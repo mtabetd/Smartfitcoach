@@ -551,8 +551,8 @@ window.S = {
   photoFront: null, photoBack: null, strongZones: [], weakZones: [],
   // Sport
   sStep: 0, sportGoals: [], sportLevel: null, sportDays: 3,
-  sportFocus: {}, sportProgram: null, selectedSportDay: 0,
   sportSessionDuration: null, // '45min','1h','1h15','1h30'
+  sportFocus: {}, sportProgram: null, selectedSportDay: 0,
   sportModalExercise: null,
   // Cross Training
   sportType: null, // 'musculation', 'crossfit', 'running', 'hyrox'
