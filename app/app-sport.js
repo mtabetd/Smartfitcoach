@@ -1428,6 +1428,9 @@ function renderMusculationProgram(p) {
     window.render();
   }}, '↻ Régénérer le programme'));
 
+  // Export PDF
+  p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { window.exportSportPDF(); }}, '\u21e9 Exporter le programme en PDF'));
+
   // Weight chart removed (was crashing)
 
   p.appendChild(h('div', {style: 'height:12px'}));
@@ -2229,5 +2232,69 @@ function renderGolfProgram(p) {
   p.appendChild(h('div', {style: 'height:12px'}));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
 }
+
+// ─── PDF EXPORT (Sport / Musculation) ───
+function exportSportPDF() {
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
+  var program = S.sportProgram;
+  if (!program || !program.length) { alert('Aucun programme \u00e0 exporter'); return; }
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({unit: 'mm', format: 'a4'});
+  var W = 210, M = 20, CW = W - 2 * M, y = 0;
+  var ivory = [250, 250, 247], black = [10, 10, 9], grey = [107, 107, 101], border = [216, 216, 208];
+
+  // Header bg
+  doc.setFillColor(black[0], black[1], black[2]);
+  doc.rect(0, 0, W, 38, 'F');
+  doc.setTextColor(ivory[0], ivory[1], ivory[2]);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
+  doc.text('MTD SMARTFIT COACH', M, 14);
+  doc.setFontSize(16); doc.setFont('times', 'italic');
+  doc.text('Programme Sport', M, 26);
+  doc.setFontSize(7); doc.setFont('helvetica', 'normal');
+  doc.text(program.length + ' jour' + (program.length > 1 ? 's' : '') + '/semaine', M, 33);
+  y = 46;
+
+  // Days
+  program.forEach(function(day) {
+    if (y > 260) { doc.addPage(); y = 20; }
+    // Day header
+    doc.setFillColor(ivory[0], ivory[1], ivory[2]);
+    doc.setDrawColor(border[0], border[1], border[2]);
+    doc.rect(M, y - 2, CW, 10, 'FD');
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(black[0], black[1], black[2]);
+    doc.text(day.name, M + 4, y + 4);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
+    doc.text(day.focus || '', M + 4 + 20, y + 4);
+    y += 14;
+
+    // Exercises
+    day.exercises.forEach(function(ex) {
+      if (y > 272) { doc.addPage(); y = 20; }
+      doc.setFont('times', 'normal'); doc.setFontSize(11); doc.setTextColor(black[0], black[1], black[2]);
+      var lines = doc.splitTextToSize(ex.n || '', CW - 30);
+      lines.forEach(function(line) { doc.text(line, M + 4, y); y += 5; });
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(grey[0], grey[1], grey[2]);
+      var detail = (ex.sets || '') + (ex.rest ? '  \u00b7  Repos ' + ex.rest : '') + (ex.m ? '  \u00b7  ' + ex.m : '');
+      doc.text(detail, M + 4, y); y += 4;
+      if (ex.eq) { doc.setFontSize(7); doc.text(ex.eq, M + 4, y); y += 4; }
+      y += 2;
+    });
+
+    y += 4;
+    doc.setDrawColor(border[0], border[1], border[2]);
+    doc.line(M, y, W - M, y); y += 6;
+  });
+
+  // Footer
+  var pages = doc.internal.getNumberOfPages();
+  for (var i = 1; i <= pages; i++) {
+    doc.setPage(i); doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
+    doc.text('MTD SmartFit Coach \u2014 g\u00e9n\u00e9r\u00e9 le ' + new Date().toLocaleDateString('fr-FR'), M, 290);
+    doc.text('Page ' + i + '/' + pages, W - M, 290, {align: 'right'});
+  }
+  doc.save('programme-sport.pdf');
+}
+window.exportSportPDF = exportSportPDF;
 
 })();

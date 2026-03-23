@@ -1795,7 +1795,7 @@ function renderModal(app) {
 
 // ─── PDF EXPORT ───
 function exportDayPDF(dayIdx) {
-  if (!window.jspdf) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
   var W = 210, M = 20, CW = W - 2 * M, y = 0;
@@ -1882,7 +1882,7 @@ function exportDayPDF(dayIdx) {
 window.exportDayPDF = exportDayPDF;
 
 function exportRecipePDF(r) {
-  if (!window.jspdf) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
   var W = 210, M = 20, CW = W - 2 * M, y = 0;
