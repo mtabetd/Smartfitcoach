@@ -214,6 +214,28 @@ function generateSportProgram() {
       });
     }
 
+    // ─── Duration-based exercise count cap and sets adjustment ───
+    if (S.sportSessionDuration) {
+      var durMax, durSetsTarget;
+      if (S.sportSessionDuration === '45min')      { durMax = 5;  durSetsTarget = 3; }
+      else if (S.sportSessionDuration === '1h')    { durMax = 6;  durSetsTarget = 3; }
+      else if (S.sportSessionDuration === '1h15')  { durMax = 7;  durSetsTarget = 4; }
+      else                                          { durMax = 8;  durSetsTarget = 4; } // 1h30
+
+      // Cap total exercises per session
+      if (dayExercises.length > durMax) {
+        dayExercises = dayExercises.slice(0, durMax);
+      }
+
+      // Adjust sets to match duration target
+      dayExercises.forEach(function(ex) {
+        if (typeof ex.sets === 'string') {
+          // sets format is e.g. "4×8-12" — replace the leading number
+          ex.sets = ex.sets.replace(/^\d+/, String(durSetsTarget));
+        }
+      });
+    }
+
     // Build focus label with star ratings (French names, max 5 stars, deduplicated)
     var categoryToFrench = {
       'chest': 'Poitrine', 'back': 'Dos', 'shoulders': 'Épaules',
@@ -1110,17 +1132,41 @@ function renderMusculationZones(p) {
     p.appendChild(tip);
   }
 
+  // ─── DURÉE DE SÉANCE ───
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:24px'}, 'Durée de tes séances'));
+  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:12px'}, 'Quelle est la durée de tes séances ?'));
+  var durationOptions = [
+    {id: '45min', label: '45 min', desc: '4-5 exercices · 3 séries'},
+    {id: '1h',    label: '1h',     desc: '5-6 exercices · 3-4 séries'},
+    {id: '1h15',  label: '1h15',   desc: '6-7 exercices · 4 séries'},
+    {id: '1h30',  label: '1h30',   desc: '7-8 exercices · 4-5 séries'}
+  ];
+  var durGrid = h('div', {'class': 'card-grid-2', style: 'margin-bottom:16px'});
+  durationOptions.forEach(function(opt) {
+    var isOn = S.sportSessionDuration === opt.id;
+    durGrid.appendChild(h('div', {'class': 'sel-card' + (isOn ? ' on' : ''), onclick: function(){
+      S.sportSessionDuration = opt.id;
+      window.render();
+    }}, [
+      h('div', {'class': 'card-name'}, opt.label),
+      h('div', {'class': 'card-sub'}, opt.desc)
+    ]));
+  });
+  p.appendChild(durGrid);
+
   p.appendChild(h('div', {style: 'height:16px'}));
   var selectedZones = Object.keys(S.sportFocus).filter(function(z){ return S.sportFocus[z] > 0; });
-  var ok = selectedZones.length >= 2;
-  if (!ok) {
+  var ok = selectedZones.length >= 2 && S.sportSessionDuration !== null;
+  if (selectedZones.length < 2) {
     p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez au moins 2 zones'));
+  } else if (!S.sportSessionDuration) {
+    p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez une durée de séance'));
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
     if (ok) {
       S.sportProgram = generateSportProgram();
       S.sStep = 4;
-      window.BLACKBOX && window.BLACKBOX.log('sport_program_generated', {days: S.sportDays, focus: S.sportFocus});
+      window.BLACKBOX && window.BLACKBOX.log('sport_program_generated', {days: S.sportDays, focus: S.sportFocus, duration: S.sportSessionDuration});
       if (window.GAMIFICATION) GAMIFICATION.unlockBadge('first_workout');
       window.render();
     }
@@ -1360,7 +1406,17 @@ function renderMusculationProgram(p) {
     // Day summary
     var summary = h('div', {'class': 'day-total'});
     summary.appendChild(h('div', {'class': 'dt-label'}, day.exercises.length + ' exercices'));
-    var estTime = day.exercises.length * 4; // ~4 min per exercise
+    // Realistic duration: ~10 min per exercise (sets × reps + rest between sets)
+    // 3 sets × 10 reps + 90s rest × 2 = ~8-10 min ; 4 sets = ~12-14 min
+    var avgSetsPerEx = 3;
+    day.exercises.forEach(function(ex) {
+      if (typeof ex.sets === 'string') {
+        var m = ex.sets.match(/^(\d+)/);
+        if (m) avgSetsPerEx = (avgSetsPerEx + parseInt(m[1])) / 2;
+      }
+    });
+    var minPerEx = avgSetsPerEx <= 3 ? 9 : 12;
+    var estTime = Math.round(day.exercises.length * minPerEx / 5) * 5; // round to nearest 5
     summary.appendChild(h('div', {'class': 'dt-val'}, '~' + estTime + ' min'));
     p.appendChild(summary);
   }
