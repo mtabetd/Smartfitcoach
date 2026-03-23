@@ -1,0 +1,671 @@
+/* ============================================================
+   PREMIUM UI  —  Micro-interactions, Animations & Visual Polish
+   Design language: ivoire / noir editorial luxury minimalism
+   Colors : ivory #FAFAF7 · black #0A0A09 · grey tones
+   Fonts  : Georgia (serif) · Helvetica Neue (sans-serif)
+   ============================================================ */
+
+
+/* -------------------------------------------------------
+   1. PAGE TRANSITIONS
+   Smooth page transitions when switching steps
+   ------------------------------------------------------- */
+
+.page-enter {
+  animation: pageEnter 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-exit {
+  animation: pageExit 0.2s ease forwards;
+}
+
+@keyframes pageExit {
+  from { opacity: 1; }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+
+/* -------------------------------------------------------
+   2. CARD INTERACTIONS
+   Cards with smooth selection animation
+   ------------------------------------------------------- */
+
+.sel-card {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sel-card:active {
+  transform: scale(0.97);
+}
+
+.sel-card.on {
+  transform: scale(1);
+  box-shadow: 0 2px 12px rgba(10, 10, 9, 0.12);
+}
+
+
+/* -------------------------------------------------------
+   3. BUTTON ENHANCEMENTS
+   Premium button press effect with shine sweep
+   ------------------------------------------------------- */
+
+.btn-primary {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05), transparent);
+  transform: translateX(-100%);
+}
+
+.btn-primary:hover::after {
+  transform: translateX(100%);
+  transition: transform 0.6s ease;
+}
+
+
+/* -------------------------------------------------------
+   4. NUMBER INPUT ANIMATIONS
+   Smooth number input focus
+   ------------------------------------------------------- */
+
+.num-input {
+  transition: all 0.3s ease;
+}
+
+.num-input:focus {
+  box-shadow: 0 0 0 3px rgba(10, 10, 9, 0.06);
+}
+
+
+/* -------------------------------------------------------
+   5. PROGRESS BAR ANIMATION
+   Animated progress with gradient and dot indicator
+   ------------------------------------------------------- */
+
+.progress-fill {
+  background: linear-gradient(90deg, #0A0A09, #1A1A18);
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -2px;
+  width: 6px;
+  height: 6px;
+  background: #0A0A09;
+  border-radius: 50%;
+}
+
+
+/* -------------------------------------------------------
+   6. SPLASH SCREEN ENHANCEMENTS
+   Premium splash animations with subtle pulse CTA
+   ------------------------------------------------------- */
+
+.splash-logo {
+  font-size: 13px;
+  letter-spacing: 10px;
+}
+
+.splash-quote {
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+@keyframes subtlePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(10, 10, 9, 0); }
+  50%      { box-shadow: 0 0 0 8px rgba(10, 10, 9, 0.04); }
+}
+
+.splash-btn {
+  animation:
+    splashFadeUp 0.8s ease 1.1s forwards,
+    subtlePulse 3s ease 2s infinite;
+}
+
+
+/* -------------------------------------------------------
+   7. MEAL CARD HOVER EFFECTS
+   ------------------------------------------------------- */
+
+.meal-card {
+  transition: all 0.2s ease;
+}
+
+.meal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(10, 10, 9, 0.08);
+}
+
+
+/* -------------------------------------------------------
+   8. SVG RING ANIMATIONS
+   Entrance animation for macro rings
+   ------------------------------------------------------- */
+
+.ring-wrap {
+  opacity: 0;
+  animation: ringIn 0.5s ease forwards;
+}
+
+.ring-wrap:nth-child(1) { animation-delay: 0.1s; }
+.ring-wrap:nth-child(2) { animation-delay: 0.25s; }
+.ring-wrap:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes ringIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+
+/* -------------------------------------------------------
+   9. STAGGERED LIST ITEMS
+   Stagger animation for lists, grids and check items
+   ------------------------------------------------------- */
+
+.level-item,
+.check-item,
+.sel-card {
+  opacity: 0;
+  animation: staggerIn 0.3s ease forwards;
+}
+
+.level-item:nth-child(1),
+.sel-card:nth-child(1),
+.check-item:nth-child(1) { animation-delay: 0.05s; }
+
+.level-item:nth-child(2),
+.sel-card:nth-child(2),
+.check-item:nth-child(2) { animation-delay: 0.1s; }
+
+.level-item:nth-child(3),
+.sel-card:nth-child(3),
+.check-item:nth-child(3) { animation-delay: 0.15s; }
+
+.level-item:nth-child(4),
+.sel-card:nth-child(4),
+.check-item:nth-child(4) { animation-delay: 0.2s; }
+
+.level-item:nth-child(5),
+.sel-card:nth-child(5),
+.check-item:nth-child(5) { animation-delay: 0.25s; }
+
+.level-item:nth-child(6),
+.sel-card:nth-child(6)  { animation-delay: 0.3s; }
+
+.level-item:nth-child(7) { animation-delay: 0.35s; }
+
+@keyframes staggerIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+
+/* -------------------------------------------------------
+   10. RESULT PAGE PREMIUM ANIMATIONS
+   Big number entrance and decorative rule expansion
+   ------------------------------------------------------- */
+
+.big-number .bn-val {
+  display: inline-block;
+  animation: countIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes countIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.result-rule {
+  animation: ruleExpand 0.5s ease 0.3s forwards;
+  transform-origin: center;
+}
+
+@keyframes ruleExpand {
+  from { width: 0; }
+  to   { width: 32px; }
+}
+
+
+/* -------------------------------------------------------
+   11. MODAL ENHANCEMENTS
+   Premium modal with backdrop blur
+   ------------------------------------------------------- */
+
+.modal-overlay {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modal-sheet {
+  border-radius: 0;
+  box-shadow: 0 -8px 32px rgba(10, 10, 9, 0.15);
+}
+
+
+/* -------------------------------------------------------
+   12. TOOLTIP SYSTEM
+   Elegant editorial tooltips
+   ------------------------------------------------------- */
+
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #0A0A09;
+  color: #FAFAF7;
+  padding: 6px 12px;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+
+/* -------------------------------------------------------
+   13. CHIP / TAG INTERACTIONS
+   ------------------------------------------------------- */
+
+.chip {
+  transition: all 0.15s ease;
+}
+
+.chip:active {
+  transform: scale(0.95);
+}
+
+.chip.on {
+  box-shadow: inset 0 0 0 1px #0A0A09;
+}
+
+
+/* -------------------------------------------------------
+   14. PHOTO UPLOAD ZONES
+   ------------------------------------------------------- */
+
+.photo-upload {
+  transition: all 0.3s ease;
+}
+
+.photo-upload:hover {
+  border-color: #0A0A09;
+  background: rgba(10, 10, 9, 0.02);
+}
+
+.photo-upload.has-photo {
+  border-style: solid;
+  border-color: #1A4A1A;
+}
+
+@keyframes photoIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.photo-upload img {
+  animation: photoIn 0.3s ease;
+}
+
+
+/* -------------------------------------------------------
+   15. CHART CONTAINER ANIMATIONS
+   ------------------------------------------------------- */
+
+.chart-container {
+  opacity: 0;
+  animation: chartIn 0.5s ease 0.2s forwards;
+}
+
+@keyframes chartIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* -------------------------------------------------------
+   16. EXERCISE CARD — SPORT MODULE
+   ------------------------------------------------------- */
+
+.exercise-card {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.exercise-card:hover {
+  transform: translateX(4px);
+  border-left: 3px solid #0A0A09;
+  padding-left: 13px;
+}
+
+.exercise-video {
+  transition: all 0.2s ease;
+}
+
+.exercise-video:hover {
+  transform: translateX(2px);
+}
+
+
+/* -------------------------------------------------------
+   17. AUTH SCREEN POLISH
+   ------------------------------------------------------- */
+
+.auth-container {
+  animation: authIn 0.6s ease forwards;
+}
+
+@keyframes authIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.auth-line {
+  animation: splashLine 0.5s ease 0.2s forwards;
+  width: 0;
+}
+
+.auth-form .field {
+  opacity: 0;
+  animation: staggerIn 0.3s ease forwards;
+}
+
+.auth-form .field:nth-child(1) { animation-delay: 0.1s; }
+.auth-form .field:nth-child(2) { animation-delay: 0.15s; }
+.auth-form .field:nth-child(3) { animation-delay: 0.2s; }
+.auth-form .field:nth-child(4) { animation-delay: 0.25s; }
+
+
+/* -------------------------------------------------------
+   18. SCROLL BEHAVIOR ENHANCEMENTS
+   Smooth scroll and custom themed scrollbar
+   ------------------------------------------------------- */
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C8C8C0;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9A9A94;
+}
+
+
+/* -------------------------------------------------------
+   19. DAY TAB ANIMATIONS
+   ------------------------------------------------------- */
+
+.day-tab {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.day-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background: #0A0A09;
+  animation: tabActivate 0.2s ease;
+}
+
+@keyframes tabActivate {
+  from { width: 0; }
+  to   { width: 20px; }
+}
+
+
+/* -------------------------------------------------------
+   20. NAVIGATION PREMIUM
+   ------------------------------------------------------- */
+
+.main-nav {
+  position: relative;
+}
+
+.main-nav::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background: #0A0A09;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-nav-tab {
+  transition: all 0.3s ease;
+}
+
+.main-nav-tab:hover {
+  background: rgba(10, 10, 9, 0.02);
+}
+
+.main-nav-tab.active {
+  font-weight: 500;
+}
+
+
+/* -------------------------------------------------------
+   21. LOADING SKELETON
+   Shimmer placeholder for charts and content loading
+   ------------------------------------------------------- */
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #EEEDE8 25%, #F4F4F0 50%, #EEEDE8 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 2px;
+}
+
+
+/* -------------------------------------------------------
+   22. NOTIFICATION / TOAST SYSTEM
+   ------------------------------------------------------- */
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #0A0A09;
+  color: #FAFAF7;
+  padding: 12px 24px;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  z-index: 2000;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(10, 10, 9, 0.2);
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+
+/* -------------------------------------------------------
+   23. PRINT STYLES
+   ------------------------------------------------------- */
+
+@media print {
+  .header,
+  .footer,
+  .main-nav,
+  .user-bar,
+  .btn-primary,
+  .btn-secondary,
+  .btn-back,
+  .swap-btn,
+  .regen-btn {
+    display: none !important;
+  }
+
+  .app {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .meal-card {
+    break-inside: avoid;
+    border: 1px solid #ccc;
+  }
+}
+
+
+/* -------------------------------------------------------
+   24. DARK MODE SUPPORT
+   Subtle dark mode — keeps the editorial feel
+   ------------------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ivory:    #1A1A18;
+    --ivory2:   #222220;
+    --ivory3:   #2A2A28;
+    --ivory4:   #333330;
+    --black:    #FAFAF7;
+    --black2:   #F0F0ED;
+    --grey:     #9A9A94;
+    --grey2:    #7A7A74;
+    --grey3:    #5A5A54;
+    --border:   #3A3A38;
+    --green:    #4ABA4A;
+    --greenbg:  rgba(74, 186, 74, .08);
+    --blue:     #6A9ADA;
+    --bluebg:   rgba(106, 154, 218, .08);
+    --orange:   #DAA06A;
+    --orangebg: rgba(218, 160, 106, .08);
+    --red:      #DA6A6A;
+    --redbg:    rgba(218, 106, 106, .08);
+  }
+
+  body {
+    background: var(--ivory);
+    color: var(--black);
+  }
+
+  .modal-overlay {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* ── DARK MODE — Manual toggle ── */
+body.dark-mode {
+  --ivory:#1A1A18;--ivory2:#222220;--ivory3:#2A2A28;--ivory4:#333330;
+  --black:#FAFAF7;--black2:#F0F0ED;--grey:#9A9A94;--grey2:#7A7A74;--grey3:#5A5A54;
+  --border:#3A3A38;--green:#4ABA4A;--greenbg:rgba(74,186,74,.08);
+  --blue:#6A9ADA;--bluebg:rgba(106,154,218,.08);--orange:#DAA06A;--orangebg:rgba(218,160,106,.08);
+  --red:#DA6A6A;--redbg:rgba(218,106,106,.08);
+  background:var(--ivory);color:var(--black);
+}
+body.dark-mode .modal-overlay{background:rgba(0,0,0,0.7)}
+body.dark-mode input,body.dark-mode select{background:var(--ivory2);color:var(--black);border-color:var(--border)}
+body.dark-mode .sel-card{background:var(--ivory2);border-color:var(--border);color:var(--black)}
+body.dark-mode .sel-card.on{background:var(--black);color:var(--ivory)}
+body.dark-mode .btn-primary{background:var(--black);color:var(--ivory)}
+body.dark-mode .exercise-card,body.dark-mode .meal-card,body.dark-mode .product-card{background:var(--ivory2);border-color:var(--border)}
+body.dark-mode .chart-container,body.dark-mode .photo-upload{background:var(--ivory2);border-color:var(--border)}
+body.dark-mode .num-input{background:var(--ivory2);color:var(--black);border-color:var(--border)}
+body.dark-mode .level-item{border-color:var(--border)}
+body.dark-mode .level-item.on{background:var(--black);color:var(--ivory)}
+body.dark-mode .chip{border-color:var(--border);color:var(--grey)}
+body.dark-mode .chip.on{background:var(--black);color:var(--ivory);border-color:var(--black)}
+body.dark-mode .day-tab{color:var(--grey)}
+body.dark-mode .day-tab.active{color:var(--black);border-bottom-color:var(--black)}
+body.dark-mode .progress-fill{background:var(--black)}
+body.dark-mode .toast{background:var(--ivory);color:#1A1A18}
+
+
+/* -------------------------------------------------------
+   25. RESPONSIVE ENHANCEMENTS
+   ------------------------------------------------------- */
+
+/* Small phones */
+@media (max-width: 560px) {
+  h1 { font-size: 32px; }
+  .result-title { font-size: 36px; }
+  .card-grid-3,
+  .card-grid-4  { grid-template-columns: 1fr 1fr; }
+  .check-grid   { grid-template-columns: 1fr; }
+  .stats-row    { grid-template-columns: 1fr 1fr; }
+  .macro-pills  { grid-template-columns: 1fr 1fr; }
+  .rings-row    { gap: 20px; }
+  .photo-grid   { grid-template-columns: 1fr; }
+
+  .alcohol-item {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+}
+
+/* Narrow phones */
+@media (max-width: 380px) {
+  .app            { padding: 0 16px 60px; }
+  .card-grid-2    { grid-template-columns: 1fr; }
+  .auth-container { padding: 40px 16px; }
+}
+
+/* Tablet optimization */
+@media (min-width: 768px) {
+  .app { max-width: 720px; }
+  h1   { font-size: 48px; }
+
+  .splash-quote {
+    font-size: 20px;
+    max-width: 400px;
+  }
+}
