@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "SmartFitCoach - Application PWA de nutrition et fitness",
   "scripts": {
-    "dev": "live-server \"macro-calculator-pro (1)\" --port=3000 --open=/index.html --watch=\"macro-calculator-pro (1)\" --no-browser",
-    "start": "live-server \"macro-calculator-pro (1)\" --port=3000 --open=/index.html --watch=\"macro-calculator-pro (1)\""
+    "dev": "live-server \"macro-calculator-pro (1)\" --port=3000 --host=0.0.0.0 --no-browser --entry-file=index.html",
+    "start": "live-server \"macro-calculator-pro (1)\" --port=3000 --host=0.0.0.0 --no-browser --entry-file=index.html"
   },
   "devDependencies": {
     "live-server": "^1.2.2"
