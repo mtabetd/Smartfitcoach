@@ -427,6 +427,7 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
     var forceEntry = NFC_PROGRAMS_FORCE[muscleGroup];
     if (forceEntry && forceEntry.force) {
       var forceResult = JSON.parse(JSON.stringify(forceEntry.force));
+      if (!forceResult.exercises) forceResult.exercises = [];
       if (S.sportLevel === 'beginner') {
         forceResult.exercises = forceResult.exercises.slice(0, 4);
         forceResult.exercises.forEach(function(ex) { if (typeof ex.sets === 'number') ex.sets = Math.max(2, ex.sets - 1); });
@@ -443,6 +444,7 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
   var template = program[goalKey] || program.masse;
   if (!template) return null;
   var result = JSON.parse(JSON.stringify(template));
+  if (!result.exercises) result.exercises = [];
   if (S.sex === 'femme') {
     result.exercises.forEach(function(ex) {
       if (ex.type === 'compound' && goalKey === 'masse' && typeof ex.reps === 'number') ex.reps = Math.min(ex.reps + 2, 15);

@@ -1067,29 +1067,31 @@ function renderCrossfitProgram(p) {
     // Show haltero section
     var haltCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #1A3A6A'});
     haltCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1A3A6A;margin-bottom:6px'}, 'HALT\u00C9RO'));
-    haltCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:4px'}, wod.haltero.name));
-    haltCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:4px'}, wod.haltero.desc));
-    haltCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-bottom:6px'}, wod.haltero.scheme));
-    if (wod.haltero.weights) {
-      var weightStr = getCFWeight(wod.haltero.weights);
+    var _halt = wod.haltero || {};
+    haltCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:4px'}, _halt.name || ''));
+    haltCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:4px'}, _halt.desc || ''));
+    haltCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-bottom:6px'}, _halt.scheme || ''));
+    if (_halt.weights) {
+      var weightStr = getCFWeight(_halt.weights);
       if (weightStr) {
         haltCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;color:#1A3A6A;font-weight:bold'}, 'Charge : ' + weightStr));
       }
     }
-    var haltVideoQ = encodeURIComponent(wod.haltero.name + ' crossfit technique');
+    var haltVideoQ = encodeURIComponent((_halt.name || '') + ' crossfit technique');
     haltCard.appendChild(h('a', {'class': 'exercise-video', href: 'https://www.youtube.com/results?search_query=' + haltVideoQ, target: '_blank', rel: 'noopener'}, '\u25B6 Voir la technique'));
     p.appendChild(haltCard);
   } else {
     // Show gym skills section first for non-haltero days
     var gymSkillCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #27AE60'});
     gymSkillCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#27AE60;margin-bottom:6px'}, 'GYMNASTIQUE'));
-    gymSkillCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:8px'}, wod.gym.name));
+    var _gym = wod.gym || {};
+    gymSkillCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:8px'}, (_gym.name || '')));
     var drillListTop = h('div', {});
-    wod.gym.drills.forEach(function(drill, idx) {
+    (_gym.drills || []).forEach(function(drill, idx) {
       drillListTop.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey);padding:3px 0'}, (idx + 1) + '. ' + drill));
     });
     gymSkillCard.appendChild(drillListTop);
-    var gymVideoQTop = encodeURIComponent(wod.gym.name.replace('Skill: ', '') + ' crossfit tutorial');
+    var gymVideoQTop = encodeURIComponent((_gym.name || '').replace('Skill: ', '') + ' crossfit tutorial');
     gymSkillCard.appendChild(h('a', {'class': 'exercise-video', href: 'https://www.youtube.com/results?search_query=' + gymVideoQTop, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, '\u25B6 Voir la technique'));
     p.appendChild(gymSkillCard);
   }
@@ -1097,19 +1099,20 @@ function renderCrossfitProgram(p) {
   // ─── WOD SECTION (always shown) ───
   var wodCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #C0392B'});
   wodCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#C0392B;margin-bottom:6px'}, 'WOD'));
-  wodCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin-bottom:4px'}, wod.wod.name));
-  wodCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;color:#C0392B;margin-bottom:10px'}, wod.wod.type));
+  var _wod = wod.wod || {};
+  wodCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin-bottom:4px'}, _wod.name || ''));
+  wodCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;color:#C0392B;margin-bottom:10px'}, _wod.type || ''));
 
   var movList = h('div', {style: 'margin-bottom:10px'});
-  wod.wod.movements.forEach(function(mov) {
+  (_wod.movements || []).forEach(function(mov) {
     var movText = formatCFMovement(mov);
     var movDiv = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;padding:4px 0;border-bottom:1px solid var(--border)'}, movText);
     movList.appendChild(movDiv);
   });
   wodCard.appendChild(movList);
 
-  if (wod.wod.notes) {
-    wodCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:6px'}, wod.wod.notes));
+  if (_wod.notes) {
+    wodCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:6px'}, _wod.notes));
   }
   p.appendChild(wodCard);
 
@@ -1118,15 +1121,16 @@ function renderCrossfitProgram(p) {
     // For haltero days, gym drills are shown after the WOD
     var gymCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #27AE60'});
     gymCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#27AE60;margin-bottom:6px'}, 'GYMNASTIQUE'));
-    gymCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:8px'}, wod.gym.name));
+    var _gym2 = wod.gym || {};
+    gymCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:8px'}, (_gym2.name || '')));
 
     var drillList = h('div', {});
-    wod.gym.drills.forEach(function(drill, idx) {
+    (_gym2.drills || []).forEach(function(drill, idx) {
       drillList.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey);padding:3px 0'}, (idx + 1) + '. ' + drill));
     });
     gymCard.appendChild(drillList);
 
-    var gymVideoQ = encodeURIComponent(wod.gym.name.replace('Skill: ', '') + ' crossfit tutorial');
+    var gymVideoQ = encodeURIComponent((_gym2.name || '').replace('Skill: ', '') + ' crossfit tutorial');
     gymCard.appendChild(h('a', {'class': 'exercise-video', href: 'https://www.youtube.com/results?search_query=' + gymVideoQ, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, '\u25B6 Voir la technique'));
     p.appendChild(gymCard);
   }
