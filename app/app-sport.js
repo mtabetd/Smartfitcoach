@@ -1165,6 +1165,7 @@ function renderMusculationZones(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
     if (ok) {
       S.sportProgram = generateSportProgram();
+      S.selectedSportDay = 0;
       S.sStep = 4;
       window.BLACKBOX && window.BLACKBOX.log('sport_program_generated', {days: S.sportDays, focus: S.sportFocus, duration: S.sportSessionDuration});
       if (window.GAMIFICATION) GAMIFICATION.unlockBadge('first_workout');
@@ -1176,7 +1177,7 @@ function renderMusculationZones(p) {
 
 // ─── STEP 4 (Muscu): PROGRAMME ───
 function renderMusculationProgram(p) {
-  if (!S.sportProgram) { S.sportProgram = generateSportProgram(); }
+  if (!S.sportProgram || !S.sportProgram.length) { S.sportProgram = generateSportProgram(); S.selectedSportDay = 0; }
 
   // Load saved musculation weights from localStorage
   if (Object.keys(S.musculationWeights).length === 0) {
@@ -1424,6 +1425,7 @@ function renderMusculationProgram(p) {
   // Regenerate
   p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function(){
     S.sportProgram = generateSportProgram();
+    S.selectedSportDay = 0;
     window.BLACKBOX && window.BLACKBOX.log('sport_program_regenerated');
     window.render();
   }}, '↻ Régénérer le programme'));
