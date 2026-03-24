@@ -180,8 +180,10 @@ function generateSportProgram() {
         count = Math.max(1, Math.round(count * pregIntensityFactor));
       }
 
+      // Cycle-based offset: rotate exercise selection each cycle
+      var cycleOffset = ((S.muscuCycle || 1) - 1) % Math.max(1, available.length - count);
       for (var i = 0; i < count; i++) {
-        var ex = Object.assign({}, available[i]);
+        var ex = Object.assign({}, available[(i + cycleOffset) % available.length]);
 
         // Override rest based on goals
         if (restOverride) ex.rest = restOverride;
@@ -485,12 +487,17 @@ function renderChargesQuestionnaire(p) {
       var ratio = currentVal / bodyWeight;
       var lbl = ratio < thresh.low ? 'Débutant' : ratio < thresh.mid ? 'Intermédiaire' : 'Avancé';
       var col = ratio < thresh.low ? '#E67E22' : ratio < thresh.mid ? '#2980B9' : '#27AE60';
-      row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + col + ';flex-shrink:0;min-width:70px;text-align:right'}, lbl));
+      // Estimate 1RM via Epley formula (assume 9 reps at entered weight)
+      var est1rm = Math.round(currentVal * (1 + 9 / 30) / 2.5) * 2.5;
+      var rightCol = h('div', {style: 'text-align:right;flex-shrink:0'});
+      rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + col}, lbl));
+      rightCol.appendChild(h('div', {style: 'font-family:Georgia;font-size:11px;color:var(--grey);margin-top:2px'}, '~1RM : ' + est1rm + ' kg'));
+      row.appendChild(rightCol);
     }
     grid.appendChild(row);
   });
   p.appendChild(grid);
-  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic;margin-bottom:16px'}, 'Laissez vide les exercices que vous ne pratiquez pas.'));
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic;margin-bottom:16px'}, 'Laissez vide les exercices que vous ne pratiquez pas. Le 1RM est estimé via la formule d\'Epley (charge × 1.3 pour 9 reps).'));
 
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ S.sStep = 15; window.render(); }}, 'Continuer'));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
@@ -1236,11 +1243,35 @@ function renderMusculationZones(p) {
 
 // ─── SYSTÈME DE PHASES 6 SEMAINES ───
 var MUSCU_PHASES = [
-  {weeks:[1,2], id:'adaptation',     label:'Adaptation',     color:'#2980B9', advice:'Maîtrisez la technique avant d\'augmenter les charges. Priorité à la forme.', setsOffset:-1, repsOffset:+2, restNote:'Prenez le temps qu\'il faut entre les séries.'},
-  {weeks:[3,4], id:'progression',    label:'Progression',    color:'#27AE60', advice:'+2.5 à 5 kg sur les exercices poly-articulaires si vous avez réussi toutes les répétitions.', setsOffset:0,  repsOffset:0,  restNote:'Respectez les temps de repos indiqués.'},
-  {weeks:[5,6], id:'intensification',label:'Intensification',color:'#E67E22', advice:'Charges maximales. Dernier set jusqu\'à l\'échec technique. Ne trichez pas sur la forme.', setsOffset:+1, repsOffset:-2, restNote:'+30s de repos vs semaines précédentes.'},
-  {weeks:[7],   id:'decharge',       label:'Décharge',       color:'#8E44AD', advice:'Récupération active. Réduisez toutes les charges de 30%. Indispensable pour la progression à long terme.', setsOffset:-1, repsOffset:0, restNote:'Repos complets, récupération musculaire.'}
+  {weeks:[1,2], id:'adaptation',     label:'Adaptation',     color:'#2980B9',
+   rpe:6,  rpeNote:'RPE 6 — vous pourriez faire 4 reps de plus. Priorité à la technique.',
+   pct1rm:0.60, advice:'Maîtrisez la technique avant d\'augmenter les charges. Si vous réussissez toutes les reps → +2.5 kg la semaine suivante.',
+   setsOffset:-1, repsOffset:+2, restNote:'Repos libres — récupération complète entre chaque série.'},
+  {weeks:[3,4], id:'progression',    label:'Progression',    color:'#27AE60',
+   rpe:8,  rpeNote:'RPE 8 — vous pourriez faire 2 reps de plus. Zone optimale hypertrophie.',
+   pct1rm:0.72, advice:'Progression double : augmentez d\'abord les reps (ex. 8→10→12), puis montez la charge de 2.5 kg et retombez à 8 reps.',
+   setsOffset:0,  repsOffset:0,  restNote:'Respectez les temps de repos indiqués.'},
+  {weeks:[5,6], id:'intensification',label:'Intensification',color:'#E67E22',
+   rpe:9,  rpeNote:'RPE 9 — 1 rep en réserve. Dernier set seulement jusqu\'à l\'échec technique (jamais sur squat/soulevé).',
+   pct1rm:0.82, advice:'Charges maximales. +1 série par exercice composé. Dernier set à l\'échec sur les isolations uniquement.',
+   setsOffset:+1, repsOffset:-2, restNote:'+30s de repos vs semaines précédentes. CNS sous pression maximale.'},
+  {weeks:[7],   id:'decharge',       label:'Décharge',       color:'#8E44AD',
+   rpe:5,  rpeNote:'RPE 5 — très facile, 5+ reps en réserve. Récupération musculaire et articulaire.',
+   pct1rm:0.50, advice:'Réduisez le volume de 50% (2 séries au lieu de 4) et les charges de 40-50%. Gardez les mêmes exercices. Indispensable pour la progression long terme.',
+   setsOffset:-2, repsOffset:0, restNote:'Repos complets. Votre prochain cycle sera plus fort grâce à cette semaine.'}
 ];
+
+// Calcule le poids recommandé pour un exercice selon la phase courante
+function getSuggestedWeight(exerciseName, reps, phase) {
+  if (!window.getMusculationWeight) return null;
+  var baseW = window.getMusculationWeight(exerciseName, null, reps);
+  if (!baseW || baseW <= 0) return null;
+  var pct = phase ? (phase.pct1rm || 0.72) : 0.72;
+  // Base weight from getMusculationWeight is already at ~70-75% 1RM at 8-10 reps
+  // Adjust proportionally to phase pct1rm (reference: 0.72 = progression phase)
+  var adjusted = Math.round(baseW * (pct / 0.72) / 2.5) * 2.5;
+  return Math.max(adjusted, 5);
+}
 
 function getMuscuPhase(week) {
   for (var i = 0; i < MUSCU_PHASES.length; i++) {
@@ -1273,6 +1304,8 @@ function loadMuscuWeek() {
   if (!isNaN(w) && w >= 1) S.muscuWeek = w;
   var start = localStorage.getItem('mtd_muscu_start_' + uid);
   if (start) S.muscuProgramStart = start;
+  var c = parseInt(localStorage.getItem('mtd_muscu_cycle_' + uid));
+  if (!isNaN(c) && c >= 1) S.muscuCycle = c;
 }
 
 function renderWeekTracker(p) {
@@ -1286,7 +1319,8 @@ function renderWeekTracker(p) {
   var top = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px'});
   var badge = h('div', {style: 'display:flex;align-items:center;gap:8px'});
   badge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:' + phase.color + ';padding:3px 8px'}, phase.label));
-  badge.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:14px;color:' + phase.color}, 'Semaine ' + week + ' / 7'));
+  var cycleNum = S.muscuCycle || 1;
+  badge.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:14px;color:' + phase.color}, 'Semaine ' + week + ' / 7 · Cycle ' + cycleNum));
   top.appendChild(badge);
   if (S.muscuProgramStart) {
     top.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey)'}, 'Début : ' + S.muscuProgramStart));
@@ -1319,8 +1353,14 @@ function renderWeekTracker(p) {
   });
   container.appendChild(labels);
 
+  // RPE badge
+  var rpeBadge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid ' + phase.color + ';margin-bottom:8px'});
+  rpeBadge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + phase.color}, 'RPE ' + phase.rpe + '/10'));
+  rpeBadge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey)'}, phase.rpeNote.replace('RPE ' + phase.rpe + ' — ', '')));
+  container.appendChild(rpeBadge);
+
   // Phase advice
-  container.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.5;margin-bottom:10px;padding-left:8px;border-left:2px solid ' + phase.color}, phase.advice));
+  container.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.5;margin-bottom:8px;padding-left:8px;border-left:2px solid ' + phase.color}, phase.advice));
   container.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic;margin-bottom:12px'}, phase.restNote));
 
   // Buttons
@@ -1335,8 +1375,12 @@ function renderWeekTracker(p) {
       style: 'flex:1;padding:10px;background:#27AE60;color:#fff;border:none;font-family:Georgia,serif;font-size:13px;cursor:pointer',
       onclick: function() {
         S.muscuProgramStart = new Date().toISOString().split('T')[0];
+        S.muscuCycle = (S.muscuCycle || 1) + 1;
         var uid2 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
         localStorage.setItem('mtd_muscu_start_' + uid2, S.muscuProgramStart);
+        localStorage.setItem('mtd_muscu_cycle_' + uid2, String(S.muscuCycle));
+        S.sportProgram = generateSportProgram();
+        S.selectedSportDay = 0;
         saveMuscuWeek(1);
         window.render();
       }
@@ -1396,6 +1440,49 @@ function renderMusculationProgram(p) {
       return z + ' ' + stars;
     }).join(' \u00b7 ');
     p.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;color:var(--grey);margin-top:4px;text-align:center'}, focusText));
+  }
+
+  // ─── VOLUME HEBDOMADAIRE MEV/MAV ───
+  if (window.VOLUME_LANDMARKS && S.sportProgram && S.sportProgram.length > 0) {
+    var muscleSetCount = {};
+    var muscleKeywords = {chest:['poitrine','pectoral','chest'],back:['dos','back','dorsaux'],shoulders:['\u00e9paule','shoulder'],legs:['jambe','quadri','ischio','mollet','leg'],glutes:['fessier','glute'],biceps:['biceps'],triceps:['triceps'],abs:['abdo','abdominaux','gainage','transverse','oblique']};
+    S.sportProgram.forEach(function(day) {
+      (day.exercises || []).forEach(function(ex) {
+        var m = (ex.m || '').toLowerCase();
+        Object.keys(muscleKeywords).forEach(function(cat) {
+          if ((muscleKeywords[cat]||[]).some(function(kw){ return m.indexOf(kw) !== -1; })) {
+            muscleSetCount[cat] = (muscleSetCount[cat] || 0) + (typeof ex.sets === 'string' ? (parseInt(ex.sets) || 3) : (ex.sets || 3));
+          }
+        });
+      });
+    });
+    var volKeys = Object.keys(muscleSetCount);
+    if (volKeys.length > 0) {
+      var volSection = h('div', {style: 'margin-bottom:16px'});
+      volSection.appendChild(h('div', {'class':'section-label'}, 'Volume hebdomadaire'));
+      volKeys.forEach(function(cat) {
+        var lm = window.VOLUME_LANDMARKS[cat];
+        if (!lm) return;
+        var sets = muscleSetCount[cat];
+        var pct = Math.min(sets / lm.mrv, 1);
+        var status, color;
+        if (sets < lm.mev) { color = '#C0392B'; status = sets + ' s. — Sous MEV (min. ' + lm.mev + ')'; }
+        else if (sets <= lm.mav) { color = '#27AE60'; status = sets + ' s. — Zone optimale'; }
+        else if (sets <= lm.mrv) { color = '#E67E22'; status = sets + ' s. — Volume \u00e9lev\u00e9'; }
+        else { color = '#C0392B'; status = sets + ' s. — D\u00e9passe MRV !'; }
+        var row = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:5px'});
+        row.appendChild(h('div', {style: 'width:75px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);flex-shrink:0'}, lm.label));
+        var barWrap = h('div', {style: 'flex:1;height:6px;background:var(--border);position:relative'});
+        barWrap.appendChild(h('div', {style: 'height:6px;width:' + Math.round(pct*100) + '%;background:' + color}));
+        barWrap.appendChild(h('div', {style: 'position:absolute;top:-2px;left:' + Math.round(lm.mev/lm.mrv*100) + '%;width:1px;height:10px;background:#999', title:'MEV'}));
+        barWrap.appendChild(h('div', {style: 'position:absolute;top:-2px;left:' + Math.round(lm.mav/lm.mrv*100) + '%;width:1px;height:10px;background:#555', title:'MAV'}));
+        row.appendChild(barWrap);
+        row.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:' + color + ';flex-shrink:0;min-width:110px'}, status));
+        volSection.appendChild(row);
+      });
+      volSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:2px'}, 'Repères : | MEV (minimum) · | MAV (optimal) · MRV = barre compl\u00e8te'));
+      p.appendChild(volSection);
+    }
   }
 
   // ─── STRENGTH GRADE ───

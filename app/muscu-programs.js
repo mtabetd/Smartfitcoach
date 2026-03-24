@@ -7,26 +7,26 @@ var NFC_PROGRAMS = {
     masse: {
       warmup: '5 min rameur + rotations \u00e9paules dynamiques',
       exercises: [
-        {order:1, name:'\u00c9cart\u00e9 poulie basse', sets:3, reps:12, rest:'1min30', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'poulie'},
-        {order:2, name:'D\u00e9velopp\u00e9 couch\u00e9 barre', sets:4, reps:8, rest:'2min', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
-        {order:3, name:'D\u00e9velopp\u00e9 inclin\u00e9 barre', sets:4, reps:8, rest:'2min', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
-        {order:4, name:'D\u00e9velopp\u00e9 inclin\u00e9 halt\u00e8res', sets:3, reps:10, rest:'2min', technique:'3s pic contraction', muscle:'pectoraux', type:'compound', equipment:'halteres'},
-        {order:5, name:'\u00c9cart\u00e9 couch\u00e9', sets:4, reps:10, rest:'1min30', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'halteres'},
+        {order:1, name:'D\u00e9velopp\u00e9 couch\u00e9 barre', sets:4, reps:6, rest:'3min', technique:'Composé principal — CNS frais', muscle:'pectoraux', type:'compound', equipment:'barre'},
+        {order:2, name:'D\u00e9velopp\u00e9 inclin\u00e9 barre', sets:4, reps:8, rest:'2min30', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
+        {order:3, name:'D\u00e9velopp\u00e9 inclin\u00e9 halt\u00e8res', sets:3, reps:10, rest:'2min', technique:'3s excentrique', muscle:'pectoraux', type:'compound', equipment:'halteres'},
+        {order:4, name:'\u00c9cart\u00e9 poulie basse', sets:3, reps:12, rest:'1min30', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'poulie'},
+        {order:5, name:'\u00c9cart\u00e9 couch\u00e9', sets:3, reps:12, rest:'1min30', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'halteres'},
         {order:6, name:'Crunch banc d\u00e9clin\u00e9', sets:3, reps:15, rest:'1min', technique:null, muscle:'abdominaux', type:'isolation', equipment:'banc'}
       ],
-      notes: 'Commencer par l\'isolation pour pr\u00e9-fatiguer le muscle. Contr\u00f4ler chaque rep.'
+      notes: 'Composés d\'abord (CNS frais) puis isolation. Contr\u00f4ler chaque rep.'
     },
     seche: {
       warmup: '5 min rameur + rotations \u00e9paules',
       exercises: [
-        {order:1, name:'\u00c9cart\u00e9 poulie basse', sets:4, reps:15, rest:'45s', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'poulie'},
-        {order:2, name:'D\u00e9velopp\u00e9 couch\u00e9 barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
-        {order:3, name:'D\u00e9velopp\u00e9 inclin\u00e9 barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
-        {order:4, name:'D\u00e9velopp\u00e9 inclin\u00e9 halt\u00e8res', sets:3, reps:12, rest:'1min', technique:'3s pic contraction', muscle:'pectoraux', type:'compound', equipment:'halteres'},
-        {order:5, name:'\u00c9cart\u00e9 couch\u00e9', sets:4, reps:12, rest:'45s', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'halteres'},
+        {order:1, name:'D\u00e9velopp\u00e9 couch\u00e9 barre', sets:4, reps:10, rest:'1min30', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
+        {order:2, name:'D\u00e9velopp\u00e9 inclin\u00e9 barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
+        {order:3, name:'D\u00e9velopp\u00e9 inclin\u00e9 halt\u00e8res', sets:3, reps:12, rest:'1min', technique:'3s pic contraction', muscle:'pectoraux', type:'compound', equipment:'halteres'},
+        {order:4, name:'\u00c9cart\u00e9 poulie basse', sets:4, reps:15, rest:'45s', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'poulie'},
+        {order:5, name:'\u00c9cart\u00e9 couch\u00e9', sets:4, reps:15, rest:'45s', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'halteres'},
         {order:6, name:'Crunch banc d\u00e9clin\u00e9', sets:4, reps:20, rest:'45s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'banc'}
       ],
-      notes: 'Repos courts, tempo rapide.'
+      notes: 'Composés d\'abord, repos courts, tempo rapide.'
     }
   },
   dos: {
@@ -113,23 +113,23 @@ var NFC_PROGRAMS = {
     masse: {
       warmup: '5 min rameur + rotations \u00e9paules + bande \u00e9lastique',
       exercises: [
-        {order:1, name:'\u00c9l\u00e9vation lat\u00e9rale', sets:4, reps:10, rest:'1min30', technique:'1 moiti\u00e9 + 1 compl\u00e8te = 1 rep', muscle:'\u00e9paules', type:'isolation', equipment:'halteres'},
-        {order:2, name:'D\u00e9velopp\u00e9 Arnold', sets:4, reps:8, rest:'1min30', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
-        {order:3, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res', sets:4, reps:10, rest:'1min30', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
-        {order:4, name:'\u00c9l\u00e9vation frontale + Face pull', sets:4, reps:'10+10', rest:'1min30', technique:'Superset: 3s excentrique', muscle:'\u00e9paules', type:'superset', equipment:'halteres+poulie'},
+        {order:1, name:'D\u00e9velopp\u00e9 militaire barre', sets:4, reps:6, rest:'3min', technique:'Composé principal — CNS frais', muscle:'\u00e9paules', type:'compound', equipment:'barre'},
+        {order:2, name:'D\u00e9velopp\u00e9 Arnold', sets:4, reps:8, rest:'2min', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
+        {order:3, name:'\u00c9l\u00e9vation frontale + Face pull', sets:4, reps:'10+10', rest:'1min30', technique:'Superset: 3s excentrique', muscle:'\u00e9paules', type:'superset', equipment:'halteres+poulie'},
+        {order:4, name:'\u00c9l\u00e9vation lat\u00e9rale', sets:4, reps:12, rest:'1min30', technique:'1 moiti\u00e9 + 1 compl\u00e8te = 1 rep', muscle:'\u00e9paules', type:'isolation', equipment:'halteres'},
         {order:5, name:'Shrug barre', sets:4, reps:10, rest:'1min30', technique:null, muscle:'trap\u00e8zes', type:'isolation', equipment:'barre'},
         {order:6, name:'Abdos rouleau', sets:4, reps:12, rest:'1min', technique:null, muscle:'abdominaux', type:'isolation', equipment:'rouleau'},
         {order:7, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
-      notes: 'Les \u00e9paules donnent la forme en V. Travaillez les 3 faisceaux.'
+      notes: 'Composés d\'abord (presse militaire = roi des épaules). Travaillez les 3 faisceaux.'
     },
     seche: {
       warmup: '5 min rameur + rotations \u00e9paules',
       exercises: [
-        {order:1, name:'\u00c9l\u00e9vation lat\u00e9rale', sets:4, reps:15, rest:'45s', technique:'1 moiti\u00e9 + 1 compl\u00e8te', muscle:'\u00e9paules', type:'isolation', equipment:'halteres'},
+        {order:1, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res', sets:4, reps:10, rest:'1min30', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
         {order:2, name:'D\u00e9velopp\u00e9 Arnold', sets:4, reps:12, rest:'1min', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
-        {order:3, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res', sets:4, reps:12, rest:'1min', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
-        {order:4, name:'\u00c9l\u00e9vation frontale + Face pull', sets:4, reps:'12+12', rest:'1min', technique:'Superset', muscle:'\u00e9paules', type:'superset', equipment:'halteres+poulie'},
+        {order:3, name:'\u00c9l\u00e9vation frontale + Face pull', sets:4, reps:'12+12', rest:'1min', technique:'Superset', muscle:'\u00e9paules', type:'superset', equipment:'halteres+poulie'},
+        {order:4, name:'\u00c9l\u00e9vation lat\u00e9rale', sets:4, reps:15, rest:'45s', technique:'1 moiti\u00e9 + 1 compl\u00e8te', muscle:'\u00e9paules', type:'isolation', equipment:'halteres'},
         {order:5, name:'Shrug barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'trap\u00e8zes', type:'isolation', equipment:'barre'},
         {order:6, name:'Abdos rouleau', sets:4, reps:15, rest:'45s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'rouleau'},
         {order:7, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'30s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
@@ -234,6 +234,19 @@ var NFC_PROGRAMS = {
     notes: 'Les triceps = 2/3 du volume du bras. Ne les n\u00e9gligez pas !'
   }
 };
+
+// ─── VOLUME LANDMARKS (Schoenfeld, RP Hypertrophy — sets/semaine par muscle) ───
+var VOLUME_LANDMARKS = {
+  chest:     {mev:6,  mav:16, mrv:22, label:'Poitrine'},
+  back:      {mev:8,  mav:16, mrv:25, label:'Dos'},
+  shoulders: {mev:6,  mav:14, mrv:20, label:'Épaules'},
+  legs:      {mev:8,  mav:18, mrv:28, label:'Jambes'},
+  glutes:    {mev:4,  mav:12, mrv:20, label:'Fessiers'},
+  biceps:    {mev:6,  mav:12, mrv:20, label:'Biceps'},
+  triceps:   {mev:6,  mav:14, mrv:20, label:'Triceps'},
+  abs:       {mev:4,  mav:10, mrv:16, label:'Abdominaux'}
+};
+window.VOLUME_LANDMARKS = VOLUME_LANDMARKS;
 
 var WEEKLY_SPLITS = {
   3: {name:'Full Body 3j', days:[{day:'Lundi',muscles:['pectoraux','dos'],label:'Haut du corps A'},{day:'Mercredi',muscles:['jambes','epaules'],label:'Bas + \u00c9paules'},{day:'Vendredi',muscles:['bras','abdos_dedied'],label:'Bras + Abdos'}]},

@@ -576,7 +576,7 @@ window.S = {
   supplements: [],
   // Musculation weight tracking
   musculationWeights: {},  // { exerciseName: { weight: Number, type: 'barre'|'haltere'|'machine'|'kb'|'bodyweight' } },
-  muscuWeek: 1, muscuProgramStart: null, sportSplashDone: false,
+  muscuWeek: 1, muscuCycle: 1, muscuProgramStart: null, sportSplashDone: false,
   // CrossFit 1RM
   crossfit1RM: {},  // { 'clean': 80, 'snatch': 60, 'deadlift': 140, ... } in kg
   // Strength assessment profile
