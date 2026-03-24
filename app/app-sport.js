@@ -271,8 +271,8 @@ window.SPORT = {
   render: function(p) {
     var content = h('div', {'class': 'fade-in'});
 
-    // Header with progress (only shown after step 0)
-    if (S.sStep > 0) {
+    // Header with progress (only shown after step 0, not on dedicated programs page)
+    if (S.sStep > 0 && S.sStep !== 15) {
       var hdr = h('header', {'class': 'header'});
       var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : 'Musculation';
       hdr.appendChild(h('div', {'class': 'logo', html: 'MTD<span>' + sportLabel + '</span>'}));
@@ -286,6 +286,7 @@ window.SPORT = {
     }
 
     if (S.sStep === 0) renderObjectif(content);              // Type selection
+    else if (S.sStep === 15) renderDedicatedPrograms(content); // Dedicated programs
     else if (S.sStep === 1) renderMusculationGoals(content);  // Muscu objectives
     else if (S.sStep === 2) renderMusculationLevel(content);  // Muscu level
     else if (S.sStep === 3) renderMusculationZones(content);  // Muscu zones
@@ -350,10 +351,10 @@ function renderObjectif(p) {
   p.appendChild(h('div', {'class': 'section-label'}, 'Type de programme'));
   var typeGrid = h('div', {'class': 'card-grid-2'});
 
-  // Musculation - clicking goes to objectives (step 1)
+  // Musculation - clicking goes to dedicated programs page first (step 15)
   typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
     S.sportType = 'musculation';
-    S.sStep = 1;
+    S.sStep = 15;
     if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'musculation'});
     window.render();
   }}, [
@@ -431,6 +432,66 @@ function renderObjectif(p) {
   p.appendChild(typeGrid);
 
   // No Continue button needed - cards auto-navigate
+}
+
+// ─── STEP 15: PROGRAMMES DÉDIÉS ───
+function renderDedicatedPrograms(p) {
+  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
+  p.appendChild(h('h1', {html: 'Programmes<br><em>dédiés</em>'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Séances ciblées par groupe musculaire. Cliquez pour voir les exercices.'));
+
+  var allDedicated = [
+    {key: 'fessiers_dedied', icon: '🍑'},
+    {key: 'abdos_dedied',    icon: '⚡'},
+    {key: 'biceps_dedied',   icon: '💪'},
+    {key: 'triceps_dedied',  icon: '🔱'}
+  ];
+
+  allDedicated.forEach(function(item) {
+    var prog = window.NFC_PROGRAMS && window.NFC_PROGRAMS[item.key];
+    if (!prog) return;
+
+    var isOpen = S['dedicatedOpen_' + item.key] || false;
+    var card = h('div', {style: 'border:1px solid var(--border);margin-bottom:8px;background:var(--ivory2)'});
+
+    var header = h('div', {
+      style: 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer',
+      onclick: function() {
+        S['dedicatedOpen_' + item.key] = !S['dedicatedOpen_' + item.key];
+        window.render();
+      }
+    });
+    var titleDiv = h('div', {style: 'display:flex;align-items:center;gap:10px'});
+    titleDiv.appendChild(h('span', {style: 'font-size:20px'}, item.icon));
+    titleDiv.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:15px'}, prog.name));
+    header.appendChild(titleDiv);
+    header.appendChild(h('span', {style: 'font-size:18px;color:var(--grey)'}, isOpen ? '▲' : '▼'));
+    card.appendChild(header);
+
+    if (isOpen) {
+      prog.exercises.forEach(function(ex) {
+        var row = h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start'});
+        var left = h('div', {});
+        left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.order + '. ' + ex.name));
+        left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.muscle + ' — ' + ex.equipment));
+        if (ex.technique) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange);margin-top:2px'}, ex.technique));
+        row.appendChild(left);
+        var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
+        right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.sets + '×' + ex.reps));
+        right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.rest));
+        row.appendChild(right);
+        card.appendChild(row);
+      });
+      if (prog.notes) {
+        card.appendChild(h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic'}, prog.notes));
+      }
+    }
+    p.appendChild(card);
+  });
+
+  p.appendChild(h('div', {style: 'height:16px'}));
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ S.sStep = 1; window.render(); }}, 'Créer mon programme personnalisé →'));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 1: MUSCULATION OBJECTIVES ───
