@@ -1175,6 +1175,10 @@ function renderStep7(p) {
 // ─── STEP 8: RESULTATS ───
 function renderStep8(p) {
   var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI(), water = (S.weight * 0.033).toFixed(1), ppk = (m.p / S.weight).toFixed(1);
+  // Enregistrer les macros journalières dans l'historique (une entrée par jour)
+  if (window.PERF_HISTORY && m && tgt > 0) {
+    try { PERF_HISTORY.recordNutrition(tgt, m.p, m.g, m.l); } catch(e) {}
+  }
 
   // Header
   var rh = h('div', {'class': 'result-header'});

@@ -230,6 +230,10 @@ if (AUTH.isLoggedIn()) {
       S.weightHistory = JSON.parse(savedWeightHistory);
     }
   } catch(e) {}
+  // Migrate existing performance data into perf-history (no-op if already done)
+  if (window.PERF_HISTORY) {
+    try { PERF_HISTORY.migrateExistingData(); } catch(e) {}
+  }
 } else {
   S.view = 'auth';
 }

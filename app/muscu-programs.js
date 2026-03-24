@@ -426,7 +426,7 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
   if (goalKey === 'force') {
     var forceEntry = NFC_PROGRAMS_FORCE[muscleGroup];
     if (forceEntry && forceEntry.force) {
-      var forceResult = JSON.parse(JSON.stringify(forceEntry.force));
+      var forceResult; try { forceResult = JSON.parse(JSON.stringify(forceEntry.force)); } catch(e) { return null; }
       if (!forceResult.exercises) forceResult.exercises = [];
       if (S.sportLevel === 'beginner') {
         forceResult.exercises = forceResult.exercises.slice(0, 4);
@@ -440,10 +440,11 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
 
   var program = NFC_PROGRAMS[muscleGroup];
   if (!program) return null;
-  if (program.exercises) return JSON.parse(JSON.stringify(program));
+  if (program.exercises) { try { return JSON.parse(JSON.stringify(program)); } catch(e) { return program; } }
   var template = program[goalKey] || program.masse;
   if (!template) return null;
-  var result = JSON.parse(JSON.stringify(template));
+  var result; try { result = JSON.parse(JSON.stringify(template)); } catch(e) { return null; }
+  if (!result) return null;
   if (!result.exercises) result.exercises = [];
   if (S.sex === 'femme') {
     result.exercises.forEach(function(ex) {
@@ -475,7 +476,8 @@ function getProgressiveProgram(muscleGroup, weekInMesocycle, userProfile) {
   var meso = MESOCYCLE_WEEKS[week] || MESOCYCLE_WEEKS[0];
   var base = getPersonalizedProgram(muscleGroup, userProfile);
   if (!base || !base.exercises) return base;
-  var result = JSON.parse(JSON.stringify(base));
+  var result; try { result = JSON.parse(JSON.stringify(base)); } catch(e) { return base; }
+  if (!result) return base;
   result.exercises.forEach(function(ex) {
     if (typeof ex.sets === 'number') {
       ex.sets = Math.max(2, Math.round(ex.sets * meso.setsMultiplier));
@@ -492,7 +494,8 @@ function getWeeklySplit(daysPerWeek, userProfile) {
   var S = userProfile || window.S || {};
   var base = WEEKLY_SPLITS[daysPerWeek] || WEEKLY_SPLITS[5];
   // Deep clone to avoid mutating the template
-  var split = JSON.parse(JSON.stringify(base));
+  var split; try { split = JSON.parse(JSON.stringify(base)); } catch(e) { return base; }
+  if (!split) return base;
   // Inject dedicated programs based on zone priorities (4★ or 5★)
   var focus = S.sportFocus || {};
   var priorityMap = {

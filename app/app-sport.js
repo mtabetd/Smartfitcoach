@@ -2373,6 +2373,15 @@ function renderHyroxConfig(p) {
       S.selectedHyroxDay = 0;
       S.sStep = 10;
       window.BLACKBOX && window.BLACKBOX.log('hyrox_config', {goal: S.hyroxGoal, level: S.hyroxLevel, days: S.hyroxDays});
+      // Enregistrer les benchmarks dans l'historique
+      if (window.PERF_HISTORY && S.hyroxBenchmarks) {
+        var hyroxSt = window.HYROX_STATIONS || [];
+        hyroxSt.forEach(function(st) {
+          if (st.id !== 'run' && S.hyroxBenchmarks[st.id]) {
+            PERF_HISTORY.recordHyroxBenchmark(st.id, st.name, S.hyroxBenchmarks[st.id]);
+          }
+        });
+      }
       window.render();
     }
   }}, 'Générer mon plan'));
@@ -2853,6 +2862,12 @@ function renderTriathlonConfig(p) {
     S.selectedTriDay = 0;
     S.sStep = 18;
     if (window.BLACKBOX) window.BLACKBOX.log('triathlon_config', {goal: S.triathlonGoal, level: S.triathlonLevel, weak: S.triathlonWeak});
+    // Enregistrer les allures triathlon dans l'historique
+    if (window.PERF_HISTORY) {
+      if (S.triathlonSwimPace) PERF_HISTORY.recordTriathlonPace('swim', S.triathlonSwimPace, 'min/100m');
+      if (S.triathlonBikePace) PERF_HISTORY.recordTriathlonPace('bike', S.triathlonBikePace, 'km/h');
+      if (S.triathlonRunPace) PERF_HISTORY.recordTriathlonPace('run', S.triathlonRunPace, 'min/km');
+    }
     window.render();
   }}, 'Générer mon programme →'));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
