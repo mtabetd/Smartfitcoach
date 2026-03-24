@@ -254,8 +254,85 @@ var HALTERO_CYCLES = [
         ]
       }
     ]
+  },
+  {
+    id: 'cycle_e',
+    name: 'Cycle E — Back Squat + Power Clean',
+    focus: 'Force maximale arrière + transfert en clean',
+    duration: '6 semaines',
+    notes: 'Cycle manquant critique: le Back Squat est la base de tous les mouvements olympiques. Sans Back Squat solide, le squat clean et le front squat plafonnent. Ce cycle cible la force maximale de squat + puissance de tirage.',
+    lifts: [
+      {
+        name: 'Back Squat',
+        day: 1,
+        warmup: [
+          '2x10 Air Squat (activation)',
+          '3x5 Back Squat (barre vide — warm-up)',
+          '3x3 @50%',
+          '2x2 @65%',
+          '1x1 @75%'
+        ],
+        accessory: [
+          '3x8 Romanian Deadlift @60%',
+          '3x10 Walking Lunges (DB ou barre)',
+          '3x12 Hip Thrust (fort activation fessiers)'
+        ],
+        standards_key: 'back_squat',
+        progression_notes: [
+          'S1-2: Brace profond (360° expansion), tibia vertical',
+          'S3-4: Pause squat 1s en bas — force excentrique',
+          'S5: Tempo 3-0-X-0 (3s descente, explosion remontée)',
+          'S6: PR day — 1RM Back Squat (testez-vous!)'
+        ]
+      },
+      {
+        name: 'Power Clean',
+        day: 2,
+        warmup: [
+          '3x5 Clean Deadlift (lent, focus position)',
+          '3x5 Hang Muscle Clean (activation)',
+          '3x3 Hang Power Clean @50%',
+          '3x2 Power Clean @60%',
+          '2x1 @70%'
+        ],
+        accessory: [
+          '3x5 Clean Pull @100% du Power Clean',
+          '3x6 Front Squat @80% du Power Clean',
+          '3x10 DB Bent Over Row (grip + dorsaux)'
+        ],
+        standards_key: 'power_clean',
+        progression_notes: [
+          'S1-2: Position genoux au 1er tirage — pas de rebond prématuré',
+          'S3-4: Extension complète hanches+genoux+orteils avant le tirage sous',
+          'S5: Réception haute et agressive — code = vitesse sous la barre',
+          'S6: PR day — 1RM Power Clean (touch & go interdit, chaque rep = full reset)'
+        ]
+      }
+    ]
   }
 ];
+
+// ─── INTER-CYCLE DELOAD PROTOCOL ───
+// Entre chaque cycle de 6 semaines: 1 semaine de déload obligatoire (ISSN 2017)
+// Volume -60%, intensité -40%. Focus: mobilité, technique légère, récupération CNS
+var INTER_CYCLE_DELOAD = {
+  description: 'Semaine de transition entre les cycles (semaine 7, 13, 19...)',
+  protocol: [
+    { day: 1, focus: 'Mobilité + Technique clean légère', desc: '3x5 Clean technique @55%. 20min foam roll + stretching.' },
+    { day: 2, focus: 'Aérobie Zone 2', desc: '30-40min Rowing ou Run à FC 60-70% FCmax. Aucune charge.' },
+    { day: 3, focus: 'Squat technique légère', desc: '3x5 Front Squat @55%. 3x5 OHS @50% (mobilité overhead).' },
+    { day: 4, focus: 'REPOS ACTIF', desc: 'Yoga, natation légère, marche 45min. Zéro barre.' },
+    { day: 5, focus: 'Récapitulatif cycle + préparation suivant', desc: '1RM estimé à 90% effort (pas de PR). Plan du cycle suivant.' }
+  ],
+  notes: 'NE PAS SAUTER le déload inter-cycle. Recherches ISSN 2017: un déload de 7 jours après 6 semaines de charge augmente le PR suivant de 3-8% vs athlètes qui ne déloadent pas. Le muscle grandit pendant le repos, pas pendant l\'entraînement.'
+};
+
+// ─── OHS PERCENTAGE CORRECTION ───
+// Note: L\'OHS (Overhead Squat) nécessite des pourcentages RÉDUITS vs les autres lifts
+// En raison de la demande de stabilité overhead, les % standard de la PERIODIZATION doivent être ajustés:
+// OHS_FACTOR = 0.88 (ex: S3 @78% → appliquer 78% * 0.88 = 69% de l\'OHS 1RM)
+// Référence: Haff & Triplett 2016 "NSCA Essentials of Strength Training and Conditioning"
+var OHS_PERCENTAGE_FACTOR = 0.88;
 
 // ─── HELPER FUNCTIONS ───
 
@@ -361,10 +438,13 @@ function renderCycleInfo(container, totalWeeks, sex, level) {
 
     // Show sets/reps/percentage for this week
     weekData.sets_reps_pct.forEach(function(srp) {
-      var weight = calcWorkingWeight(lift.standards_key, sex, level, srp.pct);
+      // Apply OHS correction factor for overhead squat
+      var effectivePct = (lift.standards_key === 'overhead_squat') ? Math.round(srp.pct * OHS_PERCENTAGE_FACTOR) : srp.pct;
+      var weight = calcWorkingWeight(lift.standards_key, sex, level, effectivePct);
       var has1RM = window.S && window.S.crossfit1RM && window.S.crossfit1RM[lift.standards_key];
       var setLine = h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--black,#0A0A09);padding:4px 0'});
-      var lineText = srp.sets + '\u00D7' + srp.reps + ' @' + srp.pct + '% (' + weight + 'kg)';
+      var displayPct = (lift.standards_key === 'overhead_squat') ? effectivePct + '% (OHS corrigé)' : srp.pct + '%';
+      var lineText = srp.sets + '\u00D7' + srp.reps + ' @' + displayPct + ' (' + weight + 'kg)';
       if (has1RM) lineText += ' \u2014 1RM: ' + window.S.crossfit1RM[lift.standards_key] + 'kg';
       lineText += ' \u2014 Repos ' + srp.rest;
       setLine.textContent = lineText;
@@ -398,6 +478,8 @@ function renderCycleInfo(container, totalWeeks, sex, level) {
 window.HALTERO_CYCLES = {
   PERIODIZATION: PERIODIZATION,
   CYCLES: HALTERO_CYCLES,
+  INTER_CYCLE_DELOAD: INTER_CYCLE_DELOAD,
+  OHS_PERCENTAGE_FACTOR: OHS_PERCENTAGE_FACTOR,
   getCurrentCycle: getCurrentCycle,
   getHalteroSession: getHalteroSession,
   calcWorkingWeight: calcWorkingWeight,

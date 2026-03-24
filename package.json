@@ -1,0 +1,14 @@
+{
+  "name": "smartfitcoach",
+  "version": "1.0.0",
+  "description": "SmartFitCoach - Application PWA de nutrition et fitness",
+  "scripts": {
+    "start": "live-server app --port=3000 --host=0.0.0.0 --no-browser --entry-file=index.html"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "jspdf": "^4.2.1"
+  }
+}

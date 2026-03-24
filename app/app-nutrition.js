@@ -1175,6 +1175,10 @@ function renderStep7(p) {
 // ─── STEP 8: RESULTATS ───
 function renderStep8(p) {
   var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI(), water = (S.weight * 0.033).toFixed(1), ppk = (m.p / S.weight).toFixed(1);
+  // Enregistrer les macros journalières dans l'historique (une entrée par jour)
+  if (window.PERF_HISTORY && m && tgt > 0) {
+    try { PERF_HISTORY.recordNutrition(tgt, m.p, m.g, m.l); } catch(e) {}
+  }
 
   // Header
   var rh = h('div', {'class': 'result-header'});
@@ -1193,6 +1197,28 @@ function renderStep8(p) {
     TIPS.renderTip(p, 'results');
     if (S.pregnant && S.sex === 'femme') TIPS.renderTip(p, 'pregnancy');
     if (S.sex === 'femme' && S.cycleTracking) TIPS.renderTip(p, 'cycle');
+  }
+
+  // ─── ALERTES MÉDICALES ET SÉCURITÉ ───
+  // Conflits médicaux (grossesse+DG+vegan, TCA+cut, IRC+muscle, cardiopathie+intensité)
+  if (window.detectMedicalConflicts) {
+    var conflicts = window.detectMedicalConflicts();
+    conflicts.forEach(function(c) {
+      var bg = c.level === 'CRITIQUE' ? '#FFEBEE' : c.level === 'ÉLEVÉ' ? '#FFF3E0' : '#E3F2FD';
+      var border = c.level === 'CRITIQUE' ? '#C0392B' : c.level === 'ÉLEVÉ' ? '#E67E22' : '#1976D2';
+      var color = c.level === 'CRITIQUE' ? '#7B1A1A' : c.level === 'ÉLEVÉ' ? '#5D4037' : '#0D47A1';
+      p.appendChild(h('div', {style: 'background:' + bg + ';border-left:4px solid ' + border + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:' + color + ';line-height:1.5'}, c.message));
+    });
+  }
+  // RED-S détection (IOC 2018 — EA < 30 kcal/kg MLG/j)
+  if (window.detectREDS) {
+    var redsAlert = window.detectREDS();
+    if (redsAlert) {
+      var redsBg = redsAlert.risk === 'CRITIQUE' ? '#FFEBEE' : '#FFF3E0';
+      var redsBorder = redsAlert.risk === 'CRITIQUE' ? '#C0392B' : '#E67E22';
+      var redsColor = redsAlert.risk === 'CRITIQUE' ? '#7B1A1A' : '#5D4037';
+      p.appendChild(h('div', {style: 'background:' + redsBg + ';border-left:4px solid ' + redsBorder + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:' + redsColor + ';line-height:1.5'}, redsAlert.message));
+    }
   }
 
   // Big numbers
@@ -1758,6 +1784,8 @@ function renderStep9(p) {
 
 // ─── MODAL ───
 function renderModal(app) {
+  // Attach to #app root (not the fade-in container) — position:fixed breaks when parent has CSS transform
+  var root = document.getElementById('app') || app;
   var ov = h('div', {'class': 'modal-overlay' + (S.modalRecipe ? ' open' : ''), onclick: function(e) {
     if (e.target === ov) { S.modalRecipe = null; window.render(); }
   }});
@@ -1790,12 +1818,12 @@ function renderModal(app) {
     sheet.appendChild(body);
   }
   ov.appendChild(sheet);
-  app.appendChild(ov);
+  root.appendChild(ov);
 }
 
 // ─── PDF EXPORT ───
 function exportDayPDF(dayIdx) {
-  if (!window.jspdf) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
   var W = 210, M = 20, CW = W - 2 * M, y = 0;
@@ -1882,7 +1910,7 @@ function exportDayPDF(dayIdx) {
 window.exportDayPDF = exportDayPDF;
 
 function exportRecipePDF(r) {
-  if (!window.jspdf) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
   var W = 210, M = 20, CW = W - 2 * M, y = 0;

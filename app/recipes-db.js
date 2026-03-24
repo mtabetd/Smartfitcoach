@@ -2609,3 +2609,8 @@ var dinner = [
     tags: ["boeuf", "champignons", "crème", "oignon", "persil"]
   }
 ];
+
+window.breakfast = breakfast;
+window.lunch = lunch;
+window.snack = snack;
+window.dinner = dinner;
