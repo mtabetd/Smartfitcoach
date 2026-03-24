@@ -62,7 +62,8 @@ var ACTIVITIES=[
   {icon:'\u{1F6B6}',name:'Légèrement actif',desc:'1-2x / semaine',factor:1.375},
   {icon:'\u{1F3C3}',name:'Modérément actif',desc:'3-4x / semaine',factor:1.55},
   {icon:'\u{1F3CB}\uFE0F',name:'Très actif',desc:'5-6x / semaine',factor:1.725},
-  {icon:'⚡',name:'Athlète',desc:'2x / jour',factor:1.9}
+  {icon:'⚡',name:'Athlète',desc:'2x / jour',factor:1.9},
+  {icon:'🏆',name:'Athlète élite',desc:'>10h / semaine (IRONMAN, pro)',factor:2.1}
 ];
 var TRAINS=[{icon:'\u{1F3CB}\uFE0F',name:'Musculation'},{icon:'\u{1FAC0}',name:'Cardio'},{icon:'💪',name:'Mixte'},{icon:'⚽',name:'Sport co.'},{icon:'\u{1F3C3}',name:'Running'}];
 var SLEEPS=['< 6h','6-7h','7-8h','8h+'];
@@ -109,6 +110,7 @@ var MEDICAL=[
     {id:'hypothyroidie',name:'Hypothyroïdie',desc:'Iode, sélénium, éviter excès soja',icon:'△'},
     {id:'hyperthyroidie',name:'Hyperthyroïdie',desc:'Apport calorique adapté, calcium',icon:'△'},
     {id:'sopk',name:'SOPK',desc:'IG bas, anti-inflammatoire',icon:'△'},
+    {id:'menopause',name:'Ménopause / Post-ménopause',desc:'Calcium, vit D, protéines + , kcal réduits',icon:'△'},
     {id:'hashimoto',name:'Thyroïdite de Hashimoto',desc:'Anti-inflammatoire, sans gluten optionnel',icon:'△'}
   ]},
   {cat:'OS & ARTICULATIONS',items:[
@@ -120,7 +122,8 @@ var MEDICAL=[
     {id:'anemie_b12',name:'Carence B12 / Folates',desc:'Sources animales ou supplémentation',icon:'●'},
     {id:'obesity',name:'Obésité (IMC > 30)',desc:'Déficit calorique contrôlé',icon:'●'},
     {id:'tca',name:'Troubles du comportement alimentaire',desc:'Suivi médical recommandé',icon:'●'},
-    {id:'grossesse',name:'Grossesse / Allaitement',desc:'Folates, fer, calcium, protéines +',icon:'●'},
+    {id:'grossesse',name:'Grossesse',desc:'Folates, fer, calcium, protéines +',icon:'●'},
+    {id:'allaitement',name:'Allaitement',desc:'+500 kcal/j, calcium, vitamine D, iode',icon:'●'},
     {id:'insomnia',name:'Troubles du sommeil',desc:'Magnésium, tryptophane, éviter excitants',icon:'●'}
   ]}
 ];
@@ -145,6 +148,7 @@ var MEDICAL_ADVICE={
   hypothyroidie:{warn:'Assurez iode et sélénium. Évitez excès de soja et crucifères crus.',macroAdj:null},
   hyperthyroidie:{warn:'Apport calorique augmenté. Calcium et vitamine D importants.',macroAdj:null},
   sopk:{warn:'Index glycémique bas, anti-inflammatoire. Oméga-3 et magnésium.',macroAdj:{g:-.08,p:.04,l:.04}},
+  menopause:{warn:'Ménopause : métabolisme réduit ~100-150 kcal/j (NAMS 2022). Augmentez calcium (1200mg/j) et vitamine D. Protéines +10% pour lutter contre la perte musculaire (ESPEN 2019). Oméga-3 pour santé cardiovasculaire.',macroAdj:{g:-.05,p:.08,l:-.03}},
   hashimoto:{warn:'Anti-inflammatoire. Certains patients bénéficient du sans gluten.',macroAdj:null},
   osteoporose:{warn:'Calcium (1200mg/j), vitamine D, protéines adéquates.',macroAdj:{g:-.03,p:.05,l:-.02}},
   polyarthrite:{warn:'Oméga-3 (poissons gras). Réduisez oméga-6 et aliments pro-inflammatoires.',macroAdj:null},
@@ -153,6 +157,7 @@ var MEDICAL_ADVICE={
   obesity:{warn:'Déficit calorique modéré (-500 kcal/j max). Protéines hautes pour préserver la masse maigre.',macroAdj:{g:-.08,p:.10,l:-.02}},
   tca:{warn:'Un suivi médical et psychologique est fortement recommandé.',macroAdj:null},
   grossesse:{warn:'Acide folique, fer, calcium. +300 kcal/j au 2e trimestre, +450 au 3e.',macroAdj:{g:.02,p:.05,l:-.02}},
+  allaitement:{warn:'Allaitement : +500 kcal/j (ACOG 2022). Calcium 1200mg/j, iode 290µg/j, vitamine D 600 UI. Évitez caféine >200mg/j et alcool.',macroAdj:{g:.03,p:.07,l:-.01}},
   insomnia:{warn:'Magnésium, tryptophane (dinde, banane). Évitez caféine après 14h.',macroAdj:null}
 };
 var MEAL_SPLIT={pctBreak:.25,pctLunch:.40,pctSnack:.05,pctDinner:.30};
@@ -1000,11 +1005,14 @@ function calcTDEE(){var s=window.S;if(s.activity===null)return 0;var selectedFac
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
 function calcTarget(){var s=window.S;if(s.goal===null)return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}return base}var goalKey=GOALS[s.goal].key;// Cap deficit to 500kcal/day for diabetics (sécurité glycémique)
+// Allaitement : +500 kcal/j (ACOG 2022) — priorité sur l'objectif coupe/sèche
+if(s.medical&&s.medical.indexOf('allaitement')!==-1){return Math.max(Math.round(tdeeVal)+500,1800);}
 // TCA/anorexie : forcer maintenance, bloquer cut/shred (ANAD, IOC 2018 — RED-S prevention)
 if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
 // Adolescent (13-17 ans) : déficit max -300kcal/j (ACSM 2007, IOC 2018 — préservation croissance + pic de masse osseuse)
 if(s.age>=13&&s.age<18&&tdeeVal>0){var minCalTeen=Math.round(tdeeVal-300);if(base<minCalTeen)base=minCalTeen;}
-var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
+var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
+if(s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1200,base-100);}if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
 if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}return base}
 function calcMacros(){
   var s=window.S;var c=calcTarget();
@@ -1014,6 +1022,8 @@ function calcMacros(){
   var ppk=1.8;
   if(goalKey==='shred')ppk=2.5;else if(goalKey==='cut')ppk=2.2;else if(goalKey==='bulk')ppk=1.8;else ppk=1.8;
   if(s.activity!==null&&ACTIVITIES[s.activity].factor>=1.7)ppk+=0.2;
+  // Plafond PPK sèche 2.5g/kg (Helms 2014, ISSN 2017) — bonus activité inclus
+  if(goalKey==='shred')ppk=Math.min(ppk,2.5);
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
   if(s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.8); // NKF/KDOQI: 0.6-0.8g/kg for CKD
   // Vegan/vegetarian: adjust protein for lower DIAAS bioavailability of plant proteins (Messina 2019, ISSN 2017)
@@ -1028,7 +1038,9 @@ function calcMacros(){
   var fpk=1.0;
   if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='bulk')fpk=1.1;else fpk=1.0;
   if(s.sex==='femme')fpk+=0.1;
-  fpk=Math.max(0.5,Math.min(1.5,fpk));
+  // Min lipides femme 0.7g/kg (ISSN 2021) — santé hormonale (vs 0.5 homme)
+  var lipidMin=s.sex==='femme'?0.7:0.5;
+  fpk=Math.max(lipidMin,Math.min(1.5,fpk));
   var lGrams=Math.round(bw*fpk);var lCal=lGrams*9;
   // Carbs fill remaining calories
   var gCal=c-pCal-lCal;
@@ -1278,6 +1290,14 @@ function detectMedicalConflicts() {
   if(s.pregnant&&med.indexOf('diabete_gest')!==-1&&s.regime===3){
     conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : Grossesse + Diabète gestationnel + Végan — Contraintes caloriques incompatibles. Il peut être impossible de couvrir vos besoins ('+calcTarget()+' kcal) avec glucides ≤200g/j sans consommer d\'œufs ou produits laitiers. Consultation diététicienne spécialisée OBLIGATOIRE.'});
   }
+  // Alerte B12 automatique régime végane (EFSA 2023, Messina 2019)
+  if(s.regime===3&&med.indexOf('anemie_b12')===-1){
+    conflicts.push({level:'INFO',message:'ℹ Régime végane — Supplémentation B12 OBLIGATOIRE (seule vitamine absente des végétaux). Recommandation EFSA 2023 : 1000µg/semaine ou 50µg/jour. Formes : méthylcobalamine ou cyanocobalamine. Prise de sang B12 annuelle conseillée.'});
+  }
+  // Alerte : allergie poisson + régime pescétarien = sources protéines animales quasi nulles
+  if(s.regime===1&&s.allergies&&s.allergies.indexOf('Poisson')!==-1){
+    conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT nutritionnel : Régime pescétarien + Allergie au poisson — toutes les sources de protéines animales non-végétales sont exclues. Votre profil devient quasi végétarien. Vérifiez vos apports en B12, zinc, fer et oméga-3 (supplémenter si nécessaire).'});
+  }
   // Conflit 2 : TCA + objectif shred/cut
   if(med.indexOf('tca')!==-1){
     var goalKey=s.goal!==null?GOALS[s.goal].key:null;
@@ -1290,7 +1310,7 @@ function detectMedicalConflicts() {
     conflicts.push({level:'INFO',message:'ℹ IRC + Objectif musculaire — La créatine est contre-indiquée (charge rénale). Protéines plafonnées à 0.8g/kg/j (NKF/KDOQI). Consulter un néphrologue avant tout programme de musculation intensif.'});
   }
   // Conflit 4 : Cardiopathie + intensité haute
-  if(med.indexOf('cardiopathie')!==-1){
+  if(med.indexOf('cardio')!==-1){
     var actFactor=s.activity!==null?ACTIVITIES[s.activity].factor:0;
     if(actFactor>=1.7){
       conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Cardiopathie + activité très intense — Niveau d\'activité incompatible sans clearance cardiologique. Test d\'effort (VO2max) obligatoire. Zones FC via formule de Karvonen recommandées.'});
@@ -1555,6 +1575,13 @@ function generateRunningProgram(weeks, daysPerWeek, level, goal) {
       longRunKm = Math.round(maxLongRun * (1 - (pctOfPlan - 0.75) / 0.25 * 0.4));
     }
     if (w % 4 === 0) longRunKm = Math.round(longRunKm * 0.7);
+    // Règle +10%/semaine (ACSM 2018) — évite les blessures par surcharge
+    if (w > 1 && program.length > 0) {
+      var prevLong = program[program.length - 1].longRun || 0;
+      if (prevLong > 0 && !(w % 4 === 0) && longRunKm > Math.round(prevLong * 1.10)) {
+        longRunKm = Math.round(prevLong * 1.10);
+      }
+    }
 
     var baseVolume = longRunKm * 2.5;
     if (level === 'beginner') baseVolume *= 0.7;

@@ -1531,7 +1531,7 @@ function renderMusculationProgram(p) {
     p.appendChild(h('div', {style: 'background:#E8F5E9;border-left:4px solid #27AE60;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1B5E20'}, '💪 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.'));
   }
   // Cardiopathie : zones FC Karvonen + avertissement beta-bloquants (AHA 2018, ACSM 2021)
-  if (S.medical && S.medical.indexOf('cardiopathie') !== -1) {
+  if (S.medical && S.medical.indexOf('cardio') !== -1) {
     var age = S.age || 40;
     var hrMax = 220 - age; // Formule standard (Fox 1971)
     var hrRest = S.heartRateRest || 65; // Utilisateur peut renseigner sa FC repos

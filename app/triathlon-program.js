@@ -428,8 +428,12 @@ function generateTriathlonProgram(goal, level, weakDiscipline) {
   for (var w = 1; w <= totalWeeks; w++) {
     var phase = getPhase(w);
     var pname = phase.name;
-    var isDeload = (w % 4 === 0) && pname !== 'Taper' && pname !== 'Race Week' && pname !== 'Peak';
+    // Masters 40+ : décharge toutes les 3 semaines (ACSM 2018) au lieu de 4
+    var deloadFreq = (window.S && window.S.age >= 40) ? 3 : 4;
+    var isDeload = (w % deloadFreq === 0) && pname !== 'Taper' && pname !== 'Race Week' && pname !== 'Peak';
     var isTaper = pname === 'Taper' || pname === 'Race Week';
+    // Masters 40+ : réduction volume 10% (récupération inter-session 72h minimum)
+    if (window.S && window.S.age >= 40 && !isTaper) vf = Math.min(vf, levelObj.vol * 0.9);
     program.push(buildWeek(w, phase, isDeload, isTaper));
   }
 
