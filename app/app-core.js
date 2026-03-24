@@ -1146,24 +1146,36 @@ function calcMacros(){
     }
 
   } else {
-    // ─── SÈCHE / COUPE — protéines hautes, préservation musculaire (Helms 2014) ───
-    // Femmes : plancher légèrement plus bas grâce à l'effet anti-catabolique des oestrogènes
-    // mais recommandation reste élevée pour la sèche car catabolisme musculaire est le risque principal
+    // ─── SÈCHE / COUPE — table complète par niveau d'activité (comme maintain) ───
+    // Sources : ISSN 2017 (1.6-2.2g/kg actifs), Helms 2014 (2.3-3.1 compétiteurs), Tarnopolsky 2000 (F -13%)
+    // Logique : sédentaire → protéines proches du maintien (+0.3-0.5g/kg pour déficit)
+    //           élite → protéines hautes (catabolisme musculaire élevé sous déficit + volume d'entraînement)
+    // Garantit cohérence calorique : évite l'overshoot quand protéines > budget calorique restant
     if(goalKey==='shred'){
-      // Femmes : valeurs abaissées vs Helms 2014 (compétiteurs) — alignées ISSN 2017 population générale active
-      // Hommes : conservent les valeurs élevées (Helms 2014, Morton 2018 confirment pour H)
-      ppk=isFemale?1.9:2.5; // Base shred : H=2.5, F=1.9 (ISSN 2017 : 1.6-2.2g/kg femmes actives)
-      // Bonus athlète : préservation masse maigre importante
-      if(actFactor>=1.9) ppk=isFemale?2.3:3.0;     // Élite shred : H=3.0, F=2.3 (Helms 2014 upper pour H; F limitée)
-      else if(actFactor>=1.7) ppk+=isFemale?0.1:0.2; // Très actif : F→2.0g/kg, H→2.7g/kg
-      // Cap shred (au-delà : pas de bénéfice supplémentaire — ISSN 2017)
-      ppk=Math.min(ppk, actFactor>=1.7?(isFemale?2.3:3.0):(isFemale?2.1:2.7));
+      if(actFactor>=1.9){
+        ppk=isFemale?2.3:2.8;   // Élite sèche : H=2.8g/kg, F=2.3g/kg (Helms 2014 upper, Tarnopolsky)
+      } else if(actFactor>=1.725){
+        ppk=isFemale?2.0:2.4;   // Très actif sèche : H=2.4, F=2.0 (ISSN 2017 upper)
+      } else if(actFactor>=1.55){
+        ppk=isFemale?1.8:2.1;   // Modéré sèche : H=2.1, F=1.8 (ISSN 2017 mid)
+      } else if(actFactor>=1.375){
+        ppk=isFemale?1.6:1.9;   // Léger sèche : H=1.9, F=1.6
+      } else {
+        ppk=isFemale?1.4:1.7;   // Sédentaire sèche : H=1.7, F=1.4 (EFSA 2012 + déficit)
+      }
     } else {
-      // cut — valeurs femmes abaissées pour rester dans la plage ISSN 2017 (1.6-2.2g/kg)
-      ppk=isFemale?1.8:2.2; // Base cut : H=2.2, F=1.8 (ISSN 2017)
-      if(actFactor>=1.9) ppk=isFemale?2.2:2.8;     // Élite cut : H=2.8, F=2.2
-      else if(actFactor>=1.7) ppk+=isFemale?0.1:0.2; // Très actif : F→1.9g/kg, H→2.4g/kg
-      ppk=Math.min(ppk, actFactor>=1.7?(isFemale?2.2:2.8):(isFemale?2.0:2.4));
+      // cut — même table, valeurs ~0.2g/kg sous la sèche (déficit moins sévère)
+      if(actFactor>=1.9){
+        ppk=isFemale?2.0:2.5;   // Élite coupe : H=2.5, F=2.0
+      } else if(actFactor>=1.725){
+        ppk=isFemale?1.8:2.1;   // Très actif coupe : H=2.1, F=1.8
+      } else if(actFactor>=1.55){
+        ppk=isFemale?1.6:1.9;   // Modéré coupe : H=1.9, F=1.6
+      } else if(actFactor>=1.375){
+        ppk=isFemale?1.4:1.7;   // Léger coupe : H=1.7, F=1.4
+      } else {
+        ppk=isFemale?1.2:1.5;   // Sédentaire coupe : H=1.5, F=1.2 (EFSA 2012 +20% déficit)
+      }
     }
   }
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
