@@ -294,10 +294,10 @@ window.SPORT = {
     // Header with progress (only shown after step 0, not on intro pages)
     if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16) {
       var hdr = h('header', {'class': 'header'});
-      var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : 'Musculation';
+      var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : 'Musculation';
       hdr.appendChild(h('div', {'class': 'logo', html: 'MTD<span>' + sportLabel + '</span>'}));
-      var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : 4;
-      var currentDisplay = S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sStep;
+      var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : 4;
+      var currentDisplay = S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sStep;
       hdr.appendChild(h('div', {'class': 'step-indicator'}, 'Étape ' + currentDisplay + ' / ' + totalSteps));
       p.appendChild(hdr);
       var pb = h('div', {'class': 'progress-bar'});
@@ -322,6 +322,8 @@ window.SPORT = {
     else if (S.sStep === 12) renderPadelProgram(content);     // Padel program
     else if (S.sStep === 13) renderGolfConfig(content);       // Golf questionnaire
     else if (S.sStep === 14) renderGolfProgram(content);      // Golf program
+    else if (S.sStep === 17) renderTriathlonConfig(content);  // Triathlon questionnaire
+    else if (S.sStep === 18) renderTriathlonProgram(content); // Triathlon program
 
     p.appendChild(content);
     renderSportModal(p);
@@ -448,6 +450,19 @@ function renderObjectif(p) {
     h('div', {'class': 'card-name'}, 'Golf'),
     h('div', {'class': 'card-sub'}, 'Progresser au golf — méthode Dave Pelz'),
     h('div', {'class': 'card-tag'}, 'Petit jeu · Long jeu · Parcours · Mental')
+  ]));
+
+  // Triathlon / IRONMAN card
+  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
+    S.sportType = 'triathlon';
+    S.sStep = 17;
+    if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'triathlon'});
+    window.render();
+  }}, [
+    h('span', {'class': 'card-icon'}, '🏊'),
+    h('div', {'class': 'card-name'}, 'Triathlon / IRONMAN'),
+    h('div', {'class': 'card-sub'}, 'Programme Jan Frodeno · Patrick Lange · Daniela Ryf'),
+    h('div', {'class': 'card-tag'}, 'Sprint · Olympic · 70.3 · IRONMAN 140.6')
   ]));
 
   p.appendChild(typeGrid);
@@ -2697,6 +2712,255 @@ function renderGolfProgram(p) {
 
   p.appendChild(h('div', {style: 'height:12px'}));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+}
+
+// ─── STEP 17: TRIATHLON CONFIG ───
+function renderTriathlonConfig(p) {
+  p.appendChild(h('div', {'class': 'eyebrow'}, 'Triathlon / IRONMAN'));
+  p.appendChild(h('h1', {html: 'Votre programme<br><em>triathlon</em>'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Méthode Jan Frodeno · Patrick Lange · Daniela Ryf · 80/20 Matt Fitzgerald · Joe Friel Training Bible'));
+
+  if (window.TIPS) window.TIPS.renderTip(p, 'triathlon');
+
+  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  // ── Objectif de course ──
+  p.appendChild(h('div', {'class': 'section-label'}, 'Objectif de course'));
+  var goalGrid = h('div', {'class': 'card-grid-2'});
+  (window.TRIATHLON_GOALS || []).forEach(function(g) {
+    var isOn = S.triathlonGoal === g.id;
+    goalGrid.appendChild(h('div', {'class': 'sel-card' + (isOn ? ' on' : ''), style: 'cursor:pointer', onclick: function() {
+      S.triathlonGoal = g.id; window.render();
+    }}, [
+      h('span', {'class': 'card-icon'}, g.icon),
+      h('div', {'class': 'card-name'}, g.name),
+      h('div', {'class': 'card-sub'}, g.desc),
+      h('div', {'class': 'card-tag'}, g.tag)
+    ]));
+  });
+  p.appendChild(goalGrid);
+
+  // ── Niveau ──
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
+  var lvlList = h('div', {'class': 'level-list'});
+  (window.TRIATHLON_LEVELS || []).forEach(function(lv) {
+    var isOn = S.triathlonLevel === lv.id;
+    lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function() {
+      S.triathlonLevel = lv.id; window.render();
+    }}, [
+      h('div', {}, [
+        h('div', {'class': 'level-name'}, lv.icon + ' ' + lv.name),
+        h('div', {'class': 'level-desc'}, lv.desc)
+      ]),
+      isOn ? h('span', {'class': 'level-badge'}, '✓') : h('span', {})
+    ]));
+  });
+  p.appendChild(lvlList);
+
+  // ── Discipline faible (optionnel) ──
+  p.appendChild(h('div', {style: 'height:20px'}));
+  p.appendChild(h('div', {style: 'width:100%;height:1px;background:var(--border);margin-bottom:16px'}));
+  p.appendChild(h('div', {'class': 'section-label'}, 'Discipline à renforcer (optionnel)'));
+  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'Une séance bonus sera ajoutée chaque semaine pour cette discipline'));
+  var discGrid = h('div', {style: 'display:flex;gap:10px;flex-wrap:wrap'});
+  [{id: 'swim', name: '🏊 Natation'}, {id: 'bike', name: '🚴 Vélo'}, {id: 'run', name: '🏃 Course à pied'}].forEach(function(d) {
+    var isOn = S.triathlonWeak === d.id;
+    discGrid.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), onclick: function() {
+      S.triathlonWeak = isOn ? null : d.id; window.render();
+    }}, d.name));
+  });
+  p.appendChild(discGrid);
+
+  // ── Infos sur les allures (optionnel) ──
+  p.appendChild(h('div', {style: 'height:20px'}));
+  p.appendChild(h('div', {style: 'width:100%;height:1px;background:var(--border);margin-bottom:16px'}));
+  p.appendChild(h('div', {'class': 'section-label'}, 'Allures actuelles (optionnel)'));
+
+  var paceGrid = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:8px'});
+
+  var swimWrap = h('div', {style: 'display:flex;flex-direction:column;gap:4px'});
+  swimWrap.appendChild(h('div', {style: 'font-size:11px;color:var(--grey)'}, '🏊 Nage /100m'));
+  swimWrap.appendChild(h('input', {'class': 'num-input', type: 'text', placeholder: '1:45', value: S.triathlonSwimPace || '', style: 'width:100%;text-align:center',
+    oninput: function(e) { S.triathlonSwimPace = e.target.value; }
+  }));
+  paceGrid.appendChild(swimWrap);
+
+  var bikeWrap = h('div', {style: 'display:flex;flex-direction:column;gap:4px'});
+  bikeWrap.appendChild(h('div', {style: 'font-size:11px;color:var(--grey)'}, '🚴 Vélo km/h'));
+  bikeWrap.appendChild(h('input', {'class': 'num-input', type: 'number', placeholder: '32', value: S.triathlonBikePace || '', style: 'width:100%;text-align:center',
+    oninput: function(e) { S.triathlonBikePace = e.target.value; }
+  }));
+  paceGrid.appendChild(bikeWrap);
+
+  var runWrap = h('div', {style: 'display:flex;flex-direction:column;gap:4px'});
+  runWrap.appendChild(h('div', {style: 'font-size:11px;color:var(--grey)'}, '🏃 Run min/km'));
+  runWrap.appendChild(h('input', {'class': 'num-input', type: 'text', placeholder: '5:00', value: S.triathlonRunPace || '', style: 'width:100%;text-align:center',
+    oninput: function(e) { S.triathlonRunPace = e.target.value; }
+  }));
+  paceGrid.appendChild(runWrap);
+  p.appendChild(paceGrid);
+
+  // Temps de course estimé si allures renseignées
+  if (S.triathlonGoal && S.triathlonBikePace && S.triathlonRunPace && S.triathlonSwimPace) {
+    var gObj = null;
+    (window.TRIATHLON_GOALS || []).forEach(function(g) { if (g.id === S.triathlonGoal) gObj = g; });
+    if (gObj) {
+      try {
+        var swimParts = (S.triathlonSwimPace || '1:45').split(':');
+        var swimSecPer100 = parseInt(swimParts[0]) * 60 + parseInt(swimParts[1] || 0);
+        var swimMin = Math.round((gObj.swimM / 100) * swimSecPer100 / 60);
+        var bikeMin = Math.round((gObj.bikeKm / parseFloat(S.triathlonBikePace)) * 60);
+        var runParts = (S.triathlonRunPace || '5:00').split(':');
+        var runSecPerKm = parseInt(runParts[0]) * 60 + parseInt(runParts[1] || 0);
+        var runMin = Math.round((gObj.runKm * runSecPerKm) / 60);
+        var totalMin = swimMin + bikeMin + runMin + (gObj.id === 'ironman' ? 10 : gObj.id === 'half' ? 6 : 4); // transitions
+        var totalH = Math.floor(totalMin / 60);
+        var totalM = totalMin % 60;
+        var estCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin-top:8px'});
+        estCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:6px'}, '⏱ Temps de course estimé'));
+        estCard.appendChild(h('div', {style: 'font-size:20px;font-family:Georgia,serif;font-style:italic;color:var(--black)'},
+          totalH + 'h' + (totalM < 10 ? '0' : '') + totalM));
+        var detail = h('div', {style: 'font-size:11px;color:var(--grey);margin-top:4px;font-family:Helvetica Neue,Arial,sans-serif'});
+        detail.appendChild(h('span', {}, '🏊 ' + swimMin + 'min · '));
+        detail.appendChild(h('span', {}, '🚴 ' + Math.floor(bikeMin/60) + 'h' + (bikeMin%60 < 10 ? '0' : '') + (bikeMin%60) + ' · '));
+        detail.appendChild(h('span', {}, '🏃 ' + Math.floor(runMin/60) + 'h' + (runMin%60 < 10 ? '0' : '') + (runMin%60)));
+        estCard.appendChild(detail);
+        p.appendChild(estCard);
+      } catch(e) {}
+    }
+  }
+
+  // ── Boutons ──
+  p.appendChild(h('div', {style: 'height:20px'}));
+  var ok = S.triathlonGoal !== null && S.triathlonLevel !== null;
+  if (!ok) {
+    p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez un objectif et un niveau'));
+  }
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
+    if (!ok) return;
+    S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null);
+    S.triathlonWeek = 1;
+    S.selectedTriDay = 0;
+    S.sStep = 18;
+    if (window.BLACKBOX) window.BLACKBOX.log('triathlon_config', {goal: S.triathlonGoal, level: S.triathlonLevel, weak: S.triathlonWeak});
+    window.render();
+  }}, 'Générer mon programme →'));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
+}
+
+// ─── STEP 18: TRIATHLON PROGRAM ───
+function renderTriathlonProgram(p) {
+  if (!S.triathlonProgram || !S.triathlonProgram.length) {
+    S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null);
+  }
+
+  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var program = S.triathlonProgram;
+  var totalWeeks = program.length;
+  if (S.triathlonWeek > totalWeeks) S.triathlonWeek = totalWeeks;
+  if (S.triathlonWeek < 1) S.triathlonWeek = 1;
+
+  var weekData = program[S.triathlonWeek - 1];
+  if (!weekData) return;
+
+  var goalObj = null;
+  (window.TRIATHLON_GOALS || []).forEach(function(g) { if (g.id === S.triathlonGoal) goalObj = g; });
+  var levelObj = null;
+  (window.TRIATHLON_LEVELS || []).forEach(function(l) { if (l.id === S.triathlonLevel) levelObj = l; });
+
+  p.appendChild(h('div', {'class': 'eyebrow'}, 'Triathlon / IRONMAN'));
+  p.appendChild(h('h1', {html: (goalObj ? goalObj.name : 'Triathlon') + '<br><em>Programme</em>'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, totalWeeks + ' semaines · ' + (levelObj ? levelObj.name : '') + ' · 80/20 · Méthode Jan Frodeno'));
+
+  // ── Navigation semaines ──
+  var weekNav = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0'});
+  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
+    if (S.triathlonWeek > 1) { S.triathlonWeek--; S.selectedTriDay = 0; window.render(); }
+  }}, '←'));
+  weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.triathlonWeek + ' / ' + totalWeeks));
+  weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
+    if (S.triathlonWeek < totalWeeks) { S.triathlonWeek++; S.selectedTriDay = 0; window.render(); }
+  }}, '→'));
+  p.appendChild(weekNav);
+
+  // ── Info phase ──
+  var phaseCard = h('div', {style: 'border-left:3px solid ' + (weekData.phaseColor || '#1A3A6A') + ';padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
+  phaseCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + (weekData.phaseColor || '#1A3A6A') + ';margin-bottom:4px'}, 'Phase : ' + weekData.phase));
+  phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey)'}, '~' + weekData.totalHours + ' d\'entraînement · 7 jours'));
+  if (weekData.isDeload) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#E67E22;margin-top:6px;font-weight:bold'}, '📉 Semaine de récupération — volume réduit'));
+  if (weekData.isTaper) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#27AE60;margin-top:6px;font-weight:bold'}, '🎯 Affûtage — Volume réduit, intensité maintenue'));
+  p.appendChild(phaseCard);
+
+  // ── Tabs jours ──
+  var sessions = weekData.sessions || [];
+  if (S.selectedTriDay >= sessions.length) S.selectedTriDay = 0;
+  var tabs = h('div', {'class': 'day-tabs', style: 'flex-wrap:wrap'});
+  sessions.forEach(function(sess, i) {
+    var icon = sess.discipline === 'swim' ? '🏊' : sess.discipline === 'bike' ? '🚴' : sess.discipline === 'run' ? '🏃' : sess.discipline === 'brick' ? '🔄' : '😴';
+    tabs.appendChild(h('button', {
+      'class': 'day-tab' + (S.selectedTriDay === i ? ' active' : ''),
+      style: 'font-size:11px',
+      onclick: function() { S.selectedTriDay = i; window.render(); }
+    }, (sess.day || ('J' + (i + 1))) + ' ' + icon));
+  });
+  p.appendChild(tabs);
+
+  // ── Séance du jour ──
+  var sess = sessions[S.selectedTriDay];
+  if (sess) {
+    var discColorMap = {
+      swim: '#1A3A6A', bike: '#6A4A1A', run: '#1A4A1A', brick: '#5A1040', rest: '#555'
+    };
+    var discColor = discColorMap[sess.discipline] || '#0A0A09';
+
+    var sessCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid ' + discColor});
+    sessCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + discColor + ';margin-bottom:6px'}, sess.type || ''));
+    sessCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin-bottom:4px'}, sess.icon + ' ' + sess.name));
+    sessCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:8px'}, sess.desc || ''));
+
+    if (sess.duration && sess.duration !== '—') {
+      var durationRow = h('div', {style: 'display:flex;gap:16px;align-items:center;margin-bottom:10px;flex-wrap:wrap'});
+      durationRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;color:' + discColor}, '⏱ ' + sess.duration));
+      if (sess.zone) durationRow.appendChild(h('div', {style: 'background:' + discColor + ';color:#fff;font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;padding:2px 8px'}, sess.zone));
+      sessCard.appendChild(durationRow);
+    }
+
+    if (sess.detail) {
+      sessCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.7;padding:12px;background:var(--ivory2);border:1px solid var(--border)'}, sess.detail));
+    }
+    p.appendChild(sessCard);
+  }
+
+  // ── Note de semaine ──
+  if (weekData.notes) {
+    p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;text-align:center;margin:16px 0;line-height:1.5'}, weekData.notes));
+  }
+
+  // ── Rappel transitions ──
+  if (weekData.phase === 'Peak' || weekData.phase === 'Build 2') {
+    var transCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin:12px 0'});
+    transCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:6px'}, '🔄 Rappel Transitions'));
+    transCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.6'}, 'T1 (Nage→Vélo) : déshabiller néo debout, clip chaussures sur pédales (avancé), casque avant de toucher vélo · T2 (Vélo→Run) : rack vélo, enlever casque, changer chaussures en courant · Jan Frodeno gagne souvent 30-60s en transition vs les autres pros'));
+    p.appendChild(transCard);
+  }
+
+  // ── Résumé semaine discipline ──
+  var swCount = 0, biCount = 0, ruCount = 0, brCount = 0;
+  sessions.forEach(function(s) {
+    if (s.discipline === 'swim') swCount++;
+    else if (s.discipline === 'bike') biCount++;
+    else if (s.discipline === 'run') ruCount++;
+    else if (s.discipline === 'brick') brCount++;
+  });
+  var sumRow = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0'});
+  if (swCount) sumRow.appendChild(h('span', {'class': 'chip on'}, '🏊 ' + swCount + ' nage'));
+  if (biCount) sumRow.appendChild(h('span', {'class': 'chip on'}, '🚴 ' + biCount + ' vélo'));
+  if (ruCount) sumRow.appendChild(h('span', {'class': 'chip on'}, '🏃 ' + ruCount + ' run'));
+  if (brCount) sumRow.appendChild(h('span', {'class': 'chip on'}, '🔄 ' + brCount + ' brick'));
+  p.appendChild(sumRow);
+
+  p.appendChild(h('div', {style: 'height:12px'}));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 17; window.render(); }, html: backArrow + 'Modifier la configuration'}));
 }
 
 // ─── PDF EXPORT (Sport / Musculation) ───

@@ -1,7 +1,7 @@
 // MTD Macro Calculator — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'mtd-v5';
-const RUNTIME_CACHE = 'mtd-runtime-v5';
+const CACHE_VERSION = 'mtd-v6';
+const RUNTIME_CACHE = 'mtd-runtime-v6';
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [
@@ -21,6 +21,7 @@ const APP_SHELL = [
   './crossfit-haltero-cycles.js',
   './crossfit-wods.js',
   './muscu-programs.js',
+  './triathlon-program.js',
   './dashboard.js',
   './premium-ui.css',
   './manifest.json',

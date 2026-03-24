@@ -601,7 +601,11 @@ window.S = {
   // Padel
   padelLevel: null, padelGoal: null, padelDays: 3, padelProgram: null, padelWeek: 1, selectedPadelDay: 0, padelProfile: {},
   // Golf
-  golfLevel: null, golfGoal: null, golfDays: 3, golfProgram: null, golfWeek: 1, selectedGolfDay: 0, golfHandicap: null, golfProfile: {}
+  golfLevel: null, golfGoal: null, golfDays: 3, golfProgram: null, golfWeek: 1, selectedGolfDay: 0, golfHandicap: null, golfProfile: {},
+  // Triathlon / IRONMAN
+  triathlonGoal: null, triathlonLevel: null, triathlonWeak: null,
+  triathlonSwimPace: null, triathlonBikePace: null, triathlonRunPace: null,
+  triathlonProgram: null, triathlonWeek: 1, selectedTriDay: 0
 };
 
 // ─── MUSCULATION KEY EXERCISES (Strength Assessment) ───
