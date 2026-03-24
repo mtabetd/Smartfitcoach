@@ -139,47 +139,97 @@ var NFC_PROGRAMS = {
   },
   fessiers_dedied: {
     name: 'Programme Fessiers',
-    exercises: [
-      {order:1, name:'Hip Thrust barre', sets:4, reps:10, rest:'2min', technique:'3s pic contraction', muscle:'fessiers', type:'compound', equipment:'barre+banc'},
-      {order:2, name:'Squat sumo', sets:4, reps:12, rest:'1min30', technique:null, muscle:'fessiers+adducteurs', type:'compound', equipment:'barre'},
-      {order:3, name:'Fente arri\u00e8re halt\u00e8res', sets:4, reps:10, rest:'1min30', technique:'10 reps chaque jambe', muscle:'fessiers', type:'compound', equipment:'halteres'},
-      {order:4, name:'Romanian Deadlift', sets:4, reps:10, rest:'2min', technique:'3s excentrique', muscle:'fessiers+ischio', type:'compound', equipment:'barre'},
-      {order:5, name:'Abduction machine', sets:4, reps:15, rest:'1min', technique:'2s pic contraction', muscle:'fessiers (moyen)', type:'isolation', equipment:'machine'},
-      {order:6, name:'Donkey kick poulie', sets:3, reps:15, rest:'1min', technique:'15 reps chaque jambe', muscle:'fessiers', type:'isolation', equipment:'poulie'}
+    duration: '~60 min',
+    variations: [
+      {
+        label: 'S\u00e9ance A \u2014 Compound',
+        exercises: [
+          {order:1, name:'Hip Thrust barre', sets:4, reps:10, rest:'2min', technique:'3s pic contraction', muscle:'fessiers', equipment:'barre+banc'},
+          {order:2, name:'Squat sumo', sets:4, reps:12, rest:'1min30', technique:null, muscle:'fessiers+adducteurs', equipment:'barre'},
+          {order:3, name:'Romanian Deadlift', sets:4, reps:10, rest:'2min', technique:'3s excentrique', muscle:'fessiers+ischio', equipment:'barre'},
+          {order:4, name:'Abduction machine', sets:4, reps:15, rest:'1min', technique:'2s pic contraction', muscle:'fessiers (moyen)', equipment:'machine'}
+        ]
+      },
+      {
+        label: 'S\u00e9ance B \u2014 Unilat\u00e9ral',
+        exercises: [
+          {order:1, name:'Hip Thrust halt\u00e8res', sets:4, reps:12, rest:'1min30', technique:'Pause 1s en haut', muscle:'fessiers', equipment:'halteres+banc'},
+          {order:2, name:'Fente arri\u00e8re halt\u00e8res', sets:4, reps:10, rest:'1min30', technique:'10 reps chaque jambe', muscle:'fessiers', equipment:'halteres'},
+          {order:3, name:'Good morning barre', sets:3, reps:12, rest:'1min30', technique:'Dos droit, inclinaison 45\u00b0', muscle:'fessiers+ischio', equipment:'barre'},
+          {order:4, name:'Donkey kick poulie', sets:4, reps:15, rest:'1min', technique:'15 reps chaque jambe', muscle:'fessiers', equipment:'poulie'}
+        ]
+      }
     ],
-    notes: 'Programme d\u00e9di\u00e9 fessiers. Id\u00e9al en compl\u00e9ment ou remplacement de la s\u00e9ance jambes.'
+    notes: 'Alternez S\u00e9ance A et S\u00e9ance B \u00e0 chaque entra\u00eenement pour varier les stimuli.'
   },
   abdos_dedied: {
     name: 'Programme Abdominaux',
-    exercises: [
-      {order:1, name:'Crunch banc d\u00e9clin\u00e9', sets:4, reps:20, rest:'45s', technique:'3s excentrique', muscle:'grand droit', type:'isolation', equipment:'banc'},
-      {order:2, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'45s', technique:null, muscle:'grand droit (bas)', type:'isolation', equipment:'barre fixe'},
-      {order:3, name:'Planche', sets:3, reps:'45-60s', rest:'30s', technique:'Gainage statique', muscle:'transverse', type:'isometrique', equipment:'sol'},
-      {order:4, name:'Russian twist', sets:4, reps:20, rest:'30s', technique:'Avec m\u00e9decine ball', muscle:'obliques', type:'isolation', equipment:'medecine ball'},
-      {order:5, name:'Obliques chaise romaine', sets:4, reps:12, rest:'45s', technique:'12 reps chaque c\u00f4t\u00e9', muscle:'obliques', type:'isolation', equipment:'chaise romaine'},
-      {order:6, name:'Ab wheel', sets:3, reps:12, rest:'1min', technique:'Contr\u00f4le total', muscle:'grand droit+transverse', type:'compound', equipment:'rouleau'}
+    duration: '~60 min',
+    variations: [
+      {
+        label: 'S\u00e9ance A \u2014 Grand droit',
+        exercises: [
+          {order:1, name:'Crunch banc d\u00e9clin\u00e9', sets:4, reps:20, rest:'45s', technique:'3s excentrique', muscle:'grand droit', equipment:'banc'},
+          {order:2, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'45s', technique:null, muscle:'grand droit (bas)', equipment:'barre fixe'},
+          {order:3, name:'Planche', sets:4, reps:'45s', rest:'30s', technique:'Gainage statique', muscle:'transverse', equipment:'sol'},
+          {order:4, name:'Ab wheel', sets:3, reps:12, rest:'1min', technique:'Contr\u00f4le total', muscle:'grand droit+transverse', equipment:'rouleau'}
+        ]
+      },
+      {
+        label: 'S\u00e9ance B \u2014 Obliques',
+        exercises: [
+          {order:1, name:'Russian twist', sets:4, reps:20, rest:'30s', technique:'Avec m\u00e9decine ball', muscle:'obliques', equipment:'medecine ball'},
+          {order:2, name:'Obliques chaise romaine', sets:4, reps:12, rest:'45s', technique:'12 reps chaque c\u00f4t\u00e9', muscle:'obliques', equipment:'chaise romaine'},
+          {order:3, name:'Planche lat\u00e9rale', sets:3, reps:'30s', rest:'30s', technique:'Chaque c\u00f4t\u00e9', muscle:'obliques+transverse', equipment:'sol'},
+          {order:4, name:'Crunch cable', sets:4, reps:15, rest:'45s', technique:'Flex complète du tronc', muscle:'grand droit', equipment:'poulie'}
+        ]
+      }
     ],
     notes: 'Les abdos se r\u00e9v\u00e8lent avec un bon taux de masse grasse. Mais il faut les construire aussi !'
   },
   biceps_dedied: {
     name: 'Programme Biceps',
-    exercises: [
-      {order:1, name:'Curl barre droite', sets:4, reps:10, rest:'1min30', technique:null, muscle:'biceps', type:'compound', equipment:'barre'},
-      {order:2, name:'Curl pupitre', sets:4, reps:10, rest:'1min30', technique:'3s excentrique', muscle:'biceps (chef court)', type:'isolation', equipment:'pupitre'},
-      {order:3, name:'Curl inclin\u00e9 halt\u00e8res', sets:3, reps:12, rest:'1min30', technique:'Banc 45\u00b0, stretch max', muscle:'biceps (chef long)', type:'isolation', equipment:'halteres+banc'},
-      {order:4, name:'Curl marteau', sets:3, reps:12, rest:'1min', technique:null, muscle:'brachial', type:'isolation', equipment:'halteres'},
-      {order:5, name:'Curl concentr\u00e9', sets:3, reps:12, rest:'1min', technique:'3s pic contraction', muscle:'biceps (pic)', type:'isolation', equipment:'halteres'}
+    duration: '~55 min',
+    variations: [
+      {
+        label: 'S\u00e9ance A \u2014 Force',
+        exercises: [
+          {order:1, name:'Curl barre droite', sets:4, reps:8, rest:'2min', technique:null, muscle:'biceps', equipment:'barre'},
+          {order:2, name:'Curl pupitre', sets:4, reps:10, rest:'1min30', technique:'3s excentrique', muscle:'biceps (chef court)', equipment:'pupitre'},
+          {order:3, name:'Curl marteau', sets:4, reps:10, rest:'1min30', technique:null, muscle:'brachial', equipment:'halteres'}
+        ]
+      },
+      {
+        label: 'S\u00e9ance B \u2014 Isolation',
+        exercises: [
+          {order:1, name:'Curl inclin\u00e9 halt\u00e8res', sets:4, reps:12, rest:'1min30', technique:'Banc 45\u00b0, stretch max', muscle:'biceps (chef long)', equipment:'halteres+banc'},
+          {order:2, name:'Curl concentr\u00e9', sets:4, reps:12, rest:'1min', technique:'3s pic contraction', muscle:'biceps (pic)', equipment:'halteres'},
+          {order:3, name:'Curl barre EZ prise serr\u00e9e', sets:3, reps:12, rest:'1min', technique:'Contr\u00f4ler la descente', muscle:'biceps (chef court)', equipment:'barre EZ'}
+        ]
+      }
     ],
     notes: 'Variez les angles pour recruter tous les chefs du biceps.'
   },
   triceps_dedied: {
     name: 'Programme Triceps',
-    exercises: [
-      {order:1, name:'D\u00e9velopp\u00e9 couch\u00e9 prise serr\u00e9e', sets:4, reps:8, rest:'2min', technique:null, muscle:'triceps', type:'compound', equipment:'barre'},
-      {order:2, name:'Barre au front (skull crushers)', sets:4, reps:10, rest:'1min30', technique:null, muscle:'triceps (chef long)', type:'isolation', equipment:'barre EZ'},
-      {order:3, name:'Dips (lest\u00e9 si possible)', sets:4, reps:10, rest:'1min30', technique:null, muscle:'triceps', type:'compound', equipment:'barres'},
-      {order:4, name:'Extension poulie haute (corde)', sets:4, reps:12, rest:'1min', technique:'3s pic contraction', muscle:'triceps', type:'isolation', equipment:'poulie'},
-      {order:5, name:'Kickback halt\u00e8re', sets:3, reps:12, rest:'1min', technique:'2s pic contraction', muscle:'triceps', type:'isolation', equipment:'halteres'}
+    duration: '~55 min',
+    variations: [
+      {
+        label: 'S\u00e9ance A \u2014 Force',
+        exercises: [
+          {order:1, name:'D\u00e9velopp\u00e9 couch\u00e9 prise serr\u00e9e', sets:4, reps:8, rest:'2min', technique:null, muscle:'triceps', equipment:'barre'},
+          {order:2, name:'Barre au front (skull crushers)', sets:4, reps:10, rest:'1min30', technique:null, muscle:'triceps (chef long)', equipment:'barre EZ'},
+          {order:3, name:'Dips (lest\u00e9 si possible)', sets:4, reps:10, rest:'1min30', technique:null, muscle:'triceps', equipment:'barres'}
+        ]
+      },
+      {
+        label: 'S\u00e9ance B \u2014 Isolation',
+        exercises: [
+          {order:1, name:'Extension poulie haute (corde)', sets:4, reps:12, rest:'1min', technique:'3s pic contraction', muscle:'triceps', equipment:'poulie'},
+          {order:2, name:'Kickback halt\u00e8re', sets:4, reps:12, rest:'1min', technique:'2s pic contraction', muscle:'triceps', equipment:'halteres'},
+          {order:3, name:'Extension nuque halt\u00e8re', sets:4, reps:12, rest:'1min30', technique:'Coudes fix\u00e9s', muscle:'triceps (chef long)', equipment:'halteres'}
+        ]
+      }
     ],
     notes: 'Les triceps = 2/3 du volume du bras. Ne les n\u00e9gligez pas !'
   }

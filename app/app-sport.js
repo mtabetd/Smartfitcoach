@@ -271,8 +271,8 @@ window.SPORT = {
   render: function(p) {
     var content = h('div', {'class': 'fade-in'});
 
-    // Header with progress (only shown after step 0, not on dedicated programs page)
-    if (S.sStep > 0 && S.sStep !== 15) {
+    // Header with progress (only shown after step 0, not on intro pages)
+    if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16) {
       var hdr = h('header', {'class': 'header'});
       var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : 'Musculation';
       hdr.appendChild(h('div', {'class': 'logo', html: 'MTD<span>' + sportLabel + '</span>'}));
@@ -286,6 +286,7 @@ window.SPORT = {
     }
 
     if (S.sStep === 0) renderObjectif(content);              // Type selection
+    else if (S.sStep === 16) renderChargesQuestionnaire(content); // Charges questionnaire
     else if (S.sStep === 15) renderDedicatedPrograms(content); // Dedicated programs
     else if (S.sStep === 1) renderMusculationGoals(content);  // Muscu objectives
     else if (S.sStep === 2) renderMusculationLevel(content);  // Muscu level
@@ -351,10 +352,10 @@ function renderObjectif(p) {
   p.appendChild(h('div', {'class': 'section-label'}, 'Type de programme'));
   var typeGrid = h('div', {'class': 'card-grid-2'});
 
-  // Musculation - clicking goes to dedicated programs page first (step 15)
+  // Musculation - clicking goes to charges questionnaire first (step 16)
   typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
     S.sportType = 'musculation';
-    S.sStep = 15;
+    S.sStep = 16;
     if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'musculation'});
     window.render();
   }}, [
@@ -434,64 +435,142 @@ function renderObjectif(p) {
   // No Continue button needed - cards auto-navigate
 }
 
+// ─── STEP 16: QUESTIONNAIRE CHARGES ───
+function renderChargesQuestionnaire(p) {
+  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
+  p.appendChild(h('h1', {html: '\u00c9valuation<br><em>des charges</em>'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Renseignez vos charges actuelles pour adapter vos programmes. Indiquez la charge max pour 8-10 reps propres.'));
+
+  if (Object.keys(S.muscuStrengthProfile).length === 0) {
+    var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+    var saved = localStorage.getItem('mtd_muscu_strength_' + userId);
+    if (saved) { try { S.muscuStrengthProfile = JSON.parse(saved); } catch(e) {} }
+  }
+
+  var bodyWeight = S.weight || 75;
+  var strengthThresholds = {
+    bench_press: {low:0.5,mid:1.0}, squat: {low:0.75,mid:1.25},
+    deadlift: {low:1.0,mid:1.5}, overhead_press: {low:0.35,mid:0.65},
+    barbell_row: {low:0.5,mid:0.85}, barbell_curl: {low:0.2,mid:0.4},
+    hip_thrust: {low:0.75,mid:1.25}, leg_press: {low:1.5,mid:2.5}
+  };
+
+  var grid = h('div', {style: 'margin-bottom:16px'});
+  (window.MUSCU_KEY_EXERCISES || []).forEach(function(exDef) {
+    var currentVal = S.muscuStrengthProfile[exDef.key] || '';
+    var row = h('div', {style: 'display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--border);background:var(--ivory2);margin-bottom:4px'});
+    var nameCol = h('div', {style: 'flex:1;min-width:0'});
+    nameCol.appendChild(h('div', {style: 'font-family:Georgia;font-size:14px'}, exDef.icon + ' ' + exDef.name));
+    nameCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--grey);margin-top:2px'}, exDef.muscle));
+    row.appendChild(nameCol);
+    var inputWrap = h('div', {style: 'display:flex;align-items:center;gap:4px;flex-shrink:0'});
+    var inp = h('input', {
+      type: 'number', step: '2.5', min: '0', max: '500',
+      value: currentVal ? String(currentVal) : '',
+      placeholder: '\u2014',
+      style: 'width:60px;padding:6px 8px;border:1px solid var(--border);font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory)',
+      onchange: (function(key) { return function(e) {
+        var v = parseFloat(e.target.value);
+        if (!isNaN(v) && v >= 0) S.muscuStrengthProfile[key] = v;
+        else delete S.muscuStrengthProfile[key];
+        var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+        localStorage.setItem('mtd_muscu_strength_' + uid, JSON.stringify(S.muscuStrengthProfile));
+      }; })(exDef.key)
+    });
+    inputWrap.appendChild(inp);
+    inputWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'kg'));
+    row.appendChild(inputWrap);
+    if (currentVal && currentVal > 0) {
+      var thresh = strengthThresholds[exDef.key] || {low:0.5,mid:1.0};
+      var ratio = currentVal / bodyWeight;
+      var lbl = ratio < thresh.low ? 'Débutant' : ratio < thresh.mid ? 'Intermédiaire' : 'Avancé';
+      var col = ratio < thresh.low ? '#E67E22' : ratio < thresh.mid ? '#2980B9' : '#27AE60';
+      row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + col + ';flex-shrink:0;min-width:70px;text-align:right'}, lbl));
+    }
+    grid.appendChild(row);
+  });
+  p.appendChild(grid);
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic;margin-bottom:16px'}, 'Laissez vide les exercices que vous ne pratiquez pas.'));
+
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ S.sStep = 15; window.render(); }}, 'Continuer'));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+}
+
 // ─── STEP 15: PROGRAMMES DÉDIÉS ───
 function renderDedicatedPrograms(p) {
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
   p.appendChild(h('h1', {html: 'Programmes<br><em>dédiés</em>'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Séances ciblées par groupe musculaire. Cliquez pour voir les exercices.'));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'S\u00e9ances cibl\u00e9es, vari\u00e9es (A/B), pr\u00eates \u00e0 l\u2019emploi.'));
 
   var allDedicated = [
-    {key: 'fessiers_dedied', icon: '🍑'},
-    {key: 'abdos_dedied',    icon: '⚡'},
-    {key: 'biceps_dedied',   icon: '💪'},
-    {key: 'triceps_dedied',  icon: '🔱'}
+    {key: 'fessiers_dedied', icon: '\uD83C\uDF51'},
+    {key: 'abdos_dedied',    icon: '\u26A1'},
+    {key: 'biceps_dedied',   icon: '\uD83D\uDCAA'},
+    {key: 'triceps_dedied',  icon: '\uD83D\uDD31'}
   ];
 
   allDedicated.forEach(function(item) {
     var prog = window.NFC_PROGRAMS && window.NFC_PROGRAMS[item.key];
-    if (!prog) return;
+    if (!prog || !prog.variations) return;
 
-    var isOpen = S['dedicatedOpen_' + item.key] || false;
+    var openKey = 'dedicatedOpen_' + item.key;
+    var varKey  = 'dedicatedVar_'  + item.key;
+    var isOpen  = S[openKey] || false;
+    var varIdx  = S[varKey]  || 0;
+
     var card = h('div', {style: 'border:1px solid var(--border);margin-bottom:8px;background:var(--ivory2)'});
 
+    // Header
     var header = h('div', {
       style: 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer',
-      onclick: function() {
-        S['dedicatedOpen_' + item.key] = !S['dedicatedOpen_' + item.key];
-        window.render();
-      }
+      onclick: function() { S[openKey] = !S[openKey]; window.render(); }
     });
     var titleDiv = h('div', {style: 'display:flex;align-items:center;gap:10px'});
     titleDiv.appendChild(h('span', {style: 'font-size:20px'}, item.icon));
-    titleDiv.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:15px'}, prog.name));
+    var titleRight = h('div', {});
+    titleRight.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px'}, prog.name));
+    titleRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, '\u23F1 ' + prog.duration));
+    titleDiv.appendChild(titleRight);
     header.appendChild(titleDiv);
-    header.appendChild(h('span', {style: 'font-size:18px;color:var(--grey)'}, isOpen ? '▲' : '▼'));
+    header.appendChild(h('span', {style: 'font-size:18px;color:var(--grey)'}, isOpen ? '\u25B2' : '\u25BC'));
     card.appendChild(header);
 
     if (isOpen) {
-      prog.exercises.forEach(function(ex) {
+      // Variation tabs A / B
+      var tabs = h('div', {style: 'display:flex;border-top:1px solid var(--border)'});
+      prog.variations.forEach(function(v, idx) {
+        var isActive = varIdx === idx;
+        var tab = h('div', {
+          style: 'flex:1;padding:10px;text-align:center;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;border-right:1px solid var(--border);' +
+            (isActive ? 'background:var(--black);color:#fff;font-weight:bold' : 'background:var(--ivory);color:var(--grey)'),
+          onclick: function(e) { e.stopPropagation(); S[varKey] = idx; window.render(); }
+        }, v.label);
+        tabs.appendChild(tab);
+      });
+      card.appendChild(tabs);
+
+      var variation = prog.variations[varIdx];
+      variation.exercises.forEach(function(ex) {
         var row = h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start'});
         var left = h('div', {});
         left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.order + '. ' + ex.name));
-        left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.muscle + ' — ' + ex.equipment));
+        left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.muscle + ' \u2014 ' + ex.equipment));
         if (ex.technique) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange);margin-top:2px'}, ex.technique));
         row.appendChild(left);
         var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
-        right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.sets + '×' + ex.reps));
+        right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.sets + '\u00d7' + ex.reps));
         right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.rest));
         row.appendChild(right);
         card.appendChild(row);
       });
-      if (prog.notes) {
-        card.appendChild(h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic'}, prog.notes));
-      }
+      card.appendChild(h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic'}, prog.notes));
     }
     p.appendChild(card);
   });
 
   p.appendChild(h('div', {style: 'height:16px'}));
-  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ S.sStep = 1; window.render(); }}, 'Créer mon programme personnalisé →'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ S.sStep = 1; window.render(); }}, 'Cr\u00e9er mon programme personnalis\u00e9 \u2192'));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 1: MUSCULATION OBJECTIVES ───
@@ -1025,92 +1104,6 @@ function renderMusculationLevel(p) {
   nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
   p.appendChild(nw);
   p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 2 et 6 jours'));
-
-  // ─── STRENGTH ASSESSMENT (optional, non-blocking) ───
-  // Load saved strength profile
-  if (Object.keys(S.muscuStrengthProfile).length === 0) {
-    var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-    var saved = localStorage.getItem('mtd_muscu_strength_' + userId);
-    if (saved) { try { S.muscuStrengthProfile = JSON.parse(saved); } catch(e) {} }
-  }
-
-  p.appendChild(h('div', {style: 'height:24px'}));
-  p.appendChild(h('div', {style: 'width:100%;height:1px;background:var(--border);margin-bottom:16px'}));
-  p.appendChild(h('div', {'class': 'section-label'}, '\u00c9valuation de force (optionnel)'));
-  p.appendChild(h('p', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;line-height:1.5'}, 'Renseignez vos charges actuelles pour un programme adapt\u00e9 \u00e0 votre niveau r\u00e9el. Indiquez la charge max avec laquelle vous faites 8-10 reps propres.'));
-
-  var strengthGrid = h('div', {style: 'margin-bottom:16px'});
-  var bodyWeight = S.weight || 75;
-
-  // Strength thresholds relative to body weight
-  var strengthThresholds = {
-    bench_press: {low: 0.5, mid: 1.0},
-    squat: {low: 0.75, mid: 1.25},
-    deadlift: {low: 1.0, mid: 1.5},
-    overhead_press: {low: 0.35, mid: 0.65},
-    barbell_row: {low: 0.5, mid: 0.85},
-    barbell_curl: {low: 0.2, mid: 0.4},
-    hip_thrust: {low: 0.75, mid: 1.25},
-    leg_press: {low: 1.5, mid: 2.5}
-  };
-
-  (window.MUSCU_KEY_EXERCISES || []).forEach(function(exDef) {
-    var currentVal = S.muscuStrengthProfile[exDef.key] || '';
-    var row = h('div', {style: 'display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--border);background:var(--ivory2);margin-bottom:4px'});
-
-    // Icon + name + muscle tag
-    var nameCol = h('div', {style: 'flex:1;min-width:0'});
-    nameCol.appendChild(h('div', {style: 'font-family:Georgia;font-size:14px'}, exDef.icon + ' ' + exDef.name));
-    nameCol.appendChild(h('div', {style: 'display:flex;align-items:center;gap:6px;margin-top:2px'}, [
-      h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--grey);background:var(--ivory3,#EEEDE8);padding:1px 6px'}, exDef.muscle),
-      h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey)'}, exDef.desc)
-    ]));
-    row.appendChild(nameCol);
-
-    // Number input
-    var inputWrap = h('div', {style: 'display:flex;align-items:center;gap:4px;flex-shrink:0'});
-    var inp = h('input', {
-      type: 'number', step: '2.5', min: '0', max: '500',
-      value: currentVal ? String(currentVal) : '',
-      placeholder: '\u2014',
-      style: 'width:60px;padding:6px 8px;border:1px solid var(--border);font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory)',
-      onchange: (function(key) { return function(e) {
-        var v = parseFloat(e.target.value);
-        if (!isNaN(v) && v >= 0) {
-          S.muscuStrengthProfile[key] = v;
-        } else {
-          delete S.muscuStrengthProfile[key];
-        }
-        var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-        localStorage.setItem('mtd_muscu_strength_' + uid, JSON.stringify(S.muscuStrengthProfile));
-        if (window.BLACKBOX) BLACKBOX.log('strength_profile_set', {exercise: key, weight: v});
-        window.render();
-      }; })(exDef.key)
-    });
-    inputWrap.appendChild(inp);
-    inputWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'kg'));
-    row.appendChild(inputWrap);
-
-    // Strength level indicator
-    if (currentVal && currentVal > 0) {
-      var thresh = strengthThresholds[exDef.key] || {low: 0.5, mid: 1.0};
-      var ratioToBW = currentVal / bodyWeight;
-      var levelLabel, levelColor;
-      if (ratioToBW < thresh.low) {
-        levelLabel = 'D\u00e9butant'; levelColor = '#E67E22';
-      } else if (ratioToBW < thresh.mid) {
-        levelLabel = 'Interm\u00e9diaire'; levelColor = '#2980B9';
-      } else {
-        levelLabel = 'Avanc\u00e9'; levelColor = '#27AE60';
-      }
-      row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + levelColor + ';flex-shrink:0;min-width:70px;text-align:right'}, levelLabel));
-    }
-
-    strengthGrid.appendChild(row);
-  });
-  p.appendChild(strengthGrid);
-
-  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic;margin-bottom:16px'}, 'Laissez vide les exercices que vous ne pratiquez pas. Les charges seront estim\u00e9es automatiquement.'));
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.sportLevel !== null;
