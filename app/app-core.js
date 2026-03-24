@@ -1107,37 +1107,60 @@ function calcMacros(){
   // Pour les macros g/kg : utiliser le poids ajusté si obèse (ASPEN 2016, ESPEN 2015)
   // Les calories (calcTarget/TDEE) restent basées sur le poids réel
   var bw=calcAdjustedWeight()||75;var goalKey=GOALS[s.goal].key;
-  // ─── PROTÉINES (g/kg) — ISSN 2017, Helms 2014, ACSM 2016 ───
-  // Approche : g/kg supérieure aux % de calories (ISSN 2017)
+  // ─── PROTÉINES (g/kg) — Table complète par sexe, activité et objectif ───
+  // Sources : Phillips & Van Loon 2011 (BJSM) | Morton 2018 (BJSM meta-analysis)
+  //           Tarnopolsky 2000 (MSSE) : femmes nécessitent ~13% de moins (oestrogène anti-catabolique,
+  //           oxydation leucine réduite) | ISSN 2017 | Helms 2014 | EFSA 2012 | IOC 2011
   var ppk=1.8;
   var actFactor=s.activity!==null?ACTIVITIES[s.activity].factor:1.2;
+  var isFemale=s.sex==='femme';
+
   if(goalKey==='maintain'){
-    // MAINTIEN : ppk modulé selon activité — évite sur-estimation pour sédentaires
-    // Sédentaire : 1.2g/kg (EFSA 2012 minimum sarcopénie) | Actif : 1.6-2.0g/kg (ISSN 2017)
-    // OMS 0.83g/kg est le minimum absolu, ISSN recommande 1.0-1.2g/kg pour maintien masse
-    if(actFactor>=1.9)ppk=2.0;       // Athlète élite maintien : 2.0g/kg (ISSN 2017, IOC 2011)
-    else if(actFactor>=1.725)ppk=1.8; // Très actif : 1.8g/kg
-    else if(actFactor>=1.55)ppk=1.6;  // Modéré : 1.6g/kg
-    else if(actFactor>=1.375)ppk=1.4; // Léger : 1.4g/kg
-    else ppk=1.2;                     // Sédentaire : 1.2g/kg (anti-sarcopénie EFSA 2012)
-  } else if(goalKey==='bulk'){
-    // MASSE : 1.8g/kg base + bonus activité (hypertrophie — ISSN 2017)
-    ppk=1.8;
-    if(actFactor>=1.9)ppk=Math.max(ppk,2.2); // Athlète élite bulk : 2.2g/kg
-    else if(actFactor>=1.7)ppk+=0.2;          // Très actif : +0.2g/kg
-  } else {
-    // SÈCHE / COUPE : protéines hautes pour préservation musculaire (Helms 2014)
-    ppk=goalKey==='shred'?2.5:2.2; // shred=2.5, cut=2.2
-    // Bonus athlète (sèche/coupe) : masse musculaire plus importante à préserver
-    if(actFactor>=1.9)ppk=Math.max(ppk,3.0); // Athlète élite sèche (Helms 2014 upper range)
-    else if(actFactor>=1.7)ppk+=0.2;
-    // Cap shred : 2.7g/kg athlètes / 2.5g/kg standard (Helms 2014, ISSN 2017)
-    if(goalKey==='shred'){
-      ppk=Math.min(ppk, actFactor>=1.7 ? 2.7 : 2.5);
+    // ─── MAINTIEN — ppk selon activité ET sexe ───
+    // Hommes : 1.2 → 2.4 g/kg selon niveau (Phillips & Van Loon 2011, ISSN 2017)
+    // Femmes : ~13% de moins (oestrogène anti-catabolique — Tarnopolsky 2000)
+    // Sédentaire plancher : OMS 0.83 minimum, EFSA 2012 recommande 1.0-1.2 pour maintien musculaire
+    if(actFactor>=1.9){
+      ppk=isFemale?2.1:2.4;  // Athlète élite : H=2.4g/kg, F=2.1g/kg (Phillips & Van Loon 2011, Morton 2018)
+    } else if(actFactor>=1.725){
+      ppk=isFemale?1.6:1.8;  // Très actif : H=1.8, F=1.6 (ISSN 2017)
+    } else if(actFactor>=1.55){
+      ppk=isFemale?1.4:1.6;  // Modéré : H=1.6, F=1.4
+    } else if(actFactor>=1.375){
+      ppk=isFemale?1.2:1.4;  // Léger : H=1.4, F=1.2
+    } else {
+      ppk=isFemale?1.0:1.2;  // Sédentaire : H=1.2, F=1.0 (EFSA 2012 — anti-sarcopénie)
     }
-    // Cap cut : 2.8g/kg athlètes / 2.4g/kg standard (légèrement plus élevé que shred autorisé)
-    if(goalKey==='cut'){
-      ppk=Math.min(ppk, actFactor>=1.7 ? 2.8 : 2.4);
+
+  } else if(goalKey==='bulk'){
+    // ─── PRISE DE MASSE — ppk selon activité ET sexe ───
+    // Athlète élite : H=2.5g/kg, F=2.2g/kg (objectif hypertrophie maximale — Morton 2018)
+    // Base non-élite : H=1.8g/kg, F=1.6g/kg (ISSN 2017)
+    if(actFactor>=1.9){
+      ppk=isFemale?2.2:2.5;  // Élite bulk : H=2.5, F=2.2 (Morton 2018 BJSM)
+    } else if(actFactor>=1.7){
+      ppk=isFemale?1.8:2.0;  // Très actif bulk : H=2.0, F=1.8
+    } else {
+      ppk=isFemale?1.6:1.8;  // Standard bulk : H=1.8, F=1.6 (ISSN 2017)
+    }
+
+  } else {
+    // ─── SÈCHE / COUPE — protéines hautes, préservation musculaire (Helms 2014) ───
+    // Femmes : plancher légèrement plus bas grâce à l'effet anti-catabolique des oestrogènes
+    // mais recommandation reste élevée pour la sèche car catabolisme musculaire est le risque principal
+    if(goalKey==='shred'){
+      ppk=isFemale?2.3:2.5; // Base shred : H=2.5, F=2.3 (Helms 2014, ISSN 2017)
+      // Bonus athlète : préservation masse maigre importante
+      if(actFactor>=1.9) ppk=isFemale?2.7:3.0;     // Élite shred : H=3.0, F=2.7 (Helms 2014 upper)
+      else if(actFactor>=1.7) ppk+=isFemale?0.1:0.2; // Très actif : +0.1-0.2g/kg
+      // Cap shred (au-delà : pas de bénéfice supplémentaire — ISSN 2017)
+      ppk=Math.min(ppk, actFactor>=1.7?(isFemale?2.7:3.0):(isFemale?2.5:2.7));
+    } else {
+      // cut
+      ppk=isFemale?2.0:2.2; // Base cut : H=2.2, F=2.0
+      if(actFactor>=1.9) ppk=isFemale?2.5:2.8;     // Élite cut : H=2.8, F=2.5
+      else if(actFactor>=1.7) ppk+=isFemale?0.1:0.2;
+      ppk=Math.min(ppk, actFactor>=1.7?(isFemale?2.5:2.8):(isFemale?2.2:2.4));
     }
   }
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
