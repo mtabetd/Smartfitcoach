@@ -992,7 +992,9 @@ window.getPregnancyWeightGuideline = getPregnancyWeightGuideline;
 
 // ─── FORMULAS ───
 function calcBMR(){var s=window.S;if(!s.sex)return 0;if(!s.age||s.age<13||s.age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;if(s.sex==='homme')return 88.362+(13.397*s.weight)+(4.799*s.height)-(5.677*s.age);return 447.593+(9.247*s.weight)+(3.098*s.height)-(4.330*s.age)}
-function calcTDEE(){var s=window.S;if(s.activity===null)return 0;return calcBMR()*ACTIVITIES[s.activity].factor}
+function calcTDEE(){var s=window.S;if(s.activity===null)return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
+// Uses the MAXIMUM of user's selected factor and sport-based estimate
+var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
 function calcTarget(){var s=window.S;if(s.goal===null)return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}return base}var goalKey=GOALS[s.goal].key;// Cap deficit to 500kcal/day for diabetics (sécurité glycémique)
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
 if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}return base}
@@ -1028,7 +1030,11 @@ function calcMacros(){
   for(var i=0;i<s.medical.length;i++){var a=MEDICAL_ADVICE[s.medical[i]];if(a&&a.macroAdj){gGrams=Math.round(gGrams*(1+(a.macroAdj.g||0)));pGrams=Math.round(pGrams*(1+(a.macroAdj.p||0)));lGrams=Math.round(lGrams*(1+(a.macroAdj.l||0)))}}
   // Re-enforce IRC protein cap after all medical adjustments (NKF 0.8g/kg)
   if(s.medical.indexOf('irc')!==-1){var maxIrcP=Math.round(bw*0.8);if(pGrams>maxIrcP)pGrams=maxIrcP;}
-  return{g:Math.max(50,gGrams),p:Math.max(40,pGrams),l:Math.max(20,lGrams),proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10}
+  // Apply cycle-phase macro adjustments (only for non-pregnant women with cycle tracking)
+  if(!s.pregnant&&s.sex==='femme'&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
+gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0)));// Never reduce protein during cycle — keep stable
+}}
+  return{g:Math.max(50,gGrams),p:Math.max(40,pGrams),l:Math.max(20,lGrams),proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
 }
 function calcBMI(){var s=window.S;var ht=s.height/100;return s.weight/Math.pow(ht,2)}
 function bmiInfo(b){if(b<18.5)return{label:'Insuffisant',color:'#1A3A6A'};if(b<25)return{label:'Normal',color:'#1A4A1A'};if(b<30)return{label:'Surpoids',color:'#6A4A1A'};return{label:'Obésité',color:'#5A1010'}}

@@ -290,7 +290,42 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
   return result;
 }
 
-function getWeeklySplit(daysPerWeek) { return WEEKLY_SPLITS[daysPerWeek] || WEEKLY_SPLITS[5]; }
+function getWeeklySplit(daysPerWeek, userProfile) {
+  var S = userProfile || window.S || {};
+  var base = WEEKLY_SPLITS[daysPerWeek] || WEEKLY_SPLITS[5];
+  // Deep clone to avoid mutating the template
+  var split = JSON.parse(JSON.stringify(base));
+  // Inject dedicated programs based on zone priorities (4★ or 5★)
+  var focus = S.sportFocus || {};
+  var priorityMap = {
+    'Fessiers': 'fessiers_dedied',
+    'Abdominaux': 'abdos_dedied',
+    'Biceps': 'biceps_dedied',
+    'Triceps': 'triceps_dedied'
+  };
+  // For each high-priority zone, inject its dedicated program into the appropriate day
+  Object.keys(priorityMap).forEach(function(zoneName) {
+    if ((focus[zoneName] || 0) < 4) return;
+    var dediedKey = priorityMap[zoneName];
+    var alreadyPresent = split.days.some(function(d){ return d.muscles.indexOf(dediedKey) !== -1; });
+    if (alreadyPresent) return;
+    // Find the best day to inject (jambes day for fessiers, bras/abdos day for others)
+    var parentGroup = {fessiers_dedied:'jambes', abdos_dedied:'bras', biceps_dedied:'bras', triceps_dedied:'bras'}[dediedKey] || 'jambes';
+    var targetDay = null;
+    // Find day with parent group, preferring the last occurrence
+    for (var di = split.days.length - 1; di >= 0; di--) {
+      if (split.days[di].muscles.indexOf(parentGroup) !== -1) { targetDay = split.days[di]; break; }
+    }
+    // If no matching day, use the last day
+    if (!targetDay) targetDay = split.days[split.days.length - 1];
+    // Inject dedicated program
+    if (targetDay.muscles.indexOf(dediedKey) === -1) {
+      targetDay.muscles.push(dediedKey);
+      targetDay.label = targetDay.label + ' + ' + zoneName + ' \u2605';
+    }
+  });
+  return split;
+}
 
 window.NFC_PROGRAMS = NFC_PROGRAMS;
 window.WEEKLY_SPLITS = WEEKLY_SPLITS;

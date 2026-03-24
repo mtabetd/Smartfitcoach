@@ -134,6 +134,15 @@ function generateSportProgram() {
       pregIntensityFactor = pregTri.trimester.intensityFactor || 0.5;
     }
   }
+  // Cycle phase: get intensity factor for menstrual cycle phase (non-pregnant women)
+  var cycleIntensityFactor = 1.0;
+  var cyclePhaseInfo = null;
+  if (!S.pregnant && S.sex === 'femme' && S.cycleTracking && window.getCurrentCyclePhase) {
+    cyclePhaseInfo = window.getCurrentCyclePhase();
+    if (cyclePhaseInfo && cyclePhaseInfo.phase.intensityFactor) {
+      cycleIntensityFactor = cyclePhaseInfo.phase.intensityFactor;
+    }
+  }
 
   // Generate exercises for each day
   var maxLv = S.sportLevel === 'beginner' ? 2 : S.sportLevel === 'intermediate' ? 3 : 4;
@@ -179,6 +188,10 @@ function generateSportProgram() {
       if (pregTri) {
         count = Math.max(1, Math.round(count * pregIntensityFactor));
       }
+      // Cycle phase: reduce exercises during low-intensity phases (luteal, menstruation)
+      if (!pregTri && cycleIntensityFactor < 0.9) {
+        count = Math.max(1, Math.round(count * cycleIntensityFactor));
+      }
 
       // Cycle-based offset: rotate exercise selection each cycle (guard against NaN)
       var poolRemainder = available.length - count;
@@ -191,6 +204,10 @@ function generateSportProgram() {
 
         // Pregnancy: longer rest
         if (pregTri) ex.rest = '90-120s';
+        // Cycle phase: reduce sets during low-intensity phases (luteal/menstruation)
+        if (!pregTri && cycleIntensityFactor < 0.9 && typeof ex.sets === 'number') {
+          ex.sets = Math.max(2, Math.round(ex.sets * cycleIntensityFactor));
+        }
 
         // Add rep suffix for shred/weightloss
         if (repSuffix && ex.sets) ex.sets = ex.sets + repSuffix;
