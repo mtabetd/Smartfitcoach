@@ -1422,6 +1422,67 @@ function renderMusculationProgram(p) {
     p.appendChild(summary);
   }
 
+  // ─── PROGRAMMES DÉDIÉS ───
+  var dedicatedMap = {
+    'Fessiers':    ['fessiers_dedied'],
+    'Abdominaux':  ['abdos_dedied'],
+    'Bras':        ['biceps_dedied', 'triceps_dedied']
+  };
+  var selectedZonesForDedicated = Object.keys(S.sportFocus).filter(function(z){ return S.sportFocus[z] > 0; });
+  var dedicatedToShow = [];
+  selectedZonesForDedicated.forEach(function(zone) {
+    if (dedicatedMap[zone]) {
+      dedicatedMap[zone].forEach(function(key) {
+        if (dedicatedToShow.indexOf(key) === -1) dedicatedToShow.push(key);
+      });
+    }
+  });
+
+  if (dedicatedToShow.length > 0 && window.NFC_PROGRAMS) {
+    p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:28px'}, 'Programmes ciblés'));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:12px'}, 'Séances bonus à intégrer selon vos priorités.'));
+
+    dedicatedToShow.forEach(function(key) {
+      var prog = window.NFC_PROGRAMS[key];
+      if (!prog) return;
+
+      var isOpen = S['dedicatedOpen_' + key] || false;
+      var card = h('div', {style: 'border:1px solid var(--border);margin-bottom:8px;background:var(--ivory2)'});
+
+      // Header toggle
+      var header = h('div', {
+        style: 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer',
+        onclick: function() {
+          S['dedicatedOpen_' + key] = !S['dedicatedOpen_' + key];
+          window.render();
+        }
+      });
+      header.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px'}, prog.name));
+      header.appendChild(h('span', {style: 'font-size:18px;color:var(--grey)'}, isOpen ? '▲' : '▼'));
+      card.appendChild(header);
+
+      if (isOpen) {
+        prog.exercises.forEach(function(ex) {
+          var row = h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start'});
+          var left = h('div', {});
+          left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.order + '. ' + ex.name));
+          left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.muscle + ' — ' + ex.equipment));
+          if (ex.technique) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange);margin-top:2px'}, ex.technique));
+          row.appendChild(left);
+          var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
+          right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.sets + '×' + ex.reps));
+          right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.rest));
+          row.appendChild(right);
+          card.appendChild(row);
+        });
+        if (prog.notes) {
+          card.appendChild(h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic'}, prog.notes));
+        }
+      }
+      p.appendChild(card);
+    });
+  }
+
   // Regenerate
   p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function(){
     S.sportProgram = generateSportProgram();
