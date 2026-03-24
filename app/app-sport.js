@@ -502,6 +502,9 @@ function renderDedicatedPrograms(p) {
   p.appendChild(h('h1', {html: 'Programmes<br><em>dédiés</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'S\u00e9ances cibl\u00e9es, vari\u00e9es (A/B), pr\u00eates \u00e0 l\u2019emploi.'));
 
+  // ─── SUIVI 6 SEMAINES ───
+  renderWeekTracker(p);
+
   var allDedicated = [
     {key: 'fessiers_dedied', icon: '\uD83C\uDF51'},
     {key: 'abdos_dedied',    icon: '\u26A1'},
@@ -550,7 +553,9 @@ function renderDedicatedPrograms(p) {
       card.appendChild(tabs);
 
       var variation = prog.variations[varIdx];
+      var currentPhase = getMuscuPhase(S.muscuWeek || 1);
       variation.exercises.forEach(function(ex) {
+        ex = applyPhaseToExercise(ex, currentPhase);
         var row = h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start'});
         var left = h('div', {});
         left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.order + '. ' + ex.name));
@@ -1229,6 +1234,126 @@ function renderMusculationZones(p) {
   p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 2; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
+// ─── SYSTÈME DE PHASES 6 SEMAINES ───
+var MUSCU_PHASES = [
+  {weeks:[1,2], id:'adaptation',     label:'Adaptation',     color:'#2980B9', advice:'Maîtrisez la technique avant d\'augmenter les charges. Priorité à la forme.', setsOffset:-1, repsOffset:+2, restNote:'Prenez le temps qu\'il faut entre les séries.'},
+  {weeks:[3,4], id:'progression',    label:'Progression',    color:'#27AE60', advice:'+2.5 à 5 kg sur les exercices poly-articulaires si vous avez réussi toutes les répétitions.', setsOffset:0,  repsOffset:0,  restNote:'Respectez les temps de repos indiqués.'},
+  {weeks:[5,6], id:'intensification',label:'Intensification',color:'#E67E22', advice:'Charges maximales. Dernier set jusqu\'à l\'échec technique. Ne trichez pas sur la forme.', setsOffset:+1, repsOffset:-2, restNote:'+30s de repos vs semaines précédentes.'},
+  {weeks:[7],   id:'decharge',       label:'Décharge',       color:'#8E44AD', advice:'Récupération active. Réduisez toutes les charges de 30%. Indispensable pour la progression à long terme.', setsOffset:-1, repsOffset:0, restNote:'Repos complets, récupération musculaire.'}
+];
+
+function getMuscuPhase(week) {
+  for (var i = 0; i < MUSCU_PHASES.length; i++) {
+    if (MUSCU_PHASES[i].weeks.indexOf(week) !== -1) return MUSCU_PHASES[i];
+  }
+  return MUSCU_PHASES[0];
+}
+
+function applyPhaseToExercise(ex, phase) {
+  var result = JSON.parse(JSON.stringify(ex));
+  var baseSets = typeof result.sets === 'number' ? result.sets : 4;
+  result.sets = Math.max(2, baseSets + phase.setsOffset);
+  if (typeof result.reps === 'number') result.reps = Math.max(5, result.reps + phase.repsOffset);
+  return result;
+}
+
+function saveMuscuWeek(week) {
+  S.muscuWeek = week;
+  var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+  localStorage.setItem('mtd_muscu_week_' + uid, String(week));
+  if (!S.muscuProgramStart) {
+    S.muscuProgramStart = new Date().toISOString().split('T')[0];
+    localStorage.setItem('mtd_muscu_start_' + uid, S.muscuProgramStart);
+  }
+}
+
+function loadMuscuWeek() {
+  var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+  var w = parseInt(localStorage.getItem('mtd_muscu_week_' + uid));
+  if (!isNaN(w) && w >= 1) S.muscuWeek = w;
+  var start = localStorage.getItem('mtd_muscu_start_' + uid);
+  if (start) S.muscuProgramStart = start;
+}
+
+function renderWeekTracker(p) {
+  loadMuscuWeek();
+  var week = S.muscuWeek || 1;
+  var phase = getMuscuPhase(week);
+
+  var container = h('div', {style: 'border:2px solid ' + phase.color + ';padding:16px;margin-bottom:20px;background:var(--ivory2)'});
+
+  // Phase badge + week
+  var top = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px'});
+  var badge = h('div', {style: 'display:flex;align-items:center;gap:8px'});
+  badge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:' + phase.color + ';padding:3px 8px'}, phase.label));
+  badge.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:14px;color:' + phase.color}, 'Semaine ' + week + ' / 7'));
+  top.appendChild(badge);
+  if (S.muscuProgramStart) {
+    top.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey)'}, 'Début : ' + S.muscuProgramStart));
+  }
+  container.appendChild(top);
+
+  // Progress bar (7 squares)
+  var squares = h('div', {style: 'display:flex;gap:3px;margin-bottom:12px'});
+  for (var w2 = 1; w2 <= 7; w2++) {
+    (function(wk) {
+      var ph = getMuscuPhase(wk);
+      var isActive = wk === week;
+      var isDone = wk < week;
+      var sq = h('div', {
+        style: 'flex:1;height:8px;cursor:pointer;transition:all 0.15s;' +
+          (isActive ? 'background:' + ph.color + ';transform:scaleY(1.5)' :
+           isDone   ? 'background:' + ph.color + ';opacity:0.4' : 'background:var(--border)'),
+        title: 'Semaine ' + wk + ' — ' + ph.label,
+        onclick: function() { saveMuscuWeek(wk); window.render(); }
+      });
+      squares.appendChild(sq);
+    })(w2);
+  }
+  container.appendChild(squares);
+
+  // Phase labels under squares
+  var labels = h('div', {style: 'display:flex;gap:3px;margin-bottom:10px'});
+  ['S1','S2','S3','S4','S5','S6','S7'].forEach(function(lbl, idx) {
+    labels.appendChild(h('div', {style: 'flex:1;text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:8px;color:var(--grey)'}, lbl));
+  });
+  container.appendChild(labels);
+
+  // Phase advice
+  container.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.5;margin-bottom:10px;padding-left:8px;border-left:2px solid ' + phase.color}, phase.advice));
+  container.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic;margin-bottom:12px'}, phase.restNote));
+
+  // Buttons
+  var btnRow = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap'});
+  if (week < 7) {
+    btnRow.appendChild(h('button', {
+      style: 'flex:1;padding:10px;background:' + phase.color + ';color:#fff;border:none;font-family:Georgia,serif;font-size:13px;cursor:pointer',
+      onclick: function() { saveMuscuWeek(week + 1); window.render(); }
+    }, 'Semaine ' + (week + 1) + ' \u2192'));
+  } else {
+    btnRow.appendChild(h('button', {
+      style: 'flex:1;padding:10px;background:#27AE60;color:#fff;border:none;font-family:Georgia,serif;font-size:13px;cursor:pointer',
+      onclick: function() {
+        S.muscuProgramStart = new Date().toISOString().split('T')[0];
+        var uid2 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+        localStorage.setItem('mtd_muscu_start_' + uid2, S.muscuProgramStart);
+        saveMuscuWeek(1);
+        window.render();
+      }
+    }, '\u21BB Nouveau cycle (Semaine 1)'));
+  }
+  btnRow.appendChild(h('button', {
+    style: 'padding:10px 14px;background:var(--ivory);color:var(--grey);border:1px solid var(--border);font-family:"Helvetica Neue",sans-serif;font-size:11px;cursor:pointer',
+    onclick: function() {
+      if (week > 1) { saveMuscuWeek(week - 1); window.render(); }
+    },
+    disabled: week <= 1
+  }, '\u2190 Sem. préc.'));
+  container.appendChild(btnRow);
+
+  p.appendChild(container);
+}
+
 // ─── STEP 4 (Muscu): PROGRAMME ───
 function renderMusculationProgram(p) {
   if (!S.sportProgram || !S.sportProgram.length) { S.sportProgram = generateSportProgram(); S.selectedSportDay = 0; }
@@ -1255,6 +1380,9 @@ function renderMusculationProgram(p) {
   }).join(' + ');
   p.appendChild(h('p', {'class': 'subtitle'}, S.sportDays + ' jours/semaine — ' + goalNames));
   if (window.TIPS) TIPS.renderTip(p, 'sportProgram');
+
+  // ─── SUIVI 6 SEMAINES ───
+  renderWeekTracker(p);
 
   // Show zone focus with star count
   var focusZones = Object.keys(S.sportFocus)
