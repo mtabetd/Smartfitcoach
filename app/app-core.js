@@ -1191,7 +1191,7 @@ function calcMacros(){
   // Fat g/kg (minimum 0.5g/kg for hormonal health)
   var fpk=1.0;
   if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='bulk')fpk=1.1;else fpk=1.0;
-  if(s.sex==='femme')fpk+=0.1;
+  if(s.sex==='femme')fpk=Math.round((fpk+0.1)*10)/10;
   // Min lipides femme 0.7g/kg (ISSN 2021) — santé hormonale (vs 0.5 homme)
   var lipidMin=s.sex==='femme'?0.7:0.5;
   fpk=Math.max(lipidMin,Math.min(1.5,fpk));

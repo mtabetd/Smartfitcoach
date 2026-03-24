@@ -1210,16 +1210,6 @@ function renderStep8(p) {
       p.appendChild(h('div', {style: 'background:' + bg + ';border-left:4px solid ' + border + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:' + color + ';line-height:1.5'}, c.message));
     });
   }
-  // RED-S détection (IOC 2018 — EA < 30 kcal/kg MLG/j)
-  if (window.detectREDS) {
-    var redsAlert = window.detectREDS();
-    if (redsAlert) {
-      var redsBg = redsAlert.risk === 'CRITIQUE' ? '#FFEBEE' : '#FFF3E0';
-      var redsBorder = redsAlert.risk === 'CRITIQUE' ? '#C0392B' : '#E67E22';
-      var redsColor = redsAlert.risk === 'CRITIQUE' ? '#7B1A1A' : '#5D4037';
-      p.appendChild(h('div', {style: 'background:' + redsBg + ';border-left:4px solid ' + redsBorder + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:' + redsColor + ';line-height:1.5'}, redsAlert.message));
-    }
-  }
 
   // Big numbers
   var sr = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px'});
