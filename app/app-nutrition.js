@@ -1780,6 +1780,8 @@ function renderStep9(p) {
 
 // ─── MODAL ───
 function renderModal(app) {
+  // Attach to #app root (not the fade-in container) — position:fixed breaks when parent has CSS transform
+  var root = document.getElementById('app') || app;
   var ov = h('div', {'class': 'modal-overlay' + (S.modalRecipe ? ' open' : ''), onclick: function(e) {
     if (e.target === ov) { S.modalRecipe = null; window.render(); }
   }});
@@ -1812,7 +1814,7 @@ function renderModal(app) {
     sheet.appendChild(body);
   }
   ov.appendChild(sheet);
-  app.appendChild(ov);
+  root.appendChild(ov);
 }
 
 // ─── PDF EXPORT ───
