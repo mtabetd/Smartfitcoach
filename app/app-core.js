@@ -1150,18 +1150,20 @@ function calcMacros(){
     // Femmes : plancher légèrement plus bas grâce à l'effet anti-catabolique des oestrogènes
     // mais recommandation reste élevée pour la sèche car catabolisme musculaire est le risque principal
     if(goalKey==='shred'){
-      ppk=isFemale?2.3:2.5; // Base shred : H=2.5, F=2.3 (Helms 2014, ISSN 2017)
+      // Femmes : valeurs abaissées vs Helms 2014 (compétiteurs) — alignées ISSN 2017 population générale active
+      // Hommes : conservent les valeurs élevées (Helms 2014, Morton 2018 confirment pour H)
+      ppk=isFemale?1.9:2.5; // Base shred : H=2.5, F=1.9 (ISSN 2017 : 1.6-2.2g/kg femmes actives)
       // Bonus athlète : préservation masse maigre importante
-      if(actFactor>=1.9) ppk=isFemale?2.7:3.0;     // Élite shred : H=3.0, F=2.7 (Helms 2014 upper)
-      else if(actFactor>=1.7) ppk+=isFemale?0.1:0.2; // Très actif : +0.1-0.2g/kg
+      if(actFactor>=1.9) ppk=isFemale?2.3:3.0;     // Élite shred : H=3.0, F=2.3 (Helms 2014 upper pour H; F limitée)
+      else if(actFactor>=1.7) ppk+=isFemale?0.1:0.2; // Très actif : F→2.0g/kg, H→2.7g/kg
       // Cap shred (au-delà : pas de bénéfice supplémentaire — ISSN 2017)
-      ppk=Math.min(ppk, actFactor>=1.7?(isFemale?2.7:3.0):(isFemale?2.5:2.7));
+      ppk=Math.min(ppk, actFactor>=1.7?(isFemale?2.3:3.0):(isFemale?2.1:2.7));
     } else {
-      // cut
-      ppk=isFemale?2.0:2.2; // Base cut : H=2.2, F=2.0
-      if(actFactor>=1.9) ppk=isFemale?2.5:2.8;     // Élite cut : H=2.8, F=2.5
-      else if(actFactor>=1.7) ppk+=isFemale?0.1:0.2;
-      ppk=Math.min(ppk, actFactor>=1.7?(isFemale?2.5:2.8):(isFemale?2.2:2.4));
+      // cut — valeurs femmes abaissées pour rester dans la plage ISSN 2017 (1.6-2.2g/kg)
+      ppk=isFemale?1.8:2.2; // Base cut : H=2.2, F=1.8 (ISSN 2017)
+      if(actFactor>=1.9) ppk=isFemale?2.2:2.8;     // Élite cut : H=2.8, F=2.2
+      else if(actFactor>=1.7) ppk+=isFemale?0.1:0.2; // Très actif : F→1.9g/kg, H→2.4g/kg
+      ppk=Math.min(ppk, actFactor>=1.7?(isFemale?2.2:2.8):(isFemale?2.0:2.4));
     }
   }
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
