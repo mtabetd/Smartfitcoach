@@ -73,6 +73,10 @@ var GOALS=[
   {icon:'↘',name:'Perte de poids',desc:'-15% calories',mult:0.85,key:'cut'},
   {icon:'↓',name:'Sèche',desc:'-25% calories',mult:0.75,key:'shred'}
 ];
+// RATIOS : distribution calorique indicative par objectif (pour affichage uniquement)
+// ATTENTION : calcMacros() utilise la méthode g/kg (ISSN 2017), pas ces ratios
+// Ces valeurs ne sont PAS utilisées pour le calcul des macros — elles servent uniquement à l'affichage indicatif
+// Note : l'approche g/kg est cliniquement supérieure aux % de calories (ISSN 2017, Helms 2014)
 var RATIOS={bulk:{g:.55,p:.25,l:.20},maintain:{g:.50,p:.30,l:.20},cut:{g:.40,p:.35,l:.25},shred:{g:.30,p:.40,l:.30}};
 var COOK_LEVELS=[{name:'Facile',desc:'5-10 min',val:1},{name:'Moyen',desc:'15-20 min',val:2},{name:'Avancé',desc:'30 min',val:3},{name:'Chef',desc:'45+ min',val:4}];
 var ALLERGIES=['Aucune','Fruits à coque','Arachides','Oeufs','Poisson','Crustacés','Soja','Lait/Produits laitiers','Gluten/Blé','Sésame','Moutarde'];
@@ -131,8 +135,14 @@ var MEDICAL_ADVICE={
   diabete_t2:{warn:'Glucides simples limités. Privilégiez les céréales complètes et légumineuses.',macroAdj:{g:-.10,p:.05,l:.05}},
   diabete_t1:{warn:'Comptage glucidique essentiel. Consultez votre diabétologue.',macroAdj:{g:-.05,p:.03,l:.02}},
   prediabete:{warn:'Favorisez les aliments à index glycémique bas et les fibres.',macroAdj:{g:-.08,p:.04,l:.04}},
-  cholesterol:{warn:'Réduisez les graisses saturées. Privilégiez les oméga-3 (poisson, noix).',macroAdj:{g:.03,p:.02,l:-.05}},
-  triglycerides:{warn:'Limitez les sucres rapides et l\u2019alcool.',macroAdj:{g:-.08,p:.03,l:.05}},
+  // AHA/ESC 2019 : hypercholestérolémie → réduire graisses SATURÉES (qualité, pas quantité totale)
+  // Ne PAS réduire les lipides totaux : MUFA (olive) et PUFA (oméga-3) sont cardioprotecteurs
+  // macroAdj.l supprimé (réduire lipides totaux = contre-productif si on supprime les bons)
+  cholesterol:{warn:'Réduisez les graisses saturées (charcuteries, beurre, fromages gras). Privilégiez MUFA (huile d\'olive) et oméga-3 (poisson gras, noix, lin). Fibres solubles (avoine, psyllium) réduisent LDL de 5-10% (AHA 2019).',macroAdj:{g:.02,p:.02,l:0}},
+  // ESC/EAS 2016 : hypertriglycéridémie → réduire glucides ET alcool (principal levier)
+  // Les oméga-3 EPA/DHA à 2-4g/j réduisent TG de 20-50% (ESC 2016) → pas d'augmentation lipides totaux
+  // macroAdj.l corrigé à 0 (les lipides omega-3 sont déjà recommandés via suppléments)
+  triglycerides:{warn:'Réduisez les glucides rapides et l\'alcool — premier levier. Oméga-3 (EPA+DHA 2-4g/j) réduisent les TG de 20-50% (ESC 2016). Évitez jus de fruits, sodas, miel, sirop d\'agave.',macroAdj:{g:-.10,p:.03,l:0}},
   goutte:{warn:'Évitez les abats, sardines, anchois. Buvez 2L+ d\'eau/jour.',macroAdj:null},
   hta:{warn:'Régime hyposodé (< 5g sel/jour). Augmentez potassium (banane, épinard).',macroAdj:null},
   cardio:{warn:'Réduisez sodium et graisses saturées. Plus d\'oméga-3.',macroAdj:{g:.03,p:.02,l:-.05}},
@@ -148,7 +158,10 @@ var MEDICAL_ADVICE={
   hypothyroidie:{warn:'Assurez iode et sélénium. Évitez excès de soja et crucifères crus.',macroAdj:null},
   hyperthyroidie:{warn:'Apport calorique augmenté. Calcium et vitamine D importants.',macroAdj:null},
   sopk:{warn:'Index glycémique bas, anti-inflammatoire. Oméga-3 et magnésium.',macroAdj:{g:-.08,p:.04,l:.04}},
-  menopause:{warn:'Ménopause : métabolisme réduit ~100-150 kcal/j (NAMS 2022). Augmentez calcium (1200mg/j) et vitamine D. Protéines +10% pour lutter contre la perte musculaire (ESPEN 2019). Oméga-3 pour santé cardiovasculaire.',macroAdj:{g:-.05,p:.08,l:-.03}},
+  // NAMS 2022 + ESPEN 2019 : ménopause → +10% protéines (résistance anabolique + perte musculaire)
+  // Lipides : pas de réduction totale — oméga-3 protecteurs cardiovasculaires (ESC 2021)
+  // macroAdj.p corrigé à +0.10 (cohérence avec description "+10%") | macroAdj.l corrigé à 0
+  menopause:{warn:'Ménopause : métabolisme réduit ~100-150 kcal/j (NAMS 2022). Calcium 1200mg/j + Vitamine D. Protéines +10% contre la perte musculaire (ESPEN 2019). Oméga-3 pour santé cardiovasculaire et os.',macroAdj:{g:-.05,p:.10,l:0}},
   hashimoto:{warn:'Anti-inflammatoire. Certains patients bénéficient du sans gluten.',macroAdj:null},
   osteoporose:{warn:'Calcium (1200mg/j), vitamine D, protéines adéquates.',macroAdj:{g:-.03,p:.05,l:-.02}},
   polyarthrite:{warn:'Oméga-3 (poissons gras). Réduisez oméga-6 et aliments pro-inflammatoires.',macroAdj:null},
@@ -1062,7 +1075,8 @@ function calcBMR(){var s=window.S;if(!s.sex)return 0;if(!s.age||s.age<13||s.age>
 function calcTDEE(){var s=window.S;if(s.activity===null)return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
-function calcTarget(){var s=window.S;if(s.goal===null)return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}return base}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
+function calcTarget(){var s=window.S;if(s.goal===null)return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}// Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
+base=Math.max(base,1800);return base}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 if(goalKey==='shred'&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}// Cap deficit to 500kcal/day for diabetics (sécurité glycémique)
 // Allaitement : +500 kcal/j (ACOG 2022) — priorité sur l'objectif coupe/sèche
 if(s.medical&&s.medical.indexOf('allaitement')!==-1){return Math.max(Math.round(tdeeVal)+500,1800);}
@@ -1072,7 +1086,15 @@ if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
 if(s.age>=13&&s.age<18&&tdeeVal>0){var minCalTeen=Math.round(tdeeVal-300);if(base<minCalTeen)base=minCalTeen;}
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
 if(s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1200,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes)if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
-if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}var kcalFloor=s.sex==='femme'?1200:1500;base=Math.max(base,kcalFloor);return base} // ACSM: plancher universel ≥1200 kcal/j (femme) / ≥1500 kcal/j (homme)
+if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}var kcalFloor=s.sex==='femme'?1200:1500;base=Math.max(base,kcalFloor);
+// Alcool : déduire les calories hebdo/7 du budget calorique journalier pour un calcul réaliste
+// Ex : 500 kcal alcool/semaine ÷ 7 = 71 kcal/j que l'on retire de l'objectif alimentaire
+// (l'alcool ne nourrit pas : 7kcal/g sans micronutriments, inhibe oxydation des graisses)
+if(s.alcoholFreq&&s.alcoholFreq!=='never'&&typeof alcoholWeeklyKcal==='function'){
+  var alcDaily=Math.round(alcoholWeeklyKcal()/7);
+  if(alcDaily>0){base=Math.max(kcalFloor,base-alcDaily);} // soustraire mais respecter le plancher
+}
+return base} // ACSM: plancher universel ≥1200 kcal/j (femme) / ≥1500 kcal/j (homme)
 function calcMacros(){
   var s=window.S;var c=calcTarget();
   if(!c||s.goal===null)return{g:0,p:0,l:0};
@@ -1082,9 +1104,17 @@ function calcMacros(){
   // Protein g/kg (ISSN 2017, Helms 2014, ACSM 2016)
   var ppk=1.8;
   if(goalKey==='shred')ppk=2.5;else if(goalKey==='cut')ppk=2.2;else if(goalKey==='bulk')ppk=1.8;else ppk=1.8;
-  if(s.activity!==null&&ACTIVITIES[s.activity].factor>=1.7)ppk+=0.2;
-  // Plafond PPK sèche 2.5g/kg (Helms 2014, ISSN 2017) — bonus activité inclus
-  if(goalKey==='shred')ppk=Math.min(ppk,2.5);
+  // NOTE: le cap shred est appliqué EN DERNIER après tous les bonus (logique correcte)
+  // Athlète elite (factor >= 1.9) → 3.0g/kg (Helms 2014, ISSN 2022 update)
+  // Très actif (factor >= 1.7) → +0.2g/kg
+  if(s.activity!==null&&ACTIVITIES[s.activity].factor>=1.9)ppk=Math.max(ppk,3.0);
+  else if(s.activity!==null&&ACTIVITIES[s.activity].factor>=1.7)ppk+=0.2;
+  // Plafond PPK sèche : 2.7g/kg pour athlètes (Helms 2014 plafond athlète haute intensité)
+  // 2.5g/kg pour non-athlètes (ISSN 2017 — au-delà pas de bénéfice supplémentaire démontré)
+  if(goalKey==='shred'){
+    var isHighActivity=s.activity!==null&&ACTIVITIES[s.activity].factor>=1.7;
+    ppk=Math.min(ppk, isHighActivity ? 2.7 : 2.5);
+  }
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
   if(s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.6); // KDOQI 2020: 0.55-0.60g/kg CKD 3-5 non-dialysis
   // Vegan/vegetarian: adjust protein for lower DIAAS bioavailability of plant proteins (Messina 2019, ISSN 2017)
@@ -1126,7 +1156,18 @@ gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0
   return{g:Math.max(130,gGrams),p:Math.max(40,pGrams),l:Math.max(20,lGrams),proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
 }
 function calcBMI(){var s=window.S;var ht=s.height/100;return s.weight/Math.pow(ht,2)}
-function bmiInfo(b){if(b<18.5)return{label:'Insuffisant',color:'#1A3A6A'};if(b<25)return{label:'Normal',color:'#1A4A1A'};if(b<30)return{label:'Surpoids',color:'#6A4A1A'};return{label:'Obésité',color:'#5A1010'}}
+// OMS : 3 grades d'obésité — prise en charge radicalement différente selon le grade
+// Grade 1 (30-34.9) : hygiène de vie | Grade 2 (35-39.9) : suivi spécialisé | Grade 3 (≥40) : chirurgie bariatrique possible (HAS 2022)
+function bmiInfo(b){
+  if(b<16.0)return{label:'Dénutrition sévère',color:'#1A0050',grade:'D3',note:'Hospitalisation nécessaire (HAS 2019)'};
+  if(b<17.0)return{label:'Dénutrition modérée',color:'#1A1070',grade:'D2',note:'Suivi diététique urgent'};
+  if(b<18.5)return{label:'Insuffisance pondérale',color:'#1A3A6A',grade:'D1',note:'Augmenter les apports caloriques'};
+  if(b<25)return{label:'Poids normal',color:'#1A4A1A',grade:'N',note:'Maintenir les habitudes alimentaires'};
+  if(b<30)return{label:'Surpoids',color:'#6A4A1A',grade:'S',note:'Hygiène de vie à améliorer'};
+  if(b<35)return{label:'Obésité grade 1',color:'#7A3010',grade:'O1',note:'Suivi médical recommandé (HAS 2022)'};
+  if(b<40)return{label:'Obésité grade 2',color:'#8A1A10',grade:'O2',note:'Suivi spécialisé médical obligatoire'};
+  return{label:'Obésité grade 3 (morbide)',color:'#5A1010',grade:'O3',note:'Équipe pluridisciplinaire — chirurgie bariatrique discutable (HAS 2022)'}
+}
 
 function calcWeightProjection(){
   var s=window.S;
@@ -1303,7 +1344,12 @@ function filterRecipes(pool,type){
   return r;
 }
 function pickRecipe(pool,targetK,used){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();av.sort(function(a,b){return Math.abs(a.k-targetK)-Math.abs(b.k-targetK)});var top=av.slice(0,Math.min(5,av.length));var p=top[Math.floor(Math.random()*top.length)];if(p)used.add(p.n);return p||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
-function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w});var split=getMealSplit();for(var d=0;d<7;d++){var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR;if(s.whey&&pSW.length>0&&d%2===0)sR=pickRecipe(pSW,sT,uS);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);var dR=pickRecipe(pD,dT,uD);plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
+function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w});var split=getMealSplit();var meals=s.mealsPerDay||3;for(var d=0;d<7;d++){var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
+// Snack : généré seulement si mealsPerDay >= 4 et split > 0
+if(meals>=4&&sT>0){if(s.whey&&pSW.length>0&&d%2===0)sR=pickRecipe(pSW,sT,uS);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
+// Dîner : généré seulement si mealsPerDay >= 3 (pas pour jeûne intermittent 2 repas)
+if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD);
+plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
 function swapMeal(di,slot){var s=window.S;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;s.weekPlan[di][slot]=av[Math.floor(Math.random()*av.length)];if(typeof window.render==='function')window.render()}
 
 window.getPool = getPool;
@@ -1326,7 +1372,15 @@ var SUPPLEMENTS_DB = [
   {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'75% des Europ\u00e9ens sont carenc\u00e9s',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
     condition:function(){return true;},
     unnecessary_if:'V\u00e9rifiez par prise de sang (objectif 40-60 ng/mL)',
-    dosageCalc:function(s){var d=2000;if(s.weight>90)d=3000;if(s.age>50)d=Math.max(d,3000);return{dose:d,unit:'UI/jour',timing:'Petit-d\u00e9jeuner avec repas gras',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Associer à Vitamine K2 (MK-7) si ≥50 ans ou facteur de risque osseux/cardiovasculaire — prévient les calcifications artérielles liées à D3 (Plaza 2021).'};}},
+    dosageCalc:function(s){
+      // Endocrine Society 2011 : obèse (IMC>30) = séquestration D3 dans tissu adipeux → 2-3× les besoins
+      var bmi=s.weight&&s.height?s.weight/Math.pow(s.height/100,2):22;
+      var d=2000;
+      if(bmi>30)d=4000; // Endocrine Society 2011 : obèse → 6000 UI correction, 4000 UI maintenance
+      else if(bmi>25)d=2500; // Surpoids léger : légère séquestration
+      if(s.age>70)d=Math.max(d,3000); // 70+ : synthèse cutanée réduite de 75% (Holick 2007)
+      else if(s.age>50)d=Math.max(d,2500); // 50-70 : synthèse réduite
+      return{dose:d,unit:'UI/jour',timing:'Petit-d\u00e9jeuner avec repas gras',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Obésité : D3 séquestrée dans tissu adipeux, besoins × 2-3 (Endocrine Society 2011). Associer à Vitamine K2 (MK-7) si ≥50 ans — prévient calcifications artérielles (Plaza 2021).'};}},
   {id:'omega3',name:'Om\u00e9ga-3 (EPA/DHA)',icon:'\uD83D\uDC1F',desc:'Anti-inflammatoire, c\u0153ur, cognition',evidence:'AHA 2019 \u2014 Recommandation',grade:'A',
     condition:function(s){return s.allergies.indexOf('Poisson')===-1&&s.allergies.indexOf('Crustac\u00e9s')===-1;},
     unnecessary_if:'Inutile si vous mangez du poisson gras 2-3x/semaine (saumon, sardines, maquereau)',
