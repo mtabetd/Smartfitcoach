@@ -1026,6 +1026,9 @@ function calcMacros(){
   var gCal=c-pCal-lCal;
   if(gCal<200){lCal=Math.max(bw*0.5*9,c-pCal-200);lGrams=Math.round(lCal/9);gCal=c-pCal-lCal;if(gCal<200){pCal=c-lCal-200;pGrams=Math.round(pCal/4);gCal=200}}
   var gGrams=Math.max(50,Math.round(gCal/4));
+  // Cap carbs to goal-specific maximum (g/kg) — prevents excessive carb surplus (Helms 2014, ISSN 2017)
+  var carbCapGpkg=goalKey==='shred'?3.5:goalKey==='cut'?4.0:goalKey==='bulk'?6.0:5.0;
+  var carbCap=Math.round(bw*carbCapGpkg);if(gGrams>carbCap)gGrams=carbCap;
   // Medical adjustments
   for(var i=0;i<s.medical.length;i++){var a=MEDICAL_ADVICE[s.medical[i]];if(a&&a.macroAdj){gGrams=Math.round(gGrams*(1+(a.macroAdj.g||0)));pGrams=Math.round(pGrams*(1+(a.macroAdj.p||0)));lGrams=Math.round(lGrams*(1+(a.macroAdj.l||0)))}}
   // Re-enforce IRC protein cap after all medical adjustments (NKF 0.8g/kg)
@@ -1133,6 +1136,9 @@ function filterRecipes(pool,type){
       }return true;
     });
   }
+  // Diabetics: soft-filter high-GI ingredients (prioritize low-GI sources — ADA 2023)
+  var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);
+  if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioche|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
   if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon/).test(i)});
   if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson/).test(i)});
   if(s.regime===3){var veganBan=/poulet|boeuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|beurre|miel|whey/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;return true});}
