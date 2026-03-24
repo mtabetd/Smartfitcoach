@@ -160,7 +160,48 @@ var MEDICAL_ADVICE={
   allaitement:{warn:'Allaitement : +500 kcal/j (ACOG 2022). Calcium 1200mg/j, iode 290µg/j, vitamine D 600 UI. Évitez caféine >200mg/j et alcool.',macroAdj:{g:.03,p:.07,l:-.01}},
   insomnia:{warn:'Magnésium, tryptophane (dinde, banane). Évitez caféine après 14h.',macroAdj:null}
 };
-var MEAL_SPLIT={pctBreak:.25,pctLunch:.40,pctSnack:.05,pctDinner:.30};
+var MEAL_SPLIT={pctBreak:.25,pctLunch:.40,pctSnack:.05,pctDinner:.30}; // défaut 3 repas
+// getMealSplit() : distribution dynamique selon activité et nombre de repas (vs MEAL_SPLIT fixe)
+// Base : ADA 2023, ISSN 2017, Ivy 2004 (post-workout nutrition window)
+function getMealSplit(){
+  var s=window.S;
+  var meals=s.mealsPerDay||3;
+  var actFactor=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
+  var isAthlete=actFactor>=1.725; // Très actif ou Athlète
+  if(meals<=2){
+    // Jeûne intermittent : 2 repas principaux, pas de collation
+    return{pctBreak:.40,pctLunch:.60,pctSnack:0,pctDinner:0,
+      note:'Jeûne intermittent : 2 repas — assurez un apport protéique suffisant à chaque repas (≥0.4g/kg/repas — Norton 2012)'};
+  }
+  if(meals===3){
+    if(isAthlete){
+      // Athlète 3 repas : collation post-entraînement essentielle → redistribuer légèrement
+      return{pctBreak:.25,pctLunch:.38,pctSnack:.07,pctDinner:.30,
+        note:'Athlète 3 repas : collation post-entraînement recommandée (+glucides/protéines dans les 30-45min — Ivy 2004)'};
+    }
+    return MEAL_SPLIT; // Standard 3 repas
+  }
+  if(meals===4){
+    if(isAthlete){
+      // Athlète 4 repas : collation sportive 10% (250-400 kcal — fenêtre anabolique Ivy 2004)
+      return{pctBreak:.25,pctLunch:.35,pctSnack:.10,pctDinner:.30,
+        note:'4 repas athlète : collation post-entraînement 10% des calories — mix glucides:protéines 3:1 optimal (Ivy 2004, ISSN 2017)'};
+    }
+    return{pctBreak:.25,pctLunch:.38,pctSnack:.07,pctDinner:.30,
+      note:'4 repas : petite collation équilibrée en milieu d\'après-midi'};
+  }
+  if(meals>=5){
+    if(isAthlete){
+      // Athlète 5 repas : 2 collations (pré + post entraînement)
+      return{pctBreak:.20,pctLunch:.30,pctSnack:.15,pctDinner:.25,
+        note:'5 repas athlète : 2 collations (pré + post entraînement) — fractionner l\'apport protéique toutes les 3-4h pour maximiser la synthèse protéique (Moore 2012, Churchward-Venne 2016)'};
+    }
+    return{pctBreak:.22,pctLunch:.33,pctSnack:.12,pctDinner:.28,
+      note:'5 repas : fractionnement modéré — améliore satiété et glycémie'};
+  }
+  return MEAL_SPLIT;
+}
+window.getMealSplit=getMealSplit;
 var DAY_NAMES=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 var SHOPPING=[
   {cat:'FRÉQUENCE',items:[
@@ -1000,6 +1041,23 @@ function getPregnancyWeightGuideline() {
 window.getPregnancyWeightGuideline = getPregnancyWeightGuideline;
 
 // ─── FORMULAS ───
+// ─── POIDS AJUSTÉ POUR LES MACROS (obésité) ───
+// Pour IMC > 30, utiliser IBW (Devine) + 40% de l'excédent (ASPEN 2016, ESPEN 2015)
+// Évite les recommandations absurdes : ex. 150kg × 2.5g/kg = 375g protéines
+// Formule Devine : homme = 50 + 2.3×(taille_pouces-60), femme = 45.5 + 2.3×(taille_pouces-60)
+function calcAdjustedWeight(){
+  var s=window.S;
+  if(!s.weight||!s.height)return s.weight||75;
+  var bmi=s.weight/Math.pow(s.height/100,2);
+  if(bmi<=30)return s.weight; // Pas d'ajustement si IMC ≤ 30
+  var heightInches=s.height/2.54;
+  var ibw=s.sex==='homme'?(50+2.3*(heightInches-60)):(45.5+2.3*(heightInches-60));
+  ibw=Math.max(40,Math.min(120,ibw));
+  if(s.weight<=ibw)return s.weight; // sécurité : ne pas pénaliser si poids < IBW (ne devrait pas arriver si IMC>30)
+  return Math.round((ibw+0.4*(s.weight-ibw))*10)/10; // Poids ajusté (Adjusted Body Weight)
+}
+window.calcAdjustedWeight=calcAdjustedWeight;
+
 function calcBMR(){var s=window.S;if(!s.sex)return 0;if(!s.age||s.age<13||s.age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;if(s.sex==='homme')return Math.round((10*s.weight)+(6.25*s.height)-(5*s.age)+5);return Math.round((10*s.weight)+(6.25*s.height)-(5*s.age)-161)} // Mifflin-St Jeor 1990 (Frankenfield 2005: best accuracy general population)
 function calcTDEE(){var s=window.S;if(s.activity===null)return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
@@ -1018,7 +1076,9 @@ if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*
 function calcMacros(){
   var s=window.S;var c=calcTarget();
   if(!c||s.goal===null)return{g:0,p:0,l:0};
-  var bw=s.weight||75;var goalKey=GOALS[s.goal].key;
+  // Pour les macros g/kg : utiliser le poids ajusté si obèse (ASPEN 2016, ESPEN 2015)
+  // Les calories (calcTarget/TDEE) restent basées sur le poids réel
+  var bw=calcAdjustedWeight()||75;var goalKey=GOALS[s.goal].key;
   // Protein g/kg (ISSN 2017, Helms 2014, ACSM 2016)
   var ppk=1.8;
   if(goalKey==='shred')ppk=2.5;else if(goalKey==='cut')ppk=2.2;else if(goalKey==='bulk')ppk=1.8;else ppk=1.8;
@@ -1121,6 +1181,76 @@ function alcoholWeeklyKcal(){
   return total;
 }
 
+// ─── HYDRATATION PERSONNALISÉE ───
+// Base : 35 ml/kg/jour (EFSA 2010) + bonus activité physique (ACSM 2007)
+// Hommes : ANC 3.7L/j total (dont 2.5L boissons) | Femmes : ANC 2.7L/j total (dont 2L boissons)
+function calcHydration(){
+  var s=window.S;
+  if(!s.weight)return null;
+  var base=Math.round(s.weight*35); // 35 ml/kg/j de base (EFSA 2010)
+  var actBonus=0; // bonus lié à l'activité physique (par séance)
+  if(s.activity!==null){
+    var factor=ACTIVITIES[s.activity].factor;
+    if(factor>=1.9)actBonus=1500;      // Athlète élite: +1.5L/j
+    else if(factor>=1.725)actBonus=1000; // Très actif: +1L/j
+    else if(factor>=1.55)actBonus=750;   // Modérément actif: +750ml/j
+    else if(factor>=1.375)actBonus=500;  // Léger: +500ml/j
+  }
+  // Ajustement grossesse : +300ml/j (OMS 2020)
+  var pregnancyBonus=s.pregnant?300:0;
+  // Ajustement allaitement : +700ml/j (EFSA 2010, ANSES 2021)
+  var allaitBonus=(s.medical&&s.medical.indexOf('allaitement')!==-1)?700:0;
+  var total=base+actBonus+pregnancyBonus+allaitBonus;
+  total=Math.ceil(total/100)*100; // arrondir à 100ml
+  var minFloor=s.sex==='femme'?2000:2500; // minimums EFSA
+  total=Math.max(total,minFloor);
+  return{
+    ml:total,
+    liters:Math.round(total/100)/10,
+    base:base,
+    actBonus:actBonus,
+    perSportHour:600, // 500-750ml/heure d'effort (ACSM 2007)
+    tips:[
+      'Urines jaune pâle = bonne hydratation',
+      actBonus>0?'Ajoutez 500-750ml par heure d\'entraînement':'Buvez régulièrement, sans attendre la soif',
+      s.pregnant?'+300ml/j recommandé en grossesse (OMS)':null,
+      (s.medical&&s.medical.indexOf('allaitement')!==-1)?'+700ml/j supplémentaires pendant l\'allaitement (ANSES 2021)':null
+    ].filter(Boolean)
+  };
+}
+window.calcHydration=calcHydration;
+
+// ─── CIBLE FIBRES ALIMENTAIRES PERSONNALISÉE ───
+// Base : 25g/j (femme) / 35g/j (homme) — ANSES 2016, IOM 2005
+// Ajustements médicaux : ADA 2023 (diabète), NICE 2021 (IRC), FODMAP (SII)
+function calcFiberTarget(){
+  var s=window.S;
+  var base=s.sex==='homme'?35:25; // IOM 2005: hommes 38g, femmes 25g (ajusté ANSES 2016)
+  var adjustments=[];
+  var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);
+  if(hasDiab){base=Math.max(base,38);adjustments.push('Diabète : fibres solubles ≥ 38g/j (ADA 2023) — ralentissent absorption glucose');}
+  if(s.medical&&s.medical.indexOf('nash')!==-1){base=Math.max(base,35);adjustments.push('NASH : fibres ≥ 35g/j pour réduire stéatose hépatique (ESPEN 2016)');}
+  if(s.medical&&s.medical.indexOf('cholesterol')!==-1){base=Math.max(base,30);adjustments.push('Hypercholestérolémie : fibres solubles (avoine, psyllium) réduisent LDL (AHA 2019)');}
+  // SII (FODMAP) : limiter en phase aiguë, fibres solubles uniquement
+  if(s.medical&&s.medical.indexOf('sii')!==-1){base=Math.min(base,20);adjustments.push('SII : max 20g/j en phase d\'exclusion FODMAP — fibres solubles uniquement (NICE 2021)');}
+  // IRC : limiter les fibres riches en potassium (légumineuses, fruits secs)
+  if(s.medical&&s.medical.indexOf('irc')!==-1){base=Math.min(base,25);adjustments.push('IRC : éviter fibres riches en potassium (légumineuses, fruits secs) — KDOQI 2020');}
+  // 60+ : transit, microbiote, prévention cancer colorectal
+  if(s.age>=60&&!adjustments.length){base=Math.max(base,30);adjustments.push('60+ : ≥ 30g/j pour microbiote et transit (EFSA 2017)');}
+  return{
+    target:base,
+    adjustments:adjustments,
+    sources:[
+      'Légumineuses (lentilles, pois chiches) : 8-10g/100g',
+      'Graines de chia : 35g/100g | Lin : 27g/100g',
+      'Légumes verts : brocoli, épinards, artichaut',
+      'Fruits entiers (pas en jus) : poire, pomme, framboises',
+      'Céréales complètes : avoine, quinoa, pain complet'
+    ]
+  };
+}
+window.calcFiberTarget=calcFiberTarget;
+
 window.calcBMR=calcBMR; window.calcTDEE=calcTDEE; window.calcTarget=calcTarget;
 window.calcMacros=calcMacros; window.calcBMI=calcBMI; window.bmiInfo=bmiInfo;
 window.calcWeightProjection=calcWeightProjection; window.alcoholWeeklyKcal=alcoholWeeklyKcal;
@@ -1173,7 +1303,7 @@ function filterRecipes(pool,type){
   return r;
 }
 function pickRecipe(pool,targetK,used){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();av.sort(function(a,b){return Math.abs(a.k-targetK)-Math.abs(b.k-targetK)});var top=av.slice(0,Math.min(5,av.length));var p=top[Math.floor(Math.random()*top.length)];if(p)used.add(p.n);return p||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
-function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w});for(var d=0;d<7;d++){var bT=Math.round(c*MEAL_SPLIT.pctBreak),lT=Math.round(c*MEAL_SPLIT.pctLunch),sT=Math.round(c*MEAL_SPLIT.pctSnack),dT=Math.round(c*MEAL_SPLIT.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR;if(s.whey&&pSW.length>0&&d%2===0)sR=pickRecipe(pSW,sT,uS);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);var dR=pickRecipe(pD,dT,uD);plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
+function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w});var split=getMealSplit();for(var d=0;d<7;d++){var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR;if(s.whey&&pSW.length>0&&d%2===0)sR=pickRecipe(pSW,sT,uS);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);var dR=pickRecipe(pD,dT,uD);plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
 function swapMeal(di,slot){var s=window.S;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;s.weekPlan[di][slot]=av[Math.floor(Math.random()*av.length)];if(typeof window.render==='function')window.render()}
 
 window.getPool = getPool;
@@ -1196,7 +1326,7 @@ var SUPPLEMENTS_DB = [
   {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'75% des Europ\u00e9ens sont carenc\u00e9s',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
     condition:function(){return true;},
     unnecessary_if:'V\u00e9rifiez par prise de sang (objectif 40-60 ng/mL)',
-    dosageCalc:function(s){var d=2000;if(s.weight>90)d=3000;if(s.age>50)d=Math.max(d,3000);return{dose:d,unit:'UI/jour',timing:'Petit-d\u00e9jeuner avec repas gras',note:'Dosage sanguin recommand\u00e9 pour ajuster'};}},
+    dosageCalc:function(s){var d=2000;if(s.weight>90)d=3000;if(s.age>50)d=Math.max(d,3000);return{dose:d,unit:'UI/jour',timing:'Petit-d\u00e9jeuner avec repas gras',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Associer à Vitamine K2 (MK-7) si ≥50 ans ou facteur de risque osseux/cardiovasculaire — prévient les calcifications artérielles liées à D3 (Plaza 2021).'};}},
   {id:'omega3',name:'Om\u00e9ga-3 (EPA/DHA)',icon:'\uD83D\uDC1F',desc:'Anti-inflammatoire, c\u0153ur, cognition',evidence:'AHA 2019 \u2014 Recommandation',grade:'A',
     condition:function(s){return s.allergies.indexOf('Poisson')===-1&&s.allergies.indexOf('Crustac\u00e9s')===-1;},
     unnecessary_if:'Inutile si vous mangez du poisson gras 2-3x/semaine (saumon, sardines, maquereau)',
@@ -1229,7 +1359,30 @@ var SUPPLEMENTS_DB = [
   {id:'iode_vegan',name:'Iode',icon:'\uD83C\uDF0A',desc:'Thyroïde, métabolisme, développement cérébral',evidence:'OMS 2007 — Apport recommand\u00e9 150-250 µg/jour',grade:'A',
     condition:function(s){return s.regime>=2;},
     unnecessary_if:'Non n\u00e9cessaire si vous consommez poissons, fruits de mer ou produits laitiers régulièrement',
-    dosageCalc:function(s){var d=s.pregnant?220:150;return{dose:d,unit:'\u00b5g/jour',timing:'Avec un repas',note:'Utiliser sel iod\u00e9 et consommer algues mod\u00e9r\u00e9ment (wakame, nori). Attention aux algues riches en iode (kelp) : risque surdosage.'};}}
+    dosageCalc:function(s){var d=s.pregnant?220:150;return{dose:d,unit:'\u00b5g/jour',timing:'Avec un repas',note:'Utiliser sel iod\u00e9 et consommer algues mod\u00e9r\u00e9ment (wakame, nori). Attention aux algues riches en iode (kelp) : risque surdosage.'};
+  }},
+  {id:'zinc_vegan',name:'Zinc',icon:'\uD83E\uDDEC',desc:'Immunité, testostérone, synthèse protéique — biodisponibilité réduite dans les végétaux',evidence:'FAO/OMS 2002 — Biodisponibilité zinc végétal réduite de 50% par les phytates (légumineuses, céréales)',grade:'A',
+    condition:function(s){return s.regime>=2;}, // Végétarien, Pescétarien, Végan
+    unnecessary_if:'Non n\u00e9cessaire si régime omnivore (huîtres, boeuf, foie = sources zinc héminique)',
+    warning:'\u26A0 Phytates dans légumineuses et céréales complètes réduisent absorption zinc de 40-50%. Techniques : trempage/germination des légumineuses, fermentation (pain au levain).',
+    dosageCalc:function(s){
+      // OMS 2002 : AJR zinc × 1.5 pour végans/végétariens (correction phytates)
+      var base=s.sex==='homme'?11:8; // AJR standard ANSES 2021
+      var dose=Math.round(base*1.5); // +50% pour compenser phytates
+      return{dose:dose,unit:'mg/jour',timing:'Entre les repas ou au coucher (éloigné du calcium/fer)',note:'Formes recommandées : gluconate ou citrate de zinc. Max 25mg/j (seuil UL EFSA). Prise de sang zinc sérique conseillée si supplémentation >3 mois.'};
+    }
+  },
+  {id:'vitamine_k2',name:'Vitamine K2 (MK-7)',icon:'\uD83E\uDDB4',desc:'Dirige le calcium vers les os — prévient calcifications artérielles avec D3',evidence:'EFSA 2017 — K2 (MK-7) synergie avec D3 pour ostéoporose (Vitamin K2 trial, Plaza 2021)',grade:'A',
+    condition:function(s){
+      // Pertinent si supplémenter en D3 ET facteur de risque osseux ou cardiovasculaire
+      var hasOsteo=s.medical&&s.medical.indexOf('osteoporose')!==-1;
+      var hasCardio=s.medical&&(s.medical.indexOf('cardio')!==-1||s.medical.indexOf('insuffisance_card')!==-1);
+      var isMenopause=s.medical&&s.medical.indexOf('menopause')!==-1;
+      var isOlder=s.age>=50;
+      return hasOsteo||hasCardio||isMenopause||isOlder;
+    },
+    unnecessary_if:'Moins prioritaire chez adultes jeunes < 50 ans sans facteur de risque osseux ou cardiovasculaire',
+    dosageCalc:function(){return{dose:90,unit:'\u00b5g/jour (femme) / 120\u00b5g/jour (homme)',timing:'Avec un repas contenant des graisses',note:'Forme MK-7 (ménaquinone-7) = demi-vie 72h, supérieure à MK-4. Synergie obligatoire avec vitamine D3. Sources alimentaires : natto (fermenté), certains fromages, jaune d\'oeuf.'};}}
 ];
 window.SUPPLEMENTS_DB = SUPPLEMENTS_DB;
 
@@ -1247,10 +1400,11 @@ function getSupplementRecommendations() {
 window.getSupplementRecommendations = getSupplementRecommendations;
 
 // ─── RED-S DETECTION (IOC 2018 — Relative Energy Deficiency in Sport) ───
-// Threshold: Energy Availability < 30 kcal/kg LBM/day
+// IOC 2018 : RED-S s'applique aux DEUX SEXES (étendu aux hommes en 2014, réaffirmé 2018)
+// Seuils : Femmes < 30 kcal/kg LBM/j (risque RED-S) | Hommes < 25 kcal/kg LBM/j
 function detectREDS() {
   var s = window.S;
-  if(!s||s.sex!=='femme'||!s.weight||!s.height)return null;
+  if(!s||!s.weight||!s.height)return null;
   var target=calcTarget();var tdeeVal=calcTDEE();
   if(!target||!tdeeVal)return null;
   // Estimate LBM: use Navy/Boer formula approximation
@@ -1267,14 +1421,22 @@ function detectREDS() {
   var bmrVal=calcBMR();
   var eee=Math.max(0,tdeeVal-bmrVal);
   var ea=(target-eee)/lbm;
-  if(ea<30){
+  // Seuils IOC 2018 : femmes < 30 kcal/kgLBM/j, hommes < 25 kcal/kgLBM/j
+  var eaThreshold = s.sex === 'femme' ? 30 : 25;
+  var eaCritical  = s.sex === 'femme' ? 20 : 15;
+  if(ea<eaThreshold){
+    var isMale = s.sex === 'homme';
+    var critSymptoms = isMale
+      ? 'Risque : déficit testostérone, ostéoporose, immunodépression, arythmies.'
+      : 'Risque : aménorrhée, ostéoporose, immunodépression, arythmies.';
     return{
       ea:Math.round(ea),
       lbm:Math.round(lbm),
-      risk:ea<20?'CRITIQUE':'ÉLEVÉ',
-      message:ea<20
-        ?'⚠ ALERTE RED-S CRITIQUE : Disponibilité énergétique '+Math.round(ea)+' kcal/kg MLG/j (seuil IOC : 30). Risque : aménorrhée, ostéoporose, immunodépression, arythmies. Consultation médicale URGENTE.'
-        :'⚠ ALERTE RED-S : Disponibilité énergétique '+Math.round(ea)+' kcal/kg MLG/j sous le seuil IOC 2018 (30 kcal/kg MLG/j). Risque RED-S : augmentez les apports ou réduisez le volume d\'entraînement.'
+      threshold: eaThreshold,
+      risk:ea<eaCritical?'CRITIQUE':'ÉLEVÉ',
+      message:ea<eaCritical
+        ?'⚠ ALERTE RED-S CRITIQUE : Disponibilité énergétique '+Math.round(ea)+' kcal/kg MLG/j (seuil IOC 2018 : '+eaThreshold+'). '+critSymptoms+' Consultation médicale URGENTE.'
+        :'⚠ ALERTE RED-S : Disponibilité énergétique '+Math.round(ea)+' kcal/kg MLG/j sous le seuil IOC 2018 ('+eaThreshold+' kcal/kg MLG/j). Risque RED-S : augmentez les apports ou réduisez le volume d\'entraînement.'
     };
   }
   return null;
@@ -1315,6 +1477,36 @@ function detectMedicalConflicts() {
     var actFactor=s.activity!==null?ACTIVITIES[s.activity].factor:0;
     if(actFactor>=1.7){
       conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Cardiopathie + activité très intense — Niveau d\'activité incompatible sans clearance cardiologique. Test d\'effort (VO2max) obligatoire. Zones FC via formule de Karvonen recommandées.'});
+    }
+  }
+  // Conflit 5 : Goutte + fructose — le fructose élève l'acide urique autant que les purines (Choi 2010, NEJM)
+  if(med.indexOf('goutte')!==-1){
+    conflicts.push({level:'ÉLEVÉ',message:'⚠ GOUTTE : Le fructose (sodas, jus de fruits industriels, miel, sirop d\'agave, dattes) élève l\'acide urique AUTANT que les purines (Choi 2010, NEJM). Évitez les sucres ajoutés et jus de fruits en plus des abats/sardines. Buvez 2L+ eau/j pour diluer l\'acide urique. La cerise et les fraises ont des propriétés anti-uricémiques (Zhang 2012, Arthritis & Rheumatism).'});
+  }
+  // Conflit 6 : Alcool + objectif musculaire/sèche — inhibe synthèse protéique
+  if(s.alcoholFreq&&s.alcoholFreq!=='never'){
+    var hasMusclGoal=s.sportGoals&&(s.sportGoals.indexOf('muscle')!==-1||s.sportGoals.indexOf('shred')!==-1);
+    var isFrequentDrinker=s.alcoholFreq==='weekly'||s.alcoholFreq==='daily';
+    if(hasMusclGoal&&isFrequentDrinker){
+      conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Alcool régulier + objectif musculaire/sèche — L\'alcool inhibe la synthèse protéique musculaire de 15-30% (Parr 2014, PLOS ONE), réduit la testostérone et perturbe la récupération. Si >3 verres/j : risque de catabolisme musculaire même avec apports protéiques adéquats. Réduire à ≤2 verres/semaine pour maximiser les résultats (ISSN 2017).'});
+    }
+    // Alcool + HTA : même modéré, augmente la pression artérielle
+    if(med.indexOf('hta')!==-1&&isFrequentDrinker){
+      conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : HTA + consommation régulière d\'alcool — Même 1-2 verres/jour élèvent la pression artérielle de 2-4 mmHg (PREDIMED 2010, ESC 2021). L\'OMS recommande zéro alcool pour les hypertendus. Vérifiez votre traitement antihypertenseur avec votre médecin.'});
+    }
+  }
+  // Conflit 7 : IRC + régime hyperprotéiné (si objectif prise de masse sans pathologie déclarée)
+  if(med.indexOf('irc')!==-1){
+    var goalKeyIRC=s.goal!==null?GOALS[s.goal].key:null;
+    if(goalKeyIRC==='bulk'){
+      conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : IRC + Prise de masse — L\'objectif "prise de masse" est incompatible avec une insuffisance rénale chronique. Les protéines sont plafonnées à 0.55-0.60g/kg/j (KDOQI 2020). Un excès protéique accélère la progression de l\'insuffisance rénale. Consultation néphrologue OBLIGATOIRE avant de modifier l\'alimentation.'});
+    }
+  }
+  // Conflit 8 : Grossesse + sèche/coupe — risque déficit pour le fœtus
+  if(s.pregnant&&s.goal!==null){
+    var pGoalKey=GOALS[s.goal].key;
+    if(pGoalKey==='cut'||pGoalKey==='shred'){
+      conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : Grossesse + déficit calorique — Tout déficit calorique pendant la grossesse est contre-indiqué (ACOG 2018). Les besoins augmentent de +300 kcal/j (T2-T3). La restriction calorique pendant la grossesse est associée à un retard de croissance intra-utérin (RCIU). Objectif automatiquement corrigé.'});
     }
   }
   return conflicts;
