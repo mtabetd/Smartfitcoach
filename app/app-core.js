@@ -996,6 +996,10 @@ function calcTDEE(){var s=window.S;if(s.activity===null)return 0;var selectedFac
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
 function calcTarget(){var s=window.S;if(s.goal===null)return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}return base}var goalKey=GOALS[s.goal].key;// Cap deficit to 500kcal/day for diabetics (sécurité glycémique)
+// TCA/anorexie : forcer maintenance, bloquer cut/shred (ANAD, IOC 2018 — RED-S prevention)
+if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
+// Adolescent (13-17 ans) : déficit max -300kcal/j (ACSM 2007, IOC 2018 — préservation croissance + pic de masse osseuse)
+if(s.age>=13&&s.age<18&&tdeeVal>0){var minCalTeen=Math.round(tdeeVal-300);if(base<minCalTeen)base=minCalTeen;}
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
 if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}return base}
 function calcMacros(){
@@ -1033,6 +1037,11 @@ function calcMacros(){
   for(var i=0;i<s.medical.length;i++){var a=MEDICAL_ADVICE[s.medical[i]];if(a&&a.macroAdj){gGrams=Math.round(gGrams*(1+(a.macroAdj.g||0)));pGrams=Math.round(pGrams*(1+(a.macroAdj.p||0)));lGrams=Math.round(lGrams*(1+(a.macroAdj.l||0)))}}
   // Re-enforce IRC protein cap after all medical adjustments (NKF 0.8g/kg)
   if(s.medical.indexOf('irc')!==-1){var maxIrcP=Math.round(bw*0.8);if(pGrams>maxIrcP)pGrams=maxIrcP;}
+  // Diabète gestationnel : plafond glucides 175-200g/j (ADA 2023, ACOG 2018)
+  if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){var gdCarbMax=Math.min(200,Math.max(175,gGrams));if(gGrams>gdCarbMax)gGrams=gdCarbMax;}
+  // Master athlete 60+ : résistance anabolique → leucine seuil 40g/meal (Churchward-Venne 2016, Moore 2015)
+  // Augmenter protéines de 10% pour compenser la résistance anabolique (recommandation ESPEN 2019)
+  if(s.age>=60&&s.medical.indexOf('irc')===-1){var masterBonus=Math.round(pGrams*0.10);pGrams=pGrams+masterBonus;}
   // Apply cycle-phase macro adjustments (only for non-pregnant women with cycle tracking)
   if(!s.pregnant&&s.sex==='femme'&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
 gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0)));// Never reduce protein during cycle — keep stable
@@ -1164,7 +1173,7 @@ var SUPPLEMENTS_DB = [
     unnecessary_if:'Inutile si vous atteignez vos prot\u00e9ines via l\'alimentation seule',
     dosageCalc:function(s){var d=s.weight>80?35:25;return{dose:d,unit:'g/prise',timing:'Post-entra\u00eenement ou petit-d\u00e9jeuner',note:'Objectif total : '+Math.round(s.weight*1.8)+'g prot/jour (alimentation + whey)'};}},
   {id:'creatine',name:'Cr\u00e9atine Monohydrate',icon:'\uD83D\uDC8A',desc:'Force, masse musculaire, r\u00e9cup\u00e9ration',evidence:'ISSN 2017 \u2014 Niveau A (500+ \u00e9tudes, le suppl\u00e9ment le plus \u00e9tudi\u00e9)',grade:'A',
-    condition:function(s){if(s.pregnant||s.age<18)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
+    condition:function(s){if(s.pregnant||s.age<18)return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
     unnecessary_if:'Non n\u00e9cessaire si objectif uniquement endurance/cardio sans musculation',
     dosageCalc:function(s){return{dose:'3-5',unit:'g/jour',timing:'Apr\u00e8s l\'entra\u00eenement avec glucides',note:'Tous les jours y compris repos. Pas de phase de charge n\u00e9cessaire'};}},
   {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'75% des Europ\u00e9ens sont carenc\u00e9s',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
@@ -1219,6 +1228,73 @@ function getSupplementRecommendations() {
   return recs;
 }
 window.getSupplementRecommendations = getSupplementRecommendations;
+
+// ─── RED-S DETECTION (IOC 2018 — Relative Energy Deficiency in Sport) ───
+// Threshold: Energy Availability < 30 kcal/kg LBM/day
+function detectREDS() {
+  var s = window.S;
+  if(!s||s.sex!=='femme'||!s.weight||!s.height)return null;
+  var target=calcTarget();var tdeeVal=calcTDEE();
+  if(!target||!tdeeVal)return null;
+  // Estimate LBM: use Navy/Boer formula approximation
+  // Simplified: LBM ≈ weight × (1 - body fat estimate)
+  // Fat % estimate from BMI (crude but functional)
+  var bmi=s.weight/((s.height/100)*(s.height/100));
+  var fatPct;
+  if(s.sex==='femme'){fatPct=1.20*bmi+0.23*s.age-5.4;}
+  else{fatPct=1.20*bmi+0.23*s.age-16.2;}
+  fatPct=Math.max(10,Math.min(45,fatPct))/100;
+  var lbm=s.weight*(1-fatPct);
+  // EA = (caloric intake - exercise energy expenditure) / LBM
+  // Approximate EEE = TDEE - BMR (activity-related expenditure)
+  var bmrVal=calcBMR();
+  var eee=Math.max(0,tdeeVal-bmrVal);
+  var ea=(target-eee)/lbm;
+  if(ea<30){
+    return{
+      ea:Math.round(ea),
+      lbm:Math.round(lbm),
+      risk:ea<20?'CRITIQUE':'ÉLEVÉ',
+      message:ea<20
+        ?'⚠ ALERTE RED-S CRITIQUE : Disponibilité énergétique '+Math.round(ea)+' kcal/kg MLG/j (seuil IOC : 30). Risque : aménorrhée, ostéoporose, immunodépression, arythmies. Consultation médicale URGENTE.'
+        :'⚠ ALERTE RED-S : Disponibilité énergétique '+Math.round(ea)+' kcal/kg MLG/j sous le seuil IOC 2018 (30 kcal/kg MLG/j). Risque RED-S : augmentez les apports ou réduisez le volume d\'entraînement.'
+    };
+  }
+  return null;
+}
+window.detectREDS = detectREDS;
+
+// ─── DÉTECTION CONFLITS MÉDICAUX ───
+function detectMedicalConflicts() {
+  var s = window.S;
+  var conflicts = [];
+  if(!s||!s.medical)return conflicts;
+  var med=s.medical;
+  // Conflit 1 : Grossesse + Diabète gestationnel + Végan → impossible de couvrir 2600kcal avec glucides ≤200g/j
+  if(s.pregnant&&med.indexOf('diabete_gest')!==-1&&s.regime===3){
+    conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : Grossesse + Diabète gestationnel + Végan — Contraintes caloriques incompatibles. Il peut être impossible de couvrir vos besoins ('+calcTarget()+' kcal) avec glucides ≤200g/j sans consommer d\'œufs ou produits laitiers. Consultation diététicienne spécialisée OBLIGATOIRE.'});
+  }
+  // Conflit 2 : TCA + objectif shred/cut
+  if(med.indexOf('tca')!==-1){
+    var goalKey=s.goal!==null?GOALS[s.goal].key:null;
+    if(goalKey==='shred'||goalKey==='cut'){
+      conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : TCA + objectif sèche/coupe — Objectif automatiquement remplacé par maintenance. Un suivi médical et psychologique est OBLIGATOIRE avant tout déficit calorique.'});
+    }
+  }
+  // Conflit 3 : IRC + créatine → déjà géré dans SUPPLEMENTS_DB (info seulement)
+  if(med.indexOf('irc')!==-1&&s.sportGoals&&s.sportGoals.indexOf('muscle')!==-1){
+    conflicts.push({level:'INFO',message:'ℹ IRC + Objectif musculaire — La créatine est contre-indiquée (charge rénale). Protéines plafonnées à 0.8g/kg/j (NKF/KDOQI). Consulter un néphrologue avant tout programme de musculation intensif.'});
+  }
+  // Conflit 4 : Cardiopathie + intensité haute
+  if(med.indexOf('cardiopathie')!==-1){
+    var actFactor=s.activity!==null?ACTIVITIES[s.activity].factor:0;
+    if(actFactor>=1.7){
+      conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Cardiopathie + activité très intense — Niveau d\'activité incompatible sans clearance cardiologique. Test d\'effort (VO2max) obligatoire. Zones FC via formule de Karvonen recommandées.'});
+    }
+  }
+  return conflicts;
+}
+window.detectMedicalConflicts = detectMedicalConflicts;
 
 // ─── AUTH RATE LIMITING ───
 var authAttempts = {};

@@ -1431,10 +1431,17 @@ function renderWeekTracker(p) {
   });
   container.appendChild(labels);
 
-  // RPE badge
+  // RPE badge — T1D cap: RPE max 7 (hypoglycémie à intensité élevée — ADA 2023, ACSM 2016)
+  var hasT1D = S.medical && S.medical.indexOf('diabete_t1') !== -1;
+  var displayRpe = phase.rpe;
+  var displayRpeNote = phase.rpeNote;
+  if (hasT1D && phase.rpe > 7) {
+    displayRpe = 7;
+    displayRpeNote = 'RPE 7 — Plafonné à 7/10 pour diabète T1 (risque hypoglycémie à RPE 8-9, ADA 2023). Glucomètre obligatoire.';
+  }
   var rpeBadge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid ' + phase.color + ';margin-bottom:8px'});
-  rpeBadge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + phase.color}, 'RPE ' + phase.rpe + '/10'));
-  rpeBadge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey)'}, phase.rpeNote.replace('RPE ' + phase.rpe + ' — ', '')));
+  rpeBadge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + phase.color}, 'RPE ' + displayRpe + '/10'));
+  rpeBadge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey)'}, displayRpeNote.replace('RPE ' + displayRpe + ' — ', '')));
   container.appendChild(rpeBadge);
 
   // Phase advice
@@ -1500,10 +1507,31 @@ function renderMusculationProgram(p) {
   // Medical/age contextual warnings in program view
   var hasDiabProg = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
   if (hasDiabProg) {
-    p.appendChild(h('div', {style: 'background:#FFF3E0;border-left:4px solid #E67E22;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#5D4037'}, '\u26A0 Diabète : Vérifiez votre glycémie avant/après chaque séance. Gardez du sucre rapide à portée. Intensité maximale RPE 8/10 — jamais à l\'échec. Hydratation ×1.5.'));
+    var diabMsg = S.medical.indexOf('diabete_t1') !== -1
+      ? '⚠ Diabète T1 : RPE plafonné à 7/10 (risque hypoglycémie à haute intensité). Glycémie cible avant séance : 7-10 mmol/L. Glucomètre obligatoire avant/après. Gardez 15-20g glucides rapides à portée.'
+      : '⚠ Diabète : Vérifiez votre glycémie avant/après chaque séance. Gardez du sucre rapide à portée. Intensité maximale RPE 8/10 — jamais à l\'échec. Hydratation ×1.5.';
+    p.appendChild(h('div', {style: 'background:#FFF3E0;border-left:4px solid #E67E22;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#5D4037'}, diabMsg));
   }
   if (S.age >= 50) {
-    p.appendChild(h('div', {style: 'background:#E8F5E9;border-left:4px solid #27AE60;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1B5E20'}, '\uD83D\uDCAA 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.'));
+    p.appendChild(h('div', {style: 'background:#E8F5E9;border-left:4px solid #27AE60;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1B5E20'}, '💪 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.'));
+  }
+  // Cardiopathie : zones FC Karvonen + avertissement beta-bloquants (AHA 2018, ACSM 2021)
+  if (S.medical && S.medical.indexOf('cardiopathie') !== -1) {
+    var age = S.age || 40;
+    var hrMax = 220 - age; // Formule standard (Fox 1971)
+    var hrRest = S.heartRateRest || 65; // Utilisateur peut renseigner sa FC repos
+    // Karvonen: Target HR = (HRmax - HRrest) × %intensity + HRrest
+    var z1lo = Math.round((hrMax - hrRest) * 0.50 + hrRest);
+    var z1hi = Math.round((hrMax - hrRest) * 0.60 + hrRest);
+    var z2lo = Math.round((hrMax - hrRest) * 0.60 + hrRest);
+    var z2hi = Math.round((hrMax - hrRest) * 0.70 + hrRest);
+    var z3lo = Math.round((hrMax - hrRest) * 0.70 + hrRest);
+    var z3hi = Math.round((hrMax - hrRest) * 0.80 + hrRest);
+    var karvonenDiv = h('div', {style: 'background:#FFEBEE;border-left:4px solid #C0392B;padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#7B1A1A'});
+    karvonenDiv.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, '❤ Cardiopathie — Zones FC Karvonen (FC repos ' + hrRest + ' bpm, HRmax estimé ' + hrMax + ' bpm)'));
+    karvonenDiv.appendChild(h('div', {}, 'Zone 1 (Récupération active) : ' + z1lo + '–' + z1hi + ' bpm | Zone 2 (Aérobie) : ' + z2lo + '–' + z2hi + ' bpm | Zone 3 (Seuil) : ' + z3lo + '–' + z3hi + ' bpm'));
+    karvonenDiv.appendChild(h('div', {style: 'margin-top:4px;font-style:italic'}, '⚠ Beta-bloquants : si prescrit, votre FC max réelle est plus basse (~10-20%). Consulter votre cardiologue pour ajuster les zones. Test d\'effort (VO2max) recommandé avant programme intensif.'));
+    p.appendChild(karvonenDiv);
   }
 
   var goalNames = S.sportGoals.map(function(gid){
