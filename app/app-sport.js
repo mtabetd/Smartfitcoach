@@ -180,8 +180,9 @@ function generateSportProgram() {
         count = Math.max(1, Math.round(count * pregIntensityFactor));
       }
 
-      // Cycle-based offset: rotate exercise selection each cycle
-      var cycleOffset = ((S.muscuCycle || 1) - 1) % Math.max(1, available.length - count);
+      // Cycle-based offset: rotate exercise selection each cycle (guard against NaN)
+      var poolRemainder = available.length - count;
+      var cycleOffset = poolRemainder > 0 ? ((S.muscuCycle || 1) - 1) % poolRemainder : 0;
       for (var i = 0; i < count; i++) {
         var ex = Object.assign({}, available[(i + cycleOffset) % available.length]);
 
@@ -561,16 +562,19 @@ function renderDedicatedPrograms(p) {
 
       var variation = prog.variations[varIdx];
       var currentPhase = getMuscuPhase(S.muscuWeek || 1);
-      variation.exercises.forEach(function(ex) {
-        ex = applyPhaseToExercise(ex, currentPhase);
+      variation.exercises.forEach(function(exBase) {
+        var ex = applyPhaseToExercise(exBase, currentPhase);
         var row = h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start'});
         var left = h('div', {});
         left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.order + '. ' + ex.name));
         left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.muscle + ' \u2014 ' + ex.equipment));
         if (ex.technique) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange);margin-top:2px'}, ex.technique));
+        // Suggested weight based on phase %1RM
+        var sugW = getSuggestedWeight(ex.name, ex.reps, currentPhase);
+        if (sugW && sugW > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#27AE60;margin-top:2px'}, '\u2192 Charge cible : ~' + sugW + ' kg'));
         row.appendChild(left);
         var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
-        right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.sets + '\u00d7' + ex.reps));
+        right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-weight:bold'}, ex.sets + '\u00d7' + ex.reps));
         right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.rest));
         row.appendChild(right);
         card.appendChild(row);
@@ -1445,7 +1449,7 @@ function renderMusculationProgram(p) {
   // ─── VOLUME HEBDOMADAIRE MEV/MAV ───
   if (window.VOLUME_LANDMARKS && S.sportProgram && S.sportProgram.length > 0) {
     var muscleSetCount = {};
-    var muscleKeywords = {chest:['poitrine','pectoral','chest'],back:['dos','back','dorsaux'],shoulders:['\u00e9paule','shoulder'],legs:['jambe','quadri','ischio','mollet','leg'],glutes:['fessier','glute'],biceps:['biceps'],triceps:['triceps'],abs:['abdo','abdominaux','gainage','transverse','oblique']};
+    var muscleKeywords = {chest:['poitrine','pectoral','chest'],back:['dos','back','dorsaux','traction','rowing'],shoulders:['\u00e9paule','shoulder','deltoid','trap\u00e8ze','trapeze','militaire','overhead'],legs:['jambe','quadri','ischio','mollet','leg','squat'],glutes:['fessier','glute','hip thrust'],biceps:['biceps'],triceps:['triceps'],abs:['abdo','abdominaux','gainage','transverse','oblique','grand droit']};
     S.sportProgram.forEach(function(day) {
       (day.exercises || []).forEach(function(ex) {
         var m = (ex.m || '').toLowerCase();
@@ -1731,22 +1735,40 @@ function renderMusculationProgram(p) {
       card.appendChild(header);
 
       if (isOpen) {
-        prog.exercises.forEach(function(ex) {
+        var phase4 = getMuscuPhase(S.muscuWeek || 1);
+        var varIdx4 = S['dedicatedVar_' + key] || 0;
+        // Dedicated programs use variations (not exercises directly)
+        var exList = (prog.variations && prog.variations[varIdx4]) ? prog.variations[varIdx4].exercises : (prog.exercises || []);
+        // Variation tabs if applicable
+        if (prog.variations && prog.variations.length > 1) {
+          var tabs4 = h('div', {style: 'display:flex;border-top:1px solid var(--border)'});
+          prog.variations.forEach(function(v, idx) {
+            var isA = varIdx4 === idx;
+            var t = h('div', {
+              style: 'flex:1;padding:8px;text-align:center;cursor:pointer;font-family:"Helvetica Neue",sans-serif;font-size:10px;border-right:1px solid var(--border);' + (isA ? 'background:var(--black);color:#fff' : 'background:var(--ivory);color:var(--grey)'),
+              onclick: (function(i){ return function(e){ e.stopPropagation(); S['dedicatedVar_' + key] = i; window.render(); }; })(idx)
+            }, v.label);
+            tabs4.appendChild(t);
+          });
+          card.appendChild(tabs4);
+        }
+        exList.forEach(function(exBase) {
+          var ex = applyPhaseToExercise(exBase, phase4);
           var row = h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start'});
           var left = h('div', {});
           left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.order + '. ' + ex.name));
-          left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.muscle + ' — ' + ex.equipment));
+          left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.muscle + ' \u2014 ' + ex.equipment));
           if (ex.technique) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange);margin-top:2px'}, ex.technique));
+          var sugW4 = getSuggestedWeight(ex.name, ex.reps, phase4);
+          if (sugW4 && sugW4 > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#27AE60;margin-top:2px'}, '\u2192 ~' + sugW4 + ' kg'));
           row.appendChild(left);
           var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
-          right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, ex.sets + '×' + ex.reps));
+          right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-weight:bold'}, ex.sets + '\u00d7' + ex.reps));
           right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.rest));
           row.appendChild(right);
           card.appendChild(row);
         });
-        if (prog.notes) {
-          card.appendChild(h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic'}, prog.notes));
-        }
+        if (prog.notes) card.appendChild(h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic'}, prog.notes));
       }
       p.appendChild(card);
     });
