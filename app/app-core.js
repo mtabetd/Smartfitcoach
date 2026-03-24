@@ -1077,13 +1077,19 @@ function calcTDEE(){var s=window.S;if(s.activity===null)return 0;var selectedFac
 var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
 function calcTarget(){var s=window.S;if(s.goal===null)return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}// Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
 base=Math.max(base,1800);return base}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
-if(goalKey==='shred'&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}// Cap deficit to 500kcal/day for diabetics (sécurité glycémique)
+// Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)
+// IMPORTANT : sans ce cap, un athlète élite (TDEE 3500+) en "cut -15%" pouvait avoir un déficit de 525-700 kcal/j
+if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}// Cap deficit to 500kcal/day for diabetics (sécurité glycémique)
 // Allaitement : +500 kcal/j (ACOG 2022) — priorité sur l'objectif coupe/sèche
 if(s.medical&&s.medical.indexOf('allaitement')!==-1){return Math.max(Math.round(tdeeVal)+500,1800);}
 // TCA/anorexie : forcer maintenance, bloquer cut/shred (ANAD, IOC 2018 — RED-S prevention)
 if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
 // Adolescent (13-17 ans) : déficit max -300kcal/j (ACSM 2007, IOC 2018 — préservation croissance + pic de masse osseuse)
-if(s.age>=13&&s.age<18&&tdeeVal>0){var minCalTeen=Math.round(tdeeVal-300);if(base<minCalTeen)base=minCalTeen;}
+// Surplus max +300kcal/j en bulk (ACSM adolescent — éviter accumulation graisseuse pendant croissance hormonale)
+if(s.age>=13&&s.age<18&&tdeeVal>0){
+  var minCalTeen=Math.round(tdeeVal-300);if(base<minCalTeen)base=minCalTeen;
+  if(goalKey==='bulk'){var maxCalTeen=Math.round(tdeeVal+300);if(base>maxCalTeen)base=maxCalTeen;}
+}
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
 if(s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1200,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes)if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
 if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}var kcalFloor=s.sex==='femme'?1200:1500;base=Math.max(base,kcalFloor);
@@ -1101,19 +1107,38 @@ function calcMacros(){
   // Pour les macros g/kg : utiliser le poids ajusté si obèse (ASPEN 2016, ESPEN 2015)
   // Les calories (calcTarget/TDEE) restent basées sur le poids réel
   var bw=calcAdjustedWeight()||75;var goalKey=GOALS[s.goal].key;
-  // Protein g/kg (ISSN 2017, Helms 2014, ACSM 2016)
+  // ─── PROTÉINES (g/kg) — ISSN 2017, Helms 2014, ACSM 2016 ───
+  // Approche : g/kg supérieure aux % de calories (ISSN 2017)
   var ppk=1.8;
-  if(goalKey==='shred')ppk=2.5;else if(goalKey==='cut')ppk=2.2;else if(goalKey==='bulk')ppk=1.8;else ppk=1.8;
-  // NOTE: le cap shred est appliqué EN DERNIER après tous les bonus (logique correcte)
-  // Athlète elite (factor >= 1.9) → 3.0g/kg (Helms 2014, ISSN 2022 update)
-  // Très actif (factor >= 1.7) → +0.2g/kg
-  if(s.activity!==null&&ACTIVITIES[s.activity].factor>=1.9)ppk=Math.max(ppk,3.0);
-  else if(s.activity!==null&&ACTIVITIES[s.activity].factor>=1.7)ppk+=0.2;
-  // Plafond PPK sèche : 2.7g/kg pour athlètes (Helms 2014 plafond athlète haute intensité)
-  // 2.5g/kg pour non-athlètes (ISSN 2017 — au-delà pas de bénéfice supplémentaire démontré)
-  if(goalKey==='shred'){
-    var isHighActivity=s.activity!==null&&ACTIVITIES[s.activity].factor>=1.7;
-    ppk=Math.min(ppk, isHighActivity ? 2.7 : 2.5);
+  var actFactor=s.activity!==null?ACTIVITIES[s.activity].factor:1.2;
+  if(goalKey==='maintain'){
+    // MAINTIEN : ppk modulé selon activité — évite sur-estimation pour sédentaires
+    // Sédentaire : 1.2g/kg (EFSA 2012 minimum sarcopénie) | Actif : 1.6-2.0g/kg (ISSN 2017)
+    // OMS 0.83g/kg est le minimum absolu, ISSN recommande 1.0-1.2g/kg pour maintien masse
+    if(actFactor>=1.9)ppk=2.0;       // Athlète élite maintien : 2.0g/kg (ISSN 2017, IOC 2011)
+    else if(actFactor>=1.725)ppk=1.8; // Très actif : 1.8g/kg
+    else if(actFactor>=1.55)ppk=1.6;  // Modéré : 1.6g/kg
+    else if(actFactor>=1.375)ppk=1.4; // Léger : 1.4g/kg
+    else ppk=1.2;                     // Sédentaire : 1.2g/kg (anti-sarcopénie EFSA 2012)
+  } else if(goalKey==='bulk'){
+    // MASSE : 1.8g/kg base + bonus activité (hypertrophie — ISSN 2017)
+    ppk=1.8;
+    if(actFactor>=1.9)ppk=Math.max(ppk,2.2); // Athlète élite bulk : 2.2g/kg
+    else if(actFactor>=1.7)ppk+=0.2;          // Très actif : +0.2g/kg
+  } else {
+    // SÈCHE / COUPE : protéines hautes pour préservation musculaire (Helms 2014)
+    ppk=goalKey==='shred'?2.5:2.2; // shred=2.5, cut=2.2
+    // Bonus athlète (sèche/coupe) : masse musculaire plus importante à préserver
+    if(actFactor>=1.9)ppk=Math.max(ppk,3.0); // Athlète élite sèche (Helms 2014 upper range)
+    else if(actFactor>=1.7)ppk+=0.2;
+    // Cap shred : 2.7g/kg athlètes / 2.5g/kg standard (Helms 2014, ISSN 2017)
+    if(goalKey==='shred'){
+      ppk=Math.min(ppk, actFactor>=1.7 ? 2.7 : 2.5);
+    }
+    // Cap cut : 2.8g/kg athlètes / 2.4g/kg standard (légèrement plus élevé que shred autorisé)
+    if(goalKey==='cut'){
+      ppk=Math.min(ppk, actFactor>=1.7 ? 2.8 : 2.4);
+    }
   }
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
   if(s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.6); // KDOQI 2020: 0.55-0.60g/kg CKD 3-5 non-dialysis
@@ -1139,7 +1164,24 @@ function calcMacros(){
   var gGrams=Math.max(130,Math.round(gCal/4)); // IOM 2005: min 130g/j (cerveau+SNC)
   // Cap carbs to goal-specific maximum (g/kg) — prevents excessive carb surplus (Helms 2014, ISSN 2017)
   var carbCapGpkg=goalKey==='shred'?3.5:goalKey==='cut'?4.0:goalKey==='bulk'?6.0:5.0;
-  var carbCap=Math.round(bw*carbCapGpkg);if(gGrams>carbCap)gGrams=carbCap;
+  var carbCap=Math.round(bw*carbCapGpkg);
+  if(gGrams>carbCap){
+    // CRITIQUE : redistribuer les calories libérées par le plafond glucides sur les lipides
+    // Sans redistribution → sous-alimentation systématique (ex: -229 kcal en bulk, -347 kcal en cut)
+    // Priorité : lipides (acides gras essentiels, hormones, vitamines liposolubles) — Helms 2014
+    var freedKcalFromCarbCap=(gGrams-carbCap)*4;
+    gGrams=carbCap;
+    var lipidAbsCap=Math.round(bw*1.5); // plafond absolu lipides 1.5g/kg (ISSN 2017)
+    var addableLipidGrams=Math.min(Math.floor(freedKcalFromCarbCap/9), Math.max(0,lipidAbsCap-lGrams));
+    if(addableLipidGrams>0){lGrams+=addableLipidGrams;lCal=lGrams*9;
+      // Si plafond lipides atteint, redistribuer le reste sur les protéines
+      var stillFreedKcal=freedKcalFromCarbCap-(addableLipidGrams*9);
+      if(stillFreedKcal>36){var addProt=Math.floor(stillFreedKcal/4);pGrams+=addProt;pCal=pGrams*4;}
+    } else {
+      // Lipides déjà au max → tout va sur les protéines
+      var addProtOnly=Math.floor(freedKcalFromCarbCap/4);pGrams+=addProtOnly;pCal=pGrams*4;
+    }
+  }
   // Medical adjustments
   for(var i=0;i<s.medical.length;i++){var a=MEDICAL_ADVICE[s.medical[i]];if(a&&a.macroAdj){gGrams=Math.round(gGrams*(1+(a.macroAdj.g||0)));pGrams=Math.round(pGrams*(1+(a.macroAdj.p||0)));lGrams=Math.round(lGrams*(1+(a.macroAdj.l||0)))}}
   // Re-enforce IRC protein cap after all medical adjustments (KDOQI 2020: 0.6g/kg CKD 3-5 non-dialysis)
