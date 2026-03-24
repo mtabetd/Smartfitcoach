@@ -444,6 +444,27 @@ function renderChargesQuestionnaire(p) {
   p.appendChild(h('h1', {html: '\u00c9valuation<br><em>des charges</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Renseignez vos charges actuelles pour adapter vos programmes. Indiquez la charge max pour 8-10 reps propres.'));
 
+  // Medical/age safety warnings
+  var hasDiabetes = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
+  if (hasDiabetes) {
+    p.appendChild(h('div', {style: 'background:#FFF3E0;border-left:4px solid #E67E22;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:12px'}, [
+      h('div', {style: 'font-weight:700;color:#E67E22;margin-bottom:4px'}, '\u26A0 Diabète — Précautions sportives'),
+      h('div', {style: 'color:#5D4037'}, 'Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (RPE max 7/10 les 4 premières semaines).')
+    ]));
+  }
+  if (S.age >= 50) {
+    p.appendChild(h('div', {style: 'background:#E8F5E9;border-left:4px solid #27AE60;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:12px'}, [
+      h('div', {style: 'font-weight:700;color:#27AE60;margin-bottom:4px'}, '\uD83D\uDCAA Athlète 50+ — Adaptations recommandées'),
+      h('div', {style: 'color:#1B5E20'}, 'Échauffement prolongé 15-20 min (vs 5-10 min standard). Décharge toutes les 4-5 semaines (vs 6 semaines). Préférez machines guidées aux barres libres pour les charges maximales. Récupération inter-séance 48-72h minimum. Contrôle médical annuel conseillé.')
+    ]));
+  }
+  if (S.pregnant) {
+    p.appendChild(h('div', {style: 'background:#FCE4EC;border-left:4px solid #E91E63;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:12px'}, [
+      h('div', {style: 'font-weight:700;color:#E91E63;margin-bottom:4px'}, '\uD83E\uDD30 Grossesse — Exercices autorisés seulement'),
+      h('div', {style: 'color:#880E4F'}, 'Évitez les charges lourdes, exercices allongés sur le dos (après 20 SA), abdominaux hyperpressifs, sauts et HIIT intense. Privilégiez marche, natation, yoga prénatal, Kegel. Consultez votre médecin avant tout entraînement.')
+    ]));
+  }
+
   if (Object.keys(S.muscuStrengthProfile).length === 0) {
     var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
     var saved = localStorage.getItem('mtd_muscu_strength_' + userId);
@@ -483,13 +504,29 @@ function renderChargesQuestionnaire(p) {
     inputWrap.appendChild(inp);
     inputWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'kg'));
     row.appendChild(inputWrap);
+    // Reps input for accurate Epley 1RM
+    var repKey = exDef.key + '_reps';
+    var currentReps = S.muscuStrengthProfile[repKey] || 8;
+    var repInp = h('input', {
+      type: 'number', min: '1', max: '30', value: String(currentReps),
+      style: 'width:38px;padding:6px 4px;border:1px solid var(--border);font-family:Georgia;font-size:12px;text-align:center;background:var(--ivory);margin-left:4px',
+      onchange: (function(rkey, wkey) { return function(e) {
+        var rv = parseInt(e.target.value);
+        if (!isNaN(rv) && rv >= 1 && rv <= 30) S.muscuStrengthProfile[rkey] = rv;
+        var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+        localStorage.setItem('mtd_muscu_strength_' + uid, JSON.stringify(S.muscuStrengthProfile));
+      }; })(repKey, exDef.key)
+    });
+    inputWrap.appendChild(repInp);
+    inputWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'reps'));
     if (currentVal && currentVal > 0) {
       var thresh = strengthThresholds[exDef.key] || {low:0.5,mid:1.0};
       var ratio = currentVal / bodyWeight;
       var lbl = ratio < thresh.low ? 'Débutant' : ratio < thresh.mid ? 'Intermédiaire' : 'Avancé';
       var col = ratio < thresh.low ? '#E67E22' : ratio < thresh.mid ? '#2980B9' : '#27AE60';
-      // Estimate 1RM via Epley formula (assume 9 reps at entered weight)
-      var est1rm = Math.round(currentVal * (1 + 9 / 30) / 2.5) * 2.5;
+      // Epley formula: 1RM = weight × (1 + reps/30) — accurate for 1-15 reps
+      var usedReps = S.muscuStrengthProfile[repKey] || 8;
+      var est1rm = Math.round(currentVal * (1 + usedReps / 30) / 2.5) * 2.5;
       var rightCol = h('div', {style: 'text-align:right;flex-shrink:0'});
       rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + col}, lbl));
       rightCol.appendChild(h('div', {style: 'font-family:Georgia;font-size:11px;color:var(--grey);margin-top:2px'}, '~1RM : ' + est1rm + ' kg'));
@@ -498,7 +535,7 @@ function renderChargesQuestionnaire(p) {
     grid.appendChild(row);
   });
   p.appendChild(grid);
-  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic;margin-bottom:16px'}, 'Laissez vide les exercices que vous ne pratiquez pas. Le 1RM est estimé via la formule d\'Epley (charge × 1.3 pour 9 reps).'));
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);font-style:italic;margin-bottom:16px'}, 'Laissez vide les exercices que vous ne pratiquez pas. Indiquez la charge ET le nombre de reps pour un calcul précis du 1RM (formule d\'Epley : charge × (1 + N/30)).'));
 
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ S.sStep = 15; window.render(); }}, 'Continuer'));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
@@ -1267,11 +1304,31 @@ var MUSCU_PHASES = [
 
 // Calcule le poids recommandé pour un exercice selon la phase courante
 function getSuggestedWeight(exerciseName, reps, phase) {
+  var pct = phase ? (phase.pct1rm || 0.72) : 0.72;
+  // Priority 1: use user's actual 1RM from strength profile (Epley-calculated)
+  if (S.muscuStrengthProfile && window.MUSCU_KEY_EXERCISES) {
+    var nameLow = (exerciseName || '').toLowerCase();
+    var matchedEx = null;
+    for (var mi = 0; mi < window.MUSCU_KEY_EXERCISES.length; mi++) {
+      var kex = window.MUSCU_KEY_EXERCISES[mi];
+      if (nameLow.indexOf(kex.name.toLowerCase().split(' ')[0]) !== -1 || nameLow.indexOf(kex.key.replace('_',' ')) !== -1) {
+        matchedEx = kex; break;
+      }
+    }
+    if (matchedEx && S.muscuStrengthProfile[matchedEx.key]) {
+      var profileWeight = S.muscuStrengthProfile[matchedEx.key];
+      var profileReps = S.muscuStrengthProfile[matchedEx.key + '_reps'] || 8;
+      // Calculate 1RM via Epley: weight × (1 + reps/30)
+      var oneRM = profileWeight * (1 + profileReps / 30);
+      // Return pct1rm × 1RM, rounded to nearest 2.5kg
+      var suggested = Math.round(oneRM * pct / 2.5) * 2.5;
+      return Math.max(suggested, 5);
+    }
+  }
+  // Priority 2: fall back to generic getMusculationWeight
   if (!window.getMusculationWeight) return null;
   var baseW = window.getMusculationWeight(exerciseName, null, reps);
   if (!baseW || baseW <= 0) return null;
-  var pct = phase ? (phase.pct1rm || 0.72) : 0.72;
-  // Base weight from getMusculationWeight is already at ~70-75% 1RM at 8-10 reps
   // Adjust proportionally to phase pct1rm (reference: 0.72 = progression phase)
   var adjusted = Math.round(baseW * (pct / 0.72) / 2.5) * 2.5;
   return Math.max(adjusted, 5);
@@ -1422,6 +1479,16 @@ function renderMusculationProgram(p) {
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
   p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
+
+  // Medical/age contextual warnings in program view
+  var hasDiabProg = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
+  if (hasDiabProg) {
+    p.appendChild(h('div', {style: 'background:#FFF3E0;border-left:4px solid #E67E22;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#5D4037'}, '\u26A0 Diabète : Vérifiez votre glycémie avant/après chaque séance. Gardez du sucre rapide à portée. Intensité maximale RPE 8/10 — jamais à l\'échec. Hydratation ×1.5.'));
+  }
+  if (S.age >= 50) {
+    p.appendChild(h('div', {style: 'background:#E8F5E9;border-left:4px solid #27AE60;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1B5E20'}, '\uD83D\uDCAA 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.'));
+  }
+
   var goalNames = S.sportGoals.map(function(gid){
     var g = window.SPORT_GOALS.find(function(x){ return x.id === gid; });
     return g ? g.name : '';
