@@ -137,7 +137,7 @@ var MEDICAL_ADVICE={
   hta:{warn:'Régime hyposodé (< 5g sel/jour). Augmentez potassium (banane, épinard).',macroAdj:null},
   cardio:{warn:'Réduisez sodium et graisses saturées. Plus d\'oméga-3.',macroAdj:{g:.03,p:.02,l:-.05}},
   insuffisance_card:{warn:'Restriction sodique stricte. Consultez votre cardiologue pour les apports hydriques.',macroAdj:null},
-  irc:{warn:'Contrôlez les protéines (0.6-0.8g/kg). Limitez potassium et phosphore.',macroAdj:{g:.08,p:-.10,l:.02}},
+  irc:{warn:'Contrôlez les protéines (0.55-0.60g/kg — KDOQI 2020). Limitez potassium et phosphore. Glucides complexes pour compenser l\'énergie.',macroAdj:{g:.08,p:0,l:.02}},
   calculs:{warn:'Buvez 2.5L+ d\'eau/jour. Limitez les oxalates (épinards, chocolat).',macroAdj:null},
   rgo:{warn:'Évitez café, chocolat, tomates, épices fortes. Repas fractionnez.',macroAdj:null},
   sii:{warn:'Régime pauvre en FODMAP en phase d\'exclusion. Réintroduction progressive.',macroAdj:null},
@@ -1014,7 +1014,7 @@ if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
 if(s.age>=13&&s.age<18&&tdeeVal>0){var minCalTeen=Math.round(tdeeVal-300);if(base<minCalTeen)base=minCalTeen;}
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
 if(s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1200,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes)if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
-if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}return base}
+if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}var kcalFloor=s.sex==='femme'?1200:1500;base=Math.max(base,kcalFloor);return base} // ACSM: plancher universel ≥1200 kcal/j (femme) / ≥1500 kcal/j (homme)
 function calcMacros(){
   var s=window.S;var c=calcTarget();
   if(!c||s.goal===null)return{g:0,p:0,l:0};
@@ -1308,7 +1308,7 @@ function detectMedicalConflicts() {
   }
   // Conflit 3 : IRC + créatine → déjà géré dans SUPPLEMENTS_DB (info seulement)
   if(med.indexOf('irc')!==-1&&s.sportGoals&&s.sportGoals.indexOf('muscle')!==-1){
-    conflicts.push({level:'INFO',message:'ℹ IRC + Objectif musculaire — La créatine est contre-indiquée (charge rénale). Protéines plafonnées à 0.8g/kg/j (NKF/KDOQI). Consulter un néphrologue avant tout programme de musculation intensif.'});
+    conflicts.push({level:'INFO',message:'ℹ IRC + Objectif musculaire — La créatine est contre-indiquée (charge rénale). Protéines plafonnées à 0.60g/kg/j (KDOQI 2020, CKD 3-5 non-dialyse). Consulter un néphrologue avant tout programme de musculation intensif.'});
   }
   // Conflit 4 : Cardiopathie + intensité haute
   if(med.indexOf('cardio')!==-1){
