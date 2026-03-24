@@ -1091,7 +1091,8 @@ if(s.age>=13&&s.age<18&&tdeeVal>0){
   if(goalKey==='bulk'){var maxCalTeen=Math.round(tdeeVal+300);if(base>maxCalTeen)base=maxCalTeen;}
 }
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
-if(s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1200,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes)if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
+if(s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1200,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes)
+if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
 if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}var kcalFloor=s.sex==='femme'?1200:1500;base=Math.max(base,kcalFloor);
 // Alcool : déduire les calories hebdo/7 du budget calorique journalier pour un calcul réaliste
 // Ex : 500 kcal alcool/semaine ÷ 7 = 71 kcal/j que l'on retire de l'objectif alimentaire
