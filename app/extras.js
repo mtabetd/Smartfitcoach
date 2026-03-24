@@ -1451,7 +1451,7 @@ window.FOOD_JOURNAL = {
   addEntry: function(meal, name, kcal, protein, carbs, fat, quantity) {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
-    var journal = JSON.parse(localStorage.getItem(key) || '{}');
+    var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
     var today = new Date().toISOString().split('T')[0];
     if (!journal[today]) journal[today] = [];
     journal[today].push({
@@ -1472,7 +1472,7 @@ window.FOOD_JOURNAL = {
   removeEntry: function(date, index) {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
-    var journal = JSON.parse(localStorage.getItem(key) || '{}');
+    var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
     if (journal[date]) {
       journal[date].splice(index, 1);
       if (journal[date].length === 0) delete journal[date];
@@ -1483,7 +1483,7 @@ window.FOOD_JOURNAL = {
   getToday: function() {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
-    var journal = JSON.parse(localStorage.getItem(key) || '{}');
+    var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
     var today = new Date().toISOString().split('T')[0];
     return journal[today] || [];
   },
@@ -1491,7 +1491,7 @@ window.FOOD_JOURNAL = {
   getDayTotal: function(date) {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_food_journal_' + (user ? user.id : 'anon');
-    var journal = JSON.parse(localStorage.getItem(key) || '{}');
+    var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
     var entries = journal[date || new Date().toISOString().split('T')[0]] || [];
     return entries.reduce(function(acc, e) {
       acc.kcal += e.kcal; acc.p += e.p; acc.g += e.g; acc.l += e.l;
@@ -1712,7 +1712,7 @@ window.PHOTO_PROGRESS = {
     // type: 'front' or 'back'
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_progress_photos_' + (user ? user.id : 'anon');
-    var photos = JSON.parse(localStorage.getItem(key) || '[]');
+    var photos = []; try { photos = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { photos = []; }
     photos.push({
       type: type,
       date: new Date().toISOString().split('T')[0],
@@ -1727,7 +1727,7 @@ window.PHOTO_PROGRESS = {
   getPhotos: function() {
     var user = window.AUTH ? window.AUTH.getUser() : null;
     var key = 'mtd_progress_photos_' + (user ? user.id : 'anon');
-    return JSON.parse(localStorage.getItem(key) || '[]');
+    try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { return []; }
   },
 
   renderWidget: function(container) {

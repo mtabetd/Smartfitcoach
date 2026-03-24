@@ -7,7 +7,7 @@ var h = window.h, txt = window.txt;
 // ─── PROGRAM GENERATION ───
 function generateSportProgram() {
   var days = S.sportDays;
-  var level = window.SPORT_LEVELS.find(function(l){ return l.id === S.sportLevel; });
+  var level = (window.SPORT_LEVELS || []).find(function(l){ return l.id === S.sportLevel; });
   var program = [];
 
   // Adjust splits based on goals
@@ -531,6 +531,10 @@ function renderChargesQuestionnaire(p) {
         else delete S.muscuStrengthProfile[key];
         var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
         localStorage.setItem('mtd_muscu_strength_' + uid, JSON.stringify(S.muscuStrengthProfile));
+        if (!isNaN(v) && v > 0 && window.PERF_HISTORY) {
+          var repsVal = S.muscuStrengthProfile[key + '_reps'] || 8;
+          PERF_HISTORY.recordMuscuStrength(key, v, repsVal);
+        }
       }; })(exDef.key)
     });
     inputWrap.appendChild(inp);
@@ -667,7 +671,7 @@ function renderMusculationGoals(p) {
 
   p.appendChild(h('div', {'class': 'section-label'}, 'Objectifs'));
   var g = h('div', {'class': 'card-grid-2'});
-  window.SPORT_GOALS.forEach(function(gl) {
+  (window.SPORT_GOALS || []).forEach(function(gl) {
     var on = S.sportGoals.indexOf(gl.id) !== -1;
     g.appendChild(h('div', {'class': 'sel-card' + (on ? ' on' : ''), onclick: function(){
       if (on) S.sportGoals = S.sportGoals.filter(function(x){ return x !== gl.id; });
@@ -701,7 +705,7 @@ function renderCrossfitLevel(p) {
 
   p.appendChild(h('div', {'class': 'section-label'}, 'Niveau (obligatoire)'));
   var list = h('div', {'class': 'level-list'});
-  window.CROSSFIT_LEVELS.forEach(function(lv) {
+  (window.CROSSFIT_LEVELS || []).forEach(function(lv) {
     var isOn = S.crossfitLevel === lv.id;
     list.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.crossfitLevel = lv.id; window.render(); }}, [
       h('div', {}, [
@@ -805,6 +809,7 @@ function renderCrossfitLevel(p) {
           // Save to localStorage
           var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
           localStorage.setItem('mtd_cf_1rm_' + uid, JSON.stringify(S.crossfit1RM));
+          if (!isNaN(v) && v > 0 && window.PERF_HISTORY) PERF_HISTORY.recordCF1RM(lift.key, v);
           // Re-render to update estimated weights
           clearTimeout(window._cf1rmTimer);
           window._cf1rmTimer = setTimeout(function(){ window.render(); }, 600);
@@ -989,12 +994,12 @@ function renderCrossfitProgram(p) {
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
   p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
-  var levelObj = window.CROSSFIT_LEVELS.find(function(l) { return l.id === S.crossfitLevel; });
+  var levelObj = (window.CROSSFIT_LEVELS || []).find(function(l) { return l.id === S.crossfitLevel; });
   p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' jours/semaine \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '') + ' \u2014 Inspir\u00E9 Mayhem / Games Athletes'));
 
   // Objectives banner
   var goalNames = S.sportGoals.map(function(gid){
-    var g2 = window.SPORT_GOALS.find(function(x){ return x.id === gid; });
+    var g2 = (window.SPORT_GOALS || []).find(function(x){ return x.id === gid; });
     return g2 ? g2.icon + ' ' + g2.name : '';
   }).join(' \u00B7 ');
   if (goalNames) {
@@ -1145,7 +1150,7 @@ function renderCrossfitProgram(p) {
 
   // Regenerate (shuffle order)
   p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function(){
-    var shuffled = window.CF_WODS.slice();
+    var shuffled = (window.CF_WODS || []).slice();
     for (var i = shuffled.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
       var tmp = shuffled[i];
@@ -1176,7 +1181,7 @@ function renderMusculationLevel(p) {
 
   p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
   var list = h('div', {'class': 'level-list'});
-  window.SPORT_LEVELS.forEach(function(lv) {
+  (window.SPORT_LEVELS || []).forEach(function(lv) {
     list.appendChild(h('div', {'class': 'level-item' + (S.sportLevel === lv.id ? ' on' : ''), onclick: function(){ S.sportLevel = lv.id; window.render(); }}, [
       h('div', {}, [h('div', {'class': 'level-name'}, lv.name), h('div', {'class': 'level-desc'}, lv.desc)]),
       h('span', {'class': 'level-badge'}, '×' + lv.factor)
@@ -1233,7 +1238,7 @@ function renderMusculationZones(p) {
   p.appendChild(h('div', {'class': 'section-label'}, 'Groupes musculaires — Priorité'));
   p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:12px'}, 'Attribuez 1 à 5 étoiles pour définir la priorité. Cliquez à nouveau pour retirer.'));
   var grid = h('div', {style: 'margin-bottom:24px'});
-  window.BODY_ZONES.forEach(function(zone) {
+  (window.BODY_ZONES || []).forEach(function(zone) {
     var priority = S.sportFocus[zone] || 0;
     var isWeak = S.weakZones.indexOf(zone) !== -1;
 
@@ -1554,7 +1559,7 @@ function renderMusculationProgram(p) {
   }
 
   var goalNames = S.sportGoals.map(function(gid){
-    var g = window.SPORT_GOALS.find(function(x){ return x.id === gid; });
+    var g = (window.SPORT_GOALS || []).find(function(x){ return x.id === gid; });
     return g ? g.name : '';
   }).join(' + ');
   p.appendChild(h('p', {'class': 'subtitle'}, S.sportDays + ' jours/semaine — ' + goalNames));
@@ -1788,6 +1793,7 @@ function renderMusculationProgram(p) {
               var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
               localStorage.setItem('mtd_muscu_weights_' + uid, JSON.stringify(S.musculationWeights));
               if (window.BLACKBOX) BLACKBOX.log('muscu_weight_set', {exercise: exName, weight: v, type: eqT});
+              if (window.PERF_HISTORY) PERF_HISTORY.recordMuscuWeight(exName, v, eqT);
               window.render();
             }
           }; })(ex.n, eqType)
@@ -1925,7 +1931,7 @@ function renderMusculationProgram(p) {
 // ─── WEIGHT CHART (for sport) ───
 function renderWeightChartSport(container) {
   var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-  var history = JSON.parse(localStorage.getItem('mtd_weight_history_' + userId) || '[]');
+  var history = []; try { history = JSON.parse(localStorage.getItem('mtd_weight_history_' + userId) || '[]'); } catch(e) { history = []; }
 
   var section = h('div', {'class': 'chart-container'});
   section.appendChild(h('div', {'class': 'chart-title'}, 'Suivi du poids'));
@@ -1947,7 +1953,7 @@ function renderWeightChartSport(container) {
     var v = parseFloat(wi.value);
     if (!isNaN(v) && v >= 30 && v <= 200) {
       var key = 'mtd_weight_history_' + userId;
-      var hist = JSON.parse(localStorage.getItem(key) || '[]');
+      var hist = []; try { hist = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { hist = []; }
       var today = new Date().toISOString().split('T')[0];
       hist.push({date: today, weight: v});
       localStorage.setItem(key, JSON.stringify(hist));
@@ -2075,7 +2081,7 @@ function renderRunningConfig(p) {
   // Goal selection (mandatory)
   p.appendChild(h('div', {'class': 'section-label'}, 'Objectif de course'));
   var goalGrid = h('div', {'class': 'card-grid-2'});
-  window.RUNNING_GOALS.forEach(function(g) {
+  (window.RUNNING_GOALS || []).forEach(function(g) {
     var isOn = S.runningGoal === g.id;
     goalGrid.appendChild(h('div', {'class': 'sel-card' + (isOn ? ' on' : ''), style: 'cursor:pointer', onclick: function(){
       S.runningGoal = g.id;
@@ -2092,7 +2098,7 @@ function renderRunningConfig(p) {
   // Level selection (mandatory)
   p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
   var lvlList = h('div', {'class': 'level-list'});
-  window.RUNNING_LEVELS.forEach(function(lv) {
+  (window.RUNNING_LEVELS || []).forEach(function(lv) {
     var isOn = S.runningLevel === lv.id;
     lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.runningLevel = lv.id; window.render(); }}, [
       h('div', {}, [
@@ -2138,7 +2144,7 @@ function renderRunningConfig(p) {
     if (paceSeconds > 0) {
       var zonesInfo = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;background:var(--ivory2);margin:16px 0'});
       zonesInfo.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:8px'}, 'Allures estimées par zone'));
-      window.RUNNING_ZONES.forEach(function(z) {
+      (window.RUNNING_ZONES || []).forEach(function(z) {
         var avgPct = (z.pct[0] + z.pct[1]) / 200;
         var zonePace = Math.round(paceSeconds / avgPct);
         var zMin = Math.floor(zonePace / 60);
@@ -2161,7 +2167,7 @@ function renderRunningConfig(p) {
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
     if (ok) {
-      var goalObj = window.RUNNING_GOALS.find(function(g){ return g.id === S.runningGoal; });
+      var goalObj = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
       S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
       S.runningWeek = 1;
       S.selectedRunDay = 0;
@@ -2176,7 +2182,7 @@ function renderRunningConfig(p) {
 // ─── STEP 8: RUNNING PROGRAM ───
 function renderRunningProgram(p) {
   if (!S.runningProgram || S.runningProgram.length === 0) {
-    var goalObj = window.RUNNING_GOALS.find(function(g){ return g.id === S.runningGoal; });
+    var goalObj = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
     S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
   }
 
@@ -2187,8 +2193,8 @@ function renderRunningProgram(p) {
   var currentWeekData = program[S.runningWeek - 1];
   if (!currentWeekData) return;
 
-  var goalObj2 = window.RUNNING_GOALS.find(function(g){ return g.id === S.runningGoal; });
-  var levelObj = window.RUNNING_LEVELS.find(function(l){ return l.id === S.runningLevel; });
+  var goalObj2 = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
+  var levelObj = (window.RUNNING_LEVELS || []).find(function(l){ return l.id === S.runningLevel; });
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
   p.appendChild(h('h1', {html: (goalObj2 ? goalObj2.name : 'Running') + '<br><em>Plan</em>'}));
@@ -2268,7 +2274,7 @@ function renderHyroxConfig(p) {
   // Goal selection (mandatory)
   p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));
   var goalGrid = h('div', {'class': 'card-grid-2'});
-  window.HYROX_GOALS.forEach(function(g) {
+  (window.HYROX_GOALS || []).forEach(function(g) {
     var isOn = S.hyroxGoal === g.id;
     goalGrid.appendChild(h('div', {'class': 'sel-card' + (isOn ? ' on' : ''), style: 'cursor:pointer', onclick: function(){
       S.hyroxGoal = g.id;
@@ -2284,7 +2290,7 @@ function renderHyroxConfig(p) {
   // Level selection (mandatory)
   p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
   var lvlList = h('div', {'class': 'level-list'});
-  window.HYROX_LEVELS.forEach(function(lv) {
+  (window.HYROX_LEVELS || []).forEach(function(lv) {
     var isOn = S.hyroxLevel === lv.id;
     lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.hyroxLevel = lv.id; window.render(); }}, [
       h('div', {}, [
@@ -2386,8 +2392,8 @@ function renderHyroxProgram(p) {
   var currentWeekData = program[S.hyroxWeek - 1];
   if (!currentWeekData) return;
 
-  var goalObj = window.HYROX_GOALS.find(function(g){ return g.id === S.hyroxGoal; });
-  var levelObj = window.HYROX_LEVELS.find(function(l){ return l.id === S.hyroxLevel; });
+  var goalObj = (window.HYROX_GOALS || []).find(function(g){ return g.id === S.hyroxGoal; });
+  var levelObj = (window.HYROX_LEVELS || []).find(function(l){ return l.id === S.hyroxLevel; });
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Hyrox'));
   p.appendChild(h('h1', {html: 'Préparation<br><em>8 semaines</em>'}));
@@ -2512,7 +2518,7 @@ function renderPadelConfig(p) {
 
   p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));
   var og = h('div', {'class': 'card-grid-2'});
-  window.PADEL_GOALS.forEach(function(gl) {
+  (window.PADEL_GOALS || []).forEach(function(gl) {
     og.appendChild(h('div', {'class': 'sel-card' + (S.padelGoal === gl.id ? ' on' : ''), onclick: function(){ S.padelGoal = gl.id; window.render(); }}, [
       h('span', {'class': 'card-icon'}, gl.icon), h('div', {'class': 'card-name'}, gl.name), h('div', {'class': 'card-sub'}, gl.desc)
     ]));
@@ -2521,7 +2527,7 @@ function renderPadelConfig(p) {
 
   p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
   var lg = h('div', {'class': 'level-list'});
-  window.PADEL_LEVELS.forEach(function(lv) {
+  (window.PADEL_LEVELS || []).forEach(function(lv) {
     lg.appendChild(h('div', {'class': 'level-item' + (S.padelLevel === lv.id ? ' on' : ''), onclick: function(){ S.padelLevel = lv.id; window.render(); }}, [
       h('div', {}, [h('div', {'class': 'level-name'}, lv.icon + ' ' + lv.name), h('div', {'class': 'level-desc'}, lv.desc)])
     ]));
@@ -2536,7 +2542,7 @@ function renderPadelConfig(p) {
 
   // Skill self-assessment
   p.appendChild(h('div', {'class': 'divider'}, [h('span', {'class': 'divider-line'}), h('span', {'class': 'divider-text'}, 'Auto-évaluation (optionnel)'), h('span', {'class': 'divider-line'})]));
-  window.PADEL_SKILLS.forEach(function(sk) {
+  (window.PADEL_SKILLS || []).forEach(function(sk) {
     var row = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ivory3,#EEEDE8)'});
     row.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px'}, sk.name));
     var stars = h('div', {style: 'display:flex;gap:4px'});
@@ -2565,7 +2571,7 @@ function renderPadelProgram(p) {
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Padel'));
   p.appendChild(h('h1', {html: 'Semaine ' + S.padelWeek + '<br><em>' + week.phase + '</em>'}));
-  var goalName = ''; window.PADEL_GOALS.forEach(function(g){ if(g.id===S.padelGoal) goalName=g.name; });
+  var goalName = ''; (window.PADEL_GOALS || []).forEach(function(g){ if(g.id===S.padelGoal) goalName=g.name; });
   p.appendChild(h('p', {'class': 'subtitle'}, S.padelDays + ' jours/semaine — ' + goalName));
   p.appendChild(h('div', {style: 'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);margin-bottom:8px'}, week.notes));
 
@@ -2615,7 +2621,7 @@ function renderGolfConfig(p) {
 
   p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));
   var og = h('div', {'class': 'card-grid-2'});
-  window.GOLF_GOALS.forEach(function(gl) {
+  (window.GOLF_GOALS || []).forEach(function(gl) {
     og.appendChild(h('div', {'class': 'sel-card' + (S.golfGoal === gl.id ? ' on' : ''), onclick: function(){ S.golfGoal = gl.id; window.render(); }}, [
       h('span', {'class': 'card-icon'}, gl.icon), h('div', {'class': 'card-name'}, gl.name), h('div', {'class': 'card-sub'}, gl.desc)
     ]));
@@ -2624,7 +2630,7 @@ function renderGolfConfig(p) {
 
   p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
   var lg = h('div', {'class': 'level-list'});
-  window.GOLF_LEVELS.forEach(function(lv) {
+  (window.GOLF_LEVELS || []).forEach(function(lv) {
     lg.appendChild(h('div', {'class': 'level-item' + (S.golfLevel === lv.id ? ' on' : ''), onclick: function(){ S.golfLevel = lv.id; window.render(); }}, [
       h('div', {}, [h('div', {'class': 'level-name'}, lv.icon + ' ' + lv.name), h('div', {'class': 'level-desc'}, lv.desc + ' (HC ' + lv.handicapRange + ')')])
     ]));
@@ -2646,7 +2652,7 @@ function renderGolfConfig(p) {
 
   // Skill self-assessment
   p.appendChild(h('div', {'class': 'divider'}, [h('span', {'class': 'divider-line'}), h('span', {'class': 'divider-text'}, 'Auto-évaluation (optionnel)'), h('span', {'class': 'divider-line'})]));
-  window.GOLF_SKILLS.forEach(function(sk) {
+  (window.GOLF_SKILLS || []).forEach(function(sk) {
     var row = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--ivory3,#EEEDE8)'});
     var left = h('div', {});
     left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px'}, sk.name));
@@ -2677,7 +2683,7 @@ function renderGolfProgram(p) {
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Golf'));
   p.appendChild(h('h1', {html: 'Semaine ' + S.golfWeek + '<br><em>' + week.phase + '</em>'}));
-  var goalName = ''; window.GOLF_GOALS.forEach(function(g){ if(g.id===S.golfGoal) goalName=g.name; });
+  var goalName = ''; (window.GOLF_GOALS || []).forEach(function(g){ if(g.id===S.golfGoal) goalName=g.name; });
   p.appendChild(h('p', {'class': 'subtitle'}, S.golfDays + ' jours/semaine — ' + goalName + (S.golfHandicap ? ' — HC ' + S.golfHandicap : '')));
   p.appendChild(h('div', {style: 'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);margin-bottom:8px'}, week.notes));
 

@@ -190,7 +190,7 @@ function getBadges() {
     var user = tryGetUser();
     if (user) {
       var key = 'mtd_badges_' + user.id;
-      var badges = JSON.parse(localStorage.getItem(key) || '[]');
+      var badges = []; try { badges = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { badges = []; }
       if (Array.isArray(badges)) return badges.slice(-3);
     }
   } catch(e){}
@@ -403,6 +403,19 @@ window.DASHBOARD = {
       weeklyWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module resume non charge')));
     }
     root.appendChild(weeklyWidget);
+
+
+    /* ═══ PROGRESSION ═══ */
+    root.appendChild(h('div', 'dash-label', 'Ma progression'));
+    var perfWidget = h('div', 'dash-widget-box');
+    if (window.PERF_HISTORY && window.PERF_HISTORY.renderProgressionWidget) {
+      try { PERF_HISTORY.renderProgressionWidget(perfWidget); } catch(e) {
+        perfWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Progression indisponible')));
+      }
+    } else {
+      perfWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module progression non charge')));
+    }
+    root.appendChild(perfWidget);
 
 
     /* ═══ FOOD JOURNAL ═══ */

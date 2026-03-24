@@ -80,7 +80,7 @@ var BADGE_DEFS = [
 function getStreak() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   if (!user) return {current: 0, best: 0, lastDate: null};
-  var data = JSON.parse(localStorage.getItem(STREAK_KEY + user.id) || '{"current":0,"best":0,"lastDate":null,"dates":[]}');
+  var data = {}; try { data = JSON.parse(localStorage.getItem(STREAK_KEY + user.id) || '{"current":0,"best":0,"lastDate":null,"dates":[]}'); } catch(e) { data = {current:0,best:0,lastDate:null,dates:[]}; }
   return data;
 }
 
@@ -121,7 +121,7 @@ function updateStreak() {
 function getUserBadges() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   if (!user) return [];
-  return JSON.parse(localStorage.getItem(BADGES_KEY + user.id) || '[]');
+  try { return JSON.parse(localStorage.getItem(BADGES_KEY + user.id) || '[]'); } catch(e) { return []; }
 }
 
 function unlockBadge(badgeId) {
