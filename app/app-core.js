@@ -1266,8 +1266,15 @@ gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0
   if(Math.abs(calGap)>20){
     var carbAdj=Math.round(calGap/4);
     var newG=gGrams+carbAdj;
-    if(newG>=130){gGrams=newG;}
-    else{gGrams=130;var remainGap=c-(gGrams*4+pGrams*4+lGrams*9);lGrams=Math.max(20,lGrams+Math.round(remainGap/9));}
+    if(newG>=130){
+      gGrams=newG;
+      // Re-enforce GD carb cap post-normalisation (ADA 2023: max 175-200g/j)
+      if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){gGrams=Math.min(200,gGrams);}
+    }else{
+      gGrams=130;
+      var remainGap=c-(gGrams*4+pGrams*4+lGrams*9);
+      lGrams=Math.max(20,lGrams+Math.round(remainGap/9));
+    }
   }
   return{g:gGrams,p:pGrams,l:lGrams,proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
 }
@@ -1275,6 +1282,7 @@ function calcBMI(){var s=window.S;if(!s.height||!s.weight||s.height<100)return n
 // OMS : 3 grades d'obésité — prise en charge radicalement différente selon le grade
 // Grade 1 (30-34.9) : hygiène de vie | Grade 2 (35-39.9) : suivi spécialisé | Grade 3 (≥40) : chirurgie bariatrique possible (HAS 2022)
 function bmiInfo(b){
+  if(b===null||b===undefined||isNaN(b))return{label:'Données insuffisantes',color:'#6B6B65',grade:'?',note:''};
   if(b<16.0)return{label:'Dénutrition sévère',color:'#1A0050',grade:'D3',note:'Hospitalisation nécessaire (HAS 2019)'};
   if(b<17.0)return{label:'Dénutrition modérée',color:'#1A1070',grade:'D2',note:'Suivi diététique urgent'};
   if(b<18.5)return{label:'Insuffisance pondérale',color:'#1A3A6A',grade:'D1',note:'Augmenter les apports caloriques'};

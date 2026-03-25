@@ -339,7 +339,9 @@ canvas.weight-chart{width:100%;height:200px}
   function simpleHash(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h=h&h;}return(h>>>0).toString(36).slice(0,10);}
   function checkGate(){
     var stored=localStorage.getItem(GATE_KEY);
-    if(stored===GATE_HASH||stored===GATE_HASH_LEGACY){unlock();return;}
+    if(stored===GATE_HASH){unlock();return;}
+    // E-04: ancien token détecté → le purger et forcer re-auth avec le nouveau mot de passe
+    if(stored===GATE_HASH_LEGACY){localStorage.removeItem(GATE_KEY);}
     document.getElementById('gate').style.display='flex';
     document.getElementById('gate-btn').onclick=tryUnlock;
     document.getElementById('gate-pw').addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock();});

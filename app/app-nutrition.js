@@ -381,9 +381,12 @@ function renderStep2(p) {
   p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 140 et 210 cm'));
 
   // BMI
-  var bmi = calcBMI(), info = bmiInfo(bmi);
-  var badge = h('div', {'class': 'imc-badge', style: 'color:' + info.color + ';border-color:' + info.color}, 'IMC : ' + bmi.toFixed(1) + ' \u2014 ' + info.label);
-  p.appendChild(badge);
+  var bmi = calcBMI();
+  if (bmi !== null) {
+    var info = bmiInfo(bmi);
+    var badge = h('div', {'class': 'imc-badge', style: 'color:' + info.color + ';border-color:' + info.color}, 'IMC : ' + bmi.toFixed(1) + ' \u2014 ' + info.label);
+    p.appendChild(badge);
+  }
 
   // Photo upload section
   p.appendChild(h('div', {style: 'height:24px'}));
@@ -1311,8 +1314,10 @@ function renderStep8(p) {
   var stats = h('div', {'class': 'stats-row'});
   stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, water), h('div', {'class': 'stat-label'}, 'L eau/jour')]));
   stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, ppk), h('div', {'class': 'stat-label'}, 'g prot/kg')]));
-  var bi = bmiInfo(bmi);
-  stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, 'IMC')]));
+  if (bmi !== null) {
+    var bi = bmiInfo(bmi);
+    stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, 'IMC')]));
+  }
   p.appendChild(stats);
 
   // Medical warnings
