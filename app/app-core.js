@@ -760,8 +760,8 @@ function generateExerciseSets(exercise, userWeight, sportGoals, sportLevel, week
   else if (sportGoals && sportGoals.indexOf('muscle') !== -1) style = 'hypertrophy';
   else if (sportGoals && sportGoals.indexOf('endurance') !== -1) style = 'endurance';
   var baseWeight = 0;
-  if (muscuStrengthProfile && window.getMusculationWeight) {
-    baseWeight = getMusculationWeight(exercise, muscuStrengthProfile, sportLevel) || 0;
+  if (window.getMusculationWeight) {
+    baseWeight = getMusculationWeight(exercise.n || exercise, null, null) || 0;
   }
   var schemes = {
     strength: {sets:[{reps:5,pct:0.85,rest:'3min'},{reps:5,pct:0.85,rest:'3min'},{reps:3,pct:0.90,rest:'4min'},{reps:3,pct:0.90,rest:'4min'},{reps:1,pct:0.95,rest:'5min'}],inc:2.5,note:'Force pure — repos complets entre les séries'},
@@ -1189,7 +1189,8 @@ function calcMacros(){
   if(s.sportGoals&&s.sportGoals.length>0){
     var hasMuscGoal=s.sportGoals.indexOf('muscle')!==-1||s.sportGoals.indexOf('shred')!==-1;
     var hasEndurOnly=!hasMuscGoal&&(s.sportGoals.indexOf('endurance')!==-1||s.sportGoals.indexOf('weightloss')!==-1||s.sportGoals.indexOf('flexibility')!==-1||s.sportGoals.indexOf('general')!==-1);
-    if(hasEndurOnly)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg pour endurance pure
+    var isDeficit=goalKey==='shred'||goalKey==='cut';
+    if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure (sauf déficit calorique — Helms 2014)
   }
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
   if(s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.6); // KDOQI 2020: 0.55-0.60g/kg CKD 3-5 non-dialysis

@@ -658,7 +658,16 @@ function renderDedicatedPrograms(p) {
   });
 
   p.appendChild(h('div', {style: 'height:16px'}));
-  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ S.sStep = 1; window.render(); }}, 'Cr\u00e9er mon programme personnalis\u00e9 \u2192'));
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
+    // CRITIQUE-1 : pré-sélection ici (une seule fois, hors render)
+    if (S.goal !== null && S.sportGoals.length === 0) {
+      var nutKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
+      var preselect = nutKey ? NUTRITION_TO_SPORT_GOAL[nutKey] : null;
+      if (preselect) S.sportGoals = [preselect];
+    }
+    S.sStep = 1;
+    window.render();
+  }}, 'Cr\u00e9er mon programme personnalis\u00e9 \u2192'));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
@@ -671,7 +680,8 @@ var SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 2, shred: 3, endurance: 1
 
 function syncSportGoalsToNutrition() {
   if (S.goal === null) return; // only sync if nutrition was filled first
-  if (S.sportGoals.length === 0) return;
+  if (S.pregnant && S.sex === 'femme') return; // ÉLEVÉ-4: grossesse → ne pas écraser le maintien forcé
+  if (S.sportGoals.length === 0) { S.goal = 1; return; } // ÉLEVÉ-2: désélection totale → reset maintien
   // Priority: shred > muscle > weightloss > others (→ maintain)
   var newIdx = 1;
   if (S.sportGoals.indexOf('shred') !== -1) newIdx = 3;
@@ -688,13 +698,7 @@ function renderMusculationGoals(p) {
 
   // ── INTERDÉPENDANCE NUTRITION ──────────────────────────────────────────
   if (S.goal !== null) {
-    // Pre-select matching sport goal if none chosen yet
-    if (S.sportGoals.length === 0) {
-      var nutKey = (window.GOALS || [])[S.goal] ? window.GOALS[S.goal].key : null;
-      var preselect = nutKey ? NUTRITION_TO_SPORT_GOAL[nutKey] : null;
-      if (preselect) S.sportGoals = [preselect];
-    }
-    // Reminder banner
+    // Reminder banner (pre-sélection déplacée dans le handler du bouton "Créer programme")
     var nutName = (window.GOALS || [])[S.goal] ? window.GOALS[S.goal].name : '';
     var banner = h('div', {style: 'border-left:3px solid var(--accent,#C8A96E);padding:12px 16px;background:var(--ivory2,#F5F4EF);margin-bottom:16px'});
     banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:bold;color:var(--text,#0A0A09);margin-bottom:4px'}, 'Objectif d\u00e9fini en Nutrition\u00a0: ' + nutName));
@@ -725,7 +729,7 @@ function renderMusculationGoals(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
     if (ok) { S.sStep = 2; window.render(); }
   }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; S.sportGoals = []; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 5 (CrossFit): NIVEAU CF ───

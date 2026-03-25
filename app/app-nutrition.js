@@ -934,11 +934,10 @@ function renderStep6(p) {
       if (S.sportGoals && S.sportGoals.length > 0 && window.NUTRITION_TO_SPORT_GOAL) {
         var newSportId = window.NUTRITION_TO_SPORT_GOAL[gl.key];
         if (newSportId) {
-          // Remove any previous primary goal (those that map to a nutrition goal)
-          var primaryIds = ['muscle', 'weightloss', 'shred', 'general'];
-          S.sportGoals = S.sportGoals.filter(function(x) { return primaryIds.indexOf(x) === -1; });
-          S.sportGoals.unshift(newSportId);
-          if (S.sportGoals.length > 3) S.sportGoals = S.sportGoals.slice(0, 3);
+          // ÉLEVÉ-1: retirer TOUS les goals pilotés par nutrition (primaires + secondaires fonctionnels)
+          var primaryIds = ['muscle', 'weightloss', 'shred', 'general', 'endurance', 'flexibility'];
+          var secondaryKept = S.sportGoals.filter(function(x) { return primaryIds.indexOf(x) === -1; });
+          S.sportGoals = [newSportId].concat(secondaryKept).slice(0, 3);
         }
       }
       // ─────────────────────────────────────────────────────────────────────
@@ -1190,7 +1189,12 @@ function renderStep7(p) {
 
 // ─── STEP 8: RESULTATS ───
 function renderStep8(p) {
-  var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI(), water = (S.weight * 0.033).toFixed(1), ppk = (m.p / S.weight).toFixed(1);
+  // CRITIQUE-3: garde S.goal null — ne peut pas calculer les macros sans objectif
+  if (S.goal === null) { goStep(6); return; }
+  var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI();
+  var _hydInfo = window.calcHydration ? window.calcHydration() : null; // ÉLEVÉ-3: hydration fine
+  var water = _hydInfo ? _hydInfo.liters.toFixed(1) : (S.weight * 0.033).toFixed(1);
+  var ppk = (m.p / S.weight).toFixed(1);
   // Enregistrer les macros journalières dans l'historique (une entrée par jour)
   if (window.PERF_HISTORY && m && tgt > 0) {
     try { PERF_HISTORY.recordNutrition(tgt, m.p, m.g, m.l); } catch(e) {}
