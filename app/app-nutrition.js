@@ -1223,6 +1223,37 @@ function renderStep8(p) {
   sr.appendChild(c2);
   p.appendChild(sr);
 
+  // ─── COHÉRENCE SPORT × NUTRITION — séances réalisées 7 derniers jours ───
+  // Permet de vérifier que le facteur d'activité sélectionné est cohérent avec la réalité
+  if (S.sessionHistory && Object.keys(S.sessionHistory).length > 0) {
+    var nowN = Date.now(), weekAgoN = nowN - 7 * 24 * 60 * 60 * 1000;
+    var weekSess = [];
+    Object.keys(S.sessionHistory).forEach(function(k) {
+      var se = S.sessionHistory[k];
+      if (se && se.date && new Date(se.date).getTime() >= weekAgoN) weekSess.push(se);
+    });
+    if (weekSess.length > 0) {
+      var totalWkKcal = weekSess.reduce(function(acc, se) { return acc + (se.kcalTotal || 0); }, 0);
+      var avgPerSess = Math.round(totalWkKcal / weekSess.length);
+      // Cohérence : comparer la dépense séances vs la part "entraînement" dans le TDEE
+      // Part entraînement TDEE ≈ (effectiveFactor - 1.2) × BMR (sédentaire = base)
+      var bmrVal = typeof calcBMR === 'function' ? calcBMR() : 0;
+      var tdeeTrainPart = bmrVal > 0 ? Math.round((tdee / bmrVal - 1.2) * bmrVal * 7) : 0;
+      var coherenceOk = tdeeTrainPart > 0 && Math.abs(totalWkKcal - tdeeTrainPart) / tdeeTrainPart < 0.35;
+      var cohColor = coherenceOk ? '#27AE60' : '#E67E22';
+      var cohBg = coherenceOk ? '#E8F5E9' : '#FFF3E0';
+      var cohBorder = coherenceOk ? '#27AE60' : '#E67E22';
+      var sessBox = h('div', {style: 'background:' + cohBg + ';border:1px solid ' + cohBorder + ';padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:11px'});
+      var sessTitle = h('div', {style: 'display:flex;justify-content:space-between;margin-bottom:4px'});
+      sessTitle.appendChild(h('span', {style: 'font-weight:bold;color:' + cohColor}, '\uD83C\uDFCB\uFE0F S\u00e9ances musculation — 7 derniers jours'));
+      sessTitle.appendChild(h('span', {style: 'font-weight:bold;color:' + cohColor}, totalWkKcal + '\u00a0kcal'));
+      sessBox.appendChild(sessTitle);
+      sessBox.appendChild(h('div', {style: 'color:var(--grey)'}, weekSess.length + '\u00a0s\u00e9ance' + (weekSess.length > 1 ? 's' : '') + ' valid\u00e9e' + (weekSess.length > 1 ? 's' : '') + ' \u2014 moy. ' + avgPerSess + '\u00a0kcal/s\u00e9ance'));
+      sessBox.appendChild(h('div', {style: 'color:var(--grey);margin-top:4px;font-style:italic;font-size:9px'}, coherenceOk ? '\u2713 Coh\u00e9rent avec votre facteur d\'activit\u00e9 TDEE' : '\u26a0 D\u00e9calage vs facteur d\'activit\u00e9 s\u00e9lectionn\u00e9 \u2014 pensez \u00e0 mettre \u00e0 jour votre niveau d\'activit\u00e9 dans votre profil'));
+      p.appendChild(sessBox);
+    }
+  }
+
   // SVG Rings
   var tot = m.g + m.p + m.l;
   var rr = h('div', {'class': 'rings-row'});

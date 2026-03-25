@@ -1582,6 +1582,21 @@ function renderMusculationProgram(p) {
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
   p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
 
+  // ─── CONFLITS OBJECTIFS NUTRITION × SPORT ───
+  if (window.detectMedicalConflicts) {
+    var progConflicts = window.detectMedicalConflicts();
+    // Filtrer : uniquement les conflits liés aux objectifs sport/nutrition (conflit 9 & 10) + médicaux sport
+    var sportConflicts = progConflicts.filter(function(c) {
+      return c.message.indexOf('CONFLIT objectif') !== -1 || c.message.indexOf('contradictoires') !== -1 || c.message.indexOf('IRC + Objectif') !== -1 || c.message.indexOf('Cardiopathie') !== -1 || c.message.indexOf('Diab\u00e8te') !== -1;
+    });
+    sportConflicts.forEach(function(c) {
+      var bg = c.level === 'CRITIQUE' ? '#FFEBEE' : c.level === '\u00c9LEV\u00c9' ? '#FFF3E0' : '#E3F2FD';
+      var border = c.level === 'CRITIQUE' ? '#C0392B' : c.level === '\u00c9LEV\u00c9' ? '#E67E22' : '#1976D2';
+      var color = c.level === 'CRITIQUE' ? '#7B1A1A' : c.level === '\u00c9LEV\u00c9' ? '#5D4037' : '#0D47A1';
+      p.appendChild(h('div', {style: 'background:' + bg + ';border-left:4px solid ' + border + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:' + color + ';line-height:1.5'}, c.message));
+    });
+  }
+
   // Medical/age contextual warnings in program view
   var hasDiabProg = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
   if (hasDiabProg) {
@@ -1932,6 +1947,8 @@ function renderMusculationProgram(p) {
       kcalBox.appendChild(kr3);
       kcalBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}, 'FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 RPE\u00a0' + kcalRes.rpe + '/10 \u2014 Keytel\u00a02005 \u00b7 Tanaka\u00a02001'));
       compPanel.appendChild(kcalBox);
+      // ⚠ Note TDEE — évite le double-comptage (audit interdépendance)
+      compPanel.appendChild(h('div', {style: 'background:#FFF8E1;border-left:3px solid #F9A825;padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:#5D4037;line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
       var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
         if (!S.sessionHistory) S.sessionHistory = {};
         S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
