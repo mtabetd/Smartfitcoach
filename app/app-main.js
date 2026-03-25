@@ -13,9 +13,50 @@ window.APP_RENDER = function() {
   render();
 };
 
+// ─── PROFILE PERSISTENCE (E-01) ───
+var PROFILE_KEYS = [
+  'sex','age','weight','height','activity','train','sleep','medical','goal','targetWeight',
+  'mealsPerDay','eatingLocation','mealPrepTime','snacking','alcoholFreq','alcoholTypes','hydration',
+  'cookLevel','whey','allergies','intolerances','regime','excluded','cuisines',
+  'shopFreq','shopStores','shopBudget','shopPrefs',
+  'bodyZones','strongZones','weakZones',
+  'pregnant','pregnancyWeek','prePregnancyWeight','dueDate',
+  'cycleLength','lastPeriodDate','cycleTracking',
+  'creatine','creatineDose','supplements',
+  'sportGoals','sportLevel','sportDays','sportSessionDuration','sportFocus',
+  'sportType','crossfitLevel',
+  'runningLevel','runningGoal','runningDays','runningPace',
+  'hyroxLevel','hyroxGoal','hyroxDays','hyroxBenchmarks',
+  'padelLevel','padelGoal','padelDays',
+  'golfLevel','golfGoal','golfDays','golfHandicap',
+  'triathlonGoal','triathlonLevel','triathlonWeak',
+  'triathlonSwimPace','triathlonBikePace','triathlonRunPace',
+  'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep'
+];
+function saveProfile() {
+  try {
+    var user = AUTH.getUser();
+    var uid = user ? user.id : 'anon';
+    var data = {};
+    PROFILE_KEYS.forEach(function(k) { data[k] = S[k]; });
+    localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
+  } catch(e) {}
+}
+function loadProfile() {
+  try {
+    var user = AUTH.getUser();
+    var uid = user ? user.id : 'anon';
+    var raw = localStorage.getItem('mtd_profile_' + uid);
+    if (!raw) return;
+    var data = JSON.parse(raw);
+    PROFILE_KEYS.forEach(function(k) { if (data[k] !== undefined) S[k] = data[k]; });
+  } catch(e) {}
+}
+
 // ─── MAIN RENDER ───
 function render() {
   if (window.destroyAllCharts) window.destroyAllCharts();
+  if (AUTH.isLoggedIn()) saveProfile();
   var app = document.getElementById('app');
   app.innerHTML = '';
 
@@ -221,14 +262,14 @@ try { if (localStorage.getItem('mtd_dark_mode') === 'true') document.body.classL
 if (AUTH.isLoggedIn()) {
   S.view = 'dashboard';
   if (window.GAMIFICATION) GAMIFICATION.updateStreak();
-  // Load weight history from localStorage
+  // Restore full profile from localStorage (E-01)
+  loadProfile();
+  // Load weight history (kept separate for history management)
   try {
     var user = AUTH.getUser();
     var userId = user ? user.id : 'anon';
     var savedWeightHistory = localStorage.getItem('mtd_weight_history_' + userId);
-    if (savedWeightHistory) {
-      S.weightHistory = JSON.parse(savedWeightHistory);
-    }
+    if (savedWeightHistory) S.weightHistory = JSON.parse(savedWeightHistory);
   } catch(e) {}
   // Migrate existing performance data into perf-history (no-op if already done)
   if (window.PERF_HISTORY) {

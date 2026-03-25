@@ -334,17 +334,21 @@ canvas.weight-chart{width:100%;height:200px}
 <script>
 (function(){
   var GATE_KEY='mtd_gate_access';
-  var GATE_HASH='b7e2g90d3f';
+  var GATE_HASH='xltc1h'; // simpleHash('987654321') — E-04: no plaintext password in source
+  var GATE_HASH_LEGACY='b7e2g90d3f'; // ancien token — rétrocompat pour utilisateurs déjà connectés
   function simpleHash(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h=h&h;}return(h>>>0).toString(36).slice(0,10);}
   function checkGate(){
-    if(localStorage.getItem(GATE_KEY)===GATE_HASH){unlock();return;}
+    var stored=localStorage.getItem(GATE_KEY);
+    if(stored===GATE_HASH){unlock();return;}
+    // E-04: ancien token détecté → le purger et forcer re-auth avec le nouveau mot de passe
+    if(stored===GATE_HASH_LEGACY){localStorage.removeItem(GATE_KEY);}
     document.getElementById('gate').style.display='flex';
     document.getElementById('gate-btn').onclick=tryUnlock;
     document.getElementById('gate-pw').addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock();});
   }
   function tryUnlock(){
     var pw=document.getElementById('gate-pw').value;
-    if(pw==='987654321'){
+    if(simpleHash(pw)===GATE_HASH){
       localStorage.setItem(GATE_KEY,GATE_HASH);
       unlock();
     } else {
@@ -365,12 +369,8 @@ canvas.weight-chart{width:100%;height:200px}
 </script>
 <script>
 (function(){
+  // E-05: F12/DevTools blocking removed — ineffective client-side and harmful to legitimate use
   document.addEventListener('contextmenu',function(e){e.preventDefault();});
-  document.addEventListener('keydown',function(e){
-    if(e.key==='F12'){e.preventDefault();return false;}
-    if(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='i'||e.key==='J'||e.key==='j'||e.key==='C'||e.key==='c')){e.preventDefault();return false;}
-    if(e.ctrlKey&&(e.key==='U'||e.key==='u')){e.preventDefault();return false;}
-  });
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>

@@ -381,9 +381,12 @@ function renderStep2(p) {
   p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 140 et 210 cm'));
 
   // BMI
-  var bmi = calcBMI(), info = bmiInfo(bmi);
-  var badge = h('div', {'class': 'imc-badge', style: 'color:' + info.color + ';border-color:' + info.color}, 'IMC : ' + bmi.toFixed(1) + ' \u2014 ' + info.label);
-  p.appendChild(badge);
+  var bmi = calcBMI();
+  if (bmi !== null) {
+    var info = bmiInfo(bmi);
+    var badge = h('div', {'class': 'imc-badge', style: 'color:' + info.color + ';border-color:' + info.color}, 'IMC : ' + bmi.toFixed(1) + ' \u2014 ' + info.label);
+    p.appendChild(badge);
+  }
 
   // Photo upload section
   p.appendChild(h('div', {style: 'height:24px'}));
@@ -927,7 +930,22 @@ function renderStep6(p) {
   p.appendChild(goalLabel);
   var gg = h('div', {'class': 'card-grid-2'});
   GOALS.forEach(function(gl, i) {
-    gg.appendChild(h('div', {'class': 'sel-card' + (S.goal === i ? ' on' : ''), onclick: function() { S.goal = i; window.render(); }}, [
+    gg.appendChild(h('div', {'class': 'sel-card' + (S.goal === i ? ' on' : ''), onclick: function() {
+      S.goal = i;
+      // ── SYNC SPORT GOALS ─────────────────────────────────────────────────
+      // If sport goals already selected, replace the "primary" one to stay coherent
+      if (S.sportGoals && S.sportGoals.length > 0 && window.NUTRITION_TO_SPORT_GOAL) {
+        var newSportId = window.NUTRITION_TO_SPORT_GOAL[gl.key];
+        if (newSportId) {
+          // ÉLEVÉ-1: retirer TOUS les goals pilotés par nutrition (primaires + secondaires fonctionnels)
+          var primaryIds = ['muscle', 'weightloss', 'shred', 'general', 'endurance', 'flexibility'];
+          var secondaryKept = S.sportGoals.filter(function(x) { return primaryIds.indexOf(x) === -1; });
+          S.sportGoals = [newSportId].concat(secondaryKept).slice(0, 3);
+        }
+      }
+      // ─────────────────────────────────────────────────────────────────────
+      window.render();
+    }}, [
       h('span', {'class': 'card-icon'}, gl.icon),
       h('div', {'class': 'card-name'}, gl.name),
       h('div', {'class': 'card-sub'}, gl.desc)
@@ -1174,7 +1192,12 @@ function renderStep7(p) {
 
 // ─── STEP 8: RESULTATS ───
 function renderStep8(p) {
-  var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI(), water = (S.weight * 0.033).toFixed(1), ppk = (m.p / S.weight).toFixed(1);
+  // CRITIQUE-3: garde S.goal null — ne peut pas calculer les macros sans objectif
+  if (S.goal === null) { goStep(6); return; }
+  var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI();
+  var _hydInfo = window.calcHydration ? window.calcHydration() : null; // ÉLEVÉ-3: hydration fine
+  var water = _hydInfo ? _hydInfo.liters.toFixed(1) : (S.weight * 0.033).toFixed(1);
+  var ppk = (m.p / S.weight).toFixed(1);
   // Enregistrer les macros journalières dans l'historique (une entrée par jour)
   if (window.PERF_HISTORY && m && tgt > 0) {
     try { PERF_HISTORY.recordNutrition(tgt, m.p, m.g, m.l); } catch(e) {}
@@ -1223,6 +1246,37 @@ function renderStep8(p) {
   sr.appendChild(c2);
   p.appendChild(sr);
 
+  // ─── COHÉRENCE SPORT × NUTRITION — séances réalisées 7 derniers jours ───
+  // Permet de vérifier que le facteur d'activité sélectionné est cohérent avec la réalité
+  if (S.sessionHistory && Object.keys(S.sessionHistory).length > 0) {
+    var nowN = Date.now(), weekAgoN = nowN - 7 * 24 * 60 * 60 * 1000;
+    var weekSess = [];
+    Object.keys(S.sessionHistory).forEach(function(k) {
+      var se = S.sessionHistory[k];
+      if (se && se.date && new Date(se.date).getTime() >= weekAgoN) weekSess.push(se);
+    });
+    if (weekSess.length > 0) {
+      var totalWkKcal = weekSess.reduce(function(acc, se) { return acc + (se.kcalTotal || 0); }, 0);
+      var avgPerSess = Math.round(totalWkKcal / weekSess.length);
+      // Cohérence : comparer la dépense séances vs la part "entraînement" dans le TDEE
+      // Part entraînement TDEE ≈ (effectiveFactor - 1.2) × BMR (sédentaire = base)
+      var bmrVal = typeof calcBMR === 'function' ? calcBMR() : 0;
+      var tdeeTrainPart = bmrVal > 0 ? Math.round((tdee / bmrVal - 1.2) * bmrVal * 7) : 0;
+      var coherenceOk = tdeeTrainPart > 0 && Math.abs(totalWkKcal - tdeeTrainPart) / tdeeTrainPart < 0.35;
+      var cohColor = coherenceOk ? '#27AE60' : '#E67E22';
+      var cohBg = coherenceOk ? '#E8F5E9' : '#FFF3E0';
+      var cohBorder = coherenceOk ? '#27AE60' : '#E67E22';
+      var sessBox = h('div', {style: 'background:' + cohBg + ';border:1px solid ' + cohBorder + ';padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:11px'});
+      var sessTitle = h('div', {style: 'display:flex;justify-content:space-between;margin-bottom:4px'});
+      sessTitle.appendChild(h('span', {style: 'font-weight:bold;color:' + cohColor}, '\uD83C\uDFCB\uFE0F S\u00e9ances musculation — 7 derniers jours'));
+      sessTitle.appendChild(h('span', {style: 'font-weight:bold;color:' + cohColor}, totalWkKcal + '\u00a0kcal'));
+      sessBox.appendChild(sessTitle);
+      sessBox.appendChild(h('div', {style: 'color:var(--grey)'}, weekSess.length + '\u00a0s\u00e9ance' + (weekSess.length > 1 ? 's' : '') + ' valid\u00e9e' + (weekSess.length > 1 ? 's' : '') + ' \u2014 moy. ' + avgPerSess + '\u00a0kcal/s\u00e9ance'));
+      sessBox.appendChild(h('div', {style: 'color:var(--grey);margin-top:4px;font-style:italic;font-size:9px'}, coherenceOk ? '\u2713 Coh\u00e9rent avec votre facteur d\'activit\u00e9 TDEE' : '\u26a0 D\u00e9calage vs facteur d\'activit\u00e9 s\u00e9lectionn\u00e9 \u2014 pensez \u00e0 mettre \u00e0 jour votre niveau d\'activit\u00e9 dans votre profil'));
+      p.appendChild(sessBox);
+    }
+  }
+
   // SVG Rings
   var tot = m.g + m.p + m.l;
   var rr = h('div', {'class': 'rings-row'});
@@ -1231,10 +1285,18 @@ function renderStep8(p) {
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', 'Lipides', m.l));
   p.appendChild(rr);
 
-  // Meal split
-  p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas'));
+  // Meal split — N-01: dynamique selon S.mealsPerDay
+  function getMealSplit(n) {
+    switch(n) {
+      case 2: return [{n:'D\u00e9jeuner',pct:50},{n:'D\u00eener',pct:50}];
+      case 3: return [{n:'Petit-d\u00e9jeuner',pct:25},{n:'D\u00e9jeuner',pct:45},{n:'D\u00eener',pct:30}];
+      case 5: return [{n:'Petit-d\u00e9jeuner',pct:20},{n:'Collation mat.',pct:10},{n:'D\u00e9jeuner',pct:35},{n:'Collation',pct:10},{n:'D\u00eener',pct:25}];
+      default: return [{n:'Petit-d\u00e9jeuner',pct:25},{n:'D\u00e9jeuner',pct:40},{n:'Collation',pct:5},{n:'D\u00eener',pct:30}];
+    }
+  }
+  p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas (' + (S.mealsPerDay||3) + ' repas/j)'));
   var ms = h('div', {'class': 'meal-split'});
-  [{n: 'Petit-d\u00e9jeuner', pct: 25}, {n: 'D\u00e9jeuner', pct: 40}, {n: 'Collation', pct: 5}, {n: 'D\u00eener', pct: 30}].forEach(function(meal) {
+  getMealSplit(S.mealsPerDay||3).forEach(function(meal) {
     var kcal = Math.round(tgt * meal.pct / 100);
     var bar = h('div', {'class': 'meal-bar'});
     bar.appendChild(h('div', {'class': 'bar-name'}, meal.n));
@@ -1252,8 +1314,10 @@ function renderStep8(p) {
   var stats = h('div', {'class': 'stats-row'});
   stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, water), h('div', {'class': 'stat-label'}, 'L eau/jour')]));
   stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, ppk), h('div', {'class': 'stat-label'}, 'g prot/kg')]));
-  var bi = bmiInfo(bmi);
-  stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, 'IMC')]));
+  if (bmi !== null) {
+    var bi = bmiInfo(bmi);
+    stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, 'IMC')]));
+  }
   p.appendChild(stats);
 
   // Medical warnings
@@ -1681,7 +1745,7 @@ function renderStep9(p) {
   });
 
   // Day total
-  var diff = dayTotal - tgtCal, diffPct = Math.abs(diff / tgtCal * 100), isOk = diffPct < 12;
+  var diff = dayTotal - tgtCal, diffPct = Math.abs(diff / tgtCal * 100), isOk = diffPct < 5;
   var total = h('div', {'class': 'day-total'});
   total.appendChild(h('div', {'class': 'dt-label'}, 'Total du jour'));
   var vd = h('div', {style: 'display:flex;align-items:center;gap:12px'});

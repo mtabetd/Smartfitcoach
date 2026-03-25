@@ -636,6 +636,10 @@ window.S = {
   // Musculation weight tracking
   musculationWeights: {},  // { exerciseName: { weight: Number, type: 'barre'|'haltere'|'machine'|'kb'|'bodyweight' } },
   muscuWeek: 1, muscuCycle: 1, muscuProgramStart: null, sportSplashDone: false,
+  bonusExercises: {},  // { dayIndex: [{n,m,eq,sets,rest,_bonus:true}] }
+  sessionHistory: {},  // { 'dayIndex_YYYY-MM-DD': { duration, kcalBase, kcalEpoc, kcalTotal } }
+  sessionCompleting: false,  // dayIndex en cours de bilan, ou false
+  _sessionDuration: null,    // durée saisie dans le panel bilan
   // CrossFit 1RM
   crossfit1RM: {},  // { 'clean': 80, 'snatch': 60, 'deadlift': 140, ... } in kg
   // Strength assessment profile
@@ -756,8 +760,8 @@ function generateExerciseSets(exercise, userWeight, sportGoals, sportLevel, week
   else if (sportGoals && sportGoals.indexOf('muscle') !== -1) style = 'hypertrophy';
   else if (sportGoals && sportGoals.indexOf('endurance') !== -1) style = 'endurance';
   var baseWeight = 0;
-  if (muscuStrengthProfile && window.getMusculationWeight) {
-    baseWeight = getMusculationWeight(exercise, muscuStrengthProfile, sportLevel) || 0;
+  if (window.getMusculationWeight) {
+    baseWeight = getMusculationWeight(exercise.n || exercise, null, null) || 0;
   }
   var schemes = {
     strength: {sets:[{reps:5,pct:0.85,rest:'3min'},{reps:5,pct:0.85,rest:'3min'},{reps:3,pct:0.90,rest:'4min'},{reps:3,pct:0.90,rest:'4min'},{reps:1,pct:0.95,rest:'5min'}],inc:2.5,note:'Force pure — repos complets entre les séries'},
@@ -774,10 +778,21 @@ function generateExerciseSets(exercise, userWeight, sportGoals, sportLevel, week
     style: style, totalSets: setsToUse.length,
     sets: setsToUse.map(function(set, idx) {
       var w = 0;
-      if (!isBodyweight && baseWeight > 0) { w = Math.round((baseWeight * set.pct * levelMult + weekBonus) / 2.5) * 2.5; w = Math.max(w, 5); }
-      return {setNumber: idx + 1, reps: set.reps, weight: w, rest: set.rest, isBodyweight: isBodyweight};
+      if (!isBodyweight) {
+        if (baseWeight > 0) {
+          w = Math.round((baseWeight * set.pct * levelMult + weekBonus) / 2.5) * 2.5;
+          w = Math.max(w, 5);
+        } else {
+          // CS-01: Fallback si profil de force non renseigné — charge estimée par poids de corps + niveau
+          var bw = (window.S && window.S.weight) || 75;
+          var bwPct = sportLevel === 'beginner' ? 0.3 : sportLevel === 'intermediate' ? 0.5 : 0.7;
+          w = Math.round((bw * bwPct * set.pct) / 2.5) * 2.5;
+          w = Math.max(w, 5);
+        }
+      }
+      return {setNumber: idx + 1, reps: set.reps, weight: w, rest: set.rest, isBodyweight: isBodyweight, isEstimated: !isBodyweight && baseWeight === 0};
     }),
-    note: scheme.note, weeklyIncrement: scheme.inc, week: week || 1
+    note: scheme.note, weeklyIncrement: scheme.inc, week: week || 1, hasEstimatedWeights: !isBodyweight && baseWeight === 0
   };
 }
 window.generateExerciseSets = generateExerciseSets;
@@ -1006,8 +1021,10 @@ window.PREGNANCY_WEIGHT_GAIN = PREGNANCY_WEIGHT_GAIN;
 
 function getPregnancyTrimester() {
   var s = window.S;
-  if (!s.pregnant || !s.pregnancyWeek) return null;
-  var week = s.pregnancyWeek;
+  if (!s.pregnant) return null;
+  // C3: Semaine non renseignée → défaut T2 semaine 20 (OMS 2016: +340 kcal/j)
+  // Evite sous-nutrition si femme enceinte sans semaine de grossesse saisie
+  var week = s.pregnancyWeek || 20;
   for (var i = 0; i < PREGNANCY_TRIMESTERS.length; i++) {
     var t = PREGNANCY_TRIMESTERS[i];
     if (week >= t.weeks[0] && week <= t.weeks[1]) {
@@ -1178,6 +1195,16 @@ function calcMacros(){
       }
     }
   }
+  // Ajustement protéine selon type de sport : endurance pure vs musculation/force
+  // ISSN 2017 : endurance = 1.4-1.6 g/kg vs résistance = 1.6-2.5 g/kg
+  // Tarnopolsky 2004 (MSSE) : athlètes endurance nécessitent ~0.2g/kg de moins que athlètes de force
+  // S'applique uniquement si l'utilisateur n'a PAS d'objectif musculaire ou de sèche sportive
+  if(s.sportGoals&&s.sportGoals.length>0){
+    var hasMuscGoal=s.sportGoals.indexOf('muscle')!==-1||s.sportGoals.indexOf('shred')!==-1;
+    var hasEndurOnly=!hasMuscGoal&&(s.sportGoals.indexOf('endurance')!==-1||s.sportGoals.indexOf('weightloss')!==-1||s.sportGoals.indexOf('flexibility')!==-1||s.sportGoals.indexOf('general')!==-1);
+    var isDeficit=goalKey==='shred'||goalKey==='cut';
+    if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure (sauf déficit calorique — Helms 2014)
+  }
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
   if(s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.6); // KDOQI 2020: 0.55-0.60g/kg CKD 3-5 non-dialysis
   // Vegan/vegetarian: adjust protein for lower DIAAS bioavailability of plant proteins (Messina 2019, ISSN 2017)
@@ -1233,12 +1260,31 @@ function calcMacros(){
   if(!s.pregnant&&s.sex==='femme'&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
 gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0)));// Never reduce protein during cycle — keep stable
 }}
-  return{g:Math.max(130,gGrams),p:Math.max(40,pGrams),l:Math.max(20,lGrams),proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
+  gGrams=Math.max(130,gGrams);pGrams=Math.max(40,pGrams);lGrams=Math.max(20,lGrams);
+  // C-01: Normalisation calorique — les ajustements médicaux peuvent créer un écart avec calcTarget()
+  // On redistribue l'écart sur les glucides en priorité (macro la plus flexible), puis sur les lipides
+  var actualCal=gGrams*4+pGrams*4+lGrams*9;
+  var calGap=c-actualCal;
+  if(Math.abs(calGap)>20){
+    var carbAdj=Math.round(calGap/4);
+    var newG=gGrams+carbAdj;
+    if(newG>=130){
+      gGrams=newG;
+      // Re-enforce GD carb cap post-normalisation (ADA 2023: max 175-200g/j)
+      if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){gGrams=Math.min(200,gGrams);}
+    }else{
+      gGrams=130;
+      var remainGap=c-(gGrams*4+pGrams*4+lGrams*9);
+      lGrams=Math.max(20,lGrams+Math.round(remainGap/9));
+    }
+  }
+  return{g:gGrams,p:pGrams,l:lGrams,proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
 }
-function calcBMI(){var s=window.S;var ht=s.height/100;return s.weight/Math.pow(ht,2)}
+function calcBMI(){var s=window.S;if(!s.height||!s.weight||s.height<100)return null;var ht=s.height/100;return Math.round((s.weight/Math.pow(ht,2))*10)/10}
 // OMS : 3 grades d'obésité — prise en charge radicalement différente selon le grade
 // Grade 1 (30-34.9) : hygiène de vie | Grade 2 (35-39.9) : suivi spécialisé | Grade 3 (≥40) : chirurgie bariatrique possible (HAS 2022)
 function bmiInfo(b){
+  if(b===null||b===undefined||isNaN(b))return{label:'Données insuffisantes',color:'#6B6B65',grade:'?',note:''};
   if(b<16.0)return{label:'Dénutrition sévère',color:'#1A0050',grade:'D3',note:'Hospitalisation nécessaire (HAS 2019)'};
   if(b<17.0)return{label:'Dénutrition modérée',color:'#1A1070',grade:'D2',note:'Suivi diététique urgent'};
   if(b<18.5)return{label:'Insuffisance pondérale',color:'#1A3A6A',grade:'D1',note:'Augmenter les apports caloriques'};
@@ -1282,8 +1328,7 @@ function calcWeightProjection(){
   var data=[];
   for(var w=0;w<=weeks;w++){
     var projected=s.weight+weeklyChange*w;
-    var noise=w>0?(Math.sin(w*2.7)*0.3):0;
-    projected=Math.round((projected+noise)*10)/10;
+    projected=Math.round(projected*10)/10;
     if(gaining&&projected>s.targetWeight)projected=s.targetWeight;
     if(!gaining&&projected<s.targetWeight)projected=s.targetWeight;
     data.push({week:w,weight:projected});
@@ -1295,9 +1340,10 @@ function calcWeightProjection(){
 
 function alcoholWeeklyKcal(){
   var total=0;
-  window.S.alcoholTypes.forEach(function(at){
+  var types=window.S&&Array.isArray(window.S.alcoholTypes)?window.S.alcoholTypes:[];
+  types.forEach(function(at){
     var drink=ALCOHOL_DB.find(function(d){return d.name===at.type});
-    if(drink)total+=drink.kcal*at.freq;
+    if(drink&&at.freq)total+=drink.kcal*at.freq;
   });
   return total;
 }
@@ -1429,8 +1475,11 @@ function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set
 if(meals>=4&&sT>0){if(s.whey&&pSW.length>0&&d%2===0)sR=pickRecipe(pSW,sT,uS);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
 // Dîner : généré seulement si mealsPerDay >= 3 (pas pour jeûne intermittent 2 repas)
 if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD);
+// Ajustement itératif ±5% : corriger le slot le plus déviant jusqu'à convergence (max 8 passes)
+var sPool=meals>=4&&sT>0?(s.whey&&pSW.length>0&&d%2===0?pSW:(pSN.length>0?pSN:pS)):null;
+for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used);if(!nr||nr.n===w.r.n)break;if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
 plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
-function swapMeal(di,slot){var s=window.S;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;s.weekPlan[di][slot]=av[Math.floor(Math.random()*av.length)];if(typeof window.render==='function')window.render()}
+function swapMeal(di,slot){var s=window.S;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));s.weekPlan[di][slot]=top[Math.floor(Math.random()*top.length)];if(typeof window.render==='function')window.render()}
 
 window.getPool = getPool;
 window.filterRecipes = filterRecipes;
@@ -1583,6 +1632,12 @@ function detectMedicalConflicts() {
   var conflicts = [];
   if(!s||!s.medical)return conflicts;
   var med=s.medical;
+  // Conflit 0 : Grossesse + IRC → protéines plafonnées à 0.6g/kg = insuffisant pour le fœtus (C1)
+  // OMS 2016 : grossesse T3 = +25g protéines/j | KDOQI 2020 : IRC CKD 3-5 = 0.6g/kg/j max
+  // Conflit irrésoluble : les deux contraintes sont incompatibles → OBLIGATOIREMENT suivi médical spécialisé
+  if(s.pregnant&&med.indexOf('irc')!==-1){
+    conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT MÉDICAL CRITIQUE : Grossesse + Insuffisance Rénale Chronique — Les besoins protéiques de la grossesse (75-100g/j) sont incompatibles avec le plafond IRC (0.6g/kg/j = ~36-45g/j). Ce profil NÉCESSITE un suivi conjoint néphrologue + diététicienne spécialisée grossesse. Ne pas modifier l\'alimentation sans avis médical.'});
+  }
   // Conflit 1 : Grossesse + Diabète gestationnel + Végan → impossible de couvrir 2600kcal avec glucides ≤200g/j
   if(s.pregnant&&med.indexOf('diabete_gest')!==-1&&s.regime===3){
     conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : Grossesse + Diabète gestationnel + Végan — Contraintes caloriques incompatibles. Il peut être impossible de couvrir vos besoins ('+calcTarget()+' kcal) avec glucides ≤200g/j sans consommer d\'œufs ou produits laitiers. Consultation diététicienne spécialisée OBLIGATOIRE.'});
@@ -1642,6 +1697,17 @@ function detectMedicalConflicts() {
     if(pGoalKey==='cut'||pGoalKey==='shred'){
       conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : Grossesse + déficit calorique — Tout déficit calorique pendant la grossesse est contre-indiqué (ACOG 2018). Les besoins augmentent de +300 kcal/j (T2-T3). La restriction calorique pendant la grossesse est associée à un retard de croissance intra-utérin (RCIU). Objectif automatiquement corrigé.'});
     }
+  }
+  // Conflit 9 : Nutrition "Prise de masse" + objectif sport "Sèche" — contradiction calorique directe
+  // Bulk = surplus +15% | Sèche sport = brûler gras → les deux sont incompatibles simultanément
+  var nutGoalKey9=s.goal!==null?GOALS[s.goal].key:null;
+  if(nutGoalKey9==='bulk'&&s.sportGoals&&s.sportGoals.indexOf('shred')!==-1){
+    conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT objectif : Alimentation "Prise de masse" (+15% calories) + Objectif sport "Sèche" — Ces objectifs sont contradictoires. La prise de masse nécessite un surplus calorique, la sèche nécessite un déficit. Choisissez : (1) Recomposition corporelle = maintenance calorique si vous débutez ou revenez après une pause ; (2) Bulk + programme musculaire, puis sèche séparément (Helms 2014, ISSN 2017).'});
+  }
+  // Conflit 10 : Nutrition sèche/coupe + objectif sport "Muscle" chez intermédiaire/avancé
+  // Débutants : recomposition possible. Intermédiaires/avancés : difficile voire contre-productif (Barakat 2020)
+  if((nutGoalKey9==='cut'||nutGoalKey9==='shred')&&s.sportGoals&&s.sportGoals.indexOf('muscle')!==-1&&s.sportLevel&&s.sportLevel!=='beginner'){
+    conflicts.push({level:'INFO',message:'ℹ Objectifs partiellement contradictoires : Déficit calorique + Objectif "Prise de masse" — Possible pour les débutants (recomposition corporelle) mais inefficace pour les intermédiaires/avancés. Un déficit réduit la synthèse protéique et limite la récupération post-séance (Barakat 2020, NSCA). Recommandé : alterner phases bulk/sèche distinctes pour maximiser les gains musculaires.'});
   }
   return conflicts;
 }

@@ -658,16 +658,54 @@ function renderDedicatedPrograms(p) {
   });
 
   p.appendChild(h('div', {style: 'height:16px'}));
-  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ S.sStep = 1; window.render(); }}, 'Cr\u00e9er mon programme personnalis\u00e9 \u2192'));
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
+    // CRITIQUE-1 : pré-sélection ici (une seule fois, hors render)
+    if (S.goal !== null && S.sportGoals.length === 0) {
+      var nutKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
+      var preselect = nutKey ? NUTRITION_TO_SPORT_GOAL[nutKey] : null;
+      if (preselect) S.sportGoals = [preselect];
+    }
+    S.sStep = 1;
+    window.render();
+  }}, 'Cr\u00e9er mon programme personnalis\u00e9 \u2192'));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 1: MUSCULATION OBJECTIVES ───
+// Mapping nutrition goal key → sport goal id
+var NUTRITION_TO_SPORT_GOAL = { bulk: 'muscle', maintain: 'general', cut: 'weightloss', shred: 'shred' };
+window.NUTRITION_TO_SPORT_GOAL = NUTRITION_TO_SPORT_GOAL;
+// Mapping sport goal id → nutrition goal index (priority order when multi-select)
+var SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 2, shred: 3, endurance: 1, flexibility: 1, general: 1 };
+
+function syncSportGoalsToNutrition() {
+  if (S.goal === null) return; // only sync if nutrition was filled first
+  if (S.pregnant && S.sex === 'femme') return; // ÉLEVÉ-4: grossesse → ne pas écraser le maintien forcé
+  if (S.sportGoals.length === 0) { S.goal = 1; return; } // ÉLEVÉ-2: désélection totale → reset maintien
+  // Priority: shred > muscle > weightloss > others (→ maintain)
+  var newIdx = 1;
+  if (S.sportGoals.indexOf('shred') !== -1) newIdx = 3;
+  else if (S.sportGoals.indexOf('muscle') !== -1) newIdx = 0;
+  else if (S.sportGoals.indexOf('weightloss') !== -1) newIdx = 2;
+  S.goal = newIdx;
+}
+
 function renderMusculationGoals(p) {
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
   p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez vos objectifs (1 \u00e0 3).'));
   if (window.TIPS) TIPS.renderTip(p, 'sportGoal');
+
+  // ── INTERDÉPENDANCE NUTRITION ──────────────────────────────────────────
+  if (S.goal !== null) {
+    // Reminder banner (pre-sélection déplacée dans le handler du bouton "Créer programme")
+    var nutName = (window.GOALS || [])[S.goal] ? window.GOALS[S.goal].name : '';
+    var banner = h('div', {style: 'border-left:3px solid var(--accent,#C8A96E);padding:12px 16px;background:var(--ivory2,#F5F4EF);margin-bottom:16px'});
+    banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:bold;color:var(--text,#0A0A09);margin-bottom:4px'}, 'Objectif d\u00e9fini en Nutrition\u00a0: ' + nutName));
+    banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65)'}, 'Si vous le modifiez ici, il sera automatiquement mis \u00e0 jour dans la section Nutrition.'));
+    p.appendChild(banner);
+  }
+  // ──────────────────────────────────────────────────────────────────────
 
   p.appendChild(h('div', {'class': 'section-label'}, 'Objectifs'));
   var g = h('div', {'class': 'card-grid-2'});
@@ -676,6 +714,7 @@ function renderMusculationGoals(p) {
     g.appendChild(h('div', {'class': 'sel-card' + (on ? ' on' : ''), onclick: function(){
       if (on) S.sportGoals = S.sportGoals.filter(function(x){ return x !== gl.id; });
       else if (S.sportGoals.length < 3) S.sportGoals.push(gl.id);
+      syncSportGoalsToNutrition();
       window.render();
     }}, [
       h('span', {'class': 'card-icon'}, gl.icon),
@@ -690,7 +729,7 @@ function renderMusculationGoals(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
     if (ok) { S.sStep = 2; window.render(); }
   }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 15; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 5 (CrossFit): NIVEAU CF ───
@@ -1508,6 +1547,60 @@ function renderWeekTracker(p) {
 }
 
 // ─── STEP 4 (Muscu): PROGRAMME ───
+// ─── CALORIE BURN ESTIMATION ───
+// Durée réelle estimée à partir des exercices (séries × reps + repos)
+function calcSessionDuration(exercises) {
+  var totalSec = 480; // 8 min échauffement
+  (exercises || []).forEach(function(ex) {
+    var sets = 3, reps = 10;
+    var sm = (ex.sets || '').match(/^(\d+)[x\u00d7](\d+)/);
+    if (sm) { sets = parseInt(sm[1]); reps = parseInt(sm[2]); }
+    var isCompound = /(squat|soulevé|développé|rowing|presse|hip thrust|fente|deadlift|tirage|pull)/i.test(ex.n || '');
+    var tSet = reps * (isCompound ? 3.5 : 2.5);
+    var rest = 90;
+    var rm = (ex.rest || '').match(/(\d+)\s*min/i);
+    var rs = (ex.rest || '').match(/^(\d+)\s*s/i);
+    if (rm) rest = parseInt(rm[1]) * 60;
+    else if (rs) rest = parseInt(rs[1]);
+    totalSec += sets * tSet + (sets - 1) * rest;
+  });
+  totalSec += 300; // 5 min récupération
+  return Math.max(20, Math.round(totalSec / 60));
+}
+
+// Dépense calorique personnalisée — Keytel et al. 2005 (FC-based) + EPOC Schuenke 2002
+function calcSessionKcal(exercises, durationMin) {
+  var s = window.S;
+  var weight = s.weight || 75;
+  var age = s.age || 30;
+  var sex = s.sex || 'homme';
+  // Phase courante → RPE
+  var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
+  var rpe = phase ? phase.rpe : 7;
+  // RPE → %FCmax (Borg 6-20 adapté résistance)
+  var pctHR = rpe <= 5 ? 0.57 : rpe <= 6 ? 0.64 : rpe <= 7 ? 0.72 : rpe <= 8 ? 0.80 : 0.87;
+  // FCmax — Tanaka 2001 (plus précis que Fox 220-age)
+  var hrMax = Math.round(208 - 0.7 * age);
+  var hr = Math.round(hrMax * pctHR);
+  // Keytel et al. 2005 — formule validée vs calorimétrie indirecte
+  var kcalMin;
+  if (sex === 'homme') {
+    kcalMin = (-55.0969 + 0.6309 * hr + 0.1988 * weight + 0.2017 * age) / 4.184;
+  } else {
+    kcalMin = (-20.4022 + 0.4472 * hr - 0.1263 * weight + 0.074 * age) / 4.184;
+  }
+  kcalMin = Math.max(kcalMin, 3.0);
+  var base = Math.round(kcalMin * durationMin);
+  // EPOC — Schuenke 2002, Paoli 2012 : +6-20% selon intensité
+  var epocPct = rpe <= 5 ? 0.06 : rpe <= 6 ? 0.10 : rpe <= 8 ? 0.15 : 0.20;
+  // Bonus volume élevé (> 25 séries totales)
+  var totalSets = 0;
+  (exercises || []).forEach(function(ex) { var m = (ex.sets || '').match(/^(\d+)/); if (m) totalSets += parseInt(m[1]); });
+  if (totalSets > 25) epocPct = Math.min(epocPct + 0.05, 0.25);
+  var epoc = Math.round(base * epocPct);
+  return { base: base, epoc: epoc, total: base + epoc, hr: hr, rpe: rpe };
+}
+
 function renderMusculationProgram(p) {
   if (!S.sportProgram || !S.sportProgram.length) { S.sportProgram = generateSportProgram(); S.selectedSportDay = 0; }
 
@@ -1527,6 +1620,32 @@ function renderMusculationProgram(p) {
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
   p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
+
+  // CS-01: Bannière charges estimées si profil de force non renseigné
+  if (Object.keys(S.muscuStrengthProfile).length === 0) {
+    var estBanner = h('div', {style: 'border-left:3px solid #E67E22;padding:10px 14px;background:#FFF3E0;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5D4037'});
+    estBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:3px'}, 'Charges estimées'));
+    estBanner.appendChild(h('div', {}, 'Les poids affichés sont calculés d\'après votre poids de corps et niveau. Pour des charges personnalisées,\u00a0'));
+    var goBack16 = h('span', {style: 'text-decoration:underline;cursor:pointer', onclick: function(){ S.sStep = 16; window.render(); }}, 'saisissez vos charges de référence');
+    estBanner.appendChild(goBack16);
+    estBanner.appendChild(h('span', {}, '.'));
+    p.appendChild(estBanner);
+  }
+
+  // ─── CONFLITS OBJECTIFS NUTRITION × SPORT ───
+  if (window.detectMedicalConflicts) {
+    var progConflicts = window.detectMedicalConflicts();
+    // Filtrer : uniquement les conflits liés aux objectifs sport/nutrition (conflit 9 & 10) + médicaux sport
+    var sportConflicts = progConflicts.filter(function(c) {
+      return c.message.indexOf('CONFLIT objectif') !== -1 || c.message.indexOf('contradictoires') !== -1 || c.message.indexOf('IRC + Objectif') !== -1 || c.message.indexOf('Cardiopathie') !== -1 || c.message.indexOf('Diab\u00e8te') !== -1;
+    });
+    sportConflicts.forEach(function(c) {
+      var bg = c.level === 'CRITIQUE' ? '#FFEBEE' : c.level === '\u00c9LEV\u00c9' ? '#FFF3E0' : '#E3F2FD';
+      var border = c.level === 'CRITIQUE' ? '#C0392B' : c.level === '\u00c9LEV\u00c9' ? '#E67E22' : '#1976D2';
+      var color = c.level === 'CRITIQUE' ? '#7B1A1A' : c.level === '\u00c9LEV\u00c9' ? '#5D4037' : '#0D47A1';
+      p.appendChild(h('div', {style: 'background:' + bg + ';border-left:4px solid ' + border + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:' + color + ';line-height:1.5'}, c.message));
+    });
+  }
 
   // Medical/age contextual warnings in program view
   var hasDiabProg = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
@@ -1814,22 +1933,85 @@ function renderMusculationProgram(p) {
       p.appendChild(card);
     });
 
+    // ─── EXERCICES BONUS (depuis programmes dédiés) ───
+    var bonusDayList = S.bonusExercises[S.selectedSportDay] || [];
+    if (bonusDayList.length > 0) {
+      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 8px'}, 'Exercices bonus'));
+      bonusDayList.forEach(function(bex, bi) {
+        var bc = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #27AE60'});
+        var bnRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center'});
+        bnRow.appendChild(h('div', {'class': 'exercise-muscle'}, bex.m));
+        bnRow.appendChild(h('span', {style: 'font-size:18px;color:#C0392B;cursor:pointer;line-height:1;padding:0 4px', onclick: (function(idx) { return function(e) { e.stopPropagation(); var arr = S.bonusExercises[S.selectedSportDay] || []; arr.splice(idx, 1); S.bonusExercises[S.selectedSportDay] = arr; window.render(); }; })(bi)}, '\u00d7'));
+        bc.appendChild(bnRow);
+        bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n));
+        bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 Repos ' + bex.rest));
+        if (bex.eq) bc.appendChild(h('div', {'class': 'exercise-detail'}, bex.eq));
+        var bsugg = window.getMusculationWeight ? window.getMusculationWeight(bex.n, bex.sets, (bex.sets || '').split('\u00d7')[1]) : null;
+        if (bsugg && bsugg > 0) bc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#27AE60;margin-top:6px;padding:4px 8px;background:rgba(39,174,96,0.06);border-left:2px solid #27AE60'}, '\uD83D\uDCA1 Charge sugg\u00e9r\u00e9e\u00a0: ' + bsugg + '\u00a0kg'));
+        p.appendChild(bc);
+      });
+    }
+
     // Day summary
+    var allEx = day.exercises.concat(bonusDayList);
+    var estDuration = calcSessionDuration(allEx);
     var summary = h('div', {'class': 'day-total'});
-    summary.appendChild(h('div', {'class': 'dt-label'}, day.exercises.length + ' exercices'));
-    // Realistic duration: ~10 min per exercise (sets × reps + rest between sets)
-    // 3 sets × 10 reps + 90s rest × 2 = ~8-10 min ; 4 sets = ~12-14 min
-    var avgSetsPerEx = 3;
-    day.exercises.forEach(function(ex) {
-      if (typeof ex.sets === 'string') {
-        var m = ex.sets.match(/^(\d+)/);
-        if (m) avgSetsPerEx = (avgSetsPerEx + parseInt(m[1])) / 2;
-      }
-    });
-    var minPerEx = avgSetsPerEx <= 3 ? 9 : 12;
-    var estTime = Math.round(day.exercises.length * minPerEx / 5) * 5; // round to nearest 5
-    summary.appendChild(h('div', {'class': 'dt-val'}, '~' + estTime + ' min'));
+    summary.appendChild(h('div', {'class': 'dt-label'}, allEx.length + ' exercice' + (allEx.length > 1 ? 's' : '') + (bonusDayList.length > 0 ? ' (dont ' + bonusDayList.length + ' bonus)' : '')));
+    summary.appendChild(h('div', {'class': 'dt-val'}, '~' + estDuration + ' min'));
     p.appendChild(summary);
+
+    // ─── SÉANCE TERMINÉE + BILAN CALORIQUE ───
+    var todayKey = S.selectedSportDay + '_' + new Date().toISOString().slice(0, 10);
+    var doneSess = S.sessionHistory && S.sessionHistory[todayKey];
+    if (doneSess) {
+      var doneBadge = h('div', {style: 'border:1px solid #27AE60;background:#E8F5E9;padding:12px 16px;margin-top:8px'});
+      doneBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold;color:#27AE60'}, '\u2713 S\u00e9ance valid\u00e9e'));
+      doneBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1B5E20;margin-top:4px'}, doneSess.duration + '\u00a0min \u2014 ' + doneSess.kcalTotal + '\u00a0kcal brul\u00e9es (dont +' + doneSess.kcalEpoc + '\u00a0kcal EPOC)'));
+      doneBadge.appendChild(h('button', {style: 'margin-top:8px;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);background:none;border:none;cursor:pointer;padding:0', onclick: function() { delete S.sessionHistory[todayKey]; window.render(); }}, 'Annuler'));
+      p.appendChild(doneBadge);
+    } else if (S.sessionCompleting === S.selectedSportDay) {
+      var realDur = S._sessionDuration != null ? S._sessionDuration : estDuration;
+      var kcalRes = calcSessionKcal(allEx, realDur);
+      var compPanel = h('div', {style: 'border:1px solid var(--border);background:var(--ivory2);padding:16px;margin-top:8px'});
+      compPanel.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:12px'}, 'Bilan de s\u00e9ance'));
+      // Durée
+      var durRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:14px'});
+      durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex:1'}, 'Dur\u00e9e r\u00e9elle'));
+      var durInp = h('input', {type: 'number', min: '10', max: '180', value: String(realDur), style: 'width:60px;padding:6px;border:1px solid var(--border);font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory)', onclick: function(e) { e.stopPropagation(); }, onchange: function(e) { var v = parseInt(e.target.value); if (!isNaN(v) && v > 0) { S._sessionDuration = v; window.render(); } }});
+      durRow.appendChild(durInp);
+      durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'min'));
+      compPanel.appendChild(durRow);
+      // Résultat calories
+      var kcalBox = h('div', {style: 'background:var(--ivory);border:1px solid var(--border);padding:12px 16px;margin-bottom:14px'});
+      var kr1 = h('div', {style: 'display:flex;justify-content:space-between;margin-bottom:6px'});
+      kr1.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'D\u00e9pense s\u00e9ance'));
+      kr1.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:16px;font-weight:bold'}, kcalRes.base + '\u00a0kcal'));
+      kcalBox.appendChild(kr1);
+      var kr2 = h('div', {style: 'display:flex;justify-content:space-between;margin-bottom:6px'});
+      kr2.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'EPOC +24h (Schuenke\u00a02002)'));
+      kr2.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:14px;color:#E67E22'}, '+' + kcalRes.epoc + '\u00a0kcal'));
+      kcalBox.appendChild(kr2);
+      var kr3 = h('div', {style: 'display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px'});
+      kr3.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold'}, 'Total estim\u00e9'));
+      kr3.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:17px;font-weight:bold;color:#27AE60'}, kcalRes.total + '\u00a0kcal'));
+      kcalBox.appendChild(kr3);
+      kcalBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}, 'FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 RPE\u00a0' + kcalRes.rpe + '/10 \u2014 Keytel\u00a02005 \u00b7 Tanaka\u00a02001'));
+      compPanel.appendChild(kcalBox);
+      // ⚠ Note TDEE — évite le double-comptage (audit interdépendance)
+      compPanel.appendChild(h('div', {style: 'background:#FFF8E1;border-left:3px solid #F9A825;padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:#5D4037;line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
+      var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
+        if (!S.sessionHistory) S.sessionHistory = {};
+        S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
+        S.sessionCompleting = false; S._sessionDuration = null;
+        window.BLACKBOX && window.BLACKBOX.log('session_done', {day: S.selectedSportDay, kcal: kcalRes.total, duration: realDur});
+        window.render();
+      }}, '\u2713 Valider la s\u00e9ance');
+      compPanel.appendChild(saveBtn);
+      compPanel.appendChild(h('div', {style: 'text-align:center;margin-top:8px'}, h('button', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);background:none;border:none;cursor:pointer', onclick: function() { S.sessionCompleting = false; S._sessionDuration = null; window.render(); }}, 'Annuler')));
+      p.appendChild(compPanel);
+    } else {
+      p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:8px;background:var(--black);color:#fff', onclick: function() { S.sessionCompleting = S.selectedSportDay; S._sessionDuration = null; window.render(); }}, '\u2713 S\u00e9ance termin\u00e9e'));
+    }
   }
 
   // ─── PROGRAMMES DÉDIÉS ───
@@ -1902,6 +2084,30 @@ function renderMusculationProgram(p) {
           var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
           right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-weight:bold'}, ex.sets + '\u00d7' + ex.reps));
           right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.rest));
+          // Bouton + / Ajouté — ajoute l'exercice en bonus à la séance courante
+          var bonusArr = S.bonusExercises[S.selectedSportDay] || [];
+          var isAddedBonus = false;
+          for (var bci = 0; bci < bonusArr.length; bci++) { if (bonusArr[bci].n === exBase.name) { isAddedBonus = true; break; } }
+          var addBtn = h('div', {
+            style: 'margin-top:6px;padding:4px 8px;cursor:pointer;font-family:"Helvetica Neue",sans-serif;font-size:10px;text-align:center;border:1px solid ' + (isAddedBonus ? '#27AE60' : 'var(--border)') + ';color:' + (isAddedBonus ? '#27AE60' : 'var(--grey)') + ';background:' + (isAddedBonus ? 'rgba(39,174,96,0.08)' : 'transparent'),
+            onclick: (function(exBCapture) { return function(e) {
+              e.stopPropagation();
+              var arr = S.bonusExercises[S.selectedSportDay] || [];
+              var existIdx = -1;
+              for (var ii = 0; ii < arr.length; ii++) { if (arr[ii].n === exBCapture.name) { existIdx = ii; break; } }
+              if (existIdx === -1) {
+                var ph = getMuscuPhase(S.muscuWeek || 1);
+                var appl = applyPhaseToExercise(exBCapture, ph);
+                arr.push({n: appl.name, m: appl.muscle || '', eq: appl.equipment || '', sets: appl.sets + '\u00d7' + appl.reps, rest: appl.rest || '60s', lv: 1, tags: [], _bonus: true});
+                S.bonusExercises[S.selectedSportDay] = arr;
+              } else {
+                arr.splice(existIdx, 1);
+                S.bonusExercises[S.selectedSportDay] = arr;
+              }
+              window.render();
+            }; })(exBase)
+          }, isAddedBonus ? '\u2713 Ajout\u00e9' : '+ Ajouter \u00e0 ma s\u00e9ance');
+          right.appendChild(addBtn);
           row.appendChild(right);
           card.appendChild(row);
         });
