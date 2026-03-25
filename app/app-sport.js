@@ -729,7 +729,7 @@ function renderMusculationGoals(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
     if (ok) { S.sStep = 2; window.render(); }
   }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; S.sportGoals = []; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 15; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 5 (CrossFit): NIVEAU CF ───
@@ -1620,6 +1620,17 @@ function renderMusculationProgram(p) {
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
   p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
+
+  // CS-01: Bannière charges estimées si profil de force non renseigné
+  if (Object.keys(S.muscuStrengthProfile).length === 0) {
+    var estBanner = h('div', {style: 'border-left:3px solid #E67E22;padding:10px 14px;background:#FFF3E0;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5D4037'});
+    estBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:3px'}, 'Charges estimées'));
+    estBanner.appendChild(h('div', {}, 'Les poids affichés sont calculés d\'après votre poids de corps et niveau. Pour des charges personnalisées,\u00a0'));
+    var goBack16 = h('span', {style: 'text-decoration:underline;cursor:pointer', onclick: function(){ S.sStep = 16; window.render(); }}, 'saisissez vos charges de référence');
+    estBanner.appendChild(goBack16);
+    estBanner.appendChild(h('span', {}, '.'));
+    p.appendChild(estBanner);
+  }
 
   // ─── CONFLITS OBJECTIFS NUTRITION × SPORT ───
   if (window.detectMedicalConflicts) {

@@ -1282,10 +1282,18 @@ function renderStep8(p) {
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', 'Lipides', m.l));
   p.appendChild(rr);
 
-  // Meal split
-  p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas'));
+  // Meal split — N-01: dynamique selon S.mealsPerDay
+  function getMealSplit(n) {
+    switch(n) {
+      case 2: return [{n:'D\u00e9jeuner',pct:50},{n:'D\u00eener',pct:50}];
+      case 3: return [{n:'Petit-d\u00e9jeuner',pct:25},{n:'D\u00e9jeuner',pct:45},{n:'D\u00eener',pct:30}];
+      case 5: return [{n:'Petit-d\u00e9jeuner',pct:20},{n:'Collation mat.',pct:10},{n:'D\u00e9jeuner',pct:35},{n:'Collation',pct:10},{n:'D\u00eener',pct:25}];
+      default: return [{n:'Petit-d\u00e9jeuner',pct:25},{n:'D\u00e9jeuner',pct:40},{n:'Collation',pct:5},{n:'D\u00eener',pct:30}];
+    }
+  }
+  p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas (' + (S.mealsPerDay||3) + ' repas/j)'));
   var ms = h('div', {'class': 'meal-split'});
-  [{n: 'Petit-d\u00e9jeuner', pct: 25}, {n: 'D\u00e9jeuner', pct: 40}, {n: 'Collation', pct: 5}, {n: 'D\u00eener', pct: 30}].forEach(function(meal) {
+  getMealSplit(S.mealsPerDay||3).forEach(function(meal) {
     var kcal = Math.round(tgt * meal.pct / 100);
     var bar = h('div', {'class': 'meal-bar'});
     bar.appendChild(h('div', {'class': 'bar-name'}, meal.n));

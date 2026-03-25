@@ -778,10 +778,21 @@ function generateExerciseSets(exercise, userWeight, sportGoals, sportLevel, week
     style: style, totalSets: setsToUse.length,
     sets: setsToUse.map(function(set, idx) {
       var w = 0;
-      if (!isBodyweight && baseWeight > 0) { w = Math.round((baseWeight * set.pct * levelMult + weekBonus) / 2.5) * 2.5; w = Math.max(w, 5); }
-      return {setNumber: idx + 1, reps: set.reps, weight: w, rest: set.rest, isBodyweight: isBodyweight};
+      if (!isBodyweight) {
+        if (baseWeight > 0) {
+          w = Math.round((baseWeight * set.pct * levelMult + weekBonus) / 2.5) * 2.5;
+          w = Math.max(w, 5);
+        } else {
+          // CS-01: Fallback si profil de force non renseigné — charge estimée par poids de corps + niveau
+          var bw = (window.S && window.S.weight) || 75;
+          var bwPct = sportLevel === 'beginner' ? 0.3 : sportLevel === 'intermediate' ? 0.5 : 0.7;
+          w = Math.round((bw * bwPct * set.pct) / 2.5) * 2.5;
+          w = Math.max(w, 5);
+        }
+      }
+      return {setNumber: idx + 1, reps: set.reps, weight: w, rest: set.rest, isBodyweight: isBodyweight, isEstimated: !isBodyweight && baseWeight === 0};
     }),
-    note: scheme.note, weeklyIncrement: scheme.inc, week: week || 1
+    note: scheme.note, weeklyIncrement: scheme.inc, week: week || 1, hasEstimatedWeights: !isBodyweight && baseWeight === 0
   };
 }
 window.generateExerciseSets = generateExerciseSets;
@@ -1247,9 +1258,20 @@ function calcMacros(){
   if(!s.pregnant&&s.sex==='femme'&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
 gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0)));// Never reduce protein during cycle — keep stable
 }}
-  return{g:Math.max(130,gGrams),p:Math.max(40,pGrams),l:Math.max(20,lGrams),proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
+  gGrams=Math.max(130,gGrams);pGrams=Math.max(40,pGrams);lGrams=Math.max(20,lGrams);
+  // C-01: Normalisation calorique — les ajustements médicaux peuvent créer un écart avec calcTarget()
+  // On redistribue l'écart sur les glucides en priorité (macro la plus flexible), puis sur les lipides
+  var actualCal=gGrams*4+pGrams*4+lGrams*9;
+  var calGap=c-actualCal;
+  if(Math.abs(calGap)>20){
+    var carbAdj=Math.round(calGap/4);
+    var newG=gGrams+carbAdj;
+    if(newG>=130){gGrams=newG;}
+    else{gGrams=130;var remainGap=c-(gGrams*4+pGrams*4+lGrams*9);lGrams=Math.max(20,lGrams+Math.round(remainGap/9));}
+  }
+  return{g:gGrams,p:pGrams,l:lGrams,proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
 }
-function calcBMI(){var s=window.S;var ht=s.height/100;return s.weight/Math.pow(ht,2)}
+function calcBMI(){var s=window.S;if(!s.height||!s.weight||s.height<100)return null;var ht=s.height/100;return Math.round((s.weight/Math.pow(ht,2))*10)/10}
 // OMS : 3 grades d'obésité — prise en charge radicalement différente selon le grade
 // Grade 1 (30-34.9) : hygiène de vie | Grade 2 (35-39.9) : suivi spécialisé | Grade 3 (≥40) : chirurgie bariatrique possible (HAS 2022)
 function bmiInfo(b){
@@ -1296,8 +1318,7 @@ function calcWeightProjection(){
   var data=[];
   for(var w=0;w<=weeks;w++){
     var projected=s.weight+weeklyChange*w;
-    var noise=w>0?(Math.sin(w*2.7)*0.3):0;
-    projected=Math.round((projected+noise)*10)/10;
+    projected=Math.round(projected*10)/10;
     if(gaining&&projected>s.targetWeight)projected=s.targetWeight;
     if(!gaining&&projected<s.targetWeight)projected=s.targetWeight;
     data.push({week:w,weight:projected});
