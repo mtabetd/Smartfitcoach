@@ -1021,8 +1021,10 @@ window.PREGNANCY_WEIGHT_GAIN = PREGNANCY_WEIGHT_GAIN;
 
 function getPregnancyTrimester() {
   var s = window.S;
-  if (!s.pregnant || !s.pregnancyWeek) return null;
-  var week = s.pregnancyWeek;
+  if (!s.pregnant) return null;
+  // C3: Semaine non renseignée → défaut T2 semaine 20 (OMS 2016: +340 kcal/j)
+  // Evite sous-nutrition si femme enceinte sans semaine de grossesse saisie
+  var week = s.pregnancyWeek || 20;
   for (var i = 0; i < PREGNANCY_TRIMESTERS.length; i++) {
     var t = PREGNANCY_TRIMESTERS[i];
     if (week >= t.weeks[0] && week <= t.weeks[1]) {
@@ -1338,9 +1340,10 @@ function calcWeightProjection(){
 
 function alcoholWeeklyKcal(){
   var total=0;
-  window.S.alcoholTypes.forEach(function(at){
+  var types=window.S&&Array.isArray(window.S.alcoholTypes)?window.S.alcoholTypes:[];
+  types.forEach(function(at){
     var drink=ALCOHOL_DB.find(function(d){return d.name===at.type});
-    if(drink)total+=drink.kcal*at.freq;
+    if(drink&&at.freq)total+=drink.kcal*at.freq;
   });
   return total;
 }
@@ -1629,6 +1632,12 @@ function detectMedicalConflicts() {
   var conflicts = [];
   if(!s||!s.medical)return conflicts;
   var med=s.medical;
+  // Conflit 0 : Grossesse + IRC → protéines plafonnées à 0.6g/kg = insuffisant pour le fœtus (C1)
+  // OMS 2016 : grossesse T3 = +25g protéines/j | KDOQI 2020 : IRC CKD 3-5 = 0.6g/kg/j max
+  // Conflit irrésoluble : les deux contraintes sont incompatibles → OBLIGATOIREMENT suivi médical spécialisé
+  if(s.pregnant&&med.indexOf('irc')!==-1){
+    conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT MÉDICAL CRITIQUE : Grossesse + Insuffisance Rénale Chronique — Les besoins protéiques de la grossesse (75-100g/j) sont incompatibles avec le plafond IRC (0.6g/kg/j = ~36-45g/j). Ce profil NÉCESSITE un suivi conjoint néphrologue + diététicienne spécialisée grossesse. Ne pas modifier l\'alimentation sans avis médical.'});
+  }
   // Conflit 1 : Grossesse + Diabète gestationnel + Végan → impossible de couvrir 2600kcal avec glucides ≤200g/j
   if(s.pregnant&&med.indexOf('diabete_gest')!==-1&&s.regime===3){
     conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : Grossesse + Diabète gestationnel + Végan — Contraintes caloriques incompatibles. Il peut être impossible de couvrir vos besoins ('+calcTarget()+' kcal) avec glucides ≤200g/j sans consommer d\'œufs ou produits laitiers. Consultation diététicienne spécialisée OBLIGATOIRE.'});
