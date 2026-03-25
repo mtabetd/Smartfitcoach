@@ -927,7 +927,23 @@ function renderStep6(p) {
   p.appendChild(goalLabel);
   var gg = h('div', {'class': 'card-grid-2'});
   GOALS.forEach(function(gl, i) {
-    gg.appendChild(h('div', {'class': 'sel-card' + (S.goal === i ? ' on' : ''), onclick: function() { S.goal = i; window.render(); }}, [
+    gg.appendChild(h('div', {'class': 'sel-card' + (S.goal === i ? ' on' : ''), onclick: function() {
+      S.goal = i;
+      // ── SYNC SPORT GOALS ─────────────────────────────────────────────────
+      // If sport goals already selected, replace the "primary" one to stay coherent
+      if (S.sportGoals && S.sportGoals.length > 0 && window.NUTRITION_TO_SPORT_GOAL) {
+        var newSportId = window.NUTRITION_TO_SPORT_GOAL[gl.key];
+        if (newSportId) {
+          // Remove any previous primary goal (those that map to a nutrition goal)
+          var primaryIds = ['muscle', 'weightloss', 'shred', 'general'];
+          S.sportGoals = S.sportGoals.filter(function(x) { return primaryIds.indexOf(x) === -1; });
+          S.sportGoals.unshift(newSportId);
+          if (S.sportGoals.length > 3) S.sportGoals = S.sportGoals.slice(0, 3);
+        }
+      }
+      // ─────────────────────────────────────────────────────────────────────
+      window.render();
+    }}, [
       h('span', {'class': 'card-icon'}, gl.icon),
       h('div', {'class': 'card-name'}, gl.name),
       h('div', {'class': 'card-sub'}, gl.desc)

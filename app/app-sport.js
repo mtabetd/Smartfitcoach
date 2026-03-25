@@ -663,11 +663,45 @@ function renderDedicatedPrograms(p) {
 }
 
 // ─── STEP 1: MUSCULATION OBJECTIVES ───
+// Mapping nutrition goal key → sport goal id
+var NUTRITION_TO_SPORT_GOAL = { bulk: 'muscle', maintain: 'general', cut: 'weightloss', shred: 'shred' };
+window.NUTRITION_TO_SPORT_GOAL = NUTRITION_TO_SPORT_GOAL;
+// Mapping sport goal id → nutrition goal index (priority order when multi-select)
+var SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 2, shred: 3, endurance: 1, flexibility: 1, general: 1 };
+
+function syncSportGoalsToNutrition() {
+  if (S.goal === null) return; // only sync if nutrition was filled first
+  if (S.sportGoals.length === 0) return;
+  // Priority: shred > muscle > weightloss > others (→ maintain)
+  var newIdx = 1;
+  if (S.sportGoals.indexOf('shred') !== -1) newIdx = 3;
+  else if (S.sportGoals.indexOf('muscle') !== -1) newIdx = 0;
+  else if (S.sportGoals.indexOf('weightloss') !== -1) newIdx = 2;
+  S.goal = newIdx;
+}
+
 function renderMusculationGoals(p) {
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
   p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez vos objectifs (1 \u00e0 3).'));
   if (window.TIPS) TIPS.renderTip(p, 'sportGoal');
+
+  // ── INTERDÉPENDANCE NUTRITION ──────────────────────────────────────────
+  if (S.goal !== null) {
+    // Pre-select matching sport goal if none chosen yet
+    if (S.sportGoals.length === 0) {
+      var nutKey = (window.GOALS || [])[S.goal] ? window.GOALS[S.goal].key : null;
+      var preselect = nutKey ? NUTRITION_TO_SPORT_GOAL[nutKey] : null;
+      if (preselect) S.sportGoals = [preselect];
+    }
+    // Reminder banner
+    var nutName = (window.GOALS || [])[S.goal] ? window.GOALS[S.goal].name : '';
+    var banner = h('div', {style: 'border-left:3px solid var(--accent,#C8A96E);padding:12px 16px;background:var(--ivory2,#F5F4EF);margin-bottom:16px'});
+    banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:bold;color:var(--text,#0A0A09);margin-bottom:4px'}, 'Objectif d\u00e9fini en Nutrition\u00a0: ' + nutName));
+    banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65)'}, 'Si vous le modifiez ici, il sera automatiquement mis \u00e0 jour dans la section Nutrition.'));
+    p.appendChild(banner);
+  }
+  // ──────────────────────────────────────────────────────────────────────
 
   p.appendChild(h('div', {'class': 'section-label'}, 'Objectifs'));
   var g = h('div', {'class': 'card-grid-2'});
@@ -676,6 +710,7 @@ function renderMusculationGoals(p) {
     g.appendChild(h('div', {'class': 'sel-card' + (on ? ' on' : ''), onclick: function(){
       if (on) S.sportGoals = S.sportGoals.filter(function(x){ return x !== gl.id; });
       else if (S.sportGoals.length < 3) S.sportGoals.push(gl.id);
+      syncSportGoalsToNutrition();
       window.render();
     }}, [
       h('span', {'class': 'card-icon'}, gl.icon),
