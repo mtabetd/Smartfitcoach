@@ -636,6 +636,10 @@ window.S = {
   // Musculation weight tracking
   musculationWeights: {},  // { exerciseName: { weight: Number, type: 'barre'|'haltere'|'machine'|'kb'|'bodyweight' } },
   muscuWeek: 1, muscuCycle: 1, muscuProgramStart: null, sportSplashDone: false,
+  bonusExercises: {},  // { dayIndex: [{n,m,eq,sets,rest,_bonus:true}] }
+  sessionHistory: {},  // { 'dayIndex_YYYY-MM-DD': { duration, kcalBase, kcalEpoc, kcalTotal } }
+  sessionCompleting: false,  // dayIndex en cours de bilan, ou false
+  _sessionDuration: null,    // durée saisie dans le panel bilan
   // CrossFit 1RM
   crossfit1RM: {},  // { 'clean': 80, 'snatch': 60, 'deadlift': 140, ... } in kg
   // Strength assessment profile
