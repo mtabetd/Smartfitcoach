@@ -1681,7 +1681,7 @@ function renderStep9(p) {
   });
 
   // Day total
-  var diff = dayTotal - tgtCal, diffPct = Math.abs(diff / tgtCal * 100), isOk = diffPct < 12;
+  var diff = dayTotal - tgtCal, diffPct = Math.abs(diff / tgtCal * 100), isOk = diffPct < 5;
   var total = h('div', {'class': 'day-total'});
   total.appendChild(h('div', {'class': 'dt-label'}, 'Total du jour'));
   var vd = h('div', {style: 'display:flex;align-items:center;gap:12px'});
