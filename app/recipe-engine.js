@@ -3172,6 +3172,29 @@
   }
 
   /**
+   * Parse la string d'ingrédients legacy (champ `i`) en tableau d'objets.
+   * Format attendu: "Flocons d'avoine 80g, lait écrémé 200ml, banane 100g, ..."
+   * @param {string} iStr
+   * @returns {Array<{name, qty, unit}>}
+   */
+  function parseIngredientsString(iStr) {
+    if (!iStr || typeof iStr !== 'string') return [];
+    return iStr.split(',').map(function(part) {
+      part = part.trim();
+      // Chercher nombre + unité en fin de chaîne
+      var m = part.match(/^(.+?)\s+([\d.]+)\s*(g|ml|kg|l|pce|cs|cc|cl)$/i);
+      if (m) {
+        return { name: m[1].trim(), qty: parseFloat(m[2]), unit: m[3].toLowerCase() };
+      }
+      // Fallback: pas d'unité trouvée mais nombre présent
+      var m2 = part.match(/^(.+?)\s+([\d.]+)$/);
+      if (m2) return { name: m2[1].trim(), qty: parseFloat(m2[2]), unit: 'g' };
+      // Dernier recours: pas de quantité
+      return { name: part, qty: 1, unit: 'pce' };
+    }).filter(function(x) { return x.name && x.name.length > 0; });
+  }
+
+  /**
    * Génère la liste de courses consolidée depuis un weekPlan.
    * Regroupe les ingrédients identiques, somme les quantités, catégorise.
    * @param {Array} weekPlan  — window.S.weekPlan
@@ -3226,7 +3249,21 @@
             });
           }
         }
-        // Recettes legacy (sans _id) : ingrédients sous forme de string → non décomposables
+        // Recettes legacy (L0XX, L1XX, etc.) : parser le champ `i` string
+        else if (recipe._id && recipe._id.match(/^L\d+$/) && recipe.i) {
+          var scalingRatioLegacy = recipe._scalingRatio || 1;
+          var parsedIngredients = recipe._scaledIngredients || parseIngredientsString(recipe.i);
+          parsedIngredients.forEach(function(ing) {
+            // Si _scaledIngredients déjà appliqué on utilise directement, sinon on scale
+            var qty = recipe._scaledIngredients
+              ? (ing.qty || 0)
+              : Math.round(ing.qty * scalingRatioLegacy * 10) / 10;
+            var key = ing.name + '||' + ing.unit;
+            if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
+            consolidated[key].qty += qty;
+            if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
+          });
+        }
       });
     });
 
@@ -3261,7 +3298,8 @@
     calcDailyBudget:      calcDailyBudget,
     calcWeeklyBudget:     calcWeeklyBudget,
     calcWeekPlanBudget:   calcWeekPlanBudget,
-    generateShoppingList: generateShoppingList,
+    generateShoppingList:    generateShoppingList,
+    parseIngredientsString:  parseIngredientsString,
     getPool:          getPool,
     db:               RECIPES_DB
   };

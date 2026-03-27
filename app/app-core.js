@@ -1481,8 +1481,48 @@ function filterRecipes(pool,type){
   return r;
 }
 function pickRecipe(pool,targetK,used){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();av.sort(function(a,b){return Math.abs(a.k-targetK)-Math.abs(b.k-targetK)});var top=av.slice(0,Math.min(5,av.length));var p=top[Math.floor(Math.random()*top.length)];if(p)used.add(p.n);return p||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
-// Applique getAdaptedRecipe si la recette est une recette riche (a un _id R201+)
-function enrichWithScaling(recipe,targetKcal){if(!recipe||!recipe._id||!window.RecipeEngine||!window.RecipeEngine.getAdaptedRecipe)return recipe;var nm=window.S._nm;if(!nm)return recipe;try{var adapted=window.RecipeEngine.getAdaptedRecipe(recipe._id,nm,{targetCalories:targetKcal});if(!adapted||!adapted.adaptedNutrition)return recipe;recipe.k=Math.round(adapted.adaptedNutrition.calories);recipe.p=Math.round(adapted.adaptedNutrition.proteinGrams);recipe.g=Math.round(adapted.adaptedNutrition.carbsGrams);recipe.l=Math.round(adapted.adaptedNutrition.fatGrams);recipe._scaledIngredients=adapted.ingredients||null;recipe._scalingRatio=adapted.scalingRatio||1;}catch(e){}return recipe;}
+// Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
+function enrichWithScaling(recipe, targetKcal) {
+  if (!recipe) return recipe;
+
+  // Recettes R201+ (format riche) — scaling via RecipeEngine
+  if (recipe._id && /^R\d+$/.test(recipe._id) && window.RecipeEngine && window.RecipeEngine.getAdaptedRecipe) {
+    var nm = window.S._nm;
+    if (!nm) return recipe;
+    try {
+      var adapted = window.RecipeEngine.getAdaptedRecipe(recipe._id, nm, { targetCalories: targetKcal });
+      if (!adapted || !adapted.adaptedNutrition) return recipe;
+      recipe.k = Math.round(adapted.adaptedNutrition.calories);
+      recipe.p = Math.round(adapted.adaptedNutrition.proteinGrams);
+      recipe.g = Math.round(adapted.adaptedNutrition.carbsGrams);
+      recipe.l = Math.round(adapted.adaptedNutrition.fatGrams);
+      recipe._scaledIngredients = adapted.ingredients || null;
+      recipe._scalingRatio = adapted.scalingRatio || 1;
+    } catch(e) {}
+    return recipe;
+  }
+
+  // Recettes legacy (format compact, _id = L0XX, L1XX, L2XX, L3XX)
+  if (recipe._id && /^L\d+$/.test(recipe._id) && targetKcal && recipe.k && recipe.k > 0) {
+    var ratio = targetKcal / recipe.k;
+    // Limiter le ratio entre 0.5 et 2.0 pour rester réaliste
+    ratio = Math.min(2.0, Math.max(0.5, ratio));
+    recipe._scalingRatio = Math.round(ratio * 100) / 100;
+    recipe.k = Math.round(recipe.k * ratio);
+    recipe.p = Math.round((recipe.p || 0) * ratio);
+    recipe.g = Math.round((recipe.g || 0) * ratio);
+    recipe.l = Math.round((recipe.l || 0) * ratio);
+    // Parser et scaler les ingrédients si RecipeEngine disponible
+    if (window.RecipeEngine && window.RecipeEngine.parseIngredientsString && recipe.i) {
+      var parsed = window.RecipeEngine.parseIngredientsString(recipe.i);
+      recipe._scaledIngredients = parsed.map(function(ing) {
+        return { name: ing.name, qty: Math.round(ing.qty * ratio * 10) / 10, unit: ing.unit };
+      });
+    }
+  }
+
+  return recipe;
+}
 function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w});var split=getMealSplit();var meals=s.mealsPerDay||3;for(var d=0;d<7;d++){var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
 if(meals>=4&&sT>0){if(s.whey&&pSW.length>0&&d%2===0)sR=pickRecipe(pSW,sT,uS);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
