@@ -1825,6 +1825,13 @@ function renderStep9(p) {
   }, _shopLabel);
   p.appendChild(btnShop);
 
+  // Salad bar button
+  p.appendChild(h('button', {
+    'class': 'regen-btn',
+    style: 'margin-top:8px;background:linear-gradient(135deg,#4CAF50,#8BC34A);color:#fff',
+    onclick: function() { window.S.saladBar.open = true; if(window.render) window.render(); }
+  }, '\uD83E\uDD57 Composer une salade'));
+
   // Shopping list button (legacy)
   p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function() { S.showList = !S.showList; window.render(); }}, S.showList ? '\u25b2 Masquer la liste de courses' : '\u25bc Ma liste de courses'));
 
@@ -2090,6 +2097,373 @@ function cleanShopChecked(list) {
   });
 }
 
+// ─── SALAD BAR ───
+var SALAD_DB = {
+  bases: [
+    { name: 'Riz brun', qty: 100, unit: 'g', k: 111, p: 2.6, g: 23, l: 0.9 },
+    { name: 'Quinoa', qty: 100, unit: 'g', k: 120, p: 4.4, g: 21, l: 1.9 },
+    { name: 'P\u00e2tes compl\u00e8tes', qty: 100, unit: 'g', k: 157, p: 5.8, g: 30, l: 1.0 },
+    { name: 'Couscous', qty: 100, unit: 'g', k: 112, p: 3.8, g: 23, l: 0.2 },
+    { name: 'Lentilles', qty: 100, unit: 'g', k: 116, p: 9.0, g: 20, l: 0.4 },
+    { name: 'Pois chiches', qty: 100, unit: 'g', k: 164, p: 8.9, g: 27, l: 2.6 },
+    { name: 'Patate douce', qty: 100, unit: 'g', k: 86, p: 1.6, g: 20, l: 0.1 },
+    { name: 'Boulgour', qty: 100, unit: 'g', k: 83, p: 3.1, g: 18, l: 0.2 }
+  ],
+  proteins: [
+    { name: 'Poulet grill\u00e9', qty: 100, unit: 'g', k: 165, p: 31, g: 0, l: 3.6 },
+    { name: 'Thon en bo\u00eete', qty: 100, unit: 'g', k: 132, p: 28, g: 0, l: 1.5 },
+    { name: 'Saumon', qty: 100, unit: 'g', k: 208, p: 20, g: 0, l: 13 },
+    { name: 'Crevettes', qty: 100, unit: 'g', k: 85, p: 18, g: 0, l: 0.9 },
+    { name: 'Oeuf dur', qty: 60, unit: 'g', k: 91, p: 7.5, g: 0.4, l: 6.3 },
+    { name: 'Tofu ferme', qty: 100, unit: 'g', k: 76, p: 8.0, g: 1.9, l: 4.2 },
+    { name: 'B\u0153uf hach\u00e9 5%', qty: 100, unit: 'g', k: 137, p: 22, g: 0, l: 5.0 },
+    { name: 'Feta', qty: 50, unit: 'g', k: 133, p: 7.2, g: 1.1, l: 10.7 },
+    { name: 'Mozzarella', qty: 60, unit: 'g', k: 133, p: 9.0, g: 1.5, l: 10 },
+    { name: 'Saumon fum\u00e9', qty: 60, unit: 'g', k: 104, p: 11, g: 0, l: 6.5 }
+  ],
+  veggies: [
+    { name: 'Tomates', qty: 100, unit: 'g', k: 18, p: 0.9, g: 3.9, l: 0.2 },
+    { name: 'Concombre', qty: 100, unit: 'g', k: 15, p: 0.7, g: 3.6, l: 0.1 },
+    { name: '\u00c9pinards', qty: 80, unit: 'g', k: 18, p: 2.3, g: 2.9, l: 0.3 },
+    { name: 'Roquette', qty: 50, unit: 'g', k: 13, p: 1.3, g: 2.0, l: 0.4 },
+    { name: 'Carottes', qty: 80, unit: 'g', k: 33, p: 0.7, g: 7.7, l: 0.1 },
+    { name: 'Poivron rouge', qty: 80, unit: 'g', k: 25, p: 0.8, g: 5.9, l: 0.2 },
+    { name: 'Champignons', qty: 80, unit: 'g', k: 18, p: 1.8, g: 3.3, l: 0.1 },
+    { name: 'Ma\u00efs', qty: 60, unit: 'g', k: 70, p: 2.1, g: 15, l: 0.6 },
+    { name: 'Haricots verts', qty: 80, unit: 'g', k: 22, p: 1.8, g: 5.0, l: 0.1 },
+    { name: 'Oignons rouges', qty: 40, unit: 'g', k: 17, p: 0.5, g: 3.9, l: 0.1 }
+  ],
+  fats: [
+    { name: 'Avocat', qty: 60, unit: 'g', k: 96, p: 1.2, g: 5.1, l: 8.8 },
+    { name: 'Huile d\'olive', qty: 10, unit: 'ml', k: 88, p: 0, g: 0, l: 10 },
+    { name: 'Amandes', qty: 20, unit: 'g', k: 116, p: 4.2, g: 4.4, l: 10 },
+    { name: 'Noix', qty: 20, unit: 'g', k: 131, p: 3.0, g: 2.8, l: 13 },
+    { name: 'Graines de chia', qty: 15, unit: 'g', k: 73, p: 2.5, g: 6.2, l: 4.6 },
+    { name: 'Olives', qty: 30, unit: 'g', k: 41, p: 0.3, g: 2.2, l: 3.8 },
+    { name: 'Tahini', qty: 15, unit: 'g', k: 89, p: 2.5, g: 3.2, l: 8.1 },
+    { name: 'Graines de s\u00e9same', qty: 10, unit: 'g', k: 57, p: 1.8, g: 2.3, l: 4.9 }
+  ],
+  sauces: [
+    { name: 'Vinaigrette l\u00e9g\u00e8re', qty: 15, unit: 'ml', k: 45, p: 0, g: 2.0, l: 4.0 },
+    { name: 'Jus de citron', qty: 20, unit: 'ml', k: 5, p: 0.1, g: 1.3, l: 0.0 },
+    { name: 'Sauce yaourt', qty: 30, unit: 'ml', k: 25, p: 1.5, g: 2.5, l: 0.5 },
+    { name: 'Sauce tahini citronn\u00e9e', qty: 20, unit: 'g', k: 60, p: 1.8, g: 3.0, l: 5.0 },
+    { name: 'Sauce soja', qty: 10, unit: 'ml', k: 6, p: 0.7, g: 0.9, l: 0.0 },
+    { name: 'Pesto', qty: 15, unit: 'g', k: 72, p: 1.5, g: 1.5, l: 7.0 }
+  ]
+};
+
+function calcSaladMacros(sb) {
+  var total = { k: 0, p: 0, g: 0, l: 0 };
+  if (sb.base) { total.k += sb.base.k; total.p += sb.base.p; total.g += sb.base.g; total.l += sb.base.l; }
+  sb.proteins.forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
+  sb.veggies.forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
+  sb.fats.forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
+  if (sb.sauce) { total.k += sb.sauce.k; total.p += sb.sauce.p; total.g += sb.sauce.g; total.l += sb.sauce.l; }
+  return { k: Math.round(total.k), p: Math.round(total.p), g: Math.round(total.g), l: Math.round(total.l) };
+}
+
+function renderSaladBar(p) {
+  var S = window.S;
+  var sb = S.saladBar;
+  p.innerHTML = '';
+
+  // Macro targets
+  var tgtMacros = { k: 600, p: 40, g: 65, l: 20 };
+  if (window.calcMacros && window.calcTarget) {
+    var dm = window.calcMacros(), dk = window.calcTarget();
+    if (dk > 0) {
+      tgtMacros.k = Math.round(dk * 0.35);
+      tgtMacros.p = Math.round(dm.p * 0.35);
+      tgtMacros.g = Math.round(dm.g * 0.35);
+      tgtMacros.l = Math.round(dm.l * 0.35);
+    }
+  }
+
+  var macros = calcSaladMacros(sb);
+  var pct = tgtMacros.k > 0 ? macros.k / tgtMacros.k : 0;
+  var barColor = pct < 0.9 ? '#4CAF50' : (pct <= 1.05 ? '#FF9800' : '#F44336');
+
+  // ── Header ──
+  var header = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px' });
+  header.appendChild(h('button', {
+    style: 'background:none;border:none;font-size:16px;cursor:pointer;color:var(--text);padding:4px 8px',
+    onclick: function() { S.saladBar.open = false; window.render(); }
+  }, '\u2190 Retour'));
+  header.appendChild(h('div', { style: 'font-size:18px;font-weight:700;color:var(--text)' }, '\uD83E\uDD57 Bar \u00e0 Salade'));
+
+  // Meal target toggle
+  var toggleWrap = h('div', { style: 'display:flex;gap:4px' });
+  ['lunch', 'dinner'].forEach(function(slot) {
+    var label = slot === 'lunch' ? 'D\u00e9j' : 'D\u00eener';
+    toggleWrap.appendChild(h('button', {
+      style: 'padding:4px 10px;border-radius:20px;border:1.5px solid ' + (sb.mealTarget === slot ? barColor : 'var(--border)') + ';background:' + (sb.mealTarget === slot ? barColor : 'transparent') + ';color:' + (sb.mealTarget === slot ? '#fff' : 'var(--text)') + ';font-size:12px;cursor:pointer;font-weight:600',
+      onclick: function() { sb.mealTarget = slot; window.render(); }
+    }, label));
+  });
+  header.appendChild(toggleWrap);
+  p.appendChild(header);
+
+  // ── Macro progress bar (sticky) ──
+  var progressBar = h('div', { style: 'position:sticky;top:0;z-index:10;background:var(--bg);padding:10px 16px;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.06)' });
+  var kcalRow = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px' });
+  kcalRow.appendChild(h('span', { style: 'font-size:13px;font-weight:700;color:' + barColor }, macros.k + ' / ' + tgtMacros.k + ' kcal'));
+  kcalRow.appendChild(h('span', { style: 'font-size:11px;color:var(--grey)' }, Math.round(pct * 100) + '%'));
+  progressBar.appendChild(kcalRow);
+
+  var barTrack = h('div', { style: 'height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:8px' });
+  barTrack.appendChild(h('div', { style: 'height:100%;width:' + Math.min(pct * 100, 100) + '%;background:' + barColor + ';border-radius:4px;transition:width 0.3s' }));
+  progressBar.appendChild(barTrack);
+
+  var chipsRow = h('div', { style: 'display:flex;gap:8px' });
+  [
+    { label: 'P', cur: macros.p, tgt: tgtMacros.p, color: '#2196F3' },
+    { label: 'G', cur: macros.g, tgt: tgtMacros.g, color: '#FF9800' },
+    { label: 'L', cur: macros.l, tgt: tgtMacros.l, color: '#9C27B0' }
+  ].forEach(function(m) {
+    chipsRow.appendChild(h('div', { style: 'flex:1;background:var(--card);border-radius:8px;padding:4px 8px;text-align:center;border:1px solid var(--border)' },
+      h('div', { style: 'font-size:9px;color:var(--grey);text-transform:uppercase;letter-spacing:1px' }, m.label),
+      h('div', { style: 'font-size:12px;font-weight:700;color:' + m.color }, m.cur + '<span style="font-weight:400;color:var(--grey)">/' + m.tgt + 'g</span>')
+    ));
+  });
+  progressBar.appendChild(chipsRow);
+  p.appendChild(progressBar);
+
+  // ── Helper: render ingredient section ──
+  function renderSection(title, icon, items, selectedItems, isRadio, maxSel, onToggle, onQty) {
+    var sec = h('div', { style: 'padding:12px 16px' });
+    sec.appendChild(h('div', { style: 'font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px' }, icon + ' ' + title));
+    var grid = h('div', { style: 'display:flex;flex-wrap:wrap;gap:6px' });
+    items.forEach(function(item) {
+      var selIdx = -1;
+      if (isRadio) {
+        selIdx = (selectedItems && selectedItems.name === item.name) ? 0 : -1;
+      } else {
+        for (var i = 0; i < selectedItems.length; i++) {
+          if (selectedItems[i].name === item.name) { selIdx = i; break; }
+        }
+      }
+      var isSel = selIdx >= 0;
+      var canAdd = isSel || isRadio || selectedItems.length < maxSel;
+      var chipStyle = 'padding:5px 10px;border-radius:20px;border:1.5px solid ' +
+        (isSel ? '#4CAF50' : 'var(--border)') +
+        ';background:' + (isSel ? 'rgba(76,175,80,0.12)' : 'var(--card)') +
+        ';color:var(--text);font-size:12px;cursor:' + (canAdd ? 'pointer' : 'not-allowed') +
+        ';font-weight:' + (isSel ? '700' : '400') +
+        ';opacity:' + (canAdd ? '1' : '0.45') + ';transition:all 0.2s';
+      grid.appendChild(h('button', {
+        style: chipStyle,
+        onclick: function() { if (canAdd || isSel) onToggle(item); }
+      }, item.name));
+    });
+    sec.appendChild(grid);
+
+    // Qty controls for selected items
+    var selList = isRadio ? (selectedItems ? [selectedItems] : []) : selectedItems;
+    if (selList.length > 0) {
+      var qtyWrap = h('div', { style: 'margin-top:8px;display:flex;flex-direction:column;gap:4px' });
+      selList.forEach(function(sel, idx) {
+        var qRow = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:8px;padding:4px 10px;border:1px solid var(--border)' });
+        qRow.appendChild(h('span', { style: 'font-size:12px;font-weight:600;color:var(--text)' }, sel.name));
+        var qCtrl = h('div', { style: 'display:flex;align-items:center;gap:6px' });
+        var step = sel.unit === 'ml' ? 10 : 25;
+        qCtrl.appendChild(h('button', {
+          style: 'width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:var(--bg);font-size:14px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center',
+          onclick: function() { onQty(sel, -step); }
+        }, '\u2212'));
+        qCtrl.appendChild(h('span', { style: 'font-size:12px;min-width:50px;text-align:center;color:var(--text)' }, sel.qty + sel.unit));
+        qCtrl.appendChild(h('button', {
+          style: 'width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:var(--bg);font-size:14px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center',
+          onclick: function() { onQty(sel, step); }
+        }, '+'));
+        var selMacros = computeItemMacros(sel);
+        qCtrl.appendChild(h('span', { style: 'font-size:11px;color:var(--grey);min-width:60px;text-align:right' }, selMacros.k + 'kcal'));
+        qRow.appendChild(qCtrl);
+        qtyWrap.appendChild(qRow);
+      });
+      sec.appendChild(qtyWrap);
+    }
+    return sec;
+  }
+
+  // ── Helper: compute macros proportional to current qty ──
+  function computeItemMacros(item) {
+    var dbItem = findInDb(item.name);
+    if (!dbItem) return { k: item.k, p: item.p, g: item.g, l: item.l };
+    var ratio = item.qty / dbItem.qty;
+    return {
+      k: Math.round(dbItem.k * ratio),
+      p: Math.round(dbItem.p * ratio * 10) / 10,
+      g: Math.round(dbItem.g * ratio * 10) / 10,
+      l: Math.round(dbItem.l * ratio * 10) / 10
+    };
+  }
+
+  function findInDb(name) {
+    var cats = ['bases', 'proteins', 'veggies', 'fats', 'sauces'];
+    for (var c = 0; c < cats.length; c++) {
+      var list = SALAD_DB[cats[c]];
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].name === name) return list[i];
+      }
+    }
+    return null;
+  }
+
+  function adjustQty(item, delta) {
+    var dbItem = findInDb(item.name);
+    var minQty = dbItem ? Math.round(dbItem.qty / 4) : 10;
+    var newQty = Math.max(minQty, item.qty + delta);
+    var ratio = newQty / (dbItem ? dbItem.qty : item.qty);
+    item.qty = newQty;
+    if (dbItem) {
+      item.k = Math.round(dbItem.k * ratio);
+      item.p = Math.round(dbItem.p * ratio * 10) / 10;
+      item.g = Math.round(dbItem.g * ratio * 10) / 10;
+      item.l = Math.round(dbItem.l * ratio * 10) / 10;
+    }
+    window.render();
+  }
+
+  function cloneItem(item) {
+    return { name: item.name, qty: item.qty, unit: item.unit, k: item.k, p: item.p, g: item.g, l: item.l };
+  }
+
+  // ── Base ──
+  p.appendChild(renderSection(
+    'Base glucidique', '\uD83C\uDF3E',
+    SALAD_DB.bases, sb.base, true, 1,
+    function(item) {
+      if (sb.base && sb.base.name === item.name) { sb.base = null; }
+      else { sb.base = cloneItem(item); }
+      window.render();
+    },
+    function(sel, delta) { adjustQty(sel, delta); }
+  ));
+
+  // ── Proteins ──
+  p.appendChild(renderSection(
+    'Prot\u00e9ines', '\uD83C\uDFCB\uFE0F',
+    SALAD_DB.proteins, sb.proteins, false, 3,
+    function(item) {
+      var idx = -1;
+      for (var i = 0; i < sb.proteins.length; i++) { if (sb.proteins[i].name === item.name) { idx = i; break; } }
+      if (idx >= 0) { sb.proteins.splice(idx, 1); }
+      else if (sb.proteins.length < 3) { sb.proteins.push(cloneItem(item)); }
+      window.render();
+    },
+    function(sel, delta) { adjustQty(sel, delta); }
+  ));
+
+  // ── Veggies ──
+  p.appendChild(renderSection(
+    'L\u00e9gumes', '\uD83E\uDD6C',
+    SALAD_DB.veggies, sb.veggies, false, 10,
+    function(item) {
+      var idx = -1;
+      for (var i = 0; i < sb.veggies.length; i++) { if (sb.veggies[i].name === item.name) { idx = i; break; } }
+      if (idx >= 0) { sb.veggies.splice(idx, 1); }
+      else { sb.veggies.push(cloneItem(item)); }
+      window.render();
+    },
+    function(sel, delta) { adjustQty(sel, delta); }
+  ));
+
+  // ── Fats ──
+  p.appendChild(renderSection(
+    'Lipides', '\uD83E\uDD51',
+    SALAD_DB.fats, sb.fats, false, 3,
+    function(item) {
+      var idx = -1;
+      for (var i = 0; i < sb.fats.length; i++) { if (sb.fats[i].name === item.name) { idx = i; break; } }
+      if (idx >= 0) { sb.fats.splice(idx, 1); }
+      else if (sb.fats.length < 3) { sb.fats.push(cloneItem(item)); }
+      window.render();
+    },
+    function(sel, delta) { adjustQty(sel, delta); }
+  ));
+
+  // ── Sauce ──
+  p.appendChild(renderSection(
+    'Sauce', '\uD83E\uDD63',
+    SALAD_DB.sauces, sb.sauce, true, 1,
+    function(item) {
+      if (sb.sauce && sb.sauce.name === item.name) { sb.sauce = null; }
+      else { sb.sauce = cloneItem(item); }
+      window.render();
+    },
+    function(sel, delta) { adjustQty(sel, delta); }
+  ));
+
+  // ── Recap + Actions ──
+  var recap = h('div', { style: 'padding:16px;background:var(--card);margin:8px 16px;border-radius:12px;border:1px solid var(--border)' });
+  recap.appendChild(h('div', { style: 'font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px' }, '\uD83D\uDCCB R\u00e9capitulatif'));
+
+  var allItems = [];
+  if (sb.base) allItems.push(sb.base);
+  sb.proteins.forEach(function(x) { allItems.push(x); });
+  sb.veggies.forEach(function(x) { allItems.push(x); });
+  sb.fats.forEach(function(x) { allItems.push(x); });
+  if (sb.sauce) allItems.push(sb.sauce);
+
+  if (allItems.length === 0) {
+    recap.appendChild(h('div', { style: 'color:var(--grey);font-size:13px;text-align:center;padding:12px' }, 'S\u00e9lectionne des ingr\u00e9dients pour composer ta salade'));
+  } else {
+    allItems.forEach(function(item) {
+      var m = computeItemMacros(item);
+      var row = h('div', { style: 'display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)' });
+      row.appendChild(h('span', { style: 'font-size:12px;color:var(--text)' }, item.name + ' ' + item.qty + item.unit));
+      row.appendChild(h('span', { style: 'font-size:11px;color:var(--grey)' }, m.k + 'kcal \u00b7 P' + m.p + ' G' + m.g + ' L' + m.l));
+      recap.appendChild(row);
+    });
+    var totalRow = h('div', { style: 'display:flex;justify-content:space-between;padding:8px 0 0;font-weight:700' });
+    totalRow.appendChild(h('span', { style: 'font-size:13px;color:var(--text)' }, 'Total'));
+    totalRow.appendChild(h('span', { style: 'font-size:13px;color:' + barColor }, macros.k + 'kcal \u00b7 P' + macros.p + ' G' + macros.g + ' L' + macros.l));
+    recap.appendChild(totalRow);
+  }
+  p.appendChild(recap);
+
+  // ── Action buttons ──
+  var actWrap = h('div', { style: 'padding:8px 16px 24px;display:flex;flex-direction:column;gap:8px' });
+
+  var btnAdd = h('button', {
+    style: 'width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#4CAF50,#8BC34A);color:#fff;font-size:15px;font-weight:700;cursor:' + (allItems.length > 0 ? 'pointer' : 'not-allowed') + ';opacity:' + (allItems.length > 0 ? '1' : '0.5'),
+    onclick: function() {
+      if (allItems.length === 0) return;
+      var slot = sb.mealTarget;
+      var saladIngredients = allItems.map(function(x) { return x.name + ' ' + x.qty + x.unit; }).join(', ');
+      var saladRecipe = {
+        _id: 'SALAD_' + Date.now(),
+        n: 'Ma Salade Perso \uD83E\uDD57',
+        k: macros.k, p: macros.p, g: macros.g, l: macros.l,
+        f: '\uD83E\uDD57',
+        lv: 1,
+        i: saladIngredients,
+        _scaledIngredients: allItems.slice(),
+        _scalingRatio: 1,
+        tags: ['salade', 'custom'],
+        st: ['Pr\u00e9parer tous les ingr\u00e9dients.', 'Assembler la salade dans un bol.', 'Assaisonner et servir.']
+      };
+      if (!S.weekPlan) S.weekPlan = [];
+      if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
+      S.weekPlan[S.selectedDay][slot] = saladRecipe;
+      S.saladBar.open = false;
+      window.render();
+    }
+  }, '\uD83D\uDCBE Ajouter au plan (' + (sb.mealTarget === 'lunch' ? 'D\u00e9jeuner' : 'D\u00eener') + ')');
+  actWrap.appendChild(btnAdd);
+
+  actWrap.appendChild(h('button', {
+    style: 'width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:14px;font-weight:600;cursor:pointer',
+    onclick: function() {
+      sb.base = null; sb.proteins = []; sb.veggies = []; sb.fats = []; sb.sauce = null;
+      window.render();
+    }
+  }, '\uD83D\uDD04 R\u00e9initialiser'));
+
+  p.appendChild(actWrap);
+}
+
 // ─── SHOPPING LIST ───
 function renderShoppingList(p) {
   var s = window.S;
@@ -2270,6 +2644,7 @@ window.NUTRITION = {
     }
     var content = h('div', {'class': 'fade-in'});
     if (S.shopListOpen) { renderShoppingList(content); p.appendChild(content); return; }
+    if (S.saladBar && S.saladBar.open) { renderSaladBar(content); p.appendChild(content); return; }
     if (S.nStep === 0) renderSplash(content);
     else if (S.nStep === 1) renderStep1(content);
     else if (S.nStep === 2) renderStep2(content);

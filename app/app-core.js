@@ -597,6 +597,15 @@ window.S = {
   regime: 0, excluded: '', cuisines: [0],
   shopFreq: null, shopStores: [], shopBudget: null, shopPrefs: [],
   shopChecked: {},   // { 'nom_ingrédient': true|false } — état cases à cocher liste de courses
+  saladBar: {
+    open: false,
+    base: null,        // { name, qty, unit, k, p, g, l }
+    proteins: [],      // array of { name, qty, unit, k, p, g, l }
+    veggies: [],       // array of { name, qty, unit, k, p, g, l }
+    fats: [],          // array of { name, qty, unit, k, p, g, l }
+    sauce: null,       // { name, qty, unit, k, p, g, l }
+    mealTarget: 'lunch' // 'lunch' | 'dinner'
+  },
   weekPlan: null, selectedDay: 0, modalRecipe: null, showList: false, shopListOpen: false,
   // Food habits
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
