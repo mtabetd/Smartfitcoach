@@ -3678,13 +3678,14 @@ function exportSportPDF() {
     doc.setDrawColor(border[0], border[1], border[2]);
     doc.rect(M, y - 2, CW, 10, 'FD');
     doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(black[0], black[1], black[2]);
-    doc.text(day.name, M + 4, y + 4);
+    doc.text(day.name || 'Jour', M + 4, y + 4);
     doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text(day.focus || '', M + 4 + 20, y + 4);
     y += 14;
 
     // Exercises
-    day.exercises.forEach(function(ex) {
+    var dayExercises = Array.isArray(day.exercises) ? day.exercises : [];
+    dayExercises.forEach(function(ex) {
       if (y > 272) { doc.addPage(); y = 20; }
       doc.setFont('times', 'normal'); doc.setFontSize(11); doc.setTextColor(black[0], black[1], black[2]);
       var lines = doc.splitTextToSize(ex.n || '', CW - 30);
