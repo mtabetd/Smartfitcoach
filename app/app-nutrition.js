@@ -1906,15 +1906,23 @@ function renderModal(app) {
   if (S.modalRecipe) {
     var r = S.modalRecipe;
     var hdr = h('div', {'class': 'modal-header'});
-    hdr.appendChild(h('div', {'class': 'modal-title'}, r.f + ' ' + r.n));
+    // Bug 2: r.f or r.n may be undefined on legacy recipes
+    var recipeEmoji = r.f || r.emoji || '';
+    var recipeName = r.n || r.name || 'Recette';
+    hdr.appendChild(h('div', {'class': 'modal-title'}, recipeEmoji + (recipeEmoji ? ' ' : '') + recipeName));
     hdr.appendChild(h('button', {'class': 'modal-close', onclick: function() { S.modalRecipe = null; window.render(); }}, '\u2715'));
     sheet.appendChild(hdr);
     var body = h('div', {'class': 'modal-body'});
     var pills = h('div', {'class': 'macro-pills'});
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, String(r.k)), h('div', {'class': 'mp-label'}, 'Calories')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, r.p + 'g'), h('div', {'class': 'mp-label'}, 'Prot\u00e9ines')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, r.g + 'g'), h('div', {'class': 'mp-label'}, 'Glucides')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, r.l + 'g'), h('div', {'class': 'mp-label'}, 'Lipides')]));
+    // Bug 3: r.k/r.p/r.g/r.l may be undefined — fallback to baseNutrition or 0
+    var kcal = r.k || (r.baseNutrition && r.baseNutrition.calories) || 0;
+    var prot = r.p || (r.baseNutrition && r.baseNutrition.proteinGrams) || 0;
+    var carbs = r.g || (r.baseNutrition && r.baseNutrition.carbsGrams) || 0;
+    var fats  = r.l || (r.baseNutrition && r.baseNutrition.fatGrams) || 0;
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, String(kcal)), h('div', {'class': 'mp-label'}, 'Calories')]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, prot + 'g'), h('div', {'class': 'mp-label'}, 'Prot\u00e9ines')]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, carbs + 'g'), h('div', {'class': 'mp-label'}, 'Glucides')]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, fats + 'g'), h('div', {'class': 'mp-label'}, 'Lipides')]));
     body.appendChild(pills);
     body.appendChild(h('div', {'class': 'section-label'}, 'Ingr\u00e9dients'));
     var ingredList = h('ul', {'class': 'ingredient-list'});
@@ -1924,21 +1932,40 @@ function renderModal(app) {
         ingredList.appendChild(h('li', {}, qtyStr));
       });
     } else if (r.i) {
-      r.i.split(',').forEach(function(ing) { ingredList.appendChild(h('li', {}, ing.trim())); });
+      // Bug 4: filter empty tokens from split
+      r.i.split(',').forEach(function(ing) { if (ing.trim()) ingredList.appendChild(h('li', {}, ing.trim())); });
+    } else if (r.ingredients && Array.isArray(r.ingredients)) {
+      r.ingredients.forEach(function(ing) {
+        var line = (ing.qty || '') + (ing.unit && ing.unit !== 'pce' ? ing.unit + ' ' : ' ') + (ing.name || '');
+        ingredList.appendChild(h('li', {}, line.trim()));
+      });
+    } else {
+      ingredList.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, 'Ingr\u00e9dients non disponibles.'));
     }
     body.appendChild(ingredList);
     body.appendChild(h('div', {'class': 'section-label'}, 'Pr\u00e9paration'));
     var sl = h('ol', {'class': 'step-list'});
-    r.st.forEach(function(s) { sl.appendChild(h('li', {}, s)); });
+    // Bug 1: r.st may be undefined on legacy recipes — also try r.steps
+    var steps = Array.isArray(r.st) ? r.st : (r.steps && Array.isArray(r.steps) ? r.steps : []);
+    if (steps.length === 0) {
+      sl.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, 'Voir la recette compl\u00e8te dans le livre de recettes.'));
+    } else {
+      steps.forEach(function(s) { sl.appendChild(h('li', {}, s || '')); });
+    }
     body.appendChild(sl);
-    var chk = r.p * 4 + r.g * 4 + r.l * 9;
-    body.appendChild(h('div', {'class': 'macro-check'}, 'V\u00e9rification : P\u00d74 + G\u00d74 + L\u00d79 = ' + chk + ' kcal (affich\u00e9 : ' + r.k + ' kcal)'));
+    // Bug 3: use local vars instead of r.p/r.g/r.l/r.k to avoid NaN
+    var chk = prot * 4 + carbs * 4 + fats * 9;
+    body.appendChild(h('div', {'class': 'macro-check'}, 'V\u00e9rification : P\u00d74 + G\u00d74 + L\u00d79 = ' + chk + ' kcal (affich\u00e9 : ' + kcal + ' kcal)'));
     var expBtn = h('button', {'class': 'btn-primary', style: 'margin-top:12px;font-size:9px', onclick: function(e) { e.stopPropagation(); window.exportRecipePDF(r); }}, '\u21e9 Exporter cette recette en PDF');
     body.appendChild(expBtn);
     sheet.appendChild(body);
   }
   ov.appendChild(sheet);
   root.appendChild(ov);
+  // Bug 6: reset scroll to top on each modal open
+  requestAnimationFrame(function() {
+    if (sheet) sheet.scrollTop = 0;
+  });
 }
 
 // ─── PDF EXPORT ───
