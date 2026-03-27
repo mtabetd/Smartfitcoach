@@ -344,6 +344,446 @@
       pricePerG: r(35 / 400),
       source: 'marjane',
       updatedAt: '2026-03'
+    },
+
+    // ── Protéines supplémentaires ──────────────────────────────────────────────
+    'Crevettes décortiquées': {
+      name: 'Crevettes décortiquées',
+      pricePerG: r(100 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Bœuf (tranche fine)': {
+      name: 'Bœuf (tranche fine)',
+      pricePerG: r(130 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Saumon fumé': {
+      name: 'Saumon fumé',
+      pricePerG: r(250 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Thon frais (pavé)': {
+      name: 'Thon frais (pavé)',
+      pricePerG: r(180 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Produits laitiers supplémentaires ──────────────────────────────────────
+    'Yaourt grec 0%': {
+      name: 'Yaourt grec 0%',
+      pricePerG: r(38 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Fromage râpé': {
+      name: 'Fromage râpé',
+      pricePerG: r(120 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Parmesan râpé': {
+      name: 'Parmesan râpé',
+      pricePerG: r(220 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Lait écrémé': {
+      name: 'Lait écrémé',
+      pricePerMl: r(7 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Beurre': {
+      name: 'Beurre',
+      pricePerG: r(90 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Crème légère 5%': {
+      name: 'Crème légère 5%',
+      pricePerMl: r(25 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Féculents supplémentaires ──────────────────────────────────────────────
+    'Quinoa': {
+      name: 'Quinoa',
+      pricePerG: r(65 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Flocons d\'avoine': {
+      name: 'Flocons d\'avoine',
+      pricePerG: r(22 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Riz japonais': {
+      name: 'Riz japonais',
+      pricePerG: r(32 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Riz à sushi': {
+      name: 'Riz à sushi',
+      pricePerG: r(32 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Riz cuit (de la veille)': {
+      name: 'Riz cuit (de la veille)',
+      pricePerG: r(8 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Nouilles de riz': {
+      name: 'Nouilles de riz',
+      pricePerG: r(28 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Nouilles ramen': {
+      name: 'Nouilles ramen',
+      pricePerG: r(30 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Nouilles soba': {
+      name: 'Nouilles soba',
+      pricePerG: r(45 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Feuilles lasagnes': {
+      name: 'Feuilles lasagnes',
+      pricePerG: r(36 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Farine d\'avoine': {
+      name: 'Farine d\'avoine',
+      pricePerG: r(25 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pain complet (tranches)': {
+      name: 'Pain complet (tranches)',
+      pricePerPce: 3.5,
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Pain burger complet': {
+      name: 'Pain burger complet',
+      pricePerPce: 8.0,
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Pain pita': {
+      name: 'Pain pita',
+      pricePerPce: 4.0,
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Tortillas de blé': {
+      name: 'Tortillas de blé',
+      pricePerPce: 5.0,
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Patate douce': {
+      name: 'Patate douce',
+      pricePerG: r(7 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pommes de terre': {
+      name: 'Pommes de terre',
+      pricePerG: r(4 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Légumes supplémentaires ────────────────────────────────────────────────
+    'Brocoli': {
+      name: 'Brocoli',
+      pricePerG: r(10 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Poivron rouge': {
+      name: 'Poivron rouge',
+      pricePerG: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Poivrons (rouge et jaune)': {
+      name: 'Poivrons (rouge et jaune)',
+      pricePerG: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Champignons': {
+      name: 'Champignons',
+      pricePerG: r(25 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Champignons de Paris': {
+      name: 'Champignons de Paris',
+      pricePerG: r(25 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Maïs en boîte': {
+      name: 'Maïs en boîte',
+      pricePerG: r(12 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Haricots verts': {
+      name: 'Haricots verts',
+      pricePerG: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Haricots noirs': {
+      name: 'Haricots noirs',
+      pricePerG: r(18 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Haricots rouges': {
+      name: 'Haricots rouges',
+      pricePerG: r(16 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Haricots (boîte)': {
+      name: 'Haricots (boîte)',
+      pricePerG: r(12 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Céleri': {
+      name: 'Céleri',
+      pricePerG: r(6 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Aubergine': {
+      name: 'Aubergine',
+      pricePerG: r(5 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Fruits supplémentaires ─────────────────────────────────────────────────
+    'Banane': {
+      name: 'Banane',
+      pricePerG: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Mangue': {
+      name: 'Mangue',
+      pricePerG: r(15 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Fraises': {
+      name: 'Fraises',
+      pricePerG: r(20 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Myrtilles (surgelées)': {
+      name: 'Myrtilles (surgelées)',
+      pricePerG: r(45 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Ananas (boîte)': {
+      name: 'Ananas (boîte)',
+      pricePerG: r(14 / 560),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Condiments & Sauces supplémentaires ────────────────────────────────────
+    'Miel': {
+      name: 'Miel',
+      pricePerG: r(80 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Moutarde de Dijon': {
+      name: 'Moutarde de Dijon',
+      pricePerG: r(22 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Sauce pimentée': {
+      name: 'Sauce pimentée',
+      pricePerMl: r(18 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Vinaigre de riz': {
+      name: 'Vinaigre de riz',
+      pricePerMl: r(12 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Vinaigre balsamique': {
+      name: 'Vinaigre balsamique',
+      pricePerMl: r(25 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Sauce teriyaki': {
+      name: 'Sauce teriyaki',
+      pricePerMl: r(22 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Nuoc-mâm': {
+      name: 'Nuoc-mâm',
+      pricePerMl: r(15 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Pâte de curry rouge': {
+      name: 'Pâte de curry rouge',
+      pricePerG: r(30 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Bouillon de poulet': {
+      name: 'Bouillon de poulet',
+      pricePerMl: r(0.002),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Bouillon de légumes': {
+      name: 'Bouillon de légumes',
+      pricePerMl: r(0.002),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Bouillon de bœuf': {
+      name: 'Bouillon de bœuf',
+      pricePerMl: r(0.002),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+
+    // ── Graines & Noix supplémentaires ─────────────────────────────────────────
+    'Noix de cajou': {
+      name: 'Noix de cajou',
+      pricePerG: r(160 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Graines de chia': {
+      name: 'Graines de chia',
+      pricePerG: r(60 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Graines de lin': {
+      name: 'Graines de lin',
+      pricePerG: r(30 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Beurre de cacahuète': {
+      name: 'Beurre de cacahuète',
+      pricePerG: r(45 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Noix (cerneaux)': {
+      name: 'Noix (cerneaux)',
+      pricePerG: r(120 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Tofu & Protéines végétales ─────────────────────────────────────────────
+    'Tofu ferme': {
+      name: 'Tofu ferme',
+      pricePerG: r(35 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Épices & Herbes supplémentaires ────────────────────────────────────────
+    'Curry en poudre': {
+      name: 'Curry en poudre',
+      pricePerG: r(25 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Piment de Cayenne': {
+      name: 'Piment de Cayenne',
+      pricePerG: r(20 / 50),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Origan séché': {
+      name: 'Origan séché',
+      pricePerG: r(15 / 20),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Basilic frais': {
+      name: 'Basilic frais',
+      pricePerG: r(20 / 30),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pesto vert': {
+      name: 'Pesto vert',
+      pricePerG: r(55 / 190),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Divers supplémentaires ──────────────────────────────────────────────────
+    'Huile de sésame': {
+      name: 'Huile de sésame',
+      pricePerMl: r(45 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Lait de coco': {
+      name: 'Lait de coco',
+      pricePerMl: r(12 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Crème de coco': {
+      name: 'Crème de coco',
+      pricePerMl: r(16 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Cacao non sucré': {
+      name: 'Cacao non sucré',
+      pricePerG: r(40 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Protéines de lactosérum (whey)': {
+      name: 'Protéines de lactosérum (whey)',
+      pricePerG: r(350 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
     }
   };
 

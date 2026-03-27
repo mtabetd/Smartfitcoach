@@ -18,7 +18,7 @@
   // ─── BASE DE DONNÉES R201-R210 ─────────────────────────────────────────────
   // Structure par recette :
   //   id, name, category ('maroc-moderne'|'world-food'), tags[], servings,
-  //   prepTime (min), cookTime (min), difficulty (1-3), videoUrl,
+  //   prepTime (min), cookTime (min), difficulty (1-3),
   //   baseNutrition { calories, proteinGrams, carbsGrams, fatGrams },  ← recette ENTIÈRE
   //   ingredients [{ name, qty, unit ('g'|'ml'|'pce'), note? }],
   //   steps[]
@@ -38,7 +38,6 @@
       category: 'maroc-moderne',
       tags: ['high-protein', 'gluten-free', 'meal-prep', 'balanced'],
       servings: 2, prepTime: 15, cookTime: 35, difficulty: 1,
-      videoUrl: 'https://www.youtube.com/results?search_query=tajine+poulet+chermoula+marocain+facile',
       // 96×4 + 46×4 + 28×9 = 384+184+252 = 820 ✓
       baseNutrition: { calories: 820, proteinGrams: 96, carbsGrams: 46, fatGrams: 28 },
       ingredients: [
@@ -71,7 +70,6 @@
       category: 'maroc-moderne',
       tags: ['high-protein', 'festive', 'balanced'],
       servings: 3, prepTime: 25, cookTime: 30, difficulty: 3,
-      videoUrl: 'https://www.youtube.com/results?search_query=pastilla+dinde+legere+recette+marocaine',
       // 95×4 + 80×4 + 48×9 = 380+320+432 = 1132 ✓
       baseNutrition: { calories: 1132, proteinGrams: 95, carbsGrams: 80, fatGrams: 48 },
       ingredients: [
@@ -103,7 +101,6 @@
       category: 'maroc-moderne',
       tags: ['high-protein', 'no-cook', 'lunch', 'meal-prep', 'budget'],
       servings: 2, prepTime: 10, cookTime: 0, difficulty: 1,
-      videoUrl: 'https://www.youtube.com/results?search_query=salade+marocaine+thon+pois+chiches+proteine+healthy',
       // 68×4 + 42×4 + 35×9 = 272+168+315 = 755 ✓
       baseNutrition: { calories: 755, proteinGrams: 68, carbsGrams: 42, fatGrams: 35 },
       ingredients: [
@@ -133,12 +130,12 @@
       category: 'maroc-moderne',
       tags: ['high-protein', 'low-carb', 'family', 'meal-prep', 'gluten-free'],
       servings: 2, prepTime: 15, cookTime: 20, difficulty: 1,
-      videoUrl: 'https://www.youtube.com/results?search_query=kefta+dinde+four+healthy+marocaine',
-      // 88×4 + 10×4 + 14×9 = 352+40+126 = 518 ✓
-      baseNutrition: { calories: 518, proteinGrams: 88, carbsGrams: 10, fatGrams: 14 },
+      // 88×4 + 10×4 + 22×9 = 352+40+198 = 590 ✓
+      baseNutrition: { calories: 590, proteinGrams: 88, carbsGrams: 10, fatGrams: 22 },
       ingredients: [
         { name: 'Hachis de dinde',    qty: 500, unit: 'g' },
         { name: 'Œuf',                qty: 1,   unit: 'pce' },
+        { name: 'Huile d\'olive',     qty: 10,  unit: 'ml' },
         { name: 'Oignon',             qty: 120, unit: 'g' },
         { name: 'Ail',                qty: 10,  unit: 'g', note: '3 gousses' },
         { name: 'Persil frais',       qty: 25,  unit: 'g' },
@@ -163,7 +160,6 @@
       category: 'maroc-moderne',
       tags: ['high-protein', 'high-carb', 'soup', 'budget', 'meal-prep'],
       servings: 3, prepTime: 15, cookTime: 45, difficulty: 2,
-      videoUrl: 'https://www.youtube.com/results?search_query=harira+marocaine+recette+facile+rapide',
       // 68×4 + 95×4 + 28×9 = 272+380+252 = 904 ✓
       baseNutrition: { calories: 904, proteinGrams: 68, carbsGrams: 95, fatGrams: 28 },
       ingredients: [
@@ -199,7 +195,6 @@
       category: 'maroc-moderne',
       tags: ['high-protein', 'gluten-free', 'family', 'festive', 'low-carb'],
       servings: 2, prepTime: 10, cookTime: 45, difficulty: 1,
-      videoUrl: 'https://www.youtube.com/results?search_query=poulet+mechoui+four+recette+marocaine+epices',
       // 77×4 + 7×4 + 35×9 = 308+28+315 = 651 ✓
       baseNutrition: { calories: 651, proteinGrams: 77, carbsGrams: 7, fatGrams: 35 },
       ingredients: [
@@ -233,7 +228,6 @@
       category: 'world-food',
       tags: ['high-protein', 'healthy-fats', 'omega3', 'instagrammable', 'no-cook'],
       servings: 2, prepTime: 20, cookTime: 15, difficulty: 1,
-      videoUrl: 'https://www.youtube.com/results?search_query=poke+bowl+saumon+avocat+recette+maison',
       // 60×4 + 89×4 + 57×9 = 240+356+513 = 1109 ✓
       baseNutrition: { calories: 1109, proteinGrams: 60, carbsGrams: 89, fatGrams: 57 },
       ingredients: [
@@ -264,7 +258,6 @@
       category: 'world-food',
       tags: ['vegetarian', 'high-protein', 'quick', 'breakfast', 'mediterranean'],
       servings: 2, prepTime: 10, cookTime: 20, difficulty: 1,
-      videoUrl: 'https://www.youtube.com/results?search_query=shakshuka+epinards+feta+recette+facile',
       // 48×4 + 38×4 + 45×9 = 192+152+405 = 749 ✓
       baseNutrition: { calories: 749, proteinGrams: 48, carbsGrams: 38, fatGrams: 45 },
       ingredients: [
@@ -296,7 +289,6 @@
       category: 'world-food',
       tags: ['high-protein', 'high-carb', 'quick', 'budget', 'meal-prep', 'one-pot'],
       servings: 2, prepTime: 5, cookTime: 20, difficulty: 1,
-      videoUrl: 'https://www.youtube.com/results?search_query=one+pot+pasta+thon+facile+rapide',
       // 84×4 + 170×4 + 19×9 = 336+680+171 = 1187 ✓
       baseNutrition: { calories: 1187, proteinGrams: 84, carbsGrams: 170, fatGrams: 19 },
       ingredients: [
@@ -327,7 +319,6 @@
       category: 'world-food',
       tags: ['vegan', 'plant-protein', 'high-fiber', 'meal-prep', 'instagrammable'],
       servings: 2, prepTime: 15, cookTime: 25, difficulty: 1,
-      videoUrl: 'https://www.youtube.com/results?search_query=buddha+bowl+pois+chiches+rotis+tahini+vegan',
       // 45×4 + 186×4 + 67×9 = 180+744+603 = 1527 ✓
       baseNutrition: { calories: 1527, proteinGrams: 45, carbsGrams: 186, fatGrams: 67 },
       ingredients: [
@@ -352,7 +343,7 @@
         'Assembler : riz → légumes côte à côte → pois chiches → avocat tranché.',
         'Napper de sauce tahini. Garnir de persil.'
       ]
-    }
+    },
 
     {
       id: 'R211',
@@ -2855,7 +2846,6 @@
       prepTime:     recipe.prepTime,
       cookTime:     recipe.cookTime,
       difficulty:   recipe.difficulty,
-      videoUrl:     recipe.videoUrl,
       steps:        recipe.steps,
       scalingRatio: Math.round(scalingRatio * 100) / 100,
       ingredients:  adaptedIngredients,
