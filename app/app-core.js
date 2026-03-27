@@ -2279,6 +2279,60 @@ function generateCardioPrescription(userAge, userWeight, sportGoals, sportLevel,
 }
 window.generateCardioPrescription = generateCardioPrescription;
 
+// ─── BRIDGE NUTRITION MASTER ─────────────────────────────────────────────────
+// Connecte window.S → NutritionMaster.compute() → window.S._nm (cache)
+// Les fonctions calcBMR/calcTDEE/calcTarget/calcMacros restent inchangées
+// et continuent à gérer les ajustements médicaux.
+// window.S._nm est la source de vérité pour RecipeEngine et app-sport.
+
+function buildNMInputs(trainingDay) {
+  var s = window.S;
+  var genderMap = { homme: 'male', femme: 'female' };
+  return {
+    gender:        genderMap[s.sex] || 'male',
+    age:           s.age   || 25,
+    weightKg:      s.weight || 75,
+    heightCm:      s.height || 175,
+    activityLevel: s.activity !== null && ACTIVITIES[s.activity]
+                   ? Math.min(ACTIVITIES[s.activity].factor, 2.5)
+                   : 1.2,
+    goal:          s.goal !== null && GOALS[s.goal] ? GOALS[s.goal].key : 'maintain',
+    isElite:       s.activity !== null && s.activity >= 4,
+    trainingDay:   trainingDay === true
+  };
+}
+
+function computeNutritionState(trainingDay) {
+  if (!window.NutritionMaster) return null;
+  if (window.S.goal === null || window.S.sex === null) return null;
+  var inputs = buildNMInputs(trainingDay);
+  var result = window.NutritionMaster.compute(inputs);
+  if (result.errors && result.errors.length > 0) return null;
+
+  // Applique les sur-couches médicales de app-core (calcTarget / calcMacros)
+  // pour que les valeurs médicalement ajustées soient reflétées dans _nm
+  var adjustedCalories = calcTarget();
+  var adjustedMacros   = calcMacros();
+  if (adjustedCalories && adjustedCalories > 0) {
+    result.caloriesTarget = adjustedCalories;
+  }
+  if (adjustedMacros) {
+    result.proteinGrams = adjustedMacros.p;
+    result.carbsGrams   = adjustedMacros.g;
+    result.fatGrams     = adjustedMacros.l;
+    result.caloriesCheck = Math.round(
+      adjustedMacros.p * 4 + adjustedMacros.g * 4 + adjustedMacros.l * 9
+    );
+  }
+
+  window.S._nm = result;
+  return result;
+}
+
+window.computeNutritionState = computeNutritionState;
+window.buildNMInputs = buildNMInputs;
+// ─────────────────────────────────────────────────────────────────────────────
+
 // ─── SECURITY: Freeze all constants ───
 if (Object.freeze) {
   [ACTIVITIES,TRAINS,SLEEPS,GOALS,RATIOS,COOK_LEVELS,ALLERGIES,INTOLERANCES,REGIMES,CUISINES,MEDICAL,ALCOHOL_DB,ALCOHOL_FREQS,FOOD_HABITS_MEALS,EATING_LOCATIONS,BODY_ZONES,SPORT_GOALS,SPORT_LEVELS,PADEL_LEVELS,PADEL_GOALS,PADEL_SKILLS,GOLF_LEVELS,GOLF_GOALS,GOLF_SKILLS].forEach(function(obj){ try{Object.freeze(obj);}catch(e){} });

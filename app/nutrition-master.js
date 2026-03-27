@@ -6,10 +6,10 @@
 
   // ─── CONSTANTES ───────────────────────────────────────────────────────────────
   var GOAL_ADJUSTMENTS = {
-    cut:          -0.10,
-    maintenance:   0.00,
-    lean_bulk:    +0.08,
-    mass_gain:    +0.15
+    bulk:        +0.15,
+    maintain:    +0.00,
+    cut:         -0.15,
+    shred:       -0.25
   };
 
   var PROT_DEFAULT_MALE   = 2.2;  // g/kg (ISSN 2017)
@@ -26,7 +26,7 @@
   var KCAL_PER_FAT        = 9;    // kcal/g lipides
 
   var VALID_GENDERS = { male: true, female: true };
-  var VALID_GOALS   = { cut: true, maintenance: true, lean_bulk: true, mass_gain: true };
+  var VALID_GOALS   = { bulk: true, maintain: true, cut: true, shred: true };
 
   // ─── FONCTIONS PURES ──────────────────────────────────────────────────────────
 
