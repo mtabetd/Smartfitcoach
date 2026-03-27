@@ -83,7 +83,8 @@ styleEl.textContent = [
   '.dash-btn-danger:hover { background:#c0392b; color:#fff; }',
 
   /* Responsive */
-  '@media(max-width:480px){ .dash-card-grid,.dash-card-grid-3{grid-template-columns:1fr;} .dash-greeting{font-size:24px;} }'
+  '@media(max-width:480px){ .dash-card-grid,.dash-card-grid-3{grid-template-columns:1fr;} .dash-greeting{font-size:24px;} }',
+  '@media(min-width:481px) and (max-width:640px){ .dash-card-grid-3{grid-template-columns:1fr 1fr;} }'
 ].join('\n');
 document.head.appendChild(styleEl);
 

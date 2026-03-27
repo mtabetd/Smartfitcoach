@@ -3455,7 +3455,7 @@ function renderTriathlonConfig(p) {
   p.appendChild(h('div', {style: 'width:100%;height:1px;background:var(--border);margin-bottom:16px'}));
   p.appendChild(h('div', {'class': 'section-label'}, 'Allures actuelles (optionnel)'));
 
-  var paceGrid = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:8px'});
+  var paceGrid = h('div', {style: 'display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin-bottom:8px'});
 
   var swimWrap = h('div', {style: 'display:flex;flex-direction:column;gap:4px'});
   swimWrap.appendChild(h('div', {style: 'font-size:11px;color:var(--grey)'}, '🏊 Nage /100m'));
