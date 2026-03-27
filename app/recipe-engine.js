@@ -3138,7 +3138,22 @@
           _id:        recipe._id || null
         };
 
-        if (recipe._id) {
+        if (recipe._id && recipe._id.indexOf('SALAD_') === 0 && recipe._scaledIngredients) {
+          // Salade custom — ingrédients déjà dans recipe._scaledIngredients
+          var saladCost = 0;
+          recipe._scaledIngredients.forEach(function(ing) {
+            var price = window.getPricePer ? window.getPricePer(ing.name, ing.unit) : null;
+            if (price !== null && price > 0) {
+              saladCost += price * (ing.scaledQty || ing.qty || 0);
+            }
+          });
+          if (saladCost > 0) {
+            mealEntry.costMAD = Math.round(saladCost * 100) / 100;
+            mealEntry.scaled  = true;
+            dayMAD += mealEntry.costMAD;
+            pricedMeals++;
+          }
+        } else if (recipe._id) {
           // Recette R201+ : utilise le _scalingRatio stocké par enrichWithScaling
           var ratio = recipe._scalingRatio || 1;
           var cost = calcRecipeCost(recipe._id, ratio);

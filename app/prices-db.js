@@ -1516,6 +1516,161 @@
       pricePerG: r(30 / 200),
       source: 'marjane',
       updatedAt: '2026-03'
+    },
+
+    // ── Alias & ingrédients SALAD_DB ──────────────────────────────────────────
+    // Bases
+    'Riz brun': {
+      name: 'Riz brun',
+      pricePerG: r(20 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pâtes complètes': {
+      name: 'Pâtes complètes',
+      pricePerG: r(36 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Couscous': {
+      name: 'Couscous',
+      pricePerG: r(18 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Lentilles': {
+      name: 'Lentilles',
+      pricePerG: r(22 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pois chiches': {
+      name: 'Pois chiches',
+      pricePerG: r(12 / 400),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Boulgour': {
+      name: 'Boulgour',
+      pricePerG: 0.022,
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Protéines — alias
+    'Poulet grillé': {
+      name: 'Poulet grillé',
+      pricePerG: r(70 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Thon en boîte': {
+      name: 'Thon en boîte',
+      pricePerG: r(9.5 / 120),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Saumon': {
+      name: 'Saumon',
+      pricePerG: r(160 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Crevettes': {
+      name: 'Crevettes',
+      pricePerG: r(100 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Oeuf dur': {
+      name: 'Oeuf dur',
+      pricePerPce: r(1.2),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Bœuf haché 5%': {
+      name: 'Bœuf haché 5%',
+      pricePerG: 0.095,
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Mozzarella': {
+      name: 'Mozzarella',
+      pricePerG: 0.15,
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    // Légumes — alias
+    'Épinards': {
+      name: 'Épinards',
+      pricePerG: r(10 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Roquette': {
+      name: 'Roquette',
+      pricePerG: 0.018,
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Maïs': {
+      name: 'Maïs',
+      pricePerG: r(12 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Oignons rouges': {
+      name: 'Oignons rouges',
+      pricePerG: r(6 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Lipides — alias
+    'Huile d\'olive': {
+      name: 'Huile d\'olive',
+      pricePerG: r(70 / 750),
+      pricePerMl: r(70 / 750),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Olives': {
+      name: 'Olives',
+      pricePerG: r(18 / 200),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Sauces
+    'Vinaigrette légère': {
+      name: 'Vinaigrette légère',
+      pricePerG: 0.012,
+      pricePerMl: 0.012,
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Jus de citron': {
+      name: 'Jus de citron',
+      pricePerG: 0.005,
+      pricePerMl: 0.005,
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Sauce yaourt': {
+      name: 'Sauce yaourt',
+      pricePerG: 0.008,
+      pricePerMl: 0.008,
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Sauce tahini citronnée': {
+      name: 'Sauce tahini citronnée',
+      pricePerG: 0.025,
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Pesto': {
+      name: 'Pesto',
+      pricePerG: r(55 / 190),
+      source: 'carrefour',
+      updatedAt: '2026-03'
     }
   };
 
