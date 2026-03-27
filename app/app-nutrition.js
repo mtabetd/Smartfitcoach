@@ -1195,6 +1195,8 @@ function renderStep8(p) {
   // CRITIQUE-3: garde S.goal null — ne peut pas calculer les macros sans objectif
   if (S.goal === null) { goStep(6); return; }
   var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI();
+    // Synchronise NutritionMaster (source de vérité pour RecipeEngine + Sport)
+    if (window.computeNutritionState) { window.computeNutritionState(false); }
   var _hydInfo = window.calcHydration ? window.calcHydration() : null; // ÉLEVÉ-3: hydration fine
   var water = _hydInfo ? _hydInfo.liters.toFixed(1) : (S.weight * 0.033).toFixed(1);
   var ppk = (m.p / S.weight).toFixed(1);
@@ -1245,6 +1247,15 @@ function renderStep8(p) {
   c2.appendChild(h('div', {'class': 'bn-label'}, GOALS[S.goal].name));
   sr.appendChild(c2);
   p.appendChild(sr);
+
+    // Bandeau validation NutritionMaster
+    var nmBanner = '';
+    if (window.S._nm && window.S._nm.errors && window.S._nm.errors.length === 0) {
+      nmBanner = '<div style="margin:8px 0;padding:8px 12px;background:rgba(76,175,80,0.12);border-left:3px solid #4CAF50;border-radius:6px;font-size:12px;color:var(--text-secondary)">' +
+        '✓ Calculs validés par NutritionMaster — P×4 + G×4 + L×9 = ' + window.S._nm.caloriesCheck + ' kcal' +
+        '</div>';
+    }
+    if (nmBanner) { p.appendChild(h('div', {html: nmBanner})); }
 
   // ─── COHÉRENCE SPORT × NUTRITION — séances réalisées 7 derniers jours ───
   // Permet de vérifier que le facteur d'activité sélectionné est cohérent avec la réalité
