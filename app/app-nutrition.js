@@ -1870,7 +1870,14 @@ function renderModal(app) {
     body.appendChild(pills);
     body.appendChild(h('div', {'class': 'section-label'}, 'Ingr\u00e9dients'));
     var ingredList = h('ul', {'class': 'ingredient-list'});
-    r.i.split(',').forEach(function(ing) { ingredList.appendChild(h('li', {}, ing.trim())); });
+    if (r._scaledIngredients && r._scaledIngredients.length > 0) {
+      r._scaledIngredients.forEach(function(ing) {
+        var qtyStr = ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name;
+        ingredList.appendChild(h('li', {}, qtyStr));
+      });
+    } else {
+      r.i.split(',').forEach(function(ing) { ingredList.appendChild(h('li', {}, ing.trim())); });
+    }
     body.appendChild(ingredList);
     body.appendChild(h('div', {'class': 'section-label'}, 'Pr\u00e9paration'));
     var sl = h('ol', {'class': 'step-list'});
