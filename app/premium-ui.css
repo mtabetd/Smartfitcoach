@@ -928,6 +928,7 @@ body, p, .subtitle {
 .tags,
 .chip-wrap,
 .muscle-tags {
+  display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
@@ -962,10 +963,9 @@ body, p, .subtitle {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Button minimum padding */
+/* Button minimum touch target */
 .btn-primary,
 .btn-secondary {
-  padding: 12px 24px;
   min-height: 44px;
 }
 

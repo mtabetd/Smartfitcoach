@@ -40,7 +40,7 @@ style.textContent = `
   .score-average { border-color:var(--orange,#6A4A1A); color:var(--orange,#6A4A1A); background:var(--orangebg,rgba(106,74,26,.06)); }
   .score-poor { border-color:var(--red,#5A1010); color:var(--red,#5A1010); background:var(--redbg,rgba(90,16,16,.06)); }
 
-  .nutri-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin:12px 0; }
+  .nutri-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(60px,1fr)); gap:6px; margin:12px 0; }
   .nutri-cell { text-align:center; padding:10px 6px; border:1px solid var(--border,#D8D8D0); background:var(--ivory,#FAFAF7); }
   .nutri-cell .nv { font-family:Georgia,serif; font-size:16px; }
   .nutri-cell .nl { font-family:'Helvetica Neue',sans-serif; font-size:8px; letter-spacing:2px; text-transform:uppercase; color:var(--grey,#6B6B65); margin-top:2px; }
