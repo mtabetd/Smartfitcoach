@@ -2922,11 +2922,15 @@
     scalingRatio = scalingRatio || 1;
 
     var breakdown = [];
-    var totalMAD = 0;
+    var missing   = [];
+    var totalMAD  = 0;
 
     recipe.ingredients.forEach(function (ing) {
       var unitPrice = window.getPricePer(ing.name, ing.unit);
-      if (unitPrice === null || unitPrice === undefined) return;
+      if (unitPrice === null || unitPrice === undefined) {
+        missing.push(ing.name);
+        return;
+      }
       var scaledQty = (ing.qty / recipe.servings) * scalingRatio;
       var cost = Math.round(scaledQty * unitPrice * 100) / 100;
       totalMAD += cost;
@@ -2935,11 +2939,15 @@
 
     totalMAD = Math.round(totalMAD * 100) / 100;
     return {
-      recipeId: recipeId,
-      recipeName: recipe.name,
-      totalMAD: totalMAD,
+      recipeId:       recipeId,
+      recipeName:     recipe.name,
+      totalMAD:       totalMAD,
       pricePerServing: Math.round((totalMAD / recipe.servings) * 100) / 100,
-      breakdown: breakdown
+      breakdown:      breakdown,
+      missing:        missing,           // ingrédients sans prix dans prices-db
+      coveragePct:    recipe.ingredients.length > 0
+                        ? Math.round(((recipe.ingredients.length - missing.length) / recipe.ingredients.length) * 100)
+                        : 100
     };
   }
 
