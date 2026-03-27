@@ -1716,10 +1716,10 @@ function renderStep9(p) {
   slots.forEach(function(sl) {
     var r = day[sl.key];
     if (!r) return;
-    dayTotal += r.k;
-    dayTotalP += r.p;
-    dayTotalG += r.g;
-    dayTotalL += r.l;
+    dayTotal += r.k || 0;
+    dayTotalP += r.p || 0;
+    dayTotalG += r.g || 0;
+    dayTotalL += r.l || 0;
     var card = h('div', {'class': 'meal-card', onclick: function(e) {
       if (e.target.closest && e.target.closest('.swap-btn')) return;
       S.modalRecipe = r;
@@ -1962,7 +1962,7 @@ function exportDayPDF(dayIdx) {
   var slots = [{key: 'breakfast', label: 'PETIT-D\u00c9JEUNER'}, {key: 'lunch', label: 'D\u00c9JEUNER'}, {key: 'snack', label: 'COLLATION'}, {key: 'dinner', label: 'D\u00ceNER'}];
   var dayTotal = 0;
   slots.forEach(function(sl) {
-    var r = dayPlan[sl.key]; if (!r) return; dayTotal += r.k;
+    var r = dayPlan[sl.key]; if (!r) return; dayTotal += r.k || 0;
     if (y > 250) { doc.addPage(); y = 20; }
     doc.setFillColor(ivory[0], ivory[1], ivory[2]);
     doc.setDrawColor(border[0], border[1], border[2]);
@@ -2064,9 +2064,12 @@ function exportRecipePDF(r) {
   doc.text('INGR\u00c9DIENTS', M, y);
   doc.setDrawColor(border[0], border[1], border[2]); doc.line(M, y + 1.5, W - M, y + 1.5); y += 6;
   doc.setFontSize(9); doc.setTextColor(black[0], black[1], black[2]);
-  r.i.split(',').forEach(function(ing) {
+  var recipeIngPDF = r._scaledIngredients && r._scaledIngredients.length > 0
+    ? r._scaledIngredients.map(function(ing) { return ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
+    : (r.i ? r.i.split(',').map(function(s) { return s.trim(); }) : []);
+  recipeIngPDF.forEach(function(ing) {
     if (y > 275) { doc.addPage(); y = 20; }
-    doc.text('\u2022  ' + ing.trim(), M + 2, y); y += 5;
+    doc.text('\u2022  ' + ing, M + 2, y); y += 5;
   }); y += 4;
 
   // Steps
@@ -2074,7 +2077,7 @@ function exportRecipePDF(r) {
   doc.text('PR\u00c9PARATION', M, y);
   doc.setDrawColor(border[0], border[1], border[2]); doc.line(M, y + 1.5, W - M, y + 1.5); y += 6;
   doc.setFontSize(9); doc.setTextColor(black[0], black[1], black[2]);
-  r.st.forEach(function(step, si) {
+  (r.st || []).forEach(function(step, si) {
     if (y > 275) { doc.addPage(); y = 20; }
     var lines = doc.splitTextToSize((si + 1) + '. ' + step, CW - 8);
     lines.forEach(function(line) { doc.text(line, M + 2, y); y += 5; });
