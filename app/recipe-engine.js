@@ -354,6 +354,562 @@
       ]
     }
 
+    {
+      id: 'R211',
+      name: 'Curry de Pois Chiches aux Épinards',
+      category: 'world-food',
+      tags: ['vegan', 'high-carb', 'indian', 'budget', 'meal-prep'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 25,
+      difficulty: 1,
+      baseNutrition: { calories: 840, proteinGrams: 28, carbsGrams: 110, fatGrams: 32 },
+      // 28*4+110*4+32*9 = 112+440+288 = 840 ✓
+      ingredients: [
+        { name: 'Pois chiches (boîte, égouttés)', qty: 400, unit: 'g' },
+        { name: 'Épinards frais', qty: 150, unit: 'g' },
+        { name: 'Tomates concassées (boîte)', qty: 400, unit: 'g' },
+        { name: 'Lait de coco', qty: 200, unit: 'ml' },
+        { name: 'Oignon', qty: 100, unit: 'g' },
+        { name: 'Ail', qty: 15, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 15, unit: 'ml' },
+        { name: 'Riz basmati', qty: 100, unit: 'g' },
+        { name: 'Curry en poudre', qty: 8, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon et ail dans l\'huile 3 min. Ajouter curry, mélanger 1 min.',
+        'Incorporer tomates, pois chiches et lait de coco. Mijoter 12 min.',
+        'Ajouter épinards, cuire 3 min. Servir sur riz basmati.'
+      ]
+    },
+    {
+      id: 'R212',
+      name: 'Bibimbap Bœuf Coréen',
+      category: 'world-food',
+      tags: ['korean', 'balanced', 'meal-prep', 'high-protein'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 20,
+      difficulty: 2,
+      baseNutrition: { calories: 722, proteinGrams: 55, carbsGrams: 85, fatGrams: 18 },
+      // 55*4+85*4+18*9 = 220+340+162 = 722 ✓
+      ingredients: [
+        { name: 'Bœuf haché maigre (5%)', qty: 250, unit: 'g' },
+        { name: 'Riz basmati', qty: 150, unit: 'g' },
+        { name: 'Carottes', qty: 100, unit: 'g' },
+        { name: 'Courgette', qty: 100, unit: 'g' },
+        { name: 'Épinards frais', qty: 80, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Sauce soja', qty: 30, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Gochujang (pâte pimentée)', qty: 15, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le riz. Faire revenir bœuf avec sauce soja et un peu de gochujang.',
+        'Sauter séparément carottes râpées, courgette et épinards dans l\'huile de sésame.',
+        'Dresser riz dans bol, disposer légumes et bœuf. Poser œuf au plat. Mélanger avant de déguster.'
+      ]
+    },
+    {
+      id: 'R213',
+      name: 'Pad Thai aux Crevettes',
+      category: 'world-food',
+      tags: ['thai', 'high-carb', 'seafood', 'stir-fry'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 2,
+      baseNutrition: { calories: 726, proteinGrams: 42, carbsGrams: 90, fatGrams: 22 },
+      // 42*4+90*4+22*9 = 168+360+198 = 726 ✓
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 250, unit: 'g' },
+        { name: 'Nouilles de riz', qty: 150, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Pousses de soja', qty: 100, unit: 'g' },
+        { name: 'Oignon vert', qty: 50, unit: 'g' },
+        { name: 'Sauce tamari', qty: 30, unit: 'ml' },
+        { name: 'Jus de citron vert', qty: 30, unit: 'ml' },
+        { name: 'Huile d\'arachide', qty: 15, unit: 'ml' },
+        { name: 'Cacahuètes concassées', qty: 20, unit: 'g' }
+      ],
+      steps: [
+        'Tremper nouilles 8 min dans eau chaude, égoutter.',
+        'Chauffer wok, cuire crevettes 2 min, réserver. Brouiller œufs dans le wok.',
+        'Ajouter nouilles, sauce tamari, citron vert. Incorporer crevettes et pousses de soja. Garnir cacahuètes et oignon vert.'
+      ]
+    },
+    {
+      id: 'R214',
+      name: 'Dal de Lentilles au Lait de Coco',
+      category: 'world-food',
+      tags: ['indian', 'vegan', 'high-carb', 'budget', 'meal-prep'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 30,
+      difficulty: 1,
+      baseNutrition: { calories: 732, proteinGrams: 32, carbsGrams: 88, fatGrams: 28 },
+      // 32*4+88*4+28*9 = 128+352+252 = 732 ✓
+      ingredients: [
+        { name: 'Lentilles corail', qty: 200, unit: 'g' },
+        { name: 'Lait de coco', qty: 200, unit: 'ml' },
+        { name: 'Tomates concassées', qty: 200, unit: 'g' },
+        { name: 'Oignon', qty: 100, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 20, unit: 'ml' },
+        { name: 'Curry en poudre', qty: 8, unit: 'g' },
+        { name: 'Riz basmati', qty: 80, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon, ail, gingembre dans l\'huile 3 min. Ajouter curry.',
+        'Incorporer lentilles, tomates, lait de coco et 400 ml eau. Cuire 20 min.',
+        'Mixer partiellement pour épaissir. Servir sur riz basmati.'
+      ]
+    },
+    {
+      id: 'R215',
+      name: 'Ramen Poulet Maison',
+      category: 'world-food',
+      tags: ['japanese', 'high-protein', 'soup', 'comfort-food'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 2,
+      baseNutrition: { calories: 695, proteinGrams: 65, carbsGrams: 75, fatGrams: 15 },
+      // 65*4+75*4+15*9 = 260+300+135 = 695 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Nouilles ramen', qty: 150, unit: 'g' },
+        { name: 'Bouillon de poulet', qty: 800, unit: 'ml' },
+        { name: 'Sauce soja', qty: 30, unit: 'ml' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Oignon vert', qty: 50, unit: 'g' },
+        { name: 'Champignons shiitake', qty: 80, unit: 'g' },
+        { name: 'Maïs en boîte', qty: 60, unit: 'g' },
+        { name: 'Huile de sésame', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire poulet dans bouillon 15 min. Retirer, effilocher.',
+        'Cuire œufs durs 7 min, écaler et couper en deux. Cuire nouilles 3 min.',
+        'Assaisonner bouillon avec sauce soja et huile de sésame. Dresser nouilles, bouillon, poulet, œuf, champignons et maïs.'
+      ]
+    },
+    {
+      id: 'R216',
+      name: 'Burrito Bowl Mexicain',
+      category: 'world-food',
+      tags: ['mexican', 'high-protein', 'high-carb', 'meal-prep'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 20,
+      difficulty: 1,
+      baseNutrition: { calories: 828, proteinGrams: 52, carbsGrams: 92, fatGrams: 28 },
+      // 52*4+92*4+28*9 = 208+368+252 = 828 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 250, unit: 'g' },
+        { name: 'Riz basmati', qty: 150, unit: 'g' },
+        { name: 'Haricots noirs (boîte)', qty: 200, unit: 'g' },
+        { name: 'Maïs en boîte', qty: 100, unit: 'g' },
+        { name: 'Avocat', qty: 100, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 80, unit: 'g' },
+        { name: 'Cumin moulu', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire riz. Assaisonner poulet avec cumin, sel, poivre.',
+        'Griller poulet à la poêle 6 min/côté, trancher.',
+        'Assembler : riz, haricots, maïs, tomates cerises, poulet, avocat. Napper de yaourt grec.'
+      ]
+    },
+    {
+      id: 'R217',
+      name: 'Wok de Poulet aux Légumes',
+      category: 'world-food',
+      tags: ['chinese', 'high-protein', 'low-carb', 'quick', 'stir-fry'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 1,
+      baseNutrition: { calories: 582, proteinGrams: 78, carbsGrams: 18, fatGrams: 22 },
+      // 78*4+18*4+22*9 = 312+72+198 = 582 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 350, unit: 'g' },
+        { name: 'Brocoli', qty: 200, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Carottes', qty: 80, unit: 'g' },
+        { name: 'Sauce soja', qty: 30, unit: 'ml' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Huile de sésame', qty: 15, unit: 'ml' },
+        { name: 'Fécule de maïs', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Couper poulet en dés. Mélanger sauce soja et fécule.',
+        'Chauffer wok à feu vif. Cuire poulet 4 min, réserver.',
+        'Sauter ail, gingembre, puis légumes 4 min. Remettre poulet, ajouter sauce. Mélanger 1 min.'
+      ]
+    },
+    {
+      id: 'R218',
+      name: 'Salade César au Poulet',
+      category: 'world-food',
+      tags: ['american', 'high-protein', 'low-carb', 'salad'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 1,
+      baseNutrition: { calories: 611, proteinGrams: 62, carbsGrams: 12, fatGrams: 35 },
+      // 62*4+12*4+35*9 = 248+48+315 = 611 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 280, unit: 'g' },
+        { name: 'Laitue romaine', qty: 200, unit: 'g' },
+        { name: 'Parmesan râpé', qty: 40, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 100, unit: 'g' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Ail', qty: 5, unit: 'g' },
+        { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Croûtons pain complet', qty: 30, unit: 'g' }
+      ],
+      steps: [
+        'Griller poulet assaisonné à la poêle 6 min/côté. Trancher.',
+        'Sauce César : yaourt, citron, ail râpé, moutarde, huile. Fouetter.',
+        'Mélanger laitue, sauce, parmesan, croûtons. Disposer poulet par-dessus.'
+      ]
+    },
+    {
+      id: 'R219',
+      name: 'Gyros de Poulet Grec',
+      category: 'world-food',
+      tags: ['greek', 'high-protein', 'mediterranean', 'wrap'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 1,
+      baseNutrition: { calories: 664, proteinGrams: 68, carbsGrams: 35, fatGrams: 28 },
+      // 68*4+35*4+28*9 = 272+140+252 = 664 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Pain pita', qty: 2, unit: 'pce' },
+        { name: 'Yaourt grec 0%', qty: 150, unit: 'g' },
+        { name: 'Concombre', qty: 100, unit: 'g' },
+        { name: 'Tomates', qty: 100, unit: 'g' },
+        { name: 'Oignon rouge', qty: 50, unit: 'g' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Origan séché', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Mariner poulet avec huile, citron, origan, sel. Griller 6 min/côté, trancher.',
+        'Tzatziki : yaourt + concombre râpé + ail + sel.',
+        'Réchauffer pita. Garnir avec poulet, tzatziki, tomates et oignon rouge.'
+      ]
+    },
+    {
+      id: 'R220',
+      name: 'Tacos Poulet Avocat',
+      category: 'world-food',
+      tags: ['mexican', 'high-protein', 'balanced', 'quick'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 1,
+      baseNutrition: { calories: 676, proteinGrams: 55, carbsGrams: 42, fatGrams: 32 },
+      // 55*4+42*4+32*9 = 220+168+288 = 676 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 250, unit: 'g' },
+        { name: 'Tortillas de blé', qty: 4, unit: 'pce' },
+        { name: 'Avocat', qty: 100, unit: 'g' },
+        { name: 'Tomates', qty: 80, unit: 'g' },
+        { name: 'Oignon rouge', qty: 50, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 60, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Cumin moulu', qty: 4, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Assaisonner poulet avec cumin, sel. Cuire à la poêle 6 min/côté, émincer.',
+        'Écraser avocat avec jus de citron vert, sel.',
+        'Garnir tortillas : guacamole, poulet, tomates dés, oignon. Finir avec yaourt grec.'
+      ]
+    },
+    {
+      id: 'R221',
+      name: 'Tom Kha Poulet Coco',
+      category: 'world-food',
+      tags: ['thai', 'low-carb', 'keto', 'soup', 'comfort-food'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 2,
+      baseNutrition: { calories: 605, proteinGrams: 42, carbsGrams: 8, fatGrams: 45 },
+      // 42*4+8*4+45*9 = 168+32+405 = 605 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 200, unit: 'g' },
+        { name: 'Lait de coco', qty: 400, unit: 'ml' },
+        { name: 'Bouillon de poulet', qty: 300, unit: 'ml' },
+        { name: 'Champignons', qty: 150, unit: 'g' },
+        { name: 'Galanga frais (ou gingembre)', qty: 20, unit: 'g' },
+        { name: 'Citronelle', qty: 1, unit: 'pce' },
+        { name: 'Citron vert (jus)', qty: 2, unit: 'pce' },
+        { name: 'Sauce poisson', qty: 20, unit: 'ml' },
+        { name: 'Piment rouge', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Chauffer bouillon avec galanga, citronelle écrasée et piment 5 min.',
+        'Ajouter lait de coco, porter à frémissement. Incorporer poulet en dés et champignons.',
+        'Cuire 10 min. Assaisonner sauce poisson et jus citron vert. Servir chaud.'
+      ]
+    },
+    {
+      id: 'R222',
+      name: 'Pasta Pesto Poulet',
+      category: 'world-food',
+      tags: ['italian', 'high-carb', 'high-protein', 'quick'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 15,
+      difficulty: 1,
+      baseNutrition: { calories: 1003, proteinGrams: 62, carbsGrams: 110, fatGrams: 35 },
+      // 62*4+110*4+35*9 = 248+440+315 = 1003 ✓
+      ingredients: [
+        { name: 'Pâtes penne', qty: 200, unit: 'g' },
+        { name: 'Blanc de poulet', qty: 250, unit: 'g' },
+        { name: 'Pesto au basilic', qty: 60, unit: 'g' },
+        { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Cuire pâtes al dente. Griller poulet en dés avec ail et huile 6 min.',
+        'Égoutter pâtes (garder 60 ml eau de cuisson). Mélanger pâtes + pesto + eau.',
+        'Ajouter poulet, tomates cerises. Parsemer parmesan et basilic frais.'
+      ]
+    },
+    {
+      id: 'R223',
+      name: 'Frittata Épinards Feta',
+      category: 'world-food',
+      tags: ['italian', 'low-carb', 'keto', 'vegetarian', 'high-protein'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      baseNutrition: { calories: 582, proteinGrams: 52, carbsGrams: 8, fatGrams: 38 },
+      // 52*4+8*4+38*9 = 208+32+342 = 582 ✓
+      ingredients: [
+        { name: 'Œuf', qty: 6, unit: 'pce' },
+        { name: 'Épinards frais', qty: 150, unit: 'g' },
+        { name: 'Feta', qty: 80, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Ail', qty: 5, unit: 'g' },
+        { name: 'Sel, poivre', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer four à 180 °C. Faire revenir oignon et ail dans huile, ajouter épinards 3 min.',
+        'Battre œufs, assaisonner. Verser sur légumes dans poêle allant au four.',
+        'Parsemer feta émiettée. Cuire four 15 min jusqu\'à fermeté.'
+      ]
+    },
+    {
+      id: 'R224',
+      name: 'Quinoa Bowl Méditerranéen',
+      category: 'world-food',
+      tags: ['mediterranean', 'vegetarian', 'high-carb', 'balanced'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 1,
+      baseNutrition: { calories: 760, proteinGrams: 32, carbsGrams: 95, fatGrams: 28 },
+      // 32*4+95*4+28*9 = 128+380+252 = 760 ✓
+      ingredients: [
+        { name: 'Quinoa', qty: 180, unit: 'g' },
+        { name: 'Pois chiches (boîte)', qty: 200, unit: 'g' },
+        { name: 'Concombre', qty: 100, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Olives noires', qty: 40, unit: 'g' },
+        { name: 'Feta', qty: 60, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Menthe fraîche', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Rincer et cuire quinoa 12 min dans 360 ml eau. Laisser refroidir.',
+        'Couper concombre en dés, tomates en deux. Égoutter pois chiches.',
+        'Mélanger tout avec huile d\'olive, citron, menthe. Parsemer feta et olives.'
+      ]
+    },
+    {
+      id: 'R225',
+      name: 'Pho Bœuf Maison',
+      category: 'world-food',
+      tags: ['vietnamese', 'high-protein', 'soup', 'low-fat'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 30,
+      difficulty: 2,
+      baseNutrition: { calories: 615, proteinGrams: 72, carbsGrams: 48, fatGrams: 15 },
+      // 72*4+48*4+15*9 = 288+192+135 = 615 ✓
+      ingredients: [
+        { name: 'Bœuf (tranche fine)', qty: 300, unit: 'g' },
+        { name: 'Nouilles de riz', qty: 150, unit: 'g' },
+        { name: 'Bouillon de bœuf', qty: 1000, unit: 'ml' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Gingembre frais', qty: 20, unit: 'g' },
+        { name: 'Sauce poisson', qty: 20, unit: 'ml' },
+        { name: 'Étoile de badiane', qty: 2, unit: 'pce' },
+        { name: 'Pousses de soja', qty: 80, unit: 'g' },
+        { name: 'Citron vert', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Griller oignon et gingembre à sec au four 5 min. Chauffer bouillon avec badiane, oignon, gingembre, sauce poisson 20 min.',
+        'Tremper nouilles 8 min, égoutter. Trancher bœuf très finement.',
+        'Dresser : nouilles dans bol, verser bouillon bouillant sur bœuf cru pour le cuire. Garnir pousses de soja et citron vert.'
+      ]
+    },
+    {
+      id: 'R226',
+      name: 'Salade Niçoise au Thon',
+      category: 'world-food',
+      tags: ['french', 'low-carb', 'high-protein', 'salad', 'mediterranean'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 10,
+      difficulty: 1,
+      baseNutrition: { calories: 622, proteinGrams: 52, carbsGrams: 18, fatGrams: 38 },
+      // 52*4+18*4+38*9 = 208+72+342 = 622 ✓
+      ingredients: [
+        { name: 'Thon en boîte (au naturel)', qty: 240, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Haricots verts', qty: 150, unit: 'g' },
+        { name: 'Tomates', qty: 150, unit: 'g' },
+        { name: 'Olives noires', qty: 40, unit: 'g' },
+        { name: 'Anchois', qty: 20, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 25, unit: 'ml' },
+        { name: 'Vinaigre balsamique', qty: 10, unit: 'ml' },
+        { name: 'Moutarde de Dijon', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire œufs durs 9 min, refroidir, couper en 2. Blanchir haricots verts 5 min.',
+        'Préparer vinaigrette : huile + vinaigre + moutarde.',
+        'Dresser laitue, tomates, haricots, thon, olives, anchois, œufs. Arroser vinaigrette.'
+      ]
+    },
+    {
+      id: 'R227',
+      name: 'Moussaka Légère à la Dinde',
+      category: 'world-food',
+      tags: ['greek', 'high-protein', 'balanced', 'baked', 'meal-prep'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 40,
+      difficulty: 3,
+      baseNutrition: { calories: 756, proteinGrams: 75, carbsGrams: 42, fatGrams: 32 },
+      // 75*4+42*4+32*9 = 300+168+288 = 756 ✓
+      ingredients: [
+        { name: 'Dinde hachée', qty: 350, unit: 'g' },
+        { name: 'Aubergine', qty: 300, unit: 'g' },
+        { name: 'Tomates concassées', qty: 200, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 150, unit: 'g' },
+        { name: 'Œuf', qty: 1, unit: 'pce' },
+        { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+        { name: 'Cannelle', qty: 2, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
+      ],
+      steps: [
+        'Trancher aubergine, saler 10 min, rincer, rôtir au four 15 min à 200 °C.',
+        'Faire revenir oignon + dinde, ajouter tomates + cannelle. Cuire 10 min.',
+        'Mélanger yaourt + œuf battu. Monter : viande, aubergines, sauce yaourt. Parsemer parmesan. Cuire 25 min à 180 °C.'
+      ]
+    },
+    {
+      id: 'R228',
+      name: 'Stir-fry Bœuf aux Brocolis',
+      category: 'world-food',
+      tags: ['chinese', 'high-protein', 'low-carb', 'stir-fry', 'quick'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 1,
+      baseNutrition: { calories: 652, proteinGrams: 78, carbsGrams: 22, fatGrams: 28 },
+      // 78*4+22*4+28*9 = 312+88+252 = 652 ✓
+      ingredients: [
+        { name: 'Bœuf (faux-filet, tranches fines)', qty: 350, unit: 'g' },
+        { name: 'Brocoli', qty: 300, unit: 'g' },
+        { name: 'Sauce soja', qty: 40, unit: 'ml' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Huile de sésame', qty: 15, unit: 'ml' },
+        { name: 'Fécule de maïs', qty: 10, unit: 'g' },
+        { name: 'Sucre (optionnel)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Mariner bœuf dans sauce soja + fécule 10 min.',
+        'Faire sauter brocoli en fleurettes 3 min dans wok très chaud. Réserver.',
+        'Saisir bœuf 2 min, ajouter ail, gingembre, brocoli. Mélanger 1 min. Finir avec huile de sésame.'
+      ]
+    },
+    {
+      id: 'R229',
+      name: 'Bowl Teriyaki Saumon',
+      category: 'world-food',
+      tags: ['japanese', 'high-protein', 'balanced', 'omega3', 'bowl'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 1,
+      baseNutrition: { calories: 978, proteinGrams: 62, carbsGrams: 88, fatGrams: 42 },
+      // 62*4+88*4+42*9 = 248+352+378 = 978 ✓
+      ingredients: [
+        { name: 'Saumon (pavé)', qty: 300, unit: 'g' },
+        { name: 'Riz japonais', qty: 200, unit: 'g' },
+        { name: 'Sauce soja', qty: 30, unit: 'ml' },
+        { name: 'Miel', qty: 20, unit: 'g' },
+        { name: 'Huile de sésame', qty: 15, unit: 'ml' },
+        { name: 'Edamame', qty: 80, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Graines de sésame', qty: 10, unit: 'g' },
+        { name: 'Oignon vert', qty: 30, unit: 'g' }
+      ],
+      steps: [
+        'Cuire riz japonais. Mélanger sauce soja, miel pour sauce teriyaki.',
+        'Saisir saumon côté peau 4 min, retourner 3 min. Napper de sauce teriyaki.',
+        'Dresser bol : riz, edamame, concombre, saumon. Garnir sésame et oignon vert.'
+      ]
+    },
+    {
+      id: 'R230',
+      name: 'Chili Sin Carne',
+      category: 'world-food',
+      tags: ['mexican', 'vegan', 'high-carb', 'budget', 'meal-prep'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 30,
+      difficulty: 1,
+      baseNutrition: { calories: 654, proteinGrams: 28, carbsGrams: 95, fatGrams: 18 },
+      // 28*4+95*4+18*9 = 112+380+162 = 654 ✓
+      ingredients: [
+        { name: 'Haricots rouges (boîte)', qty: 400, unit: 'g' },
+        { name: 'Maïs en boîte', qty: 150, unit: 'g' },
+        { name: 'Tomates concassées', qty: 400, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Oignon', qty: 100, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Cumin moulu', qty: 5, unit: 'g' },
+        { name: 'Chili en poudre', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon, ail, poivron dans huile 5 min.',
+        'Ajouter épices, tomates, haricots et maïs. Saler.',
+        'Mijoter 20 min à feu doux. Servir avec riz ou pain.'
+      ]
+    },
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
