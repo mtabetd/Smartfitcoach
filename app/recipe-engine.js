@@ -1968,6 +1968,799 @@
         'Ajouter tofu en cubes et wakame. Servir avec oignon vert. Ne pas faire bouillir après le miso.'
       ]
     },
+    {
+      id: 'R271',
+      name: 'Poulet Rôti au Citron',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'trending', 'high-protein', 'low-carb', 'keto', 'french'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 30,
+      difficulty: 1,
+      baseNutrition: { calories: 592, proteinGrams: 72, carbsGrams: 4, fatGrams: 32 },
+      // 72*4+4*4+32*9 = 288+16+288 = 592 ✓
+      ingredients: [
+        { name: 'Blanc de poulet (avec os)', qty: 350, unit: 'g' },
+        { name: 'Citron', qty: 2, unit: 'pce' },
+        { name: 'Ail', qty: 20, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Romarin frais', qty: 5, unit: 'g' },
+        { name: 'Thym frais', qty: 5, unit: 'g' },
+        { name: 'Sel, poivre', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer four à 200 °C. Mariner poulet dans huile + citron + herbes + ail 15 min.',
+        'Disposer dans plat allant au four avec tranches de citron.',
+        'Rôtir 25-30 min jusqu\'à coloration dorée et jus clair.'
+      ]
+    },
+    {
+      id: 'R272',
+      name: 'Poulet Miel Moutarde',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'trending', 'high-protein', 'low-carb', 'quick'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 15,
+      difficulty: 1,
+      baseNutrition: { calories: 502, proteinGrams: 68, carbsGrams: 8, fatGrams: 22 },
+      // 68*4+8*4+22*9 = 272+32+198 = 502 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Miel', qty: 25, unit: 'g' },
+        { name: 'Moutarde de Dijon', qty: 30, unit: 'g' },
+        { name: 'Ail', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Thym séché', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger miel, moutarde, ail haché, huile, thym.',
+        'Enrober poulet de cette marinade.',
+        'Griller à poêle 6 min/côté. Servir avec légumes verts.'
+      ]
+    },
+    {
+      id: 'R273',
+      name: 'Crêpes Protéinées',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'high-carb', 'vegetarian', 'brunch'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 15,
+      difficulty: 1,
+      baseNutrition: { calories: 455, proteinGrams: 28, carbsGrams: 52, fatGrams: 15 },
+      // 28*4+52*4+15*9 = 112+208+135 = 455 ✓
+      ingredients: [
+        { name: 'Flocons d\'avoine (mixés en farine)', qty: 80, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Lait écrémé', qty: 200, unit: 'ml' },
+        { name: 'Yaourt grec 0%', qty: 80, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Vanille', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Mixer flocons en farine. Mélanger avec œufs, lait, yaourt, miel et vanille.',
+        'Laisser reposer 5 min. Cuire crêpes en poêle antiadhésive sans matière grasse.',
+        'Garnir au choix : fruits frais, miel, yaourt.'
+      ]
+    },
+    {
+      id: 'R274',
+      name: 'Salade Lentilles Thon',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'high-protein', 'balanced', 'meal-prep'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      baseNutrition: { calories: 590, proteinGrams: 52, carbsGrams: 55, fatGrams: 18 },
+      // 52*4+55*4+18*9 = 208+220+162 = 590 ✓
+      ingredients: [
+        { name: 'Lentilles vertes', qty: 150, unit: 'g' },
+        { name: 'Thon en boîte (au naturel)', qty: 200, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Oignon rouge', qty: 40, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Moutarde', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire lentilles 20 min dans eau bouillante salée. Rincer, égoutter.',
+        'Préparer vinaigrette : huile + citron + moutarde.',
+        'Mélanger lentilles tièdes, thon, légumes. Assaisonner.'
+      ]
+    },
+    {
+      id: 'R275',
+      name: 'Gratin Brocolis Poulet',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'trending', 'high-protein', 'low-carb', 'baked'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 2,
+      baseNutrition: { calories: 628, proteinGrams: 72, carbsGrams: 22, fatGrams: 28 },
+      // 72*4+22*4+28*9 = 288+88+252 = 628 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Brocoli', qty: 300, unit: 'g' },
+        { name: 'Fromage râpé', qty: 60, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 150, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Moutarde', qty: 15, unit: 'g' },
+        { name: 'Sel, poivre, noix de muscade', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Cuire brocoli en fleurettes à la vapeur 5 min. Cuire poulet en dés à la poêle.',
+        'Mélanger yaourt + ail + moutarde + muscade pour la sauce.',
+        'Disposer brocoli et poulet dans plat, napper de sauce, parsemer fromage. Cuire 20 min à 190 °C.'
+      ]
+    },
+    {
+      id: 'R276',
+      name: 'Poêlée Légumes Œufs',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'vegetarian', 'low-carb', 'quick', 'keto'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 15,
+      difficulty: 1,
+      baseNutrition: { calories: 414, proteinGrams: 32, carbsGrams: 22, fatGrams: 22 },
+      // 32*4+22*4+22*9 = 128+88+198 = 414 ✓
+      ingredients: [
+        { name: 'Œuf', qty: 4, unit: 'pce' },
+        { name: 'Courgette', qty: 200, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Herbes de Provence', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon et poivron dans huile 3 min.',
+        'Ajouter courgette et tomates, cuire 5 min. Assaisonner herbes.',
+        'Creuser nids dans légumes, casser œufs. Couvrir et cuire 4-5 min.'
+      ]
+    },
+    {
+      id: 'R277',
+      name: 'Bowl Sushi Maison',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'japanese', 'high-carb', 'balanced', 'bowl'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 20,
+      difficulty: 2,
+      baseNutrition: { calories: 742, proteinGrams: 48, carbsGrams: 88, fatGrams: 22 },
+      // 48*4+88*4+22*9 = 192+352+198 = 742 ✓
+      ingredients: [
+        { name: 'Saumon frais', qty: 200, unit: 'g' },
+        { name: 'Riz à sushi', qty: 200, unit: 'g' },
+        { name: 'Avocat', qty: 80, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Vinaigre de riz', qty: 30, unit: 'ml' },
+        { name: 'Sauce soja', qty: 20, unit: 'ml' },
+        { name: 'Graines de sésame', qty: 10, unit: 'g' },
+        { name: 'Nori (algues)', qty: 4, unit: 'g' }
+      ],
+      steps: [
+        'Cuire riz, assaisonner vinaigre de riz + sel + sucre.',
+        'Couper saumon, avocat, concombre en dés.',
+        'Dresser bol : riz, garnitures côte à côte, saumon. Sauce soja, sésame, algues nori.'
+      ]
+    },
+    {
+      id: 'R278',
+      name: 'Velouté de Patate Douce',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'vegan', 'high-carb', 'soup', 'comfort-food'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 25,
+      difficulty: 1,
+      baseNutrition: { calories: 450, proteinGrams: 8, carbsGrams: 55, fatGrams: 22 },
+      // 8*4+55*4+22*9 = 32+220+198 = 450 ✓
+      ingredients: [
+        { name: 'Patate douce', qty: 400, unit: 'g' },
+        { name: 'Lait de coco (léger)', qty: 200, unit: 'ml' },
+        { name: 'Bouillon légumes', qty: 400, unit: 'ml' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Gingembre frais', qty: 15, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 10, unit: 'ml' },
+        { name: 'Curry en poudre', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon, gingembre, curry dans huile 3 min.',
+        'Ajouter patate douce en cubes et bouillon. Cuire 20 min.',
+        'Mixer, incorporer lait de coco. Servir avec graines de courge (optionnel).'
+      ]
+    },
+    {
+      id: 'R279',
+      name: 'Poulet Satay aux Cacahuètes',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'trending', 'thai', 'high-protein', 'balanced'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 2,
+      baseNutrition: { calories: 632, proteinGrams: 68, carbsGrams: 18, fatGrams: 32 },
+      // 68*4+18*4+32*9 = 272+72+288 = 632 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Beurre de cacahuète (naturel)', qty: 50, unit: 'g' },
+        { name: 'Lait de coco (léger)', qty: 100, unit: 'ml' },
+        { name: 'Sauce soja', qty: 20, unit: 'ml' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Ail', qty: 5, unit: 'g' },
+        { name: 'Curcuma', qty: 2, unit: 'g' },
+        { name: 'Piment', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Mariner poulet en lanières dans sauce soja, curcuma, ail 20 min. Embrocher.',
+        'Griller brochettes 4 min/côté.',
+        'Sauce satay : beurre de cacahuète + lait de coco + citron vert + piment. Chauffer 3 min. Servir.'
+      ]
+    },
+    {
+      id: 'R280',
+      name: 'Salade Avocat Crevettes',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'high-protein', 'low-carb', 'keto', 'salad'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 5,
+      difficulty: 1,
+      baseNutrition: { calories: 488, proteinGrams: 38, carbsGrams: 12, fatGrams: 32 },
+      // 38*4+12*4+32*9 = 152+48+288 = 488 ✓
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 250, unit: 'g' },
+        { name: 'Avocat', qty: 150, unit: 'g' },
+        { name: 'Salade mélangée', qty: 80, unit: 'g' },
+        { name: 'Tomates cerises', qty: 80, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Ail', qty: 5, unit: 'g' },
+        { name: 'Coriandre fraîche', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Sauter crevettes avec ail dans huile 3 min. Assaisonner.',
+        'Couper avocat en tranches, tomates en 2.',
+        'Dresser salade, crevettes, avocat, tomates. Arroser citron vert, garnir coriandre.'
+      ]
+    },
+    {
+      id: 'R281',
+      name: 'Bowl Protéiné Vert',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'high-protein', 'balanced', 'bowl', 'detox'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 1,
+      baseNutrition: { calories: 652, proteinGrams: 45, carbsGrams: 55, fatGrams: 28 },
+      // 45*4+55*4+28*9 = 180+220+252 = 652 ✓
+      ingredients: [
+        { name: 'Edamame', qty: 150, unit: 'g' },
+        { name: 'Quinoa', qty: 120, unit: 'g' },
+        { name: 'Épinards frais', qty: 80, unit: 'g' },
+        { name: 'Avocat', qty: 80, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Tahini', qty: 30, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire quinoa. Décongeler edamame.',
+        'Sauce verte : tahini + citron vert + eau + huile sésame.',
+        'Dresser bowl : quinoa, épinards, edamame, avocat, concombre. Napper sauce tahini.'
+      ]
+    },
+    {
+      id: 'R282',
+      name: 'Pain Perdu Protéiné',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'high-protein', 'high-carb', 'brunch'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 10,
+      difficulty: 1,
+      baseNutrition: { calories: 494, proteinGrams: 28, carbsGrams: 55, fatGrams: 18 },
+      // 28*4+55*4+18*9 = 112+220+162 = 494 ✓
+      ingredients: [
+        { name: 'Pain complet (tranches épaisses)', qty: 4, unit: 'pce' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Yaourt grec 0%', qty: 80, unit: 'g' },
+        { name: 'Lait écrémé', qty: 60, unit: 'ml' },
+        { name: 'Cannelle', qty: 2, unit: 'g' },
+        { name: 'Miel', qty: 20, unit: 'g' },
+        { name: 'Fruits rouges', qty: 60, unit: 'g' }
+      ],
+      steps: [
+        'Battre œufs + lait + cannelle. Tremper tranches de pain 30 secondes.',
+        'Cuire à poêle antiadhésive 2 min/côté jusqu\'à dorure.',
+        'Servir avec yaourt grec, fruits rouges et miel.'
+      ]
+    },
+    {
+      id: 'R283',
+      name: 'Wrap César Poulet',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'trending', 'high-protein', 'balanced', 'lunch'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 1,
+      baseNutrition: { calories: 624, proteinGrams: 58, carbsGrams: 35, fatGrams: 28 },
+      // 58*4+35*4+28*9 = 232+140+252 = 624 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 250, unit: 'g' },
+        { name: 'Tortillas de blé', qty: 4, unit: 'pce' },
+        { name: 'Laitue romaine', qty: 80, unit: 'g' },
+        { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 80, unit: 'g' },
+        { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
+        { name: 'Ail', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Griller poulet assaisonné 6 min/côté. Trancher en lamelles.',
+        'Sauce César légère : yaourt + moutarde + ail + huile.',
+        'Garnir tortillas : laitue, poulet, sauce César, parmesan. Rouler serré.'
+      ]
+    },
+    {
+      id: 'R284',
+      name: 'Soupe Carottes Coco',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'vegan', 'high-carb', 'soup', 'budget'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 25,
+      difficulty: 1,
+      baseNutrition: { calories: 410, proteinGrams: 8, carbsGrams: 45, fatGrams: 22 },
+      // 8*4+45*4+22*9 = 32+180+198 = 410 ✓
+      ingredients: [
+        { name: 'Carottes', qty: 400, unit: 'g' },
+        { name: 'Lait de coco', qty: 200, unit: 'ml' },
+        { name: 'Bouillon légumes', qty: 400, unit: 'ml' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Gingembre frais', qty: 15, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 10, unit: 'ml' },
+        { name: 'Curcuma', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon, gingembre, curcuma dans huile 3 min.',
+        'Ajouter carottes en rondelles, bouillon. Cuire 20 min.',
+        'Mixer, incorporer lait de coco. Ajuster assaisonnement.'
+      ]
+    },
+    {
+      id: 'R285',
+      name: 'Poulet Méditerranéen',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'trending', 'high-protein', 'low-carb', 'mediterranean'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      baseNutrition: { calories: 572, proteinGrams: 68, carbsGrams: 12, fatGrams: 28 },
+      // 68*4+12*4+28*9 = 272+48+252 = 572 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Tomates cerises', qty: 150, unit: 'g' },
+        { name: 'Olives noires', qty: 40, unit: 'g' },
+        { name: 'Feta', qty: 40, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Origan séché', qty: 4, unit: 'g' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Mariner poulet dans huile, citron, ail, origan.',
+        'Griller poulet à poêle 6 min/côté. Ajouter tomates cerises, cuire 3 min.',
+        'Parsemer olives et feta. Servir immédiatement.'
+      ]
+    },
+    {
+      id: 'R286',
+      name: 'Salade Épinards Noix',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'low-carb', 'vegetarian', 'keto', 'salad'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 464, proteinGrams: 18, carbsGrams: 35, fatGrams: 28 },
+      // 18*4+35*4+28*9 = 72+140+252 = 464 ✓
+      ingredients: [
+        { name: 'Épinards frais', qty: 150, unit: 'g' },
+        { name: 'Noix', qty: 30, unit: 'g' },
+        { name: 'Feta', qty: 60, unit: 'g' },
+        { name: 'Pomme', qty: 100, unit: 'g' },
+        { name: 'Oignon rouge', qty: 40, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Vinaigre de cidre', qty: 10, unit: 'ml' },
+        { name: 'Miel', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Préparer vinaigrette : huile + vinaigre de cidre + miel + sel.',
+        'Couper pomme en fines tranches, oignon en rondelles.',
+        'Mélanger épinards, pomme, noix, feta, oignon. Assaisonner vinaigrette.'
+      ]
+    },
+    {
+      id: 'R287',
+      name: 'Pancakes Avoine Banane',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'high-carb', 'vegetarian', 'brunch'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 10,
+      difficulty: 1,
+      baseNutrition: { calories: 468, proteinGrams: 22, carbsGrams: 68, fatGrams: 12 },
+      // 22*4+68*4+12*9 = 88+272+108 = 468 ✓
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 100, unit: 'g' },
+        { name: 'Banane mûre', qty: 120, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Lait écrémé', qty: 80, unit: 'ml' },
+        { name: 'Levure chimique', qty: 3, unit: 'g' },
+        { name: 'Cannelle', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Mixer tous les ingrédients jusqu\'à obtenir une pâte homogène.',
+        'Chauffer poêle antiadhésive légèrement huilée à feu moyen.',
+        'Verser louches, cuire 2-3 min/côté. Servir avec fruits frais.'
+      ]
+    },
+    {
+      id: 'R288',
+      name: 'Tartines Avocat Saumon',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'high-protein', 'omega3', 'brunch'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 2,
+      difficulty: 1,
+      baseNutrition: { calories: 528, proteinGrams: 28, carbsGrams: 32, fatGrams: 32 },
+      // 28*4+32*4+32*9 = 112+128+288 = 528 ✓
+      ingredients: [
+        { name: 'Pain complet (tranches)', qty: 4, unit: 'pce' },
+        { name: 'Saumon fumé', qty: 120, unit: 'g' },
+        { name: 'Avocat', qty: 120, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 0.5, unit: 'pce' },
+        { name: 'Oignon rouge', qty: 30, unit: 'g' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Aneth frais', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Toaster le pain. Écraser avocat avec citron vert et sel.',
+        'Étaler guacamole sur pain toasté.',
+        'Disposer saumon fumé, câpres, oignon rouge émincé et aneth.'
+      ]
+    },
+    {
+      id: 'R289',
+      name: 'Patate Douce Farcie',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'vegan', 'high-carb', 'baked', 'meal-prep'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 45,
+      difficulty: 1,
+      baseNutrition: { calories: 538, proteinGrams: 22, carbsGrams: 72, fatGrams: 18 },
+      // 22*4+72*4+18*9 = 88+288+162 = 538 ✓
+      ingredients: [
+        { name: 'Patate douce', qty: 400, unit: 'g' },
+        { name: 'Pois chiches (boîte)', qty: 200, unit: 'g' },
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 80, unit: 'g' },
+        { name: 'Citron (jus)', qty: 0.5, unit: 'pce' },
+        { name: 'Paprika fumé', qty: 4, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Piquer patates, cuire four 40 min à 200 °C jusqu\'à fondantes.',
+        'Rôtir pois chiches 15 min avec huile, paprika, sel.',
+        'Ouvrir patates en deux, garnir épinards, pois chiches, yaourt citronné.'
+      ]
+    },
+    {
+      id: 'R290',
+      name: 'Bowl Crevettes Avocat Riz',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'high-protein', 'balanced', 'bowl'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 1,
+      baseNutrition: { calories: 808, proteinGrams: 42, carbsGrams: 88, fatGrams: 32 },
+      // 42*4+88*4+32*9 = 168+352+288 = 808 ✓
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 250, unit: 'g' },
+        { name: 'Riz basmati', qty: 160, unit: 'g' },
+        { name: 'Avocat', qty: 120, unit: 'g' },
+        { name: 'Mangue', qty: 80, unit: 'g' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Sauce soja', qty: 20, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 15, unit: 'ml' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Graines de sésame', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Cuire riz. Sauter crevettes dans huile sésame + sauce soja 3 min.',
+        'Couper avocat, mangue et concombre en dés.',
+        'Dresser bowl : riz, crevettes, fruits et légumes. Arroser citron vert, sésame.'
+      ]
+    },
+    {
+      id: 'R291',
+      name: 'Soupe Épinards Pois Chiches',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'trending', 'vegan', 'high-carb', 'budget', 'soup'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      baseNutrition: { calories: 415, proteinGrams: 22, carbsGrams: 48, fatGrams: 15 },
+      // 22*4+48*4+15*9 = 88+192+135 = 415 ✓
+      ingredients: [
+        { name: 'Pois chiches (boîte)', qty: 300, unit: 'g' },
+        { name: 'Épinards frais', qty: 150, unit: 'g' },
+        { name: 'Tomates concassées', qty: 200, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Bouillon légumes', qty: 500, unit: 'ml' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Cumin moulu', qty: 4, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon et ail dans huile 3 min.',
+        'Ajouter pois chiches, tomates, bouillon et cumin. Cuire 12 min.',
+        'Incorporer épinards, cuire 3 min. Servir chaud avec pain complet.'
+      ]
+    },
+    {
+      id: 'R292',
+      name: 'Quinoa Poivrons Rôtis',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'vegan', 'high-carb', 'meal-prep', 'mediterranean'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 30,
+      difficulty: 1,
+      baseNutrition: { calories: 542, proteinGrams: 18, carbsGrams: 68, fatGrams: 22 },
+      // 18*4+68*4+22*9 = 72+272+198 = 542 ✓
+      ingredients: [
+        { name: 'Quinoa', qty: 150, unit: 'g' },
+        { name: 'Poivrons (rouge et jaune)', qty: 300, unit: 'g' },
+        { name: 'Courgette', qty: 150, unit: 'g' },
+        { name: 'Oignon rouge', qty: 80, unit: 'g' },
+        { name: 'Feta', qty: 50, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Herbes de Provence', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer four 200 °C. Couper légumes, arroser huile, herbes. Rôtir 25 min.',
+        'Cuire quinoa 12 min.',
+        'Mélanger quinoa, légumes rôtis, citron. Émietter feta dessus.'
+      ]
+    },
+    {
+      id: 'R293',
+      name: 'Nasi Goreng Poulet',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'indonesian', 'high-protein', 'high-carb'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 2,
+      baseNutrition: { calories: 798, proteinGrams: 55, carbsGrams: 95, fatGrams: 22 },
+      // 55*4+95*4+22*9 = 220+380+198 = 798 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 200, unit: 'g' },
+        { name: 'Riz cuit (de la veille)', qty: 350, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Sauce soja', qty: 30, unit: 'ml' },
+        { name: 'Kecap manis (ou sauce soja + miel)', qty: 20, unit: 'ml' },
+        { name: 'Pâte de piment (sambal)', qty: 10, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire poulet en dés à la poêle, réserver. Faire œufs frits, réserver.',
+        'Faire revenir oignon, ail, sambal. Ajouter riz et sauces.',
+        'Incorporer poulet, mélanger à feu vif 3 min. Servir avec œuf frit dessus.'
+      ]
+    },
+    {
+      id: 'R294',
+      name: 'Taboulé Quinoa Tomates',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'vegan', 'high-carb', 'refreshing', 'light'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 1,
+      baseNutrition: { calories: 495, proteinGrams: 18, carbsGrams: 72, fatGrams: 15 },
+      // 18*4+72*4+15*9 = 72+288+135 = 495 ✓
+      ingredients: [
+        { name: 'Quinoa', qty: 160, unit: 'g' },
+        { name: 'Tomates', qty: 200, unit: 'g' },
+        { name: 'Persil frais', qty: 60, unit: 'g' },
+        { name: 'Menthe fraîche', qty: 15, unit: 'g' },
+        { name: 'Oignon vert', qty: 40, unit: 'g' },
+        { name: 'Citron (jus)', qty: 2, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire quinoa 12 min, rincer eau froide, égoutter complètement.',
+        'Hacher persil, menthe. Couper tomates en petits dés.',
+        'Mélanger quinoa froid + légumes + herbes. Assaisonner huile + citron + sel.'
+      ]
+    },
+    {
+      id: 'R295',
+      name: 'Omelette Blanche aux Champignons',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'trending', 'high-protein', 'low-carb', 'keto', 'light'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 8,
+      difficulty: 1,
+      baseNutrition: { calories: 266, proteinGrams: 38, carbsGrams: 6, fatGrams: 10 },
+      // 38*4+6*4+10*9 = 152+24+90 = 266 ✓
+      ingredients: [
+        { name: 'Blanc d\'œuf', qty: 8, unit: 'pce' },
+        { name: 'Champignons de Paris', qty: 150, unit: 'g' },
+        { name: 'Oignon vert', qty: 30, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 5, unit: 'ml' },
+        { name: 'Sel, poivre, herbes', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir champignons en lamelles dans poêle avec un peu d\'huile 3 min.',
+        'Battre blancs d\'œufs avec sel et poivre.',
+        'Verser sur champignons, cuire à feu doux 4 min. Plier. Garnir oignon vert.'
+      ]
+    },
+    {
+      id: 'R296',
+      name: 'Curry de Crevettes Coco',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'thai', 'high-protein', 'comfort-food'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 18,
+      difficulty: 2,
+      baseNutrition: { calories: 596, proteinGrams: 42, carbsGrams: 35, fatGrams: 32 },
+      // 42*4+35*4+32*9 = 168+140+288 = 596 ✓
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 250, unit: 'g' },
+        { name: 'Lait de coco', qty: 250, unit: 'ml' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Pâte de curry rouge', qty: 20, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 10, unit: 'ml' },
+        { name: 'Coriandre fraîche', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon, ail, gingembre dans huile 3 min. Ajouter pâte de curry.',
+        'Incorporer lait de coco, tomates cerises. Mijoter 8 min.',
+        'Ajouter crevettes, cuire 4 min. Garnir coriandre. Servir avec riz basmati.'
+      ]
+    },
+    {
+      id: 'R297',
+      name: 'Pancakes Protéinés',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'high-protein', 'high-carb', 'brunch'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 10,
+      difficulty: 1,
+      baseNutrition: { calories: 483, proteinGrams: 25, carbsGrams: 62, fatGrams: 15 },
+      // 25*4+62*4+15*9 = 100+248+135 = 483 ✓
+      ingredients: [
+        { name: 'Farine d\'avoine', qty: 100, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 150, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Lait écrémé', qty: 60, unit: 'ml' },
+        { name: 'Levure chimique', qty: 4, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Vanille', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger farine, yaourt, œufs, lait, levure, miel, vanille.',
+        'Chauffer poêle antiadhésive légèrement huilée à feu moyen.',
+        'Cuire petites galettes 2 min/côté. Servir avec fruits frais et sirop d\'agave.'
+      ]
+    },
+    {
+      id: 'R298',
+      name: 'Salade de Pâtes au Thon',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'high-carb', 'balanced', 'lunch', 'meal-prep'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 10,
+      difficulty: 1,
+      baseNutrition: { calories: 662, proteinGrams: 28, carbsGrams: 88, fatGrams: 22 },
+      // 28*4+88*4+22*9 = 112+352+198 = 662 ✓
+      ingredients: [
+        { name: 'Pâtes fusilli', qty: 180, unit: 'g' },
+        { name: 'Thon en boîte (au naturel)', qty: 160, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Maïs en boîte', qty: 60, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Moutarde', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire pâtes al dente. Rincer eau froide, égoutter.',
+        'Égoutter thon. Couper tomates et concombre.',
+        'Mélanger pâtes, thon, légumes. Assaisonner huile d\'olive + citron + moutarde.'
+      ]
+    },
+    {
+      id: 'R299',
+      name: 'Wrap Thon Avocat',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'trending', 'high-protein', 'balanced', 'lunch'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 584, proteinGrams: 45, carbsGrams: 38, fatGrams: 28 },
+      // 45*4+38*4+28*9 = 180+152+252 = 584 ✓
+      ingredients: [
+        { name: 'Thon en boîte (au naturel)', qty: 200, unit: 'g' },
+        { name: 'Tortillas de blé', qty: 4, unit: 'pce' },
+        { name: 'Avocat', qty: 100, unit: 'g' },
+        { name: 'Tomates cerises', qty: 80, unit: 'g' },
+        { name: 'Laitue romaine', qty: 60, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 60, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Câpres', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Écraser avocat avec citron vert et sel.',
+        'Mélanger thon égoutté avec yaourt, câpres, sel.',
+        'Garnir tortillas : laitue, guacamole, thon, tomates. Rouler et servir.'
+      ]
+    },
+    {
+      id: 'R300',
+      name: 'Poulet Poêlé Sauce Citron',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'trending', 'high-protein', 'low-carb', 'keto', 'quick'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 15,
+      difficulty: 1,
+      baseNutrition: { calories: 548, proteinGrams: 68, carbsGrams: 6, fatGrams: 28 },
+      // 68*4+6*4+28*9 = 272+24+252 = 548 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Citron (jus)', qty: 2, unit: 'pce' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Beurre', qty: 10, unit: 'g' },
+        { name: 'Thym frais', qty: 3, unit: 'g' },
+        { name: 'Persil frais', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Aplatir blancs de poulet pour cuisson uniforme. Saler, poivrer.',
+        'Saisir dans huile + beurre 5 min/côté à feu vif. Réserver au chaud.',
+        'Déglacer poêle avec jus de citron + ail haché + thym. Réduire 2 min. Napper le poulet. Garnir persil.'
+      ]
+    },
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
