@@ -1423,7 +1423,17 @@ window.calcMacros=calcMacros; window.calcBMI=calcBMI; window.bmiInfo=bmiInfo;
 window.calcWeightProjection=calcWeightProjection; window.alcoholWeeklyKcal=alcoholWeeklyKcal;
 
 // ─── RECIPE FILTERING ───
-function getPool(t){if(t==='breakfast')return window.breakfast;if(t==='lunch')return window.lunch;if(t==='snack')return window.snack;return window.dinner}
+function getPool(t){
+  // Délègue à RecipeEngine.getPool() si disponible (fusionne anciens + nouveaux pools)
+  if (window.RecipeEngine && window.RecipeEngine.getPool) {
+    return window.RecipeEngine.getPool(t);
+  }
+  // Fallback : anciens arrays directs
+  if(t==='breakfast')return window.breakfast;
+  if(t==='lunch')return window.lunch;
+  if(t==='snack')return window.snack;
+  return window.dinner;
+}
 function filterRecipes(pool,type){
   var s=window.S;
   var r=pool.slice();

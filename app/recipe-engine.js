@@ -3011,6 +3011,78 @@
     };
   }
 
+  // ─── CONVERTISSEUR NOUVEAU → ANCIEN FORMAT ─────────────────────────────────
+  // Convertit une recette riche (R201+) au format simplifié du planificateur
+  var MEAL_TYPE_TAGS = {
+    breakfast: ['breakfast', 'brunch', 'morning'],
+    snack:     ['snack', 'gouter', 'collation', 'starter', 'pre-workout'],
+    lunch:     ['lunch', 'main', 'high-protein', 'meal-prep'],
+    dinner:    ['dinner', 'main', 'family', 'vegan', 'world-food']
+  };
+
+  function toSimpleFormat(recipe) {
+    var perServing = recipe.servings > 0 ? recipe.servings : 1;
+    var flagMap = { 'maroc-moderne': '🇲🇦', 'world-food': '🌍' };
+    var ingrStr = recipe.ingredients.map(function(ing) {
+      return ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name;
+    }).join(', ');
+    return {
+      n:    recipe.name,
+      f:    flagMap[recipe.category] || '🌍',
+      k:    Math.round(recipe.baseNutrition.calories   / perServing),
+      p:    Math.round(recipe.baseNutrition.proteinGrams / perServing),
+      g:    Math.round(recipe.baseNutrition.carbsGrams  / perServing),
+      l:    Math.round(recipe.baseNutrition.fatGrams    / perServing),
+      i:    ingrStr,
+      steps: recipe.steps || [],
+      w:    recipe.tags.indexOf('whey') >= 0,
+      tags: recipe.tags || [],
+      lv:   recipe.difficulty || 1,
+      _id:  recipe.id   // lien vers la recette complète
+    };
+  }
+
+  function classifyMealType(recipe) {
+    var tags = recipe.tags || [];
+    if (tags.indexOf('breakfast') >= 0 || tags.indexOf('brunch') >= 0) return 'breakfast';
+    if (tags.indexOf('snack') >= 0 || tags.indexOf('collation') >= 0 || tags.indexOf('starter') >= 0) return 'snack';
+    // Par défaut : déjeuner ET dîner (recettes principales)
+    return 'both';
+  }
+
+  /**
+   * Retourne le pool de recettes pour un type de repas.
+   * Fusionne recipes-db.js (ancien format) + RECIPES_DB R201+ (nouveau format converti).
+   * @param {'breakfast'|'lunch'|'snack'|'dinner'} mealType
+   * @returns {Array} Pool de recettes au format simplifié
+   */
+  function getPool(mealType) {
+    // Base : anciens pools depuis recipes-db.js
+    var oldPool = [];
+    if (mealType === 'breakfast' && window.breakfast) oldPool = window.breakfast.slice();
+    else if (mealType === 'lunch'  && window.lunch)   oldPool = window.lunch.slice();
+    else if (mealType === 'snack'  && window.snack)   oldPool = window.snack.slice();
+    else if (mealType === 'dinner' && window.dinner)  oldPool = window.dinner.slice();
+
+    // Ajout : nouvelles recettes R201+ converties au format simplifié
+    var oldNames = {};
+    oldPool.forEach(function(r) { oldNames[r.n] = true; });
+
+    RECIPES_DB.forEach(function(recipe) {
+      var type = classifyMealType(recipe);
+      var include = (type === mealType) ||
+                    (type === 'both' && (mealType === 'lunch' || mealType === 'dinner'));
+      if (!include) return;
+      var simple = toSimpleFormat(recipe);
+      if (!oldNames[simple.n]) {   // évite les doublons par nom
+        oldPool.push(simple);
+        oldNames[simple.n] = true;
+      }
+    });
+
+    return oldPool;
+  }
+
   // ─── EXPOSITION GLOBALE ────────────────────────────────────────────────────────
   window.RecipeEngine = {
     getAdaptedRecipe: getAdaptedRecipe,
@@ -3020,6 +3092,7 @@
     calcRecipeCost:   calcRecipeCost,
     calcDailyBudget:  calcDailyBudget,
     calcWeeklyBudget: calcWeeklyBudget,
+    getPool:          getPool,
     db:               RECIPES_DB
   };
 
