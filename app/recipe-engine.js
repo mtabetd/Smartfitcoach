@@ -3833,20 +3833,26 @@
               consolidated[key].qty += scaledQty;
               if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
             });
+          } else if (recipe.i) {
+            // Recette legacy (L0XX) : findRecipe ne la trouve pas dans RECIPES_DB,
+            // fallback sur le champ `i` string
+            var scalingRatioLegacy = recipe._scalingRatio || 1;
+            var parsedIngredients = parseIngredientsString(recipe.i);
+            parsedIngredients.forEach(function(ing) {
+              var qty = Math.round(ing.qty * scalingRatioLegacy * 10) / 10;
+              var key = ing.name + '||' + ing.unit;
+              if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
+              consolidated[key].qty += qty;
+              if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
+            });
           }
-        }
-        // Recettes legacy (L0XX, L1XX, etc.) : parser le champ `i` string
-        else if (recipe._id && recipe._id.match(/^L\d+$/) && recipe.i) {
-          var scalingRatioLegacy = recipe._scalingRatio || 1;
-          var parsedIngredients = recipe._scaledIngredients || parseIngredientsString(recipe.i);
-          parsedIngredients.forEach(function(ing) {
-            // Si _scaledIngredients déjà appliqué on utilise directement, sinon on scale
-            var qty = recipe._scaledIngredients
-              ? (ing.qty || 0)
-              : Math.round(ing.qty * scalingRatioLegacy * 10) / 10;
+        } else if (recipe.i) {
+          // Recette sans _id : parser le champ `i` string (fallback Repas libre)
+          var parsedFallback = parseIngredientsString(recipe.i);
+          parsedFallback.forEach(function(ing) {
             var key = ing.name + '||' + ing.unit;
             if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
-            consolidated[key].qty += qty;
+            consolidated[key].qty += ing.qty || 0;
             if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
           });
         }

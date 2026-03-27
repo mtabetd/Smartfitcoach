@@ -1918,7 +1918,7 @@ function renderModal(app) {
         var qtyStr = ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name;
         ingredList.appendChild(h('li', {}, qtyStr));
       });
-    } else {
+    } else if (r.i) {
       r.i.split(',').forEach(function(ing) { ingredList.appendChild(h('li', {}, ing.trim())); });
     }
     body.appendChild(ingredList);
@@ -1975,15 +1975,18 @@ function exportDayPDF(dayIdx) {
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text('INGR\u00c9DIENTS', M, y); y += 4;
     doc.setFontSize(8); doc.setTextColor(black[0], black[1], black[2]);
-    r.i.split(',').forEach(function(ing) {
+    var ingListPDF = r._scaledIngredients && r._scaledIngredients.length > 0
+      ? r._scaledIngredients.map(function(ing) { return ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
+      : (r.i ? r.i.split(',').map(function(s) { return s.trim(); }) : []);
+    ingListPDF.forEach(function(ing) {
       if (y > 275) { doc.addPage(); y = 20; }
-      doc.text('\u2022  ' + ing.trim(), M + 2, y); y += 4;
+      doc.text('\u2022  ' + ing, M + 2, y); y += 4;
     });
     y += 2;
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text('PR\u00c9PARATION', M, y); y += 4;
     doc.setFontSize(8); doc.setTextColor(black[0], black[1], black[2]);
-    r.st.forEach(function(step, si) {
+    (r.st || []).forEach(function(step, si) {
       if (y > 275) { doc.addPage(); y = 20; }
       var lines = doc.splitTextToSize((si + 1) + '. ' + step, CW - 6);
       lines.forEach(function(line) { doc.text(line, M + 2, y); y += 4; });
