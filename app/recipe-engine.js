@@ -2752,6 +2752,577 @@
         'Déglacer poêle avec jus de citron + ail haché + thym. Réduire 2 min. Napper le poulet. Garnir persil.'
       ]
     },
+
+    // ═══════════════════════════════════════════════════
+    //  SALADES  (R301–R320)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R301',
+      name: 'Salade Niçoise au Thon',
+      category: 'world-food',
+      tags: ['salade', 'thon', 'oeufs', 'high-protein', 'mediterranean', 'no-cook'],
+      servings: 1, prepTime: 15, cookTime: 10, difficulty: 1,
+      // 42×4 + 15×4 + 22×9 = 168+60+198 = 426 ✓
+      baseNutrition: { calories: 426, proteinGrams: 42, carbsGrams: 15, fatGrams: 22 },
+      ingredients: [
+        { name: 'Thon au naturel (boîte)', qty: 150, unit: 'g' },
+        { name: 'Haricots verts', qty: 100, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Tomate', qty: 150, unit: 'g' },
+        { name: 'Olives noires', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Moutarde', qty: 5, unit: 'g' },
+        { name: 'Ail', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire les haricots verts à la vapeur 8 min. Rafraîchir sous l\'eau froide.',
+        'Cuire les œufs 8 min dans l\'eau bouillante. Écaler et couper en quartiers.',
+        'Couper les tomates en quartiers. Égoutter le thon.',
+        'Préparer la vinaigrette : huile d\'olive + jus de citron + moutarde + ail écrasé.',
+        'Assembler salade, haricots, tomates, thon, œufs et olives.',
+        'Arroser de vinaigrette. Servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R302',
+      name: 'Buddha Bowl Quinoa Poulet',
+      category: 'world-food',
+      tags: ['salade', 'quinoa', 'poulet', 'avocat', 'high-protein', 'balanced', 'meal-prep'],
+      servings: 1, prepTime: 15, cookTime: 15, difficulty: 1,
+      // 38×4 + 45×4 + 18×9 = 152+180+162 = 494 ✓
+      baseNutrition: { calories: 494, proteinGrams: 38, carbsGrams: 45, fatGrams: 18 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 150, unit: 'g' },
+        { name: 'Quinoa sec', qty: 60, unit: 'g', note: '≈130 g cuit' },
+        { name: 'Avocat mûr', qty: 70, unit: 'g', note: '½ avocat' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Carotte', qty: 60, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Cumin moulu', qty: 2, unit: 'g' },
+        { name: 'Paprika doux', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le quinoa dans 120 ml d\'eau salée 12 min. Laisser refroidir.',
+        'Assaisonner le poulet avec cumin + paprika + sel. Griller 5 min par côté.',
+        'Couper poulet en tranches, avocat en lamelles, concombre et carotte en bâtonnets.',
+        'Assembler le bowl : quinoa en base, garnitures côte à côte.',
+        'Arroser d\'huile d\'olive + jus de citron. Servir tiède ou froid.'
+      ]
+    },
+
+    {
+      id: 'R303',
+      name: 'Salade César Poulet Grillé',
+      category: 'world-food',
+      tags: ['salade', 'poulet', 'césar', 'high-protein', 'classic'],
+      servings: 1, prepTime: 10, cookTime: 10, difficulty: 1,
+      // 40×4 + 20×4 + 20×9 = 160+80+180 = 420 ✓
+      baseNutrition: { calories: 420, proteinGrams: 40, carbsGrams: 20, fatGrams: 20 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 150, unit: 'g' },
+        { name: 'Salade romaine', qty: 120, unit: 'g' },
+        { name: 'Pain complet (croûtons)', qty: 30, unit: 'g' },
+        { name: 'Parmesan râpé', qty: 15, unit: 'g' },
+        { name: 'Yaourt nature 0%', qty: 60, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Ail', qty: 5, unit: 'g' },
+        { name: 'Moutarde', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Griller le poulet 5 min par côté. Couper en lamelles.',
+        'Couper le pain en dés. Faire dorer dans poêle sèche 3 min.',
+        'Sauce légère : yaourt + huile d\'olive + citron + ail + moutarde + sel.',
+        'Déchirer la romaine. Mélanger avec sauce.',
+        'Garnir de poulet, croûtons et parmesan. Servir aussitôt.'
+      ]
+    },
+
+    {
+      id: 'R304',
+      name: 'Salade Marocaine Poulpe',
+      category: 'maroc-moderne',
+      tags: ['salade', 'poulpe', 'fruits-de-mer', 'high-protein', 'maroc', 'gluten-free'],
+      servings: 1, prepTime: 10, cookTime: 45, difficulty: 2,
+      // 36×4 + 18×4 + 22×9 = 144+72+198 = 414 ✓
+      baseNutrition: { calories: 414, proteinGrams: 36, carbsGrams: 18, fatGrams: 22 },
+      ingredients: [
+        { name: 'Poulpe cuit', qty: 200, unit: 'g' },
+        { name: 'Tomate', qty: 150, unit: 'g' },
+        { name: 'Poivron rouge', qty: 80, unit: 'g' },
+        { name: 'Poivron vert', qty: 60, unit: 'g' },
+        { name: 'Olives vertes', qty: 40, unit: 'g' },
+        { name: 'Oignon rouge', qty: 50, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 18, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Persil frais', qty: 15, unit: 'g' },
+        { name: 'Cumin moulu', qty: 2, unit: 'g' },
+        { name: 'Paprika doux', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Si poulpe entier : cuire dans eau bouillante salée 40 min. Laisser refroidir.',
+        'Couper le poulpe en tronçons. Couper tomates, poivrons et oignon en dés.',
+        'Préparer la vinaigrette : huile d\'olive + citron + cumin + paprika + sel.',
+        'Mélanger poulpe, légumes et olives dans un saladier.',
+        'Arroser de vinaigrette. Garnir de persil haché. Servir frais.'
+      ]
+    },
+
+    {
+      id: 'R305',
+      name: 'Taboulé Libanais Poulet',
+      category: 'world-food',
+      tags: ['salade', 'poulet', 'taboulé', 'boulghour', 'high-protein', 'oriental'],
+      servings: 1, prepTime: 20, cookTime: 10, difficulty: 1,
+      // 36×4 + 40×4 + 14×9 = 144+160+126 = 430 ✓
+      baseNutrition: { calories: 430, proteinGrams: 36, carbsGrams: 40, fatGrams: 14 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 130, unit: 'g' },
+        { name: 'Boulghour fin', qty: 50, unit: 'g', note: '≈100 g réhydraté' },
+        { name: 'Persil frais (bouquet)', qty: 60, unit: 'g' },
+        { name: 'Menthe fraîche', qty: 15, unit: 'g' },
+        { name: 'Tomate', qty: 120, unit: 'g' },
+        { name: 'Oignon vert', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Couvrir le boulghour d\'eau bouillante, couvrir 10 min. Égoutter, laisser refroidir.',
+        'Griller le poulet assaisonné 5 min par côté. Couper en petits dés.',
+        'Hacher très finement persil et menthe. Couper tomates et oignons en tout petits dés.',
+        'Mélanger boulghour + herbes + tomates + oignons + poulet.',
+        'Assaisonner généreusement : huile d\'olive + citron + sel. Réfrigérer 15 min avant service.'
+      ]
+    },
+
+    {
+      id: 'R306',
+      name: 'Salade Lentilles Feta',
+      category: 'world-food',
+      tags: ['salade', 'lentilles', 'feta', 'vegetarian', 'high-protein', 'greek', 'meal-prep'],
+      servings: 1, prepTime: 10, cookTime: 20, difficulty: 1,
+      // 30×4 + 40×4 + 16×9 = 120+160+144 = 424 ✓
+      baseNutrition: { calories: 424, proteinGrams: 30, carbsGrams: 40, fatGrams: 16 },
+      ingredients: [
+        { name: 'Lentilles vertes (sèches)', qty: 80, unit: 'g', note: '≈160 g cuites' },
+        { name: 'Feta', qty: 60, unit: 'g' },
+        { name: 'Épinards frais', qty: 80, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Oignon rouge', qty: 40, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+        { name: 'Vinaigre balsamique', qty: 10, unit: 'ml' },
+        { name: 'Origan séché', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Cuire les lentilles 20 min dans l\'eau salée. Égoutter et refroidir.',
+        'Couper tomates cerises en deux, oignon en fines rondelles.',
+        'Préparer vinaigrette : huile d\'olive + vinaigre balsamique + origan + sel.',
+        'Assembler épinards + lentilles + tomates + oignon.',
+        'Émietter la feta. Arroser de vinaigrette. Servir tiède ou froid.'
+      ]
+    },
+
+    {
+      id: 'R307',
+      name: 'Salade Crevettes Avocat Mangue',
+      category: 'world-food',
+      tags: ['salade', 'crevettes', 'avocat', 'mangue', 'high-protein', 'exotic', 'no-cook'],
+      servings: 1, prepTime: 15, cookTime: 5, difficulty: 1,
+      // 30×4 + 30×4 + 20×9 = 120+120+180 = 420 ✓
+      baseNutrition: { calories: 420, proteinGrams: 30, carbsGrams: 30, fatGrams: 20 },
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 150, unit: 'g' },
+        { name: 'Avocat mûr', qty: 80, unit: 'g', note: '½ avocat' },
+        { name: 'Mangue', qty: 80, unit: 'g' },
+        { name: 'Roquette', qty: 60, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Piment doux', qty: 1, unit: 'g' },
+        { name: 'Coriandre fraîche', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Faire sauter les crevettes dans une poêle chaude 2-3 min. Assaisonner.',
+        'Couper avocat en lamelles, mangue en dés.',
+        'Préparer la vinaigrette : citron vert + huile + piment + sel.',
+        'Disposer roquette en base, garnir avocat, mangue, crevettes.',
+        'Arroser de vinaigrette. Parsemer de coriandre. Servir frais.'
+      ]
+    },
+
+    {
+      id: 'R308',
+      name: 'Bowl Saumon Riz Brun',
+      category: 'world-food',
+      tags: ['salade', 'saumon', 'riz-brun', 'edamame', 'omega3', 'high-protein', 'japanese'],
+      servings: 1, prepTime: 15, cookTime: 20, difficulty: 1,
+      // 38×4 + 50×4 + 16×9 = 152+200+144 = 496 ✓
+      baseNutrition: { calories: 496, proteinGrams: 38, carbsGrams: 50, fatGrams: 16 },
+      ingredients: [
+        { name: 'Filet de saumon', qty: 150, unit: 'g' },
+        { name: 'Riz brun', qty: 60, unit: 'g', note: '≈140 g cuit' },
+        { name: 'Edamame (surgelé)', qty: 80, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Carotte', qty: 50, unit: 'g' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 5, unit: 'ml' },
+        { name: 'Sésame toasté', qty: 5, unit: 'g' },
+        { name: 'Gingembre frais', qty: 5, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire le riz brun 18-20 min. Laisser refroidir.',
+        'Cuire le saumon à la poêle 3 min par côté. Émietter en gros morceaux.',
+        'Réchauffer l\'edamame. Couper concombre et carotte en bâtonnets fins.',
+        'Mélanger sauce soja + huile de sésame + gingembre râpé + citron vert.',
+        'Assembler le bowl : riz, saumon, edamame, légumes. Arroser de sauce. Parsemer sésame.'
+      ]
+    },
+
+    {
+      id: 'R309',
+      name: 'Salade Pâtes Thon Méditerranéenne',
+      category: 'world-food',
+      tags: ['salade', 'pâtes', 'thon', 'italian', 'high-protein', 'meal-prep', 'budget'],
+      servings: 1, prepTime: 10, cookTime: 10, difficulty: 1,
+      // 32×4 + 55×4 + 14×9 = 128+220+126 = 474 ✓
+      baseNutrition: { calories: 474, proteinGrams: 32, carbsGrams: 55, fatGrams: 14 },
+      ingredients: [
+        { name: 'Pâtes complètes (fusilli)', qty: 80, unit: 'g' },
+        { name: 'Thon au naturel (boîte)', qty: 120, unit: 'g' },
+        { name: 'Tomate', qty: 120, unit: 'g' },
+        { name: 'Olives noires', qty: 25, unit: 'g' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Oignon rouge', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire les pâtes al dente selon emballage. Égoutter et rincer à l\'eau froide.',
+        'Couper tomates en dés. Égoutter thon, olives et câpres.',
+        'Vinaigrette : huile d\'olive + jus citron + sel + poivre.',
+        'Mélanger pâtes + thon + tomates + olives + câpres + oignon.',
+        'Assaisonner et garnir de basilic frais. Servir frais.'
+      ]
+    },
+
+    {
+      id: 'R310',
+      name: 'Salade Orientale Agneau Épicé',
+      category: 'maroc-moderne',
+      tags: ['salade', 'agneau', 'couscous', 'oriental', 'high-protein', 'maroc', 'festive'],
+      servings: 1, prepTime: 15, cookTime: 15, difficulty: 2,
+      // 34×4 + 48×4 + 18×9 = 136+192+162 = 490 ✓
+      baseNutrition: { calories: 490, proteinGrams: 34, carbsGrams: 48, fatGrams: 18 },
+      ingredients: [
+        { name: 'Agneau haché maigre', qty: 130, unit: 'g' },
+        { name: 'Couscous fin', qty: 60, unit: 'g', note: '≈120 g réhydraté' },
+        { name: 'Raisins secs', qty: 20, unit: 'g' },
+        { name: 'Amandes effilées', qty: 15, unit: 'g' },
+        { name: 'Menthe fraîche', qty: 15, unit: 'g' },
+        { name: 'Persil frais', qty: 15, unit: 'g' },
+        { name: 'Oignon', qty: 50, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Ras el hanout', qty: 3, unit: 'g' },
+        { name: 'Cannelle moulue', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Réhydrater le couscous avec eau bouillante + 1 c.à.c d\'huile. Couvrir 5 min. Égrener.',
+        'Faire revenir l\'oignon émincé dans l\'huile. Ajouter l\'agneau + épices. Cuire 8 min.',
+        'Torréfier les amandes à sec dans une poêle 2 min.',
+        'Assembler couscous + agneau + raisins secs + amandes.',
+        'Garnir de menthe et persil hachés. Arroser de jus de citron. Servir tiède.'
+      ]
+    },
+
+    {
+      id: 'R311',
+      name: 'Salade Roquette Saumon Fumé Avocat',
+      category: 'world-food',
+      tags: ['salade', 'saumon-fumé', 'avocat', 'roquette', 'omega3', 'high-protein', 'quick'],
+      servings: 1, prepTime: 10, cookTime: 0, difficulty: 1,
+      // 28×4 + 15×4 + 28×9 = 112+60+252 = 424 ✓
+      baseNutrition: { calories: 424, proteinGrams: 28, carbsGrams: 15, fatGrams: 28 },
+      ingredients: [
+        { name: 'Saumon fumé', qty: 100, unit: 'g' },
+        { name: 'Roquette', qty: 80, unit: 'g' },
+        { name: 'Avocat mûr', qty: 100, unit: 'g', note: '½ gros avocat' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Pain complet (grillé)', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Aneth frais', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Griller le pain et le couper en dés pour croûtons.',
+        'Couper l\'avocat en lamelles. Arroser d\'un filet de citron.',
+        'Disposer la roquette en base du saladier.',
+        'Garnir : saumon fumé roulé, lamelles d\'avocat, câpres, croûtons.',
+        'Vinaigrette : huile d\'olive + citron + sel. Arroser et parsemer d\'aneth.'
+      ]
+    },
+
+    {
+      id: 'R312',
+      name: 'Bowl Poulet Patate Douce Tahini',
+      category: 'world-food',
+      tags: ['salade', 'poulet', 'patate-douce', 'pois-chiches', 'tahini', 'high-protein', 'meal-prep'],
+      servings: 1, prepTime: 10, cookTime: 25, difficulty: 1,
+      // 38×4 + 45×4 + 16×9 = 152+180+144 = 476 ✓
+      baseNutrition: { calories: 476, proteinGrams: 38, carbsGrams: 45, fatGrams: 16 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 150, unit: 'g' },
+        { name: 'Patate douce', qty: 130, unit: 'g' },
+        { name: 'Pois chiches (boîte, égouttés)', qty: 80, unit: 'g' },
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Tahini', qty: 15, unit: 'g' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' },
+        { name: 'Cumin moulu', qty: 2, unit: 'g' },
+        { name: 'Paprika fumé', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer four à 200 °C. Couper patate douce en dés. Mélanger avec huile + cumin.',
+        'Rôtir patate douce et pois chiches sur plaque 20 min.',
+        'Griller le poulet assaisonné 5 min par côté. Couper en tranches.',
+        'Sauce tahini : tahini + citron + 2 c.à.s d\'eau + sel.',
+        'Assembler épinards + patate douce + pois chiches + poulet. Napper de sauce tahini.'
+      ]
+    },
+
+    {
+      id: 'R313',
+      name: 'Salade Mexicaine Haricots Avocat',
+      category: 'world-food',
+      tags: ['salade', 'haricots-noirs', 'avocat', 'maïs', 'vegetarian', 'high-protein', 'mexican'],
+      servings: 1, prepTime: 10, cookTime: 0, difficulty: 1,
+      // 20×4 + 55×4 + 14×9 = 80+220+126 = 426 ✓
+      baseNutrition: { calories: 426, proteinGrams: 20, carbsGrams: 55, fatGrams: 14 },
+      ingredients: [
+        { name: 'Haricots noirs (boîte, égouttés)', qty: 150, unit: 'g' },
+        { name: 'Maïs doux (boîte, égoutté)', qty: 80, unit: 'g' },
+        { name: 'Avocat mûr', qty: 70, unit: 'g', note: '½ avocat' },
+        { name: 'Tomate', qty: 100, unit: 'g' },
+        { name: 'Oignon rouge', qty: 40, unit: 'g' },
+        { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+        { name: 'Cumin moulu', qty: 2, unit: 'g' },
+        { name: 'Piment doux', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Égoutter et rincer haricots noirs et maïs.',
+        'Couper tomate et oignon en petits dés. Écraser grossièrement l\'avocat.',
+        'Vinaigrette : citron vert + huile + cumin + piment + sel.',
+        'Mélanger haricots + maïs + tomate + oignon + avocat.',
+        'Arroser de vinaigrette. Garnir de coriandre fraîche. Servir frais.'
+      ]
+    },
+
+    {
+      id: 'R314',
+      name: 'Salade Grecque Crevettes',
+      category: 'world-food',
+      tags: ['salade', 'crevettes', 'feta', 'greek', 'high-protein', 'mediterranean'],
+      servings: 1, prepTime: 10, cookTime: 5, difficulty: 1,
+      // 32×4 + 25×4 + 20×9 = 128+100+180 = 408 ✓
+      baseNutrition: { calories: 408, proteinGrams: 32, carbsGrams: 25, fatGrams: 20 },
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 150, unit: 'g' },
+        { name: 'Tomate', qty: 120, unit: 'g' },
+        { name: 'Concombre', qty: 100, unit: 'g' },
+        { name: 'Feta', qty: 50, unit: 'g' },
+        { name: 'Olives noires', qty: 25, unit: 'g' },
+        { name: 'Pain pita complet', qty: 40, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Origan séché', qty: 2, unit: 'g' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Faire sauter les crevettes dans une poêle chaude 2-3 min. Réserver.',
+        'Couper tomates et concombre en dés. Couper le pita en triangles et griller.',
+        'Vinaigrette : huile d\'olive + citron + origan + sel.',
+        'Assembler tomates, concombre, olives, crevettes et pita grillé.',
+        'Émietter la feta. Arroser de vinaigrette. Servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R315',
+      name: 'Taboulé Quinoa Pois Chiches',
+      category: 'world-food',
+      tags: ['salade', 'quinoa', 'pois-chiches', 'taboulé', 'vegetarian', 'vegan', 'high-protein', 'meal-prep'],
+      servings: 1, prepTime: 15, cookTime: 12, difficulty: 1,
+      // 22×4 + 55×4 + 14×9 = 88+220+126 = 434 ✓
+      baseNutrition: { calories: 434, proteinGrams: 22, carbsGrams: 55, fatGrams: 14 },
+      ingredients: [
+        { name: 'Quinoa sec', qty: 60, unit: 'g', note: '≈130 g cuit' },
+        { name: 'Pois chiches (boîte, égouttés)', qty: 100, unit: 'g' },
+        { name: 'Persil frais (bouquet)', qty: 50, unit: 'g' },
+        { name: 'Tomate', qty: 100, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Oignon vert', qty: 20, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire le quinoa dans 120 ml d\'eau salée 12 min. Laisser refroidir.',
+        'Hacher finement le persil. Couper tomates, concombre et oignons en petits dés.',
+        'Égoutter et rincer les pois chiches.',
+        'Mélanger tous les ingrédients dans un saladier.',
+        'Assaisonner généreusement : huile d\'olive + citron + sel. Réfrigérer 10 min avant service.'
+      ]
+    },
+
+    {
+      id: 'R316',
+      name: 'Salade Thaï Bœuf Grillé',
+      category: 'world-food',
+      tags: ['salade', 'boeuf', 'thai', 'high-protein', 'exotic', 'low-carb'],
+      servings: 1, prepTime: 15, cookTime: 8, difficulty: 2,
+      // 36×4 + 30×4 + 18×9 = 144+120+162 = 426 ✓
+      baseNutrition: { calories: 426, proteinGrams: 36, carbsGrams: 30, fatGrams: 18 },
+      ingredients: [
+        { name: 'Rumsteak de bœuf', qty: 150, unit: 'g' },
+        { name: 'Vermicelles de riz', qty: 40, unit: 'g', note: '≈80 g réhydratés' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Carotte', qty: 60, unit: 'g' },
+        { name: 'Menthe fraîche', qty: 15, unit: 'g' },
+        { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 8, unit: 'ml' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Ail', qty: 5, unit: 'g' },
+        { name: 'Piment doux', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Réhydrater les vermicelles dans l\'eau chaude 5 min. Égoutter et refroidir.',
+        'Griller le steak 3-4 min par côté pour rosé. Laisser reposer 2 min. Trancher finement.',
+        'Julienner carotte et concombre. Hacher ail.',
+        'Sauce : sauce soja + huile sésame + citron vert + ail + piment.',
+        'Assembler vermicelles + légumes + bœuf + herbes. Arroser de sauce. Servir frais.'
+      ]
+    },
+
+    {
+      id: 'R317',
+      name: 'Bowl Tofu Sésame Riz Brun',
+      category: 'world-food',
+      tags: ['salade', 'tofu', 'riz-brun', 'edamame', 'vegetarian', 'vegan', 'high-protein', 'japanese'],
+      servings: 1, prepTime: 15, cookTime: 20, difficulty: 1,
+      // 28×4 + 50×4 + 18×9 = 112+200+162 = 474 ✓
+      baseNutrition: { calories: 474, proteinGrams: 28, carbsGrams: 50, fatGrams: 18 },
+      ingredients: [
+        { name: 'Tofu ferme', qty: 180, unit: 'g' },
+        { name: 'Riz brun', qty: 60, unit: 'g', note: '≈140 g cuit' },
+        { name: 'Edamame (surgelé)', qty: 80, unit: 'g' },
+        { name: 'Carotte', qty: 60, unit: 'g' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 8, unit: 'ml' },
+        { name: 'Sésame toasté', qty: 8, unit: 'g' },
+        { name: 'Gingembre frais', qty: 5, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire le riz brun 18-20 min. Réserver.',
+        'Presser le tofu pour enlever l\'eau. Couper en cubes.',
+        'Faire dorer le tofu dans l\'huile d\'olive 4 min de chaque côté.',
+        'Sauce : sauce soja + huile de sésame + gingembre râpé + citron vert.',
+        'Assembler riz + edamame chaud + carotte râpée + tofu. Arroser de sauce. Parsemer sésame.'
+      ]
+    },
+
+    {
+      id: 'R318',
+      name: 'Salade Italienne Mozzarella Jambon Dinde',
+      category: 'world-food',
+      tags: ['salade', 'mozzarella', 'jambon-dinde', 'italian', 'high-protein', 'quick', 'no-cook'],
+      servings: 1, prepTime: 10, cookTime: 0, difficulty: 1,
+      // 34×4 + 22×4 + 22×9 = 136+88+198 = 422 ✓
+      baseNutrition: { calories: 422, proteinGrams: 34, carbsGrams: 22, fatGrams: 22 },
+      ingredients: [
+        { name: 'Mozzarella fraîche', qty: 100, unit: 'g' },
+        { name: 'Jambon de dinde (tranches)', qty: 80, unit: 'g' },
+        { name: 'Tomate', qty: 150, unit: 'g' },
+        { name: 'Roquette', qty: 60, unit: 'g' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' },
+        { name: 'Pain complet (grillé)', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+        { name: 'Vinaigre balsamique', qty: 8, unit: 'ml' }
+      ],
+      steps: [
+        'Griller le pain complet et couper en dés.',
+        'Couper tomates et mozzarella en tranches. Rouler les tranches de dinde.',
+        'Disposer la roquette en base du plat.',
+        'Alterner tranches de tomate, mozzarella et dinde roulée.',
+        'Arroser d\'huile d\'olive + balsamique. Garnir de basilic et croûtons.'
+      ]
+    },
+
+    {
+      id: 'R319',
+      name: 'Salade Épinards Œufs Pochés Lardons Dinde',
+      category: 'world-food',
+      tags: ['salade', 'épinards', 'oeufs', 'lardons-dinde', 'high-protein', 'french', 'brunch'],
+      servings: 1, prepTime: 10, cookTime: 10, difficulty: 2,
+      // 32×4 + 25×4 + 22×9 = 128+100+198 = 426 ✓
+      baseNutrition: { calories: 426, proteinGrams: 32, carbsGrams: 25, fatGrams: 22 },
+      ingredients: [
+        { name: 'Épinards frais', qty: 120, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Lardons de dinde fumée', qty: 80, unit: 'g' },
+        { name: 'Champignons de Paris', qty: 100, unit: 'g' },
+        { name: 'Pain complet (croûtons)', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+        { name: 'Vinaigre blanc', qty: 10, unit: 'ml', note: 'pour pochage' },
+        { name: 'Moutarde', qty: 5, unit: 'g' },
+        { name: 'Vinaigre balsamique', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Faire revenir les lardons de dinde 3 min. Ajouter champignons émincés. Cuire 3 min.',
+        'Griller le pain et couper en dés pour croûtons.',
+        'Porter à ébullition de l\'eau vinaigrée. Former un tourbillon. Pocher les œufs 3 min.',
+        'Vinaigrette : huile + balsamique + moutarde + sel.',
+        'Assembler épinards + champignons + lardons + croûtons. Poser les œufs pochés dessus.',
+        'Arroser de vinaigrette. Servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R320',
+      name: 'Bowl Méditerranéen Falafel Houmous',
+      category: 'maroc-moderne',
+      tags: ['salade', 'falafel', 'houmous', 'riz-brun', 'vegetarian', 'vegan', 'high-protein', 'oriental'],
+      servings: 1, prepTime: 10, cookTime: 20, difficulty: 1,
+      // 22×4 + 55×4 + 18×9 = 88+220+162 = 470 ✓
+      baseNutrition: { calories: 470, proteinGrams: 22, carbsGrams: 55, fatGrams: 18 },
+      ingredients: [
+        { name: 'Falafel (prêt-à-cuire, surgelé)', qty: 120, unit: 'g', note: '4-5 falafels' },
+        { name: 'Riz brun', qty: 50, unit: 'g', note: '≈110 g cuit' },
+        { name: 'Houmous', qty: 60, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Tomate', qty: 80, unit: 'g' },
+        { name: 'Oignon rouge', qty: 30, unit: 'g' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' },
+        { name: 'Persil frais', qty: 10, unit: 'g' },
+        { name: 'Cumin moulu', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Cuire les falafels au four 200 °C pendant 15-18 min selon emballage.',
+        'Cuire le riz brun 18-20 min. Laisser tiédir.',
+        'Couper concombre, tomate et oignon en petits dés.',
+        'Assembler le bowl : riz brun en base, houmous d\'un côté, légumes de l\'autre.',
+        'Disposer les falafels chauds. Arroser citron + huile. Garnir de persil et cumin.'
+      ]
+    },
+
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
