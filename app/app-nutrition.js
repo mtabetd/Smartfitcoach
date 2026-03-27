@@ -2618,12 +2618,15 @@ function exportShoppingListPDF(list, shopChecked) {
     doc.roundedRect(margin, y - 4, pageW - margin * 2, 8, 2, 2, 'F');
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
-    doc.text(cat.category, margin + 3, y + 1);
+    var catLines = doc.splitTextToSize(cat.category || '', pageW - margin * 2 - 6);
+    doc.text(catLines, margin + 3, y + 1);
     y += 10;
 
-    cat.items.forEach(function(item) {
+    var catItems = Array.isArray(cat.items) ? cat.items : [];
+    catItems.forEach(function(item) {
       if (y > 278) { doc.addPage(); y = 20; }
-      var isChecked = !!(shopChecked && shopChecked[item.name]);
+      var itemName = item.name || '';
+      var isChecked = !!(shopChecked && shopChecked[itemName]);
 
       // Case à cocher
       doc.setDrawColor(180);
@@ -2641,12 +2644,13 @@ function exportShoppingListPDF(list, shopChecked) {
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(isChecked ? 150 : 0);
-      doc.text(item.name, margin + 7, y);
+      var itemNameLines = doc.splitTextToSize(itemName, pageW - margin * 2 - 30);
+      doc.text(itemNameLines, margin + 7, y);
       doc.setTextColor(120);
-      doc.text(item.qty + ' ' + item.unit, pageW - margin - 20, y, {align:'right'});
+      doc.text((item.qty || '') + ' ' + (item.unit || ''), pageW - margin - 20, y, {align:'right'});
       doc.setTextColor(0);
 
-      y += 6;
+      y += itemNameLines.length * 6;
     });
     y += 4;
   });
