@@ -59,6 +59,7 @@ function render() {
   if (AUTH.isLoggedIn()) saveProfile();
   var app = document.getElementById('app');
   app.innerHTML = '';
+  window.scrollTo(0, 0);
 
   // Not logged in → auth screens
   if (!AUTH.isLoggedIn()) {

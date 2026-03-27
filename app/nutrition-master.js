@@ -1,0 +1,238 @@
+// nutrition-master.js — NutritionMaster : source de vérité nutritionnelle unique
+// Fonctions pures, sans effet de bord, aucune valeur hardcodée hors constantes nommées.
+// Produit un USER_STATE strict, typé, cohérent et exploitable par les modules recettes/budget.
+(function () {
+  'use strict';
+
+  // ─── CONSTANTES ───────────────────────────────────────────────────────────────
+  var GOAL_ADJUSTMENTS = {
+    cut:          -0.10,
+    maintenance:   0.00,
+    lean_bulk:    +0.08,
+    mass_gain:    +0.15
+  };
+
+  var PROT_DEFAULT_MALE   = 2.2;  // g/kg (ISSN 2017)
+  var PROT_DEFAULT_FEMALE = 1.8;  // g/kg (Tarnopolsky 2000 — oestrogène anti-catabolique)
+  var PROT_ELITE_MALE     = 2.5;  // g/kg (Morton 2018 BJSM meta-analysis)
+  var PROT_ELITE_FEMALE   = 2.0;  // g/kg
+
+  var FAT_MIN_PER_KG      = 0.8;  // g/kg minimum absolu (ISSN 2021 — santé hormonale)
+
+  var CARB_CYCLING_BOOST  = 0.20; // +20% glucides les jours d'entraînement
+
+  var KCAL_PER_PROT       = 4;    // kcal/g protéines
+  var KCAL_PER_CARB       = 4;    // kcal/g glucides
+  var KCAL_PER_FAT        = 9;    // kcal/g lipides
+
+  var VALID_GENDERS = { male: true, female: true };
+  var VALID_GOALS   = { cut: true, maintenance: true, lean_bulk: true, mass_gain: true };
+
+  // ─── FONCTIONS PURES ──────────────────────────────────────────────────────────
+
+  /**
+   * Calcule le Métabolisme Basal (BMR) via Mifflin-St Jeor.
+   * @param {'male'|'female'} gender
+   * @param {number} weightKg
+   * @param {number} heightCm
+   * @param {number} age
+   * @returns {number} BMR en kcal/j (entier)
+   */
+  function calcBMR(gender, weightKg, heightCm, age) {
+    var base = 10 * weightKg + 6.25 * heightCm - 5 * age;
+    return Math.round(gender === 'male' ? base + 5 : base - 161);
+  }
+
+  /**
+   * Calcule la Dépense Énergétique Totale (TDEE).
+   * @param {number} bmr
+   * @param {number} activityLevel  PAL (ex: 1.2, 1.375, 1.55, 1.725, 1.9)
+   * @returns {number} TDEE en kcal/j (entier)
+   */
+  function calcTDEE(bmr, activityLevel) {
+    return Math.round(bmr * activityLevel);
+  }
+
+  /**
+   * Ajuste les calories selon l'objectif.
+   * Garantie : résultat >= bmr (sécurité sous-alimentation).
+   * @param {number} tdee
+   * @param {'cut'|'maintenance'|'lean_bulk'|'mass_gain'} goal
+   * @param {number} bmr  Plancher de sécurité
+   * @returns {number} caloriesTarget (entier)
+   */
+  function calcCaloriesTarget(tdee, goal, bmr) {
+    var adjusted = Math.round(tdee * (1 + GOAL_ADJUSTMENTS[goal]));
+    return Math.max(adjusted, bmr);
+  }
+
+  /**
+   * Calcule les grammes de protéines selon le genre et le niveau élite.
+   * @param {'male'|'female'} gender
+   * @param {boolean} isElite
+   * @param {number} weightKg
+   * @returns {number} proteinGrams (1 décimale)
+   */
+  function calcProtein(gender, isElite, weightKg) {
+    var perKg = gender === 'male'
+      ? (isElite ? PROT_ELITE_MALE   : PROT_DEFAULT_MALE)
+      : (isElite ? PROT_ELITE_FEMALE : PROT_DEFAULT_FEMALE);
+    return Math.round(perKg * weightKg * 10) / 10;
+  }
+
+  /**
+   * Calcule les grammes de lipides (plancher 0.8g/kg).
+   * @param {number} weightKg
+   * @returns {number} fatGrams (1 décimale)
+   */
+  function calcFat(weightKg) {
+    return Math.round(FAT_MIN_PER_KG * weightKg * 10) / 10;
+  }
+
+  /**
+   * Calcule les grammes de glucides : calories restantes après P et L.
+   * @param {number} caloriesTarget
+   * @param {number} proteinGrams
+   * @param {number} fatGrams
+   * @returns {number} carbsGrams (1 décimale)
+   */
+  function calcCarbs(caloriesTarget, proteinGrams, fatGrams) {
+    var remaining = caloriesTarget - (proteinGrams * KCAL_PER_PROT + fatGrams * KCAL_PER_FAT);
+    return Math.round(Math.max(0, remaining / KCAL_PER_CARB) * 10) / 10;
+  }
+
+  /**
+   * Applique le Carb Cycling (jours d'entraînement : +20% glucides).
+   * Recalcule les calories finales. Si résultat < bmr, remonte au bmr et ajuste G.
+   * @param {number} carbsGrams
+   * @param {number} proteinGrams
+   * @param {number} fatGrams
+   * @param {number} bmr
+   * @returns {{ carbsGrams: number, caloriesTarget: number, clampedToBMR: boolean }}
+   */
+  function applyCarbCycling(carbsGrams, proteinGrams, fatGrams, bmr) {
+    var boostedCarbs = Math.round(carbsGrams * (1 + CARB_CYCLING_BOOST) * 10) / 10;
+    var newCalories  = Math.round(
+      proteinGrams * KCAL_PER_PROT +
+      fatGrams     * KCAL_PER_FAT  +
+      boostedCarbs * KCAL_PER_CARB
+    );
+
+    if (newCalories >= bmr) {
+      return { carbsGrams: boostedCarbs, caloriesTarget: newCalories, clampedToBMR: false };
+    }
+
+    // Sécurité : remonter au BMR, ajuster G en conséquence
+    var carbsAtBMR = Math.round(
+      Math.max(0, (bmr - proteinGrams * KCAL_PER_PROT - fatGrams * KCAL_PER_FAT) / KCAL_PER_CARB) * 10
+    ) / 10;
+    return { carbsGrams: carbsAtBMR, caloriesTarget: bmr, clampedToBMR: true };
+  }
+
+  // ─── VALIDATION ───────────────────────────────────────────────────────────────
+
+  function validateInputs(inputs) {
+    var errors = [];
+    if (!VALID_GENDERS[inputs.gender])           errors.push('gender invalide : ' + inputs.gender);
+    if (!VALID_GOALS[inputs.goal])               errors.push('goal invalide : ' + inputs.goal);
+    if (!(inputs.age > 0 && inputs.age < 120))   errors.push('age invalide : ' + inputs.age);
+    if (!(inputs.weightKg > 0 && inputs.weightKg < 500)) errors.push('weightKg invalide : ' + inputs.weightKg);
+    if (!(inputs.heightCm > 0 && inputs.heightCm < 300)) errors.push('heightCm invalide : ' + inputs.heightCm);
+    if (!(inputs.activityLevel >= 1 && inputs.activityLevel <= 2.5)) errors.push('activityLevel invalide : ' + inputs.activityLevel);
+    return errors;
+  }
+
+  // ─── API PUBLIQUE ──────────────────────────────────────────────────────────────
+
+  /**
+   * Calcule et retourne le USER_STATE complet.
+   *
+   * @param {{
+   *   age: number,
+   *   gender: 'male'|'female',
+   *   weightKg: number,
+   *   heightCm: number,
+   *   activityLevel: number,
+   *   goal: 'cut'|'maintenance'|'lean_bulk'|'mass_gain',
+   *   isElite: boolean,
+   *   trainingDay: boolean
+   * }} inputs
+   *
+   * @returns {{
+   *   inputs: object,
+   *   bmr: number,
+   *   tdee: number,
+   *   caloriesTarget: number,
+   *   proteinGrams: number,
+   *   fatGrams: number,
+   *   carbsGrams: number,
+   *   caloriesCheck: number,
+   *   carbCyclingApplied: boolean,
+   *   clampedToBMR: boolean,
+   *   errors: string[]
+   * }}
+   */
+  function compute(inputs) {
+    var errors = validateInputs(inputs);
+    if (errors.length > 0) {
+      return { inputs: inputs, errors: errors,
+               bmr: 0, tdee: 0, caloriesTarget: 0,
+               proteinGrams: 0, fatGrams: 0, carbsGrams: 0,
+               caloriesCheck: 0, carbCyclingApplied: false, clampedToBMR: false };
+    }
+
+    var bmr = calcBMR(inputs.gender, inputs.weightKg, inputs.heightCm, inputs.age);
+    var tdee = calcTDEE(bmr, inputs.activityLevel);
+    var caloriesTarget = calcCaloriesTarget(tdee, inputs.goal, bmr);
+
+    var proteinGrams = calcProtein(inputs.gender, inputs.isElite, inputs.weightKg);
+    var fatGrams     = calcFat(inputs.weightKg);
+    var carbsGrams   = calcCarbs(caloriesTarget, proteinGrams, fatGrams);
+
+    var carbCyclingApplied = false;
+    var clampedToBMR       = false;
+
+    if (inputs.trainingDay) {
+      var cycled = applyCarbCycling(carbsGrams, proteinGrams, fatGrams, bmr);
+      carbsGrams         = cycled.carbsGrams;
+      caloriesTarget     = cycled.caloriesTarget;
+      clampedToBMR       = cycled.clampedToBMR;
+      carbCyclingApplied = true;
+    }
+
+    // Vérification cohérence calorique : P×4 + G×4 + L×9
+    var caloriesCheck = Math.round(
+      proteinGrams * KCAL_PER_PROT +
+      fatGrams     * KCAL_PER_FAT  +
+      carbsGrams   * KCAL_PER_CARB
+    );
+
+    return {
+      inputs:             inputs,
+      bmr:                bmr,
+      tdee:               tdee,
+      caloriesTarget:     caloriesTarget,
+      proteinGrams:       proteinGrams,
+      fatGrams:           fatGrams,
+      carbsGrams:         carbsGrams,
+      caloriesCheck:      caloriesCheck,
+      carbCyclingApplied: carbCyclingApplied,
+      clampedToBMR:       clampedToBMR,
+      errors:             []
+    };
+  }
+
+  // ─── EXPOSITION GLOBALE ────────────────────────────────────────────────────────
+  window.NutritionMaster = {
+    compute:         compute,
+    // Fonctions pures exposées pour tests unitaires
+    calcBMR:         calcBMR,
+    calcTDEE:        calcTDEE,
+    calcCaloriesTarget: calcCaloriesTarget,
+    calcProtein:     calcProtein,
+    calcFat:         calcFat,
+    calcCarbs:       calcCarbs,
+    applyCarbCycling: applyCarbCycling
+  };
+
+})();
