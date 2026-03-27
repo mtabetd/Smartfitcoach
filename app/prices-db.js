@@ -1179,7 +1179,7 @@
     },
     'Nori (algues)': {
       name: 'Nori (algues)',
-      pricePerG: r(30 / 10),
+      pricePerG: r(30 / 25),
       source: 'carrefour',
       updatedAt: '2026-03'
     },
@@ -1331,6 +1331,190 @@
       name: 'Lait de coco (léger)',
       pricePerMl: r(11 / 400),
       source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Fruits & légumes frais ────────────────────────────────────────────────
+    'Avocat': {
+      name: 'Avocat',
+      pricePerG: r(8 / 220),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Citron vert': {
+      name: 'Citron vert',
+      pricePerPce: r(1.5),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Citron': {
+      name: 'Citron',
+      pricePerPce: r(1.0),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Poivrons rouges': {
+      name: 'Poivrons rouges',
+      pricePerPce: r(3.0),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Conserves & légumineuses ──────────────────────────────────────────────
+    'Tomates concassées': {
+      name: 'Tomates concassées',
+      pricePerG: r(10 / 400),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pois chiches (boîte)': {
+      name: 'Pois chiches (boîte)',
+      pricePerG: r(12 / 400),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Haricots noirs (boîte)': {
+      name: 'Haricots noirs (boîte)',
+      pricePerG: r(12 / 400),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Haricots rouges (boîte)': {
+      name: 'Haricots rouges (boîte)',
+      pricePerG: r(12 / 400),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Épices & condiments ───────────────────────────────────────────────────
+    'Cannelle': {
+      name: 'Cannelle',
+      pricePerG: r(25 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Sel, poivre': {
+      name: 'Sel, poivre',
+      pricePerG: r(0.002),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Sel': {
+      name: 'Sel',
+      pricePerG: r(0.001),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Sel, poivre, noix de muscade': {
+      name: 'Sel, poivre, noix de muscade',
+      pricePerG: r(0.003),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Sel, poivre, herbes': {
+      name: 'Sel, poivre, herbes',
+      pricePerG: r(0.003),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Sucre glace (décor)': {
+      name: 'Sucre glace (décor)',
+      pricePerG: r(10 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Sucre (optionnel)': {
+      name: 'Sucre (optionnel)',
+      pricePerG: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Jus de citron vert': {
+      name: 'Jus de citron vert',
+      pricePerMl: r(15 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Kecap manis (ou sauce soja + miel)': {
+      name: 'Kecap manis (ou sauce soja + miel)',
+      pricePerMl: r(25 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Graines & oléagineux ──────────────────────────────────────────────────
+    'Graines de sésame': {
+      name: 'Graines de sésame',
+      pricePerG: r(20 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Amandes': {
+      name: 'Amandes',
+      pricePerG: r(80 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Noix': {
+      name: 'Noix',
+      pricePerG: r(70 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Beurre de cacahuète (naturel)': {
+      name: 'Beurre de cacahuète (naturel)',
+      pricePerG: r(35 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Edamame': {
+      name: 'Edamame',
+      pricePerG: r(18 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Bouillons & bases liquides ────────────────────────────────────────────
+    'Bouillon légumes': {
+      name: 'Bouillon légumes',
+      pricePerMl: r(0.002),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+
+    // ── Pains & féculents ─────────────────────────────────────────────────────
+    'Croûtons pain complet': {
+      name: 'Croûtons pain complet',
+      pricePerG: r(15 / 200),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Pain complet (tranches épaisses)': {
+      name: 'Pain complet (tranches épaisses)',
+      pricePerPce: r(2.5),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Flocons d\'avoine (mixés en farine)': {
+      name: 'Flocons d\'avoine (mixés en farine)',
+      pricePerG: r(12 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Viandes & protéines alternatives ─────────────────────────────────────
+    'Blanc de poulet (avec os)': {
+      name: 'Blanc de poulet (avec os)',
+      pricePerG: r(55 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Épices asiatiques ─────────────────────────────────────────────────────
+    'Galanga (ou gingembre)': {
+      name: 'Galanga (ou gingembre)',
+      pricePerG: r(30 / 200),
+      source: 'marjane',
       updatedAt: '2026-03'
     }
   };
