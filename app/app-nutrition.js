@@ -384,7 +384,11 @@ function renderStep2(p) {
   var bmi = calcBMI();
   if (bmi !== null) {
     var info = bmiInfo(bmi);
-    var badge = h('div', {'class': 'imc-badge', style: 'color:' + info.color + ';border-color:' + info.color}, 'IMC : ' + bmi.toFixed(1) + ' \u2014 ' + info.label);
+    var badge = h('div', {'class': 'imc-widget', style: 'color:' + info.color + ';border-color:' + info.color + ';background:' + info.color + '12'}, [
+      h('div', {'class': 'imc-value'}, bmi.toFixed(1)),
+      h('div', {'class': 'imc-label'}, 'IMC'),
+      h('div', {'class': 'imc-category'}, info.label)
+    ]);
     p.appendChild(badge);
   }
 
@@ -1327,7 +1331,8 @@ function renderStep8(p) {
   stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, ppk), h('div', {'class': 'stat-label'}, 'g prot/kg')]));
   if (bmi !== null) {
     var bi = bmiInfo(bmi);
-    stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, 'IMC')]));
+    var imcClass = bmi < 18.5 ? 'stat-warn' : bmi < 25 ? 'stat-good' : bmi < 30 ? 'stat-warn' : 'stat-alert';
+    stats.appendChild(h('div', {'class': 'stat-cell ' + imcClass}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, 'IMC')]));
   }
   p.appendChild(stats);
 
@@ -2223,13 +2228,13 @@ function renderSaladBar(p) {
 
   var chipsRow = h('div', { style: 'display:flex;gap:8px' });
   [
-    { label: 'P', cur: macros.p, tgt: tgtMacros.p, color: '#2196F3' },
-    { label: 'G', cur: macros.g, tgt: tgtMacros.g, color: '#FF9800' },
-    { label: 'L', cur: macros.l, tgt: tgtMacros.l, color: '#9C27B0' }
+    { label: 'P', cur: macros.p, tgt: tgtMacros.p, cssClass: 'macro-fill-protein' },
+    { label: 'G', cur: macros.g, tgt: tgtMacros.g, cssClass: 'macro-fill-carbs' },
+    { label: 'L', cur: macros.l, tgt: tgtMacros.l, cssClass: 'macro-fill-fat' }
   ].forEach(function(m) {
     chipsRow.appendChild(h('div', { style: 'flex:1;background:var(--card);border-radius:8px;padding:4px 8px;text-align:center;border:1px solid var(--border)' },
       h('div', { style: 'font-size:9px;color:var(--grey);text-transform:uppercase;letter-spacing:1px' }, m.label),
-      h('div', { style: 'font-size:12px;font-weight:700;color:' + m.color }, m.cur + '<span style="font-weight:400;color:var(--grey)">/' + m.tgt + 'g</span>')
+      h('div', { style: 'font-size:12px;font-weight:700;color:' + (m.cssClass === 'macro-fill-protein' ? 'var(--green)' : m.cssClass === 'macro-fill-carbs' ? 'var(--blue, #6A9ADA)' : 'var(--orange)') }, m.cur + '<span style="font-weight:400;color:var(--grey)">/' + m.tgt + 'g</span>')
     ));
   });
   progressBar.appendChild(chipsRow);

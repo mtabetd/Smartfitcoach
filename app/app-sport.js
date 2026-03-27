@@ -1960,10 +1960,15 @@ function renderMusculationProgram(p) {
     var z2hi = Math.round((hrMax - hrRest) * 0.70 + hrRest);
     var z3lo = Math.round((hrMax - hrRest) * 0.70 + hrRest);
     var z3hi = Math.round((hrMax - hrRest) * 0.80 + hrRest);
-    var karvonenDiv = h('div', {style: 'background:#FFEBEE;border-left:4px solid #C0392B;padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#7B1A1A'});
-    karvonenDiv.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, '❤ Cardiopathie — Zones FC Karvonen (FC repos ' + hrRest + ' bpm, HRmax estimé ' + hrMax + ' bpm)'));
-    karvonenDiv.appendChild(h('div', {}, 'Zone 1 (Récupération active) : ' + z1lo + '–' + z1hi + ' bpm | Zone 2 (Aérobie) : ' + z2lo + '–' + z2hi + ' bpm | Zone 3 (Seuil) : ' + z3lo + '–' + z3hi + ' bpm'));
-    karvonenDiv.appendChild(h('div', {style: 'margin-top:4px;font-style:italic'}, '⚠ Beta-bloquants : si prescrit, votre FC max réelle est plus basse (~10-20%). Consulter votre cardiologue pour ajuster les zones. Test d\'effort (VO2max) recommandé avant programme intensif.'));
+    var karvonenDiv = h('div', {style: 'border-left:2px solid var(--red);padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;background:var(--redbg)'});
+    karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:8px'}, 'Cardiopathie — Zones FC Karvonen'));
+    karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);margin-bottom:8px'}, 'FC repos ' + hrRest + ' bpm · HRmax estimé ' + hrMax + ' bpm'));
+    var zonesRow = h('div', {style: 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px'});
+    zonesRow.appendChild(h('span', {'class': 'val-good'}, 'Z1 Récup ' + z1lo + '–' + z1hi + ' bpm'));
+    zonesRow.appendChild(h('span', {'class': 'val-good'}, 'Z2 Aérobie ' + z2lo + '–' + z2hi + ' bpm'));
+    zonesRow.appendChild(h('span', {'class': 'val-neutral'}, 'Z3 Seuil ' + z3lo + '–' + z3hi + ' bpm'));
+    karvonenDiv.appendChild(zonesRow);
+    karvonenDiv.appendChild(h('div', {style: 'margin-top:4px;font-style:italic;color:var(--grey)'}, '⚠ Beta-bloquants : si prescrit, votre FC max réelle est plus basse (~10-20%). Consulter votre cardiologue pour ajuster les zones. Test d\'effort (VO2max) recommandé avant programme intensif.'));
     p.appendChild(karvonenDiv);
   }
 
@@ -2318,7 +2323,7 @@ function renderMusculationProgram(p) {
           // Indicateur succès/échec
           if (setRow.actualReps !== null && (setRow.actualWeight !== null || isBodyweight)) {
             var ok = setRow.actualReps >= setRow.targetReps && (isBodyweight || setRow.actualWeight >= setRow.targetWeight);
-            inputZone.appendChild(h('span', {style: 'font-size:14px;color:' + (ok ? '#27AE60' : '#E74C3C')}, ok ? '\u2713' : '\u2717'));
+            inputZone.appendChild(h('span', {'class': ok ? 'set-success' : 'set-fail', style: 'font-size:14px'}, ok ? '\u2713' : '\u2717'));
           }
 
           row.appendChild(inputZone);

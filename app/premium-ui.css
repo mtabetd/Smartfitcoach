@@ -683,3 +683,126 @@ body.dark-mode .week-separator{border-color:var(--border)}
     max-width: 400px;
   }
 }
+
+/* -------------------------------------------------------
+   SEMANTIC VALUE INDICATORS
+   Green = good · Orange = warning · Red = alert
+   Applied to macros, vitals, performance metrics
+   ------------------------------------------------------- */
+
+/* Macro progress bars — colored fill */
+.macro-fill-protein { background: var(--green) !important; }
+.macro-fill-carbs   { background: var(--blue, #6A9ADA) !important; }
+.macro-fill-fat     { background: var(--orange) !important; }
+
+/* Value status chips — compact inline indicators */
+.val-good    { color: var(--green);  background: var(--greenbg);  border: 1px solid var(--green);  padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.val-warn    { color: var(--orange); background: var(--orangebg); border: 1px solid var(--orange); padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.val-alert   { color: var(--red);    background: var(--redbg);    border: 1px solid var(--red);    padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.val-neutral { color: var(--grey);   border: 1px solid var(--border); padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+
+/* Calorie budget bar — dynamic color */
+.budget-bar-fill {
+  background: var(--green);
+  transition: background 0.4s ease, width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.budget-bar-fill.over-budget { background: var(--red); }
+.budget-bar-fill.near-budget { background: var(--orange); }
+
+/* Set tracking — per-series result color */
+.set-success { color: var(--green); font-weight: 600; }
+.set-fail    { color: var(--red);   font-weight: 600; }
+.set-pending { color: var(--grey); }
+
+/* Performance trend arrows */
+.trend-up   { color: var(--green); }
+.trend-down { color: var(--red); }
+.trend-flat { color: var(--grey); }
+
+/* Score badge — weekly compliance */
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  font-weight: normal;
+  border: 2px solid;
+}
+.score-badge.excellent { color: var(--green);  border-color: var(--green);  background: var(--greenbg); }
+.score-badge.good      { color: var(--blue, #6A9ADA); border-color: var(--blue, #6A9ADA); background: var(--bluebg, rgba(106,154,218,.08)); }
+.score-badge.average   { color: var(--orange); border-color: var(--orange); background: var(--orangebg); }
+.score-badge.poor      { color: var(--red);    border-color: var(--red);    background: var(--redbg); }
+
+/* Macro ring — colored outlines for donut chart segments */
+.ring-protein { stroke: var(--green); }
+.ring-carbs   { stroke: var(--blue, #6A9ADA); }
+.ring-fat     { stroke: var(--orange); }
+
+/* Stat cell highlight — for key metrics in summary */
+.stat-cell.stat-good  { border-bottom: 2px solid var(--green); }
+.stat-cell.stat-warn  { border-bottom: 2px solid var(--orange); }
+.stat-cell.stat-alert { border-bottom: 2px solid var(--red); }
+
+/* -------------------------------------------------------
+   MACRO PROGRESS BAR — 3-color split visual
+   ------------------------------------------------------- */
+.macro-bar-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 4px 0 8px;
+}
+.macro-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+}
+
+/* -------------------------------------------------------
+   ANIMATED NUMBER — when values update
+   ------------------------------------------------------- */
+@keyframes numPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+.num-pop { animation: numPop 0.3s ease; }
+
+/* -------------------------------------------------------
+   IMC WIDGET — prominent colored display
+   ------------------------------------------------------- */
+.imc-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 24px;
+  border: 2px solid;
+  margin: 12px 0;
+  gap: 4px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.imc-widget .imc-value {
+  font-family: 'Georgia', serif;
+  font-size: 36px;
+  line-height: 1;
+  font-weight: normal;
+}
+.imc-widget .imc-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.imc-widget .imc-category {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
