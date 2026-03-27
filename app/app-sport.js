@@ -292,7 +292,7 @@ window.SPORT = {
     var content = h('div', {'class': 'fade-in'});
 
     // Header with progress (only shown after step 0, not on intro pages)
-    if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16) {
+    if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16 && S.sStep !== 20) {
       var hdr = h('header', {'class': 'header'});
       var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : 'Musculation';
       hdr.appendChild(h('div', {'class': 'logo', html: 'MTD<span>' + sportLabel + '</span>'}));
@@ -306,6 +306,7 @@ window.SPORT = {
     }
 
     if (S.sStep === 0) renderObjectif(content);              // Type selection
+    else if (S.sStep === 20) renderMuscuMedicalQ(content);   // Medical questionnaire muscu
     else if (S.sStep === 16) renderChargesQuestionnaire(content); // Charges questionnaire
     else if (S.sStep === 15) renderDedicatedPrograms(content); // Dedicated programs
     else if (S.sStep === 1) renderMusculationGoals(content);  // Muscu objectives
@@ -374,10 +375,10 @@ function renderObjectif(p) {
   p.appendChild(h('div', {'class': 'section-label'}, 'Type de programme'));
   var typeGrid = h('div', {'class': 'card-grid-2'});
 
-  // Musculation - clicking goes to charges questionnaire first (step 16)
+  // Musculation - clicking goes to medical questionnaire first (step 20)
   typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
     S.sportType = 'musculation';
-    S.sStep = 16;
+    S.sStep = 20;
     if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'musculation'});
     window.render();
   }}, [
@@ -468,6 +469,129 @@ function renderObjectif(p) {
   p.appendChild(typeGrid);
 
   // No Continue button needed - cards auto-navigate
+}
+
+// ─── STEP 20: QUESTIONNAIRE MÉDICAL MUSCU ───
+function renderMuscuMedicalQ(p) {
+  var med = S.muscuMedical;
+
+  // Header with back button
+  var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
+  hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+  hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
+  p.appendChild(hdr);
+
+  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
+  p.appendChild(h('h1', {html: '\uD83C\uDFE5 Bilan<br><em>médical muscu</em>'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de générer votre programme, aidez-nous à adapter les exercices à votre situation physique.'));
+
+  // ─── Section 1 : Zones douloureuses ───
+  p.appendChild(h('div', {'class': 'section-label'}, 'Avez-vous des douleurs ou fragilités ?'));
+
+  var zonesData = [
+    {key: 'shoulders', label: 'Épaules',        icon: '💪'},
+    {key: 'elbows',    label: 'Coudes',          icon: '🦾'},
+    {key: 'wrists',    label: 'Poignets',        icon: '✋'},
+    {key: 'neck',      label: 'Nuque/Cervicales',icon: '🧠'},
+    {key: 'upperBack', label: 'Haut du dos',     icon: '🔝'},
+    {key: 'lowerBack', label: 'Bas du dos',      icon: '⬇'},
+    {key: 'hips',      label: 'Hanches',         icon: '🦴'},
+    {key: 'knees',     label: 'Genoux',          icon: '🦵'},
+    {key: 'ankles',    label: 'Chevilles',       icon: '🦶'}
+  ];
+
+  var zonesGrid = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px'});
+  zonesData.forEach(function(z) {
+    var active = med[z.key];
+    var chip = h('div', {
+      style: 'padding:8px 14px;border-radius:20px;border:1.5px solid ' + (active ? '#C0392B' : 'var(--border)') + ';background:' + (active ? '#FFEBEE' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:' + (active ? '#C0392B' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
+      onclick: (function(key){ return function(){ S.muscuMedical[key] = !S.muscuMedical[key]; window.render(); }; })(z.key)
+    }, z.icon + ' ' + z.label);
+    zonesGrid.appendChild(chip);
+  });
+  p.appendChild(zonesGrid);
+
+  // ─── Section 2 : Antécédents diagnostiqués ───
+  p.appendChild(h('div', {'class': 'section-label'}, 'Avez-vous un diagnostic confirmé ?'));
+
+  var antecedentsData = [
+    {key: 'herniaDisc',     label: 'Hernie discale (IRM)'},
+    {key: 'herniaInguinal', label: 'Hernie inguinale'},
+    {key: 'rotatorCuff',    label: 'Déchirure coiffe des rotateurs'},
+    {key: 'acl',            label: 'LCA opéré/fragilisé'},
+    {key: 'osteoporosis',   label: 'Ostéoporose'},
+    {key: 'hypertension',   label: 'HTA sévère'}
+  ];
+
+  var antGrid = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px'});
+  antecedentsData.forEach(function(a) {
+    var active = med[a.key];
+    var chip = h('div', {
+      style: 'padding:8px 14px;border-radius:20px;border:1.5px solid ' + (active ? '#C0392B' : 'var(--border)') + ';background:' + (active ? '#FFEBEE' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:' + (active ? '#C0392B' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
+      onclick: (function(key){ return function(){ S.muscuMedical[key] = !S.muscuMedical[key]; window.render(); }; })(a.key)
+    }, a.label);
+    antGrid.appendChild(chip);
+  });
+  p.appendChild(antGrid);
+
+  // ─── Section 3 : Niveau de douleur général (si au moins une zone cochée) ───
+  var hasAnyZone = zonesData.some(function(z){ return med[z.key]; });
+  if (hasAnyZone) {
+    p.appendChild(h('div', {'class': 'section-label'}, 'Quel est l\'intensité générale ?'));
+    var painLevels = [
+      {val: 0, label: 'Aucune'},
+      {val: 1, label: 'Légère'},
+      {val: 2, label: 'Modérée'},
+      {val: 3, label: 'Sévère'}
+    ];
+    var painRow = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px'});
+    painLevels.forEach(function(pl) {
+      var active = med.painLevel === pl.val;
+      var btn = h('div', {
+        style: 'padding:8px 16px;border-radius:20px;border:1.5px solid ' + (active ? '#C0392B' : 'var(--border)') + ';background:' + (active ? '#FFEBEE' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:' + (active ? '#C0392B' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
+        onclick: (function(v){ return function(){ S.muscuMedical.painLevel = v; window.render(); }; })(pl.val)
+      }, pl.label);
+      painRow.appendChild(btn);
+    });
+    p.appendChild(painRow);
+  }
+
+  // ─── Section 4 : Notes libres ───
+  p.appendChild(h('div', {'class': 'section-label'}, 'Notes (optionnel)'));
+  var textarea = h('textarea', {
+    placeholder: 'Précisez si besoin (ex: opération genou 2022, hernie L4-L5...)',
+    style: 'width:100%;min-height:72px;padding:10px;border:1px solid var(--border);background:var(--ivory);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;resize:vertical;box-sizing:border-box;margin-bottom:16px',
+    oninput: function(e){ S.muscuMedical.notes = e.target.value; }
+  });
+  if (med.notes) textarea.value = med.notes;
+  p.appendChild(textarea);
+
+  // ─── Avertissement si sévère ou antécédent grave ───
+  var hasSevere = med.painLevel === 3 || med.herniaDisc || med.rotatorCuff || med.acl;
+  if (hasSevere) {
+    var warn = h('div', {style: 'background:#FFEBEE;border-left:4px solid #C0392B;padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#7B1A1A;line-height:1.6'});
+    warn.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, '\u26A0 Douleur sévère ou antécédent grave détecté. Nous adapterons le programme en mode réhabilitation.'));
+    warn.appendChild(h('strong', {}, 'Consultez impérativement un médecin ou kinésithérapeute avant de reprendre la musculation lourde.'));
+    p.appendChild(warn);
+  }
+
+  // ─── Bouton Continuer ───
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
+    S.muscuMedical.done = true;
+    S.sStep = 16;
+    window.render();
+  }}, 'Continuer \u2192'));
+
+  // ─── Lien Passer ───
+  var skipLink = h('div', {
+    style: 'text-align:center;margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-decoration:underline;cursor:pointer',
+    onclick: function(){
+      S.muscuMedical.done = true;
+      S.sStep = 16;
+      window.render();
+    }
+  }, 'Passer (aucune douleur)');
+  p.appendChild(skipLink);
 }
 
 // ─── STEP 16: QUESTIONNAIRE CHARGES ───

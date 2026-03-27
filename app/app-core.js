@@ -654,6 +654,30 @@ window.S = {
   crossfit1RM: {},  // { 'clean': 80, 'snatch': 60, 'deadlift': 140, ... } in kg
   // Strength assessment profile
   muscuStrengthProfile: {},  // { 'bench_press': 60, 'squat': 80, 'deadlift': 100, ... }
+  muscuMedical: {
+    done: false,
+    // Zones douloureuses (multi-select)
+    shoulders: false,   // Épaules (coiffe des rotateurs, tendinite)
+    elbows: false,      // Coudes (épicondylite, tendinite)
+    wrists: false,      // Poignets
+    neck: false,        // Nuque / cervicales
+    upperBack: false,   // Haut du dos / thoracique
+    lowerBack: false,   // Bas du dos (lombalgie, hernie discale)
+    hips: false,        // Hanches (conflit fémoro-acétabulaire)
+    knees: false,       // Genoux (tendinite rotulienne, ménisques)
+    ankles: false,      // Chevilles
+    // Antécédents graves
+    herniaDisc: false,  // Hernie discale confirmée (IRM)
+    herniaInguinal: false, // Hernie inguinale / abdominale
+    rotatorCuff: false, // Déchirure coiffe des rotateurs (diagnostiquée)
+    acl: false,         // LCA opéré ou fragilisé
+    osteoporosis: false,// Ostéoporose
+    hypertension: false,// HTA sévère (>160/100)
+    // Intensité douleur générale 0-3
+    painLevel: 0,       // 0=aucune 1=légère 2=modérée 3=sévère
+    // Notes libres
+    notes: ''
+  },
   // Running
   runningLevel: null,        // 'beginner','intermediate','advanced'
   runningGoal: null,         // '5k','10k','semi','marathon','trail'
