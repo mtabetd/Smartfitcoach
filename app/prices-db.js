@@ -784,6 +784,554 @@
       pricePerG: r(350 / 1000),
       source: 'estimation',
       updatedAt: '2026-03'
+    },
+
+    // ── Légumes & herbes supplémentaires ───────────────────────────────────────
+    'Champignons shiitake': {
+      name: 'Champignons shiitake',
+      pricePerG: r(60 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Laitue romaine': {
+      name: 'Laitue romaine',
+      pricePerG: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Laitue': {
+      name: 'Laitue',
+      pricePerG: r(6 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Tomates cerises': {
+      name: 'Tomates cerises',
+      pricePerG: r(12 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Tomates mûres': {
+      name: 'Tomates mûres',
+      pricePerG: r(5 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Tomates': {
+      name: 'Tomates',
+      pricePerG: r(5 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Carottes': {
+      name: 'Carottes',
+      pricePerG: r(4 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pousses de soja': {
+      name: 'Pousses de soja',
+      pricePerG: r(12 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Oignon vert': {
+      name: 'Oignon vert',
+      pricePerG: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Salade mélangée': {
+      name: 'Salade mélangée',
+      pricePerG: r(12 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Pastèque': {
+      name: 'Pastèque',
+      pricePerG: r(4 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Menthe fraîche': {
+      name: 'Menthe fraîche',
+      pricePerG: r(2 / 90),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Romarin frais': {
+      name: 'Romarin frais',
+      pricePerG: r(2 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Thym frais': {
+      name: 'Thym frais',
+      pricePerG: r(2 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Aneth frais': {
+      name: 'Aneth frais',
+      pricePerG: r(3 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Ciboulette fraîche': {
+      name: 'Ciboulette fraîche',
+      pricePerG: r(2.5 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Petits pois surgelés': {
+      name: 'Petits pois surgelés',
+      pricePerG: r(18 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Légumineuses supplémentaires ───────────────────────────────────────────
+    'Pois chiches secs (trempés 12h)': {
+      name: 'Pois chiches secs (trempés 12h)',
+      pricePerG: r(12 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Lentilles vertes': {
+      name: 'Lentilles vertes',
+      pricePerG: r(22 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Haricots blancs (boîte)': {
+      name: 'Haricots blancs (boîte)',
+      pricePerG: r(8 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Fruits supplémentaires ─────────────────────────────────────────────────
+    'Kiwi': {
+      name: 'Kiwi',
+      pricePerG: r(15 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pomme': {
+      name: 'Pomme',
+      pricePerG: r(6 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Fruits rouges surgelés': {
+      name: 'Fruits rouges surgelés',
+      pricePerG: r(35 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Fruits rouges': {
+      name: 'Fruits rouges',
+      pricePerG: r(35 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Dattes Medjool dénoyautées': {
+      name: 'Dattes Medjool dénoyautées',
+      pricePerG: r(60 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Raisins secs': {
+      name: 'Raisins secs',
+      pricePerG: r(30 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Mangue fraîche': {
+      name: 'Mangue fraîche',
+      pricePerG: r(12 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Mangue surgelée': {
+      name: 'Mangue surgelée',
+      pricePerG: r(25 / 400),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Banane mûre': {
+      name: 'Banane mûre',
+      pricePerG: r(5 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Banane congelée': {
+      name: 'Banane congelée',
+      pricePerG: r(7 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Myrtilles': {
+      name: 'Myrtilles',
+      pricePerG: r(60 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Ananas (boîte)': {
+      name: 'Ananas (boîte)',
+      pricePerG: r(14 / 560),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Produits d'épicerie supplémentaires ────────────────────────────────────
+    'Granola': {
+      name: 'Granola',
+      pricePerG: r(80 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Cacahuètes concassées': {
+      name: 'Cacahuètes concassées',
+      pricePerG: r(50 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Noix de coco râpée': {
+      name: 'Noix de coco râpée',
+      pricePerG: r(50 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Poudre de cacao': {
+      name: 'Poudre de cacao',
+      pricePerG: r(60 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Pépites de chocolat noir': {
+      name: 'Pépites de chocolat noir',
+      pricePerG: r(75 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Fécule de maïs': {
+      name: 'Fécule de maïs',
+      pricePerG: r(18 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Farine': {
+      name: 'Farine',
+      pricePerG: r(7 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Levure chimique': {
+      name: 'Levure chimique',
+      pricePerG: r(5 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Câpres': {
+      name: 'Câpres',
+      pricePerG: r(20 / 100),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Anchois': {
+      name: 'Anchois',
+      pricePerG: r(30 / 100),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Moutarde': {
+      name: 'Moutarde',
+      pricePerG: r(20 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Ail en poudre': {
+      name: 'Ail en poudre',
+      pricePerG: r(8 / 50),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Épices supplémentaires ─────────────────────────────────────────────────
+    'Garam masala': {
+      name: 'Garam masala',
+      pricePerG: r(8 / 50),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Curcuma': {
+      name: 'Curcuma',
+      pricePerG: r(5 / 50),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Thym séché': {
+      name: 'Thym séché',
+      pricePerG: r(8 / 15),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Herbes de Provence': {
+      name: 'Herbes de Provence',
+      pricePerG: r(8 / 15),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Piment doux': {
+      name: 'Piment doux',
+      pricePerG: r(8 / 50),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Chili en poudre': {
+      name: 'Chili en poudre',
+      pricePerG: r(8 / 50),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Flocons de piment rouge': {
+      name: 'Flocons de piment rouge',
+      pricePerG: r(10 / 50),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Origan séché': {
+      name: 'Origan séché',
+      pricePerG: r(8 / 15),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Sauces & condiments asiatiques supplémentaires ─────────────────────────
+    'Gochujang (pâte pimentée)': {
+      name: 'Gochujang (pâte pimentée)',
+      pricePerG: r(80 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Sauce poisson': {
+      name: 'Sauce poisson',
+      pricePerMl: r(15 / 150),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Pâte miso blanche': {
+      name: 'Pâte miso blanche',
+      pricePerG: r(25 / 100),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Kecap manis': {
+      name: 'Kecap manis',
+      pricePerMl: r(15 / 150),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Pâte de piment (sambal)': {
+      name: 'Pâte de piment (sambal)',
+      pricePerG: r(18 / 100),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Sauce tamari': {
+      name: 'Sauce tamari',
+      pricePerMl: r(18 / 150),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Vinaigre de vin rouge': {
+      name: 'Vinaigre de vin rouge',
+      pricePerMl: r(15 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Vinaigre blanc': {
+      name: 'Vinaigre blanc',
+      pricePerMl: r(5 / 250),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Vinaigre de cidre': {
+      name: 'Vinaigre de cidre',
+      pricePerMl: r(15 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Pesto au basilic': {
+      name: 'Pesto au basilic',
+      pricePerG: r(36 / 300),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Produits exotiques supplémentaires ─────────────────────────────────────
+    'Algues wakame séchées': {
+      name: 'Algues wakame séchées',
+      pricePerG: r(20 / 10),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Nori (algues)': {
+      name: 'Nori (algues)',
+      pricePerG: r(30 / 10),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Tofu soyeux': {
+      name: 'Tofu soyeux',
+      pricePerG: r(30 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Étoile de badiane': {
+      name: 'Étoile de badiane',
+      pricePerPce: 2.0,
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Citronelle': {
+      name: 'Citronelle',
+      pricePerPce: 3.0,
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Galanga frais (ou gingembre)': {
+      name: 'Galanga frais (ou gingembre)',
+      pricePerG: r(30 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Huile de coco': {
+      name: 'Huile de coco',
+      pricePerMl: r(60 / 750),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Huile d\'arachide': {
+      name: 'Huile d\'arachide',
+      pricePerMl: r(28 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Pâtes locales (alternative économique) ─────────────────────────────────
+    'Pâtes locales': {
+      name: 'Pâtes locales',
+      pricePerG: r(12 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pâtes fusilli': {
+      name: 'Pâtes fusilli',
+      pricePerG: r(36 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Pâtes courtes (ditalini)': {
+      name: 'Pâtes courtes (ditalini)',
+      pricePerG: r(36 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Muffins anglais complets': {
+      name: 'Muffins anglais complets',
+      pricePerPce: 8.0,
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Divers ─────────────────────────────────────────────────────────────────
+    'Eau': {
+      name: 'Eau',
+      pricePerMl: 0,
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Eau froide': {
+      name: 'Eau froide',
+      pricePerMl: 0,
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Vanille': {
+      name: 'Vanille',
+      pricePerG: r(5 / 10),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Piment rouge': {
+      name: 'Piment rouge',
+      pricePerPce: 1.0,
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Piment': {
+      name: 'Piment',
+      pricePerPce: 1.0,
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Blanc d\'œuf': {
+      name: 'Blanc d\'œuf',
+      pricePerPce: 0.6,
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+
+    // ── Alias noms doublons (normalisation) ────────────────────────────────────
+    'Dinde hachée': {
+      name: 'Dinde hachée',
+      pricePerG: r(55 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Bœuf haché maigre (5%)': {
+      name: 'Bœuf haché maigre (5%)',
+      pricePerG: r(115 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Bœuf (faux-filet, tranches fines)': {
+      name: 'Bœuf (faux-filet, tranches fines)',
+      pricePerG: r(130 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Saumon (pavé)': {
+      name: 'Saumon (pavé)',
+      pricePerG: r(160 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Saumon frais': {
+      name: 'Saumon frais',
+      pricePerG: r(160 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Thon en boîte (au naturel)': {
+      name: 'Thon en boîte (au naturel)',
+      pricePerG: r(9.5 / 120),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Cuisses de poulet sans peau': {
+      name: 'Cuisses de poulet sans peau',
+      pricePerG: r(30 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Lait de coco (léger)': {
+      name: 'Lait de coco (léger)',
+      pricePerMl: r(11 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
     }
   };
 
