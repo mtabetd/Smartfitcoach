@@ -1606,6 +1606,69 @@ function getSuggestedWeight(exerciseName, reps, phase) {
   return Math.max(adjusted, 5);
 }
 
+function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
+  // Récupère l'historique de cet exercice
+  var history = S.muscuProgressionHistory[exerciseName] || [];
+
+  // Si historique disponible, utilise la dernière session
+  if (history.length > 0) {
+    var last = history[history.length - 1];
+    // Règle de progression : si toutes séries réussies → +2.5kg (upper body) ou +5kg (lower body)
+    var lowerBodyKeywords = /squat|leg|fessier|ischios|mollet/i;
+    var increment = lowerBodyKeywords.test(exerciseName) ? 5 : 2.5;
+
+    // Vérifier si la dernière session était "réussie" (toutes reps atteintes)
+    var lastLog = null;
+    Object.keys(S.muscuSessionLog).forEach(function(date) {
+      if (S.muscuSessionLog[date][exerciseName]) {
+        lastLog = { date: date, sets: S.muscuSessionLog[date][exerciseName] };
+      }
+    });
+
+    if (lastLog) {
+      var allSucceeded = lastLog.sets.every(function(s) {
+        return s.actualReps >= s.targetReps && s.actualWeight >= s.targetWeight;
+      });
+      if (allSucceeded) return Math.round((last.weight + increment) * 2) / 2; // arrondi 0.5kg
+      // Échec → maintenir le poids
+      return last.weight;
+    }
+    return last.weight;
+  }
+
+  // Pas d'historique → utilise le poids de base calculé
+  return baseWeight;
+}
+
+function saveMuscuSessionLog() {
+  var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+  localStorage.setItem('mtd_muscu_session_' + uid, JSON.stringify(S.muscuSessionLog));
+
+  // Mettre à jour l'historique de progression
+  Object.keys(S.muscuSessionLog).forEach(function(date) {
+    Object.keys(S.muscuSessionLog[date]).forEach(function(exName) {
+      var sets = S.muscuSessionLog[date][exName];
+      var completed = sets.filter(function(s) { return s.actualWeight !== null; });
+      if (completed.length === 0) return;
+      var avgWeight = completed.reduce(function(sum, s) { return sum + s.actualWeight; }, 0) / completed.length;
+      var avgReps = completed.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / completed.length;
+
+      if (!S.muscuProgressionHistory[exName]) S.muscuProgressionHistory[exName] = [];
+      // Ne pas dupliquer pour la même date
+      var existing = S.muscuProgressionHistory[exName].find(function(entry) { return entry.date === date; });
+      if (!existing) {
+        S.muscuProgressionHistory[exName].push({
+          date: date,
+          week: S.muscuCycle || 1,
+          weight: Math.round(avgWeight * 2) / 2,
+          reps: Math.round(avgReps)
+        });
+      }
+    });
+  });
+  localStorage.setItem('mtd_muscu_progression_' + uid, JSON.stringify(S.muscuProgressionHistory));
+}
+
 function getMuscuPhase(week) {
   for (var i = 0; i < MUSCU_PHASES.length; i++) {
     if (MUSCU_PHASES[i].weeks.indexOf(week) !== -1) return MUSCU_PHASES[i];
