@@ -718,7 +718,9 @@ window.S = {
   // Triathlon / IRONMAN
   triathlonGoal: null, triathlonLevel: null, triathlonWeak: null,
   triathlonSwimPace: null, triathlonBikePace: null, triathlonRunPace: null,
-  triathlonProgram: null, triathlonWeek: 1, selectedTriDay: 0
+  triathlonProgram: null, triathlonWeek: 1, selectedTriDay: 0,
+  // Cardio metrics
+  heartRateRest: null         // FC repos en bpm (optionnel, défaut 65 si non renseigné)
 };
 
 // ─── MUSCULATION KEY EXERCISES (Strength Assessment) ───
