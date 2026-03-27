@@ -53,47 +53,63 @@ var HALTERO_CYCLES = [
         name: 'Clean & Jerk',
         day: 1,
         warmup: [
-          '3x5 Muscle Clean (barre vide)',
-          '3x3 Front Squat (montée progressive)',
-          '3x3 Push Jerk (montée progressive)',
-          '3x2 Squat Clean @50%',
+          '3x5 Muscle Clean (barre vide — focus réception coudes hauts)',
+          '3x3 Romanian Deadlift (position de départ du clean)',
+          '3x3 Hang Clean à genou (drill position basse)',
+          '3x3 Front Squat (montée progressive — coudes hauts)',
+          '3x3 Push Jerk (dip vertical, drive explosif)',
+          '3x2 Pause Squat Clean @50% (2s pause en bas)',
           '2x2 Clean & Jerk @60%'
         ],
         accessory: [
-          '3x5 Clean Pull @90% du Clean',
-          '3x8 Front Rack Lunges',
-          '3x10 Bent Over Row'
+          '3x5 Clean Pull @90% du Clean (tirage explosif + shrug)',
+          '3x8 Front Rack Lunges (stabilité rack)',
+          '3x10 Bent Over Row (force de tirage dorsaux)'
+        ],
+        technical_drills: [
+          'Muscle Clean: épaules au-dessus de la barre, coudes qui montent',
+          'Clean Pull: extension complète hanches-genoux-orteils avant le tirage sous',
+          'Jerk Balance: split position stable — pied avant = tibia vertical',
+          'Push Press: drive des jambes au max, bras terminent le mouvement'
         ],
         standards_key: 'squat_clean',
         jerk_key: 'shoulder_to_oh',
         progression_notes: [
-          'S1-2: Focus réception basse et rebond',
-          'S3-4: Accélération du 2ème tirage',
-          'S5: Timing du jerk après le clean',
-          'S6: PR day — 1 Clean & Jerk'
+          'S1-2: Focus réception basse et rebond élastique',
+          'S3-4: Accélération du 2ème tirage (explosion hanches)',
+          'S5: Timing du jerk après le clean (respirez, repartez)',
+          'S6: PR day — 1 Clean & Jerk — montée progressive longue'
         ]
       },
       {
         name: 'Snatch',
         day: 2,
         warmup: [
-          '3x5 Snatch Grip Deadlift',
-          '3x5 Overhead Squat (barre vide)',
-          '3x3 Hang Power Snatch @50%',
+          '3x5 Snatch Grip Deadlift (lent — position parfaite départ)',
+          '3x5 OHS avec pause 2s en bas (mobilité thoracique + épaules)',
+          '3x5 Snatch High Pull (tirage jusqu\'aux hanches + shrug)',
+          '3x3 Hang Snatch High Pull (connexion position hang)',
+          '3x3 Hang Power Snatch @50% (timing sous la barre)',
           '3x2 Power Snatch @60%',
-          '2x1 Squat Snatch @65%'
+          '2x1 Squat Snatch @65% (drop snatch drill avant si nécessaire)'
         ],
         accessory: [
-          '3x3 Snatch Pull @100% du Snatch',
-          '3x5 Snatch Balance',
-          '3x8 Snatch Grip Romanian Deadlift'
+          '3x3 Snatch Pull @100% du Snatch (force de tirage)',
+          '3x5 Snatch Balance (réception overhead rapide — drop rapide)',
+          '3x8 Snatch Grip Romanian Deadlift (force ischio-jambiers en position snatch)'
+        ],
+        technical_drills: [
+          'Drop Snatch: barre en rack, drop en OHS sans tirage — train la réception',
+          'OHS avec pause: 3s en bas, genoux out, chest up, talon sur sol',
+          'Hang Snatch High Pull: coudes hauts et dehors = tirage court et efficace',
+          'Snatch Balance: press under — force de mise en position + timing'
         ],
         standards_key: 'snatch',
         progression_notes: [
-          'S1-2: Patience au genou, ne tirez pas trop tôt',
-          'S3-4: Agressivité sous la barre',
-          'S5: Confiance en overhead',
-          'S6: PR day — 1RM Snatch'
+          'S1-2: Patience au genou, barre proche du corps — ne tirez pas trop tôt',
+          'S3-4: Agressivité sous la barre — plus vite = mieux (drop snatch drill)',
+          'S5: Confiance en overhead — réception stable et active',
+          'S6: PR day — 1RM Snatch — échauffement 60-70-77-83-88-93-100%'
         ]
       }
     ]
@@ -108,45 +124,59 @@ var HALTERO_CYCLES = [
         name: 'Front Squat',
         day: 1,
         warmup: [
-          '2x10 Air Squat',
-          '2x8 Goblet Squat',
+          '2x10 Air Squat (activation hanches + mobilité cheville)',
+          '2x8 Goblet Squat (position de fond, coudes intérieurs)',
+          '3x5 Front Squat barre vide (coudes hauts = au moins parallèles au sol)',
           '3x5 Front Squat (montée progressive)',
           '2x3 @60%'
         ],
         accessory: [
-          '3x8 Bulgarian Split Squat',
-          '3x10 Leg Press (ou Wall Sit 3x45s)',
-          '3x12 Hip Thrust'
+          '3x8 Bulgarian Split Squat (force unilatérale + équilibre)',
+          '3x10 Leg Press (ou Wall Sit 3x45s — travail isométrique)',
+          '3x12 Hip Thrust (activation fessiers = lockout puissant)'
+        ],
+        technical_drills: [
+          'Position rack: coudes hauts (fingertip grip OK), barre sur les deltoïdes antérieurs',
+          'Tempo Squat 3-1-X: 3s descente / 1s pause bas / explosif remontée — force excentrique',
+          'Pause Front Squat 2s: force active en fond de squat = pré-requis squat clean lourd',
+          'Cue: "pousser les genoux dehors" + "tirer la barre vers vous" en descendant'
         ],
         standards_key: 'front_squat',
         progression_notes: [
-          'S1-2: Travailler la position rack (coudes hauts)',
-          'S3-4: Tempo squat 3s descente, explosif remontée',
-          'S5: Pause squat 2s en bas',
-          'S6: PR day — 1RM Front Squat'
+          'S1-2: Travailler la position rack — coudes hauts même avec charge lourde',
+          'S3-4: Tempo squat 3s descente, explosif remontée — force excentrique',
+          'S5: Pause squat 2s en bas — position de réception clean simulée',
+          'S6: PR day — 1RM Front Squat — le plus lourd possible proprement'
         ]
       },
       {
         name: 'Overhead Squat',
         day: 2,
         warmup: [
-          '3x5 Pass-throughs (PVC)',
-          '3x5 Snatch Grip Press en OHS',
-          '3x5 OHS @barre vide',
-          '3x3 @50%',
-          '2x2 @60%'
+          '3x10 Pass-throughs PVC (mobilité épaules + thoracique)',
+          '3x5 PVC Snatch Grip Press behind neck (activation overhead)',
+          '3x5 OHS barre vide — pause 2s en bas',
+          '3x5 Snatch Balance barre vide (drop rapide en OHS)',
+          '3x3 OHS @50% (facteur OHS = 0.88 appliqué)',
+          '2x2 @55%'
         ],
         accessory: [
-          '3x5 Snatch Balance',
-          '3x30s Overhead Hold @70%',
-          '3x8 Snatch Grip Deadlift'
+          '3x5 Snatch Balance (réception OHS rapide depuis racks)',
+          '3x30s Overhead Hold @70% (endurance stabilité overhead)',
+          '3x8 Snatch Grip Deadlift (force de tirage prise large)'
+        ],
+        technical_drills: [
+          'Drop Snatch: depuis épaules, drop sous la barre sans tirage — entraîne la réception',
+          'OHS hold 3s: au fond du squat — test mobilité thoracique + épaules (chest up!)',
+          'Overhead stretch: bandes de résistance pour l\'épaule + thoracic spine extension',
+          'Note: OHS = 88% des % standard (ex: S3 @78% → appliquer @69% de votre 1RM OHS)'
         ],
         standards_key: 'overhead_squat',
         progression_notes: [
-          'S1-2: Mobilité thoracique et épaules',
-          'S3-4: Stabilité au fond du squat',
-          'S5: Confiance avec charges lourdes',
-          'S6: PR day — 1RM OHS'
+          'S1-2: Mobilité thoracique et épaules — investissement = récompense S5-6',
+          'S3-4: Stabilité au fond du squat avec charge — tempo 2s en bas',
+          'S5: Confiance avec charges lourdes overhead — position active = sécurité',
+          'S6: PR day — 1RM OHS — attention: échauffement long obligatoire'
         ]
       }
     ]
@@ -161,44 +191,61 @@ var HALTERO_CYCLES = [
         name: 'Squat Clean',
         day: 1,
         warmup: [
-          '3x5 Clean Deadlift (slow)',
-          '3x3 Hang Squat Clean @50%',
+          '3x5 Clean Deadlift lent (focus hip hinge, dos neutre)',
+          '3x5 Hang Muscle Clean (activation du 2ème tirage)',
+          '3x3 Hang Squat Clean @50% (réception basse active)',
+          '3x3 Pause Squat Clean @55% (2s pause en position de réception)',
           '3x2 Squat Clean @60%',
           '2x1 @70%'
         ],
         accessory: [
-          '3x3 Clean Pull @105%',
-          '3x5 Pause Front Squat (3s pause)',
-          '3x8 Pendlay Row'
+          '3x3 Clean Pull @105% (sur-poids pour renforcer le tirage)',
+          '3x5 Pause Front Squat 3s (force excentrique en bas)',
+          '3x8 Pendlay Row (force de tirage depuis le sol)'
+        ],
+        technical_drills: [
+          'Hang Muscle Clean: tirage jusqu\'aux épaules sans squat — isolation du 2ème tirage',
+          'Pause Squat Clean: 2s en position de réception — force active en bas',
+          'Clean Pull: extension complète avant le tirage sous (3 phases: 1er tirage / explosion hanches / tirage sous)',
+          'Clean depuis blocs: travailler la position du 2ème tirage isolément'
         ],
         standards_key: 'squat_clean',
         progression_notes: [
-          'S1-2: Vitesse sous la barre',
-          'S3-4: Réception active en bas du squat',
-          'S5: Stand up du squat = force pure',
-          'S6: PR day — 1RM Squat Clean'
+          'S1-2: Vitesse sous la barre — pensez "descendre vite" pas "tirer haut"',
+          'S3-4: Réception active en bas du squat — coudes hauts même fatigué',
+          'S5: Stand up du squat = force pure de front squat',
+          'S6: PR day — 1RM Squat Clean — chauffez 60-70-77-83-90-95-100%'
         ]
       },
       {
         name: 'Jerk (Push + Split)',
         day: 2,
         warmup: [
-          '3x5 Push Press (montée progressive)',
+          '3x5 Push Press (montée progressive — activation des épaules)',
+          '3x5 Jerk Dip + Drive drill (barre vide — dip vertical, drive agressif)',
+          '3x3 Jerk Balance drill (position split depuis derrière nuque)',
+          '3x3 Behind-Neck Push Press (activation overhead)',
           '3x3 Push Jerk @50%',
           '3x2 Split Jerk @60%',
           '2x1 @70%'
         ],
         accessory: [
-          '3x5 Jerk Dip + Drive (sans lâcher)',
-          '3x5 Behind Neck Jerk',
-          '3x8 DB Z-Press'
+          '3x5 Jerk Dip + Drive (ne pas relâcher — force du dip)',
+          '3x5 Behind Neck Split Jerk (position derrière nuque = force position)',
+          '3x8 DB Z-Press (force stabilité overhead strict)'
+        ],
+        technical_drills: [
+          'Jerk Balance: barre depuis racks, dip minimal + split en dessous — drill position split',
+          'Push Press: pression des jambes à 100% avant les bras — séquence claire',
+          'Split Jerk Footwork drill: sans barre, pratiquer le split 20x (45cm avant, 30cm derrière)',
+          'Behind-Neck Push Press: épaules préparées à la position de lockout'
         ],
         standards_key: 'push_press',
         progression_notes: [
-          'S1-2: Dip droit, drive vertical',
-          'S3-4: Timing du lockout',
-          'S5: Split position stable',
-          'S6: PR day — 1RM Jerk'
+          'S1-2: Dip droit vertical (tibia perpendiculaire au sol), drive explosif',
+          'S3-4: Timing du lockout — bras verrouillés avant la réception du pied',
+          'S5: Split position stable — récupération du split = 3s min',
+          'S6: PR day — 1RM Jerk — testez Push Jerk d\'abord puis Split si plus lourd'
         ]
       }
     ]
@@ -235,22 +282,30 @@ var HALTERO_CYCLES = [
         name: 'Hang Snatch',
         day: 2,
         warmup: [
-          '3x5 Snatch Grip RDL',
-          '3x5 Hang Muscle Snatch',
+          '3x5 Snatch Grip RDL (position de tension en hang)',
+          '3x5 Hang Muscle Snatch (tirage complet isolation depuis hang)',
+          '3x5 OHS pause 2s en bas (force et mobilité overhead)',
+          '3x3 Hang Snatch High Pull @50% (connexion hang → tirage)',
           '3x3 Hang Power Snatch @50%',
           '3x2 Hang Squat Snatch @60%'
         ],
         accessory: [
-          '3x3 Snatch Pull from hang @100%',
-          '3x5 OHS @70%',
-          '3x8 Bent Over Snatch Grip Row'
+          '3x3 Snatch Pull from hang @100% (force depuis position haute)',
+          '3x5 OHS @70% (stabilité avec charge)',
+          '3x8 Bent Over Snatch Grip Row (force dorsaux en prise snatch)'
+        ],
+        technical_drills: [
+          'Hang Muscle Snatch: isolation du tirage haut depuis genou — coudes hauts',
+          'Snatch High Pull from hang: extension hanches + shrug — connecter hang à réception',
+          'OHS pause: 3s en bas, contrôle scapulaire, chest up = pré-requis pour lourd',
+          'Hang position tension: genoux légèrement fléchis, hanches au-dessus genoux, tension ischio-jambiers'
         ],
         standards_key: 'snatch',
         progression_notes: [
-          'S1-2: Tension en position de hang',
-          'S3-4: Extension agressive des hanches',
-          'S5: Réception rapide et stable',
-          'S6: PR day — 1RM Hang Snatch'
+          'S1-2: Tension ischio-jambiers en position de hang — ne pas s\'affaisser',
+          'S3-4: Extension agressive des hanches (explosion = différence hang vs sol)',
+          'S5: Réception rapide et stable en OHS — position active',
+          'S6: PR day — 1RM Hang Snatch — comparez avec snatch depuis sol'
         ]
       }
     ]

@@ -13,8 +13,10 @@ window.CF_WODS_FULL = [
     {name: 'Toes-to-bar', reps: 12, gymnastics: 'toes_to_bar'},
     {name: 'Box Jumps', reps: 14, gymnastics: 'box_jump'},
     {name: 'Cal Row', special: 'row_cal'}
-  ], notes: 'Pacing 70-80%. Respirez sur les TTB. Rounds réguliers = victoire. 🔥' },
-  gym: { name: 'Skill: Kipping Pull-ups', drills: ['3x5 Strict Pull-ups', '3x8 Kipping Pull-ups', '3x Max Butterfly attempts', '2min Hollow Hold'] }
+  ], notes: 'AMRAP 15min: objectif = régularité des rounds. Stratégie: Thrusters 10 unbroken (léger), TTB par 6-6, Box Jumps step-down dès la fatigue, Row 12/10 cal. Cible: 5+ rounds. Élite 7+ rounds. Respirez profondément sur les TTB — expiration à chaque rep. Zone 2-3 (70-80% effort). Rounds réguliers = victoire sur vous-même.' },
+  gym: { name: 'Skill: Kipping Pull-ups', drills: ['3x5 Strict Pull-ups', '3x8 Kipping Pull-ups', '3x Max Butterfly attempts', '2min Hollow Hold'] },
+  scaled: { movements: [{name: 'Thrusters', reps: 10, note: '→ 30/20 kg ou goblet squats'}, {name: 'Toes-to-bar', reps: 12, note: '→ Knees-to-chest ou sit-ups'}, {name: 'Box Jumps', reps: 14, note: '→ Step-ups 50cm'}], note: 'Scaling global S1: réduire charges de 30%. Kipping pull-ups → jumping pull-ups. Objectif = maintenir 5 rounds complets.' },
+  rxPlus: { note: 'RX+: Thrusters +5kg, TTB strict (no kip), Box Jumps 75/65cm, Row +3cal. Target 7+ rounds.' }
 },
 {
   day: 2, week: 1, name: 'THUNDER', theme: 'Snatch + Chipper',
@@ -25,8 +27,10 @@ window.CF_WODS_FULL = [
     {name: 'Power Snatches', reps: 30, weight: 'snatch'},
     {name: 'Double Unders', reps: 100, gymnastics: 'double_unders'},
     {name: 'Wall Balls', reps: 50, gymnastics: 'wall_ball'}
-  ], notes: 'Chipper sandwich. Brisez les Wall Balls 25-25, Snatches 10-10-10. Restez calme. ⚡' },
-  gym: { name: 'Skill: Handstand Walk', drills: ['5x30s Wall-Facing Handstand Hold', '3x5 Wall Walk (slow descent)', '5x3m HS Walk attempts', '3x20 Shoulder Taps en HS'] }
+  ], notes: 'Chipper sandwich WB-DU-Snatch-DU-WB. Stratégie: WB par 25-15-10 (ne partez pas en sprint), DU unbroken ou 50-50, Snatches par 10-10-10 (singles si fatigue de l\'overhead), 2ème bloc DU = poussez malgré les poumons, derniers WB 25-25. Respirez entre chaque section. Élite sub 12min, Avancé sub 16min. Pacing modéré sur le 1er WB = réserve pour la fin.' },
+  gym: { name: 'Skill: Handstand Walk', drills: ['5x30s Wall-Facing Handstand Hold', '3x5 Wall Walk (slow descent)', '5x3m HS Walk attempts', '3x20 Shoulder Taps en HS'] },
+  scaled: { movements: [{name: 'Wall Balls', reps: 50, note: '→ 4/3 kg ou air squats'}, {name: 'Double Unders', reps: 100, note: '→ 200 Single Unders ou 60 DU'}, {name: 'Power Snatches', reps: 30, note: '→ 35/25 kg ou KB snatch 15/arm'}], note: 'Scaling chipper: réduire d\'abord les poids, puis les reps si nécessaire. Garder la structure sandwich pour l\'intention du WOD.' },
+  rxPlus: { note: 'RX+: WB 9/6 kg, DU → 50 Triple Unders (ou 75 DU), Snatches +5kg. Target sub 11min.' }
 },
 {
   day: 3, week: 1, name: 'BLITZ', theme: 'Front Squat + Sprint',
@@ -36,8 +40,10 @@ window.CF_WODS_FULL = [
     {name: 'Burpees over bar', reps: 9, gymnastics: 'burpee'},
     {name: 'Pull-ups', reps: 6, gymnastics: 'pullups'},
     {name: 'Run 200m', reps: 1, special: 'run_200'}
-  ], notes: 'Sprint les burpees, steady sur les deadlifts. Run 200m = récupération active entre rounds. Grip management crucial! 💀🏃' },
-  gym: { name: 'Skill: Ring Muscle-ups', drills: ['3x5 Strict Ring Dips', '3x3 Kipping Swing to Hip (rings)', '5x1-3 Ring Muscle-up attempts', 'Accumulate 1min L-sit on rings'] }
+  ], notes: '5 rounds DL-Burpees-Pull-ups-Run. Stratégie: DL modéré (70% 1RM) = touche-et-pose ou petites séries (6-6). Burpees RAPIDES — c\'est le moteur du WOD. Pull-ups 6 unbroken kipping. Run 200m à 85-90% — récupération ACTIVE (ne marchez pas!). Grip management critique: bracelet, chalk. Cible rounds réguliers <3:30 chacun. Élite sub 15min, Avancé sub 19min.' },
+  gym: { name: 'Skill: Ring Muscle-ups', drills: ['3x5 Strict Ring Dips', '3x3 Kipping Swing to Hip (rings)', '5x1-3 Ring Muscle-up attempts', 'Accumulate 1min L-sit on rings'] },
+  scaled: { movements: [{name: 'Deadlift', reps: 12, note: '→ 60% bodyweight ou réduire à 8 reps'}, {name: 'Pull-ups', reps: 6, note: '→ Banded pull-ups ou ring rows'}], note: 'Scaling: DL accessible = grip OK pour 5 rounds. Pull-ups = banded si nécessaire. Run = même distance, même effort.' },
+  rxPlus: { note: 'RX+: DL +10%, Burpees = box jump over, Pull-ups C2B. Target sub 14min.' }
 },
 {
   day: 4, week: 1, name: 'MAYHEM', theme: 'Squat Clean + Long AMRAP',
@@ -47,8 +53,10 @@ window.CF_WODS_FULL = [
     {name: 'Box Jumps', reps: 12, gymnastics: 'box_jump'},
     {name: 'Thrusters', reps: 9, weight: 'thruster'},
     {name: 'Bar Muscle-ups', reps: 3, gymnastics: 'muscle_ups_bar'}
-  ], notes: 'Long grinder. Respirez sur les KB swings. BMU = petites séries. Visez 5+ rounds. 🦍' },
-  gym: { name: 'Skill: HSPU', drills: ['3x5 Strict HSPU (ou pike push-ups)', '3x5 Kipping HSPU', 'Max unbroken HSPU test', '3x15 DB Strict Press léger'] }
+  ], notes: 'AMRAP 20min — long grinder glycolytique-oxydatif. Stratégie: KB Swings americains unbroken (hip drive, pas les bras), Box Jumps step-down après round 3, Thrusters 9 unbroken ou 5+4, BMU = petites séries de 1-2 dès la fatigue (ne ratez pas!). Pace 75-80% effort — round régulier toutes les ~3:30. Cible 5+ rounds. Élite 7+ rounds. Respirez nasalement entre les mouvements.' },
+  gym: { name: 'Skill: HSPU', drills: ['3x5 Strict HSPU (ou pike push-ups)', '3x5 Kipping HSPU', 'Max unbroken HSPU test', '3x15 DB Strict Press léger'] },
+  scaled: { movements: [{name: 'KB Swings', reps: 15, note: '→ 16/12 kg ou goblet squat'}, {name: 'Box Jumps', reps: 12, note: '→ Step-ups 50cm'}, {name: 'Bar Muscle-ups', reps: 3, note: '→ Chest-to-bar pull-ups x6 ou pull-ups x9'}], note: 'Scaling: BMU → C2B ou pull-ups kipping. Thrusters à 65% du RX. Garder 20min d\'AMRAP = mêmes reps mais moins lourd.' },
+  rxPlus: { note: 'RX+: KB 32/24kg, Box Jumps 80/65cm, Thrusters +5kg, BMU = strict. Target 7+ rounds.' }
 },
 {
   day: 5, week: 1, name: 'INFERNO', theme: 'OHS + Long Chipper',
@@ -60,8 +68,10 @@ window.CF_WODS_FULL = [
     {name: 'Push Press', reps: 30, weight: 'push_press'},
     {name: 'Double Unders', reps: 100, gymnastics: 'double_unders'},
     {name: 'Rope Climbs', reps: 5, gymnastics: 'rope_climb'}
-  ], notes: 'Energy descendante. Partez contrôlé sur le row, gardez de l\'énergie pour la fin. 🔥' },
-  gym: { name: 'Skill: Rope Climb + Core', drills: ['3x1-2 Rope Climb (legless si RX)', '4x8 Strict Toes-to-bar', '3x15 GHD Sit-ups', '3x20 Hollow Rocks'] }
+  ], notes: 'Long chipper avec énergie descendante — courez à 80% pour garder du jus. Stratégie: Run 800m = pace modéré (3:45-4:00/km). Power Cleans 10-10-10. TTB 10-10-10. Push Press 10-10-10. DU 50-50 ou unbroken. Rope Climbs: 1 à la fois, reposez 15s entre chaque. Respirez dans le ventre sur les DU. Élite sub 17min, Avancé sub 22min.' },
+  gym: { name: 'Skill: Rope Climb + Core', drills: ['3x1-2 Rope Climb (legless si RX)', '4x8 Strict Toes-to-bar', '3x15 GHD Sit-ups', '3x20 Hollow Rocks'] },
+  scaled: { movements: [{name: 'Power Cleans', reps: 30, note: '→ 50% bodyweight ou hang power cleans'}, {name: 'Double Unders', reps: 100, note: '→ 200 SU ou 60 DU'}, {name: 'Rope Climbs', reps: 5, note: '→ 3 Rope Climbs ou 15 Ring Rows'}], note: 'Scaling: réduire les charges de 30%. Si pas de rope, remplacer par 15 ring rows strictes. DU → SU x2.' },
+  rxPlus: { note: 'RX+: Rope Climbs = legless. DU → Triple Unders (x50). Target sub 16min.' }
 },
 
 // ============ WEEK 2 ============
@@ -73,8 +83,10 @@ window.CF_WODS_FULL = [
     {name: 'Min 2: Burpees', reps: 10, gymnastics: 'burpee'},
     {name: 'Min 3: Wall Balls', reps: 15, gymnastics: 'wall_ball'},
     {name: 'Min 4: Cal Assault Bike', special: 'assault_bike'}
-  ], notes: 'Finissez chaque minute en 45s max. Si vous débordez, baissez l\'intensité. Régularité > vitesse. ⚔️' },
-  gym: { name: 'Skill: Double Unders', drills: ['5x30 Double Unders unbroken', '3x50 Double Unders for time', '2min Max DU practice', '3x15 Calf Raises (explosif)'] }
+  ], notes: 'EMOM 4 stations x 5 rounds. Chaque minute doit être finie en 45s MAX — les 15s restantes = repos. Stratégie: Power Cleans 5 TnG @70-75%, Burpees rapides (pas de pause au sol!), WB 15 unbroken (léger!), Bike = 12/10 cal effort modéré. Si vous débordez sur une minute, réduisez les reps la suivante. Régularité sur 20min > sprint sur 1 round. Sub 40s par station = élite.' },
+  gym: { name: 'Skill: Double Unders', drills: ['5x30 Double Unders unbroken', '3x50 Double Unders for time', '2min Max DU practice', '3x15 Calf Raises (explosif)'] },
+  scaled: { movements: [{name: 'Power Cleans', reps: 5, note: '→ 3 reps ou 60% du poids RX'}, {name: 'Burpees', reps: 10, note: '→ 6 burpees'}, {name: 'Wall Balls', reps: 15, note: '→ 10 reps ou 4/3 kg'}], note: 'Scaling EMOM: réduire les reps pour garantir 15s de repos. L\'EMOM fonctionne seulement si vous avez du repos.' },
+  rxPlus: { note: 'RX+: Power Cleans = hang squat clean, Burpees = box jump over, WB 9/6kg, Bike +3cal.' }
 },
 {
   day: 7, week: 2, name: 'TITAN', theme: 'Back Squat + Fran Benchmark', benchmark: 'FRAN',
@@ -86,8 +98,10 @@ window.CF_WODS_FULL = [
     {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'},
     {name: 'Thrusters', reps: 9, weight: 'thruster'},
     {name: 'Pull-ups', reps: 9, gymnastics: 'pullups'}
-  ], notes: '🏅 BENCHMARK FRAN: Le WOD CrossFit le plus iconique. Standards: Élite H sub 2:30 / F sub 3:00. Avancé H sub 4:00 / F sub 5:00. Thrusters: essayez unbroken au 21. Pull-ups kipping fluides. Le 9 = sprint total. ⚠️ NOTEZ votre temps — vous re-testerez en semaine 12 et 20! 🏛️' },
-  gym: { name: 'Skill: L-Sit + Core', drills: ['3x20s L-Sit Hold (parallettes ou anneaux)', '3x10 Strict Leg Raises', '3x15 V-ups', '2min Plank Hold'] }
+  ], notes: 'BENCHMARK FRAN — le WOD CrossFit le plus iconique depuis 1997. Stratégie élite: 21 Thrusters unbroken (jambes d\'abord, finissez par la presse overhead), Pull-ups kipping fluides 12-9 ou 21 unbroken. 15 = 8-7 ou unbroken. 9 = SPRINT TOTAL, rien dans le réservoir. Respirez nasalement entre Thrusters et Pull-ups. Standards: Élite H sub 2:30 / F sub 3:00. Avancé H sub 4:00 / F sub 5:00. ⚠️ NOTEZ votre temps — vous re-testerez en S8, S16 et S20! 🏛️' },
+  gym: { name: 'Skill: L-Sit + Core', drills: ['3x20s L-Sit Hold (parallettes ou anneaux)', '3x10 Strict Leg Raises', '3x15 V-ups', '2min Plank Hold'] },
+  scaled: { movements: [{name: 'Thrusters', reps: 21, note: '→ 30/20 kg ou goblet squats (si pas de barre)'}, {name: 'Pull-ups', reps: 21, note: '→ Banded kipping pull-ups ou jumping pull-ups + ring rows'}], note: 'Scaling Fran: gardez le poids confortable (pas de grind). L\'intensité vient de la vitesse, pas du poids. Pull-ups = toujours kipping pour respecter l\'esprit du benchmark.' },
+  rxPlus: { note: 'RX+ Fran: Thrusters 52/38kg (115/85lb), Pull-ups butterfly strict ou C2B. Target sub 2:00.' }
 },
 {
   day: 8, week: 2, name: 'SCORPION', theme: 'Hang Clean + Tabata',
@@ -97,8 +111,10 @@ window.CF_WODS_FULL = [
     {name: 'Tabata 2: Box Jumps', reps: 'max', gymnastics: 'box_jump'},
     {name: 'Tabata 3: Toes-to-bar', reps: 'max', gymnastics: 'toes_to_bar'},
     {name: 'Tabata 4: Cal Row', special: 'row_cal'}
-  ], notes: '20s ON / 10s OFF x 8 rounds par mouvement. 1min rest entre chaque Tabata. Score = total reps. 🦂' },
-  gym: { name: 'Skill: Pistol Squat', drills: ['3x5/leg Pistol Squats (assisté si nécessaire)', '3x10 Bulgarian Split Squats', '3x30s Single Leg Balance', '3x8 Box Pistols'] }
+  ], notes: 'Tabata 4 stations (20s ON / 10s OFF x 8 rounds par station = 4min chaque). 1min repos entre chaque Tabata. Stratégie: KB Swings = américains ou russes selon niveau, choisissez un pace soutenable (pas de sprint round 1!). Box Jumps = step-down après round 4. TTB = touchez les barres à chaque rep. Row = calibres 12/10 cal minimum. Score total = somme de tous les reps. Élite 600+ reps. Respirez régulièrement — système oxydatif dominant.' },
+  gym: { name: 'Skill: Pistol Squat', drills: ['3x5/leg Pistol Squats (assisté si nécessaire)', '3x10 Bulgarian Split Squats', '3x30s Single Leg Balance', '3x8 Box Pistols'] },
+  scaled: { movements: [{name: 'KB Swings', note: '→ 16/12 kg russes'}, {name: 'Box Jumps', note: '→ Step-ups 50cm'}, {name: 'Toes-to-bar', note: '→ Knees-to-chest ou strict sit-ups'}], note: 'Scaling Tabata: réduire les charges, garder les 20s ON / 10s OFF. Score basé sur le MINIMUM de reps par round (Tabata score officiel).' },
+  rxPlus: { note: 'RX+: KB 32/24kg, Box Jumps 80cm, TTB strict, Row sprint max cal. Target 700+ reps total.' }
 },
 {
   day: 9, week: 2, name: 'PHANTOM', theme: 'Push Press + Sprint WOD',
@@ -106,9 +122,11 @@ window.CF_WODS_FULL = [
   wod: { name: 'PHANTOM', type: '3 Rounds For Time (cap 12min)', movements: [
     {name: 'Shoulder-to-OH', reps: 12, weight: 'shoulder_to_oh'},
     {name: 'HSPU', reps: 9, gymnastics: 'hspu'},
-    {name: 'Cal Assault Bike', special: 'assault_bike'}
-  ], notes: 'Sprint court mais brutal. Unbroken si possible. Gas pedal à fond dès le départ! 👻' },
-  gym: { name: 'Skill: Strict Pull-ups + Weighted', drills: ['5x3 Weighted Strict Pull-ups', '3x Max Strict Pull-ups', '3x8 Tempo Pull-ups (3s descente)', '3x10 Ring Rows (pieds surélevés)'] }
+    {name: 'Cal Assault Bike', special: 'assault_bike', note: '15/12 cal'}
+  ], notes: '3 rounds pushing + pressing overhead — sprint court mais très demandant pour les épaules. Stratégie: S2OH unbroken si charge légère (70%), HSPU 5+4 ou 9 unbroken (kipping), Bike = sprint 30-35s. Repos minimal entre rounds. Épaules vont brûler — contrôle respiratoire entre S2OH et HSPU. Élite sub 8min, Avancé sub 11min. Attention: après le haltéro lourd, chargez le S2OH léger (65-70%).' },
+  gym: { name: 'Skill: Strict Pull-ups + Weighted', drills: ['5x3 Weighted Strict Pull-ups', '3x Max Strict Pull-ups', '3x8 Tempo Pull-ups (3s descente)', '3x10 Ring Rows (pieds surélevés)'] },
+  scaled: { movements: [{name: 'Shoulder-to-OH', reps: 12, note: '→ Push Press à 60% du RX'}, {name: 'HSPU', reps: 9, note: '→ Pike Push-ups ou HSPU banded'}], note: 'Scaling: HSPU → pike sur box. S2OH à charge confortable = unbroken possible. Bike reste sprint.' },
+  rxPlus: { note: 'RX+: S2OH = Split Jerk. HSPU = Strict HSPU (no kip). Bike +3cal. Target sub 7min.' }
 },
 {
   day: 10, week: 2, name: 'AVALANCHE', theme: 'Snatch + Descending Ladder',
@@ -117,8 +135,10 @@ window.CF_WODS_FULL = [
     {name: 'Power Snatches', reps: '10-8-6-4-2', weight: 'snatch'},
     {name: 'Bar Muscle-ups', reps: '5-4-3-2-1', gymnastics: 'muscle_ups_bar'},
     {name: 'Box Jumps', reps: '20-16-12-8-4', gymnastics: 'box_jump'}
-  ], notes: 'Descending ladder. Ça devient plus facile chaque round. Snatches singles, pas de risque. 🏔️' },
-  gym: { name: 'Skill: Handstand Hold + Walk', drills: ['3x45s Freestanding HS Hold attempts', '5x5m Handstand Walk', '3x5 Wall Walk strict', '3x10 Pike HSPU (on box)'] }
+  ], notes: 'Descending ladder — ça devient plus court chaque round, donc accélérez. Stratégie: Snatches singles OK (overhead après haltéro), BMU par 1-2 (concentrez-vous sur la transition, pas la vitesse), Box Jumps step-down round 1-2 puis rebond rapide. Au round 4 (4 reps): tout donner. Au round 5: sprint. Élite sub 9min, Avancé sub 13min. Charge snatches légère = mieux finir les BMU.' },
+  gym: { name: 'Skill: Handstand Hold + Walk', drills: ['3x45s Freestanding HS Hold attempts', '5x5m Handstand Walk', '3x5 Wall Walk strict', '3x10 Pike HSPU (on box)'] },
+  scaled: { movements: [{name: 'Power Snatches', note: '→ 35/25 kg ou KB snatch'}, {name: 'Bar Muscle-ups', reps: '5-4-3-2-1', note: '→ C2B Pull-ups x2 par BMU ou pull-ups x3 par BMU'}], note: 'Scaling: BMU → C2B ou kipping pull-ups. Le schème descendant reste le même. Box Jumps step-ups si nécessaire.' },
+  rxPlus: { note: 'RX+: Snatches +5kg, BMU = strict, Box Jumps 80/65cm. Target sub 8min.' }
 },
 
 // ============ WEEK 3 ============
@@ -132,8 +152,10 @@ window.CF_WODS_FULL = [
     {name: 'Pull-ups', reps: 30, gymnastics: 'pullups'},
     {name: 'Hang Cleans', reps: 20, weight: 'hang_clean'},
     {name: 'HSPU', reps: 10, gymnastics: 'hspu'}
-  ], notes: 'Gros chipper 50-50-40-30-20-10. Fractionnez intelligemment. C\'est un marathon, pas un sprint. 🌪️' },
-  gym: { name: 'Skill: Rope Climb', drills: ['3x2 Rope Climbs (focus technique de pieds)', '3x1 Legless Rope Climb attempts', '3x5 Strict Pull-ups (supination)', '3x10 Barbell Curls léger'] }
+  ], notes: 'Grand chipper descendant (50-40-30-20-10). Marathon, pas sprint. Stratégie: Run 800m à 3:50-4:10/km (gardez des jambes). WB 20-20-10. DL 10-10-10-10 (dos neutre, pas de rush). Pull-ups 10-10-10 kipping. Hang Cleans 5x4 touch-and-go. HSPU 5+5 ou unbroken (déjà fatigués!). Respirez dans le nez entre chaque section. Élite sub 20min, Avancé sub 26min.' },
+  gym: { name: 'Skill: Rope Climb', drills: ['3x2 Rope Climbs (focus technique de pieds)', '3x1 Legless Rope Climb attempts', '3x5 Strict Pull-ups (supination)', '3x10 Barbell Curls léger'] },
+  scaled: { movements: [{name: 'Wall Balls', reps: 50, note: '→ 30 reps ou 4/3 kg'}, {name: 'Deadlifts', reps: 40, note: '→ 25 reps ou 60% du poids'}, {name: 'Pull-ups', reps: 30, note: '→ 20 reps banded ou ring rows'}, {name: 'Hang Cleans', reps: 20, note: '→ 15 reps ou 60% du poids'}, {name: 'HSPU', reps: 10, note: '→ Pike push-ups ou 6 HSPU'}], note: 'Scaling chipper: réduire volumes (-30%) ET poids (-30%). Ne réduire qu\'une variable à la fois si possible.' },
+  rxPlus: { note: 'RX+: Run = 1000m, Pull-ups = C2B, HSPU = strict deficit. Target sub 18min.' }
 },
 {
   day: 12, week: 3, name: 'RECKONING', theme: 'Sumo DL HP + EMOM',
@@ -200,16 +222,20 @@ window.CF_WODS_FULL = [
     {name: 'Run 400m', reps: 1, special: 'run_400'},
     {name: 'KB Swings American', reps: 21, gymnastics: 'kb_swing', note: 'H: 24kg / F: 16kg'},
     {name: 'Pull-ups', reps: 12, gymnastics: 'pullups'}
-  ], notes: '🏅 BENCHMARK HELEN: Course + KB + Gymnastics. Standards CrossFit Games. Objectifs: Élite H sub 9:00 / F sub 10:30. Avancé H sub 10:30 / F sub 12:00. Course à 85% effort. KB swings unbroken si possible. Pull-ups kipping. ⚠️ NOTEZ votre score — vous re-testerez en Week 12 et Week 20! 🏃‍♂️' },
-  gym: { name: 'Skill: Running Economy', drills: ['3x200m Run @85% (récup 90s entre)', '3x20 High Knees + Butt Kicks', '3x10 Single Leg Bounds', '5min Easy Walk — cool down complet'] }
+  ], notes: 'BENCHMARK HELEN — Test tri-modal classique (cardio + KB + gymnastics). Stratégie: 1er 400m à 85% (évitez le sprint, vous avez 3 runs!). KB 21 unbroken americains (poussez les hanches, bras passifs). Pull-ups kipping 12 unbroken ou 8-4. Le 3ème round = accélérez le 400m. Respirez par la bouche uniquement sur les KB (rythme forcé). Standards CrossFit Games. Élite H sub 9:00 / F sub 10:30. Avancé H sub 11:00 / F sub 12:30. ⚠️ NOTEZ votre score — vous re-testerez en S8, S12, S16 et S20!' },
+  gym: { name: 'Skill: Running Economy', drills: ['3x200m Run @85% (récup 90s entre)', '3x20 High Knees + Butt Kicks', '3x10 Single Leg Bounds', '5min Easy Walk — cool down complet'] },
+  scaled: { movements: [{name: 'KB Swings', reps: 21, note: '→ 16/12 kg american ou 20/16 kg russien'}, {name: 'Pull-ups', reps: 12, note: '→ Banded kipping ou jumping pull-ups'}], note: 'Scaling Helen: garder les 3 mouvements. Réduire KB et pull-ups. Run reste 400m (pas de réduction).' },
+  rxPlus: { note: 'RX+ Helen: KB 32/20kg american. Pull-ups butterfly strict. Run à 90% effort. Target sub 8:00.' }
 },
 {
   day: 18, week: 4, name: 'ISABEL', theme: 'Benchmark officiel — Isabel (30 Snatches)', benchmark: 'ISABEL', deload: true,
   haltero: { name: 'Snatch Warm-up', desc: 'Montée activation: 3x3 @50%, 3x2 @65%, 2x1 @75% — Préparez le PR', scheme: '12min — Progression', weights: 'snatch' },
   wod: { name: 'ISABEL', type: 'For Time (cap 8min)', movements: [
     {name: 'Power Snatches', reps: 30, weight: 'snatch', note: 'RX H: 61kg (135lb) / F: 43kg (95lb) — ou 65-70% de votre 1RM'}
-  ], notes: '🏅 BENCHMARK ISABEL: 30 snatches, le plus vite possible. Standards CrossFit Games. Objectifs: Élite H sub 1:30 / F sub 2:00. Avancé H sub 2:30 / F sub 3:00. Touch-and-go tant que technique = parfaite. Singles dès que ça se dégrade. Poids > timing. ⚠️ NOTEZ votre temps et le poids utilisé! ⚡' },
-  gym: { name: 'Skill: Snatch Efficiency', drills: ['3x5 Snatch High Pull (connexion tirage)', '3x3 Muscle Snatch (technique overhead)', '3x3 Snatch Balance (réception rapide)', '5min Band stretches épaules + thoracique'] }
+  ], notes: 'BENCHMARK ISABEL — 30 snatches for time, la définition de l\'explosivité CrossFit. Stratégie: Touch-and-go tant que la technique est propre (dos neutre, barre proche du corps). Singles dès que vous sentez le grip lâcher ou la barre sortir du chemin. Partitionnez 10-10-10 ou 15-10-5 si premier test. Pensez: vitesse de tirage > confort entre reps. Respirez en haut, repositionnez-vous en 1s, retirée. Élite H sub 1:30 / F sub 2:00. Avancé H sub 2:30 / F sub 3:00. ⚠️ NOTEZ votre temps et le poids utilisé!' },
+  gym: { name: 'Skill: Snatch Efficiency', drills: ['3x5 Snatch High Pull (connexion tirage)', '3x3 Muscle Snatch (technique overhead)', '3x3 Snatch Balance (réception rapide)', '5min Band stretches épaules + thoracique'] },
+  scaled: { movements: [{name: 'Power Snatches', reps: 30, note: '→ 40/28 kg ou 60-65% de votre 1RM snatch'}], note: 'Scaling Isabel: garder TOUJOURS le power snatch (pas KB snatch = différent benchmark). Réduire uniquement le poids.' },
+  rxPlus: { note: 'RX+ Isabel: 70/48kg (155/105lb). Touch-and-go strict. Target sub 1:15.' }
 },
 {
   day: 19, week: 4, name: 'CINDY', theme: 'Benchmark officiel — Cindy (Pure Gymnastics AMRAP)', benchmark: 'CINDY', deload: true,
@@ -218,8 +244,10 @@ window.CF_WODS_FULL = [
     {name: 'Pull-ups', reps: 5, gymnastics: 'pullups'},
     {name: 'Push-ups', reps: 10, gymnastics: 'pushups'},
     {name: 'Air Squats', reps: 15, gymnastics: 'air_squat'}
-  ], notes: '🏅 BENCHMARK CINDY: Gymnastics pur — aucun équipement nécessaire. Standards CrossFit Games. Objectifs: Élite H 25+ rounds / F 20+ rounds. Avancé H 20+ / F 16+. Pull-ups CHIN ABOVE BAR. Push-ups CHEST TO GROUND. Squats full depth. PACE RÉGULIER = plus de rounds. ⚠️ NOTEZ votre score! 💪' },
-  gym: { name: 'Skill: Gymnastics Fondations', drills: ['3x5 Strict Pull-ups (weighted si >25 rounds Cindy)', '3x10 Ring Push-ups', '3x15 Air Squats tempo (3s descente)', '3x1min Hollow Body Hold'] }
+  ], notes: 'BENCHMARK CINDY — pure gymnastics, aucun équipement nécessaire. Le test absolu de l\'endurance gymnique. Stratégie: cibler 1 round toutes les 50-55s (soit 21-22 rounds en 20min). Pull-ups CHIN ABOVE BAR (pas de demi-reps!). Push-ups CHEST TO GROUND (count only full ROM). Squats full depth. PACING RÉGULIER > sprint. Technique de respiration: expirez sous la barre (pull-ups), inspirez en bas de push-up. Standards. Élite H 25+ / F 20+. Avancé H 20+ / F 16+. ⚠️ NOTEZ votre score!' },
+  gym: { name: 'Skill: Gymnastics Fondations', drills: ['3x5 Strict Pull-ups (weighted si >25 rounds Cindy)', '3x10 Ring Push-ups', '3x15 Air Squats tempo (3s descente)', '3x1min Hollow Body Hold'] },
+  scaled: { movements: [{name: 'Pull-ups', reps: 5, note: '→ Banded kipping ou jumping pull-ups'}, {name: 'Push-ups', reps: 10, note: '→ Genoux si nécessaire (chest to ground standard maintenu)'}], note: 'Scaling Cindy: garder TOUJOURS les mêmes reps 5-10-15. Modifier uniquement le mode du mouvement (banded, knees). L\'intention = rounds réguliers.' },
+  rxPlus: { note: 'RX+ Cindy: Pull-ups = C2B, Push-ups = parallettes (plus de ROM), Squats = pistols alternés 5/leg. Target 30+ rounds.' }
 },
 {
   day: 20, week: 4, name: 'ANNIE', theme: 'Benchmark officiel — Annie (Double Unders + Sit-ups)', benchmark: 'ANNIE', deload: true,
@@ -227,8 +255,10 @@ window.CF_WODS_FULL = [
   wod: { name: 'ANNIE', type: '50-40-30-20-10 For Time (cap 12min)', movements: [
     {name: 'Double Unders', reps: '50-40-30-20-10', gymnastics: 'double_unders'},
     {name: 'Abmat Sit-ups', reps: '50-40-30-20-10', gymnastics: 'situps'}
-  ], notes: '🏅 BENCHMARK ANNIE: DU + Core. Standards CrossFit Games. Objectifs: Élite H sub 5:00 / F sub 5:30. Avancé H sub 7:00 / F sub 8:00. DU unbroken au maximum. Sit-ups: ancrez les pieds, touchez les orteils en haut. Alternez round par round. ⚠️ NOTEZ votre score! 🎯 FIN SEMAINE 4 DÉLOAD = batteries rechargées pour les semaines 5-7! 🔋' },
-  gym: { name: 'Skill: Double Under Mastery', drills: ['5x30 DU unbroken', '3x50 DU for time', '3x Max DU no miss attempts', '5min Easy Bike — récupération finale S4'] }
+  ], notes: 'BENCHMARK ANNIE — test DU + core classique CrossFit. Stratégie: DU unbroken sur le 50 si possible (respirez, ne sautez pas trop haut, poignets relâchés). Sit-ups: ancrez les pieds à l\'Abmat, touchez les orteils en haut de chaque rep (full ROM). Ne vous précipitez pas — rythme constant sur les DU > sprint-arrêt. Si vous cassez: repos 3 respirations max, relancez. Élite H sub 5:00 / F sub 5:30. Avancé sub 7:00 / sub 8:00. FIN S4 — batteries rechargées pour S5-7! ⚠️ NOTEZ votre score!' },
+  gym: { name: 'Skill: Double Under Mastery', drills: ['5x30 DU unbroken', '3x50 DU for time', '3x Max DU no miss attempts', '5min Easy Bike — récupération finale S4'] },
+  scaled: { movements: [{name: 'Double Unders', note: '→ 100-80-60-40-20 Single Unders ou 30-25-20-15-10 DU si en apprentissage'}], note: 'Scaling Annie: garder les Sit-ups identiques (50-40-30-20-10). Adapter les DU selon votre niveau. Une fois 30 DU unbroken acquis, passez RX.' },
+  rxPlus: { note: 'RX+ Annie: DU → 25-20-15-10-5 Triple Unders. Sit-ups GHD (attention: réduire à 25-20-15-10-5). Target DU unbroken jusqu\'au 30.' }
 },
 
 // ============ WEEK 5 ============
@@ -271,12 +301,14 @@ window.CF_WODS_FULL = [
   haltero: { name: 'Shoulder-to-OH', desc: 'Push Press + Push Jerk combo 3+2 x 5 sets', scheme: 'E2MOM 10min', weights: 'shoulder_to_oh' },
   wod: { name: 'SENTINEL', type: 'EMOM 30 (6 rounds)', movements: [
     {name: 'Min 1: Shoulder-to-OH', reps: 8, weight: 'shoulder_to_oh'},
-    {name: 'Min 2: Pull-ups', reps: 12, gymnastics: 'pullups'},
+    {name: 'Min 2: Pull-ups', reps: 10, gymnastics: 'pullups'},
     {name: 'Min 3: KB Swings', reps: 15, gymnastics: 'kb_swing'},
-    {name: 'Min 4: Double Unders', reps: 40, gymnastics: 'double_unders'},
-    {name: 'Min 5: Burpees', reps: 8, gymnastics: 'burpee'}
-  ], notes: '30min EMOM. Restez dans la zone de 40-45s de travail par minute. C\'est un long game. 🛡️⚡' },
-  gym: { name: 'Skill: Pistols + Single Leg', drills: ['4x5/leg Pistol Squats', '3x8/leg Step-up (heavy DB)', '3x10/leg Single Leg Glute Bridge', '2x1min/leg Couch Stretch'] }
+    {name: 'Min 4: Double Unders', reps: 35, gymnastics: 'double_unders'},
+    {name: 'Min 5: Burpees', reps: 7, gymnastics: 'burpee'}
+  ], notes: 'EMOM 30min — 5 stations x 6 rounds. Chaque minute = 35-42s de travail, 18-25s de repos obligatoire. Stratégie: S2OH unbroken, Pull-ups kipping 10 unbroken (ajustez si fatigue Min 2), KB unbroken 15 américains, DU 35 sans faute (si vous cassez à 20 → les 15 restants en 10s = trop court!), Burpees rapides 7. Si une minute déborde → réduire 1-2 reps la semaine prochaine. Long EMOM = gestion mentale = régularité.' },
+  gym: { name: 'Skill: Pistols + Single Leg', drills: ['4x5/leg Pistol Squats', '3x8/leg Step-up (heavy DB)', '3x10/leg Single Leg Glute Bridge', '2x1min/leg Couch Stretch'] },
+  scaled: { movements: [{name: 'S2OH', reps: 8, note: '→ 6 reps ou push press uniquement'}, {name: 'Pull-ups', reps: 10, note: '→ 6-8 reps banded ou ring rows'}, {name: 'Double Unders', reps: 35, note: '→ 25 DU ou 60 SU'}, {name: 'Burpees', reps: 7, note: '→ 5 burpees'}], note: 'Scaling EMOM long: réduire de 20% les reps. L\'objectif = tenir 30min avec repos. Arrêtez si le repos disparaît complètement.' },
+  rxPlus: { note: 'RX+: S2OH = split jerk, Pull-ups = C2B, DU = 45 unbroken, Burpees = box jump over 9 reps. Minimum 15s repos par minute.' }
 },
 {
   day: 25, week: 5, name: 'LEVIATHAN', theme: 'Power Clean + Monster WOD',
@@ -300,9 +332,11 @@ window.CF_WODS_FULL = [
   wod: { name: 'BARRACUDA', type: '5 Rounds For Time (cap 18min)', movements: [
     {name: 'Hang Cleans', reps: 8, weight: 'hang_clean'},
     {name: 'Box Jumps', reps: 12, gymnastics: 'box_jump'},
-    {name: 'Cal Row', special: 'row_cal'}
-  ], notes: 'Sprint each round, rest between. Row 15/12 cal per round. Touch & go cleans if possible.' },
-  gym: { name: 'Skill: Toes-to-bar Efficiency', drills: ['3x10 Kipping TTB', '3x5 Strict TTB', '3x15 V-ups', '2min Max TTB unbroken attempt'] }
+    {name: 'Cal Row', special: 'row_cal', note: '15/12 cal'}
+  ], notes: '5 rounds sprints. Stratégie: Hang Cleans touch-and-go si possible (8 = 4+4 si lourd), Box Jumps step-down pour ménager les jambes, Row 15/12 cal en 40-45s. Repos naturel = transition entre mouvements. Rounds réguliers < 2:45. Phase de transmutation S6 = intensité monte. Élite sub 12min, Avancé sub 16min.' },
+  gym: { name: 'Skill: Toes-to-bar Efficiency', drills: ['3x10 Kipping TTB', '3x5 Strict TTB', '3x15 V-ups', '2min Max TTB unbroken attempt'] },
+  scaled: { movements: [{name: 'Hang Cleans', reps: 8, note: '→ 6 reps ou 70% du poids RX'}, {name: 'Box Jumps', reps: 12, note: '→ Step-ups 50cm'}], note: 'Scaling: Cleans accessibles = TnG possible. Box Jumps step-up si genoux douloureux.' },
+  rxPlus: { note: 'RX+: Hang Cleans = squat hang clean, Box Jumps 80/65cm, Row +3cal. Target sub 11min.' }
 },
 {
   day: 27, week: 6, name: 'UPRISING', theme: 'Thruster + Pyramid',
@@ -310,8 +344,10 @@ window.CF_WODS_FULL = [
   wod: { name: 'UPRISING', type: '1-2-3-4-5-4-3-2-1 Pyramid (cap 16min)', movements: [
     {name: 'Thrusters', reps: '1-2-3-4-5-4-3-2-1', weight: 'thruster'},
     {name: 'Rope Climbs', reps: '1-2-3-4-5-4-3-2-1', gymnastics: 'rope_climb'}
-  ], notes: 'Pyramid montante puis descendante. Thrusters moderes. Rope climbs rapides. Le round 5 est le sommet.' },
-  gym: { name: 'Skill: Weighted Dips', drills: ['3x5 Weighted Ring Dips', '3x8 Strict Bar Dips', '3x10 Push-ups (deficit)', '3x15 Tricep Kickbacks'] }
+  ], notes: 'Pyramid 1-2-3-4-5-4-3-2-1 = 25 Thrusters + 25 Rope Climbs total. Stratégie: Montée = conservez-vous (le sommet = 5+5 est le plus dur). Sommet round 5: thrusters unbroken, rope climbs efficaces. Descente = accélérez (5-4-3-2-1 → progressivement plus rapide). Thruster = modéré (70-75%), rope climbs = technique J-hook. Élite sub 10min, Avancé sub 14min.' },
+  gym: { name: 'Skill: Weighted Dips', drills: ['3x5 Weighted Ring Dips', '3x8 Strict Bar Dips', '3x10 Push-ups (deficit)', '3x15 Tricep Kickbacks'] },
+  scaled: { movements: [{name: 'Rope Climbs', note: '→ Remplacer par 3x Ring Rows par montée ou Pull-ups banded'}], note: 'Scaling: Si pas de corde, Ring Rows x3 par rope climb. Thrusters à 65% du poids RX. Garder le schème pyramid.' },
+  rxPlus: { note: 'RX+: Thrusters = heavier (+10%), Rope Climbs = legless. Target sub 9min.' }
 },
 {
   day: 28, week: 6, name: 'PREDATOR', theme: 'Deadlift + Dark AMRAP',
@@ -321,8 +357,10 @@ window.CF_WODS_FULL = [
     {name: 'Double Unders', reps: 36, gymnastics: 'double_unders'},
     {name: 'Bar Muscle-ups', reps: 3, gymnastics: 'muscle_ups_bar'},
     {name: 'Burpees', reps: 6, gymnastics: 'burpee'}
-  ], notes: 'Grip sera un facteur limitant. DL en sets de 3 si necessaire. BMU frais entre les DU et burpees.' },
-  gym: { name: 'Skill: Strict Gymnastics', drills: ['3x5 Strict C2B Pull-ups', '3x5 Strict Ring Dips', '3x8 Strict HSPU (or pike)', '3x10 Hollow Body Rocks'] }
+  ], notes: 'AMRAP 14min — facteur limitant: grip DL + transition DL → DU. Stratégie: DL 9 = 3-3-3 si lourd (après @85% haltéro!), ou TnG si charge légère. DU 36 unbroken ou 18-18. BMU 1-2 en gardant l\'énergie (entre DU et burpees = bon timing). Burpees rapides pour finir le round. Chalk obligatoire. Cible 5+ rounds. Respirez après chaque set de DL.' },
+  gym: { name: 'Skill: Strict Gymnastics', drills: ['3x5 Strict C2B Pull-ups', '3x5 Strict Ring Dips', '3x8 Strict HSPU (or pike)', '3x10 Hollow Body Rocks'] },
+  scaled: { movements: [{name: 'Deadlifts', reps: 9, note: '→ 6 reps ou 70% du poids'}, {name: 'Bar Muscle-ups', reps: 3, note: '→ 6 C2B Pull-ups ou 9 Pull-ups kipping'}], note: 'Scaling: DL accessible pour 9 reps sur 14min. BMU → C2B ou pull-ups.' },
+  rxPlus: { note: 'RX+: DL TnG obligatoire, BMU = strict, DU 40, Burpees box jump over. Target 6+ rounds.' }
 },
 {
   day: 29, week: 6, name: 'GRIZZLY', theme: 'Front Squat + Bear Complex',
@@ -354,9 +392,11 @@ window.CF_WODS_FULL = [
     {name: 'Deadlifts', reps: 12, weight: 'deadlift'},
     {name: 'Pistols', reps: 8, gymnastics: 'pistols'},
     {name: 'Toes-to-bar', reps: 10, gymnastics: 'toes_to_bar'},
-    {name: 'Cal Row', special: 'row_cal'}
-  ], notes: '22min de travail. Pace regulier. Wall Balls en 9-9. DL moderé pour garder le grip. Visez 4+ rounds.' },
-  gym: { name: 'Skill: Handstand Push-ups Kipping', drills: ['3x Max Kipping HSPU', '3x5 Strict HSPU', '3x8 Pike HSPU (feet on box)', '3x10 DB Push Press'] }
+    {name: 'Cal Row', special: 'row_cal', note: '15/12 cal'}
+  ], notes: 'AMRAP 22min — test final de la phase transmutation. 5 mouvements variés, pace oxydatif. Stratégie: WB 9-9 (hauteur cible, pas de vitesse), DL modéré 6-6 TnG (grip management!), Pistols alternés 4/leg (si difficile: 3/leg), TTB 5-5, Row 15/12 cal @ 1:55-2:00 pace. Chaque round ~ 4min = 5+ rounds cible. Respirez entre WB et DL. Élite 6+ rounds, Avancé 4-5 rounds.' },
+  gym: { name: 'Skill: Handstand Push-ups Kipping', drills: ['3x Max Kipping HSPU', '3x5 Strict HSPU', '3x8 Pike HSPU (feet on box)', '3x10 DB Push Press'] },
+  scaled: { movements: [{name: 'Wall Balls', reps: 18, note: '→ 12 reps ou 4/3 kg'}, {name: 'Pistols', reps: 8, note: '→ 8 Box Pistols ou 12 goblet squats'}, {name: 'Toes-to-bar', reps: 10, note: '→ Knees-to-chest ou 15 V-ups'}], note: 'Scaling AMRAP long: adapter 2-3 mouvements max. Ne réduire que ce qui vous empêche de maintenir le pace.' },
+  rxPlus: { note: 'RX+: WB 9/6kg, DL +10%, Pistols = ring pistols, TTB strict, Row 20/15cal. Target 6+ rounds.' }
 },
 {
   day: 32, week: 7, name: 'CYCLONE', theme: 'Power Clean + Rotating EMOM',
@@ -435,7 +475,9 @@ window.CF_WODS_FULL = [
     {name: 'Power Snatches', reps: 'max contrôlé', weight: 'snatch', note: '@55% — technique > vitesse'},
     {name: 'Toes-to-bar', reps: 'max contrôlé', gymnastics: 'toes_to_bar'}
   ], notes: '🔄 DÉLOAD S8: 5 rounds au lieu de 8. Intensité zone 2 (conversationnel). Snatches avec 3s de reset entre chaque rep. TTB qualité. Déload = actif, pas inactif. 💤' },
-  gym: { name: 'Skill: Snatch Drills', drills: ['3x5 Snatch High Pull (slow)', '3x3 Hang Muscle Snatch', '3x5 OHS (pause 2s en bas)', '5min Mobilité épaules + thoracique'] }
+  gym: { name: 'Skill: Snatch Drills', drills: ['3x5 Snatch High Pull (slow)', '3x3 Hang Muscle Snatch', '3x5 OHS (pause 2s en bas)', '5min Mobilité épaules + thoracique'] },
+  scaled: { movements: [{name: 'Power Snatches', note: '→ Hang Power Snatch @45% ou KB Single Arm Snatch'}], note: 'Déload: maintenez le mouvement sans pousser l\'intensité.' },
+  rxPlus: { note: 'RX+ Déload: restez à @65% max. Ce n\'est PAS le jour d\'aller lourd.' }
 },
 {
   day: 39, week: 8, name: 'FORTRESS-DELOAD', theme: 'Déload S2 — Back Squat Léger + Récupération', deload: true,
@@ -445,19 +487,25 @@ window.CF_WODS_FULL = [
     {name: 'Handstand Walk', reps: '15m', gymnastics: 'handstand_walk'},
     {name: 'Deadlifts', reps: 8, weight: 'deadlift'},
     {name: 'Handstand Walk', reps: '10m', gymnastics: 'handstand_walk'}
-  ], notes: '🔄 DÉLOAD S8: Volume DL réduit de 50%. HS walk = skill focus, pas cardiovasculaire. Pace détendu. Grip management. 💤' },
-  gym: { name: 'Skill: HS Walk Technique', drills: ['3x10m HS Walk contrôlé', '3x5 Wall Walk (slow)', '3x10 Shoulder Taps en HS', '5min Foam Roll + étirements dorsaux'] }
+  ], notes: '🔄 DÉLOAD S8: Volume DL réduit de 50%. HS Walk = skill focus, pas cardiovasculaire. Pace détendu. Grip management. Chaque DL = rep parfaite, dos neutre, hip hinge complet. 💤' },
+  gym: { name: 'Skill: HS Walk Technique', drills: ['3x10m HS Walk contrôlé', '3x5 Wall Walk (slow)', '3x10 Shoulder Taps en HS', '5min Foam Roll + étirements dorsaux'] },
+  scaled: { movements: [{name: 'Handstand Walk', note: '→ 3x5 Wall Walk lent ou HS Hold 20s contre mur'}], note: 'Déload: DL à 50% body weight max. Pas de HS Walk → Bear Crawl 15m.' },
+  rxPlus: { note: 'RX+ Déload: HS Walk yeux fermés (sens proprioception). DL slow eccentric 5s.' }
 },
 {
-  day: 40, week: 8, name: 'KRONOS-DELOAD', theme: 'Déload S2 — S2OH + AMRAP Court', deload: true,
-  haltero: { name: 'Shoulder-to-OH Technique', desc: 'S2OH 3x3 @65% (push press ou push jerk)', scheme: 'E2MOM 6min — Léger', weights: 'shoulder_to_oh' },
-  wod: { name: 'KRONOS-LIGHT', type: 'AMRAP 10 — Zone 2', movements: [
-    {name: 'Shoulder-to-OH', reps: 5, weight: 'shoulder_to_oh', note: '@60%'},
-    {name: 'Ring Dips', reps: 5, gymnastics: 'ring_dips'},
-    {name: 'Pistols', reps: 6, gymnastics: 'pistols'},
-    {name: 'Double Unders', reps: 30, gymnastics: 'double_unders'}
-  ], notes: '🔄 DÉLOAD S8: 10min au lieu de 16min. Reps réduits. DU = 30 au lieu de 50. Aérobie facile. FIN DÉLOAD S8 — rechargé pour S9-11! 🔋' },
-  gym: { name: 'Récupération Active Finale S8', drills: ['3x5/leg Pistol Squats (focus technique)', '3x8 Ring Dips contrôlés', '5x20 DU relaxés', '10min Easy Row ou Bike zone 1'] }
+  day: 40, week: 8, name: 'FRAN-RETEST', theme: 'Déload S2 — Re-test Benchmark FRAN (semaine 2)', benchmark: 'FRAN', deload: true, benchmark_retest: true,
+  haltero: { name: 'Thruster Warm-up Léger', desc: 'Push Press 3x5 @55% + Thruster 3x3 @60% — Activation, pas de fatigue', scheme: '8min — Juste s\'activer', weights: 'thruster' },
+  wod: { name: 'FRAN', type: 'For Time (cap 10min)', movements: [
+    {name: 'Thrusters', reps: 21, weight: 'thruster', note: 'RX H: 43kg (95lb) / F: 29kg (65lb)'},
+    {name: 'Pull-ups', reps: 21, gymnastics: 'pullups'},
+    {name: 'Thrusters', reps: 15, weight: 'thruster'},
+    {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'},
+    {name: 'Thrusters', reps: 9, weight: 'thruster'},
+    {name: 'Pull-ups', reps: 9, gymnastics: 'pullups'}
+  ], notes: '🔄 RE-TEST FRAN S8: Après 7 semaines de programme, votre Fran devrait être plus rapide! Comparez avec votre score de S2. Stratégie: 21 Thrusters unbroken si possible, Pull-ups kipping fluides. Le 9 = sprint absolu. Élite H sub 2:30 / F sub 3:00. Avancé sub 4:00 / sub 5:00. ⚠️ NOTEZ votre temps et comparez avec S2! 📊' },
+  gym: { name: 'Post-FRAN Recovery', drills: ['5min Foam Roll épaules + quads', '3x10 Band Face Pulls (épaules)', '2x2min Pigeon Stretch', '10min Easy Row zone 1 — cool down complet'] },
+  scaled: { movements: [{name: 'Thrusters', reps: 21, note: '→ 30/20 kg ou goblet squats'}, {name: 'Pull-ups', note: '→ Banded kipping ou ring rows'}], note: 'Scaling identique à S2. L\'objectif = battre votre temps précédent, PAS de faire RX si ce n\'est pas encore là.' },
+  rxPlus: { note: 'RX+ Fran: Thrusters 52/38kg, Pull-ups butterfly strict. Target sub 2:00.' }
 },
 
 // ============ WEEK 9 ============
@@ -666,36 +714,38 @@ window.CF_WODS_FULL = [
   gym: { name: 'Skill: HS Walk + Récupération', drills: ['5x30s HS Hold freestanding', '3x5 Wall Walk (slow)', '5x5m HS Walk précis', '5min Foam Roll complet'] }
 },
 {
-  day: 58, week: 12, name: 'BASILISK-DELOAD', theme: 'Déload S3 — Hang Clean Léger + EMOM Court', deload: true,
-  haltero: { name: 'Hang Clean Léger', desc: '2 Hang Cleans @65% x 6 sets', scheme: 'Every 90s x 6 — Léger', weights: 'hang_clean' },
-  wod: { name: 'BASILISK-LIGHT', type: 'EMOM 12 (3 rounds)', movements: [
-    {name: 'Min 1: Hang Cleans', reps: 4, weight: 'hang_clean', note: '@60%'},
-    {name: 'Min 2: HSPU', reps: 5, gymnastics: 'hspu'},
-    {name: 'Min 3: KB Swings', reps: 10, gymnastics: 'kb_swing'},
-    {name: 'Min 4: Rope Climb', reps: 1, gymnastics: 'rope_climb'}
-  ], notes: '🔄 DÉLOAD S12: 12min au lieu de 20min. Reps réduits. Finissez chaque minute en 35s. Rope climbs = technique J-hook ou S-wrap parfaite. 💤' },
-  gym: { name: 'Skill: Rope Climb Maîtrise', drills: ['3x2 Rope Climbs (focus technique pieds)', '3x1 Legless attempts (si compétent)', '3x5 Towel Pull-ups (grip)', '5min Mobilité dorsaux + épaules'] }
+  day: 58, week: 12, name: 'HELEN-RETEST', theme: 'Déload S3 — Re-test Benchmark HELEN (semaine 4)', benchmark: 'HELEN', deload: true, benchmark_retest: true,
+  haltero: { name: 'Snatch Activation Légère', desc: 'Power Snatch 3x3 @55% — Échauffement pré-Helen, pas de fatigue', scheme: '8min — Activation seule', weights: 'snatch' },
+  wod: { name: 'HELEN', type: '3 Rounds For Time (cap 15min)', movements: [
+    {name: 'Run 400m', reps: 1, special: 'run_400'},
+    {name: 'KB Swings American', reps: 21, gymnastics: 'kb_swing', note: 'H: 24kg / F: 16kg'},
+    {name: 'Pull-ups', reps: 12, gymnastics: 'pullups'}
+  ], notes: '🔄 RE-TEST HELEN S12: Après 11 semaines de programme, mesurez votre progression! Comparez avec votre score de S4. Stratégie: Course à 85% effort — ni trop fort ni trop lent. KB swings unbroken si possible (hip drive!). Pull-ups kipping en 2 sets max. Le dernier 400m = tout donner. Élite H sub 9:00 / F sub 10:30. Avancé sub 11:00. ⚠️ NOTEZ votre temps et comparez avec S4! 📊' },
+  gym: { name: 'Skill: Running Economy + Récupération', drills: ['3x200m Run @85% (récup 90s)', '3x20 High Knees + Butt Kicks', '5min Easy Walk — cool down complet', '3x1min Pigeon Stretch'] },
+  scaled: { movements: [{name: 'KB Swings', note: '→ 16/12 kg american ou 20/14 kg russe'}, {name: 'Pull-ups', note: '→ Banded kipping ou jumping pull-ups'}], note: 'Scaling identique à S4. Objectif: battre votre temps précédent.' },
+  rxPlus: { note: 'RX+ Helen: KB 32/20kg american. Pull-ups butterfly strict. Target sub 8:00.' }
 },
 {
-  day: 59, week: 12, name: 'PALADIN-DELOAD', theme: 'Déload S3 — Front Squat Léger + Triplet Court', deload: true,
-  haltero: { name: 'Front Squat Léger', desc: 'Front Squat 3x5 @65% — Coudes hauts, position solide', scheme: 'E2MOM 8min — Léger', weights: 'front_squat' },
-  wod: { name: 'PALADIN-LIGHT', type: '2 Rounds For Time (cap 10min)', movements: [
-    {name: 'Front Squats', reps: 6, weight: 'front_squat', note: '@60%'},
-    {name: 'Rope Climbs', reps: 2, gymnastics: 'rope_climb'},
-    {name: 'Double Unders', reps: 30, gymnastics: 'double_unders'}
-  ], notes: '🔄 DÉLOAD S12: 2 rounds au lieu de 4. DU 30 au lieu de 50. Squats légers et fluides. Rope climbs = technique impeccable. Zen mode total. 💤' },
-  gym: { name: 'Skill: DU + Mobilité', drills: ['5x30 DU unbroken (relaxé)', '3x20 Single Under drill', '3x1min Pigeon Stretch', '3x1min Couch Stretch'] }
+  day: 59, week: 12, name: 'ISABEL-RETEST', theme: 'Déload S3 — Re-test Benchmark ISABEL (semaine 4)', benchmark: 'ISABEL', deload: true, benchmark_retest: true,
+  haltero: { name: 'Snatch Warm-up Re-test', desc: 'Montée activation: 3x3 @50%, 2x2 @65%, 2x1 @75% — Préparez ISABEL', scheme: '10min — Progression légère', weights: 'snatch' },
+  wod: { name: 'ISABEL', type: 'For Time (cap 8min)', movements: [
+    {name: 'Power Snatches', reps: 30, weight: 'snatch', note: 'RX H: 61kg (135lb) / F: 43kg (95lb) — ou 65-70% de votre 1RM'}
+  ], notes: '🔄 RE-TEST ISABEL S12: 30 snatches contre la montre — vos 11 semaines de travail overhead se mesurent ici. Comparez avec S4. Touch-and-go tant que la technique est propre. Singles dès que vous sentez la fatigue du grip. Maintenir la vitesse de tirage > le confort. Élite H sub 1:30 / F sub 2:00. Avancé sub 2:30 / sub 3:00. ⚠️ NOTEZ votre temps et poids utilisé! 📊' },
+  gym: { name: 'Skill: Snatch Efficiency + Récupération', drills: ['3x5 Snatch High Pull (connexion tirage)', '3x3 Muscle Snatch (technique overhead)', '3x3 Snatch Balance', '5min Band stretches épaules + thoracique'] },
+  scaled: { movements: [{name: 'Power Snatches', note: '→ 40/30 kg ou 60-65% de votre 1RM snatch'}], note: 'Scaling identique à S4. Objectif: battre votre temps ou augmenter le poids.' },
+  rxPlus: { note: 'RX+ Isabel: 70/48kg. Target sub 1:15. Pas de singles avant le rep 20.' }
 },
 {
-  day: 60, week: 12, name: 'MARAUDER-DELOAD', theme: 'Déload S3 — S2OH Léger + Chipper Court', deload: true,
-  haltero: { name: 'Shoulder-to-OH Léger', desc: 'S2OH 3x5 @65% (push press)', scheme: 'E2MOM 6min — Léger', weights: 'shoulder_to_oh' },
-  wod: { name: 'MARAUDER-LIGHT', type: 'For Time (cap 12min)', movements: [
-    {name: 'Shoulder-to-OH', reps: 10, weight: 'shoulder_to_oh', note: '@60%'},
-    {name: 'Pull-ups', reps: 20, gymnastics: 'pullups'},
-    {name: 'Box Jumps', reps: 15, gymnastics: 'box_jump'},
-    {name: 'Power Cleans', reps: 10, weight: 'power_clean', note: '@60%'}
-  ], notes: '🔄 DÉLOAD S12: Volume réduit de 50%. Pas de Bike finale pour ménager le système nerveux. FIN DÉLOAD S12 — mi-programme accompli! 30 jours pour le finish! 🔋' },
-  gym: { name: 'Récupération Active Finale S12', drills: ['3x5 Strict HSPU (contrôle pur)', '3x8 Kipping HSPU technique', '5min Easy Row zone 1', '10min Stretching global complet'] }
+  day: 60, week: 12, name: 'CINDY-RETEST', theme: 'Déload S3 — Re-test Benchmark CINDY (semaine 4)', benchmark: 'CINDY', deload: true, benchmark_retest: true,
+  haltero: { name: 'Push Press Activation Légère', desc: 'Push Press 3x5 @55% — Léger, activation avant Cindy', scheme: '6min — Ultra léger', weights: 'push_press' },
+  wod: { name: 'CINDY', type: 'AMRAP 20', movements: [
+    {name: 'Pull-ups', reps: 5, gymnastics: 'pullups'},
+    {name: 'Push-ups', reps: 10, gymnastics: 'pushups'},
+    {name: 'Air Squats', reps: 15, gymnastics: 'air_squat'}
+  ], notes: '🔄 RE-TEST CINDY S12: L\'AMRAP pur gymnastics. Comparez avec votre score S4 — chaque round de plus = votre progression visible. Standards stricts: Pull-ups CHIN ABOVE BAR. Push-ups CHEST TO GROUND. Squats full depth. Pace RÉGULIER = plus de rounds (un round toutes les 50-55s = 21+ rounds). FIN DÉLOAD S12 — mi-programme accompli! ⚠️ NOTEZ votre score! 📊 🔋' },
+  gym: { name: 'Récupération Active Finale S12', drills: ['3x5 Strict Pull-ups (weighted si 20+ rounds)', '3x10 Ring Push-ups', '5min Easy Row zone 1', '10min Stretching global complet'] },
+  scaled: { movements: [{name: 'Pull-ups', note: '→ Banded kipping ou jumping pull-ups'}, {name: 'Push-ups', note: '→ Genoux au sol'}], note: 'Scaling identique à S4. Standards maintenus = intégrité du score.' },
+  rxPlus: { note: 'RX+ Cindy: Pull-ups butterfly, Push-ups sur parallettes (+ 3cm ROM), Squats tempo 2s descent. Target 25+ rounds.' }
 },
 
 // ============ WEEK 13 ============
@@ -706,8 +756,10 @@ window.CF_WODS_FULL = [
     {name: 'Power Cleans', reps: 7, weight: 'power_clean'},
     {name: 'Burpees', reps: 7, gymnastics: 'burpee'},
     {name: 'Toes-to-bar', reps: 7, gymnastics: 'toes_to_bar'}
-  ], notes: 'Souffle du dragon. Court et violent. Cleans touch-and-go si possible. Burpees rapides. TTB unbroken = le but. 6+ rounds.' },
-  gym: { name: 'Skill: Touch-and-Go Cleans', drills: ['5x3 TnG Power Clean @70%', '3x5 TnG Power Clean @65%', '3x8 RDL (clean grip)', '3x10 Hang Muscle Clean'] }
+  ], notes: 'AMRAP 12min triplet uniforme (7-7-7). Phase Spécialisation S13 = intensité haute. Stratégie: Power Cleans TnG légers (70-75%) = cycle rapide. Burpees: chest to floor, jump and clap = rythme constant. TTB unbroken 7 = objectif (si loupés, 4+3). Pace glycolytique-oxydatif — 1min 30s par round cible = 8 rounds. Élite 9+ rounds, Avancé 6+ rounds. Respirez sur les TTB (expiration en haut).' },
+  gym: { name: 'Skill: Touch-and-Go Cleans', drills: ['5x3 TnG Power Clean @70%', '3x5 TnG Power Clean @65%', '3x8 RDL (clean grip)', '3x10 Hang Muscle Clean'] },
+  scaled: { movements: [{name: 'Power Cleans', reps: 7, note: '→ 5 reps ou 65% du poids'}, {name: 'Toes-to-bar', reps: 7, note: '→ Knees-to-chest ou V-ups'}], note: 'Scaling: garder 7-7-7 ou réduire à 5-5-5. Phase spécialisation = intensité. Préférez réduire les poids que les reps.' },
+  rxPlus: { note: 'RX+: Power Cleans = squat cleans, Burpees = box jump over, TTB strict. Target 10+ rounds.' }
 },
 {
   day: 62, week: 13, name: 'BEHEMOTH', theme: 'Back Squat + Beast Mode',
@@ -715,8 +767,10 @@ window.CF_WODS_FULL = [
   wod: { name: 'BEHEMOTH', type: 'For Time — 21-15-9 (cap 15min)', movements: [
     {name: 'Thrusters', reps: '21-15-9', weight: 'thruster'},
     {name: 'Chest-to-bar Pull-ups', reps: '21-15-9', gymnastics: 'pullups'}
-  ], notes: 'Fran on stéroïdes. Thrusters 7-7-7 au 21, essayez unbroken au 9. C2B en plus gros sets possibles. RX = heavy Fran vibes.' },
-  gym: { name: 'Skill: Chest-to-bar Pull-ups', drills: ['3x5 Strict C2B', '3x8 Kipping C2B', 'Max unbroken C2B test', '3x8 Supinated BB Row'] }
+  ], notes: 'BEHEMOTH = Fran avec C2B (plus de travail de tirage + chest standard strict). Stratégie 21: Thrusters 7-7-7 ou 11-10, C2B kipping en 7-7-7. Stratégie 15: Thrusters 8-7 ou unbroken, C2B 8-7. Stratégie 9: SPRINT TOTAL — unbroken si possible sur les 2 mouvements. Le standard C2B = poitrine DOIT toucher la barre (pas le menton). Jambes sur les thrusters! Élite sub 5:30, Avancé sub 9:00.' },
+  gym: { name: 'Skill: Chest-to-bar Pull-ups', drills: ['3x5 Strict C2B', '3x8 Kipping C2B', 'Max unbroken C2B test', '3x8 Supinated BB Row'] },
+  scaled: { movements: [{name: 'Chest-to-bar Pull-ups', note: '→ Kipping pull-ups standard (chin above bar)'}, {name: 'Thrusters', note: '→ 30/20 kg si C2B est le facteur limitant'}], note: 'Scaling: C2B → pull-ups standard. Garder les thrusters au poids RX si possible.' },
+  rxPlus: { note: 'RX+: Thrusters +5kg, C2B = butterfly strict. Target sub 4:30.' }
 },
 {
   day: 63, week: 13, name: 'SERPENT', theme: 'OHS + Slithering Intervals',
@@ -740,18 +794,18 @@ window.CF_WODS_FULL = [
   gym: { name: 'Skill: Hip Power', drills: ['3x10 SDLHP (light, technique)', '3x10 KB Sumo Deadlift', '3x8 Barbell Hip Thrust', '3x10 Broad Jumps'] }
 },
 {
-  day: 65, week: 13, name: 'ABYSS', theme: 'Clean + Deep Water WOD',
-  haltero: { name: 'Clean & Jerk', desc: '1 Clean + 1 Front Squat + 1 Jerk', scheme: 'E2MOM 14min', weights: 'clean' },
-  wod: { name: 'ABYSS', type: 'For Time (cap 24min)', movements: [
-    {name: 'Run 800m', reps: 1, special: 'run_800'},
-    {name: 'Muscle-ups (ring)', reps: 15, gymnastics: 'muscle_ups_ring'},
-    {name: 'Squat Cleans', reps: 15, weight: 'squat_clean'},
-    {name: 'Muscle-ups (ring)', reps: 10, gymnastics: 'muscle_ups_ring'},
-    {name: 'Squat Cleans', reps: 10, weight: 'squat_clean'},
-    {name: 'Muscle-ups (ring)', reps: 5, gymnastics: 'muscle_ups_ring'},
-    {name: 'Squat Cleans', reps: 5, weight: 'squat_clean'}
-  ], notes: 'Les profondeurs. Row = 1:45 pace. RMU en 3-2 dès le début. Cleans par 5. Le volume descend = accélérez en fin. Sortez de l\'abysse.' },
-  gym: { name: 'Skill: Ring Work', drills: ['3x10 Ring Rows (feet elevated)', '3x5 Ring Dips (strict)', '3x3 False Grip Pull-ups', '3x10 Ring Push-ups (deep)'] }
+  day: 65, week: 13, name: 'MURPH', theme: 'Hero WOD — J. Michael Murphy — Endurance + Poids du corps', hero: true,
+  haltero: { name: 'Active Recovery', desc: 'Pas d\'haltérophilie ce jour. Mobilité coiffe rotateurs 15min + Hip Flexor Stretch.', scheme: 'Mobilité seule — 15min', weights: null },
+  wod: { name: 'MURPH', type: 'For Time (cap 60min)', movements: [
+    {name: 'Run 1600m', reps: 1, special: 'run_1600'},
+    {name: 'Pull-ups', reps: 100, gymnastics: 'pullups'},
+    {name: 'Push-ups', reps: 200, gymnastics: 'pushups'},
+    {name: 'Air Squats', reps: 300, gymnastics: 'air_squat'},
+    {name: 'Run 1600m', reps: 1, special: 'run_1600'}
+  ], notes: 'MURPH — le Hero WOD le plus iconic du CrossFit. Dédié au Lt. Michael P. Murphy, Navy SEAL, KIA 28 juin 2005. Stratégie élite: 20 rounds de 5 Pull-ups / 10 Push-ups / 15 Air Squats entre les 2 runs. 1er run à 80% effort. Partitionnez dès le début — NE PAS partir unbroken. Standards: Élite H sub 35min / F sub 45min (avec weight vest 9/6 kg). Sans vest H sub 40min / F sub 50min. Avancé H sub 45min / F sub 55min. RESPIREZ entre chaque round des 20. Push-ups chest to ground, squats full depth, chin above bar. ⚠️ NOTEZ votre temps! 🏆' },
+  gym: { name: 'Post-Murph Recovery', drills: ['5min Foam Roll épaules/thoracique complet', '3x10 Band Dislocates (rotation épaules)', '3min Child\'s Pose', '3min Pigeon Pose chaque côté', '5min Easy Walk — cool down actif'] },
+  scaled: { movements: [{name: 'Pull-ups', reps: 100, note: '→ Ring rows ou banded pull-ups'}, {name: 'Push-ups', reps: 200, note: '→ Genoux au sol si nécessaire'}, {name: 'Run', note: '→ Row 1500m ou marche rapide si blessure'}], note: 'Première fois: Réduire à 50/100/150 (demi-Murph). Partitionnez librement. Respectez les standards de mouvements. Ne jamais sauter la vest la première fois.' },
+  rxPlus: { note: 'RX+ Murph: Weight vest 9/6 kg obligatoire. Pull-ups = unbroken par 5 toujours. Courir les 2 miles à >85% effort. Target H sub 32min / F sub 40min.' }
 },
 
 // ============ WEEK 14 ============
@@ -799,19 +853,16 @@ window.CF_WODS_FULL = [
   gym: { name: 'Skill: Squat Mobility', drills: ['3x10 Goblet Squat (paused 3s)', '2x2min Ankle Stretch', '2x2min Hip Flexor Stretch', '3x5 Cossack Squat/side'] }
 },
 {
-  day: 70, week: 14, name: 'HARBINGER', theme: 'Power Clean + Omen WOD',
-  haltero: { name: 'Power Clean + Push Jerk', desc: '2 Power Clean + 1 Push Jerk', scheme: 'E2MOM 12min', weights: 'power_clean' },
-  wod: { name: 'HARBINGER', type: 'For Time (cap 20min)', movements: [
-    {name: 'Power Cleans', reps: 10, weight: 'power_clean'},
-    {name: 'Rope Climbs', reps: 4, gymnastics: 'rope_climb'},
-    {name: 'Power Cleans', reps: 10, weight: 'power_clean'},
-    {name: 'Handstand Walk', reps: '50ft', gymnastics: 'handstand_walk'},
-    {name: 'Power Cleans', reps: 10, weight: 'power_clean'},
-    {name: 'Rope Climbs', reps: 4, gymnastics: 'rope_climb'},
-    {name: 'Power Cleans', reps: 10, weight: 'power_clean'},
-    {name: 'Handstand Walk', reps: '50ft', gymnastics: 'handstand_walk'}
-  ], notes: 'Le présage. 40 cleans total = grip management critique. TnG par 5. Rope climbs lents et contrôlés. HS Walk = 5x10ft segments.' },
-  gym: { name: 'Skill: Grip Endurance', drills: ['3x45s Dead Hang', '3x20 Farmer Carry (heavy, 30m)', '3x8 Towel Pull-ups', '3x10 Wrist Curls (both directions)'] }
+  day: 70, week: 14, name: 'DT', theme: 'Hero WOD — Richard "Dick" Tanner — Haltéro + Stamina', hero: true,
+  haltero: { name: 'Clean Pull + Front Squat Activation', desc: '3x3 Clean Pull @70% + 3x3 Front Squat @60% — Activation technique avant DT', scheme: '10min — Préparation barbell cycling', weights: 'deadlift' },
+  wod: { name: 'DT', type: '5 Rounds For Time (cap 20min)', movements: [
+    {name: 'Deadlift', reps: 12, weight: 'deadlift', note: 'RX H: 70kg (155lb) / F: 47.5kg (105lb)'},
+    {name: 'Hang Power Clean', reps: 9, weight: 'power_clean', note: 'Même barre'},
+    {name: 'Push Jerk', reps: 6, weight: 'thruster', note: 'Même barre — RX H: 70kg / F: 47.5kg'}
+  ], notes: 'DT — Dédié au SSgt Richard "Dick" Tanner. Barbell cycling pur — MÊME barre tout le WOD. Stratégie: DL touch-and-go ou 1s de reset entre reps (dos neutre toujours!). HPC unbroken si possible les 3 premiers rounds. Push Jerk 3-3 ou unbroken. Chaque round = respiration contrôlée après les jerks. Standards: RX H 70kg / F 47.5kg. Élite H sub 6:00 / F sub 8:00. Avancé H sub 9:00 / F sub 11:00. Débutant sub 13:00. GRIP + RESPIREZ — ne lâchez pas la barre ! ⚠️ NOTEZ votre temps!' },
+  gym: { name: 'Posterior Chain Recovery', drills: ['3x10 Good Morning léger (PVC)', '3x5 Pause Front Squat @50%', '5min Thoracic Mobility (foam roll)', '3x1min Hip Flexor Stretch chaque côté'] },
+  scaled: { movements: [{name: 'Tous mouvements', note: '→ 42.5/30 kg ou poids = 75% de votre 1RM DL'}], note: 'Même schème 5 rounds 12-9-6. Poids adapté. Ne JAMAIS sacrifier la position du dos sur les DL. L\'honneur du Hero WOD = terminer, pas le poids.' },
+  rxPlus: { note: 'RX+ DT: 85/57.5kg. HPC touch-and-go strict. Jerk split. Target sub 5:30 / sub 7:30.' }
 },
 
 // ============ WEEK 15 ============
@@ -862,19 +913,16 @@ window.CF_WODS_FULL = [
   gym: { name: 'Skill: Strict Gymnastics', drills: ['3x3 Strict Muscle-up (bar or ring)', '3x5 Strict HSPU', '3x5 Strict C2B Pull-ups', '3x15 Hollow Rocks'] }
 },
 {
-  day: 75, week: 15, name: 'EXODUS', theme: 'Mixed Modal + Grand Departure',
-  haltero: { name: 'Clean & Jerk', desc: '1 Clean + 1 Hang Clean + 1 Jerk', scheme: 'E2MOM 14min — Build', weights: 'clean' },
-  wod: { name: 'EXODUS', type: 'For Time (cap 28min)', movements: [
-    {name: 'Deadlifts', reps: 30, weight: 'deadlift'},
-    {name: 'HSPU', reps: 30, gymnastics: 'hspu'},
-    {name: 'Cal Row', special: 'row_cal', note: '40/35 cal'},
-    {name: 'Double Unders', reps: 100, gymnastics: 'double_unders'},
-    {name: 'Power Cleans', reps: 20, weight: 'power_clean'},
-    {name: 'Ring Muscle-ups', reps: 15, gymnastics: 'muscle_ups_ring'},
-    {name: 'Wall Balls', reps: 50, gymnastics: 'wall_ball'},
-    {name: 'Rope Climbs', reps: 5, gymnastics: 'rope_climb'}
-  ], notes: 'Le grand exode de Part 3. Chipper épique. DL 6x5. HSPU 6x5. Row 2:00 pace. DU unbroken. Cleans 4x5. RMU 3-3-3-3-3. WB 10x5. Rope = finish line.' },
-  gym: { name: 'Skill: Full Body Recovery', drills: ['3x10 Good Mornings', '2x2min Pigeon Stretch', '2x2min Couch Stretch', '3x1min Hang from Bar', '5min Easy Row or Bike'] }
+  day: 75, week: 15, name: 'JACKIE', theme: 'Benchmark Girl WOD — Row + Thrusters + Pull-ups', benchmark: 'JACKIE',
+  haltero: { name: 'Thruster Build-up', desc: '3x5 Thruster montée progressive @50-60-70% — Préparez JACKIE', scheme: '10min — Préparation', weights: 'thruster' },
+  wod: { name: 'JACKIE', type: 'For Time (cap 12min)', movements: [
+    {name: 'Row 1000m', reps: 1, special: 'row_1000'},
+    {name: 'Thrusters', reps: 50, weight: 'thruster', note: 'RX H: 20kg (45lb) / F: 15kg (35lb)'},
+    {name: 'Pull-ups', reps: 30, gymnastics: 'pullups'}
+  ], notes: 'BENCHMARK JACKIE — Le Girl WOD qui teste Row + Barbell + Gymnastics. Stratégie: Row à 85% (pace d\'environ 1:45-1:50/500m), Thrusters 15-15-10-10 ou 20-20-10, Pull-ups kipping unbroken si possible (sinon 10-10-10). Accélérez sur les derniers 10 pull-ups — finish LINE. Standards: Élite H sub 5:30 / F sub 6:30. Avancé H sub 7:00 / F sub 8:00. Scaled sub 10:00. ⚠️ NOTEZ votre temps! 🏅' },
+  gym: { name: 'Pulling Strength + Core', drills: ['5x3 Weighted Pull-ups', '3x5 Strict Ring Dips', '3x Max Kipping HSPU', '3x15 Hollow Rocks'] },
+  scaled: { movements: [{name: 'Thrusters', reps: 50, note: '→ 15/10 kg ou 30/20 kg si débutant'}, {name: 'Pull-ups', reps: 30, note: '→ Banded kipping ou ring rows'}], note: 'Scaling JACKIE: réduire le poids des thrusters de 30-40%. Ne pas réduire les reps — l\'âme du benchmark est dans le volume.' },
+  rxPlus: { note: 'RX+ Jackie: Row 1000m @1:40/500m pace. Thrusters 25/17.5kg. Pull-ups butterfly strict. Target sub 5:00.' }
 },
 // --- END PART 3 (days 51-75) --- PART 4 CONTINUES ---
 
@@ -906,39 +954,42 @@ window.CF_WODS_FULL = [
   gym: { name: 'Skill: Bar MU Technique', drills: ['3x5 Chest-to-bar Pull-ups (gros kip)', '3x3 Kip to Hip drill', '5x1-2 Bar MU attempts (contrôle)', '3x10 Strict Dips (contrôle)'] }
 },
 {
-  day: 78, week: 16, name: 'IRONWOLF-DELOAD', theme: 'Déload S4 — Deadlift Léger + Couplet Court', deload: true,
-  haltero: { name: 'Deadlift Technique', desc: 'Deadlift 3x5 @65% — Dos neutre, hip hinge parfait', scheme: 'E3min x 3 sets — Léger', weights: 'deadlift' },
-  wod: { name: 'IRONWOLF-LIGHT', type: 'For Time (cap 12min)', movements: [
-    {name: 'Deadlifts', reps: 10, weight: 'deadlift', note: '@60%'},
-    {name: 'HSPU', reps: 8, gymnastics: 'hspu'},
-    {name: 'Deadlifts', reps: 8, weight: 'deadlift'},
-    {name: 'HSPU', reps: 6, gymnastics: 'hspu'},
-    {name: 'Deadlifts', reps: 6, weight: 'deadlift'},
-    {name: 'HSPU', reps: 4, gymnastics: 'hspu'}
-  ], notes: '🔄 DÉLOAD S16: Volumes divisés par 2. DL techniques, pas de PR. HSPU = strict si possible. Pace détendu. 💤' },
-  gym: { name: 'Skill: HS Walk + Récupération', drills: ['5x30s Wall-Facing HS Hold', '3x5 Wall Walk (slow)', '5x5m HS Walk (focus)', '5min Mobilité épaules + thoracique'] }
+  day: 78, week: 16, name: 'ANNIE-RETEST', theme: 'Déload S4 — Re-test Benchmark ANNIE (semaines 4 et 12)', benchmark: 'ANNIE', deload: true, benchmark_retest: true,
+  haltero: { name: 'Deadlift Activation Légère', desc: 'Deadlift 3x3 @60% — Activation légère, pas de fatigue avant ANNIE', scheme: 'E3min x 3 — Ultra léger', weights: 'deadlift' },
+  wod: { name: 'ANNIE', type: '50-40-30-20-10 For Time (cap 12min)', movements: [
+    {name: 'Double Unders', reps: '50-40-30-20-10', gymnastics: 'double_unders'},
+    {name: 'Abmat Sit-ups', reps: '50-40-30-20-10', gymnastics: 'situps'}
+  ], notes: '🔄 RE-TEST ANNIE S16: 3ème évaluation du programme — vos DU et votre core ont 15 semaines de travail! Comparez avec S4 ET S12. Stratégie: DU unbroken le plus longtemps possible. Sit-ups: ancrez les pieds, touchez les orteils. Alternez sections sans vous arrêter. Élite H sub 5:00 / F sub 5:30. Avancé sub 7:00 / sub 8:00. ⚠️ NOTEZ votre score et comparez avec vos résultats précédents! 📊' },
+  gym: { name: 'Skill: DU Mastery + Récupération', drills: ['5x30 DU unbroken', '3x50 DU for time', '3x Max DU no miss attempts', '5min Easy Bike zone 1 — récupération'] },
+  scaled: { movements: [{name: 'Double Unders', note: '→ Single Unders x2 (100-80-60-40-20) ou 30-25-20-15-10 DU'}], note: 'Scaling identique à S4. Progressez vers RX si vous avez amélioré vos DU.' },
+  rxPlus: { note: 'RX+ Annie: DU unbroken jusqu\'au 30. Target sub 4:30. Sit-ups GHD (attention volume).' }
 },
 {
-  day: 79, week: 16, name: 'STINGRAY-DELOAD', theme: 'Déload S4 — Squat Clean Léger + AMRAP Court', deload: true,
-  haltero: { name: 'Squat Clean Léger', desc: 'Squat Clean 3x3 @65% — Vitesse sous la barre', scheme: 'E2MOM 8min — Léger', weights: 'squat_clean' },
-  wod: { name: 'STINGRAY-LIGHT', type: 'AMRAP 10 — Zone 2', movements: [
-    {name: 'Squat Cleans', reps: 3, weight: 'squat_clean', note: '@60%'},
-    {name: 'Ring Dips', reps: 5, gymnastics: 'ring_dips'},
-    {name: 'Double Unders', reps: 25, gymnastics: 'double_unders'},
-    {name: 'Cal Row', special: 'row_cal', note: '10/8 cal — pace modéré'}
-  ], notes: '🔄 DÉLOAD S16: 10min au lieu de 20min. Reps réduits. Ring dips = technique. DU 25 au lieu de 40. Zone 2 confortables. 💤' },
-  gym: { name: 'Skill: Ring MU Préparation', drills: ['3x5 Strict Ring Dips (full ROM)', '3x3 Kip Swing to Hip (rings)', '5x1-2 Ring MU (contrôle complet)', '2min Ring Support Hold'] }
+  day: 79, week: 16, name: 'FRAN-RETEST-2', theme: 'Déload S4 — Re-test Benchmark FRAN (semaines 2 et 8)', benchmark: 'FRAN', deload: true, benchmark_retest: true,
+  haltero: { name: 'Thruster Activation S16', desc: 'Push Press 3x5 @55% + Thruster 3x3 @60% — Activation propre avant FRAN', scheme: '8min — Léger', weights: 'thruster' },
+  wod: { name: 'FRAN', type: 'For Time (cap 10min)', movements: [
+    {name: 'Thrusters', reps: 21, weight: 'thruster', note: 'RX H: 43kg (95lb) / F: 29kg (65lb)'},
+    {name: 'Pull-ups', reps: 21, gymnastics: 'pullups'},
+    {name: 'Thrusters', reps: 15, weight: 'thruster'},
+    {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'},
+    {name: 'Thrusters', reps: 9, weight: 'thruster'},
+    {name: 'Pull-ups', reps: 9, gymnastics: 'pullups'}
+  ], notes: '🔄 RE-TEST FRAN S16: 3ème tentative! Après 4 mois de programme, votre FRAN doit être nettement meilleure. Comparez avec S2 et S8. Stratégie: 21 Thrusters unbroken (legs drive!), Pull-ups kipping butterfly si possible. 15 = 8-7 ou unbroken. 9 = SPRINT TOTAL, rien dans le réservoir. Élite H sub 2:30 / F sub 3:00. Avancé sub 4:00. ⚠️ NOTEZ et comparez! 📊' },
+  gym: { name: 'Post-FRAN Mobilité', drills: ['5min Foam Roll épaules + quads', '3x10 Band Face Pulls', '2x2min Pigeon Stretch', '5min Easy Row zone 1'] },
+  scaled: { movements: [{name: 'Thrusters', note: '→ 30/20 kg'}, {name: 'Pull-ups', note: '→ Banded kipping ou ring rows'}], note: 'Scaling cohérent avec les tests précédents pour comparer. Évitez de changer le scaling d\'un test à l\'autre.' },
+  rxPlus: { note: 'RX+ Fran S16: 52/38kg, Pull-ups butterfly strict. Target sub 2:00. Phase finale = tout donner.' }
 },
 {
-  day: 80, week: 16, name: 'WARHAMMER-DELOAD', theme: 'Déload S4 — S2OH Léger + Chipper Réduit', deload: true,
-  haltero: { name: 'Push Press Léger', desc: 'Push Press 3x5 @65% — Dip minimal, drive explosif', scheme: 'E2MOM 6min — Léger', weights: 'push_press' },
-  wod: { name: 'WARHAMMER-LIGHT', type: 'For Time (cap 12min)', movements: [
-    {name: 'Shoulder-to-OH', reps: 15, weight: 'shoulder_to_oh', note: '@60%'},
-    {name: 'Wall Balls', reps: 20, gymnastics: 'wall_ball'},
-    {name: 'Rope Climbs', reps: 2, gymnastics: 'rope_climb'},
-    {name: 'KB Swings', reps: 15, gymnastics: 'kb_swing'}
-  ], notes: '🔄 DÉLOAD S16: Volume -50%. Pas de Pistols ni de Bike pour ménager les jambes. FIN DÉLOAD S16 — 4 semaines de phase finale devant vous! Corps = rechargé, mental = affûté. 🔋💥' },
-  gym: { name: 'Récupération Active Finale S16', drills: ['3x Rope Climb technique parfaite', '3x15 Strict Toes-to-bar', '5min Easy Row zone 1', '15min Stretching complet + visualisation'] }
+  day: 80, week: 16, name: 'HELEN-RETEST-2', theme: 'Déload S4 — Re-test Benchmark HELEN (semaines 4 et 12)', benchmark: 'HELEN', deload: true, benchmark_retest: true,
+  haltero: { name: 'Clean Activation Légère', desc: '3x3 Hang Power Clean @55% — Activation légère avant HELEN', scheme: '8min — Ultra léger', weights: 'hang_clean' },
+  wod: { name: 'HELEN', type: '3 Rounds For Time (cap 15min)', movements: [
+    {name: 'Run 400m', reps: 1, special: 'run_400'},
+    {name: 'KB Swings American', reps: 21, gymnastics: 'kb_swing', note: 'H: 24kg / F: 16kg'},
+    {name: 'Pull-ups', reps: 12, gymnastics: 'pullups'}
+  ], notes: '🔄 RE-TEST HELEN S16: Dernier déload avant la phase finale — dernière chance de mesurer vos progrès! Comparez avec S4 et S12. Stratégie: 1er 400m à 80% (pas de sprint!), KB unbroken (hip explosion), Pull-ups kipping butterfly. Accélérez le 3ème tour. FIN DÉLOAD S16 — Corps rechargé, mental affûté pour les 4 dernières semaines! Élite H sub 9:00 / F sub 10:30. ⚠️ NOTEZ et comparez! 🔋💥 📊' },
+  gym: { name: 'Récupération Active Finale S16', drills: ['3x200m Run @85% (récup 90s)', '5min Easy Row zone 1', '15min Stretching complet + visualisation', '5min Préparation mentale S17-20'] },
+  scaled: { movements: [{name: 'KB Swings', note: '→ 16/12 kg ou russien swings'}, {name: 'Pull-ups', note: '→ Banded kipping ou ring rows'}], note: 'Scaling cohérent avec S4 et S12.' },
+  rxPlus: { note: 'RX+ Helen S16: KB 32/20kg, Pull-ups butterfly strict. Target sub 8:00. Dernier benchmark avant le peaking!' }
 },
 
 // ============ WEEK 17 ============
@@ -1176,8 +1227,10 @@ window.CF_WODS_FULL = [
     {name: 'Squat Cleans', reps: 10, weight: 'squat_clean'},
     {name: 'Ring Muscle-ups', reps: 5, gymnastics: 'muscle_ups_ring'},
     {name: 'Rope Climb', reps: 1, gymnastics: 'rope_climb'}
-  ], notes: 'ARMAGEDDON. Le WOD final. 100 jours pour ça. Row 2:00. DL 8x5. WB 10x5. Cleans 5x6. HSPU 5x5. DU unbroken. Thrusters 4x5. BMU 3-3-3-3-3. SqCl singles. RMU 2-2-1. Last rope climb = victoire. Vous êtes des guerriers.' },
-  gym: { name: 'Skill: Victory Lap', drills: ['3x Max Strict Pull-ups', '3x Max Strict HSPU', '1x Max Ring Muscle-ups', '1x Max Unbroken Double Unders', '5min Easy Row — Cool Down'] }
+  ], notes: 'ARMAGEDDON — le WOD final de 100 jours de programme. Ce moment vous a été préparé. Stratégie: Row 2:00/500m pace (pas de sprint — chipper). DL 8x5 TnG. WB 10x5. Power Cleans 5-5-6-5-5-4 touch-and-go. HSPU 5x5. DU unbroken ou 50-50. Thrusters 4x5. BMU 3-3-3-3-3 (singles OK). Squat Cleans 10 singles max effort. RMU 2-2-1 (pas de raté). Rope climb finale = victoire. Ne vous arrêtez jamais > 20s. Vous êtes des guerriers — 100 jours prouvés.' },
+  gym: { name: 'Skill: Victory Lap', drills: ['3x Max Strict Pull-ups', '3x Max Strict HSPU', '1x Max Ring Muscle-ups', '1x Max Unbroken Double Unders', '5min Easy Row — Cool Down'] },
+  scaled: { movements: [{name: 'Bar Muscle-ups', reps: 15, note: '→ 30 C2B Pull-ups'}, {name: 'Ring Muscle-ups', reps: 5, note: '→ 10 Strict Pull-ups'}, {name: 'HSPU', reps: 25, note: '→ 20 Pike HSPU ou DB Press'}, {name: 'Rope Climb', reps: 1, note: '→ 5 Ring Rows'}], note: 'Scaling ARMAGEDDON: réduire les charges de 20-25% sur tous les barbell mouvements. Garder les reps identiques autant que possible. Le chipper final = mêmes intentions.' },
+  rxPlus: { note: 'RX+ Armageddon: DL +10%, HSPU = strict, BMU = strict, Rope Climb = legless, DU → 50 Triple Unders. Target sub 27min.' }
 }
 ];
 
