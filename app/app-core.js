@@ -596,7 +596,8 @@ window.S = {
   cookLevel: 2, whey: null, allergies: [], intolerances: [],
   regime: 0, excluded: '', cuisines: [0],
   shopFreq: null, shopStores: [], shopBudget: null, shopPrefs: [],
-  weekPlan: null, selectedDay: 0, modalRecipe: null, showList: false,
+  shopChecked: {},   // { 'nom_ingrédient': true|false } — état cases à cocher liste de courses
+  weekPlan: null, selectedDay: 0, modalRecipe: null, showList: false, shopListOpen: false,
   // Food habits
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,

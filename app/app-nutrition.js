@@ -1815,7 +1815,14 @@ function renderStep9(p) {
     }
   }
 
-  // Shopping list button
+  // Bouton liste de courses améliorée
+  var btnShop = h('button', {
+    style: 'width:100%;padding:12px;margin:8px 0;background:var(--card);border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
+    onclick: function() { window.S.shopListOpen = true; if(window.render) window.render(); }
+  }, '🛒 Voir la liste de courses');
+  p.appendChild(btnShop);
+
+  // Shopping list button (legacy)
   p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function() { S.showList = !S.showList; window.render(); }}, S.showList ? '\u25b2 Masquer la liste de courses' : '\u25bc Ma liste de courses'));
 
   if (S.showList) {
@@ -2068,6 +2075,170 @@ function exportRecipePDF(r) {
 }
 window.exportRecipePDF = exportRecipePDF;
 
+// ─── SHOPPING LIST ───
+function renderShoppingList(p) {
+  var s = window.S;
+  p.innerHTML = '';
+
+  // Header
+  var header = h('div', {style:'padding:20px 16px 8px'});
+  header.appendChild(h('div', {style:'font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px'}, '🛒 Liste de courses'));
+  header.appendChild(h('div', {style:'font-size:13px;color:var(--text-secondary)'}, 'Semaine complète — cochez au fur et à mesure'));
+  p.appendChild(header);
+
+  // Bouton retour
+  var btnBack = h('button', {
+    style:'margin:0 16px 12px;padding:10px 14px;background:transparent;border:none;color:var(--text-secondary);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px',
+    onclick: function() { window.S.shopListOpen = false; if(window.render) window.render(); }
+  }, '← Retour au plan');
+  p.appendChild(btnBack);
+
+  if (!s.weekPlan || !window.RecipeEngine) {
+    p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, 'Générez d\'abord votre plan de repas.'));
+    return;
+  }
+
+  var list = window.RecipeEngine.generateShoppingList(s.weekPlan);
+  if (!s.shopChecked) s.shopChecked = {};
+
+  if (!list.length) {
+    p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, 'Aucun ingrédient détecté dans le plan.'));
+    return;
+  }
+
+  // Boutons actions
+  var actions = h('div', {style:'display:flex;gap:10px;padding:0 16px 12px;flex-wrap:wrap'});
+
+  var btnPDF = h('button', {
+    style:'flex:1;padding:10px 14px;background:var(--black);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;min-width:140px',
+    onclick: function() { exportShoppingListPDF(list, s.shopChecked); }
+  }, '📄 Télécharger PDF');
+
+  var btnReset = h('button', {
+    style:'padding:10px 14px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer',
+    onclick: function() { s.shopChecked = {}; if(window.render) window.render(); }
+  }, '↺ Réinitialiser');
+
+  // Compteur
+  var total = list.reduce(function(n,cat){return n+cat.items.length;}, 0);
+  var checked = Object.keys(s.shopChecked).filter(function(k){return s.shopChecked[k];}).length;
+  var counter = h('div', {style:'padding:0 16px 8px;font-size:13px;color:var(--text-secondary)'}, checked + ' / ' + total + ' articles achetés');
+
+  actions.appendChild(btnPDF);
+  actions.appendChild(btnReset);
+  p.appendChild(actions);
+  p.appendChild(counter);
+
+  // Liste par catégorie
+  list.forEach(function(cat) {
+    var catBlock = h('div', {style:'margin:0 16px 14px;background:var(--card);border-radius:12px;overflow:hidden'});
+
+    // Header catégorie
+    var catChecked = cat.items.filter(function(item){return s.shopChecked[item.name];}).length;
+    catBlock.appendChild(h('div', {
+      style:'padding:10px 14px;background:var(--bg);font-weight:700;font-size:13px;color:var(--text);display:flex;justify-content:space-between'
+    },
+      h('span', {}, cat.category),
+      h('span', {style:'font-weight:400;color:var(--text-secondary);font-size:12px'}, catChecked + '/' + cat.items.length)
+    ));
+
+    // Items
+    cat.items.forEach(function(item) {
+      var isChecked = !!s.shopChecked[item.name];
+      var row = h('div', {
+        style:'display:flex;align-items:center;padding:10px 14px;border-top:1px solid var(--border);cursor:pointer;' + (isChecked ? 'opacity:0.45;' : ''),
+        onclick: function() {
+          s.shopChecked[item.name] = !s.shopChecked[item.name];
+          if(window.render) window.render();
+        }
+      });
+
+      // Checkbox custom
+      var cb = h('div', {style:'width:20px;height:20px;border-radius:5px;border:2px solid ' + (isChecked ? 'var(--accent)' : 'var(--border)') + ';margin-right:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:' + (isChecked ? 'var(--accent)' : 'transparent')});
+      if (isChecked) cb.appendChild(h('span', {style:'color:#fff;font-size:12px;font-weight:700'}, '✓'));
+
+      var label = h('div', {style:'flex:1'});
+      label.appendChild(h('div', {style:'font-size:14px;color:var(--text);' + (isChecked ? 'text-decoration:line-through;' : '')}, item.name));
+      label.appendChild(h('div', {style:'font-size:11px;color:var(--text-secondary)'}, item.qty + ' ' + item.unit));
+
+      row.appendChild(cb);
+      row.appendChild(label);
+      catBlock.appendChild(row);
+    });
+
+    p.appendChild(catBlock);
+  });
+}
+
+function exportShoppingListPDF(list, shopChecked) {
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('Export PDF non disponible'); return; }
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  var y = 20;
+  var margin = 15;
+  var pageW = 210;
+
+  // Titre
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Liste de courses — SmartFitCoach', margin, y);
+  y += 6;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(120);
+  doc.text('Semaine du ' + new Date().toLocaleDateString('fr-FR'), margin, y);
+  doc.setTextColor(0);
+  y += 10;
+
+  list.forEach(function(cat) {
+    if (y > 270) { doc.addPage(); y = 20; }
+
+    // Catégorie header
+    doc.setFillColor(240, 240, 240);
+    doc.roundedRect(margin, y - 4, pageW - margin * 2, 8, 2, 2, 'F');
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text(cat.category, margin + 3, y + 1);
+    y += 10;
+
+    cat.items.forEach(function(item) {
+      if (y > 278) { doc.addPage(); y = 20; }
+      var isChecked = !!(shopChecked && shopChecked[item.name]);
+
+      // Case à cocher
+      doc.setDrawColor(180);
+      doc.setLineWidth(0.4);
+      doc.rect(margin, y - 3.5, 4, 4);
+      if (isChecked) {
+        doc.setDrawColor(80);
+        doc.setLineWidth(0.8);
+        doc.line(margin + 0.5, y - 1.5, margin + 1.8, y - 0.2);
+        doc.line(margin + 1.8, y - 0.2, margin + 3.5, y - 3);
+        doc.setLineWidth(0.4);
+      }
+
+      // Nom + quantité
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(isChecked ? 150 : 0);
+      doc.text(item.name, margin + 7, y);
+      doc.setTextColor(120);
+      doc.text(item.qty + ' ' + item.unit, pageW - margin - 20, y, {align:'right'});
+      doc.setTextColor(0);
+
+      y += 6;
+    });
+    y += 4;
+  });
+
+  // Note bas de page
+  doc.setFontSize(8);
+  doc.setTextColor(150);
+  doc.text('Généré par SmartFitCoach — ' + new Date().toLocaleDateString('fr-FR'), margin, 290);
+
+  doc.save('liste-courses-smartfitcoach.pdf');
+}
+
 // ─── PUBLIC API ───
 window.NUTRITION = {
   render: function(p) {
@@ -2082,6 +2253,7 @@ window.NUTRITION = {
       p.appendChild(pb);
     }
     var content = h('div', {'class': 'fade-in'});
+    if (S.shopListOpen) { renderShoppingList(content); p.appendChild(content); return; }
     if (S.nStep === 0) renderSplash(content);
     else if (S.nStep === 1) renderStep1(content);
     else if (S.nStep === 2) renderStep2(content);

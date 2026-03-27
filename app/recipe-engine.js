@@ -3171,6 +3171,86 @@
     };
   }
 
+  /**
+   * Génère la liste de courses consolidée depuis un weekPlan.
+   * Regroupe les ingrédients identiques, somme les quantités, catégorise.
+   * @param {Array} weekPlan  — window.S.weekPlan
+   * @returns {Array<{category, items: Array<{name, qty, unit, recipes}>}>}
+   */
+  function generateShoppingList(weekPlan) {
+    if (!weekPlan || !weekPlan.length) return [];
+
+    var CATEGORIES = {
+      'Protéines animales': /poulet|dinde|boeuf|bœuf|saumon|thon|crevette|oeuf|œuf|viande|steak|filet|blanc de|hachis|kefta/i,
+      'Légumineuses':       /pois chiches|lentilles|haricots|fèves|edamame|soja/i,
+      'Produits laitiers':  /feta|yaourt|fromage|lait|beurre|crème|ricotta|parmesan/i,
+      'Féculents':          /riz|pâtes|quinoa|pain|flocons|avoine|soba|ramen|nouilles|couscous|semoule|tortillas|feuille/i,
+      'Légumes':            /courgette|tomate|épinard|carotte|oignon|ail|brocoli|poivron|chou|concombre|champignon|aubergine|celeri|salade|laitue|pousses|patate/i,
+      'Fruits':             /avocat|citron|banane|mangue|fraise|myrtille|pomme|kiwi|ananas|raisin|datte/i,
+      'Huiles & Sauces':    /huile|sauce soja|tahini|vinaigre|moutarde|pesto|teriyaki|nuoc|miso|tamari|kecap/i,
+      'Épices & Herbes':    /cumin|paprika|cannelle|gingembre|curry|curcuma|coriandre|persil|basilic|origan|thym|ras el hanout|garam|chili|piment|safran|menthe|aneth/i,
+      'Conserves':          /boîte|concassées|naturel|conserve/i,
+      'Graines & Noix':     /sésame|amande|noix|cajou|chia|lin|cacahuète|pistache/i,
+      'Divers':             /.*/
+    };
+
+    var consolidated = {};  // { 'ingredientName||unit': {name, qty, unit, recipes:[]} }
+    var slots = ['breakfast', 'lunch', 'snack', 'dinner'];
+
+    weekPlan.forEach(function(day) {
+      slots.forEach(function(slot) {
+        var recipe = day[slot];
+        if (!recipe) return;
+
+        var recipeName = recipe.n || recipe.name || slot;
+        var scalingRatio = recipe._scalingRatio || 1;
+
+        // Recettes R201+ : utilise les ingrédients scalés si disponibles
+        if (recipe._id && recipe._scaledIngredients && recipe._scaledIngredients.length > 0) {
+          recipe._scaledIngredients.forEach(function(ing) {
+            var key = ing.name + '||' + ing.unit;
+            if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
+            consolidated[key].qty += ing.scaledQty || ing.qty || 0;
+            if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
+          });
+        } else if (recipe._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
+          // Recette R201+ sans ingrédients scalés : utilise findRecipe + scalingRatio
+          var fullRecipe = window.RecipeEngine.findRecipe(recipe._id);
+          if (fullRecipe && fullRecipe.ingredients) {
+            fullRecipe.ingredients.forEach(function(ing) {
+              var scaledQty = Math.round((ing.qty / fullRecipe.servings) * scalingRatio * 10) / 10;
+              var key = ing.name + '||' + ing.unit;
+              if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
+              consolidated[key].qty += scaledQty;
+              if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
+            });
+          }
+        }
+        // Recettes legacy (sans _id) : ingrédients sous forme de string → non décomposables
+      });
+    });
+
+    // Regrouper par catégorie
+    var categorized = {};
+    Object.keys(consolidated).forEach(function(key) {
+      var item = consolidated[key];
+      item.qty = Math.round(item.qty * 10) / 10;
+      var cat = 'Divers';
+      var catKeys = Object.keys(CATEGORIES);
+      for (var i = 0; i < catKeys.length - 1; i++) {
+        if (CATEGORIES[catKeys[i]].test(item.name)) { cat = catKeys[i]; break; }
+      }
+      if (!categorized[cat]) categorized[cat] = [];
+      categorized[cat].push(item);
+    });
+
+    // Trier catégories et items
+    var ORDER = ['Protéines animales','Légumineuses','Produits laitiers','Féculents','Légumes','Fruits','Huiles & Sauces','Épices & Herbes','Conserves','Graines & Noix','Divers'];
+    return ORDER.filter(function(c) { return categorized[c] && categorized[c].length > 0; }).map(function(c) {
+      return { category: c, items: categorized[c].sort(function(a,b){ return a.name.localeCompare(b.name); }) };
+    });
+  }
+
   // ─── EXPOSITION GLOBALE ────────────────────────────────────────────────────────
   window.RecipeEngine = {
     getAdaptedRecipe: getAdaptedRecipe,
@@ -3181,6 +3261,7 @@
     calcDailyBudget:      calcDailyBudget,
     calcWeeklyBudget:     calcWeeklyBudget,
     calcWeekPlanBudget:   calcWeekPlanBudget,
+    generateShoppingList: generateShoppingList,
     getPool:          getPool,
     db:               RECIPES_DB
   };
