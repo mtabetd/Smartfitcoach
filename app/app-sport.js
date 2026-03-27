@@ -1618,8 +1618,11 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
     var increment = lowerBodyKeywords.test(exerciseName) ? 5 : 2.5;
 
     // Vérifier si la dernière session était "réussie" (toutes reps atteintes)
+    // Exclure la session d'aujourd'hui (initialisée avec des nulls, pas encore validée)
+    var today = new Date().toISOString().slice(0, 10);
     var lastLog = null;
-    Object.keys(S.muscuSessionLog).forEach(function(date) {
+    var sortedDates = Object.keys(S.muscuSessionLog).filter(function(d) { return d !== today; }).sort();
+    sortedDates.forEach(function(date) {
       if (S.muscuSessionLog[date][exerciseName]) {
         lastLog = { date: date, sets: S.muscuSessionLog[date][exerciseName] };
       }
