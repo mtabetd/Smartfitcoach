@@ -969,7 +969,7 @@ function renderStep6(p) {
     p.appendChild(twLabel);
 
     var twWrap = h('div', {'class': 'num-input-wrap'});
-    twWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '40', max: '160', step: '0.5', value: S.targetWeight ? String(S.targetWeight) : '', inputmode: 'decimal', placeholder: goalKey === 'bulk' ? '85' : '65', oninput: function(e) {
+    twWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '40', max: '160', step: '0.5', value: S.targetWeight ? String(S.targetWeight) : '', inputmode: 'decimal', placeholder: '', oninput: function(e) {
       var v = parseFloat(e.target.value);
       if (!isNaN(v) && v >= 40 && v <= 160) S.targetWeight = v;
       else if (e.target.value === '') S.targetWeight = null;
