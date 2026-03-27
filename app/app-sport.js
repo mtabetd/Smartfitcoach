@@ -678,6 +678,22 @@ window.NUTRITION_TO_SPORT_GOAL = NUTRITION_TO_SPORT_GOAL;
 // Mapping sport goal id → nutrition goal index (priority order when multi-select)
 var SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 2, shred: 3, endurance: 1, flexibility: 1, general: 1 };
 
+  // ─── CONTEXTE NUTRITIONNEL (source : NutritionMaster via window.S._nm) ────
+  function getNutritionContext() {
+    var nm = window.S._nm;
+    if (!nm || nm.errors && nm.errors.length > 0) return null;
+    return {
+      caloriesTarget:  nm.caloriesTarget  || 0,
+      caloriesCheck:   nm.caloriesCheck   || 0,
+      proteinGrams:    nm.proteinGrams    || 0,
+      carbsGrams:      nm.carbsGrams      || 0,
+      fatGrams:        nm.fatGrams        || 0,
+      bmr:             nm.bmr             || 0,
+      tdee:            nm.tdee            || 0,
+      goal:            nm.inputs && nm.inputs.goal || null
+    };
+  }
+
 function syncSportGoalsToNutrition() {
   if (S.goal === null) return; // only sync if nutrition was filled first
   if (S.pregnant && S.sex === 'femme') return; // ÉLEVÉ-4: grossesse → ne pas écraser le maintien forcé
@@ -1999,6 +2015,36 @@ function renderMusculationProgram(p) {
       compPanel.appendChild(kcalBox);
       // ⚠ Note TDEE — évite le double-comptage (audit interdépendance)
       compPanel.appendChild(h('div', {style: 'background:#FFF8E1;border-left:3px solid #F9A825;padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:#5D4037;line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
+      // Contexte nutritionnel : montre l'impact de la session sur le budget calorique
+      var nc = getNutritionContext();
+      var nutritionContextHtml = '';
+      if (nc && nc.caloriesTarget > 0 && kcalRes && kcalRes.total > 0) {
+        var pct = Math.round((kcalRes.total / nc.caloriesTarget) * 100);
+        var warningColor = pct > 40 ? '#ef5350' : pct > 25 ? '#ff9800' : '#4CAF50';
+        var warningMsg = pct > 40
+          ? '\u26a0\ufe0f Session tr\u00e8s intense \u2014 pensez \u00e0 ajuster votre alimentation post-entra\u00eenement'
+          : pct > 25
+            ? '\uD83D\uDD36 Session mod\u00e9r\u00e9e \u2014 nutrition pr\u00e9/post recommand\u00e9e'
+            : '\u2705 Session \u00e9quilibr\u00e9e pour votre objectif';
+        nutritionContextHtml =
+          '<div style="margin-top:12px;padding:10px 14px;background:rgba(0,0,0,0.06);border-radius:10px;font-size:13px">' +
+            '<div style="font-weight:600;margin-bottom:6px;color:var(--text)">\uD83C\uDF7D\ufe0f Impact nutritionnel</div>' +
+            '<div style="display:flex;justify-content:space-between;margin-bottom:4px">' +
+              '<span>Cible calorique du jour</span>' +
+              '<span style="font-weight:600">' + nc.caloriesTarget + ' kcal</span>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;margin-bottom:4px">' +
+              '<span>Calories br\u00fcl\u00e9es en session</span>' +
+              '<span style="font-weight:600;color:' + warningColor + '">\u2212' + kcalRes.total + ' kcal (' + pct + '%)</span>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;margin-bottom:8px">' +
+              '<span>Cible prot\u00e9ines</span>' +
+              '<span style="font-weight:600">' + nc.proteinGrams + ' g</span>' +
+            '</div>' +
+            '<div style="font-size:12px;color:' + warningColor + '">' + warningMsg + '</div>' +
+          '</div>';
+        compPanel.appendChild(h('div', {html: nutritionContextHtml}));
+      }
       var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
         if (!S.sessionHistory) S.sessionHistory = {};
         S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
