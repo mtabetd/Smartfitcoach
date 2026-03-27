@@ -2217,6 +2217,135 @@ function renderMusculationProgram(p) {
         card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);margin-top:6px;font-style:italic'}, 'Poids de corps'));
       }
 
+      // ─── TRACKER SÉRIES : recommandations + saisie réelle ───
+      (function(exRef, isBodyweight) {
+        var setsMatch = (exRef.sets || '').match(/^(\d+)\s*[x\u00d7]\s*(\d+)(?:-(\d+))?/);
+        var numSets = setsMatch ? parseInt(setsMatch[1]) : 3;
+        var minReps = setsMatch ? parseInt(setsMatch[2]) : 10;
+        var maxReps = setsMatch && setsMatch[3] ? parseInt(setsMatch[3]) : minReps;
+
+        var exPhase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(S.muscuWeek || 1) : null;
+        var sugWeight = getSuggestedWeight(exRef.n, minReps, exPhase) || 0;
+        var progressiveWeight = getProgressiveWeight(exRef.n, sugWeight, S.muscuCycle || 1);
+
+        var today = new Date().toISOString().slice(0, 10);
+        if (!S.muscuSessionLog[today]) S.muscuSessionLog[today] = {};
+        if (!S.muscuSessionLog[today][exRef.n]) {
+          S.muscuSessionLog[today][exRef.n] = [];
+          for (var si2 = 0; si2 < numSets; si2++) {
+            S.muscuSessionLog[today][exRef.n].push({
+              set: si2 + 1,
+              targetWeight: progressiveWeight,
+              targetReps: si2 < 2 ? maxReps : minReps,
+              actualWeight: null,
+              actualReps: null
+            });
+          }
+        }
+        var setData = S.muscuSessionLog[today][exRef.n];
+
+        // Tableau des séries
+        var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:6px;overflow:hidden'});
+
+        // Header
+        var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 1fr;background:var(--surface,var(--ivory2));padding:6px 8px;font-size:10px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
+        setHeader.appendChild(h('div', {}, '#'));
+        setHeader.appendChild(h('div', {}, 'Conseill\u00e9'));
+        setHeader.appendChild(h('div', {}, 'R\u00e9alis\u00e9'));
+        setTable.appendChild(setHeader);
+
+        // Rows
+        setData.forEach(function(setRow, si3) {
+          var row = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 1fr;padding:6px 8px;border-top:1px solid var(--border);align-items:center'});
+
+          row.appendChild(h('div', {style: 'font-size:12px;font-weight:700;color:var(--text)'}, String(setRow.set)));
+
+          var conseilleStr = (progressiveWeight > 0 && !isBodyweight)
+            ? (progressiveWeight + ' kg \u00d7 ' + setRow.targetReps)
+            : (setRow.targetReps + ' reps');
+          row.appendChild(h('div', {style: 'font-size:12px;color:var(--grey)'}, conseilleStr));
+
+          var inputZone = h('div', {style: 'display:flex;align-items:center;gap:4px', onclick: function(e){ e.stopPropagation(); }});
+
+          if (!isBodyweight) {
+            var weightPlaceholder = progressiveWeight > 0 ? String(progressiveWeight) : 'kg';
+            var weightInput = h('input', {
+              type: 'number', min: '0', max: '500', step: '2.5',
+              placeholder: weightPlaceholder,
+              value: setRow.actualWeight !== null ? String(setRow.actualWeight) : '',
+              style: 'width:48px;padding:3px 5px;border:1px solid var(--border);border-radius:4px;font-size:11px;text-align:center;background:var(--bg,var(--ivory))',
+              oninput: (function(sr){ return function(e) {
+                var v = parseFloat(e.target.value);
+                sr.actualWeight = isNaN(v) ? null : v;
+                saveMuscuSessionLog();
+              }; })(setRow)
+            });
+            inputZone.appendChild(weightInput);
+            inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, 'kg'));
+          } else {
+            var pcLabel = h('input', {
+              type: 'number', min: '0', max: '200', step: '1',
+              placeholder: 'PC',
+              value: setRow.actualWeight !== null ? String(setRow.actualWeight) : '',
+              style: 'width:40px;padding:3px 5px;border:1px solid var(--border);border-radius:4px;font-size:11px;text-align:center;background:var(--bg,var(--ivory))',
+              oninput: (function(sr){ return function(e) {
+                var v = parseFloat(e.target.value);
+                sr.actualWeight = isNaN(v) ? null : v;
+                saveMuscuSessionLog();
+              }; })(setRow)
+            });
+            inputZone.appendChild(pcLabel);
+            inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, 'kg+'));
+          }
+
+          var repsInput = h('input', {
+            type: 'number', min: '0', max: '50', step: '1',
+            placeholder: String(setRow.targetReps),
+            value: setRow.actualReps !== null ? String(setRow.actualReps) : '',
+            style: 'width:36px;padding:3px 5px;border:1px solid var(--border);border-radius:4px;font-size:11px;text-align:center;background:var(--bg,var(--ivory))',
+            oninput: (function(sr){ return function(e) {
+              var v = parseInt(e.target.value);
+              sr.actualReps = isNaN(v) ? null : v;
+              saveMuscuSessionLog();
+            }; })(setRow)
+          });
+          inputZone.appendChild(repsInput);
+          inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, 'reps'));
+
+          // Indicateur succès/échec
+          if (setRow.actualReps !== null && (setRow.actualWeight !== null || isBodyweight)) {
+            var ok = setRow.actualReps >= setRow.targetReps && (isBodyweight || setRow.actualWeight >= setRow.targetWeight);
+            inputZone.appendChild(h('span', {style: 'font-size:14px;color:' + (ok ? '#27AE60' : '#E74C3C')}, ok ? '\u2713' : '\u2717'));
+          }
+
+          row.appendChild(inputZone);
+          setTable.appendChild(row);
+        });
+
+        // Note progression semaine prochaine
+        if (progressiveWeight > 0 && !isBodyweight) {
+          var lbKeywords = /squat|leg|fessier|ischios|mollet/i;
+          var nextIncr = lbKeywords.test(exRef.n) ? 5 : 2.5;
+          var progressNote = h('div', {style: 'padding:6px 8px;background:rgba(76,175,80,0.08);border-top:1px solid var(--border);font-size:10px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif'});
+          progressNote.appendChild(h('span', {style: 'color:#27AE60'}, '\uD83D\uDCC8 '));
+          progressNote.appendChild(h('span', {}, 'Objectif semaine prochaine\u00a0: ' + (progressiveWeight + nextIncr) + '\u00a0kg si toutes s\u00e9ries r\u00e9ussies'));
+          setTable.appendChild(progressNote);
+        }
+
+        // Mini graphe progression si >= 3 entrées historique
+        var progHist = S.muscuProgressionHistory[exRef.n];
+        if (progHist && progHist.length >= 3) {
+          var lastFive = progHist.slice(-5);
+          var progLine = lastFive.map(function(e) { return e.weight + ' kg'; }).join(' \u2192 ');
+          var progGraph = h('div', {style: 'padding:6px 8px;border-top:1px solid var(--border);font-size:10px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif'});
+          progGraph.appendChild(h('span', {style: 'color:#27AE60'}, '\uD83D\uDCCA '));
+          progGraph.appendChild(h('span', {}, 'Progression\u00a0: ' + progLine));
+          setTable.appendChild(progGraph);
+        }
+
+        card.appendChild(setTable);
+      })(ex, eqType === 'bodyweight');
+
       p.appendChild(card);
     });
 
