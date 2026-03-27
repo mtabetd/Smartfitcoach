@@ -2530,6 +2530,11 @@ function renderShoppingList(p) {
   p.appendChild(actions);
   p.appendChild(counter);
 
+  var sectionsCount = list.length;
+  var infoBar = h('div', {style:'margin:0 16px 12px;padding:10px 14px;border:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey)'},
+    sectionsCount + ' rayon' + (sectionsCount > 1 ? 's' : '') + ' — ' + total + ' article' + (total > 1 ? 's' : '') + ' — Parcours optimisé ');
+  p.appendChild(infoBar);
+
   // Liste par catégorie
   list.forEach(function(cat) {
     var catBlock = h('div', {style:'margin:0 16px 14px;background:var(--card);border-radius:12px;overflow:hidden'});
@@ -2537,7 +2542,7 @@ function renderShoppingList(p) {
     // Header catégorie
     var catChecked = cat.items.filter(function(item){return s.shopChecked[item.name];}).length;
     catBlock.appendChild(h('div', {
-      style:'padding:10px 14px;background:var(--bg);font-weight:700;font-size:13px;color:var(--text);display:flex;justify-content:space-between'
+      style:'padding:12px 16px 10px;background:var(--ivory2,#F4F4F0);border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);display:flex;justify-content:space-between;align-items:center'
     },
       h('span', {}, cat.category),
       h('span', {style:'font-weight:400;color:var(--text-secondary);font-size:12px'}, catChecked + '/' + cat.items.length)
@@ -2559,8 +2564,8 @@ function renderShoppingList(p) {
       if (isChecked) cb.appendChild(h('span', {style:'color:#fff;font-size:12px;font-weight:700'}, '✓'));
 
       var label = h('div', {style:'flex:1'});
-      label.appendChild(h('div', {style:'font-size:14px;color:var(--text);' + (isChecked ? 'text-decoration:line-through;' : '')}, item.name));
-      label.appendChild(h('div', {style:'font-size:11px;color:var(--text-secondary)'}, item.qty + ' ' + item.unit));
+      label.appendChild(h('div', {style:'font-size:14px;font-family:Georgia,serif;color:var(--text);' + (isChecked ? 'text-decoration:line-through;opacity:0.6;' : '')}, item.name));
+      label.appendChild(h('div', {style:'font-size:11px;font-family:"Helvetica Neue",Arial,sans-serif;color:var(--text-secondary)'}, item.qty + ' ' + item.unit));
 
       row.appendChild(cb);
       row.appendChild(label);

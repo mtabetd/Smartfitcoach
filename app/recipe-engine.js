@@ -3789,18 +3789,20 @@
   function generateShoppingList(weekPlan) {
     if (!weekPlan || !weekPlan.length) return [];
 
-    var CATEGORIES = {
-      'Protéines animales': /poulet|dinde|boeuf|bœuf|saumon|thon|crevette|oeuf|œuf|viande|steak|filet|blanc de|hachis|kefta/i,
-      'Légumineuses':       /pois chiches|lentilles|haricots|fèves|edamame|soja/i,
-      'Produits laitiers':  /feta|yaourt|fromage|lait|beurre|crème|ricotta|parmesan/i,
-      'Féculents':          /riz|pâtes|quinoa|pain|flocons|avoine|soba|ramen|nouilles|couscous|semoule|tortillas|feuille/i,
-      'Légumes':            /courgette|tomate|épinard|carotte|oignon|ail|brocoli|poivron|chou|concombre|champignon|aubergine|celeri|salade|laitue|pousses|patate/i,
-      'Fruits':             /avocat|citron|banane|mangue|fraise|myrtille|pomme|kiwi|ananas|raisin|datte/i,
-      'Huiles & Sauces':    /huile|sauce soja|tahini|vinaigre|moutarde|pesto|teriyaki|nuoc|miso|tamari|kecap/i,
-      'Épices & Herbes':    /cumin|paprika|cannelle|gingembre|curry|curcuma|coriandre|persil|basilic|origan|thym|ras el hanout|garam|chili|piment|safran|menthe|aneth/i,
-      'Conserves':          /boîte|concassées|naturel|conserve/i,
-      'Graines & Noix':     /sésame|amande|noix|cajou|chia|lin|cacahuète|pistache/i,
-      'Divers':             /.*/
+    var SHOP_SECTIONS = {
+      '🥩 Boucherie & Poissonnerie': /poulet|dinde|boeuf|bœuf|saumon|thon|crevette|cabillaud|maquereau|sardine|filet|blanc de|hachis|steak|viande|kefta|merguez|agneau|veau|moule/i,
+      '🥚 Œufs & Produits laitiers': /oeuf|œuf|yaourt|fromage|lait|beurre|crème fraîche|ricotta|parmesan|mozzarella|feta|skyr|mascarpone|cottage|kéfir/i,
+      '🥦 Fruits & Légumes':         /courgette|tomate|épinard|carotte|oignon|ail|brocoli|poivron|chou|concombre|champignon|aubergine|céleri|salade|laitue|pousses|patate|avocat|citron|banane|mangue|fraise|myrtille|pomme|kiwi|ananas|raisin|datte|pêche|poire|melon|pastèque|betterave|navet|poireau|fenouil|asperge|haricot vert|petit pois|maïs|roquette|mâche|cresson|bok choy|brocoli/i,
+      '🌾 Féculents & Céréales':     /riz|pâtes|quinoa|flocons|avoine|soba|ramen|nouilles|couscous|semoule|lentilles|pois chiches|haricots|fèves|farine|pain|tortilla|pita|ciabatta|orge|épeautre|millet|sarrasin|boulgour|polenta/i,
+      '🧊 Surgelés':                 /surgelé|congelé|frozen|açaï|edamame/i,
+      '🥫 Conserves & Bocaux':       /boîte|tomates concassées|conserve|bocal|naturel en boîte|thon.*boîte|sardine.*boîte|pois chiches.*boîte|haricots.*boîte/i,
+      '🫙 Épicerie sèche':           /huile|vinaigre|sauce soja|tahini|moutarde|pesto|miel|confiture|sirop|ketchup|mayonnaise|nuoc|miso|tamari|kecap|teriyaki|sriracha|fish sauce|worcestershire|bouillon|levure/i,
+      '🌿 Épices & Herbes':          /cumin|paprika|cannelle|gingembre|curry|curcuma|coriandre|persil|basilic|origan|thym|ras el hanout|garam masala|chili|piment|safran|menthe|aneth|estragon|laurier|muscade|cardamome|clou|poivre|sel|sumac|zaatar|harissa/i,
+      '🌰 Graines, Noix & Fruits secs': /sésame|amande|noix|cajou|chia|lin|cacahuète|pistache|noisette|graine de tournesol|graine de courge|raisin sec|abricot sec|datte|figue sèche|cranberry/i,
+      '🥤 Boissons & Laits végétaux': /lait d.amande|lait de coco|lait végétal|lait de soja|lait de riz|lait d.avoine|jus|eau de coco|kombucha/i,
+      '🍞 Boulangerie & Pâtisserie': /pain|baguette|brioche|wraps|tortilla|naan|pita|chapati/i,
+      '❄️ Crèmerie & Fromages':     /fromage.*affiné|comté|emmental|gruyère|gouda|cheddar|camembert|brie|bleu/i,
+      '🛒 Divers':                   /.*/
     };
 
     var consolidated = {};  // { 'ingredientName||unit': {name, qty, unit, recipes:[]} }
@@ -3864,17 +3866,17 @@
     Object.keys(consolidated).forEach(function(key) {
       var item = consolidated[key];
       item.qty = Math.round(item.qty * 10) / 10;
-      var cat = 'Divers';
-      var catKeys = Object.keys(CATEGORIES);
+      var cat = '🛒 Divers';
+      var catKeys = Object.keys(SHOP_SECTIONS);
       for (var i = 0; i < catKeys.length - 1; i++) {
-        if (CATEGORIES[catKeys[i]].test(item.name)) { cat = catKeys[i]; break; }
+        if (SHOP_SECTIONS[catKeys[i]].test(item.name)) { cat = catKeys[i]; break; }
       }
       if (!categorized[cat]) categorized[cat] = [];
       categorized[cat].push(item);
     });
 
     // Trier catégories et items
-    var ORDER = ['Protéines animales','Légumineuses','Produits laitiers','Féculents','Légumes','Fruits','Huiles & Sauces','Épices & Herbes','Conserves','Graines & Noix','Divers'];
+    var ORDER = ['🥩 Boucherie & Poissonnerie','🥚 Œufs & Produits laitiers','🥦 Fruits & Légumes','🌾 Féculents & Céréales','🧊 Surgelés','🥫 Conserves & Bocaux','🫙 Épicerie sèche','🌿 Épices & Herbes','🌰 Graines, Noix & Fruits secs','🥤 Boissons & Laits végétaux','🍞 Boulangerie & Pâtisserie','❄️ Crèmerie & Fromages','🛒 Divers'];
     return ORDER.filter(function(c) { return categorized[c] && categorized[c].length > 0; }).map(function(c) {
       return { category: c, items: categorized[c].sort(function(a,b){ return a.name.localeCompare(b.name); }) };
     });
