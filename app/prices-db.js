@@ -1284,6 +1284,166 @@
       updatedAt: '2026-03'
     },
 
+    // ── Ingrédients manquants R201-R360 + salades ─────────────────────────────
+    // Viandes
+    'Agneau haché maigre': {
+      name: 'Agneau haché maigre',
+      pricePerG: r(130 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Rumsteak de bœuf': {
+      name: 'Rumsteak de bœuf',
+      pricePerG: r(150 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Jambon de dinde (tranches)': {
+      name: 'Jambon de dinde (tranches)',
+      pricePerG: r(60 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Lardons de dinde fumée': {
+      name: 'Lardons de dinde fumée',
+      pricePerG: r(55 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Poissons & fruits de mer
+    'Filet de saumon': {
+      name: 'Filet de saumon',
+      pricePerG: r(160 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Poulpe cuit': {
+      name: 'Poulpe cuit',
+      pricePerG: r(80 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Produits laitiers
+    'Mozzarella fraîche': {
+      name: 'Mozzarella fraîche',
+      pricePerG: r(65 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Yaourt nature 0%': {
+      name: 'Yaourt nature 0%',
+      pricePerG: r(6 / 125),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Légumes
+    'Poivron vert': {
+      name: 'Poivron vert',
+      pricePerG: r(6 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Olives vertes': {
+      name: 'Olives vertes',
+      pricePerG: r(20 / 200),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Salade romaine': {
+      name: 'Salade romaine',
+      pricePerG: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Maïs doux (boîte, égoutté)': {
+      name: 'Maïs doux (boîte, égoutté)',
+      pricePerG: r(12 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    // Légumineuses & féculents
+    'Haricots noirs (boîte, égouttés)': {
+      name: 'Haricots noirs (boîte, égouttés)',
+      pricePerG: r(12 / 400),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Lentilles vertes (sèches)': {
+      name: 'Lentilles vertes (sèches)',
+      pricePerG: r(22 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Quinoa sec': {
+      name: 'Quinoa sec',
+      pricePerG: r(65 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Boulghour fin': {
+      name: 'Boulghour fin',
+      pricePerG: r(18 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Couscous fin': {
+      name: 'Couscous fin',
+      pricePerG: r(18 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pâtes complètes (fusilli)': {
+      name: 'Pâtes complètes (fusilli)',
+      pricePerG: r(36 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Vermicelles de riz': {
+      name: 'Vermicelles de riz',
+      pricePerG: r(28 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    // Pains
+    'Pain complet (grillé)': {
+      name: 'Pain complet (grillé)',
+      pricePerG: r(18 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pain complet (croûtons)': {
+      name: 'Pain complet (croûtons)',
+      pricePerG: r(15 / 200),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Pain pita complet': {
+      name: 'Pain pita complet',
+      pricePerG: r(20 / 320),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Condiments & préparations
+    'Falafel (prêt-à-cuire, surgelé)': {
+      name: 'Falafel (prêt-à-cuire, surgelé)',
+      pricePerG: r(30 / 300),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Houmous': {
+      name: 'Houmous',
+      pricePerG: r(25 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    // Herbes
+    'Persil frais (bouquet)': {
+      name: 'Persil frais (bouquet)',
+      pricePerG: r(2 / 90),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
     // ── Alias noms doublons (normalisation) ────────────────────────────────────
     'Dinde hachée': {
       name: 'Dinde hachée',
