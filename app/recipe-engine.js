@@ -910,6 +910,1064 @@
         'Mijoter 20 min à feu doux. Servir avec riz ou pain.'
       ]
     },
+    {
+      id: 'R231',
+      name: 'Lasagnes Dinde Légères',
+      category: 'world-food',
+      tags: ['italian', 'high-protein', 'baked', 'meal-prep', 'comfort-food'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 40,
+      difficulty: 3,
+      baseNutrition: { calories: 939, proteinGrams: 88, carbsGrams: 68, fatGrams: 35 },
+      // 88*4+68*4+35*9 = 352+272+315 = 939 ✓
+      ingredients: [
+        { name: 'Dinde hachée', qty: 400, unit: 'g' },
+        { name: 'Feuilles lasagnes', qty: 150, unit: 'g' },
+        { name: 'Tomates concassées', qty: 400, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 200, unit: 'g' },
+        { name: 'Lait écrémé', qty: 150, unit: 'ml' },
+        { name: 'Farine', qty: 20, unit: 'g' },
+        { name: 'Parmesan râpé', qty: 40, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Faire revenir oignon et dinde 8 min. Ajouter tomates, saler. Mijoter 10 min.',
+        'Béchamel légère : mélanger farine + lait + yaourt à feu doux 5 min.',
+        'Monter lasagnes : viande, pâtes, béchamel x3. Finir parmesan. Four 25 min à 180 °C.'
+      ]
+    },
+    {
+      id: 'R232',
+      name: 'Falafels au Four avec Tahini',
+      category: 'world-food',
+      tags: ['lebanese', 'vegan', 'high-carb', 'baked', 'mediterranean'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 25,
+      difficulty: 2,
+      baseNutrition: { calories: 675, proteinGrams: 28, carbsGrams: 62, fatGrams: 35 },
+      // 28*4+62*4+35*9 = 112+248+315 = 675 ✓
+      ingredients: [
+        { name: 'Pois chiches secs (trempés 12h)', qty: 250, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Persil frais', qty: 20, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Cumin moulu', qty: 5, unit: 'g' },
+        { name: 'Coriandre moulue', qty: 3, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Tahini', qty: 30, unit: 'g' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Mixer pois chiches, oignon, persil, ail, épices. Former boulettes.',
+        'Badigeonner huile. Cuire au four 22 min à 200 °C en retournant à mi-cuisson.',
+        'Sauce tahini : tahini + jus citron + eau. Servir falafels avec sauce.'
+      ]
+    },
+    {
+      id: 'R233',
+      name: 'Avocado Toast aux Œufs',
+      category: 'world-food',
+      tags: ['brunch', 'balanced', 'vegetarian', 'quick'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 5,
+      difficulty: 1,
+      baseNutrition: { calories: 571, proteinGrams: 32, carbsGrams: 32, fatGrams: 35 },
+      // 32*4+32*4+35*9 = 128+128+315 = 571 ✓
+      ingredients: [
+        { name: 'Pain complet (tranches)', qty: 4, unit: 'pce' },
+        { name: 'Avocat', qty: 150, unit: 'g' },
+        { name: 'Œuf', qty: 4, unit: 'pce' },
+        { name: 'Citron (jus)', qty: 0.5, unit: 'pce' },
+        { name: 'Flocons de piment rouge', qty: 1, unit: 'g' },
+        { name: 'Sel, poivre', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Toaster le pain. Écraser avocat avec jus de citron, sel, poivre.',
+        'Cuire œufs pochés ou au plat.',
+        'Tartiner guacamole sur pain. Poser œuf dessus. Saupoudrer piment.'
+      ]
+    },
+    {
+      id: 'R234',
+      name: 'Burger de Dinde Maison',
+      category: 'world-food',
+      tags: ['american', 'high-protein', 'balanced', 'burger'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 2,
+      baseNutrition: { calories: 704, proteinGrams: 75, carbsGrams: 38, fatGrams: 28 },
+      // 75*4+38*4+28*9 = 300+152+252 = 704 ✓
+      ingredients: [
+        { name: 'Dinde hachée', qty: 350, unit: 'g' },
+        { name: 'Pain burger complet', qty: 2, unit: 'pce' },
+        { name: 'Laitue', qty: 40, unit: 'g' },
+        { name: 'Tomate', qty: 80, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 60, unit: 'g' },
+        { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
+        { name: 'Oignon rouge', qty: 40, unit: 'g' },
+        { name: 'Ail en poudre', qty: 2, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Mélanger dinde avec ail, sel, poivre. Former 2 steaks.',
+        'Griller à la poêle 5 min/côté. Toaster le pain.',
+        'Sauce : yaourt + moutarde. Assembler burger avec tous les ingrédients.'
+      ]
+    },
+    {
+      id: 'R235',
+      name: 'Soupe de Lentilles au Lait de Coco',
+      category: 'world-food',
+      tags: ['indian', 'vegan', 'budget', 'soup', 'meal-prep'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 25,
+      difficulty: 1,
+      baseNutrition: { calories: 638, proteinGrams: 28, carbsGrams: 82, fatGrams: 22 },
+      // 28*4+82*4+22*9 = 112+328+198 = 638 ✓
+      ingredients: [
+        { name: 'Lentilles vertes', qty: 200, unit: 'g' },
+        { name: 'Lait de coco', qty: 200, unit: 'ml' },
+        { name: 'Carottes', qty: 150, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Cumin moulu', qty: 5, unit: 'g' },
+        { name: 'Curcuma', qty: 3, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Faire revenir oignon, ail, gingembre, épices dans huile 3 min.',
+        'Ajouter lentilles, carottes, 600 ml eau. Cuire 20 min.',
+        'Incorporer lait de coco, mixer partiellement. Saler et servir.'
+      ]
+    },
+    {
+      id: 'R236',
+      name: 'Noodles Soba aux Légumes',
+      category: 'world-food',
+      tags: ['japanese', 'vegan', 'high-carb', 'quick'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 1,
+      baseNutrition: { calories: 591, proteinGrams: 22, carbsGrams: 92, fatGrams: 15 },
+      // 22*4+92*4+15*9 = 88+368+135 = 591 ✓
+      ingredients: [
+        { name: 'Nouilles soba', qty: 200, unit: 'g' },
+        { name: 'Carottes', qty: 100, unit: 'g' },
+        { name: 'Edamame', qty: 80, unit: 'g' },
+        { name: 'Oignon vert', qty: 50, unit: 'g' },
+        { name: 'Sauce soja', qty: 30, unit: 'ml' },
+        { name: 'Vinaigre de riz', qty: 15, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Graines de sésame', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Cuire nouilles soba 5 min, rincer à l\'eau froide.',
+        'Préparer sauce : sauce soja + vinaigre de riz + huile sésame.',
+        'Mélanger nouilles, carottes râpées, edamame, sauce. Garnir oignon vert et sésame.'
+      ]
+    },
+    {
+      id: 'R237',
+      name: 'Steak de Thon au Sésame',
+      category: 'world-food',
+      tags: ['japanese', 'high-protein', 'low-carb', 'keto', 'seafood'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 6,
+      difficulty: 2,
+      baseNutrition: { calories: 596, proteinGrams: 78, carbsGrams: 8, fatGrams: 28 },
+      // 78*4+8*4+28*9 = 312+32+252 = 596 ✓
+      ingredients: [
+        { name: 'Thon frais (pavé)', qty: 350, unit: 'g' },
+        { name: 'Graines de sésame', qty: 30, unit: 'g' },
+        { name: 'Sauce soja', qty: 30, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 15, unit: 'ml' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Citron vert', qty: 1, unit: 'pce' },
+        { name: 'Salade mélangée', qty: 80, unit: 'g' }
+      ],
+      steps: [
+        'Enrober thon de graines de sésame des deux côtés.',
+        'Saisir à feu très vif 1,5 min/côté (centre rosé). Réserver.',
+        'Vinaigrette : sauce soja + huile sésame + gingembre râpé + citron vert. Trancher thon, servir sur salade avec vinaigrette.'
+      ]
+    },
+    {
+      id: 'R238',
+      name: 'Saumon en Papillote au Citron',
+      category: 'world-food',
+      tags: ['french', 'high-protein', 'low-carb', 'keto', 'omega3'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 18,
+      difficulty: 1,
+      baseNutrition: { calories: 579, proteinGrams: 62, carbsGrams: 4, fatGrams: 35 },
+      // 62*4+4*4+35*9 = 248+16+315 = 579 ✓
+      ingredients: [
+        { name: 'Saumon (pavé)', qty: 300, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Aneth frais', qty: 10, unit: 'g' },
+        { name: 'Courgette', qty: 100, unit: 'g' },
+        { name: 'Sel, poivre', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer four à 200 °C. Préparer 2 feuilles aluminium.',
+        'Déposer saumon, courgette en rondelles, ail, aneth, citron en tranches. Arroser huile.',
+        'Fermer papillotes hermétiquement. Cuire 18 min. Ouvrir à table.'
+      ]
+    },
+    {
+      id: 'R239',
+      name: 'Wraps Poulet Légumes',
+      category: 'world-food',
+      tags: ['american', 'high-protein', 'balanced', 'quick', 'lunch'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 10,
+      difficulty: 1,
+      baseNutrition: { calories: 613, proteinGrams: 55, carbsGrams: 42, fatGrams: 25 },
+      // 55*4+42*4+25*9 = 220+168+225 = 613 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 250, unit: 'g' },
+        { name: 'Tortillas de blé', qty: 4, unit: 'pce' },
+        { name: 'Laitue romaine', qty: 60, unit: 'g' },
+        { name: 'Tomates cerises', qty: 80, unit: 'g' },
+        { name: 'Poivron rouge', qty: 80, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 60, unit: 'g' },
+        { name: 'Citron (jus)', qty: 0.5, unit: 'pce' },
+        { name: 'Paprika fumé', qty: 3, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Assaisonner poulet avec paprika, sel. Griller à poêle 5 min/côté, trancher.',
+        'Sauce : yaourt + citron + sel.',
+        'Garnir tortillas : laitue, poivron, tomates, poulet, sauce.'
+      ]
+    },
+    {
+      id: 'R240',
+      name: 'Salade Grecque à la Feta',
+      category: 'world-food',
+      tags: ['greek', 'low-carb', 'vegetarian', 'keto', 'salad'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 478, proteinGrams: 22, carbsGrams: 12, fatGrams: 38 },
+      // 22*4+12*4+38*9 = 88+48+342 = 478 ✓
+      ingredients: [
+        { name: 'Feta', qty: 120, unit: 'g' },
+        { name: 'Concombre', qty: 200, unit: 'g' },
+        { name: 'Tomates', qty: 200, unit: 'g' },
+        { name: 'Olives noires', qty: 60, unit: 'g' },
+        { name: 'Oignon rouge', qty: 50, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 25, unit: 'ml' },
+        { name: 'Origan séché', qty: 3, unit: 'g' },
+        { name: 'Vinaigre de vin rouge', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Couper concombre, tomates et oignon en morceaux réguliers.',
+        'Mélanger avec olives et feta émiettée.',
+        'Assaisonner avec huile d\'olive, vinaigre, origan, sel.'
+      ]
+    },
+    {
+      id: 'R241',
+      name: 'Bowl Quinoa Poulet',
+      category: 'world-food',
+      tags: ['american', 'high-protein', 'balanced', 'meal-prep', 'bowl'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 20,
+      difficulty: 1,
+      baseNutrition: { calories: 770, proteinGrams: 68, carbsGrams: 75, fatGrams: 22 },
+      // 68*4+75*4+22*9 = 272+300+198 = 770 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Quinoa', qty: 150, unit: 'g' },
+        { name: 'Épinards frais', qty: 80, unit: 'g' },
+        { name: 'Tomates cerises', qty: 80, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Avocat', qty: 60, unit: 'g' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Tahini', qty: 15, unit: 'g' }
+      ],
+      steps: [
+        'Cuire quinoa 12 min. Griller poulet assaisonné 6 min/côté, trancher.',
+        'Sauce : tahini + citron + eau + sel.',
+        'Dresser bowl : quinoa, épinards, légumes, poulet. Napper de sauce tahini.'
+      ]
+    },
+    {
+      id: 'R242',
+      name: 'Omelette aux Champignons',
+      category: 'world-food',
+      tags: ['french', 'low-carb', 'keto', 'vegetarian', 'quick'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 10,
+      difficulty: 1,
+      baseNutrition: { calories: 582, proteinGrams: 52, carbsGrams: 8, fatGrams: 38 },
+      // 52*4+8*4+38*9 = 208+32+342 = 582 ✓
+      ingredients: [
+        { name: 'Œuf', qty: 6, unit: 'pce' },
+        { name: 'Champignons de Paris', qty: 200, unit: 'g' },
+        { name: 'Fromage râpé', qty: 50, unit: 'g' },
+        { name: 'Beurre', qty: 15, unit: 'g' },
+        { name: 'Ciboulette fraîche', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir champignons en lamelles dans beurre 4 min. Saler.',
+        'Battre œufs avec sel et poivre. Verser dans poêle beurrée.',
+        'Quand bords pris, ajouter champignons et fromage. Plier l\'omelette. Servir avec ciboulette.'
+      ]
+    },
+    {
+      id: 'R243',
+      name: 'Minestrone Protéiné',
+      category: 'world-food',
+      tags: ['italian', 'high-carb', 'budget', 'soup', 'meal-prep'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 30,
+      difficulty: 1,
+      baseNutrition: { calories: 615, proteinGrams: 32, carbsGrams: 88, fatGrams: 15 },
+      // 32*4+88*4+15*9 = 128+352+135 = 615 ✓
+      ingredients: [
+        { name: 'Haricots blancs (boîte)', qty: 200, unit: 'g' },
+        { name: 'Pâtes courtes (ditalini)', qty: 100, unit: 'g' },
+        { name: 'Tomates concassées', qty: 200, unit: 'g' },
+        { name: 'Courgette', qty: 150, unit: 'g' },
+        { name: 'Carottes', qty: 100, unit: 'g' },
+        { name: 'Céleri', qty: 60, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Bouillon légumes', qty: 800, unit: 'ml' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Faire revenir oignon, céleri, carottes dans huile 5 min.',
+        'Ajouter tomates, courgettes, haricots, bouillon. Cuire 20 min.',
+        'Ajouter pâtes, cuire 8 min. Servir avec parmesan (optionnel).'
+      ]
+    },
+    {
+      id: 'R244',
+      name: 'Riz Frit à l\'Œuf',
+      category: 'world-food',
+      tags: ['chinese', 'high-carb', 'vegetarian', 'quick', 'budget'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 1,
+      baseNutrition: { calories: 690, proteinGrams: 22, carbsGrams: 110, fatGrams: 18 },
+      // 22*4+110*4+18*9 = 88+440+162 = 690 ✓
+      ingredients: [
+        { name: 'Riz cuit (de la veille)', qty: 400, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Petits pois surgelés', qty: 80, unit: 'g' },
+        { name: 'Carottes', qty: 60, unit: 'g' },
+        { name: 'Oignon vert', qty: 40, unit: 'g' },
+        { name: 'Sauce soja', qty: 30, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Chauffer wok à feu vif avec huile. Brouiller œufs, réserver.',
+        'Faire sauter carottes et petits pois 2 min.',
+        'Ajouter riz cuit, sauce soja. Mélanger à feu vif 3 min. Incorporer œufs et oignon vert. Finir huile sésame.'
+      ]
+    },
+    {
+      id: 'R245',
+      name: 'Tikka Masala Light',
+      category: 'world-food',
+      tags: ['indian', 'high-protein', 'balanced', 'meal-prep'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 2,
+      baseNutrition: { calories: 692, proteinGrams: 68, carbsGrams: 42, fatGrams: 28 },
+      // 68*4+42*4+28*9 = 272+168+252 = 692 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 150, unit: 'g' },
+        { name: 'Tomates concassées', qty: 300, unit: 'g' },
+        { name: 'Lait de coco (léger)', qty: 150, unit: 'ml' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Garam masala', qty: 8, unit: 'g' },
+        { name: 'Curcuma', qty: 3, unit: 'g' },
+        { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Mariner poulet en dés dans yaourt + garam masala + curcuma 30 min.',
+        'Faire revenir oignon et ail. Ajouter poulet mariné, saisir 5 min.',
+        'Incorporer tomates et lait de coco. Mijoter 15 min. Servir avec riz basmati.'
+      ]
+    },
+    {
+      id: 'R246',
+      name: 'Œufs Bénédictine Healthy',
+      category: 'world-food',
+      tags: ['brunch', 'high-protein', 'balanced', 'american'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 2,
+      baseNutrition: { calories: 540, proteinGrams: 35, carbsGrams: 28, fatGrams: 32 },
+      // 35*4+28*4+32*9 = 140+112+288 = 540 ✓
+      ingredients: [
+        { name: 'Œuf', qty: 4, unit: 'pce' },
+        { name: 'Muffins anglais complets', qty: 2, unit: 'pce' },
+        { name: 'Saumon fumé', qty: 80, unit: 'g' },
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 80, unit: 'g' },
+        { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
+        { name: 'Citron (jus)', qty: 0.5, unit: 'pce' },
+        { name: 'Vinaigre blanc', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Sauce hollandaise légère : yaourt + moutarde + citron, tiédir 2 min.',
+        'Pocher œufs 3 min dans eau + vinaigre frémissante.',
+        'Toaster muffins. Garnir : saumon fumé, épinards flétris, œuf poché, sauce.'
+      ]
+    },
+    {
+      id: 'R247',
+      name: 'Taboulé Quinoa',
+      category: 'world-food',
+      tags: ['lebanese', 'vegan', 'high-carb', 'light', 'salad'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 1,
+      baseNutrition: { calories: 590, proteinGrams: 22, carbsGrams: 85, fatGrams: 18 },
+      // 22*4+85*4+18*9 = 88+340+162 = 590 ✓
+      ingredients: [
+        { name: 'Quinoa', qty: 150, unit: 'g' },
+        { name: 'Persil frais', qty: 60, unit: 'g' },
+        { name: 'Menthe fraîche', qty: 20, unit: 'g' },
+        { name: 'Tomates', qty: 150, unit: 'g' },
+        { name: 'Concombre', qty: 100, unit: 'g' },
+        { name: 'Oignon rouge', qty: 50, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 2, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire quinoa 12 min, rincer à l\'eau froide, égoutter.',
+        'Hacher finement persil, menthe, tomates, concombre, oignon.',
+        'Mélanger quinoa froid + légumes. Assaisonner huile d\'olive + citron + sel.'
+      ]
+    },
+    {
+      id: 'R248',
+      name: 'Tom Yum Crevettes',
+      category: 'world-food',
+      tags: ['thai', 'high-protein', 'low-carb', 'soup', 'spicy'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 18,
+      difficulty: 2,
+      baseNutrition: { calories: 454, proteinGrams: 45, carbsGrams: 28, fatGrams: 18 },
+      // 45*4+28*4+18*9 = 180+112+162 = 454 ✓
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 250, unit: 'g' },
+        { name: 'Bouillon de poulet', qty: 800, unit: 'ml' },
+        { name: 'Champignons', qty: 100, unit: 'g' },
+        { name: 'Citronelle', qty: 2, unit: 'pce' },
+        { name: 'Galanga (ou gingembre)', qty: 20, unit: 'g' },
+        { name: 'Sauce poisson', qty: 20, unit: 'ml' },
+        { name: 'Citron vert (jus)', qty: 2, unit: 'pce' },
+        { name: 'Piment rouge', qty: 2, unit: 'pce' },
+        { name: 'Tomates cerises', qty: 80, unit: 'g' }
+      ],
+      steps: [
+        'Chauffer bouillon avec citronelle, galanga, piment 8 min.',
+        'Ajouter champignons et tomates cerises, cuire 4 min.',
+        'Incorporer crevettes, cuire 3 min. Finir sauce poisson + citron vert. Servir chaud.'
+      ]
+    },
+    {
+      id: 'R249',
+      name: 'Bowl Mangue Protéiné',
+      category: 'world-food',
+      tags: ['tropical', 'high-carb', 'vegetarian', 'brunch', 'refreshing'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 520, proteinGrams: 28, carbsGrams: 75, fatGrams: 12 },
+      // 28*4+75*4+12*9 = 112+300+108 = 520 ✓
+      ingredients: [
+        { name: 'Yaourt grec 0%', qty: 300, unit: 'g' },
+        { name: 'Mangue fraîche', qty: 200, unit: 'g' },
+        { name: 'Granola', qty: 60, unit: 'g' },
+        { name: 'Banane', qty: 80, unit: 'g' },
+        { name: 'Graines de chia', qty: 15, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Noix de coco râpée', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Couper mangue et banane en morceaux.',
+        'Verser yaourt grec dans bols.',
+        'Disposer fruits, granola, graines de chia. Arroser miel, parsemer coco râpée.'
+      ]
+    },
+    {
+      id: 'R250',
+      name: 'Meal Prep Bowl Complet',
+      category: 'world-food',
+      tags: ['meal-prep', 'high-protein', 'balanced', 'budget'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 25,
+      difficulty: 1,
+      baseNutrition: { calories: 852, proteinGrams: 85, carbsGrams: 65, fatGrams: 28 },
+      // 85*4+65*4+28*9 = 340+260+252 = 852 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 350, unit: 'g' },
+        { name: 'Riz basmati', qty: 120, unit: 'g' },
+        { name: 'Brocoli', qty: 200, unit: 'g' },
+        { name: 'Patate douce', qty: 150, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Paprika fumé', qty: 4, unit: 'g' },
+        { name: 'Cumin moulu', qty: 3, unit: 'g' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire riz. Rôtir patate douce et brocoli à 200 °C 20 min avec huile et épices.',
+        'Griller poulet assaisonné 6 min/côté, trancher.',
+        'Assembler boxes : riz, légumes rôtis, poulet. Arroser citron. Conserver 3 jours au frais.'
+      ]
+    },
+    {
+      id: 'R251',
+      name: 'Overnight Oats Protéinés',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'high-carb', 'meal-prep', 'brunch'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 550, proteinGrams: 22, carbsGrams: 75, fatGrams: 18 },
+      // 22*4+75*4+18*9 = 88+300+162 = 550 ✓
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 160, unit: 'g' },
+        { name: 'Lait écrémé', qty: 300, unit: 'ml' },
+        { name: 'Yaourt grec 0%', qty: 100, unit: 'g' },
+        { name: 'Graines de chia', qty: 15, unit: 'g' },
+        { name: 'Fruits rouges surgelés', qty: 80, unit: 'g' },
+        { name: 'Miel', qty: 15, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger flocons, lait, yaourt, chia et miel dans bocal.',
+        'Couvrir et réfrigérer toute la nuit (min 6h).',
+        'Le matin, remuer et garnir de fruits rouges dégelés.'
+      ]
+    },
+    {
+      id: 'R252',
+      name: 'Smoothie Bowl Mangue',
+      category: 'world-food',
+      tags: ['instagram', 'tiktok-viral', 'high-carb', 'vegan', 'brunch'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 440, proteinGrams: 18, carbsGrams: 65, fatGrams: 12 },
+      // 18*4+65*4+12*9 = 72+260+108 = 440 ✓
+      ingredients: [
+        { name: 'Mangue surgelée', qty: 300, unit: 'g' },
+        { name: 'Banane congelée', qty: 100, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 150, unit: 'g' },
+        { name: 'Granola', qty: 40, unit: 'g' },
+        { name: 'Kiwi', qty: 80, unit: 'g' },
+        { name: 'Graines de chia', qty: 10, unit: 'g' },
+        { name: 'Noix de coco râpée', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Mixer mangue + banane congelées + yaourt jusqu\'à consistance épaisse.',
+        'Verser dans bols. La consistance doit être plus épaisse qu\'un smoothie.',
+        'Garnir granola, kiwi tranché, chia et coco. Servir immédiatement.'
+      ]
+    },
+    {
+      id: 'R253',
+      name: 'Butter Chicken Light',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'indian', 'high-protein', 'comfort-food'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 2,
+      baseNutrition: { calories: 664, proteinGrams: 68, carbsGrams: 35, fatGrams: 28 },
+      // 68*4+35*4+28*9 = 272+140+252 = 664 ✓
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Tomates concassées', qty: 300, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 150, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Garam masala', qty: 8, unit: 'g' },
+        { name: 'Beurre', qty: 15, unit: 'g' },
+        { name: 'Crème légère 5%', qty: 60, unit: 'ml' }
+      ],
+      steps: [
+        'Mariner poulet dans yaourt + garam masala 1h (ou 30 min min). Griller à poêle.',
+        'Faire revenir oignon, ail, gingembre dans beurre. Ajouter tomates, cuire 10 min.',
+        'Mixer la sauce, ajouter crème légère et poulet. Mijoter 10 min. Servir avec riz basmati.'
+      ]
+    },
+    {
+      id: 'R254',
+      name: 'Salmon Teriyaki Bowl',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'japanese', 'high-protein', 'omega3', 'bowl'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 2,
+      baseNutrition: { calories: 930, proteinGrams: 62, carbsGrams: 85, fatGrams: 38 },
+      // 62*4+85*4+38*9 = 248+340+342 = 930 ✓
+      ingredients: [
+        { name: 'Saumon (pavé)', qty: 300, unit: 'g' },
+        { name: 'Riz japonais', qty: 200, unit: 'g' },
+        { name: 'Sauce soja', qty: 40, unit: 'ml' },
+        { name: 'Miel', qty: 25, unit: 'g' },
+        { name: 'Huile de sésame', qty: 20, unit: 'ml' },
+        { name: 'Edamame', qty: 80, unit: 'g' },
+        { name: 'Avocat', qty: 80, unit: 'g' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Graines de sésame', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Sauce teriyaki : sauce soja + miel + huile sésame. Mariner saumon 10 min.',
+        'Saisir saumon dans poêle chaude 3-4 min/côté en nappant de sauce.',
+        'Dresser bol : riz, edamame, avocat, concombre, saumon. Arroser reste sauce, parsemer sésame.'
+      ]
+    },
+    {
+      id: 'R255',
+      name: 'Egg Muffins aux Légumes',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'high-protein', 'low-carb', 'meal-prep', 'keto'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      baseNutrition: { calories: 476, proteinGrams: 48, carbsGrams: 8, fatGrams: 28 },
+      // 48*4+8*4+28*9 = 192+32+252 = 476 ✓
+      ingredients: [
+        { name: 'Œuf', qty: 6, unit: 'pce' },
+        { name: 'Poivron rouge', qty: 80, unit: 'g' },
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Fromage râpé', qty: 40, unit: 'g' },
+        { name: 'Oignon vert', qty: 30, unit: 'g' },
+        { name: 'Sel, poivre', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer four à 175 °C. Huiler moule à muffins 6 alvéoles.',
+        'Répartir légumes hachés dans alvéoles. Battre œufs, assaisonner, verser dessus.',
+        'Parsemer fromage. Cuire 18-20 min jusqu\'à dorure. Se conserve 4 jours au frais.'
+      ]
+    },
+    {
+      id: 'R256',
+      name: 'Baked Oats Banane',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'high-carb', 'vegetarian', 'brunch'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 25,
+      difficulty: 1,
+      baseNutrition: { calories: 495, proteinGrams: 18, carbsGrams: 72, fatGrams: 15 },
+      // 18*4+72*4+15*9 = 72+288+135 = 495 ✓
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 150, unit: 'g' },
+        { name: 'Banane', qty: 150, unit: 'g' },
+        { name: 'Lait écrémé', qty: 200, unit: 'ml' },
+        { name: 'Œuf', qty: 1, unit: 'pce' },
+        { name: 'Miel', qty: 20, unit: 'g' },
+        { name: 'Cannelle', qty: 2, unit: 'g' },
+        { name: 'Pépites de chocolat noir', qty: 15, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer four à 180 °C. Écraser banane.',
+        'Mélanger tous ingrédients. Verser dans plat huilé.',
+        'Cuire 20-25 min jusqu\'à dorure. Couper en parts et servir chaud.'
+      ]
+    },
+    {
+      id: 'R257',
+      name: 'Chia Pudding Coco',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'vegan', 'low-carb', 'meal-prep'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 414, proteinGrams: 12, carbsGrams: 42, fatGrams: 22 },
+      // 12*4+42*4+22*9 = 48+168+198 = 414 ✓
+      ingredients: [
+        { name: 'Graines de chia', qty: 60, unit: 'g' },
+        { name: 'Lait de coco (léger)', qty: 300, unit: 'ml' },
+        { name: 'Mangue fraîche', qty: 150, unit: 'g' },
+        { name: 'Miel', qty: 15, unit: 'g' },
+        { name: 'Noix de coco râpée', qty: 15, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger chia, lait de coco et miel. Fouetter vigoureusement pour éviter les grumeaux.',
+        'Réfrigérer minimum 4h (idéalement toute la nuit). Remuer après 30 min.',
+        'Dresser avec mangue en dés et noix de coco râpée.'
+      ]
+    },
+    {
+      id: 'R258',
+      name: 'Granola Maison',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'vegan', 'high-carb', 'meal-prep'],
+      servings: 4,
+      prepTime: 10,
+      cookTime: 25,
+      difficulty: 1,
+      baseNutrition: { calories: 652, proteinGrams: 15, carbsGrams: 85, fatGrams: 28 },
+      // 15*4+85*4+28*9 = 60+340+252 = 652 ✓
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 300, unit: 'g' },
+        { name: 'Miel', qty: 80, unit: 'g' },
+        { name: 'Huile de coco', qty: 40, unit: 'ml' },
+        { name: 'Amandes effilées', qty: 60, unit: 'g' },
+        { name: 'Noix de cajou', qty: 60, unit: 'g' },
+        { name: 'Raisins secs', qty: 60, unit: 'g' },
+        { name: 'Cannelle', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer four à 160 °C. Mélanger flocons + miel + huile de coco + cannelle.',
+        'Étaler sur plaque. Cuire 20-25 min en mélangeant toutes les 10 min.',
+        'Laisser refroidir totalement (croustillant en refroidissant). Ajouter fruits secs. Conserver en bocal.'
+      ]
+    },
+    {
+      id: 'R259',
+      name: 'Pancakes Banane',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'vegetarian', 'high-carb', 'brunch'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 10,
+      difficulty: 1,
+      baseNutrition: { calories: 456, proteinGrams: 22, carbsGrams: 65, fatGrams: 12 },
+      // 22*4+65*4+12*9 = 88+260+108 = 456 ✓
+      ingredients: [
+        { name: 'Banane mûre', qty: 150, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Flocons d\'avoine', qty: 80, unit: 'g' },
+        { name: 'Lait écrémé', qty: 60, unit: 'ml' },
+        { name: 'Levure chimique', qty: 4, unit: 'g' },
+        { name: 'Cannelle', qty: 2, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Écraser banane. Mixer avec œufs, flocons, lait et levure.',
+        'Chauffer poêle antiadhésive légèrement huilée à feu moyen.',
+        'Verser petites louches de pâte. Cuire 2 min/côté. Servir avec miel.'
+      ]
+    },
+    {
+      id: 'R260',
+      name: 'Mug Cake Protéiné',
+      category: 'world-food',
+      tags: ['tiktok-viral', 'instagram', 'high-protein', 'quick', 'snack'],
+      servings: 1,
+      prepTime: 2,
+      cookTime: 2,
+      difficulty: 1,
+      baseNutrition: { calories: 320, proteinGrams: 25, carbsGrams: 28, fatGrams: 12 },
+      // 25*4+28*4+12*9 = 100+112+108 = 320 ✓
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 40, unit: 'g' },
+        { name: 'Œuf', qty: 1, unit: 'pce' },
+        { name: 'Lait écrémé', qty: 60, unit: 'ml' },
+        { name: 'Poudre de cacao', qty: 10, unit: 'g' },
+        { name: 'Miel', qty: 15, unit: 'g' },
+        { name: 'Levure chimique', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger tous les ingrédients dans un grand mug.',
+        'Micro-ondes 90 secondes à puissance max.',
+        'Laisser reposer 1 min. Déguster directement dans le mug.'
+      ]
+    },
+    {
+      id: 'R261',
+      name: 'Energy Balls aux Dattes',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'vegan', 'high-carb', 'snack', 'meal-prep'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 418, proteinGrams: 12, carbsGrams: 52, fatGrams: 18 },
+      // 12*4+52*4+18*9 = 48+208+162 = 418 ✓
+      ingredients: [
+        { name: 'Dattes Medjool dénoyautées', qty: 200, unit: 'g' },
+        { name: 'Amandes', qty: 80, unit: 'g' },
+        { name: 'Flocons d\'avoine', qty: 60, unit: 'g' },
+        { name: 'Poudre de cacao', qty: 15, unit: 'g' },
+        { name: 'Noix de coco râpée', qty: 20, unit: 'g' },
+        { name: 'Cannelle', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Mixer amandes et flocons grossièrement. Ajouter dattes et cacao.',
+        'Mixer jusqu\'à formation d\'une boule. Ajouter 1 cs d\'eau si trop sec.',
+        'Former 16 boules, rouler dans coco râpée. Réfrigérer 1h. Conserver 2 semaines.'
+      ]
+    },
+    {
+      id: 'R262',
+      name: 'Hummus Maison',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'vegan', 'lebanese', 'snack', 'high-carb'],
+      servings: 4,
+      prepTime: 10,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 504, proteinGrams: 18, carbsGrams: 45, fatGrams: 28 },
+      // 18*4+45*4+28*9 = 72+180+252 = 504 ✓
+      ingredients: [
+        { name: 'Pois chiches (boîte, égouttés)', qty: 400, unit: 'g' },
+        { name: 'Tahini', qty: 60, unit: 'g' },
+        { name: 'Citron (jus)', qty: 2, unit: 'pce' },
+        { name: 'Ail', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 30, unit: 'ml' },
+        { name: 'Cumin moulu', qty: 3, unit: 'g' },
+        { name: 'Paprika fumé', qty: 2, unit: 'g' },
+        { name: 'Eau froide', qty: 60, unit: 'ml' }
+      ],
+      steps: [
+        'Mixer pois chiches, tahini, jus citron, ail et cumin 2 min.',
+        'Ajouter eau froide progressivement jusqu\'à texture crémeuse.',
+        'Dresser dans plat, former puits, verser huile d\'olive, saupoudrer paprika.'
+      ]
+    },
+    {
+      id: 'R263',
+      name: 'Velouté de Courgette',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'vegan', 'low-carb', 'light', 'soup'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 1,
+      baseNutrition: { calories: 255, proteinGrams: 8, carbsGrams: 22, fatGrams: 15 },
+      // 8*4+22*4+15*9 = 32+88+135 = 255 ✓
+      ingredients: [
+        { name: 'Courgette', qty: 500, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 5, unit: 'g' },
+        { name: 'Bouillon légumes', qty: 500, unit: 'ml' },
+        { name: 'Crème légère 5%', qty: 50, unit: 'ml' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon et ail dans huile 3 min.',
+        'Ajouter courgettes coupées, bouillon. Cuire 15 min.',
+        'Mixer finement, incorporer crème. Servir avec basilic frais.'
+      ]
+    },
+    {
+      id: 'R264',
+      name: 'Velouté Carottes Gingembre',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'vegan', 'high-carb', 'soup', 'detox'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 25,
+      difficulty: 1,
+      baseNutrition: { calories: 346, proteinGrams: 8, carbsGrams: 38, fatGrams: 18 },
+      // 8*4+38*4+18*9 = 32+152+162 = 346 ✓
+      ingredients: [
+        { name: 'Carottes', qty: 400, unit: 'g' },
+        { name: 'Gingembre frais', qty: 20, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Lait de coco (léger)', qty: 200, unit: 'ml' },
+        { name: 'Bouillon légumes', qty: 400, unit: 'ml' },
+        { name: 'Huile de tournesol', qty: 10, unit: 'ml' },
+        { name: 'Cumin moulu', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon, gingembre et cumin dans huile 3 min.',
+        'Ajouter carottes en rondelles et bouillon. Cuire 20 min.',
+        'Mixer, incorporer lait de coco. Ajuster sel et servir avec coriandre.'
+      ]
+    },
+    {
+      id: 'R265',
+      name: 'Salade Pastèque Feta',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'tiktok-viral', 'low-carb', 'vegetarian', 'refreshing'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 370, proteinGrams: 15, carbsGrams: 28, fatGrams: 22 },
+      // 15*4+28*4+22*9 = 60+112+198 = 370 ✓
+      ingredients: [
+        { name: 'Pastèque', qty: 400, unit: 'g' },
+        { name: 'Feta', qty: 80, unit: 'g' },
+        { name: 'Menthe fraîche', qty: 15, unit: 'g' },
+        { name: 'Oignon rouge', qty: 40, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
+      ],
+      steps: [
+        'Couper pastèque en gros cubes, émietter la feta.',
+        'Émincer oignon rouge finement.',
+        'Assembler pastèque, feta, oignon, menthe. Arroser huile d\'olive et citron vert.'
+      ]
+    },
+    {
+      id: 'R266',
+      name: 'Bowl Yaourt Grec aux Fruits',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'high-carb', 'vegetarian', 'brunch', 'light'],
+      servings: 2,
+      prepTime: 8,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 364, proteinGrams: 18, carbsGrams: 55, fatGrams: 8 },
+      // 18*4+55*4+8*9 = 72+220+72 = 364 ✓
+      ingredients: [
+        { name: 'Yaourt grec 0%', qty: 400, unit: 'g' },
+        { name: 'Fraises', qty: 100, unit: 'g' },
+        { name: 'Myrtilles', qty: 60, unit: 'g' },
+        { name: 'Banane', qty: 80, unit: 'g' },
+        { name: 'Granola', qty: 40, unit: 'g' },
+        { name: 'Miel', qty: 20, unit: 'g' }
+      ],
+      steps: [
+        'Verser yaourt dans bols.',
+        'Couper fruits en morceaux. Disposer joliment sur le yaourt.',
+        'Saupoudrer granola et arroser de miel.'
+      ]
+    },
+    {
+      id: 'R267',
+      name: 'Poivrons Farcis au Quinoa',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'vegetarian', 'high-carb', 'baked', 'meal-prep'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 30,
+      difficulty: 2,
+      baseNutrition: { calories: 522, proteinGrams: 28, carbsGrams: 62, fatGrams: 18 },
+      // 28*4+62*4+18*9 = 112+248+162 = 522 ✓
+      ingredients: [
+        { name: 'Poivrons rouges', qty: 4, unit: 'pce' },
+        { name: 'Quinoa', qty: 150, unit: 'g' },
+        { name: 'Tomates concassées', qty: 150, unit: 'g' },
+        { name: 'Pois chiches (boîte)', qty: 150, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Feta', qty: 40, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Cumin moulu', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer four à 190 °C. Cuire quinoa. Couper chapeau des poivrons, évider.',
+        'Mélanger quinoa, tomates, pois chiches, oignon, cumin, feta.',
+        'Farcir poivrons, arroser huile. Cuire 25-30 min au four.'
+      ]
+    },
+    {
+      id: 'R268',
+      name: 'Gaspacho Tomate',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'vegan', 'low-carb', 'light', 'refreshing'],
+      servings: 4,
+      prepTime: 15,
+      cookTime: 0,
+      difficulty: 1,
+      baseNutrition: { calories: 247, proteinGrams: 6, carbsGrams: 22, fatGrams: 15 },
+      // 6*4+22*4+15*9 = 24+88+135 = 247 ✓
+      ingredients: [
+        { name: 'Tomates mûres', qty: 600, unit: 'g' },
+        { name: 'Concombre', qty: 200, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Oignon rouge', qty: 50, unit: 'g' },
+        { name: 'Ail', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 40, unit: 'ml' },
+        { name: 'Vinaigre de vin rouge', qty: 15, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Mixer tomates, concombre, poivron, oignon et ail.',
+        'Ajouter huile d\'olive et vinaigre. Mixer finement.',
+        'Assaisonner, réfrigérer 2h minimum. Servir très froid avec un filet d\'huile.'
+      ]
+    },
+    {
+      id: 'R269',
+      name: 'Tortilla Espagnole',
+      category: 'world-food',
+      tags: ['trending', 'instagram', 'spanish', 'vegetarian', 'balanced'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 20,
+      difficulty: 2,
+      baseNutrition: { calories: 650, proteinGrams: 42, carbsGrams: 35, fatGrams: 38 },
+      // 42*4+35*4+38*9 = 168+140+342 = 650 ✓
+      ingredients: [
+        { name: 'Œuf', qty: 5, unit: 'pce' },
+        { name: 'Pommes de terre', qty: 250, unit: 'g' },
+        { name: 'Oignon', qty: 100, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 30, unit: 'ml' },
+        { name: 'Sel', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Couper pommes de terre et oignon en fines tranches. Confire 15 min dans huile à feu moyen.',
+        'Battre œufs, incorporer pommes de terre et oignon égouttés. Saler.',
+        'Cuire en poêle couverte 5 min. Retourner avec assiette, cuire 4 min. Servir tiède ou froid.'
+      ]
+    },
+    {
+      id: 'R270',
+      name: 'Soupe Miso Tofu',
+      category: 'world-food',
+      tags: ['instagram', 'trending', 'japanese', 'vegan', 'low-carb', 'light'],
+      servings: 2,
+      prepTime: 5,
+      cookTime: 10,
+      difficulty: 1,
+      baseNutrition: { calories: 252, proteinGrams: 18, carbsGrams: 18, fatGrams: 12 },
+      // 18*4+18*4+12*9 = 72+72+108 = 252 ✓
+      ingredients: [
+        { name: 'Tofu soyeux', qty: 150, unit: 'g' },
+        { name: 'Pâte miso blanche', qty: 30, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
+        { name: 'Algues wakame séchées', qty: 5, unit: 'g' },
+        { name: 'Oignon vert', qty: 30, unit: 'g' },
+        { name: 'Sauce soja', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Chauffer bouillon sans bouillir. Réhydrater wakame 5 min dans eau froide.',
+        'Dissoudre miso dans louche de bouillon froid. Incorporer dans la soupe.',
+        'Ajouter tofu en cubes et wakame. Servir avec oignon vert. Ne pas faire bouillir après le miso.'
+      ]
+    },
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
