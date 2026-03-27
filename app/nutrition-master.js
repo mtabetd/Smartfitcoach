@@ -53,17 +53,22 @@
     return Math.round(bmr * activityLevel);
   }
 
+  var KCAL_FLOOR_MALE   = 1500; // ACSM — plancher absolu homme
+  var KCAL_FLOOR_FEMALE = 1200; // ACSM — plancher absolu femme
+
   /**
    * Ajuste les calories selon l'objectif.
-   * Garantie : résultat >= bmr (sécurité sous-alimentation).
+   * Garantie : résultat >= max(bmr, plancher sexe-spécifique ACSM).
    * @param {number} tdee
    * @param {'cut'|'maintenance'|'lean_bulk'|'mass_gain'} goal
-   * @param {number} bmr  Plancher de sécurité
+   * @param {number} bmr       Plancher BMR
+   * @param {'male'|'female'} gender  Nécessaire pour plancher sexe-spécifique
    * @returns {number} caloriesTarget (entier)
    */
-  function calcCaloriesTarget(tdee, goal, bmr) {
-    var adjusted = Math.round(tdee * (1 + GOAL_ADJUSTMENTS[goal]));
-    return Math.max(adjusted, bmr);
+  function calcCaloriesTarget(tdee, goal, bmr, gender) {
+    var adjusted   = Math.round(tdee * (1 + GOAL_ADJUSTMENTS[goal]));
+    var kcalFloor  = gender === 'male' ? KCAL_FLOOR_MALE : KCAL_FLOOR_FEMALE;
+    return Math.max(adjusted, bmr, kcalFloor);
   }
 
   /**
@@ -103,14 +108,15 @@
 
   /**
    * Applique le Carb Cycling (jours d'entraînement : +20% glucides).
-   * Recalcule les calories finales. Si résultat < bmr, remonte au bmr et ajuste G.
+   * Recalcule les calories finales. Si résultat < plancher (max(bmr, sexe)), remonte au plancher et ajuste G.
    * @param {number} carbsGrams
    * @param {number} proteinGrams
    * @param {number} fatGrams
    * @param {number} bmr
+   * @param {'male'|'female'} gender  Nécessaire pour plancher sexe-spécifique ACSM
    * @returns {{ carbsGrams: number, caloriesTarget: number, clampedToBMR: boolean }}
    */
-  function applyCarbCycling(carbsGrams, proteinGrams, fatGrams, bmr) {
+  function applyCarbCycling(carbsGrams, proteinGrams, fatGrams, bmr, gender) {
     var boostedCarbs = Math.round(carbsGrams * (1 + CARB_CYCLING_BOOST) * 10) / 10;
     var newCalories  = Math.round(
       proteinGrams * KCAL_PER_PROT +
@@ -118,15 +124,17 @@
       boostedCarbs * KCAL_PER_CARB
     );
 
-    if (newCalories >= bmr) {
+    var kcalFloor = Math.max(bmr, gender === 'male' ? KCAL_FLOOR_MALE : KCAL_FLOOR_FEMALE);
+
+    if (newCalories >= kcalFloor) {
       return { carbsGrams: boostedCarbs, caloriesTarget: newCalories, clampedToBMR: false };
     }
 
-    // Sécurité : remonter au BMR, ajuster G en conséquence
-    var carbsAtBMR = Math.round(
-      Math.max(0, (bmr - proteinGrams * KCAL_PER_PROT - fatGrams * KCAL_PER_FAT) / KCAL_PER_CARB) * 10
+    // Sécurité : remonter au plancher, ajuster G en conséquence
+    var carbsAtFloor = Math.round(
+      Math.max(0, (kcalFloor - proteinGrams * KCAL_PER_PROT - fatGrams * KCAL_PER_FAT) / KCAL_PER_CARB) * 10
     ) / 10;
-    return { carbsGrams: carbsAtBMR, caloriesTarget: bmr, clampedToBMR: true };
+    return { carbsGrams: carbsAtFloor, caloriesTarget: kcalFloor, clampedToBMR: true };
   }
 
   // ─── VALIDATION ───────────────────────────────────────────────────────────────
@@ -183,7 +191,7 @@
 
     var bmr = calcBMR(inputs.gender, inputs.weightKg, inputs.heightCm, inputs.age);
     var tdee = calcTDEE(bmr, inputs.activityLevel);
-    var caloriesTarget = calcCaloriesTarget(tdee, inputs.goal, bmr);
+    var caloriesTarget = calcCaloriesTarget(tdee, inputs.goal, bmr, inputs.gender);
 
     var proteinGrams = calcProtein(inputs.gender, inputs.isElite, inputs.weightKg);
     var fatGrams     = calcFat(inputs.weightKg);
@@ -193,7 +201,7 @@
     var clampedToBMR       = false;
 
     if (inputs.trainingDay) {
-      var cycled = applyCarbCycling(carbsGrams, proteinGrams, fatGrams, bmr);
+      var cycled = applyCarbCycling(carbsGrams, proteinGrams, fatGrams, bmr, inputs.gender);
       carbsGrams         = cycled.carbsGrams;
       caloriesTarget     = cycled.caloriesTarget;
       clampedToBMR       = cycled.clampedToBMR;
