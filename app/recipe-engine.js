@@ -3034,7 +3034,7 @@
       g:    Math.round(recipe.baseNutrition.carbsGrams  / perServing),
       l:    Math.round(recipe.baseNutrition.fatGrams    / perServing),
       i:    ingrStr,
-      steps: recipe.steps || [],
+      st:    recipe.steps || [],
       w:    recipe.tags.indexOf('whey') >= 0,
       tags: recipe.tags || [],
       lv:   recipe.difficulty || 1,
