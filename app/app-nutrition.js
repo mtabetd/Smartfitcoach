@@ -1815,11 +1815,14 @@ function renderStep9(p) {
     }
   }
 
-  // Bouton liste de courses améliorée
+  // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
+  var _shopList = (window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan) : [];
+  var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
+  var _shopLabel = '\uD83D\uDECD Liste de courses' + (_shopTotal > 0 ? ' (' + _shopTotal + ' articles)' : '');
   var btnShop = h('button', {
     style: 'width:100%;padding:12px;margin:8px 0;background:var(--card);border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
     onclick: function() { window.S.shopListOpen = true; if(window.render) window.render(); }
-  }, '🛒 Voir la liste de courses');
+  }, _shopLabel);
   p.appendChild(btnShop);
 
   // Shopping list button (legacy)
@@ -2075,6 +2078,18 @@ function exportRecipePDF(r) {
 }
 window.exportRecipePDF = exportRecipePDF;
 
+// ─── SHOPPING LIST HELPERS ───
+function cleanShopChecked(list) {
+  if (!window.S || !window.S.shopChecked) return;
+  var validNames = {};
+  list.forEach(function(cat) {
+    cat.items.forEach(function(item) { validNames[item.name] = true; });
+  });
+  Object.keys(window.S.shopChecked).forEach(function(k) {
+    if (!validNames[k]) delete window.S.shopChecked[k];
+  });
+}
+
 // ─── SHOPPING LIST ───
 function renderShoppingList(p) {
   var s = window.S;
@@ -2100,6 +2115,7 @@ function renderShoppingList(p) {
 
   var list = window.RecipeEngine.generateShoppingList(s.weekPlan);
   if (!s.shopChecked) s.shopChecked = {};
+  cleanShopChecked(list);
 
   if (!list.length) {
     p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, 'Aucun ingrédient détecté dans le plan.'));
