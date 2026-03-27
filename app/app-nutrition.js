@@ -1974,9 +1974,10 @@ function exportDayPDF(dayIdx) {
     doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text(sl.label, M, y); y += 5;
     doc.setFont('times', 'normal'); doc.setFontSize(13); doc.setTextColor(black[0], black[1], black[2]);
-    doc.text(r.n, M, y); y += 5;
+    var rNameLines = doc.splitTextToSize(r.n || 'Repas', CW);
+    doc.text(rNameLines, M, y); y += rNameLines.length * 5;
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(grey[0], grey[1], grey[2]);
-    doc.text(r.k + ' kcal  \u00b7  G ' + r.g + 'g  \u00b7  P ' + r.p + 'g  \u00b7  L ' + r.l + 'g', M, y); y += 6;
+    doc.text((r.k || 0) + ' kcal  \u00b7  G ' + (r.g || 0) + 'g  \u00b7  P ' + (r.p || 0) + 'g  \u00b7  L ' + (r.l || 0) + 'g', M, y); y += 6;
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text('INGR\u00c9DIENTS', M, y); y += 4;
     doc.setFontSize(8); doc.setTextColor(black[0], black[1], black[2]);
@@ -1985,7 +1986,8 @@ function exportDayPDF(dayIdx) {
       : (r.i ? r.i.split(',').map(function(s) { return s.trim(); }) : []);
     ingListPDF.forEach(function(ing) {
       if (y > 275) { doc.addPage(); y = 20; }
-      doc.text('\u2022  ' + ing, M + 2, y); y += 4;
+      var ingLines = doc.splitTextToSize('\u2022  ' + (ing || ''), CW - 4);
+      doc.text(ingLines, M + 2, y); y += ingLines.length * 4;
     });
     y += 2;
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
@@ -2028,7 +2030,12 @@ function exportDayPDF(dayIdx) {
     doc.text('MTD Macro Calculator \u2014 g\u00e9n\u00e9r\u00e9 le ' + new Date().toLocaleDateString('fr-FR'), M, 290);
     doc.text('Page ' + i + '/' + pages, W - M, 290, {align: 'right'});
   }
-  doc.save('plan-' + DAY_NAMES[dayIdx].toLowerCase() + '.pdf');
+  var safeDayName = (DAY_NAMES[dayIdx] || 'jour').toLowerCase()
+    .replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e')
+    .replace(/[îï]/g, 'i').replace(/[ôõö]/g, 'o')
+    .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
+    .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+  doc.save('plan-' + (safeDayName || 'jour') + '.pdf');
 }
 window.exportDayPDF = exportDayPDF;
 
@@ -2046,13 +2053,14 @@ function exportRecipePDF(r) {
   doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
   doc.text('MTD MACRO CALCULATOR', M, 12);
   doc.setFont('times', 'italic'); doc.setFontSize(18);
-  doc.text(r.n, M, 25);
+  var recTitleLines = doc.splitTextToSize(r.n || 'Recette', W - 2 * M);
+  doc.text(recTitleLines, M, 25);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-  doc.text(r.k + ' kcal  |  G ' + r.g + 'g  |  P ' + r.p + 'g  |  L ' + r.l + 'g', M, 31);
+  doc.text((r.k || 0) + ' kcal  |  G ' + (r.g || 0) + 'g  |  P ' + (r.p || 0) + 'g  |  L ' + (r.l || 0) + 'g', M, 31);
   y = 44;
 
   // Macro boxes
-  var macros = [{l: 'CALORIES', v: String(r.k)}, {l: 'PROT\u00c9INES', v: r.p + 'g'}, {l: 'GLUCIDES', v: r.g + 'g'}, {l: 'LIPIDES', v: r.l + 'g'}];
+  var macros = [{l: 'CALORIES', v: String(r.k || 0)}, {l: 'PROT\u00c9INES', v: (r.p || 0) + 'g'}, {l: 'GLUCIDES', v: (r.g || 0) + 'g'}, {l: 'LIPIDES', v: (r.l || 0) + 'g'}];
   var bw = CW / 4 - 2;
   macros.forEach(function(mc2, i) {
     var x = M + i * (bw + 2.6);
@@ -2074,7 +2082,8 @@ function exportRecipePDF(r) {
     : (r.i ? r.i.split(',').map(function(s) { return s.trim(); }) : []);
   recipeIngPDF.forEach(function(ing) {
     if (y > 275) { doc.addPage(); y = 20; }
-    doc.text('\u2022  ' + ing, M + 2, y); y += 5;
+    var ingLines = doc.splitTextToSize('\u2022  ' + (ing || ''), CW - 4);
+    doc.text(ingLines, M + 2, y); y += ingLines.length * 5;
   }); y += 4;
 
   // Steps
@@ -2092,7 +2101,12 @@ function exportRecipePDF(r) {
   // Footer
   doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
   doc.text('MTD Macro Calculator', M, 290);
-  doc.save(r.n.toLowerCase().replace(/[^a-z0-9]/g, '-') + '.pdf');
+  var safeName = (r.n || 'recette').toLowerCase()
+    .replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e')
+    .replace(/[îï]/g, 'i').replace(/[ôõö]/g, 'o')
+    .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
+    .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+  doc.save((safeName || 'recette') + '.pdf');
 }
 window.exportRecipePDF = exportRecipePDF;
 
