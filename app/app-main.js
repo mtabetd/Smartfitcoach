@@ -60,6 +60,13 @@ function render() {
   var app = document.getElementById('app');
   app.innerHTML = '';
   window.scrollTo(0, 0);
+  // Scroll le conteneur .app (overflow-y:auto) au top à chaque changement de page
+  requestAnimationFrame(function() {
+    var appWrap = document.querySelector('.app');
+    if (appWrap) appWrap.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  });
 
   // Not logged in → auth screens
   if (!AUTH.isLoggedIn()) {
