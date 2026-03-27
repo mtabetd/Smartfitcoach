@@ -4,6 +4,50 @@
 var S = window.S;
 var h = window.h, txt = window.txt;
 
+// ─── MEDICAL EXERCISE FILTER ───
+function filterExerciseByMedical(ex, med) {
+  if (!med || !med.done) return true; // pas de filtre
+
+  var n = (ex.n || ex.name || '').toLowerCase();
+
+  // Épaules fragiles → pas de développé militaire, élévations latérales lourdes, dips lourds
+  if (med.shoulders || med.rotatorCuff) {
+    if (/militaire|overhead press|\u00e9l\u00e9vation lat\u00e9rale|dips|upright row/.test(n)) return false;
+  }
+
+  // Coudes → pas de curl barre, extensions triceps lourdes
+  if (med.elbows) {
+    if (/curl barre|extension.*triceps|french press|skullcrusher/.test(n)) return false;
+  }
+
+  // Bas du dos / hernie discale → pas de soulevé de terre, good morning, jefferson
+  if (med.lowerBack || med.herniaDisc) {
+    if (/soulev\u00e9.*terre|deadlift|good morning|jefferson|hyperextension.*lourde/.test(n)) return false;
+  }
+
+  // Hernie inguinale → pas de squat lourd, leg press lourd, exercises valsalva
+  if (med.herniaInguinal) {
+    if (/squat.*lourd|leg press|soulev\u00e9.*terre/.test(n)) return false;
+  }
+
+  // Genoux → pas de squat complet, leg extension lourd, fentes profondes
+  if (med.knees || med.acl) {
+    if (/squat complet|leg extension|fente.*profonde|jump squat|pistol squat/.test(n)) return false;
+  }
+
+  // Hanches → pas de sumo deadlift, deep squat
+  if (med.hips) {
+    if (/sumo|deep squat|squat complet/.test(n)) return false;
+  }
+
+  // Cervicales/nuque → pas de shrugs lourds, neck press
+  if (med.neck) {
+    if (/shrug|neck press|trap\u00e8ze lourd/.test(n)) return false;
+  }
+
+  return true;
+}
+
 // ─── PROGRAM GENERATION ───
 function generateSportProgram() {
   var days = S.sportDays;
@@ -168,6 +212,14 @@ function generateSportProgram() {
           }
           return true;
         });
+      }
+
+      // Medical restrictions: filter exercises based on muscuMedical profile
+      if (S.muscuMedical && S.muscuMedical.done) {
+        var beforeFilter = available.length;
+        available = available.filter(function(ex){ return filterExerciseByMedical(ex, S.muscuMedical); });
+        // If filter removed everything, restore original pool to avoid empty day
+        if (available.length === 0) available = pool.filter(function(ex){ return ex.lv <= maxLv; }).slice();
       }
 
       var pri = categoryPriority[group] || 1;
@@ -1770,6 +1822,29 @@ function renderMusculationProgram(p) {
     estBanner.appendChild(goBack16);
     estBanner.appendChild(h('span', {}, '.'));
     p.appendChild(estBanner);
+  }
+
+  // ─── BANNIÈRE ADAPTATIONS MÉDICALES ───
+  if (S.muscuMedical && S.muscuMedical.done) {
+    var med = S.muscuMedical;
+    var restrictions = [];
+    if (med.shoulders || med.rotatorCuff) restrictions.push('\u26A0 \u00c9paules\u00a0: exercices overhead \u00e9vit\u00e9s');
+    if (med.lowerBack || med.herniaDisc) restrictions.push('\u26A0 Dos\u00a0: soulev\u00e9 de terre et flexions lourdes retir\u00e9s');
+    if (med.knees || med.acl) restrictions.push('\u26A0 Genoux\u00a0: squats profonds remplac\u00e9s');
+    if (med.herniaInguinal) restrictions.push('\u26A0 Hernie inguinale\u00a0: exercices hyperpressifs retir\u00e9s');
+    if (med.hypertension) restrictions.push('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e RPE\u00a07/10, Valsalva interdit');
+    if (med.osteoporosis) restrictions.push('\u26A0 Ost\u00e9oporose\u00a0: charges \u2264\u00a070\u00a0% 1RM, pas d\'impacts');
+    if (restrictions.length > 0) {
+      var medBanner = h('div', {style: 'background:#FFF3E0;border-left:4px solid #E67E22;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5D4037'});
+      medBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, '\uD83C\uDFE5 Programme adapt\u00e9 \u00e0 votre bilan m\u00e9dical'));
+      restrictions.forEach(function(r) {
+        medBanner.appendChild(h('div', {style: 'margin-bottom:3px'}, r));
+      });
+      var editMed = h('div', {style: 'margin-top:8px;font-size:10px;text-decoration:underline;cursor:pointer;color:#E67E22',
+        onclick: function(){ S.sStep = 20; window.render(); }}, 'Modifier mon bilan m\u00e9dical');
+      medBanner.appendChild(editMed);
+      p.appendChild(medBanner);
+    }
   }
 
   // ─── CONFLITS OBJECTIFS NUTRITION × SPORT ───

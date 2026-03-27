@@ -654,6 +654,22 @@ window.S = {
   crossfit1RM: {},  // { 'clean': 80, 'snatch': 60, 'deadlift': 140, ... } in kg
   // Strength assessment profile
   muscuStrengthProfile: {},  // { 'bench_press': 60, 'squat': 80, 'deadlift': 100, ... }
+  muscuSessionLog: {},
+  // Structure : {
+  //   'YYYY-MM-DD': {           // date de la séance
+  //     'Développé couché': [   // nom exercice
+  //       { set: 1, targetWeight: 60, targetReps: 10, actualWeight: 60, actualReps: 9 },
+  //       { set: 2, targetWeight: 60, targetReps: 10, actualWeight: 62.5, actualReps: 8 },
+  //     ]
+  //   }
+  // }
+  muscuProgressionHistory: {},
+  // Structure : {
+  //   'Développé couché': [
+  //     { week: 1, weight: 60, reps: 10, date: 'YYYY-MM-DD' },
+  //     { week: 2, weight: 62.5, reps: 10, date: 'YYYY-MM-DD' },
+  //   ]
+  // }
   muscuMedical: {
     done: false,
     // Zones douloureuses (multi-select)
