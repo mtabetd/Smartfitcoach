@@ -509,14 +509,120 @@
     return RECIPES_DB.map(function (r) { return r.id; });
   }
 
+  // ─── BUDGET ENGINE ─────────────────────────────────────────────────────────────
+
+  /**
+   * Calcule le coût d'une recette en MAD.
+   * Utilise window.getPricePer() depuis prices-db.js.
+   * @param {string} recipeId
+   * @param {number} [scalingRatio=1]  — 1 = recette de base
+   * @returns {{ totalMAD: number, breakdown: Array, pricePerServing: number } | null}
+   */
+  function calcRecipeCost(recipeId, scalingRatio) {
+    var recipe = findRecipe(recipeId);
+    if (!recipe) return null;
+    if (!window.getPricePer) return null;
+    scalingRatio = scalingRatio || 1;
+
+    var breakdown = [];
+    var totalMAD = 0;
+
+    recipe.ingredients.forEach(function (ing) {
+      var unitPrice = window.getPricePer(ing.name, ing.unit);
+      if (unitPrice === null || unitPrice === undefined) return;
+      var scaledQty = (ing.qty / recipe.servings) * scalingRatio;
+      var cost = Math.round(scaledQty * unitPrice * 100) / 100;
+      totalMAD += cost;
+      breakdown.push({ name: ing.name, qty: Math.round(scaledQty * 10) / 10, unit: ing.unit, unitPrice: unitPrice, cost: cost });
+    });
+
+    totalMAD = Math.round(totalMAD * 100) / 100;
+    return {
+      recipeId: recipeId,
+      recipeName: recipe.name,
+      totalMAD: totalMAD,
+      pricePerServing: Math.round((totalMAD / recipe.servings) * 100) / 100,
+      breakdown: breakdown
+    };
+  }
+
+  /**
+   * Calcule le budget quotidien pour un userState donné.
+   * Sélectionne automatiquement les recettes les mieux adaptées (filterRecipes).
+   * @param {object} userState  — issu de window.NutritionMaster.compute()
+   * @param {object} [options]
+   * @param {number} [options.mealsPerDay=3]
+   * @param {string} [options.category]  — 'maroc-moderne' | 'world-food' | null (les deux)
+   * @returns {{ meals: Array, totalMAD: number, budgetPerMeal: number }}
+   */
+  function calcDailyBudget(userState, options) {
+    options = options || {};
+    var mealsPerDay = options.mealsPerDay || 3;
+    var mealFraction = 1 / mealsPerDay;
+
+    var filters = {};
+    if (options.category) filters.category = options.category;
+
+    var candidates = filterRecipes(userState, filters);
+    if (!candidates.length) return { meals: [], totalMAD: 0, budgetPerMeal: 0 };
+
+    var meals = [];
+    var totalMAD = 0;
+
+    for (var i = 0; i < mealsPerDay; i++) {
+      var recipe = candidates[i % candidates.length];
+      var targetCal = Math.round(userState.caloriesTarget * mealFraction);
+      var caloriesPerServing = recipe.baseNutrition.calories / recipe.servings;
+      var ratio = targetCal / caloriesPerServing;
+      var cost = calcRecipeCost(recipe.id, ratio);
+      if (cost) {
+        meals.push({ meal: i + 1, recipeId: recipe.id, recipeName: recipe.name, targetCalories: targetCal, costMAD: cost.totalMAD });
+        totalMAD += cost.totalMAD;
+      }
+    }
+
+    totalMAD = Math.round(totalMAD * 100) / 100;
+    return {
+      mealsPerDay: mealsPerDay,
+      meals: meals,
+      totalMAD: totalMAD,
+      budgetPerMeal: Math.round((totalMAD / mealsPerDay) * 100) / 100
+    };
+  }
+
+  /**
+   * Calcule le budget hebdomadaire (7 jours).
+   * @param {object} userState
+   * @param {object} [options]  — mêmes options que calcDailyBudget
+   * @returns {{ days: Array, totalMAD: number, avgDailyMAD: number }}
+   */
+  function calcWeeklyBudget(userState, options) {
+    var days = [];
+    var totalMAD = 0;
+
+    for (var d = 0; d < 7; d++) {
+      var daily = calcDailyBudget(userState, options);
+      days.push({ day: d + 1, totalMAD: daily.totalMAD, meals: daily.meals });
+      totalMAD += daily.totalMAD;
+    }
+
+    totalMAD = Math.round(totalMAD * 100) / 100;
+    return {
+      days: days,
+      totalMAD: totalMAD,
+      avgDailyMAD: Math.round((totalMAD / 7) * 100) / 100
+    };
+  }
+
   // ─── EXPOSITION GLOBALE ────────────────────────────────────────────────────────
   window.RecipeEngine = {
-    // API principale
     getAdaptedRecipe: getAdaptedRecipe,
     filterRecipes:    filterRecipes,
     findRecipe:       findRecipe,
     listRecipeIds:    listRecipeIds,
-    // Accès direct à la DB (lecture seule)
+    calcRecipeCost:   calcRecipeCost,
+    calcDailyBudget:  calcDailyBudget,
+    calcWeeklyBudget: calcWeeklyBudget,
     db:               RECIPES_DB
   };
 
