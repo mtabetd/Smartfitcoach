@@ -1789,6 +1789,32 @@ function renderStep9(p) {
     p.appendChild(tip);
   }
 
+  // Budget réel du plan semaine
+  if (window.RecipeEngine && window.RecipeEngine.calcWeekPlanBudget && S.weekPlan) {
+    var budget = window.RecipeEngine.calcWeekPlanBudget(S.weekPlan);
+    if (budget.totalMAD > 0) {
+      var budgetBlock = h('div', { style: 'margin:16px 0;padding:14px 16px;background:var(--card);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)' });
+      budgetBlock.appendChild(h('div', { style: 'font-weight:700;font-size:14px;margin-bottom:10px;color:var(--text)' }, '💰 Budget courses estimé'));
+      var budgetGrid = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px' });
+      budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:8px;padding:10px;text-align:center' },
+        h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, 'Budget / jour'),
+        h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.avgDailyMAD + ' MAD')
+      ));
+      budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:8px;padding:10px;text-align:center' },
+        h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, 'Budget / semaine'),
+        h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.weeklyMAD + ' MAD')
+      ));
+      budgetBlock.appendChild(budgetGrid);
+      if (budget.coveragePct < 100) {
+        budgetBlock.appendChild(h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-top:8px' },
+          '* Estimation basée sur ' + budget.coveragePct + '% des repas (recettes avec prix disponibles)'
+        ));
+      }
+      // Insère après le plan semaine
+      p.appendChild(budgetBlock);
+    }
+  }
+
   // Shopping list button
   p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function() { S.showList = !S.showList; window.render(); }}, S.showList ? '\u25b2 Masquer la liste de courses' : '\u25bc Ma liste de courses'));
 

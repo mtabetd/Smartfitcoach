@@ -3083,6 +3083,86 @@
     return oldPool;
   }
 
+  /**
+   * Calcule le budget réel basé sur le vrai weekPlan de l'utilisateur.
+   * Utilise _scalingRatio stocké par enrichWithScaling() pour les recettes R201+.
+   * Pour les recettes legacy (sans _id), cost = null (prix non disponible).
+   *
+   * @param {Array} weekPlan  — window.S.weekPlan (7 jours)
+   * @returns {{
+   *   days: Array<{
+   *     day: number,
+   *     meals: Array<{slot, recipeName, costMAD, scaled, _id}>,
+   *     totalMAD: number
+   *   }>,
+   *   totalMAD: number,
+   *   avgDailyMAD: number,
+   *   coveragePct: number,   — % de repas dont le prix est connu
+   *   weeklyMAD: number
+   * }}
+   */
+  function calcWeekPlanBudget(weekPlan) {
+    if (!weekPlan || !weekPlan.length) {
+      return { days: [], totalMAD: 0, avgDailyMAD: 0, coveragePct: 0, weeklyMAD: 0 };
+    }
+
+    var slots = ['breakfast', 'lunch', 'snack', 'dinner'];
+    var totalMAD = 0;
+    var totalMeals = 0;
+    var pricedMeals = 0;
+    var days = [];
+
+    for (var d = 0; d < weekPlan.length; d++) {
+      var dayPlan = weekPlan[d];
+      var dayMAD = 0;
+      var dayMeals = [];
+
+      slots.forEach(function(slot) {
+        var recipe = dayPlan[slot];
+        if (!recipe) return;
+
+        totalMeals++;
+        var mealEntry = {
+          slot:       slot,
+          recipeName: recipe.n || recipe.name || '?',
+          costMAD:    null,
+          scaled:     false,
+          _id:        recipe._id || null
+        };
+
+        if (recipe._id) {
+          // Recette R201+ : utilise le _scalingRatio stocké par enrichWithScaling
+          var ratio = recipe._scalingRatio || 1;
+          var cost = calcRecipeCost(recipe._id, ratio);
+          if (cost && cost.totalMAD) {
+            mealEntry.costMAD = Math.round(cost.totalMAD * 100) / 100;
+            mealEntry.scaled  = true;
+            dayMAD += mealEntry.costMAD;
+            pricedMeals++;
+          }
+        }
+        // Recette legacy sans _id : prix non disponible (pas dans prices-db)
+
+        dayMeals.push(mealEntry);
+      });
+
+      dayMAD = Math.round(dayMAD * 100) / 100;
+      totalMAD += dayMAD;
+      days.push({ day: d + 1, meals: dayMeals, totalMAD: dayMAD });
+    }
+
+    totalMAD = Math.round(totalMAD * 100) / 100;
+    var coveragePct = totalMeals > 0 ? Math.round((pricedMeals / totalMeals) * 100) : 0;
+
+    return {
+      days:         days,
+      totalMAD:     totalMAD,
+      avgDailyMAD:  Math.round((totalMAD / Math.max(weekPlan.length, 1)) * 100) / 100,
+      weeklyMAD:    totalMAD,
+      coveragePct:  coveragePct
+    };
+  }
+
   // ─── EXPOSITION GLOBALE ────────────────────────────────────────────────────────
   window.RecipeEngine = {
     getAdaptedRecipe: getAdaptedRecipe,
@@ -3090,8 +3170,9 @@
     findRecipe:       findRecipe,
     listRecipeIds:    listRecipeIds,
     calcRecipeCost:   calcRecipeCost,
-    calcDailyBudget:  calcDailyBudget,
-    calcWeeklyBudget: calcWeeklyBudget,
+    calcDailyBudget:      calcDailyBudget,
+    calcWeeklyBudget:     calcWeeklyBudget,
+    calcWeekPlanBudget:   calcWeekPlanBudget,
     getPool:          getPool,
     db:               RECIPES_DB
   };
