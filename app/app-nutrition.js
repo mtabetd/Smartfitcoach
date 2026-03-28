@@ -700,6 +700,21 @@ function renderStep5(p) {
   p.appendChild(snackWrap);
   p.appendChild(h('div', {style: 'height:8px'}));
 
+  // Desserts healthy
+  p.appendChild(h('div', {'class': 'section-label'}, '🍮 Desserts healthy dans mon plan'));
+  var dessertWrap = h('div', {'class': 'chip-wrap'});
+  var dessertSub = h('div', {style: 'font-size:11px;color:var(--grey);margin-bottom:6px;font-family:"Helvetica Neue",Arial,sans-serif'}, '2-3 fois par semaine en collation' + ((S.mealsPerDay||3) < 4 ? ' (nécessite 4 repas/jour)' : ''));
+  p.appendChild(dessertSub);
+  ['Non merci', 'Oui, avec plaisir !'].forEach(function(opt) {
+    var isOn = opt.startsWith('Oui') ? S.wantsDessert : !S.wantsDessert;
+    dessertWrap.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), onclick: function() {
+      S.wantsDessert = opt.startsWith('Oui');
+      window.render();
+    }}, opt));
+  });
+  p.appendChild(dessertWrap);
+  p.appendChild(h('div', {style: 'height:8px'}));
+
   // Hydratation quotidienne
   p.appendChild(h('div', {'class': 'section-label'}, 'Hydratation quotidienne'));
   var hydOpts = ['< 1L/jour', '1-2L/jour', '2L+/jour'];
