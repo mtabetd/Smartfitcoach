@@ -401,6 +401,27 @@ window.DASHBOARD = {
     ]);
     grid.appendChild(sleepCard);
 
+    // Sport burned today — add card if session was validated today
+    (function() {
+      var S = window.S;
+      if (!S || !S.sessionHistory) return;
+      var today = new Date().toISOString().slice(0, 10);
+      var todaySess = null;
+      Object.keys(S.sessionHistory).forEach(function(k) {
+        var se = S.sessionHistory[k];
+        if (se && se.date && se.date.slice(0, 10) === today) todaySess = se;
+      });
+      if (!todaySess || !todaySess.kcalTotal) return;
+      var burnCard = h('div', 'dash-card', [
+        h('p', 'dash-card-title', '\uD83C\uDFCB\uFE0F Brûlées'),
+        h('div', 'dash-big', [
+          document.createTextNode(todaySess.kcalTotal),
+          h('span', 'dash-unit', 'kcal')
+        ])
+      ]);
+      grid.appendChild(burnCard);
+    })();
+
     root.appendChild(grid);
 
 

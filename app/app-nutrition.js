@@ -1804,7 +1804,11 @@ function renderStep8(p) {
     p.appendChild(scanSection);
   }
 
-  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { goStep(9); }}, 'Voir mon planning semaine'));
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
+    // Badge profil complet : déclenché quand l'utilisateur voit ses résultats et passe au planning
+    if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('profile_complete');
+    goStep(9);
+  }}, 'Voir mon planning semaine'));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(7); }, html: backArrowHtml() + 'Modifier mes pr\u00e9f\u00e9rences'}));
 }
 
