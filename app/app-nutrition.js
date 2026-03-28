@@ -2007,19 +2007,26 @@ function renderModal(app) {
     body.appendChild(pills);
     body.appendChild(h('div', {'class': 'section-label'}, 'Ingr\u00e9dients'));
     var ingredList = h('ul', {'class': 'ingredient-list'});
+    // Helper: display one ingredient {name, qty, unit} as a readable line
+    function fmtIng(ing) {
+      var qty = ing.qty ? roundDisplayQty(ing.qty, ing.unit) : '';
+      var unit = ing.unit && ing.unit !== 'pce' ? ing.unit + '\u00a0' : (ing.unit === 'pce' ? ' pce\u00a0' : ' ');
+      return (qty + unit + (ing.name || '')).trim();
+    }
     if (r._scaledIngredients && r._scaledIngredients.length > 0) {
-      r._scaledIngredients.forEach(function(ing) {
-        var qtyStr = roundDisplayQty(ing.qty, ing.unit) + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name;
-        ingredList.appendChild(h('li', {}, qtyStr));
-      });
+      r._scaledIngredients.forEach(function(ing) { ingredList.appendChild(h('li', {}, fmtIng(ing))); });
+    } else if (r.ingredients && Array.isArray(r.ingredients) && r.ingredients.length > 0) {
+      r.ingredients.forEach(function(ing) { ingredList.appendChild(h('li', {}, fmtIng(ing))); });
     } else if (r.i) {
-      // Bug 4: filter empty tokens from split
       r.i.split(',').forEach(function(ing) { if (ing.trim()) ingredList.appendChild(h('li', {}, ing.trim())); });
-    } else if (r.ingredients && Array.isArray(r.ingredients)) {
-      r.ingredients.forEach(function(ing) {
-        var line = (ing.qty ? roundDisplayQty(ing.qty, ing.unit) : '') + (ing.unit && ing.unit !== 'pce' ? ing.unit + ' ' : ' ') + (ing.name || '');
-        ingredList.appendChild(h('li', {}, line.trim()));
-      });
+    } else if (r._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
+      // Fallback direct RECIPES_DB lookup — always works even for old/cached weekPlans
+      var fullR = window.RecipeEngine.findRecipe(r._id);
+      if (fullR && fullR.ingredients && fullR.ingredients.length > 0) {
+        fullR.ingredients.forEach(function(ing) { ingredList.appendChild(h('li', {}, fmtIng(ing))); });
+      } else {
+        ingredList.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, 'Ingr\u00e9dients non disponibles.'));
+      }
     } else {
       ingredList.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, 'Ingr\u00e9dients non disponibles.'));
     }

@@ -14012,23 +14012,28 @@
 
   function toSimpleFormat(recipe) {
     var perServing = recipe.servings > 0 ? recipe.servings : 1;
-    var flagMap = { 'maroc-moderne': '🇲🇦', 'world-food': '🌍' };
-    var ingrStr = recipe.ingredients.map(function(ing) {
-      return ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name;
+    var flagMap = { 'maroc-moderne': '🇲🇦', 'world-food': '🌍', 'italian': '🇮🇹' };
+    // Per-serving ingredients with correct units (all units preserved, not forced to 'g')
+    var perServIngr = (recipe.ingredients || []).map(function(ing) {
+      return { name: ing.name, qty: Math.round((ing.qty / perServing) * 10) / 10, unit: ing.unit || 'g', note: ing.note };
+    });
+    var ingrStr = perServIngr.map(function(ing) {
+      return ing.qty + (ing.unit === 'pce' ? ' pce ' : ' ' + ing.unit + ' ') + ing.name;
     }).join(', ');
     return {
-      n:    recipe.name,
-      f:    recipe.origin || flagMap[recipe.category] || '🌍',
-      k:    Math.round(recipe.baseNutrition.calories   / perServing),
-      p:    Math.round(recipe.baseNutrition.proteinGrams / perServing),
-      g:    Math.round(recipe.baseNutrition.carbsGrams  / perServing),
-      l:    Math.round(recipe.baseNutrition.fatGrams    / perServing),
-      i:    ingrStr,
-      st:    recipe.steps || [],
-      w:    recipe.tags.indexOf('whey') >= 0,
-      tags: recipe.tags || [],
-      lv:   recipe.difficulty || 1,
-      _id:  recipe.id   // lien vers la recette complète
+      n:           recipe.name,
+      f:           recipe.origin || recipe.emoji || flagMap[recipe.category] || '🌍',
+      k:           Math.round(recipe.baseNutrition.calories    / perServing),
+      p:           Math.round(recipe.baseNutrition.proteinGrams / perServing),
+      g:           Math.round(recipe.baseNutrition.carbsGrams   / perServing),
+      l:           Math.round(recipe.baseNutrition.fatGrams     / perServing),
+      i:           ingrStr,
+      ingredients: perServIngr,  // array structuré pour affichage modal fiable
+      st:          recipe.steps || [],
+      w:           (recipe.tags || []).indexOf('whey') >= 0,
+      tags:        recipe.tags || [],
+      lv:          recipe.difficulty || 1,
+      _id:         recipe.id   // lien vers la recette complète dans RECIPES_DB
     };
   }
 
