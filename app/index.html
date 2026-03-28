@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#FAFAF7">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -334,46 +334,7 @@ canvas.weight-chart{width:100%;height:200px}
 </style>
 </head>
 <body>
-<script>
-/* ── SECURITY: Production hardening ── */
-(function(){
-  'use strict';
-  // Disable verbose console output in production (non-localhost)
-  var isProd = (typeof location !== 'undefined' &&
-    location.hostname !== 'localhost' &&
-    location.hostname !== '127.0.0.1' &&
-    location.hostname !== '');
-  if (isProd) {
-    var noop = function(){};
-    // Preserve console.error/warn for critical diagnostics; suppress debug noise
-    if (typeof console !== 'undefined') {
-      console.log = noop;
-      console.debug = noop;
-      console.info = noop;
-      // Keep console.warn and console.error for legitimate error tracking
-    }
-  }
-
-  // DevTools detection (timing + dimension heuristic) — prod only, warning only
-  if (isProd) {
-    var devtoolsOpen = false;
-    function detectDevTools() {
-      var widthThreshold = window.outerWidth - window.innerWidth > 160;
-      var heightThreshold = window.outerHeight - window.innerHeight > 160;
-      if ((widthThreshold || heightThreshold) && !devtoolsOpen) {
-        devtoolsOpen = true;
-        // Discrete warning — does not block the app
-        if (typeof console !== 'undefined' && console.warn) {
-          console.warn('[MTD] DevTools detected. This application is for personal use only.');
-        }
-      } else if (!widthThreshold && !heightThreshold) {
-        devtoolsOpen = false;
-      }
-    }
-    setInterval(detectDevTools, 1000);
-  }
-})();
-</script>
+<script src="./security-init.js"></script>
 <div id="gate" style="position:fixed;inset:0;background:var(--ivory,#FAFAF7);z-index:9999;display:flex;align-items:center;justify-content:center">
 <div style="text-align:center;max-width:340px;padding:24px">
 <div style="font-family:Georgia,serif;font-size:11px;letter-spacing:8px;text-transform:uppercase;margin-bottom:6px;color:var(--black,#0A0A09)">MTD</div>
@@ -385,56 +346,8 @@ canvas.weight-chart{width:100%;height:200px}
 </div>
 </div>
 <div id="app" style="display:none"></div>
-<script>
-(function(){
-  var GATE_KEY='mtd_gate_access';
-  var GATE_HASH='xltc1h'; // simpleHash('987654321') — E-04: no plaintext password in source
-  var GATE_HASH_LEGACY='b7e2g90d3f'; // ancien token — rétrocompat pour utilisateurs déjà connectés
-  function simpleHash(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h=h&h;}return(h>>>0).toString(36).slice(0,10);}
-  function checkGate(){
-    var stored=localStorage.getItem(GATE_KEY);
-    if(stored===GATE_HASH){unlock();return;}
-    // E-04: ancien token détecté → le purger et forcer re-auth avec le nouveau mot de passe
-    if(stored===GATE_HASH_LEGACY){localStorage.removeItem(GATE_KEY);}
-    document.getElementById('gate').style.display='flex';
-    document.getElementById('gate-btn').onclick=tryUnlock;
-    document.getElementById('gate-pw').addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock();});
-  }
-  function tryUnlock(){
-    var pw=document.getElementById('gate-pw').value;
-    if(simpleHash(pw)===GATE_HASH){
-      localStorage.setItem(GATE_KEY,GATE_HASH);
-      unlock();
-    } else {
-      var err=document.getElementById('gate-error');
-      err.style.display='block';
-      err.textContent='Mot de passe incorrect';
-      document.getElementById('gate-pw').value='';
-      document.getElementById('gate-pw').focus();
-    }
-  }
-  function unlock(){
-    document.getElementById('gate').style.display='none';
-    document.getElementById('app').style.display='block';
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',checkGate);
-  else checkGate();
-})();
-</script>
-<script>
-// Global error boundary — catch unhandled JS errors and show user-friendly message
-window.onerror = function(msg, url, line, col, err) {
-  var app = document.getElementById('app');
-  if (app) {
-    app.innerHTML = '<div style="padding:40px;text-align:center;font-family:\'Helvetica Neue\',Arial,sans-serif"><h2 style="font-family:Georgia,serif">Une erreur est survenue</h2><p style="color:#666;margin:16px 0">' + (msg || '') + '</p><button onclick="location.reload()" style="padding:10px 24px;background:#0A0A09;color:#fff;border:none;cursor:pointer;font-size:14px">Recharger</button></div>';
-  }
-  console.error('GLOBAL ERROR:', msg, url, line, col, err);
-  return true;
-};
-window.addEventListener('unhandledrejection', function(event) {
-  console.error('UNHANDLED PROMISE REJECTION:', event.reason);
-});
-</script>
+<script src="./gate.js"></script>
+<script src="./error-boundary.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
 <script src="./jspdf.umd.min.js"></script>
 <script src="./prices-db.js"></script>

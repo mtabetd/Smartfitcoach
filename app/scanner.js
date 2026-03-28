@@ -81,8 +81,11 @@ function isSafeApiUrl(url) {
 
 // ─── SECURITY: Barcode validation ───
 function isValidBarcode(barcode) {
-  // Only allow numeric barcodes (EAN-8, EAN-13, UPC-A, UPC-E, Code128 subset)
-  return typeof barcode === 'string' && /^[0-9A-Za-z\-]{8,20}$/.test(barcode.trim());
+  // EAN-8/EAN-13/UPC-A/UPC-E: digits only (8-13 chars)
+  // Code128 fallback: digits + uppercase + limited special chars
+  if (typeof barcode !== 'string') return false;
+  var b = barcode.trim();
+  return /^[0-9]{8,13}$/.test(b) || /^[0-9A-Z\-\.\ \/\+]{1,20}$/.test(b);
 }
 
 // ─── OPEN FOOD FACTS API ───

@@ -160,6 +160,13 @@ function todayKey() {
 function el(tag, cls, html) {
   var e = document.createElement(tag);
   if (cls) e.className = cls;
+  if (html !== undefined) e.textContent = html; // XSS fix: textContent instead of innerHTML
+  return e;
+}
+// elHTML: use only for trusted static HTML strings, never for user-provided content
+function elHTML(tag, cls, html) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
   if (html !== undefined) e.innerHTML = html;
   return e;
 }
