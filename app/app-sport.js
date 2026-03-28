@@ -2871,10 +2871,13 @@ function renderWeightChartSport(container) {
   var inputRow = h('div', {style: 'display:flex;gap:8px;align-items:center;margin-top:8px'});
   var wi = h('input', {'class': 'num-input', type: 'number', step: '0.1', min: '30', max: '200', placeholder: String(S.weight || 75), style: 'font-size:16px;padding:8px;width:100px;text-align:center'});
   inputRow.appendChild(wi);
-  inputRow.appendChild(h('span', {'class': 'num-unit'}, 'kg'));
+  inputRow.appendChild(h('span', {'class': 'num-unit'}, window.UNITS ? window.UNITS.weightLabel() : 'kg'));
   inputRow.appendChild(h('button', {'class': 'btn-primary', style: 'width:auto;margin:0;padding:10px 20px', onclick: function(){
     var v = parseFloat(wi.value);
-    if (!isNaN(v) && v >= 30 && v <= 200) {
+    var vKg = window.UNITS ? window.UNITS.toKg(v) : v;
+    var wRange = window.UNITS ? window.UNITS.weightRange() : {min: 30, max: 300};
+    if (!isNaN(v) && v >= wRange.min && v <= wRange.max) {
+      v = vKg; // always store in kg
       var key = 'mtd_weight_history_' + userId;
       var hist = []; try { hist = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { hist = []; }
       var today = new Date().toISOString().split('T')[0];
@@ -2889,7 +2892,7 @@ function renderWeightChartSport(container) {
         GAMIFICATION.unlockBadge('first_weigh');
         if (hist.length >= 10) GAMIFICATION.unlockBadge('weight_10');
       }
-      if (window.GAMIFICATION) GAMIFICATION.showToast('Poids enregistré : ' + v + ' kg');
+      if (window.GAMIFICATION) GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg'));
       window.render();
     }
   }}, 'Enregistrer'));

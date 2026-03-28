@@ -36,7 +36,8 @@ var PROFILE_KEYS = [
   'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
   'shopChecked','weekPlan','selectedDay',
   'currency','currencySymbol',
-  'lang'
+  'lang',
+  'weightUnit','heightUnit'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -311,6 +312,11 @@ if (AUTH.isLoggedIn()) {
   // Restaurer la langue
   if (window.I18N && S.lang) {
     window.I18N.current = S.lang;
+  }
+  // Restaurer les préférences d'unités (kg/lbs, cm/ft)
+  if (window.UNITS) {
+    window.UNITS.weight = S.weightUnit || 'kg';
+    window.UNITS.height = S.heightUnit || 'cm';
   }
   // Load weight history (kept separate for history management)
   try {
