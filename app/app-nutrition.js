@@ -2637,7 +2637,7 @@ function renderShoppingList(p) {
   var btnPDF = h('button', {
     style:'flex:1;padding:10px 14px;background:var(--black);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;min-width:140px',
     onclick: function() { exportShoppingListPDF(list, s.shopChecked); }
-  }, arMode ? (AR ? AR.ui['download_pdf'] : '📄 PDF') : '📄 Télécharger PDF');
+  }, arMode ? (AR ? AR.ui['download_pdf'] : '📄 PDF') : '\uD83D\uDCC4 ' + window.t('shop.export'));
 
   var btnReset = h('button', {
     style:'padding:10px 14px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer',
@@ -2669,7 +2669,7 @@ function renderShoppingList(p) {
   var checked = Object.keys(s.shopChecked).filter(function(k){return s.shopChecked[k];}).length;
   var counterText = arMode
     ? (checked + ' / ' + total + ' ' + (AR ? AR.ui['articles_bought'] : 'منتج مشترى'))
-    : (checked + ' / ' + total + ' articles achetés');
+    : (checked + ' / ' + total + ' ' + window.t('shop.bought'));
   var counter = h('div', {
     style:'padding:0 16px 8px;font-size:13px;color:var(--text-secondary)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ''),
     'class':'shop-print-hide'
@@ -2681,7 +2681,7 @@ function renderShoppingList(p) {
   var sectionsCount = list.length;
   var infoBarText = arMode
     ? (sectionsCount + ' ' + (AR ? AR.ui['sections'] : 'رايون') + ' — ' + total + ' ' + (AR ? AR.ui['articles'] : 'منتج') + ' — ' + (AR ? AR.ui['optimized_route'] : 'مسار محسّن'))
-    : (sectionsCount + ' rayon' + (sectionsCount > 1 ? 's' : '') + ' — ' + total + ' article' + (total > 1 ? 's' : '') + ' — Parcours optimisé');
+    : (sectionsCount + ' ' + window.t('shop.aisles') + ' — ' + total + ' ' + window.t('shop.items') + ' — ' + window.t('shop.optimized'));
   var infoBar = h('div', {
     style:'margin:0 16px 12px;padding:10px 14px;border:1px solid var(--border);font-size:10px;letter-spacing:' + (arMode ? '0' : '1px') + ';color:var(--grey)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ';font-family:"Helvetica Neue",Arial,sans-serif'),
     'class':'shop-print-hide'

@@ -3723,7 +3723,7 @@ function renderTriathlonConfig(p) {
   p.appendChild(goalGrid);
 
   // ── Niveau ──
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.level')));
   var lvlList = h('div', {'class': 'level-list'});
   (window.TRIATHLON_LEVELS || []).forEach(function(lv) {
     var isOn = S.triathlonLevel === lv.id;
@@ -4031,12 +4031,12 @@ function renderYogaOnboarding(p) {
   p.appendChild(h('p', {'class': 'subtitle'}, 'Flexibilit\u00e9, force, \u00e9quilibre et pleine conscience.'));
 
   // Niveau
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
   var lvlList = h('div', {'class': 'level-list'});
   [
-    { id: 'debutant', icon: '\uD83C\uDF31', name: 'D\u00e9butant', desc: 'Premi\u00e8res postures, respiration consciente, s\u00e9ances de 20-30 min' },
-    { id: 'intermediaire', icon: '\uD83C\uDF3F', name: 'Interm\u00e9diaire', desc: 'Vinyasa fluide, \u00e9quilibre, force fonctionnelle' },
-    { id: 'avance', icon: '\uD83C\uDF4A', name: 'Avanc\u00e9', desc: 'Inversions, backbends profonds, pranayama' }
+    { id: 'debutant', icon: '\uD83C\uDF31', name: window.t('sport.beginner'), desc: 'Premi\u00e8res postures, respiration consciente, s\u00e9ances de 20-30 min' },
+    { id: 'intermediaire', icon: '\uD83C\uDF3F', name: window.t('sport.intermediate'), desc: 'Vinyasa fluide, \u00e9quilibre, force fonctionnelle' },
+    { id: 'avance', icon: '\uD83C\uDF4A', name: window.t('sport.advanced'), desc: 'Inversions, backbends profonds, pranayama' }
   ].forEach(function(lv) {
     var isOn = S.yogaLevel === lv.id;
     lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.yogaLevel = lv.id; window.render(); }}, [
@@ -4068,7 +4068,7 @@ function renderYogaOnboarding(p) {
   p.appendChild(objGrid);
 
   // Jours par semaine
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours par semaine'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   var nw = h('div', {'class': 'num-input-wrap'});
   nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.yogaDays || 3), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.yogaDays = v; } },
