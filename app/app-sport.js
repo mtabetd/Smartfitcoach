@@ -1644,8 +1644,9 @@ function renderCrossfitProgram(p) {
     scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E07B00;margin-bottom:6px'}, '⬇ SCALING'));
     if (Array.isArray(_sc.movements) && _sc.movements.length) {
       _sc.movements.forEach(function(m) {
-        if (!m.note) return;
-        scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);padding:2px 0'}, (m.name ? m.name + ' ' : '') + m.note));
+        var txt = (m.name || '') + (m.note ? ' ' + m.note : '');
+        if (!txt.trim()) return;
+        scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);padding:2px 0'}, txt.trim()));
       });
     }
     if (_sc.note) scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#E07B00;margin-top:4px;font-style:italic'}, _sc.note));
