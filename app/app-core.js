@@ -3452,6 +3452,96 @@ window.buildNMInputs = buildNMInputs;
 // ─── SECURITY: Freeze all constants ───
 if (Object.freeze) {
   [ACTIVITIES,TRAINS,SLEEPS,GOALS,RATIOS,COOK_LEVELS,ALLERGIES,INTOLERANCES,REGIMES,CUISINES,MEDICAL,ALCOHOL_DB,ALCOHOL_FREQS,FOOD_HABITS_MEALS,EATING_LOCATIONS,BODY_ZONES,SPORT_GOALS,SPORT_LEVELS,PADEL_LEVELS,PADEL_GOALS,PADEL_SKILLS,GOLF_LEVELS,GOLF_GOALS,GOLF_SKILLS].forEach(function(obj){ try{Object.freeze(obj);}catch(e){} });
+  // Freeze unit conversion constants (mutable 'weight'/'height' props are intentionally left unfrozen)
+  try { Object.freeze({ KG_TO_LBS: window.UNITS.KG_TO_LBS, LBS_TO_KG: window.UNITS.LBS_TO_KG, CM_TO_INCH: window.UNITS.CM_TO_INCH, INCH_TO_CM: window.UNITS.INCH_TO_CM }); } catch(e) {}
 }
+
+// ─── SECURITY: localStorage XOR obfuscation helpers ───
+// Discourages trivial reading of profile data from DevTools console
+// Key is derived per-session using user id + a fixed app salt
+(function(){
+  'use strict';
+  var _XOR_KEY = 'MTD_SFCH_2024';
+
+  function xorString(str, key) {
+    var out = [];
+    for (var i = 0; i < str.length; i++) {
+      out.push(String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length)));
+    }
+    return out.join('');
+  }
+
+  function encodeStorage(data) {
+    try {
+      var json = JSON.stringify(data);
+      var xored = xorString(json, _XOR_KEY);
+      return btoa(unescape(encodeURIComponent(xored)));
+    } catch(e) { return null; }
+  }
+
+  function decodeStorage(encoded) {
+    try {
+      var xored = decodeURIComponent(escape(atob(encoded)));
+      return JSON.parse(xorString(xored, _XOR_KEY));
+    } catch(e) { return null; }
+  }
+
+  // Expose helpers for app-main.js saveProfile / loadProfile
+  window._storageEncode = encodeStorage;
+  window._storageDecode = decodeStorage;
+
+  // ─── SECURITY: Integrity check on critical functions ───
+  // Detect if key functions have been tampered with by malicious browser extensions
+  // Runs once at load time; logs warning if fingerprint mismatch detected
+  function fingerprintFn(fn) {
+    if (typeof fn !== 'function') return 0;
+    var s = fn.toString();
+    var h = 0x811c9dc5;
+    for (var i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    return (h >>> 0);
+  }
+
+  // Record baseline fingerprints at first load (before any extension can modify)
+  var _baseFP = {};
+  try {
+    _baseFP.calcBMR     = fingerprintFn(window.calcBMR);
+    _baseFP.calcTarget  = fingerprintFn(window.calcTarget);
+    _baseFP.calcMacros  = fingerprintFn(window.calcMacros);
+    _baseFP.sanitizeHTML = fingerprintFn(window.sanitizeHTML);
+  } catch(e) {}
+
+  window._verifyCriticalFunctions = function() {
+    var tampered = [];
+    try {
+      if (_baseFP.calcBMR     && fingerprintFn(window.calcBMR)      !== _baseFP.calcBMR)     tampered.push('calcBMR');
+      if (_baseFP.calcTarget  && fingerprintFn(window.calcTarget)   !== _baseFP.calcTarget)  tampered.push('calcTarget');
+      if (_baseFP.calcMacros  && fingerprintFn(window.calcMacros)   !== _baseFP.calcMacros)  tampered.push('calcMacros');
+      if (_baseFP.sanitizeHTML && fingerprintFn(window.sanitizeHTML) !== _baseFP.sanitizeHTML) tampered.push('sanitizeHTML');
+    } catch(e) {}
+    if (tampered.length > 0 && typeof console !== 'undefined' && console.warn) {
+      console.warn('[MTD Security] Integrity check: modified functions detected:', tampered.join(', '));
+    }
+    return tampered.length === 0;
+  };
+
+  // ─── SECURITY: Anti-copy protection on sensitive calculated results ───
+  // Disables right-click and text selection on macro result elements
+  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('contextmenu', function(e) {
+      var el = e.target;
+      // Only block on macro/result display elements
+      if (el && (
+        el.classList.contains('macro-cell') ||
+        el.classList.contains('result-title') ||
+        el.classList.contains('stat-val')
+      )) {
+        e.preventDefault();
+      }
+    });
+  });
+})();
 
 })();

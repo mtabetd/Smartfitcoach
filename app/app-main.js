@@ -67,6 +67,15 @@ function saveProfile() {
         };
       });
     }
+    // Use XOR+base64 obfuscation to deter trivial localStorage inspection
+    if (window._storageEncode) {
+      var encoded = window._storageEncode(data);
+      if (encoded) {
+        localStorage.setItem('mtd_profile_' + uid, encoded);
+        return;
+      }
+    }
+    // Fallback: plain JSON (if encoding unavailable)
     localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
   } catch(e) {}
 }
@@ -76,7 +85,15 @@ function loadProfile() {
     var uid = user ? user.id : 'anon';
     var raw = localStorage.getItem('mtd_profile_' + uid);
     if (!raw) return;
-    var data = JSON.parse(raw);
+    // Try obfuscated decode first, then fall back to plain JSON
+    var data = null;
+    if (window._storageDecode) {
+      data = window._storageDecode(raw);
+    }
+    if (!data) {
+      try { data = JSON.parse(raw); } catch(e2) { return; }
+    }
+    if (!data) return;
     PROFILE_KEYS.forEach(function(k) { if (data[k] !== undefined) S[k] = data[k]; });
   } catch(e) {}
 }
@@ -342,5 +359,10 @@ if (AUTH.isLoggedIn()) {
 
 // First render
 render();
+
+// SECURITY: Integrity check — verify critical functions were not tampered by extensions
+if (window._verifyCriticalFunctions) {
+  try { window._verifyCriticalFunctions(); } catch(e) {}
+}
 
 })();
