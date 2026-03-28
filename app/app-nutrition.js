@@ -1505,6 +1505,17 @@ function renderStep8(p) {
   }
   p.appendChild(stats);
 
+  // ─── OBÉSITÉ : avertissement auto si IMC >= 30 et 'obesity' absent de S.medical ───
+  // HAS 2022 : IMC >= 30 = obésité grade 1+ → prise en charge spécifique recommandée
+  // Afficher un conseil d'activation du profil médical 'obesity' pour optimiser les macros
+  if (bmi !== null && bmi >= 30 && (!S.medical || S.medical.indexOf('obesity') === -1)) {
+    var obesityTip = h('div', {style: 'border-left:3px solid #7A3010;background:rgba(122,48,16,0.06);padding:12px 16px;margin:12px 0'});
+    obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7A3010;margin-bottom:6px'}, '\u26A0 IMC ' + bmi.toFixed(1) + ' \u2014 Ob\u00e9sit\u00e9 grade 1 (HAS 2022)'));
+    obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg2,#555);margin-bottom:4px'}, 'Votre calcul est ajust\u00e9 avec le poids id\u00e9al corrig\u00e9 (ASPEN 2016) pour \u00e9viter une surestimation des besoins prot\u00e9iques. D\u00e9ficit plafonn\u00e9 \u00e0 \u2212500\u00a0kcal/j pour pr\u00e9server la masse maigre (Helms 2014).'));
+    obesityTip.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#7A3010;margin-top:4px'}, 'Conseil\u00a0: activez la condition \u00ab\u00a0Ob\u00e9sit\u00e9 (IMC\u00a0>\u00a030)\u00a0\u00bb dans vos conditions m\u00e9dicales (Contr\u00f4les sant\u00e9) pour des recommandations nutritionnelles sp\u00e9cifiques.'));
+    p.appendChild(obesityTip);
+  }
+
   // Medical warnings
   if (S.medical.length > 0) {
     var mw = h('div', {style: 'border-left:2px solid var(--orange);padding:12px 16px;background:var(--orangebg);margin:16px 0'});
