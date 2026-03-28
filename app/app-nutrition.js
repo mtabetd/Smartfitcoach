@@ -2066,10 +2066,16 @@ function renderModal(app) {
     body.appendChild(ingredList);
     body.appendChild(h('div', {'class': 'section-label'}, 'Pr\u00e9paration'));
     var sl = h('ol', {'class': 'step-list'});
-    // Bug 1: r.st may be undefined on legacy recipes — also try r.steps
-    var steps = Array.isArray(r.st) ? r.st : (r.steps && Array.isArray(r.steps) ? r.steps : []);
+    var steps = Array.isArray(r.st) && r.st.length > 0 ? r.st
+              : Array.isArray(r.steps) && r.steps.length > 0 ? r.steps
+              : [];
+    // Fallback : lookup direct dans RECIPES_DB si steps vides (cache stale ou plan ancien)
+    if (steps.length === 0 && r._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
+      var _fullR = window.RecipeEngine.findRecipe(r._id);
+      if (_fullR && Array.isArray(_fullR.steps) && _fullR.steps.length > 0) steps = _fullR.steps;
+    }
     if (steps.length === 0) {
-      sl.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, 'Voir la recette compl\u00e8te dans le livre de recettes.'));
+      sl.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, 'Pr\u00e9paration non disponible pour ce repas.'));
     } else {
       steps.forEach(function(s) { sl.appendChild(h('li', {}, s || '')); });
     }
