@@ -35,8 +35,9 @@ var PROFILE_KEYS = [
   'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
   'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
   'shopChecked','weekPlan','selectedDay',
-  'lang',
-  'weightUnit','heightUnit'
+  'lang','weightUnit','heightUnit',
+  'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
+  'heartRateRest','yogaLevel','yogaGoal','yogaDays'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -103,15 +104,26 @@ function render() {
   if (window.destroyAllCharts) window.destroyAllCharts();
   if (AUTH.isLoggedIn()) saveProfile();
   var app = document.getElementById('app');
+
+  // Scroll to top only when navigating to a different page/step
+  var _didNavigate = (render._lastView !== S.view) ||
+                     (render._lastNStep !== S.nStep) ||
+                     (render._lastSStep !== S.sStep);
+  render._lastView  = S.view;
+  render._lastNStep = S.nStep;
+  render._lastSStep = S.sStep;
+
   app.innerHTML = '';
-  window.scrollTo(0, 0);
-  // Scroll le conteneur .app (overflow-y:auto) au top à chaque changement de page
-  requestAnimationFrame(function() {
-    var appWrap = document.querySelector('.app');
-    if (appWrap) appWrap.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  });
+
+  if (_didNavigate) {
+    window.scrollTo(0, 0);
+    requestAnimationFrame(function() {
+      var appWrap = document.querySelector('.app');
+      if (appWrap) appWrap.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+  }
 
   // Not logged in → auth screens
   if (!AUTH.isLoggedIn()) {
@@ -130,6 +142,20 @@ function render() {
   var ubRight = h('div', {style: 'display:flex;align-items:center;gap:12px'});
   // Session time
   ubRight.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey3)'}, (window.BLACKBOX ? window.BLACKBOX.getSessionMinutes() : 0) + ' min'));
+  // Language toggle FR / EN
+  var _curLang = (window.I18N ? window.I18N.current : (S.lang || 'fr'));
+  var langBtn = h('button', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;padding:4px 10px;background:none;border:1px solid var(--border);cursor:pointer;color:var(--grey)',
+    onclick: function() {
+      var next = (window.I18N ? window.I18N.current : (S.lang || 'fr')) === 'fr' ? 'en' : 'fr';
+      S.lang = next;
+      if (window.I18N) { window.I18N.current = next; }
+      try { localStorage.setItem('mtd_lang', next); } catch(e) {}
+      render();
+    }
+  }, _curLang === 'fr' ? 'FR' : 'EN');
+  ubRight.appendChild(langBtn);
+  // Day/night toggle
   var _isDark = document.body.classList.contains('dark-mode');
   ubRight.appendChild(h('button', {style:'font-size:16px;padding:2px 8px;background:none;border:1px solid var(--border);cursor:pointer', onclick: function(){ document.body.classList.toggle('dark-mode'); try{localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode')?'true':'false');}catch(e){} render(); }}, _isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'));
   ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; render(); }}, 'D\u00e9connexion'));
@@ -296,8 +322,9 @@ function renderRegister(app) {
     AUTH.register(name, email, pw).then(function(result) {
       if (result.ok) {
         S.authError = '';
-        S.view = 'dashboard';
-        if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+        S.view = 'nutrition'; // Nouveau compte → onboarding nutrition obligatoire
+        S.nStep = 0;
+        if (window.GAMIFICATION) { GAMIFICATION.unlockBadge('first_login'); }
         render();
       } else {
         S.authError = result.error;
@@ -325,6 +352,33 @@ window.render = render;
 
 // ─── DARK MODE PREFERENCE ───
 try { if (localStorage.getItem('mtd_dark_mode') === 'true') document.body.classList.add('dark-mode'); } catch(e) {}
+
+// ─── DEV ONLY: ?reset=users handler (localhost only) ───
+(function() {
+  var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  if (isLocal && location.search.indexOf('reset=users') !== -1) {
+    ['mtd_users','mtd_session','mtd_session_start','mtd_login_rl'].forEach(function(k){ localStorage.removeItem(k); });
+    Object.keys(localStorage).forEach(function(k){
+      if (k.startsWith('mtd_profile_') || k.startsWith('mtd_weight_history_') || k.startsWith('mtd_blackbox')) {
+        localStorage.removeItem(k);
+      }
+    });
+    alert('Base utilisateurs effacée. Rechargement...');
+    location.href = location.pathname;
+  }
+})();
+
+// ─── DEV ONLY: one-time wipe of test data on localhost ───
+if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && !localStorage.getItem('mtd_dev_wiped_v1')) {
+  ['mtd_users','mtd_session','mtd_session_start','mtd_login_rl'].forEach(function(k){ localStorage.removeItem(k); });
+  // Also remove all profile/history keys
+  Object.keys(localStorage).forEach(function(k){
+    if (k.startsWith('mtd_profile_') || k.startsWith('mtd_weight_history_') || k.startsWith('mtd_blackbox')) {
+      localStorage.removeItem(k);
+    }
+  });
+  localStorage.setItem('mtd_dev_wiped_v1', '1');
+}
 
 // ─── INIT ───
 // Auto-login check

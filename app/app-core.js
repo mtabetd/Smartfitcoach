@@ -80,7 +80,7 @@ var GOALS=[
 // Note : l'approche g/kg est cliniquement supérieure aux % de calories (ISSN 2017, Helms 2014)
 var RATIOS={bulk:{g:.55,p:.25,l:.20},maintain:{g:.50,p:.30,l:.20},cut:{g:.40,p:.35,l:.25},shred:{g:.30,p:.40,l:.30}};
 var COOK_LEVELS=[{name:'Facile',desc:'5-10 min',val:1},{name:'Moyen',desc:'15-20 min',val:2},{name:'Avancé',desc:'30 min',val:3},{name:'Chef',desc:'45+ min',val:4}];
-var ALLERGIES=['Aucune','Fruits à coque','Arachides','Oeufs','Poisson','Crustacés','Soja','Lait/Produits laitiers','Gluten/Blé','Sésame','Moutarde'];
+var ALLERGIES=['Aucune','Fruits à coque','Arachides','Œufs','Poisson','Crustacés','Soja','Lait/Produits laitiers','Gluten/Blé','Sésame','Moutarde'];
 var INTOLERANCES=['Aucune','Lactose','Gluten','Fructose','Histamine'];
 var REGIMES=[{icon:'♦',name:'Omnivore'},{icon:'♦',name:'Pescétarien'},{icon:'♦',name:'Végétarien'},{icon:'♦',name:'Végan'}];
 var CUISINES=[{f:'🌍',name:'Toutes'},{f:'🇫🇷',name:'Française'},{f:'🇺🇸',name:'Américaine'},{f:'🇯🇵',name:'Japonaise'},{f:'🇲🇦',name:'Marocaine'},{f:'🇮🇹',name:'Italienne'},{f:'🇹🇭',name:'Thaïlandaise'},{f:'🇮🇳',name:'Indienne'},{f:'🇰🇷',name:'Coréenne'},{f:'🇲🇽',name:'Mexicaine'},{f:'🇱🇧',name:'Libanaise'},{f:'🇻🇳',name:'Vietnamienne'}];
@@ -252,7 +252,7 @@ var SHOPPING=[
     {id:'budget_high',name:'Confort',desc:'Qualité sans restriction'}
   ]},
   {cat:'PRÉFÉRENCES PRODUITS',items:[
-    {id:'pref_fresh',name:'Produits frais',desc:'Viande, poisson, légumes fraîs'},
+    {id:'pref_fresh',name:'Produits frais',desc:'Viande, poisson, légumes frais'},
     {id:'pref_frozen',name:'Surgelés acceptés',desc:'Légumes, poisson, fruits surgelés'},
     {id:'pref_canned',name:'Conserves acceptées',desc:'Légumineuses, thon, tomates'},
     {id:'pref_batch',name:'Batch cooking',desc:'Je prépare en avance pour la semaine'},
@@ -260,7 +260,7 @@ var SHOPPING=[
   ]}
 ];
 var STAPLES=[
-  {cat:'PROTÉINES',items:['Blancs de poulet','Oeufs (x30)','Thon en conserve','Boeuf haché 5%','Saumon / Pavés poisson','Lentilles corail','Pois chiches','Dinde escalopes','Fromage blanc 0%','Whey protéine']},
+  {cat:'PROTÉINES',items:['Blancs de poulet','Œufs (x30)','Thon en conserve','Bœuf haché 5%','Saumon / Pavés poisson','Lentilles corail','Pois chiches','Escalopes de dinde','Fromage blanc 0%','Whey protéine']},
   {cat:'GLUCIDES',items:['Riz basmati','Flocons d\'avoine','Pain complet','Patate douce','Pâtes complètes','Semoule','Quinoa','Bananes','Dattes']},
   {cat:'LIPIDES',items:['Huile d\'olive extra vierge','Avocat','Amandes / Noix','Beurre de cacahuète','Graines de chia','Graines de lin']},
   {cat:'LÉGUMES',items:['Brocoli','Courgettes','Épinards','Tomates','Oignon','Ail','Poivrons','Carottes','Salade verte','Concombre']},
@@ -819,7 +819,8 @@ window.I18N = {
       'common.kcal': 'kcal',
       'common.g': 'g',
       'common.ml': 'ml',
-      'common.minor_warning': "Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé."
+      'common.minor_warning': "Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé.",
+      'Langue / Language': 'Langue / Language'
     },
 
     en: {
@@ -873,7 +874,7 @@ window.I18N = {
       'onb.s2.height': 'Height',
       'onb.s2.bmi': 'BMI',
       'onb.s2.bmi_under': 'Underweight',
-      'onb.s2.bmi_normal': 'Normal weight',
+      'onb.s2.bmi_normal': 'Normal Weight',
       'onb.s2.bmi_over': 'Overweight',
       'onb.s2.bmi_obese': 'Obese',
 
@@ -885,8 +886,8 @@ window.I18N = {
       'onb.s3.active': 'Very Active',
       'onb.s3.very_active': 'Extremely Active',
       'onb.s3.elite': 'Elite Athlete',
-      'onb.s3.training_days': 'Training days / week',
-      'onb.s3.sleep': 'Hours of sleep / night',
+      'onb.s3.training_days': 'Training Days / Week',
+      'onb.s3.sleep': 'Hours of Sleep / Night',
 
       // Step 4
       'onb.s4.title': 'Health & Medical History',
@@ -940,7 +941,7 @@ window.I18N = {
       'dash.goal': 'Goal',
       'dash.weight': 'Weight',
       'dash.progression': 'Progress',
-      'dash.no_weight': 'Add your first weight entry to see your progress chart',
+      'dash.no_weight': 'Add your first weight entry to see your progress chart.',
 
       // Sport
       'sport.select': 'Choose Your Sport',
@@ -950,7 +951,7 @@ window.I18N = {
       'sport.advanced': 'Advanced',
       'sport.elite': 'Elite',
       'sport.goal': 'Goal',
-      'sport.days': 'Days / week',
+      'sport.days': 'Days / Week',
       'sport.program': 'My Program',
       'sport.week': 'Week',
 
@@ -981,7 +982,7 @@ window.I18N = {
       'scan.barcode_placeholder': 'Barcode (EAN-13)',
       'scan.search': 'Search',
       'scan.history': 'History',
-      'scan.no_history': 'Scan your first product to see history here',
+      'scan.no_history': 'Scan your first product to see history here.',
       'scan.health_score': 'Health Score',
 
       // Extras
@@ -1017,7 +1018,8 @@ window.I18N = {
       'common.kcal': 'kcal',
       'common.g': 'g',
       'common.ml': 'ml',
-      'common.minor_warning': 'For users under 18, this program should be followed under the supervision of a healthcare professional.'
+      'common.minor_warning': 'For users under 18, this program should be followed under the supervision of a healthcare professional.',
+      'Langue / Language': 'Language'
     }
   }
 };
@@ -1417,6 +1419,7 @@ window.S = {
   authError: '',
   // Nutrition wizard
   nStep: 0, sex: null, age: 28, weight: 75, height: 175,
+  lang: 'fr', weightUnit: 'kg', heightUnit: 'cm',
   activity: null, train: [], sleep: null, medical: [], goal: null,
   cookLevel: 2, whey: null, allergies: [], intolerances: [],
   regime: 0, excluded: '', cuisines: [0],
@@ -1546,7 +1549,15 @@ window.S = {
   triathlonSwimPace: null, triathlonBikePace: null, triathlonRunPace: null,
   triathlonProgram: null, triathlonWeek: 1, selectedTriDay: 0,
   // Cardio metrics
-  heartRateRest: null        // FC repos en bpm (optionnel, défaut 65 si non renseigné)
+  heartRateRest: null,       // FC repos en bpm (optionnel, défaut 65 si non renseigné)
+  // Cycling
+  cyclingLevel: null, cyclingGoal: null, cyclingDays: 3,
+  cyclingType: null, cyclingFTP: null, cyclingSpeed: null, cyclingRelief: null,
+  cyclingProgram: null, cyclingWeek: 1, selectedCyclingDay: 0,
+  // Calisthenics
+  calisthenicsLevel: null, calisthenicsGoal: null, calisthenicsdays: 3,
+  calisthPullups: null, calisthPushups: null,
+  calisthenicsProgram: null, calisthenicsWeek: 1, selectedCalisthDay: 0
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -2083,10 +2094,10 @@ function calcAdjustedWeight(){
 window.calcAdjustedWeight=calcAdjustedWeight;
 
 function calcBMR(){var s=window.S;if(!s.sex)return 0;if(!s.age||s.age<13||s.age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;if(s.sex==='homme')return Math.round((10*s.weight)+(6.25*s.height)-(5*s.age)+5);return Math.round((10*s.weight)+(6.25*s.height)-(5*s.age)-161)} // Mifflin-St Jeor 1990 (Frankenfield 2005: best accuracy general population)
-function calcTDEE(){var s=window.S;if(s.activity===null)return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
+function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
-function calcTarget(){var s=window.S;if(s.goal===null)return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}// Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
+function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}// Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
 base=Math.max(base,1800);return base}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)
 // IMPORTANT : sans ce cap, un athlète élite (TDEE 3500+) en "cut -15%" pouvait avoir un déficit de 525-700 kcal/j
@@ -2133,7 +2144,7 @@ function calcMacros(){
   //           Tarnopolsky 2000 (MSSE) : femmes nécessitent ~13% de moins (oestrogène anti-catabolique,
   //           oxydation leucine réduite) | ISSN 2017 | Helms 2014 | EFSA 2012 | IOC 2011
   var ppk=1.8;
-  var actFactor=s.activity!==null?ACTIVITIES[s.activity].factor:1.2;
+  var actFactor=(s.activity!==null&&s.activity!==undefined&&ACTIVITIES[s.activity])?ACTIVITIES[s.activity].factor:1.2;
   var isFemale=s.sex==='femme';
 
   if(goalKey==='maintain'){
@@ -2360,7 +2371,7 @@ function calcHydration(){
   if(!s.weight)return null;
   var base=Math.round(s.weight*35); // 35 ml/kg/j de base (EFSA 2010)
   var actBonus=0; // bonus lié à l'activité physique (par séance)
-  if(s.activity!==null){
+  if(s.activity!==null&&s.activity!==undefined&&ACTIVITIES[s.activity]){
     var factor=ACTIVITIES[s.activity].factor;
     if(factor>=1.9)actBonus=1500;      // Athlète élite: +1.5L/j
     else if(factor>=1.725)actBonus=1000; // Très actif: +1L/j
@@ -2481,7 +2492,7 @@ function filterRecipes(pool,type){
   if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioche|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
   if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon/).test(i)});
   if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson/).test(i)});
-  if(s.regime===3){var veganBan=/poulet|boeuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|beurre|miel|whey/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;return true});}
+  if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|beurre|miel|whey/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;return true});}
   if(s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
   if(s.cuisines.indexOf(0)===-1&&s.cuisines.length>0){var flags=[];for(var c=0;c<s.cuisines.length;c++){var co=CUISINES[s.cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0)r=r.filter(function(x){return flags.indexOf(x.f)!==-1})}
   return r;
@@ -2540,7 +2551,7 @@ bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR)sR=enrichWithScali
 var sPool=meals>=4&&sT>0?(s.whey&&pSW.length>0&&d%2===0?pSW:(pSN.length>0?pSN:pS)):null;
 for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
 plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
-function swapMeal(di,slot){var s=window.S;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));var nr=top[Math.floor(Math.random()*top.length)];nr=enrichWithScaling(nr,tgt);s.weekPlan[di][slot]=nr;if(typeof window.render==='function')window.render()}
+function swapMeal(di,slot){var s=window.S;if(!s.weekPlan||!s.weekPlan[di])return;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));var nr=top[Math.floor(Math.random()*top.length)];nr=enrichWithScaling(nr,tgt);s.weekPlan[di][slot]=nr;if(typeof window.render==='function')window.render()}
 
 window.getPool = getPool;
 window.filterRecipes = filterRecipes;
@@ -2590,7 +2601,7 @@ var SUPPLEMENTS_DB = [
   {id:'vitamine_b12',name:'Vitamine B12',icon:'\uD83D\uDC8A',desc:'Ind\u00e9pensable pour les v\u00e9gans — absente des v\u00e9g\u00e9taux',evidence:'EFSA 2015 \u2014 Niveau A — seule vitamine introuvable dans les v\u00e9g\u00e9taux',grade:'A',
     condition:function(s){return s.regime===3;},
     warning:'\u26A0 CARENCE GRAVE si non suppl\u00e9ment\u00e9 : an\u00e9mie pernicieuse, neuropathies irr\u00e9versibles. Prise de sang annuelle obligatoire.',
-    unnecessary_if:'Non n\u00e9cessaire si r\u00e9gime omnivore, pescétarien ou v\u00e9g\u00e9tarien lacto-ovo (oeufs et produits laitiers en apportent)',
+    unnecessary_if:'Non n\u00e9cessaire si r\u00e9gime omnivore, pescétarien ou v\u00e9g\u00e9tarien lacto-ovo (\u0153ufs et produits laitiers en apportent)',
     dosageCalc:function(){return{dose:'1000',unit:'\u00b5g/semaine (ou 50\u00b5g/jour)',timing:'Avec un repas',note:'Formes recommand\u00e9es : m\u00e9thylcobalamine ou cyanocobalamine. Prise de sang ferritine + B12 annuelle.'};}},
   {id:'dha_algues',name:'DHA Algues (Om\u00e9ga-3 v\u00e9gan)',icon:'\uD83C\uDF3F',desc:'Source v\u00e9gane de DHA — bioéquivalent au DHA de poisson',evidence:'EFSA 2012 \u2014 DHA algues bioéquivalent au DHA poisson (gras cérébraux, cardiovasculaire)',grade:'A',
     condition:function(s){return s.regime===3||(s.pregnant&&s.allergies&&s.allergies.indexOf('Poisson')!==-1);},
@@ -2607,7 +2618,7 @@ var SUPPLEMENTS_DB = [
   }},
   {id:'zinc_vegan',name:'Zinc',icon:'\uD83E\uDDEC',desc:'Immunité, testostérone, synthèse protéique — biodisponibilité réduite dans les végétaux',evidence:'FAO/OMS 2002 — Biodisponibilité zinc végétal réduite de 50% par les phytates (légumineuses, céréales)',grade:'A',
     condition:function(s){return s.regime>=2;}, // Végétarien, Pescétarien, Végan
-    unnecessary_if:'Non n\u00e9cessaire si régime omnivore (huîtres, boeuf, foie = sources zinc héminique)',
+    unnecessary_if:'Non n\u00e9cessaire si régime omnivore (huîtres, bœuf, foie = sources zinc héminique)',
     warning:'\u26A0 Phytates dans légumineuses et céréales complètes réduisent absorption zinc de 40-50%. Techniques : trempage/germination des légumineuses, fermentation (pain au levain).',
     dosageCalc:function(s){
       // OMS 2002 : AJR zinc × 1.5 pour végans/végétariens (correction phytates)
@@ -2662,7 +2673,7 @@ var SUPPLEMENTS_DB = [
       return hasOsteo||hasCardio||isMenopause||isOlder;
     },
     unnecessary_if:'Moins prioritaire chez adultes jeunes < 50 ans sans facteur de risque osseux ou cardiovasculaire',
-    dosageCalc:function(){return{dose:90,unit:'\u00b5g/jour (femme) / 120\u00b5g/jour (homme)',timing:'Avec un repas contenant des graisses',note:'Forme MK-7 (ménaquinone-7) = demi-vie 72h, supérieure à MK-4. Synergie obligatoire avec vitamine D3. Sources alimentaires : natto (fermenté), certains fromages, jaune d\'oeuf.'};}}
+    dosageCalc:function(){return{dose:90,unit:'\u00b5g/jour (femme) / 120\u00b5g/jour (homme)',timing:'Avec un repas contenant des graisses',note:'Forme MK-7 (ménaquinone-7) = demi-vie 72h, supérieure à MK-4. Synergie obligatoire avec vitamine D3. Sources alimentaires : natto (fermenté), certains fromages, jaune d\'œuf.'};}}
 ];
 window.SUPPLEMENTS_DB = SUPPLEMENTS_DB;
 
@@ -2760,7 +2771,7 @@ function detectMedicalConflicts() {
   }
   // Conflit 4 : Cardiopathie + intensité haute
   if(med.indexOf('cardio')!==-1){
-    var actFactor=s.activity!==null?ACTIVITIES[s.activity].factor:0;
+    var actFactor=(s.activity!==null&&s.activity!==undefined&&ACTIVITIES[s.activity])?ACTIVITIES[s.activity].factor:0;
     if(actFactor>=1.7){
       conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Cardiopathie + activité très intense — Niveau d\'activité incompatible sans clearance cardiologique. Test d\'effort (VO2max) obligatoire. Zones FC via formule de Karvonen recommandées.'});
     }
@@ -2997,12 +3008,13 @@ var RUNNING_GOALS = [
 ];
 window.RUNNING_GOALS = RUNNING_GOALS;
 
+// Zones FC course — modèle ACSM 5 zones FCmax (Swain & Franklin 2002)
 var RUNNING_ZONES = [
-  {zone: 'Z1', name: 'Récupération', pct: [59, 74], feel: 'Conversation facile', color: '#1A4A1A'},
-  {zone: 'Z2', name: 'Endurance fondamentale', pct: [74, 84], feel: 'Parler par phrases', color: '#1A3A6A'},
-  {zone: 'Z3', name: 'Tempo / Seuil', pct: [84, 88], feel: 'Quelques mots', color: '#6A4A1A'},
-  {zone: 'Z4', name: 'Seuil anaérobie', pct: [88, 95], feel: 'Effort soutenu', color: '#8A3A1A'},
-  {zone: 'Z5', name: 'VMA / VO2max', pct: [95, 100], feel: 'Quasi-max', color: '#5A1010'}
+  {zone: 'Z1', name: 'Récupération active',      pct: [50, 60], feel: 'Conversation très facile', color: '#1A4A1A'},
+  {zone: 'Z2', name: 'Endurance fondamentale',   pct: [60, 70], feel: 'Conversation facile',      color: '#1A3A6A'},
+  {zone: 'Z3', name: 'Aérobie / Tempo',          pct: [70, 80], feel: 'Quelques phrases',          color: '#6A4A1A'},
+  {zone: 'Z4', name: 'Seuil anaérobie',          pct: [80, 90], feel: 'Quelques mots seulement',   color: '#8A3A1A'},
+  {zone: 'Z5', name: 'VMA / VO2max',             pct: [90,100], feel: 'Effort maximal',             color: '#5A1010'}
 ];
 window.RUNNING_ZONES = RUNNING_ZONES;
 

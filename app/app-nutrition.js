@@ -4,6 +4,18 @@
 var S = window.S;
 var h = window.h, txt = window.txt, svgRing = window.svgRing;
 
+// ─── DISPLAY ROUNDING ───
+function roundDisplayQty(qty, unit) {
+  if (!qty) return 0;
+  if (unit === 'g') return Math.round(qty / 5) * 5 || 5;
+  if (unit === 'ml') return Math.round(qty / 10) * 10 || 10;
+  if (unit === 'pce') return Math.max(1, Math.round(qty));
+  if (unit === 'cs' || unit === 'cc') return Math.max(1, Math.round(qty));
+  if (unit === 'kg') return Math.round(qty * 10) / 10;
+  if (unit === 'L' || unit === 'l') return Math.round(qty * 10) / 10;
+  return Math.round(qty);
+}
+
 // ─── LOCAL REFERENCES ───
 var ACTIVITIES = window.ACTIVITIES;
 var GOALS = window.GOALS;
@@ -515,7 +527,8 @@ function renderStep2(p) {
   }
 
   p.appendChild(h('div', {style: 'height:24px'}));
-  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { goStep(3); }}, 'Continuer'));
+  var _step2ok = !!(S.weight && S.height);
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(3); }}, 'Continuer'));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(1); }, html: backArrowHtml() + 'Retour'}));
 }
 
@@ -1066,9 +1079,17 @@ function renderStep6(p) {
 
   p.appendChild(h('div', {style: 'height:16px'}));
   var goalOk = S.goal !== null;
+  var _tcaConflict = false;
   if (goalOk && S.goal !== null) {
     var gk = GOALS[S.goal].key;
     if ((gk === 'cut' || gk === 'shred' || gk === 'bulk' || gk === 'lean_bulk') && !S.targetWeight) goalOk = false;
+    if ((gk === 'cut' || gk === 'shred') && S.medical && S.medical.indexOf('tca') !== -1) {
+      goalOk = false;
+      _tcaConflict = true;
+    }
+  }
+  if (_tcaConflict) {
+    p.appendChild(h('div', {style: 'background:#FCE4EC;border-left:4px solid #C62828;padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#B71C1C;line-height:1.6'}, '⚠ CONFLIT : Objectif sèche/coupe incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !goalOk, onclick: function() {
     if (goalOk) {
@@ -1167,7 +1188,7 @@ function renderStep7(p) {
   // Excluded
   p.appendChild(h('div', {'class': 'section-label'}, 'Aliments exclus'));
   var fi = h('div', {'class': 'field'});
-  fi.appendChild(h('input', {type: 'text', placeholder: 'Ex: avocat, boeuf, saumon...', value: S.excluded, oninput: function(e) { S.excluded = e.target.value; }}));
+  fi.appendChild(h('input', {type: 'text', placeholder: 'Ex: avocat, bœuf, saumon...', value: S.excluded, oninput: function(e) { S.excluded = e.target.value; }}));
   p.appendChild(fi);
 
   // Cuisines
@@ -1290,8 +1311,8 @@ function renderStep8(p) {
   })();
   rh.appendChild(h('div', {'class': 'result-rule'}));
   var _profItems = [S.sex==='homme'?'Homme':'Femme', S.age+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
-  if(S.activity!==null)_profItems.push(ACTIVITIES[S.activity].name);
-  if(S.goal!==null)_profItems.push(GOALS[S.goal].name);
+  if(S.activity!==null&&S.activity!==undefined&&ACTIVITIES[S.activity])_profItems.push(ACTIVITIES[S.activity].name);
+  if(S.goal!==null&&S.goal!==undefined&&GOALS[S.goal])_profItems.push(GOALS[S.goal].name);
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));
   var _m=calcMacros();
   if(_m.proteinPerKg){rh.appendChild(h('div',{style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey2);letter-spacing:1px'},'Prot\u00e9ines: '+_m.proteinPerKg+'g/kg \u00B7 Lipides: '+_m.fatPerKg+'g/kg \u00B7 Glucides: '+(_m.carbsPerKg||'-')+'g/kg'));}
@@ -1322,7 +1343,7 @@ function renderStep8(p) {
   sr.appendChild(c1);
   var c2 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c2.appendChild(h('div', {'class': 'bn-val'}, String(tgt)));
-  c2.appendChild(h('div', {'class': 'bn-label'}, GOALS[S.goal].name));
+  c2.appendChild(h('div', {'class': 'bn-label'}, (S.goal!==null&&GOALS[S.goal])?GOALS[S.goal].name:''));
   sr.appendChild(c2);
   p.appendChild(sr);
 
@@ -1963,7 +1984,7 @@ function renderModal(app) {
     var ingredList = h('ul', {'class': 'ingredient-list'});
     if (r._scaledIngredients && r._scaledIngredients.length > 0) {
       r._scaledIngredients.forEach(function(ing) {
-        var qtyStr = ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name;
+        var qtyStr = roundDisplayQty(ing.qty, ing.unit) + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name;
         ingredList.appendChild(h('li', {}, qtyStr));
       });
     } else if (r.i) {
@@ -1971,7 +1992,7 @@ function renderModal(app) {
       r.i.split(',').forEach(function(ing) { if (ing.trim()) ingredList.appendChild(h('li', {}, ing.trim())); });
     } else if (r.ingredients && Array.isArray(r.ingredients)) {
       r.ingredients.forEach(function(ing) {
-        var line = (ing.qty || '') + (ing.unit && ing.unit !== 'pce' ? ing.unit + ' ' : ' ') + (ing.name || '');
+        var line = (ing.qty ? roundDisplayQty(ing.qty, ing.unit) : '') + (ing.unit && ing.unit !== 'pce' ? ing.unit + ' ' : ' ') + (ing.name || '');
         ingredList.appendChild(h('li', {}, line.trim()));
       });
     } else {
@@ -2045,7 +2066,7 @@ function exportDayPDF(dayIdx) {
     doc.text('INGR\u00c9DIENTS', M, y); y += 4;
     doc.setFontSize(8); doc.setTextColor(black[0], black[1], black[2]);
     var ingListPDF = r._scaledIngredients && r._scaledIngredients.length > 0
-      ? r._scaledIngredients.map(function(ing) { return ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
+      ? r._scaledIngredients.map(function(ing) { return roundDisplayQty(ing.qty, ing.unit) + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
       : (r.i ? r.i.split(',').map(function(s) { return s.trim(); }) : []);
     ingListPDF.forEach(function(ing) {
       if (y > 275) { doc.addPage(); y = 20; }
@@ -2141,7 +2162,7 @@ function exportRecipePDF(r) {
   doc.setDrawColor(border[0], border[1], border[2]); doc.line(M, y + 1.5, W - M, y + 1.5); y += 6;
   doc.setFontSize(9); doc.setTextColor(black[0], black[1], black[2]);
   var recipeIngPDF = r._scaledIngredients && r._scaledIngredients.length > 0
-    ? r._scaledIngredients.map(function(ing) { return ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
+    ? r._scaledIngredients.map(function(ing) { return roundDisplayQty(ing.qty, ing.unit) + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
     : (r.i ? r.i.split(',').map(function(s) { return s.trim(); }) : []);
   recipeIngPDF.forEach(function(ing) {
     if (y > 275) { doc.addPage(); y = 20; }
@@ -2202,7 +2223,7 @@ var SALAD_DB = {
     { name: 'Thon en bo\u00eete', qty: 100, unit: 'g', k: 132, p: 28, g: 0, l: 1.5 },
     { name: 'Saumon', qty: 100, unit: 'g', k: 208, p: 20, g: 0, l: 13 },
     { name: 'Crevettes', qty: 100, unit: 'g', k: 85, p: 18, g: 0, l: 0.9 },
-    { name: 'Oeuf dur', qty: 60, unit: 'g', k: 91, p: 7.5, g: 0.4, l: 6.3 },
+    { name: 'Œuf dur', qty: 60, unit: 'g', k: 91, p: 7.5, g: 0.4, l: 6.3 },
     { name: 'Tofu ferme', qty: 100, unit: 'g', k: 76, p: 8.0, g: 1.9, l: 4.2 },
     { name: 'B\u0153uf hach\u00e9 5%', qty: 100, unit: 'g', k: 137, p: 22, g: 0, l: 5.0 },
     { name: 'Feta', qty: 50, unit: 'g', k: 133, p: 7.2, g: 1.1, l: 10.7 },
@@ -2733,21 +2754,22 @@ function printShoppingListAR(list) {
   var AR = window.SHOP_AR;
   var now = new Date();
   var dateStr = now.toLocaleDateString('ar-MA', {year:'numeric', month:'long', day:'numeric'});
+  function escHTML(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  // Construire le HTML d'impression
+  // Construire le HTML d'impression (toutes les valeurs dynamiques échappées)
   var html = '<div class="shop-print-area">';
-  html += '<div class="shop-print-title">' + (AR ? AR.ui['print_title'] : 'قائمة التسوق') + '</div>';
-  html += '<div class="shop-print-date">' + (AR ? AR.ui['date_label'] : 'تاريخ الطباعة') + ' : ' + dateStr + '</div>';
+  html += '<div class="shop-print-title">' + escHTML(AR ? AR.ui['print_title'] : 'قائمة التسوق') + '</div>';
+  html += '<div class="shop-print-date">' + escHTML(AR ? AR.ui['date_label'] : 'تاريخ الطباعة') + ' : ' + escHTML(dateStr) + '</div>';
 
   list.forEach(function(cat) {
     html += '<div class="shop-cat-block">';
     var catName = AR ? AR.translateSection(cat.category) : cat.category;
-    html += '<div class="shop-cat-name">' + catName + '</div>';
+    html += '<div class="shop-cat-name">' + escHTML(catName) + '</div>';
     cat.items.forEach(function(item) {
       var ingName = AR ? AR.translateIngredient(item.name) : item.name;
       html += '<div class="shop-print-item">';
-      html += '<span>' + ingName + '</span>';
-      html += '<span>' + item.qty + ' ' + item.unit + '</span>';
+      html += '<span>' + escHTML(ingName) + '</span>';
+      html += '<span>' + escHTML(item.qty) + ' ' + escHTML(item.unit) + '</span>';
       html += '</div>';
     });
     html += '</div>';

@@ -256,15 +256,16 @@ window.AUTH = {
     name = sanitize((name || '').trim());
     email = sanitize((email || '').trim().toLowerCase());
 
-    // Validate
+    // Validate -- apply timing delay even on validation failure to prevent user enumeration
+    var _startValidation = Date.now();
     if (!validateName(name)) {
-      return Promise.resolve({ ok: false, error: 'Pr\u00e9nom requis (min 2 caract\u00e8res)' });
+      return withTimingDelay(Promise.resolve({ ok: false, error: 'Pr\u00e9nom requis (min 2 caract\u00e8res)' }), _startValidation);
     }
     if (!validateEmail(email)) {
-      return Promise.resolve({ ok: false, error: 'Email invalide' });
+      return withTimingDelay(Promise.resolve({ ok: false, error: 'Email invalide' }), _startValidation);
     }
     if (!validatePassword(password)) {
-      return Promise.resolve({ ok: false, error: 'Mot de passe min 6 caract\u00e8res' });
+      return withTimingDelay(Promise.resolve({ ok: false, error: 'Mot de passe min 6 caract\u00e8res' }), _startValidation);
     }
 
     // Check for duplicate email

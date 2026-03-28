@@ -212,20 +212,6 @@ window.DASHBOARD = {
     var logs = tryGetLogs(userId);
     var now = new Date();
 
-    /* ═══ LANGUAGE TOGGLE ═══ */
-    if (window.I18N) {
-      var langToggle = h('div', {style: 'display:flex;gap:4px;align-items:center;justify-content:flex-end;margin-bottom:8px'});
-      ['fr', 'en'].forEach(function(lng) {
-        var isActive = (window.S && window.S.lang ? window.S.lang : window.I18N.current) === lng;
-        var btn = h('button', {
-          style: 'padding:4px 8px;font-size:11px;border-radius:4px;border:1px solid var(--border,#D8D8D0);cursor:pointer;background:' + (isActive ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (isActive ? 'var(--ivory,#FAFAF7)' : 'var(--text,#0A0A09)'),
-          onclick: function() { window.I18N.setLang(lng); }
-        }, lng === 'fr' ? '\uD83C\uDDEB\uD83C\uDDF7 FR' : '\uD83C\uDDEC\uD83C\uDDE7 EN');
-        langToggle.appendChild(btn);
-      });
-      root.appendChild(langToggle);
-    }
-
     /* ═══ GREETING ═══ */
     var greeting = greetingWord() + (user && user.name ? ', ' + firstName(user.name) : '');
     root.appendChild(h('h1', 'dash-greeting', greeting));
@@ -249,7 +235,7 @@ window.DASHBOARD = {
 
 
     /* ═══ STREAK ═══ */
-    root.appendChild(h('div', 'dash-label', 'Votre serie'));
+    root.appendChild(h('div', 'dash-label', 'Votre série'));
     if (window.GAMIFICATION && window.GAMIFICATION.updateStreak) {
       try { window.GAMIFICATION.updateStreak(); } catch(e){}
     }
@@ -265,7 +251,7 @@ window.DASHBOARD = {
 
 
     /* ═══ TODAY'S OVERVIEW ═══ */
-    root.appendChild(h('div', 'dash-label', 'Apercu du jour'));
+    root.appendChild(h('div', 'dash-label', 'Aperçu du jour'));
     var grid = h('div', 'dash-card-grid');
 
     // Weight
@@ -323,7 +309,7 @@ window.DASHBOARD = {
 
 
     /* ═══ QUICK ACTIONS ═══ */
-    root.appendChild(h('div', 'dash-label', 'Acces rapide'));
+    root.appendChild(h('div', 'dash-label', 'Accès rapide'));
 
     // Big nav cards
     var navGrid = h('div', 'dash-card-grid');
@@ -391,7 +377,7 @@ window.DASHBOARD = {
         waterWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module hydratation indisponible')));
       }
     } else {
-      waterWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module hydratation non charge')));
+      waterWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module hydratation non chargé')));
     }
     root.appendChild(waterWidget);
 
@@ -404,20 +390,20 @@ window.DASHBOARD = {
         sleepWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module sommeil indisponible')));
       }
     } else {
-      sleepWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module sommeil non charge')));
+      sleepWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module sommeil non chargé')));
     }
     root.appendChild(sleepWidget);
 
 
     /* ═══ WEEKLY SUMMARY ═══ */
-    root.appendChild(h('div', 'dash-label', 'Resume hebdomadaire'));
+    root.appendChild(h('div', 'dash-label', 'Résumé hebdomadaire'));
     var weeklyWidget = h('div', 'dash-widget-box');
     if (window.WEEKLY_SUMMARY && window.WEEKLY_SUMMARY.renderWidget) {
       try { window.WEEKLY_SUMMARY.renderWidget(weeklyWidget); } catch(e) {
-        weeklyWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Resume indisponible')));
+        weeklyWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Résumé indisponible')));
       }
     } else {
-      weeklyWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module resume non charge')));
+      weeklyWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module résumé non chargé')));
     }
     root.appendChild(weeklyWidget);
 
@@ -430,7 +416,7 @@ window.DASHBOARD = {
         perfWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Progression indisponible')));
       }
     } else {
-      perfWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module progression non charge')));
+      perfWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module progression non chargé')));
     }
     root.appendChild(perfWidget);
 
@@ -529,11 +515,10 @@ window.DASHBOARD = {
         var JOURS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
         var target = (window.S.calories && window.S.calories > 0) ? window.S.calories : 2000;
         var dayKcals = window.S.weekPlan.map(function(day) {
-          if (!day || !Array.isArray(day.meals)) return 0;
-          return day.meals.reduce(function(sum, m) {
-            var k = (m && (m.k || (m.baseNutrition && m.baseNutrition.calories) || m.kcal)) || 0;
-            return sum + (isNaN(k) ? 0 : k);
-          }, 0);
+          if (!day) return 0;
+          // weekPlan structure: {breakfast, lunch, snack, dinner} — not {meals:[]}
+          function getK(meal) { return (meal && (meal.k || (meal.baseNutrition && meal.baseNutrition.calories) || meal.kcal)) || 0; }
+          return getK(day.breakfast) + getK(day.lunch) + getK(day.snack) + getK(day.dinner);
         });
         if (window._dashKcalChart) { try { window._dashKcalChart.destroy(); } catch(e2) {} window._dashKcalChart = null; }
         var isDark2 = document.body.classList.contains('dark-mode') || window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -632,7 +617,7 @@ window.DASHBOARD = {
       var b1 = h('div', 'dash-badge-mini', '\u2605');
       b1.title = 'Premier pas'; b1.style.opacity = '.35';
       var b2 = h('div', 'dash-badge-mini', '\uD83D\uDD25');
-      b2.title = 'Serie de 7 jours'; b2.style.opacity = '.35';
+      b2.title = 'Série de 7 jours'; b2.style.opacity = '.35';
       var b3 = h('div', 'dash-badge-mini', '\uD83C\uDFC6');
       b3.title = 'Objectif atteint'; b3.style.opacity = '.35';
       badgesRow.appendChild(b1);
@@ -655,13 +640,13 @@ window.DASHBOARD = {
 
 
     /* ═══ MES DONNÉES ═══ */
-    root.appendChild(h('div', 'dash-label', 'Mes donnees'));
+    root.appendChild(h('div', 'dash-label', 'Mes données'));
     var dataSection = h('div', 'dash-data-section');
     var dataBtns = h('div', 'dash-data-btns');
 
     var exportBtn = document.createElement('button');
     exportBtn.className = 'dash-btn-primary';
-    exportBtn.textContent = '\u2B07 Exporter mes donnees';
+    exportBtn.textContent = '\u2B07 Exporter mes données';
     exportBtn.addEventListener('click', function() { exportAllData(); });
     dataBtns.appendChild(exportBtn);
 
@@ -673,7 +658,7 @@ window.DASHBOARD = {
 
     var deleteBtn = document.createElement('button');
     deleteBtn.className = 'dash-btn-danger';
-    deleteBtn.textContent = 'Supprimer toutes mes donnees';
+    deleteBtn.textContent = 'Supprimer toutes mes données';
     deleteBtn.addEventListener('click', function() { deleteAllData(); });
     dataBtns.appendChild(deleteBtn);
 
@@ -687,7 +672,7 @@ window.DASHBOARD = {
     var sessionParts = [];
     sessionParts.push('Session : ' + (sessionMin || 0) + ' min');
     if (lastDate) {
-      sessionParts.push('Derniere visite : ' + lastDate.getDate() + ' ' + MOIS[lastDate.getMonth()] + ' ' + lastDate.getFullYear());
+      sessionParts.push('Dernière visite : ' + lastDate.getDate() + ' ' + MOIS[lastDate.getMonth()] + ' ' + lastDate.getFullYear());
     }
     root.appendChild(h('div', 'dash-session', sessionParts.join(' | ')));
 
@@ -795,11 +780,11 @@ function openMeasurementsModal() {
   if (window.MEASUREMENTS && window.MEASUREMENTS.renderForm) {
     try { window.MEASUREMENTS.renderForm(formContainer); } catch(e) {
       formContainer.appendChild(h('p', null, 'Module mensurations indisponible.'));
-      formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
+      if (formContainer.lastChild) formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
     }
   } else {
-    formContainer.appendChild(h('p', null, 'Module mensurations non charge.'));
-    formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
+    formContainer.appendChild(h('p', null, 'Module mensurations non chargé.'));
+    if (formContainer.lastChild) formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
   }
   box.appendChild(formContainer);
 
@@ -825,7 +810,7 @@ function openBadgesModal() {
   if (window.GAMIFICATION && window.GAMIFICATION.renderBadgesPanel) {
     try { window.GAMIFICATION.renderBadgesPanel(panel); } catch(e) {
       panel.appendChild(h('p', null, 'Panneau badges indisponible.'));
-      panel.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
+      if (panel.lastChild) panel.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
     }
   }
   box.appendChild(panel);
@@ -894,7 +879,7 @@ function openKitchenTimer() {
   controls.style.cssText = 'display:flex;gap:8px;justify-content:center;';
 
   var startBtn = document.createElement('button');
-  startBtn.textContent = 'Demarrer';
+  startBtn.textContent = 'Démarrer';
   startBtn.style.cssText = 'padding:10px 24px;background:var(--black,#181818);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;';
   startBtn.addEventListener('click', function() {
     if (running) return;
@@ -907,8 +892,8 @@ function openKitchenTimer() {
       if (totalSeconds <= 0) {
         clearInterval(interval);
         running = false;
-        startBtn.textContent = 'Demarrer';
-        display.textContent = 'Termine !';
+        startBtn.textContent = 'Démarrer';
+        display.textContent = 'Terminé !';
         display.style.color = 'var(--black,#181818)';
         try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate([200,100,200]); } catch(e){}
       }
@@ -917,13 +902,13 @@ function openKitchenTimer() {
   controls.appendChild(startBtn);
 
   var resetBtn = document.createElement('button');
-  resetBtn.textContent = 'Reinitialiser';
+  resetBtn.textContent = 'Réinitialiser';
   resetBtn.style.cssText = 'padding:10px 24px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;';
   resetBtn.addEventListener('click', function() {
     clearInterval(interval);
     running = false;
     totalSeconds = 0;
-    startBtn.textContent = 'Demarrer';
+    startBtn.textContent = 'Démarrer';
     updateDisplay();
   });
   controls.appendChild(resetBtn);
@@ -967,7 +952,7 @@ function exportAllData() {
   a.click();
   URL.revokeObjectURL(url);
 
-  if (window.GAMIFICATION) GAMIFICATION.showToast('Donnees exportees !');
+  if (window.GAMIFICATION) GAMIFICATION.showToast('Données exportées !');
 }
 
 function importData() {
@@ -983,13 +968,13 @@ function importData() {
         var backup = JSON.parse(ev.target.result);
         if (!backup.data || !backup.version) { alert('Fichier invalide'); return; }
 
-        if (!confirm('Cela remplacera vos donnees actuelles. Continuer ?')) return;
+        if (!confirm('Cela remplacera vos données actuelles. Continuer ?')) return;
 
         Object.keys(backup.data).forEach(function(key) {
           localStorage.setItem(key, typeof backup.data[key] === 'string' ? backup.data[key] : JSON.stringify(backup.data[key]));
         });
 
-        if (window.GAMIFICATION) GAMIFICATION.showToast('Donnees restaurees !');
+        if (window.GAMIFICATION) GAMIFICATION.showToast('Données restaurées !');
         setTimeout(function(){ location.reload(); }, 1000);
       } catch(err) {
         alert('Erreur de lecture : ' + err.message);
@@ -1001,8 +986,8 @@ function importData() {
 }
 
 function deleteAllData() {
-  if (!confirm('Etes-vous sur ? Toutes vos donnees seront supprimees definitivement.')) return;
-  if (!confirm('Derniere confirmation : cette action est irreversible. Continuer ?')) return;
+  if (!confirm('Êtes-vous sûr ? Toutes vos données seront supprimées définitivement.')) return;
+  if (!confirm('Dernière confirmation : cette action est irréversible. Continuer ?')) return;
 
   var keysToRemove = [];
   for (var i = 0; i < localStorage.length; i++) {
@@ -1019,7 +1004,7 @@ function deleteAllData() {
     try { window.AUTH.logout(); } catch(e){}
   }
 
-  if (window.GAMIFICATION) GAMIFICATION.showToast('Donnees supprimees.');
+  if (window.GAMIFICATION) GAMIFICATION.showToast('Données supprimées.');
   setTimeout(function(){ location.reload(); }, 1000);
 }
 
@@ -1030,9 +1015,9 @@ function renderFallbackQuote(container) {
   var quotes = [
     'Le corps atteint ce que l\'esprit croit.',
     'Chaque jour est une nouvelle occasion de progresser.',
-    'La discipline est le pont entre les objectifs et les resultats.',
-    'Prenez soin de votre corps, c\'est le seul endroit ou vous vivez.',
-    'Le succes est la somme de petits efforts repetes jour apres jour.'
+    'La discipline est le pont entre les objectifs et les résultats.',
+    'Prenez soin de votre corps, c\'est le seul endroit où vous vivez.',
+    'Le succès est la somme de petits efforts répétés jour après jour.'
   ];
   var today = new Date();
   var idx = (today.getFullYear() * 366 + today.getMonth() * 31 + today.getDate()) % quotes.length;
@@ -1057,7 +1042,7 @@ function renderFallbackStreak(container) {
     try { var s = window.GAMIFICATION.getStreak(); streak = (s && typeof s === 'object') ? (s.current || 0) : (s || 0); } catch(e){}
   }
   var card = h('div', 'dash-card');
-  card.appendChild(h('p', 'dash-card-title', 'Serie en cours'));
+  card.appendChild(h('p', 'dash-card-title', 'Série en cours'));
   var big = h('div', 'dash-big');
   big.appendChild(document.createTextNode(streak));
   big.appendChild(h('span', 'dash-unit', streak === 1 ? 'jour' : 'jours'));

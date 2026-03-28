@@ -642,13 +642,13 @@
         { name: 'Bouillon de poulet', qty: 300, unit: 'ml' },
         { name: 'Champignons', qty: 150, unit: 'g' },
         { name: 'Galanga frais (ou gingembre)', qty: 20, unit: 'g' },
-        { name: 'Citronelle', qty: 1, unit: 'pce' },
+        { name: 'Citronnelle', qty: 1, unit: 'pce' },
         { name: 'Citron vert (jus)', qty: 2, unit: 'pce' },
         { name: 'Sauce poisson', qty: 20, unit: 'ml' },
         { name: 'Piment rouge', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Chauffer bouillon avec galanga, citronelle écrasée et piment 5 min.',
+        'Chauffer bouillon avec galanga, citronnelle écrasée et piment 5 min.',
         'Ajouter lait de coco, porter à frémissement. Incorporer poulet en dés et champignons.',
         'Cuire 10 min. Assaisonner sauce poisson et jus citron vert. Servir chaud.'
       ]
@@ -1377,7 +1377,7 @@
         { name: 'Crevettes décortiquées', qty: 250, unit: 'g' },
         { name: 'Bouillon de poulet', qty: 800, unit: 'ml' },
         { name: 'Champignons', qty: 100, unit: 'g' },
-        { name: 'Citronelle', qty: 2, unit: 'pce' },
+        { name: 'Citronnelle', qty: 2, unit: 'pce' },
         { name: 'Galanga (ou gingembre)', qty: 20, unit: 'g' },
         { name: 'Sauce poisson', qty: 20, unit: 'ml' },
         { name: 'Citron vert (jus)', qty: 2, unit: 'pce' },
@@ -1385,7 +1385,7 @@
         { name: 'Tomates cerises', qty: 80, unit: 'g' }
       ],
       steps: [
-        'Chauffer bouillon avec citronelle, galanga, piment 8 min.',
+        'Chauffer bouillon avec citronnelle, galanga, piment 8 min.',
         'Ajouter champignons et tomates cerises, cuire 4 min.',
         'Incorporer crevettes, cuire 3 min. Finir sauce poisson + citron vert. Servir chaud.'
       ]
@@ -5815,6 +5815,150 @@
   }
 
   /**
+   * Convertit une quantité nutritionnelle en quantité d'achat réaliste.
+   * Les gens achètent 1 kg de poulet, pas 347 g ; 1 L de lait, pas 230 ml.
+   */
+  function toMarketQty(name, qty, unit, cat) {
+    var lname = name.toLowerCase();
+
+    // ── Pièces (œufs, etc.) ────────────────────────────────────────────────
+    if (unit === 'pce') {
+      var n = Math.ceil(qty);
+      // Œufs → arrondir au pack de 6
+      if (/oeuf|œuf/i.test(lname)) n = Math.ceil(n / 6) * 6;
+      return { qty: n, unit: 'pce' };
+    }
+
+    // ── Cuillères (épices / condiments) → garder tel quel ─────────────────
+    if (unit === 'cs' || unit === 'cc') {
+      return { qty: Math.ceil(qty), unit: unit };
+    }
+
+    // ── Normaliser en ml ou en g ───────────────────────────────────────────
+    var isLiquid = (unit === 'ml' || unit === 'cl' || unit === 'l');
+    var inMl = isLiquid
+      ? (unit === 'l' ? qty * 1000 : unit === 'cl' ? qty * 10 : qty)
+      : 0;
+    var inG = !isLiquid
+      ? (unit === 'kg' ? qty * 1000 : qty)
+      : 0;
+
+    // ── LIQUIDES ──────────────────────────────────────────────────────────
+    if (isLiquid) {
+      // Lait (toutes sortes) → bouteille de 1 L
+      if (/lait/i.test(lname)) {
+        var liters = Math.max(1, Math.ceil(inMl / 1000));
+        return { qty: liters, unit: 'L' };
+      }
+      // Crème fraîche / crème liquide → pot de 20 cl / 25 cl (200 ml)
+      if (/cr[eè]me/i.test(lname)) {
+        var cl = Math.max(20, Math.ceil(inMl / 200) * 200);
+        return { qty: cl, unit: 'ml' };
+      }
+      // Huile → arrondir au 250 ml
+      if (/huile/i.test(lname)) {
+        var oilMl = Math.max(250, Math.ceil(inMl / 250) * 250);
+        return oilMl >= 1000
+          ? { qty: oilMl / 1000, unit: 'L' }
+          : { qty: oilMl, unit: 'ml' };
+      }
+      // Jus, lait végétal, eau de coco → 1 L min
+      if (cat === '🥤 Boissons & Laits végétaux') {
+        var bevL = Math.max(1, Math.ceil(inMl / 500) / 2);
+        return { qty: bevL, unit: 'L' };
+      }
+      // Vinaigre, sauce soja, etc. (petits flacons) → 250 ml min
+      if (inMl <= 500) {
+        var smallBottle = Math.max(250, Math.ceil(inMl / 250) * 250);
+        return { qty: smallBottle, unit: 'ml' };
+      }
+      // Générique : arrondir au 500 ml
+      var genMl = Math.ceil(inMl / 500) * 500;
+      return genMl >= 1000
+        ? { qty: genMl / 1000, unit: 'L' }
+        : { qty: genMl, unit: 'ml' };
+    }
+
+    // ── SOLIDES EN GRAMMES ────────────────────────────────────────────────
+
+    // Épices & herbes → garder la quantité (petit pot déjà chez soi)
+    if (cat === '🌿 Épices & Herbes') {
+      return { qty: Math.round(inG), unit: 'g' };
+    }
+
+    // Viande & poisson → minimum 250 g, arrondir au 250 g
+    if (cat === '🥩 Boucherie & Poissonnerie') {
+      var meatG = Math.max(250, Math.ceil(inG / 250) * 250);
+      return meatG >= 1000
+        ? { qty: +(meatG / 1000).toFixed(2), unit: 'kg' }
+        : { qty: meatG, unit: 'g' };
+    }
+
+    // Fruits & légumes → minimum 500 g, arrondir au 500 g
+    // Sauf petites quantités type ail/gingembre (< 80 g) → 100 g min
+    if (cat === '🥦 Fruits & Légumes') {
+      if (inG < 80) {
+        return { qty: Math.max(50, Math.ceil(inG / 50) * 50), unit: 'g' };
+      }
+      var vegG = Math.max(500, Math.ceil(inG / 500) * 500);
+      return vegG >= 1000
+        ? { qty: +(vegG / 1000).toFixed(2), unit: 'kg' }
+        : { qty: vegG, unit: 'g' };
+    }
+
+    // Féculents & céréales → minimum 500 g, arrondir au 500 g
+    if (cat === '🌾 Féculents & Céréales') {
+      if (inG < 100) return { qty: Math.ceil(inG), unit: 'g' }; // petites quantités (farine de niche, etc.)
+      var starG = Math.max(500, Math.ceil(inG / 500) * 500);
+      return starG >= 1000
+        ? { qty: +(starG / 1000).toFixed(2), unit: 'kg' }
+        : { qty: starG, unit: 'g' };
+    }
+
+    // Conserves & bocaux → arrondir à la boîte de 400 g
+    if (cat === '🥫 Conserves & Bocaux') {
+      var cans = Math.max(1, Math.ceil(inG / 400));
+      return { qty: cans, unit: cans === 1 ? 'boîte' : 'boîtes' };
+    }
+
+    // Produits laitiers solides (hors lait géré côté liquide)
+    if (cat === '🥚 Œufs & Produits laitiers') {
+      // Fromage → 200 g min
+      if (/fromage|parmesan|mozzarella|feta|ricotta|comté|emmental|gruyère|gouda|cheddar|camembert|brie|bleu/i.test(lname)) {
+        return { qty: Math.max(200, Math.ceil(inG / 200) * 200), unit: 'g' };
+      }
+      // Beurre → 125 g ou 250 g
+      if (/beurre/i.test(lname)) {
+        return { qty: inG <= 125 ? 125 : Math.ceil(inG / 250) * 250, unit: 'g' };
+      }
+      // Yaourt, skyr, kéfir → pot de 125 g ou 500 g
+      if (/yaourt|skyr|kéfir|cottage|mascarpone/i.test(lname)) {
+        return { qty: Math.max(125, Math.ceil(inG / 125) * 125), unit: 'g' };
+      }
+      return { qty: Math.ceil(inG), unit: 'g' };
+    }
+
+    // Graines, noix & fruits secs → arrondir au 50 g
+    if (cat === '🌰 Graines, Noix & Fruits secs') {
+      return { qty: Math.max(50, Math.ceil(inG / 50) * 50), unit: 'g' };
+    }
+
+    // Épicerie sèche (condiments, sauces…) → garder, petits flacons
+    if (cat === '🫙 Épicerie sèche') {
+      if (inG > 0) return { qty: Math.ceil(inG), unit: 'g' };
+    }
+
+    // Boulangerie → à la pièce ou 500 g
+    if (cat === '🍞 Boulangerie & Pâtisserie') {
+      if (unit === 'pce' || inG === 0) return { qty: Math.ceil(qty), unit: 'pce' };
+      return { qty: Math.max(1, Math.ceil(inG / 500)), unit: inG <= 500 ? 'unité' : 'unités' };
+    }
+
+    // Fallback : arrondir à l'entier
+    return { qty: Math.ceil(inG || qty), unit: unit };
+  }
+
+  /**
    * Génère la liste de courses consolidée depuis un weekPlan.
    * Regroupe les ingrédients identiques, somme les quantités, catégorise.
    * @param {Array} weekPlan  — window.S.weekPlan
@@ -5895,16 +6039,20 @@
       });
     });
 
-    // Regrouper par catégorie
+    // Regrouper par catégorie + arrondir aux quantités d'achat réalistes
     var categorized = {};
     Object.keys(consolidated).forEach(function(key) {
       var item = consolidated[key];
-      item.qty = Math.round(item.qty * 10) / 10;
+      // Détecter la catégorie d'abord (nécessaire pour les règles de market qty)
       var cat = '🛒 Divers';
       var catKeys = Object.keys(SHOP_SECTIONS);
       for (var i = 0; i < catKeys.length - 1; i++) {
         if (SHOP_SECTIONS[catKeys[i]].test(item.name)) { cat = catKeys[i]; break; }
       }
+      // Convertir en quantité d'achat réaliste (kg/L/boîte vs grammes nutritionnels)
+      var mq = toMarketQty(item.name, item.qty, item.unit, cat);
+      item.qty  = mq.qty;
+      item.unit = mq.unit;
       if (!categorized[cat]) categorized[cat] = [];
       categorized[cat].push(item);
     });

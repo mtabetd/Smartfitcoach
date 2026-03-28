@@ -15,17 +15,17 @@ var breakfast = [
   },
   {
     _id: 'L002',
-    n: "Avocado Toast Oeuf Poché",
+    n: "Avocado Toast Œuf Poché",
     f: "🇦🇺",
     k: 458,
     p: 20,
     g: 36,
     l: 26,
     lv: 2,
-    i: "Pain complet 80g, avocat 100g, oeuf 60g, citron 10ml, piment rouge 2g, sel, poivre",
-    st: ["Faire pocher l'oeuf dans de l'eau frémissante avec un peu de vinaigre.", "Écraser l'avocat avec le citron, sel et piment.", "Tartiner le pain grillé d'avocat et poser l'oeuf par-dessus."],
+    i: "Pain complet 80g, avocat 100g, œuf 60g, citron 10ml, piment rouge 2g, sel, poivre",
+    st: ["Faire pocher l'œuf dans de l'eau frémissante avec un peu de vinaigre.", "Écraser l'avocat avec le citron, sel et piment.", "Tartiner le pain grillé d'avocat et poser l'œuf par-dessus."],
     w: false,
-    tags: ["pain", "avocat", "oeuf", "citron"]
+    tags: ["pain", "avocat", "œuf", "citron"]
   },
   {
     _id: 'L003',
@@ -57,17 +57,17 @@ var breakfast = [
   },
   {
     _id: 'L005',
-    n: "Oeufs Brouillés Pain Seigle",
+    n: "Œufs Brouillés Pain Seigle",
     f: "🇩🇪",
     k: 446,
     p: 28,
     g: 34,
     l: 22,
     lv: 2,
-    i: "Oeufs 3x60g, pain de seigle 80g, beurre 15g, ciboulette 5g, sel, poivre",
-    st: ["Battre les oeufs avec sel et poivre.", "Faire fondre le beurre à feu doux, verser les oeufs.", "Remuer doucement jusqu'à texture crémeuse. Servir sur pain de seigle grillé avec ciboulette."],
+    i: "Œufs 3x60g, pain de seigle 80g, beurre 15g, ciboulette 5g, sel, poivre",
+    st: ["Battre les œufs avec sel et poivre.", "Faire fondre le beurre à feu doux, verser les œufs.", "Remuer doucement jusqu'à texture crémeuse. Servir sur pain de seigle grillé avec ciboulette."],
     w: false,
-    tags: ["oeuf", "pain", "seigle", "beurre", "ciboulette"]
+    tags: ["œuf", "pain", "seigle", "beurre", "ciboulette"]
   },
   {
     _id: 'L006',
@@ -78,10 +78,10 @@ var breakfast = [
     g: 18,
     l: 24,
     lv: 2,
-    i: "Oeufs 3x60g, tomates pelées 200g, poivron rouge 100g, oignon 60g, huile d'olive 20ml, cumin 2g, paprika 2g",
-    st: ["Faire revenir l'oignon et le poivron dans l'huile d'olive.", "Ajouter les tomates, cumin, paprika, mijoter 10 min.", "Creuser des puits, casser les oeufs dedans, couvrir et cuire 5 min."],
+    i: "Œufs 3x60g, tomates pelées 200g, poivron rouge 100g, oignon 60g, huile d'olive 20ml, cumin 2g, paprika 2g",
+    st: ["Faire revenir l'oignon et le poivron dans l'huile d'olive.", "Ajouter les tomates, cumin, paprika, mijoter 10 min.", "Creuser des puits, casser les œufs dedans, couvrir et cuire 5 min."],
     w: false,
-    tags: ["oeuf", "tomate", "poivron", "oignon", "huile"]
+    tags: ["œuf", "tomate", "poivron", "oignon", "huile"]
   },
   {
     _id: 'L007',
@@ -106,10 +106,10 @@ var breakfast = [
     g: 58,
     l: 14,
     lv: 2,
-    i: "Riz japonais 120g (cuit 240g), oeuf 2x60g, sauce soja 15ml, huile de sésame 8ml, nori 5g, sésame 5g",
-    st: ["Cuire le riz japonais.", "Battre les oeufs avec la sauce soja.", "Verser les oeufs crus sur le riz chaud, mélanger vivement. Finir avec huile de sésame et nori."],
+    i: "Riz japonais 120g (cuit 240g), œuf 2x60g, sauce soja 15ml, huile de sésame 8ml, nori 5g, sésame 5g",
+    st: ["Cuire le riz japonais.", "Battre les œufs avec la sauce soja.", "Verser les œufs crus sur le riz chaud, mélanger vivement. Finir avec huile de sésame et nori."],
     w: false,
-    tags: ["riz", "oeuf", "soja", "sésame", "nori"]
+    tags: ["riz", "œuf", "soja", "sésame", "nori"]
   },
   {
     _id: 'L009',
@@ -120,24 +120,24 @@ var breakfast = [
     g: 60,
     l: 12,
     lv: 2,
-    i: "Flocons d'avoine 100g, banane 100g, oeufs 2x60g, lait écrémé 100ml, levure 3g",
+    i: "Flocons d'avoine 100g, banane 100g, œufs 2x60g, lait écrémé 100ml, levure 3g",
     st: ["Mixer tous les ingrédients en pâte lisse.", "Cuire des petites crêpes épaisses dans une poêle antiadhésive.", "Servir avec un filet de miel ou sirop d'érable."],
     w: false,
-    tags: ["avoine", "banane", "oeuf", "lait"]
+    tags: ["avoine", "banane", "œuf", "lait"]
   },
   {
     _id: 'L010',
-    n: "Galette Sarrasin Oeuf Épinards",
+    n: "Galette Sarrasin Œuf Épinards",
     f: "🇫🇷",
     k: 392,
     p: 22,
     g: 40,
     l: 16,
     lv: 2,
-    i: "Farine de sarrasin 80g, oeuf 60g, épinards frais 80g, emmental râpé 30g, beurre 10g, eau 150ml",
-    st: ["Préparer la pâte avec farine de sarrasin, eau et oeuf. Laisser reposer 30 min.", "Cuire une galette fine dans une crêpière beurrée.", "Garnir d'épinards sautés et d'emmental, replier les bords."],
+    i: "Farine de sarrasin 80g, œuf 60g, épinards frais 80g, emmental râpé 30g, beurre 10g, eau 150ml",
+    st: ["Préparer la pâte avec farine de sarrasin, eau et œuf. Laisser reposer 30 min.", "Cuire une galette fine dans une crêpière beurrée.", "Garnir d'épinards sautés et d'emmental, replier les bords."],
     w: false,
-    tags: ["sarrasin", "oeuf", "épinards", "fromage"]
+    tags: ["sarrasin", "œuf", "épinards", "fromage"]
   },
   {
     _id: 'L011',
@@ -148,10 +148,10 @@ var breakfast = [
     g: 56,
     l: 14,
     lv: 2,
-    i: "Pain de mie complet 100g, oeufs 2x60g, lait écrémé 100ml, banane 100g, cannelle 2g, vanille 2ml",
-    st: ["Battre les oeufs avec le lait, la cannelle et la vanille.", "Tremper les tranches de pain dans le mélange.", "Cuire 2-3 min de chaque côté dans une poêle légèrement huilée. Servir avec banane tranchée."],
+    i: "Pain de mie complet 100g, œufs 2x60g, lait écrémé 100ml, banane 100g, cannelle 2g, vanille 2ml",
+    st: ["Battre les œufs avec le lait, la cannelle et la vanille.", "Tremper les tranches de pain dans le mélange.", "Cuire 2-3 min de chaque côté dans une poêle légèrement huilée. Servir avec banane tranchée."],
     w: false,
-    tags: ["pain", "oeuf", "lait", "banane", "cannelle"]
+    tags: ["pain", "œuf", "lait", "banane", "cannelle"]
   },
   {
     _id: 'L012',
@@ -204,10 +204,10 @@ var breakfast = [
     g: 10,
     l: 24,
     lv: 3,
-    i: "Oeufs 4x60g, sauce soja 10ml, mirin halal 10ml, sucre 5g, huile 10ml, oignons verts 15g",
-    st: ["Battre les oeufs avec la sauce soja, mirin et sucre.", "Chauffer une poêle rectangulaire, huiler légèrement.", "Verser un tiers de la pâte, rouler délicatement à l'aide d'une spatule. Répéter 3 fois pour former un rouleau compact."],
+    i: "Œufs 4x60g, sauce soja 10ml, mirin halal 10ml, sucre 5g, huile 10ml, oignons verts 15g",
+    st: ["Battre les œufs avec la sauce soja, mirin et sucre.", "Chauffer une poêle rectangulaire, huiler légèrement.", "Verser un tiers de la pâte, rouler délicatement à l'aide d'une spatule. Répéter 3 fois pour former un rouleau compact."],
     w: false,
-    tags: ["oeuf", "soja", "oignon vert"]
+    tags: ["œuf", "soja", "oignon vert"]
   },
   {
     _id: 'L016',
@@ -218,10 +218,10 @@ var breakfast = [
     g: 34,
     l: 24,
     lv: 3,
-    i: "Muffin anglais 70g, saumon fumé 80g, oeuf 2x60g, sauce hollandaise 40g (sans beurre d'alcool), épinards 40g",
-    st: ["Griller les muffins anglais.", "Pocher les oeufs dans de l'eau frémissante.", "Assembler: muffin, épinards, saumon, oeuf poché, sauce hollandaise."],
+    i: "Muffin anglais 70g, saumon fumé 80g, œuf 2x60g, sauce hollandaise 40g (sans beurre d'alcool), épinards 40g",
+    st: ["Griller les muffins anglais.", "Pocher les œufs dans de l'eau frémissante.", "Assembler: muffin, épinards, saumon, œuf poché, sauce hollandaise."],
     w: false,
-    tags: ["muffin", "saumon", "oeuf", "sauce hollandaise", "épinards"]
+    tags: ["muffin", "saumon", "œuf", "sauce hollandaise", "épinards"]
   },
   {
     _id: 'L017',
@@ -232,10 +232,10 @@ var breakfast = [
     g: 56,
     l: 14,
     lv: 3,
-    i: "Farine 90g, oeufs 2x60g, lait 100ml, yaourt 80g, levure 5g, sucre 15g, beurre 10g",
-    st: ["Séparer les blancs des jaunes d'oeufs. Monter les blancs en neige ferme.", "Mélanger les jaunes, farine, lait, yaourt, sucre et levure.", "Incorporer délicatement les blancs en neige. Cuire à feu très doux 4 min par côté sous couvercle."],
+    i: "Farine 90g, œufs 2x60g, lait 100ml, yaourt 80g, levure 5g, sucre 15g, beurre 10g",
+    st: ["Séparer les blancs des jaunes d'œufs. Monter les blancs en neige ferme.", "Mélanger les jaunes, farine, lait, yaourt, sucre et levure.", "Incorporer délicatement les blancs en neige. Cuire à feu très doux 4 min par côté sous couvercle."],
     w: false,
-    tags: ["farine", "oeuf", "lait", "yaourt", "beurre"]
+    tags: ["farine", "œuf", "lait", "yaourt", "beurre"]
   },
   {
     _id: 'L018',
@@ -246,10 +246,10 @@ var breakfast = [
     g: 52,
     l: 12,
     lv: 2,
-    i: "Farine de sarrasin 80g, oeuf 60g, lait écrémé 200ml, noix concassées 20g, miel 15g, beurre 8g",
-    st: ["Préparer la pâte de sarrasin avec oeuf, farine et lait.", "Cuire des crêpes fines dans une poêle beurrée.", "Servir avec miel et noix concassées."],
+    i: "Farine de sarrasin 80g, œuf 60g, lait écrémé 200ml, noix concassées 20g, miel 15g, beurre 8g",
+    st: ["Préparer la pâte de sarrasin avec œuf, farine et lait.", "Cuire des crêpes fines dans une poêle beurrée.", "Servir avec miel et noix concassées."],
     w: false,
-    tags: ["sarrasin", "oeuf", "lait", "noix", "miel"]
+    tags: ["sarrasin", "œuf", "lait", "noix", "miel"]
   },
   {
     _id: 'L019',
@@ -267,17 +267,17 @@ var breakfast = [
   },
   {
     _id: 'L020',
-    n: "Toast Avocat Oeuf Dur Tomate",
+    n: "Toast Avocat Œuf Dur Tomate",
     f: "🇦🇺",
     k: 374,
     p: 18,
     g: 44,
     l: 14,
     lv: 1,
-    i: "Pain complet 80g, avocat 60g, oeuf dur 60g, tomate 80g, jus de citron 5ml, sel, poivre",
-    st: ["Griller le pain complet.", "Écraser l'avocat avec citron, sel et poivre.", "Disposer l'avocat sur le pain, garnir d'oeuf dur tranché et de tomate."],
+    i: "Pain complet 80g, avocat 60g, œuf dur 60g, tomate 80g, jus de citron 5ml, sel, poivre",
+    st: ["Griller le pain complet.", "Écraser l'avocat avec citron, sel et poivre.", "Disposer l'avocat sur le pain, garnir d'œuf dur tranché et de tomate."],
     w: false,
-    tags: ["pain", "avocat", "oeuf", "tomate"]
+    tags: ["pain", "avocat", "œuf", "tomate"]
   },
   {
     _id: 'L021',
@@ -302,10 +302,10 @@ var breakfast = [
     g: 20,
     l: 24,
     lv: 2,
-    i: "Oeufs 3x60g, épinards frais 80g, feta 40g, tomate 80g, huile d'olive 10ml, origan 2g",
-    st: ["Battre les oeufs avec sel et origan.", "Faire revenir les épinards et la tomate dans l'huile d'olive.", "Verser les oeufs, cuire 3 min, ajouter la feta émiettée et plier."],
+    i: "Œufs 3x60g, épinards frais 80g, feta 40g, tomate 80g, huile d'olive 10ml, origan 2g",
+    st: ["Battre les œufs avec sel et origan.", "Faire revenir les épinards et la tomate dans l'huile d'olive.", "Verser les œufs, cuire 3 min, ajouter la feta émiettée et plier."],
     w: false,
-    tags: ["oeuf", "épinards", "feta", "tomate", "huile"]
+    tags: ["œuf", "épinards", "feta", "tomate", "huile"]
   },
   {
     _id: 'L023',
@@ -323,17 +323,17 @@ var breakfast = [
   },
   {
     _id: 'L024',
-    n: "Crumpets Oeuf Fromage Blanc",
+    n: "Crumpets Œuf Fromage Blanc",
     f: "🇬🇧",
     k: 384,
     p: 30,
     g: 30,
     l: 16,
     lv: 2,
-    i: "Crumpets 2x50g, oeufs 2x60g, fromage blanc 0% 120g, ciboulette 5g, saumon fumé 50g",
-    st: ["Griller les crumpets.", "Poêler les oeufs au plat.", "Servir les crumpets garnis de fromage blanc, oeuf et saumon, parsemer de ciboulette."],
+    i: "Crumpets 2x50g, œufs 2x60g, fromage blanc 0% 120g, ciboulette 5g, saumon fumé 50g",
+    st: ["Griller les crumpets.", "Poêler les œufs au plat.", "Servir les crumpets garnis de fromage blanc, œuf et saumon, parsemer de ciboulette."],
     w: false,
-    tags: ["crumpet", "oeuf", "fromage blanc", "saumon", "ciboulette"]
+    tags: ["crumpet", "œuf", "fromage blanc", "saumon", "ciboulette"]
   },
   {
     _id: 'L025',
@@ -351,17 +351,17 @@ var breakfast = [
   },
   {
     _id: 'L026',
-    n: "Wrap Petit Déjeuner Oeuf Avocat",
+    n: "Wrap Petit Déjeuner Œuf Avocat",
     f: "🇲🇽",
     k: 388,
     p: 20,
     g: 50,
     l: 12,
     lv: 2,
-    i: "Tortilla de blé 60g, oeuf brouillé 2x60g, avocat 60g, tomate 60g, poivron 40g, épices 2g",
-    st: ["Brouiller les oeufs avec sel et épices.", "Chauffer la tortilla.", "Garnir d'oeufs brouillés, avocat, tomate et poivron. Rouler."],
+    i: "Tortilla de blé 60g, œuf brouillé 2x60g, avocat 60g, tomate 60g, poivron 40g, épices 2g",
+    st: ["Brouiller les œufs avec sel et épices.", "Chauffer la tortilla.", "Garnir d'œufs brouillés, avocat, tomate et poivron. Rouler."],
     w: false,
-    tags: ["tortilla", "oeuf", "avocat", "tomate", "poivron"]
+    tags: ["tortilla", "œuf", "avocat", "tomate", "poivron"]
   },
   {
     _id: 'L027',
@@ -372,10 +372,10 @@ var breakfast = [
     g: 62,
     l: 10,
     lv: 2,
-    i: "Flocons d'avoine 100g, lait écrémé 150ml, oeuf 60g, miel 20g, myrtilles 100g, huile 5ml",
-    st: ["Mixer les flocons d'avoine en poudre fine. Mélanger avec lait, oeuf et miel.", "Cuire dans un gaufrier huilé.", "Servir avec les myrtilles fraîches."],
+    i: "Flocons d'avoine 100g, lait écrémé 150ml, œuf 60g, miel 20g, myrtilles 100g, huile 5ml",
+    st: ["Mixer les flocons d'avoine en poudre fine. Mélanger avec lait, œuf et miel.", "Cuire dans un gaufrier huilé.", "Servir avec les myrtilles fraîches."],
     w: false,
-    tags: ["avoine", "lait", "oeuf", "miel", "myrtilles"]
+    tags: ["avoine", "lait", "œuf", "miel", "myrtilles"]
   },
   {
     _id: 'L028',
@@ -386,10 +386,10 @@ var breakfast = [
     g: 38,
     l: 16,
     lv: 2,
-    i: "Tortilla 70g, haricots noirs 100g, oeuf 2x60g, fromage râpé 30g, salsa 40g, épinards 40g",
-    st: ["Brouiller les oeufs.", "Chauffer les haricots noirs à la poêle.", "Assembler la tortilla avec oeufs, haricots, fromage et salsa. Rouler."],
+    i: "Tortilla 70g, haricots noirs 100g, œuf 2x60g, fromage râpé 30g, salsa 40g, épinards 40g",
+    st: ["Brouiller les œufs.", "Chauffer les haricots noirs à la poêle.", "Assembler la tortilla avec œufs, haricots, fromage et salsa. Rouler."],
     w: false,
-    tags: ["tortilla", "haricots", "oeuf", "fromage", "salsa", "épinards"]
+    tags: ["tortilla", "haricots", "œuf", "fromage", "salsa", "épinards"]
   },
   {
     _id: 'L029',
@@ -414,10 +414,10 @@ var breakfast = [
     g: 58,
     l: 12,
     lv: 2,
-    i: "Flocons d'avoine 100g, lait écrémé 150ml, oeuf 60g, myrtilles 80g, levure 3g, huile 8ml",
-    st: ["Mixer les flocons d'avoine en farine. Mélanger avec lait, oeuf, levure.", "Cuire des petits pancakes dans une poêle avec un peu d'huile.", "Servir avec les myrtilles fraîches."],
+    i: "Flocons d'avoine 100g, lait écrémé 150ml, œuf 60g, myrtilles 80g, levure 3g, huile 8ml",
+    st: ["Mixer les flocons d'avoine en farine. Mélanger avec lait, œuf, levure.", "Cuire des petits pancakes dans une poêle avec un peu d'huile.", "Servir avec les myrtilles fraîches."],
     w: false,
-    tags: ["avoine", "lait", "oeuf", "myrtilles"]
+    tags: ["avoine", "lait", "œuf", "myrtilles"]
   },
   {
     _id: 'L031',
@@ -428,10 +428,10 @@ var breakfast = [
     g: 14,
     l: 22,
     lv: 2,
-    i: "Blancs d'oeufs 200g, champignons 100g, épinards 80g, fromage de chèvre 30g, huile d'olive 10ml, herbes de Provence 2g",
-    st: ["Faire sauter les champignons et épinards dans l'huile d'olive.", "Verser les blancs d'oeufs battus par-dessus.", "Cuire à feu moyen, ajouter le fromage de chèvre, plier."],
+    i: "Blancs d'œufs 200g, champignons 100g, épinards 80g, fromage de chèvre 30g, huile d'olive 10ml, herbes de Provence 2g",
+    st: ["Faire sauter les champignons et épinards dans l'huile d'olive.", "Verser les blancs d'œufs battus par-dessus.", "Cuire à feu moyen, ajouter le fromage de chèvre, plier."],
     w: false,
-    tags: ["blancs d'oeuf", "champignons", "épinards", "chèvre"]
+    tags: ["blancs d'œuf", "champignons", "épinards", "chèvre"]
   },
   {
     _id: 'L032',
@@ -449,17 +449,17 @@ var breakfast = [
   },
   {
     _id: 'L033',
-    n: "Tartines Pain Complet Oeuf Pesto",
+    n: "Tartines Pain Complet Œuf Pesto",
     f: "🇮🇹",
     k: 382,
     p: 22,
     g: 42,
     l: 14,
     lv: 1,
-    i: "Pain complet 80g, oeuf dur 2x60g, pesto basilic 20g, tomate cerise 80g, roquette 20g",
-    st: ["Griller le pain complet.", "Tartiner de pesto.", "Garnir de rondelles d'oeufs durs, tomates cerises et roquette."],
+    i: "Pain complet 80g, œuf dur 2x60g, pesto basilic 20g, tomate cerise 80g, roquette 20g",
+    st: ["Griller le pain complet.", "Tartiner de pesto.", "Garnir de rondelles d'œufs durs, tomates cerises et roquette."],
     w: false,
-    tags: ["pain", "oeuf", "pesto", "tomate", "roquette"]
+    tags: ["pain", "œuf", "pesto", "tomate", "roquette"]
   },
   {
     _id: 'L034',
@@ -484,10 +484,10 @@ var breakfast = [
     g: 28,
     l: 22,
     lv: 2,
-    i: "Pain brioché 80g, ricotta 100g, oeufs 2x60g, framboises 60g, sucre vanillé 5g, beurre 10g",
-    st: ["Battre les oeufs, tremper le pain brioché.", "Cuire dans une poêle avec le beurre.", "Servir avec la ricotta fouettée et les framboises fraîches."],
+    i: "Pain brioché 80g, ricotta 100g, œufs 2x60g, framboises 60g, sucre vanillé 5g, beurre 10g",
+    st: ["Battre les œufs, tremper le pain brioché.", "Cuire dans une poêle avec le beurre.", "Servir avec la ricotta fouettée et les framboises fraîches."],
     w: false,
-    tags: ["pain brioché", "ricotta", "oeuf", "framboises", "beurre"]
+    tags: ["pain brioché", "ricotta", "œuf", "framboises", "beurre"]
   },
   {
     _id: 'L036',
@@ -519,17 +519,17 @@ var breakfast = [
   },
   {
     _id: 'L038',
-    n: "Oeufs Cocotte Tomate Épinards",
+    n: "Œufs Cocotte Tomate Épinards",
     f: "🇫🇷",
     k: 398,
     p: 32,
     g: 18,
     l: 22,
     lv: 2,
-    i: "Oeufs 3x60g, épinards 100g, tomate 100g, crème légère 30ml, fromage râpé 20g, sel, poivre",
-    st: ["Préchauffer le four à 180°C.", "Disposer épinards et tomate dans des ramequins, casser les oeufs par-dessus.", "Ajouter la crème et le fromage, cuire 12-15 min."],
+    i: "Œufs 3x60g, épinards 100g, tomate 100g, crème légère 30ml, fromage râpé 20g, sel, poivre",
+    st: ["Préchauffer le four à 180°C.", "Disposer épinards et tomate dans des ramequins, casser les œufs par-dessus.", "Ajouter la crème et le fromage, cuire 12-15 min."],
     w: false,
-    tags: ["oeuf", "épinards", "tomate", "crème", "fromage"]
+    tags: ["œuf", "épinards", "tomate", "crème", "fromage"]
   },
   {
     _id: 'L039',
@@ -554,10 +554,10 @@ var breakfast = [
     g: 40,
     l: 18,
     lv: 2,
-    i: "Farine 70g, ricotta 100g, oeufs 2x60g, lait 80ml, citron zeste 5g, sucre 10g, levure 3g",
+    i: "Farine 70g, ricotta 100g, œufs 2x60g, lait 80ml, citron zeste 5g, sucre 10g, levure 3g",
     st: ["Mélanger tous les ingrédients en pâte lisse.", "Cuire des pancakes dans une poêle antiadhésive.", "Servir avec un zeste de citron et miel."],
     w: false,
-    tags: ["farine", "ricotta", "oeuf", "lait", "citron"]
+    tags: ["farine", "ricotta", "œuf", "lait", "citron"]
   },
   {
     _id: 'L041',
@@ -610,24 +610,24 @@ var breakfast = [
     g: 22,
     l: 24,
     lv: 2,
-    i: "Oeufs 3x60g, feta 50g, menthe fraîche 10g, tomate 80g, oignon 40g, huile d'olive 12ml",
-    st: ["Battre les oeufs avec sel et menthe ciselée.", "Faire revenir oignon et tomate dans l'huile.", "Verser les oeufs, parsemer de feta, cuire jusqu'à prise."],
+    i: "Œufs 3x60g, feta 50g, menthe fraîche 10g, tomate 80g, oignon 40g, huile d'olive 12ml",
+    st: ["Battre les œufs avec sel et menthe ciselée.", "Faire revenir oignon et tomate dans l'huile.", "Verser les œufs, parsemer de feta, cuire jusqu'à prise."],
     w: false,
-    tags: ["oeuf", "feta", "menthe", "tomate", "oignon"]
+    tags: ["œuf", "feta", "menthe", "tomate", "oignon"]
   },
   {
     _id: 'L045',
-    n: "Bol Riz Brun Oeuf Poché Avocat",
+    n: "Bol Riz Brun Œuf Poché Avocat",
     f: "🇯🇵",
     k: 388,
     p: 22,
     g: 48,
     l: 12,
     lv: 2,
-    i: "Riz brun 80g cuit 200g, oeuf poché 60g, avocat 60g, sauce soja 10ml, sésame 5g, nori 5g",
-    st: ["Cuire le riz brun.", "Pocher l'oeuf dans de l'eau frémissante.", "Disposer le riz, l'avocat tranché, l'oeuf. Arroser de sauce soja et parsemer de sésame."],
+    i: "Riz brun 80g cuit 200g, œuf poché 60g, avocat 60g, sauce soja 10ml, sésame 5g, nori 5g",
+    st: ["Cuire le riz brun.", "Pocher l'œuf dans de l'eau frémissante.", "Disposer le riz, l'avocat tranché, l'œuf. Arroser de sauce soja et parsemer de sésame."],
     w: false,
-    tags: ["riz brun", "oeuf", "avocat", "soja", "sésame", "nori"]
+    tags: ["riz brun", "œuf", "avocat", "soja", "sésame", "nori"]
   },
   {
     _id: 'L046',
@@ -652,10 +652,10 @@ var breakfast = [
     g: 28,
     l: 20,
     lv: 2,
-    i: "Oeufs 4x60g, tomates 200g, poivron 80g, pois chiches 80g, harissa 10g, cumin 2g, huile d'olive 10ml",
-    st: ["Faire revenir poivron et épices dans l'huile.", "Ajouter tomates et pois chiches, mijoter 10 min.", "Casser les oeufs dans la sauce, couvrir et cuire 5-6 min."],
+    i: "Œufs 4x60g, tomates 200g, poivron 80g, pois chiches 80g, harissa 10g, cumin 2g, huile d'olive 10ml",
+    st: ["Faire revenir poivron et épices dans l'huile.", "Ajouter tomates et pois chiches, mijoter 10 min.", "Casser les œufs dans la sauce, couvrir et cuire 5-6 min."],
     w: false,
-    tags: ["oeuf", "tomate", "poivron", "pois chiches", "harissa"]
+    tags: ["œuf", "tomate", "poivron", "pois chiches", "harissa"]
   },
   {
     _id: 'L048',
@@ -666,10 +666,10 @@ var breakfast = [
     g: 50,
     l: 10,
     lv: 2,
-    i: "Farine complète 80g, lait écrémé 200ml, oeuf 60g, fromage blanc 100g, fraises 80g, miel 10g",
-    st: ["Préparer la pâte à crêpes avec farine, lait et oeuf.", "Cuire des crêpes fines.", "Garnir de fromage blanc, fraises et miel."],
+    i: "Farine complète 80g, lait écrémé 200ml, œuf 60g, fromage blanc 100g, fraises 80g, miel 10g",
+    st: ["Préparer la pâte à crêpes avec farine, lait et œuf.", "Cuire des crêpes fines.", "Garnir de fromage blanc, fraises et miel."],
     w: false,
-    tags: ["farine", "lait", "oeuf", "fromage blanc", "fraises", "miel"]
+    tags: ["farine", "lait", "œuf", "fromage blanc", "fraises", "miel"]
   },
   {
     _id: 'L049',
@@ -746,17 +746,17 @@ var lunch = [
   },
   {
     _id: 'L104',
-    n: "Steak Boeuf Patate Douce",
+    n: "Steak Bœuf Patate Douce",
     f: "🇺🇸",
     k: 542,
     p: 46,
     g: 40,
     l: 22,
     lv: 2,
-    i: "Steak de boeuf 200g, patate douce 200g, haricots verts 100g, huile d'olive 12ml, herbes de Provence 3g",
+    i: "Steak de bœuf 200g, patate douce 200g, haricots verts 100g, huile d'olive 12ml, herbes de Provence 3g",
     st: ["Cuire la patate douce en dés au four à 200°C pendant 25 min.", "Griller le steak à feu vif 3-4 min de chaque côté.", "Accompagner de haricots verts vapeur."],
     w: false,
-    tags: ["boeuf", "patate douce", "haricots verts", "huile"]
+    tags: ["bœuf", "patate douce", "haricots verts", "huile"]
   },
   {
     _id: 'L105',
@@ -837,10 +837,10 @@ var lunch = [
     g: 54,
     l: 14,
     lv: 2,
-    i: "Nouilles de riz 120g, crevettes 150g, oeufs 2x60g, cacahuètes 20g, germes de soja 60g, sauce tamarin 20ml, huile 8ml",
-    st: ["Tremper les nouilles de riz dans l'eau froide 30 min.", "Poêler les crevettes, ajouter les oeufs brouillés.", "Ajouter les nouilles, la sauce, les germes de soja. Garnir de cacahuètes."],
+    i: "Nouilles de riz 120g, crevettes 150g, œufs 2x60g, cacahuètes 20g, germes de soja 60g, sauce tamarin 20ml, huile 8ml",
+    st: ["Tremper les nouilles de riz dans l'eau froide 30 min.", "Poêler les crevettes, ajouter les œufs brouillés.", "Ajouter les nouilles, la sauce, les germes de soja. Garnir de cacahuètes."],
     w: false,
-    tags: ["nouilles", "crevettes", "oeuf", "cacahuètes", "soja", "tamarin"]
+    tags: ["nouilles", "crevettes", "œuf", "cacahuètes", "soja", "tamarin"]
   },
   {
     _id: 'L111',
@@ -858,17 +858,17 @@ var lunch = [
   },
   {
     _id: 'L112',
-    n: "Bibimbap Boeuf",
+    n: "Bibimbap Bœuf",
     f: "🇰🇷",
     k: 546,
     p: 38,
     g: 58,
     l: 18,
     lv: 3,
-    i: "Boeuf haché 150g, riz japonais 120g, épinards 80g, carotte 60g, courgette 60g, oeuf 60g, sauce gochujang 15g, huile de sésame 8ml",
-    st: ["Cuire le riz.", "Poêler le boeuf haché avec la sauce.", "Assembler le bol avec riz, légumes sautés séparément, boeuf et oeuf au plat. Finir avec huile de sésame."],
+    i: "Bœuf haché 150g, riz japonais 120g, épinards 80g, carotte 60g, courgette 60g, œuf 60g, sauce gochujang 15g, huile de sésame 8ml",
+    st: ["Cuire le riz.", "Poêler le bœuf haché avec la sauce.", "Assembler le bol avec riz, légumes sautés séparément, bœuf et œuf au plat. Finir avec huile de sésame."],
     w: false,
-    tags: ["boeuf", "riz", "épinards", "carotte", "courgette", "oeuf", "sésame"]
+    tags: ["bœuf", "riz", "épinards", "carotte", "courgette", "œuf", "sésame"]
   },
   {
     _id: 'L113',
@@ -921,10 +921,10 @@ var lunch = [
     g: 48,
     l: 16,
     lv: 3,
-    i: "Nouilles ramen 120g, blanc de poulet 180g, bouillon de poulet 600ml, oeuf 60g, nori 5g, oignons verts 20g, sauce soja 20ml, huile de sésame 8ml",
-    st: ["Cuire le poulet dans le bouillon avec sauce soja.", "Cuire les nouilles séparément.", "Assembler: nouilles, poulet effiloché, oeuf mollet, nori et oignons verts."],
+    i: "Nouilles ramen 120g, blanc de poulet 180g, bouillon de poulet 600ml, œuf 60g, nori 5g, oignons verts 20g, sauce soja 20ml, huile de sésame 8ml",
+    st: ["Cuire le poulet dans le bouillon avec sauce soja.", "Cuire les nouilles séparément.", "Assembler: nouilles, poulet effiloché, œuf mollet, nori et oignons verts."],
     w: false,
-    tags: ["nouilles", "poulet", "bouillon", "oeuf", "nori", "soja"]
+    tags: ["nouilles", "poulet", "bouillon", "œuf", "nori", "soja"]
   },
   {
     _id: 'L117',
@@ -984,17 +984,17 @@ var lunch = [
   },
   {
     _id: 'L121',
-    n: "Bowl Boeuf Coréen Riz Sésame",
+    n: "Bowl Bœuf Coréen Riz Sésame",
     f: "🇰🇷",
     k: 512,
     p: 42,
     g: 50,
     l: 16,
     lv: 3,
-    i: "Boeuf 180g, riz japonais 120g, sauce soja 20ml, ail 5g, gingembre 5g, poire asiatique 40g, huile de sésame 8ml, sésame 8g",
-    st: ["Mariner le boeuf dans sauce soja, ail, gingembre et poire râpée.", "Poêler à feu vif.", "Servir sur le riz avec huile de sésame et sésame grillé."],
+    i: "Bœuf 180g, riz japonais 120g, sauce soja 20ml, ail 5g, gingembre 5g, poire asiatique 40g, huile de sésame 8ml, sésame 8g",
+    st: ["Mariner le bœuf dans sauce soja, ail, gingembre et poire râpée.", "Poêler à feu vif.", "Servir sur le riz avec huile de sésame et sésame grillé."],
     w: false,
-    tags: ["boeuf", "riz", "soja", "ail", "gingembre", "sésame"]
+    tags: ["bœuf", "riz", "soja", "ail", "gingembre", "sésame"]
   },
   {
     _id: 'L122',
@@ -1033,10 +1033,10 @@ var lunch = [
     g: 36,
     l: 24,
     lv: 1,
-    i: "Thon en conserve 180g, haricots verts 100g, pomme de terre 120g, oeuf dur 60g, tomate 80g, olives 20g, huile d'olive 12ml",
+    i: "Thon en conserve 180g, haricots verts 100g, pomme de terre 120g, œuf dur 60g, tomate 80g, olives 20g, huile d'olive 12ml",
     st: ["Cuire les haricots verts et pommes de terre.", "Assembler la salade avec tous les ingrédients.", "Assaisonner d'huile d'olive et sel."],
     w: false,
-    tags: ["thon", "haricots verts", "pomme de terre", "oeuf", "tomate", "olives"]
+    tags: ["thon", "haricots verts", "pomme de terre", "œuf", "tomate", "olives"]
   },
   {
     _id: 'L125',
@@ -1138,17 +1138,17 @@ var lunch = [
   },
   {
     _id: 'L132',
-    n: "Boeuf Haché Légumes Wok",
+    n: "Bœuf Haché Légumes Wok",
     f: "🇨🇳",
     k: 516,
     p: 42,
     g: 42,
     l: 20,
     lv: 2,
-    i: "Boeuf haché 180g, brocoli 100g, poivron 80g, carotte 60g, sauce huître halal 20ml, riz 100g, ail 5g",
-    st: ["Poêler le boeuf haché à feu vif.", "Ajouter les légumes et l'ail.", "Incorporer la sauce, servir avec le riz."],
+    i: "Bœuf haché 180g, brocoli 100g, poivron 80g, carotte 60g, sauce huître halal 20ml, riz 100g, ail 5g",
+    st: ["Poêler le bœuf haché à feu vif.", "Ajouter les légumes et l'ail.", "Incorporer la sauce, servir avec le riz."],
     w: false,
-    tags: ["boeuf", "brocoli", "poivron", "carotte", "sauce huître", "riz"]
+    tags: ["bœuf", "brocoli", "poivron", "carotte", "sauce huître", "riz"]
   },
   {
     _id: 'L133',
@@ -1166,17 +1166,17 @@ var lunch = [
   },
   {
     _id: 'L134',
-    n: "Burritos Boeuf Haricots Noirs",
+    n: "Burritos Bœuf Haricots Noirs",
     f: "🇲🇽",
     k: 504,
     p: 40,
     g: 50,
     l: 16,
     lv: 3,
-    i: "Boeuf haché 150g, haricots noirs 100g, tortilla blé 80g, maïs 60g, salsa 40g, fromage râpé 30g, épices 5g",
-    st: ["Cuire le boeuf haché avec épices et oignon.", "Chauffer les haricots noirs.", "Assembler le burrito, rouler, griller 2 min."],
+    i: "Bœuf haché 150g, haricots noirs 100g, tortilla blé 80g, maïs 60g, salsa 40g, fromage râpé 30g, épices 5g",
+    st: ["Cuire le bœuf haché avec épices et oignon.", "Chauffer les haricots noirs.", "Assembler le burrito, rouler, griller 2 min."],
     w: false,
-    tags: ["boeuf", "haricots noirs", "tortilla", "maïs", "salsa", "fromage"]
+    tags: ["bœuf", "haricots noirs", "tortilla", "maïs", "salsa", "fromage"]
   },
   {
     _id: 'L135',
@@ -1187,10 +1187,10 @@ var lunch = [
     g: 48,
     l: 18,
     lv: 3,
-    i: "Boeuf 180g, nouilles de riz 120g, bouillon pho 600ml, oignon brûlé 40g, gingembre 10g, basilic 10g, germes de soja 60g",
-    st: ["Préparer le bouillon avec os de boeuf, oignon brûlé et épices 2h.", "Cuire les nouilles.", "Assembler: nouilles, boeuf, bouillon chaud, herbes et germes."],
+    i: "Bœuf 180g, nouilles de riz 120g, bouillon pho 600ml, oignon brûlé 40g, gingembre 10g, basilic 10g, germes de soja 60g",
+    st: ["Préparer le bouillon avec os de bœuf, oignon brûlé et épices 2h.", "Cuire les nouilles.", "Assembler: nouilles, bœuf, bouillon chaud, herbes et germes."],
     w: false,
-    tags: ["boeuf", "nouilles", "bouillon", "gingembre", "basilic", "soja"]
+    tags: ["bœuf", "nouilles", "bouillon", "gingembre", "basilic", "soja"]
   },
   {
     _id: 'L136',
@@ -1215,10 +1215,10 @@ var lunch = [
     g: 56,
     l: 12,
     lv: 2,
-    i: "Riz cuit 200g, poulet 150g, oeuf 60g, oignon 60g, sauce soja 15ml, piment 3g, ail 5g, huile 8ml",
-    st: ["Poêler le riz cuit avec ail et oignon.", "Ajouter le poulet en dés, oeuf et sauce soja.", "Incorporer le piment. Servir avec oeuf au plat."],
+    i: "Riz cuit 200g, poulet 150g, œuf 60g, oignon 60g, sauce soja 15ml, piment 3g, ail 5g, huile 8ml",
+    st: ["Poêler le riz cuit avec ail et oignon.", "Ajouter le poulet en dés, œuf et sauce soja.", "Incorporer le piment. Servir avec œuf au plat."],
     w: false,
-    tags: ["riz", "poulet", "oeuf", "soja", "ail", "oignon"]
+    tags: ["riz", "poulet", "œuf", "soja", "ail", "oignon"]
   },
   {
     _id: 'L138',
@@ -1250,17 +1250,17 @@ var lunch = [
   },
   {
     _id: 'L140',
-    n: "Salade Thaï Boeuf Grillé",
+    n: "Salade Thaï Bœuf Grillé",
     f: "🇹🇭",
     k: 514,
     p: 42,
     g: 46,
     l: 18,
     lv: 2,
-    i: "Boeuf 180g, nouilles de riz 100g, concombre 60g, carotte 60g, cacahuètes 20g, menthe 10g, sauce fish halal 15ml, citron vert 20ml",
-    st: ["Griller le boeuf saignant, trancher fin.", "Cuire les nouilles.", "Assembler avec légumes, herbes, cacahuètes et sauce citron."],
+    i: "Bœuf 180g, nouilles de riz 100g, concombre 60g, carotte 60g, cacahuètes 20g, menthe 10g, sauce fish halal 15ml, citron vert 20ml",
+    st: ["Griller le bœuf saignant, trancher fin.", "Cuire les nouilles.", "Assembler avec légumes, herbes, cacahuètes et sauce citron."],
     w: false,
-    tags: ["boeuf", "nouilles", "concombre", "carotte", "cacahuètes", "menthe"]
+    tags: ["bœuf", "nouilles", "concombre", "carotte", "cacahuètes", "menthe"]
   },
   {
     _id: 'L141',
@@ -1278,17 +1278,17 @@ var lunch = [
   },
   {
     _id: 'L142',
-    n: "Lomo Saltado Boeuf",
+    n: "Lomo Saltado Bœuf",
     f: "🇵🇪",
     k: 508,
     p: 40,
     g: 42,
     l: 20,
     lv: 3,
-    i: "Boeuf 180g, pommes de terre 150g, tomate 80g, oignon rouge 60g, sauce soja 15ml, coriandre 10g, riz 80g",
-    st: ["Faire sauter le boeuf à feu très vif.", "Ajouter oignon, tomate et sauce soja.", "Incorporer les frites maison et coriandre. Servir avec riz."],
+    i: "Bœuf 180g, pommes de terre 150g, tomate 80g, oignon rouge 60g, sauce soja 15ml, coriandre 10g, riz 80g",
+    st: ["Faire sauter le bœuf à feu très vif.", "Ajouter oignon, tomate et sauce soja.", "Incorporer les frites maison et coriandre. Servir avec riz."],
     w: false,
-    tags: ["boeuf", "pomme de terre", "tomate", "oignon", "soja", "coriandre"]
+    tags: ["bœuf", "pomme de terre", "tomate", "oignon", "soja", "coriandre"]
   },
   {
     _id: 'L143',
@@ -1306,17 +1306,17 @@ var lunch = [
   },
   {
     _id: 'L144',
-    n: "Keftah Boeuf Tomate Herbes",
+    n: "Keftah Bœuf Tomate Herbes",
     f: "🇲🇦",
     k: 524,
     p: 42,
     g: 44,
     l: 20,
     lv: 2,
-    i: "Boeuf haché 200g, tomates 150g, oignon 60g, persil 10g, cumin 2g, paprika 2g, semoule 100g, harissa 10g",
-    st: ["Préparer les keftah avec boeuf, oignon et épices.", "Griller les keftah ou cuire à la poêle.", "Servir avec semoule et sauce tomate épicée."],
+    i: "Bœuf haché 200g, tomates 150g, oignon 60g, persil 10g, cumin 2g, paprika 2g, semoule 100g, harissa 10g",
+    st: ["Préparer les keftah avec bœuf, oignon et épices.", "Griller les keftah ou cuire à la poêle.", "Servir avec semoule et sauce tomate épicée."],
     w: false,
-    tags: ["boeuf", "tomate", "oignon", "persil", "semoule", "harissa"]
+    tags: ["bœuf", "tomate", "oignon", "persil", "semoule", "harissa"]
   },
   {
     _id: 'L145',
@@ -1435,17 +1435,17 @@ var snack = [
   },
   {
     _id: 'L203',
-    n: "Oeufs Durs Crudités",
+    n: "Œufs Durs Crudités",
     f: "🌍",
     k: 222,
     p: 16,
     g: 8,
     l: 14,
     lv: 1,
-    i: "Oeufs durs 2x60g, carotte 80g, concombre 80g, tomate cerise 60g, sel, poivre",
-    st: ["Cuire les oeufs 10 min dans l'eau bouillante.", "Laisser refroidir, écaler.", "Servir avec les crudités."],
+    i: "Œufs durs 2x60g, carotte 80g, concombre 80g, tomate cerise 60g, sel, poivre",
+    st: ["Cuire les œufs 10 min dans l'eau bouillante.", "Laisser refroidir, écaler.", "Servir avec les crudités."],
     w: false,
-    tags: ["oeuf", "carotte", "concombre", "tomate"]
+    tags: ["œuf", "carotte", "concombre", "tomate"]
   },
   {
     _id: 'L204',
@@ -1596,10 +1596,10 @@ var snack = [
     g: 24,
     l: 8,
     lv: 1,
-    i: "Whey protéine chocolat 30g, farine d'avoine 30g, oeuf 60g, lait écrémé 30ml, levure 2g",
+    i: "Whey protéine chocolat 30g, farine d'avoine 30g, œuf 60g, lait écrémé 30ml, levure 2g",
     st: ["Mélanger tous les ingrédients dans un mug.", "Cuire 2 min au micro-ondes.", "Laisser reposer 1 min avant de déguster."],
     w: true,
-    tags: ["whey", "avoine", "oeuf", "lait"]
+    tags: ["whey", "avoine", "œuf", "lait"]
   },
   {
     _id: 'L215',
@@ -1624,10 +1624,10 @@ var snack = [
     g: 28,
     l: 14,
     lv: 2,
-    i: "Banane 100g, farine avoine 60g, oeuf 60g, noix 25g, miel 10g, levure 3g",
-    st: ["Écraser la banane, mélanger avec oeuf, farine et miel.", "Ajouter les noix et la levure.", "Cuire 35 min à 180°C. Couper en tranches."],
+    i: "Banane 100g, farine avoine 60g, œuf 60g, noix 25g, miel 10g, levure 3g",
+    st: ["Écraser la banane, mélanger avec œuf, farine et miel.", "Ajouter les noix et la levure.", "Cuire 35 min à 180°C. Couper en tranches."],
     w: false,
-    tags: ["banane", "avoine", "oeuf", "noix", "miel"]
+    tags: ["banane", "avoine", "œuf", "noix", "miel"]
   },
   {
     _id: 'L217',
@@ -1806,10 +1806,10 @@ var snack = [
     g: 32,
     l: 10,
     lv: 2,
-    i: "Farine d'avoine 60g, myrtilles 60g, oeuf 60g, yaourt 60g, miel 15g, levure 3g, huile 8ml",
-    st: ["Mélanger farine, oeuf, yaourt et miel.", "Incorporer les myrtilles.", "Cuire en moule à muffin 20 min à 180°C."],
+    i: "Farine d'avoine 60g, myrtilles 60g, œuf 60g, yaourt 60g, miel 15g, levure 3g, huile 8ml",
+    st: ["Mélanger farine, œuf, yaourt et miel.", "Incorporer les myrtilles.", "Cuire en moule à muffin 20 min à 180°C."],
     w: false,
-    tags: ["avoine", "myrtilles", "oeuf", "yaourt", "miel"]
+    tags: ["avoine", "myrtilles", "œuf", "yaourt", "miel"]
   },
   {
     _id: 'L230',
@@ -1904,10 +1904,10 @@ var snack = [
     g: 28,
     l: 12,
     lv: 2,
-    i: "Whey protéine 35g, farine d'avoine 50g, oeuf 60g, lait écrémé 80ml, myrtilles 60g",
-    st: ["Mélanger whey, farine, oeuf et lait.", "Cuire des pancakes dans une poêle antiadhésive.", "Garnir de myrtilles fraîches."],
+    i: "Whey protéine 35g, farine d'avoine 50g, œuf 60g, lait écrémé 80ml, myrtilles 60g",
+    st: ["Mélanger whey, farine, œuf et lait.", "Cuire des pancakes dans une poêle antiadhésive.", "Garnir de myrtilles fraîches."],
     w: true,
-    tags: ["whey", "avoine", "oeuf", "lait", "myrtilles"]
+    tags: ["whey", "avoine", "œuf", "lait", "myrtilles"]
   },
   {
     _id: 'L237',
@@ -1946,10 +1946,10 @@ var snack = [
     g: 36,
     l: 8,
     lv: 1,
-    i: "Whey protéine vanille 30g, farine d'avoine 40g, oeuf 60g, myrtilles 40g, lait 40ml, levure 2g",
+    i: "Whey protéine vanille 30g, farine d'avoine 40g, œuf 60g, myrtilles 40g, lait 40ml, levure 2g",
     st: ["Mélanger tous les ingrédients dans un mug.", "Incorporer les myrtilles.", "Cuire 2 min au micro-ondes."],
     w: true,
-    tags: ["whey", "avoine", "oeuf", "myrtilles", "lait"]
+    tags: ["whey", "avoine", "œuf", "myrtilles", "lait"]
   },
   {
     _id: 'L240',
@@ -2016,10 +2016,10 @@ var snack = [
     g: 22,
     l: 12,
     lv: 2,
-    i: "Whey protéine chocolat 40g, farine d'avoine 40g, oeuf 60g, beurre de cajou 15g, pépites chocolat 15g",
+    i: "Whey protéine chocolat 40g, farine d'avoine 40g, œuf 60g, beurre de cajou 15g, pépites chocolat 15g",
     st: ["Mélanger tous les ingrédients jusqu'à pâte homogène.", "Former des cookies et disposer sur plaque.", "Cuire 10 min à 180°C."],
     w: true,
-    tags: ["whey", "avoine", "oeuf", "cajou", "chocolat"]
+    tags: ["whey", "avoine", "œuf", "cajou", "chocolat"]
   },
   {
     _id: 'L245',
@@ -2173,10 +2173,10 @@ var dinner = [
     g: 6,
     l: 26,
     lv: 1,
-    i: "Oeufs 3x60g, champignons 120g, persil 10g, ciboulette 5g, beurre 15g, sel, poivre",
-    st: ["Faire sauter les champignons dans le beurre.", "Battre les oeufs avec les herbes.", "Cuire l'omelette moelleuse, garnir de champignons."],
+    i: "Œufs 3x60g, champignons 120g, persil 10g, ciboulette 5g, beurre 15g, sel, poivre",
+    st: ["Faire sauter les champignons dans le beurre.", "Battre les œufs avec les herbes.", "Cuire l'omelette moelleuse, garnir de champignons."],
     w: false,
-    tags: ["oeuf", "champignons", "persil", "ciboulette", "beurre"]
+    tags: ["œuf", "champignons", "persil", "ciboulette", "beurre"]
   },
   {
     _id: 'L306',
@@ -2236,17 +2236,17 @@ var dinner = [
   },
   {
     _id: 'L310',
-    n: "Pho Boeuf",
+    n: "Pho Bœuf",
     f: "🇻🇳",
     k: 422,
     p: 36,
     g: 38,
     l: 14,
     lv: 3,
-    i: "Boeuf 160g, nouilles de riz 100g, bouillon pho 600ml, oignon brûlé 40g, gingembre 15g, basilic 10g, citron vert 15ml, germes de soja 60g",
-    st: ["Préparer le bouillon pho avec épices 1h.", "Cuire les nouilles.", "Assembler avec boeuf cru tranché fin (le bouillon le cuit), herbes fraîches."],
+    i: "Bœuf 160g, nouilles de riz 100g, bouillon pho 600ml, oignon brûlé 40g, gingembre 15g, basilic 10g, citron vert 15ml, germes de soja 60g",
+    st: ["Préparer le bouillon pho avec épices 1h.", "Cuire les nouilles.", "Assembler avec bœuf cru tranché fin (le bouillon le cuit), herbes fraîches."],
     w: false,
-    tags: ["boeuf", "nouilles", "gingembre", "basilic", "soja"]
+    tags: ["bœuf", "nouilles", "gingembre", "basilic", "soja"]
   },
   {
     _id: 'L311',
@@ -2264,17 +2264,17 @@ var dinner = [
   },
   {
     _id: 'L312',
-    n: "Tataki Boeuf Sésame",
+    n: "Tataki Bœuf Sésame",
     f: "🇯🇵",
     k: 396,
     p: 42,
     g: 12,
     l: 20,
     lv: 3,
-    i: "Filet de boeuf 200g, sésame 15g, sauce soja 15ml, gingembre 8g, huile de sésame 8ml, salade 60g",
-    st: ["Rouler le filet de boeuf dans le sésame.", "Saisir 30 sec de chaque côté à feu très vif.", "Trancher fin, servir sur salade avec sauce soja et gingembre."],
+    i: "Filet de bœuf 200g, sésame 15g, sauce soja 15ml, gingembre 8g, huile de sésame 8ml, salade 60g",
+    st: ["Rouler le filet de bœuf dans le sésame.", "Saisir 30 sec de chaque côté à feu très vif.", "Trancher fin, servir sur salade avec sauce soja et gingembre."],
     w: false,
-    tags: ["boeuf", "sésame", "soja", "gingembre", "salade"]
+    tags: ["bœuf", "sésame", "soja", "gingembre", "salade"]
   },
   {
     _id: 'L313',
@@ -2299,8 +2299,8 @@ var dinner = [
     g: 4,
     l: 22,
     lv: 3,
-    i: "Dorade 400g (entière), gros sel 500g, blancs d'oeufs 2x30g, herbes aromatiques 10g, citron 20ml, huile d'olive 10ml",
-    st: ["Mélanger le gros sel avec les blancs d'oeufs.", "Envelopper la dorade dans la croûte de sel.", "Cuire 25 min à 200°C. Casser la croûte, servir avec citron."],
+    i: "Dorade 400g (entière), gros sel 500g, blancs d'œufs 2x30g, herbes aromatiques 10g, citron 20ml, huile d'olive 10ml",
+    st: ["Mélanger le gros sel avec les blancs d'œufs.", "Envelopper la dorade dans la croûte de sel.", "Cuire 25 min à 200°C. Casser la croûte, servir avec citron."],
     w: false,
     tags: ["dorade", "sel", "herbes", "citron", "huile"]
   },
@@ -2355,10 +2355,10 @@ var dinner = [
     g: 14,
     l: 28,
     lv: 2,
-    i: "Thon frais 200g, haricots verts 80g, oeuf dur 60g, tomate 80g, olives 20g, huile d'olive 15ml, moutarde 10g",
+    i: "Thon frais 200g, haricots verts 80g, œuf dur 60g, tomate 80g, olives 20g, huile d'olive 15ml, moutarde 10g",
     st: ["Griller le thon 2-3 min de chaque côté.", "Cuire les haricots verts al dente.", "Composer la salade, assaisonner à la moutarde."],
     w: false,
-    tags: ["thon", "haricots verts", "oeuf", "tomate", "olives", "huile"]
+    tags: ["thon", "haricots verts", "œuf", "tomate", "olives", "huile"]
   },
   {
     _id: 'L319',
@@ -2418,17 +2418,17 @@ var dinner = [
   },
   {
     _id: 'L323',
-    n: "Boeuf Bourguignon Allégé",
+    n: "Bœuf Bourguignon Allégé",
     f: "🇫🇷",
     k: 454,
     p: 42,
     g: 22,
     l: 22,
     lv: 4,
-    i: "Boeuf à braiser 200g, carotte 80g, oignon 60g, champignons 80g, bouillon 300ml, concentré de tomate 20g, herbes 5g",
-    st: ["Faire dorer le boeuf.", "Ajouter les légumes, le concentré et le bouillon.", "Mijoter 1h30 à feu très doux."],
+    i: "Bœuf à braiser 200g, carotte 80g, oignon 60g, champignons 80g, bouillon 300ml, concentré de tomate 20g, herbes 5g",
+    st: ["Faire dorer le bœuf.", "Ajouter les légumes, le concentré et le bouillon.", "Mijoter 1h30 à feu très doux."],
     w: false,
-    tags: ["boeuf", "carotte", "oignon", "champignons", "tomate"]
+    tags: ["bœuf", "carotte", "oignon", "champignons", "tomate"]
   },
   {
     _id: 'L324',
@@ -2446,17 +2446,17 @@ var dinner = [
   },
   {
     _id: 'L325',
-    n: "Salade Tiède Boeuf Avocat",
+    n: "Salade Tiède Bœuf Avocat",
     f: "🇺🇸",
     k: 444,
     p: 36,
     g: 30,
     l: 20,
     lv: 2,
-    i: "Boeuf haché maigre 160g, avocat 80g, tomate 80g, maïs 60g, laitue 60g, citron 15ml, épices 3g",
-    st: ["Cuire le boeuf haché avec épices.", "Préparer la salade avec tous les légumes.", "Assembler tiède avec le boeuf."],
+    i: "Bœuf haché maigre 160g, avocat 80g, tomate 80g, maïs 60g, laitue 60g, citron 15ml, épices 3g",
+    st: ["Cuire le bœuf haché avec épices.", "Préparer la salade avec tous les légumes.", "Assembler tiède avec le bœuf."],
     w: false,
-    tags: ["boeuf", "avocat", "tomate", "maïs", "laitue"]
+    tags: ["bœuf", "avocat", "tomate", "maïs", "laitue"]
   },
   {
     _id: 'L326',
@@ -2600,17 +2600,17 @@ var dinner = [
   },
   {
     _id: 'L336',
-    n: "Boeuf Haché Courgette Gratiné",
+    n: "Bœuf Haché Courgette Gratiné",
     f: "🇮🇹",
     k: 446,
     p: 42,
     g: 20,
     l: 22,
     lv: 2,
-    i: "Boeuf haché 180g, courgette 200g, tomate 100g, fromage râpé 30g, oignon 60g, herbes 3g",
-    st: ["Évider les courgettes et farcir de boeuf haché.", "Napper de sauce tomate.", "Gratiner 25 min à 180°C."],
+    i: "Bœuf haché 180g, courgette 200g, tomate 100g, fromage râpé 30g, oignon 60g, herbes 3g",
+    st: ["Évider les courgettes et farcir de bœuf haché.", "Napper de sauce tomate.", "Gratiner 25 min à 180°C."],
     w: false,
-    tags: ["boeuf", "courgette", "tomate", "fromage", "oignon"]
+    tags: ["bœuf", "courgette", "tomate", "fromage", "oignon"]
   },
   {
     _id: 'L337',
@@ -2796,17 +2796,17 @@ var dinner = [
   },
   {
     _id: 'L350',
-    n: "Filet de Boeuf Sauce Champignons",
+    n: "Filet de Bœuf Sauce Champignons",
     f: "🇫🇷",
     k: 444,
     p: 40,
     g: 26,
     l: 20,
     lv: 3,
-    i: "Filet de boeuf 180g, champignons 120g, crème légère 60ml, oignon 40g, bouillon 100ml, persil 5g, huile 10ml",
-    st: ["Saisir le filet de boeuf à feu très vif.", "Préparer la sauce champignons à la crème.", "Servir avec la sauce et persil."],
+    i: "Filet de bœuf 180g, champignons 120g, crème légère 60ml, oignon 40g, bouillon 100ml, persil 5g, huile 10ml",
+    st: ["Saisir le filet de bœuf à feu très vif.", "Préparer la sauce champignons à la crème.", "Servir avec la sauce et persil."],
     w: false,
-    tags: ["boeuf", "champignons", "crème", "oignon", "persil"]
+    tags: ["bœuf", "champignons", "crème", "oignon", "persil"]
   }
 ];
 
