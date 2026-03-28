@@ -1,7 +1,7 @@
 // MTD Macro Calculator — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'mtd-v6';
-const RUNTIME_CACHE = 'mtd-runtime-v6';
+const CACHE_VERSION = 'mtd-v7';
+const RUNTIME_CACHE = 'mtd-runtime-v7';
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [
@@ -13,6 +13,7 @@ const APP_SHELL = [
   './app-nutrition.js',
   './auth.js',
   './recipes-db.js',
+  './recipe-engine.js',
   './exercises-db.js',
   './gamification.js',
   './extras.js',
@@ -23,14 +24,19 @@ const APP_SHELL = [
   './muscu-programs.js',
   './triathlon-program.js',
   './dashboard.js',
+  './prices-db.js',
+  './nutrition-master.js',
+  './perf-history.js',
   './premium-ui.css',
   './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
   './jspdf.umd.min.js'
 ];
 
 // Third-party CDN scripts to pre-cache.
 const CDN_ASSETS = [
-  'https://cdn.jsdelivr.net/npm/chart.js'
+  'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js'
 ];
 
 // ---------------------------------------------------------------------------

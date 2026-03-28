@@ -531,7 +531,15 @@ function createRow(name, sub, delta, unit, periodLabel) {
   right.appendChild(valEl);
   if (delta.deltaKg !== null && delta.deltaKg !== undefined) {
     var deltaEl = document.createElement('div');
-    deltaEl.innerHTML = deltaTag(delta, unit, false);
+    // XSS fix: use DOM construction instead of innerHTML for deltaTag output
+    var sign = delta.deltaKg > 0 ? '+' : '';
+    var isGoodFlag = delta.trend === 'up';
+    var tagColor = delta.deltaKg === 0 ? '#6B6B65' : isGoodFlag ? '#27AE60' : '#C0392B';
+    var tagSpan = document.createElement('span');
+    tagSpan.style.cssText = 'font-size:11px;color:' + tagColor + ';font-family:Helvetica Neue,Arial,sans-serif;margin-left:6px';
+    var pctStr = delta.deltaPct !== null ? ' (' + (delta.deltaPct > 0 ? '+' : '') + delta.deltaPct + '%)' : '';
+    tagSpan.textContent = sign + delta.deltaKg + (unit || 'kg') + pctStr;
+    deltaEl.appendChild(tagSpan);
     if (periodLabel) deltaEl.appendChild(document.createTextNode(' vs ' + periodLabel));
     right.appendChild(deltaEl);
   } else {
@@ -572,7 +580,11 @@ function createRowTime(name, sub, delta, invertColors, periodLabel) {
     var color = dSecs === 0 ? '#6B6B65' : isGood ? '#27AE60' : '#C0392B';
     var pctStr = delta.deltaPct !== null ? ' (' + (delta.deltaPct > 0 ? '+' : '') + delta.deltaPct + '%)' : '';
     var deltaEl = document.createElement('div');
-    deltaEl.innerHTML = '<span style="font-size:11px;color:' + color + ';font-family:Helvetica Neue,Arial,sans-serif;margin-left:6px">' + sign + dSecs + 's' + pctStr + '</span>';
+    // XSS fix: use DOM construction instead of innerHTML
+    var timeSpan = document.createElement('span');
+    timeSpan.style.cssText = 'font-size:11px;color:' + color + ';font-family:Helvetica Neue,Arial,sans-serif;margin-left:6px';
+    timeSpan.textContent = sign + dSecs + 's' + pctStr;
+    deltaEl.appendChild(timeSpan);
     if (periodLabel) deltaEl.appendChild(document.createTextNode(' vs ' + periodLabel));
     right.appendChild(deltaEl);
   } else {

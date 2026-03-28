@@ -1532,6 +1532,8 @@ function renderStep8(p) {
     if (!S.weightHistory) S.weightHistory = [];
     var today = new Date().toISOString().split('T')[0];
     S.weightHistory.push({date: today, weight: v});
+    // Cap to 52 entries (1 year of weekly weigh-ins) to limit localStorage size
+    if (S.weightHistory.length > 52) S.weightHistory = S.weightHistory.slice(-52);
     S.weight = v;
     // Persist to localStorage
     try {
@@ -2459,7 +2461,7 @@ function renderSaladBar(p) {
   var actWrap = h('div', { style: 'padding:8px 16px 24px;display:flex;flex-direction:column;gap:8px' });
 
   var btnAdd = h('button', {
-    style: 'width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#4CAF50,#8BC34A);color:#fff;font-size:15px;font-weight:700;cursor:' + (allItems.length > 0 ? 'pointer' : 'not-allowed') + ';opacity:' + (allItems.length > 0 ? '1' : '0.5'),
+    style: 'width:100%;padding:14px;min-height:44px;border:none;background:var(--black,#0A0A09);color:var(--ivory,#FAFAF7);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:' + (allItems.length > 0 ? 'pointer' : 'not-allowed') + ';opacity:' + (allItems.length > 0 ? '1' : '0.5'),
     onclick: function() {
       if (allItems.length === 0) return;
       var slot = sb.mealTarget;

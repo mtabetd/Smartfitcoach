@@ -1878,32 +1878,36 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
 }
 
 function saveMuscuSessionLog() {
-  var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-  localStorage.setItem('mtd_muscu_session_' + uid, JSON.stringify(S.muscuSessionLog));
+  try {
+    var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+    localStorage.setItem('mtd_muscu_session_' + uid, JSON.stringify(S.muscuSessionLog));
 
-  // Mettre à jour l'historique de progression
-  Object.keys(S.muscuSessionLog).forEach(function(date) {
-    Object.keys(S.muscuSessionLog[date]).forEach(function(exName) {
-      var sets = S.muscuSessionLog[date][exName];
-      var completed = sets.filter(function(s) { return s.actualWeight !== null; });
-      if (completed.length === 0) return;
-      var avgWeight = completed.reduce(function(sum, s) { return sum + s.actualWeight; }, 0) / completed.length;
-      var avgReps = completed.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / completed.length;
+    // Mettre à jour l'historique de progression
+    Object.keys(S.muscuSessionLog).forEach(function(date) {
+      Object.keys(S.muscuSessionLog[date]).forEach(function(exName) {
+        var sets = S.muscuSessionLog[date][exName];
+        var completed = sets.filter(function(s) { return s.actualWeight !== null; });
+        if (completed.length === 0) return;
+        var avgWeight = completed.reduce(function(sum, s) { return sum + s.actualWeight; }, 0) / completed.length;
+        var avgReps = completed.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / completed.length;
 
-      if (!S.muscuProgressionHistory[exName]) S.muscuProgressionHistory[exName] = [];
-      // Ne pas dupliquer pour la même date
-      var existing = S.muscuProgressionHistory[exName].find(function(entry) { return entry.date === date; });
-      if (!existing) {
-        S.muscuProgressionHistory[exName].push({
-          date: date,
-          week: S.muscuCycle || 1,
-          weight: Math.round(avgWeight * 2) / 2,
-          reps: Math.round(avgReps)
-        });
-      }
+        if (!S.muscuProgressionHistory[exName]) S.muscuProgressionHistory[exName] = [];
+        // Ne pas dupliquer pour la même date
+        var existing = S.muscuProgressionHistory[exName].find(function(entry) { return entry.date === date; });
+        if (!existing) {
+          S.muscuProgressionHistory[exName].push({
+            date: date,
+            week: S.muscuCycle || 1,
+            weight: Math.round(avgWeight * 2) / 2,
+            reps: Math.round(avgReps)
+          });
+        }
+      });
     });
-  });
-  localStorage.setItem('mtd_muscu_progression_' + uid, JSON.stringify(S.muscuProgressionHistory));
+    localStorage.setItem('mtd_muscu_progression_' + uid, JSON.stringify(S.muscuProgressionHistory));
+  } catch (e) {
+    console.warn('[saveMuscuSessionLog] localStorage error:', e);
+  }
 }
 
 function getMuscuPhase(week) {
@@ -1923,22 +1927,30 @@ function applyPhaseToExercise(ex, phase) {
 
 function saveMuscuWeek(week) {
   S.muscuWeek = week;
-  var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-  localStorage.setItem('mtd_muscu_week_' + uid, String(week));
-  if (!S.muscuProgramStart) {
-    S.muscuProgramStart = new Date().toISOString().split('T')[0];
-    localStorage.setItem('mtd_muscu_start_' + uid, S.muscuProgramStart);
+  try {
+    var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+    localStorage.setItem('mtd_muscu_week_' + uid, String(week));
+    if (!S.muscuProgramStart) {
+      S.muscuProgramStart = new Date().toISOString().split('T')[0];
+      localStorage.setItem('mtd_muscu_start_' + uid, S.muscuProgramStart);
+    }
+  } catch (e) {
+    console.warn('[saveMuscuWeek] localStorage error:', e);
   }
 }
 
 function loadMuscuWeek() {
-  var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-  var w = parseInt(localStorage.getItem('mtd_muscu_week_' + uid));
-  if (!isNaN(w) && w >= 1) S.muscuWeek = w;
-  var start = localStorage.getItem('mtd_muscu_start_' + uid);
-  if (start) S.muscuProgramStart = start;
-  var c = parseInt(localStorage.getItem('mtd_muscu_cycle_' + uid));
-  if (!isNaN(c) && c >= 1) S.muscuCycle = c;
+  try {
+    var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+    var w = parseInt(localStorage.getItem('mtd_muscu_week_' + uid));
+    if (!isNaN(w) && w >= 1) S.muscuWeek = w;
+    var start = localStorage.getItem('mtd_muscu_start_' + uid);
+    if (start) S.muscuProgramStart = start;
+    var c = parseInt(localStorage.getItem('mtd_muscu_cycle_' + uid));
+    if (!isNaN(c) && c >= 1) S.muscuCycle = c;
+  } catch (e) {
+    console.warn('[loadMuscuWeek] localStorage error:', e);
+  }
 }
 
 function renderWeekTracker(p) {
