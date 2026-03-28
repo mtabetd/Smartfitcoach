@@ -5349,7 +5349,7 @@
       emoji: '🥕', origin: '🇫🇷',
       mealTypes: ['snack'],
       tags: ['high-protein', 'snack', 'meal-prep', 'carrot-cake', 'noix', 'cannelle', 'batch-cooking', 'vegetarian'],
-      difficulty: 2, prepTime: 20, cookTime: 22, servings: 6,
+      difficulty: 2, prepTime: 20, cookTime: 20, servings: 6,
       // 120×4 + 84×4 + 36×9 = 480+336+324 = 1140 ✓ (≈1140 kcal, 190 kcal/muffin)
       baseNutrition: { calories: 1140, proteinGrams: 120, carbsGrams: 84, fatGrams: 36 },
       ingredients: [
@@ -5381,7 +5381,7 @@
       emoji: '🍵', origin: '🇯🇵',
       mealTypes: ['breakfast', 'snack'],
       tags: ['high-protein', 'snack', 'pancakes', 'matcha', 'japonais', 'souffle', 'tendance', 'instagrammable', 'vegetarian'],
-      difficulty: 3, prepTime: 15, cookTime: 15, servings: 1,
+      difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
       // 30×4 + 30×4 + 10×9 = 120+120+90 = 330 ✓ (≈320 kcal)
       baseNutrition: { calories: 330, proteinGrams: 30, carbsGrams: 30, fatGrams: 10 },
       ingredients: [
@@ -5550,7 +5550,7 @@
       emoji: '🍫', origin: '🏅',
       mealTypes: ['snack'],
       tags: ['high-protein', 'snack', 'meal-prep', 'chocolat', 'caramel', 'twix', 'indulgent', 'premium'],
-      difficulty: 2, prepTime: 30, cookTime: 15, servings: 8,
+      difficulty: 2, prepTime: 25, cookTime: 15, servings: 8,
       // 128×4 + 192×4 + 96×9 = 512+768+864 = 2144 ✓ (TOTAL 8 barres)
       baseNutrition: { calories: 2144, proteinGrams: 128, carbsGrams: 192, fatGrams: 96 },
       ingredients: [
@@ -5764,7 +5764,7 @@
       emoji: '🍠', origin: '🌍',
       mealTypes: ['snack'],
       tags: ['high-protein', 'snack', 'brownie', 'patate-douce', 'cajou', 'sans-farine', 'sans-sucre-ajouté', 'fudgey'],
-      difficulty: 2, prepTime: 20, cookTime: 25, servings: 9,
+      difficulty: 2, prepTime: 20, cookTime: 20, servings: 9,
       // 108×4 + 102×4 + 68×9 = 432+408+612 = 1452 ✓
       baseNutrition: { calories: 1452, proteinGrams: 108, carbsGrams: 102, fatGrams: 68 },
       ingredients: [
