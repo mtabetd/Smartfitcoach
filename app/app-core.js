@@ -252,7 +252,7 @@ var SHOPPING=[
     {id:'budget_high',name:'Confort',desc:'Qualité sans restriction'}
   ]},
   {cat:'PRÉFÉRENCES PRODUITS',items:[
-    {id:'pref_fresh',name:'Produits frais',desc:'Viande, poisson, légumes fraîs'},
+    {id:'pref_fresh',name:'Produits frais',desc:'Viande, poisson, légumes frais'},
     {id:'pref_frozen',name:'Surgelés acceptés',desc:'Légumes, poisson, fruits surgelés'},
     {id:'pref_canned',name:'Conserves acceptées',desc:'Légumineuses, thon, tomates'},
     {id:'pref_batch',name:'Batch cooking',desc:'Je prépare en avance pour la semaine'},
