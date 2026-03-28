@@ -1099,8 +1099,9 @@ var EXERCISES = {
       sets: "3\u00d720-25",
       rest: "45s",
       video: "https://www.youtube.com/results?search_query=crunch+abdos+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+      warn: "Deconseille si hernie discale (flexion lombaire repetee = risque discal) ou osteoporose (compression vertebrale anterieure en flexion) — preferer McGill curl-up ou planche",
       desc: "Allonge au sol, decoller les epaules en contractant les abdominaux.",
-      tips: ["Contractez le transverse (rentrer le nombril) avant tout mouvement", "Ne pas tirer sur la nuque", "Expirer en montant", "Regard vers le plafond"],
+      tips: ["Contractez le transverse (rentrer le nombril) avant tout mouvement", "Ne pas tirer sur la nuque", "Expirer en montant", "Regard vers le plafond", "Amplitude minimale : epaules a 30 degres — pas de sit-up complet"],
       lv: 1,
       tags: ["abdos", "grand droit", "debutant"]
     },
