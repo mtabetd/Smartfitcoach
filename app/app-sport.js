@@ -1688,6 +1688,30 @@ function renderCrossfitProgram(p) {
     p.appendChild(goalBanner);
   }
 
+  // ─── MEDICAL RESTRICTIONS BANNER (CrossFit) ───
+  // Afficher les restrictions médicales pertinentes pour les WODs CrossFit
+  // Les WODs contiennent des mouvements à risque (box jumps, sauts, charges lourdes)
+  // qui doivent être signalés si l'utilisateur a des conditions médicales
+  if (S.muscuMedical && S.muscuMedical.done) {
+    var cfMedRestrictions = [];
+    var cfMed = S.muscuMedical;
+    if (cfMed.knees || cfMed.acl)         cfMedRestrictions.push('\u26A0 Genoux / LCA\u00a0: remplacez les Box Jumps par des Box Step-ups, \u00e9vitez les Jump Squats et Pistols. Thrusters et Wall Balls autoris\u00e9s avec technique contr\u00f4l\u00e9e.');
+    if (cfMed.kneeOsteoarthritis)          cfMedRestrictions.push('\u26A0 Gonarthrose\u00a0: \u00e9vitez tous les sauts et flexions profondes sous charge. Privil\u00e9giez le velo (Assault Bike) et le rameur (Row) comme alternatives cardio (OARSI 2014).');
+    if (cfMed.meniscus)                    cfMedRestrictions.push('\u26A0 M\u00e9nisque\u00a0: pas de Box Jumps ni Pistols. Squats limit\u00e9s \u00e0 90\u00b0 de flexion maximum sous charge.');
+    if (cfMed.lowerBack || cfMed.herniaDisc) cfMedRestrictions.push('\u26A0 Dos / Hernie discale\u00a0: r\u00e9duisez la charge sur Deadlifts et Back Squats (\u226470\u00a0% 1RM). \u00c9vitez Good Morning et Jefferson Curl.');
+    if (cfMed.shoulders || cfMed.rotatorCuff) cfMedRestrictions.push('\u26A0 \u00c9paules\u00a0: remplacez HSPU par Pike Push-ups. Overhead Press all\u00e9g\u00e9. \u00c9vitez les mouvements overhead douloureux (Ludewig & Cook, Phys Ther 2000).');
+    if (cfMed.hypertension)                cfMedRestrictions.push('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e RPE\u00a07/10 maximum. \u00c9vitez Valsalva lors des charges lourdes (AHA/ACSM 2007).');
+    if (cfMed.osteoporosis)                cfMedRestrictions.push('\u26A0 Ost\u00e9oporose\u00a0: pas de Box Jumps ni sauts. Charges \u226470\u00a0% 1RM uniquement. \u00c9vitez flexions vert\u00e9brales r\u00e9p\u00e9t\u00e9es (Sinaki, Spine 2002).');
+    if (cfMedRestrictions.length > 0) {
+      var cfMedBanner = h('div', {style: 'border-left:3px solid #E07B00;background:rgba(224,123,0,0.07);padding:12px 16px;margin-bottom:16px'});
+      cfMedBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E07B00;margin-bottom:8px'}, '\u26A0 Restrictions m\u00e9dicales \u2014 CrossFit'));
+      cfMedRestrictions.forEach(function(r) {
+        cfMedBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg2,#555);margin-bottom:4px'}, r));
+      });
+      p.appendChild(cfMedBanner);
+    }
+  }
+
   // ─── STRENGTH GRADE ───
   if (window.renderStrengthGrade) renderStrengthGrade(p);
 
