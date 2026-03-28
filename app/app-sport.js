@@ -1471,6 +1471,12 @@ function generateCrossfitWeek(weekNumber, daysPerWeek) {
 
 // ─── VUE CALENDRIER 100 JOURS ───
 function renderCFCalendar(p) {
+  // Guard: ensure cfProgress is always an object
+  if (!S.cfProgress || typeof S.cfProgress !== 'object') S.cfProgress = {};
+  // Guard: ensure cfCurrentDay is a valid number
+  if (!S.cfCurrentDay || S.cfCurrentDay < 1) S.cfCurrentDay = 1;
+  if (S.cfCurrentDay > 100) S.cfCurrentDay = 100;
+
   var allWods = window.CF_WODS_FULL || window.CF_WODS || [];
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'CrossFit'));
@@ -1609,8 +1615,15 @@ function renderCFCalendar(p) {
 
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
+  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
+  if (!S.cfProgress || typeof S.cfProgress !== 'object') S.cfProgress = {};
+  // Guard: cfCurrentDay bounds
+  if (!S.cfCurrentDay || S.cfCurrentDay < 1) S.cfCurrentDay = 1;
+  if (S.cfCurrentDay > 100) S.cfCurrentDay = 100;
+
   // Load saved 1RM data if not already loaded
-  if (Object.keys(S.crossfit1RM).length === 0) {
+  if (!S.crossfit1RM || Object.keys(S.crossfit1RM).length === 0) {
+    S.crossfit1RM = S.crossfit1RM || {};
     var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
     var saved1rm = localStorage.getItem('mtd_cf_1rm_' + userId);
     if (saved1rm) { try { S.crossfit1RM = JSON.parse(saved1rm); } catch(e) {} }
@@ -1632,8 +1645,8 @@ function renderCrossfitProgram(p) {
     return;
   }
 
-  // Clamp selectedCrossfitDay
-  if (S.selectedCrossfitDay >= template.length) S.selectedCrossfitDay = 0;
+  // Clamp selectedCrossfitDay — guard null/undefined and out-of-bounds
+  if (!S.selectedCrossfitDay || S.selectedCrossfitDay < 0 || S.selectedCrossfitDay >= template.length) S.selectedCrossfitDay = 0;
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
   p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
@@ -1669,7 +1682,8 @@ function renderCrossfitProgram(p) {
   }}, '\u2190'));
   weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.crossfitWeek));
   weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
-    S.crossfitWeek++; S.selectedCrossfitDay = 0; window.render();
+    var maxWeek = Math.ceil((window.CF_WODS || []).length / Math.max(1, daysPerWeek));
+    if (S.crossfitWeek < maxWeek) { S.crossfitWeek++; S.selectedCrossfitDay = 0; window.render(); }
   }}, '\u2192'));
   p.appendChild(weekNav);
 
@@ -1838,6 +1852,137 @@ function renderCrossfitProgram(p) {
   summary.appendChild(h('div', {'class': 'dt-label'}, sectionCount + ' sections'));
   summary.appendChild(h('div', {'class': 'dt-val'}, currentDay.hasHaltero ? '~60-75 min' : '~45-60 min'));
   p.appendChild(summary);
+
+  // ─── WOD TIMER ───
+  // Simple stopwatch / countdown for AMRAP and For Time WODs
+  (function() {
+    var wodType = (_wod.type || '').toUpperCase();
+    var timerContainer = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;margin:12px 0;background:var(--ivory2)'});
+    timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'TIMER WOD'));
+
+    // Parse AMRAP/EMOM duration in minutes, or cap for For Time
+    var totalSeconds = 0;
+    var isCountdown = false;
+    var capMatch = wodType.match(/(\d+)\s*(?:MIN|MINUTES?)/);
+    if (capMatch) {
+      totalSeconds = parseInt(capMatch[1]) * 60;
+      isCountdown = true;
+    }
+
+    var displayEl = h('div', {style: 'font-family:Georgia,serif;font-size:36px;text-align:center;letter-spacing:2px;color:#0A0A09;margin:8px 0'}, '00:00');
+    timerContainer.appendChild(displayEl);
+
+    var _timerRunning = false;
+    var _timerInterval = null;
+    var _elapsed = 0;
+    var _timerStartTime = 0;
+
+    function formatTime(secs) {
+      var m = Math.floor(Math.abs(secs) / 60);
+      var s = Math.abs(secs) % 60;
+      return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function updateDisplay() {
+      var shown = isCountdown ? Math.max(0, totalSeconds - _elapsed) : _elapsed;
+      displayEl.textContent = formatTime(shown);
+      if (isCountdown && shown === 0) {
+        displayEl.style.color = '#C0392B';
+      }
+    }
+
+    var btnRow = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap'});
+
+    var startBtn = h('button', {'class': 'btn-primary', style: 'width:auto;padding:8px 20px;margin:0', onclick: function() {
+      if (_timerRunning) {
+        _timerRunning = false;
+        clearInterval(_timerInterval);
+        startBtn.textContent = 'Reprendre';
+      } else {
+        _timerRunning = true;
+        _timerStartTime = Date.now() - _elapsed * 1000;
+        _timerInterval = setInterval(function() {
+          _elapsed = Math.floor((Date.now() - _timerStartTime) / 1000);
+          updateDisplay();
+          if (isCountdown && _elapsed >= totalSeconds) {
+            _timerRunning = false;
+            clearInterval(_timerInterval);
+            startBtn.textContent = 'Temps écoulé';
+          }
+        }, 250);
+        startBtn.textContent = 'Pause';
+      }
+    }}, 'Démarrer');
+
+    var resetBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:8px 16px;margin:0', onclick: function() {
+      _timerRunning = false;
+      clearInterval(_timerInterval);
+      _elapsed = 0;
+      startBtn.textContent = 'Démarrer';
+      displayEl.style.color = '#0A0A09';
+      updateDisplay();
+    }}, 'Reset');
+
+    btnRow.appendChild(startBtn);
+    btnRow.appendChild(resetBtn);
+    timerContainer.appendChild(btnRow);
+
+    if (isCountdown) {
+      timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);text-align:center;margin-top:6px'}, 'Compte à rebours ' + (_wod.type || '')));
+    } else {
+      timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);text-align:center;margin-top:6px'}, 'Chrono — ' + (_wod.type || '')));
+    }
+    updateDisplay();
+    p.appendChild(timerContainer);
+  })();
+
+  // ─── MARQUER WOD COMME TERMINÉ ───
+  (function() {
+    if (!S.cfProgress) S.cfProgress = {};
+    var wodDay = wod && wod.day;
+    if (!wodDay) return;
+    var isWodDone = !!(S.cfProgress[wodDay] && S.cfProgress[wodDay].done);
+
+    var doneCard = h('div', {style: 'border:1px solid ' + (isWodDone ? '#4CAF50' : 'var(--border)') + ';padding:14px 16px;margin:8px 0;background:' + (isWodDone ? 'rgba(76,175,80,0.07)' : 'var(--ivory2)')});
+    doneCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'SUIVI WOD — Jour ' + wodDay));
+
+    if (isWodDone) {
+      doneCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;color:#2E7D32;margin-bottom:8px'}, '✓ WOD complété le ' + (S.cfProgress[wodDay].date || '') + (S.cfProgress[wodDay].score ? ' — Score : ' + S.cfProgress[wodDay].score : '')));
+
+      var editBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:6px 14px;margin:0;font-size:11px', onclick: function() {
+        S.cfProgress[wodDay] = null;
+        window.render();
+      }}, 'Corriger');
+      doneCard.appendChild(editBtn);
+    } else {
+      // Score input
+      var scoreWrap = h('div', {style: 'margin-bottom:10px'});
+      scoreWrap.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'Score (rounds, temps, reps, kg) — optionnel'));
+      var scoreInput = h('input', {
+        type: 'text',
+        placeholder: 'Ex: 8 rounds + 5, 14:32, 135 reps...',
+        style: 'width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory);color:#0A0A09',
+        value: ''
+      });
+      scoreWrap.appendChild(scoreInput);
+      doneCard.appendChild(scoreWrap);
+
+      var doneBtn = h('button', {'class': 'btn-primary', style: 'width:100%;margin:0', onclick: function() {
+        if (!S.cfProgress) S.cfProgress = {};
+        var today = new Date();
+        var dateStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+        S.cfProgress[wodDay] = { done: true, date: dateStr, score: scoreInput.value.trim() };
+        // Advance cfCurrentDay if this was the current day
+        if (S.cfCurrentDay === wodDay && wodDay < 100) {
+          S.cfCurrentDay = wodDay + 1;
+        }
+        window.BLACKBOX && window.BLACKBOX.log('cf_wod_done', {day: wodDay, score: scoreInput.value.trim()});
+        window.render();
+      }}, '✓ WOD terminé');
+      doneCard.appendChild(doneBtn);
+    }
+    p.appendChild(doneCard);
+  })();
 
   // Regenerate (shuffle order)
   p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function(){

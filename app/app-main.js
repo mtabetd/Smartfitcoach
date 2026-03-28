@@ -17,7 +17,7 @@ window.APP_RENDER = function() {
 var PROFILE_KEYS = [
   'sex','age','weight','height','activity','train','sleep','medical','goal','targetWeight',
   'mealsPerDay','eatingLocation','mealPrepTime','snacking','alcoholFreq','alcoholTypes','hydration',
-  'cookLevel','whey','allergies','intolerances','regime','excluded','cuisines',
+  'cookLevel','whey','allergies','intolerances','regime','halal','excluded','cuisines',
   'shopFreq','shopStores','shopBudget','shopPrefs',
   'bodyZones','strongZones','weakZones',
   'pregnant','pregnancyWeek','prePregnancyWeight','dueDate',
@@ -25,16 +25,32 @@ var PROFILE_KEYS = [
   'creatine','creatineDose','supplements',
   'sportGoals','sportLevel','sportDays','sportSessionDuration','sportFocus',
   'sportType','crossfitLevel',
-  'runningLevel','runningGoal','runningDays','runningPace',
-  'hyroxLevel','hyroxGoal','hyroxDays','hyroxBenchmarks',
-  'padelLevel','padelGoal','padelDays',
-  'golfLevel','golfGoal','golfDays','golfHandicap',
+  'trainTime',
+  // CrossFit progress (calendar, current day, weekly cycle)
+  'cfProgress','cfCurrentDay','crossfitWeek','crossfitCycleWeek','selectedCrossfitDay',
+  // Running
+  'runningLevel','runningGoal','runningDays','runningPace','runningVO2max','runningWeek','selectedRunDay',
+  // Hyrox
+  'hyroxLevel','hyroxGoal','hyroxDays','hyroxBenchmarks','hyroxWeek','selectedHyroxDay',
+  // Padel
+  'padelLevel','padelGoal','padelDays','padelProfile','padelWeek','selectedPadelDay',
+  // Golf
+  'golfLevel','golfGoal','golfDays','golfHandicap','golfProfile','golfWeek','selectedGolfDay',
+  // Triathlon
   'triathlonGoal','triathlonLevel','triathlonWeak',
-  'triathlonSwimPace','triathlonBikePace','triathlonRunPace',
+  'triathlonSwimPace','triathlonBikePace','triathlonRunPace','triathlonWeek','selectedTriDay',
+  // Cycling
   'cyclingLevel','cyclingGoal','cyclingDays','cyclingType','cyclingFTP','cyclingSpeed','cyclingRelief',
+  'cyclingWeek','selectedCyclingDay',
+  // Calisthenics
   'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
+  'calisthenicsWeek','selectedCalisthDay',
+  // Musculation
   'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
+  'bonusExercises','sessionHistory','muscuProgressionHistory',
+  // Nutrition plan
   'shopChecked','weekPlan','selectedDay',
+  // System
   'lang','weightUnit','heightUnit',
   'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
   'heartRateRest','yogaLevel','yogaGoal','yogaDays',
@@ -51,7 +67,12 @@ function slimMeal(meal) {
 }
 
 // Keys that affect the meal plan — changing any of these should invalidate weekPlan
-var NUTRITION_PLAN_KEYS = ['goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height'];
+// Includes dietary preferences (regime, halal, allergies, etc.) since filterRecipes() depends on them
+var NUTRITION_PLAN_KEYS = [
+  'goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height',
+  'regime', 'halal', 'excluded', 'cookLevel', 'wantsDessert',
+  'allergies', 'intolerances', 'cuisines', 'whey'
+];
 
 function saveProfile() {
   try {
@@ -69,7 +90,12 @@ function saveProfile() {
         if (!prev) { try { prev = JSON.parse(raw2); } catch(e2) {} }
         if (!prev) return;
         var planImpacted = NUTRITION_PLAN_KEYS.some(function(k) {
-          return prev[k] !== S[k];
+          // For arrays/objects use JSON serialization; for primitives use strict equality
+          var pv = prev[k], sv = S[k];
+          if (typeof pv === 'object' || typeof sv === 'object') {
+            return JSON.stringify(pv) !== JSON.stringify(sv);
+          }
+          return pv !== sv;
         });
         if (planImpacted) {
           S.weekPlan = null;

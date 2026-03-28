@@ -1880,6 +1880,8 @@ function renderStep9(p) {
 
   if (!S._nm && window.computeNutritionState) window.computeNutritionState(false);
   if (!S.weekPlan) S.weekPlan = generateWeek();
+  // Bounds check: selectedDay must be in [0, 6]
+  if (typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) S.selectedDay = 0;
 
   // Day tabs
   var tabs = h('div', {'class': 'day-tabs'});
@@ -2028,6 +2030,36 @@ function renderStep9(p) {
   var totalMacroKcal = dayTotalP * 4 + dayTotalG * 4 + dayTotalL * 9;
   macroComparison.appendChild(h('span', {}, 'V\u00e9rif : ' + totalMacroKcal + ' kcal'));
   p.appendChild(macroComparison);
+
+  // ─── INTÉGRATION SPORT → NUTRITION : dépense calorique séance d'aujourd'hui ───
+  // Si une séance a été validée aujourd'hui, affiche les calories brûlées et le bilan net
+  (function() {
+    if (!S.sessionHistory) return;
+    var today = new Date().toISOString().slice(0, 10);
+    // Chercher la séance d'aujourd'hui (clé format 'dayIndex_YYYY-MM-DD' ou 'YYYY-MM-DD')
+    var todaySess = null;
+    Object.keys(S.sessionHistory).forEach(function(k) {
+      var se = S.sessionHistory[k];
+      if (se && se.date && se.date.slice(0, 10) === today) todaySess = se;
+    });
+    if (!todaySess || !todaySess.kcalTotal) return;
+    var burned = todaySess.kcalTotal;
+    var netTarget = tgtCal + burned; // calories nettes à consommer = objectif + brûlées
+    var netDiv = h('div', {style: 'background:#E8F5E9;border:1px solid #27AE60;border-radius:8px;padding:10px 14px;margin:8px 0;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1A5C2A'});
+    var netRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px'});
+    netRow.appendChild(h('span', {style: 'font-weight:700'}, '\uD83C\uDFCB\uFE0F S\u00e9ance valid\u00e9e aujourd\'hui — d\u00e9pense'));
+    netRow.appendChild(h('span', {style: 'font-weight:700'}, '+' + burned + ' kcal'));
+    netDiv.appendChild(netRow);
+    var netRow2 = h('div', {style: 'display:flex;justify-content:space-between;align-items:center'});
+    netRow2.appendChild(h('span', {style: 'color:#1A5C2A'}, 'Objectif alimentaire ajust\u00e9 (net)'));
+    netRow2.appendChild(h('span', {style: 'font-weight:600;color:#1A5C2A'}, netTarget + ' kcal'));
+    netDiv.appendChild(netRow2);
+    if (todaySess.kcalEpoc) {
+      var epocNote = h('div', {style: 'color:#5A8A5A;font-size:9px;margin-top:3px'}, 'dont +' + todaySess.kcalEpoc + ' kcal EPOC (afterburn) inclus');
+      netDiv.appendChild(epocNote);
+    }
+    p.appendChild(netDiv);
+  })();
 
   // Whey tip
   if (S.whey) {
