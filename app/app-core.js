@@ -72,13 +72,14 @@ var GOALS=[
   {icon:'↗',name:'Prise de masse douce',desc:'+10% calories',mult:1.10,key:'lean_bulk'},
   {icon:'=',name:'Maintien',desc:'= TDEE',mult:1.0,key:'maintain'},
   {icon:'↘',name:'Perte de poids',desc:'-15% calories',mult:0.85,key:'cut'},
-  {icon:'↓',name:'Sèche',desc:'-20% calories',mult:0.80,key:'shred'}
+  {icon:'↓',name:'Sèche',desc:'-20% calories',mult:0.80,key:'shred'},
+  {icon:'⚖️',name:'Recomposition',desc:'Maintien calories, optimisation macros',mult:1.00,key:'recomposition'}
 ];
 // RATIOS : distribution calorique indicative par objectif (pour affichage uniquement)
 // ATTENTION : calcMacros() utilise la méthode g/kg (ISSN 2017), pas ces ratios
 // Ces valeurs ne sont PAS utilisées pour le calcul des macros — elles servent uniquement à l'affichage indicatif
 // Note : l'approche g/kg est cliniquement supérieure aux % de calories (ISSN 2017, Helms 2014)
-var RATIOS={bulk:{g:.55,p:.25,l:.20},maintain:{g:.50,p:.30,l:.20},cut:{g:.40,p:.35,l:.25},shred:{g:.30,p:.40,l:.30}};
+var RATIOS={bulk:{g:.55,p:.25,l:.20},maintain:{g:.50,p:.30,l:.20},cut:{g:.40,p:.35,l:.25},shred:{g:.30,p:.40,l:.30},recomposition:{g:.40,p:.35,l:.25}};
 var COOK_LEVELS=[{name:'Facile',desc:'5-10 min',val:1},{name:'Moyen',desc:'15-20 min',val:2},{name:'Avancé',desc:'30 min',val:3},{name:'Chef',desc:'45+ min',val:4}];
 var ALLERGIES=['Aucune','Fruits à coque','Arachides','Œufs','Poisson','Crustacés','Soja','Lait/Produits laitiers','Gluten/Blé','Sésame','Moutarde'];
 var INTOLERANCES=['Aucune','Lactose','Gluten','Fructose','Histamine'];
@@ -715,6 +716,7 @@ window.I18N = {
       'onb.s6.maintain': 'Maintien',
       'onb.s6.cut': 'Sèche',
       'onb.s6.shred': 'Shred',
+      'onb.s6.recomposition': 'Recomposition',
 
       // Step 8 — Récap macros
       'onb.s8.title': 'Votre programme nutritionnel',
@@ -992,6 +994,7 @@ window.I18N = {
       'onb.s6.maintain': 'Maintenance',
       'onb.s6.cut': 'Cut',
       'onb.s6.shred': 'Shred',
+      'onb.s6.recomposition': 'Recomposition',
 
       // Step 8
       'onb.s8.title': 'Your Nutrition Plan',
@@ -2248,6 +2251,22 @@ function calcMacros(){
       ppk=isFemale?1.0:1.2;  // Sédentaire : H=1.2, F=1.0 (EFSA 2012 — anti-sarcopénie)
     }
 
+  } else if(goalKey==='recomposition'){
+    // ─── RECOMPOSITION — haute protéine (maintien masse musculaire + perte grasse simultanée) ───
+    // Distribution : P=35%, G=40%, L=25% — calorie neutre (mult=1.00)
+    // Sources : Barakat 2020 (NSCA) — recomposition validée ≥1.6g/kg ; Hall 2012 ; Morton 2018 BJSM
+    if(actFactor>=1.9){
+      ppk=isFemale?2.0:2.4;   // Élite recompo : H=2.4, F=2.0
+    } else if(actFactor>=1.725){
+      ppk=isFemale?1.8:2.1;   // Très actif recompo : H=2.1, F=1.8
+    } else if(actFactor>=1.55){
+      ppk=isFemale?1.6:1.9;   // Modéré recompo : H=1.9, F=1.6
+    } else if(actFactor>=1.375){
+      ppk=isFemale?1.4:1.7;   // Léger recompo : H=1.7, F=1.4
+    } else {
+      ppk=isFemale?1.2:1.6;   // Sédentaire recompo : H=1.6, F=1.2
+    }
+
   } else if(goalKey==='bulk'||goalKey==='lean_bulk'){
     // ─── PRISE DE MASSE / PRISE DE MASSE DOUCE — ppk selon activité ET sexe ───
     // Athlète élite : H=2.2g/kg, F=2.0g/kg (ISSN Position Stand 2023 upper — Morton 2018 BJSM)
@@ -2315,7 +2334,7 @@ function calcMacros(){
   var pCal=pGrams*4;
   // Fat g/kg (minimum 0.5g/kg for hormonal health)
   var fpk=1.0;
-  if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='bulk'||goalKey==='lean_bulk')fpk=1.1;else fpk=1.0;
+  if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='recomposition')fpk=0.9;else if(goalKey==='bulk'||goalKey==='lean_bulk')fpk=1.1;else fpk=1.0;
   if(s.sex==='femme')fpk=Math.round((fpk+0.1)*10)/10;
   // Min lipides femme 0.7g/kg (ISSN 2021) — santé hormonale (vs 0.5 homme)
   var lipidMin=s.sex==='femme'?0.7:0.5;
@@ -2364,7 +2383,7 @@ gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0
   // On redistribue l'écart sur les glucides en priorité (macro la plus flexible), puis sur les lipides
   var actualCal=gGrams*4+pGrams*4+lGrams*9;
   var calGap=c-actualCal;
-  if(Math.abs(calGap)>20){
+  if(Math.abs(calGap)>10){
     var carbAdj=Math.round(calGap/4);
     var newG=gGrams+carbAdj;
     if(newG>=130){
@@ -2581,7 +2600,9 @@ function filterRecipes(pool,type){
   if(s.cuisines.indexOf(0)===-1&&s.cuisines.length>0){var flags=[];for(var c=0;c<s.cuisines.length;c++){var co=CUISINES[s.cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0)r=r.filter(function(x){return flags.indexOf(x.f)!==-1})}
   return r;
 }
-function pickRecipe(pool,targetK,used){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();av.sort(function(a,b){return Math.abs(a.k-targetK)-Math.abs(b.k-targetK)});var top=av.slice(0,Math.min(5,av.length));var p=top[Math.floor(Math.random()*top.length)];if(p)used.add(p.n);return p||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+function pickRecipe(pool,targetK,used){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();
+// Score composite : proximité calorique + adéquation macros selon objectif
+var s=window.S||{};var goalKey=(s.goal!==null&&s.goal!==undefined&&GOALS[s.goal])?GOALS[s.goal].key:'maintain';var scored=av.map(function(r){var calScore=Math.abs((r.k||0)-targetK);var macroScore=0;var totalMacroKcal=(r.p||0)*4+(r.g||0)*4+(r.l||0)*9;if(totalMacroKcal>0){var protPct=(r.p||0)*4/totalMacroKcal;if((goalKey==='cut'||goalKey==='shred'||goalKey==='recomposition')&&protPct<0.25){macroScore=100;}else if((goalKey==='bulk'||goalKey==='lean_bulk')&&protPct>0.45){macroScore=50;}}return{recipe:r,score:calScore+macroScore};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked)used.add(picked.n);return picked||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
