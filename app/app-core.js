@@ -1546,7 +1546,15 @@ window.S = {
   triathlonSwimPace: null, triathlonBikePace: null, triathlonRunPace: null,
   triathlonProgram: null, triathlonWeek: 1, selectedTriDay: 0,
   // Cardio metrics
-  heartRateRest: null        // FC repos en bpm (optionnel, défaut 65 si non renseigné)
+  heartRateRest: null,       // FC repos en bpm (optionnel, défaut 65 si non renseigné)
+  // Cycling
+  cyclingLevel: null, cyclingGoal: null, cyclingDays: 3,
+  cyclingType: null, cyclingFTP: null, cyclingSpeed: null, cyclingRelief: null,
+  cyclingProgram: null, cyclingWeek: 1, selectedCyclingDay: 0,
+  // Calisthenics
+  calisthenicsLevel: null, calisthenicsGoal: null, calisthenicsdays: 3,
+  calisthPullups: null, calisthPushups: null,
+  calisthenicsProgram: null, calisthenicsWeek: 1, selectedCalisthDay: 0
 };
 
 // ═══════════════════════════════════════════════════════════════
