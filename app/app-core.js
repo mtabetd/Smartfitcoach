@@ -458,7 +458,8 @@ function getCFWorkingWeight(standardsKey, percentage) {
   var s = window.S;
   if (!s) return '?';
   var sexKey = s.sex === 'homme' ? 'm' : 'f';
-  var lvlIdx = s.crossfitLevel === 'scaled' ? 0 : s.crossfitLevel === 'inter' ? 1 : 2;
+  // Default to 'inter' (index 1) when crossfitLevel is not set, to avoid defaulting to RX for new users
+  var lvlIdx = s.crossfitLevel === 'scaled' ? 0 : s.crossfitLevel === 'rx' ? 2 : 1;
   // WOD working weight percentages by level (% of 1RM)
   var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : 0.75;
 
