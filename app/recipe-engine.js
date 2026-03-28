@@ -6906,6 +6906,326 @@
       ]
     },
 
+  // ─── RECETTES ITALIENNES R450-R459 : PROTÉINES & SECONDI PIATTI ──────────────
+
+    {
+      id: 'R450',
+      name: 'Pollo alla Pizzaiola Express',
+      emoji: '🍅',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['poulet', 'tomate', 'sans-gluten', 'proteine', 'express', 'italienne'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 38×4 + 12×4 + 10×9 = 152 + 48 + 90 = 290 kcal ✓
+      baseNutrition: { calories: 290, proteinGrams: 38, carbsGrams: 12, fatGrams: 10 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Tomates pelées concassées', qty: 200, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Origan séché', qty: 2, unit: 'g' },
+        { name: 'Câpres', qty: 20, unit: 'g' },
+        { name: 'Olives noires dénoyautées', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Aplatir légèrement les blancs de poulet entre deux feuilles de film alimentaire. Saler et poivrer.',
+        'Chauffer l\'huile dans une poêle antiadhésive à feu moyen-vif. Saisir le poulet 3 min de chaque côté jusqu\'à dorure.',
+        'Ajouter l\'ail haché, les tomates concassées, l\'origan, les câpres et les olives. Mélanger et couvrir.',
+        'Laisser mijoter 10 min à feu moyen jusqu\'à ce que le poulet soit bien cuit. Servir avec un filet d\'huile d\'olive extra-vierge.'
+      ]
+    },
+
+    {
+      id: 'R451',
+      name: 'Branzino al Forno con Erbe',
+      emoji: '🐟',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['poisson', 'bar', 'four', 'herbes', 'sans-gluten', 'proteine', 'light'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 40×4 + 4×4 + 11×9 = 160 + 16 + 99 = 275 kcal ✓
+      baseNutrition: { calories: 275, proteinGrams: 40, carbsGrams: 4, fatGrams: 11 },
+      ingredients: [
+        { name: 'Filets de bar (branzino)', qty: 320, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Persil frais', qty: 15, unit: 'g' },
+        { name: 'Romarin frais', qty: 5, unit: 'g' },
+        { name: 'Thym frais', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préchauffer le four à 200 °C. Tapisser un plat de papier cuisson.',
+        'Mélanger l\'huile d\'olive, l\'ail finement haché, le persil, le romarin et le thym. Ajouter le zeste et le jus de citron.',
+        'Déposer les filets de bar dans le plat, napper de la marinade aux herbes et assaisonner.',
+        'Enfourner 15-18 min jusqu\'à ce que le poisson se défasse facilement à la fourchette. Servir avec des tranches de citron.'
+      ]
+    },
+
+    {
+      id: 'R452',
+      name: 'Involtini de Dinde Épinards & Ricotta',
+      emoji: '🌿',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['dinde', 'epinards', 'ricotta', 'roule', 'proteine', 'italienne', 'four'],
+      difficulty: 2,
+      prepTime: 15,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 42×4 + 8×4 + 14×9 = 168 + 32 + 126 = 326 kcal ✓
+      baseNutrition: { calories: 326, proteinGrams: 42, carbsGrams: 8, fatGrams: 14 },
+      ingredients: [
+        { name: 'Escalopes de dinde fines', qty: 300, unit: 'g' },
+        { name: 'Ricotta allégée', qty: 80, unit: 'g' },
+        { name: 'Épinards frais', qty: 100, unit: 'g' },
+        { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+        { name: 'Ail', qty: 1, unit: 'gousse' },
+        { name: 'Noix de muscade', qty: 1, unit: 'pincée' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préchauffer le four à 190 °C. Faire tomber les épinards à sec dans une poêle avec l\'ail haché. Laisser refroidir et presser pour éliminer l\'excès d\'eau.',
+        'Mélanger les épinards égouttés avec la ricotta, le parmesan et la muscade. Assaisonner.',
+        'Étaler les escalopes, répartir la farce, rouler serré et maintenir avec un pic en bois. Badigeonner d\'huile d\'olive.',
+        'Cuire au four 18-20 min. Laisser reposer 2 min avant de retirer les pics et servir avec une salade verte.'
+      ]
+    },
+
+    {
+      id: 'R453',
+      name: 'Scaloppine al Limone Light',
+      emoji: '🍋',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['veau', 'citron', 'light', 'sans-gluten', 'proteine', 'rapide', 'italienne'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 10,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 44×4 + 6×4 + 9×9 = 176 + 24 + 81 = 281 kcal ✓
+      baseNutrition: { calories: 281, proteinGrams: 44, carbsGrams: 6, fatGrams: 9 },
+      ingredients: [
+        { name: 'Escalopes de veau', qty: 320, unit: 'g' },
+        { name: 'Farine de riz', qty: 15, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Bouillon de volaille dégraissé', qty: 80, unit: 'ml' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Persil frais', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Aplatir les escalopes finement entre deux films. Fariner légèrement et secouer l\'excédent.',
+        'Chauffer l\'huile dans une grande poêle à feu vif. Cuire les escalopes 1-2 min de chaque côté. Réserver au chaud.',
+        'Déglacer la poêle avec le jus de citron et le bouillon. Ajouter les câpres et réduire 2 min.',
+        'Remettre les escalopes dans la sauce, parsemer de persil ciselé et servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R454',
+      name: 'Salmone alla Griglia Siciliana',
+      emoji: '🐠',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['saumon', 'grille', 'sicile', 'omega3', 'proteine', 'sans-gluten', 'italienne'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 10,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 42×4 + 6×4 + 18×9 = 168 + 24 + 162 = 354 kcal ✓
+      baseNutrition: { calories: 354, proteinGrams: 42, carbsGrams: 6, fatGrams: 18 },
+      ingredients: [
+        { name: 'Pavés de saumon', qty: 300, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Olives vertes dénoyautées', qty: 30, unit: 'g' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Origan séché', qty: 2, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préparer la salsa sicilienne : couper les tomates cerises en deux, mélanger avec les olives, les câpres, l\'origan, le zeste de citron et la moitié de l\'huile.',
+        'Badigeonner les pavés de saumon du reste d\'huile, saler et poivrer. Chauffer un grill ou une poêle grillée à feu vif.',
+        'Cuire le saumon 3-4 min de chaque côté selon l\'épaisseur, jusqu\'à caramélisation des bords.',
+        'Dresser les pavés sur assiette, napper de salsa sicilienne et arroser d\'un filet de jus de citron.'
+      ]
+    },
+
+    {
+      id: 'R455',
+      name: 'Polpette di Tacchino al Pomodoro',
+      emoji: '🧆',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['dinde', 'boulettes', 'tomate', 'proteine', 'italienne', 'batch-cooking', 'poele'],
+      difficulty: 1,
+      prepTime: 15,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 40×4 + 14×4 + 10×9 = 160 + 56 + 90 = 306 kcal ✓
+      baseNutrition: { calories: 306, proteinGrams: 40, carbsGrams: 14, fatGrams: 10 },
+      ingredients: [
+        { name: 'Viande hachée de dinde', qty: 300, unit: 'g' },
+        { name: 'Œuf', qty: 1, unit: 'pce' },
+        { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+        { name: 'Ail', qty: 1, unit: 'gousse' },
+        { name: 'Persil frais', qty: 10, unit: 'g' },
+        { name: 'Tomates pelées concassées', qty: 250, unit: 'g' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Mélanger la dinde hachée avec l\'œuf, le parmesan, l\'ail et le persil hachés. Assaisonner et former des boulettes de 3 cm.',
+        'Dorer les boulettes dans l\'huile à feu moyen-vif 3-4 min en les tournant régulièrement.',
+        'Verser les tomates concassées, couvrir et mijoter 15 min à feu doux en remuant de temps en temps.',
+        'Parsemer de basilic ciselé et servir avec du pain grillé aux céréales ou des légumes vapeur.'
+      ]
+    },
+
+    {
+      id: 'R456',
+      name: 'Tonno Scottato Sesamo & Rucola',
+      emoji: '🥗',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['thon', 'sesame', 'roquette', 'snacking', 'proteine', 'rapide', 'italienne'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 5,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 46×4 + 4×4 + 14×9 = 184 + 16 + 126 = 326 kcal ✓
+      baseNutrition: { calories: 326, proteinGrams: 46, carbsGrams: 4, fatGrams: 14 },
+      ingredients: [
+        { name: 'Pavés de thon rouge frais', qty: 320, unit: 'g' },
+        { name: 'Graines de sésame blanc et noir', qty: 30, unit: 'g' },
+        { name: 'Roquette', qty: 60, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sauce soja allégée', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Mélanger les graines de sésame blanc et noir dans une assiette creuse. Rouler les pavés de thon dans les graines pour les enrober uniformément.',
+        'Chauffer une poêle à feu très vif sans matière grasse. Saisir le thon 45 secondes à 1 min par face : l\'extérieur doit être doré, l\'intérieur rosé.',
+        'Pendant ce temps, assaisonner la roquette avec l\'huile d\'olive, le jus de citron et la sauce soja.',
+        'Trancher le thon en médaillons et disposer sur le lit de roquette. Terminer avec le zeste de citron et servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R457',
+      name: 'Pollo al Limone e Capperi',
+      emoji: '🍋',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['poulet', 'citron', 'capres', 'light', 'proteine', 'italienne', 'sans-gluten'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 40×4 + 5×4 + 9×9 = 160 + 20 + 81 = 261 kcal ✓
+      baseNutrition: { calories: 261, proteinGrams: 40, carbsGrams: 5, fatGrams: 9 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Citron', qty: 2, unit: 'pce' },
+        { name: 'Câpres rincées', qty: 25, unit: 'g' },
+        { name: 'Bouillon de volaille dégraissé', qty: 100, unit: 'ml' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Thym frais', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Couper les blancs de poulet en fines tranches dans l\'épaisseur. Assaisonner de sel, poivre et thym.',
+        'Chauffer l\'huile à feu moyen-vif. Saisir le poulet 3 min de chaque côté. Retirer et réserver.',
+        'Dans la même poêle, faire revenir l\'ail haché 30 s, déglacer au jus de citron et au bouillon. Ajouter les câpres et le zeste. Réduire 3 min.',
+        'Remettre le poulet dans la sauce, chauffer 2 min et servir nappé de sauce au citron-câpres.'
+      ]
+    },
+
+    {
+      id: 'R458',
+      name: 'Gamberoni all\'Aglio e Prezzemolo',
+      emoji: '🦐',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['crevettes', 'ail', 'persil', 'express', 'proteine', 'italienne', 'sans-gluten'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 8,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 36×4 + 4×4 + 12×9 = 144 + 16 + 108 = 268 kcal ✓
+      baseNutrition: { calories: 268, proteinGrams: 36, carbsGrams: 4, fatGrams: 12 },
+      ingredients: [
+        { name: 'Grosses crevettes décortiquées (gambas)', qty: 300, unit: 'g' },
+        { name: 'Ail', qty: 4, unit: 'gousses' },
+        { name: 'Persil frais', qty: 20, unit: 'g' },
+        { name: 'Piment rouge frais', qty: 1, unit: 'pce' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Sécher les crevettes avec du papier absorbant. Hacher l\'ail et le persil. Émincer finement le piment.',
+        'Chauffer l\'huile à feu vif dans une grande poêle. Ajouter l\'ail et le piment, faire revenir 30 secondes jusqu\'à dorure légère.',
+        'Ajouter les crevettes en une seule couche, cuire 2 min de chaque côté jusqu\'à ce qu\'elles soient rosées et légèrement caramélisées.',
+        'Hors du feu, ajouter le persil haché et le jus de citron. Mélanger et servir immédiatement avec des quartiers de citron.'
+      ]
+    },
+
+    {
+      id: 'R459',
+      name: 'Bistecca di Manzo con Gremolata',
+      emoji: '🥩',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['boeuf', 'gremolata', 'steak', 'proteine', 'sans-gluten', 'italienne', 'grill'],
+      difficulty: 2,
+      prepTime: 10,
+      cookTime: 10,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 44×4 + 4×4 + 14×9 = 176 + 16 + 126 = 318 kcal ✓
+      baseNutrition: { calories: 318, proteinGrams: 44, carbsGrams: 4, fatGrams: 14 },
+      ingredients: [
+        { name: 'Steak de bœuf maigre (rumsteck)', qty: 300, unit: 'g' },
+        { name: 'Persil frais', qty: 20, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Citron (zeste)', qty: 1, unit: 'pce' },
+        { name: 'Romarin frais', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Sel de mer, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préparer la gremolata : hacher finement le persil, l\'ail et le romarin, mélanger avec le zeste de citron et 5 ml d\'huile. Réserver.',
+        'Sortir la viande 15 min avant cuisson. Badigeonner du reste d\'huile, saler et poivrer généreusement des deux côtés.',
+        'Chauffer un grill en fonte à feu maximal jusqu\'à ce qu\'il soit très chaud. Saisir le steak 3-4 min de chaque côté pour une cuisson saignante à à point.',
+        'Laisser reposer la viande 3 min sous une feuille d\'aluminium. Trancher et servir nappé de gremolata.'
+      ]
+    },
+
 
   // ─── RECETTES LEGACY L001-L350 MIGRÉES EN FORMAT R ────────────────────────────
 
