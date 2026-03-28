@@ -5475,7 +5475,7 @@
         { name: 'Whey chocolat', qty: 100, unit: 'g' },
         { name: 'Noisettes entières', qty: 100, unit: 'g' },
         { name: 'Cacao pur non sucré', qty: 20, unit: 'g' },
-        { name: 'Sirop d\'érable', qty: 80, unit: 'g' },
+        { name: 'Sirop d\'érable', qty: 80, unit: 'ml' },
         { name: 'Beurre de noisette', qty: 60, unit: 'g' },
         { name: 'Huile de coco fondue', qty: 20, unit: 'g' },
         { name: 'Sel', qty: 2, unit: 'g' }
@@ -5532,7 +5532,7 @@
         { name: 'Zeste de citron vert', qty: 10, unit: 'g' },
         { name: 'Jus de citron vert', qty: 30, unit: 'ml' },
         { name: 'Huile de coco fondue', qty: 30, unit: 'g' },
-        { name: 'Sirop d\'agave', qty: 40, unit: 'g' },
+        { name: 'Sirop d\'agave', qty: 40, unit: 'ml' },
         { name: 'Sel', qty: 1, unit: 'g' }
       ],
       steps: [
@@ -6973,6 +6973,10 @@
         var bevL = Math.max(1, Math.ceil(inMl / 500) / 2);
         return { qty: bevL, unit: 'L' };
       }
+      // Eau de rose / hydrolat → flacon 100 ml min
+      if (/eau de rose|eau florale|hydrolat/i.test(lname)) {
+        return { qty: Math.max(100, Math.ceil(inMl / 100) * 100), unit: 'ml' };
+      }
       // Vinaigre, sauce soja, etc. (petits flacons) → 250 ml min
       if (inMl <= 500) {
         var smallBottle = Math.max(250, Math.ceil(inMl / 250) * 250);
@@ -7033,6 +7037,10 @@
       if (/fromage|parmesan|mozzarella|feta|ricotta|comté|emmental|gruyère|gouda|cheddar|camembert|brie|bleu/i.test(lname)) {
         return { qty: Math.max(200, Math.ceil(inG / 200) * 200), unit: 'g' };
       }
+      // Beurre de cacahuète / beurre de noix/amande/cajou → 🌰 arrondir au 250 g
+      if (/beurre de (cacahu[eè]te?|noix|amande|cajou|noisette|pistache)/i.test(lname)) {
+        return { qty: Math.max(250, Math.ceil(inG / 250) * 250), unit: 'g' };
+      }
       // Beurre → 125 g ou 250 g
       if (/beurre/i.test(lname)) {
         return { qty: inG <= 125 ? 125 : Math.ceil(inG / 250) * 250, unit: 'g' };
@@ -7049,8 +7057,25 @@
       return { qty: Math.max(50, Math.ceil(inG / 50) * 50), unit: 'g' };
     }
 
-    // Épicerie sèche (condiments, sauces…) → garder, petits flacons
+    // Épicerie sèche (condiments, sauces…)
     if (cat === '🫙 Épicerie sèche') {
+      if (isLiquid) {
+        // Sirop, sauce liquide → 250 ml min
+        var syrMl = Math.max(250, Math.ceil(inMl / 250) * 250);
+        return syrMl >= 1000 ? { qty: syrMl / 1000, unit: 'L' } : { qty: syrMl, unit: 'ml' };
+      }
+      // Whey / protéine poudre → sac 500 g min
+      if (/whey|prot[eé]ine.*poudre|caséine|collagène/i.test(lname)) {
+        return { qty: Math.max(500, Math.ceil(inG / 500) * 500), unit: 'g' };
+      }
+      // Chocolat → tablette 100 g
+      if (/chocolat/i.test(lname)) {
+        return { qty: Math.max(100, Math.ceil(inG / 100) * 100), unit: 'g' };
+      }
+      // Eau de rose / hydrolat → flacon 100 ml min (mais déclaré en g ici = unlikely)
+      if (/eau de rose|eau florale|hydrolat/i.test(lname)) {
+        return { qty: 100, unit: 'ml' };
+      }
       if (inG > 0) return { qty: Math.ceil(inG), unit: 'g' };
     }
 
@@ -7076,12 +7101,12 @@
     var SHOP_SECTIONS = {
       '🥩 Boucherie & Poissonnerie': /poulet|dinde|boeuf|bœuf|saumon|thon|crevette|cabillaud|maquereau|sardine|filet|blanc de|hachis|steak|viande|kefta|merguez|agneau|veau|moule/i,
       '🥚 Œufs & Produits laitiers': /oeuf|œuf|yaourt|fromage|lait|beurre|crème fraîche|ricotta|parmesan|mozzarella|feta|skyr|mascarpone|cottage|kéfir/i,
-      '🥦 Fruits & Légumes':         /courgette|tomate|épinard|carotte|oignon|ail|brocoli|poivron|chou|concombre|champignon|aubergine|céleri|salade|laitue|pousses|patate|avocat|citron|banane|mangue|fraise|myrtille|pomme|kiwi|ananas|raisin|datte|pêche|poire|melon|pastèque|betterave|navet|poireau|fenouil|asperge|haricot vert|petit pois|maïs|roquette|mâche|cresson|bok choy|brocoli/i,
+      '🥦 Fruits & Légumes':         /courgette|tomate|épinard|carotte|oignon|ail|brocoli|poivron|chou|concombre|champignon|aubergine|céleri|salade|laitue|pousses|patate|avocat|citron|banane|mangue|fraise|myrtille|pomme|kiwi|ananas|raisin|pêche|poire|melon|pastèque|betterave|navet|poireau|fenouil|asperge|haricot vert|petit pois|maïs|roquette|mâche|cresson|bok choy|brocoli/i,
       '🌾 Féculents & Céréales':     /riz|pâtes|quinoa|flocons|avoine|soba|ramen|nouilles|couscous|semoule|lentilles|pois chiches|haricots|fèves|farine|pain|tortilla|pita|ciabatta|orge|épeautre|millet|sarrasin|boulgour|polenta/i,
       '🧊 Surgelés':                 /surgelé|congelé|frozen|açaï|edamame/i,
       '🥫 Conserves & Bocaux':       /boîte|tomates concassées|conserve|bocal|naturel en boîte|thon.*boîte|sardine.*boîte|pois chiches.*boîte|haricots.*boîte/i,
-      '🫙 Épicerie sèche':           /huile|vinaigre|sauce soja|tahini|moutarde|pesto|miel|confiture|sirop|ketchup|mayonnaise|nuoc|miso|tamari|kecap|teriyaki|sriracha|fish sauce|worcestershire|bouillon|levure/i,
-      '🌿 Épices & Herbes':          /cumin|paprika|cannelle|gingembre|curry|curcuma|coriandre|persil|basilic|origan|thym|ras el hanout|garam masala|chili|piment|safran|menthe|aneth|estragon|laurier|muscade|cardamome|clou|poivre|sel|sumac|zaatar|harissa/i,
+      '🫙 Épicerie sèche':           /huile|vinaigre|sauce soja|tahini|moutarde|pesto|miel|confiture|sirop|ketchup|mayonnaise|nuoc|miso|tamari|kecap|teriyaki|sriracha|fish sauce|worcestershire|bouillon|levure|chocolat|whey|prot[eé]ine.*poudre|caséine|collagène/i,
+      '🌿 Épices & Herbes':          /cumin|paprika|cannelle|gingembre|curry|curcuma|coriandre|persil|basilic|origan|thym|ras el hanout|garam masala|chili|piment|safran|menthe|aneth|estragon|laurier|muscade|cardamome|clou|poivre|sel|sumac|zaatar|harissa|matcha|cacao/i,
       '🌰 Graines, Noix & Fruits secs': /sésame|amande|noix|cajou|chia|lin|cacahuète|pistache|noisette|graine de tournesol|graine de courge|raisin sec|abricot sec|datte|figue sèche|cranberry/i,
       '🥤 Boissons & Laits végétaux': /lait d.amande|lait de coco|lait végétal|lait de soja|lait de riz|lait d.avoine|jus|eau de coco|kombucha/i,
       '🍞 Boulangerie & Pâtisserie': /pain|baguette|brioche|wraps|tortilla|naan|pita|chapati/i,
