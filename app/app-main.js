@@ -136,10 +136,18 @@ function render() {
     if (window.DASHBOARD) DASHBOARD.render(content);
     else {
       // Fallback if dashboard not loaded
-      content.appendChild(h('div', {style: 'text-align:center;padding:40px'}, [
-        h('h1', {html: 'Bienvenue<br><em>' + (user ? user.name : '') + '</em>'}),
+      // XSS fix: build h1 with user.name via DOM, not via innerHTML
+      var welcomeH1 = document.createElement('h1');
+      welcomeH1.appendChild(document.createTextNode('Bienvenue'));
+      welcomeH1.appendChild(document.createElement('br'));
+      var nameEm = document.createElement('em');
+      nameEm.textContent = user ? user.name : '';
+      welcomeH1.appendChild(nameEm);
+      var welcomeDiv = h('div', {style: 'text-align:center;padding:40px'}, [
         h('p', {'class': 'subtitle'}, 'Choisissez Nutrition ou Sport dans la navigation.')
-      ]));
+      ]);
+      welcomeDiv.insertBefore(welcomeH1, welcomeDiv.firstChild);
+      content.appendChild(welcomeDiv);
     }
   }
 

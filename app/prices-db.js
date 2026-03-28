@@ -157,12 +157,6 @@
       source: 'marjane',
       updatedAt: '2026-03'
     },
-    'Céleri': {
-      name: 'Céleri',
-      pricePerG: r(3 / 150),
-      source: 'marjane',
-      updatedAt: '2026-03'
-    },
     'Avocat mûr': {
       name: 'Avocat mûr',
       pricePerG: r(15 / 1000),
@@ -732,12 +726,6 @@
     'Piment de Cayenne': {
       name: 'Piment de Cayenne',
       pricePerG: r(20 / 50),
-      source: 'marjane',
-      updatedAt: '2026-03'
-    },
-    'Origan séché': {
-      name: 'Origan séché',
-      pricePerG: r(15 / 20),
       source: 'marjane',
       updatedAt: '2026-03'
     },
