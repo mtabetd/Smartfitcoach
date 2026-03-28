@@ -2649,7 +2649,7 @@ function filterRecipes(pool,type){
       for(var t=0;t<s.intolerances.length;t++){
         var it=s.intolerances[t].toLowerCase();
         if(it==='lactose'&&(/lait|fromage|yaourt|beurre|crème|ricotta|cottage|whey|feta|parmesan|mozzarella|skyr|emmental|gruyère|comté|camembert|mascarpone|kéfir|labneh|ghee|cheddar|gouda/).test(ing))return false;
-        if(it==='gluten'&&(/pain|blé|farine|pâte|avoine|seigle|couscous|semoule|orge|épeautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari/).test(ing))return false; // BUG FIX : orge, épeautre, boulgour, seitan, kamut, sauce soja (gluten caché), avoine (contamination croisée) manquaient — INCO 2020, AFDIAG
+        if(it==='gluten'){var gi=ing.replace(/galette de riz|farine de riz|farine de sarrasin|pâte miso|sauce tamari certifiée sans gluten/g,'');if((/pain|blé|farine|pâte|avoine|seigle|couscous|semoule|orge|épeautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari|tortilla|wrap|naan/).test(gi))return false;} // BUG FIX : orge, épeautre, boulgour, seitan, kamut, sauce soja/tamari (gluten caché), avoine (contamination croisée), tortilla/naan/wrap manquaient — AFDIAG / INCO 2020
         if(it==='fructose'&&(/miel|pomme|poire|mangue|cerise|figue|datte/).test(ing))return false;
         if(it==='histamine'&&(/thon|saumon fumé|fromage|tomate|épinard|avocat|soja/).test(ing))return false;
       }return true;
