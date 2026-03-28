@@ -3322,6 +3322,474 @@
         'Disposer les falafels chauds. Arroser citron + huile. Garnir de persil et cumin.'
       ]
     },
+    {
+      id: 'R321',
+      name: 'Açaí Bowl',
+      emoji: '🥣', origin: '🇧🇷',
+      mealTypes: ['breakfast'],
+      tags: ['acai', 'smoothie-bowl', 'antioxydants', 'tendance', 'vegan'],
+      difficulty: 1, prepTime: 10, cookTime: 0, servings: 1,
+      // 11×4 + 63×4 + 12×9 = 44+252+108 = 404 ✓
+      baseNutrition: { calories: 404, proteinGrams: 11, carbsGrams: 63, fatGrams: 12 },
+      ingredients: [
+        { name: 'Açaí en poudre', qty: 20, unit: 'g' },
+        { name: 'Banane', qty: 120, unit: 'g' },
+        { name: 'Granola', qty: 40, unit: 'g' },
+        { name: 'Fruits rouges', qty: 80, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: "Lait d'amande", qty: 100, unit: 'ml' }
+      ],
+      steps: [
+        "Mixer l'açaí en poudre avec la banane et le lait d'amande jusqu'à consistance épaisse.",
+        'Verser dans un bol.',
+        'Garnir de granola, fruits rouges et miel.'
+      ]
+    },
+    {
+      id: 'R322',
+      name: 'Egg Muffins Protéinés',
+      emoji: '🥚', origin: '🇺🇸',
+      mealTypes: ['breakfast'],
+      tags: ['oeufs', 'high-protein', 'meal-prep', 'low-carb', 'gluten-free'],
+      difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
+      // 28×4 + 8×4 + 18×9 = 112+32+162 = 306 ✓
+      baseNutrition: { calories: 306, proteinGrams: 28, carbsGrams: 8, fatGrams: 18 },
+      ingredients: [
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Épinards frais', qty: 40, unit: 'g' },
+        { name: 'Fromage râpé', qty: 20, unit: 'g' },
+        { name: 'Jambon de dinde (tranches)', qty: 40, unit: 'g' },
+        { name: 'Tomate', qty: 40, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 180 °C. Huiler légèrement un moule à muffins.',
+        'Battre les œufs. Ajouter épinards hachés, fromage, dinde et tomates en dés.',
+        'Verser dans les moules. Cuire 18-20 min jusqu\'à ce que les œufs soient pris.'
+      ]
+    },
+    {
+      id: 'R323',
+      name: 'Chia Pudding Mangue Coco',
+      emoji: '🥭', origin: '🇹🇭',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['chia', 'vegan', 'no-cook', 'meal-prep', 'tropical'],
+      difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
+      // 8×4 + 44×4 + 13×9 = 32+176+117 = 325 ✓
+      baseNutrition: { calories: 325, proteinGrams: 8, carbsGrams: 44, fatGrams: 13 },
+      ingredients: [
+        { name: 'Graines de chia', qty: 30, unit: 'g' },
+        { name: 'Lait de coco (brique)', qty: 200, unit: 'ml' },
+        { name: 'Mangue (fraîche)', qty: 100, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger les graines de chia avec le lait de coco et le miel.',
+        'Réfrigérer au moins 4h ou toute la nuit.',
+        'Servir avec la mangue coupée en dés.'
+      ]
+    },
+    {
+      id: 'R324',
+      name: 'Smoothie Bowl Green',
+      emoji: '🥬', origin: '🇦🇺',
+      mealTypes: ['breakfast'],
+      tags: ['smoothie-bowl', 'green', 'detox', 'vegan', 'tendance'],
+      difficulty: 1, prepTime: 8, cookTime: 0, servings: 1,
+      // 9×4 + 58×4 + 8×9 = 36+232+72 = 340 ✓
+      baseNutrition: { calories: 340, proteinGrams: 9, carbsGrams: 58, fatGrams: 8 },
+      ingredients: [
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Banane', qty: 120, unit: 'g' },
+        { name: "Lait d'amande", qty: 100, unit: 'ml' },
+        { name: 'Kiwi', qty: 1, unit: 'pce' },
+        { name: 'Granola', qty: 30, unit: 'g' },
+        { name: 'Graines de chia', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Mixer épinards, banane et lait végétal jusqu\'à texture épaisse et lisse.',
+        'Verser dans un bol.',
+        'Garnir de kiwi tranché, granola et graines de chia.'
+      ]
+    },
+    {
+      id: 'R325',
+      name: 'Toast Avocat Saumon Fumé',
+      emoji: '🥑', origin: '🇺🇸',
+      mealTypes: ['breakfast'],
+      tags: ['avocat', 'saumon', 'healthy-fats', 'high-protein', 'tendance'],
+      difficulty: 1, prepTime: 8, cookTime: 0, servings: 1,
+      // 22×4 + 30×4 + 20×9 = 88+120+180 = 388 ✓
+      baseNutrition: { calories: 388, proteinGrams: 22, carbsGrams: 30, fatGrams: 20 },
+      ingredients: [
+        { name: 'Pain complet', qty: 2, unit: 'pce' },
+        { name: 'Avocat', qty: 80, unit: 'g' },
+        { name: 'Saumon fumé', qty: 60, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Câpres', qty: 10, unit: 'g' },
+        { name: 'Aneth (frais ou séché)', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Griller le pain complet.',
+        "Écraser l'avocat avec le jus de citron, sel et poivre.",
+        'Étaler sur le pain, déposer le saumon fumé, câpres et aneth.'
+      ]
+    },
+    {
+      id: 'R326',
+      name: 'Pancakes Protéinés Myrtilles',
+      emoji: '🥞', origin: '🇺🇸',
+      mealTypes: ['breakfast'],
+      tags: ['pancakes', 'high-protein', 'myrtilles', 'brunch', 'tendance'],
+      difficulty: 1, prepTime: 10, cookTime: 15, servings: 1,
+      // 24×4 + 52×4 + 10×9 = 96+208+90 = 394 ✓
+      baseNutrition: { calories: 394, proteinGrams: 24, carbsGrams: 52, fatGrams: 10 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 60, unit: 'g' },
+        { name: 'Banane', qty: 80, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Myrtilles', qty: 60, unit: 'g' },
+        { name: 'Sirop d\'érable', qty: 15, unit: 'ml' }
+      ],
+      steps: [
+        'Mixer les flocons avec la banane et les œufs pour former une pâte.',
+        'Cuire à la poêle anti-adhésive 2-3 min par face.',
+        'Servir avec myrtilles fraîches et sirop d\'érable.'
+      ]
+    },
+    {
+      id: 'R327',
+      name: 'Skyr Fruits Rouges & Noix',
+      emoji: '🍓', origin: '🇮🇸',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['skyr', 'high-protein', 'fruits-rouges', 'low-fat', 'nordique'],
+      difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
+      // 20×4 + 30×4 + 9×9 = 80+120+81 = 281 ✓
+      baseNutrition: { calories: 281, proteinGrams: 20, carbsGrams: 30, fatGrams: 9 },
+      ingredients: [
+        { name: 'Skyr / Yaourt islandais', qty: 180, unit: 'g' },
+        { name: 'Fraises', qty: 80, unit: 'g' },
+        { name: 'Framboises', qty: 50, unit: 'g' },
+        { name: 'Noix', qty: 20, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Verser le skyr dans un bol.',
+        'Déposer les fruits rouges et les noix concassées.',
+        'Arroser de miel.'
+      ]
+    },
+    {
+      id: 'R328',
+      name: 'Œufs Brouillés Champignons',
+      emoji: '🍄', origin: '🇫🇷',
+      mealTypes: ['breakfast'],
+      tags: ['oeufs', 'champignons', 'french', 'high-protein', 'low-carb'],
+      difficulty: 1, prepTime: 5, cookTime: 8, servings: 1,
+      // 22×4 + 6×4 + 16×9 = 88+24+144 = 256 ✓
+      baseNutrition: { calories: 256, proteinGrams: 22, carbsGrams: 6, fatGrams: 16 },
+      ingredients: [
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Champignons de Paris', qty: 100, unit: 'g' },
+        { name: 'Fromage frais (type St Moret)', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' },
+        { name: 'Persil frais', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir les champignons émincés dans l\'huile 3 min.',
+        'Battre les œufs, verser sur les champignons à feu doux.',
+        'Remuer doucement pour des œufs crémeux. Finir avec le fromage frais et le persil.'
+      ]
+    },
+    {
+      id: 'R329',
+      name: 'Bowl Quinoa Fruité du Matin',
+      emoji: '🌅', origin: '🇺🇸',
+      mealTypes: ['breakfast'],
+      tags: ['quinoa', 'fruits', 'vegan', 'meal-prep', 'healthy'],
+      difficulty: 1, prepTime: 5, cookTime: 15, servings: 1,
+      // 14×4 + 58×4 + 10×9 = 56+232+90 = 378 ✓
+      baseNutrition: { calories: 378, proteinGrams: 14, carbsGrams: 58, fatGrams: 10 },
+      ingredients: [
+        { name: 'Quinoa', qty: 60, unit: 'g' },
+        { name: "Lait d'amande", qty: 150, unit: 'ml' },
+        { name: 'Banane', qty: 80, unit: 'g' },
+        { name: 'Pêche', qty: 1, unit: 'pce' },
+        { name: 'Amandes effilées', qty: 15, unit: 'g' },
+        { name: 'Cannelle', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le quinoa dans le lait d\'amande 12 min à feu doux.',
+        'Laisser tiédir légèrement.',
+        'Garnir de banane tranchée, pêche, amandes et cannelle.'
+      ]
+    },
+    {
+      id: 'R330',
+      name: 'Galettes Sarrasin Œuf & Avocat',
+      emoji: '🫓', origin: '🇫🇷',
+      mealTypes: ['breakfast'],
+      tags: ['sarrasin', 'gluten-free', 'oeufs', 'avocat', 'french'],
+      difficulty: 2, prepTime: 10, cookTime: 10, servings: 1,
+      // 18×4 + 34×4 + 18×9 = 72+136+162 = 370 ✓
+      baseNutrition: { calories: 370, proteinGrams: 18, carbsGrams: 34, fatGrams: 18 },
+      ingredients: [
+        { name: 'Farine de sarrasin', qty: 60, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Avocat', qty: 60, unit: 'g' },
+        { name: 'Épinards frais', qty: 40, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Mélanger la farine avec 150ml d\'eau, une pincée de sel. Laisser reposer 30 min.',
+        'Cuire les galettes dans une poêle huilée. Casser un œuf au centre, plier.',
+        'Servir avec avocat écrasé et épinards frais.'
+      ]
+    },
+    {
+      id: 'R331',
+      name: 'Poke Bowl Saumon',
+      emoji: '🐟', origin: '🇺🇸',
+      mealTypes: ['lunch'],
+      tags: ['poke', 'saumon', 'japonais', 'bowl', 'tendance', 'high-protein'],
+      difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
+      // 35×4 + 52×4 + 16×9 = 140+208+144 = 492 ✓
+      baseNutrition: { calories: 492, proteinGrams: 35, carbsGrams: 52, fatGrams: 16 },
+      ingredients: [
+        { name: 'Riz blanc', qty: 80, unit: 'g' },
+        { name: 'Saumon frais (filet)', qty: 120, unit: 'g' },
+        { name: 'Avocat', qty: 60, unit: 'g' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Edamame (surgelé)', qty: 40, unit: 'g' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 5, unit: 'ml' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le riz. Rincer le saumon, couper en dés, mariner 10 min sauce soja + huile sésame.',
+        'Cuire les edamames surgelés 3 min à l\'eau bouillante.',
+        'Assembler : riz en base, saumon, avocat, concombre, edamame. Parsemer de sésame.'
+      ]
+    },
+    {
+      id: 'R332',
+      name: 'Bao Bun Poulet Teriyaki',
+      emoji: '🫔', origin: '🇯🇵',
+      mealTypes: ['lunch'],
+      tags: ['bao', 'poulet', 'teriyaki', 'japonais', 'tendance', 'street-food'],
+      difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
+      // 36×4 + 48×4 + 12×9 = 144+192+108 = 444 ✓
+      baseNutrition: { calories: 444, proteinGrams: 36, carbsGrams: 48, fatGrams: 12 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 130, unit: 'g' },
+        { name: 'Pain vapeur bao (surgelé)', qty: 2, unit: 'pce' },
+        { name: 'Sauce teriyaki', qty: 30, unit: 'ml' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le poulet en lanières à la poêle. Verser la sauce teriyaki, caraméliser 2 min.',
+        'Réchauffer les bao vapeur (cuiseur vapeur ou micro-ondes 45 sec).',
+        'Garnir les bao de poulet teriyaki, concombre et sésame.'
+      ]
+    },
+    {
+      id: 'R333',
+      name: 'Bibimbap Bœuf',
+      emoji: '🍚', origin: '🇰🇷',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['coréen', 'bibimbap', 'boeuf', 'bowl', 'tendance', 'high-protein'],
+      difficulty: 2, prepTime: 15, cookTime: 20, servings: 1,
+      // 38×4 + 58×4 + 14×9 = 152+232+126 = 510 ✓
+      baseNutrition: { calories: 510, proteinGrams: 38, carbsGrams: 58, fatGrams: 14 },
+      ingredients: [
+        { name: 'Riz blanc', qty: 80, unit: 'g' },
+        { name: 'Bœuf maigre haché', qty: 120, unit: 'g' },
+        { name: 'Courgette', qty: 80, unit: 'g' },
+        { name: 'Carotte', qty: 60, unit: 'g' },
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Œuf', qty: 1, unit: 'pce' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 5, unit: 'ml' },
+        { name: 'Gochujang (pâte pimentée coréenne)', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le riz. Faire revenir le bœuf haché avec sauce soja et ail. Réserver.',
+        'Sauter séparément courgette, carotte et épinards avec un filet d\'huile de sésame.',
+        'Assembler le bowl : riz en base, légumes et bœuf disposés en secteurs, œuf au plat au centre, gochujang sur le dessus.'
+      ]
+    },
+    {
+      id: 'R334',
+      name: 'Banh Mi Bowl Poulet',
+      emoji: '🥢', origin: '🇻🇳',
+      mealTypes: ['lunch'],
+      tags: ['vietnamien', 'poulet', 'bowl', 'tendance', 'fresh', 'high-protein'],
+      difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
+      // 38×4 + 50×4 + 11×9 = 152+200+99 = 451 ✓
+      baseNutrition: { calories: 451, proteinGrams: 38, carbsGrams: 50, fatGrams: 11 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 130, unit: 'g' },
+        { name: 'Riz jasmin', qty: 70, unit: 'g' },
+        { name: 'Carotte', qty: 60, unit: 'g' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Sriracha', qty: 5, unit: 'ml' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Coriandre fraîche', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire le riz jasmin. Griller le poulet assaisonné sel/poivre/citron.',
+        'Couper carottes et concombre en julienne. Mariner 5 min dans jus de citron + sel.',
+        'Assembler : riz, poulet, légumes marinés, coriandre, sauce soja + sriracha.'
+      ]
+    },
+    {
+      id: 'R335',
+      name: 'Buddha Bowl Tofu & Greens',
+      emoji: '🧘', origin: '🇺🇸',
+      mealTypes: ['lunch'],
+      tags: ['vegan', 'tofu', 'bowl', 'healthy', 'tendance', 'high-fiber'],
+      difficulty: 2, prepTime: 15, cookTime: 20, servings: 1,
+      // 22×4 + 50×4 + 16×9 = 88+200+144 = 432 ✓
+      baseNutrition: { calories: 432, proteinGrams: 22, carbsGrams: 50, fatGrams: 16 },
+      ingredients: [
+        { name: 'Tofu ferme', qty: 150, unit: 'g' },
+        { name: 'Quinoa', qty: 60, unit: 'g' },
+        { name: 'Patate douce', qty: 100, unit: 'g' },
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Graines de tournesol', qty: 15, unit: 'g' },
+        { name: 'Tahini', qty: 20, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire le quinoa. Rôtir la patate douce en cubes au four 200°C / 20 min.',
+        'Couper le tofu en cubes, dorer à la poêle avec sel et paprika.',
+        'Sauce tahini : mélanger tahini + jus citron + 2cs eau.',
+        'Assembler : quinoa, épinards, patate douce, tofu, graines, sauce tahini.'
+      ]
+    },
+    {
+      id: 'R336',
+      name: 'Wrap Méditerranéen Halloumi',
+      emoji: '🫙', origin: '🇬🇷',
+      mealTypes: ['lunch'],
+      tags: ['halloumi', 'méditerranéen', 'wrap', 'végétarien', 'tendance'],
+      difficulty: 1, prepTime: 10, cookTime: 8, servings: 1,
+      // 26×4 + 38×4 + 18×9 = 104+152+162 = 418 ✓
+      baseNutrition: { calories: 418, proteinGrams: 26, carbsGrams: 38, fatGrams: 18 },
+      ingredients: [
+        { name: 'Tortilla de blé', qty: 1, unit: 'pce' },
+        { name: 'Halloumi', qty: 80, unit: 'g' },
+        { name: 'Houmous', qty: 40, unit: 'g' },
+        { name: 'Tomates cerises', qty: 60, unit: 'g' },
+        { name: 'Roquette', qty: 30, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' }
+      ],
+      steps: [
+        'Griller le halloumi à la poêle sèche 2-3 min par face jusqu\'à coloration dorée.',
+        'Réchauffer la tortilla. Étaler le houmous.',
+        'Garnir de halloumi, tomates cerises, roquette, jus de citron. Rouler.'
+      ]
+    },
+    {
+      id: 'R337',
+      name: 'Ramen Poulet Low-Carb',
+      emoji: '🍜', origin: '🇯🇵',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['ramen', 'poulet', 'japonais', 'low-carb', 'réconfortant'],
+      difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
+      // 38×4 + 22×4 + 12×9 = 152+88+108 = 348 ✓
+      baseNutrition: { calories: 348, proteinGrams: 38, carbsGrams: 22, fatGrams: 12 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 130, unit: 'g' },
+        { name: 'Bouillon de poulet (cube)', qty: 1, unit: 'pce' },
+        { name: 'Pâte miso', qty: 20, unit: 'g' },
+        { name: 'Œuf', qty: 1, unit: 'pce' },
+        { name: 'Courgette', qty: 150, unit: 'g' },
+        { name: 'Nori (feuilles d\'algue)', qty: 5, unit: 'g' },
+        { name: 'Sauce soja', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Porter 500ml d\'eau à ébullition avec le cube de bouillon. Dissoudre le miso.',
+        'Cuire le poulet en lanières dans le bouillon 8 min.',
+        'Couper la courgette en spirales (zoodles). Cuire l\'œuf mollet 7 min.',
+        'Servir : bouillon + poulet + zoodles + œuf coupé + nori.'
+      ]
+    },
+    {
+      id: 'R338',
+      name: 'Pad Thaï Crevettes',
+      emoji: '🦐', origin: '🇹🇭',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['thaï', 'crevettes', 'nouilles', 'tendance', 'asian', 'high-protein'],
+      difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
+      // 32×4 + 48×4 + 14×9 = 128+192+126 = 446 ✓
+      baseNutrition: { calories: 446, proteinGrams: 32, carbsGrams: 48, fatGrams: 14 },
+      ingredients: [
+        { name: 'Nouilles de riz', qty: 80, unit: 'g' },
+        { name: 'Crevettes décortiquées', qty: 120, unit: 'g' },
+        { name: 'Œuf', qty: 1, unit: 'pce' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Sauce nuoc-mâm (fish sauce)', qty: 10, unit: 'ml' },
+        { name: 'Beurre de cacahuète', qty: 15, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Faire tremper les nouilles de riz 8 min dans l\'eau chaude. Égoutter.',
+        'Sauter les crevettes à feu vif 2 min. Pousser sur le côté, brouiller l\'œuf.',
+        'Ajouter les nouilles, sauce soja, fish sauce, beurre de cacahuète. Mélanger. Finir avec citron et sésame.'
+      ]
+    },
+    {
+      id: 'R339',
+      name: 'Bowl Falafel Taboulé Moderne',
+      emoji: '🧆', origin: '🇱🇧',
+      mealTypes: ['lunch'],
+      tags: ['falafel', 'libanais', 'végétarien', 'bowl', 'moyen-orient', 'tendance'],
+      difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
+      // 22×4 + 55×4 + 16×9 = 88+220+144 = 452 ✓
+      baseNutrition: { calories: 452, proteinGrams: 22, carbsGrams: 55, fatGrams: 16 },
+      ingredients: [
+        { name: 'Falafel surgelé', qty: 120, unit: 'g' },
+        { name: 'Quinoa', qty: 60, unit: 'g' },
+        { name: 'Tomate', qty: 80, unit: 'g' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Persil frais', qty: 1, unit: 'pce' },
+        { name: 'Houmous', qty: 50, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire les falafels au four 200°C / 18 min. Cuire le quinoa.',
+        'Taboulé : mélanger quinoa, tomates et concombre en dés, persil haché, citron, huile.',
+        'Assembler : taboulé quinoa, houmous, falafels dorés.'
+      ]
+    },
+    {
+      id: 'R340',
+      name: 'Soba Bowl Thon',
+      emoji: '🍣', origin: '🇯🇵',
+      mealTypes: ['lunch'],
+      tags: ['soba', 'thon', 'japonais', 'bowl', 'high-protein', 'tendance'],
+      difficulty: 1, prepTime: 10, cookTime: 8, servings: 1,
+      // 34×4 + 46×4 + 10×9 = 136+184+90 = 410 ✓
+      baseNutrition: { calories: 410, proteinGrams: 34, carbsGrams: 46, fatGrams: 10 },
+      ingredients: [
+        { name: 'Nouilles soba', qty: 80, unit: 'g' },
+        { name: 'Thon au naturel (boîte)', qty: 120, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Avocat', qty: 50, unit: 'g' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 5, unit: 'ml' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire les soba 4-5 min. Rincer à l\'eau froide.',
+        'Égoutter le thon.',
+        'Assembler : soba, thon, concombre en rondelles, avocat. Sauce soja + huile sésame. Parsemer de sésame.'
+      ]
+    },
 
   ];
 
