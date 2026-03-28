@@ -35,7 +35,6 @@ var PROFILE_KEYS = [
   'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
   'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
   'shopChecked','weekPlan','selectedDay',
-  'currency','currencySymbol',
   'lang',
   'weightUnit','heightUnit'
 ];

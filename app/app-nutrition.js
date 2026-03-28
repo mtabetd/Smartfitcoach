@@ -896,17 +896,7 @@ function renderStep5(p) {
   f_lang.appendChild(langSelect);
   p.appendChild(f_lang);
 
-  // Sélecteur devise
-  p.appendChild(h('div', {'class': 'section-label'}, 'Devise'));
-  var f_currency = h('div', {'class': 'field'});
-  var currencySelect = h('select', {'class': 'num-input', style: 'width:100%;padding:10px 12px;font-size:14px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text)', onchange: function(){ S.currency = this.value; S.currencySymbol = {'EUR':'\u20ac','MAD':'DH','GBP':'\u00a3','CHF':'CHF'}[this.value] || '\u20ac'; }});
-  [['EUR','\u20ac Euro'],['MAD','DH Dirham'],['GBP','\u00a3 Livre sterling'],['CHF','CHF Franc suisse']].forEach(function(opt) {
-    var o = h('option', {value: opt[0]}, opt[1]);
-    if ((S.currency || 'EUR') === opt[0]) o.setAttribute('selected', 'selected');
-    currencySelect.appendChild(o);
-  });
-  f_currency.appendChild(currencySelect);
-  p.appendChild(f_currency);
+  // Devise fixée en MAD
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var canContinue = S.mealsPerDay !== null && S.eatingLocation !== null && S.mealPrepTime !== null && S.alcoholFreq !== null;
@@ -1882,11 +1872,11 @@ function renderStep9(p) {
       var budgetGrid = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px' });
       budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:8px;padding:10px;text-align:center' },
         h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, 'Budget / jour'),
-        h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.avgDailyMAD + ' ' + (S.currencySymbol || '\u20ac'))
+        h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.avgDailyMAD + ' ' + 'DH')
       ));
       budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:8px;padding:10px;text-align:center' },
         h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, 'Budget / semaine'),
-        h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.weeklyMAD + ' ' + (S.currencySymbol || '\u20ac'))
+        h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.weeklyMAD + ' ' + 'DH')
       ));
       budgetBlock.appendChild(budgetGrid);
       if (budget.coveragePct < 100) {
