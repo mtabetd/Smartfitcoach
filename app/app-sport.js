@@ -1673,6 +1673,17 @@ function renderCrossfitProgram(p) {
   }}, '\u2192'));
   p.appendChild(weekNav);
 
+  // ─── BOUTON VUE 100 JOURS ───
+  var calBtn = h('button', {
+    'class': 'btn-secondary',
+    style: 'width:100%;margin:0 0 16px;padding:10px 16px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:Helvetica Neue,Arial,sans-serif;font-size:13px',
+    onclick: function() { S.cfCalendarOpen = true; window.render(); }
+  }, [
+    h('span', {}, '\uD83D\uDCC5'),
+    h('span', {}, 'Vue 100 jours')
+  ]);
+  p.appendChild(calBtn);
+
   // ─── CROSSFIT DELOAD BANNER (semaines 4, 8, 12, 16) ───
   // Protocole Mayhem / Games : 3 semaines d'intensité + 1 semaine de décharge.
   // Volume réduit de 40-50%, intensité maintenue à 70% max. Récupération CNS + articulaire.
