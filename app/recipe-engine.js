@@ -6044,6 +6044,297 @@
       ]
     },
 
+    {
+      id: 'R430',
+      name: 'Riz au Lait Protéiné à la Rose et Pistaches',
+      emoji: '🌹', origin: '🇲🇦',
+      mealTypes: ['snack'],
+      tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'rose', 'pistaches', 'sans-gluten'],
+      difficulty: 1, prepTime: 10, cookTime: 25, servings: 4,
+      // P×4 + G×4 + L×9 = 56×4 + 116×4 + 40×9 = 224 + 464 + 360 = 1048 kcal (~1040 déclaré, 0.77%) ✓
+      baseNutrition: { calories: 1040, proteinGrams: 56, carbsGrams: 116, fatGrams: 40 },
+      ingredients: [
+        { name: 'Riz rond', qty: 160, unit: 'g' },
+        { name: 'Lait entier', qty: 800, unit: 'ml' },
+        { name: 'Skyr nature', qty: 200, unit: 'g' },
+        { name: 'Eau de rose', qty: 20, unit: 'ml' },
+        { name: 'Pistaches non salées concassées', qty: 40, unit: 'g' },
+        { name: 'Miel', qty: 40, unit: 'g' },
+        { name: 'Cannelle moulue', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Rincer le riz à l\'eau froide. Le mettre dans une casserole avec le lait entier froid.',
+        'Cuire à feu moyen-doux 20-25 min en remuant régulièrement jusqu\'à consistance crémeuse. Le riz doit être très tendre et le lait bien absorbé.',
+        'Hors du feu, incorporer le miel, l\'eau de rose et la cannelle. Mélanger doucement.',
+        'Laisser tiédir 5 min puis incorporer le skyr à la spatule pour un résultat crémeux.',
+        'Répartir dans 4 coupes. Saupoudrer de pistaches concassées et d\'une pincée de cannelle. Servir tiède ou frais.'
+      ]
+    },
+
+    {
+      id: 'R431',
+      name: 'Clafoutis Healthy Cerises-Amandes',
+      emoji: '🍒', origin: '🇫🇷',
+      mealTypes: ['snack'],
+      tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'cerises', 'amandes', 'sans-beurre'],
+      difficulty: 2, prepTime: 10, cookTime: 25, servings: 6,
+      // P×4 + G×4 + L×9 = 72×4 + 144×4 + 24×9 = 288 + 576 + 216 = 1080 kcal ✓
+      baseNutrition: { calories: 1080, proteinGrams: 72, carbsGrams: 144, fatGrams: 24 },
+      ingredients: [
+        { name: 'Cerises fraîches ou surgelées dénoyautées', qty: 400, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 400, unit: 'g' },
+        { name: 'Œufs entiers', qty: 180, unit: 'g' },
+        { name: 'Farine d\'avoine', qty: 60, unit: 'g' },
+        { name: 'Poudre d\'amandes', qty: 40, unit: 'g' },
+        { name: 'Extrait d\'amande amère', qty: 5, unit: 'ml' },
+        { name: 'Stevia en poudre', qty: 6, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Préchauffer le four à 180°C. Huiler légèrement un moule de 22 cm avec un peu d\'huile de coco.',
+        'Dans un saladier, fouetter les œufs avec le fromage blanc 0%, la stevia, l\'extrait de vanille et l\'extrait d\'amande amère.',
+        'Incorporer la farine d\'avoine et la poudre d\'amandes en pluie. Fouetter jusqu\'à obtenir une pâte lisse sans grumeaux.',
+        'Répartir les cerises uniformément dans le moule. Verser délicatement l\'appareil par-dessus.',
+        'Enfourner 25 min jusqu\'à ce que le clafoutis soit doré et ferme au toucher. Laisser tiédir avant de servir.'
+      ]
+    },
+
+    {
+      id: 'R432',
+      name: 'Tarte Tatin Pomme-Cannelle Protéinée',
+      emoji: '🍎', origin: '🇫🇷',
+      mealTypes: ['snack'],
+      tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'pomme', 'cannelle', 'tarte'],
+      difficulty: 2, prepTime: 15, cookTime: 25, servings: 6,
+      // P×4 + G×4 + L×9 = 60×4 + 162×4 + 48×9 = 240 + 648 + 432 = 1320 kcal ✓
+      baseNutrition: { calories: 1320, proteinGrams: 60, carbsGrams: 162, fatGrams: 48 },
+      ingredients: [
+        { name: 'Pommes Golden', qty: 600, unit: 'g' },
+        { name: 'Farine d\'avoine', qty: 120, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 250, unit: 'g' },
+        { name: 'Œufs entiers', qty: 120, unit: 'g' },
+        { name: 'Beurre', qty: 40, unit: 'g' },
+        { name: 'Miel', qty: 50, unit: 'g' },
+        { name: 'Stevia en poudre', qty: 4, unit: 'g' },
+        { name: 'Cannelle moulue', qty: 4, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Préchauffer le four à 180°C. Éplucher et couper les pommes en quartiers épais.',
+        'Dans une poêle allant au four (ou moule à tarte), faire fondre le beurre avec le miel à feu moyen. Ajouter la cannelle et disposer les pommes en rosace. Cuire 5 min jusqu\'à légère caramélisation.',
+        'Préparer la pâte : mélanger la farine d\'avoine, la stevia, 1 œuf et 20g de beurre fondu à la fourchette jusqu\'à obtenir une boule. Étaler entre deux feuilles de papier sulfurisé.',
+        'Déposer la pâte sur les pommes en rentrant les bords. Enfourner 20 min jusqu\'à dorure.',
+        'Laisser reposer 5 min puis retourner sur un plat. Préparer la crème : mélanger le fromage blanc 0% avec la vanille et la stevia. Servir en accompagnement frais.'
+      ]
+    },
+
+    {
+      id: 'R433',
+      name: 'Sorbet Mangue-Citron Vert Protéiné',
+      emoji: '🥭', origin: '🌍',
+      mealTypes: ['snack'],
+      tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'mangue', 'sorbet', 'sans-cuisson', 'vegan-option', 'rapide'],
+      difficulty: 1, prepTime: 5, cookTime: 0, servings: 4,
+      // P×4 + G×4 + L×9 = 48×4 + 84×4 + 8×9 = 192 + 336 + 72 = 600 kcal ✓
+      baseNutrition: { calories: 600, proteinGrams: 48, carbsGrams: 84, fatGrams: 8 },
+      ingredients: [
+        { name: 'Mangue congelée en morceaux', qty: 500, unit: 'g' },
+        { name: 'Skyr nature', qty: 250, unit: 'g' },
+        { name: 'Jus de citron vert', qty: 40, unit: 'ml' },
+        { name: 'Miel', qty: 30, unit: 'g' },
+        { name: 'Menthe fraîche', qty: 10, unit: 'g' },
+        { name: 'Zeste de citron vert', qty: 4, unit: 'g' }
+      ],
+      steps: [
+        'Sortir la mangue congelée du congélateur 5 min avant pour faciliter le mixage.',
+        'Mettre la mangue, le skyr, le jus de citron vert, le miel et les feuilles de menthe dans le blender.',
+        'Mixer à pleine puissance 1-2 min jusqu\'à obtenir une texture lisse et crémeuse. Racler les bords si nécessaire.',
+        'Goûter et ajuster le sucre avec un filet de miel si besoin.',
+        'Servir immédiatement en coupes garnies de zeste de citron vert et d\'une feuille de menthe. Pour une texture plus ferme, passer 20 min au congélateur.'
+      ]
+    },
+
+    {
+      id: 'R434',
+      name: 'Beignets Healthy au Four Façon Donuts',
+      emoji: '🍩', origin: '🌍',
+      mealTypes: ['snack'],
+      tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'donuts', 'chocolat', 'four', 'sans-friture'],
+      difficulty: 2, prepTime: 15, cookTime: 15, servings: 8,
+      // P×4 + G×4 + L×9 = 80×4 + 162×4 + 48×9 = 320 + 648 + 432 = 1400 kcal ✓
+      baseNutrition: { calories: 1400, proteinGrams: 80, carbsGrams: 162, fatGrams: 48 },
+      ingredients: [
+        { name: 'Farine d\'avoine', qty: 200, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 300, unit: 'g' },
+        { name: 'Œufs entiers', qty: 160, unit: 'g' },
+        { name: 'Huile de coco', qty: 20, unit: 'g' },
+        { name: 'Levure chimique', qty: 8, unit: 'g' },
+        { name: 'Stevia en poudre', qty: 6, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 5, unit: 'ml' },
+        { name: 'Chocolat noir 70%', qty: 60, unit: 'g' },
+        { name: 'Lait d\'amande', qty: 30, unit: 'ml' },
+        { name: 'Sucre de coco', qty: 16, unit: 'g' },
+        { name: 'Cannelle moulue', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 180°C. Huiler légèrement un moule à donuts (8 empreintes) avec l\'huile de coco.',
+        'Dans un saladier, mélanger le fromage blanc, les œufs, l\'huile de coco fondue, la stevia et la vanille.',
+        'Incorporer la farine d\'avoine et la levure chimique. Mélanger jusqu\'à une pâte homogène et épaisse.',
+        'Remplir les empreintes à donuts aux 3/4. Enfourner 12-15 min jusqu\'à ce que les beignets soient dorés et qu\'un cure-dent en ressorte propre. Laisser refroidir 10 min.',
+        'Glaçage chocolat : faire fondre le chocolat noir avec le lait d\'amande au bain-marie ou 30 sec au micro-ondes. Tremper le dessus de chaque donut et laisser figer.',
+        'OU Glaçage sec : mélanger le sucre de coco et la cannelle. Rouler les donuts encore tièdes dans ce mélange. Servir dans l\'heure pour garder le croustillant.'
+      ]
+    },
+
+    {
+      id: 'R435',
+      name: 'Gâteau Basque Protéiné Crème Vanille',
+      emoji: '🍮', origin: '🇫🇷',
+      mealTypes: ['snack'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'pâtisserie', 'vanille', 'avoine'],
+      difficulty: 2, prepTime: 20, cookTime: 20, servings: 8,
+      // P×4 + G×4 + L×9 = 112×4 + 200×4 + 72×9 = 448 + 800 + 648 = 1896 kcal ÷ 8 = 237 kcal/part ✓
+      baseNutrition: { calories: 1896, proteinGrams: 112, carbsGrams: 200, fatGrams: 72 },
+      ingredients: [
+        { name: 'Farine d\'avoine', qty: 200, unit: 'g' },
+        { name: 'Beurre', qty: 60, unit: 'g' },
+        { name: 'Sucre de coco', qty: 50, unit: 'g' },
+        { name: 'Œufs entiers', qty: 120, unit: 'g' },
+        { name: 'Levure chimique', qty: 5, unit: 'g' },
+        { name: 'Lait demi-écrémé', qty: 300, unit: 'ml' },
+        { name: 'Jaunes d\'œufs', qty: 60, unit: 'g' },
+        { name: 'Maïzena', qty: 20, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 10, unit: 'ml' },
+        { name: 'Skyr nature', qty: 150, unit: 'g' },
+        { name: 'Stevia', qty: 4, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 180°C. Beurrer légèrement un moule rond de 22 cm.',
+        'Préparer la pâte : mélanger la farine d\'avoine, le sucre de coco et la levure. Ajouter le beurre ramolli et les œufs entiers. Pétrir jusqu\'à obtenir une boule souple. Réserver au frais 10 min.',
+        'Préparer la crème vanille : chauffer le lait avec la vanille et la stevia sans faire bouillir. Fouetter les jaunes avec la maïzena. Verser le lait chaud progressivement en remuant, remettre sur feu doux 3 min jusqu\'à épaississement.',
+        'Hors du feu, incorporer le skyr à la crème encore tiède. Lisser au fouet et laisser refroidir 5 min.',
+        'Étaler les deux tiers de la pâte dans le moule. Verser la crème vanille-skyr. Couvrir avec le reste de pâte étalé et souder les bords.',
+        'Enfourner 20 min jusqu\'à dorure dorée. Laisser tiédir avant de démouler et couper en 8 parts.'
+      ]
+    },
+
+    {
+      id: 'R436',
+      name: 'Verrine Légère Mangue-Coco-Passion',
+      emoji: '🥭', origin: '🌴',
+      mealTypes: ['snack'],
+      tags: ['snack', 'dessert', 'healthy', 'maroc', 'fruits', 'exotique', 'léger', 'sans-cuisson', 'vegan-option'],
+      difficulty: 1, prepTime: 20, cookTime: 10, servings: 4,
+      // P×4 + G×4 + L×9 = 40×4 + 84×4 + 24×9 = 160 + 336 + 216 = 712 kcal ÷ 4 = 178 kcal/verrine ✓
+      baseNutrition: { calories: 712, proteinGrams: 40, carbsGrams: 84, fatGrams: 24 },
+      ingredients: [
+        { name: 'Mangue fraîche', qty: 300, unit: 'g' },
+        { name: 'Jus de fruit de la passion', qty: 80, unit: 'ml' },
+        { name: 'Lait de coco light', qty: 250, unit: 'ml' },
+        { name: 'Gélatine en feuilles', qty: 4, unit: 'g' },
+        { name: 'Stevia', qty: 3, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 300, unit: 'g' },
+        { name: 'Zeste de citron vert', qty: 4, unit: 'g' },
+        { name: 'Jus de citron vert', qty: 15, unit: 'ml' }
+      ],
+      steps: [
+        'Faire tremper les feuilles de gélatine dans l\'eau froide 5 min. Chauffer le lait de coco light avec la stevia sans bouillir. Essorer la gélatine et la dissoudre dans le lait chaud. Laisser tiédir 10 min puis couler dans 4 verrines. Réfrigérer 15 min.',
+        'Mixer la mangue pelée coupée en dés avec le jus de fruit de la passion jusqu\'à coulis lisse. Ajuster la douceur avec un peu de stevia si nécessaire.',
+        'Mélanger le yaourt grec avec le zeste et le jus de citron vert.',
+        'Sortir les verrines : verser délicatement le coulis mangue-passion sur la panna cotta coco prise. Terminer par une couche généreuse de yaourt au citron vert.',
+        'Décorer d\'un zeste de citron vert. Servir immédiatement ou réfrigérer jusqu\'au moment de déguster.'
+      ]
+    },
+
+    {
+      id: 'R437',
+      name: 'Pain d\'Épices Protéiné Moelleux',
+      emoji: '🍞', origin: '🇫🇷',
+      mealTypes: ['snack'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'épices', 'moelleux', 'avoine', 'whey'],
+      difficulty: 1, prepTime: 10, cookTime: 25, servings: 8,
+      // P×4 + G×4 + L×9 = 96×4 + 192×4 + 48×9 = 384 + 768 + 432 = 1584 kcal ÷ 8 = 198 kcal/tranche ✓
+      baseNutrition: { calories: 1584, proteinGrams: 96, carbsGrams: 192, fatGrams: 48 },
+      ingredients: [
+        { name: 'Farine d\'avoine', qty: 180, unit: 'g' },
+        { name: 'Whey vanille', qty: 80, unit: 'g' },
+        { name: 'Miel', qty: 80, unit: 'g' },
+        { name: 'Cannelle moulue', qty: 4, unit: 'g' },
+        { name: 'Gingembre moulu', qty: 3, unit: 'g' },
+        { name: 'Anis étoilé moulu', qty: 2, unit: 'g' },
+        { name: 'Œufs entiers', qty: 120, unit: 'g' },
+        { name: 'Lait demi-écrémé', qty: 150, unit: 'ml' },
+        { name: 'Levure chimique', qty: 6, unit: 'g' },
+        { name: 'Huile d\'olive légère', qty: 30, unit: 'ml' }
+      ],
+      steps: [
+        'Préchauffer le four à 170°C. Chemiser un moule à cake de papier cuisson.',
+        'Dans un grand bol, mélanger la farine d\'avoine, la whey vanille, la levure, la cannelle, le gingembre et l\'anis étoilé moulu.',
+        'Dans un autre bol, fouetter les œufs avec le miel, le lait et l\'huile d\'olive.',
+        'Verser les liquides sur les poudres et mélanger à la spatule jusqu\'à pâte homogène. Ne pas trop travailler.',
+        'Verser dans le moule et enfourner 25 min. Vérifier la cuisson en plantant un couteau : il doit ressortir propre.',
+        'Laisser refroidir 10 min dans le moule avant de démouler sur une grille. Couper en 8 tranches. Se conserve 3 jours dans un récipient hermétique.'
+      ]
+    },
+
+    {
+      id: 'R438',
+      name: 'Tarte Citron Meringuée Légère',
+      emoji: '🍋', origin: '🇫🇷',
+      mealTypes: ['snack'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'citron', 'meringue', 'léger', 'pâtisserie'],
+      difficulty: 2, prepTime: 20, cookTime: 20, servings: 6,
+      // P×4 + G×4 + L×9 = 84×4 + 150×4 + 48×9 = 336 + 600 + 432 = 1368 kcal ÷ 6 = 228 kcal/part ✓
+      baseNutrition: { calories: 1368, proteinGrams: 84, carbsGrams: 150, fatGrams: 48 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 120, unit: 'g' },
+        { name: 'Amandes en poudre', qty: 40, unit: 'g' },
+        { name: 'Beurre', qty: 30, unit: 'g' },
+        { name: 'Jus de citron frais', qty: 120, unit: 'ml' },
+        { name: 'Zeste de citron', qty: 8, unit: 'g' },
+        { name: 'Œufs entiers', qty: 150, unit: 'g' },
+        { name: 'Stevia', qty: 6, unit: 'g' },
+        { name: 'Maïzena', qty: 20, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 200, unit: 'g' },
+        { name: 'Blancs d\'œufs', qty: 120, unit: 'g' },
+        { name: 'Sucre de coco', qty: 30, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 180°C. Mixer les flocons d\'avoine avec les amandes et le beurre fondu pour former une pâte sablée. Presser dans un moule à tarte de 22 cm. Enfourner 10 min.',
+        'Préparer la crème citron : fouetter les œufs avec la stevia et la maïzena. Ajouter le jus et le zeste de citron. Cuire à feu doux 5 min en remuant jusqu\'à épaississement.',
+        'Hors du feu, incorporer le fromage blanc à la crème citron encore chaude. Mélanger vigoureusement. Verser sur le fond de tarte précuit.',
+        'Monter les blancs d\'œufs en neige ferme. Ajouter le sucre de coco progressivement en continuant de fouetter jusqu\'à meringue brillante.',
+        'Couvrir la crème citron avec la meringue en formant des pics. Passer sous le gril du four 3-4 min jusqu\'à légère coloration dorée. Surveiller attentivement.',
+        'Laisser refroidir à température ambiante puis réfrigérer 15 min. Couper en 6 parts et servir frais.'
+      ]
+    },
+
+    {
+      id: 'R439',
+      name: 'Glace Banana Nice Cream Chocolat-Noisette',
+      emoji: '🍌', origin: '🌍',
+      mealTypes: ['snack'],
+      tags: ['snack', 'dessert', 'healthy', 'maroc', 'banane', 'chocolat', 'sans-cuisson', 'vegan', 'express', 'glace'],
+      difficulty: 1, prepTime: 5, cookTime: 0, servings: 2,
+      // P×4 + G×4 + L×9 = 24×4 + 68×4 + 20×9 = 96 + 272 + 180 = 548 kcal ÷ 2 = 274 kcal/portion ✓
+      baseNutrition: { calories: 548, proteinGrams: 24, carbsGrams: 68, fatGrams: 20 },
+      ingredients: [
+        { name: 'Bananes mûres congelées', qty: 300, unit: 'g' },
+        { name: 'Cacao en poudre non sucré', qty: 15, unit: 'g' },
+        { name: 'Beurre de noisette', qty: 30, unit: 'g' },
+        { name: 'Lait d\'amande non sucré', qty: 60, unit: 'ml' },
+        { name: 'Whey chocolat ou vanille', qty: 30, unit: 'g' },
+        { name: 'Stevia', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Sortir les bananes congelées du congélateur et laisser 2 min à température ambiante pour faciliter le mixage.',
+        'Placer les bananes, le cacao, le beurre de noisette, le lait d\'amande, la whey et la stevia dans un blender puissant.',
+        'Mixer par impulsions 30 secondes, puis en continu 1-2 min jusqu\'à texture crémeuse et homogène rappelant une glace. Racler les parois si nécessaire.',
+        'Goûter et ajuster la douceur avec un peu de stevia. Servir immédiatement pour une texture soft-serve, ou passer 15 min au congélateur pour une glace plus ferme.',
+        'Dresser dans deux bols et garnir d\'une pincée de cacao ou de quelques noisettes concassées.'
+      ]
+    },
+
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
