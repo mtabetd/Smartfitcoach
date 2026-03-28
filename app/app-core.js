@@ -1671,6 +1671,42 @@ var SUPPLEMENTS_DB = [
       return{dose:dose,unit:'mg/jour',timing:'Entre les repas ou au coucher (éloigné du calcium/fer)',note:'Formes recommandées : gluconate ou citrate de zinc. Max 25mg/j (seuil UL EFSA). Prise de sang zinc sérique conseillée si supplémentation >3 mois.'};
     }
   },
+  // ─── CAFÉINE — ISSN Position Stand 2021 (Grgic et al.) Grade A ───
+  // 3-6 mg/kg avant entraînement : améliore force, endurance, puissance, focus
+  // Sécurité : contre-indiqué grossesse (> 200mg/j — OMS), HTA non contrôlée, anxiété sévère
+  {id:'cafeine',name:'Caféine',icon:'\u2615',desc:'Performance, focus, endurance, force',evidence:'ISSN Position Stand 2021 (Grgic et al.) \u2014 Niveau A',grade:'A',
+    condition:function(s){
+      if(s.pregnant)return false; // OMS : max 200mg/j grossesse → supplément déconseillé
+      if(s.medical&&(s.medical.indexOf('hta')!==-1||s.medical.indexOf('insuffisance_card')!==-1))return false;
+      if(s.medical&&s.medical.indexOf('insomnia')!==-1)return false;
+      return s.activity!==null&&s.activity>=2; // Modérément actif minimum
+    },
+    unnecessary_if:'Café naturel (1-2 tasses) avant entraînement = source suffisante si bien toléré',
+    warning:'\u26A0 Éviter après 14h (demi-vie 5-6h). Tolérance individuelle variable. Ne pas combiner avec autres stimulants.',
+    dosageCalc:function(s){
+      var dose=Math.round(s.weight*4); // 4 mg/kg (milieu ISSN 3-6 mg/kg)
+      dose=Math.min(dose,400); // Cap à 400mg (seuil OMS adulte sain)
+      return{dose:dose,unit:'mg, 30-60 min avant entraînement',timing:'30-60 min avant séance',note:'Dose ISSN : 3-6 mg/kg ('+Math.round(s.weight*3)+'-'+Math.round(s.weight*6)+'mg pour '+s.weight+'kg). Ne pas dépasser 400mg/j. Cycler : 1-2 semaines sans pour éviter la tolérance.'};
+    }
+  },
+  // ─── BÊTA-ALANINE — ISSN Position Stand 2015 (Hobson et al.) Grade A ───
+  // 3.2-6.4 g/j (en doses fractionnées) : tamponnage acide lactique → endurance musculaire et HIIT
+  // Bénéfice principal : efforts 1-4 min (seuil lactate) — moins efficace force pure ou < 60s
+  {id:'beta_alanine',name:'Bêta-Alanine',icon:'\uD83D\uDCAA',desc:'Tamponnage acide lactique — endurance musculaire, HIIT, musculation volume',evidence:'ISSN Position Stand 2015 (Hobson et al.) \u2014 Niveau A',grade:'A',
+    condition:function(s){
+      if(s.pregnant)return false;
+      var goals=s.sportGoals||[];
+      var hasEndur=goals.indexOf('endurance')!==-1;
+      var hasMusc=goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1;
+      var hasGeneral=goals.indexOf('general')!==-1;
+      return s.activity!==null&&s.activity>=2&&(hasEndur||hasMusc||hasGeneral);
+    },
+    unnecessary_if:'Peu bénéfique pour les sports de force pure (< 60s d\'effort) ou l\'endurance aérobie de fond',
+    warning:'Paresthésie (fourmillements bénins) fréquente : fractionner la dose en 0.8-1.6g toutes les 3-4h.',
+    dosageCalc:function(){
+      return{dose:'3.2-6.4',unit:'g/jour en doses fractionnées (0.8-1.6g × 4)',timing:'Avec les repas pour réduire les fourmillements',note:'Saturation des réserves de carnosine musculaire en 4 semaines. Effet dose-dépendant. Maintenir la prise quotidiennement (y compris jours sans entraînement).'};
+    }
+  },
   {id:'vitamine_k2',name:'Vitamine K2 (MK-7)',icon:'\uD83E\uDDB4',desc:'Dirige le calcium vers les os — prévient calcifications artérielles avec D3',evidence:'EFSA 2017 — K2 (MK-7) synergie avec D3 pour ostéoporose (Vitamin K2 trial, Plaza 2021)',grade:'A',
     condition:function(s){
       // Pertinent si supplémenter en D3 ET facteur de risque osseux ou cardiovasculaire

@@ -88,9 +88,13 @@
         : KCAL_FLOOR_FEMALE;
     }
     // Cap déficit à -500 kcal/j (ACSM 2009, Helms 2014) pour objectifs coupe/sèche
-    var deficit = goal === 'cut' || goal === 'shred';
-    var deficitCap = deficit ? Math.round(tdee - 500) : 0;
-    return Math.max(adjusted, bmr, kcalFloor, deficitCap > 0 ? deficitCap : 0);
+    // Math.max ignore deficitCap si objectif non-déficitaire (maintain/bulk)
+    var isDeficit = goal === 'cut' || goal === 'shred';
+    if (isDeficit) {
+      var deficitCap = Math.round(tdee - 500);
+      return Math.max(adjusted, bmr, kcalFloor, deficitCap);
+    }
+    return Math.max(adjusted, bmr, kcalFloor);
   }
 
   /**
