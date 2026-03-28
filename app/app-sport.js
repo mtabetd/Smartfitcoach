@@ -1830,6 +1830,7 @@ function renderSparkline(values, color) {
   polyline.setAttribute('stroke-linejoin', 'round');
   svg.appendChild(polyline);
   // Dot final
+  if (!pts || pts.length === 0) return null;
   var lastPt = pts[pts.length - 1].split(',');
   var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
   circle.setAttribute('cx', lastPt[0]);
@@ -2287,8 +2288,8 @@ function renderMusculationProgram(p) {
         row.appendChild(h('div', {style: 'width:75px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);flex-shrink:0'}, lm.label));
         var barWrap = h('div', {style: 'flex:1;height:6px;background:var(--border);position:relative'});
         barWrap.appendChild(h('div', {style: 'height:6px;width:' + Math.round(pct*100) + '%;background:' + color}));
-        barWrap.appendChild(h('div', {style: 'position:absolute;top:-2px;left:' + Math.round(lm.mev/lm.mrv*100) + '%;width:1px;height:10px;background:#999', title:'MEV'}));
-        barWrap.appendChild(h('div', {style: 'position:absolute;top:-2px;left:' + Math.round(lm.mav/lm.mrv*100) + '%;width:1px;height:10px;background:#555', title:'MAV'}));
+        barWrap.appendChild(h('div', {style: 'position:absolute;top:-2px;left:' + (lm.mrv > 0 ? Math.round((lm.mev||0)/lm.mrv*100) : 0) + '%;width:1px;height:10px;background:#999', title:'MEV'}));
+        barWrap.appendChild(h('div', {style: 'position:absolute;top:-2px;left:' + (lm.mrv > 0 ? Math.round((lm.mav||0)/lm.mrv*100) : 0) + '%;width:1px;height:10px;background:#555', title:'MAV'}));
         row.appendChild(barWrap);
         row.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:' + color + ';flex-shrink:0;min-width:110px'}, status));
         volSection.appendChild(row);
@@ -2429,7 +2430,8 @@ function renderMusculationProgram(p) {
       card.appendChild(vlink);
 
       // ─── AI-suggested weight from strength profile ───
-      var suggestedReps = ex.sets ? ex.sets.split('\u00d7')[1] : null;
+      var _setParts = ex.sets ? ex.sets.split('\u00d7') : [];
+      var suggestedReps = _setParts.length > 1 ? _setParts[1] : null;
       var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
       if (suggested && suggested > 0) {
         card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#27AE60;margin-top:6px;padding:4px 8px;background:rgba(39,174,96,0.06);border-left:2px solid #27AE60'}, '\uD83D\uDCA1 Charge sugg\u00e9r\u00e9e : ' + (window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + 'kg')));
@@ -2633,7 +2635,9 @@ function renderMusculationProgram(p) {
         bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n));
         bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 Repos ' + bex.rest));
         if (bex.eq) bc.appendChild(h('div', {'class': 'exercise-detail'}, bex.eq));
-        var bsugg = window.getMusculationWeight ? window.getMusculationWeight(bex.n, bex.sets, (bex.sets || '').split('\u00d7')[1]) : null;
+        var _bexParts = (bex.sets || '').split('\u00d7');
+        var _bexReps = _bexParts.length > 1 ? _bexParts[1] : null;
+        var bsugg = window.getMusculationWeight ? window.getMusculationWeight(bex.n, bex.sets, _bexReps) : null;
         if (bsugg && bsugg > 0) bc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#27AE60;margin-top:6px;padding:4px 8px;background:rgba(39,174,96,0.06);border-left:2px solid #27AE60'}, '\uD83D\uDCA1 Charge sugg\u00e9r\u00e9e\u00a0: ' + bsugg + '\u00a0kg'));
         p.appendChild(bc);
       });
@@ -3082,8 +3086,9 @@ function renderRunningConfig(p) {
       var zonesInfo = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;background:var(--ivory2);margin:16px 0'});
       zonesInfo.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:8px'}, 'Allures estimées par zone'));
       (window.RUNNING_ZONES || []).forEach(function(z) {
+        if (!z.pct || !z.pct[0] || !z.pct[1]) return;
         var avgPct = (z.pct[0] + z.pct[1]) / 200;
-        var zonePace = Math.round(paceSeconds / avgPct);
+        var zonePace = avgPct > 0 ? Math.round(paceSeconds / avgPct) : paceSeconds;
         var zMin = Math.floor(zonePace / 60);
         var zSec = zonePace % 60;
         var paceStr = zMin + ':' + (zSec < 10 ? '0' : '') + zSec;
@@ -3785,10 +3790,11 @@ function renderTriathlonConfig(p) {
         var swimParts = (S.triathlonSwimPace || '1:45').split(':');
         var swimSecPer100 = parseInt(swimParts[0]) * 60 + parseInt(swimParts[1] || 0);
         var swimMin = Math.round((gObj.swimM / 100) * swimSecPer100 / 60);
-        var bikeMin = Math.round((gObj.bikeKm / parseFloat(S.triathlonBikePace)) * 60);
+        var _bikeSpeed = parseFloat(S.triathlonBikePace) || 0;
+        var bikeMin = _bikeSpeed > 0 ? Math.round((gObj.bikeKm / _bikeSpeed) * 60) : 0;
         var runParts = (S.triathlonRunPace || '5:00').split(':');
         var runSecPerKm = parseInt(runParts[0]) * 60 + parseInt(runParts[1] || 0);
-        var runMin = Math.round((gObj.runKm * runSecPerKm) / 60);
+        var runMin = runSecPerKm > 0 ? Math.round((gObj.runKm * runSecPerKm) / 60) : 0;
         var totalMin = swimMin + bikeMin + runMin + (gObj.id === 'ironman' ? 10 : gObj.id === 'half' ? 6 : 4); // transitions
         var totalH = Math.floor(totalMin / 60);
         var totalM = totalMin % 60;

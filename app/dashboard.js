@@ -781,11 +781,11 @@ function openMeasurementsModal() {
   if (window.MEASUREMENTS && window.MEASUREMENTS.renderForm) {
     try { window.MEASUREMENTS.renderForm(formContainer); } catch(e) {
       formContainer.appendChild(h('p', null, 'Module mensurations indisponible.'));
-      formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
+      if (formContainer.lastChild) formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
     }
   } else {
     formContainer.appendChild(h('p', null, 'Module mensurations non charge.'));
-    formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
+    if (formContainer.lastChild) formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
   }
   box.appendChild(formContainer);
 
@@ -811,7 +811,7 @@ function openBadgesModal() {
   if (window.GAMIFICATION && window.GAMIFICATION.renderBadgesPanel) {
     try { window.GAMIFICATION.renderBadgesPanel(panel); } catch(e) {
       panel.appendChild(h('p', null, 'Panneau badges indisponible.'));
-      panel.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
+      if (panel.lastChild) panel.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
     }
   }
   box.appendChild(panel);
