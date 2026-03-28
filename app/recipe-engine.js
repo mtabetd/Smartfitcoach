@@ -13264,6 +13264,338 @@
       'Servir avec les fruits rouges frais et quelques feuilles de menthe.'
     ]
   }
+,
+
+  // ─── RECETTES ITALIENNES R470-R479 : ZUPPE & PIATTI UNICI ────────────────────
+
+    {
+      id: 'R470',
+      name: 'Minestrone di Verdure Power',
+      emoji: '🥣',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['soupe', 'végétarien', 'haute-proteine', 'legumes', 'healthy', 'batch-cooking', 'anti-inflammatoire'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 25,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 22×4 + 42×4 + 10×9 = 88 + 168 + 90 = 346 kcal ✓
+      baseNutrition: { calories: 346, proteinGrams: 22, carbsGrams: 42, fatGrams: 10 },
+      ingredients: [
+        { name: 'Haricots blancs cuits', qty: 200, unit: 'g' },
+        { name: 'Courgette', qty: 150, unit: 'g' },
+        { name: 'Carotte', qty: 100, unit: 'g' },
+        { name: 'Céleri', qty: 80, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 200, unit: 'g' },
+        { name: 'Épinards frais', qty: 80, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Ail', qty: 2, unit: 'pce' },
+        { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        "Chauffer l'huile d'olive dans une grande casserole. Faire revenir l'ail émincé, la carotte et le céleri en dés 3 minutes à feu moyen.",
+        'Ajouter la courgette en dés, les tomates concassées et le bouillon. Porter à ébullition, puis réduire et mijoter 15 minutes.',
+        'Incorporer les haricots blancs et les épinards, cuire encore 5 minutes. Assaisonner de sel, poivre et basilic frais.',
+        "Servir dans des bols profonds, parsemer de parmesan râpé et d'un filet d'huile d'olive extra-vierge."
+      ]
+    },
+
+    {
+      id: 'R471',
+      name: 'Ribollita Toscane Légère',
+      emoji: '🍲',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['soupe', 'toscan', 'légumes', 'chou-noir', 'haricots', 'comfort-food', 'batch-cooking'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 25,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 18×4 + 45×4 + 9×9 = 72 + 180 + 81 = 333 kcal ✓
+      baseNutrition: { calories: 333, proteinGrams: 18, carbsGrams: 45, fatGrams: 9 },
+      ingredients: [
+        { name: 'Chou noir (cavolo nero)', qty: 150, unit: 'g' },
+        { name: 'Haricots cannellini cuits', qty: 180, unit: 'g' },
+        { name: 'Pain de campagne rassis', qty: 60, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 150, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Carotte', qty: 80, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 500, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Romarin frais', qty: 5, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'pce' }
+      ],
+      steps: [
+        "Dans une casserole, faire revenir l'oignon, la carotte et l'ail hachés dans l'huile d'olive 4 minutes jusqu'à légère coloration.",
+        'Ajouter le chou noir émincé, les tomates et le bouillon. Mijoter 15 minutes à feu moyen-doux.',
+        'Incorporer les haricots cannellini et le pain rassis émietté. Cuire encore 5 minutes en remuant pour que le pain épaississe la soupe.',
+        "Terminer avec le romarin ciselé, un filet d'huile d'olive à cru et du poivre noir fraîchement moulu."
+      ]
+    },
+
+    {
+      id: 'R472',
+      name: 'Zuppa di Lenticchie al Rosmarino',
+      emoji: '🫘',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['soupe', 'lentilles', 'romarin', 'protéines-végétales', 'fer', 'anti-inflammatoire', 'batch-cooking'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 30,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 20×4 + 44×4 + 8×9 = 80 + 176 + 72 = 328 kcal ✓
+      baseNutrition: { calories: 328, proteinGrams: 20, carbsGrams: 44, fatGrams: 8 },
+      ingredients: [
+        { name: 'Lentilles vertes sèches', qty: 160, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 200, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'pce' },
+        { name: 'Bouillon de légumes', qty: 700, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Romarin frais', qty: 8, unit: 'g' },
+        { name: 'Cumin moulu', qty: 2, unit: 'g' },
+        { name: 'Jus de citron', qty: 15, unit: 'ml' }
+      ],
+      steps: [
+        "Faire revenir l'oignon et l'ail émincés dans l'huile d'olive 3 minutes. Ajouter le cumin et une branche de romarin.",
+        'Incorporer les lentilles rincées, les tomates concassées et le bouillon. Porter à ébullition.',
+        "Réduire le feu et mijoter 25 minutes jusqu'à ce que les lentilles soient tendres. Retirer le romarin.",
+        "Mixer partiellement pour une texture mi-lisse mi-rustique. Finir avec le jus de citron, le romarin ciselé et un filet d'huile d'olive."
+      ]
+    },
+
+    {
+      id: 'R473',
+      name: 'Acquacotta con Uovo Pochée',
+      emoji: '🍳',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['soupe', 'oeuf-poche', 'maremme', 'légumes', 'rustique', 'protéines', 'anti-gaspillage'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 16×4 + 28×4 + 12×9 = 64 + 112 + 108 = 284 kcal ✓
+      baseNutrition: { calories: 284, proteinGrams: 16, carbsGrams: 28, fatGrams: 12 },
+      ingredients: [
+        { name: 'Tomates fraîches', qty: 200, unit: 'g' },
+        { name: 'Oignon', qty: 100, unit: 'g' },
+        { name: 'Céleri', qty: 80, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Oeufs', qty: 2, unit: 'pce' },
+        { name: 'Pain de campagne grillé', qty: 50, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 400, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Sauge fraîche', qty: 5, unit: 'g' },
+        { name: 'Pecorino râpé', qty: 15, unit: 'g' }
+      ],
+      steps: [
+        "Faire revenir l'oignon, le céleri et le poivron en dés dans l'huile d'olive 5 minutes. Ajouter les tomates coupées et la sauge.",
+        'Verser le bouillon, porter à ébullition puis mijoter 10 minutes. Assaisonner de sel et poivre.',
+        "Créer deux creux dans la soupe frémissante et y casser délicatement les œufs. Pocher 3-4 minutes jusqu'à blanc coagulé et jaune coulant.",
+        "Placer une tranche de pain grillé au fond de chaque bol, verser la soupe avec l'œuf par-dessus. Finir avec le pecorino et un filet d'huile d'olive."
+      ]
+    },
+
+    {
+      id: 'R474',
+      name: 'Zuppa di Farro e Borlotti',
+      emoji: '🌾',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['soupe', 'farro', 'borlotti', 'fibres', 'céréales-anciennes', 'protéines-végétales', 'batch-cooking'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 30,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 19×4 + 50×4 + 7×9 = 76 + 200 + 63 = 339 kcal ✓
+      baseNutrition: { calories: 339, proteinGrams: 19, carbsGrams: 50, fatGrams: 7 },
+      ingredients: [
+        { name: 'Farro perlé', qty: 120, unit: 'g' },
+        { name: 'Haricots borlotti cuits', qty: 160, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 150, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'pce' },
+        { name: 'Bouillon de légumes', qty: 700, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 12, unit: 'ml' },
+        { name: 'Laurier', qty: 2, unit: 'pce' },
+        { name: 'Thym frais', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        "Dans une casserole, faire revenir l'oignon et l'ail hachés dans l'huile d'olive 3 minutes. Ajouter les tomates et le laurier.",
+        'Incorporer le farro rincé et le bouillon. Porter à ébullition puis mijoter 20 minutes à couvert.',
+        "Ajouter les haricots borlotti et le thym. Poursuivre 5-7 minutes jusqu'à ce que le farro soit al dente et le bouillon légèrement épaissi.",
+        "Retirer le laurier. Rectifier l'assaisonnement et servir avec un filet d'huile d'olive extra-vierge et du poivre concassé."
+      ]
+    },
+
+    {
+      id: 'R475',
+      name: 'Frittata di Verdure al Forno',
+      emoji: '🥚',
+      origin: '🇮🇹',
+      mealTypes: ['breakfast', 'lunch', 'dinner'],
+      category: 'italian',
+      tags: ['frittata', 'oeuf', 'légumes', 'four', 'sans-gluten', 'protéines', 'meal-prep'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 24×4 + 10×4 + 16×9 = 96 + 40 + 144 = 280 kcal ✓
+      baseNutrition: { calories: 280, proteinGrams: 24, carbsGrams: 10, fatGrams: 16 },
+      ingredients: [
+        { name: 'Oeufs', qty: 4, unit: 'pce' },
+        { name: 'Courgette', qty: 120, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Oignon rouge', qty: 60, unit: 'g' },
+        { name: 'Feta émiettée', qty: 40, unit: 'g' },
+        { name: "Huile d'olive extra-vierge", qty: 10, unit: 'ml' },
+        { name: 'Origan séché', qty: 2, unit: 'g' },
+        { name: 'Basilic frais', qty: 8, unit: 'g' }
+      ],
+      steps: [
+        "Préchauffer le four à 180°C. Dans une poêle allant au four, faire revenir l'oignon et les légumes coupés en dés dans l'huile 5 minutes.",
+        "Battre les œufs avec l'origan, du sel et du poivre. Incorporer les épinards aux légumes poêlés, puis verser le mélange d'œufs par-dessus.",
+        "Parsemer de feta émiettée et enfourner 12-15 minutes jusqu'à ce que la frittata soit prise et légèrement dorée en surface.",
+        'Laisser tiédir 2 minutes avant de démouler. Garnir de basilic frais et servir en parts avec une salade verte.'
+      ]
+    },
+
+    {
+      id: 'R476',
+      name: 'Uova in Purgatorio',
+      emoji: '🍅',
+      origin: '🇮🇹',
+      mealTypes: ['breakfast', 'lunch', 'dinner'],
+      category: 'italian',
+      tags: ['oeuf', 'tomate', 'shakshuka-italiana', 'piment', 'rapide', 'protéines', 'sans-gluten'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 20,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 18×4 + 16×4 + 14×9 = 72 + 64 + 126 = 262 kcal ✓
+      baseNutrition: { calories: 262, proteinGrams: 18, carbsGrams: 16, fatGrams: 14 },
+      ingredients: [
+        { name: 'Oeufs', qty: 4, unit: 'pce' },
+        { name: 'Tomates pelées en boîte', qty: 400, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'pce' },
+        { name: 'Piment rouge séché', qty: 1, unit: 'pce' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' },
+        { name: 'Pecorino romano râpé', qty: 20, unit: 'g' }
+      ],
+      steps: [
+        "Dans une poêle large, faire revenir l'ail émincé et le piment émietté dans l'huile d'olive 2 minutes jusqu'à légère coloration.",
+        "Ajouter les tomates pelées concassées à la main. Assaisonner de sel et cuire à feu moyen 10 minutes jusqu'à légère réduction.",
+        "Créer 4 creux dans la sauce et y casser les œufs délicatement. Couvrir et cuire 6-8 minutes selon la cuisson désirée (jaune coulant ou ferme).",
+        'Parsemer de pecorino râpé et de basilic frais déchiré. Servir directement dans la poêle avec du pain de campagne grillé.'
+      ]
+    },
+
+    {
+      id: 'R477',
+      name: 'Polenta Crémeuse Champignons Sautés',
+      emoji: '🍄',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['polenta', 'champignons', 'comfort-food', 'sans-gluten', 'végétarien', 'umami', 'nordique-italien'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 25,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 16×4 + 48×4 + 12×9 = 64 + 192 + 108 = 364 kcal ✓
+      baseNutrition: { calories: 364, proteinGrams: 16, carbsGrams: 48, fatGrams: 12 },
+      ingredients: [
+        { name: 'Polenta à cuisson rapide', qty: 120, unit: 'g' },
+        { name: 'Champignons mélangés', qty: 250, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 500, unit: 'ml' },
+        { name: 'Lait demi-écrémé', qty: 100, unit: 'ml' },
+        { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'pce' },
+        { name: 'Thym frais', qty: 5, unit: 'g' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Persil frais', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        "Porter le bouillon et le lait à ébullition dans une casserole. Verser la polenta en pluie en fouettant constamment. Cuire 5-7 minutes jusqu'à épaississement crémeux.",
+        'Incorporer la moitié du parmesan à la polenta. Assaisonner de sel et poivre, couvrir et réserver hors du feu.',
+        "Dans une poêle chaude, faire sauter les champignons tranchés dans l'huile d'olive avec l'ail et le thym 8-10 minutes jusqu'à dorure. Assaisonner.",
+        "Dresser la polenta crémeuse dans les assiettes, disposer les champignons par-dessus. Finir avec le parmesan restant, le persil ciselé et un filet d'huile d'olive."
+      ]
+    },
+
+    {
+      id: 'R478',
+      name: 'Farinata di Ceci',
+      emoji: '🫓',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner', 'snack'],
+      category: 'italian',
+      tags: ['farinata', 'pois-chiches', 'ligurie', 'sans-gluten', 'vegan', 'street-food', 'protéines-végétales'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 14×4 + 34×4 + 12×9 = 56 + 136 + 108 = 300 kcal ✓
+      baseNutrition: { calories: 300, proteinGrams: 14, carbsGrams: 34, fatGrams: 12 },
+      ingredients: [
+        { name: 'Farine de pois chiches', qty: 120, unit: 'g' },
+        { name: 'Eau', qty: 360, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 20, unit: 'ml' },
+        { name: 'Romarin frais', qty: 5, unit: 'g' },
+        { name: 'Oignon rouge', qty: 60, unit: 'g' },
+        { name: 'Sel de mer', qty: 3, unit: 'g' },
+        { name: 'Poivre noir', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        "Fouetter la farine de pois chiches avec l'eau froide jusqu'à pâte lisse et sans grumeaux. Laisser reposer 30 minutes (ou 5 min si pressé).",
+        "Préchauffer le four à 230°C avec la plaque huilée à l'intérieur. Émincer finement l'oignon rouge et les aiguilles de romarin.",
+        "Incorporer la moitié de l'huile d'olive, l'oignon et le romarin à la pâte. Verser sur la plaque chaude huilée en couche fine (3-4 mm).",
+        "Enfourner 15-18 minutes jusqu'à bords dorés et croustillants et centre légèrement ferme. Arroser du reste d'huile, saler et poivrer. Servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R479',
+      name: 'Pappa al Pomodoro Moderne',
+      emoji: '🍅',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['pappa-al-pomodoro', 'tomate', 'pain', 'toscane', 'comfort-food', 'anti-gaspillage', 'végétarien'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 20,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 10×4 + 40×4 + 11×9 = 40 + 160 + 99 = 299 kcal ✓
+      baseNutrition: { calories: 299, proteinGrams: 10, carbsGrams: 40, fatGrams: 11 },
+      ingredients: [
+        { name: 'Pain de campagne rassis', qty: 120, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 400, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 300, unit: 'ml' },
+        { name: 'Ail', qty: 3, unit: 'pce' },
+        { name: "Huile d'olive extra-vierge", qty: 20, unit: 'ml' },
+        { name: 'Basilic frais', qty: 15, unit: 'g' },
+        { name: 'Piment rouge séché', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        "Dans une casserole, faire revenir l'ail écrasé et le piment dans l'huile d'olive 2 minutes. Ajouter les tomates et écraser grossièrement à la cuillère.",
+        'Verser le bouillon chaud et porter à frémissement. Émietter le pain rassis dans la soupe en morceaux irréguliers.',
+        "Cuire 10-12 minutes en remuant fréquemment jusqu'à consistance épaisse et crémeuse, comme une bouillie rustique. Le pain doit être complètement absorbé.",
+        "Retirer du feu, incorporer généreusement le basilic frais déchiré. Laisser reposer 2 minutes. Servir tiède avec un filet d'huile d'olive extra-vierge et du basilic supplémentaire."
+      ]
+    }
+
 
   ];
 
