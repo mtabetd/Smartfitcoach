@@ -119,7 +119,8 @@ var MEDICAL=[
   ]},
   {cat:'OS & ARTICULATIONS',items:[
     {id:'osteoporose',name:'Ostéoporose',desc:'Calcium, vitamine D, protéines',icon:'▽'},
-    {id:'polyarthrite',name:'Polyarthrite rhumatoïde',desc:'Oméga-3, anti-inflammatoire',icon:'▽'}
+    {id:'polyarthrite',name:'Polyarthrite rhumatoïde',desc:'Oméga-3, anti-inflammatoire',icon:'▽'},
+    {id:'spondylarthrite',name:'Spondylarthrite ankylosante',desc:'Anti-inflammatoire, mobilité, natation/yoga recommandés',icon:'▽'}
   ]},
   {cat:'CARENCES & AUTRES',items:[
     {id:'anemie',name:'Anémie ferriprive',desc:'Fer héminique, vitamine C',icon:'●'},
@@ -163,9 +164,18 @@ var MEDICAL_ADVICE={
   // macroAdj.p corrigé à +0.10 (cohérence avec description "+10%") | macroAdj.l corrigé à 0
   menopause:{warn:'Ménopause : métabolisme réduit ~100-150 kcal/j (NAMS 2022). Calcium 1200mg/j + Vitamine D. Protéines +10% contre la perte musculaire (ESPEN 2019). Oméga-3 pour santé cardiovasculaire et os.',macroAdj:{g:-.05,p:.10,l:0}},
   hashimoto:{warn:'Anti-inflammatoire. Certains patients bénéficient du sans gluten.',macroAdj:null},
-  osteoporose:{warn:'Calcium (1200mg/j), vitamine D, protéines adéquates.',macroAdj:{g:-.03,p:.05,l:-.02}},
-  polyarthrite:{warn:'Oméga-3 (poissons gras). Réduisez oméga-6 et aliments pro-inflammatoires.',macroAdj:null},
-  anemie:{warn:'Fer héminique (viande rouge), vitamine C pour absorption. Évitez thé/café aux repas.',macroAdj:null},
+  // Ostéoporose : calcium 1200mg/j + vitamine D 800-2000 UI/j + protéines ≥1.2g/kg (NOF 2022, ESCEO 2019)
+  // Exercice en charge (marche, muscu légère ≤70% 1RM) réduit le risque fracturaire (Kohrt et al. MSSE 2004)
+  osteoporose:{warn:'Calcium 1200 mg/j + Vitamine D 800-2000 UI/j (NOF 2022). Protéines ≥ 1.2 g/kg pour maintien osseux (ESCEO 2019). Exercice en charge recommandé (marche, muscu légère ≤70% 1RM). Évitez alcool et tabac.',macroAdj:{g:-.03,p:.05,l:-.02}},
+  // Polyarthrite rhumatoïde : oméga-3 3-5g/j EPA+DHA (Calder, AJCN 2015), réduction TNF-alpha
+  polyarthrite:{warn:'Oméga-3 EPA+DHA 3-5g/j — réduction inflammation (Calder, AJCN 2015). Réduisez oméga-6 (huiles végétales raffinées) et aliments ultra-transformés (pro-inflammatoires). Alimentation méditerranéenne recommandée (Sköldstam et al. Scand J Rheumatol 2003). Curcuma (curcumine) : anti-inflammatoire adjuvant.',macroAdj:null},
+  // Spondylarthrite ankylosante : Sieper & Poddubnyy, Lancet 2017
+  // Exercice recommandé : natation, yoga, étirements quotidiens maintiennent mobilité rachidienne
+  // Charges axiales lourdes (soulevé de terre, squat lourd) : déconseillées (contrainte sur enthèses)
+  spondylarthrite:{warn:'Alimentation anti-inflammatoire (oméga-3, méditerranéenne). Certains patients bénéficient d\'une réduction des glucides fermentescibles (FODMAP). Vitamine D importante (déficit fréquent dans la SA — Braun & Sieper 2011). Exercice quotidien maintient la mobilité rachidienne (Sieper & Poddubnyy, Lancet 2017).',macroAdj:{g:-.03,p:.02,l:.01}},
+  // Besoins en fer : femme en âge de procréer 18 mg/j, homme/postménopause 8 mg/j (ANSES 2021)
+  // Sportive : +30-70% par rapport aux besoins standards (hémoscopie, hémolyse du pied — Schumacher et al. BJSM 2002)
+  anemie:{warn:'Fer héminique (viande rouge, foie, huîtres) + vitamine C pour l\'absorption. Évitez thé/café aux repas (réduction absorption -60%). Femme sportive : besoins 18-27 mg/j (Schumacher et al. BJSM 2002 — hémolyse à l\'impact, pertes menstruelles). Prise de sang ferritine recommandée.',macroAdj:null},
   anemie_b12:{warn:'Sources B12 : viande, poisson, œufs. Supplémentation si végétalien.',macroAdj:null},
   obesity:{warn:'Déficit calorique modéré (-500 kcal/j max). Protéines hautes pour préserver la masse maigre.',macroAdj:{g:-.08,p:.10,l:-.02}},
   tca:{warn:'Un suivi médical et psychologique est fortement recommandé.',macroAdj:null},
@@ -174,9 +184,11 @@ var MEDICAL_ADVICE={
   allaitement:{warn:'Allaitement : +500 kcal/j (ACOG 2022). Calcium 1200mg/j, iode 290µg/j, vitamine D 600 UI. Évitez caféine >200mg/j et alcool.',macroAdj:{g:.03,p:.07,l:-.01}},
   insomnia:{warn:'Magnésium, tryptophane (dinde, banane). Évitez caféine après 14h.',macroAdj:null}
 };
-var MEAL_SPLIT={pctBreak:.25,pctLunch:.40,pctSnack:.05,pctDinner:.30}; // défaut 3 repas
+var MEAL_SPLIT={pctBreak:.25,pctLunch:.45,pctSnack:0,pctDinner:.30}; // défaut 3 repas — pctSnack=0 car generateWeek ne génère pas de collation pour meals<4
 // getMealSplit() : distribution dynamique selon activité et nombre de repas (vs MEAL_SPLIT fixe)
 // Base : ADA 2023, ISSN 2017, Ivy 2004 (post-workout nutrition window)
+// INVARIANT : pctSnack doit être 0 quand meals<4, car generateWeek n'alloue le slot snack que si meals>=4.
+// Un pctSnack>0 avec meals=3 crée un déficit calorique silencieux égal à pctSnack×TDEE (ex: 5%×1800=90kcal/j).
 function getMealSplit(){
   var s=window.S;
   var meals=s.mealsPerDay||3;
@@ -189,11 +201,13 @@ function getMealSplit(){
   }
   if(meals===3){
     if(isAthlete){
-      // Athlète 3 repas : collation post-entraînement essentielle → redistribuer légèrement
-      return{pctBreak:.25,pctLunch:.38,pctSnack:.07,pctDinner:.30,
-        note:'Athlète 3 repas : collation post-entraînement recommandée (+glucides/protéines dans les 30-45min — Ivy 2004)'};
+      // Athlète 3 repas : pctSnack=0 obligatoire (generateWeek ne génère pas de slot snack pour meals=3)
+      // Budget snack (7%) redistribué sur déjeuner (+5%) et dîner (+2%) pour atteindre 100%
+      // Note informative : collation post-entraînement recommandée en dehors du plan généré
+      return{pctBreak:.25,pctLunch:.43,pctSnack:0,pctDinner:.32,
+        note:'Athlète 3 repas : collation post-entraînement recommandée (+glucides/protéines dans les 30-45min — Ivy 2004). Ajoutez 150-250kcal (banane + whey ou fruit + yaourt grec) après séance.'};
     }
-    return MEAL_SPLIT; // Standard 3 repas
+    return MEAL_SPLIT; // Standard 3 repas (pctSnack=0, redistribué sur déjeuner)
   }
   if(meals===4){
     if(isAthlete){
@@ -690,6 +704,7 @@ window.S = {
     acl: false,         // LCA opéré ou fragilisé
     osteoporosis: false,// Ostéoporose
     hypertension: false,// HTA sévère (>160/100)
+    rheumatoidArthritis: false, // Polyarthrite rhumatoïde (PR) — exercices doux en rémission, repos en poussée
     // Intensité douleur générale 0-3
     painLevel: 0,       // 0=aucune 1=légère 2=modérée 3=sévère
     // Notes libres
@@ -1439,9 +1454,12 @@ function calcHydration(){
     base:base,
     actBonus:actBonus,
     perSportHour:600, // 500-750ml/heure d'effort (ACSM 2007)
+    electrolytes: actBonus >= 750, // Électrolytes recommandés si effort > ~60 min (Maughan & Shirreffs, BJSM 2010)
     tips:[
       'Urines jaune pâle = bonne hydratation',
       actBonus>0?'Ajoutez 500-750ml par heure d\'entraînement':'Buvez régulièrement, sans attendre la soif',
+      // Électrolytes pour efforts > 1h (Maughan & Shirreffs, BJSM 2010 — sodium 500-1000mg/h, potassium 200-400mg/h)
+      actBonus>=750?'Effort > 60 min : ajoutez des électrolytes (sodium 500-1000 mg/h, potassium 200-400 mg/h) pour prévenir hyponatrémie et crampes (Maughan & Shirreffs, BJSM 2010).':null,
       s.pregnant?'+300ml/j recommandé en grossesse (OMS)':null,
       (s.medical&&s.medical.indexOf('allaitement')!==-1)?'+700ml/j supplémentaires pendant l\'allaitement (ANSES 2021)':null
     ].filter(Boolean)
