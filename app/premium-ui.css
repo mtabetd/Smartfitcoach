@@ -36,7 +36,7 @@
    ------------------------------------------------------- */
 
 .sel-card {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .sel-card:active {
@@ -418,20 +418,20 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--ivory);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C8C8C0;
-  border-radius: 2px;
+  background: var(--grey3);
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9A9A94;
+  background: var(--grey);
 }
 
 
@@ -891,7 +891,7 @@ body.dark-mode .week-separator{border-color:var(--border)}
 
 /* Line-height systématique */
 body, p, .subtitle {
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 /* Cards spacing */
