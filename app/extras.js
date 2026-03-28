@@ -410,6 +410,8 @@ window.MEAL_TIMER = {
   renderWidget: function(container) {
     if (!container) return;
     var self = this;
+    // Clear stale listeners from previous render cycles to prevent accumulation
+    self._listeners = [];
     container.innerHTML = '';
 
     var wrap = el('div', 'extras-widget timer-section');

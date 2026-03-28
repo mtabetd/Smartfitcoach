@@ -4103,9 +4103,12 @@ function renderYogaProgram(p) {
   var levelKey = S.yogaLevel === 'avance' ? 'avance' : S.yogaLevel === 'intermediaire' ? 'intermediaire' : 'debutant';
   var basePoses = YOGA_SESSIONS[levelKey] || YOGA_SESSIONS.debutant;
 
-  // Filter poses by duration
+  // Filter poses by duration — Savasana TOUJOURS en dernière position (règle coach)
   var maxPoses = S.yogaDuration === '20min' ? 4 : S.yogaDuration === '30min' ? 5 : S.yogaDuration === '45min' ? 6 : 7;
-  var poses = basePoses.slice(0, Math.min(maxPoses, basePoses.length));
+  var savasana = basePoses[basePoses.length - 1]; // Dernier élément = Savasana (toujours inclus)
+  var posePool = basePoses.slice(0, basePoses.length - 1); // Tout sauf Savasana
+  var bodyPoses = posePool.slice(0, Math.min(maxPoses - 1, posePool.length)); // maxPoses - 1 pour réserver la place Savasana
+  var poses = bodyPoses.concat([savasana]); // Savasana toujours en dernier
 
   // Pregnancy warning
   var pregWarn = getPregnancySportWarning();
