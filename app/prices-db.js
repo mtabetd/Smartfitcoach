@@ -743,12 +743,6 @@
     },
 
     // ── Divers supplémentaires ──────────────────────────────────────────────────
-    'Huile de sésame': {
-      name: 'Huile de sésame',
-      pricePerMl: r(45 / 250),
-      source: 'carrefour',
-      updatedAt: '2026-03'
-    },
     'Lait de coco': {
       name: 'Lait de coco',
       pricePerMl: r(12 / 400),
@@ -962,12 +956,6 @@
     'Myrtilles': {
       name: 'Myrtilles',
       pricePerG: r(60 / 1000),
-      source: 'carrefour',
-      updatedAt: '2026-03'
-    },
-    'Ananas (boîte)': {
-      name: 'Ananas (boîte)',
-      pricePerG: r(14 / 560),
       source: 'carrefour',
       updatedAt: '2026-03'
     },
