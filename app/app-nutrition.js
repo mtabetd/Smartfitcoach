@@ -1905,6 +1905,20 @@ function renderStep9(p) {
   });
   p.appendChild(tabs);
 
+  // Quick action buttons — Salad bar & Smoothie bar
+  var quickActions = h('div', {style: 'display:flex;gap:8px;margin:12px 0 4px'});
+  quickActions.appendChild(h('button', {
+    style: 'flex:1;padding:10px 8px;background:var(--green,#1A4A1A);color:var(--ivory,#FAFAF7);border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
+    onclick: function() { if (!window.S.saladBar) window.S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' }; window.S.saladBar.open = true; if(window.render) window.render(); }
+  }, [h('span', {style:'font-size:18px'}, '\uD83E\uDD57'), h('span', {}, 'Composer une salade')]));
+  if (S.whey === true || S.whey === 1) {
+    quickActions.appendChild(h('button', {
+      style: 'flex:1;padding:10px 8px;background:#6B3FA0;color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
+      onclick: function() { window.S.smoothieBarOpen = true; if(window.render) window.render(); }
+    }, [h('span', {style:'font-size:18px'}, '\uD83E\uDD64'), h('span', {}, 'Smoothies Whey')]));
+  }
+  p.appendChild(quickActions);
+
   // Day meals
   var day = S.weekPlan[S.selectedDay] || {}, tgtCal = calcTarget(), dayTotal = 0, dayTotalP = 0, dayTotalG = 0, dayTotalL = 0;
   var slots = [
@@ -2187,22 +2201,6 @@ function renderStep9(p) {
     onclick: function() { window.S.shopListOpen = true; if(window.render) window.render(); }
   }, _shopLabel);
   p.appendChild(btnShop);
-
-  // Salad bar button
-  p.appendChild(h('button', {
-    'class': 'regen-btn',
-    style: 'margin-top:8px;background:var(--green,#1A4A1A);color:var(--ivory,#FAFAF7)',
-    onclick: function() { if (!window.S.saladBar) window.S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' }; window.S.saladBar.open = true; if(window.render) window.render(); }
-  }, '\uD83E\uDD57 Composer une salade'));
-
-  // Smoothie bar button (visible seulement si S.whey === true)
-  if (S.whey === true) {
-    p.appendChild(h('button', {
-      'class': 'regen-btn',
-      style: 'margin-top:8px;background:#6B3FA0;color:#fff',
-      onclick: function() { window.S.smoothieBarOpen = true; if(window.render) window.render(); }
-    }, '\uD83E\uDD64 Smoothies Whey'));
-  }
 
   // Export PDF
   p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:16px;background:var(--black2)', onclick: function() { window.exportDayPDF(S.selectedDay); }}, '\u21e9 Exporter le jour en PDF'));
