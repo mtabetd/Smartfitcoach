@@ -8572,6 +8572,219 @@
     ]
   },
 
+  // ─── PETITS-DÉJEUNERS VEGAN L051-L058 ──────────────────────────────────────
+  {
+    id: 'L051',
+    name: 'Porridge Avoine Lait Amande Banane',
+    emoji: '🌱',
+    origin: '🌍',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'vegan', 'avoine', 'banane', 'chia', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 7,
+    servings: 1,
+    baseNutrition: { calories: 378, proteinGrams: 14, carbsGrams: 64, fatGrams: 10 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 90, unit: 'g' },
+      { name: 'Lait d\'amande', qty: 250, unit: 'ml' },
+      { name: 'Banane', qty: 120, unit: 'g' },
+      { name: 'Graines de chia', qty: 15, unit: 'g' },
+      { name: 'Cannelle', qty: 2, unit: 'g' },
+      { name: 'Sirop d\'érable', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Porter le lait d\'amande à ébullition, ajouter les flocons d\'avoine.',
+      'Cuire 5 min à feu doux en remuant.',
+      'Servir garni de banane tranchée, graines de chia et sirop d\'érable.'
+    ]
+  },
+  {
+    id: 'L052',
+    name: 'Smoothie Bowl Mangue Coco Protéiné',
+    emoji: '🌱',
+    origin: '🌍',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'vegan', 'mangue', 'lait de coco', 'banane', 'granola', 'chia'],
+    difficulty: 1,
+    prepTime: 8,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 392, proteinGrams: 18, carbsGrams: 58, fatGrams: 12 },
+    ingredients: [
+      { name: 'Mangue', qty: 150, unit: 'g' },
+      { name: 'Lait de coco', qty: 100, unit: 'ml' },
+      { name: 'Banane', qty: 80, unit: 'g' },
+      { name: 'Graines de chanvre', qty: 30, unit: 'g' },
+      { name: 'Granola', qty: 50, unit: 'g' },
+      { name: 'Kiwi', qty: 60, unit: 'g' },
+      { name: 'Graines de chia', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Mixer la mangue, la banane et le lait de coco.',
+      'Verser dans un bol.',
+      'Garnir de granola, kiwi tranché, graines de chanvre et chia.'
+    ]
+  },
+  {
+    id: 'L053',
+    name: 'Toast Avocat Tomate Graines de Chanvre',
+    emoji: '🌱',
+    origin: '🌍',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'vegan', 'pain', 'avocat', 'tomate', 'chanvre', 'citron'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 2,
+    servings: 1,
+    baseNutrition: { calories: 396, proteinGrams: 20, carbsGrams: 40, fatGrams: 18 },
+    ingredients: [
+      { name: 'Pain complet', qty: 80, unit: 'g' },
+      { name: 'Avocat', qty: 140, unit: 'g' },
+      { name: 'Tomate', qty: 100, unit: 'g' },
+      { name: 'Graines de chanvre', qty: 30, unit: 'g' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Piment rouge', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Griller le pain complet.',
+      'Écraser l\'avocat avec citron, sel et piment.',
+      'Tartiner d\'avocat, couvrir de tomate tranchée et saupoudrer de graines de chanvre.'
+    ]
+  },
+  {
+    id: 'L054',
+    name: 'Bol Quinoa Fruits Rouges Amandes',
+    emoji: '🌱',
+    origin: '🌍',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'vegan', 'quinoa', 'lait d\'amande', 'framboises', 'myrtilles', 'amandes', 'lin'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 12,
+    servings: 1,
+    baseNutrition: { calories: 404, proteinGrams: 22, carbsGrams: 54, fatGrams: 12 },
+    ingredients: [
+      { name: 'Quinoa', qty: 90, unit: 'g' },
+      { name: 'Lait d\'amande', qty: 200, unit: 'ml' },
+      { name: 'Framboises', qty: 80, unit: 'g' },
+      { name: 'Myrtilles', qty: 60, unit: 'g' },
+      { name: 'Amandes', qty: 25, unit: 'g' },
+      { name: 'Graines de lin', qty: 15, unit: 'g' },
+      { name: 'Sirop d\'érable', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire le quinoa dans le lait d\'amande (10-12 min).',
+      'Laisser tiédir.',
+      'Garnir de fruits rouges, amandes et graines de lin. Arroser de sirop d\'érable.'
+    ]
+  },
+  {
+    id: 'L055',
+    name: 'Chia Pudding Cacao Beurre de Cacahuète',
+    emoji: '🌱',
+    origin: '🌍',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'vegan', 'chia', 'lait d\'avoine', 'cacao', 'cacahuète', 'banane'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 418, proteinGrams: 24, carbsGrams: 38, fatGrams: 18 },
+    ingredients: [
+      { name: 'Graines de chia', qty: 50, unit: 'g' },
+      { name: 'Lait d\'avoine', qty: 300, unit: 'ml' },
+      { name: 'Cacao en poudre', qty: 15, unit: 'g' },
+      { name: 'Beurre de cacahuète', qty: 30, unit: 'g' },
+      { name: 'Banane', qty: 80, unit: 'g' },
+      { name: 'Sirop d\'érable', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Mélanger graines de chia, lait d\'avoine, cacao et sirop d\'érable.',
+      'Réfrigérer au moins 4h ou une nuit.',
+      'Servir avec beurre de cacahuète et banane tranchée.'
+    ]
+  },
+  {
+    id: 'L056',
+    name: 'Pancakes Flocons Avoine Banane Vegan',
+    emoji: '🌱',
+    origin: '🌍',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'vegan', 'avoine', 'banane', 'lait d\'amande', 'farine', 'fruits rouges'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 12,
+    servings: 1,
+    baseNutrition: { calories: 386, proteinGrams: 16, carbsGrams: 62, fatGrams: 10 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 100, unit: 'g' },
+      { name: 'Banane', qty: 120, unit: 'g' },
+      { name: 'Lait d\'amande', qty: 150, unit: 'ml' },
+      { name: 'Farine complète', qty: 30, unit: 'g' },
+      { name: 'Levure chimique', qty: 5, unit: 'g' },
+      { name: 'Huile de coco', qty: 10, unit: 'g' },
+      { name: 'Fruits rouges', qty: 80, unit: 'g' }
+    ],
+    steps: [
+      'Mixer les flocons d\'avoine en farine grossière.',
+      'Écraser la banane, mélanger avec lait d\'amande, farine et levure.',
+      'Cuire les pancakes dans l\'huile de coco. Servir avec fruits rouges.'
+    ]
+  },
+  {
+    id: 'L057',
+    name: 'Tartine Pain Complet Beurre Amande Fruits',
+    emoji: '🌱',
+    origin: '🌍',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'vegan', 'pain', 'amande', 'banane', 'fraises', 'chia'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 2,
+    servings: 1,
+    baseNutrition: { calories: 374, proteinGrams: 18, carbsGrams: 44, fatGrams: 16 },
+    ingredients: [
+      { name: 'Pain complet', qty: 80, unit: 'g' },
+      { name: 'Beurre d\'amande', qty: 40, unit: 'g' },
+      { name: 'Banane', qty: 80, unit: 'g' },
+      { name: 'Fraises', qty: 60, unit: 'g' },
+      { name: 'Graines de chia', qty: 10, unit: 'g' },
+      { name: 'Sirop d\'érable', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Griller le pain complet.',
+      'Tartiner généreusement de beurre d\'amande.',
+      'Disposer banane et fraises tranchées, saupoudrer de chia et sirop d\'érable.'
+    ]
+  },
+  {
+    id: 'L058',
+    name: 'Bowl Patate Douce Rôtie Beurre Noisette',
+    emoji: '🌱',
+    origin: '🌍',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'vegan', 'patate douce', 'noisette', 'avoine', 'courge', 'cannelle'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 45,
+    servings: 1,
+    baseNutrition: { calories: 412, proteinGrams: 16, carbsGrams: 60, fatGrams: 14 },
+    ingredients: [
+      { name: 'Patate douce', qty: 250, unit: 'g' },
+      { name: 'Beurre de noisette', qty: 30, unit: 'g' },
+      { name: 'Flocons d\'avoine', qty: 50, unit: 'g' },
+      { name: 'Graines de courge', qty: 15, unit: 'g' },
+      { name: 'Cannelle', qty: 2, unit: 'g' },
+      { name: 'Sirop d\'érable', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Rôtir la patate douce entière 45 min à 200°C.',
+      'Ouvrir en deux, écraser la chair.',
+      'Garnir de beurre de noisette, flocons d\'avoine grillés, graines de courge et sirop d\'érable.'
+    ]
+  },
+
   {
     id: 'L101',
     name: 'Poulet Grillé Riz Basmati',
