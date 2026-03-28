@@ -4458,6 +4458,12 @@ function renderCyclingProgram(p) {
   }
 
   var plan = S.cyclingPlan;
+  if (!plan || !plan.length) {
+    var backArrowCyc = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+    p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 22; window.render(); }, html: backArrowCyc + 'Retour'}));
+    return;
+  }
   var totalWeeks = plan.length;
   if (!S.cyclingWeek || S.cyclingWeek < 1) S.cyclingWeek = 1;
   if (S.cyclingWeek > totalWeeks) S.cyclingWeek = totalWeeks;
