@@ -908,11 +908,11 @@ function renderChargesQuestionnaire(p) {
       }; })(repKey, exDef.key)
     });
     inputWrap.appendChild(repInp);
-    inputWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'reps'));
+    inputWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, window.t('muscu.reps')));
     if (currentVal && currentVal > 0) {
       var thresh = strengthThresholds[exDef.key] || {low:0.5,mid:1.0};
       var ratio = currentVal / bodyWeight;
-      var lbl = ratio < thresh.low ? 'Débutant' : ratio < thresh.mid ? 'Intermédiaire' : 'Avancé';
+      var lbl = ratio < thresh.low ? window.t('sport.beginner') : ratio < thresh.mid ? window.t('sport.intermediate') : window.t('sport.advanced');
       var col = ratio < thresh.low ? '#E67E22' : ratio < thresh.mid ? '#2980B9' : '#27AE60';
       // Epley formula: 1RM = weight × (1 + reps/30) — accurate for 1-15 reps
       var usedReps = S.muscuStrengthProfile[repKey] || 8;
@@ -1606,7 +1606,7 @@ function renderMusculationLevel(p) {
   p.appendChild(h('p', {'class': 'subtitle'}, 'Niveau d\'expérience et fréquence d\'entraînement.'));
   if (window.TIPS) TIPS.renderTip(p, 'sportLevel');
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
   var list = h('div', {'class': 'level-list'});
   (window.SPORT_LEVELS || []).forEach(function(lv) {
     list.appendChild(h('div', {'class': 'level-item' + (S.sportLevel === lv.id ? ' on' : ''), onclick: function(){ S.sportLevel = lv.id; window.render(); }}, [
@@ -1616,7 +1616,7 @@ function renderMusculationLevel(p) {
   });
   p.appendChild(list);
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Jours par semaine'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
   var nw = h('div', {'class': 'num-input-wrap'});
   nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) S.sportDays = v; },
@@ -2582,7 +2582,7 @@ function renderMusculationProgram(p) {
             }; })(setRow)
           });
           inputZone.appendChild(repsInput);
-          inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, 'reps'));
+          inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, window.t('muscu.reps')));
 
           // Indicateur succès/échec
           if (setRow.actualReps !== null && (setRow.actualWeight !== null || isBodyweight)) {
@@ -2665,7 +2665,7 @@ function renderMusculationProgram(p) {
       var realDur = S._sessionDuration != null ? S._sessionDuration : estDuration;
       var kcalRes = calcSessionKcal(allEx, realDur);
       var compPanel = h('div', {style: 'border:1px solid var(--border);background:var(--ivory2);padding:16px;margin-top:8px'});
-      compPanel.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:12px'}, 'Bilan de s\u00e9ance'));
+      compPanel.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:12px'}, window.t('muscu.session_summary')));
       // Durée
       var durRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:14px'});
       durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex:1'}, 'Dur\u00e9e r\u00e9elle'));
@@ -2963,9 +2963,9 @@ function renderSportModal(app) {
     // Muscle + Equipment
     var pills = h('div', {'class': 'macro-pills'});
     pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, ex.m), h('div', {'class': 'mp-label'}, 'Muscle')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, ex.sets), h('div', {'class': 'mp-label'}, 'Séries')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, ex.rest), h('div', {'class': 'mp-label'}, 'Repos')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, '★'.repeat(Math.max(0, parseInt(ex.lv) || 0))), h('div', {'class': 'mp-label'}, 'Niveau')]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, ex.sets), h('div', {'class': 'mp-label'}, window.t('muscu.sets'))]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, ex.rest), h('div', {'class': 'mp-label'}, window.t('muscu.rest'))]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, '★'.repeat(Math.max(0, parseInt(ex.lv) || 0))), h('div', {'class': 'mp-label'}, window.t('sport.level'))]));
     body.appendChild(pills);
 
     // Equipment
@@ -3038,7 +3038,7 @@ function renderRunningConfig(p) {
   p.appendChild(goalGrid);
 
   // Level selection (mandatory)
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.level')));
   var lvlList = h('div', {'class': 'level-list'});
   (window.RUNNING_LEVELS || []).forEach(function(lv) {
     var isOn = S.runningLevel === lv.id;
@@ -3053,7 +3053,7 @@ function renderRunningConfig(p) {
   p.appendChild(lvlList);
 
   // Days per week
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours d\'entraînement par semaine'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   var daysWrap = h('div', {'class': 'num-input-wrap'});
   daysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.runningDays), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.runningDays = v; window.render(); } },
@@ -3236,7 +3236,7 @@ function renderHyroxConfig(p) {
   p.appendChild(goalGrid);
 
   // Level selection (mandatory)
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.level')));
   var lvlList = h('div', {'class': 'level-list'});
   (window.HYROX_LEVELS || []).forEach(function(lv) {
     var isOn = S.hyroxLevel === lv.id;
@@ -3251,7 +3251,7 @@ function renderHyroxConfig(p) {
   p.appendChild(lvlList);
 
   // Days per week
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours d\'entraînement par semaine'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   var daysWrap = h('div', {'class': 'num-input-wrap'});
   daysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.hyroxDays), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.hyroxDays = v; window.render(); } },
@@ -3487,7 +3487,7 @@ function renderPadelConfig(p) {
   });
   p.appendChild(og);
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
   var lg = h('div', {'class': 'level-list'});
   (window.PADEL_LEVELS || []).forEach(function(lv) {
     lg.appendChild(h('div', {'class': 'level-item' + (S.padelLevel === lv.id ? ' on' : ''), onclick: function(){ S.padelLevel = lv.id; window.render(); }}, [
@@ -3496,7 +3496,7 @@ function renderPadelConfig(p) {
   });
   p.appendChild(lg);
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Jours par semaine'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
   var nw = h('div', {'class': 'num-input-wrap'});
   nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.padelDays), oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) S.padelDays = v; }}));
   nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
@@ -3595,7 +3595,7 @@ function renderGolfConfig(p) {
   });
   p.appendChild(og);
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
   var lg = h('div', {'class': 'level-list'});
   (window.GOLF_LEVELS || []).forEach(function(lv) {
     lg.appendChild(h('div', {'class': 'level-item' + (S.golfLevel === lv.id ? ' on' : ''), onclick: function(){ S.golfLevel = lv.id; window.render(); }}, [
@@ -3604,7 +3604,7 @@ function renderGolfConfig(p) {
   });
   p.appendChild(lg);
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Jours par semaine'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
   var nw = h('div', {'class': 'num-input-wrap'});
   nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.golfDays), oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) S.golfDays = v; }}));
   nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));

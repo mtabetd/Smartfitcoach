@@ -1035,7 +1035,7 @@ function renderStep6(p) {
     var tgt = calcTarget();
     var bn = h('div', {'class': 'big-number'});
     bn.appendChild(h('div', {'class': 'bn-val'}, String(tgt)));
-    bn.appendChild(h('div', {'class': 'bn-label'}, 'Calories cibles / jour'));
+    bn.appendChild(h('div', {'class': 'bn-label'}, window.t('onb.s8.target')));
     p.appendChild(bn);
 
     // Target weight
@@ -1339,7 +1339,7 @@ function renderStep8(p) {
   var sr = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px'});
   var c1 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c1.appendChild(h('div', {'class': 'bn-val'}, String(tdee)));
-  c1.appendChild(h('div', {'class': 'bn-label'}, 'TDEE'));
+  c1.appendChild(h('div', {'class': 'bn-label'}, window.t('onb.s8.tdee')));
   sr.appendChild(c1);
   var c2 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c2.appendChild(h('div', {'class': 'bn-val'}, String(tgt)));
@@ -1389,18 +1389,18 @@ function renderStep8(p) {
   // SVG Rings
   var tot = m.g + m.p + m.l;
   var rr = h('div', {'class': 'rings-row'});
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.g / tot * 100 : 0, '#1A3A6A', 'Glucides', m.g));
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, '#1A4A1A', 'Prot\u00e9ines', m.p));
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', 'Lipides', m.l));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.g / tot * 100 : 0, '#1A3A6A', window.t('onb.s8.carbs'), m.g));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, '#1A4A1A', window.t('onb.s8.proteins'), m.p));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', window.t('onb.s8.fats'), m.l));
   p.appendChild(rr);
 
   // Meal split — N-01: dynamique selon S.mealsPerDay
   function getMealSplit(n) {
     switch(n) {
-      case 2: return [{n:'D\u00e9jeuner',pct:50},{n:'D\u00eener',pct:50}];
-      case 3: return [{n:'Petit-d\u00e9jeuner',pct:25},{n:'D\u00e9jeuner',pct:45},{n:'D\u00eener',pct:30}];
-      case 5: return [{n:'Petit-d\u00e9jeuner',pct:20},{n:'Collation mat.',pct:10},{n:'D\u00e9jeuner',pct:35},{n:'Collation',pct:10},{n:'D\u00eener',pct:25}];
-      default: return [{n:'Petit-d\u00e9jeuner',pct:25},{n:'D\u00e9jeuner',pct:40},{n:'Collation',pct:5},{n:'D\u00eener',pct:30}];
+      case 2: return [{n:window.t('onb.s9.lunch'),pct:50},{n:window.t('onb.s9.dinner'),pct:50}];
+      case 3: return [{n:window.t('onb.s9.breakfast'),pct:25},{n:window.t('onb.s9.lunch'),pct:45},{n:window.t('onb.s9.dinner'),pct:30}];
+      case 5: return [{n:window.t('onb.s9.breakfast'),pct:20},{n:'Collation mat.',pct:10},{n:window.t('onb.s9.lunch'),pct:35},{n:window.t('onb.s9.snack'),pct:10},{n:window.t('onb.s9.dinner'),pct:25}];
+      default: return [{n:window.t('onb.s9.breakfast'),pct:25},{n:window.t('onb.s9.lunch'),pct:40},{n:window.t('onb.s9.snack'),pct:5},{n:window.t('onb.s9.dinner'),pct:30}];
     }
   }
   p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas (' + (S.mealsPerDay||3) + ' repas/j)'));
@@ -1815,10 +1815,10 @@ function renderStep9(p) {
   // Day meals
   var day = S.weekPlan[S.selectedDay] || {}, tgtCal = calcTarget(), dayTotal = 0, dayTotalP = 0, dayTotalG = 0, dayTotalL = 0;
   var slots = [
-    {key: 'breakfast', label: 'Petit-d\u00e9jeuner'},
-    {key: 'lunch', label: 'D\u00e9jeuner'},
-    {key: 'snack', label: 'Collation'},
-    {key: 'dinner', label: 'D\u00eener'}
+    {key: 'breakfast', label: window.t('onb.s9.breakfast')},
+    {key: 'lunch', label: window.t('onb.s9.lunch')},
+    {key: 'snack', label: window.t('onb.s9.snack')},
+    {key: 'dinner', label: window.t('onb.s9.dinner')}
   ];
   slots.forEach(function(sl) {
     var r = day[sl.key];
@@ -1865,7 +1865,7 @@ function renderStep9(p) {
   // Day total
   var diff = dayTotal - tgtCal, diffPct = tgtCal > 0 ? Math.abs(diff / tgtCal * 100) : 0, isOk = diffPct < 5;
   var total = h('div', {'class': 'day-total'});
-  total.appendChild(h('div', {'class': 'dt-label'}, 'Total du jour'));
+  total.appendChild(h('div', {'class': 'dt-label'}, window.t('onb.s9.total')));
   var vd = h('div', {style: 'display:flex;align-items:center;gap:12px'});
   vd.appendChild(h('span', {'class': 'dt-val'}, dayTotal + ' kcal'));
 
@@ -1925,7 +1925,7 @@ function renderStep9(p) {
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
   var _shopList = (window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan) : [];
   var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
-  var _shopLabel = '\uD83D\uDECD Liste de courses' + (_shopTotal > 0 ? ' (' + _shopTotal + ' articles)' : '');
+  var _shopLabel = '\uD83D\uDECD ' + window.t('shop.title') + (_shopTotal > 0 ? ' (' + _shopTotal + ' articles)' : '');
   var btnShop = h('button', {
     style: 'width:100%;padding:12px;margin:8px 0;background:var(--card);border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
     onclick: function() { window.S.shopListOpen = true; if(window.render) window.render(); }
@@ -1946,7 +1946,7 @@ function renderStep9(p) {
     S.weekPlan = generateWeek();
     bb('week_regenerated', {});
     window.render();
-  }}, '\u21bb R\u00e9g\u00e9n\u00e9rer la semaine'));
+  }}, '\u21bb ' + window.t('onb.s9.generate')));
   p.appendChild(h('div', {style: 'height:12px'}));
   p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(8); }}, '\u2190 Retour aux r\u00e9sultats'));
 }
@@ -1976,9 +1976,9 @@ function renderModal(app) {
     var carbs = r.g || (r.baseNutrition && r.baseNutrition.carbsGrams) || 0;
     var fats  = r.l || (r.baseNutrition && r.baseNutrition.fatGrams) || 0;
     pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, String(kcal)), h('div', {'class': 'mp-label'}, 'Calories')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, prot + 'g'), h('div', {'class': 'mp-label'}, 'Prot\u00e9ines')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, carbs + 'g'), h('div', {'class': 'mp-label'}, 'Glucides')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, fats + 'g'), h('div', {'class': 'mp-label'}, 'Lipides')]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, prot + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.proteins'))]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, carbs + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.carbs'))]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, fats + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.fats'))]));
     body.appendChild(pills);
     body.appendChild(h('div', {'class': 'section-label'}, 'Ingr\u00e9dients'));
     var ingredList = h('ul', {'class': 'ingredient-list'});
@@ -2601,7 +2601,7 @@ function renderShoppingList(p) {
   var titleEl = h('div', {
     style:'font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ''),
     'class': arMode ? 'shop-ar-title' : ''
-  }, arMode ? (AR ? AR.ui['title'] : 'قائمة التسوق') : '🛒 Liste de courses');
+  }, arMode ? (AR ? AR.ui['title'] : 'قائمة التسوق') : '\uD83D\uDED2 ' + window.t('shop.title'));
   var subtitleEl = h('div', {
     style:'font-size:13px;color:var(--text-secondary)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : '')
   }, arMode ? (AR ? AR.ui['subtitle'] : 'الأسبوع كامل') : 'Semaine complète — cochez au fur et à mesure');
@@ -2642,7 +2642,7 @@ function renderShoppingList(p) {
   var btnReset = h('button', {
     style:'padding:10px 14px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer',
     onclick: function() { s.shopChecked = {}; if(window.render) window.render(); }
-  }, arMode ? (AR ? AR.ui['reset'] : '↺') : '↺ Réinitialiser');
+  }, arMode ? (AR ? AR.ui['reset'] : '↺') : '\u21ba ' + window.t('shop.reset'));
 
   // Bouton toggle arabe / FR
   var btnAR = h('button', {

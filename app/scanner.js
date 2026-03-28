@@ -420,7 +420,7 @@ window.SCANNER = {
     // Section label
     var label = document.createElement('div');
     label.className = 'section-label';
-    label.textContent = 'Scanner un produit';
+    label.textContent = window.t('scan.scan');
     label.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border,#D8D8D0)';
     scannerDiv.appendChild(label);
 
@@ -436,7 +436,7 @@ window.SCANNER = {
     // Scan button
     var scanBtn = document.createElement('div');
     scanBtn.className = 'scan-btn';
-    scanBtn.textContent = '\uD83D\uDCF7 Scanner un code-barres';
+    scanBtn.textContent = '\uD83D\uDCF7 ' + window.t('scan.scan');
     scanBtn.onclick = function() {
       showCamera = true;
       renderCameraView();
@@ -448,11 +448,11 @@ window.SCANNER = {
     manualDiv.className = 'manual-barcode';
     var manualInput = document.createElement('input');
     manualInput.type = 'text';
-    manualInput.placeholder = 'Ou entrez le code-barres...';
+    manualInput.placeholder = window.t('scan.barcode_placeholder');
     manualInput.inputMode = 'numeric';
     manualDiv.appendChild(manualInput);
     var manualBtn = document.createElement('button');
-    manualBtn.textContent = 'Analyser';
+    manualBtn.textContent = window.t('scan.search');
     manualBtn.onclick = function() {
       var code = manualInput.value.trim();
       if (isValidBarcode(code)) lookupAndAnalyze(code);
@@ -473,7 +473,7 @@ window.SCANNER = {
     histSection.className = 'scan-history';
     var histLabel = document.createElement('div');
     histLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#5A5A54);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border,#D8D8D0)';
-    histLabel.textContent = 'Derniers scans';
+    histLabel.textContent = window.t('scan.history');
     histSection.appendChild(histLabel);
     if (history.length > 0) {
 
@@ -507,7 +507,7 @@ window.SCANNER = {
       emptyHistIcon.textContent = '\uD83D\uDD0D';
       var emptyHistTitle = document.createElement('p');
       emptyHistTitle.className = 'empty-state-title';
-      emptyHistTitle.textContent = 'Aucun scan enregistré';
+      emptyHistTitle.textContent = window.t('scan.no_history');
       var emptyHistText = document.createElement('p');
       emptyHistText.textContent = 'Scannez votre premier produit pour voir l\'historique ici.';
       emptyHistMsg.appendChild(emptyHistIcon);
@@ -581,7 +581,7 @@ window.SCANNER = {
       resultContainer.innerHTML = '';
       var loading = document.createElement('div');
       loading.className = 'scan-loading';
-      loading.textContent = 'Analyse en cours...';
+      loading.textContent = window.t('common.loading');
       resultContainer.appendChild(loading);
 
       if (window.BLACKBOX) BLACKBOX.log('barcode_scanned', { barcode: barcode });

@@ -879,7 +879,7 @@ function openKitchenTimer() {
   controls.style.cssText = 'display:flex;gap:8px;justify-content:center;';
 
   var startBtn = document.createElement('button');
-  startBtn.textContent = 'Démarrer';
+  startBtn.textContent = window.t('extras.start');
   startBtn.style.cssText = 'padding:10px 24px;background:var(--black,#181818);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;';
   startBtn.addEventListener('click', function() {
     if (running) return;
@@ -892,7 +892,7 @@ function openKitchenTimer() {
       if (totalSeconds <= 0) {
         clearInterval(interval);
         running = false;
-        startBtn.textContent = 'Démarrer';
+        startBtn.textContent = window.t('extras.start');
         display.textContent = 'Terminé !';
         display.style.color = 'var(--black,#181818)';
         try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate([200,100,200]); } catch(e){}
@@ -902,13 +902,13 @@ function openKitchenTimer() {
   controls.appendChild(startBtn);
 
   var resetBtn = document.createElement('button');
-  resetBtn.textContent = 'Réinitialiser';
+  resetBtn.textContent = window.t('extras.reset');
   resetBtn.style.cssText = 'padding:10px 24px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;';
   resetBtn.addEventListener('click', function() {
     clearInterval(interval);
     running = false;
     totalSeconds = 0;
-    startBtn.textContent = 'Démarrer';
+    startBtn.textContent = window.t('extras.start');
     updateDisplay();
   });
   controls.appendChild(resetBtn);
