@@ -2555,21 +2555,47 @@ function renderShoppingList(p) {
   var s = window.S;
   p.innerHTML = '';
 
+  // État arabe : stocké dans window.S.shopArMode (ne pas perturber I18N global)
+  var arMode = !!s.shopArMode;
+  var AR = window.SHOP_AR || null;
+
+  // ── Helper : traduire si mode arabe actif ──
+  function arUI(key, fallback) {
+    if (arMode && AR && AR.ui[key]) return AR.ui[key];
+    return fallback;
+  }
+  function arSection(name) {
+    if (arMode && AR) return AR.translateSection(name);
+    return name;
+  }
+  function arIngredient(name) {
+    if (arMode && AR) return AR.translateIngredient(name);
+    return name;
+  }
+
   // Header
   var header = h('div', {style:'padding:20px 16px 8px'});
-  header.appendChild(h('div', {style:'font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px'}, '🛒 Liste de courses'));
-  header.appendChild(h('div', {style:'font-size:13px;color:var(--text-secondary)'}, 'Semaine complète — cochez au fur et à mesure'));
+  var titleEl = h('div', {
+    style:'font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ''),
+    'class': arMode ? 'shop-ar-title' : ''
+  }, arMode ? (AR ? AR.ui['title'] : 'قائمة التسوق') : '🛒 Liste de courses');
+  var subtitleEl = h('div', {
+    style:'font-size:13px;color:var(--text-secondary)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : '')
+  }, arMode ? (AR ? AR.ui['subtitle'] : 'الأسبوع كامل') : 'Semaine complète — cochez au fur et à mesure');
+  header.appendChild(titleEl);
+  header.appendChild(subtitleEl);
   p.appendChild(header);
 
   // Bouton retour
   var btnBack = h('button', {
-    style:'margin:0 16px 12px;padding:10px 14px;background:transparent;border:none;color:var(--text-secondary);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px',
+    style:'margin:0 16px 12px;padding:10px 14px;background:transparent;border:none;color:var(--text-secondary);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px' + (arMode ? ';direction:rtl;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ''),
+    'class': 'shop-print-hide',
     onclick: function() { window.S.shopListOpen = false; if(window.render) window.render(); }
-  }, '← Retour au plan');
+  }, arMode ? (AR ? AR.ui['back'] : '← ارجع') : '← Retour au plan');
   p.appendChild(btnBack);
 
   if (!s.weekPlan || !window.RecipeEngine) {
-    p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, 'Générez d\'abord votre plan de repas.'));
+    p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, arUI('no_plan', 'Générez d\'abord votre plan de repas.')));
     return;
   }
 
@@ -2578,56 +2604,94 @@ function renderShoppingList(p) {
   cleanShopChecked(list);
 
   if (!list.length) {
-    p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, 'Aucun ingrédient détecté dans le plan.'));
+    p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, arUI('no_items', 'Aucun ingrédient détecté dans le plan.')));
     return;
   }
 
-  // Boutons actions
-  var actions = h('div', {style:'display:flex;gap:10px;padding:0 16px 12px;flex-wrap:wrap'});
+  // ── Boutons actions ──
+  var actions = h('div', {style:'display:flex;gap:10px;padding:0 16px 12px;flex-wrap:wrap', 'class':'shop-print-hide'});
 
   var btnPDF = h('button', {
     style:'flex:1;padding:10px 14px;background:var(--black);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;min-width:140px',
     onclick: function() { exportShoppingListPDF(list, s.shopChecked); }
-  }, '📄 Télécharger PDF');
+  }, arMode ? (AR ? AR.ui['download_pdf'] : '📄 PDF') : '📄 Télécharger PDF');
 
   var btnReset = h('button', {
     style:'padding:10px 14px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer',
     onclick: function() { s.shopChecked = {}; if(window.render) window.render(); }
-  }, '↺ Réinitialiser');
+  }, arMode ? (AR ? AR.ui['reset'] : '↺') : '↺ Réinitialiser');
+
+  // Bouton toggle arabe / FR
+  var btnAR = h('button', {
+    'class': 'btn-shop-ar' + (arMode ? ' active' : ''),
+    onclick: function() {
+      window.S.shopArMode = !window.S.shopArMode;
+      if (window.render) window.render();
+    }
+  }, arMode ? 'FR' : 'عربي');
+
+  // Bouton imprimer en arabe
+  var btnPrintAR = h('button', {
+    'class': 'btn-shop-print-ar',
+    onclick: function() { printShoppingListAR(list); }
+  }, arMode ? (AR ? AR.ui['print'] : '🖨️ طباعة') : '🖨️ طباعة');
+
+  actions.appendChild(btnPDF);
+  actions.appendChild(btnReset);
+  actions.appendChild(btnAR);
+  actions.appendChild(btnPrintAR);
 
   // Compteur
   var total = list.reduce(function(n,cat){return n+cat.items.length;}, 0);
   var checked = Object.keys(s.shopChecked).filter(function(k){return s.shopChecked[k];}).length;
-  var counter = h('div', {style:'padding:0 16px 8px;font-size:13px;color:var(--text-secondary)'}, checked + ' / ' + total + ' articles achetés');
+  var counterText = arMode
+    ? (checked + ' / ' + total + ' ' + (AR ? AR.ui['articles_bought'] : 'منتج مشترى'))
+    : (checked + ' / ' + total + ' articles achetés');
+  var counter = h('div', {
+    style:'padding:0 16px 8px;font-size:13px;color:var(--text-secondary)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ''),
+    'class':'shop-print-hide'
+  }, counterText);
 
-  actions.appendChild(btnPDF);
-  actions.appendChild(btnReset);
   p.appendChild(actions);
   p.appendChild(counter);
 
   var sectionsCount = list.length;
-  var infoBar = h('div', {style:'margin:0 16px 12px;padding:10px 14px;border:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey)'},
-    sectionsCount + ' rayon' + (sectionsCount > 1 ? 's' : '') + ' — ' + total + ' article' + (total > 1 ? 's' : '') + ' — Parcours optimisé ');
+  var infoBarText = arMode
+    ? (sectionsCount + ' ' + (AR ? AR.ui['sections'] : 'رايون') + ' — ' + total + ' ' + (AR ? AR.ui['articles'] : 'منتج') + ' — ' + (AR ? AR.ui['optimized_route'] : 'مسار محسّن'))
+    : (sectionsCount + ' rayon' + (sectionsCount > 1 ? 's' : '') + ' — ' + total + ' article' + (total > 1 ? 's' : '') + ' — Parcours optimisé');
+  var infoBar = h('div', {
+    style:'margin:0 16px 12px;padding:10px 14px;border:1px solid var(--border);font-size:10px;letter-spacing:' + (arMode ? '0' : '1px') + ';color:var(--grey)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ';font-family:"Helvetica Neue",Arial,sans-serif'),
+    'class':'shop-print-hide'
+  }, infoBarText);
   p.appendChild(infoBar);
 
-  // Liste par catégorie
+  // ── Liste par catégorie (affichage interactif) ──
+  var shopContainer = h('div', {
+    'class': arMode ? 'shop-ar' : '',
+    style: arMode ? 'direction:rtl' : ''
+  });
+
   list.forEach(function(cat) {
     var catBlock = h('div', {style:'margin:0 16px 14px;background:var(--card);border-radius:12px;overflow:hidden'});
 
-    // Header catégorie
     var catChecked = cat.items.filter(function(item){return s.shopChecked[item.name];}).length;
-    catBlock.appendChild(h('div', {
-      style:'padding:12px 16px 10px;background:var(--ivory2,#F4F4F0);border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);display:flex;justify-content:space-between;align-items:center'
-    },
-      h('span', {}, cat.category),
+    var catHeaderStyle = 'padding:12px 16px 10px;background:var(--ivory2,#F4F4F0);border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--black,#0A0A09);display:flex;justify-content:space-between;align-items:center;' +
+      (arMode ? 'direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif;letter-spacing:0' : 'font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:2px');
+
+    catBlock.appendChild(h('div', {style: catHeaderStyle, 'class':'shop-cat-header'},
+      h('span', {}, arSection(cat.category)),
       h('span', {style:'font-weight:400;color:var(--text-secondary);font-size:12px'}, catChecked + '/' + cat.items.length)
     ));
 
-    // Items
     cat.items.forEach(function(item) {
       var isChecked = !!s.shopChecked[item.name];
+      var rowStyle = 'display:flex;align-items:center;padding:10px 14px;border-top:1px solid var(--border);cursor:pointer;' +
+        (isChecked ? 'opacity:0.45;' : '') +
+        (arMode ? 'flex-direction:row-reverse;direction:rtl;' : '');
+
       var row = h('div', {
-        style:'display:flex;align-items:center;padding:10px 14px;border-top:1px solid var(--border);cursor:pointer;' + (isChecked ? 'opacity:0.45;' : ''),
+        style: rowStyle,
+        'class': 'shop-item-row',
         onclick: function() {
           s.shopChecked[item.name] = !s.shopChecked[item.name];
           if(window.render) window.render();
@@ -2635,11 +2699,20 @@ function renderShoppingList(p) {
       });
 
       // Checkbox custom
-      var cb = h('div', {style:'width:20px;height:20px;border-radius:5px;border:2px solid ' + (isChecked ? 'var(--accent)' : 'var(--border)') + ';margin-right:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:' + (isChecked ? 'var(--accent)' : 'transparent')});
+      var cbStyle = 'width:20px;height:20px;border-radius:5px;border:2px solid ' + (isChecked ? 'var(--accent)' : 'var(--border)') +
+        ';flex-shrink:0;display:flex;align-items:center;justify-content:center;background:' + (isChecked ? 'var(--accent)' : 'transparent') +
+        (arMode ? ';margin-left:12px;margin-right:0' : ';margin-right:12px');
+      var cb = h('div', {style: cbStyle, 'class':'shop-cb'});
       if (isChecked) cb.appendChild(h('span', {style:'color:#fff;font-size:12px;font-weight:700'}, '✓'));
 
-      var label = h('div', {style:'flex:1'});
-      label.appendChild(h('div', {style:'font-size:14px;font-family:Georgia,serif;color:var(--text);' + (isChecked ? 'text-decoration:line-through;opacity:0.6;' : '')}, item.name));
+      var labelStyle = 'flex:1' + (arMode ? ';text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : '');
+      var label = h('div', {style: labelStyle, 'class':'shop-item-label'});
+
+      var displayName = arIngredient(item.name);
+      var nameStyle = 'font-size:14px;color:var(--text);' +
+        (arMode ? 'font-family:"Segoe UI",Arial,Tahoma,sans-serif;' : 'font-family:Georgia,serif;') +
+        (isChecked ? 'text-decoration:line-through;opacity:0.6;' : '');
+      label.appendChild(h('div', {style: nameStyle}, displayName));
       label.appendChild(h('div', {style:'font-size:11px;font-family:"Helvetica Neue",Arial,sans-serif;color:var(--text-secondary)'}, item.qty + ' ' + item.unit));
 
       row.appendChild(cb);
@@ -2647,8 +2720,58 @@ function renderShoppingList(p) {
       catBlock.appendChild(row);
     });
 
-    p.appendChild(catBlock);
+    shopContainer.appendChild(catBlock);
   });
+
+  p.appendChild(shopContainer);
+}
+
+// ─── PRINT EN ARABE ───
+function printShoppingListAR(list) {
+  var AR = window.SHOP_AR;
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('ar-MA', {year:'numeric', month:'long', day:'numeric'});
+
+  // Construire le HTML d'impression
+  var html = '<div class="shop-print-area">';
+  html += '<div class="shop-print-title">' + (AR ? AR.ui['print_title'] : 'قائمة التسوق') + '</div>';
+  html += '<div class="shop-print-date">' + (AR ? AR.ui['date_label'] : 'تاريخ الطباعة') + ' : ' + dateStr + '</div>';
+
+  list.forEach(function(cat) {
+    html += '<div class="shop-cat-block">';
+    var catName = AR ? AR.translateSection(cat.category) : cat.category;
+    html += '<div class="shop-cat-name">' + catName + '</div>';
+    cat.items.forEach(function(item) {
+      var ingName = AR ? AR.translateIngredient(item.name) : item.name;
+      html += '<div class="shop-print-item">';
+      html += '<span>' + ingName + '</span>';
+      html += '<span>' + item.qty + ' ' + item.unit + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Ouvrir une fenêtre d'impression dédiée
+  var printWin = window.open('', '_blank', 'width=700,height=900');
+  if (!printWin) { window.print(); return; }
+  printWin.document.write('<!DOCTYPE html><html lang="ar" dir="rtl"><head>');
+  printWin.document.write('<meta charset="UTF-8">');
+  printWin.document.write('<title>' + (AR ? AR.ui['print_title'] : 'قائمة التسوق') + '</title>');
+  printWin.document.write('<style>');
+  printWin.document.write('body{font-family:"Segoe UI",Arial,Tahoma,sans-serif;direction:rtl;text-align:right;padding:20px;color:#000;background:#fff;}');
+  printWin.document.write('.shop-print-title{font-size:22px;font-weight:700;margin-bottom:4px;}');
+  printWin.document.write('.shop-print-date{font-size:12px;color:#666;margin-bottom:16px;}');
+  printWin.document.write('.shop-cat-block{margin-bottom:12px;page-break-inside:avoid;}');
+  printWin.document.write('.shop-cat-name{font-size:13px;font-weight:700;background:#f0f0f0;padding:6px 10px;border-radius:4px;margin-bottom:4px;}');
+  printWin.document.write('.shop-print-item{display:flex;justify-content:space-between;padding:3px 10px;font-size:12px;border-bottom:1px solid #eee;}');
+  printWin.document.write('@media print{body{padding:10px;}}');
+  printWin.document.write('</style></head><body>');
+  printWin.document.write(html);
+  printWin.document.write('</body></html>');
+  printWin.document.close();
+  printWin.focus();
+  setTimeout(function() { printWin.print(); }, 400);
 }
 
 function exportShoppingListPDF(list, shopChecked) {

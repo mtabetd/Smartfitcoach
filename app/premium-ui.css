@@ -1122,3 +1122,157 @@ p, li, .card-sub, .level-desc, .exercise-detail,
   cursor: pointer;
 }
 
+
+
+/* -------------------------------------------------------
+   25. ARABIC SHOPPING LIST (RTL / Darija)
+   ------------------------------------------------------- */
+
+/* Conteneur principal RTL */
+.shop-ar {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+}
+
+/* Header de catégorie en RTL */
+.shop-ar .shop-cat-header {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  letter-spacing: 0;
+}
+
+/* Ligne d'article en RTL */
+.shop-ar .shop-item-row {
+  direction: rtl;
+  flex-direction: row-reverse;
+}
+
+/* Checkbox RTL */
+.shop-ar .shop-cb {
+  margin-right: 0;
+  margin-left: 12px;
+}
+
+/* Label RTL */
+.shop-ar .shop-item-label {
+  text-align: right;
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+}
+
+/* Titre principal liste en arabe */
+.shop-ar-title {
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  direction: rtl;
+  text-align: right;
+}
+
+/* Bouton toggle arabe */
+.btn-shop-ar {
+  padding: 8px 14px;
+  background: #2D6A4F;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+}
+.btn-shop-ar.active {
+  background: #1B4332;
+}
+
+/* Bouton imprimer en arabe */
+.btn-shop-print-ar {
+  padding: 8px 14px;
+  background: #1565C0;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+}
+
+/* ── PRINT : n'imprimer QUE la liste de courses en arabe ── */
+@media print {
+  /* Masquer tout sauf la liste */
+  body > *:not(#app),
+  .header,
+  .footer,
+  .main-nav,
+  .user-bar,
+  .btn-primary,
+  .btn-secondary,
+  .btn-back,
+  .swap-btn,
+  .regen-btn,
+  .btn-shop-ar,
+  .btn-shop-print-ar,
+  .shop-print-hide {
+    display: none !important;
+  }
+
+  /* Zone d'impression de la liste */
+  .shop-print-area {
+    display: block !important;
+    direction: rtl;
+    text-align: right;
+    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+    padding: 20px;
+    color: #000;
+    background: #fff;
+  }
+
+  .shop-print-area .shop-print-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    direction: rtl;
+    text-align: right;
+    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  }
+
+  .shop-print-area .shop-print-date {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 16px;
+    direction: rtl;
+    text-align: right;
+  }
+
+  .shop-print-area .shop-cat-block {
+    margin-bottom: 12px;
+    break-inside: avoid;
+  }
+
+  .shop-print-area .shop-cat-name {
+    font-size: 13px;
+    font-weight: 700;
+    background: #f0f0f0;
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    direction: rtl;
+    text-align: right;
+    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  }
+
+  .shop-print-area .shop-print-item {
+    display: flex;
+    justify-content: space-between;
+    direction: rtl;
+    padding: 3px 10px;
+    font-size: 12px;
+    border-bottom: 1px solid #eee;
+    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  }
+
+  /* Masquer les éléments non liés à l'impression */
+  .shop-no-print {
+    display: none !important;
+  }
+}
