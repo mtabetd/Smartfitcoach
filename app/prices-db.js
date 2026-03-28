@@ -2414,6 +2414,128 @@
       source: 'marjane',
       updatedAt: '2026-03'
     },
+
+    // ── SALAD_DB premium — Bar à Salades ─────────────────────────────────────
+    'Burrata': {
+      name: 'Burrata',
+      pricePerG: r(65 / 125),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Gravlax maison': {
+      name: 'Gravlax maison',
+      pricePerG: r(120 / 200),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Poulpe grillé': {
+      name: 'Poulpe grillé',
+      pricePerG: r(90 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Riz noir Vénéré': {
+      name: 'Riz noir Vénéré',
+      pricePerG: r(55 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Freekeh': {
+      name: 'Freekeh',
+      pricePerG: r(35 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Sarrasin grillé': {
+      name: 'Sarrasin grillé',
+      pricePerG: r(30 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Mâche': {
+      name: 'Mâche',
+      pricePerG: r(25 / 100),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Asperges blanches': {
+      name: 'Asperges blanches',
+      pricePerG: r(60 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Fenouil effiloché': {
+      name: 'Fenouil effiloché',
+      pricePerG: r(15 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Radis Watermelon': {
+      name: 'Radis Watermelon',
+      pricePerG: r(40 / 200),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Micro-pousses': {
+      name: 'Micro-pousses',
+      pricePerG: r(80 / 100),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Fleurs comestibles': {
+      name: 'Fleurs comestibles',
+      pricePerG: r(150 / 20),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Huile de truffe blanche': {
+      name: 'Huile de truffe blanche',
+      pricePerMl: r(280 / 100),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Pignons de pin grillés': {
+      name: 'Pignons de pin grillés',
+      pricePerG: r(120 / 100),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Noisettes concassées': {
+      name: 'Noisettes concassées',
+      pricePerG: r(60 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Sauce miso': {
+      name: 'Sauce miso',
+      pricePerG: r(45 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Green Goddess': {
+      name: 'Green Goddess',
+      pricePerG: r(35 / 200),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Yuzu kosho': {
+      name: 'Yuzu kosho',
+      pricePerG: r(90 / 70),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Chermoula': {
+      name: 'Chermoula',
+      pricePerG: r(20 / 100),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Gribiche express': {
+      name: 'Gribiche express',
+      pricePerG: r(40 / 100),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
   };
 
   /**
@@ -2468,6 +2590,38 @@
     'Banane congelée': 'Banane',
     'Pommes Golden': 'Pomme',
     'Pommes (pelées, en fines tranches)': 'Pomme',
+    // ─── SALAD_DB ALIASES ───────────────────────────────────────────────
+    // Bases
+    'Patate douce rôtie': 'Patate douce',
+    'Pâtes complètes': 'Pâtes complètes (fusilli)',
+    // Protéines
+    'Feta AOP': 'Feta',
+    'Mozzarella di bufala': 'Mozzarella',
+    'Steak de thon snacké': 'Thon frais (pavé)',
+    'Bœuf haché 5%': 'Bœuf haché maigre (5%)',
+    'Œuf mollet': 'Œuf',
+    // Légumes
+    'Épinards baby': 'Épinards frais',
+    'Carottes râpées': 'Carottes',
+    'Maïs doux': 'Maïs',
+    'Avocat tranché': 'Avocat',
+    'Tomates Heirloom': 'Tomate',
+    'Betterave rôtie': 'Betterave (cuite)',
+    // Lipides
+    'Huile d\'olive extra-vierge': 'Huile d\'olive',
+    'Olives Taggiàsche': 'Olives noires',
+    'Tahini de sésame blanc': 'Tahini',
+    'Noix de Grenoble': 'Noix (cerneaux)',
+    'Graines de sésame torréfiées': 'Graines de sésame',
+    'Parmesan 24 mois': 'Parmesan',
+    // Sauces
+    'Sauce tahini citronnée': 'Tahini',
+    'Pesto Génois': 'Pesto',
+    'Sauce yaourt menthe': 'Yaourt nature 0%',
+    'Sauce soja réduite': 'Sauce soja',
+    'Vinaigrette au miso': 'Sauce miso',
+    'Caesar légère': 'Vinaigrette légère',
+    'Crevettes tigre': 'Crevettes décortiquées',
   };
 
   function getPricePer(ingredientName, unit) {

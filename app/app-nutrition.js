@@ -2259,10 +2259,10 @@ var SALAD_DB = {
     { name: 'Mozzarella di bufala', qty: 60, unit: 'g', k: 140, p: 9.5, g: 1.2, l: 11 },
     { name: 'Saumon fum\u00e9', qty: 60, unit: 'g', k: 104, p: 11, g: 0, l: 6.5 },
     // Prestige
-    { name: 'Burrata', qty: 80, unit: 'g', k: 192, p: 9.6, g: 1.6, l: 16.8, premium: true },
-    { name: 'Gravlax maison', qty: 60, unit: 'g', k: 122, p: 12, g: 0.5, l: 7.8, premium: true },
+    { name: 'Burrata', qty: 80, unit: 'g', k: 196, p: 9.6, g: 1.6, l: 16.8, premium: true },
+    { name: 'Gravlax maison', qty: 60, unit: 'g', k: 120, p: 12, g: 0.5, l: 7.8, premium: true },
     { name: 'Crevettes tigre', qty: 100, unit: 'g', k: 99, p: 21, g: 0, l: 1.1, premium: true },
-    { name: 'Poulpe grill\u00e9', qty: 80, unit: 'g', k: 70, p: 13, g: 1.5, l: 0.8, premium: true },
+    { name: 'Poulpe grill\u00e9', qty: 80, unit: 'g', k: 65, p: 13, g: 1.5, l: 0.8, premium: true },
     { name: 'Steak de thon snack\u00e9', qty: 100, unit: 'g', k: 144, p: 30, g: 0, l: 2.0, premium: true },
     { name: 'Edamame', qty: 80, unit: 'g', k: 110, p: 10, g: 8, l: 4.7, premium: true },
     { name: 'Tofu soyeux', qty: 100, unit: 'g', k: 55, p: 6.0, g: 2.0, l: 2.7, premium: true }
