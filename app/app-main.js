@@ -158,15 +158,15 @@ function render() {
   // Day/night toggle
   var _isDark = document.body.classList.contains('dark-mode');
   ubRight.appendChild(h('button', {style:'font-size:16px;padding:2px 8px;background:none;border:1px solid var(--border);cursor:pointer', onclick: function(){ document.body.classList.toggle('dark-mode'); try{localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode')?'true':'false');}catch(e){} render(); }}, _isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'));
-  ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; render(); }}, 'D\u00e9connexion'));
+  ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; render(); }}, window.t('auth.logout')));
   ub.appendChild(ubRight);
   wrap.appendChild(ub);
 
   // Main navigation (3 tabs: Dashboard, Nutrition, Sport)
   var nav = h('div', {'class': 'main-nav'});
-  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'dashboard' ? ' active' : ''), onclick: function(){ S.view = 'dashboard'; if(window.BLACKBOX)window.BLACKBOX.log('nav_dashboard'); render(); }}, '◆ Accueil'));
-  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, '◆ Nutrition'));
-  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, '◆ Sport'));
+  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'dashboard' ? ' active' : ''), onclick: function(){ S.view = 'dashboard'; if(window.BLACKBOX)window.BLACKBOX.log('nav_dashboard'); render(); }}, '◆ ' + window.t('nav.dashboard')));
+  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, '◆ ' + window.t('nav.nutrition')));
+  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, '◆ ' + window.t('nav.sport')));
   wrap.appendChild(nav);
 
   var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
@@ -220,14 +220,14 @@ function renderLogin(app) {
 
   // Email
   var f1 = h('div', {'class': 'field'});
-  f1.appendChild(h('label', {'class': 'field-label'}, 'Email'));
+  f1.appendChild(h('label', {'class': 'field-label'}, window.t('auth.email')));
   var emailInput = h('input', {type: 'email', placeholder: 'votre@email.com', autocomplete: 'email'});
   f1.appendChild(emailInput);
   form.appendChild(f1);
 
   // Password
   var f2 = h('div', {'class': 'field'});
-  f2.appendChild(h('label', {'class': 'field-label'}, 'Mot de passe'));
+  f2.appendChild(h('label', {'class': 'field-label'}, window.t('auth.password')));
   var pwInput = h('input', {type: 'password', placeholder: '••••••', autocomplete: 'current-password'});
   f2.appendChild(pwInput);
   form.appendChild(f2);
@@ -237,7 +237,7 @@ function renderLogin(app) {
     var email = emailInput.value.trim();
     var pw = pwInput.value;
     if (!email || !pw) { S.authError = 'Veuillez remplir tous les champs'; render(); return; }
-    if (!window.canAttemptAuth(email)) { S.authError = 'Trop de tentatives. Réessayez dans 5 minutes.'; render(); return; }
+    if (!window.canAttemptAuth(email)) { S.authError = window.t('auth.rate_limit'); render(); return; }
     AUTH.login(email, pw).then(function(result) {
       if (result.ok) {
         S.authError = '';
@@ -252,14 +252,14 @@ function renderLogin(app) {
       S.authError = 'Erreur de connexion. Réessayez.';
       render();
     });
-  }}, 'Se connecter'));
+  }}, window.t('auth.login_btn')));
 
   c.appendChild(form);
 
   // Switch to register
   var sw = h('div', {'class': 'auth-switch'});
-  sw.appendChild(txt('Pas encore de compte ? '));
-  sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'authRegister'; render(); }}, 'Créer un compte'));
+  sw.appendChild(txt(window.t('auth.no_account') + ' '));
+  sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'authRegister'; render(); }}, window.t('auth.register')));
   c.appendChild(sw);
 
   app.appendChild(c);
@@ -269,7 +269,7 @@ function renderLogin(app) {
 function renderRegister(app) {
   var c = h('div', {'class': 'auth-container'});
   c.appendChild(h('div', {'class': 'auth-logo'}, 'MTD'));
-  c.appendChild(h('div', {'class': 'auth-sub'}, 'Créer votre compte'));
+  c.appendChild(h('div', {'class': 'auth-sub'}, window.t('auth.register')));
   c.appendChild(h('div', {'class': 'auth-line'}));
 
   if (window.TIPS) TIPS.renderToggle(c);
