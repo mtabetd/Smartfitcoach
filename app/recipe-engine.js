@@ -12321,16 +12321,28 @@
     if (!iStr || typeof iStr !== 'string') return [];
     return iStr.split(',').map(function(part) {
       part = part.trim();
-      // Chercher nombre + unité en fin de chaîne
+      // Nettoyer les parenthèses ex: "Riz japonais 120g (cuit 240g)" → "Riz japonais 120g"
+      part = part.replace(/\s*\([^)]*\)/g, '').trim();
+
+      // Format NxM : "Œufs 3x60g" → name:"Œufs", qty:180, unit:"g"
+      var mNxM = part.match(/^(.+?)\s+(\d+)\s*[x×]\s*([\d.]+)\s*(g|ml|kg|l|pce|cs|cc|cl)$/i);
+      if (mNxM) {
+        var count = parseInt(mNxM[2]);
+        var single = parseFloat(mNxM[3]);
+        var unit = mNxM[4].toLowerCase();
+        return { name: mNxM[1].trim(), qty: Math.round(count * single * 10) / 10, unit: unit };
+      }
+
+      // Format standard : "Flocons d'avoine 80g"
       var m = part.match(/^(.+?)\s+([\d.]+)\s*(g|ml|kg|l|pce|cs|cc|cl)$/i);
       if (m) {
         return { name: m[1].trim(), qty: parseFloat(m[2]), unit: m[3].toLowerCase() };
       }
-      // Fallback: pas d'unité trouvée mais nombre présent
+      // Fallback: nombre sans unité → assume grammes
       var m2 = part.match(/^(.+?)\s+([\d.]+)$/);
       if (m2) return { name: m2[1].trim(), qty: parseFloat(m2[2]), unit: 'g' };
-      // Dernier recours: pas de quantité
-      return { name: part, qty: 1, unit: 'pce' };
+      // Dernier recours: ingrédient sans quantité (sel, poivre...) → quantité symbolique
+      return { name: part, qty: 1, unit: 'g' };
     }).filter(function(x) { return x.name && x.name.length > 0; });
   }
 

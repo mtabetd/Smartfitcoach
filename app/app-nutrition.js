@@ -1920,9 +1920,9 @@ function renderStep9(p) {
   // Budget réel du plan semaine
   if (window.RecipeEngine && window.RecipeEngine.calcWeekPlanBudget && S.weekPlan) {
     var budget = window.RecipeEngine.calcWeekPlanBudget(S.weekPlan);
+    var budgetBlock = h('div', { style: 'margin:16px 0;padding:14px 16px;background:var(--card);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)' });
+    budgetBlock.appendChild(h('div', { style: 'font-weight:700;font-size:14px;margin-bottom:10px;color:var(--text)' }, '💰 Budget courses estimé'));
     if (budget.totalMAD > 0) {
-      var budgetBlock = h('div', { style: 'margin:16px 0;padding:14px 16px;background:var(--card);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)' });
-      budgetBlock.appendChild(h('div', { style: 'font-weight:700;font-size:14px;margin-bottom:10px;color:var(--text)' }, '💰 Budget courses estimé'));
       var budgetGrid = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px' });
       budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:8px;padding:10px;text-align:center' },
         h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, 'Budget / jour'),
@@ -1938,9 +1938,13 @@ function renderStep9(p) {
           '* Estimation basée sur ' + budget.coveragePct + '% des repas (recettes avec prix disponibles)'
         ));
       }
-      // Insère après le plan semaine
-      p.appendChild(budgetBlock);
+    } else {
+      budgetBlock.appendChild(h('div', { style: 'font-size:12px;color:var(--text-secondary);text-align:center;padding:8px 0' },
+        'Prix non disponibles pour ce plan — généralement disponibles dès la semaine suivante'
+      ));
     }
+    // Insère après le plan semaine
+    p.appendChild(budgetBlock);
   }
 
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
