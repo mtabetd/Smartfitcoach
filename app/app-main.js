@@ -120,11 +120,21 @@ function loadProfile() {
     }
     if (!data) return;
     PROFILE_KEYS.forEach(function(k) { if (data[k] !== undefined) S[k] = data[k]; });
+    // Reset ephemeral UI state that should not persist across sessions
+    S.shopListOpen = false;
+    S.smoothieBarOpen = false;
+    S._addMealModalSlot = null;
+    S.modalRecipe = null;
+    S.modalSmoothie = null;
+    if (S.saladBar) S.saladBar.open = false;
   } catch(e) {}
 }
 
 // ─── MAIN RENDER ───
 function render() {
+  if (render._lock) return;
+  render._lock = true;
+  try {
   if (window.destroyAllCharts) window.destroyAllCharts();
   if (AUTH.isLoggedIn()) saveProfile();
   var app = document.getElementById('app');
@@ -239,6 +249,7 @@ function render() {
       if (_w2) _w2.scrollTop = 0;
     });
   }
+  } finally { render._lock = false; }
 }
 
 // ─── AUTH: LOGIN SCREEN ───

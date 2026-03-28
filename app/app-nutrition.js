@@ -1471,18 +1471,16 @@ function renderStep8(p) {
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', window.t('onb.s8.fats'), m.l));
   p.appendChild(rr);
 
-  // Meal split — N-01: dynamique selon S.mealsPerDay
-  function getMealSplit(n) {
-    switch(n) {
-      case 2: return [{n:window.t('onb.s9.lunch'),pct:50},{n:window.t('onb.s9.dinner'),pct:50}];
-      case 3: return [{n:window.t('onb.s9.breakfast'),pct:25},{n:window.t('onb.s9.lunch'),pct:45},{n:window.t('onb.s9.dinner'),pct:30}];
-      case 5: return [{n:window.t('onb.s9.breakfast'),pct:20},{n:'Collation mat.',pct:10},{n:window.t('onb.s9.lunch'),pct:35},{n:window.t('onb.s9.snack'),pct:10},{n:window.t('onb.s9.dinner'),pct:25}];
-      default: return [{n:window.t('onb.s9.breakfast'),pct:25},{n:window.t('onb.s9.lunch'),pct:40},{n:window.t('onb.s9.snack'),pct:5},{n:window.t('onb.s9.dinner'),pct:30}];
-    }
-  }
   p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas (' + (S.mealsPerDay||3) + ' repas/j)'));
   var ms = h('div', {'class': 'meal-split'});
-  getMealSplit(S.mealsPerDay||3).forEach(function(meal) {
+  var _globalSplit = window.getMealSplit ? window.getMealSplit() : null;
+  var _splitList = _globalSplit ? [
+    {n: window.t('onb.s9.breakfast'), pct: Math.round((_globalSplit.pctBreak||0.25)*100)},
+    {n: window.t('onb.s9.lunch'), pct: Math.round((_globalSplit.pctLunch||0.40)*100)},
+    {n: window.t('onb.s9.snack'), pct: Math.round((_globalSplit.pctSnack||0.05)*100)},
+    {n: window.t('onb.s9.dinner'), pct: Math.round((_globalSplit.pctDinner||0.30)*100)}
+  ].filter(function(m){return m.pct>0;}) : [{n:window.t('onb.s9.breakfast'),pct:25},{n:window.t('onb.s9.lunch'),pct:40},{n:window.t('onb.s9.snack'),pct:5},{n:window.t('onb.s9.dinner'),pct:30}];
+  _splitList.forEach(function(meal) {
     var kcal = Math.round(tgt * meal.pct / 100);
     var bar = h('div', {'class': 'meal-bar'});
     bar.appendChild(h('div', {'class': 'bar-name'}, meal.n));
