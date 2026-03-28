@@ -31,6 +31,7 @@ var PROFILE_KEYS = [
   'golfLevel','golfGoal','golfDays','golfHandicap',
   'triathlonGoal','triathlonLevel','triathlonWeak',
   'triathlonSwimPace','triathlonBikePace','triathlonRunPace',
+  'cyclingLevel','cyclingGoal','cyclingDays','cyclingType','cyclingFTP','cyclingSpeed','cyclingRelief',
   'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
   'shopChecked','weekPlan','selectedDay',
   'currency','currencySymbol'
