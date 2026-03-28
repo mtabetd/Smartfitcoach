@@ -50,10 +50,33 @@ function slimMeal(meal) {
   return { _id: meal._id, n: meal.n, k: meal.k, p: meal.p, g: meal.g, l: meal.l, w: meal.w, lv: meal.lv };
 }
 
+// Keys that affect the meal plan — changing any of these should invalidate weekPlan
+var NUTRITION_PLAN_KEYS = ['goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height'];
+
 function saveProfile() {
   try {
     var user = AUTH.getUser();
     var uid = user ? user.id : 'anon';
+
+    // Check if nutrition-relevant values changed vs what is currently persisted.
+    // If so, weekPlan is stale and must be invalidated before saving.
+    (function() {
+      try {
+        var raw2 = localStorage.getItem('mtd_profile_' + uid);
+        if (!raw2 || !S.weekPlan) return; // nothing to compare or no plan to invalidate
+        var prev = null;
+        if (window._storageDecode) { prev = window._storageDecode(raw2); }
+        if (!prev) { try { prev = JSON.parse(raw2); } catch(e2) {} }
+        if (!prev) return;
+        var planImpacted = NUTRITION_PLAN_KEYS.some(function(k) {
+          return prev[k] !== S[k];
+        });
+        if (planImpacted) {
+          S.weekPlan = null;
+        }
+      } catch(e2) {}
+    })();
+
     var data = {};
     PROFILE_KEYS.forEach(function(k) { data[k] = S[k]; });
     // Slim weekPlan before serializing: strip ingredient/step/tag fields so
