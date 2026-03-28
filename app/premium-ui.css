@@ -609,6 +609,9 @@ body.dark-mode {
   --border:#3A3A38;--green:#4ABA4A;--greenbg:rgba(74,186,74,.08);
   --blue:#6A9ADA;--bluebg:rgba(106,154,218,.08);--orange:#DAA06A;--orangebg:rgba(218,160,106,.08);
   --red:#DA6A6A;--redbg:rgba(218,106,106,.08);
+  /* Semantic aliases — dark overrides */
+  --bg:#1A1A18;--text:#FAFAF7;--text-secondary:#9A9A94;
+  --card:#222220;--surface:#222220;--accent:#4ABA4A;
   background:var(--ivory);color:var(--black);
 }
 body.dark-mode .modal-overlay{background:rgba(0,0,0,0.7)}
