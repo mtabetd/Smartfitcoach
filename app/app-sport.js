@@ -767,7 +767,7 @@ function renderMuscuMedicalQ(p) {
   // ─── Section 3 : Niveau de douleur général (si au moins une zone cochée) ───
   var hasAnyZone = zonesData.some(function(z){ return med[z.key]; });
   if (hasAnyZone) {
-    p.appendChild(h('div', {'class': 'section-label'}, 'Quel est l\'intensité générale ?'));
+    p.appendChild(h('div', {'class': 'section-label'}, 'Quelle est l\'intensité générale ?'));
     var painLevels = [
       {val: 0, label: 'Aucune'},
       {val: 1, label: 'Légère'},

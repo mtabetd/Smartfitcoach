@@ -642,13 +642,13 @@
         { name: 'Bouillon de poulet', qty: 300, unit: 'ml' },
         { name: 'Champignons', qty: 150, unit: 'g' },
         { name: 'Galanga frais (ou gingembre)', qty: 20, unit: 'g' },
-        { name: 'Citronelle', qty: 1, unit: 'pce' },
+        { name: 'Citronnelle', qty: 1, unit: 'pce' },
         { name: 'Citron vert (jus)', qty: 2, unit: 'pce' },
         { name: 'Sauce poisson', qty: 20, unit: 'ml' },
         { name: 'Piment rouge', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Chauffer bouillon avec galanga, citronelle écrasée et piment 5 min.',
+        'Chauffer bouillon avec galanga, citronnelle écrasée et piment 5 min.',
         'Ajouter lait de coco, porter à frémissement. Incorporer poulet en dés et champignons.',
         'Cuire 10 min. Assaisonner sauce poisson et jus citron vert. Servir chaud.'
       ]
@@ -1377,7 +1377,7 @@
         { name: 'Crevettes décortiquées', qty: 250, unit: 'g' },
         { name: 'Bouillon de poulet', qty: 800, unit: 'ml' },
         { name: 'Champignons', qty: 100, unit: 'g' },
-        { name: 'Citronelle', qty: 2, unit: 'pce' },
+        { name: 'Citronnelle', qty: 2, unit: 'pce' },
         { name: 'Galanga (ou gingembre)', qty: 20, unit: 'g' },
         { name: 'Sauce poisson', qty: 20, unit: 'ml' },
         { name: 'Citron vert (jus)', qty: 2, unit: 'pce' },
@@ -1385,7 +1385,7 @@
         { name: 'Tomates cerises', qty: 80, unit: 'g' }
       ],
       steps: [
-        'Chauffer bouillon avec citronelle, galanga, piment 8 min.',
+        'Chauffer bouillon avec citronnelle, galanga, piment 8 min.',
         'Ajouter champignons et tomates cerises, cuire 4 min.',
         'Incorporer crevettes, cuire 3 min. Finir sauce poisson + citron vert. Servir chaud.'
       ]
