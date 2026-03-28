@@ -2304,7 +2304,7 @@ function renderSaladBar(p) {
   // Meal target toggle
   var toggleWrap = h('div', { style: 'display:flex;gap:4px' });
   ['lunch', 'dinner'].forEach(function(slot) {
-    var label = slot === 'lunch' ? 'D\u00e9j' : 'D\u00eener';
+    var label = slot === 'lunch' ? window.t('onb.s9.lunch') : window.t('onb.s9.dinner');
     toggleWrap.appendChild(h('button', {
       style: 'padding:4px 10px;border-radius:20px;border:1.5px solid ' + (sb.mealTarget === slot ? barColor : 'var(--border)') + ';background:' + (sb.mealTarget === slot ? barColor : 'transparent') + ';color:' + (sb.mealTarget === slot ? '#fff' : 'var(--text)') + ';font-size:12px;cursor:pointer;font-weight:600',
       onclick: function() { sb.mealTarget = slot; window.render(); }
@@ -2559,7 +2559,7 @@ function renderSaladBar(p) {
       S.saladBar.open = false;
       window.render();
     }
-  }, '\uD83D\uDCBE Ajouter au plan (' + (sb.mealTarget === 'lunch' ? 'D\u00e9jeuner' : 'D\u00eener') + ')');
+  }, '\uD83D\uDCBE Ajouter au plan (' + (sb.mealTarget === 'lunch' ? window.t('onb.s9.lunch') : window.t('onb.s9.dinner')) + ')');
   actWrap.appendChild(btnAdd);
 
   actWrap.appendChild(h('button', {
