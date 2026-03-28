@@ -199,12 +199,108 @@ function getBadges() {
 }
 
 
+/* ─── WELCOME SCREEN (jour 0 — avant génération du plan) ─── */
+function renderWelcomeScreen(container) {
+  var S = window.S || {};
+  var user = tryGetUser();
+  var root = h('div', 'dash-root');
+
+  /* Greeting */
+  var now = new Date();
+  var greeting = greetingWord() + (user && user.name ? ', ' + firstName(user.name) : '');
+  root.appendChild(h('h1', 'dash-greeting', greeting));
+  var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
+  root.appendChild(h('p', 'dash-date', dateStr));
+
+  /* Tips toggle */
+  if (window.TIPS) TIPS.renderToggle(root);
+
+  /* Welcome card */
+  root.appendChild(h('div', 'dash-label', 'Bienvenue sur SmartFitCoach'));
+
+  var welcomeCard = document.createElement('div');
+  welcomeCard.className = 'dash-card';
+  welcomeCard.style.cssText = 'text-align:center;padding:32px 20px;';
+
+  var icon = document.createElement('div');
+  icon.style.cssText = 'font-size:36px;margin-bottom:16px;';
+  icon.textContent = '\u25C6';
+  welcomeCard.appendChild(icon);
+
+  var title = document.createElement('p');
+  title.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:20px;margin:0 0 10px;color:var(--black,#181818);';
+  title.textContent = 'Votre programme personnalisé vous attend';
+  welcomeCard.appendChild(title);
+
+  var sub = document.createElement('p');
+  sub.style.cssText = 'font-size:13px;color:var(--grey,#6B6B65);margin:0 0 24px;line-height:1.6;font-family:"Helvetica Neue",Arial,sans-serif;';
+  /* Determine message based on onboarding step */
+  var nStep = S.nStep || 0;
+  if (nStep === 0) {
+    sub.textContent = 'Complétez le questionnaire Nutrition pour générer votre plan alimentaire et sportif personnalisé.';
+  } else if (nStep > 0 && nStep < 10) {
+    sub.textContent = 'Votre questionnaire est en cours (étape ' + nStep + '/9). Terminez-le pour accéder à votre tableau de bord complet.';
+  } else {
+    sub.textContent = 'Générez votre plan semaine dans Nutrition pour commencer le suivi de vos calories et performances.';
+  }
+  welcomeCard.appendChild(sub);
+
+  var ctaBtn = document.createElement('button');
+  ctaBtn.className = 'dash-btn-primary';
+  ctaBtn.style.cssText = 'max-width:320px;margin:0 auto;display:block;';
+  ctaBtn.textContent = nStep === 0 ? 'Commencer le questionnaire \u2192' : 'Reprendre le questionnaire \u2192';
+  ctaBtn.addEventListener('click', function() {
+    if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
+  });
+  welcomeCard.appendChild(ctaBtn);
+
+  root.appendChild(welcomeCard);
+
+  /* Quick nav cards — always accessible */
+  root.appendChild(h('div', 'dash-label', 'Accès rapide'));
+  var navGrid = h('div', 'dash-card-grid');
+
+  var nutCard = h('div', 'dash-nav');
+  nutCard.appendChild(h('span', 'dash-nav-icon', '\u25C6'));
+  nutCard.appendChild(h('p', 'dash-nav-name', 'Nutrition'));
+  nutCard.appendChild(h('p', 'dash-nav-sub', nStep === 0 ? 'Démarrer le questionnaire' : 'Continuer l\'onboarding'));
+  nutCard.style.cursor = 'pointer';
+  nutCard.addEventListener('click', function() {
+    if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
+  });
+  navGrid.appendChild(nutCard);
+
+  var sportCard = h('div', 'dash-nav');
+  sportCard.appendChild(h('span', 'dash-nav-icon', '\u25C6'));
+  sportCard.appendChild(h('p', 'dash-nav-name', 'Sport'));
+  sportCard.appendChild(h('p', 'dash-nav-sub', 'Explorer les programmes'));
+  sportCard.style.cursor = 'pointer';
+  sportCard.addEventListener('click', function() {
+    if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport');
+  });
+  navGrid.appendChild(sportCard);
+
+  root.appendChild(navGrid);
+
+  container.appendChild(root);
+}
+
 /* ─── MAIN MODULE ─── */
 window.DASHBOARD = {
 
   render: function(container) {
     if (!container) return;
     container.innerHTML = '';
+
+    var S = window.S || {};
+
+    /* ─── WELCOME SCREEN: afficher uniquement si weekPlan non généré (jour 0 / setup incomplet) ─── */
+    var hasPlan = Array.isArray(S.weekPlan) && S.weekPlan.length > 0;
+    if (!hasPlan) {
+      renderWelcomeScreen(container);
+      return;
+    }
+    /* ─────────────────────────────────────────────────────────────────────────────────────────────── */
 
     var root = h('div', 'dash-root');
     var user = tryGetUser();
@@ -305,6 +401,41 @@ window.DASHBOARD = {
     ]);
     grid.appendChild(sleepCard);
 
+    // Sport burned today — add card if session was validated today
+    (function() {
+      var S = window.S;
+      if (!S || !S.sessionHistory) return;
+      var today = new Date().toISOString().slice(0, 10);
+      var todaySess = null;
+      Object.keys(S.sessionHistory).forEach(function(k) {
+        var se = S.sessionHistory[k];
+        if (se && se.date && se.date.slice(0, 10) === today) todaySess = se;
+      });
+      if (!todaySess || !todaySess.kcalTotal) return;
+      var burnCard = h('div', 'dash-card', [
+        h('p', 'dash-card-title', '\uD83C\uDFCB\uFE0F Brûlées'),
+        h('div', 'dash-big', [
+          document.createTextNode(todaySess.kcalTotal),
+          h('span', 'dash-unit', 'kcal')
+        ])
+      ]);
+      grid.appendChild(burnCard);
+      // Net calories (target - burned) — important for recovery nutrition
+      var calTarget = window.calcTarget ? window.calcTarget() : 0;
+      if (calTarget > 0) {
+        var netKcal = calTarget - todaySess.kcalTotal;
+        var netCard = h('div', 'dash-card', [
+          h('p', 'dash-card-title', '\u26a1 Kcal nettes récupération'),
+          h('div', 'dash-big', [
+            document.createTextNode(Math.max(0, netKcal)),
+            h('span', 'dash-unit', 'kcal')
+          ]),
+          h('p', {style: 'font-size:10px;color:var(--grey,#6B6B65);margin:4px 0 0;font-family:"Helvetica Neue",Arial,sans-serif'}, 'Objectif \u2212 dépense = disponible récupération')
+        ]);
+        grid.appendChild(netCard);
+      }
+    })();
+
     root.appendChild(grid);
 
 
@@ -347,6 +478,94 @@ window.DASHBOARD = {
       root.appendChild(macroCard);
     }
 
+
+    /* ═══ WIDGET GROSSESSE ═══ */
+    if (S.pregnant && S.sex === 'femme') {
+      var pregTri = window.getPregnancyTrimester ? window.getPregnancyTrimester() : null;
+      var pregWeightGuide = window.getPregnancyWeightGuideline ? window.getPregnancyWeightGuideline() : null;
+      if (pregTri) {
+        root.appendChild(h('div', 'dash-label', 'Grossesse — Semaine ' + pregTri.week));
+        var pregCard = document.createElement('div');
+        pregCard.className = 'dash-card';
+        pregCard.style.cssText = 'border-left:4px solid #E91E63;padding:16px;background:rgba(233,30,99,0.03);margin-bottom:12px;';
+
+        var pregTitle = document.createElement('div');
+        pregTitle.style.cssText = 'font-family:Georgia,serif;font-size:17px;color:#C2185B;margin-bottom:4px;';
+        pregTitle.textContent = '\uD83E\uDD30 ' + pregTri.trimester.name + ' \u2014 ' + pregTri.trimester.desc;
+        pregCard.appendChild(pregTitle);
+
+        var pregProgress = document.createElement('div');
+        pregProgress.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px;';
+        pregProgress.textContent = 'Progression : ' + pregTri.progress + '% \u2014 ' + pregTri.weeksLeft + ' semaines restantes';
+        pregCard.appendChild(pregProgress);
+
+        // Progress bar
+        var pregBarBg = document.createElement('div');
+        pregBarBg.style.cssText = 'height:6px;background:rgba(0,0,0,0.08);border-radius:3px;overflow:hidden;margin-bottom:12px;';
+        var pregBarFill = document.createElement('div');
+        pregBarFill.style.cssText = 'height:6px;width:' + pregTri.progress + '%;background:#E91E63;border-radius:3px;';
+        pregBarBg.appendChild(pregBarFill);
+        pregCard.appendChild(pregBarBg);
+
+        // Calorie info
+        var pregCal = document.createElement('div');
+        pregCal.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#880E4F;margin-bottom:6px;';
+        var extraKcal = pregTri.trimester.calorieExtra || 0;
+        pregCal.textContent = extraKcal > 0 ? '+' + extraKcal + ' kcal/jour (besoins grossesse inclus dans votre cible)' : 'T1 : pas de calories supplémentaires nécessaires';
+        pregCard.appendChild(pregCal);
+
+        // Weight guideline
+        if (pregWeightGuide) {
+          var pregWeight = document.createElement('div');
+          pregWeight.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px;';
+          pregWeight.textContent = 'Poids attendu à SA' + pregTri.week + ' : ' + pregWeightGuide.expectedWeightMin + '\u2013' + pregWeightGuide.expectedWeightMax + ' kg (gain cible : +' + pregWeightGuide.currentExpectedGainMin + '\u2013+' + pregWeightGuide.currentExpectedGainMax + ' kg)';
+          pregCard.appendChild(pregWeight);
+        }
+
+        // Nutrition tips (top 3)
+        var tipsTitle = document.createElement('div');
+        tipsTitle.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E91E63;margin-bottom:6px;';
+        tipsTitle.textContent = 'Conseils nutrition ce trimestre';
+        pregCard.appendChild(tipsTitle);
+        (pregTri.trimester.nutritionTips || []).slice(0, 3).forEach(function(tip) {
+          var tipEl = document.createElement('div');
+          tipEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-bottom:3px;padding-left:8px;';
+          tipEl.textContent = '\u2022 ' + tip;
+          pregCard.appendChild(tipEl);
+        });
+
+        // Sport warning
+        var pregSportWarn = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
+        if (pregSportWarn) {
+          var warnBox = document.createElement('div');
+          warnBox.style.cssText = 'margin-top:10px;padding:8px 10px;background:rgba(233,30,99,0.07);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#C2185B;border-radius:2px;';
+          warnBox.textContent = pregSportWarn;
+          pregCard.appendChild(warnBox);
+        }
+
+        root.appendChild(pregCard);
+      }
+    }
+
+
+    /* ═══ ALERTES MÉDICALES ═══ */
+    if (S.medical && S.medical.length > 0) {
+      var hasDiabDash = S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1 || S.medical.indexOf('prediabete') !== -1;
+      if (hasDiabDash) {
+        root.appendChild(h('div', 'dash-label', 'Suivi médical'));
+        var diabWarnCard = document.createElement('div');
+        diabWarnCard.style.cssText = 'background:#FFF8E1;border-left:4px solid #F9A825;padding:14px 16px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.6;';
+        var diabWarnTitle = document.createElement('div');
+        diabWarnTitle.style.cssText = 'font-weight:700;color:#F57F17;margin-bottom:6px;font-size:12px;letter-spacing:1px;text-transform:uppercase;';
+        diabWarnTitle.textContent = '\u26A0 Diabète — Recommandations importantes';
+        diabWarnCard.appendChild(diabWarnTitle);
+        var diabWarnMsg = document.createElement('div');
+        diabWarnMsg.style.cssText = 'color:#5D4037;';
+        diabWarnMsg.textContent = 'Consultez votre médecin ou diabétologue avant de modifier votre alimentation ou votre programme sportif. Mesurez votre glycémie régulièrement, notamment avant et après l\'effort. Privilegiez les aliments à index glycémique bas.';
+        diabWarnCard.appendChild(diabWarnMsg);
+        root.appendChild(diabWarnCard);
+      }
+    }
 
     /* ═══ QUICK ACTIONS ═══ */
     root.appendChild(h('div', 'dash-label', 'Accès rapide'));

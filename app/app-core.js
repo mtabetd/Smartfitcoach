@@ -72,7 +72,7 @@ var GOALS=[
   {icon:'↗',name:'Prise de masse douce',desc:'+10% calories',mult:1.10,key:'lean_bulk'},
   {icon:'=',name:'Maintien',desc:'= TDEE',mult:1.0,key:'maintain'},
   {icon:'↘',name:'Perte de poids',desc:'-15% calories',mult:0.85,key:'cut'},
-  {icon:'↓',name:'Sèche',desc:'-20% calories',mult:0.80,key:'shred'},
+  {icon:'↓',name:'Sèche',desc:'-20% calories (plafonn\u00e9 \u00e0 \u22125\u200900 kcal/j max — Helms 2014)',mult:0.80,key:'shred'},
   {icon:'⚖️',name:'Recomposition',desc:'Maintien calories, optimisation macros',mult:1.00,key:'recomposition'}
 ];
 // RATIOS : distribution calorique indicative par objectif (pour affichage uniquement)
@@ -382,39 +382,43 @@ window.SPORT_LEVELS = SPORT_LEVELS;
 var CROSSFIT_LEVELS = [
   {id: 'scaled', name: 'Scaled', desc: 'Débutant / Adapté — Mouvements simplifiés, charges légères', icon: '🟢'},
   {id: 'inter', name: 'Intermédiaire', desc: 'Mouvements maîtrisés — Charges modérées', icon: '🟡'},
-  {id: 'rx', name: 'RX (Prescrit)', desc: 'Standards compétition — Charges et mouvements avancés', icon: '🔴'}
+  {id: 'rx', name: 'RX (Prescrit)', desc: 'Standards compétition — Charges et mouvements avancés', icon: '🔴'},
+  {id: 'rx_plus', name: 'RX+ (Élite)', desc: 'Athlète élite Games / Compétiteur — Charges maximales, mouvements avancés', icon: '⚫'}
 ];
 window.CROSSFIT_LEVELS = CROSSFIT_LEVELS;
 
 var CF_STANDARDS = {
-  clean: { m: [40, 60, 80], f: [25, 40, 55] },
-  snatch: { m: [30, 50, 70], f: [20, 35, 50] },
-  deadlift: { m: [60, 90, 110], f: [40, 60, 80] },
-  squat_clean: { m: [40, 60, 80], f: [25, 40, 55] },
-  thruster: { m: [30, 43, 60], f: [20, 30, 43] },
-  front_squat: { m: [40, 60, 80], f: [25, 40, 55] },
-  overhead_squat: { m: [25, 40, 60], f: [15, 25, 40] },
-  push_press: { m: [30, 43, 60], f: [20, 30, 43] },
-  power_clean: { m: [40, 60, 80], f: [25, 40, 55] },
-  hang_clean: { m: [35, 55, 75], f: [20, 35, 50] },
-  shoulder_to_oh: { m: [30, 43, 60], f: [20, 30, 43] },
-  back_squat: { m: [50, 70, 100], f: [30, 50, 70] },
-  sumo_dl_hp: { m: [35, 50, 70], f: [20, 35, 50] },
-  pullups: { scaled: 'Ring Rows', inter: 'Pull-ups', rx: 'Chest-to-bar' },
-  muscle_ups_bar: { scaled: 'Pull-ups + Dips', inter: 'Bar Muscle-ups (tentatives)', rx: 'Bar Muscle-ups' },
-  muscle_ups_ring: { scaled: 'Ring Rows + Ring Dips', inter: 'Ring Muscle-ups (tentatives)', rx: 'Ring Muscle-ups' },
-  hspu: { scaled: 'Pike Push-ups', inter: 'HSPU (abmat)', rx: 'Strict/Kipping HSPU' },
-  handstand_walk: { scaled: 'Bear Crawl 2x distance', inter: 'Wall Walk', rx: 'Handstand Walk' },
-  pistols: { scaled: 'Air Squats', inter: 'Pistols (assistés)', rx: 'Pistols' },
-  toes_to_bar: { scaled: 'Hanging Knee Raises', inter: 'Toes-to-bar (kipping)', rx: 'Toes-to-bar (strict ou kipping)' },
-  rope_climb: { scaled: 'Rope Pull (allongé)', inter: '1 Rope Climb', rx: 'Legless Rope Climb' },
-  double_unders: { scaled: 'Single Unders (x3)', inter: 'Double Unders', rx: 'Double Unders' },
-  box_jump: { scaled: 'Step-ups 50cm', inter: 'Box Jump 50/60cm', rx: 'Box Jump 60/75cm' },
-  wall_ball: { scaled: '4/6kg → 2.7/3m', inter: '6/9kg → 2.7/3m', rx: '9/14kg → 3/3.5m' },
-  kb_swing: { scaled: '12/16kg', inter: '16/24kg', rx: '24/32kg' },
-  burpee: { scaled: 'Burpees (step)', inter: 'Burpees', rx: 'Burpees over bar / Burpee Box Jump Over' },
-  row_cal: { cal: [12, 15, 20] },
-  assault_bike: { cal: [8, 12, 15] }
+  // Numeric standards: [scaled, inter, rx, rx_plus] — 4 values for 4 levels
+  clean: { m: [40, 60, 80, 100], f: [25, 40, 55, 70] },
+  snatch: { m: [30, 50, 70, 90], f: [20, 35, 50, 65] },
+  deadlift: { m: [60, 90, 110, 140], f: [40, 60, 80, 100] },
+  squat_clean: { m: [40, 60, 80, 100], f: [25, 40, 55, 70] },
+  thruster: { m: [30, 43, 60, 75], f: [20, 30, 43, 55] },
+  front_squat: { m: [40, 60, 80, 100], f: [25, 40, 55, 70] },
+  overhead_squat: { m: [25, 40, 60, 80], f: [15, 25, 40, 55] },
+  push_press: { m: [30, 43, 60, 75], f: [20, 30, 43, 55] },
+  power_clean: { m: [40, 60, 80, 100], f: [25, 40, 55, 70] },
+  hang_clean: { m: [35, 55, 75, 95], f: [20, 35, 50, 65] },
+  shoulder_to_oh: { m: [30, 43, 60, 75], f: [20, 30, 43, 55] },
+  back_squat: { m: [50, 70, 100, 130], f: [30, 50, 70, 90] },
+  sumo_dl_hp: { m: [35, 50, 70, 85], f: [20, 35, 50, 65] },
+  // Gymnastics standards: [scaled, inter, rx, rx_plus]
+  c2b_pullups: { scaled: 'Pull-ups assistés (élastique)', inter: 'Chest-to-bar kipping', rx: 'Chest-to-bar kipping', rx_plus: 'Chest-to-bar strict' },
+  pullups: { scaled: 'Ring Rows', inter: 'Pull-ups', rx: 'Chest-to-bar', rx_plus: 'Chest-to-bar + Bar Muscle-ups' },
+  muscle_ups_bar: { scaled: 'Pull-ups + Dips', inter: 'Bar Muscle-ups (tentatives)', rx: 'Bar Muscle-ups', rx_plus: 'Strict Bar Muscle-ups' },
+  muscle_ups_ring: { scaled: 'Ring Rows + Ring Dips', inter: 'Ring Muscle-ups (tentatives)', rx: 'Ring Muscle-ups', rx_plus: 'Strict Ring Muscle-ups' },
+  hspu: { scaled: 'Pike Push-ups', inter: 'HSPU (abmat)', rx: 'Strict/Kipping HSPU', rx_plus: 'Strict HSPU (no abmat)' },
+  handstand_walk: { scaled: 'Bear Crawl 2x distance', inter: 'Wall Walk', rx: 'Handstand Walk', rx_plus: 'Handstand Walk (obstacles)' },
+  pistols: { scaled: 'Air Squats', inter: 'Pistols (assistés)', rx: 'Pistols', rx_plus: 'Pistols (lesté)' },
+  toes_to_bar: { scaled: 'Hanging Knee Raises', inter: 'Toes-to-bar (kipping)', rx: 'Toes-to-bar (strict ou kipping)', rx_plus: 'Toes-to-bar strict' },
+  rope_climb: { scaled: 'Rope Pull (allongé)', inter: '1 Rope Climb', rx: 'Legless Rope Climb', rx_plus: 'Legless Rope Climb (15ft)' },
+  double_unders: { scaled: 'Single Unders (x3)', inter: 'Double Unders', rx: 'Double Unders', rx_plus: 'Double Unders (volume +25%)' },
+  box_jump: { scaled: 'Step-ups 50cm', inter: 'Box Jump 50/60cm', rx: 'Box Jump 60/75cm', rx_plus: 'Box Jump 75/90cm' },
+  wall_ball: { scaled: '4/6kg → 2.7/3m', inter: '6/9kg → 2.7/3m', rx: '9/14kg → 3/3.5m', rx_plus: '9/14kg → 3.5m (cible Games)' },
+  kb_swing: { scaled: '12/16kg', inter: '16/24kg', rx: '24/32kg', rx_plus: '32/40kg' },
+  burpee: { scaled: 'Burpees (step)', inter: 'Burpees', rx: 'Burpees over bar / Burpee Box Jump Over', rx_plus: 'Burpee Box Jump Over (75cm)' },
+  row_cal: { cal: [12, 15, 20, 25] },
+  assault_bike: { cal: [8, 12, 15, 20] }
 };
 window.CF_STANDARDS = CF_STANDARDS;
 
@@ -430,23 +434,56 @@ var CF_1RM_LIFTS = [
 ];
 window.CF_1RM_LIFTS = CF_1RM_LIFTS;
 
+// Scaling factors relative to Back Squat 1RM for deriving missing lift maxes
+// References: Haff & Triplett 2016, Symmetry Strength, ExRx standards
+var CF_LIFT_SCALING_FACTORS = {
+  back_squat:    1.00,
+  front_squat:   0.85,
+  overhead_squat: 0.60, // OHS — overhead stability + mobility demand; ~60% BS (ExRx, Symmetry Strength); corrected from erroneous 0.88 which exceeded front_squat (0.85)
+  squat_clean:   0.75,
+  clean:         0.75,
+  power_clean:   0.70,
+  hang_clean:    0.70,
+  snatch:        0.60,
+  deadlift:      1.25,
+  bench_press:   0.85,
+  push_press:    0.65,
+  shoulder_to_oh: 0.65,
+  thruster:      0.70, // Front squat + overhead press pattern; corrected from 0.55 (Haff & Triplett 2016)
+  jerk:          0.80, // Split/push jerk — overhead strength from back squat base (Haff & Triplett 2016)
+  sumo_dl_hp:    0.50
+};
+window.CF_LIFT_SCALING_FACTORS = CF_LIFT_SCALING_FACTORS;
+
 // Returns the working weight for a given movement
-// Uses user's 1RM if available, otherwise falls back to CF_STANDARDS
+// Priority 1: user's direct 1RM for that lift
+// Priority 2: derive from back_squat 1RM using scaling factors
+// Priority 3: fall back to CF_STANDARDS (level/sex tables)
 function getCFWorkingWeight(standardsKey, percentage) {
   var s = window.S;
+  if (!s) return '?';
   var sexKey = s.sex === 'homme' ? 'm' : 'f';
-  var lvlIdx = s.crossfitLevel === 'scaled' ? 0 : s.crossfitLevel === 'inter' ? 1 : 2;
+  // Default to 'inter' (index 1) when crossfitLevel is not set, to avoid defaulting to RX for new users
+  var lvlIdx = s.crossfitLevel === 'scaled' ? 0 : s.crossfitLevel === 'inter' ? 1 : s.crossfitLevel === 'rx' ? 2 : s.crossfitLevel === 'rx_plus' ? 3 : 1;
+  // WOD working weight percentages by level (% of 1RM) — rx_plus uses 80% (Games athlete intensity — NSCA 2016)
+  var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : lvlIdx === 2 ? 0.75 : 0.80;
 
-  // Check if user has a 1RM for this lift
+  // Priority 1: user has a direct 1RM for this specific lift
   if (s.crossfit1RM && s.crossfit1RM[standardsKey]) {
     var rm = s.crossfit1RM[standardsKey];
     if (percentage) return Math.round(rm * percentage / 100);
-    // For WODs, use typical percentages by level
-    var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : 0.75;
     return Math.round(rm * wodPct);
   }
 
-  // Fallback to CF_STANDARDS
+  // Priority 2: derive from back_squat 1RM using scaling factors
+  if (s.crossfit1RM && s.crossfit1RM['back_squat'] && CF_LIFT_SCALING_FACTORS[standardsKey]) {
+    var bsRm = s.crossfit1RM['back_squat'];
+    var derived1RM = Math.round(bsRm * CF_LIFT_SCALING_FACTORS[standardsKey]);
+    if (percentage) return Math.round(derived1RM * percentage / 100);
+    return Math.round(derived1RM * wodPct);
+  }
+
+  // Priority 3: fallback to CF_STANDARDS (sex/level tables)
   var standards = window.CF_STANDARDS;
   if (standards && standards[standardsKey] && standards[standardsKey][sexKey]) {
     return standards[standardsKey][sexKey][lvlIdx];
@@ -1526,7 +1563,7 @@ window.S = {
   nStep: 0, sex: null, age: 28, weight: 75, height: 175,
   lang: 'fr', weightUnit: 'kg', heightUnit: 'cm',
   activity: null, train: [], sleep: null, medical: [], goal: null,
-  cookLevel: 2, whey: null, allergies: [], intolerances: [],
+  cookLevel: 2, whey: null, wheyFlavors: [], allergies: [], intolerances: [],
   regime: 0, halal: false, excluded: '', cuisines: [0],
   shopFreq: null, shopStores: [], shopBudget: null, shopPrefs: [],
   shopChecked: {},   // { 'nom_ingrédient': true|false } — état cases à cocher liste de courses
@@ -1540,6 +1577,7 @@ window.S = {
     mealTarget: 'lunch' // 'lunch' | 'dinner'
   },
   weekPlan: null, selectedDay: 0, modalRecipe: null, showList: false, shopListOpen: false,
+  smoothieBarOpen: false, modalSmoothie: null, _addMealModalSlot: null, _recipePicker: null,
   // Food habits
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,
@@ -1586,6 +1624,10 @@ window.S = {
   sessionHistory: {},  // { 'dayIndex_YYYY-MM-DD': { duration, kcalBase, kcalEpoc, kcalTotal } }
   sessionCompleting: false,  // dayIndex en cours de bilan, ou false
   _sessionDuration: null,    // durée saisie dans le panel bilan
+  // CrossFit 100-day calendar
+  cfCalendarOpen: false,  // true = vue calendrier 100 jours ouverte
+  cfCurrentDay: 1,        // jour actuel de l'utilisateur dans le programme (1-100)
+  cfProgress: {},         // { 1: { done: true, date: 'YYYY-MM-DD' }, ... }
   // CrossFit 1RM
   crossfit1RM: {},  // { 'clean': 80, 'snatch': 60, 'deadlift': 140, ... } in kg
   // Strength assessment profile
@@ -2203,7 +2245,14 @@ function calcAdjustedWeight(){
 }
 window.calcAdjustedWeight=calcAdjustedWeight;
 
-function calcBMR(){var s=window.S;if(!s.sex)return 0;if(!s.age||s.age<13||s.age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;if(s.sex==='homme')return Math.round((10*s.weight)+(6.25*s.height)-(5*s.age)+5);return Math.round((10*s.weight)+(6.25*s.height)-(5*s.age)-161)} // Mifflin-St Jeor 1990 (Frankenfield 2005: best accuracy general population)
+function calcBMR(){var s=window.S;if(!s.sex)return 0;if(!s.age||s.age<13||s.age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;
+// GROSSESSE : utiliser le poids pré-grossesse pour le BMR de base (ACOG 2018, OMS 2016)
+// Les calories supplémentaires (+340 T2 / +450 T3) s'ajoutent à ce TDEE de référence via calcTarget()
+// Utiliser s.weight actuel (gonflé par la grossesse) surestimerait le TDEE de base et additionnerait
+// deux fois les besoins énergétiques liés à la grossesse.
+var bw=s.weight;
+if(s.pregnant&&s.prePregnancyWeight&&s.prePregnancyWeight>=30&&s.prePregnancyWeight<=300)bw=s.prePregnancyWeight;
+if(s.sex==='homme')return Math.round((10*bw)+(6.25*s.height)-(5*s.age)+5);return Math.round((10*bw)+(6.25*s.height)-(5*s.age)-161)} // Mifflin-St Jeor 1990 (Frankenfield 2005: best accuracy general population)
 function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
@@ -2232,9 +2281,9 @@ if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*
 // Plancher calorique sexe-spécifique (ACSM / IOC 2018 RED-S prevention)
 // Femme active (PAL ≥ 1.375) : plancher 1400 kcal/j — prévention RED-S (IOC 2018)
 // Femme sédentaire : plancher 1200 kcal/j (ACSM)
-// Homme : plancher 1400 kcal/j (ACSM — QA spec)
+// Homme : plancher 1500 kcal/j (ACSM — plancher physiologique masculin)
 var effectivePAL=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
-var kcalFloor=s.sex==='femme'?(effectivePAL>=1.375?1400:1200):1400;
+var kcalFloor=s.sex==='femme'?(effectivePAL>=1.375?1400:1200):1500;
 base=Math.max(base,kcalFloor);
 // Alcool : déduire les calories hebdo/7 du budget calorique journalier pour un calcul réaliste
 // Ex : 500 kcal alcool/semaine ÷ 7 = 71 kcal/j que l'on retire de l'objectif alimentaire
@@ -2581,14 +2630,14 @@ function filterRecipes(pool,type){
       var ing=(x.i+' '+x.tags.join(' ')).toLowerCase();
       for(var a=0;a<s.allergies.length;a++){
         var al=s.allergies[a].toLowerCase();
-        if(al==='fruits \u00e0 coque'){var nc=ing.replace(/noix de coco|noix de muscade/g,'');if((/amande|noix|noisette|cajou|pistache|pecan|macadamia/).test(nc))return false;}
+        if(al==='fruits \u00e0 coque'){var nc=ing.replace(/noix de coco|noix de muscade/g,'');if((/amande|noix|noisette|cajou|pistache|pecan|macadamia|pignon/).test(nc))return false;}
         if(al==='arachides'&&(/arachide|cacahu[e\u00e8]te/).test(ing))return false;
-        if(al==='oeufs'&&(/oeuf|\u0153uf/).test(ing))return false;
+        if((al==='oeufs'||al==='\u0153ufs')&&(/oeuf|\u0153uf/).test(ing))return false;
         if(al==='poisson'&&(/saumon|thon|cabillaud|dorade|sardine|maquereau|poisson|anchois|merlu|truite|sole|lotte|morue/).test(ing))return false;
         if(al==='crustac\u00e9s'&&(/crevette|crustac|homard|crabe|gambas/).test(ing))return false;
-        if(al==='soja'&&(/soja|tofu|edamame/).test(ing))return false;
+        if(al==='soja'&&(/soja|tofu|edamame|tempeh|tamari|miso|natto/).test(ing))return false;
         if(al==='lait/produits laitiers'){var dl=ing.replace(/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz|beurre de cacahu/g,'');if((/lait|fromage|yaourt|beurre|cr\u00e8me|ricotta|mozzarella|parmesan|emmental|feta|cottage|skyr|labneh|k\u00e9fir|whey/).test(dl))return false;}
-        if(al==='gluten/bl\u00e9'){var gl=ing.replace(/galette de riz|farine de riz|farine de sarrasin|p\u00e2te miso/g,'');if((/pain|bl\u00e9|farine|p\u00e2te|seigle|couscous|semoule|tortilla|wrap|naan|galette|cr\u00eape|pancake|muffin/).test(gl))return false;}
+        if(al==='gluten/bl\u00e9'){var gl=ing.replace(/galette de riz|farine de riz|farine de sarrasin|p\u00e2te miso/g,'');if((/pain|bl\u00e9|farine|p\u00e2te|seigle|couscous|semoule|tortilla|wrap|naan|galette|cr\u00eape|pancake|muffin|avoine|orge|\u00e9peautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari/).test(gl))return false;} // BUG FIX : avoine (contamination croisée fréquente — AFDIAG), orge, épeautre, boulgour, seitan, kamut, sauce soja/tamari (gluten caché) manquaient
         if(al==='sésame'&&(/sésame/).test(ing))return false;
         if(al==='moutarde'&&(/moutarde/).test(ing))return false;
       }return true;
@@ -2599,8 +2648,8 @@ function filterRecipes(pool,type){
       var ing=(x.i+' '+x.tags.join(' ')).toLowerCase();
       for(var t=0;t<s.intolerances.length;t++){
         var it=s.intolerances[t].toLowerCase();
-        if(it==='lactose'&&(/lait|fromage|yaourt|beurre|crème|ricotta|cottage|whey/).test(ing))return false;
-        if(it==='gluten'&&(/pain|blé|farine|pâte|avoine|seigle|couscous|semoule/).test(ing))return false;
+        if(it==='lactose'&&(/lait|fromage|yaourt|beurre|crème|ricotta|cottage|whey|feta|parmesan|mozzarella|skyr|emmental|gruyère|comté|camembert|mascarpone|kéfir|labneh|ghee|cheddar|gouda/).test(ing))return false;
+        if(it==='gluten'){var gi=ing.replace(/galette de riz|farine de riz|farine de sarrasin|pâte miso|sauce tamari certifiée sans gluten/g,'');if((/pain|blé|farine|pâte|avoine|seigle|couscous|semoule|orge|épeautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari|tortilla|wrap|naan/).test(gi))return false;} // BUG FIX : orge, épeautre, boulgour, seitan, kamut, sauce soja/tamari (gluten caché), avoine (contamination croisée), tortilla/naan/wrap manquaient — AFDIAG / INCO 2020
         if(it==='fructose'&&(/miel|pomme|poire|mangue|cerise|figue|datte/).test(ing))return false;
         if(it==='histamine'&&(/thon|saumon fumé|fromage|tomate|épinard|avocat|soja/).test(ing))return false;
       }return true;
@@ -2608,10 +2657,10 @@ function filterRecipes(pool,type){
   }
   // Diabetics: soft-filter high-GI ingredients (prioritize low-GI sources — ADA 2023)
   var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);
-  if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioche|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
-  if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon/).test(i)});
-  if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson/).test(i)});
-  if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|beurre|miel|whey/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;return true});}
+  if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioch[eé]|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|sucre\s+\d|sucre vanill|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
+  if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon|merguez|canard|lapin|foie/).test(i)});
+  if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|merguez|gambas|lotte|morue|foie|anchois|truite|colin/).test(i)});
+  if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|daurade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|miel|whey|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|truite|anchois|colin|branzino|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|lapin|foie de|jambon|charcuterie/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;if(/beurre/.test(i)&&!/beurre de cacahu|beurre d.amande|beurre de noisette|beurre de noix|beurre de coco/.test(i))return false;return true});} // beurre végétal (cacahuète, amande, noisette) autorisé en vegan
   // Halal : exclut porc, charcuterie porcine et alcool
   if(s.halal)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin/).test(i)});
   if(s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
@@ -2688,6 +2737,7 @@ function swapMeal(di,slot){var s=window.S;if(!s.weekPlan||!s.weekPlan[di])return
 window.getPool = getPool;
 window.filterRecipes = filterRecipes;
 window.pickRecipe = pickRecipe;
+window.enrichWithScaling = enrichWithScaling;
 window.generateWeek = generateWeek;
 window.swapMeal = swapMeal;
 
@@ -2695,7 +2745,7 @@ window.swapMeal = swapMeal;
 // Only supplements with overwhelming scientific evidence + personalized to user needs
 var SUPPLEMENTS_DB = [
   {id:'whey',name:'Whey Prot\u00e9ine',icon:'\uD83E\uDD5B',desc:'Atteindre l\'objectif prot\u00e9ique quotidien',evidence:'ISSN 2017 \u2014 Niveau A (700+ \u00e9tudes)',grade:'A',
-    condition:function(s){return s.whey===1;}, // Only if user explicitly wants whey
+    condition:function(s){return s.whey===1||s.whey===true;}, // Only if user explicitly wants whey
     unnecessary_if:'Inutile si vous atteignez vos prot\u00e9ines via l\'alimentation seule',
     dosageCalc:function(s){var d=s.weight>80?35:25;return{dose:d,unit:'g/prise',timing:'Post-entra\u00eenement ou petit-d\u00e9jeuner',note:'Objectif total : '+Math.round(s.weight*1.8)+'g prot/jour (alimentation + whey)'};}},
   {id:'creatine',name:'Cr\u00e9atine Monohydrate',icon:'\uD83D\uDC8A',desc:'Force, masse musculaire, r\u00e9cup\u00e9ration',evidence:'ISSN 2017 \u2014 Niveau A (500+ \u00e9tudes, le suppl\u00e9ment le plus \u00e9tudi\u00e9)',grade:'A',
@@ -2715,13 +2765,13 @@ var SUPPLEMENTS_DB = [
       else if(s.age>50)d=Math.max(d,2500); // 50-70 : synthèse réduite
       return{dose:d,unit:'UI/jour',timing:'Petit-d\u00e9jeuner avec repas gras',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Obésité : D3 séquestrée dans tissu adipeux, besoins × 2-3 (Endocrine Society 2011). Associer à Vitamine K2 (MK-7) si ≥50 ans — prévient calcifications artérielles (Plaza 2021).'};}},
   {id:'omega3',name:'Om\u00e9ga-3 (EPA/DHA)',icon:'\uD83D\uDC1F',desc:'Anti-inflammatoire, c\u0153ur, cognition',evidence:'AHA 2019 \u2014 Recommandation',grade:'A',
-    condition:function(s){return (s.allergies||[]).indexOf('Poisson')===-1&&(s.allergies||[]).indexOf('Crustac\u00e9s')===-1;},
+    condition:function(s){return s.regime!==3&&(s.allergies||[]).indexOf('Poisson')===-1&&(s.allergies||[]).indexOf('Crustac\u00e9s')===-1;}, // Vegan : utiliser DHA algues à la place
     unnecessary_if:'Inutile si vous mangez du poisson gras 2-3x/semaine (saumon, sardines, maquereau)',
     dosageCalc:function(s){var d=1000;if(s.activity!==null&&s.activity>=3)d=2000;return{dose:d,unit:'mg EPA+DHA/jour',timing:'Pendant un repas',note:'Ratio EPA:DHA 2:1 pour sportifs'};}},
-  {id:'magnesium',name:'Magn\u00e9sium (Bisglycinate)',icon:'\uD83E\uDDEA',desc:'Sommeil, crampes, r\u00e9cup\u00e9ration',evidence:'EFSA 2015 \u2014 Apport recommand\u00e9',grade:'A',
-    condition:function(s){return (s.sleep!==null&&s.sleep<=1)||(s.activity!==null&&s.activity>=3);},
-    unnecessary_if:'Non prioritaire si bon sommeil et entra\u00eenement mod\u00e9r\u00e9',
-    dosageCalc:function(s){var d=s.sex==='homme'?400:310;if(s.activity!==null&&s.activity>=3)d+=50;return{dose:d,unit:'mg/jour',timing:'Le soir avant le coucher',note:'Forme bisglycinate mieux tol\u00e9r\u00e9e'};}},
+  {id:'magnesium',name:'Magn\u00e9sium (Bisglycinate)',icon:'\uD83E\uDDEA',desc:'Sommeil, crampes, r\u00e9cup\u00e9ration — sensibilit\u00e9 \u00e0 l\'insuline (diab\u00e8te T2)',evidence:'EFSA 2015 \u2014 Apport recommand\u00e9. ADA 2023 : d\u00e9ficit magn\u00e9sium fr\u00e9quent en diab\u00e8te T2 (r\u00e9sistance insuline)',grade:'A',
+    condition:function(s){var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('prediabete')!==-1);return hasDiab||(s.sleep!==null&&s.sleep<=1)||(s.activity!==null&&s.activity>=3);},
+    unnecessary_if:'Non prioritaire si bon sommeil, entra\u00eenement mod\u00e9r\u00e9 et absence de diab\u00e8te/pr\u00e9-diab\u00e8te',
+    dosageCalc:function(s){var d=s.sex==='homme'?400:310;if(s.activity!==null&&s.activity>=3)d+=50;var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('prediabete')!==-1);return{dose:d,unit:'mg/jour',timing:'Le soir avant le coucher',note:hasDiab?'Forme bisglycinate mieux tol\u00e9r\u00e9e. Le magn\u00e9sium am\u00e9liore la sensibilit\u00e9 \u00e0 l\'insuline et r\u00e9duit l\'insulino-r\u00e9sistance (ADA 2023, Guerrero-Romero 2011). Bilan magn\u00e9s\u00e9mie conseill\u00e9.':'Forme bisglycinate mieux tol\u00e9r\u00e9e'};}},
   {id:'fer',name:'Fer',icon:'\uD83E\uDE78',desc:'Transport d\'oxyg\u00e8ne, \u00e9nergie',evidence:'OMS \u2014 Recommandation (femmes)',grade:'A',
     condition:function(s){return (s.sex==='femme'&&s.age<51)||s.pregnant;},
     unnecessary_if:'Hommes : ne suppl\u00e9mentez PAS sans analyse de sang (surdosage dangereux)',warning:'\u26A0 Dosage sanguin (ferritine) OBLIGATOIRE avant suppl\u00e9mentation',
@@ -2922,6 +2972,15 @@ function detectMedicalConflicts() {
     // Alcool + HTA : même modéré, augmente la pression artérielle
     if(med.indexOf('hta')!==-1&&isFrequentDrinker){
       conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : HTA + consommation régulière d\'alcool — Même 1-2 verres/jour élèvent la pression artérielle de 2-4 mmHg (PREDIMED 2010, ESC 2021). L\'OMS recommande zéro alcool pour les hypertendus. Vérifiez votre traitement antihypertenseur avec votre médecin.'});
+    }
+  }
+  // Conflit 6b : Diabète T2 + Prise de masse — surplus calorique déconseillé (hyperglycémie, résistance insuline)
+  // ADA 2023 : chez le diabétique T2, un surplus calorique agressif amplifie la résistance à l'insuline
+  // Le bulk peut être envisagé uniquement sous supervision médicale avec contrôle glycémique strict
+  if(med.indexOf('diabete_t2')!==-1||med.indexOf('prediabete')!==-1){
+    var goalKeyDiab=s.goal!==null?GOALS[s.goal].key:null;
+    if(goalKeyDiab==='bulk'||goalKeyDiab==='lean_bulk'){
+      conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Diabète T2 / Pré-diabète + Prise de masse — Un surplus calorique chez un diabétique T2 peut aggraver la résistance à l\'insuline et perturber le contrôle glycémique (ADA 2023). Recommandation : privilégiez la recomposition corporelle (maintien calorique + protéines 1.4-1.6g/kg + résistance musculaire) plutôt qu\'un surplus. Consultez votre diabétologue avant de modifier significativement votre alimentation.'});
     }
   }
   // Conflit 7 : IRC + régime hyperprotéiné (si objectif prise de masse sans pathologie déclarée)

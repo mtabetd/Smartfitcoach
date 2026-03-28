@@ -580,6 +580,7 @@ window.SPORT = {
     else if (S.sStep === 3) renderMusculationZones(content);  // Muscu zones
     else if (S.sStep === 4) renderMusculationProgram(content); // Muscu program
     else if (S.sStep === 5) renderCrossfitLevel(content);     // CF level
+    else if (S.sStep === 6 && S.cfCalendarOpen) renderCFCalendar(content); // CF calendar
     else if (S.sStep === 6) renderCrossfitProgram(content);   // CF program
     else if (S.sStep === 7) renderRunningConfig(content);     // Running questionnaire
     else if (S.sStep === 8) renderRunningProgram(content);    // Running program
@@ -1250,6 +1251,7 @@ function renderCrossfitLevel(p) {
     if (S.crossfitLevel === 'scaled') cfDayReco = 'Recommand\u00E9 : 3-4 jours (r\u00E9cup\u00E9ration importante)';
     else if (S.crossfitLevel === 'inter') cfDayReco = 'Recommand\u00E9 : 4-5 jours';
     else if (S.crossfitLevel === 'rx') cfDayReco = 'Recommand\u00E9 : 5-6 jours';
+    else if (S.crossfitLevel === 'rx_plus') cfDayReco = 'Recommand\u00E9 : 6 jours (programme \u00E9lite Games — r\u00E9cup\u00E9ration active obligatoire)';
     if (cfDayReco) {
       p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px;font-style:italic'}, cfDayReco));
     }
@@ -1281,8 +1283,8 @@ function renderCrossfitLevel(p) {
 
       // Show estimated working weight if value is filled
       if (currentVal && S.crossfitLevel) {
-        var lvlIdx = S.crossfitLevel === 'scaled' ? 0 : S.crossfitLevel === 'inter' ? 1 : 2;
-        var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : 0.75;
+        var lvlIdx = S.crossfitLevel === 'scaled' ? 0 : S.crossfitLevel === 'inter' ? 1 : S.crossfitLevel === 'rx_plus' ? 3 : 2;
+        var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : lvlIdx === 3 ? 0.80 : 0.75;
         var estWeight = Math.round(currentVal * wodPct);
         leftDiv.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#1A3A6A;margin-top:2px;font-weight:bold'}, 'WOD \u2248 ' + (window.UNITS ? window.UNITS.displayWeight(estWeight) : estWeight + 'kg')));
       }
@@ -1337,7 +1339,8 @@ function renderCrossfitLevel(p) {
 function getCFLevelIdx() {
   if (S.crossfitLevel === 'scaled') return 0;
   if (S.crossfitLevel === 'inter') return 1;
-  return 2;
+  if (S.crossfitLevel === 'rx_plus') return 3;
+  return 2; // 'rx' or unknown defaults to rx (index 2)
 }
 
 function getCFSexKey() {
@@ -1357,7 +1360,7 @@ function formatCFMovement(mov) {
     if (w !== '?') {
       var rmNote = '';
       if (S.crossfit1RM && S.crossfit1RM[mov.weight]) {
-        var pctUsed = levelIdx === 0 ? 55 : levelIdx === 1 ? 65 : 75;
+        var pctUsed = levelIdx === 0 ? 55 : levelIdx === 1 ? 65 : levelIdx === 3 ? 80 : 75;
         rmNote = ' (' + pctUsed + '% de votre 1RM)';
       }
       parts.push(mov.name + ' @' + (window.UNITS ? window.UNITS.displayWeight(parseFloat(w)) : w + 'kg') + rmNote);
@@ -1395,7 +1398,7 @@ function getCFWeight(key) {
       var result = window.UNITS ? window.UNITS.displayWeight(parseFloat(w)) : w + 'kg';
       if (S.crossfit1RM && S.crossfit1RM[key]) {
         var lvlIdx = getCFLevelIdx();
-        var pct = lvlIdx === 0 ? 55 : lvlIdx === 1 ? 65 : 75;
+        var pct = lvlIdx === 0 ? 55 : lvlIdx === 1 ? 65 : lvlIdx === 3 ? 80 : 75;
         result += ' (' + pct + '% 1RM)';
       }
       return result;
@@ -1468,10 +1471,161 @@ function generateCrossfitWeek(weekNumber, daysPerWeek) {
   return weekProgram;
 }
 
+// ─── VUE CALENDRIER 100 JOURS ───
+function renderCFCalendar(p) {
+  // Guard: ensure cfProgress is always an object
+  if (!S.cfProgress || typeof S.cfProgress !== 'object') S.cfProgress = {};
+  // Guard: ensure cfCurrentDay is a valid number
+  if (!S.cfCurrentDay || S.cfCurrentDay < 1) S.cfCurrentDay = 1;
+  if (S.cfCurrentDay > 100) S.cfCurrentDay = 100;
+
+  var allWods = window.CF_WODS_FULL || window.CF_WODS || [];
+
+  p.appendChild(h('div', {'class': 'eyebrow'}, 'CrossFit'));
+  p.appendChild(h('h1', {html: 'Programme<br><em>100 Jours</em>'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Vue d\'ensemble — cliquez sur un jour pour y accéder'));
+
+  // ─── Bouton retour ───
+  var backBtn = h('button', {'class': 'btn-back', style: 'margin-bottom:16px', onclick: function() {
+    S.cfCalendarOpen = false;
+    window.render();
+  }}, '← Retour au programme');
+  p.appendChild(backBtn);
+
+  // ─── Légende ───
+  var legend = h('div', {style: 'display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;align-items:center'});
+  var legendItems = [
+    {color: '#4CAF50', label: 'Complété'},
+    {color: '#1A3C5E', label: 'Jour actuel'},
+    {color: '#999',    label: 'À venir'}
+  ];
+  legendItems.forEach(function(li) {
+    var dot = h('div', {style: 'width:12px;height:12px;border-radius:50%;background:' + li.color + ';flex-shrink:0'});
+    var lbl = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, li.label);
+    var item = h('div', {style: 'display:flex;align-items:center;gap:6px'}, [dot, lbl]);
+    legend.appendChild(item);
+  });
+  p.appendChild(legend);
+
+  // ─── Progression globale ───
+  var totalDone = 0;
+  for (var dk in S.cfProgress) { if (S.cfProgress[dk] && S.cfProgress[dk].done) totalDone++; }
+  var pct = Math.round(totalDone / 100 * 100);
+  var progressBar = h('div', {style: 'background:#E5E4DE;height:6px;border-radius:3px;margin-bottom:20px;overflow:hidden'});
+  progressBar.appendChild(h('div', {style: 'background:#4CAF50;height:100%;width:' + pct + '%;transition:width 0.4s ease'}));
+  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, totalDone + ' / 100 jours complétés (' + pct + '%)'));
+  p.appendChild(progressBar);
+
+  // ─── Grouper par semaine ───
+  var weeks = {};
+  for (var wi = 0; wi < allWods.length && wi < 100; wi++) {
+    var wod = allWods[wi];
+    var weekNum = wod.week || (Math.floor(wi / 7) + 1);
+    if (!weeks[weekNum]) weeks[weekNum] = [];
+    weeks[weekNum].push(wod);
+  }
+  // Si CF_WODS_FULL non chargé, générer des jours fictifs pour afficher la structure
+  if (!allWods.length) {
+    for (var fd = 1; fd <= 100; fd++) {
+      var fw = Math.floor((fd - 1) / 7) + 1;
+      if (!weeks[fw]) weeks[fw] = [];
+      weeks[fw].push({ day: fd, week: fw, name: 'JOUR ' + fd });
+    }
+  }
+
+  var weekKeys = Object.keys(weeks).map(Number).sort(function(a, b) { return a - b; });
+
+  weekKeys.forEach(function(weekNum) {
+    var wods = weeks[weekNum];
+    var weekSection = h('div', {style: 'margin-bottom:24px'});
+
+    // Header semaine
+    var weekLabel = 'Semaine ' + weekNum;
+    // Phases indicatives
+    if (weekNum <= 4) weekLabel += ' — Base';
+    else if (weekNum <= 7) weekLabel += ' — Développement';
+    else if (weekNum <= 9) weekLabel += ' — Intensité';
+    else if (weekNum === 10) weekLabel += ' — Finale';
+    weekSection.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:6px'}, weekLabel));
+
+    var grid = h('div', {style: 'display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px'});
+
+    wods.forEach(function(wod) {
+      var dayNum = wod.day;
+      var isDone = S.cfProgress[dayNum] && S.cfProgress[dayNum].done === true;
+      var isCurrent = dayNum === S.cfCurrentDay;
+
+      var cardColor, textColor, borderColor;
+      if (isDone) {
+        cardColor = 'rgba(76,175,80,0.12)';
+        textColor = '#2E7D32';
+        borderColor = '#4CAF50';
+      } else if (isCurrent) {
+        cardColor = 'rgba(26,60,94,0.10)';
+        textColor = '#1A3C5E';
+        borderColor = '#1A3C5E';
+      } else {
+        cardColor = 'rgba(153,153,153,0.07)';
+        textColor = '#999';
+        borderColor = '#ccc';
+      }
+
+      var card = h('div', {
+        style: 'background:' + cardColor + ';border:1px solid ' + borderColor + ';border-left:3px solid ' + borderColor + ';padding:10px;cursor:pointer;border-radius:2px;transition:opacity 0.15s',
+        onclick: (function(d) {
+          return function() {
+            S.cfCurrentDay = d;
+            // Naviguer vers ce jour dans renderCrossfitProgram
+            // On calcule la semaine correspondante et on met à jour crossfitWeek
+            if (window.CF_WODS_FULL) {
+              var targetWod = window.CF_WODS_FULL.find(function(w) { return w.day === d; });
+              if (targetWod && targetWod.week) {
+                S.crossfitWeek = targetWod.week;
+              }
+            }
+            S.cfCalendarOpen = false;
+            window.render();
+          };
+        })(dayNum)
+      });
+
+      // Numéro + nom du WOD
+      card.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + textColor + ';margin-bottom:3px'}, 'JOUR ' + dayNum));
+      card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:' + textColor + ';font-weight:bold;line-height:1.2;word-break:break-word'}, wod.name || ('WOD ' + dayNum)));
+
+      // Indicateur état
+      if (isDone) {
+        card.appendChild(h('div', {style: 'font-size:10px;color:#4CAF50;margin-top:4px'}, '✓ Terminé'));
+      } else if (isCurrent) {
+        card.appendChild(h('div', {style: 'font-size:10px;color:#1A3C5E;margin-top:4px;font-weight:bold'}, '▶ Aujourd\'hui'));
+      }
+
+      grid.appendChild(card);
+    });
+
+    weekSection.appendChild(grid);
+    p.appendChild(weekSection);
+  });
+
+  // Bouton retour en bas
+  var backBtn2 = h('button', {'class': 'btn-back', style: 'margin-top:8px', onclick: function() {
+    S.cfCalendarOpen = false;
+    window.render();
+  }}, '← Retour au programme');
+  p.appendChild(backBtn2);
+}
+
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
+  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
+  if (!S.cfProgress || typeof S.cfProgress !== 'object') S.cfProgress = {};
+  // Guard: cfCurrentDay bounds
+  if (!S.cfCurrentDay || S.cfCurrentDay < 1) S.cfCurrentDay = 1;
+  if (S.cfCurrentDay > 100) S.cfCurrentDay = 100;
+
   // Load saved 1RM data if not already loaded
-  if (Object.keys(S.crossfit1RM).length === 0) {
+  if (!S.crossfit1RM || Object.keys(S.crossfit1RM).length === 0) {
+    S.crossfit1RM = S.crossfit1RM || {};
     var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
     var saved1rm = localStorage.getItem('mtd_cf_1rm_' + userId);
     if (saved1rm) { try { S.crossfit1RM = JSON.parse(saved1rm); } catch(e) {} }
@@ -1493,13 +1647,27 @@ function renderCrossfitProgram(p) {
     return;
   }
 
-  // Clamp selectedCrossfitDay
-  if (S.selectedCrossfitDay >= template.length) S.selectedCrossfitDay = 0;
+  // Clamp selectedCrossfitDay — guard null/undefined and out-of-bounds
+  if (!S.selectedCrossfitDay || S.selectedCrossfitDay < 0 || S.selectedCrossfitDay >= template.length) S.selectedCrossfitDay = 0;
 
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
   p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
   var levelObj = (window.CROSSFIT_LEVELS || []).find(function(l) { return l.id === S.crossfitLevel; });
   p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' jours/semaine \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '') + ' \u2014 Inspir\u00E9 Mayhem / Games Athletes'));
+
+  // ─── BIENVENUE SCALED / DÉBUTANT ───
+  // Afficher un message d'accueil et un CTA 1RM uniquement pour les nouveaux utilisateurs scaled sans 1RM définis
+  if (S.crossfitLevel === 'scaled') {
+    var has1RM = S.crossfit1RM && Object.keys(S.crossfit1RM).some(function(k) { return S.crossfit1RM[k]; });
+    var welcomeCard = h('div', {style: 'border-left:4px solid #E07B00;background:rgba(224,123,0,0.07);padding:14px 16px;margin-bottom:16px'});
+    welcomeCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:6px'}, 'Bienvenue dans le programme Scaled !'));
+    welcomeCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:8px'}, 'Tous les WODs sont adaptés à votre niveau : charges allégées, mouvements simplifiés (pas de muscle-up, TTB remplacés par Knee Raises, etc.). Progressez à votre rythme — les WODs de la semaine 10+ seront nettement plus intenses.'));
+    if (!has1RM) {
+      welcomeCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#E07B00;margin-bottom:8px'}, 'Pour des charges de travail précises, renseignez vos 1RM (back squat, clean, deadlift…). Sans 1RM, les charges sont basées sur les standards internationaux pour votre niveau.'));
+      welcomeCard.appendChild(h('button', {'class': 'btn-secondary', style: 'width:auto;padding:6px 14px;margin:0;font-size:11px', onclick: function() { S.sStep = 5; window.render(); }}, 'Entrer mes 1RM \u2192'));
+    }
+    p.appendChild(welcomeCard);
+  }
 
   // Objectives banner
   var goalNames = S.sportGoals.map(function(gid){
@@ -1520,6 +1688,30 @@ function renderCrossfitProgram(p) {
     p.appendChild(goalBanner);
   }
 
+  // ─── MEDICAL RESTRICTIONS BANNER (CrossFit) ───
+  // Afficher les restrictions médicales pertinentes pour les WODs CrossFit
+  // Les WODs contiennent des mouvements à risque (box jumps, sauts, charges lourdes)
+  // qui doivent être signalés si l'utilisateur a des conditions médicales
+  if (S.muscuMedical && S.muscuMedical.done) {
+    var cfMedRestrictions = [];
+    var cfMed = S.muscuMedical;
+    if (cfMed.knees || cfMed.acl)         cfMedRestrictions.push('\u26A0 Genoux / LCA\u00a0: remplacez les Box Jumps par des Box Step-ups, \u00e9vitez les Jump Squats et Pistols. Thrusters et Wall Balls autoris\u00e9s avec technique contr\u00f4l\u00e9e.');
+    if (cfMed.kneeOsteoarthritis)          cfMedRestrictions.push('\u26A0 Gonarthrose\u00a0: \u00e9vitez tous les sauts et flexions profondes sous charge. Privil\u00e9giez le velo (Assault Bike) et le rameur (Row) comme alternatives cardio (OARSI 2014).');
+    if (cfMed.meniscus)                    cfMedRestrictions.push('\u26A0 M\u00e9nisque\u00a0: pas de Box Jumps ni Pistols. Squats limit\u00e9s \u00e0 90\u00b0 de flexion maximum sous charge.');
+    if (cfMed.lowerBack || cfMed.herniaDisc) cfMedRestrictions.push('\u26A0 Dos / Hernie discale\u00a0: r\u00e9duisez la charge sur Deadlifts et Back Squats (\u226470\u00a0% 1RM). \u00c9vitez Good Morning et Jefferson Curl.');
+    if (cfMed.shoulders || cfMed.rotatorCuff) cfMedRestrictions.push('\u26A0 \u00c9paules\u00a0: remplacez HSPU par Pike Push-ups. Overhead Press all\u00e9g\u00e9. \u00c9vitez les mouvements overhead douloureux (Ludewig & Cook, Phys Ther 2000).');
+    if (cfMed.hypertension)                cfMedRestrictions.push('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e RPE\u00a07/10 maximum. \u00c9vitez Valsalva lors des charges lourdes (AHA/ACSM 2007).');
+    if (cfMed.osteoporosis)                cfMedRestrictions.push('\u26A0 Ost\u00e9oporose\u00a0: pas de Box Jumps ni sauts. Charges \u226470\u00a0% 1RM uniquement. \u00c9vitez flexions vert\u00e9brales r\u00e9p\u00e9t\u00e9es (Sinaki, Spine 2002).');
+    if (cfMedRestrictions.length > 0) {
+      var cfMedBanner = h('div', {style: 'border-left:3px solid #E07B00;background:rgba(224,123,0,0.07);padding:12px 16px;margin-bottom:16px'});
+      cfMedBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E07B00;margin-bottom:8px'}, '\u26A0 Restrictions m\u00e9dicales \u2014 CrossFit'));
+      cfMedRestrictions.forEach(function(r) {
+        cfMedBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg2,#555);margin-bottom:4px'}, r));
+      });
+      p.appendChild(cfMedBanner);
+    }
+  }
+
   // ─── STRENGTH GRADE ───
   if (window.renderStrengthGrade) renderStrengthGrade(p);
 
@@ -1530,9 +1722,21 @@ function renderCrossfitProgram(p) {
   }}, '\u2190'));
   weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.crossfitWeek));
   weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
-    S.crossfitWeek++; S.selectedCrossfitDay = 0; window.render();
+    var maxWeek = Math.ceil((window.CF_WODS || []).length / Math.max(1, daysPerWeek));
+    if (S.crossfitWeek < maxWeek) { S.crossfitWeek++; S.selectedCrossfitDay = 0; window.render(); }
   }}, '\u2192'));
   p.appendChild(weekNav);
+
+  // ─── BOUTON VUE 100 JOURS ───
+  var calBtn = h('button', {
+    'class': 'btn-secondary',
+    style: 'width:100%;margin:0 0 16px;padding:10px 16px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:Helvetica Neue,Arial,sans-serif;font-size:13px',
+    onclick: function() { S.cfCalendarOpen = true; window.render(); }
+  }, [
+    h('span', {}, '\uD83D\uDCC5'),
+    h('span', {}, 'Vue 100 jours')
+  ]);
+  p.appendChild(calBtn);
 
   // ─── CROSSFIT DELOAD BANNER (semaines 4, 8, 12, 16) ───
   // Protocole Mayhem / Games : 3 semaines d'intensité + 1 semaine de décharge.
@@ -1637,6 +1841,31 @@ function renderCrossfitProgram(p) {
   }
   p.appendChild(wodCard);
 
+  // ─── SCALING OPTIONS ───
+  var _sc = wod.scaled;
+  if (_sc) {
+    var scCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #E07B00;background:rgba(224,123,0,0.04);margin-top:8px'});
+    scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E07B00;margin-bottom:6px'}, '⬇ SCALING'));
+    if (Array.isArray(_sc.movements) && _sc.movements.length) {
+      _sc.movements.forEach(function(m) {
+        var txt = (m.name || '') + (m.note ? ' ' + m.note : '');
+        if (!txt.trim()) return;
+        scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);padding:2px 0'}, txt.trim()));
+      });
+    }
+    if (_sc.note) scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#E07B00;margin-top:4px;font-style:italic'}, _sc.note));
+    p.appendChild(scCard);
+  }
+
+  // ─── RX+ CHALLENGE ───
+  var _rxp = wod.rxPlus;
+  if (_rxp && _rxp.note) {
+    var rxCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #8B2FC9;background:rgba(139,47,201,0.04);margin-top:8px'});
+    rxCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8B2FC9;margin-bottom:6px'}, '★ RX+'));
+    rxCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#8B2FC9'}, _rxp.note));
+    p.appendChild(rxCard);
+  }
+
   // ─── GYM DRILLS (always shown at the end) ───
   if (currentDay.hasHaltero) {
     // For haltero days, gym drills are shown after the WOD
@@ -1663,6 +1892,138 @@ function renderCrossfitProgram(p) {
   summary.appendChild(h('div', {'class': 'dt-label'}, sectionCount + ' sections'));
   summary.appendChild(h('div', {'class': 'dt-val'}, currentDay.hasHaltero ? '~60-75 min' : '~45-60 min'));
   p.appendChild(summary);
+
+  // ─── WOD TIMER ───
+  // Simple stopwatch / countdown for AMRAP and For Time WODs
+  (function() {
+    var wodType = (_wod.type || '').toUpperCase();
+    var timerContainer = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;margin:12px 0;background:var(--ivory2)'});
+    timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'TIMER WOD'));
+
+    // Parse AMRAP/EMOM duration in minutes, or cap for For Time
+    var totalSeconds = 0;
+    var isCountdown = false;
+    var capMatch = wodType.match(/(\d+)\s*(?:MIN|MINUTES?)/);
+    if (capMatch) {
+      totalSeconds = parseInt(capMatch[1]) * 60;
+      isCountdown = true;
+    }
+
+    var displayEl = h('div', {style: 'font-family:Georgia,serif;font-size:36px;text-align:center;letter-spacing:2px;color:#0A0A09;margin:8px 0'}, '00:00');
+    timerContainer.appendChild(displayEl);
+
+    var _timerRunning = false;
+    var _timerInterval = null;
+    var _elapsed = 0;
+    var _timerStartTime = 0;
+
+    function formatTime(secs) {
+      var m = Math.floor(Math.abs(secs) / 60);
+      var s = Math.abs(secs) % 60;
+      return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function updateDisplay() {
+      var shown = isCountdown ? Math.max(0, totalSeconds - _elapsed) : _elapsed;
+      displayEl.textContent = formatTime(shown);
+      if (isCountdown && shown === 0) {
+        displayEl.style.color = '#C0392B';
+      }
+    }
+
+    var btnRow = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap'});
+
+    var startBtn = h('button', {'class': 'btn-primary', style: 'width:auto;padding:8px 20px;margin:0', onclick: function() {
+      if (_timerRunning) {
+        _timerRunning = false;
+        clearInterval(_timerInterval);
+        startBtn.textContent = 'Reprendre';
+      } else {
+        _timerRunning = true;
+        _timerStartTime = Date.now() - _elapsed * 1000;
+        _timerInterval = setInterval(function() {
+          _elapsed = Math.floor((Date.now() - _timerStartTime) / 1000);
+          updateDisplay();
+          if (isCountdown && _elapsed >= totalSeconds) {
+            _timerRunning = false;
+            clearInterval(_timerInterval);
+            startBtn.textContent = 'Temps écoulé';
+          }
+        }, 250);
+        startBtn.textContent = 'Pause';
+      }
+    }}, 'Démarrer');
+
+    var resetBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:8px 16px;margin:0', onclick: function() {
+      _timerRunning = false;
+      clearInterval(_timerInterval);
+      _elapsed = 0;
+      startBtn.textContent = 'Démarrer';
+      displayEl.style.color = '#0A0A09';
+      updateDisplay();
+    }}, 'Reset');
+
+    btnRow.appendChild(startBtn);
+    btnRow.appendChild(resetBtn);
+    timerContainer.appendChild(btnRow);
+
+    if (isCountdown) {
+      timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);text-align:center;margin-top:6px'}, 'Compte à rebours ' + (_wod.type || '')));
+    } else {
+      timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);text-align:center;margin-top:6px'}, 'Chrono — ' + (_wod.type || '')));
+    }
+    updateDisplay();
+    p.appendChild(timerContainer);
+  })();
+
+  // ─── MARQUER WOD COMME TERMINÉ ───
+  (function() {
+    if (!S.cfProgress) S.cfProgress = {};
+    var wodDay = wod && wod.day;
+    if (!wodDay) return;
+    var isWodDone = !!(S.cfProgress[wodDay] && S.cfProgress[wodDay].done);
+
+    var doneCard = h('div', {style: 'border:1px solid ' + (isWodDone ? '#4CAF50' : 'var(--border)') + ';padding:14px 16px;margin:8px 0;background:' + (isWodDone ? 'rgba(76,175,80,0.07)' : 'var(--ivory2)')});
+    doneCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'SUIVI WOD — Jour ' + wodDay));
+
+    if (isWodDone) {
+      doneCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;color:#2E7D32;margin-bottom:8px'}, '✓ WOD complété le ' + (S.cfProgress[wodDay].date || '') + (S.cfProgress[wodDay].score ? ' — Score : ' + S.cfProgress[wodDay].score : '')));
+
+      var editBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:6px 14px;margin:0;font-size:11px', onclick: function() {
+        S.cfProgress[wodDay] = null;
+        window.render();
+      }}, 'Corriger');
+      doneCard.appendChild(editBtn);
+    } else {
+      // Score input
+      var scoreWrap = h('div', {style: 'margin-bottom:10px'});
+      scoreWrap.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'Score (rounds, temps, reps, kg) — optionnel'));
+      var scoreInput = h('input', {
+        type: 'text',
+        placeholder: 'Ex: 8 rounds + 5, 14:32, 135 reps...',
+        style: 'width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory);color:#0A0A09',
+        value: ''
+      });
+      scoreWrap.appendChild(scoreInput);
+      doneCard.appendChild(scoreWrap);
+
+      var doneBtn = h('button', {'class': 'btn-primary', style: 'width:100%;margin:0', onclick: function() {
+        if (!S.cfProgress) S.cfProgress = {};
+        var today = new Date();
+        var mm = today.getMonth() + 1; var dd = today.getDate();
+        var dateStr = today.getFullYear() + '-' + (mm < 10 ? '0' : '') + mm + '-' + (dd < 10 ? '0' : '') + dd;
+        S.cfProgress[wodDay] = { done: true, date: dateStr, score: scoreInput.value.trim() };
+        // Advance cfCurrentDay if this was the current day
+        if (S.cfCurrentDay === wodDay && wodDay < 100) {
+          S.cfCurrentDay = wodDay + 1;
+        }
+        window.BLACKBOX && window.BLACKBOX.log('cf_wod_done', {day: wodDay, score: scoreInput.value.trim()});
+        window.render();
+      }}, '✓ WOD terminé');
+      doneCard.appendChild(doneBtn);
+    }
+    p.appendChild(doneCard);
+  })();
 
   // Regenerate (shuffle order)
   p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function(){
@@ -2270,6 +2631,30 @@ function renderMusculationProgram(p) {
     if (savedStr) { try { S.muscuStrengthProfile = JSON.parse(savedStr); } catch(e) {} }
   }
 
+  // Bridge crossfit1RM → muscuStrengthProfile for powerlifters/strength athletes
+  // If muscuStrengthProfile is empty but crossfit1RM has lifts, pre-populate from 1RM values.
+  // Uses reps=1 as Epley reference (1RM × (1+1/30) ≈ 3% overestimate — acceptable given 1RM test variance).
+  // Only fills keys that are not already set (user-entered muscuStrengthProfile takes priority).
+  // Mapping: crossfit1RM.back_squat → squat, deadlift → deadlift, bench → bench_press, press → overhead_press
+  if (S.crossfit1RM && Object.keys(S.crossfit1RM).length > 0) {
+    var cf1rm = S.crossfit1RM;
+    var CROSSFIT_TO_MUSCU = {
+      back_squat: 'squat',
+      deadlift:   'deadlift',
+      bench:      'bench_press',
+      press:      'overhead_press'
+    };
+    Object.keys(CROSSFIT_TO_MUSCU).forEach(function(cfKey) {
+      var muscuKey = CROSSFIT_TO_MUSCU[cfKey];
+      if (cf1rm[cfKey] && !S.muscuStrengthProfile[muscuKey]) {
+        // Store the 1RM directly; Epley reference reps=1 → estimated 1RM = stored * (1+1/30) ≈ stored * 1.033
+        // To preserve the exact known 1RM, divide by 1.0333 so Epley gives back the original value
+        S.muscuStrengthProfile[muscuKey] = Math.round(cf1rm[cfKey] / (1 + 1 / 30));
+        S.muscuStrengthProfile[muscuKey + '_reps'] = 1;
+      }
+    });
+  }
+
   // Load session log and progression history
   if (Object.keys(S.muscuSessionLog).length === 0) {
     var userId3 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
@@ -2377,6 +2762,15 @@ function renderMusculationProgram(p) {
     karvonenDiv.appendChild(zonesRow);
     karvonenDiv.appendChild(h('div', {style: 'margin-top:4px;font-style:italic;color:var(--grey)'}, '⚠ Beta-bloquants : si prescrit, votre FC max réelle est plus basse (~10-20%). Consulter votre cardiologue pour ajuster les zones. Test d\'effort (VO2max) recommandé avant programme intensif.'));
     p.appendChild(karvonenDiv);
+  }
+
+  // Sommeil insuffisant : avertissement récupération (S.sleep 0=<6h, 1=6-7h) — ACSM 2020, IOC 2018
+  if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) {
+    var sleepLabels = ['< 6h', '6-7h'];
+    var sleepMsg = S.sleep === 0
+      ? '⚠ Sommeil < 6h/nuit — risque de surentraînement élevé. Performance -30%, récupération compromise (IOC 2018). Limitez les séances intenses à 2/semaine. Évitez les blocs HIIT consécutifs.'
+      : '⚠ Sommeil 6-7h/nuit — récupération partielle. Maintenez au maximum 4 séances/semaine. Évitez 2 jours intenses d\'affilée.';
+    p.appendChild(h('div', {style: 'background:#FFF8E1;border-left:4px solid #F9A825;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#5D4037'}, sleepMsg));
   }
 
   var goalNames = S.sportGoals.map(function(gid){
@@ -4450,6 +4844,8 @@ function generateCyclingPlan(level, days) {
     { name: 'Affûtage',      weeks: [8],       color: '#27AE60', focus: 'Réduction volume — maintien intensité' }
   ];
   var template = (level === 'avance' || level === 'intermediaire') ? CYCLING_WORKOUTS.intermediaire : CYCLING_WORKOUTS.debutant;
+  // VO2max override for Spécifique phase (weeks 6-7): replace Sweet Spot Z4 with Z5 intervals
+  var vo2maxSession = { day: 'Jeudi', type: 'VO2max', zone: 5, duration: 60, desc: '6×4min à 106-120% FTP + 4min récup — intervalles courts haute intensité' };
   var plan = [];
   for (var w = 1; w <= 8; w++) {
     var phase = phases[0];
@@ -4458,8 +4854,13 @@ function generateCyclingPlan(level, days) {
     }
     var isDeload = (w === 4 || w === 8);
     var volFactor = isDeload ? 0.6 : (w <= 2 ? 0.75 : w <= 5 ? 1.0 : 1.1);
+    var isSpecific = phase.name === 'Spécifique';
     var maxDays = Math.min(days, template.length);
     var sessions = template.slice(0, maxDays).map(function(s) {
+      // During Spécifique phase, replace Sweet Spot (Z4) with VO2max (Z5) — for intermediaire/avance
+      if (isSpecific && s.type === 'Sweet Spot' && (level === 'intermediaire' || level === 'avance')) {
+        return { day: vo2maxSession.day, type: vo2maxSession.type, duration: Math.round(vo2maxSession.duration * volFactor), zone: vo2maxSession.zone, desc: vo2maxSession.desc };
+      }
       return { day: s.day, type: s.type, duration: Math.round(s.duration * volFactor), zone: s.zone, desc: s.desc };
     });
     plan.push({ week: w, phase: phase.name, phaseColor: phase.color, focus: phase.focus, isDeload: isDeload, sessions: sessions });
@@ -4713,7 +5114,7 @@ function renderCyclingProgram(p) {
   }
 
   var sessions = weekData.sessions || [];
-  if (S.selectedCyclingDay >= sessions.length) S.selectedCyclingDay = 0;
+  if (S.selectedCyclingDay < 0 || S.selectedCyclingDay >= sessions.length) S.selectedCyclingDay = 0;
   var tabs = h('div', {'class': 'day-tabs', style: 'flex-wrap:wrap'});
   sessions.forEach(function(sess, i) {
     tabs.appendChild(h('button', {
