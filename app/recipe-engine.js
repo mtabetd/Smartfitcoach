@@ -764,7 +764,7 @@
     },
     {
       id: 'R226',
-      name: 'Salade Niçoise au Thon',
+      name: 'Salade Niçoise aux Anchois',
       category: 'world-food',
       tags: ['french', 'low-carb', 'high-protein', 'salad', 'mediterranean'],
       servings: 2,
@@ -1496,7 +1496,7 @@
     },
     {
       id: 'R253',
-      name: 'Butter Chicken Light',
+      name: 'Butter Chicken Crémeux',
       category: 'world-food',
       tags: ['trending', 'instagram', 'indian', 'high-protein', 'comfort-food'],
       servings: 2,
@@ -5156,10 +5156,10 @@
     },
     {
       id: 'R398',
-      name: 'Caille Rôtie & Légumes du Soleil',
-      emoji: '🐦', origin: '🇫🇷',
+      name: 'Poulet Rôti & Légumes du Soleil',
+      emoji: '🍗', origin: '🇫🇷',
       mealTypes: ['dinner'],
-      tags: ['caille', 'français', 'élégant', 'rôti', 'high-protein', 'tendance'],
+      tags: ['poulet', 'français', 'rôti', 'légumes', 'high-protein', 'tendance'],
       difficulty: 3, prepTime: 15, cookTime: 25, servings: 1,
       // 34×4 + 20×4 + 12×9 = 136+80+108 = 324 ✓
       baseNutrition: { calories: 324, proteinGrams: 34, carbsGrams: 20, fatGrams: 12 },
@@ -5172,9 +5172,9 @@
         { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
       ],
       steps: [
-        'Assaisonner le poulet avec herbes de Provence + sel + huile.',
-        'Cuire légumes en ratatouille : courgette + tomate + poivron en dés, 15 min à la poêle.',
-        'Griller le poulet au four 200°C / 20 min. Servir avec la ratatouille.'
+        'Assaisonner le blanc de poulet avec herbes de Provence, sel et huile d\'olive.',
+        'Préparer la ratatouille : courgette + tomate + poivron en dés, 15 min à la poêle.',
+        'Cuire le poulet au four 200°C / 20 min jusqu\'à dorure. Servir avec la ratatouille provençale.'
       ]
     },
     {
@@ -5187,7 +5187,7 @@
       // 30×4 + 50×4 + 14×9 = 120+200+126 = 446 ✓
       baseNutrition: { calories: 446, proteinGrams: 30, carbsGrams: 50, fatGrams: 14 },
       ingredients: [
-        { name: 'Riz blanc', qty: 75, unit: 'ml' },
+        { name: 'Riz blanc', qty: 75, unit: 'g' },
         { name: 'Vinaigre de riz', qty: 15, unit: 'ml' },
         { name: 'Saumon frais (filet)', qty: 100, unit: 'g' },
         { name: 'Avocat', qty: 60, unit: 'g' },
@@ -6420,7 +6420,7 @@
 
   {
     id: 'L004',
-    name: 'Porridge Pomme Cannelle',
+    name: 'Porridge Pomme & Cannelle',
     emoji: '🥣',
     origin: '🇬🇧',
     mealTypes: ['breakfast'],
@@ -7225,7 +7225,7 @@
 
   {
     id: 'L034',
-    name: 'Chia Pudding Mangue Coco',
+    name: 'Chia Pudding Mangue-Coco',
     emoji: '🌅',
     origin: '🇹🇭',
     mealTypes: ['breakfast'],
@@ -7792,7 +7792,7 @@
 
   {
     id: 'L105',
-    name: 'Salade César Poulet',
+    name: 'Salade César au Poulet Rôti',
     emoji: '🍗',
     origin: '🇺🇸',
     mealTypes: ['lunch'],
@@ -7931,7 +7931,7 @@
 
   {
     id: 'L110',
-    name: 'Pad Thaï Crevettes',
+    name: 'Pad Thaï aux Crevettes',
     emoji: '🦐',
     origin: '🇹🇭',
     mealTypes: ['lunch'],
@@ -7987,7 +7987,7 @@
 
   {
     id: 'L112',
-    name: 'Bibimbap Bœuf',
+    name: 'Bibimbap au Bœuf',
     emoji: '🥩',
     origin: '🇰🇷',
     mealTypes: ['lunch'],
@@ -8101,7 +8101,7 @@
 
   {
     id: 'L116',
-    name: 'Ramen Poulet Maison',
+    name: 'Ramen Maison au Poulet',
     emoji: '🍗',
     origin: '🇯🇵',
     mealTypes: ['lunch'],
@@ -8687,7 +8687,7 @@
 
   {
     id: 'L137',
-    name: 'Nasi Goreng Poulet',
+    name: 'Nasi Goreng au Poulet',
     emoji: '🍗',
     origin: '🇮🇩',
     mealTypes: ['lunch'],
@@ -8772,7 +8772,7 @@
 
   {
     id: 'L140',
-    name: 'Salade Thaï Bœuf Grillé',
+    name: 'Salade Thaï au Bœuf Grillé',
     emoji: '🥩',
     origin: '🇹🇭',
     mealTypes: ['lunch'],
