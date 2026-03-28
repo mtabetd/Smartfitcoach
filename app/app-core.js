@@ -874,7 +874,7 @@ window.I18N = {
       'onb.s2.height': 'Height',
       'onb.s2.bmi': 'BMI',
       'onb.s2.bmi_under': 'Underweight',
-      'onb.s2.bmi_normal': 'Normal weight',
+      'onb.s2.bmi_normal': 'Normal Weight',
       'onb.s2.bmi_over': 'Overweight',
       'onb.s2.bmi_obese': 'Obese',
 
@@ -886,8 +886,8 @@ window.I18N = {
       'onb.s3.active': 'Very Active',
       'onb.s3.very_active': 'Extremely Active',
       'onb.s3.elite': 'Elite Athlete',
-      'onb.s3.training_days': 'Training days / week',
-      'onb.s3.sleep': 'Hours of sleep / night',
+      'onb.s3.training_days': 'Training Days / Week',
+      'onb.s3.sleep': 'Hours of Sleep / Night',
 
       // Step 4
       'onb.s4.title': 'Health & Medical History',
@@ -941,7 +941,7 @@ window.I18N = {
       'dash.goal': 'Goal',
       'dash.weight': 'Weight',
       'dash.progression': 'Progress',
-      'dash.no_weight': 'Add your first weight entry to see your progress chart',
+      'dash.no_weight': 'Add your first weight entry to see your progress chart.',
 
       // Sport
       'sport.select': 'Choose Your Sport',
@@ -951,7 +951,7 @@ window.I18N = {
       'sport.advanced': 'Advanced',
       'sport.elite': 'Elite',
       'sport.goal': 'Goal',
-      'sport.days': 'Days / week',
+      'sport.days': 'Days / Week',
       'sport.program': 'My Program',
       'sport.week': 'Week',
 
@@ -982,7 +982,7 @@ window.I18N = {
       'scan.barcode_placeholder': 'Barcode (EAN-13)',
       'scan.search': 'Search',
       'scan.history': 'History',
-      'scan.no_history': 'Scan your first product to see history here',
+      'scan.no_history': 'Scan your first product to see history here.',
       'scan.health_score': 'Health Score',
 
       // Extras

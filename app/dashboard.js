@@ -235,7 +235,7 @@ window.DASHBOARD = {
 
 
     /* ═══ STREAK ═══ */
-    root.appendChild(h('div', 'dash-label', 'Votre serie'));
+    root.appendChild(h('div', 'dash-label', 'Votre série'));
     if (window.GAMIFICATION && window.GAMIFICATION.updateStreak) {
       try { window.GAMIFICATION.updateStreak(); } catch(e){}
     }
@@ -251,7 +251,7 @@ window.DASHBOARD = {
 
 
     /* ═══ TODAY'S OVERVIEW ═══ */
-    root.appendChild(h('div', 'dash-label', 'Apercu du jour'));
+    root.appendChild(h('div', 'dash-label', 'Aperçu du jour'));
     var grid = h('div', 'dash-card-grid');
 
     // Weight
@@ -309,7 +309,7 @@ window.DASHBOARD = {
 
 
     /* ═══ QUICK ACTIONS ═══ */
-    root.appendChild(h('div', 'dash-label', 'Acces rapide'));
+    root.appendChild(h('div', 'dash-label', 'Accès rapide'));
 
     // Big nav cards
     var navGrid = h('div', 'dash-card-grid');
@@ -377,7 +377,7 @@ window.DASHBOARD = {
         waterWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module hydratation indisponible')));
       }
     } else {
-      waterWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module hydratation non charge')));
+      waterWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module hydratation non chargé')));
     }
     root.appendChild(waterWidget);
 
@@ -390,20 +390,20 @@ window.DASHBOARD = {
         sleepWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module sommeil indisponible')));
       }
     } else {
-      sleepWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module sommeil non charge')));
+      sleepWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module sommeil non chargé')));
     }
     root.appendChild(sleepWidget);
 
 
     /* ═══ WEEKLY SUMMARY ═══ */
-    root.appendChild(h('div', 'dash-label', 'Resume hebdomadaire'));
+    root.appendChild(h('div', 'dash-label', 'Résumé hebdomadaire'));
     var weeklyWidget = h('div', 'dash-widget-box');
     if (window.WEEKLY_SUMMARY && window.WEEKLY_SUMMARY.renderWidget) {
       try { window.WEEKLY_SUMMARY.renderWidget(weeklyWidget); } catch(e) {
-        weeklyWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Resume indisponible')));
+        weeklyWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Résumé indisponible')));
       }
     } else {
-      weeklyWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module resume non charge')));
+      weeklyWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module résumé non chargé')));
     }
     root.appendChild(weeklyWidget);
 
@@ -416,7 +416,7 @@ window.DASHBOARD = {
         perfWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Progression indisponible')));
       }
     } else {
-      perfWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module progression non charge')));
+      perfWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Module progression non chargé')));
     }
     root.appendChild(perfWidget);
 
@@ -617,7 +617,7 @@ window.DASHBOARD = {
       var b1 = h('div', 'dash-badge-mini', '\u2605');
       b1.title = 'Premier pas'; b1.style.opacity = '.35';
       var b2 = h('div', 'dash-badge-mini', '\uD83D\uDD25');
-      b2.title = 'Serie de 7 jours'; b2.style.opacity = '.35';
+      b2.title = 'Série de 7 jours'; b2.style.opacity = '.35';
       var b3 = h('div', 'dash-badge-mini', '\uD83C\uDFC6');
       b3.title = 'Objectif atteint'; b3.style.opacity = '.35';
       badgesRow.appendChild(b1);
@@ -640,13 +640,13 @@ window.DASHBOARD = {
 
 
     /* ═══ MES DONNÉES ═══ */
-    root.appendChild(h('div', 'dash-label', 'Mes donnees'));
+    root.appendChild(h('div', 'dash-label', 'Mes données'));
     var dataSection = h('div', 'dash-data-section');
     var dataBtns = h('div', 'dash-data-btns');
 
     var exportBtn = document.createElement('button');
     exportBtn.className = 'dash-btn-primary';
-    exportBtn.textContent = '\u2B07 Exporter mes donnees';
+    exportBtn.textContent = '\u2B07 Exporter mes données';
     exportBtn.addEventListener('click', function() { exportAllData(); });
     dataBtns.appendChild(exportBtn);
 
@@ -658,7 +658,7 @@ window.DASHBOARD = {
 
     var deleteBtn = document.createElement('button');
     deleteBtn.className = 'dash-btn-danger';
-    deleteBtn.textContent = 'Supprimer toutes mes donnees';
+    deleteBtn.textContent = 'Supprimer toutes mes données';
     deleteBtn.addEventListener('click', function() { deleteAllData(); });
     dataBtns.appendChild(deleteBtn);
 
@@ -952,7 +952,7 @@ function exportAllData() {
   a.click();
   URL.revokeObjectURL(url);
 
-  if (window.GAMIFICATION) GAMIFICATION.showToast('Donnees exportees !');
+  if (window.GAMIFICATION) GAMIFICATION.showToast('Données exportées !');
 }
 
 function importData() {
@@ -968,13 +968,13 @@ function importData() {
         var backup = JSON.parse(ev.target.result);
         if (!backup.data || !backup.version) { alert('Fichier invalide'); return; }
 
-        if (!confirm('Cela remplacera vos donnees actuelles. Continuer ?')) return;
+        if (!confirm('Cela remplacera vos données actuelles. Continuer ?')) return;
 
         Object.keys(backup.data).forEach(function(key) {
           localStorage.setItem(key, typeof backup.data[key] === 'string' ? backup.data[key] : JSON.stringify(backup.data[key]));
         });
 
-        if (window.GAMIFICATION) GAMIFICATION.showToast('Donnees restaurees !');
+        if (window.GAMIFICATION) GAMIFICATION.showToast('Données restaurées !');
         setTimeout(function(){ location.reload(); }, 1000);
       } catch(err) {
         alert('Erreur de lecture : ' + err.message);
@@ -986,7 +986,7 @@ function importData() {
 }
 
 function deleteAllData() {
-  if (!confirm('Etes-vous sur ? Toutes vos donnees seront supprimees definitivement.')) return;
+  if (!confirm('Êtes-vous sûr ? Toutes vos données seront supprimées définitivement.')) return;
   if (!confirm('Derniere confirmation : cette action est irreversible. Continuer ?')) return;
 
   var keysToRemove = [];
@@ -1004,7 +1004,7 @@ function deleteAllData() {
     try { window.AUTH.logout(); } catch(e){}
   }
 
-  if (window.GAMIFICATION) GAMIFICATION.showToast('Donnees supprimees.');
+  if (window.GAMIFICATION) GAMIFICATION.showToast('Données supprimées.');
   setTimeout(function(){ location.reload(); }, 1000);
 }
 
@@ -1015,9 +1015,9 @@ function renderFallbackQuote(container) {
   var quotes = [
     'Le corps atteint ce que l\'esprit croit.',
     'Chaque jour est une nouvelle occasion de progresser.',
-    'La discipline est le pont entre les objectifs et les resultats.',
-    'Prenez soin de votre corps, c\'est le seul endroit ou vous vivez.',
-    'Le succes est la somme de petits efforts repetes jour apres jour.'
+    'La discipline est le pont entre les objectifs et les résultats.',
+    'Prenez soin de votre corps, c\'est le seul endroit où vous vivez.',
+    'Le succès est la somme de petits efforts répétés jour après jour.'
   ];
   var today = new Date();
   var idx = (today.getFullYear() * 366 + today.getMonth() * 31 + today.getDate()) % quotes.length;
@@ -1042,7 +1042,7 @@ function renderFallbackStreak(container) {
     try { var s = window.GAMIFICATION.getStreak(); streak = (s && typeof s === 'object') ? (s.current || 0) : (s || 0); } catch(e){}
   }
   var card = h('div', 'dash-card');
-  card.appendChild(h('p', 'dash-card-title', 'Serie en cours'));
+  card.appendChild(h('p', 'dash-card-title', 'Série en cours'));
   var big = h('div', 'dash-big');
   big.appendChild(document.createTextNode(streak));
   big.appendChild(h('span', 'dash-unit', streak === 1 ? 'jour' : 'jours'));
