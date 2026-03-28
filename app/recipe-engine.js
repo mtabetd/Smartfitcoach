@@ -13804,7 +13804,7 @@
   function filterRecipes(userState, filters) {
     filters = filters || {};
     var mealType = (filters && filters.mealType) || null;
-    var split = (typeof getMealSplit === 'function') ? getMealSplit() : null;
+    var split = (typeof window.getMealSplit === 'function') ? window.getMealSplit() : null;
     var fraction = (split && mealType)
       ? (mealType === 'breakfast' ? (split.pctBreak  || DEFAULT_MEAL_FRACTION)
        : mealType === 'lunch'     ? (split.pctLunch  || DEFAULT_MEAL_FRACTION)

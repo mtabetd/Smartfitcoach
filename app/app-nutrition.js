@@ -2672,13 +2672,17 @@ function renderSaladBar(p) {
   header.appendChild(h('div', { style: 'font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.3px' }, '\u2728 L\u2019Atelier Bowl'));
 
   // Meal target toggle
-  var toggleWrap = h('div', { style: 'display:flex;gap:4px' });
-  ['lunch', 'dinner'].forEach(function(slot) {
-    var label = slot === 'lunch' ? window.t('onb.s9.lunch') : window.t('onb.s9.dinner');
+  var toggleWrap = h('div', { style: 'display:flex;gap:4px;flex-wrap:wrap' });
+  [
+    { slot: 'breakfast', label: window.t('onb.s9.breakfast') },
+    { slot: 'lunch',     label: window.t('onb.s9.lunch') },
+    { slot: 'snack',     label: window.t('onb.s9.snack') },
+    { slot: 'dinner',    label: window.t('onb.s9.dinner') }
+  ].forEach(function(item) {
     toggleWrap.appendChild(h('button', {
-      style: 'padding:4px 10px;border-radius:20px;border:1.5px solid ' + (sb.mealTarget === slot ? barColor : 'var(--border)') + ';background:' + (sb.mealTarget === slot ? barColor : 'transparent') + ';color:' + (sb.mealTarget === slot ? '#fff' : 'var(--text)') + ';font-size:12px;cursor:pointer;font-weight:600',
-      onclick: function() { sb.mealTarget = slot; window.render(); }
-    }, label));
+      style: 'padding:4px 10px;border-radius:20px;border:1.5px solid ' + (sb.mealTarget === item.slot ? barColor : 'var(--border)') + ';background:' + (sb.mealTarget === item.slot ? barColor : 'transparent') + ';color:' + (sb.mealTarget === item.slot ? '#fff' : 'var(--text)') + ';font-size:12px;cursor:pointer;font-weight:600',
+      onclick: (function(s) { return function() { sb.mealTarget = s; window.render(); }; })(item.slot)
+    }, item.label));
   });
   header.appendChild(toggleWrap);
   p.appendChild(header);
@@ -2968,7 +2972,7 @@ function renderSaladBar(p) {
       S.saladBar.open = false;
       window.render();
     }
-  }, 'Valider ma composition — ' + (sb.mealTarget === 'lunch' ? window.t('onb.s9.lunch') : window.t('onb.s9.dinner')))  ;
+  }, 'Valider ma composition — ' + (sb.mealTarget === 'breakfast' ? window.t('onb.s9.breakfast') : sb.mealTarget === 'snack' ? window.t('onb.s9.snack') : sb.mealTarget === 'dinner' ? window.t('onb.s9.dinner') : window.t('onb.s9.lunch')));
   actWrap.appendChild(btnAdd);
 
   actWrap.appendChild(h('button', {
