@@ -1089,12 +1089,6 @@
       source: 'marjane',
       updatedAt: '2026-03'
     },
-    'Origan séché': {
-      name: 'Origan séché',
-      pricePerG: r(8 / 15),
-      source: 'marjane',
-      updatedAt: '2026-03'
-    },
 
     // ── Sauces & condiments asiatiques supplémentaires ─────────────────────────
     'Gochujang (pâte pimentée)': {
