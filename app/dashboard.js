@@ -212,20 +212,6 @@ window.DASHBOARD = {
     var logs = tryGetLogs(userId);
     var now = new Date();
 
-    /* ═══ LANGUAGE TOGGLE ═══ */
-    if (window.I18N) {
-      var langToggle = h('div', {style: 'display:flex;gap:4px;align-items:center;justify-content:flex-end;margin-bottom:8px'});
-      ['fr', 'en'].forEach(function(lng) {
-        var isActive = (window.S && window.S.lang ? window.S.lang : window.I18N.current) === lng;
-        var btn = h('button', {
-          style: 'padding:4px 8px;font-size:11px;border-radius:4px;border:1px solid var(--border,#D8D8D0);cursor:pointer;background:' + (isActive ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (isActive ? 'var(--ivory,#FAFAF7)' : 'var(--text,#0A0A09)'),
-          onclick: function() { window.I18N.setLang(lng); }
-        }, lng === 'fr' ? '\uD83C\uDDEB\uD83C\uDDF7 FR' : '\uD83C\uDDEC\uD83C\uDDE7 EN');
-        langToggle.appendChild(btn);
-      });
-      root.appendChild(langToggle);
-    }
-
     /* ═══ GREETING ═══ */
     var greeting = greetingWord() + (user && user.name ? ', ' + firstName(user.name) : '');
     root.appendChild(h('h1', 'dash-greeting', greeting));

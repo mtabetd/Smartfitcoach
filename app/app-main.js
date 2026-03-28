@@ -130,6 +130,20 @@ function render() {
   var ubRight = h('div', {style: 'display:flex;align-items:center;gap:12px'});
   // Session time
   ubRight.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey3)'}, (window.BLACKBOX ? window.BLACKBOX.getSessionMinutes() : 0) + ' min'));
+  // Language toggle FR / EN
+  var _curLang = (window.I18N ? window.I18N.current : (S.lang || 'fr'));
+  var langBtn = h('button', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;padding:4px 10px;background:none;border:1px solid var(--border);cursor:pointer;color:var(--grey)',
+    onclick: function() {
+      var next = (window.I18N ? window.I18N.current : (S.lang || 'fr')) === 'fr' ? 'en' : 'fr';
+      S.lang = next;
+      if (window.I18N) { window.I18N.current = next; }
+      try { localStorage.setItem('mtd_lang', next); } catch(e) {}
+      render();
+    }
+  }, _curLang === 'fr' ? 'FR' : 'EN');
+  ubRight.appendChild(langBtn);
+  // Day/night toggle
   var _isDark = document.body.classList.contains('dark-mode');
   ubRight.appendChild(h('button', {style:'font-size:16px;padding:2px 8px;background:none;border:1px solid var(--border);cursor:pointer', onclick: function(){ document.body.classList.toggle('dark-mode'); try{localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode')?'true':'false');}catch(e){} render(); }}, _isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'));
   ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; render(); }}, 'D\u00e9connexion'));
