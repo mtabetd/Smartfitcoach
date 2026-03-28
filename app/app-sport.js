@@ -1145,7 +1145,7 @@ function renderCrossfitLevel(p) {
   p.appendChild(explainBox);
 
   // ─── JOURS D'ENTRAÎNEMENT PAR SEMAINE ───
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, "Jours d'entra\u00EEnement par semaine"));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   var cfDaysWrap = h('div', {'class': 'num-input-wrap'});
   cfDaysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.sportDays), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.sportDays = v; window.render(); } },
@@ -4343,11 +4343,11 @@ function renderCyclingOnboarding(p) {
   });
   p.appendChild(bikeGrid);
 
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.level')));
   var levels = [
-    { id: 'debutant',      icon: '🟢', name: 'Débutant',      desc: '< 2h par semaine, découverte du cyclisme' },
-    { id: 'intermediaire', icon: '🟡', name: 'Intermédiaire', desc: '2-5h par semaine, confortable sur longues sorties' },
-    { id: 'avance',        icon: '🔴', name: 'Avancé',        desc: '> 5h par semaine, FTP > 3 w/kg' }
+    { id: 'debutant',      icon: '🟢', name: window.t('sport.beginner'),      desc: '< 2h par semaine, découverte du cyclisme' },
+    { id: 'intermediaire', icon: '🟡', name: window.t('sport.intermediate'), desc: '2-5h par semaine, confortable sur longues sorties' },
+    { id: 'avance',        icon: '🔴', name: window.t('sport.advanced'),        desc: '> 5h par semaine, FTP > 3 w/kg' }
   ];
   var lvlList = h('div', {'class': 'level-list'});
   levels.forEach(function(lv) {
@@ -4381,7 +4381,7 @@ function renderCyclingOnboarding(p) {
   });
   p.appendChild(goalGrid);
 
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours d\'entraînement par semaine'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   if (!S.cyclingDays) S.cyclingDays = 3;
   var daysWrap = h('div', {'class': 'num-input-wrap'});
   daysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.cyclingDays), inputmode: 'numeric',
@@ -4493,7 +4493,7 @@ function renderCyclingProgram(p) {
   }
 
   var weightKg = S.weight || 70;
-  var levelNames = { debutant: 'Débutant', intermediaire: 'Intermédiaire', avance: 'Avancé' };
+  var levelNames = { debutant: window.t('sport.beginner'), intermediaire: window.t('sport.intermediate'), avance: window.t('sport.advanced') };
   var goalNames = { weightloss: 'Perte de poids', endurance: 'Endurance de base', competitive: 'Sportif compétitif', granfondo: 'Gran Fondo', triathlon: 'Triathlon' };
   var bikeNames = { road: 'Route 🚲', vtt: 'VTT 🚵', indoor: 'Indoor 💻', gravel: 'Gravel 🌿' };
 
@@ -4737,13 +4737,13 @@ function renderCalisthenicsOnboarding(p) {
   p.appendChild(h('p', {'class': 'subtitle'}, 'Street workout, progressions au poids du corps.'));
 
   // Niveau
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
   var lvlList = h('div', {'class': 'level-list'});
   [
-    { id: 'debutant',      icon: '🌱', name: 'Débutant',      desc: 'Moins de 5 tractions, bases à construire' },
-    { id: 'intermediaire', icon: '🌿', name: 'Intermédiaire', desc: '5-12 tractions, maîtrise des fondamentaux' },
-    { id: 'avance',        icon: '🍃', name: 'Avancé',        desc: '12+ tractions, apprentissage des skills' },
-    { id: 'elite',         icon: '🏆', name: 'Elite',         desc: 'Maîtrise complète, skills de haut niveau' }
+    { id: 'debutant',      icon: '🌱', name: window.t('sport.beginner'),      desc: 'Moins de 5 tractions, bases à construire' },
+    { id: 'intermediaire', icon: '🌿', name: window.t('sport.intermediate'), desc: '5-12 tractions, maîtrise des fondamentaux' },
+    { id: 'avance',        icon: '🍃', name: window.t('sport.advanced'),        desc: '12+ tractions, apprentissage des skills' },
+    { id: 'elite',         icon: '🏆', name: window.t('sport.elite'),         desc: 'Maîtrise complète, skills de haut niveau' }
   ].forEach(function(lv) {
     var isOn = S.calisthenicsLevel === lv.id;
     lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.calisthenicsLevel = lv.id; window.render(); }}, [
@@ -4801,7 +4801,7 @@ function renderCalisthenicsOnboarding(p) {
   p.appendChild(goalChips);
 
   // Jours par semaine
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours par semaine'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   var nw = h('div', {'class': 'num-input-wrap'});
   nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.calisthenicsdays || 3), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.calisthenicsdays = v; } },

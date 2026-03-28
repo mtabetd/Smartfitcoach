@@ -116,7 +116,7 @@ function renderStep1(p) {
 
   // Sex (MANDATORY)
   var sexLabel = h('div', {'class': 'section-label'});
-  sexLabel.appendChild(txt('Sexe'));
+  sexLabel.appendChild(txt(window.t('onb.s1.sex')));
   sexLabel.appendChild(reqDot());
   p.appendChild(sexLabel);
   var g = h('div', {'class': 'card-grid-2'});
@@ -326,7 +326,7 @@ function renderStep1(p) {
 
   // Age (MANDATORY 14-70)
   var ageLabel = h('div', {'class': 'section-label'});
-  ageLabel.appendChild(txt('\u00c2ge'));
+  ageLabel.appendChild(txt(window.t('onb.s2.age')));
   ageLabel.appendChild(reqDot());
   p.appendChild(ageLabel);
   var aw = h('div', {'class': 'num-input-wrap'});
@@ -361,7 +361,7 @@ function renderStep2(p) {
 
   // Weight (MANDATORY)
   var wLabel = h('div', {'class': 'section-label'});
-  wLabel.appendChild(txt('Poids'));
+  wLabel.appendChild(txt(window.t('onb.s2.weight')));
   wLabel.appendChild(reqDot());
   p.appendChild(wLabel);
   // Toggle unité poids
@@ -399,7 +399,7 @@ function renderStep2(p) {
 
   // Height (MANDATORY)
   var hLabel = h('div', {'class': 'section-label'});
-  hLabel.appendChild(txt('Taille'));
+  hLabel.appendChild(txt(window.t('onb.s2.height')));
   hLabel.appendChild(reqDot());
   p.appendChild(hLabel);
   // Toggle unité taille
@@ -440,7 +440,7 @@ function renderStep2(p) {
     var info = bmiInfo(bmi);
     var badge = h('div', {'class': 'imc-widget', style: 'color:' + info.color + ';border-color:' + info.color + ';background:' + info.color + '12'}, [
       h('div', {'class': 'imc-value'}, bmi.toFixed(1)),
-      h('div', {'class': 'imc-label'}, 'IMC'),
+      h('div', {'class': 'imc-label'}, window.t('onb.s2.bmi')),
       h('div', {'class': 'imc-category'}, info.label)
     ]);
     p.appendChild(badge);
@@ -567,7 +567,7 @@ function renderStep3(p) {
 
   // Sleep (MANDATORY)
   var sleepLabel = h('div', {'class': 'section-label'});
-  sleepLabel.appendChild(txt('Sommeil'));
+  sleepLabel.appendChild(txt(window.t('onb.s3.sleep')));
   sleepLabel.appendChild(reqDot());
   p.appendChild(sleepLabel);
   var sw = h('div', {'class': 'chip-wrap'});
@@ -591,7 +591,7 @@ function renderStep4(p) {
 
   var none = S.medical.length === 0;
   var nb = h('div', {'class': 'sel-card' + (none ? ' on' : ''), style: 'margin-bottom:16px;text-align:center', onclick: function() { S.medical = []; window.render(); }});
-  nb.appendChild(h('div', {'class': 'card-name'}, 'Aucune condition particuli\u00e8re'));
+  nb.appendChild(h('div', {'class': 'card-name'}, window.t('onb.s4.none')));
   nb.appendChild(h('div', {'class': 'card-sub'}, 'Je suis en bonne sant\u00e9'));
   p.appendChild(nb);
 
@@ -1119,7 +1119,7 @@ function renderStep7(p) {
   p.appendChild(cl);
 
   // Whey
-  p.appendChild(h('div', {'class': 'section-label'}, 'Whey prot\u00e9ine'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('onb.s5.whey')));
   var wg = h('div', {'class': 'card-grid-2'});
   [{name: 'Oui', val: true}, {name: 'Non', val: false}].forEach(function(o) {
     wg.appendChild(h('div', {'class': 'sel-card' + (S.whey === o.val ? ' on' : ''), onclick: function() { S.whey = o.val; window.render(); }}, [
@@ -1148,7 +1148,7 @@ function renderStep7(p) {
   }
 
   // Allergies
-  p.appendChild(h('div', {'class': 'section-label'}, 'Allergies'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('onb.s5.allergies')));
   var allergyWrap = h('div', {'class': 'chip-wrap'});
   ALLERGIES.forEach(function(a) {
     var on = S.allergies.indexOf(a) !== -1;
@@ -1162,7 +1162,7 @@ function renderStep7(p) {
   p.appendChild(h('div', {style: 'height:8px'}));
 
   // Intolerances
-  p.appendChild(h('div', {'class': 'section-label'}, 'Intol\u00e9rances'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('onb.s5.intolerances')));
   var intolWrap = h('div', {'class': 'chip-wrap'});
   INTOLERANCES.forEach(function(t) {
     var on = S.intolerances.indexOf(t) !== -1;
@@ -1176,7 +1176,7 @@ function renderStep7(p) {
   p.appendChild(h('div', {style: 'height:8px'}));
 
   // Regime
-  p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9gime alimentaire'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('onb.s5.diet')));
   var rg = h('div', {'class': 'card-grid-4'});
   REGIMES.forEach(function(r, i) {
     rg.appendChild(h('div', {'class': 'sel-card' + (S.regime === i ? ' on' : ''), onclick: function() { S.regime = i; window.render(); }}, [
@@ -1426,7 +1426,7 @@ function renderStep8(p) {
   if (bmi !== null) {
     var bi = bmiInfo(bmi);
     var imcClass = bmi < 18.5 ? 'stat-warn' : bmi < 25 ? 'stat-good' : bmi < 30 ? 'stat-warn' : 'stat-alert';
-    stats.appendChild(h('div', {'class': 'stat-cell ' + imcClass}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, 'IMC')]));
+    stats.appendChild(h('div', {'class': 'stat-cell ' + imcClass}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, window.t('onb.s2.bmi'))]));
   }
   p.appendChild(stats);
 
