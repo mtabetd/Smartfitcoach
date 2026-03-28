@@ -37,7 +37,8 @@ var PROFILE_KEYS = [
   'shopChecked','weekPlan','selectedDay',
   'lang','weightUnit','heightUnit',
   'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
-  'heartRateRest','yogaLevel','yogaGoal','yogaDays'
+  'heartRateRest','yogaLevel','yogaGoal','yogaDays',
+  'wantsDessert'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.

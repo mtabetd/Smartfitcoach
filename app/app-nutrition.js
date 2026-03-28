@@ -1819,7 +1819,7 @@ function renderWeightChart(p) {
 function renderStep9(p) {
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Planning'));
   p.appendChild(h('h1', {html: 'Votre<br><em>semaine</em>'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 4 repas/jour \u00b7 200 recettes halal du monde entier'));
+  p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 439 recettes'));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
   if (!S.weekPlan) S.weekPlan = generateWeek();

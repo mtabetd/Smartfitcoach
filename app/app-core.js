@@ -1636,7 +1636,9 @@ window.S = {
   // Calisthenics
   calisthenicsLevel: null, calisthenicsGoal: null, calisthenicsdays: 3,
   calisthPullups: null, calisthPushups: null,
-  calisthenicsProgram: null, calisthenicsWeek: 1, selectedCalisthDay: 0
+  calisthenicsProgram: null, calisthenicsWeek: 1, selectedCalisthDay: 0,
+  // Yoga
+  yogaLevel: null, yogaGoal: null, yogaDays: 3
 };
 
 // ═══════════════════════════════════════════════════════════════
