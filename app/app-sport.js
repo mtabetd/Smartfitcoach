@@ -1706,6 +1706,41 @@ function getSuggestedWeight(exerciseName, reps, phase) {
   return Math.max(adjusted, 5);
 }
 
+function renderSparkline(values, color) {
+  color = color || '#1A4A1A';
+  if (!values || values.length < 2) return null;
+  var W = 80, H = 28, pad = 3;
+  var min = Math.min.apply(null, values);
+  var max = Math.max.apply(null, values);
+  var range = max - min || 1;
+  var pts = values.map(function(v, i) {
+    var x = pad + (i / (values.length - 1)) * (W - 2*pad);
+    var y = H - pad - ((v - min) / range) * (H - 2*pad);
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  });
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.setAttribute('style', 'display:inline-block;vertical-align:middle');
+  var polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  polyline.setAttribute('points', pts.join(' '));
+  polyline.setAttribute('fill', 'none');
+  polyline.setAttribute('stroke', color);
+  polyline.setAttribute('stroke-width', '2');
+  polyline.setAttribute('stroke-linecap', 'round');
+  polyline.setAttribute('stroke-linejoin', 'round');
+  svg.appendChild(polyline);
+  // Dot final
+  var lastPt = pts[pts.length - 1].split(',');
+  var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  circle.setAttribute('cx', lastPt[0]);
+  circle.setAttribute('cy', lastPt[1]);
+  circle.setAttribute('r', '3');
+  circle.setAttribute('fill', color);
+  svg.appendChild(circle);
+  return svg;
+}
+
 function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
   // Récupère l'historique de cet exercice
   var history = S.muscuProgressionHistory[exerciseName] || [];
@@ -2454,10 +2489,12 @@ function renderMusculationProgram(p) {
         var progHist = S.muscuProgressionHistory[exRef.n];
         if (progHist && progHist.length >= 3) {
           var lastFive = progHist.slice(-5);
-          var progLine = lastFive.map(function(e) { return e.weight + ' kg'; }).join(' \u2192 ');
-          var progGraph = h('div', {style: 'padding:6px 8px;border-top:1px solid var(--border);font-size:10px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif'});
+          var progressValues = lastFive.map(function(e) { return e.weight; });
+          var progGraph = h('div', {style: 'padding:6px 8px;border-top:1px solid var(--border);font-size:10px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;display:flex;align-items:center;gap:6px'});
           progGraph.appendChild(h('span', {style: 'color:#27AE60'}, '\uD83D\uDCCA '));
-          progGraph.appendChild(h('span', {}, 'Progression\u00a0: ' + progLine));
+          var sparkSvg = renderSparkline(progressValues, '#27AE60');
+          if (sparkSvg) progGraph.appendChild(sparkSvg);
+          progGraph.appendChild(h('span', {style: 'margin-left:4px'}, progressValues[0] + '\u00a0kg \u2192 ' + progressValues[progressValues.length - 1] + '\u00a0kg'));
           setTable.appendChild(progGraph);
         }
 

@@ -418,6 +418,111 @@ window.DASHBOARD = {
     }
     root.appendChild(perfWidget);
 
+    // Créer canvas Chart.js pour la courbe de poids
+    var canvas = h('canvas', {id: 'weight-chart', style: 'width:100%;height:180px;max-height:180px'});
+    var chartWrap = h('div', {'class': 'card', style: 'margin-bottom:16px'});
+    chartWrap.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:8px'}, 'PROGRESSION DU POIDS'));
+    chartWrap.appendChild(canvas);
+    root.appendChild(chartWrap);
+
+    // Initialiser le chart après rendu DOM
+    requestAnimationFrame(function() {
+      if (!window.Chart) return;
+      var ctx = document.getElementById('weight-chart');
+      if (!ctx) return;
+      var hist = (window.S && window.S.weightHistory ? window.S.weightHistory : []).slice(-12); // 12 dernières entrées
+      if (!hist || hist.length < 2) return;
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: hist.map(function(e) { return e.date ? e.date.substring(5) : ''; }),
+          datasets: [{
+            data: hist.map(function(e) { return e.weight || e.w || e; }),
+            borderColor: '#1A4A1A',
+            backgroundColor: 'rgba(26,74,26,0.08)',
+            pointRadius: 4,
+            pointBackgroundColor: '#1A4A1A',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              grid: { color: 'rgba(0,0,0,0.05)' },
+              ticks: { font: { size: 10 }, callback: function(v) { return v + ' kg'; } }
+            },
+            x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+          }
+        }
+      });
+    });
+
+    // Chart kcal semaine
+    if (window.S && window.S.weekPlan && window.S.weekPlan.length === 7) {
+      var kcalCanvas = h('canvas', {id: 'kcal-chart', style: 'width:100%;height:140px;max-height:140px'});
+      var kcalWrap = h('div', {'class': 'card', style: 'margin-bottom:16px'});
+      kcalWrap.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:8px'}, 'CALORIES PAR JOUR — PLAN SEMAINE'));
+      kcalWrap.appendChild(kcalCanvas);
+      root.appendChild(kcalWrap);
+
+      requestAnimationFrame(function() {
+        if (!window.Chart) return;
+        var ctx2 = document.getElementById('kcal-chart');
+        if (!ctx2) return;
+        var JOURS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+        var target = (window.S && window.S.calories) || 2000;
+        var dayKcals = window.S.weekPlan.map(function(day) {
+          if (!day || !day.meals) return 0;
+          return day.meals.reduce(function(sum, m) {
+            return sum + ((m && (m.k || (m.baseNutrition && m.baseNutrition.calories) || m.kcal)) || 0);
+          }, 0);
+        });
+        new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: JOURS,
+            datasets: [
+              {
+                label: 'Kcal plan',
+                data: dayKcals,
+                backgroundColor: dayKcals.map(function(k) {
+                  var ratio = k / target;
+                  return ratio < 0.92 ? 'rgba(26,74,26,0.6)' : ratio > 1.08 ? 'rgba(180,40,40,0.6)' : 'rgba(26,74,26,0.9)';
+                }),
+                borderRadius: 4
+              },
+              {
+                label: 'Cible',
+                data: Array(7).fill(target),
+                type: 'line',
+                borderColor: '#B22222',
+                borderDash: [4,3],
+                pointRadius: 0,
+                borderWidth: 1.5,
+                fill: false
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: {
+                grid: { color: 'rgba(0,0,0,0.05)' },
+                ticks: { font: { size: 9 }, callback: function(v) { return v + ' kcal'; } }
+              },
+              x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+            }
+          }
+        });
+      });
+    }
+
 
     /* ═══ FOOD JOURNAL ═══ */
     root.appendChild(h('div', 'dash-label', 'Journal alimentaire'));
