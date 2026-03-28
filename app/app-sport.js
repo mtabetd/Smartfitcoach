@@ -441,10 +441,10 @@ window.SPORT = {
     // Header with progress (only shown after step 0, not on intro pages)
     if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16 && S.sStep !== 20) {
       var hdr = h('header', {'class': 'header'});
-      var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : 'Musculation';
+      var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? 'Yoga & Mobilit\u00e9' : 'Musculation';
       hdr.appendChild(h('div', {'class': 'logo', html: 'MTD<span>' + sportLabel + '</span>'}));
-      var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : 4;
-      var currentDisplay = S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sStep;
+      var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : 4;
+      var currentDisplay = S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sStep;
       hdr.appendChild(h('div', {'class': 'step-indicator'}, 'Étape ' + currentDisplay + ' / ' + totalSteps));
       p.appendChild(hdr);
       var pb = h('div', {'class': 'progress-bar'});
@@ -472,6 +472,8 @@ window.SPORT = {
     else if (S.sStep === 14) renderGolfProgram(content);      // Golf program
     else if (S.sStep === 17) renderTriathlonConfig(content);  // Triathlon questionnaire
     else if (S.sStep === 18) renderTriathlonProgram(content); // Triathlon program
+    else if (S.sStep === 19) renderYogaOnboarding(content);  // Yoga questionnaire
+    else if (S.sStep === 21) renderYogaProgram(content);     // Yoga program
 
     p.appendChild(content);
     renderSportModal(p);
@@ -611,6 +613,19 @@ function renderObjectif(p) {
     h('div', {'class': 'card-name'}, 'Triathlon / IRONMAN'),
     h('div', {'class': 'card-sub'}, 'Programme Jan Frodeno · Patrick Lange · Daniela Ryf'),
     h('div', {'class': 'card-tag'}, 'Sprint · Olympic · 70.3 · IRONMAN 140.6')
+  ]));
+
+  // Yoga & Mobilité card
+  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
+    S.sportType = 'yoga';
+    S.sStep = 19;
+    if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'yoga'});
+    window.render();
+  }}, [
+    h('span', {'class': 'card-icon'}, '\uD83E\uDDD8'),
+    h('div', {'class': 'card-name'}, 'Yoga & Mobilit\u00e9'),
+    h('div', {'class': 'card-sub'}, 'Flexibilit\u00e9, force, \u00e9quilibre, pleine conscience'),
+    h('div', {'class': 'card-tag'}, 'Hatha \u00b7 Vinyasa \u00b7 Yin \u00b7 Ashtanga')
   ]));
 
   p.appendChild(typeGrid);

@@ -330,6 +330,12 @@ function renderStep1(p) {
   p.appendChild(aw);
   p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 14 et 70 ans'));
 
+  if (S.age && S.age < 18) {
+    var minorWarn = h('div', {style: 'background:rgba(180,120,0,0.1);border:1px solid #B47800;border-radius:6px;padding:10px 12px;font-size:11px;color:#7A5200;margin-top:8px;line-height:1.5'},
+      'Pour les moins de 18 ans, ce programme doit \u00eatre suivi avec l\'accompagnement d\'un professionnel de sant\u00e9 ou d\'un m\u00e9decin.');
+    p.appendChild(minorWarn);
+  }
+
   p.appendChild(h('div', {style: 'height:16px'}));
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex, onclick: function() { if (S.sex) { bb('nutrition_identity', {sex: S.sex, age: S.age}); goStep(2); } }}, 'Continuer'));
 }
@@ -837,6 +843,18 @@ function renderStep5(p) {
     }
   }
   } // end else (non-pregnant alcohol section)
+
+  // Sélecteur devise
+  p.appendChild(h('div', {'class': 'section-label'}, 'Devise'));
+  var f_currency = h('div', {'class': 'field'});
+  var currencySelect = h('select', {'class': 'num-input', style: 'width:100%;padding:10px 12px;font-size:14px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text)', onchange: function(){ S.currency = this.value; S.currencySymbol = {'EUR':'\u20ac','MAD':'DH','GBP':'\u00a3','CHF':'CHF'}[this.value] || '\u20ac'; }});
+  [['EUR','\u20ac Euro'],['MAD','DH Dirham'],['GBP','\u00a3 Livre sterling'],['CHF','CHF Franc suisse']].forEach(function(opt) {
+    var o = h('option', {value: opt[0]}, opt[1]);
+    if ((S.currency || 'EUR') === opt[0]) o.setAttribute('selected', 'selected');
+    currencySelect.appendChild(o);
+  });
+  f_currency.appendChild(currencySelect);
+  p.appendChild(f_currency);
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var canContinue = S.mealsPerDay !== null && S.eatingLocation !== null && S.mealPrepTime !== null && S.alcoholFreq !== null;
@@ -1803,11 +1821,11 @@ function renderStep9(p) {
       var budgetGrid = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px' });
       budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:8px;padding:10px;text-align:center' },
         h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, 'Budget / jour'),
-        h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.avgDailyMAD + ' MAD')
+        h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.avgDailyMAD + ' ' + (S.currencySymbol || '\u20ac'))
       ));
       budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:8px;padding:10px;text-align:center' },
         h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, 'Budget / semaine'),
-        h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.weeklyMAD + ' MAD')
+        h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.weeklyMAD + ' ' + (S.currencySymbol || '\u20ac'))
       ));
       budgetBlock.appendChild(budgetGrid);
       if (budget.coveragePct < 100) {
@@ -1836,52 +1854,6 @@ function renderStep9(p) {
     style: 'margin-top:8px;background:linear-gradient(135deg,#4CAF50,#8BC34A);color:#fff',
     onclick: function() { window.S.saladBar.open = true; if(window.render) window.render(); }
   }, '\uD83E\uDD57 Composer une salade'));
-
-  // Shopping list button (legacy)
-  p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function() { S.showList = !S.showList; window.render(); }}, S.showList ? '\u25b2 Masquer la liste de courses' : '\u25bc Ma liste de courses'));
-
-  if (S.showList) {
-    var listWrap = h('div', {style: 'margin-top:12px'});
-    // Extract ingredients
-    var ingMap = {};
-    if (S.weekPlan) S.weekPlan.forEach(function(dayPlan) {
-      ['breakfast', 'lunch', 'snack', 'dinner'].forEach(function(slot) {
-        if (dayPlan[slot] && dayPlan[slot].i) dayPlan[slot].i.split(',').forEach(function(ing) {
-          var t = ing.trim().toLowerCase();
-          if (t) ingMap[t] = (ingMap[t] || 0) + 1;
-        });
-      });
-    });
-    var ingList = Object.keys(ingMap).sort(function(a, b) { return ingMap[b] - ingMap[a]; });
-    listWrap.appendChild(h('div', {'class': 'section-label'}, 'Ingr\u00e9dients de la semaine (\u00d7 fr\u00e9quence)'));
-    var il = h('ul', {'class': 'ingredient-list'});
-    ingList.slice(0, 30).forEach(function(ing) { il.appendChild(h('li', {}, ing + ' (\u00d7' + ingMap[ing] + ')')); });
-    listWrap.appendChild(il);
-
-    // Staples suggestions
-    listWrap.appendChild(h('div', {'class': 'divider'}, [h('div', {'class': 'divider-line'}), h('div', {'class': 'divider-text'}, 'Suggestions indispensables'), h('div', {'class': 'divider-line'})]));
-    STAPLES.forEach(function(cat) {
-      listWrap.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:12px 0 6px'}, cat.cat));
-      var chipW = h('div', {'class': 'chip-wrap'});
-      cat.items.forEach(function(item) { chipW.appendChild(h('span', {'class': 'chip', style: 'cursor:default'}, item)); });
-      listWrap.appendChild(chipW);
-    });
-
-    // Budget tip
-    if (S.shopBudget === 'budget_low') {
-      var budgetTip = h('div', {'class': 'whey-tip', style: 'border-left-color:var(--blue);background:var(--bluebg);margin-top:16px'});
-      budgetTip.appendChild(h('strong', {}, 'Astuce budget \u2014 '));
-      budgetTip.appendChild(h('span', {}, 'Privil\u00e9giez les l\u00e9gumineuses (lentilles, pois chiches), les oeufs et le poulet entier. Achetez les l\u00e9gumes de saison au march\u00e9.'));
-      listWrap.appendChild(budgetTip);
-    }
-    if (S.shopFreq === 'weekly' || S.shopFreq === 'biweekly') {
-      var batchTip = h('div', {'class': 'whey-tip', style: 'border-left-color:var(--green);background:var(--greenbg);margin-top:8px'});
-      batchTip.appendChild(h('strong', {}, 'Batch cooking \u2014 '));
-      batchTip.appendChild(h('span', {}, 'Pr\u00e9parez riz, poulet et l\u00e9gumes en gros le dimanche. Congelez les portions pour la semaine.'));
-      listWrap.appendChild(batchTip);
-    }
-    p.appendChild(listWrap);
-  }
 
   // Export PDF
   p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:16px;background:var(--black2)', onclick: function() { window.exportDayPDF(S.selectedDay); }}, '\u21e9 Exporter le jour en PDF'));

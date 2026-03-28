@@ -32,7 +32,8 @@ var PROFILE_KEYS = [
   'triathlonGoal','triathlonLevel','triathlonWeak',
   'triathlonSwimPace','triathlonBikePace','triathlonRunPace',
   'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
-  'shopChecked','weekPlan','selectedDay'
+  'shopChecked','weekPlan','selectedDay',
+  'currency','currencySymbol'
 ];
 function saveProfile() {
   try {

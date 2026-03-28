@@ -206,9 +206,9 @@ window.AUTH = {
   isLoggedIn: function() {
     var s = getSession();
     if (!s) return false;
-    // Session expiry: 24 hours
+    // Session expiry: 30 days
     var start = parseInt(localStorage.getItem(SESSION_START_KEY) || '0');
-    if (start && Date.now() - start > 86400000) {
+    if (start && Date.now() - start > 30 * 24 * 60 * 60 * 1000) {
       localStorage.removeItem(SESSION_KEY);
       localStorage.removeItem(SESSION_START_KEY);
       return false;
