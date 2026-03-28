@@ -1754,14 +1754,6 @@
       source: 'marjane',
       updatedAt: '2026-03'
     },
-    // Lipides — alias
-    'Huile d\'olive': {
-      name: 'Huile d\'olive',
-      pricePerG: r(70 / 750),
-      pricePerMl: r(70 / 750),
-      source: 'carrefour',
-      updatedAt: '2026-03'
-    },
     'Olives': {
       name: 'Olives',
       pricePerG: r(18 / 200),
