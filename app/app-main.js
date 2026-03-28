@@ -32,6 +32,7 @@ var PROFILE_KEYS = [
   'triathlonGoal','triathlonLevel','triathlonWeak',
   'triathlonSwimPace','triathlonBikePace','triathlonRunPace',
   'cyclingLevel','cyclingGoal','cyclingDays','cyclingType','cyclingFTP','cyclingSpeed','cyclingRelief',
+  'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
   'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
   'shopChecked','weekPlan','selectedDay',
   'currency','currencySymbol'

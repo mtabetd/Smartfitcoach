@@ -506,8 +506,8 @@ window.SPORT = {
     else if (S.sStep === 21) renderYogaProgram(content);     // Yoga program
     else if (S.sStep === 22) renderCyclingOnboarding(content); // Cycling questionnaire
     else if (S.sStep === 23) renderCyclingProgram(content);    // Cycling program
-    else if (S.sStep === 24) { if (typeof renderCalisthenicsOnboarding === 'function') renderCalisthenicsOnboarding(content); else { content.appendChild(h('div', {style:'text-align:center;padding:40px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'Module Callisthénie en cours de chargement...')); content.appendChild(h('button', {'class':'btn-back', onclick:function(){ S.sStep=0; S.sportType=null; window.render(); }}, '← Retour')); } } // Calisthenics onboarding
-    else if (S.sStep === 25) { if (typeof renderCalisthenicsProgram === 'function') renderCalisthenicsProgram(content); else { content.appendChild(h('div', {style:'text-align:center;padding:40px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'Module Callisthénie en cours de chargement...')); content.appendChild(h('button', {'class':'btn-back', onclick:function(){ S.sStep=0; S.sportType=null; window.render(); }}, '← Retour')); } } // Calisthenics program
+    else if (S.sStep === 24) { renderCalisthenicsOnboarding(content); } // Calisthenics onboarding
+    else if (S.sStep === 25) { renderCalisthenicsProgram(content); }   // Calisthenics program
 
     p.appendChild(content);
     renderSportModal(p);
@@ -4659,5 +4659,287 @@ function exportSportPDF() {
   doc.save('programme-sport.pdf');
 }
 window.exportSportPDF = exportSportPDF;
+
+// ─── STEP 24: CALISTHENICS ONBOARDING ───
+function renderCalisthenicsOnboarding(p) {
+  p.appendChild(h('div', {'class': 'eyebrow'}, 'Callisthénie'));
+  p.appendChild(h('h1', {html: 'Votre programme<br><em>callisthénie</em>'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Street workout, progressions au poids du corps.'));
+
+  // Niveau
+  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  var lvlList = h('div', {'class': 'level-list'});
+  [
+    { id: 'debutant',      icon: '🌱', name: 'Débutant',      desc: 'Moins de 5 tractions, bases à construire' },
+    { id: 'intermediaire', icon: '🌿', name: 'Intermédiaire', desc: '5-12 tractions, maîtrise des fondamentaux' },
+    { id: 'avance',        icon: '🍃', name: 'Avancé',        desc: '12+ tractions, apprentissage des skills' },
+    { id: 'elite',         icon: '🏆', name: 'Elite',         desc: 'Maîtrise complète, skills de haut niveau' }
+  ].forEach(function(lv) {
+    var isOn = S.calisthenicsLevel === lv.id;
+    lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.calisthenicsLevel = lv.id; window.render(); }}, [
+      h('div', {}, [
+        h('div', {'class': 'level-name'}, lv.icon + ' ' + lv.name),
+        h('div', {'class': 'level-desc'}, lv.desc)
+      ]),
+      isOn ? h('span', {'class': 'level-badge'}, '✓') : h('span', {})
+    ]));
+  });
+  p.appendChild(lvlList);
+
+  // Pull-ups max
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Pull-ups max (en une série)'));
+  var puWrap = h('div', {'class': 'num-input-wrap'});
+  puWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '0', max: '50', value: String(S.calisthPullups || 0), inputmode: 'numeric',
+    oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 0 && v <= 50) { S.calisthPullups = v; } },
+    onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 0) { e.target.value = '0'; S.calisthPullups = 0; } else if (v > 50) { e.target.value = '50'; S.calisthPullups = 50; } }
+  }));
+  puWrap.appendChild(h('span', {'class': 'num-unit'}, 'reps'));
+  p.appendChild(puWrap);
+  p.appendChild(h('div', {'class': 'num-hint'}, '0 à 50 répétitions'));
+
+  // Push-ups max
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Push-ups max (en une série)'));
+  var ppWrap = h('div', {'class': 'num-input-wrap'});
+  ppWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '0', max: '100', value: String(S.calisthPushups || 0), inputmode: 'numeric',
+    oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 0 && v <= 100) { S.calisthPushups = v; } },
+    onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 0) { e.target.value = '0'; S.calisthPushups = 0; } else if (v > 100) { e.target.value = '100'; S.calisthPushups = 100; } }
+  }));
+  ppWrap.appendChild(h('span', {'class': 'num-unit'}, 'reps'));
+  p.appendChild(ppWrap);
+  p.appendChild(h('div', {'class': 'num-hint'}, '0 à 100 répétitions'));
+
+  // Objectifs (multi-select chips)
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Objectifs (plusieurs choix possibles)'));
+  var goalChips = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px'});
+  var GOAL_OPTIONS = [
+    { id: 'muscle_up',   label: 'Muscle-up' },
+    { id: 'handstand',   label: 'Handstand' },
+    { id: 'front_lever', label: 'Front lever' },
+    { id: 'planche',     label: 'Planche' },
+    { id: 'lsit',        label: 'L-sit' },
+    { id: 'dragon_flag', label: 'Dragon flag' }
+  ];
+  if (!S.calisthenicsGoal) S.calisthenicsGoal = [];
+  GOAL_OPTIONS.forEach(function(g) {
+    var isOn = S.calisthenicsGoal.indexOf(g.id) >= 0;
+    goalChips.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), onclick: function(){
+      var idx = S.calisthenicsGoal.indexOf(g.id);
+      if (idx >= 0) { S.calisthenicsGoal.splice(idx, 1); } else { S.calisthenicsGoal.push(g.id); }
+      window.render();
+    }}, g.label));
+  });
+  p.appendChild(goalChips);
+
+  // Jours par semaine
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours par semaine'));
+  var nw = h('div', {'class': 'num-input-wrap'});
+  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.calisthenicsdays || 3), inputmode: 'numeric',
+    oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.calisthenicsdays = v; } },
+    onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = '2'; S.calisthenicsdays = 2; } else if (v > 5) { e.target.value = '5'; S.calisthenicsdays = 5; } }
+  }));
+  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
+  p.appendChild(nw);
+  p.appendChild(h('div', {'class': 'num-hint'}, '2 à 5 jours par semaine'));
+
+  p.appendChild(h('div', {style: 'height:20px'}));
+  var ok = S.calisthenicsLevel && S.calisthenicsGoal && S.calisthenicsGoal.length > 0;
+  if (!ok) {
+    p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez un niveau et au moins un objectif'));
+  }
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
+    if (ok) {
+      if (!S.calisthenicsdays) S.calisthenicsdays = 3;
+      if (!S.calisthPullups) S.calisthPullups = 0;
+      if (!S.calisthPushups) S.calisthPushups = 0;
+      S.sStep = 25;
+      window.BLACKBOX && window.BLACKBOX.log('calisthenics_config', { level: S.calisthenicsLevel, goal: S.calisthenicsGoal, days: S.calisthenicsdays });
+      window.render();
+    }
+  }}, 'Générer mon programme'));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+}
+
+// ─── STEP 25: CALISTHENICS PROGRAM ───
+function renderCalisthenicsProgram(content) {
+  var skills = S.calisthenicsGoal || [];
+  var level = S.calisthenicsLevel || 'debutant';
+  var pullups = parseInt(S.calisthPullups) || 0;
+
+  var SKILLS = {
+    'muscle_up': {
+      name: 'Muscle-up barre', emoji: '🔝',
+      prereqs: '8+ pull-ups explosifs, dip complet',
+      time: {debutant:'8-12 mois', intermediaire:'4-6 mois', avance:'2-3 mois', elite:'2-6 semaines'},
+      steps: [
+        'Semaines 1-4 : Pull-ups stricts 5×5 — tirer coudes vers hanches',
+        'Semaines 4-8 : Pull-ups explosifs 5×3 — toucher la barre avec la poitrine',
+        'Semaines 6-10 : Fausse prise 5×3 — poignet par-dessus la barre',
+        'Semaines 8-14 : Muscle-up négatif 5×3 — transition lente 5 sec',
+        'Semaines 12+ : Muscle-up strict 3×1-3 reps'
+      ],
+      video: 'https://www.youtube.com/watch?v=_UNWnDiMnyM'
+    },
+    'handstand': {
+      name: 'Handstand (ATR)', emoji: '🤸',
+      prereqs: 'Push-ups corrects, core solide, poignets renforcés',
+      time: {debutant:'6-12 mois', intermediaire:'3-6 mois', avance:'1-3 mois', elite:'2-4 semaines'},
+      steps: [
+        'Quotidien : Wrist warm-up 3×30 sec — OBLIGATOIRE avant chaque session',
+        'Semaines 1-3 : Pike hold contre mur 4×30 sec',
+        'Semaines 2-6 : Wall handstand face au mur 4×20-30 sec',
+        'Semaines 4-10 : Kick-up + bail — apprendre à tomber proprement d\'abord',
+        'Semaines 8-16 : Chest-to-wall + tentatives libres',
+        'Semaines 12+ : Freestanding — 10 min de pratique quotidienne'
+      ],
+      video: 'https://www.youtube.com/watch?v=v61TBViFh0g'
+    },
+    'front_lever': {
+      name: 'Front lever', emoji: '🏹',
+      prereqs: '15+ pull-ups, hollow body 30 sec',
+      time: {debutant:'18-24 mois', intermediaire:'10-14 mois', avance:'5-8 mois', elite:'2-4 mois'},
+      steps: [
+        'Semaines 1-4 : Tuck front lever 4×10 sec — genoux serrés contre poitrine',
+        'Semaines 4-8 : Advanced tuck 4×8 sec — dos plat',
+        'Semaines 8-14 : One leg front lever 4×6 sec',
+        'Semaines 12-20 : Straddle 3×5 sec — jambes écartées',
+        'Semaines 18+ : Full front lever 3×3-5 sec'
+      ],
+      video: 'https://www.youtube.com/watch?v=IhhgTE2WxKE'
+    },
+    'planche': {
+      name: 'Planche', emoji: '🧲',
+      prereqs: 'Planche lean 45°, core extrême, années de pratique',
+      time: {debutant:'3-5 ans', intermediaire:'2-3 ans', avance:'1-2 ans', elite:'6-12 mois'},
+      steps: [
+        'Mois 1-6 : Planche lean — incliner le corps vers l\'avant progressivement',
+        'Mois 6-12 : Tuck planche 4×5-10 sec',
+        'Mois 12-18 : Advanced tuck planche 4×5 sec',
+        'Mois 18-30 : Straddle planche 3×3-5 sec',
+        'Mois 30+ : Full planche — quelques secondes'
+      ],
+      video: 'https://www.youtube.com/watch?v=MWA7p2sXNiE'
+    },
+    'lsit': {
+      name: 'L-sit', emoji: '🅻',
+      prereqs: 'Dips complets, souplesse ischios',
+      time: {debutant:'2-5 mois', intermediaire:'1-2 mois', avance:'2-6 semaines', elite:'1-3 semaines'},
+      steps: [
+        'Semaines 1-2 : Flexion genoux au sol (tuck L-sit) 4×5-10 sec',
+        'Semaines 2-4 : Une jambe tendue, une fléchie 4×8 sec',
+        'Semaines 4-8 : L-sit complet 4×10 sec',
+        'Semaines 8+ : L-sit tenu 30+ sec'
+      ],
+      video: 'https://www.youtube.com/watch?v=16a529mtX68'
+    },
+    'dragon_flag': {
+      name: 'Dragon flag', emoji: '🐉',
+      prereqs: 'L-sit 20 sec, leg raise strict, core fort',
+      time: {debutant:'4-8 mois', intermediaire:'2-4 mois', avance:'1-2 mois', elite:'1-3 semaines'},
+      steps: [
+        'Semaines 1-3 : Leg raise strict 4×10 — jambes tendues',
+        'Semaines 3-6 : Dragon flag négatif 4×5 — descente lente 5 sec',
+        'Semaines 6-10 : Dragon flag partiel 4×5 sec hold',
+        'Semaines 10+ : Dragon flag complet 3×3-5 reps'
+      ],
+      video: 'https://www.youtube.com/watch?v=moyFIvRrS0s'
+    }
+  };
+
+  // Header
+  var header = h('div', {'class':'card', style:'margin-bottom:16px'}, [
+    h('div', {'class':'label-caps', style:'margin-bottom:4px'}, '💪 CALLISTHÉNIE'),
+    h('div', {style:'font-size:13px;color:var(--grey3)'}, 'Niveau: ' + level + ' — ' + (skills.length || 0) + ' skill(s) sélectionné(s)')
+  ]);
+  content.appendChild(header);
+
+  // Avertissements médicaux
+  if (S.muscuMedical) {
+    var warns = [];
+    if (S.muscuMedical.shoulders || S.muscuMedical.rotatorCuff) warns.push('Épaules : progresser avec assistance élastique uniquement, éviter HSPU et planche');
+    if (S.muscuMedical.hernia || S.muscuMedical.herniaDisc) warns.push('Hernie : éviter dragon flag, L-sit et human flag (compression discale)');
+    if (S.muscuMedical.wrists) warns.push('Poignets : renforcement 4-6 semaines AVANT tout appui');
+    if (warns.length) {
+      var warnDiv = h('div', {style:'background:rgba(180,100,0,0.1);border:1px solid #B47800;border-radius:8px;padding:12px;margin-bottom:16px'});
+      warns.forEach(function(w) { warnDiv.appendChild(h('div', {style:'font-size:12px;margin-bottom:4px'}, '⚠️ ' + w)); });
+      content.appendChild(warnDiv);
+    }
+  }
+
+  // Skills sélectionnés
+  if (!skills || skills.length === 0) {
+    content.appendChild(h('div', {'class':'empty-state'}, [
+      h('div', {'class':'empty-state-icon'}, '💪'),
+      h('div', {'class':'empty-state-title'}, 'Aucun skill sélectionné'),
+      h('div', {style:'font-size:13px;color:var(--grey3);margin-top:8px'}, 'Retournez à l\'onboarding pour choisir vos objectifs.')
+    ]));
+  } else {
+    skills.forEach(function(skillId) {
+      var sk = SKILLS[skillId];
+      if (!sk) return;
+      var card = h('div', {'class':'card', style:'margin-bottom:16px'});
+      // Header skill
+      card.appendChild(h('div', {style:'display:flex;align-items:center;gap:8px;margin-bottom:12px'}, [
+        h('span', {style:'font-size:24px'}, sk.emoji),
+        h('div', {}, [
+          h('div', {style:'font-weight:600;font-size:15px'}, sk.name),
+          h('div', {style:'font-size:11px;color:var(--grey3)'}, 'Prérequis: ' + sk.prereqs)
+        ])
+      ]));
+      // Temps de maîtrise
+      card.appendChild(h('div', {style:'background:var(--surface,#F4F4F0);border-radius:6px;padding:8px 12px;margin-bottom:12px;font-size:12px'}, [
+        h('span', {style:'font-weight:600'}, '⏱ Temps estimé: '),
+        h('span', {style:'color:var(--grey3)'}, sk.time[level] || sk.time['debutant'])
+      ]));
+      // Étapes de progression
+      var stepsDiv = h('div', {style:'margin-bottom:12px'});
+      stepsDiv.appendChild(h('div', {'class':'label-caps', style:'margin-bottom:8px;font-size:9px'}, 'PROGRESSION'));
+      sk.steps.forEach(function(step, i) {
+        stepsDiv.appendChild(h('div', {style:'display:flex;gap:8px;margin-bottom:6px;font-size:12px;line-height:1.4'}, [
+          h('span', {style:'color:var(--accent,#1A4A1A);font-weight:700;flex-shrink:0'}, (i+1) + '.'),
+          h('span', {style:'color:var(--text,#0A0A09)'}, step)
+        ]));
+      });
+      card.appendChild(stepsDiv);
+      // Vidéo
+      card.appendChild(h('a', {href:sk.video, target:'_blank', rel:'noopener', style:'display:inline-block;font-size:12px;color:var(--accent,#1A4A1A);text-decoration:underline'}, '▶ Voir la démonstration vidéo'));
+      content.appendChild(card);
+    });
+  }
+
+  // Programme hebdomadaire
+  var progCard = h('div', {'class':'card', style:'margin-bottom:16px'});
+  progCard.appendChild(h('div', {'class':'label-caps', style:'margin-bottom:12px'}, 'PROGRAMME HEBDOMADAIRE'));
+  var days = S.calisthenicsdays || 3;
+  var weekPlan = [];
+  if (days >= 2) weekPlan.push({day:'Lundi', focus:'Pull (tractions, skills barre)', warmup:'5 min: scapular pull-ups 3×10, dead hangs 3×20 sec'});
+  if (days >= 2) weekPlan.push({day:'Mercredi', focus:'Push (dips, HSPU, handstand)', warmup:'5 min: wrist circles, pike push-ups, shoulder circles'});
+  if (days >= 3) weekPlan.push({day:'Vendredi', focus:'Core & Skills statiques (L-sit, planche)', warmup:'5 min: hollow body 3×20 sec, arch hold, planche lean'});
+  if (days >= 4) weekPlan.push({day:'Samedi', focus:'Full body skills + pratique libre', warmup:'10 min activation générale'});
+  if (days >= 5) weekPlan.push({day:'Dimanche', focus:'Récupération active + mobilité', warmup:'Stretching 20 min'});
+  weekPlan.forEach(function(d) {
+    var dayDiv = h('div', {style:'margin-bottom:10px;padding:10px;background:var(--surface,#F4F4F0);border-radius:6px'});
+    dayDiv.appendChild(h('div', {style:'font-weight:600;font-size:13px;margin-bottom:4px'}, d.day + ' — ' + d.focus));
+    dayDiv.appendChild(h('div', {style:'font-size:11px;color:var(--grey3)'}, '🔥 ' + d.warmup));
+    progCard.appendChild(dayDiv);
+  });
+  content.appendChild(progCard);
+
+  // Règles d'or
+  var rulesCard = h('div', {'class':'card'});
+  rulesCard.appendChild(h('div', {'class':'label-caps', style:'margin-bottom:12px'}, 'RÈGLES D\'OR CALLISTHÉNIE'));
+  ['La régularité bat l\'intensité — 20 min/jour > 2h/semaine',
+   'Repos 3-5 min entre séries de skills (pas 60 sec)',
+   'Maîtrisez les prérequis AVANT de progresser',
+   'Qualité > quantité — 1 rep parfaite vaut 10 reps bâclées',
+   'Échauffez les poignets SYSTÉMATIQUEMENT'
+  ].forEach(function(rule) {
+    rulesCard.appendChild(h('div', {style:'font-size:12px;margin-bottom:6px;padding-left:12px;border-left:2px solid var(--accent,#1A4A1A)'}, rule));
+  });
+  content.appendChild(rulesCard);
+
+  // Bouton retour
+  var backBtn = h('button', {'class':'btn-back', style:'margin-top:16px', onclick:function(){ S.sStep=24; window.render(); }}, '← Modifier les objectifs');
+  content.appendChild(backBtn);
+}
 
 })();
