@@ -1155,7 +1155,7 @@ function renderStep7(p) {
       {id: 'strawberry', label: 'Fraise',            icon: '\uD83C\uDF53'},
       {id: 'peanut',     label: 'Cacahu\u00e8te',   icon: '\uD83E\uDD5C'},
       {id: 'coffee',     label: 'Caf\u00e9',        icon: '\u2615'},
-      {id: 'blueberry',  label: 'Myrtille',         icon: '\uD83AB'},
+      {id: 'blueberry',  label: 'Myrtille',         icon: '\uD83E\uDED7'},
       {id: 'coconut',    label: 'Noix de Coco',     icon: '\uD83E\uDD65'},
       {id: 'lemon',      label: 'Citron',           icon: '\uD83C\uDF4B'},
       {id: 'banana',     label: 'Banane',           icon: '\uD83C\uDF4C'},
@@ -1980,6 +1980,7 @@ function renderStep9(p) {
           onclick: function(e) {
             e.stopPropagation();
             S._addMealModalSlot = null;
+            S._recipePicker = { slotKey: slotKey, query: '' };
             window.render();
           }
         }, [h('span', {style: 'font-size:22px'}, '\uD83C\uDF7D'), h('span', {}, 'Choisir une recette')]);
@@ -3083,11 +3084,11 @@ var WHEY_SMOOTHIES = [
     tips:'Chlorophylle + antioxydants = combo récupération ultime après séance CrossFit.' },
 
   // === NATURE / UNFLAVORED ===
-  { id:'sm_nature_01', name:'Clean Shake Neutre', flavors:['nature'], goal:['muscle','fat_loss'], timing:'anytime', cal:280, p:33, c:28, f:5, prep:'2min',
+  { id:'sm_nature_01', name:'Clean Shake Neutre', flavors:['unflavored'], goal:['muscle','fat_loss'], timing:'anytime', cal:280, p:33, c:28, f:5, prep:'2min',
     ingredients:[{name:'Whey nature',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Flocons d\'avoine',qty:25,unit:'g'},{name:'Amandes effilées',qty:10,unit:'g'}],
     steps:['Mixer tout ensemble 20 secondes','Goûter — ajuster avec miel si nécessaire','Consommer immédiatement'],
     tips:'Base neutre : ajouter fruits frais selon humeur. Très digestible.' },
-  { id:'sm_nature_02', name:'Athlete\'s Functional Shake', flavors:['nature'], goal:['performance','recovery'], timing:'post', cal:360, p:38, c:38, f:7, prep:'3min',
+  { id:'sm_nature_02', name:'Athlete\'s Functional Shake', flavors:['unflavored'], goal:['performance','recovery'], timing:'post', cal:360, p:38, c:38, f:7, prep:'3min',
     ingredients:[{name:'Whey nature',qty:35,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Jus d\'orange frais',qty:150,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Curcuma',qty:1,unit:'g'},{name:'Poivre noir',qty:0.5,unit:'g'}],
     steps:['Mixer yaourt + jus d\'orange + banane','Ajouter whey, curcuma, poivre','Mixer 20 secondes','Boire dans les 30 min post-séance'],
     tips:'Le poivre active la biodisponibilité de la curcumine x20. Anti-inflammatoire puissant.' },
@@ -3104,8 +3105,103 @@ var WHEY_SMOOTHIES = [
   { id:'sm_multi_03', name:'Mocha Hazelnut Dream', flavors:['coffee','hazelnut'], goal:['performance'], timing:'pre', cal:340, p:32, c:35, f:9, prep:'4min',
     ingredients:[{name:'Whey café ou noisette',qty:30,unit:'g'},{name:'Café expresso',qty:60,unit:'ml'},{name:'Pâte de noisette',qty:10,unit:'g'},{name:'Lait écrémé',qty:200,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'}],
     steps:['Préparer expresso refroidi','Mixer avec lait, whey, noisette, cacao','Servir sur glaçons','Boire 20-30 min avant séance'],
-    tips:'Combo caféine + théobromine (cacao) = stimulation durable sans crash.' }
+    tips:'Combo caféine + théobromine (cacao) = stimulation durable sans crash.' },
+
+  // === BANANE #2 ===
+  { id:'sm_ban_02', name:'Banana Split Recovery', flavors:['banana','vanilla'], goal:['recovery'], timing:'post', cal:380, p:36, c:48, f:6, prep:'3min',
+    ingredients:[{name:'Whey banane ou vanille',qty:30,unit:'g'},{name:'Banane congelée',qty:120,unit:'g'},{name:'Skyr nature',qty:100,unit:'g'},{name:'Lait écrémé',qty:150,unit:'ml'},{name:'Miel',qty:10,unit:'g'}],
+    steps:['Mixer banane congelée avec lait','Ajouter skyr et whey','Mixer jusqu\'à texture crémeuse','Finir avec un filet de miel'],
+    tips:'La banane congelée donne une texture glacée sans ajouter de glace. Riche en potassium pour récupération musculaire.' },
+
+  // === NOISETTE #2 ===
+  { id:'sm_hazel_02', name:'Noisette Overnight Shake', flavors:['hazelnut'], goal:['muscle','recovery'], timing:'anytime', cal:440, p:35, c:45, f:13, prep:'5min',
+    ingredients:[{name:'Whey noisette',qty:30,unit:'g'},{name:'Purée de noisette complète',qty:20,unit:'g'},{name:'Lait d\'avoine',qty:250,unit:'ml'},{name:'Flocons d\'avoine',qty:30,unit:'g'},{name:'Cacao pur',qty:5,unit:'g'},{name:'Datte Medjool',qty:1,unit:'pce'}],
+    steps:['Faire tremper flocons 5 min dans lait d\'avoine','Ajouter datte dénoyautée, purée noisette, cacao, whey','Mixer 30 secondes','Consommer immédiatement ou conserver 2h au frais'],
+    tips:'Datte Medjool = sucre naturel + fibres solubles. Meilleur shake noisette pour calorie dense.' },
+
+  // === MULTI #4 — Lemon Matcha Zen ===
+  { id:'sm_multi_04', name:'Lemon Matcha Zen', flavors:['lemon','matcha'], goal:['fat_loss','performance'], timing:'pre', cal:260, p:30, c:28, f:4, prep:'3min',
+    ingredients:[{name:'Whey nature ou citron',qty:25,unit:'g'},{name:'Matcha cérémonie',qty:3,unit:'g'},{name:'Jus de citron frais',qty:30,unit:'ml'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Miel',qty:8,unit:'g'},{name:'Gingembre frais',qty:5,unit:'g'}],
+    steps:['Dissoudre matcha dans un peu d\'eau chaude, laisser refroidir','Mixer eau de coco + citron + gingembre + whey','Ajouter matcha dissous','Mixer 15 secondes et servir sur glaçons'],
+    tips:'Association catéchines (matcha) + vitamine C (citron) = absorption antioxydants x4. Idéal fasted cardio.' }
 ];
+
+// ─── RECIPE PICKER ───────────────────────────────────────────────────────────
+function renderRecipePicker(p) {
+  var S = window.S;
+  var picker = S._recipePicker;
+  if (!picker) return;
+  var slotKey = picker.slotKey;
+  var query = picker.query || '';
+  var slotLabels = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+  var slotLabel = slotLabels[slotKey] || slotKey;
+
+  var overlay = h('div', {
+    style: 'position:fixed;inset:0;background:var(--bg,#F4F3EE);z-index:9200;display:flex;flex-direction:column;overflow:hidden'
+  });
+
+  // Header
+  var hdr = h('div', { style: 'display:flex;align-items:center;gap:10px;padding:16px 16px 12px;background:var(--card,#FFFFFF);box-shadow:0 2px 8px rgba(0,0,0,0.08);flex-shrink:0' });
+  hdr.appendChild(h('button', {
+    style: 'background:none;border:none;font-size:20px;cursor:pointer;padding:4px 8px',
+    onclick: function() { S._recipePicker = null; window.render(); }
+  }, '\u2190'));
+  hdr.appendChild(h('div', { style: 'font-size:16px;font-weight:700;color:var(--black,#0A0A09);flex:1' }, '\uD83C\uDF7D Choisir une recette — ' + slotLabel));
+  overlay.appendChild(hdr);
+
+  // Search box
+  var searchWrap = h('div', { style: 'padding:12px 16px;background:var(--card,#FFFFFF);border-top:1px solid var(--border,#E5E4DE);flex-shrink:0' });
+  var searchInput = h('input', {
+    type: 'text',
+    placeholder: 'Rechercher une recette...',
+    value: query,
+    style: 'width:100%;padding:10px 14px;border:1.5px solid var(--border,#E5E4DE);border-radius:10px;font-size:14px;background:var(--bg,#F4F3EE);box-sizing:border-box',
+    oninput: function(e) { S._recipePicker.query = e.target.value; window.render(); }
+  });
+  searchWrap.appendChild(searchInput);
+  overlay.appendChild(searchWrap);
+
+  // Recipe list
+  var listWrap = h('div', { style: 'flex:1;overflow-y:auto;padding:12px 16px' });
+
+  var pool = (typeof getPool === 'function') ? getPool(slotKey) : (window.RecipeEngine ? window.RecipeEngine.getPool(slotKey) : []);
+  var q = query.toLowerCase().trim();
+  var filtered = q ? pool.filter(function(r) { return r.n.toLowerCase().indexOf(q) >= 0; }) : pool;
+
+  if (!filtered.length) {
+    listWrap.appendChild(h('div', { style: 'text-align:center;color:#888;padding:40px 16px;font-size:14px' }, 'Aucune recette trouvée.'));
+  } else {
+    filtered.forEach(function(recipe) {
+      var card = h('div', {
+        style: 'background:var(--card,#FFFFFF);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,0.06)',
+        onclick: function() {
+          if (!S.weekPlan || !S.weekPlan[S.selectedDay]) { S._recipePicker = null; window.render(); return; }
+          var c = typeof calcTarget === 'function' ? calcTarget() : 0;
+          var split = typeof getMealSplit === 'function' ? getMealSplit() : null;
+          var tgt = 0;
+          if (c && split) {
+            tgt = slotKey === 'breakfast' ? Math.round(c * split.pctBreak) :
+                  slotKey === 'lunch'     ? Math.round(c * split.pctLunch) :
+                  slotKey === 'snack'     ? Math.round(c * split.pctSnack) :
+                                            Math.round(c * split.pctDinner);
+          }
+          var nr = tgt > 0 && typeof enrichWithScaling === 'function' ? enrichWithScaling(recipe, tgt) : recipe;
+          S.weekPlan[S.selectedDay][slotKey] = nr;
+          S._recipePicker = null;
+          window.render();
+        }
+      });
+      var left = h('div', { style: 'flex:1;min-width:0' });
+      left.appendChild(h('div', { style: 'font-size:14px;font-weight:600;color:var(--black,#0A0A09);white-space:nowrap;overflow:hidden;text-overflow:ellipsis' }, (recipe.f || '') + ' ' + recipe.n));
+      left.appendChild(h('div', { style: 'font-size:12px;color:#888;margin-top:2px' }, recipe.k + ' kcal · ' + recipe.p + 'g prot · ' + recipe.g + 'g glu · ' + recipe.l + 'g lip'));
+      card.appendChild(left);
+      card.appendChild(h('div', { style: 'color:#1A3C5E;font-size:18px;margin-left:10px' }, '\u276F'));
+      listWrap.appendChild(card);
+    });
+  }
+  overlay.appendChild(listWrap);
+  p.appendChild(overlay);
+}
 
 // ─── RENDER SMOOTHIE BAR ───
 function renderSmoothieBar(p) {
@@ -3640,6 +3736,7 @@ window.NUTRITION = {
     var content = h('div', {'class': 'fade-in'});
     if (S.shopListOpen) { renderShoppingList(content); p.appendChild(content); return; }
     if (S.saladBar && S.saladBar.open) { renderSaladBar(content); p.appendChild(content); return; }
+    if (S._recipePicker) { renderRecipePicker(p); return; }
     if (S.smoothieBarOpen) {
       content.appendChild(h('div', {style:'display:flex;align-items:center;gap:12px;margin-bottom:16px'}, [
         h('button', {'class':'btn-secondary', style:'padding:8px 14px', onclick:function(){S.smoothieBarOpen=false;window.render();}}, '\u2190 Retour'),

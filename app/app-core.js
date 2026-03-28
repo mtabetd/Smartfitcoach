@@ -1540,6 +1540,7 @@ window.S = {
     mealTarget: 'lunch' // 'lunch' | 'dinner'
   },
   weekPlan: null, selectedDay: 0, modalRecipe: null, showList: false, shopListOpen: false,
+  smoothieBarOpen: false, modalSmoothie: null, _addMealModalSlot: null, _recipePicker: null,
   // Food habits
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,

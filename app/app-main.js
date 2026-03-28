@@ -126,6 +126,7 @@ function loadProfile() {
     S._addMealModalSlot = null;
     S.modalRecipe = null;
     S.modalSmoothie = null;
+    S._recipePicker = null;
     if (S.saladBar) S.saladBar.open = false;
   } catch(e) {}
 }
