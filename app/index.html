@@ -6,9 +6,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#FAFAF7">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://world.openfoodfacts.org https://images.openfoodfacts.org; connect-src 'self' https://world.openfoodfacts.org ws://localhost:3000 ws://127.0.0.1:3000 ws://0.0.0.0:3000; object-src 'none'; base-uri 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex, nofollow">
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="./premium-ui.css">
 <title>MTD Macro Calculator</title>
@@ -330,6 +332,46 @@ canvas.weight-chart{width:100%;height:200px}
 </style>
 </head>
 <body>
+<script>
+/* ── SECURITY: Production hardening ── */
+(function(){
+  'use strict';
+  // Disable verbose console output in production (non-localhost)
+  var isProd = (typeof location !== 'undefined' &&
+    location.hostname !== 'localhost' &&
+    location.hostname !== '127.0.0.1' &&
+    location.hostname !== '');
+  if (isProd) {
+    var noop = function(){};
+    // Preserve console.error/warn for critical diagnostics; suppress debug noise
+    if (typeof console !== 'undefined') {
+      console.log = noop;
+      console.debug = noop;
+      console.info = noop;
+      // Keep console.warn and console.error for legitimate error tracking
+    }
+  }
+
+  // DevTools detection (timing + dimension heuristic) — prod only, warning only
+  if (isProd) {
+    var devtoolsOpen = false;
+    function detectDevTools() {
+      var widthThreshold = window.outerWidth - window.innerWidth > 160;
+      var heightThreshold = window.outerHeight - window.innerHeight > 160;
+      if ((widthThreshold || heightThreshold) && !devtoolsOpen) {
+        devtoolsOpen = true;
+        // Discrete warning — does not block the app
+        if (typeof console !== 'undefined' && console.warn) {
+          console.warn('[MTD] DevTools detected. This application is for personal use only.');
+        }
+      } else if (!widthThreshold && !heightThreshold) {
+        devtoolsOpen = false;
+      }
+    }
+    setInterval(detectDevTools, 1000);
+  }
+})();
+</script>
 <div id="gate" style="position:fixed;inset:0;background:var(--ivory,#FAFAF7);z-index:9999;display:flex;align-items:center;justify-content:center">
 <div style="text-align:center;max-width:340px;padding:24px">
 <div style="font-family:Georgia,serif;font-size:11px;letter-spacing:8px;text-transform:uppercase;margin-bottom:6px;color:var(--black,#0A0A09)">MTD</div>
