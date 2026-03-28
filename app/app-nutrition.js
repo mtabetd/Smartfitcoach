@@ -3559,7 +3559,7 @@ function renderShoppingList(p) {
   freqBanner.appendChild(h('span', {style:'font-size:16px'}, '\uD83D\uDED2'));
   freqBanner.appendChild(h('div', {}, [
     h('div', {style:'font-weight:600;color:var(--text)'}, 'Liste pour ' + freqLabel),
-    h('div', {style:'font-size:11px;color:var(--text-secondary)'}, s.shopFreq === '2x_week' ? 'Faites 2 courses par semaine — renouvelez dans 4 jours' : s.shopFreq === 'daily' ? 'Courses pour aujourd\'hui uniquement' : s.shopFreq === 'biweekly' ? 'Doublez les quantités pour faire vos courses toutes les 2 semaines' : 'Courses pour toute la semaine')
+    h('div', {style:'font-size:11px;color:var(--text-secondary)'}, s.shopFreq === '2x_week' ? 'Faites 2 courses par semaine — renouvelez dans 4 jours' : s.shopFreq === 'daily' ? 'Courses pour aujourd\'hui uniquement' : s.shopFreq === 'biweekly' ? 'Quantités déjà doublées pour 14 jours — stock et surgelés recommandés' : 'Courses pour toute la semaine')
   ]));
   p.appendChild(freqBanner);
 
