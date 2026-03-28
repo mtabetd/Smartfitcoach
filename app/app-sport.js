@@ -3263,7 +3263,7 @@ function renderPadelProgram(p) {
     var colors = {technique: 'var(--blue,#1A3A6A)', physical: 'var(--green,#1A4A1A)', match: 'var(--red,#5A1010)', tactics: 'var(--orange,#6A4A1A)', recovery: 'var(--grey,#6B6B65)'};
     var card = h('div', {style: 'border-left:3px solid ' + (colors[session.type] || 'var(--black)') + ';padding:16px;margin:12px 0;background:var(--ivory2,#F4F4F0)'});
     card.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;margin-bottom:12px'}, session.name));
-    session.exercises.forEach(function(ex, i) {
+    (session.exercises || []).forEach(function(ex, i) {
       var exDiv = h('div', {style: 'padding:8px 0;border-bottom:1px solid var(--ivory3,#EEEDE8)'});
       exDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:12px;font-weight:500'}, (i + 1) + '. ' + ex.name));
       exDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, ex.detail));
@@ -3378,7 +3378,7 @@ function renderGolfProgram(p) {
     var colors = {short_game: 'var(--green,#1A4A1A)', long_game: 'var(--blue,#1A3A6A)', course_play: 'var(--orange,#6A4A1A)', physical: 'var(--red,#5A1010)', mental: 'var(--grey,#6B6B65)'};
     var card = h('div', {style: 'border-left:3px solid ' + (colors[session.type] || 'var(--black)') + ';padding:16px;margin:12px 0;background:var(--ivory2,#F4F4F0)'});
     card.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;margin-bottom:12px'}, session.name));
-    session.exercises.forEach(function(ex, i) {
+    (session.exercises || []).forEach(function(ex, i) {
       var exDiv = h('div', {style: 'padding:8px 0;border-bottom:1px solid var(--ivory3,#EEEDE8)'});
       exDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:12px;font-weight:500'}, (i + 1) + '. ' + ex.name));
       exDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, ex.detail));
