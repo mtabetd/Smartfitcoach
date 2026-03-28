@@ -463,9 +463,9 @@ function getCFWorkingWeight(standardsKey, percentage) {
   if (!s) return '?';
   var sexKey = s.sex === 'homme' ? 'm' : 'f';
   // Default to 'inter' (index 1) when crossfitLevel is not set, to avoid defaulting to RX for new users
-  var lvlIdx = s.crossfitLevel === 'scaled' ? 0 : s.crossfitLevel === 'rx' ? 2 : 1;
-  // WOD working weight percentages by level (% of 1RM)
-  var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : 0.75;
+  var lvlIdx = s.crossfitLevel === 'scaled' ? 0 : s.crossfitLevel === 'inter' ? 1 : s.crossfitLevel === 'rx' ? 2 : s.crossfitLevel === 'rx_plus' ? 3 : 1;
+  // WOD working weight percentages by level (% of 1RM) — rx_plus uses 80% (Games athlete intensity — NSCA 2016)
+  var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : lvlIdx === 2 ? 0.75 : 0.80;
 
   // Priority 1: user has a direct 1RM for this specific lift
   if (s.crossfit1RM && s.crossfit1RM[standardsKey]) {
@@ -2634,7 +2634,7 @@ function filterRecipes(pool,type){
         if((al==='oeufs'||al==='\u0153ufs')&&(/oeuf|\u0153uf/).test(ing))return false;
         if(al==='poisson'&&(/saumon|thon|cabillaud|dorade|sardine|maquereau|poisson|anchois|merlu|truite|sole|lotte|morue/).test(ing))return false;
         if(al==='crustac\u00e9s'&&(/crevette|crustac|homard|crabe|gambas/).test(ing))return false;
-        if(al==='soja'&&(/soja|tofu|edamame/).test(ing))return false;
+        if(al==='soja'&&(/soja|tofu|edamame|tempeh|tamari|miso|natto/).test(ing))return false;
         if(al==='lait/produits laitiers'){var dl=ing.replace(/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz|beurre de cacahu/g,'');if((/lait|fromage|yaourt|beurre|cr\u00e8me|ricotta|mozzarella|parmesan|emmental|feta|cottage|skyr|labneh|k\u00e9fir|whey/).test(dl))return false;}
         if(al==='gluten/bl\u00e9'){var gl=ing.replace(/galette de riz|farine de riz|farine de sarrasin|p\u00e2te miso/g,'');if((/pain|bl\u00e9|farine|p\u00e2te|seigle|couscous|semoule|tortilla|wrap|naan|galette|cr\u00eape|pancake|muffin/).test(gl))return false;}
         if(al==='sésame'&&(/sésame/).test(ing))return false;
@@ -2659,7 +2659,7 @@ function filterRecipes(pool,type){
   if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioche|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
   if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon|merguez|canard|lapin|foie/).test(i)});
   if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|merguez|gambas|lotte|morue|foie|anchois|truite|colin/).test(i)});
-  if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|beurre|miel|whey/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;return true});}
+  if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|daurade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|beurre|miel|whey|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|truite|anchois|colin|branzino|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|lapin|foie de|jambon|charcuterie/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;return true});}
   // Halal : exclut porc, charcuterie porcine et alcool
   if(s.halal)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin/).test(i)});
   if(s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
@@ -2764,7 +2764,7 @@ var SUPPLEMENTS_DB = [
       else if(s.age>50)d=Math.max(d,2500); // 50-70 : synthèse réduite
       return{dose:d,unit:'UI/jour',timing:'Petit-d\u00e9jeuner avec repas gras',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Obésité : D3 séquestrée dans tissu adipeux, besoins × 2-3 (Endocrine Society 2011). Associer à Vitamine K2 (MK-7) si ≥50 ans — prévient calcifications artérielles (Plaza 2021).'};}},
   {id:'omega3',name:'Om\u00e9ga-3 (EPA/DHA)',icon:'\uD83D\uDC1F',desc:'Anti-inflammatoire, c\u0153ur, cognition',evidence:'AHA 2019 \u2014 Recommandation',grade:'A',
-    condition:function(s){return (s.allergies||[]).indexOf('Poisson')===-1&&(s.allergies||[]).indexOf('Crustac\u00e9s')===-1;},
+    condition:function(s){return s.regime!==3&&(s.allergies||[]).indexOf('Poisson')===-1&&(s.allergies||[]).indexOf('Crustac\u00e9s')===-1;}, // Vegan : utiliser DHA algues à la place
     unnecessary_if:'Inutile si vous mangez du poisson gras 2-3x/semaine (saumon, sardines, maquereau)',
     dosageCalc:function(s){var d=1000;if(s.activity!==null&&s.activity>=3)d=2000;return{dose:d,unit:'mg EPA+DHA/jour',timing:'Pendant un repas',note:'Ratio EPA:DHA 2:1 pour sportifs'};}},
   {id:'magnesium',name:'Magn\u00e9sium (Bisglycinate)',icon:'\uD83E\uDDEA',desc:'Sommeil, crampes, r\u00e9cup\u00e9ration',evidence:'EFSA 2015 \u2014 Apport recommand\u00e9',grade:'A',
