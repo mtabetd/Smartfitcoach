@@ -12953,6 +12953,316 @@
       'Arroser d\'un filet d\'huile d\'olive extra-vierge et du jus de citron fraîchement pressé.',
       'Assaisonner de fleur de sel et poivre noir, laisser mariner 2 min et servir immédiatement.'
     ]
+  },
+  ,
+
+  // ─── ITALIAN COLAZIONE & SNACK R480-R489 ──────────────────────────────────
+
+  {
+    id: 'R480',
+    name: 'Colazione Proteica Italiana',
+    emoji: '🥣',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack'],
+    category: 'italian',
+    tags: ['ricotta', 'miel', 'noisettes', 'protéiné', 'healthy', 'italien'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: 22×4 + 18×4 + 12×9 = 88 + 72 + 108 = 268 ≈ 270 kcal ✓
+    baseNutrition: { calories: 270, proteinGrams: 22, carbsGrams: 18, fatGrams: 12 },
+    ingredients: [
+      { name: 'Ricotta fraîche', qty: 250, unit: 'g' },
+      { name: "Miel d'acacia", qty: 20, unit: 'g' },
+      { name: 'Noisettes torréfiées', qty: 30, unit: 'g' },
+      { name: 'Zeste de citron', qty: 1, unit: 'pce' },
+      { name: 'Cannelle', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Fouetter la ricotta avec le zeste de citron jusqu'à obtenir une texture crémeuse.",
+      'Répartir la ricotta dans deux bols.',
+      'Concasser grossièrement les noisettes torréfiées.',
+      'Napper de miel, parsemer de noisettes et saupoudrer de cannelle.'
+    ]
+  },
+
+  {
+    id: 'R481',
+    name: 'Cornetto Intégral Ricotta & Figue',
+    emoji: '🥐',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack'],
+    category: 'italian',
+    tags: ['cornetto', 'ricotta', 'figue', 'intégral', 'boulangerie', 'italien'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 12,
+    servings: 2,
+    // Vérification: 18×4 + 42×4 + 10×9 = 72 + 168 + 90 = 330 kcal ✓
+    baseNutrition: { calories: 330, proteinGrams: 18, carbsGrams: 42, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pâte à croissant intégrale', qty: 160, unit: 'g' },
+      { name: 'Ricotta fraîche', qty: 100, unit: 'g' },
+      { name: 'Figues fraîches', qty: 80, unit: 'g' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: 'Amandes effilées', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Préchauffer le four à 190°C.',
+      'Découper la pâte en triangles et tartiner de ricotta mélangée au miel.',
+      'Déposer des tranches de figue sur chaque triangle.',
+      "Rouler les cornetti et enfourner 12 min jusqu'à dorure.",
+      "Parsemer d'amandes effilées à la sortie du four."
+    ]
+  },
+
+  {
+    id: 'R482',
+    name: 'Granola Italiano Pistache & Orange',
+    emoji: '🟢',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack'],
+    category: 'italian',
+    tags: ['granola', 'pistache', 'orange', 'flocons avoine', 'croquant', 'italien'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 20,
+    servings: 2,
+    // Vérification: 16×4 + 38×4 + 14×9 = 64 + 152 + 126 = 342 ≈ 340 kcal ✓
+    baseNutrition: { calories: 340, proteinGrams: 16, carbsGrams: 38, fatGrams: 14 },
+    ingredients: [
+      { name: "Flocons d'avoine", qty: 120, unit: 'g' },
+      { name: 'Pistaches non salées', qty: 40, unit: 'g' },
+      { name: "Zeste d'orange bio", qty: 1, unit: 'pce' },
+      { name: "Jus d'orange", qty: 30, unit: 'ml' },
+      { name: "Huile d'olive", qty: 15, unit: 'ml' },
+      { name: 'Miel', qty: 20, unit: 'g' }
+    ],
+    steps: [
+      'Préchauffer le four à 170°C.',
+      "Mélanger flocons, pistaches concassées, zeste et jus d'orange, huile et miel.",
+      'Étaler sur plaque et cuire 20 min en remuant à mi-cuisson.',
+      'Laisser refroidir complètement pour obtenir des clusters croquants.',
+      'Servir avec du yaourt grec ou du lait végétal.'
+    ]
+  },
+
+  {
+    id: 'R483',
+    name: 'Smoothie Bowl Agrumi Italiens',
+    emoji: '🍊',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack'],
+    category: 'italian',
+    tags: ['smoothie bowl', 'agrumes', 'sicile', 'vitamine C', 'frais', 'italien'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: 15×4 + 40×4 + 6×9 = 60 + 160 + 54 = 274 ≈ 275 kcal ✓
+    baseNutrition: { calories: 275, proteinGrams: 15, carbsGrams: 40, fatGrams: 6 },
+    ingredients: [
+      { name: 'Orange sanguine', qty: 200, unit: 'g' },
+      { name: 'Citron de Sicile', qty: 1, unit: 'pce' },
+      { name: 'Banane congelée', qty: 100, unit: 'g' },
+      { name: 'Yaourt grec 0%', qty: 150, unit: 'g' },
+      { name: 'Granola', qty: 30, unit: 'g' },
+      { name: 'Pistaches', qty: 10, unit: 'g' },
+      { name: 'Feuilles de menthe', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      "Mixer la banane congelée, l'orange sanguine pelée et le jus de citron.",
+      "Ajouter le yaourt grec et mixer jusqu'à consistance épaisse et lisse.",
+      'Verser dans deux bols.',
+      'Garnir de granola, pistaches concassées et feuilles de menthe.'
+    ]
+  },
+
+  {
+    id: 'R484',
+    name: 'Crostini Avocat & Anchois',
+    emoji: '🥑',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack', 'lunch'],
+    category: 'italian',
+    tags: ['crostini', 'avocat', 'anchois', 'oméga-3', 'apéro', 'italien'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 5,
+    servings: 2,
+    // Vérification: 16×4 + 22×4 + 15×9 = 64 + 88 + 135 = 287 ≈ 290 kcal ✓
+    baseNutrition: { calories: 290, proteinGrams: 16, carbsGrams: 22, fatGrams: 15 },
+    ingredients: [
+      { name: 'Pain ciabatta', qty: 120, unit: 'g' },
+      { name: 'Avocat mûr', qty: 100, unit: 'g' },
+      { name: "Filets d'anchois", qty: 30, unit: 'g' },
+      { name: 'Tomates cerises', qty: 60, unit: 'g' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' },
+      { name: 'Basilic frais', qty: 5, unit: 'g' },
+      { name: 'Poivre noir', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Toaster les tranches de ciabatta 3-4 min au grill.',
+      "Écraser l'avocat avec le jus de citron et le poivre.",
+      "Tartiner les crostini d'avocat écrasé.",
+      "Déposer un filet d'anchois et une demi-tomate cerise sur chaque crostino.",
+      'Décorer de feuilles de basilic frais.'
+    ]
+  },
+
+  {
+    id: 'R485',
+    name: 'Tartine Ricotta Tomates Séchées Basilic',
+    emoji: '🍅',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack', 'lunch'],
+    category: 'italian',
+    tags: ['tartine', 'ricotta', 'tomates séchées', 'basilic', 'méditerranéen', 'italien'],
+    difficulty: 1,
+    prepTime: 8,
+    cookTime: 3,
+    servings: 2,
+    // Vérification: 18×4 + 26×4 + 10×9 = 72 + 104 + 90 = 266 ≈ 265 kcal ✓
+    baseNutrition: { calories: 265, proteinGrams: 18, carbsGrams: 26, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pain de campagne', qty: 120, unit: 'g' },
+      { name: 'Ricotta fraîche', qty: 150, unit: 'g' },
+      { name: "Tomates séchées à l'huile", qty: 40, unit: 'g' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Ail', qty: 1, unit: 'gousse' },
+      { name: "Huile d'olive extra vierge", qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      "Toaster les tranches de pain et les frotter avec une gousse d'ail.",
+      "Mélanger la ricotta avec un filet d'huile d'olive et du poivre.",
+      'Tartiner généreusement de ricotta assaisonnée.',
+      'Disposer les tomates séchées égouttées et les feuilles de basilic frais.'
+    ]
+  },
+
+  {
+    id: 'R486',
+    name: 'Energy Balls Amaretti & Cacao',
+    emoji: '🍫',
+    origin: '🇮🇹',
+    mealTypes: ['snack'],
+    category: 'italian',
+    tags: ['energy balls', 'amaretti', 'cacao', 'amande', 'sans cuisson', 'italien'],
+    difficulty: 1,
+    prepTime: 15,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: 15×4 + 28×4 + 13×9 = 60 + 112 + 117 = 289 ≈ 290 kcal ✓
+    baseNutrition: { calories: 290, proteinGrams: 15, carbsGrams: 28, fatGrams: 13 },
+    ingredients: [
+      { name: 'Biscuits amaretti', qty: 60, unit: 'g' },
+      { name: 'Cacao en poudre non sucré', qty: 15, unit: 'g' },
+      { name: "Beurre d'amande", qty: 40, unit: 'g' },
+      { name: 'Protéine vanille en poudre', qty: 20, unit: 'g' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: "Extrait d'amande", qty: 2, unit: 'ml' }
+    ],
+    steps: [
+      'Émietter finement les amaretti.',
+      "Mélanger tous les ingrédients jusqu'à obtenir une pâte malléable.",
+      "Si la pâte est trop sèche, ajouter quelques gouttes d'eau.",
+      'Former 8 boules de taille égale et réfrigérer 30 min avant de servir.'
+    ]
+  },
+
+  {
+    id: 'R487',
+    name: 'Tiramisu Protéiné Express',
+    emoji: '☕',
+    origin: '🇮🇹',
+    mealTypes: ['snack', 'breakfast'],
+    category: 'italian',
+    tags: ['tiramisu', 'mascarpone', 'café', 'protéiné', 'express', 'italien'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: 20×4 + 22×4 + 11×9 = 80 + 88 + 99 = 267 ≈ 270 kcal ✓
+    baseNutrition: { calories: 270, proteinGrams: 20, carbsGrams: 22, fatGrams: 11 },
+    ingredients: [
+      { name: 'Ricotta fraîche', qty: 150, unit: 'g' },
+      { name: 'Mascarpone', qty: 50, unit: 'g' },
+      { name: 'Protéine vanille en poudre', qty: 20, unit: 'g' },
+      { name: 'Café espresso froid', qty: 60, unit: 'ml' },
+      { name: 'Biscuits à la cuillère', qty: 40, unit: 'g' },
+      { name: 'Cacao en poudre', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      "Fouetter ricotta, mascarpone et protéine en poudre jusqu'à texture lisse.",
+      'Tremper rapidement les biscuits dans le café froid.',
+      'Alterner couches de biscuits imbibés et crème dans deux verres.',
+      'Saupoudrer de cacao tamisé et réfrigérer 5 min avant de servir.'
+    ]
+  },
+
+  {
+    id: 'R488',
+    name: 'Frittelle di Avena',
+    emoji: '🥞',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast'],
+    category: 'italian',
+    tags: ['pancakes', 'avoine', 'frittelle', 'vanille', 'léger', 'italien'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 2,
+    // Vérification: 22×4 + 30×4 + 8×9 = 88 + 120 + 72 = 280 kcal ✓
+    baseNutrition: { calories: 280, proteinGrams: 22, carbsGrams: 30, fatGrams: 8 },
+    ingredients: [
+      { name: "Flocons d'avoine mixés", qty: 80, unit: 'g' },
+      { name: 'Oeufs', qty: 2, unit: 'pce' },
+      { name: 'Ricotta', qty: 80, unit: 'g' },
+      { name: 'Lait écrémé', qty: 60, unit: 'ml' },
+      { name: 'Miel', qty: 10, unit: 'g' },
+      { name: 'Extrait de vanille', qty: 2, unit: 'ml' },
+      { name: 'Levure chimique', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      "Mixer les flocons d'avoine en farine fine.",
+      "Mélanger tous les ingrédients jusqu'à pâte homogène sans grumeaux.",
+      'Chauffer une poêle antiadhésive légèrement huilée à feu moyen.',
+      'Verser des petites louches de pâte et cuire 2 min par côté.',
+      'Servir avec miel et fruits frais de saison.'
+    ]
+  },
+
+  {
+    id: 'R489',
+    name: 'Panna Cotta Légère Protéinée aux Fruits Rouges',
+    emoji: '🍮',
+    origin: '🇮🇹',
+    mealTypes: ['snack', 'breakfast'],
+    category: 'italian',
+    tags: ['panna cotta', 'fruits rouges', 'protéiné', 'léger', 'dessert sain', 'italien'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 5,
+    servings: 2,
+    // Vérification: 18×4 + 20×4 + 7×9 = 72 + 80 + 63 = 215 kcal ✓
+    baseNutrition: { calories: 215, proteinGrams: 18, carbsGrams: 20, fatGrams: 7 },
+    ingredients: [
+      { name: 'Lait de coco léger', qty: 200, unit: 'ml' },
+      { name: 'Protéine vanille en poudre', qty: 30, unit: 'g' },
+      { name: 'Gélatine', qty: 4, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' },
+      { name: 'Fruits rouges mélangés', qty: 100, unit: 'g' },
+      { name: 'Yaourt grec 0%', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      "Faire tremper la gélatine dans l'eau froide 5 min.",
+      'Chauffer le lait de coco à feu doux avec le miel sans faire bouillir.',
+      'Incorporer la gélatine essorée et la protéine en poudre hors du feu.',
+      'Mélanger avec le yaourt grec pour une texture plus légère.',
+      'Verser dans des verrines et réfrigérer au minimum 2h.',
+      'Servir avec les fruits rouges frais et quelques feuilles de menthe.'
+    ]
   }
 
   ];
