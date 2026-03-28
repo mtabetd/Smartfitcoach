@@ -5811,6 +5811,239 @@
       ]
     },
 
+    {
+      id: 'R422',
+      name: 'Panna Cotta Légère Vanille-Fruits Rouges',
+      emoji: '🍮', origin: '🇮🇹',
+      mealTypes: ['snack', 'dessert'],
+      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'léger', 'élégant'],
+      difficulty: 1, prepTime: 15, cookTime: 10, servings: 4,
+      // P×4 + G×4 + L×9 = 48×4 + 100×4 + 20×9 = 192 + 400 + 180 = 772 kcal ✓
+      baseNutrition: { calories: 772, proteinGrams: 48, carbsGrams: 100, fatGrams: 20 },
+      ingredients: [
+        { name: 'Fromage blanc 0%', qty: 400, unit: 'g' },
+        { name: 'Lait demi-écrémé', qty: 200, unit: 'ml' },
+        { name: 'Gélatine en feuilles', qty: 8, unit: 'g' },
+        { name: 'Miel', qty: 40, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 5, unit: 'ml' },
+        { name: 'Fruits rouges surgelés (framboises/myrtilles)', qty: 200, unit: 'g' },
+        { name: 'Citron (jus)', qty: 15, unit: 'ml' },
+        { name: 'Stevia', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Faire tremper les feuilles de gélatine 5 min dans de l\'eau froide.',
+        'Chauffer le lait à feu doux (sans bouillir). Essorer la gélatine et la dissoudre dans le lait chaud. Laisser tiédir 5 min.',
+        'Incorporer le fromage blanc, le miel et la vanille au lait. Fouetter jusqu\'à obtenir un mélange lisse.',
+        'Répartir dans 4 verrines ou ramequins. Réfrigérer au minimum 2h (ou toute la nuit).',
+        'Préparer le coulis : chauffer les fruits rouges surgelés dans une casserole avec le jus de citron et la stevia 5 min. Mixer et filtrer si désiré.',
+        'Au moment de servir, napper chaque panna cotta du coulis fruits rouges refroidi.'
+      ]
+    },
+
+    {
+      id: 'R423',
+      name: 'Mousse au Chocolat Noir Protéinée',
+      emoji: '🍫', origin: '🇫🇷',
+      mealTypes: ['snack', 'dessert'],
+      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'chocolat', 'aérien'],
+      difficulty: 2, prepTime: 20, cookTime: 5, servings: 4,
+      // P×4 + G×4 + L×9 = 60×4 + 60×4 + 32×9 = 240 + 240 + 288 = 768 kcal ✓
+      baseNutrition: { calories: 768, proteinGrams: 60, carbsGrams: 60, fatGrams: 32 },
+      ingredients: [
+        { name: 'Chocolat noir 70%', qty: 120, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 400, unit: 'g' },
+        { name: 'Blancs d\'œufs', qty: 160, unit: 'g' },
+        { name: 'Cacao en poudre non sucré', qty: 20, unit: 'g' },
+        { name: 'Stevia', qty: 3, unit: 'g' },
+        { name: 'Sel', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Faire fondre le chocolat noir au bain-marie ou au micro-ondes par tranches de 30 sec. Laisser tiédir 5 min.',
+        'Dans un grand bol, mélanger le fromage blanc avec le cacao et la stevia jusqu\'à homogénéité.',
+        'Incorporer le chocolat fondu tiédi au mélange fromage blanc-cacao. Bien mélanger.',
+        'Monter les blancs d\'œufs en neige ferme avec une pincée de sel.',
+        'Incorporer les blancs en neige en 3 fois, en soulevant délicatement la masse de bas en haut pour conserver la légèreté.',
+        'Répartir en 4 verrines et réfrigérer 1h minimum avant de servir.'
+      ]
+    },
+
+    {
+      id: 'R424',
+      name: 'Crème Brûlée Légère au Café',
+      emoji: '☕', origin: '🇫🇷',
+      mealTypes: ['snack', 'dessert'],
+      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'café', 'caramel', 'élégant'],
+      difficulty: 2, prepTime: 10, cookTime: 30, servings: 4,
+      // P×4 + G×4 + L×9 = 48×4 + 80×4 + 20×9 = 192 + 320 + 180 = 692 kcal ✓
+      baseNutrition: { calories: 692, proteinGrams: 48, carbsGrams: 80, fatGrams: 20 },
+      ingredients: [
+        { name: 'Yaourt grec 0%', qty: 300, unit: 'g' },
+        { name: 'Lait demi-écrémé', qty: 200, unit: 'ml' },
+        { name: 'Œufs entiers', qty: 100, unit: 'g' },
+        { name: 'Café soluble', qty: 8, unit: 'g' },
+        { name: 'Sucre de coco', qty: 40, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 3, unit: 'ml' },
+        { name: 'Sucre de coco (pour caraméliser)', qty: 20, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 150°C. Dissoudre le café soluble dans 2 cuillères à soupe d\'eau chaude.',
+        'Fouetter les œufs avec le sucre de coco jusqu\'à blanchiment léger. Incorporer le yaourt grec, le lait, le café dissous et la vanille.',
+        'Filtrer le mélange au travers d\'une passoire fine pour éliminer les grumeaux.',
+        'Verser dans 4 ramequins. Cuire au bain-marie 25 min jusqu\'à ce que les crèmes soient tremblotantes au centre.',
+        'Réfrigérer au moins 2h. Avant de servir, saupoudrer 1 cc de sucre de coco sur chaque crème.',
+        'Passer sous le gril du four (position haute) 2-3 min ou utiliser un chalumeau pour caraméliser. Servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R425',
+      name: 'Tarte Banoffee Healthy Sans Cuisson',
+      emoji: '🍌', origin: '🇬🇧',
+      mealTypes: ['snack', 'dessert'],
+      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'banane', 'chocolat'],
+      difficulty: 1, prepTime: 20, cookTime: 0, servings: 6,
+      // P×4 + G×4 + L×9 = 60×4 + 180×4 + 60×9 = 240 + 720 + 540 = 1500 kcal ✓
+      baseNutrition: { calories: 1500, proteinGrams: 60, carbsGrams: 180, fatGrams: 60 },
+      ingredients: [
+        { name: 'Dattes Medjool dénoyautées', qty: 150, unit: 'g' },
+        { name: 'Flocons d\'avoine', qty: 100, unit: 'g' },
+        { name: 'Noix de cajou', qty: 80, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 400, unit: 'g' },
+        { name: 'Miel', qty: 30, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 5, unit: 'ml' },
+        { name: 'Bananes', qty: 300, unit: 'g' },
+        { name: 'Chocolat noir 70%', qty: 40, unit: 'g' },
+        { name: 'Cannelle moulue', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Mixer les dattes, les flocons d\'avoine et les noix de cajou jusqu\'à obtenir une pâte collante.',
+        'Presser la pâte dans le fond d\'un moule à tarte (Ø 22 cm) en remontant légèrement sur les bords. Réfrigérer 15 min.',
+        'Mélanger le fromage blanc avec le miel, la vanille et la cannelle jusqu\'à obtenir une crème lisse.',
+        'Étaler la crème sur le fond de tarte refroidi.',
+        'Couper les bananes en rondelles et les disposer harmonieusement sur la crème.',
+        'Râper ou hacher finement le chocolat noir et en parsemer le dessus. Servir frais.'
+      ]
+    },
+
+    {
+      id: 'R426',
+      name: 'Tiramisu Protéiné Revisité',
+      emoji: '🍰', origin: '🇮🇹',
+      mealTypes: ['snack', 'dessert'],
+      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'café', 'cacao', 'tiramisu'],
+      difficulty: 2, prepTime: 25, cookTime: 5, servings: 6,
+      // P×4 + G×4 + L×9 = 108×4 + 150×4 + 60×9 = 432 + 600 + 540 = 1572 kcal ✓
+      baseNutrition: { calories: 1572, proteinGrams: 108, carbsGrams: 150, fatGrams: 60 },
+      ingredients: [
+        { name: 'Boudoirs (biscuits à la cuillère)', qty: 120, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 400, unit: 'g' },
+        { name: 'Skyr nature', qty: 300, unit: 'g' },
+        { name: 'Mascarpone', qty: 100, unit: 'g' },
+        { name: 'Café fort refroidi', qty: 150, unit: 'ml' },
+        { name: 'Sucre de coco', qty: 30, unit: 'g' },
+        { name: 'Cacao en poudre non sucré', qty: 20, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 5, unit: 'ml' },
+        { name: 'Blancs d\'œufs', qty: 80, unit: 'g' }
+      ],
+      steps: [
+        'Préparer un café fort et laisser refroidir complètement.',
+        'Fouetter ensemble le fromage blanc, le skyr, le mascarpone, le sucre de coco et la vanille jusqu\'à homogénéité.',
+        'Monter les blancs en neige ferme et les incorporer délicatement à la crème pour l\'alléger.',
+        'Tremper rapidement les boudoirs dans le café froid (2 sec max pour ne pas les ramollir trop).',
+        'Disposer une couche de boudoirs imbibés dans un plat ou 6 verrines. Couvrir d\'une couche de crème.',
+        'Répéter l\'opération (boudoirs + crème). Saupoudrer généreusement de cacao tamisé. Réfrigérer 2h minimum.'
+      ]
+    },
+
+    {
+      id: 'R427',
+      name: 'Fondant au Chocolat Coulant Protéiné',
+      emoji: '🫓', origin: '🇫🇷',
+      mealTypes: ['snack', 'dessert'],
+      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'chocolat', 'coulant', 'four'],
+      difficulty: 2, prepTime: 15, cookTime: 10, servings: 4,
+      // P×4 + G×4 + L×9 = 72×4 + 88×4 + 48×9 = 288 + 352 + 432 = 1072 kcal ✓
+      baseNutrition: { calories: 1072, proteinGrams: 72, carbsGrams: 88, fatGrams: 48 },
+      ingredients: [
+        { name: 'Chocolat noir 70%', qty: 120, unit: 'g' },
+        { name: 'Beurre', qty: 40, unit: 'g' },
+        { name: 'Œufs entiers', qty: 150, unit: 'g' },
+        { name: 'Farine d\'avoine', qty: 40, unit: 'g' },
+        { name: 'Cacao en poudre non sucré', qty: 20, unit: 'g' },
+        { name: 'Sucre de coco', qty: 30, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 100, unit: 'g' },
+        { name: 'Sel', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 200°C. Beurrer et saupoudrer de cacao 4 ramequins individuels.',
+        'Faire fondre le chocolat noir avec le beurre au bain-marie. Mélanger jusqu\'à obtenir une ganache lisse. Laisser tiédir 5 min.',
+        'Fouetter les œufs avec le sucre de coco jusqu\'à blanchiment. Incorporer le fromage blanc.',
+        'Verser le chocolat fondu sur le mélange œufs-fromage blanc. Ajouter la farine d\'avoine, le cacao et le sel. Mélanger délicatement.',
+        'Répartir dans les 4 ramequins. (Astuce : réfrigérer 30 min avant cuisson pour un cœur plus coulant.)',
+        'Enfourner exactement 10 min à 200°C. Démouler immédiatement en retournant sur l\'assiette. Servir sans attendre.'
+      ]
+    },
+
+    {
+      id: 'R428',
+      name: 'Cheesecake Healthy Citron-Pistache No-Bake',
+      emoji: '🍋', origin: '🌍',
+      mealTypes: ['snack', 'dessert'],
+      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'citron', 'pistache'],
+      difficulty: 1, prepTime: 25, cookTime: 0, servings: 8,
+      // P×4 + G×4 + L×9 = 112×4 + 200×4 + 64×9 = 448 + 800 + 576 = 1824 kcal ✓
+      baseNutrition: { calories: 1824, proteinGrams: 112, carbsGrams: 200, fatGrams: 64 },
+      ingredients: [
+        { name: 'Dattes Medjool dénoyautées', qty: 120, unit: 'g' },
+        { name: 'Pistaches non salées', qty: 80, unit: 'g' },
+        { name: 'Flocons d\'avoine', qty: 80, unit: 'g' },
+        { name: 'Fromage frais allégé (Philadelphia light)', qty: 300, unit: 'g' },
+        { name: 'Skyr nature', qty: 400, unit: 'g' },
+        { name: 'Citron (jus + zeste)', qty: 60, unit: 'g' },
+        { name: 'Miel', qty: 40, unit: 'g' },
+        { name: 'Gélatine en feuilles', qty: 8, unit: 'g' },
+        { name: 'Pistaches concassées (topping)', qty: 30, unit: 'g' }
+      ],
+      steps: [
+        'Mixer les dattes, 80g de pistaches et les flocons d\'avoine pour obtenir une pâte homogène. Presser dans le fond d\'un moule à charnière (Ø 20 cm). Réfrigérer 15 min.',
+        'Tremper la gélatine 5 min dans l\'eau froide. La dissoudre dans 3 cuillères à soupe d\'eau chaude.',
+        'Fouetter le fromage frais avec le skyr, le jus et zeste de citron, et le miel jusqu\'à parfaite homogénéité.',
+        'Incorporer la gélatine dissoute tiédie à la crème au fromage. Bien mélanger.',
+        'Verser la crème sur le fond de tarte. Lisser le dessus. Réfrigérer 3h minimum (idéalement une nuit).',
+        'Démouler délicatement. Parsemer de pistaches concassées et de zeste de citron râpé avant de servir.'
+      ]
+    },
+
+    {
+      id: 'R429',
+      name: 'Île Flottante Légère Protéinée',
+      emoji: '🏝️', origin: '🇫🇷',
+      mealTypes: ['snack', 'dessert'],
+      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'léger', 'élégant', 'vanille'],
+      difficulty: 2, prepTime: 20, cookTime: 15, servings: 4,
+      // P×4 + G×4 + L×9 = 60×4 + 72×4 + 20×9 = 240 + 288 + 180 = 708 kcal ✓
+      baseNutrition: { calories: 708, proteinGrams: 60, carbsGrams: 72, fatGrams: 20 },
+      ingredients: [
+        { name: 'Blancs d\'œufs', qty: 200, unit: 'g' },
+        { name: 'Lait demi-écrémé', qty: 500, unit: 'ml' },
+        { name: 'Jaunes d\'œufs', qty: 80, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 8, unit: 'ml' },
+        { name: 'Stevia', qty: 4, unit: 'g' },
+        { name: 'Miel', qty: 30, unit: 'g' },
+        { name: 'Beurre', qty: 5, unit: 'g' },
+        { name: 'Cannelle moulue', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Chauffer le lait à feu doux avec la moitié de la vanille et la stevia. Ne pas faire bouillir.',
+        'Monter les blancs d\'œufs en neige très ferme. Former des quenelles à l\'aide de deux cuillères à soupe.',
+        'Pocher les îles flottantes dans le lait frémissant 2 min de chaque côté. Les égoutter sur du papier absorbant.',
+        'Préparer la crème anglaise : fouetter les jaunes avec la stevia dans un bol. Verser le lait vanillé chaud progressivement en remuant.',
+        'Remettre sur feu doux en remuant constamment jusqu\'à ce que la crème nappe la cuillère (82°C). Filtrer et laisser tiédir.',
+        'Préparer le coulis caramel léger : chauffer le miel avec le beurre 2 min jusqu\'à légère coloration. Incorporer 2 cs de lait et la cannelle.',
+        'Dresser : verser la crème anglaise dans 4 assiettes creuses, déposer les îles flottantes, napper d\'un filet de caramel au miel.'
+      ]
+    },
+
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
