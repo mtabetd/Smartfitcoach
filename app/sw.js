@@ -116,9 +116,11 @@ self.addEventListener('fetch', (event) => {
 async function networkFirst(request) {
   try {
     const networkResponse = await fetch(request);
-    // Clone before consuming — responses can only be read once.
-    const cache = await caches.open(CACHE_VERSION);
-    cache.put(request, networkResponse.clone());
+    // Only cache successful responses (avoid caching 404/500)
+    if (networkResponse.ok) {
+      const cache = await caches.open(CACHE_VERSION);
+      cache.put(request, networkResponse.clone());
+    }
     return networkResponse;
   } catch (_) {
     const cached = await caches.match(request);
