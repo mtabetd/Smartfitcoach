@@ -1097,7 +1097,7 @@ function renderDedicatedPrograms(p) {
 
 // ─── STEP 1: MUSCULATION OBJECTIVES ───
 // Mapping nutrition goal key → sport goal id
-var NUTRITION_TO_SPORT_GOAL = { bulk: 'muscle', maintain: 'general', cut: 'weightloss', shred: 'shred' };
+var NUTRITION_TO_SPORT_GOAL = { bulk: 'muscle', maintain: 'general', cut: 'weightloss', shred: 'shred', recomposition: 'general' };
 window.NUTRITION_TO_SPORT_GOAL = NUTRITION_TO_SPORT_GOAL;
 // Mapping sport goal id → nutrition goal index (priority order when multi-select)
 var SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 2, shred: 3, endurance: 1, flexibility: 1, general: 1 };
