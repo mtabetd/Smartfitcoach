@@ -4786,7 +4786,7 @@
       name: 'Granola Maison Amandes Coco',
       emoji: '🥜', origin: '🇺🇸',
       mealTypes: ['breakfast', 'snack'],
-      tags: ['granola', 'maison', 'amandes', 'coco', 'meal-prep', 'vegan'],
+      tags: ['granola', 'maison', 'amandes', 'coco', 'meal-prep', 'vegetarian'],
       difficulty: 1, prepTime: 5, cookTime: 20, servings: 1,
       // 9×4 + 48×4 + 14×9 = 36+192+126 = 354 ✓
       baseNutrition: { calories: 354, proteinGrams: 9, carbsGrams: 48, fatGrams: 14 },
@@ -4809,7 +4809,7 @@
       name: 'Smoothie Protéiné Mangue Curcuma',
       emoji: '🥭', origin: '🇮🇳',
       mealTypes: ['breakfast', 'snack'],
-      tags: ['smoothie', 'mangue', 'curcuma', 'anti-inflammatoire', 'tendance', 'vegan'],
+      tags: ['smoothie', 'mangue', 'curcuma', 'anti-inflammatoire', 'tendance', 'vegetarian'],
       difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
       // 14×4 + 42×4 + 6×9 = 56+168+54 = 278 ✓
       baseNutrition: { calories: 278, proteinGrams: 14, carbsGrams: 42, fatGrams: 6 },
@@ -5581,7 +5581,8 @@
     for (var i = 0; i < mealsPerDay; i++) {
       var recipe = candidates[i % candidates.length];
       var targetCal = Math.round(userState.caloriesTarget * mealFraction);
-      var caloriesPerServing = recipe.baseNutrition.calories / recipe.servings;
+      var caloriesPerServing = (recipe.servings && recipe.servings > 0) ? recipe.baseNutrition.calories / recipe.servings : 0;
+      if (!caloriesPerServing) continue; // évite division par zéro si servings manquant
       var ratio = targetCal / caloriesPerServing;
       var cost = calcRecipeCost(recipe.id, ratio);
       if (cost) {

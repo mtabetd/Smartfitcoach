@@ -1649,7 +1649,12 @@ window.FOOD_JOURNAL = {
 
         var macros = document.createElement('span');
         macros.className = 'fj-entry-macros';
-        macros.innerHTML = '<span>' + item.entry.kcal + ' kcal</span><span>P' + item.entry.p + '</span><span>G' + item.entry.g + '</span><span>L' + item.entry.l + '</span>';
+        // XSS fix: use DOM construction — entry values come from localStorage (user-controlled)
+        var kcalSpan = document.createElement('span'); kcalSpan.textContent = item.entry.kcal + ' kcal';
+        var pSpan = document.createElement('span'); pSpan.textContent = 'P' + item.entry.p;
+        var gSpan = document.createElement('span'); gSpan.textContent = 'G' + item.entry.g;
+        var lSpan = document.createElement('span'); lSpan.textContent = 'L' + item.entry.l;
+        macros.appendChild(kcalSpan); macros.appendChild(pSpan); macros.appendChild(gSpan); macros.appendChild(lSpan);
         row.appendChild(macros);
 
         var del = document.createElement('span');
@@ -1674,7 +1679,15 @@ window.FOOD_JOURNAL = {
     if (total.count > 0 || target > 0) {
       var totalRow = document.createElement('div');
       totalRow.className = 'fj-total';
-      totalRow.innerHTML = '<span><strong>' + total.kcal + '</strong> / ' + target + ' kcal</span><span>P ' + total.p.toFixed(0) + '/' + targetMacros.p + 'g \u00B7 G ' + total.g.toFixed(0) + '/' + targetMacros.g + 'g \u00B7 L ' + total.l.toFixed(0) + '/' + targetMacros.l + 'g</span>';
+      // XSS fix: use DOM construction — total values derive from localStorage entries
+      var kcalSummary = document.createElement('span');
+      var boldKcal = document.createElement('strong'); boldKcal.textContent = total.kcal;
+      kcalSummary.appendChild(boldKcal);
+      kcalSummary.appendChild(document.createTextNode(' / ' + target + ' kcal'));
+      var macroSummary = document.createElement('span');
+      macroSummary.textContent = 'P ' + total.p.toFixed(0) + '/' + targetMacros.p + 'g \u00B7 G ' + total.g.toFixed(0) + '/' + targetMacros.g + 'g \u00B7 L ' + total.l.toFixed(0) + '/' + targetMacros.l + 'g';
+      totalRow.appendChild(kcalSummary);
+      totalRow.appendChild(macroSummary);
       section.appendChild(totalRow);
 
       // Progress bar

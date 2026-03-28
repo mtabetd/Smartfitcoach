@@ -1274,7 +1274,7 @@ function renderStep8(p) {
     // Bandeau validation NutritionMaster
     var nmBanner = '';
     if (window.S._nm && window.S._nm.errors && window.S._nm.errors.length === 0) {
-      nmBanner = '<div style="margin:8px 0;padding:8px 12px;background:rgba(76,175,80,0.12);border-left:3px solid #4CAF50;border-radius:6px;font-size:12px;color:var(--text-secondary)">' +
+      nmBanner = '<div style="margin:8px 0;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border-left:3px solid var(--green,#1A4A1A);font-size:12px;color:var(--text-secondary,#5A5A54)">' +
         '✓ Calculs validés par NutritionMaster — P×4 + G×4 + L×9 = ' + window.S._nm.caloriesCheck + ' kcal' +
         '</div>';
     }

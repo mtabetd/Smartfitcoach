@@ -526,7 +526,7 @@ window.DASHBOARD = {
         var kcalRed = isDark2 ? 'rgba(218,106,106,0.7)' : 'rgba(180,40,40,0.7)';
         var kcalRedLine = isDark2 ? '#DA6A6A' : '#B22222';
         var kcalGrid2 = isDark2 ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
-        window._dashKcalChart = new Chart(ctx2, {
+        window._dashKcalChart = (window.createChart ? window.createChart(ctx2, {
           type: 'bar',
           data: {
             labels: JOURS,
@@ -564,7 +564,7 @@ window.DASHBOARD = {
               x: { grid: { display: false }, ticks: { font: { size: 9 } } }
             }
           }
-        });
+        }) : null);
       });
     } else {
       var weekEmptyState = document.createElement('div');
