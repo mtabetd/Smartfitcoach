@@ -199,12 +199,108 @@ function getBadges() {
 }
 
 
+/* ─── WELCOME SCREEN (jour 0 — avant génération du plan) ─── */
+function renderWelcomeScreen(container) {
+  var S = window.S || {};
+  var user = tryGetUser();
+  var root = h('div', 'dash-root');
+
+  /* Greeting */
+  var now = new Date();
+  var greeting = greetingWord() + (user && user.name ? ', ' + firstName(user.name) : '');
+  root.appendChild(h('h1', 'dash-greeting', greeting));
+  var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
+  root.appendChild(h('p', 'dash-date', dateStr));
+
+  /* Tips toggle */
+  if (window.TIPS) TIPS.renderToggle(root);
+
+  /* Welcome card */
+  root.appendChild(h('div', 'dash-label', 'Bienvenue sur SmartFitCoach'));
+
+  var welcomeCard = document.createElement('div');
+  welcomeCard.className = 'dash-card';
+  welcomeCard.style.cssText = 'text-align:center;padding:32px 20px;';
+
+  var icon = document.createElement('div');
+  icon.style.cssText = 'font-size:36px;margin-bottom:16px;';
+  icon.textContent = '\u25C6';
+  welcomeCard.appendChild(icon);
+
+  var title = document.createElement('p');
+  title.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:20px;margin:0 0 10px;color:var(--black,#181818);';
+  title.textContent = 'Votre programme personnalisé vous attend';
+  welcomeCard.appendChild(title);
+
+  var sub = document.createElement('p');
+  sub.style.cssText = 'font-size:13px;color:var(--grey,#6B6B65);margin:0 0 24px;line-height:1.6;font-family:"Helvetica Neue",Arial,sans-serif;';
+  /* Determine message based on onboarding step */
+  var nStep = S.nStep || 0;
+  if (nStep === 0) {
+    sub.textContent = 'Complétez le questionnaire Nutrition pour générer votre plan alimentaire et sportif personnalisé.';
+  } else if (nStep > 0 && nStep < 10) {
+    sub.textContent = 'Votre questionnaire est en cours (étape ' + nStep + '/9). Terminez-le pour accéder à votre tableau de bord complet.';
+  } else {
+    sub.textContent = 'Générez votre plan semaine dans Nutrition pour commencer le suivi de vos calories et performances.';
+  }
+  welcomeCard.appendChild(sub);
+
+  var ctaBtn = document.createElement('button');
+  ctaBtn.className = 'dash-btn-primary';
+  ctaBtn.style.cssText = 'max-width:320px;margin:0 auto;display:block;';
+  ctaBtn.textContent = nStep === 0 ? 'Commencer le questionnaire \u2192' : 'Reprendre le questionnaire \u2192';
+  ctaBtn.addEventListener('click', function() {
+    if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
+  });
+  welcomeCard.appendChild(ctaBtn);
+
+  root.appendChild(welcomeCard);
+
+  /* Quick nav cards — always accessible */
+  root.appendChild(h('div', 'dash-label', 'Accès rapide'));
+  var navGrid = h('div', 'dash-card-grid');
+
+  var nutCard = h('div', 'dash-nav');
+  nutCard.appendChild(h('span', 'dash-nav-icon', '\u25C6'));
+  nutCard.appendChild(h('p', 'dash-nav-name', 'Nutrition'));
+  nutCard.appendChild(h('p', 'dash-nav-sub', nStep === 0 ? 'Démarrer le questionnaire' : 'Continuer l\'onboarding'));
+  nutCard.style.cursor = 'pointer';
+  nutCard.addEventListener('click', function() {
+    if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
+  });
+  navGrid.appendChild(nutCard);
+
+  var sportCard = h('div', 'dash-nav');
+  sportCard.appendChild(h('span', 'dash-nav-icon', '\u25C6'));
+  sportCard.appendChild(h('p', 'dash-nav-name', 'Sport'));
+  sportCard.appendChild(h('p', 'dash-nav-sub', 'Explorer les programmes'));
+  sportCard.style.cursor = 'pointer';
+  sportCard.addEventListener('click', function() {
+    if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport');
+  });
+  navGrid.appendChild(sportCard);
+
+  root.appendChild(navGrid);
+
+  container.appendChild(root);
+}
+
 /* ─── MAIN MODULE ─── */
 window.DASHBOARD = {
 
   render: function(container) {
     if (!container) return;
     container.innerHTML = '';
+
+    var S = window.S || {};
+
+    /* ─── WELCOME SCREEN: afficher uniquement si weekPlan non généré (jour 0 / setup incomplet) ─── */
+    var hasPlan = Array.isArray(S.weekPlan) && S.weekPlan.length > 0;
+    if (!hasPlan) {
+      renderWelcomeScreen(container);
+      return;
+    }
+    /* ─────────────────────────────────────────────────────────────────────────────────────────────── */
 
     var root = h('div', 'dash-root');
     var user = tryGetUser();

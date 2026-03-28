@@ -1587,6 +1587,10 @@ window.S = {
   sessionHistory: {},  // { 'dayIndex_YYYY-MM-DD': { duration, kcalBase, kcalEpoc, kcalTotal } }
   sessionCompleting: false,  // dayIndex en cours de bilan, ou false
   _sessionDuration: null,    // durée saisie dans le panel bilan
+  // CrossFit 100-day calendar
+  cfCalendarOpen: false,  // true = vue calendrier 100 jours ouverte
+  cfCurrentDay: 1,        // jour actuel de l'utilisateur dans le programme (1-100)
+  cfProgress: {},         // { 1: { done: true, date: 'YYYY-MM-DD' }, ... }
   // CrossFit 1RM
   crossfit1RM: {},  // { 'clean': 80, 'snatch': 60, 'deadlift': 140, ... } in kg
   // Strength assessment profile

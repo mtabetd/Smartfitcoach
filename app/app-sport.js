@@ -580,6 +580,7 @@ window.SPORT = {
     else if (S.sStep === 3) renderMusculationZones(content);  // Muscu zones
     else if (S.sStep === 4) renderMusculationProgram(content); // Muscu program
     else if (S.sStep === 5) renderCrossfitLevel(content);     // CF level
+    else if (S.sStep === 6 && S.cfCalendarOpen) renderCFCalendar(content); // CF calendar
     else if (S.sStep === 6) renderCrossfitProgram(content);   // CF program
     else if (S.sStep === 7) renderRunningConfig(content);     // Running questionnaire
     else if (S.sStep === 8) renderRunningProgram(content);    // Running program
@@ -1466,6 +1467,144 @@ function generateCrossfitWeek(weekNumber, daysPerWeek) {
   }
 
   return weekProgram;
+}
+
+// ─── VUE CALENDRIER 100 JOURS ───
+function renderCFCalendar(p) {
+  var allWods = window.CF_WODS_FULL || window.CF_WODS || [];
+
+  p.appendChild(h('div', {'class': 'eyebrow'}, 'CrossFit'));
+  p.appendChild(h('h1', {html: 'Programme<br><em>100 Jours</em>'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Vue d\'ensemble — cliquez sur un jour pour y accéder'));
+
+  // ─── Bouton retour ───
+  var backBtn = h('button', {'class': 'btn-back', style: 'margin-bottom:16px', onclick: function() {
+    S.cfCalendarOpen = false;
+    window.render();
+  }}, '← Retour au programme');
+  p.appendChild(backBtn);
+
+  // ─── Légende ───
+  var legend = h('div', {style: 'display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;align-items:center'});
+  var legendItems = [
+    {color: '#4CAF50', label: 'Complété'},
+    {color: '#1A3C5E', label: 'Jour actuel'},
+    {color: '#999',    label: 'À venir'}
+  ];
+  legendItems.forEach(function(li) {
+    var dot = h('div', {style: 'width:12px;height:12px;border-radius:50%;background:' + li.color + ';flex-shrink:0'});
+    var lbl = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, li.label);
+    var item = h('div', {style: 'display:flex;align-items:center;gap:6px'}, [dot, lbl]);
+    legend.appendChild(item);
+  });
+  p.appendChild(legend);
+
+  // ─── Progression globale ───
+  var totalDone = 0;
+  for (var dk in S.cfProgress) { if (S.cfProgress[dk] && S.cfProgress[dk].done) totalDone++; }
+  var pct = Math.round(totalDone / 100 * 100);
+  var progressBar = h('div', {style: 'background:#E5E4DE;height:6px;border-radius:3px;margin-bottom:20px;overflow:hidden'});
+  progressBar.appendChild(h('div', {style: 'background:#4CAF50;height:100%;width:' + pct + '%;transition:width 0.4s ease'}));
+  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, totalDone + ' / 100 jours complétés (' + pct + '%)'));
+  p.appendChild(progressBar);
+
+  // ─── Grouper par semaine ───
+  var weeks = {};
+  for (var wi = 0; wi < allWods.length && wi < 100; wi++) {
+    var wod = allWods[wi];
+    var weekNum = wod.week || (Math.floor(wi / 7) + 1);
+    if (!weeks[weekNum]) weeks[weekNum] = [];
+    weeks[weekNum].push(wod);
+  }
+  // Si CF_WODS_FULL non chargé, générer des jours fictifs pour afficher la structure
+  if (!allWods.length) {
+    for (var fd = 1; fd <= 100; fd++) {
+      var fw = Math.floor((fd - 1) / 7) + 1;
+      if (!weeks[fw]) weeks[fw] = [];
+      weeks[fw].push({ day: fd, week: fw, name: 'JOUR ' + fd });
+    }
+  }
+
+  var weekKeys = Object.keys(weeks).map(Number).sort(function(a, b) { return a - b; });
+
+  weekKeys.forEach(function(weekNum) {
+    var wods = weeks[weekNum];
+    var weekSection = h('div', {style: 'margin-bottom:24px'});
+
+    // Header semaine
+    var weekLabel = 'Semaine ' + weekNum;
+    // Phases indicatives
+    if (weekNum <= 4) weekLabel += ' — Base';
+    else if (weekNum <= 7) weekLabel += ' — Développement';
+    else if (weekNum <= 9) weekLabel += ' — Intensité';
+    else if (weekNum === 10) weekLabel += ' — Finale';
+    weekSection.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:6px'}, weekLabel));
+
+    var grid = h('div', {style: 'display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px'});
+
+    wods.forEach(function(wod) {
+      var dayNum = wod.day;
+      var isDone = S.cfProgress[dayNum] && S.cfProgress[dayNum].done === true;
+      var isCurrent = dayNum === S.cfCurrentDay;
+
+      var cardColor, textColor, borderColor;
+      if (isDone) {
+        cardColor = 'rgba(76,175,80,0.12)';
+        textColor = '#2E7D32';
+        borderColor = '#4CAF50';
+      } else if (isCurrent) {
+        cardColor = 'rgba(26,60,94,0.10)';
+        textColor = '#1A3C5E';
+        borderColor = '#1A3C5E';
+      } else {
+        cardColor = 'rgba(153,153,153,0.07)';
+        textColor = '#999';
+        borderColor = '#ccc';
+      }
+
+      var card = h('div', {
+        style: 'background:' + cardColor + ';border:1px solid ' + borderColor + ';border-left:3px solid ' + borderColor + ';padding:10px;cursor:pointer;border-radius:2px;transition:opacity 0.15s',
+        onclick: (function(d) {
+          return function() {
+            S.cfCurrentDay = d;
+            // Naviguer vers ce jour dans renderCrossfitProgram
+            // On calcule la semaine correspondante et on met à jour crossfitWeek
+            if (window.CF_WODS_FULL) {
+              var targetWod = window.CF_WODS_FULL.find(function(w) { return w.day === d; });
+              if (targetWod && targetWod.week) {
+                S.crossfitWeek = targetWod.week;
+              }
+            }
+            S.cfCalendarOpen = false;
+            window.render();
+          };
+        })(dayNum)
+      });
+
+      // Numéro + nom du WOD
+      card.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + textColor + ';margin-bottom:3px'}, 'JOUR ' + dayNum));
+      card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:' + textColor + ';font-weight:bold;line-height:1.2;word-break:break-word'}, wod.name || ('WOD ' + dayNum)));
+
+      // Indicateur état
+      if (isDone) {
+        card.appendChild(h('div', {style: 'font-size:10px;color:#4CAF50;margin-top:4px'}, '✓ Terminé'));
+      } else if (isCurrent) {
+        card.appendChild(h('div', {style: 'font-size:10px;color:#1A3C5E;margin-top:4px;font-weight:bold'}, '▶ Aujourd\'hui'));
+      }
+
+      grid.appendChild(card);
+    });
+
+    weekSection.appendChild(grid);
+    p.appendChild(weekSection);
+  });
+
+  // Bouton retour en bas
+  var backBtn2 = h('button', {'class': 'btn-back', style: 'margin-top:8px', onclick: function() {
+    S.cfCalendarOpen = false;
+    window.render();
+  }}, '← Retour au programme');
+  p.appendChild(backBtn2);
 }
 
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
