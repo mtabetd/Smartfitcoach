@@ -809,9 +809,10 @@ function renderDedicatedPrograms(p) {
       });
       card.appendChild(tabs);
 
-      var variation = prog.variations[varIdx];
+      var variation = prog.variations[varIdx] || prog.variations[0];
+      if (!variation) return;
       var currentPhase = getMuscuPhase(S.muscuWeek || 1);
-      variation.exercises.forEach(function(exBase) {
+      (variation.exercises || []).forEach(function(exBase) {
         var ex = applyPhaseToExercise(exBase, currentPhase);
         var row = h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start'});
         var left = h('div', {});
