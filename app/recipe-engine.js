@@ -14607,7 +14607,7 @@
     Object.keys(consolidated).forEach(function(key) {
       var item = consolidated[key];
       // Appliquer le ratio fréquence de courses AVANT la conversion market qty
-      if (freqRatio < 1 && typeof item.qty === 'number') {
+      if (freqRatio !== 1 && typeof item.qty === 'number') {
         item.qty = item.qty * freqRatio;
       }
       // Détecter la catégorie d'abord (nécessaire pour les règles de market qty)
@@ -14630,7 +14630,7 @@
       return { category: c, items: categorized[c].sort(function(a,b){ return a.name.localeCompare(b.name); }) };
     });
     // Métadonnée : période couverte (affichée dans le header de la liste)
-    var FREQ_LABELS = { daily: '1 jour', '2x_week': '4 jours', weekly: '7 jours', biweekly: '7 jours' };
+    var FREQ_LABELS = { daily: '1 jour', '2x_week': '4 jours', weekly: '7 jours', biweekly: '14 jours' };
     result._freqLabel = FREQ_LABELS[shopFreq] || '7 jours';
     result._freqDays = freqDays;
     return result;
