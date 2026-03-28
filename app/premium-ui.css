@@ -1171,26 +1171,26 @@ p, li, .card-sub, .level-desc, .exercise-detail,
 /* Bouton toggle arabe */
 .btn-shop-ar {
   padding: 8px 14px;
-  background: #2D6A4F;
+  background: #1A4A1A;
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 2px;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
 }
 .btn-shop-ar.active {
-  background: #1B4332;
+  background: #0D3310;
 }
 
 /* Bouton imprimer en arabe */
 .btn-shop-print-ar {
   padding: 8px 14px;
-  background: #1565C0;
+  background: #1A3A6A;
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 2px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
