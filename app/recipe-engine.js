@@ -5624,6 +5624,193 @@
       ]
     },
 
+    {
+      id: 'R415',
+      name: 'Energy Balls Chocolat-Pistache-Fleur de Sel',
+      emoji: '🍫', origin: '🌍',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'no-bake', 'energy-ball', 'chocolat', 'pistache', 'original'],
+      difficulty: 1, prepTime: 25, cookTime: 0, servings: 14,
+      // 112×4 + 98×4 + 82×9 = 448+392+738 = 1578 ✓
+      baseNutrition: { calories: 1578, proteinGrams: 112, carbsGrams: 98, fatGrams: 82 },
+      ingredients: [
+        { name: 'Dattes Medjool (dénoyautées)', qty: 200, unit: 'g' },
+        { name: 'Amandes', qty: 100, unit: 'g' },
+        { name: 'Whey protéine chocolat', qty: 60, unit: 'g' },
+        { name: 'Pistaches non salées', qty: 60, unit: 'g' },
+        { name: 'Cacao en poudre non sucré', qty: 20, unit: 'g' },
+        { name: 'Fleur de sel', qty: 2, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Mixer les amandes en poudre grossière. Réserver 30g de pistaches concassées pour l\'enrobage.',
+        'Mixer les dattes Medjool jusqu\'à obtenir une pâte collante. Ajouter amandes, whey chocolat, cacao, vanille et fleur de sel. Mixer jusqu\'à homogénéité.',
+        'Diviser en 14 portions égales (~35g). Rouler en boules de 2 cm de diamètre entre les paumes.',
+        'Rouler chaque ball dans les pistaches concassées ou le cacao en poudre. Réfrigérer 1h avant dégustation. Conservation : 7 jours au frigo.'
+      ]
+    },
+
+    {
+      id: 'R416',
+      name: 'Energy Balls Cacahuète-Avoine-Miel "PB&J"',
+      emoji: '🥜', origin: '🇺🇸',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'no-bake', 'energy-ball', 'cacahuète', 'avoine', 'miel', 'peanut-butter'],
+      difficulty: 1, prepTime: 20, cookTime: 0, servings: 12,
+      // 108×4 + 120×4 + 66×9 = 432+480+594 = 1506 ✓
+      baseNutrition: { calories: 1506, proteinGrams: 108, carbsGrams: 120, fatGrams: 66 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 120, unit: 'g' },
+        { name: 'Beurre de cacahuète naturel', qty: 130, unit: 'g' },
+        { name: 'Miel', qty: 40, unit: 'g' },
+        { name: 'Whey protéine vanille', qty: 60, unit: 'g' },
+        { name: 'Cranberries séchées', qty: 40, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger beurre de cacahuète et miel dans un saladier. Chauffer 30 sec au micro-ondes pour faciliter le mélange.',
+        'Incorporer les flocons d\'avoine, la whey vanille et les cranberries séchées. Mélanger jusqu\'à obtenir une pâte homogène.',
+        'Si trop collante, réfrigérer 20 min. Former 12 boules compactes (~50g chacune) en pressant fermement.',
+        'Déposer sur une plaque tapissée de papier cuisson. Réfrigérer au moins 30 min. Conservation : 10 jours au frigo.'
+      ]
+    },
+
+    {
+      id: 'R417',
+      name: 'Cheesecake Protéiné Citron-Framboise No-Bake',
+      emoji: '🍋', origin: '🇺🇸',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'no-bake', 'cheesecake', 'citron', 'framboise', 'premium', 'dessert-protéiné'],
+      difficulty: 2, prepTime: 30, cookTime: 0, servings: 6,
+      // 132×4 + 114×4 + 78×9 = 528+456+702 = 1686 ✓
+      baseNutrition: { calories: 1686, proteinGrams: 132, carbsGrams: 114, fatGrams: 78 },
+      ingredients: [
+        { name: 'Dattes Medjool (dénoyautées)', qty: 80, unit: 'g' },
+        { name: 'Amandes', qty: 60, unit: 'g' },
+        { name: 'Noix de cajou', qty: 40, unit: 'g' },
+        { name: 'Cream cheese allégé', qty: 200, unit: 'g' },
+        { name: 'Skyr nature', qty: 300, unit: 'g' },
+        { name: 'Whey protéine vanille', qty: 60, unit: 'g' },
+        { name: 'Jus de citron', qty: 40, unit: 'ml' },
+        { name: 'Zeste de citron (pce)', qty: 1, unit: 'pce' },
+        { name: 'Framboises fraîches', qty: 150, unit: 'g' },
+        { name: 'Miel', qty: 20, unit: 'g' }
+      ],
+      steps: [
+        'Base : mixer dattes + amandes + cajou jusqu\'à obtenir une pâte collante. Presser uniformément au fond d\'un moule 20cm tapissé de papier sulfurisé.',
+        'Crème : fouetter cream cheese allégé + skyr + whey vanille + jus et zeste de citron + miel jusqu\'à obtenir un appareil lisse et aérien.',
+        'Verser la crème sur la base. Lisser. Filmer et réfrigérer minimum 4h (idéalement une nuit).',
+        'Coulis : mixer 100g de framboises avec quelques gouttes de citron. Verser sur le cheesecake froid. Décorer avec les framboises entières restantes. Couper en 6 parts.'
+      ]
+    },
+
+    {
+      id: 'R418',
+      name: 'Cookies Protéinés Double Chocolat-Noix de Cajou',
+      emoji: '🍪', origin: '🇺🇸',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'cookies', 'chocolat', 'cajou', 'baked', 'moelleux', 'premium'],
+      difficulty: 2, prepTime: 15, cookTime: 12, servings: 10,
+      // 120×4 + 140×4 + 82×9 = 480+560+738 = 1778 ✓
+      baseNutrition: { calories: 1778, proteinGrams: 120, carbsGrams: 140, fatGrams: 82 },
+      ingredients: [
+        { name: 'Farine d\'avoine', qty: 120, unit: 'g' },
+        { name: 'Whey protéine chocolat', qty: 80, unit: 'g' },
+        { name: 'Beurre de cajou', qty: 100, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Cacao en poudre non sucré', qty: 20, unit: 'g' },
+        { name: 'Pépites de chocolat noir 70%', qty: 60, unit: 'g' },
+        { name: 'Sel de mer', qty: 2, unit: 'g' },
+        { name: 'Bicarbonate de soude', qty: 3, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 175°C. Mélanger beurre de cajou + œufs jusqu\'à consistance crémeuse.',
+        'Incorporer farine d\'avoine, whey chocolat, cacao, sel et bicarbonate. Mélanger sans excès. Ajouter les pépites de chocolat.',
+        'Former 10 boules (~55g). Déposer sur plaque avec papier cuisson. Aplatir légèrement. Saupoudrer d\'une pincée de sel de mer.',
+        'Cuire 10-12 min. Le centre doit paraître légèrement sous-cuit : il se raffermira en refroidissant. Laisser refroidir 10 min sur la plaque avant de déguster.'
+      ]
+    },
+
+    {
+      id: 'R419',
+      name: 'Smoothie Bowl Protéiné Açaï-Mangue',
+      emoji: '🫐', origin: '🇧🇷',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['high-protein', 'snack', 'breakfast', 'smoothie-bowl', 'açaï', 'mangue', 'no-bake', 'tendance', 'coloré'],
+      difficulty: 1, prepTime: 10, cookTime: 0, servings: 1,
+      // 28×4 + 46×4 + 14×9 = 112+184+126 = 422 ✓
+      baseNutrition: { calories: 422, proteinGrams: 28, carbsGrams: 46, fatGrams: 14 },
+      ingredients: [
+        { name: 'Purée d\'açaï surgelée', qty: 100, unit: 'g' },
+        { name: 'Mangue congelée', qty: 100, unit: 'g' },
+        { name: 'Banane congelée', qty: 80, unit: 'g' },
+        { name: 'Whey protéine vanille', qty: 30, unit: 'g' },
+        { name: 'Lait de coco léger', qty: 60, unit: 'ml' },
+        { name: 'Granola nature', qty: 25, unit: 'g' },
+        { name: 'Noix de cajou', qty: 10, unit: 'g' },
+        { name: 'Noix de coco râpée', qty: 5, unit: 'g' },
+        { name: 'Myrtilles fraîches', qty: 30, unit: 'g' },
+        { name: 'Miel', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Mixer açaï + mangue congelée + banane congelée + whey vanille + lait de coco jusqu\'à obtenir une texture épaisse, crémeuse et lisse. Utiliser le minimum de liquide.',
+        'Verser dans un bol profond. La texture doit être suffisamment épaisse pour tenir une cuillère droite.',
+        'Disposer les toppings en rangées harmonieuses : granola, noix de cajou, noix de coco râpée, myrtilles fraîches. Finir par un filet de miel. Servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R420',
+      name: 'Brownie Protéiné Patate Douce & Noix de Cajou',
+      emoji: '🍠', origin: '🌍',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'brownie', 'patate-douce', 'cajou', 'sans-farine', 'sans-sucre-ajouté', 'fudgey'],
+      difficulty: 2, prepTime: 20, cookTime: 25, servings: 9,
+      // 108×4 + 102×4 + 68×9 = 432+408+612 = 1452 ✓
+      baseNutrition: { calories: 1452, proteinGrams: 108, carbsGrams: 102, fatGrams: 68 },
+      ingredients: [
+        { name: 'Patate douce (cuite, en purée)', qty: 300, unit: 'g' },
+        { name: 'Whey protéine chocolat', qty: 80, unit: 'g' },
+        { name: 'Cacao en poudre non sucré', qty: 30, unit: 'g' },
+        { name: 'Beurre de cajou', qty: 80, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Noix de cajou concassées', qty: 50, unit: 'g' },
+        { name: 'Sel de mer', qty: 2, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Préchauffer le four à 170°C. Cuire la patate douce à la vapeur ou au four, éplucher et réduire en purée lisse.',
+        'Mélanger purée tiède + beurre de cajou + œufs + vanille jusqu\'à homogénéité. Ajouter whey chocolat, cacao et sel. Mélanger sans excès.',
+        'Verser dans un moule carré 20×20cm tapissé de papier sulfurisé. Parsemer de noix de cajou concassées. Appuyer légèrement.',
+        'Cuire 22-25 min. Le centre doit être encore légèrement tremblotant. Laisser refroidir complètement avant de découper en 9 carrés. Réfrigérer pour une texture fudgey optimale.'
+      ]
+    },
+
+    {
+      id: 'R421',
+      name: 'Bouchées Protéinées Coco-Matcha "Raffaello Vert"',
+      emoji: '🍵', origin: '🇯🇵',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'no-bake', 'matcha', 'coco', 'cajou', 'premium', 'original', 'raffaello'],
+      difficulty: 2, prepTime: 30, cookTime: 0, servings: 12,
+      // 60×4 + 72×4 + 60×9 = 240+288+540 = 1068 ✓
+      baseNutrition: { calories: 1068, proteinGrams: 60, carbsGrams: 72, fatGrams: 60 },
+      ingredients: [
+        { name: 'Noix de cajou entières', qty: 12, unit: 'pce' },
+        { name: 'Noix de cajou', qty: 120, unit: 'g' },
+        { name: 'Whey protéine neutre (sans arôme)', qty: 40, unit: 'g' },
+        { name: 'Huile de coco', qty: 20, unit: 'g' },
+        { name: 'Matcha en poudre (qualité culinaire)', qty: 8, unit: 'g' },
+        { name: 'Noix de coco râpée', qty: 60, unit: 'g' },
+        { name: 'Miel', qty: 20, unit: 'g' }
+      ],
+      steps: [
+        'Mixer 120g de noix de cajou jusqu\'à obtenir une pâte lisse. Ajouter whey neutre, huile de coco fondue, matcha et miel. Mixer jusqu\'à homogénéité. La pâte doit être souple et non collante.',
+        'Si trop molle, réfrigérer 20 min. Prélever ~25g de pâte, former un disque, placer une noix de cajou entière au centre, refermer et rouler en boule parfaite.',
+        'Rouler chaque bouchée dans la noix de coco râpée pour obtenir l\'enrobage blanc caractéristique. Appuyer légèrement pour que la coco adhère.',
+        'Disposer sur une plaque. Réfrigérer 1h minimum. Les bouchées se bonifient le lendemain. Conservation : 10 jours au frigo.'
+      ]
+    },
+
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
