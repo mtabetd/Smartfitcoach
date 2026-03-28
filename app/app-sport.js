@@ -3515,6 +3515,11 @@ function renderPadelConfig(p) {
 
 function renderPadelProgram(p) {
   if (!S.padelProgram) { S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); }
+  if (!S.padelProgram || !S.padelProgram.length) {
+    p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+    p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+    return;
+  }
   var week = S.padelProgram[S.padelWeek - 1];
   if (!week) return;
 
@@ -3627,6 +3632,11 @@ function renderGolfConfig(p) {
 
 function renderGolfProgram(p) {
   if (!S.golfProgram) { S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); }
+  if (!S.golfProgram || !S.golfProgram.length) {
+    p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+    p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+    return;
+  }
   var week = S.golfProgram[S.golfWeek - 1];
   if (!week) return;
 
@@ -3821,6 +3831,11 @@ function renderTriathlonProgram(p) {
 
   var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var program = S.triathlonProgram;
+  if (!program || !program.length) {
+    p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+    p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 17; window.render(); }, html: backArrow + 'Retour'}));
+    return;
+  }
   var totalWeeks = program.length;
   if (S.triathlonWeek > totalWeeks) S.triathlonWeek = totalWeeks;
   if (S.triathlonWeek < 1) S.triathlonWeek = 1;
