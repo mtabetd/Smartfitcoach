@@ -5228,6 +5228,211 @@
         'Assembler le bowl : tous les éléments disposés en secteurs colorés. Graines de tournesol. Sauce tahini.'
       ]
     },
+    {
+      id: 'R401',
+      name: 'Muffins Protéinés Pistache-Citron',
+      emoji: '🧁', origin: '🌍',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'meal-prep', 'muffin', 'pistache', 'citron', 'batch-cooking', 'vegetarian'],
+      difficulty: 2, prepTime: 15, cookTime: 22, servings: 6,
+      // 150×4 + 80×4 + 32×9 = 600+320+288 = 1208 ✓ (≈1200 kcal, 200 kcal/muffin)
+      baseNutrition: { calories: 1208, proteinGrams: 150, carbsGrams: 80, fatGrams: 32 },
+      ingredients: [
+        { name: 'Whey protéine vanille', qty: 120, unit: 'g' },
+        { name: 'Farine d\'avoine', qty: 100, unit: 'g' },
+        { name: 'Pistaches hachées', qty: 50, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 200, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Zeste de citron', qty: 1, unit: 'pce' },
+        { name: 'Extrait de vanille', qty: 5, unit: 'ml' },
+        { name: 'Levure chimique', qty: 8, unit: 'g' },
+        { name: 'Érythritol (ou sucre)', qty: 30, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 180°C. Garnir un moule à 6 muffins de caissettes papier.',
+        'Mélanger farine d\'avoine, whey vanille, levure et érythritol dans un grand bol.',
+        'Dans un autre bol, fouetter fromage blanc, œufs, zeste de citron râpé et extrait de vanille.',
+        'Incorporer les ingrédients liquides aux secs en mélangeant délicatement. Ne pas trop travailler.',
+        'Ajouter les pistaches hachées en réservant quelques morceaux pour la déco.',
+        'Répartir dans les 6 moules. Parsemer des pistaches réservées. Cuire 20-22 min.',
+        'Vérifier la cuisson avec un cure-dent. Laisser refroidir 10 min avant de démouler.'
+      ]
+    },
+    {
+      id: 'R402',
+      name: 'Pancakes Protéinés Banane-Cannelle',
+      emoji: '🥞', origin: '🇺🇸',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['high-protein', 'snack', 'pancakes', 'banane', 'cannelle', 'meal-prep', 'vegetarian'],
+      difficulty: 1, prepTime: 10, cookTime: 15, servings: 2,
+      // 60×4 + 88×4 + 14×9 = 240+352+126 = 718 ✓ (≈700 kcal, 359 kcal/portion)
+      baseNutrition: { calories: 718, proteinGrams: 60, carbsGrams: 88, fatGrams: 14 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 120, unit: 'g' },
+        { name: 'Banane mûre', qty: 120, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Whey protéine vanille', qty: 60, unit: 'g' },
+        { name: 'Lait d\'amande', qty: 120, unit: 'ml' },
+        { name: 'Cannelle moulue', qty: 4, unit: 'g' },
+        { name: 'Levure chimique', qty: 5, unit: 'g' },
+        { name: 'Huile de coco', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Mixer les flocons d\'avoine en farine fine au blender.',
+        'Ajouter banane en morceaux, œufs, whey, lait d\'amande et cannelle. Mixer jusqu\'à pâte homogène.',
+        'Laisser reposer 5 min. Ajouter levure et mélanger à la spatule.',
+        'Chauffer une poêle antiadhésive à feu moyen avec un peu d\'huile de coco.',
+        'Verser des louches de pâte. Cuire 2-3 min jusqu\'à formation de bulles, retourner, cuire 1-2 min.',
+        'Servir chaud, empilés. Accompagner de cannelle supplémentaire, yaourt grec et quelques rondelles de banane.'
+      ]
+    },
+    {
+      id: 'R403',
+      name: 'Muffins Dattes-Cajou-Chocolat',
+      emoji: '🍫', origin: '🌍',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'meal-prep', 'sans-sucre-ajouté', 'dattes', 'chocolat', 'batch-cooking', 'vegan-friendly'],
+      difficulty: 2, prepTime: 20, cookTime: 20, servings: 8,
+      // 128×4 + 110×4 + 46×9 = 512+440+414 = 1366 ✓ (≈1360 kcal, 170 kcal/muffin)
+      baseNutrition: { calories: 1366, proteinGrams: 128, carbsGrams: 110, fatGrams: 46 },
+      ingredients: [
+        { name: 'Dattes Medjool (dénoyautées)', qty: 160, unit: 'g' },
+        { name: 'Noix de cajou (crues)', qty: 80, unit: 'g' },
+        { name: 'Whey protéine chocolat', qty: 120, unit: 'g' },
+        { name: 'Cacao non sucré', qty: 40, unit: 'g' },
+        { name: 'Farine d\'avoine', qty: 80, unit: 'g' },
+        { name: 'Œuf', qty: 4, unit: 'pce' },
+        { name: 'Lait d\'amande', qty: 100, unit: 'ml' },
+        { name: 'Levure chimique', qty: 8, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Préchauffer le four à 175°C. Garnir un moule à 8 muffins.',
+        'Faire tremper les dattes dans l\'eau chaude 10 min. Égoutter et mixer en purée lisse.',
+        'Torréfier les noix de cajou à sec 3 min à la poêle. Hacher grossièrement.',
+        'Mélanger farine d\'avoine, whey chocolat, cacao et levure.',
+        'Fouetter œufs avec purée de dattes, lait d\'amande et vanille.',
+        'Incorporer l\'appareil humide aux secs. Ajouter les cajous hachés. Mélanger délicatement.',
+        'Répartir dans les 8 moules. Cuire 18-20 min. Refroidir sur grille avant dégustation.'
+      ]
+    },
+    {
+      id: 'R404',
+      name: 'Pancakes Protéinés Myrtilles-Avoine',
+      emoji: '🫐', origin: '🇺🇸',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['high-protein', 'snack', 'pancakes', 'myrtilles', 'avoine', 'skyr', 'antioxydants', 'vegetarian'],
+      difficulty: 1, prepTime: 10, cookTime: 15, servings: 2,
+      // 56×4 + 100×4 + 16×9 = 224+400+144 = 768 ✓ (≈760 kcal, 384 kcal/portion)
+      baseNutrition: { calories: 768, proteinGrams: 56, carbsGrams: 100, fatGrams: 16 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 100, unit: 'g' },
+        { name: 'Skyr nature', qty: 200, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Myrtilles fraîches ou surgelées', qty: 100, unit: 'g' },
+        { name: 'Lait d\'amande', qty: 80, unit: 'ml' },
+        { name: 'Levure chimique', qty: 5, unit: 'g' },
+        { name: 'Miel', qty: 15, unit: 'g' },
+        { name: 'Yaourt grec 0%', qty: 80, unit: 'g' }
+      ],
+      steps: [
+        'Mixer flocons en farine. Mélanger avec levure.',
+        'Fouetter skyr, œufs et lait d\'amande. Incorporer aux secs. Laisser reposer 5 min.',
+        'Incorporer délicatement les myrtilles à la pâte (réserver quelques-unes pour la garniture).',
+        'Cuire à feu moyen dans une poêle légèrement huilée, 2-3 min par face.',
+        'Sauce : mélanger yaourt grec + miel. Servir les pancakes nappés de sauce et des myrtilles réservées.'
+      ]
+    },
+    {
+      id: 'R405',
+      name: 'Muffins Protéinés Carotte-Noix',
+      emoji: '🥕', origin: '🇫🇷',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'meal-prep', 'carrot-cake', 'noix', 'cannelle', 'batch-cooking', 'vegetarian'],
+      difficulty: 2, prepTime: 20, cookTime: 22, servings: 6,
+      // 120×4 + 84×4 + 36×9 = 480+336+324 = 1140 ✓ (≈1140 kcal, 190 kcal/muffin)
+      baseNutrition: { calories: 1140, proteinGrams: 120, carbsGrams: 84, fatGrams: 36 },
+      ingredients: [
+        { name: 'Whey protéine vanille', qty: 100, unit: 'g' },
+        { name: 'Farine d\'avoine', qty: 100, unit: 'g' },
+        { name: 'Carottes râpées', qty: 200, unit: 'g' },
+        { name: 'Noix hachées', qty: 50, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 150, unit: 'g' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Cannelle moulue', qty: 5, unit: 'g' },
+        { name: 'Gingembre moulu', qty: 2, unit: 'g' },
+        { name: 'Muscade moulue', qty: 1, unit: 'g' },
+        { name: 'Levure chimique', qty: 8, unit: 'g' },
+        { name: 'Érythritol (ou sucre)', qty: 30, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 180°C. Préparer un moule à 6 muffins.',
+        'Râper finement les carottes. Hacher grossièrement les noix.',
+        'Mélanger farine d\'avoine, whey, levure, érythritol, cannelle, gingembre et muscade.',
+        'Fouetter fromage blanc et œufs. Ajouter les carottes râpées et bien mélanger.',
+        'Incorporer le mélange humide aux secs en quelques coups de spatule. Ajouter les noix.',
+        'Répartir dans les moules. Cuire 20-22 min. Vérifier la cuisson avec un cure-dent.',
+        'Laisser refroidir complètement. Optionnel : glacer avec un voile de fromage frais allégé et cannelle.'
+      ]
+    },
+    {
+      id: 'R406',
+      name: 'Pancakes Soufflés Japonais Protéinés Matcha',
+      emoji: '🍵', origin: '🇯🇵',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['high-protein', 'snack', 'pancakes', 'matcha', 'japonais', 'souffle', 'tendance', 'instagrammable', 'vegetarian'],
+      difficulty: 3, prepTime: 15, cookTime: 15, servings: 1,
+      // 30×4 + 30×4 + 10×9 = 120+120+90 = 330 ✓ (≈320 kcal)
+      baseNutrition: { calories: 330, proteinGrams: 30, carbsGrams: 30, fatGrams: 10 },
+      ingredients: [
+        { name: 'Blanc d\'œuf', qty: 120, unit: 'g' },
+        { name: 'Fromage blanc 0%', qty: 100, unit: 'g' },
+        { name: 'Whey protéine neutre', qty: 30, unit: 'g' },
+        { name: 'Farine de riz', qty: 20, unit: 'g' },
+        { name: 'Matcha en poudre (qualité culinaire)', qty: 5, unit: 'g' },
+        { name: 'Jaune d\'œuf', qty: 1, unit: 'pce' },
+        { name: 'Miel', qty: 8, unit: 'g' },
+        { name: 'Levure chimique', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Fouetter jaune d\'œuf + fromage blanc + miel + matcha jusqu\'à homogène. Ajouter farine de riz, whey et levure.',
+        'Monter les blancs d\'œufs en neige très ferme (pointes dressées). C\'est la clé de la texture soufflée.',
+        'Incorporer ¼ des blancs en neige vigoureusement pour détendre la base, puis plier délicatement le reste en 2 fois.',
+        'Chauffer une poêle à couvercle à feu très doux. Huiler légèrement.',
+        'Déposer des cercles épais de pâte (3 pancakes). Ajouter quelques gouttes d\'eau sur le côté, couvrir. Cuire 4-5 min.',
+        'Retourner très délicatement. Couvrir. Cuire encore 3-4 min.',
+        'Servir immédiatement saupoudrés de matcha, sucre glace (léger) et myrtilles fraîches.'
+      ]
+    },
+    {
+      id: 'R407',
+      name: 'French Toast Protéiné Figues & Amandes',
+      emoji: '🍞', origin: '🇫🇷',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['high-protein', 'snack', 'french-toast', 'figues', 'amandes', 'élégant', 'tendance', 'vegetarian'],
+      difficulty: 1, prepTime: 10, cookTime: 10, servings: 1,
+      // 32×4 + 44×4 + 13×9 = 128+176+117 = 421 ✓ (≈420 kcal)
+      baseNutrition: { calories: 421, proteinGrams: 32, carbsGrams: 44, fatGrams: 13 },
+      ingredients: [
+        { name: 'Pain complet épais (type pain de mie)', qty: 100, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Whey protéine vanille', qty: 25, unit: 'g' },
+        { name: 'Lait d\'amande', qty: 80, unit: 'ml' },
+        { name: 'Figues séchées', qty: 40, unit: 'g' },
+        { name: 'Amandes effilées', qty: 15, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Cannelle moulue', qty: 2, unit: 'g' },
+        { name: 'Extrait de vanille', qty: 3, unit: 'ml' }
+      ],
+      steps: [
+        'Fouetter vigoureusement œufs, lait d\'amande, whey vanille, vanille et cannelle dans un plat creux.',
+        'Tremper les tranches de pain épais dans l\'appareil 2 min de chaque côté pour bien imbiber.',
+        'Dorer dans une poêle antiadhésive à feu moyen 3-4 min par face, jusqu\'à belle couleur dorée.',
+        'Pendant ce temps, torréfier les amandes effilées à sec dans une petite poêle 2-3 min.',
+        'Couper les figues séchées en quartiers.',
+        'Servir le french toast nappé de miel, garni de figues et amandes effilées torréfiées. Saupoudrer de cannelle.'
+      ]
+    },
 
   ];
 
