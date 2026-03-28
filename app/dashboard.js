@@ -515,11 +515,10 @@ window.DASHBOARD = {
         var JOURS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
         var target = (window.S.calories && window.S.calories > 0) ? window.S.calories : 2000;
         var dayKcals = window.S.weekPlan.map(function(day) {
-          if (!day || !Array.isArray(day.meals)) return 0;
-          return day.meals.reduce(function(sum, m) {
-            var k = (m && (m.k || (m.baseNutrition && m.baseNutrition.calories) || m.kcal)) || 0;
-            return sum + (isNaN(k) ? 0 : k);
-          }, 0);
+          if (!day) return 0;
+          // weekPlan structure: {breakfast, lunch, snack, dinner} — not {meals:[]}
+          function getK(meal) { return (meal && (meal.k || (meal.baseNutrition && meal.baseNutrition.calories) || meal.kcal)) || 0; }
+          return getK(day.breakfast) + getK(day.lunch) + getK(day.snack) + getK(day.dinner);
         });
         if (window._dashKcalChart) { try { window._dashKcalChart.destroy(); } catch(e2) {} window._dashKcalChart = null; }
         var isDark2 = document.body.classList.contains('dark-mode') || window.matchMedia('(prefers-color-scheme: dark)').matches;

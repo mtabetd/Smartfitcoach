@@ -1832,6 +1832,7 @@ function renderSparkline(values, color) {
   // Dot final
   if (!pts || pts.length === 0) return null;
   var lastPt = pts[pts.length - 1].split(',');
+  if (lastPt.length < 2) return svg; // malformed point — skip final dot
   var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
   circle.setAttribute('cx', lastPt[0]);
   circle.setAttribute('cy', lastPt[1]);

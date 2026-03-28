@@ -2091,10 +2091,10 @@ function calcAdjustedWeight(){
 window.calcAdjustedWeight=calcAdjustedWeight;
 
 function calcBMR(){var s=window.S;if(!s.sex)return 0;if(!s.age||s.age<13||s.age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;if(s.sex==='homme')return Math.round((10*s.weight)+(6.25*s.height)-(5*s.age)+5);return Math.round((10*s.weight)+(6.25*s.height)-(5*s.age)-161)} // Mifflin-St Jeor 1990 (Frankenfield 2005: best accuracy general population)
-function calcTDEE(){var s=window.S;if(s.activity===null)return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
+function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
-function calcTarget(){var s=window.S;if(s.goal===null)return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}// Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
+function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}// Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
 base=Math.max(base,1800);return base}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)
 // IMPORTANT : sans ce cap, un athlète élite (TDEE 3500+) en "cut -15%" pouvait avoir un déficit de 525-700 kcal/j
@@ -2141,7 +2141,7 @@ function calcMacros(){
   //           Tarnopolsky 2000 (MSSE) : femmes nécessitent ~13% de moins (oestrogène anti-catabolique,
   //           oxydation leucine réduite) | ISSN 2017 | Helms 2014 | EFSA 2012 | IOC 2011
   var ppk=1.8;
-  var actFactor=s.activity!==null?ACTIVITIES[s.activity].factor:1.2;
+  var actFactor=(s.activity!==null&&s.activity!==undefined&&ACTIVITIES[s.activity])?ACTIVITIES[s.activity].factor:1.2;
   var isFemale=s.sex==='femme';
 
   if(goalKey==='maintain'){
@@ -2368,7 +2368,7 @@ function calcHydration(){
   if(!s.weight)return null;
   var base=Math.round(s.weight*35); // 35 ml/kg/j de base (EFSA 2010)
   var actBonus=0; // bonus lié à l'activité physique (par séance)
-  if(s.activity!==null){
+  if(s.activity!==null&&s.activity!==undefined&&ACTIVITIES[s.activity]){
     var factor=ACTIVITIES[s.activity].factor;
     if(factor>=1.9)actBonus=1500;      // Athlète élite: +1.5L/j
     else if(factor>=1.725)actBonus=1000; // Très actif: +1L/j
@@ -2548,7 +2548,7 @@ bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR)sR=enrichWithScali
 var sPool=meals>=4&&sT>0?(s.whey&&pSW.length>0&&d%2===0?pSW:(pSN.length>0?pSN:pS)):null;
 for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
 plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
-function swapMeal(di,slot){var s=window.S;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));var nr=top[Math.floor(Math.random()*top.length)];nr=enrichWithScaling(nr,tgt);s.weekPlan[di][slot]=nr;if(typeof window.render==='function')window.render()}
+function swapMeal(di,slot){var s=window.S;if(!s.weekPlan||!s.weekPlan[di])return;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));var nr=top[Math.floor(Math.random()*top.length)];nr=enrichWithScaling(nr,tgt);s.weekPlan[di][slot]=nr;if(typeof window.render==='function')window.render()}
 
 window.getPool = getPool;
 window.filterRecipes = filterRecipes;
@@ -2768,7 +2768,7 @@ function detectMedicalConflicts() {
   }
   // Conflit 4 : Cardiopathie + intensité haute
   if(med.indexOf('cardio')!==-1){
-    var actFactor=s.activity!==null?ACTIVITIES[s.activity].factor:0;
+    var actFactor=(s.activity!==null&&s.activity!==undefined&&ACTIVITIES[s.activity])?ACTIVITIES[s.activity].factor:0;
     if(actFactor>=1.7){
       conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Cardiopathie + activité très intense — Niveau d\'activité incompatible sans clearance cardiologique. Test d\'effort (VO2max) obligatoire. Zones FC via formule de Karvonen recommandées.'});
     }

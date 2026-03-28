@@ -1299,8 +1299,8 @@ function renderStep8(p) {
   })();
   rh.appendChild(h('div', {'class': 'result-rule'}));
   var _profItems = [S.sex==='homme'?'Homme':'Femme', S.age+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
-  if(S.activity!==null)_profItems.push(ACTIVITIES[S.activity].name);
-  if(S.goal!==null)_profItems.push(GOALS[S.goal].name);
+  if(S.activity!==null&&S.activity!==undefined&&ACTIVITIES[S.activity])_profItems.push(ACTIVITIES[S.activity].name);
+  if(S.goal!==null&&S.goal!==undefined&&GOALS[S.goal])_profItems.push(GOALS[S.goal].name);
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));
   var _m=calcMacros();
   if(_m.proteinPerKg){rh.appendChild(h('div',{style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey2);letter-spacing:1px'},'Prot\u00e9ines: '+_m.proteinPerKg+'g/kg \u00B7 Lipides: '+_m.fatPerKg+'g/kg \u00B7 Glucides: '+(_m.carbsPerKg||'-')+'g/kg'));}
@@ -1331,7 +1331,7 @@ function renderStep8(p) {
   sr.appendChild(c1);
   var c2 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c2.appendChild(h('div', {'class': 'bn-val'}, String(tgt)));
-  c2.appendChild(h('div', {'class': 'bn-label'}, GOALS[S.goal].name));
+  c2.appendChild(h('div', {'class': 'bn-label'}, (S.goal!==null&&GOALS[S.goal])?GOALS[S.goal].name:''));
   sr.appendChild(c2);
   p.appendChild(sr);
 
