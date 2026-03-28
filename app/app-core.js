@@ -80,7 +80,7 @@ var GOALS=[
 // Note : l'approche g/kg est cliniquement supérieure aux % de calories (ISSN 2017, Helms 2014)
 var RATIOS={bulk:{g:.55,p:.25,l:.20},maintain:{g:.50,p:.30,l:.20},cut:{g:.40,p:.35,l:.25},shred:{g:.30,p:.40,l:.30}};
 var COOK_LEVELS=[{name:'Facile',desc:'5-10 min',val:1},{name:'Moyen',desc:'15-20 min',val:2},{name:'Avancé',desc:'30 min',val:3},{name:'Chef',desc:'45+ min',val:4}];
-var ALLERGIES=['Aucune','Fruits à coque','Arachides','Oeufs','Poisson','Crustacés','Soja','Lait/Produits laitiers','Gluten/Blé','Sésame','Moutarde'];
+var ALLERGIES=['Aucune','Fruits à coque','Arachides','Œufs','Poisson','Crustacés','Soja','Lait/Produits laitiers','Gluten/Blé','Sésame','Moutarde'];
 var INTOLERANCES=['Aucune','Lactose','Gluten','Fructose','Histamine'];
 var REGIMES=[{icon:'♦',name:'Omnivore'},{icon:'♦',name:'Pescétarien'},{icon:'♦',name:'Végétarien'},{icon:'♦',name:'Végan'}];
 var CUISINES=[{f:'🌍',name:'Toutes'},{f:'🇫🇷',name:'Française'},{f:'🇺🇸',name:'Américaine'},{f:'🇯🇵',name:'Japonaise'},{f:'🇲🇦',name:'Marocaine'},{f:'🇮🇹',name:'Italienne'},{f:'🇹🇭',name:'Thaïlandaise'},{f:'🇮🇳',name:'Indienne'},{f:'🇰🇷',name:'Coréenne'},{f:'🇲🇽',name:'Mexicaine'},{f:'🇱🇧',name:'Libanaise'},{f:'🇻🇳',name:'Vietnamienne'}];
@@ -260,7 +260,7 @@ var SHOPPING=[
   ]}
 ];
 var STAPLES=[
-  {cat:'PROTÉINES',items:['Blancs de poulet','Oeufs (x30)','Thon en conserve','Boeuf haché 5%','Saumon / Pavés poisson','Lentilles corail','Pois chiches','Dinde escalopes','Fromage blanc 0%','Whey protéine']},
+  {cat:'PROTÉINES',items:['Blancs de poulet','Œufs (x30)','Thon en conserve','Bœuf haché 5%','Saumon / Pavés poisson','Lentilles corail','Pois chiches','Escalopes de dinde','Fromage blanc 0%','Whey protéine']},
   {cat:'GLUCIDES',items:['Riz basmati','Flocons d\'avoine','Pain complet','Patate douce','Pâtes complètes','Semoule','Quinoa','Bananes','Dattes']},
   {cat:'LIPIDES',items:['Huile d\'olive extra vierge','Avocat','Amandes / Noix','Beurre de cacahuète','Graines de chia','Graines de lin']},
   {cat:'LÉGUMES',items:['Brocoli','Courgettes','Épinards','Tomates','Oignon','Ail','Poivrons','Carottes','Salade verte','Concombre']},

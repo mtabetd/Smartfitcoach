@@ -4,6 +4,18 @@
 var S = window.S;
 var h = window.h, txt = window.txt, svgRing = window.svgRing;
 
+// ─── DISPLAY ROUNDING ───
+function roundDisplayQty(qty, unit) {
+  if (!qty) return 0;
+  if (unit === 'g') return Math.round(qty / 5) * 5 || 5;
+  if (unit === 'ml') return Math.round(qty / 10) * 10 || 10;
+  if (unit === 'pce') return Math.max(1, Math.round(qty));
+  if (unit === 'cs' || unit === 'cc') return Math.max(1, Math.round(qty));
+  if (unit === 'kg') return Math.round(qty * 10) / 10;
+  if (unit === 'L' || unit === 'l') return Math.round(qty * 10) / 10;
+  return Math.round(qty);
+}
+
 // ─── LOCAL REFERENCES ───
 var ACTIVITIES = window.ACTIVITIES;
 var GOALS = window.GOALS;
@@ -1972,7 +1984,7 @@ function renderModal(app) {
     var ingredList = h('ul', {'class': 'ingredient-list'});
     if (r._scaledIngredients && r._scaledIngredients.length > 0) {
       r._scaledIngredients.forEach(function(ing) {
-        var qtyStr = ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name;
+        var qtyStr = roundDisplayQty(ing.qty, ing.unit) + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name;
         ingredList.appendChild(h('li', {}, qtyStr));
       });
     } else if (r.i) {
@@ -1980,7 +1992,7 @@ function renderModal(app) {
       r.i.split(',').forEach(function(ing) { if (ing.trim()) ingredList.appendChild(h('li', {}, ing.trim())); });
     } else if (r.ingredients && Array.isArray(r.ingredients)) {
       r.ingredients.forEach(function(ing) {
-        var line = (ing.qty || '') + (ing.unit && ing.unit !== 'pce' ? ing.unit + ' ' : ' ') + (ing.name || '');
+        var line = (ing.qty ? roundDisplayQty(ing.qty, ing.unit) : '') + (ing.unit && ing.unit !== 'pce' ? ing.unit + ' ' : ' ') + (ing.name || '');
         ingredList.appendChild(h('li', {}, line.trim()));
       });
     } else {
@@ -2054,7 +2066,7 @@ function exportDayPDF(dayIdx) {
     doc.text('INGR\u00c9DIENTS', M, y); y += 4;
     doc.setFontSize(8); doc.setTextColor(black[0], black[1], black[2]);
     var ingListPDF = r._scaledIngredients && r._scaledIngredients.length > 0
-      ? r._scaledIngredients.map(function(ing) { return ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
+      ? r._scaledIngredients.map(function(ing) { return roundDisplayQty(ing.qty, ing.unit) + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
       : (r.i ? r.i.split(',').map(function(s) { return s.trim(); }) : []);
     ingListPDF.forEach(function(ing) {
       if (y > 275) { doc.addPage(); y = 20; }
@@ -2150,7 +2162,7 @@ function exportRecipePDF(r) {
   doc.setDrawColor(border[0], border[1], border[2]); doc.line(M, y + 1.5, W - M, y + 1.5); y += 6;
   doc.setFontSize(9); doc.setTextColor(black[0], black[1], black[2]);
   var recipeIngPDF = r._scaledIngredients && r._scaledIngredients.length > 0
-    ? r._scaledIngredients.map(function(ing) { return ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
+    ? r._scaledIngredients.map(function(ing) { return roundDisplayQty(ing.qty, ing.unit) + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name; })
     : (r.i ? r.i.split(',').map(function(s) { return s.trim(); }) : []);
   recipeIngPDF.forEach(function(ing) {
     if (y > 275) { doc.addPage(); y = 20; }
