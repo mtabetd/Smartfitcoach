@@ -601,6 +601,430 @@ var CF_WODS = [
 ];
 window.CF_WODS = window.CF_WODS_FULL || CF_WODS; // Use 100 WODs if available, fallback to 14 inline
 
+// ═══════════════════════════════════════════════════════════════
+// INTERNATIONALISATION — i18n
+// ═══════════════════════════════════════════════════════════════
+window.I18N = {
+  current: 'fr',
+
+  t: function(key) {
+    var lang = window.I18N.current;
+    var dict = window.I18N.dict[lang] || window.I18N.dict['fr'];
+    return dict[key] || window.I18N.dict['fr'][key] || key;
+  },
+
+  setLang: function(lang) {
+    window.I18N.current = lang;
+    if (window.S) window.S.lang = lang;
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem('mtd_profile') || '{}'); } catch(e){}
+    saved.lang = lang;
+    try { localStorage.setItem('mtd_profile', JSON.stringify(saved)); } catch(e){}
+    if (window.render) render();
+  },
+
+  dict: {
+    fr: {
+      // Navigation
+      'nav.dashboard': 'Tableau de bord',
+      'nav.nutrition': 'Nutrition',
+      'nav.sport': 'Sport',
+      'nav.scanner': 'Scanner',
+      'nav.extras': 'Extras',
+
+      // Auth
+      'auth.login': 'Connexion',
+      'auth.register': 'Créer un compte',
+      'auth.email': 'Email',
+      'auth.password': 'Mot de passe',
+      'auth.confirm_password': 'Confirmer le mot de passe',
+      'auth.firstname': 'Prénom',
+      'auth.login_btn': 'Se connecter',
+      'auth.register_btn': "S'inscrire",
+      'auth.logout': 'Déconnexion',
+      'auth.no_account': 'Pas encore de compte ?',
+      'auth.has_account': 'Déjà un compte ?',
+      'auth.error_credentials': 'Email ou mot de passe incorrect',
+      'auth.error_email': 'Email invalide',
+      'auth.error_password_length': 'Mot de passe : 6 caractères minimum',
+      'auth.error_password_match': 'Les mots de passe ne correspondent pas',
+      'auth.rate_limit': 'Trop de tentatives. Réessayez dans 5 minutes.',
+
+      // Onboarding steps
+      'onb.title': 'Mon Programme',
+      'onb.step': 'Étape',
+      'onb.of': 'sur',
+      'onb.next': 'Continuer',
+      'onb.back': '← Retour',
+      'onb.start': 'Commencer',
+      'onb.finish': 'Voir mon programme',
+
+      // Step 1 — Profil
+      'onb.s1.title': 'Votre profil',
+      'onb.s1.sex': 'Sexe biologique',
+      'onb.s1.male': 'Homme',
+      'onb.s1.female': 'Femme',
+      'onb.s1.menstrual': 'Suivi du cycle menstruel',
+      'onb.s1.pregnant': 'Grossesse',
+      'onb.s1.trimester': 'Trimestre',
+
+      // Step 2 — Mensuration
+      'onb.s2.title': 'Mensurations',
+      'onb.s2.age': 'Âge',
+      'onb.s2.weight': 'Poids',
+      'onb.s2.height': 'Taille',
+      'onb.s2.bmi': 'IMC',
+      'onb.s2.bmi_under': 'Insuffisance pondérale',
+      'onb.s2.bmi_normal': 'Poids normal',
+      'onb.s2.bmi_over': 'Surpoids',
+      'onb.s2.bmi_obese': 'Obésité',
+
+      // Step 3 — Activité
+      'onb.s3.title': "Niveau d'activité",
+      'onb.s3.sedentary': 'Sédentaire',
+      'onb.s3.light': 'Légèrement actif',
+      'onb.s3.moderate': 'Modérément actif',
+      'onb.s3.active': 'Très actif',
+      'onb.s3.very_active': 'Extrêmement actif',
+      'onb.s3.elite': 'Athlète élite',
+      'onb.s3.training_days': "Jours d'entraînement / semaine",
+      'onb.s3.sleep': 'Heures de sommeil / nuit',
+
+      // Step 4 — Médical
+      'onb.s4.title': 'Santé & Antécédents',
+      'onb.s4.none': 'Aucune condition particulière',
+
+      // Step 5 — Préférences
+      'onb.s5.title': 'Préférences alimentaires',
+      'onb.s5.diet': 'Régime alimentaire',
+      'onb.s5.omnivore': 'Omnivore',
+      'onb.s5.vegetarian': 'Végétarien',
+      'onb.s5.vegan': 'Végane',
+      'onb.s5.pescatarian': 'Pescétarien',
+      'onb.s5.allergies': 'Allergies',
+      'onb.s5.intolerances': 'Intolérances',
+      'onb.s5.whey': 'Je prends de la whey protéine',
+      'onb.s5.currency': 'Devise',
+
+      // Step 6 — Objectif
+      'onb.s6.title': 'Votre objectif',
+      'onb.s6.bulk': 'Prise de masse',
+      'onb.s6.lean_bulk': 'Prise de masse douce',
+      'onb.s6.maintain': 'Maintien',
+      'onb.s6.cut': 'Sèche',
+      'onb.s6.shred': 'Shred',
+
+      // Step 8 — Récap macros
+      'onb.s8.title': 'Votre programme nutritionnel',
+      'onb.s8.bmr': 'Métabolisme de base',
+      'onb.s8.tdee': 'Dépense totale',
+      'onb.s8.target': 'Cible calorique',
+      'onb.s8.proteins': 'Protéines',
+      'onb.s8.carbs': 'Glucides',
+      'onb.s8.fats': 'Lipides',
+
+      // Step 9 — Plan
+      'onb.s9.title': 'Votre plan semaine',
+      'onb.s9.breakfast': 'Petit-déjeuner',
+      'onb.s9.lunch': 'Déjeuner',
+      'onb.s9.dinner': 'Dîner',
+      'onb.s9.snack': 'Collation',
+      'onb.s9.total': 'Total',
+      'onb.s9.target': 'Cible',
+      'onb.s9.generate': 'Générer un nouveau plan',
+      'onb.s9.shopping': 'Liste de courses',
+
+      // Dashboard
+      'dash.greeting_morning': 'Bonjour',
+      'dash.greeting_afternoon': 'Bon après-midi',
+      'dash.greeting_evening': 'Bonsoir',
+      'dash.calories': 'kcal',
+      'dash.goal': 'Objectif',
+      'dash.weight': 'Poids',
+      'dash.progression': 'Progression',
+      'dash.no_weight': 'Ajoutez votre premier poids pour voir la courbe de progression',
+
+      // Sport
+      'sport.select': 'Choisissez votre sport',
+      'sport.level': 'Niveau',
+      'sport.beginner': 'Débutant',
+      'sport.intermediate': 'Intermédiaire',
+      'sport.advanced': 'Avancé',
+      'sport.elite': 'Elite',
+      'sport.goal': 'Objectif',
+      'sport.days': 'Jours / semaine',
+      'sport.program': 'Mon programme',
+      'sport.week': 'Semaine',
+
+      // Musculation
+      'muscu.sets': 'séries',
+      'muscu.reps': 'reps',
+      'muscu.rest': 'Repos',
+      'muscu.weight': 'Charge',
+      'muscu.success': 'Série réussie',
+      'muscu.fail': 'Série échouée',
+      'muscu.session_summary': 'Bilan de séance',
+      'muscu.duration': 'Durée',
+      'muscu.calories_burned': 'kcal brûlées',
+
+      // Liste de courses
+      'shop.title': 'Liste de courses',
+      'shop.aisles': 'rayons',
+      'shop.items': 'articles',
+      'shop.optimized': 'Parcours optimisé',
+      'shop.bought': 'articles achetés',
+      'shop.reset': 'Réinitialiser',
+      'shop.export': 'Exporter PDF',
+
+      // Scanner
+      'scan.title': 'Scanner',
+      'scan.scan': 'Scanner un produit',
+      'scan.manual': 'Saisie manuelle',
+      'scan.barcode_placeholder': 'Code-barres (EAN-13)',
+      'scan.search': 'Rechercher',
+      'scan.history': 'Historique',
+      'scan.no_history': "Scannez votre premier produit pour voir l'historique ici",
+      'scan.health_score': 'Score santé',
+
+      // Extras
+      'extras.water': 'Hydratation',
+      'extras.water_glasses': 'verres',
+      'extras.timer': 'Minuteur',
+      'extras.start': 'Démarrer',
+      'extras.stop': 'Arrêter',
+      'extras.reset': 'Réinitialiser',
+      'extras.measures': 'Mesures corporelles',
+      'extras.sleep': 'Sommeil',
+      'extras.food_calc': 'Calculateur nutritionnel',
+
+      // Commun
+      'common.save': 'Enregistrer',
+      'common.cancel': 'Annuler',
+      'common.confirm': 'Confirmer',
+      'common.delete': 'Supprimer',
+      'common.edit': 'Modifier',
+      'common.close': 'Fermer',
+      'common.loading': 'Chargement...',
+      'common.error': 'Une erreur est survenue',
+      'common.reload': 'Recharger',
+      'common.per_day': '/ jour',
+      'common.per_week': '/ semaine',
+      'common.per_kg': 'g / kg',
+      'common.years': 'ans',
+      'common.hours': 'h',
+      'common.minutes': 'min',
+      'common.seconds': 'sec',
+      'common.kg': 'kg',
+      'common.cm': 'cm',
+      'common.kcal': 'kcal',
+      'common.g': 'g',
+      'common.ml': 'ml',
+      'common.minor_warning': "Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé."
+    },
+
+    en: {
+      // Navigation
+      'nav.dashboard': 'Dashboard',
+      'nav.nutrition': 'Nutrition',
+      'nav.sport': 'Workout',
+      'nav.scanner': 'Scanner',
+      'nav.extras': 'Extras',
+
+      // Auth
+      'auth.login': 'Sign In',
+      'auth.register': 'Create Account',
+      'auth.email': 'Email',
+      'auth.password': 'Password',
+      'auth.confirm_password': 'Confirm Password',
+      'auth.firstname': 'First Name',
+      'auth.login_btn': 'Sign In',
+      'auth.register_btn': 'Sign Up',
+      'auth.logout': 'Sign Out',
+      'auth.no_account': "Don't have an account?",
+      'auth.has_account': 'Already have an account?',
+      'auth.error_credentials': 'Incorrect email or password',
+      'auth.error_email': 'Invalid email address',
+      'auth.error_password_length': 'Password must be at least 6 characters',
+      'auth.error_password_match': 'Passwords do not match',
+      'auth.rate_limit': 'Too many attempts. Please try again in 5 minutes.',
+
+      // Onboarding
+      'onb.title': 'My Program',
+      'onb.step': 'Step',
+      'onb.of': 'of',
+      'onb.next': 'Continue',
+      'onb.back': '← Back',
+      'onb.start': 'Get Started',
+      'onb.finish': 'View My Program',
+
+      // Step 1
+      'onb.s1.title': 'Your Profile',
+      'onb.s1.sex': 'Biological Sex',
+      'onb.s1.male': 'Male',
+      'onb.s1.female': 'Female',
+      'onb.s1.menstrual': 'Menstrual Cycle Tracking',
+      'onb.s1.pregnant': 'Pregnancy',
+      'onb.s1.trimester': 'Trimester',
+
+      // Step 2
+      'onb.s2.title': 'Body Measurements',
+      'onb.s2.age': 'Age',
+      'onb.s2.weight': 'Weight',
+      'onb.s2.height': 'Height',
+      'onb.s2.bmi': 'BMI',
+      'onb.s2.bmi_under': 'Underweight',
+      'onb.s2.bmi_normal': 'Normal weight',
+      'onb.s2.bmi_over': 'Overweight',
+      'onb.s2.bmi_obese': 'Obese',
+
+      // Step 3
+      'onb.s3.title': 'Activity Level',
+      'onb.s3.sedentary': 'Sedentary',
+      'onb.s3.light': 'Lightly Active',
+      'onb.s3.moderate': 'Moderately Active',
+      'onb.s3.active': 'Very Active',
+      'onb.s3.very_active': 'Extremely Active',
+      'onb.s3.elite': 'Elite Athlete',
+      'onb.s3.training_days': 'Training days / week',
+      'onb.s3.sleep': 'Hours of sleep / night',
+
+      // Step 4
+      'onb.s4.title': 'Health & Medical History',
+      'onb.s4.none': 'No specific conditions',
+
+      // Step 5
+      'onb.s5.title': 'Food Preferences',
+      'onb.s5.diet': 'Diet Type',
+      'onb.s5.omnivore': 'Omnivore',
+      'onb.s5.vegetarian': 'Vegetarian',
+      'onb.s5.vegan': 'Vegan',
+      'onb.s5.pescatarian': 'Pescatarian',
+      'onb.s5.allergies': 'Allergies',
+      'onb.s5.intolerances': 'Intolerances',
+      'onb.s5.whey': 'I take whey protein',
+      'onb.s5.currency': 'Currency',
+
+      // Step 6
+      'onb.s6.title': 'Your Goal',
+      'onb.s6.bulk': 'Muscle Gain',
+      'onb.s6.lean_bulk': 'Lean Bulk',
+      'onb.s6.maintain': 'Maintenance',
+      'onb.s6.cut': 'Cut',
+      'onb.s6.shred': 'Shred',
+
+      // Step 8
+      'onb.s8.title': 'Your Nutrition Plan',
+      'onb.s8.bmr': 'Basal Metabolic Rate',
+      'onb.s8.tdee': 'Total Daily Energy',
+      'onb.s8.target': 'Calorie Target',
+      'onb.s8.proteins': 'Protein',
+      'onb.s8.carbs': 'Carbohydrates',
+      'onb.s8.fats': 'Fat',
+
+      // Step 9
+      'onb.s9.title': 'Your Weekly Plan',
+      'onb.s9.breakfast': 'Breakfast',
+      'onb.s9.lunch': 'Lunch',
+      'onb.s9.dinner': 'Dinner',
+      'onb.s9.snack': 'Snack',
+      'onb.s9.total': 'Total',
+      'onb.s9.target': 'Target',
+      'onb.s9.generate': 'Generate New Plan',
+      'onb.s9.shopping': 'Shopping List',
+
+      // Dashboard
+      'dash.greeting_morning': 'Good morning',
+      'dash.greeting_afternoon': 'Good afternoon',
+      'dash.greeting_evening': 'Good evening',
+      'dash.calories': 'kcal',
+      'dash.goal': 'Goal',
+      'dash.weight': 'Weight',
+      'dash.progression': 'Progress',
+      'dash.no_weight': 'Add your first weight entry to see your progress chart',
+
+      // Sport
+      'sport.select': 'Choose Your Sport',
+      'sport.level': 'Level',
+      'sport.beginner': 'Beginner',
+      'sport.intermediate': 'Intermediate',
+      'sport.advanced': 'Advanced',
+      'sport.elite': 'Elite',
+      'sport.goal': 'Goal',
+      'sport.days': 'Days / week',
+      'sport.program': 'My Program',
+      'sport.week': 'Week',
+
+      // Musculation
+      'muscu.sets': 'sets',
+      'muscu.reps': 'reps',
+      'muscu.rest': 'Rest',
+      'muscu.weight': 'Load',
+      'muscu.success': 'Set completed',
+      'muscu.fail': 'Set failed',
+      'muscu.session_summary': 'Session Summary',
+      'muscu.duration': 'Duration',
+      'muscu.calories_burned': 'kcal burned',
+
+      // Shopping
+      'shop.title': 'Shopping List',
+      'shop.aisles': 'aisles',
+      'shop.items': 'items',
+      'shop.optimized': 'Optimized route',
+      'shop.bought': 'items purchased',
+      'shop.reset': 'Reset',
+      'shop.export': 'Export PDF',
+
+      // Scanner
+      'scan.title': 'Scanner',
+      'scan.scan': 'Scan a Product',
+      'scan.manual': 'Manual Entry',
+      'scan.barcode_placeholder': 'Barcode (EAN-13)',
+      'scan.search': 'Search',
+      'scan.history': 'History',
+      'scan.no_history': 'Scan your first product to see history here',
+      'scan.health_score': 'Health Score',
+
+      // Extras
+      'extras.water': 'Hydration',
+      'extras.water_glasses': 'glasses',
+      'extras.timer': 'Timer',
+      'extras.start': 'Start',
+      'extras.stop': 'Stop',
+      'extras.reset': 'Reset',
+      'extras.measures': 'Body Measurements',
+      'extras.sleep': 'Sleep',
+      'extras.food_calc': 'Nutrition Calculator',
+
+      // Common
+      'common.save': 'Save',
+      'common.cancel': 'Cancel',
+      'common.confirm': 'Confirm',
+      'common.delete': 'Delete',
+      'common.edit': 'Edit',
+      'common.close': 'Close',
+      'common.loading': 'Loading...',
+      'common.error': 'An error occurred',
+      'common.reload': 'Reload',
+      'common.per_day': '/ day',
+      'common.per_week': '/ week',
+      'common.per_kg': 'g / kg',
+      'common.years': 'yrs',
+      'common.hours': 'h',
+      'common.minutes': 'min',
+      'common.seconds': 'sec',
+      'common.kg': 'kg',
+      'common.cm': 'cm',
+      'common.kcal': 'kcal',
+      'common.g': 'g',
+      'common.ml': 'ml',
+      'common.minor_warning': 'For users under 18, this program should be followed under the supervision of a healthcare professional.'
+    }
+  }
+};
+
+// Raccourci global
+window.t = function(key) { return window.I18N.t(key); };
+
 // ─── GLOBAL STATE ───
 window.S = {
   // Routing
@@ -741,6 +1165,122 @@ window.S = {
   // Devise
   currency: 'EUR',
   currencySymbol: '€'
+};
+
+// ═══════════════════════════════════════════════════════════════
+// SYSTÈME DE CONVERSION D'UNITÉS
+// ═══════════════════════════════════════════════════════════════
+window.UNITS = {
+  weight: 'kg',   // 'kg' ou 'lbs'
+  height: 'cm',   // 'cm' ou 'ft'
+
+  // Facteurs de conversion
+  KG_TO_LBS: 2.20462,
+  LBS_TO_KG: 0.453592,
+  CM_TO_INCH: 0.393701,
+  INCH_TO_CM: 2.54,
+
+  // Affichage poids
+  displayWeight: function(kg) {
+    if (!kg && kg !== 0) return '';
+    if (window.UNITS.weight === 'lbs') {
+      return Math.round(kg * window.UNITS.KG_TO_LBS * 10) / 10 + ' lbs';
+    }
+    return (Math.round(kg * 10) / 10) + ' kg';
+  },
+
+  // Affichage poids court (sans unité, pour inputs)
+  displayWeightVal: function(kg) {
+    if (!kg && kg !== 0) return '';
+    if (window.UNITS.weight === 'lbs') {
+      return Math.round(kg * window.UNITS.KG_TO_LBS * 10) / 10;
+    }
+    return Math.round(kg * 10) / 10;
+  },
+
+  // Convertir input → kg (pour stockage interne toujours en kg)
+  toKg: function(val) {
+    var n = parseFloat(val) || 0;
+    if (window.UNITS.weight === 'lbs') return Math.round(n * window.UNITS.LBS_TO_KG * 10) / 10;
+    return n;
+  },
+
+  // Affichage taille
+  displayHeight: function(cm) {
+    if (!cm && cm !== 0) return '';
+    if (window.UNITS.height === 'ft') {
+      var totalInches = cm * window.UNITS.CM_TO_INCH;
+      var feet = Math.floor(totalInches / 12);
+      var inches = Math.round(totalInches % 12);
+      if (inches === 12) { feet++; inches = 0; }
+      return feet + "'" + inches + '"';
+    }
+    return cm + ' cm';
+  },
+
+  // Affichage taille court pour input
+  displayHeightVal: function(cm) {
+    if (!cm && cm !== 0) return '';
+    if (window.UNITS.height === 'ft') {
+      var totalInches = cm * window.UNITS.CM_TO_INCH;
+      return Math.round(totalInches * 10) / 10; // en pouces décimaux pour input
+    }
+    return cm;
+  },
+
+  // Convertir input taille → cm (stockage interne toujours en cm)
+  toCm: function(val) {
+    var n = parseFloat(val) || 0;
+    if (window.UNITS.height === 'ft') return Math.round(n * window.UNITS.INCH_TO_CM * 10) / 10;
+    return n;
+  },
+
+  // Label unité poids pour les inputs
+  weightLabel: function() {
+    return window.UNITS.weight === 'lbs' ? 'lbs' : 'kg';
+  },
+
+  // Label unité taille pour les inputs
+  heightLabel: function() {
+    return window.UNITS.height === 'ft' ? 'in (pouces)' : 'cm';
+  },
+
+  // Plages valides selon unité (pour validation input)
+  weightRange: function() {
+    return window.UNITS.weight === 'lbs'
+      ? {min: 66, max: 660, step: 0.5}   // 30-300 kg en lbs
+      : {min: 30, max: 300, step: 0.1};
+  },
+
+  heightRange: function() {
+    return window.UNITS.height === 'ft'
+      ? {min: 47, max: 98, step: 0.5}    // 120-250 cm en pouces
+      : {min: 120, max: 250, step: 1};
+  },
+
+  // Changer d'unité poids
+  setWeightUnit: function(unit) {
+    window.UNITS.weight = unit;
+    if (window.S) window.S.weightUnit = unit;
+    try {
+      var saved = JSON.parse(localStorage.getItem('mtd_profile') || '{}');
+      saved.weightUnit = unit;
+      localStorage.setItem('mtd_profile', JSON.stringify(saved));
+    } catch(e) {}
+    if (window.render) render();
+  },
+
+  // Changer d'unité taille
+  setHeightUnit: function(unit) {
+    window.UNITS.height = unit;
+    if (window.S) window.S.heightUnit = unit;
+    try {
+      var saved = JSON.parse(localStorage.getItem('mtd_profile') || '{}');
+      saved.heightUnit = unit;
+      localStorage.setItem('mtd_profile', JSON.stringify(saved));
+    } catch(e) {}
+    if (window.render) render();
+  }
 };
 
 // ─── MUSCULATION KEY EXERCISES (Strength Assessment) ───

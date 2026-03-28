@@ -844,6 +844,22 @@ function renderStep5(p) {
   }
   } // end else (non-pregnant alcohol section)
 
+  // Sélecteur de langue
+  var f_lang = h('div', {'class': 'field'});
+  f_lang.appendChild(h('label', {'class': 'field-label'}, '\uD83C\uDF10 ' + (window.t ? window.t('Langue / Language') : 'Langue / Language')));
+  var langSelect = h('select', {'class': 'num-input', style: 'width:100%;padding:10px 12px;font-size:14px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text)',
+    onchange: function() {
+      window.I18N.setLang(this.value);
+    }
+  });
+  [['fr', '\uD83C\uDDEB\uD83C\uDDF7 Français'], ['en', '\uD83C\uDDEC\uD83C\uDDE7 English']].forEach(function(opt) {
+    var o = h('option', {value: opt[0]}, opt[1]);
+    if ((S.lang || (window.I18N ? window.I18N.current : 'fr') || 'fr') === opt[0]) o.setAttribute('selected', 'selected');
+    langSelect.appendChild(o);
+  });
+  f_lang.appendChild(langSelect);
+  p.appendChild(f_lang);
+
   // Sélecteur devise
   p.appendChild(h('div', {'class': 'section-label'}, 'Devise'));
   var f_currency = h('div', {'class': 'field'});

@@ -35,7 +35,8 @@ var PROFILE_KEYS = [
   'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
   'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
   'shopChecked','weekPlan','selectedDay',
-  'currency','currencySymbol'
+  'currency','currencySymbol',
+  'lang'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -307,6 +308,10 @@ if (AUTH.isLoggedIn()) {
   if (window.GAMIFICATION) GAMIFICATION.updateStreak();
   // Restore full profile from localStorage (E-01)
   loadProfile();
+  // Restaurer la langue
+  if (window.I18N && S.lang) {
+    window.I18N.current = S.lang;
+  }
   // Load weight history (kept separate for history management)
   try {
     var user = AUTH.getUser();
