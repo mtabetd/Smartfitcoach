@@ -310,8 +310,9 @@ function renderRegister(app) {
     AUTH.register(name, email, pw).then(function(result) {
       if (result.ok) {
         S.authError = '';
-        S.view = 'dashboard';
-        if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+        S.view = 'nutrition'; // Nouveau compte → onboarding nutrition obligatoire
+        S.nStep = 0;
+        if (window.GAMIFICATION) { GAMIFICATION.unlockBadge('first_login'); }
         render();
       } else {
         S.authError = result.error;

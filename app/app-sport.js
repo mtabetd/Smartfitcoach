@@ -4831,6 +4831,7 @@ function renderCalisthenicsOnboarding(p) {
 
 // ─── STEP 25: CALISTHENICS PROGRAM ───
 function renderCalisthenicsProgram(content) {
+  if (!S.calisthenicsLevel) { S.sStep = 24; window.render(); return; } // guard: onboarding requis
   var skills = S.calisthenicsGoal || [];
   var level = S.calisthenicsLevel || 'debutant';
   var pullups = parseInt(S.calisthPullups) || 0;

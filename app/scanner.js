@@ -455,7 +455,7 @@ window.SCANNER = {
     manualBtn.textContent = 'Analyser';
     manualBtn.onclick = function() {
       var code = manualInput.value.trim();
-      if (code.length >= 8) lookupAndAnalyze(code);
+      if (isValidBarcode(code)) lookupAndAnalyze(code);
     };
     manualDiv.appendChild(manualBtn);
     scannerDiv.appendChild(manualDiv);

@@ -2742,21 +2742,22 @@ function printShoppingListAR(list) {
   var AR = window.SHOP_AR;
   var now = new Date();
   var dateStr = now.toLocaleDateString('ar-MA', {year:'numeric', month:'long', day:'numeric'});
+  function escHTML(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  // Construire le HTML d'impression
+  // Construire le HTML d'impression (toutes les valeurs dynamiques échappées)
   var html = '<div class="shop-print-area">';
-  html += '<div class="shop-print-title">' + (AR ? AR.ui['print_title'] : 'قائمة التسوق') + '</div>';
-  html += '<div class="shop-print-date">' + (AR ? AR.ui['date_label'] : 'تاريخ الطباعة') + ' : ' + dateStr + '</div>';
+  html += '<div class="shop-print-title">' + escHTML(AR ? AR.ui['print_title'] : 'قائمة التسوق') + '</div>';
+  html += '<div class="shop-print-date">' + escHTML(AR ? AR.ui['date_label'] : 'تاريخ الطباعة') + ' : ' + escHTML(dateStr) + '</div>';
 
   list.forEach(function(cat) {
     html += '<div class="shop-cat-block">';
     var catName = AR ? AR.translateSection(cat.category) : cat.category;
-    html += '<div class="shop-cat-name">' + catName + '</div>';
+    html += '<div class="shop-cat-name">' + escHTML(catName) + '</div>';
     cat.items.forEach(function(item) {
       var ingName = AR ? AR.translateIngredient(item.name) : item.name;
       html += '<div class="shop-print-item">';
-      html += '<span>' + ingName + '</span>';
-      html += '<span>' + item.qty + ' ' + item.unit + '</span>';
+      html += '<span>' + escHTML(ingName) + '</span>';
+      html += '<span>' + escHTML(item.qty) + ' ' + escHTML(item.unit) + '</span>';
       html += '</div>';
     });
     html += '</div>';
