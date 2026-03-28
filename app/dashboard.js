@@ -270,11 +270,13 @@ window.DASHBOARD = {
 
     // Weight
     var wVal = lastWeight(logs);
+    var _wUnit = window.UNITS ? window.UNITS.weightLabel() : 'kg';
+    var _wDisplay = wVal !== null ? (window.UNITS ? window.UNITS.displayWeightVal(wVal) : wVal) : '--';
     var weightCard = h('div', 'dash-card', [
       h('p', 'dash-card-title', 'Poids'),
       h('div', 'dash-big', [
-        document.createTextNode(wVal !== null ? wVal : '--'),
-        h('span', 'dash-unit', 'kg')
+        document.createTextNode(_wDisplay),
+        h('span', 'dash-unit', _wUnit)
       ])
     ]);
     grid.appendChild(weightCard);
@@ -503,7 +505,7 @@ window.DASHBOARD = {
           scales: {
             y: {
               grid: { color: chartGrid },
-              ticks: { font: { size: 10 }, callback: function(v) { return v + ' kg'; } }
+              ticks: { font: { size: 10 }, callback: function(v) { return window.UNITS ? window.UNITS.displayWeightVal(v) + ' ' + window.UNITS.weightLabel() : v + ' kg'; } }
             },
             x: { grid: { display: false }, ticks: { font: { size: 9 } } }
           }
@@ -720,7 +722,7 @@ function openWeightPrompt() {
   input.style.cssText = 'width:100%;padding:12px;font-family:Georgia,serif;font-size:20px;font-style:italic;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);color:var(--black,#181818);box-sizing:border-box;outline:none;margin-bottom:12px;';
   form.appendChild(input);
 
-  var unit = h('p', null, 'kg');
+  var unit = h('p', null, window.UNITS ? window.UNITS.weightLabel() : 'kg');
   unit.style.cssText = 'font-size:11px;color:var(--grey,#6B6B65);margin:0 0 16px;';
   form.appendChild(unit);
 
@@ -732,31 +734,33 @@ function openWeightPrompt() {
   saveBtn.addEventListener('click', function() {
     var val = parseFloat(input.value);
     if (isNaN(val) || val <= 0) { input.style.borderColor = '#c44'; return; }
+    // Convert to kg for internal storage
+    var valKg = window.UNITS ? window.UNITS.toKg(val) : val;
 
     // Save to state FIRST (always succeeds)
-    if (window.S) window.S.weight = val;
+    if (window.S) window.S.weight = valKg;
 
     // Log to BLACKBOX
-    try { if (window.BLACKBOX) window.BLACKBOX.log('weight_logged', { weight: val }); } catch(e){}
+    try { if (window.BLACKBOX) window.BLACKBOX.log('weight_logged', { weight: valKg }); } catch(e){}
 
-    // Save to weight history in localStorage
+    // Save to weight history in localStorage (always in kg internally)
     var user = tryGetUser();
     var userId = user ? user.id : 'anon';
     var whKey = 'mtd_weight_history_' + userId;
     var wh = [];
     try { wh = JSON.parse(localStorage.getItem(whKey) || '[]'); } catch(e){ wh = []; }
-    wh.push({ date: new Date().toISOString().split('T')[0], weight: val });
+    wh.push({ date: new Date().toISOString().split('T')[0], weight: valKg });
     try { localStorage.setItem(whKey, JSON.stringify(wh)); } catch(e){}
 
     // Update S.weightHistory for other modules
     if (window.S && Array.isArray(window.S.weightHistory)) {
-      window.S.weightHistory.push({ date: new Date().toISOString().split('T')[0], weight: val });
+      window.S.weightHistory.push({ date: new Date().toISOString().split('T')[0], weight: valKg });
     }
 
     // Toast + badges
     if (window.GAMIFICATION) {
       try {
-        GAMIFICATION.showToast('Poids enregistré : ' + val + ' kg');
+        GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg'));
         GAMIFICATION.unlockBadge('first_weigh');
         if (wh.length >= 10) GAMIFICATION.unlockBadge('weight_10');
       } catch(e){}

@@ -352,19 +352,37 @@ function renderStep2(p) {
   wLabel.appendChild(txt('Poids'));
   wLabel.appendChild(reqDot());
   p.appendChild(wLabel);
+  // Toggle unité poids
+  var weightUnitDiv = h('div', {style: 'display:flex;gap:8px;margin-bottom:8px'});
+  ['kg', 'lbs'].forEach(function(u) {
+    var isActive = window.UNITS ? window.UNITS.weight === u : u === 'kg';
+    var btn = h('button', {
+      style: 'padding:6px 16px;border-radius:20px;font-size:12px;border:1px solid var(--border,#D8D8D0);cursor:pointer;' +
+        'background:' + (isActive ? 'var(--black,#0A0A09)' : 'transparent') + ';' +
+        'color:' + (isActive ? 'var(--ivory,#FAFAF7)' : 'var(--text,#0A0A09)'),
+      onclick: function(e) {
+        e.preventDefault();
+        if (window.UNITS) window.UNITS.setWeightUnit(u);
+      }
+    }, u);
+    weightUnitDiv.appendChild(btn);
+  });
+  p.appendChild(weightUnitDiv);
+  var wRange = window.UNITS ? window.UNITS.weightRange() : {min: 30, max: 300, step: 0.1};
+  var wVal = window.UNITS ? window.UNITS.displayWeightVal(S.weight) : S.weight;
   var ww = h('div', {'class': 'num-input-wrap'});
-  ww.appendChild(h('input', {'class': 'num-input', type: 'number', min: '40', max: '160', step: '0.5', value: String(S.weight), inputmode: 'decimal', placeholder: '75', oninput: function(e) {
+  ww.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(wRange.min), max: String(wRange.max), step: String(wRange.step), value: String(wVal), inputmode: 'decimal', placeholder: window.UNITS && window.UNITS.weight === 'lbs' ? '165' : '75', oninput: function(e) {
     var v = parseFloat(e.target.value);
-    if (!isNaN(v) && v >= 40 && v <= 160) S.weight = v;
+    if (!isNaN(v)) S.weight = window.UNITS ? window.UNITS.toKg(v) : v;
   }, onblur: function(e) {
     var v = parseFloat(e.target.value);
-    if (isNaN(v) || v < 40) e.target.value = S.weight = 40;
-    else if (v > 160) e.target.value = S.weight = 160;
+    if (isNaN(v) || v < wRange.min) { e.target.value = wRange.min; S.weight = window.UNITS ? window.UNITS.toKg(wRange.min) : wRange.min; }
+    else if (v > wRange.max) { e.target.value = wRange.max; S.weight = window.UNITS ? window.UNITS.toKg(wRange.max) : wRange.max; }
     window.render();
   }}));
-  ww.appendChild(h('span', {'class': 'num-unit'}, 'kg'));
+  ww.appendChild(h('span', {'class': 'num-unit'}, window.UNITS ? window.UNITS.weightLabel() : 'kg'));
   p.appendChild(ww);
-  p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 40 et 160 kg'));
+  p.appendChild(h('div', {'class': 'num-hint'}, window.UNITS && window.UNITS.weight === 'lbs' ? 'Entre 66 et 660 lbs' : 'Entre 30 et 300 kg'));
   p.appendChild(h('div', {style: 'height:16px'}));
 
   // Height (MANDATORY)
@@ -372,19 +390,37 @@ function renderStep2(p) {
   hLabel.appendChild(txt('Taille'));
   hLabel.appendChild(reqDot());
   p.appendChild(hLabel);
+  // Toggle unité taille
+  var heightUnitDiv = h('div', {style: 'display:flex;gap:8px;margin-bottom:8px'});
+  ['cm', 'ft'].forEach(function(u) {
+    var isActiveH = window.UNITS ? window.UNITS.height === u : u === 'cm';
+    var btnH = h('button', {
+      style: 'padding:6px 16px;border-radius:20px;font-size:12px;border:1px solid var(--border,#D8D8D0);cursor:pointer;' +
+        'background:' + (isActiveH ? 'var(--black,#0A0A09)' : 'transparent') + ';' +
+        'color:' + (isActiveH ? 'var(--ivory,#FAFAF7)' : 'var(--text,#0A0A09)'),
+      onclick: function(e) {
+        e.preventDefault();
+        if (window.UNITS) window.UNITS.setHeightUnit(u);
+      }
+    }, u === 'ft' ? 'ft\u00b7in' : 'cm');
+    heightUnitDiv.appendChild(btnH);
+  });
+  p.appendChild(heightUnitDiv);
+  var hRange = window.UNITS ? window.UNITS.heightRange() : {min: 120, max: 250, step: 1};
+  var hVal = window.UNITS ? window.UNITS.displayHeightVal(S.height) : S.height;
   var hw = h('div', {'class': 'num-input-wrap'});
-  hw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '140', max: '210', step: '1', value: String(S.height), inputmode: 'numeric', placeholder: '175', oninput: function(e) {
-    var v = parseInt(e.target.value);
-    if (!isNaN(v) && v >= 140 && v <= 210) S.height = v;
+  hw.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(hRange.min), max: String(hRange.max), step: String(hRange.step), value: String(hVal), inputmode: window.UNITS && window.UNITS.height === 'ft' ? 'decimal' : 'numeric', placeholder: window.UNITS && window.UNITS.height === 'ft' ? 'pouces (ex: 70.9)' : '175', oninput: function(e) {
+    var v = parseFloat(e.target.value);
+    if (!isNaN(v)) S.height = window.UNITS ? window.UNITS.toCm(v) : v;
   }, onblur: function(e) {
-    var v = parseInt(e.target.value);
-    if (isNaN(v) || v < 140) e.target.value = S.height = 140;
-    else if (v > 210) e.target.value = S.height = 210;
+    var v = parseFloat(e.target.value);
+    if (isNaN(v) || v < hRange.min) { e.target.value = hRange.min; S.height = window.UNITS ? window.UNITS.toCm(hRange.min) : hRange.min; }
+    else if (v > hRange.max) { e.target.value = hRange.max; S.height = window.UNITS ? window.UNITS.toCm(hRange.max) : hRange.max; }
     window.render();
   }}));
-  hw.appendChild(h('span', {'class': 'num-unit'}, 'cm'));
+  hw.appendChild(h('span', {'class': 'num-unit'}, window.UNITS ? window.UNITS.heightLabel() : 'cm'));
   p.appendChild(hw);
-  p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 140 et 210 cm'));
+  p.appendChild(h('div', {'class': 'num-hint'}, window.UNITS && window.UNITS.height === 'ft' ? 'En pouces d\u00e9cimaux (ex: 70.9 = 5\'11")' : 'Entre 120 et 250 cm'));
 
   // BMI
   var bmi = calcBMI();
@@ -1250,7 +1286,7 @@ function renderStep8(p) {
   var _uName = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().name : '';
   rh.appendChild(h('div', {'class': 'result-title', html: (_uName ? _uName + ',<br>' : '') + 'Vos <em>macros</em>'}));
   rh.appendChild(h('div', {'class': 'result-rule'}));
-  var _profItems = [S.sex==='homme'?'Homme':'Femme', S.age+' ans', S.weight+'kg', (S.height/100).toFixed(2)+'m'];
+  var _profItems = [S.sex==='homme'?'Homme':'Femme', S.age+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
   if(S.activity!==null)_profItems.push(ACTIVITIES[S.activity].name);
   if(S.goal!==null)_profItems.push(GOALS[S.goal].name);
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));

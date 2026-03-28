@@ -919,7 +919,7 @@ function renderChargesQuestionnaire(p) {
       var est1rm = Math.round(currentVal * (1 + usedReps / 30) / 2.5) * 2.5;
       var rightCol = h('div', {style: 'text-align:right;flex-shrink:0'});
       rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + col}, lbl));
-      rightCol.appendChild(h('div', {style: 'font-family:Georgia;font-size:11px;color:var(--grey);margin-top:2px'}, '~1RM : ' + est1rm + ' kg'));
+      rightCol.appendChild(h('div', {style: 'font-family:Georgia;font-size:11px;color:var(--grey);margin-top:2px'}, '~1RM : ' + (window.UNITS ? window.UNITS.displayWeight(est1rm) : est1rm + ' kg')));
       row.appendChild(rightCol);
     }
     grid.appendChild(row);
@@ -999,7 +999,7 @@ function renderDedicatedPrograms(p) {
         if (ex.technique) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange);margin-top:2px'}, ex.technique));
         // Suggested weight based on phase %1RM
         var sugW = getSuggestedWeight(ex.name, ex.reps, currentPhase);
-        if (sugW && sugW > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#27AE60;margin-top:2px'}, '\u2192 Charge cible : ~' + sugW + ' kg'));
+        if (sugW && sugW > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#27AE60;margin-top:2px'}, '\u2192 Charge cible : ~' + (window.UNITS ? window.UNITS.displayWeight(sugW) : sugW + ' kg')));
         row.appendChild(left);
         var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
         right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-weight:bold'}, ex.sets + '\u00d7' + ex.reps));
@@ -1195,7 +1195,7 @@ function renderCrossfitLevel(p) {
         var lvlIdx = S.crossfitLevel === 'scaled' ? 0 : S.crossfitLevel === 'inter' ? 1 : 2;
         var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : 0.75;
         var estWeight = Math.round(currentVal * wodPct);
-        leftDiv.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#1A3A6A;margin-top:2px;font-weight:bold'}, 'WOD \u2248 ' + estWeight + 'kg'));
+        leftDiv.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#1A3A6A;margin-top:2px;font-weight:bold'}, 'WOD \u2248 ' + (window.UNITS ? window.UNITS.displayWeight(estWeight) : estWeight + 'kg')));
       }
       row.appendChild(leftDiv);
 
@@ -1271,7 +1271,7 @@ function formatCFMovement(mov) {
         var pctUsed = levelIdx === 0 ? 55 : levelIdx === 1 ? 65 : 75;
         rmNote = ' (' + pctUsed + '% de votre 1RM)';
       }
-      parts.push(mov.name + ' @' + w + 'kg' + rmNote);
+      parts.push(mov.name + ' @' + (window.UNITS ? window.UNITS.displayWeight(parseFloat(w)) : w + 'kg') + rmNote);
     } else {
       parts.push(mov.name);
     }
@@ -1303,7 +1303,7 @@ function getCFWeight(key) {
   if (window.getCFWorkingWeight) {
     var w = window.getCFWorkingWeight(key);
     if (w !== '?') {
-      var result = w + 'kg';
+      var result = window.UNITS ? window.UNITS.displayWeight(parseFloat(w)) : w + 'kg';
       if (S.crossfit1RM && S.crossfit1RM[key]) {
         var lvlIdx = getCFLevelIdx();
         var pct = lvlIdx === 0 ? 55 : lvlIdx === 1 ? 65 : 75;
@@ -1316,7 +1316,7 @@ function getCFWeight(key) {
   if (!std) return '';
   var sexKey = getCFSexKey();
   var levelIdx = getCFLevelIdx();
-  if (std[sexKey]) return std[sexKey][levelIdx] + 'kg';
+  if (std[sexKey]) return window.UNITS ? window.UNITS.displayWeight(std[sexKey][levelIdx]) : std[sexKey][levelIdx] + 'kg';
   return '';
 }
 
@@ -2432,7 +2432,7 @@ function renderMusculationProgram(p) {
       var suggestedReps = ex.sets ? ex.sets.split('\u00d7')[1] : null;
       var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
       if (suggested && suggested > 0) {
-        card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#27AE60;margin-top:6px;padding:4px 8px;background:rgba(39,174,96,0.06);border-left:2px solid #27AE60'}, '\uD83D\uDCA1 Charge sugg\u00e9r\u00e9e : ' + suggested + 'kg'));
+        card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#27AE60;margin-top:6px;padding:4px 8px;background:rgba(39,174,96,0.06);border-left:2px solid #27AE60'}, '\uD83D\uDCA1 Charge sugg\u00e9r\u00e9e : ' + (window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + 'kg')));
       }
 
       // ─── Weight/Load tracking ───
@@ -2472,10 +2472,12 @@ function renderMusculationProgram(p) {
           }; })(ex.n, eqType)
         });
         weightRow.appendChild(wInput);
-        weightRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'kg'));
+        weightRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, window.UNITS ? window.UNITS.weightLabel() : 'kg'));
 
         if (currentWeight) {
-          var display = eqType === 'haltere' ? '2\u00d7' + currentWeight + 'kg' : currentWeight + 'kg';
+          var _dispW = window.UNITS ? window.UNITS.displayWeightVal(currentWeight) : currentWeight;
+          var _unit = window.UNITS ? window.UNITS.weightLabel() : 'kg';
+          var display = eqType === 'haltere' ? '2\u00d7' + _dispW + _unit : _dispW + _unit;
           weightRow.appendChild(h('span', {style: 'font-family:Georgia;font-size:13px;font-style:italic;margin-left:auto;color:var(--black)'}, display));
         }
 
@@ -2794,7 +2796,7 @@ function renderMusculationProgram(p) {
           left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, ex.muscle + ' \u2014 ' + ex.equipment));
           if (ex.technique) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange);margin-top:2px'}, ex.technique));
           var sugW4 = getSuggestedWeight(ex.name, ex.reps, phase4);
-          if (sugW4 && sugW4 > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#27AE60;margin-top:2px'}, '\u2192 ~' + sugW4 + ' kg'));
+          if (sugW4 && sugW4 > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#27AE60;margin-top:2px'}, '\u2192 ~' + (window.UNITS ? window.UNITS.displayWeight(sugW4) : sugW4 + ' kg')));
           row.appendChild(left);
           var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
           right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-weight:bold'}, ex.sets + '\u00d7' + ex.reps));
@@ -2966,7 +2968,9 @@ function renderSportModal(app) {
     var modalSavedW = S.musculationWeights[ex.n];
     if (modalSavedW && modalSavedW.weight) {
       var modalEqType = modalSavedW.type || 'barre';
-      var modalWeightDisplay = modalEqType === 'haltere' ? '2\u00d7' + modalSavedW.weight + ' kg' : modalSavedW.weight + ' kg';
+      var _mwDisp = window.UNITS ? window.UNITS.displayWeightVal(modalSavedW.weight) : modalSavedW.weight;
+      var _mwUnit = window.UNITS ? window.UNITS.weightLabel() : 'kg';
+      var modalWeightDisplay = modalEqType === 'haltere' ? '2\u00d7' + _mwDisp + ' ' + _mwUnit : _mwDisp + ' ' + _mwUnit;
       var modalTypeLabel = modalEqType === 'barre' ? '\uD83C\uDFCB\uFE0F Barre' : modalEqType === 'haltere' ? '\uD83D\uDCAA Halt\u00e8res' : modalEqType === 'machine' ? '\u2699\uFE0F Machine' : modalEqType === 'kb' ? '\uD83D\uDD14 Kettlebell' : 'Poids de corps';
 
       body.appendChild(h('div', {'class': 'section-label'}, 'Charge de travail'));
