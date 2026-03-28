@@ -51,6 +51,62 @@ var USERS_KEY = 'mtd_users';
 var SESSION_KEY = 'mtd_session';
 var SESSION_START_KEY = 'mtd_session_start';
 var LOG_KEY = 'mtd_blackbox';
+var RATE_LIMIT_KEY = 'mtd_login_rl';
+
+// ─── RATE LIMITING ───
+var MAX_ATTEMPTS = 5;
+var LOCKOUT_DURATION = 5 * 60 * 1000; // 5 minutes
+
+function getRateLimit(email) {
+  try {
+    var data = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{}');
+    return data[email] || { attempts: 0, lockedUntil: 0 };
+  } catch (e) {
+    return { attempts: 0, lockedUntil: 0 };
+  }
+}
+
+function setRateLimit(email, attempts, lockedUntil) {
+  try {
+    var data = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{}');
+    data[email] = { attempts: attempts, lockedUntil: lockedUntil || 0 };
+    // Clean old entries (> 24h)
+    var now = Date.now();
+    Object.keys(data).forEach(function(k) {
+      if (data[k].lockedUntil < now - 86400000 && data[k].attempts < MAX_ATTEMPTS) delete data[k];
+    });
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
+  } catch (e) {
+    // Storage unavailable — fail open (don't block legitimate users)
+  }
+}
+
+function clearRateLimit(email) {
+  setRateLimit(email, 0, 0);
+}
+
+function checkRateLimit(email) {
+  var rl = getRateLimit(email);
+  var now = Date.now();
+  if (rl.lockedUntil && now < rl.lockedUntil) {
+    var remaining = Math.ceil((rl.lockedUntil - now) / 1000);
+    return { blocked: true, remaining: remaining };
+  }
+  return { blocked: false, attempts: rl.attempts };
+}
+
+function recordFailedAttempt(email) {
+  var rl = getRateLimit(email);
+  var now = Date.now();
+  // Reset if previous lockout has expired
+  if (rl.lockedUntil && now >= rl.lockedUntil) {
+    rl.attempts = 0;
+    rl.lockedUntil = 0;
+  }
+  rl.attempts += 1;
+  var lockout = rl.attempts >= MAX_ATTEMPTS ? now + LOCKOUT_DURATION : 0;
+  setRateLimit(email, rl.attempts, lockout);
+}
 
 // ─── USER STORAGE HELPERS ───
 function getUsers() {
@@ -167,6 +223,13 @@ window.AUTH = {
       return { ok: false, error: 'Email invalide' };
     }
 
+    // Rate limiting — brute force protection
+    var rl = checkRateLimit(email);
+    if (rl.blocked) {
+      var mins = Math.ceil(rl.remaining / 60);
+      return { ok: false, error: 'Trop de tentatives. Réessayez dans ' + mins + ' minute' + (mins > 1 ? 's' : '') + '.' };
+    }
+
     var users = getUsers();
     var user = null;
     for (var i = 0; i < users.length; i++) {
@@ -177,14 +240,23 @@ window.AUTH = {
     }
 
     if (!user) {
+      recordFailedAttempt(email);
       return { ok: false, error: 'Email ou mot de passe incorrect' };
     }
 
     if (user.pwHash !== hashPassword(password)) {
+      recordFailedAttempt(email);
       BLACKBOX.log('login_failed', { email: email });
-      return { ok: false, error: 'Email ou mot de passe incorrect' };
+      var rlAfter = getRateLimit(email);
+      var attemptsLeft = Math.max(0, MAX_ATTEMPTS - rlAfter.attempts);
+      var errMsg = 'Email ou mot de passe incorrect';
+      if (attemptsLeft > 0 && attemptsLeft <= 2) {
+        errMsg += ' (' + attemptsLeft + ' tentative' + (attemptsLeft > 1 ? 's' : '') + ' restante' + (attemptsLeft > 1 ? 's' : '') + ')';
+      }
+      return { ok: false, error: errMsg };
     }
 
+    clearRateLimit(email);
     setSession(user);
     BLACKBOX.log('login', { email: email });
 
