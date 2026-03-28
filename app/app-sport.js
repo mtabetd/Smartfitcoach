@@ -206,15 +206,38 @@ function generateSportProgram() {
     return Array.isArray(cat) ? cat : [cat];
   }
 
-  // Determine exercise count based on priority
-  // Priority 5 = 3-4, 4 = 3, 3 = 2-3, 2 = 2, 1 = 1-2
+  // Determine exercise count based on priority and user level
+  // beginner:     pri 5 = 2-3, 4 = 2, 3 = 1-2, 2 = 1, 1 = 1
+  // intermediate: pri 5 = 3-4, 4 = 3, 3 = 2-3, 2 = 2, 1 = 1-2  (original)
+  // advanced:     pri 5 = 4-5, 4 = 4, 3 = 3-4, 2 = 2-3, 1 = 2
   function exerciseCountForPriority(pri) {
-    if (pri >= 5) return 3 + Math.round(Math.random());
-    if (pri === 4) return 3;
-    if (pri === 3) return 2 + Math.round(Math.random());
-    if (pri === 2) return 2;
-    return 1 + Math.round(Math.random());
+    var lvl = S.sportLevel || 'intermediate';
+    if (lvl === 'beginner') {
+      if (pri >= 5) return 2 + Math.round(Math.random());    // 2-3
+      if (pri === 4) return 2;
+      if (pri === 3) return 1 + Math.round(Math.random());   // 1-2
+      if (pri === 2) return 1;
+      return 1;
+    } else if (lvl === 'advanced') {
+      if (pri >= 5) return 4 + Math.round(Math.random());    // 4-5
+      if (pri === 4) return 4;
+      if (pri === 3) return 3 + Math.round(Math.random());   // 3-4
+      if (pri === 2) return 2 + Math.round(Math.random());   // 2-3
+      return 2;
+    } else {
+      // intermediate (original behaviour)
+      if (pri >= 5) return 3 + Math.round(Math.random());
+      if (pri === 4) return 3;
+      if (pri === 3) return 2 + Math.round(Math.random());
+      if (pri === 2) return 2;
+      return 1 + Math.round(Math.random());
+    }
   }
+
+  // Maximum total exercises per session by level (BUG-18)
+  var maxExercisesPerSession = S.sportLevel === 'beginner' ? 8
+    : S.sportLevel === 'advanced' ? 16
+    : 12;
 
   // Determine how many days each zone appears based on priority
   // 5-star: 60-70%, 4: 50-60%, 3: 40-50%, 2: 30-40%, 1: 20-30%
@@ -313,6 +336,9 @@ function generateSportProgram() {
     }
   }
 
+  // BUG-10: Track how many times each group has appeared this week (intra-week progression)
+  var groupWeekOccurrence = {};
+
   // Generate exercises for each day
   var maxLv = S.sportLevel === 'beginner' ? 2 : S.sportLevel === 'intermediate' ? 3 : 4;
   // During pregnancy, cap level
@@ -370,14 +396,25 @@ function generateSportProgram() {
         count = Math.max(1, Math.round(count * cycleIntensityFactor));
       }
 
+      // BUG-10: Determine intra-week occurrence index for this group
+      var groupOcc = groupWeekOccurrence[group] || 0;
+      groupWeekOccurrence[group] = groupOcc + 1;
+
       // Cycle-based offset: rotate exercise selection each cycle (guard against NaN)
       var poolRemainder = available.length - count;
       var cycleOffset = poolRemainder > 0 ? ((S.muscuCycle || 1) - 1) % poolRemainder : 0;
+      var groupStartIdx = dayExercises.length; // track where this group's exercises start
       for (var i = 0; i < count; i++) {
         var ex = Object.assign({}, available[(i + cycleOffset) % available.length]);
 
         // Override rest based on goals
         if (restOverride) ex.rest = restOverride;
+
+        // BUG-19: Beginners need extra rest on compound/complex exercises (lv >= 2)
+        if (S.sportLevel === 'beginner' && ex.lv >= 2) {
+          var restSec = parseInt((ex.rest || '90s').replace(/[^0-9]/g,'')) || 90;
+          ex.rest = Math.min(restSec + 30, 180) + 's';
+        }
 
         // Pregnancy: longer rest
         if (pregTri) ex.rest = '90-120s';
@@ -394,6 +431,33 @@ function generateSportProgram() {
 
         dayExercises.push(ex);
       }
+
+      // BUG-10: Apply intra-week progressive overload variation for repeated muscle groups
+      // occ 0 = base session, occ 1 = active recovery (−1 set), occ 2 = endurance focus (+2 reps)
+      if (groupOcc > 0) {
+        for (var gi = groupStartIdx; gi < dayExercises.length; gi++) {
+          var gex = dayExercises[gi];
+          if (groupOcc % 2 === 1) {
+            // 2nd occurrence: reduce sets by 1 for active recovery
+            if (typeof gex.sets === 'string') {
+              gex.sets = gex.sets.replace(/^(\d+)/, function(m, n) {
+                var reduced = Math.max(1, parseInt(n) - 1);
+                return String(reduced);
+              });
+            }
+          } else {
+            // 3rd, 5th... occurrence: endurance focus — add 2 reps to rep ranges
+            if (typeof gex.sets === 'string') {
+              gex.sets = gex.sets.replace(/(\d+)(-(\d+))?$/, function(m, r1, dash, r2) {
+                if (r2) {
+                  return (parseInt(r1) + 2) + '-' + (parseInt(r2) + 2);
+                }
+                return String(parseInt(r1) + 2);
+              });
+            }
+          }
+        }
+      }
     });
 
     // Pregnancy: add Kegel exercises to every day
@@ -409,6 +473,11 @@ function generateSportProgram() {
         tips: ['Essentiel pour pr\u00e9parer l\'accouchement', 'Pr\u00e9vient l\'incontinence', 'Peut \u00eatre fait n\'importe o\u00f9'],
         video: 'https://www.youtube.com/results?search_query=exercices+kegel+grossesse'
       });
+    }
+
+    // ─── Level-based exercise count cap (BUG-18) ───
+    if (dayExercises.length > maxExercisesPerSession) {
+      dayExercises = dayExercises.slice(0, maxExercisesPerSession);
     }
 
     // ─── Duration-based exercise count cap and sets adjustment ───
