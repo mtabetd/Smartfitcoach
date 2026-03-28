@@ -382,39 +382,42 @@ window.SPORT_LEVELS = SPORT_LEVELS;
 var CROSSFIT_LEVELS = [
   {id: 'scaled', name: 'Scaled', desc: 'Débutant / Adapté — Mouvements simplifiés, charges légères', icon: '🟢'},
   {id: 'inter', name: 'Intermédiaire', desc: 'Mouvements maîtrisés — Charges modérées', icon: '🟡'},
-  {id: 'rx', name: 'RX (Prescrit)', desc: 'Standards compétition — Charges et mouvements avancés', icon: '🔴'}
+  {id: 'rx', name: 'RX (Prescrit)', desc: 'Standards compétition — Charges et mouvements avancés', icon: '🔴'},
+  {id: 'rx_plus', name: 'RX+ (Élite)', desc: 'Athlète élite Games / Compétiteur — Charges maximales, mouvements avancés', icon: '⚫'}
 ];
 window.CROSSFIT_LEVELS = CROSSFIT_LEVELS;
 
 var CF_STANDARDS = {
-  clean: { m: [40, 60, 80], f: [25, 40, 55] },
-  snatch: { m: [30, 50, 70], f: [20, 35, 50] },
-  deadlift: { m: [60, 90, 110], f: [40, 60, 80] },
-  squat_clean: { m: [40, 60, 80], f: [25, 40, 55] },
-  thruster: { m: [30, 43, 60], f: [20, 30, 43] },
-  front_squat: { m: [40, 60, 80], f: [25, 40, 55] },
-  overhead_squat: { m: [25, 40, 60], f: [15, 25, 40] },
-  push_press: { m: [30, 43, 60], f: [20, 30, 43] },
-  power_clean: { m: [40, 60, 80], f: [25, 40, 55] },
-  hang_clean: { m: [35, 55, 75], f: [20, 35, 50] },
-  shoulder_to_oh: { m: [30, 43, 60], f: [20, 30, 43] },
-  back_squat: { m: [50, 70, 100], f: [30, 50, 70] },
-  sumo_dl_hp: { m: [35, 50, 70], f: [20, 35, 50] },
-  pullups: { scaled: 'Ring Rows', inter: 'Pull-ups', rx: 'Chest-to-bar' },
-  muscle_ups_bar: { scaled: 'Pull-ups + Dips', inter: 'Bar Muscle-ups (tentatives)', rx: 'Bar Muscle-ups' },
-  muscle_ups_ring: { scaled: 'Ring Rows + Ring Dips', inter: 'Ring Muscle-ups (tentatives)', rx: 'Ring Muscle-ups' },
-  hspu: { scaled: 'Pike Push-ups', inter: 'HSPU (abmat)', rx: 'Strict/Kipping HSPU' },
-  handstand_walk: { scaled: 'Bear Crawl 2x distance', inter: 'Wall Walk', rx: 'Handstand Walk' },
-  pistols: { scaled: 'Air Squats', inter: 'Pistols (assistés)', rx: 'Pistols' },
-  toes_to_bar: { scaled: 'Hanging Knee Raises', inter: 'Toes-to-bar (kipping)', rx: 'Toes-to-bar (strict ou kipping)' },
-  rope_climb: { scaled: 'Rope Pull (allongé)', inter: '1 Rope Climb', rx: 'Legless Rope Climb' },
-  double_unders: { scaled: 'Single Unders (x3)', inter: 'Double Unders', rx: 'Double Unders' },
-  box_jump: { scaled: 'Step-ups 50cm', inter: 'Box Jump 50/60cm', rx: 'Box Jump 60/75cm' },
-  wall_ball: { scaled: '4/6kg → 2.7/3m', inter: '6/9kg → 2.7/3m', rx: '9/14kg → 3/3.5m' },
-  kb_swing: { scaled: '12/16kg', inter: '16/24kg', rx: '24/32kg' },
-  burpee: { scaled: 'Burpees (step)', inter: 'Burpees', rx: 'Burpees over bar / Burpee Box Jump Over' },
-  row_cal: { cal: [12, 15, 20] },
-  assault_bike: { cal: [8, 12, 15] }
+  // Numeric standards: [scaled, inter, rx, rx_plus] — 4 values for 4 levels
+  clean: { m: [40, 60, 80, 100], f: [25, 40, 55, 70] },
+  snatch: { m: [30, 50, 70, 90], f: [20, 35, 50, 65] },
+  deadlift: { m: [60, 90, 110, 140], f: [40, 60, 80, 100] },
+  squat_clean: { m: [40, 60, 80, 100], f: [25, 40, 55, 70] },
+  thruster: { m: [30, 43, 60, 75], f: [20, 30, 43, 55] },
+  front_squat: { m: [40, 60, 80, 100], f: [25, 40, 55, 70] },
+  overhead_squat: { m: [25, 40, 60, 80], f: [15, 25, 40, 55] },
+  push_press: { m: [30, 43, 60, 75], f: [20, 30, 43, 55] },
+  power_clean: { m: [40, 60, 80, 100], f: [25, 40, 55, 70] },
+  hang_clean: { m: [35, 55, 75, 95], f: [20, 35, 50, 65] },
+  shoulder_to_oh: { m: [30, 43, 60, 75], f: [20, 30, 43, 55] },
+  back_squat: { m: [50, 70, 100, 130], f: [30, 50, 70, 90] },
+  sumo_dl_hp: { m: [35, 50, 70, 85], f: [20, 35, 50, 65] },
+  // Gymnastics standards: [scaled, inter, rx, rx_plus]
+  pullups: { scaled: 'Ring Rows', inter: 'Pull-ups', rx: 'Chest-to-bar', rx_plus: 'Chest-to-bar + Bar Muscle-ups' },
+  muscle_ups_bar: { scaled: 'Pull-ups + Dips', inter: 'Bar Muscle-ups (tentatives)', rx: 'Bar Muscle-ups', rx_plus: 'Strict Bar Muscle-ups' },
+  muscle_ups_ring: { scaled: 'Ring Rows + Ring Dips', inter: 'Ring Muscle-ups (tentatives)', rx: 'Ring Muscle-ups', rx_plus: 'Strict Ring Muscle-ups' },
+  hspu: { scaled: 'Pike Push-ups', inter: 'HSPU (abmat)', rx: 'Strict/Kipping HSPU', rx_plus: 'Strict HSPU (no abmat)' },
+  handstand_walk: { scaled: 'Bear Crawl 2x distance', inter: 'Wall Walk', rx: 'Handstand Walk', rx_plus: 'Handstand Walk (obstacles)' },
+  pistols: { scaled: 'Air Squats', inter: 'Pistols (assistés)', rx: 'Pistols', rx_plus: 'Pistols (lesté)' },
+  toes_to_bar: { scaled: 'Hanging Knee Raises', inter: 'Toes-to-bar (kipping)', rx: 'Toes-to-bar (strict ou kipping)', rx_plus: 'Toes-to-bar strict' },
+  rope_climb: { scaled: 'Rope Pull (allongé)', inter: '1 Rope Climb', rx: 'Legless Rope Climb', rx_plus: 'Legless Rope Climb (15ft)' },
+  double_unders: { scaled: 'Single Unders (x3)', inter: 'Double Unders', rx: 'Double Unders', rx_plus: 'Double Unders (volume +25%)' },
+  box_jump: { scaled: 'Step-ups 50cm', inter: 'Box Jump 50/60cm', rx: 'Box Jump 60/75cm', rx_plus: 'Box Jump 75/90cm' },
+  wall_ball: { scaled: '4/6kg → 2.7/3m', inter: '6/9kg → 2.7/3m', rx: '9/14kg → 3/3.5m', rx_plus: '9/14kg → 3.5m (cible Games)' },
+  kb_swing: { scaled: '12/16kg', inter: '16/24kg', rx: '24/32kg', rx_plus: '32/40kg' },
+  burpee: { scaled: 'Burpees (step)', inter: 'Burpees', rx: 'Burpees over bar / Burpee Box Jump Over', rx_plus: 'Burpee Box Jump Over (75cm)' },
+  row_cal: { cal: [12, 15, 20, 25] },
+  assault_bike: { cal: [8, 12, 15, 20] }
 };
 window.CF_STANDARDS = CF_STANDARDS;
 
@@ -2644,7 +2647,7 @@ function filterRecipes(pool,type){
       var ing=(x.i+' '+x.tags.join(' ')).toLowerCase();
       for(var t=0;t<s.intolerances.length;t++){
         var it=s.intolerances[t].toLowerCase();
-        if(it==='lactose'&&(/lait|fromage|yaourt|beurre|crème|ricotta|cottage|whey/).test(ing))return false;
+        if(it==='lactose'&&(/lait|fromage|yaourt|beurre|crème|ricotta|cottage|whey|feta|parmesan|mozzarella|skyr|emmental|gruyère|comté|camembert|mascarpone|kéfir|labneh|ghee|cheddar|gouda/).test(ing))return false;
         if(it==='gluten'&&(/pain|blé|farine|pâte|avoine|seigle|couscous|semoule/).test(ing))return false;
         if(it==='fructose'&&(/miel|pomme|poire|mangue|cerise|figue|datte/).test(ing))return false;
         if(it==='histamine'&&(/thon|saumon fumé|fromage|tomate|épinard|avocat|soja/).test(ing))return false;
@@ -2654,8 +2657,8 @@ function filterRecipes(pool,type){
   // Diabetics: soft-filter high-GI ingredients (prioritize low-GI sources — ADA 2023)
   var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);
   if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioche|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
-  if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon/).test(i)});
-  if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson/).test(i)});
+  if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon|merguez|canard|lapin|foie/).test(i)});
+  if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson|sole|bar(?! de)|moule|poulpe|canard|lapin|merguez|gambas|lotte|morue|foie|anchois|truite|colin/).test(i)});
   if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|beurre|miel|whey/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;return true});}
   // Halal : exclut porc, charcuterie porcine et alcool
   if(s.halal)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin/).test(i)});
