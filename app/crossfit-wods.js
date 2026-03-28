@@ -990,8 +990,6 @@ window.CF_WODS_FULL = [
   scaled: { movements: [{name: 'Deadlifts', reps: 10, note: '→ 60% du RX'}, {name: 'Double Unders', reps: 50, note: '→ 100 Single Unders'}, {name: 'Rope Climbs', reps: 2, note: '→ 6 Ring Rows strictes ou 1 Rope Climb'}], note: 'Scaling: choisir un poids pour le complex = PP guide. Rope → ring rows si nécessaire.' },
   rxPlus: { note: 'RX+: DL H 100kg / F 70kg, Rope Climbs legless. DU → 25 Triple Unders. Target sub 13min.' }
 },
-  rxPlus: { note: 'RX+ Fran S16: 52/38kg, Pull-ups butterfly strict. Target sub 2:00. Phase finale = tout donner.' }
-},
 {
   day: 80, week: 16, name: 'HELEN-RETEST-2', theme: 'Déload S4 — Re-test Benchmark HELEN (semaines 4 et 12)', benchmark: 'HELEN', deload: true, benchmark_retest: true,
   haltero: { name: 'Clean Activation Légère', desc: '3x3 Hang Power Clean @55% — Activation légère avant HELEN', scheme: '8min — Ultra léger', weights: 'hang_clean' },
@@ -1183,67 +1181,79 @@ window.CF_WODS_FULL = [
 // Principes: D96=volume -60%, D97=volume -50%, D98=activation légère, D99=prépa mentale+skill, D100=THE FINALE
 // Ne pas ajouter de fatigue — conserver l'énergie pour le Day 100 ARMAGEDDON
 {
-  day: 96, week: 20, name: 'TAPER-TECHNIQUE', theme: 'Taper J1 — Clean & Jerk Technique + EMOM Court', taper: true,
-  haltero: { name: 'Clean & Jerk Technique', desc: 'Clean & Jerk 5x1 @75% — Technique parfaite, pas de fatigue. Concentrez-vous sur chaque détail', scheme: 'E3MOM x 5 — Récupération complète entre sets', weights: 'clean' },
-  wod: { name: 'TAPER-1', type: 'EMOM 10 (3 rounds)', movements: [
-    {name: 'Min 1: Power Cleans', reps: 4, weight: 'power_clean', note: '@65% — technique TnG'},
-    {name: 'Min 2: Ring Muscle-ups', reps: 3, gymnastics: 'muscle_ups_ring'},
-    {name: 'Min 3: Wall Balls', reps: 10, gymnastics: 'wall_ball'},
-    {name: 'Min 4: Cal Assault Bike', special: 'assault_bike', note: '10/8 cal — aérobie léger'}
-  ], notes: '⚡ TAPER S20 Jour 1: 10min au lieu de 20min. Reps -40%. Pace conversationnel. Corps = conservé pour ARMAGEDDON. Objectif: rester actif, pas se fatiguer. Concentrez-vous sur la qualité des mouvements. 4 jours jusqu\'au finale! 💪' },
-  gym: { name: 'Activation + Récupération', drills: ['3x3 Strict Ring Dips (contrôle pur)', '3x5 Kipping Ring MU (facile)', '5min Foam Roll complet', '5min Visualisation: imaginez ARMAGEDDON'] }
+  day: 96, week: 20, name: 'ODIN', theme: 'Taper J1 — Activation Clean & Jerk + EMOM Court', taper: true,
+  haltero: { name: 'Clean & Jerk Technique', desc: 'Clean & Jerk 5x1 @70% — Chaque rep technique parfaite. Volume -60%, fraicheur maximale.', scheme: 'E3MOM x 5 — Recuperation complete entre sets', weights: 'clean' },
+  wod: { name: 'ODIN', type: 'EMOM 10min', movements: [
+    {name: 'Min 1-5: Power Cleans', reps: 3, weight: 'power_clean'},
+    {name: 'Min 2-6: Toes-to-bar', reps: 5, gymnastics: 'toes_to_bar'},
+    {name: 'Min 3-7: Wall Balls', reps: 7, gymnastics: 'wall_ball'},
+    {name: 'Min 4-8: Double Unders', reps: 20, gymnastics: 'double_unders'},
+    {name: 'Min 5-10: Pull-ups', reps: 5, gymnastics: 'pullups'}
+  ], notes: 'TAPER Jour 1 — 4 jours avant RAGNAROK. Volume -60% intentionnel : votre corps accumule de l\'energie pour la bataille finale. EMOM 10min leger, pas de sprint. Chaque rep est executee avec precision et confiance. Vos systemes nerveux et musculaires se rechargent. Ressentez la puissance qui monte. Dans 4 jours, vous unleashcez tout ce travail accumule sur 100 jours.' },
+  gym: { name: 'Skill: Rope Climb Technique', drills: ['3x1 Rope Climb (technique jambes — lent)', '3x5 Strict Pull-ups (activation lats)', '5min Foam Roll thoracique + epaules', '5min Visualisation: imaginez RAGNAROK section par section'] },
+  scaled: { movements: [{name: 'Power Cleans', reps: 3, note: '-> 60% 1RM ou hang power clean'}, {name: 'Toes-to-bar', reps: 5, note: '-> Knees-to-chest decontractes'}, {name: 'Wall Balls', reps: 7, note: '-> 4/3 kg leger'}], note: 'Scaling Taper J1: tout doit rester confortable. Si un mouvement tire, reduire encore. Objectif = actif, pas fatigue.' },
+  rxPlus: { note: 'RX+ Taper: memes reps, +5kg Power Clean uniquement. Ne pas aller plus loin — le taper est intentionnel.' }
 },
 {
-  day: 97, week: 20, name: 'TAPER-SNATCH', theme: 'Taper J2 — Snatch Précision + WOD Court', taper: true,
-  haltero: { name: 'Snatch Technique de Précision', desc: 'Snatch 5x1 @70% — Chaque rep = parfaite. Montée progressive légère', scheme: 'E3MOM x 5 — Qualité > quantité', weights: 'snatch' },
-  wod: { name: 'TAPER-2', type: 'For Time (cap 10min)', movements: [
-    {name: 'Power Snatches', reps: 6, weight: 'snatch', note: '@65%'},
-    {name: 'Rope Climbs', reps: 2, gymnastics: 'rope_climb'},
+  day: 97, week: 20, name: 'FREYR', theme: 'Taper J2 — Snatch Precision + WOD 8min', taper: true,
+  haltero: { name: 'Snatch Technique de Precision', desc: 'Snatch 5x1 @65% — Volume -50%. Focus technique: position basse, reception stable, overhead solide.', scheme: 'E3MOM x 5 — Qualite absolue, zero fatigue', weights: 'snatch' },
+  wod: { name: 'FREYR', type: 'For Time (cap 8min)', movements: [
+    {name: 'Power Snatches', reps: 5, weight: 'snatch'},
+    {name: 'Box Jumps', reps: 8, gymnastics: 'box_jump'},
     {name: 'Power Snatches', reps: 4, weight: 'snatch'},
-    {name: 'Rope Climb', reps: 1, gymnastics: 'rope_climb'}
-  ], notes: '⚡ TAPER S20 Jour 2: WOD court. Snatches légers = TnG contrôlés. Rope climbs techniques. Pas de sprint. Corps conservé. 3 jours pour ARMAGEDDON. Mangez bien, dormez 9h. 💤' },
-  gym: { name: 'Snatch Skill + Mobilité', drills: ['5x2 Hang Snatch paused catch @55%', '3x3 Snatch Balance @50%', '5min Band stretches épaules', '5min Thoracic + hip mobility'] }
+    {name: 'Burpees over bar', reps: 6, gymnastics: 'burpee'},
+    {name: 'Power Snatches', reps: 3, weight: 'snatch'},
+    {name: 'Double Unders', reps: 30, gymnastics: 'double_unders'}
+  ], notes: 'TAPER Jour 2 — 3 jours avant RAGNAROK. WOD 8min maximum : corps economise, systeme nerveux central preservé. Snatches legers a 65% = fluidite et rythme, pas d\'effort maximum. Box jumps explosifs mais controles. Le but est d\'activer les fibres rapides sans les epuiser. Ce soir : proteines 2g/kg, glucides complexes, sommeil 9 heures. Chaque heure de sommeil forge un guerrier pour RAGNAROK.' },
+  gym: { name: 'Skill: Snatch Balance + Mobilite', drills: ['4x2 Snatch Balance @50% (vitesse sous la barre)', '3x5 OHS pause 3s en bas @40%', '5min Bandes epaules + thoracique', '5min Hanche + cheville mobilite active'] },
+  scaled: { movements: [{name: 'Power Snatches', reps: 5, note: '-> 55% 1RM ou KB snatch'}, {name: 'Box Jumps', reps: 8, note: '-> Step-ups explosifs 50cm'}, {name: 'Double Unders', reps: 30, note: '-> 60 Single Unders'}], note: 'Scaling Taper J2: aucun mouvement ne doit brûler. Si c\'est dur, c\'est trop lourd. Taper = recharge, pas performance.' },
+  rxPlus: { note: 'RX+ Taper: Snatch @70%, Box Jumps 75cm, DU unbroken 30. Cap 8min respecte imperative.' }
 },
 {
-  day: 98, week: 20, name: 'TAPER-ACTIVATION', theme: 'Taper J3 — Squat Clean Léger + Activation Courte', taper: true,
-  haltero: { name: 'Squat Clean Activation', desc: 'Squat Clean 4x1 @70% — Activation neuromusculaire légère', scheme: 'E3MOM x 4 — Léger mais explosif', weights: 'squat_clean' },
-  wod: { name: 'TAPER-3', type: 'AMRAP 8 — Activation Pure', movements: [
-    {name: 'Squat Cleans', reps: 2, weight: 'squat_clean', note: '@65%'},
-    {name: 'HSPU', reps: 3, gymnastics: 'hspu'},
+  day: 98, week: 20, name: 'THOR', theme: 'Taper J3 — Squat Clean @65% + AMRAP 8min Activation', taper: true,
+  haltero: { name: 'Squat Clean Activation', desc: 'Squat Clean 4x1 @65% — Activation neuromusculaire pure. Jambes rechargées, explosivite conservée.', scheme: 'E3MOM x 4 — Leger mais explosif a chaque rep', weights: 'squat_clean' },
+  wod: { name: 'THOR', type: 'AMRAP 8min', movements: [
+    {name: 'Squat Cleans', reps: 2, weight: 'squat_clean'},
+    {name: 'Toes-to-bar', reps: 4, gymnastics: 'toes_to_bar'},
     {name: 'Box Jumps', reps: 5, gymnastics: 'box_jump'},
-    {name: 'Toes-to-bar', reps: 5, gymnastics: 'toes_to_bar'}
-  ], notes: '⚡ TAPER S20 Jour 3: 8min d\'activation. Reps minimaux. Garder les muscles actifs sans fatiguer. 2 jours pour ARMAGEDDON. Nutrition optimale: glucides 5-6g/kg, protéines 2g/kg. Hydratation +++. 💧' },
-  gym: { name: 'Activation Gymnique + Récupération', drills: ['3x3 Strict MU (activation pure)', '3x5 Strict HSPU', '3x3/leg Pistols (activation)', '10min Easy Row zone 1 + stretching'] }
+    {name: 'Double Unders', reps: 15, gymnastics: 'double_unders'}
+  ], notes: 'TAPER Jour 3 — 2 jours avant RAGNAROK. AMRAP 8min tres leger : 2 squat cleans seulement par round, tout reste frais. Squat Cleans @65% = activation parfaite sans brûler les quadriceps. Votre corps est une arme chargee a bloc. Ce soir, nutrition critique : 6g glucides/kg bodyweight (riz, pates, patate douce), 2g proteines/kg, 3L eau. Dormez 9 heures. Dans 48 heures commence la legende.' },
+  gym: { name: 'Skill: Box Jump + Pistols Activation', drills: ['3x3 Box Jumps reactifs (focus atterrissage souple)', '3x3/jambe Pistols (activation mollets et fessiers)', '5min Easy Assault Bike zone 1', '10min Stretching complet + foam roll'] },
+  scaled: { movements: [{name: 'Squat Cleans', reps: 2, note: '-> 60% 1RM ou goblet squat lourd'}, {name: 'Toes-to-bar', reps: 4, note: '-> Knees-to-chest ou sit-ups'}, {name: 'Double Unders', reps: 15, note: '-> 30 Single Unders'}], note: 'Scaling Taper J3: confort total. 8min ne doit jamais devenir un effort max. Corps repose = performance RAGNAROK.' },
+  rxPlus: { note: 'RX+ Taper: Squat Cleans @70%, Box Jumps 75cm, Toes-to-bar strict. Meme duree 8min.' }
 },
 {
-  day: 99, week: 20, name: 'TAPER-FINAL-PREP', theme: 'Taper J4 — Activation Finale + Préparation Mentale', taper: true,
-  haltero: { name: 'Thruster Activation', desc: '1 Squat Clean + 3 Thrusters @65% x 4 sets — Juste activer les patterns', scheme: 'E3MOM x 4 — Ultra léger', weights: 'thruster' },
-  wod: { name: 'TAPER-4', type: '3 Rounds AMRAP 3min / 1min REST', movements: [
-    {name: 'Thrusters', reps: 5, weight: 'thruster', note: '@60% — explosifs'},
-    {name: 'Burpees over bar', reps: 5, gymnastics: 'burpee'},
-    {name: 'Double Unders', reps: 20, gymnastics: 'double_unders'}
-  ], notes: '⚡ TAPER S20 Jour 4: VEILLE DE L\'ARMAGEDDON. Activation pure — pas de fatigue. 3 rounds de 3min, pas plus. Couchez-vous tôt ce soir. Mangez des glucides complexes. Visualisez chaque mouvement d\'ARMAGEDDON. Vous avez travaillé 99 jours pour CE moment. Demain = votre jour. 🔥💪🏆' },
-  gym: { name: 'Préparation Mentale & Skill Final', drills: ['3x Max DU unbroken (relaxé)', '3x10 Strict Pull-ups (activation)', '5min Easy Bike (activation corps entier)', '15min Visualisation + mental preparation pour Day 100'] }
+  day: 99, week: 20, name: 'VALHALLA', theme: 'Taper J4 — Activation Finale + Preparation Mentale', taper: true,
+  haltero: { name: 'Thruster + Clean Activation', desc: '1 Squat Clean + 2 Thrusters @60% x 3 sets — Juste activer les patterns du RAGNAROK. Rien de plus.', scheme: 'E3MOM x 3 — Ultra leger, ultra propre', weights: 'thruster' },
+  wod: { name: 'VALHALLA', type: '3 Rounds — AMRAP 3min / 1min REST', movements: [
+    {name: 'Thrusters', reps: 4, weight: 'thruster'},
+    {name: 'Burpees over bar', reps: 4, gymnastics: 'burpee'},
+    {name: 'Double Unders', reps: 15, gymnastics: 'double_unders'},
+    {name: 'Pull-ups', reps: 4, gymnastics: 'pullups'}
+  ], notes: 'DEMAIN = RAGNAROK. Ce soir : mangez des glucides (pates, riz, pain complet), dormez 9 heures minimum. Couchez-vous tot. 3 rounds de 3min aujourd\'hui = activation pure, zero fatigue. Visualisez chaque mouvement du chipper final. Row 50 cal regulier. 40 DL par series de 8. 50 WB par 10. Vous avez accumule 99 jours de travail pour CE moment precis. Demain, vous n\'arretez jamais. Jamais plus de 20 secondes de repos. Valhalla vous attend.' },
+  gym: { name: 'Skill: Mental Prep + Movements Cles', drills: ['3x Max DU unbroken (relaxe, pas de sprint)', '3x3 Rope Climb (rappel technique)', '5min Easy Row zone 1 (visualisation)', '15min Visualisation guidee : chaque section de RAGNAROK, rep par rep'] },
+  scaled: { movements: [{name: 'Thrusters', reps: 4, note: '-> @55%, tres leger'}, {name: 'Double Unders', reps: 15, note: '-> 30 Single Unders'}, {name: 'Pull-ups', reps: 4, note: '-> Banded ou ring rows'}], note: 'Scaling Valhalla J4: tout confort. Si quoi que ce soit tire, arretez. Vous aurez besoin de tout demain pour RAGNAROK.' },
+  rxPlus: { note: 'RX+ Valhalla: memes reps, +5% sur Thrusters. Pas plus. Dormez 9h, mangez des glucides. Demain = RAGNAROK.' }
 },
 {
-  day: 100, week: 20, name: 'ARMAGEDDON', theme: 'The Final Battle — Ultimate WOD',
-  haltero: { name: 'Clean & Jerk', desc: 'Clean & Jerk — Build to 1RM', scheme: 'E2MOM 14min — Every rep counts', weights: 'clean' },
-  wod: { name: 'ARMAGEDDON', type: 'For Time (cap 35min)', movements: [
-    {name: 'Cal Row', special: 'row_cal', note: '50/40 cal'},
+  day: 100, week: 20, name: 'RAGNAROK', theme: 'THE FINAL BATTLE — 100 Days', taper: true,
+  haltero: { name: 'Snatch + Clean & Jerk Primer', desc: 'Snatch 2x1 @70% + Clean & Jerk 2x1 @70% — Activation CNS pure avant le chipper. 4 reps totales, rien de plus.', scheme: 'E3MOM x 4 — Primer pre-competition, 12min', weights: 'snatch' },
+  wod: { name: 'RAGNAROK', type: 'For Time (cap 35min)', movements: [
+    {name: 'Cal Row', reps: 50, special: 'row_cal'},
     {name: 'Deadlifts', reps: 40, weight: 'deadlift'},
     {name: 'Wall Balls', reps: 50, gymnastics: 'wall_ball'},
     {name: 'Power Cleans', reps: 30, weight: 'power_clean'},
-    {name: 'HSPU', reps: 25, gymnastics: 'hspu'},
+    {name: 'Toes-to-bar', reps: 30, gymnastics: 'toes_to_bar'},
     {name: 'Double Unders', reps: 100, gymnastics: 'double_unders'},
     {name: 'Thrusters', reps: 20, weight: 'thruster'},
     {name: 'Bar Muscle-ups', reps: 15, gymnastics: 'muscle_ups_bar'},
     {name: 'Squat Cleans', reps: 10, weight: 'squat_clean'},
     {name: 'Ring Muscle-ups', reps: 5, gymnastics: 'muscle_ups_ring'},
     {name: 'Rope Climb', reps: 1, gymnastics: 'rope_climb'}
-  ], notes: 'ARMAGEDDON — le WOD final de 100 jours de programme. Ce moment vous a été préparé. Stratégie: Row 2:00/500m pace (pas de sprint — chipper). DL 8x5 TnG. WB 10x5. Power Cleans 5-5-6-5-5-4 touch-and-go. HSPU 5x5. DU unbroken ou 50-50. Thrusters 4x5. BMU 3-3-3-3-3 (singles OK). Squat Cleans 10 singles max effort. RMU 2-2-1 (pas de raté). Rope climb finale = victoire. Ne vous arrêtez jamais > 20s. Vous êtes des guerriers — 100 jours prouvés.' },
-  gym: { name: 'Skill: Victory Lap', drills: ['3x Max Strict Pull-ups', '3x Max Strict HSPU', '1x Max Ring Muscle-ups', '1x Max Unbroken Double Unders', '5min Easy Row — Cool Down'] },
-  scaled: { movements: [{name: 'Bar Muscle-ups', reps: 15, note: '→ 30 C2B Pull-ups'}, {name: 'Ring Muscle-ups', reps: 5, note: '→ 10 Strict Pull-ups'}, {name: 'HSPU', reps: 25, note: '→ 20 Pike HSPU ou DB Press'}, {name: 'Rope Climb', reps: 1, note: '→ 5 Ring Rows'}], note: 'Scaling ARMAGEDDON: réduire les charges de 20-25% sur tous les barbell mouvements. Garder les reps identiques autant que possible. Le chipper final = mêmes intentions.' },
-  rxPlus: { note: 'RX+ Armageddon: DL +10%, HSPU = strict, BMU = strict, Rope Climb = legless, DU → 50 Triple Unders. Target sub 27min.' }
+  ], notes: 'RAGNAROK — 100 jours de sueur, de discipline et de sacrifices pour CE moment precis. Chaque rep que vous avez faite depuis le Jour 1 vous a construit pour aujourd\'hui. Vous n\'etes plus la personne qui a commence ce programme. Strategie chipper : Row 50 cal regulier (2:00/500m pace, pas de sprint). DL 8x5 TnG ou 5x8. WB 10x5 sets. Power Cleans 6-6-6-6-6 touch-and-go. TTB 6-6-6-5-5-5-3-3. DU unbroken ou 50-50. Thrusters 4-4-4-4-4. BMU singles ou 2-2-2-3-3-3. Squat Cleans 10 singles max effort — chaque rep est une victoire. RMU 2-2-1. Rope Climb finale = vous avez gagne. Ne vous arretez JAMAIS plus de 20 secondes. Regardez le chrono, pas la douleur. Vous etes un guerrier. Cent jours prouvent ce que vous valez.' },
+  gym: { name: 'Skill: Victory Lap', drills: ['3x Max Strict Pull-ups (post-WOD fierte)', '3x Max Strict HSPU (celebration)', '1x Max Ring Muscle-ups attempt', '5min Easy Row Cool Down — vous avez tout donne'] },
+  scaled: { movements: [{name: 'Bar Muscle-ups', reps: 15, note: '-> 30 Chest-to-bar Pull-ups ou 45 Pull-ups kipping'}, {name: 'Ring Muscle-ups', reps: 5, note: '-> 10 Strict Pull-ups ou 5 Bar MU'}, {name: 'Squat Cleans', reps: 10, note: '-> @75% du RX, memes reps'}, {name: 'Rope Climb', reps: 1, note: '-> 5 Ring Rows strictes ou 1 Rope Climb avec pieds'}], note: 'Scaling RAGNAROK: reduire les charges de 20-25% sur tous les mouvements barbell. Garder les reps identiques — la structure du chipper fait partie du defi. Le WOD scaled est tout aussi epique. Cent jours de travail, meme dignite.' },
+  rxPlus: { note: 'RX+ RAGNAROK: DL +10%, TTB strict (no kip), BMU strict, Rope Climb legless, DU -> 50 Triple Unders, Squat Cleans +5kg. Target sub 27min. Legendaire.' }
 }
 ];
 
