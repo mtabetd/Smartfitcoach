@@ -1970,7 +1970,8 @@ function renderCrossfitProgram(p) {
       var doneBtn = h('button', {'class': 'btn-primary', style: 'width:100%;margin:0', onclick: function() {
         if (!S.cfProgress) S.cfProgress = {};
         var today = new Date();
-        var dateStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+        var mm = today.getMonth() + 1; var dd = today.getDate();
+        var dateStr = today.getFullYear() + '-' + (mm < 10 ? '0' : '') + mm + '-' + (dd < 10 ? '0' : '') + dd;
         S.cfProgress[wodDay] = { done: true, date: dateStr, score: scoreInput.value.trim() };
         // Advance cfCurrentDay if this was the current day
         if (S.cfCurrentDay === wodDay && wodDay < 100) {
@@ -2697,6 +2698,15 @@ function renderMusculationProgram(p) {
     karvonenDiv.appendChild(zonesRow);
     karvonenDiv.appendChild(h('div', {style: 'margin-top:4px;font-style:italic;color:var(--grey)'}, '⚠ Beta-bloquants : si prescrit, votre FC max réelle est plus basse (~10-20%). Consulter votre cardiologue pour ajuster les zones. Test d\'effort (VO2max) recommandé avant programme intensif.'));
     p.appendChild(karvonenDiv);
+  }
+
+  // Sommeil insuffisant : avertissement récupération (S.sleep 0=<6h, 1=6-7h) — ACSM 2020, IOC 2018
+  if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) {
+    var sleepLabels = ['< 6h', '6-7h'];
+    var sleepMsg = S.sleep === 0
+      ? '⚠ Sommeil < 6h/nuit — risque de surentraînement élevé. Performance -30%, récupération compromise (IOC 2018). Limitez les séances intenses à 2/semaine. Évitez les blocs HIIT consécutifs.'
+      : '⚠ Sommeil 6-7h/nuit — récupération partielle. Maintenez au maximum 4 séances/semaine. Évitez 2 jours intenses d\'affilée.';
+    p.appendChild(h('div', {style: 'background:#FFF8E1;border-left:4px solid #F9A825;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#5D4037'}, sleepMsg));
   }
 
   var goalNames = S.sportGoals.map(function(gid){
