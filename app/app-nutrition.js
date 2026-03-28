@@ -2635,12 +2635,23 @@ function renderSaladBar(p) {
   var sb = S.saladBar;
   p.innerHTML = '';
 
-  // Macro targets — déjeuner 35% du TDEE, dîner 30% (recommandations standard)
+  // Macro targets — calculés selon le slot via getMealSplit()
   var tgtMacros = { k: 600, p: 40, g: 65, l: 20 };
   if (window.calcMacros && window.calcTarget) {
     var dm = window.calcMacros(), dk = window.calcTarget();
     if (dk > 0) {
-      var mealRatio = (sb.mealTarget === 'dinner') ? 0.30 : 0.35;
+      var _split = window.getMealSplit ? window.getMealSplit() : null;
+      var mealRatio;
+      if (_split) {
+        var _slotKey = sb.mealTarget || 'lunch';
+        if (_slotKey === 'breakfast')    mealRatio = _split.pctBreak;
+        else if (_slotKey === 'lunch')   mealRatio = _split.pctLunch;
+        else if (_slotKey === 'snack')   mealRatio = _split.pctSnack || 0.10;
+        else                             mealRatio = _split.pctDinner;
+      } else {
+        var _defaults = { breakfast: 0.25, lunch: 0.35, snack: 0.10, dinner: 0.30 };
+        mealRatio = _defaults[sb.mealTarget] || 0.35;
+      }
       tgtMacros.k = Math.round(dk * mealRatio);
       tgtMacros.p = Math.round(dm.p * mealRatio);
       tgtMacros.g = Math.round(dm.g * mealRatio);
@@ -3177,7 +3188,7 @@ function renderRecipePicker(p) {
         onclick: function() {
           if (!S.weekPlan || !S.weekPlan[S.selectedDay]) { S._recipePicker = null; window.render(); return; }
           var c = typeof calcTarget === 'function' ? calcTarget() : 0;
-          var split = typeof getMealSplit === 'function' ? getMealSplit() : null;
+          var split = window.getMealSplit ? window.getMealSplit() : null;
           var tgt = 0;
           if (c && split) {
             tgt = slotKey === 'breakfast' ? Math.round(c * split.pctBreak) :
@@ -3185,7 +3196,7 @@ function renderRecipePicker(p) {
                   slotKey === 'snack'     ? Math.round(c * split.pctSnack) :
                                             Math.round(c * split.pctDinner);
           }
-          var nr = tgt > 0 && typeof enrichWithScaling === 'function' ? enrichWithScaling(recipe, tgt) : recipe;
+          var nr = tgt > 0 && typeof window.enrichWithScaling === 'function' ? window.enrichWithScaling(recipe, tgt) : recipe;
           S.weekPlan[S.selectedDay][slotKey] = nr;
           S._recipePicker = null;
           window.render();
@@ -3584,8 +3595,10 @@ window.openSaladComposer = function openSaladComposer(slotKey) {
   if (!S.saladBar) {
     S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' };
   }
-  // Align mealTarget with the requested slot when applicable
-  if (slotKey === 'lunch' || slotKey === 'dinner') S.saladBar.mealTarget = slotKey;
+  // Align mealTarget with the requested slot
+  if (slotKey === 'breakfast' || slotKey === 'lunch' || slotKey === 'snack' || slotKey === 'dinner') {
+    S.saladBar.mealTarget = slotKey;
+  }
 
   // ── Compute calorie target for this slot ──
   function getSlotTargetCals(slot) {

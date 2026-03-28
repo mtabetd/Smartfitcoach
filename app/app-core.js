@@ -430,23 +430,54 @@ var CF_1RM_LIFTS = [
 ];
 window.CF_1RM_LIFTS = CF_1RM_LIFTS;
 
+// Scaling factors relative to Back Squat 1RM for deriving missing lift maxes
+// References: Haff & Triplett 2016, Symmetry Strength, ExRx standards
+var CF_LIFT_SCALING_FACTORS = {
+  back_squat:    1.00,
+  front_squat:   0.85,
+  overhead_squat: 0.88, // OHS — overhead stability demand reduces capacity
+  squat_clean:   0.75,
+  clean:         0.75,
+  power_clean:   0.70,
+  hang_clean:    0.70,
+  snatch:        0.60,
+  deadlift:      1.25,
+  bench_press:   0.85,
+  push_press:    0.65,
+  shoulder_to_oh: 0.65,
+  thruster:      0.55,
+  sumo_dl_hp:    0.50
+};
+window.CF_LIFT_SCALING_FACTORS = CF_LIFT_SCALING_FACTORS;
+
 // Returns the working weight for a given movement
-// Uses user's 1RM if available, otherwise falls back to CF_STANDARDS
+// Priority 1: user's direct 1RM for that lift
+// Priority 2: derive from back_squat 1RM using scaling factors
+// Priority 3: fall back to CF_STANDARDS (level/sex tables)
 function getCFWorkingWeight(standardsKey, percentage) {
   var s = window.S;
+  if (!s) return '?';
   var sexKey = s.sex === 'homme' ? 'm' : 'f';
   var lvlIdx = s.crossfitLevel === 'scaled' ? 0 : s.crossfitLevel === 'inter' ? 1 : 2;
+  // WOD working weight percentages by level (% of 1RM)
+  var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : 0.75;
 
-  // Check if user has a 1RM for this lift
+  // Priority 1: user has a direct 1RM for this specific lift
   if (s.crossfit1RM && s.crossfit1RM[standardsKey]) {
     var rm = s.crossfit1RM[standardsKey];
     if (percentage) return Math.round(rm * percentage / 100);
-    // For WODs, use typical percentages by level
-    var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : 0.75;
     return Math.round(rm * wodPct);
   }
 
-  // Fallback to CF_STANDARDS
+  // Priority 2: derive from back_squat 1RM using scaling factors
+  if (s.crossfit1RM && s.crossfit1RM['back_squat'] && CF_LIFT_SCALING_FACTORS[standardsKey]) {
+    var bsRm = s.crossfit1RM['back_squat'];
+    var derived1RM = Math.round(bsRm * CF_LIFT_SCALING_FACTORS[standardsKey]);
+    if (percentage) return Math.round(derived1RM * percentage / 100);
+    return Math.round(derived1RM * wodPct);
+  }
+
+  // Priority 3: fallback to CF_STANDARDS (sex/level tables)
   var standards = window.CF_STANDARDS;
   if (standards && standards[standardsKey] && standards[standardsKey][sexKey]) {
     return standards[standardsKey][sexKey][lvlIdx];
@@ -2693,6 +2724,7 @@ function swapMeal(di,slot){var s=window.S;if(!s.weekPlan||!s.weekPlan[di])return
 window.getPool = getPool;
 window.filterRecipes = filterRecipes;
 window.pickRecipe = pickRecipe;
+window.enrichWithScaling = enrichWithScaling;
 window.generateWeek = generateWeek;
 window.swapMeal = swapMeal;
 
