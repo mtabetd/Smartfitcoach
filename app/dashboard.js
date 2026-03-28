@@ -751,7 +751,8 @@ function openKitchenTimer() {
 /* ═══ DATA EXPORT / IMPORT / DELETE ═══ */
 
 function exportAllData() {
-  var user = window.AUTH ? AUTH.getUser() : {};
+  var user = (window.AUTH && AUTH.getUser) ? AUTH.getUser() : null;
+  user = user || {};
   var userId = user.id || 'anon';
 
   var backup = {

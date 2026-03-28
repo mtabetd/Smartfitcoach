@@ -3358,7 +3358,8 @@
     var targetCalories = options.targetCalories || Math.round(userState.caloriesTarget * mealFraction);
 
     // scalingRatio : rapport calories cibles / calories de la recette entière
-    var caloriesPerServing = recipe.baseNutrition.calories / recipe.servings;
+    var caloriesPerServing = recipe.servings > 0 ? recipe.baseNutrition.calories / recipe.servings : 0;
+    if (!caloriesPerServing) return null; // évite division par zéro
     var scalingRatio       = targetCalories / caloriesPerServing;
 
     // Scaling ingrédients

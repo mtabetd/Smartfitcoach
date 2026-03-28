@@ -243,7 +243,7 @@ function findAlternatives(product, callback) {
 function getScanHistory() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   var key = 'mtd_scan_history_' + (user ? user.id : 'anon');
-  return JSON.parse(localStorage.getItem(key) || '[]');
+  try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { return []; }
 }
 
 function addToScanHistory(product, score) {
