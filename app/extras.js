@@ -1089,6 +1089,18 @@ window.FOOD_CALC = {
       var addBtn = el('button', 'food-add-btn', 'Ajouter au journal');
       addBtn.addEventListener('click', function() {
         var g = parseFloat(qtyInput.value) || 100;
+        // Calculer les macros scalées à la quantité saisie
+        var ratio = g / 100;
+        var kcal   = Math.round((food.energy_100g || food.kcal || 0) * ratio);
+        var prot   = Math.round((food.proteins_100g || food.p || 0) * ratio * 10) / 10;
+        var carbs  = Math.round((food.carbohydrates_100g || food.g || 0) * ratio * 10) / 10;
+        var fat    = Math.round((food.fat_100g || food.l || 0) * ratio * 10) / 10;
+        // Déterminer le repas selon l'heure
+        var h = new Date().getHours();
+        var mealSlot = h < 10 ? 'breakfast' : h < 14 ? 'lunch' : h < 17 ? 'snack' : 'dinner';
+        if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
+          window.FOOD_JOURNAL.addEntry(mealSlot, food.name, kcal, prot, carbs, fat, g + 'g', 'scanner');
+        }
         log('food_add_journal', { food: food.name, quantity: g });
         addBtn.textContent = 'Ajoute !';
         addBtn.style.borderColor = 'var(--green,#1A4A1A)';

@@ -513,7 +513,7 @@ window.DASHBOARD = {
         if (!ctx2 || !ctx2.getContext) return;
         if (!window.S || !Array.isArray(window.S.weekPlan) || window.S.weekPlan.length !== 7) return;
         var JOURS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-        var target = (window.S.calories && window.S.calories > 0) ? window.S.calories : 2000;
+        var target = (window.calcTarget ? window.calcTarget() : 0) || (window.S.calories && window.S.calories > 0 ? window.S.calories : 2000);
         var dayKcals = window.S.weekPlan.map(function(day) {
           if (!day) return 0;
           // weekPlan structure: {breakfast, lunch, snack, dinner} — not {meals:[]}
