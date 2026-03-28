@@ -3289,6 +3289,14 @@ function renderSmoothieBar(p) {
 }
 
 // Modal smoothie détail
+function showToast(msg, ms) {
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:99999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.3)';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(function(){ toast.style.opacity='0'; toast.style.transition='opacity 0.4s'; setTimeout(function(){ if(toast.parentNode) toast.parentNode.removeChild(toast); }, 400); }, ms || 2500);
+}
+
 function renderSmoothieModal(app) {
   var S = window.S;
   if (!S.modalSmoothie) return;
@@ -3313,7 +3321,86 @@ function renderSmoothieModal(app) {
   if (sm.tips) {
     body.appendChild(h('div', {style:'background:rgba(26,74,26,0.06);border-left:3px solid var(--green,#1A4A1A);padding:10px;border-radius:0 8px 8px 0;margin-top:12px;font-size:12px;color:var(--fg2)'}, '💡 '+sm.tips));
   }
+  // Bouton "Ajouter à mon plan — Collation"
+  var dayNames = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  var dayLabel = dayNames[typeof S.selectedDay === 'number' ? S.selectedDay : 0] || 'Lun';
+  var addContainer = h('div', {style:'padding:16px 20px;border-top:1px solid var(--border,#eee)'});
+  var addBtn = h('button', {
+    style:'width:100%;padding:14px;background:#6B3FA0;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.2px',
+    onclick: function() {
+      // Guard clause : vérifier que le plan existe
+      if (!S.weekPlan || !S.weekPlan[S.selectedDay]) {
+        addBtn.textContent = 'Générez d\'abord votre plan semaine';
+        addBtn.style.background = '#888';
+        return;
+      }
+      // Convertir le smoothie au format weekPlan
+      var smoothieAsRecipe = {
+        n: sm.name,
+        f: '🥛',
+        k: sm.cal,
+        p: sm.p,
+        g: sm.c,
+        l: sm.f,
+        i: sm.ingredients.map(function(ing){ return ing.qty+' '+ing.unit+' '+ing.name; }).join(', '),
+        ingredients: sm.ingredients,
+        st: sm.steps,
+        w: true,
+        tags: ['whey','smoothie'].concat(sm.goal || []),
+        lv: 1,
+        _id: sm.id,
+        _smoothie: true
+      };
+      // Redistribution des macros des autres repas
+      var split = window.getMealSplit ? window.getMealSplit() : null;
+      var totalTarget = typeof calcTarget === 'function' ? calcTarget() : (window.S.caloriesTarget || 2000);
+      var snackTargetBefore = split ? Math.round(totalTarget * split.pctSnack) : Math.round(totalTarget * 0.15);
+      var delta = sm.cal - snackTargetBefore;
+      var dayPlan = S.weekPlan[S.selectedDay];
+      // Placer le smoothie dans le slot snack
+      dayPlan.snack = smoothieAsRecipe;
+      // Redistribuer le delta si significatif
+      if (split && Math.abs(delta) > 30) {
+        var otherSum = split.pctBreak + split.pctLunch + split.pctDinner;
+        if (otherSum > 0) {
+          var slots = [
+            { key: 'breakfast', pct: split.pctBreak },
+            { key: 'lunch', pct: split.pctLunch },
+            { key: 'dinner', pct: split.pctDinner }
+          ];
+          slots.forEach(function(sl) {
+            var recipe = dayPlan[sl.key];
+            if (!recipe) return;
+            var adjustment = -delta * (sl.pct / otherSum);
+            var oldCal = recipe.k || 0;
+            var newTargetCals = Math.round(oldCal + adjustment);
+            if (newTargetCals <= 0) return;
+            // Utiliser enrichWithScaling si disponible et recipe a un _id
+            var eWS = window.enrichWithScaling;
+            if (eWS && recipe._id && ((/^R\d+$/.test(recipe._id) && window.RecipeEngine) || /^L\d+$/.test(recipe._id))) {
+              dayPlan[sl.key] = eWS(recipe, newTargetCals);
+            } else {
+              // Rescaling direct des macros
+              var ratio = oldCal > 0 ? newTargetCals / oldCal : 1;
+              recipe.k = newTargetCals;
+              recipe.p = Math.round((recipe.p || 0) * ratio);
+              recipe.g = Math.round((recipe.g || 0) * ratio);
+              recipe.l = Math.round((recipe.l || 0) * ratio);
+            }
+          });
+        }
+      }
+      // Fermer les modals et naviguer
+      S.modalSmoothie = null;
+      S.smoothieBarOpen = false;
+      S.nStep = 9;
+      showToast('✅ Smoothie ajouté en collation — Plan recalculé', 2500);
+      if (typeof window.render === 'function') window.render();
+    }
+  }, '🥛 Ajouter à mon plan — Collation du '+dayLabel);
+  addContainer.appendChild(addBtn);
   box.appendChild(body);
+  box.appendChild(addContainer);
   ov.appendChild(box);
   app.appendChild(ov);
 }
