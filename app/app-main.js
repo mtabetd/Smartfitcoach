@@ -148,12 +148,9 @@ function render() {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;padding:4px 10px;background:none;border:1px solid var(--border);cursor:pointer;color:var(--grey)',
     onclick: function() {
       var next = (window.I18N ? window.I18N.current : (S.lang || 'fr')) === 'fr' ? 'en' : 'fr';
-      S.lang = next;
-      if (window.I18N) { window.I18N.current = next; }
-      try { localStorage.setItem('mtd_lang', next); } catch(e) {}
-      render();
+      if (window.I18N && window.I18N.setLang) { window.I18N.setLang(next); } else { S.lang = next; render(); }
     }
-  }, _curLang === 'fr' ? 'FR' : 'EN');
+  }, _curLang === 'fr' ? 'EN' : 'FR');
   ubRight.appendChild(langBtn);
   // Day/night toggle
   var _isDark = document.body.classList.contains('dark-mode');
