@@ -1286,6 +1286,8 @@ function renderStep7(p) {
   var ok = S.whey !== null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
     if (ok) {
+      // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
+      if (window.computeNutritionState) { window.computeNutritionState(false); }
       S.weekPlan = generateWeek();
       bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
       if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');

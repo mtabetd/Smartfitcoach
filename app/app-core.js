@@ -221,11 +221,13 @@ function getMealSplit(){
   }
   if(meals>=5){
     if(isAthlete){
-      // Athlète 5 repas : 2 collations (pré + post entraînement)
-      return{pctBreak:.20,pctLunch:.30,pctSnack:.15,pctDinner:.25,
-        note:'5 repas athlète : 2 collations (pré + post entraînement) — fractionner l\'apport protéique toutes les 3-4h pour maximiser la synthèse protéique (Moore 2012, Churchward-Venne 2016)'};
+      // Athlète 5 repas : collation étendue pré+post entraînement = 20% (fenêtre anabolique)
+      // 0.20+0.30+0.20+0.30 = 1.00 ✓
+      return{pctBreak:.20,pctLunch:.30,pctSnack:.20,pctDinner:.30,
+        note:'5 repas athlète : collation étendue pré+post entraînement — fractionner l\'apport protéique toutes les 3-4h pour maximiser la synthèse protéique (Moore 2012, Churchward-Venne 2016)'};
     }
-    return{pctBreak:.22,pctLunch:.33,pctSnack:.12,pctDinner:.28,
+    // Standard 5 repas : 0.22+0.33+0.13+0.32 = 1.00 ✓
+    return{pctBreak:.22,pctLunch:.33,pctSnack:.13,pctDinner:.32,
       note:'5 repas : fractionnement modéré — améliore satiété et glycémie'};
   }
   return MEAL_SPLIT;
@@ -2182,8 +2184,9 @@ function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOAL
 base=Math.max(base,1800);return base}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)
 // IMPORTANT : sans ce cap, un athlète élite (TDEE 3500+) en "cut -15%" pouvait avoir un déficit de 525-700 kcal/j
-if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}// Cap deficit to 500kcal/day for diabetics (sécurité glycémique)
-// Allaitement : +500 kcal/j (ACOG 2022) — priorité sur l'objectif coupe/sèche
+if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}// Cap surplus à +500 kcal/j pour bulk/lean_bulk (ISSN 2017, ACSM — au-delà : accumulation graisseuse excessive)
+// IMPORTANT : sans ce cap, un athlète élite (TDEE 4000) en bulk recevait +600 kcal/j
+if((goalKey==='bulk'||goalKey==='lean_bulk')&&tdeeVal>0){base=Math.min(base,Math.round(tdeeVal+500));}// Allaitement : +500 kcal/j (ACOG 2022) — priorité sur l'objectif coupe/sèche
 if(s.medical&&s.medical.indexOf('allaitement')!==-1){return Math.max(Math.round(tdeeVal)+500,1800);}
 // TCA/anorexie : forcer maintenance, bloquer cut/shred (ANAD, IOC 2018 — RED-S prevention)
 if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
