@@ -964,29 +964,32 @@ window.CF_WODS_FULL = [
   rxPlus: { note: 'RX+: Snatches H 70kg / F 47kg, BMU strict. Legless rope instead of 2nd run (3 climbs). Target sub 15min.' }
 },
 {
-  day: 78, week: 16, name: 'ANNIE-RETEST', theme: 'Déload S4 — Re-test Benchmark ANNIE (semaines 4 et 12)', benchmark: 'ANNIE', deload: true, benchmark_retest: true,
-  haltero: { name: 'Deadlift Activation Légère', desc: 'Deadlift 3x3 @60% — Activation légère, pas de fatigue avant ANNIE', scheme: 'E3min x 3 — Ultra léger', weights: 'deadlift' },
-  wod: { name: 'ANNIE', type: '50-40-30-20-10 For Time (cap 12min)', movements: [
-    {name: 'Double Unders', reps: '50-40-30-20-10', gymnastics: 'double_unders'},
-    {name: 'Abmat Sit-ups', reps: '50-40-30-20-10', gymnastics: 'situps'}
-  ], notes: '🔄 RE-TEST ANNIE S16: 3ème évaluation du programme — vos DU et votre core ont 15 semaines de travail! Comparez avec S4 ET S12. Stratégie: DU unbroken le plus longtemps possible. Sit-ups: ancrez les pieds, touchez les orteils. Alternez sections sans vous arrêter. Élite H sub 5:00 / F sub 5:30. Avancé sub 7:00 / sub 8:00. ⚠️ NOTEZ votre score et comparez avec vos résultats précédents! 📊' },
-  gym: { name: 'Skill: DU Mastery + Récupération', drills: ['5x30 DU unbroken', '3x50 DU for time', '3x Max DU no miss attempts', '5min Easy Bike zone 1 — récupération'] },
-  scaled: { movements: [{name: 'Double Unders', note: '→ Single Unders x2 (100-80-60-40-20) ou 30-25-20-15-10 DU'}], note: 'Scaling identique à S4. Progressez vers RX si vous avez amélioré vos DU.' },
-  rxPlus: { note: 'RX+ Annie: DU unbroken jusqu\'au 30. Target sub 4:30. Sit-ups GHD (attention volume).' }
+  day: 78, week: 16, name: 'DOMINION', theme: 'Front Squat Heavy + Death by Intervals',
+  haltero: { name: 'Front Squat', desc: 'Front Squat: 4x3 @80%, 3x2 @87%, 2x1 @93%+. Mobilité maximale, position parfaite.', scheme: 'E2MOM 14min — Lourd', weights: 'front_squat' },
+  wod: { name: 'DOMINION', type: '5 Rounds For Time (cap 22min)', movements: [
+    {name: 'Front Squats', reps: 8, weight: 'front_squat'},
+    {name: 'HSPU', reps: 10, gymnastics: 'hspu'},
+    {name: 'Cal Assault Bike', special: 'assault_bike', note: '18/14 cal'},
+    {name: 'Toes-to-bar', reps: 12, gymnastics: 'toes_to_bar'}
+  ], notes: 'DOMINION — 5 rounds de domination totale. Front Squats RX: H 80kg / F 55kg (70% 1RM environ). Stratégie: FS 4+4 ou unbroken si charge légère — cuissses en feu = normal. HSPU 5+5 ou 10 unbroken kipping. Bike sprint 20-25s sans se relever du siège. TTB 6-6 ou unbroken si core frais. Repos entre rounds: 30s MAX — discipline mentale requise. Round 4 et 5 = le vrai test. Ralentissez sur HSPU et TTB, accelerez sur le Bike. Élite sub 17min, Avancé sub 21min. Les jambes vont accuser les FS après le lourd — c\'est le plan. Cherchez la fluidité entre les mouvements.' },
+  gym: { name: 'Skill: HSPU Déficit', drills: ['3x5 Deficit HSPU (2x45lb plates)', '3x3 Strict HSPU (slow descent 3s)', '3x Max Kipping HSPU', '3x20s HS Hold freestanding attempts'] },
+  scaled: { movements: [{name: 'Front Squats', reps: 8, note: '→ 60% du RX ou Goblet Squats'}, {name: 'HSPU', reps: 10, note: '→ Pike HSPU sur box ou DB Strict Press'}], note: 'Scaling: FS léger = séries unbroken. HSPU pike si nécessaire. Bike = même effort.' },
+  rxPlus: { note: 'RX+: FS H 95kg / F 65kg, HSPU strict 10 (no kip), Bike +4cal. Target sub 15min.' }
 },
 {
-  day: 79, week: 16, name: 'FRAN-RETEST-2', theme: 'Déload S4 — Re-test Benchmark FRAN (semaines 2 et 8)', benchmark: 'FRAN', deload: true, benchmark_retest: true,
-  haltero: { name: 'Thruster Activation S16', desc: 'Push Press 3x5 @55% + Thruster 3x3 @60% — Activation propre avant FRAN', scheme: '8min — Léger', weights: 'thruster' },
-  wod: { name: 'FRAN', type: 'For Time (cap 10min)', movements: [
-    {name: 'Thrusters', reps: 21, weight: 'thruster', note: 'RX H: 43kg (95lb) / F: 29kg (65lb)'},
-    {name: 'Pull-ups', reps: 21, gymnastics: 'pullups'},
-    {name: 'Thrusters', reps: 15, weight: 'thruster'},
-    {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'},
-    {name: 'Thrusters', reps: 9, weight: 'thruster'},
-    {name: 'Pull-ups', reps: 9, gymnastics: 'pullups'}
-  ], notes: '🔄 RE-TEST FRAN S16: 3ème tentative! Après 4 mois de programme, votre FRAN doit être nettement meilleure. Comparez avec S2 et S8. Stratégie: 21 Thrusters unbroken (legs drive!), Pull-ups kipping butterfly si possible. 15 = 8-7 ou unbroken. 9 = SPRINT TOTAL, rien dans le réservoir. Élite H sub 2:30 / F sub 3:00. Avancé sub 4:00. ⚠️ NOTEZ et comparez! 📊' },
-  gym: { name: 'Post-FRAN Mobilité', drills: ['5min Foam Roll épaules + quads', '3x10 Band Face Pulls', '2x2min Pigeon Stretch', '5min Easy Row zone 1'] },
-  scaled: { movements: [{name: 'Thrusters', note: '→ 30/20 kg'}, {name: 'Pull-ups', note: '→ Banded kipping ou ring rows'}], note: 'Scaling cohérent avec les tests précédents pour comparer. Évitez de changer le scaling d\'un test à l\'autre.' },
+  day: 79, week: 16, name: 'OVERLORD', theme: 'Deadlift Max + Barbell Triplet',
+  haltero: { name: 'Deadlift', desc: 'Deadlift: 3x3 @80%, 2x2 @87%, 2x1 @92%+. Contrôle excentrique 2s, explosif concentrique.', scheme: 'E2MOM 14min — Near-max', weights: 'deadlift' },
+  wod: { name: 'OVERLORD', type: '4 Rounds For Time (cap 20min)', movements: [
+    {name: 'Deadlifts', reps: 10, weight: 'deadlift'},
+    {name: 'Hang Power Cleans', reps: 8, weight: 'hang_clean'},
+    {name: 'Push Press', reps: 6, weight: 'push_press'},
+    {name: 'Double Unders', reps: 50, gymnastics: 'double_unders'},
+    {name: 'Rope Climbs', reps: 2, gymnastics: 'rope_climb'}
+  ], notes: 'OVERLORD — maître absolu de la force et du conditionnement. Barbell complex RX: mêmes charges pour DL + HPC + PP (H 70kg / F 47kg — poids du Push Press guide le tout). Stratégie: DL 5+5 TnG, HPC 4+4 ou TnG, PP 6 unbroken (explosif!). DU = 50 unbroken objectif (en cas d\'echec, reprendre immédiatement). Rope Climbs: technique jambes (leglock), max 2 pulls si solide. Repos entre rounds: 45s MAX. Élite sub 14min, Avancé sub 18min. Le combo DL → HPC → PP = pattern neuromusculaire redoutable. Grip va brûler — soufflez après les PP avant les DU. 4 rounds = 40 DL, 32 HPC, 24 PP, 200 DU, 8 rope climbs. Une bête de travail.' },
+  gym: { name: 'Skill: Rope Climb (Legless)', drills: ['3x1 Legless Rope Climb (ou tentatives max)', '3x3 Rope Climb technique (jambes)', '3x8 Strict Pull-ups (grip long)', '3x30s Dead Hang (respiration)'] },
+  scaled: { movements: [{name: 'Deadlifts', reps: 10, note: '→ 60% du RX'}, {name: 'Double Unders', reps: 50, note: '→ 100 Single Unders'}, {name: 'Rope Climbs', reps: 2, note: '→ 6 Ring Rows strictes ou 1 Rope Climb'}], note: 'Scaling: choisir un poids pour le complex = PP guide. Rope → ring rows si nécessaire.' },
+  rxPlus: { note: 'RX+: DL H 100kg / F 70kg, Rope Climbs legless. DU → 25 Triple Unders. Target sub 13min.' }
+},
   rxPlus: { note: 'RX+ Fran S16: 52/38kg, Pull-ups butterfly strict. Target sub 2:00. Phase finale = tout donner.' }
 },
 {
