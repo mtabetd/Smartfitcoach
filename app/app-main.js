@@ -36,12 +36,35 @@ var PROFILE_KEYS = [
   'shopChecked','weekPlan','selectedDay',
   'currency','currencySymbol'
 ];
+/**
+ * Slim a single meal object down to essential nutritional fields only.
+ * Strips heavy fields (ingredient strings, step arrays, tags) to keep
+ * localStorage usage well below the 5 MB browser quota.
+ */
+function slimMeal(meal) {
+  if (!meal) return null;
+  return { _id: meal._id, n: meal.n, k: meal.k, p: meal.p, g: meal.g, l: meal.l, w: meal.w, lv: meal.lv };
+}
+
 function saveProfile() {
   try {
     var user = AUTH.getUser();
     var uid = user ? user.id : 'anon';
     var data = {};
     PROFILE_KEYS.forEach(function(k) { data[k] = S[k]; });
+    // Slim weekPlan before serializing: strip ingredient/step/tag fields so
+    // 7 days × 4 meals of full recipe objects don't blow up localStorage.
+    if (Array.isArray(data.weekPlan)) {
+      data.weekPlan = data.weekPlan.map(function(day) {
+        if (!day) return day;
+        return {
+          breakfast: slimMeal(day.breakfast),
+          lunch:     slimMeal(day.lunch),
+          snack:     slimMeal(day.snack),
+          dinner:    slimMeal(day.dinner)
+        };
+      });
+    }
     localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
   } catch(e) {}
 }

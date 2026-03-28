@@ -884,7 +884,7 @@ function renderChargesQuestionnaire(p) {
         if (!isNaN(v) && v >= 0) S.muscuStrengthProfile[key] = v;
         else delete S.muscuStrengthProfile[key];
         var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-        localStorage.setItem('mtd_muscu_strength_' + uid, JSON.stringify(S.muscuStrengthProfile));
+        try { localStorage.setItem('mtd_muscu_strength_' + uid, JSON.stringify(S.muscuStrengthProfile)); } catch(e2) { console.warn('[muscu_strength] localStorage error:', e2); }
         if (!isNaN(v) && v > 0 && window.PERF_HISTORY) {
           var repsVal = S.muscuStrengthProfile[key + '_reps'] || 8;
           PERF_HISTORY.recordMuscuStrength(key, v, repsVal);
@@ -904,7 +904,7 @@ function renderChargesQuestionnaire(p) {
         var rv = parseInt(e.target.value);
         if (!isNaN(rv) && rv >= 1 && rv <= 30) S.muscuStrengthProfile[rkey] = rv;
         var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-        localStorage.setItem('mtd_muscu_strength_' + uid, JSON.stringify(S.muscuStrengthProfile));
+        try { localStorage.setItem('mtd_muscu_strength_' + uid, JSON.stringify(S.muscuStrengthProfile)); } catch(e2) { console.warn('[muscu_strength_reps] localStorage error:', e2); }
       }; })(repKey, exDef.key)
     });
     inputWrap.appendChild(repInp);
@@ -1218,7 +1218,7 @@ function renderCrossfitLevel(p) {
           }
           // Save to localStorage
           var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-          localStorage.setItem('mtd_cf_1rm_' + uid, JSON.stringify(S.crossfit1RM));
+          try { localStorage.setItem('mtd_cf_1rm_' + uid, JSON.stringify(S.crossfit1RM)); } catch(e2) { console.warn('[cf_1rm] localStorage error:', e2); }
           if (!isNaN(v) && v > 0 && window.PERF_HISTORY) PERF_HISTORY.recordCF1RM(lift.key, v);
           // Re-render to update estimated weights
           clearTimeout(window._cf1rmTimer);

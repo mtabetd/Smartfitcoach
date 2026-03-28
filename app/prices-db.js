@@ -1831,7 +1831,145 @@
       pricePerG: r(55 / 190),
       source: 'carrefour',
       updatedAt: '2026-03'
-    }
+    },
+
+    // ── Ingrédients manquants R381-R400 ──────────────────────────────────────────
+    // Pain & féculents
+    'Pain complet': {
+      name: 'Pain complet',
+      pricePerPce: r(3.0),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Riz blanc': {
+      name: 'Riz blanc',
+      pricePerG: r(15 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Riz jasmin': {
+      name: 'Riz jasmin',
+      pricePerG: r(20 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Pâtes complètes fusilli': {
+      name: 'Pâtes complètes fusilli',
+      pricePerG: r(36 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Farine complète': {
+      name: 'Farine complète',
+      pricePerG: r(10 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Légumes & fruits frais
+    'Betterave (cuite)': {
+      name: 'Betterave (cuite)',
+      pricePerG: r(6 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Mangue (fraîche)': {
+      name: 'Mangue (fraîche)',
+      pricePerG: r(12 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Piment rouge (frais)': {
+      name: 'Piment rouge (frais)',
+      pricePerPce: r(1.5),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Légumineuses
+    'Lentilles vertes sèches': {
+      name: 'Lentilles vertes sèches',
+      pricePerG: r(22 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Produits laitiers & alternatives
+    'Skyr / Yaourt islandais': {
+      name: 'Skyr / Yaourt islandais',
+      pricePerG: r(55 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    // Condiments & bouillons
+    'Citron (pce)': {
+      name: 'Citron (pce)',
+      pricePerPce: r(1.0),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Bouillon de légumes (cube)': {
+      name: 'Bouillon de légumes (cube)',
+      pricePerPce: r(1.5),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Bouillon de poulet (cube)': {
+      name: 'Bouillon de poulet (cube)',
+      pricePerPce: r(1.5),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Épices & herbes
+    'Gingembre': {
+      name: 'Gingembre',
+      pricePerG: r(30 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Graines & oléagineux
+    'Graines de tournesol': {
+      name: 'Graines de tournesol',
+      pricePerG: r(25 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Sésame (graines)': {
+      name: 'Sésame (graines)',
+      pricePerG: r(20 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    // Boissons & laits végétaux
+    'Lait d\'amande': {
+      name: 'Lait d\'amande',
+      pricePerMl: r(18 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    // Surgelés & préparés
+    'Falafel surgelé': {
+      name: 'Falafel surgelé',
+      pricePerG: r(30 / 300),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Tortilla de blé': {
+      name: 'Tortilla de blé',
+      pricePerPce: r(5.0),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    // Produits exotiques
+    'Açaí en poudre': {
+      name: 'Açaí en poudre',
+      pricePerG: r(120 / 100),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Nori (feuilles d\'algue)': {
+      name: 'Nori (feuilles d\'algue)',
+      pricePerG: r(30 / 25),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
   };
 
   /**
