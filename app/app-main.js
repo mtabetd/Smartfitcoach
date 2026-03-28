@@ -35,8 +35,9 @@ var PROFILE_KEYS = [
   'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
   'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
   'shopChecked','weekPlan','selectedDay',
-  'lang',
-  'weightUnit','heightUnit'
+  'lang','weightUnit','heightUnit',
+  'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
+  'heartRateRest','yogaLevel','yogaGoal','yogaDays'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -103,15 +104,26 @@ function render() {
   if (window.destroyAllCharts) window.destroyAllCharts();
   if (AUTH.isLoggedIn()) saveProfile();
   var app = document.getElementById('app');
+
+  // Scroll to top only when navigating to a different page/step
+  var _didNavigate = (render._lastView !== S.view) ||
+                     (render._lastNStep !== S.nStep) ||
+                     (render._lastSStep !== S.sStep);
+  render._lastView  = S.view;
+  render._lastNStep = S.nStep;
+  render._lastSStep = S.sStep;
+
   app.innerHTML = '';
-  window.scrollTo(0, 0);
-  // Scroll le conteneur .app (overflow-y:auto) au top à chaque changement de page
-  requestAnimationFrame(function() {
-    var appWrap = document.querySelector('.app');
-    if (appWrap) appWrap.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  });
+
+  if (_didNavigate) {
+    window.scrollTo(0, 0);
+    requestAnimationFrame(function() {
+      var appWrap = document.querySelector('.app');
+      if (appWrap) appWrap.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+  }
 
   // Not logged in → auth screens
   if (!AUTH.isLoggedIn()) {

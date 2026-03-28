@@ -819,7 +819,8 @@ window.I18N = {
       'common.kcal': 'kcal',
       'common.g': 'g',
       'common.ml': 'ml',
-      'common.minor_warning': "Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé."
+      'common.minor_warning': "Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé.",
+      'Langue / Language': 'Langue / Language'
     },
 
     en: {
@@ -1017,7 +1018,8 @@ window.I18N = {
       'common.kcal': 'kcal',
       'common.g': 'g',
       'common.ml': 'ml',
-      'common.minor_warning': 'For users under 18, this program should be followed under the supervision of a healthcare professional.'
+      'common.minor_warning': 'For users under 18, this program should be followed under the supervision of a healthcare professional.',
+      'Langue / Language': 'Language'
     }
   }
 };
@@ -1417,6 +1419,7 @@ window.S = {
   authError: '',
   // Nutrition wizard
   nStep: 0, sex: null, age: 28, weight: 75, height: 175,
+  lang: 'fr', weightUnit: 'kg', heightUnit: 'cm',
   activity: null, train: [], sleep: null, medical: [], goal: null,
   cookLevel: 2, whey: null, allergies: [], intolerances: [],
   regime: 0, excluded: '', cuisines: [0],
