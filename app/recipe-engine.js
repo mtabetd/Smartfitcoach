@@ -6335,6 +6335,5414 @@
       ]
     },
 
+
+
+  // ─── RECETTES LEGACY L001-L350 MIGRÉES EN FORMAT R ────────────────────────────
+
+  {
+    id: 'L001',
+    name: 'Overnight Oats Banane Amandes',
+    emoji: '🥣',
+    origin: '🇺🇸',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'banane', 'amandes', 'miel', 'lait', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 422, proteinGrams: 18, carbsGrams: 56, fatGrams: 14 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 80, unit: 'g' },
+      { name: 'Lait écrémé', qty: 200, unit: 'ml' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Amandes effilées', qty: 20, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger les flocons d\'avoine avec le lait dans un bol.',
+      'Ajouter le miel et remuer.',
+      'Réfrigérer une nuit. Garnir de banane tranchée et d\'amandes avant de servir.'
+    ]
+  },
+
+  {
+    id: 'L002',
+    name: 'Avocado Toast Œuf Poché',
+    emoji: '🍞',
+    origin: '🇦🇺',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'pain', 'avocat', 'œuf', 'citron', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 458, proteinGrams: 20, carbsGrams: 36, fatGrams: 26 },
+    ingredients: [
+      { name: 'Pain complet', qty: 80, unit: 'g' },
+      { name: 'Avocat', qty: 100, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Citron', qty: 10, unit: 'ml' },
+      { name: 'Piment rouge', qty: 2, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'g' },
+      { name: 'Poivre', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Faire pocher l\'œuf dans de l\'eau frémissante avec un peu de vinaigre.',
+      'Écraser l\'avocat avec le citron, sel et piment.',
+      'Tartiner le pain grillé d\'avocat et poser l\'œuf par-dessus.'
+    ]
+  },
+
+  {
+    id: 'L003',
+    name: 'Yaourt Grec Myrtilles Granola',
+    emoji: '🥣',
+    origin: '🇬🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'yaourt', 'myrtilles', 'granola', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 386, proteinGrams: 26, carbsGrams: 48, fatGrams: 10 },
+    ingredients: [
+      { name: 'Yaourt grec 0%', qty: 200, unit: 'g' },
+      { name: 'Myrtilles', qty: 100, unit: 'g' },
+      { name: 'Granola', qty: 60, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Verser le yaourt dans un bol.',
+      'Ajouter les myrtilles fraîches et le granola.',
+      'Drizzler de miel et servir immédiatement.'
+    ]
+  },
+
+  {
+    id: 'L004',
+    name: 'Porridge Pomme Cannelle',
+    emoji: '🥣',
+    origin: '🇬🇧',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'pomme', 'cannelle', 'miel', 'lait', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 5,
+    servings: 1,
+    baseNutrition: { calories: 384, proteinGrams: 14, carbsGrams: 64, fatGrams: 8 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 90, unit: 'g' },
+      { name: 'Lait demi-écrémé', qty: 250, unit: 'ml' },
+      { name: 'Pomme', qty: 120, unit: 'g' },
+      { name: 'Cannelle', qty: 2, unit: 'g' },
+      { name: 'Miel', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Porter le lait à ébullition, ajouter les flocons d\'avoine.',
+      'Cuire 5 min à feu doux en remuant.',
+      'Servir avec la pomme râpée, la cannelle et le miel.'
+    ]
+  },
+
+  {
+    id: 'L005',
+    name: 'Œufs Brouillés Pain Seigle',
+    emoji: '🍞',
+    origin: '🇩🇪',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'œuf', 'pain', 'seigle', 'beurre', 'ciboulette', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 446, proteinGrams: 28, carbsGrams: 34, fatGrams: 22 },
+    ingredients: [
+      { name: 'Œufs', qty: 180, unit: 'g' },
+      { name: 'Pain de seigle', qty: 80, unit: 'g' },
+      { name: 'Beurre', qty: 15, unit: 'g' },
+      { name: 'Ciboulette', qty: 5, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'g' },
+      { name: 'Poivre', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Battre les œufs avec sel et poivre.',
+      'Faire fondre le beurre à feu doux, verser les œufs.',
+      'Remuer doucement jusqu\'à texture crémeuse. Servir sur pain de seigle grillé avec ciboulette.'
+    ]
+  },
+
+  {
+    id: 'L006',
+    name: 'Shakshuka Tomate Poivron',
+    emoji: '🍳',
+    origin: '🇮🇱',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'œuf', 'tomate', 'poivron', 'oignon', 'huile', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 376, proteinGrams: 22, carbsGrams: 18, fatGrams: 24 },
+    ingredients: [
+      { name: 'Œufs', qty: 180, unit: 'g' },
+      { name: 'Tomates pelées', qty: 200, unit: 'g' },
+      { name: 'Poivron rouge', qty: 100, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Cumin', qty: 2, unit: 'g' },
+      { name: 'Paprika', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Faire revenir l\'oignon et le poivron dans l\'huile d\'olive.',
+      'Ajouter les tomates, cumin, paprika, mijoter 10 min.',
+      'Creuser des puits, casser les œufs dedans, couvrir et cuire 5 min.'
+    ]
+  },
+
+  {
+    id: 'L007',
+    name: 'Smoothie Bowl Açaí',
+    emoji: '🥣',
+    origin: '🇧🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'açaí', 'banane', 'granola', 'fraises', 'lait de coco', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 418, proteinGrams: 14, carbsGrams: 68, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pulpe d\'açaí', qty: 100, unit: 'g' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Lait de coco', qty: 80, unit: 'ml' },
+      { name: 'Granola', qty: 50, unit: 'g' },
+      { name: 'Fraises', qty: 80, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Mixer la pulpe d\'açaí avec la banane et le lait de coco.',
+      'Verser dans un bol.',
+      'Garnir de granola, fraises et miel.'
+    ]
+  },
+
+  {
+    id: 'L008',
+    name: 'Bol Riz Tamago Japonais',
+    emoji: '🍳',
+    origin: '🇯🇵',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'riz', 'œuf', 'soja', 'sésame', 'nori', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 430, proteinGrams: 18, carbsGrams: 58, fatGrams: 14 },
+    ingredients: [
+      { name: 'Riz japonais', qty: 120, unit: 'g' },
+      { name: 'Œuf', qty: 120, unit: 'g' },
+      { name: 'Sauce soja', qty: 15, unit: 'ml' },
+      { name: 'Huile de sésame', qty: 8, unit: 'ml' },
+      { name: 'Nori', qty: 5, unit: 'g' },
+      { name: 'Sésame', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le riz japonais.',
+      'Battre les œufs avec la sauce soja.',
+      'Verser les œufs crus sur le riz chaud, mélanger vivement. Finir avec huile de sésame et nori.'
+    ]
+  },
+
+  {
+    id: 'L009',
+    name: 'Pancakes Banane Avoine',
+    emoji: '🥣',
+    origin: '🇺🇸',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'banane', 'œuf', 'lait', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 468, proteinGrams: 30, carbsGrams: 60, fatGrams: 12 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 100, unit: 'g' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Œufs', qty: 120, unit: 'g' },
+      { name: 'Lait écrémé', qty: 100, unit: 'ml' },
+      { name: 'Levure', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Mixer tous les ingrédients en pâte lisse.',
+      'Cuire des petites crêpes épaisses dans une poêle antiadhésive.',
+      'Servir avec un filet de miel ou sirop d\'érable.'
+    ]
+  },
+
+  {
+    id: 'L010',
+    name: 'Galette Sarrasin Œuf Épinards',
+    emoji: '🍳',
+    origin: '🇫🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'sarrasin', 'œuf', 'épinards', 'fromage', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 392, proteinGrams: 22, carbsGrams: 40, fatGrams: 16 },
+    ingredients: [
+      { name: 'Farine de sarrasin', qty: 80, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Épinards frais', qty: 80, unit: 'g' },
+      { name: 'Emmental râpé', qty: 30, unit: 'g' },
+      { name: 'Beurre', qty: 10, unit: 'g' },
+      { name: 'Eau', qty: 150, unit: 'ml' }
+    ],
+    steps: [
+      'Préparer la pâte avec farine de sarrasin, eau et œuf. Laisser reposer 30 min.',
+      'Cuire une galette fine dans une crêpière beurrée.',
+      'Garnir d\'épinards sautés et d\'emmental, replier les bords.'
+    ]
+  },
+
+  {
+    id: 'L011',
+    name: 'French Toast Cannelle Banane',
+    emoji: '🍞',
+    origin: '🇫🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'pain', 'œuf', 'lait', 'banane', 'cannelle', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 454, proteinGrams: 26, carbsGrams: 56, fatGrams: 14 },
+    ingredients: [
+      { name: 'Pain de mie complet', qty: 100, unit: 'g' },
+      { name: 'Œufs', qty: 120, unit: 'g' },
+      { name: 'Lait écrémé', qty: 100, unit: 'ml' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Cannelle', qty: 2, unit: 'g' },
+      { name: 'Vanille', qty: 2, unit: 'ml' }
+    ],
+    steps: [
+      'Battre les œufs avec le lait, la cannelle et la vanille.',
+      'Tremper les tranches de pain dans le mélange.',
+      'Cuire 2-3 min de chaque côté dans une poêle légèrement huilée. Servir avec banane tranchée.'
+    ]
+  },
+
+  {
+    id: 'L012',
+    name: 'Müesli Bircher Pomme',
+    emoji: '🥣',
+    origin: '🇨🇭',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'yaourt', 'pomme', 'noisettes', 'raisins', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 454, proteinGrams: 20, carbsGrams: 62, fatGrams: 14 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 80, unit: 'g' },
+      { name: 'Yaourt nature', qty: 150, unit: 'g' },
+      { name: 'Pomme', qty: 120, unit: 'g' },
+      { name: 'Noisettes', qty: 20, unit: 'g' },
+      { name: 'Raisins secs', qty: 20, unit: 'g' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Mélanger les flocons d\'avoine avec le yaourt et le jus de citron.',
+      'Ajouter la pomme râpée, les raisins secs et les noisettes.',
+      'Réfrigérer toute la nuit et servir frais.'
+    ]
+  },
+
+  {
+    id: 'L013',
+    name: 'Toast Saumon Fumé Aneth',
+    emoji: '🍞',
+    origin: '🇸🇪',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'pain', 'saumon', 'fromage frais', 'aneth', 'câpres', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 420, proteinGrams: 28, carbsGrams: 32, fatGrams: 20 },
+    ingredients: [
+      { name: 'Pain complet', qty: 80, unit: 'g' },
+      { name: 'Saumon fumé', qty: 100, unit: 'g' },
+      { name: 'Fromage frais', qty: 60, unit: 'g' },
+      { name: 'Aneth', qty: 5, unit: 'g' },
+      { name: 'Câpres', qty: 10, unit: 'g' },
+      { name: 'Citron', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Griller le pain.',
+      'Tartiner de fromage frais.',
+      'Disposer le saumon fumé, les câpres, l\'aneth et un filet de citron.'
+    ]
+  },
+
+  {
+    id: 'L014',
+    name: 'Congee Poulet Gingembre',
+    emoji: '🌅',
+    origin: '🇨🇳',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'riz', 'poulet', 'gingembre', 'oignon vert', 'soja', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 384, proteinGrams: 32, carbsGrams: 46, fatGrams: 8 },
+    ingredients: [
+      { name: 'Riz rond', qty: 80, unit: 'g' },
+      { name: 'Blancs de poulet', qty: 120, unit: 'g' },
+      { name: 'Gingembre', qty: 10, unit: 'g' },
+      { name: 'Bouillon de volaille', qty: 600, unit: 'ml' },
+      { name: 'Oignons verts', qty: 20, unit: 'g' },
+      { name: 'Sauce soja', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Porter le bouillon à ébullition avec le riz et le gingembre.',
+      'Cuire 30-40 min à feu doux jusqu\'à texture crémeuse.',
+      'Ajouter le poulet effiloché, finir avec oignons verts et sauce soja.'
+    ]
+  },
+
+  {
+    id: 'L015',
+    name: 'Tamagoyaki Omelette Roulée',
+    emoji: '🍳',
+    origin: '🇯🇵',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'œuf', 'soja', 'oignon vert', 'healthy'],
+    difficulty: 3,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 352, proteinGrams: 24, carbsGrams: 10, fatGrams: 24 },
+    ingredients: [
+      { name: 'Œufs', qty: 240, unit: 'g' },
+      { name: 'Sauce soja', qty: 10, unit: 'ml' },
+      { name: 'Mirin halal', qty: 10, unit: 'ml' },
+      { name: 'Sucre', qty: 5, unit: 'g' },
+      { name: 'Huile', qty: 10, unit: 'ml' },
+      { name: 'Oignons verts', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Battre les œufs avec la sauce soja, mirin et sucre.',
+      'Chauffer une poêle rectangulaire, huiler légèrement.',
+      'Verser un tiers de la pâte, rouler délicatement à l\'aide d\'une spatule. Répéter 3 fois pour former un rouleau compact.'
+    ]
+  },
+
+  {
+    id: 'L016',
+    name: 'Eggs Benedict Saumon',
+    emoji: '🍳',
+    origin: '🇺🇸',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'muffin', 'saumon', 'œuf', 'sauce hollandaise', 'épinards', 'healthy'],
+    difficulty: 3,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 480, proteinGrams: 32, carbsGrams: 34, fatGrams: 24 },
+    ingredients: [
+      { name: 'Muffin anglais', qty: 70, unit: 'g' },
+      { name: 'Saumon fumé', qty: 80, unit: 'g' },
+      { name: 'Œuf', qty: 120, unit: 'g' },
+      { name: 'Sauce hollandaise', qty: 40, unit: 'g' },
+      { name: 'Épinards', qty: 40, unit: 'g' }
+    ],
+    steps: [
+      'Griller les muffins anglais.',
+      'Pocher les œufs dans de l\'eau frémissante.',
+      'Assembler: muffin, épinards, saumon, œuf poché, sauce hollandaise.'
+    ]
+  },
+
+  {
+    id: 'L017',
+    name: 'Fluffy Pancakes Soufflés',
+    emoji: '🍳',
+    origin: '🇯🇵',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'farine', 'œuf', 'lait', 'yaourt', 'beurre', 'healthy'],
+    difficulty: 3,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 438, proteinGrams: 22, carbsGrams: 56, fatGrams: 14 },
+    ingredients: [
+      { name: 'Farine', qty: 90, unit: 'g' },
+      { name: 'Œufs', qty: 120, unit: 'g' },
+      { name: 'Lait', qty: 100, unit: 'ml' },
+      { name: 'Yaourt', qty: 80, unit: 'g' },
+      { name: 'Levure', qty: 5, unit: 'g' },
+      { name: 'Sucre', qty: 15, unit: 'g' },
+      { name: 'Beurre', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Séparer les blancs des jaunes d\'œufs. Monter les blancs en neige ferme.',
+      'Mélanger les jaunes, farine, lait, yaourt, sucre et levure.',
+      'Incorporer délicatement les blancs en neige. Cuire à feu très doux 4 min par côté sous couvercle.'
+    ]
+  },
+
+  {
+    id: 'L018',
+    name: 'Crêpes Sarrasin Miel Noix',
+    emoji: '🍳',
+    origin: '🇫🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'sarrasin', 'œuf', 'lait', 'noix', 'miel', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 412, proteinGrams: 24, carbsGrams: 52, fatGrams: 12 },
+    ingredients: [
+      { name: 'Farine de sarrasin', qty: 80, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Lait écrémé', qty: 200, unit: 'ml' },
+      { name: 'Noix concassées', qty: 20, unit: 'g' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: 'Beurre', qty: 8, unit: 'g' }
+    ],
+    steps: [
+      'Préparer la pâte de sarrasin avec œuf, farine et lait.',
+      'Cuire des crêpes fines dans une poêle beurrée.',
+      'Servir avec miel et noix concassées.'
+    ]
+  },
+
+  {
+    id: 'L019',
+    name: 'Bol Açaí Fraises Granola',
+    emoji: '🥣',
+    origin: '🇧🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'açaí', 'fraises', 'granola', 'yaourt', 'chia', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 394, proteinGrams: 20, carbsGrams: 38, fatGrams: 18 },
+    ingredients: [
+      { name: 'Pulpe d\'açaí', qty: 100, unit: 'g' },
+      { name: 'Fraises', qty: 100, unit: 'g' },
+      { name: 'Granola', qty: 50, unit: 'g' },
+      { name: 'Yaourt grec', qty: 100, unit: 'g' },
+      { name: 'Graines de chia', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Mixer l\'açaí avec les fraises.',
+      'Verser dans un bol, déposer le yaourt grec par-dessus.',
+      'Garnir de granola et graines de chia.'
+    ]
+  },
+
+  {
+    id: 'L020',
+    name: 'Toast Avocat Œuf Dur Tomate',
+    emoji: '🍞',
+    origin: '🇦🇺',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'pain', 'avocat', 'œuf', 'tomate', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 374, proteinGrams: 18, carbsGrams: 44, fatGrams: 14 },
+    ingredients: [
+      { name: 'Pain complet', qty: 80, unit: 'g' },
+      { name: 'Avocat', qty: 60, unit: 'g' },
+      { name: 'Œuf dur', qty: 60, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Jus de citron', qty: 5, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'g' },
+      { name: 'Poivre', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Griller le pain complet.',
+      'Écraser l\'avocat avec citron, sel et poivre.',
+      'Disposer l\'avocat sur le pain, garnir d\'œuf dur tranché et de tomate.'
+    ]
+  },
+
+  {
+    id: 'L021',
+    name: 'Porridge Banane Chocolat Noir',
+    emoji: '🥣',
+    origin: '🇬🇧',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'lait', 'banane', 'chocolat', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 5,
+    servings: 1,
+    baseNutrition: { calories: 394, proteinGrams: 16, carbsGrams: 60, fatGrams: 10 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 90, unit: 'g' },
+      { name: 'Lait écrémé', qty: 250, unit: 'ml' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Pépites de chocolat noir', qty: 15, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les flocons d\'avoine dans le lait à feu doux 5 min.',
+      'Trancher la banane et disposer sur le porridge.',
+      'Parsemer de pépites de chocolat et drizzler de miel.'
+    ]
+  },
+
+  {
+    id: 'L022',
+    name: 'Omelette Épinards Feta Tomate',
+    emoji: '🍳',
+    origin: '🇬🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'œuf', 'épinards', 'feta', 'tomate', 'huile', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 408, proteinGrams: 28, carbsGrams: 20, fatGrams: 24 },
+    ingredients: [
+      { name: 'Œufs', qty: 180, unit: 'g' },
+      { name: 'Épinards frais', qty: 80, unit: 'g' },
+      { name: 'Feta', qty: 40, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Origan', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Battre les œufs avec sel et origan.',
+      'Faire revenir les épinards et la tomate dans l\'huile d\'olive.',
+      'Verser les œufs, cuire 3 min, ajouter la feta émiettée et plier.'
+    ]
+  },
+
+  {
+    id: 'L023',
+    name: 'Bowl Quinoa Fruits Rouges Miel',
+    emoji: '🥛',
+    origin: '🇺🇸',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'quinoa', 'yaourt', 'framboises', 'myrtilles', 'amandes', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 410, proteinGrams: 26, carbsGrams: 36, fatGrams: 18 },
+    ingredients: [
+      { name: 'Quinoa', qty: 80, unit: 'g' },
+      { name: 'Yaourt grec', qty: 150, unit: 'g' },
+      { name: 'Framboises', qty: 80, unit: 'g' },
+      { name: 'Myrtilles', qty: 60, unit: 'g' },
+      { name: 'Amandes', qty: 20, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le quinoa, laisser refroidir.',
+      'Assembler dans un bol: quinoa, yaourt grec, fruits rouges.',
+      'Garnir d\'amandes et de miel.'
+    ]
+  },
+
+  {
+    id: 'L024',
+    name: 'Crumpets Œuf Fromage Blanc',
+    emoji: '🍳',
+    origin: '🇬🇧',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'crumpet', 'œuf', 'fromage blanc', 'saumon', 'ciboulette', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 384, proteinGrams: 30, carbsGrams: 30, fatGrams: 16 },
+    ingredients: [
+      { name: 'Crumpets', qty: 100, unit: 'g' },
+      { name: 'Œufs', qty: 120, unit: 'g' },
+      { name: 'Fromage blanc 0%', qty: 120, unit: 'g' },
+      { name: 'Ciboulette', qty: 5, unit: 'g' },
+      { name: 'Saumon fumé', qty: 50, unit: 'g' }
+    ],
+    steps: [
+      'Griller les crumpets.',
+      'Poêler les œufs au plat.',
+      'Servir les crumpets garnis de fromage blanc, œuf et saumon, parsemer de ciboulette.'
+    ]
+  },
+
+  {
+    id: 'L025',
+    name: 'Muesli Noix Fruits Secs Yaourt',
+    emoji: '🥣',
+    origin: '🇨🇭',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'yaourt', 'noix', 'abricot', 'lin', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 380, proteinGrams: 22, carbsGrams: 46, fatGrams: 12 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 70, unit: 'g' },
+      { name: 'Yaourt nature', qty: 200, unit: 'g' },
+      { name: 'Noix', qty: 20, unit: 'g' },
+      { name: 'Abricots secs', qty: 30, unit: 'g' },
+      { name: 'Graines de lin', qty: 10, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Tremper les flocons d\'avoine dans le yaourt une nuit.',
+      'Ajouter noix concassées, abricots secs et graines de lin.',
+      'Finir avec un filet de miel.'
+    ]
+  },
+
+  {
+    id: 'L026',
+    name: 'Wrap Petit Déjeuner Œuf Avocat',
+    emoji: '🥑',
+    origin: '🇲🇽',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'tortilla', 'œuf', 'avocat', 'tomate', 'poivron', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 388, proteinGrams: 20, carbsGrams: 50, fatGrams: 12 },
+    ingredients: [
+      { name: 'Tortilla de blé', qty: 60, unit: 'g' },
+      { name: 'Œuf brouillé', qty: 120, unit: 'g' },
+      { name: 'Avocat', qty: 60, unit: 'g' },
+      { name: 'Tomate', qty: 60, unit: 'g' },
+      { name: 'Poivron', qty: 40, unit: 'g' },
+      { name: 'Épices', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Brouiller les œufs avec sel et épices.',
+      'Chauffer la tortilla.',
+      'Garnir d\'œufs brouillés, avocat, tomate et poivron. Rouler.'
+    ]
+  },
+
+  {
+    id: 'L027',
+    name: 'Gaufres Avoine Miel Myrtilles',
+    emoji: '🥣',
+    origin: '🇧🇪',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'lait', 'œuf', 'miel', 'myrtilles', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 386, proteinGrams: 12, carbsGrams: 62, fatGrams: 10 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 100, unit: 'g' },
+      { name: 'Lait écrémé', qty: 150, unit: 'ml' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Miel', qty: 20, unit: 'g' },
+      { name: 'Myrtilles', qty: 100, unit: 'g' },
+      { name: 'Huile', qty: 5, unit: 'ml' }
+    ],
+    steps: [
+      'Mixer les flocons d\'avoine en poudre fine. Mélanger avec lait, œuf et miel.',
+      'Cuire dans un gaufrier huilé.',
+      'Servir avec les myrtilles fraîches.'
+    ]
+  },
+
+  {
+    id: 'L028',
+    name: 'Burritos Petit Déjeuner Haricots',
+    emoji: '🍳',
+    origin: '🇲🇽',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'tortilla', 'haricots', 'œuf', 'fromage', 'salsa', 'épinards', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 392, proteinGrams: 24, carbsGrams: 38, fatGrams: 16 },
+    ingredients: [
+      { name: 'Tortilla', qty: 70, unit: 'g' },
+      { name: 'Haricots noirs', qty: 100, unit: 'g' },
+      { name: 'Œuf', qty: 120, unit: 'g' },
+      { name: 'Fromage râpé', qty: 30, unit: 'g' },
+      { name: 'Salsa', qty: 40, unit: 'g' },
+      { name: 'Épinards', qty: 40, unit: 'g' }
+    ],
+    steps: [
+      'Brouiller les œufs.',
+      'Chauffer les haricots noirs à la poêle.',
+      'Assembler la tortilla avec œufs, haricots, fromage et salsa. Rouler.'
+    ]
+  },
+
+  {
+    id: 'L029',
+    name: 'Bowl Fromage Blanc Fruits Graines',
+    emoji: '🥛',
+    origin: '🇫🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'fromage blanc', 'kiwi', 'fraises', 'graines', 'amandes', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 394, proteinGrams: 26, carbsGrams: 32, fatGrams: 18 },
+    ingredients: [
+      { name: 'Fromage blanc 0%', qty: 200, unit: 'g' },
+      { name: 'Kiwi', qty: 80, unit: 'g' },
+      { name: 'Fraises', qty: 80, unit: 'g' },
+      { name: 'Graines de courge', qty: 20, unit: 'g' },
+      { name: 'Amandes effilées', qty: 20, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Verser le fromage blanc dans un bol.',
+      'Disposer les fruits coupés par-dessus.',
+      'Parsemer de graines et amandes, finir avec le miel.'
+    ]
+  },
+
+  {
+    id: 'L030',
+    name: 'Pancakes Flocons Avoine Myrtilles',
+    emoji: '🥣',
+    origin: '🇺🇸',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'lait', 'œuf', 'myrtilles', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 396, proteinGrams: 14, carbsGrams: 58, fatGrams: 12 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 100, unit: 'g' },
+      { name: 'Lait écrémé', qty: 150, unit: 'ml' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Myrtilles', qty: 80, unit: 'g' },
+      { name: 'Levure', qty: 3, unit: 'g' },
+      { name: 'Huile', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Mixer les flocons d\'avoine en farine. Mélanger avec lait, œuf, levure.',
+      'Cuire des petits pancakes dans une poêle avec un peu d\'huile.',
+      'Servir avec les myrtilles fraîches.'
+    ]
+  },
+
+  {
+    id: 'L031',
+    name: 'Omelette Blanche Champignons Épinards',
+    emoji: '🍳',
+    origin: '🇫🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'blancs d\'œuf', 'champignons', 'épinards', 'chèvre', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 390, proteinGrams: 34, carbsGrams: 14, fatGrams: 22 },
+    ingredients: [
+      { name: 'Blancs d\'œufs', qty: 200, unit: 'g' },
+      { name: 'Champignons', qty: 100, unit: 'g' },
+      { name: 'Épinards', qty: 80, unit: 'g' },
+      { name: 'Fromage de chèvre', qty: 30, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Herbes de Provence', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Faire sauter les champignons et épinards dans l\'huile d\'olive.',
+      'Verser les blancs d\'œufs battus par-dessus.',
+      'Cuire à feu moyen, ajouter le fromage de chèvre, plier.'
+    ]
+  },
+
+  {
+    id: 'L032',
+    name: 'Bowl Açaí Banane Beurre de Cacahuète',
+    emoji: '🥣',
+    origin: '🇧🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'açaí', 'banane', 'granola', 'cacahuète', 'lait d\'amande', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 408, proteinGrams: 18, carbsGrams: 48, fatGrams: 16 },
+    ingredients: [
+      { name: 'Pulpe d\'açaí', qty: 100, unit: 'g' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Granola', qty: 50, unit: 'g' },
+      { name: 'Beurre de cacahuète', qty: 20, unit: 'g' },
+      { name: 'Lait d\'amande', qty: 80, unit: 'ml' }
+    ],
+    steps: [
+      'Mixer l\'açaí avec la banane et le lait d\'amande.',
+      'Verser dans un bol.',
+      'Garnir de granola et beurre de cacahuète.'
+    ]
+  },
+
+  {
+    id: 'L033',
+    name: 'Tartines Pain Complet Œuf Pesto',
+    emoji: '🍞',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'pain', 'œuf', 'pesto', 'tomate', 'roquette', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 382, proteinGrams: 22, carbsGrams: 42, fatGrams: 14 },
+    ingredients: [
+      { name: 'Pain complet', qty: 80, unit: 'g' },
+      { name: 'Œuf dur', qty: 120, unit: 'g' },
+      { name: 'Pesto basilic', qty: 20, unit: 'g' },
+      { name: 'Tomate cerise', qty: 80, unit: 'g' },
+      { name: 'Roquette', qty: 20, unit: 'g' }
+    ],
+    steps: [
+      'Griller le pain complet.',
+      'Tartiner de pesto.',
+      'Garnir de rondelles d\'œufs durs, tomates cerises et roquette.'
+    ]
+  },
+
+  {
+    id: 'L034',
+    name: 'Chia Pudding Mangue Coco',
+    emoji: '🌅',
+    origin: '🇹🇭',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'chia', 'lait de coco', 'mangue', 'miel', 'coco', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 398, proteinGrams: 16, carbsGrams: 52, fatGrams: 14 },
+    ingredients: [
+      { name: 'Graines de chia', qty: 40, unit: 'g' },
+      { name: 'Lait de coco', qty: 200, unit: 'ml' },
+      { name: 'Mangue', qty: 120, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' },
+      { name: 'Noix de coco râpée', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger les graines de chia avec le lait de coco et le miel.',
+      'Réfrigérer toute la nuit jusqu\'à prise en gel.',
+      'Servir avec la mangue coupée et la noix de coco râpée.'
+    ]
+  },
+
+  {
+    id: 'L035',
+    name: 'Pain Perdu Ricotta Fruits Rouges',
+    emoji: '🍞',
+    origin: '🇫🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'pain brioché', 'ricotta', 'œuf', 'framboises', 'beurre', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 414, proteinGrams: 26, carbsGrams: 28, fatGrams: 22 },
+    ingredients: [
+      { name: 'Pain brioché', qty: 80, unit: 'g' },
+      { name: 'Ricotta', qty: 100, unit: 'g' },
+      { name: 'Œufs', qty: 120, unit: 'g' },
+      { name: 'Framboises', qty: 60, unit: 'g' },
+      { name: 'Sucre vanillé', qty: 5, unit: 'g' },
+      { name: 'Beurre', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Battre les œufs, tremper le pain brioché.',
+      'Cuire dans une poêle avec le beurre.',
+      'Servir avec la ricotta fouettée et les framboises fraîches.'
+    ]
+  },
+
+  {
+    id: 'L036',
+    name: 'Granola Maison Yaourt Mangue',
+    emoji: '🥣',
+    origin: '🇺🇸',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'miel', 'amandes', 'yaourt', 'mangue', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 406, proteinGrams: 20, carbsGrams: 50, fatGrams: 14 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 80, unit: 'g' },
+      { name: 'Miel', qty: 20, unit: 'g' },
+      { name: 'Amandes', qty: 20, unit: 'g' },
+      { name: 'Huile de coco', qty: 8, unit: 'g' },
+      { name: 'Yaourt grec', qty: 150, unit: 'g' },
+      { name: 'Mangue', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger flocons, miel, amandes et huile de coco. Étaler sur plaque.',
+      'Cuire au four à 160°C pendant 20 min en remuant à mi-cuisson.',
+      'Servir sur le yaourt grec avec la mangue.'
+    ]
+  },
+
+  {
+    id: 'L037',
+    name: 'Smoothie Bowl Framboise Protéiné',
+    emoji: '🥣',
+    origin: '🇺🇸',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'framboises', 'banane', 'yaourt', 'granola', 'chia', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 386, proteinGrams: 18, carbsGrams: 56, fatGrams: 10 },
+    ingredients: [
+      { name: 'Framboises', qty: 150, unit: 'g' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Yaourt grec', qty: 100, unit: 'g' },
+      { name: 'Granola', qty: 60, unit: 'g' },
+      { name: 'Graines de chia', qty: 10, unit: 'g' },
+      { name: 'Miel', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Mixer les framboises, banane et yaourt grec.',
+      'Verser dans un bol.',
+      'Garnir de granola, graines de chia et miel.'
+    ]
+  },
+
+  {
+    id: 'L038',
+    name: 'Œufs Cocotte Tomate Épinards',
+    emoji: '🍳',
+    origin: '🇫🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'œuf', 'épinards', 'tomate', 'crème', 'fromage', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 398, proteinGrams: 32, carbsGrams: 18, fatGrams: 22 },
+    ingredients: [
+      { name: 'Œufs', qty: 180, unit: 'g' },
+      { name: 'Épinards', qty: 100, unit: 'g' },
+      { name: 'Tomate', qty: 100, unit: 'g' },
+      { name: 'Crème légère', qty: 30, unit: 'ml' },
+      { name: 'Fromage râpé', qty: 20, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'g' },
+      { name: 'Poivre', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Préchauffer le four à 180°C.',
+      'Disposer épinards et tomate dans des ramequins, casser les œufs par-dessus.',
+      'Ajouter la crème et le fromage, cuire 12-15 min.'
+    ]
+  },
+
+  {
+    id: 'L039',
+    name: 'Flocons d\'Avoine Poires Cannelle',
+    emoji: '🥣',
+    origin: '🇫🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'poire', 'lait', 'cannelle', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 5,
+    servings: 1,
+    baseNutrition: { calories: 386, proteinGrams: 14, carbsGrams: 60, fatGrams: 10 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 90, unit: 'g' },
+      { name: 'Poire', qty: 120, unit: 'g' },
+      { name: 'Lait écrémé', qty: 250, unit: 'ml' },
+      { name: 'Cannelle', qty: 2, unit: 'g' },
+      { name: 'Cardamome', qty: 1, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Porter le lait à ébullition, verser sur les flocons.',
+      'Laisser gonfler 5 min.',
+      'Ajouter la poire râpée, cannelle, cardamome et miel.'
+    ]
+  },
+
+  {
+    id: 'L040',
+    name: 'Pancakes Ricotta Citron',
+    emoji: '🍳',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'farine', 'ricotta', 'œuf', 'lait', 'citron', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 410, proteinGrams: 22, carbsGrams: 40, fatGrams: 18 },
+    ingredients: [
+      { name: 'Farine', qty: 70, unit: 'g' },
+      { name: 'Ricotta', qty: 100, unit: 'g' },
+      { name: 'Œufs', qty: 120, unit: 'g' },
+      { name: 'Lait', qty: 80, unit: 'ml' },
+      { name: 'Citron zeste', qty: 5, unit: 'g' },
+      { name: 'Sucre', qty: 10, unit: 'g' },
+      { name: 'Levure', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger tous les ingrédients en pâte lisse.',
+      'Cuire des pancakes dans une poêle antiadhésive.',
+      'Servir avec un zeste de citron et miel.'
+    ]
+  },
+
+  {
+    id: 'L041',
+    name: 'Overnight Oats Mangue Coco',
+    emoji: '🥣',
+    origin: '🇹🇭',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'lait de coco', 'mangue', 'coco', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 388, proteinGrams: 16, carbsGrams: 54, fatGrams: 12 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 80, unit: 'g' },
+      { name: 'Lait de coco', qty: 180, unit: 'ml' },
+      { name: 'Mangue', qty: 100, unit: 'g' },
+      { name: 'Noix de coco râpée', qty: 15, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger flocons d\'avoine, lait de coco et miel.',
+      'Réfrigérer une nuit.',
+      'Garnir de mangue fraîche et noix de coco.'
+    ]
+  },
+
+  {
+    id: 'L042',
+    name: 'Bowl Protéiné Fromage Blanc Noix',
+    emoji: '🥛',
+    origin: '🇫🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'fromage blanc', 'noix', 'noisettes', 'miel', 'pomme', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 412, proteinGrams: 24, carbsGrams: 34, fatGrams: 20 },
+    ingredients: [
+      { name: 'Fromage blanc 0%', qty: 200, unit: 'g' },
+      { name: 'Noix', qty: 25, unit: 'g' },
+      { name: 'Noisettes', qty: 15, unit: 'g' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: 'Cannelle', qty: 1, unit: 'g' },
+      { name: 'Pomme', qty: 80, unit: 'g' }
+    ],
+    steps: [
+      'Verser le fromage blanc dans un bol.',
+      'Couper la pomme en petits dés.',
+      'Garnir de noix, noisettes, pomme et miel.'
+    ]
+  },
+
+  {
+    id: 'L043',
+    name: 'Toast Beurre d\'Amande Banane Graines',
+    emoji: '🍞',
+    origin: '🇺🇸',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'pain', 'amande', 'banane', 'graines', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 410, proteinGrams: 20, carbsGrams: 42, fatGrams: 18 },
+    ingredients: [
+      { name: 'Pain complet', qty: 80, unit: 'g' },
+      { name: 'Beurre d\'amande', qty: 30, unit: 'g' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Graines de courge', qty: 10, unit: 'g' },
+      { name: 'Cannelle', qty: 1, unit: 'g' },
+      { name: 'Miel', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Griller le pain complet.',
+      'Tartiner généreusement de beurre d\'amande.',
+      'Garnir de rondelles de banane, graines et un filet de miel.'
+    ]
+  },
+
+  {
+    id: 'L044',
+    name: 'Omelette Turque Menthe Feta',
+    emoji: '🍳',
+    origin: '🇹🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'œuf', 'feta', 'menthe', 'tomate', 'oignon', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 416, proteinGrams: 28, carbsGrams: 22, fatGrams: 24 },
+    ingredients: [
+      { name: 'Œufs', qty: 180, unit: 'g' },
+      { name: 'Feta', qty: 50, unit: 'g' },
+      { name: 'Menthe fraîche', qty: 10, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Oignon', qty: 40, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' }
+    ],
+    steps: [
+      'Battre les œufs avec sel et menthe ciselée.',
+      'Faire revenir oignon et tomate dans l\'huile.',
+      'Verser les œufs, parsemer de feta, cuire jusqu\'à prise.'
+    ]
+  },
+
+  {
+    id: 'L045',
+    name: 'Bol Riz Brun Œuf Poché Avocat',
+    emoji: '🥑',
+    origin: '🇯🇵',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'riz brun', 'œuf', 'avocat', 'soja', 'sésame', 'nori', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 388, proteinGrams: 22, carbsGrams: 48, fatGrams: 12 },
+    ingredients: [
+      { name: 'Riz brun', qty: 80, unit: 'g' },
+      { name: 'Œuf poché', qty: 60, unit: 'g' },
+      { name: 'Avocat', qty: 60, unit: 'g' },
+      { name: 'Sauce soja', qty: 10, unit: 'ml' },
+      { name: 'Sésame', qty: 5, unit: 'g' },
+      { name: 'Nori', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le riz brun.',
+      'Pocher l\'œuf dans de l\'eau frémissante.',
+      'Disposer le riz, l\'avocat tranché, l\'œuf. Arroser de sauce soja et parsemer de sésame.'
+    ]
+  },
+
+  {
+    id: 'L046',
+    name: 'Porridge Cacao Banane Noisette',
+    emoji: '🥣',
+    origin: '🇨🇭',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'avoine', 'lait', 'cacao', 'banane', 'noisettes', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 5,
+    servings: 1,
+    baseNutrition: { calories: 384, proteinGrams: 14, carbsGrams: 64, fatGrams: 8 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 90, unit: 'g' },
+      { name: 'Lait écrémé', qty: 250, unit: 'ml' },
+      { name: 'Cacao non sucré', qty: 10, unit: 'g' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Noisettes', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les flocons d\'avoine dans le lait.',
+      'Incorporer le cacao en remuant.',
+      'Garnir de banane tranchée et noisettes concassées.'
+    ]
+  },
+
+  {
+    id: 'L047',
+    name: 'Shakshuka aux Légumes Épicée',
+    emoji: '🍳',
+    origin: '🇲🇦',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'œuf', 'tomate', 'poivron', 'pois chiches', 'harissa', 'healthy'],
+    difficulty: 2,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 412, proteinGrams: 30, carbsGrams: 28, fatGrams: 20 },
+    ingredients: [
+      { name: 'Œufs', qty: 240, unit: 'g' },
+      { name: 'Tomates', qty: 200, unit: 'g' },
+      { name: 'Poivron', qty: 80, unit: 'g' },
+      { name: 'Pois chiches', qty: 80, unit: 'g' },
+      { name: 'Harissa', qty: 10, unit: 'g' },
+      { name: 'Cumin', qty: 2, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Faire revenir poivron et épices dans l\'huile.',
+      'Ajouter tomates et pois chiches, mijoter 10 min.',
+      'Casser les œufs dans la sauce, couvrir et cuire 5-6 min.'
+    ]
+  },
+
+  {
+    id: 'L048',
+    name: 'Crêpes Blé Complet Fromage Blanc Fruits',
+    emoji: '🍳',
+    origin: '🇫🇷',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'farine', 'lait', 'œuf', 'fromage blanc', 'fraises', 'miel', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 378, proteinGrams: 22, carbsGrams: 50, fatGrams: 10 },
+    ingredients: [
+      { name: 'Farine complète', qty: 80, unit: 'g' },
+      { name: 'Lait écrémé', qty: 200, unit: 'ml' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Fromage blanc', qty: 100, unit: 'g' },
+      { name: 'Fraises', qty: 80, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Préparer la pâte à crêpes avec farine, lait et œuf.',
+      'Cuire des crêpes fines.',
+      'Garnir de fromage blanc, fraises et miel.'
+    ]
+  },
+
+  {
+    id: 'L049',
+    name: 'Bowl Protéiné Quinoa Baies Amandes',
+    emoji: '🥛',
+    origin: '🇺🇸',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'quinoa', 'yaourt', 'amandes', 'myrtilles', 'framboises', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 390, proteinGrams: 26, carbsGrams: 40, fatGrams: 14 },
+    ingredients: [
+      { name: 'Quinoa', qty: 80, unit: 'g' },
+      { name: 'Yaourt grec', qty: 150, unit: 'g' },
+      { name: 'Amandes', qty: 20, unit: 'g' },
+      { name: 'Myrtilles', qty: 80, unit: 'g' },
+      { name: 'Framboises', qty: 60, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le quinoa, laisser refroidir.',
+      'Mélanger avec le yaourt grec.',
+      'Garnir d\'amandes, myrtilles et framboises.'
+    ]
+  },
+
+  {
+    id: 'L050',
+    name: 'Tartine Saumon Avocat Citron',
+    emoji: '🍞',
+    origin: '🇸🇪',
+    mealTypes: ['breakfast'],
+    tags: ['breakfast', 'pain', 'saumon', 'avocat', 'citron', 'aneth', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 412, proteinGrams: 20, carbsGrams: 38, fatGrams: 20 },
+    ingredients: [
+      { name: 'Pain complet', qty: 80, unit: 'g' },
+      { name: 'Saumon fumé', qty: 80, unit: 'g' },
+      { name: 'Avocat', qty: 80, unit: 'g' },
+      { name: 'Citron', qty: 10, unit: 'ml' },
+      { name: 'Aneth', qty: 5, unit: 'g' },
+      { name: 'Fromage blanc', qty: 30, unit: 'g' }
+    ],
+    steps: [
+      'Griller le pain complet.',
+      'Écraser l\'avocat avec citron et sel.',
+      'Tartiner d\'avocat, disposer le saumon, le fromage blanc et l\'aneth.'
+    ]
+  },
+
+  {
+    id: 'L101',
+    name: 'Poulet Grillé Riz Basmati',
+    emoji: '🍗',
+    origin: '🌍',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'riz', 'citron', 'persil', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 566, proteinGrams: 48, carbsGrams: 62, fatGrams: 14 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 200, unit: 'g' },
+      { name: 'Riz basmati', qty: 120, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Épices', qty: 3, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'g' },
+      { name: 'Persil', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le poulet avec huile, épices et citron.',
+      'Griller 6 min de chaque côté.',
+      'Servir avec le riz basmati cuit et le persil.'
+    ]
+  },
+
+  {
+    id: 'L102',
+    name: 'Saumon Quinoa Brocoli',
+    emoji: '🐟',
+    origin: '🌍',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'saumon', 'quinoa', 'brocoli', 'huile', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 596, proteinGrams: 42, carbsGrams: 44, fatGrams: 28 },
+    ingredients: [
+      { name: 'Filet de saumon', qty: 200, unit: 'g' },
+      { name: 'Quinoa', qty: 90, unit: 'g' },
+      { name: 'Brocoli', qty: 150, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Citron', qty: 1, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le quinoa et le brocoli à la vapeur.',
+      'Poêler le saumon 4 min de chaque côté.',
+      'Servir avec un filet d\'huile d\'olive et citron.'
+    ]
+  },
+
+  {
+    id: 'L103',
+    name: 'Poke Bowl Thon Avocat',
+    emoji: '🐟',
+    origin: '🌺',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'thon', 'riz', 'avocat', 'edamame', 'carotte', 'soja', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 576, proteinGrams: 38, carbsGrams: 52, fatGrams: 24 },
+    ingredients: [
+      { name: 'Thon frais', qty: 180, unit: 'g' },
+      { name: 'Riz japonais', qty: 120, unit: 'g' },
+      { name: 'Avocat', qty: 80, unit: 'g' },
+      { name: 'Edamame', qty: 60, unit: 'g' },
+      { name: 'Carotte', qty: 40, unit: 'g' },
+      { name: 'Sauce soja', qty: 20, unit: 'ml' },
+      { name: 'Sésame', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le riz japonais.',
+      'Couper le thon et l\'avocat en dés.',
+      'Assembler le bol avec tous les ingrédients, arroser de sauce soja.'
+    ]
+  },
+
+  {
+    id: 'L104',
+    name: 'Steak Bœuf Patate Douce',
+    emoji: '🥩',
+    origin: '🇺🇸',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'bœuf', 'patate douce', 'haricots verts', 'huile', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 542, proteinGrams: 46, carbsGrams: 40, fatGrams: 22 },
+    ingredients: [
+      { name: 'Steak de bœuf', qty: 200, unit: 'g' },
+      { name: 'Patate douce', qty: 200, unit: 'g' },
+      { name: 'Haricots verts', qty: 100, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Herbes de Provence', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Cuire la patate douce en dés au four à 200°C pendant 25 min.',
+      'Griller le steak à feu vif 3-4 min de chaque côté.',
+      'Accompagner de haricots verts vapeur.'
+    ]
+  },
+
+  {
+    id: 'L105',
+    name: 'Salade César Poulet',
+    emoji: '🍗',
+    origin: '🇺🇸',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'laitue', 'parmesan', 'croûtons', 'sauce césar', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 446, proteinGrams: 44, carbsGrams: 18, fatGrams: 22 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 200, unit: 'g' },
+      { name: 'Laitue romaine', qty: 150, unit: 'g' },
+      { name: 'Parmesan', qty: 30, unit: 'g' },
+      { name: 'Croûtons', qty: 30, unit: 'g' },
+      { name: 'Sauce César', qty: 30, unit: 'g' },
+      { name: 'Citron', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Griller le poulet et le trancher.',
+      'Préparer la laitue, les croûtons et le parmesan.',
+      'Mélanger avec la sauce César et le jus de citron.'
+    ]
+  },
+
+  {
+    id: 'L106',
+    name: 'Bowl Lentilles Épinards',
+    emoji: '🍽️',
+    origin: '🇮🇳',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'lentilles', 'épinards', 'tomate', 'oignon', 'cumin', 'curcuma', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 428, proteinGrams: 24, carbsGrams: 56, fatGrams: 12 },
+    ingredients: [
+      { name: 'Lentilles vertes', qty: 120, unit: 'g' },
+      { name: 'Épinards', qty: 100, unit: 'g' },
+      { name: 'Tomate', qty: 100, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Cumin', qty: 2, unit: 'g' },
+      { name: 'Curcuma', qty: 2, unit: 'g' },
+      { name: 'Huile', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire les lentilles dans l\'eau bouillante 20 min.',
+      'Faire revenir oignon, tomate et épices.',
+      'Ajouter les épinards et les lentilles, mijoter 5 min.'
+    ]
+  },
+
+  {
+    id: 'L107',
+    name: 'Harira Poulet',
+    emoji: '🍗',
+    origin: '🇲🇦',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'pois chiches', 'tomate', 'coriandre', 'cumin', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 412, proteinGrams: 36, carbsGrams: 40, fatGrams: 12 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 150, unit: 'g' },
+      { name: 'Pois chiches', qty: 80, unit: 'g' },
+      { name: 'Tomates', qty: 150, unit: 'g' },
+      { name: 'Céleri', qty: 50, unit: 'g' },
+      { name: 'Coriandre', qty: 10, unit: 'g' },
+      { name: 'Cumin', qty: 2, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'g' },
+      { name: 'Huile', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Faire revenir le poulet avec les épices.',
+      'Ajouter tomates, pois chiches, céleri et 600ml d\'eau.',
+      'Mijoter 25 min, finir avec coriandre fraîche et citron.'
+    ]
+  },
+
+  {
+    id: 'L108',
+    name: 'Wrap Dinde Avocat',
+    emoji: '🌯',
+    origin: '🇺🇸',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'tortilla', 'dinde', 'avocat', 'laitue', 'tomate', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 500, proteinGrams: 38, carbsGrams: 42, fatGrams: 20 },
+    ingredients: [
+      { name: 'Tortilla blé', qty: 70, unit: 'g' },
+      { name: 'Escalope de dinde', qty: 160, unit: 'g' },
+      { name: 'Avocat', qty: 80, unit: 'g' },
+      { name: 'Laitue', qty: 30, unit: 'g' },
+      { name: 'Tomate', qty: 60, unit: 'g' },
+      { name: 'Moutarde', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Cuire la dinde à la poêle.',
+      'Préparer les légumes.',
+      'Assembler le wrap avec tous les ingrédients, rouler serré.'
+    ]
+  },
+
+  {
+    id: 'L109',
+    name: 'Risotto Poulet Champignons',
+    emoji: '🍗',
+    origin: '🇮🇹',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'riz', 'poulet', 'champignons', 'parmesan', 'oignon', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 618, proteinGrams: 42, carbsGrams: 72, fatGrams: 18 },
+    ingredients: [
+      { name: 'Riz arborio', qty: 150, unit: 'g' },
+      { name: 'Blanc de poulet', qty: 150, unit: 'g' },
+      { name: 'Champignons', qty: 100, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Parmesan', qty: 30, unit: 'g' },
+      { name: 'Bouillon', qty: 600, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Faire revenir l\'oignon et le poulet.',
+      'Ajouter le riz, nacrer 2 min.',
+      'Incorporer le bouillon louche par louche en remuant 20 min. Finir avec parmesan.'
+    ]
+  },
+
+  {
+    id: 'L110',
+    name: 'Pad Thaï Crevettes',
+    emoji: '🦐',
+    origin: '🇹🇭',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'nouilles', 'crevettes', 'œuf', 'cacahuètes', 'soja', 'tamarin', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 470, proteinGrams: 32, carbsGrams: 54, fatGrams: 14 },
+    ingredients: [
+      { name: 'Nouilles de riz', qty: 120, unit: 'g' },
+      { name: 'Crevettes', qty: 150, unit: 'g' },
+      { name: 'Œufs', qty: 120, unit: 'g' },
+      { name: 'Cacahuètes', qty: 20, unit: 'g' },
+      { name: 'Germes de soja', qty: 60, unit: 'g' },
+      { name: 'Sauce tamarin', qty: 20, unit: 'ml' },
+      { name: 'Huile', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Tremper les nouilles de riz dans l\'eau froide 30 min.',
+      'Poêler les crevettes, ajouter les œufs brouillés.',
+      'Ajouter les nouilles, la sauce, les germes de soja. Garnir de cacahuètes.'
+    ]
+  },
+
+  {
+    id: 'L111',
+    name: 'Shawarma Poulet Semoule',
+    emoji: '🍗',
+    origin: '🌍',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'semoule', 'yaourt', 'tomate', 'concombre', 'ail', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 562, proteinGrams: 48, carbsGrams: 52, fatGrams: 18 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 200, unit: 'g' },
+      { name: 'Semoule', qty: 120, unit: 'g' },
+      { name: 'Yaourt', qty: 60, unit: 'g' },
+      { name: 'Épices shawarma', qty: 5, unit: 'g' },
+      { name: 'Tomate', qty: 60, unit: 'g' },
+      { name: 'Concombre', qty: 40, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le poulet dans les épices, yaourt et ail au moins 30 min.',
+      'Cuire le poulet à la poêle ou au four 20 min.',
+      'Servir avec la semoule cuite et les légumes.'
+    ]
+  },
+
+  {
+    id: 'L112',
+    name: 'Bibimbap Bœuf',
+    emoji: '🥩',
+    origin: '🇰🇷',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'bœuf', 'riz', 'épinards', 'carotte', 'courgette', 'œuf', 'sésame', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 546, proteinGrams: 38, carbsGrams: 58, fatGrams: 18 },
+    ingredients: [
+      { name: 'Bœuf haché', qty: 150, unit: 'g' },
+      { name: 'Riz japonais', qty: 120, unit: 'g' },
+      { name: 'Épinards', qty: 80, unit: 'g' },
+      { name: 'Carotte', qty: 60, unit: 'g' },
+      { name: 'Courgette', qty: 60, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Sauce gochujang', qty: 15, unit: 'g' },
+      { name: 'Huile de sésame', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire le riz.',
+      'Poêler le bœuf haché avec la sauce.',
+      'Assembler le bol avec riz, légumes sautés séparément, bœuf et œuf au plat. Finir avec huile de sésame.'
+    ]
+  },
+
+  {
+    id: 'L113',
+    name: 'Ceviche Cabillaud',
+    emoji: '🐟',
+    origin: '🇵🇪',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'cabillaud', 'citron', 'avocat', 'oignon', 'coriandre', 'maïs', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 388, proteinGrams: 36, carbsGrams: 16, fatGrams: 20 },
+    ingredients: [
+      { name: 'Cabillaud frais', qty: 200, unit: 'g' },
+      { name: 'Citron vert', qty: 60, unit: 'ml' },
+      { name: 'Avocat', qty: 80, unit: 'g' },
+      { name: 'Oignon rouge', qty: 40, unit: 'g' },
+      { name: 'Coriandre', qty: 10, unit: 'g' },
+      { name: 'Piment', qty: 3, unit: 'g' },
+      { name: 'Maïs', qty: 40, unit: 'g' }
+    ],
+    steps: [
+      'Couper le cabillaud en petits dés.',
+      'Mariner dans le jus de citron vert 15 min jusqu\'à opacification.',
+      'Mélanger avec avocat, oignon, coriandre et piment.'
+    ]
+  },
+
+  {
+    id: 'L114',
+    name: 'Tikka Masala Poulet',
+    emoji: '🍗',
+    origin: '🇮🇳',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'yaourt', 'tomate', 'crème', 'riz', 'tikka masala', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 516, proteinGrams: 46, carbsGrams: 38, fatGrams: 20 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 200, unit: 'g' },
+      { name: 'Yaourt', qty: 80, unit: 'g' },
+      { name: 'Tomates', qty: 150, unit: 'g' },
+      { name: 'Crème', qty: 40, unit: 'ml' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Tikka masala', qty: 10, unit: 'g' },
+      { name: 'Riz basmati', qty: 80, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le poulet dans yaourt et épices.',
+      'Cuire l\'oignon, ajouter tomates et épices, incorporer la crème.',
+      'Ajouter le poulet grillé, mijoter 10 min. Servir avec riz basmati.'
+    ]
+  },
+
+  {
+    id: 'L115',
+    name: 'Couscous Royal',
+    emoji: '🫙',
+    origin: '🇲🇦',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'semoule', 'agneau', 'merguez', 'courgette', 'carotte', 'pois chiches', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 626, proteinGrams: 48, carbsGrams: 68, fatGrams: 18 },
+    ingredients: [
+      { name: 'Semoule', qty: 150, unit: 'g' },
+      { name: 'Agneau', qty: 150, unit: 'g' },
+      { name: 'Merguez de poulet', qty: 80, unit: 'g' },
+      { name: 'Courgette', qty: 80, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Pois chiches', qty: 60, unit: 'g' },
+      { name: 'Bouillon', qty: 300, unit: 'ml' },
+      { name: 'Ras el hanout', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Cuire la semoule selon les instructions.',
+      'Braiser l\'agneau avec les épices et légumes.',
+      'Assembler avec les merguez grillées et un peu de harissa.'
+    ]
+  },
+
+  {
+    id: 'L116',
+    name: 'Ramen Poulet Maison',
+    emoji: '🍗',
+    origin: '🇯🇵',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'nouilles', 'poulet', 'bouillon', 'œuf', 'nori', 'soja', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 504, proteinGrams: 42, carbsGrams: 48, fatGrams: 16 },
+    ingredients: [
+      { name: 'Nouilles ramen', qty: 120, unit: 'g' },
+      { name: 'Blanc de poulet', qty: 180, unit: 'g' },
+      { name: 'Bouillon de poulet', qty: 600, unit: 'ml' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Nori', qty: 5, unit: 'g' },
+      { name: 'Oignons verts', qty: 20, unit: 'g' },
+      { name: 'Sauce soja', qty: 20, unit: 'ml' },
+      { name: 'Huile de sésame', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire le poulet dans le bouillon avec sauce soja.',
+      'Cuire les nouilles séparément.',
+      'Assembler: nouilles, poulet effiloché, œuf mollet, nori et oignons verts.'
+    ]
+  },
+
+  {
+    id: 'L117',
+    name: 'Osso Bucco Veau',
+    emoji: '🥩',
+    origin: '🇮🇹',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'veau', 'tomate', 'oignon', 'carotte', 'céleri', 'healthy'],
+    difficulty: 4,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 570, proteinGrams: 52, carbsGrams: 32, fatGrams: 26 },
+    ingredients: [
+      { name: 'Jarret de veau', qty: 250, unit: 'g' },
+      { name: 'Tomates', qty: 150, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Carotte', qty: 60, unit: 'g' },
+      { name: 'Céleri', qty: 40, unit: 'g' },
+      { name: 'Bouillon', qty: 200, unit: 'ml' },
+      { name: 'Gremolata', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' }
+    ],
+    steps: [
+      'Fariner et dorer les jarrets de veau dans l\'huile.',
+      'Ajouter les légumes, tomates et bouillon.',
+      'Braiser 1h30 à feu doux. Finir avec la gremolata.'
+    ]
+  },
+
+  {
+    id: 'L118',
+    name: 'Bowl Poulet Patate Douce Avocat',
+    emoji: '🍗',
+    origin: '🇺🇸',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'patate douce', 'avocat', 'épinards', 'pois chiches', 'tahini', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 526, proteinGrams: 38, carbsGrams: 44, fatGrams: 22 },
+    ingredients: [
+      { name: 'Poulet grillé', qty: 170, unit: 'g' },
+      { name: 'Patate douce rôtie', qty: 150, unit: 'g' },
+      { name: 'Avocat', qty: 60, unit: 'g' },
+      { name: 'Épinards', qty: 60, unit: 'g' },
+      { name: 'Pois chiches', qty: 60, unit: 'g' },
+      { name: 'Tahini', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Cuire la patate douce au four à 200°C.',
+      'Griller le poulet assaisonné.',
+      'Assembler le bowl avec tous les ingrédients, drizzler de tahini.'
+    ]
+  },
+
+  {
+    id: 'L119',
+    name: 'Dahl Lentilles Corail Coco',
+    emoji: '🍽️',
+    origin: '🇮🇳',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'lentilles', 'lait de coco', 'tomate', 'oignon', 'gingembre', 'curcuma', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 488, proteinGrams: 40, carbsGrams: 46, fatGrams: 16 },
+    ingredients: [
+      { name: 'Lentilles corail', qty: 150, unit: 'g' },
+      { name: 'Lait de coco', qty: 100, unit: 'ml' },
+      { name: 'Tomates', qty: 100, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Gingembre', qty: 10, unit: 'g' },
+      { name: 'Curcuma', qty: 2, unit: 'g' },
+      { name: 'Cumin', qty: 2, unit: 'g' },
+      { name: 'Huile', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Faire revenir oignon, gingembre et épices.',
+      'Ajouter lentilles, tomates et lait de coco.',
+      'Cuire 25 min jusqu\'à consistance crémeuse.'
+    ]
+  },
+
+  {
+    id: 'L120',
+    name: 'Filet Cabillaud Légumes Rôtis',
+    emoji: '🐟',
+    origin: '🇵🇹',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'cabillaud', 'poivron', 'courgette', 'tomate', 'pomme de terre', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 516, proteinGrams: 44, carbsGrams: 40, fatGrams: 20 },
+    ingredients: [
+      { name: 'Filet de cabillaud', qty: 200, unit: 'g' },
+      { name: 'Poivron rouge', qty: 100, unit: 'g' },
+      { name: 'Courgette', qty: 100, unit: 'g' },
+      { name: 'Tomate', qty: 100, unit: 'g' },
+      { name: 'Pomme de terre', qty: 100, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Herbes', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Couper les légumes, assaisonner avec huile et herbes, rôtir 25 min à 200°C.',
+      'Assaisonner le cabillaud, déposer sur les légumes.',
+      'Cuire encore 15 min.'
+    ]
+  },
+
+  {
+    id: 'L121',
+    name: 'Bowl Bœuf Coréen Riz Sésame',
+    emoji: '🥩',
+    origin: '🇰🇷',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'bœuf', 'riz', 'soja', 'ail', 'gingembre', 'sésame', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 512, proteinGrams: 42, carbsGrams: 50, fatGrams: 16 },
+    ingredients: [
+      { name: 'Bœuf', qty: 180, unit: 'g' },
+      { name: 'Riz japonais', qty: 120, unit: 'g' },
+      { name: 'Sauce soja', qty: 20, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Gingembre', qty: 5, unit: 'g' },
+      { name: 'Poire asiatique', qty: 40, unit: 'g' },
+      { name: 'Huile de sésame', qty: 8, unit: 'ml' },
+      { name: 'Sésame', qty: 8, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le bœuf dans sauce soja, ail, gingembre et poire râpée.',
+      'Poêler à feu vif.',
+      'Servir sur le riz avec huile de sésame et sésame grillé.'
+    ]
+  },
+
+  {
+    id: 'L122',
+    name: 'Tajine Agneau Légumes',
+    emoji: '🫙',
+    origin: '🇲🇦',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'agneau', 'courgette', 'carotte', 'pois chiches', 'semoule', 'coriandre', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 35,
+    servings: 1,
+    baseNutrition: { calories: 494, proteinGrams: 36, carbsGrams: 56, fatGrams: 14 },
+    ingredients: [
+      { name: 'Agneau', qty: 180, unit: 'g' },
+      { name: 'Courgette', qty: 100, unit: 'g' },
+      { name: 'Carotte', qty: 100, unit: 'g' },
+      { name: 'Pois chiches', qty: 80, unit: 'g' },
+      { name: 'Semoule', qty: 80, unit: 'g' },
+      { name: 'Ras el hanout', qty: 5, unit: 'g' },
+      { name: 'Coriandre', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Dorer l\'agneau avec les épices.',
+      'Ajouter les légumes et pois chiches, couvrir d\'eau.',
+      'Mijoter 45 min. Servir avec la semoule et coriandre fraîche.'
+    ]
+  },
+
+  {
+    id: 'L123',
+    name: 'Poulet Teriyaki Riz Brocoli',
+    emoji: '🍗',
+    origin: '🇯🇵',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'riz', 'brocoli', 'teriyaki', 'sésame', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 506, proteinGrams: 38, carbsGrams: 48, fatGrams: 18 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 180, unit: 'g' },
+      { name: 'Riz', qty: 120, unit: 'g' },
+      { name: 'Brocoli', qty: 150, unit: 'g' },
+      { name: 'Sauce teriyaki', qty: 30, unit: 'ml' },
+      { name: 'Sésame', qty: 8, unit: 'g' },
+      { name: 'Oignons verts', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le poulet dans la sauce teriyaki.',
+      'Griller le poulet.',
+      'Servir avec le riz vapeur et le brocoli. Garnir de sésame.'
+    ]
+  },
+
+  {
+    id: 'L124',
+    name: 'Salade Niçoise Thon',
+    emoji: '🐟',
+    origin: '🇫🇷',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'thon', 'haricots verts', 'pomme de terre', 'œuf', 'tomate', 'olives', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 536, proteinGrams: 44, carbsGrams: 36, fatGrams: 24 },
+    ingredients: [
+      { name: 'Thon en conserve', qty: 180, unit: 'g' },
+      { name: 'Haricots verts', qty: 100, unit: 'g' },
+      { name: 'Pomme de terre', qty: 120, unit: 'g' },
+      { name: 'Œuf dur', qty: 60, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Olives', qty: 20, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire les haricots verts et pommes de terre.',
+      'Assembler la salade avec tous les ingrédients.',
+      'Assaisonner d\'huile d\'olive et sel.'
+    ]
+  },
+
+  {
+    id: 'L125',
+    name: 'Curry Rouge Poulet Coco',
+    emoji: '🍗',
+    origin: '🇹🇭',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'lait de coco', 'curry rouge', 'poivron', 'aubergine', 'riz', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 522, proteinGrams: 46, carbsGrams: 44, fatGrams: 18 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 200, unit: 'g' },
+      { name: 'Lait de coco', qty: 100, unit: 'ml' },
+      { name: 'Pâte de curry rouge', qty: 20, unit: 'g' },
+      { name: 'Poivron', qty: 80, unit: 'g' },
+      { name: 'Aubergine', qty: 80, unit: 'g' },
+      { name: 'Riz jasmin', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      'Faire revenir la pâte de curry dans une poêle.',
+      'Ajouter le poulet, puis le lait de coco et les légumes.',
+      'Mijoter 15 min. Servir avec riz jasmin.'
+    ]
+  },
+
+  {
+    id: 'L126',
+    name: 'Salade Quinoa Feta Légumes Grillés',
+    emoji: '🥗',
+    origin: '🇬🇷',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'quinoa', 'feta', 'courgette', 'poivron', 'roquette', 'pignons', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 512, proteinGrams: 40, carbsGrams: 52, fatGrams: 16 },
+    ingredients: [
+      { name: 'Quinoa', qty: 100, unit: 'g' },
+      { name: 'Feta', qty: 80, unit: 'g' },
+      { name: 'Courgette grillée', qty: 100, unit: 'g' },
+      { name: 'Poivron rouge', qty: 80, unit: 'g' },
+      { name: 'Roquette', qty: 40, unit: 'g' },
+      { name: 'Pignons', qty: 15, unit: 'g' },
+      { name: 'Vinaigrette citron', qty: 15, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire le quinoa.',
+      'Griller les légumes.',
+      'Assembler avec la feta, roquette, pignons et vinaigrette.'
+    ]
+  },
+
+  {
+    id: 'L127',
+    name: 'Tacos Poulet Guacamole',
+    emoji: '🍗',
+    origin: '🇲🇽',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'tortilla', 'avocat', 'salsa', 'chou', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 524, proteinGrams: 42, carbsGrams: 44, fatGrams: 20 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 180, unit: 'g' },
+      { name: 'Tortillas', qty: 70, unit: 'g' },
+      { name: 'Guacamole', qty: 60, unit: 'g' },
+      { name: 'Salsa', qty: 40, unit: 'g' },
+      { name: 'Chou rouge', qty: 40, unit: 'g' },
+      { name: 'Citron vert', qty: 10, unit: 'ml' },
+      { name: 'Épices', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le poulet avec les épices.',
+      'Préparer le guacamole et la salsa.',
+      'Assembler les tacos avec poulet, guacamole, salsa et chou.'
+    ]
+  },
+
+  {
+    id: 'L128',
+    name: 'Bowl Falafel Houmous Taboulé',
+    emoji: '🍽️',
+    origin: '🇱🇧',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'falafel', 'houmous', 'taboulé', 'pita', 'persil', 'boulgour', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 492, proteinGrams: 36, carbsGrams: 60, fatGrams: 12 },
+    ingredients: [
+      { name: 'Falafels', qty: 120, unit: 'g' },
+      { name: 'Houmous', qty: 80, unit: 'g' },
+      { name: 'Taboulé', qty: 100, unit: 'g' },
+      { name: 'Pain pita', qty: 60, unit: 'g' },
+      { name: 'Tzatziki', qty: 40, unit: 'g' },
+      { name: 'Tomate', qty: 60, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les falafels au four ou à la poêle.',
+      'Préparer le taboulé avec persil, boulgour et tomates.',
+      'Assembler le bowl avec houmous, falafels et taboulé.'
+    ]
+  },
+
+  {
+    id: 'L129',
+    name: 'Poisson Grillé Salsa Mangue',
+    emoji: '🐟',
+    origin: '🇨🇴',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'daurade', 'mangue', 'avocat', 'coriandre', 'riz', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 504, proteinGrams: 44, carbsGrams: 46, fatGrams: 16 },
+    ingredients: [
+      { name: 'Filet de daurade', qty: 200, unit: 'g' },
+      { name: 'Mangue', qty: 120, unit: 'g' },
+      { name: 'Avocat', qty: 60, unit: 'g' },
+      { name: 'Oignon rouge', qty: 30, unit: 'g' },
+      { name: 'Coriandre', qty: 10, unit: 'g' },
+      { name: 'Riz', qty: 90, unit: 'g' },
+      { name: 'Citron vert', qty: 15, unit: 'ml' }
+    ],
+    steps: [
+      'Griller le filet de daurade.',
+      'Préparer la salsa avec mangue, avocat, oignon et coriandre.',
+      'Servir avec le riz et la salsa.'
+    ]
+  },
+
+  {
+    id: 'L130',
+    name: 'Chicken Tikka Naan Yogurt',
+    emoji: '🍗',
+    origin: '🇮🇳',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'naan', 'yaourt', 'tomate', 'tikka masala', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 514, proteinGrams: 40, carbsGrams: 48, fatGrams: 18 },
+    ingredients: [
+      { name: 'Poulet', qty: 180, unit: 'g' },
+      { name: 'Naan', qty: 100, unit: 'g' },
+      { name: 'Yaourt', qty: 80, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Tikka masala', qty: 8, unit: 'g' },
+      { name: 'Huile', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Mariner le poulet dans yaourt et épices.',
+      'Cuire le poulet grillé.',
+      'Servir avec naan chaud et sauce au yaourt.'
+    ]
+  },
+
+  {
+    id: 'L131',
+    name: 'Saumon Teriyaki Riz Edamame',
+    emoji: '🐟',
+    origin: '🇯🇵',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'saumon', 'riz', 'edamame', 'teriyaki', 'sésame', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 514, proteinGrams: 38, carbsGrams: 50, fatGrams: 18 },
+    ingredients: [
+      { name: 'Filet de saumon', qty: 180, unit: 'g' },
+      { name: 'Riz japonais', qty: 120, unit: 'g' },
+      { name: 'Edamame', qty: 80, unit: 'g' },
+      { name: 'Sauce teriyaki', qty: 25, unit: 'ml' },
+      { name: 'Sésame', qty: 8, unit: 'g' },
+      { name: 'Gingembre', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le saumon dans la sauce teriyaki.',
+      'Poêler le saumon 4 min de chaque côté.',
+      'Servir avec riz et edamame. Parsemer de sésame.'
+    ]
+  },
+
+  {
+    id: 'L132',
+    name: 'Bœuf Haché Légumes Wok',
+    emoji: '🥩',
+    origin: '🇨🇳',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'bœuf', 'brocoli', 'poivron', 'carotte', 'sauce huître', 'riz', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 516, proteinGrams: 42, carbsGrams: 42, fatGrams: 20 },
+    ingredients: [
+      { name: 'Bœuf haché', qty: 180, unit: 'g' },
+      { name: 'Brocoli', qty: 100, unit: 'g' },
+      { name: 'Poivron', qty: 80, unit: 'g' },
+      { name: 'Carotte', qty: 60, unit: 'g' },
+      { name: 'Sauce huître halal', qty: 20, unit: 'ml' },
+      { name: 'Riz', qty: 100, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Poêler le bœuf haché à feu vif.',
+      'Ajouter les légumes et l\'ail.',
+      'Incorporer la sauce, servir avec le riz.'
+    ]
+  },
+
+  {
+    id: 'L133',
+    name: 'Souvlaki Poulet Tzatziki',
+    emoji: '🍗',
+    origin: '🇬🇷',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'pita', 'tzatziki', 'tomate', 'oignon', 'roquette', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 534, proteinGrams: 46, carbsGrams: 38, fatGrams: 22 },
+    ingredients: [
+      { name: 'Poulet', qty: 200, unit: 'g' },
+      { name: 'Pain pita', qty: 80, unit: 'g' },
+      { name: 'Tzatziki', qty: 60, unit: 'g' },
+      { name: 'Tomate', qty: 60, unit: 'g' },
+      { name: 'Oignon rouge', qty: 40, unit: 'g' },
+      { name: 'Roquette', qty: 30, unit: 'g' },
+      { name: 'Épices grecques', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le poulet avec épices et huile d\'olive.',
+      'Griller en brochettes.',
+      'Servir dans le pita avec tzatziki, tomate et oignon.'
+    ]
+  },
+
+  {
+    id: 'L134',
+    name: 'Burritos Bœuf Haricots Noirs',
+    emoji: '🥩',
+    origin: '🇲🇽',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'bœuf', 'haricots noirs', 'tortilla', 'maïs', 'salsa', 'fromage', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 504, proteinGrams: 40, carbsGrams: 50, fatGrams: 16 },
+    ingredients: [
+      { name: 'Bœuf haché', qty: 150, unit: 'g' },
+      { name: 'Haricots noirs', qty: 100, unit: 'g' },
+      { name: 'Tortilla blé', qty: 80, unit: 'g' },
+      { name: 'Maïs', qty: 60, unit: 'g' },
+      { name: 'Salsa', qty: 40, unit: 'g' },
+      { name: 'Fromage râpé', qty: 30, unit: 'g' },
+      { name: 'Épices', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le bœuf haché avec épices et oignon.',
+      'Chauffer les haricots noirs.',
+      'Assembler le burrito, rouler, griller 2 min.'
+    ]
+  },
+
+  {
+    id: 'L135',
+    name: 'Pho Bo Authentique',
+    emoji: '🥩',
+    origin: '🇻🇳',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'bœuf', 'nouilles', 'bouillon', 'gingembre', 'basilic', 'soja', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 522, proteinGrams: 42, carbsGrams: 48, fatGrams: 18 },
+    ingredients: [
+      { name: 'Bœuf', qty: 180, unit: 'g' },
+      { name: 'Nouilles de riz', qty: 120, unit: 'g' },
+      { name: 'Bouillon pho', qty: 600, unit: 'ml' },
+      { name: 'Oignon brûlé', qty: 40, unit: 'g' },
+      { name: 'Gingembre', qty: 10, unit: 'g' },
+      { name: 'Basilic', qty: 10, unit: 'g' },
+      { name: 'Germes de soja', qty: 60, unit: 'g' }
+    ],
+    steps: [
+      'Préparer le bouillon avec os de bœuf, oignon brûlé et épices 2h.',
+      'Cuire les nouilles.',
+      'Assembler: nouilles, bœuf, bouillon chaud, herbes et germes.'
+    ]
+  },
+
+  {
+    id: 'L136',
+    name: 'Gratin Poulet Légumes Béchamel',
+    emoji: '🍗',
+    origin: '🇫🇷',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'courgette', 'poivron', 'béchamel', 'fromage', 'pâtes', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 534, proteinGrams: 44, carbsGrams: 40, fatGrams: 22 },
+    ingredients: [
+      { name: 'Poulet', qty: 200, unit: 'g' },
+      { name: 'Courgette', qty: 100, unit: 'g' },
+      { name: 'Poivron', qty: 80, unit: 'g' },
+      { name: 'Béchamel légère', qty: 100, unit: 'ml' },
+      { name: 'Fromage râpé', qty: 40, unit: 'g' },
+      { name: 'Pâtes', qty: 80, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les pâtes al dente.',
+      'Poêler poulet et légumes.',
+      'Assembler, napper de béchamel, gratiner 20 min à 180°C.'
+    ]
+  },
+
+  {
+    id: 'L137',
+    name: 'Nasi Goreng Poulet',
+    emoji: '🍗',
+    origin: '🇮🇩',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'riz', 'poulet', 'œuf', 'soja', 'ail', 'oignon', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 484, proteinGrams: 38, carbsGrams: 56, fatGrams: 12 },
+    ingredients: [
+      { name: 'Riz cuit', qty: 200, unit: 'g' },
+      { name: 'Poulet', qty: 150, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Sauce soja', qty: 15, unit: 'ml' },
+      { name: 'Piment', qty: 3, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Huile', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Poêler le riz cuit avec ail et oignon.',
+      'Ajouter le poulet en dés, œuf et sauce soja.',
+      'Incorporer le piment. Servir avec œuf au plat.'
+    ]
+  },
+
+  {
+    id: 'L138',
+    name: 'Wrap Falafel Légumes Houmous',
+    emoji: '🌯',
+    origin: '🇱🇧',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'falafel', 'tortilla', 'houmous', 'taboulé', 'laitue', 'tomate', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 516, proteinGrams: 40, carbsGrams: 44, fatGrams: 20 },
+    ingredients: [
+      { name: 'Falafels', qty: 140, unit: 'g' },
+      { name: 'Tortilla', qty: 80, unit: 'g' },
+      { name: 'Houmous', qty: 60, unit: 'g' },
+      { name: 'Taboulé', qty: 80, unit: 'g' },
+      { name: 'Laitue', qty: 30, unit: 'g' },
+      { name: 'Tomate', qty: 60, unit: 'g' },
+      { name: 'Oignon rouge', qty: 30, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les falafels.',
+      'Tartiner la tortilla de houmous.',
+      'Garnir de falafels, taboulé, laitue et tomate. Rouler.'
+    ]
+  },
+
+  {
+    id: 'L139',
+    name: 'Poulet Mafé Sénégalais',
+    emoji: '🍗',
+    origin: '🇸🇳',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'cacahuète', 'tomate', 'patate douce', 'riz', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 506, proteinGrams: 36, carbsGrams: 50, fatGrams: 18 },
+    ingredients: [
+      { name: 'Poulet', qty: 180, unit: 'g' },
+      { name: 'Beurre de cacahuète', qty: 30, unit: 'g' },
+      { name: 'Tomates', qty: 150, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Patate douce', qty: 100, unit: 'g' },
+      { name: 'Riz', qty: 80, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Faire revenir le poulet, oignon et ail.',
+      'Ajouter tomates, beurre de cacahuète dilué et patate douce.',
+      'Mijoter 30 min. Servir avec riz.'
+    ]
+  },
+
+  {
+    id: 'L140',
+    name: 'Salade Thaï Bœuf Grillé',
+    emoji: '🥩',
+    origin: '🇹🇭',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'bœuf', 'nouilles', 'concombre', 'carotte', 'cacahuètes', 'menthe', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 514, proteinGrams: 42, carbsGrams: 46, fatGrams: 18 },
+    ingredients: [
+      { name: 'Bœuf', qty: 180, unit: 'g' },
+      { name: 'Nouilles de riz', qty: 100, unit: 'g' },
+      { name: 'Concombre', qty: 60, unit: 'g' },
+      { name: 'Carotte', qty: 60, unit: 'g' },
+      { name: 'Cacahuètes', qty: 20, unit: 'g' },
+      { name: 'Menthe', qty: 10, unit: 'g' },
+      { name: 'Sauce fish halal', qty: 15, unit: 'ml' },
+      { name: 'Citron vert', qty: 20, unit: 'ml' }
+    ],
+    steps: [
+      'Griller le bœuf saignant, trancher fin.',
+      'Cuire les nouilles.',
+      'Assembler avec légumes, herbes, cacahuètes et sauce citron.'
+    ]
+  },
+
+  {
+    id: 'L141',
+    name: 'Poulet Rôti Pommes de Terre',
+    emoji: '🍗',
+    origin: '🇫🇷',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'pomme de terre', 'oignon', 'ail', 'herbes de Provence', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 526, proteinGrams: 44, carbsGrams: 38, fatGrams: 22 },
+    ingredients: [
+      { name: 'Cuisses de poulet', qty: 220, unit: 'g' },
+      { name: 'Pommes de terre', qty: 200, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Ail', qty: 10, unit: 'g' },
+      { name: 'Herbes de Provence', qty: 3, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Assaisonner le poulet avec herbes, ail et huile.',
+      'Disposer avec pommes de terre en rondelles.',
+      'Cuire au four 40 min à 200°C.'
+    ]
+  },
+
+  {
+    id: 'L142',
+    name: 'Lomo Saltado Bœuf',
+    emoji: '🥩',
+    origin: '🇵🇪',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'bœuf', 'pomme de terre', 'tomate', 'oignon', 'soja', 'coriandre', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 508, proteinGrams: 40, carbsGrams: 42, fatGrams: 20 },
+    ingredients: [
+      { name: 'Bœuf', qty: 180, unit: 'g' },
+      { name: 'Pommes de terre', qty: 150, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Oignon rouge', qty: 60, unit: 'g' },
+      { name: 'Sauce soja', qty: 15, unit: 'ml' },
+      { name: 'Coriandre', qty: 10, unit: 'g' },
+      { name: 'Riz', qty: 80, unit: 'g' }
+    ],
+    steps: [
+      'Faire sauter le bœuf à feu très vif.',
+      'Ajouter oignon, tomate et sauce soja.',
+      'Incorporer les frites maison et coriandre. Servir avec riz.'
+    ]
+  },
+
+  {
+    id: 'L143',
+    name: 'Poulet Korma Riz Basmati',
+    emoji: '🍗',
+    origin: '🇮🇳',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'yaourt', 'amandes', 'crème', 'riz', 'korma', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 486, proteinGrams: 38, carbsGrams: 52, fatGrams: 14 },
+    ingredients: [
+      { name: 'Poulet', qty: 180, unit: 'g' },
+      { name: 'Yaourt', qty: 80, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Amandes', qty: 20, unit: 'g' },
+      { name: 'Crème légère', qty: 40, unit: 'ml' },
+      { name: 'Épices korma', qty: 8, unit: 'g' },
+      { name: 'Riz basmati', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le poulet dans yaourt et épices.',
+      'Préparer la sauce korma avec oignon, amandes et crème.',
+      'Mijoter 20 min. Servir avec riz basmati.'
+    ]
+  },
+
+  {
+    id: 'L144',
+    name: 'Keftah Bœuf Tomate Herbes',
+    emoji: '🥩',
+    origin: '🇲🇦',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'bœuf', 'tomate', 'oignon', 'persil', 'semoule', 'harissa', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 524, proteinGrams: 42, carbsGrams: 44, fatGrams: 20 },
+    ingredients: [
+      { name: 'Bœuf haché', qty: 200, unit: 'g' },
+      { name: 'Tomates', qty: 150, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Persil', qty: 10, unit: 'g' },
+      { name: 'Cumin', qty: 2, unit: 'g' },
+      { name: 'Paprika', qty: 2, unit: 'g' },
+      { name: 'Semoule', qty: 100, unit: 'g' },
+      { name: 'Harissa', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Préparer les keftah avec bœuf, oignon et épices.',
+      'Griller les keftah ou cuire à la poêle.',
+      'Servir avec semoule et sauce tomate épicée.'
+    ]
+  },
+
+  {
+    id: 'L145',
+    name: 'Wok Crevettes Légumes Riz',
+    emoji: '🦐',
+    origin: '🇨🇳',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'crevettes', 'brocoli', 'carotte', 'champignons', 'riz', 'soja', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 524, proteinGrams: 46, carbsGrams: 40, fatGrams: 20 },
+    ingredients: [
+      { name: 'Crevettes', qty: 200, unit: 'g' },
+      { name: 'Brocoli', qty: 100, unit: 'g' },
+      { name: 'Carotte', qty: 60, unit: 'g' },
+      { name: 'Champignons', qty: 60, unit: 'g' },
+      { name: 'Riz', qty: 100, unit: 'g' },
+      { name: 'Sauce soja', qty: 15, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Gingembre', qty: 5, unit: 'g' },
+      { name: 'Huile', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Poêler les crevettes à feu vif.',
+      'Ajouter les légumes, ail et gingembre.',
+      'Incorporer la sauce soja. Servir avec riz vapeur.'
+    ]
+  },
+
+  {
+    id: 'L146',
+    name: 'Hamburger Dinde Maison',
+    emoji: '🍔',
+    origin: '🇺🇸',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'dinde', 'pain', 'tomate', 'laitue', 'oignon', 'fromage', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 534, proteinGrams: 44, carbsGrams: 40, fatGrams: 22 },
+    ingredients: [
+      { name: 'Dinde hachée', qty: 180, unit: 'g' },
+      { name: 'Pain burger complet', qty: 80, unit: 'g' },
+      { name: 'Tomate', qty: 60, unit: 'g' },
+      { name: 'Laitue', qty: 30, unit: 'g' },
+      { name: 'Oignon', qty: 30, unit: 'g' },
+      { name: 'Fromage', qty: 30, unit: 'g' },
+      { name: 'Moutarde', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Façonner le steak de dinde, assaisonner.',
+      'Griller 5 min de chaque côté.',
+      'Assembler le burger avec tous les ingrédients.'
+    ]
+  },
+
+  {
+    id: 'L147',
+    name: 'Poêlée Saumon Épinards Quinoa',
+    emoji: '🐟',
+    origin: '🇸🇪',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'saumon', 'épinards', 'quinoa', 'ail', 'citron', 'câpres', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 506, proteinGrams: 40, carbsGrams: 46, fatGrams: 18 },
+    ingredients: [
+      { name: 'Saumon', qty: 180, unit: 'g' },
+      { name: 'Épinards', qty: 100, unit: 'g' },
+      { name: 'Quinoa', qty: 100, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Câpres', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le quinoa.',
+      'Poêler le saumon côté peau.',
+      'Faire sauter les épinards avec ail, citron et câpres. Servir ensemble.'
+    ]
+  },
+
+  {
+    id: 'L148',
+    name: 'Poulet Piri Piri Riz Coriandre',
+    emoji: '🍗',
+    origin: '🇵🇹',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'riz', 'piri piri', 'ail', 'citron', 'coriandre', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 506, proteinGrams: 38, carbsGrams: 48, fatGrams: 18 },
+    ingredients: [
+      { name: 'Poulet', qty: 180, unit: 'g' },
+      { name: 'Riz', qty: 110, unit: 'g' },
+      { name: 'Piri piri', qty: 15, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Coriandre', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Mariner le poulet dans la sauce piri piri, ail et citron.',
+      'Griller au four ou sur la braise.',
+      'Servir avec riz vapeur et coriandre fraîche.'
+    ]
+  },
+
+  {
+    id: 'L149',
+    name: 'Enchiladas Poulet Sauce Tomate',
+    emoji: '🍗',
+    origin: '🇲🇽',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'poulet', 'tortilla', 'sauce tomate', 'fromage', 'haricots noirs', 'healthy'],
+    difficulty: 3,
+    prepTime: 20,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 524, proteinGrams: 42, carbsGrams: 44, fatGrams: 20 },
+    ingredients: [
+      { name: 'Poulet', qty: 180, unit: 'g' },
+      { name: 'Tortillas', qty: 80, unit: 'g' },
+      { name: 'Sauce enchilada', qty: 100, unit: 'g' },
+      { name: 'Fromage râpé', qty: 40, unit: 'g' },
+      { name: 'Haricots noirs', qty: 60, unit: 'g' },
+      { name: 'Crème', qty: 20, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire le poulet effiloché avec sauce.',
+      'Rouler dans les tortillas.',
+      'Napper de sauce et fromage, cuire 20 min à 180°C.'
+    ]
+  },
+
+  {
+    id: 'L150',
+    name: 'Bol Buddha Légumes Tofu',
+    emoji: '🍚',
+    origin: '🇯🇵',
+    mealTypes: ['lunch'],
+    tags: ['lunch', 'tofu', 'riz brun', 'edamame', 'carotte', 'avocat', 'sésame', 'tahini', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 496, proteinGrams: 40, carbsGrams: 48, fatGrams: 16 },
+    ingredients: [
+      { name: 'Tofu ferme', qty: 200, unit: 'g' },
+      { name: 'Riz brun', qty: 120, unit: 'g' },
+      { name: 'Edamame', qty: 80, unit: 'g' },
+      { name: 'Carotte', qty: 60, unit: 'g' },
+      { name: 'Avocat', qty: 60, unit: 'g' },
+      { name: 'Graines de sésame', qty: 10, unit: 'g' },
+      { name: 'Sauce tahini', qty: 20, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le riz brun.',
+      'Poêler le tofu jusqu\'à dorure.',
+      'Assembler le bol avec tous les ingrédients et sauce tahini.'
+    ]
+  },
+
+  {
+    id: 'L201',
+    name: 'Yaourt Grec Amandes Miel',
+    emoji: '🥛',
+    origin: '🇬🇷',
+    mealTypes: ['snack'],
+    tags: ['snack', 'yaourt', 'amandes', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 258, proteinGrams: 22, carbsGrams: 20, fatGrams: 10 },
+    ingredients: [
+      { name: 'Yaourt grec 0%', qty: 200, unit: 'g' },
+      { name: 'Amandes', qty: 20, unit: 'g' },
+      { name: 'Miel', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Verser le yaourt dans un bol.',
+      'Parsemer d\'amandes.',
+      'Drizzler de miel.'
+    ]
+  },
+
+  {
+    id: 'L202',
+    name: 'Pomme Beurre d\'Amande',
+    emoji: '🍎',
+    origin: '🇺🇸',
+    mealTypes: ['snack'],
+    tags: ['snack', 'pomme', 'amande', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 252, proteinGrams: 6, carbsGrams: 30, fatGrams: 12 },
+    ingredients: [
+      { name: 'Pomme', qty: 180, unit: 'g' },
+      { name: 'Beurre d\'amande', qty: 30, unit: 'g' }
+    ],
+    steps: [
+      'Trancher la pomme en quartiers.',
+      'Servir avec le beurre d\'amande pour tremper.'
+    ]
+  },
+
+  {
+    id: 'L203',
+    name: 'Œufs Durs Crudités',
+    emoji: '🥚',
+    origin: '🌍',
+    mealTypes: ['snack'],
+    tags: ['snack', 'œuf', 'carotte', 'concombre', 'tomate', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 222, proteinGrams: 16, carbsGrams: 8, fatGrams: 14 },
+    ingredients: [
+      { name: 'Œufs durs', qty: 120, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Concombre', qty: 80, unit: 'g' },
+      { name: 'Tomate cerise', qty: 60, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'g' },
+      { name: 'Poivre', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les œufs 10 min dans l\'eau bouillante.',
+      'Laisser refroidir, écaler.',
+      'Servir avec les crudités.'
+    ]
+  },
+
+  {
+    id: 'L204',
+    name: 'Dattes Fourrées Amandes',
+    emoji: '🥜',
+    origin: '🌍',
+    mealTypes: ['snack'],
+    tags: ['snack', 'dattes', 'amandes', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 1,
+    baseNutrition: { calories: 244, proteinGrams: 5, carbsGrams: 38, fatGrams: 8 },
+    ingredients: [
+      { name: 'Dattes Medjool', qty: 80, unit: 'g' },
+      { name: 'Amandes entières', qty: 20, unit: 'g' }
+    ],
+    steps: [
+      'Dénoyauter les dattes.',
+      'Fourrer chaque datte d\'une amande entière.',
+      'Servir à température ambiante.'
+    ]
+  },
+
+  {
+    id: 'L205',
+    name: 'Edamame Citron Sel',
+    emoji: '🥜',
+    origin: '🇯🇵',
+    mealTypes: ['snack'],
+    tags: ['snack', 'edamame', 'citron', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 184, proteinGrams: 16, carbsGrams: 12, fatGrams: 8 },
+    ingredients: [
+      { name: 'Edamame', qty: 200, unit: 'g' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Fleur de sel', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les edamame dans l\'eau bouillante salée 5 min.',
+      'Égoutter et arroser de jus de citron.',
+      'Parsemer de fleur de sel.'
+    ]
+  },
+
+  {
+    id: 'L206',
+    name: 'Houmous Crudités',
+    emoji: '🫙',
+    origin: '🇱🇧',
+    mealTypes: ['snack'],
+    tags: ['snack', 'houmous', 'carotte', 'céleri', 'concombre', 'poivron', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 288, proteinGrams: 10, carbsGrams: 26, fatGrams: 16 },
+    ingredients: [
+      { name: 'Houmous', qty: 100, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Céleri', qty: 60, unit: 'g' },
+      { name: 'Concombre', qty: 60, unit: 'g' },
+      { name: 'Poivron rouge', qty: 60, unit: 'g' }
+    ],
+    steps: [
+      'Couper les légumes en bâtonnets.',
+      'Disposer autour du houmous.',
+      'Déguster comme snack.'
+    ]
+  },
+
+  {
+    id: 'L207',
+    name: 'Energy Balls Dattes Avoine',
+    emoji: '🥜',
+    origin: '🇺🇸',
+    mealTypes: ['snack'],
+    tags: ['snack', 'avoine', 'dattes', 'amande', 'chia', 'cacao', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 366, proteinGrams: 12, carbsGrams: 48, fatGrams: 14 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 80, unit: 'g' },
+      { name: 'Dattes dénoyautées', qty: 80, unit: 'g' },
+      { name: 'Beurre d\'amande', qty: 25, unit: 'g' },
+      { name: 'Graines de chia', qty: 10, unit: 'g' },
+      { name: 'Cacao', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Mixer les dattes en pâte.',
+      'Mélanger avec avoine, beurre d\'amande, chia et cacao.',
+      'Former des boules et réfrigérer 30 min.'
+    ]
+  },
+
+  {
+    id: 'L208',
+    name: 'Tartine Ricotta Figues',
+    emoji: '🥜',
+    origin: '🇮🇹',
+    mealTypes: ['snack'],
+    tags: ['snack', 'pain', 'ricotta', 'figues', 'miel', 'noix', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 298, proteinGrams: 14, carbsGrams: 38, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pain complet', qty: 60, unit: 'g' },
+      { name: 'Ricotta', qty: 80, unit: 'g' },
+      { name: 'Figues fraîches', qty: 80, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' },
+      { name: 'Noix', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Griller le pain complet.',
+      'Tartiner de ricotta.',
+      'Garnir de figues tranchées, noix et miel.'
+    ]
+  },
+
+  {
+    id: 'L209',
+    name: 'Onigiri Thon Sésame',
+    emoji: '🌾',
+    origin: '🇯🇵',
+    mealTypes: ['snack'],
+    tags: ['snack', 'riz', 'thon', 'sésame', 'nori', 'soja', 'healthy'],
+    difficulty: 2,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 302, proteinGrams: 20, carbsGrams: 42, fatGrams: 6 },
+    ingredients: [
+      { name: 'Riz japonais', qty: 120, unit: 'g' },
+      { name: 'Thon en conserve', qty: 80, unit: 'g' },
+      { name: 'Sésame', qty: 8, unit: 'g' },
+      { name: 'Nori', qty: 10, unit: 'g' },
+      { name: 'Sauce soja', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire le riz japonais.',
+      'Mélanger le thon avec un peu de sauce soja.',
+      'Former des triangles de riz farcis de thon, envelopper de nori.'
+    ]
+  },
+
+  {
+    id: 'L210',
+    name: 'Shake Whey Banane Cacahuète',
+    emoji: '🍌',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'banane', 'cacahuète', 'lait', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 388, proteinGrams: 36, carbsGrams: 34, fatGrams: 12 },
+    ingredients: [
+      { name: 'Whey protéine vanille', qty: 40, unit: 'g' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Beurre de cacahuète', qty: 20, unit: 'g' },
+      { name: 'Lait écrémé', qty: 250, unit: 'ml' }
+    ],
+    steps: [
+      'Mettre tous les ingrédients dans le blender.',
+      'Mixer jusqu\'à consistance lisse.',
+      'Servir immédiatement.'
+    ]
+  },
+
+  {
+    id: 'L211',
+    name: 'Shake Whey Choco Banane',
+    emoji: '🍌',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'banane', 'cacao', 'lait', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 352, proteinGrams: 32, carbsGrams: 38, fatGrams: 8 },
+    ingredients: [
+      { name: 'Whey protéine chocolat', qty: 35, unit: 'g' },
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Cacao', qty: 10, unit: 'g' },
+      { name: 'Lait écrémé', qty: 300, unit: 'ml' }
+    ],
+    steps: [
+      'Mixer tous les ingrédients.',
+      'Ajouter des glaçons si désiré.',
+      'Servir frais.'
+    ]
+  },
+
+  {
+    id: 'L212',
+    name: 'Shake Whey Avoine Miel',
+    emoji: '🍌',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'avoine', 'miel', 'lait', 'banane', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 434, proteinGrams: 34, carbsGrams: 52, fatGrams: 10 },
+    ingredients: [
+      { name: 'Whey protéine', qty: 35, unit: 'g' },
+      { name: 'Flocons d\'avoine', qty: 60, unit: 'g' },
+      { name: 'Miel', qty: 20, unit: 'g' },
+      { name: 'Lait écrémé', qty: 300, unit: 'ml' },
+      { name: 'Banane', qty: 50, unit: 'g' }
+    ],
+    steps: [
+      'Mixer tous les ingrédients dans le blender.',
+      'Ajouter des glaçons.',
+      'Servir immédiatement.'
+    ]
+  },
+
+  {
+    id: 'L213',
+    name: 'Smoothie Whey Mangue Coco',
+    emoji: '🥤',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'mangue', 'lait de coco', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 378, proteinGrams: 30, carbsGrams: 42, fatGrams: 10 },
+    ingredients: [
+      { name: 'Whey protéine vanille', qty: 30, unit: 'g' },
+      { name: 'Mangue', qty: 150, unit: 'g' },
+      { name: 'Lait de coco', qty: 150, unit: 'ml' },
+      { name: 'Glaçons', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      'Mixer la mangue avec le lait de coco.',
+      'Ajouter la whey protéine et les glaçons.',
+      'Mixer jusqu\'à consistance lisse.'
+    ]
+  },
+
+  {
+    id: 'L214',
+    name: 'Mug Cake Whey 2min',
+    emoji: '🥚',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'avoine', 'œuf', 'lait', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 280, proteinGrams: 28, carbsGrams: 24, fatGrams: 8 },
+    ingredients: [
+      { name: 'Whey protéine chocolat', qty: 30, unit: 'g' },
+      { name: 'Farine d\'avoine', qty: 30, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Lait écrémé', qty: 30, unit: 'ml' },
+      { name: 'Levure', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger tous les ingrédients dans un mug.',
+      'Cuire 2 min au micro-ondes.',
+      'Laisser reposer 1 min avant de déguster.'
+    ]
+  },
+
+  {
+    id: 'L215',
+    name: 'Fromage Blanc Fruits Rouges Graines',
+    emoji: '🍎',
+    origin: '🇫🇷',
+    mealTypes: ['snack'],
+    tags: ['snack', 'fromage blanc', 'framboises', 'myrtilles', 'graines', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 234, proteinGrams: 12, carbsGrams: 24, fatGrams: 10 },
+    ingredients: [
+      { name: 'Fromage blanc 0%', qty: 150, unit: 'g' },
+      { name: 'Framboises', qty: 60, unit: 'g' },
+      { name: 'Myrtilles', qty: 40, unit: 'g' },
+      { name: 'Graines de tournesol', qty: 15, unit: 'g' },
+      { name: 'Miel', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Verser le fromage blanc dans un bol.',
+      'Ajouter les fruits rouges.',
+      'Parsemer de graines et miel.'
+    ]
+  },
+
+  {
+    id: 'L216',
+    name: 'Banana Bread Protéiné',
+    emoji: '🍌',
+    origin: '🇺🇸',
+    mealTypes: ['snack'],
+    tags: ['snack', 'banane', 'avoine', 'œuf', 'noix', 'miel', 'healthy'],
+    difficulty: 2,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 270, proteinGrams: 8, carbsGrams: 28, fatGrams: 14 },
+    ingredients: [
+      { name: 'Banane', qty: 100, unit: 'g' },
+      { name: 'Farine avoine', qty: 60, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Noix', qty: 25, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' },
+      { name: 'Levure', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Écraser la banane, mélanger avec œuf, farine et miel.',
+      'Ajouter les noix et la levure.',
+      'Cuire 35 min à 180°C. Couper en tranches.'
+    ]
+  },
+
+  {
+    id: 'L217',
+    name: 'Yaourt Grec Granola Fruits Secs',
+    emoji: '🍎',
+    origin: '🇬🇷',
+    mealTypes: ['snack'],
+    tags: ['snack', 'yaourt', 'granola', 'abricots', 'noix', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 236, proteinGrams: 14, carbsGrams: 18, fatGrams: 12 },
+    ingredients: [
+      { name: 'Yaourt grec', qty: 150, unit: 'g' },
+      { name: 'Granola', qty: 30, unit: 'g' },
+      { name: 'Abricots secs', qty: 20, unit: 'g' },
+      { name: 'Noix', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Verser le yaourt dans un bol.',
+      'Garnir de granola, abricots et noix.'
+    ]
+  },
+
+  {
+    id: 'L218',
+    name: 'Energy Balls Cacao Noisette',
+    emoji: '🥜',
+    origin: '🇮🇹',
+    mealTypes: ['snack'],
+    tags: ['snack', 'avoine', 'dattes', 'cacao', 'noisettes', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 250, proteinGrams: 6, carbsGrams: 34, fatGrams: 10 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 60, unit: 'g' },
+      { name: 'Dattes', qty: 60, unit: 'g' },
+      { name: 'Cacao', qty: 10, unit: 'g' },
+      { name: 'Noisettes', qty: 20, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Mixer les dattes avec les noisettes.',
+      'Incorporer avoine, cacao et miel.',
+      'Former des boules et réfrigérer.'
+    ]
+  },
+
+  {
+    id: 'L219',
+    name: 'Noix Mélangées Fruits Secs',
+    emoji: '🍎',
+    origin: '🌍',
+    mealTypes: ['snack'],
+    tags: ['snack', 'amandes', 'cajou', 'pistaches', 'cranberries', 'abricots', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 254, proteinGrams: 10, carbsGrams: 22, fatGrams: 14 },
+    ingredients: [
+      { name: 'Amandes', qty: 25, unit: 'g' },
+      { name: 'Noix de cajou', qty: 20, unit: 'g' },
+      { name: 'Pistaches', qty: 15, unit: 'g' },
+      { name: 'Cranberries', qty: 20, unit: 'g' },
+      { name: 'Abricots secs', qty: 20, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger toutes les noix et fruits secs.',
+      'Portions pré-dosées dans un sachet.',
+      'Consommer comme en-cas.'
+    ]
+  },
+
+  {
+    id: 'L220',
+    name: 'Galette de Riz Beurre Cacahuète Banane',
+    emoji: '🍌',
+    origin: '🇺🇸',
+    mealTypes: ['snack'],
+    tags: ['snack', 'riz soufflé', 'cacahuète', 'banane', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 250, proteinGrams: 8, carbsGrams: 32, fatGrams: 10 },
+    ingredients: [
+      { name: 'Galettes de riz', qty: 27, unit: 'g' },
+      { name: 'Beurre de cacahuète', qty: 25, unit: 'g' },
+      { name: 'Banane', qty: 80, unit: 'g' }
+    ],
+    steps: [
+      'Tartiner les galettes de riz de beurre de cacahuète.',
+      'Garnir de rondelles de banane.'
+    ]
+  },
+
+  {
+    id: 'L221',
+    name: 'Skyr Myrtilles Cannelle',
+    emoji: '🫐',
+    origin: '🇮🇸',
+    mealTypes: ['snack'],
+    tags: ['snack', 'skyr', 'myrtilles', 'cannelle', 'noix', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 244, proteinGrams: 18, carbsGrams: 16, fatGrams: 12 },
+    ingredients: [
+      { name: 'Skyr', qty: 200, unit: 'g' },
+      { name: 'Myrtilles', qty: 80, unit: 'g' },
+      { name: 'Cannelle', qty: 1, unit: 'g' },
+      { name: 'Noix', qty: 15, unit: 'g' },
+      { name: 'Miel', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Verser le skyr dans un bol.',
+      'Garnir de myrtilles, noix et cannelle.',
+      'Drizzler de miel.'
+    ]
+  },
+
+  {
+    id: 'L222',
+    name: 'Tartines Pain Complet Ricotta Tomate',
+    emoji: '🥜',
+    origin: '🇮🇹',
+    mealTypes: ['snack'],
+    tags: ['snack', 'pain', 'ricotta', 'tomate', 'basilic', 'huile', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 242, proteinGrams: 12, carbsGrams: 26, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pain complet', qty: 50, unit: 'g' },
+      { name: 'Ricotta', qty: 60, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Basilic', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Griller le pain.',
+      'Tartiner de ricotta.',
+      'Garnir de tomate, basilic et huile d\'olive.'
+    ]
+  },
+
+  {
+    id: 'L223',
+    name: 'Boisson Protéinée Kéfir Fruits',
+    emoji: '🍎',
+    origin: '🇹🇷',
+    mealTypes: ['snack'],
+    tags: ['snack', 'kéfir', 'banane', 'fraises', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 234, proteinGrams: 16, carbsGrams: 20, fatGrams: 10 },
+    ingredients: [
+      { name: 'Kéfir', qty: 200, unit: 'ml' },
+      { name: 'Banane', qty: 60, unit: 'g' },
+      { name: 'Fraises', qty: 80, unit: 'g' },
+      { name: 'Miel', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Mixer le kéfir avec banane et fraises.',
+      'Ajouter le miel.',
+      'Servir frais.'
+    ]
+  },
+
+  {
+    id: 'L224',
+    name: 'Compote Maison Pomme Poire Cannelle',
+    emoji: '🍎',
+    origin: '🇫🇷',
+    mealTypes: ['snack'],
+    tags: ['snack', 'pomme', 'poire', 'yaourt', 'cannelle', 'graines', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 256, proteinGrams: 10, carbsGrams: 36, fatGrams: 8 },
+    ingredients: [
+      { name: 'Pomme', qty: 150, unit: 'g' },
+      { name: 'Poire', qty: 100, unit: 'g' },
+      { name: 'Yaourt grec', qty: 100, unit: 'g' },
+      { name: 'Cannelle', qty: 2, unit: 'g' },
+      { name: 'Graines de courge', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Cuire pomme et poire avec cannelle jusqu\'à consistance de compote.',
+      'Laisser refroidir.',
+      'Servir avec yaourt grec et graines.'
+    ]
+  },
+
+  {
+    id: 'L225',
+    name: 'Crackers Sarrasin Thon Avocat',
+    emoji: '🥜',
+    origin: '🌍',
+    mealTypes: ['snack'],
+    tags: ['snack', 'sarrasin', 'thon', 'avocat', 'citron', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 260, proteinGrams: 20, carbsGrams: 18, fatGrams: 12 },
+    ingredients: [
+      { name: 'Crackers sarrasin', qty: 30, unit: 'g' },
+      { name: 'Thon', qty: 80, unit: 'g' },
+      { name: 'Avocat', qty: 40, unit: 'g' },
+      { name: 'Citron', qty: 5, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'g' },
+      { name: 'Poivre', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Écraser légèrement l\'avocat avec citron.',
+      'Mettre le thon sur les crackers.',
+      'Garnir d\'avocat et assaisonner.'
+    ]
+  },
+
+  {
+    id: 'L226',
+    name: 'Barre Avoine Miel Noix Maison',
+    emoji: '🥜',
+    origin: '🇺🇸',
+    mealTypes: ['snack'],
+    tags: ['snack', 'avoine', 'miel', 'cacahuète', 'noix', 'graines', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 252, proteinGrams: 6, carbsGrams: 30, fatGrams: 12 },
+    ingredients: [
+      { name: 'Flocons d\'avoine', qty: 80, unit: 'g' },
+      { name: 'Miel', qty: 25, unit: 'g' },
+      { name: 'Beurre de cacahuète', qty: 20, unit: 'g' },
+      { name: 'Noix', qty: 20, unit: 'g' },
+      { name: 'Graines de tournesol', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger tous les ingrédients.',
+      'Étaler dans un moule, presser fermement.',
+      'Réfrigérer 2h, couper en barres.'
+    ]
+  },
+
+  {
+    id: 'L227',
+    name: 'Tzatziki Concombre Crudités',
+    emoji: '🥛',
+    origin: '🇬🇷',
+    mealTypes: ['snack'],
+    tags: ['snack', 'yaourt', 'concombre', 'ail', 'aneth', 'pita', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 234, proteinGrams: 14, carbsGrams: 22, fatGrams: 10 },
+    ingredients: [
+      { name: 'Yaourt grec', qty: 150, unit: 'g' },
+      { name: 'Concombre', qty: 100, unit: 'g' },
+      { name: 'Ail', qty: 3, unit: 'g' },
+      { name: 'Aneth', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+      { name: 'Pain pita', qty: 40, unit: 'g' }
+    ],
+    steps: [
+      'Râper le concombre, presser pour extraire l\'eau.',
+      'Mélanger avec yaourt, ail et aneth.',
+      'Servir avec pain pita et crudités.'
+    ]
+  },
+
+  {
+    id: 'L228',
+    name: 'Compote Banane Cacao Beurre Amande',
+    emoji: '🍌',
+    origin: '🇺🇸',
+    mealTypes: ['snack'],
+    tags: ['snack', 'banane', 'cacao', 'amande', 'lait', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 232, proteinGrams: 12, carbsGrams: 28, fatGrams: 8 },
+    ingredients: [
+      { name: 'Banane', qty: 150, unit: 'g' },
+      { name: 'Cacao', qty: 10, unit: 'g' },
+      { name: 'Beurre d\'amande', qty: 15, unit: 'g' },
+      { name: 'Lait écrémé', qty: 50, unit: 'ml' }
+    ],
+    steps: [
+      'Mixer la banane avec le cacao et le lait.',
+      'Ajouter le beurre d\'amande.',
+      'Servir en bol ou en verre.'
+    ]
+  },
+
+  {
+    id: 'L229',
+    name: 'Muffin Avoine Myrtilles Maison',
+    emoji: '🫐',
+    origin: '🇺🇸',
+    mealTypes: ['snack'],
+    tags: ['snack', 'avoine', 'myrtilles', 'œuf', 'yaourt', 'miel', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 250, proteinGrams: 8, carbsGrams: 32, fatGrams: 10 },
+    ingredients: [
+      { name: 'Farine d\'avoine', qty: 60, unit: 'g' },
+      { name: 'Myrtilles', qty: 60, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Yaourt', qty: 60, unit: 'g' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: 'Levure', qty: 3, unit: 'g' },
+      { name: 'Huile', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Mélanger farine, œuf, yaourt et miel.',
+      'Incorporer les myrtilles.',
+      'Cuire en moule à muffin 20 min à 180°C.'
+    ]
+  },
+
+  {
+    id: 'L230',
+    name: 'Pudding Chia Coco Mangue',
+    emoji: '🥛',
+    origin: '🇹🇭',
+    mealTypes: ['snack'],
+    tags: ['snack', 'chia', 'lait de coco', 'mangue', 'yaourt', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 244, proteinGrams: 16, carbsGrams: 18, fatGrams: 12 },
+    ingredients: [
+      { name: 'Graines de chia', qty: 30, unit: 'g' },
+      { name: 'Lait de coco', qty: 150, unit: 'ml' },
+      { name: 'Mangue', qty: 80, unit: 'g' },
+      { name: 'Yaourt', qty: 60, unit: 'g' },
+      { name: 'Miel', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger chia avec lait de coco et miel.',
+      'Réfrigérer 4h.',
+      'Servir avec mangue et yaourt.'
+    ]
+  },
+
+  {
+    id: 'L231',
+    name: 'Verrines Fromage Blanc Saumon Aneth',
+    emoji: '🥛',
+    origin: '🇸🇪',
+    mealTypes: ['snack'],
+    tags: ['snack', 'fromage blanc', 'saumon', 'aneth', 'concombre', 'pain', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 288, proteinGrams: 22, carbsGrams: 14, fatGrams: 16 },
+    ingredients: [
+      { name: 'Fromage blanc', qty: 150, unit: 'g' },
+      { name: 'Saumon fumé', qty: 80, unit: 'g' },
+      { name: 'Aneth', qty: 5, unit: 'g' },
+      { name: 'Concombre', qty: 60, unit: 'g' },
+      { name: 'Pain grillé', qty: 30, unit: 'g' }
+    ],
+    steps: [
+      'Couper le saumon et concombre en petits dés.',
+      'Mélanger avec le fromage blanc et l\'aneth.',
+      'Servir dans des verrines avec le pain.'
+    ]
+  },
+
+  {
+    id: 'L232',
+    name: 'Smoothie Mangue Ananas Gingembre',
+    emoji: '🥛',
+    origin: '🇧🇷',
+    mealTypes: ['snack'],
+    tags: ['snack', 'mangue', 'ananas', 'yaourt', 'gingembre', 'lait de coco', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 240, proteinGrams: 8, carbsGrams: 34, fatGrams: 8 },
+    ingredients: [
+      { name: 'Mangue', qty: 120, unit: 'g' },
+      { name: 'Ananas', qty: 100, unit: 'g' },
+      { name: 'Yaourt', qty: 100, unit: 'g' },
+      { name: 'Gingembre', qty: 5, unit: 'g' },
+      { name: 'Lait de coco', qty: 80, unit: 'ml' }
+    ],
+    steps: [
+      'Mixer tous les ingrédients.',
+      'Ajouter des glaçons.',
+      'Servir frais.'
+    ]
+  },
+
+  {
+    id: 'L233',
+    name: 'Galettes Riz Avocat Tomate',
+    emoji: '🌾',
+    origin: '🇺🇸',
+    mealTypes: ['snack'],
+    tags: ['snack', 'riz soufflé', 'avocat', 'tomate', 'citron', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 252, proteinGrams: 10, carbsGrams: 26, fatGrams: 12 },
+    ingredients: [
+      { name: 'Galettes de riz', qty: 27, unit: 'g' },
+      { name: 'Avocat', qty: 60, unit: 'g' },
+      { name: 'Tomate cerise', qty: 60, unit: 'g' },
+      { name: 'Citron', qty: 5, unit: 'ml' },
+      { name: 'Sel', qty: 1, unit: 'g' },
+      { name: 'Poivre', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Tartiner les galettes d\'avocat écrasé.',
+      'Garnir de tomates cerises coupées.',
+      'Assaisonner de citron, sel et poivre.'
+    ]
+  },
+
+  {
+    id: 'L234',
+    name: 'Labneh Tomates Cerises Zaatar',
+    emoji: '🥜',
+    origin: '🇱🇧',
+    mealTypes: ['snack'],
+    tags: ['snack', 'labneh', 'tomate', 'zaatar', 'huile', 'pita', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 244, proteinGrams: 18, carbsGrams: 16, fatGrams: 12 },
+    ingredients: [
+      { name: 'Labneh', qty: 120, unit: 'g' },
+      { name: 'Tomates cerises', qty: 80, unit: 'g' },
+      { name: 'Zaatar', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+      { name: 'Pain pita', qty: 30, unit: 'g' }
+    ],
+    steps: [
+      'Étaler le labneh dans une assiette.',
+      'Garnir de tomates cerises, zaatar et huile d\'olive.',
+      'Servir avec le pain pita.'
+    ]
+  },
+
+  {
+    id: 'L235',
+    name: 'Shake Whey Fraise Yaourt',
+    emoji: '🍓',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'fraises', 'yaourt', 'lait', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 338, proteinGrams: 32, carbsGrams: 30, fatGrams: 10 },
+    ingredients: [
+      { name: 'Whey protéine fraise', qty: 35, unit: 'g' },
+      { name: 'Fraises', qty: 100, unit: 'g' },
+      { name: 'Yaourt grec', qty: 100, unit: 'g' },
+      { name: 'Lait écrémé', qty: 150, unit: 'ml' }
+    ],
+    steps: [
+      'Mixer tous les ingrédients.',
+      'Ajouter des glaçons.',
+      'Servir immédiatement.'
+    ]
+  },
+
+  {
+    id: 'L236',
+    name: 'Protein Pancakes Whey Myrtilles',
+    emoji: '🫐',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'avoine', 'œuf', 'lait', 'myrtilles', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 356, proteinGrams: 34, carbsGrams: 28, fatGrams: 12 },
+    ingredients: [
+      { name: 'Whey protéine', qty: 35, unit: 'g' },
+      { name: 'Farine d\'avoine', qty: 50, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Lait écrémé', qty: 80, unit: 'ml' },
+      { name: 'Myrtilles', qty: 60, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger whey, farine, œuf et lait.',
+      'Cuire des pancakes dans une poêle antiadhésive.',
+      'Garnir de myrtilles fraîches.'
+    ]
+  },
+
+  {
+    id: 'L237',
+    name: 'Bowl Protéiné Whey Ananas Coco',
+    emoji: '💪',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'lait de coco', 'ananas', 'coco', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 338, proteinGrams: 30, carbsGrams: 32, fatGrams: 10 },
+    ingredients: [
+      { name: 'Whey protéine vanille', qty: 30, unit: 'g' },
+      { name: 'Lait de coco', qty: 150, unit: 'ml' },
+      { name: 'Ananas', qty: 100, unit: 'g' },
+      { name: 'Noix de coco râpée', qty: 10, unit: 'g' },
+      { name: 'Glaçons', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      'Mixer whey avec lait de coco et ananas.',
+      'Ajouter glaçons.',
+      'Garnir de noix de coco.'
+    ]
+  },
+
+  {
+    id: 'L238',
+    name: 'Shake Whey Café Protéiné',
+    emoji: '🥤',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'café', 'lait', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 322, proteinGrams: 36, carbsGrams: 22, fatGrams: 10 },
+    ingredients: [
+      { name: 'Whey protéine café', qty: 35, unit: 'g' },
+      { name: 'Café expresso froid', qty: 60, unit: 'ml' },
+      { name: 'Lait écrémé', qty: 250, unit: 'ml' },
+      { name: 'Glaçons', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      'Préparer un café et laisser refroidir.',
+      'Mixer avec whey et lait.',
+      'Servir avec des glaçons.'
+    ]
+  },
+
+  {
+    id: 'L239',
+    name: 'Mug Cake Whey Vanille Myrtilles',
+    emoji: '🫐',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'avoine', 'œuf', 'myrtilles', 'lait', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 328, proteinGrams: 28, carbsGrams: 36, fatGrams: 8 },
+    ingredients: [
+      { name: 'Whey protéine vanille', qty: 30, unit: 'g' },
+      { name: 'Farine d\'avoine', qty: 40, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Myrtilles', qty: 40, unit: 'g' },
+      { name: 'Lait', qty: 40, unit: 'ml' },
+      { name: 'Levure', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger tous les ingrédients dans un mug.',
+      'Incorporer les myrtilles.',
+      'Cuire 2 min au micro-ondes.'
+    ]
+  },
+
+  {
+    id: 'L240',
+    name: 'Shake Whey Beurre Cacahuète Chocolat',
+    emoji: '🥜',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'cacahuète', 'lait', 'cacao', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 348, proteinGrams: 34, carbsGrams: 26, fatGrams: 12 },
+    ingredients: [
+      { name: 'Whey protéine chocolat', qty: 35, unit: 'g' },
+      { name: 'Beurre de cacahuète', qty: 20, unit: 'g' },
+      { name: 'Lait écrémé', qty: 300, unit: 'ml' },
+      { name: 'Cacao', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Ajouter tous les ingrédients dans le blender.',
+      'Mixer 30 secondes.',
+      'Servir avec des glaçons.'
+    ]
+  },
+
+  {
+    id: 'L241',
+    name: 'Whey Smoothie Bowl Framboise',
+    emoji: '🍌',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'framboises', 'banane', 'lait', 'granola', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 322, proteinGrams: 30, carbsGrams: 28, fatGrams: 10 },
+    ingredients: [
+      { name: 'Whey protéine vanille', qty: 30, unit: 'g' },
+      { name: 'Framboises', qty: 120, unit: 'g' },
+      { name: 'Banane', qty: 80, unit: 'g' },
+      { name: 'Lait écrémé', qty: 100, unit: 'ml' },
+      { name: 'Granola', qty: 30, unit: 'g' }
+    ],
+    steps: [
+      'Mixer whey, framboises, banane et lait.',
+      'Verser dans un bol.',
+      'Garnir de granola.'
+    ]
+  },
+
+  {
+    id: 'L242',
+    name: 'Protein Ball Whey Cacao Noix',
+    emoji: '🥜',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'avoine', 'miel', 'cacao', 'noix', 'healthy'],
+    difficulty: 2,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 314, proteinGrams: 32, carbsGrams: 24, fatGrams: 10 },
+    ingredients: [
+      { name: 'Whey protéine chocolat', qty: 40, unit: 'g' },
+      { name: 'Flocons d\'avoine', qty: 40, unit: 'g' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: 'Cacao', qty: 10, unit: 'g' },
+      { name: 'Noix', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger tous les ingrédients.',
+      'Former des boules compactes.',
+      'Réfrigérer 1h.'
+    ]
+  },
+
+  {
+    id: 'L243',
+    name: 'Shake Whey Matcha Lait Amande',
+    emoji: '🥤',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'matcha', 'lait d\'amande', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 330, proteinGrams: 30, carbsGrams: 30, fatGrams: 10 },
+    ingredients: [
+      { name: 'Whey protéine vanille', qty: 30, unit: 'g' },
+      { name: 'Matcha', qty: 5, unit: 'g' },
+      { name: 'Lait d\'amande', qty: 300, unit: 'ml' },
+      { name: 'Miel', qty: 10, unit: 'g' },
+      { name: 'Glaçons', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      'Mixer tous les ingrédients.',
+      'Verser dans un verre.',
+      'Servir glacé.'
+    ]
+  },
+
+  {
+    id: 'L244',
+    name: 'Protein Cookie Whey Chocolat',
+    emoji: '🍫',
+    origin: '🥤',
+    mealTypes: ['snack'],
+    tags: ['snack', 'whey', 'avoine', 'œuf', 'cajou', 'chocolat', 'healthy'],
+    difficulty: 2,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 332, proteinGrams: 34, carbsGrams: 22, fatGrams: 12 },
+    ingredients: [
+      { name: 'Whey protéine chocolat', qty: 40, unit: 'g' },
+      { name: 'Farine d\'avoine', qty: 40, unit: 'g' },
+      { name: 'Œuf', qty: 60, unit: 'g' },
+      { name: 'Beurre de cajou', qty: 15, unit: 'g' },
+      { name: 'Pépites chocolat', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger tous les ingrédients jusqu\'à pâte homogène.',
+      'Former des cookies et disposer sur plaque.',
+      'Cuire 10 min à 180°C.'
+    ]
+  },
+
+  {
+    id: 'L245',
+    name: 'Crackers Avocat Tomate Basilic',
+    emoji: '🥜',
+    origin: '🇮🇹',
+    mealTypes: ['snack'],
+    tags: ['snack', 'crackers', 'avocat', 'tomate', 'basilic', 'huile', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 244, proteinGrams: 8, carbsGrams: 26, fatGrams: 12 },
+    ingredients: [
+      { name: 'Crackers complets', qty: 40, unit: 'g' },
+      { name: 'Avocat', qty: 60, unit: 'g' },
+      { name: 'Tomate cerise', qty: 80, unit: 'g' },
+      { name: 'Basilic', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Écraser l\'avocat avec sel et citron.',
+      'Tartiner les crackers.',
+      'Garnir de tomate et basilic.'
+    ]
+  },
+
+  {
+    id: 'L246',
+    name: 'Soupe Miso Légère Tofu',
+    emoji: '🥜',
+    origin: '🇯🇵',
+    mealTypes: ['snack'],
+    tags: ['snack', 'miso', 'tofu', 'algues', 'oignon vert', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 226, proteinGrams: 14, carbsGrams: 20, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pâte miso', qty: 20, unit: 'g' },
+      { name: 'Tofu soyeux', qty: 100, unit: 'g' },
+      { name: 'Algues wakame', qty: 5, unit: 'g' },
+      { name: 'Oignons verts', qty: 15, unit: 'g' },
+      { name: 'Eau chaude', qty: 300, unit: 'ml' }
+    ],
+    steps: [
+      'Dissoudre la pâte miso dans l\'eau chaude.',
+      'Ajouter le tofu en dés et les algues.',
+      'Garnir d\'oignons verts.'
+    ]
+  },
+
+  {
+    id: 'L247',
+    name: 'Cottage Cheese Ananas Noix Coco',
+    emoji: '🥜',
+    origin: '🇺🇸',
+    mealTypes: ['snack'],
+    tags: ['snack', 'cottage cheese', 'ananas', 'coco', 'miel', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 254, proteinGrams: 18, carbsGrams: 14, fatGrams: 14 },
+    ingredients: [
+      { name: 'Cottage cheese', qty: 150, unit: 'g' },
+      { name: 'Ananas', qty: 80, unit: 'g' },
+      { name: 'Noix de coco râpée', qty: 20, unit: 'g' },
+      { name: 'Miel', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Verser le cottage cheese dans un bol.',
+      'Garnir d\'ananas, noix de coco et miel.'
+    ]
+  },
+
+  {
+    id: 'L248',
+    name: 'Bâtonnets Légumes Sauce Tahini',
+    emoji: '🥜',
+    origin: '🇱🇧',
+    mealTypes: ['snack'],
+    tags: ['snack', 'carotte', 'céleri', 'concombre', 'poivron', 'tahini', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 236, proteinGrams: 10, carbsGrams: 22, fatGrams: 12 },
+    ingredients: [
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Céleri', qty: 60, unit: 'g' },
+      { name: 'Concombre', qty: 60, unit: 'g' },
+      { name: 'Poivron', qty: 60, unit: 'g' },
+      { name: 'Tahini', qty: 25, unit: 'g' },
+      { name: 'Citron', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Couper les légumes en bâtonnets.',
+      'Préparer la sauce tahini avec citron et eau.',
+      'Servir ensemble.'
+    ]
+  },
+
+  {
+    id: 'L249',
+    name: 'Amandes Grillées Herbes Épicées',
+    emoji: '🥜',
+    origin: '🌍',
+    mealTypes: ['snack'],
+    tags: ['snack', 'amandes', 'épices', 'paprika', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 254, proteinGrams: 12, carbsGrams: 20, fatGrams: 14 },
+    ingredients: [
+      { name: 'Amandes', qty: 60, unit: 'g' },
+      { name: 'Épices mélangées', qty: 3, unit: 'g' },
+      { name: 'Sel', qty: 2, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 5, unit: 'ml' },
+      { name: 'Paprika', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger les amandes avec huile et épices.',
+      'Rôtir au four 10 min à 170°C.',
+      'Laisser refroidir avant de servir.'
+    ]
+  },
+
+  {
+    id: 'L250',
+    name: 'Velouté Carotte Gingembre',
+    emoji: '🥜',
+    origin: '🇫🇷',
+    mealTypes: ['snack'],
+    tags: ['snack', 'carotte', 'gingembre', 'lait de coco', 'oignon', 'healthy'],
+    difficulty: 1,
+    prepTime: 3,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 226, proteinGrams: 16, carbsGrams: 18, fatGrams: 10 },
+    ingredients: [
+      { name: 'Carotte', qty: 200, unit: 'g' },
+      { name: 'Gingembre', qty: 10, unit: 'g' },
+      { name: 'Lait de coco', qty: 60, unit: 'ml' },
+      { name: 'Bouillon de légumes', qty: 200, unit: 'ml' },
+      { name: 'Oignon', qty: 40, unit: 'g' },
+      { name: 'Huile', qty: 5, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire les carottes avec oignon et gingembre.',
+      'Mixer avec le bouillon et le lait de coco.',
+      'Servir chaud ou froid.'
+    ]
+  },
+
+  {
+    id: 'L301',
+    name: 'Saumon Vapeur Épinards',
+    emoji: '🐟',
+    origin: '🇸🇪',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'saumon', 'épinards', 'huile', 'citron', 'ail', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 480, proteinGrams: 40, carbsGrams: 8, fatGrams: 32 },
+    ingredients: [
+      { name: 'Filet de saumon', qty: 200, unit: 'g' },
+      { name: 'Épinards frais', qty: 150, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Citron', qty: 20, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'g' },
+      { name: 'Poivre', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le saumon à la vapeur 12 min.',
+      'Faire sauter les épinards avec ail et huile d\'olive.',
+      'Servir avec citron frais.'
+    ]
+  },
+
+  {
+    id: 'L302',
+    name: 'Poulet Grillé Légumes Vapeur',
+    emoji: '🍗',
+    origin: '🌍',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'brocoli', 'carotte', 'courgette', 'huile', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 392, proteinGrams: 48, carbsGrams: 14, fatGrams: 16 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 220, unit: 'g' },
+      { name: 'Brocoli', qty: 120, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Courgette', qty: 80, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Épices', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le poulet avec épices et huile.',
+      'Griller 6 min de chaque côté.',
+      'Cuire les légumes à la vapeur 8 min. Servir ensemble.'
+    ]
+  },
+
+  {
+    id: 'L303',
+    name: 'Cabillaud Courgettes',
+    emoji: '🐟',
+    origin: '🇸🇪',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'cabillaud', 'courgette', 'huile', 'citron', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 318, proteinGrams: 38, carbsGrams: 10, fatGrams: 14 },
+    ingredients: [
+      { name: 'Filet de cabillaud', qty: 200, unit: 'g' },
+      { name: 'Courgette', qty: 150, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Herbes de Provence', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Assaisonner le cabillaud avec herbes et citron.',
+      'Poêler 4 min de chaque côté.',
+      'Cuire les courgettes en rondelles. Servir.'
+    ]
+  },
+
+  {
+    id: 'L304',
+    name: 'Dinde Haricots Verts',
+    emoji: '🍽️',
+    origin: '🇺🇸',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'dinde', 'haricots verts', 'ail', 'huile', 'citron', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 376, proteinGrams: 44, carbsGrams: 14, fatGrams: 16 },
+    ingredients: [
+      { name: 'Escalope de dinde', qty: 200, unit: 'g' },
+      { name: 'Haricots verts', qty: 200, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Thym', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les haricots verts al dente.',
+      'Poêler la dinde avec ail et thym.',
+      'Servir avec citron et huile d\'olive.'
+    ]
+  },
+
+  {
+    id: 'L305',
+    name: 'Omelette Champignons Herbes',
+    emoji: '🍽️',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'œuf', 'champignons', 'persil', 'ciboulette', 'beurre', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 354, proteinGrams: 24, carbsGrams: 6, fatGrams: 26 },
+    ingredients: [
+      { name: 'Œufs', qty: 180, unit: 'g' },
+      { name: 'Champignons', qty: 120, unit: 'g' },
+      { name: 'Persil', qty: 10, unit: 'g' },
+      { name: 'Ciboulette', qty: 5, unit: 'g' },
+      { name: 'Beurre', qty: 15, unit: 'g' },
+      { name: 'Sel', qty: 1, unit: 'g' },
+      { name: 'Poivre', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Faire sauter les champignons dans le beurre.',
+      'Battre les œufs avec les herbes.',
+      'Cuire l\'omelette moelleuse, garnir de champignons.'
+    ]
+  },
+
+  {
+    id: 'L306',
+    name: 'Soupe Miso Saumon',
+    emoji: '🐟',
+    origin: '🇯🇵',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'saumon', 'miso', 'tofu', 'algues', 'nouilles', 'oignon vert', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 374, proteinGrams: 34, carbsGrams: 28, fatGrams: 14 },
+    ingredients: [
+      { name: 'Saumon', qty: 150, unit: 'g' },
+      { name: 'Pâte miso', qty: 25, unit: 'g' },
+      { name: 'Tofu', qty: 100, unit: 'g' },
+      { name: 'Algues wakame', qty: 10, unit: 'g' },
+      { name: 'Oignons verts', qty: 20, unit: 'g' },
+      { name: 'Nouilles soba', qty: 60, unit: 'g' }
+    ],
+    steps: [
+      'Porter l\'eau à ébullition, ajouter les nouilles.',
+      'Cuire le saumon.',
+      'Dissoudre le miso hors feu, ajouter tous les ingrédients.'
+    ]
+  },
+
+  {
+    id: 'L307',
+    name: 'Tajine Poulet Citron Confit',
+    emoji: '🍗',
+    origin: '🇲🇦',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'citron confit', 'olives', 'oignon', 'coriandre', 'healthy'],
+    difficulty: 3,
+    prepTime: 10,
+    cookTime: 30,
+    servings: 1,
+    baseNutrition: { calories: 436, proteinGrams: 46, carbsGrams: 18, fatGrams: 20 },
+    ingredients: [
+      { name: 'Cuisses de poulet', qty: 220, unit: 'g' },
+      { name: 'Citron confit', qty: 30, unit: 'g' },
+      { name: 'Olives', qty: 30, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Ras el hanout', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Coriandre', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Faire dorer le poulet avec épices et oignon.',
+      'Ajouter citron confit, olives et 200ml d\'eau.',
+      'Mijoter 45 min. Servir avec coriandre.'
+    ]
+  },
+
+  {
+    id: 'L308',
+    name: 'Teriyaki Poulet Brocoli',
+    emoji: '🍗',
+    origin: '🇯🇵',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'brocoli', 'teriyaki', 'riz', 'sésame', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 470, proteinGrams: 44, carbsGrams: 42, fatGrams: 14 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 200, unit: 'g' },
+      { name: 'Brocoli', qty: 150, unit: 'g' },
+      { name: 'Sauce teriyaki', qty: 30, unit: 'ml' },
+      { name: 'Riz', qty: 80, unit: 'g' },
+      { name: 'Sésame', qty: 8, unit: 'g' },
+      { name: 'Gingembre', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le poulet dans la sauce teriyaki.',
+      'Griller le poulet, cuire le brocoli vapeur.',
+      'Servir avec riz et sésame.'
+    ]
+  },
+
+  {
+    id: 'L309',
+    name: 'Crevettes Ail Citron',
+    emoji: '🦐',
+    origin: '🌍',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'crevettes', 'ail', 'citron', 'huile', 'persil', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 364, proteinGrams: 34, carbsGrams: 12, fatGrams: 20 },
+    ingredients: [
+      { name: 'Crevettes', qty: 250, unit: 'g' },
+      { name: 'Ail', qty: 10, unit: 'g' },
+      { name: 'Citron', qty: 20, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Persil', qty: 10, unit: 'g' },
+      { name: 'Piment', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Chauffer l\'huile à feu vif.',
+      'Faire sauter les crevettes avec ail et piment 3 min.',
+      'Finir avec citron et persil.'
+    ]
+  },
+
+  {
+    id: 'L310',
+    name: 'Pho Bœuf',
+    emoji: '🥩',
+    origin: '🇻🇳',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'bœuf', 'nouilles', 'gingembre', 'basilic', 'soja', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 422, proteinGrams: 36, carbsGrams: 38, fatGrams: 14 },
+    ingredients: [
+      { name: 'Bœuf', qty: 160, unit: 'g' },
+      { name: 'Nouilles de riz', qty: 100, unit: 'g' },
+      { name: 'Bouillon pho', qty: 600, unit: 'ml' },
+      { name: 'Oignon brûlé', qty: 40, unit: 'g' },
+      { name: 'Gingembre', qty: 15, unit: 'g' },
+      { name: 'Basilic', qty: 10, unit: 'g' },
+      { name: 'Citron vert', qty: 15, unit: 'ml' },
+      { name: 'Germes de soja', qty: 60, unit: 'g' }
+    ],
+    steps: [
+      'Préparer le bouillon pho avec épices 1h.',
+      'Cuire les nouilles.',
+      'Assembler avec bœuf cru tranché fin (le bouillon le cuit), herbes fraîches.'
+    ]
+  },
+
+  {
+    id: 'L311',
+    name: 'Blanquette Veau Légère',
+    emoji: '🥩',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'veau', 'carotte', 'champignons', 'oignon', 'crème', 'healthy'],
+    difficulty: 4,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 478, proteinGrams: 46, carbsGrams: 24, fatGrams: 22 },
+    ingredients: [
+      { name: 'Veau', qty: 200, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Champignons', qty: 80, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Crème légère', qty: 60, unit: 'ml' },
+      { name: 'Citron', qty: 10, unit: 'ml' },
+      { name: 'Bouillon', qty: 400, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire le veau dans le bouillon avec légumes 1h.',
+      'Préparer la sauce à la crème avec citron.',
+      'Filtrer le bouillon, assembler avec la sauce.'
+    ]
+  },
+
+  {
+    id: 'L312',
+    name: 'Tataki Bœuf Sésame',
+    emoji: '🥩',
+    origin: '🇯🇵',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'bœuf', 'sésame', 'soja', 'gingembre', 'salade', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 396, proteinGrams: 42, carbsGrams: 12, fatGrams: 20 },
+    ingredients: [
+      { name: 'Filet de bœuf', qty: 200, unit: 'g' },
+      { name: 'Sésame', qty: 15, unit: 'g' },
+      { name: 'Sauce soja', qty: 15, unit: 'ml' },
+      { name: 'Gingembre', qty: 8, unit: 'g' },
+      { name: 'Huile de sésame', qty: 8, unit: 'ml' },
+      { name: 'Salade', qty: 60, unit: 'g' }
+    ],
+    steps: [
+      'Rouler le filet de bœuf dans le sésame.',
+      'Saisir 30 sec de chaque côté à feu très vif.',
+      'Trancher fin, servir sur salade avec sauce soja et gingembre.'
+    ]
+  },
+
+  {
+    id: 'L313',
+    name: 'Curry Vert Crevettes',
+    emoji: '🦐',
+    origin: '🇹🇭',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'crevettes', 'lait de coco', 'curry vert', 'aubergine', 'riz', 'basilic', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 442, proteinGrams: 32, carbsGrams: 38, fatGrams: 18 },
+    ingredients: [
+      { name: 'Crevettes', qty: 200, unit: 'g' },
+      { name: 'Lait de coco', qty: 100, unit: 'ml' },
+      { name: 'Pâte de curry vert', qty: 20, unit: 'g' },
+      { name: 'Aubergine', qty: 100, unit: 'g' },
+      { name: 'Riz jasmin', qty: 80, unit: 'g' },
+      { name: 'Basilic thaï', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Faire revenir la pâte de curry dans une poêle.',
+      'Ajouter les crevettes, puis le lait de coco et aubergine.',
+      'Mijoter 10 min. Servir avec riz et basilic.'
+    ]
+  },
+
+  {
+    id: 'L314',
+    name: 'Dorade Croûte de Sel',
+    emoji: '🍽️',
+    origin: '🌍',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'dorade', 'sel', 'herbes', 'citron', 'huile', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 390, proteinGrams: 44, carbsGrams: 4, fatGrams: 22 },
+    ingredients: [
+      { name: 'Dorade', qty: 400, unit: 'g' },
+      { name: 'Gros sel', qty: 500, unit: 'g' },
+      { name: 'Blancs d\'œufs', qty: 60, unit: 'g' },
+      { name: 'Herbes aromatiques', qty: 10, unit: 'g' },
+      { name: 'Citron', qty: 20, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Mélanger le gros sel avec les blancs d\'œufs.',
+      'Envelopper la dorade dans la croûte de sel.',
+      'Cuire 25 min à 200°C. Casser la croûte, servir avec citron.'
+    ]
+  },
+
+  {
+    id: 'L315',
+    name: 'Gyoza Dinde Vapeur',
+    emoji: '🍽️',
+    origin: '🇯🇵',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'dinde', 'chou', 'gingembre', 'soja', 'sésame', 'healthy'],
+    difficulty: 4,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 470, proteinGrams: 38, carbsGrams: 48, fatGrams: 14 },
+    ingredients: [
+      { name: 'Dinde hachée', qty: 150, unit: 'g' },
+      { name: 'Pâtes à gyoza', qty: 100, unit: 'g' },
+      { name: 'Chou', qty: 80, unit: 'g' },
+      { name: 'Gingembre', qty: 8, unit: 'g' },
+      { name: 'Sauce soja', qty: 15, unit: 'ml' },
+      { name: 'Huile de sésame', qty: 8, unit: 'ml' },
+      { name: 'Oignons verts', qty: 15, unit: 'g' }
+    ],
+    steps: [
+      'Mélanger dinde, chou, gingembre et assaisonnement.',
+      'Plier les gyoza.',
+      'Cuire à la vapeur 12 min. Servir avec sauce soja et huile de sésame.'
+    ]
+  },
+
+  {
+    id: 'L316',
+    name: 'Filet de Bar Herbes Vapeur',
+    emoji: '🍽️',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'bar', 'poireaux', 'carotte', 'huile', 'citron', 'thym', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 446, proteinGrams: 42, carbsGrams: 20, fatGrams: 22 },
+    ingredients: [
+      { name: 'Filet de bar', qty: 200, unit: 'g' },
+      { name: 'Poireaux', qty: 120, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Citron', qty: 20, unit: 'ml' },
+      { name: 'Thym', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les légumes à la vapeur 8 min.',
+      'Cuire le bar vapeur 10 min avec thym.',
+      'Servir avec légumes et citron.'
+    ]
+  },
+
+  {
+    id: 'L317',
+    name: 'Poulet Moutarde Légumes Rôtis',
+    emoji: '🍗',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'moutarde', 'carotte', 'courgette', 'oignon', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 464, proteinGrams: 40, carbsGrams: 22, fatGrams: 24 },
+    ingredients: [
+      { name: 'Cuisses de poulet', qty: 200, unit: 'g' },
+      { name: 'Moutarde', qty: 20, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Courgette', qty: 80, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' }
+    ],
+    steps: [
+      'Badigeonner le poulet de moutarde.',
+      'Disposer avec les légumes en dés.',
+      'Cuire au four 35 min à 190°C.'
+    ]
+  },
+
+  {
+    id: 'L318',
+    name: 'Thon Grillé Salade Niçoise',
+    emoji: '🐟',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'thon', 'haricots verts', 'œuf', 'tomate', 'olives', 'huile', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 460, proteinGrams: 38, carbsGrams: 14, fatGrams: 28 },
+    ingredients: [
+      { name: 'Thon frais', qty: 200, unit: 'g' },
+      { name: 'Haricots verts', qty: 80, unit: 'g' },
+      { name: 'Œuf dur', qty: 60, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Olives', qty: 20, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Moutarde', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Griller le thon 2-3 min de chaque côté.',
+      'Cuire les haricots verts al dente.',
+      'Composer la salade, assaisonner à la moutarde.'
+    ]
+  },
+
+  {
+    id: 'L319',
+    name: 'Salade de Poulet Grillé Roquette',
+    emoji: '🍗',
+    origin: '🇮🇹',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'roquette', 'tomate', 'parmesan', 'pignons', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 438, proteinGrams: 44, carbsGrams: 16, fatGrams: 22 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 200, unit: 'g' },
+      { name: 'Roquette', qty: 60, unit: 'g' },
+      { name: 'Tomates cerises', qty: 100, unit: 'g' },
+      { name: 'Parmesan', qty: 30, unit: 'g' },
+      { name: 'Pignons', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Vinaigre balsamique', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Griller le poulet assaisonné.',
+      'Préparer la base de roquette avec tomates et parmesan.',
+      'Trancher le poulet, disposer sur la salade.'
+    ]
+  },
+
+  {
+    id: 'L320',
+    name: 'Steak de Thon Sesame Salade',
+    emoji: '🐟',
+    origin: '🇯🇵',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'thon', 'sésame', 'soja', 'salade', 'gingembre', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 420, proteinGrams: 46, carbsGrams: 14, fatGrams: 20 },
+    ingredients: [
+      { name: 'Thon frais', qty: 220, unit: 'g' },
+      { name: 'Sésame', qty: 15, unit: 'g' },
+      { name: 'Sauce soja', qty: 15, unit: 'ml' },
+      { name: 'Huile de sésame', qty: 8, unit: 'ml' },
+      { name: 'Salade mélangée', qty: 80, unit: 'g' },
+      { name: 'Gingembre', qty: 8, unit: 'g' },
+      { name: 'Citron vert', qty: 15, unit: 'ml' }
+    ],
+    steps: [
+      'Paner le thon dans le sésame.',
+      'Saisir 1 min de chaque côté.',
+      'Trancher et servir sur salade avec sauce soja-gingembre.'
+    ]
+  },
+
+  {
+    id: 'L321',
+    name: 'Agneau Grillé Légumes Méditerranéens',
+    emoji: '🥩',
+    origin: '🇬🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'agneau', 'courgette', 'poivron', 'tomate', 'ail', 'huile', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 466, proteinGrams: 40, carbsGrams: 18, fatGrams: 26 },
+    ingredients: [
+      { name: 'Côtelettes d\'agneau', qty: 200, unit: 'g' },
+      { name: 'Courgette', qty: 80, unit: 'g' },
+      { name: 'Poivron', qty: 80, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Herbes grecques', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' }
+    ],
+    steps: [
+      'Mariner les côtelettes avec herbes, ail et huile.',
+      'Griller 4 min de chaque côté.',
+      'Rôtir les légumes séparément.'
+    ]
+  },
+
+  {
+    id: 'L322',
+    name: 'Morue Pil Pil Poivrons',
+    emoji: '🍽️',
+    origin: '🇪🇸',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'morue', 'poivrons', 'ail', 'huile', 'pomme de terre', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 426, proteinGrams: 38, carbsGrams: 28, fatGrams: 18 },
+    ingredients: [
+      { name: 'Morue dessalée', qty: 200, unit: 'g' },
+      { name: 'Poivrons rôtis', qty: 100, unit: 'g' },
+      { name: 'Ail', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Pommes de terre', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      'Dessaler la morue 24h.',
+      'Confiture la morue dans l\'huile avec ail.',
+      'Laisser émulsionner la sauce, servir avec poivrons et pommes de terre.'
+    ]
+  },
+
+  {
+    id: 'L323',
+    name: 'Bœuf Bourguignon Allégé',
+    emoji: '🥩',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'bœuf', 'carotte', 'oignon', 'champignons', 'tomate', 'healthy'],
+    difficulty: 4,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 454, proteinGrams: 42, carbsGrams: 22, fatGrams: 22 },
+    ingredients: [
+      { name: 'Bœuf à braiser', qty: 200, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Champignons', qty: 80, unit: 'g' },
+      { name: 'Bouillon', qty: 300, unit: 'ml' },
+      { name: 'Concentré de tomate', qty: 20, unit: 'g' },
+      { name: 'Herbes', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Faire dorer le bœuf.',
+      'Ajouter les légumes, le concentré et le bouillon.',
+      'Mijoter 1h30 à feu très doux.'
+    ]
+  },
+
+  {
+    id: 'L324',
+    name: 'Escalope Dinde Légères Vapeur',
+    emoji: '🍽️',
+    origin: '🇺🇸',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'dinde', 'haricots verts', 'asperges', 'huile', 'citron', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 414, proteinGrams: 44, carbsGrams: 10, fatGrams: 22 },
+    ingredients: [
+      { name: 'Escalope de dinde', qty: 220, unit: 'g' },
+      { name: 'Haricots verts', qty: 150, unit: 'g' },
+      { name: 'Asperges', qty: 100, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Cuire dinde à la vapeur ou à la poêle.',
+      'Cuire les légumes al dente.',
+      'Assaisonner avec huile, citron et ail.'
+    ]
+  },
+
+  {
+    id: 'L325',
+    name: 'Salade Tiède Bœuf Avocat',
+    emoji: '🥩',
+    origin: '🇺🇸',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'bœuf', 'avocat', 'tomate', 'maïs', 'laitue', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 444, proteinGrams: 36, carbsGrams: 30, fatGrams: 20 },
+    ingredients: [
+      { name: 'Bœuf haché maigre', qty: 160, unit: 'g' },
+      { name: 'Avocat', qty: 80, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Maïs', qty: 60, unit: 'g' },
+      { name: 'Laitue', qty: 60, unit: 'g' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Épices', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le bœuf haché avec épices.',
+      'Préparer la salade avec tous les légumes.',
+      'Assembler tiède avec le bœuf.'
+    ]
+  },
+
+  {
+    id: 'L326',
+    name: 'Filet de Sole Vapeur Légumes',
+    emoji: '🥦',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'sole', 'courgette', 'carotte', 'brocoli', 'huile', 'citron', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 436, proteinGrams: 40, carbsGrams: 24, fatGrams: 20 },
+    ingredients: [
+      { name: 'Sole', qty: 220, unit: 'g' },
+      { name: 'Courgette', qty: 100, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Brocoli', qty: 80, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Estragon', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Cuire la sole et les légumes à la vapeur 12 min.',
+      'Arroser d\'huile d\'olive et citron.',
+      'Garnir d\'estragon.'
+    ]
+  },
+
+  {
+    id: 'L327',
+    name: 'Poulet Citron Curcuma Épinards',
+    emoji: '🍗',
+    origin: '🇮🇳',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'épinards', 'curcuma', 'gingembre', 'citron', 'riz', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 442, proteinGrams: 38, carbsGrams: 32, fatGrams: 18 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 180, unit: 'g' },
+      { name: 'Épinards', qty: 120, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Curcuma', qty: 3, unit: 'g' },
+      { name: 'Gingembre', qty: 8, unit: 'g' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Riz', qty: 60, unit: 'g' },
+      { name: 'Huile', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Poêler le poulet avec curcuma et gingembre.',
+      'Ajouter les épinards.',
+      'Servir avec riz basmati et jus de citron.'
+    ]
+  },
+
+  {
+    id: 'L328',
+    name: 'Saumon Épinards Crème Légère',
+    emoji: '🐟',
+    origin: '🇸🇪',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'saumon', 'épinards', 'crème', 'ail', 'citron', 'aneth', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 432, proteinGrams: 42, carbsGrams: 12, fatGrams: 24 },
+    ingredients: [
+      { name: 'Saumon', qty: 200, unit: 'g' },
+      { name: 'Épinards', qty: 120, unit: 'g' },
+      { name: 'Crème légère', qty: 60, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Aneth', qty: 5, unit: 'g' },
+      { name: 'Huile', qty: 8, unit: 'ml' }
+    ],
+    steps: [
+      'Poêler le saumon côté peau 4 min.',
+      'Faire une sauce crème avec épinards, ail et citron.',
+      'Servir le saumon nappé de sauce.'
+    ]
+  },
+
+  {
+    id: 'L329',
+    name: 'Crevettes Curry Coco Légumes',
+    emoji: '🦐',
+    origin: '🇹🇭',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'crevettes', 'lait de coco', 'curry', 'brocoli', 'poivron', 'coriandre', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 436, proteinGrams: 44, carbsGrams: 20, fatGrams: 20 },
+    ingredients: [
+      { name: 'Crevettes', qty: 220, unit: 'g' },
+      { name: 'Lait de coco', qty: 80, unit: 'ml' },
+      { name: 'Curry rouge', qty: 15, unit: 'g' },
+      { name: 'Brocoli', qty: 100, unit: 'g' },
+      { name: 'Poivron', qty: 80, unit: 'g' },
+      { name: 'Coriandre', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Faire revenir le curry dans une poêle.',
+      'Ajouter les crevettes et légumes.',
+      'Incorporer le lait de coco, mijoter 8 min.'
+    ]
+  },
+
+  {
+    id: 'L330',
+    name: 'Magret de Canard Légumes Vapeur',
+    emoji: '🥦',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'canard', 'haricots verts', 'carotte', 'orange', 'miel', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 446, proteinGrams: 40, carbsGrams: 22, fatGrams: 22 },
+    ingredients: [
+      { name: 'Magret de canard', qty: 180, unit: 'g' },
+      { name: 'Haricots verts', qty: 120, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Orange', qty: 60, unit: 'ml' },
+      { name: 'Miel', qty: 10, unit: 'g' },
+      { name: 'Vinaigre', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Quadriller et cuire le magret côté peau.',
+      'Préparer la sauce orange-miel.',
+      'Servir avec légumes vapeur et sauce.'
+    ]
+  },
+
+  {
+    id: 'L331',
+    name: 'Cabillaud Tajine Légumes',
+    emoji: '🐟',
+    origin: '🇲🇦',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'cabillaud', 'courgette', 'tomate', 'oignon', 'chermoula', 'coriandre', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 30,
+    servings: 1,
+    baseNutrition: { calories: 448, proteinGrams: 40, carbsGrams: 18, fatGrams: 24 },
+    ingredients: [
+      { name: 'Cabillaud', qty: 200, unit: 'g' },
+      { name: 'Courgette', qty: 80, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Chermoula', qty: 20, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Coriandre', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le cabillaud dans la chermoula.',
+      'Disposer les légumes dans un tajine.',
+      'Ajouter le poisson, cuire 25 min à couvert.'
+    ]
+  },
+
+  {
+    id: 'L332',
+    name: 'Gambas Plancha Sauce Romesco',
+    emoji: '🍽️',
+    origin: '🇪🇸',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'gambas', 'poivrons', 'amandes', 'ail', 'huile', 'citron', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 448, proteinGrams: 42, carbsGrams: 16, fatGrams: 24 },
+    ingredients: [
+      { name: 'Gambas', qty: 220, unit: 'g' },
+      { name: 'Poivrons rôtis', qty: 100, unit: 'g' },
+      { name: 'Amandes', qty: 20, unit: 'g' },
+      { name: 'Ail', qty: 8, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Piment', qty: 3, unit: 'g' },
+      { name: 'Citron', qty: 15, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire les gambas à la plancha 2 min de chaque côté.',
+      'Mixer poivrons, amandes, ail pour la sauce romesco.',
+      'Servir avec la sauce.'
+    ]
+  },
+
+  {
+    id: 'L333',
+    name: 'Poulet Vapeur Riz Thaï Basilic',
+    emoji: '🍗',
+    origin: '🇹🇭',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'basilic', 'ail', 'piment', 'huile', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 412, proteinGrams: 44, carbsGrams: 14, fatGrams: 20 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 220, unit: 'g' },
+      { name: 'Basilic thaï', qty: 15, unit: 'g' },
+      { name: 'Ail', qty: 8, unit: 'g' },
+      { name: 'Piment', qty: 3, unit: 'g' },
+      { name: 'Sauce de poisson halal', qty: 10, unit: 'ml' },
+      { name: 'Huile', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire le poulet vapeur ou poêlé.',
+      'Préparer la sauce basilic-ail.',
+      'Servir avec riz thaï jasmin.'
+    ]
+  },
+
+  {
+    id: 'L334',
+    name: 'Salade Chaude Poulpe Grillé',
+    emoji: '🥗',
+    origin: '🇵🇹',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulpe', 'pomme de terre', 'tomate', 'oignon', 'persil', 'huile', 'healthy'],
+    difficulty: 3,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 1,
+    baseNutrition: { calories: 454, proteinGrams: 40, carbsGrams: 24, fatGrams: 22 },
+    ingredients: [
+      { name: 'Poulpe cuit', qty: 200, unit: 'g' },
+      { name: 'Pomme de terre', qty: 100, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Oignon rouge', qty: 40, unit: 'g' },
+      { name: 'Persil', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Citron', qty: 15, unit: 'ml' }
+    ],
+    steps: [
+      'Griller le poulpe précuit.',
+      'Cuire les pommes de terre.',
+      'Assembler la salade avec tous les ingrédients.'
+    ]
+  },
+
+  {
+    id: 'L335',
+    name: 'Soupe Poulet Légumes Maison',
+    emoji: '🍗',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'carotte', 'navet', 'poireau', 'céleri', 'vermicelles', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 454, proteinGrams: 38, carbsGrams: 26, fatGrams: 22 },
+    ingredients: [
+      { name: 'Poulet', qty: 180, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Navet', qty: 60, unit: 'g' },
+      { name: 'Poireau', qty: 60, unit: 'g' },
+      { name: 'Céleri', qty: 40, unit: 'g' },
+      { name: 'Bouillon', qty: 600, unit: 'ml' },
+      { name: 'Vermicelles', qty: 40, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le poulet dans le bouillon.',
+      'Ajouter les légumes taillés, cuire 20 min.',
+      'Ajouter vermicelles, cuire 5 min.'
+    ]
+  },
+
+  {
+    id: 'L336',
+    name: 'Bœuf Haché Courgette Gratiné',
+    emoji: '🥩',
+    origin: '🇮🇹',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'bœuf', 'courgette', 'tomate', 'fromage', 'oignon', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 446, proteinGrams: 42, carbsGrams: 20, fatGrams: 22 },
+    ingredients: [
+      { name: 'Bœuf haché', qty: 180, unit: 'g' },
+      { name: 'Courgette', qty: 200, unit: 'g' },
+      { name: 'Tomate', qty: 100, unit: 'g' },
+      { name: 'Fromage râpé', qty: 30, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Herbes', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Évider les courgettes et farcir de bœuf haché.',
+      'Napper de sauce tomate.',
+      'Gratiner 25 min à 180°C.'
+    ]
+  },
+
+  {
+    id: 'L337',
+    name: 'Rôti de Dinde Légumes Printaniers',
+    emoji: '🥦',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'dinde', 'asperges', 'petits pois', 'carotte', 'herbes', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 454, proteinGrams: 36, carbsGrams: 28, fatGrams: 22 },
+    ingredients: [
+      { name: 'Rôti de dinde', qty: 200, unit: 'g' },
+      { name: 'Asperges', qty: 100, unit: 'g' },
+      { name: 'Petits pois', qty: 80, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Herbes de Provence', qty: 3, unit: 'g' },
+      { name: 'Huile', qty: 12, unit: 'ml' }
+    ],
+    steps: [
+      'Rôtir la dinde 45 min à 180°C.',
+      'Cuire les légumes vapeur.',
+      'Servir ensemble avec jus de cuisson.'
+    ]
+  },
+
+  {
+    id: 'L338',
+    name: 'Bar en Papillote Légumes',
+    emoji: '🥦',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'bar', 'tomate', 'courgette', 'olives', 'herbes', 'citron', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 448, proteinGrams: 40, carbsGrams: 18, fatGrams: 24 },
+    ingredients: [
+      { name: 'Filet de bar', qty: 200, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Courgette', qty: 80, unit: 'g' },
+      { name: 'Olives', qty: 20, unit: 'g' },
+      { name: 'Herbes de Provence', qty: 3, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Citron', qty: 15, unit: 'ml' }
+    ],
+    steps: [
+      'Placer le bar et légumes sur du papier aluminium.',
+      'Assaisonner avec herbes, olives et citron.',
+      'Fermer la papillote et cuire 20 min à 180°C.'
+    ]
+  },
+
+  {
+    id: 'L339',
+    name: 'Poulet Sauce Cacahuète Africaine',
+    emoji: '🍗',
+    origin: '🇸🇳',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'cacahuète', 'tomate', 'oignon', 'piment', 'ail', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 440, proteinGrams: 44, carbsGrams: 12, fatGrams: 24 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 220, unit: 'g' },
+      { name: 'Beurre de cacahuète', qty: 30, unit: 'g' },
+      { name: 'Tomate', qty: 100, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Piment', qty: 3, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Bouillon', qty: 200, unit: 'ml' }
+    ],
+    steps: [
+      'Faire dorer le poulet.',
+      'Préparer la sauce avec cacahuète, tomate et bouillon.',
+      'Mijoter 25 min.'
+    ]
+  },
+
+  {
+    id: 'L340',
+    name: 'Gratin Dauphinois Poisson',
+    emoji: '🐟',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'cabillaud', 'pomme de terre', 'crème', 'fromage', 'ail', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 446, proteinGrams: 38, carbsGrams: 24, fatGrams: 22 },
+    ingredients: [
+      { name: 'Cabillaud', qty: 180, unit: 'g' },
+      { name: 'Pomme de terre', qty: 120, unit: 'g' },
+      { name: 'Crème légère', qty: 80, unit: 'ml' },
+      { name: 'Fromage râpé', qty: 30, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Noix de muscade', qty: 1, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les pommes de terre à la mandoline.',
+      'Disposer avec le poisson en couches.',
+      'Napper de crème et fromage, gratiner 30 min à 180°C.'
+    ]
+  },
+
+  {
+    id: 'L341',
+    name: 'Osso Bucco de Dinde Gremolata',
+    emoji: '🍽️',
+    origin: '🇮🇹',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'dinde', 'tomate', 'oignon', 'carotte', 'gremolata', 'healthy'],
+    difficulty: 4,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 438, proteinGrams: 40, carbsGrams: 20, fatGrams: 22 },
+    ingredients: [
+      { name: 'Jarret de dinde', qty: 220, unit: 'g' },
+      { name: 'Tomate', qty: 100, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Carotte', qty: 60, unit: 'g' },
+      { name: 'Gremolata', qty: 10, unit: 'g' },
+      { name: 'Bouillon', qty: 200, unit: 'ml' },
+      { name: 'Huile', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Fariner et dorer le jarret.',
+      'Ajouter légumes et bouillon.',
+      'Braiser 1h. Finir avec la gremolata.'
+    ]
+  },
+
+  {
+    id: 'L342',
+    name: 'Mahi Mahi Grillé Salsa Tomate',
+    emoji: '🍽️',
+    origin: '🇧🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'mahi mahi', 'tomate', 'oignon', 'coriandre', 'piment', 'citron', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 440, proteinGrams: 42, carbsGrams: 14, fatGrams: 24 },
+    ingredients: [
+      { name: 'Filet de mahi mahi', qty: 220, unit: 'g' },
+      { name: 'Tomate', qty: 100, unit: 'g' },
+      { name: 'Oignon rouge', qty: 40, unit: 'g' },
+      { name: 'Coriandre', qty: 10, unit: 'g' },
+      { name: 'Piment', qty: 3, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Citron vert', qty: 20, unit: 'ml' }
+    ],
+    steps: [
+      'Griller le mahi mahi assaisonné 4 min de chaque côté.',
+      'Préparer la salsa tomate fraîche.',
+      'Servir avec la salsa.'
+    ]
+  },
+
+  {
+    id: 'L343',
+    name: 'Grillades Poulet Citron Origan',
+    emoji: '🍗',
+    origin: '🇬🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'citron', 'origan', 'ail', 'huile', 'courgette', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 438, proteinGrams: 44, carbsGrams: 16, fatGrams: 22 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 220, unit: 'g' },
+      { name: 'Citron', qty: 30, unit: 'ml' },
+      { name: 'Origan', qty: 5, unit: 'g' },
+      { name: 'Ail', qty: 8, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Courgette grillée', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      'Mariner le poulet dans citron, ail et origan.',
+      'Griller 6 min de chaque côté.',
+      'Servir avec courgette grillée.'
+    ]
+  },
+
+  {
+    id: 'L344',
+    name: 'Lotte Sauce Curry Légume Vapeur',
+    emoji: '🍛',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'lotte', 'lait de coco', 'curry', 'brocoli', 'carotte', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 444, proteinGrams: 38, carbsGrams: 28, fatGrams: 20 },
+    ingredients: [
+      { name: 'Lotte', qty: 200, unit: 'g' },
+      { name: 'Lait de coco', qty: 80, unit: 'ml' },
+      { name: 'Curry', qty: 8, unit: 'g' },
+      { name: 'Brocoli', qty: 100, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Oignon', qty: 40, unit: 'g' }
+    ],
+    steps: [
+      'Poêler la lotte.',
+      'Préparer la sauce curry au lait de coco.',
+      'Cuire les légumes vapeur. Servir ensemble.'
+    ]
+  },
+
+  {
+    id: 'L345',
+    name: 'Poulet au Four Légumes Méditerranéens',
+    emoji: '🍗',
+    origin: '🇪🇸',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'aubergine', 'poivron', 'tomate', 'ail', 'herbes', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 436, proteinGrams: 40, carbsGrams: 24, fatGrams: 20 },
+    ingredients: [
+      { name: 'Poulet', qty: 200, unit: 'g' },
+      { name: 'Aubergine', qty: 100, unit: 'g' },
+      { name: 'Poivron', qty: 80, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Ail', qty: 8, unit: 'g' },
+      { name: 'Herbes', qty: 3, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' }
+    ],
+    steps: [
+      'Disposer poulet et légumes dans un plat.',
+      'Assaisonner d\'herbes, ail et huile.',
+      'Cuire 40 min à 190°C.'
+    ]
+  },
+
+  {
+    id: 'L346',
+    name: 'Lieu Noir Épinards Ail',
+    emoji: '🍽️',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'lieu noir', 'épinards', 'ail', 'huile', 'pomme de terre', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 15,
+    servings: 1,
+    baseNutrition: { calories: 438, proteinGrams: 42, carbsGrams: 18, fatGrams: 22 },
+    ingredients: [
+      { name: 'Lieu noir', qty: 220, unit: 'g' },
+      { name: 'Épinards', qty: 150, unit: 'g' },
+      { name: 'Ail', qty: 8, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+      { name: 'Citron', qty: 15, unit: 'ml' },
+      { name: 'Pomme de terre', qty: 80, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les pommes de terre.',
+      'Poêler le lieu noir assaisonné.',
+      'Faire revenir épinards et ail. Servir ensemble.'
+    ]
+  },
+
+  {
+    id: 'L347',
+    name: 'Boulettes Dinde Sauce Tomate',
+    emoji: '🍽️',
+    origin: '🇮🇹',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'dinde', 'tomate', 'oignon', 'ail', 'basilic', 'parmesan', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 430, proteinGrams: 44, carbsGrams: 14, fatGrams: 22 },
+    ingredients: [
+      { name: 'Dinde hachée', qty: 220, unit: 'g' },
+      { name: 'Tomates', qty: 150, unit: 'g' },
+      { name: 'Oignon', qty: 60, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Basilic', qty: 10, unit: 'g' },
+      { name: 'Parmesan', qty: 20, unit: 'g' },
+      { name: 'Huile', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Former les boulettes de dinde avec épices.',
+      'Cuire dans la sauce tomate 20 min.',
+      'Garnir de parmesan et basilic.'
+    ]
+  },
+
+  {
+    id: 'L348',
+    name: 'Soupe Tom Yum Crevettes',
+    emoji: '🦐',
+    origin: '🇹🇭',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'crevettes', 'champignons', 'citronnelle', 'galanga', 'citron', 'piment', 'healthy'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 20,
+    servings: 1,
+    baseNutrition: { calories: 438, proteinGrams: 40, carbsGrams: 20, fatGrams: 22 },
+    ingredients: [
+      { name: 'Crevettes', qty: 200, unit: 'g' },
+      { name: 'Champignons', qty: 100, unit: 'g' },
+      { name: 'Citronnelle', qty: 10, unit: 'g' },
+      { name: 'Galanga', qty: 8, unit: 'g' },
+      { name: 'Citron vert', qty: 20, unit: 'ml' },
+      { name: 'Piment', qty: 3, unit: 'g' },
+      { name: 'Tomate cerise', qty: 60, unit: 'g' },
+      { name: 'Lait de coco', qty: 60, unit: 'ml' }
+    ],
+    steps: [
+      'Préparer le bouillon avec citronnelle, galanga et piment.',
+      'Ajouter crevettes et champignons.',
+      'Finir avec citron vert et lait de coco.'
+    ]
+  },
+
+  {
+    id: 'L349',
+    name: 'Roulades Poulet Épinards Fromage',
+    emoji: '🍗',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'poulet', 'épinards', 'chèvre', 'tomate', 'ail', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 454, proteinGrams: 42, carbsGrams: 22, fatGrams: 22 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 200, unit: 'g' },
+      { name: 'Épinards cuits', qty: 80, unit: 'g' },
+      { name: 'Fromage de chèvre', qty: 40, unit: 'g' },
+      { name: 'Tomate', qty: 80, unit: 'g' },
+      { name: 'Huile', qty: 10, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Aplatir les blancs de poulet.',
+      'Farcir d\'épinards et fromage de chèvre.',
+      'Rouler, ficeler et cuire 25 min au four à 180°C.'
+    ]
+  },
+
+  {
+    id: 'L350',
+    name: 'Filet de Bœuf Sauce Champignons',
+    emoji: '🥩',
+    origin: '🇫🇷',
+    mealTypes: ['dinner'],
+    tags: ['dinner', 'bœuf', 'champignons', 'crème', 'oignon', 'persil', 'healthy'],
+    difficulty: 3,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 1,
+    baseNutrition: { calories: 444, proteinGrams: 40, carbsGrams: 26, fatGrams: 20 },
+    ingredients: [
+      { name: 'Filet de bœuf', qty: 180, unit: 'g' },
+      { name: 'Champignons', qty: 120, unit: 'g' },
+      { name: 'Crème légère', qty: 60, unit: 'ml' },
+      { name: 'Oignon', qty: 40, unit: 'g' },
+      { name: 'Bouillon', qty: 100, unit: 'ml' },
+      { name: 'Persil', qty: 5, unit: 'g' },
+      { name: 'Huile', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Saisir le filet de bœuf à feu très vif.',
+      'Préparer la sauce champignons à la crème.',
+      'Servir avec la sauce et persil.'
+    ]
+  }
+
+
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
@@ -6747,7 +12155,7 @@
     }).join(', ');
     return {
       n:    recipe.name,
-      f:    flagMap[recipe.category] || '🌍',
+      f:    recipe.origin || flagMap[recipe.category] || '🌍',
       k:    Math.round(recipe.baseNutrition.calories   / perServing),
       p:    Math.round(recipe.baseNutrition.proteinGrams / perServing),
       g:    Math.round(recipe.baseNutrition.carbsGrams  / perServing),
@@ -6771,28 +12179,19 @@
 
   /**
    * Retourne le pool de recettes pour un type de repas.
-   * Fusionne recipes-db.js (ancien format) + RECIPES_DB R201+ (nouveau format converti).
+   * Toutes les 439 recettes (R201-R439 + L001-L350 migrées) sont dans RECIPES_DB.
    * @param {'breakfast'|'lunch'|'snack'|'dinner'} mealType
    * @returns {Array} Pool de recettes au format simplifié
    */
   function getPool(mealType) {
-    // Base : anciens pools depuis recipes-db.js (L001-L350, format legacy)
-    var oldPool = [];
-    if (mealType === 'breakfast' && window.breakfast) oldPool = window.breakfast.slice();
-    else if (mealType === 'lunch'  && window.lunch)   oldPool = window.lunch.slice();
-    else if (mealType === 'snack'  && window.snack)   oldPool = window.snack.slice();
-    else if (mealType === 'dinner' && window.dinner)  oldPool = window.dinner.slice();
-
-    // Ajout : nouvelles recettes R201+ — utilise mealTypes[] en priorité
-    var oldNames = {};
-    oldPool.forEach(function(r) { oldNames[r.n] = true; });
+    var pool = [];
 
     RECIPES_DB.forEach(function(recipe) {
       var mt = recipe.mealTypes || [];
       var include = false;
 
       if (mt.length > 0) {
-        // Utiliser mealTypes[] directement (source de vérité)
+        // mealTypes[] = source de vérité (toutes les recettes L et R en ont)
         if (mealType === 'breakfast') {
           include = mt.indexOf('breakfast') >= 0;
         } else if (mealType === 'snack') {
@@ -6803,21 +12202,18 @@
           include = mt.indexOf('dinner') >= 0 || mt.indexOf('both') >= 0;
         }
       } else {
-        // Fallback sur les tags si mealTypes absent (anciennes recettes)
+        // Fallback tags pour recettes R201-R349 sans mealTypes (category field)
         var type = classifyMealType(recipe);
         include = (type === mealType) ||
                   (type === 'both' && (mealType === 'lunch' || mealType === 'dinner'));
       }
 
-      if (!include) return;
-      var simple = toSimpleFormat(recipe);
-      if (!oldNames[simple.n]) {
-        oldPool.push(simple);
-        oldNames[simple.n] = true;
+      if (include) {
+        pool.push(toSimpleFormat(recipe));
       }
     });
 
-    return oldPool;
+    return pool;
   }
 
   /**
@@ -7163,12 +12559,11 @@
               if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
             });
           } else if (recipe.i) {
-            // Recette legacy (L0XX) : findRecipe ne la trouve pas dans RECIPES_DB,
-            // fallback sur le champ `i` string
-            var scalingRatioLegacy = recipe._scalingRatio || 1;
+            // Fallback : recette avec champ `i` string (cas de repas libres)
+            var scalingRatioFallback = recipe._scalingRatio || 1;
             var parsedIngredients = parseIngredientsString(recipe.i);
             parsedIngredients.forEach(function(ing) {
-              var qty = Math.round(ing.qty * scalingRatioLegacy * 10) / 10;
+              var qty = Math.round(ing.qty * scalingRatioFallback * 10) / 10;
               var key = ing.name + '||' + ing.unit;
               if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
               consolidated[key].qty += qty;
