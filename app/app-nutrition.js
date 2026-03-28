@@ -3380,7 +3380,7 @@ function renderSmoothieBar(p) {
 
     var card = h('div', {
       style: 'background:var(--card,#fff);border:1.5px solid var(--border,#E5E4DE);border-radius:14px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:box-shadow 0.15s',
-      onclick: function() { window.S.modalSmoothie = sm; if(window.render) window.render(); }
+      onclick: function() { showSmoothieModal(sm); }
     });
 
     // Ligne 1 : badge timing + temps préparation
@@ -3431,14 +3431,15 @@ function showToast(msg, ms) {
   setTimeout(function(){ toast.style.opacity='0'; toast.style.transition='opacity 0.4s'; setTimeout(function(){ if(toast.parentNode) toast.parentNode.removeChild(toast); }, 400); }, ms || 2500);
 }
 
-function renderSmoothieModal(app) {
+function showSmoothieModal(sm) {
   var S = window.S;
-  if (!S.modalSmoothie) return;
-  var sm = S.modalSmoothie;
+  // Nettoyer tout overlay précédent
+  var old = document.getElementById('_smoothie_modal_ov');
+  if (old && old.parentNode) old.parentNode.removeChild(old);
 
-  // Overlay
-  var ov = h('div', {style:'position:fixed;inset:0;background:rgba(10,10,9,0.55);z-index:9999;display:flex;align-items:flex-end;justify-content:center;padding:0',
-    onclick:function(e){ if(e.target===ov){S.modalSmoothie=null;window.render();} }});
+  // Overlay impératif
+  var ov = h('div', {id:'_smoothie_modal_ov', style:'position:fixed;inset:0;background:rgba(10,10,9,0.55);z-index:99999;display:flex;align-items:flex-end;justify-content:center;padding:0',
+    onclick:function(e){ if(e.target===ov){ var el=document.getElementById('_smoothie_modal_ov'); if(el&&el.parentNode) el.parentNode.removeChild(el); } }});
 
   // Sheet bottom-up (style bottom sheet mobile)
   var box = h('div', {style:'background:var(--card,#fff);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden'});
@@ -3459,7 +3460,7 @@ function renderSmoothieModal(app) {
   titleRow.appendChild(h('div', {style:'font-size:20px;font-weight:800;color:#fff;line-height:1.2;flex:1'}, sm.name));
   titleRow.appendChild(h('button', {
     style:'flex-shrink:0;width:32px;height:32px;background:rgba(255,255,255,0.18);border:none;color:#fff;font-size:20px;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;margin-top:-2px',
-    onclick:function(){S.modalSmoothie=null;window.render();}
+    onclick:function(){ var el=document.getElementById('_smoothie_modal_ov'); if(el&&el.parentNode) el.parentNode.removeChild(el); }
   }, '×'));
   header.appendChild(titleRow);
 
@@ -3586,7 +3587,8 @@ function renderSmoothieModal(app) {
           });
         }
       }
-      S.modalSmoothie = null;
+      var el = document.getElementById('_smoothie_modal_ov');
+      if (el && el.parentNode) el.parentNode.removeChild(el);
       S.smoothieBarOpen = false;
       S.nStep = 9;
       showToast('✅ Smoothie ajouté en collation — Plan recalculé', 2500);
@@ -3596,8 +3598,7 @@ function renderSmoothieModal(app) {
   footer.appendChild(addBtn);
   box.appendChild(footer);
   ov.appendChild(box);
-  var root = document.getElementById('app') || document.body;
-  root.appendChild(ov);
+  document.body.appendChild(ov);
 }
 
 // ─── SHOPPING LIST ───
@@ -4081,7 +4082,6 @@ window.NUTRITION = {
       renderSmoothieBar(smZone);
       content.appendChild(smZone);
       p.appendChild(content);
-      if (S.modalSmoothie) renderSmoothieModal(p);
       return;
     }
     if (S.nStep === 0) renderSplash(content);
@@ -4096,7 +4096,6 @@ window.NUTRITION = {
     else if (S.nStep === 9) renderStep9(content);
     p.appendChild(content);
     renderModal(p);
-    if (S.modalSmoothie) renderSmoothieModal(p);
   }
 };
 
