@@ -6575,6 +6575,336 @@
       ]
     },
 
+  // ─── RECETTES ITALIENNES R440-R449 : PÂTES & RISOTTI HEALTHY ─────────────────
+
+    {
+      id: 'R440',
+      name: 'Pasta e Fagioli Moderne',
+      emoji: '🫘',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['high-protein', 'mediterranean', 'balanced', 'anti-inflammatory', 'budget', 'meal-prep'],
+      difficulty: 2,
+      prepTime: 10,
+      cookTime: 25,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 32×4 + 52×4 + 10×9 = 128 + 208 + 90 = 426 kcal ≈ 430 ✓
+      baseNutrition: { calories: 430, proteinGrams: 32, carbsGrams: 52, fatGrams: 10 },
+      ingredients: [
+        { name: 'Haricots cannellini en boîte', qty: 400, unit: 'g' },
+        { name: 'Ditalini ou petites pâtes courtes', qty: 120, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 200, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
+        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Romarin frais', qty: 2, unit: 'branches' },
+        { name: 'Huile d\'olive extra-vierge', qty: 15, unit: 'ml' },
+        { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+        { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Faire revenir l\'ail émincé dans l\'huile d\'olive à feu moyen 1 min. Ajouter le romarin et les tomates pelées écrasées. Cuire 3 min.',
+        'Verser le bouillon, ajouter la moitié des haricots entiers et mixer grossièrement l\'autre moitié directement dans la casserole pour créer une base crémeuse.',
+        'Porter à ébullition, ajouter les pâtes et cuire al dente selon les indications (env. 8-10 min). Ajuster la consistance avec un peu d\'eau si nécessaire.',
+        'Retirer le romarin, assaisonner. Servir dans deux bols profonds, arroser d\'un filet d\'huile d\'olive et parsemer de parmesan râpé.'
+      ]
+    },
+
+    {
+      id: 'R441',
+      name: 'Risotto aux Asperges & Parmesan Light',
+      emoji: '🌿',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['vegetarian', 'mediterranean', 'balanced', 'anti-inflammatory', 'high-protein'],
+      difficulty: 2,
+      prepTime: 10,
+      cookTime: 25,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 22×4 + 62×4 + 10×9 = 88 + 248 + 90 = 426 kcal ≈ 430 ✓
+      baseNutrition: { calories: 430, proteinGrams: 22, carbsGrams: 62, fatGrams: 10 },
+      ingredients: [
+        { name: 'Riz arborio', qty: 160, unit: 'g' },
+        { name: 'Asperges vertes', qty: 250, unit: 'g' },
+        { name: 'Bouillon de légumes chaud', qty: 700, unit: 'ml' },
+        { name: 'Échalote', qty: 1, unit: 'pce' },
+        { name: 'Vin blanc sec', qty: 60, unit: 'ml' },
+        { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Zeste de citron', qty: 1, unit: 'pce' },
+        { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Couper les asperges en tronçons de 3 cm en réservant les pointes. Faire revenir l\'échalote émincée dans l\'huile d\'olive 2 min. Ajouter le riz et nacrer 2 min.',
+        'Déglacer au vin blanc, laisser absorber. Ajouter les tronçons d\'asperges (sans les pointes). Incorporer le bouillon chaud louche par louche en remuant constamment.',
+        'À mi-cuisson (env. 10 min), ajouter les pointes d\'asperges. Continuer d\'ajouter le bouillon jusqu\'à cuisson al dente du riz (18-20 min total).',
+        'Hors du feu, incorporer le parmesan et le zeste de citron. Laisser reposer 2 min, assaisonner et servir immédiatement dans des assiettes creuses chaudes.'
+      ]
+    },
+
+    {
+      id: 'R442',
+      name: 'Spaghetti Aglio Olio Poulet Grillé',
+      emoji: '🍝',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['high-protein', 'quick', 'mediterranean', 'balanced', 'dairy-free'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 42×4 + 55×4 + 14×9 = 168 + 220 + 126 = 514 kcal ≈ 515 ✓
+      baseNutrition: { calories: 515, proteinGrams: 42, carbsGrams: 55, fatGrams: 14 },
+      ingredients: [
+        { name: 'Spaghetti complets', qty: 160, unit: 'g' },
+        { name: 'Filets de poulet', qty: 300, unit: 'g' },
+        { name: 'Ail', qty: 4, unit: 'gousses' },
+        { name: 'Huile d\'olive extra-vierge', qty: 20, unit: 'ml' },
+        { name: 'Piment rouge séché (peperoncino)', qty: 1, unit: 'pce' },
+        { name: 'Persil plat frais', qty: 20, unit: 'g' },
+        { name: 'Jus de citron', qty: 15, unit: 'ml' },
+        { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les spaghetti al dente dans une grande casserole d\'eau salée. Réserver 100 ml d\'eau de cuisson avant d\'égoutter.',
+        'Pendant ce temps, griller les filets de poulet assaisonnés à la poêle grill 5-6 min de chaque côté. Trancher en lamelles.',
+        'Dans une grande poêle, chauffer l\'huile à feu doux, faire revenir l\'ail émincé et le piment 2 min sans colorer. Ajouter les pâtes et un peu d\'eau de cuisson, mélanger.',
+        'Incorporer le poulet tranché, le persil ciselé et le jus de citron. Mélanger vigoureusement 1 min pour enrober. Servir aussitôt.'
+      ]
+    },
+
+    {
+      id: 'R443',
+      name: 'Penne Arrabiata aux Crevettes',
+      emoji: '🍤',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['high-protein', 'mediterranean', 'quick', 'omega3', 'dairy-free', 'anti-inflammatory'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 38×4 + 54×4 + 9×9 = 152 + 216 + 81 = 449 kcal ≈ 450 ✓
+      baseNutrition: { calories: 450, proteinGrams: 38, carbsGrams: 54, fatGrams: 9 },
+      ingredients: [
+        { name: 'Penne de blé complet', qty: 150, unit: 'g' },
+        { name: 'Crevettes décortiquées crues', qty: 250, unit: 'g' },
+        { name: 'Tomates cerises', qty: 200, unit: 'g' },
+        { name: 'Purée de tomates', qty: 150, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Piment rouge frais', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les penne al dente dans de l\'eau bouillante salée. Réserver 80 ml d\'eau de cuisson.',
+        'Dans une poêle, faire revenir l\'ail et le piment émincés dans l\'huile 1 min. Ajouter les tomates cerises coupées en deux, cuire 3 min jusqu\'à ce qu\'elles éclatent.',
+        'Ajouter la purée de tomates, laisser mijoter 5 min. Incorporer les crevettes, cuire 3-4 min jusqu\'à ce qu\'elles soient roses. Assaisonner généreusement.',
+        'Mélanger les pâtes égouttées à la sauce, ajouter un peu d\'eau de cuisson si nécessaire pour lier. Servir avec le basilic déchiré et un filet d\'huile d\'olive cru.'
+      ]
+    },
+
+    {
+      id: 'R444',
+      name: 'Tagliatelles Saumon Épinards Citron',
+      emoji: '🐟',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['high-protein', 'omega3', 'anti-inflammatory', 'mediterranean', 'balanced', 'quick'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 15,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 40×4 + 50×4 + 16×9 = 160 + 200 + 144 = 504 kcal ≈ 505 ✓
+      baseNutrition: { calories: 505, proteinGrams: 40, carbsGrams: 50, fatGrams: 16 },
+      ingredients: [
+        { name: 'Tagliatelles fraîches', qty: 200, unit: 'g' },
+        { name: 'Filet de saumon sans peau', qty: 280, unit: 'g' },
+        { name: 'Épinards frais', qty: 150, unit: 'g' },
+        { name: 'Crème fraîche légère (5% MG)', qty: 80, unit: 'g' },
+        { name: 'Jus et zeste de citron', qty: 1, unit: 'pce' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Aneth frais', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les tagliatelles fraîches al dente (env. 3 min). Réserver 60 ml d\'eau de cuisson. Égoutter.',
+        'Dans une large poêle, chauffer l\'huile, ajouter le saumon coupé en cubes et cuire 3-4 min. Il doit rester légèrement nacré au cœur. Réserver.',
+        'Dans la même poêle, faire tomber les épinards 1 min. Ajouter la crème légère, le jus et le zeste de citron, les câpres. Laisser frémir 2 min.',
+        'Ajouter les pâtes et le saumon, mélanger délicatement. Ajuster avec l\'eau de cuisson. Parsemer d\'aneth frais et servir aussitôt.'
+      ]
+    },
+
+    {
+      id: 'R445',
+      name: 'Orzo Salade Méditerranéenne',
+      emoji: '🥗',
+      origin: '🇮🇹',
+      mealTypes: ['lunch'],
+      category: 'italian',
+      tags: ['vegetarian', 'mediterranean', 'meal-prep', 'balanced', 'anti-inflammatory', 'quick'],
+      difficulty: 1,
+      prepTime: 15,
+      cookTime: 10,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 18×4 + 58×4 + 14×9 = 72 + 232 + 126 = 430 kcal ✓
+      baseNutrition: { calories: 430, proteinGrams: 18, carbsGrams: 58, fatGrams: 14 },
+      ingredients: [
+        { name: 'Orzo (pâtes en forme de riz)', qty: 160, unit: 'g' },
+        { name: 'Feta allégée', qty: 80, unit: 'g' },
+        { name: 'Tomates cerises', qty: 150, unit: 'g' },
+        { name: 'Concombre', qty: 100, unit: 'g' },
+        { name: 'Olives noires', qty: 40, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Basilic et menthe frais', qty: 15, unit: 'g' },
+        { name: 'Huile d\'olive extra-vierge', qty: 20, unit: 'ml' },
+        { name: 'Vinaigre de citron', qty: 15, unit: 'ml' },
+        { name: 'Sel, poivre, origan séché', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire l\'orzo al dente dans de l\'eau bouillante salée (8-10 min). Égoutter, rincer à l\'eau froide pour stopper la cuisson et refroidir rapidement.',
+        'Couper les tomates cerises en deux, le concombre en demi-rondelles, le poivron en petits dés. Émietter la feta grossièrement.',
+        'Dans un grand bol, mélanger l\'orzo froid avec tous les légumes, les olives, la feta et les herbes ciselées.',
+        'Assaisonner avec l\'huile d\'olive, le vinaigre de citron, l\'origan, le sel et le poivre. Mélanger, goûter et ajuster. Servir froid ou à température ambiante — idéal en lunch box.'
+      ]
+    },
+
+    {
+      id: 'R446',
+      name: 'Risotto Champignons & Thym Vegan',
+      emoji: '🍄',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['vegan', 'vegetarian', 'dairy-free', 'mediterranean', 'anti-inflammatory', 'balanced'],
+      difficulty: 2,
+      prepTime: 10,
+      cookTime: 28,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 14×4 + 68×4 + 12×9 = 56 + 272 + 108 = 436 kcal ≈ 435 ✓
+      baseNutrition: { calories: 435, proteinGrams: 14, carbsGrams: 68, fatGrams: 12 },
+      ingredients: [
+        { name: 'Riz arborio', qty: 160, unit: 'g' },
+        { name: 'Champignons mélangés (shiitake, portobello, champignons de Paris)', qty: 300, unit: 'g' },
+        { name: 'Bouillon de légumes chaud', qty: 750, unit: 'ml' },
+        { name: 'Oignon jaune', qty: 1, unit: 'pce' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Vin blanc sec', qty: 60, unit: 'ml' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Thym frais', qty: 4, unit: 'branches' },
+        { name: 'Levure nutritionnelle', qty: 15, unit: 'g' },
+        { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Faire sauter les champignons tranchés dans la moitié de l\'huile à feu vif 5 min jusqu\'à coloration dorée. Saler, ajouter l\'ail et le thym. Réserver.',
+        'Dans la même casserole, faire revenir l\'oignon émincé dans le reste d\'huile 3 min. Ajouter le riz et nacrer 2 min. Déglacer au vin blanc, laisser absorber.',
+        'Incorporer le bouillon chaud louche par louche en remuant régulièrement (18-20 min), jusqu\'à texture crémeuse et riz al dente.',
+        'Hors du feu, incorporer la levure nutritionnelle pour une touche umami fromagère. Ajouter les champignons sautés, mélanger, assaisonner et servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R447',
+      name: 'Pasta Primavera Arc-en-Ciel',
+      emoji: '🌈',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['vegetarian', 'balanced', 'anti-inflammatory', 'mediterranean', 'quick', 'meal-prep'],
+      difficulty: 1,
+      prepTime: 15,
+      cookTime: 15,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 22×4 + 60×4 + 12×9 = 88 + 240 + 108 = 436 kcal ≈ 435 ✓
+      baseNutrition: { calories: 435, proteinGrams: 22, carbsGrams: 60, fatGrams: 12 },
+      ingredients: [
+        { name: 'Fusilli tricolores ou penne', qty: 160, unit: 'g' },
+        { name: 'Courgette', qty: 120, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Poivron jaune', qty: 100, unit: 'g' },
+        { name: 'Pois chiches en boîte', qty: 120, unit: 'g' },
+        { name: 'Tomates cerises', qty: 120, unit: 'g' },
+        { name: 'Parmesan râpé', qty: 25, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Basilic frais', qty: 15, unit: 'g' },
+        { name: 'Ail en poudre, sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les pâtes al dente. Pendant ce temps, couper tous les légumes en dés réguliers de 1 cm.',
+        'Dans une grande poêle, faire sauter les poivrons et la courgette dans l\'huile à feu vif 5 min. Ajouter les tomates cerises et les pois chiches, cuire 3 min.',
+        'Égoutter les pâtes en réservant 80 ml d\'eau de cuisson. Ajouter les pâtes aux légumes, mélanger et ajouter un peu d\'eau de cuisson pour lier la sauce.',
+        'Hors du feu, incorporer le parmesan et le basilic déchiré. Assaisonner avec l\'ail en poudre, sel et poivre. Servir en bowl pour un format trendy.'
+      ]
+    },
+
+    {
+      id: 'R448',
+      name: 'Cacio e Pepe Revisité Light',
+      emoji: '🧀',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['vegetarian', 'quick', 'balanced', 'mediterranean', 'budget'],
+      difficulty: 2,
+      prepTime: 5,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 26×4 + 62×4 + 14×9 = 104 + 248 + 126 = 478 kcal ≈ 480 ✓
+      baseNutrition: { calories: 480, proteinGrams: 26, carbsGrams: 62, fatGrams: 14 },
+      ingredients: [
+        { name: 'Spaghetti ou tonnarelli', qty: 160, unit: 'g' },
+        { name: 'Pecorino romano râpé finement', qty: 50, unit: 'g' },
+        { name: 'Parmesan finement râpé', qty: 20, unit: 'g' },
+        { name: 'Poivre noir en grains entiers', qty: 5, unit: 'g' },
+        { name: 'Ricotta allégée', qty: 60, unit: 'g' },
+        { name: 'Sel', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Torréfier le poivre concassé grossièrement à sec dans une grande poêle 1 min. Cuire les pâtes al dente dans très peu d\'eau (concentrée en amidon). Réserver 150 ml d\'eau de cuisson.',
+        'Dans un bol, mélanger le pecorino, le parmesan et la ricotta avec 2 cuillères d\'eau de cuisson tiède pour former une crème lisse. Assaisonner.',
+        'Ajouter les pâtes égouttées dans la poêle avec le poivre torréfié. Hors du feu, verser la crème fromagère et mélanger vigoureusement en ajoutant l\'eau de cuisson louche par louche.',
+        'La sauce doit être soyeuse et enrober chaque spaghetti (technique "mantecatura"). Servir immédiatement dans des assiettes chaudes avec un tour de moulin à poivre généreux.'
+      ]
+    },
+
+    {
+      id: 'R449',
+      name: 'Gnocchis Patate Douce Sauge Brûlée',
+      emoji: '🟠',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['vegetarian', 'gluten-free', 'anti-inflammatory', 'balanced', 'mediterranean', 'meal-prep'],
+      difficulty: 2,
+      prepTime: 20,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 16×4 + 62×4 + 12×9 = 64 + 248 + 108 = 420 kcal ✓
+      baseNutrition: { calories: 420, proteinGrams: 16, carbsGrams: 62, fatGrams: 12 },
+      ingredients: [
+        { name: 'Patates douces', qty: 400, unit: 'g' },
+        { name: 'Farine de riz (ou farine T45)', qty: 80, unit: 'g' },
+        { name: 'Oeuf entier', qty: 1, unit: 'pce' },
+        { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+        { name: 'Beurre', qty: 15, unit: 'g' },
+        { name: 'Sauge fraîche', qty: 10, unit: 'feuilles' },
+        { name: 'Noix', qty: 20, unit: 'g' },
+        { name: 'Noix de muscade', qty: 1, unit: 'pincée' },
+        { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les patates douces entières au micro-ondes 8-10 min ou au four 30 min jusqu\'à tendreté. Éplucher et écraser en purée lisse. Laisser refroidir 5 min.',
+        'Mélanger la purée avec la farine de riz, l\'oeuf, la moitié du parmesan, la muscade, le sel. Former une pâte souple (ne pas trop travailler). Rouler en boudins de 2 cm de diamètre, couper en tronçons de 2 cm.',
+        'Cuire les gnocchis dans de l\'eau bouillante salée : dès qu\'ils remontent en surface, attendre 30 secondes puis égoutter.',
+        'Dans une poêle, faire fondre le beurre à feu moyen jusqu\'à coloration noisette, ajouter la sauge et les noix concassées. Faire dorer les gnocchis égouttés 2 min de chaque côté. Servir parsemé du reste de parmesan.'
+      ]
+    },
 
 
   // ─── RECETTES LEGACY L001-L350 MIGRÉES EN FORMAT R ────────────────────────────
