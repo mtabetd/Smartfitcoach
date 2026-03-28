@@ -2206,61 +2206,180 @@ function cleanShopChecked(list) {
   });
 }
 
-// ─── SALAD BAR ───
+// ─── L'ATELIER BOWL ───
 var SALAD_DB = {
   bases: [
+    // Classiques
     { name: 'Riz brun', qty: 100, unit: 'g', k: 111, p: 2.6, g: 23, l: 0.9 },
     { name: 'Quinoa', qty: 100, unit: 'g', k: 120, p: 4.4, g: 21, l: 1.9 },
     { name: 'P\u00e2tes compl\u00e8tes', qty: 100, unit: 'g', k: 157, p: 5.8, g: 30, l: 1.0 },
     { name: 'Couscous', qty: 100, unit: 'g', k: 112, p: 3.8, g: 23, l: 0.2 },
     { name: 'Lentilles', qty: 100, unit: 'g', k: 116, p: 9.0, g: 20, l: 0.4 },
     { name: 'Pois chiches', qty: 100, unit: 'g', k: 164, p: 8.9, g: 27, l: 2.6 },
-    { name: 'Patate douce', qty: 100, unit: 'g', k: 86, p: 1.6, g: 20, l: 0.1 },
-    { name: 'Boulgour', qty: 100, unit: 'g', k: 83, p: 3.1, g: 18, l: 0.2 }
+    { name: 'Patate douce r\u00f4tie', qty: 100, unit: 'g', k: 90, p: 1.8, g: 21, l: 0.1 },
+    { name: 'Boulgour', qty: 100, unit: 'g', k: 83, p: 3.1, g: 18, l: 0.2 },
+    // Prestige
+    { name: 'Riz noir V\u00e9n\u00e9r\u00e9', qty: 100, unit: 'g', k: 130, p: 3.5, g: 26, l: 1.2, premium: true },
+    { name: 'Freekeh', qty: 100, unit: 'g', k: 112, p: 5.0, g: 22, l: 0.8, premium: true },
+    { name: 'Sarrasin grill\u00e9', qty: 100, unit: 'g', k: 108, p: 4.0, g: 22, l: 1.1, premium: true },
+    { name: 'Orzo gratin\u00e9', qty: 100, unit: 'g', k: 150, p: 5.2, g: 29, l: 1.0, premium: true },
+    { name: 'M\u00e2che', qty: 60, unit: 'g', k: 13, p: 1.8, g: 1.2, l: 0.4, premium: true }
   ],
   proteins: [
+    // Classiques
     { name: 'Poulet grill\u00e9', qty: 100, unit: 'g', k: 165, p: 31, g: 0, l: 3.6 },
     { name: 'Thon en bo\u00eete', qty: 100, unit: 'g', k: 132, p: 28, g: 0, l: 1.5 },
     { name: 'Saumon', qty: 100, unit: 'g', k: 208, p: 20, g: 0, l: 13 },
     { name: 'Crevettes', qty: 100, unit: 'g', k: 85, p: 18, g: 0, l: 0.9 },
-    { name: 'Œuf dur', qty: 60, unit: 'g', k: 91, p: 7.5, g: 0.4, l: 6.3 },
+    { name: '\u0152uf mollet', qty: 60, unit: 'g', k: 91, p: 7.5, g: 0.4, l: 6.3 },
     { name: 'Tofu ferme', qty: 100, unit: 'g', k: 76, p: 8.0, g: 1.9, l: 4.2 },
     { name: 'B\u0153uf hach\u00e9 5%', qty: 100, unit: 'g', k: 137, p: 22, g: 0, l: 5.0 },
-    { name: 'Feta', qty: 50, unit: 'g', k: 133, p: 7.2, g: 1.1, l: 10.7 },
-    { name: 'Mozzarella', qty: 60, unit: 'g', k: 133, p: 9.0, g: 1.5, l: 10 },
-    { name: 'Saumon fum\u00e9', qty: 60, unit: 'g', k: 104, p: 11, g: 0, l: 6.5 }
+    { name: 'Feta AOP', qty: 50, unit: 'g', k: 133, p: 7.2, g: 1.1, l: 10.7 },
+    { name: 'Mozzarella di bufala', qty: 60, unit: 'g', k: 140, p: 9.5, g: 1.2, l: 11 },
+    { name: 'Saumon fum\u00e9', qty: 60, unit: 'g', k: 104, p: 11, g: 0, l: 6.5 },
+    // Prestige
+    { name: 'Burrata', qty: 80, unit: 'g', k: 192, p: 9.6, g: 1.6, l: 16.8, premium: true },
+    { name: 'Gravlax maison', qty: 60, unit: 'g', k: 122, p: 12, g: 0.5, l: 7.8, premium: true },
+    { name: 'Crevettes tigre', qty: 100, unit: 'g', k: 99, p: 21, g: 0, l: 1.1, premium: true },
+    { name: 'Poulpe grill\u00e9', qty: 80, unit: 'g', k: 70, p: 13, g: 1.5, l: 0.8, premium: true },
+    { name: 'Steak de thon snack\u00e9', qty: 100, unit: 'g', k: 144, p: 30, g: 0, l: 2.0, premium: true },
+    { name: 'Edamame', qty: 80, unit: 'g', k: 110, p: 10, g: 8, l: 4.7, premium: true },
+    { name: 'Tofu soyeux', qty: 100, unit: 'g', k: 55, p: 6.0, g: 2.0, l: 2.7, premium: true }
   ],
   veggies: [
-    { name: 'Tomates', qty: 100, unit: 'g', k: 18, p: 0.9, g: 3.9, l: 0.2 },
+    // Classiques
+    { name: 'Tomates cerises', qty: 100, unit: 'g', k: 18, p: 0.9, g: 3.9, l: 0.2 },
     { name: 'Concombre', qty: 100, unit: 'g', k: 15, p: 0.7, g: 3.6, l: 0.1 },
-    { name: '\u00c9pinards', qty: 80, unit: 'g', k: 18, p: 2.3, g: 2.9, l: 0.3 },
+    { name: '\u00c9pinards baby', qty: 80, unit: 'g', k: 18, p: 2.3, g: 2.9, l: 0.3 },
     { name: 'Roquette', qty: 50, unit: 'g', k: 13, p: 1.3, g: 2.0, l: 0.4 },
-    { name: 'Carottes', qty: 80, unit: 'g', k: 33, p: 0.7, g: 7.7, l: 0.1 },
+    { name: 'Carottes r\u00e2p\u00e9es', qty: 80, unit: 'g', k: 33, p: 0.7, g: 7.7, l: 0.1 },
     { name: 'Poivron rouge', qty: 80, unit: 'g', k: 25, p: 0.8, g: 5.9, l: 0.2 },
     { name: 'Champignons', qty: 80, unit: 'g', k: 18, p: 1.8, g: 3.3, l: 0.1 },
-    { name: 'Ma\u00efs', qty: 60, unit: 'g', k: 70, p: 2.1, g: 15, l: 0.6 },
+    { name: 'Ma\u00efs doux', qty: 60, unit: 'g', k: 70, p: 2.1, g: 15, l: 0.6 },
     { name: 'Haricots verts', qty: 80, unit: 'g', k: 22, p: 1.8, g: 5.0, l: 0.1 },
-    { name: 'Oignons rouges', qty: 40, unit: 'g', k: 17, p: 0.5, g: 3.9, l: 0.1 }
+    { name: 'Oignons rouges', qty: 40, unit: 'g', k: 17, p: 0.5, g: 3.9, l: 0.1 },
+    // Prestige
+    { name: 'Betterave r\u00f4tie', qty: 80, unit: 'g', k: 46, p: 1.7, g: 10, l: 0.2, premium: true },
+    { name: 'Asperges blanches', qty: 80, unit: 'g', k: 18, p: 2.0, g: 3.1, l: 0.1, premium: true },
+    { name: 'Fenouil effil\u00f3ch\u00e9', qty: 60, unit: 'g', k: 16, p: 0.6, g: 3.7, l: 0.1, premium: true },
+    { name: 'Radis Watermelon', qty: 50, unit: 'g', k: 9, p: 0.4, g: 1.9, l: 0.1, premium: true },
+    { name: 'Micro-pousses', qty: 20, unit: 'g', k: 10, p: 1.2, g: 1.0, l: 0.5, premium: true },
+    { name: 'Fleurs comestibles', qty: 5, unit: 'g', k: 3, p: 0.2, g: 0.5, l: 0.1, premium: true },
+    { name: 'Avocat tranch\u00e9', qty: 60, unit: 'g', k: 96, p: 1.2, g: 5.1, l: 8.8, premium: true },
+    { name: 'Tomates Heirloom', qty: 100, unit: 'g', k: 22, p: 1.1, g: 4.8, l: 0.3, premium: true }
   ],
   fats: [
+    // Classiques
     { name: 'Avocat', qty: 60, unit: 'g', k: 96, p: 1.2, g: 5.1, l: 8.8 },
-    { name: 'Huile d\'olive', qty: 10, unit: 'ml', k: 88, p: 0, g: 0, l: 10 },
-    { name: 'Amandes', qty: 20, unit: 'g', k: 116, p: 4.2, g: 4.4, l: 10 },
-    { name: 'Noix', qty: 20, unit: 'g', k: 131, p: 3.0, g: 2.8, l: 13 },
+    { name: "Huile d'olive extra-vierge", qty: 10, unit: 'ml', k: 88, p: 0, g: 0, l: 10 },
+    { name: 'Amandes effil\u00e9es', qty: 20, unit: 'g', k: 116, p: 4.2, g: 4.4, l: 10 },
+    { name: 'Noix de Grenoble', qty: 20, unit: 'g', k: 131, p: 3.0, g: 2.8, l: 13 },
     { name: 'Graines de chia', qty: 15, unit: 'g', k: 73, p: 2.5, g: 6.2, l: 4.6 },
-    { name: 'Olives', qty: 30, unit: 'g', k: 41, p: 0.3, g: 2.2, l: 3.8 },
-    { name: 'Tahini', qty: 15, unit: 'g', k: 89, p: 2.5, g: 3.2, l: 8.1 },
-    { name: 'Graines de s\u00e9same', qty: 10, unit: 'g', k: 57, p: 1.8, g: 2.3, l: 4.9 }
+    { name: 'Olives Taggi\u00e0sche', qty: 30, unit: 'g', k: 45, p: 0.3, g: 2.5, l: 4.2 },
+    { name: 'Tahini de s\u00e9same blanc', qty: 15, unit: 'g', k: 89, p: 2.5, g: 3.2, l: 8.1 },
+    { name: 'Graines de s\u00e9same torr\u00e9fi\u00e9es', qty: 10, unit: 'g', k: 57, p: 1.8, g: 2.3, l: 4.9 },
+    // Prestige
+    { name: 'Huile de truffe blanche', qty: 5, unit: 'ml', k: 44, p: 0, g: 0, l: 5.0, premium: true },
+    { name: 'Pignons de pin grill\u00e9s', qty: 15, unit: 'g', k: 102, p: 2.1, g: 2.0, l: 10.2, premium: true },
+    { name: 'Noisettes concass\u00e9es', qty: 15, unit: 'g', k: 94, p: 2.3, g: 2.5, l: 9.0, premium: true },
+    { name: 'Parmesan 24 mois', qty: 15, unit: 'g', k: 59, p: 5.4, g: 0.3, l: 4.1, premium: true },
+    { name: 'Noix de cajou', qty: 20, unit: 'g', k: 113, p: 3.0, g: 6.3, l: 9.0, premium: true }
   ],
   sauces: [
+    // Classiques
     { name: 'Vinaigrette l\u00e9g\u00e8re', qty: 15, unit: 'ml', k: 45, p: 0, g: 2.0, l: 4.0 },
     { name: 'Jus de citron', qty: 20, unit: 'ml', k: 5, p: 0.1, g: 1.3, l: 0.0 },
-    { name: 'Sauce yaourt', qty: 30, unit: 'ml', k: 25, p: 1.5, g: 2.5, l: 0.5 },
+    { name: 'Sauce yaourt menthe', qty: 30, unit: 'ml', k: 28, p: 1.8, g: 2.8, l: 0.6 },
     { name: 'Sauce tahini citronn\u00e9e', qty: 20, unit: 'g', k: 60, p: 1.8, g: 3.0, l: 5.0 },
-    { name: 'Sauce soja', qty: 10, unit: 'ml', k: 6, p: 0.7, g: 0.9, l: 0.0 },
-    { name: 'Pesto', qty: 15, unit: 'g', k: 72, p: 1.5, g: 1.5, l: 7.0 }
+    { name: 'Sauce soja r\u00e9duite', qty: 10, unit: 'ml', k: 6, p: 0.7, g: 0.9, l: 0.0 },
+    { name: 'Pesto G\u00eanois', qty: 15, unit: 'g', k: 72, p: 1.5, g: 1.5, l: 7.0 },
+    // Prestige
+    { name: 'Vinaigrette au miso', qty: 20, unit: 'g', k: 52, p: 1.2, g: 4.5, l: 3.2, premium: true },
+    { name: 'Caesar l\u00e9g\u00e8re', qty: 25, unit: 'g', k: 55, p: 2.0, g: 2.5, l: 4.5, premium: true },
+    { name: 'Green Goddess', qty: 25, unit: 'g', k: 48, p: 0.8, g: 2.0, l: 4.2, premium: true },
+    { name: 'Yuzu kosho', qty: 10, unit: 'g', k: 12, p: 0.4, g: 2.0, l: 0.2, premium: true },
+    { name: 'Chermoula', qty: 20, unit: 'g', k: 38, p: 0.5, g: 1.5, l: 3.5, premium: true },
+    { name: 'Gribiche express', qty: 25, unit: 'g', k: 68, p: 2.5, g: 1.0, l: 6.0, premium: true }
   ]
 };
+
+// ─── COMPOSITIONS SIGNATURE ───
+// 5 bowls curétés par le "chef" — l'utilisateur adopte et personnalise
+var SIGNATURE_BOWLS = [
+  {
+    id: 'japanese_wave',
+    label: 'Vague Japonaise',
+    subtitle: 'Fra\u00eecheur umami \u00b7 \u2191 Prot\u00e9ines',
+    palette: '#2D6A6A',
+    base: 'Riz noir V\u00e9n\u00e9r\u00e9',
+    proteins: ['Steak de thon snack\u00e9', 'Edamame'],
+    veggies: ['Radis Watermelon', 'Concombre', 'Micro-pousses'],
+    fats: ['Graines de s\u00e9same torr\u00e9fi\u00e9es'],
+    sauce: 'Yuzu kosho'
+  },
+  {
+    id: 'mediterranean_sun',
+    label: 'M\u00e9diterran\u00e9e Dor\u00e9e',
+    subtitle: '\u00c9quilibre parfait \u00b7 Anti-inflammatoire',
+    palette: '#C47A2B',
+    base: 'Freekeh',
+    proteins: ['Poulpe grill\u00e9', 'Feta AOP'],
+    veggies: ['Tomates Heirloom', 'Fenouil effil\u00f3ch\u00e9', 'Oignons rouges'],
+    fats: ['Olives Taggi\u00e0sche', 'Pignons de pin grill\u00e9s'],
+    sauce: 'Chermoula'
+  },
+  {
+    id: 'green_goddess_bowl',
+    label: 'La D\u00e9esse Verte',
+    subtitle: 'D\u00e9tox & vitalit\u00e9 \u00b7 Faible calorie',
+    palette: '#2A6A3A',
+    base: 'M\u00e2che',
+    proteins: ['Tofu soyeux', 'Edamame'],
+    veggies: ['\u00c9pinards baby', 'Asperges blanches', 'Avocat tranch\u00e9', 'Micro-pousses'],
+    fats: ['Graines de chia'],
+    sauce: 'Green Goddess'
+  },
+  {
+    id: 'cesar_prestige',
+    label: 'C\u00e9sar R\u00e9invent\u00e9',
+    subtitle: 'Classique \u00e9lev\u00e9 \u00b7 \u2191 Sati\u00e9t\u00e9',
+    palette: '#5A3A8A',
+    base: 'Quinoa',
+    proteins: ['Poulet grill\u00e9', 'Parmesan 24 mois'],
+    veggies: ['Roquette', 'Tomates cerises', 'Fleurs comestibles'],
+    fats: ['Noisettes concass\u00e9es'],
+    sauce: 'Caesar l\u00e9g\u00e8re'
+  },
+  {
+    id: 'nordic_gravlax',
+    label: 'Nordique Signature',
+    subtitle: 'Om\u00e9ga-3 \u00b7 Raffinement scandinave',
+    palette: '#3A5A8A',
+    base: 'Sarrasin grill\u00e9',
+    proteins: ['Gravlax maison'],
+    veggies: ['Fenouil effil\u00f3ch\u00e9', 'Radis Watermelon', 'Betterave r\u00f4tie'],
+    fats: ['Noix de Grenoble', 'Huile de truffe blanche'],
+    sauce: 'Gribiche express'
+  }
+];
+
+// Résoudre une composition signature en objets SALAD_DB complets
+function resolveSignatureBowl(sig) {
+  function findItem(cat, name) {
+    var list = SALAD_DB[cat];
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].name === name) return JSON.parse(JSON.stringify(list[i]));
+    }
+    return null;
+  }
+  var resolved = { base: null, proteins: [], veggies: [], fats: [], sauce: null };
+  resolved.base = findItem('bases', sig.base);
+  (sig.proteins || []).forEach(function(n) { var it = findItem('proteins', n); if (it) resolved.proteins.push(it); });
+  (sig.veggies || []).forEach(function(n) { var it = findItem('veggies', n); if (it) resolved.veggies.push(it); });
+  (sig.fats || []).forEach(function(n) { var it = findItem('fats', n); if (it) resolved.fats.push(it); });
+  resolved.sauce = findItem('sauces', sig.sauce);
+  return resolved;
+}
 
 function calcSaladMacros(sb) {
   var total = { k: 0, p: 0, g: 0, l: 0 };
