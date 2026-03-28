@@ -4796,6 +4796,8 @@ function generateCyclingPlan(level, days) {
     { name: 'Affûtage',      weeks: [8],       color: '#27AE60', focus: 'Réduction volume — maintien intensité' }
   ];
   var template = (level === 'avance' || level === 'intermediaire') ? CYCLING_WORKOUTS.intermediaire : CYCLING_WORKOUTS.debutant;
+  // VO2max override for Spécifique phase (weeks 6-7): replace Sweet Spot Z4 with Z5 intervals
+  var vo2maxSession = { day: 'Jeudi', type: 'VO2max', zone: 5, duration: 60, desc: '6×4min à 106-120% FTP + 4min récup — intervalles courts haute intensité' };
   var plan = [];
   for (var w = 1; w <= 8; w++) {
     var phase = phases[0];
@@ -4804,8 +4806,13 @@ function generateCyclingPlan(level, days) {
     }
     var isDeload = (w === 4 || w === 8);
     var volFactor = isDeload ? 0.6 : (w <= 2 ? 0.75 : w <= 5 ? 1.0 : 1.1);
+    var isSpecific = phase.name === 'Spécifique';
     var maxDays = Math.min(days, template.length);
     var sessions = template.slice(0, maxDays).map(function(s) {
+      // During Spécifique phase, replace Sweet Spot (Z4) with VO2max (Z5) — for intermediaire/avance
+      if (isSpecific && s.type === 'Sweet Spot' && (level === 'intermediaire' || level === 'avance')) {
+        return { day: vo2maxSession.day, type: vo2maxSession.type, duration: Math.round(vo2maxSession.duration * volFactor), zone: vo2maxSession.zone, desc: vo2maxSession.desc };
+      }
       return { day: s.day, type: s.type, duration: Math.round(s.duration * volFactor), zone: s.zone, desc: s.desc };
     });
     plan.push({ week: w, phase: phase.name, phaseColor: phase.color, focus: phase.focus, isDeload: isDeload, sessions: sessions });
@@ -5059,7 +5066,7 @@ function renderCyclingProgram(p) {
   }
 
   var sessions = weekData.sessions || [];
-  if (S.selectedCyclingDay >= sessions.length) S.selectedCyclingDay = 0;
+  if (S.selectedCyclingDay < 0 || S.selectedCyclingDay >= sessions.length) S.selectedCyclingDay = 0;
   var tabs = h('div', {'class': 'day-tabs', style: 'flex-wrap:wrap'});
   sessions.forEach(function(sess, i) {
     tabs.appendChild(h('button', {

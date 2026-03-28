@@ -420,6 +420,20 @@ window.DASHBOARD = {
         ])
       ]);
       grid.appendChild(burnCard);
+      // Net calories (target - burned) — important for recovery nutrition
+      var calTarget = window.calcTarget ? window.calcTarget() : 0;
+      if (calTarget > 0) {
+        var netKcal = calTarget - todaySess.kcalTotal;
+        var netCard = h('div', 'dash-card', [
+          h('p', 'dash-card-title', '\u26a1 Kcal nettes récupération'),
+          h('div', 'dash-big', [
+            document.createTextNode(Math.max(0, netKcal)),
+            h('span', 'dash-unit', 'kcal')
+          ]),
+          h('p', {style: 'font-size:10px;color:var(--grey,#6B6B65);margin:4px 0 0;font-family:"Helvetica Neue",Arial,sans-serif'}, 'Objectif \u2212 dépense = disponible récupération')
+        ]);
+        grid.appendChild(netCard);
+      }
     })();
 
     root.appendChild(grid);

@@ -14047,8 +14047,19 @@
       });
     }
 
+    // ── Halal exclusions (porc + alcool) ──
+    // Synchronisé avec app-core.js filtreHalal pour cohérence double-filtre végétarien+halal
+    var HALAL_EXCLUSIONS = ['porc', 'cochon', 'lard', 'bacon', 'jambon porc', 'saucisson',
+                            'pepperoni', 'chorizo', 'pancetta', 'gélatine de porc',
+                            'alcool', 'vin blanc', 'vin rouge', 'bière', 'rhum',
+                            'cognac', 'whisky', 'vodka', 'porto', 'amaretto', 'mirin'];
+    var halalExclusions = [];
+    if (filters.halal) {
+      halalExclusions = HALAL_EXCLUSIONS;
+    }
+
     // ── Combine all ingredient exclusions ──
-    var allExclusions = allergyExclusions.concat(intoleranceExclusions);
+    var allExclusions = allergyExclusions.concat(intoleranceExclusions).concat(halalExclusions);
 
     // ── Build regime constraint ──
     var regimeIdx = (filters.regime !== undefined && filters.regime !== null) ? filters.regime : null;
@@ -14424,6 +14435,16 @@
         pool.push(toSimpleFormat(recipe));
       }
     });
+
+    // ── Appliquer filtre halal si S.halal = true (cohérence avec app-core.js filterRecipes) ──
+    var s = window.S;
+    if (s && s.halal) {
+      var HALAL_BAN = /porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin/;
+      pool = pool.filter(function(r) {
+        var ingText = ((r.i || '') + ' ' + (r.tags || []).join(' ')).toLowerCase();
+        return !HALAL_BAN.test(ingText);
+      });
+    }
 
     return pool;
   }

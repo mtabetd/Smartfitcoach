@@ -3338,6 +3338,17 @@ function renderSmoothieBar(p) {
   p.appendChild(h('div', {style:'font-size:13px;color:var(--fg2,#888);margin-bottom:12px'},
     '🥛 ' + filtered.length + ' recettes de smoothies' + (flavors.length ? ' filtrées pour vos parfums' : '') + ' — Shake by SmartFitCoach'));
 
+  // ── Conseil substitution whey végétale (régime végétarien/vegan) ──
+  // Les recettes de smoothies utilisent de la whey classique (lactosérum).
+  // Pour un végétarien/vegan utilisant de la whey végétale (pois, riz, chanvre),
+  // les macros sont quasi-identiques et la substitution est directe.
+  if (S.regime === 2 || S.regime === 3) {
+    var wheyVegetaleNote = h('div', {style:'background:var(--ivory2,#f8f7f2);border-left:3px solid var(--accent,#1A4A1A);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif'});
+    wheyVegetaleNote.appendChild(h('strong', {}, '\u26A0\uFE0F Substitution Whey V\u00e9g\u00e9tale'));
+    wheyVegetaleNote.appendChild(h('div', {style:'margin-top:4px;color:var(--grey,#666)'}, 'Ces recettes utilisent de la whey classique (lactos\u00e9rum). Remplacez par une whey v\u00e9g\u00e9tale (prot\u00e9ine de pois, riz brun ou chanvre) \u2014 m\u00eames macros, substitution directe 1:1. Choisissez un isolat pour minimiser l\u2019impact digestif.'));
+    p.appendChild(wheyVegetaleNote);
+  }
+
   if (!filtered.length) {
     p.appendChild(h('div', {style:'text-align:center;padding:24px;color:var(--fg2)'}, 'Aucune recette pour ces parfums. Sélectionnez d\'autres parfums dans vos préférences.'));
     return;
