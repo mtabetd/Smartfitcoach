@@ -12954,7 +12954,6 @@
       'Assaisonner de fleur de sel et poivre noir, laisser mariner 2 min et servir immédiatement.'
     ]
   },
-  ,
 
   // ─── ITALIAN COLAZIONE & SNACK R480-R489 ──────────────────────────────────
 
