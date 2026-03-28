@@ -3080,7 +3080,7 @@ function renderSaladBar(p) {
 var WHEY_SMOOTHIES = [
   // === CHOCOLAT ===
   { id:'sm_choco_01', name:'Chocolat Noir Énergie', flavors:['chocolate'], goal:['muscle','performance'], timing:'post', cal:380, p:35, c:42, f:8, prep:'3min',
-    ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Banane congelée',qty:100,unit:'g'},{name:'Cacao pur',qty:10,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'}],
+    ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Banane congelée',qty:100,unit:'g'},{name:'Cacao pur',qty:10,unit:'g'},{name:'Beurre d\'amande',qty:15,unit:'g'}],
     steps:['Congeler la banane la veille en morceaux','Mettre tous les ingrédients dans le blender','Mixer 45 secondes à pleine puissance','Consommer dans les 10 min post-entraînement'],
     tips:'Ajouter des glaçons pour une texture plus épaisse. 1 cuillère de miel si glycogène à refaire.' },
   { id:'sm_choco_02', name:'Brownie Shake Récupération', flavors:['chocolate'], goal:['muscle','recovery'], timing:'post', cal:420, p:40, c:48, f:9, prep:'4min',
@@ -3313,7 +3313,24 @@ function renderSmoothieBar(p) {
   var S = window.S;
   p.innerHTML = '';
   var flavors = S.wheyFlavors || [];
+  var allergies = (S.allergies || []).filter(function(a) { return a !== 'Aucune'; });
+  // Vérifie si un smoothie contient un ingrédient allergène
+  function smoothieHasAllergen(sm) {
+    if (!allergies.length) return false;
+    var ingText = (sm.ingredients || []).map(function(i) { return i.name; }).join(' ').toLowerCase();
+    for (var a = 0; a < allergies.length; a++) {
+      var al = allergies[a].toLowerCase();
+      if (al === 'arachides' && /arachide|cacahu[eè]te/.test(ingText)) return true;
+      if ((al === 'fruits à coque' || al === 'fruits a coque') && /amande|noisette|noix|cajou|pistache|pecan|macadamia/.test(ingText.replace(/noix de coco|noix de muscade/g, ''))) return true;
+      if ((al === 'oeufs' || al === 'œufs') && /oeuf|œuf/.test(ingText)) return true;
+      if (al === 'lait/produits laitiers' && /lait|fromage|yaourt|beurre|crème|ricotta|cottage|skyr/.test(ingText.replace(/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/g, ''))) return true;
+      if (al === 'soja' && /soja|tofu/.test(ingText)) return true;
+      if (al === 'gluten/blé' && /farine|pain|avoine|orge|seigle/.test(ingText.replace(/galette de riz|farine de riz|farine de sarrasin/g, ''))) return true;
+    }
+    return false;
+  }
   var filtered = WHEY_SMOOTHIES.filter(function(sm) {
+    if (smoothieHasAllergen(sm)) return false;
     if (!flavors.length) return true;
     return sm.flavors.some(function(f) { return flavors.indexOf(f) !== -1; });
   });
