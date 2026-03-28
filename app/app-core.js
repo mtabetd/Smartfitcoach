@@ -2545,15 +2545,7 @@ window.calcWeightProjection=calcWeightProjection; window.alcoholWeeklyKcal=alcoh
 
 // ─── RECIPE FILTERING ───
 function getPool(t){
-  // Délègue à RecipeEngine.getPool() si disponible (fusionne anciens + nouveaux pools)
-  if (window.RecipeEngine && window.RecipeEngine.getPool) {
-    return window.RecipeEngine.getPool(t);
-  }
-  // Fallback : anciens arrays directs
-  if(t==='breakfast')return window.breakfast;
-  if(t==='lunch')return window.lunch;
-  if(t==='snack')return window.snack;
-  return window.dinner;
+  return window.RecipeEngine.getPool(t);
 }
 function filterRecipes(pool,type){
   var s=window.S;
