@@ -1274,7 +1274,20 @@ function renderStep8(p) {
   var rh = h('div', {'class': 'result-header'});
   rh.appendChild(h('div', {'class': 'result-eyebrow'}, 'R\u00e9sultats personnalis\u00e9s'));
   var _uName = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().name : '';
-  rh.appendChild(h('div', {'class': 'result-title', html: (_uName ? _uName + ',<br>' : '') + 'Vos <em>macros</em>'}));
+  // XSS fix: build title via DOM instead of innerHTML with user data
+  (function() {
+    var titleDiv = document.createElement('div');
+    titleDiv.className = 'result-title';
+    if (_uName) {
+      titleDiv.appendChild(document.createTextNode(_uName + ','));
+      titleDiv.appendChild(document.createElement('br'));
+    }
+    titleDiv.appendChild(document.createTextNode('Vos '));
+    var em = document.createElement('em');
+    em.textContent = 'macros';
+    titleDiv.appendChild(em);
+    rh.appendChild(titleDiv);
+  })();
   rh.appendChild(h('div', {'class': 'result-rule'}));
   var _profItems = [S.sex==='homme'?'Homme':'Femme', S.age+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
   if(S.activity!==null)_profItems.push(ACTIVITIES[S.activity].name);
@@ -1313,14 +1326,13 @@ function renderStep8(p) {
   sr.appendChild(c2);
   p.appendChild(sr);
 
-    // Bandeau validation NutritionMaster
-    var nmBanner = '';
+    // Bandeau validation NutritionMaster (XSS-safe DOM construction)
     if (window.S._nm && window.S._nm.errors && window.S._nm.errors.length === 0) {
-      nmBanner = '<div style="margin:8px 0;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border-left:3px solid var(--green,#1A4A1A);font-size:12px;color:var(--text-secondary,#5A5A54)">' +
-        '✓ Calculs validés par NutritionMaster — P×4 + G×4 + L×9 = ' + window.S._nm.caloriesCheck + ' kcal' +
-        '</div>';
+      var nmDiv = document.createElement('div');
+      nmDiv.style.cssText = 'margin:8px 0;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border-left:3px solid var(--green,#1A4A1A);font-size:12px;color:var(--text-secondary,#5A5A54)';
+      nmDiv.textContent = '\u2713 Calculs valid\u00e9s par NutritionMaster \u2014 P\u00d74 + G\u00d74 + L\u00d79 = ' + Number(window.S._nm.caloriesCheck) + ' kcal';
+      p.appendChild(nmDiv);
     }
-    if (nmBanner) { p.appendChild(h('div', {html: nmBanner})); }
 
   // ─── COHÉRENCE SPORT × NUTRITION — séances réalisées 7 derniers jours ───
   // Permet de vérifier que le facteur d'activité sélectionné est cohérent avec la réalité

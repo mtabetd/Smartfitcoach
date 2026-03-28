@@ -73,9 +73,31 @@ if ('BarcodeDetector' in window) {
   } catch(e) { /* fallback to manual */ }
 }
 
+// ─── SECURITY: API URL validation ───
+var ALLOWED_API_DOMAIN = 'https://world.openfoodfacts.org/';
+function isSafeApiUrl(url) {
+  return typeof url === 'string' && url.indexOf(ALLOWED_API_DOMAIN) === 0;
+}
+
+// ─── SECURITY: Barcode validation ───
+function isValidBarcode(barcode) {
+  // Only allow numeric barcodes (EAN-8, EAN-13, UPC-A, UPC-E, Code128 subset)
+  return typeof barcode === 'string' && /^[0-9A-Za-z\-]{8,20}$/.test(barcode.trim());
+}
+
 // ─── OPEN FOOD FACTS API ───
 function lookupProduct(barcode, callback) {
-  var url = 'https://world.openfoodfacts.org/api/v2/product/' + encodeURIComponent(barcode) + '.json';
+  // Validate barcode before using it in URL
+  if (!isValidBarcode(barcode)) {
+    callback('Code-barres invalide', null);
+    return;
+  }
+  var url = 'https://world.openfoodfacts.org/api/v2/product/' + encodeURIComponent(barcode.trim()) + '.json';
+  // Validate constructed URL domain
+  if (!isSafeApiUrl(url)) {
+    callback('URL non autorisée', null);
+    return;
+  }
   // Timeout: 10 seconds via AbortController
   var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
   var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 10000) : null;
@@ -99,30 +121,44 @@ function lookupProduct(barcode, callback) {
     });
 }
 
+function sanitizeText(s) {
+  if (typeof s !== 'string') return '';
+  // Strip any HTML tags and limit length
+  return s.replace(/<[^>]*>/g, '').substring(0, 500);
+}
+
 function parseProduct(p) {
   var n = p.nutriments || {};
+  // Validate and sanitize image URL — only allow https from openfoodfacts domains
+  var rawImg = p.image_front_small_url || p.image_url || null;
+  var safeImg = null;
+  if (rawImg && typeof rawImg === 'string' &&
+      (rawImg.indexOf('https://images.openfoodfacts.org/') === 0 ||
+       rawImg.indexOf('https://world.openfoodfacts.org/') === 0)) {
+    safeImg = rawImg;
+  }
   return {
-    name: p.product_name || p.product_name_fr || 'Produit inconnu',
-    brand: p.brands || '',
-    quantity: p.quantity || '',
-    image: p.image_front_small_url || p.image_url || null,
-    barcode: p.code || '',
-    // Nutriments per 100g
-    kcal: Math.round(n['energy-kcal_100g'] || n['energy-kcal'] || 0),
-    protein: Math.round((n.proteins_100g || 0) * 10) / 10,
-    carbs: Math.round((n.carbohydrates_100g || 0) * 10) / 10,
-    fat: Math.round((n.fat_100g || 0) * 10) / 10,
-    fiber: Math.round((n.fiber_100g || 0) * 10) / 10,
-    sugar: Math.round((n.sugars_100g || 0) * 10) / 10,
-    salt: Math.round((n.salt_100g || 0) * 100) / 100,
-    saturatedFat: Math.round((n['saturated-fat_100g'] || 0) * 10) / 10,
+    name: sanitizeText(p.product_name || p.product_name_fr || 'Produit inconnu'),
+    brand: sanitizeText(p.brands || ''),
+    quantity: sanitizeText(p.quantity || ''),
+    image: safeImg,
+    barcode: sanitizeText(p.code || ''),
+    // Nutriments per 100g — coerce to numbers to prevent injection
+    kcal: Math.round(Number(n['energy-kcal_100g'] || n['energy-kcal'] || 0)),
+    protein: Math.round(Number(n.proteins_100g || 0) * 10) / 10,
+    carbs: Math.round(Number(n.carbohydrates_100g || 0) * 10) / 10,
+    fat: Math.round(Number(n.fat_100g || 0) * 10) / 10,
+    fiber: Math.round(Number(n.fiber_100g || 0) * 10) / 10,
+    sugar: Math.round(Number(n.sugars_100g || 0) * 10) / 10,
+    salt: Math.round(Number(n.salt_100g || 0) * 100) / 100,
+    saturatedFat: Math.round(Number(n['saturated-fat_100g'] || 0) * 10) / 10,
     // Existing scores
-    nutriscore: p.nutriscore_grade || p.nutrition_grades || null,
-    nova: p.nova_group || null,
-    ingredients: p.ingredients_text_fr || p.ingredients_text || '',
-    additives: (p.additives_tags || []).length,
-    categories: p.categories || '',
-    allergens: p.allergens || ''
+    nutriscore: /^[a-e]$/.test(p.nutriscore_grade || p.nutrition_grades || '') ? (p.nutriscore_grade || p.nutrition_grades) : null,
+    nova: Number(p.nova_group) >= 1 && Number(p.nova_group) <= 4 ? Number(p.nova_group) : null,
+    ingredients: sanitizeText(p.ingredients_text_fr || p.ingredients_text || ''),
+    additives: Array.isArray(p.additives_tags) ? p.additives_tags.length : 0,
+    categories: sanitizeText(p.categories || ''),
+    allergens: sanitizeText(p.allergens || '')
   };
 }
 
@@ -231,6 +267,9 @@ function findAlternatives(product, callback) {
   if (!category) { callback([]); return; }
 
   var url = 'https://world.openfoodfacts.org/cgi/search.pl?action=process&tagtype_0=categories&tag_contains_0=contains&tag_0=' + encodeURIComponent(category) + '&sort_by=nutriscore_score&page_size=10&json=1';
+
+  // Validate URL domain
+  if (!isSafeApiUrl(url)) { callback([]); return; }
 
   var altController = typeof AbortController !== 'undefined' ? new AbortController() : null;
   var altTimeout = altController ? setTimeout(function() { altController.abort(); }, 10000) : null;
@@ -394,7 +433,7 @@ window.SCANNER = {
     // Scan button
     var scanBtn = document.createElement('div');
     scanBtn.className = 'scan-btn';
-    scanBtn.innerHTML = '&#x1F4F7; Scanner un code-barres';
+    scanBtn.textContent = '\uD83D\uDCF7 Scanner un code-barres';
     scanBtn.onclick = function() {
       showCamera = true;
       renderCameraView();
