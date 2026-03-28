@@ -465,6 +465,75 @@ window.DASHBOARD = {
     }
 
 
+    /* ═══ WIDGET GROSSESSE ═══ */
+    if (S.pregnant && S.sex === 'femme') {
+      var pregTri = window.getPregnancyTrimester ? window.getPregnancyTrimester() : null;
+      var pregWeightGuide = window.getPregnancyWeightGuideline ? window.getPregnancyWeightGuideline() : null;
+      if (pregTri) {
+        root.appendChild(h('div', 'dash-label', 'Grossesse — Semaine ' + pregTri.week));
+        var pregCard = document.createElement('div');
+        pregCard.className = 'dash-card';
+        pregCard.style.cssText = 'border-left:4px solid #E91E63;padding:16px;background:rgba(233,30,99,0.03);margin-bottom:12px;';
+
+        var pregTitle = document.createElement('div');
+        pregTitle.style.cssText = 'font-family:Georgia,serif;font-size:17px;color:#C2185B;margin-bottom:4px;';
+        pregTitle.textContent = '\uD83E\uDD30 ' + pregTri.trimester.name + ' \u2014 ' + pregTri.trimester.desc;
+        pregCard.appendChild(pregTitle);
+
+        var pregProgress = document.createElement('div');
+        pregProgress.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px;';
+        pregProgress.textContent = 'Progression : ' + pregTri.progress + '% \u2014 ' + pregTri.weeksLeft + ' semaines restantes';
+        pregCard.appendChild(pregProgress);
+
+        // Progress bar
+        var pregBarBg = document.createElement('div');
+        pregBarBg.style.cssText = 'height:6px;background:rgba(0,0,0,0.08);border-radius:3px;overflow:hidden;margin-bottom:12px;';
+        var pregBarFill = document.createElement('div');
+        pregBarFill.style.cssText = 'height:6px;width:' + pregTri.progress + '%;background:#E91E63;border-radius:3px;';
+        pregBarBg.appendChild(pregBarFill);
+        pregCard.appendChild(pregBarBg);
+
+        // Calorie info
+        var pregCal = document.createElement('div');
+        pregCal.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#880E4F;margin-bottom:6px;';
+        var extraKcal = pregTri.trimester.calorieExtra || 0;
+        pregCal.textContent = extraKcal > 0 ? '+' + extraKcal + ' kcal/jour (besoins grossesse inclus dans votre cible)' : 'T1 : pas de calories supplémentaires nécessaires';
+        pregCard.appendChild(pregCal);
+
+        // Weight guideline
+        if (pregWeightGuide) {
+          var pregWeight = document.createElement('div');
+          pregWeight.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px;';
+          pregWeight.textContent = 'Poids attendu à SA' + pregTri.week + ' : ' + pregWeightGuide.expectedWeightMin + '\u2013' + pregWeightGuide.expectedWeightMax + ' kg (gain cible : +' + pregWeightGuide.currentExpectedGainMin + '\u2013+' + pregWeightGuide.currentExpectedGainMax + ' kg)';
+          pregCard.appendChild(pregWeight);
+        }
+
+        // Nutrition tips (top 3)
+        var tipsTitle = document.createElement('div');
+        tipsTitle.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E91E63;margin-bottom:6px;';
+        tipsTitle.textContent = 'Conseils nutrition ce trimestre';
+        pregCard.appendChild(tipsTitle);
+        (pregTri.trimester.nutritionTips || []).slice(0, 3).forEach(function(tip) {
+          var tipEl = document.createElement('div');
+          tipEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-bottom:3px;padding-left:8px;';
+          tipEl.textContent = '\u2022 ' + tip;
+          pregCard.appendChild(tipEl);
+        });
+
+        // Sport warning
+        var pregSportWarn = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
+        if (pregSportWarn) {
+          var warnBox = document.createElement('div');
+          warnBox.style.cssText = 'margin-top:10px;padding:8px 10px;background:rgba(233,30,99,0.07);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#C2185B;border-radius:2px;';
+          warnBox.textContent = pregSportWarn;
+          pregCard.appendChild(warnBox);
+        }
+
+        root.appendChild(pregCard);
+      }
+    }
+
+
     /* ═══ QUICK ACTIONS ═══ */
     root.appendChild(h('div', 'dash-label', 'Accès rapide'));
 
