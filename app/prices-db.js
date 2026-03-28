@@ -2536,6 +2536,412 @@
       source: 'estimation',
       updatedAt: '2026-03'
     },
+
+    // ── Viandes & Poissons marocains (souk / poissonnerie) ────────────────────
+    'Sardines fraîches': {
+      name: 'Sardines fraîches',
+      pricePerG: r(12 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Kefta de bœuf': {
+      name: 'Kefta de bœuf',
+      pricePerG: r(100 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Merguez': {
+      name: 'Merguez',
+      pricePerG: r(80 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Côtelettes d\'agneau': {
+      name: 'Côtelettes d\'agneau',
+      pricePerG: r(150 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Poulet entier fermier': {
+      name: 'Poulet entier fermier',
+      pricePerG: r(35 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Dinde entière': {
+      name: 'Dinde entière',
+      pricePerG: r(55 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Filet de dorade': {
+      name: 'Filet de dorade',
+      pricePerG: r(90 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Calamars frais': {
+      name: 'Calamars frais',
+      pricePerG: r(80 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Anchois frais': {
+      name: 'Anchois frais',
+      pricePerG: r(20 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Steak de veau': {
+      name: 'Steak de veau',
+      pricePerG: r(180 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+
+    // ── Produits laitiers marocains ───────────────────────────────────────────
+    'Lben': {
+      name: 'Lben',
+      pricePerMl: r(8 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Fromage Kiri': {
+      name: 'Fromage Kiri',
+      pricePerG: r(35 / 120),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Fromage Vache qui rit': {
+      name: 'Fromage Vache qui rit',
+      pricePerG: r(30 / 120),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Smen': {
+      name: 'Smen',
+      pricePerG: r(120 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Jben': {
+      name: 'Jben',
+      pricePerG: r(20 / 250),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+
+    // ── Légumes frais (souk marocain) — entrées manquantes ───────────────────
+    'Navet': {
+      name: 'Navet',
+      pricePerG: r(4 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Chou blanc': {
+      name: 'Chou blanc',
+      pricePerG: r(5 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Betterave fraîche': {
+      name: 'Betterave fraîche',
+      pricePerG: r(5 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Fèves fraîches': {
+      name: 'Fèves fraîches',
+      pricePerG: r(8 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Petits pois frais': {
+      name: 'Petits pois frais',
+      pricePerG: r(12 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Piment vert frais': {
+      name: 'Piment vert frais',
+      pricePerG: r(5 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Artichaut': {
+      name: 'Artichaut',
+      pricePerG: r(15 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Fenouil': {
+      name: 'Fenouil',
+      pricePerG: r(10 / 500),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Blette': {
+      name: 'Blette',
+      pricePerG: r(6 / 400),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Cresson': {
+      name: 'Cresson',
+      pricePerG: r(5 / 150),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+
+    // ── Fruits frais (souk marocain) — entrées manquantes ────────────────────
+    'Orange': {
+      name: 'Orange',
+      pricePerG: r(8 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Citron jaune': {
+      name: 'Citron jaune',
+      pricePerG: r(10 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Grenade': {
+      name: 'Grenade',
+      pricePerG: r(15 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Figue fraîche': {
+      name: 'Figue fraîche',
+      pricePerG: r(20 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Pastèque fraîche': {
+      name: 'Pastèque fraîche',
+      pricePerG: r(5 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Melon': {
+      name: 'Melon',
+      pricePerG: r(8 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Pêche fraîche': {
+      name: 'Pêche fraîche',
+      pricePerG: r(15 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Abricot': {
+      name: 'Abricot',
+      pricePerG: r(15 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Fraises fraîches': {
+      name: 'Fraises fraîches',
+      pricePerG: r(25 / 500),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Datte Medjool': {
+      name: 'Datte Medjool',
+      pricePerG: r(80 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+
+    // ── Épicerie sèche marocaine ──────────────────────────────────────────────
+    'Citrons confits': {
+      name: 'Citrons confits',
+      pricePerG: r(25 / 300),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Olives vertes marinées': {
+      name: 'Olives vertes marinées',
+      pricePerG: r(20 / 200),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Olives noires beldi': {
+      name: 'Olives noires beldi',
+      pricePerG: r(25 / 200),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Harissa': {
+      name: 'Harissa',
+      pricePerG: r(15 / 80),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Concentré de tomate': {
+      name: 'Concentré de tomate',
+      pricePerG: r(6 / 70),
+      source: 'bim',
+      updatedAt: '2026-03'
+    },
+    'Rfissa (trid séché)': {
+      name: 'Rfissa (trid séché)',
+      pricePerG: r(15 / 250),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Pâte de sésame (tahini)': {
+      name: 'Pâte de sésame (tahini)',
+      pricePerG: r(45 / 400),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Amlou': {
+      name: 'Amlou',
+      pricePerG: r(120 / 250),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Huile d\'argan': {
+      name: 'Huile d\'argan',
+      pricePerMl: r(250 / 250),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Safran marocain': {
+      name: 'Safran marocain',
+      pricePerG: r(30 / 0.5),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Gingembre en poudre': {
+      name: 'Gingembre en poudre',
+      pricePerG: r(8 / 50),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Cumin en poudre': {
+      name: 'Cumin en poudre',
+      pricePerG: r(5 / 50),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Paprika doux marocain': {
+      name: 'Paprika doux marocain',
+      pricePerG: r(5 / 50),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Cannelle en poudre': {
+      name: 'Cannelle en poudre',
+      pricePerG: r(6 / 50),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+
+    // ── Légumineuses & Céréales marocaines ────────────────────────────────────
+    'Pois cassés': {
+      name: 'Pois cassés',
+      pricePerG: r(15 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Haricots blancs secs': {
+      name: 'Haricots blancs secs',
+      pricePerG: r(18 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Fèves sèches': {
+      name: 'Fèves sèches',
+      pricePerG: r(15 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Semoule fine': {
+      name: 'Semoule fine',
+      pricePerG: r(10 / 1000),
+      source: 'bim',
+      updatedAt: '2026-03'
+    },
+    'Semoule moyenne': {
+      name: 'Semoule moyenne',
+      pricePerG: r(10 / 1000),
+      source: 'bim',
+      updatedAt: '2026-03'
+    },
+    'Semoule grosse': {
+      name: 'Semoule grosse',
+      pricePerG: r(10 / 1000),
+      source: 'bim',
+      updatedAt: '2026-03'
+    },
+    'Orge perlé': {
+      name: 'Orge perlé',
+      pricePerG: r(12 / 1000),
+      source: 'souk',
+      updatedAt: '2026-03'
+    },
+    'Farine blanche T55': {
+      name: 'Farine blanche T55',
+      pricePerG: r(8 / 1000),
+      source: 'bim',
+      updatedAt: '2026-03'
+    },
+    'Farine complète T110': {
+      name: 'Farine complète T110',
+      pricePerG: r(12 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Cuisine italienne (produits courants au Maroc) ─────────────────────────
+    'Pâtes spaghetti': {
+      name: 'Pâtes spaghetti',
+      pricePerG: r(12 / 500),
+      source: 'bim',
+      updatedAt: '2026-03'
+    },
+    'Pâtes tagliatelles': {
+      name: 'Pâtes tagliatelles',
+      pricePerG: r(18 / 250),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Tomates pelées en boîte': {
+      name: 'Tomates pelées en boîte',
+      pricePerG: r(12 / 400),
+      source: 'bim',
+      updatedAt: '2026-03'
+    },
+    'Pesto basilic': {
+      name: 'Pesto basilic',
+      pricePerG: r(45 / 190),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Ricotta': {
+      name: 'Ricotta',
+      pricePerG: r(55 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Mozzarella fraîche (125g)': {
+      name: 'Mozzarella fraîche (125g)',
+      pricePerG: r(50 / 125),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Suppléments & nutrition sportive ──────────────────────────────────────
+    'Créatine monohydrate': {
+      name: 'Créatine monohydrate',
+      pricePerG: r(180 / 300),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
   };
 
   /**

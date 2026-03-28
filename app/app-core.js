@@ -191,7 +191,7 @@ var MEAL_SPLIT={pctBreak:.25,pctLunch:.45,pctSnack:0,pctDinner:.30}; // défaut 
 // Base : ADA 2023, ISSN 2017, Ivy 2004 (post-workout nutrition window)
 // INVARIANT : pctSnack doit être 0 quand meals<4, car generateWeek n'alloue le slot snack que si meals>=4.
 // Un pctSnack>0 avec meals=3 crée un déficit calorique silencieux égal à pctSnack×TDEE (ex: 5%×1800=90kcal/j).
-function getMealSplit(){
+function _getMealSplitBase(){
   var s=window.S;
   var meals=s.mealsPerDay||3;
   var actFactor=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
@@ -203,17 +203,13 @@ function getMealSplit(){
   }
   if(meals===3){
     if(isAthlete){
-      // Athlète 3 repas : pctSnack=0 obligatoire (generateWeek ne génère pas de slot snack pour meals=3)
-      // Budget snack (7%) redistribué sur déjeuner (+5%) et dîner (+2%) pour atteindre 100%
-      // Note informative : collation post-entraînement recommandée en dehors du plan généré
       return{pctBreak:.25,pctLunch:.43,pctSnack:0,pctDinner:.32,
         note:'Athlète 3 repas : collation post-entraînement recommandée (+glucides/protéines dans les 30-45min — Ivy 2004). Ajoutez 150-250kcal (banane + whey ou fruit + yaourt grec) après séance.'};
     }
-    return MEAL_SPLIT; // Standard 3 repas (pctSnack=0, redistribué sur déjeuner)
+    return{pctBreak:.25,pctLunch:.45,pctSnack:0,pctDinner:.30}; // clone de MEAL_SPLIT
   }
   if(meals===4){
     if(isAthlete){
-      // Athlète 4 repas : collation sportive 10% (250-400 kcal — fenêtre anabolique Ivy 2004)
       return{pctBreak:.25,pctLunch:.35,pctSnack:.10,pctDinner:.30,
         note:'4 repas athlète : collation post-entraînement 10% des calories — mix glucides:protéines 3:1 optimal (Ivy 2004, ISSN 2017)'};
     }
@@ -222,16 +218,42 @@ function getMealSplit(){
   }
   if(meals>=5){
     if(isAthlete){
-      // Athlète 5 repas : collation étendue pré+post entraînement = 20% (fenêtre anabolique)
       // 0.20+0.30+0.20+0.30 = 1.00 ✓
       return{pctBreak:.20,pctLunch:.30,pctSnack:.20,pctDinner:.30,
         note:'5 repas athlète : collation étendue pré+post entraînement — fractionner l\'apport protéique toutes les 3-4h pour maximiser la synthèse protéique (Moore 2012, Churchward-Venne 2016)'};
     }
-    // Standard 5 repas : 0.22+0.33+0.13+0.32 = 1.00 ✓
+    // 0.22+0.33+0.13+0.32 = 1.00 ✓
     return{pctBreak:.22,pctLunch:.33,pctSnack:.13,pctDinner:.32,
       note:'5 repas : fractionnement modéré — améliore satiété et glycémie'};
   }
-  return MEAL_SPLIT;
+  return{pctBreak:.25,pctLunch:.45,pctSnack:0,pctDinner:.30};
+}
+// Nutrient timing : ajuste la distribution selon l'heure d'entraînement (±5% max)
+// Source : Ivy 2004, ISSN Position Stand 2017, Aragon & Schoenfeld 2013
+// INVARIANT : la somme des pct reste toujours 1.00 (vérifié manuellement pour chaque cas)
+function _applyTrainTiming(sp, trainTime){
+  if(!trainTime) return sp; // pas d'entraînement renseigné → comportement identique
+  var SHIFT=0.05; // 5% redistribué — modeste, conforme à la littérature (Aragon 2013 : timing < total journalier)
+  var r=function(x){return Math.round(x*100)/100;}; // arrondi 2 décimales
+  var b=sp.pctBreak, l=sp.pctLunch, sn=sp.pctSnack, d=sp.pctDinner;
+  var timing='';
+  if(trainTime==='morning'){
+    // Matin : petit-déj = post-séance (fenêtre anabolique) → +5%, dîner allégé → -5%
+    // Guard : pctDinner doit rester ≥ 0.15 après shift
+    if(d>=SHIFT+0.15){b=r(b+SHIFT);d=r(d-SHIFT);timing='\uD83D\uDCAA Post-séance matin';}
+  } else if(trainTime==='noon'){
+    // Midi : déjeuner = post-séance → +5%, petit-déj allégé → -5%
+    // Guard : pctBreak doit rester ≥ 0.15 après shift
+    if(b>=SHIFT+0.15){l=r(l+SHIFT);b=r(b-SHIFT);timing='\u26A1 Pré-séance midi';}
+  } else if(trainTime==='evening'){
+    // Soir : dîner = post-séance → +5%, petit-déj allégé → -5%
+    // Guard : pctBreak doit rester ≥ 0.15 après shift
+    if(b>=SHIFT+0.15&&d>0){d=r(d+SHIFT);b=r(b-SHIFT);timing='\uD83C\uDF19 Post-séance soir';}
+  }
+  return{pctBreak:b,pctLunch:l,pctSnack:sn,pctDinner:d,note:sp.note,trainTimingNote:timing};
+}
+function getMealSplit(){
+  return _applyTrainTiming(_getMealSplitBase(), window.S && window.S.trainTime);
 }
 window.getMealSplit=getMealSplit;
 var DAY_NAMES=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
@@ -1533,6 +1555,7 @@ window.S = {
   // Sport
   sStep: 0, sportGoals: [], sportLevel: null, sportDays: 3,
   sportEquipment: 'gym', // 'gym' (salle complète), 'dumbbells' (haltères+banc), 'home' (poids du corps)
+  trainTime: null, // 'morning' | 'noon' | 'evening' — heure d'entraînement pour nutrient timing
   sportSessionDuration: null, // '45min','1h','1h15','1h30'
   sportFocus: {}, sportProgram: null, selectedSportDay: 0,
   sportModalExercise: null,
@@ -2615,6 +2638,13 @@ function enrichWithScaling(recipe, targetKcal) {
       recipe.l = Math.round(adapted.adaptedNutrition.fatGrams);
       recipe._scaledIngredients = adapted.ingredients || null;
       recipe._scalingRatio = adapted.scalingRatio || 1;
+      // Appliquer les mesures pratiques sur les ingrédients scalés
+      if (recipe._scaledIngredients && window.RecipeEngine && window.RecipeEngine.convertToDisplay) {
+        recipe._scaledIngredients = recipe._scaledIngredients.map(function(ing) {
+          var disp = window.RecipeEngine.convertToDisplay(ing.qty, ing.unit, ing.name);
+          return { name: ing.name, qty: disp.qty, unit: disp.unit, note: ing.note };
+        });
+      }
     } catch(e) {}
     return recipe;
   }
@@ -2633,7 +2663,9 @@ function enrichWithScaling(recipe, targetKcal) {
     if (window.RecipeEngine && window.RecipeEngine.parseIngredientsString && recipe.i) {
       var parsed = window.RecipeEngine.parseIngredientsString(recipe.i);
       recipe._scaledIngredients = parsed.map(function(ing) {
-        return { name: ing.name, qty: Math.round(ing.qty * ratio * 10) / 10, unit: ing.unit };
+        var scaledQty = Math.round(ing.qty * ratio * 10) / 10;
+        var disp = window.RecipeEngine.convertToDisplay ? window.RecipeEngine.convertToDisplay(scaledQty, ing.unit, ing.name) : { qty: scaledQty, unit: ing.unit };
+        return { name: ing.name, qty: disp.qty, unit: disp.unit };
       });
     }
   }

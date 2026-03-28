@@ -190,6 +190,17 @@ window.WATER_TRACKER = {
   _key: function() { return storageKey('water'); },
   _TARGET: 8,
 
+  // Calcule la cible en verres (250ml) depuis calcHydration() si disponible
+  _getTarget: function() {
+    if (window.calcHydration && window.S && window.S.weight) {
+      var hyd = window.calcHydration();
+      if (hyd && hyd.liters > 0) {
+        return Math.max(8, Math.ceil(hyd.liters * 4)); // 1 verre = 250ml, min 8
+      }
+    }
+    return this._TARGET;
+  },
+
   _loadAll: function() {
     return loadData('water') || {};
   },
@@ -202,7 +213,7 @@ window.WATER_TRACKER = {
     var all = this._loadAll();
     var today = todayKey();
     var glasses = (all[today] && typeof all[today] === 'number') ? all[today] : 0;
-    var target = this._TARGET;
+    var target = this._getTarget();
     return {
       glasses: glasses,
       target: target,
@@ -214,7 +225,7 @@ window.WATER_TRACKER = {
     var all = this._loadAll();
     var today = todayKey();
     var current = (all[today] && typeof all[today] === 'number') ? all[today] : 0;
-    if (current < this._TARGET) {
+    if (current < this._getTarget()) {
       all[today] = current + 1;
       this._saveAll(all);
       log('water_add', { glasses: all[today], date: today });
@@ -263,7 +274,7 @@ window.WATER_TRACKER = {
     function buildGlasses() {
       row.innerHTML = '';
       data = self.getToday();
-      for (var i = 0; i < self._TARGET; i++) {
+      for (var i = 0; i < self._getTarget(); i++) {
         (function(idx) {
           var glass = el('div', 'water-glass' + (idx < data.glasses ? ' filled' : ''));
           var fill = el('div', 'water-fill');

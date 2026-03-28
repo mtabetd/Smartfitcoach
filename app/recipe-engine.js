@@ -14009,6 +14009,137 @@
     dinner:    ['dinner', 'main', 'family', 'vegan', 'world-food']
   };
 
+  function convertToDisplay(qty, unit, name) {
+    var n = (name || '').toLowerCase();
+    var u = (unit || '').toLowerCase();
+    var q = qty;
+
+    // ── Œufs & produits ──────────────────────────────────────────────────
+    if (n.indexOf('blanc') >= 0 && (n.indexOf('uf') >= 0 || n.indexOf('oeuf') >= 0 || n.indexOf('œuf') >= 0)) {
+      if (u === 'g') {
+        var blancs = Math.round(q / 30);
+        if (blancs >= 1) return { qty: blancs, unit: blancs > 1 ? 'blancs' : 'blanc' };
+      }
+    }
+    if (n.indexOf('jaune') >= 0 && (n.indexOf('uf') >= 0 || n.indexOf('oeuf') >= 0 || n.indexOf('œuf') >= 0)) {
+      if (u === 'g') {
+        var jaunes = Math.round(q / 20);
+        if (jaunes >= 1) return { qty: jaunes, unit: jaunes > 1 ? 'jaunes' : 'jaune' };
+      }
+    }
+    if ((n.indexOf('oeuf') >= 0 || n.indexOf('œuf') >= 0) && n.indexOf('blanc') < 0 && n.indexOf('jaune') < 0) {
+      if (u === 'g') {
+        var oeufs = Math.round(q / 50);
+        if (oeufs >= 1) return { qty: oeufs, unit: oeufs > 1 ? 'œufs' : 'œuf' };
+      }
+    }
+
+    // ── Huiles & liquides ─────────────────────────────────────────────────
+    var isOil = n.indexOf('huile') >= 0;
+    var isVinegar = n.indexOf('vinaigre') >= 0;
+    var isSauce = n.indexOf('sauce soja') >= 0 || n.indexOf('sauce tamari') >= 0 || n.indexOf('tamari') >= 0;
+    var isHoney = n.indexOf('miel') >= 0;
+    var isMaple = n.indexOf('sirop') >= 0 && n.indexOf('erable') >= 0 || n.indexOf('sirop') >= 0 && n.indexOf('érable') >= 0;
+    if (isOil || isVinegar || isSauce || isHoney || isMaple) {
+      if (u === 'g' || u === 'ml') {
+        if (Math.round(q) === 5)  return { qty: 1, unit: 'c.à.café' };
+        if (Math.round(q) === 15) return { qty: 1, unit: 'c.à.soupe' };
+        if (Math.round(q) === 10) return { qty: 2, unit: 'c.à.café' };
+        if (Math.round(q) === 30) return { qty: 2, unit: 'c.à.soupe' };
+        if (Math.round(q) === 45) return { qty: 3, unit: 'c.à.soupe' };
+        if (Math.round(q) === 60) return { qty: 4, unit: 'c.à.soupe' };
+        // Générique : multiples de 15
+        if (q > 0 && q % 15 === 0) {
+          var tbsp = q / 15;
+          return { qty: tbsp, unit: tbsp > 1 ? 'c.à.soupe' : 'c.à.soupe' };
+        }
+        // Petites quantités : multiples de 5
+        if (q > 0 && q <= 20 && q % 5 === 0) {
+          var tsp = q / 5;
+          return { qty: tsp, unit: tsp > 1 ? 'c.à.café' : 'c.à.café' };
+        }
+      }
+    }
+
+    // Lait de coco, crème liquide
+    var isCocoMilk = n.indexOf('lait de coco') >= 0;
+    var isCream = n.indexOf('crème') >= 0 || n.indexOf('creme') >= 0;
+    if (isCocoMilk || isCream) {
+      if (u === 'ml' || u === 'g') {
+        if (Math.round(q) === 30)  return { qty: 2, unit: 'c.à.soupe' };
+        if (Math.round(q) === 60)  return { qty: 4, unit: 'c.à.soupe' };
+        if (Math.round(q) === 15)  return { qty: 1, unit: 'c.à.soupe' };
+        if (Math.round(q) === 45)  return { qty: 3, unit: 'c.à.soupe' };
+      }
+    }
+
+    // ── Beurre ────────────────────────────────────────────────────────────
+    if (n.indexOf('beurre') >= 0) {
+      if (u === 'g') {
+        if (Math.round(q) === 5)  return { qty: 1, unit: 'c.à.café' };
+        if (Math.round(q) === 10) return { qty: 2, unit: 'c.à.café' };
+        if (Math.round(q) === 15) return { qty: 1, unit: 'c.à.soupe' };
+        if (Math.round(q) === 30) return { qty: 2, unit: 'c.à.soupe' };
+      }
+    }
+
+    // ── Épices & condiments (≤ 10g) ───────────────────────────────────────
+    var spiceKeywords = ['sel', 'poivre', 'curcuma', 'cumin', 'paprika', 'cannelle', 'coriandre',
+      'gingembre', 'cardamome', 'muscade', 'piment', 'cayenne', 'origan', 'thym', 'basilic',
+      'persil', 'ciboulette', 'ras el hanout', 'harissa', 'sumac', 'za\'atar', 'zaatar',
+      'fenouil', 'anis', 'clou', 'epice', 'épice', 'herbe', 'fenugrec', 'safran',
+      'ail en poudre', 'oignon en poudre', 'levure chimique', 'bicarbonate'];
+    var isSpice = false;
+    for (var si = 0; si < spiceKeywords.length; si++) {
+      if (n.indexOf(spiceKeywords[si]) >= 0) { isSpice = true; break; }
+    }
+    if (isSpice && u === 'g' && q <= 10) {
+      if (q <= 1)              return { qty: '¼',  unit: 'c.à.café' };
+      if (q <= 2)              return { qty: '½',  unit: 'c.à.café' };
+      if (q >= 3 && q <= 4)   return { qty: 1,    unit: 'c.à.café' };
+      if (q >= 5 && q <= 6)   return { qty: '1½', unit: 'c.à.café' };
+      if (q >= 6 && q <= 8)   return { qty: 1,    unit: 'c.à.soupe' };
+      if (q >= 9 && q <= 10)  return { qty: '1½', unit: 'c.à.soupe' };
+    }
+
+    // ── Fromages râpés ────────────────────────────────────────────────────
+    var isGratedCheese = (n.indexOf('parmesan') >= 0 || n.indexOf('gruyere') >= 0 || n.indexOf('gruyère') >= 0 || n.indexOf('feta') >= 0);
+    if (isGratedCheese && u === 'g') {
+      if (Math.round(q) === 15) return { qty: 1, unit: 'c.à.soupe' };
+      if (Math.round(q) === 30) return { qty: 2, unit: 'c.à.soupe' };
+    }
+
+    // ── Légumes & fruits frais ────────────────────────────────────────────
+    if (n.indexOf('avocat') >= 0 && u === 'g') {
+      if (Math.round(q) === 150) return { qty: 1,   unit: 'avocat' };
+      if (Math.round(q) === 75)  return { qty: '½', unit: 'avocat' };
+    }
+    if (n.indexOf('tomate') >= 0 && n.indexOf('concentre') < 0 && n.indexOf('concentré') < 0 && u === 'g') {
+      if (Math.round(q) === 120) return { qty: 1,   unit: 'tomate' };
+      if (Math.round(q) === 60)  return { qty: '½', unit: 'tomate' };
+    }
+    if (n.indexOf('citron') >= 0 && u === 'g') {
+      if (Math.round(q) === 120) return { qty: 1, unit: 'citron' };
+    }
+    if (n.indexOf('jus de citron') >= 0 && (u === 'ml' || u === 'g')) {
+      if (Math.round(q) === 30) return { qty: "jus d'1", unit: 'citron' };
+    }
+    if ((n.indexOf('ail') >= 0) && n.indexOf('poudre') < 0 && u === 'g') {
+      var gousses = Math.round(q / 5);
+      if (gousses >= 1) return { qty: gousses, unit: gousses > 1 ? 'gousses' : 'gousse' };
+    }
+    if (n.indexOf('oignon') >= 0 && n.indexOf('poudre') < 0 && u === 'g') {
+      if (Math.round(q) === 100) return { qty: 1,   unit: 'oignon moyen' };
+      if (Math.round(q) === 50)  return { qty: '½', unit: 'oignon' };
+    }
+    if (n.indexOf('echalote') >= 0 || n.indexOf('échalote') >= 0) {
+      if (u === 'g' && Math.round(q) === 40) return { qty: 1, unit: 'échalote' };
+    }
+
+    // Aucune conversion applicable : retourner les valeurs originales
+    return { qty: qty, unit: unit };
+  }
+
   function toSimpleFormat(recipe) {
     var perServing = recipe.servings > 0 ? recipe.servings : 1;
     var flagMap = { 'maroc-moderne': '🇲🇦', 'world-food': '🌍', 'italian': '🇮🇹' };
@@ -14017,7 +14148,8 @@
       return { name: ing.name, qty: Math.round((ing.qty / perServing) * 10) / 10, unit: ing.unit || 'g', note: ing.note };
     });
     var ingrStr = perServIngr.map(function(ing) {
-      return ing.qty + (ing.unit === 'pce' ? ' pce ' : ' ' + ing.unit + ' ') + ing.name;
+      var disp = convertToDisplay(ing.qty, ing.unit, ing.name);
+      return disp.qty + (disp.unit === 'pce' ? ' pce ' : ' ' + disp.unit + ' ') + ing.name;
     }).join(', ');
     return {
       n:           recipe.name,
@@ -14388,8 +14520,16 @@
    * @param {Array} weekPlan  — window.S.weekPlan
    * @returns {Array<{category, items: Array<{name, qty, unit, recipes}>}>}
    */
-  function generateShoppingList(weekPlan) {
+  function generateShoppingList(weekPlan, options) {
     if (!weekPlan || !weekPlan.length) return [];
+    options = options || {};
+
+    // Adapter les quantités selon la fréquence de courses de l'utilisateur
+    var shopFreq = options.shopFreq || (window.S && window.S.shopFreq) || 'weekly';
+    // Nombre de jours couverts par chaque course
+    var FREQ_DAYS = { daily: 1, '2x_week': 4, weekly: 7, biweekly: 7 };
+    var freqDays = FREQ_DAYS[shopFreq] || 7;
+    var freqRatio = freqDays / 7; // ratio pour scaler les quantités
 
     var SHOP_SECTIONS = {
       '🥩 Boucherie & Poissonnerie': /poulet|dinde|boeuf|bœuf|saumon|thon|crevette|cabillaud|maquereau|sardine|filet|blanc de|hachis|steak|viande|kefta|merguez|agneau|veau|moule/i,
@@ -14466,6 +14606,10 @@
     var categorized = {};
     Object.keys(consolidated).forEach(function(key) {
       var item = consolidated[key];
+      // Appliquer le ratio fréquence de courses AVANT la conversion market qty
+      if (freqRatio < 1 && typeof item.qty === 'number') {
+        item.qty = item.qty * freqRatio;
+      }
       // Détecter la catégorie d'abord (nécessaire pour les règles de market qty)
       var cat = '🛒 Divers';
       var catKeys = Object.keys(SHOP_SECTIONS);
@@ -14482,9 +14626,14 @@
 
     // Trier catégories et items
     var ORDER = ['🥩 Boucherie & Poissonnerie','🥚 Œufs & Produits laitiers','🥦 Fruits & Légumes','🌾 Féculents & Céréales','🧊 Surgelés','🥫 Conserves & Bocaux','🫙 Épicerie sèche','🌿 Épices & Herbes','🌰 Graines, Noix & Fruits secs','🥤 Boissons & Laits végétaux','🍞 Boulangerie & Pâtisserie','❄️ Crèmerie & Fromages','🛒 Divers'];
-    return ORDER.filter(function(c) { return categorized[c] && categorized[c].length > 0; }).map(function(c) {
+    var result = ORDER.filter(function(c) { return categorized[c] && categorized[c].length > 0; }).map(function(c) {
       return { category: c, items: categorized[c].sort(function(a,b){ return a.name.localeCompare(b.name); }) };
     });
+    // Métadonnée : période couverte (affichée dans le header de la liste)
+    var FREQ_LABELS = { daily: '1 jour', '2x_week': '4 jours', weekly: '7 jours', biweekly: '7 jours' };
+    result._freqLabel = FREQ_LABELS[shopFreq] || '7 jours';
+    result._freqDays = freqDays;
+    return result;
   }
 
   // ─── EXPOSITION GLOBALE ────────────────────────────────────────────────────────
@@ -14499,6 +14648,7 @@
     calcWeekPlanBudget:   calcWeekPlanBudget,
     generateShoppingList:    generateShoppingList,
     parseIngredientsString:  parseIngredientsString,
+    convertToDisplay:        convertToDisplay,
     getPool:          getPool,
     db:               RECIPES_DB
   };

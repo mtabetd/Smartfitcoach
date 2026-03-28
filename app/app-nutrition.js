@@ -1867,7 +1867,19 @@ function renderStep9(p) {
       }
       window.render();
     }});
-    card.appendChild(h('div', {'class': 'meal-type'}, sl.label));
+    // Badge nutrient-timing : post-séance ou pré-séance selon trainTime
+    var timingBadge = null;
+    var tt = S.trainTime;
+    if (tt) {
+      var POST = {morning: 'breakfast', noon: 'lunch', evening: 'dinner'};
+      var PRE  = {morning: null, noon: 'breakfast', evening: 'lunch'};
+      if (POST[tt] === sl.key) timingBadge = h('span', {style: 'font-size:10px;font-weight:700;color:#fff;background:#1A8C1A;border-radius:4px;padding:1px 6px;margin-left:6px'}, '\uD83D\uDCAA Post-s\u00e9ance');
+      else if (PRE[tt] === sl.key) timingBadge = h('span', {style: 'font-size:10px;font-weight:700;color:#fff;background:#E07B00;border-radius:4px;padding:1px 6px;margin-left:6px'}, '\u26A1 Pr\u00e9-s\u00e9ance');
+    }
+    var mealTypeEl = h('div', {'class': 'meal-type'});
+    mealTypeEl.appendChild(document.createTextNode(sl.label));
+    if (timingBadge) mealTypeEl.appendChild(timingBadge);
+    card.appendChild(mealTypeEl);
     card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f), txt(r.n)]));
     card.appendChild(h('div', {'class': 'meal-kcal'}, r.k + ' kcal'));
     var mc = h('div', {'class': 'meal-macros'});
@@ -1968,7 +1980,7 @@ function renderStep9(p) {
   }
 
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
-  var _shopList = (window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan) : [];
+  var _shopList = (window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan, {shopFreq: S.shopFreq}) : [];
   var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
   var _shopLabel = '\uD83D\uDECD ' + window.t('shop.title') + (_shopTotal > 0 ? ' (' + _shopTotal + ' articles)' : '');
   var btnShop = h('button', {
@@ -2271,11 +2283,22 @@ var SALAD_DB = {
     { name: 'Pois chiches', qty: 100, unit: 'g', k: 164, p: 8.9, g: 27, l: 2.6 },
     { name: 'Patate douce r\u00f4tie', qty: 100, unit: 'g', k: 90, p: 1.8, g: 21, l: 0.1 },
     { name: 'Boulgour', qty: 100, unit: 'g', k: 83, p: 3.1, g: 18, l: 0.2 },
+    // Marocains & méditerranéens
+    { name: 'Riz blanc', qty: 100, unit: 'g', k: 130, p: 2.7, g: 28, l: 0.3 },
+    { name: 'Semoule cuite', qty: 100, unit: 'g', k: 112, p: 3.8, g: 23, l: 0.2 },
+    { name: 'Pain marocain (khobz)', qty: 50, unit: 'g', k: 130, p: 4.2, g: 26, l: 1.1 },
+    { name: 'Haricots rouges', qty: 100, unit: 'g', k: 127, p: 8.7, g: 22, l: 0.5 },
+    { name: 'Haricots blancs', qty: 100, unit: 'g', k: 116, p: 8.0, g: 20, l: 0.4 },
+    { name: 'F\u00e8ves cuites', qty: 100, unit: 'g', k: 88, p: 7.6, g: 14, l: 0.6 },
+    { name: 'Bl\u00e9 complet cuit', qty: 100, unit: 'g', k: 124, p: 5.0, g: 26, l: 1.0 },
+    { name: 'Pomme de terre vapeur', qty: 100, unit: 'g', k: 77, p: 2.0, g: 17, l: 0.1 },
+    { name: 'Orge perl\u00e9 cuit', qty: 100, unit: 'g', k: 123, p: 2.3, g: 28, l: 0.4 },
     // Prestige
     { name: 'Riz noir V\u00e9n\u00e9r\u00e9', qty: 100, unit: 'g', k: 130, p: 3.5, g: 26, l: 1.2, premium: true },
     { name: 'Freekeh', qty: 100, unit: 'g', k: 112, p: 5.0, g: 22, l: 0.8, premium: true },
     { name: 'Sarrasin grill\u00e9', qty: 100, unit: 'g', k: 108, p: 4.0, g: 22, l: 1.1, premium: true },
     { name: 'Orzo gratin\u00e9', qty: 100, unit: 'g', k: 150, p: 5.2, g: 29, l: 1.0, premium: true },
+    { name: 'Msemen', qty: 50, unit: 'g', k: 160, p: 4.5, g: 28, l: 3.5, premium: true },
     { name: 'M\u00e2che', qty: 60, unit: 'g', k: 13, p: 1.8, g: 1.2, l: 0.4, premium: true }
   ],
   proteins: [
@@ -2290,6 +2313,14 @@ var SALAD_DB = {
     { name: 'Feta AOP', qty: 50, unit: 'g', k: 133, p: 7.2, g: 1.1, l: 10.7 },
     { name: 'Mozzarella di bufala', qty: 60, unit: 'g', k: 140, p: 9.5, g: 1.2, l: 11 },
     { name: 'Saumon fum\u00e9', qty: 60, unit: 'g', k: 104, p: 11, g: 0, l: 6.5 },
+    // Marocains & méditerranéens
+    { name: 'Sardines \u00e0 l\u2019huile \u00e9goutt\u00e9es', qty: 80, unit: 'g', k: 157, p: 17, g: 0, l: 10 },
+    { name: 'Kefta grill\u00e9e', qty: 100, unit: 'g', k: 218, p: 17, g: 2, l: 15 },
+    { name: 'Merguez (tranche)', qty: 60, unit: 'g', k: 175, p: 9, g: 1, l: 15 },
+    { name: 'Anchois (bo\u00eete)', qty: 30, unit: 'g', k: 59, p: 8.2, g: 0, l: 2.8 },
+    { name: 'Blanc d\u2019\u0153uf cuit', qty: 50, unit: 'g', k: 26, p: 5.5, g: 0.4, l: 0.1 },
+    { name: 'Jben (fromage frais marocain)', qty: 50, unit: 'g', k: 85, p: 5.5, g: 2, l: 6.5 },
+    { name: 'Merlan frit', qty: 80, unit: 'g', k: 112, p: 18, g: 3, l: 3.5 },
     // Prestige
     { name: 'Burrata', qty: 80, unit: 'g', k: 196, p: 9.6, g: 1.6, l: 16.8, premium: true },
     { name: 'Gravlax maison', qty: 60, unit: 'g', k: 120, p: 12, g: 0.5, l: 7.8, premium: true },
@@ -2297,7 +2328,12 @@ var SALAD_DB = {
     { name: 'Poulpe grill\u00e9', qty: 80, unit: 'g', k: 65, p: 13, g: 1.5, l: 0.8, premium: true },
     { name: 'Steak de thon snack\u00e9', qty: 100, unit: 'g', k: 144, p: 30, g: 0, l: 2.0, premium: true },
     { name: 'Edamame', qty: 80, unit: 'g', k: 110, p: 10, g: 8, l: 4.7, premium: true },
-    { name: 'Tofu soyeux', qty: 100, unit: 'g', k: 55, p: 6.0, g: 2.0, l: 2.7, premium: true }
+    { name: 'Tofu soyeux', qty: 100, unit: 'g', k: 55, p: 6.0, g: 2.0, l: 2.7, premium: true },
+    { name: 'Thon rouge frais', qty: 100, unit: 'g', k: 144, p: 30, g: 0, l: 2.0, premium: true },
+    { name: 'Crevettes royales', qty: 100, unit: 'g', k: 90, p: 19, g: 0, l: 1.2, premium: true },
+    { name: 'Dorade grill\u00e9e', qty: 100, unit: 'g', k: 121, p: 22, g: 0, l: 3.5, premium: true },
+    { name: 'Poulpe marocain', qty: 80, unit: 'g', k: 61, p: 13, g: 1.5, l: 0.7, premium: true },
+    { name: 'Fromage smen', qty: 20, unit: 'g', k: 148, p: 0.5, g: 0, l: 16, premium: true }
   ],
   veggies: [
     // Classiques
@@ -2311,6 +2347,22 @@ var SALAD_DB = {
     { name: 'Ma\u00efs doux', qty: 60, unit: 'g', k: 70, p: 2.1, g: 15, l: 0.6 },
     { name: 'Haricots verts', qty: 80, unit: 'g', k: 22, p: 1.8, g: 5.0, l: 0.1 },
     { name: 'Oignons rouges', qty: 40, unit: 'g', k: 17, p: 0.5, g: 3.9, l: 0.1 },
+    // Marocains & méditerranéens
+    { name: 'Zaalouk (aubergine tomate)', qty: 80, unit: 'g', k: 52, p: 1.2, g: 6, l: 2.8 },
+    { name: 'Taktouka (poivron tomate)', qty: 80, unit: 'g', k: 48, p: 1.5, g: 7, l: 1.8 },
+    { name: 'Chakchouka (l\u00e9gumes \u00e9pic\u00e9s)', qty: 80, unit: 'g', k: 55, p: 2, g: 7, l: 2.2 },
+    { name: 'Poivron grill\u00e9', qty: 80, unit: 'g', k: 31, p: 1.0, g: 7, l: 0.4 },
+    { name: 'Aubergine r\u00f4tie', qty: 80, unit: 'g', k: 23, p: 0.9, g: 5, l: 0.2 },
+    { name: 'Brocoli vapeur', qty: 80, unit: 'g', k: 27, p: 2.4, g: 5, l: 0.3 },
+    { name: 'Chou-fleur r\u00f4ti', qty: 80, unit: 'g', k: 30, p: 2.3, g: 5.6, l: 0.3 },
+    { name: '\u00c9pinards cuits', qty: 80, unit: 'g', k: 23, p: 2.9, g: 3.6, l: 0.3 },
+    { name: 'Courgette grill\u00e9e', qty: 80, unit: 'g', k: 18, p: 1.4, g: 3.6, l: 0.2 },
+    { name: 'Carottes r\u00f4ties', qty: 80, unit: 'g', k: 47, p: 1.0, g: 11, l: 0.2 },
+    { name: 'Tomates Beldi (marocaines)', qty: 100, unit: 'g', k: 20, p: 1.0, g: 4.2, l: 0.3 },
+    { name: 'Navet cuit', qty: 80, unit: 'g', k: 22, p: 0.7, g: 5, l: 0.1 },
+    { name: 'Petits pois', qty: 80, unit: 'g', k: 64, p: 4.3, g: 11, l: 0.4 },
+    { name: 'Haricots verts vapeur', qty: 80, unit: 'g', k: 22, p: 1.8, g: 5, l: 0.1 },
+    { name: 'Feuilles de menthe fra\u00eeche', qty: 10, unit: 'g', k: 4, p: 0.3, g: 0.8, l: 0.1 },
     // Prestige
     { name: 'Betterave r\u00f4tie', qty: 80, unit: 'g', k: 46, p: 1.7, g: 10, l: 0.2, premium: true },
     { name: 'Asperges blanches', qty: 80, unit: 'g', k: 18, p: 2.0, g: 3.1, l: 0.1, premium: true },
@@ -2319,7 +2371,8 @@ var SALAD_DB = {
     { name: 'Micro-pousses', qty: 20, unit: 'g', k: 10, p: 1.2, g: 1.0, l: 0.5, premium: true },
     { name: 'Fleurs comestibles', qty: 5, unit: 'g', k: 3, p: 0.2, g: 0.5, l: 0.1, premium: true },
     { name: 'Avocat tranch\u00e9', qty: 60, unit: 'g', k: 96, p: 1.2, g: 5.1, l: 8.8, premium: true },
-    { name: 'Tomates Heirloom', qty: 100, unit: 'g', k: 22, p: 1.1, g: 4.8, l: 0.3, premium: true }
+    { name: 'Tomates Heirloom', qty: 100, unit: 'g', k: 22, p: 1.1, g: 4.8, l: 0.3, premium: true },
+    { name: 'C\u00e9leri r\u00e9moulade', qty: 80, unit: 'g', k: 38, p: 0.5, g: 4, l: 2.5, premium: true }
   ],
   fats: [
     // Classiques
@@ -2331,12 +2384,19 @@ var SALAD_DB = {
     { name: 'Olives Taggi\u00e0sche', qty: 30, unit: 'g', k: 45, p: 0.3, g: 2.5, l: 4.2 },
     { name: 'Tahini de s\u00e9same blanc', qty: 15, unit: 'g', k: 89, p: 2.5, g: 3.2, l: 8.1 },
     { name: 'Graines de s\u00e9same torr\u00e9fi\u00e9es', qty: 10, unit: 'g', k: 57, p: 1.8, g: 2.3, l: 4.9 },
+    // Marocains & méditerranéens
+    { name: "Huile d\u2019argan (filet)", qty: 10, unit: 'ml', k: 88, p: 0, g: 0, l: 10 },
+    { name: 'Olives beldi marocaines', qty: 30, unit: 'g', k: 52, p: 0.3, g: 0, l: 5.5 },
+    { name: 'Olives vertes marin\u00e9es', qty: 30, unit: 'g', k: 42, p: 0.3, g: 0.5, l: 4.5 },
+    { name: 'Amandes enti\u00e8res', qty: 20, unit: 'g', k: 116, p: 4.2, g: 4.4, l: 10 },
+    { name: 'Pistaches', qty: 20, unit: 'g', k: 113, p: 4.2, g: 5.5, l: 9.2 },
     // Prestige
     { name: 'Huile de truffe blanche', qty: 5, unit: 'ml', k: 44, p: 0, g: 0, l: 5.0, premium: true },
     { name: 'Pignons de pin grill\u00e9s', qty: 15, unit: 'g', k: 102, p: 2.1, g: 2.0, l: 10.2, premium: true },
     { name: 'Noisettes concass\u00e9es', qty: 15, unit: 'g', k: 94, p: 2.3, g: 2.5, l: 9.0, premium: true },
     { name: 'Parmesan 24 mois', qty: 15, unit: 'g', k: 59, p: 5.4, g: 0.3, l: 4.1, premium: true },
-    { name: 'Noix de cajou', qty: 20, unit: 'g', k: 113, p: 3.0, g: 6.3, l: 9.0, premium: true }
+    { name: 'Noix de cajou', qty: 20, unit: 'g', k: 113, p: 3.0, g: 6.3, l: 9.0, premium: true },
+    { name: 'Amlou (amandes+argan+miel)', qty: 20, unit: 'g', k: 112, p: 3.2, g: 5, l: 9.5, premium: true }
   ],
   sauces: [
     // Classiques
@@ -2352,7 +2412,18 @@ var SALAD_DB = {
     { name: 'Green Goddess', qty: 25, unit: 'g', k: 48, p: 0.8, g: 2.0, l: 4.2, premium: true },
     { name: 'Yuzu kosho', qty: 10, unit: 'g', k: 12, p: 0.4, g: 2.0, l: 0.2, premium: true },
     { name: 'Chermoula', qty: 20, unit: 'g', k: 38, p: 0.5, g: 1.5, l: 3.5, premium: true },
-    { name: 'Gribiche express', qty: 25, unit: 'g', k: 68, p: 2.5, g: 1.0, l: 6.0, premium: true }
+    { name: 'Gribiche express', qty: 25, unit: 'g', k: 68, p: 2.5, g: 1.0, l: 6.0, premium: true },
+    // Marocaines & world
+    { name: 'Chermoula verte', qty: 20, unit: 'g', k: 38, p: 0.5, g: 1.5, l: 3.5 },
+    { name: 'Harissa', qty: 15, unit: 'g', k: 32, p: 1.2, g: 4, l: 1.5 },
+    { name: 'Vinaigrette citron-cumin', qty: 15, unit: 'ml', k: 52, p: 0.1, g: 1.5, l: 5.0 },
+    { name: 'Sauce \u00e0 l\u2019ail (chtitha)', qty: 20, unit: 'g', k: 45, p: 0.8, g: 3, l: 3.5 },
+    { name: 'Sauce yaourt concombre (ra\u00efta)', qty: 30, unit: 'ml', k: 25, p: 1.5, g: 2.5, l: 0.8 },
+    { name: 'Huile d\u2019olive citronn\u00e9e', qty: 15, unit: 'ml', k: 130, p: 0, g: 0.2, l: 14.5 },
+    { name: 'Sauce tomate \u00e9pic\u00e9e', qty: 30, unit: 'g', k: 28, p: 0.8, g: 5, l: 0.8 },
+    { name: 'Sauce tha\u00efe cacahu\u00e8te', qty: 25, unit: 'g', k: 89, p: 3.5, g: 7, l: 5.8, premium: true },
+    { name: 'Sauce argan miel', qty: 15, unit: 'ml', k: 96, p: 0.5, g: 8, l: 7, premium: true },
+    { name: 'Ponzu maison', qty: 15, unit: 'ml', k: 14, p: 0.5, g: 2.8, l: 0.1, premium: true }
   ]
 };
 
@@ -2842,6 +2913,16 @@ function renderShoppingList(p) {
     p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, arUI('no_items', 'Aucun ingrédient détecté dans le plan.')));
     return;
   }
+
+  // ── Label fréquence de courses ──
+  var freqLabel = list._freqLabel || '7 jours';
+  var freqBanner = h('div', {style:'margin:0 16px 12px;padding:10px 14px;background:var(--card);border-radius:10px;display:flex;align-items:center;gap:8px;font-size:13px'});
+  freqBanner.appendChild(h('span', {style:'font-size:16px'}, '\uD83D\uDED2'));
+  freqBanner.appendChild(h('div', {}, [
+    h('div', {style:'font-weight:600;color:var(--text)'}, 'Liste pour ' + freqLabel),
+    h('div', {style:'font-size:11px;color:var(--text-secondary)'}, s.shopFreq === '2x_week' ? 'Faites 2 courses par semaine — renouvelez dans 4 jours' : s.shopFreq === 'daily' ? 'Courses pour aujourd\'hui uniquement' : s.shopFreq === 'biweekly' ? 'Doublez les quantités pour faire vos courses toutes les 2 semaines' : 'Courses pour toute la semaine')
+  ]));
+  p.appendChild(freqBanner);
 
   // ── Boutons actions ──
   var actions = h('div', {style:'display:flex;gap:10px;padding:0 16px 12px;flex-wrap:wrap', 'class':'shop-print-hide'});
