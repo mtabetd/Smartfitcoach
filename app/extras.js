@@ -53,8 +53,8 @@ style.textContent = [
   '.measure-delta.neutral { color:var(--grey,#6B6B65); }',
   '.measure-btn { font-family:"Helvetica Neue",sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; padding:10px 24px; border:1px solid var(--black,#0A0A09); background:var(--black,#0A0A09); color:var(--ivory,#FAFAF7); cursor:pointer; margin-top:14px; width:100%; transition:all 0.2s; }',
   '.measure-btn:hover { background:transparent; color:var(--black,#0A0A09); }',
-  '.measure-history { margin-top:16px; }',
-  '.measure-history-row { display:grid; grid-template-columns:90px repeat(5,1fr); gap:4px; padding:5px 0; border-bottom:1px solid var(--ivory3,#EEEDE8); font-family:"Helvetica Neue",sans-serif; font-size:10px; text-align:center; }',
+  '.measure-history { margin-top:16px; overflow-x:auto; -webkit-overflow-scrolling:touch; }',
+  '.measure-history-row { display:grid; grid-template-columns:90px repeat(5,1fr); gap:4px; padding:5px 0; border-bottom:1px solid var(--ivory3,#EEEDE8); font-family:"Helvetica Neue",sans-serif; font-size:10px; text-align:center; min-width:360px; }',
   '.measure-history-header { font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--grey,#6B6B65); }',
 
   '/* Sleep */',
@@ -87,7 +87,7 @@ style.textContent = [
   '.food-result-item:last-child { border-bottom:none; }',
   '.food-detail { margin-top:12px; padding:14px; border:1px solid var(--border,#D8D8D0); background:var(--ivory2,#F4F4F0); }',
   '.food-detail-name { font-family:Georgia,serif; font-size:14px; font-style:italic; margin-bottom:8px; }',
-  '.food-detail-macros { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:10px 0; }',
+  '.food-detail-macros { display:grid; grid-template-columns:repeat(auto-fit,minmax(60px,1fr)); gap:8px; margin:10px 0; }',
   '.food-detail-macro { text-align:center; }',
   '.food-detail-macro-val { font-family:Georgia,serif; font-size:16px; display:block; }',
   '.food-detail-macro-label { font-family:"Helvetica Neue",sans-serif; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--grey,#6B6B65); }',
@@ -410,6 +410,8 @@ window.MEAL_TIMER = {
   renderWidget: function(container) {
     if (!container) return;
     var self = this;
+    // Clear stale listeners from previous render cycles to prevent accumulation
+    self._listeners = [];
     container.innerHTML = '';
 
     var wrap = el('div', 'extras-widget timer-section');
@@ -1649,7 +1651,12 @@ window.FOOD_JOURNAL = {
 
         var macros = document.createElement('span');
         macros.className = 'fj-entry-macros';
-        macros.innerHTML = '<span>' + item.entry.kcal + ' kcal</span><span>P' + item.entry.p + '</span><span>G' + item.entry.g + '</span><span>L' + item.entry.l + '</span>';
+        // XSS fix: use DOM construction — entry values come from localStorage (user-controlled)
+        var kcalSpan = document.createElement('span'); kcalSpan.textContent = item.entry.kcal + ' kcal';
+        var pSpan = document.createElement('span'); pSpan.textContent = 'P' + item.entry.p;
+        var gSpan = document.createElement('span'); gSpan.textContent = 'G' + item.entry.g;
+        var lSpan = document.createElement('span'); lSpan.textContent = 'L' + item.entry.l;
+        macros.appendChild(kcalSpan); macros.appendChild(pSpan); macros.appendChild(gSpan); macros.appendChild(lSpan);
         row.appendChild(macros);
 
         var del = document.createElement('span');
@@ -1674,7 +1681,15 @@ window.FOOD_JOURNAL = {
     if (total.count > 0 || target > 0) {
       var totalRow = document.createElement('div');
       totalRow.className = 'fj-total';
-      totalRow.innerHTML = '<span><strong>' + total.kcal + '</strong> / ' + target + ' kcal</span><span>P ' + total.p.toFixed(0) + '/' + targetMacros.p + 'g \u00B7 G ' + total.g.toFixed(0) + '/' + targetMacros.g + 'g \u00B7 L ' + total.l.toFixed(0) + '/' + targetMacros.l + 'g</span>';
+      // XSS fix: use DOM construction — total values derive from localStorage entries
+      var kcalSummary = document.createElement('span');
+      var boldKcal = document.createElement('strong'); boldKcal.textContent = total.kcal;
+      kcalSummary.appendChild(boldKcal);
+      kcalSummary.appendChild(document.createTextNode(' / ' + target + ' kcal'));
+      var macroSummary = document.createElement('span');
+      macroSummary.textContent = 'P ' + total.p.toFixed(0) + '/' + targetMacros.p + 'g \u00B7 G ' + total.g.toFixed(0) + '/' + targetMacros.g + 'g \u00B7 L ' + total.l.toFixed(0) + '/' + targetMacros.l + 'g';
+      totalRow.appendChild(kcalSummary);
+      totalRow.appendChild(macroSummary);
       section.appendChild(totalRow);
 
       // Progress bar

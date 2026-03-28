@@ -31,14 +31,51 @@ var PROFILE_KEYS = [
   'golfLevel','golfGoal','golfDays','golfHandicap',
   'triathlonGoal','triathlonLevel','triathlonWeak',
   'triathlonSwimPace','triathlonBikePace','triathlonRunPace',
-  'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep'
+  'cyclingLevel','cyclingGoal','cyclingDays','cyclingType','cyclingFTP','cyclingSpeed','cyclingRelief',
+  'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
+  'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
+  'shopChecked','weekPlan','selectedDay',
+  'lang',
+  'weightUnit','heightUnit'
 ];
+/**
+ * Slim a single meal object down to essential nutritional fields only.
+ * Strips heavy fields (ingredient strings, step arrays, tags) to keep
+ * localStorage usage well below the 5 MB browser quota.
+ */
+function slimMeal(meal) {
+  if (!meal) return null;
+  return { _id: meal._id, n: meal.n, k: meal.k, p: meal.p, g: meal.g, l: meal.l, w: meal.w, lv: meal.lv };
+}
+
 function saveProfile() {
   try {
     var user = AUTH.getUser();
     var uid = user ? user.id : 'anon';
     var data = {};
     PROFILE_KEYS.forEach(function(k) { data[k] = S[k]; });
+    // Slim weekPlan before serializing: strip ingredient/step/tag fields so
+    // 7 days × 4 meals of full recipe objects don't blow up localStorage.
+    if (Array.isArray(data.weekPlan)) {
+      data.weekPlan = data.weekPlan.map(function(day) {
+        if (!day) return day;
+        return {
+          breakfast: slimMeal(day.breakfast),
+          lunch:     slimMeal(day.lunch),
+          snack:     slimMeal(day.snack),
+          dinner:    slimMeal(day.dinner)
+        };
+      });
+    }
+    // Use XOR+base64 obfuscation to deter trivial localStorage inspection
+    if (window._storageEncode) {
+      var encoded = window._storageEncode(data);
+      if (encoded) {
+        localStorage.setItem('mtd_profile_' + uid, encoded);
+        return;
+      }
+    }
+    // Fallback: plain JSON (if encoding unavailable)
     localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
   } catch(e) {}
 }
@@ -48,7 +85,15 @@ function loadProfile() {
     var uid = user ? user.id : 'anon';
     var raw = localStorage.getItem('mtd_profile_' + uid);
     if (!raw) return;
-    var data = JSON.parse(raw);
+    // Try obfuscated decode first, then fall back to plain JSON
+    var data = null;
+    if (window._storageDecode) {
+      data = window._storageDecode(raw);
+    }
+    if (!data) {
+      try { data = JSON.parse(raw); } catch(e2) { return; }
+    }
+    if (!data) return;
     PROFILE_KEYS.forEach(function(k) { if (data[k] !== undefined) S[k] = data[k]; });
   } catch(e) {}
 }
@@ -59,6 +104,14 @@ function render() {
   if (AUTH.isLoggedIn()) saveProfile();
   var app = document.getElementById('app');
   app.innerHTML = '';
+  window.scrollTo(0, 0);
+  // Scroll le conteneur .app (overflow-y:auto) au top à chaque changement de page
+  requestAnimationFrame(function() {
+    var appWrap = document.querySelector('.app');
+    if (appWrap) appWrap.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  });
 
   // Not logged in → auth screens
   if (!AUTH.isLoggedIn()) {
@@ -102,10 +155,18 @@ function render() {
     if (window.DASHBOARD) DASHBOARD.render(content);
     else {
       // Fallback if dashboard not loaded
-      content.appendChild(h('div', {style: 'text-align:center;padding:40px'}, [
-        h('h1', {html: 'Bienvenue<br><em>' + (user ? user.name : '') + '</em>'}),
+      // XSS fix: build h1 with user.name via DOM, not via innerHTML
+      var welcomeH1 = document.createElement('h1');
+      welcomeH1.appendChild(document.createTextNode('Bienvenue'));
+      welcomeH1.appendChild(document.createElement('br'));
+      var nameEm = document.createElement('em');
+      nameEm.textContent = user ? user.name : '';
+      welcomeH1.appendChild(nameEm);
+      var welcomeDiv = h('div', {style: 'text-align:center;padding:40px'}, [
         h('p', {'class': 'subtitle'}, 'Choisissez Nutrition ou Sport dans la navigation.')
-      ]));
+      ]);
+      welcomeDiv.insertBefore(welcomeH1, welcomeDiv.firstChild);
+      content.appendChild(welcomeDiv);
     }
   }
 
@@ -151,16 +212,20 @@ function renderLogin(app) {
     var pw = pwInput.value;
     if (!email || !pw) { S.authError = 'Veuillez remplir tous les champs'; render(); return; }
     if (!window.canAttemptAuth(email)) { S.authError = 'Trop de tentatives. Réessayez dans 5 minutes.'; render(); return; }
-    var result = AUTH.login(email, pw);
-    if (result.ok) {
-      S.authError = '';
-      S.view = 'dashboard';
-      if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+    AUTH.login(email, pw).then(function(result) {
+      if (result.ok) {
+        S.authError = '';
+        S.view = 'dashboard';
+        if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+        render();
+      } else {
+        S.authError = result.error;
+        render();
+      }
+    }).catch(function() {
+      S.authError = 'Erreur de connexion. Réessayez.';
       render();
-    } else {
-      S.authError = result.error;
-      render();
-    }
+    });
   }}, 'Se connecter'));
 
   c.appendChild(form);
@@ -228,16 +293,20 @@ function renderRegister(app) {
     if (pw !== pw2) { S.authError = 'Les mots de passe ne correspondent pas'; render(); return; }
     if (pw.length < 6) { S.authError = 'Le mot de passe doit faire au moins 6 caractères'; render(); return; }
 
-    var result = AUTH.register(name, email, pw);
-    if (result.ok) {
-      S.authError = '';
-      S.view = 'dashboard';
-      if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+    AUTH.register(name, email, pw).then(function(result) {
+      if (result.ok) {
+        S.authError = '';
+        S.view = 'dashboard';
+        if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+        render();
+      } else {
+        S.authError = result.error;
+        render();
+      }
+    }).catch(function() {
+      S.authError = 'Erreur lors de la création du compte. Réessayez.';
       render();
-    } else {
-      S.authError = result.error;
-      render();
-    }
+    });
   }}, 'Créer mon compte'));
 
   c.appendChild(form);
@@ -264,6 +333,15 @@ if (AUTH.isLoggedIn()) {
   if (window.GAMIFICATION) GAMIFICATION.updateStreak();
   // Restore full profile from localStorage (E-01)
   loadProfile();
+  // Restaurer la langue
+  if (window.I18N && S.lang) {
+    window.I18N.current = S.lang;
+  }
+  // Restaurer les préférences d'unités (kg/lbs, cm/ft)
+  if (window.UNITS) {
+    window.UNITS.weight = S.weightUnit || 'kg';
+    window.UNITS.height = S.heightUnit || 'cm';
+  }
   // Load weight history (kept separate for history management)
   try {
     var user = AUTH.getUser();
@@ -281,5 +359,10 @@ if (AUTH.isLoggedIn()) {
 
 // First render
 render();
+
+// SECURITY: Integrity check — verify critical functions were not tampered by extensions
+if (window._verifyCriticalFunctions) {
+  try { window._verifyCriticalFunctions(); } catch(e) {}
+}
 
 })();

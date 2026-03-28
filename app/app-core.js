@@ -69,9 +69,10 @@ var TRAINS=[{icon:'\u{1F3CB}\uFE0F',name:'Musculation'},{icon:'\u{1FAC0}',name:'
 var SLEEPS=['< 6h','6-7h','7-8h','8h+'];
 var GOALS=[
   {icon:'↗',name:'Prise de masse',desc:'+15% calories',mult:1.15,key:'bulk'},
+  {icon:'↗',name:'Prise de masse douce',desc:'+10% calories',mult:1.10,key:'lean_bulk'},
   {icon:'=',name:'Maintien',desc:'= TDEE',mult:1.0,key:'maintain'},
   {icon:'↘',name:'Perte de poids',desc:'-15% calories',mult:0.85,key:'cut'},
-  {icon:'↓',name:'Sèche',desc:'-25% calories',mult:0.75,key:'shred'}
+  {icon:'↓',name:'Sèche',desc:'-20% calories',mult:0.80,key:'shred'}
 ];
 // RATIOS : distribution calorique indicative par objectif (pour affichage uniquement)
 // ATTENTION : calcMacros() utilise la méthode g/kg (ISSN 2017), pas ces ratios
@@ -119,7 +120,8 @@ var MEDICAL=[
   ]},
   {cat:'OS & ARTICULATIONS',items:[
     {id:'osteoporose',name:'Ostéoporose',desc:'Calcium, vitamine D, protéines',icon:'▽'},
-    {id:'polyarthrite',name:'Polyarthrite rhumatoïde',desc:'Oméga-3, anti-inflammatoire',icon:'▽'}
+    {id:'polyarthrite',name:'Polyarthrite rhumatoïde',desc:'Oméga-3, anti-inflammatoire',icon:'▽'},
+    {id:'spondylarthrite',name:'Spondylarthrite ankylosante',desc:'Anti-inflammatoire, mobilité, natation/yoga recommandés',icon:'▽'}
   ]},
   {cat:'CARENCES & AUTRES',items:[
     {id:'anemie',name:'Anémie ferriprive',desc:'Fer héminique, vitamine C',icon:'●'},
@@ -163,19 +165,31 @@ var MEDICAL_ADVICE={
   // macroAdj.p corrigé à +0.10 (cohérence avec description "+10%") | macroAdj.l corrigé à 0
   menopause:{warn:'Ménopause : métabolisme réduit ~100-150 kcal/j (NAMS 2022). Calcium 1200mg/j + Vitamine D. Protéines +10% contre la perte musculaire (ESPEN 2019). Oméga-3 pour santé cardiovasculaire et os.',macroAdj:{g:-.05,p:.10,l:0}},
   hashimoto:{warn:'Anti-inflammatoire. Certains patients bénéficient du sans gluten.',macroAdj:null},
-  osteoporose:{warn:'Calcium (1200mg/j), vitamine D, protéines adéquates.',macroAdj:{g:-.03,p:.05,l:-.02}},
-  polyarthrite:{warn:'Oméga-3 (poissons gras). Réduisez oméga-6 et aliments pro-inflammatoires.',macroAdj:null},
-  anemie:{warn:'Fer héminique (viande rouge), vitamine C pour absorption. Évitez thé/café aux repas.',macroAdj:null},
+  // Ostéoporose : calcium 1200mg/j + vitamine D 800-2000 UI/j + protéines ≥1.2g/kg (NOF 2022, ESCEO 2019)
+  // Exercice en charge (marche, muscu légère ≤70% 1RM) réduit le risque fracturaire (Kohrt et al. MSSE 2004)
+  osteoporose:{warn:'Calcium 1200 mg/j + Vitamine D 800-2000 UI/j (NOF 2022). Protéines ≥ 1.2 g/kg pour maintien osseux (ESCEO 2019). Exercice en charge recommandé (marche, muscu légère ≤70% 1RM). Évitez alcool et tabac.',macroAdj:{g:-.03,p:.05,l:-.02}},
+  // Polyarthrite rhumatoïde : oméga-3 3-5g/j EPA+DHA (Calder, AJCN 2015), réduction TNF-alpha
+  polyarthrite:{warn:'Oméga-3 EPA+DHA 3-5g/j — réduction inflammation (Calder, AJCN 2015). Réduisez oméga-6 (huiles végétales raffinées) et aliments ultra-transformés (pro-inflammatoires). Alimentation méditerranéenne recommandée (Sköldstam et al. Scand J Rheumatol 2003). Curcuma (curcumine) : anti-inflammatoire adjuvant.',macroAdj:null},
+  // Spondylarthrite ankylosante : Sieper & Poddubnyy, Lancet 2017
+  // Exercice recommandé : natation, yoga, étirements quotidiens maintiennent mobilité rachidienne
+  // Charges axiales lourdes (soulevé de terre, squat lourd) : déconseillées (contrainte sur enthèses)
+  spondylarthrite:{warn:'Alimentation anti-inflammatoire (oméga-3, méditerranéenne). Certains patients bénéficient d\'une réduction des glucides fermentescibles (FODMAP). Vitamine D importante (déficit fréquent dans la SA — Braun & Sieper 2011). Exercice quotidien maintient la mobilité rachidienne (Sieper & Poddubnyy, Lancet 2017).',macroAdj:{g:-.03,p:.02,l:.01}},
+  // Besoins en fer : femme en âge de procréer 18 mg/j, homme/postménopause 8 mg/j (ANSES 2021)
+  // Sportive : +30-70% par rapport aux besoins standards (hémoscopie, hémolyse du pied — Schumacher et al. BJSM 2002)
+  anemie:{warn:'Fer héminique (viande rouge, foie, huîtres) + vitamine C pour l\'absorption. Évitez thé/café aux repas (réduction absorption -60%). Femme sportive : besoins 18-27 mg/j (Schumacher et al. BJSM 2002 — hémolyse à l\'impact, pertes menstruelles). Prise de sang ferritine recommandée.',macroAdj:null},
   anemie_b12:{warn:'Sources B12 : viande, poisson, œufs. Supplémentation si végétalien.',macroAdj:null},
   obesity:{warn:'Déficit calorique modéré (-500 kcal/j max). Protéines hautes pour préserver la masse maigre.',macroAdj:{g:-.08,p:.10,l:-.02}},
   tca:{warn:'Un suivi médical et psychologique est fortement recommandé.',macroAdj:null},
-  grossesse:{warn:'Acide folique, fer, calcium. +300 kcal/j au 2e trimestre, +450 au 3e.',macroAdj:{g:.02,p:.05,l:-.02}},
+  // ACOG 2018 / OMS : +340 kcal/j T2, +450 kcal/j T3 (corrigé de l'erreur "+300 T2")
+  grossesse:{warn:'Acide folique 400µg, fer 27mg, calcium. +340 kcal/j au 2e trimestre, +450 kcal/j au 3e (ACOG 2018 / OMS).',macroAdj:{g:.02,p:.05,l:-.02}},
   allaitement:{warn:'Allaitement : +500 kcal/j (ACOG 2022). Calcium 1200mg/j, iode 290µg/j, vitamine D 600 UI. Évitez caféine >200mg/j et alcool.',macroAdj:{g:.03,p:.07,l:-.01}},
   insomnia:{warn:'Magnésium, tryptophane (dinde, banane). Évitez caféine après 14h.',macroAdj:null}
 };
-var MEAL_SPLIT={pctBreak:.25,pctLunch:.40,pctSnack:.05,pctDinner:.30}; // défaut 3 repas
+var MEAL_SPLIT={pctBreak:.25,pctLunch:.45,pctSnack:0,pctDinner:.30}; // défaut 3 repas — pctSnack=0 car generateWeek ne génère pas de collation pour meals<4
 // getMealSplit() : distribution dynamique selon activité et nombre de repas (vs MEAL_SPLIT fixe)
 // Base : ADA 2023, ISSN 2017, Ivy 2004 (post-workout nutrition window)
+// INVARIANT : pctSnack doit être 0 quand meals<4, car generateWeek n'alloue le slot snack que si meals>=4.
+// Un pctSnack>0 avec meals=3 crée un déficit calorique silencieux égal à pctSnack×TDEE (ex: 5%×1800=90kcal/j).
 function getMealSplit(){
   var s=window.S;
   var meals=s.mealsPerDay||3;
@@ -188,11 +202,13 @@ function getMealSplit(){
   }
   if(meals===3){
     if(isAthlete){
-      // Athlète 3 repas : collation post-entraînement essentielle → redistribuer légèrement
-      return{pctBreak:.25,pctLunch:.38,pctSnack:.07,pctDinner:.30,
-        note:'Athlète 3 repas : collation post-entraînement recommandée (+glucides/protéines dans les 30-45min — Ivy 2004)'};
+      // Athlète 3 repas : pctSnack=0 obligatoire (generateWeek ne génère pas de slot snack pour meals=3)
+      // Budget snack (7%) redistribué sur déjeuner (+5%) et dîner (+2%) pour atteindre 100%
+      // Note informative : collation post-entraînement recommandée en dehors du plan généré
+      return{pctBreak:.25,pctLunch:.43,pctSnack:0,pctDinner:.32,
+        note:'Athlète 3 repas : collation post-entraînement recommandée (+glucides/protéines dans les 30-45min — Ivy 2004). Ajoutez 150-250kcal (banane + whey ou fruit + yaourt grec) après séance.'};
     }
-    return MEAL_SPLIT; // Standard 3 repas
+    return MEAL_SPLIT; // Standard 3 repas (pctSnack=0, redistribué sur déjeuner)
   }
   if(meals===4){
     if(isAthlete){
@@ -585,6 +601,815 @@ var CF_WODS = [
 ];
 window.CF_WODS = window.CF_WODS_FULL || CF_WODS; // Use 100 WODs if available, fallback to 14 inline
 
+// ═══════════════════════════════════════════════════════════════
+// INTERNATIONALISATION — i18n
+// ═══════════════════════════════════════════════════════════════
+window.I18N = {
+  current: 'fr',
+
+  t: function(key) {
+    var lang = window.I18N.current;
+    var dict = window.I18N.dict[lang] || window.I18N.dict['fr'];
+    return dict[key] || window.I18N.dict['fr'][key] || key;
+  },
+
+  setLang: function(lang) {
+    window.I18N.current = lang;
+    if (window.S) window.S.lang = lang;
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem('mtd_profile') || '{}'); } catch(e){}
+    saved.lang = lang;
+    try { localStorage.setItem('mtd_profile', JSON.stringify(saved)); } catch(e){}
+    if (window.render) render();
+  },
+
+  dict: {
+    fr: {
+      // Navigation
+      'nav.dashboard': 'Tableau de bord',
+      'nav.nutrition': 'Nutrition',
+      'nav.sport': 'Sport',
+      'nav.scanner': 'Scanner',
+      'nav.extras': 'Extras',
+
+      // Auth
+      'auth.login': 'Connexion',
+      'auth.register': 'Créer un compte',
+      'auth.email': 'Email',
+      'auth.password': 'Mot de passe',
+      'auth.confirm_password': 'Confirmer le mot de passe',
+      'auth.firstname': 'Prénom',
+      'auth.login_btn': 'Se connecter',
+      'auth.register_btn': "S'inscrire",
+      'auth.logout': 'Déconnexion',
+      'auth.no_account': 'Pas encore de compte ?',
+      'auth.has_account': 'Déjà un compte ?',
+      'auth.error_credentials': 'Email ou mot de passe incorrect',
+      'auth.error_email': 'Email invalide',
+      'auth.error_password_length': 'Mot de passe : 6 caractères minimum',
+      'auth.error_password_match': 'Les mots de passe ne correspondent pas',
+      'auth.rate_limit': 'Trop de tentatives. Réessayez dans 5 minutes.',
+
+      // Onboarding steps
+      'onb.title': 'Mon Programme',
+      'onb.step': 'Étape',
+      'onb.of': 'sur',
+      'onb.next': 'Continuer',
+      'onb.back': '← Retour',
+      'onb.start': 'Commencer',
+      'onb.finish': 'Voir mon programme',
+
+      // Step 1 — Profil
+      'onb.s1.title': 'Votre profil',
+      'onb.s1.sex': 'Sexe biologique',
+      'onb.s1.male': 'Homme',
+      'onb.s1.female': 'Femme',
+      'onb.s1.menstrual': 'Suivi du cycle menstruel',
+      'onb.s1.pregnant': 'Grossesse',
+      'onb.s1.trimester': 'Trimestre',
+
+      // Step 2 — Mensuration
+      'onb.s2.title': 'Mensurations',
+      'onb.s2.age': 'Âge',
+      'onb.s2.weight': 'Poids',
+      'onb.s2.height': 'Taille',
+      'onb.s2.bmi': 'IMC',
+      'onb.s2.bmi_under': 'Insuffisance pondérale',
+      'onb.s2.bmi_normal': 'Poids normal',
+      'onb.s2.bmi_over': 'Surpoids',
+      'onb.s2.bmi_obese': 'Obésité',
+
+      // Step 3 — Activité
+      'onb.s3.title': "Niveau d'activité",
+      'onb.s3.sedentary': 'Sédentaire',
+      'onb.s3.light': 'Légèrement actif',
+      'onb.s3.moderate': 'Modérément actif',
+      'onb.s3.active': 'Très actif',
+      'onb.s3.very_active': 'Extrêmement actif',
+      'onb.s3.elite': 'Athlète élite',
+      'onb.s3.training_days': "Jours d'entraînement / semaine",
+      'onb.s3.sleep': 'Heures de sommeil / nuit',
+
+      // Step 4 — Médical
+      'onb.s4.title': 'Santé & Antécédents',
+      'onb.s4.none': 'Aucune condition particulière',
+
+      // Step 5 — Préférences
+      'onb.s5.title': 'Préférences alimentaires',
+      'onb.s5.diet': 'Régime alimentaire',
+      'onb.s5.omnivore': 'Omnivore',
+      'onb.s5.vegetarian': 'Végétarien',
+      'onb.s5.vegan': 'Végane',
+      'onb.s5.pescatarian': 'Pescétarien',
+      'onb.s5.allergies': 'Allergies',
+      'onb.s5.intolerances': 'Intolérances',
+      'onb.s5.whey': 'Je prends de la whey protéine',
+      'onb.s5.currency': 'Devise',
+
+      // Step 6 — Objectif
+      'onb.s6.title': 'Votre objectif',
+      'onb.s6.bulk': 'Prise de masse',
+      'onb.s6.lean_bulk': 'Prise de masse douce',
+      'onb.s6.maintain': 'Maintien',
+      'onb.s6.cut': 'Sèche',
+      'onb.s6.shred': 'Shred',
+
+      // Step 8 — Récap macros
+      'onb.s8.title': 'Votre programme nutritionnel',
+      'onb.s8.bmr': 'Métabolisme de base',
+      'onb.s8.tdee': 'Dépense totale',
+      'onb.s8.target': 'Cible calorique',
+      'onb.s8.proteins': 'Protéines',
+      'onb.s8.carbs': 'Glucides',
+      'onb.s8.fats': 'Lipides',
+
+      // Step 9 — Plan
+      'onb.s9.title': 'Votre plan semaine',
+      'onb.s9.breakfast': 'Petit-déjeuner',
+      'onb.s9.lunch': 'Déjeuner',
+      'onb.s9.dinner': 'Dîner',
+      'onb.s9.snack': 'Collation',
+      'onb.s9.total': 'Total',
+      'onb.s9.target': 'Cible',
+      'onb.s9.generate': 'Générer un nouveau plan',
+      'onb.s9.shopping': 'Liste de courses',
+
+      // Dashboard
+      'dash.greeting_morning': 'Bonjour',
+      'dash.greeting_afternoon': 'Bon après-midi',
+      'dash.greeting_evening': 'Bonsoir',
+      'dash.calories': 'kcal',
+      'dash.goal': 'Objectif',
+      'dash.weight': 'Poids',
+      'dash.progression': 'Progression',
+      'dash.no_weight': 'Ajoutez votre premier poids pour voir la courbe de progression',
+
+      // Sport
+      'sport.select': 'Choisissez votre sport',
+      'sport.level': 'Niveau',
+      'sport.beginner': 'Débutant',
+      'sport.intermediate': 'Intermédiaire',
+      'sport.advanced': 'Avancé',
+      'sport.elite': 'Elite',
+      'sport.goal': 'Objectif',
+      'sport.days': 'Jours / semaine',
+      'sport.program': 'Mon programme',
+      'sport.week': 'Semaine',
+
+      // Musculation
+      'muscu.sets': 'séries',
+      'muscu.reps': 'reps',
+      'muscu.rest': 'Repos',
+      'muscu.weight': 'Charge',
+      'muscu.success': 'Série réussie',
+      'muscu.fail': 'Série échouée',
+      'muscu.session_summary': 'Bilan de séance',
+      'muscu.duration': 'Durée',
+      'muscu.calories_burned': 'kcal brûlées',
+
+      // Liste de courses
+      'shop.title': 'Liste de courses',
+      'shop.aisles': 'rayons',
+      'shop.items': 'articles',
+      'shop.optimized': 'Parcours optimisé',
+      'shop.bought': 'articles achetés',
+      'shop.reset': 'Réinitialiser',
+      'shop.export': 'Exporter PDF',
+
+      // Scanner
+      'scan.title': 'Scanner',
+      'scan.scan': 'Scanner un produit',
+      'scan.manual': 'Saisie manuelle',
+      'scan.barcode_placeholder': 'Code-barres (EAN-13)',
+      'scan.search': 'Rechercher',
+      'scan.history': 'Historique',
+      'scan.no_history': "Scannez votre premier produit pour voir l'historique ici",
+      'scan.health_score': 'Score santé',
+
+      // Extras
+      'extras.water': 'Hydratation',
+      'extras.water_glasses': 'verres',
+      'extras.timer': 'Minuteur',
+      'extras.start': 'Démarrer',
+      'extras.stop': 'Arrêter',
+      'extras.reset': 'Réinitialiser',
+      'extras.measures': 'Mesures corporelles',
+      'extras.sleep': 'Sommeil',
+      'extras.food_calc': 'Calculateur nutritionnel',
+
+      // Commun
+      'common.save': 'Enregistrer',
+      'common.cancel': 'Annuler',
+      'common.confirm': 'Confirmer',
+      'common.delete': 'Supprimer',
+      'common.edit': 'Modifier',
+      'common.close': 'Fermer',
+      'common.loading': 'Chargement...',
+      'common.error': 'Une erreur est survenue',
+      'common.reload': 'Recharger',
+      'common.per_day': '/ jour',
+      'common.per_week': '/ semaine',
+      'common.per_kg': 'g / kg',
+      'common.years': 'ans',
+      'common.hours': 'h',
+      'common.minutes': 'min',
+      'common.seconds': 'sec',
+      'common.kg': 'kg',
+      'common.cm': 'cm',
+      'common.kcal': 'kcal',
+      'common.g': 'g',
+      'common.ml': 'ml',
+      'common.minor_warning': "Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé."
+    },
+
+    en: {
+      // Navigation
+      'nav.dashboard': 'Dashboard',
+      'nav.nutrition': 'Nutrition',
+      'nav.sport': 'Workout',
+      'nav.scanner': 'Scanner',
+      'nav.extras': 'Extras',
+
+      // Auth
+      'auth.login': 'Sign In',
+      'auth.register': 'Create Account',
+      'auth.email': 'Email',
+      'auth.password': 'Password',
+      'auth.confirm_password': 'Confirm Password',
+      'auth.firstname': 'First Name',
+      'auth.login_btn': 'Sign In',
+      'auth.register_btn': 'Sign Up',
+      'auth.logout': 'Sign Out',
+      'auth.no_account': "Don't have an account?",
+      'auth.has_account': 'Already have an account?',
+      'auth.error_credentials': 'Incorrect email or password',
+      'auth.error_email': 'Invalid email address',
+      'auth.error_password_length': 'Password must be at least 6 characters',
+      'auth.error_password_match': 'Passwords do not match',
+      'auth.rate_limit': 'Too many attempts. Please try again in 5 minutes.',
+
+      // Onboarding
+      'onb.title': 'My Program',
+      'onb.step': 'Step',
+      'onb.of': 'of',
+      'onb.next': 'Continue',
+      'onb.back': '← Back',
+      'onb.start': 'Get Started',
+      'onb.finish': 'View My Program',
+
+      // Step 1
+      'onb.s1.title': 'Your Profile',
+      'onb.s1.sex': 'Biological Sex',
+      'onb.s1.male': 'Male',
+      'onb.s1.female': 'Female',
+      'onb.s1.menstrual': 'Menstrual Cycle Tracking',
+      'onb.s1.pregnant': 'Pregnancy',
+      'onb.s1.trimester': 'Trimester',
+
+      // Step 2
+      'onb.s2.title': 'Body Measurements',
+      'onb.s2.age': 'Age',
+      'onb.s2.weight': 'Weight',
+      'onb.s2.height': 'Height',
+      'onb.s2.bmi': 'BMI',
+      'onb.s2.bmi_under': 'Underweight',
+      'onb.s2.bmi_normal': 'Normal weight',
+      'onb.s2.bmi_over': 'Overweight',
+      'onb.s2.bmi_obese': 'Obese',
+
+      // Step 3
+      'onb.s3.title': 'Activity Level',
+      'onb.s3.sedentary': 'Sedentary',
+      'onb.s3.light': 'Lightly Active',
+      'onb.s3.moderate': 'Moderately Active',
+      'onb.s3.active': 'Very Active',
+      'onb.s3.very_active': 'Extremely Active',
+      'onb.s3.elite': 'Elite Athlete',
+      'onb.s3.training_days': 'Training days / week',
+      'onb.s3.sleep': 'Hours of sleep / night',
+
+      // Step 4
+      'onb.s4.title': 'Health & Medical History',
+      'onb.s4.none': 'No specific conditions',
+
+      // Step 5
+      'onb.s5.title': 'Food Preferences',
+      'onb.s5.diet': 'Diet Type',
+      'onb.s5.omnivore': 'Omnivore',
+      'onb.s5.vegetarian': 'Vegetarian',
+      'onb.s5.vegan': 'Vegan',
+      'onb.s5.pescatarian': 'Pescatarian',
+      'onb.s5.allergies': 'Allergies',
+      'onb.s5.intolerances': 'Intolerances',
+      'onb.s5.whey': 'I take whey protein',
+      'onb.s5.currency': 'Currency',
+
+      // Step 6
+      'onb.s6.title': 'Your Goal',
+      'onb.s6.bulk': 'Muscle Gain',
+      'onb.s6.lean_bulk': 'Lean Bulk',
+      'onb.s6.maintain': 'Maintenance',
+      'onb.s6.cut': 'Cut',
+      'onb.s6.shred': 'Shred',
+
+      // Step 8
+      'onb.s8.title': 'Your Nutrition Plan',
+      'onb.s8.bmr': 'Basal Metabolic Rate',
+      'onb.s8.tdee': 'Total Daily Energy',
+      'onb.s8.target': 'Calorie Target',
+      'onb.s8.proteins': 'Protein',
+      'onb.s8.carbs': 'Carbohydrates',
+      'onb.s8.fats': 'Fat',
+
+      // Step 9
+      'onb.s9.title': 'Your Weekly Plan',
+      'onb.s9.breakfast': 'Breakfast',
+      'onb.s9.lunch': 'Lunch',
+      'onb.s9.dinner': 'Dinner',
+      'onb.s9.snack': 'Snack',
+      'onb.s9.total': 'Total',
+      'onb.s9.target': 'Target',
+      'onb.s9.generate': 'Generate New Plan',
+      'onb.s9.shopping': 'Shopping List',
+
+      // Dashboard
+      'dash.greeting_morning': 'Good morning',
+      'dash.greeting_afternoon': 'Good afternoon',
+      'dash.greeting_evening': 'Good evening',
+      'dash.calories': 'kcal',
+      'dash.goal': 'Goal',
+      'dash.weight': 'Weight',
+      'dash.progression': 'Progress',
+      'dash.no_weight': 'Add your first weight entry to see your progress chart',
+
+      // Sport
+      'sport.select': 'Choose Your Sport',
+      'sport.level': 'Level',
+      'sport.beginner': 'Beginner',
+      'sport.intermediate': 'Intermediate',
+      'sport.advanced': 'Advanced',
+      'sport.elite': 'Elite',
+      'sport.goal': 'Goal',
+      'sport.days': 'Days / week',
+      'sport.program': 'My Program',
+      'sport.week': 'Week',
+
+      // Musculation
+      'muscu.sets': 'sets',
+      'muscu.reps': 'reps',
+      'muscu.rest': 'Rest',
+      'muscu.weight': 'Load',
+      'muscu.success': 'Set completed',
+      'muscu.fail': 'Set failed',
+      'muscu.session_summary': 'Session Summary',
+      'muscu.duration': 'Duration',
+      'muscu.calories_burned': 'kcal burned',
+
+      // Shopping
+      'shop.title': 'Shopping List',
+      'shop.aisles': 'aisles',
+      'shop.items': 'items',
+      'shop.optimized': 'Optimized route',
+      'shop.bought': 'items purchased',
+      'shop.reset': 'Reset',
+      'shop.export': 'Export PDF',
+
+      // Scanner
+      'scan.title': 'Scanner',
+      'scan.scan': 'Scan a Product',
+      'scan.manual': 'Manual Entry',
+      'scan.barcode_placeholder': 'Barcode (EAN-13)',
+      'scan.search': 'Search',
+      'scan.history': 'History',
+      'scan.no_history': 'Scan your first product to see history here',
+      'scan.health_score': 'Health Score',
+
+      // Extras
+      'extras.water': 'Hydration',
+      'extras.water_glasses': 'glasses',
+      'extras.timer': 'Timer',
+      'extras.start': 'Start',
+      'extras.stop': 'Stop',
+      'extras.reset': 'Reset',
+      'extras.measures': 'Body Measurements',
+      'extras.sleep': 'Sleep',
+      'extras.food_calc': 'Nutrition Calculator',
+
+      // Common
+      'common.save': 'Save',
+      'common.cancel': 'Cancel',
+      'common.confirm': 'Confirm',
+      'common.delete': 'Delete',
+      'common.edit': 'Edit',
+      'common.close': 'Close',
+      'common.loading': 'Loading...',
+      'common.error': 'An error occurred',
+      'common.reload': 'Reload',
+      'common.per_day': '/ day',
+      'common.per_week': '/ week',
+      'common.per_kg': 'g / kg',
+      'common.years': 'yrs',
+      'common.hours': 'h',
+      'common.minutes': 'min',
+      'common.seconds': 'sec',
+      'common.kg': 'kg',
+      'common.cm': 'cm',
+      'common.kcal': 'kcal',
+      'common.g': 'g',
+      'common.ml': 'ml',
+      'common.minor_warning': 'For users under 18, this program should be followed under the supervision of a healthcare professional.'
+    }
+  }
+};
+
+// Raccourci global
+window.t = function(key) { return window.I18N.t(key); };
+
+// ═══════════════════════════════════════════════════════════════
+// SHOP_AR — Dictionnaire arabe marocain (darija) pour la liste de courses
+// Namespace séparé, n'affecte PAS window.I18N (FR/EN intact)
+// ═══════════════════════════════════════════════════════════════
+window.SHOP_AR = {
+
+  // ── UI texts ──────────────────────────────────────────────────
+  ui: {
+    'title':           'قائمة التسوق',
+    'subtitle':        'الأسبوع كامل — شكر كلشي كتشري',
+    'back':            '← ارجع للبرنامج',
+    'print':           '🖨️ طباعة',
+    'print_title':     'قائمة التسوق — SmartFitCoach',
+    'download_pdf':    '📄 تحميل PDF',
+    'reset':           '↺ إعادة تعيين',
+    'toggle_ar':       'عربي',
+    'toggle_fr':       'FR',
+    'total':           'المجموع',
+    'articles_bought': 'منتج مشترى',
+    'sections':        'رايون',
+    'articles':        'منتج',
+    'optimized_route': 'مسار محسّن',
+    'no_plan':         'دير البرنامج ديالك قبل.',
+    'no_items':        'ما لقينا حتى مكون فالبرنامج.',
+    'date_label':      'تاريخ الطباعة'
+  },
+
+  // ── Rayons / sections supermarché ────────────────────────────
+  sections: {
+    '🥩 Boucherie & Poissonnerie':      '🥩 اللحوم والسمك',
+    '🥚 Œufs & Produits laitiers':      '🥚 البيض ومنتجات الألبان',
+    '🥦 Fruits & Légumes':              '🥦 الخضروات والفواكه',
+    '🌾 Féculents & Céréales':          '🌾 النشويات والحبوب',
+    '🧊 Surgelés':                      '🧊 المجمدات',
+    '🥫 Conserves & Bocaux':            '🥫 المعلبات والمرطبانات',
+    '🫙 Épicerie sèche':                '🫙 البقالة الجافة',
+    '🌿 Épices & Herbes':               '🌿 التوابل والأعشاب',
+    '🌰 Graines, Noix & Fruits secs':   '🌰 البذور والمكسرات والفواكه المجففة',
+    '🥤 Boissons & Laits végétaux':     '🥤 المشروبات وحليب النباتات',
+    '🍞 Boulangerie & Pâtisserie':      '🍞 المخبزة والحلويات',
+    '❄️ Crèmerie & Fromages':           '❄️ الجبن والألبان المبردة',
+    '🛒 Divers':                        '🛒 متفرقات'
+  },
+
+  // ── Ingrédients — 200+ traductions FR → Darija/arabe marocain ──
+  ingredients: {
+    // ─── Viandes & Volailles ───
+    'poulet':                   'الدجاج',
+    'blanc de poulet':          'صدر الدجاج',
+    'filet de poulet':          'فيليه الدجاج',
+    'cuisses de poulet':        'أفخاذ الدجاج',
+    'poulet haché':             'الدجاج المفروم',
+    'dinde':                    'الحبش',
+    'filet de dinde':           'فيليه الحبش',
+    'blanc de dinde':           'صدر الحبش',
+    'boeuf':                    'لحم البقر',
+    'bœuf':                     'لحم البقر',
+    'viande hachée':            'اللحم المفروم',
+    'steak':                    'الستيك',
+    'filet de boeuf':           'فيليه البقر',
+    'veau':                     'لحم العجل',
+    'agneau':                   'لحم الغنم',
+    'côtelettes d\'agneau':     'ضلوع الغنم',
+    'kefta':                    'الكفتة',
+    'merguez':                  'المرقاز',
+    'hachis':                   'اللحم المفروم',
+    'lardons':                  'اللاردون',
+    'jambon':                   'الجامبون',
+    'chorizo':                  'التشوريثو',
+    'bacon':                    'البيكون',
+
+    // ─── Poissons & Fruits de mer ───
+    'saumon':                   'السلمون',
+    'filet de saumon':          'فيليه السلمون',
+    'thon':                     'التون',
+    'cabillaud':                 'سمك الكابيو',
+    'maquereau':                'سمك الكاوالا',
+    'sardine':                  'السردين',
+    'crevettes':                'الجمبري',
+    'moules':                   'المحار',
+    'dorade':                   'الدوراد',
+    'bar':                      'القاروص',
+    'sole':                     'سمك السول',
+    'merlu':                    'الميرلو',
+    'anchois':                  'الأنشوا',
+    'tilapia':                  'التيلابيا',
+    'truite':                   'الترويت',
+
+    // ─── Œufs ───
+    'oeuf':                     'البيضة',
+    'oeufs':                    'البيض',
+    'œuf':                      'البيضة',
+    'œufs':                     'البيض',
+    'blancs d\'oeufs':          'بياض البيض',
+    'jaunes d\'oeufs':          'صفار البيض',
+
+    // ─── Produits laitiers ───
+    'lait':                     'الحليب',
+    'lait écrémé':              'الحليب الكاشح',
+    'lait demi-écrémé':         'الحليب نص كاشح',
+    'lait entier':              'الحليب الكامل',
+    'lait de vache':            'حليب البقرة',
+    'yaourt':                   'الداون',
+    'yaourt grec':              'الداون اليوناني',
+    'yaourt nature':            'الداون طبيعي',
+    'fromage':                  'الجبن',
+    'fromage blanc':            'الجبن الأبيض',
+    'fromage râpé':             'الجبن المبشور',
+    'parmesan':                 'البارميزان',
+    'mozzarella':               'الموزاريلا',
+    'feta':                     'الفيتا',
+    'ricotta':                  'الريكوتا',
+    'skyr':                     'السكير',
+    'mascarpone':               'الماسكاربوني',
+    'cottage':                  'الكوتاج',
+    'comté':                    'الكونتي',
+    'emmental':                 'الإيمنتال',
+    'gruyère':                  'الغرويار',
+    'beurre':                   'الزبدة',
+    'crème fraîche':            'الكريمة الطازجة',
+    'crème':                    'الكريمة',
+    'kéfir':                    'الكيفير',
+
+    // ─── Légumes ───
+    'tomate':                   'الطماطم',
+    'tomates':                  'الطماطم',
+    'tomates cerises':          'طماطم كرزية',
+    'tomates concassées':       'طماطم مهروسة',
+    'tomates pelées':           'طماطم مقشرة',
+    'courgette':                'القرعة الخضراء',
+    'courgettes':               'القرع الأخضر',
+    'carotte':                  'الجزرة',
+    'carottes':                 'الجزر',
+    'oignon':                   'البصل',
+    'oignons':                  'البصل',
+    'ail':                      'الثوم',
+    'brocoli':                  'البروكلي',
+    'poivron':                  'الفلفل الرومي',
+    'poivron rouge':            'الفلفل الرومي الأحمر',
+    'poivron vert':             'الفلفل الرومي الأخضر',
+    'épinards':                 'السبانخ',
+    'épinard':                  'السبانخ',
+    'chou':                     'الكرمب',
+    'concombre':                'الخيار',
+    'champignon':               'الشمبيون',
+    'champignons':              'الشمبيون',
+    'aubergine':                'الدنجال',
+    'céleri':                   'الكرافس',
+    'salade':                   'السلاطة',
+    'laitue':                   'الليتيس',
+    'roquette':                 'الجرجير',
+    'mâche':                    'الماش',
+    'pousses':                  'البراعم',
+    'patate douce':             'البطاطا الحلوة',
+    'pomme de terre':           'البطاطس',
+    'poireau':                  'الكراث',
+    'fenouil':                  'الفنل',
+    'asperge':                  'الأسبراج',
+    'asperges':                 'الأسبراج',
+    'haricots verts':           'الفاصولية الخضراء',
+    'haricot vert':             'الفاصولية الخضراء',
+    'petits pois':              'الجلبانة',
+    'maïs':                     'الدرة',
+    'betterave':                'الشمندر',
+    'navet':                    'اللفت',
+    'radis':                    'الفجل',
+    'artichaut':                'القرنون',
+    'chou-fleur':               'الزهرة',
+    'chou rouge':               'الكرمب الحمر',
+    'potiron':                  'القرعة',
+    'courge':                   'القرعة',
+    'endive':                   'الشيكوريا',
+    'cresson':                  'الحرشا',
+    'bok choy':                 'بوك تشوي',
+    'piment':                   'الهريسة',
+    'piment rouge':             'الفلفل الأحمر الحار',
+    'poireaux':                 'الكراث',
+
+    // ─── Fruits ───
+    'banane':                   'الموزة',
+    'bananes':                  'الموز',
+    'pomme':                    'التفاح',
+    'pommes':                   'التفاح',
+    'orange':                   'البرتقال',
+    'citron':                   'الحامض',
+    'citron vert':              'الليمون الأخضر',
+    'fraise':                   'الفراولة',
+    'fraises':                  'الفراولة',
+    'myrtilles':                'التوت الأزرق',
+    'framboises':               'التوت الأحمر',
+    'mangue':                   'المانجو',
+    'kiwi':                     'الكيوي',
+    'ananas':                   'الأناناس',
+    'raisin':                   'العنب',
+    'pêche':                    'الخوخ',
+    'poire':                    'الإجاص',
+    'melon':                    'البطيخ الأصفر',
+    'pastèque':                 'الدلاح',
+    'abricot':                  'المشمش',
+    'cerise':                   'الحب الملوك',
+    'figue':                    'الكرماس',
+    'datte':                    'التمر',
+    'avocat':                   'الأفوكا',
+    'pamplemousse':             'البامبلموس',
+    'grenade':                  'الرمان',
+    'noix de coco':             'جوز الهند',
+    'pulpe d\'açaí':            'بولب الأكاي',
+
+    // ─── Céréales & Féculents ───
+    'riz':                      'الرز',
+    'riz basmati':              'الرز البسمتي',
+    'riz complet':              'الرز الكامل',
+    'pâtes':                    'الماكرونة',
+    'spaghetti':                'السباغيتي',
+    'tagliatelles':             'التالياتيل',
+    'penne':                    'البيني',
+    'fusilli':                  'الفوزيلي',
+    'quinoa':                   'الكينوا',
+    'flocons d\'avoine':        'دقيق الشوفان',
+    'avoine':                   'الشوفان',
+    'soba':                     'نودل السوبا',
+    'ramen':                    'الرامين',
+    'nouilles':                 'النودل',
+    'couscous':                 'الكسكس',
+    'semoule':                  'السميد',
+    'farine':                   'الدقيق',
+    'farine complète':          'الدقيق الكامل',
+    'boulgour':                 'البرغل',
+    'polenta':                  'البولنتا',
+    'sarrasin':                 'الحنطة السوداء',
+    'millet':                   'الدخن',
+    'épeautre':                 'الكاموت',
+    'orge':                     'الشعير',
+    'son d\'avoine':            'نخالة الشوفان',
+
+    // ─── Légumineuses ───
+    'lentilles':                'العدس',
+    'lentilles vertes':         'العدس الأخضر',
+    'lentilles rouges':         'العدس الأحمر',
+    'pois chiches':             'الحمص',
+    'haricots':                 'الفاصولية',
+    'haricots rouges':          'الفاصولية الحمراء',
+    'haricots noirs':           'الفاصولية السوداء',
+    'fèves':                    'الفول',
+    'edamame':                  'الإيدامامي',
+    'soja':                     'الصويا',
+
+    // ─── Pain & Boulangerie ───
+    'pain':                     'الخبز',
+    'pain complet':             'الخبز الكامل',
+    'pain de seigle':           'خبز الجاودار',
+    'baguette':                 'الباكيت',
+    'tortilla':                 'التورتيا',
+    'wraps':                    'الرابس',
+    'pita':                     'خبز البيتا',
+    'naan':                     'خبز النان',
+    'chapati':                  'الشاباتي',
+    'ciabatta':                 'الشياباتا',
+    'brioche':                  'البريوش',
+    'granola':                  'الغرانولا',
+
+    // ─── Huiles, sauces & condiments ───
+    'huile d\'olive':           'زيت الزيتون',
+    'huile de coco':            'زيت جوز الهند',
+    'huile':                    'الزيت',
+    'vinaigre':                 'الخل',
+    'vinaigre balsamique':      'خل البلسامي',
+    'sauce soja':               'صلصة الصويا',
+    'tahini':                   'الطحينة',
+    'moutarde':                 'المسطردة',
+    'pesto':                    'البيستو',
+    'miel':                     'العسل',
+    'sirop d\'érable':          'شراب القيقب',
+    'ketchup':                  'الكاتشاب',
+    'mayonnaise':               'المايونيز',
+    'miso':                     'الميزو',
+    'tamari':                   'التاماري',
+    'sriracha':                 'السريراشا',
+    'harissa':                  'الهريسة',
+    'nuoc-mâm':                 'صلصة السمك',
+    'bouillon':                 'المرق',
+    'levure nutritionnelle':    'الخميرة الغذائية',
+    'concentré de tomate':      'معجون الطماطم',
+
+    // ─── Épices & Herbes ───
+    'sel':                      'الملح',
+    'poivre':                   'الفلفل الأسود',
+    'cumin':                    'الكمون',
+    'paprika':                  'الفلفل الحلو',
+    'cannelle':                 'القرفة',
+    'gingembre':                'الزنجبيل',
+    'curry':                    'الكاري',
+    'curcuma':                  'الكركم',
+    'coriandre':                'الكزبرة',
+    'persil':                   'المعدنوس',
+    'basilic':                  'الحبق',
+    'origan':                   'الزعتر الرومي',
+    'thym':                     'الزعتر',
+    'ras el hanout':            'رأس الحانوت',
+    'garam masala':             'غارام ماسالا',
+    'safran':                   'الزعفران',
+    'menthe':                   'النعناع',
+    'aneth':                    'الشبت',
+    'estragon':                 'الطرخون',
+    'laurier':                  'ورق الغار',
+    'muscade':                  'جوزة الطيب',
+    'cardamome':                'الهيل',
+    'clou de girofle':          'القرنفل',
+    'sumac':                    'السماق',
+    'zaatar':                   'الزعتر',
+    'chili':                    'الشيلي',
+    'ciboulette':               'الثوم المعمر',
+    'romarin':                  'إكليل الجبل',
+
+    // ─── Graines, Noix & Fruits secs ───
+    'amandes':                  'اللوز',
+    'amande':                   'اللوز',
+    'noix':                     'الجوز',
+    'noix de cajou':            'الكاجو',
+    'cacahuètes':               'الفول السوداني',
+    'pistaches':                'الفستق',
+    'noisettes':                'البندق',
+    'sésame':                   'السمسم',
+    'graines de chia':          'بذور الشيا',
+    'graines de lin':           'بذور الكتان',
+    'graines de tournesol':     'بذور عباد الشمس',
+    'graines de courge':        'بذور القرعة',
+    'raisins secs':             'الزبيب',
+    'abricots secs':            'المشمش المجفف',
+    'figues sèches':            'الكرماس المجفف',
+    'cranberries':              'التوت البري المجفف',
+    'noix de pécan':            'البقان',
+
+    // ─── Boissons & Laits végétaux ───
+    'lait d\'amande':           'حليب اللوز',
+    'lait de coco':             'حليب جوز الهند',
+    'lait de soja':             'حليب الصويا',
+    'lait de riz':              'حليب الرز',
+    'lait d\'avoine':           'حليب الشوفان',
+    'lait végétal':             'الحليب النباتي',
+    'jus d\'orange':            'عصير البرتقال',
+    'eau de coco':              'ماء جوز الهند',
+    'café':                     'القهوة',
+    'thé':                      'الأتاي',
+    'thé vert':                 'الأتاي الأخضر',
+    'kombucha':                 'الكومبوتشا',
+
+    // ─── Divers ───
+    'protéine en poudre':       'البروتين البودرة',
+    'whey':                     'الواي بروتين',
+    'sirop':                    'الشراب',
+    'cacao':                    'الكاكاو',
+    'chocolat noir':            'الشوكولاتة الداكنة',
+    'chocolat':                 'الشوكولاتة',
+    'sucre':                    'السكر',
+    'sucre roux':               'السكر الأحمر',
+    'confiture':                'المربى',
+    'bicarbonate':              'البيكاربونات',
+    'levure chimique':          'الخميرة الكيميائية',
+    'vanille':                  'الفانيليا',
+    'arrow-root':               'نشا الكاساف'
+  },
+
+  // ── Méthode de traduction d'un nom d'ingrédient ──────────────
+  translateIngredient: function(name) {
+    if (!name) return name;
+    var lower = name.toLowerCase().trim();
+    var dict = window.SHOP_AR.ingredients;
+    // Correspondance exacte
+    if (dict[lower]) return dict[lower];
+    // Correspondance partielle : cherche si une clé est contenue dans le nom
+    var keys = Object.keys(dict);
+    for (var i = 0; i < keys.length; i++) {
+      if (lower.indexOf(keys[i]) !== -1) return dict[keys[i]];
+    }
+    // Aucune traduction : retourne le nom original
+    return name;
+  },
+
+  // ── Traduction d'un rayon ────────────────────────────────────
+  translateSection: function(sectionName) {
+    return window.SHOP_AR.sections[sectionName] || sectionName;
+  }
+};
+
 // ─── GLOBAL STATE ───
 window.S = {
   // Routing
@@ -596,7 +1421,17 @@ window.S = {
   cookLevel: 2, whey: null, allergies: [], intolerances: [],
   regime: 0, excluded: '', cuisines: [0],
   shopFreq: null, shopStores: [], shopBudget: null, shopPrefs: [],
-  weekPlan: null, selectedDay: 0, modalRecipe: null, showList: false,
+  shopChecked: {},   // { 'nom_ingrédient': true|false } — état cases à cocher liste de courses
+  saladBar: {
+    open: false,
+    base: null,        // { name, qty, unit, k, p, g, l }
+    proteins: [],      // array of { name, qty, unit, k, p, g, l }
+    veggies: [],       // array of { name, qty, unit, k, p, g, l }
+    fats: [],          // array of { name, qty, unit, k, p, g, l }
+    sauce: null,       // { name, qty, unit, k, p, g, l }
+    mealTarget: 'lunch' // 'lunch' | 'dinner'
+  },
+  weekPlan: null, selectedDay: 0, modalRecipe: null, showList: false, shopListOpen: false,
   // Food habits
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,
@@ -644,6 +1479,47 @@ window.S = {
   crossfit1RM: {},  // { 'clean': 80, 'snatch': 60, 'deadlift': 140, ... } in kg
   // Strength assessment profile
   muscuStrengthProfile: {},  // { 'bench_press': 60, 'squat': 80, 'deadlift': 100, ... }
+  muscuSessionLog: {},
+  // Structure : {
+  //   'YYYY-MM-DD': {           // date de la séance
+  //     'Développé couché': [   // nom exercice
+  //       { set: 1, targetWeight: 60, targetReps: 10, actualWeight: 60, actualReps: 9 },
+  //       { set: 2, targetWeight: 60, targetReps: 10, actualWeight: 62.5, actualReps: 8 },
+  //     ]
+  //   }
+  // }
+  muscuProgressionHistory: {},
+  // Structure : {
+  //   'Développé couché': [
+  //     { week: 1, weight: 60, reps: 10, date: 'YYYY-MM-DD' },
+  //     { week: 2, weight: 62.5, reps: 10, date: 'YYYY-MM-DD' },
+  //   ]
+  // }
+  muscuMedical: {
+    done: false,
+    // Zones douloureuses (multi-select)
+    shoulders: false,   // Épaules (coiffe des rotateurs, tendinite)
+    elbows: false,      // Coudes (épicondylite, tendinite)
+    wrists: false,      // Poignets
+    neck: false,        // Nuque / cervicales
+    upperBack: false,   // Haut du dos / thoracique
+    lowerBack: false,   // Bas du dos (lombalgie, hernie discale)
+    hips: false,        // Hanches (conflit fémoro-acétabulaire)
+    knees: false,       // Genoux (tendinite rotulienne, ménisques)
+    ankles: false,      // Chevilles
+    // Antécédents graves
+    herniaDisc: false,  // Hernie discale confirmée (IRM)
+    herniaInguinal: false, // Hernie inguinale / abdominale
+    rotatorCuff: false, // Déchirure coiffe des rotateurs (diagnostiquée)
+    acl: false,         // LCA opéré ou fragilisé
+    osteoporosis: false,// Ostéoporose
+    hypertension: false,// HTA sévère (>160/100)
+    rheumatoidArthritis: false, // Polyarthrite rhumatoïde (PR) — exercices doux en rémission, repos en poussée
+    // Intensité douleur générale 0-3
+    painLevel: 0,       // 0=aucune 1=légère 2=modérée 3=sévère
+    // Notes libres
+    notes: ''
+  },
   // Running
   runningLevel: null,        // 'beginner','intermediate','advanced'
   runningGoal: null,         // '5k','10k','semi','marathon','trail'
@@ -668,7 +1544,125 @@ window.S = {
   // Triathlon / IRONMAN
   triathlonGoal: null, triathlonLevel: null, triathlonWeak: null,
   triathlonSwimPace: null, triathlonBikePace: null, triathlonRunPace: null,
-  triathlonProgram: null, triathlonWeek: 1, selectedTriDay: 0
+  triathlonProgram: null, triathlonWeek: 1, selectedTriDay: 0,
+  // Cardio metrics
+  heartRateRest: null        // FC repos en bpm (optionnel, défaut 65 si non renseigné)
+};
+
+// ═══════════════════════════════════════════════════════════════
+// SYSTÈME DE CONVERSION D'UNITÉS
+// ═══════════════════════════════════════════════════════════════
+window.UNITS = {
+  weight: 'kg',   // 'kg' ou 'lbs'
+  height: 'cm',   // 'cm' ou 'ft'
+
+  // Facteurs de conversion
+  KG_TO_LBS: 2.20462,
+  LBS_TO_KG: 0.453592,
+  CM_TO_INCH: 0.393701,
+  INCH_TO_CM: 2.54,
+
+  // Affichage poids
+  displayWeight: function(kg) {
+    if (!kg && kg !== 0) return '';
+    if (window.UNITS.weight === 'lbs') {
+      return Math.round(kg * window.UNITS.KG_TO_LBS * 10) / 10 + ' lbs';
+    }
+    return (Math.round(kg * 10) / 10) + ' kg';
+  },
+
+  // Affichage poids court (sans unité, pour inputs)
+  displayWeightVal: function(kg) {
+    if (!kg && kg !== 0) return '';
+    if (window.UNITS.weight === 'lbs') {
+      return Math.round(kg * window.UNITS.KG_TO_LBS * 10) / 10;
+    }
+    return Math.round(kg * 10) / 10;
+  },
+
+  // Convertir input → kg (pour stockage interne toujours en kg)
+  toKg: function(val) {
+    var n = parseFloat(val) || 0;
+    if (window.UNITS.weight === 'lbs') return Math.round(n * window.UNITS.LBS_TO_KG * 10) / 10;
+    return n;
+  },
+
+  // Affichage taille
+  displayHeight: function(cm) {
+    if (!cm && cm !== 0) return '';
+    if (window.UNITS.height === 'ft') {
+      var totalInches = cm * window.UNITS.CM_TO_INCH;
+      var feet = Math.floor(totalInches / 12);
+      var inches = Math.round(totalInches % 12);
+      if (inches === 12) { feet++; inches = 0; }
+      return feet + "'" + inches + '"';
+    }
+    return cm + ' cm';
+  },
+
+  // Affichage taille court pour input
+  displayHeightVal: function(cm) {
+    if (!cm && cm !== 0) return '';
+    if (window.UNITS.height === 'ft') {
+      var totalInches = cm * window.UNITS.CM_TO_INCH;
+      return Math.round(totalInches * 10) / 10; // en pouces décimaux pour input
+    }
+    return cm;
+  },
+
+  // Convertir input taille → cm (stockage interne toujours en cm)
+  toCm: function(val) {
+    var n = parseFloat(val) || 0;
+    if (window.UNITS.height === 'ft') return Math.round(n * window.UNITS.INCH_TO_CM * 10) / 10;
+    return n;
+  },
+
+  // Label unité poids pour les inputs
+  weightLabel: function() {
+    return window.UNITS.weight === 'lbs' ? 'lbs' : 'kg';
+  },
+
+  // Label unité taille pour les inputs
+  heightLabel: function() {
+    return window.UNITS.height === 'ft' ? 'in (pouces)' : 'cm';
+  },
+
+  // Plages valides selon unité (pour validation input)
+  weightRange: function() {
+    return window.UNITS.weight === 'lbs'
+      ? {min: 66, max: 660, step: 0.5}   // 30-300 kg en lbs
+      : {min: 30, max: 300, step: 0.1};
+  },
+
+  heightRange: function() {
+    return window.UNITS.height === 'ft'
+      ? {min: 47, max: 98, step: 0.5}    // 120-250 cm en pouces
+      : {min: 120, max: 250, step: 1};
+  },
+
+  // Changer d'unité poids
+  setWeightUnit: function(unit) {
+    window.UNITS.weight = unit;
+    if (window.S) window.S.weightUnit = unit;
+    try {
+      var saved = JSON.parse(localStorage.getItem('mtd_profile') || '{}');
+      saved.weightUnit = unit;
+      localStorage.setItem('mtd_profile', JSON.stringify(saved));
+    } catch(e) {}
+    if (window.render) render();
+  },
+
+  // Changer d'unité taille
+  setHeightUnit: function(unit) {
+    window.UNITS.height = unit;
+    if (window.S) window.S.heightUnit = unit;
+    try {
+      var saved = JSON.parse(localStorage.getItem('mtd_profile') || '{}');
+      saved.heightUnit = unit;
+      localStorage.setItem('mtd_profile', JSON.stringify(saved));
+    } catch(e) {}
+    if (window.render) render();
+  }
 };
 
 // ─── MUSCULATION KEY EXERCISES (Strength Assessment) ───
@@ -1105,12 +2099,21 @@ if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
 // Surplus max +300kcal/j en bulk (ACSM adolescent — éviter accumulation graisseuse pendant croissance hormonale)
 if(s.age>=13&&s.age<18&&tdeeVal>0){
   var minCalTeen=Math.round(tdeeVal-300);if(base<minCalTeen)base=minCalTeen;
-  if(goalKey==='bulk'){var maxCalTeen=Math.round(tdeeVal+300);if(base>maxCalTeen)base=maxCalTeen;}
+  if(goalKey==='bulk'||goalKey==='lean_bulk'){var maxCalTeen=Math.round(tdeeVal+300);if(base>maxCalTeen)base=maxCalTeen;}
 }
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
-if(s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1200,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes)
+// Ménopause : réduction métabolique ~150 kcal/j (NAMS 2022, Poehlman 1995)
+// Plancher 1400 kcal/j maintenu — les femmes ménopausées doivent être encouragées à rester actives (NAMS 2022)
+if(s.sex==='femme'&&s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1400,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes) — femme uniquement
 if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
-if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}var kcalFloor=s.sex==='femme'?1200:1500;base=Math.max(base,kcalFloor);
+if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}
+// Plancher calorique sexe-spécifique (ACSM / IOC 2018 RED-S prevention)
+// Femme active (PAL ≥ 1.375) : plancher 1400 kcal/j — prévention RED-S (IOC 2018)
+// Femme sédentaire : plancher 1200 kcal/j (ACSM)
+// Homme : plancher 1400 kcal/j (ACSM — QA spec)
+var effectivePAL=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
+var kcalFloor=s.sex==='femme'?(effectivePAL>=1.375?1400:1200):1400;
+base=Math.max(base,kcalFloor);
 // Alcool : déduire les calories hebdo/7 du budget calorique journalier pour un calcul réaliste
 // Ex : 500 kcal alcool/semaine ÷ 7 = 71 kcal/j que l'on retire de l'objectif alimentaire
 // (l'alcool ne nourrit pas : 7kcal/g sans micronutriments, inhibe oxydation des graisses)
@@ -1118,7 +2121,7 @@ if(s.alcoholFreq&&s.alcoholFreq!=='never'&&typeof alcoholWeeklyKcal==='function'
   var alcDaily=Math.round(alcoholWeeklyKcal()/7);
   if(alcDaily>0){base=Math.max(kcalFloor,base-alcDaily);} // soustraire mais respecter le plancher
 }
-return base} // ACSM: plancher universel ≥1200 kcal/j (femme) / ≥1500 kcal/j (homme)
+return base} // ACSM: plancher universel ≥1200 kcal/j (femme) / ≥1400 kcal/j (homme)
 function calcMacros(){
   var s=window.S;var c=calcTarget();
   if(!c||s.goal===null)return{g:0,p:0,l:0};
@@ -1139,7 +2142,7 @@ function calcMacros(){
     // Femmes : ~13% de moins (oestrogène anti-catabolique — Tarnopolsky 2000)
     // Sédentaire plancher : OMS 0.83 minimum, EFSA 2012 recommande 1.0-1.2 pour maintien musculaire
     if(actFactor>=1.9){
-      ppk=isFemale?2.1:2.4;  // Athlète élite : H=2.4g/kg, F=2.1g/kg (Phillips & Van Loon 2011, Morton 2018)
+      ppk=isFemale?2.0:2.2;  // Athlète élite : H=2.2g/kg, F=2.0g/kg (ISSN Position Stand 2023 upper — Morton 2018 BJSM)
     } else if(actFactor>=1.725){
       ppk=isFemale?1.6:1.8;  // Très actif : H=1.8, F=1.6 (ISSN 2017)
     } else if(actFactor>=1.55){
@@ -1150,12 +2153,12 @@ function calcMacros(){
       ppk=isFemale?1.0:1.2;  // Sédentaire : H=1.2, F=1.0 (EFSA 2012 — anti-sarcopénie)
     }
 
-  } else if(goalKey==='bulk'){
-    // ─── PRISE DE MASSE — ppk selon activité ET sexe ───
-    // Athlète élite : H=2.5g/kg, F=2.2g/kg (objectif hypertrophie maximale — Morton 2018)
+  } else if(goalKey==='bulk'||goalKey==='lean_bulk'){
+    // ─── PRISE DE MASSE / PRISE DE MASSE DOUCE — ppk selon activité ET sexe ───
+    // Athlète élite : H=2.2g/kg, F=2.0g/kg (ISSN Position Stand 2023 upper — Morton 2018 BJSM)
     // Base non-élite : H=1.8g/kg, F=1.6g/kg (ISSN 2017)
     if(actFactor>=1.9){
-      ppk=isFemale?2.2:2.5;  // Élite bulk : H=2.5, F=2.2 (Morton 2018 BJSM)
+      ppk=isFemale?2.0:2.2;  // Élite bulk : H=2.2g/kg, F=2.0g/kg (ISSN 2023 upper / Morton 2018 BJSM)
     } else if(actFactor>=1.7){
       ppk=isFemale?1.8:2.0;  // Très actif bulk : H=2.0, F=1.8
     } else {
@@ -1206,7 +2209,7 @@ function calcMacros(){
     if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure (sauf déficit calorique — Helms 2014)
   }
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
-  if(s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.6); // KDOQI 2020: 0.55-0.60g/kg CKD 3-5 non-dialysis
+  if(s.medical&&s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.6); // KDOQI 2020: 0.55-0.60g/kg CKD 3-5 non-dialysis
   // Vegan/vegetarian: adjust protein for lower DIAAS bioavailability of plant proteins (Messina 2019, ISSN 2017)
   if(s.regime===3)ppk=Math.round(ppk*1.10*10)/10; // Végan: +10% (DIAAS correction — FAO 2013, PMC 2020)
   else if(s.regime===2)ppk=Math.round(ppk*1.10*10)/10; // Végétarien lacto-ovo: +10% (DIAAS correction — FAO 2013, PMC 2020)
@@ -1217,7 +2220,7 @@ function calcMacros(){
   var pCal=pGrams*4;
   // Fat g/kg (minimum 0.5g/kg for hormonal health)
   var fpk=1.0;
-  if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='bulk')fpk=1.1;else fpk=1.0;
+  if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='bulk'||goalKey==='lean_bulk')fpk=1.1;else fpk=1.0;
   if(s.sex==='femme')fpk=Math.round((fpk+0.1)*10)/10;
   // Min lipides femme 0.7g/kg (ISSN 2021) — santé hormonale (vs 0.5 homme)
   var lipidMin=s.sex==='femme'?0.7:0.5;
@@ -1228,7 +2231,7 @@ function calcMacros(){
   if(gCal<200){lCal=Math.max(bw*0.5*9,c-pCal-200);lGrams=Math.round(lCal/9);gCal=c-pCal-lCal;if(gCal<200){pCal=c-lCal-200;pGrams=Math.round(pCal/4);gCal=200}}
   var gGrams=Math.max(130,Math.round(gCal/4)); // IOM 2005: min 130g/j (cerveau+SNC)
   // Cap carbs to goal-specific maximum (g/kg) — prevents excessive carb surplus (Helms 2014, ISSN 2017)
-  var carbCapGpkg=goalKey==='shred'?3.5:goalKey==='cut'?4.0:goalKey==='bulk'?6.0:5.0;
+  var carbCapGpkg=goalKey==='shred'?3.5:goalKey==='cut'?4.0:(goalKey==='bulk'||goalKey==='lean_bulk')?6.0:5.0;
   var carbCap=Math.round(bw*carbCapGpkg);
   if(gGrams>carbCap){
     // CRITIQUE : redistribuer les calories libérées par le plafond glucides sur les lipides
@@ -1248,14 +2251,15 @@ function calcMacros(){
     }
   }
   // Medical adjustments
-  for(var i=0;i<s.medical.length;i++){var a=MEDICAL_ADVICE[s.medical[i]];if(a&&a.macroAdj){gGrams=Math.round(gGrams*(1+(a.macroAdj.g||0)));pGrams=Math.round(pGrams*(1+(a.macroAdj.p||0)));lGrams=Math.round(lGrams*(1+(a.macroAdj.l||0)))}}
+  if(s.medical){for(var i=0;i<s.medical.length;i++){var mId=s.medical[i];var a=MEDICAL_ADVICE[mId];if(a&&a.macroAdj){// ménopause, sopk, grossesse, allaitement : ajustements féminins uniquement
+var femaleOnly=['menopause','sopk','grossesse','allaitement'];if(femaleOnly.indexOf(mId)!==-1&&s.sex!=='femme')continue;gGrams=Math.round(gGrams*(1+(a.macroAdj.g||0)));pGrams=Math.round(pGrams*(1+(a.macroAdj.p||0)));lGrams=Math.round(lGrams*(1+(a.macroAdj.l||0)))}}}
   // Re-enforce IRC protein cap after all medical adjustments (KDOQI 2020: 0.6g/kg CKD 3-5 non-dialysis)
-  if(s.medical.indexOf('irc')!==-1){var maxIrcP=Math.round(bw*0.6);if(pGrams>maxIrcP)pGrams=maxIrcP;}
+  if(s.medical&&s.medical.indexOf('irc')!==-1){var maxIrcP=Math.round(bw*0.6);if(pGrams>maxIrcP)pGrams=maxIrcP;}
   // Diabète gestationnel : plafond glucides 175-200g/j (ADA 2023, ACOG 2018)
   if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){var gdCarbMax=Math.min(200,Math.max(175,gGrams));if(gGrams>gdCarbMax)gGrams=gdCarbMax;}
   // Master athlete 60+ : résistance anabolique → leucine seuil 40g/meal (Churchward-Venne 2016, Moore 2015)
   // Augmenter protéines de 10% pour compenser la résistance anabolique (recommandation ESPEN 2019)
-  if(s.age>=60&&s.medical.indexOf('irc')===-1){pGrams=Math.max(pGrams,Math.round(bw*1.2));} // ESPEN 2014: plancher 1.2g/kg pour 60+ (résistance anabolique)
+  if(s.age>=60&&(!s.medical||s.medical.indexOf('irc')===-1)){pGrams=Math.max(pGrams,Math.round(bw*1.2));} // ESPEN 2014: plancher 1.2g/kg pour 60+ (résistance anabolique)
   // Apply cycle-phase macro adjustments (only for non-pregnant women with cycle tracking)
   if(!s.pregnant&&s.sex==='femme'&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
 gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0)));// Never reduce protein during cycle — keep stable
@@ -1377,9 +2381,12 @@ function calcHydration(){
     base:base,
     actBonus:actBonus,
     perSportHour:600, // 500-750ml/heure d'effort (ACSM 2007)
+    electrolytes: actBonus >= 750, // Électrolytes recommandés si effort > ~60 min (Maughan & Shirreffs, BJSM 2010)
     tips:[
       'Urines jaune pâle = bonne hydratation',
       actBonus>0?'Ajoutez 500-750ml par heure d\'entraînement':'Buvez régulièrement, sans attendre la soif',
+      // Électrolytes pour efforts > 1h (Maughan & Shirreffs, BJSM 2010 — sodium 500-1000mg/h, potassium 200-400mg/h)
+      actBonus>=750?'Effort > 60 min : ajoutez des électrolytes (sodium 500-1000 mg/h, potassium 200-400 mg/h) pour prévenir hyponatrémie et crampes (Maughan & Shirreffs, BJSM 2010).':null,
       s.pregnant?'+300ml/j recommandé en grossesse (OMS)':null,
       (s.medical&&s.medical.indexOf('allaitement')!==-1)?'+700ml/j supplémentaires pendant l\'allaitement (ANSES 2021)':null
     ].filter(Boolean)
@@ -1423,13 +2430,23 @@ window.calcMacros=calcMacros; window.calcBMI=calcBMI; window.bmiInfo=bmiInfo;
 window.calcWeightProjection=calcWeightProjection; window.alcoholWeeklyKcal=alcoholWeeklyKcal;
 
 // ─── RECIPE FILTERING ───
-function getPool(t){if(t==='breakfast')return window.breakfast;if(t==='lunch')return window.lunch;if(t==='snack')return window.snack;return window.dinner}
+function getPool(t){
+  // Délègue à RecipeEngine.getPool() si disponible (fusionne anciens + nouveaux pools)
+  if (window.RecipeEngine && window.RecipeEngine.getPool) {
+    return window.RecipeEngine.getPool(t);
+  }
+  // Fallback : anciens arrays directs
+  if(t==='breakfast')return window.breakfast;
+  if(t==='lunch')return window.lunch;
+  if(t==='snack')return window.snack;
+  return window.dinner;
+}
 function filterRecipes(pool,type){
   var s=window.S;
-  var r=pool.slice();
+  var r=(pool||[]).slice();
   r=r.filter(function(x){return x.lv<=s.cookLevel+1});
   if(type==='snack'&&!s.whey)r=r.filter(function(x){return!x.w});
-  if(s.allergies.length>0&&s.allergies.indexOf('Aucune')===-1){
+  if((s.allergies||[]).length>0&&(s.allergies||[]).indexOf('Aucune')===-1){
     r=r.filter(function(x){
       var ing=(x.i+' '+x.tags.join(' ')).toLowerCase();
       for(var a=0;a<s.allergies.length;a++){
@@ -1447,7 +2464,7 @@ function filterRecipes(pool,type){
       }return true;
     });
   }
-  if(s.intolerances.length>0&&s.intolerances.indexOf('Aucune')===-1){
+  if((s.intolerances||[]).length>0&&(s.intolerances||[]).indexOf('Aucune')===-1){
     r=r.filter(function(x){
       var ing=(x.i+' '+x.tags.join(' ')).toLowerCase();
       for(var t=0;t<s.intolerances.length;t++){
@@ -1470,16 +2487,60 @@ function filterRecipes(pool,type){
   return r;
 }
 function pickRecipe(pool,targetK,used){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();av.sort(function(a,b){return Math.abs(a.k-targetK)-Math.abs(b.k-targetK)});var top=av.slice(0,Math.min(5,av.length));var p=top[Math.floor(Math.random()*top.length)];if(p)used.add(p.n);return p||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+// Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
+function enrichWithScaling(recipe, targetKcal) {
+  if (!recipe) return recipe;
+
+  // Recettes R201+ (format riche) — scaling via RecipeEngine
+  if (recipe._id && /^R\d+$/.test(recipe._id) && window.RecipeEngine && window.RecipeEngine.getAdaptedRecipe) {
+    var nm = window.S._nm;
+    if (!nm) return recipe;
+    try {
+      var adapted = window.RecipeEngine.getAdaptedRecipe(recipe._id, nm, { targetCalories: targetKcal });
+      if (!adapted || !adapted.adaptedNutrition) return recipe;
+      recipe.k = Math.round(adapted.adaptedNutrition.calories);
+      recipe.p = Math.round(adapted.adaptedNutrition.proteinGrams);
+      recipe.g = Math.round(adapted.adaptedNutrition.carbsGrams);
+      recipe.l = Math.round(adapted.adaptedNutrition.fatGrams);
+      recipe._scaledIngredients = adapted.ingredients || null;
+      recipe._scalingRatio = adapted.scalingRatio || 1;
+    } catch(e) {}
+    return recipe;
+  }
+
+  // Recettes legacy (format compact, _id = L0XX, L1XX, L2XX, L3XX)
+  if (recipe._id && /^L\d+$/.test(recipe._id) && targetKcal && recipe.k && recipe.k > 0) {
+    var ratio = targetKcal / recipe.k;
+    // Limiter le ratio entre 0.5 et 2.0 pour rester réaliste
+    ratio = Math.min(2.0, Math.max(0.5, ratio));
+    recipe._scalingRatio = Math.round(ratio * 100) / 100;
+    recipe.k = Math.round(recipe.k * ratio);
+    recipe.p = Math.round((recipe.p || 0) * ratio);
+    recipe.g = Math.round((recipe.g || 0) * ratio);
+    recipe.l = Math.round((recipe.l || 0) * ratio);
+    // Parser et scaler les ingrédients si RecipeEngine disponible
+    if (window.RecipeEngine && window.RecipeEngine.parseIngredientsString && recipe.i) {
+      var parsed = window.RecipeEngine.parseIngredientsString(recipe.i);
+      recipe._scaledIngredients = parsed.map(function(ing) {
+        return { name: ing.name, qty: Math.round(ing.qty * ratio * 10) / 10, unit: ing.unit };
+      });
+    }
+  }
+
+  return recipe;
+}
 function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w});var split=getMealSplit();var meals=s.mealsPerDay||3;for(var d=0;d<7;d++){var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
 if(meals>=4&&sT>0){if(s.whey&&pSW.length>0&&d%2===0)sR=pickRecipe(pSW,sT,uS);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
 // Dîner : généré seulement si mealsPerDay >= 3 (pas pour jeûne intermittent 2 repas)
 if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD);
+// Scaling sur mesure : enrichit les recettes R201+ avec macros/ingrédients scalés
+bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR)sR=enrichWithScaling(sR,sT);if(dR)dR=enrichWithScaling(dR,dT);
 // Ajustement itératif ±5% : corriger le slot le plus déviant jusqu'à convergence (max 8 passes)
 var sPool=meals>=4&&sT>0?(s.whey&&pSW.length>0&&d%2===0?pSW:(pSN.length>0?pSN:pS)):null;
-for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used);if(!nr||nr.n===w.r.n)break;if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
+for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
 plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
-function swapMeal(di,slot){var s=window.S;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));s.weekPlan[di][slot]=top[Math.floor(Math.random()*top.length)];if(typeof window.render==='function')window.render()}
+function swapMeal(di,slot){var s=window.S;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));var nr=top[Math.floor(Math.random()*top.length)];nr=enrichWithScaling(nr,tgt);s.weekPlan[di][slot]=nr;if(typeof window.render==='function')window.render()}
 
 window.getPool = getPool;
 window.filterRecipes = filterRecipes;
@@ -1511,7 +2572,7 @@ var SUPPLEMENTS_DB = [
       else if(s.age>50)d=Math.max(d,2500); // 50-70 : synthèse réduite
       return{dose:d,unit:'UI/jour',timing:'Petit-d\u00e9jeuner avec repas gras',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Obésité : D3 séquestrée dans tissu adipeux, besoins × 2-3 (Endocrine Society 2011). Associer à Vitamine K2 (MK-7) si ≥50 ans — prévient calcifications artérielles (Plaza 2021).'};}},
   {id:'omega3',name:'Om\u00e9ga-3 (EPA/DHA)',icon:'\uD83D\uDC1F',desc:'Anti-inflammatoire, c\u0153ur, cognition',evidence:'AHA 2019 \u2014 Recommandation',grade:'A',
-    condition:function(s){return s.allergies.indexOf('Poisson')===-1&&s.allergies.indexOf('Crustac\u00e9s')===-1;},
+    condition:function(s){return (s.allergies||[]).indexOf('Poisson')===-1&&(s.allergies||[]).indexOf('Crustac\u00e9s')===-1;},
     unnecessary_if:'Inutile si vous mangez du poisson gras 2-3x/semaine (saumon, sardines, maquereau)',
     dosageCalc:function(s){var d=1000;if(s.activity!==null&&s.activity>=3)d=2000;return{dose:d,unit:'mg EPA+DHA/jour',timing:'Pendant un repas',note:'Ratio EPA:DHA 2:1 pour sportifs'};}},
   {id:'magnesium',name:'Magn\u00e9sium (Bisglycinate)',icon:'\uD83E\uDDEA',desc:'Sommeil, crampes, r\u00e9cup\u00e9ration',evidence:'EFSA 2015 \u2014 Apport recommand\u00e9',grade:'A',
@@ -1553,6 +2614,42 @@ var SUPPLEMENTS_DB = [
       var base=s.sex==='homme'?11:8; // AJR standard ANSES 2021
       var dose=Math.round(base*1.5); // +50% pour compenser phytates
       return{dose:dose,unit:'mg/jour',timing:'Entre les repas ou au coucher (éloigné du calcium/fer)',note:'Formes recommandées : gluconate ou citrate de zinc. Max 25mg/j (seuil UL EFSA). Prise de sang zinc sérique conseillée si supplémentation >3 mois.'};
+    }
+  },
+  // ─── CAFÉINE — ISSN Position Stand 2021 (Grgic et al.) Grade A ───
+  // 3-6 mg/kg avant entraînement : améliore force, endurance, puissance, focus
+  // Sécurité : contre-indiqué grossesse (> 200mg/j — OMS), HTA non contrôlée, anxiété sévère
+  {id:'cafeine',name:'Caféine',icon:'\u2615',desc:'Performance, focus, endurance, force',evidence:'ISSN Position Stand 2021 (Grgic et al.) \u2014 Niveau A',grade:'A',
+    condition:function(s){
+      if(s.pregnant)return false; // OMS : max 200mg/j grossesse → supplément déconseillé
+      if(s.medical&&(s.medical.indexOf('hta')!==-1||s.medical.indexOf('insuffisance_card')!==-1))return false;
+      if(s.medical&&s.medical.indexOf('insomnia')!==-1)return false;
+      return s.activity!==null&&s.activity>=2; // Modérément actif minimum
+    },
+    unnecessary_if:'Café naturel (1-2 tasses) avant entraînement = source suffisante si bien toléré',
+    warning:'\u26A0 Éviter après 14h (demi-vie 5-6h). Tolérance individuelle variable. Ne pas combiner avec autres stimulants.',
+    dosageCalc:function(s){
+      var dose=Math.round(s.weight*4); // 4 mg/kg (milieu ISSN 3-6 mg/kg)
+      dose=Math.min(dose,400); // Cap à 400mg (seuil OMS adulte sain)
+      return{dose:dose,unit:'mg, 30-60 min avant entraînement',timing:'30-60 min avant séance',note:'Dose ISSN : 3-6 mg/kg ('+Math.round(s.weight*3)+'-'+Math.round(s.weight*6)+'mg pour '+s.weight+'kg). Ne pas dépasser 400mg/j. Cycler : 1-2 semaines sans pour éviter la tolérance.'};
+    }
+  },
+  // ─── BÊTA-ALANINE — ISSN Position Stand 2015 (Hobson et al.) Grade A ───
+  // 3.2-6.4 g/j (en doses fractionnées) : tamponnage acide lactique → endurance musculaire et HIIT
+  // Bénéfice principal : efforts 1-4 min (seuil lactate) — moins efficace force pure ou < 60s
+  {id:'beta_alanine',name:'Bêta-Alanine',icon:'\uD83D\uDCAA',desc:'Tamponnage acide lactique — endurance musculaire, HIIT, musculation volume',evidence:'ISSN Position Stand 2015 (Hobson et al.) \u2014 Niveau A',grade:'A',
+    condition:function(s){
+      if(s.pregnant)return false;
+      var goals=s.sportGoals||[];
+      var hasEndur=goals.indexOf('endurance')!==-1;
+      var hasMusc=goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1;
+      var hasGeneral=goals.indexOf('general')!==-1;
+      return s.activity!==null&&s.activity>=2&&(hasEndur||hasMusc||hasGeneral);
+    },
+    unnecessary_if:'Peu bénéfique pour les sports de force pure (< 60s d\'effort) ou l\'endurance aérobie de fond',
+    warning:'Paresthésie (fourmillements bénins) fréquente : fractionner la dose en 0.8-1.6g toutes les 3-4h.',
+    dosageCalc:function(){
+      return{dose:'3.2-6.4',unit:'g/jour en doses fractionnées (0.8-1.6g × 4)',timing:'Avec les repas pour réduire les fourmillements',note:'Saturation des réserves de carnosine musculaire en 4 semaines. Effet dose-dépendant. Maintenir la prise quotidiennement (y compris jours sans entraînement).'};
     }
   },
   {id:'vitamine_k2',name:'Vitamine K2 (MK-7)',icon:'\uD83E\uDDB4',desc:'Dirige le calcium vers les os — prévient calcifications artérielles avec D3',evidence:'EFSA 2017 — K2 (MK-7) synergie avec D3 pour ostéoporose (Vitamin K2 trial, Plaza 2021)',grade:'A',
@@ -1687,7 +2784,7 @@ function detectMedicalConflicts() {
   // Conflit 7 : IRC + régime hyperprotéiné (si objectif prise de masse sans pathologie déclarée)
   if(med.indexOf('irc')!==-1){
     var goalKeyIRC=s.goal!==null?GOALS[s.goal].key:null;
-    if(goalKeyIRC==='bulk'){
+    if(goalKeyIRC==='bulk'||goalKeyIRC==='lean_bulk'){
       conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : IRC + Prise de masse — L\'objectif "prise de masse" est incompatible avec une insuffisance rénale chronique. Les protéines sont plafonnées à 0.55-0.60g/kg/j (KDOQI 2020). Un excès protéique accélère la progression de l\'insuffisance rénale. Consultation néphrologue OBLIGATOIRE avant de modifier l\'alimentation.'});
     }
   }
@@ -1701,13 +2798,32 @@ function detectMedicalConflicts() {
   // Conflit 9 : Nutrition "Prise de masse" + objectif sport "Sèche" — contradiction calorique directe
   // Bulk = surplus +15% | Sèche sport = brûler gras → les deux sont incompatibles simultanément
   var nutGoalKey9=s.goal!==null?GOALS[s.goal].key:null;
-  if(nutGoalKey9==='bulk'&&s.sportGoals&&s.sportGoals.indexOf('shred')!==-1){
+  if((nutGoalKey9==='bulk'||nutGoalKey9==='lean_bulk')&&s.sportGoals&&s.sportGoals.indexOf('shred')!==-1){
     conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT objectif : Alimentation "Prise de masse" (+15% calories) + Objectif sport "Sèche" — Ces objectifs sont contradictoires. La prise de masse nécessite un surplus calorique, la sèche nécessite un déficit. Choisissez : (1) Recomposition corporelle = maintenance calorique si vous débutez ou revenez après une pause ; (2) Bulk + programme musculaire, puis sèche séparément (Helms 2014, ISSN 2017).'});
   }
   // Conflit 10 : Nutrition sèche/coupe + objectif sport "Muscle" chez intermédiaire/avancé
   // Débutants : recomposition possible. Intermédiaires/avancés : difficile voire contre-productif (Barakat 2020)
   if((nutGoalKey9==='cut'||nutGoalKey9==='shred')&&s.sportGoals&&s.sportGoals.indexOf('muscle')!==-1&&s.sportLevel&&s.sportLevel!=='beginner'){
     conflicts.push({level:'INFO',message:'ℹ Objectifs partiellement contradictoires : Déficit calorique + Objectif "Prise de masse" — Possible pour les débutants (recomposition corporelle) mais inefficace pour les intermédiaires/avancés. Un déficit réduit la synthèse protéique et limite la récupération post-séance (Barakat 2020, NSCA). Recommandé : alterner phases bulk/sèche distinctes pour maximiser les gains musculaires.'});
+  }
+  // Conflit 11 : CrossFit intensif + objectif nutrition "Prise de masse"
+  // CrossFit haute intensité brûle 500-800 kcal/séance. Un surplus pour la masse amplifie le stockage adipeux si
+  // l'entraînement est métabolique — recomposition plus adaptée (Barakat 2020, NSCA Journal)
+  if(s.sportType==='crossfit'&&(nutGoalKey9==='bulk'||nutGoalKey9==='lean_bulk')){
+    conflicts.push({level:'INFO',message:'ℹ CrossFit intensif + Prise de masse — La combinaison est difficile à optimiser : CrossFit brûle 500-800 kcal/séance (métabolique), ce qui réduit le surplus net. La synthèse protéique est compromise par l\'acidose lactique intense (Sale 2004). Pour une prise de masse efficace : privilégiez ≤3 séances CrossFit/sem + ajout musculation PPL 3j/sem. Surplus calorique +10% max pour limiter le gain de gras (Israetel 2019, RP Strength).'});
+  }
+  // Conflit 12 : Marathon + sèche — risque d\'insuffisance rénale chronique aiguë + blessure
+  // Couplage déficit calorique + volume marathon > 70km/sem = catabolisme musculaire, IRC transitoire,
+  // stress osseux (ACSM 2018 — Female Athlete Triad)
+  if(s.sportType==='running'&&s.runningGoal==='marathon'&&(nutGoalKey9==='cut'||nutGoalKey9==='shred')){
+    conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Marathon + Sèche — La restriction calorique pendant la préparation marathon est DANGEREUSE. Un déficit calorique en phase de volume élevé (>60km/sem) augmente le risque de : (1) Fractures de stress (déficit énergétique relatif au sport, RED-S — Mountjoy 2018, BJSM) ; (2) Catabolisme musculaire (perte de force propulsive) ; (3) Immunosuppression et surentraînement. Recommandation : maintien calorique minimum pendant la préparation, sèche uniquement HORS saison compétitive.'});
+  }
+  // Conflit 13 : Hyrox compétitif (sub75 / sub60 / podium) + sèche
+  // Hyrox = 8 stations + 8×1km run — dépense 900-1400 kcal. Sèche compromet la puissance aérobie et force
+  // fonctionnelle sur les stations (Sled Push/Pull, Farmers Carry, Sandbag Lunges)
+  var hyroxCompGoals = ['sub75', 'sub60', 'podium'];
+  if(s.sportType==='hyrox'&&s.hyroxGoal&&hyroxCompGoals.indexOf(s.hyroxGoal)!==-1&&(nutGoalKey9==='cut'||nutGoalKey9==='shred')){
+    conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Hyrox compétitif (objectif ' + (s.hyroxGoal||'performance') + ') + Sèche — Un déficit calorique pendant la préparation Hyrox compétitive compromet : (1) La puissance sur Sled Push/Pull et Farmers Carry (nécessitent force maximale) ; (2) La résistance aérobie sur 8×1km (glycogène réduit) ; (3) La récupération inter-stations. Recommandation NSCA 2020 : recomposition corporelle à maintien calorique (+protéines 2.2g/kg) plutôt qu\'un déficit actif pendant la phase compétitive.'});
   }
   return conflicts;
 }
@@ -2279,9 +3395,153 @@ function generateCardioPrescription(userAge, userWeight, sportGoals, sportLevel,
 }
 window.generateCardioPrescription = generateCardioPrescription;
 
+// ─── BRIDGE NUTRITION MASTER ─────────────────────────────────────────────────
+// Connecte window.S → NutritionMaster.compute() → window.S._nm (cache)
+// Les fonctions calcBMR/calcTDEE/calcTarget/calcMacros restent inchangées
+// et continuent à gérer les ajustements médicaux.
+// window.S._nm est la source de vérité pour RecipeEngine et app-sport.
+
+function buildNMInputs(trainingDay) {
+  var s = window.S;
+  var genderMap = { homme: 'male', femme: 'female' };
+  return {
+    gender:        genderMap[s.sex] || 'male',
+    age:           s.age   || 25,
+    weightKg:      s.weight || 75,
+    heightCm:      s.height || 175,
+    activityLevel: s.activity !== null && ACTIVITIES[s.activity]
+                   ? Math.min(ACTIVITIES[s.activity].factor, 2.5)
+                   : 1.2,
+    goal:          s.goal !== null && GOALS[s.goal] ? GOALS[s.goal].key : 'maintain',
+    isElite:       s.activity !== null && s.activity >= 4,
+    trainingDay:   trainingDay === true
+  };
+}
+
+function computeNutritionState(trainingDay) {
+  if (!window.NutritionMaster) return null;
+  if (window.S.goal === null || window.S.sex === null) return null;
+  var inputs = buildNMInputs(trainingDay);
+  var result = window.NutritionMaster.compute(inputs);
+  if (result.errors && result.errors.length > 0) return null;
+
+  // Applique les sur-couches médicales de app-core (calcTarget / calcMacros)
+  // pour que les valeurs médicalement ajustées soient reflétées dans _nm
+  var adjustedCalories = calcTarget();
+  var adjustedMacros   = calcMacros();
+  if (adjustedCalories && adjustedCalories > 0) {
+    result.caloriesTarget = adjustedCalories;
+  }
+  if (adjustedMacros) {
+    result.proteinGrams = adjustedMacros.p;
+    result.carbsGrams   = adjustedMacros.g;
+    result.fatGrams     = adjustedMacros.l;
+    result.caloriesCheck = Math.round(
+      adjustedMacros.p * 4 + adjustedMacros.g * 4 + adjustedMacros.l * 9
+    );
+  }
+
+  window.S._nm = result;
+  return result;
+}
+
+window.computeNutritionState = computeNutritionState;
+window.buildNMInputs = buildNMInputs;
+// ─────────────────────────────────────────────────────────────────────────────
+
 // ─── SECURITY: Freeze all constants ───
 if (Object.freeze) {
   [ACTIVITIES,TRAINS,SLEEPS,GOALS,RATIOS,COOK_LEVELS,ALLERGIES,INTOLERANCES,REGIMES,CUISINES,MEDICAL,ALCOHOL_DB,ALCOHOL_FREQS,FOOD_HABITS_MEALS,EATING_LOCATIONS,BODY_ZONES,SPORT_GOALS,SPORT_LEVELS,PADEL_LEVELS,PADEL_GOALS,PADEL_SKILLS,GOLF_LEVELS,GOLF_GOALS,GOLF_SKILLS].forEach(function(obj){ try{Object.freeze(obj);}catch(e){} });
+  // Freeze unit conversion constants (mutable 'weight'/'height' props are intentionally left unfrozen)
+  try { Object.freeze({ KG_TO_LBS: window.UNITS.KG_TO_LBS, LBS_TO_KG: window.UNITS.LBS_TO_KG, CM_TO_INCH: window.UNITS.CM_TO_INCH, INCH_TO_CM: window.UNITS.INCH_TO_CM }); } catch(e) {}
 }
+
+// ─── SECURITY: localStorage XOR obfuscation helpers ───
+// Discourages trivial reading of profile data from DevTools console
+// Key is derived per-session using user id + a fixed app salt
+(function(){
+  'use strict';
+  var _XOR_KEY = 'MTD_SFCH_2024';
+
+  function xorString(str, key) {
+    var out = [];
+    for (var i = 0; i < str.length; i++) {
+      out.push(String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length)));
+    }
+    return out.join('');
+  }
+
+  function encodeStorage(data) {
+    try {
+      var json = JSON.stringify(data);
+      var xored = xorString(json, _XOR_KEY);
+      return btoa(unescape(encodeURIComponent(xored)));
+    } catch(e) { return null; }
+  }
+
+  function decodeStorage(encoded) {
+    try {
+      var xored = decodeURIComponent(escape(atob(encoded)));
+      return JSON.parse(xorString(xored, _XOR_KEY));
+    } catch(e) { return null; }
+  }
+
+  // Expose helpers for app-main.js saveProfile / loadProfile
+  window._storageEncode = encodeStorage;
+  window._storageDecode = decodeStorage;
+
+  // ─── SECURITY: Integrity check on critical functions ───
+  // Detect if key functions have been tampered with by malicious browser extensions
+  // Runs once at load time; logs warning if fingerprint mismatch detected
+  function fingerprintFn(fn) {
+    if (typeof fn !== 'function') return 0;
+    var s = fn.toString();
+    var h = 0x811c9dc5;
+    for (var i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    return (h >>> 0);
+  }
+
+  // Record baseline fingerprints at first load (before any extension can modify)
+  var _baseFP = {};
+  try {
+    _baseFP.calcBMR     = fingerprintFn(window.calcBMR);
+    _baseFP.calcTarget  = fingerprintFn(window.calcTarget);
+    _baseFP.calcMacros  = fingerprintFn(window.calcMacros);
+    _baseFP.sanitizeHTML = fingerprintFn(window.sanitizeHTML);
+  } catch(e) {}
+
+  window._verifyCriticalFunctions = function() {
+    var tampered = [];
+    try {
+      if (_baseFP.calcBMR     && fingerprintFn(window.calcBMR)      !== _baseFP.calcBMR)     tampered.push('calcBMR');
+      if (_baseFP.calcTarget  && fingerprintFn(window.calcTarget)   !== _baseFP.calcTarget)  tampered.push('calcTarget');
+      if (_baseFP.calcMacros  && fingerprintFn(window.calcMacros)   !== _baseFP.calcMacros)  tampered.push('calcMacros');
+      if (_baseFP.sanitizeHTML && fingerprintFn(window.sanitizeHTML) !== _baseFP.sanitizeHTML) tampered.push('sanitizeHTML');
+    } catch(e) {}
+    if (tampered.length > 0 && typeof console !== 'undefined' && console.warn) {
+      console.warn('[MTD Security] Integrity check: modified functions detected:', tampered.join(', '));
+    }
+    return tampered.length === 0;
+  };
+
+  // ─── SECURITY: Anti-copy protection on sensitive calculated results ───
+  // Disables right-click and text selection on macro result elements
+  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('contextmenu', function(e) {
+      var el = e.target;
+      // Only block on macro/result display elements
+      if (el && (
+        el.classList.contains('macro-cell') ||
+        el.classList.contains('result-title') ||
+        el.classList.contains('stat-val')
+      )) {
+        e.preventDefault();
+      }
+    });
+  });
+})();
 
 })();

@@ -36,7 +36,7 @@
    ------------------------------------------------------- */
 
 .sel-card {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .sel-card:active {
@@ -418,20 +418,20 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--ivory);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C8C8C0;
-  border-radius: 2px;
+  background: var(--grey3);
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9A9A94;
+  background: var(--grey);
 }
 
 
@@ -609,6 +609,9 @@ body.dark-mode {
   --border:#3A3A38;--green:#4ABA4A;--greenbg:rgba(74,186,74,.08);
   --blue:#6A9ADA;--bluebg:rgba(106,154,218,.08);--orange:#DAA06A;--orangebg:rgba(218,160,106,.08);
   --red:#DA6A6A;--redbg:rgba(218,106,106,.08);
+  /* Semantic aliases — dark overrides */
+  --bg:#1A1A18;--text:#FAFAF7;--text-secondary:#9A9A94;
+  --card:#222220;--surface:#222220;--accent:#4ABA4A;
   background:var(--ivory);color:var(--black);
 }
 body.dark-mode .modal-overlay{background:rgba(0,0,0,0.7)}
@@ -681,5 +684,1025 @@ body.dark-mode .week-separator{border-color:var(--border)}
   .splash-quote {
     font-size: 20px;
     max-width: 400px;
+  }
+}
+
+/* -------------------------------------------------------
+   SEMANTIC VALUE INDICATORS
+   Green = good · Orange = warning · Red = alert
+   Applied to macros, vitals, performance metrics
+   ------------------------------------------------------- */
+
+/* Macro progress bars — colored fill */
+.macro-fill-protein { background: var(--green) !important; }
+.macro-fill-carbs   { background: var(--blue, #6A9ADA) !important; }
+.macro-fill-fat     { background: var(--orange) !important; }
+
+/* Value status chips — compact inline indicators */
+.val-good    { color: var(--green);  background: var(--greenbg);  border: 1px solid var(--green);  padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.val-warn    { color: var(--orange); background: var(--orangebg); border: 1px solid var(--orange); padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.val-alert   { color: var(--red);    background: var(--redbg);    border: 1px solid var(--red);    padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.val-neutral { color: var(--grey);   border: 1px solid var(--border); padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+
+/* Calorie budget bar — dynamic color */
+.budget-bar-fill {
+  background: var(--green);
+  transition: background 0.4s ease, width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.budget-bar-fill.over-budget { background: var(--red); }
+.budget-bar-fill.near-budget { background: var(--orange); }
+
+/* Set tracking — per-series result color */
+.set-success { color: var(--green); font-weight: 600; }
+.set-fail    { color: var(--red);   font-weight: 600; }
+.set-pending { color: var(--grey); }
+
+/* Performance trend arrows */
+.trend-up   { color: var(--green); }
+.trend-down { color: var(--red); }
+.trend-flat { color: var(--grey); }
+
+/* Score badge — weekly compliance */
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  font-weight: normal;
+  border: 2px solid;
+}
+.score-badge.excellent { color: var(--green);  border-color: var(--green);  background: var(--greenbg); }
+.score-badge.good      { color: var(--blue, #6A9ADA); border-color: var(--blue, #6A9ADA); background: var(--bluebg, rgba(106,154,218,.08)); }
+.score-badge.average   { color: var(--orange); border-color: var(--orange); background: var(--orangebg); }
+.score-badge.poor      { color: var(--red);    border-color: var(--red);    background: var(--redbg); }
+
+/* Macro ring — colored outlines for donut chart segments */
+.ring-protein { stroke: var(--green); }
+.ring-carbs   { stroke: var(--blue, #6A9ADA); }
+.ring-fat     { stroke: var(--orange); }
+
+/* Stat cell highlight — for key metrics in summary */
+.stat-cell.stat-good  { border-bottom: 2px solid var(--green); }
+.stat-cell.stat-warn  { border-bottom: 2px solid var(--orange); }
+.stat-cell.stat-alert { border-bottom: 2px solid var(--red); }
+
+/* -------------------------------------------------------
+   MACRO PROGRESS BAR — 3-color split visual
+   ------------------------------------------------------- */
+.macro-bar-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 4px 0 8px;
+}
+.macro-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+}
+
+/* -------------------------------------------------------
+   ANIMATED NUMBER — when values update
+   ------------------------------------------------------- */
+@keyframes numPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+.num-pop { animation: numPop 0.3s ease; }
+
+/* -------------------------------------------------------
+   IMC WIDGET — prominent colored display
+   ------------------------------------------------------- */
+.imc-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 24px;
+  border: 2px solid;
+  margin: 12px 0;
+  gap: 4px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.imc-widget .imc-value {
+  font-family: 'Georgia', serif;
+  font-size: 36px;
+  line-height: 1;
+  font-weight: normal;
+}
+.imc-widget .imc-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.imc-widget .imc-category {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* -------------------------------------------------------
+   TYPOGRAPHIC HIERARCHY — Luxury House Standard
+   ------------------------------------------------------- */
+
+/* Majuscules espacées pour labels et catégories */
+.label-caps {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--grey);
+  font-weight: normal;
+}
+
+/* Valeurs numériques proéminentes */
+.value-display {
+  font-family: 'Georgia', serif;
+  font-size: 28px;
+  font-weight: normal;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+/* Titres de section — style editorial */
+.section-head {
+  font-family: 'Georgia', serif;
+  font-size: 18px;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+/* Sous-titres — Helvetica léger */
+.section-sub {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--grey);
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/* Séparateurs fins style luxe */
+.divider-luxury {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+  opacity: 0.5;
+}
+
+/* Espacement cohérent des listes d'items */
+.list-item-luxury {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.list-item-luxury:last-child { border-bottom: none; }
+
+/* Chips et badges — sizing cohérent */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  gap: 4px;
+}
+
+/* -------------------------------------------------------
+   LAYOUT ANTI-OVERLAP — Spacing & Breathing Room
+   ------------------------------------------------------- */
+
+/* Line-height systématique */
+body, p, .subtitle {
+  line-height: 1.7;
+}
+
+/* Cards spacing */
+.card,
+.meal-card,
+.exercise-card,
+.sel-card,
+.product-card {
+  margin-bottom: 16px;
+}
+
+/* Section titles spacing */
+.section-title,
+.step-title,
+.page-title {
+  margin-bottom: 20px;
+  margin-top: 32px;
+}
+
+/* Badges, chips, tags — overflow control */
+.badge,
+.chip,
+.tag,
+.muscle-tag,
+.level-badge,
+.val-good,
+.val-warn,
+.val-alert,
+.val-neutral {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Tags collections — prevent overlap */
+.tags,
+.chip-wrap,
+.muscle-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Recipe name truncation — 2-line clamp */
+.recipe-name,
+.meal-name {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.35;
+}
+
+/* Grid responsive — prevent overflow on small screens */
+.card-grid-2,
+.card-grid-3,
+.card-grid-4 {
+  gap: 12px;
+}
+
+@media (max-width: 480px) {
+  .card-grid-3,
+  .card-grid-4 {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+}
+
+/* App container — iOS smooth scroll */
+.app {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Button minimum touch target */
+.btn-primary,
+.btn-secondary {
+  min-height: 44px;
+}
+
+/* App padding mobile */
+@media (max-width: 680px) {
+  .app {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* -------------------------------------------------------
+   UX AUDIT FIXES — go-live
+   ------------------------------------------------------- */
+
+/* 1. Prevent horizontal scroll on mobile */
+body {
+  overflow-x: hidden;
+}
+
+/* 2. Touch targets — Apple HIG 44×44 minimum */
+.btn-primary,
+.btn-secondary,
+.btn-back,
+.swap-btn,
+.regen-btn,
+.day-tab,
+.main-nav-tab,
+.chip,
+.level-item,
+.sel-card,
+.muscle-tag,
+.dash-action,
+.dash-nav {
+  min-height: 44px;
+}
+.btn-primary,
+.btn-secondary,
+.swap-btn,
+.chip,
+.level-badge,
+.muscle-tag {
+  min-width: 44px;
+}
+
+/* 3. Focus outlines — keyboard accessibility */
+.btn-primary:focus,
+.btn-secondary:focus,
+.btn-back:focus,
+.swap-btn:focus,
+.regen-btn:focus,
+.day-tab:focus,
+.main-nav-tab:focus,
+.chip:focus,
+.sel-card:focus,
+.level-item:focus,
+.check-item:focus,
+.muscle-tag:focus,
+.exercise-card:focus,
+.dash-action:focus,
+.dash-nav:focus,
+.modal-close:focus {
+  outline: 2px solid var(--black);
+  outline-offset: 2px;
+}
+
+/* 4. Word-break to prevent text overflow */
+.recipe-name,
+.meal-name,
+.exercise-name,
+.card-name,
+.level-name,
+.check-label,
+.exercise-detail,
+.ingredient-list li {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 5. Prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 6. WCAG AA contrast — text-secondary must be ≥4.5:1 on #FAFAF7
+   #6B6B65 = ratio ~3.9:1 (FAIL) → corrected to #5A5A54 = ratio ~4.6:1 (PASS) */
+:root {
+  --grey: #5A5A54;
+  --text-secondary: #5A5A54;
+}
+
+/* 7. Empty state styling */
+.empty-state {
+  text-align: center;
+  padding: 32px 24px;
+  color: var(--grey);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  border: 1px dashed var(--border);
+  background: var(--ivory2);
+  margin: 16px 0;
+}
+.empty-state-icon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 12px;
+}
+.empty-state-title {
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+  color: var(--black);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+/* 8. Body line-height enforcement */
+p, li, .card-sub, .level-desc, .exercise-detail,
+.exercise-muscle, .exercise-sets, .check-label {
+  line-height: 1.5;
+}
+
+/* 9. Section spacing */
+.dash-label,
+.section-label,
+.step-label {
+  margin-top: 32px;
+  margin-bottom: 14px;
+}
+
+/* 10. Cursor pointer for all interactive elements */
+.sel-card,
+.level-item,
+.check-item,
+.chip,
+.muscle-tag,
+.exercise-card,
+.day-tab,
+.main-nav-tab,
+.meal-card,
+.swap-btn,
+.regen-btn,
+.dash-action,
+.dash-nav {
+  cursor: pointer;
+}
+
+
+
+/* -------------------------------------------------------
+   25. ARABIC SHOPPING LIST (RTL / Darija)
+   ------------------------------------------------------- */
+
+/* Conteneur principal RTL */
+.shop-ar {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+}
+
+/* Header de catégorie en RTL */
+.shop-ar .shop-cat-header {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  letter-spacing: 0;
+}
+
+/* Ligne d'article en RTL */
+.shop-ar .shop-item-row {
+  direction: rtl;
+  flex-direction: row-reverse;
+}
+
+/* Checkbox RTL */
+.shop-ar .shop-cb {
+  margin-right: 0;
+  margin-left: 12px;
+}
+
+/* Label RTL */
+.shop-ar .shop-item-label {
+  text-align: right;
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+}
+
+/* Titre principal liste en arabe */
+.shop-ar-title {
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  direction: rtl;
+  text-align: right;
+}
+
+/* Bouton toggle arabe */
+.btn-shop-ar {
+  padding: 8px 14px;
+  background: #2D6A4F;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+}
+.btn-shop-ar.active {
+  background: #1B4332;
+}
+
+/* Bouton imprimer en arabe */
+.btn-shop-print-ar {
+  padding: 8px 14px;
+  background: #1565C0;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+}
+
+/* ── PRINT : n'imprimer QUE la liste de courses en arabe ── */
+@media print {
+  /* Masquer tout sauf la liste */
+  body > *:not(#app),
+  .header,
+  .footer,
+  .main-nav,
+  .user-bar,
+  .btn-primary,
+  .btn-secondary,
+  .btn-back,
+  .swap-btn,
+  .regen-btn,
+  .btn-shop-ar,
+  .btn-shop-print-ar,
+  .shop-print-hide {
+    display: none !important;
+  }
+
+  /* Zone d'impression de la liste */
+  .shop-print-area {
+    display: block !important;
+    direction: rtl;
+    text-align: right;
+    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+    padding: 20px;
+    color: #000;
+    background: #fff;
+  }
+
+  .shop-print-area .shop-print-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    direction: rtl;
+    text-align: right;
+    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  }
+
+  .shop-print-area .shop-print-date {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 16px;
+    direction: rtl;
+    text-align: right;
+  }
+
+  .shop-print-area .shop-cat-block {
+    margin-bottom: 12px;
+    break-inside: avoid;
+  }
+
+  .shop-print-area .shop-cat-name {
+    font-size: 13px;
+    font-weight: 700;
+    background: #f0f0f0;
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    direction: rtl;
+    text-align: right;
+    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  }
+
+  .shop-print-area .shop-print-item {
+    display: flex;
+    justify-content: space-between;
+    direction: rtl;
+    padding: 3px 10px;
+    font-size: 12px;
+    border-bottom: 1px solid #eee;
+    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  }
+
+  /* Masquer les éléments non liés à l'impression */
+  .shop-no-print {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   LUXURY REFINEMENT — Cormorant Garamond · Montserrat
+   Design language: Hermès · Patek Philippe · Dior · Richard Mille
+   ============================================================ */
+
+/* -------------------------------------------------------
+   L1. TYPOGRAPHY — Cormorant Garamond for editorial titles
+   Montserrat for labels and UI copy
+   ------------------------------------------------------- */
+
+h1, h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.eyebrow,
+.eyebrow-title,
+.result-eyebrow {
+  font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+  letter-spacing: 6px;
+}
+
+.result-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+body,
+.field-label,
+.section-label,
+.label-caps,
+.num-unit,
+.num-hint,
+.eyebrow,
+.subtitle,
+.card-sub,
+.card-tag,
+.level-desc,
+.level-badge,
+.chip,
+.check-label,
+.step-indicator,
+.main-nav-tab,
+.day-tab,
+.meal-type,
+.meal-macros,
+.meal-level,
+.dt-label,
+.bar-name,
+.bar-val,
+.ring-label,
+.stat-label,
+.macro-cell .m-unit,
+.macro-cell .m-label,
+.mp-label,
+.chart-title,
+.user-name,
+.user-logout,
+.auth-sub,
+.auth-switch,
+.modal-close,
+.swap-btn,
+.regen-btn,
+.btn-primary,
+.btn-secondary,
+.btn-back,
+.section-sub,
+.section-head,
+.imc-widget .imc-label,
+.imc-widget .imc-category,
+.macro-check,
+.splash-sub,
+.photo-upload .photo-label {
+  font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+}
+
+/* Serif titles for cards and modules */
+.card-name,
+.level-name,
+.meal-name,
+.exercise-name,
+.step-title,
+.page-title,
+.section-head,
+.modal-title,
+.auth-logo,
+.splash-logo,
+.logo,
+.empty-state-title,
+.imc-value,
+.imc-widget .imc-value {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Numerical display — Cormorant with oldstyle figures (Patek detail) */
+.dash-big,
+.macro-value,
+.kpi-value,
+.stat-val,
+.macro-cell .m-val,
+.macro-pill .mp-val,
+.big-number .bn-val,
+.num-input,
+.meal-kcal,
+.dt-val,
+.ring-val,
+.value-display {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-feature-settings: "onum" 1;
+  font-weight: 300;
+}
+
+
+/* -------------------------------------------------------
+   L2. BODY LINE-HEIGHT & BREATHING ROOM
+   Le luxe respire — generosity of space
+   ------------------------------------------------------- */
+
+body, p, .subtitle {
+  line-height: 1.7;
+}
+
+.eyebrow,
+.eyebrow-title,
+.result-eyebrow,
+.field-label,
+.section-label,
+.stat-label,
+.card-tag,
+.label-caps,
+.level-badge,
+.main-nav-tab,
+.day-tab {
+  letter-spacing: 6px;
+}
+
+
+/* -------------------------------------------------------
+   L3. BUTTONS — signature luxe hover fill bottom-to-top
+   Hermès cubic-bezier courbe
+   ------------------------------------------------------- */
+
+.btn-primary {
+  letter-spacing: 6px;
+  font-size: 8px;
+  padding: 18px 28px;
+  border: 1px solid var(--black);
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Override the existing shine sweep ::after with fill-from-bottom */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  background: var(--black2);
+  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 0;
+  transform: none;
+}
+
+.btn-primary:hover::after {
+  height: 100%;
+  transform: none;
+  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Ensure button text stays above the fill overlay */
+.btn-primary > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* -------------------------------------------------------
+   L4. SEPARATORS — gradient-fade signature lines
+   ------------------------------------------------------- */
+
+.result-rule,
+.section-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--black), transparent);
+  margin: 20px 0;
+}
+
+/* Luxury divider — for important separations */
+.luxury-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--black), transparent);
+  margin: 28px 0;
+  opacity: 0.6;
+}
+
+
+/* -------------------------------------------------------
+   L5. CARDS — lévitation subtile Dior
+   ------------------------------------------------------- */
+
+.sel-card,
+.meal-card,
+.exercise-card,
+.dash-card {
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.25s ease;
+}
+
+.sel-card:hover,
+.meal-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(10, 10, 9, 0.06);
+}
+
+
+/* -------------------------------------------------------
+   L6. NAVIGATION — backdrop blur luxe
+   ------------------------------------------------------- */
+
+.main-nav {
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(250, 250, 247, 0.92);
+}
+
+.main-nav-tab {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+
+/* -------------------------------------------------------
+   L7. INPUTS — underline style Hermès (angles droits)
+   ------------------------------------------------------- */
+
+.field input,
+.field textarea {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 0;
+  background: transparent;
+  transition: border-color 0.3s ease;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-bottom-color: var(--black);
+  outline: none;
+  box-shadow: none;
+}
+
+.num-input {
+  border-radius: 0;
+}
+
+
+/* -------------------------------------------------------
+   L8. MICRO-ANIMATIONS — entrance et sélections
+   ------------------------------------------------------- */
+
+#app-root {
+  animation: luxeFadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes luxeFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.chip,
+.level-item {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+
+/* -------------------------------------------------------
+   L9. AUTH SCREENS — vitrine de la maison
+   ------------------------------------------------------- */
+
+.auth-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 60px 32px;
+}
+
+.auth-logo {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 11px;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  font-weight: 300;
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.auth-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 32px;
+  font-weight: 300;
+  font-style: italic;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+
+/* -------------------------------------------------------
+   L10. SECTIONS — spacing +8px for breathing room
+   ------------------------------------------------------- */
+
+.card,
+.result-block,
+.kpi-box {
+  padding-top: calc(var(--card-pad, 16px) + 4px);
+  padding-bottom: calc(var(--card-pad, 16px) + 4px);
+}
+
+.section-label,
+.step-label,
+.dash-label {
+  margin-top: 40px;
+  margin-bottom: 22px;
+}
+
+.section-title,
+.step-title,
+.page-title {
+  margin-bottom: 28px;
+  margin-top: 40px;
+}
+
+
+/* -------------------------------------------------------
+   L11. SCROLLBAR — 3px ultra-fine luxe
+   ------------------------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ivory);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--grey3);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--grey);
+}
+
+
+/* -------------------------------------------------------
+   L12. DARK MODE — luxury class consistency
+   ------------------------------------------------------- */
+
+body.dark-mode .main-nav {
+  background: rgba(26, 26, 24, 0.92);
+  border-top-color: var(--border);
+}
+
+body.dark-mode .field input,
+body.dark-mode .field textarea {
+  border-bottom-color: var(--border);
+  background: transparent;
+  color: var(--black);
+}
+
+body.dark-mode .field input:focus,
+body.dark-mode .field textarea:focus {
+  border-bottom-color: var(--black);
+}
+
+body.dark-mode .luxury-divider {
+  background: linear-gradient(90deg, transparent, var(--black), transparent);
+}
+
+body.dark-mode .result-rule,
+body.dark-mode .section-divider {
+  background: linear-gradient(90deg, transparent, var(--black), transparent);
+}
+
+body.dark-mode .auth-container {
+  color: var(--black);
+}
+
+@media (prefers-color-scheme: dark) {
+  .main-nav {
+    background: rgba(26, 26, 24, 0.92);
+  }
+
+  .field input,
+  .field textarea {
+    background: transparent;
+    border-bottom-color: var(--border);
+    color: var(--black);
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    border-bottom-color: var(--black);
+  }
+}
+
+
+/* -------------------------------------------------------
+   REDUCED MOTION — respect system preference
+   (reinforces existing rule, luxury animations only)
+   ------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary::after,
+  #app-root,
+  .luxury-divider,
+  .sel-card,
+  .meal-card,
+  .exercise-card,
+  .dash-card {
+    animation: none !important;
+    transition: none !important;
   }
 }

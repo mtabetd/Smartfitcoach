@@ -1,5 +1,6 @@
 var breakfast = [
   {
+    _id: 'L001',
     n: "Overnight Oats Banane Amandes",
     f: "🇺🇸",
     k: 422,
@@ -13,6 +14,7 @@ var breakfast = [
     tags: ["avoine", "banane", "amandes", "miel", "lait"]
   },
   {
+    _id: 'L002',
     n: "Avocado Toast Oeuf Poché",
     f: "🇦🇺",
     k: 458,
@@ -26,6 +28,7 @@ var breakfast = [
     tags: ["pain", "avocat", "oeuf", "citron"]
   },
   {
+    _id: 'L003',
     n: "Yaourt Grec Myrtilles Granola",
     f: "🇬🇷",
     k: 386,
@@ -39,6 +42,7 @@ var breakfast = [
     tags: ["yaourt", "myrtilles", "granola", "miel"]
   },
   {
+    _id: 'L004',
     n: "Porridge Pomme Cannelle",
     f: "🇬🇧",
     k: 384,
@@ -52,6 +56,7 @@ var breakfast = [
     tags: ["avoine", "pomme", "cannelle", "miel", "lait"]
   },
   {
+    _id: 'L005',
     n: "Oeufs Brouillés Pain Seigle",
     f: "🇩🇪",
     k: 446,
@@ -65,6 +70,7 @@ var breakfast = [
     tags: ["oeuf", "pain", "seigle", "beurre", "ciboulette"]
   },
   {
+    _id: 'L006',
     n: "Shakshuka Tomate Poivron",
     f: "🇮🇱",
     k: 376,
@@ -78,6 +84,7 @@ var breakfast = [
     tags: ["oeuf", "tomate", "poivron", "oignon", "huile"]
   },
   {
+    _id: 'L007',
     n: "Smoothie Bowl Açaí",
     f: "🇧🇷",
     k: 418,
@@ -91,6 +98,7 @@ var breakfast = [
     tags: ["açaí", "banane", "granola", "fraises", "lait de coco"]
   },
   {
+    _id: 'L008',
     n: "Bol Riz Tamago Japonais",
     f: "🇯🇵",
     k: 430,
@@ -104,6 +112,7 @@ var breakfast = [
     tags: ["riz", "oeuf", "soja", "sésame", "nori"]
   },
   {
+    _id: 'L009',
     n: "Pancakes Banane Avoine",
     f: "🇺🇸",
     k: 468,
@@ -117,6 +126,7 @@ var breakfast = [
     tags: ["avoine", "banane", "oeuf", "lait"]
   },
   {
+    _id: 'L010',
     n: "Galette Sarrasin Oeuf Épinards",
     f: "🇫🇷",
     k: 392,
@@ -130,6 +140,7 @@ var breakfast = [
     tags: ["sarrasin", "oeuf", "épinards", "fromage"]
   },
   {
+    _id: 'L011',
     n: "French Toast Cannelle Banane",
     f: "🇫🇷",
     k: 454,
@@ -143,6 +154,7 @@ var breakfast = [
     tags: ["pain", "oeuf", "lait", "banane", "cannelle"]
   },
   {
+    _id: 'L012',
     n: "Müesli Bircher Pomme",
     f: "🇨🇭",
     k: 454,
@@ -156,6 +168,7 @@ var breakfast = [
     tags: ["avoine", "yaourt", "pomme", "noisettes", "raisins"]
   },
   {
+    _id: 'L013',
     n: "Toast Saumon Fumé Aneth",
     f: "🇸🇪",
     k: 420,
@@ -169,6 +182,7 @@ var breakfast = [
     tags: ["pain", "saumon", "fromage frais", "aneth", "câpres"]
   },
   {
+    _id: 'L014',
     n: "Congee Poulet Gingembre",
     f: "🇨🇳",
     k: 384,
@@ -182,6 +196,7 @@ var breakfast = [
     tags: ["riz", "poulet", "gingembre", "oignon vert", "soja"]
   },
   {
+    _id: 'L015',
     n: "Tamagoyaki Omelette Roulée",
     f: "🇯🇵",
     k: 352,
@@ -195,6 +210,7 @@ var breakfast = [
     tags: ["oeuf", "soja", "oignon vert"]
   },
   {
+    _id: 'L016',
     n: "Eggs Benedict Saumon",
     f: "🇺🇸",
     k: 480,
@@ -208,6 +224,7 @@ var breakfast = [
     tags: ["muffin", "saumon", "oeuf", "sauce hollandaise", "épinards"]
   },
   {
+    _id: 'L017',
     n: "Fluffy Pancakes Soufflés",
     f: "🇯🇵",
     k: 438,
@@ -221,6 +238,7 @@ var breakfast = [
     tags: ["farine", "oeuf", "lait", "yaourt", "beurre"]
   },
   {
+    _id: 'L018',
     n: "Crêpes Sarrasin Miel Noix",
     f: "🇫🇷",
     k: 412,
@@ -234,6 +252,7 @@ var breakfast = [
     tags: ["sarrasin", "oeuf", "lait", "noix", "miel"]
   },
   {
+    _id: 'L019',
     n: "Bol Açaí Fraises Granola",
     f: "🇧🇷",
     k: 394,
@@ -247,6 +266,7 @@ var breakfast = [
     tags: ["açaí", "fraises", "granola", "yaourt", "chia"]
   },
   {
+    _id: 'L020',
     n: "Toast Avocat Oeuf Dur Tomate",
     f: "🇦🇺",
     k: 374,
@@ -260,6 +280,7 @@ var breakfast = [
     tags: ["pain", "avocat", "oeuf", "tomate"]
   },
   {
+    _id: 'L021',
     n: "Porridge Banane Chocolat Noir",
     f: "🇬🇧",
     k: 394,
@@ -273,6 +294,7 @@ var breakfast = [
     tags: ["avoine", "lait", "banane", "chocolat", "miel"]
   },
   {
+    _id: 'L022',
     n: "Omelette Épinards Feta Tomate",
     f: "🇬🇷",
     k: 408,
@@ -286,6 +308,7 @@ var breakfast = [
     tags: ["oeuf", "épinards", "feta", "tomate", "huile"]
   },
   {
+    _id: 'L023',
     n: "Bowl Quinoa Fruits Rouges Miel",
     f: "🇺🇸",
     k: 410,
@@ -299,6 +322,7 @@ var breakfast = [
     tags: ["quinoa", "yaourt", "framboises", "myrtilles", "amandes"]
   },
   {
+    _id: 'L024',
     n: "Crumpets Oeuf Fromage Blanc",
     f: "🇬🇧",
     k: 384,
@@ -312,6 +336,7 @@ var breakfast = [
     tags: ["crumpet", "oeuf", "fromage blanc", "saumon", "ciboulette"]
   },
   {
+    _id: 'L025',
     n: "Muesli Noix Fruits Secs Yaourt",
     f: "🇨🇭",
     k: 380,
@@ -325,6 +350,7 @@ var breakfast = [
     tags: ["avoine", "yaourt", "noix", "abricot", "lin", "miel"]
   },
   {
+    _id: 'L026',
     n: "Wrap Petit Déjeuner Oeuf Avocat",
     f: "🇲🇽",
     k: 388,
@@ -338,6 +364,7 @@ var breakfast = [
     tags: ["tortilla", "oeuf", "avocat", "tomate", "poivron"]
   },
   {
+    _id: 'L027',
     n: "Gaufres Avoine Miel Myrtilles",
     f: "🇧🇪",
     k: 386,
@@ -351,6 +378,7 @@ var breakfast = [
     tags: ["avoine", "lait", "oeuf", "miel", "myrtilles"]
   },
   {
+    _id: 'L028',
     n: "Burritos Petit Déjeuner Haricots",
     f: "🇲🇽",
     k: 392,
@@ -364,6 +392,7 @@ var breakfast = [
     tags: ["tortilla", "haricots", "oeuf", "fromage", "salsa", "épinards"]
   },
   {
+    _id: 'L029',
     n: "Bowl Fromage Blanc Fruits Graines",
     f: "🇫🇷",
     k: 394,
@@ -377,6 +406,7 @@ var breakfast = [
     tags: ["fromage blanc", "kiwi", "fraises", "graines", "amandes", "miel"]
   },
   {
+    _id: 'L030',
     n: "Pancakes Flocons Avoine Myrtilles",
     f: "🇺🇸",
     k: 396,
@@ -390,6 +420,7 @@ var breakfast = [
     tags: ["avoine", "lait", "oeuf", "myrtilles"]
   },
   {
+    _id: 'L031',
     n: "Omelette Blanche Champignons Épinards",
     f: "🇫🇷",
     k: 390,
@@ -403,6 +434,7 @@ var breakfast = [
     tags: ["blancs d'oeuf", "champignons", "épinards", "chèvre"]
   },
   {
+    _id: 'L032',
     n: "Bowl Açaí Banane Beurre de Cacahuète",
     f: "🇧🇷",
     k: 408,
@@ -416,6 +448,7 @@ var breakfast = [
     tags: ["açaí", "banane", "granola", "cacahuète", "lait d'amande"]
   },
   {
+    _id: 'L033',
     n: "Tartines Pain Complet Oeuf Pesto",
     f: "🇮🇹",
     k: 382,
@@ -429,6 +462,7 @@ var breakfast = [
     tags: ["pain", "oeuf", "pesto", "tomate", "roquette"]
   },
   {
+    _id: 'L034',
     n: "Chia Pudding Mangue Coco",
     f: "🇹🇭",
     k: 398,
@@ -442,6 +476,7 @@ var breakfast = [
     tags: ["chia", "lait de coco", "mangue", "miel", "coco"]
   },
   {
+    _id: 'L035',
     n: "Pain Perdu Ricotta Fruits Rouges",
     f: "🇫🇷",
     k: 414,
@@ -455,6 +490,7 @@ var breakfast = [
     tags: ["pain brioché", "ricotta", "oeuf", "framboises", "beurre"]
   },
   {
+    _id: 'L036',
     n: "Granola Maison Yaourt Mangue",
     f: "🇺🇸",
     k: 406,
@@ -468,6 +504,7 @@ var breakfast = [
     tags: ["avoine", "miel", "amandes", "yaourt", "mangue"]
   },
   {
+    _id: 'L037',
     n: "Smoothie Bowl Framboise Protéiné",
     f: "🇺🇸",
     k: 386,
@@ -481,6 +518,7 @@ var breakfast = [
     tags: ["framboises", "banane", "yaourt", "granola", "chia"]
   },
   {
+    _id: 'L038',
     n: "Oeufs Cocotte Tomate Épinards",
     f: "🇫🇷",
     k: 398,
@@ -494,6 +532,7 @@ var breakfast = [
     tags: ["oeuf", "épinards", "tomate", "crème", "fromage"]
   },
   {
+    _id: 'L039',
     n: "Flocons d'Avoine Poires Cannelle",
     f: "🇫🇷",
     k: 386,
@@ -507,6 +546,7 @@ var breakfast = [
     tags: ["avoine", "poire", "lait", "cannelle", "miel"]
   },
   {
+    _id: 'L040',
     n: "Pancakes Ricotta Citron",
     f: "🇮🇹",
     k: 410,
@@ -520,6 +560,7 @@ var breakfast = [
     tags: ["farine", "ricotta", "oeuf", "lait", "citron"]
   },
   {
+    _id: 'L041',
     n: "Overnight Oats Mangue Coco",
     f: "🇹🇭",
     k: 388,
@@ -533,6 +574,7 @@ var breakfast = [
     tags: ["avoine", "lait de coco", "mangue", "coco", "miel"]
   },
   {
+    _id: 'L042',
     n: "Bowl Protéiné Fromage Blanc Noix",
     f: "🇫🇷",
     k: 412,
@@ -546,6 +588,7 @@ var breakfast = [
     tags: ["fromage blanc", "noix", "noisettes", "miel", "pomme"]
   },
   {
+    _id: 'L043',
     n: "Toast Beurre d'Amande Banane Graines",
     f: "🇺🇸",
     k: 410,
@@ -559,6 +602,7 @@ var breakfast = [
     tags: ["pain", "amande", "banane", "graines", "miel"]
   },
   {
+    _id: 'L044',
     n: "Omelette Turque Menthe Feta",
     f: "🇹🇷",
     k: 416,
@@ -572,6 +616,7 @@ var breakfast = [
     tags: ["oeuf", "feta", "menthe", "tomate", "oignon"]
   },
   {
+    _id: 'L045',
     n: "Bol Riz Brun Oeuf Poché Avocat",
     f: "🇯🇵",
     k: 388,
@@ -585,6 +630,7 @@ var breakfast = [
     tags: ["riz brun", "oeuf", "avocat", "soja", "sésame", "nori"]
   },
   {
+    _id: 'L046',
     n: "Porridge Cacao Banane Noisette",
     f: "🇨🇭",
     k: 384,
@@ -598,6 +644,7 @@ var breakfast = [
     tags: ["avoine", "lait", "cacao", "banane", "noisettes"]
   },
   {
+    _id: 'L047',
     n: "Shakshuka aux Légumes Épicée",
     f: "🇲🇦",
     k: 412,
@@ -611,6 +658,7 @@ var breakfast = [
     tags: ["oeuf", "tomate", "poivron", "pois chiches", "harissa"]
   },
   {
+    _id: 'L048',
     n: "Crêpes Blé Complet Fromage Blanc Fruits",
     f: "🇫🇷",
     k: 378,
@@ -624,6 +672,7 @@ var breakfast = [
     tags: ["farine", "lait", "oeuf", "fromage blanc", "fraises", "miel"]
   },
   {
+    _id: 'L049',
     n: "Bowl Protéiné Quinoa Baies Amandes",
     f: "🇺🇸",
     k: 390,
@@ -637,6 +686,7 @@ var breakfast = [
     tags: ["quinoa", "yaourt", "amandes", "myrtilles", "framboises", "miel"]
   },
   {
+    _id: 'L050',
     n: "Tartine Saumon Avocat Citron",
     f: "🇸🇪",
     k: 412,
@@ -653,6 +703,7 @@ var breakfast = [
 
 var lunch = [
   {
+    _id: 'L101',
     n: "Poulet Grillé Riz Basmati",
     f: "🌍",
     k: 566,
@@ -666,6 +717,7 @@ var lunch = [
     tags: ["poulet", "riz", "citron", "persil"]
   },
   {
+    _id: 'L102',
     n: "Saumon Quinoa Brocoli",
     f: "🌍",
     k: 596,
@@ -679,6 +731,7 @@ var lunch = [
     tags: ["saumon", "quinoa", "brocoli", "huile"]
   },
   {
+    _id: 'L103',
     n: "Poke Bowl Thon Avocat",
     f: "🌺",
     k: 576,
@@ -692,6 +745,7 @@ var lunch = [
     tags: ["thon", "riz", "avocat", "edamame", "carotte", "soja"]
   },
   {
+    _id: 'L104',
     n: "Steak Boeuf Patate Douce",
     f: "🇺🇸",
     k: 542,
@@ -705,6 +759,7 @@ var lunch = [
     tags: ["boeuf", "patate douce", "haricots verts", "huile"]
   },
   {
+    _id: 'L105',
     n: "Salade César Poulet",
     f: "🇺🇸",
     k: 446,
@@ -718,6 +773,7 @@ var lunch = [
     tags: ["poulet", "laitue", "parmesan", "croûtons", "sauce césar"]
   },
   {
+    _id: 'L106',
     n: "Bowl Lentilles Épinards",
     f: "🇮🇳",
     k: 428,
@@ -731,6 +787,7 @@ var lunch = [
     tags: ["lentilles", "épinards", "tomate", "oignon", "cumin", "curcuma"]
   },
   {
+    _id: 'L107',
     n: "Harira Poulet",
     f: "🇲🇦",
     k: 412,
@@ -744,6 +801,7 @@ var lunch = [
     tags: ["poulet", "pois chiches", "tomate", "coriandre", "cumin"]
   },
   {
+    _id: 'L108',
     n: "Wrap Dinde Avocat",
     f: "🇺🇸",
     k: 500,
@@ -757,6 +815,7 @@ var lunch = [
     tags: ["tortilla", "dinde", "avocat", "laitue", "tomate"]
   },
   {
+    _id: 'L109',
     n: "Risotto Poulet Champignons",
     f: "🇮🇹",
     k: 618,
@@ -770,6 +829,7 @@ var lunch = [
     tags: ["riz", "poulet", "champignons", "parmesan", "oignon"]
   },
   {
+    _id: 'L110',
     n: "Pad Thaï Crevettes",
     f: "🇹🇭",
     k: 470,
@@ -783,6 +843,7 @@ var lunch = [
     tags: ["nouilles", "crevettes", "oeuf", "cacahuètes", "soja", "tamarin"]
   },
   {
+    _id: 'L111',
     n: "Shawarma Poulet Semoule",
     f: "🌍",
     k: 562,
@@ -796,6 +857,7 @@ var lunch = [
     tags: ["poulet", "semoule", "yaourt", "tomate", "concombre", "ail"]
   },
   {
+    _id: 'L112',
     n: "Bibimbap Boeuf",
     f: "🇰🇷",
     k: 546,
@@ -809,6 +871,7 @@ var lunch = [
     tags: ["boeuf", "riz", "épinards", "carotte", "courgette", "oeuf", "sésame"]
   },
   {
+    _id: 'L113',
     n: "Ceviche Cabillaud",
     f: "🇵🇪",
     k: 388,
@@ -822,6 +885,7 @@ var lunch = [
     tags: ["cabillaud", "citron", "avocat", "oignon", "coriandre", "maïs"]
   },
   {
+    _id: 'L114',
     n: "Tikka Masala Poulet",
     f: "🇮🇳",
     k: 516,
@@ -835,6 +899,7 @@ var lunch = [
     tags: ["poulet", "yaourt", "tomate", "crème", "riz", "tikka masala"]
   },
   {
+    _id: 'L115',
     n: "Couscous Royal",
     f: "🇲🇦",
     k: 626,
@@ -848,6 +913,7 @@ var lunch = [
     tags: ["semoule", "agneau", "merguez", "courgette", "carotte", "pois chiches"]
   },
   {
+    _id: 'L116',
     n: "Ramen Poulet Maison",
     f: "🇯🇵",
     k: 504,
@@ -861,6 +927,7 @@ var lunch = [
     tags: ["nouilles", "poulet", "bouillon", "oeuf", "nori", "soja"]
   },
   {
+    _id: 'L117',
     n: "Osso Bucco Veau",
     f: "🇮🇹",
     k: 570,
@@ -874,6 +941,7 @@ var lunch = [
     tags: ["veau", "tomate", "oignon", "carotte", "céleri"]
   },
   {
+    _id: 'L118',
     n: "Bowl Poulet Patate Douce Avocat",
     f: "🇺🇸",
     k: 526,
@@ -887,6 +955,7 @@ var lunch = [
     tags: ["poulet", "patate douce", "avocat", "épinards", "pois chiches", "tahini"]
   },
   {
+    _id: 'L119',
     n: "Dahl Lentilles Corail Coco",
     f: "🇮🇳",
     k: 488,
@@ -900,6 +969,7 @@ var lunch = [
     tags: ["lentilles", "lait de coco", "tomate", "oignon", "gingembre", "curcuma"]
   },
   {
+    _id: 'L120',
     n: "Filet Cabillaud Légumes Rôtis",
     f: "🇵🇹",
     k: 516,
@@ -913,6 +983,7 @@ var lunch = [
     tags: ["cabillaud", "poivron", "courgette", "tomate", "pomme de terre"]
   },
   {
+    _id: 'L121',
     n: "Bowl Boeuf Coréen Riz Sésame",
     f: "🇰🇷",
     k: 512,
@@ -926,6 +997,7 @@ var lunch = [
     tags: ["boeuf", "riz", "soja", "ail", "gingembre", "sésame"]
   },
   {
+    _id: 'L122',
     n: "Tajine Agneau Légumes",
     f: "🇲🇦",
     k: 494,
@@ -939,6 +1011,7 @@ var lunch = [
     tags: ["agneau", "courgette", "carotte", "pois chiches", "semoule", "coriandre"]
   },
   {
+    _id: 'L123',
     n: "Poulet Teriyaki Riz Brocoli",
     f: "🇯🇵",
     k: 506,
@@ -952,6 +1025,7 @@ var lunch = [
     tags: ["poulet", "riz", "brocoli", "teriyaki", "sésame"]
   },
   {
+    _id: 'L124',
     n: "Salade Niçoise Thon",
     f: "🇫🇷",
     k: 536,
@@ -965,6 +1039,7 @@ var lunch = [
     tags: ["thon", "haricots verts", "pomme de terre", "oeuf", "tomate", "olives"]
   },
   {
+    _id: 'L125',
     n: "Curry Rouge Poulet Coco",
     f: "🇹🇭",
     k: 522,
@@ -978,6 +1053,7 @@ var lunch = [
     tags: ["poulet", "lait de coco", "curry rouge", "poivron", "aubergine", "riz"]
   },
   {
+    _id: 'L126',
     n: "Salade Quinoa Feta Légumes Grillés",
     f: "🇬🇷",
     k: 512,
@@ -991,6 +1067,7 @@ var lunch = [
     tags: ["quinoa", "feta", "courgette", "poivron", "roquette", "pignons"]
   },
   {
+    _id: 'L127',
     n: "Tacos Poulet Guacamole",
     f: "🇲🇽",
     k: 524,
@@ -1004,6 +1081,7 @@ var lunch = [
     tags: ["poulet", "tortilla", "avocat", "salsa", "chou"]
   },
   {
+    _id: 'L128',
     n: "Bowl Falafel Houmous Taboulé",
     f: "🇱🇧",
     k: 492,
@@ -1017,6 +1095,7 @@ var lunch = [
     tags: ["falafel", "houmous", "taboulé", "pita", "persil", "boulgour"]
   },
   {
+    _id: 'L129',
     n: "Poisson Grillé Salsa Mangue",
     f: "🇨🇴",
     k: 504,
@@ -1030,6 +1109,7 @@ var lunch = [
     tags: ["daurade", "mangue", "avocat", "coriandre", "riz"]
   },
   {
+    _id: 'L130',
     n: "Chicken Tikka Naan Yogurt",
     f: "🇮🇳",
     k: 514,
@@ -1043,6 +1123,7 @@ var lunch = [
     tags: ["poulet", "naan", "yaourt", "tomate", "tikka masala"]
   },
   {
+    _id: 'L131',
     n: "Saumon Teriyaki Riz Edamame",
     f: "🇯🇵",
     k: 514,
@@ -1056,6 +1137,7 @@ var lunch = [
     tags: ["saumon", "riz", "edamame", "teriyaki", "sésame"]
   },
   {
+    _id: 'L132',
     n: "Boeuf Haché Légumes Wok",
     f: "🇨🇳",
     k: 516,
@@ -1069,6 +1151,7 @@ var lunch = [
     tags: ["boeuf", "brocoli", "poivron", "carotte", "sauce huître", "riz"]
   },
   {
+    _id: 'L133',
     n: "Souvlaki Poulet Tzatziki",
     f: "🇬🇷",
     k: 534,
@@ -1082,6 +1165,7 @@ var lunch = [
     tags: ["poulet", "pita", "tzatziki", "tomate", "oignon", "roquette"]
   },
   {
+    _id: 'L134',
     n: "Burritos Boeuf Haricots Noirs",
     f: "🇲🇽",
     k: 504,
@@ -1095,6 +1179,7 @@ var lunch = [
     tags: ["boeuf", "haricots noirs", "tortilla", "maïs", "salsa", "fromage"]
   },
   {
+    _id: 'L135',
     n: "Pho Bo Authentique",
     f: "🇻🇳",
     k: 522,
@@ -1108,6 +1193,7 @@ var lunch = [
     tags: ["boeuf", "nouilles", "bouillon", "gingembre", "basilic", "soja"]
   },
   {
+    _id: 'L136',
     n: "Gratin Poulet Légumes Béchamel",
     f: "🇫🇷",
     k: 534,
@@ -1121,6 +1207,7 @@ var lunch = [
     tags: ["poulet", "courgette", "poivron", "béchamel", "fromage", "pâtes"]
   },
   {
+    _id: 'L137',
     n: "Nasi Goreng Poulet",
     f: "🇮🇩",
     k: 484,
@@ -1134,6 +1221,7 @@ var lunch = [
     tags: ["riz", "poulet", "oeuf", "soja", "ail", "oignon"]
   },
   {
+    _id: 'L138',
     n: "Wrap Falafel Légumes Houmous",
     f: "🇱🇧",
     k: 516,
@@ -1147,6 +1235,7 @@ var lunch = [
     tags: ["falafel", "tortilla", "houmous", "taboulé", "laitue", "tomate"]
   },
   {
+    _id: 'L139',
     n: "Poulet Mafé Sénégalais",
     f: "🇸🇳",
     k: 506,
@@ -1160,6 +1249,7 @@ var lunch = [
     tags: ["poulet", "cacahuète", "tomate", "patate douce", "riz"]
   },
   {
+    _id: 'L140',
     n: "Salade Thaï Boeuf Grillé",
     f: "🇹🇭",
     k: 514,
@@ -1173,6 +1263,7 @@ var lunch = [
     tags: ["boeuf", "nouilles", "concombre", "carotte", "cacahuètes", "menthe"]
   },
   {
+    _id: 'L141',
     n: "Poulet Rôti Pommes de Terre",
     f: "🇫🇷",
     k: 526,
@@ -1186,6 +1277,7 @@ var lunch = [
     tags: ["poulet", "pomme de terre", "oignon", "ail", "herbes de Provence"]
   },
   {
+    _id: 'L142',
     n: "Lomo Saltado Boeuf",
     f: "🇵🇪",
     k: 508,
@@ -1199,6 +1291,7 @@ var lunch = [
     tags: ["boeuf", "pomme de terre", "tomate", "oignon", "soja", "coriandre"]
   },
   {
+    _id: 'L143',
     n: "Poulet Korma Riz Basmati",
     f: "🇮🇳",
     k: 486,
@@ -1212,6 +1305,7 @@ var lunch = [
     tags: ["poulet", "yaourt", "amandes", "crème", "riz", "korma"]
   },
   {
+    _id: 'L144',
     n: "Keftah Boeuf Tomate Herbes",
     f: "🇲🇦",
     k: 524,
@@ -1225,6 +1319,7 @@ var lunch = [
     tags: ["boeuf", "tomate", "oignon", "persil", "semoule", "harissa"]
   },
   {
+    _id: 'L145',
     n: "Wok Crevettes Légumes Riz",
     f: "🇨🇳",
     k: 524,
@@ -1238,6 +1333,7 @@ var lunch = [
     tags: ["crevettes", "brocoli", "carotte", "champignons", "riz", "soja"]
   },
   {
+    _id: 'L146',
     n: "Hamburger Dinde Maison",
     f: "🇺🇸",
     k: 534,
@@ -1251,6 +1347,7 @@ var lunch = [
     tags: ["dinde", "pain", "tomate", "laitue", "oignon", "fromage"]
   },
   {
+    _id: 'L147',
     n: "Poêlée Saumon Épinards Quinoa",
     f: "🇸🇪",
     k: 506,
@@ -1264,6 +1361,7 @@ var lunch = [
     tags: ["saumon", "épinards", "quinoa", "ail", "citron", "câpres"]
   },
   {
+    _id: 'L148',
     n: "Poulet Piri Piri Riz Coriandre",
     f: "🇵🇹",
     k: 506,
@@ -1277,6 +1375,7 @@ var lunch = [
     tags: ["poulet", "riz", "piri piri", "ail", "citron", "coriandre"]
   },
   {
+    _id: 'L149',
     n: "Enchiladas Poulet Sauce Tomate",
     f: "🇲🇽",
     k: 524,
@@ -1290,6 +1389,7 @@ var lunch = [
     tags: ["poulet", "tortilla", "sauce tomate", "fromage", "haricots noirs"]
   },
   {
+    _id: 'L150',
     n: "Bol Buddha Légumes Tofu",
     f: "🇯🇵",
     k: 496,
@@ -1306,6 +1406,7 @@ var lunch = [
 
 var snack = [
   {
+    _id: 'L201',
     n: "Yaourt Grec Amandes Miel",
     f: "🇬🇷",
     k: 258,
@@ -1319,6 +1420,7 @@ var snack = [
     tags: ["yaourt", "amandes", "miel"]
   },
   {
+    _id: 'L202',
     n: "Pomme Beurre d'Amande",
     f: "🇺🇸",
     k: 252,
@@ -1332,6 +1434,7 @@ var snack = [
     tags: ["pomme", "amande"]
   },
   {
+    _id: 'L203',
     n: "Oeufs Durs Crudités",
     f: "🌍",
     k: 222,
@@ -1345,6 +1448,7 @@ var snack = [
     tags: ["oeuf", "carotte", "concombre", "tomate"]
   },
   {
+    _id: 'L204',
     n: "Dattes Fourrées Amandes",
     f: "🌍",
     k: 244,
@@ -1358,6 +1462,7 @@ var snack = [
     tags: ["dattes", "amandes"]
   },
   {
+    _id: 'L205',
     n: "Edamame Citron Sel",
     f: "🇯🇵",
     k: 184,
@@ -1371,6 +1476,7 @@ var snack = [
     tags: ["edamame", "citron"]
   },
   {
+    _id: 'L206',
     n: "Houmous Crudités",
     f: "🇱🇧",
     k: 288,
@@ -1384,6 +1490,7 @@ var snack = [
     tags: ["houmous", "carotte", "céleri", "concombre", "poivron"]
   },
   {
+    _id: 'L207',
     n: "Energy Balls Dattes Avoine",
     f: "🇺🇸",
     k: 366,
@@ -1397,6 +1504,7 @@ var snack = [
     tags: ["avoine", "dattes", "amande", "chia", "cacao"]
   },
   {
+    _id: 'L208',
     n: "Tartine Ricotta Figues",
     f: "🇮🇹",
     k: 298,
@@ -1410,6 +1518,7 @@ var snack = [
     tags: ["pain", "ricotta", "figues", "miel", "noix"]
   },
   {
+    _id: 'L209',
     n: "Onigiri Thon Sésame",
     f: "🇯🇵",
     k: 302,
@@ -1423,6 +1532,7 @@ var snack = [
     tags: ["riz", "thon", "sésame", "nori", "soja"]
   },
   {
+    _id: 'L210',
     n: "Shake Whey Banane Cacahuète",
     f: "🥤",
     k: 388,
@@ -1436,6 +1546,7 @@ var snack = [
     tags: ["whey", "banane", "cacahuète", "lait"]
   },
   {
+    _id: 'L211',
     n: "Shake Whey Choco Banane",
     f: "🥤",
     k: 352,
@@ -1449,6 +1560,7 @@ var snack = [
     tags: ["whey", "banane", "cacao", "lait"]
   },
   {
+    _id: 'L212',
     n: "Shake Whey Avoine Miel",
     f: "🥤",
     k: 434,
@@ -1462,6 +1574,7 @@ var snack = [
     tags: ["whey", "avoine", "miel", "lait", "banane"]
   },
   {
+    _id: 'L213',
     n: "Smoothie Whey Mangue Coco",
     f: "🥤",
     k: 378,
@@ -1475,6 +1588,7 @@ var snack = [
     tags: ["whey", "mangue", "lait de coco"]
   },
   {
+    _id: 'L214',
     n: "Mug Cake Whey 2min",
     f: "🥤",
     k: 280,
@@ -1488,6 +1602,7 @@ var snack = [
     tags: ["whey", "avoine", "oeuf", "lait"]
   },
   {
+    _id: 'L215',
     n: "Fromage Blanc Fruits Rouges Graines",
     f: "🇫🇷",
     k: 234,
@@ -1501,6 +1616,7 @@ var snack = [
     tags: ["fromage blanc", "framboises", "myrtilles", "graines", "miel"]
   },
   {
+    _id: 'L216',
     n: "Banana Bread Protéiné",
     f: "🇺🇸",
     k: 270,
@@ -1514,6 +1630,7 @@ var snack = [
     tags: ["banane", "avoine", "oeuf", "noix", "miel"]
   },
   {
+    _id: 'L217',
     n: "Yaourt Grec Granola Fruits Secs",
     f: "🇬🇷",
     k: 236,
@@ -1527,6 +1644,7 @@ var snack = [
     tags: ["yaourt", "granola", "abricots", "noix"]
   },
   {
+    _id: 'L218',
     n: "Energy Balls Cacao Noisette",
     f: "🇮🇹",
     k: 250,
@@ -1540,6 +1658,7 @@ var snack = [
     tags: ["avoine", "dattes", "cacao", "noisettes", "miel"]
   },
   {
+    _id: 'L219',
     n: "Noix Mélangées Fruits Secs",
     f: "🌍",
     k: 254,
@@ -1553,6 +1672,7 @@ var snack = [
     tags: ["amandes", "cajou", "pistaches", "cranberries", "abricots"]
   },
   {
+    _id: 'L220',
     n: "Galette de Riz Beurre Cacahuète Banane",
     f: "🇺🇸",
     k: 250,
@@ -1566,6 +1686,7 @@ var snack = [
     tags: ["riz soufflé", "cacahuète", "banane"]
   },
   {
+    _id: 'L221',
     n: "Skyr Myrtilles Cannelle",
     f: "🇮🇸",
     k: 244,
@@ -1579,6 +1700,7 @@ var snack = [
     tags: ["skyr", "myrtilles", "cannelle", "noix", "miel"]
   },
   {
+    _id: 'L222',
     n: "Tartines Pain Complet Ricotta Tomate",
     f: "🇮🇹",
     k: 242,
@@ -1592,6 +1714,7 @@ var snack = [
     tags: ["pain", "ricotta", "tomate", "basilic", "huile"]
   },
   {
+    _id: 'L223',
     n: "Boisson Protéinée Kéfir Fruits",
     f: "🇹🇷",
     k: 234,
@@ -1605,6 +1728,7 @@ var snack = [
     tags: ["kéfir", "banane", "fraises", "miel"]
   },
   {
+    _id: 'L224',
     n: "Compote Maison Pomme Poire Cannelle",
     f: "🇫🇷",
     k: 256,
@@ -1618,6 +1742,7 @@ var snack = [
     tags: ["pomme", "poire", "yaourt", "cannelle", "graines"]
   },
   {
+    _id: 'L225',
     n: "Crackers Sarrasin Thon Avocat",
     f: "🌍",
     k: 260,
@@ -1631,6 +1756,7 @@ var snack = [
     tags: ["sarrasin", "thon", "avocat", "citron"]
   },
   {
+    _id: 'L226',
     n: "Barre Avoine Miel Noix Maison",
     f: "🇺🇸",
     k: 252,
@@ -1644,6 +1770,7 @@ var snack = [
     tags: ["avoine", "miel", "cacahuète", "noix", "graines"]
   },
   {
+    _id: 'L227',
     n: "Tzatziki Concombre Crudités",
     f: "🇬🇷",
     k: 234,
@@ -1657,6 +1784,7 @@ var snack = [
     tags: ["yaourt", "concombre", "ail", "aneth", "pita"]
   },
   {
+    _id: 'L228',
     n: "Compote Banane Cacao Beurre Amande",
     f: "🇺🇸",
     k: 232,
@@ -1670,6 +1798,7 @@ var snack = [
     tags: ["banane", "cacao", "amande", "lait"]
   },
   {
+    _id: 'L229',
     n: "Muffin Avoine Myrtilles Maison",
     f: "🇺🇸",
     k: 250,
@@ -1683,6 +1812,7 @@ var snack = [
     tags: ["avoine", "myrtilles", "oeuf", "yaourt", "miel"]
   },
   {
+    _id: 'L230',
     n: "Pudding Chia Coco Mangue",
     f: "🇹🇭",
     k: 244,
@@ -1696,6 +1826,7 @@ var snack = [
     tags: ["chia", "lait de coco", "mangue", "yaourt", "miel"]
   },
   {
+    _id: 'L231',
     n: "Verrines Fromage Blanc Saumon Aneth",
     f: "🇸🇪",
     k: 288,
@@ -1709,6 +1840,7 @@ var snack = [
     tags: ["fromage blanc", "saumon", "aneth", "concombre", "pain"]
   },
   {
+    _id: 'L232',
     n: "Smoothie Mangue Ananas Gingembre",
     f: "🇧🇷",
     k: 240,
@@ -1722,6 +1854,7 @@ var snack = [
     tags: ["mangue", "ananas", "yaourt", "gingembre", "lait de coco"]
   },
   {
+    _id: 'L233',
     n: "Galettes Riz Avocat Tomate",
     f: "🇺🇸",
     k: 252,
@@ -1735,6 +1868,7 @@ var snack = [
     tags: ["riz soufflé", "avocat", "tomate", "citron"]
   },
   {
+    _id: 'L234',
     n: "Labneh Tomates Cerises Zaatar",
     f: "🇱🇧",
     k: 244,
@@ -1748,6 +1882,7 @@ var snack = [
     tags: ["labneh", "tomate", "zaatar", "huile", "pita"]
   },
   {
+    _id: 'L235',
     n: "Shake Whey Fraise Yaourt",
     f: "🥤",
     k: 338,
@@ -1761,6 +1896,7 @@ var snack = [
     tags: ["whey", "fraises", "yaourt", "lait"]
   },
   {
+    _id: 'L236',
     n: "Protein Pancakes Whey Myrtilles",
     f: "🥤",
     k: 356,
@@ -1774,6 +1910,7 @@ var snack = [
     tags: ["whey", "avoine", "oeuf", "lait", "myrtilles"]
   },
   {
+    _id: 'L237',
     n: "Bowl Protéiné Whey Ananas Coco",
     f: "🥤",
     k: 338,
@@ -1787,6 +1924,7 @@ var snack = [
     tags: ["whey", "lait de coco", "ananas", "coco"]
   },
   {
+    _id: 'L238',
     n: "Shake Whey Café Protéiné",
     f: "🥤",
     k: 322,
@@ -1800,6 +1938,7 @@ var snack = [
     tags: ["whey", "café", "lait"]
   },
   {
+    _id: 'L239',
     n: "Mug Cake Whey Vanille Myrtilles",
     f: "🥤",
     k: 328,
@@ -1813,6 +1952,7 @@ var snack = [
     tags: ["whey", "avoine", "oeuf", "myrtilles", "lait"]
   },
   {
+    _id: 'L240',
     n: "Shake Whey Beurre Cacahuète Chocolat",
     f: "🥤",
     k: 348,
@@ -1826,6 +1966,7 @@ var snack = [
     tags: ["whey", "cacahuète", "lait", "cacao"]
   },
   {
+    _id: 'L241',
     n: "Whey Smoothie Bowl Framboise",
     f: "🥤",
     k: 322,
@@ -1839,6 +1980,7 @@ var snack = [
     tags: ["whey", "framboises", "banane", "lait", "granola"]
   },
   {
+    _id: 'L242',
     n: "Protein Ball Whey Cacao Noix",
     f: "🥤",
     k: 314,
@@ -1852,6 +1994,7 @@ var snack = [
     tags: ["whey", "avoine", "miel", "cacao", "noix"]
   },
   {
+    _id: 'L243',
     n: "Shake Whey Matcha Lait Amande",
     f: "🥤",
     k: 330,
@@ -1865,6 +2008,7 @@ var snack = [
     tags: ["whey", "matcha", "lait d'amande", "miel"]
   },
   {
+    _id: 'L244',
     n: "Protein Cookie Whey Chocolat",
     f: "🥤",
     k: 332,
@@ -1878,6 +2022,7 @@ var snack = [
     tags: ["whey", "avoine", "oeuf", "cajou", "chocolat"]
   },
   {
+    _id: 'L245',
     n: "Crackers Avocat Tomate Basilic",
     f: "🇮🇹",
     k: 244,
@@ -1891,6 +2036,7 @@ var snack = [
     tags: ["crackers", "avocat", "tomate", "basilic", "huile"]
   },
   {
+    _id: 'L246',
     n: "Soupe Miso Légère Tofu",
     f: "🇯🇵",
     k: 226,
@@ -1904,6 +2050,7 @@ var snack = [
     tags: ["miso", "tofu", "algues", "oignon vert"]
   },
   {
+    _id: 'L247',
     n: "Cottage Cheese Ananas Noix Coco",
     f: "🇺🇸",
     k: 254,
@@ -1917,6 +2064,7 @@ var snack = [
     tags: ["cottage cheese", "ananas", "coco", "miel"]
   },
   {
+    _id: 'L248',
     n: "Bâtonnets Légumes Sauce Tahini",
     f: "🇱🇧",
     k: 236,
@@ -1930,6 +2078,7 @@ var snack = [
     tags: ["carotte", "céleri", "concombre", "poivron", "tahini"]
   },
   {
+    _id: 'L249',
     n: "Amandes Grillées Herbes Épicées",
     f: "🌍",
     k: 254,
@@ -1943,6 +2092,7 @@ var snack = [
     tags: ["amandes", "épices", "paprika"]
   },
   {
+    _id: 'L250',
     n: "Velouté Carotte Gingembre",
     f: "🇫🇷",
     k: 226,
@@ -1959,6 +2109,7 @@ var snack = [
 
 var dinner = [
   {
+    _id: 'L301',
     n: "Saumon Vapeur Épinards",
     f: "🇸🇪",
     k: 480,
@@ -1972,6 +2123,7 @@ var dinner = [
     tags: ["saumon", "épinards", "huile", "citron", "ail"]
   },
   {
+    _id: 'L302',
     n: "Poulet Grillé Légumes Vapeur",
     f: "🌍",
     k: 392,
@@ -1985,6 +2137,7 @@ var dinner = [
     tags: ["poulet", "brocoli", "carotte", "courgette", "huile"]
   },
   {
+    _id: 'L303',
     n: "Cabillaud Courgettes",
     f: "🇸🇪",
     k: 318,
@@ -1998,6 +2151,7 @@ var dinner = [
     tags: ["cabillaud", "courgette", "huile", "citron"]
   },
   {
+    _id: 'L304',
     n: "Dinde Haricots Verts",
     f: "🇺🇸",
     k: 376,
@@ -2011,6 +2165,7 @@ var dinner = [
     tags: ["dinde", "haricots verts", "ail", "huile", "citron"]
   },
   {
+    _id: 'L305',
     n: "Omelette Champignons Herbes",
     f: "🇫🇷",
     k: 354,
@@ -2024,6 +2179,7 @@ var dinner = [
     tags: ["oeuf", "champignons", "persil", "ciboulette", "beurre"]
   },
   {
+    _id: 'L306',
     n: "Soupe Miso Saumon",
     f: "🇯🇵",
     k: 374,
@@ -2037,6 +2193,7 @@ var dinner = [
     tags: ["saumon", "miso", "tofu", "algues", "nouilles", "oignon vert"]
   },
   {
+    _id: 'L307',
     n: "Tajine Poulet Citron Confit",
     f: "🇲🇦",
     k: 436,
@@ -2050,6 +2207,7 @@ var dinner = [
     tags: ["poulet", "citron confit", "olives", "oignon", "coriandre"]
   },
   {
+    _id: 'L308',
     n: "Teriyaki Poulet Brocoli",
     f: "🇯🇵",
     k: 470,
@@ -2063,6 +2221,7 @@ var dinner = [
     tags: ["poulet", "brocoli", "teriyaki", "riz", "sésame"]
   },
   {
+    _id: 'L309',
     n: "Crevettes Ail Citron",
     f: "🌍",
     k: 364,
@@ -2076,6 +2235,7 @@ var dinner = [
     tags: ["crevettes", "ail", "citron", "huile", "persil"]
   },
   {
+    _id: 'L310',
     n: "Pho Boeuf",
     f: "🇻🇳",
     k: 422,
@@ -2089,6 +2249,7 @@ var dinner = [
     tags: ["boeuf", "nouilles", "gingembre", "basilic", "soja"]
   },
   {
+    _id: 'L311',
     n: "Blanquette Veau Légère",
     f: "🇫🇷",
     k: 478,
@@ -2102,6 +2263,7 @@ var dinner = [
     tags: ["veau", "carotte", "champignons", "oignon", "crème"]
   },
   {
+    _id: 'L312',
     n: "Tataki Boeuf Sésame",
     f: "🇯🇵",
     k: 396,
@@ -2115,6 +2277,7 @@ var dinner = [
     tags: ["boeuf", "sésame", "soja", "gingembre", "salade"]
   },
   {
+    _id: 'L313',
     n: "Curry Vert Crevettes",
     f: "🇹🇭",
     k: 442,
@@ -2128,6 +2291,7 @@ var dinner = [
     tags: ["crevettes", "lait de coco", "curry vert", "aubergine", "riz", "basilic"]
   },
   {
+    _id: 'L314',
     n: "Dorade Croûte de Sel",
     f: "🌍",
     k: 390,
@@ -2141,6 +2305,7 @@ var dinner = [
     tags: ["dorade", "sel", "herbes", "citron", "huile"]
   },
   {
+    _id: 'L315',
     n: "Gyoza Dinde Vapeur",
     f: "🇯🇵",
     k: 470,
@@ -2154,6 +2319,7 @@ var dinner = [
     tags: ["dinde", "chou", "gingembre", "soja", "sésame"]
   },
   {
+    _id: 'L316',
     n: "Filet de Bar Herbes Vapeur",
     f: "🇫🇷",
     k: 446,
@@ -2167,6 +2333,7 @@ var dinner = [
     tags: ["bar", "poireaux", "carotte", "huile", "citron", "thym"]
   },
   {
+    _id: 'L317',
     n: "Poulet Moutarde Légumes Rôtis",
     f: "🇫🇷",
     k: 464,
@@ -2180,6 +2347,7 @@ var dinner = [
     tags: ["poulet", "moutarde", "carotte", "courgette", "oignon"]
   },
   {
+    _id: 'L318',
     n: "Thon Grillé Salade Niçoise",
     f: "🇫🇷",
     k: 460,
@@ -2193,6 +2361,7 @@ var dinner = [
     tags: ["thon", "haricots verts", "oeuf", "tomate", "olives", "huile"]
   },
   {
+    _id: 'L319',
     n: "Salade de Poulet Grillé Roquette",
     f: "🇮🇹",
     k: 438,
@@ -2206,6 +2375,7 @@ var dinner = [
     tags: ["poulet", "roquette", "tomate", "parmesan", "pignons"]
   },
   {
+    _id: 'L320',
     n: "Steak de Thon Sesame Salade",
     f: "🇯🇵",
     k: 420,
@@ -2219,6 +2389,7 @@ var dinner = [
     tags: ["thon", "sésame", "soja", "salade", "gingembre"]
   },
   {
+    _id: 'L321',
     n: "Agneau Grillé Légumes Méditerranéens",
     f: "🇬🇷",
     k: 466,
@@ -2232,6 +2403,7 @@ var dinner = [
     tags: ["agneau", "courgette", "poivron", "tomate", "ail", "huile"]
   },
   {
+    _id: 'L322',
     n: "Morue Pil Pil Poivrons",
     f: "🇪🇸",
     k: 426,
@@ -2245,6 +2417,7 @@ var dinner = [
     tags: ["morue", "poivrons", "ail", "huile", "pomme de terre"]
   },
   {
+    _id: 'L323',
     n: "Boeuf Bourguignon Allégé",
     f: "🇫🇷",
     k: 454,
@@ -2258,6 +2431,7 @@ var dinner = [
     tags: ["boeuf", "carotte", "oignon", "champignons", "tomate"]
   },
   {
+    _id: 'L324',
     n: "Escalope Dinde Légères Vapeur",
     f: "🇺🇸",
     k: 414,
@@ -2271,6 +2445,7 @@ var dinner = [
     tags: ["dinde", "haricots verts", "asperges", "huile", "citron"]
   },
   {
+    _id: 'L325',
     n: "Salade Tiède Boeuf Avocat",
     f: "🇺🇸",
     k: 444,
@@ -2284,6 +2459,7 @@ var dinner = [
     tags: ["boeuf", "avocat", "tomate", "maïs", "laitue"]
   },
   {
+    _id: 'L326',
     n: "Filet de Sole Vapeur Légumes",
     f: "🇫🇷",
     k: 436,
@@ -2297,6 +2473,7 @@ var dinner = [
     tags: ["sole", "courgette", "carotte", "brocoli", "huile", "citron"]
   },
   {
+    _id: 'L327',
     n: "Poulet Citron Curcuma Épinards",
     f: "🇮🇳",
     k: 442,
@@ -2310,6 +2487,7 @@ var dinner = [
     tags: ["poulet", "épinards", "curcuma", "gingembre", "citron", "riz"]
   },
   {
+    _id: 'L328',
     n: "Saumon Épinards Crème Légère",
     f: "🇸🇪",
     k: 432,
@@ -2323,6 +2501,7 @@ var dinner = [
     tags: ["saumon", "épinards", "crème", "ail", "citron", "aneth"]
   },
   {
+    _id: 'L329',
     n: "Crevettes Curry Coco Légumes",
     f: "🇹🇭",
     k: 436,
@@ -2336,6 +2515,7 @@ var dinner = [
     tags: ["crevettes", "lait de coco", "curry", "brocoli", "poivron", "coriandre"]
   },
   {
+    _id: 'L330',
     n: "Magret de Canard Légumes Vapeur",
     f: "🇫🇷",
     k: 446,
@@ -2349,6 +2529,7 @@ var dinner = [
     tags: ["canard", "haricots verts", "carotte", "orange", "miel"]
   },
   {
+    _id: 'L331',
     n: "Cabillaud Tajine Légumes",
     f: "🇲🇦",
     k: 448,
@@ -2362,6 +2543,7 @@ var dinner = [
     tags: ["cabillaud", "courgette", "tomate", "oignon", "chermoula", "coriandre"]
   },
   {
+    _id: 'L332',
     n: "Gambas Plancha Sauce Romesco",
     f: "🇪🇸",
     k: 448,
@@ -2375,6 +2557,7 @@ var dinner = [
     tags: ["gambas", "poivrons", "amandes", "ail", "huile", "citron"]
   },
   {
+    _id: 'L333',
     n: "Poulet Vapeur Riz Thaï Basilic",
     f: "🇹🇭",
     k: 412,
@@ -2388,6 +2571,7 @@ var dinner = [
     tags: ["poulet", "basilic", "ail", "piment", "huile"]
   },
   {
+    _id: 'L334',
     n: "Salade Chaude Poulpe Grillé",
     f: "🇵🇹",
     k: 454,
@@ -2401,6 +2585,7 @@ var dinner = [
     tags: ["poulpe", "pomme de terre", "tomate", "oignon", "persil", "huile"]
   },
   {
+    _id: 'L335',
     n: "Soupe Poulet Légumes Maison",
     f: "🇫🇷",
     k: 454,
@@ -2414,6 +2599,7 @@ var dinner = [
     tags: ["poulet", "carotte", "navet", "poireau", "céleri", "vermicelles"]
   },
   {
+    _id: 'L336',
     n: "Boeuf Haché Courgette Gratiné",
     f: "🇮🇹",
     k: 446,
@@ -2427,6 +2613,7 @@ var dinner = [
     tags: ["boeuf", "courgette", "tomate", "fromage", "oignon"]
   },
   {
+    _id: 'L337',
     n: "Rôti de Dinde Légumes Printaniers",
     f: "🇫🇷",
     k: 454,
@@ -2440,6 +2627,7 @@ var dinner = [
     tags: ["dinde", "asperges", "petits pois", "carotte", "herbes"]
   },
   {
+    _id: 'L338',
     n: "Bar en Papillote Légumes",
     f: "🇫🇷",
     k: 448,
@@ -2453,6 +2641,7 @@ var dinner = [
     tags: ["bar", "tomate", "courgette", "olives", "herbes", "citron"]
   },
   {
+    _id: 'L339',
     n: "Poulet Sauce Cacahuète Africaine",
     f: "🇸🇳",
     k: 440,
@@ -2466,6 +2655,7 @@ var dinner = [
     tags: ["poulet", "cacahuète", "tomate", "oignon", "piment", "ail"]
   },
   {
+    _id: 'L340',
     n: "Gratin Dauphinois Poisson",
     f: "🇫🇷",
     k: 446,
@@ -2479,6 +2669,7 @@ var dinner = [
     tags: ["cabillaud", "pomme de terre", "crème", "fromage", "ail"]
   },
   {
+    _id: 'L341',
     n: "Osso Bucco de Dinde Gremolata",
     f: "🇮🇹",
     k: 438,
@@ -2492,6 +2683,7 @@ var dinner = [
     tags: ["dinde", "tomate", "oignon", "carotte", "gremolata"]
   },
   {
+    _id: 'L342',
     n: "Mahi Mahi Grillé Salsa Tomate",
     f: "🇧🇷",
     k: 440,
@@ -2505,6 +2697,7 @@ var dinner = [
     tags: ["mahi mahi", "tomate", "oignon", "coriandre", "piment", "citron"]
   },
   {
+    _id: 'L343',
     n: "Grillades Poulet Citron Origan",
     f: "🇬🇷",
     k: 438,
@@ -2518,6 +2711,7 @@ var dinner = [
     tags: ["poulet", "citron", "origan", "ail", "huile", "courgette"]
   },
   {
+    _id: 'L344',
     n: "Lotte Sauce Curry Légume Vapeur",
     f: "🇫🇷",
     k: 444,
@@ -2531,6 +2725,7 @@ var dinner = [
     tags: ["lotte", "lait de coco", "curry", "brocoli", "carotte"]
   },
   {
+    _id: 'L345',
     n: "Poulet au Four Légumes Méditerranéens",
     f: "🇪🇸",
     k: 436,
@@ -2544,6 +2739,7 @@ var dinner = [
     tags: ["poulet", "aubergine", "poivron", "tomate", "ail", "herbes"]
   },
   {
+    _id: 'L346',
     n: "Lieu Noir Épinards Ail",
     f: "🇫🇷",
     k: 438,
@@ -2557,6 +2753,7 @@ var dinner = [
     tags: ["lieu noir", "épinards", "ail", "huile", "pomme de terre"]
   },
   {
+    _id: 'L347',
     n: "Boulettes Dinde Sauce Tomate",
     f: "🇮🇹",
     k: 430,
@@ -2570,6 +2767,7 @@ var dinner = [
     tags: ["dinde", "tomate", "oignon", "ail", "basilic", "parmesan"]
   },
   {
+    _id: 'L348',
     n: "Soupe Tom Yum Crevettes",
     f: "🇹🇭",
     k: 438,
@@ -2583,6 +2781,7 @@ var dinner = [
     tags: ["crevettes", "champignons", "citronnelle", "galanga", "citron", "piment"]
   },
   {
+    _id: 'L349',
     n: "Roulades Poulet Épinards Fromage",
     f: "🇫🇷",
     k: 454,
@@ -2596,6 +2795,7 @@ var dinner = [
     tags: ["poulet", "épinards", "chèvre", "tomate", "ail"]
   },
   {
+    _id: 'L350',
     n: "Filet de Boeuf Sauce Champignons",
     f: "🇫🇷",
     k: 444,

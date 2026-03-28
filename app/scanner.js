@@ -40,7 +40,7 @@ style.textContent = `
   .score-average { border-color:var(--orange,#6A4A1A); color:var(--orange,#6A4A1A); background:var(--orangebg,rgba(106,74,26,.06)); }
   .score-poor { border-color:var(--red,#5A1010); color:var(--red,#5A1010); background:var(--redbg,rgba(90,16,16,.06)); }
 
-  .nutri-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin:12px 0; }
+  .nutri-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(60px,1fr)); gap:6px; margin:12px 0; }
   .nutri-cell { text-align:center; padding:10px 6px; border:1px solid var(--border,#D8D8D0); background:var(--ivory,#FAFAF7); }
   .nutri-cell .nv { font-family:Georgia,serif; font-size:16px; }
   .nutri-cell .nl { font-family:'Helvetica Neue',sans-serif; font-size:8px; letter-spacing:2px; text-transform:uppercase; color:var(--grey,#6B6B65); margin-top:2px; }
@@ -73,47 +73,92 @@ if ('BarcodeDetector' in window) {
   } catch(e) { /* fallback to manual */ }
 }
 
+// ─── SECURITY: API URL validation ───
+var ALLOWED_API_DOMAIN = 'https://world.openfoodfacts.org/';
+function isSafeApiUrl(url) {
+  return typeof url === 'string' && url.indexOf(ALLOWED_API_DOMAIN) === 0;
+}
+
+// ─── SECURITY: Barcode validation ───
+function isValidBarcode(barcode) {
+  // Only allow numeric barcodes (EAN-8, EAN-13, UPC-A, UPC-E, Code128 subset)
+  return typeof barcode === 'string' && /^[0-9A-Za-z\-]{8,20}$/.test(barcode.trim());
+}
+
 // ─── OPEN FOOD FACTS API ───
 function lookupProduct(barcode, callback) {
-  var url = 'https://world.openfoodfacts.org/api/v2/product/' + encodeURIComponent(barcode) + '.json';
-  fetch(url)
-    .then(function(r) { return r.json(); })
+  // Validate barcode before using it in URL
+  if (!isValidBarcode(barcode)) {
+    callback('Code-barres invalide', null);
+    return;
+  }
+  var url = 'https://world.openfoodfacts.org/api/v2/product/' + encodeURIComponent(barcode.trim()) + '.json';
+  // Validate constructed URL domain
+  if (!isSafeApiUrl(url)) {
+    callback('URL non autorisée', null);
+    return;
+  }
+  // Timeout: 10 seconds via AbortController
+  var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 10000) : null;
+  fetch(url, controller ? { signal: controller.signal } : {})
+    .then(function(r) {
+      if (timeoutId) clearTimeout(timeoutId);
+      return r.json();
+    })
     .then(function(data) {
-      if (data.status === 1 && data.product) {
+      // Guard against malformed API response
+      if (data && data.status === 1 && data.product && typeof data.product === 'object') {
         callback(null, parseProduct(data.product));
       } else {
         callback('Produit non trouvé dans la base de données', null);
       }
     })
     .catch(function(err) {
-      callback('Erreur de connexion : ' + err.message, null);
+      if (timeoutId) clearTimeout(timeoutId);
+      var msg = err && err.name === 'AbortError' ? 'Délai dépassé (10s) — vérifiez votre connexion' : 'Erreur de connexion : ' + (err ? err.message : 'inconnue');
+      callback(msg, null);
     });
+}
+
+function sanitizeText(s) {
+  if (typeof s !== 'string') return '';
+  // Strip any HTML tags and limit length
+  return s.replace(/<[^>]*>/g, '').substring(0, 500);
 }
 
 function parseProduct(p) {
   var n = p.nutriments || {};
+  // Validate and sanitize image URL — only allow https from openfoodfacts domains
+  var rawImg = p.image_front_small_url || p.image_url || null;
+  var safeImg = null;
+  if (rawImg && typeof rawImg === 'string' &&
+      (rawImg.indexOf('https://images.openfoodfacts.org/') === 0 ||
+       rawImg.indexOf('https://world.openfoodfacts.org/') === 0)) {
+    safeImg = rawImg;
+  }
   return {
-    name: p.product_name || p.product_name_fr || 'Produit inconnu',
-    brand: p.brands || '',
-    quantity: p.quantity || '',
-    image: p.image_front_small_url || p.image_url || null,
-    barcode: p.code || '',
-    // Nutriments per 100g
-    kcal: Math.round(n['energy-kcal_100g'] || n['energy-kcal'] || 0),
-    protein: Math.round((n.proteins_100g || 0) * 10) / 10,
-    carbs: Math.round((n.carbohydrates_100g || 0) * 10) / 10,
-    fat: Math.round((n.fat_100g || 0) * 10) / 10,
-    fiber: Math.round((n.fiber_100g || 0) * 10) / 10,
-    sugar: Math.round((n.sugars_100g || 0) * 10) / 10,
-    salt: Math.round((n.salt_100g || 0) * 100) / 100,
-    saturatedFat: Math.round((n['saturated-fat_100g'] || 0) * 10) / 10,
+    name: sanitizeText(p.product_name || p.product_name_fr || 'Produit inconnu'),
+    brand: sanitizeText(p.brands || ''),
+    quantity: sanitizeText(p.quantity || ''),
+    image: safeImg,
+    barcode: sanitizeText(p.code || ''),
+    // Nutriments per 100g — coerce to numbers to prevent injection
+    kcal: Math.round(Number(n['energy-kcal_100g'] || n['energy-kcal'] || 0)),
+    protein: Math.round(Number(n.proteins_100g || 0) * 10) / 10,
+    carbs: Math.round(Number(n.carbohydrates_100g || 0) * 10) / 10,
+    fat: Math.round(Number(n.fat_100g || 0) * 10) / 10,
+    fiber: Math.round(Number(n.fiber_100g || 0) * 10) / 10,
+    sugar: Math.round(Number(n.sugars_100g || 0) * 10) / 10,
+    salt: Math.round(Number(n.salt_100g || 0) * 100) / 100,
+    saturatedFat: Math.round(Number(n['saturated-fat_100g'] || 0) * 10) / 10,
     // Existing scores
-    nutriscore: p.nutriscore_grade || p.nutrition_grades || null,
-    nova: p.nova_group || null,
-    ingredients: p.ingredients_text_fr || p.ingredients_text || '',
-    additives: (p.additives_tags || []).length,
-    categories: p.categories || '',
-    allergens: p.allergens || ''
+    nutriscore: /^[a-e]$/.test(p.nutriscore_grade || p.nutrition_grades || '') ? (p.nutriscore_grade || p.nutrition_grades) : null,
+    nova: Number(p.nova_group) >= 1 && Number(p.nova_group) <= 4 ? Number(p.nova_group) : null,
+    ingredients: sanitizeText(p.ingredients_text_fr || p.ingredients_text || ''),
+    additives: Array.isArray(p.additives_tags) ? p.additives_tags.length : 0,
+    categories: sanitizeText(p.categories || ''),
+    allergens: sanitizeText(p.allergens || '')
   };
 }
 
@@ -223,10 +268,19 @@ function findAlternatives(product, callback) {
 
   var url = 'https://world.openfoodfacts.org/cgi/search.pl?action=process&tagtype_0=categories&tag_contains_0=contains&tag_0=' + encodeURIComponent(category) + '&sort_by=nutriscore_score&page_size=10&json=1';
 
-  fetch(url)
-    .then(function(r) { return r.json(); })
+  // Validate URL domain
+  if (!isSafeApiUrl(url)) { callback([]); return; }
+
+  var altController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var altTimeout = altController ? setTimeout(function() { altController.abort(); }, 10000) : null;
+  fetch(url, altController ? { signal: altController.signal } : {})
+    .then(function(r) {
+      if (altTimeout) clearTimeout(altTimeout);
+      return r.json();
+    })
     .then(function(data) {
-      if (!data.products) { callback([]); return; }
+      // Guard against malformed API response
+      if (!data || !Array.isArray(data.products)) { callback([]); return; }
       var alts = data.products
         .map(function(p) { return parseProduct(p); })
         .filter(function(p) { return p.name && p.name !== product.name && p.kcal > 0; })
@@ -236,14 +290,14 @@ function findAlternatives(product, callback) {
         .slice(0, 5);
       callback(alts);
     })
-    .catch(function() { callback([]); });
+    .catch(function() { if (altTimeout) clearTimeout(altTimeout); callback([]); });
 }
 
 // ─── SCAN HISTORY ───
 function getScanHistory() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   var key = 'mtd_scan_history_' + (user ? user.id : 'anon');
-  return JSON.parse(localStorage.getItem(key) || '[]');
+  try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { return []; }
 }
 
 function addToScanHistory(product, score) {
@@ -379,7 +433,7 @@ window.SCANNER = {
     // Scan button
     var scanBtn = document.createElement('div');
     scanBtn.className = 'scan-btn';
-    scanBtn.innerHTML = '&#x1F4F7; Scanner un code-barres';
+    scanBtn.textContent = '\uD83D\uDCF7 Scanner un code-barres';
     scanBtn.onclick = function() {
       showCamera = true;
       renderCameraView();
@@ -412,24 +466,53 @@ window.SCANNER = {
 
     // Scan history
     var history = getScanHistory();
+    var histSection = document.createElement('div');
+    histSection.className = 'scan-history';
+    var histLabel = document.createElement('div');
+    histLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#5A5A54);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border,#D8D8D0)';
+    histLabel.textContent = 'Derniers scans';
+    histSection.appendChild(histLabel);
     if (history.length > 0) {
-      var histSection = document.createElement('div');
-      histSection.className = 'scan-history';
-      var histLabel = document.createElement('div');
-      histLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border,#D8D8D0)';
-      histLabel.textContent = 'Derniers scans';
-      histSection.appendChild(histLabel);
 
       history.slice(0, 5).forEach(function(item) {
         var row = document.createElement('div');
         row.className = 'scan-history-item';
-        row.innerHTML = '<span>' + item.name + ' <span style="color:var(--grey2)">' + (item.brand || '') + '</span></span><span class="' + getScoreClass(item.score) + '" style="font-family:Georgia;font-style:italic;padding:2px 8px;font-size:12px">' + item.score + '%</span>';
+        // XSS fix: use DOM construction instead of innerHTML — item.name/brand come from OpenFoodFacts (external) stored in localStorage
+        var nameSpan = document.createElement('span');
+        var nameText = document.createTextNode(item.name + ' ');
+        nameSpan.appendChild(nameText);
+        var brandSpan = document.createElement('span');
+        brandSpan.style.color = 'var(--grey2)';
+        brandSpan.textContent = item.brand || '';
+        nameSpan.appendChild(brandSpan);
+        var scoreSpan = document.createElement('span');
+        scoreSpan.className = getScoreClass(item.score);
+        scoreSpan.style.cssText = 'font-family:Georgia;font-style:italic;padding:2px 8px;font-size:12px';
+        scoreSpan.textContent = item.score + '%';
+        row.appendChild(nameSpan);
+        row.appendChild(scoreSpan);
         row.style.cursor = 'pointer';
         row.onclick = function() { lookupAndAnalyze(item.barcode); };
         histSection.appendChild(row);
       });
-      scannerDiv.appendChild(histSection);
+    } else {
+      var emptyHistMsg = document.createElement('div');
+      emptyHistMsg.className = 'empty-state';
+      emptyHistMsg.style.cssText = 'margin:0;padding:20px 16px;';
+      var emptyHistIcon = document.createElement('span');
+      emptyHistIcon.className = 'empty-state-icon';
+      emptyHistIcon.textContent = '\uD83D\uDD0D';
+      var emptyHistTitle = document.createElement('p');
+      emptyHistTitle.className = 'empty-state-title';
+      emptyHistTitle.textContent = 'Aucun scan enregistré';
+      var emptyHistText = document.createElement('p');
+      emptyHistText.textContent = 'Scannez votre premier produit pour voir l\'historique ici.';
+      emptyHistMsg.appendChild(emptyHistIcon);
+      emptyHistMsg.appendChild(emptyHistTitle);
+      emptyHistMsg.appendChild(emptyHistText);
+      histSection.appendChild(emptyHistMsg);
     }
+    scannerDiv.appendChild(histSection);
 
     container.appendChild(scannerDiv);
 
@@ -604,7 +687,10 @@ window.SCANNER = {
       ].forEach(function(m) {
         var cell = document.createElement('div');
         cell.className = 'nutri-cell';
-        cell.innerHTML = '<div class="nv">' + m.v + '</div><div class="nl">' + m.l + '</div>';
+        // XSS fix: use DOM construction — m.v are numeric values but defense-in-depth
+        var vDiv = document.createElement('div'); vDiv.className = 'nv'; vDiv.textContent = m.v;
+        var lDiv = document.createElement('div'); lDiv.className = 'nl'; lDiv.textContent = m.l;
+        cell.appendChild(vDiv); cell.appendChild(lDiv);
         grid.appendChild(cell);
       });
       card.appendChild(grid);
@@ -620,7 +706,10 @@ window.SCANNER = {
       ].forEach(function(m) {
         var cell = document.createElement('div');
         cell.className = 'nutri-cell';
-        cell.innerHTML = '<div class="nv" style="font-size:14px">' + m.v + '</div><div class="nl">' + m.l + '</div>';
+        // XSS fix: use DOM construction
+        var vDiv = document.createElement('div'); vDiv.className = 'nv'; vDiv.style.fontSize = '14px'; vDiv.textContent = m.v;
+        var lDiv = document.createElement('div'); lDiv.className = 'nl'; lDiv.textContent = m.l;
+        cell.appendChild(vDiv); cell.appendChild(lDiv);
         detailGrid.appendChild(cell);
       });
       card.appendChild(detailGrid);
@@ -629,7 +718,8 @@ window.SCANNER = {
       var fitness = checkFitness(p);
       var verdict = document.createElement('div');
       verdict.className = 'fit-verdict ' + (fitness.fits ? 'fit-yes' : (score >= 40 ? 'fit-warning' : 'fit-no'));
-      verdict.innerHTML = (fitness.fits ? '\u2713 ' : '\u26A0 ') + fitness.message;
+      // XSS fix: fitness.message is JS-constructed but textContent is always safer
+      verdict.textContent = (fitness.fits ? '\u2713 ' : '\u26A0 ') + fitness.message;
       card.appendChild(verdict);
 
       resultContainer.appendChild(card);
