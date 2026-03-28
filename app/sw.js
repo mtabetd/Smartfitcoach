@@ -1,7 +1,7 @@
 // MTD Macro Calculator — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'mtd-v8';
-const RUNTIME_CACHE = 'mtd-runtime-v8';
+const CACHE_VERSION = 'mtd-v9';
+const RUNTIME_CACHE = 'mtd-runtime-v9';
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [

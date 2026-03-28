@@ -1204,6 +1204,13 @@ function renderStep7(p) {
   });
   p.appendChild(rg);
 
+  // Halal option
+  var halalRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:8px 0;cursor:pointer', onclick: function() { S.halal = !S.halal; window.render(); }});
+  var halalBox = h('div', {style: 'width:20px;height:20px;border-radius:4px;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;background:' + (S.halal ? 'var(--accent)' : 'transparent') + ';flex-shrink:0'}, S.halal ? h('span', {style: 'color:#fff;font-size:12px;font-weight:700'}, '\u2713') : null);
+  halalRow.appendChild(halalBox);
+  halalRow.appendChild(h('div', {style: 'font-size:13px;font-weight:500'}, '\u262a\ufe0f Halal \u2014 exclure porc & alcool'));
+  p.appendChild(halalRow);
+
   // Excluded
   p.appendChild(h('div', {'class': 'section-label'}, 'Aliments exclus'));
   var fi = h('div', {'class': 'field'});
@@ -1821,9 +1828,10 @@ function renderWeightChart(p) {
 function renderStep9(p) {
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Planning'));
   p.appendChild(h('h1', {html: 'Votre<br><em>semaine</em>'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 439 recettes'));
+  p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 489 recettes'));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
+  if (!S._nm && window.computeNutritionState) window.computeNutritionState(false);
   if (!S.weekPlan) S.weekPlan = generateWeek();
 
   // Day tabs
@@ -1933,6 +1941,18 @@ function renderStep9(p) {
         h('div', { style: 'font-size:20px;font-weight:700;color:var(--accent)' }, budget.weeklyMAD + ' ' + 'DH')
       ));
       budgetBlock.appendChild(budgetGrid);
+      // Comparaison avec le budget alimentaire de l'utilisateur
+      if (S.shopBudget && budget.avgDailyMAD > 0) {
+        var budgetDayLimits = {budget_low: 45, budget_mid: 90, budget_high: 180};
+        var dayLimit = budgetDayLimits[S.shopBudget];
+        if (dayLimit) {
+          var overBudget = budget.avgDailyMAD > dayLimit;
+          var budgetStatus = overBudget
+            ? '\u26a0\ufe0f Au-dessus de votre fourchette (' + dayLimit + ' DH/j)'
+            : '\u2713 Dans votre fourchette budget';
+          budgetBlock.appendChild(h('div', { style: 'font-size:12px;font-weight:600;color:' + (overBudget ? '#D32F2F' : 'var(--accent)') + ';margin-top:8px;text-align:center' }, budgetStatus));
+        }
+      }
       if (budget.coveragePct < 100) {
         budgetBlock.appendChild(h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-top:8px' },
           '* Estimation basée sur ' + budget.coveragePct + '% des repas (recettes avec prix disponibles)'
@@ -1968,6 +1988,7 @@ function renderStep9(p) {
   p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:16px;background:var(--black2)', onclick: function() { window.exportDayPDF(S.selectedDay); }}, '\u21e9 Exporter le jour en PDF'));
   p.appendChild(h('div', {style: 'height:8px'}));
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
+    if (window.computeNutritionState) window.computeNutritionState(false);
     S.weekPlan = generateWeek();
     bb('week_regenerated', {});
     window.render();
