@@ -3790,6 +3790,497 @@
         'Assembler : soba, thon, concombre en rondelles, avocat. Sauce soja + huile sésame. Parsemer de sésame.'
       ]
     },
+    {
+      id: 'R341',
+      name: 'Grain Bowl Lentilles & Halloumi',
+      emoji: '🫘', origin: '🇲🇪',
+      mealTypes: ['lunch'],
+      tags: ['lentilles', 'halloumi', 'végétarien', 'bowl', 'méditerranéen', 'high-protein'],
+      difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
+      // 28×4 + 50×4 + 18×9 = 112+200+162 = 474 ✓
+      baseNutrition: { calories: 474, proteinGrams: 28, carbsGrams: 50, fatGrams: 18 },
+      ingredients: [
+        { name: 'Lentilles vertes sèches', qty: 70, unit: 'g' },
+        { name: 'Halloumi', qty: 80, unit: 'g' },
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Tomate', qty: 80, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Cumin moulu', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Cuire les lentilles 20 min dans l\'eau salée. Égoutter.',
+        'Griller le halloumi à la poêle sèche 2 min par face.',
+        'Mélanger lentilles, épinards, tomate. Assaisonner huile + citron + cumin.',
+        'Disposer le halloumi grillé sur le bowl.'
+      ]
+    },
+    {
+      id: 'R342',
+      name: 'Taco Bowl Poulet Épicé',
+      emoji: '🌮', origin: '🇲🇽',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['mexicain', 'poulet', 'bowl', 'épicé', 'tendance', 'high-protein'],
+      difficulty: 1, prepTime: 10, cookTime: 15, servings: 1,
+      // 40×4 + 52×4 + 12×9 = 160+208+108 = 476 ✓
+      baseNutrition: { calories: 476, proteinGrams: 40, carbsGrams: 52, fatGrams: 12 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 140, unit: 'g' },
+        { name: 'Riz blanc', qty: 70, unit: 'g' },
+        { name: 'Maïs doux boîte', qty: 60, unit: 'g' },
+        { name: 'Haricots noirs égouttés', qty: 60, unit: 'g' },
+        { name: 'Tomate', qty: 80, unit: 'g' },
+        { name: 'Avocat', qty: 40, unit: 'g' },
+        { name: 'Paprika fumé', qty: 3, unit: 'g' },
+        { name: 'Cumin moulu', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le riz. Assaisonner le poulet avec paprika + cumin + sel. Cuire à la poêle.',
+        'Couper le poulet en lanières.',
+        'Assembler : riz, poulet épicé, maïs, haricots noirs, tomates, avocat.'
+      ]
+    },
+    {
+      id: 'R343',
+      name: 'Burrito Bowl Bœuf',
+      emoji: '🌯', origin: '🇲🇽',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['mexicain', 'boeuf', 'bowl', 'tendance', 'high-protein', 'hearty'],
+      difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
+      // 38×4 + 54×4 + 16×9 = 152+216+144 = 512 ✓
+      baseNutrition: { calories: 512, proteinGrams: 38, carbsGrams: 54, fatGrams: 16 },
+      ingredients: [
+        { name: 'Bœuf maigre haché', qty: 130, unit: 'g' },
+        { name: 'Riz blanc', qty: 70, unit: 'g' },
+        { name: 'Haricots noirs égouttés', qty: 60, unit: 'g' },
+        { name: 'Poivron rouge', qty: 80, unit: 'g' },
+        { name: 'Oignon', qty: 50, unit: 'g' },
+        { name: 'Tomate', qty: 80, unit: 'g' },
+        { name: 'Cumin moulu', qty: 2, unit: 'g' },
+        { name: 'Paprika fumé', qty: 2, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire le riz. Faire revenir oignon et poivron à la poêle.',
+        'Ajouter le bœuf haché + épices. Cuire 8 min.',
+        'Assembler : riz, bœuf épicé, haricots, poivrons, tomates.'
+      ]
+    },
+    {
+      id: 'R344',
+      name: 'Chirashi Saumon',
+      emoji: '🍱', origin: '🇯🇵',
+      mealTypes: ['lunch'],
+      tags: ['japonais', 'saumon', 'riz', 'chirashi', 'tendance', 'fresh'],
+      difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
+      // 32×4 + 52×4 + 14×9 = 128+208+126 = 462 ✓
+      baseNutrition: { calories: 462, proteinGrams: 32, carbsGrams: 52, fatGrams: 14 },
+      ingredients: [
+        { name: 'Riz blanc', qty: 80, unit: 'g' },
+        { name: 'Vinaigre de riz', qty: 15, unit: 'ml' },
+        { name: 'Saumon frais (filet)', qty: 110, unit: 'g' },
+        { name: 'Avocat', qty: 50, unit: 'g' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Sauce soja', qty: 10, unit: 'ml' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le riz. Tiédir et assaisonner avec vinaigre de riz + sel.',
+        'Couper saumon, avocat et concombre en tranches fines.',
+        'Disposer harmonieusement sur le riz. Sésame + sauce soja en accompagnement.'
+      ]
+    },
+    {
+      id: 'R345',
+      name: 'Green Goddess Bowl Poulet',
+      emoji: '💚', origin: '🇺🇸',
+      mealTypes: ['lunch'],
+      tags: ['green', 'poulet', 'bowl', 'tendance', 'fresh', 'high-protein'],
+      difficulty: 1, prepTime: 15, cookTime: 12, servings: 1,
+      // 42×4 + 44×4 + 14×9 = 168+176+126 = 470 ✓
+      baseNutrition: { calories: 470, proteinGrams: 42, carbsGrams: 44, fatGrams: 14 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 140, unit: 'g' },
+        { name: 'Quinoa', qty: 60, unit: 'g' },
+        { name: 'Avocat', qty: 50, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Edamame (surgelé)', qty: 60, unit: 'g' },
+        { name: 'Tahini', qty: 20, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Persil frais', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire le quinoa et les edamames. Griller le poulet assaisonné.',
+        'Sauce green goddess : mixer tahini + citron + persil + 2cs eau.',
+        'Assembler : quinoa, poulet, avocat, concombre, edamame. Napper de sauce verte.'
+      ]
+    },
+    {
+      id: 'R346',
+      name: 'Saumon Miso Glacé',
+      emoji: '🐠', origin: '🇯🇵',
+      mealTypes: ['dinner'],
+      tags: ['saumon', 'miso', 'japonais', 'tendance', 'high-protein', 'omega3'],
+      difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
+      // 38×4 + 42×4 + 16×9 = 152+168+144 = 464 ✓
+      baseNutrition: { calories: 464, proteinGrams: 38, carbsGrams: 42, fatGrams: 16 },
+      ingredients: [
+        { name: 'Saumon frais (filet)', qty: 150, unit: 'g' },
+        { name: 'Pâte miso', qty: 20, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Sauce soja', qty: 10, unit: 'ml' },
+        { name: 'Riz brun', qty: 60, unit: 'g' },
+        { name: 'Bok choy', qty: 120, unit: 'g' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger miso + miel + sauce soja. Enduire le saumon. Mariner 10 min.',
+        'Cuire le riz brun. Blanchir le bok choy 2 min.',
+        'Cuire le saumon au four 200°C 12 min ou à la poêle 4 min par face.',
+        'Servir sur riz brun avec bok choy. Parsemer de sésame.'
+      ]
+    },
+    {
+      id: 'R347',
+      name: 'Poulet Tikka Masala Light',
+      emoji: '🍛', origin: '🇮🇳',
+      mealTypes: ['dinner'],
+      tags: ['indien', 'poulet', 'curry', 'light', 'tendance', 'high-protein'],
+      difficulty: 2, prepTime: 15, cookTime: 25, servings: 1,
+      // 42×4 + 48×4 + 12×9 = 168+192+108 = 468 ✓
+      baseNutrition: { calories: 468, proteinGrams: 42, carbsGrams: 48, fatGrams: 12 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 150, unit: 'g' },
+        { name: 'Yaourt nature 0%', qty: 80, unit: 'g' },
+        { name: 'Tomate', qty: 150, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Garam Masala', qty: 5, unit: 'g' },
+        { name: 'Curcuma', qty: 2, unit: 'g' },
+        { name: 'Gingembre', qty: 5, unit: 'g' },
+        { name: 'Riz basmati', qty: 60, unit: 'g' }
+      ],
+      steps: [
+        'Mariner le poulet en dés dans yaourt + garam masala + curcuma 10 min.',
+        'Faire revenir l\'oignon. Ajouter tomates concassées + gingembre. Mijoter 10 min.',
+        'Ajouter le poulet. Cuire 15 min à feu moyen. Servir sur riz basmati.'
+      ]
+    },
+    {
+      id: 'R348',
+      name: 'Spaghetti Bolognaise Healthy',
+      emoji: '🍝', origin: '🇮🇹',
+      mealTypes: ['dinner'],
+      tags: ['italien', 'pâtes', 'boeuf', 'healthy', 'réconfortant', 'classique'],
+      difficulty: 2, prepTime: 10, cookTime: 25, servings: 1,
+      // 38×4 + 58×4 + 12×9 = 152+232+108 = 492 ✓
+      baseNutrition: { calories: 492, proteinGrams: 38, carbsGrams: 58, fatGrams: 12 },
+      ingredients: [
+        { name: 'Pâtes complètes fusilli', qty: 80, unit: 'g' },
+        { name: 'Bœuf maigre haché', qty: 120, unit: 'g' },
+        { name: 'Tomate', qty: 150, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' },
+        { name: 'Origan', qty: 2, unit: 'g' },
+        { name: 'Fromage râpé', qty: 15, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir oignon + ail dans l\'huile. Ajouter bœuf haché, cuire 5 min.',
+        'Ajouter tomates concassées + origan. Mijoter 15 min.',
+        'Cuire les pâtes al dente. Servir avec la bolognaise et fromage râpé.'
+      ]
+    },
+    {
+      id: 'R349',
+      name: 'Curry de Pois Chiches',
+      emoji: '🫘', origin: '🇮🇳',
+      mealTypes: ['dinner'],
+      tags: ['indien', 'vegan', 'pois-chiches', 'curry', 'tendance', 'high-fiber'],
+      difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
+      // 20×4 + 62×4 + 14×9 = 80+248+126 = 454 ✓
+      baseNutrition: { calories: 454, proteinGrams: 20, carbsGrams: 62, fatGrams: 14 },
+      ingredients: [
+        { name: 'Pois chiches (boîte)', qty: 150, unit: 'g' },
+        { name: 'Lait de coco (brique)', qty: 100, unit: 'ml' },
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Tomate', qty: 100, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Garam Masala', qty: 5, unit: 'g' },
+        { name: 'Curcuma', qty: 2, unit: 'g' },
+        { name: 'Riz basmati', qty: 60, unit: 'g' }
+      ],
+      steps: [
+        'Faire revenir l\'oignon. Ajouter épices + tomates. Cuire 5 min.',
+        'Ajouter pois chiches + lait de coco. Mijoter 12 min.',
+        'Incorporer les épinards en fin de cuisson. Servir sur riz basmati.'
+      ]
+    },
+    {
+      id: 'R350',
+      name: 'Bulgogi Bowl Bœuf Coréen',
+      emoji: '🥩', origin: '🇰🇷',
+      mealTypes: ['dinner'],
+      tags: ['coréen', 'boeuf', 'bulgogi', 'bowl', 'tendance', 'high-protein'],
+      difficulty: 2, prepTime: 15, cookTime: 10, servings: 1,
+      // 36×4 + 52×4 + 14×9 = 144+208+126 = 478 ✓
+      baseNutrition: { calories: 478, proteinGrams: 36, carbsGrams: 52, fatGrams: 14 },
+      ingredients: [
+        { name: 'Bœuf maigre haché', qty: 130, unit: 'g' },
+        { name: 'Riz blanc', qty: 70, unit: 'g' },
+        { name: 'Sauce soja', qty: 20, unit: 'ml' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Huile de sésame', qty: 5, unit: 'ml' },
+        { name: 'Gingembre', qty: 5, unit: 'g' },
+        { name: 'Salade romaine', qty: 60, unit: 'g' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Mariner le bœuf : sauce soja + miel + huile sésame + gingembre 10 min.',
+        'Cuire le riz. Saisir le bœuf à feu vif 5 min.',
+        'Assembler : riz, bœuf bulgogi, salade, sésame.'
+      ]
+    },
+    {
+      id: 'R351',
+      name: 'Shakshuka',
+      emoji: '🍳', origin: '🇮🇱',
+      mealTypes: ['dinner'],
+      tags: ['israélien', 'oeufs', 'tomates', 'épicé', 'tendance', 'végétarien'],
+      difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
+      // 22×4 + 28×4 + 16×9 = 88+112+144 = 344 ✓
+      baseNutrition: { calories: 344, proteinGrams: 22, carbsGrams: 28, fatGrams: 16 },
+      ingredients: [
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Tomate', qty: 200, unit: 'g' },
+        { name: 'Poivron rouge', qty: 80, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Cumin moulu', qty: 3, unit: 'g' },
+        { name: 'Paprika fumé', qty: 3, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+        { name: 'Pain pita complet', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Faire revenir oignon + poivron à l\'huile. Ajouter tomates + épices.',
+        'Mijoter 10 min jusqu\'à sauce épaisse. Creuser 3 puits.',
+        'Casser un œuf dans chaque puits. Couvrir et cuire 5-7 min. Servir avec pita.'
+      ]
+    },
+    {
+      id: 'R352',
+      name: 'Poulet Rôti Citron & Herbes',
+      emoji: '🍋', origin: '🇫🇷',
+      mealTypes: ['dinner'],
+      tags: ['français', 'poulet', 'citron', 'herbes', 'classique', 'high-protein'],
+      difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
+      // 42×4 + 28×4 + 12×9 = 168+112+108 = 388 ✓
+      baseNutrition: { calories: 388, proteinGrams: 42, carbsGrams: 28, fatGrams: 12 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 150, unit: 'g' },
+        { name: 'Citron (pce)', qty: 1, unit: 'pce' },
+        { name: 'Thym', qty: 3, unit: 'g' },
+        { name: 'Romarin', qty: 3, unit: 'g' },
+        { name: 'Patate douce', qty: 150, unit: 'g' },
+        { name: 'Courgette', qty: 100, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
+      ],
+      steps: [
+        'Mariner le poulet avec jus de citron + herbes + huile + sel.',
+        'Cuire au four 200°C avec patate douce et courgette en morceaux, 22-25 min.',
+        'Servir avec les légumes rôtis.'
+      ]
+    },
+    {
+      id: 'R353',
+      name: 'Cabillaud Croûte Herbes',
+      emoji: '🐟', origin: '🇫🇷',
+      mealTypes: ['dinner'],
+      tags: ['poisson', 'cabillaud', 'français', 'light', 'high-protein', 'elegant'],
+      difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
+      // 36×4 + 28×4 + 10×9 = 144+112+90 = 346 ✓
+      baseNutrition: { calories: 346, proteinGrams: 36, carbsGrams: 28, fatGrams: 10 },
+      ingredients: [
+        { name: 'Cabillaud (filet)', qty: 160, unit: 'g' },
+        { name: 'Chapelure', qty: 20, unit: 'g' },
+        { name: 'Persil frais', qty: 1, unit: 'pce' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Haricots verts', qty: 120, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
+      ],
+      steps: [
+        'Mélanger chapelure + persil haché + zeste citron + huile.',
+        'Déposer sur le cabillaud. Cuire au four 200°C / 12 min.',
+        'Cuire les haricots verts vapeur 6 min. Servir ensemble.'
+      ]
+    },
+    {
+      id: 'R354',
+      name: 'Butter Chicken Light',
+      emoji: '🍗', origin: '🇮🇳',
+      mealTypes: ['dinner'],
+      tags: ['indien', 'poulet', 'light', 'tendance', 'crémeux', 'high-protein'],
+      difficulty: 2, prepTime: 15, cookTime: 25, servings: 1,
+      // 40×4 + 46×4 + 12×9 = 160+184+108 = 452 ✓
+      baseNutrition: { calories: 452, proteinGrams: 40, carbsGrams: 46, fatGrams: 12 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 140, unit: 'g' },
+        { name: 'Yaourt nature 0%', qty: 80, unit: 'g' },
+        { name: 'Tomate', qty: 150, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Garam Masala', qty: 5, unit: 'g' },
+        { name: 'Curcuma', qty: 2, unit: 'g' },
+        { name: 'Gingembre', qty: 5, unit: 'g' },
+        { name: 'Riz basmati', qty: 60, unit: 'g' }
+      ],
+      steps: [
+        'Mariner poulet en dés avec yaourt + épices 15 min.',
+        'Faire revenir oignon. Ajouter tomates + épices. Mijoter 10 min. Mixer la sauce.',
+        'Ajouter le poulet, cuire 15 min. Sauce onctueuse sans crème. Servir sur riz basmati.'
+      ]
+    },
+    {
+      id: 'R355',
+      name: 'Stir-Fry Bœuf Brocoli',
+      emoji: '🥦', origin: '🇨🇳',
+      mealTypes: ['dinner'],
+      tags: ['chinois', 'boeuf', 'brocoli', 'stir-fry', 'tendance', 'high-protein'],
+      difficulty: 2, prepTime: 10, cookTime: 12, servings: 1,
+      // 36×4 + 40×4 + 12×9 = 144+160+108 = 412 ✓
+      baseNutrition: { calories: 412, proteinGrams: 36, carbsGrams: 40, fatGrams: 12 },
+      ingredients: [
+        { name: 'Bœuf maigre haché', qty: 130, unit: 'g' },
+        { name: 'Brocoli', qty: 150, unit: 'g' },
+        { name: 'Sauce soja', qty: 20, unit: 'ml' },
+        { name: 'Sauce huître', qty: 15, unit: 'ml' },
+        { name: 'Gingembre', qty: 5, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'g' },
+        { name: 'Riz blanc', qty: 60, unit: 'g' },
+        { name: 'Huile de sésame', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire le riz. Blanchir le brocoli 2 min.',
+        'Saisir le bœuf à feu vif avec ail + gingembre, 4 min.',
+        'Ajouter brocoli + sauce soja + sauce huître. Sauter 2 min. Finir avec huile sésame.'
+      ]
+    },
+    {
+      id: 'R356',
+      name: 'Gnocchi Épinards Ricotta',
+      emoji: '🫘', origin: '🇮🇹',
+      mealTypes: ['dinner'],
+      tags: ['italien', 'végétarien', 'gnocchi', 'réconfortant', 'tendance'],
+      difficulty: 1, prepTime: 8, cookTime: 10, servings: 1,
+      // 22×4 + 54×4 + 14×9 = 88+216+126 = 430 ✓
+      baseNutrition: { calories: 430, proteinGrams: 22, carbsGrams: 54, fatGrams: 14 },
+      ingredients: [
+        { name: 'Gnocchi (frais ou emballé)', qty: 200, unit: 'g' },
+        { name: 'Épinards frais', qty: 80, unit: 'g' },
+        { name: 'Ricotta', qty: 60, unit: 'g' },
+        { name: 'Fromage râpé', qty: 15, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire les gnocchi selon emballage (2-3 min eau bouillante). Égoutter.',
+        'Faire revenir ail + épinards à l\'huile 2 min. Ajouter la ricotta.',
+        'Mélanger gnocchi + sauce épinards-ricotta. Parsemer de fromage râpé.'
+      ]
+    },
+    {
+      id: 'R357',
+      name: 'Soupe Miso Tofu & Wakame',
+      emoji: '🍵', origin: '🇯🇵',
+      mealTypes: ['dinner'],
+      tags: ['japonais', 'soupe', 'miso', 'tofu', 'light', 'réconfortant'],
+      difficulty: 1, prepTime: 8, cookTime: 10, servings: 1,
+      // 18×4 + 32×4 + 8×9 = 72+128+72 = 272 ✓
+      baseNutrition: { calories: 272, proteinGrams: 18, carbsGrams: 32, fatGrams: 8 },
+      ingredients: [
+        { name: 'Pâte miso', qty: 30, unit: 'g' },
+        { name: 'Tofu soyeux', qty: 100, unit: 'g' },
+        { name: 'Wakame (algue séchée)', qty: 5, unit: 'g' },
+        { name: 'Riz blanc', qty: 60, unit: 'g' },
+        { name: 'Sauce soja', qty: 5, unit: 'ml' },
+        { name: 'Oignon vert', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire le riz. Réhydrater le wakame 5 min dans l\'eau froide.',
+        'Porter 400ml d\'eau à frémissement (ne pas bouillir). Dissoudre le miso.',
+        'Ajouter tofu en dés, wakame, sauce soja. Servir avec riz et oignon vert émincé.'
+      ]
+    },
+    {
+      id: 'R358',
+      name: 'Tartare Saumon Avocat',
+      emoji: '🥗', origin: '🇫🇷',
+      mealTypes: ['dinner'],
+      tags: ['français', 'saumon', 'cru', 'avocat', 'élégant', 'tendance'],
+      difficulty: 2, prepTime: 15, cookTime: 0, servings: 1,
+      // 28×4 + 14×4 + 24×9 = 112+56+216 = 384 ✓
+      baseNutrition: { calories: 384, proteinGrams: 28, carbsGrams: 14, fatGrams: 24 },
+      ingredients: [
+        { name: 'Saumon frais (filet)', qty: 120, unit: 'g' },
+        { name: 'Avocat', qty: 80, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Sauce soja', qty: 10, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 5, unit: 'ml' },
+        { name: 'Pain complet', qty: 2, unit: 'pce' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Couper le saumon ultra-frais en petits dés. Assaisonner : citron + sauce soja + huile sésame.',
+        'Écraser l\'avocat en guacamole léger avec citron + sel.',
+        'Dresser : guacamole en base, tartare de saumon dessus. Toast pain complet. Sésame.'
+      ]
+    },
+    {
+      id: 'R359',
+      name: 'Moules Marinières Légères',
+      emoji: '🦪', origin: '🇧🇪',
+      mealTypes: ['dinner'],
+      tags: ['moules', 'fruits-de-mer', 'léger', 'français', 'protéiné'],
+      difficulty: 2, prepTime: 10, cookTime: 12, servings: 1,
+      // 28×4 + 22×4 + 8×9 = 112+88+72 = 272 ✓
+      baseNutrition: { calories: 272, proteinGrams: 28, carbsGrams: 22, fatGrams: 8 },
+      ingredients: [
+        { name: 'Moules (fraîches)', qty: 400, unit: 'g' },
+        { name: 'Bouillon de légumes (cube)', qty: 1, unit: 'pce' },
+        { name: 'Ail', qty: 3, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Persil frais', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+        { name: 'Pain complet', qty: 2, unit: 'pce' }
+      ],
+      steps: [
+        'Nettoyer et gratter les moules. Jeter celles qui restent ouvertes.',
+        'Faire revenir ail + oignon à l\'huile. Ajouter 150ml de bouillon chaud.',
+        'Ajouter les moules, couvrir, cuire 4-5 min jusqu\'à ouverture. Parsemer de persil. Servir avec pain.'
+      ]
+    },
+    {
+      id: 'R360',
+      name: 'Poulet Satay Sauce Cacahuète',
+      emoji: '🥜', origin: '🇮🇩',
+      mealTypes: ['dinner'],
+      tags: ['indonésien', 'poulet', 'cacahuète', 'satay', 'tendance', 'high-protein'],
+      difficulty: 2, prepTime: 15, cookTime: 15, servings: 1,
+      // 40×4 + 44×4 + 16×9 = 160+176+144 = 480 ✓
+      baseNutrition: { calories: 480, proteinGrams: 40, carbsGrams: 44, fatGrams: 16 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 140, unit: 'g' },
+        { name: 'Beurre de cacahuète', qty: 30, unit: 'g' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Riz jasmin', qty: 60, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Mariner le poulet en lanières : sauce soja + miel + citron 10 min. Griller à la poêle.',
+        'Sauce satay : beurre de cacahuète + 2cs eau chaude + sauce soja + miel. Fouetter.',
+        'Servir le poulet sur riz jasmin avec concombre et sauce cacahuète. Sésame.'
+      ]
+    },
 
   ];
 
