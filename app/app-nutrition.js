@@ -1968,7 +1968,7 @@ function renderStep9(p) {
   }
 
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
-  var _shopList = (window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan) : [];
+  var _shopList = (window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan, {shopFreq: S.shopFreq}) : [];
   var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
   var _shopLabel = '\uD83D\uDECD ' + window.t('shop.title') + (_shopTotal > 0 ? ' (' + _shopTotal + ' articles)' : '');
   var btnShop = h('button', {
@@ -2842,6 +2842,16 @@ function renderShoppingList(p) {
     p.appendChild(h('div', {style:'padding:20px;text-align:center;color:var(--text-secondary)'}, arUI('no_items', 'Aucun ingrédient détecté dans le plan.')));
     return;
   }
+
+  // ── Label fréquence de courses ──
+  var freqLabel = list._freqLabel || '7 jours';
+  var freqBanner = h('div', {style:'margin:0 16px 12px;padding:10px 14px;background:var(--card);border-radius:10px;display:flex;align-items:center;gap:8px;font-size:13px'});
+  freqBanner.appendChild(h('span', {style:'font-size:16px'}, '\uD83D\uDED2'));
+  freqBanner.appendChild(h('div', {}, [
+    h('div', {style:'font-weight:600;color:var(--text)'}, 'Liste pour ' + freqLabel),
+    h('div', {style:'font-size:11px;color:var(--text-secondary)'}, s.shopFreq === '2x_week' ? 'Faites 2 courses par semaine — renouvelez dans 4 jours' : s.shopFreq === 'daily' ? 'Courses pour aujourd\'hui uniquement' : s.shopFreq === 'biweekly' ? 'Doublez les quantités pour faire vos courses toutes les 2 semaines' : 'Courses pour toute la semaine')
+  ]));
+  p.appendChild(freqBanner);
 
   // ── Boutons actions ──
   var actions = h('div', {style:'display:flex;gap:10px;padding:0 16px 12px;flex-wrap:wrap', 'class':'shop-print-hide'});

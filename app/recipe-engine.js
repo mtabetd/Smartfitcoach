@@ -14520,8 +14520,16 @@
    * @param {Array} weekPlan  — window.S.weekPlan
    * @returns {Array<{category, items: Array<{name, qty, unit, recipes}>}>}
    */
-  function generateShoppingList(weekPlan) {
+  function generateShoppingList(weekPlan, options) {
     if (!weekPlan || !weekPlan.length) return [];
+    options = options || {};
+
+    // Adapter les quantités selon la fréquence de courses de l'utilisateur
+    var shopFreq = options.shopFreq || (window.S && window.S.shopFreq) || 'weekly';
+    // Nombre de jours couverts par chaque course
+    var FREQ_DAYS = { daily: 1, '2x_week': 4, weekly: 7, biweekly: 7 };
+    var freqDays = FREQ_DAYS[shopFreq] || 7;
+    var freqRatio = freqDays / 7; // ratio pour scaler les quantités
 
     var SHOP_SECTIONS = {
       '🥩 Boucherie & Poissonnerie': /poulet|dinde|boeuf|bœuf|saumon|thon|crevette|cabillaud|maquereau|sardine|filet|blanc de|hachis|steak|viande|kefta|merguez|agneau|veau|moule/i,
@@ -14598,6 +14606,10 @@
     var categorized = {};
     Object.keys(consolidated).forEach(function(key) {
       var item = consolidated[key];
+      // Appliquer le ratio fréquence de courses AVANT la conversion market qty
+      if (freqRatio < 1 && typeof item.qty === 'number') {
+        item.qty = item.qty * freqRatio;
+      }
       // Détecter la catégorie d'abord (nécessaire pour les règles de market qty)
       var cat = '🛒 Divers';
       var catKeys = Object.keys(SHOP_SECTIONS);
@@ -14614,9 +14626,14 @@
 
     // Trier catégories et items
     var ORDER = ['🥩 Boucherie & Poissonnerie','🥚 Œufs & Produits laitiers','🥦 Fruits & Légumes','🌾 Féculents & Céréales','🧊 Surgelés','🥫 Conserves & Bocaux','🫙 Épicerie sèche','🌿 Épices & Herbes','🌰 Graines, Noix & Fruits secs','🥤 Boissons & Laits végétaux','🍞 Boulangerie & Pâtisserie','❄️ Crèmerie & Fromages','🛒 Divers'];
-    return ORDER.filter(function(c) { return categorized[c] && categorized[c].length > 0; }).map(function(c) {
+    var result = ORDER.filter(function(c) { return categorized[c] && categorized[c].length > 0; }).map(function(c) {
       return { category: c, items: categorized[c].sort(function(a,b){ return a.name.localeCompare(b.name); }) };
     });
+    // Métadonnée : période couverte (affichée dans le header de la liste)
+    var FREQ_LABELS = { daily: '1 jour', '2x_week': '4 jours', weekly: '7 jours', biweekly: '7 jours' };
+    result._freqLabel = FREQ_LABELS[shopFreq] || '7 jours';
+    result._freqDays = freqDays;
+    return result;
   }
 
   // ─── EXPOSITION GLOBALE ────────────────────────────────────────────────────────
