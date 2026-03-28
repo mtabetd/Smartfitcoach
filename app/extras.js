@@ -660,7 +660,7 @@ window.MEASUREMENTS = {
 
     var history = self.getHistory();
     if (history.length === 0) {
-      wrap.appendChild(el('div', 'extras-empty', 'Aucune mesure enregistree.'));
+      wrap.appendChild(el('div', 'extras-empty', 'Aucune mesure enregistrée.'));
       container.appendChild(wrap);
       return;
     }
@@ -854,7 +854,7 @@ window.SLEEP_TRACKER = {
       stats.appendChild(trendRow);
 
       var countRow = el('div', 'sleep-stat-row');
-      countRow.appendChild(el('span', 'sleep-stat-label', 'Nuits enregistrees'));
+      countRow.appendChild(el('span', 'sleep-stat-label', 'Nuits enregistrées'));
       countRow.appendChild(el('span', 'sleep-stat-value', String(self.getHistory().length)));
       stats.appendChild(countRow);
 
@@ -1216,7 +1216,7 @@ window.WEEKLY_SUMMARY = {
       { days: 30,  label: 'Or' },
       { days: 14,  label: 'Argent' },
       { days: 7,   label: 'Bronze' },
-      { days: 3,   label: 'Debutant' }
+      { days: 3,   label: 'Débutant' }
     ];
     var current = null;
     var next = null;
@@ -1240,7 +1240,7 @@ window.WEEKLY_SUMMARY = {
     container.innerHTML = '';
 
     var wrap = el('div', 'extras-widget weekly-section');
-    var title = el('div', 'weekly-title', 'Resume de la semaine');
+    var title = el('div', 'weekly-title', 'Résumé de la semaine');
     wrap.appendChild(title);
 
     // Day dots
@@ -1290,7 +1290,7 @@ window.WEEKLY_SUMMARY = {
     // Streak
     var streak = self._getStreak();
     var statStreak = el('div', 'summary-stat');
-    statStreak.appendChild(el('span', 'summary-stat-label', 'Serie en cours'));
+    statStreak.appendChild(el('span', 'summary-stat-label', 'Série en cours'));
     statStreak.appendChild(el('span', 'summary-stat-value', streak + ' jour' + (streak > 1 ? 's' : '')));
     wrap.appendChild(statStreak);
 

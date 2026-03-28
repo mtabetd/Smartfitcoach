@@ -672,7 +672,7 @@ window.DASHBOARD = {
     var sessionParts = [];
     sessionParts.push('Session : ' + (sessionMin || 0) + ' min');
     if (lastDate) {
-      sessionParts.push('Derniere visite : ' + lastDate.getDate() + ' ' + MOIS[lastDate.getMonth()] + ' ' + lastDate.getFullYear());
+      sessionParts.push('Dernière visite : ' + lastDate.getDate() + ' ' + MOIS[lastDate.getMonth()] + ' ' + lastDate.getFullYear());
     }
     root.appendChild(h('div', 'dash-session', sessionParts.join(' | ')));
 
@@ -783,7 +783,7 @@ function openMeasurementsModal() {
       if (formContainer.lastChild) formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
     }
   } else {
-    formContainer.appendChild(h('p', null, 'Module mensurations non charge.'));
+    formContainer.appendChild(h('p', null, 'Module mensurations non chargé.'));
     if (formContainer.lastChild) formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
   }
   box.appendChild(formContainer);
@@ -879,7 +879,7 @@ function openKitchenTimer() {
   controls.style.cssText = 'display:flex;gap:8px;justify-content:center;';
 
   var startBtn = document.createElement('button');
-  startBtn.textContent = 'Demarrer';
+  startBtn.textContent = 'Démarrer';
   startBtn.style.cssText = 'padding:10px 24px;background:var(--black,#181818);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;';
   startBtn.addEventListener('click', function() {
     if (running) return;
@@ -892,8 +892,8 @@ function openKitchenTimer() {
       if (totalSeconds <= 0) {
         clearInterval(interval);
         running = false;
-        startBtn.textContent = 'Demarrer';
-        display.textContent = 'Termine !';
+        startBtn.textContent = 'Démarrer';
+        display.textContent = 'Terminé !';
         display.style.color = 'var(--black,#181818)';
         try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate([200,100,200]); } catch(e){}
       }
@@ -902,13 +902,13 @@ function openKitchenTimer() {
   controls.appendChild(startBtn);
 
   var resetBtn = document.createElement('button');
-  resetBtn.textContent = 'Reinitialiser';
+  resetBtn.textContent = 'Réinitialiser';
   resetBtn.style.cssText = 'padding:10px 24px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;';
   resetBtn.addEventListener('click', function() {
     clearInterval(interval);
     running = false;
     totalSeconds = 0;
-    startBtn.textContent = 'Demarrer';
+    startBtn.textContent = 'Démarrer';
     updateDisplay();
   });
   controls.appendChild(resetBtn);
@@ -987,7 +987,7 @@ function importData() {
 
 function deleteAllData() {
   if (!confirm('Êtes-vous sûr ? Toutes vos données seront supprimées définitivement.')) return;
-  if (!confirm('Derniere confirmation : cette action est irreversible. Continuer ?')) return;
+  if (!confirm('Dernière confirmation : cette action est irréversible. Continuer ?')) return;
 
   var keysToRemove = [];
   for (var i = 0; i < localStorage.length; i++) {
