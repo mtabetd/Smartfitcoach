@@ -445,7 +445,8 @@ var CF_LIFT_SCALING_FACTORS = {
   bench_press:   0.85,
   push_press:    0.65,
   shoulder_to_oh: 0.65,
-  thruster:      0.55,
+  thruster:      0.70, // Front squat + overhead press pattern; corrected from 0.55 (Haff & Triplett 2016)
+  jerk:          0.80, // Split/push jerk — overhead strength from back squat base (Haff & Triplett 2016)
   sumo_dl_hp:    0.50
 };
 window.CF_LIFT_SCALING_FACTORS = CF_LIFT_SCALING_FACTORS;
@@ -2269,9 +2270,9 @@ if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*
 // Plancher calorique sexe-spécifique (ACSM / IOC 2018 RED-S prevention)
 // Femme active (PAL ≥ 1.375) : plancher 1400 kcal/j — prévention RED-S (IOC 2018)
 // Femme sédentaire : plancher 1200 kcal/j (ACSM)
-// Homme : plancher 1400 kcal/j (ACSM — QA spec)
+// Homme : plancher 1500 kcal/j (ACSM — plancher physiologique masculin)
 var effectivePAL=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
-var kcalFloor=s.sex==='femme'?(effectivePAL>=1.375?1400:1200):1400;
+var kcalFloor=s.sex==='femme'?(effectivePAL>=1.375?1400:1200):1500;
 base=Math.max(base,kcalFloor);
 // Alcool : déduire les calories hebdo/7 du budget calorique journalier pour un calcul réaliste
 // Ex : 500 kcal alcool/semaine ÷ 7 = 71 kcal/j que l'on retire de l'objectif alimentaire
