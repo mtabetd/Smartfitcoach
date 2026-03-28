@@ -326,6 +326,33 @@ window.render = render;
 // ─── DARK MODE PREFERENCE ───
 try { if (localStorage.getItem('mtd_dark_mode') === 'true') document.body.classList.add('dark-mode'); } catch(e) {}
 
+// ─── DEV ONLY: ?reset=users handler (localhost only) ───
+(function() {
+  var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  if (isLocal && location.search.indexOf('reset=users') !== -1) {
+    ['mtd_users','mtd_session','mtd_session_start','mtd_login_rl'].forEach(function(k){ localStorage.removeItem(k); });
+    Object.keys(localStorage).forEach(function(k){
+      if (k.startsWith('mtd_profile_') || k.startsWith('mtd_weight_history_') || k.startsWith('mtd_blackbox')) {
+        localStorage.removeItem(k);
+      }
+    });
+    alert('Base utilisateurs effacée. Rechargement...');
+    location.href = location.pathname;
+  }
+})();
+
+// ─── DEV ONLY: one-time wipe of test data on localhost ───
+if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && !localStorage.getItem('mtd_dev_wiped_v1')) {
+  ['mtd_users','mtd_session','mtd_session_start','mtd_login_rl'].forEach(function(k){ localStorage.removeItem(k); });
+  // Also remove all profile/history keys
+  Object.keys(localStorage).forEach(function(k){
+    if (k.startsWith('mtd_profile_') || k.startsWith('mtd_weight_history_') || k.startsWith('mtd_blackbox')) {
+      localStorage.removeItem(k);
+    }
+  });
+  localStorage.setItem('mtd_dev_wiped_v1', '1');
+}
+
 // ─── INIT ───
 // Auto-login check
 if (AUTH.isLoggedIn()) {
