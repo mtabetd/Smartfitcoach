@@ -2031,7 +2031,7 @@ function renderStep9(p) {
         });
         sheet.appendChild(h('div', {
           style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:15px;font-weight:700;color:var(--black,#0A0A09);margin-bottom:16px;text-align:center'
-        }, 'Ajouter \u00e0 ce repas'));
+        }, 'Remplacer ce repas — ' + slotLabel));
         var choiceRow = h('div', {style: 'display:flex;gap:12px'});
         var btnRecipe = h('button', {
           style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--border,#E5E4DE);border-radius:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
@@ -2058,7 +2058,7 @@ function renderStep9(p) {
         var root = document.getElementById('app') || p;
         root.appendChild(overlay);
       }
-    })(sl.key);
+    })(sl.key, sl.label);
   });
 
   // Day total
@@ -2277,9 +2277,11 @@ function renderModal(app) {
       steps.forEach(function(s) { sl.appendChild(h('li', {}, s || '')); });
     }
     body.appendChild(sl);
-    // Bug 3: use local vars instead of r.p/r.g/r.l/r.k to avoid NaN
+    // Vérification cohérence macros : P×4 + G×4 + L×9 ≈ kcal affiché
     var chk = prot * 4 + carbs * 4 + fats * 9;
-    body.appendChild(h('div', {'class': 'macro-check'}, 'V\u00e9rification : P\u00d74 + G\u00d74 + L\u00d79 = ' + chk + ' kcal (affich\u00e9 : ' + kcal + ' kcal)'));
+    var diffPctChk = kcal > 0 ? Math.abs((chk - kcal) / kcal * 100) : 0;
+    var chkColor = diffPctChk <= 5 ? 'var(--green,#1A4A1A)' : 'var(--orange,#6A4A1A)';
+    body.appendChild(h('div', {'class': 'macro-check', style: 'color:' + chkColor}, '\u2139\ufe0f \u00c9quivalent calorique macros : ' + chk + ' kcal' + (diffPctChk > 5 ? ' (\u00e9cart ' + Math.round(diffPctChk) + '% vs ' + kcal + ' kcal affich\u00e9)' : ' \u2713')));
     var expBtn = h('button', {'class': 'btn-primary', style: 'margin-top:12px;font-size:9px', onclick: function(e) { e.stopPropagation(); window.exportRecipePDF(r); }}, '\u21e9 Exporter cette recette en PDF');
     body.appendChild(expBtn);
     sheet.appendChild(body);
@@ -3361,15 +3363,23 @@ function renderSmoothieModal(app) {
   header.appendChild(h('button', {style:'position:absolute;top:12px;right:16px;background:none;border:none;color:#fff;font-size:20px;cursor:pointer',onclick:function(){S.modalSmoothie=null;window.render();}}, '×'));
   box.appendChild(header);
   var body = h('div', {style:'padding:16px 20px;overflow-y:auto;max-height:60vh'});
-  body.appendChild(h('div', {'class':'section-label'}, 'Ingrédients'));
-  sm.ingredients.forEach(function(ing) {
-    body.appendChild(h('div', {style:'font-size:13px;padding:4px 0;border-bottom:1px solid var(--border,#eee)'},
-      '• '+ing.qty+' '+ing.unit+' — '+ing.name));
-  });
-  body.appendChild(h('div', {'class':'section-label', style:'margin-top:12px'}, 'Préparation'));
-  sm.steps.forEach(function(step, i) {
-    body.appendChild(h('div', {style:'font-size:13px;padding:4px 0'}, (i+1)+'. '+step));
-  });
+  body.appendChild(h('div', {'class':'section-label'}, 'Ingr\u00e9dients'));
+  if (sm.ingredients && sm.ingredients.length > 0) {
+    sm.ingredients.forEach(function(ing) {
+      body.appendChild(h('div', {style:'font-size:13px;padding:4px 0;border-bottom:1px solid var(--border,#eee)'},
+        '\u2022 '+ing.qty+' '+ing.unit+' \u2014 '+ing.name));
+    });
+  } else {
+    body.appendChild(h('div', {style:'font-size:13px;color:var(--grey);font-style:italic;padding:4px 0'}, 'Ingr\u00e9dients non disponibles.'));
+  }
+  body.appendChild(h('div', {'class':'section-label', style:'margin-top:12px'}, 'Pr\u00e9paration'));
+  if (sm.steps && sm.steps.length > 0) {
+    sm.steps.forEach(function(step, i) {
+      body.appendChild(h('div', {style:'font-size:13px;padding:4px 0'}, (i+1)+'. '+step));
+    });
+  } else {
+    body.appendChild(h('div', {style:'font-size:13px;color:var(--grey);font-style:italic;padding:4px 0'}, '\u00c9tapes non disponibles.'));
+  }
   if (sm.tips) {
     body.appendChild(h('div', {style:'background:rgba(26,74,26,0.06);border-left:3px solid var(--green,#1A4A1A);padding:10px;border-radius:0 8px 8px 0;margin-top:12px;font-size:12px;color:var(--fg2)'}, '💡 '+sm.tips));
   }
