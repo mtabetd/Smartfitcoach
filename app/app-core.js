@@ -1546,10 +1546,7 @@ window.S = {
   triathlonSwimPace: null, triathlonBikePace: null, triathlonRunPace: null,
   triathlonProgram: null, triathlonWeek: 1, selectedTriDay: 0,
   // Cardio metrics
-  heartRateRest: null,        // FC repos en bpm (optionnel, défaut 65 si non renseigné)
-  // Devise
-  currency: 'EUR',
-  currencySymbol: '€'
+  heartRateRest: null        // FC repos en bpm (optionnel, défaut 65 si non renseigné)
 };
 
 // ═══════════════════════════════════════════════════════════════
