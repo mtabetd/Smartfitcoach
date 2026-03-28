@@ -1858,7 +1858,7 @@ function renderStep9(p) {
   // Salad bar button
   p.appendChild(h('button', {
     'class': 'regen-btn',
-    style: 'margin-top:8px;background:linear-gradient(135deg,#4CAF50,#8BC34A);color:#fff',
+    style: 'margin-top:8px;background:var(--green,#1A4A1A);color:var(--ivory,#FAFAF7)',
     onclick: function() { window.S.saladBar.open = true; if(window.render) window.render(); }
   }, '\uD83E\uDD57 Composer une salade'));
 
@@ -2214,7 +2214,7 @@ function renderSaladBar(p) {
 
   var macros = calcSaladMacros(sb);
   var pct = tgtMacros.k > 0 ? macros.k / tgtMacros.k : 0;
-  var barColor = pct < 0.9 ? '#4CAF50' : (pct <= 1.05 ? '#FF9800' : '#F44336');
+  var barColor = pct < 0.9 ? 'var(--green,#1A4A1A)' : (pct <= 1.05 ? 'var(--orange,#6A4A1A)' : 'var(--red,#5A1010)');
 
   // ── Header ──
   var header = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px' });
@@ -2278,8 +2278,8 @@ function renderSaladBar(p) {
       var isSel = selIdx >= 0;
       var canAdd = isSel || isRadio || selectedItems.length < maxSel;
       var chipStyle = 'padding:5px 10px;border-radius:20px;border:1.5px solid ' +
-        (isSel ? '#4CAF50' : 'var(--border)') +
-        ';background:' + (isSel ? 'rgba(76,175,80,0.12)' : 'var(--card)') +
+        (isSel ? 'var(--green,#1A4A1A)' : 'var(--border)') +
+        ';background:' + (isSel ? 'var(--greenbg,rgba(26,74,26,.06))' : 'var(--card)') +
         ';color:var(--text);font-size:12px;cursor:' + (canAdd ? 'pointer' : 'not-allowed') +
         ';font-weight:' + (isSel ? '700' : '400') +
         ';opacity:' + (canAdd ? '1' : '0.45') + ';transition:all 0.2s';
