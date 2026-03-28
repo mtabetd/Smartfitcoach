@@ -1904,7 +1904,58 @@ function renderStep9(p) {
   ];
   slots.forEach(function(sl) {
     var r = day[sl.key];
-    if (!r) return;
+    // Slot vide — afficher un placeholder cliquable pour ajouter un repas
+    if (!r) {
+      (function(slotKey, slotLabel) {
+        var emptyCard = h('div', {
+          style: 'border:1.5px dashed var(--border,#E5E4DE);border-radius:10px;padding:16px;margin-bottom:16px;text-align:center;cursor:pointer;color:var(--grey,#888)',
+          onclick: function() { S._addMealModalSlot = slotKey; window.render(); }
+        });
+        emptyCard.appendChild(h('div', {style: 'font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;color:var(--grey,#888)'}, slotLabel));
+        emptyCard.appendChild(h('div', {style: 'font-size:22px;margin-bottom:4px'}, '+'));
+        emptyCard.appendChild(h('div', {style: 'font-size:12px'}, 'Ajouter un repas'));
+        p.appendChild(emptyCard);
+
+        if (S._addMealModalSlot === slotKey) {
+          var overlay = h('div', {
+            style: 'position:fixed;inset:0;background:rgba(10,10,9,0.45);z-index:9000;display:flex;align-items:flex-end;justify-content:center',
+            onclick: function(e) {
+              if (e.target === overlay) { S._addMealModalSlot = null; window.render(); }
+            }
+          });
+          var sheet = h('div', {
+            style: 'background:var(--card,#FFFFFF);border-radius:18px 18px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 -4px 24px rgba(0,0,0,0.12)'
+          });
+          sheet.appendChild(h('div', {
+            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:15px;font-weight:700;color:var(--black,#0A0A09);margin-bottom:16px;text-align:center'
+          }, 'Ajouter \u00e0 ' + slotLabel));
+          var choiceRow = h('div', {style: 'display:flex;gap:12px'});
+          choiceRow.appendChild(h('button', {
+            style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--border,#E5E4DE);border-radius:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+            onclick: function(e) {
+              e.stopPropagation();
+              S._addMealModalSlot = null;
+              S._recipePicker = { slotKey: slotKey, query: '' };
+              window.render();
+            }
+          }, [h('span', {style: 'font-size:22px'}, '\uD83C\uDF7D'), h('span', {}, 'Choisir une recette')]));
+          choiceRow.appendChild(h('button', {
+            style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--blue,#1A3C5E);border-radius:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--blue,#1A3C5E);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+            onclick: function(e) {
+              e.stopPropagation();
+              S._addMealModalSlot = null;
+              window.render();
+              if (window.openSaladComposer) window.openSaladComposer(slotKey);
+            }
+          }, [h('span', {style: 'font-size:22px'}, '\uD83E\uDD57'), h('span', {}, 'Composer une salade')]));
+          sheet.appendChild(choiceRow);
+          overlay.appendChild(sheet);
+          var root = document.getElementById('app') || p;
+          root.appendChild(overlay);
+        }
+      })(sl.key, sl.label);
+      return;
+    }
     dayTotal += r.k || 0;
     dayTotalP += r.p || 0;
     dayTotalG += r.g || 0;
@@ -1940,9 +1991,10 @@ function renderStep9(p) {
     mc.appendChild(h('span', {}, 'P ' + r.p + 'g'));
     mc.appendChild(h('span', {}, 'L ' + r.l + 'g'));
     card.appendChild(mc);
+    var lv = r.lv || 0;
     var stars = '';
-    for (var s = 0; s < r.lv; s++) stars += '\u2605';
-    for (var s2 = r.lv; s2 < 4; s2++) stars += '\u2606';
+    for (var s = 0; s < lv; s++) stars += '\u2605';
+    for (var s2 = lv; s2 < 4; s2++) stars += '\u2606';
     card.appendChild(h('div', {'class': 'meal-level'}, stars));
     card.appendChild(h('div', {'class': 'swap-btn', onclick: function(e) {
       e.stopPropagation();
@@ -1955,8 +2007,8 @@ function renderStep9(p) {
     }}, '\u21bb'));
     p.appendChild(card);
 
-    // Bouton "+ Ajouter à ce repas" avec mini-modal
-    (function(slotKey) {
+    // Bouton "Remplacer ce repas" avec mini-modal (slot déjà occupé)
+    (function(slotKey, slotLabel) {
       var addBtn = h('button', {
         style: 'width:100%;padding:8px 12px;margin-bottom:8px;background:transparent;border:1.5px dashed var(--border,#E5E4DE);border-radius:10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--blue,#1A3C5E);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
         onclick: function(e) {
@@ -1964,7 +2016,7 @@ function renderStep9(p) {
           S._addMealModalSlot = slotKey;
           window.render();
         }
-      }, '+ Ajouter \u00e0 ce repas');
+      }, '\u21ba Remplacer ce repas');
       p.appendChild(addBtn);
 
       if (S._addMealModalSlot === slotKey) {
@@ -2129,7 +2181,7 @@ function renderStep9(p) {
   p.appendChild(h('button', {
     'class': 'regen-btn',
     style: 'margin-top:8px;background:var(--green,#1A4A1A);color:var(--ivory,#FAFAF7)',
-    onclick: function() { window.S.saladBar.open = true; if(window.render) window.render(); }
+    onclick: function() { if (!window.S.saladBar) window.S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' }; window.S.saladBar.open = true; if(window.render) window.render(); }
   }, '\uD83E\uDD57 Composer une salade'));
 
   // Smoothie bar button (visible seulement si S.whey === true)

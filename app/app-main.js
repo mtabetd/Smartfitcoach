@@ -54,7 +54,8 @@ var PROFILE_KEYS = [
   'lang','weightUnit','heightUnit',
   'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
   'heartRateRest','yogaLevel','yogaGoal','yogaDays',
-  'wantsDessert'
+  'wantsDessert',
+  'wheyFlavors','saladBuilder'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.

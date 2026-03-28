@@ -2620,7 +2620,7 @@ function filterRecipes(pool,type){
         var al=s.allergies[a].toLowerCase();
         if(al==='fruits \u00e0 coque'){var nc=ing.replace(/noix de coco|noix de muscade/g,'');if((/amande|noix|noisette|cajou|pistache|pecan|macadamia/).test(nc))return false;}
         if(al==='arachides'&&(/arachide|cacahu[e\u00e8]te/).test(ing))return false;
-        if(al==='oeufs'&&(/oeuf|\u0153uf/).test(ing))return false;
+        if((al==='oeufs'||al==='\u0153ufs')&&(/oeuf|\u0153uf/).test(ing))return false;
         if(al==='poisson'&&(/saumon|thon|cabillaud|dorade|sardine|maquereau|poisson|anchois|merlu|truite|sole|lotte|morue/).test(ing))return false;
         if(al==='crustac\u00e9s'&&(/crevette|crustac|homard|crabe|gambas/).test(ing))return false;
         if(al==='soja'&&(/soja|tofu|edamame/).test(ing))return false;
