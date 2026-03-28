@@ -6776,24 +6776,42 @@
    * @returns {Array} Pool de recettes au format simplifié
    */
   function getPool(mealType) {
-    // Base : anciens pools depuis recipes-db.js
+    // Base : anciens pools depuis recipes-db.js (L001-L350, format legacy)
     var oldPool = [];
     if (mealType === 'breakfast' && window.breakfast) oldPool = window.breakfast.slice();
     else if (mealType === 'lunch'  && window.lunch)   oldPool = window.lunch.slice();
     else if (mealType === 'snack'  && window.snack)   oldPool = window.snack.slice();
     else if (mealType === 'dinner' && window.dinner)  oldPool = window.dinner.slice();
 
-    // Ajout : nouvelles recettes R201+ converties au format simplifié
+    // Ajout : nouvelles recettes R201+ — utilise mealTypes[] en priorité
     var oldNames = {};
     oldPool.forEach(function(r) { oldNames[r.n] = true; });
 
     RECIPES_DB.forEach(function(recipe) {
-      var type = classifyMealType(recipe);
-      var include = (type === mealType) ||
-                    (type === 'both' && (mealType === 'lunch' || mealType === 'dinner'));
+      var mt = recipe.mealTypes || [];
+      var include = false;
+
+      if (mt.length > 0) {
+        // Utiliser mealTypes[] directement (source de vérité)
+        if (mealType === 'breakfast') {
+          include = mt.indexOf('breakfast') >= 0;
+        } else if (mealType === 'snack') {
+          include = mt.indexOf('snack') >= 0;
+        } else if (mealType === 'lunch') {
+          include = mt.indexOf('lunch') >= 0 || mt.indexOf('both') >= 0;
+        } else if (mealType === 'dinner') {
+          include = mt.indexOf('dinner') >= 0 || mt.indexOf('both') >= 0;
+        }
+      } else {
+        // Fallback sur les tags si mealTypes absent (anciennes recettes)
+        var type = classifyMealType(recipe);
+        include = (type === mealType) ||
+                  (type === 'both' && (mealType === 'lunch' || mealType === 'dinner'));
+      }
+
       if (!include) return;
       var simple = toSimpleFormat(recipe);
-      if (!oldNames[simple.n]) {   // évite les doublons par nom
+      if (!oldNames[simple.n]) {
         oldPool.push(simple);
         oldNames[simple.n] = true;
       }
