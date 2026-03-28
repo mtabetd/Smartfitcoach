@@ -10,64 +10,137 @@ function filterExerciseByMedical(ex, med) {
 
   var n = (ex.n || ex.name || '').toLowerCase();
 
-  // Épaules fragiles → pas de développé militaire, élévations latérales, dips, upright row
-  // BUG FIX: les noms d'exercices en DB sont sans accents (e.g. "Elevations laterales")
-  // et "Extension overhead haltere" doit être exclu aussi
+  // ── ÉPAULES / COIFFE DES ROTATEURS ──
+  // Tout mouvement au-dessus de 90° d'abduction + rotation interne forcée = impingement sous-acromial,
+  // risque déchirure sus-épineux, tendinite long biceps.
+  // Exclure : overhead press (toutes variantes), upright row (rotation interne forcée),
+  // dips (tension antérieure coiffe), élévations frontales/latérales lourdes, arnold press.
   if (med.shoulders || med.rotatorCuff) {
-    if (/militaire|overhead press|overhead|el[eé]vation.*lat[eé]rale|elevations? lat[eé]rales?|dips|upright row/.test(n)) return false;
+    if (/militaire|d[eé]velopp[eé] militaire|developpe militaire|d[eé]velopp[eé] halteres|developpe halteres|arnold press|overhead press|el[eé]vation.*lat[eé]rale|elevations? lat[eé]rales?|elevation frontale|elevations? frontales?|dips|upright row|tirage menton|lu raise/.test(n)) return false;
   }
 
-  // Coudes → pas de curl barre, extensions triceps, skull crushers
-  // BUG FIX: "Skull crushers (barre front)" ne matchait pas /skullcrusher/ (avec espace)
-  // BUG FIX: "Barre au front skullcrusher" était OK mais "skull crushers" non
+  // ── COUDES — ÉPICONDYLITE LATÉRALE (tennis elbow) / MÉDIALE (golfer's elbow) ──
+  // Curl barre droite = flexion résistée supination → épicondyle médial.
+  // Rowing prise large = valgus forcé sous charge → épicondyle latéral.
+  // Extensions triceps = tension insertion triceps à l'olécrâne.
   if (med.elbows) {
-    if (/curl barre|extension.*triceps|french press|skull.?crusher|skullcrusher/.test(n)) return false;
+    if (/curl barre|curl.*halteres|curl marteau|curl concentre|curl pupitre|curl 21|chin.?up|skull.?crusher|barre.*front skullcrusher|french press|extension.*triceps|rowing barre|rowing.*prise large|tirage vertical/.test(n)) return false;
   }
 
-  // Bas du dos / hernie discale → pas de soulevé de terre, good morning, jefferson
-  // BUG FIX: "Souleve de terre" (sans accent) ne matchait pas /soulevé.*terre/
-  // Correction: accepter avec ou sans accent
+  // ── POIGNETS ──
+  // Front squat / OHS = flexion dorsale forcée des poignets sous charge axiale.
+  if (med.wrists) {
+    if (/curl barre|wrist curl|curl.*poignet|front squat|overhead squat/.test(n)) return false;
+  }
+
+  // ── BAS DU DOS / HERNIE DISCALE L4-L5 / L5-S1 ──
+  // Compression axiale + flexion lombaire sous charge = augmentation pression intradiscale
+  // → herniation / aggravation (Nachemson 1966, McGill 2007).
+  // Crunch/sit-up classique = flexion lombaire répétée → déconseillé en hernie active.
+  // RDL, rowing buste penché = flexion du tronc sous charge.
   if (med.lowerBack || med.herniaDisc) {
-    if (/soulev[eé].*terre|deadlift|good morning|jefferson|hyperextension.*lourde/.test(n)) return false;
+    if (/soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning|jefferson|squat barre|back squat|hack squat|presse.*cuisse|leg press|rowing barre|pendlay row|rowing t.?bar|t.?bar row|crunch|sit.?up|ab wheel|roue abdominal|hyperextension/.test(n)) return false;
   }
 
-  // Hernie inguinale → pas de squat (toute variante), leg press/presse à cuisses, soulevé de terre
-  // BUG FIX: "Squat barre", "Hack squat machine", "Goblet squat" ne matchaient pas /squat.*lourd/
-  // BUG FIX: "Presse a cuisses" ne matchait pas /leg press/ (nommé différemment en DB)
-  // BUG FIX: "Souleve de terre" (sans accent) ignoré
+  // ── HERNIE INGUINALE ──
+  // Valsalva + augmentation pression intra-abdominale = risque d'étranglement herniaire.
   if (med.herniaInguinal) {
-    if (/squat|presse.*cuisse|leg press|soulev[eé].*terre/.test(n)) return false;
+    if (/squat|presse.*cuisse|leg press|soulev[eé].*terre|deadlift|hip thrust|burpee/.test(n)) return false;
   }
 
-  // Genoux → pas de squat complet, leg extension, fentes profondes, jump squat, pistol squat
-  // Note: leg extension (quadriceps) matche bien /leg extension/ — correct
+  // ── GENOUX / LCA ──
+  // Leg extension = cisaillement tibio-fémoral antérieur en contraction isolée = stress maximal LCA.
+  // Pistol squat / sissy squat = flexion >120° = risque ligamentaire + méniscal.
+  // Box jump / jump squat = impact réception = risque re-rupture LCA fragilisé.
+  // Squat barre / squat bulgare profond = cisaillement sous charge.
+  // Fentes avant = genou dépasse les orteils = cisaillement tibio-fémoral.
   if (med.knees || med.acl) {
-    if (/squat complet|leg extension|fente.*profonde|jump squat|pistol squat/.test(n)) return false;
+    if (/leg extension|pistol squat|sissy squat|jump squat|box jump|fente.*avant|squat bulgare|squat barre/.test(n)) return false;
   }
 
-  // Hanches → pas de sumo, deep squat, squat complet
+  // ── HANCHES ──
   if (med.hips) {
-    if (/sumo|deep squat|squat complet/.test(n)) return false;
+    if (/sumo|deep squat|pistol squat|fente laterale/.test(n)) return false;
   }
 
-  // Cervicales/nuque → pas de shrugs, neck press, trapèze lourd
+  // ── CERVICALES / NUQUE ──
+  // Shrugs lourds = compression disques cervicaux sous charge axiale.
+  // Behind-neck = compression C4-C6 + impingement sous-acromial.
   if (med.neck) {
-    if (/shrug|neck press|trap[eè]ze lourd/.test(n)) return false;
+    if (/shrug|neck press|behind.?neck|derriere.*nuque/.test(n)) return false;
   }
 
-  // Ostéoporose → pas d'exercices à impact élevé, pas de charges >70% 1RM implicites
-  // BUG FIX: osteoporosis n'avait aucun filtrage d'exercices concrets
+  // ── OSTÉOPOROSE ──
+  // (Sinaki & Mikkelsen, JAMA 1984; Sinaki, Spine 2002)
+  // Flexion vertébrale répétée → fractures de compression T6-L2.
+  // Impacts élevés (sauts) → fractures trabéculaires des plateaux vertébraux.
+  // NOTE : les exercices en extension et mise en charge (marche, squat léger, bird-dog) sont BÉNÉFIQUES.
   if (med.osteoporosis) {
-    if (/jump|saut|box jump|burpee|kettlebell swing|arraché|épaulé|snatch|clean/.test(n)) return false;
+    // Impacts élevés
+    if (/box jump|jump squat|burpee|pompes plyometriques|corde.*sauter|jumping jacks/.test(n)) return false;
+    // Flexion vertébrale répétée sous charge — fractures de compression
+    if (/crunch|sit.?up|ab wheel|roue abdominal|cable crunch|dragon flag|windshield wiper|russian twist|jefferson curl/.test(n)) return false;
   }
 
-  // HTA sévère → pas de Valsalva (soulevé de terre lourd, squat lourd, développé couché lourd)
-  // BUG FIX: hypertension n'avait aucun filtrage d'exercices concrets
+  // ── HTA SÉVÈRE ──
+  // Valsalva prolongé → pic PA systolique +60 à +100 mmHg (Lamotte et al., Arch Cardiovasc Dis 2015).
+  // Exclure les exercices impliquant charge ≥85% 1RM avec apnée obligatoire.
   if (med.hypertension) {
-    if (/soulev[eé].*terre|soulevé.*terre|arraché|épaulé|snatch|clean/.test(n)) return false;
+    if (/soulev[eé].*terre|deadlift|squat barre|l.?sit|dragon flag/.test(n)) return false;
+  }
+
+  // ── POLYARTHRITE RHUMATOÏDE ──
+  // (Smolen et al., Ann Rheum Dis 2020 — EULAR guidelines)
+  // En poussée : repos articulaire strict. En rémission : exercices doux à intensité modérée.
+  // Contre-indiqués : charges lourdes >70% 1RM, impacts répétés, exercices en extension forcée.
+  if (med.rheumatoidArthritis) {
+    if (/soulev[eé].*terre|deadlift|arraché|snatch|clean|jump squat|box jump|burpee|squat barre/.test(n)) return false;
+  }
+
+  // ── MÉNISQUE LÉSÉ / OPÉRÉ ──
+  // Flexion >90° sous charge = compression méniscale → déchirure ou aggravation.
+  // Cisaillement en rotation (fentes, pivot squat) = risque méniscal.
+  if (med.meniscus) {
+    if (/leg extension|pistol squat|sissy squat|squat bulgare|fente.*avant|jump squat|box jump/.test(n)) return false;
+  }
+
+  // ── FIBROMYALGIE ──
+  // (Häuser et al., Cochrane 2017 ; EULAR recommendations 2017)
+  // Exercices à haute intensité = amplification centrale de la douleur (central sensitization).
+  // Contre-indiqués : HIIT intense, efforts maximaux, charges lourdes.
+  // Recommandés : aérobie léger, stretching, yoga, natation (remise en forme progressive).
+  if (med.fibromyalgia) {
+    if (/soulev[eé].*terre|deadlift|squat barre|burpee|box jump|jump squat|pompes plyometriques/.test(n)) return false;
+  }
+
+  // ── PIEDS / FASCIITE PLANTAIRE ──
+  // Impacts répétés + charge sur les pieds = aggravation fasciite plantaire.
+  if (med.feet) {
+    if (/corde.*sauter|box jump|jump squat|burpee|course|jogging|jumping jacks/.test(n)) return false;
   }
 
   return true;
+}
+
+// ─── ALERTE GROSSESSE SPORT (ACOG 2020, IOC 2018) ───
+// Renvoie un message d'alerte si S.pregnant et conditions dangereuses détectées.
+// ACOG 2020 : Contre-indications T2/T3 — décubitus dorsal >20 min (compression veine cave inférieure),
+// Valsalva (squat lourd, soulevé de terre), sports de contact, altitude >2500m.
+// 150 min/semaine d'activité modérée recommandées (ACOG 2020, OMS 2020).
+function getPregnancySportWarning() {
+  var s = window.S;
+  if (!s || !s.pregnant || s.sex !== 'femme') return null;
+  var week = s.pregnancyWeek || 0;
+  if (week < 14) {
+    // T1 : nausées, fatigue → intensité réduite, pas de sur-échauffement
+    return '⚠ Grossesse T1 (sem. 1-13) : Activité physique modérée recommandée (150 min/sem, ACOG 2020). Évitez le sur-échauffement (>38,5°C). Consultez votre obstétricien avant tout programme intensif.';
+  } else if (week < 28) {
+    // T2 : veine cave — décubitus dorsal contre-indiqué
+    return '⚠ Grossesse T2 (sem. 14-27, ACOG 2020) : (1) Évitez le décubitus dorsal prolongé >20 min — compression de la veine cave inférieure. (2) Pas de Valsalva (squat lourd, soulevé de terre) — risque de chute de pression. (3) Sports de contact contre-indiqués. Exercices recommandés : natation, marche, vélo stationnaire, yoga prénatal.';
+  } else {
+    // T3 : mêmes contre-indications + risque chute de l'équilibre
+    return '⚠ Grossesse T3 (sem. 28+, ACOG 2020) : (1) Décubitus dorsal INTERDIT. (2) Valsalva interdit (soulevé de terre, squat lourd, développé couché). (3) Sports de contact et à risque de chute contre-indiqués. (4) Équilibre altéré — préférez exercices guidés ou en appui. Consultez votre obstétricien avant chaque modification du programme.';
+  }
 }
 
 // ─── PROGRAM GENERATION ───
@@ -563,15 +636,16 @@ function renderMuscuMedicalQ(p) {
   p.appendChild(h('div', {'class': 'section-label'}, 'Avez-vous des douleurs ou fragilités ?'));
 
   var zonesData = [
-    {key: 'shoulders', label: 'Épaules',        icon: '💪'},
-    {key: 'elbows',    label: 'Coudes',          icon: '🦾'},
-    {key: 'wrists',    label: 'Poignets',        icon: '✋'},
-    {key: 'neck',      label: 'Nuque/Cervicales',icon: '🧠'},
-    {key: 'upperBack', label: 'Haut du dos',     icon: '🔝'},
-    {key: 'lowerBack', label: 'Bas du dos',      icon: '⬇'},
-    {key: 'hips',      label: 'Hanches',         icon: '🦴'},
-    {key: 'knees',     label: 'Genoux',          icon: '🦵'},
-    {key: 'ankles',    label: 'Chevilles',       icon: '🦶'}
+    {key: 'shoulders', label: 'Épaules',           icon: '💪'},
+    {key: 'elbows',    label: 'Coudes',             icon: '🦾'},
+    {key: 'wrists',    label: 'Poignets',           icon: '✋'},
+    {key: 'neck',      label: 'Nuque/Cervicales',   icon: '🧠'},
+    {key: 'upperBack', label: 'Haut du dos',        icon: '🔝'},
+    {key: 'lowerBack', label: 'Bas du dos',         icon: '⬇'},
+    {key: 'hips',      label: 'Hanches',            icon: '🦴'},
+    {key: 'knees',     label: 'Genoux',             icon: '🦵'},
+    {key: 'ankles',    label: 'Chevilles',          icon: '🦶'},
+    {key: 'feet',      label: 'Pieds (fasciite)',   icon: '🦵'}
   ];
 
   var zonesGrid = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px'});
@@ -589,12 +663,15 @@ function renderMuscuMedicalQ(p) {
   p.appendChild(h('div', {'class': 'section-label'}, 'Avez-vous un diagnostic confirmé ?'));
 
   var antecedentsData = [
-    {key: 'herniaDisc',     label: 'Hernie discale (IRM)'},
-    {key: 'herniaInguinal', label: 'Hernie inguinale'},
-    {key: 'rotatorCuff',    label: 'Déchirure coiffe des rotateurs'},
-    {key: 'acl',            label: 'LCA opéré/fragilisé'},
-    {key: 'osteoporosis',   label: 'Ostéoporose'},
-    {key: 'hypertension',   label: 'HTA sévère'}
+    {key: 'herniaDisc',           label: 'Hernie discale (IRM)'},
+    {key: 'herniaInguinal',       label: 'Hernie inguinale'},
+    {key: 'rotatorCuff',          label: 'Déchirure coiffe des rotateurs'},
+    {key: 'acl',                  label: 'LCA opéré/fragilisé'},
+    {key: 'osteoporosis',         label: 'Ostéoporose'},
+    {key: 'hypertension',         label: 'HTA sévère'},
+    {key: 'rheumatoidArthritis',  label: 'Polyarthrite rhumatoïde (PR)'},
+    {key: 'fibromyalgia',         label: 'Fibromyalgie'},
+    {key: 'meniscus',             label: 'Ménisque lésé/opéré'}
   ];
 
   var antGrid = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px'});
@@ -641,7 +718,7 @@ function renderMuscuMedicalQ(p) {
   p.appendChild(textarea);
 
   // ─── Avertissement si sévère ou antécédent grave ───
-  var hasSevere = med.painLevel === 3 || med.herniaDisc || med.rotatorCuff || med.acl;
+  var hasSevere = med.painLevel === 3 || med.herniaDisc || med.rotatorCuff || med.acl || med.fibromyalgia || med.meniscus;
   if (hasSevere) {
     var warn = h('div', {style: 'background:#FFEBEE;border-left:4px solid #C0392B;padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#7B1A1A;line-height:1.6'});
     warn.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, '\u26A0 Douleur sévère ou antécédent grave détecté. Nous adapterons le programme en mode réhabilitation.'));
@@ -1931,7 +2008,8 @@ function renderMusculationProgram(p) {
     if (med.knees || med.acl) restrictions.push('\u26A0 Genoux\u00a0: squats profonds remplac\u00e9s');
     if (med.herniaInguinal) restrictions.push('\u26A0 Hernie inguinale\u00a0: exercices hyperpressifs retir\u00e9s');
     if (med.hypertension) restrictions.push('\u26A0 HTA\u00a0: intensit\u00e9 plafonn\u00e9e RPE\u00a07/10, Valsalva interdit');
-    if (med.osteoporosis) restrictions.push('\u26A0 Ost\u00e9oporose\u00a0: charges \u2264\u00a070\u00a0% 1RM, pas d\'impacts');
+    if (med.osteoporosis) restrictions.push('\u26A0 Ost\u00e9oporose\u00a0: charges \u2264\u00a070\u00a0% 1RM, pas d\'impacts ni flexions vert\u00e9brales (Sinaki, Spine 2002)');
+    if (med.rheumatoidArthritis) restrictions.push('\u26A0 Polyarthrite rhumato\u00efde\u00a0: charges l\u00e9g\u00e8res, exercices doux en r\u00e9mission uniquement \u2014 arr\u00eatez en cas de pouss\u00e9e (EULAR 2020)');
     if (restrictions.length > 0) {
       var medBanner = h('div', {style: 'background:#FFF3E0;border-left:4px solid #E67E22;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5D4037'});
       medBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, '\uD83C\uDFE5 Programme adapt\u00e9 \u00e0 votre bilan m\u00e9dical'));
@@ -1943,6 +2021,12 @@ function renderMusculationProgram(p) {
       medBanner.appendChild(editMed);
       p.appendChild(medBanner);
     }
+  }
+
+  // ─── ALERTE GROSSESSE SPORT (ACOG 2020) ───
+  var pregSportWarn = getPregnancySportWarning();
+  if (pregSportWarn) {
+    p.appendChild(h('div', {style: 'background:#FFF3E0;border-left:4px solid #E8A87C;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5D4037;line-height:1.6'}, pregSportWarn));
   }
 
   // ─── CONFLITS OBJECTIFS NUTRITION × SPORT ───

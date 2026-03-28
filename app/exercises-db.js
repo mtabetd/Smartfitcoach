@@ -491,8 +491,9 @@ var EXERCISES = {
       eq: "Halteres",
       sets: "4\u00d78-12",
       rest: "90s",
+      warn: "Eviter si conflit sous-acromial, tendinite coiffe des rotateurs ou impingement — tout mouvement overhead depasse 90 degres d'abduction = risque coiffe",
       desc: "Assis ou debout, pousser les halteres de l'epaule vers le haut.",
-      tips: ["Plus grande amplitude qu'a la barre", "Coudes legerement en avant du corps", "Variante plus stable pour les epaules"],
+      tips: ["Plus grande amplitude qu'a la barre", "Coudes legerement en avant du corps", "Variante plus stable pour les epaules", "Ne jamais depasser la douleur — toute douleur au pincement en haut = arreter"],
       lv: 2,
       tags: ["epaules", "force", "compose"]
     }
@@ -883,8 +884,9 @@ var EXERCISES = {
       eq: "Barre ou halteres",
       sets: "4\u00d78-12",
       rest: "90s",
+      warn: "Contre-indique si hernie discale L4/L5 ou L5/S1 — la flexion du tronc sous charge comprime le disque posterieurement",
       desc: "Debout, barre aux hanches, descendre en gardant les jambes semi-flechies jusqu'au tibia.",
-      tips: ["Dos plat obligatoire", "Sentir l'etirement des ischios", "Barre contre les jambes tout le long"],
+      tips: ["Dos plat OBLIGATOIRE — la moindre flexion lombaire sous charge = risque disque", "Sentir l'etirement des ischios", "Barre contre les jambes tout le long", "Amplitude limitee a la flexion de hanche sans perte de lordose"],
       lv: 2,
       tags: ["jambes", "ischios", "fessiers", "compose"]
     },
@@ -1028,8 +1030,9 @@ var EXERCISES = {
       sets: "4\u00d78-12",
       rest: "90s",
       video: "https://www.youtube.com/results?search_query=souleve+de+terre+roumain+romanian+deadlift+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+      warn: "Contre-indique si hernie discale L4/L5 ou L5/S1 — descente sous charge = compression posterolaterale du disque",
       desc: "Debout, descendre la barre le long des cuisses en poussant les hanches en arriere.",
-      tips: ["Jambes quasi tendues", "Dos droit en permanence", "Sentir l'etirement des ischio-jambiers"],
+      tips: ["Jambes quasi tendues", "Dos PLAT en permanence — ne jamais arrondir le lombaire", "Sentir l'etirement des ischio-jambiers", "Amplitude limitee : arreter quand le dos commence a s'arrondir"],
       lv: 2,
       tags: ["fessiers", "ischio-jambiers", "chaine posterieure"]
     },
@@ -1148,6 +1151,7 @@ var EXERCISES = {
       sets: "3\u00d720 (total)",
       rest: "45s",
       video: "https://www.youtube.com/results?search_query=russian+twist+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+      warn: "Attention osteoporose severe et spondylarthrite : la rotation axiale sous charge peut fragiliser le rachis. Preferer planche laterale ou rotation debout a faible amplitude.",
       desc: "Assis, pieds decolles du sol, faire pivoter le buste de gauche a droite.",
       tips: ["Contractez le transverse (rentrer le nombril) avant tout mouvement", "Pieds decolles pour plus de difficulte", "Rotation du buste, pas des bras", "Ajouter du poids progressivement"],
       lv: 2,
@@ -1172,6 +1176,7 @@ var EXERCISES = {
       sets: "3\u00d78-12",
       rest: "60s",
       video: "https://www.youtube.com/results?search_query=ab+wheel+rollout+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+      warn: "Contre-indique si osteoporose — le rollout crée une flexion vertebrale avec charge eccentric elevee (risque fracture de compression — Sinaki, Spine 2002). Preferer planche ou bird-dog.",
       desc: "A genoux, faire rouler la roue devant soi en gardant le dos droit, puis revenir.",
       tips: ["Ne pas cambrer le dos", "Contracter les abdos tout le long", "Commencer a genoux"],
       lv: 3,

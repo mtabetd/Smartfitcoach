@@ -31,7 +31,8 @@ var PROFILE_KEYS = [
   'golfLevel','golfGoal','golfDays','golfHandicap',
   'triathlonGoal','triathlonLevel','triathlonWeak',
   'triathlonSwimPace','triathlonBikePace','triathlonRunPace',
-  'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep'
+  'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
+  'shopChecked','weekPlan','selectedDay'
 ];
 function saveProfile() {
   try {

@@ -22,6 +22,9 @@
   --blue:#1A3A6A; --bluebg:rgba(26,58,106,.06);
   --orange:#6A4A1A; --orangebg:rgba(106,74,26,.06);
   --red:#5A1010; --redbg:rgba(90,16,16,.06);
+  /* Semantic aliases used by newer components (shopping list, salad bar, budget, set-tracker) */
+  --bg:#FAFAF7; --text:#0A0A09; --text-secondary:#6B6B65;
+  --card:#F4F4F0; --surface:#F4F4F0; --accent:#1A4A1A;
 }
 
 /* ── RESET & BASE ── */
@@ -404,12 +407,8 @@ canvas.weight-chart{width:100%;height:200px}
 <script src="./app-main.js"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  // Unregister old SW and clear caches to fix stale content
-  navigator.serviceWorker.getRegistrations().then(function(regs) {
-    regs.forEach(function(r) { r.unregister(); });
-  });
-  caches.keys().then(function(names) {
-    names.forEach(function(n) { caches.delete(n); });
+  navigator.serviceWorker.register('./sw.js').catch(function(err) {
+    console.warn('[SW] Registration failed:', err);
   });
 }
 </script>

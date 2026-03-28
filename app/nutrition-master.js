@@ -203,7 +203,8 @@
    *   caloriesCheck: number,
    *   carbCyclingApplied: boolean,
    *   clampedToBMR: boolean,
-   *   errors: string[]
+   *   errors: string[],
+   *   timingAdvice: { postWorkoutProtein: number, preWorkoutCarbs: number, electrolytesNeeded: boolean }
    * }}
    */
   function compute(inputs) {
@@ -241,6 +242,14 @@
       carbsGrams   * KCAL_PER_CARB
     );
 
+    // ─── TIMING NUTRITIONNEL SPORTIF ────────────────────────────────────────────
+    // Fenêtre anabolique post-entraînement : 20-40g protéines dans les 2h
+    // (Moore et al. Am J Clin Nutr 2009 ; Churchward-Venne et al. 2012)
+    // Pré-entraînement : glucides IG modéré 30-80g, 2-3h avant
+    // (Jeukendrup & Killer, Ann Nutr Metab 2010)
+    var postWorkoutProtein = Math.round(Math.min(40, Math.max(20, proteinGrams * 0.20)));
+    var preWorkoutCarbs    = Math.round(Math.min(80, Math.max(30, carbsGrams   * 0.25)));
+
     return {
       inputs:             inputs,
       bmr:                bmr,
@@ -252,7 +261,13 @@
       caloriesCheck:      caloriesCheck,
       carbCyclingApplied: carbCyclingApplied,
       clampedToBMR:       clampedToBMR,
-      errors:             []
+      errors:             [],
+      // Timing nutritionnel exposé pour l'UI (Moore et al. AJCN 2009 ; Jeukendrup & Killer 2010)
+      timingAdvice: {
+        postWorkoutProtein: postWorkoutProtein, // g — 0-2h après séance
+        preWorkoutCarbs:    preWorkoutCarbs,    // g — 2-3h avant séance
+        electrolytesNeeded: inputs.trainingDay && inputs.activityLevel >= 1.725
+      }
     };
   }
 
