@@ -14527,7 +14527,7 @@
     // Adapter les quantités selon la fréquence de courses de l'utilisateur
     var shopFreq = options.shopFreq || (window.S && window.S.shopFreq) || 'weekly';
     // Nombre de jours couverts par chaque course
-    var FREQ_DAYS = { daily: 1, '2x_week': 4, weekly: 7, biweekly: 7 };
+    var FREQ_DAYS = { daily: 1, '2x_week': 4, weekly: 7, biweekly: 14 };
     var freqDays = FREQ_DAYS[shopFreq] || 7;
     var freqRatio = freqDays / 7; // ratio pour scaler les quantités
 

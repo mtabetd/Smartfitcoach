@@ -1637,6 +1637,30 @@ function renderCrossfitProgram(p) {
   }
   p.appendChild(wodCard);
 
+  // ─── SCALING OPTIONS ───
+  var _sc = wod.scaled;
+  if (_sc) {
+    var scCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #E07B00;background:rgba(224,123,0,0.04);margin-top:8px'});
+    scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E07B00;margin-bottom:6px'}, '⬇ SCALING'));
+    if (Array.isArray(_sc.movements) && _sc.movements.length) {
+      _sc.movements.forEach(function(m) {
+        if (!m.note) return;
+        scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);padding:2px 0'}, (m.name ? m.name + ' ' : '') + m.note));
+      });
+    }
+    if (_sc.note) scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#E07B00;margin-top:4px;font-style:italic'}, _sc.note));
+    p.appendChild(scCard);
+  }
+
+  // ─── RX+ CHALLENGE ───
+  var _rxp = wod.rxPlus;
+  if (_rxp && _rxp.note) {
+    var rxCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #8B2FC9;background:rgba(139,47,201,0.04);margin-top:8px'});
+    rxCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8B2FC9;margin-bottom:6px'}, '★ RX+'));
+    rxCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#8B2FC9'}, _rxp.note));
+    p.appendChild(rxCard);
+  }
+
   // ─── GYM DRILLS (always shown at the end) ───
   if (currentDay.hasHaltero) {
     // For haltero days, gym drills are shown after the WOD
