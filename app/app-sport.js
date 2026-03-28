@@ -4485,6 +4485,12 @@ function renderCyclingProgram(p) {
   var weekData = plan[S.cyclingWeek - 1];
   if (!weekData) return;
 
+  // Pregnancy warning (ACOG 2020)
+  var _pregCycling = getPregnancySportWarning();
+  if (_pregCycling) {
+    p.appendChild(h('div', {style: 'background:#FFF3E0;border-left:4px solid #E8A87C;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5D4037;line-height:1.6'}, _pregCycling));
+  }
+
   var weightKg = S.weight || 70;
   var levelNames = { debutant: 'Débutant', intermediaire: 'Intermédiaire', avance: 'Avancé' };
   var goalNames = { weightloss: 'Perte de poids', endurance: 'Endurance de base', competitive: 'Sportif compétitif', granfondo: 'Gran Fondo', triathlon: 'Triathlon' };
@@ -4914,6 +4920,12 @@ function renderCalisthenicsProgram(content) {
     h('div', {style:'font-size:13px;color:var(--grey3)'}, 'Niveau: ' + level + ' — ' + (skills.length || 0) + ' skill(s) sélectionné(s)')
   ]);
   content.appendChild(header);
+
+  // Pregnancy warning (ACOG 2020)
+  var _pregCalisth = getPregnancySportWarning();
+  if (_pregCalisth) {
+    content.appendChild(h('div', {style: 'background:#FFF3E0;border-left:4px solid #E8A87C;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5D4037;line-height:1.6'}, _pregCalisth));
+  }
 
   // Avertissements médicaux
   if (S.muscuMedical) {

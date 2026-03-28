@@ -515,7 +515,8 @@ function renderStep2(p) {
   }
 
   p.appendChild(h('div', {style: 'height:24px'}));
-  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { goStep(3); }}, 'Continuer'));
+  var _step2ok = !!(S.weight && S.height);
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(3); }}, 'Continuer'));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(1); }, html: backArrowHtml() + 'Retour'}));
 }
 
@@ -1066,9 +1067,17 @@ function renderStep6(p) {
 
   p.appendChild(h('div', {style: 'height:16px'}));
   var goalOk = S.goal !== null;
+  var _tcaConflict = false;
   if (goalOk && S.goal !== null) {
     var gk = GOALS[S.goal].key;
     if ((gk === 'cut' || gk === 'shred' || gk === 'bulk' || gk === 'lean_bulk') && !S.targetWeight) goalOk = false;
+    if ((gk === 'cut' || gk === 'shred') && S.medical && S.medical.indexOf('tca') !== -1) {
+      goalOk = false;
+      _tcaConflict = true;
+    }
+  }
+  if (_tcaConflict) {
+    p.appendChild(h('div', {style: 'background:#FCE4EC;border-left:4px solid #C62828;padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#B71C1C;line-height:1.6'}, '⚠ CONFLIT : Objectif sèche/coupe incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !goalOk, onclick: function() {
     if (goalOk) {
