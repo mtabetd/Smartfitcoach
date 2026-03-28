@@ -5679,7 +5679,7 @@
       name: 'Cheesecake Protéiné Citron-Framboise No-Bake',
       emoji: '🍋', origin: '🇺🇸',
       mealTypes: ['snack'],
-      tags: ['high-protein', 'snack', 'no-bake', 'cheesecake', 'citron', 'framboise', 'premium', 'dessert-protéiné'],
+      tags: ['high-protein', 'snack', 'dessert', 'no-bake', 'cheesecake', 'citron', 'framboise', 'premium', 'dessert-protéiné'],
       difficulty: 2, prepTime: 30, cookTime: 0, servings: 6,
       // 132×4 + 114×4 + 78×9 = 528+456+702 = 1686 ✓
       baseNutrition: { calories: 1686, proteinGrams: 132, carbsGrams: 114, fatGrams: 78 },
@@ -5816,7 +5816,7 @@
       name: 'Panna Cotta Légère Vanille-Fruits Rouges',
       emoji: '🍮', origin: '🇮🇹',
       mealTypes: ['snack', 'dessert'],
-      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'léger', 'élégant'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'léger', 'élégant'],
       difficulty: 1, prepTime: 15, cookTime: 10, servings: 4,
       // P×4 + G×4 + L×9 = 48×4 + 100×4 + 20×9 = 192 + 400 + 180 = 772 kcal ✓
       baseNutrition: { calories: 772, proteinGrams: 48, carbsGrams: 100, fatGrams: 20 },
@@ -5845,7 +5845,7 @@
       name: 'Mousse au Chocolat Noir Protéinée',
       emoji: '🍫', origin: '🇫🇷',
       mealTypes: ['snack', 'dessert'],
-      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'chocolat', 'aérien'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'chocolat', 'aérien'],
       difficulty: 2, prepTime: 20, cookTime: 5, servings: 4,
       // P×4 + G×4 + L×9 = 60×4 + 60×4 + 32×9 = 240 + 240 + 288 = 768 kcal ✓
       baseNutrition: { calories: 768, proteinGrams: 60, carbsGrams: 60, fatGrams: 32 },
@@ -5872,7 +5872,7 @@
       name: 'Crème Brûlée Légère au Café',
       emoji: '☕', origin: '🇫🇷',
       mealTypes: ['snack', 'dessert'],
-      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'café', 'caramel', 'élégant'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'café', 'caramel', 'élégant'],
       difficulty: 2, prepTime: 10, cookTime: 30, servings: 4,
       // P×4 + G×4 + L×9 = 48×4 + 80×4 + 20×9 = 192 + 320 + 180 = 692 kcal ✓
       baseNutrition: { calories: 692, proteinGrams: 48, carbsGrams: 80, fatGrams: 20 },
@@ -5900,7 +5900,7 @@
       name: 'Tarte Banoffee Healthy Sans Cuisson',
       emoji: '🍌', origin: '🇬🇧',
       mealTypes: ['snack', 'dessert'],
-      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'banane', 'chocolat'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'banane', 'chocolat'],
       difficulty: 1, prepTime: 20, cookTime: 0, servings: 6,
       // P×4 + G×4 + L×9 = 60×4 + 180×4 + 60×9 = 240 + 720 + 540 = 1500 kcal ✓
       baseNutrition: { calories: 1500, proteinGrams: 60, carbsGrams: 180, fatGrams: 60 },
@@ -5930,7 +5930,7 @@
       name: 'Tiramisu Protéiné Revisité',
       emoji: '🍰', origin: '🇮🇹',
       mealTypes: ['snack', 'dessert'],
-      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'café', 'cacao', 'tiramisu'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'café', 'cacao', 'tiramisu'],
       difficulty: 2, prepTime: 25, cookTime: 5, servings: 6,
       // P×4 + G×4 + L×9 = 108×4 + 150×4 + 60×9 = 432 + 600 + 540 = 1572 kcal ✓
       baseNutrition: { calories: 1572, proteinGrams: 108, carbsGrams: 150, fatGrams: 60 },
@@ -5960,7 +5960,7 @@
       name: 'Fondant au Chocolat Coulant Protéiné',
       emoji: '🫓', origin: '🇫🇷',
       mealTypes: ['snack', 'dessert'],
-      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'chocolat', 'coulant', 'four'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'chocolat', 'coulant', 'four'],
       difficulty: 2, prepTime: 15, cookTime: 10, servings: 4,
       // P×4 + G×4 + L×9 = 72×4 + 88×4 + 48×9 = 288 + 352 + 432 = 1072 kcal ✓
       baseNutrition: { calories: 1072, proteinGrams: 72, carbsGrams: 88, fatGrams: 48 },
@@ -5989,7 +5989,7 @@
       name: 'Cheesecake Healthy Citron-Pistache No-Bake',
       emoji: '🍋', origin: '🌍',
       mealTypes: ['snack', 'dessert'],
-      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'citron', 'pistache'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'sans-cuisson', 'citron', 'pistache'],
       difficulty: 1, prepTime: 25, cookTime: 0, servings: 8,
       // P×4 + G×4 + L×9 = 112×4 + 200×4 + 64×9 = 448 + 800 + 576 = 1824 kcal ✓
       baseNutrition: { calories: 1824, proteinGrams: 112, carbsGrams: 200, fatGrams: 64 },
@@ -6019,7 +6019,7 @@
       name: 'Île Flottante Légère Protéinée',
       emoji: '🏝️', origin: '🇫🇷',
       mealTypes: ['snack', 'dessert'],
-      tags: ['dessert', 'healthy', 'high-protein', 'maroc', 'léger', 'élégant', 'vanille'],
+      tags: ['snack', 'dessert', 'healthy', 'high-protein', 'maroc', 'léger', 'élégant', 'vanille'],
       difficulty: 2, prepTime: 20, cookTime: 15, servings: 4,
       // P×4 + G×4 + L×9 = 60×4 + 72×4 + 20×9 = 240 + 288 + 180 = 708 kcal ✓
       baseNutrition: { calories: 708, proteinGrams: 60, carbsGrams: 72, fatGrams: 20 },

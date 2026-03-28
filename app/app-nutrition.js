@@ -705,9 +705,13 @@ function renderStep5(p) {
   var dessertWrap = h('div', {'class': 'chip-wrap'});
   var dessertSub = h('div', {style: 'font-size:11px;color:var(--grey);margin-bottom:6px;font-family:"Helvetica Neue",Arial,sans-serif'}, '2-3 fois par semaine en collation' + ((S.mealsPerDay||3) < 4 ? ' (nécessite 4 repas/jour)' : ''));
   p.appendChild(dessertSub);
+  var dessertDisabled = (S.mealsPerDay || 3) < 4;
+  if (dessertDisabled && S.wantsDessert) { S.wantsDessert = false; }
   ['Non merci', 'Oui, avec plaisir !'].forEach(function(opt) {
     var isOn = opt.startsWith('Oui') ? S.wantsDessert : !S.wantsDessert;
-    dessertWrap.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), onclick: function() {
+    var chipStyle = dessertDisabled ? 'opacity:0.4;pointer-events:none;cursor:not-allowed' : '';
+    dessertWrap.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), style: chipStyle, onclick: function() {
+      if (dessertDisabled) return;
       S.wantsDessert = opt.startsWith('Oui');
       window.render();
     }}, opt));
