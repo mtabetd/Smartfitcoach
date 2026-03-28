@@ -206,15 +206,38 @@ function generateSportProgram() {
     return Array.isArray(cat) ? cat : [cat];
   }
 
-  // Determine exercise count based on priority
-  // Priority 5 = 3-4, 4 = 3, 3 = 2-3, 2 = 2, 1 = 1-2
+  // Determine exercise count based on priority and user level
+  // beginner:     pri 5 = 2-3, 4 = 2, 3 = 1-2, 2 = 1, 1 = 1
+  // intermediate: pri 5 = 3-4, 4 = 3, 3 = 2-3, 2 = 2, 1 = 1-2  (original)
+  // advanced:     pri 5 = 4-5, 4 = 4, 3 = 3-4, 2 = 2-3, 1 = 2
   function exerciseCountForPriority(pri) {
-    if (pri >= 5) return 3 + Math.round(Math.random());
-    if (pri === 4) return 3;
-    if (pri === 3) return 2 + Math.round(Math.random());
-    if (pri === 2) return 2;
-    return 1 + Math.round(Math.random());
+    var lvl = S.sportLevel || 'intermediate';
+    if (lvl === 'beginner') {
+      if (pri >= 5) return 2 + Math.round(Math.random());    // 2-3
+      if (pri === 4) return 2;
+      if (pri === 3) return 1 + Math.round(Math.random());   // 1-2
+      if (pri === 2) return 1;
+      return 1;
+    } else if (lvl === 'advanced') {
+      if (pri >= 5) return 4 + Math.round(Math.random());    // 4-5
+      if (pri === 4) return 4;
+      if (pri === 3) return 3 + Math.round(Math.random());   // 3-4
+      if (pri === 2) return 2 + Math.round(Math.random());   // 2-3
+      return 2;
+    } else {
+      // intermediate (original behaviour)
+      if (pri >= 5) return 3 + Math.round(Math.random());
+      if (pri === 4) return 3;
+      if (pri === 3) return 2 + Math.round(Math.random());
+      if (pri === 2) return 2;
+      return 1 + Math.round(Math.random());
+    }
   }
+
+  // Maximum total exercises per session by level (BUG-18)
+  var maxExercisesPerSession = S.sportLevel === 'beginner' ? 8
+    : S.sportLevel === 'advanced' ? 16
+    : 12;
 
   // Determine how many days each zone appears based on priority
   // 5-star: 60-70%, 4: 50-60%, 3: 40-50%, 2: 30-40%, 1: 20-30%
@@ -313,6 +336,9 @@ function generateSportProgram() {
     }
   }
 
+  // BUG-10: Track how many times each group has appeared this week (intra-week progression)
+  var groupWeekOccurrence = {};
+
   // Generate exercises for each day
   var maxLv = S.sportLevel === 'beginner' ? 2 : S.sportLevel === 'intermediate' ? 3 : 4;
   // During pregnancy, cap level
@@ -370,14 +396,25 @@ function generateSportProgram() {
         count = Math.max(1, Math.round(count * cycleIntensityFactor));
       }
 
+      // BUG-10: Determine intra-week occurrence index for this group
+      var groupOcc = groupWeekOccurrence[group] || 0;
+      groupWeekOccurrence[group] = groupOcc + 1;
+
       // Cycle-based offset: rotate exercise selection each cycle (guard against NaN)
       var poolRemainder = available.length - count;
       var cycleOffset = poolRemainder > 0 ? ((S.muscuCycle || 1) - 1) % poolRemainder : 0;
+      var groupStartIdx = dayExercises.length; // track where this group's exercises start
       for (var i = 0; i < count; i++) {
         var ex = Object.assign({}, available[(i + cycleOffset) % available.length]);
 
         // Override rest based on goals
         if (restOverride) ex.rest = restOverride;
+
+        // BUG-19: Beginners need extra rest on compound/complex exercises (lv >= 2)
+        if (S.sportLevel === 'beginner' && ex.lv >= 2) {
+          var restSec = parseInt((ex.rest || '90s').replace(/[^0-9]/g,'')) || 90;
+          ex.rest = Math.min(restSec + 30, 180) + 's';
+        }
 
         // Pregnancy: longer rest
         if (pregTri) ex.rest = '90-120s';
@@ -394,6 +431,33 @@ function generateSportProgram() {
 
         dayExercises.push(ex);
       }
+
+      // BUG-10: Apply intra-week progressive overload variation for repeated muscle groups
+      // occ 0 = base session, occ 1 = active recovery (−1 set), occ 2 = endurance focus (+2 reps)
+      if (groupOcc > 0) {
+        for (var gi = groupStartIdx; gi < dayExercises.length; gi++) {
+          var gex = dayExercises[gi];
+          if (groupOcc % 2 === 1) {
+            // 2nd occurrence: reduce sets by 1 for active recovery
+            if (typeof gex.sets === 'string') {
+              gex.sets = gex.sets.replace(/^(\d+)/, function(m, n) {
+                var reduced = Math.max(1, parseInt(n) - 1);
+                return String(reduced);
+              });
+            }
+          } else {
+            // 3rd, 5th... occurrence: endurance focus — add 2 reps to rep ranges
+            if (typeof gex.sets === 'string') {
+              gex.sets = gex.sets.replace(/(\d+)(-(\d+))?$/, function(m, r1, dash, r2) {
+                if (r2) {
+                  return (parseInt(r1) + 2) + '-' + (parseInt(r2) + 2);
+                }
+                return String(parseInt(r1) + 2);
+              });
+            }
+          }
+        }
+      }
     });
 
     // Pregnancy: add Kegel exercises to every day
@@ -409,6 +473,11 @@ function generateSportProgram() {
         tips: ['Essentiel pour pr\u00e9parer l\'accouchement', 'Pr\u00e9vient l\'incontinence', 'Peut \u00eatre fait n\'importe o\u00f9'],
         video: 'https://www.youtube.com/results?search_query=exercices+kegel+grossesse'
       });
+    }
+
+    // ─── Level-based exercise count cap (BUG-18) ───
+    if (dayExercises.length > maxExercisesPerSession) {
+      dayExercises = dayExercises.slice(0, maxExercisesPerSession);
     }
 
     // ─── Duration-based exercise count cap and sets adjustment ───
@@ -908,11 +977,11 @@ function renderChargesQuestionnaire(p) {
       }; })(repKey, exDef.key)
     });
     inputWrap.appendChild(repInp);
-    inputWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'reps'));
+    inputWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, window.t('muscu.reps')));
     if (currentVal && currentVal > 0) {
       var thresh = strengthThresholds[exDef.key] || {low:0.5,mid:1.0};
       var ratio = currentVal / bodyWeight;
-      var lbl = ratio < thresh.low ? 'Débutant' : ratio < thresh.mid ? 'Intermédiaire' : 'Avancé';
+      var lbl = ratio < thresh.low ? window.t('sport.beginner') : ratio < thresh.mid ? window.t('sport.intermediate') : window.t('sport.advanced');
       var col = ratio < thresh.low ? '#E67E22' : ratio < thresh.mid ? '#2980B9' : '#27AE60';
       // Epley formula: 1RM = weight × (1 + reps/30) — accurate for 1-15 reps
       var usedReps = S.muscuStrengthProfile[repKey] || 8;
@@ -1028,7 +1097,7 @@ function renderDedicatedPrograms(p) {
 
 // ─── STEP 1: MUSCULATION OBJECTIVES ───
 // Mapping nutrition goal key → sport goal id
-var NUTRITION_TO_SPORT_GOAL = { bulk: 'muscle', maintain: 'general', cut: 'weightloss', shred: 'shred' };
+var NUTRITION_TO_SPORT_GOAL = { bulk: 'muscle', maintain: 'general', cut: 'weightloss', shred: 'shred', recomposition: 'general' };
 window.NUTRITION_TO_SPORT_GOAL = NUTRITION_TO_SPORT_GOAL;
 // Mapping sport goal id → nutrition goal index (priority order when multi-select)
 var SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 2, shred: 3, endurance: 1, flexibility: 1, general: 1 };
@@ -1145,7 +1214,7 @@ function renderCrossfitLevel(p) {
   p.appendChild(explainBox);
 
   // ─── JOURS D'ENTRAÎNEMENT PAR SEMAINE ───
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, "Jours d'entra\u00EEnement par semaine"));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   var cfDaysWrap = h('div', {'class': 'num-input-wrap'});
   cfDaysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.sportDays), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.sportDays = v; window.render(); } },
@@ -1606,7 +1675,7 @@ function renderMusculationLevel(p) {
   p.appendChild(h('p', {'class': 'subtitle'}, 'Niveau d\'expérience et fréquence d\'entraînement.'));
   if (window.TIPS) TIPS.renderTip(p, 'sportLevel');
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
   var list = h('div', {'class': 'level-list'});
   (window.SPORT_LEVELS || []).forEach(function(lv) {
     list.appendChild(h('div', {'class': 'level-item' + (S.sportLevel === lv.id ? ' on' : ''), onclick: function(){ S.sportLevel = lv.id; window.render(); }}, [
@@ -1616,7 +1685,7 @@ function renderMusculationLevel(p) {
   });
   p.appendChild(list);
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Jours par semaine'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
   var nw = h('div', {'class': 'num-input-wrap'});
   nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) S.sportDays = v; },
@@ -2074,29 +2143,52 @@ function calcSessionDuration(exercises) {
   return Math.max(20, Math.round(totalSec / 60));
 }
 
-// Dépense calorique personnalisée — Keytel et al. 2005 (FC-based) + EPOC Schuenke 2002
+// Dépense calorique personnalisée — MET (Ainsworth 2011) pour musculation + Keytel 2005 pour cardio
+// NOTE: La formule Keytel (FC-based) est valide pour exercice aérobique CONTINU.
+// Pour la musculation (effort intermittent), elle surestime de ~2x (MET musculation = 5-6 vs course).
+// On utilise donc MET pour la résistance et Keytel pour les séances à dominante cardio.
 function calcSessionKcal(exercises, durationMin) {
   var s = window.S;
   var weight = s.weight || 75;
   var age = s.age || 30;
-  var sex = s.sex || 'homme';
+  var sex = s.sex || (s.sex === 'femme' ? 'femme' : 'homme'); // BUG-15 fix: respect null sex
   // Phase courante → RPE
   var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
   var rpe = phase ? phase.rpe : 7;
-  // RPE → %FCmax (Borg 6-20 adapté résistance)
-  var pctHR = rpe <= 5 ? 0.57 : rpe <= 6 ? 0.64 : rpe <= 7 ? 0.72 : rpe <= 8 ? 0.80 : 0.87;
-  // FCmax — Tanaka 2001 (plus précis que Fox 220-age)
-  var hrMax = Math.round(208 - 0.7 * age);
-  var hr = Math.round(hrMax * pctHR);
-  // Keytel et al. 2005 — formule validée vs calorimétrie indirecte
-  var kcalMin;
-  if (sex === 'homme') {
-    kcalMin = (-55.0969 + 0.6309 * hr + 0.1988 * weight + 0.2017 * age) / 4.184;
+
+  // Déterminer si la séance est à dominante cardio ou musculation
+  var cardioKeywords = ['cardio', 'course', 'running', 'vélo', 'rowing', 'jumping', 'burpee', 'hiit'];
+  var cardioCount = 0;
+  (exercises || []).forEach(function(ex) {
+    var m_lower = (ex.m || '').toLowerCase();
+    cardioKeywords.forEach(function(kw) { if (m_lower.indexOf(kw) >= 0) cardioCount++; });
+  });
+  var isCardioSession = (exercises && exercises.length > 0) && (cardioCount / exercises.length >= 0.5);
+
+  var base, hr;
+  if (isCardioSession) {
+    // Keytel et al. 2005 — valide pour aérobique continu
+    var pctHR = rpe <= 5 ? 0.57 : rpe <= 6 ? 0.64 : rpe <= 7 ? 0.72 : rpe <= 8 ? 0.80 : 0.87;
+    var hrMax = Math.round(208 - 0.7 * age);
+    hr = Math.round(hrMax * pctHR);
+    var kcalMin;
+    if (sex === 'homme') {
+      kcalMin = (-55.0969 + 0.6309 * hr + 0.1988 * weight + 0.2017 * age) / 4.184;
+    } else {
+      kcalMin = (-20.4022 + 0.4472 * hr - 0.1263 * weight + 0.074 * age) / 4.184;
+    }
+    kcalMin = Math.max(kcalMin, 3.0);
+    base = Math.round(kcalMin * durationMin);
   } else {
-    kcalMin = (-20.4022 + 0.4472 * hr - 0.1263 * weight + 0.074 * age) / 4.184;
+    // MET-based pour musculation (Ainsworth 2011 — Compendium of Physical Activities)
+    // Musculation légère: MET 3.5 | modérée: MET 5.0 | intense: MET 6.0 | très intense: MET 8.0
+    var met = rpe <= 5 ? 3.5 : rpe <= 6 ? 5.0 : rpe <= 8 ? 6.0 : 8.0;
+    // Formule MET: kcal = MET × poids_kg × durée_heures
+    base = Math.round(met * weight * (durationMin / 60));
+    // FCmax estimée pour l'affichage uniquement
+    hr = Math.round((208 - 0.7 * age) * (rpe <= 5 ? 0.57 : rpe <= 6 ? 0.64 : rpe <= 7 ? 0.72 : rpe <= 8 ? 0.80 : 0.87));
   }
-  kcalMin = Math.max(kcalMin, 3.0);
-  var base = Math.round(kcalMin * durationMin);
+
   // EPOC — Schuenke 2002, Paoli 2012 : +6-20% selon intensité
   var epocPct = rpe <= 5 ? 0.06 : rpe <= 6 ? 0.10 : rpe <= 8 ? 0.15 : 0.20;
   // Bonus volume élevé (> 25 séries totales)
@@ -2421,14 +2513,16 @@ function renderMusculationProgram(p) {
         card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:' + intColor + ';margin-top:4px'}, 'Intensit\u00e9 cycle : ' + intPct + '%'));
       }
 
-      // Video link
-      var vlink = h('a', {'class': 'exercise-video', href: ex.video, target: '_blank', rel: 'noopener', onclick: function(e){
-        e.stopPropagation();
-        window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
-        var count = window.GAMIFICATION ? GAMIFICATION.incrementCounter('exercises_viewed') : 0;
-        if (count >= 20 && window.GAMIFICATION) GAMIFICATION.unlockBadge('exercises_20');
-      }}, '▶ Voir la technique');
-      card.appendChild(vlink);
+      // Video link (guard: only render if video URL exists)
+      if (ex.video) {
+        var vlink = h('a', {'class': 'exercise-video', href: ex.video, target: '_blank', rel: 'noopener', onclick: function(e){
+          e.stopPropagation();
+          window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
+          var count = window.GAMIFICATION ? GAMIFICATION.incrementCounter('exercises_viewed') : 0;
+          if (count >= 20 && window.GAMIFICATION) GAMIFICATION.unlockBadge('exercises_20');
+        }}, '▶ Voir la technique');
+        card.appendChild(vlink);
+      }
 
       // ─── AI-suggested weight from strength profile ───
       var _setParts = ex.sets ? ex.sets.split('\u00d7') : [];
@@ -2582,7 +2676,7 @@ function renderMusculationProgram(p) {
             }; })(setRow)
           });
           inputZone.appendChild(repsInput);
-          inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, 'reps'));
+          inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, window.t('muscu.reps')));
 
           // Indicateur succès/échec
           if (setRow.actualReps !== null && (setRow.actualWeight !== null || isBodyweight)) {
@@ -2665,7 +2759,7 @@ function renderMusculationProgram(p) {
       var realDur = S._sessionDuration != null ? S._sessionDuration : estDuration;
       var kcalRes = calcSessionKcal(allEx, realDur);
       var compPanel = h('div', {style: 'border:1px solid var(--border);background:var(--ivory2);padding:16px;margin-top:8px'});
-      compPanel.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:12px'}, 'Bilan de s\u00e9ance'));
+      compPanel.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:12px'}, window.t('muscu.session_summary')));
       // Durée
       var durRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:14px'});
       durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex:1'}, 'Dur\u00e9e r\u00e9elle'));
@@ -2687,7 +2781,7 @@ function renderMusculationProgram(p) {
       kr3.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold'}, 'Total estim\u00e9'));
       kr3.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:17px;font-weight:bold;color:var(--green,#1A4A1A)'}, kcalRes.total + '\u00a0kcal'));
       kcalBox.appendChild(kr3);
-      kcalBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}, 'FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 RPE\u00a0' + kcalRes.rpe + '/10 \u2014 Keytel\u00a02005 \u00b7 Tanaka\u00a02001'));
+      kcalBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}, 'FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 RPE\u00a0' + kcalRes.rpe + '/10 \u2014 MET\u00a0Ainsworth\u00a02011 \u00b7 Tanaka\u00a02001'));
       compPanel.appendChild(kcalBox);
       // ⚠ Note TDEE — évite le double-comptage (audit interdépendance)
       compPanel.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:3px solid var(--orange,#6A4A1A);padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--text,#0A0A09);line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
@@ -2963,9 +3057,9 @@ function renderSportModal(app) {
     // Muscle + Equipment
     var pills = h('div', {'class': 'macro-pills'});
     pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, ex.m), h('div', {'class': 'mp-label'}, 'Muscle')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, ex.sets), h('div', {'class': 'mp-label'}, 'Séries')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, ex.rest), h('div', {'class': 'mp-label'}, 'Repos')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, '★'.repeat(Math.max(0, parseInt(ex.lv) || 0))), h('div', {'class': 'mp-label'}, 'Niveau')]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, ex.sets), h('div', {'class': 'mp-label'}, window.t('muscu.sets'))]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, ex.rest), h('div', {'class': 'mp-label'}, window.t('muscu.rest'))]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, '★'.repeat(Math.max(0, parseInt(ex.lv) || 0))), h('div', {'class': 'mp-label'}, window.t('sport.level'))]));
     body.appendChild(pills);
 
     // Equipment
@@ -3000,12 +3094,14 @@ function renderSportModal(app) {
       body.appendChild(tl);
     }
 
-    // Video button (prominent)
-    body.appendChild(h('a', {
-      'class': 'btn-primary', href: ex.video, target: '_blank', rel: 'noopener',
-      style: 'display:block;text-align:center;text-decoration:none;margin-top:16px',
-      onclick: function(){ window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n}); }
-    }, '▶ Voir la vidéo technique'));
+    // Video button (only render if URL exists)
+    if (ex.video) {
+      body.appendChild(h('a', {
+        'class': 'btn-primary', href: ex.video, target: '_blank', rel: 'noopener',
+        style: 'display:block;text-align:center;text-decoration:none;margin-top:16px',
+        onclick: function(){ window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n}); }
+      }, '▶ Voir la vidéo technique'));
+    }
 
     sheet.appendChild(body);
   }
@@ -3038,7 +3134,7 @@ function renderRunningConfig(p) {
   p.appendChild(goalGrid);
 
   // Level selection (mandatory)
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.level')));
   var lvlList = h('div', {'class': 'level-list'});
   (window.RUNNING_LEVELS || []).forEach(function(lv) {
     var isOn = S.runningLevel === lv.id;
@@ -3053,7 +3149,7 @@ function renderRunningConfig(p) {
   p.appendChild(lvlList);
 
   // Days per week
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours d\'entraînement par semaine'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   var daysWrap = h('div', {'class': 'num-input-wrap'});
   daysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.runningDays), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.runningDays = v; window.render(); } },
@@ -3236,7 +3332,7 @@ function renderHyroxConfig(p) {
   p.appendChild(goalGrid);
 
   // Level selection (mandatory)
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.level')));
   var lvlList = h('div', {'class': 'level-list'});
   (window.HYROX_LEVELS || []).forEach(function(lv) {
     var isOn = S.hyroxLevel === lv.id;
@@ -3251,7 +3347,7 @@ function renderHyroxConfig(p) {
   p.appendChild(lvlList);
 
   // Days per week
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours d\'entraînement par semaine'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   var daysWrap = h('div', {'class': 'num-input-wrap'});
   daysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.hyroxDays), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.hyroxDays = v; window.render(); } },
@@ -3487,7 +3583,7 @@ function renderPadelConfig(p) {
   });
   p.appendChild(og);
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
   var lg = h('div', {'class': 'level-list'});
   (window.PADEL_LEVELS || []).forEach(function(lv) {
     lg.appendChild(h('div', {'class': 'level-item' + (S.padelLevel === lv.id ? ' on' : ''), onclick: function(){ S.padelLevel = lv.id; window.render(); }}, [
@@ -3496,7 +3592,7 @@ function renderPadelConfig(p) {
   });
   p.appendChild(lg);
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Jours par semaine'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
   var nw = h('div', {'class': 'num-input-wrap'});
   nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.padelDays), oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) S.padelDays = v; }}));
   nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
@@ -3595,7 +3691,7 @@ function renderGolfConfig(p) {
   });
   p.appendChild(og);
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
   var lg = h('div', {'class': 'level-list'});
   (window.GOLF_LEVELS || []).forEach(function(lv) {
     lg.appendChild(h('div', {'class': 'level-item' + (S.golfLevel === lv.id ? ' on' : ''), onclick: function(){ S.golfLevel = lv.id; window.render(); }}, [
@@ -3604,7 +3700,7 @@ function renderGolfConfig(p) {
   });
   p.appendChild(lg);
 
-  p.appendChild(h('div', {'class': 'section-label'}, 'Jours par semaine'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
   var nw = h('div', {'class': 'num-input-wrap'});
   nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.golfDays), oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) S.golfDays = v; }}));
   nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
@@ -3723,7 +3819,7 @@ function renderTriathlonConfig(p) {
   p.appendChild(goalGrid);
 
   // ── Niveau ──
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.level')));
   var lvlList = h('div', {'class': 'level-list'});
   (window.TRIATHLON_LEVELS || []).forEach(function(lv) {
     var isOn = S.triathlonLevel === lv.id;
@@ -4031,12 +4127,12 @@ function renderYogaOnboarding(p) {
   p.appendChild(h('p', {'class': 'subtitle'}, 'Flexibilit\u00e9, force, \u00e9quilibre et pleine conscience.'));
 
   // Niveau
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
   var lvlList = h('div', {'class': 'level-list'});
   [
-    { id: 'debutant', icon: '\uD83C\uDF31', name: 'D\u00e9butant', desc: 'Premi\u00e8res postures, respiration consciente, s\u00e9ances de 20-30 min' },
-    { id: 'intermediaire', icon: '\uD83C\uDF3F', name: 'Interm\u00e9diaire', desc: 'Vinyasa fluide, \u00e9quilibre, force fonctionnelle' },
-    { id: 'avance', icon: '\uD83C\uDF4A', name: 'Avanc\u00e9', desc: 'Inversions, backbends profonds, pranayama' }
+    { id: 'debutant', icon: '\uD83C\uDF31', name: window.t('sport.beginner'), desc: 'Premi\u00e8res postures, respiration consciente, s\u00e9ances de 20-30 min' },
+    { id: 'intermediaire', icon: '\uD83C\uDF3F', name: window.t('sport.intermediate'), desc: 'Vinyasa fluide, \u00e9quilibre, force fonctionnelle' },
+    { id: 'avance', icon: '\uD83C\uDF4A', name: window.t('sport.advanced'), desc: 'Inversions, backbends profonds, pranayama' }
   ].forEach(function(lv) {
     var isOn = S.yogaLevel === lv.id;
     lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.yogaLevel = lv.id; window.render(); }}, [
@@ -4068,7 +4164,7 @@ function renderYogaOnboarding(p) {
   p.appendChild(objGrid);
 
   // Jours par semaine
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours par semaine'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   var nw = h('div', {'class': 'num-input-wrap'});
   nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.yogaDays || 3), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.yogaDays = v; } },
@@ -4343,11 +4439,11 @@ function renderCyclingOnboarding(p) {
   });
   p.appendChild(bikeGrid);
 
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.level')));
   var levels = [
-    { id: 'debutant',      icon: '🟢', name: 'Débutant',      desc: '< 2h par semaine, découverte du cyclisme' },
-    { id: 'intermediaire', icon: '🟡', name: 'Intermédiaire', desc: '2-5h par semaine, confortable sur longues sorties' },
-    { id: 'avance',        icon: '🔴', name: 'Avancé',        desc: '> 5h par semaine, FTP > 3 w/kg' }
+    { id: 'debutant',      icon: '🟢', name: window.t('sport.beginner'),      desc: '< 2h par semaine, découverte du cyclisme' },
+    { id: 'intermediaire', icon: '🟡', name: window.t('sport.intermediate'), desc: '2-5h par semaine, confortable sur longues sorties' },
+    { id: 'avance',        icon: '🔴', name: window.t('sport.advanced'),        desc: '> 5h par semaine, FTP > 3 w/kg' }
   ];
   var lvlList = h('div', {'class': 'level-list'});
   levels.forEach(function(lv) {
@@ -4381,7 +4477,7 @@ function renderCyclingOnboarding(p) {
   });
   p.appendChild(goalGrid);
 
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours d\'entraînement par semaine'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   if (!S.cyclingDays) S.cyclingDays = 3;
   var daysWrap = h('div', {'class': 'num-input-wrap'});
   daysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.cyclingDays), inputmode: 'numeric',
@@ -4493,7 +4589,7 @@ function renderCyclingProgram(p) {
   }
 
   var weightKg = S.weight || 70;
-  var levelNames = { debutant: 'Débutant', intermediaire: 'Intermédiaire', avance: 'Avancé' };
+  var levelNames = { debutant: window.t('sport.beginner'), intermediaire: window.t('sport.intermediate'), avance: window.t('sport.advanced') };
   var goalNames = { weightloss: 'Perte de poids', endurance: 'Endurance de base', competitive: 'Sportif compétitif', granfondo: 'Gran Fondo', triathlon: 'Triathlon' };
   var bikeNames = { road: 'Route 🚲', vtt: 'VTT 🚵', indoor: 'Indoor 💻', gravel: 'Gravel 🌿' };
 
@@ -4737,13 +4833,13 @@ function renderCalisthenicsOnboarding(p) {
   p.appendChild(h('p', {'class': 'subtitle'}, 'Street workout, progressions au poids du corps.'));
 
   // Niveau
-  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
   var lvlList = h('div', {'class': 'level-list'});
   [
-    { id: 'debutant',      icon: '🌱', name: 'Débutant',      desc: 'Moins de 5 tractions, bases à construire' },
-    { id: 'intermediaire', icon: '🌿', name: 'Intermédiaire', desc: '5-12 tractions, maîtrise des fondamentaux' },
-    { id: 'avance',        icon: '🍃', name: 'Avancé',        desc: '12+ tractions, apprentissage des skills' },
-    { id: 'elite',         icon: '🏆', name: 'Elite',         desc: 'Maîtrise complète, skills de haut niveau' }
+    { id: 'debutant',      icon: '🌱', name: window.t('sport.beginner'),      desc: 'Moins de 5 tractions, bases à construire' },
+    { id: 'intermediaire', icon: '🌿', name: window.t('sport.intermediate'), desc: '5-12 tractions, maîtrise des fondamentaux' },
+    { id: 'avance',        icon: '🍃', name: window.t('sport.advanced'),        desc: '12+ tractions, apprentissage des skills' },
+    { id: 'elite',         icon: '🏆', name: window.t('sport.elite'),         desc: 'Maîtrise complète, skills de haut niveau' }
   ].forEach(function(lv) {
     var isOn = S.calisthenicsLevel === lv.id;
     lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.calisthenicsLevel = lv.id; window.render(); }}, [
@@ -4801,7 +4897,7 @@ function renderCalisthenicsOnboarding(p) {
   p.appendChild(goalChips);
 
   // Jours par semaine
-  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Jours par semaine'));
+  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
   var nw = h('div', {'class': 'num-input-wrap'});
   nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.calisthenicsdays || 3), inputmode: 'numeric',
     oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.calisthenicsdays = v; } },
@@ -4977,8 +5073,10 @@ function renderCalisthenicsProgram(content) {
         ]));
       });
       card.appendChild(stepsDiv);
-      // Vidéo
-      card.appendChild(h('a', {href:sk.video, target:'_blank', rel:'noopener', style:'display:inline-block;font-size:12px;color:var(--accent,#1A4A1A);text-decoration:underline'}, '▶ Voir la démonstration vidéo'));
+      // Vidéo (guard: only render if URL exists)
+      if (sk.video) {
+        card.appendChild(h('a', {href:sk.video, target:'_blank', rel:'noopener', style:'display:inline-block;font-size:12px;color:var(--accent,#1A4A1A);text-decoration:underline'}, '▶ Voir la démonstration vidéo'));
+      }
       content.appendChild(card);
     });
   }

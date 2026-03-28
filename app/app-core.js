@@ -72,13 +72,14 @@ var GOALS=[
   {icon:'↗',name:'Prise de masse douce',desc:'+10% calories',mult:1.10,key:'lean_bulk'},
   {icon:'=',name:'Maintien',desc:'= TDEE',mult:1.0,key:'maintain'},
   {icon:'↘',name:'Perte de poids',desc:'-15% calories',mult:0.85,key:'cut'},
-  {icon:'↓',name:'Sèche',desc:'-20% calories',mult:0.80,key:'shred'}
+  {icon:'↓',name:'Sèche',desc:'-20% calories',mult:0.80,key:'shred'},
+  {icon:'⚖️',name:'Recomposition',desc:'Maintien calories, optimisation macros',mult:1.00,key:'recomposition'}
 ];
 // RATIOS : distribution calorique indicative par objectif (pour affichage uniquement)
 // ATTENTION : calcMacros() utilise la méthode g/kg (ISSN 2017), pas ces ratios
 // Ces valeurs ne sont PAS utilisées pour le calcul des macros — elles servent uniquement à l'affichage indicatif
 // Note : l'approche g/kg est cliniquement supérieure aux % de calories (ISSN 2017, Helms 2014)
-var RATIOS={bulk:{g:.55,p:.25,l:.20},maintain:{g:.50,p:.30,l:.20},cut:{g:.40,p:.35,l:.25},shred:{g:.30,p:.40,l:.30}};
+var RATIOS={bulk:{g:.55,p:.25,l:.20},maintain:{g:.50,p:.30,l:.20},cut:{g:.40,p:.35,l:.25},shred:{g:.30,p:.40,l:.30},recomposition:{g:.40,p:.35,l:.25}};
 var COOK_LEVELS=[{name:'Facile',desc:'5-10 min',val:1},{name:'Moyen',desc:'15-20 min',val:2},{name:'Avancé',desc:'30 min',val:3},{name:'Chef',desc:'45+ min',val:4}];
 var ALLERGIES=['Aucune','Fruits à coque','Arachides','Œufs','Poisson','Crustacés','Soja','Lait/Produits laitiers','Gluten/Blé','Sésame','Moutarde'];
 var INTOLERANCES=['Aucune','Lactose','Gluten','Fructose','Histamine'];
@@ -221,11 +222,13 @@ function getMealSplit(){
   }
   if(meals>=5){
     if(isAthlete){
-      // Athlète 5 repas : 2 collations (pré + post entraînement)
-      return{pctBreak:.20,pctLunch:.30,pctSnack:.15,pctDinner:.25,
-        note:'5 repas athlète : 2 collations (pré + post entraînement) — fractionner l\'apport protéique toutes les 3-4h pour maximiser la synthèse protéique (Moore 2012, Churchward-Venne 2016)'};
+      // Athlète 5 repas : collation étendue pré+post entraînement = 20% (fenêtre anabolique)
+      // 0.20+0.30+0.20+0.30 = 1.00 ✓
+      return{pctBreak:.20,pctLunch:.30,pctSnack:.20,pctDinner:.30,
+        note:'5 repas athlète : collation étendue pré+post entraînement — fractionner l\'apport protéique toutes les 3-4h pour maximiser la synthèse protéique (Moore 2012, Churchward-Venne 2016)'};
     }
-    return{pctBreak:.22,pctLunch:.33,pctSnack:.12,pctDinner:.28,
+    // Standard 5 repas : 0.22+0.33+0.13+0.32 = 1.00 ✓
+    return{pctBreak:.22,pctLunch:.33,pctSnack:.13,pctDinner:.32,
       note:'5 repas : fractionnement modéré — améliore satiété et glycémie'};
   }
   return MEAL_SPLIT;
@@ -713,6 +716,7 @@ window.I18N = {
       'onb.s6.maintain': 'Maintien',
       'onb.s6.cut': 'Sèche',
       'onb.s6.shred': 'Shred',
+      'onb.s6.recomposition': 'Recomposition',
 
       // Step 8 — Récap macros
       'onb.s8.title': 'Votre programme nutritionnel',
@@ -819,12 +823,90 @@ window.I18N = {
       'common.kcal': 'kcal',
       'common.g': 'g',
       'common.ml': 'ml',
+      // Dashboard
+      'dash.today_overview': "Aperçu du jour",
+      'dash.quick_access': "Accès rapide",
+      'dash.quote_of_day': "Citation du jour",
+      'dash.streak': "Votre série",
+      'dash.record_weight': "Enregistrer mon poids",
+      'dash.weight': "Poids",
+      'dash.measurements': "Mensurations",
+      'dash.kitchen_timer': "Timer cuisine",
+      'dash.save': "Enregistrer",
+      'dash.done': "Terminé !",
+      'dash.running': "En cours...",
+      'dash.plan_meals': "Planifiez vos repas",
+      'dash.your_program': "Votre programme",
+      // Scanner
+      'scan.alternatives': "Alternatives plus saines",
+      'scan.nutriscore': "Nutri-Score",
+      'scan.proteins': "PROTÉINES",
+      'scan.carbs': "GLUCIDES",
+      'scan.fats': "LIPIDES",
+      'scan.sugars': "SUCRES",
+      'scan.fibers': "FIBRES",
+      'scan.salt': "SEL",
+      'scan.sat_fat': "GRAS SAT.",
+      // Sport
+      'sport.start': "Commencer",
+      'sport.pain_none': "Aucune",
+      'sport.pain_mild': "Légère",
+      'sport.pain_moderate': "Modérée",
+      'sport.pain_severe': "Sévère",
+      'sport.zone_shoulders': "Épaules",
+      'sport.zone_elbows': "Coudes",
+      'sport.zone_wrists': "Poignets",
+      'sport.zone_neck': "Nuque / Cou",
+      'sport.zone_upper_back': "Haut du dos",
+      'sport.zone_lower_back': "Bas du dos",
+      'sport.zone_hips': "Hanches",
+      'sport.zone_knees': "Genoux",
+      'sport.zone_ankles': "Chevilles",
       'common.minor_warning': "Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé.",
       'Langue / Language': 'Langue / Language'
     },
 
     en: {
       // Navigation
+      // Dashboard
+      'dash.today_overview': "Today's Overview",
+      'dash.quick_access': "Quick Access",
+      'dash.quote_of_day': "Quote of the Day",
+      'dash.streak': "Your Streak",
+      'dash.record_weight': "Log My Weight",
+      'dash.weight': "Weight",
+      'dash.measurements': "Measurements",
+      'dash.kitchen_timer': "Kitchen Timer",
+      'dash.save': "Save",
+      'dash.done': "Done!",
+      'dash.running': "Running...",
+      'dash.plan_meals': "Plan your meals",
+      'dash.your_program': "Your program",
+      // Scanner
+      'scan.alternatives': "Healthier Alternatives",
+      'scan.nutriscore': "Nutri-Score",
+      'scan.proteins': "PROTEIN",
+      'scan.carbs': "CARBS",
+      'scan.fats': "FATS",
+      'scan.sugars': "SUGARS",
+      'scan.fibers': "FIBER",
+      'scan.salt': "SALT",
+      'scan.sat_fat': "SAT. FAT",
+      // Sport
+      'sport.start': "Start",
+      'sport.pain_none': "None",
+      'sport.pain_mild': "Mild",
+      'sport.pain_moderate': "Moderate",
+      'sport.pain_severe': "Severe",
+      'sport.zone_shoulders': "Shoulders",
+      'sport.zone_elbows': "Elbows",
+      'sport.zone_wrists': "Wrists",
+      'sport.zone_neck': "Neck",
+      'sport.zone_upper_back': "Upper Back",
+      'sport.zone_lower_back': "Lower Back",
+      'sport.zone_hips': "Hips",
+      'sport.zone_knees': "Knees",
+      'sport.zone_ankles': "Ankles",
       'nav.dashboard': 'Dashboard',
       'nav.nutrition': 'Nutrition',
       'nav.sport': 'Workout',
@@ -912,6 +994,7 @@ window.I18N = {
       'onb.s6.maintain': 'Maintenance',
       'onb.s6.cut': 'Cut',
       'onb.s6.shred': 'Shred',
+      'onb.s6.recomposition': 'Recomposition',
 
       // Step 8
       'onb.s8.title': 'Your Nutrition Plan',
@@ -1438,6 +1521,7 @@ window.S = {
   // Food habits
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,
+  wantsDessert: false,        // inclure des desserts healthy 2-3x/semaine dans le plan
   // Alcohol
   alcoholFreq: null, alcoholTypes: [],
   // Weight
@@ -1557,7 +1641,9 @@ window.S = {
   // Calisthenics
   calisthenicsLevel: null, calisthenicsGoal: null, calisthenicsdays: 3,
   calisthPullups: null, calisthPushups: null,
-  calisthenicsProgram: null, calisthenicsWeek: 1, selectedCalisthDay: 0
+  calisthenicsProgram: null, calisthenicsWeek: 1, selectedCalisthDay: 0,
+  // Yoga
+  yogaLevel: null, yogaGoal: null, yogaDays: 3
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -2101,8 +2187,9 @@ function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOAL
 base=Math.max(base,1800);return base}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)
 // IMPORTANT : sans ce cap, un athlète élite (TDEE 3500+) en "cut -15%" pouvait avoir un déficit de 525-700 kcal/j
-if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}// Cap deficit to 500kcal/day for diabetics (sécurité glycémique)
-// Allaitement : +500 kcal/j (ACOG 2022) — priorité sur l'objectif coupe/sèche
+if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}// Cap surplus à +500 kcal/j pour bulk/lean_bulk (ISSN 2017, ACSM — au-delà : accumulation graisseuse excessive)
+// IMPORTANT : sans ce cap, un athlète élite (TDEE 4000) en bulk recevait +600 kcal/j
+if((goalKey==='bulk'||goalKey==='lean_bulk')&&tdeeVal>0){base=Math.min(base,Math.round(tdeeVal+500));}// Allaitement : +500 kcal/j (ACOG 2022) — priorité sur l'objectif coupe/sèche
 if(s.medical&&s.medical.indexOf('allaitement')!==-1){return Math.max(Math.round(tdeeVal)+500,1800);}
 // TCA/anorexie : forcer maintenance, bloquer cut/shred (ANAD, IOC 2018 — RED-S prevention)
 if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
@@ -2162,6 +2249,22 @@ function calcMacros(){
       ppk=isFemale?1.2:1.4;  // Léger : H=1.4, F=1.2
     } else {
       ppk=isFemale?1.0:1.2;  // Sédentaire : H=1.2, F=1.0 (EFSA 2012 — anti-sarcopénie)
+    }
+
+  } else if(goalKey==='recomposition'){
+    // ─── RECOMPOSITION — haute protéine (maintien masse musculaire + perte grasse simultanée) ───
+    // Distribution : P=35%, G=40%, L=25% — calorie neutre (mult=1.00)
+    // Sources : Barakat 2020 (NSCA) — recomposition validée ≥1.6g/kg ; Hall 2012 ; Morton 2018 BJSM
+    if(actFactor>=1.9){
+      ppk=isFemale?2.0:2.4;   // Élite recompo : H=2.4, F=2.0
+    } else if(actFactor>=1.725){
+      ppk=isFemale?1.8:2.1;   // Très actif recompo : H=2.1, F=1.8
+    } else if(actFactor>=1.55){
+      ppk=isFemale?1.6:1.9;   // Modéré recompo : H=1.9, F=1.6
+    } else if(actFactor>=1.375){
+      ppk=isFemale?1.4:1.7;   // Léger recompo : H=1.7, F=1.4
+    } else {
+      ppk=isFemale?1.2:1.6;   // Sédentaire recompo : H=1.6, F=1.2
     }
 
   } else if(goalKey==='bulk'||goalKey==='lean_bulk'){
@@ -2231,7 +2334,7 @@ function calcMacros(){
   var pCal=pGrams*4;
   // Fat g/kg (minimum 0.5g/kg for hormonal health)
   var fpk=1.0;
-  if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='bulk'||goalKey==='lean_bulk')fpk=1.1;else fpk=1.0;
+  if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='recomposition')fpk=0.9;else if(goalKey==='bulk'||goalKey==='lean_bulk')fpk=1.1;else fpk=1.0;
   if(s.sex==='femme')fpk=Math.round((fpk+0.1)*10)/10;
   // Min lipides femme 0.7g/kg (ISSN 2021) — santé hormonale (vs 0.5 homme)
   var lipidMin=s.sex==='femme'?0.7:0.5;
@@ -2280,7 +2383,7 @@ gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0
   // On redistribue l'écart sur les glucides en priorité (macro la plus flexible), puis sur les lipides
   var actualCal=gGrams*4+pGrams*4+lGrams*9;
   var calGap=c-actualCal;
-  if(Math.abs(calGap)>20){
+  if(Math.abs(calGap)>10){
     var carbAdj=Math.round(calGap/4);
     var newG=gGrams+carbAdj;
     if(newG>=130){
@@ -2442,15 +2545,7 @@ window.calcWeightProjection=calcWeightProjection; window.alcoholWeeklyKcal=alcoh
 
 // ─── RECIPE FILTERING ───
 function getPool(t){
-  // Délègue à RecipeEngine.getPool() si disponible (fusionne anciens + nouveaux pools)
-  if (window.RecipeEngine && window.RecipeEngine.getPool) {
-    return window.RecipeEngine.getPool(t);
-  }
-  // Fallback : anciens arrays directs
-  if(t==='breakfast')return window.breakfast;
-  if(t==='lunch')return window.lunch;
-  if(t==='snack')return window.snack;
-  return window.dinner;
+  return window.RecipeEngine.getPool(t);
 }
 function filterRecipes(pool,type){
   var s=window.S;
@@ -2497,7 +2592,9 @@ function filterRecipes(pool,type){
   if(s.cuisines.indexOf(0)===-1&&s.cuisines.length>0){var flags=[];for(var c=0;c<s.cuisines.length;c++){var co=CUISINES[s.cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0)r=r.filter(function(x){return flags.indexOf(x.f)!==-1})}
   return r;
 }
-function pickRecipe(pool,targetK,used){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();av.sort(function(a,b){return Math.abs(a.k-targetK)-Math.abs(b.k-targetK)});var top=av.slice(0,Math.min(5,av.length));var p=top[Math.floor(Math.random()*top.length)];if(p)used.add(p.n);return p||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+function pickRecipe(pool,targetK,used){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();
+// Score composite : proximité calorique + adéquation macros selon objectif
+var s=window.S||{};var goalKey=(s.goal!==null&&s.goal!==undefined&&GOALS[s.goal])?GOALS[s.goal].key:'maintain';var scored=av.map(function(r){var calScore=Math.abs((r.k||0)-targetK);var macroScore=0;var totalMacroKcal=(r.p||0)*4+(r.g||0)*4+(r.l||0)*9;if(totalMacroKcal>0){var protPct=(r.p||0)*4/totalMacroKcal;if((goalKey==='cut'||goalKey==='shred'||goalKey==='recomposition')&&protPct<0.25){macroScore=100;}else if((goalKey==='bulk'||goalKey==='lean_bulk')&&protPct>0.45){macroScore=50;}}return{recipe:r,score:calScore+macroScore};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked)used.add(picked.n);return picked||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
@@ -2540,15 +2637,15 @@ function enrichWithScaling(recipe, targetKcal) {
 
   return recipe;
 }
-function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w});var split=getMealSplit();var meals=s.mealsPerDay||3;for(var d=0;d<7;d++){var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
+function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var split=getMealSplit();var meals=s.mealsPerDay||3;for(var d=0;d<7;d++){var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
-if(meals>=4&&sT>0){if(s.whey&&pSW.length>0&&d%2===0)sR=pickRecipe(pSW,sT,uS);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
+if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS);else if(s.whey&&pSW.length>0&&d%2===0)sR=pickRecipe(pSW,sT,uS);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
 // Dîner : généré seulement si mealsPerDay >= 3 (pas pour jeûne intermittent 2 repas)
 if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD);
 // Scaling sur mesure : enrichit les recettes R201+ avec macros/ingrédients scalés
 bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR)sR=enrichWithScaling(sR,sT);if(dR)dR=enrichWithScaling(dR,dT);
 // Ajustement itératif ±5% : corriger le slot le plus déviant jusqu'à convergence (max 8 passes)
-var sPool=meals>=4&&sT>0?(s.whey&&pSW.length>0&&d%2===0?pSW:(pSN.length>0?pSN:pS)):null;
+var isDessertDayPool=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;var sPool=meals>=4&&sT>0?(isDessertDayPool?pSD:(s.whey&&pSW.length>0&&d%2===0?pSW:(pSN.length>0?pSN:pS))):null;
 for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
 plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
 function swapMeal(di,slot){var s=window.S;if(!s.weekPlan||!s.weekPlan[di])return;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));var nr=top[Math.floor(Math.random()*top.length)];nr=enrichWithScaling(nr,tgt);s.weekPlan[di][slot]=nr;if(typeof window.render==='function')window.render()}

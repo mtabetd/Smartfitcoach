@@ -114,10 +114,10 @@ function frenchDate(d) {
 
 function greetingWord() {
   var hr = new Date().getHours();
-  if (hr < 5) return 'Bonne nuit';
-  if (hr < 12) return 'Bonjour';
-  if (hr < 18) return 'Bon apres-midi';
-  return 'Bonsoir';
+  if (hr < 5) return window.t('dash.greeting_evening');
+  if (hr < 12) return window.t('dash.greeting_morning');
+  if (hr < 18) return window.t('dash.greeting_afternoon');
+  return window.t('dash.greeting_evening');
 }
 
 function firstName(name) {
@@ -259,7 +259,7 @@ window.DASHBOARD = {
     var _wUnit = window.UNITS ? window.UNITS.weightLabel() : 'kg';
     var _wDisplay = wVal !== null ? (window.UNITS ? window.UNITS.displayWeightVal(wVal) : wVal) : '--';
     var weightCard = h('div', 'dash-card', [
-      h('p', 'dash-card-title', 'Poids'),
+      h('p', 'dash-card-title', window.t('dash.weight')),
       h('div', 'dash-big', [
         document.createTextNode(_wDisplay),
         h('span', 'dash-unit', _wUnit)
@@ -270,10 +270,10 @@ window.DASHBOARD = {
     // Calories
     var cVal = lastCalorieTarget(logs);
     var calCard = h('div', 'dash-card', [
-      h('p', 'dash-card-title', 'Objectif calories'),
+      h('p', 'dash-card-title', window.t('dash.goal')),
       h('div', 'dash-big', [
         document.createTextNode(cVal !== null ? cVal : '--'),
-        h('span', 'dash-unit', 'kcal')
+        h('span', 'dash-unit', window.t('common.kcal'))
       ])
     ]);
     grid.appendChild(calCard);
@@ -282,7 +282,7 @@ window.DASHBOARD = {
     var wProg = waterProgress(logs);
     var waterPct = wProg ? Math.min(100, Math.round((wProg.current / wProg.goal) * 100)) : 0;
     var waterCard = h('div', 'dash-card');
-    waterCard.appendChild(h('p', 'dash-card-title', 'Hydratation'));
+    waterCard.appendChild(h('p', 'dash-card-title', window.t('extras.water')));
     var waterBig = h('div', 'dash-big');
     waterBig.appendChild(document.createTextNode(wProg ? wProg.current : '--'));
     waterBig.appendChild(h('span', 'dash-unit', wProg ? '/ ' + wProg.goal + ' ml' : 'ml'));
@@ -297,7 +297,7 @@ window.DASHBOARD = {
     // Sleep
     var sVal = lastSleep(logs);
     var sleepCard = h('div', 'dash-card', [
-      h('p', 'dash-card-title', 'Sommeil'),
+      h('p', 'dash-card-title', window.t('extras.sleep')),
       h('div', 'dash-big', [
         document.createTextNode(sVal !== null ? sVal : '--'),
         h('span', 'dash-unit', 'h')
@@ -306,6 +306,46 @@ window.DASHBOARD = {
     grid.appendChild(sleepCard);
 
     root.appendChild(grid);
+
+
+    /* ═══ MACROS P/G/L ═══ */
+    var macros = window.calcMacros ? window.calcMacros() : null;
+    var macroTarget = window.calcTarget ? window.calcTarget() : 0;
+    if (macros && macroTarget > 0) {
+      root.appendChild(h('div', 'dash-label', 'Macros du jour'));
+      var macroCard = h('div', 'dash-card');
+      var macroItems = [
+        {label: 'Protéines', val: macros.p, color: '#4CAF50', kcalPerG: 4},
+        {label: 'Glucides',  val: macros.g, color: '#2196F3', kcalPerG: 4},
+        {label: 'Lipides',   val: macros.l, color: '#FF9800', kcalPerG: 9}
+      ];
+      macroItems.forEach(function(item) {
+        var row = document.createElement('div');
+        row.style.cssText = 'margin-bottom:10px';
+        // Label row
+        var labelRow = document.createElement('div');
+        labelRow.style.cssText = 'display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;font-family:"Helvetica Neue",Arial,sans-serif';
+        var labelSpan = document.createElement('span');
+        labelSpan.style.cssText = 'color:var(--grey,#6B6B65)';
+        labelSpan.textContent = item.label;
+        var valSpan = document.createElement('span');
+        valSpan.style.cssText = 'color:var(--black,#181818);font-weight:600';
+        valSpan.textContent = item.val + 'g';
+        labelRow.appendChild(labelSpan);
+        labelRow.appendChild(valSpan);
+        row.appendChild(labelRow);
+        // Bar
+        var barBg = document.createElement('div');
+        barBg.style.cssText = 'height:6px;background:rgba(0,0,0,0.08);border-radius:3px;overflow:hidden';
+        var pct = Math.min(100, Math.round(item.val * item.kcalPerG / macroTarget * 100));
+        var barFill = document.createElement('div');
+        barFill.style.cssText = 'height:6px;width:' + pct + '%;background:' + item.color + ';border-radius:3px;transition:width 0.3s';
+        barBg.appendChild(barFill);
+        row.appendChild(barBg);
+        macroCard.appendChild(row);
+      });
+      root.appendChild(macroCard);
+    }
 
 
     /* ═══ QUICK ACTIONS ═══ */
@@ -359,7 +399,7 @@ window.DASHBOARD = {
 
     var timerAction = h('div', 'dash-action');
     timerAction.appendChild(h('span', 'dash-action-icon', '\u23F1'));
-    timerAction.appendChild(h('p', 'dash-action-name', 'Timer'));
+    timerAction.appendChild(h('p', 'dash-action-name', window.t('extras.timer')));
     timerAction.appendChild(h('p', 'dash-action-sub', 'Timer cuisine'));
     timerAction.addEventListener('click', function() {
       openKitchenTimer();
@@ -513,7 +553,7 @@ window.DASHBOARD = {
         if (!ctx2 || !ctx2.getContext) return;
         if (!window.S || !Array.isArray(window.S.weekPlan) || window.S.weekPlan.length !== 7) return;
         var JOURS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-        var target = (window.S.calories && window.S.calories > 0) ? window.S.calories : 2000;
+        var target = (window.calcTarget ? window.calcTarget() : 0) || (window.S.calories && window.S.calories > 0 ? window.S.calories : 2000);
         var dayKcals = window.S.weekPlan.map(function(day) {
           if (!day) return 0;
           // weekPlan structure: {breakfast, lunch, snack, dinner} — not {meals:[]}
@@ -879,7 +919,7 @@ function openKitchenTimer() {
   controls.style.cssText = 'display:flex;gap:8px;justify-content:center;';
 
   var startBtn = document.createElement('button');
-  startBtn.textContent = 'Démarrer';
+  startBtn.textContent = window.t('extras.start');
   startBtn.style.cssText = 'padding:10px 24px;background:var(--black,#181818);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;';
   startBtn.addEventListener('click', function() {
     if (running) return;
@@ -892,7 +932,7 @@ function openKitchenTimer() {
       if (totalSeconds <= 0) {
         clearInterval(interval);
         running = false;
-        startBtn.textContent = 'Démarrer';
+        startBtn.textContent = window.t('extras.start');
         display.textContent = 'Terminé !';
         display.style.color = 'var(--black,#181818)';
         try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate([200,100,200]); } catch(e){}
@@ -902,13 +942,13 @@ function openKitchenTimer() {
   controls.appendChild(startBtn);
 
   var resetBtn = document.createElement('button');
-  resetBtn.textContent = 'Réinitialiser';
+  resetBtn.textContent = window.t('extras.reset');
   resetBtn.style.cssText = 'padding:10px 24px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;';
   resetBtn.addEventListener('click', function() {
     clearInterval(interval);
     running = false;
     totalSeconds = 0;
-    startBtn.textContent = 'Démarrer';
+    startBtn.textContent = window.t('extras.start');
     updateDisplay();
   });
   controls.appendChild(resetBtn);

@@ -254,7 +254,7 @@ window.WATER_TRACKER = {
 
     var wrap = el('div', 'extras-widget water-section');
 
-    var title = el('div', 'water-title', 'Hydratation');
+    var title = el('div', 'water-title', window.t('extras.water'));
     wrap.appendChild(title);
 
     var row = el('div', 'water-row');
@@ -453,18 +453,18 @@ window.MEAL_TIMER = {
     display.textContent = self._formatTime(selectedMinutes * 60);
 
     // Start/Stop button
-    var actionBtn = el('button', 'timer-btn', 'Demarrer');
+    var actionBtn = el('button', 'timer-btn', window.t('extras.start'));
     var running = false;
 
     function setRunning(isRunning) {
       running = isRunning;
       if (running) {
-        actionBtn.textContent = 'Arreter';
+        actionBtn.textContent = window.t('extras.stop');
         actionBtn.classList.add('stop');
         display.classList.add('running');
         wrap.classList.add('running');
       } else {
-        actionBtn.textContent = 'Demarrer';
+        actionBtn.textContent = window.t('extras.start');
         actionBtn.classList.remove('stop');
         display.classList.remove('running');
         wrap.classList.remove('running');
@@ -572,7 +572,7 @@ window.MEASUREMENTS = {
     container.innerHTML = '';
 
     var wrap = el('div', 'extras-widget measure-section');
-    var title = el('div', 'measure-title', 'Mensurations');
+    var title = el('div', 'measure-title', window.t('extras.measures'));
     wrap.appendChild(title);
 
     var last = self.getLast();
@@ -621,7 +621,7 @@ window.MEASUREMENTS = {
       wrap.appendChild(row);
     }
 
-    var btn = el('button', 'measure-btn', 'Enregistrer');
+    var btn = el('button', 'measure-btn', window.t('common.save'));
     btn.addEventListener('click', function() {
       var data = {};
       var hasValue = false;
@@ -775,7 +775,7 @@ window.SLEEP_TRACKER = {
     container.innerHTML = '';
 
     var wrap = el('div', 'extras-widget sleep-section');
-    var title = el('div', 'sleep-title', 'Sommeil');
+    var title = el('div', 'sleep-title', window.t('extras.sleep'));
     wrap.appendChild(title);
 
     // Hours input
@@ -820,7 +820,7 @@ window.SLEEP_TRACKER = {
     wrap.appendChild(qualRow);
 
     // Save button
-    var btn = el('button', 'sleep-btn', 'Enregistrer');
+    var btn = el('button', 'sleep-btn', window.t('common.save'));
     btn.addEventListener('click', function() {
       if (!selectedQuality) return;
       var h = parseFloat(hoursInput.value);
@@ -1089,6 +1089,18 @@ window.FOOD_CALC = {
       var addBtn = el('button', 'food-add-btn', 'Ajouter au journal');
       addBtn.addEventListener('click', function() {
         var g = parseFloat(qtyInput.value) || 100;
+        // Calculer les macros scalées à la quantité saisie
+        var ratio = g / 100;
+        var kcal   = Math.round((food.energy_100g || food.kcal || 0) * ratio);
+        var prot   = Math.round((food.proteins_100g || food.p || 0) * ratio * 10) / 10;
+        var carbs  = Math.round((food.carbohydrates_100g || food.g || 0) * ratio * 10) / 10;
+        var fat    = Math.round((food.fat_100g || food.l || 0) * ratio * 10) / 10;
+        // Déterminer le repas selon l'heure
+        var h = new Date().getHours();
+        var mealSlot = h < 10 ? 'breakfast' : h < 14 ? 'lunch' : h < 17 ? 'snack' : 'dinner';
+        if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
+          window.FOOD_JOURNAL.addEntry(mealSlot, food.name, kcal, prot, carbs, fat, g + 'g', 'scanner');
+        }
         log('food_add_journal', { food: food.name, quantity: g });
         addBtn.textContent = 'Ajoute !';
         addBtn.style.borderColor = 'var(--green,#1A4A1A)';

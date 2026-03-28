@@ -194,10 +194,10 @@ var EXERCISES = {
       sets: "4\u00d78-12",
       rest: "90s",
       video: "https://www.youtube.com/results?search_query=rowing+barre+barbell+row+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
-      warn: "Contre-indiqué si épicondylite laterale (tennis elbow) — prise pronation + extension du poignet sous charge = s trèss maximal sur l'epicondyle lateral. Préférer rowing haltere unilateral prise neutre ou rowing cable.",
+      warn: "Contre-indiqué si épicondylite laterale (tennis elbow) — prise pronation + extension du poignet sous charge = stress maximal sur l'epicondyle lateral. Préférer rowing haltere unilateral prise neutre ou rowing cable.",
       desc: "Penché à 45 degrés, tirer la barre vers le nombril en serrant les omoplates.",
       tips: ["Dos droit, ne pas arrondir", "Tirer avec les coudes", "Serrer les omoplates en haut", "Gainage abdominal permanent pour protéger les lombaires"],
-      lv: 2,
+      lv: 3,
       tags: ["dos", "biceps", "force"]
     },
     {
@@ -207,7 +207,7 @@ var EXERCISES = {
       sets: "4\u00d710-12",
       rest: "90s",
       video: "https://www.youtube.com/results?search_query=tirage+vertical+lat+pulldown+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
-      warn: "Tirer DEVANT la poitrine UNIQUEMENT — tirage derrière la nuque (behind-neck) interdit : compression C4-C6 + impingement sous-acromial sévère. Contre-indiqué si épicondylite (prise pronation = s trèss epicondyle).",
+      warn: "Tirer DEVANT la poitrine UNIQUEMENT — tirage derrière la nuque (behind-neck) interdit : compression C4-C6 + impingement sous-acromial sévère. Contre-indiqué si épicondylite (prise pronation = stress epicondyle).",
       desc: "Assis à la poulie haute, tirer la barre vers le haut de la poitrine.",
       tips: ["Ne pas tirer derrière la nuque — TOUJOURS devant la poitrine", "Garder le buste légèrement incline", "Sentir le dos travailler"],
       lv: 1,
@@ -311,11 +311,11 @@ var EXERCISES = {
     {
       n: "Traction prise neutre",
       m: "Grand dorsal / Biceps",
-      eq: "Barre ou poignées neu très",
+      eq: "Barre ou poignées neutres",
       sets: "4\u00d76-10",
       rest: "90s",
       desc: "Prise neutre (paumes se font face), traction complète jusqu'au menton.",
-      tips: ["Intermédiaire entre supination et pronation", "Moins de s trèss sur les coudes", "Excellent pour les coudes sensibles"],
+      tips: ["Intermédiaire entre supination et pronation", "Moins de stress sur les coudes", "Excellent pour les coudes sensibles"],
       lv: 3,
       tags: ["dos", "biceps", "compose", "poids du corps"]
     },
@@ -331,7 +331,7 @@ var EXERCISES = {
       tags: ["dos", "rhomboides", "trapezes", "cable"]
     },
     {
-      n: "T-bar row",
+      n: "T-bar Row Machine",
       m: "Dorsaux / Rhomboïdes",
       eq: "T-bar machine ou barre en angle",
       sets: "4\u00d78-12",
@@ -669,7 +669,7 @@ var EXERCISES = {
       video: "https://www.youtube.com/results?search_query=skull+crushers+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
       desc: "Allongé sur le banc, descendre la barre vers le front puis etendre les bras.",
       tips: ["Coudes fixes pointant vers le plafond", "Descendre vers le front, pas la poitrine", "Charge modérée pour la securite"],
-      lv: 2,
+      lv: 3,
       tags: ["triceps", "isolation", "longue portion"]
     },
     {
@@ -762,7 +762,7 @@ var EXERCISES = {
       rest: "75s",
       desc: "Allongé, descendre la barre vers le front en pliant les coudes.",
       tips: ["Descendre jusqu'au front ou derrière la tête pour plus de stretch", "Coudes vers l'interieur", "Ne pas verrouiller complètement"],
-      lv: 2,
+      lv: 3,
       tags: ["triceps", "masse", "isolation"]
     }
   ],
@@ -889,7 +889,7 @@ var EXERCISES = {
       warn: "Contre-indiqué si hernie discale L4/L5 ou L5/S1 — la flexion du tronc sous charge comprime le disque posterieurement",
       desc: "Debout, barre aux hanches, descendre en gardant les jambes semi-fléchies jusqu'au tibia.",
       tips: ["Dos plat OBLIGATOIRE — la moindre flexion lombaire sous charge = risque disque", "Sentir l'étirement des ischios", "Barre contre les jambes tout le long", "Amplitude limitée à la flexion de hanche sans perte de lordose"],
-      lv: 2,
+      lv: 3,
       tags: ["jambes", "ischios", "fessiers", "compose"]
     },
     {
@@ -920,7 +920,7 @@ var EXERCISES = {
       eq: "Poids du corps (support)",
       sets: "3\u00d712-15",
       rest: "60s",
-      warn: "S trèss patello-femoral et ligamentaire  très eleve — contre-indique si tendinopathie rotulienne, LCA fragile, chondropathie ou douleur antérieure du genou",
+      warn: "Stress patello-femoral et ligamentaire très élevé — contre-indique si tendinopathie rotulienne, LCA fragile, chondropathie ou douleur antérieure du genou",
       desc: "Debout, se tenir à un support, descendre en laissant les genoux aller loin en avant.",
       tips: ["Pointes de pieds rélevées", "Stretch intense des quadriceps", "Progresser avec lest", "STOP immediat si douleur au genou — ne pas confondre brulure musculaire et douleur articulaire"],
       lv: 3,
@@ -961,7 +961,7 @@ var EXERCISES = {
       rest: "60s",
       video: "https://www.youtube.com/results?search_query=fentes+arriere+reverse+lunges+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
       desc: "Faire un pas en arrière, descendre le genou vers le sol, remonter.",
-      tips: ["Plus de s trèss sur les fessiers que les fentes avant", "Buste droit", "Contrôler le mouvement"],
+      tips: ["Plus de stress sur les fessiers que les fentes avant", "Buste droit", "Contrôler le mouvement"],
       lv: 2,
       tags: ["fessiers", "jambes", "unilateral"]
     },
@@ -1035,7 +1035,7 @@ var EXERCISES = {
       warn: "Contre-indiqué si hernie discale L4/L5 ou L5/S1 — descente sous charge = compression posterolaterale du disque",
       desc: "Debout, descendre la barre le long des cuisses en poussant les hanches en arrière.",
       tips: ["Jambes quasi tendues", "Dos PLAT en permanence — ne jamais arrondir le lombaire", "Sentir l'étirement des ischio-jambiers", "Amplitude limitée : arreter quand le dos commence a s'arrondir"],
-      lv: 2,
+      lv: 3,
       tags: ["fessiers", "ischio-jambiers", "chaine posterieure"]
     },
     {

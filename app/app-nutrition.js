@@ -98,7 +98,7 @@ function renderSplash(app) {
     "La sant\u00e9 n\u2019est pas tout, mais sans la sant\u00e9 tout n\u2019est rien."
   ];
   sp.appendChild(h('div', {'class': 'splash-quote'}, quotes[Math.floor(Math.random() * quotes.length)]));
-  sp.appendChild(h('button', {'class': 'splash-btn', onclick: function() { goStep(1); }}, 'Commencer'));
+  sp.appendChild(h('button', {'class': 'splash-btn', onclick: function() { goStep(1); }}, window.t('onb.start')));
   app.appendChild(sp);
 }
 
@@ -109,18 +109,18 @@ function renderStep1(p) {
   if (user && user.name) {
     p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-style:italic;margin-bottom:20px'}, 'Bonjour, ' + user.name));
   }
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape I'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' I'));
   p.appendChild(h('h1', {html: 'Votre<br><em>identit\u00e9</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Ces donn\u00e9es permettent de calculer votre m\u00e9tabolisme de base et vos besoins caloriques journaliers.'));
   if (window.TIPS) TIPS.renderTip(p, 'identity');
 
   // Sex (MANDATORY)
   var sexLabel = h('div', {'class': 'section-label'});
-  sexLabel.appendChild(txt('Sexe'));
+  sexLabel.appendChild(txt(window.t('onb.s1.sex')));
   sexLabel.appendChild(reqDot());
   p.appendChild(sexLabel);
   var g = h('div', {'class': 'card-grid-2'});
-  [{icon: '\u2642', name: 'Homme', val: 'homme'}, {icon: '\u2640', name: 'Femme', val: 'femme'}].forEach(function(o) {
+  [{icon: '\u2642', name: window.t('onb.s1.male'), val: 'homme'}, {icon: '\u2640', name: window.t('onb.s1.female'), val: 'femme'}].forEach(function(o) {
     g.appendChild(h('div', {'class': 'sel-card' + (S.sex === o.val ? ' on' : ''), onclick: function() { S.sex = o.val; window.render(); }}, [
       h('span', {'class': 'card-icon'}, o.icon),
       h('div', {'class': 'card-name'}, o.name)
@@ -326,7 +326,7 @@ function renderStep1(p) {
 
   // Age (MANDATORY 14-70)
   var ageLabel = h('div', {'class': 'section-label'});
-  ageLabel.appendChild(txt('\u00c2ge'));
+  ageLabel.appendChild(txt(window.t('onb.s2.age')));
   ageLabel.appendChild(reqDot());
   p.appendChild(ageLabel);
   var aw = h('div', {'class': 'num-input-wrap'});
@@ -349,19 +349,19 @@ function renderStep1(p) {
   }
 
   p.appendChild(h('div', {style: 'height:16px'}));
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex, onclick: function() { if (S.sex) { bb('nutrition_identity', {sex: S.sex, age: S.age}); goStep(2); } }}, 'Continuer'));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex, onclick: function() { if (S.sex) { bb('nutrition_identity', {sex: S.sex, age: S.age}); goStep(2); } }}, window.t('onb.next')));
 }
 
 // ─── STEP 2: MORPHOLOGIE ───
 function renderStep2(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape II'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' II'));
   p.appendChild(h('h1', {html: 'Votre<br><em>morphologie</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Poids et taille pour calculer votre IMC et calibrer les besoins caloriques.'));
   if (window.TIPS) TIPS.renderTip(p, 'morphology');
 
   // Weight (MANDATORY)
   var wLabel = h('div', {'class': 'section-label'});
-  wLabel.appendChild(txt('Poids'));
+  wLabel.appendChild(txt(window.t('onb.s2.weight')));
   wLabel.appendChild(reqDot());
   p.appendChild(wLabel);
   // Toggle unité poids
@@ -399,7 +399,7 @@ function renderStep2(p) {
 
   // Height (MANDATORY)
   var hLabel = h('div', {'class': 'section-label'});
-  hLabel.appendChild(txt('Taille'));
+  hLabel.appendChild(txt(window.t('onb.s2.height')));
   hLabel.appendChild(reqDot());
   p.appendChild(hLabel);
   // Toggle unité taille
@@ -440,7 +440,7 @@ function renderStep2(p) {
     var info = bmiInfo(bmi);
     var badge = h('div', {'class': 'imc-widget', style: 'color:' + info.color + ';border-color:' + info.color + ';background:' + info.color + '12'}, [
       h('div', {'class': 'imc-value'}, bmi.toFixed(1)),
-      h('div', {'class': 'imc-label'}, 'IMC'),
+      h('div', {'class': 'imc-label'}, window.t('onb.s2.bmi')),
       h('div', {'class': 'imc-category'}, info.label)
     ]);
     p.appendChild(badge);
@@ -528,13 +528,13 @@ function renderStep2(p) {
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(3); }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(1); }, html: backArrowHtml() + 'Retour'}));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(3); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(1); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 3: ACTIVITE ───
 function renderStep3(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape III'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' III'));
   p.appendChild(h('h1', {html: 'Votre<br><em>activit\u00e9</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Niveau d\'activit\u00e9 physique, type d\'entra\u00eenement et qualit\u00e9 de sommeil.'));
   if (window.TIPS) TIPS.renderTip(p, 'activity');
@@ -567,7 +567,7 @@ function renderStep3(p) {
 
   // Sleep (MANDATORY)
   var sleepLabel = h('div', {'class': 'section-label'});
-  sleepLabel.appendChild(txt('Sommeil'));
+  sleepLabel.appendChild(txt(window.t('onb.s3.sleep')));
   sleepLabel.appendChild(reqDot());
   p.appendChild(sleepLabel);
   var sw = h('div', {'class': 'chip-wrap'});
@@ -578,20 +578,20 @@ function renderStep3(p) {
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.activity !== null && S.train.length > 0 && S.sleep !== null;
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(4); }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(2); }, html: backArrowHtml() + 'Retour'}));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(4); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 4: SANTE ───
 function renderStep4(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape IV'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' IV'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'S\u00e9lectionnez vos conditions m\u00e9dicales pour adapter les macros et obtenir des recommandations nutritionnelles personnalis\u00e9es.'));
   if (window.TIPS) TIPS.renderTip(p, 'health');
 
   var none = S.medical.length === 0;
   var nb = h('div', {'class': 'sel-card' + (none ? ' on' : ''), style: 'margin-bottom:16px;text-align:center', onclick: function() { S.medical = []; window.render(); }});
-  nb.appendChild(h('div', {'class': 'card-name'}, 'Aucune condition particuli\u00e8re'));
+  nb.appendChild(h('div', {'class': 'card-name'}, window.t('onb.s4.none')));
   nb.appendChild(h('div', {'class': 'card-sub'}, 'Je suis en bonne sant\u00e9'));
   p.appendChild(nb);
 
@@ -634,13 +634,13 @@ function renderStep4(p) {
   warn.textContent = '\u26a0 Ces informations ne remplacent pas un avis m\u00e9dical. Consultez votre m\u00e9decin.';
   p.appendChild(warn);
 
-  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { goStep(5); }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(3); }, html: backArrowHtml() + 'Retour'}));
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { goStep(5); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 5: HABITUDES ALIMENTAIRES ───
 function renderStep5(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape V'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' V'));
   p.appendChild(h('h1', {html: 'Vos<br><em>habitudes alimentaires</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Personnalisez vos recommandations selon votre mode de vie'));
   if (window.TIPS) TIPS.renderTip(p, 'habits');
@@ -698,6 +698,25 @@ function renderStep5(p) {
     snackWrap.appendChild(h('span', {'class': 'chip' + (S.snacking === opt ? ' on' : ''), onclick: function() { S.snacking = opt; window.render(); }}, opt));
   });
   p.appendChild(snackWrap);
+  p.appendChild(h('div', {style: 'height:8px'}));
+
+  // Desserts healthy
+  p.appendChild(h('div', {'class': 'section-label'}, '🍮 Desserts healthy dans mon plan'));
+  var dessertWrap = h('div', {'class': 'chip-wrap'});
+  var dessertSub = h('div', {style: 'font-size:11px;color:var(--grey);margin-bottom:6px;font-family:"Helvetica Neue",Arial,sans-serif'}, '2-3 fois par semaine en collation' + ((S.mealsPerDay||3) < 4 ? ' (nécessite 4 repas/jour)' : ''));
+  p.appendChild(dessertSub);
+  var dessertDisabled = (S.mealsPerDay || 3) < 4;
+  if (dessertDisabled && S.wantsDessert) { S.wantsDessert = false; }
+  ['Non merci', 'Oui, avec plaisir !'].forEach(function(opt) {
+    var isOn = opt.startsWith('Oui') ? S.wantsDessert : !S.wantsDessert;
+    var chipStyle = dessertDisabled ? 'opacity:0.4;pointer-events:none;cursor:not-allowed' : '';
+    dessertWrap.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), style: chipStyle, onclick: function() {
+      if (dessertDisabled) return;
+      S.wantsDessert = opt.startsWith('Oui');
+      window.render();
+    }}, opt));
+  });
+  p.appendChild(dessertWrap);
   p.appendChild(h('div', {style: 'height:8px'}));
 
   // Hydratation quotidienne
@@ -918,13 +937,13 @@ function renderStep5(p) {
       bb('nutrition_habits', {meals: S.mealsPerDay, location: S.eatingLocation, prepTime: S.mealPrepTime, alcoholFreq: S.alcoholFreq});
       goStep(6);
     }
-  }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(4); }, html: backArrowHtml() + 'Retour'}));
+  }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 6: OBJECTIF ───
 function renderStep6(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape VI'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' VI'));
   p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>'}));
   if (window.TIPS) TIPS.renderTip(p, 'goal');
 
@@ -936,7 +955,7 @@ function renderStep6(p) {
     S.goal = 1; // index of "Maintien" in GOALS
 
     var pregObjCard = h('div', {style: 'border-left:3px solid #E8A87C;padding:16px;background:var(--ivory2);margin-bottom:16px'});
-    pregObjCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px'}, '\uD83E\uDD30 Maintien + besoins grossesse'));
+    pregObjCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px'}, '\uD83E\uDD30 ' + window.t('onb.s6.maintain') + ' + besoins grossesse'));
     pregObjCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'La perte de poids est d\u00e9conseill\u00e9e pendant la grossesse.'));
 
     var triPreg = window.getPregnancyTrimester ? window.getPregnancyTrimester() : null;
@@ -994,8 +1013,8 @@ function renderStep6(p) {
     p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
       bb('nutrition_goal', {goal: 'maintain_pregnancy', target: calcTarget()});
       goStep(7);
-    }}, 'Continuer'));
-    p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(5); }, html: backArrowHtml() + 'Retour'}));
+    }}, window.t('onb.next')));
+    p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
     return;
   }
 
@@ -1035,7 +1054,7 @@ function renderStep6(p) {
     var tgt = calcTarget();
     var bn = h('div', {'class': 'big-number'});
     bn.appendChild(h('div', {'class': 'bn-val'}, String(tgt)));
-    bn.appendChild(h('div', {'class': 'bn-label'}, 'Calories cibles / jour'));
+    bn.appendChild(h('div', {'class': 'bn-label'}, window.t('onb.s8.target')));
     p.appendChild(bn);
 
     // Target weight
@@ -1096,13 +1115,13 @@ function renderStep6(p) {
       bb('nutrition_goal', {goal: GOALS[S.goal].key, target: calcTarget(), targetWeight: S.targetWeight});
       goStep(7);
     }
-  }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(5); }, html: backArrowHtml() + 'Retour'}));
+  }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 7: PREFERENCES ───
 function renderStep7(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape VII'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' VII'));
   p.appendChild(h('h1', {html: 'Vos<br><em>pr\u00e9f\u00e9rences</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Personnalisez vos recettes selon votre niveau cuisine, allergies et cuisines du monde pr\u00e9f\u00e9r\u00e9es.'));
   if (window.TIPS) TIPS.renderTip(p, 'preferences');
@@ -1119,7 +1138,7 @@ function renderStep7(p) {
   p.appendChild(cl);
 
   // Whey
-  p.appendChild(h('div', {'class': 'section-label'}, 'Whey prot\u00e9ine'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('onb.s5.whey')));
   var wg = h('div', {'class': 'card-grid-2'});
   [{name: 'Oui', val: true}, {name: 'Non', val: false}].forEach(function(o) {
     wg.appendChild(h('div', {'class': 'sel-card' + (S.whey === o.val ? ' on' : ''), onclick: function() { S.whey = o.val; window.render(); }}, [
@@ -1148,7 +1167,7 @@ function renderStep7(p) {
   }
 
   // Allergies
-  p.appendChild(h('div', {'class': 'section-label'}, 'Allergies'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('onb.s5.allergies')));
   var allergyWrap = h('div', {'class': 'chip-wrap'});
   ALLERGIES.forEach(function(a) {
     var on = S.allergies.indexOf(a) !== -1;
@@ -1162,7 +1181,7 @@ function renderStep7(p) {
   p.appendChild(h('div', {style: 'height:8px'}));
 
   // Intolerances
-  p.appendChild(h('div', {'class': 'section-label'}, 'Intol\u00e9rances'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('onb.s5.intolerances')));
   var intolWrap = h('div', {'class': 'chip-wrap'});
   INTOLERANCES.forEach(function(t) {
     var on = S.intolerances.indexOf(t) !== -1;
@@ -1176,7 +1195,7 @@ function renderStep7(p) {
   p.appendChild(h('div', {style: 'height:8px'}));
 
   // Regime
-  p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9gime alimentaire'));
+  p.appendChild(h('div', {'class': 'section-label'}, window.t('onb.s5.diet')));
   var rg = h('div', {'class': 'card-grid-4'});
   REGIMES.forEach(function(r, i) {
     rg.appendChild(h('div', {'class': 'sel-card' + (S.regime === i ? ' on' : ''), onclick: function() { S.regime = i; window.render(); }}, [
@@ -1267,13 +1286,15 @@ function renderStep7(p) {
   var ok = S.whey !== null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
     if (ok) {
+      // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
+      if (window.computeNutritionState) { window.computeNutritionState(false); }
       S.weekPlan = generateWeek();
       bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
       if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
       goStep(8);
     }
-  }}, 'Voir mes r\u00e9sultats'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(6); }, html: backArrowHtml() + 'Retour'}));
+  }}, window.t('onb.finish')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 8: RESULTATS ───
@@ -1339,7 +1360,7 @@ function renderStep8(p) {
   var sr = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px'});
   var c1 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c1.appendChild(h('div', {'class': 'bn-val'}, String(tdee)));
-  c1.appendChild(h('div', {'class': 'bn-label'}, 'TDEE'));
+  c1.appendChild(h('div', {'class': 'bn-label'}, window.t('onb.s8.tdee')));
   sr.appendChild(c1);
   var c2 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c2.appendChild(h('div', {'class': 'bn-val'}, String(tgt)));
@@ -1389,18 +1410,18 @@ function renderStep8(p) {
   // SVG Rings
   var tot = m.g + m.p + m.l;
   var rr = h('div', {'class': 'rings-row'});
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.g / tot * 100 : 0, '#1A3A6A', 'Glucides', m.g));
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, '#1A4A1A', 'Prot\u00e9ines', m.p));
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', 'Lipides', m.l));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.g / tot * 100 : 0, '#1A3A6A', window.t('onb.s8.carbs'), m.g));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, '#1A4A1A', window.t('onb.s8.proteins'), m.p));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', window.t('onb.s8.fats'), m.l));
   p.appendChild(rr);
 
   // Meal split — N-01: dynamique selon S.mealsPerDay
   function getMealSplit(n) {
     switch(n) {
-      case 2: return [{n:'D\u00e9jeuner',pct:50},{n:'D\u00eener',pct:50}];
-      case 3: return [{n:'Petit-d\u00e9jeuner',pct:25},{n:'D\u00e9jeuner',pct:45},{n:'D\u00eener',pct:30}];
-      case 5: return [{n:'Petit-d\u00e9jeuner',pct:20},{n:'Collation mat.',pct:10},{n:'D\u00e9jeuner',pct:35},{n:'Collation',pct:10},{n:'D\u00eener',pct:25}];
-      default: return [{n:'Petit-d\u00e9jeuner',pct:25},{n:'D\u00e9jeuner',pct:40},{n:'Collation',pct:5},{n:'D\u00eener',pct:30}];
+      case 2: return [{n:window.t('onb.s9.lunch'),pct:50},{n:window.t('onb.s9.dinner'),pct:50}];
+      case 3: return [{n:window.t('onb.s9.breakfast'),pct:25},{n:window.t('onb.s9.lunch'),pct:45},{n:window.t('onb.s9.dinner'),pct:30}];
+      case 5: return [{n:window.t('onb.s9.breakfast'),pct:20},{n:'Collation mat.',pct:10},{n:window.t('onb.s9.lunch'),pct:35},{n:window.t('onb.s9.snack'),pct:10},{n:window.t('onb.s9.dinner'),pct:25}];
+      default: return [{n:window.t('onb.s9.breakfast'),pct:25},{n:window.t('onb.s9.lunch'),pct:40},{n:window.t('onb.s9.snack'),pct:5},{n:window.t('onb.s9.dinner'),pct:30}];
     }
   }
   p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas (' + (S.mealsPerDay||3) + ' repas/j)'));
@@ -1426,7 +1447,7 @@ function renderStep8(p) {
   if (bmi !== null) {
     var bi = bmiInfo(bmi);
     var imcClass = bmi < 18.5 ? 'stat-warn' : bmi < 25 ? 'stat-good' : bmi < 30 ? 'stat-warn' : 'stat-alert';
-    stats.appendChild(h('div', {'class': 'stat-cell ' + imcClass}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, 'IMC')]));
+    stats.appendChild(h('div', {'class': 'stat-cell ' + imcClass}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, window.t('onb.s2.bmi'))]));
   }
   p.appendChild(stats);
 
@@ -1800,7 +1821,7 @@ function renderWeightChart(p) {
 function renderStep9(p) {
   p.appendChild(h('div', {'class': 'eyebrow'}, 'Planning'));
   p.appendChild(h('h1', {html: 'Votre<br><em>semaine</em>'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 4 repas/jour \u00b7 200 recettes halal du monde entier'));
+  p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 439 recettes'));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
   if (!S.weekPlan) S.weekPlan = generateWeek();
@@ -1815,10 +1836,10 @@ function renderStep9(p) {
   // Day meals
   var day = S.weekPlan[S.selectedDay] || {}, tgtCal = calcTarget(), dayTotal = 0, dayTotalP = 0, dayTotalG = 0, dayTotalL = 0;
   var slots = [
-    {key: 'breakfast', label: 'Petit-d\u00e9jeuner'},
-    {key: 'lunch', label: 'D\u00e9jeuner'},
-    {key: 'snack', label: 'Collation'},
-    {key: 'dinner', label: 'D\u00eener'}
+    {key: 'breakfast', label: window.t('onb.s9.breakfast')},
+    {key: 'lunch', label: window.t('onb.s9.lunch')},
+    {key: 'snack', label: window.t('onb.s9.snack')},
+    {key: 'dinner', label: window.t('onb.s9.dinner')}
   ];
   slots.forEach(function(sl) {
     var r = day[sl.key];
@@ -1865,7 +1886,7 @@ function renderStep9(p) {
   // Day total
   var diff = dayTotal - tgtCal, diffPct = tgtCal > 0 ? Math.abs(diff / tgtCal * 100) : 0, isOk = diffPct < 5;
   var total = h('div', {'class': 'day-total'});
-  total.appendChild(h('div', {'class': 'dt-label'}, 'Total du jour'));
+  total.appendChild(h('div', {'class': 'dt-label'}, window.t('onb.s9.total')));
   var vd = h('div', {style: 'display:flex;align-items:center;gap:12px'});
   vd.appendChild(h('span', {'class': 'dt-val'}, dayTotal + ' kcal'));
 
@@ -1899,9 +1920,9 @@ function renderStep9(p) {
   // Budget réel du plan semaine
   if (window.RecipeEngine && window.RecipeEngine.calcWeekPlanBudget && S.weekPlan) {
     var budget = window.RecipeEngine.calcWeekPlanBudget(S.weekPlan);
+    var budgetBlock = h('div', { style: 'margin:16px 0;padding:14px 16px;background:var(--card);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)' });
+    budgetBlock.appendChild(h('div', { style: 'font-weight:700;font-size:14px;margin-bottom:10px;color:var(--text)' }, '💰 Budget courses estimé'));
     if (budget.totalMAD > 0) {
-      var budgetBlock = h('div', { style: 'margin:16px 0;padding:14px 16px;background:var(--card);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)' });
-      budgetBlock.appendChild(h('div', { style: 'font-weight:700;font-size:14px;margin-bottom:10px;color:var(--text)' }, '💰 Budget courses estimé'));
       var budgetGrid = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px' });
       budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:8px;padding:10px;text-align:center' },
         h('div', { style: 'font-size:11px;color:var(--text-secondary);margin-bottom:4px' }, 'Budget / jour'),
@@ -1917,15 +1938,19 @@ function renderStep9(p) {
           '* Estimation basée sur ' + budget.coveragePct + '% des repas (recettes avec prix disponibles)'
         ));
       }
-      // Insère après le plan semaine
-      p.appendChild(budgetBlock);
+    } else {
+      budgetBlock.appendChild(h('div', { style: 'font-size:12px;color:var(--text-secondary);text-align:center;padding:8px 0' },
+        'Prix non disponibles pour ce plan — généralement disponibles dès la semaine suivante'
+      ));
     }
+    // Insère après le plan semaine
+    p.appendChild(budgetBlock);
   }
 
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
   var _shopList = (window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan) : [];
   var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
-  var _shopLabel = '\uD83D\uDECD Liste de courses' + (_shopTotal > 0 ? ' (' + _shopTotal + ' articles)' : '');
+  var _shopLabel = '\uD83D\uDECD ' + window.t('shop.title') + (_shopTotal > 0 ? ' (' + _shopTotal + ' articles)' : '');
   var btnShop = h('button', {
     style: 'width:100%;padding:12px;margin:8px 0;background:var(--card);border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
     onclick: function() { window.S.shopListOpen = true; if(window.render) window.render(); }
@@ -1946,7 +1971,7 @@ function renderStep9(p) {
     S.weekPlan = generateWeek();
     bb('week_regenerated', {});
     window.render();
-  }}, '\u21bb R\u00e9g\u00e9n\u00e9rer la semaine'));
+  }}, '\u21bb ' + window.t('onb.s9.generate')));
   p.appendChild(h('div', {style: 'height:12px'}));
   p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(8); }}, '\u2190 Retour aux r\u00e9sultats'));
 }
@@ -1976,9 +2001,9 @@ function renderModal(app) {
     var carbs = r.g || (r.baseNutrition && r.baseNutrition.carbsGrams) || 0;
     var fats  = r.l || (r.baseNutrition && r.baseNutrition.fatGrams) || 0;
     pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, String(kcal)), h('div', {'class': 'mp-label'}, 'Calories')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, prot + 'g'), h('div', {'class': 'mp-label'}, 'Prot\u00e9ines')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, carbs + 'g'), h('div', {'class': 'mp-label'}, 'Glucides')]));
-    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, fats + 'g'), h('div', {'class': 'mp-label'}, 'Lipides')]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, prot + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.proteins'))]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, carbs + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.carbs'))]));
+    pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, fats + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.fats'))]));
     body.appendChild(pills);
     body.appendChild(h('div', {'class': 'section-label'}, 'Ingr\u00e9dients'));
     var ingredList = h('ul', {'class': 'ingredient-list'});
@@ -2206,61 +2231,180 @@ function cleanShopChecked(list) {
   });
 }
 
-// ─── SALAD BAR ───
+// ─── L'ATELIER BOWL ───
 var SALAD_DB = {
   bases: [
+    // Classiques
     { name: 'Riz brun', qty: 100, unit: 'g', k: 111, p: 2.6, g: 23, l: 0.9 },
     { name: 'Quinoa', qty: 100, unit: 'g', k: 120, p: 4.4, g: 21, l: 1.9 },
     { name: 'P\u00e2tes compl\u00e8tes', qty: 100, unit: 'g', k: 157, p: 5.8, g: 30, l: 1.0 },
     { name: 'Couscous', qty: 100, unit: 'g', k: 112, p: 3.8, g: 23, l: 0.2 },
     { name: 'Lentilles', qty: 100, unit: 'g', k: 116, p: 9.0, g: 20, l: 0.4 },
     { name: 'Pois chiches', qty: 100, unit: 'g', k: 164, p: 8.9, g: 27, l: 2.6 },
-    { name: 'Patate douce', qty: 100, unit: 'g', k: 86, p: 1.6, g: 20, l: 0.1 },
-    { name: 'Boulgour', qty: 100, unit: 'g', k: 83, p: 3.1, g: 18, l: 0.2 }
+    { name: 'Patate douce r\u00f4tie', qty: 100, unit: 'g', k: 90, p: 1.8, g: 21, l: 0.1 },
+    { name: 'Boulgour', qty: 100, unit: 'g', k: 83, p: 3.1, g: 18, l: 0.2 },
+    // Prestige
+    { name: 'Riz noir V\u00e9n\u00e9r\u00e9', qty: 100, unit: 'g', k: 130, p: 3.5, g: 26, l: 1.2, premium: true },
+    { name: 'Freekeh', qty: 100, unit: 'g', k: 112, p: 5.0, g: 22, l: 0.8, premium: true },
+    { name: 'Sarrasin grill\u00e9', qty: 100, unit: 'g', k: 108, p: 4.0, g: 22, l: 1.1, premium: true },
+    { name: 'Orzo gratin\u00e9', qty: 100, unit: 'g', k: 150, p: 5.2, g: 29, l: 1.0, premium: true },
+    { name: 'M\u00e2che', qty: 60, unit: 'g', k: 13, p: 1.8, g: 1.2, l: 0.4, premium: true }
   ],
   proteins: [
+    // Classiques
     { name: 'Poulet grill\u00e9', qty: 100, unit: 'g', k: 165, p: 31, g: 0, l: 3.6 },
     { name: 'Thon en bo\u00eete', qty: 100, unit: 'g', k: 132, p: 28, g: 0, l: 1.5 },
     { name: 'Saumon', qty: 100, unit: 'g', k: 208, p: 20, g: 0, l: 13 },
     { name: 'Crevettes', qty: 100, unit: 'g', k: 85, p: 18, g: 0, l: 0.9 },
-    { name: 'Œuf dur', qty: 60, unit: 'g', k: 91, p: 7.5, g: 0.4, l: 6.3 },
+    { name: '\u0152uf mollet', qty: 60, unit: 'g', k: 91, p: 7.5, g: 0.4, l: 6.3 },
     { name: 'Tofu ferme', qty: 100, unit: 'g', k: 76, p: 8.0, g: 1.9, l: 4.2 },
     { name: 'B\u0153uf hach\u00e9 5%', qty: 100, unit: 'g', k: 137, p: 22, g: 0, l: 5.0 },
-    { name: 'Feta', qty: 50, unit: 'g', k: 133, p: 7.2, g: 1.1, l: 10.7 },
-    { name: 'Mozzarella', qty: 60, unit: 'g', k: 133, p: 9.0, g: 1.5, l: 10 },
-    { name: 'Saumon fum\u00e9', qty: 60, unit: 'g', k: 104, p: 11, g: 0, l: 6.5 }
+    { name: 'Feta AOP', qty: 50, unit: 'g', k: 133, p: 7.2, g: 1.1, l: 10.7 },
+    { name: 'Mozzarella di bufala', qty: 60, unit: 'g', k: 140, p: 9.5, g: 1.2, l: 11 },
+    { name: 'Saumon fum\u00e9', qty: 60, unit: 'g', k: 104, p: 11, g: 0, l: 6.5 },
+    // Prestige
+    { name: 'Burrata', qty: 80, unit: 'g', k: 196, p: 9.6, g: 1.6, l: 16.8, premium: true },
+    { name: 'Gravlax maison', qty: 60, unit: 'g', k: 120, p: 12, g: 0.5, l: 7.8, premium: true },
+    { name: 'Crevettes tigre', qty: 100, unit: 'g', k: 99, p: 21, g: 0, l: 1.1, premium: true },
+    { name: 'Poulpe grill\u00e9', qty: 80, unit: 'g', k: 65, p: 13, g: 1.5, l: 0.8, premium: true },
+    { name: 'Steak de thon snack\u00e9', qty: 100, unit: 'g', k: 144, p: 30, g: 0, l: 2.0, premium: true },
+    { name: 'Edamame', qty: 80, unit: 'g', k: 110, p: 10, g: 8, l: 4.7, premium: true },
+    { name: 'Tofu soyeux', qty: 100, unit: 'g', k: 55, p: 6.0, g: 2.0, l: 2.7, premium: true }
   ],
   veggies: [
-    { name: 'Tomates', qty: 100, unit: 'g', k: 18, p: 0.9, g: 3.9, l: 0.2 },
+    // Classiques
+    { name: 'Tomates cerises', qty: 100, unit: 'g', k: 18, p: 0.9, g: 3.9, l: 0.2 },
     { name: 'Concombre', qty: 100, unit: 'g', k: 15, p: 0.7, g: 3.6, l: 0.1 },
-    { name: '\u00c9pinards', qty: 80, unit: 'g', k: 18, p: 2.3, g: 2.9, l: 0.3 },
+    { name: '\u00c9pinards baby', qty: 80, unit: 'g', k: 18, p: 2.3, g: 2.9, l: 0.3 },
     { name: 'Roquette', qty: 50, unit: 'g', k: 13, p: 1.3, g: 2.0, l: 0.4 },
-    { name: 'Carottes', qty: 80, unit: 'g', k: 33, p: 0.7, g: 7.7, l: 0.1 },
+    { name: 'Carottes r\u00e2p\u00e9es', qty: 80, unit: 'g', k: 33, p: 0.7, g: 7.7, l: 0.1 },
     { name: 'Poivron rouge', qty: 80, unit: 'g', k: 25, p: 0.8, g: 5.9, l: 0.2 },
     { name: 'Champignons', qty: 80, unit: 'g', k: 18, p: 1.8, g: 3.3, l: 0.1 },
-    { name: 'Ma\u00efs', qty: 60, unit: 'g', k: 70, p: 2.1, g: 15, l: 0.6 },
+    { name: 'Ma\u00efs doux', qty: 60, unit: 'g', k: 70, p: 2.1, g: 15, l: 0.6 },
     { name: 'Haricots verts', qty: 80, unit: 'g', k: 22, p: 1.8, g: 5.0, l: 0.1 },
-    { name: 'Oignons rouges', qty: 40, unit: 'g', k: 17, p: 0.5, g: 3.9, l: 0.1 }
+    { name: 'Oignons rouges', qty: 40, unit: 'g', k: 17, p: 0.5, g: 3.9, l: 0.1 },
+    // Prestige
+    { name: 'Betterave r\u00f4tie', qty: 80, unit: 'g', k: 46, p: 1.7, g: 10, l: 0.2, premium: true },
+    { name: 'Asperges blanches', qty: 80, unit: 'g', k: 18, p: 2.0, g: 3.1, l: 0.1, premium: true },
+    { name: 'Fenouil effil\u00f3ch\u00e9', qty: 60, unit: 'g', k: 16, p: 0.6, g: 3.7, l: 0.1, premium: true },
+    { name: 'Radis Watermelon', qty: 50, unit: 'g', k: 9, p: 0.4, g: 1.9, l: 0.1, premium: true },
+    { name: 'Micro-pousses', qty: 20, unit: 'g', k: 10, p: 1.2, g: 1.0, l: 0.5, premium: true },
+    { name: 'Fleurs comestibles', qty: 5, unit: 'g', k: 3, p: 0.2, g: 0.5, l: 0.1, premium: true },
+    { name: 'Avocat tranch\u00e9', qty: 60, unit: 'g', k: 96, p: 1.2, g: 5.1, l: 8.8, premium: true },
+    { name: 'Tomates Heirloom', qty: 100, unit: 'g', k: 22, p: 1.1, g: 4.8, l: 0.3, premium: true }
   ],
   fats: [
+    // Classiques
     { name: 'Avocat', qty: 60, unit: 'g', k: 96, p: 1.2, g: 5.1, l: 8.8 },
-    { name: 'Huile d\'olive', qty: 10, unit: 'ml', k: 88, p: 0, g: 0, l: 10 },
-    { name: 'Amandes', qty: 20, unit: 'g', k: 116, p: 4.2, g: 4.4, l: 10 },
-    { name: 'Noix', qty: 20, unit: 'g', k: 131, p: 3.0, g: 2.8, l: 13 },
+    { name: "Huile d'olive extra-vierge", qty: 10, unit: 'ml', k: 88, p: 0, g: 0, l: 10 },
+    { name: 'Amandes effil\u00e9es', qty: 20, unit: 'g', k: 116, p: 4.2, g: 4.4, l: 10 },
+    { name: 'Noix de Grenoble', qty: 20, unit: 'g', k: 131, p: 3.0, g: 2.8, l: 13 },
     { name: 'Graines de chia', qty: 15, unit: 'g', k: 73, p: 2.5, g: 6.2, l: 4.6 },
-    { name: 'Olives', qty: 30, unit: 'g', k: 41, p: 0.3, g: 2.2, l: 3.8 },
-    { name: 'Tahini', qty: 15, unit: 'g', k: 89, p: 2.5, g: 3.2, l: 8.1 },
-    { name: 'Graines de s\u00e9same', qty: 10, unit: 'g', k: 57, p: 1.8, g: 2.3, l: 4.9 }
+    { name: 'Olives Taggi\u00e0sche', qty: 30, unit: 'g', k: 45, p: 0.3, g: 2.5, l: 4.2 },
+    { name: 'Tahini de s\u00e9same blanc', qty: 15, unit: 'g', k: 89, p: 2.5, g: 3.2, l: 8.1 },
+    { name: 'Graines de s\u00e9same torr\u00e9fi\u00e9es', qty: 10, unit: 'g', k: 57, p: 1.8, g: 2.3, l: 4.9 },
+    // Prestige
+    { name: 'Huile de truffe blanche', qty: 5, unit: 'ml', k: 44, p: 0, g: 0, l: 5.0, premium: true },
+    { name: 'Pignons de pin grill\u00e9s', qty: 15, unit: 'g', k: 102, p: 2.1, g: 2.0, l: 10.2, premium: true },
+    { name: 'Noisettes concass\u00e9es', qty: 15, unit: 'g', k: 94, p: 2.3, g: 2.5, l: 9.0, premium: true },
+    { name: 'Parmesan 24 mois', qty: 15, unit: 'g', k: 59, p: 5.4, g: 0.3, l: 4.1, premium: true },
+    { name: 'Noix de cajou', qty: 20, unit: 'g', k: 113, p: 3.0, g: 6.3, l: 9.0, premium: true }
   ],
   sauces: [
+    // Classiques
     { name: 'Vinaigrette l\u00e9g\u00e8re', qty: 15, unit: 'ml', k: 45, p: 0, g: 2.0, l: 4.0 },
     { name: 'Jus de citron', qty: 20, unit: 'ml', k: 5, p: 0.1, g: 1.3, l: 0.0 },
-    { name: 'Sauce yaourt', qty: 30, unit: 'ml', k: 25, p: 1.5, g: 2.5, l: 0.5 },
+    { name: 'Sauce yaourt menthe', qty: 30, unit: 'ml', k: 28, p: 1.8, g: 2.8, l: 0.6 },
     { name: 'Sauce tahini citronn\u00e9e', qty: 20, unit: 'g', k: 60, p: 1.8, g: 3.0, l: 5.0 },
-    { name: 'Sauce soja', qty: 10, unit: 'ml', k: 6, p: 0.7, g: 0.9, l: 0.0 },
-    { name: 'Pesto', qty: 15, unit: 'g', k: 72, p: 1.5, g: 1.5, l: 7.0 }
+    { name: 'Sauce soja r\u00e9duite', qty: 10, unit: 'ml', k: 6, p: 0.7, g: 0.9, l: 0.0 },
+    { name: 'Pesto G\u00eanois', qty: 15, unit: 'g', k: 72, p: 1.5, g: 1.5, l: 7.0 },
+    // Prestige
+    { name: 'Vinaigrette au miso', qty: 20, unit: 'g', k: 52, p: 1.2, g: 4.5, l: 3.2, premium: true },
+    { name: 'Caesar l\u00e9g\u00e8re', qty: 25, unit: 'g', k: 55, p: 2.0, g: 2.5, l: 4.5, premium: true },
+    { name: 'Green Goddess', qty: 25, unit: 'g', k: 48, p: 0.8, g: 2.0, l: 4.2, premium: true },
+    { name: 'Yuzu kosho', qty: 10, unit: 'g', k: 12, p: 0.4, g: 2.0, l: 0.2, premium: true },
+    { name: 'Chermoula', qty: 20, unit: 'g', k: 38, p: 0.5, g: 1.5, l: 3.5, premium: true },
+    { name: 'Gribiche express', qty: 25, unit: 'g', k: 68, p: 2.5, g: 1.0, l: 6.0, premium: true }
   ]
 };
+
+// ─── COMPOSITIONS SIGNATURE ───
+// 5 bowls curétés par le "chef" — l'utilisateur adopte et personnalise
+var SIGNATURE_BOWLS = [
+  {
+    id: 'japanese_wave',
+    label: 'Vague Japonaise',
+    subtitle: 'Fra\u00eecheur umami \u00b7 \u2191 Prot\u00e9ines',
+    palette: '#2D6A6A',
+    base: 'Riz noir V\u00e9n\u00e9r\u00e9',
+    proteins: ['Steak de thon snack\u00e9', 'Edamame'],
+    veggies: ['Radis Watermelon', 'Concombre', 'Micro-pousses'],
+    fats: ['Graines de s\u00e9same torr\u00e9fi\u00e9es'],
+    sauce: 'Yuzu kosho'
+  },
+  {
+    id: 'mediterranean_sun',
+    label: 'M\u00e9diterran\u00e9e Dor\u00e9e',
+    subtitle: '\u00c9quilibre parfait \u00b7 Anti-inflammatoire',
+    palette: '#C47A2B',
+    base: 'Freekeh',
+    proteins: ['Poulpe grill\u00e9', 'Feta AOP'],
+    veggies: ['Tomates Heirloom', 'Fenouil effil\u00f3ch\u00e9', 'Oignons rouges'],
+    fats: ['Olives Taggi\u00e0sche', 'Pignons de pin grill\u00e9s'],
+    sauce: 'Chermoula'
+  },
+  {
+    id: 'green_goddess_bowl',
+    label: 'La D\u00e9esse Verte',
+    subtitle: 'D\u00e9tox & vitalit\u00e9 \u00b7 Faible calorie',
+    palette: '#2A6A3A',
+    base: 'M\u00e2che',
+    proteins: ['Tofu soyeux', 'Edamame'],
+    veggies: ['\u00c9pinards baby', 'Asperges blanches', 'Avocat tranch\u00e9', 'Micro-pousses'],
+    fats: ['Graines de chia'],
+    sauce: 'Green Goddess'
+  },
+  {
+    id: 'cesar_prestige',
+    label: 'C\u00e9sar R\u00e9invent\u00e9',
+    subtitle: 'Classique \u00e9lev\u00e9 \u00b7 \u2191 Sati\u00e9t\u00e9',
+    palette: '#5A3A8A',
+    base: 'Quinoa',
+    proteins: ['Poulet grill\u00e9', 'Parmesan 24 mois'],
+    veggies: ['Roquette', 'Tomates cerises', 'Fleurs comestibles'],
+    fats: ['Noisettes concass\u00e9es'],
+    sauce: 'Caesar l\u00e9g\u00e8re'
+  },
+  {
+    id: 'nordic_gravlax',
+    label: 'Nordique Signature',
+    subtitle: 'Om\u00e9ga-3 \u00b7 Raffinement scandinave',
+    palette: '#3A5A8A',
+    base: 'Sarrasin grill\u00e9',
+    proteins: ['Gravlax maison'],
+    veggies: ['Fenouil effil\u00f3ch\u00e9', 'Radis Watermelon', 'Betterave r\u00f4tie'],
+    fats: ['Noix de Grenoble', 'Huile de truffe blanche'],
+    sauce: 'Gribiche express'
+  }
+];
+
+// Résoudre une composition signature en objets SALAD_DB complets
+function resolveSignatureBowl(sig) {
+  function findItem(cat, name) {
+    var list = SALAD_DB[cat];
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].name === name) return JSON.parse(JSON.stringify(list[i]));
+    }
+    return null;
+  }
+  var resolved = { base: null, proteins: [], veggies: [], fats: [], sauce: null };
+  resolved.base = findItem('bases', sig.base);
+  (sig.proteins || []).forEach(function(n) { var it = findItem('proteins', n); if (it) resolved.proteins.push(it); });
+  (sig.veggies || []).forEach(function(n) { var it = findItem('veggies', n); if (it) resolved.veggies.push(it); });
+  (sig.fats || []).forEach(function(n) { var it = findItem('fats', n); if (it) resolved.fats.push(it); });
+  resolved.sauce = findItem('sauces', sig.sauce);
+  return resolved;
+}
 
 function calcSaladMacros(sb) {
   var total = { k: 0, p: 0, g: 0, l: 0 };
@@ -2277,15 +2421,16 @@ function renderSaladBar(p) {
   var sb = S.saladBar;
   p.innerHTML = '';
 
-  // Macro targets
+  // Macro targets — déjeuner 35% du TDEE, dîner 30% (recommandations standard)
   var tgtMacros = { k: 600, p: 40, g: 65, l: 20 };
   if (window.calcMacros && window.calcTarget) {
     var dm = window.calcMacros(), dk = window.calcTarget();
     if (dk > 0) {
-      tgtMacros.k = Math.round(dk * 0.35);
-      tgtMacros.p = Math.round(dm.p * 0.35);
-      tgtMacros.g = Math.round(dm.g * 0.35);
-      tgtMacros.l = Math.round(dm.l * 0.35);
+      var mealRatio = (sb.mealTarget === 'dinner') ? 0.30 : 0.35;
+      tgtMacros.k = Math.round(dk * mealRatio);
+      tgtMacros.p = Math.round(dm.p * mealRatio);
+      tgtMacros.g = Math.round(dm.g * mealRatio);
+      tgtMacros.l = Math.round(dm.l * mealRatio);
     }
   }
 
@@ -2299,12 +2444,12 @@ function renderSaladBar(p) {
     style: 'background:none;border:none;font-size:16px;cursor:pointer;color:var(--text);padding:4px 8px',
     onclick: function() { S.saladBar.open = false; window.render(); }
   }, '\u2190 Retour'));
-  header.appendChild(h('div', { style: 'font-size:18px;font-weight:700;color:var(--text)' }, '\uD83E\uDD57 Bar \u00e0 Salade'));
+  header.appendChild(h('div', { style: 'font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.3px' }, '\u2728 L\u2019Atelier Bowl'));
 
   // Meal target toggle
   var toggleWrap = h('div', { style: 'display:flex;gap:4px' });
   ['lunch', 'dinner'].forEach(function(slot) {
-    var label = slot === 'lunch' ? 'D\u00e9j' : 'D\u00eener';
+    var label = slot === 'lunch' ? window.t('onb.s9.lunch') : window.t('onb.s9.dinner');
     toggleWrap.appendChild(h('button', {
       style: 'padding:4px 10px;border-radius:20px;border:1.5px solid ' + (sb.mealTarget === slot ? barColor : 'var(--border)') + ';background:' + (sb.mealTarget === slot ? barColor : 'transparent') + ';color:' + (sb.mealTarget === slot ? '#fff' : 'var(--text)') + ';font-size:12px;cursor:pointer;font-weight:600',
       onclick: function() { sb.mealTarget = slot; window.render(); }
@@ -2338,6 +2483,43 @@ function renderSaladBar(p) {
   progressBar.appendChild(chipsRow);
   p.appendChild(progressBar);
 
+  // ── Compositions Signature carousel ──
+  var sigSection = h('div', { style: 'padding:12px 16px 4px' });
+  sigSection.appendChild(h('div', {
+    style: 'font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'
+  }, '★ Signatures du chef'));
+  var sigScroll = h('div', {
+    style: 'display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none'
+  });
+  SIGNATURE_BOWLS.forEach(function(sig) {
+    var isActive = sb._signatureId === sig.id;
+    var card = h('button', {
+      style: 'flex:0 0 auto;width:150px;padding:10px 12px;border-radius:14px;border:1.5px solid ' +
+        (isActive ? sig.palette : 'var(--border)') +
+        ';background:' + (isActive ? sig.palette + '18' : 'var(--card)') +
+        ';text-align:left;cursor:pointer;transition:all 0.2s',
+      onclick: function() {
+        var resolved = resolveSignatureBowl(sig);
+        sb.base = resolved.base;
+        sb.proteins = resolved.proteins;
+        sb.veggies = resolved.veggies;
+        sb.fats = resolved.fats;
+        sb.sauce = resolved.sauce;
+        sb._signatureId = isActive ? null : sig.id;
+        window.render();
+      }
+    });
+    card.appendChild(h('div', {
+      style: 'font-size:12px;font-weight:700;color:' + sig.palette + ';margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'
+    }, sig.label));
+    card.appendChild(h('div', {
+      style: 'font-size:10px;color:var(--grey);line-height:1.3;white-space:normal'
+    }, sig.subtitle));
+    sigScroll.appendChild(card);
+  });
+  sigSection.appendChild(sigScroll);
+  p.appendChild(sigSection);
+
   // ── Helper: render ingredient section ──
   function renderSection(title, icon, items, selectedItems, isRadio, maxSel, onToggle, onQty) {
     var sec = h('div', { style: 'padding:12px 16px' });
@@ -2360,10 +2542,12 @@ function renderSaladBar(p) {
         ';color:var(--text);font-size:12px;cursor:' + (canAdd ? 'pointer' : 'not-allowed') +
         ';font-weight:' + (isSel ? '700' : '400') +
         ';opacity:' + (canAdd ? '1' : '0.45') + ';transition:all 0.2s';
-      grid.appendChild(h('button', {
-        style: chipStyle,
+      var chipLabel = item.premium ? (item.name + ' ◆') : item.name;
+      var chipBtn = h('button', {
+        style: chipStyle + (item.premium && !isSel ? ';border-style:dashed' : ''),
         onclick: function() { if (canAdd || isSel) onToggle(item); }
-      }, item.name));
+      }, chipLabel);
+      grid.appendChild(chipBtn);
     });
     sec.appendChild(grid);
 
@@ -2440,7 +2624,7 @@ function renderSaladBar(p) {
 
   // ── Base ──
   p.appendChild(renderSection(
-    'Base glucidique', '\uD83C\uDF3E',
+    'La Base', '\uD83C\uDF3E',
     SALAD_DB.bases, sb.base, true, 1,
     function(item) {
       if (sb.base && sb.base.name === item.name) { sb.base = null; }
@@ -2452,7 +2636,7 @@ function renderSaladBar(p) {
 
   // ── Proteins ──
   p.appendChild(renderSection(
-    'Prot\u00e9ines', '\uD83C\uDFCB\uFE0F',
+    'Prot\u00e9ines nobles', '\uD83E\uDDC0',
     SALAD_DB.proteins, sb.proteins, false, 3,
     function(item) {
       var idx = -1;
@@ -2466,7 +2650,7 @@ function renderSaladBar(p) {
 
   // ── Veggies ──
   p.appendChild(renderSection(
-    'L\u00e9gumes', '\uD83E\uDD6C',
+    'Jardini\u00e8re', '\uD83C\uDF31',
     SALAD_DB.veggies, sb.veggies, false, 10,
     function(item) {
       var idx = -1;
@@ -2480,7 +2664,7 @@ function renderSaladBar(p) {
 
   // ── Fats ──
   p.appendChild(renderSection(
-    'Lipides', '\uD83E\uDD51',
+    'Finitions & textures', '\u2728',
     SALAD_DB.fats, sb.fats, false, 3,
     function(item) {
       var idx = -1;
@@ -2494,7 +2678,7 @@ function renderSaladBar(p) {
 
   // ── Sauce ──
   p.appendChild(renderSection(
-    'Sauce', '\uD83E\uDD63',
+    'L\u2019assaisonnement', '\uD83C\uDF3F',
     SALAD_DB.sauces, sb.sauce, true, 1,
     function(item) {
       if (sb.sauce && sb.sauce.name === item.name) { sb.sauce = null; }
@@ -2506,7 +2690,7 @@ function renderSaladBar(p) {
 
   // ── Recap + Actions ──
   var recap = h('div', { style: 'padding:16px;background:var(--card);margin:8px 16px;border-radius:12px;border:1px solid var(--border)' });
-  recap.appendChild(h('div', { style: 'font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px' }, '\uD83D\uDCCB R\u00e9capitulatif'));
+  recap.appendChild(h('div', { style: 'font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px' }, 'Votre composition'));
 
   var allItems = [];
   if (sb.base) allItems.push(sb.base);
@@ -2516,7 +2700,7 @@ function renderSaladBar(p) {
   if (sb.sauce) allItems.push(sb.sauce);
 
   if (allItems.length === 0) {
-    recap.appendChild(h('div', { style: 'color:var(--grey);font-size:13px;text-align:center;padding:12px' }, 'S\u00e9lectionne des ingr\u00e9dients pour composer ta salade'));
+    recap.appendChild(h('div', { style: 'color:var(--grey);font-size:13px;text-align:center;padding:12px' }, 'Composez votre cr\u00e9ation ou partez d\u2019une composition signature ci-dessus'));
   } else {
     allItems.forEach(function(item) {
       var m = computeItemMacros(item);
@@ -2543,15 +2727,15 @@ function renderSaladBar(p) {
       var saladIngredients = allItems.map(function(x) { return x.name + ' ' + x.qty + x.unit; }).join(', ');
       var saladRecipe = {
         _id: 'SALAD_' + Date.now(),
-        n: 'Ma Salade Perso \uD83E\uDD57',
+        n: 'Mon Atelier Bowl \u2728',
         k: macros.k, p: macros.p, g: macros.g, l: macros.l,
         f: '\uD83E\uDD57',
         lv: 1,
         i: saladIngredients,
         _scaledIngredients: allItems.slice(),
         _scalingRatio: 1,
-        tags: ['salade', 'custom'],
-        st: ['Pr\u00e9parer tous les ingr\u00e9dients.', 'Assembler la salade dans un bol.', 'Assaisonner et servir.']
+        tags: ['atelier', 'bowl', 'custom'],
+        st: ['Pr\u00e9parez et templ\u00e9risez vos ingr\u00e9dients.', 'Disposez la base au fond du bol.', 'Ajoutez les prot\u00e9ines et les garnitures.', 'Nappez de sauce au dernier moment et servez.']
       };
       if (!S.weekPlan) S.weekPlan = [];
       if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
@@ -2559,7 +2743,7 @@ function renderSaladBar(p) {
       S.saladBar.open = false;
       window.render();
     }
-  }, '\uD83D\uDCBE Ajouter au plan (' + (sb.mealTarget === 'lunch' ? 'D\u00e9jeuner' : 'D\u00eener') + ')');
+  }, 'Valider ma composition — ' + (sb.mealTarget === 'lunch' ? window.t('onb.s9.lunch') : window.t('onb.s9.dinner')))  ;
   actWrap.appendChild(btnAdd);
 
   actWrap.appendChild(h('button', {
@@ -2568,7 +2752,7 @@ function renderSaladBar(p) {
       sb.base = null; sb.proteins = []; sb.veggies = []; sb.fats = []; sb.sauce = null;
       window.render();
     }
-  }, '\uD83D\uDD04 R\u00e9initialiser'));
+  }, 'Repartir de z\u00e9ro'));
 
   p.appendChild(actWrap);
 }
@@ -2601,7 +2785,7 @@ function renderShoppingList(p) {
   var titleEl = h('div', {
     style:'font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ''),
     'class': arMode ? 'shop-ar-title' : ''
-  }, arMode ? (AR ? AR.ui['title'] : 'قائمة التسوق') : '🛒 Liste de courses');
+  }, arMode ? (AR ? AR.ui['title'] : 'قائمة التسوق') : '\uD83D\uDED2 ' + window.t('shop.title'));
   var subtitleEl = h('div', {
     style:'font-size:13px;color:var(--text-secondary)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : '')
   }, arMode ? (AR ? AR.ui['subtitle'] : 'الأسبوع كامل') : 'Semaine complète — cochez au fur et à mesure');
@@ -2637,12 +2821,12 @@ function renderShoppingList(p) {
   var btnPDF = h('button', {
     style:'flex:1;padding:10px 14px;background:var(--black);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;min-width:140px',
     onclick: function() { exportShoppingListPDF(list, s.shopChecked); }
-  }, arMode ? (AR ? AR.ui['download_pdf'] : '📄 PDF') : '📄 Télécharger PDF');
+  }, arMode ? (AR ? AR.ui['download_pdf'] : '📄 PDF') : '\uD83D\uDCC4 ' + window.t('shop.export'));
 
   var btnReset = h('button', {
     style:'padding:10px 14px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer',
     onclick: function() { s.shopChecked = {}; if(window.render) window.render(); }
-  }, arMode ? (AR ? AR.ui['reset'] : '↺') : '↺ Réinitialiser');
+  }, arMode ? (AR ? AR.ui['reset'] : '↺') : '\u21ba ' + window.t('shop.reset'));
 
   // Bouton toggle arabe / FR
   var btnAR = h('button', {
@@ -2669,7 +2853,7 @@ function renderShoppingList(p) {
   var checked = Object.keys(s.shopChecked).filter(function(k){return s.shopChecked[k];}).length;
   var counterText = arMode
     ? (checked + ' / ' + total + ' ' + (AR ? AR.ui['articles_bought'] : 'منتج مشترى'))
-    : (checked + ' / ' + total + ' articles achetés');
+    : (checked + ' / ' + total + ' ' + window.t('shop.bought'));
   var counter = h('div', {
     style:'padding:0 16px 8px;font-size:13px;color:var(--text-secondary)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ''),
     'class':'shop-print-hide'
@@ -2681,7 +2865,7 @@ function renderShoppingList(p) {
   var sectionsCount = list.length;
   var infoBarText = arMode
     ? (sectionsCount + ' ' + (AR ? AR.ui['sections'] : 'رايون') + ' — ' + total + ' ' + (AR ? AR.ui['articles'] : 'منتج') + ' — ' + (AR ? AR.ui['optimized_route'] : 'مسار محسّن'))
-    : (sectionsCount + ' rayon' + (sectionsCount > 1 ? 's' : '') + ' — ' + total + ' article' + (total > 1 ? 's' : '') + ' — Parcours optimisé');
+    : (sectionsCount + ' ' + window.t('shop.aisles') + ' — ' + total + ' ' + window.t('shop.items') + ' — ' + window.t('shop.optimized'));
   var infoBar = h('div', {
     style:'margin:0 16px 12px;padding:10px 14px;border:1px solid var(--border);font-size:10px;letter-spacing:' + (arMode ? '0' : '1px') + ';color:var(--grey)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ';font-family:"Helvetica Neue",Arial,sans-serif'),
     'class':'shop-print-hide'
@@ -2878,7 +3062,7 @@ window.NUTRITION = {
     if (S.nStep >= 1 && S.nStep <= 9) {
       var hdr = h('header', {'class': 'header'});
       hdr.appendChild(h('div', {'class': 'logo', html: 'MTD<span>Nutrition & Sport</span>'}));
-      hdr.appendChild(h('div', {'class': 'step-indicator'}, '\u00c9tape ' + S.nStep + ' / 9'));
+      hdr.appendChild(h('div', {'class': 'step-indicator'}, window.t('onb.step') + ' ' + S.nStep + ' ' + window.t('onb.of') + ' 9'));
       p.appendChild(hdr);
       var pb = h('div', {'class': 'progress-bar'});
       pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + ((S.nStep - 1) / 8 * 100) + '%'}));

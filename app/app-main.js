@@ -37,7 +37,8 @@ var PROFILE_KEYS = [
   'shopChecked','weekPlan','selectedDay',
   'lang','weightUnit','heightUnit',
   'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
-  'heartRateRest','yogaLevel','yogaGoal','yogaDays'
+  'heartRateRest','yogaLevel','yogaGoal','yogaDays',
+  'wantsDessert'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -49,10 +50,33 @@ function slimMeal(meal) {
   return { _id: meal._id, n: meal.n, k: meal.k, p: meal.p, g: meal.g, l: meal.l, w: meal.w, lv: meal.lv };
 }
 
+// Keys that affect the meal plan — changing any of these should invalidate weekPlan
+var NUTRITION_PLAN_KEYS = ['goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height'];
+
 function saveProfile() {
   try {
     var user = AUTH.getUser();
     var uid = user ? user.id : 'anon';
+
+    // Check if nutrition-relevant values changed vs what is currently persisted.
+    // If so, weekPlan is stale and must be invalidated before saving.
+    (function() {
+      try {
+        var raw2 = localStorage.getItem('mtd_profile_' + uid);
+        if (!raw2 || !S.weekPlan) return; // nothing to compare or no plan to invalidate
+        var prev = null;
+        if (window._storageDecode) { prev = window._storageDecode(raw2); }
+        if (!prev) { try { prev = JSON.parse(raw2); } catch(e2) {} }
+        if (!prev) return;
+        var planImpacted = NUTRITION_PLAN_KEYS.some(function(k) {
+          return prev[k] !== S[k];
+        });
+        if (planImpacted) {
+          S.weekPlan = null;
+        }
+      } catch(e2) {}
+    })();
+
     var data = {};
     PROFILE_KEYS.forEach(function(k) { data[k] = S[k]; });
     // Slim weekPlan before serializing: strip ingredient/step/tag fields so
@@ -148,25 +172,22 @@ function render() {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;padding:4px 10px;background:none;border:1px solid var(--border);cursor:pointer;color:var(--grey)',
     onclick: function() {
       var next = (window.I18N ? window.I18N.current : (S.lang || 'fr')) === 'fr' ? 'en' : 'fr';
-      S.lang = next;
-      if (window.I18N) { window.I18N.current = next; }
-      try { localStorage.setItem('mtd_lang', next); } catch(e) {}
-      render();
+      if (window.I18N && window.I18N.setLang) { window.I18N.setLang(next); } else { S.lang = next; render(); }
     }
-  }, _curLang === 'fr' ? 'FR' : 'EN');
+  }, _curLang === 'fr' ? 'EN' : 'FR');
   ubRight.appendChild(langBtn);
   // Day/night toggle
   var _isDark = document.body.classList.contains('dark-mode');
   ubRight.appendChild(h('button', {style:'font-size:16px;padding:2px 8px;background:none;border:1px solid var(--border);cursor:pointer', onclick: function(){ document.body.classList.toggle('dark-mode'); try{localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode')?'true':'false');}catch(e){} render(); }}, _isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'));
-  ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; render(); }}, 'D\u00e9connexion'));
+  ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; render(); }}, window.t('auth.logout')));
   ub.appendChild(ubRight);
   wrap.appendChild(ub);
 
   // Main navigation (3 tabs: Dashboard, Nutrition, Sport)
   var nav = h('div', {'class': 'main-nav'});
-  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'dashboard' ? ' active' : ''), onclick: function(){ S.view = 'dashboard'; if(window.BLACKBOX)window.BLACKBOX.log('nav_dashboard'); render(); }}, '◆ Accueil'));
-  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, '◆ Nutrition'));
-  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, '◆ Sport'));
+  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'dashboard' ? ' active' : ''), onclick: function(){ S.view = 'dashboard'; if(window.BLACKBOX)window.BLACKBOX.log('nav_dashboard'); render(); }}, '◆ ' + window.t('nav.dashboard')));
+  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, '◆ ' + window.t('nav.nutrition')));
+  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, '◆ ' + window.t('nav.sport')));
   wrap.appendChild(nav);
 
   var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
@@ -220,14 +241,14 @@ function renderLogin(app) {
 
   // Email
   var f1 = h('div', {'class': 'field'});
-  f1.appendChild(h('label', {'class': 'field-label'}, 'Email'));
+  f1.appendChild(h('label', {'class': 'field-label'}, window.t('auth.email')));
   var emailInput = h('input', {type: 'email', placeholder: 'votre@email.com', autocomplete: 'email'});
   f1.appendChild(emailInput);
   form.appendChild(f1);
 
   // Password
   var f2 = h('div', {'class': 'field'});
-  f2.appendChild(h('label', {'class': 'field-label'}, 'Mot de passe'));
+  f2.appendChild(h('label', {'class': 'field-label'}, window.t('auth.password')));
   var pwInput = h('input', {type: 'password', placeholder: '••••••', autocomplete: 'current-password'});
   f2.appendChild(pwInput);
   form.appendChild(f2);
@@ -237,7 +258,7 @@ function renderLogin(app) {
     var email = emailInput.value.trim();
     var pw = pwInput.value;
     if (!email || !pw) { S.authError = 'Veuillez remplir tous les champs'; render(); return; }
-    if (!window.canAttemptAuth(email)) { S.authError = 'Trop de tentatives. Réessayez dans 5 minutes.'; render(); return; }
+    if (!window.canAttemptAuth(email)) { S.authError = window.t('auth.rate_limit'); render(); return; }
     AUTH.login(email, pw).then(function(result) {
       if (result.ok) {
         S.authError = '';
@@ -252,14 +273,14 @@ function renderLogin(app) {
       S.authError = 'Erreur de connexion. Réessayez.';
       render();
     });
-  }}, 'Se connecter'));
+  }}, window.t('auth.login_btn')));
 
   c.appendChild(form);
 
   // Switch to register
   var sw = h('div', {'class': 'auth-switch'});
-  sw.appendChild(txt('Pas encore de compte ? '));
-  sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'authRegister'; render(); }}, 'Créer un compte'));
+  sw.appendChild(txt(window.t('auth.no_account') + ' '));
+  sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'authRegister'; render(); }}, window.t('auth.register')));
   c.appendChild(sw);
 
   app.appendChild(c);
@@ -269,7 +290,7 @@ function renderLogin(app) {
 function renderRegister(app) {
   var c = h('div', {'class': 'auth-container'});
   c.appendChild(h('div', {'class': 'auth-logo'}, 'MTD'));
-  c.appendChild(h('div', {'class': 'auth-sub'}, 'Créer votre compte'));
+  c.appendChild(h('div', {'class': 'auth-sub'}, window.t('auth.register')));
   c.appendChild(h('div', {'class': 'auth-line'}));
 
   if (window.TIPS) TIPS.renderToggle(c);
@@ -282,28 +303,28 @@ function renderRegister(app) {
 
   // Name
   var f0 = h('div', {'class': 'field'});
-  f0.appendChild(h('label', {'class': 'field-label'}, 'Prénom ●'));
+  f0.appendChild(h('label', {'class': 'field-label'}, window.t('auth.firstname') + ' ●'));
   var nameInput = h('input', {type: 'text', placeholder: 'Votre prénom', autocomplete: 'given-name'});
   f0.appendChild(nameInput);
   form.appendChild(f0);
 
   // Email
   var f1 = h('div', {'class': 'field'});
-  f1.appendChild(h('label', {'class': 'field-label'}, 'Email ●'));
+  f1.appendChild(h('label', {'class': 'field-label'}, window.t('auth.email') + ' ●'));
   var emailInput = h('input', {type: 'email', placeholder: 'votre@email.com', autocomplete: 'email'});
   f1.appendChild(emailInput);
   form.appendChild(f1);
 
   // Password
   var f2 = h('div', {'class': 'field'});
-  f2.appendChild(h('label', {'class': 'field-label'}, 'Mot de passe ●'));
+  f2.appendChild(h('label', {'class': 'field-label'}, window.t('auth.password') + ' ●'));
   var pwInput = h('input', {type: 'password', placeholder: 'Min. 6 caractères', autocomplete: 'new-password'});
   f2.appendChild(pwInput);
   form.appendChild(f2);
 
   // Confirm password
   var f3 = h('div', {'class': 'field'});
-  f3.appendChild(h('label', {'class': 'field-label'}, 'Confirmer le mot de passe ●'));
+  f3.appendChild(h('label', {'class': 'field-label'}, window.t('auth.confirm_password') + ' ●'));
   var pw2Input = h('input', {type: 'password', placeholder: 'Retapez le mot de passe', autocomplete: 'new-password'});
   f3.appendChild(pw2Input);
   form.appendChild(f3);
@@ -316,8 +337,8 @@ function renderRegister(app) {
     var pw2 = pw2Input.value;
 
     if (!name || !email || !pw || !pw2) { S.authError = 'Tous les champs sont obligatoires'; render(); return; }
-    if (pw !== pw2) { S.authError = 'Les mots de passe ne correspondent pas'; render(); return; }
-    if (pw.length < 6) { S.authError = 'Le mot de passe doit faire au moins 6 caractères'; render(); return; }
+    if (pw !== pw2) { S.authError = window.t('auth.error_password_match'); render(); return; }
+    if (pw.length < 6) { S.authError = window.t('auth.error_password_length'); render(); return; }
 
     AUTH.register(name, email, pw).then(function(result) {
       if (result.ok) {
@@ -334,14 +355,14 @@ function renderRegister(app) {
       S.authError = 'Erreur lors de la création du compte. Réessayez.';
       render();
     });
-  }}, 'Créer mon compte'));
+  }}, window.t('auth.register_btn')));
 
   c.appendChild(form);
 
   // Switch to login
   var sw = h('div', {'class': 'auth-switch'});
-  sw.appendChild(txt('Déjà un compte ? '));
-  sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'auth'; render(); }}, 'Se connecter'));
+  sw.appendChild(txt(window.t('auth.has_account') + ' '));
+  sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'auth'; render(); }}, window.t('auth.login')));
   c.appendChild(sw);
 
   app.appendChild(c);
