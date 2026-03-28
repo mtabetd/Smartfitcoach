@@ -2396,15 +2396,16 @@ function renderSaladBar(p) {
   var sb = S.saladBar;
   p.innerHTML = '';
 
-  // Macro targets
+  // Macro targets — déjeuner 35% du TDEE, dîner 30% (recommandations standard)
   var tgtMacros = { k: 600, p: 40, g: 65, l: 20 };
   if (window.calcMacros && window.calcTarget) {
     var dm = window.calcMacros(), dk = window.calcTarget();
     if (dk > 0) {
-      tgtMacros.k = Math.round(dk * 0.35);
-      tgtMacros.p = Math.round(dm.p * 0.35);
-      tgtMacros.g = Math.round(dm.g * 0.35);
-      tgtMacros.l = Math.round(dm.l * 0.35);
+      var mealRatio = (sb.mealTarget === 'dinner') ? 0.30 : 0.35;
+      tgtMacros.k = Math.round(dk * mealRatio);
+      tgtMacros.p = Math.round(dm.p * mealRatio);
+      tgtMacros.g = Math.round(dm.g * mealRatio);
+      tgtMacros.l = Math.round(dm.l * mealRatio);
     }
   }
 
@@ -2418,7 +2419,7 @@ function renderSaladBar(p) {
     style: 'background:none;border:none;font-size:16px;cursor:pointer;color:var(--text);padding:4px 8px',
     onclick: function() { S.saladBar.open = false; window.render(); }
   }, '\u2190 Retour'));
-  header.appendChild(h('div', { style: 'font-size:18px;font-weight:700;color:var(--text)' }, '\uD83E\uDD57 Bar \u00e0 Salade'));
+  header.appendChild(h('div', { style: 'font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.3px' }, '\u2728 L\u2019Atelier Bowl'));
 
   // Meal target toggle
   var toggleWrap = h('div', { style: 'display:flex;gap:4px' });
@@ -2457,6 +2458,43 @@ function renderSaladBar(p) {
   progressBar.appendChild(chipsRow);
   p.appendChild(progressBar);
 
+  // ── Compositions Signature carousel ──
+  var sigSection = h('div', { style: 'padding:12px 16px 4px' });
+  sigSection.appendChild(h('div', {
+    style: 'font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'
+  }, '★ Signatures du chef'));
+  var sigScroll = h('div', {
+    style: 'display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none'
+  });
+  SIGNATURE_BOWLS.forEach(function(sig) {
+    var isActive = sb._signatureId === sig.id;
+    var card = h('button', {
+      style: 'flex:0 0 auto;width:150px;padding:10px 12px;border-radius:14px;border:1.5px solid ' +
+        (isActive ? sig.palette : 'var(--border)') +
+        ';background:' + (isActive ? sig.palette + '18' : 'var(--card)') +
+        ';text-align:left;cursor:pointer;transition:all 0.2s',
+      onclick: function() {
+        var resolved = resolveSignatureBowl(sig);
+        sb.base = resolved.base;
+        sb.proteins = resolved.proteins;
+        sb.veggies = resolved.veggies;
+        sb.fats = resolved.fats;
+        sb.sauce = resolved.sauce;
+        sb._signatureId = isActive ? null : sig.id;
+        window.render();
+      }
+    });
+    card.appendChild(h('div', {
+      style: 'font-size:12px;font-weight:700;color:' + sig.palette + ';margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'
+    }, sig.label));
+    card.appendChild(h('div', {
+      style: 'font-size:10px;color:var(--grey);line-height:1.3;white-space:normal'
+    }, sig.subtitle));
+    sigScroll.appendChild(card);
+  });
+  sigSection.appendChild(sigScroll);
+  p.appendChild(sigSection);
+
   // ── Helper: render ingredient section ──
   function renderSection(title, icon, items, selectedItems, isRadio, maxSel, onToggle, onQty) {
     var sec = h('div', { style: 'padding:12px 16px' });
@@ -2479,10 +2517,12 @@ function renderSaladBar(p) {
         ';color:var(--text);font-size:12px;cursor:' + (canAdd ? 'pointer' : 'not-allowed') +
         ';font-weight:' + (isSel ? '700' : '400') +
         ';opacity:' + (canAdd ? '1' : '0.45') + ';transition:all 0.2s';
-      grid.appendChild(h('button', {
-        style: chipStyle,
+      var chipLabel = item.premium ? (item.name + ' ◆') : item.name;
+      var chipBtn = h('button', {
+        style: chipStyle + (item.premium && !isSel ? ';border-style:dashed' : ''),
         onclick: function() { if (canAdd || isSel) onToggle(item); }
-      }, item.name));
+      }, chipLabel);
+      grid.appendChild(chipBtn);
     });
     sec.appendChild(grid);
 
@@ -2559,7 +2599,7 @@ function renderSaladBar(p) {
 
   // ── Base ──
   p.appendChild(renderSection(
-    'Base glucidique', '\uD83C\uDF3E',
+    'La Base', '\uD83C\uDF3E',
     SALAD_DB.bases, sb.base, true, 1,
     function(item) {
       if (sb.base && sb.base.name === item.name) { sb.base = null; }
@@ -2571,7 +2611,7 @@ function renderSaladBar(p) {
 
   // ── Proteins ──
   p.appendChild(renderSection(
-    'Prot\u00e9ines', '\uD83C\uDFCB\uFE0F',
+    'Prot\u00e9ines nobles', '\uD83E\uDDC0',
     SALAD_DB.proteins, sb.proteins, false, 3,
     function(item) {
       var idx = -1;
@@ -2585,7 +2625,7 @@ function renderSaladBar(p) {
 
   // ── Veggies ──
   p.appendChild(renderSection(
-    'L\u00e9gumes', '\uD83E\uDD6C',
+    'Jardini\u00e8re', '\uD83C\uDF31',
     SALAD_DB.veggies, sb.veggies, false, 10,
     function(item) {
       var idx = -1;
@@ -2599,7 +2639,7 @@ function renderSaladBar(p) {
 
   // ── Fats ──
   p.appendChild(renderSection(
-    'Lipides', '\uD83E\uDD51',
+    'Finitions & textures', '\u2728',
     SALAD_DB.fats, sb.fats, false, 3,
     function(item) {
       var idx = -1;
@@ -2613,7 +2653,7 @@ function renderSaladBar(p) {
 
   // ── Sauce ──
   p.appendChild(renderSection(
-    'Sauce', '\uD83E\uDD63',
+    'L\u2019assaisonnement', '\uD83C\uDF3F',
     SALAD_DB.sauces, sb.sauce, true, 1,
     function(item) {
       if (sb.sauce && sb.sauce.name === item.name) { sb.sauce = null; }
@@ -2625,7 +2665,7 @@ function renderSaladBar(p) {
 
   // ── Recap + Actions ──
   var recap = h('div', { style: 'padding:16px;background:var(--card);margin:8px 16px;border-radius:12px;border:1px solid var(--border)' });
-  recap.appendChild(h('div', { style: 'font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px' }, '\uD83D\uDCCB R\u00e9capitulatif'));
+  recap.appendChild(h('div', { style: 'font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:10px' }, 'Votre composition'));
 
   var allItems = [];
   if (sb.base) allItems.push(sb.base);
@@ -2635,7 +2675,7 @@ function renderSaladBar(p) {
   if (sb.sauce) allItems.push(sb.sauce);
 
   if (allItems.length === 0) {
-    recap.appendChild(h('div', { style: 'color:var(--grey);font-size:13px;text-align:center;padding:12px' }, 'S\u00e9lectionne des ingr\u00e9dients pour composer ta salade'));
+    recap.appendChild(h('div', { style: 'color:var(--grey);font-size:13px;text-align:center;padding:12px' }, 'Composez votre cr\u00e9ation ou partez d\u2019une composition signature ci-dessus'));
   } else {
     allItems.forEach(function(item) {
       var m = computeItemMacros(item);
@@ -2662,15 +2702,15 @@ function renderSaladBar(p) {
       var saladIngredients = allItems.map(function(x) { return x.name + ' ' + x.qty + x.unit; }).join(', ');
       var saladRecipe = {
         _id: 'SALAD_' + Date.now(),
-        n: 'Ma Salade Perso \uD83E\uDD57',
+        n: 'Mon Atelier Bowl \u2728',
         k: macros.k, p: macros.p, g: macros.g, l: macros.l,
         f: '\uD83E\uDD57',
         lv: 1,
         i: saladIngredients,
         _scaledIngredients: allItems.slice(),
         _scalingRatio: 1,
-        tags: ['salade', 'custom'],
-        st: ['Pr\u00e9parer tous les ingr\u00e9dients.', 'Assembler la salade dans un bol.', 'Assaisonner et servir.']
+        tags: ['atelier', 'bowl', 'custom'],
+        st: ['Pr\u00e9parez et templ\u00e9risez vos ingr\u00e9dients.', 'Disposez la base au fond du bol.', 'Ajoutez les prot\u00e9ines et les garnitures.', 'Nappez de sauce au dernier moment et servez.']
       };
       if (!S.weekPlan) S.weekPlan = [];
       if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
@@ -2678,7 +2718,7 @@ function renderSaladBar(p) {
       S.saladBar.open = false;
       window.render();
     }
-  }, '\uD83D\uDCBE Ajouter au plan (' + (sb.mealTarget === 'lunch' ? window.t('onb.s9.lunch') : window.t('onb.s9.dinner')) + ')');
+  }, 'Valider ma composition — ' + (sb.mealTarget === 'lunch' ? window.t('onb.s9.lunch') : window.t('onb.s9.dinner')))  ;
   actWrap.appendChild(btnAdd);
 
   actWrap.appendChild(h('button', {
@@ -2687,7 +2727,7 @@ function renderSaladBar(p) {
       sb.base = null; sb.proteins = []; sb.veggies = []; sb.fats = []; sb.sauce = null;
       window.render();
     }
-  }, '\uD83D\uDD04 R\u00e9initialiser'));
+  }, 'Repartir de z\u00e9ro'));
 
   p.appendChild(actWrap);
 }
