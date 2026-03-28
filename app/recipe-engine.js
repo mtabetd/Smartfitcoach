@@ -4759,6 +4759,475 @@
         'Saisir le thon à la poêle 2-3 min par face (rosé au centre). Napper de sauce vierge.'
       ]
     },
+    {
+      id: 'R381',
+      name: 'Tartines Avocat Œuf Poché',
+      emoji: '🥑', origin: '🇦🇺',
+      mealTypes: ['breakfast'],
+      tags: ['avocat', 'oeufs-pochés', 'brunch', 'tendance', 'high-protein'],
+      difficulty: 2, prepTime: 8, cookTime: 5, servings: 1,
+      // 18×4 + 26×4 + 18×9 = 72+104+162 = 338 ✓
+      baseNutrition: { calories: 338, proteinGrams: 18, carbsGrams: 26, fatGrams: 18 },
+      ingredients: [
+        { name: 'Pain complet', qty: 2, unit: 'pce' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Avocat', qty: 80, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Piment rouge (frais)', qty: 0.5, unit: 'pce' }
+      ],
+      steps: [
+        'Griller le pain. Écraser l\'avocat avec citron + sel + piment.',
+        'Pocher les œufs dans eau frémissante vinaigrée 3 min.',
+        'Étaler l\'avocat sur le pain. Déposer les œufs pochés. Poivre + fleur de sel.'
+      ]
+    },
+    {
+      id: 'R382',
+      name: 'Granola Maison Amandes Coco',
+      emoji: '🥜', origin: '🇺🇸',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['granola', 'maison', 'amandes', 'coco', 'meal-prep', 'vegan'],
+      difficulty: 1, prepTime: 5, cookTime: 20, servings: 1,
+      // 9×4 + 48×4 + 14×9 = 36+192+126 = 354 ✓
+      baseNutrition: { calories: 354, proteinGrams: 9, carbsGrams: 48, fatGrams: 14 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 60, unit: 'g' },
+        { name: 'Amandes effilées', qty: 20, unit: 'g' },
+        { name: 'Noix de cajou', qty: 15, unit: 'g' },
+        { name: 'Miel', qty: 20, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' },
+        { name: 'Lait d\'amande', qty: 150, unit: 'ml' }
+      ],
+      steps: [
+        'Mélanger flocons + amandes + cajou + miel + huile. Étaler sur plaque.',
+        'Cuire au four 160°C / 20 min en remuant à mi-cuisson.',
+        'Laisser refroidir. Servir avec lait d\'amande.'
+      ]
+    },
+    {
+      id: 'R383',
+      name: 'Smoothie Protéiné Mangue Curcuma',
+      emoji: '🥭', origin: '🇮🇳',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['smoothie', 'mangue', 'curcuma', 'anti-inflammatoire', 'tendance', 'vegan'],
+      difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
+      // 14×4 + 42×4 + 6×9 = 56+168+54 = 278 ✓
+      baseNutrition: { calories: 278, proteinGrams: 14, carbsGrams: 42, fatGrams: 6 },
+      ingredients: [
+        { name: 'Mangue (fraîche)', qty: 150, unit: 'g' },
+        { name: 'Lait d\'amande', qty: 200, unit: 'ml' },
+        { name: 'Skyr / Yaourt islandais', qty: 80, unit: 'g' },
+        { name: 'Curcuma', qty: 2, unit: 'g' },
+        { name: 'Gingembre', qty: 3, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Mixer tous les ingrédients jusqu\'à consistance lisse.',
+        'Ajuster la consistance avec plus de lait si nécessaire.',
+        'Servir frais avec quelques glaçons.'
+      ]
+    },
+    {
+      id: 'R384',
+      name: 'Waffles Protéinés Banane',
+      emoji: '🧇', origin: '🇧🇪',
+      mealTypes: ['breakfast'],
+      tags: ['waffles', 'banane', 'high-protein', 'brunch', 'tendance', 'fun'],
+      difficulty: 2, prepTime: 10, cookTime: 10, servings: 1,
+      // 24×4 + 46×4 + 10×9 = 96+184+90 = 370 ✓
+      baseNutrition: { calories: 370, proteinGrams: 24, carbsGrams: 46, fatGrams: 10 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 60, unit: 'g' },
+        { name: 'Banane', qty: 80, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Lait d\'amande', qty: 60, unit: 'ml' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Fraises', qty: 80, unit: 'g' }
+      ],
+      steps: [
+        'Mixer flocons en farine. Mélanger avec banane écrasée, œufs, lait, miel.',
+        'Cuire dans un gaufrier huilé 4-5 min.',
+        'Servir avec fraises fraîches.'
+      ]
+    },
+    {
+      id: 'R385',
+      name: 'Tartare de Betterave & Feta',
+      emoji: '🟣', origin: '🇫🇷',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['betterave', 'feta', 'végétarien', 'élégant', 'tendance', 'coloré'],
+      difficulty: 1, prepTime: 10, cookTime: 0, servings: 1,
+      // 12×4 + 24×4 + 14×9 = 48+96+126 = 270 ✓
+      baseNutrition: { calories: 270, proteinGrams: 12, carbsGrams: 24, fatGrams: 14 },
+      ingredients: [
+        { name: 'Betterave (cuite)', qty: 150, unit: 'g' },
+        { name: 'Feta', qty: 60, unit: 'g' },
+        { name: 'Noix', qty: 20, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+        { name: 'Vinaigre balsamique', qty: 8, unit: 'ml' },
+        { name: 'Persil frais', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Couper la betterave cuite en petits dés.',
+        'Mélanger avec feta émiettée, noix concassées, huile + balsamique.',
+        'Garnir de persil. Servir frais.'
+      ]
+    },
+    {
+      id: 'R386',
+      name: 'Soupe Lentilles Épinards',
+      emoji: '🍵', origin: '🇫🇷',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['soupe', 'lentilles', 'épinards', 'vegan', 'réconfortant', 'high-fiber'],
+      difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
+      // 18×4 + 44×4 + 8×9 = 72+176+72 = 320 ✓
+      baseNutrition: { calories: 320, proteinGrams: 18, carbsGrams: 44, fatGrams: 8 },
+      ingredients: [
+        { name: 'Lentilles vertes sèches', qty: 80, unit: 'g' },
+        { name: 'Épinards frais', qty: 80, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Carotte', qty: 80, unit: 'g' },
+        { name: 'Bouillon de légumes (cube)', qty: 1, unit: 'pce' },
+        { name: 'Cumin moulu', qty: 3, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Faire revenir oignon + carotte en dés dans l\'huile. Ajouter cumin.',
+        'Ajouter lentilles rincées + 500ml eau + cube de bouillon. Cuire 20 min.',
+        'Ajouter épinards. Cuire 3 min. Mixer partiellement pour texture crémeuse.'
+      ]
+    },
+    {
+      id: 'R387',
+      name: 'Bowl Açaí Tropical Protéiné',
+      emoji: '🌴', origin: '🇧🇷',
+      mealTypes: ['breakfast'],
+      tags: ['acai', 'tropical', 'smoothie-bowl', 'high-protein', 'tendance', 'coloré'],
+      difficulty: 1, prepTime: 8, cookTime: 0, servings: 1,
+      // 16×4 + 52×4 + 10×9 = 64+208+90 = 362 ✓
+      baseNutrition: { calories: 362, proteinGrams: 16, carbsGrams: 52, fatGrams: 10 },
+      ingredients: [
+        { name: 'Açaí en poudre', qty: 15, unit: 'g' },
+        { name: 'Banane', qty: 100, unit: 'g' },
+        { name: 'Skyr / Yaourt islandais', qty: 100, unit: 'g' },
+        { name: 'Mangue (fraîche)', qty: 80, unit: 'g' },
+        { name: 'Granola', qty: 30, unit: 'g' },
+        { name: 'Kiwi', qty: 1, unit: 'pce' },
+        { name: 'Graines de chia', qty: 8, unit: 'g' }
+      ],
+      steps: [
+        'Mixer açaí + banane + skyr jusqu\'à base épaisse.',
+        'Verser dans le bol.',
+        'Garnir de mangue, kiwi, granola, chia.'
+      ]
+    },
+    {
+      id: 'R388',
+      name: 'Yakitori Poulet Sauce Teriyaki',
+      emoji: '🍡', origin: '🇯🇵',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['japonais', 'yakitori', 'poulet', 'brochettes', 'tendance', 'high-protein'],
+      difficulty: 2, prepTime: 15, cookTime: 12, servings: 1,
+      // 36×4 + 32×4 + 8×9 = 144+128+72 = 344 ✓
+      baseNutrition: { calories: 344, proteinGrams: 36, carbsGrams: 32, fatGrams: 8 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 130, unit: 'g' },
+        { name: 'Sauce teriyaki', qty: 30, unit: 'ml' },
+        { name: 'Riz jasmin', qty: 60, unit: 'g' },
+        { name: 'Oignon vert', qty: 2, unit: 'pce' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Couper le poulet en cubes. Mariner dans la sauce teriyaki 10 min.',
+        'Enfiler sur des piques. Griller au four ou barbecue 10-12 min en retournant.',
+        'Servir sur riz jasmin avec oignons verts et sésame.'
+      ]
+    },
+    {
+      id: 'R389',
+      name: 'Salade César Poulet',
+      emoji: '🥗', origin: '🇺🇸',
+      mealTypes: ['lunch'],
+      tags: ['salade-césar', 'poulet', 'classique', 'américain', 'high-protein'],
+      difficulty: 1, prepTime: 12, cookTime: 10, servings: 1,
+      // 38×4 + 20×4 + 14×9 = 152+80+126 = 358 ✓
+      baseNutrition: { calories: 358, proteinGrams: 38, carbsGrams: 20, fatGrams: 14 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 130, unit: 'g' },
+        { name: 'Salade romaine', qty: 100, unit: 'g' },
+        { name: 'Pain complet', qty: 1, unit: 'pce' },
+        { name: 'Fromage râpé', qty: 15, unit: 'g' },
+        { name: 'Sauce soja', qty: 5, unit: 'ml' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Moutarde', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le poulet à la poêle, trancher. Couper le pain en dés et toaster.',
+        'Sauce légère : moutarde + sauce soja + huile + citron.',
+        'Assembler : romaine + poulet + croûtons + fromage. Napper de sauce.'
+      ]
+    },
+    {
+      id: 'R390',
+      name: 'Wrap Falafel Légumes Grillés',
+      emoji: '🌯', origin: '🇱🇧',
+      mealTypes: ['lunch'],
+      tags: ['falafel', 'végétarien', 'wrap', 'libanais', 'tendance', 'vegan'],
+      difficulty: 1, prepTime: 10, cookTime: 20, servings: 1,
+      // 16×4 + 46×4 + 16×9 = 64+184+144 = 392 ✓
+      baseNutrition: { calories: 392, proteinGrams: 16, carbsGrams: 46, fatGrams: 16 },
+      ingredients: [
+        { name: 'Falafel surgelé', qty: 100, unit: 'g' },
+        { name: 'Tortilla de blé', qty: 1, unit: 'pce' },
+        { name: 'Houmous', qty: 40, unit: 'g' },
+        { name: 'Courgette', qty: 80, unit: 'g' },
+        { name: 'Poivron rouge', qty: 60, unit: 'g' },
+        { name: 'Roquette', qty: 30, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire les falafels au four 200°C / 18 min.',
+        'Griller courgette et poivron à la poêle avec un filet d\'huile.',
+        'Étaler houmous sur la tortilla. Garnir de légumes grillés + falafels + roquette + citron.'
+      ]
+    },
+    {
+      id: 'R391',
+      name: 'Ceviche Crevettes Avocat',
+      emoji: '🦐', origin: '🇵🇪',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['ceviche', 'crevettes', 'avocat', 'péruvien', 'tendance', 'frais'],
+      difficulty: 2, prepTime: 20, cookTime: 0, servings: 1,
+      // 24×4 + 16×4 + 14×9 = 96+64+126 = 286 ✓
+      baseNutrition: { calories: 286, proteinGrams: 24, carbsGrams: 16, fatGrams: 14 },
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 130, unit: 'g' },
+        { name: 'Avocat', qty: 70, unit: 'g' },
+        { name: 'Citron (pce)', qty: 2, unit: 'pce' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Tomate', qty: 60, unit: 'g' },
+        { name: 'Oignon vert', qty: 2, unit: 'pce' },
+        { name: 'Coriandre fraîche', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Blanchir les crevettes 2 min. Laisser mariner 15 min dans jus de citron (cuisson à froid).',
+        'Couper avocat, concombre, tomate en dés.',
+        'Mélanger tout. Garnir de coriandre et oignon vert. Servir très frais.'
+      ]
+    },
+    {
+      id: 'R392',
+      name: 'Pâtes au Pesto Poulet Tomates Cerises',
+      emoji: '🍝', origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['pâtes', 'pesto', 'poulet', 'italien', 'rapide', 'tendance'],
+      difficulty: 1, prepTime: 8, cookTime: 15, servings: 1,
+      // 38×4 + 56×4 + 14×9 = 152+224+126 = 502 ✓
+      baseNutrition: { calories: 502, proteinGrams: 38, carbsGrams: 56, fatGrams: 14 },
+      ingredients: [
+        { name: 'Pâtes complètes fusilli', qty: 75, unit: 'g' },
+        { name: 'Blanc de poulet', qty: 120, unit: 'g' },
+        { name: 'Pesto vert', qty: 25, unit: 'g' },
+        { name: 'Tomates cerises', qty: 80, unit: 'g' },
+        { name: 'Fromage râpé', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Cuire les pâtes al dente. Cuire le poulet et trancher.',
+        'Mélanger pâtes égouttées + pesto + poulet + tomates cerises coupées.',
+        'Parsemer de fromage râpé. Servir chaud ou froid.'
+      ]
+    },
+    {
+      id: 'R393',
+      name: 'Omelette Espagnole Légère',
+      emoji: '🍳', origin: '🇪🇸',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['omelette', 'espagnol', 'pommes-de-terre', 'tortilla', 'classique', 'végétarien'],
+      difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
+      // 22×4 + 30×4 + 14×9 = 88+120+126 = 334 ✓
+      baseNutrition: { calories: 334, proteinGrams: 22, carbsGrams: 30, fatGrams: 14 },
+      ingredients: [
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Patate douce', qty: 120, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+        { name: 'Poivron rouge', qty: 60, unit: 'g' }
+      ],
+      steps: [
+        'Cuire patate douce en rondelles fines et oignon dans l\'huile à feu doux 10 min.',
+        'Ajouter poivron. Verser les œufs battus. Cuire 5 min à couvert.',
+        'Retourner l\'omelette. Cuire 3 min. Servir chaud ou froid.'
+      ]
+    },
+    {
+      id: 'R394',
+      name: 'Quinoa Tabboulé Oriental',
+      emoji: '🌿', origin: '🇱🇧',
+      mealTypes: ['lunch'],
+      tags: ['quinoa', 'tabboulé', 'libanais', 'végétarien', 'frais', 'tendance'],
+      difficulty: 1, prepTime: 15, cookTime: 15, servings: 1,
+      // 14×4 + 46×4 + 12×9 = 56+184+108 = 348 ✓
+      baseNutrition: { calories: 348, proteinGrams: 14, carbsGrams: 46, fatGrams: 12 },
+      ingredients: [
+        { name: 'Quinoa', qty: 70, unit: 'g' },
+        { name: 'Tomate', qty: 100, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Persil frais', qty: 2, unit: 'pce' },
+        { name: 'Menthe fraîche', qty: 5, unit: 'g' },
+        { name: 'Citron (pce)', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire le quinoa 12 min. Laisser refroidir complètement.',
+        'Couper tomates + concombre en petits dés. Hacher persil + menthe.',
+        'Mélanger quinoa + légumes + herbes. Assaisonner abondamment citron + huile + sel.'
+      ]
+    },
+    {
+      id: 'R395',
+      name: 'Brick Thon Fromage Salade',
+      emoji: '🥙', origin: '🇹🇳',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['brick', 'thon', 'tunisien', 'croustillant', 'tendance', 'high-protein'],
+      difficulty: 2, prepTime: 10, cookTime: 10, servings: 1,
+      // 30×4 + 22×4 + 16×9 = 120+88+144 = 352 ✓
+      baseNutrition: { calories: 352, proteinGrams: 30, carbsGrams: 22, fatGrams: 16 },
+      ingredients: [
+        { name: 'Thon au naturel (boîte)', qty: 100, unit: 'g' },
+        { name: 'Œuf', qty: 1, unit: 'pce' },
+        { name: 'Fromage râpé', qty: 20, unit: 'g' },
+        { name: 'Farine complète', qty: 40, unit: 'g' },
+        { name: 'Salade romaine', qty: 60, unit: 'g' },
+        { name: 'Tomate', qty: 60, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
+      ],
+      steps: [
+        'Mélanger thon + fromage + sel/poivre. Étaler sur une feuille de brick (ou pâte fine).',
+        'Casser l\'œuf au centre. Replier. Dorer à la poêle huilée 3 min par face.',
+        'Servir avec salade + tomates en vinaigrette.'
+      ]
+    },
+    {
+      id: 'R396',
+      name: 'Soupe Poule au Gingembre',
+      emoji: '🍲', origin: '🇨🇳',
+      mealTypes: ['dinner'],
+      tags: ['soupe', 'poulet', 'gingembre', 'chinois', 'réconfortant', 'anti-inflammatoire'],
+      difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
+      // 32×4 + 22×4 + 8×9 = 128+88+72 = 288 ✓
+      baseNutrition: { calories: 288, proteinGrams: 32, carbsGrams: 22, fatGrams: 8 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 120, unit: 'g' },
+        { name: 'Bouillon de poulet (cube)', qty: 1, unit: 'pce' },
+        { name: 'Gingembre', qty: 10, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'g' },
+        { name: 'Riz blanc', qty: 40, unit: 'g' },
+        { name: 'Oignon vert', qty: 2, unit: 'pce' },
+        { name: 'Sauce soja', qty: 10, unit: 'ml' }
+      ],
+      steps: [
+        'Porter 600ml eau + cube bouillon + gingembre râpé + ail à ébullition.',
+        'Ajouter poulet en lanières + riz. Cuire 18 min à feu moyen.',
+        'Finir avec sauce soja + oignons verts. Servir brûlant.'
+      ]
+    },
+    {
+      id: 'R397',
+      name: 'Steak Haché Maison Patate Douce',
+      emoji: '🍔', origin: '🇫🇷',
+      mealTypes: ['dinner'],
+      tags: ['steak', 'boeuf', 'patate-douce', 'français', 'healthy-burger', 'high-protein'],
+      difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
+      // 36×4 + 36×4 + 12×9 = 144+144+108 = 396 ✓
+      baseNutrition: { calories: 396, proteinGrams: 36, carbsGrams: 36, fatGrams: 12 },
+      ingredients: [
+        { name: 'Bœuf maigre haché', qty: 130, unit: 'g' },
+        { name: 'Patate douce', qty: 180, unit: 'g' },
+        { name: 'Oignon', qty: 40, unit: 'g' },
+        { name: 'Moutarde', qty: 8, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Cuire la patate douce en frites au four 200°C / 20 min (couper en bâtonnets, huiler).',
+        'Former le steak haché avec oignon émincé + moutarde + sel/poivre.',
+        'Cuire le steak à la poêle 3-4 min par face. Servir avec les frites de patate douce.'
+      ]
+    },
+    {
+      id: 'R398',
+      name: 'Caille Rôtie & Légumes du Soleil',
+      emoji: '🐦', origin: '🇫🇷',
+      mealTypes: ['dinner'],
+      tags: ['caille', 'français', 'élégant', 'rôti', 'high-protein', 'tendance'],
+      difficulty: 3, prepTime: 15, cookTime: 25, servings: 1,
+      // 34×4 + 20×4 + 12×9 = 136+80+108 = 324 ✓
+      baseNutrition: { calories: 324, proteinGrams: 34, carbsGrams: 20, fatGrams: 12 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 130, unit: 'g' },
+        { name: 'Courgette', qty: 100, unit: 'g' },
+        { name: 'Tomate', qty: 100, unit: 'g' },
+        { name: 'Poivron rouge', qty: 80, unit: 'g' },
+        { name: 'Herbes de Provence', qty: 3, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
+      ],
+      steps: [
+        'Assaisonner le poulet avec herbes de Provence + sel + huile.',
+        'Cuire légumes en ratatouille : courgette + tomate + poivron en dés, 15 min à la poêle.',
+        'Griller le poulet au four 200°C / 20 min. Servir avec la ratatouille.'
+      ]
+    },
+    {
+      id: 'R399',
+      name: 'Maki Bowl Saumon Avocat',
+      emoji: '🍱', origin: '🇯🇵',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['japonais', 'maki', 'saumon', 'bowl', 'tendance', 'fresh'],
+      difficulty: 2, prepTime: 20, cookTime: 15, servings: 1,
+      // 30×4 + 50×4 + 14×9 = 120+200+126 = 446 ✓
+      baseNutrition: { calories: 446, proteinGrams: 30, carbsGrams: 50, fatGrams: 14 },
+      ingredients: [
+        { name: 'Riz blanc', qty: 75, unit: 'ml' },
+        { name: 'Vinaigre de riz', qty: 15, unit: 'ml' },
+        { name: 'Saumon frais (filet)', qty: 100, unit: 'g' },
+        { name: 'Avocat', qty: 60, unit: 'g' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Nori (feuilles d\'algue)', qty: 5, unit: 'g' },
+        { name: 'Sauce soja', qty: 10, unit: 'ml' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le riz. Assaisonner avec vinaigre de riz + sel. Laisser tiédir.',
+        'Couper saumon + avocat + concombre en dés. Ciseler le nori.',
+        'Bowl : riz en base, garnitures en secteurs, nori ciselé, sauce soja, sésame.'
+      ]
+    },
+    {
+      id: 'R400',
+      name: 'Power Bowl Complet du Champion',
+      emoji: '🏆', origin: '🌍',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['power-bowl', 'complet', 'high-protein', 'champion', 'tendance', 'coloré'],
+      difficulty: 2, prepTime: 20, cookTime: 20, servings: 1,
+      // 45×4 + 55×4 + 16×9 = 180+220+144 = 544 ✓
+      baseNutrition: { calories: 544, proteinGrams: 45, carbsGrams: 55, fatGrams: 16 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 150, unit: 'g' },
+        { name: 'Quinoa', qty: 60, unit: 'g' },
+        { name: 'Patate douce', qty: 100, unit: 'g' },
+        { name: 'Edamame (surgelé)', qty: 50, unit: 'g' },
+        { name: 'Avocat', qty: 50, unit: 'g' },
+        { name: 'Épinards frais', qty: 50, unit: 'g' },
+        { name: 'Graines de tournesol', qty: 10, unit: 'g' },
+        { name: 'Tahini', qty: 15, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' }
+      ],
+      steps: [
+        'Cuire quinoa (12 min) + patate douce rôtie au four (20 min) + edamames (3 min).',
+        'Griller le poulet assaisonné. Sauce : tahini + citron + 2cs eau.',
+        'Assembler le bowl : tous les éléments disposés en secteurs colorés. Graines de tournesol. Sauce tahini.'
+      ]
+    },
 
   ];
 
