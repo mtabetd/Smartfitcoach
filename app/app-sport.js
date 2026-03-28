@@ -13,18 +13,23 @@ function filterExerciseByMedical(ex, med) {
   // ── ÉPAULES / COIFFE DES ROTATEURS ──
   // Tout mouvement au-dessus de 90° d'abduction + rotation interne forcée = impingement sous-acromial,
   // risque déchirure sus-épineux, tendinite long biceps.
-  // Exclure : overhead press (toutes variantes), upright row (rotation interne forcée),
-  // dips (tension antérieure coiffe), élévations frontales/latérales lourdes, arnold press.
+  // Exclure : overhead press (toutes variantes), upright row (TOUJOURS — rotation interne forcée humerus),
+  // dips (tension antérieure coiffe), élévations frontales/latérales lourdes, arnold press,
+  // développé nuque / behind-neck (compression C4-C6 + impingement), handstand push-up (HSPU).
+  // Réf : Ludewig & Cook, Phys Ther 2000 ; Flatow et al., JSES 1994.
   if (med.shoulders || med.rotatorCuff) {
-    if (/militaire|d[eé]velopp[eé] militaire|developpe militaire|d[eé]velopp[eé] halteres|developpe halteres|arnold press|overhead press|el[eé]vation.*lat[eé]rale|elevations? lat[eé]rales?|elevation frontale|elevations? frontales?|dips|upright row|tirage menton|lu raise/.test(n)) return false;
+    if (/militaire|d[eé]velopp[eé] militaire|developpe militaire|d[eé]velopp[eé] halteres|developpe halteres|arnold press|overhead press|el[eé]vation.*lat[eé]rale|elevations? lat[eé]rales?|elevation frontale|elevations? frontales?|dips|upright row|tirage menton|lu raise|behind.?neck|nuque|handstand|hspu/.test(n)) return false;
   }
 
   // ── COUDES — ÉPICONDYLITE LATÉRALE (tennis elbow) / MÉDIALE (golfer's elbow) ──
+  // Rowing barre pronation = valgus forcé + extension poignet sous charge → épicondyle latéral.
+  // Pull-ups/chin-ups pronation = traction répétée sur tendon extenseur commun.
   // Curl barre droite = flexion résistée supination → épicondyle médial.
-  // Rowing prise large = valgus forcé sous charge → épicondyle latéral.
-  // Extensions triceps = tension insertion triceps à l'olécrâne.
-  if (med.elbows) {
-    if (/curl barre|curl.*halteres|curl marteau|curl concentre|curl pupitre|curl 21|chin.?up|skull.?crusher|barre.*front skullcrusher|french press|extension.*triceps|rowing barre|rowing.*prise large|tirage vertical/.test(n)) return false;
+  // Wrist curl = sollicitation directe des fléchisseurs → épicondyle médial (golfer's elbow).
+  // Recommander : prise supination ou neutre, extensions poignet légères en rééducation.
+  // Réf : Bisset & Vicenzino, JOSPT 2015 ; Coombes et al., Lancet 2013.
+  if (med.elbows || med.epicondylitis) {
+    if (/curl barre|curl.*halteres|curl marteau|curl concentre|curl pupitre|curl 21|chin.?up|tractions.*pronation|pull.?up.*pronation|skull.?crusher|barre.*front skullcrusher|french press|extension.*triceps|rowing barre|rowing.*prise large|tirage vertical|wrist curl/.test(n)) return false;
   }
 
   // ── POIGNETS ──
@@ -72,21 +77,28 @@ function filterExerciseByMedical(ex, med) {
 
   // ── OSTÉOPOROSE ──
   // (Sinaki & Mikkelsen, JAMA 1984; Sinaki, Spine 2002)
-  // Flexion vertébrale répétée → fractures de compression T6-L2.
+  // Flexion vertébrale répétée → fractures de compression T6-L2 (risque ×5 vs extension).
   // Impacts élevés (sauts) → fractures trabéculaires des plateaux vertébraux.
-  // NOTE : les exercices en extension et mise en charge (marche, squat léger, bird-dog) sont BÉNÉFIQUES.
+  // Charges axiales lourdes (squat barre, soulevé de terre) → compression vertébrale directe.
+  // NOTE : les exercices en extension et mise en charge LÉGÈRE (marche, squat goblet léger, bird-dog)
+  //        stimulent l'anabolisme osseux (ostéoblastes) et sont BÉNÉFIQUES — NE PAS SUPPRIMER.
   if (med.osteoporosis) {
-    // Impacts élevés
+    // Impacts élevés — fractures trabéculaires
     if (/box jump|jump squat|burpee|pompes plyometriques|corde.*sauter|jumping jacks/.test(n)) return false;
-    // Flexion vertébrale répétée sous charge — fractures de compression
+    // Flexion vertébrale répétée sous charge — fractures de compression T6-L2
     if (/crunch|sit.?up|ab wheel|roue abdominal|cable crunch|dragon flag|windshield wiper|russian twist|jefferson curl/.test(n)) return false;
+    // Charges axiales lourdes — compression vertébrale directe
+    if (/squat barre|back squat|soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning/.test(n)) return false;
   }
 
-  // ── HTA SÉVÈRE ──
+  // ── HTA SÉVÈRE (≥180/110 mmHg) ──
   // Valsalva prolongé → pic PA systolique +60 à +100 mmHg (Lamotte et al., Arch Cardiovasc Dis 2015).
-  // Exclure les exercices impliquant charge ≥85% 1RM avec apnée obligatoire.
+  // Arraché/snatch = Valsalva maximal + pic de pression intra-abdominale extrême → contre-indiqué.
+  // Isométriques maximaux (L-sit, dragon flag) = augmentation pression artérielle soutenue.
+  // Recommandé : cardio Z1-Z2 uniquement (< 65% FCmax), musculation légère RPE max 6/10.
+  // Réf : Pescatello et al., Med Sci Sports Exerc 2004 ; AHA/ACSM Joint Position 2007.
   if (med.hypertension) {
-    if (/soulev[eé].*terre|deadlift|squat barre|l.?sit|dragon flag/.test(n)) return false;
+    if (/soulev[eé].*terre|deadlift|squat barre|l.?sit|dragon flag|arrac[hé][eé]|snatch|clean.*jerk|windshield wiper/.test(n)) return false;
   }
 
   // ── POLYARTHRITE RHUMATOÏDE ──
@@ -732,12 +744,13 @@ function renderMuscuMedicalQ(p) {
     {key: 'rotatorCuff',          label: 'Déchirure coiffe des rotateurs'},
     {key: 'acl',                  label: 'LCA opéré/fragilisé'},
     {key: 'osteoporosis',         label: 'Ostéoporose'},
-    {key: 'hypertension',         label: 'HTA sévère'},
+    {key: 'hypertension',         label: 'HTA sévère (≥180/110)'},
     {key: 'rheumatoidArthritis',  label: 'Polyarthrite rhumatoïde (PR)'},
     {key: 'fibromyalgia',         label: 'Fibromyalgie'},
     {key: 'meniscus',             label: 'Ménisque lésé/opéré'},
     {key: 'spondylarthritis',     label: 'Spondylarthrite ankylosante'},
-    {key: 'kneeOsteoarthritis',   label: 'Gonarthrose (arthrose du genou)'}
+    {key: 'kneeOsteoarthritis',   label: 'Gonarthrose (arthrose du genou)'},
+    {key: 'epicondylitis',        label: 'Épicondylite latérale (tennis elbow)'}
   ];
 
   var antGrid = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px'});
@@ -784,7 +797,7 @@ function renderMuscuMedicalQ(p) {
   p.appendChild(textarea);
 
   // ─── Avertissement si sévère ou antécédent grave ───
-  var hasSevere = med.painLevel === 3 || med.herniaDisc || med.rotatorCuff || med.acl || med.fibromyalgia || med.meniscus;
+  var hasSevere = med.painLevel === 3 || med.herniaDisc || med.rotatorCuff || med.acl || med.fibromyalgia || med.meniscus || med.osteoporosis || med.hypertension || med.spondylarthritis || med.rheumatoidArthritis;
   if (hasSevere) {
     var warn = h('div', {style: 'background:#FFEBEE;border-left:4px solid #C0392B;padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#7B1A1A;line-height:1.6'});
     warn.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, '\u26A0 Douleur sévère ou antécédent grave détecté. Nous adapterons le programme en mode réhabilitation.'));
@@ -1341,6 +1354,10 @@ function generateCrossfitWeek(weekNumber, daysPerWeek) {
   var allWods = window.CF_WODS || [];
   if (!allWods.length) return [];
 
+  // Semaines de décharge CrossFit : 4, 8, 12, 16... (cycle 3+1 semaines — protocole Mayhem/Games)
+  // Volume réduit 40-50%, intensité plafonnée à 70% max, pas de PR ni de test.
+  var isDeloadWeek = (weekNumber % 4 === 0);
+
   var template = CF_DAY_TEMPLATES[daysPerWeek] || CF_DAY_TEMPLATES[4];
   var weekProgram = [];
   var startIdx = ((weekNumber - 1) * daysPerWeek) % allWods.length;
@@ -1354,7 +1371,8 @@ function generateCrossfitWeek(weekNumber, daysPerWeek) {
       focus: template[d].focus,
       hasHaltero: template[d].hasHaltero,
       halteroLift: template[d].halteroLift,
-      wod: wod
+      wod: wod,
+      isDeload: isDeloadWeek
     });
   }
 
@@ -1426,6 +1444,18 @@ function renderCrossfitProgram(p) {
     S.crossfitWeek++; S.selectedCrossfitDay = 0; window.render();
   }}, '\u2192'));
   p.appendChild(weekNav);
+
+  // ─── CROSSFIT DELOAD BANNER (semaines 4, 8, 12, 16) ───
+  // Protocole Mayhem / Games : 3 semaines d'intensité + 1 semaine de décharge.
+  // Volume réduit de 40-50%, intensité maintenue à 70% max. Récupération CNS + articulaire.
+  var cfWeekNum = S.crossfitWeek || 1;
+  var isCFDeload = (cfWeekNum % 4 === 0);
+  if (isCFDeload) {
+    var cfDeloadBanner = h('div', {style: 'background:#F3E5F5;border-left:4px solid #8E44AD;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#4A235A'});
+    cfDeloadBanner.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, '\uD83D\uDCC9 Semaine ' + cfWeekNum + ' — DÉCHARGE OBLIGATOIRE (CrossFit cycle 4-1)'));
+    cfDeloadBanner.appendChild(h('div', {}, 'Réduisez le volume de 40-50\u00a0% (ex. 3 séries au lieu de 5). Intensité \u226470\u00a0% du max. Gardez les mêmes mouvements — c\'est la récupération CNS et articulaire qui permet les PR des semaines suivantes. Pas de PR ni de test de max cette semaine.'));
+    p.appendChild(cfDeloadBanner);
+  }
 
   // ─── HALTERO CYCLE INFO ───
   if (window.HALTERO_CYCLES) {
@@ -2119,6 +2149,7 @@ function renderMusculationProgram(p) {
     if (med.feet) restrictions.push('\u26A0 Pieds/fasciite\u00a0: exercices \u00e0 impact retir\u00e9s (sauts, corde), privil\u00e9gier velo ou natation');
     if (med.spondylarthritis) restrictions.push('\u26A0 Spondylarthrite\u00a0: charges axiales lourdes retir\u00e9es (deadlift, squat barre, good morning) \u2014 natation, yoga et \u00e9tirements recommand\u00e9s (Sieper & Poddubnyy, Lancet 2017)');
     if (med.kneeOsteoarthritis) restrictions.push('\u26A0 Gonarthrose\u00a0: flexions profondes du genou et impacts retir\u00e9s \u2014 v\u00e9lo stationnaire et musculation en amplitude limit\u00e9e recommand\u00e9s (OARSI 2014)');
+    if (med.epicondylitis || med.elbows) restrictions.push('\u26A0 \u00c9picondylite\u00a0: rowing barre pronation, pull-ups pronation, curl barre droite retir\u00e9s \u2014 favoriser prise supination ou neutre (Bisset & Vicenzino, JOSPT 2015)');
     if (restrictions.length > 0) {
       var medBanner = h('div', {style: 'background:#FFF3E0;border-left:4px solid #E67E22;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5D4037'});
       medBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, '\uD83C\uDFE5 Programme adapt\u00e9 \u00e0 votre bilan m\u00e9dical'));
@@ -2631,22 +2662,22 @@ function renderMusculationProgram(p) {
       kcalBox.appendChild(kr1);
       var kr2 = h('div', {style: 'display:flex;justify-content:space-between;margin-bottom:6px'});
       kr2.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)'}, 'EPOC +24h (Schuenke\u00a02002)'));
-      kr2.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:14px;color:#E67E22'}, '+' + kcalRes.epoc + '\u00a0kcal'));
+      kr2.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:14px;color:var(--orange,#6A4A1A)'}, '+' + kcalRes.epoc + '\u00a0kcal'));
       kcalBox.appendChild(kr2);
       var kr3 = h('div', {style: 'display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px'});
       kr3.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold'}, 'Total estim\u00e9'));
-      kr3.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:17px;font-weight:bold;color:#27AE60'}, kcalRes.total + '\u00a0kcal'));
+      kr3.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:17px;font-weight:bold;color:var(--green,#1A4A1A)'}, kcalRes.total + '\u00a0kcal'));
       kcalBox.appendChild(kr3);
       kcalBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}, 'FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 RPE\u00a0' + kcalRes.rpe + '/10 \u2014 Keytel\u00a02005 \u00b7 Tanaka\u00a02001'));
       compPanel.appendChild(kcalBox);
       // ⚠ Note TDEE — évite le double-comptage (audit interdépendance)
-      compPanel.appendChild(h('div', {style: 'background:#FFF8E1;border-left:3px solid #F9A825;padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:#5D4037;line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
+      compPanel.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:3px solid var(--orange,#6A4A1A);padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--text,#0A0A09);line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
       // Contexte nutritionnel : montre l'impact de la session sur le budget calorique
       var nc = getNutritionContext();
       var nutritionContextHtml = '';
       if (nc && nc.caloriesTarget > 0 && kcalRes && kcalRes.total > 0) {
         var pct = Math.round((kcalRes.total / nc.caloriesTarget) * 100);
-        var warningColor = pct > 40 ? '#ef5350' : pct > 25 ? '#ff9800' : '#4CAF50';
+        var warningColor = pct > 40 ? 'var(--red,#5A1010)' : pct > 25 ? 'var(--orange,#6A4A1A)' : 'var(--green,#1A4A1A)';
         var warningMsg = pct > 40
           ? '\u26a0\ufe0f Session tr\u00e8s intense \u2014 pensez \u00e0 ajuster votre alimentation post-entra\u00eenement'
           : pct > 25

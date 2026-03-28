@@ -423,7 +423,20 @@ window.SCANNER = {
       history.slice(0, 5).forEach(function(item) {
         var row = document.createElement('div');
         row.className = 'scan-history-item';
-        row.innerHTML = '<span>' + item.name + ' <span style="color:var(--grey2)">' + (item.brand || '') + '</span></span><span class="' + getScoreClass(item.score) + '" style="font-family:Georgia;font-style:italic;padding:2px 8px;font-size:12px">' + item.score + '%</span>';
+        // XSS fix: use DOM construction instead of innerHTML — item.name/brand come from OpenFoodFacts (external) stored in localStorage
+        var nameSpan = document.createElement('span');
+        var nameText = document.createTextNode(item.name + ' ');
+        nameSpan.appendChild(nameText);
+        var brandSpan = document.createElement('span');
+        brandSpan.style.color = 'var(--grey2)';
+        brandSpan.textContent = item.brand || '';
+        nameSpan.appendChild(brandSpan);
+        var scoreSpan = document.createElement('span');
+        scoreSpan.className = getScoreClass(item.score);
+        scoreSpan.style.cssText = 'font-family:Georgia;font-style:italic;padding:2px 8px;font-size:12px';
+        scoreSpan.textContent = item.score + '%';
+        row.appendChild(nameSpan);
+        row.appendChild(scoreSpan);
         row.style.cursor = 'pointer';
         row.onclick = function() { lookupAndAnalyze(item.barcode); };
         histSection.appendChild(row);
@@ -604,7 +617,10 @@ window.SCANNER = {
       ].forEach(function(m) {
         var cell = document.createElement('div');
         cell.className = 'nutri-cell';
-        cell.innerHTML = '<div class="nv">' + m.v + '</div><div class="nl">' + m.l + '</div>';
+        // XSS fix: use DOM construction — m.v are numeric values but defense-in-depth
+        var vDiv = document.createElement('div'); vDiv.className = 'nv'; vDiv.textContent = m.v;
+        var lDiv = document.createElement('div'); lDiv.className = 'nl'; lDiv.textContent = m.l;
+        cell.appendChild(vDiv); cell.appendChild(lDiv);
         grid.appendChild(cell);
       });
       card.appendChild(grid);
@@ -620,7 +636,10 @@ window.SCANNER = {
       ].forEach(function(m) {
         var cell = document.createElement('div');
         cell.className = 'nutri-cell';
-        cell.innerHTML = '<div class="nv" style="font-size:14px">' + m.v + '</div><div class="nl">' + m.l + '</div>';
+        // XSS fix: use DOM construction
+        var vDiv = document.createElement('div'); vDiv.className = 'nv'; vDiv.style.fontSize = '14px'; vDiv.textContent = m.v;
+        var lDiv = document.createElement('div'); lDiv.className = 'nl'; lDiv.textContent = m.l;
+        cell.appendChild(vDiv); cell.appendChild(lDiv);
         detailGrid.appendChild(cell);
       });
       card.appendChild(detailGrid);
@@ -629,7 +648,8 @@ window.SCANNER = {
       var fitness = checkFitness(p);
       var verdict = document.createElement('div');
       verdict.className = 'fit-verdict ' + (fitness.fits ? 'fit-yes' : (score >= 40 ? 'fit-warning' : 'fit-no'));
-      verdict.innerHTML = (fitness.fits ? '\u2713 ' : '\u26A0 ') + fitness.message;
+      // XSS fix: fitness.message is JS-constructed but textContent is always safer
+      verdict.textContent = (fitness.fits ? '\u2713 ' : '\u26A0 ') + fitness.message;
       card.appendChild(verdict);
 
       resultContainer.appendChild(card);

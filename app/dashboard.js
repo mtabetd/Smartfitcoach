@@ -79,8 +79,8 @@ styleEl.textContent = [
   '.dash-btn-primary:hover { opacity:.85; }',
   '.dash-btn-secondary { width:100%; padding:14px; background:var(--ivory2,#F4F4F0); color:var(--black,#181818); border:1px solid var(--border,#D8D8D0); font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
   '.dash-btn-secondary:hover { background:var(--black,#181818); color:var(--ivory,#FAF9F6); }',
-  '.dash-btn-danger { width:100%; padding:14px; background:transparent; color:#c0392b; border:1px solid #c0392b; font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
-  '.dash-btn-danger:hover { background:#c0392b; color:#fff; }',
+  '.dash-btn-danger { width:100%; padding:14px; background:transparent; color:var(--red,#5A1010); border:1px solid var(--red,#5A1010); font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
+  '.dash-btn-danger:hover { background:var(--red,#5A1010); color:var(--ivory,#FAFAF7); }',
 
   /* Responsive */
   '@media(max-width:480px){ .dash-card-grid,.dash-card-grid-3{grid-template-columns:1fr;} .dash-greeting{font-size:24px;} }',
@@ -419,10 +419,32 @@ window.DASHBOARD = {
     root.appendChild(perfWidget);
 
     // Créer canvas Chart.js pour la courbe de poids
-    var canvas = h('canvas', {id: 'weight-chart', style: 'width:100%;height:180px;max-height:180px'});
+    var rawHistCheck = (window.S && window.S.weightHistory ? window.S.weightHistory : []).filter(function(e) {
+      if (!e) return false;
+      var w = parseFloat(e.weight || e.w || e);
+      return !isNaN(w) && w > 0;
+    });
     var chartWrap = h('div', {'class': 'card', style: 'margin-bottom:16px'});
     chartWrap.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:8px'}, 'PROGRESSION DU POIDS'));
-    chartWrap.appendChild(canvas);
+    if (rawHistCheck.length < 2) {
+      var weightEmptyState = document.createElement('div');
+      weightEmptyState.className = 'empty-state';
+      var weightEmptyIcon = document.createElement('span');
+      weightEmptyIcon.className = 'empty-state-icon';
+      weightEmptyIcon.textContent = '\u2696\ufe0f';
+      var weightEmptyTitle = document.createElement('p');
+      weightEmptyTitle.className = 'empty-state-title';
+      weightEmptyTitle.textContent = 'Aucune courbe disponible';
+      var weightEmptyMsg = document.createElement('p');
+      weightEmptyMsg.textContent = 'Ajoutez votre premier poids pour voir la courbe de progression.';
+      weightEmptyState.appendChild(weightEmptyIcon);
+      weightEmptyState.appendChild(weightEmptyTitle);
+      weightEmptyState.appendChild(weightEmptyMsg);
+      chartWrap.appendChild(weightEmptyState);
+    } else {
+      var canvas = h('canvas', {id: 'weight-chart', style: 'width:100%;height:180px;max-height:180px'});
+      chartWrap.appendChild(canvas);
+    }
     root.appendChild(chartWrap);
 
     // Initialiser le chart après rendu DOM
@@ -442,16 +464,20 @@ window.DASHBOARD = {
       });
       if (filteredData.length < 2) return;
       if (window._dashWeightChart) { try { window._dashWeightChart.destroy(); } catch(e2) {} window._dashWeightChart = null; }
-      window._dashWeightChart = new Chart(ctx, {
+      var isDark = document.body.classList.contains('dark-mode') || window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var chartAccent = isDark ? '#4ABA4A' : '#1A4A1A';
+      var chartAccentBg = isDark ? 'rgba(74,186,74,0.08)' : 'rgba(26,74,26,0.08)';
+      var chartGrid = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+      window._dashWeightChart = (window.createChart ? window.createChart(ctx, {
         type: 'line',
         data: {
           labels: filteredLabels,
           datasets: [{
             data: filteredData,
-            borderColor: '#1A4A1A',
-            backgroundColor: 'rgba(26,74,26,0.08)',
+            borderColor: chartAccent,
+            backgroundColor: chartAccentBg,
             pointRadius: 4,
-            pointBackgroundColor: '#1A4A1A',
+            pointBackgroundColor: chartAccent,
             tension: 0.3,
             fill: true
           }]
@@ -462,20 +488,20 @@ window.DASHBOARD = {
           plugins: { legend: { display: false } },
           scales: {
             y: {
-              grid: { color: 'rgba(0,0,0,0.05)' },
+              grid: { color: chartGrid },
               ticks: { font: { size: 10 }, callback: function(v) { return v + ' kg'; } }
             },
             x: { grid: { display: false }, ticks: { font: { size: 9 } } }
           }
         }
-      });
+      }) : null);
     });
 
     // Chart kcal semaine
+    var kcalWrap = h('div', {'class': 'card', style: 'margin-bottom:16px'});
+    kcalWrap.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:8px'}, 'CALORIES PAR JOUR — PLAN SEMAINE'));
     if (window.S && window.S.weekPlan && window.S.weekPlan.length === 7) {
       var kcalCanvas = h('canvas', {id: 'kcal-chart', style: 'width:100%;height:140px;max-height:140px'});
-      var kcalWrap = h('div', {'class': 'card', style: 'margin-bottom:16px'});
-      kcalWrap.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:8px'}, 'CALORIES PAR JOUR — PLAN SEMAINE'));
       kcalWrap.appendChild(kcalCanvas);
       root.appendChild(kcalWrap);
 
@@ -494,6 +520,12 @@ window.DASHBOARD = {
           }, 0);
         });
         if (window._dashKcalChart) { try { window._dashKcalChart.destroy(); } catch(e2) {} window._dashKcalChart = null; }
+        var isDark2 = document.body.classList.contains('dark-mode') || window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var kcalGreen = isDark2 ? 'rgba(74,186,74,0.7)' : 'rgba(26,74,26,0.7)';
+        var kcalGreenFull = isDark2 ? 'rgba(74,186,74,0.9)' : 'rgba(26,74,26,0.9)';
+        var kcalRed = isDark2 ? 'rgba(218,106,106,0.7)' : 'rgba(180,40,40,0.7)';
+        var kcalRedLine = isDark2 ? '#DA6A6A' : '#B22222';
+        var kcalGrid2 = isDark2 ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
         window._dashKcalChart = new Chart(ctx2, {
           type: 'bar',
           data: {
@@ -504,7 +536,7 @@ window.DASHBOARD = {
                 data: dayKcals,
                 backgroundColor: dayKcals.map(function(k) {
                   var ratio = k / target;
-                  return ratio < 0.92 ? 'rgba(26,74,26,0.6)' : ratio > 1.08 ? 'rgba(180,40,40,0.6)' : 'rgba(26,74,26,0.9)';
+                  return ratio < 0.92 ? kcalGreen : ratio > 1.08 ? kcalRed : kcalGreenFull;
                 }),
                 borderRadius: 4
               },
@@ -512,7 +544,7 @@ window.DASHBOARD = {
                 label: 'Cible',
                 data: Array(7).fill(target),
                 type: 'line',
-                borderColor: '#B22222',
+                borderColor: kcalRedLine,
                 borderDash: [4,3],
                 pointRadius: 0,
                 borderWidth: 1.5,
@@ -526,7 +558,7 @@ window.DASHBOARD = {
             plugins: { legend: { display: false } },
             scales: {
               y: {
-                grid: { color: 'rgba(0,0,0,0.05)' },
+                grid: { color: kcalGrid2 },
                 ticks: { font: { size: 9 }, callback: function(v) { return v + ' kcal'; } }
               },
               x: { grid: { display: false }, ticks: { font: { size: 9 } } }
@@ -534,6 +566,22 @@ window.DASHBOARD = {
           }
         });
       });
+    } else {
+      var weekEmptyState = document.createElement('div');
+      weekEmptyState.className = 'empty-state';
+      var weekEmptyIcon = document.createElement('span');
+      weekEmptyIcon.className = 'empty-state-icon';
+      weekEmptyIcon.textContent = '\uD83D\uDDD3\ufe0f';
+      var weekEmptyTitle = document.createElement('p');
+      weekEmptyTitle.className = 'empty-state-title';
+      weekEmptyTitle.textContent = 'Aucun plan semaine généré';
+      var weekEmptyMsg = document.createElement('p');
+      weekEmptyMsg.textContent = 'Générez votre plan semaine dans Nutrition pour commencer à suivre vos calories.';
+      weekEmptyState.appendChild(weekEmptyIcon);
+      weekEmptyState.appendChild(weekEmptyTitle);
+      weekEmptyState.appendChild(weekEmptyMsg);
+      kcalWrap.appendChild(weekEmptyState);
+      root.appendChild(kcalWrap);
     }
 
 
@@ -574,6 +622,10 @@ window.DASHBOARD = {
       badgesRow.appendChild(b1);
       badgesRow.appendChild(b2);
       badgesRow.appendChild(b3);
+      var badgeEncouragement = document.createElement('p');
+      badgeEncouragement.style.cssText = 'font-size:11px;color:var(--grey,#5A5A54);margin:8px 0 0;font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.5;';
+      badgeEncouragement.textContent = 'Continuez \u2014 vos premiers badges vous attendent !';
+      badgesCard.appendChild(badgeEncouragement);
     }
     var badgeLink = h('span', 'dash-badge-link', 'Voir tous les badges \u2192');
     badgeLink.addEventListener('click', function() {
