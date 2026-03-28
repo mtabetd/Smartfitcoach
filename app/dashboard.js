@@ -429,15 +429,25 @@ window.DASHBOARD = {
     requestAnimationFrame(function() {
       if (!window.Chart) return;
       var ctx = document.getElementById('weight-chart');
-      if (!ctx) return;
-      var hist = (window.S && window.S.weightHistory ? window.S.weightHistory : []).slice(-12); // 12 dernières entrées
-      if (!hist || hist.length < 2) return;
-      new Chart(ctx, {
+      if (!ctx || !ctx.getContext) return;
+      var rawHist = (window.S && window.S.weightHistory ? window.S.weightHistory : []).slice(-12);
+      var filteredLabels = [];
+      var filteredData = [];
+      (rawHist || []).forEach(function(e) {
+        if (!e) return;
+        var w = parseFloat(e.weight || e.w || e);
+        if (isNaN(w) || w <= 0) return;
+        filteredLabels.push(e.date ? e.date.substring(5) : '?');
+        filteredData.push(w);
+      });
+      if (filteredData.length < 2) return;
+      if (window._dashWeightChart) { try { window._dashWeightChart.destroy(); } catch(e2) {} window._dashWeightChart = null; }
+      window._dashWeightChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: hist.map(function(e) { return e.date ? e.date.substring(5) : ''; }),
+          labels: filteredLabels,
           datasets: [{
-            data: hist.map(function(e) { return e.weight || e.w || e; }),
+            data: filteredData,
             borderColor: '#1A4A1A',
             backgroundColor: 'rgba(26,74,26,0.08)',
             pointRadius: 4,
@@ -472,16 +482,19 @@ window.DASHBOARD = {
       requestAnimationFrame(function() {
         if (!window.Chart) return;
         var ctx2 = document.getElementById('kcal-chart');
-        if (!ctx2) return;
+        if (!ctx2 || !ctx2.getContext) return;
+        if (!window.S || !Array.isArray(window.S.weekPlan) || window.S.weekPlan.length !== 7) return;
         var JOURS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-        var target = (window.S && window.S.calories) || 2000;
+        var target = (window.S.calories && window.S.calories > 0) ? window.S.calories : 2000;
         var dayKcals = window.S.weekPlan.map(function(day) {
-          if (!day || !day.meals) return 0;
+          if (!day || !Array.isArray(day.meals)) return 0;
           return day.meals.reduce(function(sum, m) {
-            return sum + ((m && (m.k || (m.baseNutrition && m.baseNutrition.calories) || m.kcal)) || 0);
+            var k = (m && (m.k || (m.baseNutrition && m.baseNutrition.calories) || m.kcal)) || 0;
+            return sum + (isNaN(k) ? 0 : k);
           }, 0);
         });
-        new Chart(ctx2, {
+        if (window._dashKcalChart) { try { window._dashKcalChart.destroy(); } catch(e2) {} window._dashKcalChart = null; }
+        window._dashKcalChart = new Chart(ctx2, {
           type: 'bar',
           data: {
             labels: JOURS,

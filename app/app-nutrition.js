@@ -905,10 +905,11 @@ function renderStep6(p) {
 
         setTimeout(function() {
           if (typeof Chart === 'undefined' || !curveCanvas.getContext) return;
+          var baseW = parseFloat(S.prePregnancyWeight || S.weight);
+          if (isNaN(baseW) || baseW <= 0) return;
           var labels = [];
           var minData = [];
           var maxData = [];
-          var baseW = S.prePregnancyWeight || S.weight;
           for (var w = 0; w <= 40; w++) {
             labels.push('S' + w);
             var t1g = Math.min(w, 13) / 13 * 2.0;
@@ -1426,10 +1427,11 @@ function renderStep8(p) {
 
         setTimeout(function() {
           if (typeof Chart === 'undefined' || !pregWeightCanvas.getContext) return;
+          var pregBaseW = parseFloat(S.prePregnancyWeight || S.weight);
+          if (isNaN(pregBaseW) || pregBaseW <= 0) return;
           var pregLabels = [];
           var pregMinD = [];
           var pregMaxD = [];
-          var pregBaseW = S.prePregnancyWeight || S.weight;
           for (var pw = 0; pw <= 40; pw++) {
             pregLabels.push(pw % 4 === 0 ? 'S' + pw : '');
             var pt1g = Math.min(pw, 13) / 13 * 2.0;
@@ -1669,12 +1671,17 @@ function renderWeightChart(p) {
 
   setTimeout(function() {
     if (typeof Chart === 'undefined') return;
+    if (!canvas || !canvas.getContext) return;
     var labels = [];
     var data = [];
-    S.weightHistory.forEach(function(entry) {
-      labels.push(entry.date.substring(5)); // MM-DD
-      data.push(entry.weight);
+    (S.weightHistory || []).forEach(function(entry) {
+      if (!entry) return;
+      var w = parseFloat(entry.weight);
+      if (isNaN(w) || w <= 0) return;
+      labels.push(entry.date ? entry.date.substring(5) : '?');
+      data.push(w);
     });
+    if (data.length < 2) return;
     try { window.createChart(canvas, {
       type: 'line',
       data: {

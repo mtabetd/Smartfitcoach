@@ -1758,13 +1758,16 @@ function getSuggestedWeight(exerciseName, reps, phase) {
 
 function renderSparkline(values, color) {
   color = color || '#1A4A1A';
-  if (!values || values.length < 2) return null;
+  if (!values || !Array.isArray(values)) return null;
+  // Filter out NaN/null/undefined and non-positive values
+  var cleanValues = values.map(function(v) { return parseFloat(v) || 0; }).filter(function(v) { return !isNaN(v) && v > 0; });
+  if (cleanValues.length < 2) return null;
   var W = 80, H = 28, pad = 3;
-  var min = Math.min.apply(null, values);
-  var max = Math.max.apply(null, values);
+  var min = Math.min.apply(null, cleanValues);
+  var max = Math.max.apply(null, cleanValues);
   var range = max - min || 1;
-  var pts = values.map(function(v, i) {
-    var x = pad + (i / (values.length - 1)) * (W - 2*pad);
+  var pts = cleanValues.map(function(v, i) {
+    var x = pad + (i / (cleanValues.length - 1)) * (W - 2*pad);
     var y = H - pad - ((v - min) / range) * (H - 2*pad);
     return x.toFixed(1) + ',' + y.toFixed(1);
   });
@@ -2833,15 +2836,24 @@ function renderWeightChartSport(container) {
 
   // Render Chart.js
   setTimeout(function(){
-    if (!canvas.getContext || !window.Chart) return;
-    if (history.length === 0) return;
+    if (!canvas || !canvas.getContext || !window.Chart) return;
+    var cleanLabels = [];
+    var cleanData = [];
+    (history || []).forEach(function(entry) {
+      if (!entry) return;
+      var w = parseFloat(entry.weight);
+      if (isNaN(w) || w <= 0) return;
+      cleanLabels.push(entry.date || '?');
+      cleanData.push(w);
+    });
+    if (cleanData.length < 2) return;
     try { window.createChart(canvas, {
       type: 'line',
       data: {
-        labels: history.map(function(entry){ return entry.date; }),
+        labels: cleanLabels,
         datasets: [{
           label: 'Poids (kg)',
-          data: history.map(function(entry){ return entry.weight; }),
+          data: cleanData,
           borderColor: '#0A0A09',
           backgroundColor: 'rgba(10,10,9,0.05)',
           fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#0A0A09'
