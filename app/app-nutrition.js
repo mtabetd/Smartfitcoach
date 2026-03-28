@@ -3997,6 +3997,7 @@ window.NUTRITION = {
       renderSmoothieBar(smZone);
       content.appendChild(smZone);
       p.appendChild(content);
+      if (S.modalSmoothie) renderSmoothieModal(p);
       return;
     }
     if (S.nStep === 0) renderSplash(content);
