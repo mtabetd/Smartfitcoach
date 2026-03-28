@@ -2146,7 +2146,7 @@ function renderMusculationProgram(p) {
   if (day) {
     p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus));
 
-    day.exercises.forEach(function(ex) {
+    (day.exercises || []).forEach(function(ex) {
       var card = h('div', {'class': 'exercise-card', onclick: function(){ S.sportModalExercise = ex; window.render(); }});
       card.appendChild(h('div', {'class': 'exercise-muscle'}, ex.m));
       card.appendChild(h('div', {'class': 'exercise-name'}, ex.n));
@@ -3119,7 +3119,7 @@ function renderHyroxProgram(p) {
 
     // Exercises list
     var exList = h('div', {style: 'margin-bottom:10px'});
-    sess.exercises.forEach(function(ex, idx) {
+    (sess.exercises || []).forEach(function(ex, idx) {
       if (!ex.name && !ex.detail) return;
       var exRow = h('div', {style: 'padding:6px 0;border-bottom:1px solid var(--border)'});
       if (ex.name) {
