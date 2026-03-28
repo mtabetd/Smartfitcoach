@@ -3117,6 +3117,11 @@ function renderRunningProgram(p) {
   }
 
   var program = S.runningProgram;
+  if (!program || !program.length) {
+    p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+    p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 7; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+    return;
+  }
   var totalWeeks = program.length;
   if (S.runningWeek > totalWeeks) S.runningWeek = totalWeeks;
   if (S.runningWeek < 1) S.runningWeek = 1;
@@ -3325,6 +3330,11 @@ function renderHyroxProgram(p) {
   }
 
   var program = S.hyroxProgram;
+  if (!program || !program.length) {
+    p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
+    p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 9; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+    return;
+  }
   var totalWeeks = program.length;
   if (S.hyroxWeek > totalWeeks) S.hyroxWeek = totalWeeks;
   if (S.hyroxWeek < 1) S.hyroxWeek = 1;
