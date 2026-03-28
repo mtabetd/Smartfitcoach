@@ -1505,7 +1505,7 @@ window.S = {
   lang: 'fr', weightUnit: 'kg', heightUnit: 'cm',
   activity: null, train: [], sleep: null, medical: [], goal: null,
   cookLevel: 2, whey: null, allergies: [], intolerances: [],
-  regime: 0, excluded: '', cuisines: [0],
+  regime: 0, halal: false, excluded: '', cuisines: [0],
   shopFreq: null, shopStores: [], shopBudget: null, shopPrefs: [],
   shopChecked: {},   // { 'nom_ingrédient': true|false } — état cases à cocher liste de courses
   saladBar: {
@@ -1532,6 +1532,7 @@ window.S = {
   photoFront: null, photoBack: null, strongZones: [], weakZones: [],
   // Sport
   sStep: 0, sportGoals: [], sportLevel: null, sportDays: 3,
+  sportEquipment: 'gym', // 'gym' (salle complète), 'dumbbells' (haltères+banc), 'home' (poids du corps)
   sportSessionDuration: null, // '45min','1h','1h15','1h30'
   sportFocus: {}, sportProgram: null, selectedSportDay: 0,
   sportModalExercise: null,
@@ -2551,7 +2552,7 @@ function filterRecipes(pool,type){
   var s=window.S;
   var r=(pool||[]).slice();
   r=r.filter(function(x){return x.lv<=s.cookLevel+1});
-  if(type==='snack'&&!s.whey)r=r.filter(function(x){return!x.w});
+  if(!s.whey)r=r.filter(function(x){return!x.w});
   if((s.allergies||[]).length>0&&(s.allergies||[]).indexOf('Aucune')===-1){
     r=r.filter(function(x){
       var ing=(x.i+' '+x.tags.join(' ')).toLowerCase();
@@ -2588,6 +2589,8 @@ function filterRecipes(pool,type){
   if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon/).test(i)});
   if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson/).test(i)});
   if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|beurre|miel|whey/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;return true});}
+  // Halal : exclut porc, charcuterie porcine et alcool
+  if(s.halal)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin/).test(i)});
   if(s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
   if(s.cuisines.indexOf(0)===-1&&s.cuisines.length>0){var flags=[];for(var c=0;c<s.cuisines.length;c++){var co=CUISINES[s.cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0)r=r.filter(function(x){return flags.indexOf(x.f)!==-1})}
   return r;
@@ -2648,7 +2651,7 @@ bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR)sR=enrichWithScali
 var isDessertDayPool=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;var sPool=meals>=4&&sT>0?(isDessertDayPool?pSD:(s.whey&&pSW.length>0&&d%2===0?pSW:(pSN.length>0?pSN:pS))):null;
 for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
 plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
-function swapMeal(di,slot){var s=window.S;if(!s.weekPlan||!s.weekPlan[di])return;var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));var nr=top[Math.floor(Math.random()*top.length)];nr=enrichWithScaling(nr,tgt);s.weekPlan[di][slot]=nr;if(typeof window.render==='function')window.render()}
+function swapMeal(di,slot){var s=window.S;if(!s.weekPlan||!s.weekPlan[di])return;if(!s._nm&&window.computeNutritionState)window.computeNutritionState(false);var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));var nr=top[Math.floor(Math.random()*top.length)];nr=enrichWithScaling(nr,tgt);s.weekPlan[di][slot]=nr;if(typeof window.render==='function')window.render()}
 
 window.getPool = getPool;
 window.filterRecipes = filterRecipes;

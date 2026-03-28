@@ -354,6 +354,26 @@ function generateSportProgram() {
       var available = pool.filter(function(ex){ return ex.lv <= maxLv; });
       if (!available.length) available = pool.slice();
 
+      // Equipment filter: exclude exercises requiring unavailable gear
+      if (S.sportEquipment && S.sportEquipment !== 'gym') {
+        var eqFiltered = available.filter(function(ex) {
+          var eq = (ex.eq || '').toLowerCase();
+          if (S.sportEquipment === 'home') {
+            return /poids du corps|poids de corps|sans mat/.test(eq);
+          }
+          if (S.sportEquipment === 'dumbbells') {
+            // Exclude exercises requiring cable machines, barbells, or specialized machines
+            if (/câble|poulie|machine|t-bar|landmine|convergente|pec deck|barre de traction/.test(eq)) return false;
+            // "barre + banc" requires barbell — exclude, but "haltères ou barre" → allow (use dumbbells)
+            if (/^barre\b/.test(eq) && !/ou halt|halt[eè]res ou barre/.test(eq)) return false;
+            return true;
+          }
+          return true;
+        });
+        // Fallback: if filter removes too many exercises, use unfiltered pool
+        if (eqFiltered.length >= 2) available = eqFiltered;
+      }
+
       // Pregnancy: filter forbidden exercises
       if (pregTri && pregForbidden.length > 0) {
         available = available.filter(function(ex) {
@@ -1694,6 +1714,21 @@ function renderMusculationLevel(p) {
   nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
   p.appendChild(nw);
   p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 2 et 6 jours'));
+
+  // Equipment selection
+  p.appendChild(h('div', {'class': 'section-label'}, '\uD83C\uDFCB\uFE0F\u200D\u2642\uFE0F Mat\u00e9riel disponible'));
+  var equipOptions = [
+    {id: 'gym', label: 'Salle compl\u00e8te', desc: 'Barres, machines, poulies'},
+    {id: 'dumbbells', label: 'Halt\u00e8res + banc', desc: 'Home gym ou salle basique'},
+    {id: 'home', label: 'Maison / PDC', desc: 'Sans mat\u00e9riel, poids du corps'}
+  ];
+  var eqGrid = h('div', {'class': 'level-list'});
+  equipOptions.forEach(function(eq) {
+    eqGrid.appendChild(h('div', {'class': 'level-item' + (S.sportEquipment === eq.id ? ' on' : ''), onclick: function() { S.sportEquipment = eq.id; window.render(); }}, [
+      h('div', {}, [h('div', {'class': 'level-name'}, eq.label), h('div', {'class': 'level-desc'}, eq.desc)])
+    ]));
+  });
+  p.appendChild(eqGrid);
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.sportLevel !== null;

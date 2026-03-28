@@ -6575,6 +6575,656 @@
       ]
     },
 
+  // ─── RECETTES ITALIENNES R440-R449 : PÂTES & RISOTTI HEALTHY ─────────────────
+
+    {
+      id: 'R440',
+      name: 'Pasta e Fagioli Moderne',
+      emoji: '🫘',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['high-protein', 'mediterranean', 'balanced', 'anti-inflammatory', 'budget', 'meal-prep'],
+      difficulty: 2,
+      prepTime: 10,
+      cookTime: 25,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 32×4 + 52×4 + 10×9 = 128 + 208 + 90 = 426 kcal ≈ 430 ✓
+      baseNutrition: { calories: 430, proteinGrams: 32, carbsGrams: 52, fatGrams: 10 },
+      ingredients: [
+        { name: 'Haricots cannellini en boîte', qty: 400, unit: 'g' },
+        { name: 'Ditalini ou petites pâtes courtes', qty: 120, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 200, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
+        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Romarin frais', qty: 2, unit: 'branches' },
+        { name: 'Huile d\'olive extra-vierge', qty: 15, unit: 'ml' },
+        { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+        { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Faire revenir l\'ail émincé dans l\'huile d\'olive à feu moyen 1 min. Ajouter le romarin et les tomates pelées écrasées. Cuire 3 min.',
+        'Verser le bouillon, ajouter la moitié des haricots entiers et mixer grossièrement l\'autre moitié directement dans la casserole pour créer une base crémeuse.',
+        'Porter à ébullition, ajouter les pâtes et cuire al dente selon les indications (env. 8-10 min). Ajuster la consistance avec un peu d\'eau si nécessaire.',
+        'Retirer le romarin, assaisonner. Servir dans deux bols profonds, arroser d\'un filet d\'huile d\'olive et parsemer de parmesan râpé.'
+      ]
+    },
+
+    {
+      id: 'R441',
+      name: 'Risotto aux Asperges & Parmesan Light',
+      emoji: '🌿',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['vegetarian', 'mediterranean', 'balanced', 'anti-inflammatory', 'high-protein'],
+      difficulty: 2,
+      prepTime: 10,
+      cookTime: 25,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 22×4 + 62×4 + 10×9 = 88 + 248 + 90 = 426 kcal ≈ 430 ✓
+      baseNutrition: { calories: 430, proteinGrams: 22, carbsGrams: 62, fatGrams: 10 },
+      ingredients: [
+        { name: 'Riz arborio', qty: 160, unit: 'g' },
+        { name: 'Asperges vertes', qty: 250, unit: 'g' },
+        { name: 'Bouillon de légumes chaud', qty: 700, unit: 'ml' },
+        { name: 'Échalote', qty: 1, unit: 'pce' },
+        { name: 'Vin blanc sec', qty: 60, unit: 'ml' },
+        { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Zeste de citron', qty: 1, unit: 'pce' },
+        { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Couper les asperges en tronçons de 3 cm en réservant les pointes. Faire revenir l\'échalote émincée dans l\'huile d\'olive 2 min. Ajouter le riz et nacrer 2 min.',
+        'Déglacer au vin blanc, laisser absorber. Ajouter les tronçons d\'asperges (sans les pointes). Incorporer le bouillon chaud louche par louche en remuant constamment.',
+        'À mi-cuisson (env. 10 min), ajouter les pointes d\'asperges. Continuer d\'ajouter le bouillon jusqu\'à cuisson al dente du riz (18-20 min total).',
+        'Hors du feu, incorporer le parmesan et le zeste de citron. Laisser reposer 2 min, assaisonner et servir immédiatement dans des assiettes creuses chaudes.'
+      ]
+    },
+
+    {
+      id: 'R442',
+      name: 'Spaghetti Aglio Olio Poulet Grillé',
+      emoji: '🍝',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['high-protein', 'quick', 'mediterranean', 'balanced', 'dairy-free'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 42×4 + 55×4 + 14×9 = 168 + 220 + 126 = 514 kcal ≈ 515 ✓
+      baseNutrition: { calories: 515, proteinGrams: 42, carbsGrams: 55, fatGrams: 14 },
+      ingredients: [
+        { name: 'Spaghetti complets', qty: 160, unit: 'g' },
+        { name: 'Filets de poulet', qty: 300, unit: 'g' },
+        { name: 'Ail', qty: 4, unit: 'gousses' },
+        { name: 'Huile d\'olive extra-vierge', qty: 20, unit: 'ml' },
+        { name: 'Piment rouge séché (peperoncino)', qty: 1, unit: 'pce' },
+        { name: 'Persil plat frais', qty: 20, unit: 'g' },
+        { name: 'Jus de citron', qty: 15, unit: 'ml' },
+        { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les spaghetti al dente dans une grande casserole d\'eau salée. Réserver 100 ml d\'eau de cuisson avant d\'égoutter.',
+        'Pendant ce temps, griller les filets de poulet assaisonnés à la poêle grill 5-6 min de chaque côté. Trancher en lamelles.',
+        'Dans une grande poêle, chauffer l\'huile à feu doux, faire revenir l\'ail émincé et le piment 2 min sans colorer. Ajouter les pâtes et un peu d\'eau de cuisson, mélanger.',
+        'Incorporer le poulet tranché, le persil ciselé et le jus de citron. Mélanger vigoureusement 1 min pour enrober. Servir aussitôt.'
+      ]
+    },
+
+    {
+      id: 'R443',
+      name: 'Penne Arrabiata aux Crevettes',
+      emoji: '🍤',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['high-protein', 'mediterranean', 'quick', 'omega3', 'dairy-free', 'anti-inflammatory'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 38×4 + 54×4 + 9×9 = 152 + 216 + 81 = 449 kcal ≈ 450 ✓
+      baseNutrition: { calories: 450, proteinGrams: 38, carbsGrams: 54, fatGrams: 9 },
+      ingredients: [
+        { name: 'Penne de blé complet', qty: 150, unit: 'g' },
+        { name: 'Crevettes décortiquées crues', qty: 250, unit: 'g' },
+        { name: 'Tomates cerises', qty: 200, unit: 'g' },
+        { name: 'Purée de tomates', qty: 150, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Piment rouge frais', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les penne al dente dans de l\'eau bouillante salée. Réserver 80 ml d\'eau de cuisson.',
+        'Dans une poêle, faire revenir l\'ail et le piment émincés dans l\'huile 1 min. Ajouter les tomates cerises coupées en deux, cuire 3 min jusqu\'à ce qu\'elles éclatent.',
+        'Ajouter la purée de tomates, laisser mijoter 5 min. Incorporer les crevettes, cuire 3-4 min jusqu\'à ce qu\'elles soient roses. Assaisonner généreusement.',
+        'Mélanger les pâtes égouttées à la sauce, ajouter un peu d\'eau de cuisson si nécessaire pour lier. Servir avec le basilic déchiré et un filet d\'huile d\'olive cru.'
+      ]
+    },
+
+    {
+      id: 'R444',
+      name: 'Tagliatelles Saumon Épinards Citron',
+      emoji: '🐟',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['high-protein', 'omega3', 'anti-inflammatory', 'mediterranean', 'balanced', 'quick'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 15,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 40×4 + 50×4 + 16×9 = 160 + 200 + 144 = 504 kcal ≈ 505 ✓
+      baseNutrition: { calories: 505, proteinGrams: 40, carbsGrams: 50, fatGrams: 16 },
+      ingredients: [
+        { name: 'Tagliatelles fraîches', qty: 200, unit: 'g' },
+        { name: 'Filet de saumon sans peau', qty: 280, unit: 'g' },
+        { name: 'Épinards frais', qty: 150, unit: 'g' },
+        { name: 'Crème fraîche légère (5% MG)', qty: 80, unit: 'g' },
+        { name: 'Jus et zeste de citron', qty: 1, unit: 'pce' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Aneth frais', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les tagliatelles fraîches al dente (env. 3 min). Réserver 60 ml d\'eau de cuisson. Égoutter.',
+        'Dans une large poêle, chauffer l\'huile, ajouter le saumon coupé en cubes et cuire 3-4 min. Il doit rester légèrement nacré au cœur. Réserver.',
+        'Dans la même poêle, faire tomber les épinards 1 min. Ajouter la crème légère, le jus et le zeste de citron, les câpres. Laisser frémir 2 min.',
+        'Ajouter les pâtes et le saumon, mélanger délicatement. Ajuster avec l\'eau de cuisson. Parsemer d\'aneth frais et servir aussitôt.'
+      ]
+    },
+
+    {
+      id: 'R445',
+      name: 'Orzo Salade Méditerranéenne',
+      emoji: '🥗',
+      origin: '🇮🇹',
+      mealTypes: ['lunch'],
+      category: 'italian',
+      tags: ['vegetarian', 'mediterranean', 'meal-prep', 'balanced', 'anti-inflammatory', 'quick'],
+      difficulty: 1,
+      prepTime: 15,
+      cookTime: 10,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 18×4 + 58×4 + 14×9 = 72 + 232 + 126 = 430 kcal ✓
+      baseNutrition: { calories: 430, proteinGrams: 18, carbsGrams: 58, fatGrams: 14 },
+      ingredients: [
+        { name: 'Orzo (pâtes en forme de riz)', qty: 160, unit: 'g' },
+        { name: 'Feta allégée', qty: 80, unit: 'g' },
+        { name: 'Tomates cerises', qty: 150, unit: 'g' },
+        { name: 'Concombre', qty: 100, unit: 'g' },
+        { name: 'Olives noires', qty: 40, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Basilic et menthe frais', qty: 15, unit: 'g' },
+        { name: 'Huile d\'olive extra-vierge', qty: 20, unit: 'ml' },
+        { name: 'Vinaigre de citron', qty: 15, unit: 'ml' },
+        { name: 'Sel, poivre, origan séché', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire l\'orzo al dente dans de l\'eau bouillante salée (8-10 min). Égoutter, rincer à l\'eau froide pour stopper la cuisson et refroidir rapidement.',
+        'Couper les tomates cerises en deux, le concombre en demi-rondelles, le poivron en petits dés. Émietter la feta grossièrement.',
+        'Dans un grand bol, mélanger l\'orzo froid avec tous les légumes, les olives, la feta et les herbes ciselées.',
+        'Assaisonner avec l\'huile d\'olive, le vinaigre de citron, l\'origan, le sel et le poivre. Mélanger, goûter et ajuster. Servir froid ou à température ambiante — idéal en lunch box.'
+      ]
+    },
+
+    {
+      id: 'R446',
+      name: 'Risotto Champignons & Thym Vegan',
+      emoji: '🍄',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['vegan', 'vegetarian', 'dairy-free', 'mediterranean', 'anti-inflammatory', 'balanced'],
+      difficulty: 2,
+      prepTime: 10,
+      cookTime: 28,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 14×4 + 68×4 + 12×9 = 56 + 272 + 108 = 436 kcal ≈ 435 ✓
+      baseNutrition: { calories: 435, proteinGrams: 14, carbsGrams: 68, fatGrams: 12 },
+      ingredients: [
+        { name: 'Riz arborio', qty: 160, unit: 'g' },
+        { name: 'Champignons mélangés (shiitake, portobello, champignons de Paris)', qty: 300, unit: 'g' },
+        { name: 'Bouillon de légumes chaud', qty: 750, unit: 'ml' },
+        { name: 'Oignon jaune', qty: 1, unit: 'pce' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Vin blanc sec', qty: 60, unit: 'ml' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Thym frais', qty: 4, unit: 'branches' },
+        { name: 'Levure nutritionnelle', qty: 15, unit: 'g' },
+        { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Faire sauter les champignons tranchés dans la moitié de l\'huile à feu vif 5 min jusqu\'à coloration dorée. Saler, ajouter l\'ail et le thym. Réserver.',
+        'Dans la même casserole, faire revenir l\'oignon émincé dans le reste d\'huile 3 min. Ajouter le riz et nacrer 2 min. Déglacer au vin blanc, laisser absorber.',
+        'Incorporer le bouillon chaud louche par louche en remuant régulièrement (18-20 min), jusqu\'à texture crémeuse et riz al dente.',
+        'Hors du feu, incorporer la levure nutritionnelle pour une touche umami fromagère. Ajouter les champignons sautés, mélanger, assaisonner et servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R447',
+      name: 'Pasta Primavera Arc-en-Ciel',
+      emoji: '🌈',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['vegetarian', 'balanced', 'anti-inflammatory', 'mediterranean', 'quick', 'meal-prep'],
+      difficulty: 1,
+      prepTime: 15,
+      cookTime: 15,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 22×4 + 60×4 + 12×9 = 88 + 240 + 108 = 436 kcal ≈ 435 ✓
+      baseNutrition: { calories: 435, proteinGrams: 22, carbsGrams: 60, fatGrams: 12 },
+      ingredients: [
+        { name: 'Fusilli tricolores ou penne', qty: 160, unit: 'g' },
+        { name: 'Courgette', qty: 120, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Poivron jaune', qty: 100, unit: 'g' },
+        { name: 'Pois chiches en boîte', qty: 120, unit: 'g' },
+        { name: 'Tomates cerises', qty: 120, unit: 'g' },
+        { name: 'Parmesan râpé', qty: 25, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Basilic frais', qty: 15, unit: 'g' },
+        { name: 'Ail en poudre, sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les pâtes al dente. Pendant ce temps, couper tous les légumes en dés réguliers de 1 cm.',
+        'Dans une grande poêle, faire sauter les poivrons et la courgette dans l\'huile à feu vif 5 min. Ajouter les tomates cerises et les pois chiches, cuire 3 min.',
+        'Égoutter les pâtes en réservant 80 ml d\'eau de cuisson. Ajouter les pâtes aux légumes, mélanger et ajouter un peu d\'eau de cuisson pour lier la sauce.',
+        'Hors du feu, incorporer le parmesan et le basilic déchiré. Assaisonner avec l\'ail en poudre, sel et poivre. Servir en bowl pour un format trendy.'
+      ]
+    },
+
+    {
+      id: 'R448',
+      name: 'Cacio e Pepe Revisité Light',
+      emoji: '🧀',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['vegetarian', 'quick', 'balanced', 'mediterranean', 'budget'],
+      difficulty: 2,
+      prepTime: 5,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 26×4 + 62×4 + 14×9 = 104 + 248 + 126 = 478 kcal ≈ 480 ✓
+      baseNutrition: { calories: 480, proteinGrams: 26, carbsGrams: 62, fatGrams: 14 },
+      ingredients: [
+        { name: 'Spaghetti ou tonnarelli', qty: 160, unit: 'g' },
+        { name: 'Pecorino romano râpé finement', qty: 50, unit: 'g' },
+        { name: 'Parmesan finement râpé', qty: 20, unit: 'g' },
+        { name: 'Poivre noir en grains entiers', qty: 5, unit: 'g' },
+        { name: 'Ricotta allégée', qty: 60, unit: 'g' },
+        { name: 'Sel', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Torréfier le poivre concassé grossièrement à sec dans une grande poêle 1 min. Cuire les pâtes al dente dans très peu d\'eau (concentrée en amidon). Réserver 150 ml d\'eau de cuisson.',
+        'Dans un bol, mélanger le pecorino, le parmesan et la ricotta avec 2 cuillères d\'eau de cuisson tiède pour former une crème lisse. Assaisonner.',
+        'Ajouter les pâtes égouttées dans la poêle avec le poivre torréfié. Hors du feu, verser la crème fromagère et mélanger vigoureusement en ajoutant l\'eau de cuisson louche par louche.',
+        'La sauce doit être soyeuse et enrober chaque spaghetti (technique "mantecatura"). Servir immédiatement dans des assiettes chaudes avec un tour de moulin à poivre généreux.'
+      ]
+    },
+
+    {
+      id: 'R449',
+      name: 'Gnocchis Patate Douce Sauge Brûlée',
+      emoji: '🟠',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['vegetarian', 'gluten-free', 'anti-inflammatory', 'balanced', 'mediterranean', 'meal-prep'],
+      difficulty: 2,
+      prepTime: 20,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 16×4 + 62×4 + 12×9 = 64 + 248 + 108 = 420 kcal ✓
+      baseNutrition: { calories: 420, proteinGrams: 16, carbsGrams: 62, fatGrams: 12 },
+      ingredients: [
+        { name: 'Patates douces', qty: 400, unit: 'g' },
+        { name: 'Farine de riz (ou farine T45)', qty: 80, unit: 'g' },
+        { name: 'Oeuf entier', qty: 1, unit: 'pce' },
+        { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+        { name: 'Beurre', qty: 15, unit: 'g' },
+        { name: 'Sauge fraîche', qty: 10, unit: 'feuilles' },
+        { name: 'Noix', qty: 20, unit: 'g' },
+        { name: 'Noix de muscade', qty: 1, unit: 'pincée' },
+        { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les patates douces entières au micro-ondes 8-10 min ou au four 30 min jusqu\'à tendreté. Éplucher et écraser en purée lisse. Laisser refroidir 5 min.',
+        'Mélanger la purée avec la farine de riz, l\'oeuf, la moitié du parmesan, la muscade, le sel. Former une pâte souple (ne pas trop travailler). Rouler en boudins de 2 cm de diamètre, couper en tronçons de 2 cm.',
+        'Cuire les gnocchis dans de l\'eau bouillante salée : dès qu\'ils remontent en surface, attendre 30 secondes puis égoutter.',
+        'Dans une poêle, faire fondre le beurre à feu moyen jusqu\'à coloration noisette, ajouter la sauge et les noix concassées. Faire dorer les gnocchis égouttés 2 min de chaque côté. Servir parsemé du reste de parmesan.'
+      ]
+    },
+
+  // ─── RECETTES ITALIENNES R450-R459 : PROTÉINES & SECONDI PIATTI ──────────────
+
+    {
+      id: 'R450',
+      name: 'Pollo alla Pizzaiola Express',
+      emoji: '🍅',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['poulet', 'tomate', 'sans-gluten', 'proteine', 'express', 'italienne'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 38×4 + 12×4 + 10×9 = 152 + 48 + 90 = 290 kcal ✓
+      baseNutrition: { calories: 290, proteinGrams: 38, carbsGrams: 12, fatGrams: 10 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Tomates pelées concassées', qty: 200, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Origan séché', qty: 2, unit: 'g' },
+        { name: 'Câpres', qty: 20, unit: 'g' },
+        { name: 'Olives noires dénoyautées', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Aplatir légèrement les blancs de poulet entre deux feuilles de film alimentaire. Saler et poivrer.',
+        'Chauffer l\'huile dans une poêle antiadhésive à feu moyen-vif. Saisir le poulet 3 min de chaque côté jusqu\'à dorure.',
+        'Ajouter l\'ail haché, les tomates concassées, l\'origan, les câpres et les olives. Mélanger et couvrir.',
+        'Laisser mijoter 10 min à feu moyen jusqu\'à ce que le poulet soit bien cuit. Servir avec un filet d\'huile d\'olive extra-vierge.'
+      ]
+    },
+
+    {
+      id: 'R451',
+      name: 'Branzino al Forno con Erbe',
+      emoji: '🐟',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['poisson', 'bar', 'four', 'herbes', 'sans-gluten', 'proteine', 'light'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 40×4 + 4×4 + 11×9 = 160 + 16 + 99 = 275 kcal ✓
+      baseNutrition: { calories: 275, proteinGrams: 40, carbsGrams: 4, fatGrams: 11 },
+      ingredients: [
+        { name: 'Filets de bar (branzino)', qty: 320, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Persil frais', qty: 15, unit: 'g' },
+        { name: 'Romarin frais', qty: 5, unit: 'g' },
+        { name: 'Thym frais', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préchauffer le four à 200 °C. Tapisser un plat de papier cuisson.',
+        'Mélanger l\'huile d\'olive, l\'ail finement haché, le persil, le romarin et le thym. Ajouter le zeste et le jus de citron.',
+        'Déposer les filets de bar dans le plat, napper de la marinade aux herbes et assaisonner.',
+        'Enfourner 15-18 min jusqu\'à ce que le poisson se défasse facilement à la fourchette. Servir avec des tranches de citron.'
+      ]
+    },
+
+    {
+      id: 'R452',
+      name: 'Involtini de Dinde Épinards & Ricotta',
+      emoji: '🌿',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['dinde', 'epinards', 'ricotta', 'roule', 'proteine', 'italienne', 'four'],
+      difficulty: 2,
+      prepTime: 15,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 42×4 + 8×4 + 14×9 = 168 + 32 + 126 = 326 kcal ✓
+      baseNutrition: { calories: 326, proteinGrams: 42, carbsGrams: 8, fatGrams: 14 },
+      ingredients: [
+        { name: 'Escalopes de dinde fines', qty: 300, unit: 'g' },
+        { name: 'Ricotta allégée', qty: 80, unit: 'g' },
+        { name: 'Épinards frais', qty: 100, unit: 'g' },
+        { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+        { name: 'Ail', qty: 1, unit: 'gousse' },
+        { name: 'Noix de muscade', qty: 1, unit: 'pincée' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préchauffer le four à 190 °C. Faire tomber les épinards à sec dans une poêle avec l\'ail haché. Laisser refroidir et presser pour éliminer l\'excès d\'eau.',
+        'Mélanger les épinards égouttés avec la ricotta, le parmesan et la muscade. Assaisonner.',
+        'Étaler les escalopes, répartir la farce, rouler serré et maintenir avec un pic en bois. Badigeonner d\'huile d\'olive.',
+        'Cuire au four 18-20 min. Laisser reposer 2 min avant de retirer les pics et servir avec une salade verte.'
+      ]
+    },
+
+    {
+      id: 'R453',
+      name: 'Scaloppine al Limone Light',
+      emoji: '🍋',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['veau', 'citron', 'light', 'sans-gluten', 'proteine', 'rapide', 'italienne'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 10,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 44×4 + 6×4 + 9×9 = 176 + 24 + 81 = 281 kcal ✓
+      baseNutrition: { calories: 281, proteinGrams: 44, carbsGrams: 6, fatGrams: 9 },
+      ingredients: [
+        { name: 'Escalopes de veau', qty: 320, unit: 'g' },
+        { name: 'Farine de riz', qty: 15, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Bouillon de volaille dégraissé', qty: 80, unit: 'ml' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Persil frais', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Aplatir les escalopes finement entre deux films. Fariner légèrement et secouer l\'excédent.',
+        'Chauffer l\'huile dans une grande poêle à feu vif. Cuire les escalopes 1-2 min de chaque côté. Réserver au chaud.',
+        'Déglacer la poêle avec le jus de citron et le bouillon. Ajouter les câpres et réduire 2 min.',
+        'Remettre les escalopes dans la sauce, parsemer de persil ciselé et servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R454',
+      name: 'Salmone alla Griglia Siciliana',
+      emoji: '🐠',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['saumon', 'grille', 'sicile', 'omega3', 'proteine', 'sans-gluten', 'italienne'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 10,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 42×4 + 6×4 + 18×9 = 168 + 24 + 162 = 354 kcal ✓
+      baseNutrition: { calories: 354, proteinGrams: 42, carbsGrams: 6, fatGrams: 18 },
+      ingredients: [
+        { name: 'Pavés de saumon', qty: 300, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Olives vertes dénoyautées', qty: 30, unit: 'g' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Origan séché', qty: 2, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préparer la salsa sicilienne : couper les tomates cerises en deux, mélanger avec les olives, les câpres, l\'origan, le zeste de citron et la moitié de l\'huile.',
+        'Badigeonner les pavés de saumon du reste d\'huile, saler et poivrer. Chauffer un grill ou une poêle grillée à feu vif.',
+        'Cuire le saumon 3-4 min de chaque côté selon l\'épaisseur, jusqu\'à caramélisation des bords.',
+        'Dresser les pavés sur assiette, napper de salsa sicilienne et arroser d\'un filet de jus de citron.'
+      ]
+    },
+
+    {
+      id: 'R455',
+      name: 'Polpette di Tacchino al Pomodoro',
+      emoji: '🧆',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['dinde', 'boulettes', 'tomate', 'proteine', 'italienne', 'batch-cooking', 'poele'],
+      difficulty: 1,
+      prepTime: 15,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 40×4 + 14×4 + 10×9 = 160 + 56 + 90 = 306 kcal ✓
+      baseNutrition: { calories: 306, proteinGrams: 40, carbsGrams: 14, fatGrams: 10 },
+      ingredients: [
+        { name: 'Viande hachée de dinde', qty: 300, unit: 'g' },
+        { name: 'Œuf', qty: 1, unit: 'pce' },
+        { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+        { name: 'Ail', qty: 1, unit: 'gousse' },
+        { name: 'Persil frais', qty: 10, unit: 'g' },
+        { name: 'Tomates pelées concassées', qty: 250, unit: 'g' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Mélanger la dinde hachée avec l\'œuf, le parmesan, l\'ail et le persil hachés. Assaisonner et former des boulettes de 3 cm.',
+        'Dorer les boulettes dans l\'huile à feu moyen-vif 3-4 min en les tournant régulièrement.',
+        'Verser les tomates concassées, couvrir et mijoter 15 min à feu doux en remuant de temps en temps.',
+        'Parsemer de basilic ciselé et servir avec du pain grillé aux céréales ou des légumes vapeur.'
+      ]
+    },
+
+    {
+      id: 'R456',
+      name: 'Tonno Scottato Sesamo & Rucola',
+      emoji: '🥗',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['thon', 'sesame', 'roquette', 'snacking', 'proteine', 'rapide', 'italienne'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 5,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 46×4 + 4×4 + 14×9 = 184 + 16 + 126 = 326 kcal ✓
+      baseNutrition: { calories: 326, proteinGrams: 46, carbsGrams: 4, fatGrams: 14 },
+      ingredients: [
+        { name: 'Pavés de thon rouge frais', qty: 320, unit: 'g' },
+        { name: 'Graines de sésame blanc et noir', qty: 30, unit: 'g' },
+        { name: 'Roquette', qty: 60, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sauce soja allégée', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Mélanger les graines de sésame blanc et noir dans une assiette creuse. Rouler les pavés de thon dans les graines pour les enrober uniformément.',
+        'Chauffer une poêle à feu très vif sans matière grasse. Saisir le thon 45 secondes à 1 min par face : l\'extérieur doit être doré, l\'intérieur rosé.',
+        'Pendant ce temps, assaisonner la roquette avec l\'huile d\'olive, le jus de citron et la sauce soja.',
+        'Trancher le thon en médaillons et disposer sur le lit de roquette. Terminer avec le zeste de citron et servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R457',
+      name: 'Pollo al Limone e Capperi',
+      emoji: '🍋',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['poulet', 'citron', 'capres', 'light', 'proteine', 'italienne', 'sans-gluten'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 20,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 40×4 + 5×4 + 9×9 = 160 + 20 + 81 = 261 kcal ✓
+      baseNutrition: { calories: 261, proteinGrams: 40, carbsGrams: 5, fatGrams: 9 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+        { name: 'Citron', qty: 2, unit: 'pce' },
+        { name: 'Câpres rincées', qty: 25, unit: 'g' },
+        { name: 'Bouillon de volaille dégraissé', qty: 100, unit: 'ml' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Thym frais', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Couper les blancs de poulet en fines tranches dans l\'épaisseur. Assaisonner de sel, poivre et thym.',
+        'Chauffer l\'huile à feu moyen-vif. Saisir le poulet 3 min de chaque côté. Retirer et réserver.',
+        'Dans la même poêle, faire revenir l\'ail haché 30 s, déglacer au jus de citron et au bouillon. Ajouter les câpres et le zeste. Réduire 3 min.',
+        'Remettre le poulet dans la sauce, chauffer 2 min et servir nappé de sauce au citron-câpres.'
+      ]
+    },
+
+    {
+      id: 'R458',
+      name: 'Gamberoni all\'Aglio e Prezzemolo',
+      emoji: '🦐',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['crevettes', 'ail', 'persil', 'express', 'proteine', 'italienne', 'sans-gluten'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 8,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 36×4 + 4×4 + 12×9 = 144 + 16 + 108 = 268 kcal ✓
+      baseNutrition: { calories: 268, proteinGrams: 36, carbsGrams: 4, fatGrams: 12 },
+      ingredients: [
+        { name: 'Grosses crevettes décortiquées (gambas)', qty: 300, unit: 'g' },
+        { name: 'Ail', qty: 4, unit: 'gousses' },
+        { name: 'Persil frais', qty: 20, unit: 'g' },
+        { name: 'Piment rouge frais', qty: 1, unit: 'pce' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Sécher les crevettes avec du papier absorbant. Hacher l\'ail et le persil. Émincer finement le piment.',
+        'Chauffer l\'huile à feu vif dans une grande poêle. Ajouter l\'ail et le piment, faire revenir 30 secondes jusqu\'à dorure légère.',
+        'Ajouter les crevettes en une seule couche, cuire 2 min de chaque côté jusqu\'à ce qu\'elles soient rosées et légèrement caramélisées.',
+        'Hors du feu, ajouter le persil haché et le jus de citron. Mélanger et servir immédiatement avec des quartiers de citron.'
+      ]
+    },
+
+    {
+      id: 'R459',
+      name: 'Bistecca di Manzo con Gremolata',
+      emoji: '🥩',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['boeuf', 'gremolata', 'steak', 'proteine', 'sans-gluten', 'italienne', 'grill'],
+      difficulty: 2,
+      prepTime: 10,
+      cookTime: 10,
+      servings: 2,
+      // Vérification: P×4 + G×4 + L×9 = 44×4 + 4×4 + 14×9 = 176 + 16 + 126 = 318 kcal ✓
+      baseNutrition: { calories: 318, proteinGrams: 44, carbsGrams: 4, fatGrams: 14 },
+      ingredients: [
+        { name: 'Steak de bœuf maigre (rumsteck)', qty: 300, unit: 'g' },
+        { name: 'Persil frais', qty: 20, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Citron (zeste)', qty: 1, unit: 'pce' },
+        { name: 'Romarin frais', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Sel de mer, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préparer la gremolata : hacher finement le persil, l\'ail et le romarin, mélanger avec le zeste de citron et 5 ml d\'huile. Réserver.',
+        'Sortir la viande 15 min avant cuisson. Badigeonner du reste d\'huile, saler et poivrer généreusement des deux côtés.',
+        'Chauffer un grill en fonte à feu maximal jusqu\'à ce qu\'il soit très chaud. Saisir le steak 3-4 min de chaque côté pour une cuisson saignante à à point.',
+        'Laisser reposer la viande 3 min sous une feuille d\'aluminium. Trancher et servir nappé de gremolata.'
+      ]
+    },
 
 
   // ─── RECETTES LEGACY L001-L350 MIGRÉES EN FORMAT R ────────────────────────────
@@ -11980,7 +12630,970 @@
       'Préparer la sauce champignons à la crème.',
       'Servir avec la sauce et persil.'
     ]
+  },
+
+  // ─── INSALATE & ANTIPASTI MODERNES (R460-R469) ────────────────────────────
+  {
+    id: 'R460',
+    name: 'Panzanella Moderne au Poulet Grillé',
+    emoji: '🥗',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['salade', 'poulet', 'pain grillé', 'tomates', 'basilic', 'healthy', 'bowl'],
+    difficulty: 1,
+    prepTime: 15,
+    cookTime: 10,
+    servings: 2,
+    // Vérification: P32×4 + G32×4 + L14×9 = 128+128+126 = 382 kcal ✓
+    baseNutrition: { calories: 382, proteinGrams: 32, carbsGrams: 32, fatGrams: 14 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+      { name: 'Tomates cerises', qty: 200, unit: 'g' },
+      { name: 'Concombre', qty: 150, unit: 'g' },
+      { name: 'Pain de campagne', qty: 80, unit: 'g' },
+      { name: 'Oignon rouge', qty: 50, unit: 'g' },
+      { name: 'Basilic frais', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Vinaigre balsamique', qty: 15, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Couper le pain en cubes et le toaster 5 min au four à 180°C jusqu\'à ce qu\'il soit doré et croustillant.',
+      'Griller les blancs de poulet assaisonnés à feu vif 4-5 min par face, puis trancher en lanières.',
+      'Couper les tomates cerises en deux, émincer finement le concombre et l\'oignon rouge.',
+      'Préparer la vinaigrette : mélanger l\'huile d\'olive, le vinaigre balsamique et l\'ail écrasé.',
+      'Assembler tous les ingrédients dans un grand bol, arroser de vinaigrette et garnir de basilic frais.'
+    ]
+  },
+  {
+    id: 'R461',
+    name: 'Insalata Caprese Avocat & Thon',
+    emoji: '🥑',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['caprese', 'avocat', 'thon', 'mozzarella', 'tomates', 'no-cook', 'bowl'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: P28×4 + G16×4 + L20×9 = 112+64+180 = 356 kcal ✓
+    baseNutrition: { calories: 356, proteinGrams: 28, carbsGrams: 16, fatGrams: 20 },
+    ingredients: [
+      { name: 'Thon en boîte au naturel', qty: 200, unit: 'g' },
+      { name: 'Mozzarella di bufala', qty: 125, unit: 'g' },
+      { name: 'Avocat', qty: 100, unit: 'g' },
+      { name: 'Tomates', qty: 200, unit: 'g' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' },
+      { name: 'Fleur de sel', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Égoutter le thon et l\'émietter grossièrement à la fourchette.',
+      'Trancher la mozzarella et les tomates en rondelles épaisses, puis l\'avocat en lamelles.',
+      'Disposer en cercle dans le bol en alternant tomates, mozzarella et avocat.',
+      'Répartir le thon émietté au centre et parsemer de basilic frais ciselé.',
+      'Arroser d\'huile d\'olive et de jus de citron, assaisonner de fleur de sel et poivre.'
+    ]
+  },
+  {
+    id: 'R462',
+    name: 'Carpaccio de Bœuf Roquette & Parmesan',
+    emoji: '🥩',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['carpaccio', 'bœuf', 'roquette', 'parmesan', 'no-cook', 'antipasto', 'léger'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: P26×4 + G8×4 + L16×9 = 104+32+144 = 280 kcal ✓
+    baseNutrition: { calories: 280, proteinGrams: 26, carbsGrams: 8, fatGrams: 16 },
+    ingredients: [
+      { name: 'Bœuf carpaccio (tranché fin)', qty: 250, unit: 'g' },
+      { name: 'Roquette', qty: 60, unit: 'g' },
+      { name: 'Parmesan', qty: 30, unit: 'g' },
+      { name: 'Câpres', qty: 20, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Jus de citron', qty: 15, unit: 'ml' },
+      { name: 'Poivre noir', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Sortir le carpaccio du réfrigérateur 5 min avant de servir et disposer les tranches à plat sur les assiettes.',
+      'Répartir la roquette fraîche au centre de chaque assiette.',
+      'Parsemer de copeaux de parmesan obtenus avec un économe et de câpres égouttées.',
+      'Arroser généreusement d\'huile d\'olive extra-vierge et de jus de citron frais.',
+      'Terminer avec un généreux tour de moulin à poivre et servir immédiatement.'
+    ]
+  },
+  {
+    id: 'R463',
+    name: 'Bruschetta Ricotta & Tomates Cerises',
+    emoji: '🍅',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'snack'],
+    category: 'italian',
+    tags: ['bruschetta', 'ricotta', 'tomates cerises', 'basilic', 'antipasto', 'végétarien', 'lunch box'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 5,
+    servings: 2,
+    // Vérification: P22×4 + G36×4 + L10×9 = 88+144+90 = 322 kcal ✓
+    baseNutrition: { calories: 322, proteinGrams: 22, carbsGrams: 36, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pain ciabatta', qty: 120, unit: 'g' },
+      { name: 'Ricotta', qty: 150, unit: 'g' },
+      { name: 'Tomates cerises', qty: 200, unit: 'g' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Fleur de sel', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Couper la ciabatta en tranches épaisses et faire griller au four ou à la poêle jusqu\'à dorure.',
+      'Frotter légèrement chaque tranche de pain grillé avec la gousse d\'ail coupée en deux.',
+      'Mélanger la ricotta avec une pincée de sel, du poivre et un filet d\'huile d\'olive.',
+      'Couper les tomates cerises en deux et les assaisonner de fleur de sel et basilic ciselé.',
+      'Tartiner chaque bruschetta de ricotta assaisonnée et garnir de tomates cerises marinées.'
+    ]
+  },
+  {
+    id: 'R464',
+    name: 'Insalata di Polpo e Patate',
+    emoji: '🐙',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['poulpe', 'pommes de terre', 'persil', 'citron', 'salade', 'méditerranéen', 'protéiné'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 2,
+    // Vérification: P30×4 + G28×4 + L12×9 = 120+112+108 = 340 kcal ✓
+    baseNutrition: { calories: 340, proteinGrams: 30, carbsGrams: 28, fatGrams: 12 },
+    ingredients: [
+      { name: 'Poulpe cuit', qty: 300, unit: 'g' },
+      { name: 'Pommes de terre', qty: 200, unit: 'g' },
+      { name: 'Céleri', qty: 80, unit: 'g' },
+      { name: 'Olives noires', qty: 30, unit: 'g' },
+      { name: 'Persil frais', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Jus de citron', qty: 20, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les pommes de terre à l\'eau bouillante salée 20 min, égoutter et laisser tiédir.',
+      'Couper le poulpe cuit en tronçons de 2 cm et les pommes de terre en morceaux.',
+      'Émincer finement le céleri et hacher le persil frais.',
+      'Préparer la vinaigrette avec l\'huile d\'olive, le jus de citron et l\'ail écrasé.',
+      'Mélanger poulpe, pommes de terre, céleri et olives, arroser de vinaigrette et garnir de persil.'
+    ]
+  },
+  {
+    id: 'R465',
+    name: 'Antipasto Bowl Charcuterie Légère',
+    emoji: '🍖',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['antipasto', 'charcuterie', 'bresaola', 'légumes grillés', 'bowl', 'no-cook', 'protéiné'],
+    difficulty: 1,
+    prepTime: 12,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: P30×4 + G20×4 + L18×9 = 120+80+162 = 362 kcal ✓
+    baseNutrition: { calories: 362, proteinGrams: 30, carbsGrams: 20, fatGrams: 18 },
+    ingredients: [
+      { name: 'Bresaola', qty: 120, unit: 'g' },
+      { name: 'Prosciutto crudo', qty: 60, unit: 'g' },
+      { name: 'Artichauts marinés', qty: 100, unit: 'g' },
+      { name: 'Poivrons grillés en bocal', qty: 100, unit: 'g' },
+      { name: 'Olives vertes', qty: 40, unit: 'g' },
+      { name: 'Roquette', qty: 40, unit: 'g' },
+      { name: 'Parmesan', qty: 20, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
+    ],
+    steps: [
+      'Disposer la bresaola et le prosciutto en éventail dans deux bols larges.',
+      'Ajouter les artichauts marinés égouttés, les poivrons grillés en lanières et les olives.',
+      'Placer un bouquet de roquette au centre de chaque bol.',
+      'Parsemer de copeaux de parmesan réalisés à l\'économe.',
+      'Arroser d\'un filet d\'huile d\'olive extra-vierge et servir avec du pain grillé si désiré.'
+    ]
+  },
+  {
+    id: 'R466',
+    name: 'Insalata di Farro con Verdure',
+    emoji: '🌾',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['farro', 'céréales', 'légumes', 'végétarien', 'bowl', 'lunch box', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 25,
+    servings: 2,
+    // Vérification: P20×4 + G50×4 + L11×9 = 80+200+99 = 379 kcal ✓
+    baseNutrition: { calories: 379, proteinGrams: 20, carbsGrams: 50, fatGrams: 11 },
+    ingredients: [
+      { name: 'Farro (épeautre)', qty: 160, unit: 'g' },
+      { name: 'Courgette', qty: 150, unit: 'g' },
+      { name: 'Tomates séchées', qty: 40, unit: 'g' },
+      { name: 'Feta', qty: 60, unit: 'g' },
+      { name: 'Épinards frais', qty: 60, unit: 'g' },
+      { name: 'Pignons de pin', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' },
+      { name: 'Herbes de Provence', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le farro dans l\'eau bouillante salée selon les instructions (env. 25 min), égoutter et refroidir.',
+      'Couper la courgette en petits dés et la faire revenir 3 min à la poêle avec un filet d\'huile d\'olive.',
+      'Torréfier les pignons de pin à sec 2 min dans une poêle jusqu\'à dorure légère.',
+      'Mélanger le farro refroidi avec la courgette, les tomates séchées émincées et les épinards.',
+      'Émietter la feta, ajouter les pignons, arroser d\'huile et citron, assaisonner aux herbes de Provence.'
+    ]
+  },
+  {
+    id: 'R467',
+    name: 'Caponata Sicilienne Power Bowl',
+    emoji: '🍆',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['caponata', 'aubergine', 'sicilien', 'végétarien', 'bowl', 'légumes', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 2,
+    // Vérification: P18×4 + G40×4 + L13×9 = 72+160+117 = 349 kcal ✓
+    baseNutrition: { calories: 349, proteinGrams: 18, carbsGrams: 40, fatGrams: 13 },
+    ingredients: [
+      { name: 'Aubergine', qty: 300, unit: 'g' },
+      { name: 'Tomates cerises', qty: 200, unit: 'g' },
+      { name: 'Céleri', qty: 80, unit: 'g' },
+      { name: 'Olives vertes', qty: 40, unit: 'g' },
+      { name: 'Câpres', qty: 20, unit: 'g' },
+      { name: 'Pois chiches cuits', qty: 120, unit: 'g' },
+      { name: 'Vinaigre de vin rouge', qty: 20, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Couper l\'aubergine en cubes de 2 cm, saler et laisser dégorger 10 min, puis éponger.',
+      'Faire revenir l\'aubergine et le céleri émincé dans l\'huile d\'olive à feu vif 8-10 min.',
+      'Ajouter les tomates cerises coupées en deux, les olives, les câpres et les pois chiches.',
+      'Verser le vinaigre de vin rouge, mélanger et cuire encore 5 min à feu moyen.',
+      'Servir tiède ou froid dans des bols, garni de basilic frais ciselé.'
+    ]
+  },
+  {
+    id: 'R468',
+    name: 'Insalata Nizzarda Italiana',
+    emoji: '🐟',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['niçoise', 'thon', 'œufs', 'haricots verts', 'tomates', 'salade', 'protéiné'],
+    difficulty: 1,
+    prepTime: 15,
+    cookTime: 10,
+    servings: 2,
+    // Vérification: P32×4 + G22×4 + L18×9 = 128+88+162 = 378 kcal ✓
+    baseNutrition: { calories: 378, proteinGrams: 32, carbsGrams: 22, fatGrams: 18 },
+    ingredients: [
+      { name: 'Thon en boîte au naturel', qty: 200, unit: 'g' },
+      { name: 'Œufs', qty: 2, unit: 'pce' },
+      { name: 'Haricots verts', qty: 150, unit: 'g' },
+      { name: 'Tomates', qty: 150, unit: 'g' },
+      { name: 'Olives noires', qty: 30, unit: 'g' },
+      { name: 'Anchois à l\'huile', qty: 20, unit: 'g' },
+      { name: 'Laitue', qty: 60, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Vinaigre de vin', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire les haricots verts à l\'eau bouillante salée 5-6 min, ils doivent rester croquants, égoutter et refroidir.',
+      'Faire cuire les œufs durs 9 min dans l\'eau bouillante, puis les refroidir et les écaler.',
+      'Émincer les tomates en quartiers, couper les œufs en deux et émietter le thon.',
+      'Dresser la laitue dans les assiettes puis disposer harmonieusement tous les ingrédients.',
+      'Arroser de vinaigrette à l\'huile d\'olive, poser les anchois sur le dessus et servir.'
+    ]
+  },
+  {
+    id: 'R469',
+    name: 'Carpaccio de Saumon Câpres & Citron',
+    emoji: '🐟',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['carpaccio', 'saumon', 'câpres', 'citron', 'aneth', 'no-cook', 'léger'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: P26×4 + G6×4 + L17×9 = 104+24+153 = 281 kcal ✓
+    baseNutrition: { calories: 281, proteinGrams: 26, carbsGrams: 6, fatGrams: 17 },
+    ingredients: [
+      { name: 'Saumon frais (tranché fin)', qty: 280, unit: 'g' },
+      { name: 'Câpres', qty: 25, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Aneth frais', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Oignon rouge', qty: 30, unit: 'g' },
+      { name: 'Fleur de sel', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Disposer les tranches de saumon bien à plat en une seule couche sur deux grandes assiettes froides.',
+      'Émincer l\'oignon rouge en très fines rondelles et les répartir sur le saumon.',
+      'Parsemer de câpres égouttées et de brins d\'aneth frais.',
+      'Arroser d\'un filet d\'huile d\'olive extra-vierge et du jus de citron fraîchement pressé.',
+      'Assaisonner de fleur de sel et poivre noir, laisser mariner 2 min et servir immédiatement.'
+    ]
+  },
+
+  // ─── ITALIAN COLAZIONE & SNACK R480-R489 ──────────────────────────────────
+
+  {
+    id: 'R480',
+    name: 'Colazione Proteica Italiana',
+    emoji: '🥣',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack'],
+    category: 'italian',
+    tags: ['ricotta', 'miel', 'noisettes', 'protéiné', 'healthy', 'italien'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: 22×4 + 18×4 + 12×9 = 88 + 72 + 108 = 268 ≈ 270 kcal ✓
+    baseNutrition: { calories: 270, proteinGrams: 22, carbsGrams: 18, fatGrams: 12 },
+    ingredients: [
+      { name: 'Ricotta fraîche', qty: 250, unit: 'g' },
+      { name: "Miel d'acacia", qty: 20, unit: 'g' },
+      { name: 'Noisettes torréfiées', qty: 30, unit: 'g' },
+      { name: 'Zeste de citron', qty: 1, unit: 'pce' },
+      { name: 'Cannelle', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      "Fouetter la ricotta avec le zeste de citron jusqu'à obtenir une texture crémeuse.",
+      'Répartir la ricotta dans deux bols.',
+      'Concasser grossièrement les noisettes torréfiées.',
+      'Napper de miel, parsemer de noisettes et saupoudrer de cannelle.'
+    ]
+  },
+
+  {
+    id: 'R481',
+    name: 'Cornetto Intégral Ricotta & Figue',
+    emoji: '🥐',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack'],
+    category: 'italian',
+    tags: ['cornetto', 'ricotta', 'figue', 'intégral', 'boulangerie', 'italien'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 12,
+    servings: 2,
+    // Vérification: 18×4 + 42×4 + 10×9 = 72 + 168 + 90 = 330 kcal ✓
+    baseNutrition: { calories: 330, proteinGrams: 18, carbsGrams: 42, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pâte à croissant intégrale', qty: 160, unit: 'g' },
+      { name: 'Ricotta fraîche', qty: 100, unit: 'g' },
+      { name: 'Figues fraîches', qty: 80, unit: 'g' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: 'Amandes effilées', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Préchauffer le four à 190°C.',
+      'Découper la pâte en triangles et tartiner de ricotta mélangée au miel.',
+      'Déposer des tranches de figue sur chaque triangle.',
+      "Rouler les cornetti et enfourner 12 min jusqu'à dorure.",
+      "Parsemer d'amandes effilées à la sortie du four."
+    ]
+  },
+
+  {
+    id: 'R482',
+    name: 'Granola Italiano Pistache & Orange',
+    emoji: '🟢',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack'],
+    category: 'italian',
+    tags: ['granola', 'pistache', 'orange', 'flocons avoine', 'croquant', 'italien'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 20,
+    servings: 2,
+    // Vérification: 16×4 + 38×4 + 14×9 = 64 + 152 + 126 = 342 ≈ 340 kcal ✓
+    baseNutrition: { calories: 340, proteinGrams: 16, carbsGrams: 38, fatGrams: 14 },
+    ingredients: [
+      { name: "Flocons d'avoine", qty: 120, unit: 'g' },
+      { name: 'Pistaches non salées', qty: 40, unit: 'g' },
+      { name: "Zeste d'orange bio", qty: 1, unit: 'pce' },
+      { name: "Jus d'orange", qty: 30, unit: 'ml' },
+      { name: "Huile d'olive", qty: 15, unit: 'ml' },
+      { name: 'Miel', qty: 20, unit: 'g' }
+    ],
+    steps: [
+      'Préchauffer le four à 170°C.',
+      "Mélanger flocons, pistaches concassées, zeste et jus d'orange, huile et miel.",
+      'Étaler sur plaque et cuire 20 min en remuant à mi-cuisson.',
+      'Laisser refroidir complètement pour obtenir des clusters croquants.',
+      'Servir avec du yaourt grec ou du lait végétal.'
+    ]
+  },
+
+  {
+    id: 'R483',
+    name: 'Smoothie Bowl Agrumi Italiens',
+    emoji: '🍊',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack'],
+    category: 'italian',
+    tags: ['smoothie bowl', 'agrumes', 'sicile', 'vitamine C', 'frais', 'italien'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: 15×4 + 40×4 + 6×9 = 60 + 160 + 54 = 274 ≈ 275 kcal ✓
+    baseNutrition: { calories: 275, proteinGrams: 15, carbsGrams: 40, fatGrams: 6 },
+    ingredients: [
+      { name: 'Orange sanguine', qty: 200, unit: 'g' },
+      { name: 'Citron de Sicile', qty: 1, unit: 'pce' },
+      { name: 'Banane congelée', qty: 100, unit: 'g' },
+      { name: 'Yaourt grec 0%', qty: 150, unit: 'g' },
+      { name: 'Granola', qty: 30, unit: 'g' },
+      { name: 'Pistaches', qty: 10, unit: 'g' },
+      { name: 'Feuilles de menthe', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      "Mixer la banane congelée, l'orange sanguine pelée et le jus de citron.",
+      "Ajouter le yaourt grec et mixer jusqu'à consistance épaisse et lisse.",
+      'Verser dans deux bols.',
+      'Garnir de granola, pistaches concassées et feuilles de menthe.'
+    ]
+  },
+
+  {
+    id: 'R484',
+    name: 'Crostini Avocat & Anchois',
+    emoji: '🥑',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack', 'lunch'],
+    category: 'italian',
+    tags: ['crostini', 'avocat', 'anchois', 'oméga-3', 'apéro', 'italien'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 5,
+    servings: 2,
+    // Vérification: 16×4 + 22×4 + 15×9 = 64 + 88 + 135 = 287 ≈ 290 kcal ✓
+    baseNutrition: { calories: 290, proteinGrams: 16, carbsGrams: 22, fatGrams: 15 },
+    ingredients: [
+      { name: 'Pain ciabatta', qty: 120, unit: 'g' },
+      { name: 'Avocat mûr', qty: 100, unit: 'g' },
+      { name: "Filets d'anchois", qty: 30, unit: 'g' },
+      { name: 'Tomates cerises', qty: 60, unit: 'g' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' },
+      { name: 'Basilic frais', qty: 5, unit: 'g' },
+      { name: 'Poivre noir', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Toaster les tranches de ciabatta 3-4 min au grill.',
+      "Écraser l'avocat avec le jus de citron et le poivre.",
+      "Tartiner les crostini d'avocat écrasé.",
+      "Déposer un filet d'anchois et une demi-tomate cerise sur chaque crostino.",
+      'Décorer de feuilles de basilic frais.'
+    ]
+  },
+
+  {
+    id: 'R485',
+    name: 'Tartine Ricotta Tomates Séchées Basilic',
+    emoji: '🍅',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast', 'snack', 'lunch'],
+    category: 'italian',
+    tags: ['tartine', 'ricotta', 'tomates séchées', 'basilic', 'méditerranéen', 'italien'],
+    difficulty: 1,
+    prepTime: 8,
+    cookTime: 3,
+    servings: 2,
+    // Vérification: 18×4 + 26×4 + 10×9 = 72 + 104 + 90 = 266 ≈ 265 kcal ✓
+    baseNutrition: { calories: 265, proteinGrams: 18, carbsGrams: 26, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pain de campagne', qty: 120, unit: 'g' },
+      { name: 'Ricotta fraîche', qty: 150, unit: 'g' },
+      { name: "Tomates séchées à l'huile", qty: 40, unit: 'g' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Ail', qty: 1, unit: 'gousse' },
+      { name: "Huile d'olive extra vierge", qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      "Toaster les tranches de pain et les frotter avec une gousse d'ail.",
+      "Mélanger la ricotta avec un filet d'huile d'olive et du poivre.",
+      'Tartiner généreusement de ricotta assaisonnée.',
+      'Disposer les tomates séchées égouttées et les feuilles de basilic frais.'
+    ]
+  },
+
+  {
+    id: 'R486',
+    name: 'Energy Balls Amaretti & Cacao',
+    emoji: '🍫',
+    origin: '🇮🇹',
+    mealTypes: ['snack'],
+    category: 'italian',
+    tags: ['energy balls', 'amaretti', 'cacao', 'amande', 'sans cuisson', 'italien'],
+    difficulty: 1,
+    prepTime: 15,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: 15×4 + 28×4 + 13×9 = 60 + 112 + 117 = 289 ≈ 290 kcal ✓
+    baseNutrition: { calories: 290, proteinGrams: 15, carbsGrams: 28, fatGrams: 13 },
+    ingredients: [
+      { name: 'Biscuits amaretti', qty: 60, unit: 'g' },
+      { name: 'Cacao en poudre non sucré', qty: 15, unit: 'g' },
+      { name: "Beurre d'amande", qty: 40, unit: 'g' },
+      { name: 'Protéine vanille en poudre', qty: 20, unit: 'g' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: "Extrait d'amande", qty: 2, unit: 'ml' }
+    ],
+    steps: [
+      'Émietter finement les amaretti.',
+      "Mélanger tous les ingrédients jusqu'à obtenir une pâte malléable.",
+      "Si la pâte est trop sèche, ajouter quelques gouttes d'eau.",
+      'Former 8 boules de taille égale et réfrigérer 30 min avant de servir.'
+    ]
+  },
+
+  {
+    id: 'R487',
+    name: 'Tiramisu Protéiné Express',
+    emoji: '☕',
+    origin: '🇮🇹',
+    mealTypes: ['snack', 'breakfast'],
+    category: 'italian',
+    tags: ['tiramisu', 'mascarpone', 'café', 'protéiné', 'express', 'italien'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: 20×4 + 22×4 + 11×9 = 80 + 88 + 99 = 267 ≈ 270 kcal ✓
+    baseNutrition: { calories: 270, proteinGrams: 20, carbsGrams: 22, fatGrams: 11 },
+    ingredients: [
+      { name: 'Ricotta fraîche', qty: 150, unit: 'g' },
+      { name: 'Mascarpone', qty: 50, unit: 'g' },
+      { name: 'Protéine vanille en poudre', qty: 20, unit: 'g' },
+      { name: 'Café espresso froid', qty: 60, unit: 'ml' },
+      { name: 'Biscuits à la cuillère', qty: 40, unit: 'g' },
+      { name: 'Cacao en poudre', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      "Fouetter ricotta, mascarpone et protéine en poudre jusqu'à texture lisse.",
+      'Tremper rapidement les biscuits dans le café froid.',
+      'Alterner couches de biscuits imbibés et crème dans deux verres.',
+      'Saupoudrer de cacao tamisé et réfrigérer 5 min avant de servir.'
+    ]
+  },
+
+  {
+    id: 'R488',
+    name: 'Frittelle di Avena',
+    emoji: '🥞',
+    origin: '🇮🇹',
+    mealTypes: ['breakfast'],
+    category: 'italian',
+    tags: ['pancakes', 'avoine', 'frittelle', 'vanille', 'léger', 'italien'],
+    difficulty: 1,
+    prepTime: 5,
+    cookTime: 10,
+    servings: 2,
+    // Vérification: 22×4 + 30×4 + 8×9 = 88 + 120 + 72 = 280 kcal ✓
+    baseNutrition: { calories: 280, proteinGrams: 22, carbsGrams: 30, fatGrams: 8 },
+    ingredients: [
+      { name: "Flocons d'avoine mixés", qty: 80, unit: 'g' },
+      { name: 'Oeufs', qty: 2, unit: 'pce' },
+      { name: 'Ricotta', qty: 80, unit: 'g' },
+      { name: 'Lait écrémé', qty: 60, unit: 'ml' },
+      { name: 'Miel', qty: 10, unit: 'g' },
+      { name: 'Extrait de vanille', qty: 2, unit: 'ml' },
+      { name: 'Levure chimique', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      "Mixer les flocons d'avoine en farine fine.",
+      "Mélanger tous les ingrédients jusqu'à pâte homogène sans grumeaux.",
+      'Chauffer une poêle antiadhésive légèrement huilée à feu moyen.',
+      'Verser des petites louches de pâte et cuire 2 min par côté.',
+      'Servir avec miel et fruits frais de saison.'
+    ]
+  },
+
+  {
+    id: 'R489',
+    name: 'Panna Cotta Légère Protéinée aux Fruits Rouges',
+    emoji: '🍮',
+    origin: '🇮🇹',
+    mealTypes: ['snack', 'breakfast'],
+    category: 'italian',
+    tags: ['panna cotta', 'fruits rouges', 'protéiné', 'léger', 'dessert sain', 'italien'],
+    difficulty: 2,
+    prepTime: 10,
+    cookTime: 5,
+    servings: 2,
+    // Vérification: 18×4 + 20×4 + 7×9 = 72 + 80 + 63 = 215 kcal ✓
+    baseNutrition: { calories: 215, proteinGrams: 18, carbsGrams: 20, fatGrams: 7 },
+    ingredients: [
+      { name: 'Lait de coco léger', qty: 200, unit: 'ml' },
+      { name: 'Protéine vanille en poudre', qty: 30, unit: 'g' },
+      { name: 'Gélatine', qty: 4, unit: 'g' },
+      { name: 'Miel', qty: 10, unit: 'g' },
+      { name: 'Fruits rouges mélangés', qty: 100, unit: 'g' },
+      { name: 'Yaourt grec 0%', qty: 100, unit: 'g' }
+    ],
+    steps: [
+      "Faire tremper la gélatine dans l'eau froide 5 min.",
+      'Chauffer le lait de coco à feu doux avec le miel sans faire bouillir.',
+      'Incorporer la gélatine essorée et la protéine en poudre hors du feu.',
+      'Mélanger avec le yaourt grec pour une texture plus légère.',
+      'Verser dans des verrines et réfrigérer au minimum 2h.',
+      'Servir avec les fruits rouges frais et quelques feuilles de menthe.'
+    ]
   }
+,
+
+  // ─── RECETTES ITALIENNES R470-R479 : ZUPPE & PIATTI UNICI ────────────────────
+
+    {
+      id: 'R470',
+      name: 'Minestrone di Verdure Power',
+      emoji: '🥣',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['soupe', 'végétarien', 'haute-proteine', 'legumes', 'healthy', 'batch-cooking', 'anti-inflammatoire'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 25,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 22×4 + 42×4 + 10×9 = 88 + 168 + 90 = 346 kcal ✓
+      baseNutrition: { calories: 346, proteinGrams: 22, carbsGrams: 42, fatGrams: 10 },
+      ingredients: [
+        { name: 'Haricots blancs cuits', qty: 200, unit: 'g' },
+        { name: 'Courgette', qty: 150, unit: 'g' },
+        { name: 'Carotte', qty: 100, unit: 'g' },
+        { name: 'Céleri', qty: 80, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 200, unit: 'g' },
+        { name: 'Épinards frais', qty: 80, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Ail', qty: 2, unit: 'pce' },
+        { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        "Chauffer l'huile d'olive dans une grande casserole. Faire revenir l'ail émincé, la carotte et le céleri en dés 3 minutes à feu moyen.",
+        'Ajouter la courgette en dés, les tomates concassées et le bouillon. Porter à ébullition, puis réduire et mijoter 15 minutes.',
+        'Incorporer les haricots blancs et les épinards, cuire encore 5 minutes. Assaisonner de sel, poivre et basilic frais.',
+        "Servir dans des bols profonds, parsemer de parmesan râpé et d'un filet d'huile d'olive extra-vierge."
+      ]
+    },
+
+    {
+      id: 'R471',
+      name: 'Ribollita Toscane Légère',
+      emoji: '🍲',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['soupe', 'toscan', 'légumes', 'chou-noir', 'haricots', 'comfort-food', 'batch-cooking'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 25,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 18×4 + 45×4 + 9×9 = 72 + 180 + 81 = 333 kcal ✓
+      baseNutrition: { calories: 333, proteinGrams: 18, carbsGrams: 45, fatGrams: 9 },
+      ingredients: [
+        { name: 'Chou noir (cavolo nero)', qty: 150, unit: 'g' },
+        { name: 'Haricots cannellini cuits', qty: 180, unit: 'g' },
+        { name: 'Pain de campagne rassis', qty: 60, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 150, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Carotte', qty: 80, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 500, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Romarin frais', qty: 5, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'pce' }
+      ],
+      steps: [
+        "Dans une casserole, faire revenir l'oignon, la carotte et l'ail hachés dans l'huile d'olive 4 minutes jusqu'à légère coloration.",
+        'Ajouter le chou noir émincé, les tomates et le bouillon. Mijoter 15 minutes à feu moyen-doux.',
+        'Incorporer les haricots cannellini et le pain rassis émietté. Cuire encore 5 minutes en remuant pour que le pain épaississe la soupe.',
+        "Terminer avec le romarin ciselé, un filet d'huile d'olive à cru et du poivre noir fraîchement moulu."
+      ]
+    },
+
+    {
+      id: 'R472',
+      name: 'Zuppa di Lenticchie al Rosmarino',
+      emoji: '🫘',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['soupe', 'lentilles', 'romarin', 'protéines-végétales', 'fer', 'anti-inflammatoire', 'batch-cooking'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 30,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 20×4 + 44×4 + 8×9 = 80 + 176 + 72 = 328 kcal ✓
+      baseNutrition: { calories: 328, proteinGrams: 20, carbsGrams: 44, fatGrams: 8 },
+      ingredients: [
+        { name: 'Lentilles vertes sèches', qty: 160, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 200, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'pce' },
+        { name: 'Bouillon de légumes', qty: 700, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Romarin frais', qty: 8, unit: 'g' },
+        { name: 'Cumin moulu', qty: 2, unit: 'g' },
+        { name: 'Jus de citron', qty: 15, unit: 'ml' }
+      ],
+      steps: [
+        "Faire revenir l'oignon et l'ail émincés dans l'huile d'olive 3 minutes. Ajouter le cumin et une branche de romarin.",
+        'Incorporer les lentilles rincées, les tomates concassées et le bouillon. Porter à ébullition.',
+        "Réduire le feu et mijoter 25 minutes jusqu'à ce que les lentilles soient tendres. Retirer le romarin.",
+        "Mixer partiellement pour une texture mi-lisse mi-rustique. Finir avec le jus de citron, le romarin ciselé et un filet d'huile d'olive."
+      ]
+    },
+
+    {
+      id: 'R473',
+      name: 'Acquacotta con Uovo Pochée',
+      emoji: '🍳',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['soupe', 'oeuf-poche', 'maremme', 'légumes', 'rustique', 'protéines', 'anti-gaspillage'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 16×4 + 28×4 + 12×9 = 64 + 112 + 108 = 284 kcal ✓
+      baseNutrition: { calories: 284, proteinGrams: 16, carbsGrams: 28, fatGrams: 12 },
+      ingredients: [
+        { name: 'Tomates fraîches', qty: 200, unit: 'g' },
+        { name: 'Oignon', qty: 100, unit: 'g' },
+        { name: 'Céleri', qty: 80, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Oeufs', qty: 2, unit: 'pce' },
+        { name: 'Pain de campagne grillé', qty: 50, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 400, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Sauge fraîche', qty: 5, unit: 'g' },
+        { name: 'Pecorino râpé', qty: 15, unit: 'g' }
+      ],
+      steps: [
+        "Faire revenir l'oignon, le céleri et le poivron en dés dans l'huile d'olive 5 minutes. Ajouter les tomates coupées et la sauge.",
+        'Verser le bouillon, porter à ébullition puis mijoter 10 minutes. Assaisonner de sel et poivre.',
+        "Créer deux creux dans la soupe frémissante et y casser délicatement les œufs. Pocher 3-4 minutes jusqu'à blanc coagulé et jaune coulant.",
+        "Placer une tranche de pain grillé au fond de chaque bol, verser la soupe avec l'œuf par-dessus. Finir avec le pecorino et un filet d'huile d'olive."
+      ]
+    },
+
+    {
+      id: 'R474',
+      name: 'Zuppa di Farro e Borlotti',
+      emoji: '🌾',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['soupe', 'farro', 'borlotti', 'fibres', 'céréales-anciennes', 'protéines-végétales', 'batch-cooking'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 30,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 19×4 + 50×4 + 7×9 = 76 + 200 + 63 = 339 kcal ✓
+      baseNutrition: { calories: 339, proteinGrams: 19, carbsGrams: 50, fatGrams: 7 },
+      ingredients: [
+        { name: 'Farro perlé', qty: 120, unit: 'g' },
+        { name: 'Haricots borlotti cuits', qty: 160, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 150, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'pce' },
+        { name: 'Bouillon de légumes', qty: 700, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 12, unit: 'ml' },
+        { name: 'Laurier', qty: 2, unit: 'pce' },
+        { name: 'Thym frais', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        "Dans une casserole, faire revenir l'oignon et l'ail hachés dans l'huile d'olive 3 minutes. Ajouter les tomates et le laurier.",
+        'Incorporer le farro rincé et le bouillon. Porter à ébullition puis mijoter 20 minutes à couvert.',
+        "Ajouter les haricots borlotti et le thym. Poursuivre 5-7 minutes jusqu'à ce que le farro soit al dente et le bouillon légèrement épaissi.",
+        "Retirer le laurier. Rectifier l'assaisonnement et servir avec un filet d'huile d'olive extra-vierge et du poivre concassé."
+      ]
+    },
+
+    {
+      id: 'R475',
+      name: 'Frittata di Verdure al Forno',
+      emoji: '🥚',
+      origin: '🇮🇹',
+      mealTypes: ['breakfast', 'lunch', 'dinner'],
+      category: 'italian',
+      tags: ['frittata', 'oeuf', 'légumes', 'four', 'sans-gluten', 'protéines', 'meal-prep'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 24×4 + 10×4 + 16×9 = 96 + 40 + 144 = 280 kcal ✓
+      baseNutrition: { calories: 280, proteinGrams: 24, carbsGrams: 10, fatGrams: 16 },
+      ingredients: [
+        { name: 'Oeufs', qty: 4, unit: 'pce' },
+        { name: 'Courgette', qty: 120, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Épinards frais', qty: 60, unit: 'g' },
+        { name: 'Oignon rouge', qty: 60, unit: 'g' },
+        { name: 'Feta émiettée', qty: 40, unit: 'g' },
+        { name: "Huile d'olive extra-vierge", qty: 10, unit: 'ml' },
+        { name: 'Origan séché', qty: 2, unit: 'g' },
+        { name: 'Basilic frais', qty: 8, unit: 'g' }
+      ],
+      steps: [
+        "Préchauffer le four à 180°C. Dans une poêle allant au four, faire revenir l'oignon et les légumes coupés en dés dans l'huile 5 minutes.",
+        "Battre les œufs avec l'origan, du sel et du poivre. Incorporer les épinards aux légumes poêlés, puis verser le mélange d'œufs par-dessus.",
+        "Parsemer de feta émiettée et enfourner 12-15 minutes jusqu'à ce que la frittata soit prise et légèrement dorée en surface.",
+        'Laisser tiédir 2 minutes avant de démouler. Garnir de basilic frais et servir en parts avec une salade verte.'
+      ]
+    },
+
+    {
+      id: 'R476',
+      name: 'Uova in Purgatorio',
+      emoji: '🍅',
+      origin: '🇮🇹',
+      mealTypes: ['breakfast', 'lunch', 'dinner'],
+      category: 'italian',
+      tags: ['oeuf', 'tomate', 'shakshuka-italiana', 'piment', 'rapide', 'protéines', 'sans-gluten'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 20,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 18×4 + 16×4 + 14×9 = 72 + 64 + 126 = 262 kcal ✓
+      baseNutrition: { calories: 262, proteinGrams: 18, carbsGrams: 16, fatGrams: 14 },
+      ingredients: [
+        { name: 'Oeufs', qty: 4, unit: 'pce' },
+        { name: 'Tomates pelées en boîte', qty: 400, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'pce' },
+        { name: 'Piment rouge séché', qty: 1, unit: 'pce' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Basilic frais', qty: 10, unit: 'g' },
+        { name: 'Pecorino romano râpé', qty: 20, unit: 'g' }
+      ],
+      steps: [
+        "Dans une poêle large, faire revenir l'ail émincé et le piment émietté dans l'huile d'olive 2 minutes jusqu'à légère coloration.",
+        "Ajouter les tomates pelées concassées à la main. Assaisonner de sel et cuire à feu moyen 10 minutes jusqu'à légère réduction.",
+        "Créer 4 creux dans la sauce et y casser les œufs délicatement. Couvrir et cuire 6-8 minutes selon la cuisson désirée (jaune coulant ou ferme).",
+        'Parsemer de pecorino râpé et de basilic frais déchiré. Servir directement dans la poêle avec du pain de campagne grillé.'
+      ]
+    },
+
+    {
+      id: 'R477',
+      name: 'Polenta Crémeuse Champignons Sautés',
+      emoji: '🍄',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['polenta', 'champignons', 'comfort-food', 'sans-gluten', 'végétarien', 'umami', 'nordique-italien'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 25,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 16×4 + 48×4 + 12×9 = 64 + 192 + 108 = 364 kcal ✓
+      baseNutrition: { calories: 364, proteinGrams: 16, carbsGrams: 48, fatGrams: 12 },
+      ingredients: [
+        { name: 'Polenta à cuisson rapide', qty: 120, unit: 'g' },
+        { name: 'Champignons mélangés', qty: 250, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 500, unit: 'ml' },
+        { name: 'Lait demi-écrémé', qty: 100, unit: 'ml' },
+        { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'pce' },
+        { name: 'Thym frais', qty: 5, unit: 'g' },
+        { name: "Huile d'olive extra-vierge", qty: 15, unit: 'ml' },
+        { name: 'Persil frais', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        "Porter le bouillon et le lait à ébullition dans une casserole. Verser la polenta en pluie en fouettant constamment. Cuire 5-7 minutes jusqu'à épaississement crémeux.",
+        'Incorporer la moitié du parmesan à la polenta. Assaisonner de sel et poivre, couvrir et réserver hors du feu.',
+        "Dans une poêle chaude, faire sauter les champignons tranchés dans l'huile d'olive avec l'ail et le thym 8-10 minutes jusqu'à dorure. Assaisonner.",
+        "Dresser la polenta crémeuse dans les assiettes, disposer les champignons par-dessus. Finir avec le parmesan restant, le persil ciselé et un filet d'huile d'olive."
+      ]
+    },
+
+    {
+      id: 'R478',
+      name: 'Farinata di Ceci',
+      emoji: '🫓',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner', 'snack'],
+      category: 'italian',
+      tags: ['farinata', 'pois-chiches', 'ligurie', 'sans-gluten', 'vegan', 'street-food', 'protéines-végétales'],
+      difficulty: 1,
+      prepTime: 10,
+      cookTime: 20,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 14×4 + 34×4 + 12×9 = 56 + 136 + 108 = 300 kcal ✓
+      baseNutrition: { calories: 300, proteinGrams: 14, carbsGrams: 34, fatGrams: 12 },
+      ingredients: [
+        { name: 'Farine de pois chiches', qty: 120, unit: 'g' },
+        { name: 'Eau', qty: 360, unit: 'ml' },
+        { name: "Huile d'olive extra-vierge", qty: 20, unit: 'ml' },
+        { name: 'Romarin frais', qty: 5, unit: 'g' },
+        { name: 'Oignon rouge', qty: 60, unit: 'g' },
+        { name: 'Sel de mer', qty: 3, unit: 'g' },
+        { name: 'Poivre noir', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        "Fouetter la farine de pois chiches avec l'eau froide jusqu'à pâte lisse et sans grumeaux. Laisser reposer 30 minutes (ou 5 min si pressé).",
+        "Préchauffer le four à 230°C avec la plaque huilée à l'intérieur. Émincer finement l'oignon rouge et les aiguilles de romarin.",
+        "Incorporer la moitié de l'huile d'olive, l'oignon et le romarin à la pâte. Verser sur la plaque chaude huilée en couche fine (3-4 mm).",
+        "Enfourner 15-18 minutes jusqu'à bords dorés et croustillants et centre légèrement ferme. Arroser du reste d'huile, saler et poivrer. Servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R479',
+      name: 'Pappa al Pomodoro Moderne',
+      emoji: '🍅',
+      origin: '🇮🇹',
+      mealTypes: ['lunch', 'dinner'],
+      category: 'italian',
+      tags: ['pappa-al-pomodoro', 'tomate', 'pain', 'toscane', 'comfort-food', 'anti-gaspillage', 'végétarien'],
+      difficulty: 1,
+      prepTime: 5,
+      cookTime: 20,
+      servings: 2,
+      // P×4 + G×4 + L×9 = 10×4 + 40×4 + 11×9 = 40 + 160 + 99 = 299 kcal ✓
+      baseNutrition: { calories: 299, proteinGrams: 10, carbsGrams: 40, fatGrams: 11 },
+      ingredients: [
+        { name: 'Pain de campagne rassis', qty: 120, unit: 'g' },
+        { name: 'Tomates pelées en boîte', qty: 400, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 300, unit: 'ml' },
+        { name: 'Ail', qty: 3, unit: 'pce' },
+        { name: "Huile d'olive extra-vierge", qty: 20, unit: 'ml' },
+        { name: 'Basilic frais', qty: 15, unit: 'g' },
+        { name: 'Piment rouge séché', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        "Dans une casserole, faire revenir l'ail écrasé et le piment dans l'huile d'olive 2 minutes. Ajouter les tomates et écraser grossièrement à la cuillère.",
+        'Verser le bouillon chaud et porter à frémissement. Émietter le pain rassis dans la soupe en morceaux irréguliers.',
+        "Cuire 10-12 minutes en remuant fréquemment jusqu'à consistance épaisse et crémeuse, comme une bouillie rustique. Le pain doit être complètement absorbé.",
+        "Retirer du feu, incorporer généreusement le basilic frais déchiré. Laisser reposer 2 minutes. Servir tiède avec un filet d'huile d'olive extra-vierge et du basilic supplémentaire."
+      ]
+    }
 
 
   ];
@@ -12398,23 +14011,28 @@
 
   function toSimpleFormat(recipe) {
     var perServing = recipe.servings > 0 ? recipe.servings : 1;
-    var flagMap = { 'maroc-moderne': '🇲🇦', 'world-food': '🌍' };
-    var ingrStr = recipe.ingredients.map(function(ing) {
-      return ing.qty + (ing.unit === 'pce' ? ' pce ' : ing.unit === 'ml' ? 'ml ' : 'g ') + ing.name;
+    var flagMap = { 'maroc-moderne': '🇲🇦', 'world-food': '🌍', 'italian': '🇮🇹' };
+    // Per-serving ingredients with correct units (all units preserved, not forced to 'g')
+    var perServIngr = (recipe.ingredients || []).map(function(ing) {
+      return { name: ing.name, qty: Math.round((ing.qty / perServing) * 10) / 10, unit: ing.unit || 'g', note: ing.note };
+    });
+    var ingrStr = perServIngr.map(function(ing) {
+      return ing.qty + (ing.unit === 'pce' ? ' pce ' : ' ' + ing.unit + ' ') + ing.name;
     }).join(', ');
     return {
-      n:    recipe.name,
-      f:    recipe.origin || flagMap[recipe.category] || '🌍',
-      k:    Math.round(recipe.baseNutrition.calories   / perServing),
-      p:    Math.round(recipe.baseNutrition.proteinGrams / perServing),
-      g:    Math.round(recipe.baseNutrition.carbsGrams  / perServing),
-      l:    Math.round(recipe.baseNutrition.fatGrams    / perServing),
-      i:    ingrStr,
-      st:    recipe.steps || [],
-      w:    recipe.tags.indexOf('whey') >= 0,
-      tags: recipe.tags || [],
-      lv:   recipe.difficulty || 1,
-      _id:  recipe.id   // lien vers la recette complète
+      n:           recipe.name,
+      f:           recipe.origin || recipe.emoji || flagMap[recipe.category] || '🌍',
+      k:           Math.round(recipe.baseNutrition.calories    / perServing),
+      p:           Math.round(recipe.baseNutrition.proteinGrams / perServing),
+      g:           Math.round(recipe.baseNutrition.carbsGrams   / perServing),
+      l:           Math.round(recipe.baseNutrition.fatGrams     / perServing),
+      i:           ingrStr,
+      ingredients: perServIngr,  // array structuré pour affichage modal fiable
+      st:          recipe.steps || [],
+      w:           (recipe.tags || []).indexOf('whey') >= 0,
+      tags:        recipe.tags || [],
+      lv:          recipe.difficulty || 1,
+      _id:         recipe.id   // lien vers la recette complète dans RECIPES_DB
     };
   }
 

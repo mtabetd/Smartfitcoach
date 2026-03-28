@@ -140,13 +140,12 @@ function render() {
   app.innerHTML = '';
 
   if (_didNavigate) {
-    window.scrollTo(0, 0);
-    requestAnimationFrame(function() {
-      var appWrap = document.querySelector('.app');
-      if (appWrap) appWrap.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    });
+    // Scroll immediately (before new content is painted)
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    var _appEl = document.getElementById('app');
+    if (_appEl) _appEl.scrollTop = 0;
   }
 
   // Not logged in → auth screens
@@ -222,6 +221,24 @@ function render() {
   // Footer
   wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'MTD Macro Calculator')]));
   app.appendChild(wrap);
+
+  // Post-render scroll: reset .app container and window after content is in DOM
+  if (_didNavigate) {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    if (app) app.scrollTop = 0;
+    var _wrap = app.querySelector('.app');
+    if (_wrap) _wrap.scrollTop = 0;
+    requestAnimationFrame(function() {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      if (app) app.scrollTop = 0;
+      var _w2 = app.querySelector('.app');
+      if (_w2) _w2.scrollTop = 0;
+    });
+  }
 }
 
 // ─── AUTH: LOGIN SCREEN ───
