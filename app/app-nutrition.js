@@ -3374,20 +3374,50 @@ function renderSmoothieBar(p) {
   }
 
   filtered.forEach(function(sm) {
-    var card = h('div', {'class':'exercise-card', style:'margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px', onclick:function() {
-      window.S.modalSmoothie = sm; if(window.render) window.render();
-    }});
-    var timingColor = sm.timing==='pre'?'#E07B00':sm.timing==='post'?'#1A4A1A':'#4A4A8A';
-    var timingLabel = sm.timing==='pre'?'⚡ Avant':sm.timing==='post'?'💪 Après':'🕐 Libre';
-    var left = h('div', {style:'flex:1;min-width:0'});
-    left.appendChild(h('div', {style:'display:flex;align-items:center;gap:8px;margin-bottom:4px'}, [
-      h('strong', {style:'font-size:14px;color:var(--text,#0A0A09);white-space:nowrap;overflow:hidden;text-overflow:ellipsis'}, sm.name),
-      h('span', {style:'flex-shrink:0;font-size:11px;background:'+timingColor+';color:#fff;padding:2px 7px;border-radius:10px;font-weight:600'}, timingLabel)
-    ]));
-    left.appendChild(h('div', {style:'font-size:12px;color:var(--fg2,#888);margin-bottom:2px'}, sm.cal+' kcal · P:'+sm.p+'g · G:'+sm.c+'g · L:'+sm.f+'g · ⏱ '+sm.prep));
-    left.appendChild(h('div', {style:'font-size:11px;color:var(--fg2,#888)'}, sm.flavors.map(function(f){return'#'+f}).join(' ')+' · '+sm.goal.map(function(g){return g.replace(/_/g,' ')}).join(', ')));
-    card.appendChild(left);
-    card.appendChild(h('div', {style:'flex-shrink:0;font-size:18px;color:var(--fg2,#888);margin-left:4px'}, '\u276F'));
+    var tColors = {pre:'#E07B00', post:'#1A6B2A', other:'#4A6A8A'};
+    var tLabels = {pre:'⚡ Pré-workout', post:'💪 Post-workout', other:'🕐 Libre'};
+    var tKey = sm.timing === 'pre' ? 'pre' : sm.timing === 'post' ? 'post' : 'other';
+
+    var card = h('div', {
+      style: 'background:var(--card,#fff);border:1.5px solid var(--border,#E5E4DE);border-radius:14px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:box-shadow 0.15s',
+      onclick: function() { window.S.modalSmoothie = sm; if(window.render) window.render(); }
+    });
+
+    // Ligne 1 : badge timing + temps préparation
+    var topRow = h('div', {style:'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px'});
+    topRow.appendChild(h('span', {style:'display:inline-block;background:'+tColors[tKey]+';color:#fff;font-size:10px;font-weight:700;letter-spacing:0.4px;padding:3px 9px;border-radius:20px;text-transform:uppercase'}, tLabels[tKey]));
+    if (sm.prep) topRow.appendChild(h('span', {style:'font-size:11px;color:var(--fg2,#888)'}, '⏱ ' + sm.prep));
+    card.appendChild(topRow);
+
+    // Ligne 2 : nom + chevron
+    var nameRow = h('div', {style:'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px'});
+    nameRow.appendChild(h('div', {style:'font-size:15px;font-weight:700;color:var(--text,#0A0A09);flex:1;line-height:1.3'}, sm.name));
+    nameRow.appendChild(h('span', {style:'font-size:20px;color:var(--green,#1A4A1A);font-weight:700;margin-left:8px;flex-shrink:0'}, '\u276F'));
+    card.appendChild(nameRow);
+
+    // Ligne 3 : macros
+    var macroRow = h('div', {style:'display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap'});
+    var macroItems = [
+      {v: sm.cal + ' kcal', bg: 'rgba(26,74,26,0.08)', c: 'var(--green,#1A4A1A)'},
+      {v: 'P ' + sm.p + 'g', bg: 'rgba(26,74,26,0.05)', c: 'var(--text,#0A0A09)'},
+      {v: 'G ' + sm.c + 'g', bg: 'rgba(26,74,26,0.05)', c: 'var(--text,#0A0A09)'},
+      {v: 'L ' + sm.f + 'g', bg: 'rgba(26,74,26,0.05)', c: 'var(--text,#0A0A09)'}
+    ];
+    macroItems.forEach(function(mi) {
+      macroRow.appendChild(h('span', {style:'font-size:11px;font-weight:600;padding:3px 8px;background:'+mi.bg+';color:'+mi.c+';border-radius:20px'}, mi.v));
+    });
+    card.appendChild(macroRow);
+
+    // Ligne 4 : tags (parfums + objectifs)
+    var allTags = (sm.flavors || []).concat(sm.goal || []);
+    if (allTags.length > 0) {
+      var tagRow = h('div', {style:'display:flex;flex-wrap:wrap;gap:4px'});
+      allTags.slice(0, 5).forEach(function(tag) {
+        tagRow.appendChild(h('span', {style:'font-size:10px;color:var(--fg2,#888);background:var(--bg,#F7F6F1);padding:2px 7px;border-radius:10px'}, '#' + tag.replace(/_/g,' ')));
+      });
+      card.appendChild(tagRow);
+    }
+
     p.appendChild(card);
   });
 }
