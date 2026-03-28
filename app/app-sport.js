@@ -2211,7 +2211,7 @@ function renderMusculationProgram(p) {
   // Cardiopathie : zones FC Karvonen + avertissement beta-bloquants (AHA 2018, ACSM 2021)
   if (S.medical && S.medical.indexOf('cardio') !== -1) {
     var age = S.age || 40;
-    var hrMax = 220 - age; // Formule standard (Fox 1971)
+    var hrMax = Math.round(208 - 0.7 * age); // Tanaka 2001 — plus précis que Fox (AHA 2010)
     var hrRest = S.heartRateRest || 65; // Utilisateur peut renseigner sa FC repos
     // Karvonen: Target HR = (HRmax - HRrest) × %intensity + HRrest
     var z1lo = Math.round((hrMax - hrRest) * 0.50 + hrRest);

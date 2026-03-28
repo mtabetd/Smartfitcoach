@@ -3005,12 +3005,13 @@ var RUNNING_GOALS = [
 ];
 window.RUNNING_GOALS = RUNNING_GOALS;
 
+// Zones FC course — modèle ACSM 5 zones FCmax (Swain & Franklin 2002)
 var RUNNING_ZONES = [
-  {zone: 'Z1', name: 'Récupération', pct: [59, 74], feel: 'Conversation facile', color: '#1A4A1A'},
-  {zone: 'Z2', name: 'Endurance fondamentale', pct: [74, 84], feel: 'Parler par phrases', color: '#1A3A6A'},
-  {zone: 'Z3', name: 'Tempo / Seuil', pct: [84, 88], feel: 'Quelques mots', color: '#6A4A1A'},
-  {zone: 'Z4', name: 'Seuil anaérobie', pct: [88, 95], feel: 'Effort soutenu', color: '#8A3A1A'},
-  {zone: 'Z5', name: 'VMA / VO2max', pct: [95, 100], feel: 'Quasi-max', color: '#5A1010'}
+  {zone: 'Z1', name: 'Récupération active',      pct: [50, 60], feel: 'Conversation très facile', color: '#1A4A1A'},
+  {zone: 'Z2', name: 'Endurance fondamentale',   pct: [60, 70], feel: 'Conversation facile',      color: '#1A3A6A'},
+  {zone: 'Z3', name: 'Aérobie / Tempo',          pct: [70, 80], feel: 'Quelques phrases',          color: '#6A4A1A'},
+  {zone: 'Z4', name: 'Seuil anaérobie',          pct: [80, 90], feel: 'Quelques mots seulement',   color: '#8A3A1A'},
+  {zone: 'Z5', name: 'VMA / VO2max',             pct: [90,100], feel: 'Effort maximal',             color: '#5A1010'}
 ];
 window.RUNNING_ZONES = RUNNING_ZONES;
 
