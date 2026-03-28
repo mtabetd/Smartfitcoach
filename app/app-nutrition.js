@@ -1147,6 +1147,45 @@ function renderStep7(p) {
   });
   p.appendChild(wg);
 
+  // Whey flavor selector (visible only if S.whey === true)
+  if (S.whey === true) {
+    var wheyFlavors = [
+      {id: 'chocolate',  label: 'Chocolat',         icon: '\uD83C\uDF6B'},
+      {id: 'vanilla',    label: 'Vanille',           icon: '\uD83C\uDF66'},
+      {id: 'strawberry', label: 'Fraise',            icon: '\uD83C\uDF53'},
+      {id: 'peanut',     label: 'Cacahu\u00e8te',   icon: '\uD83E\uDD5C'},
+      {id: 'coffee',     label: 'Caf\u00e9',        icon: '\u2615'},
+      {id: 'blueberry',  label: 'Myrtille',         icon: '\uD83AB'},
+      {id: 'coconut',    label: 'Noix de Coco',     icon: '\uD83E\uDD65'},
+      {id: 'lemon',      label: 'Citron',           icon: '\uD83C\uDF4B'},
+      {id: 'banana',     label: 'Banane',           icon: '\uD83C\uDF4C'},
+      {id: 'hazelnut',   label: 'Noisette',         icon: '\uD83C\uDF30'},
+      {id: 'matcha',     label: 'Matcha',           icon: '\uD83C\uDF75'},
+      {id: 'unflavored', label: 'Nature/Unflavored', icon: '\uD83E\uDED9'}
+    ];
+    p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:12px'}, 'Parfums pr\u00e9f\u00e9r\u00e9s'));
+    var flavorGrid = h('div', {'class': 'chip-wrap', style: 'gap:8px;margin-top:4px'});
+    wheyFlavors.forEach(function(f) {
+      var selected = S.wheyFlavors.indexOf(f.id) !== -1;
+      var btn = h('span', {
+        'class': 'chip' + (selected ? ' on' : ''),
+        style: selected
+          ? 'border:2px solid var(--orange,#f07b29);background:var(--orangebg,#fff3e6);'
+          : 'border:2px solid #ccc;',
+        onclick: (function(fid) {
+          return function() {
+            var idx = S.wheyFlavors.indexOf(fid);
+            if (idx !== -1) { S.wheyFlavors.splice(idx, 1); }
+            else { S.wheyFlavors.push(fid); }
+            window.render();
+          };
+        })(f.id)
+      }, f.icon + '\u00a0' + f.label);
+      flavorGrid.appendChild(btn);
+    });
+    p.appendChild(flavorGrid);
+  }
+
   // Cross-reference whey with supplement selection
   if (S.whey === true && S.supplements.indexOf('whey') !== -1) {
     var wheyTip = h('div', {'class': 'whey-tip', style: 'margin-top:8px;margin-bottom:8px'});
@@ -1210,6 +1249,16 @@ function renderStep7(p) {
   halalRow.appendChild(halalBox);
   halalRow.appendChild(h('div', {style: 'font-size:13px;font-weight:500'}, '\u262a\ufe0f Halal \u2014 exclure porc & alcool'));
   p.appendChild(halalRow);
+
+  // Salade builder toggle
+  var saladRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:8px 0;cursor:pointer', onclick: function() { S.saladBuilder = !S.saladBuilder; window.render(); }});
+  var saladBox = h('div', {style: 'width:20px;height:20px;border-radius:4px;border:2px solid var(--blue,#1A3C5E);display:flex;align-items:center;justify-content:center;background:' + (S.saladBuilder ? 'var(--blue,#1A3C5E)' : 'transparent') + ';flex-shrink:0'}, S.saladBuilder ? h('span', {style: 'color:#fff;font-size:12px;font-weight:700'}, '\u2713') : null);
+  saladRow.appendChild(saladBox);
+  saladRow.appendChild(h('div', {style: 'font-size:13px;font-weight:500;font-family:"Helvetica Neue",Arial,sans-serif'}, '\uD83E\uDD57 Salades \u00e0 composer'));
+  p.appendChild(saladRow);
+  if (S.saladBuilder) {
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#9A9A94);margin:4px 0 8px 30px;line-height:1.5'}, 'Vous pourrez composer vos salades directement dans votre plan de repas.'));
+  }
 
   // Excluded
   p.appendChild(h('div', {'class': 'section-label'}, 'Aliments exclus'));
@@ -1901,6 +1950,58 @@ function renderStep9(p) {
       }
     }}, '\u21bb'));
     p.appendChild(card);
+
+    // Bouton "+ Ajouter à ce repas" avec mini-modal
+    (function(slotKey) {
+      var addBtn = h('button', {
+        style: 'width:100%;padding:8px 12px;margin-bottom:8px;background:transparent;border:1.5px dashed var(--border,#E5E4DE);border-radius:10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--blue,#1A3C5E);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
+        onclick: function(e) {
+          e.stopPropagation();
+          S._addMealModalSlot = slotKey;
+          window.render();
+        }
+      }, '+ Ajouter \u00e0 ce repas');
+      p.appendChild(addBtn);
+
+      if (S._addMealModalSlot === slotKey) {
+        var overlay = h('div', {
+          style: 'position:fixed;inset:0;background:rgba(10,10,9,0.45);z-index:9000;display:flex;align-items:flex-end;justify-content:center',
+          onclick: function(e) {
+            if (e.target === overlay) { S._addMealModalSlot = null; window.render(); }
+          }
+        });
+        var sheet = h('div', {
+          style: 'background:var(--card,#FFFFFF);border-radius:18px 18px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 -4px 24px rgba(0,0,0,0.12)'
+        });
+        sheet.appendChild(h('div', {
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:15px;font-weight:700;color:var(--black,#0A0A09);margin-bottom:16px;text-align:center'
+        }, 'Ajouter \u00e0 ce repas'));
+        var choiceRow = h('div', {style: 'display:flex;gap:12px'});
+        var btnRecipe = h('button', {
+          style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--border,#E5E4DE);border-radius:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+          onclick: function(e) {
+            e.stopPropagation();
+            S._addMealModalSlot = null;
+            window.render();
+          }
+        }, [h('span', {style: 'font-size:22px'}, '\uD83C\uDF7D'), h('span', {}, 'Choisir une recette')]);
+        var btnSalad = h('button', {
+          style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--blue,#1A3C5E);border-radius:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--blue,#1A3C5E);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+          onclick: function(e) {
+            e.stopPropagation();
+            S._addMealModalSlot = null;
+            window.render();
+            if (window.openSaladComposer) window.openSaladComposer(slotKey);
+          }
+        }, [h('span', {style: 'font-size:22px'}, '\uD83E\uDD57'), h('span', {}, 'Composer une salade')]);
+        choiceRow.appendChild(btnRecipe);
+        choiceRow.appendChild(btnSalad);
+        sheet.appendChild(choiceRow);
+        overlay.appendChild(sheet);
+        var root = document.getElementById('app') || p;
+        root.appendChild(overlay);
+      }
+    })(sl.key);
   });
 
   // Day total
@@ -1995,6 +2096,15 @@ function renderStep9(p) {
     style: 'margin-top:8px;background:var(--green,#1A4A1A);color:var(--ivory,#FAFAF7)',
     onclick: function() { window.S.saladBar.open = true; if(window.render) window.render(); }
   }, '\uD83E\uDD57 Composer une salade'));
+
+  // Smoothie bar button (visible seulement si S.whey === true)
+  if (S.whey === true) {
+    p.appendChild(h('button', {
+      'class': 'regen-btn',
+      style: 'margin-top:8px;background:#6B3FA0;color:#fff',
+      onclick: function() { window.S.smoothieBarOpen = true; if(window.render) window.render(); }
+    }, '\uD83E\uDD64 Smoothies Whey'));
+  }
 
   // Export PDF
   p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:16px;background:var(--black2)', onclick: function() { window.exportDayPDF(S.selectedDay); }}, '\u21e9 Exporter le jour en PDF'));
@@ -2862,6 +2972,207 @@ function renderSaladBar(p) {
   p.appendChild(actWrap);
 }
 
+// ─── WHEY SMOOTHIES DATABASE ───
+var WHEY_SMOOTHIES = [
+  // === CHOCOLAT ===
+  { id:'sm_choco_01', name:'Chocolat Noir Énergie', flavors:['chocolate'], goal:['muscle','performance'], timing:'post', cal:380, p:35, c:42, f:8, prep:'3min',
+    ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Banane congelée',qty:100,unit:'g'},{name:'Cacao pur',qty:10,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'}],
+    steps:['Congeler la banane la veille en morceaux','Mettre tous les ingrédients dans le blender','Mixer 45 secondes à pleine puissance','Consommer dans les 10 min post-entraînement'],
+    tips:'Ajouter des glaçons pour une texture plus épaisse. 1 cuillère de miel si glycogène à refaire.' },
+  { id:'sm_choco_02', name:'Brownie Shake Récupération', flavors:['chocolate'], goal:['muscle','recovery'], timing:'post', cal:420, p:40, c:48, f:9, prep:'4min',
+    ingredients:[{name:'Whey chocolat',qty:35,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Flocons d\'avoine',qty:40,unit:'g'},{name:'Cacao pur',qty:8,unit:'g'},{name:'Datte Medjool',qty:2,unit:'pcs'}],
+    steps:['Faire tremper les flocons 5 min dans le lait','Ajouter le reste des ingrédients','Mixer jusqu\'à consistance crémeuse','Laisser reposer 1 min avant de boire'],
+    tips:'Les flocons ralentissent l\'absorption — idéal si prochain repas dans 2h+.' },
+  { id:'sm_choco_03', name:'Chocolat Menthe Explosif', flavors:['chocolate'], goal:['fat_loss','performance'], timing:'pre', cal:290, p:32, c:28, f:6, prep:'2min',
+    ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Eau froide',qty:300,unit:'ml'},{name:'Épinards frais',qty:30,unit:'g'},{name:'Menthe fraîche',qty:5,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
+    steps:['Mettre eau et épinards en premier','Ajouter whey, menthe et glaçons','Mixer 30 secondes','Boire 30 min avant l\'entraînement'],
+    tips:'Les épinards n\'ont aucun goût mais apportent fer et magnésium. Booster naturel.' },
+
+  // === VANILLE ===
+  { id:'sm_van_01', name:'Vanilla Cream Gainer', flavors:['vanilla'], goal:['muscle'], timing:'post', cal:500, p:38, c:65, f:10, prep:'3min',
+    ingredients:[{name:'Whey vanille',qty:35,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Flocons d\'avoine',qty:50,unit:'g'},{name:'Miel',qty:15,unit:'g'},{name:'Vanille extrait',qty:2,unit:'ml'}],
+    steps:['Mixer lait et flocons 20 secondes','Ajouter whey, miel, extrait vanille','Mixer encore 20 secondes','Consommer immédiatement'],
+    tips:'Shake calorique — parfait pour prise de masse en période de surplus.' },
+  { id:'sm_van_02', name:'Vanilla Latte Matin', flavors:['vanilla','coffee'], goal:['performance','fat_loss'], timing:'pre', cal:310, p:33, c:30, f:7, prep:'3min',
+    ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Café expresso froid',qty:60,unit:'ml'},{name:'Lait d\'amande',qty:200,unit:'ml'},{name:'Glaçons',qty:80,unit:'g'},{name:'Cannelle',qty:1,unit:'g'}],
+    steps:['Préparer expresso et le laisser refroidir','Combiner tous les ingrédients','Mixer 20 secondes','Saupoudrer de cannelle'],
+    tips:'La caféine booste la performance de 3-7%. Parfait en matinal avant séance.' },
+  { id:'sm_van_03', name:'Vanilla Banana Overnight', flavors:['vanilla','banana'], goal:['muscle','recovery'], timing:'anytime', cal:440, p:36, c:55, f:8, prep:'5min',
+    ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Lait écrémé',qty:200,unit:'ml'},{name:'Banane',qty:120,unit:'g'},{name:'Flocons d\'avoine',qty:40,unit:'g'},{name:'Graines de chia',qty:10,unit:'g'}],
+    steps:['Mixer lait + banane + whey','Verser dans un verre','Ajouter flocons et chia','Mélanger et réfrigérer 1h ou boire immédiatement'],
+    tips:'Avec réfrigération, texture pudding très rassasiante. Idéal collation.' },
+
+  // === FRAISE ===
+  { id:'sm_straw_01', name:'Fraise Citron Vitalité', flavors:['strawberry','lemon'], goal:['fat_loss','performance'], timing:'post', cal:280, p:30, c:32, f:3, prep:'3min',
+    ingredients:[{name:'Whey fraise',qty:25,unit:'g'},{name:'Fraises congelées',qty:150,unit:'g'},{name:'Jus de citron',qty:30,unit:'ml'},{name:'Eau',qty:200,unit:'ml'},{name:'Stevia',qty:1,unit:'g'}],
+    steps:['Décongeler légèrement les fraises','Mixer tous les ingrédients','Ajuster le citron selon goût','Consommer frais'],
+    tips:'Moins de 300kcal — parfait en cut. La vitamine C aide l\'absorption du fer.' },
+  { id:'sm_straw_02', name:'Strawberry Cheesecake Shake', flavors:['strawberry'], goal:['muscle','anytime'], timing:'anytime', cal:390, p:38, c:38, f:9, prep:'4min',
+    ingredients:[{name:'Whey fraise',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:100,unit:'g'},{name:'Fraises',qty:100,unit:'g'},{name:'Lait',qty:150,unit:'ml'},{name:'Vanille',qty:1,unit:'g'}],
+    steps:['Mixer fraises avec le lait','Ajouter fromage blanc et whey','Mixer jusqu\'à onctuosité','Servir avec quelques fraises fraîches'],
+    tips:'Le fromage blanc double les protéines et la texture est sublime.' },
+
+  // === CACAHUÈTE ===
+  { id:'sm_peanut_01', name:'PB&J Power Shake', flavors:['peanut','strawberry'], goal:['muscle','performance'], timing:'post', cal:450, p:42, c:45, f:14, prep:'3min',
+    ingredients:[{name:'Whey cacahuète',qty:30,unit:'g'},{name:'Beurre de cacahuète',qty:20,unit:'g'},{name:'Fraises congelées',qty:80,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Miel',qty:10,unit:'g'}],
+    steps:['Mettre tous les ingrédients dans le blender','Mixer 45 secondes','Goûter et ajuster le miel','Servir avec paille large'],
+    tips:'Combo protéines + sucres rapides + lents = récupération optimale.' },
+  { id:'sm_peanut_02', name:'Cacahuète Chocolat Noir Ultime', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:480, p:40, c:40, f:16, prep:'3min',
+    ingredients:[{name:'Whey cacahuète',qty:25,unit:'g'},{name:'Whey chocolat',qty:15,unit:'g'},{name:'Beurre d\'arachide',qty:25,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Banane',qty:80,unit:'g'}],
+    steps:['Peler et couper la banane','Mixer tous les ingrédients','Mixer 30 secondes puissance max','Consommer avec des glaçons'],
+    tips:'Le mix de deux wheys = profil aminoacidé complet. Très rassasiant.' },
+
+  // === CAFÉ ===
+  { id:'sm_coffee_01', name:'Cold Brew Pre-Workout', flavors:['coffee'], goal:['performance','fat_loss'], timing:'pre', cal:260, p:32, c:22, f:5, prep:'3min',
+    ingredients:[{name:'Whey café',qty:30,unit:'g'},{name:'Cold brew concentré',qty:100,unit:'ml'},{name:'Lait d\'amande',qty:200,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'},{name:'Extrait vanille',qty:1,unit:'ml'}],
+    steps:['Préparer cold brew la veille','Mixer tous les ingrédients avec glaçons','Servir immédiatement','Boire 20-30 min avant séance'],
+    tips:'200mg caféine = dose optimale pour performance. Ne pas prendre après 16h.' },
+  { id:'sm_coffee_02', name:'Tiramisu Shake Masse', flavors:['coffee','vanilla'], goal:['muscle'], timing:'post', cal:430, p:38, c:50, f:8, prep:'5min',
+    ingredients:[{name:'Whey café',qty:30,unit:'g'},{name:'Ricotta légère',qty:80,unit:'g'},{name:'Café fort',qty:60,unit:'ml'},{name:'Lait',qty:150,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
+    steps:['Préparer café fort et refroidir','Mixer ricotta + lait + whey','Ajouter café + miel','Saupoudrer de cacao'],
+    tips:'Goût tiramisu sans les calories du dessert. Texture très crémeuse.' },
+
+  // === MYRTILLE ===
+  { id:'sm_blue_01', name:'Blueberry Antioxydant Warrior', flavors:['blueberry'], goal:['recovery','performance'], timing:'post', cal:310, p:30, c:38, f:4, prep:'3min',
+    ingredients:[{name:'Whey myrtille ou vanille',qty:25,unit:'g'},{name:'Myrtilles congelées',qty:150,unit:'g'},{name:'Épinards',qty:30,unit:'g'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Citron',qty:10,unit:'ml'}],
+    steps:['Mixer épinards avec eau de coco','Ajouter myrtilles et whey','Mixer 40 secondes','Finir avec le jus de citron'],
+    tips:'Anthocyanes = anti-inflammatoires naturels. Parfait post-WOD intense.' },
+  { id:'sm_blue_02', name:'Myrtille Lavande Zen', flavors:['blueberry'], goal:['recovery'], timing:'anytime', cal:290, p:28, c:35, f:5, prep:'3min',
+    ingredients:[{name:'Whey nature ou vanille',qty:25,unit:'g'},{name:'Myrtilles',qty:120,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Lait',qty:100,unit:'ml'},{name:'Miel de lavande',qty:10,unit:'g'}],
+    steps:['Mixer yaourt + lait + whey','Ajouter myrtilles et miel','Mixer 30 secondes','Servir avec quelques myrtilles entières'],
+    tips:'Le yaourt grec = source de probiotiques. Intestin sain = meilleure absorption.' },
+
+  // === NOIX DE COCO ===
+  { id:'sm_coco_01', name:'Tropical Gainz', flavors:['coconut','banana'], goal:['muscle','performance'], timing:'post', cal:460, p:36, c:58, f:12, prep:'4min',
+    ingredients:[{name:'Whey coco ou vanille',qty:30,unit:'g'},{name:'Lait de coco',qty:150,unit:'ml'},{name:'Banane',qty:120,unit:'g'},{name:'Ananas',qty:100,unit:'g'},{name:'Flocons de coco',qty:10,unit:'g'}],
+    steps:['Couper banane et ananas','Mixer avec lait de coco et whey','Mixer 30 secondes','Garnir de flocons de coco'],
+    tips:'Profil glucidique parfait post-WOD. L\'ananas contient de la bromélaïne anti-inflammatoire.' },
+  { id:'sm_coco_02', name:'Coco Matcha Équilibre', flavors:['coconut','matcha'], goal:['fat_loss','performance'], timing:'pre', cal:300, p:30, c:28, f:9, prep:'4min',
+    ingredients:[{name:'Whey nature ou vanille',qty:25,unit:'g'},{name:'Lait de coco léger',qty:200,unit:'ml'},{name:'Matcha grade cérémonial',qty:4,unit:'g'},{name:'Glaçons',qty:80,unit:'g'},{name:'Miel',qty:8,unit:'g'}],
+    steps:['Dissoudre le matcha dans un peu d\'eau chaude','Refroidir au frigo 5 min','Mixer avec tous les ingrédients','Servir froid'],
+    tips:'L-théanine du matcha + caféine = focus sans nervosité. Idéal avant séance technique.' },
+
+  // === CITRON ===
+  { id:'sm_lemon_01', name:'Limonade Protéinée Été', flavors:['lemon'], goal:['fat_loss','anytime'], timing:'anytime', cal:220, p:28, c:22, f:2, prep:'2min',
+    ingredients:[{name:'Whey citron ou nature',qty:25,unit:'g'},{name:'Jus de citron frais',qty:60,unit:'ml'},{name:'Eau pétillante',qty:300,unit:'ml'},{name:'Stevia',qty:1,unit:'g'},{name:'Menthe',qty:3,unit:'g'}],
+    steps:['Mélanger whey avec un peu d\'eau plate','Ajouter le jus de citron','Verser l\'eau pétillante délicatement','Finir avec menthe et glaçons'],
+    tips:'Seulement 220kcal — option coupe-faim légère. L\'acide citrique aide la digestion.' },
+  { id:'sm_lemon_02', name:'Lemon Cheesecake Detox', flavors:['lemon'], goal:['fat_loss'], timing:'anytime', cal:260, p:32, c:26, f:4, prep:'4min',
+    ingredients:[{name:'Whey citron ou vanille',qty:25,unit:'g'},{name:'Fromage blanc 0%',qty:120,unit:'g'},{name:'Citron zeste+jus',qty:1,unit:'pcs'},{name:'Lait écrémé',qty:100,unit:'ml'},{name:'Gingembre',qty:2,unit:'g'}],
+    steps:['Zester et presser le citron','Mixer tout avec fromage blanc','Ajouter le gingembre','Réfrigérer 15 min pour meilleure texture'],
+    tips:'Gingembre = effet thermogénique naturel. Aide la digestion post-repas.' },
+
+  // === BANANE ===
+  { id:'sm_ban_01', name:'Banana Power Breakfast', flavors:['banana','vanilla'], goal:['muscle','performance'], timing:'pre', cal:410, p:34, c:56, f:6, prep:'3min',
+    ingredients:[{name:'Whey banane ou vanille',qty:30,unit:'g'},{name:'Banane mûre',qty:150,unit:'g'},{name:'Lait écrémé',qty:200,unit:'ml'},{name:'Flocons d\'avoine',qty:40,unit:'g'},{name:'Cannelle',qty:1,unit:'g'}],
+    steps:['Mixer flocons avec lait 10 secondes','Ajouter banane et whey','Mixer 20 secondes','Saupoudrer de cannelle'],
+    tips:'Index glycémique moyen grâce aux flocons = énergie durable pour longue séance.' },
+
+  // === NOISETTE ===
+  { id:'sm_hazel_01', name:'Ferrero Shake', flavors:['hazelnut','chocolate'], goal:['muscle'], timing:'anytime', cal:470, p:38, c:48, f:14, prep:'3min',
+    ingredients:[{name:'Whey noisette ou chocolat',qty:30,unit:'g'},{name:'Pâte de noisette pure',qty:15,unit:'g'},{name:'Cacao pur',qty:8,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Banane',qty:80,unit:'g'}],
+    steps:['Mixer banane avec lait','Ajouter pâte de noisette, cacao, whey','Mixer 30 secondes','Garnir d\'éclats de noisettes'],
+    tips:'Goût Nutella mais avec macro-nutriments d\'athlète. Aucune huile de palme.' },
+
+  // === MATCHA ===
+  { id:'sm_matcha_01', name:'Matcha Warrior Bowl', flavors:['matcha'], goal:['performance','fat_loss'], timing:'pre', cal:320, p:30, c:38, f:5, prep:'5min',
+    ingredients:[{name:'Whey nature ou vanille',qty:25,unit:'g'},{name:'Matcha grade cérémonial',qty:5,unit:'g'},{name:'Lait d\'avoine',qty:200,unit:'ml'},{name:'Miel de manuka',qty:10,unit:'g'},{name:'Gingembre râpé',qty:2,unit:'g'}],
+    steps:['Dissoudre matcha dans 50ml eau chaude','Fouetter énergiquement sans grumeaux','Mixer avec lait, whey, miel','Ajouter gingembre'],
+    tips:'EGCG du matcha booste le métabolisme. Double effet avec la caféine naturelle.' },
+  { id:'sm_matcha_02', name:'Green Machine Récupération', flavors:['matcha','coconut'], goal:['recovery'], timing:'post', cal:330, p:32, c:35, f:7, prep:'4min',
+    ingredients:[{name:'Whey vanille',qty:25,unit:'g'},{name:'Matcha',qty:4,unit:'g'},{name:'Lait de coco léger',qty:150,unit:'ml'},{name:'Épinards',qty:40,unit:'g'},{name:'Pomme verte',qty:80,unit:'g'},{name:'Citron',qty:15,unit:'ml'}],
+    steps:['Mixer épinards avec lait de coco','Ajouter matcha, pomme, whey, citron','Mixer 45 secondes','Passer au tamis si texture trop épaisse'],
+    tips:'Chlorophylle + antioxydants = combo récupération ultime après séance CrossFit.' },
+
+  // === NATURE / UNFLAVORED ===
+  { id:'sm_nature_01', name:'Clean Shake Neutre', flavors:['nature'], goal:['muscle','fat_loss'], timing:'anytime', cal:280, p:33, c:28, f:5, prep:'2min',
+    ingredients:[{name:'Whey nature',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Flocons d\'avoine',qty:25,unit:'g'},{name:'Amandes effilées',qty:10,unit:'g'}],
+    steps:['Mixer tout ensemble 20 secondes','Goûter — ajuster avec miel si nécessaire','Consommer immédiatement'],
+    tips:'Base neutre : ajouter fruits frais selon humeur. Très digestible.' },
+  { id:'sm_nature_02', name:'Athlete\'s Functional Shake', flavors:['nature'], goal:['performance','recovery'], timing:'post', cal:360, p:38, c:38, f:7, prep:'3min',
+    ingredients:[{name:'Whey nature',qty:35,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Jus d\'orange frais',qty:150,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Curcuma',qty:1,unit:'g'},{name:'Poivre noir',qty:0.5,unit:'g'}],
+    steps:['Mixer yaourt + jus d\'orange + banane','Ajouter whey, curcuma, poivre','Mixer 20 secondes','Boire dans les 30 min post-séance'],
+    tips:'Le poivre active la biodisponibilité de la curcumine x20. Anti-inflammatoire puissant.' },
+
+  // === MULTI-PARFUMS ===
+  { id:'sm_multi_01', name:'Reese\'s Smoothie Bowl', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:520, p:42, c:55, f:15, prep:'5min',
+    ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Beurre de cacahuète',qty:20,unit:'g'},{name:'Banane congelée',qty:150,unit:'g'},{name:'Lait',qty:100,unit:'ml'},{name:'Granola',qty:30,unit:'g'}],
+    steps:['Mixer banane + lait + whey + beurre de cacahuète','Texture épaisse (peu de lait)','Verser dans un bol','Garnir de granola'],
+    tips:'Format bowl = plus rassasiant (mastication). Ajouter fruits frais en saison.' },
+  { id:'sm_multi_02', name:'Sunrise Recovery', flavors:['strawberry','banana'], goal:['recovery','muscle'], timing:'post', cal:390, p:34, c:50, f:5, prep:'3min',
+    ingredients:[{name:'Whey vanille ou fraise',qty:25,unit:'g'},{name:'Fraises',qty:100,unit:'g'},{name:'Banane',qty:100,unit:'g'},{name:'Jus d\'orange',qty:100,unit:'ml'},{name:'Miel',qty:8,unit:'g'},{name:'Glaçons',qty:80,unit:'g'}],
+    steps:['Mixer fruits + jus d\'orange','Ajouter whey, miel, glaçons','Mixer 30 secondes','Servir immédiatement'],
+    tips:'Ratio glucides/protéines 1.5:1 = optimal pour resynthèse glycogène post-WOD.' },
+  { id:'sm_multi_03', name:'Mocha Hazelnut Dream', flavors:['coffee','hazelnut'], goal:['performance'], timing:'pre', cal:340, p:32, c:35, f:9, prep:'4min',
+    ingredients:[{name:'Whey café ou noisette',qty:30,unit:'g'},{name:'Café expresso',qty:60,unit:'ml'},{name:'Pâte de noisette',qty:10,unit:'g'},{name:'Lait écrémé',qty:200,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'}],
+    steps:['Préparer expresso refroidi','Mixer avec lait, whey, noisette, cacao','Servir sur glaçons','Boire 20-30 min avant séance'],
+    tips:'Combo caféine + théobromine (cacao) = stimulation durable sans crash.' }
+];
+
+// ─── RENDER SMOOTHIE BAR ───
+function renderSmoothieBar(p) {
+  var S = window.S;
+  p.innerHTML = '';
+  var flavors = S.wheyFlavors || [];
+  var filtered = WHEY_SMOOTHIES.filter(function(sm) {
+    if (!flavors.length) return true;
+    return sm.flavors.some(function(f) { return flavors.indexOf(f) !== -1; });
+  });
+
+  p.appendChild(h('div', {style:'font-size:13px;color:var(--fg2,#888);margin-bottom:12px'},
+    '🥛 ' + filtered.length + ' recettes de smoothies' + (flavors.length ? ' filtrées pour vos parfums' : '') + ' — Shake by SmartFitCoach'));
+
+  if (!filtered.length) {
+    p.appendChild(h('div', {style:'text-align:center;padding:24px;color:var(--fg2)'}, 'Aucune recette pour ces parfums. Sélectionnez d\'autres parfums dans vos préférences.'));
+    return;
+  }
+
+  filtered.forEach(function(sm) {
+    var card = h('div', {'class':'exercise-card', style:'margin-bottom:12px;cursor:pointer', onclick:function() {
+      window.S.modalSmoothie = sm; if(window.render) window.render();
+    }});
+    var timingColor = sm.timing==='pre'?'#E07B00':sm.timing==='post'?'#1A4A1A':'#4A4A8A';
+    var timingLabel = sm.timing==='pre'?'⚡ Avant':sm.timing==='post'?'💪 Après':'🕐 Libre';
+    card.appendChild(h('div', {style:'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px'}, [
+      h('strong', {style:'font-size:14px'}, sm.name),
+      h('span', {style:'font-size:11px;background:'+timingColor+';color:#fff;padding:2px 6px;border-radius:10px'}, timingLabel)
+    ]));
+    card.appendChild(h('div', {style:'font-size:12px;color:var(--fg2)'}, sm.cal+'kcal · P:'+sm.p+'g · G:'+sm.c+'g · L:'+sm.f+'g · ⏱'+sm.prep));
+    card.appendChild(h('div', {style:'font-size:11px;color:var(--fg2);margin-top:2px'}, sm.flavors.map(function(f){return'#'+f}).join(' ')+' · '+sm.goal.map(function(g){return g.replace('_',' ')}).join(', ')));
+    p.appendChild(card);
+  });
+}
+
+// Modal smoothie détail
+function renderSmoothieModal(app) {
+  var S = window.S;
+  if (!S.modalSmoothie) return;
+  var sm = S.modalSmoothie;
+  var ov = h('div', {'class':'modal-overlay open', onclick:function(e){ if(e.target===ov){S.modalSmoothie=null;window.render();} }});
+  var box = h('div', {'class':'modal-box', style:'max-width:480px;border-radius:16px'});
+  var header = h('div', {style:'background:var(--green,#1A4A1A);color:#fff;padding:16px 20px;border-radius:16px 16px 0 0;position:relative'});
+  header.appendChild(h('div', {style:'font-size:18px;font-weight:700'}, '🥛 '+sm.name));
+  header.appendChild(h('div', {style:'font-size:12px;opacity:0.8;margin-top:4px'}, sm.cal+'kcal · P:'+sm.p+'g · G:'+sm.c+'g · L:'+sm.f+'g'));
+  header.appendChild(h('button', {style:'position:absolute;top:12px;right:16px;background:none;border:none;color:#fff;font-size:20px;cursor:pointer',onclick:function(){S.modalSmoothie=null;window.render();}}, '×'));
+  box.appendChild(header);
+  var body = h('div', {style:'padding:16px 20px;overflow-y:auto;max-height:60vh'});
+  body.appendChild(h('div', {'class':'section-label'}, 'Ingrédients'));
+  sm.ingredients.forEach(function(ing) {
+    body.appendChild(h('div', {style:'font-size:13px;padding:4px 0;border-bottom:1px solid var(--border,#eee)'},
+      '• '+ing.qty+' '+ing.unit+' — '+ing.name));
+  });
+  body.appendChild(h('div', {'class':'section-label', style:'margin-top:12px'}, 'Préparation'));
+  sm.steps.forEach(function(step, i) {
+    body.appendChild(h('div', {style:'font-size:13px;padding:4px 0'}, (i+1)+'. '+step));
+  });
+  if (sm.tips) {
+    body.appendChild(h('div', {style:'background:rgba(26,74,26,0.06);border-left:3px solid var(--green,#1A4A1A);padding:10px;border-radius:0 8px 8px 0;margin-top:12px;font-size:12px;color:var(--fg2)'}, '💡 '+sm.tips));
+  }
+  box.appendChild(body);
+  ov.appendChild(box);
+  app.appendChild(ov);
+}
+
 // ─── SHOPPING LIST ───
 function renderShoppingList(p) {
   var s = window.S;
@@ -3170,6 +3481,151 @@ function exportShoppingListPDF(list, shopChecked) {
   doc.save('liste-courses-smartfitcoach.pdf');
 }
 
+// ─── SALADE COMPOSER (modal fullscreen) ───
+window.openSaladComposer = function openSaladComposer(slotKey) {
+  var S = window.S;
+  if (!S) return;
+
+  // Ensure saladBar state is initialised
+  if (!S.saladBar) {
+    S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' };
+  }
+  // Align mealTarget with the requested slot when applicable
+  if (slotKey === 'lunch' || slotKey === 'dinner') S.saladBar.mealTarget = slotKey;
+
+  // ── Compute calorie target for this slot ──
+  function getSlotTargetCals(slot) {
+    var totalCals = window.calcTarget ? window.calcTarget() : 0;
+    if (!totalCals) totalCals = (S._nm && S._nm.calories) ? S._nm.calories : 2000;
+    var split = window.getMealSplit ? window.getMealSplit() : null;
+    var pct;
+    if (split) {
+      if (slot === 'breakfast')    pct = split.pctBreak;
+      else if (slot === 'lunch')   pct = split.pctLunch;
+      else if (slot === 'snack')   pct = split.pctSnack || 0.10;
+      else                         pct = split.pctDinner;
+    } else {
+      var defaults = { breakfast: 0.25, lunch: 0.40, snack: 0.10, dinner: 0.30 };
+      pct = defaults[slot] || 0.30;
+    }
+    return Math.round(totalCals * pct);
+  }
+
+  var targetCals = getSlotTargetCals(slotKey);
+
+  // ── Build fullscreen overlay ──
+  var root = document.getElementById('app') || document.body;
+
+  // Remove any existing composer overlay to avoid duplicates
+  var existing = document.getElementById('salad-composer-overlay');
+  if (existing) existing.parentNode.removeChild(existing);
+
+  var overlay = document.createElement('div');
+  overlay.id = 'salad-composer-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9000;background:var(--bg,#FAFAF7);display:flex;flex-direction:column;overflow:hidden';
+
+  // Scrollable content zone — renderSaladBar will populate this
+  var contentZone = document.createElement('div');
+  contentZone.style.cssText = 'flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;';
+
+  // Render the saladBar composer into the content zone
+  renderSaladBar(contentZone);
+
+  // Patch the "← Retour" button inserted by renderSaladBar to close our overlay instead
+  var backBtn = contentZone.querySelector('button');
+  if (backBtn) {
+    backBtn.onclick = function() {
+      overlay.parentNode && overlay.parentNode.removeChild(overlay);
+    };
+  }
+
+  // ── Slot label ──
+  var slotLabels = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+  var slotLabel = slotLabels[slotKey] || slotKey;
+
+  // ── Sticky "Insérer" button bar ──
+  var insertBar = document.createElement('div');
+  insertBar.style.cssText = 'flex-shrink:0;padding:12px 16px 24px;background:var(--bg,#FAFAF7);border-top:1px solid var(--border,#D8D8D0);';
+
+  var insertBtn = document.createElement('button');
+  insertBtn.style.cssText = 'width:100%;padding:15px;border:none;border-radius:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAFAF7);font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;';
+  insertBtn.textContent = '\u2705 Insérer dans mon repas — ' + slotLabel;
+
+  insertBtn.onclick = function() {
+    var sb = S.saladBar;
+
+    // a. Collect selected ingredients
+    var allItems = [];
+    if (sb.base) allItems.push(sb.base);
+    (sb.proteins || []).forEach(function(x) { allItems.push(x); });
+    (sb.veggies  || []).forEach(function(x) { allItems.push(x); });
+    (sb.fats     || []).forEach(function(x) { allItems.push(x); });
+    if (sb.sauce) allItems.push(sb.sauce);
+
+    if (allItems.length === 0) {
+      alert('Veuillez sélectionner au moins un ingrédient.');
+      return;
+    }
+
+    // b. Calculate current macros
+    var macros = calcSaladMacros(sb);
+    var saladCals = macros.k || 1; // avoid division by zero
+
+    // c. Scale to target calories
+    var ratio = targetCals > 0 ? targetCals / saladCals : 1;
+    var scaledCals    = Math.round(macros.k * ratio);
+    var scaledProtein = Math.round(macros.p * ratio);
+    var scaledCarbs   = Math.round(macros.g * ratio);
+    var scaledFat     = Math.round(macros.l * ratio);
+
+    // Scale each ingredient qty
+    var scaledItems = allItems.map(function(x) {
+      return { name: x.name, qty: Math.round((x.qty || 0) * ratio), unit: x.unit || 'g' };
+    });
+
+    // d. Ingredients string
+    var ingredientsList = scaledItems.map(function(x) {
+      return x.name + ' ' + x.qty + (x.unit || 'g');
+    }).join(', ');
+
+    // e. Build virtual recipe object
+    var saladRecipe = {
+      _id: 'custom_salad_' + Date.now(),
+      n: 'Ma Salade Personnalisée',
+      type: slotKey,
+      cal: scaledCals,
+      k: scaledCals,
+      p: scaledProtein,
+      g: scaledCarbs,
+      f: scaledFat,
+      l: scaledFat,
+      i: ingredientsList,
+      _scaledIngredients: scaledItems,
+      _scalingRatio: ratio,
+      st: [
+        'Composer votre salade selon les ingrédients sélectionnés',
+        'Mélanger tous les ingrédients',
+        'Assaisonner selon vos goûts'
+      ],
+      tags: ['salade', 'custom', 'composer'],
+      custom: true
+    };
+
+    // f. Insert into weekPlan and close
+    if (!S.weekPlan) S.weekPlan = [];
+    if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
+    S.weekPlan[S.selectedDay][slotKey] = saladRecipe;
+
+    overlay.parentNode && overlay.parentNode.removeChild(overlay);
+    if (window.render) window.render();
+  };
+
+  insertBar.appendChild(insertBtn);
+  overlay.appendChild(contentZone);
+  overlay.appendChild(insertBar);
+  root.appendChild(overlay);
+};
+
 // ─── PUBLIC API ───
 window.NUTRITION = {
   render: function(p) {
@@ -3186,6 +3642,17 @@ window.NUTRITION = {
     var content = h('div', {'class': 'fade-in'});
     if (S.shopListOpen) { renderShoppingList(content); p.appendChild(content); return; }
     if (S.saladBar && S.saladBar.open) { renderSaladBar(content); p.appendChild(content); return; }
+    if (S.smoothieBarOpen) {
+      content.appendChild(h('div', {style:'display:flex;align-items:center;gap:12px;margin-bottom:16px'}, [
+        h('button', {'class':'btn-secondary', style:'padding:8px 14px', onclick:function(){S.smoothieBarOpen=false;window.render();}}, '\u2190 Retour'),
+        h('div', {style:'font-size:17px;font-weight:700'}, '\uD83E\uDD64 Smoothies Whey')
+      ]));
+      var smZone = h('div');
+      renderSmoothieBar(smZone);
+      content.appendChild(smZone);
+      p.appendChild(content);
+      return;
+    }
     if (S.nStep === 0) renderSplash(content);
     else if (S.nStep === 1) renderStep1(content);
     else if (S.nStep === 2) renderStep2(content);
@@ -3198,6 +3665,7 @@ window.NUTRITION = {
     else if (S.nStep === 9) renderStep9(content);
     p.appendChild(content);
     renderModal(p);
+    if (S.modalSmoothie) renderSmoothieModal(p);
   }
 };
 

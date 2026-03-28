@@ -1526,7 +1526,7 @@ window.S = {
   nStep: 0, sex: null, age: 28, weight: 75, height: 175,
   lang: 'fr', weightUnit: 'kg', heightUnit: 'cm',
   activity: null, train: [], sleep: null, medical: [], goal: null,
-  cookLevel: 2, whey: null, allergies: [], intolerances: [],
+  cookLevel: 2, whey: null, wheyFlavors: [], allergies: [], intolerances: [],
   regime: 0, halal: false, excluded: '', cuisines: [0],
   shopFreq: null, shopStores: [], shopBudget: null, shopPrefs: [],
   shopChecked: {},   // { 'nom_ingrédient': true|false } — état cases à cocher liste de courses
