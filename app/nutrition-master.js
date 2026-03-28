@@ -59,7 +59,7 @@
     return Math.round(bmr * activityLevel);
   }
 
-  var KCAL_FLOOR_MALE          = 1500; // ACSM — plancher absolu homme
+  var KCAL_FLOOR_MALE          = 1400; // ACSM / QA spec — plancher absolu homme
   var KCAL_FLOOR_FEMALE        = 1200; // ACSM — plancher absolu femme sédentaire
   var KCAL_FLOOR_FEMALE_ACTIVE = 1400; // ACSM / IOC 2018 — plancher femme sportive (RED-S prevention)
   // Seuil d'activité : PAL ≥ 1.375 (légèrement actif, ≥1x/semaine) → plancher 1400 kcal

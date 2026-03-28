@@ -119,6 +119,24 @@ function filterExerciseByMedical(ex, med) {
     if (/corde.*sauter|box jump|jump squat|burpee|course|jogging|jumping jacks/.test(n)) return false;
   }
 
+  // ── SPONDYLARTHRITE ANKYLOSANTE ──
+  // (Sieper & Poddubnyy, Lancet 2017 — ASAS guidelines)
+  // Charges axiales lourdes = contrainte sur enthèses vertébrales et sacro-iliaques → déconseillées.
+  // Flexion du tronc sous charge (deadlift, good morning) = stress axial aggravant.
+  // Recommandés : natation, yoga, étirements quotidiens maintiennent mobilité rachidienne.
+  if (med.spondylarthritis) {
+    if (/soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning|jefferson|squat barre|back squat|hack squat|presse.*cuisse|leg press|rowing barre|pendlay row|rowing t.?bar|t.?bar row|crunch|sit.?up|ab wheel|roue abdominal|hyperextension/.test(n)) return false;
+  }
+
+  // ── GONARTHROSE (arthrose du genou) ──
+  // (OAR SI 2014, EULAR 2018 — osteoarthritis knee)
+  // Flexion profonde du genou sous charge = aggravation douleur compartiment médial/latéral.
+  // Impacts répétés = dégradation du cartilage.
+  // Recommandés : vélo stationnaire, natation, musculation légère en amplitude limitée.
+  if (med.kneeOsteoarthritis) {
+    if (/leg extension|pistol squat|sissy squat|jump squat|box jump|fente.*avant|squat bulgare|squat barre|burpee|corde.*sauter|jogging|course|soulev[eé].*terre|deadlift/.test(n)) return false;
+  }
+
   return true;
 }
 
@@ -441,10 +459,10 @@ window.SPORT = {
     // Header with progress (only shown after step 0, not on intro pages)
     if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16 && S.sStep !== 20) {
       var hdr = h('header', {'class': 'header'});
-      var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? 'Yoga & Mobilit\u00e9' : 'Musculation';
+      var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? 'Yoga & Mobilit\u00e9' : S.sportType === 'cycling' ? 'Cyclisme' : 'Musculation';
       hdr.appendChild(h('div', {'class': 'logo', html: 'MTD<span>' + sportLabel + '</span>'}));
-      var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : 4;
-      var currentDisplay = S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sStep;
+      var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : 4;
+      var currentDisplay = S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sStep;
       hdr.appendChild(h('div', {'class': 'step-indicator'}, 'Étape ' + currentDisplay + ' / ' + totalSteps));
       p.appendChild(hdr);
       var pb = h('div', {'class': 'progress-bar'});
@@ -474,6 +492,8 @@ window.SPORT = {
     else if (S.sStep === 18) renderTriathlonProgram(content); // Triathlon program
     else if (S.sStep === 19) renderYogaOnboarding(content);  // Yoga questionnaire
     else if (S.sStep === 21) renderYogaProgram(content);     // Yoga program
+    else if (S.sStep === 22) renderCyclingOnboarding(content); // Cycling questionnaire
+    else if (S.sStep === 23) renderCyclingProgram(content);    // Cycling program
 
     p.appendChild(content);
     renderSportModal(p);
@@ -628,6 +648,19 @@ function renderObjectif(p) {
     h('div', {'class': 'card-tag'}, 'Hatha \u00b7 Vinyasa \u00b7 Yin \u00b7 Ashtanga')
   ]));
 
+  // Cyclisme card
+  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
+    S.sportType = 'cycling';
+    S.sStep = 22;
+    if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'cycling'});
+    window.render();
+  }}, [
+    h('span', {'class': 'card-icon'}, '\uD83D\uDEB4'),
+    h('div', {'class': 'card-name'}, 'Cyclisme'),
+    h('div', {'class': 'card-sub'}, 'Route, VTT, indoor \u2014 am\u00e9liore l\'endurance et la puissance'),
+    h('div', {'class': 'card-tag'}, 'Route \u00b7 VTT \u00b7 Indoor \u00b7 Gravel \u00b7 FTP')
+  ]));
+
   p.appendChild(typeGrid);
 
   // No Continue button needed - cards auto-navigate
@@ -686,7 +719,9 @@ function renderMuscuMedicalQ(p) {
     {key: 'hypertension',         label: 'HTA sévère'},
     {key: 'rheumatoidArthritis',  label: 'Polyarthrite rhumatoïde (PR)'},
     {key: 'fibromyalgia',         label: 'Fibromyalgie'},
-    {key: 'meniscus',             label: 'Ménisque lésé/opéré'}
+    {key: 'meniscus',             label: 'Ménisque lésé/opéré'},
+    {key: 'spondylarthritis',     label: 'Spondylarthrite ankylosante'},
+    {key: 'kneeOsteoarthritis',   label: 'Gonarthrose (arthrose du genou)'}
   ];
 
   var antGrid = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px'});
@@ -2063,6 +2098,8 @@ function renderMusculationProgram(p) {
     if (med.fibromyalgia) restrictions.push('\u26A0 Fibromyalgie\u00a0: intensit\u00e9 mod\u00e9r\u00e9e max, pas de HIIT ni charges maximales \u2014 exercices a\u00e9robies doux recommand\u00e9s (Cochrane 2017)');
     if (med.meniscus) restrictions.push('\u26A0 M\u00e9nisque\u00a0: pas de flexion >90\u00b0 sous charge ni de cisaillement en rotation (leg extension, fentes)');
     if (med.feet) restrictions.push('\u26A0 Pieds/fasciite\u00a0: exercices \u00e0 impact retir\u00e9s (sauts, corde), privil\u00e9gier velo ou natation');
+    if (med.spondylarthritis) restrictions.push('\u26A0 Spondylarthrite\u00a0: charges axiales lourdes retir\u00e9es (deadlift, squat barre, good morning) \u2014 natation, yoga et \u00e9tirements recommand\u00e9s (Sieper & Poddubnyy, Lancet 2017)');
+    if (med.kneeOsteoarthritis) restrictions.push('\u26A0 Gonarthrose\u00a0: flexions profondes du genou et impacts retir\u00e9s \u2014 v\u00e9lo stationnaire et musculation en amplitude limit\u00e9e recommand\u00e9s (OARSI 2014)');
     if (restrictions.length > 0) {
       var medBanner = h('div', {style: 'background:#FFF3E0;border-left:4px solid #E67E22;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5D4037'});
       medBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, '\uD83C\uDFE5 Programme adapt\u00e9 \u00e0 votre bilan m\u00e9dical'));

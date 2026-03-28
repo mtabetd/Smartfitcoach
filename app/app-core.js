@@ -71,7 +71,7 @@ var GOALS=[
   {icon:'↗',name:'Prise de masse',desc:'+15% calories',mult:1.15,key:'bulk'},
   {icon:'=',name:'Maintien',desc:'= TDEE',mult:1.0,key:'maintain'},
   {icon:'↘',name:'Perte de poids',desc:'-15% calories',mult:0.85,key:'cut'},
-  {icon:'↓',name:'Sèche',desc:'-25% calories',mult:0.75,key:'shred'}
+  {icon:'↓',name:'Sèche',desc:'-20% calories',mult:0.80,key:'shred'}
 ];
 // RATIOS : distribution calorique indicative par objectif (pour affichage uniquement)
 // ATTENTION : calcMacros() utilise la méthode g/kg (ISSN 2017), pas ces ratios
@@ -1187,9 +1187,9 @@ if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*
 // Plancher calorique sexe-spécifique (ACSM / IOC 2018 RED-S prevention)
 // Femme active (PAL ≥ 1.375) : plancher 1400 kcal/j — prévention RED-S (IOC 2018)
 // Femme sédentaire : plancher 1200 kcal/j (ACSM)
-// Homme : plancher 1500 kcal/j (ACSM)
+// Homme : plancher 1400 kcal/j (ACSM — QA spec)
 var effectivePAL=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
-var kcalFloor=s.sex==='femme'?(effectivePAL>=1.375?1400:1200):1500;
+var kcalFloor=s.sex==='femme'?(effectivePAL>=1.375?1400:1200):1400;
 base=Math.max(base,kcalFloor);
 // Alcool : déduire les calories hebdo/7 du budget calorique journalier pour un calcul réaliste
 // Ex : 500 kcal alcool/semaine ÷ 7 = 71 kcal/j que l'on retire de l'objectif alimentaire

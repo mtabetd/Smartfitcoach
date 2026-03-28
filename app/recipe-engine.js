@@ -5354,11 +5354,128 @@
    *
    * @returns {object[]} recettes filtrées, triées par écart calorique croissant
    */
+  // ─── ALLERGY / REGIME MAPS ────────────────────────────────────────────────────
+  // Map allergie label (ALLERGIES constant) → liste d'ingrédients à exclure (sous-chaînes).
+  var ALLERGY_INGREDIENT_MAP = {
+    'Fruits à coque': ['amande', 'noix de cajou', 'noix de macadamia', 'noix du brésil',
+                       'noix de pécan', 'pistache', 'noisette', 'noix (', 'noix,', '" noix"',
+                       'noix concassée', 'noix effilée', 'noix de coco', // noix de coco exclue par sécurité
+                       'lait d\'amande', 'beurre d\'amande', 'farine d\'amande',
+                       'granola', /* souvent contient noix */ 'skyr.*noix'],
+    'Arachides':      ['cacahuète', 'beurre de cacahuète', 'arachide', 'satay'],
+    'Oeufs':          ['oeuf', 'œuf', 'egg'],
+    'Poisson':        ['saumon', 'thon', 'cabillaud', 'tilapia', 'truite', 'anchois',
+                       'sardine', 'maquereau', 'poisson', 'colin', 'dorade', 'bar ',
+                       'lotte', 'filet de mer'],
+    'Crustacés':      ['crevette', 'homard', 'crabe', 'langouste', 'écrevisse', 'crustacé'],
+    'Soja':           ['tofu', 'tempeh', 'edamame', 'pousses de soja', 'sauce soja',
+                       'lait de soja', 'sauce tamari', 'miso', 'natto'],
+    'Lait/Produits laitiers': ['fromage', 'beurre', 'crème', 'lait (', 'lait entier',
+                                'lait demi-écrémé', 'yaourt', 'skyr', 'ricotta', 'feta',
+                                'mozzarella', 'parmesan', 'gruyère', 'emmental', 'camembert',
+                                'whey', 'caséine', 'ghee'],
+    'Gluten/Blé':     ['farine de blé', 'farine t45', 'farine t55', 'farine t65',
+                       'pâte', 'pain ', 'baguette', 'blé ', 'boulgour', 'semoule',
+                       'orge', 'seigle', 'vermicelle', 'feuille de brick',
+                       'sauce soja', /* souvent contient blé */ 'chapelure'],
+    'Sésame':         ['sésame', 'tahini', 'huile de sésame', 'graine de sésame'],
+    'Moutarde':       ['moutarde']
+  };
+
+  // Map intolerance label → ingrédients à exclure
+  var INTOLERANCE_INGREDIENT_MAP = {
+    'Lactose': ['lait (', 'lait entier', 'lait demi-écrémé', 'lait de vache',
+                'crème', 'beurre', 'fromage blanc', 'yaourt', 'skyr',
+                'ricotta', 'mozzarella fraîche', 'fromage frais'],
+    'Gluten':  ['farine de blé', 'farine t45', 'farine t55', 'farine t65',
+                'pain ', 'pâte', 'blé ', 'boulgour', 'semoule',
+                'orge', 'seigle', 'vermicelle', 'feuille de brick',
+                'chapelure', 'sauce soja']
+  };
+
+  // Map regime index (REGIMES array) → required tag or excluded tags
+  // regime 0=Omnivore (pas de restriction), 1=Pescétarien (no meat), 2=Végétarien, 3=Végan
+  var REGIME_REQUIRED_TAGS = {
+    1: null,  // Pescétarien : pas de tag obligatoire (filtre ingrédients viande)
+    2: null,  // Végétarien  : pas de tag obligatoire (filtre ingrédients viande)
+    3: 'vegan' // Végan : doit avoir le tag 'vegan'
+  };
+  // Ingrédients viande à exclure pour pescétarien + végétarien
+  var MEAT_INGREDIENTS = ['boeuf', 'bœuf', 'veau', 'agneau', 'porc', 'lard', 'bacon',
+                          'jambon', 'chorizo', 'saucisse', 'saucisson', 'charcuterie',
+                          'dinde', 'poulet', 'canard', 'volaille', 'lapin', 'gibier',
+                          'hachis', 'steak', 'côte de', 'rôti', 'escalope'];
+  // Ingrédients animaux en plus pour végétalien
+  var ANIMAL_INGREDIENTS = MEAT_INGREDIENTS.concat(
+    ['oeuf', 'œuf', 'lait ', 'fromage', 'beurre', 'crème', 'yaourt', 'skyr',
+     'miel', 'whey', 'caséine', 'saumon', 'thon', 'crevette', 'poisson']
+  );
+
+  /**
+   * Vérifie si une recette contient un ingrédient exclu (sous-chaîne insensible à la casse).
+   * @param {object} recipe
+   * @param {string[]} excludedTerms
+   * @returns {boolean} true si la recette est safe (pas d'ingrédient exclu)
+   */
+  function recipeHasNoExcludedIngredients(recipe, excludedTerms) {
+    if (!excludedTerms || !excludedTerms.length) return true;
+    var ings = recipe.ingredients || [];
+    for (var i = 0; i < ings.length; i++) {
+      var ingName = (ings[i].name || '').toLowerCase();
+      for (var j = 0; j < excludedTerms.length; j++) {
+        if (ingName.indexOf(excludedTerms[j].toLowerCase()) !== -1) return false;
+      }
+    }
+    // Also check recipe name and tags for allergen hints
+    var rName = (recipe.name || '').toLowerCase();
+    for (var k = 0; k < excludedTerms.length; k++) {
+      if (rName.indexOf(excludedTerms[k].toLowerCase()) !== -1) return false;
+    }
+    return true;
+  }
+
   function filterRecipes(userState, filters) {
     filters = filters || {};
     var mealTarget = userState && userState.caloriesTarget
       ? Math.round(userState.caloriesTarget * DEFAULT_MEAL_FRACTION)
       : null;
+
+    // ── Build exclusion list from filters.allergies ──
+    var allergyExclusions = [];
+    if (filters.allergies && filters.allergies.length) {
+      filters.allergies.forEach(function (allergyLabel) {
+        var terms = ALLERGY_INGREDIENT_MAP[allergyLabel];
+        if (terms) allergyExclusions = allergyExclusions.concat(terms);
+      });
+    }
+
+    // ── Build exclusion list from filters.intolerances ──
+    var intoleranceExclusions = [];
+    if (filters.intolerances && filters.intolerances.length) {
+      filters.intolerances.forEach(function (intoleranceLabel) {
+        var terms = INTOLERANCE_INGREDIENT_MAP[intoleranceLabel];
+        if (terms) intoleranceExclusions = intoleranceExclusions.concat(terms);
+      });
+    }
+
+    // ── Combine all ingredient exclusions ──
+    var allExclusions = allergyExclusions.concat(intoleranceExclusions);
+
+    // ── Build regime constraint ──
+    var regimeIdx = (filters.regime !== undefined && filters.regime !== null) ? filters.regime : null;
+    var regimeExclusions = [];
+    if (regimeIdx === 2) {
+      // Végétarien : exclure viande
+      regimeExclusions = MEAT_INGREDIENTS;
+    } else if (regimeIdx === 3) {
+      // Végan : exclure tous produits animaux
+      regimeExclusions = ANIMAL_INGREDIENTS;
+    }
+    // Pescétarien (1) : exclure viande mais garder poisson — utiliser MEAT_INGREDIENTS
+    if (regimeIdx === 1) {
+      regimeExclusions = MEAT_INGREDIENTS;
+    }
+    allExclusions = allExclusions.concat(regimeExclusions);
 
     return RECIPES_DB.filter(function (r) {
       if (filters.category && r.category !== filters.category) return false;
@@ -5368,6 +5485,15 @@
         var hasAll = filters.tags.every(function (t) { return r.tags.indexOf(t) !== -1; });
         if (!hasAll) return false;
       }
+
+      // ── Filtre régime : végan doit avoir tag 'vegan' ──
+      if (regimeIdx === 3 && r.tags.indexOf('vegan') === -1) return false;
+      // Végétarien : tag 'vegetarian' ou 'vegan' requis
+      if (regimeIdx === 2 && r.tags.indexOf('vegetarian') === -1 && r.tags.indexOf('vegan') === -1) return false;
+
+      // ── Filtre ingrédients exclus (allergies + intolérances + régime ingrédient) ──
+      if (allExclusions.length && !recipeHasNoExcludedIngredients(r, allExclusions)) return false;
+
       return true;
     }).sort(function (a, b) {
       if (!mealTarget) return 0;
