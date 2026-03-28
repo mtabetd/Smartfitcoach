@@ -926,32 +926,42 @@ window.CF_WODS_FULL = [
 },
 // --- END PART 3 (days 51-75) --- PART 4 CONTINUES ---
 
-// ============ PART 4: DAYS 76-100 (WEEKS 16-20) ============
+// ============ PART 4: DAYS 76-100 (WEEKS 16-20) — PHASE PEAK ============
+// Semaines 16-19: intensité maximale Games-level. Semaine 20: TAPER + RAGNAROK.
+// C'est ici que les champions sont forgés. 100 jours pour ce moment.
 
-// ============ WEEK 16 — DÉLOAD ============
-// Deload #4 — Dernier déload avant la phase finale S17-20.
-// CNS = priorité. Corps rechargé = performances maximales S17+
-// Volume -50%, technique parfaite, récupération maximale
+// ============ WEEK 16 — GAMES PEAK 1 ============
 {
-  day: 76, week: 16, name: 'CERBERUS-DELOAD', theme: 'Déload S4 — Clean Complex Léger + AMRAP Court', deload: true,
-  haltero: { name: 'Clean Complex Léger', desc: '1 Power Clean + 1 Front Squat @65% — Technique fluide', scheme: 'E2MOM 8min — Léger', weights: 'clean' },
-  wod: { name: 'CERBERUS-LIGHT', type: 'AMRAP 10 — Zone 2', movements: [
-    {name: 'Power Cleans', reps: 6, weight: 'power_clean', note: '@60%'},
-    {name: 'Box Jumps', reps: 8, gymnastics: 'box_jump'},
-    {name: 'Toes-to-bar', reps: 8, gymnastics: 'toes_to_bar'},
-    {name: 'Cal Assault Bike', special: 'assault_bike', note: '8/6 cal — effort modéré'}
-  ], notes: '🔄 DÉLOAD S16: 10min au lieu de 18min. Reps réduits. Zone 2 aérobie. Pas de compétition. Dernière recharge avant la phase finale! 💤' },
-  gym: { name: 'Mobilité & Récupération Active', drills: ['3x5 Strict Pull-ups (focus scapulaire)', '3x8 Kipping Pull-ups (contrôle)', '3x20 Hollow Rocks', '10min Foam Roll + stretching complet'] }
+  day: 76, week: 16, name: 'GOLIATH', theme: 'Clean & Jerk Games + Hero Couplet',
+  haltero: { name: 'Clean & Jerk', desc: 'Clean & Jerk: 5x1 @85%, puis 3x1 @90%+. Build to near-max single. Every rep explosif.', scheme: 'E2MOM 16min — Intensity on bar', weights: 'clean' },
+  wod: { name: 'GOLIATH', type: 'AMRAP 20', movements: [
+    {name: 'Squat Cleans', reps: 5, weight: 'squat_clean'},
+    {name: 'Ring Muscle-ups', reps: 5, gymnastics: 'muscle_ups_ring'},
+    {name: 'Run 400m', reps: 1, special: 'run_400'}
+  ], notes: 'GOLIATH — le géant est réveillé. Semaine 16, charge maximale Games-level. Squat Cleans RX: H 102kg / F 70kg. Stratégie: 5 Cleans TnG si possible (technique d\'abord — pas de no-rep au fond du squat). Ring MU: 2-2-1 ou 3-2. Run 400m: 85-90% pace — jamais à fond, vous avez 20min. Cible: 6+ rounds (élite 8+). Le rythme doit être constant sur chaque round. Ne ralentissez JAMAIS au-delà de 30s de pause entre mouvements. Les Cleans font mal? Bien — c\'est là que vous devenez fort. Si un round dépasse 4:00, réduisez le poids. Respirez dans le ventre sur les descentes. Élite Games sub 3:20/round. Votre corps peut davantage que votre tête ne le croit.' },
+  gym: { name: 'Skill: Ring MU Efficiency', drills: ['3x3 Strict Ring MU (controlled negative)', '5x2 False Grip Ring MU (speed)', '3x5 Deep Ring Dips (full ROM)', '3x10 Band Pull-Aparts'] },
+  scaled: { movements: [{name: 'Squat Cleans', reps: 5, note: '→ Power Cleans à 70% du RX'}, {name: 'Ring Muscle-ups', reps: 5, note: '→ 8 C2B Pull-ups ou 10 Pull-ups kipping'}], note: 'Scaling: RMU → C2B. Cleans = poids permettant TnG propre. Garder 20min et 400m runs.' },
+  rxPlus: { note: 'RX+: Squat Cleans H 115kg / F 79kg, Ring MU strict. Target 9+ rounds.' }
 },
 {
-  day: 77, week: 16, name: 'TRIDENT-DELOAD', theme: 'Déload S4 — Snatch Technique + Triplet Court', deload: true,
-  haltero: { name: 'Snatch Technique', desc: '1 Hang Snatch + 1 Snatch @65% x 6 sets', scheme: 'Every 90s x 6 — Léger', weights: 'snatch' },
-  wod: { name: 'TRIDENT-LIGHT', type: '3 Rounds For Time (cap 10min)', movements: [
-    {name: 'Power Snatches', reps: 5, weight: 'snatch', note: '@60%'},
-    {name: 'Burpees over bar', reps: 5, gymnastics: 'burpee'},
-    {name: 'Pull-ups', reps: 10, gymnastics: 'pullups'}
-  ], notes: '🔄 DÉLOAD S16: 3 rounds au lieu de 5. Snatches techniques. Burpees au rythme. Pull-ups kipping propres. 💤' },
-  gym: { name: 'Skill: Bar MU Technique', drills: ['3x5 Chest-to-bar Pull-ups (gros kip)', '3x3 Kip to Hip drill', '5x1-2 Bar MU attempts (contrôle)', '3x10 Strict Dips (contrôle)'] }
+  day: 77, week: 16, name: 'SPARTACUS', theme: 'Snatch Ladder + Games Chipper', hero: true,
+  haltero: { name: 'Snatch', desc: 'Snatch: 3x2 @75%, 3x1 @82%, 2x1 @88%+. Explosivité maximale, barre rapide au-dessus.', scheme: 'E90s x 8 sets — Progressif lourd', weights: 'snatch' },
+  wod: { name: 'SPARTACUS', type: 'For Time (cap 22min) — HERO WOD', movements: [
+    {name: 'Run 800m', reps: 1, special: 'run_800'},
+    {name: 'Power Snatches', reps: 21, weight: 'snatch'},
+    {name: 'Toes-to-bar', reps: 21, gymnastics: 'toes_to_bar'},
+    {name: 'Bar Muscle-ups', reps: 12, gymnastics: 'muscle_ups_bar'},
+    {name: 'Power Snatches', reps: 15, weight: 'snatch'},
+    {name: 'Toes-to-bar', reps: 15, gymnastics: 'toes_to_bar'},
+    {name: 'Bar Muscle-ups', reps: 8, gymnastics: 'muscle_ups_bar'},
+    {name: 'Power Snatches', reps: 9, weight: 'snatch'},
+    {name: 'Toes-to-bar', reps: 9, gymnastics: 'toes_to_bar'},
+    {name: 'Bar Muscle-ups', reps: 4, gymnastics: 'muscle_ups_bar'},
+    {name: 'Run 800m', reps: 1, special: 'run_800'}
+  ], notes: 'SPARTACUS — Hero WOD dédié aux guerriers qui ne capitulent jamais. Run d\'ouverture à 80% (4:10-4:30/km), pas un sprint — vous avez un chipper entier devant vous. Snatches légers RX: H 61kg / F 43kg = touch-and-go 7-7-7 puis 5-5-5 puis unbroken sur les 9. TTB: séries de 7, puis 5, puis 9 unbroken si grip possible. BMU: 3-3-3-3 / 2-2-2-2 / 2-1-1. Run final: videz les réservoirs — vous avez tout donné dans le chipper. Rep total: 800m + 45 snatches + 45 TTB + 24 BMU + 800m. Élite sub 17min. Avancé sub 21min. Honore ceux qui se battent sans uniforme.' },
+  gym: { name: 'Skill: Bar Muscle-up Kip', drills: ['3x5 C2B kip drill (hip to bar)', '5x2 Bar MU fast kip', '3x8 Strict Chest-to-Bar Pull-ups', '3x10 Band Pull-Aparts overhead'] },
+  scaled: { movements: [{name: 'Power Snatches', reps: 21, note: '→ 40/27kg ou DB snatches'}, {name: 'Bar Muscle-ups', reps: 12, note: '→ C2B pull-ups x1.5 ou pull-ups x2'}], note: 'Scaling: BMU → C2B. Snatches charge légère = TnG maintenu. Run = même distance.' },
+  rxPlus: { note: 'RX+: Snatches H 70kg / F 47kg, BMU strict. Legless rope instead of 2nd run (3 climbs). Target sub 15min.' }
 },
 {
   day: 78, week: 16, name: 'ANNIE-RETEST', theme: 'Déload S4 — Re-test Benchmark ANNIE (semaines 4 et 12)', benchmark: 'ANNIE', deload: true, benchmark_retest: true,
