@@ -506,8 +506,8 @@ window.SPORT = {
     else if (S.sStep === 21) renderYogaProgram(content);     // Yoga program
     else if (S.sStep === 22) renderCyclingOnboarding(content); // Cycling questionnaire
     else if (S.sStep === 23) renderCyclingProgram(content);    // Cycling program
-    else if (S.sStep === 24) renderCalisthenicsOnboarding(content); // Calisthenics onboarding
-    else if (S.sStep === 25) renderCalisthenicsProgram(content);    // Calisthenics program
+    else if (S.sStep === 24) { if (typeof renderCalisthenicsOnboarding === 'function') renderCalisthenicsOnboarding(content); else { content.appendChild(h('div', {style:'text-align:center;padding:40px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'Module Callisthénie en cours de chargement...')); content.appendChild(h('button', {'class':'btn-back', onclick:function(){ S.sStep=0; S.sportType=null; window.render(); }}, '← Retour')); } } // Calisthenics onboarding
+    else if (S.sStep === 25) { if (typeof renderCalisthenicsProgram === 'function') renderCalisthenicsProgram(content); else { content.appendChild(h('div', {style:'text-align:center;padding:40px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'Module Callisthénie en cours de chargement...')); content.appendChild(h('button', {'class':'btn-back', onclick:function(){ S.sStep=0; S.sportType=null; window.render(); }}, '← Retour')); } } // Calisthenics program
 
     p.appendChild(content);
     renderSportModal(p);
