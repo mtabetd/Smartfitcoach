@@ -72,7 +72,7 @@ var GOALS=[
   {icon:'↗',name:'Prise de masse douce',desc:'+10% calories',mult:1.10,key:'lean_bulk'},
   {icon:'=',name:'Maintien',desc:'= TDEE',mult:1.0,key:'maintain'},
   {icon:'↘',name:'Perte de poids',desc:'-15% calories',mult:0.85,key:'cut'},
-  {icon:'↓',name:'Sèche',desc:'-20% calories',mult:0.80,key:'shred'},
+  {icon:'↓',name:'Sèche',desc:'-20% calories (plafonn\u00e9 \u00e0 \u22125\u200900 kcal/j max — Helms 2014)',mult:0.80,key:'shred'},
   {icon:'⚖️',name:'Recomposition',desc:'Maintien calories, optimisation macros',mult:1.00,key:'recomposition'}
 ];
 // RATIOS : distribution calorique indicative par objectif (pour affichage uniquement)
