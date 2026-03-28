@@ -2074,29 +2074,52 @@ function calcSessionDuration(exercises) {
   return Math.max(20, Math.round(totalSec / 60));
 }
 
-// Dépense calorique personnalisée — Keytel et al. 2005 (FC-based) + EPOC Schuenke 2002
+// Dépense calorique personnalisée — MET (Ainsworth 2011) pour musculation + Keytel 2005 pour cardio
+// NOTE: La formule Keytel (FC-based) est valide pour exercice aérobique CONTINU.
+// Pour la musculation (effort intermittent), elle surestime de ~2x (MET musculation = 5-6 vs course).
+// On utilise donc MET pour la résistance et Keytel pour les séances à dominante cardio.
 function calcSessionKcal(exercises, durationMin) {
   var s = window.S;
   var weight = s.weight || 75;
   var age = s.age || 30;
-  var sex = s.sex || 'homme';
+  var sex = s.sex || (s.sex === 'femme' ? 'femme' : 'homme'); // BUG-15 fix: respect null sex
   // Phase courante → RPE
   var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
   var rpe = phase ? phase.rpe : 7;
-  // RPE → %FCmax (Borg 6-20 adapté résistance)
-  var pctHR = rpe <= 5 ? 0.57 : rpe <= 6 ? 0.64 : rpe <= 7 ? 0.72 : rpe <= 8 ? 0.80 : 0.87;
-  // FCmax — Tanaka 2001 (plus précis que Fox 220-age)
-  var hrMax = Math.round(208 - 0.7 * age);
-  var hr = Math.round(hrMax * pctHR);
-  // Keytel et al. 2005 — formule validée vs calorimétrie indirecte
-  var kcalMin;
-  if (sex === 'homme') {
-    kcalMin = (-55.0969 + 0.6309 * hr + 0.1988 * weight + 0.2017 * age) / 4.184;
+
+  // Déterminer si la séance est à dominante cardio ou musculation
+  var cardioKeywords = ['cardio', 'course', 'running', 'vélo', 'rowing', 'jumping', 'burpee', 'hiit'];
+  var cardioCount = 0;
+  (exercises || []).forEach(function(ex) {
+    var m_lower = (ex.m || '').toLowerCase();
+    cardioKeywords.forEach(function(kw) { if (m_lower.indexOf(kw) >= 0) cardioCount++; });
+  });
+  var isCardioSession = (exercises && exercises.length > 0) && (cardioCount / exercises.length >= 0.5);
+
+  var base, hr;
+  if (isCardioSession) {
+    // Keytel et al. 2005 — valide pour aérobique continu
+    var pctHR = rpe <= 5 ? 0.57 : rpe <= 6 ? 0.64 : rpe <= 7 ? 0.72 : rpe <= 8 ? 0.80 : 0.87;
+    var hrMax = Math.round(208 - 0.7 * age);
+    hr = Math.round(hrMax * pctHR);
+    var kcalMin;
+    if (sex === 'homme') {
+      kcalMin = (-55.0969 + 0.6309 * hr + 0.1988 * weight + 0.2017 * age) / 4.184;
+    } else {
+      kcalMin = (-20.4022 + 0.4472 * hr - 0.1263 * weight + 0.074 * age) / 4.184;
+    }
+    kcalMin = Math.max(kcalMin, 3.0);
+    base = Math.round(kcalMin * durationMin);
   } else {
-    kcalMin = (-20.4022 + 0.4472 * hr - 0.1263 * weight + 0.074 * age) / 4.184;
+    // MET-based pour musculation (Ainsworth 2011 — Compendium of Physical Activities)
+    // Musculation légère: MET 3.5 | modérée: MET 5.0 | intense: MET 6.0 | très intense: MET 8.0
+    var met = rpe <= 5 ? 3.5 : rpe <= 6 ? 5.0 : rpe <= 8 ? 6.0 : 8.0;
+    // Formule MET: kcal = MET × poids_kg × durée_heures
+    base = Math.round(met * weight * (durationMin / 60));
+    // FCmax estimée pour l'affichage uniquement
+    hr = Math.round((208 - 0.7 * age) * (rpe <= 5 ? 0.57 : rpe <= 6 ? 0.64 : rpe <= 7 ? 0.72 : rpe <= 8 ? 0.80 : 0.87));
   }
-  kcalMin = Math.max(kcalMin, 3.0);
-  var base = Math.round(kcalMin * durationMin);
+
   // EPOC — Schuenke 2002, Paoli 2012 : +6-20% selon intensité
   var epocPct = rpe <= 5 ? 0.06 : rpe <= 6 ? 0.10 : rpe <= 8 ? 0.15 : 0.20;
   // Bonus volume élevé (> 25 séries totales)
@@ -2421,14 +2444,16 @@ function renderMusculationProgram(p) {
         card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:' + intColor + ';margin-top:4px'}, 'Intensit\u00e9 cycle : ' + intPct + '%'));
       }
 
-      // Video link
-      var vlink = h('a', {'class': 'exercise-video', href: ex.video, target: '_blank', rel: 'noopener', onclick: function(e){
-        e.stopPropagation();
-        window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
-        var count = window.GAMIFICATION ? GAMIFICATION.incrementCounter('exercises_viewed') : 0;
-        if (count >= 20 && window.GAMIFICATION) GAMIFICATION.unlockBadge('exercises_20');
-      }}, '▶ Voir la technique');
-      card.appendChild(vlink);
+      // Video link (guard: only render if video URL exists)
+      if (ex.video) {
+        var vlink = h('a', {'class': 'exercise-video', href: ex.video, target: '_blank', rel: 'noopener', onclick: function(e){
+          e.stopPropagation();
+          window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
+          var count = window.GAMIFICATION ? GAMIFICATION.incrementCounter('exercises_viewed') : 0;
+          if (count >= 20 && window.GAMIFICATION) GAMIFICATION.unlockBadge('exercises_20');
+        }}, '▶ Voir la technique');
+        card.appendChild(vlink);
+      }
 
       // ─── AI-suggested weight from strength profile ───
       var _setParts = ex.sets ? ex.sets.split('\u00d7') : [];
@@ -2687,7 +2712,7 @@ function renderMusculationProgram(p) {
       kr3.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold'}, 'Total estim\u00e9'));
       kr3.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:17px;font-weight:bold;color:var(--green,#1A4A1A)'}, kcalRes.total + '\u00a0kcal'));
       kcalBox.appendChild(kr3);
-      kcalBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}, 'FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 RPE\u00a0' + kcalRes.rpe + '/10 \u2014 Keytel\u00a02005 \u00b7 Tanaka\u00a02001'));
+      kcalBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:6px;font-style:italic'}, 'FC estim\u00e9e\u00a0' + kcalRes.hr + '\u00a0bpm \u2014 RPE\u00a0' + kcalRes.rpe + '/10 \u2014 MET\u00a0Ainsworth\u00a02011 \u00b7 Tanaka\u00a02001'));
       compPanel.appendChild(kcalBox);
       // ⚠ Note TDEE — évite le double-comptage (audit interdépendance)
       compPanel.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:3px solid var(--orange,#6A4A1A);padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--text,#0A0A09);line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
@@ -3000,12 +3025,14 @@ function renderSportModal(app) {
       body.appendChild(tl);
     }
 
-    // Video button (prominent)
-    body.appendChild(h('a', {
-      'class': 'btn-primary', href: ex.video, target: '_blank', rel: 'noopener',
-      style: 'display:block;text-align:center;text-decoration:none;margin-top:16px',
-      onclick: function(){ window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n}); }
-    }, '▶ Voir la vidéo technique'));
+    // Video button (only render if URL exists)
+    if (ex.video) {
+      body.appendChild(h('a', {
+        'class': 'btn-primary', href: ex.video, target: '_blank', rel: 'noopener',
+        style: 'display:block;text-align:center;text-decoration:none;margin-top:16px',
+        onclick: function(){ window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n}); }
+      }, '▶ Voir la vidéo technique'));
+    }
 
     sheet.appendChild(body);
   }
@@ -4977,8 +5004,10 @@ function renderCalisthenicsProgram(content) {
         ]));
       });
       card.appendChild(stepsDiv);
-      // Vidéo
-      card.appendChild(h('a', {href:sk.video, target:'_blank', rel:'noopener', style:'display:inline-block;font-size:12px;color:var(--accent,#1A4A1A);text-decoration:underline'}, '▶ Voir la démonstration vidéo'));
+      // Vidéo (guard: only render if URL exists)
+      if (sk.video) {
+        card.appendChild(h('a', {href:sk.video, target:'_blank', rel:'noopener', style:'display:inline-block;font-size:12px;color:var(--accent,#1A4A1A);text-decoration:underline'}, '▶ Voir la démonstration vidéo'));
+      }
       content.appendChild(card);
     });
   }
