@@ -2096,6 +2096,324 @@
       source: 'marjane',
       updatedAt: '2026-03'
     },
+
+    // ── Produits laitiers & fromages (nouvelles recettes R401-R439) ──────────
+    'Fromage blanc 0%': {
+      name: 'Fromage blanc 0%',
+      pricePerG: r(12 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Lait demi-écrémé': {
+      name: 'Lait demi-écrémé',
+      pricePerG: r(7 / 1000),
+      pricePerMl: r(7 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Lait entier': {
+      name: 'Lait entier',
+      pricePerG: r(8 / 1000),
+      pricePerMl: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Mascarpone': {
+      name: 'Mascarpone',
+      pricePerG: r(25 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Cream cheese allégé': {
+      name: 'Cream cheese allégé',
+      pricePerG: r(22 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Gélatine en feuilles': {
+      name: 'Gélatine en feuilles',
+      pricePerG: r(18 / 12),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Jaune d\'œuf': {
+      name: 'Jaune d\'œuf',
+      pricePerPce: r(0.7),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Jaunes d\'œufs': {
+      name: 'Jaunes d\'œufs',
+      pricePerPce: r(0.7),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Sucres & édulcorants ──────────────────────────────────────────────────
+    'Stevia': {
+      name: 'Stevia',
+      pricePerG: r(80 / 50),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Stevia en poudre': {
+      name: 'Stevia en poudre',
+      pricePerG: r(80 / 50),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Sucre de coco': {
+      name: 'Sucre de coco',
+      pricePerG: r(45 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Sucre de coco (pour caraméliser)': {
+      name: 'Sucre de coco (pour caraméliser)',
+      pricePerG: r(45 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Érythritol (ou sucre)': {
+      name: 'Érythritol (ou sucre)',
+      pricePerG: r(50 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Sirop d\'érable': {
+      name: 'Sirop d\'érable',
+      pricePerG: r(60 / 250),
+      pricePerMl: r(60 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Sirop d\'agave': {
+      name: 'Sirop d\'agave',
+      pricePerG: r(45 / 250),
+      pricePerMl: r(45 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Chocolat & cacao ──────────────────────────────────────────────────────
+    'Chocolat noir 70%': {
+      name: 'Chocolat noir 70%',
+      pricePerG: r(25 / 100),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Chocolat noir 70% (enrobage)': {
+      name: 'Chocolat noir 70% (enrobage)',
+      pricePerG: r(25 / 100),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Fruits à coque & beurres ──────────────────────────────────────────────
+    'Pistaches': {
+      name: 'Pistaches',
+      pricePerG: r(150 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pistaches concassées': {
+      name: 'Pistaches concassées',
+      pricePerG: r(150 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Pistaches émondées': {
+      name: 'Pistaches émondées',
+      pricePerG: r(160 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Noisettes entières': {
+      name: 'Noisettes entières',
+      pricePerG: r(80 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Beurre de noisette': {
+      name: 'Beurre de noisette',
+      pricePerG: r(65 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Beurre de cajou': {
+      name: 'Beurre de cajou',
+      pricePerG: r(80 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Beurre d\'amande': {
+      name: 'Beurre d\'amande',
+      pricePerG: r(70 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Poudre d\'amandes': {
+      name: 'Poudre d\'amandes',
+      pricePerG: r(60 / 200),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Amandes en poudre': {
+      name: 'Amandes en poudre',
+      pricePerG: r(60 / 200),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Cranberries séchées': {
+      name: 'Cranberries séchées',
+      pricePerG: r(35 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Féculents & farines ───────────────────────────────────────────────────
+    'Farine de riz': {
+      name: 'Farine de riz',
+      pricePerG: r(20 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Riz rond': {
+      name: 'Riz rond',
+      pricePerG: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Fruits & légumes ──────────────────────────────────────────────────────
+    'Cerises fraîches ou surgelées dénoyautées': {
+      name: 'Cerises fraîches ou surgelées dénoyautées',
+      pricePerG: r(30 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Cerises dénoyautées surgelées': {
+      name: 'Cerises dénoyautées surgelées',
+      pricePerG: r(25 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Framboises fraîches': {
+      name: 'Framboises fraîches',
+      pricePerG: r(35 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Purée d\'açaï surgelée': {
+      name: 'Purée d\'açaï surgelée',
+      pricePerG: r(60 / 100),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Épices & arômates ──────────────────────────────────────────────────────
+    'Matcha en poudre (qualité culinaire)': {
+      name: 'Matcha en poudre (qualité culinaire)',
+      pricePerG: r(60 / 50),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Matcha en poudre': {
+      name: 'Matcha en poudre',
+      pricePerG: r(60 / 50),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Extrait d\'amande amère': {
+      name: 'Extrait d\'amande amère',
+      pricePerMl: r(25 / 50),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Muscade moulue': {
+      name: 'Muscade moulue',
+      pricePerG: r(15 / 50),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Anis étoilé moulu': {
+      name: 'Anis étoilé moulu',
+      pricePerG: r(12 / 50),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Eau de rose': {
+      name: 'Eau de rose',
+      pricePerMl: r(20 / 200),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Fruits secs & divers ──────────────────────────────────────────────────
+    'Figues séchées': {
+      name: 'Figues séchées',
+      pricePerG: r(30 / 200),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Mangue séchée non sucrée': {
+      name: 'Mangue séchée non sucrée',
+      pricePerG: r(40 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+
+    // ── Boissons & liquides ───────────────────────────────────────────────────
+    'Jus de fruit de la passion': {
+      name: 'Jus de fruit de la passion',
+      pricePerMl: r(30 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Café soluble': {
+      name: 'Café soluble',
+      pricePerG: r(40 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Café fort refroidi': {
+      name: 'Café fort refroidi',
+      pricePerMl: r(0.05),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Biscuits & pâtisserie ─────────────────────────────────────────────────
+    'Boudoirs (biscuits à la cuillère)': {
+      name: 'Boudoirs (biscuits à la cuillère)',
+      pricePerG: r(20 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Bicarbonate de soude': {
+      name: 'Bicarbonate de soude',
+      pricePerG: r(5 / 200),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Zeste de citron (pce)': {
+      name: 'Zeste de citron (pce)',
+      pricePerPce: r(0.5),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Zeste de citron vert': {
+      name: 'Zeste de citron vert',
+      pricePerG: r(0.5 / 5),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Zeste de citron': {
+      name: 'Zeste de citron',
+      pricePerG: r(0.5 / 5),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
   };
 
   /**
@@ -2105,8 +2423,57 @@
    * @param {string} unit            - Unité : 'g' | 'ml' | 'pce'
    * @returns {number|null}          - Prix en MAD pour 1 unité, ou null si introuvable
    */
+  // Aliases pour normaliser les variantes de noms d'ingrédients
+  var PRICE_ALIASES = {
+    'Whey protéine vanille': 'Protéines de lactosérum (whey)',
+    'Whey protéine chocolat': 'Protéines de lactosérum (whey)',
+    'Whey protéine neutre': 'Protéines de lactosérum (whey)',
+    'Whey vanille': 'Protéines de lactosérum (whey)',
+    'Whey chocolat': 'Protéines de lactosérum (whey)',
+    'Whey neutre': 'Protéines de lactosérum (whey)',
+    'Protéine de pois neutre (ou whey neutre)': 'Protéines de lactosérum (whey)',
+    'Skyr nature': 'Skyr / Yaourt islandais',
+    'Blancs d\'\u0153ufs': 'Blanc d\'\u0153uf',
+    'Blanc d\'\u0153ufs': 'Blanc d\'\u0153uf',
+    '\u0152ufs entiers': '\u0152uf',
+    '\u0152ufs': '\u0152uf',
+    'Cacao en poudre non sucré': 'Cacao non sucré',
+    'Cacao pur non sucré': 'Cacao non sucré',
+    'Dattes Medjool (dénoyautées)': 'Dattes Medjool dénoyautées',
+    'Dattes Medjool (caramel)': 'Dattes Medjool dénoyautées',
+    'Dattes dénoyautées': 'Dattes Medjool dénoyautées',
+    'Myrtilles fraîches': 'Myrtilles',
+    'Myrtilles fraîches ou surgelées': 'Myrtilles',
+    'Myrtilles surgelées': 'Myrtilles (surgelées)',
+    'Huile de coco fondue': 'Huile de coco',
+    'Noix de cajou crues': 'Noix de cajou',
+    'Noix de cajou concassées': 'Noix de cajou',
+    'Noix de cajou entières': 'Noix de cajou',
+    'Extrait de vanille': 'Vanille',
+    'Pépites de chocolat noir 70%': 'Pépites de chocolat noir',
+    'Maïzena': 'Fécule de maïs',
+    'Lait de coco léger': 'Lait de coco',
+    'Lait de coco light': 'Lait de coco',
+    'Lait de coco (caramel)': 'Lait de coco',
+    'Mangue congelée': 'Mangue surgelée',
+    'Mangue en morceaux surgelée': 'Mangue surgelée',
+    'Framboises': 'framboises',
+    'Patate douce (cuite, en purée)': 'Patate douce',
+    'Beurre de cacahuète naturel': 'Beurre de cacahuète',
+    'Beurre de cacahuète (caramel)': 'Beurre de cacahuète',
+    'Flocons d\'avoine (base biscuit)': 'Flocons d\'avoine',
+    'Bananes bien mûres': 'Banane',
+    'Banane mûre': 'Banane',
+    'Bananes (congelées pour glace)': 'Banane',
+    'Banane congelée': 'Banane',
+    'Pommes Golden': 'Pomme',
+    'Pommes (pelées, en fines tranches)': 'Pomme',
+  };
+
   function getPricePer(ingredientName, unit) {
-    var entry = PRICES_DB[ingredientName];
+    // Résoudre l'alias si besoin
+    var resolvedName = PRICE_ALIASES[ingredientName] || ingredientName;
+    var entry = PRICES_DB[resolvedName];
     if (!entry) {
       console.warn('[prices-db] Ingrédient inconnu : "' + ingredientName + '"');
       return null;
