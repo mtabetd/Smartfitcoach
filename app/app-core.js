@@ -1884,6 +1884,25 @@ function detectMedicalConflicts() {
   if((nutGoalKey9==='cut'||nutGoalKey9==='shred')&&s.sportGoals&&s.sportGoals.indexOf('muscle')!==-1&&s.sportLevel&&s.sportLevel!=='beginner'){
     conflicts.push({level:'INFO',message:'ℹ Objectifs partiellement contradictoires : Déficit calorique + Objectif "Prise de masse" — Possible pour les débutants (recomposition corporelle) mais inefficace pour les intermédiaires/avancés. Un déficit réduit la synthèse protéique et limite la récupération post-séance (Barakat 2020, NSCA). Recommandé : alterner phases bulk/sèche distinctes pour maximiser les gains musculaires.'});
   }
+  // Conflit 11 : CrossFit intensif + objectif nutrition "Prise de masse"
+  // CrossFit haute intensité brûle 500-800 kcal/séance. Un surplus pour la masse amplifie le stockage adipeux si
+  // l'entraînement est métabolique — recomposition plus adaptée (Barakat 2020, NSCA Journal)
+  if(s.sportType==='crossfit'&&(nutGoalKey9==='bulk'||nutGoalKey9==='lean_bulk')){
+    conflicts.push({level:'INFO',message:'ℹ CrossFit intensif + Prise de masse — La combinaison est difficile à optimiser : CrossFit brûle 500-800 kcal/séance (métabolique), ce qui réduit le surplus net. La synthèse protéique est compromise par l\'acidose lactique intense (Sale 2004). Pour une prise de masse efficace : privilégiez ≤3 séances CrossFit/sem + ajout musculation PPL 3j/sem. Surplus calorique +10% max pour limiter le gain de gras (Israetel 2019, RP Strength).'});
+  }
+  // Conflit 12 : Marathon + sèche — risque d\'insuffisance rénale chronique aiguë + blessure
+  // Couplage déficit calorique + volume marathon > 70km/sem = catabolisme musculaire, IRC transitoire,
+  // stress osseux (ACSM 2018 — Female Athlete Triad)
+  if(s.sportType==='running'&&s.runningGoal==='marathon'&&(nutGoalKey9==='cut'||nutGoalKey9==='shred')){
+    conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Marathon + Sèche — La restriction calorique pendant la préparation marathon est DANGEREUSE. Un déficit calorique en phase de volume élevé (>60km/sem) augmente le risque de : (1) Fractures de stress (déficit énergétique relatif au sport, RED-S — Mountjoy 2018, BJSM) ; (2) Catabolisme musculaire (perte de force propulsive) ; (3) Immunosuppression et surentraînement. Recommandation : maintien calorique minimum pendant la préparation, sèche uniquement HORS saison compétitive.'});
+  }
+  // Conflit 13 : Hyrox compétitif (sub75 / sub60 / podium) + sèche
+  // Hyrox = 8 stations + 8×1km run — dépense 900-1400 kcal. Sèche compromet la puissance aérobie et force
+  // fonctionnelle sur les stations (Sled Push/Pull, Farmers Carry, Sandbag Lunges)
+  var hyroxCompGoals = ['sub75', 'sub60', 'podium'];
+  if(s.sportType==='hyrox'&&s.hyroxGoal&&hyroxCompGoals.indexOf(s.hyroxGoal)!==-1&&(nutGoalKey9==='cut'||nutGoalKey9==='shred')){
+    conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Hyrox compétitif (objectif ' + (s.hyroxGoal||'performance') + ') + Sèche — Un déficit calorique pendant la préparation Hyrox compétitive compromet : (1) La puissance sur Sled Push/Pull et Farmers Carry (nécessitent force maximale) ; (2) La résistance aérobie sur 8×1km (glycogène réduit) ; (3) La récupération inter-stations. Recommandation NSCA 2020 : recomposition corporelle à maintien calorique (+protéines 2.2g/kg) plutôt qu\'un déficit actif pendant la phase compétitive.'});
+  }
   return conflicts;
 }
 window.detectMedicalConflicts = detectMedicalConflicts;

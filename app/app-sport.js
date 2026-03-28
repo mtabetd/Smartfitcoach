@@ -4595,6 +4595,295 @@ function renderCyclingProgram(p) {
   p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 22; window.render(); }, html: backArrow + 'Modifier la configuration'}));
 }
 
+// ═══════════════════════════════════════
+// CALLISTHÉNIE MODULE
+// ═══════════════════════════════════════
+
+var CALISTHENICS_SKILLS = {
+  planche: {
+    name: 'Planche',
+    icon: '🤸',
+    description: 'Force de poussée horizontale — gainage total',
+    restTime: '3-5 min (skill statique)',
+    progressions: [
+      { level: 'A', name: 'Planche Frog (équilibre)', duration: '5-10s', weeks: '1-3', prep: ['Hollow body 3×20s', 'Wrist prep 2min', 'Pike push-up 3×8'], cue: 'Mains à plat, doigts écartés, épaules protractées — soulever les genoux' },
+      { level: 'B', name: 'Planche Tuck (genoux groupés)', duration: '10-20s', weeks: '4-8', prep: ['Pseudo planche push-up 3×6', 'Shoulder protraction hold 3×20s', 'Wrist circles 2min'], cue: 'Genoux au niveau de la poitrine, dos rond, épaules devant les mains' },
+      { level: 'C', name: 'Advanced Tuck (hanche à 90°)', duration: '8-15s', weeks: '9-16', prep: ['Pseudo planche push-up incliné 3×6', 'Tuck planche push-up 3×4', 'Bulgarian bag shoulder 3×10'], cue: 'Ouvrir progressivement la hanche, garder le dos arrondi' },
+      { level: 'D', name: 'Straddle Planche', duration: '5-10s', weeks: '17-28', prep: ['Advanced tuck push-up 3×5', 'Planche lean 30s', 'Maltese lean 15s'], cue: 'Jambes écartées à 90°+ — angle optimal pour réduire le bras de levier' },
+      { level: 'E', name: 'Full Planche', duration: '3-8s', weeks: '29-52+', prep: ['Straddle planche push-up 3×3', 'Planche lean maximal 30s', 'Handstand 30s minimum requis'], cue: 'Jambes jointes et horizontales — temps de maîtrise réaliste : 1-2 ans' }
+    ]
+  },
+  frontLever: {
+    name: 'Front Lever',
+    icon: '💪',
+    description: 'Force de traction horizontale — grand dorsal + core',
+    restTime: '3-5 min (skill statique)',
+    progressions: [
+      { level: 'A', name: 'Tuck Front Lever (genoux groupés)', duration: '8-15s', weeks: '1-4', prep: ['Australian pull-up 3×10', 'Dead hang 3×30s', 'Scapular pull-up 3×10'], cue: 'Corps en boule, hanches à hauteur des épaules, dos plat' },
+      { level: 'B', name: 'Advanced Tuck (dos plat, hanche à 90°)', duration: '8-15s', weeks: '5-10', prep: ['Slow pull-up eccentric 5s 3×5', 'Tuck front lever pull-up 3×3', 'Band-assisted front lever 3×15s'], cue: 'Hanche ouverte, cuisse horizontale, dos plat — progression clé' },
+      { level: 'C', name: 'Straddle Front Lever', duration: '5-10s', weeks: '11-20', prep: ['Front lever pull-up tuck 3×3', 'Windshield wipers 3×5', 'L-sit pull-up 3×5'], cue: 'Jambes écartées — réduire l\'écartement semaine par semaine' },
+      { level: 'D', name: 'Full Front Lever', duration: '3-8s', weeks: '21-36+', prep: ['Straddle pull-up 3×3', 'Front lever raise tuck 3×5', 'Hanging leg raise weighted 3×8'], cue: 'Corps parfaitement horizontal, bras tendus, scapulas déprimées' }
+    ]
+  },
+  muscleUp: {
+    name: 'Muscle-up',
+    icon: '🏋️',
+    description: 'Passage traction → poussée — force explosive',
+    restTime: '3-4 min',
+    progressions: [
+      { level: 'A', name: 'Pull-up strict fausse prise', duration: '3×5 reps', weeks: '1-4', prep: ['Dead hang 30s', 'Scapular pull-up 3×10', 'Jumping muscle-up x5'], cue: 'Maîtriser 10 tractions strictes en fausse prise avant de progresser' },
+      { level: 'B', name: 'Explosion + transition barre', duration: '3×5 chaque', weeks: '5-8', prep: ['Bar dip 3×10', 'Pull-up fausse prise explosif 3×5', 'Negative muscle-up 3×3 5s'], cue: 'Explosion au-dessus de la barre, transition rapide en appui de poussée' },
+      { level: 'C', name: 'Kipping muscle-up (bascule)', duration: '3×3 reps', weeks: '9-14', prep: ['Kipping swing maîtrisé', 'Pull-up explosif 3×5', 'Bar dip strict 3×12'], cue: 'Kipping comme outil d\'apprentissage — viser le strict ensuite' },
+      { level: 'D', name: 'Strict muscle-up', duration: '1-5 reps', weeks: '15-28+', prep: ['Weighted pull-up +10kg 3×5', 'Weighted dip +10kg 3×8', 'Ring muscle-up transition 3×3'], cue: 'Strict = force pure. Bras qui passent en ligne droite au-dessus du support' }
+    ]
+  },
+  handstand: {
+    name: 'Handstand',
+    icon: '🙌',
+    description: 'Équilibre inversé — proprioception et force épaules',
+    restTime: '2-3 min',
+    progressions: [
+      { level: 'A', name: 'Wall Handstand Hold', duration: '3×20-30s', weeks: '1-4', prep: ['Pike hold 3×20s', 'Wrist mobility 3min/jour', 'Shoulder shrugs inverted 3×10'], cue: 'Face au mur, ventre collé, corps gainé, pousser le sol vers le bas' },
+      { level: 'B', name: 'Kick-up + Hold (loin du mur)', duration: '5-15s', weeks: '5-10', prep: ['Wall handstand kick-up 3×5', 'Forward rolls de secours', 'Finger pressure balance 3×20s'], cue: 'Alignement talons-fesses-épaules-poignets, micro-corrections doigts' },
+      { level: 'C', name: 'Freestanding Handstand 10-30s', duration: '10-30s', weeks: '11-24', prep: ['Pirouette contre mur 3×5', 'Handstand touches 3×10', 'One arm supported 3×10s'], cue: 'Regarder les mains, micro-ajustements onglets, 10min/jour de pratique' },
+      { level: 'D', name: 'Handstand Push-up (HSPU)', duration: '3×3-8 reps', weeks: '20-36+', prep: ['Pike push-up 3×10', 'Wall HSPU negatives 3×5', 'Pike HSPU box 3×8'], cue: 'Tête entre les mains, coudes à 45°, plein amplitude menton-sol' }
+    ]
+  }
+};
+
+var CALISTHENICS_WEEKLY_STRUCTURE = {
+  debutant: {
+    days: 3,
+    sessions: [
+      { name: 'Poussée + Équilibre', focus: 'push', exercises: ['Hollow body 3×20s', 'Pike hold 3×15s', 'Push-up 3×10', 'Pseudo planche lean 3×10s', 'Pike push-up 3×8', 'Dip 3×8'] },
+      { name: 'Traction + Core', focus: 'pull', exercises: ['Dead hang 3×20s', 'Scapular pull-up 3×10', 'Australian pull-up 3×8', 'L-sit parallettes 3×10s', 'Hanging knee raise 3×10'] },
+      { name: 'Jambes + Gainage', focus: 'legs', exercises: ['Squat 3×15', 'Bulgarian split squat 3×10', 'Hip thrust 3×12', 'Plank 3×45s', 'Side plank 3×30s', 'Bridge 3×15'] }
+    ]
+  },
+  intermediaire: {
+    days: 4,
+    sessions: [
+      { name: 'Planche progressions', focus: 'planche', exercises: ['Wrist prep 3min', 'Frog stand 3×15s', 'Tuck planche 4×10s', 'Pseudo planche push-up 4×6', 'Planche lean 3×15s', 'Ring dip 4×8'] },
+      { name: 'Front Lever + Traction', focus: 'frontlever', exercises: ['Scapular pull-up 4×10', 'Tuck front lever 4×12s', 'Advanced tuck FL 4×8s', 'Slow pull-up 4×5 3s descente', 'L-sit pull-up 3×5'] },
+      { name: 'Handstand + Poussée', focus: 'handstand', exercises: ['Wrist mobility 3min', 'Wall handstand 4×20s', 'Pike HSPU 4×6', 'Ring push-up 4×10', 'Handstand kick-up 4×5 essais'] },
+      { name: 'Conditionnement + Core', focus: 'conditioning', exercises: ['Pull-up explosif 4×5', 'Muscle-up transition ring 4×3', 'Windshield wiper 3×8', 'Dragon flag 3×5', 'Pistol squat 3×5 par jambe'] }
+    ]
+  },
+  avance: {
+    days: 5,
+    sessions: [
+      { name: 'Planche — Volume skill', focus: 'planche', exercises: ['Wrist prep 3min', 'Advanced tuck planche 5×12s', 'Straddle planche 5×8s', 'Full planche attempts 5×3-5s', 'Planche push-up 4×3', 'Maltese lean 3×20s'] },
+      { name: 'Front Lever — Volume skill', focus: 'frontlever', exercises: ['Advanced tuck FL 5×12s', 'Straddle FL 5×8s', 'Full front lever 5×3-5s', 'FL pull-up 4×3', 'Front lever raise 3×5'] },
+      { name: 'Muscle-up + Handstand', focus: 'muscleup', exercises: ['Bar muscle-up strict 5×3', 'Ring muscle-up 4×3', 'Freestanding handstand 5×15-20s', 'HSPU 4×5', 'Handstand walk 2×5m'] },
+      { name: 'Force + Explosivité', focus: 'strength', exercises: ['Weighted pull-up +10kg 4×5', 'Weighted dip +10kg 4×8', 'Archer push-up 4×6', 'One-arm pull-up progression 4×3 assisté', 'Manna progression 4×8s'] },
+      { name: 'Mobilité + Récupération active', focus: 'mobility', exercises: ['Hip flexor stretch 3×60s par côté', 'Shoulder circles 3×20', 'Bridge walk-out 3×10', 'Pancake stretch 3×60s', 'Wrist rehabilitation 5min'] }
+    ]
+  }
+};
+
+function generateCalisthenicsPlan(level, goal) {
+  var structure = CALISTHENICS_WEEKLY_STRUCTURE[level] || CALISTHENICS_WEEKLY_STRUCTURE.debutant;
+  var totalWeeks = level === 'debutant' ? 12 : level === 'intermediaire' ? 16 : 20;
+  var plan = [];
+  for (var w = 1; w <= totalWeeks; w++) {
+    var isDeload = (w % 4 === 0);
+    var phase = w <= Math.round(totalWeeks * 0.3) ? 'Fondations' :
+                w <= Math.round(totalWeeks * 0.6) ? 'Développement' :
+                w <= Math.round(totalWeeks * 0.85) ? 'Spécifique' : 'Pic/Test';
+    var weekFocus = isDeload ? 'Décharge — 50% volume, RIR élevé, consolider les acquis' :
+                   (w % 4 === 1 ? 'Accumulation — augmentation volume, RIR 3-4' :
+                    w % 4 === 2 ? 'Intensification — augmentation intensité, RIR 2' :
+                    'Réalisation — effort maximum, RIR 1');
+    var weekObj = {
+      week: w, phase: phase, isDeload: isDeload, focus: weekFocus,
+      sessions: structure.sessions.map(function(sess) {
+        return {
+          name: isDeload ? sess.name + ' (allégé)' : sess.name,
+          focus: sess.focus,
+          exercises: isDeload ? sess.exercises.slice(0, Math.max(2, Math.ceil(sess.exercises.length * 0.5))) : sess.exercises
+        };
+      })
+    };
+    plan.push(weekObj);
+  }
+  return plan;
+}
+
+// ─── STEP 24: CALLISTHÉNIE ONBOARDING ───
+function renderCalisthenicsOnboarding(p) {
+  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;margin-bottom:6px'}, '\uD83D\uDCAA Callisth\u00e9nie'));
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:20px;line-height:1.6'}, 'Muscle-up, Planche, Front Lever, Handstand \u2014 progressions bas\u00e9es sur la science de la force relative.'));
+
+  p.appendChild(h('div', {'class': 'section-label'}, 'Niveau actuel'));
+  var levels = [
+    { id: 'debutant', name: 'D\u00e9butant', desc: 'Je ma\u00eetrise les push-ups, tractions basiques' },
+    { id: 'intermediaire', name: 'Interm\u00e9diaire', desc: '10 pull-ups stricts, 20 push-ups, L-sit 10s' },
+    { id: 'avance', name: 'Avanc\u00e9', desc: 'Muscle-up, tuck planche / tuck front lever acquis' }
+  ];
+  var levelRow = h('div', {style: 'display:flex;flex-direction:column;gap:8px;margin-bottom:16px'});
+  levels.forEach(function(lvl) {
+    var isOn = S.calisthenicsLevel === lvl.id;
+    levelRow.appendChild(h('div', {
+      style: 'padding:12px 16px;border-radius:4px;border:1.5px solid ' + (isOn ? 'var(--accent,#0A0A09)' : 'var(--border)') + ';background:var(--ivory2);cursor:pointer',
+      onclick: (function(id){ return function(){ S.calisthenicsLevel = id; window.render(); }; })(lvl.id)
+    }, [
+      h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:' + (isOn ? '600' : '400')}, lvl.name),
+      h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, lvl.desc)
+    ]));
+  });
+  p.appendChild(levelRow);
+
+  p.appendChild(h('div', {'class': 'section-label'}, 'Skill principal \u00e0 d\u00e9velopper'));
+  var goals = [
+    { id: 'planche',    name: 'Planche',           desc: 'Force horizontale de pouss\u00e9e \u2014 bras tendus' },
+    { id: 'frontLever', name: 'Front Lever',        desc: 'Force horizontale de traction \u2014 grand dorsal' },
+    { id: 'muscleUp',   name: 'Muscle-up',          desc: 'Passage explosif traction \u2192 appui' },
+    { id: 'handstand',  name: 'Handstand',          desc: '\u00c9quilibre sur les mains + HSPU' },
+    { id: 'complet',    name: 'Programme complet',  desc: 'D\u00e9velopper tous les skills en parall\u00e8le' }
+  ];
+  var goalRow = h('div', {style: 'display:flex;flex-direction:column;gap:8px;margin-bottom:20px'});
+  goals.forEach(function(g) {
+    var isOn = S.calisthenicsGoal === g.id;
+    goalRow.appendChild(h('div', {
+      style: 'padding:10px 16px;border-radius:4px;border:1.5px solid ' + (isOn ? 'var(--accent,#0A0A09)' : 'var(--border)') + ';background:var(--ivory2);cursor:pointer',
+      onclick: (function(id){ return function(){ S.calisthenicsGoal = id; window.render(); }; })(g.id)
+    }, [
+      h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:' + (isOn ? '600' : '400')}, g.name),
+      h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, g.desc)
+    ]));
+  });
+  p.appendChild(goalRow);
+
+  var skillPreviewKey = S.calisthenicsGoal && S.calisthenicsGoal !== 'complet' ? S.calisthenicsGoal : 'planche';
+  var skillPreview = CALISTHENICS_SKILLS[skillPreviewKey];
+  if (skillPreview) {
+    var prevCard = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;background:var(--ivory2);margin-bottom:16px'});
+    prevCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:14px;margin-bottom:6px'}, skillPreview.icon + ' Progressions \u2014 ' + skillPreview.name));
+    prevCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, skillPreview.description + ' \u2014 Repos entre sets : ' + skillPreview.restTime));
+    skillPreview.progressions.forEach(function(prog) {
+      var row = h('div', {style: 'padding:6px 0;border-bottom:1px solid var(--ivory3,#EEEDE8);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px'});
+      row.appendChild(h('div', {style: 'font-weight:600;color:var(--accent,#0A0A09)'}, prog.level + '. ' + prog.name + ' \u2014 ' + prog.duration));
+      row.appendChild(h('div', {style: 'color:var(--grey);margin-top:2px'}, '\uD83D\uDCC5 Semaines ' + prog.weeks + ' \u00b7 ' + prog.cue));
+      prevCard.appendChild(row);
+    });
+    p.appendChild(prevCard);
+  }
+
+  var ok = S.calisthenicsLevel && S.calisthenicsGoal;
+  if (!ok) p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'S\u00e9lectionnez un niveau et un objectif'));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
+    if (!ok) return;
+    S.calisthenicsPlan = generateCalisthenicsPlan(S.calisthenicsLevel, S.calisthenicsGoal);
+    S.calisthenicsWeek = 1;
+    S.selectedCalisthenicsDay = 0;
+    S.sStep = 25;
+    if (window.BLACKBOX) BLACKBOX.log('calisthenics_config', { level: S.calisthenicsLevel, goal: S.calisthenicsGoal });
+    window.render();
+  }}, 'G\u00e9n\u00e9rer mon programme'));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
+}
+
+// ─── STEP 25: CALLISTHÉNIE PROGRAMME ───
+function renderCalisthenicsProgram(p) {
+  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  if (!S.calisthenicsPlan || !S.calisthenicsPlan.length) {
+    S.calisthenicsPlan = generateCalisthenicsPlan(S.calisthenicsLevel || 'debutant', S.calisthenicsGoal || 'complet');
+  }
+  var plan = S.calisthenicsPlan;
+  var totalWeeks = plan.length;
+  if (!S.calisthenicsWeek || S.calisthenicsWeek < 1) S.calisthenicsWeek = 1;
+  if (S.calisthenicsWeek > totalWeeks) S.calisthenicsWeek = totalWeeks;
+  if (S.selectedCalisthenicsDay === undefined || S.selectedCalisthenicsDay === null) S.selectedCalisthenicsDay = 0;
+
+  var weekData = plan[S.calisthenicsWeek - 1];
+  if (!weekData) return;
+
+  var phaseColors = { 'Fondations': '#1A3A6A', 'D\u00e9veloppement': '#E67E22', 'Sp\u00e9cifique': '#27AE60', 'Pic/Test': '#C0392B' };
+  var phaseColor = phaseColors[weekData.phase] || '#1A3A6A';
+
+  var headerCard = h('div', {style: 'border-left:3px solid ' + phaseColor + ';padding:12px 16px;background:var(--ivory2);margin-bottom:12px'});
+  headerCard.appendChild(h('div', {style: 'display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px'}, [
+    h('div', {style: 'font-family:Georgia;font-size:16px'}, weekData.isDeload ? '\u267B\uFE0F D\u00e9load \u2014 Semaine ' + weekData.week : '\uD83D\uDCAA Semaine ' + weekData.week + ' / ' + totalWeeks),
+    h('span', {style: 'background:' + phaseColor + ';color:#fff;font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:1px;padding:3px 10px;font-weight:600'}, weekData.phase.toUpperCase())
+  ]));
+  headerCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-top:4px'}, weekData.focus));
+  p.appendChild(headerCard);
+
+  var restReminder = h('div', {style: 'background:#E8F5E9;border-left:3px solid #27AE60;padding:8px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1B5E20'});
+  restReminder.appendChild(h('span', {style: 'font-weight:700'}, '\u23F1 Repos skills statiques (Planche / FL / HS) : 3-5 min minimum '));
+  restReminder.appendChild(h('span', {}, '\u2014 Force dynamique : 2-3 min'));
+  p.appendChild(restReminder);
+
+  var weekNav = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:12px;justify-content:center'});
+  weekNav.appendChild(h('button', {style: 'padding:6px 12px;font-size:12px;border:1px solid var(--border);background:var(--ivory2);cursor:pointer', disabled: S.calisthenicsWeek <= 1, onclick: function(){ if (S.calisthenicsWeek > 1) { S.calisthenicsWeek--; S.selectedCalisthenicsDay = 0; window.render(); }}}, '\u2190'));
+  weekNav.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey)'}, 'S' + S.calisthenicsWeek + ' / S' + totalWeeks));
+  weekNav.appendChild(h('button', {style: 'padding:6px 12px;font-size:12px;border:1px solid var(--border);background:var(--ivory2);cursor:pointer', disabled: S.calisthenicsWeek >= totalWeeks, onclick: function(){ if (S.calisthenicsWeek < totalWeeks) { S.calisthenicsWeek++; S.selectedCalisthenicsDay = 0; window.render(); }}}, '\u2192'));
+  p.appendChild(weekNav);
+
+  var sessions = weekData.sessions || [];
+  var tabs = h('div', {style: 'display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px'});
+  sessions.forEach(function(sess, i) {
+    var isActive = S.selectedCalisthenicsDay === i;
+    tabs.appendChild(h('button', {
+      style: 'padding:6px 12px;font-size:11px;border:1.5px solid ' + (isActive ? 'var(--accent,#0A0A09)' : 'var(--border)') + ';background:' + (isActive ? 'var(--accent,#0A0A09)' : 'var(--ivory2)') + ';color:' + (isActive ? '#fff' : 'inherit') + ';cursor:pointer;font-weight:' + (isActive ? '600' : '400'),
+      onclick: (function(idx){ return function(){ S.selectedCalisthenicsDay = idx; window.render(); }; })(i)
+    }, 'J' + (i + 1)));
+  });
+  p.appendChild(tabs);
+
+  var currentSess = sessions[S.selectedCalisthenicsDay];
+  if (currentSess) {
+    var focusColors = { planche: '#E67E22', frontlever: '#1A3A6A', muscleup: '#C0392B', handstand: '#7B5EA7', conditioning: '#27AE60', strength: '#D4AC0D', legs: '#16A085', mobility: '#2ECC71', pull: '#1A3A6A', push: '#E67E22' };
+    var fColor = focusColors[currentSess.focus] || '#1A3A6A';
+    var sessCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid ' + fColor});
+    sessCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;margin-bottom:4px'}, '\uD83D\uDCAA ' + currentSess.name));
+    currentSess.exercises.forEach(function(ex, ei) {
+      var exRow = h('div', {style: 'padding:8px 0;border-bottom:1px solid var(--ivory3,#EEEDE8);font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px'});
+      exRow.appendChild(h('div', {style: 'font-weight:600;margin-bottom:2px'}, (ei + 1) + '. ' + ex));
+      var skillMapKey = currentSess.focus === 'planche' ? 'planche' : currentSess.focus === 'frontlever' ? 'frontLever' : currentSess.focus === 'muscleup' ? 'muscleUp' : currentSess.focus === 'handstand' ? 'handstand' : null;
+      if (skillMapKey && CALISTHENICS_SKILLS[skillMapKey] && ei === 0) {
+        var skillData = CALISTHENICS_SKILLS[skillMapKey];
+        var matchedProg = null;
+        for (var pi = 0; pi < skillData.progressions.length; pi++) {
+          var wArr = skillData.progressions[pi].weeks.split('-');
+          if (S.calisthenicsWeek >= parseInt(wArr[0]) && S.calisthenicsWeek <= parseInt(wArr[1] || '999')) {
+            matchedProg = skillData.progressions[pi]; break;
+          }
+        }
+        if (matchedProg) {
+          exRow.appendChild(h('div', {style: 'font-size:10px;color:' + fColor + ';margin-top:3px;font-style:italic'}, '\uD83C\uDFAF Niveau cible S' + S.calisthenicsWeek + ' : ' + matchedProg.name + ' (' + matchedProg.duration + ')'));
+          exRow.appendChild(h('div', {style: 'font-size:10px;color:var(--grey);margin-top:1px'}, '\uD83D\uDCA1 ' + matchedProg.cue));
+        }
+      }
+      sessCard.appendChild(exRow);
+    });
+    p.appendChild(sessCard);
+  }
+
+  var roadmapSkillKey = S.calisthenicsGoal && S.calisthenicsGoal !== 'complet' ? S.calisthenicsGoal : 'planche';
+  var roadmapSkill = CALISTHENICS_SKILLS[roadmapSkillKey];
+  if (roadmapSkill) {
+    var roadmapCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin:12px 0'});
+    roadmapCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;margin-bottom:8px'}, roadmapSkill.icon + ' Roadmap \u2014 ' + roadmapSkill.name));
+    roadmapCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:6px'}, '\u23F1 Repos entre sets de skill statique : ' + roadmapSkill.restTime));
+    roadmapSkill.progressions.forEach(function(prog) {
+      var wRng = prog.weeks.split('-');
+      var isCurrent = S.calisthenicsWeek >= parseInt(wRng[0]) && S.calisthenicsWeek <= parseInt(wRng[1] || '999');
+      var rowStyle = 'padding:5px 0;border-bottom:1px solid var(--ivory3,#EEEDE8);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px';
+      if (isCurrent) rowStyle += ';background:#FFFDE7;border-radius:3px;padding:6px 8px;margin:2px -4px';
+      var row = h('div', {style: rowStyle});
+      row.appendChild(h('div', {style: 'font-weight:' + (isCurrent ? '700' : '500') + ';color:' + (isCurrent ? phaseColor : 'var(--grey)')}, (isCurrent ? '\u25B6 ' : '') + prog.level + '. ' + prog.name + ' \u2014 ' + prog.duration + ' \u00b7 S' + prog.weeks));
+      if (isCurrent) row.appendChild(h('div', {style: 'font-size:10px;color:var(--grey);margin-top:2px'}, '\uD83D\uDCA1 ' + prog.cue));
+      roadmapCard.appendChild(row);
+    });
+    p.appendChild(roadmapCard);
+  }
+
+  p.appendChild(h('div', {style: 'height:12px'}));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 24; window.render(); }, html: backArrow + 'Modifier la configuration'}));
+}
+
 // ─── PDF EXPORT (Sport / Musculation) ───
 function exportSportPDF() {
   if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
