@@ -2615,6 +2615,13 @@ function enrichWithScaling(recipe, targetKcal) {
       recipe.l = Math.round(adapted.adaptedNutrition.fatGrams);
       recipe._scaledIngredients = adapted.ingredients || null;
       recipe._scalingRatio = adapted.scalingRatio || 1;
+      // Appliquer les mesures pratiques sur les ingrédients scalés
+      if (recipe._scaledIngredients && window.RecipeEngine && window.RecipeEngine.convertToDisplay) {
+        recipe._scaledIngredients = recipe._scaledIngredients.map(function(ing) {
+          var disp = window.RecipeEngine.convertToDisplay(ing.qty, ing.unit, ing.name);
+          return { name: ing.name, qty: disp.qty, unit: disp.unit, note: ing.note };
+        });
+      }
     } catch(e) {}
     return recipe;
   }
@@ -2633,7 +2640,9 @@ function enrichWithScaling(recipe, targetKcal) {
     if (window.RecipeEngine && window.RecipeEngine.parseIngredientsString && recipe.i) {
       var parsed = window.RecipeEngine.parseIngredientsString(recipe.i);
       recipe._scaledIngredients = parsed.map(function(ing) {
-        return { name: ing.name, qty: Math.round(ing.qty * ratio * 10) / 10, unit: ing.unit };
+        var scaledQty = Math.round(ing.qty * ratio * 10) / 10;
+        var disp = window.RecipeEngine.convertToDisplay ? window.RecipeEngine.convertToDisplay(scaledQty, ing.unit, ing.name) : { qty: scaledQty, unit: ing.unit };
+        return { name: ing.name, qty: disp.qty, unit: disp.unit };
       });
     }
   }
