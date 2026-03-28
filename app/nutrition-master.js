@@ -7,6 +7,7 @@
   // ─── CONSTANTES ───────────────────────────────────────────────────────────────
   var GOAL_ADJUSTMENTS = {
     bulk:        +0.15,
+    lean_bulk:   +0.10,  // Prise de masse douce — ISSN 2023 : surplus modéré préserve le ratio masse maigre/grasse
     maintain:    +0.00,
     cut:         -0.15,
     // ACSM 2009 / Helms 2014 : déficit max -500 kcal/j pour préserver la masse maigre.
@@ -32,7 +33,7 @@
   var KCAL_PER_FAT        = 9;    // kcal/g lipides
 
   var VALID_GENDERS = { male: true, female: true };
-  var VALID_GOALS   = { bulk: true, maintain: true, cut: true, shred: true };
+  var VALID_GOALS   = { bulk: true, lean_bulk: true, maintain: true, cut: true, shred: true };
 
   // ─── FONCTIONS PURES ──────────────────────────────────────────────────────────
 

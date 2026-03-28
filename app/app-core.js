@@ -69,6 +69,7 @@ var TRAINS=[{icon:'\u{1F3CB}\uFE0F',name:'Musculation'},{icon:'\u{1FAC0}',name:'
 var SLEEPS=['< 6h','6-7h','7-8h','8h+'];
 var GOALS=[
   {icon:'↗',name:'Prise de masse',desc:'+15% calories',mult:1.15,key:'bulk'},
+  {icon:'↗',name:'Prise de masse douce',desc:'+10% calories',mult:1.10,key:'lean_bulk'},
   {icon:'=',name:'Maintien',desc:'= TDEE',mult:1.0,key:'maintain'},
   {icon:'↘',name:'Perte de poids',desc:'-15% calories',mult:0.85,key:'cut'},
   {icon:'↓',name:'Sèche',desc:'-20% calories',mult:0.80,key:'shred'}
@@ -1176,7 +1177,7 @@ if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
 // Surplus max +300kcal/j en bulk (ACSM adolescent — éviter accumulation graisseuse pendant croissance hormonale)
 if(s.age>=13&&s.age<18&&tdeeVal>0){
   var minCalTeen=Math.round(tdeeVal-300);if(base<minCalTeen)base=minCalTeen;
-  if(goalKey==='bulk'){var maxCalTeen=Math.round(tdeeVal+300);if(base>maxCalTeen)base=maxCalTeen;}
+  if(goalKey==='bulk'||goalKey==='lean_bulk'){var maxCalTeen=Math.round(tdeeVal+300);if(base>maxCalTeen)base=maxCalTeen;}
 }
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
 // Ménopause : réduction métabolique ~150 kcal/j (NAMS 2022, Poehlman 1995)
@@ -1198,7 +1199,7 @@ if(s.alcoholFreq&&s.alcoholFreq!=='never'&&typeof alcoholWeeklyKcal==='function'
   var alcDaily=Math.round(alcoholWeeklyKcal()/7);
   if(alcDaily>0){base=Math.max(kcalFloor,base-alcDaily);} // soustraire mais respecter le plancher
 }
-return base} // ACSM: plancher universel ≥1200 kcal/j (femme) / ≥1500 kcal/j (homme)
+return base} // ACSM: plancher universel ≥1200 kcal/j (femme) / ≥1400 kcal/j (homme)
 function calcMacros(){
   var s=window.S;var c=calcTarget();
   if(!c||s.goal===null)return{g:0,p:0,l:0};
@@ -1219,7 +1220,7 @@ function calcMacros(){
     // Femmes : ~13% de moins (oestrogène anti-catabolique — Tarnopolsky 2000)
     // Sédentaire plancher : OMS 0.83 minimum, EFSA 2012 recommande 1.0-1.2 pour maintien musculaire
     if(actFactor>=1.9){
-      ppk=isFemale?2.1:2.4;  // Athlète élite : H=2.4g/kg, F=2.1g/kg (Phillips & Van Loon 2011, Morton 2018)
+      ppk=isFemale?2.0:2.2;  // Athlète élite : H=2.2g/kg, F=2.0g/kg (ISSN Position Stand 2023 upper — Morton 2018 BJSM)
     } else if(actFactor>=1.725){
       ppk=isFemale?1.6:1.8;  // Très actif : H=1.8, F=1.6 (ISSN 2017)
     } else if(actFactor>=1.55){
@@ -1230,12 +1231,12 @@ function calcMacros(){
       ppk=isFemale?1.0:1.2;  // Sédentaire : H=1.2, F=1.0 (EFSA 2012 — anti-sarcopénie)
     }
 
-  } else if(goalKey==='bulk'){
-    // ─── PRISE DE MASSE — ppk selon activité ET sexe ───
-    // Athlète élite : H=2.5g/kg, F=2.2g/kg (objectif hypertrophie maximale — Morton 2018)
+  } else if(goalKey==='bulk'||goalKey==='lean_bulk'){
+    // ─── PRISE DE MASSE / PRISE DE MASSE DOUCE — ppk selon activité ET sexe ───
+    // Athlète élite : H=2.2g/kg, F=2.0g/kg (ISSN Position Stand 2023 upper — Morton 2018 BJSM)
     // Base non-élite : H=1.8g/kg, F=1.6g/kg (ISSN 2017)
     if(actFactor>=1.9){
-      ppk=isFemale?2.2:2.5;  // Élite bulk : H=2.5, F=2.2 (Morton 2018 BJSM)
+      ppk=isFemale?2.0:2.2;  // Élite bulk : H=2.2g/kg, F=2.0g/kg (ISSN 2023 upper / Morton 2018 BJSM)
     } else if(actFactor>=1.7){
       ppk=isFemale?1.8:2.0;  // Très actif bulk : H=2.0, F=1.8
     } else {
@@ -1297,7 +1298,7 @@ function calcMacros(){
   var pCal=pGrams*4;
   // Fat g/kg (minimum 0.5g/kg for hormonal health)
   var fpk=1.0;
-  if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='bulk')fpk=1.1;else fpk=1.0;
+  if(goalKey==='shred')fpk=0.7;else if(goalKey==='cut')fpk=0.85;else if(goalKey==='bulk'||goalKey==='lean_bulk')fpk=1.1;else fpk=1.0;
   if(s.sex==='femme')fpk=Math.round((fpk+0.1)*10)/10;
   // Min lipides femme 0.7g/kg (ISSN 2021) — santé hormonale (vs 0.5 homme)
   var lipidMin=s.sex==='femme'?0.7:0.5;
@@ -1308,7 +1309,7 @@ function calcMacros(){
   if(gCal<200){lCal=Math.max(bw*0.5*9,c-pCal-200);lGrams=Math.round(lCal/9);gCal=c-pCal-lCal;if(gCal<200){pCal=c-lCal-200;pGrams=Math.round(pCal/4);gCal=200}}
   var gGrams=Math.max(130,Math.round(gCal/4)); // IOM 2005: min 130g/j (cerveau+SNC)
   // Cap carbs to goal-specific maximum (g/kg) — prevents excessive carb surplus (Helms 2014, ISSN 2017)
-  var carbCapGpkg=goalKey==='shred'?3.5:goalKey==='cut'?4.0:goalKey==='bulk'?6.0:5.0;
+  var carbCapGpkg=goalKey==='shred'?3.5:goalKey==='cut'?4.0:(goalKey==='bulk'||goalKey==='lean_bulk')?6.0:5.0;
   var carbCap=Math.round(bw*carbCapGpkg);
   if(gGrams>carbCap){
     // CRITIQUE : redistribuer les calories libérées par le plafond glucides sur les lipides
@@ -1860,7 +1861,7 @@ function detectMedicalConflicts() {
   // Conflit 7 : IRC + régime hyperprotéiné (si objectif prise de masse sans pathologie déclarée)
   if(med.indexOf('irc')!==-1){
     var goalKeyIRC=s.goal!==null?GOALS[s.goal].key:null;
-    if(goalKeyIRC==='bulk'){
+    if(goalKeyIRC==='bulk'||goalKeyIRC==='lean_bulk'){
       conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : IRC + Prise de masse — L\'objectif "prise de masse" est incompatible avec une insuffisance rénale chronique. Les protéines sont plafonnées à 0.55-0.60g/kg/j (KDOQI 2020). Un excès protéique accélère la progression de l\'insuffisance rénale. Consultation néphrologue OBLIGATOIRE avant de modifier l\'alimentation.'});
     }
   }
@@ -1874,7 +1875,7 @@ function detectMedicalConflicts() {
   // Conflit 9 : Nutrition "Prise de masse" + objectif sport "Sèche" — contradiction calorique directe
   // Bulk = surplus +15% | Sèche sport = brûler gras → les deux sont incompatibles simultanément
   var nutGoalKey9=s.goal!==null?GOALS[s.goal].key:null;
-  if(nutGoalKey9==='bulk'&&s.sportGoals&&s.sportGoals.indexOf('shred')!==-1){
+  if((nutGoalKey9==='bulk'||nutGoalKey9==='lean_bulk')&&s.sportGoals&&s.sportGoals.indexOf('shred')!==-1){
     conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT objectif : Alimentation "Prise de masse" (+15% calories) + Objectif sport "Sèche" — Ces objectifs sont contradictoires. La prise de masse nécessite un surplus calorique, la sèche nécessite un déficit. Choisissez : (1) Recomposition corporelle = maintenance calorique si vous débutez ou revenez après une pause ; (2) Bulk + programme musculaire, puis sèche séparément (Helms 2014, ISSN 2017).'});
   }
   // Conflit 10 : Nutrition sèche/coupe + objectif sport "Muscle" chez intermédiaire/avancé

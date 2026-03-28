@@ -985,7 +985,7 @@ function renderStep6(p) {
 
     // Target weight
     var goalKey = GOALS[S.goal].key;
-    var needsTarget = goalKey === 'cut' || goalKey === 'shred' || goalKey === 'bulk';
+    var needsTarget = goalKey === 'cut' || goalKey === 'shred' || goalKey === 'bulk' || goalKey === 'lean_bulk';
     var twLabel = h('div', {'class': 'section-label'});
     twLabel.appendChild(txt('Poids objectif'));
     if (needsTarget) twLabel.appendChild(reqDot());
@@ -1026,7 +1026,7 @@ function renderStep6(p) {
   var goalOk = S.goal !== null;
   if (goalOk && S.goal !== null) {
     var gk = GOALS[S.goal].key;
-    if ((gk === 'cut' || gk === 'shred' || gk === 'bulk') && !S.targetWeight) goalOk = false;
+    if ((gk === 'cut' || gk === 'shred' || gk === 'bulk' || gk === 'lean_bulk') && !S.targetWeight) goalOk = false;
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !goalOk, onclick: function() {
     if (goalOk) {
