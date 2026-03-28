@@ -1905,6 +1905,20 @@ function renderStep9(p) {
   });
   p.appendChild(tabs);
 
+  // Quick action buttons — Salad bar & Smoothie bar
+  var quickActions = h('div', {style: 'display:flex;gap:8px;margin:12px 0 4px'});
+  quickActions.appendChild(h('button', {
+    style: 'flex:1;padding:10px 8px;background:var(--green,#1A4A1A);color:var(--ivory,#FAFAF7);border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
+    onclick: function() { if (!window.S.saladBar) window.S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' }; window.S.saladBar.open = true; if(window.render) window.render(); }
+  }, [h('span', {style:'font-size:18px'}, '\uD83E\uDD57'), h('span', {}, 'Composer une salade')]));
+  if (S.whey === true || S.whey === 1) {
+    quickActions.appendChild(h('button', {
+      style: 'flex:1;padding:10px 8px;background:#6B3FA0;color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
+      onclick: function() { window.S.smoothieBarOpen = true; if(window.render) window.render(); }
+    }, [h('span', {style:'font-size:18px'}, '\uD83E\uDD64'), h('span', {}, 'Smoothies Whey')]));
+  }
+  p.appendChild(quickActions);
+
   // Day meals
   var day = S.weekPlan[S.selectedDay] || {}, tgtCal = calcTarget(), dayTotal = 0, dayTotalP = 0, dayTotalG = 0, dayTotalL = 0;
   var slots = [
@@ -2187,22 +2201,6 @@ function renderStep9(p) {
     onclick: function() { window.S.shopListOpen = true; if(window.render) window.render(); }
   }, _shopLabel);
   p.appendChild(btnShop);
-
-  // Salad bar button
-  p.appendChild(h('button', {
-    'class': 'regen-btn',
-    style: 'margin-top:8px;background:var(--green,#1A4A1A);color:var(--ivory,#FAFAF7)',
-    onclick: function() { if (!window.S.saladBar) window.S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' }; window.S.saladBar.open = true; if(window.render) window.render(); }
-  }, '\uD83E\uDD57 Composer une salade'));
-
-  // Smoothie bar button (visible seulement si S.whey === true)
-  if (S.whey === true) {
-    p.appendChild(h('button', {
-      'class': 'regen-btn',
-      style: 'margin-top:8px;background:#6B3FA0;color:#fff',
-      onclick: function() { window.S.smoothieBarOpen = true; if(window.render) window.render(); }
-    }, '\uD83E\uDD64 Smoothies Whey'));
-  }
 
   // Export PDF
   p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:16px;background:var(--black2)', onclick: function() { window.exportDayPDF(S.selectedDay); }}, '\u21e9 Exporter le jour en PDF'));
@@ -3376,17 +3374,20 @@ function renderSmoothieBar(p) {
   }
 
   filtered.forEach(function(sm) {
-    var card = h('div', {'class':'exercise-card', style:'margin-bottom:12px;cursor:pointer', onclick:function() {
+    var card = h('div', {'class':'exercise-card', style:'margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px', onclick:function() {
       window.S.modalSmoothie = sm; if(window.render) window.render();
     }});
     var timingColor = sm.timing==='pre'?'#E07B00':sm.timing==='post'?'#1A4A1A':'#4A4A8A';
     var timingLabel = sm.timing==='pre'?'⚡ Avant':sm.timing==='post'?'💪 Après':'🕐 Libre';
-    card.appendChild(h('div', {style:'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px'}, [
-      h('strong', {style:'font-size:14px'}, sm.name),
-      h('span', {style:'font-size:11px;background:'+timingColor+';color:#fff;padding:2px 6px;border-radius:10px'}, timingLabel)
+    var left = h('div', {style:'flex:1;min-width:0'});
+    left.appendChild(h('div', {style:'display:flex;align-items:center;gap:8px;margin-bottom:4px'}, [
+      h('strong', {style:'font-size:14px;color:var(--text,#0A0A09);white-space:nowrap;overflow:hidden;text-overflow:ellipsis'}, sm.name),
+      h('span', {style:'flex-shrink:0;font-size:11px;background:'+timingColor+';color:#fff;padding:2px 7px;border-radius:10px;font-weight:600'}, timingLabel)
     ]));
-    card.appendChild(h('div', {style:'font-size:12px;color:var(--fg2)'}, sm.cal+'kcal · P:'+sm.p+'g · G:'+sm.c+'g · L:'+sm.f+'g · ⏱'+sm.prep));
-    card.appendChild(h('div', {style:'font-size:11px;color:var(--fg2);margin-top:2px'}, sm.flavors.map(function(f){return'#'+f}).join(' ')+' · '+sm.goal.map(function(g){return g.replace('_',' ')}).join(', ')));
+    left.appendChild(h('div', {style:'font-size:12px;color:var(--fg2,#888);margin-bottom:2px'}, sm.cal+' kcal · P:'+sm.p+'g · G:'+sm.c+'g · L:'+sm.f+'g · ⏱ '+sm.prep));
+    left.appendChild(h('div', {style:'font-size:11px;color:var(--fg2,#888)'}, sm.flavors.map(function(f){return'#'+f}).join(' ')+' · '+sm.goal.map(function(g){return g.replace(/_/g,' ')}).join(', ')));
+    card.appendChild(left);
+    card.appendChild(h('div', {style:'flex-shrink:0;font-size:18px;color:var(--fg2,#888);margin-left:4px'}, '\u276F'));
     p.appendChild(card);
   });
 }
@@ -3405,39 +3406,60 @@ function renderSmoothieModal(app) {
   if (!S.modalSmoothie) return;
   var sm = S.modalSmoothie;
   var ov = h('div', {'class':'modal-overlay open', onclick:function(e){ if(e.target===ov){S.modalSmoothie=null;window.render();} }});
-  var box = h('div', {'class':'modal-box', style:'max-width:480px;border-radius:16px'});
-  var header = h('div', {style:'background:var(--green,#1A4A1A);color:#fff;padding:16px 20px;border-radius:16px 16px 0 0;position:relative'});
-  header.appendChild(h('div', {style:'font-size:18px;font-weight:700'}, '🥛 '+sm.name));
-  header.appendChild(h('div', {style:'font-size:12px;opacity:0.8;margin-top:4px'}, sm.cal+'kcal · P:'+sm.p+'g · G:'+sm.c+'g · L:'+sm.f+'g'));
-  header.appendChild(h('button', {style:'position:absolute;top:12px;right:16px;background:none;border:none;color:#fff;font-size:20px;cursor:pointer',onclick:function(){S.modalSmoothie=null;window.render();}}, '×'));
+  var box = h('div', {'class':'modal-box', style:'max-width:480px;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;max-height:80vh'});
+  // ── Header ──
+  var timingColor = sm.timing==='pre'?'#E07B00':sm.timing==='post'?'#1A6B2A':'#4A4A8A';
+  var timingLabel = sm.timing==='pre'?'⚡ Pré-workout':sm.timing==='post'?'💪 Post-workout':'🕐 Libre';
+  var header = h('div', {style:'background:var(--green,#1A4A1A);color:#fff;padding:18px 20px 14px;position:relative;flex-shrink:0'});
+  // Timing badge
+  header.appendChild(h('span', {style:'display:inline-block;font-size:11px;font-weight:700;background:'+timingColor+';color:#fff;padding:3px 9px;border-radius:10px;margin-bottom:8px;letter-spacing:0.3px'}, timingLabel));
+  header.appendChild(h('div', {style:'font-size:18px;font-weight:700;line-height:1.3;padding-right:32px'}, '🥛 '+sm.name));
+  header.appendChild(h('div', {style:'font-size:12px;opacity:0.85;margin-top:6px;font-weight:500;letter-spacing:0.2px'}, sm.cal+' kcal · P:'+sm.p+'g · G:'+sm.c+'g · L:'+sm.f+'g'));
+  header.appendChild(h('button', {style:'position:absolute;top:14px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:18px;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1',onclick:function(){S.modalSmoothie=null;window.render();}}, '×'));
   box.appendChild(header);
-  var body = h('div', {style:'padding:16px 20px;overflow-y:auto;max-height:60vh'});
-  body.appendChild(h('div', {'class':'section-label'}, 'Ingr\u00e9dients'));
+  // ── Body ──
+  var body = h('div', {style:'padding:16px 20px;overflow-y:auto;flex:1'});
+  // Ingrédients
+  body.appendChild(h('div', {'class':'section-label', style:'font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--fg2,#888);margin-bottom:8px'}, 'Ingr\u00e9dients'));
   if (sm.ingredients && sm.ingredients.length > 0) {
+    var ingList = h('div', {style:'margin-bottom:14px'});
     sm.ingredients.forEach(function(ing) {
-      body.appendChild(h('div', {style:'font-size:13px;padding:4px 0;border-bottom:1px solid var(--border,#eee)'},
-        '\u2022 '+ing.qty+' '+ing.unit+' \u2014 '+ing.name));
+      var row = h('div', {style:'display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:1px solid var(--border,#E5E4DE)'});
+      row.appendChild(h('span', {style:'color:var(--green,#1A4A1A);font-size:14px;flex-shrink:0'}, '\u2022'));
+      row.appendChild(h('span', {style:'font-size:13px;font-weight:600;color:var(--text,#0A0A09);white-space:nowrap'}, ing.qty+'\u00a0'+ing.unit));
+      row.appendChild(h('span', {style:'font-size:13px;color:var(--text,#0A0A09)'}, ing.name));
+      ingList.appendChild(row);
     });
+    body.appendChild(ingList);
   } else {
-    body.appendChild(h('div', {style:'font-size:13px;color:var(--grey);font-style:italic;padding:4px 0'}, 'Ingr\u00e9dients non disponibles.'));
+    body.appendChild(h('div', {style:'font-size:13px;color:var(--fg2,#888);font-style:italic;padding:4px 0;margin-bottom:14px'}, 'Ingr\u00e9dients non disponibles.'));
   }
-  body.appendChild(h('div', {'class':'section-label', style:'margin-top:12px'}, 'Pr\u00e9paration'));
+  // Préparation
+  body.appendChild(h('div', {'class':'section-label', style:'font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--fg2,#888);margin-bottom:8px'}, 'Pr\u00e9paration'));
   if (sm.steps && sm.steps.length > 0) {
+    var stepList = h('div', {style:'margin-bottom:14px'});
     sm.steps.forEach(function(step, i) {
-      body.appendChild(h('div', {style:'font-size:13px;padding:4px 0'}, (i+1)+'. '+step));
+      var row = h('div', {style:'display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border,#E5E4DE)'});
+      row.appendChild(h('span', {style:'flex-shrink:0;width:20px;height:20px;background:var(--green,#1A4A1A);color:#fff;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center'}, String(i+1)));
+      row.appendChild(h('span', {style:'font-size:13px;color:var(--text,#0A0A09);line-height:1.5'}, step));
+      stepList.appendChild(row);
     });
+    body.appendChild(stepList);
   } else {
-    body.appendChild(h('div', {style:'font-size:13px;color:var(--grey);font-style:italic;padding:4px 0'}, '\u00c9tapes non disponibles.'));
+    body.appendChild(h('div', {style:'font-size:13px;color:var(--fg2,#888);font-style:italic;padding:4px 0;margin-bottom:14px'}, '\u00c9tapes non disponibles.'));
   }
+  // Tips
   if (sm.tips) {
-    body.appendChild(h('div', {style:'background:rgba(26,74,26,0.06);border-left:3px solid var(--green,#1A4A1A);padding:10px;border-radius:0 8px 8px 0;margin-top:12px;font-size:12px;color:var(--fg2)'}, '💡 '+sm.tips));
+    body.appendChild(h('div', {style:'background:rgba(26,74,26,0.07);border-left:3px solid var(--green,#1A4A1A);padding:10px 12px;border-radius:0 8px 8px 0;margin-top:4px;font-size:12px;color:var(--text,#0A0A09);line-height:1.5'}, '💡 '+sm.tips));
   }
+  box.appendChild(body);
+  // ── Footer bouton ──
   // Bouton "Ajouter à mon plan — Collation"
   var dayNames = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
   var dayLabel = dayNames[typeof S.selectedDay === 'number' ? S.selectedDay : 0] || 'Lun';
-  var addContainer = h('div', {style:'padding:16px 20px;border-top:1px solid var(--border,#eee)'});
+  var addContainer = h('div', {style:'padding:14px 20px 16px;border-top:1px solid var(--border,#E5E4DE);flex-shrink:0;background:var(--card,#fff)'});
   var addBtn = h('button', {
-    style:'width:100%;padding:14px;background:#6B3FA0;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.2px',
+    style:'width:100%;padding:15px;background:#6B3FA0;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.2px;box-shadow:0 2px 10px rgba(107,63,160,0.25)',
     onclick: function() {
       // Guard clause : vérifier que le plan existe
       if (!S.weekPlan || !S.weekPlan[S.selectedDay]) {
@@ -3997,6 +4019,7 @@ window.NUTRITION = {
       renderSmoothieBar(smZone);
       content.appendChild(smZone);
       p.appendChild(content);
+      if (S.modalSmoothie) renderSmoothieModal(p);
       return;
     }
     if (S.nStep === 0) renderSplash(content);
