@@ -1730,6 +1730,25 @@ function renderMusculationLevel(p) {
   });
   p.appendChild(eqGrid);
 
+  // Heure d'entraînement — pour le nutrient timing (Ivy 2004, ISSN 2017)
+  p.appendChild(h('div', {'class': 'section-label'}, '\u23F0 Heure d\'entra\u00eenement habituelle'));
+  p.appendChild(h('div', {style: 'font-size:12px;color:var(--text-secondary);margin:-4px 0 10px'}, 'Permet d\'adapter la r\u00e9partition des repas (prot\u00e9ines + glucides au bon moment)'));
+  var trainOptions = [
+    {id: 'morning', label: '\uD83C\uDF05 Matin',   desc: 'Avant 12h — petit-d\u00e9j post-s\u00e9ance'},
+    {id: 'noon',    label: '\u2600\uFE0F Midi',    desc: '12h–15h — d\u00e9jeuner post-s\u00e9ance'},
+    {id: 'evening', label: '\uD83C\uDF19 Soir',    desc: 'Apr\u00e8s 17h — d\u00eener post-s\u00e9ance'}
+  ];
+  var ttGrid = h('div', {'class': 'level-list'});
+  trainOptions.forEach(function(opt) {
+    ttGrid.appendChild(h('div', {'class': 'level-item' + (S.trainTime === opt.id ? ' on' : ''), onclick: function() {
+      S.trainTime = (S.trainTime === opt.id) ? null : opt.id; // toggle
+      if (S.weekPlan) { S.weekPlan = null; } // invalider le plan pour régénérer avec nouveau timing
+      window.render();
+    }}, [h('div', {}, [h('div', {'class': 'level-name'}, opt.label), h('div', {'class': 'level-desc'}, opt.desc)])]));
+  });
+  p.appendChild(ttGrid);
+  p.appendChild(h('div', {style: 'font-size:11px;color:var(--text-secondary);margin-top:4px'}, 'Optionnel — laissez vide si variable'));
+
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.sportLevel !== null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){

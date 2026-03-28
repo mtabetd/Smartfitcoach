@@ -1867,7 +1867,19 @@ function renderStep9(p) {
       }
       window.render();
     }});
-    card.appendChild(h('div', {'class': 'meal-type'}, sl.label));
+    // Badge nutrient-timing : post-séance ou pré-séance selon trainTime
+    var timingBadge = null;
+    var tt = S.trainTime;
+    if (tt) {
+      var POST = {morning: 'breakfast', noon: 'lunch', evening: 'dinner'};
+      var PRE  = {morning: null, noon: 'breakfast', evening: 'lunch'};
+      if (POST[tt] === sl.key) timingBadge = h('span', {style: 'font-size:10px;font-weight:700;color:#fff;background:#1A8C1A;border-radius:4px;padding:1px 6px;margin-left:6px'}, '\uD83D\uDCAA Post-s\u00e9ance');
+      else if (PRE[tt] === sl.key) timingBadge = h('span', {style: 'font-size:10px;font-weight:700;color:#fff;background:#E07B00;border-radius:4px;padding:1px 6px;margin-left:6px'}, '\u26A1 Pr\u00e9-s\u00e9ance');
+    }
+    var mealTypeEl = h('div', {'class': 'meal-type'});
+    mealTypeEl.appendChild(document.createTextNode(sl.label));
+    if (timingBadge) mealTypeEl.appendChild(timingBadge);
+    card.appendChild(mealTypeEl);
     card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f), txt(r.n)]));
     card.appendChild(h('div', {'class': 'meal-kcal'}, r.k + ' kcal'));
     var mc = h('div', {'class': 'meal-macros'});
