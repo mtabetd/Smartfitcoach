@@ -1940,6 +1940,170 @@
       source: 'carrefour',
       updatedAt: '2026-03'
     },
+
+    // ── 27 ingrédients manquants — couverture 100% recettes ───────────────────
+    'aneth': {
+      name: 'aneth',
+      pricePerG: r(8 / 90),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'bok choy': {
+      name: 'bok choy',
+      pricePerG: r(15 / 300),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'cabillaud': {
+      name: 'cabillaud',
+      pricePerG: r(85 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'chapelure': {
+      name: 'chapelure',
+      pricePerG: r(12 / 500),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'chou blanc': {
+      name: 'chou blanc',
+      pricePerG: r(8 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'farine de sarrasin': {
+      name: 'farine de sarrasin',
+      pricePerG: r(25 / 1000),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'framboises': {
+      name: 'framboises',
+      pricePerG: r(35 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'fromage frais': {
+      name: 'fromage frais',
+      pricePerG: r(28 / 150),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'gnocchi': {
+      name: 'gnocchi',
+      pricePerG: r(22 / 500),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'gochujang': {
+      name: 'gochujang',
+      pricePerG: r(35 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'halloumi': {
+      name: 'halloumi',
+      pricePerG: r(45 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'haricots noirs': {
+      name: 'haricots noirs',
+      pricePerG: r(12 / 400),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'lait de coco': {
+      name: 'lait de coco',
+      pricePerMl: r(18 / 400),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'maïs doux': {
+      name: 'maïs doux',
+      pricePerG: r(10 / 400),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'moules': {
+      name: 'moules',
+      pricePerG: r(40 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'origan': {
+      name: 'origan',
+      pricePerG: r(8 / 15),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'pain bao': {
+      name: 'pain bao',
+      pricePerPce: r(25 / 6),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'pâte miso': {
+      name: 'pâte miso',
+      pricePerG: r(35 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'pêche': {
+      name: 'pêche',
+      pricePerG: r(15 / 1000),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'ricotta': {
+      name: 'ricotta',
+      pricePerG: r(30 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'romarin': {
+      name: 'romarin',
+      pricePerG: r(8 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'sauce huître': {
+      name: 'sauce huître',
+      pricePerMl: r(22 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'nuoc-mâm': {
+      name: 'nuoc-mâm',
+      pricePerMl: r(18 / 200),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'sriracha': {
+      name: 'sriracha',
+      pricePerMl: r(20 / 250),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'thym': {
+      name: 'thym',
+      pricePerG: r(8 / 100),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'wakame': {
+      name: 'wakame',
+      pricePerG: r(30 / 50),
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'garam masala': {
+      name: 'garam masala',
+      pricePerG: r(15 / 50),
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
   };
 
   /**
