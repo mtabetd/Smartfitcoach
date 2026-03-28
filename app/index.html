@@ -33,14 +33,14 @@
 /* ── RESET & BASE ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:14px}
-body{background:var(--ivory);color:var(--black);font-family:'Georgia',serif;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{background:var(--ivory);color:var(--black);font-family:'Montserrat','Helvetica Neue',sans-serif;line-height:1.7;min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .app{max-width:680px;margin:0 auto;padding:0 24px 80px;overflow-y:auto;-webkit-overflow-scrolling:touch}
 
 /* ── HEADER ── */
 .header{padding:40px 0 28px;border-bottom:1px solid var(--black);margin-bottom:40px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
-.logo{font-family:'Georgia',serif;font-size:13px;letter-spacing:6px;text-transform:uppercase;font-weight:normal}
-.logo span{display:block;font-size:9px;letter-spacing:3px;color:var(--grey);margin-top:3px;font-family:'Helvetica Neue',Arial,sans-serif;font-weight:300}
-.step-indicator{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey)}
+.logo{font-family:'Cormorant Garamond',Georgia,serif;font-size:13px;letter-spacing:6px;text-transform:uppercase;font-weight:normal}
+.logo span{display:block;font-size:9px;letter-spacing:3px;color:var(--grey);margin-top:3px;font-family:'Montserrat','Helvetica Neue',sans-serif;font-weight:300}
+.step-indicator{font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey)}
 
 /* ── PROGRESS ── */
 .progress-bar{height:1px;background:var(--border);margin-bottom:40px}
@@ -53,11 +53,11 @@ body{background:var(--ivory);color:var(--black);font-family:'Georgia',serif;line
 .fade-in{animation:fadeUp .35s ease both}
 
 /* ── TYPOGRAPHY ── */
-.eyebrow{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey);margin-bottom:16px}
-h1{font-family:'Georgia',serif;font-size:42px;font-weight:normal;line-height:1;letter-spacing:-1px;margin-bottom:16px}
+.eyebrow{font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:16px}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:42px;font-weight:normal;line-height:1;letter-spacing:-1px;margin-bottom:16px}
 h1 em{font-style:italic}
-.subtitle{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.8;margin-bottom:36px;font-weight:300}
-.section-label{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:20px;margin-top:32px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.subtitle{font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:12px;color:var(--grey);line-height:1.8;margin-bottom:36px;font-weight:300}
+.section-label{font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:20px;margin-top:32px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 
 /* ── DIVIDERS ── */
 .divider{display:flex;align-items:center;gap:12px;margin:24px 0 14px}
@@ -65,21 +65,21 @@ h1 em{font-style:italic}
 .divider-text{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);white-space:nowrap}
 
 /* ── BUTTONS ── */
-.btn-primary{display:block;width:100%;margin-top:8px;background:var(--black);color:var(--ivory);font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;font-weight:400;padding:17px 24px;border:1px solid var(--black);cursor:pointer;transition:all .2s;outline:none}
+.btn-primary{display:block;width:100%;margin-top:8px;background:var(--black);color:var(--ivory);font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:8px;letter-spacing:6px;text-transform:uppercase;font-weight:400;padding:18px 28px;border:1px solid var(--black);cursor:pointer;transition:all .35s cubic-bezier(.25,.46,.45,.94);outline:none}
 .btn-primary:hover{background:var(--black2)}
 .btn-primary:disabled{background:var(--border);border-color:var(--border);color:var(--grey2);cursor:not-allowed}
-.btn-secondary{display:block;width:100%;margin-top:8px;background:transparent;color:var(--grey);font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:12px 24px;border:1px solid var(--border);cursor:pointer;transition:all .2s;outline:none}
+.btn-secondary{display:block;width:100%;margin-top:8px;background:transparent;color:var(--grey);font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:12px 24px;border:1px solid var(--border);cursor:pointer;transition:all .2s;outline:none}
 .btn-secondary:hover{border-color:var(--black);color:var(--black)}
-.btn-back{display:inline-flex;align-items:center;gap:8px;background:none;border:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey2);cursor:pointer;padding:10px 0;transition:color .2s}
+.btn-back{display:inline-flex;align-items:center;gap:8px;background:none;border:none;font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey2);cursor:pointer;padding:10px 0;transition:color .2s}
 .btn-back:hover{color:var(--black)}
 .btn-back:hover svg{transform:translateX(-3px)}
 .btn-back svg{transition:transform .2s}
 
 /* ── FORM ── */
 .field{margin-bottom:18px}
-.field-label{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);display:block;margin-bottom:7px}
-.field input,.field textarea{width:100%;background:var(--ivory);border:1px solid var(--border);color:var(--black);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;font-weight:300;padding:11px 14px;outline:none;transition:border-color .2s}
-.field input:focus,.field textarea:focus{border-color:var(--black)}
+.field-label{font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);display:block;margin-bottom:7px}
+.field input,.field textarea{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--black);font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:13px;font-weight:300;padding:10px 0;outline:none;transition:border-color .3s ease}
+.field input:focus,.field textarea:focus{border-bottom-color:var(--black);outline:none}
 .field input::placeholder,.field textarea::placeholder{color:var(--grey3)}
 
 /* ── CARDS ── */
@@ -133,8 +133,8 @@ h1 em{font-style:italic}
 
 /* ── RESULT ── */
 .result-header{text-align:center;padding:40px 0 36px;border-bottom:1px solid var(--black);margin-bottom:32px}
-.result-eyebrow{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey);margin-bottom:16px}
-.result-title{font-family:'Georgia',serif;font-size:48px;font-weight:normal;line-height:1;letter-spacing:-1px;margin-bottom:12px}
+.result-eyebrow{font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:16px}
+.result-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:48px;font-weight:normal;line-height:1;letter-spacing:-1px;margin-bottom:12px}
 .result-title em{font-style:italic}
 .result-rule{width:32px;height:1px;background:var(--black);margin:0 auto}
 

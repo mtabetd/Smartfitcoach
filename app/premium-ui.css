@@ -1276,3 +1276,433 @@ p, li, .card-sub, .level-desc, .exercise-detail,
     display: none !important;
   }
 }
+
+/* ============================================================
+   LUXURY REFINEMENT — Cormorant Garamond · Montserrat
+   Design language: Hermès · Patek Philippe · Dior · Richard Mille
+   ============================================================ */
+
+/* -------------------------------------------------------
+   L1. TYPOGRAPHY — Cormorant Garamond for editorial titles
+   Montserrat for labels and UI copy
+   ------------------------------------------------------- */
+
+h1, h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.eyebrow,
+.eyebrow-title,
+.result-eyebrow {
+  font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+  letter-spacing: 6px;
+}
+
+.result-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+body,
+.field-label,
+.section-label,
+.label-caps,
+.num-unit,
+.num-hint,
+.eyebrow,
+.subtitle,
+.card-sub,
+.card-tag,
+.level-desc,
+.level-badge,
+.chip,
+.check-label,
+.step-indicator,
+.main-nav-tab,
+.day-tab,
+.meal-type,
+.meal-macros,
+.meal-level,
+.dt-label,
+.bar-name,
+.bar-val,
+.ring-label,
+.stat-label,
+.macro-cell .m-unit,
+.macro-cell .m-label,
+.mp-label,
+.chart-title,
+.user-name,
+.user-logout,
+.auth-sub,
+.auth-switch,
+.modal-close,
+.swap-btn,
+.regen-btn,
+.btn-primary,
+.btn-secondary,
+.btn-back,
+.section-sub,
+.section-head,
+.imc-widget .imc-label,
+.imc-widget .imc-category,
+.macro-check,
+.splash-sub,
+.photo-upload .photo-label {
+  font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+}
+
+/* Serif titles for cards and modules */
+.card-name,
+.level-name,
+.meal-name,
+.exercise-name,
+.step-title,
+.page-title,
+.section-head,
+.modal-title,
+.auth-logo,
+.splash-logo,
+.logo,
+.empty-state-title,
+.imc-value,
+.imc-widget .imc-value {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Numerical display — Cormorant with oldstyle figures (Patek detail) */
+.dash-big,
+.macro-value,
+.kpi-value,
+.stat-val,
+.macro-cell .m-val,
+.macro-pill .mp-val,
+.big-number .bn-val,
+.num-input,
+.meal-kcal,
+.dt-val,
+.ring-val,
+.value-display {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-feature-settings: "onum" 1;
+  font-weight: 300;
+}
+
+
+/* -------------------------------------------------------
+   L2. BODY LINE-HEIGHT & BREATHING ROOM
+   Le luxe respire — generosity of space
+   ------------------------------------------------------- */
+
+body, p, .subtitle {
+  line-height: 1.7;
+}
+
+.eyebrow,
+.eyebrow-title,
+.result-eyebrow,
+.field-label,
+.section-label,
+.stat-label,
+.card-tag,
+.label-caps,
+.level-badge,
+.main-nav-tab,
+.day-tab {
+  letter-spacing: 6px;
+}
+
+
+/* -------------------------------------------------------
+   L3. BUTTONS — signature luxe hover fill bottom-to-top
+   Hermès cubic-bezier courbe
+   ------------------------------------------------------- */
+
+.btn-primary {
+  letter-spacing: 6px;
+  font-size: 8px;
+  padding: 18px 28px;
+  border: 1px solid var(--black);
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Override the existing shine sweep ::after with fill-from-bottom */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  background: var(--black2);
+  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 0;
+  transform: none;
+}
+
+.btn-primary:hover::after {
+  height: 100%;
+  transform: none;
+  transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Ensure button text stays above the fill overlay */
+.btn-primary > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* -------------------------------------------------------
+   L4. SEPARATORS — gradient-fade signature lines
+   ------------------------------------------------------- */
+
+.result-rule,
+.section-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--black), transparent);
+  margin: 20px 0;
+}
+
+/* Luxury divider — for important separations */
+.luxury-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--black), transparent);
+  margin: 28px 0;
+  opacity: 0.6;
+}
+
+
+/* -------------------------------------------------------
+   L5. CARDS — lévitation subtile Dior
+   ------------------------------------------------------- */
+
+.sel-card,
+.meal-card,
+.exercise-card,
+.dash-card {
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.25s ease;
+}
+
+.sel-card:hover,
+.meal-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(10, 10, 9, 0.06);
+}
+
+
+/* -------------------------------------------------------
+   L6. NAVIGATION — backdrop blur luxe
+   ------------------------------------------------------- */
+
+.main-nav {
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(250, 250, 247, 0.92);
+}
+
+.main-nav-tab {
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+
+/* -------------------------------------------------------
+   L7. INPUTS — underline style Hermès (angles droits)
+   ------------------------------------------------------- */
+
+.field input,
+.field textarea {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 0;
+  background: transparent;
+  transition: border-color 0.3s ease;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-bottom-color: var(--black);
+  outline: none;
+  box-shadow: none;
+}
+
+.num-input {
+  border-radius: 0;
+}
+
+
+/* -------------------------------------------------------
+   L8. MICRO-ANIMATIONS — entrance et sélections
+   ------------------------------------------------------- */
+
+#app-root {
+  animation: luxeFadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes luxeFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.chip,
+.level-item {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+
+/* -------------------------------------------------------
+   L9. AUTH SCREENS — vitrine de la maison
+   ------------------------------------------------------- */
+
+.auth-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 60px 32px;
+}
+
+.auth-logo {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 11px;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  font-weight: 300;
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.auth-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 32px;
+  font-weight: 300;
+  font-style: italic;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+
+/* -------------------------------------------------------
+   L10. SECTIONS — spacing +8px for breathing room
+   ------------------------------------------------------- */
+
+.card,
+.result-block,
+.kpi-box {
+  padding-top: calc(var(--card-pad, 16px) + 4px);
+  padding-bottom: calc(var(--card-pad, 16px) + 4px);
+}
+
+.section-label,
+.step-label,
+.dash-label {
+  margin-top: 40px;
+  margin-bottom: 22px;
+}
+
+.section-title,
+.step-title,
+.page-title {
+  margin-bottom: 28px;
+  margin-top: 40px;
+}
+
+
+/* -------------------------------------------------------
+   L11. SCROLLBAR — 3px ultra-fine luxe
+   ------------------------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ivory);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--grey3);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--grey);
+}
+
+
+/* -------------------------------------------------------
+   L12. DARK MODE — luxury class consistency
+   ------------------------------------------------------- */
+
+body.dark-mode .main-nav {
+  background: rgba(26, 26, 24, 0.92);
+  border-top-color: var(--border);
+}
+
+body.dark-mode .field input,
+body.dark-mode .field textarea {
+  border-bottom-color: var(--border);
+  background: transparent;
+  color: var(--black);
+}
+
+body.dark-mode .field input:focus,
+body.dark-mode .field textarea:focus {
+  border-bottom-color: var(--black);
+}
+
+body.dark-mode .luxury-divider {
+  background: linear-gradient(90deg, transparent, var(--black), transparent);
+}
+
+body.dark-mode .result-rule,
+body.dark-mode .section-divider {
+  background: linear-gradient(90deg, transparent, var(--black), transparent);
+}
+
+body.dark-mode .auth-container {
+  color: var(--black);
+}
+
+@media (prefers-color-scheme: dark) {
+  .main-nav {
+    background: rgba(26, 26, 24, 0.92);
+  }
+
+  .field input,
+  .field textarea {
+    background: transparent;
+    border-bottom-color: var(--border);
+    color: var(--black);
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    border-bottom-color: var(--black);
+  }
+}
+
+
+/* -------------------------------------------------------
+   REDUCED MOTION — respect system preference
+   (reinforces existing rule, luxury animations only)
+   ------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary::after,
+  #app-root,
+  .luxury-divider,
+  .sel-card,
+  .meal-card,
+  .exercise-card,
+  .dash-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}
