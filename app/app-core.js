@@ -403,6 +403,7 @@ var CF_STANDARDS = {
   back_squat: { m: [50, 70, 100, 130], f: [30, 50, 70, 90] },
   sumo_dl_hp: { m: [35, 50, 70, 85], f: [20, 35, 50, 65] },
   // Gymnastics standards: [scaled, inter, rx, rx_plus]
+  c2b_pullups: { scaled: 'Pull-ups assistés (élastique)', inter: 'Chest-to-bar kipping', rx: 'Chest-to-bar kipping', rx_plus: 'Chest-to-bar strict' },
   pullups: { scaled: 'Ring Rows', inter: 'Pull-ups', rx: 'Chest-to-bar', rx_plus: 'Chest-to-bar + Bar Muscle-ups' },
   muscle_ups_bar: { scaled: 'Pull-ups + Dips', inter: 'Bar Muscle-ups (tentatives)', rx: 'Bar Muscle-ups', rx_plus: 'Strict Bar Muscle-ups' },
   muscle_ups_ring: { scaled: 'Ring Rows + Ring Dips', inter: 'Ring Muscle-ups (tentatives)', rx: 'Ring Muscle-ups', rx_plus: 'Strict Ring Muscle-ups' },
@@ -438,7 +439,7 @@ window.CF_1RM_LIFTS = CF_1RM_LIFTS;
 var CF_LIFT_SCALING_FACTORS = {
   back_squat:    1.00,
   front_squat:   0.85,
-  overhead_squat: 0.88, // OHS — overhead stability demand reduces capacity
+  overhead_squat: 0.60, // OHS — overhead stability + mobility demand; ~60% BS (ExRx, Symmetry Strength); corrected from erroneous 0.88 which exceeded front_squat (0.85)
   squat_clean:   0.75,
   clean:         0.75,
   power_clean:   0.70,
@@ -2636,7 +2637,7 @@ function filterRecipes(pool,type){
         if(al==='crustac\u00e9s'&&(/crevette|crustac|homard|crabe|gambas/).test(ing))return false;
         if(al==='soja'&&(/soja|tofu|edamame|tempeh|tamari|miso|natto/).test(ing))return false;
         if(al==='lait/produits laitiers'){var dl=ing.replace(/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz|beurre de cacahu/g,'');if((/lait|fromage|yaourt|beurre|cr\u00e8me|ricotta|mozzarella|parmesan|emmental|feta|cottage|skyr|labneh|k\u00e9fir|whey/).test(dl))return false;}
-        if(al==='gluten/bl\u00e9'){var gl=ing.replace(/galette de riz|farine de riz|farine de sarrasin|p\u00e2te miso/g,'');if((/pain|bl\u00e9|farine|p\u00e2te|seigle|couscous|semoule|tortilla|wrap|naan|galette|cr\u00eape|pancake|muffin/).test(gl))return false;}
+        if(al==='gluten/bl\u00e9'){var gl=ing.replace(/galette de riz|farine de riz|farine de sarrasin|p\u00e2te miso/g,'');if((/pain|bl\u00e9|farine|p\u00e2te|seigle|couscous|semoule|tortilla|wrap|naan|galette|cr\u00eape|pancake|muffin|avoine|orge|\u00e9peautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari/).test(gl))return false;} // BUG FIX : avoine (contamination croisée fréquente — AFDIAG), orge, épeautre, boulgour, seitan, kamut, sauce soja/tamari (gluten caché) manquaient
         if(al==='sésame'&&(/sésame/).test(ing))return false;
         if(al==='moutarde'&&(/moutarde/).test(ing))return false;
       }return true;
@@ -2648,7 +2649,7 @@ function filterRecipes(pool,type){
       for(var t=0;t<s.intolerances.length;t++){
         var it=s.intolerances[t].toLowerCase();
         if(it==='lactose'&&(/lait|fromage|yaourt|beurre|crème|ricotta|cottage|whey|feta|parmesan|mozzarella|skyr|emmental|gruyère|comté|camembert|mascarpone|kéfir|labneh|ghee|cheddar|gouda/).test(ing))return false;
-        if(it==='gluten'&&(/pain|blé|farine|pâte|avoine|seigle|couscous|semoule/).test(ing))return false;
+        if(it==='gluten'&&(/pain|blé|farine|pâte|avoine|seigle|couscous|semoule|orge|épeautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari/).test(ing))return false; // BUG FIX : orge, épeautre, boulgour, seitan, kamut, sauce soja (gluten caché), avoine (contamination croisée) manquaient — INCO 2020, AFDIAG
         if(it==='fructose'&&(/miel|pomme|poire|mangue|cerise|figue|datte/).test(ing))return false;
         if(it==='histamine'&&(/thon|saumon fumé|fromage|tomate|épinard|avocat|soja/).test(ing))return false;
       }return true;
