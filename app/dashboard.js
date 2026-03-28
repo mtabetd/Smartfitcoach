@@ -534,6 +534,25 @@ window.DASHBOARD = {
     }
 
 
+    /* ═══ ALERTES MÉDICALES ═══ */
+    if (S.medical && S.medical.length > 0) {
+      var hasDiabDash = S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1 || S.medical.indexOf('prediabete') !== -1;
+      if (hasDiabDash) {
+        root.appendChild(h('div', 'dash-label', 'Suivi médical'));
+        var diabWarnCard = document.createElement('div');
+        diabWarnCard.style.cssText = 'background:#FFF8E1;border-left:4px solid #F9A825;padding:14px 16px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.6;';
+        var diabWarnTitle = document.createElement('div');
+        diabWarnTitle.style.cssText = 'font-weight:700;color:#F57F17;margin-bottom:6px;font-size:12px;letter-spacing:1px;text-transform:uppercase;';
+        diabWarnTitle.textContent = '\u26A0 Diabète — Recommandations importantes';
+        diabWarnCard.appendChild(diabWarnTitle);
+        var diabWarnMsg = document.createElement('div');
+        diabWarnMsg.style.cssText = 'color:#5D4037;';
+        diabWarnMsg.textContent = 'Consultez votre médecin ou diabétologue avant de modifier votre alimentation ou votre programme sportif. Mesurez votre glycémie régulièrement, notamment avant et après l\'effort. Privilegiez les aliments à index glycémique bas.';
+        diabWarnCard.appendChild(diabWarnMsg);
+        root.appendChild(diabWarnCard);
+      }
+    }
+
     /* ═══ QUICK ACTIONS ═══ */
     root.appendChild(h('div', 'dash-label', 'Accès rapide'));
 

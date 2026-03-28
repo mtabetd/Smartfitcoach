@@ -2657,7 +2657,7 @@ function filterRecipes(pool,type){
   }
   // Diabetics: soft-filter high-GI ingredients (prioritize low-GI sources — ADA 2023)
   var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);
-  if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioche|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
+  if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioch[eé]|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|sucre\s+\d|sucre vanill|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
   if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon|merguez|canard|lapin|foie/).test(i)});
   if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|merguez|gambas|lotte|morue|foie|anchois|truite|colin/).test(i)});
   if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|daurade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|miel|whey|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|truite|anchois|colin|branzino|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|lapin|foie de|jambon|charcuterie/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;if(/beurre/.test(i)&&!/beurre de cacahu|beurre d.amande|beurre de noisette|beurre de noix|beurre de coco/.test(i))return false;return true});} // beurre végétal (cacahuète, amande, noisette) autorisé en vegan
@@ -2768,10 +2768,10 @@ var SUPPLEMENTS_DB = [
     condition:function(s){return s.regime!==3&&(s.allergies||[]).indexOf('Poisson')===-1&&(s.allergies||[]).indexOf('Crustac\u00e9s')===-1;}, // Vegan : utiliser DHA algues à la place
     unnecessary_if:'Inutile si vous mangez du poisson gras 2-3x/semaine (saumon, sardines, maquereau)',
     dosageCalc:function(s){var d=1000;if(s.activity!==null&&s.activity>=3)d=2000;return{dose:d,unit:'mg EPA+DHA/jour',timing:'Pendant un repas',note:'Ratio EPA:DHA 2:1 pour sportifs'};}},
-  {id:'magnesium',name:'Magn\u00e9sium (Bisglycinate)',icon:'\uD83E\uDDEA',desc:'Sommeil, crampes, r\u00e9cup\u00e9ration',evidence:'EFSA 2015 \u2014 Apport recommand\u00e9',grade:'A',
-    condition:function(s){return (s.sleep!==null&&s.sleep<=1)||(s.activity!==null&&s.activity>=3);},
-    unnecessary_if:'Non prioritaire si bon sommeil et entra\u00eenement mod\u00e9r\u00e9',
-    dosageCalc:function(s){var d=s.sex==='homme'?400:310;if(s.activity!==null&&s.activity>=3)d+=50;return{dose:d,unit:'mg/jour',timing:'Le soir avant le coucher',note:'Forme bisglycinate mieux tol\u00e9r\u00e9e'};}},
+  {id:'magnesium',name:'Magn\u00e9sium (Bisglycinate)',icon:'\uD83E\uDDEA',desc:'Sommeil, crampes, r\u00e9cup\u00e9ration — sensibilit\u00e9 \u00e0 l\'insuline (diab\u00e8te T2)',evidence:'EFSA 2015 \u2014 Apport recommand\u00e9. ADA 2023 : d\u00e9ficit magn\u00e9sium fr\u00e9quent en diab\u00e8te T2 (r\u00e9sistance insuline)',grade:'A',
+    condition:function(s){var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('prediabete')!==-1);return hasDiab||(s.sleep!==null&&s.sleep<=1)||(s.activity!==null&&s.activity>=3);},
+    unnecessary_if:'Non prioritaire si bon sommeil, entra\u00eenement mod\u00e9r\u00e9 et absence de diab\u00e8te/pr\u00e9-diab\u00e8te',
+    dosageCalc:function(s){var d=s.sex==='homme'?400:310;if(s.activity!==null&&s.activity>=3)d+=50;var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('prediabete')!==-1);return{dose:d,unit:'mg/jour',timing:'Le soir avant le coucher',note:hasDiab?'Forme bisglycinate mieux tol\u00e9r\u00e9e. Le magn\u00e9sium am\u00e9liore la sensibilit\u00e9 \u00e0 l\'insuline et r\u00e9duit l\'insulino-r\u00e9sistance (ADA 2023, Guerrero-Romero 2011). Bilan magn\u00e9s\u00e9mie conseill\u00e9.':'Forme bisglycinate mieux tol\u00e9r\u00e9e'};}},
   {id:'fer',name:'Fer',icon:'\uD83E\uDE78',desc:'Transport d\'oxyg\u00e8ne, \u00e9nergie',evidence:'OMS \u2014 Recommandation (femmes)',grade:'A',
     condition:function(s){return (s.sex==='femme'&&s.age<51)||s.pregnant;},
     unnecessary_if:'Hommes : ne suppl\u00e9mentez PAS sans analyse de sang (surdosage dangereux)',warning:'\u26A0 Dosage sanguin (ferritine) OBLIGATOIRE avant suppl\u00e9mentation',
@@ -2972,6 +2972,15 @@ function detectMedicalConflicts() {
     // Alcool + HTA : même modéré, augmente la pression artérielle
     if(med.indexOf('hta')!==-1&&isFrequentDrinker){
       conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : HTA + consommation régulière d\'alcool — Même 1-2 verres/jour élèvent la pression artérielle de 2-4 mmHg (PREDIMED 2010, ESC 2021). L\'OMS recommande zéro alcool pour les hypertendus. Vérifiez votre traitement antihypertenseur avec votre médecin.'});
+    }
+  }
+  // Conflit 6b : Diabète T2 + Prise de masse — surplus calorique déconseillé (hyperglycémie, résistance insuline)
+  // ADA 2023 : chez le diabétique T2, un surplus calorique agressif amplifie la résistance à l'insuline
+  // Le bulk peut être envisagé uniquement sous supervision médicale avec contrôle glycémique strict
+  if(med.indexOf('diabete_t2')!==-1||med.indexOf('prediabete')!==-1){
+    var goalKeyDiab=s.goal!==null?GOALS[s.goal].key:null;
+    if(goalKeyDiab==='bulk'||goalKeyDiab==='lean_bulk'){
+      conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Diabète T2 / Pré-diabète + Prise de masse — Un surplus calorique chez un diabétique T2 peut aggraver la résistance à l\'insuline et perturber le contrôle glycémique (ADA 2023). Recommandation : privilégiez la recomposition corporelle (maintien calorique + protéines 1.4-1.6g/kg + résistance musculaire) plutôt qu\'un surplus. Consultez votre diabétologue avant de modifier significativement votre alimentation.'});
     }
   }
   // Conflit 7 : IRC + régime hyperprotéiné (si objectif prise de masse sans pathologie déclarée)
