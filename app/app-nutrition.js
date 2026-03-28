@@ -289,8 +289,8 @@ function renderStep1(p) {
           if (wgPreg) {
             var wgCard = h('div', {style: 'border-left:3px solid ' + triColor + ';padding:14px 16px;background:var(--ivory2);margin-bottom:12px'});
             wgCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:8px'}, 'Prise de poids recommand\u00e9e (IOM 2009)'));
-            var preBmi = S.prePregnancyWeight ? S.prePregnancyWeight / Math.pow(S.height / 100, 2) : (calcBMI ? calcBMI() : 0);
-            wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'IMC pr\u00e9-grossesse : ' + preBmi.toFixed(1) + ' (' + wgPreg.category + ')'));
+            var preBmi = S.prePregnancyWeight ? S.prePregnancyWeight / Math.pow(S.height / 100, 2) : (calcBMI ? (calcBMI() || 0) : 0);
+            wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'IMC pr\u00e9-grossesse : ' + (preBmi || 0).toFixed(1) + ' (' + wgPreg.category + ')'));
             wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'Gain total recommand\u00e9 : ' + wgPreg.totalGainMin + ' \u2014 ' + wgPreg.totalGainMax + ' kg'));
             wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, '\u00c0 la semaine ' + S.pregnancyWeek + ' : +' + wgPreg.currentExpectedGainMin + ' \u00e0 +' + wgPreg.currentExpectedGainMax + ' kg attendus'));
             wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'}, 'Poids attendu : ' + wgPreg.expectedWeightMin + ' kg \u2014 ' + wgPreg.expectedWeightMax + ' kg'));
@@ -1203,7 +1203,7 @@ function renderStep8(p) {
     if (window.computeNutritionState) { window.computeNutritionState(false); }
   var _hydInfo = window.calcHydration ? window.calcHydration() : null; // ÉLEVÉ-3: hydration fine
   var water = _hydInfo ? _hydInfo.liters.toFixed(1) : (S.weight * 0.033).toFixed(1);
-  var ppk = (m.p / S.weight).toFixed(1);
+  var ppk = (S.weight > 0 ? (m.p / S.weight) : 0).toFixed(1);
   // Enregistrer les macros journalières dans l'historique (une entrée par jour)
   if (window.PERF_HISTORY && m && tgt > 0) {
     try { PERF_HISTORY.recordNutrition(tgt, m.p, m.g, m.l); } catch(e) {}
@@ -1231,7 +1231,7 @@ function renderStep8(p) {
   // ─── ALERTES MÉDICALES ET SÉCURITÉ ───
   // Conflits médicaux (grossesse+DG+vegan, TCA+cut, IRC+muscle, cardiopathie+intensité)
   if (window.detectMedicalConflicts) {
-    var conflicts = window.detectMedicalConflicts();
+    var conflicts = window.detectMedicalConflicts() || [];
     conflicts.forEach(function(c) {
       var bg = c.level === 'CRITIQUE' ? '#FFEBEE' : c.level === 'ÉLEVÉ' ? '#FFF3E0' : '#E3F2FD';
       var border = c.level === 'CRITIQUE' ? '#C0392B' : c.level === 'ÉLEVÉ' ? '#E67E22' : '#1976D2';
@@ -1373,7 +1373,7 @@ function renderStep8(p) {
       // Nutrition tips
       var pregNutList = h('div', {style: 'border-left:2px solid #27AE60;padding:8px 12px;margin:10px 0'});
       pregNutList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#27AE60;margin-bottom:6px'}, 'Recommandations nutritionnelles'));
-      triRes.trimester.nutritionTips.forEach(function(tip) {
+      (triRes.trimester.nutritionTips || []).forEach(function(tip) {
         pregNutList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
       });
       pregResCard.appendChild(pregNutList);
@@ -1480,7 +1480,7 @@ function renderStep8(p) {
       // Nutrition tips
       var tipsList = h('div', {style: 'border-left:2px solid #27AE60;padding:8px 12px;margin-bottom:10px'});
       tipsList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#27AE60;margin-bottom:6px'}, 'Conseils nutrition'));
-      cycleInfo.phase.nutritionTips.forEach(function(tip) {
+      (cycleInfo.phase.nutritionTips || []).forEach(function(tip) {
         tipsList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
       });
       cycCard.appendChild(tipsList);
@@ -1558,7 +1558,7 @@ function renderStep8(p) {
   // Supplémentation recommandée
   if (window.TIPS) TIPS.renderTip(p, 'supplements');
   if (getSupplementRecommendations) {
-    var suppRecs = getSupplementRecommendations();
+    var suppRecs = getSupplementRecommendations() || [];
     if (suppRecs.length > 0) {
       p.appendChild(h('div', {'class': 'section-label'}, 'Suppl\u00e9mentation recommand\u00e9e'));
 
@@ -1711,7 +1711,7 @@ function renderStep9(p) {
   p.appendChild(tabs);
 
   // Day meals
-  var day = S.weekPlan[S.selectedDay], tgtCal = calcTarget(), dayTotal = 0, dayTotalP = 0, dayTotalG = 0, dayTotalL = 0;
+  var day = S.weekPlan[S.selectedDay] || {}, tgtCal = calcTarget(), dayTotal = 0, dayTotalP = 0, dayTotalG = 0, dayTotalL = 0;
   var slots = [
     {key: 'breakfast', label: 'Petit-d\u00e9jeuner'},
     {key: 'lunch', label: 'D\u00e9jeuner'},
@@ -1761,7 +1761,7 @@ function renderStep9(p) {
   });
 
   // Day total
-  var diff = dayTotal - tgtCal, diffPct = Math.abs(diff / tgtCal * 100), isOk = diffPct < 5;
+  var diff = dayTotal - tgtCal, diffPct = tgtCal > 0 ? Math.abs(diff / tgtCal * 100) : 0, isOk = diffPct < 5;
   var total = h('div', {'class': 'day-total'});
   total.appendChild(h('div', {'class': 'dt-label'}, 'Total du jour'));
   var vd = h('div', {style: 'display:flex;align-items:center;gap:12px'});
@@ -1990,6 +1990,7 @@ function exportDayPDF(dayIdx) {
   y = 46;
 
   // Meals
+  if (!S.weekPlan || !S.weekPlan[dayIdx]) { alert('Aucun plan disponible pour ce jour.'); return; }
   var dayPlan = S.weekPlan[dayIdx];
   var slots = [{key: 'breakfast', label: 'PETIT-D\u00c9JEUNER'}, {key: 'lunch', label: 'D\u00c9JEUNER'}, {key: 'snack', label: 'COLLATION'}, {key: 'dinner', label: 'D\u00ceNER'}];
   var dayTotal = 0;
@@ -2208,9 +2209,9 @@ var SALAD_DB = {
 function calcSaladMacros(sb) {
   var total = { k: 0, p: 0, g: 0, l: 0 };
   if (sb.base) { total.k += sb.base.k; total.p += sb.base.p; total.g += sb.base.g; total.l += sb.base.l; }
-  sb.proteins.forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  sb.veggies.forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  sb.fats.forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
+  (sb.proteins || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
+  (sb.veggies || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
+  (sb.fats || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
   if (sb.sauce) { total.k += sb.sauce.k; total.p += sb.sauce.p; total.g += sb.sauce.g; total.l += sb.sauce.l; }
   return { k: Math.round(total.k), p: Math.round(total.p), g: Math.round(total.g), l: Math.round(total.l) };
 }
@@ -2539,7 +2540,7 @@ function renderShoppingList(p) {
     return;
   }
 
-  var list = window.RecipeEngine.generateShoppingList(s.weekPlan);
+  var list = window.RecipeEngine.generateShoppingList(s.weekPlan) || [];
   if (!s.shopChecked) s.shopChecked = {};
   cleanShopChecked(list);
 
