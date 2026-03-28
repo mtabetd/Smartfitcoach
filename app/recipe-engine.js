@@ -12630,8 +12630,330 @@
       'Préparer la sauce champignons à la crème.',
       'Servir avec la sauce et persil.'
     ]
-  }
+  },
 
+  // ─── INSALATE & ANTIPASTI MODERNES (R460-R469) ────────────────────────────
+  {
+    id: 'R460',
+    name: 'Panzanella Moderne au Poulet Grillé',
+    emoji: '🥗',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['salade', 'poulet', 'pain grillé', 'tomates', 'basilic', 'healthy', 'bowl'],
+    difficulty: 1,
+    prepTime: 15,
+    cookTime: 10,
+    servings: 2,
+    // Vérification: P32×4 + G32×4 + L14×9 = 128+128+126 = 382 kcal ✓
+    baseNutrition: { calories: 382, proteinGrams: 32, carbsGrams: 32, fatGrams: 14 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 300, unit: 'g' },
+      { name: 'Tomates cerises', qty: 200, unit: 'g' },
+      { name: 'Concombre', qty: 150, unit: 'g' },
+      { name: 'Pain de campagne', qty: 80, unit: 'g' },
+      { name: 'Oignon rouge', qty: 50, unit: 'g' },
+      { name: 'Basilic frais', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Vinaigre balsamique', qty: 15, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Couper le pain en cubes et le toaster 5 min au four à 180°C jusqu\'à ce qu\'il soit doré et croustillant.',
+      'Griller les blancs de poulet assaisonnés à feu vif 4-5 min par face, puis trancher en lanières.',
+      'Couper les tomates cerises en deux, émincer finement le concombre et l\'oignon rouge.',
+      'Préparer la vinaigrette : mélanger l\'huile d\'olive, le vinaigre balsamique et l\'ail écrasé.',
+      'Assembler tous les ingrédients dans un grand bol, arroser de vinaigrette et garnir de basilic frais.'
+    ]
+  },
+  {
+    id: 'R461',
+    name: 'Insalata Caprese Avocat & Thon',
+    emoji: '🥑',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['caprese', 'avocat', 'thon', 'mozzarella', 'tomates', 'no-cook', 'bowl'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: P28×4 + G16×4 + L20×9 = 112+64+180 = 356 kcal ✓
+    baseNutrition: { calories: 356, proteinGrams: 28, carbsGrams: 16, fatGrams: 20 },
+    ingredients: [
+      { name: 'Thon en boîte au naturel', qty: 200, unit: 'g' },
+      { name: 'Mozzarella di bufala', qty: 125, unit: 'g' },
+      { name: 'Avocat', qty: 100, unit: 'g' },
+      { name: 'Tomates', qty: 200, unit: 'g' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' },
+      { name: 'Fleur de sel', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Égoutter le thon et l\'émietter grossièrement à la fourchette.',
+      'Trancher la mozzarella et les tomates en rondelles épaisses, puis l\'avocat en lamelles.',
+      'Disposer en cercle dans le bol en alternant tomates, mozzarella et avocat.',
+      'Répartir le thon émietté au centre et parsemer de basilic frais ciselé.',
+      'Arroser d\'huile d\'olive et de jus de citron, assaisonner de fleur de sel et poivre.'
+    ]
+  },
+  {
+    id: 'R462',
+    name: 'Carpaccio de Bœuf Roquette & Parmesan',
+    emoji: '🥩',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['carpaccio', 'bœuf', 'roquette', 'parmesan', 'no-cook', 'antipasto', 'léger'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: P26×4 + G8×4 + L16×9 = 104+32+144 = 280 kcal ✓
+    baseNutrition: { calories: 280, proteinGrams: 26, carbsGrams: 8, fatGrams: 16 },
+    ingredients: [
+      { name: 'Bœuf carpaccio (tranché fin)', qty: 250, unit: 'g' },
+      { name: 'Roquette', qty: 60, unit: 'g' },
+      { name: 'Parmesan', qty: 30, unit: 'g' },
+      { name: 'Câpres', qty: 20, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Jus de citron', qty: 15, unit: 'ml' },
+      { name: 'Poivre noir', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Sortir le carpaccio du réfrigérateur 5 min avant de servir et disposer les tranches à plat sur les assiettes.',
+      'Répartir la roquette fraîche au centre de chaque assiette.',
+      'Parsemer de copeaux de parmesan obtenus avec un économe et de câpres égouttées.',
+      'Arroser généreusement d\'huile d\'olive extra-vierge et de jus de citron frais.',
+      'Terminer avec un généreux tour de moulin à poivre et servir immédiatement.'
+    ]
+  },
+  {
+    id: 'R463',
+    name: 'Bruschetta Ricotta & Tomates Cerises',
+    emoji: '🍅',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'snack'],
+    category: 'italian',
+    tags: ['bruschetta', 'ricotta', 'tomates cerises', 'basilic', 'antipasto', 'végétarien', 'lunch box'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 5,
+    servings: 2,
+    // Vérification: P22×4 + G36×4 + L10×9 = 88+144+90 = 322 kcal ✓
+    baseNutrition: { calories: 322, proteinGrams: 22, carbsGrams: 36, fatGrams: 10 },
+    ingredients: [
+      { name: 'Pain ciabatta', qty: 120, unit: 'g' },
+      { name: 'Ricotta', qty: 150, unit: 'g' },
+      { name: 'Tomates cerises', qty: 200, unit: 'g' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Fleur de sel', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Couper la ciabatta en tranches épaisses et faire griller au four ou à la poêle jusqu\'à dorure.',
+      'Frotter légèrement chaque tranche de pain grillé avec la gousse d\'ail coupée en deux.',
+      'Mélanger la ricotta avec une pincée de sel, du poivre et un filet d\'huile d\'olive.',
+      'Couper les tomates cerises en deux et les assaisonner de fleur de sel et basilic ciselé.',
+      'Tartiner chaque bruschetta de ricotta assaisonnée et garnir de tomates cerises marinées.'
+    ]
+  },
+  {
+    id: 'R464',
+    name: 'Insalata di Polpo e Patate',
+    emoji: '🐙',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['poulpe', 'pommes de terre', 'persil', 'citron', 'salade', 'méditerranéen', 'protéiné'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 25,
+    servings: 2,
+    // Vérification: P30×4 + G28×4 + L12×9 = 120+112+108 = 340 kcal ✓
+    baseNutrition: { calories: 340, proteinGrams: 30, carbsGrams: 28, fatGrams: 12 },
+    ingredients: [
+      { name: 'Poulpe cuit', qty: 300, unit: 'g' },
+      { name: 'Pommes de terre', qty: 200, unit: 'g' },
+      { name: 'Céleri', qty: 80, unit: 'g' },
+      { name: 'Olives noires', qty: 30, unit: 'g' },
+      { name: 'Persil frais', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Jus de citron', qty: 20, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' }
+    ],
+    steps: [
+      'Cuire les pommes de terre à l\'eau bouillante salée 20 min, égoutter et laisser tiédir.',
+      'Couper le poulpe cuit en tronçons de 2 cm et les pommes de terre en morceaux.',
+      'Émincer finement le céleri et hacher le persil frais.',
+      'Préparer la vinaigrette avec l\'huile d\'olive, le jus de citron et l\'ail écrasé.',
+      'Mélanger poulpe, pommes de terre, céleri et olives, arroser de vinaigrette et garnir de persil.'
+    ]
+  },
+  {
+    id: 'R465',
+    name: 'Antipasto Bowl Charcuterie Légère',
+    emoji: '🍖',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['antipasto', 'charcuterie', 'bresaola', 'légumes grillés', 'bowl', 'no-cook', 'protéiné'],
+    difficulty: 1,
+    prepTime: 12,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: P30×4 + G20×4 + L18×9 = 120+80+162 = 362 kcal ✓
+    baseNutrition: { calories: 362, proteinGrams: 30, carbsGrams: 20, fatGrams: 18 },
+    ingredients: [
+      { name: 'Bresaola', qty: 120, unit: 'g' },
+      { name: 'Prosciutto crudo', qty: 60, unit: 'g' },
+      { name: 'Artichauts marinés', qty: 100, unit: 'g' },
+      { name: 'Poivrons grillés en bocal', qty: 100, unit: 'g' },
+      { name: 'Olives vertes', qty: 40, unit: 'g' },
+      { name: 'Roquette', qty: 40, unit: 'g' },
+      { name: 'Parmesan', qty: 20, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
+    ],
+    steps: [
+      'Disposer la bresaola et le prosciutto en éventail dans deux bols larges.',
+      'Ajouter les artichauts marinés égouttés, les poivrons grillés en lanières et les olives.',
+      'Placer un bouquet de roquette au centre de chaque bol.',
+      'Parsemer de copeaux de parmesan réalisés à l\'économe.',
+      'Arroser d\'un filet d\'huile d\'olive extra-vierge et servir avec du pain grillé si désiré.'
+    ]
+  },
+  {
+    id: 'R466',
+    name: 'Insalata di Farro con Verdure',
+    emoji: '🌾',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['farro', 'céréales', 'légumes', 'végétarien', 'bowl', 'lunch box', 'healthy'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 25,
+    servings: 2,
+    // Vérification: P20×4 + G50×4 + L11×9 = 80+200+99 = 379 kcal ✓
+    baseNutrition: { calories: 379, proteinGrams: 20, carbsGrams: 50, fatGrams: 11 },
+    ingredients: [
+      { name: 'Farro (épeautre)', qty: 160, unit: 'g' },
+      { name: 'Courgette', qty: 150, unit: 'g' },
+      { name: 'Tomates séchées', qty: 40, unit: 'g' },
+      { name: 'Feta', qty: 60, unit: 'g' },
+      { name: 'Épinards frais', qty: 60, unit: 'g' },
+      { name: 'Pignons de pin', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Jus de citron', qty: 10, unit: 'ml' },
+      { name: 'Herbes de Provence', qty: 3, unit: 'g' }
+    ],
+    steps: [
+      'Cuire le farro dans l\'eau bouillante salée selon les instructions (env. 25 min), égoutter et refroidir.',
+      'Couper la courgette en petits dés et la faire revenir 3 min à la poêle avec un filet d\'huile d\'olive.',
+      'Torréfier les pignons de pin à sec 2 min dans une poêle jusqu\'à dorure légère.',
+      'Mélanger le farro refroidi avec la courgette, les tomates séchées émincées et les épinards.',
+      'Émietter la feta, ajouter les pignons, arroser d\'huile et citron, assaisonner aux herbes de Provence.'
+    ]
+  },
+  {
+    id: 'R467',
+    name: 'Caponata Sicilienne Power Bowl',
+    emoji: '🍆',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['caponata', 'aubergine', 'sicilien', 'végétarien', 'bowl', 'légumes', 'healthy'],
+    difficulty: 2,
+    prepTime: 15,
+    cookTime: 20,
+    servings: 2,
+    // Vérification: P18×4 + G40×4 + L13×9 = 72+160+117 = 349 kcal ✓
+    baseNutrition: { calories: 349, proteinGrams: 18, carbsGrams: 40, fatGrams: 13 },
+    ingredients: [
+      { name: 'Aubergine', qty: 300, unit: 'g' },
+      { name: 'Tomates cerises', qty: 200, unit: 'g' },
+      { name: 'Céleri', qty: 80, unit: 'g' },
+      { name: 'Olives vertes', qty: 40, unit: 'g' },
+      { name: 'Câpres', qty: 20, unit: 'g' },
+      { name: 'Pois chiches cuits', qty: 120, unit: 'g' },
+      { name: 'Vinaigre de vin rouge', qty: 20, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' }
+    ],
+    steps: [
+      'Couper l\'aubergine en cubes de 2 cm, saler et laisser dégorger 10 min, puis éponger.',
+      'Faire revenir l\'aubergine et le céleri émincé dans l\'huile d\'olive à feu vif 8-10 min.',
+      'Ajouter les tomates cerises coupées en deux, les olives, les câpres et les pois chiches.',
+      'Verser le vinaigre de vin rouge, mélanger et cuire encore 5 min à feu moyen.',
+      'Servir tiède ou froid dans des bols, garni de basilic frais ciselé.'
+    ]
+  },
+  {
+    id: 'R468',
+    name: 'Insalata Nizzarda Italiana',
+    emoji: '🐟',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['niçoise', 'thon', 'œufs', 'haricots verts', 'tomates', 'salade', 'protéiné'],
+    difficulty: 1,
+    prepTime: 15,
+    cookTime: 10,
+    servings: 2,
+    // Vérification: P32×4 + G22×4 + L18×9 = 128+88+162 = 378 kcal ✓
+    baseNutrition: { calories: 378, proteinGrams: 32, carbsGrams: 22, fatGrams: 18 },
+    ingredients: [
+      { name: 'Thon en boîte au naturel', qty: 200, unit: 'g' },
+      { name: 'Œufs', qty: 2, unit: 'pce' },
+      { name: 'Haricots verts', qty: 150, unit: 'g' },
+      { name: 'Tomates', qty: 150, unit: 'g' },
+      { name: 'Olives noires', qty: 30, unit: 'g' },
+      { name: 'Anchois à l\'huile', qty: 20, unit: 'g' },
+      { name: 'Laitue', qty: 60, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Vinaigre de vin', qty: 10, unit: 'ml' }
+    ],
+    steps: [
+      'Cuire les haricots verts à l\'eau bouillante salée 5-6 min, ils doivent rester croquants, égoutter et refroidir.',
+      'Faire cuire les œufs durs 9 min dans l\'eau bouillante, puis les refroidir et les écaler.',
+      'Émincer les tomates en quartiers, couper les œufs en deux et émietter le thon.',
+      'Dresser la laitue dans les assiettes puis disposer harmonieusement tous les ingrédients.',
+      'Arroser de vinaigrette à l\'huile d\'olive, poser les anchois sur le dessus et servir.'
+    ]
+  },
+  {
+    id: 'R469',
+    name: 'Carpaccio de Saumon Câpres & Citron',
+    emoji: '🐟',
+    origin: '🇮🇹',
+    mealTypes: ['lunch', 'dinner'],
+    category: 'italian',
+    tags: ['carpaccio', 'saumon', 'câpres', 'citron', 'aneth', 'no-cook', 'léger'],
+    difficulty: 1,
+    prepTime: 10,
+    cookTime: 0,
+    servings: 2,
+    // Vérification: P26×4 + G6×4 + L17×9 = 104+24+153 = 281 kcal ✓
+    baseNutrition: { calories: 281, proteinGrams: 26, carbsGrams: 6, fatGrams: 17 },
+    ingredients: [
+      { name: 'Saumon frais (tranché fin)', qty: 280, unit: 'g' },
+      { name: 'Câpres', qty: 25, unit: 'g' },
+      { name: 'Citron', qty: 1, unit: 'pce' },
+      { name: 'Aneth frais', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Oignon rouge', qty: 30, unit: 'g' },
+      { name: 'Fleur de sel', qty: 2, unit: 'g' }
+    ],
+    steps: [
+      'Disposer les tranches de saumon bien à plat en une seule couche sur deux grandes assiettes froides.',
+      'Émincer l\'oignon rouge en très fines rondelles et les répartir sur le saumon.',
+      'Parsemer de câpres égouttées et de brins d\'aneth frais.',
+      'Arroser d\'un filet d\'huile d\'olive extra-vierge et du jus de citron fraîchement pressé.',
+      'Assaisonner de fleur de sel et poivre noir, laisser mariner 2 min et servir immédiatement.'
+    ]
+  }
 
   ];
 
