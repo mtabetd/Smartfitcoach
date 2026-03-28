@@ -2581,8 +2581,8 @@ function renderMusculationProgram(p) {
         if (progressiveWeight > 0 && !isBodyweight) {
           var lbKeywords = /squat|leg|fessier|ischios|mollet/i;
           var nextIncr = lbKeywords.test(exRef.n) ? 5 : 2.5;
-          var progressNote = h('div', {style: 'padding:6px 8px;background:rgba(76,175,80,0.08);border-top:1px solid var(--border);font-size:10px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif'});
-          progressNote.appendChild(h('span', {style: 'color:#27AE60'}, '\uD83D\uDCC8 '));
+          var progressNote = h('div', {style: 'padding:6px 8px;background:var(--greenbg,rgba(26,74,26,.06));border-top:1px solid var(--border);font-size:10px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif'});
+          progressNote.appendChild(h('span', {style: 'color:var(--green,#1A4A1A)'}, '\uD83D\uDCC8 '));
           progressNote.appendChild(h('span', {}, 'Objectif semaine prochaine\u00a0: ' + (progressiveWeight + nextIncr) + '\u00a0kg si toutes s\u00e9ries r\u00e9ussies'));
           setTable.appendChild(progressNote);
         }
@@ -2684,7 +2684,7 @@ function renderMusculationProgram(p) {
             ? '\uD83D\uDD36 Session mod\u00e9r\u00e9e \u2014 nutrition pr\u00e9/post recommand\u00e9e'
             : '\u2705 Session \u00e9quilibr\u00e9e pour votre objectif';
         nutritionContextHtml =
-          '<div style="margin-top:12px;padding:10px 14px;background:rgba(0,0,0,0.06);border-radius:10px;font-size:13px">' +
+          '<div style="margin-top:12px;padding:10px 14px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:13px">' +
             '<div style="font-weight:600;margin-bottom:6px;color:var(--text)">\uD83C\uDF7D\ufe0f Impact nutritionnel</div>' +
             '<div style="display:flex;justify-content:space-between;margin-bottom:4px">' +
               '<span>Cible calorique du jour</span>' +
