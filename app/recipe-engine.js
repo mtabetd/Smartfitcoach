@@ -5434,6 +5434,196 @@
       ]
     },
 
+    {
+      id: 'R408',
+      name: 'Granola Protéiné Pistache-Coco-Miel',
+      emoji: '🥣', origin: '🌿',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'meal-prep', 'granola', 'pistache', 'coco', 'croustillant'],
+      difficulty: 1, prepTime: 10, cookTime: 25, servings: 10,
+      // 150×4 + 260×4 + 90×9 = 600+1040+810 = 2450 ✓ (TOTAL 10 portions)
+      baseNutrition: { calories: 2450, proteinGrams: 150, carbsGrams: 260, fatGrams: 90 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 400, unit: 'g' },
+        { name: 'Whey vanille', qty: 100, unit: 'g' },
+        { name: 'Pistaches concassées', qty: 80, unit: 'g' },
+        { name: 'Noix de coco râpée', qty: 60, unit: 'g' },
+        { name: 'Miel', qty: 80, unit: 'g' },
+        { name: 'Huile de coco fondue', qty: 40, unit: 'g' },
+        { name: 'Sel', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 160°C. Mélanger flocons d\'avoine, whey vanille, noix de coco et sel dans un grand bol.',
+        'Dans un bol séparé, mélanger le miel fondu et l\'huile de coco. Verser sur le mélange sec et bien enrober.',
+        'Étaler uniformément sur une plaque recouverte de papier sulfurisé. Parsemer les pistaches concassées par-dessus.',
+        'Cuire 20-25 min en remuant doucement à mi-cuisson pour former des clusters généreux. Surveiller la couleur dorée.',
+        'Laisser refroidir complètement sans remuer (crucial pour le croustillant). Conserver en boîte hermétique 2 semaines.'
+      ]
+    },
+
+    {
+      id: 'R409',
+      name: 'Granola Protéiné Chocolat-Noisette',
+      emoji: '🍫', origin: '🌰',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'meal-prep', 'granola', 'chocolat', 'noisette', 'ferrero-style'],
+      difficulty: 1, prepTime: 10, cookTime: 25, servings: 10,
+      // 140×4 + 260×4 + 80×9 = 560+1040+720 = 2320 ✓ (TOTAL 10 portions)
+      baseNutrition: { calories: 2320, proteinGrams: 140, carbsGrams: 260, fatGrams: 80 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 380, unit: 'g' },
+        { name: 'Whey chocolat', qty: 100, unit: 'g' },
+        { name: 'Noisettes entières', qty: 100, unit: 'g' },
+        { name: 'Cacao pur non sucré', qty: 20, unit: 'g' },
+        { name: 'Sirop d\'érable', qty: 80, unit: 'g' },
+        { name: 'Beurre de noisette', qty: 60, unit: 'g' },
+        { name: 'Huile de coco fondue', qty: 20, unit: 'g' },
+        { name: 'Sel', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Préchauffer le four à 160°C. Mélanger flocons, whey chocolat, cacao et sel. Hacher grossièrement les noisettes.',
+        'Faire fondre doucement le beurre de noisette avec le sirop d\'érable et l\'huile de coco. Verser sur le mélange sec.',
+        'Incorporer les noisettes et mélanger jusqu\'à enrobage uniforme. Étaler en couche épaisse sur plaque sulfurisée.',
+        'Cuire 22-25 min en retournant à mi-cuisson. Former des gros clusters style "Ferrero Rocher" avant refroidissement.',
+        'Refroidir totalement avant de briser en morceaux. Conserver hermétiquement jusqu\'à 2 semaines.'
+      ]
+    },
+
+    {
+      id: 'R410',
+      name: 'Barres Protéinées Dattes-Amandes-Cannelle',
+      emoji: '🍬', origin: '🌴',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'meal-prep', 'no-bake', 'dattes', 'amandes', 'naturel', 'sans-cuisson'],
+      difficulty: 1, prepTime: 20, cookTime: 0, servings: 10,
+      // 120×4 + 280×4 + 50×9 = 480+1120+450 = 2050 ✓ (TOTAL 10 barres)
+      baseNutrition: { calories: 2050, proteinGrams: 120, carbsGrams: 280, fatGrams: 50 },
+      ingredients: [
+        { name: 'Dattes Medjool dénoyautées', qty: 300, unit: 'g' },
+        { name: 'Amandes entières', qty: 150, unit: 'g' },
+        { name: 'Whey vanille', qty: 100, unit: 'g' },
+        { name: 'Flocons d\'avoine', qty: 100, unit: 'g' },
+        { name: 'Cannelle moulue', qty: 5, unit: 'g' },
+        { name: 'Sel de mer', qty: 2, unit: 'g' },
+        { name: 'Eau', qty: 20, unit: 'ml' }
+      ],
+      steps: [
+        'Mixer les amandes en grossier dans un robot. Réserver. Mixer les dattes jusqu\'à obtenir une pâte collante.',
+        'Ajouter whey vanille, flocons d\'avoine, cannelle et sel à la pâte de dattes. Mixer brièvement pour combiner.',
+        'Incorporer les amandes concassées. Si trop sec, ajouter l\'eau cuillère à soupe par cuillère jusqu\'à cohésion.',
+        'Presser uniformément dans un moule rectangulaire tapissé de film alimentaire sur 2 cm d\'épaisseur.',
+        'Réfrigérer 2h minimum. Couper en 10 barres égales. Conserver au frigo 1 semaine ou congeler 3 mois.'
+      ]
+    },
+
+    {
+      id: 'R411',
+      name: 'Barres Protéinées Pistache-Citron Vert-Cajou',
+      emoji: '💚', origin: '🌿',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'meal-prep', 'no-bake', 'pistache', 'cajou', 'citron-vert', 'vegan-option'],
+      difficulty: 1, prepTime: 20, cookTime: 0, servings: 8,
+      // 112×4 + 144×4 + 80×9 = 448+576+720 = 1744 ✓ (TOTAL 8 barres)
+      baseNutrition: { calories: 1744, proteinGrams: 112, carbsGrams: 144, fatGrams: 80 },
+      ingredients: [
+        { name: 'Noix de cajou crues', qty: 180, unit: 'g' },
+        { name: 'Pistaches décortiquées', qty: 80, unit: 'g' },
+        { name: 'Protéine de pois neutre (ou whey neutre)', qty: 80, unit: 'g' },
+        { name: 'Zeste de citron vert', qty: 10, unit: 'g' },
+        { name: 'Jus de citron vert', qty: 30, unit: 'ml' },
+        { name: 'Huile de coco fondue', qty: 30, unit: 'g' },
+        { name: 'Sirop d\'agave', qty: 40, unit: 'g' },
+        { name: 'Sel', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Mixer les noix de cajou jusqu\'à obtenir une farine grossière. Concasser légèrement les pistaches et réserver.',
+        'Ajouter protéine de pois, zeste, jus de citron vert, sirop d\'agave et sel. Mixer brièvement pour combiner.',
+        'Verser l\'huile de coco fondue et mixer jusqu\'à obtenir une pâte qui se tient. Incorporer les pistaches à la main.',
+        'Étaler dans un moule tapissé de papier sulfurisé sur 1,5 cm d\'épaisseur. Décorer de pistaches entières.',
+        'Réfrigérer 1h30. Couper en 8 barres. Conserver au frigo 5 jours. Texture "Larabar" premium.'
+      ]
+    },
+
+    {
+      id: 'R412',
+      name: 'Barres Chocolat-Caramel Protéinées "Twix Sain"',
+      emoji: '🍫', origin: '🏅',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'meal-prep', 'chocolat', 'caramel', 'twix', 'indulgent', 'premium'],
+      difficulty: 2, prepTime: 30, cookTime: 15, servings: 8,
+      // 128×4 + 192×4 + 96×9 = 512+768+864 = 2144 ✓ (TOTAL 8 barres)
+      baseNutrition: { calories: 2144, proteinGrams: 128, carbsGrams: 192, fatGrams: 96 },
+      ingredients: [
+        { name: 'Flocons d\'avoine (base biscuit)', qty: 160, unit: 'g' },
+        { name: 'Whey vanille (base biscuit)', qty: 60, unit: 'g' },
+        { name: 'Beurre d\'amande (base biscuit)', qty: 60, unit: 'g' },
+        { name: 'Dattes Medjool (caramel)', qty: 120, unit: 'g' },
+        { name: 'Beurre de cacahuète (caramel)', qty: 60, unit: 'g' },
+        { name: 'Lait de coco (caramel)', qty: 40, unit: 'ml' },
+        { name: 'Chocolat noir 70% (enrobage)', qty: 120, unit: 'g' },
+        { name: 'Fleur de sel', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Base biscuit : mixer flocons + whey + beurre d\'amande + 2cs eau jusqu\'à obtenir une pâte homogène. Presser dans moule tapissé de 2 cm.',
+        'Cuire la base 12 min à 175°C jusqu\'à légère dorure. Laisser refroidir complètement.',
+        'Caramel : mixer dattes + beurre de cacahuète + lait de coco jusqu\'à consistance lisse et collante.',
+        'Étaler le caramel sur la base refroidie en couche uniforme d\'1 cm. Réfrigérer 30 min.',
+        'Faire fondre le chocolat noir au bain-marie. Couper en 8 barres, enrober chacune de chocolat. Déposer sur grille, saupoudrer de fleur de sel. Réfrigérer 45 min.'
+      ]
+    },
+
+    {
+      id: 'R413',
+      name: 'Barres Protéinées Mangue-Gingembre-Cajou',
+      emoji: '🥭', origin: '🌏',
+      mealTypes: ['snack'],
+      tags: ['high-protein', 'snack', 'meal-prep', 'no-bake', 'mangue', 'gingembre', 'cajou', 'exotique', 'tropical'],
+      difficulty: 1, prepTime: 20, cookTime: 0, servings: 8,
+      // 88×4 + 176×4 + 72×9 = 352+704+648 = 1704 ✓ (TOTAL 8 barres)
+      baseNutrition: { calories: 1704, proteinGrams: 88, carbsGrams: 176, fatGrams: 72 },
+      ingredients: [
+        { name: 'Noix de cajou crues', qty: 200, unit: 'g' },
+        { name: 'Mangue séchée non sucrée', qty: 120, unit: 'g' },
+        { name: 'Whey vanille', qty: 80, unit: 'g' },
+        { name: 'Gingembre frais râpé', qty: 15, unit: 'g' },
+        { name: 'Huile de coco fondue', qty: 25, unit: 'g' },
+        { name: 'Miel', qty: 30, unit: 'g' },
+        { name: 'Sel', qty: 1, unit: 'g' }
+      ],
+      steps: [
+        'Couper la mangue séchée en petits morceaux. Mixer les noix de cajou en grossier dans un robot.',
+        'Ajouter whey vanille, gingembre râpé, miel, huile de coco et sel. Mixer brièvement pour combiner.',
+        'Incorporer les morceaux de mangue séchée et mélanger à la main pour les répartir uniformément dans la pâte.',
+        'La pâte doit se tenir : si trop sèche, ajouter 1cs d\'eau ; si trop collante, ajouter un peu plus de whey.',
+        'Étaler dans moule tapissé sur 1,5 cm, réfrigérer 2h. Couper en 8 barres. Conserver 1 semaine au frigo.'
+      ]
+    },
+
+    {
+      id: 'R414',
+      name: 'Granola Bowl Protéiné du Matin',
+      emoji: '🌅', origin: '🌍',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['high-protein', 'breakfast', 'snack', 'bowl', 'granola', 'skyr', 'myrtilles', 'meal-prep', 'premium'],
+      difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
+      // 35×4 + 55×4 + 12×9 = 140+220+108 = 468 ✓ (TOTAL 1 portion)
+      baseNutrition: { calories: 468, proteinGrams: 35, carbsGrams: 55, fatGrams: 12 },
+      ingredients: [
+        { name: 'Granola pistache-coco (R408)', qty: 60, unit: 'g' },
+        { name: 'Skyr nature', qty: 200, unit: 'g' },
+        { name: 'Myrtilles fraîches ou surgelées décongelées', qty: 60, unit: 'g' },
+        { name: 'Framboises fraîches', qty: 40, unit: 'g' },
+        { name: 'Graines de chia', qty: 10, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Verser le skyr dans un bol large. Lisser avec une cuillère pour un effet crémeux et uniforme.',
+        'Déposer le granola pistache-coco sur le côté du bol pour préserver son croustillant jusqu\'au service.',
+        'Disposer les myrtilles et framboises en secteurs colorés. Saupoudrer les graines de chia.',
+        'Drizzler le miel en filet sur l\'ensemble. Servir immédiatement pour profiter du contraste croustillant/crémeux.'
+      ]
+    },
+
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
