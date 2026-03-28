@@ -1711,8 +1711,8 @@
       source: 'marjane',
       updatedAt: '2026-03'
     },
-    'Oeuf dur': {
-      name: 'Oeuf dur',
+    'Œuf dur': {
+      name: 'Œuf dur',
       pricePerPce: r(1.2),
       source: 'marjane',
       updatedAt: '2026-03'

@@ -746,17 +746,17 @@ var lunch = [
   },
   {
     _id: 'L104',
-    n: "Steak Boeuf Patate Douce",
+    n: "Steak Bœuf Patate Douce",
     f: "🇺🇸",
     k: 542,
     p: 46,
     g: 40,
     l: 22,
     lv: 2,
-    i: "Steak de boeuf 200g, patate douce 200g, haricots verts 100g, huile d'olive 12ml, herbes de Provence 3g",
+    i: "Steak de bœuf 200g, patate douce 200g, haricots verts 100g, huile d'olive 12ml, herbes de Provence 3g",
     st: ["Cuire la patate douce en dés au four à 200°C pendant 25 min.", "Griller le steak à feu vif 3-4 min de chaque côté.", "Accompagner de haricots verts vapeur."],
     w: false,
-    tags: ["boeuf", "patate douce", "haricots verts", "huile"]
+    tags: ["bœuf", "patate douce", "haricots verts", "huile"]
   },
   {
     _id: 'L105',
@@ -858,17 +858,17 @@ var lunch = [
   },
   {
     _id: 'L112',
-    n: "Bibimbap Boeuf",
+    n: "Bibimbap Bœuf",
     f: "🇰🇷",
     k: 546,
     p: 38,
     g: 58,
     l: 18,
     lv: 3,
-    i: "Boeuf haché 150g, riz japonais 120g, épinards 80g, carotte 60g, courgette 60g, œuf 60g, sauce gochujang 15g, huile de sésame 8ml",
-    st: ["Cuire le riz.", "Poêler le boeuf haché avec la sauce.", "Assembler le bol avec riz, légumes sautés séparément, boeuf et œuf au plat. Finir avec huile de sésame."],
+    i: "Bœuf haché 150g, riz japonais 120g, épinards 80g, carotte 60g, courgette 60g, œuf 60g, sauce gochujang 15g, huile de sésame 8ml",
+    st: ["Cuire le riz.", "Poêler le bœuf haché avec la sauce.", "Assembler le bol avec riz, légumes sautés séparément, bœuf et œuf au plat. Finir avec huile de sésame."],
     w: false,
-    tags: ["boeuf", "riz", "épinards", "carotte", "courgette", "œuf", "sésame"]
+    tags: ["bœuf", "riz", "épinards", "carotte", "courgette", "œuf", "sésame"]
   },
   {
     _id: 'L113',
@@ -984,17 +984,17 @@ var lunch = [
   },
   {
     _id: 'L121',
-    n: "Bowl Boeuf Coréen Riz Sésame",
+    n: "Bowl Bœuf Coréen Riz Sésame",
     f: "🇰🇷",
     k: 512,
     p: 42,
     g: 50,
     l: 16,
     lv: 3,
-    i: "Boeuf 180g, riz japonais 120g, sauce soja 20ml, ail 5g, gingembre 5g, poire asiatique 40g, huile de sésame 8ml, sésame 8g",
-    st: ["Mariner le boeuf dans sauce soja, ail, gingembre et poire râpée.", "Poêler à feu vif.", "Servir sur le riz avec huile de sésame et sésame grillé."],
+    i: "Bœuf 180g, riz japonais 120g, sauce soja 20ml, ail 5g, gingembre 5g, poire asiatique 40g, huile de sésame 8ml, sésame 8g",
+    st: ["Mariner le bœuf dans sauce soja, ail, gingembre et poire râpée.", "Poêler à feu vif.", "Servir sur le riz avec huile de sésame et sésame grillé."],
     w: false,
-    tags: ["boeuf", "riz", "soja", "ail", "gingembre", "sésame"]
+    tags: ["bœuf", "riz", "soja", "ail", "gingembre", "sésame"]
   },
   {
     _id: 'L122',
@@ -1138,17 +1138,17 @@ var lunch = [
   },
   {
     _id: 'L132',
-    n: "Boeuf Haché Légumes Wok",
+    n: "Bœuf Haché Légumes Wok",
     f: "🇨🇳",
     k: 516,
     p: 42,
     g: 42,
     l: 20,
     lv: 2,
-    i: "Boeuf haché 180g, brocoli 100g, poivron 80g, carotte 60g, sauce huître halal 20ml, riz 100g, ail 5g",
-    st: ["Poêler le boeuf haché à feu vif.", "Ajouter les légumes et l'ail.", "Incorporer la sauce, servir avec le riz."],
+    i: "Bœuf haché 180g, brocoli 100g, poivron 80g, carotte 60g, sauce huître halal 20ml, riz 100g, ail 5g",
+    st: ["Poêler le bœuf haché à feu vif.", "Ajouter les légumes et l'ail.", "Incorporer la sauce, servir avec le riz."],
     w: false,
-    tags: ["boeuf", "brocoli", "poivron", "carotte", "sauce huître", "riz"]
+    tags: ["bœuf", "brocoli", "poivron", "carotte", "sauce huître", "riz"]
   },
   {
     _id: 'L133',
@@ -1166,17 +1166,17 @@ var lunch = [
   },
   {
     _id: 'L134',
-    n: "Burritos Boeuf Haricots Noirs",
+    n: "Burritos Bœuf Haricots Noirs",
     f: "🇲🇽",
     k: 504,
     p: 40,
     g: 50,
     l: 16,
     lv: 3,
-    i: "Boeuf haché 150g, haricots noirs 100g, tortilla blé 80g, maïs 60g, salsa 40g, fromage râpé 30g, épices 5g",
-    st: ["Cuire le boeuf haché avec épices et oignon.", "Chauffer les haricots noirs.", "Assembler le burrito, rouler, griller 2 min."],
+    i: "Bœuf haché 150g, haricots noirs 100g, tortilla blé 80g, maïs 60g, salsa 40g, fromage râpé 30g, épices 5g",
+    st: ["Cuire le bœuf haché avec épices et oignon.", "Chauffer les haricots noirs.", "Assembler le burrito, rouler, griller 2 min."],
     w: false,
-    tags: ["boeuf", "haricots noirs", "tortilla", "maïs", "salsa", "fromage"]
+    tags: ["bœuf", "haricots noirs", "tortilla", "maïs", "salsa", "fromage"]
   },
   {
     _id: 'L135',
@@ -1187,10 +1187,10 @@ var lunch = [
     g: 48,
     l: 18,
     lv: 3,
-    i: "Boeuf 180g, nouilles de riz 120g, bouillon pho 600ml, oignon brûlé 40g, gingembre 10g, basilic 10g, germes de soja 60g",
-    st: ["Préparer le bouillon avec os de boeuf, oignon brûlé et épices 2h.", "Cuire les nouilles.", "Assembler: nouilles, boeuf, bouillon chaud, herbes et germes."],
+    i: "Bœuf 180g, nouilles de riz 120g, bouillon pho 600ml, oignon brûlé 40g, gingembre 10g, basilic 10g, germes de soja 60g",
+    st: ["Préparer le bouillon avec os de bœuf, oignon brûlé et épices 2h.", "Cuire les nouilles.", "Assembler: nouilles, bœuf, bouillon chaud, herbes et germes."],
     w: false,
-    tags: ["boeuf", "nouilles", "bouillon", "gingembre", "basilic", "soja"]
+    tags: ["bœuf", "nouilles", "bouillon", "gingembre", "basilic", "soja"]
   },
   {
     _id: 'L136',
@@ -1250,17 +1250,17 @@ var lunch = [
   },
   {
     _id: 'L140',
-    n: "Salade Thaï Boeuf Grillé",
+    n: "Salade Thaï Bœuf Grillé",
     f: "🇹🇭",
     k: 514,
     p: 42,
     g: 46,
     l: 18,
     lv: 2,
-    i: "Boeuf 180g, nouilles de riz 100g, concombre 60g, carotte 60g, cacahuètes 20g, menthe 10g, sauce fish halal 15ml, citron vert 20ml",
-    st: ["Griller le boeuf saignant, trancher fin.", "Cuire les nouilles.", "Assembler avec légumes, herbes, cacahuètes et sauce citron."],
+    i: "Bœuf 180g, nouilles de riz 100g, concombre 60g, carotte 60g, cacahuètes 20g, menthe 10g, sauce fish halal 15ml, citron vert 20ml",
+    st: ["Griller le bœuf saignant, trancher fin.", "Cuire les nouilles.", "Assembler avec légumes, herbes, cacahuètes et sauce citron."],
     w: false,
-    tags: ["boeuf", "nouilles", "concombre", "carotte", "cacahuètes", "menthe"]
+    tags: ["bœuf", "nouilles", "concombre", "carotte", "cacahuètes", "menthe"]
   },
   {
     _id: 'L141',
@@ -1278,17 +1278,17 @@ var lunch = [
   },
   {
     _id: 'L142',
-    n: "Lomo Saltado Boeuf",
+    n: "Lomo Saltado Bœuf",
     f: "🇵🇪",
     k: 508,
     p: 40,
     g: 42,
     l: 20,
     lv: 3,
-    i: "Boeuf 180g, pommes de terre 150g, tomate 80g, oignon rouge 60g, sauce soja 15ml, coriandre 10g, riz 80g",
-    st: ["Faire sauter le boeuf à feu très vif.", "Ajouter oignon, tomate et sauce soja.", "Incorporer les frites maison et coriandre. Servir avec riz."],
+    i: "Bœuf 180g, pommes de terre 150g, tomate 80g, oignon rouge 60g, sauce soja 15ml, coriandre 10g, riz 80g",
+    st: ["Faire sauter le bœuf à feu très vif.", "Ajouter oignon, tomate et sauce soja.", "Incorporer les frites maison et coriandre. Servir avec riz."],
     w: false,
-    tags: ["boeuf", "pomme de terre", "tomate", "oignon", "soja", "coriandre"]
+    tags: ["bœuf", "pomme de terre", "tomate", "oignon", "soja", "coriandre"]
   },
   {
     _id: 'L143',
@@ -1306,17 +1306,17 @@ var lunch = [
   },
   {
     _id: 'L144',
-    n: "Keftah Boeuf Tomate Herbes",
+    n: "Keftah Bœuf Tomate Herbes",
     f: "🇲🇦",
     k: 524,
     p: 42,
     g: 44,
     l: 20,
     lv: 2,
-    i: "Boeuf haché 200g, tomates 150g, oignon 60g, persil 10g, cumin 2g, paprika 2g, semoule 100g, harissa 10g",
-    st: ["Préparer les keftah avec boeuf, oignon et épices.", "Griller les keftah ou cuire à la poêle.", "Servir avec semoule et sauce tomate épicée."],
+    i: "Bœuf haché 200g, tomates 150g, oignon 60g, persil 10g, cumin 2g, paprika 2g, semoule 100g, harissa 10g",
+    st: ["Préparer les keftah avec bœuf, oignon et épices.", "Griller les keftah ou cuire à la poêle.", "Servir avec semoule et sauce tomate épicée."],
     w: false,
-    tags: ["boeuf", "tomate", "oignon", "persil", "semoule", "harissa"]
+    tags: ["bœuf", "tomate", "oignon", "persil", "semoule", "harissa"]
   },
   {
     _id: 'L145',
@@ -2236,17 +2236,17 @@ var dinner = [
   },
   {
     _id: 'L310',
-    n: "Pho Boeuf",
+    n: "Pho Bœuf",
     f: "🇻🇳",
     k: 422,
     p: 36,
     g: 38,
     l: 14,
     lv: 3,
-    i: "Boeuf 160g, nouilles de riz 100g, bouillon pho 600ml, oignon brûlé 40g, gingembre 15g, basilic 10g, citron vert 15ml, germes de soja 60g",
-    st: ["Préparer le bouillon pho avec épices 1h.", "Cuire les nouilles.", "Assembler avec boeuf cru tranché fin (le bouillon le cuit), herbes fraîches."],
+    i: "Bœuf 160g, nouilles de riz 100g, bouillon pho 600ml, oignon brûlé 40g, gingembre 15g, basilic 10g, citron vert 15ml, germes de soja 60g",
+    st: ["Préparer le bouillon pho avec épices 1h.", "Cuire les nouilles.", "Assembler avec bœuf cru tranché fin (le bouillon le cuit), herbes fraîches."],
     w: false,
-    tags: ["boeuf", "nouilles", "gingembre", "basilic", "soja"]
+    tags: ["bœuf", "nouilles", "gingembre", "basilic", "soja"]
   },
   {
     _id: 'L311',
@@ -2264,17 +2264,17 @@ var dinner = [
   },
   {
     _id: 'L312',
-    n: "Tataki Boeuf Sésame",
+    n: "Tataki Bœuf Sésame",
     f: "🇯🇵",
     k: 396,
     p: 42,
     g: 12,
     l: 20,
     lv: 3,
-    i: "Filet de boeuf 200g, sésame 15g, sauce soja 15ml, gingembre 8g, huile de sésame 8ml, salade 60g",
-    st: ["Rouler le filet de boeuf dans le sésame.", "Saisir 30 sec de chaque côté à feu très vif.", "Trancher fin, servir sur salade avec sauce soja et gingembre."],
+    i: "Filet de bœuf 200g, sésame 15g, sauce soja 15ml, gingembre 8g, huile de sésame 8ml, salade 60g",
+    st: ["Rouler le filet de bœuf dans le sésame.", "Saisir 30 sec de chaque côté à feu très vif.", "Trancher fin, servir sur salade avec sauce soja et gingembre."],
     w: false,
-    tags: ["boeuf", "sésame", "soja", "gingembre", "salade"]
+    tags: ["bœuf", "sésame", "soja", "gingembre", "salade"]
   },
   {
     _id: 'L313',
@@ -2418,17 +2418,17 @@ var dinner = [
   },
   {
     _id: 'L323',
-    n: "Boeuf Bourguignon Allégé",
+    n: "Bœuf Bourguignon Allégé",
     f: "🇫🇷",
     k: 454,
     p: 42,
     g: 22,
     l: 22,
     lv: 4,
-    i: "Boeuf à braiser 200g, carotte 80g, oignon 60g, champignons 80g, bouillon 300ml, concentré de tomate 20g, herbes 5g",
-    st: ["Faire dorer le boeuf.", "Ajouter les légumes, le concentré et le bouillon.", "Mijoter 1h30 à feu très doux."],
+    i: "Bœuf à braiser 200g, carotte 80g, oignon 60g, champignons 80g, bouillon 300ml, concentré de tomate 20g, herbes 5g",
+    st: ["Faire dorer le bœuf.", "Ajouter les légumes, le concentré et le bouillon.", "Mijoter 1h30 à feu très doux."],
     w: false,
-    tags: ["boeuf", "carotte", "oignon", "champignons", "tomate"]
+    tags: ["bœuf", "carotte", "oignon", "champignons", "tomate"]
   },
   {
     _id: 'L324',
@@ -2446,17 +2446,17 @@ var dinner = [
   },
   {
     _id: 'L325',
-    n: "Salade Tiède Boeuf Avocat",
+    n: "Salade Tiède Bœuf Avocat",
     f: "🇺🇸",
     k: 444,
     p: 36,
     g: 30,
     l: 20,
     lv: 2,
-    i: "Boeuf haché maigre 160g, avocat 80g, tomate 80g, maïs 60g, laitue 60g, citron 15ml, épices 3g",
-    st: ["Cuire le boeuf haché avec épices.", "Préparer la salade avec tous les légumes.", "Assembler tiède avec le boeuf."],
+    i: "Bœuf haché maigre 160g, avocat 80g, tomate 80g, maïs 60g, laitue 60g, citron 15ml, épices 3g",
+    st: ["Cuire le bœuf haché avec épices.", "Préparer la salade avec tous les légumes.", "Assembler tiède avec le bœuf."],
     w: false,
-    tags: ["boeuf", "avocat", "tomate", "maïs", "laitue"]
+    tags: ["bœuf", "avocat", "tomate", "maïs", "laitue"]
   },
   {
     _id: 'L326',
@@ -2600,17 +2600,17 @@ var dinner = [
   },
   {
     _id: 'L336',
-    n: "Boeuf Haché Courgette Gratiné",
+    n: "Bœuf Haché Courgette Gratiné",
     f: "🇮🇹",
     k: 446,
     p: 42,
     g: 20,
     l: 22,
     lv: 2,
-    i: "Boeuf haché 180g, courgette 200g, tomate 100g, fromage râpé 30g, oignon 60g, herbes 3g",
-    st: ["Évider les courgettes et farcir de boeuf haché.", "Napper de sauce tomate.", "Gratiner 25 min à 180°C."],
+    i: "Bœuf haché 180g, courgette 200g, tomate 100g, fromage râpé 30g, oignon 60g, herbes 3g",
+    st: ["Évider les courgettes et farcir de bœuf haché.", "Napper de sauce tomate.", "Gratiner 25 min à 180°C."],
     w: false,
-    tags: ["boeuf", "courgette", "tomate", "fromage", "oignon"]
+    tags: ["bœuf", "courgette", "tomate", "fromage", "oignon"]
   },
   {
     _id: 'L337',
@@ -2796,17 +2796,17 @@ var dinner = [
   },
   {
     _id: 'L350',
-    n: "Filet de Boeuf Sauce Champignons",
+    n: "Filet de Bœuf Sauce Champignons",
     f: "🇫🇷",
     k: 444,
     p: 40,
     g: 26,
     l: 20,
     lv: 3,
-    i: "Filet de boeuf 180g, champignons 120g, crème légère 60ml, oignon 40g, bouillon 100ml, persil 5g, huile 10ml",
-    st: ["Saisir le filet de boeuf à feu très vif.", "Préparer la sauce champignons à la crème.", "Servir avec la sauce et persil."],
+    i: "Filet de bœuf 180g, champignons 120g, crème légère 60ml, oignon 40g, bouillon 100ml, persil 5g, huile 10ml",
+    st: ["Saisir le filet de bœuf à feu très vif.", "Préparer la sauce champignons à la crème.", "Servir avec la sauce et persil."],
     w: false,
-    tags: ["boeuf", "champignons", "crème", "oignon", "persil"]
+    tags: ["bœuf", "champignons", "crème", "oignon", "persil"]
   }
 ];
 
