@@ -169,7 +169,8 @@ var MEDICAL_ADVICE={
   anemie_b12:{warn:'Sources B12 : viande, poisson, œufs. Supplémentation si végétalien.',macroAdj:null},
   obesity:{warn:'Déficit calorique modéré (-500 kcal/j max). Protéines hautes pour préserver la masse maigre.',macroAdj:{g:-.08,p:.10,l:-.02}},
   tca:{warn:'Un suivi médical et psychologique est fortement recommandé.',macroAdj:null},
-  grossesse:{warn:'Acide folique, fer, calcium. +300 kcal/j au 2e trimestre, +450 au 3e.',macroAdj:{g:.02,p:.05,l:-.02}},
+  // ACOG 2018 / OMS : +340 kcal/j T2, +450 kcal/j T3 (corrigé de l'erreur "+300 T2")
+  grossesse:{warn:'Acide folique 400µg, fer 27mg, calcium. +340 kcal/j au 2e trimestre, +450 kcal/j au 3e (ACOG 2018 / OMS).',macroAdj:{g:.02,p:.05,l:-.02}},
   allaitement:{warn:'Allaitement : +500 kcal/j (ACOG 2022). Calcium 1200mg/j, iode 290µg/j, vitamine D 600 UI. Évitez caféine >200mg/j et alcool.',macroAdj:{g:.03,p:.07,l:-.01}},
   insomnia:{warn:'Magnésium, tryptophane (dinde, banane). Évitez caféine après 14h.',macroAdj:null}
 };
@@ -1160,9 +1161,18 @@ if(s.age>=13&&s.age<18&&tdeeVal>0){
   if(goalKey==='bulk'){var maxCalTeen=Math.round(tdeeVal+300);if(base>maxCalTeen)base=maxCalTeen;}
 }
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
-if(s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1200,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes)
+// Ménopause : réduction métabolique ~150 kcal/j (NAMS 2022, Poehlman 1995)
+// Plancher 1400 kcal/j maintenu — les femmes ménopausées doivent être encouragées à rester actives (NAMS 2022)
+if(s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1400,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes)
 if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
-if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}var kcalFloor=s.sex==='femme'?1200:1500;base=Math.max(base,kcalFloor);
+if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}
+// Plancher calorique sexe-spécifique (ACSM / IOC 2018 RED-S prevention)
+// Femme active (PAL ≥ 1.375) : plancher 1400 kcal/j — prévention RED-S (IOC 2018)
+// Femme sédentaire : plancher 1200 kcal/j (ACSM)
+// Homme : plancher 1500 kcal/j (ACSM)
+var effectivePAL=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
+var kcalFloor=s.sex==='femme'?(effectivePAL>=1.375?1400:1200):1500;
+base=Math.max(base,kcalFloor);
 // Alcool : déduire les calories hebdo/7 du budget calorique journalier pour un calcul réaliste
 // Ex : 500 kcal alcool/semaine ÷ 7 = 71 kcal/j que l'on retire de l'objectif alimentaire
 // (l'alcool ne nourrit pas : 7kcal/g sans micronutriments, inhibe oxydation des graisses)

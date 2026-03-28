@@ -9,13 +9,19 @@
     bulk:        +0.15,
     maintain:    +0.00,
     cut:         -0.15,
-    shred:       -0.25
+    // ACSM 2009 / Helms 2014 : déficit max -500 kcal/j pour préserver la masse maigre.
+    // -0.20 (vs -0.25) est un plafond plus sûr ; calcCaloriesTarget applique en plus
+    // le cap 500 kcal/j via la contrainte Math.max(tdee-500, floor).
+    shred:       -0.20
   };
 
-  var PROT_DEFAULT_MALE   = 2.2;  // g/kg (ISSN 2017)
-  var PROT_DEFAULT_FEMALE = 1.8;  // g/kg (Tarnopolsky 2000 — oestrogène anti-catabolique)
-  var PROT_ELITE_MALE     = 2.5;  // g/kg (Morton 2018 BJSM meta-analysis)
-  var PROT_ELITE_FEMALE   = 2.0;  // g/kg
+  // PROT_DEFAULT : valeur médiane ISSN Position Stand 2023 pour non-élite en résistance
+  // ISSN 2023 : 1.4-2.0 g/kg (force/muscu non-élite) — 1.8 = milieu de fourchette
+  // 2.2 g/kg correspond à l'UPPER BOUND pour sportifs intensifs/sèche, pas au défaut général
+  var PROT_DEFAULT_MALE   = 1.8;  // g/kg — ISSN Position Stand 2023 (non-élite résistance)
+  var PROT_DEFAULT_FEMALE = 1.6;  // g/kg — Tarnopolsky 2000 : femmes ~11% moins (oestrogène anti-catabolique)
+  var PROT_ELITE_MALE     = 2.2;  // g/kg — ISSN 2023 upper / Morton 2018 BJSM meta-analysis
+  var PROT_ELITE_FEMALE   = 2.0;  // g/kg — Morton 2018 BJSM
 
   var FAT_MIN_PER_KG      = 0.8;  // g/kg minimum absolu (ISSN 2021 — santé hormonale)
 
@@ -53,22 +59,38 @@
     return Math.round(bmr * activityLevel);
   }
 
-  var KCAL_FLOOR_MALE   = 1500; // ACSM — plancher absolu homme
-  var KCAL_FLOOR_FEMALE = 1200; // ACSM — plancher absolu femme
+  var KCAL_FLOOR_MALE          = 1500; // ACSM — plancher absolu homme
+  var KCAL_FLOOR_FEMALE        = 1200; // ACSM — plancher absolu femme sédentaire
+  var KCAL_FLOOR_FEMALE_ACTIVE = 1400; // ACSM / IOC 2018 — plancher femme sportive (RED-S prevention)
+  // Seuil d'activité : PAL ≥ 1.375 (légèrement actif, ≥1x/semaine) → plancher 1400 kcal
+  var ACTIVITY_THRESHOLD_ACTIVE = 1.375;
 
   /**
    * Ajuste les calories selon l'objectif.
-   * Garantie : résultat >= max(bmr, plancher sexe-spécifique ACSM).
+   * Garantie : résultat >= max(bmr, plancher sexe-spécifique ACSM, tdee-500 kcal si déficit).
+   * Le cap -500 kcal/j (ACSM 2009, Helms 2014) prévient la perte de masse maigre.
    * @param {number} tdee
-   * @param {'cut'|'maintenance'|'lean_bulk'|'mass_gain'} goal
-   * @param {number} bmr       Plancher BMR
+   * @param {'bulk'|'maintain'|'cut'|'shred'} goal
+   * @param {number} bmr          Plancher BMR
    * @param {'male'|'female'} gender  Nécessaire pour plancher sexe-spécifique
+   * @param {number} [activityLevel]  PAL — utilisé pour plancher femme sportive (RED-S)
    * @returns {number} caloriesTarget (entier)
    */
-  function calcCaloriesTarget(tdee, goal, bmr, gender) {
-    var adjusted   = Math.round(tdee * (1 + GOAL_ADJUSTMENTS[goal]));
-    var kcalFloor  = gender === 'male' ? KCAL_FLOOR_MALE : KCAL_FLOOR_FEMALE;
-    return Math.max(adjusted, bmr, kcalFloor);
+  function calcCaloriesTarget(tdee, goal, bmr, gender, activityLevel) {
+    var adjusted  = Math.round(tdee * (1 + (GOAL_ADJUSTMENTS[goal] || 0)));
+    // Plancher féminin : 1400 si active (PAL ≥ 1.375), 1200 si sédentaire (ACSM / IOC RED-S)
+    var kcalFloor;
+    if (gender === 'male') {
+      kcalFloor = KCAL_FLOOR_MALE;
+    } else {
+      kcalFloor = (activityLevel && activityLevel >= ACTIVITY_THRESHOLD_ACTIVE)
+        ? KCAL_FLOOR_FEMALE_ACTIVE
+        : KCAL_FLOOR_FEMALE;
+    }
+    // Cap déficit à -500 kcal/j (ACSM 2009, Helms 2014) pour objectifs coupe/sèche
+    var deficit = goal === 'cut' || goal === 'shred';
+    var deficitCap = deficit ? Math.round(tdee - 500) : 0;
+    return Math.max(adjusted, bmr, kcalFloor, deficitCap > 0 ? deficitCap : 0);
   }
 
   /**
@@ -191,7 +213,7 @@
 
     var bmr = calcBMR(inputs.gender, inputs.weightKg, inputs.heightCm, inputs.age);
     var tdee = calcTDEE(bmr, inputs.activityLevel);
-    var caloriesTarget = calcCaloriesTarget(tdee, inputs.goal, bmr, inputs.gender);
+    var caloriesTarget = calcCaloriesTarget(tdee, inputs.goal, bmr, inputs.gender, inputs.activityLevel);
 
     var proteinGrams = calcProtein(inputs.gender, inputs.isElite, inputs.weightKg);
     var fatGrams     = calcFat(inputs.weightKg);

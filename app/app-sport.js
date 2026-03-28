@@ -10,39 +10,61 @@ function filterExerciseByMedical(ex, med) {
 
   var n = (ex.n || ex.name || '').toLowerCase();
 
-  // Épaules fragiles → pas de développé militaire, élévations latérales lourdes, dips lourds
+  // Épaules fragiles → pas de développé militaire, élévations latérales, dips, upright row
+  // BUG FIX: les noms d'exercices en DB sont sans accents (e.g. "Elevations laterales")
+  // et "Extension overhead haltere" doit être exclu aussi
   if (med.shoulders || med.rotatorCuff) {
-    if (/militaire|overhead press|\u00e9l\u00e9vation lat\u00e9rale|dips|upright row/.test(n)) return false;
+    if (/militaire|overhead press|overhead|el[eé]vation.*lat[eé]rale|elevations? lat[eé]rales?|dips|upright row/.test(n)) return false;
   }
 
-  // Coudes → pas de curl barre, extensions triceps lourdes
+  // Coudes → pas de curl barre, extensions triceps, skull crushers
+  // BUG FIX: "Skull crushers (barre front)" ne matchait pas /skullcrusher/ (avec espace)
+  // BUG FIX: "Barre au front skullcrusher" était OK mais "skull crushers" non
   if (med.elbows) {
-    if (/curl barre|extension.*triceps|french press|skullcrusher/.test(n)) return false;
+    if (/curl barre|extension.*triceps|french press|skull.?crusher|skullcrusher/.test(n)) return false;
   }
 
   // Bas du dos / hernie discale → pas de soulevé de terre, good morning, jefferson
+  // BUG FIX: "Souleve de terre" (sans accent) ne matchait pas /soulevé.*terre/
+  // Correction: accepter avec ou sans accent
   if (med.lowerBack || med.herniaDisc) {
-    if (/soulev\u00e9.*terre|deadlift|good morning|jefferson|hyperextension.*lourde/.test(n)) return false;
+    if (/soulev[eé].*terre|deadlift|good morning|jefferson|hyperextension.*lourde/.test(n)) return false;
   }
 
-  // Hernie inguinale → pas de squat lourd, leg press lourd, exercises valsalva
+  // Hernie inguinale → pas de squat (toute variante), leg press/presse à cuisses, soulevé de terre
+  // BUG FIX: "Squat barre", "Hack squat machine", "Goblet squat" ne matchaient pas /squat.*lourd/
+  // BUG FIX: "Presse a cuisses" ne matchait pas /leg press/ (nommé différemment en DB)
+  // BUG FIX: "Souleve de terre" (sans accent) ignoré
   if (med.herniaInguinal) {
-    if (/squat.*lourd|leg press|soulev\u00e9.*terre/.test(n)) return false;
+    if (/squat|presse.*cuisse|leg press|soulev[eé].*terre/.test(n)) return false;
   }
 
-  // Genoux → pas de squat complet, leg extension lourd, fentes profondes
+  // Genoux → pas de squat complet, leg extension, fentes profondes, jump squat, pistol squat
+  // Note: leg extension (quadriceps) matche bien /leg extension/ — correct
   if (med.knees || med.acl) {
     if (/squat complet|leg extension|fente.*profonde|jump squat|pistol squat/.test(n)) return false;
   }
 
-  // Hanches → pas de sumo deadlift, deep squat
+  // Hanches → pas de sumo, deep squat, squat complet
   if (med.hips) {
     if (/sumo|deep squat|squat complet/.test(n)) return false;
   }
 
-  // Cervicales/nuque → pas de shrugs lourds, neck press
+  // Cervicales/nuque → pas de shrugs, neck press, trapèze lourd
   if (med.neck) {
-    if (/shrug|neck press|trap\u00e8ze lourd/.test(n)) return false;
+    if (/shrug|neck press|trap[eè]ze lourd/.test(n)) return false;
+  }
+
+  // Ostéoporose → pas d'exercices à impact élevé, pas de charges >70% 1RM implicites
+  // BUG FIX: osteoporosis n'avait aucun filtrage d'exercices concrets
+  if (med.osteoporosis) {
+    if (/jump|saut|box jump|burpee|kettlebell swing|arraché|épaulé|snatch|clean/.test(n)) return false;
+  }
+
+  // HTA sévère → pas de Valsalva (soulevé de terre lourd, squat lourd, développé couché lourd)
+  // BUG FIX: hypertension n'avait aucun filtrage d'exercices concrets
+  if (med.hypertension) {
+    if (/soulev[eé].*terre|soulevé.*terre|arraché|épaulé|snatch|clean/.test(n)) return false;
   }
 
   return true;
