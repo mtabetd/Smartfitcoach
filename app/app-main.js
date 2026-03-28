@@ -195,16 +195,20 @@ function renderLogin(app) {
     var pw = pwInput.value;
     if (!email || !pw) { S.authError = 'Veuillez remplir tous les champs'; render(); return; }
     if (!window.canAttemptAuth(email)) { S.authError = 'Trop de tentatives. Réessayez dans 5 minutes.'; render(); return; }
-    var result = AUTH.login(email, pw);
-    if (result.ok) {
-      S.authError = '';
-      S.view = 'dashboard';
-      if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+    AUTH.login(email, pw).then(function(result) {
+      if (result.ok) {
+        S.authError = '';
+        S.view = 'dashboard';
+        if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+        render();
+      } else {
+        S.authError = result.error;
+        render();
+      }
+    }).catch(function() {
+      S.authError = 'Erreur de connexion. Réessayez.';
       render();
-    } else {
-      S.authError = result.error;
-      render();
-    }
+    });
   }}, 'Se connecter'));
 
   c.appendChild(form);
@@ -272,16 +276,20 @@ function renderRegister(app) {
     if (pw !== pw2) { S.authError = 'Les mots de passe ne correspondent pas'; render(); return; }
     if (pw.length < 6) { S.authError = 'Le mot de passe doit faire au moins 6 caractères'; render(); return; }
 
-    var result = AUTH.register(name, email, pw);
-    if (result.ok) {
-      S.authError = '';
-      S.view = 'dashboard';
-      if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+    AUTH.register(name, email, pw).then(function(result) {
+      if (result.ok) {
+        S.authError = '';
+        S.view = 'dashboard';
+        if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+        render();
+      } else {
+        S.authError = result.error;
+        render();
+      }
+    }).catch(function() {
+      S.authError = 'Erreur lors de la création du compte. Réessayez.';
       render();
-    } else {
-      S.authError = result.error;
-      render();
-    }
+    });
   }}, 'Créer mon compte'));
 
   c.appendChild(form);
