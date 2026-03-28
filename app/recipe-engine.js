@@ -4281,6 +4281,484 @@
         'Servir le poulet sur riz jasmin avec concombre et sauce cacahuète. Sésame.'
       ]
     },
+    {
+      id: 'R361',
+      name: 'Overnight Oats Beurre Cacahuète Banane',
+      emoji: '🥣', origin: '🇺🇸',
+      mealTypes: ['breakfast'],
+      tags: ['overnight-oats', 'meal-prep', 'tendance', 'high-protein', 'no-cook'],
+      difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
+      // 18×4 + 58×4 + 14×9 = 72+232+126 = 430 ✓
+      baseNutrition: { calories: 430, proteinGrams: 18, carbsGrams: 58, fatGrams: 14 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 70, unit: 'g' },
+        { name: 'Lait d\'amande', qty: 200, unit: 'ml' },
+        { name: 'Beurre de cacahuète', qty: 20, unit: 'g' },
+        { name: 'Banane', qty: 80, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Graines de chia', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger flocons + lait d\'amande + graines de chia + miel dans un bocal.',
+        'Réfrigérer toute la nuit.',
+        'Matin : garnir de beurre de cacahuète et banane tranchée.'
+      ]
+    },
+    {
+      id: 'R362',
+      name: 'French Toast Protéiné',
+      emoji: '🍞', origin: '🇫🇷',
+      mealTypes: ['breakfast'],
+      tags: ['french-toast', 'high-protein', 'brunch', 'tendance', 'réconfortant'],
+      difficulty: 1, prepTime: 5, cookTime: 8, servings: 1,
+      // 26×4 + 40×4 + 12×9 = 104+160+108 = 372 ✓
+      baseNutrition: { calories: 372, proteinGrams: 26, carbsGrams: 40, fatGrams: 12 },
+      ingredients: [
+        { name: 'Pain complet', qty: 3, unit: 'pce' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Lait d\'amande', qty: 60, unit: 'ml' },
+        { name: 'Cannelle', qty: 2, unit: 'g' },
+        { name: 'Miel', qty: 15, unit: 'g' },
+        { name: 'Fraises', qty: 80, unit: 'g' }
+      ],
+      steps: [
+        'Battre œufs + lait + cannelle dans un bol.',
+        'Tremper les tranches de pain dans le mélange.',
+        'Cuire à la poêle huilée 2-3 min par face jusqu\'à dorure. Servir avec fraises + miel.'
+      ]
+    },
+    {
+      id: 'R363',
+      name: 'Wrap Petit-Déjeuner Mexicain',
+      emoji: '🌯', origin: '🇲🇽',
+      mealTypes: ['breakfast'],
+      tags: ['wrap', 'oeufs', 'mexicain', 'high-protein', 'tendance', 'savoureux'],
+      difficulty: 1, prepTime: 8, cookTime: 8, servings: 1,
+      // 28×4 + 36×4 + 14×9 = 112+144+126 = 382 ✓
+      baseNutrition: { calories: 382, proteinGrams: 28, carbsGrams: 36, fatGrams: 14 },
+      ingredients: [
+        { name: 'Tortilla de blé', qty: 1, unit: 'pce' },
+        { name: 'Œuf', qty: 3, unit: 'pce' },
+        { name: 'Haricots noirs égouttés', qty: 60, unit: 'g' },
+        { name: 'Avocat', qty: 40, unit: 'g' },
+        { name: 'Tomate', qty: 60, unit: 'g' },
+        { name: 'Paprika fumé', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Brouiller les œufs avec paprika. Réchauffer les haricots.',
+        'Réchauffer la tortilla.',
+        'Garnir : œufs, haricots, avocat écrasé, tomates. Rouler.'
+      ]
+    },
+    {
+      id: 'R364',
+      name: 'Porridge Pomme Cannelle',
+      emoji: '🍎', origin: '🇬🇧',
+      mealTypes: ['breakfast'],
+      tags: ['porridge', 'pomme', 'cannelle', 'réconfortant', 'healthy', 'vegan'],
+      difficulty: 1, prepTime: 2, cookTime: 8, servings: 1,
+      // 10×4 + 60×4 + 8×9 = 40+240+72 = 352 ✓
+      baseNutrition: { calories: 352, proteinGrams: 10, carbsGrams: 60, fatGrams: 8 },
+      ingredients: [
+        { name: 'Flocons d\'avoine', qty: 70, unit: 'g' },
+        { name: 'Lait d\'amande', qty: 250, unit: 'ml' },
+        { name: 'Pomme', qty: 1, unit: 'pce' },
+        { name: 'Cannelle', qty: 3, unit: 'g' },
+        { name: 'Miel', qty: 15, unit: 'g' },
+        { name: 'Noix', qty: 15, unit: 'g' }
+      ],
+      steps: [
+        'Cuire les flocons dans le lait d\'amande à feu moyen 5 min en remuant.',
+        'Râper la pomme ou couper en dés. Mélanger avec cannelle.',
+        'Servir le porridge avec pomme, noix et miel.'
+      ]
+    },
+    {
+      id: 'R365',
+      name: 'Bowl Protéiné Ricotta Fruits',
+      emoji: '🫐', origin: '🇮🇹',
+      mealTypes: ['breakfast', 'snack'],
+      tags: ['ricotta', 'fruits', 'high-protein', 'italien', 'light', 'tendance'],
+      difficulty: 1, prepTime: 5, cookTime: 0, servings: 1,
+      // 20×4 + 28×4 + 10×9 = 80+112+90 = 282 ✓
+      baseNutrition: { calories: 282, proteinGrams: 20, carbsGrams: 28, fatGrams: 10 },
+      ingredients: [
+        { name: 'Ricotta', qty: 150, unit: 'g' },
+        { name: 'Myrtilles', qty: 60, unit: 'g' },
+        { name: 'Fraises', qty: 60, unit: 'g' },
+        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Amandes effilées', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Lisser la ricotta dans un bol.',
+        'Disposer les fruits rouges et amandes effilées.',
+        'Arroser de miel.'
+      ]
+    },
+    {
+      id: 'R366',
+      name: 'Salade Niçoise Moderne',
+      emoji: '🥗', origin: '🇫🇷',
+      mealTypes: ['lunch'],
+      tags: ['niçoise', 'thon', 'français', 'salade', 'classique', 'high-protein'],
+      difficulty: 1, prepTime: 15, cookTime: 10, servings: 1,
+      // 32×4 + 24×4 + 16×9 = 128+96+144 = 368 ✓
+      baseNutrition: { calories: 368, proteinGrams: 32, carbsGrams: 24, fatGrams: 16 },
+      ingredients: [
+        { name: 'Thon au naturel (boîte)', qty: 130, unit: 'g' },
+        { name: 'Œuf', qty: 2, unit: 'pce' },
+        { name: 'Haricots verts', qty: 100, unit: 'g' },
+        { name: 'Tomate', qty: 100, unit: 'g' },
+        { name: 'Olives vertes', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Vinaigre balsamique', qty: 8, unit: 'ml' },
+        { name: 'Salade romaine', qty: 60, unit: 'g' }
+      ],
+      steps: [
+        'Cuire les haricots verts vapeur 6 min. Cuire les œufs durs 10 min.',
+        'Dresser : salade, haricots verts, tomates, thon, olives, œufs coupés.',
+        'Vinaigrette : huile d\'olive + balsamique + moutarde + sel.'
+      ]
+    },
+    {
+      id: 'R367',
+      name: 'Bowl Quinoa Méditerranéen',
+      emoji: '🌿', origin: '🇬🇷',
+      mealTypes: ['lunch'],
+      tags: ['quinoa', 'méditerranéen', 'végétarien', 'bowl', 'fresh', 'healthy'],
+      difficulty: 1, prepTime: 10, cookTime: 15, servings: 1,
+      // 20×4 + 52×4 + 14×9 = 80+208+126 = 414 ✓
+      baseNutrition: { calories: 414, proteinGrams: 20, carbsGrams: 52, fatGrams: 14 },
+      ingredients: [
+        { name: 'Quinoa', qty: 70, unit: 'g' },
+        { name: 'Feta', qty: 60, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Olives vertes', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Origan', qty: 2, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le quinoa 12 min. Laisser tiédir.',
+        'Couper tomates, concombre, olives. Émietter la feta.',
+        'Mélanger quinoa + légumes + feta. Assaisonner huile + citron + origan.'
+      ]
+    },
+    {
+      id: 'R368',
+      name: 'Noodle Bowl Thaï Végétarien',
+      emoji: '🍜', origin: '🇹🇭',
+      mealTypes: ['lunch'],
+      tags: ['thaï', 'végétarien', 'nouilles', 'bowl', 'tendance', 'vegan'],
+      difficulty: 1, prepTime: 10, cookTime: 10, servings: 1,
+      // 14×4 + 56×4 + 14×9 = 56+224+126 = 406 ✓
+      baseNutrition: { calories: 406, proteinGrams: 14, carbsGrams: 56, fatGrams: 14 },
+      ingredients: [
+        { name: 'Nouilles de riz', qty: 80, unit: 'g' },
+        { name: 'Tofu ferme', qty: 100, unit: 'g' },
+        { name: 'Carotte', qty: 60, unit: 'g' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Beurre de cacahuète', qty: 20, unit: 'g' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Faire tremper les nouilles de riz 8 min dans l\'eau chaude.',
+        'Dorer le tofu en cubes à la poêle. Râper la carotte.',
+        'Sauce : beurre de cacahuète + sauce soja + citron + 2cs eau. Assembler le bowl.'
+      ]
+    },
+    {
+      id: 'R369',
+      name: 'Assiette Mezze Libanaise',
+      emoji: '🧿', origin: '🇱🇧',
+      mealTypes: ['lunch'],
+      tags: ['libanais', 'mezze', 'végétarien', 'moyen-orient', 'tendance', 'partage'],
+      difficulty: 1, prepTime: 15, cookTime: 0, servings: 1,
+      // 16×4 + 42×4 + 18×9 = 64+168+162 = 394 ✓
+      baseNutrition: { calories: 394, proteinGrams: 16, carbsGrams: 42, fatGrams: 18 },
+      ingredients: [
+        { name: 'Houmous', qty: 80, unit: 'g' },
+        { name: 'Pain pita complet', qty: 1, unit: 'pce' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Tomate', qty: 80, unit: 'g' },
+        { name: 'Olives vertes', qty: 30, unit: 'g' },
+        { name: 'Feta', qty: 40, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
+      ],
+      steps: [
+        'Couper concombre et tomates en dés.',
+        'Dresser l\'assiette : houmous au centre, légumes autour, olives, feta émiettée.',
+        'Arroser d\'huile d\'olive. Servir avec pita grillé.'
+      ]
+    },
+    {
+      id: 'R370',
+      name: 'Club Sandwich Healthy',
+      emoji: '🥪', origin: '🇺🇸',
+      mealTypes: ['lunch'],
+      tags: ['sandwich', 'poulet', 'américain', 'classique', 'high-protein'],
+      difficulty: 1, prepTime: 10, cookTime: 10, servings: 1,
+      // 36×4 + 40×4 + 12×9 = 144+160+108 = 412 ✓
+      baseNutrition: { calories: 412, proteinGrams: 36, carbsGrams: 40, fatGrams: 12 },
+      ingredients: [
+        { name: 'Pain complet', qty: 3, unit: 'pce' },
+        { name: 'Blanc de poulet', qty: 120, unit: 'g' },
+        { name: 'Œuf', qty: 1, unit: 'pce' },
+        { name: 'Tomate', qty: 80, unit: 'g' },
+        { name: 'Salade romaine', qty: 40, unit: 'g' },
+        { name: 'Moutarde', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Griller les tranches de pain. Cuire le poulet à la poêle et trancher.',
+        'Cuire l\'œuf au plat.',
+        'Monter le club : pain + moutarde + salade + tomate + poulet + œuf + pain.'
+      ]
+    },
+    {
+      id: 'R371',
+      name: 'Risotto Poulet Champignons Light',
+      emoji: '🍄', origin: '🇮🇹',
+      mealTypes: ['dinner'],
+      tags: ['risotto', 'poulet', 'champignons', 'italien', 'réconfortant', 'light'],
+      difficulty: 3, prepTime: 10, cookTime: 30, servings: 1,
+      // 34×4 + 54×4 + 10×9 = 136+216+90 = 442 ✓
+      baseNutrition: { calories: 442, proteinGrams: 34, carbsGrams: 54, fatGrams: 10 },
+      ingredients: [
+        { name: 'Riz blanc', qty: 70, unit: 'g' },
+        { name: 'Blanc de poulet', qty: 120, unit: 'g' },
+        { name: 'Champignons de Paris', qty: 120, unit: 'g' },
+        { name: 'Oignon', qty: 50, unit: 'g' },
+        { name: 'Bouillon de poulet (cube)', qty: 1, unit: 'pce' },
+        { name: 'Fromage râpé', qty: 15, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Faire revenir oignon + champignons. Ajouter poulet en dés, cuire 5 min.',
+        'Ajouter le riz, nacrer 1 min. Verser le bouillon chaud louche par louche.',
+        'Remuer 20 min. Finir avec fromage râpé. Crémeux sans beurre.'
+      ]
+    },
+    {
+      id: 'R372',
+      name: 'Dahl de Lentilles Corail',
+      emoji: '🟠', origin: '🇮🇳',
+      mealTypes: ['dinner'],
+      tags: ['indien', 'lentilles', 'vegan', 'dahl', 'tendance', 'high-fiber'],
+      difficulty: 1, prepTime: 10, cookTime: 25, servings: 1,
+      // 18×4 + 56×4 + 10×9 = 72+224+90 = 386 ✓
+      baseNutrition: { calories: 386, proteinGrams: 18, carbsGrams: 56, fatGrams: 10 },
+      ingredients: [
+        { name: 'Lentilles vertes sèches', qty: 80, unit: 'g' },
+        { name: 'Lait de coco (brique)', qty: 100, unit: 'ml' },
+        { name: 'Tomate', qty: 100, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Curcuma', qty: 2, unit: 'g' },
+        { name: 'Garam Masala', qty: 4, unit: 'g' },
+        { name: 'Gingembre', qty: 5, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Rincer les lentilles. Faire revenir oignon + gingembre + épices.',
+        'Ajouter lentilles + tomates + 300ml eau. Cuire 20 min.',
+        'Incorporer lait de coco, cuire 5 min. Servir avec riz ou pain pita.'
+      ]
+    },
+    {
+      id: 'R373',
+      name: 'Grilled Cheese Healthy',
+      emoji: '🧀', origin: '🇺🇸',
+      mealTypes: ['dinner'],
+      tags: ['sandwich', 'fromage', 'américain', 'réconfortant', 'tendance', 'simple'],
+      difficulty: 1, prepTime: 5, cookTime: 8, servings: 1,
+      // 22×4 + 34×4 + 16×9 = 88+136+144 = 368 ✓
+      baseNutrition: { calories: 368, proteinGrams: 22, carbsGrams: 34, fatGrams: 16 },
+      ingredients: [
+        { name: 'Pain complet', qty: 3, unit: 'pce' },
+        { name: 'Fromage râpé', qty: 50, unit: 'g' },
+        { name: 'Jambon de dinde (tranches)', qty: 60, unit: 'g' },
+        { name: 'Tomate', qty: 60, unit: 'g' },
+        { name: 'Moutarde', qty: 8, unit: 'g' }
+      ],
+      steps: [
+        'Tartiner de moutarde. Garnir avec fromage, jambon de dinde, tomates.',
+        'Fermer le sandwich.',
+        'Cuire à la poêle à feu moyen 3-4 min par face jusqu\'à fromage fondu.'
+      ]
+    },
+    {
+      id: 'R374',
+      name: 'Soupe Thaï Crevettes Coco',
+      emoji: '🍲', origin: '🇹🇭',
+      mealTypes: ['dinner'],
+      tags: ['thaï', 'crevettes', 'coco', 'soupe', 'tendance', 'léger'],
+      difficulty: 2, prepTime: 10, cookTime: 15, servings: 1,
+      // 26×4 + 22×4 + 14×9 = 104+88+126 = 318 ✓
+      baseNutrition: { calories: 318, proteinGrams: 26, carbsGrams: 22, fatGrams: 14 },
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 120, unit: 'g' },
+        { name: 'Lait de coco (brique)', qty: 150, unit: 'ml' },
+        { name: 'Bouillon de légumes (cube)', qty: 1, unit: 'pce' },
+        { name: 'Champignons de Paris', qty: 80, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Sauce soja', qty: 10, unit: 'ml' },
+        { name: 'Gingembre', qty: 5, unit: 'g' },
+        { name: 'Coriandre fraîche', qty: 1, unit: 'pce' }
+      ],
+      steps: [
+        'Porter bouillon + lait de coco + gingembre à frémissement.',
+        'Ajouter champignons, cuire 5 min. Ajouter crevettes, cuire 3 min.',
+        'Assaisonner citron + sauce soja. Garnir de coriandre.'
+      ]
+    },
+    {
+      id: 'R375',
+      name: 'Poulet Tandoori Légumes Rôtis',
+      emoji: '🫙', origin: '🇮🇳',
+      mealTypes: ['dinner'],
+      tags: ['indien', 'poulet', 'tandoori', 'rôti', 'tendance', 'high-protein'],
+      difficulty: 2, prepTime: 15, cookTime: 25, servings: 1,
+      // 42×4 + 30×4 + 10×9 = 168+120+90 = 378 ✓
+      baseNutrition: { calories: 378, proteinGrams: 42, carbsGrams: 30, fatGrams: 10 },
+      ingredients: [
+        { name: 'Blanc de poulet', qty: 150, unit: 'g' },
+        { name: 'Yaourt nature 0%', qty: 80, unit: 'g' },
+        { name: 'Garam Masala', qty: 5, unit: 'g' },
+        { name: 'Curcuma', qty: 2, unit: 'g' },
+        { name: 'Paprika fumé', qty: 3, unit: 'g' },
+        { name: 'Courgette', qty: 100, unit: 'g' },
+        { name: 'Poivron rouge', qty: 80, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
+      ],
+      steps: [
+        'Mariner poulet dans yaourt + épices 15 min minimum.',
+        'Cuire le poulet au four 200°C 20-25 min avec légumes découpés.',
+        'Servir avec pain pita ou riz basmati.'
+      ]
+    },
+    {
+      id: 'R376',
+      name: 'Gyoza Poulet Maison',
+      emoji: '🥟', origin: '🇯🇵',
+      mealTypes: ['dinner'],
+      tags: ['japonais', 'gyoza', 'poulet', 'dim-sum', 'tendance', 'fun'],
+      difficulty: 3, prepTime: 25, cookTime: 10, servings: 1,
+      // 28×4 + 36×4 + 10×9 = 112+144+90 = 346 ✓
+      baseNutrition: { calories: 346, proteinGrams: 28, carbsGrams: 36, fatGrams: 10 },
+      ingredients: [
+        { name: 'Hachis de dinde', qty: 100, unit: 'g' },
+        { name: 'Chou blanc', qty: 60, unit: 'g' },
+        { name: 'Sauce soja', qty: 15, unit: 'ml' },
+        { name: 'Gingembre', qty: 5, unit: 'g' },
+        { name: 'Huile de sésame', qty: 5, unit: 'ml' },
+        { name: 'Farine complète', qty: 60, unit: 'g' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Pâte : farine + 60ml eau chaude, pétrir, laisser reposer 20 min.',
+        'Farce : dinde + chou haché + sauce soja + gingembre + huile sésame.',
+        'Former des petites galettes, garnir, plier en demi-lune. Cuire à la poêle huilée + 3cs eau, couvrir 5 min.'
+      ]
+    },
+    {
+      id: 'R377',
+      name: 'Poke Bowl Thon Épicé',
+      emoji: '🌶️', origin: '🇺🇸',
+      mealTypes: ['lunch', 'dinner'],
+      tags: ['poke', 'thon', 'épicé', 'bowl', 'tendance', 'high-protein'],
+      difficulty: 1, prepTime: 12, cookTime: 15, servings: 1,
+      // 34×4 + 50×4 + 12×9 = 136+200+108 = 444 ✓
+      baseNutrition: { calories: 444, proteinGrams: 34, carbsGrams: 50, fatGrams: 12 },
+      ingredients: [
+        { name: 'Riz blanc', qty: 75, unit: 'g' },
+        { name: 'Thon au naturel (boîte)', qty: 130, unit: 'g' },
+        { name: 'Sriracha', qty: 8, unit: 'ml' },
+        { name: 'Avocat', qty: 50, unit: 'g' },
+        { name: 'Concombre', qty: 60, unit: 'g' },
+        { name: 'Edamame (surgelé)', qty: 40, unit: 'g' },
+        { name: 'Sauce soja', qty: 10, unit: 'ml' },
+        { name: 'Sésame (graines)', qty: 5, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le riz. Mélanger thon égoutté + sriracha + sauce soja.',
+        'Cuire les edamames 3 min.',
+        'Assembler : riz, thon épicé, avocat, concombre, edamame. Sésame.'
+      ]
+    },
+    {
+      id: 'R378',
+      name: 'Poêlée Crevettes Ail & Herbes',
+      emoji: '🦐', origin: '🇫🇷',
+      mealTypes: ['dinner'],
+      tags: ['crevettes', 'ail', 'français', 'rapide', 'high-protein', 'léger'],
+      difficulty: 1, prepTime: 8, cookTime: 8, servings: 1,
+      // 28×4 + 30×4 + 12×9 = 112+120+108 = 340 ✓
+      baseNutrition: { calories: 340, proteinGrams: 28, carbsGrams: 30, fatGrams: 12 },
+      ingredients: [
+        { name: 'Crevettes décortiquées', qty: 150, unit: 'g' },
+        { name: 'Ail', qty: 4, unit: 'g' },
+        { name: 'Persil frais', qty: 1, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Riz blanc', qty: 60, unit: 'g' }
+      ],
+      steps: [
+        'Cuire le riz.',
+        'Chauffer l\'huile. Saisir l\'ail émincé 30 sec. Ajouter crevettes, cuire 3 min par face.',
+        'Finir avec jus de citron + persil haché. Servir sur riz.'
+      ]
+    },
+    {
+      id: 'R379',
+      name: 'Curry Thaï Vert Tofu',
+      emoji: '🟢', origin: '🇹🇭',
+      mealTypes: ['dinner'],
+      tags: ['thaï', 'vegan', 'tofu', 'curry-vert', 'tendance', 'aromate'],
+      difficulty: 2, prepTime: 10, cookTime: 20, servings: 1,
+      // 18×4 + 44×4 + 16×9 = 72+176+144 = 392 ✓
+      baseNutrition: { calories: 392, proteinGrams: 18, carbsGrams: 44, fatGrams: 16 },
+      ingredients: [
+        { name: 'Tofu ferme', qty: 150, unit: 'g' },
+        { name: 'Lait de coco (brique)', qty: 150, unit: 'ml' },
+        { name: 'Courgette', qty: 100, unit: 'g' },
+        { name: 'Poivron vert', qty: 80, unit: 'g' },
+        { name: 'Garam Masala', qty: 3, unit: 'g' },
+        { name: 'Gingembre', qty: 5, unit: 'g' },
+        { name: 'Sauce soja', qty: 10, unit: 'ml' },
+        { name: 'Riz jasmin', qty: 60, unit: 'g' }
+      ],
+      steps: [
+        'Dorer le tofu en cubes à la poêle. Réserver.',
+        'Faire revenir gingembre + épices. Ajouter légumes + lait de coco. Mijoter 12 min.',
+        'Ajouter tofu + sauce soja. Cuire 3 min. Servir sur riz jasmin.'
+      ]
+    },
+    {
+      id: 'R380',
+      name: 'Steak de Thon Sauce Vierge',
+      emoji: '🐟', origin: '🇫🇷',
+      mealTypes: ['dinner'],
+      tags: ['thon', 'français', 'élégant', 'high-protein', 'omega3', 'léger'],
+      difficulty: 2, prepTime: 10, cookTime: 8, servings: 1,
+      // 36×4 + 20×4 + 12×9 = 144+80+108 = 332 ✓
+      baseNutrition: { calories: 332, proteinGrams: 36, carbsGrams: 20, fatGrams: 12 },
+      ingredients: [
+        { name: 'Thon au naturel (boîte)', qty: 150, unit: 'g' },
+        { name: 'Tomate', qty: 100, unit: 'g' },
+        { name: 'Citron (pce)', qty: 0.5, unit: 'pce' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Basilic frais', qty: 5, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'g' },
+        { name: 'Haricots verts', qty: 120, unit: 'g' }
+      ],
+      steps: [
+        'Sauce vierge : tomates en dés + ail émincé + huile + citron + basilic. Réserver.',
+        'Cuire les haricots verts vapeur 6 min.',
+        'Saisir le thon à la poêle 2-3 min par face (rosé au centre). Napper de sauce vierge.'
+      ]
+    },
 
   ];
 
