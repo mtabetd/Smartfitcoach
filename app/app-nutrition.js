@@ -3596,7 +3596,8 @@ function renderSmoothieModal(app) {
   footer.appendChild(addBtn);
   box.appendChild(footer);
   ov.appendChild(box);
-  app.appendChild(ov);
+  var root = document.getElementById('app') || document.body;
+  root.appendChild(ov);
 }
 
 // ─── SHOPPING LIST ───
