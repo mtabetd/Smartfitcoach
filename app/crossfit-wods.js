@@ -631,12 +631,12 @@ window.CF_WODS_FULL = [
 },
 // --- END PART 2 (days 26-50) --- PART 3 CONTINUES ---
 
-// ============ WEEK 11 ============
+// ============ WEEK 11 — PUISSANCE / PRÉPA COMPÉTITION ============
 {
-  day: 51, week: 11, name: 'RAGNAROK', theme: 'Deadlift + End of Days',
-  haltero: { name: 'Deadlift Build', desc: 'Deadlift 5-3-3-2-1-1', scheme: '15min — Build to heavy single', weights: 'deadlift' },
-  wod: { name: 'RAGNAROK', type: 'For Time (cap 20min)', movements: [
-    {name: 'Deadlifts', reps: 30, weight: 'deadlift'},
+  day: 51, week: 11, name: 'APOCALYPSE', theme: 'Deadlift Lourd + Chipper Infernal',
+  haltero: { name: 'Deadlift Peak', desc: 'Deadlift 5-3-2-2-1-1 — Build to near-max. Approche contrôlée excentrique 2s, explosif concentrique. Dos neutre absolu, verrouillage hanches en haut.', scheme: 'E2MOM 14min — Build lourd', weights: 'deadlift' },
+  wod: { name: 'APOCALYPSE', type: 'For Time (cap 22min)', movements: [
+    {name: 'Deadlifts', reps: 21, weight: 'deadlift'},
     {name: 'Handstand Push-ups', reps: 30, gymnastics: 'hspu'},
     {name: 'KB Swings', reps: 30, gymnastics: 'kb_swing'},
     {name: 'Pistols', reps: 30, gymnastics: 'pistols'},
