@@ -2607,6 +2607,30 @@ function renderMusculationProgram(p) {
     if (savedStr) { try { S.muscuStrengthProfile = JSON.parse(savedStr); } catch(e) {} }
   }
 
+  // Bridge crossfit1RM → muscuStrengthProfile for powerlifters/strength athletes
+  // If muscuStrengthProfile is empty but crossfit1RM has lifts, pre-populate from 1RM values.
+  // Uses reps=1 as Epley reference (1RM × (1+1/30) ≈ 3% overestimate — acceptable given 1RM test variance).
+  // Only fills keys that are not already set (user-entered muscuStrengthProfile takes priority).
+  // Mapping: crossfit1RM.back_squat → squat, deadlift → deadlift, bench → bench_press, press → overhead_press
+  if (S.crossfit1RM && Object.keys(S.crossfit1RM).length > 0) {
+    var cf1rm = S.crossfit1RM;
+    var CROSSFIT_TO_MUSCU = {
+      back_squat: 'squat',
+      deadlift:   'deadlift',
+      bench:      'bench_press',
+      press:      'overhead_press'
+    };
+    Object.keys(CROSSFIT_TO_MUSCU).forEach(function(cfKey) {
+      var muscuKey = CROSSFIT_TO_MUSCU[cfKey];
+      if (cf1rm[cfKey] && !S.muscuStrengthProfile[muscuKey]) {
+        // Store the 1RM directly; Epley reference reps=1 → estimated 1RM = stored * (1+1/30) ≈ stored * 1.033
+        // To preserve the exact known 1RM, divide by 1.0333 so Epley gives back the original value
+        S.muscuStrengthProfile[muscuKey] = Math.round(cf1rm[cfKey] / (1 + 1 / 30));
+        S.muscuStrengthProfile[muscuKey + '_reps'] = 1;
+      }
+    });
+  }
+
   // Load session log and progression history
   if (Object.keys(S.muscuSessionLog).length === 0) {
     var userId3 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';

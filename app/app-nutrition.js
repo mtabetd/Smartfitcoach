@@ -3314,10 +3314,11 @@ function renderSmoothieBar(p) {
   p.innerHTML = '';
   var flavors = S.wheyFlavors || [];
   var allergies = (S.allergies || []).filter(function(a) { return a !== 'Aucune'; });
-  // Vérifie si un smoothie contient un ingrédient allergène
+  var intolerances = (S.intolerances || []).filter(function(a) { return a !== 'Aucune'; });
+  // Vérifie si un smoothie contient un ingrédient allergène ou intolérant
   function smoothieHasAllergen(sm) {
-    if (!allergies.length) return false;
     var ingText = (sm.ingredients || []).map(function(i) { return i.name; }).join(' ').toLowerCase();
+    // Vérification allergies
     for (var a = 0; a < allergies.length; a++) {
       var al = allergies[a].toLowerCase();
       if (al === 'arachides' && /arachide|cacahu[eè]te/.test(ingText)) return true;
@@ -3326,6 +3327,15 @@ function renderSmoothieBar(p) {
       if (al === 'lait/produits laitiers' && /lait|fromage|yaourt|beurre|crème|ricotta|cottage|skyr/.test(ingText.replace(/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/g, ''))) return true;
       if (al === 'soja' && /soja|tofu/.test(ingText)) return true;
       if (al === 'gluten/blé' && /farine|pain|avoine|orge|seigle/.test(ingText.replace(/galette de riz|farine de riz|farine de sarrasin/g, ''))) return true;
+    }
+    // Vérification intolérances (celiac/gluten, lactose) — AFDIAG / INCO 2020
+    for (var t = 0; t < intolerances.length; t++) {
+      var it = intolerances[t].toLowerCase();
+      if (it === 'gluten') {
+        var gi = ingText.replace(/galette de riz|farine de riz|farine de sarrasin|lait d.avoine(?! certifi)|avoine certifi/g, '');
+        if (/farine|pain|avoine|orge|seigle|couscous|semoule|épeautre|epeautre|boulgour|seitan|kamut|sauce soja/.test(gi)) return true;
+      }
+      if (it === 'lactose' && /lait|fromage|yaourt|beurre|crème|ricotta|skyr/.test(ingText.replace(/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz|beurre de cacahu|beurre d.amande/g, ''))) return true;
     }
     return false;
   }

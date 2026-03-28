@@ -13970,7 +13970,9 @@
     'Gluten':  ['farine de blé', 'farine t45', 'farine t55', 'farine t65',
                 'pain ', 'pâte', 'blé ', 'boulgour', 'semoule',
                 'orge', 'seigle', 'vermicelle', 'feuille de brick',
-                'chapelure', 'sauce soja']
+                'chapelure', 'sauce soja',
+                'couscous', 'seitan', 'épeautre', 'epeautre', 'kamut',
+                'avoine', 'tortilla', 'wrap ', 'naan']
   };
 
   // Map regime index (REGIMES array) → required tag or excluded tags
