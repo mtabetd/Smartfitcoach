@@ -76,17 +76,26 @@ if ('BarcodeDetector' in window) {
 // ─── OPEN FOOD FACTS API ───
 function lookupProduct(barcode, callback) {
   var url = 'https://world.openfoodfacts.org/api/v2/product/' + encodeURIComponent(barcode) + '.json';
-  fetch(url)
-    .then(function(r) { return r.json(); })
+  // Timeout: 10 seconds via AbortController
+  var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 10000) : null;
+  fetch(url, controller ? { signal: controller.signal } : {})
+    .then(function(r) {
+      if (timeoutId) clearTimeout(timeoutId);
+      return r.json();
+    })
     .then(function(data) {
-      if (data.status === 1 && data.product) {
+      // Guard against malformed API response
+      if (data && data.status === 1 && data.product && typeof data.product === 'object') {
         callback(null, parseProduct(data.product));
       } else {
         callback('Produit non trouvé dans la base de données', null);
       }
     })
     .catch(function(err) {
-      callback('Erreur de connexion : ' + err.message, null);
+      if (timeoutId) clearTimeout(timeoutId);
+      var msg = err && err.name === 'AbortError' ? 'Délai dépassé (10s) — vérifiez votre connexion' : 'Erreur de connexion : ' + (err ? err.message : 'inconnue');
+      callback(msg, null);
     });
 }
 
@@ -223,10 +232,16 @@ function findAlternatives(product, callback) {
 
   var url = 'https://world.openfoodfacts.org/cgi/search.pl?action=process&tagtype_0=categories&tag_contains_0=contains&tag_0=' + encodeURIComponent(category) + '&sort_by=nutriscore_score&page_size=10&json=1';
 
-  fetch(url)
-    .then(function(r) { return r.json(); })
+  var altController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var altTimeout = altController ? setTimeout(function() { altController.abort(); }, 10000) : null;
+  fetch(url, altController ? { signal: altController.signal } : {})
+    .then(function(r) {
+      if (altTimeout) clearTimeout(altTimeout);
+      return r.json();
+    })
     .then(function(data) {
-      if (!data.products) { callback([]); return; }
+      // Guard against malformed API response
+      if (!data || !Array.isArray(data.products)) { callback([]); return; }
       var alts = data.products
         .map(function(p) { return parseProduct(p); })
         .filter(function(p) { return p.name && p.name !== product.name && p.kcal > 0; })
@@ -236,7 +251,7 @@ function findAlternatives(product, callback) {
         .slice(0, 5);
       callback(alts);
     })
-    .catch(function() { callback([]); });
+    .catch(function() { if (altTimeout) clearTimeout(altTimeout); callback([]); });
 }
 
 // ─── SCAN HISTORY ───
@@ -412,13 +427,13 @@ window.SCANNER = {
 
     // Scan history
     var history = getScanHistory();
+    var histSection = document.createElement('div');
+    histSection.className = 'scan-history';
+    var histLabel = document.createElement('div');
+    histLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#5A5A54);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border,#D8D8D0)';
+    histLabel.textContent = 'Derniers scans';
+    histSection.appendChild(histLabel);
     if (history.length > 0) {
-      var histSection = document.createElement('div');
-      histSection.className = 'scan-history';
-      var histLabel = document.createElement('div');
-      histLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border,#D8D8D0)';
-      histLabel.textContent = 'Derniers scans';
-      histSection.appendChild(histLabel);
 
       history.slice(0, 5).forEach(function(item) {
         var row = document.createElement('div');
@@ -441,8 +456,24 @@ window.SCANNER = {
         row.onclick = function() { lookupAndAnalyze(item.barcode); };
         histSection.appendChild(row);
       });
-      scannerDiv.appendChild(histSection);
+    } else {
+      var emptyHistMsg = document.createElement('div');
+      emptyHistMsg.className = 'empty-state';
+      emptyHistMsg.style.cssText = 'margin:0;padding:20px 16px;';
+      var emptyHistIcon = document.createElement('span');
+      emptyHistIcon.className = 'empty-state-icon';
+      emptyHistIcon.textContent = '\uD83D\uDD0D';
+      var emptyHistTitle = document.createElement('p');
+      emptyHistTitle.className = 'empty-state-title';
+      emptyHistTitle.textContent = 'Aucun scan enregistré';
+      var emptyHistText = document.createElement('p');
+      emptyHistText.textContent = 'Scannez votre premier produit pour voir l\'historique ici.';
+      emptyHistMsg.appendChild(emptyHistIcon);
+      emptyHistMsg.appendChild(emptyHistTitle);
+      emptyHistMsg.appendChild(emptyHistText);
+      histSection.appendChild(emptyHistMsg);
     }
+    scannerDiv.appendChild(histSection);
 
     container.appendChild(scannerDiv);
 

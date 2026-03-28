@@ -2029,8 +2029,8 @@ function renderWeekTracker(p) {
         S.muscuProgramStart = new Date().toISOString().split('T')[0];
         S.muscuCycle = (S.muscuCycle || 1) + 1;
         var uid2 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-        localStorage.setItem('mtd_muscu_start_' + uid2, S.muscuProgramStart);
-        localStorage.setItem('mtd_muscu_cycle_' + uid2, String(S.muscuCycle));
+        try { localStorage.setItem('mtd_muscu_start_' + uid2, S.muscuProgramStart); } catch(e) { console.warn('[muscu_cycle] localStorage error:', e); }
+        try { localStorage.setItem('mtd_muscu_cycle_' + uid2, String(S.muscuCycle)); } catch(e) { console.warn('[muscu_cycle] localStorage error:', e); }
         S.sportProgram = generateSportProgram();
         S.selectedSportDay = 0;
         saveMuscuWeek(1);
@@ -2464,7 +2464,7 @@ function renderMusculationProgram(p) {
             if (!isNaN(v) && v >= 0) {
               S.musculationWeights[exName] = { weight: v, type: eqT };
               var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
-              localStorage.setItem('mtd_muscu_weights_' + uid, JSON.stringify(S.musculationWeights));
+              try { localStorage.setItem('mtd_muscu_weights_' + uid, JSON.stringify(S.musculationWeights)); } catch(e) { console.warn('[muscu_weights] localStorage error:', e); }
               if (window.BLACKBOX) BLACKBOX.log('muscu_weight_set', {exercise: exName, weight: v, type: eqT});
               if (window.PERF_HISTORY) PERF_HISTORY.recordMuscuWeight(exName, v, eqT);
               window.render();
@@ -2877,7 +2877,7 @@ function renderWeightChartSport(container) {
       var hist = []; try { hist = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { hist = []; }
       var today = new Date().toISOString().split('T')[0];
       hist.push({date: today, weight: v});
-      localStorage.setItem(key, JSON.stringify(hist));
+      try { localStorage.setItem(key, JSON.stringify(hist)); } catch(e) { console.warn('[weight_history] localStorage error:', e); }
       S.weight = v;
       // Sync with S.weightHistory
       if (!S.weightHistory) S.weightHistory = [];
