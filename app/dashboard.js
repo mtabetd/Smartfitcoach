@@ -114,10 +114,10 @@ function frenchDate(d) {
 
 function greetingWord() {
   var hr = new Date().getHours();
-  if (hr < 5) return 'Bonne nuit';
-  if (hr < 12) return 'Bonjour';
-  if (hr < 18) return 'Bon apres-midi';
-  return 'Bonsoir';
+  if (hr < 5) return window.t('dash.greeting_evening');
+  if (hr < 12) return window.t('dash.greeting_morning');
+  if (hr < 18) return window.t('dash.greeting_afternoon');
+  return window.t('dash.greeting_evening');
 }
 
 function firstName(name) {
@@ -259,7 +259,7 @@ window.DASHBOARD = {
     var _wUnit = window.UNITS ? window.UNITS.weightLabel() : 'kg';
     var _wDisplay = wVal !== null ? (window.UNITS ? window.UNITS.displayWeightVal(wVal) : wVal) : '--';
     var weightCard = h('div', 'dash-card', [
-      h('p', 'dash-card-title', 'Poids'),
+      h('p', 'dash-card-title', window.t('dash.weight')),
       h('div', 'dash-big', [
         document.createTextNode(_wDisplay),
         h('span', 'dash-unit', _wUnit)
@@ -270,10 +270,10 @@ window.DASHBOARD = {
     // Calories
     var cVal = lastCalorieTarget(logs);
     var calCard = h('div', 'dash-card', [
-      h('p', 'dash-card-title', 'Objectif calories'),
+      h('p', 'dash-card-title', window.t('dash.goal')),
       h('div', 'dash-big', [
         document.createTextNode(cVal !== null ? cVal : '--'),
-        h('span', 'dash-unit', 'kcal')
+        h('span', 'dash-unit', window.t('common.kcal'))
       ])
     ]);
     grid.appendChild(calCard);
@@ -282,7 +282,7 @@ window.DASHBOARD = {
     var wProg = waterProgress(logs);
     var waterPct = wProg ? Math.min(100, Math.round((wProg.current / wProg.goal) * 100)) : 0;
     var waterCard = h('div', 'dash-card');
-    waterCard.appendChild(h('p', 'dash-card-title', 'Hydratation'));
+    waterCard.appendChild(h('p', 'dash-card-title', window.t('extras.water')));
     var waterBig = h('div', 'dash-big');
     waterBig.appendChild(document.createTextNode(wProg ? wProg.current : '--'));
     waterBig.appendChild(h('span', 'dash-unit', wProg ? '/ ' + wProg.goal + ' ml' : 'ml'));
@@ -297,7 +297,7 @@ window.DASHBOARD = {
     // Sleep
     var sVal = lastSleep(logs);
     var sleepCard = h('div', 'dash-card', [
-      h('p', 'dash-card-title', 'Sommeil'),
+      h('p', 'dash-card-title', window.t('extras.sleep')),
       h('div', 'dash-big', [
         document.createTextNode(sVal !== null ? sVal : '--'),
         h('span', 'dash-unit', 'h')
@@ -359,7 +359,7 @@ window.DASHBOARD = {
 
     var timerAction = h('div', 'dash-action');
     timerAction.appendChild(h('span', 'dash-action-icon', '\u23F1'));
-    timerAction.appendChild(h('p', 'dash-action-name', 'Timer'));
+    timerAction.appendChild(h('p', 'dash-action-name', window.t('extras.timer')));
     timerAction.appendChild(h('p', 'dash-action-sub', 'Timer cuisine'));
     timerAction.addEventListener('click', function() {
       openKitchenTimer();

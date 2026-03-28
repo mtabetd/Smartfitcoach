@@ -282,28 +282,28 @@ function renderRegister(app) {
 
   // Name
   var f0 = h('div', {'class': 'field'});
-  f0.appendChild(h('label', {'class': 'field-label'}, 'Prénom ●'));
+  f0.appendChild(h('label', {'class': 'field-label'}, window.t('auth.firstname') + ' ●'));
   var nameInput = h('input', {type: 'text', placeholder: 'Votre prénom', autocomplete: 'given-name'});
   f0.appendChild(nameInput);
   form.appendChild(f0);
 
   // Email
   var f1 = h('div', {'class': 'field'});
-  f1.appendChild(h('label', {'class': 'field-label'}, 'Email ●'));
+  f1.appendChild(h('label', {'class': 'field-label'}, window.t('auth.email') + ' ●'));
   var emailInput = h('input', {type: 'email', placeholder: 'votre@email.com', autocomplete: 'email'});
   f1.appendChild(emailInput);
   form.appendChild(f1);
 
   // Password
   var f2 = h('div', {'class': 'field'});
-  f2.appendChild(h('label', {'class': 'field-label'}, 'Mot de passe ●'));
+  f2.appendChild(h('label', {'class': 'field-label'}, window.t('auth.password') + ' ●'));
   var pwInput = h('input', {type: 'password', placeholder: 'Min. 6 caractères', autocomplete: 'new-password'});
   f2.appendChild(pwInput);
   form.appendChild(f2);
 
   // Confirm password
   var f3 = h('div', {'class': 'field'});
-  f3.appendChild(h('label', {'class': 'field-label'}, 'Confirmer le mot de passe ●'));
+  f3.appendChild(h('label', {'class': 'field-label'}, window.t('auth.confirm_password') + ' ●'));
   var pw2Input = h('input', {type: 'password', placeholder: 'Retapez le mot de passe', autocomplete: 'new-password'});
   f3.appendChild(pw2Input);
   form.appendChild(f3);
@@ -316,8 +316,8 @@ function renderRegister(app) {
     var pw2 = pw2Input.value;
 
     if (!name || !email || !pw || !pw2) { S.authError = 'Tous les champs sont obligatoires'; render(); return; }
-    if (pw !== pw2) { S.authError = 'Les mots de passe ne correspondent pas'; render(); return; }
-    if (pw.length < 6) { S.authError = 'Le mot de passe doit faire au moins 6 caractères'; render(); return; }
+    if (pw !== pw2) { S.authError = window.t('auth.error_password_match'); render(); return; }
+    if (pw.length < 6) { S.authError = window.t('auth.error_password_length'); render(); return; }
 
     AUTH.register(name, email, pw).then(function(result) {
       if (result.ok) {
@@ -334,14 +334,14 @@ function renderRegister(app) {
       S.authError = 'Erreur lors de la création du compte. Réessayez.';
       render();
     });
-  }}, 'Créer mon compte'));
+  }}, window.t('auth.register_btn')));
 
   c.appendChild(form);
 
   // Switch to login
   var sw = h('div', {'class': 'auth-switch'});
-  sw.appendChild(txt('Déjà un compte ? '));
-  sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'auth'; render(); }}, 'Se connecter'));
+  sw.appendChild(txt(window.t('auth.has_account') + ' '));
+  sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'auth'; render(); }}, window.t('auth.login')));
   c.appendChild(sw);
 
   app.appendChild(c);

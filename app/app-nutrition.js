@@ -98,7 +98,7 @@ function renderSplash(app) {
     "La sant\u00e9 n\u2019est pas tout, mais sans la sant\u00e9 tout n\u2019est rien."
   ];
   sp.appendChild(h('div', {'class': 'splash-quote'}, quotes[Math.floor(Math.random() * quotes.length)]));
-  sp.appendChild(h('button', {'class': 'splash-btn', onclick: function() { goStep(1); }}, 'Commencer'));
+  sp.appendChild(h('button', {'class': 'splash-btn', onclick: function() { goStep(1); }}, window.t('onb.start')));
   app.appendChild(sp);
 }
 
@@ -109,7 +109,7 @@ function renderStep1(p) {
   if (user && user.name) {
     p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-style:italic;margin-bottom:20px'}, 'Bonjour, ' + user.name));
   }
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape I'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' I'));
   p.appendChild(h('h1', {html: 'Votre<br><em>identit\u00e9</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Ces donn\u00e9es permettent de calculer votre m\u00e9tabolisme de base et vos besoins caloriques journaliers.'));
   if (window.TIPS) TIPS.renderTip(p, 'identity');
@@ -120,7 +120,7 @@ function renderStep1(p) {
   sexLabel.appendChild(reqDot());
   p.appendChild(sexLabel);
   var g = h('div', {'class': 'card-grid-2'});
-  [{icon: '\u2642', name: 'Homme', val: 'homme'}, {icon: '\u2640', name: 'Femme', val: 'femme'}].forEach(function(o) {
+  [{icon: '\u2642', name: window.t('onb.s1.male'), val: 'homme'}, {icon: '\u2640', name: window.t('onb.s1.female'), val: 'femme'}].forEach(function(o) {
     g.appendChild(h('div', {'class': 'sel-card' + (S.sex === o.val ? ' on' : ''), onclick: function() { S.sex = o.val; window.render(); }}, [
       h('span', {'class': 'card-icon'}, o.icon),
       h('div', {'class': 'card-name'}, o.name)
@@ -349,12 +349,12 @@ function renderStep1(p) {
   }
 
   p.appendChild(h('div', {style: 'height:16px'}));
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex, onclick: function() { if (S.sex) { bb('nutrition_identity', {sex: S.sex, age: S.age}); goStep(2); } }}, 'Continuer'));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex, onclick: function() { if (S.sex) { bb('nutrition_identity', {sex: S.sex, age: S.age}); goStep(2); } }}, window.t('onb.next')));
 }
 
 // ─── STEP 2: MORPHOLOGIE ───
 function renderStep2(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape II'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' II'));
   p.appendChild(h('h1', {html: 'Votre<br><em>morphologie</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Poids et taille pour calculer votre IMC et calibrer les besoins caloriques.'));
   if (window.TIPS) TIPS.renderTip(p, 'morphology');
@@ -528,13 +528,13 @@ function renderStep2(p) {
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(3); }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(1); }, html: backArrowHtml() + 'Retour'}));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(3); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(1); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 3: ACTIVITE ───
 function renderStep3(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape III'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' III'));
   p.appendChild(h('h1', {html: 'Votre<br><em>activit\u00e9</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Niveau d\'activit\u00e9 physique, type d\'entra\u00eenement et qualit\u00e9 de sommeil.'));
   if (window.TIPS) TIPS.renderTip(p, 'activity');
@@ -578,13 +578,13 @@ function renderStep3(p) {
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.activity !== null && S.train.length > 0 && S.sleep !== null;
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(4); }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(2); }, html: backArrowHtml() + 'Retour'}));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(4); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 4: SANTE ───
 function renderStep4(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape IV'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' IV'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'S\u00e9lectionnez vos conditions m\u00e9dicales pour adapter les macros et obtenir des recommandations nutritionnelles personnalis\u00e9es.'));
   if (window.TIPS) TIPS.renderTip(p, 'health');
@@ -634,13 +634,13 @@ function renderStep4(p) {
   warn.textContent = '\u26a0 Ces informations ne remplacent pas un avis m\u00e9dical. Consultez votre m\u00e9decin.';
   p.appendChild(warn);
 
-  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { goStep(5); }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(3); }, html: backArrowHtml() + 'Retour'}));
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { goStep(5); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 5: HABITUDES ALIMENTAIRES ───
 function renderStep5(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape V'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' V'));
   p.appendChild(h('h1', {html: 'Vos<br><em>habitudes alimentaires</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Personnalisez vos recommandations selon votre mode de vie'));
   if (window.TIPS) TIPS.renderTip(p, 'habits');
@@ -918,13 +918,13 @@ function renderStep5(p) {
       bb('nutrition_habits', {meals: S.mealsPerDay, location: S.eatingLocation, prepTime: S.mealPrepTime, alcoholFreq: S.alcoholFreq});
       goStep(6);
     }
-  }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(4); }, html: backArrowHtml() + 'Retour'}));
+  }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 6: OBJECTIF ───
 function renderStep6(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape VI'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' VI'));
   p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>'}));
   if (window.TIPS) TIPS.renderTip(p, 'goal');
 
@@ -994,8 +994,8 @@ function renderStep6(p) {
     p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
       bb('nutrition_goal', {goal: 'maintain_pregnancy', target: calcTarget()});
       goStep(7);
-    }}, 'Continuer'));
-    p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(5); }, html: backArrowHtml() + 'Retour'}));
+    }}, window.t('onb.next')));
+    p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
     return;
   }
 
@@ -1096,13 +1096,13 @@ function renderStep6(p) {
       bb('nutrition_goal', {goal: GOALS[S.goal].key, target: calcTarget(), targetWeight: S.targetWeight});
       goStep(7);
     }
-  }}, 'Continuer'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(5); }, html: backArrowHtml() + 'Retour'}));
+  }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 7: PREFERENCES ───
 function renderStep7(p) {
-  p.appendChild(h('div', {'class': 'eyebrow'}, '\u00c9tape VII'));
+  p.appendChild(h('div', {'class': 'eyebrow'}, window.t('onb.step') + ' VII'));
   p.appendChild(h('h1', {html: 'Vos<br><em>pr\u00e9f\u00e9rences</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Personnalisez vos recettes selon votre niveau cuisine, allergies et cuisines du monde pr\u00e9f\u00e9r\u00e9es.'));
   if (window.TIPS) TIPS.renderTip(p, 'preferences');
@@ -1273,7 +1273,7 @@ function renderStep7(p) {
       goStep(8);
     }
   }}, 'Voir mes r\u00e9sultats'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(6); }, html: backArrowHtml() + 'Retour'}));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 8: RESULTATS ───
@@ -2878,7 +2878,7 @@ window.NUTRITION = {
     if (S.nStep >= 1 && S.nStep <= 9) {
       var hdr = h('header', {'class': 'header'});
       hdr.appendChild(h('div', {'class': 'logo', html: 'MTD<span>Nutrition & Sport</span>'}));
-      hdr.appendChild(h('div', {'class': 'step-indicator'}, '\u00c9tape ' + S.nStep + ' / 9'));
+      hdr.appendChild(h('div', {'class': 'step-indicator'}, window.t('onb.step') + ' ' + S.nStep + ' ' + window.t('onb.of') + ' 9'));
       p.appendChild(hdr);
       var pb = h('div', {'class': 'progress-bar'});
       pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + ((S.nStep - 1) / 8 * 100) + '%'}));
