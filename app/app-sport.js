@@ -1251,6 +1251,7 @@ function renderCrossfitLevel(p) {
     if (S.crossfitLevel === 'scaled') cfDayReco = 'Recommand\u00E9 : 3-4 jours (r\u00E9cup\u00E9ration importante)';
     else if (S.crossfitLevel === 'inter') cfDayReco = 'Recommand\u00E9 : 4-5 jours';
     else if (S.crossfitLevel === 'rx') cfDayReco = 'Recommand\u00E9 : 5-6 jours';
+    else if (S.crossfitLevel === 'rx_plus') cfDayReco = 'Recommand\u00E9 : 6 jours (programme \u00E9lite Games — r\u00E9cup\u00E9ration active obligatoire)';
     if (cfDayReco) {
       p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px;font-style:italic'}, cfDayReco));
     }
@@ -1282,8 +1283,8 @@ function renderCrossfitLevel(p) {
 
       // Show estimated working weight if value is filled
       if (currentVal && S.crossfitLevel) {
-        var lvlIdx = S.crossfitLevel === 'scaled' ? 0 : S.crossfitLevel === 'inter' ? 1 : 2;
-        var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : 0.75;
+        var lvlIdx = S.crossfitLevel === 'scaled' ? 0 : S.crossfitLevel === 'inter' ? 1 : S.crossfitLevel === 'rx_plus' ? 3 : 2;
+        var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : lvlIdx === 3 ? 0.80 : 0.75;
         var estWeight = Math.round(currentVal * wodPct);
         leftDiv.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#1A3A6A;margin-top:2px;font-weight:bold'}, 'WOD \u2248 ' + (window.UNITS ? window.UNITS.displayWeight(estWeight) : estWeight + 'kg')));
       }
@@ -1338,7 +1339,8 @@ function renderCrossfitLevel(p) {
 function getCFLevelIdx() {
   if (S.crossfitLevel === 'scaled') return 0;
   if (S.crossfitLevel === 'inter') return 1;
-  return 2;
+  if (S.crossfitLevel === 'rx_plus') return 3;
+  return 2; // 'rx' or unknown defaults to rx (index 2)
 }
 
 function getCFSexKey() {
@@ -1358,7 +1360,7 @@ function formatCFMovement(mov) {
     if (w !== '?') {
       var rmNote = '';
       if (S.crossfit1RM && S.crossfit1RM[mov.weight]) {
-        var pctUsed = levelIdx === 0 ? 55 : levelIdx === 1 ? 65 : 75;
+        var pctUsed = levelIdx === 0 ? 55 : levelIdx === 1 ? 65 : levelIdx === 3 ? 80 : 75;
         rmNote = ' (' + pctUsed + '% de votre 1RM)';
       }
       parts.push(mov.name + ' @' + (window.UNITS ? window.UNITS.displayWeight(parseFloat(w)) : w + 'kg') + rmNote);
@@ -1396,7 +1398,7 @@ function getCFWeight(key) {
       var result = window.UNITS ? window.UNITS.displayWeight(parseFloat(w)) : w + 'kg';
       if (S.crossfit1RM && S.crossfit1RM[key]) {
         var lvlIdx = getCFLevelIdx();
-        var pct = lvlIdx === 0 ? 55 : lvlIdx === 1 ? 65 : 75;
+        var pct = lvlIdx === 0 ? 55 : lvlIdx === 1 ? 65 : lvlIdx === 3 ? 80 : 75;
         result += ' (' + pct + '% 1RM)';
       }
       return result;

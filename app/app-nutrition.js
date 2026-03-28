@@ -3533,7 +3533,7 @@ function renderShoppingList(p) {
     return;
   }
 
-  var list = window.RecipeEngine.generateShoppingList(s.weekPlan) || [];
+  var list = window.RecipeEngine.generateShoppingList(s.weekPlan, {shopFreq: s.shopFreq}) || [];
   if (!s.shopChecked) s.shopChecked = {};
   cleanShopChecked(list);
 
