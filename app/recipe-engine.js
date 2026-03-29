@@ -14337,7 +14337,7 @@
         'Retirer du feu. Déchirer abondamment le basilic frais à la main et l\'incorporer. Couvrir 2 minutes : la chaleur résiduelle libère les huiles essentielles du basilic sans les détruire.',
         'Servir tiède — jamais bouillant, jamais froid. Un filet généreux d\'huile d\'olive extra-vierge versé en dernière seconde dans chaque bol.'
       ]
-    }
+    },
 
   // ═══════════════════════════════════════════════════
   //  CUISINE ITALIENNE — R490-R499
@@ -16191,20 +16191,28 @@
             dayMAD += mealEntry.costMAD;
             pricedMeals++;
           }
-        } else if (recipe._smoothie && recipe.ingredients && recipe.ingredients.length) {
-          // Smoothie whey — ingrédients déjà présents dans l'objet weekPlan (format {name,qty,unit})
-          var smoothieCost = 0;
-          recipe.ingredients.forEach(function(ing) {
-            var price = window.getPricePer ? window.getPricePer(ing.name, ing.unit) : null;
-            if (price !== null && price > 0) {
-              smoothieCost += price * (ing.qty || 0);
+        } else if (recipe._id && recipe._id.indexOf('sm_') === 0) {
+          // Smoothie whey — lookup dans WHEY_SMOOTHIES car slimMeal() a supprimé les ingrédients
+          var smoothieData = recipe.ingredients && recipe.ingredients.length ? recipe : null;
+          if (!smoothieData && window.WHEY_SMOOTHIES) {
+            for (var wsi = 0; wsi < window.WHEY_SMOOTHIES.length; wsi++) {
+              if (window.WHEY_SMOOTHIES[wsi].id === recipe._id) { smoothieData = window.WHEY_SMOOTHIES[wsi]; break; }
             }
-          });
-          if (smoothieCost > 0) {
-            mealEntry.costMAD = Math.round(smoothieCost * 100) / 100;
-            mealEntry.scaled  = true;
-            dayMAD += mealEntry.costMAD;
-            pricedMeals++;
+          }
+          if (smoothieData && smoothieData.ingredients) {
+            var smoothieCost = 0;
+            smoothieData.ingredients.forEach(function(ing) {
+              var price = window.getPricePer ? window.getPricePer(ing.name, ing.unit) : null;
+              if (price !== null && price > 0) {
+                smoothieCost += price * (ing.qty || 0);
+              }
+            });
+            if (smoothieCost > 0) {
+              mealEntry.costMAD = Math.round(smoothieCost * 100) / 100;
+              mealEntry.scaled  = true;
+              dayMAD += mealEntry.costMAD;
+              pricedMeals++;
+            }
           }
         } else if (recipe._id) {
           // Recette R201+ : utilise le _scalingRatio stocké par enrichWithScaling
@@ -16505,7 +16513,7 @@
         // Recettes R201+ : utilise les ingrédients scalés si disponibles
         if (recipe._id && recipe._scaledIngredients && recipe._scaledIngredients.length > 0) {
           recipe._scaledIngredients.forEach(function(ing) {
-            var key = ing.name + '||' + ing.unit;
+            var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim();
             if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
             consolidated[key].qty += ing.scaledQty || ing.qty || 0;
             if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
@@ -16516,7 +16524,7 @@
           if (fullRecipe && fullRecipe.ingredients) {
             fullRecipe.ingredients.forEach(function(ing) {
               var scaledQty = Math.round((ing.qty / fullRecipe.servings) * scalingRatio * 10) / 10;
-              var key = ing.name + '||' + ing.unit;
+              var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim();
               if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
               consolidated[key].qty += scaledQty;
               if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
@@ -16527,17 +16535,32 @@
             var parsedIngredients = parseIngredientsString(recipe.i);
             parsedIngredients.forEach(function(ing) {
               var qty = Math.round(ing.qty * scalingRatioFallback * 10) / 10;
-              var key = ing.name + '||' + ing.unit;
+              var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim();
               if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
               consolidated[key].qty += qty;
               if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
             });
           }
+          // Smoothie whey — lookup depuis WHEY_SMOOTHIES si findRecipe a échoué
+          if (!fullRecipe && recipe._id && recipe._id.indexOf('sm_') === 0 && window.WHEY_SMOOTHIES) {
+            var sm = null;
+            for (var si = 0; si < window.WHEY_SMOOTHIES.length; si++) {
+              if (window.WHEY_SMOOTHIES[si].id === recipe._id) { sm = window.WHEY_SMOOTHIES[si]; break; }
+            }
+            if (sm && sm.ingredients) {
+              sm.ingredients.forEach(function(ing) {
+                var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim();
+                if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
+                consolidated[key].qty += ing.qty || 0;
+                if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
+              });
+            }
+          }
         } else if (recipe.i) {
           // Recette sans _id : parser le champ `i` string (fallback Repas libre)
           var parsedFallback = parseIngredientsString(recipe.i);
           parsedFallback.forEach(function(ing) {
-            var key = ing.name + '||' + ing.unit;
+            var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim();
             if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
             consolidated[key].qty += ing.qty || 0;
             if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);

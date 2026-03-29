@@ -464,6 +464,11 @@ if (AUTH.isLoggedIn()) {
   if (window.GAMIFICATION) GAMIFICATION.updateStreak();
   // Restore full profile from localStorage (E-01)
   loadProfile();
+  // Si l'utilisateur existant a un profil mais nStep=0 (ex: profil corrompu ou rechargement)
+  // → sauter le splash pour ne pas le forcer à refaire tout l'onboarding
+  if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
+    S.nStep = S.weekPlan ? 9 : (S.goal ? 8 : 1);
+  }
   // Restaurer la langue
   if (window.I18N && S.lang) {
     window.I18N.current = S.lang;

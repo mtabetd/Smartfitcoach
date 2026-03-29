@@ -2035,6 +2035,35 @@ function renderStep9(p) {
     mc.appendChild(h('span', {}, 'P ' + r.p + 'g'));
     mc.appendChild(h('span', {}, 'L ' + r.l + 'g'));
     card.appendChild(mc);
+    // Prix estimé par repas (si disponible)
+    (function() {
+      var mealPrice = null;
+      if (r._id && window.RecipeEngine && window.RecipeEngine.calcRecipeCost && window.getPricePer) {
+        if (r._id.indexOf('sm_') === 0 && window.WHEY_SMOOTHIES) {
+          // Smoothie : calculer depuis WHEY_SMOOTHIES
+          for (var _wsi = 0; _wsi < window.WHEY_SMOOTHIES.length; _wsi++) {
+            if (window.WHEY_SMOOTHIES[_wsi].id === r._id) {
+              var _sm = window.WHEY_SMOOTHIES[_wsi];
+              var _sc = 0;
+              _sm.ingredients.forEach(function(ing) {
+                var _p = window.getPricePer(ing.name, ing.unit);
+                if (_p !== null && _p > 0) _sc += _p * (ing.qty || 0);
+              });
+              if (_sc > 0) mealPrice = '~' + Math.round(_sc) + ' DH';
+              break;
+            }
+          }
+        } else if (r._id.indexOf('R') === 0) {
+          var _cost = window.RecipeEngine.calcRecipeCost(r._id, r._scalingRatio || 1);
+          if (_cost && _cost.totalMAD > 0) {
+            mealPrice = '~' + Math.round(_cost.totalMAD) + ' DH';
+          }
+        }
+      }
+      if (mealPrice) {
+        card.appendChild(h('div', {style:'font-size:10px;color:var(--text-secondary);margin-top:2px;font-family:"Helvetica Neue",Arial,sans-serif'}, '💰 ' + mealPrice));
+      }
+    })();
     var lv = r.lv || 0;
     var stars = '';
     for (var s = 0; s < lv; s++) stars += '\u2605';
@@ -2263,6 +2292,19 @@ function renderModal(app) {
     pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, carbs + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.carbs'))]));
     pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, fats + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.fats'))]));
     body.appendChild(pills);
+    // Affichage prix par portion
+    if (r._id && window.RecipeEngine && window.RecipeEngine.calcRecipeCost && window.getPricePer) {
+      var costInfo = window.RecipeEngine.calcRecipeCost(r._id, 1);
+      if (costInfo && costInfo.totalMAD > 0) {
+        var priceDiv = h('div', {style:'display:flex;align-items:center;gap:8px;margin:8px 0;padding:8px 12px;background:rgba(26,74,26,0.06);border-radius:8px'});
+        priceDiv.appendChild(h('span', {style:'font-size:14px'}, '💰'));
+        priceDiv.appendChild(h('div', {style:'flex:1'},[
+          h('div', {style:'font-size:13px;font-weight:600;color:var(--text)'}, '~' + Math.round(costInfo.totalMAD) + ' DH pour ' + (costInfo.missing && costInfo.missing.length ? costInfo.coveragePct + '% des ingrédients' : 'la recette')),
+          h('div', {style:'font-size:11px;color:var(--text-secondary)'}, '~' + Math.round(costInfo.pricePerServing) + ' DH / portion')
+        ]));
+        body.appendChild(priceDiv);
+      }
+    }
     body.appendChild(h('div', {'class': 'section-label'}, 'Ingr\u00e9dients'));
     var ingredList = h('ul', {'class': 'ingredient-list'});
     // Helper: display one ingredient {name, qty, unit} as a readable line
@@ -4070,6 +4112,17 @@ function renderShoppingList(p) {
   ]));
   p.appendChild(freqBanner);
 
+  // Affichage du budget total estimé dans la liste de courses
+  if (window.RecipeEngine && window.RecipeEngine.calcWeekPlanBudget && s.weekPlan) {
+    var shopBudget = window.RecipeEngine.calcWeekPlanBudget(s.weekPlan);
+    if (shopBudget && shopBudget.totalMAD > 0) {
+      var budgetLine = h('div', {style:'margin:0 16px 12px;padding:10px 14px;background:rgba(26,74,26,0.08);border-radius:10px;display:flex;justify-content:space-between;align-items:center'});
+      budgetLine.appendChild(h('span', {style:'font-size:13px;font-weight:600;color:var(--text)'}, '💰 Budget total estimé'));
+      budgetLine.appendChild(h('span', {style:'font-size:16px;font-weight:700;color:var(--accent,#1A4A1A)'}, '~' + Math.round(shopBudget.weeklyMAD) + ' DH'));
+      p.appendChild(budgetLine);
+    }
+  }
+
   // ── Boutons actions ──
   var actions = h('div', {style:'display:flex;gap:10px;padding:0 16px 12px;flex-wrap:wrap', 'class':'shop-print-hide'});
 
@@ -4215,26 +4268,53 @@ function printShoppingListAR(list) {
   });
   html += '</div>';
 
-  // Ouvrir une fenêtre d'impression dédiée
-  var printWin = window.open('', '_blank', 'width=700,height=900');
-  if (!printWin) { window.print(); return; }
-  printWin.document.write('<!DOCTYPE html><html lang="ar" dir="rtl"><head>');
-  printWin.document.write('<meta charset="UTF-8">');
-  printWin.document.write('<title>' + (AR ? AR.ui['print_title'] : 'قائمة التسوق') + '</title>');
-  printWin.document.write('<style>');
-  printWin.document.write('body{font-family:"Segoe UI",Arial,Tahoma,sans-serif;direction:rtl;text-align:right;padding:20px;color:#000;background:#fff;}');
-  printWin.document.write('.shop-print-title{font-size:22px;font-weight:700;margin-bottom:4px;}');
-  printWin.document.write('.shop-print-date{font-size:12px;color:#666;margin-bottom:16px;}');
-  printWin.document.write('.shop-cat-block{margin-bottom:12px;page-break-inside:avoid;}');
-  printWin.document.write('.shop-cat-name{font-size:13px;font-weight:700;background:#f0f0f0;padding:6px 10px;border-radius:4px;margin-bottom:4px;}');
-  printWin.document.write('.shop-print-item{display:flex;justify-content:space-between;padding:3px 10px;font-size:12px;border-bottom:1px solid #eee;}');
-  printWin.document.write('@media print{body{padding:10px;}}');
-  printWin.document.write('</style></head><body>');
-  printWin.document.write(html);
-  printWin.document.write('</body></html>');
-  printWin.document.close();
-  printWin.focus();
-  setTimeout(function() { printWin.print(); }, 400);
+  // Impression via iframe dédié (évite les problèmes de redirection avec window.open)
+  var title = AR ? AR.ui['print_title'] : 'قائمة التسوق';
+  var fullHTML = '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>' + escHTML(title) + '</title><style>' +
+    'body{font-family:"Segoe UI",Arial,Tahoma,sans-serif;direction:rtl;text-align:right;padding:20px;color:#000;background:#fff;}' +
+    '.shop-print-title{font-size:22px;font-weight:700;margin-bottom:4px;}' +
+    '.shop-print-date{font-size:12px;color:#666;margin-bottom:16px;}' +
+    '.shop-cat-block{margin-bottom:12px;page-break-inside:avoid;}' +
+    '.shop-cat-name{font-size:13px;font-weight:700;background:#f0f0f0;padding:6px 10px;border-radius:4px;margin-bottom:4px;}' +
+    '.shop-print-item{display:flex;justify-content:space-between;padding:3px 10px;font-size:12px;border-bottom:1px solid #eee;}' +
+    '@media print{body{padding:10px;}}' +
+    '</style></head><body>' + html + '</body></html>';
+
+  try {
+    // Approche 1: Blob URL (propre, sans redirection)
+    var blob = new Blob([fullHTML], {type: 'text/html;charset=utf-8'});
+    var blobUrl = URL.createObjectURL(blob);
+    var printWin = window.open(blobUrl, '_blank', 'width=700,height=900');
+    if (printWin) {
+      printWin.onload = function() {
+        try { printWin.print(); } catch(e) {}
+        setTimeout(function() { URL.revokeObjectURL(blobUrl); }, 5000);
+      };
+      return;
+    }
+    URL.revokeObjectURL(blobUrl);
+  } catch(e) {}
+
+  // Approche 2: iframe caché (fallback — ne redirige jamais)
+  var iframe = document.createElement('iframe');
+  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:0';
+  iframe.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(iframe);
+  try {
+    var idoc = iframe.contentWindow.document;
+    idoc.open('text/html', 'replace');
+    idoc.write(fullHTML);
+    idoc.close();
+    iframe.contentWindow.focus();
+    setTimeout(function() {
+      try { iframe.contentWindow.print(); } catch(pe) {}
+      setTimeout(function() {
+        try { document.body.removeChild(iframe); } catch(re) {}
+      }, 3000);
+    }, 300);
+  } catch(fe) {
+    try { document.body.removeChild(iframe); } catch(re2) {}
+  }
 }
 
 function exportShoppingListPDF(list, shopChecked) {
