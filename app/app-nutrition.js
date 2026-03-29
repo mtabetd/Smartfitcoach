@@ -4538,6 +4538,8 @@ window.openSaladComposer = function openSaladComposer(slotKey) {
 };
 
 // ─── PUBLIC API ───
+window.WHEY_SMOOTHIES = WHEY_SMOOTHIES;
+
 window.NUTRITION = {
   render: function(p) {
     // Header with step indicator and progress bar
