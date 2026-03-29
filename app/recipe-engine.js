@@ -6800,11 +6800,12 @@
         { name: 'Extrait de vanille', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Préchauffer le four à 180°C. Huiler légèrement un moule de 22 cm avec un peu d\'huile de coco.',
-        'Dans un saladier, fouetter les œufs avec le fromage blanc 0%, la stevia, l\'extrait de vanille et l\'extrait d\'amande amère.',
-        'Incorporer la farine d\'avoine et la poudre d\'amandes en pluie. Fouetter jusqu\'à obtenir une pâte lisse sans grumeaux.',
-        'Répartir les cerises uniformément dans le moule. Verser délicatement l\'appareil par-dessus.',
-        'Enfourner 25 min jusqu\'à ce que le clafoutis soit doré et ferme au toucher. Laisser tiédir avant de servir.'
+        'Préchauffer le four à 180°C. Beurrer au pinceau un moule de 22 cm et chemiser le fond d\'un disque de papier cuisson — le clafoutis se démoule sans accroc.',
+        'Fouetter vigoureusement les œufs avec le fromage blanc, la stevia, la vanille et l\'extrait d\'amande amère jusqu\'à obtenir un appareil parfaitement lisse et légèrement mousseux — l\'air incorporé donnera la texture fondante.',
+        'Tamiser la farine d\'avoine et la poudre d\'amandes ensemble, puis les incorporer en pluie en remuant à la spatule — pas de grumeaux, mais surtout ne pas trop travailler la pâte.',
+        'Sécher les cerises soigneusement sur du papier absorbant : un fruit mouillé fait tomber l\'appareil. Les disposer en couche uniforme dans le moule.',
+        'Verser l\'appareil délicatement en filet sur les cerises pour ne pas les déplacer. Enfourner 25 min — le clafoutis est cuit quand le centre tremble légèrement mais ne coule plus.',
+        'Laisser tiédir 10 min hors du four avant de servir : la texture se raffermit et les arômes d\'amande s\'épanouissent.'
       ]
     },
 
@@ -6829,11 +6830,12 @@
         { name: 'Extrait de vanille', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Préchauffer le four à 180°C. Éplucher et couper les pommes en quartiers épais.',
-        'Dans une poêle allant au four (ou moule à tarte), faire fondre le beurre avec le miel à feu moyen. Ajouter la cannelle et disposer les pommes en rosace. Cuire 5 min jusqu\'à légère caramélisation.',
-        'Préparer la pâte : mélanger la farine d\'avoine, la stevia, 1 œuf et 20g de beurre fondu à la fourchette jusqu\'à obtenir une boule. Étaler entre deux feuilles de papier sulfurisé.',
-        'Déposer la pâte sur les pommes en rentrant les bords. Enfourner 20 min jusqu\'à dorure.',
-        'Laisser reposer 5 min puis retourner sur un plat. Préparer la crème : mélanger le fromage blanc 0% avec la vanille et la stevia. Servir en accompagnement frais.'
+        'Préchauffer le four à 185°C. Éplucher les pommes et les couper en quartiers épais, réguliers — l\'uniformité assure une caramélisation homogène.',
+        'Dans une poêle allant au four, faire fondre le beurre à feu moyen jusqu\'au stade noisette (léger parfum de caramel, couleur ambrée). Ajouter le miel et la cannelle, puis disposer les quartiers de pommes bien serrés en rosace. Cuire 6 min sans remuer : le fond doit accrocher légèrement.',
+        'Préparer la pâte : travailler la farine d\'avoine, la stevia, l\'œuf et le beurre du bout des doigts jusqu\'à obtenir une boule. Étaler entre deux feuilles de papier sulfurisé en disque légèrement plus grand que la poêle.',
+        'Poser le disque de pâte sur les pommes en rentrant les bords vers l\'intérieur comme une couverture. Piquer 3-4 fois à la fourchette.',
+        'Enfourner 20 min jusqu\'à pâte bien dorée. Laisser reposer 3 min, puis retourner d\'un geste vif sur un plat — attendre trop longtemps fige le caramel.',
+        'Mélanger le fromage blanc 0% avec la vanille et la stevia restante. Servir la tarte tiède avec la crème fraîche à côté.'
       ]
     },
 
@@ -6855,11 +6857,11 @@
         { name: 'Zeste de citron vert', qty: 4, unit: 'g' }
       ],
       steps: [
-        'Sortir la mangue congelée du congélateur 5 min avant pour faciliter le mixage.',
-        'Mettre la mangue, le skyr, le jus de citron vert, le miel et les feuilles de menthe dans le blender.',
-        'Mixer à pleine puissance 1-2 min jusqu\'à obtenir une texture lisse et crémeuse. Racler les bords si nécessaire.',
-        'Goûter et ajuster le sucre avec un filet de miel si besoin.',
-        'Servir immédiatement en coupes garnies de zeste de citron vert et d\'une feuille de menthe. Pour une texture plus ferme, passer 20 min au congélateur.'
+        'Sortir la mangue congelée 3-4 min à température ambiante — juste assez pour que le blender ne force pas, pas assez pour que la chair ramollisse.',
+        'Zester le citron vert avant de le presser : les huiles essentielles du zeste sont dix fois plus parfumées que le jus seul.',
+        'Mettre la mangue dans le blender avec le skyr, le jus de citron vert et le miel. Mixer par impulsions d\'abord pour briser les blocs, puis en continu 1 min jusqu\'à texture parfaitement lisse — racler les parois à mi-parcours.',
+        'Goûter et ajuster : un filet de miel si la mangue manque de sucre, un peu plus de citron vert pour la vivacité. Incorporer les feuilles de menthe et mixer 10 sec supplémentaires.',
+        'Dresser immédiatement dans des coupes froides (passées 5 min au congélateur) et garnir du zeste de citron vert et d\'une feuille de menthe. Pour une texture plus ferme, passer 15 min au congélateur sans laisser décongeler.'
       ]
     },
 
@@ -6886,12 +6888,12 @@
         { name: 'Cannelle moulue', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 180°C. Huiler légèrement un moule à donuts (8 empreintes) avec l\'huile de coco.',
-        'Dans un saladier, mélanger le fromage blanc, les œufs, l\'huile de coco fondue, la stevia et la vanille.',
-        'Incorporer la farine d\'avoine et la levure chimique. Mélanger jusqu\'à une pâte homogène et épaisse.',
-        'Remplir les empreintes à donuts aux 3/4. Enfourner 12-15 min jusqu\'à ce que les beignets soient dorés et qu\'un cure-dent en ressorte propre. Laisser refroidir 10 min.',
-        'Glaçage chocolat : faire fondre le chocolat noir avec le lait d\'amande au bain-marie ou 30 sec au micro-ondes. Tremper le dessus de chaque donut et laisser figer.',
-        'OU Glaçage sec : mélanger le sucre de coco et la cannelle. Rouler les donuts encore tièdes dans ce mélange. Servir dans l\'heure pour garder le croustillant.'
+        'Préchauffer le four à 180°C. Badigeonner généreusement les empreintes à donuts d\'huile de coco fondue au pinceau — chaque recoin, sinon les bords collent.',
+        'Fouetter le fromage blanc avec les œufs, l\'huile de coco fondue (tiède, pas chaude), la stevia et la vanille jusqu\'à mélange homogène.',
+        'Incorporer la farine d\'avoine et la levure chimique tamisées ensemble en une seule fois. Mélanger à la spatule en 15-20 coups : la pâte doit être épaisse et légèrement granuleuse — ne pas chercher une texture lisse, la farine d\'avoine ne se dissout pas totalement.',
+        'Transférer la pâte dans une poche à douille ou un sac congélation coupé à l\'angle. Remplir les empreintes aux 3/4 avec précision. Enfourner 12-14 min — un cure-dent inséré en doit ressortir propre mais légèrement humide.',
+        'Laisser refroidir 5 min dans le moule, puis démouler sur une grille. Pour le glaçage chocolat : faire fondre le chocolat noir avec le lait d\'amande au bain-marie (50°C max), tremper le dessus de chaque donut et laisser cristalliser à l\'air libre.',
+        'Pour le glaçage sec : mélanger sucre de coco et cannelle dans une assiette creuse, rouler les donuts encore tièdes. Servir dans l\'heure — au-delà le croustillant disparaît.'
       ]
     },
 
@@ -6918,12 +6920,12 @@
         { name: 'Stevia', qty: 4, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 180°C. Beurrer légèrement un moule rond de 22 cm.',
-        'Préparer la pâte : mélanger la farine d\'avoine, le sucre de coco et la levure. Ajouter le beurre ramolli et les œufs entiers. Pétrir jusqu\'à obtenir une boule souple. Réserver au frais 10 min.',
-        'Préparer la crème vanille : chauffer le lait avec la vanille et la stevia sans faire bouillir. Fouetter les jaunes avec la maïzena. Verser le lait chaud progressivement en remuant, remettre sur feu doux 3 min jusqu\'à épaississement.',
-        'Hors du feu, incorporer le skyr à la crème encore tiède. Lisser au fouet et laisser refroidir 5 min.',
-        'Étaler les deux tiers de la pâte dans le moule. Verser la crème vanille-skyr. Couvrir avec le reste de pâte étalé et souder les bords.',
-        'Enfourner 20 min jusqu\'à dorure dorée. Laisser tiédir avant de démouler et couper en 8 parts.'
+        'Préchauffer le four à 180°C. Beurrer et fariner légèrement le moule de 22 cm. Préparer la pâte : travailler du bout des doigts la farine d\'avoine, le sucre de coco, la levure et le beurre ramolli en sable grossier. Ajouter les œufs entiers et pétrir brièvement jusqu\'à boule souple — ne pas insister. Réserver au frais 15 min.',
+        'Crème pâtissière légère : chauffer le lait avec la vanille à 80°C (frémissement, pas ébullition). Fouetter les jaunes d\'œufs avec la maïzena et la stevia jusqu\'à blanchiment léger.',
+        'Verser le lait chaud sur les jaunes en filet mince, fouettant sans arrêt. Reverser dans la casserole et cuire à feu doux-moyen en remuant constamment jusqu\'au premier bouillonnement — la crème épaissit en 2-3 min.',
+        'Hors du feu, laisser tiédir 5 min puis incorporer le skyr au fouet pour alléger la crème. Couvrir au contact d\'un film alimentaire.',
+        'Étaler les deux tiers de la pâte dans le moule en remontant sur les bords (1 cm). Verser la crème froide, puis couvrir du reste de pâte étalé. Souder les bords en pinçant. Dorer au jaune d\'œuf en deux passages croisés à la fourchette.',
+        'Enfourner 20-22 min jusqu\'à croûte bien dorée. Laisser tiédir 15 min avant de démouler — la crème se tient quand elle est froide.'
       ]
     },
 
@@ -6947,11 +6949,11 @@
         { name: 'Jus de citron vert', qty: 15, unit: 'ml' }
       ],
       steps: [
-        'Faire tremper les feuilles de gélatine dans l\'eau froide 5 min. Chauffer le lait de coco light avec la stevia sans bouillir. Essorer la gélatine et la dissoudre dans le lait chaud. Laisser tiédir 10 min puis couler dans 4 verrines. Réfrigérer 15 min.',
-        'Mixer la mangue pelée coupée en dés avec le jus de fruit de la passion jusqu\'à coulis lisse. Ajuster la douceur avec un peu de stevia si nécessaire.',
-        'Mélanger le yaourt grec avec le zeste et le jus de citron vert.',
-        'Sortir les verrines : verser délicatement le coulis mangue-passion sur la panna cotta coco prise. Terminer par une couche généreuse de yaourt au citron vert.',
-        'Décorer d\'un zeste de citron vert. Servir immédiatement ou réfrigérer jusqu\'au moment de déguster.'
+        'Hydrater les feuilles de gélatine dans un grand bol d\'eau très froide (avec des glaçons si possible) pendant 5 min exactement — une gélatine bien hydratée se dissout sans grumeaux.',
+        'Chauffer le lait de coco avec la stevia à feu doux jusqu\'à 70°C (frémissement, pas bouillant). Essorer la gélatine entre les paumes, la plonger dans le lait chaud et fouetter jusqu\'à dissolution complète. Couler dans 4 verrines et réfrigérer 20 min minimum.',
+        'Mixer la mangue pelée avec le jus de fruit de la passion jusqu\'à coulis très lisse. Passer au tamis fin si la mangue est fibreuse — la texture du coulis doit être parfaitement soyeuse.',
+        'Mélanger le yaourt grec avec le zeste finement râpé et le jus de citron vert. Assaisonner de stevia si besoin : le yaourt doit être vif, presque acidulé.',
+        'Sortir les verrines quand la panna cotta est prise (elle ne doit plus bouger en inclinant le verre). Verser le coulis mangue-passion en filet le long de la paroi pour ne pas briser la panna cotta. Terminer par la quenelle de yaourt citron vert et décorer d\'un zeste. Servir dans l\'heure.'
       ]
     },
 
@@ -6977,12 +6979,12 @@
         { name: 'Huile d\'olive légère', qty: 30, unit: 'ml' }
       ],
       steps: [
-        'Préchauffer le four à 170°C. Chemiser un moule à cake de papier cuisson.',
-        'Dans un grand bol, mélanger la farine d\'avoine, la whey vanille, la levure, la cannelle, le gingembre et l\'anis étoilé moulu.',
-        'Dans un autre bol, fouetter les œufs avec le miel, le lait et l\'huile d\'olive.',
-        'Verser les liquides sur les poudres et mélanger à la spatule jusqu\'à pâte homogène. Ne pas trop travailler.',
-        'Verser dans le moule et enfourner 25 min. Vérifier la cuisson en plantant un couteau : il doit ressortir propre.',
-        'Laisser refroidir 10 min dans le moule avant de démouler sur une grille. Couper en 8 tranches. Se conserve 3 jours dans un récipient hermétique.'
+        'Préchauffer le four à 165°C (chaleur tournante). Chemiser un moule à cake de papier cuisson en laissant dépasser les bords — facilite le démoulage. Tiédir légèrement le miel au bain-marie pour le rendre liquide et homogène.',
+        'Mélanger au fouet la farine d\'avoine, la whey vanille, la levure chimique, la cannelle, le gingembre et l\'anis étoilé dans un grand bol — bien répartir les épices dans les poudres.',
+        'Dans un autre récipient, fouetter les œufs avec le miel tiède, le lait et l\'huile d\'olive jusqu\'à mélange homogène. La chaleur du miel active les épices.',
+        'Verser les liquides sur les poudres en une fois. Mélanger à la spatule en 20 coups maximum, en raclant le fond : une pâte à pain d\'épices ne se travaille pas, elle se mélange juste.',
+        'Verser dans le moule. Tapoter le moule sur le plan de travail 3 fois pour chasser les bulles d\'air. Enfourner 25-28 min — la surface doit rebondir sous le doigt, pas s\'enfoncer.',
+        'Démouler après 10 min de repos, puis laisser refroidir complètement sur une grille. Le pain d\'épices est meilleur le lendemain : les épices se développent en 24h. Conserver filmé à température ambiante.'
       ]
     },
 
@@ -7009,12 +7011,12 @@
         { name: 'Sucre de coco', qty: 30, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 180°C. Mixer les flocons d\'avoine avec les amandes et le beurre fondu pour former une pâte sablée. Presser dans un moule à tarte de 22 cm. Enfourner 10 min.',
-        'Préparer la crème citron : fouetter les œufs avec la stevia et la maïzena. Ajouter le jus et le zeste de citron. Cuire à feu doux 5 min en remuant jusqu\'à épaississement.',
-        'Hors du feu, incorporer le fromage blanc à la crème citron encore chaude. Mélanger vigoureusement. Verser sur le fond de tarte précuit.',
-        'Monter les blancs d\'œufs en neige ferme. Ajouter le sucre de coco progressivement en continuant de fouetter jusqu\'à meringue brillante.',
-        'Couvrir la crème citron avec la meringue en formant des pics. Passer sous le gril du four 3-4 min jusqu\'à légère coloration dorée. Surveiller attentivement.',
-        'Laisser refroidir à température ambiante puis réfrigérer 15 min. Couper en 6 parts et servir frais.'
+        'Préchauffer le four à 180°C. Mixer les flocons d\'avoine et les amandes en poudre grossière, mélanger avec le beurre fondu jusqu\'à texture de sable humide. Tasser fermement et régulièrement dans un moule à tarte de 22 cm en remontant sur 2 cm de bord. Enfourner 10-12 min jusqu\'à légère dorure. Laisser refroidir.',
+        'Crème citron : fouetter les œufs entiers avec la stevia et la maïzena. Incorporer le jus de citron et le zeste. Cuire à feu doux en remuant constamment au fouet jusqu\'à premier épaississement (environ 5 min) — ne jamais cesser de remuer pour éviter la coagulation des œufs.',
+        'Hors du feu, laisser la température descendre à 60°C puis incorporer le fromage blanc au fouet. La chaleur résiduelle lie la crème sans la faire coaguler. Couler sur le fond de tarte refroidi.',
+        'Réfrigérer la tarte garnie 15 min pour que la crème se stabilise avant d\'ajouter la meringue.',
+        'Meringue : monter les blancs en neige à vitesse moyenne jusqu\'à bec mou, puis augmenter la vitesse et incorporer le sucre de coco en trois fois jusqu\'à meringue brillante et ferme. Dresser à la poche ou à la spatule en formant des pics expressifs.',
+        'Passer sous le gril préchauffé 3 min — surveiller sans quitter des yeux, la meringue peut brûler en 30 secondes. Laisser reposer 10 min puis réfrigérer jusqu\'au service.'
       ]
     },
 
@@ -7036,11 +7038,11 @@
         { name: 'Stevia', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Sortir les bananes congelées du congélateur et laisser 2 min à température ambiante pour faciliter le mixage.',
-        'Placer les bananes, le cacao, le beurre de noisette, le lait d\'amande, la whey et la stevia dans un blender puissant.',
-        'Mixer par impulsions 30 secondes, puis en continu 1-2 min jusqu\'à texture crémeuse et homogène rappelant une glace. Racler les parois si nécessaire.',
-        'Goûter et ajuster la douceur avec un peu de stevia. Servir immédiatement pour une texture soft-serve, ou passer 15 min au congélateur pour une glace plus ferme.',
-        'Dresser dans deux bols et garnir d\'une pincée de cacao ou de quelques noisettes concassées.'
+        'Sortir les bananes congelées 2-3 min à température ambiante — elles doivent rester très froides mais se laisser couper au couteau. Les casser en morceaux grossiers pour faciliter le démarrage du blender.',
+        'Placer la whey au fond du blender (elle favorise l\'émulsion), puis les morceaux de banane, le cacao tamisé, le beurre de noisette et le lait d\'amande. Laisser la stevia pour l\'ajustement final.',
+        'Mixer par impulsions courtes 4-5 fois pour briser les blocs, puis en continu 45-60 sec jusqu\'à texture crémeuse et dense. Si le blender force, ajouter 1 cuillère à soupe de lait d\'amande supplémentaire — pas plus.',
+        'Goûter : ajuster en stevia ou en cacao selon la préférence. Pour une texture parfaite, la nice cream doit être épaisse comme une crème glacée artisanale.',
+        'Servir immédiatement dans des bols froids pour la texture soft-serve. Pour une glace plus ferme, verser dans un récipient plat, couvrir au contact et passer 20 min au congélateur. Garnir d\'une pincée de cacao et de noisettes concassées torréfiées.'
       ]
     },
 
@@ -7072,10 +7074,11 @@
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Faire revenir l\'ail émincé dans l\'huile d\'olive à feu moyen 1 min. Ajouter le romarin et les tomates pelées écrasées. Cuire 3 min.',
-        'Verser le bouillon, ajouter la moitié des haricots entiers et mixer grossièrement l\'autre moitié directement dans la casserole pour créer une base crémeuse.',
-        'Porter à ébullition, ajouter les pâtes et cuire al dente selon les indications (env. 8-10 min). Ajuster la consistance avec un peu d\'eau si nécessaire.',
-        'Retirer le romarin, assaisonner. Servir dans deux bols profonds, arroser d\'un filet d\'huile d\'olive et parsemer de parmesan râpé.'
+        'Faire chauffer l\'huile d\'olive à feu moyen dans une casserole à fond épais. Faire revenir l\'ail émincé très finement avec le romarin 1 min 30 jusqu\'à ce que l\'ail commence à dorer sur les bords — c\'est là que les arômes se libèrent dans l\'huile.',
+        'Ajouter les tomates pelées et les écraser à la cuillère en bois contre le fond. Cuire 4 min à feu vif pour concentrer la pulpe et éliminer l\'acidité.',
+        'Verser le bouillon. Ajouter les deux tiers des haricots entiers. Mixer grossièrement le tiers restant directement dans la casserole avec un mixeur plongeant 5 sec — l\'objectif est une texture à la fois crémeuse et rustique, pas une soupe lisse.',
+        'Porter à ébullition, ajouter les pâtes directement dans le bouillon et cuire en remuant régulièrement : les pâtes cuisent dans la soupe et absorbent les arômes. Cuire 2 min de moins que l\'indication du paquet — elles finissent de cuire hors du feu.',
+        'Retirer le romarin, couper le feu, couvrir 2 min. Assaisonner en sel et poivre noir fraîchement moulu. Dresser dans des bols profonds chauds, arroser d\'un généreux filet d\'huile d\'olive à cru et parsemer de parmesan râpé à la minute.'
       ]
     },
 
@@ -7105,10 +7108,11 @@
         { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Couper les asperges en tronçons de 3 cm en réservant les pointes. Faire revenir l\'échalote émincée dans l\'huile d\'olive 2 min. Ajouter le riz et nacrer 2 min.',
-        'Déglacer au vin blanc, laisser absorber. Ajouter les tronçons d\'asperges (sans les pointes). Incorporer le bouillon chaud louche par louche en remuant constamment.',
-        'À mi-cuisson (env. 10 min), ajouter les pointes d\'asperges. Continuer d\'ajouter le bouillon jusqu\'à cuisson al dente du riz (18-20 min total).',
-        'Hors du feu, incorporer le parmesan et le zeste de citron. Laisser reposer 2 min, assaisonner et servir immédiatement dans des assiettes creuses chaudes.'
+        'Casser les asperges à la main : la tige se brise naturellement à la limite du tendre. Tailler les pointes à 5 cm, couper le reste en tronçons de 2 cm. Chauffer le bouillon séparément — il doit rester frémissant tout au long de la cuisson.',
+        'Faire suer l\'échalote émincée dans l\'huile à feu doux 3 min sans coloration. Ajouter le riz arborio, nacrer 2 min en remuant : chaque grain doit être translucide en périphérie et blanc nacré au cœur.',
+        'Déglacer au vin blanc, remuer jusqu\'à absorption complète. Incorporer les tronçons d\'asperges. Verser le bouillon chaud louche par louche, en attendant à chaque fois que le riz ait presque tout absorbé avant d\'en rajouter.',
+        'À 10 min de cuisson, ajouter les pointes d\'asperges. Continuer jusqu\'à ce que le riz soit al dente (18-20 min total) : il doit filer légèrement quand on tire la cuillère.',
+        'Hors du feu, incorporer le parmesan râpé finement et le zeste de citron. Couvrir 2 min — c\'est la mantecatura, qui rend le risotto onctueux sans matière grasse. Ajuster sel et poivre blanc, servir sans attendre.'
       ]
     },
 
@@ -7137,10 +7141,11 @@
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Cuire les spaghetti al dente dans une grande casserole d\'eau salée. Réserver 100 ml d\'eau de cuisson avant d\'égoutter.',
-        'Pendant ce temps, griller les filets de poulet assaisonnés à la poêle grill 5-6 min de chaque côté. Trancher en lamelles.',
-        'Dans une grande poêle, chauffer l\'huile à feu doux, faire revenir l\'ail émincé et le piment 2 min sans colorer. Ajouter les pâtes et un peu d\'eau de cuisson, mélanger.',
-        'Incorporer le poulet tranché, le persil ciselé et le jus de citron. Mélanger vigoureusement 1 min pour enrober. Servir aussitôt.'
+        'Aplatir les filets de poulet à 1,5 cm d\'épaisseur avec la paume ou le plat d\'un couteau. Assaisonner généreusement sel et poivre. Chauffer une poêle grill à feu très vif jusqu\'à légère fumée.',
+        'Griller le poulet 4-5 min sans bouger pour obtenir les marques de grill, retourner une seule fois, cuire encore 4 min. Laisser reposer 3 min sur une planche avant de trancher en biais, épais de 5 mm.',
+        'Cuire les spaghetti al dente dans une grande casserole d\'eau très salée. Réserver impérativement 100 ml d\'eau de cuisson avant d\'égoutter.',
+        'Dans une grande poêle froide, mettre l\'huile d\'olive et l\'ail émincé en tranches fines. Chauffer doucement ensemble : l\'ail doit blondir sans jamais brûler — à la moindre couleur brune, tout recommencer. Ajouter le piment émietté.',
+        'Verser les pâtes dans la poêle avec 60 ml d\'eau de cuisson, mélanger à feu moyen-vif en tournant vigoureusement : l\'amidon émulsionne l\'huile en sauce légère et brillante. Ajouter le poulet, le persil ciselé, le jus de citron, mélanger et servir aussitôt.'
       ]
     },
 
@@ -7170,10 +7175,11 @@
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Cuire les penne al dente dans de l\'eau bouillante salée. Réserver 80 ml d\'eau de cuisson.',
-        'Dans une poêle, faire revenir l\'ail et le piment émincés dans l\'huile 1 min. Ajouter les tomates cerises coupées en deux, cuire 3 min jusqu\'à ce qu\'elles éclatent.',
-        'Ajouter la purée de tomates, laisser mijoter 5 min. Incorporer les crevettes, cuire 3-4 min jusqu\'à ce qu\'elles soient roses. Assaisonner généreusement.',
-        'Mélanger les pâtes égouttées à la sauce, ajouter un peu d\'eau de cuisson si nécessaire pour lier. Servir avec le basilic déchiré et un filet d\'huile d\'olive cru.'
+        'Décortiquer les crevettes si nécessaire, retirer le boyau avec la pointe d\'un couteau. Sécher sur papier absorbant — une crevette humide bouillit au lieu de saisir. Cuire les penne al dente, réserver 80 ml d\'eau de cuisson.',
+        'Chauffer l\'huile à feu vif dans une poêle large. Ajouter l\'ail en tranches fines et le piment émietté, faire revenir 45 secondes — l\'ail doit blondir, jamais noircir. Ajouter les tomates cerises coupées en deux, les écraser légèrement à la cuillère.',
+        'Verser la purée de tomates, laisser réduire 5 min à feu moyen-vif jusqu\'à ce que la sauce épaississe et nape la cuillère. Rectifier le sel.',
+        'Monter le feu à vif, jeter les crevettes dans la sauce chaude, cuire 2 min en les retournant une seule fois : elles doivent être roses et fermes, jamais caoutchouteuses. Hors du feu immédiatement.',
+        'Ajouter les pâtes égouttées, 40 ml d\'eau de cuisson, mélanger 30 secondes sur feu doux pour lier. Finir avec le basilic déchiré à la main — jamais au couteau, pour préserver les arômes.'
       ]
     },
 
@@ -7203,10 +7209,10 @@
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Cuire les tagliatelles fraîches al dente (env. 3 min). Réserver 60 ml d\'eau de cuisson. Égoutter.',
-        'Dans une large poêle, chauffer l\'huile, ajouter le saumon coupé en cubes et cuire 3-4 min. Il doit rester légèrement nacré au cœur. Réserver.',
-        'Dans la même poêle, faire tomber les épinards 1 min. Ajouter la crème légère, le jus et le zeste de citron, les câpres. Laisser frémir 2 min.',
-        'Ajouter les pâtes et le saumon, mélanger délicatement. Ajuster avec l\'eau de cuisson. Parsemer d\'aneth frais et servir aussitôt.'
+        'Couper le saumon en cubes de 3 cm réguliers. Saler légèrement. Cuire les tagliatelles fraîches al dente (2-3 min dans eau très salée). Réserver 60 ml d\'eau de cuisson, égoutter.',
+        'Dans une poêle large bien chaude avec l\'huile, déposer les cubes de saumon en une seule couche sans les toucher pendant 2 min : ils doivent se détacher seuls quand ils sont saisis. Retourner délicatement, cuire 1 min. Le cœur reste nacré. Réserver sur assiette.',
+        'Dans la même poêle, jeter les épinards frais à feu vif, remuer 1 min jusqu\'à ce qu\'ils tombent. Ajouter la crème légère, le jus et le zeste de citron, les câpres rincées. Laisser frémir 2 min à feu doux.',
+        'Ajouter les tagliatelles, mélanger délicatement avec des pinces, ajouter l\'eau de cuisson si la sauce est trop serrée. Replacer le saumon par-dessus — ne plus mélanger pour ne pas le casser. Parsemer d\'aneth frais et servir aussitôt.'
       ]
     },
 
@@ -7237,10 +7243,10 @@
         { name: 'Sel, poivre, origan séché', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Cuire l\'orzo al dente dans de l\'eau bouillante salée (8-10 min). Égoutter, rincer à l\'eau froide pour stopper la cuisson et refroidir rapidement.',
-        'Couper les tomates cerises en deux, le concombre en demi-rondelles, le poivron en petits dés. Émietter la feta grossièrement.',
-        'Dans un grand bol, mélanger l\'orzo froid avec tous les légumes, les olives, la feta et les herbes ciselées.',
-        'Assaisonner avec l\'huile d\'olive, le vinaigre de citron, l\'origan, le sel et le poivre. Mélanger, goûter et ajuster. Servir froid ou à température ambiante — idéal en lunch box.'
+        'Cuire l\'orzo al dente dans eau bouillante bien salée (8 min). L\'égoutter et l\'étaler immédiatement sur une plaque en couche fine, arroser d\'un filet d\'huile d\'olive, mélanger — cela évite qu\'il colle en refroidissant rapidement.',
+        'Préparer les légumes pendant que l\'orzo refroidit : tomates cerises coupées en deux, concombre en demi-lunes de 5 mm, poivron rouge en brunoise de 1 cm. Garder les coupes régulières — c\'est ce qui fait la différence visuellement et en bouche.',
+        'Dans un bol, fouetter l\'huile d\'olive avec le jus de citron, l\'origan, sel et poivre pour obtenir une vinaigrette émulsionnée. Goûter et ajuster l\'acidité.',
+        'Mélanger l\'orzo froid avec les légumes, les olives et les herbes ciselées (basilic + menthe). Verser la vinaigrette, bien mélanger. Émietter la feta en gros morceaux par-dessus — pas mélangée, pour qu\'elle reste en pièces visibles. Servir frais.'
       ]
     },
 
@@ -7271,10 +7277,11 @@
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Faire sauter les champignons tranchés dans la moitié de l\'huile à feu vif 5 min jusqu\'à coloration dorée. Saler, ajouter l\'ail et le thym. Réserver.',
-        'Dans la même casserole, faire revenir l\'oignon émincé dans le reste d\'huile 3 min. Ajouter le riz et nacrer 2 min. Déglacer au vin blanc, laisser absorber.',
-        'Incorporer le bouillon chaud louche par louche en remuant régulièrement (18-20 min), jusqu\'à texture crémeuse et riz al dente.',
-        'Hors du feu, incorporer la levure nutritionnelle pour une touche umami fromagère. Ajouter les champignons sautés, mélanger, assaisonner et servir immédiatement.'
+        'Trancher les champignons à épaisseur régulière (5 mm). Chauffer la moitié de l\'huile à feu vif dans une large poêle jusqu\'à légère fumée. Sauter les champignons EN DEUX FOIS : ne jamais surcharger la poêle, sinon ils cuisent à la vapeur au lieu de dorer. 4-5 min par fournée. Saler en fin de cuisson, ajouter l\'ail et le thym, réserver.',
+        'Dans une casserole, faire revenir l\'oignon émincé dans le reste d\'huile à feu moyen 4 min jusqu\'à translucidité. Ajouter le riz, nacrer 2 min en remuant. Déglacer au vin blanc, absorber complètement.',
+        'Maintenir le bouillon de légumes frémissant dans une casserole voisine. Incorporer louche par louche en remuant régulièrement — pas en continu, mais sans jamais laisser le fond sécher. 18-20 min de cuisson totale.',
+        'Quand le riz est al dente et la texture coulante ("all\'onda" — comme une vague), retirer du feu. Incorporer la levure nutritionnelle et la moitié des champignons, mélanger vigoureusement 1 min pour créer l\'onctuosité.',
+        'Servir immédiatement, déposer le reste des champignons dorés sur le dessus, quelques feuilles de thym frais. La levure nutritionnelle donne la profondeur fromagère sans aucun produit laitier.'
       ]
     },
 
@@ -7305,10 +7312,11 @@
         { name: 'Ail en poudre, sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Cuire les pâtes al dente. Pendant ce temps, couper tous les légumes en dés réguliers de 1 cm.',
-        'Dans une grande poêle, faire sauter les poivrons et la courgette dans l\'huile à feu vif 5 min. Ajouter les tomates cerises et les pois chiches, cuire 3 min.',
-        'Égoutter les pâtes en réservant 80 ml d\'eau de cuisson. Ajouter les pâtes aux légumes, mélanger et ajouter un peu d\'eau de cuisson pour lier la sauce.',
-        'Hors du feu, incorporer le parmesan et le basilic déchiré. Assaisonner avec l\'ail en poudre, sel et poivre. Servir en bowl pour un format trendy.'
+        'Tailler tous les légumes en brunoise régulière de 1 cm — poivron rouge, poivron jaune, courgette. La régularité assure une cuisson uniforme et une belle présentation. Cuire les pâtes al dente, réserver 80 ml d\'eau de cuisson.',
+        'Chauffer l\'huile à feu vif dans une grande poêle ou wok. Saisir les poivrons 3 min en remuant : ils doivent légèrement brunir aux bords sans ramollir. Ajouter la courgette, sauter 2 min.',
+        'Ajouter les pois chiches égouttés et rincés, les tomates cerises coupées en deux. Cuire 2 min en écrasant légèrement quelques tomates pour créer un fond de sauce. Assaisonner sel, poivre, ail en poudre.',
+        'Verser les pâtes dans la poêle avec 60 ml d\'eau de cuisson, mélanger à feu moyen 1 min : l\'amidon lie les légumes et les pâtes en une sauce naturelle sans corps gras supplémentaire.',
+        'Hors du feu, incorporer le parmesan râpé, mélanger rapidement. Ajouter le basilic déchiré à la main. Servir aussitôt — les couleurs sont au maximum, le parmesan encore filant.'
       ]
     },
 
@@ -7335,10 +7343,11 @@
         { name: 'Sel', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Torréfier le poivre concassé grossièrement à sec dans une grande poêle 1 min. Cuire les pâtes al dente dans très peu d\'eau (concentrée en amidon). Réserver 150 ml d\'eau de cuisson.',
-        'Dans un bol, mélanger le pecorino, le parmesan et la ricotta avec 2 cuillères d\'eau de cuisson tiède pour former une crème lisse. Assaisonner.',
-        'Ajouter les pâtes égouttées dans la poêle avec le poivre torréfié. Hors du feu, verser la crème fromagère et mélanger vigoureusement en ajoutant l\'eau de cuisson louche par louche.',
-        'La sauce doit être soyeuse et enrober chaque spaghetti (technique "mantecatura"). Servir immédiatement dans des assiettes chaudes avec un tour de moulin à poivre généreux.'
+        'Concasser grossièrement le poivre en grains au mortier ou sous un fond de casserole — des morceaux irréguliers, pas de la poudre. Torréfier à sec dans la poêle 1 min à feu moyen jusqu\'à parfum poivré intense. Réserver dans la poêle.',
+        'Cuire les pâtes dans une casserole avec très peu d\'eau (2x le volume des pâtes, très salée) : l\'eau devient riche en amidon, c\'est l\'ingrédient secret du cacio e pepe. Réserver impérativement 150 ml d\'eau de cuisson.',
+        'Dans un bol froid, mélanger le pecorino et le parmesan râpés très finement avec la ricotta allégée. Ajouter 2 cuillères d\'eau de cuisson TIÈDE (jamais bouillante — le fromage grainerait). Fouetter en crème lisse.',
+        'Réchauffer le poivre torréfié à feu moyen dans la poêle. Ajouter les pâtes égouttées avec 60 ml d\'eau de cuisson, mélanger énergiquement 30 secondes. Retirer du feu.',
+        'Verser la crème fromagère sur les pâtes hors du feu, mélanger vigoureusement en versant l\'eau de cuisson au compte-gouttes jusqu\'à texture soyeuse et filante. Servir immédiatement dans des assiettes chaudes, tour généreux de moulin à poivre.'
       ]
     },
 
@@ -7368,10 +7377,11 @@
         { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Cuire les patates douces entières au micro-ondes 8-10 min ou au four 30 min jusqu\'à tendreté. Éplucher et écraser en purée lisse. Laisser refroidir 5 min.',
-        'Mélanger la purée avec la farine de riz, l\'oeuf, la moitié du parmesan, la muscade, le sel. Former une pâte souple (ne pas trop travailler). Rouler en boudins de 2 cm de diamètre, couper en tronçons de 2 cm.',
-        'Cuire les gnocchis dans de l\'eau bouillante salée : dès qu\'ils remontent en surface, attendre 30 secondes puis égoutter.',
-        'Dans une poêle, faire fondre le beurre à feu moyen jusqu\'à coloration noisette, ajouter la sauge et les noix concassées. Faire dorer les gnocchis égouttés 2 min de chaque côté. Servir parsemé du reste de parmesan.'
+        'Cuire les patates douces entières et non pelées au four à 200°C pendant 40 min (ou au micro-ondes 10 min). Les peler encore chaudes — la chair se détache net. Écraser immédiatement au presse-purée ou à la fourchette : ne jamais mixer, cela libère trop d\'amidon.',
+        'Étaler la purée sur le plan de travail pour qu\'elle refroidisse et perde son humidité 5 min. Creuser un puits, y déposer l\'œuf, la farine de riz, la moitié du parmesan, la muscade, sel. Amalgamer rapidement en fraisant la pâte avec la paume — s\'arrêter dès que c\'est homogène. Trop travailler = gnocchis caoutchouteux.',
+        'Rouler en boudins de 2 cm de diamètre sur plan fariné. Couper en tronçons de 2 cm. Passer chaque gnocchi sur le dos d\'une fourchette pour créer les stries qui retiennent la sauce.',
+        'Cuire dans une grande casserole d\'eau bouillante très salée : dès qu\'ils remontent en surface, attendre 20 secondes seulement puis sortir à l\'écumoire sur un torchon propre — pas dans une passoire qui les casserait.',
+        'Dans une poêle, faire fondre le beurre à feu moyen jusqu\'à couleur noisette et odeur de biscuit. Ajouter la sauge — elle doit crépiter et devenir croustillante en 30 secondes. Faire dorer les gnocchis 1-2 min de chaque côté. Parsemer des noix concassées et du reste de parmesan.'
       ]
     },
 
@@ -7402,10 +7412,10 @@
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Aplatir légèrement les blancs de poulet entre deux feuilles de film alimentaire. Saler et poivrer.',
-        'Chauffer l\'huile dans une poêle antiadhésive à feu moyen-vif. Saisir le poulet 3 min de chaque côté jusqu\'à dorure.',
-        'Ajouter l\'ail haché, les tomates concassées, l\'origan, les câpres et les olives. Mélanger et couvrir.',
-        'Laisser mijoter 10 min à feu moyen jusqu\'à ce que le poulet soit bien cuit. Servir avec un filet d\'huile d\'olive extra-vierge.'
+        'Aplatir les blancs de poulet entre deux feuilles de film alimentaire à 1,5 cm d\'épaisseur uniforme avec un rouleau ou le plat d\'un couteau. Sel, poivre des deux côtés. Cette épaisseur constante garantit une cuisson homogène.',
+        'Chauffer l\'huile dans une poêle antiadhésive à feu vif jusqu\'à légère fumée. Saisir le poulet 3 min SANS TOUCHER pour obtenir une belle croûte dorée. Retourner une seule fois, saisir 2 min. Réserver sur une assiette — il finira de cuire dans la sauce.',
+        'Dans la même poêle (sans nettoyer — les sucs de poulet sont de l\'or), réduire à feu moyen. Ajouter l\'ail haché, faire revenir 30 secondes. Verser les tomates concassées, l\'origan, les câpres et les olives. Racler le fond avec une cuillère en bois pour décoller les sucs.',
+        'Remettre le poulet dans la sauce, couvrir, laisser mijoter 8 min à feu doux. Vérifier la cuisson en pressant : le poulet doit rebondir légèrement, jamais être dur. Servir nappé de sauce avec un filet d\'huile d\'olive cru.'
       ]
     },
 
