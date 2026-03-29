@@ -2006,7 +2006,18 @@ function renderStep9(p) {
     dayTotalL += r.l || 0;
     var card = h('div', {'class': 'meal-card', onclick: function(e) {
       if (e.target.closest && e.target.closest('.swap-btn')) return;
-      S.modalRecipe = r;
+      // Smoothies : slimMeal() a supprimé ingredients — on récupère les données complètes
+      if (r._id && r._id.indexOf('sm_') === 0 && window.WHEY_SMOOTHIES) {
+        var _fullSm = null;
+        for (var _si = 0; _si < window.WHEY_SMOOTHIES.length; _si++) {
+          if (window.WHEY_SMOOTHIES[_si].id === r._id) { _fullSm = window.WHEY_SMOOTHIES[_si]; break; }
+        }
+        if (_fullSm) {
+          S.modalRecipe = { _id: r._id, n: _fullSm.name || r.n, k: r.k, p: r.p, g: r.g, l: r.l,
+            f: _fullSm.emoji || '🥤', ingredients: _fullSm.ingredients || [], steps: _fullSm.steps || [],
+            _smoothie: true };
+        } else { S.modalRecipe = r; }
+      } else { S.modalRecipe = r; }
       bb('recipe_view', {recipe: r.n});
       if (window.GAMIFICATION) {
         var rc = window.GAMIFICATION.incrementCounter('recipes_viewed');
