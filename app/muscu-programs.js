@@ -861,6 +861,63 @@ var COLEMAN_PROGRAMS = {
     },
     epaules: {
       beginner: {
+        exercises: [
+          {order:1, name:'Développé militaire barre', sets:4, reps:'10-12', rest:'90s', technique:'Base Coleman. 4 séries progressives. Amplitude complète, pas de triche.', muscle:'epaules', type:'compound', equipment:'barre', rest_pause:false},
+          {order:2, name:'Élévations latérales haltères', sets:4, reps:'12-15', rest:'60s', technique:'4 séries. Bras à hauteur épaule. Légère rotation externe. Contraction 1s.', muscle:'epaules', type:'isolation', equipment:'halteres', rest_pause:false},
+          {order:3, name:'Élévations frontales haltères', sets:3, reps:'12-15', rest:'60s', technique:'3 séries. Déltoïde antérieur. Alternance gauche/droite ou bilatéral.', muscle:'epaules', type:'isolation', equipment:'halteres', rest_pause:false},
+          {order:4, name:'Oiseau haltères (arrière)', sets:4, reps:'15-20', rest:'60s', technique:'4 séries. Torse penché. Bras arrière. Deltoïde postérieur souvent négligé.', muscle:'epaules', type:'isolation', equipment:'halteres', rest_pause:false}
+        ]
+      },
+      intermediate: {
+        exercises: [
+          {order:1, name:'Développé haltères assis', sets:5, reps:'10-12', rest:'90s', technique:'5 séries. Amplitude supérieure à la barre. Rotation naturelle des poignets.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
+          {order:2, name:'Élévations latérales câble', sets:4, reps:'12-15', rest:'60s', technique:'4 séries câble = tension constante. Superset avec élévations haltères.', muscle:'epaules', type:'isolation', equipment:'poulie', superset_with:'elev_lat_halt'},
+          {order:3, name:'Élévations latérales haltères', sets:4, reps:'12-15', rest:'60s', technique:'Suite superset. Brûlure maximale du médial. Drop set dernière série.', muscle:'epaules', type:'isolation', equipment:'halteres', rest_pause:false},
+          {order:4, name:'Rowing menton prise large', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Prise large = plus d\'épaules, moins de trapèzes. Coudes hauts.', muscle:'epaules', type:'compound', equipment:'barre', rest_pause:false},
+          {order:5, name:'Face pull câble', sets:4, reps:'15-20', rest:'60s', technique:'4 séries. Prise corde. Coudes hauts. Santé et volume postérieur.', muscle:'epaules', type:'isolation', equipment:'poulie', rest_pause:false}
+        ]
+      },
+      advanced: {
+        exercises: [
+          {order:1, name:'Développé militaire barre', sets:5, reps:'8-12', rest:'2min', technique:'5 séries lourdes. 5e série drop set immédiat. Progression chaque semaine.', muscle:'epaules', type:'compound', equipment:'barre', rest_pause:false},
+          {order:2, name:'Développé Arnold', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Rotation complète. Cible les 3 faisceaux. Technique signature.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
+          {order:3, name:'Élévations latérales haltères', sets:5, reps:'12-20', rest:'60s', technique:'5 séries. Progressive overload. 3e série = 15, 4e = 12 + drop set, 5e = 20 léger.', muscle:'epaules', type:'isolation', equipment:'halteres', rest_pause:false},
+          {order:4, name:'Oiseau machine', sets:4, reps:'15-20', rest:'60s', technique:'4 séries machine. Superset avec face pull. Deltoïde arrière volume maximal.', muscle:'epaules', type:'isolation', equipment:'machine', superset_with:'face_pull'},
+          {order:5, name:'Face pull câble', sets:4, reps:'20', rest:'60s', technique:'Suite superset. Prise haute. Coudes niveau épaule. Rotation externe.', muscle:'epaules', type:'isolation', equipment:'poulie', rest_pause:false}
+        ]
+      }
+    },
+    bras: {
+      beginner: {
+        exercises: [
+          {order:1, name:'Curl barre', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Mouvement strict. Coudes fixes. Contraction peak 1s. Descente contrôlée.', muscle:'biceps', type:'compound', equipment:'barre', rest_pause:false},
+          {order:2, name:'Dips triceps', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Corps vertical. Descente complète. Pas de balancement.', muscle:'triceps', type:'compound', equipment:'poids_corps', rest_pause:false},
+          {order:3, name:'Curl haltères alterné', sets:3, reps:'12', rest:'60s', technique:'3 séries. Supination en montant. Contraction maximale.', muscle:'biceps', type:'isolation', equipment:'halteres', rest_pause:false},
+          {order:4, name:'Extension triceps poulie', sets:3, reps:'12-15', rest:'60s', technique:'3 séries. Coudes fixes. Extension complète. Contraction peak.', muscle:'triceps', type:'isolation', equipment:'poulie', rest_pause:false}
+        ]
+      },
+      intermediate: {
+        exercises: [
+          {order:1, name:'Curl barre EZ', sets:5, reps:'8-12', rest:'90s', technique:'5 séries. Prise EZ = moins de stress coudes. Amplitude totale. Progressive overload.', muscle:'biceps', type:'compound', equipment:'barre_ez', rest_pause:false},
+          {order:2, name:'Pushdown câble V-bar', sets:5, reps:'10-12', rest:'90s', technique:'5 séries. Coudes fixes. Extension totale. Contraction 2s. Drop set 5e série.', muscle:'triceps', type:'isolation', equipment:'poulie', rest_pause:false},
+          {order:3, name:'Curl incliné haltères', sets:4, reps:'10-12', rest:'60s', technique:'4 séries. Banc incliné = étirement max long chef. Supination complète.', muscle:'biceps', type:'isolation', equipment:'halteres', superset_with:'extension_crane'},
+          {order:4, name:'Extension crâne barre EZ', sets:4, reps:'10-12', rest:'60s', technique:'Suite superset. Long faisceau triceps. Descente lente vers front.', muscle:'triceps', type:'compound', equipment:'barre_ez', rest_pause:false},
+          {order:5, name:'Marteau câble', sets:3, reps:'12-15', rest:'60s', technique:'3 séries. Brachial et brachioradial. Prise neutre. Volume finisher.', muscle:'biceps', type:'isolation', equipment:'poulie', rest_pause:false}
+        ]
+      },
+      advanced: {
+        exercises: [
+          {order:1, name:'Curl barre debout', sets:5, reps:'8-12', rest:'90s', technique:'5 séries lourdes. 5e série drop set 3 descentes. Mouvement pur biceps.', muscle:'biceps', type:'compound', equipment:'barre', rest_pause:false},
+          {order:2, name:'Dips lestés', sets:5, reps:'8-12', rest:'90s', technique:'5 séries lestées. 5e série enlever le lest, max reps. Triceps chef long focus.', muscle:'triceps', type:'compound', equipment:'poids_corps', rest_pause:false},
+          {order:3, name:'Curl concentration', sets:4, reps:'12-15', rest:'60s', technique:'4 séries. Coude contre cuisse. Supination totale. Peak contraction 2s.', muscle:'biceps', type:'isolation', equipment:'halteres', superset_with:'kickback'},
+          {order:4, name:'Kickback haltère', sets:4, reps:'12-15', rest:'60s', technique:'Suite superset. Extension complète. Contraction peak 2s. Volume total.', muscle:'triceps', type:'isolation', equipment:'halteres', rest_pause:false},
+          {order:5, name:'Curl marteau haltères', sets:4, reps:'10-12', rest:'60s', technique:'4 séries. Brachial et avant-bras. Finisher volume biceps.', muscle:'biceps', type:'isolation', equipment:'halteres', rest_pause:false},
+          {order:6, name:'Extension triceps prise corde', sets:4, reps:'12-15', rest:'60s', technique:'4 séries. Écarter la corde en bas = chef latéral. Drop set 4e série.', muscle:'triceps', type:'isolation', equipment:'poulie', rest_pause:false}
+        ]
+      }
+    },
+    epaules: {
+      beginner: {
         name: 'High Volume Épaules — Débutant',
         description: 'Volume Coleman épaules débutant. 4-5 exercices, tous faisceaux.',
         exercises: [
