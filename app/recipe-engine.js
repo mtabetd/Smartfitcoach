@@ -14371,12 +14371,12 @@
       { name: 'Sel, poivre noir, noix de muscade', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Rincer le quinoa. Porter le bouillon à frémissement dans une casserole.',
-      'Dans une grande poêle, faire revenir l\'oignon émincé et l\'ail dans l\'huile d\'olive 3 min à feu moyen.',
-      'Ajouter les champignons tranchés, une pincée de sel et de poivre noir, cuire 5 min jusqu\'à évaporation de l\'eau.',
-      'Verser le quinoa dans la poêle avec les champignons, puis ajouter le bouillon chaud louche par louche (comme un risotto), en remuant, sur 15-18 min.',
-      'Hors du feu, incorporer le parmesan râpé, une râpée de noix de muscade et le jus de citron ; mélanger vivement pour créer un liant crémeux.',
-      'Répartir dans deux bols, parsemer de persil haché et d\'un tour de poivre noir avant de servir.'
+      'Rincer le quinoa à l\'eau froide jusqu\'à ce que l\'eau soit claire ; égoutter. Porter le bouillon à frémissement doux — jamais à gros bouillons.',
+      'Dans une grande sauteuse, faire suer l\'oignon émincé dans l\'huile d\'olive à feu moyen sans coloration, 4 min ; ajouter l\'ail 1 min.',
+      'Monter le feu à vif, ajouter les champignons tranchés en une seule couche, ne pas remuer pendant 2 min pour obtenir une belle coloration de Maillard ; assaisonner.',
+      'Baisser à feu moyen, verser le quinoa dans la poêle ; nacrer 1 min en remuant pour enrober chaque grain d\'huile, comme un risotto authentique.',
+      'Ajouter le bouillon chaud, louche par louche, en remuant et en attendant l\'absorption complète avant chaque ajout — 15 à 18 min.',
+      'Hors du feu, incorporer le parmesan en deux fois, une râpée de muscade et le jus de citron ; mélanger vivement pour créer la liaison crémeuse (la mantecatura italienne).'
     ]
   },
 
@@ -14410,12 +14410,12 @@
       { name: 'Sel, poivre, piment doux', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Couper les blancs de poulet en gros morceaux, les assaisonner de sel, poivre et origan.',
-      'Faire dorer le poulet 3 min de chaque côté dans l\'huile d\'olive à feu vif, puis réserver.',
-      'Dans la même poêle, faire revenir l\'oignon émincé, l\'ail et le poivron coupé en lanières 4 min à feu moyen.',
-      'Ajouter les tomates concassées, les tomates cerises, les olives, les câpres et une pincée de piment ; laisser mijoter 5 min.',
-      'Remettre le poulet dans la sauce, couvrir et cuire à feu doux 20 min jusqu\'à ce qu\'il soit cuit à cœur.',
-      'Parsemer de basilic frais ciselé et servir directement dans la poêle ou dans des assiettes creuses.'
+      'Sécher soigneusement les morceaux de poulet avec du papier absorbant — une surface humide ne dore pas, elle bout. Assaisonner généreusement de sel, poivre et origan.',
+      'Chauffer l\'huile d\'olive à feu vif dans une cocotte épaisse ; saisir le poulet 3-4 min par face jusqu\'à croûte dorée profonde. Réserver.',
+      'Réduire à feu moyen, faire revenir l\'oignon et le poivron en lanières dans les sucs de cuisson 5 min ; déglacer avec 2 cuillères de vin blanc ou d\'eau pour décoller les sucs caramélisés.',
+      'Ajouter l\'ail 1 min, puis les tomates concassées, les cerises, les olives, les câpres et le piment ; assaisonner, laisser réduire 5 min à découvert.',
+      'Remettre le poulet dans la sauce, couvrir et mijoter à feu très doux 20 min — le couvercle légèrement entrouvert concentre la sauce sans assécher.',
+      'Vérifier la cuisson à cœur, rectifier l\'assaisonnement, parsemer de basilic frais ciselé à la dernière minute.'
     ]
   },
 
@@ -14449,12 +14449,12 @@
       { name: 'Sel, poivre, piment doux', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Faire revenir dans l\'huile d\'olive l\'oignon, l\'ail, la carotte et le céleri tous finement émincés avec le romarin, 5 min à feu moyen avec une pincée de sel.',
-      'Ajouter les tomates concassées et cuire 3 min en remuant.',
-      'Verser le bouillon et les haricots blancs ; mixer grossièrement au mixeur plongeant (juste la moitié pour garder du morceaux) et porter à ébullition.',
-      'Ajouter les pâtes et cuire selon le temps indiqué sur le paquet en remuant régulièrement, jusqu\'à consistance de soupe épaisse.',
-      'Rectifier avec sel, poivre et une pincée de piment ; si la soupe épaissit trop, ajouter un peu de bouillon chaud.',
-      'Servir dans des bols profonds, filet d\'huile d\'olive et parmesan râpé par-dessus.'
+      'Faire un soffritto précis : oignon, carotte et céleri taillés en brunoise de 5 mm, faire suer dans l\'huile avec le romarin à feu doux 8 min jusqu\'à fondant translucide.',
+      'Monter le feu, ajouter les tomates concassées, cuire 5 min en remuant jusqu\'à assèchement et caramélisation légère des sucres — la sauce devient plus rouge foncé.',
+      'Verser le bouillon, ajouter les haricots blancs ; mixer grossièrement au mixeur plongeant en laissant au moins un tiers des haricots entiers pour la texture traditionnelle.',
+      'Porter à ébullition légère, goûter et saler le bouillon avant d\'ajouter les pâtes — les pâtes absorbent le sel de cuisson, un bouillon peu salé donne des pâtes fades.',
+      'Cuire les pâtes directement dans la soupe en remuant régulièrement ; ajouter du bouillon chaud si la consistance épaissit trop — la Pasta e Fagioli doit napper une cuillère.',
+      'Servir dans des bols profonds, un filet d\'huile d\'olive crue de qualité et le parmesan ; la valeur ajoutée est dans ce geste final.'
     ]
   },
 
@@ -14485,12 +14485,12 @@
       { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Préchauffer le four à 180°C. Faire revenir l\'ail dans l\'huile d\'olive 1 min, ajouter les épinards avec une pincée de sel et de muscade, cuire 3 min jusqu\'à ce qu\'ils soient tendres.',
-      'Dans un grand bol, battre les œufs avec la ricotta, le parmesan, du sel et du poivre noir jusqu\'à mélange homogène.',
-      'Incorporer les épinards égouttés à la préparation aux œufs.',
-      'Verser dans un plat à four légèrement huilé (ou une poêle allant au four), disposer les tomates cerises coupées en deux sur le dessus.',
-      'Cuire au four 18-20 min jusqu\'à ce que la frittata soit gonflée, dorée sur les bords et prise au centre.',
-      'Laisser tiédir 2 min avant de couper en parts et de servir avec une salade verte.'
+      'Préchauffer le four à 180°C. Faire revenir l\'ail dans l\'huile d\'olive 30 secondes à peine — il doit embaumer sans brunir. Ajouter les épinards, saler, couvrir 2 min pour les faire tomber.',
+      'Exprimer l\'excès d\'eau des épinards en les pressant dans une passoire — une frittata aqueuse ne prend pas. Hacher grossièrement et réserver.',
+      'Battre les œufs au fouet 30 secondes — pas davantage, incorporer trop d\'air rend la frittata fragile. Ajouter ricotta, parmesan, muscade, sel et poivre ; fouetter jusqu\'à homogène.',
+      'Incorporer les épinards refroidis à la préparation. Verser dans une poêle allant au four légèrement huilée, disposer les tomates cerises en deux sur le dessus en les enfonçant légèrement.',
+      'Cuire à feu moyen 3 min pour saisir le fond — bords qui commencent à prendre — puis enfourner 15 à 18 min jusqu\'à gonflée, dorée, prise au centre (trembler légèrement est normal).',
+      'Laisser reposer 3 min avant de couper : la frittata se raffermit hors du feu, comme tous les œufs cuits.'
     ]
   },
 
@@ -14522,12 +14522,12 @@
       { name: 'Sel, poivre noir, origan séché', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Rincer les lentilles et les cuire 20 min dans une grande casserole d\'eau salée non couverte, jusqu\'à ce qu\'elles soient tendres mais encore fermes ; égoutter et refroidir sous eau froide.',
-      'Couper les tomates en rondelles, les tomates cerises en deux, la mozzarella en tranches. Ciseler le basilic.',
-      'Préparer la vinaigrette en fouettant l\'huile d\'olive, le vinaigre balsamique, le jus de citron, l\'ail pressé, une pincée de sel, poivre et origan.',
-      'Dans un grand saladier, mélanger les lentilles tièdes avec la moitié de la vinaigrette, laisser absorber 5 min.',
-      'Disposer les lentilles en base dans les assiettes, placer alternativement les tranches de tomates et de mozzarella par-dessus.',
-      'Arroser du reste de vinaigrette, parsemer de basilic frais ciselé et servir immédiatement ou après 15 min pour que les saveurs se mêlent.'
+      'Cuire les lentilles dans une grande eau froide portée à ébullition, avec une feuille de laurier et une échalote entière — jamais de sel en début de cuisson, cela durcit la peau. Saler à mi-cuisson seulement.',
+      'Égoutter les lentilles al dente (elles finissent de cuire dans la vinaigrette), rincer brièvement à l\'eau froide pour stopper la cuisson tout en conservant une légère chaleur.',
+      'Préparer la vinaigrette en fouettant l\'huile, le balsamique, le jus de citron, l\'ail pressé, sel, poivre et origan ; assaisonner les lentilles tièdes avec la moitié — elles absorbent mieux chauds.',
+      'Couper les tomates avec un couteau très tranchant — un couteau émoussé écrase et fait perdre le jus. Trancher la mozzarella à 1 cm d\'épaisseur.',
+      'Dresser en assiette en alternant lentilles, tranche de tomate et tranche de mozzarella — le contraste visuel est la signature caprese.',
+      'Arroser du reste de vinaigrette, poser les feuilles de basilic entières (ne jamais les ciseler sur les tomates : elles noircissent), servir dans les 10 minutes.'
     ]
   },
 
@@ -14559,12 +14559,12 @@
       { name: 'Sel, poivre, piment doux', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Assaisonner les filets de saumon avec sel, poivre et piment doux sur les deux faces.',
-      'Chauffer l\'huile d\'olive dans une poêle antiadhésive à feu vif ; saisir le saumon 3 min côté peau puis 2 min côté chair ; réserver sur une assiette.',
-      'Dans la même poêle à feu moyen, faire revenir l\'ail émincé 1 min, puis ajouter les tomates cerises coupées en deux et cuire 3 min jusqu\'à ce qu\'elles commencent à fondre.',
-      'Verser le vinaigre balsamique et le miel, mélanger et laisser réduire 2 min pour former une sauce agrodolce brillante.',
-      'Ajouter les olives et les câpres dans la sauce, chauffer 1 min.',
-      'Remettre le saumon dans la poêle, napper de sauce, parsemer de basilic frais et servir immédiatement avec du quinoa ou des légumes vapeur.'
+      'Sortir le saumon du réfrigérateur 10 min avant cuisson — une protéine froide saisie à feu vif se contracte et durcit à cœur. Sécher soigneusement les filets.',
+      'Chauffer l\'huile à feu très vif jusqu\'à légère fumée ; déposer les filets côté peau vers le haut, saisir 3 min sans toucher pour former la croûte. Retourner et cuire 2 min côté chair — le saumon doit être nacré à cœur, jamais sec.',
+      'Retirer le saumon et baisser le feu à moyen. Dans les sucs, faire revenir l\'ail émincé 40 secondes ; ajouter les tomates cerises coupées en deux, cuire 3 min.',
+      'Verser le miel, laisser caraméliser 30 secondes avant d\'ajouter le vinaigre balsamique — l\'ordre est crucial pour l\'agrodolce : sucre d\'abord, acide ensuite.',
+      'Réduire 2 min jusqu\'à sauce nappante et brillante. Ajouter olives et câpres, chauffer 1 min.',
+      'Remettre délicatement le saumon dans la sauce, napper, parsemer de basilic frais déchiré à la main. Servir immédiatement — l\'agrodolce ne s\'attend pas.'
     ]
   },
 
@@ -14597,12 +14597,12 @@
       { name: 'Sel, poivre noir, origan', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Préchauffer le four à 190°C. Couper les courgettes en deux dans la longueur, vider la chair avec une cuillère en laissant 5 mm de bord ; hacher grossièrement la chair prélevée.',
-      'Faire revenir la chair de courgette avec l\'ail dans l\'huile d\'olive, sel et poivre, 4 min à feu moyen ; retirer du feu et laisser refroidir légèrement.',
-      'Dans un bol, mélanger le thon émietté, la ricotta, le parmesan, les câpres, le jus et le zeste de citron, le persil haché, et la chair de courgette sautée.',
-      'Assaisonner la farce de poivre et d\'origan, puis garnir généreusement les barques de courgettes.',
-      'Déposer une demi-tomate cerise sur chaque courgette farcie ; placer sur une plaque huilée et cuire 22-25 min jusqu\'à ce que les courgettes soient tendres et dorées.',
-      'Servir chaud ou tiède, avec un filet d\'huile d\'olive et persil frais ciselé.'
+      'Préchauffer le four à 190°C. Couper les courgettes en deux dans la longueur avec un couteau tranchant ; évider à la cuillère parisienne ou à la petite cuillère en laissant 6 mm de bord — trop fin, elles s\'effondrent ; trop épais, elles sont pâteuses.',
+      'Saler légèrement l\'intérieur des barques et les retourner sur du papier absorbant 10 min — le sel libère l\'eau excédentaire, les courgettes tiennent à la cuisson.',
+      'Hacher la chair grossièrement, la sauter dans l\'huile d\'olive avec l\'ail et une pincée de sel à feu vif jusqu\'à évaporation complète de l\'eau de végétation — la farce ne doit plus coller à la poêle.',
+      'Laisser refroidir la chair 5 min. Dans un bol, combiner thon émietté, ricotta, parmesan, câpres, jus et zeste de citron, persil haché et la chair de courgette refroidie ; assaisonner de poivre et d\'origan.',
+      'Éponger l\'intérieur des barques, farcir généreusement en dôme, placer une demi-tomate cerise sur chaque ; enfourner 22-25 min jusqu\'à dorées et tendres sous la pointe d\'un couteau.',
+      'Laisser tiédir 3 min avant de servir : la farce se raffermit et se découpe proprement. Filet d\'huile d\'olive crue et persil ciselé au service.'
     ]
   },
 
@@ -14636,12 +14636,12 @@
       { name: 'Sel, poivre, origan séché', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Couper le pain en cubes de 2 cm ; les frotter d\'ail et les griller à sec à la poêle ou au four 180°C pendant 8 min jusqu\'à ce qu\'ils soient croustillants.',
-      'Couper les tomates et le concombre en morceaux, les tomates cerises en deux, le poivron en dés et l\'oignon rouge en fines lamelles.',
-      'Fouetter l\'huile d\'olive avec le vinaigre de vin rouge, une pincée de sel, poivre et origan pour former la vinaigrette.',
-      'Dans un grand saladier, mélanger les légumes avec la moitié de la vinaigrette ; laisser dégorger 5 min.',
-      'Ajouter le thon émietté et les croûtons, arroser du reste de vinaigrette ; mélanger délicatement pour que le pain absorbe les jus sans se défaire.',
-      'Parsemer de basilic frais ciselé, rectifier l\'assaisonnement en sel et poivre, servir immédiatement ou après 10 min de repos.'
+      'Couper le pain rassis en cubes de 2 cm — le pain de la veille est idéal, il absorbe sans se défaire. Frotter chaque cube avec l\'ail coupé en deux, puis griller à la poêle sèche à feu moyen-vif jusqu\'à coloration dorée sur toutes les faces.',
+      'Couper les tomates en morceaux irréguliers, les saler et les laisser dégorger dans une passoire 10 min — le jus recueilli est de l\'or liquide pour la vinaigrette.',
+      'Fouetter l\'huile d\'olive extra-vierge avec le vinaigre de vin rouge, une pincée de sel, poivre et origan ; incorporer le jus des tomates récupéré.',
+      'Dans le saladier, mélanger tomates, concombre coupé en demi-rondelles, poivron en dés et oignon rouge en lamelles fines ; arroser de la moitié de la vinaigrette, laisser mariner 5 min.',
+      'Émietter le thon grossièrement à la fourchette — pas en bouillie, des morceaux qui se tiennent donnent de la mâche. Ajouter aux légumes avec les croûtons.',
+      'Arroser du reste de vinaigrette, mélanger délicatement une seule fois et parsemer de basilic déchiré. Servir dans les 5 minutes — les croûtons humidifiés mais encore légèrement croquants sont la signature.'
     ]
   },
 
@@ -14676,12 +14676,12 @@
       { name: 'Sel, poivre, piment doux', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Émincer l\'oignon, l\'ail, le céleri et couper la carotte et la courgette en dés de 1 cm.',
-      'Dans une grande casserole, chauffer l\'huile d\'olive à feu moyen, faire revenir l\'oignon, le céleri et la carotte 5 min avec sel, poivre et herbes jusqu\'à légère coloration.',
-      'Ajouter l\'ail 1 min, puis les tomates concassées, mélanger et cuire 3 min.',
-      'Verser le bouillon et les lentilles corail rincées ; porter à ébullition, réduire le feu et cuire 12 min en remuant de temps en temps (les lentilles épaississent la soupe naturellement).',
-      'Ajouter les pâtes, la courgette et les haricots verts ; cuire encore 10 min à feu doux jusqu\'à ce que les pâtes soient al dente.',
-      'Rectifier l\'assaisonnement en sel, poivre et piment doux ; servir bien chaud avec un filet d\'huile d\'olive et une pincée d\'origan.'
+      'Préparer le soffritto de base : oignon, céleri et carotte en petits dés réguliers, faire suer dans l\'huile d\'olive à feu doux 8 min avec sel, thym et laurier — la patience ici parfume tout le minestrone.',
+      'Ajouter l\'ail 1 min, puis les tomates concassées ; monter le feu et cuire 5 min en remuant jusqu\'à réduction et légère caramélisation des sucres tomates.',
+      'Verser le bouillon chaud et les lentilles corail rincées ; porter à frémissement, réduire le feu et cuire 10 min en remuant — les lentilles corail fondent naturellement et épaississent la soupe.',
+      'Ajouter la courgette en dés et les haricots verts ; cuire 5 min.',
+      'Verser les pâtes et cuire selon le temps paquet moins 2 min — les pâtes continuent de cuire dans la soupe chaude après service. Rectifier la consistance avec du bouillon si nécessaire.',
+      'Retirer le laurier, rectifier sel, poivre et piment doux. Servir brûlant avec un généreux filet d\'huile d\'olive crue et une pincée d\'origan — la qualité de l\'huile finale change tout.'
     ]
   },
 
@@ -14714,12 +14714,12 @@
       { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Préchauffer le four à 200°C avec une grille huilée. Placer les blancs de poulet entre deux feuilles de film alimentaire et les aplatir à 1 cm avec un rouleau à pâtisserie.',
-      'Mélanger la chapelure avec le parmesan, l\'ail en poudre, l\'origan, le sel et le poivre dans une assiette creuse.',
-      'Battre l\'œuf dans une assiette. Tremper chaque escalope dans l\'œuf battu, puis dans le mélange chapelure-parmesan en pressant bien pour faire adhérer.',
-      'Déposer les escalopes panées sur la grille huilée, arroser d\'un filet d\'huile d\'olive et cuire au four 20-22 min en retournant à mi-cuisson, jusqu\'à dorure croustillante.',
-      'Pendant ce temps, couper les tomates cerises en deux, préparer la vinaigrette en fouettant le jus de citron avec le reste d\'huile, sel et poivre.',
-      'Dresser les escalopes avec la roquette et les tomates cerises assaisonnées de vinaigrette citron ; terminer avec le zeste de citron râpé.'
+      'Préchauffer le four à 200°C avec la grille au centre. Placer les blancs de poulet entre deux feuilles de film alimentaire et aplatir à exactement 1 cm avec un rouleau — l\'épaisseur uniforme garantit une cuisson homogène.',
+      'Mélanger chapelure, parmesan, ail en poudre, origan, sel et poivre dans une assiette plate ; préparer l\'œuf battu dans une seconde assiette avec une pincée de sel.',
+      'Paner à l\'anglaise : tremper l\'escalope dans l\'œuf en laissant l\'excès égoutter, puis presser fermement dans le mélange chapelure des deux côtés — une pression ferme est nécessaire pour que la panure adhère.',
+      'Déposer les escalopes panées sur une grille huilée posée sur une plaque — la grille permet la circulation d\'air sous la panure pour une texture croustillante sur toutes les faces.',
+      'Cuire 20-22 min en retournant à mi-cuisson ; la panure doit être dorée foncée, uniformément croustillante. Vérifier la cuisson à 72°C à cœur.',
+      'Pendant la cuisson, préparer la salade : couper les tomates cerises, fouetter le jus de citron avec l\'huile, le sel et le zeste râpé. Dresser les escalopes avec la roquette assaisonnée, servir immédiatement.'
     ]
   },
 
@@ -14757,11 +14757,11 @@
       { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Cuire les œufs durs 9 minutes dans l\'eau bouillante, refroidir sous eau froide, écaler et couper en quartiers.',
-      'Blanchir les haricots verts 4 minutes dans eau bouillante salée, égoutter et plonger dans eau glacée pour fixer la couleur.',
-      'Préparer la vinaigrette : fouetter huile d\'olive, vinaigre, moutarde, jus de citron, sel et poivre.',
-      'Dresser la laitue dans les assiettes, répartir haricots verts, tomates cerises coupées en deux, thon égoutté et effeuillé, olives et câpres.',
-      'Poser les quartiers d\'œufs sur la salade, napper de vinaigrette et servir immédiatement.'
+      'Cuire les œufs mollets exactement 7 minutes dans l\'eau frémissante salée — pas bouillante — puis stopper la cuisson en les plongeant 2 minutes dans un bain glacé ; écaler délicatement et couper en deux.',
+      'Blanchir les haricots verts 4 minutes dans une grande quantité d\'eau bouillante très salée (10 g de sel par litre) ; les rafraîchir immédiatement dans de l\'eau glacée pour fixer leur couleur émeraude et stopper la cuisson.',
+      'Réaliser la vinaigrette dans un bol : dissoudre une pincée de sel dans le vinaigre de vin, incorporer la moutarde de Dijon au fouet, émulsionner avec l\'huile d\'olive en filet, ajouter le jus de citron et poivrer.',
+      'Dresser la laitue romaine en couronne dans les assiettes. Disposer harmonieusement les haricots verts, les tomates cerises coupées en deux, le thon égoutté et effeuillé à la main, les olives et les câpres.',
+      'Poser les demi-œufs mollets côté jaune apparent, napper généreusement de vinaigrette et servir sans attendre.'
     ]
   },
 
@@ -14794,11 +14794,11 @@
       { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Couper les poivrons en lanières, émincer l\'oignon et hacher l\'ail. Détailler le poulet en gros cubes.',
-      'Faire revenir le poulet 3 minutes de chaque côté dans l\'huile d\'olive à feu vif. Réserver.',
-      'Dans la même poêle, faire suer l\'oignon 3 minutes, ajouter l\'ail, les poivrons et le jambon de dinde. Cuire 5 minutes.',
-      'Ajouter les tomates, le paprika fumé, le thym et le laurier. Laisser mijoter 10 minutes.',
-      'Remettre le poulet dans la sauce, couvrir et cuire encore 15 minutes à feu doux jusqu\'à tendreté. Rectifier l\'assaisonnement.'
+      'Tailler les poivrons en julienne régulière, émincer l\'oignon en fines lamelles, écraser les gousses d\'ail en chemise avec le plat du couteau. Détailler les blancs de poulet en pavés de 3 cm.',
+      'Saisir les pavés de poulet à feu vif dans l\'huile d\'olive bien chaude, 3 minutes par face, pour obtenir une belle croûte dorée ; saler, poivrer et réserver sur une grille.',
+      'Dans la même poêle, faire suer l\'oignon à feu moyen 4 minutes sans coloration, puis ajouter l\'ail haché, les poivrons et le jambon de dinde en dés ; cuire 6 minutes en remuant jusqu\'à fondant.',
+      'Incorporer les tomates pelées concassées, le paprika fumé, le thym et le laurier. Laisser réduire la piperade à feu moyen 8 minutes, jusqu\'à consistance sirupeuse.',
+      'Nicher les pavés de poulet dans la piperade, couvrir et finir la cuisson à feu doux 10 minutes. Rectifier l\'assaisonnement et servir directement dans la cocotte.'
     ]
   },
 
@@ -14832,11 +14832,11 @@
       { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Rincer les lentilles à l\'eau froide. Éplucher et tailler carottes, oignon et céleri en dés.',
-      'Faire suer l\'oignon et le céleri dans l\'huile d\'olive 3 minutes, ajouter l\'ail haché et le cumin, cuire 1 minute.',
-      'Ajouter les carottes, les lentilles, le thym et le laurier. Verser le bouillon chaud.',
-      'Porter à ébullition puis laisser mijoter 30 minutes à feu doux jusqu\'à ce que les lentilles soient fondantes.',
-      'Mixer partiellement pour une texture crémeuse avec des morceaux. Rectifier l\'assaisonnement, parsemer de persil frais et servir.'
+      'Rincer les lentilles vertes à l\'eau froide ; ne jamais les faire tremper. Réaliser une mirepoix : tailler carottes, oignon et céleri en dés de 5 mm d\'une régularité parfaite — c\'est la base aromatique, elle mérite du soin.',
+      'Faire suer la mirepoix dans l\'huile d\'olive à feu doux 5 minutes, sans coloration ; ajouter l\'ail haché et le cumin moulu, cuire 1 minute en remuant pour torréfier les épices.',
+      'Incorporer les lentilles, le thym et le laurier. Mouiller avec le bouillon de légumes chaud (jamais froid : cela bloque la cuisson). Porter à ébullition, écumer soigneusement.',
+      'Laisser mijoter 30 minutes à feu très doux, à couvert, jusqu\'à ce que les lentilles soient fondantes mais tiennent encore légèrement sous la dent.',
+      'Mixer un tiers de la soupe au mixeur plongeant directement dans la casserole pour créer l\'onctuosité tout en préservant des morceaux. Rectifier sel et poivre, et parsemer de persil plat ciselé au dernier moment.'
     ]
   },
 
@@ -14866,11 +14866,11 @@
       { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Sécher les filets de sole avec du papier absorbant. Assaisonner de sel et poivre, fariner légèrement avec la farine de riz (secouer l\'excédent).',
-      'Chauffer l\'huile d\'olive dans une grande poêle antiadhésive à feu moyen-vif. Cuire les filets 2-3 minutes de chaque côté jusqu\'à dorure légère.',
-      'Retirer les filets, réserver au chaud. Baisser le feu, ajouter l\'ail haché dans la poêle, faire blondir 30 secondes.',
-      'Déglacer avec le jus de citron, ajouter les câpres et le zeste. Gratter les sucs de cuisson 1 minute.',
-      'Verser la sauce citronnée sur les filets, parsemer de persil haché et servir aussitôt avec une salade verte ou haricots verts vapeur.'
+      'Sécher impeccablement les filets avec du papier absorbant — l\'humidité est l\'ennemi de la dorure. Assaisonner sel fin et poivre blanc des deux faces, puis fariner délicatement dans la farine de riz en tapotant pour éliminer tout excédent.',
+      'Chauffer l\'huile d\'olive dans une grande poêle à feu moyen-vif jusqu\'au premier filet de fumée. Poser les filets côté présentation en premier ; ne pas les déplacer pendant 2 minutes pour former une croûte nacrée.',
+      'Retourner délicatement avec une spatule large et cuire 1 minute 30 sur l\'autre face. Les filets doivent se détacher seuls de la poêle. Réserver sur un plat chaud.',
+      'Baisser le feu, ajouter l\'ail haché dans la poêle vide et le faire blondir 20 secondes. Déglacer avec le jus de citron et gratter les sucs dorés au fond ; ajouter les câpres rincées et le zeste de citron, laisser bouillonner 30 secondes.',
+      'Napper les filets de cette sauce vive, parsemer de persil plat grossièrement haché — jamais finement pour qu\'il ne brûle pas — et servir à la seconde.'
     ]
   },
 
@@ -14901,11 +14901,11 @@
       { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Préchauffer le four à 180°C. Émincer finement les champignons, hacher l\'ail.',
-      'Faire sauter les champignons et l\'ail dans l\'huile d\'olive 4 minutes jusqu\'à évaporation. Ajouter les épinards, cuire 2 minutes jusqu\'à ce qu\'ils tombent. Assaisonner sel, poivre, muscade.',
-      'Mélanger le yaourt grec avec la moitié du chèvre émietté. Huiler deux ramequins.',
-      'Répartir le mélange champignons-épinards dans les ramequins, creuser un nid et casser 2 œufs dans chacun. Déposer le reste du chèvre, napper d\'une cuillerée de yaourt.',
-      'Cuire au bain-marie au four 12-14 minutes jusqu\'à ce que les blancs soient pris et les jaunes encore coulants. Servir immédiatement.'
+      'Préchauffer le four à 180 °C chaleur tournante. Beurrer (ou huiler) généreusement les ramequins en remontant sur les bords. Émincer finement les champignons, hacher l\'ail en brunoise.',
+      'Faire sauter les champignons à feu vif dans l\'huile d\'olive sans les remuer pendant 2 minutes pour qu\'ils colorent — ils doivent dorer, pas suer. Ajouter l\'ail, poursuivre 1 minute, puis incorporer les épinards et cuire jusqu\'à ce qu\'ils tombent complètement. Assaisonner sel, poivre, muscade.',
+      'Fouetter le yaourt grec avec la moitié du chèvre émietté pour obtenir un appareil lisse. Répartir la fondue champignons-épinards bien essorée dans les ramequins ; creuser un nid profond au centre.',
+      'Casser chaque œuf séparément dans une tasse avant de le faire glisser dans son nid — jamais directement de la coquille au ramequin, sous peine de percer le jaune. Déposer une noisette d\'appareil yaourt-chèvre tout autour, émietter le reste du fromage sur le dessus.',
+      'Cuire au bain-marie 13 à 15 minutes : le blanc doit être juste pris, translucide sur les bords, et le jaune encore tremblotant sous le doigt. Servir sans attendre, les ramequins brûlants posés sur une assiette avec un linge.'
     ]
   },
 
@@ -14938,11 +14938,11 @@
       { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Faire revenir les lardons de dinde dans une poêle chaude sans matière grasse 3-4 minutes jusqu\'à ce qu\'ils soient dorés et légèrement croustillants.',
-      'Préparer la vinaigrette tiède : dans les lardons retirés, faire suer l\'échalote émincée finement, déglacer avec le vinaigre balsamique, ajouter l\'huile d\'olive et la moutarde.',
-      'Pocher les œufs : porter l\'eau à frémissement avec le vinaigre blanc. Casser chaque œuf dans un bol, créer un tourbillon et glisser l\'œuf. Cuire 3 minutes. Égoutter sur papier absorbant.',
-      'Dresser roquette et frisée dans les assiettes, ajouter les tomates cerises et les lardons chauds, napper de vinaigrette tiède.',
-      'Déposer 2 œufs pochés par assiette, assaisonner et servir immédiatement.'
+      'Faire revenir les lardons de dinde à sec dans une poêle froide que l\'on monte progressivement à feu moyen-vif : le gras fond doucement, les lardons deviennent uniformément croustillants. Égoutter sur papier absorbant et réserver la poêle.',
+      'Préparer la vinaigrette tiède dans la même poêle dégraissée : faire suer l\'échalote émincée 1 minute, déglacer au vinaigre balsamique, réduire 30 secondes, puis incorporer l\'huile d\'olive hors du feu et la moutarde de Dijon au fouet. Elle doit être légèrement chaude pour flétrir les feuilles.',
+      'Pocher les œufs : amener l\'eau à frémissement (jamais à ébullition pleine) avec le vinaigre blanc. Casser chaque œuf dans un ramequin. Créer un tourbillon doux avec une cuillère et verser l\'œuf au cœur du courant ; cuire 3 minutes précises. Égoutter sur papier absorbant et parer les filaments.',
+      'Dresser la roquette et la frisée dans deux assiettes creuses. Déposer les lardons tièdes et les tomates cerises coupées en deux, puis napper immédiatement de vinaigrette chaude pour créer le contraste fané/craquant.',
+      'Poser délicatement deux œufs pochés par assiette, assaisonner d\'une pincée de fleur de sel et servir à table avant que la chaleur ne s\'évapore.'
     ]
   },
 
@@ -14973,11 +14973,11 @@
       { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Préchauffer le four à 190°C. Couper les courgettes en rondelles de 5 mm. Faire revenir avec l\'ail émincé dans l\'huile d\'olive 5 minutes, assaisonner.',
-      'Dans un bol, fouetter les œufs avec le yaourt grec, les 3/4 du chèvre émietté, le thym, sel et poivre.',
-      'Disposer les courgettes dans un plat à gratin légèrement huilé, verser l\'appareil yaourt-chèvre par-dessus.',
-      'Émietter le reste du chèvre sur le dessus, parsemer de parmesan râpé.',
-      'Cuire 25-30 minutes jusqu\'à ce que le gratin soit doré et ferme. Laisser tiédir 5 minutes avant de servir.'
+      'Préchauffer le four à 190 °C. Trancher les courgettes en rondelles de 4 mm à la mandoline ou au couteau pour une épaisseur régulière ; les assaisonner de sel fin et laisser dégorger 10 minutes sur un torchon pour éliminer l\'excès d\'eau — étape indispensable pour éviter un gratin aqueux.',
+      'Éponger les rondelles et les faire revenir par petites quantités dans l\'huile d\'olive à feu vif avec l\'ail émincé, 3 minutes, pour qu\'elles colorent légèrement. Réserver.',
+      'Préparer l\'appareil : fouetter les œufs avec le yaourt grec jusqu\'à homogénéité, incorporer les trois quarts du chèvre émietté, le thym effeuillé, sel et poivre. L\'appareil doit être crémeux mais pas liquide.',
+      'Ranger les rondelles de courgettes en rosace dans le plat à gratin légèrement huilé. Verser l\'appareil en le faisant pénétrer entre les couches. Émietter le reste du chèvre sur le dessus, parsemer de parmesan râpé.',
+      'Enfourner 25 à 30 minutes : le gratin est prêt quand la surface est dorée, légèrement soufflée, et qu\'une lame de couteau ressort sèche au centre. Laisser reposer 5 minutes avant de servir — il se tient mieux tiède que brûlant.'
     ]
   },
 
@@ -15008,11 +15008,11 @@
       { name: 'Poivre noir, piment doux', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Égoutter les sardines en conservant 1 cuillère à soupe d\'huile d\'olive. Retirer les arêtes centrales si nécessaire.',
-      'Émincer finement l\'échalote, hacher la ciboulette et le persil.',
-      'Écraser les sardines à la fourchette dans un bol. Incorporer le fromage blanc, la moutarde, le jus de citron et le zeste.',
-      'Ajouter l\'échalote, les herbes, les câpres et le piment. Mélanger grossièrement pour garder une texture rustique.',
-      'Réfrigérer 15 minutes avant de servir sur des tranches de pain de seigle grillé ou des crackers, garni de rondelles de concombre.'
+      'Ouvrir les boîtes de sardines, égoutter en réservant une cuillère à soupe de leur huile d\'olive. Lever délicatement les filets en retirant l\'arête centrale et la peau si elle est trop marquée — mais garder les petites arêtes latérales, elles fondent et apportent du calcium.',
+      'Émincer l\'échalote en tout petits dés (brunoise fine), la rincer sous eau froide et éponger : cela adoucit son âcreté sans perdre son croquant. Ciseler finement la ciboulette et le persil plat.',
+      'Écraser les sardines à la fourchette dans un bol en gardant des morceaux visibles — les rillettes ne sont pas une purée. Incorporer le fromage blanc, la moutarde, le jus et le zeste de citron, l\'huile réservée.',
+      'Ajouter la brunoise d\'échalote, les herbes ciselées et les câpres hachées grossièrement. Mélanger par mouvements souples, goûter, rectifier citron, sel et piment doux.',
+      'Couvrir et réfrigérer 20 minutes minimum avant de servir : le froid révèle les arômes et raffermit la texture. Dresser en quenelle sur des rondelles de concombre ou des crackers de seigle, garni d\'une pluche de persil.'
     ]
   },
 
@@ -15046,11 +15046,11 @@
       { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Couper le poulet en gros morceaux (4-5 cm), assaisonner. Faire dorer vivement dans l\'huile d\'olive 4 minutes de chaque côté. Réserver.',
-      'Dans la même cocotte, faire revenir l\'oignon émincé et les carottes en dés 5 minutes. Ajouter l\'ail haché, le concentré de tomate, cuire 1 minute.',
-      'Déglacer avec le vin rouge si utilisé (ou bouillon). Gratter les sucs, laisser réduire 3 minutes.',
-      'Ajouter les tomates concassées, le bouillon, le thym et le laurier. Remettre le poulet. Porter à ébullition, couvrir et mijoter 30 minutes.',
-      'Ajouter les champignons entiers les 15 dernières minutes. Rectifier l\'assaisonnement, parsemer de persil haché et servir avec pommes vapeur ou haricots verts.'
+      'Détailler les cuisses de poulet en gros morceaux réguliers de 4 cm, sécher au papier absorbant, assaisonner généreusement. Faire chauffer l\'huile d\'olive dans une cocotte en fonte jusqu\'à légère fumée, saisir les morceaux en une seule couche sans les toucher pendant 4 minutes par face pour obtenir une coloration acajou — c\'est le fond de goût du plat. Réserver.',
+      'Dans la même cocotte, faire revenir l\'oignon émincé et les carottes en brunoise 5 minutes à feu moyen. Ajouter l\'ail haché et le concentré de tomate, cuire 2 minutes en remuant jusqu\'à légère caramélisation.',
+      'Déglacer avec le vin rouge (ou le bouillon), racler vigoureusement les sucs caramélisés au fond — c\'est là que réside toute la saveur. Laisser réduire de moitié.',
+      'Ajouter les tomates concassées, le bouillon restant et le bouquet garni. Remettre les morceaux de poulet, porter à ébullition, écumer, puis couvrir et mijoter à feu très doux 30 minutes.',
+      'Poêler les champignons à feu vif séparément dans une poêle sèche pour les colorer — ne jamais les ajouter crus dans le bouillon, ils libèreraient trop d\'eau. Les incorporer 10 minutes avant la fin. Rectifier, parsemer de persil haché au service.'
     ]
   },
 
@@ -15083,11 +15083,11 @@
       { name: 'Poivre noir, fleur de sel', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Si thon frais : s\'assurer qu\'il est très frais (sashimi grade). Couper en petits dés de 5 mm au couteau bien aiguisé. Si conserve premium : égoutter et effeuiller grossièrement.',
-      'Émincer finement l\'échalote, hacher les cornichons, les câpres, la ciboulette et le persil.',
-      'Préparer la sauce : mélanger moutarde, jus de citron, sauce soja, huile d\'olive, poivre.',
-      'Combiner le thon avec l\'échalote, les cornichons, les câpres et les herbes. Incorporer la sauce délicatement. Goûter et ajuster citron/sel.',
-      'Former le tartare à l\'aide d\'un cercle dans les assiettes, parsemer de fleur de sel et ciboulette. Servir avec roquette et crackers de seigle ou concombre en lamelles.'
+      'Si thon frais : placer le filet 15 minutes au congélateur pour le raffermir — il se taille plus nettement. Couper au couteau bien aiguisé (jamais au hachoir) en cubes de 5 mm, en travaillant perpendiculairement aux fibres pour une texture fondante.',
+      'Ciseler finement l\'échalote en brunoise, la rincer à l\'eau froide une minute et éponger pour ôter l\'âcreté. Hacher séparément cornichons, câpres, ciboulette et persil ; garder chaque élément distinct pour doser librement.',
+      'Préparer la sauce à l\'avance dans un petit bol : moutarde de Dijon, jus de citron, sauce soja, huile d\'olive extra vierge. Fouetter pour émulsionner, poivrer généreusement. Goûter seul : elle doit être franche et bien équilibrée.',
+      'Mélanger délicatement le thon avec la brunoise d\'échalote, les cornichons, les câpres et les herbes. Incorporer la sauce cuillerée par cuillerée en soulevant la masse — jamais en mélangeant brusquement — pour ne pas écraser les cubes. Ajuster citron et fleur de sel.',
+      'Dresser à l\'aide d\'un cercle en tassant légèrement, retirer le cercle d\'un geste sec. Parsemer de fleur de sel et de ciboulette ciselée. Servir immédiatement sur assiette froide avec des lamelles de concombre et quelques feuilles de roquette.'
     ]
   },
 
@@ -15126,12 +15126,12 @@
     { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
   ],
   steps: [
-    'Cuire le riz blanc selon les indications. Réserver au chaud.',
-    'Mélanger le cumin, le paprika fumé, le sel et le poivre. Enduire les blancs de poulet de ce mélange.',
-    'Faire chauffer l\'huile dans une poêle à feu moyen-fort. Cuire le poulet 6-7 min de chaque côté jusqu\'à dorure. Laisser reposer 5 min puis émincer.',
-    'Préparer le guacamole express : écraser l\'avocat avec le jus de citron vert, sel et la moitié de la coriandre.',
-    'Préparer la salsa : couper la tomate et l\'oignon rouge en dés, mélanger avec le reste de coriandre et un filet de citron vert.',
-    'Assembler les bowls : riz, haricots noirs, maïs, poulet émincé, guacamole et salsa. Servir aussitôt.'
+    'Cuire le riz blanc dans 1,5× son volume d\'eau bouillante salée avec une tige de coriandre entière ; ôter la tige, égrener à la fourchette et réserver couvert.',
+    'Mélanger cumin, paprika fumé, sel et poivre. Quadriller légèrement les blancs de poulet au couteau (3 mm de profondeur) pour que l\'épice pénètre, puis enrober.',
+    'Chauffer l\'huile dans une poêle en fonte à feu vif jusqu\'à frémissement. Saisir le poulet 5 min côté premier sans le bouger pour obtenir une croûte nette, retourner 4 min, puis laisser reposer 5 min sous papier aluminium avant d\'émincer en biais.',
+    'Écraser l\'avocat à la fourchette en gardant des morceaux ; assaisonner avec le jus de citron vert, sel et moitié de la coriandre ciselée. Filmer au contact pour éviter l\'oxydation.',
+    'Préparer la salsa pico de gallo : dés de tomate épépinée, oignon rouge rincé à l\'eau froide (réduit l\'âcreté), reste de coriandre, filet de citron vert, sel.',
+    'Assembler à chaud : riz en base, haricots noirs tièdes, maïs, poulet tranché, guacamole, salsa. Servir immédiatement.'
   ]
 },
 
@@ -15167,12 +15167,12 @@
     { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
   ],
   steps: [
-    'Préchauffer le four à 200 °C. Mélanger le cumin, le paprika, l\'origan, le sel et un filet d\'huile. Enduire les blancs de poulet de cette marinade.',
-    'Enfourner le poulet 18-20 min jusqu\'à cuisson complète. Laisser reposer puis couper en lanières.',
-    'Préparer la salsa fraîche : couper tomates, oignon rouge et piment en petits dés. Ajouter la coriandre et le jus de citron vert.',
-    'Écraser l\'avocat avec une pincée de sel et un filet de citron vert pour un guacamole rapide.',
-    'Tiédir les galettes de blé 1 min dans une poêle sèche.',
-    'Garnir chaque galette de lanières de poulet, salsa fraîche, guacamole et une cuillerée de yaourt grec. Plier et servir.'
+    'Préchauffer le four à 200 °C chaleur tournante. Mélanger cumin, paprika, origan, sel et huile pour former une pâte d\'épices. Inciser légèrement les blancs et les enrober entièrement ; laisser mariner 10 min le temps que le four chauffe.',
+    'Enfourner le poulet sur une grille (pas dans un plat) pour que l\'air circule tout autour. Cuire 18 min jusqu\'à 74 °C à cœur. Laisser reposer 5 min sous feuille d\'aluminium, puis effilocher à la fourchette plutôt que de trancher — la viande effilochée absorbe mieux les sauces.',
+    'Préparer la salsa cruda : dés de tomate épépinée, oignon rouge finement ciselé, piment haché, coriandre, jus de citron vert. Assaisonner et laisser macérer 5 min.',
+    'Écraser l\'avocat avec sel, piment haché et jus de citron vert ; incorporer une cuillerée de yaourt grec pour un guacamole crémeux allégé.',
+    'Chauffer les galettes 30 secondes de chaque côté dans une poêle sèche très chaude (doivent former de petites cloques) — c\'est ce qui leur donne souplesse et légère saveur de farine grillée.',
+    'Garnir chaque galette : poulet effiloché au centre, salsa, guacamole au yaourt, trait de yaourt grec. Plier en U et servir sans attendre.'
   ]
 },
 
@@ -15206,12 +15206,12 @@
     { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
   ],
   steps: [
-    'Émincer l\'oignon, l\'ail et le piment. Couper le poivron en dés.',
-    'Faire revenir l\'oignon dans l\'huile d\'olive 3 min à feu moyen, puis ajouter l\'ail, le poivron et le piment. Faire sauter 2 min.',
-    'Ajouter le bœuf haché, égrener à la spatule et saisir jusqu\'à coloration complète.',
-    'Incorporer les tomates pelées, le cumin, le paprika fumé et l\'origan. Mélanger, saler, poivrer.',
-    'Ajouter les haricots rouges égouttés. Porter à frémissement puis laisser mijoter 20 min à couvert.',
-    'Rectifier l\'assaisonnement. Servir avec une cuillerée de yaourt grec et de la coriandre fraîche si souhaité.'
+    'Émincer oignon, ail, piment en brunoise fine. Couper le poivron en dés de 1 cm — l\'uniformité garantit une cuisson homogène.',
+    'Dans une cocotte à fond épais, chauffer l\'huile à feu moyen-vif. Faire revenir l\'oignon seul 4 min jusqu\'à transparence, puis ajouter le poivron 3 min, l\'ail et le piment 1 min — cette mise en place par strates construit les saveurs.',
+    'Monter le feu au maximum. Ajouter le bœuf haché en une seule couche sans remuer pendant 2 min pour obtenir une vraie caramélisation (réaction de Maillard). Égrener ensuite à la spatule et cuire jusqu\'à disparition complète du rose.',
+    'Ajouter cumin, paprika fumé et origan directement sur la viande chaude et torréfier 30 secondes à sec avant d\'incorporer les tomates pelées — les épices libèrent leurs huiles essentielles au contact de la chaleur sèche.',
+    'Ajouter une cuillère à café de cacao en poudre non sucré (ingrédient additionnel). Incorporer les haricots rouges égouttés. Porter à frémissement léger, couvrir et mijoter 20 min en remuant toutes les 5 min.',
+    'Rectifier l\'assaisonnement. Servir avec une cuillerée de yaourt grec et quelques feuilles de coriandre fraîche.'
   ]
 },
 
@@ -15242,11 +15242,11 @@
     { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
   ],
   steps: [
-    'Couper les avocats en deux, retirer le noyau et récupérer la chair dans un bol.',
-    'Écraser l\'avocat à la fourchette en gardant une texture légèrement rustique.',
-    'Incorporer le cottage cheese, le jus de citron vert, l\'ail pressé, le sel et le poivre. Bien mélanger.',
-    'Ajouter la tomate coupée en tout petits dés, l\'oignon rouge finement haché et le piment émincé.',
-    'Parsemer de coriandre fraîche ciselée. Servir immédiatement avec des galettes de blé grillées ou des crudités.'
+    'Choisir des avocats au stade parfait de maturité : ils doivent céder sous une pression légère du pouce sans s\'enfoncer. Couper en deux, ôter le noyau d\'un coup sec du couteau, récupérer la chair à la cuillère en un seul geste.',
+    'Écraser l\'avocat à la fourchette sur une planche — jamais au mixeur — en laissant des petits morceaux de 5 mm : un guacamole doit avoir du caractère et de la texture, pas être une purée lisse.',
+    'Rincer l\'oignon rouge ciselé 30 secondes sous l\'eau froide et sécher avant de l\'incorporer : ce geste simple supprime l\'âcreté piquante en conservant le croquant.',
+    'Mélanger délicatement l\'avocat écrasé, le cottage cheese, le jus de citron vert, l\'ail pressé, sel et poivre. Le citron vert sert à la fois d\'assaisonnement et d\'antioxydant.',
+    'Incorporer la tomate épépinée et coupée en brunoise fine (dés de 3 mm), l\'oignon rincé, le piment haché et la coriandre ciselée au dernier moment.'
   ]
 },
 
@@ -15279,12 +15279,12 @@
     { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
   ],
   steps: [
-    'Émincer finement l\'ail et le piment. Couper les poivrons en lanières.',
-    'Sécher les crevettes avec du papier absorbant. Les assaisonner de cumin, paprika, sel et poivre.',
-    'Faire chauffer l\'huile dans une grande poêle à feu vif. Saisir les crevettes 1-2 min de chaque côté jusqu\'à coloration rosée. Réserver.',
-    'Dans la même poêle, faire revenir les poivrons 4-5 min à feu moyen. Ajouter l\'ail et le piment, cuire 1 min.',
-    'Remettre les crevettes dans la poêle. Verser le jus de citron vert, bien mélanger et cuire 30 secondes.',
-    'Parsemer de coriandre fraîche ciselée. Servir avec du riz ou des galettes de blé tièdes.'
+    'Sécher scrupuleusement les crevettes avec du papier absorbant — c\'est la règle d\'or : une crevette humide ne saisit pas, elle cuit à la vapeur et devient caoutchouteuse. Assaisonner de cumin, paprika, sel et poivre au dernier moment.',
+    'Couper les poivrons en lanières de 1 cm de largeur régulière. Émincer l\'ail en lamelles fines plutôt qu\'en presse-ail (moins d\'amertume).',
+    'Chauffer la poêle à feu vif 2 min avant d\'y verser l\'huile. Lorsque l\'huile frémit et commence à fumer légèrement, disposer les crevettes côte à côte sans les superposer. Saisir 90 secondes sans toucher, retourner, 60 secondes, réserver aussitôt — elles finissent de cuire hors du feu.',
+    'Dans la même poêle, faire sauter les lanières de poivrons à feu vif 4 min en remuant régulièrement jusqu\'à légère coloration. Ajouter l\'ail en lamelles et le piment, cuire 1 min.',
+    'Presser un demi-citron vert directement dans la poêle chaude hors du feu (les huiles essentielles du zeste s\'évaporent à la chaleur), ajouter les crevettes réservées, mélanger 30 secondes.',
+    'Parsemer généreusement de coriandre fraîche ciselée et servir immédiatement — les crevettes ne supportent pas l\'attente.'
   ]
 },
 
@@ -15320,12 +15320,12 @@
     { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
   ],
   steps: [
-    'Préchauffer le four à 190 °C. Pocher les blancs de poulet dans de l\'eau bouillante salée 15 min. Égoutter et effilocher à la fourchette.',
-    'Préparer la sauce enchilada : faire revenir l\'oignon et l\'ail dans l\'huile 3 min. Ajouter les tomates, le cumin, le paprika, le piment, saler et mijoter 10 min. Mixer légèrement.',
-    'Mélanger le poulet effiloché avec la moitié de la sauce et la coriandre ciselée.',
-    'Garnir chaque galette de blé de farce poulet, rouler serré et disposer dans un plat à gratin huilé.',
-    'Napper avec le reste de sauce, parsemer de mozzarella. Enfourner 15-18 min jusqu\'à gratinage.',
-    'Servir avec une cuillerée de yaourt grec à la place de la crème acide.'
+    'Préchauffer le four à 190 °C. Pocher les blancs de poulet en démarrant à l\'eau froide salée avec 2 gousses d\'ail écrasées : monter à frémissement (jamais à ébullition franche), cuire 12 min, éteindre le feu et laisser reposer 5 min dans l\'eau — la viande reste ainsi juteuse. Effilocher avec deux fourchettes.',
+    'Sauce enchilada : faire revenir oignon et ail dans l\'huile 3 min. Ajouter tomates, cumin, paprika fumé, piment, sel. Mijoter 10 min. Passer rapidement au mixeur plongeant pour une sauce onctueuse sans être lisse — quelques morceaux apportent de la texture.',
+    'Mélanger le poulet effiloché avec la moitié de la sauce et toute la coriandre ciselée. Assaisonner et goûter — la farce doit être bien relevée car la galette atténue les saveurs.',
+    'Tremper rapidement chaque galette 5 secondes dans la sauce chaude avant de la garnir : cette étape traditionnelle mexicaine imperméabilise la galette, l\'empêche de se dessécher au four et lui confère le goût caractéristique des enchiladas.',
+    'Rouler serré, disposer joint en bas dans un plat huilé, napper du reste de sauce. Parsemer de mozzarella râpée. Enfourner 15-18 min jusqu\'à gratinage doré.',
+    'Laisser reposer 2 min hors du four avant de servir — les enchiladas se découpent mieux et la sauce se stabilise. Accompagner d\'une cuillerée de yaourt grec.'
   ]
 },
 
@@ -15362,12 +15362,11 @@
     { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
   ],
   steps: [
-    'Préchauffer le four à 200 °C. Couper les galettes de blé en lanières fines. Disposer sur une plaque, arroser d\'un filet d\'huile et enfourner 8-10 min jusqu\'à dorure croustillante.',
-    'Faire revenir l\'oignon, l\'ail et le piment dans le reste d\'huile 3 min.',
-    'Ajouter les tomates, le cumin, le paprika. Cuire 5 min, puis verser le bouillon de poulet. Porter à ébullition.',
-    'Ajouter les blancs de poulet entiers. Cuire 15 min à frémissement. Retirer le poulet, effilocher, puis remettre dans la soupe.',
-    'Incorporer les haricots noirs et le maïs. Laisser mijoter 5 min. Ajuster l\'assaisonnement et ajouter le jus de citron vert.',
-    'Servir en bols avec les lanières de galette croustillantes et la coriandre fraîche.'
+    'Préchauffer le four à 200 °C. Badigeonner les lanières de galette d\'un filet d\'huile, saler légèrement et enfourner 8-10 min sur une grille (pas une plaque pleine) pour une dorure uniforme des deux côtés sans retournement.',
+    'Dans une cocotte, faire revenir oignon et ail ciselés dans l\'huile 3 min jusqu\'à transparence. Ajouter le piment, le cumin et le paprika, torréfier 30 secondes à sec avant d\'incorporer les tomates pelées écrasées à la main. Cuire 5 min.',
+    'Verser le bouillon, porter à frémissement. Déposer les blancs de poulet entiers dans le bouillon frémissant (jamais bouillant) et cuire exactement 15 min à couvert. Retirer le poulet, effilocher finement à la fourchette, remettre dans la soupe.',
+    'Ajouter haricots noirs et maïs, laisser mijoter 5 min. Presser le citron vert hors du feu pour préserver la fraîcheur des agrumes.',
+    'Servir en bols très chauds : disposer d\'abord la soupe, puis déposer les lanières croustillantes au dernier moment (elles ne doivent pas macérer), parsemer de coriandre.'
   ]
 },
 
@@ -15401,12 +15400,11 @@
     { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
   ],
   steps: [
-    'Rincer le quinoa à l\'eau froide. Cuire dans 360 ml d\'eau bouillante salée 12-14 min à couvert jusqu\'à absorption. Laisser refroidir.',
-    'Préparer la vinaigrette : mélanger le jus de citron vert, l\'huile d\'olive, le cumin, le sel et le poivre.',
-    'Couper les tomates cerises en deux, le poivron en dés, l\'avocat en cubes et l\'oignon rouge en fines rondelles.',
-    'Dans un grand saladier, mélanger le quinoa refroidi, les haricots noirs, le maïs, les légumes et l\'avocat.',
-    'Arroser de vinaigrette et parsemer de coriandre fraîche ciselée. Bien mélanger délicatement.',
-    'Laisser reposer 5 min avant de servir pour que les saveurs se mêlent. Se conserve 24 h au réfrigérateur.'
+    'Rincer le quinoa à l\'eau froide dans une passoire fine jusqu\'à ce que l\'eau soit claire (élimine la saponine amère). Cuire dans 360 ml d\'eau bouillante salée, couvrir, feu doux, 12 min, puis couper le feu et laisser gonfler 5 min sans lever le couvercle. Égrener à la fourchette et étaler sur une plaque pour refroidir rapidement.',
+    'Préparer la vinaigrette en émulsionnant : jus de citron vert, huile d\'olive, cumin, sel, poivre. Assaisonner le quinoa encore tiède — les grains absorbent la vinaigrette à chaud et sont plus savoureux que s\'ils sont assaisonnés froids.',
+    'Couper les tomates cerises en deux, le poivron en brunoise de 5 mm, l\'avocat en cubes de 1,5 cm (pas plus petits pour éviter l\'écrasement), l\'oignon rouge en fines rondelles passées 1 min sous l\'eau froide.',
+    'Dans un grand saladier, combiner quinoa assaisonné, haricots noirs, maïs égoutté et séché, poivron. Rectifier l\'assaisonnement.',
+    'Ajouter délicatement avocat, tomates cerises, oignon rouge et coriandre en dernier, en soulevant la salade avec une spatule plutôt qu\'en remuant — pour ne pas écraser l\'avocat.'
   ]
 },
 
@@ -15442,12 +15440,12 @@
     { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
   ],
   steps: [
-    'Préchauffer le four à 220 °C. Détailler le chou-fleur en petits fleurons. Mélanger avec l\'huile, le cumin, le paprika, le sel et le poivre.',
-    'Étaler les fleurons en une seule couche sur une plaque. Rôtir 22-25 min en retournant à mi-cuisson, jusqu\'à belle coloration dorée.',
-    'Préparer la sauce : mélanger le yaourt grec avec un filet de jus de citron vert, une pincée de cumin et de sel.',
-    'Préparer la salsa : couper la tomate et l\'oignon rouge en dés, mélanger avec le piment haché, la coriandre et le jus de citron vert restant.',
-    'Écraser légèrement l\'avocat avec sel et citron pour un guacamole express.',
-    'Assembler les bowls : chou-fleur rôti, haricots noirs, maïs, guacamole, salsa. Napper de sauce au yaourt et garnir de coriandre.'
+    'Préchauffer le four à 230 °C (pas 220 °C) — la température élevée est indispensable pour caraméliser les fleurons sans les cuire à la vapeur. Détailler le chou-fleur en fleurons réguliers de 3-4 cm. Sécher soigneusement avec un torchon.',
+    'Mélanger les fleurons avec l\'huile, le cumin, le paprika fumé, sel et poivre. Étaler en une seule couche espacée sur la plaque — si les fleurons se touchent, ils cuit à la vapeur et restent mous. Utiliser deux plaques si nécessaire.',
+    'Rôtir 20 min sans ouvrir le four, puis retourner chaque fleurette et rôtir 8 min supplémentaires. Le chou-fleur doit présenter des bords noirs-dorés — c\'est la caramélisation des sucres naturels qui donne la saveur umami.',
+    'Sauce yaourt : mélanger yaourt grec, jus de citron vert, pincée de cumin, sel et une cuillère à café de curcuma (ingrédient additionnel, anti-inflammatoire, 0 kcal significatif). Réserver au frais.',
+    'Salsa express : dés de tomate épépinée, oignon rouge rincé, piment, coriandre, citron vert. Macérer 5 min.',
+    'Assembler les bowls : chou-fleur rôti chaud, haricots noirs, maïs, guacamole express (avocat écrasé, sel, citron vert), salsa, trait de sauce yaourt au curcuma. Garnir de coriandre fraîche.'
   ]
 },
 
@@ -15480,12 +15478,12 @@
     { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
   ],
   steps: [
-    'Égoutter soigneusement le thon. L\'émietter grossièrement dans un saladier.',
-    'Couper les tomates, le concombre et l\'oignon rouge en petits dés réguliers. Émincer finement le piment.',
-    'Couper l\'avocat en cubes de taille moyenne. Réserver séparément pour éviter l\'oxydation.',
-    'Mélanger le thon, les légumes (sauf l\'avocat) avec le jus de citron vert, le jus de citron jaune et l\'huile d\'olive. Assaisonner de sel et poivre.',
-    'Laisser mariner 5-10 min au frais pour que les saveurs se développent.',
-    'Incorporer délicatement l\'avocat et la coriandre fraîche. Servir frais, accompagné de galettes de blé grillées ou de feuilles de laitue.'
+    'Égoutter le thon dans une passoire fine et presser doucement avec le dos d\'une cuillère pour extraire l\'excès de liquide — un thon bien égoutté absorbe mieux la marinade et ne dilue pas les saveurs.',
+    'Couper tomates (épépinées), concombre (épépiné, pelé) et oignon rouge en brunoise très régulière de 4 mm. Rincer l\'oignon rouge 30 secondes sous l\'eau froide, égoutter. Émincer le piment en brunoise fine en retirant les graines selon l\'intensité souhaitée.',
+    'Mélanger jus de citron vert, jus de citron jaune, huile d\'olive, sel et poivre dans un bol. Goûter : la marinade doit être vive, légèrement grasse et bien salée — elle s\'adoucira au contact des légumes.',
+    'Combiner thon émietté, tomates, concombre, oignon rouge et piment. Verser la marinade, mélanger délicatement. Laisser reposer 8 min au réfrigérateur — pas plus, pour conserver la fraîcheur du thon.',
+    'Couper l\'avocat en cubes de 1,5 cm au dernier moment. Incorporer avocat et coriandre ciselée par un mouvement de soulèvement, jamais en remuant, pour garder les cubes intacts.',
+    'Servir dans des bols refroidis au congélateur 5 min. Accompagner de galettes de blé légèrement grillées ou de feuilles de laitue iceberg en cups.'
   ]
 }
 
