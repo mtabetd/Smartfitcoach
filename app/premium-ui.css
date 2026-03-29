@@ -360,22 +360,66 @@
    ------------------------------------------------------- */
 
 .exercise-card {
+  border-radius: 4px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  background: var(--ivory2);
   transition: all 0.2s ease;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .exercise-card:hover {
   transform: translateX(4px);
-  border-left: 3px solid #0A0A09;
+  border-left: 3px solid var(--black);
   padding-left: 13px;
 }
 
 .exercise-video {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 10px;
+  color: var(--blue, #1A3A6A);
+  margin-top: 8px;
+  text-decoration: none;
+  border: 1px solid var(--blue, #1A3A6A);
+  padding: 4px 10px;
   transition: all 0.2s ease;
 }
 
 .exercise-video:hover {
+  background: var(--bluebg, rgba(26,58,106,.06));
   transform: translateX(2px);
+}
+
+.exercise-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.exercise-muscle {
+  font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+
+.exercise-sets {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  color: var(--black);
+  margin-top: 6px;
+}
+
+.exercise-detail {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  color: var(--grey);
+  margin-top: 6px;
 }
 
 
