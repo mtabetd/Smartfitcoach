@@ -57,12 +57,12 @@
         { name: 'Gingembre moulu',              qty: 2,   unit: 'g' }
       ],
       steps: [
-        'Mariner le poulet 10 min avec ail, cumin, paprika, gingembre, jus de citron.',
-        'Dorer l\'oignon émincé dans l\'huile d\'olive 3 min.',
-        'Ajouter le poulet, colorer 5 min de chaque côté.',
-        'Incorporer tomates, courgettes et pois chiches. Couvrir.',
-        'Mijoter à feu doux 25 min. Rectifier l\'assaisonnement.',
-        'Servir avec coriandre fraîche.'
+        'Préparer la chermoula : écraser l\'ail au sel, mélanger cumin, paprika, gingembre, jus de citron et huile d\'olive. Masser le poulet et laisser mariner 10 min à température ambiante.',
+        'Chauffer le tajine ou une cocotte à feu vif. Saisir le poulet mariné 3 min côté lisse sans toucher — il doit se détacher seul — puis retourner 2 min.',
+        'Baisser à feu moyen, ajouter l\'oignon émincé en fines demi-lunes. Laisser fondre 3 min en grattant les sucs de cuisson.',
+        'Déposer tomates coupées en quartiers, courgettes en sifflet épais et pois chiches. Verser 3 cuillères à soupe d\'eau. Couvrir hermétiquement.',
+        'Mijoter à feu doux 20 min. Soulever le couvercle, goûter, rectifier sel et cumin. Laisser reposer 5 min hors feu, couvercle fermé.',
+        'Ciseler la coriandre fraîche à la dernière seconde et parsemer au service pour préserver ses arômes volatils.'
       ]
     },
 
@@ -90,12 +90,12 @@
         { name: 'Sucre glace (décor)',qty: 10,  unit: 'g' }
       ],
       steps: [
-        'Cuire la dinde avec oignon, épices et 200 ml d\'eau jusqu\'à absorption. Effilocher.',
-        'Brouiller les œufs dans le jus de cuisson. Réserver.',
-        'Torréfier les amandes 2 min. Mixer grossièrement avec cannelle.',
-        'Sur chaque feuille de brick : couche dinde → œufs → amandes. Plier en carré.',
-        'Badigeonner légèrement d\'huile. Cuire au four 200 °C — 18 min.',
-        'Saupoudrer sucre glace + cannelle au service.'
+        'Dans une cocotte, faire revenir l\'oignon émincé dans l\'huile à feu moyen jusqu\'à transparence. Ajouter la dinde en morceaux, le safran infusé dans 2 c. à soupe d\'eau chaude, le gingembre, la cannelle et 150 ml d\'eau. Cuire à couvert 20 min.',
+        'Effilocher la dinde à la fourchette dans son jus. Remettre sur feu vif pour réduire le liquide jusqu\'à ce qu\'il soit quasi absorbé — la farce ne doit pas être humide.',
+        'Battre les œufs à la fourchette, les verser dans la farce chaude hors feu et brouiller doucement : ils doivent rester moelleux, pas caoutchouteux. Réserver.',
+        'Torréfier les amandes à sec dans une poêle 2 min jusqu\'à dorure. Concasser grossièrement au couteau — jamais au mixeur pour garder la texture.',
+        'Huiler légèrement un plat. Superposer 3 feuilles de brick en les faisant déborder. Garnir : dinde-œufs, puis amandes. Rabattre les feuilles, couvrir des 3 dernières feuilles huilées en dessous. Cuire four 200 °C, 15-18 min jusqu\'à dorure profonde.',
+        'Saupoudrer sucre glace + cannelle à la sortie du four. Servir immédiatement — la croustillance se perd en 10 min.'
       ]
     },
 
@@ -122,11 +122,11 @@
         { name: 'Cumin moulu',     qty: 2,   unit: 'g' }
       ],
       steps: [
-        'Égoutter et rincer pois chiches et thon.',
-        'Couper tomates, concombre et oignon rouge en petits dés.',
-        'Assembler tous les ingrédients dans un saladier.',
-        'Assaisonner huile d\'olive + jus de citron + cumin + sel.',
-        'Garnir de persil haché. Servir frais.'
+        'Rincer et égoutter soigneusement les pois chiches à l\'eau froide. Sécher le thon sur du papier absorbant — une garniture sèche accroche mieux l\'assaisonnement.',
+        'Tailler les tomates en brunoise irrégulière, saler légèrement et laisser dégorger 5 min dans une passoire. Cette étape évite une salade détrempée.',
+        'Couper concombre en demi-lunes de 4 mm. Émincer l\'oignon rouge très fin ; le passer 2 min sous l\'eau froide pour adoucir son âcreté tout en conservant le croquant.',
+        'Préparer la vinaigrette directement dans le saladier : jus de citron + sel + cumin, puis fouetter l\'huile d\'olive en filet pour émulsionner.',
+        'Assembler dans l\'ordre : pois chiches, légumes, thon en gros morceaux (ne pas émietter), olives. Mélanger délicatement une seule fois pour ne pas casser le thon. Rectifier sel et citron.'
       ]
     },
 
@@ -153,12 +153,11 @@
         { name: 'Ras el hanout',      qty: 2,   unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 200 °C.',
-        'Hacher finement oignon, ail, persil, coriandre.',
-        'Mélanger dinde + œuf + herbes + épices + sel.',
-        'Former des brochettes plates. Déposer sur papier sulfurisé.',
-        'Cuire 18-20 min en retournant à mi-cuisson.',
-        'Servir avec salade ou légumes grillés.'
+        'Hacher finement oignon, ail, persil et coriandre au couteau — jamais au robot qui les rend aqueux. Essorer légèrement les herbes dans les mains pour évacuer l\'excès d\'humidité.',
+        'Mélanger hachis de dinde, œuf, herbes et épices dans un bol froid. Travailler 1 min à la main jusqu\'à homogénéité — trop travailler rend la texture caoutchouteuse.',
+        'Préchauffer le four à 210 °C. Former des keftas de 8 cm de long en les roulant entre les paumes mouillées pour une surface lisse qui ne craquèle pas à la cuisson.',
+        'Déposer sur plaque légèrement huilée. Badigeonner d\'un filet d\'huile d\'olive avec un pinceau — cette fine couche crée une croûte dorée sans ajouter de matière grasse inutile.',
+        'Cuire 10 min. Retourner délicatement avec une spatule plate. Poursuivre 8-10 min. La kefta est cuite quand elle résiste légèrement sous le doigt et affiche une belle coloration ambrée.'
       ]
     },
 
@@ -190,12 +189,12 @@
         { name: 'Gingembre moulu',              qty: 2,   unit: 'g' }
       ],
       steps: [
-        'Faire revenir bœuf haché + oignon dans l\'huile 5 min.',
-        'Ajouter tomates, épices, 1 L d\'eau. Porter à ébullition.',
-        'Incorporer lentilles rincées + pois chiches. Cuire 25 min.',
-        'Ajouter céleri + vermicelles. Cuire encore 10 min.',
-        'Hors feu : herbes fraîches + jus de citron. Ajuster sel.',
-        'Servir chaud avec dattes ou citron tranché.'
+        'Dans une grande cocotte, dorer le bœuf haché à feu vif sans remuer pendant 2 min pour qu\'il prenne de la couleur. Ajouter l\'oignon émincé, baisser à feu moyen et cuire 3 min en remuant.',
+        'Ajouter tomates concassées, safran, cumin, cannelle, gingembre. Faire compoter 5 min à découvert — cette réduction concentre les arômes avant l\'ajout de l\'eau.',
+        'Verser 1 litre d\'eau bouillante (jamais froide : le choc thermique cuit mal les légumineuses). Incorporer les lentilles rincées et les pois chiches. Porter à frémissement, écumer si nécessaire.',
+        'Mijoter 20 min à feu doux à couvert. Ajouter le céleri en brunoise. Prolonger 10 min.',
+        'Verser les vermicelles. Cuire 5 min en remuant souvent — ils absorbent vite. Ajuster la consistance avec un peu d\'eau si nécessaire : la harira doit napper la cuillère.',
+        'Hors feu, incorporer herbes fraîches ciselées et jus de citron. Ne jamais cuire les herbes : les ajouter à la dernière seconde préserve leur arôme et leur couleur verte.'
       ]
     },
 
@@ -221,12 +220,11 @@
         { name: 'Ras el hanout',   qty: 2,  unit: 'g' }
       ],
       steps: [
-        'Mixer ail + huile + citron + épices → marinade.',
-        'Inciser les cuisses. Enduire généreusement. Mariner 30 min min.',
-        'Préchauffer four à 220 °C.',
-        'Cuire 20 min. Baisser à 180 °C, poursuivre 25 min.',
-        'Arroser du jus de cuisson à mi-parcours.',
-        'Servir avec salade choumicha.'
+        'Écraser l\'ail au sel en pâte lisse avec le plat du couteau. Mélanger avec huile d\'olive, jus de citron et toutes les épices. La pâte doit être dense et parfumée.',
+        'Inciser les cuisses en croix profondes jusqu\'à l\'os — cette technique n\'est pas décorative, elle permet à la marinade de pénétrer en profondeur et accélère la cuisson au cœur.',
+        'Masser généreusement y compris dans les incisions. Laisser mariner au minimum 30 min à température ambiante, ou idéalement 2 h au réfrigérateur.',
+        'Préchauffer four à 220 °C avec la plaque vide à l\'intérieur. Déposer les cuisses côté peau sur la plaque chaude : le choc thermique immédiat saisit la peau et la rend croustillante.',
+        'Cuire 20 min à 220 °C pour la croûte. Baisser à 180 °C, arroser du jus de cuisson recueilli dans la plaque. Poursuivre 20-25 min jusqu\'à 75 °C à cœur.'
       ]
     },
 
@@ -258,11 +256,11 @@
         { name: 'Huile de sésame',     qty: 10,  unit: 'ml' }
       ],
       steps: [
-        'Cuire le riz basmati. Laisser refroidir.',
-        'Couper le saumon en cubes 2 cm. Mariner 10 min : sauce soja + gingembre râpé + huile de sésame.',
-        'Trancher avocat. Râper carotte. Couper concombre en rondelles.',
-        'Assembler chaque bol : riz → saumon → légumes côte à côte.',
-        'Parsemer sésame. Arroser reste marinade + jus de citron vert.'
+        'Cuire le riz basmati avec une pincée de sel. À la cuisson, étaler sur une plaque et laisser refroidir à l\'air libre — ce séchage rapide donne une texture légèrement ferme et non collante, essentielle pour un poke.',
+        'Tailler le saumon en cubes de 2 cm nets au couteau bien affûté en un seul geste — scier le poisson l\'écrase. Préparer la marinade : sauce soja + gingembre râpé fin + huile de sésame + jus de citron vert. Mariner 8 min maximum, pas plus.',
+        'Décongeler les edamame à l\'eau bouillante 2 min. Tailler la carotte en julienne fine au couteau. Trancher le concombre en biais pour l\'élégance visuelle.',
+        'Trancher l\'avocat à la dernière minute et citronner immédiatement pour éviter l\'oxydation.',
+        'Monter le bol dans l\'ordre : riz froid, puis chaque ingrédient en zone séparée côte à côte — ne jamais tout mélanger avant service, la présentation est la moitié du plaisir.'
       ]
     },
 
@@ -290,12 +288,11 @@
         { name: 'Persil frais',                 qty: 10,  unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon + ail + épices dans l\'huile 3 min.',
-        'Ajouter tomates concassées. Mijoter 8 min.',
-        'Incorporer épinards. Laisser réduire 2 min.',
-        'Creuser 4 puits. Casser 1 œuf dans chaque.',
-        'Émietter la feta. Couvrir, cuire à feu doux 6-8 min.',
-        'Garnir de persil. Servir en poêle avec pain complet.'
+        'Chauffer l\'huile d\'olive dans une sauteuse à bords hauts. Faire revenir oignon émincé à feu moyen 4 min jusqu\'à légère coloration. Ajouter l\'ail haché et les épices, cuire 1 min en remuant : les épices doivent "fleurir" dans la matière grasse pour libérer leurs huiles essentielles.',
+        'Verser les tomates concassées. Monter le feu pour faire bouillonner 2 min, puis réduire et mijoter 8 min à couvert. La sauce doit légèrement se concentrer et perdre son acidité crue.',
+        'Ajouter les épinards en une seule fois. Couvrir 2 min — ils vont fondre dans la vapeur. Remuer pour les répartir. La sauce doit rester dense.',
+        'Creuser 4 puits bien distincts avec le dos d\'une cuillère. Casser délicatement 1 œuf dans chaque puits en le maintenant bas au-dessus de la sauce pour ne pas casser le jaune.',
+        'Émietter la feta grossièrement au-dessus. Couvrir et cuire à feu très doux 6-7 min : le blanc doit être pris, le jaune encore coulant — c\'est le moment parfait.'
       ]
     },
 
@@ -322,12 +319,11 @@
         { name: 'Origan séché',                 qty: 1,   unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon + ail dans l\'huile 2 min.',
-        'Ajouter tomates, épices, sel + 400 ml eau.',
-        'Verser les pâtes CRUES directement. Porter à ébullition.',
-        'Cuire 13-15 min à feu moyen en remuant souvent.',
-        'Hors feu : incorporer thon égoutté + épinards 1 min.',
-        'Servir immédiatement. Se conserve 3 jours au frigo.'
+        'Dans une grande sauteuse ou casserole à fond épais, faire revenir oignon émincé dans l\'huile à feu vif 2 min. Ajouter l\'ail haché, cuire 30 secondes — il doit blondir légèrement sans brûler.',
+        'Verser les tomates concassées. Laisser compoter 3 min à feu vif pour évaporer l\'excédent d\'eau et concentrer l\'acidité. Ajouter origan, basilic, sel et poivre.',
+        'Verser les pâtes crues directement dans la sauce. Couvrir d\'eau bouillante à hauteur exacte (environ 400 ml). Porter à ébullition vive.',
+        'Cuire 12-14 min à feu moyen en remuant toutes les 2 min pour libérer l\'amidon : c\'est cet amidon qui lie la sauce et la rend soyeuse, sans aucun ajout de matière grasse.',
+        'Hors feu, lorsque les pâtes sont al dente et le liquide quasi absorbé, incorporer le thon égoutté en gros morceaux et les épinards. Couvrir 1 min — la chaleur résiduelle suffit à tout finir.'
       ]
     },
 
@@ -356,12 +352,12 @@
         { name: 'Persil frais',    qty: 15,  unit: 'g' }
       ],
       steps: [
-        'Préchauffer four à 200 °C. Sécher les pois chiches.',
-        'Enrober huile + cumin + paprika + sel. Rôtir 22 min (secouer à mi-cuisson).',
-        'Cuire riz basmati. Émincer chou rouge. Râper carotte.',
-        'Sauce tahini : tahini + jus de citron + ail râpé + 2 cs eau. Fouetter.',
-        'Assembler : riz → légumes côte à côte → pois chiches → avocat tranché.',
-        'Napper de sauce tahini. Garnir de persil.'
+        'Rincer et sécher soigneusement les pois chiches avec du papier absorbant — l\'humidité est l\'ennemi du croustillant. Laisser sécher à l\'air 10 min si possible.',
+        'Préchauffer le four à 210 °C. Enrober les pois chiches secs d\'huile d\'olive, cumin, paprika fumé et sel. Étaler en couche unique sur plaque, sans chevauchement. Rôtir 25 min en secouant la plaque à mi-cuisson — ils doivent être bien dorés et croquants.',
+        'Cuire le riz basmati. Émincer finement le chou rouge au couteau (jamais à la mandoline pour ce plat : les lanières au couteau ont plus de mâche). Râper la carotte en julienne.',
+        'Sauce tahini : fouetter tahini + jus de citron + ail râpé + sel. Ajouter l\'eau froide cuillère par cuillère en fouettant jusqu\'à obtenir une sauce blanche et crémeuse — le tahini s\'éclaircit à mesure qu\'on ajoute l\'eau.',
+        'Assembler le bol dans l\'ordre : riz, puis chaque composant en secteurs distincts. Trancher l\'avocat à la dernière seconde. Déposer les pois chiches chauds et croustillants en dernier.',
+        'Napper de sauce tahini en filet. Parsemer de persil ciselé. Servir immédiatement pour préserver le contraste chaud-croustillant des pois chiches.'
       ]
     },
 
@@ -390,9 +386,12 @@
         { name: 'Curry en poudre', qty: 8, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon et ail dans l\'huile 3 min. Ajouter curry, mélanger 1 min.',
-        'Incorporer tomates, pois chiches et lait de coco. Mijoter 12 min.',
-        'Ajouter épinards, cuire 3 min. Servir sur riz basmati.'
+        'Faire chauffer l\'huile à feu vif jusqu\'à frémissement. Saisir l\'oignon émincé 4 min en remuant sans cesse, il doit devenir translucide et légèrement coloré.',
+        'Baisser à feu moyen, ajouter l\'ail haché et le curry. Torréfier les épices 90 secondes en mélangeant : elles doivent embaumer sans brûler.',
+        'Verser les tomates concassées, racler les sucs au fond de la casserole. Ajouter les pois chiches égouttés et le lait de coco. Porter à ébullition.',
+        'Réduire le feu, laisser mijoter 15 min à couvert jusqu\'à ce que la sauce épaississe et nappe la cuillère.',
+        'Hors du feu, incorporer les épinards frais par poignées successives en remuant ; ils tombent en 2 min — ne pas les surcuire.',
+        'Cuire le riz basmati à l\'eau froide départ, porter à ébullition puis couvrir et éteindre le feu 12 min. Servir le curry sur le riz, ajuster le sel.'
       ]
     },
     {
@@ -420,9 +419,12 @@
         { name: 'Gochujang (pâte pimentée)', qty: 15, unit: 'g' }
       ],
       steps: [
-        'Cuire le riz. Faire revenir bœuf avec sauce soja et un peu de gochujang.',
-        'Sauter séparément carottes râpées, courgette et épinards dans l\'huile de sésame.',
-        'Dresser riz dans bol, disposer légumes et bœuf. Poser œuf au plat. Mélanger avant de déguster.'
+        'Cuire le riz basmati par absorption (ratio 1:1,5 eau). Pendant ce temps, assaisonner le bœuf haché avec la sauce soja et la moitié du gochujang.',
+        'Saisir le bœuf à feu vif dans une poêle très chaude sans matière grasse ajoutée, 3 min en écrasant à la spatule pour obtenir de belles parties caramélisées. Réserver.',
+        'Dans la même poêle avec une goutte d\'huile de sésame, sauter les carottes râpées 2 min seules, puis la courgette en julienne 2 min, enfin les épinards 1 min. Chaque légume garde sa texture et sa couleur.',
+        'Dans la même poêle, verser le reste d\'huile de sésame et cuire les œufs au plat à feu doux-moyen, jaune coulant — c\'est lui qui sert de sauce.',
+        'Dresser dans des bols larges et chauds : riz au centre, légumes disposés en quartiers distincts, bœuf, puis l\'œuf au plat par-dessus.',
+        'Déposer le reste de gochujang sur le jaune. Mélanger vigoureusement au moment de servir.'
       ]
     },
     {
@@ -450,9 +452,12 @@
         { name: 'Cacahuètes concassées', qty: 20, unit: 'g' }
       ],
       steps: [
-        'Tremper nouilles 8 min dans eau chaude, égoutter.',
-        'Chauffer wok, cuire crevettes 2 min, réserver. Brouiller œufs dans le wok.',
-        'Ajouter nouilles, sauce tamari, citron vert. Incorporer crevettes et pousses de soja. Garnir cacahuètes et oignon vert.'
+        'Tremper les nouilles de riz 8 min dans l\'eau chaude (pas bouillante), égoutter et réserver — elles finissent de cuire dans le wok.',
+        'Chauffer le wok à feu maximum jusqu\'à légère fumée. Verser l\'huile d\'arachide, saisir les crevettes 90 secondes en une seule couche sans les bouger, puis les retourner 30 secondes. Retirer et réserver.',
+        'Casser les œufs directement dans le wok, brouiller 30 secondes à la spatule en les cassant en petits morceaux avant qu\'ils soient totalement pris.',
+        'Ajouter les nouilles égouttées, verser aussitôt la sauce tamari et le jus de citron vert. Sauter à feu vif 2 min en soulevant continuellement.',
+        'Incorporer les crevettes réservées et les pousses de soja. Mélanger 1 min — les pousses doivent rester croquantes.',
+        'Dresser, garnir d\'oignon vert ciselé et de cacahuètes concassées. Servir immédiatement, le pad thai ne supporte pas l\'attente.'
       ]
     },
     {
@@ -480,9 +485,12 @@
         { name: 'Riz basmati', qty: 80, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon, ail, gingembre dans l\'huile 3 min. Ajouter curry.',
-        'Incorporer lentilles, tomates, lait de coco et 400 ml eau. Cuire 20 min.',
-        'Mixer partiellement pour épaissir. Servir sur riz basmati.'
+        'Chauffer l\'huile dans une casserole à fond épais. Faire revenir l\'oignon émincé à feu moyen 5 min jusqu\'à légère coloration dorée — cette caramélisation donne la base sucrée du dal.',
+        'Ajouter l\'ail et le gingembre râpés puis le curry en poudre. Torréfier 90 secondes en remuant constamment.',
+        'Incorporer les tomates concassées, racler le fond, laisser réduire 3 min jusqu\'à ce que la sauce soit sèche et concentrée.',
+        'Verser les lentilles corail rincées, le lait de coco et 400 ml d\'eau. Porter à ébullition, puis réduire à feu doux et cuire 20 min à couvert en remuant de temps en temps.',
+        'Lorsque les lentilles sont fondantes, écraser grossièrement 1/3 du mélange contre la paroi à la cuillère en bois pour lier naturellement le dal — inutile d\'utiliser un mixeur.',
+        'Cuire le riz basmati à part. Vérifier l\'assaisonnement du dal, servir sur le riz avec un filet de jus de citron frais pour relever l\'ensemble.'
       ]
     },
     {
@@ -510,9 +518,12 @@
         { name: 'Huile de sésame', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Cuire poulet dans bouillon 15 min. Retirer, effilocher.',
-        'Cuire œufs durs 7 min, écaler et couper en deux. Cuire nouilles 3 min.',
-        'Assaisonner bouillon avec sauce soja et huile de sésame. Dresser nouilles, bouillon, poulet, œuf, champignons et maïs.'
+        'Pocher les blancs de poulet dans le bouillon frémissant (jamais bouillant) 15 min. Retirer, couvrir de film alimentaire et laisser reposer 5 min avant d\'effilocher à la fourchette — la chair reste moelleuse.',
+        'Porter à ébullition une casserole d\'eau séparée. Cuire les œufs exactement 6 min 30, plonger immédiatement dans l\'eau glacée, écaler délicatement. Le jaune sera encore fondant.',
+        'Faire revenir les champignons shiitake tranchés à sec dans une poêle anti-adhésive 3 min à feu vif jusqu\'à légère dorure.',
+        'Cuire les nouilles ramen al dente selon le paquet (généralement 2-3 min), égoutter.',
+        'Assaisonner le bouillon chaud avec la sauce soja et l\'huile de sésame. Goûter — le bouillon doit être puissant car les nouilles vont le diluer.',
+        'Dresser en bols préchauffés : nouilles, bouillon bien chaud versé à la louche, poulet effiloché, champignons, maïs, œuf coupé en deux. Garnir d\'oignon vert ciselé.'
       ]
     },
     {
@@ -540,9 +551,12 @@
         { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
       ],
       steps: [
-        'Cuire riz. Assaisonner poulet avec cumin, sel, poivre.',
-        'Griller poulet à la poêle 6 min/côté, trancher.',
-        'Assembler : riz, haricots, maïs, tomates cerises, poulet, avocat. Napper de yaourt grec.'
+        'Cuire le riz basmati par absorption. Pendant ce temps, assaisonner généreusement les blancs de poulet avec cumin, sel, poivre des deux côtés.',
+        'Chauffer une poêle en fonte ou à fond épais à feu vif jusqu\'à légère fumée. Saisir le poulet à sec 3 min sans le bouger pour former une croûte caramélisée, puis retourner et cuire 3 min. Laisser reposer 5 min avant de trancher.',
+        'Dans la même poêle, faire sauter les haricots noirs égouttés avec une pincée de cumin 2 min pour les réchauffer et les parfumer.',
+        'Préparer la salsa : tomates cerises coupées en deux, oignon rouge ciselé fin, jus de citron vert, sel. Laisser macérer 5 min.',
+        'Écraser l\'avocat à la fourchette avec sel, poivre et une giclée de jus de citron vert — garder quelques morceaux pour la texture.',
+        'Assembler les bols : riz, haricots, poulet tranché, salsa, guacamole. Napper de yaourt grec comme ersatz de crème fraîche. Servir sans attendre.'
       ]
     },
     {
@@ -570,9 +584,12 @@
         { name: 'Fécule de maïs', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Couper poulet en dés. Mélanger sauce soja et fécule.',
-        'Chauffer wok à feu vif. Cuire poulet 4 min, réserver.',
-        'Sauter ail, gingembre, puis légumes 4 min. Remettre poulet, ajouter sauce. Mélanger 1 min.'
+        'Couper le poulet en lanières régulières de 1 cm d\'épaisseur — l\'uniformité garantit une cuisson homogène. Délayer la fécule de maïs dans la sauce soja froide.',
+        'Chauffer le wok à feu maximum 2 min. Verser l\'huile de sésame, saisir les lanières de poulet en une seule couche 3 min sans y toucher, retourner et cuire 1 min. Retirer et réserver.',
+        'Sans baisser le feu, faire revenir l\'ail et le gingembre émincés 30 secondes — ils doivent grésiller fort, pas brûler.',
+        'Ajouter les carottes en julienne, cuire 2 min à feu vif. Ajouter le brocoli en fleurettes, cuire 2 min. Enfin le poivron rouge en lamelles, cuire 1 min. Chaque légume garde sa couleur vive.',
+        'Remettre le poulet, verser la sauce soja-fécule. Mélanger 1 min à feu vif — la sauce va nappe et coller aux ingrédients.',
+        'Vérifier l\'assaisonnement, dresser immédiatement. Les légumes doivent rester croquants, le poulet brillant et laqué.'
       ]
     },
     {
@@ -600,9 +617,12 @@
         { name: 'Croûtons pain complet', qty: 30, unit: 'g' }
       ],
       steps: [
-        'Griller poulet assaisonné à la poêle 6 min/côté. Trancher.',
-        'Sauce César : yaourt, citron, ail râpé, moutarde, huile. Fouetter.',
-        'Mélanger laitue, sauce, parmesan, croûtons. Disposer poulet par-dessus.'
+        'Sortir le poulet du réfrigérateur 10 min avant la cuisson. Assaisonner sel et poivre. Chauffer la poêle à feu vif avec l\'huile d\'olive, saisir le poulet 4 min côté lisse sans y toucher pour former une belle croûte dorée.',
+        'Retourner, réduire à feu moyen, couvrir et cuire 5-6 min. Laisser reposer 5 min enveloppé dans du papier aluminium avant de trancher en biais.',
+        'Préparer la sauce : écraser l\'ail en purée fine avec une pincée de sel, fouetter avec le yaourt grec, la moutarde de Dijon, le jus de citron et l\'huile d\'olive versée en filet pour émulsionner.',
+        'Déchirer la laitue romaine à la main en morceaux généreux — ne jamais la couper au couteau, les feuilles déchirent le long de leurs fibres naturelles et restent plus croquantes.',
+        'Dans un grand saladier, enrober la laitue de sauce en la soulevant depuis le dessous. Ajouter la moitié du parmesan râpé, mélanger.',
+        'Dresser en assiettes, disposer les tranches de poulet en éventail, les croûtons de pain complet, le reste de parmesan. Servir sans attendre.'
       ]
     },
     {
@@ -630,9 +650,12 @@
         { name: 'Origan séché', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Mariner poulet avec huile, citron, origan, sel. Griller 6 min/côté, trancher.',
-        'Tzatziki : yaourt + concombre râpé + ail + sel.',
-        'Réchauffer pita. Garnir avec poulet, tzatziki, tomates et oignon rouge.'
+        'Mariner le poulet minimum 20 min (idéalement 1h) dans l\'huile d\'olive, le jus de citron, l\'origan, sel et poivre — l\'acidité attendrit la fibre musculaire.',
+        'Égoutter le poulet de sa marinade avant cuisson. Chauffer une poêle grill ou en fonte à feu vif, saisir les filets 4 min sans les bouger pour des marques nettes. Retourner, cuire 3-4 min. Laisser reposer 5 min.',
+        'Préparer le tzatziki : râper le concombre, presser fermement dans un torchon pour éliminer l\'eau — c\'est le geste essentiel pour un tzatziki épais et non liquide. Mélanger avec le yaourt grec, l\'ail râpé et le sel.',
+        'Trancher le poulet reposé en fines lamelles en biais pour maximiser la surface.',
+        'Réchauffer les pitas 1 min de chaque côté dans la poêle à sec ou directement sur la flamme pour les assouplir et les parfumer.',
+        'Garnir généreusement : tzatziki d\'abord, puis poulet, tomates en dés, oignon rouge finement ciselé. Servir plié ou ouvert.'
       ]
     },
     {
@@ -660,9 +683,12 @@
         { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Assaisonner poulet avec cumin, sel. Cuire à la poêle 6 min/côté, émincer.',
-        'Écraser avocat avec jus de citron vert, sel.',
-        'Garnir tortillas : guacamole, poulet, tomates dés, oignon. Finir avec yaourt grec.'
+        'Assaisonner les blancs de poulet avec le cumin, sel, poivre. Chauffer la poêle avec l\'huile à feu vif. Saisir le poulet 4 min côté lisse sans le bouger — il doit se détacher seul de la poêle quand il est prêt.',
+        'Retourner, réduire à feu moyen, couvrir et cuire 4 min. Laisser reposer 5 min avant d\'émincer en fines lanières.',
+        'Pendant la cuisson, écraser l\'avocat à la fourchette avec le jus de citron vert, sel, poivre. Conserver la texture grossière — un guacamole lisse est sans intérêt.',
+        'Préparer la salsa rapide : dés de tomates, oignon rouge ciselé très fin, une pincée de sel. Mélanger, laisser dégorger 3 min, égoutter.',
+        'Réchauffer les tortillas à sec dans la poêle encore chaude, 20 secondes de chaque côté — elles deviennent souples et légèrement grillées.',
+        'Garnir chaque tortilla : guacamole en base, lanières de poulet, salsa égouttée, une cuillerée de yaourt grec. Servir immédiatement plié en deux.'
       ]
     },
     {
@@ -690,9 +716,12 @@
         { name: 'Piment rouge', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Chauffer bouillon avec galanga, citronnelle écrasée et piment 5 min.',
-        'Ajouter lait de coco, porter à frémissement. Incorporer poulet en dés et champignons.',
-        'Cuire 10 min. Assaisonner sauce poisson et jus citron vert. Servir chaud.'
+        'Écraser la citronnelle à plat avec le dos du couteau pour libérer ses huiles essentielles. Tailler le galanga (ou gingembre) en fines rondelles biseautées.',
+        'Porter le bouillon à 90 °C (frémissement, pas ébullition). Infuser citronnelle, galanga et piment entier 8 min à couvert, puis retirer ces aromates à l\'écumoire.',
+        'Ajouter le lait de coco, ramener à frémissement doux. Incorporer les champignons émincés et le poulet coupé en morceaux réguliers de 3 cm.',
+        'Cuire 8–10 min à feu doux : le poulet doit rester moelleux, jamais bouilli. Vérifier la cuisson en coupant un morceau — chair blanche et juteuse.',
+        'Hors du feu, assaisonner avec la sauce poisson et le jus de citron vert pressé au dernier moment pour garder sa fraîcheur.',
+        'Servir immédiatement dans des bols chauds. Un filet de jus de citron vert à table rehausse le tout à la dernière seconde.'
       ]
     },
     {
@@ -719,9 +748,12 @@
         { name: 'Basilic frais', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Cuire pâtes al dente. Griller poulet en dés avec ail et huile 6 min.',
-        'Égoutter pâtes (garder 60 ml eau de cuisson). Mélanger pâtes + pesto + eau.',
-        'Ajouter poulet, tomates cerises. Parsemer parmesan et basilic frais.'
+        'Porter une grande casserole d\'eau fortement salée (10 g/litre) à ébullition. Cuire les penne 1 min de moins que le temps indiqué sur le paquet — ils finiront dans la poêle.',
+        'Pendant ce temps, chauffer l\'huile d\'olive à feu vif. Saisir les dés de poulet en une seule couche sans les toucher 3 min pour obtenir une belle coloration dorée, puis retourner 2 min. Ajouter l\'ail haché en fin de cuisson seulement.',
+        'Réserver 80 ml d\'eau de cuisson des pâtes avant d\'égoutter. C\'est votre liant naturel, riche en amidon.',
+        'Hors du feu, mélanger pâtes égouttées, pesto et 40 ml d\'eau de cuisson. Incorporer le reste de l\'eau si nécessaire pour obtenir une sauce soyeuse qui enrobe chaque penne.',
+        'Ajouter le poulet et les tomates cerises coupées en deux. Un seul tour de mélange délicat pour ne pas écraser les tomates.',
+        'Dresser, parsemer le parmesan finement râpé et les feuilles de basilic frais entières. Servir sans attendre : les pâtes n\'attendent personne.'
       ]
     },
     {
@@ -747,9 +779,12 @@
         { name: 'Sel, poivre', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Préchauffer four à 180 °C. Faire revenir oignon et ail dans huile, ajouter épinards 3 min.',
-        'Battre œufs, assaisonner. Verser sur légumes dans poêle allant au four.',
-        'Parsemer feta émiettée. Cuire four 15 min jusqu\'à fermeté.'
+        'Préchauffer le four à 180 °C (chaleur tournante). Utiliser une poêle à manche en métal allant au four (20–22 cm de diamètre).',
+        'Dans la poêle chaude avec l\'huile, faire suer l\'oignon émincé à feu moyen jusqu\'à translucidité (3 min). Ajouter l\'ail haché 30 secondes, puis les épinards en deux fois — ils tombent vite.',
+        'Battre les œufs à la fourchette avec une pincée de sel et de poivre. Ne pas fouetter excessivement : on ne veut pas d\'air, la frittata doit être dense et crémeuse.',
+        'Verser les œufs sur les légumes à feu moyen-doux. Laisser cuire 2 min jusqu\'à ce que les bords commencent à prendre, en ramenant légèrement les bords vers le centre avec une spatule.',
+        'Parsemer la feta émiettée uniformément. Enfourner 12–14 min : la frittata est prête quand le centre est juste ferme sous une légère pression du doigt.',
+        'Laisser reposer 2 min hors du four avant de couper. La frittata se détaille en parts comme une tarte — découpez net avec un couteau long.'
       ]
     },
     {
@@ -777,9 +812,12 @@
         { name: 'Menthe fraîche', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Rincer et cuire quinoa 12 min dans 360 ml eau. Laisser refroidir.',
-        'Couper concombre en dés, tomates en deux. Égoutter pois chiches.',
-        'Mélanger tout avec huile d\'olive, citron, menthe. Parsemer feta et olives.'
+        'Rincer le quinoa à l\'eau froide dans une passoire fine jusqu\'à ce que l\'eau soit claire — cette étape élimine la saponine qui donne l\'amertume.',
+        'Cuire le quinoa dans 360 ml d\'eau froide salée. Porter à ébullition, couvrir, réduire à feu doux 12 min. Éteindre, laisser gonfler 5 min couvercle fermé, puis égrener à la fourchette.',
+        'Pendant que le quinoa tiédit, tailler le concombre en petits dés réguliers (5 mm), couper les tomates cerises en deux. Égoutter et rincer les pois chiches.',
+        'Préparer la vinaigrette : émulsionner le jus de citron avec l\'huile d\'olive en fouettant vigoureusement. Assaisonner.',
+        'Mélanger quinoa tiède, pois chiches, concombre et tomates. Verser la vinaigrette et mélanger délicatement pour ne pas écraser les légumes.',
+        'Dresser en bowl, parsemer la feta émiettée à la main, les olives et les feuilles de menthe fraîche entières. La menthe se cisèle en salle, jamais à l\'avance.'
       ]
     },
     {
@@ -807,9 +845,12 @@
         { name: 'Citron vert', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Griller oignon et gingembre à sec au four 5 min. Chauffer bouillon avec badiane, oignon, gingembre, sauce poisson 20 min.',
-        'Tremper nouilles 8 min, égoutter. Trancher bœuf très finement.',
-        'Dresser : nouilles dans bol, verser bouillon bouillant sur bœuf cru pour le cuire. Garnir pousses de soja et citron vert.'
+        'Placer l\'oignon coupé en deux et le gingembre tranché sur une plaque sèche. Griller sous le gril du four 8–10 min jusqu\'à noircissement partiel des bords : c\'est ce caramélisé qui donne la couleur ambrée et la profondeur au bouillon.',
+        'Porter le bouillon à ébullition avec les étoiles de badiane, l\'oignon et le gingembre grillés. Réduire le feu, laisser frémir 20 min à couvert. Filtrer au travers d\'une passoire fine. Assaisonner avec la sauce poisson.',
+        'Faire tremper les nouilles de riz 8 min dans l\'eau tiède (pas bouillante), égoutter. Elles finiront de cuire dans le bouillon chaud.',
+        'Trancher le bœuf le plus finement possible — idéalement 2 mm d\'épaisseur. Si la viande est légèrement congelée (20 min au congélateur), la découpe est beaucoup plus nette.',
+        'Porter le bouillon filtré à ébullition vive. Répartir les nouilles dans les bols, disposer les tranches de bœuf cru par-dessus en les étalant bien.',
+        'Verser le bouillon bouillant (95–100 °C) directement sur le bœuf : la viande cuit instantanément à la nappe. Garnir de pousses de soja et d\'un quartier de citron vert. Servir à table dans la seconde.'
       ]
     },
     {
@@ -837,9 +878,12 @@
         { name: 'Moutarde de Dijon', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire œufs durs 9 min, refroidir, couper en 2. Blanchir haricots verts 5 min.',
-        'Préparer vinaigrette : huile + vinaigre + moutarde.',
-        'Dresser laitue, tomates, haricots, thon, olives, anchois, œufs. Arroser vinaigrette.'
+        'Plonger les œufs dans l\'eau bouillante salée et minuteur en main : 9 minutes exactement pour un jaune fondant sans cercle vert. Refroidir immédiatement dans un bol d\'eau glacée pour arrêter la cuisson.',
+        'Blanchir les haricots verts à grande eau bouillante très salée 4 min : ils doivent rester croquants et d\'un vert intense. Plonger aussitôt dans de l\'eau glacée pour fixer la couleur.',
+        'Préparer la vinaigrette dans le fond du saladier : moutarde de Dijon en premier, puis vinaigre balsamique, sel, poivre. Émulsionner en versant l\'huile d\'olive en filet tout en fouettant.',
+        'Couper les tomates en quartiers réguliers, les œufs en deux dans le sens de la longueur pour révéler le jaune.',
+        'Dresser la salade par couches successives : haricots verts, tomates, thon effeuilé à la main (jamais en boule). Disposer les anchois, les olives et les œufs en derniers, comme des éléments de composition.',
+        'Napper de vinaigrette au moment de servir, jamais avant. La salade niçoise ne se mélange pas — elle se dresse et se compose.'
       ]
     },
     {
@@ -867,9 +911,12 @@
         { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
       ],
       steps: [
-        'Trancher aubergine, saler 10 min, rincer, rôtir au four 15 min à 200 °C.',
-        'Faire revenir oignon + dinde, ajouter tomates + cannelle. Cuire 10 min.',
-        'Mélanger yaourt + œuf battu. Monter : viande, aubergines, sauce yaourt. Parsemer parmesan. Cuire 25 min à 180 °C.'
+        'Trancher l\'aubergine en rondelles de 1 cm, saler légèrement et laisser dégorger 15 min sur du papier absorbant. Rincer, sécher, disposer sur plaque huilée et rôtir à 200 °C pendant 15 min en retournant à mi-cuisson : les rondelles doivent être dorées et moelleuses.',
+        'Dans une poêle chaude, faire revenir l\'oignon émincé 3 min jusqu\'à coloration. Ajouter la dinde hachée et cuire à feu vif en écrasant les grumeaux : une viande bien saisie, pas bouillie, donne tout son goût.',
+        'Incorporer les tomates concassées et la cannelle. Assaisonner. Cuire 10 min à feu moyen jusqu\'à ce que la sauce réduise et colle légèrement à la poêle.',
+        'Préparer la béchamel légère : fouetter le yaourt grec avec l\'œuf battu, une pincée de sel et de noix de muscade. Cette préparation remplace une béchamel classique avec 80 % de matière grasse en moins.',
+        'Monter le plat en deux couches : viande → aubergines → viande → aubergines. Verser la sauce yaourt-œuf en couvrant toute la surface. Parsemer le parmesan râpé.',
+        'Enfourner à 180 °C pendant 25 min. Le gratin doit être doré et légèrement soufflé. Laisser reposer 5 min avant de découper : cela permet au plat de se tenir à la coupe.'
       ]
     },
     {
@@ -896,9 +943,12 @@
         { name: 'Sucre (optionnel)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Mariner bœuf dans sauce soja + fécule 10 min.',
-        'Faire sauter brocoli en fleurettes 3 min dans wok très chaud. Réserver.',
-        'Saisir bœuf 2 min, ajouter ail, gingembre, brocoli. Mélanger 1 min. Finir avec huile de sésame.'
+        'Trancher le bœuf en fines lamelles de 3–4 mm dans le sens contraire des fibres — ce geste seul garantit la tendreté. Mélanger avec la sauce soja et la fécule de maïs, laisser mariner 10 min minimum.',
+        'Blanchir les fleurettes de brocoli 2 min à l\'eau bouillante salée, égoutter et sécher soigneusement. Un brocoli humide dans le wok = vapeur = plus de sauté.',
+        'Chauffer le wok à feu maximum jusqu\'à légère fumée. C\'est le "wok hei" — la saveur de la flamme — qui fait toute la différence avec une poêle ordinaire.',
+        'Saisir le bœuf en petites quantités (ne jamais surcharger le wok) 1 min 30 sans toucher, puis retourner 30 secondes. La viande doit rester rosée à cœur. Réserver.',
+        'Dans le même wok encore chaud, faire revenir l\'ail et le gingembre râpés 30 secondes. Remettre le brocoli, puis le bœuf. Mélanger énergiquement 1 min à feu vif.',
+        'Hors du feu, ajouter l\'huile de sésame en filet. Ne jamais cuire l\'huile de sésame — sa chaleur détruit les arômes. Servir immédiatement : le stir-fry n\'attend pas.'
       ]
     },
     {
@@ -926,9 +976,12 @@
         { name: 'Oignon vert', qty: 30, unit: 'g' }
       ],
       steps: [
-        'Cuire riz japonais. Mélanger sauce soja, miel pour sauce teriyaki.',
-        'Saisir saumon côté peau 4 min, retourner 3 min. Napper de sauce teriyaki.',
-        'Dresser bol : riz, edamame, concombre, saumon. Garnir sésame et oignon vert.'
+        'Rincer le riz japonais jusqu\'à eau claire (5–6 fois) pour éliminer l\'excès d\'amidon. Cuire selon la méthode absorption : 200 g de riz pour 240 ml d\'eau froide, porter à ébullition, couvrir hermétiquement, feu minimum 12 min, repos 10 min sans soulever le couvercle.',
+        'Préparer la sauce teriyaki : mélanger la sauce soja et le miel. Réserver la moitié pour napper en fin de cuisson.',
+        'Sécher soigneusement les pavés de saumon avec du papier absorbant — un poisson humide ne se saisit pas, il cuit à la vapeur. Assaisonner côté chair seulement.',
+        'Chauffer une poêle antiadhésive à feu moyen-vif. Placer le saumon côté peau, appuyer légèrement 30 secondes pour un contact parfait. Cuire 4–5 min sans bouger jusqu\'à ce que la peau soit croustillante et que la cuisson remonte aux deux-tiers de la chair.',
+        'Retourner, éteindre le feu et laisser finir la cuisson à la chaleur résiduelle 2 min. Verser la moitié de la sauce teriyaki dans la poêle chaude : elle caramélise instantanément sur le poisson.',
+        'Dresser le bowl : riz, edamame, concombre en fines tranches biseautées. Poser le saumon nappé de sauce, parsemer les graines de sésame et l\'oignon vert ciselé. Servir sans attendre.'
       ]
     },
     {
@@ -956,9 +1009,12 @@
         { name: 'Chili en poudre', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon, ail, poivron dans huile 5 min.',
-        'Ajouter épices, tomates, haricots et maïs. Saler.',
-        'Mijoter 20 min à feu doux. Servir avec riz ou pain.'
+        'Ciseler finement l\'oignon, tailler le poivron en brunoise régulière (5 mm), écraser l\'ail. Des légumes taillés uniformément cuisent de façon homogène.',
+        'Chauffer l\'huile d\'olive à feu moyen. Faire suer oignon et poivron 5 min en remuant régulièrement — ils doivent ramollir sans colorer. Ajouter l\'ail les 30 dernières secondes.',
+        'Ajouter le cumin et le chili en poudre directement dans la matière grasse chaude et mélanger 30 secondes : torréfier les épices à sec libère leurs huiles essentielles et multiplie leur puissance aromatique.',
+        'Incorporer les tomates concassées, porter à frémissement. Ajouter haricots rouges égouttés-rincés et maïs égoutté. Saler, mélanger.',
+        'Laisser mijoter 20 min à feu doux, à demi-couvert, en remuant toutes les 5 min. Le chili est prêt quand la sauce est épaisse et enrobe les haricots.',
+        'Goûter et ajuster l\'assaisonnement en sel et en chili. Un filet de jus de citron vert hors du feu relève tous les arômes. Servir avec du riz complet ou du pain de campagne.'
       ]
     },
     {
@@ -986,9 +1042,12 @@
         { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Faire revenir oignon et dinde 8 min. Ajouter tomates, saler. Mijoter 10 min.',
-        'Béchamel légère : mélanger farine + lait + yaourt à feu doux 5 min.',
-        'Monter lasagnes : viande, pâtes, béchamel x3. Finir parmesan. Four 25 min à 180 °C.'
+        'Dans une sauteuse chaude, faire suer l\'oignon émincé à feu moyen 3 min, puis monter à feu vif et colorer la dinde hachée 5 min en écrasant à la spatule — obtenir une belle caramélisation.',
+        'Ajouter les tomates concassées, saler, poivrer. Laisser mijoter 10 min à découvert jusqu\'à évaporation de l\'excès d\'eau.',
+        'Béchamel légère : faire fondre la farine dans 2 cs d\'eau froide, incorporer le lait chaud en fouettant à feu doux. Hors du feu, ajouter le yaourt grec — ne jamais faire rebouillir.',
+        'Dans un plat à gratin, alterner : sauce viande, feuilles de lasagnes crues, béchamel — 3 couches. Terminer par béchamel et parmesan.',
+        'Couvrir d\'aluminium. Cuire 20 min à 180 °C, retirer le papier, gratiner 8 min jusqu\'à croûte dorée.',
+        'Laisser reposer 5 min hors du four avant de découper — les lasagnes se tiennent et se servent proprement.'
       ]
     },
     {
@@ -1016,9 +1075,12 @@
         { name: 'Citron (jus)', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Mixer pois chiches, oignon, persil, ail, épices. Former boulettes.',
-        'Badigeonner huile. Cuire au four 22 min à 200 °C en retournant à mi-cuisson.',
-        'Sauce tahini : tahini + jus citron + eau. Servir falafels avec sauce.'
+        'NE PAS cuire les pois chiches — ils doivent être seulement trempés 12 h et bien égouttés. C\'est le secret de la texture authentique.',
+        'Mixer par impulsions courtes pois chiches, oignon grossièrement coupé, persil, ail, cumin, coriandre, sel — obtenir une pâte grumeleuse, jamais lisse.',
+        'Former des boulettes de 30 g en serrant bien dans la paume. Réfrigérer 15 min pour qu\'elles se tiennent à la cuisson.',
+        'Badigeonner généreusement d\'huile d\'olive au pinceau sur toutes les faces. Disposer sur plaque avec papier cuisson.',
+        'Cuire à 200 °C chaleur tournante 12 min, retourner délicatement, cuire encore 10 min — croûte dorée et ferme.',
+        'Sauce tahini : délayer tahini avec jus de citron et 3 cs d\'eau glacée en fouettant — elle doit napper la cuillère.'
       ]
     },
     {
@@ -1043,9 +1105,12 @@
         { name: 'Sel, poivre', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Toaster le pain. Écraser avocat avec jus de citron, sel, poivre.',
-        'Cuire œufs pochés ou au plat.',
-        'Tartiner guacamole sur pain. Poser œuf dessus. Saupoudrer piment.'
+        'Porter 1 litre d\'eau à frémissement (85 °C, jamais à ébullition), ajouter 1 cs de vinaigre blanc — il fixe le blanc.',
+        'Casser chaque œuf dans un ramequin. Créer un tourbillon dans l\'eau avec une cuillère, glisser l\'œuf au centre. Pocher 3 min exactement — blanc pris, jaune coulant.',
+        'Pendant la cuisson des œufs, toaster le pain complet jusqu\'à légère coloration dorée et croustillante.',
+        'Écraser l\'avocat à la fourchette grossièrement — ne pas mixer. Assaisonner avec jus de citron, sel en flocons, poivre noir fraîchement moulu.',
+        'Tartiner généreusement l\'écrasé d\'avocat sur le pain chaud. Déposer l\'œuf égoutté sur papier absorbant, puis sur le toast.',
+        'Finir d\'un filet de flocons de piment rouge. Servir immédiatement — la chaleur du pain réveille les arômes de l\'avocat.'
       ]
     },
     {
@@ -1073,9 +1138,12 @@
         { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Mélanger dinde avec ail, sel, poivre. Former 2 steaks.',
-        'Griller à la poêle 5 min/côté. Toaster le pain.',
-        'Sauce : yaourt + moutarde. Assembler burger avec tous les ingrédients.'
+        'Travailler la dinde hachée le moins possible : assaisonner avec ail en poudre, sel, poivre, et former 2 steaks de 175 g en appuyant légèrement au centre — pour éviter le bombement à la cuisson.',
+        'Poêle très chaude avec huile. Saisir 4 min côté 1 sans toucher — laisser la croûte se former. Retourner, baisser légèrement le feu, cuire encore 4 min. Température à cœur : 74 °C.',
+        'Retirer les steaks, couvrir de papier aluminium et laisser reposer 3 min — les jus se redistribuent, la viande reste moelleuse.',
+        'Sauce : fouetter yaourt grec avec moutarde de Dijon et une pincée de sel jusqu\'à consistance crémeuse.',
+        'Toaster les pains burger 1 min à sec dans la poêle encore chaude — côté mie seulement.',
+        'Assembler dans l\'ordre : base pain, sauce, laitue (barrière contre l\'humidité), steak, oignon rouge, tomate, sauce, chapeau de pain.'
       ]
     },
     {
@@ -1103,9 +1171,12 @@
         { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Faire revenir oignon, ail, gingembre, épices dans huile 3 min.',
-        'Ajouter lentilles, carottes, 600 ml eau. Cuire 20 min.',
-        'Incorporer lait de coco, mixer partiellement. Saler et servir.'
+        'Faire chauffer l\'huile à feu vif. Ajouter cumin et curcuma à sec 30 secondes — les épices doivent grésiller et libérer leurs arômes. Ajouter aussitôt oignon, ail et gingembre râpé.',
+        'Faire revenir à feu moyen 4 min en remuant jusqu\'à légère coloration de l\'oignon.',
+        'Rincer les lentilles. Ajouter avec les carottes coupées en rondelles. Verser 600 ml d\'eau bouillante. Porter à ébullition, écumer.',
+        'Réduire à feu doux, couvrir et cuire 20 min jusqu\'à ce que les lentilles soient fondantes.',
+        'Hors du feu, mixer 1/3 de la soupe et remettre dans la casserole — technique du mixage partiel pour garder la texture et le corps.',
+        'Incorporer le lait de coco sur feu doux, ne jamais faire rebouillir. Rectifier l\'assaisonnement. Servir avec un filet d\'huile d\'olive.'
       ]
     },
     {
@@ -1132,9 +1203,12 @@
         { name: 'Graines de sésame', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Cuire nouilles soba 5 min, rincer à l\'eau froide.',
-        'Préparer sauce : sauce soja + vinaigre de riz + huile sésame.',
-        'Mélanger nouilles, carottes râpées, edamame, sauce. Garnir oignon vert et sésame.'
+        'Porter une grande casserole d\'eau non salée à ébullition. Cuire les soba exactement selon l\'indication du paquet (4-5 min en général).',
+        'Égoutter immédiatement et rincer abondamment sous eau froide courante en frottant les nouilles entre les mains — cela élimine l\'amidon et les rend non collantes.',
+        'Tailler les carottes en julienne fine au couteau (bâtonnets de 3 mm) — la julienne accroche mieux la sauce que la râpe.',
+        'Émulsionner la sauce : fouetter vigoureusement sauce soja + vinaigre de riz + huile de sésame jusqu\'à ce que la sauce soit homogène et légèrement épaissie.',
+        'Mélanger les soba froides avec julienne de carottes et edamame. Verser la sauce, mélanger délicatement avec des baguettes ou deux fourchettes.',
+        'Dresser dans les bols, garnir d\'oignon vert ciselé et de graines de sésame. Servir frais ou à température ambiante.'
       ]
     },
     {
@@ -1160,9 +1234,12 @@
         { name: 'Salade mélangée', qty: 80, unit: 'g' }
       ],
       steps: [
-        'Enrober thon de graines de sésame des deux côtés.',
-        'Saisir à feu très vif 1,5 min/côté (centre rosé). Réserver.',
-        'Vinaigrette : sauce soja + huile sésame + gingembre râpé + citron vert. Trancher thon, servir sur salade avec vinaigrette.'
+        'Préparer la vinaigrette à l\'avance : sauce soja + huile de sésame + gingembre fraîchement râpé + jus de citron vert. Laisser infuser 10 min.',
+        'Sécher soigneusement les pavés de thon avec du papier absorbant — l\'humidité fait sauter le sésame.',
+        'Verser les graines de sésame dans une assiette plate. Presser fermement chaque face du thon dans le sésame pour créer une croûte uniforme.',
+        'Chauffer la poêle à sec ou avec 1 cc d\'huile à feu maximum jusqu\'à légère fumée. C\'est cette chaleur extrême qui caramélise le sésame sans cuire le centre.',
+        'Saisir les pavés exactement 1 min 30 côté 1, 1 min côté 2. Les flancs doivent rester roses-translucides — c\'est ainsi que le thon se déguste.',
+        'Trancher en biais en lamelles de 1 cm. Dresser sur la salade, napper de vinaigrette. Servir dans la minute.'
       ]
     },
     {
@@ -1188,9 +1265,12 @@
         { name: 'Sel, poivre', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Préchauffer four à 200 °C. Préparer 2 feuilles aluminium.',
-        'Déposer saumon, courgette en rondelles, ail, aneth, citron en tranches. Arroser huile.',
-        'Fermer papillotes hermétiquement. Cuire 18 min. Ouvrir à table.'
+        'Préchauffer le four à 200 °C. Couper 2 grandes feuilles d\'aluminium — elles doivent être assez larges pour replier les bords 3 fois.',
+        'Trancher les courgettes en rondelles de 5 mm. Les disposer en lit au centre de la feuille — le saumon repose dessus, jamais directement sur le papier.',
+        'Déposer le pavé de saumon sur le lit de courgettes. Répartir ail émincé finement, aneth ciselée, tranches fines de citron.',
+        'Arroser d\'huile d\'olive, saler, poivrer. Replier le papier hermétiquement en laissant un espace d\'air — la vapeur interne cuit le poisson en douceur.',
+        'Enfourner 18 min. La papillote doit être bien gonflée — c\'est le signe que la vapeur a bien travaillé.',
+        'Ouvrir à table devant les convives : le panache de vapeur parfumée fait partie du service. Presser un quartier de citron frais au dernier moment.'
       ]
     },
     {
@@ -1218,9 +1298,12 @@
         { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Assaisonner poulet avec paprika, sel. Griller à poêle 5 min/côté, trancher.',
-        'Sauce : yaourt + citron + sel.',
-        'Garnir tortillas : laitue, poivron, tomates, poulet, sauce.'
+        'Aplatir légèrement les blancs de poulet à l\'aide du plat de la main pour une épaisseur uniforme — cuisson homogène garantie. Assaisonner généreusement des deux côtés avec paprika fumé, sel, poivre.',
+        'Poêle bien chaude avec huile. Cuire 5 min côté 1 sans bouger — la croûte se forme. Retourner, cuire 4 min. Hors du feu, laisser reposer 3 min sous aluminium.',
+        'Sauce : mélanger yaourt grec, jus de citron, sel. Pour plus de fraîcheur, ajouter quelques feuilles de coriandre ou menthe fraîche ciselées.',
+        'Trancher le poulet reposé en biais, en lamelles de 1 cm — la coupe en biais donne de plus belles tranches et une texture plus tendre en bouche.',
+        'Passer les tortillas 20 secondes dans la poêle chaude à sec ou 30 secondes au micro-ondes sous film — une tortilla froide craque au roulage.',
+        'Garnir le centre de la tortilla : sauce en premier (barrière), laitue, poivron rouge émincé, tomates cerises coupées, poulet tranché. Rouler serré en rabattant les côtés.'
       ]
     },
     {
@@ -1247,9 +1330,12 @@
         { name: 'Vinaigre de vin rouge', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Couper concombre, tomates et oignon en morceaux réguliers.',
-        'Mélanger avec olives et feta émiettée.',
-        'Assaisonner avec huile d\'olive, vinaigre, origan, sel.'
+        'Couper le concombre en deux dans la longueur, retirer les graines à la cuillère — elles rendent de l\'eau et détrempent la salade.',
+        'Tailler concombre et tomates en gros morceaux de 2 cm. Émincer l\'oignon rouge en demi-rondelles fines et le passer 5 min dans l\'eau glacée — cela adoucit le piquant.',
+        'Dans un bol, fouetter huile d\'olive, vinaigre de vin rouge, origan séché, sel et poivre en une vinaigrette homogène.',
+        'Disposer concombre, tomates, oignon égoutté et olives noires dans le plat de service.',
+        'Arroser de vinaigrette et mélanger délicatement.',
+        'Déposer la feta en bloc ou en tranches épaisses sur le dessus — jamais émiettée à l\'avance, elle doit garder son caractère. Finir d\'un tour de poivre et d\'une pincée d\'origan frais si disponible.'
       ]
     },
     {
@@ -1277,9 +1363,10 @@
         { name: 'Tahini', qty: 15, unit: 'g' }
       ],
       steps: [
-        'Cuire quinoa 12 min. Griller poulet assaisonné 6 min/côté, trancher.',
-        'Sauce : tahini + citron + eau + sel.',
-        'Dresser bowl : quinoa, épinards, légumes, poulet. Napper de sauce tahini.'
+        'Rincer abondamment le quinoa à l\'eau froide. Porter 300 ml d\'eau salée à ébullition, verser le quinoa, couvrir et cuire 12 min à feu doux. Ôter du feu, laisser gonfler 5 min à couvert, puis égrener à la fourchette.',
+        'Assaisonner les blancs de poulet de sel, poivre et un filet d\'huile d\'olive. Griller dans une poêle en inox très chaude 5 min côté lisse, 4 min côté strié. Laisser reposer 3 min hors feu avant de trancher en biais.',
+        'Sauce tahini : mélanger tahini + jus de citron + 2 c. à soupe d\'eau froide + une pincée de sel. Fouetter jusqu\'à consistance nappante — la sauce doit couler en ruban.',
+        'Dresser le bowl en secteurs distincts : quinoa tiède d\'un côté, épinards crus, tomates cerises coupées en deux, concombre en demi-rondelles, tranches de poulet, éventail d\'avocat. Napper de sauce tahini au moment de servir.'
       ]
     },
     {
@@ -1304,9 +1391,10 @@
         { name: 'Sel, poivre', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Faire revenir champignons en lamelles dans beurre 4 min. Saler.',
-        'Battre œufs avec sel et poivre. Verser dans poêle beurrée.',
-        'Quand bords pris, ajouter champignons et fromage. Plier l\'omelette. Servir avec ciboulette.'
+        'Essuyer les champignons avec un linge humide — jamais sous l\'eau. Les émincer régulièrement à 3 mm. Chauffer une noix de beurre à feu vif jusqu\'au beurre noisette, saisir les champignons sans remuer 2 min pour les colorer, puis sauter 2 min supplémentaires. Saler en fin de cuisson pour ne pas les dégorger.',
+        'Casser les œufs dans un bol. Assaisonner sel fin et poivre. Battre à la fourchette 20 secondes — les brins doivent être rompus mais non mousseux.',
+        'Dans la même poêle, ajouter une petite noix de beurre à feu moyen-vif. Verser les œufs, secouer la poêle d\'un mouvement circulaire en remuant le centre avec une spatule souple jusqu\'à ce que le dessous soit pris et le dessus encore légèrement baveux.',
+        'Disposer champignons et fromage râpé en ligne au centre. Incliner la poêle à 45°, rabattre un tiers de l\'omelette sur la garniture, puis faire glisser sur l\'assiette en retournant pour former un rouleau doré. Parsemer de ciboulette ciselée.'
       ]
     },
     {
@@ -1334,9 +1422,10 @@
         { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Faire revenir oignon, céleri, carottes dans huile 5 min.',
-        'Ajouter tomates, courgettes, haricots, bouillon. Cuire 20 min.',
-        'Ajouter pâtes, cuire 8 min. Servir avec parmesan (optionnel).'
+        'Tailler oignon, céleri et carottes en brunoise régulière de 5 mm — c\'est le soffritto, l\'âme du minestrone. Chauffer l\'huile d\'olive à feu moyen et faire suer ce mélange 8 min à couvert en remuant jusqu\'à ce que les légumes soient translucides et sucrés.',
+        'Ajouter les tomates concassées, monter le feu 2 min pour concentrer le jus, puis incorporer les courgettes en dés, les haricots blancs égouttés et le bouillon chaud. Porter à ébullition, puis baisser à frémissement et cuire 15 min à découvert.',
+        'Ajouter les pâtes directement dans la soupe et cuire selon le temps indiqué sur le paquet moins 1 min — elles continueront à gonfler dans le bouillon chaud.',
+        'Rectifier l\'assaisonnement. Servir dans des assiettes creuses chaudes, avec un filet d\'huile d\'olive à cru pour exalter les arômes.'
       ]
     },
     {
@@ -1363,9 +1452,11 @@
         { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Chauffer wok à feu vif avec huile. Brouiller œufs, réserver.',
-        'Faire sauter carottes et petits pois 2 min.',
-        'Ajouter riz cuit, sauce soja. Mélanger à feu vif 3 min. Incorporer œufs et oignon vert. Finir huile sésame.'
+        'Utiliser impérativement du riz de la veille, froid et sec — le riz frais rend de l\'humidité et colle. Égrener les grains à la main avant cuisson.',
+        'Chauffer le wok (ou grande poêle en acier) à feu maximum jusqu\'à légère fumée. Verser l\'huile de tournesol, brouiller les œufs battus en les remuant vivement 30 secondes pour des miettes moelleuses. Réserver immédiatement hors du wok.',
+        'Dans le même wok très chaud, sauter les carottes en fine brunoise et les petits pois 2 min à feu vif sans baisser la flamme — c\'est le "wok hei", la saveur fumée caractéristique.',
+        'Ajouter le riz froid d\'un coup, écraser les grumeaux avec la spatule, mélanger 2 min à feu maximum. Verser la sauce soja sur les parois chaudes du wok (pas sur le riz) pour la faire caraméliser.',
+        'Incorporer les œufs brouillés et l\'oignon vert ciselé. Toss rapide. Couper le feu et terminer par un filet d\'huile de sésame — elle ne supporte pas la chaleur prolongée.'
       ]
     },
     {
@@ -1393,9 +1484,10 @@
         { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Mariner poulet en dés dans yaourt + garam masala + curcuma 30 min.',
-        'Faire revenir oignon et ail. Ajouter poulet mariné, saisir 5 min.',
-        'Incorporer tomates et lait de coco. Mijoter 15 min. Servir avec riz basmati.'
+        'Couper les blancs de poulet en cubes de 3 cm. Mélanger avec yaourt grec, garam masala, curcuma, sel. Couvrir et réfrigérer minimum 1 heure (idéalement une nuit) — l\'acide du yaourt attendrit les fibres.',
+        'Saisir les cubes de poulet marinés dans une poêle très chaude avec un filet d\'huile, 2 min par face, sans les superposer. Ils doivent être dorés à l\'extérieur et pas encore cuits à coeur. Réserver.',
+        'Dans la même poêle, faire suer l\'oignon haché à feu moyen 5 min. Ajouter l\'ail écrasé, cuire 1 min. Incorporer les tomates concassées et cuire 8 min à feu moyen jusqu\'à réduction et légère caramélisation.',
+        'Verser le lait de coco léger, incorporer le poulet saisi, mélanger et laisser mijoter à couvert 12 min à feu doux. La sauce doit napper la cuillère. Rectifier le sel et servir avec riz basmati.'
       ]
     },
     {
@@ -1422,9 +1514,10 @@
         { name: 'Vinaigre blanc', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Sauce hollandaise légère : yaourt + moutarde + citron, tiédir 2 min.',
-        'Pocher œufs 3 min dans eau + vinaigre frémissante.',
-        'Toaster muffins. Garnir : saumon fumé, épinards flétris, œuf poché, sauce.'
+        'Sauce hollandaise légère : fouetter yaourt grec avec moutarde de Dijon, jus de citron, sel et poivre. Tiédir dans une petite casserole à feu très doux (max 60 °C) en remuant constamment — le yaourt ne doit jamais bouillir ou il tranche.',
+        'Remplir une sauteuse d\'eau à 8 cm, porter à frémissement (90 °C, jamais à gros bouillons). Ajouter le vinaigre. Casser chaque œuf dans un ramequin. Créer un léger tourbillon, glisser l\'œuf au centre, cuire 3 min. Retirer avec une écumoire, éponger sur papier absorbant.',
+        'Toaster les demi-muffins complets jusqu\'à légère coloration dorée. Pendant ce temps, flétrir les épinards frais 1 min dans une poêle sèche à feu vif avec une pincée de sel.',
+        'Dresser dans l\'ordre : muffin, tranche de saumon fumé, épinards essorés, œuf poché, napper généreusement de sauce hollandaise légère. Servir sans attendre.'
       ]
     },
     {
@@ -1451,9 +1544,10 @@
         { name: 'Citron (jus)', qty: 2, unit: 'pce' }
       ],
       steps: [
-        'Cuire quinoa 12 min, rincer à l\'eau froide, égoutter.',
-        'Hacher finement persil, menthe, tomates, concombre, oignon.',
-        'Mélanger quinoa froid + légumes. Assaisonner huile d\'olive + citron + sel.'
+        'Rincer le quinoa sous l\'eau froide 1 min (retire le goût amer). Cuire dans 2 fois son volume d\'eau bouillante salée, 12 min à couvert. Étaler sur plaque et refroidir 10 min — un quinoa chaud fait "cuire" les herbes et les ramollit.',
+        'Hacher finement au couteau (jamais au robot) le persil et la menthe — les lames de robot écrasent et oxydent les herbes. Couper tomates, concombre et oignon rouge en très petite brunoise régulière de 4 mm.',
+        'Dans un grand saladier, mélanger d\'abord les légumes avec le sel et le jus de citron. Laisser mariner 5 min pour les attendrir légèrement. Puis incorporer le quinoa froid et les herbes.',
+        'Verser l\'huile d\'olive en dernier, mélanger délicatement. Goûter et rectifier citron/sel. Réfrigérer 30 min avant de servir — le taboulé est toujours meilleur frais.'
       ]
     },
     {
@@ -1481,9 +1575,11 @@
         { name: 'Tomates cerises', qty: 80, unit: 'g' }
       ],
       steps: [
-        'Chauffer bouillon avec citronnelle, galanga, piment 8 min.',
-        'Ajouter champignons et tomates cerises, cuire 4 min.',
-        'Incorporer crevettes, cuire 3 min. Finir sauce poisson + citron vert. Servir chaud.'
+        'Écraser les tiges de citronnelle avec le plat du couteau pour libérer les huiles essentielles. Trancher le galanga (ou gingembre) en fines lamelles. Inciser les piments.',
+        'Porter le bouillon de poulet à ébullition. Ajouter citronnelle, galanga et piments. Baisser à frémissement et infuser 10 min à couvert — c\'est ce bouillon aromatique qui est l\'âme de la soupe.',
+        'Ajouter champignons et tomates cerises entières. Cuire 4 min à feu moyen.',
+        'Incorporer les crevettes décortiquées. Cuire exactement 2 à 3 min — les crevettes sont cuites quand elles s\'enroulent et deviennent opaques. Toute surcuisson les rend caoutchouteuses.',
+        'Hors du feu, assaisonner avec sauce poisson et jus de citron vert pressé au dernier moment. Goûter : l\'équilibre doit être acide, salé, pimenté. Servir en bols profonds très chauds.'
       ]
     },
     {
@@ -1509,9 +1605,10 @@
         { name: 'Noix de coco râpée', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Couper mangue et banane en morceaux.',
-        'Verser yaourt grec dans bols.',
-        'Disposer fruits, granola, graines de chia. Arroser miel, parsemer coco râpée.'
+        'Fouetter le yaourt grec vigoureusement 30 secondes dans un bol : il s\'aère légèrement et devient plus onctueux. Incorporer le miel en filet tout en fouettant.',
+        'Couper la mangue en cubes réguliers de 2 cm et la banane en rondelles obliques — la régularité des découpes donne au bowl son aspect professionnel.',
+        'Répartir le yaourt dans les bols en base épaisse. Placer les fruits en rangées ou secteurs distincts d\'un côté, puis le granola de l\'autre côté (pour qu\'il reste croquant jusqu\'au dernier moment).',
+        'Saupoudrer les graines de chia sur les fruits, parsemer la noix de coco râpée en finition. Servir immédiatement — le granola perd son croquant en moins de 5 min au contact du yaourt humide.'
       ]
     },
     {
@@ -1538,9 +1635,10 @@
         { name: 'Citron (jus)', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Cuire riz. Rôtir patate douce et brocoli à 200 °C 20 min avec huile et épices.',
-        'Griller poulet assaisonné 6 min/côté, trancher.',
-        'Assembler boxes : riz, légumes rôtis, poulet. Arroser citron. Conserver 3 jours au frais.'
+        'Rincer le riz basmati jusqu\'à eau claire, cuire par absorption (1 volume riz pour 1,5 volume eau froide salée) : porter à ébullition, couvrir hermétiquement, baisser à feu minimum 12 min, ôter du feu 5 min. Égrener à la fourchette.',
+        'Couper la patate douce en cubes de 2 cm et détailler le brocoli en fleurettes régulières. Mélanger avec huile d\'olive, paprika fumé, cumin et sel. Étaler sur plaque en une seule couche sans superposer — si les légumes se touchent, ils cuisent à la vapeur plutôt qu\'à rôtir. Enfourner à 200 °C, 20 min, en retournant à mi-cuisson.',
+        'Assaisonner les blancs de poulet de sel, poivre et paprika. Griller dans une poêle striée bien chaude 6 min côté lisse, 4 min côté strié. Laisser reposer 5 min avant de trancher — le repos redistribue les jus dans les fibres.',
+        'Assembler les boxes en compartiments : riz d\'un côté, légumes rôtis au centre, poulet tranché face visible. Arroser de jus de citron sur les légumes uniquement. Laisser refroidir complètement avant de fermer et réfrigérer — un couvercle sur un plat chaud crée de la condensation qui ramollit tout.'
       ]
     },
     {
@@ -1565,9 +1663,11 @@
         { name: 'Miel', qty: 15, unit: 'g' }
       ],
       steps: [
-        'Mélanger flocons, lait, yaourt, chia et miel dans bocal.',
-        'Couvrir et réfrigérer toute la nuit (min 6h).',
-        'Le matin, remuer et garnir de fruits rouges dégelés.'
+        'Dans un bocal de 500 ml, verser les flocons d\'avoine, les graines de chia et le miel. Mélanger à sec avant tout ajout de liquide — les chia s\'hydratent uniformément.',
+        'Incorporer le yaourt grec en premier, puis le lait écrémé. Fouetter 30 secondes avec une fourchette jusqu\'à homogénéité ; aucun fond de flocons ne doit rester sec.',
+        'Fermer hermétiquement et placer au réfrigérateur au moins 8 h (une nuit idéalement). Le froid transforme la texture : les flocons absorbent tout le liquide sans cuire.',
+        'Le matin, sortir le bocal 5 min avant de servir. Remuer une fois : la texture doit être crémeuse et non liquide.',
+        'Décongeler les fruits rouges 10 min à température ambiante pour libérer leur jus naturel. Disposer en surface sans mélanger pour préserver le visuel et la fraîcheur.'
       ]
     },
     {
@@ -1593,9 +1693,11 @@
         { name: 'Noix de coco râpée', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Mixer mangue + banane congelées + yaourt jusqu\'à consistance épaisse.',
-        'Verser dans bols. La consistance doit être plus épaisse qu\'un smoothie.',
-        'Garnir granola, kiwi tranché, chia et coco. Servir immédiatement.'
+        'Sortir la mangue et la banane congelées 3 min avant de mixer — un fruit trop dur casse les lames et donne une texture granuleuse.',
+        'Placer mangue, banane et yaourt grec dans le blender. Mixer par impulsions courtes (3 × 5 secondes) puis en continu 20 secondes. La consistance finale doit tenir sur une cuillère retournée.',
+        'Verser immédiatement dans des bols bien froids (passés 5 min au congélateur). Un bol chaud fait fondre l\'ensemble trop vite.',
+        'Disposer les garnitures par zones distinctes — granola d\'un côté, kiwi tranché finement, chia saupoudré, noix de coco râpée — sans jamais mélanger. L\'œil mange avant la bouche.',
+        'Servir sans attendre : le smoothie bowl se déguste dans les 5 premières minutes, c\'est là qu\'il est parfait.'
       ]
     },
     {
@@ -1623,9 +1725,12 @@
         { name: 'Crème légère 5%', qty: 60, unit: 'ml' }
       ],
       steps: [
-        'Mariner poulet dans yaourt + garam masala 1h (ou 30 min min). Griller à poêle.',
-        'Faire revenir oignon, ail, gingembre dans beurre. Ajouter tomates, cuire 10 min.',
-        'Mixer la sauce, ajouter crème légère et poulet. Mijoter 10 min. Servir avec riz basmati.'
+        'Tailler le blanc de poulet en cubes de 3 cm. Mélanger avec le yaourt grec et le garam masala ; masser la viande à la main pour faire pénétrer la marinade. Couvrir au contact et réfrigérer 1 h minimum.',
+        'Saisir les cubes de poulet égouttés (sans marinade) dans une poêle très chaude à sec, 2 min par face, jusqu\'à coloration dorée. Réserver — le poulet finira de cuire dans la sauce.',
+        'Dans la même poêle, faire fondre le beurre à feu moyen. Ajouter oignon émincé, ail et gingembre râpés. Faire revenir 5 min sans colorer, jusqu\'à transparence totale.',
+        'Verser les tomates concassées, saler légèrement. Cuire à couvert 10 min à feu doux, puis mixer la sauce au mixeur plongeant jusqu\'à consistance lisse comme de la soie.',
+        'Incorporer la crème légère hors du feu pour éviter qu\'elle tourne. Remettre le poulet. Mijoter 8 min à feu très doux — le poulet doit rester moelleux, jamais sec.',
+        'Rectifier l\'assaisonnement. Servir aussitôt, parsemé d\'une pincée de garam masala cru pour le parfum.'
       ]
     },
     {
@@ -1653,9 +1758,12 @@
         { name: 'Graines de sésame', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Sauce teriyaki : sauce soja + miel + huile sésame. Mariner saumon 10 min.',
-        'Saisir saumon dans poêle chaude 3-4 min/côté en nappant de sauce.',
-        'Dresser bol : riz, edamame, avocat, concombre, saumon. Arroser reste sauce, parsemer sésame.'
+        'Préparer la sauce teriyaki : mélanger sauce soja, miel et huile de sésame. Plonger les pavés de saumon côté peau vers le haut pendant 10 min — pas plus, le soja "cuit" légèrement la chair.',
+        'Sortir le saumon, éponger légèrement avec du papier absorbant. Une chair sèche en surface garantit une belle caramélisation ; une chair humide va bouillir dans la poêle.',
+        'Cuire à feu vif dans une poêle sans matière grasse, côté peau en premier, 3 min sans toucher. Retourner, baisser le feu à moyen, napper de sauce teriyaki à la cuillère. Cuire encore 2-3 min. La sauce doit glacer, pas brûler.',
+        'Pendant ce temps, passer les edamame 2 min à l\'eau bouillante salée. Trancher l\'avocat et le concombre en biseau pour l\'élégance.',
+        'Dresser le riz en dôme au centre du bol. Disposer saumon, edamame, avocat et concombre en quartiers distincts autour. Verser le jus de cuisson réduit en filet. Parsemer de sésame.',
+        'Servir immédiatement : le riz chaud et le saumon tiède contrastent avec le concombre et l\'avocat frais — c\'est ce contraste qui rend le bowl addictif.'
       ]
     },
     {
@@ -1680,9 +1788,12 @@
         { name: 'Sel, poivre', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Préchauffer four à 175 °C. Huiler moule à muffins 6 alvéoles.',
-        'Répartir légumes hachés dans alvéoles. Battre œufs, assaisonner, verser dessus.',
-        'Parsemer fromage. Cuire 18-20 min jusqu\'à dorure. Se conserve 4 jours au frais.'
+        'Préchauffer le four à 175 °C chaleur tournante. Huiler généreusement chaque alvéole du moule à muffins avec un pinceau — les œufs accrochent facilement.',
+        'Tailler poivron, épinards et oignon vert en brunoise fine (3 mm). Des légumes trop gros coulent au fond ; des légumes fins se répartissent uniformément dans chaque bouchée.',
+        'Battre les 6 œufs vigoureusement à la fourchette 1 min entière : on cherche à incorporer de l\'air pour une texture soufflée, pas dense. Assaisonner sel et poivre.',
+        'Répartir la brunoise de légumes à parts égales dans les 6 alvéoles. Verser l\'appareil à œufs jusqu\'aux ¾ seulement — les muffins vont gonfler.',
+        'Parsemer le fromage râpé sur chaque alvéole. Enfourner 18-20 min : les bords doivent être dorés et le centre à peine tremblant à la sortie du four (il finit de cuire sur le moule chaud).',
+        'Laisser tiédir 3 min avant de démouler en passant un couteau fin sur le pourtour. Se conservent 4 jours au réfrigérateur dans une boîte hermétique.'
       ]
     },
     {
@@ -1708,9 +1819,11 @@
         { name: 'Pépites de chocolat noir', qty: 15, unit: 'g' }
       ],
       steps: [
-        'Préchauffer four à 180 °C. Écraser banane.',
-        'Mélanger tous ingrédients. Verser dans plat huilé.',
-        'Cuire 20-25 min jusqu\'à dorure. Couper en parts et servir chaud.'
+        'Préchauffer le four à 180 °C. Choisir une banane très mûre (peau noire) : plus elle est mûre, plus elle est sucrée naturellement, ce qui réduit le besoin en miel.',
+        'Écraser la banane à la fourchette jusqu\'à obtenir une purée lisse sans morceaux. Ajouter l\'œuf battu et mélanger vigoureusement — l\'œuf lie la préparation et donne de la tenue.',
+        'Incorporer flocons d\'avoine, lait écrémé, miel et cannelle. Mélanger 30 secondes ; la pâte doit être épaisse, pas liquide. Laisser reposer 2 min : les flocons absorbent l\'humidité.',
+        'Verser dans un plat légèrement huilé (20 × 20 cm). Parsemer les pépites de chocolat noir en surface, sans les mélanger — elles fondront en pockets de chocolat discrets.',
+        'Cuire 20-25 min : la surface doit être dorée et légèrement craquelée, le centre encore très légèrement humide. Vérifier avec la pointe d\'un couteau : elle doit ressortir avec quelques miettes, pas propre.'
       ]
     },
     {
@@ -1734,9 +1847,11 @@
         { name: 'Noix de coco râpée', qty: 15, unit: 'g' }
       ],
       steps: [
-        'Mélanger chia, lait de coco et miel. Fouetter vigoureusement pour éviter les grumeaux.',
-        'Réfrigérer minimum 4h (idéalement toute la nuit). Remuer après 30 min.',
-        'Dresser avec mangue en dés et noix de coco râpée.'
+        'Dans un bol, fouetter le lait de coco léger avec le miel 30 secondes pour bien émulsionner — le gras du coco a tendance à se séparer.',
+        'Verser les graines de chia en pluie fine tout en fouettant continuellement. Ce geste évite les amas : chaque graine doit être individuelle dans le liquide.',
+        'Laisser reposer 5 min à température ambiante puis fouetter une deuxième fois vigoureusement. C\'est ce double fouettage qui garantit une texture lisse et crémeuse, sans grumeaux.',
+        'Couvrir et réfrigérer minimum 4 h. Idéalement toute la nuit : les graines absorbent tout le liquide et gonflent à 10 fois leur volume initial.',
+        'Au moment de servir, couper la mangue fraîche en brunoise régulière de 1 cm. Dresser le pudding dans des verrines, disposer la mangue en dôme, parsemer la noix de coco râpée.'
       ]
     },
     {
@@ -1762,9 +1877,12 @@
         { name: 'Cannelle', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Préchauffer four à 160 °C. Mélanger flocons + miel + huile de coco + cannelle.',
-        'Étaler sur plaque. Cuire 20-25 min en mélangeant toutes les 10 min.',
-        'Laisser refroidir totalement (croustillant en refroidissant). Ajouter fruits secs. Conserver en bocal.'
+        'Préchauffer le four à 160 °C chaleur tournante — jamais plus chaud : le granola doit sécher et dorer doucement, pas griller.',
+        'Faire fondre l\'huile de coco avec le miel dans une casserole à feu très doux jusqu\'à liquéfaction. Verser ce mélange chaud sur les flocons et la cannelle ; mélanger à la spatule pour enrober chaque flocon.',
+        'Étaler en couche fine et régulière (max 1 cm) sur une plaque recouverte de papier cuisson. Une couche épaisse cuit à l\'étouffée ; une couche fine devient croustillante.',
+        'Enfourner 20-25 min. Mélanger délicatement toutes les 8-10 min avec une grande spatule en retournant les bords (qui colorent plus vite) vers le centre. Le granola est prêt quand il est doré ambré — il paraît encore mou au four.',
+        'Sortir du four et laisser refroidir COMPLÈTEMENT sur la plaque sans y toucher — au moins 20 min. Le croustillant se forme en refroidissant, pas en cuisant.',
+        'Seulement quand le granola est froid : incorporer amandes, cajous et raisins secs. Conserver en bocal hermétique jusqu\'à 2 semaines.'
       ]
     },
     {
@@ -1790,9 +1908,12 @@
         { name: 'Miel', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Écraser banane. Mixer avec œufs, flocons, lait et levure.',
-        'Chauffer poêle antiadhésive légèrement huilée à feu moyen.',
-        'Verser petites louches de pâte. Cuire 2 min/côté. Servir avec miel.'
+        'Écraser la banane très mûre à la fourchette jusqu\'à obtenir une purée lisse. Ajouter les œufs un à un en fouettant entre chaque ajout — cela incorpore de l\'air et allège la pâte.',
+        'Mixer les flocons d\'avoine 15 secondes au blender pour obtenir une farine grossière. Ce geste transforme la texture : les pancakes tiennent mieux et sont moins "gélatineux".',
+        'Incorporer la farine d\'avoine, le lait écrémé, la levure chimique et la cannelle à la purée de banane. Ne pas trop mélanger : quelques grumeaux sont acceptables. Laisser reposer 3 min.',
+        'Chauffer une poêle antiadhésive à feu moyen. Huiler très légèrement avec un papier absorbant imbibé d\'huile. La poêle est prête quand une goutte d\'eau dansote à la surface.',
+        'Verser des petites louches de 60 ml. Cuire 2 min sans toucher jusqu\'à apparition de bulles en surface et bords secs. Retourner une seule fois, cuire 1 min 30. Ne jamais appuyer sur les pancakes.',
+        'Servir en pile de 3, filet de miel versé à la dernière seconde pour ne pas les détremper.'
       ]
     },
     {
@@ -1817,9 +1938,11 @@
         { name: 'Levure chimique', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Mélanger tous les ingrédients dans un grand mug.',
-        'Micro-ondes 90 secondes à puissance max.',
-        'Laisser reposer 1 min. Déguster directement dans le mug.'
+        'Mixer les flocons d\'avoine 10 secondes pour les réduire en farine fine — cela donne une texture de gâteau, pas de porridge. Verser dans un grand mug (350 ml minimum).',
+        'Ajouter cacao, levure chimique, miel et lait écrémé. Fouetter à la fourchette 30 secondes pour obtenir une pâte lisse. Incorporer l\'œuf en dernier et mélanger 15 secondes — pas plus, sous peine de rendre le gâteau caoutchouteux.',
+        'La pâte doit remplir le mug au maximum à mi-hauteur : elle va doubler de volume au micro-ondes.',
+        'Cuire à puissance maximale (800-900 W) exactement 80 secondes. Chaque micro-ondes est différent — à 60 secondes, vérifier : le dessus doit être à peine sec au toucher.',
+        'Laisser reposer 1 min 30 OBLIGATOIREMENT dans le mug : la chaleur résiduelle termine la cuisson du centre. Déguster immédiatement, le mug cake n\'attend personne.'
       ]
     },
     {
@@ -1844,9 +1967,12 @@
         { name: 'Cannelle', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Mixer amandes et flocons grossièrement. Ajouter dattes et cacao.',
-        'Mixer jusqu\'à formation d\'une boule. Ajouter 1 cs d\'eau si trop sec.',
-        'Former 16 boules, rouler dans coco râpée. Réfrigérer 1h. Conserver 2 semaines.'
+        'Torréfiez les amandes à sec dans une poêle 3-4 min à feu moyen jusqu\'à ce qu\'elles embaument : l\'arôme, c\'est la signature.',
+        'Mixez les amandes avec les flocons d\'avoine en pulsions courtes pour garder un peu de texture — pas une poudre.',
+        'Ajoutez les dattes Medjool, le cacao et la cannelle. Mixez en continu 1 à 2 min jusqu\'à ce que la masse se détache des parois et forme une boule.',
+        'Si la pâte est trop sèche, ajoutez l\'eau froide cuillère à soupe par cuillère à soupe : mieux vaut y aller doucement.',
+        'Humidifiez légèrement vos paumes et roulez 16 boules d\'égale grosseur — le geste doit être ferme et rapide pour ne pas ramollir la pâte.',
+        'Roulez dans la noix de coco râpée, placez sur une assiette et réfrigérez 1 h minimum. Se conservent 2 semaines au frais dans une boîte hermétique.'
       ]
     },
     {
@@ -1873,9 +1999,12 @@
         { name: 'Eau froide', qty: 60, unit: 'ml' }
       ],
       steps: [
-        'Mixer pois chiches, tahini, jus citron, ail et cumin 2 min.',
-        'Ajouter eau froide progressivement jusqu\'à texture crémeuse.',
-        'Dresser dans plat, former puits, verser huile d\'olive, saupoudrer paprika.'
+        'Égouttez les pois chiches, réservez le liquide de conserve. Frottez-les entre vos paumes pour ôter les peaux : cela donne un hummus d\'une onctuosité incomparable.',
+        'Mixez tahini et jus de citron ensemble 1 min avant d\'ajouter quoi que ce soit : ce geste blanchit le tahini et structure la crème.',
+        'Ajoutez l\'ail, le cumin et les pois chiches. Mixez 2 min à pleine puissance.',
+        'Versez l\'eau froide (ou le liquide réservé) en filet fin, moteur tournant, jusqu\'à obtenir une texture soyeuse qui se tient.',
+        'Goûtez, rectifiez citron et sel. Le jus de citron s\'estompe à l\'air : soyez généreux.',
+        'Dressez en faisant un creux au centre avec le dos d\'une cuillère, versez un filet d\'huile d\'olive, saupoudrez de paprika fumé. Servez à température ambiante.'
       ]
     },
     {
@@ -1901,9 +2030,12 @@
         { name: 'Basilic frais', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon et ail dans huile 3 min.',
-        'Ajouter courgettes coupées, bouillon. Cuire 15 min.',
-        'Mixer finement, incorporer crème. Servir avec basilic frais.'
+        'Dans une cocotte, faites suer l\'oignon et l\'ail dans l\'huile d\'olive à feu doux 5 min, couvercle posé : ils doivent fondre sans colorer — la douceur du velouté en dépend.',
+        'Ajoutez les courgettes taillées en gros tronçons, sel. Laissez-les rendre leur eau 3 min à feu vif en remuant : cela concentre le goût avant même le bouillon.',
+        'Versez le bouillon chaud. Portez à frémissement et cuisez 12 min à couvert — les courgettes doivent être tendres mais encore vertes.',
+        'Hors du feu, ajoutez la moitié du basilic frais puis mixez immédiatement à pleine puissance 2 min pour fixer la chlorophylle et obtenir un vert lumineux.',
+        'Remettez brièvement sur feu doux, incorporez la crème légère sans faire bouillir. Rectifiez l\'assaisonnement.',
+        'Servez dans des assiettes creuses chaudes, déposez quelques feuilles de basilic frais et un trait d\'huile d\'olive à cru.'
       ]
     },
     {
@@ -1929,9 +2061,12 @@
         { name: 'Cumin moulu', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon, gingembre et cumin dans huile 3 min.',
-        'Ajouter carottes en rondelles et bouillon. Cuire 20 min.',
-        'Mixer, incorporer lait de coco. Ajuster sel et servir avec coriandre.'
+        'Faites chauffer l\'huile dans une cocotte à feu moyen. Ajoutez l\'oignon émincé et le cumin : laissez griller 2-3 min en remuant jusqu\'à ce que le cumin crépite et embaume — c\'est là que naît le goût.',
+        'Ajoutez le gingembre râpé finement. Remuez 1 min : il doit revenir dans la matière grasse, pas bouillir dans le liquide.',
+        'Incorporez les carottes en rondelles, nacrez-les 2 min dans la matière grasse aromatisée avant de mouiller.',
+        'Versez le bouillon chaud. Portez à frémissement, couvrez et cuisez 20 min jusqu\'à ce qu\'une pointe de couteau traverse les carottes sans effort.',
+        'Mixez à pleine puissance 2 min pour une texture parfaitement lisse. Incorporez le lait de coco en remuant, goûtez et ajustez le sel.',
+        'Servez fumant avec une pincée de cumin grillé et, si disponible, quelques feuilles de coriandre fraîche pour la fraîcheur.'
       ]
     },
     {
@@ -1956,9 +2091,12 @@
         { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
       ],
       steps: [
-        'Couper pastèque en gros cubes, émietter la feta.',
-        'Émincer oignon rouge finement.',
-        'Assembler pastèque, feta, oignon, menthe. Arroser huile d\'olive et citron vert.'
+        'Réfrigérez la pastèque entière au moins 2 h avant de la couper : froide, elle est infiniment plus savoureuse et la salade ne rend pas d\'eau.',
+        'Taillez la pastèque en cubes de 3-4 cm, épépinez. Tranchez l\'oignon rouge en rondelles fines, faites-les tremper 5 min dans l\'eau froide pour adoucir leur piquant.',
+        'Préparez la vinaigrette : émulsionnez le jus de citron vert avec l\'huile d\'olive, sel, poivre.',
+        'Émiettez la feta à la main en morceaux irréguliers, plus généreux qu\'une râpe : la texture compte autant que le goût.',
+        'Disposez la pastèque dans le plat de service, répartissez l\'oignon égoutté et la feta, effeuillez la menthe fraîche par-dessus.',
+        'Arrosez de vinaigrette au dernier moment et servez immédiatement — cette salade n\'attend pas.'
       ]
     },
     {
@@ -1983,9 +2121,12 @@
         { name: 'Miel', qty: 20, unit: 'g' }
       ],
       steps: [
-        'Verser yaourt dans bols.',
-        'Couper fruits en morceaux. Disposer joliment sur le yaourt.',
-        'Saupoudrer granola et arroser de miel.'
+        'Sortez le yaourt grec 10 min avant de servir : à peine moins froid, il est plus onctueux et révèle mieux ses arômes lactiques.',
+        'Coupez les fraises en deux ou en quartiers selon leur taille, tranchez la banane en rondelles épaisses. Gardez les myrtilles entières.',
+        'Fouettez brièvement le yaourt avec une fourchette pour le détendre légèrement, puis versez-le dans les bols en formant un creux central avec le dos d\'une cuillère.',
+        'Disposez les fruits par zones de couleur — fraises, myrtilles, banane — pour un visuel net : on mange d\'abord avec les yeux.',
+        'Faites griller le granola à sec 2 min dans une poêle chaude juste avant de servir pour lui redonner son croustillant.',
+        'Répartissez le granola chaud sur le yaourt froid, filez le miel en spirale depuis le bord vers le centre. Servez aussitôt.'
       ]
     },
     {
@@ -2012,9 +2153,12 @@
         { name: 'Cumin moulu', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Préchauffer four à 190 °C. Cuire quinoa. Couper chapeau des poivrons, évider.',
-        'Mélanger quinoa, tomates, pois chiches, oignon, cumin, feta.',
-        'Farcir poivrons, arroser huile. Cuire 25-30 min au four.'
+        'Préchauffez le four à 190 °C. Rincez le quinoa sous l\'eau froide 1 min pour éliminer la saponine amère, puis cuisez-le dans deux fois son volume d\'eau salée 15 min à couvert.',
+        'Coupez le chapeau des poivrons, évidez-les en préservant la chair, badigeonnez l\'intérieur d\'un filet d\'huile d\'olive et enfournez à blanc 10 min pour les prédémarrer.',
+        'Émincez l\'oignon finement, faites-le suer 5 min dans une poêle avec l\'huile restante. Ajoutez le cumin et toastez 30 secondes.',
+        'Dans un saladier, combinez quinoa égoutté, tomates, pois chiches, oignon aromatisé. Rectifiez le sel, ajoutez la moitié de la feta émiettée.',
+        'Farcissez les poivrons préchauds généreusement, couronnez du reste de feta, reposez les chapeaux en biais pour laisser l\'humidité s\'échapper.',
+        'Enfournez 20-25 min : les poivrons doivent être fondants et légèrement caramélisés sur les bords. Laissez reposer 5 min avant de servir.'
       ]
     },
     {
@@ -2041,9 +2185,12 @@
         { name: 'Sel, poivre', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Mixer tomates, concombre, poivron, oignon et ail.',
-        'Ajouter huile d\'olive et vinaigre. Mixer finement.',
-        'Assaisonner, réfrigérer 2h minimum. Servir très froid avec un filet d\'huile.'
+        'Mondez les tomates : incisez en croix, plongez 30 secondes dans l\'eau bouillante, pelez. La peau restante donnait cette note âcre que vous n\'arriviez pas à identifier.',
+        'Épépinez concombre et poivron, coupez-les grossièrement. Réservez quelques dés de chaque pour la garniture finale.',
+        'Mixez tomates, concombre, poivron, oignon rouge et ail à pleine puissance 3 min pour obtenir une texture parfaitement homogène.',
+        'Versez l\'huile d\'olive en filet moteur tournant — comme une vinaigrette — puis le vinaigre. Le gaspacho s\'émulsionne et prend de la tenue.',
+        'Passez au tamis fin en appuyant avec une cuillère : cette étape que l\'on saute souvent fait toute la différence de texture.',
+        'Assaisonnez, couvrez et réfrigérez au moins 3 h — idéalement une nuit. Servez glacé avec un filet d\'huile, les dés réservés et une pincée de sel en fleur.'
       ]
     },
     {
@@ -2067,9 +2214,12 @@
         { name: 'Sel', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Couper pommes de terre et oignon en fines tranches. Confire 15 min dans huile à feu moyen.',
-        'Battre œufs, incorporer pommes de terre et oignon égouttés. Saler.',
-        'Cuire en poêle couverte 5 min. Retourner avec assiette, cuire 4 min. Servir tiède ou froid.'
+        'Épluchez et taillez les pommes de terre en rondelles de 3 mm d\'épaisseur — l\'uniformité assure une cuisson homogène. Émincez l\'oignon en demi-lunes de même épaisseur.',
+        'Confisez pommes de terre et oignon dans l\'huile d\'olive à feu doux (frémissement, pas friture) 15-18 min, en retournant souvent : ils doivent être fondants sans colorer.',
+        'Battez les œufs avec le sel. Égouttez les pommes de terre en réservant l\'huile, incorporez-les aux œufs avec l\'oignon. Laissez reposer 5 min : les œufs s\'imprègnent.',
+        'Dans la même poêle avec 1 cs d\'huile réservée sur feu moyen-fort, versez le mélange. Formez les bords avec une spatule. Couvrez, cuisez 4-5 min jusqu\'à ce que le dessus commence à prendre.',
+        'Posez une assiette plate sur la poêle, retournez d\'un geste ferme et décidé. Faites glisser la tortilla, côté cru vers le bas, pour 3-4 min supplémentaires.',
+        'La tortilla idéale est légèrement tremblante au centre quand on la sort — elle finit de cuire à la chaleur résiduelle. Servez tiède ou à température ambiante, jamais chaude.'
       ]
     },
     {
@@ -2094,9 +2244,12 @@
         { name: 'Sauce soja', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Chauffer bouillon sans bouillir. Réhydrater wakame 5 min dans eau froide.',
-        'Dissoudre miso dans louche de bouillon froid. Incorporer dans la soupe.',
-        'Ajouter tofu en cubes et wakame. Servir avec oignon vert. Ne pas faire bouillir après le miso.'
+        'Réhydratez les algues wakame dans un bol d\'eau froide 5-8 min. L\'eau froide, pas chaude : elle préserve la couleur verte et la texture délicate.',
+        'Taillez le tofu soyeux en cubes de 2 cm en l\'égouttant sur papier absorbant 5 min — il se tiendra mieux dans la soupe.',
+        'Chauffez le bouillon de légumes à feu doux jusqu\'à frémissement léger (environ 70-75 °C). Il ne doit jamais bouillir : la chaleur vive tuerait les enzymes vivants du miso.',
+        'Prélevez une louche de bouillon tiède, délayez-y la pâte miso avec une cuillère jusqu\'à dissolution complète — pas de grumeaux — puis reversez ce mélange dans la casserole.',
+        'Ajoutez délicatement les cubes de tofu et les wakame essorés. Laissez tiédir 1 min hors du feu : le tofu soyeux se réchauffe, il ne se cuit pas.',
+        'Servez dans des bols chauds, arrosez d\'un trait de sauce soja, parsemez d\'oignon vert ciselé en biseau pour la fraîcheur et la couleur.'
       ]
     },
     {
@@ -2122,9 +2275,11 @@
         { name: 'Sel, poivre', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Préchauffer four à 200 °C. Mariner poulet dans huile + citron + herbes + ail 15 min.',
-        'Disposer dans plat allant au four avec tranches de citron.',
-        'Rôtir 25-30 min jusqu\'à coloration dorée et jus clair.'
+        'Sortir le poulet 20 min avant cuisson. Préchauffer le four à 220 °C chaleur tournante.',
+        'Mélanger huile d\'olive, jus d\'un citron, ail écrasé, romarin et thym. Frotter généreusement sous la peau et sur toute la surface. Saler, poivrer.',
+        'Disposer le poulet sur un lit de rondelles de citron dans le plat. Rôtir 10 min à 220 °C pour saisir, puis baisser à 190 °C pour 20 min.',
+        'Arroser le poulet de son jus à mi-cuisson. Vérifier la cuisson : piquer la chair à l\'endroit le plus épais — le jus doit couler clair.',
+        'Laisser reposer 5 min hors du four, recouvert d\'une feuille d\'aluminium, avant de servir. Les fibres se détendent, la chair reste juteuse.'
       ]
     },
     {
@@ -2149,9 +2304,10 @@
         { name: 'Thym séché', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Mélanger miel, moutarde, ail haché, huile, thym.',
-        'Enrober poulet de cette marinade.',
-        'Griller à poêle 6 min/côté. Servir avec légumes verts.'
+        'Aplatir les blancs de poulet à l\'aide du plat de la main ou d\'un rouleau à pâtisserie à épaisseur uniforme (1,5 cm). Épaisseur régulière = cuisson homogène.',
+        'Fouetter vivement miel, moutarde de Dijon, ail finement haché, huile d\'olive et thym jusqu\'à émulsion lisse. Enrober le poulet et laisser mariner 10 min minimum.',
+        'Chauffer la poêle à feu vif sans matière grasse supplémentaire. Saisir le poulet 2 min pour colorer, puis baisser à feu moyen et cuire 5 min par côté.',
+        'Verser le reste de marinade en fin de cuisson et laisser caraméliser 1 min en retournant. Trancher en biais avant de servir.'
       ]
     },
     {
@@ -2176,9 +2332,11 @@
         { name: 'Vanille', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Mixer flocons en farine. Mélanger avec œufs, lait, yaourt, miel et vanille.',
-        'Laisser reposer 5 min. Cuire crêpes en poêle antiadhésive sans matière grasse.',
-        'Garnir au choix : fruits frais, miel, yaourt.'
+        'Mixer finement les flocons d\'avoine jusqu\'à obtenir une farine légère. Tamiser si possible pour éliminer les grumeaux.',
+        'Battre les œufs en omelette, incorporer le lait progressivement puis la farine d\'avoine, le yaourt grec, le miel et la vanille. Fouetter jusqu\'à consistance lisse.',
+        'Laisser reposer la pâte 5 à 10 min : le gluten des flocons se détend, les crêpes seront plus souples et moins cassantes.',
+        'Chauffer une poêle antiadhésive à feu moyen. Verser une louche de pâte et incliner immédiatement la poêle pour étaler en disque fin. Cuire 1 min 30 par côté jusqu\'à légère coloration dorée.',
+        'Empiler les crêpes chaudes et servir avec fruits frais de saison, miel ou yaourt grec.'
       ]
     },
     {
@@ -2205,9 +2363,10 @@
         { name: 'Moutarde', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire lentilles 20 min dans eau bouillante salée. Rincer, égoutter.',
-        'Préparer vinaigrette : huile + citron + moutarde.',
-        'Mélanger lentilles tièdes, thon, légumes. Assaisonner.'
+        'Rincer les lentilles. Les plonger dans l\'eau froide non salée, porter à ébullition puis cuire 18 à 20 min. Saler uniquement les 5 dernières minutes — le sel précoce durcit la peau.',
+        'Égoutter les lentilles et les assaisonner tièdes avec la vinaigrette (huile d\'olive, jus de citron, moutarde). Tièdes, elles absorbent mieux les saveurs.',
+        'Couper oignon rouge en fines lamelles, tomates cerises en 2, concombre en demi-rondelles. Émietter le thon grossièrement à la fourchette.',
+        'Assembler lentilles, thon et légumes. Goûter et rectifier l\'assaisonnement. Servir à température ambiante — jamais glacé, les arômes seraient muets.'
       ]
     },
     {
@@ -2233,9 +2392,11 @@
         { name: 'Sel, poivre, noix de muscade', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Cuire brocoli en fleurettes à la vapeur 5 min. Cuire poulet en dés à la poêle.',
-        'Mélanger yaourt + ail + moutarde + muscade pour la sauce.',
-        'Disposer brocoli et poulet dans plat, napper de sauce, parsemer fromage. Cuire 20 min à 190 °C.'
+        'Préchauffer le four à 190 °C. Détailler le brocoli en fleurettes régulières. Cuire à la vapeur exactement 4 min — al dente, pas mou. Refroidir sous eau froide pour fixer la couleur verte.',
+        'Couper le poulet en dés de 2 cm. Saisir vivement à la poêle dans une noix d\'huile, 3 min à feu vif. Ne pas cuire entièrement — il terminera au four. Saler, poivrer.',
+        'Préparer la sauce : fouetter yaourt grec, ail râpé, moutarde, noix de muscade râpée fraîche. La muscade fraîche est sans comparaison avec la poudre.',
+        'Disposer le poulet et le brocoli en couches dans le plat. Napper uniformément de sauce. Parsemer le fromage râpé.',
+        'Enfourner 20 min. Les 3 dernières minutes, passer en mode grill pour gratiner le dessus à la perfection. Servir sans attendre.'
       ]
     },
     {
@@ -2261,9 +2422,11 @@
         { name: 'Herbes de Provence', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon et poivron dans huile 3 min.',
-        'Ajouter courgette et tomates, cuire 5 min. Assaisonner herbes.',
-        'Creuser nids dans légumes, casser œufs. Couvrir et cuire 4-5 min.'
+        'Émincer oignon en demi-rondelles, poivron en lanières, courgette en demi-lunes de 5 mm. Tailles similaires = cuisson uniforme.',
+        'Chauffer l\'huile d\'olive dans une grande poêle à feu vif. Saisir l\'oignon et le poivron 3 min en remuant peu — laisser colorer légèrement.',
+        'Ajouter la courgette, cuire 4 min. Ajouter les tomates cerises entières, saupoudrer les herbes de Provence. Cuire 2 min jusqu\'à ce que les tomates commencent à fondre.',
+        'Réduire à feu doux. Creuser 4 nids bien distincts dans les légumes avec le dos d\'une cuillère. Casser délicatement un œuf dans chaque nid.',
+        'Couvrir hermétiquement et cuire 4 à 5 min. Le blanc doit être opaque, le jaune encore tremblotant. Saler uniquement les blancs — jamais le jaune qui durcit.'
       ]
     },
     {
@@ -2290,9 +2453,11 @@
         { name: 'Nori (algues)', qty: 4, unit: 'g' }
       ],
       steps: [
-        'Cuire riz, assaisonner vinaigre de riz + sel + sucre.',
-        'Couper saumon, avocat, concombre en dés.',
-        'Dresser bol : riz, garnitures côte à côte, saumon. Sauce soja, sésame, algues nori.'
+        'Rincer le riz à sushi 3 fois jusqu\'à eau claire. Cuire avec 240 ml d\'eau froide : porter à ébullition, couvrir, cuire 12 min à feu doux, puis éteindre et laisser reposer 10 min couvercle fermé.',
+        'Mélanger vinaigre de riz, une pincée de sel et une demi-cuillère à café de sucre. Incorporer au riz encore chaud en soulevant délicatement avec une spatule — jamais en remuant, on écraserait les grains.',
+        'Trancher le saumon très froid en dés de 1,5 cm avec un couteau bien affûté. Le saumon froid se coupe net, sans déchirer la chair.',
+        'Émincer concombre en fines demi-lunes, trancher l\'avocat à la dernière minute et arroser immédiatement de jus de citron vert pour éviter l\'oxydation.',
+        'Dresser : riz en base, puis chaque garniture disposée en secteurs distincts et colorés. Saumon au centre. Sauce soja, graines de sésame torréfiées, algues nori ciselées en finition.'
       ]
     },
     {
@@ -2318,9 +2483,11 @@
         { name: 'Curry en poudre', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon, gingembre, curry dans huile 3 min.',
-        'Ajouter patate douce en cubes et bouillon. Cuire 20 min.',
-        'Mixer, incorporer lait de coco. Servir avec graines de courge (optionnel).'
+        'Émincer finement l\'oignon. Râper le gingembre frais. Faire revenir dans l\'huile à feu moyen 3 min sans colorer — on cherche la transparence, pas le doré.',
+        'Ajouter le curry en poudre et faire torréfier 30 secondes à sec dans la poêle en remuant. Cette étape active les arômes liposolubles du curry — elle est essentielle.',
+        'Ajouter la patate douce pelée et coupée en cubes réguliers de 3 cm, mouiller avec le bouillon. Porter à ébullition, réduire le feu et cuire 20 min jusqu\'à ce qu\'une lame de couteau passe sans résistance.',
+        'Mixer au blender plongeant en longeant les parois pour obtenir un velouté parfaitement lisse. Incorporer le lait de coco, ajuster l\'assaisonnement.',
+        'Servir aussitôt dans des bols chauds. Finir d\'un filet d\'huile d\'olive et d\'une pincée de curry.'
       ]
     },
     {
@@ -2347,9 +2514,12 @@
         { name: 'Piment', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Mariner poulet en lanières dans sauce soja, curcuma, ail 20 min. Embrocher.',
-        'Griller brochettes 4 min/côté.',
-        'Sauce satay : beurre de cacahuète + lait de coco + citron vert + piment. Chauffer 3 min. Servir.'
+        'Tailler le poulet en lanières régulières de 2 cm de large dans le sens de la longueur. Régularité = cuisson homogène sur brochette.',
+        'Mélanger sauce soja, curcuma, ail haché fin et la moitié du jus de citron vert. Mariner le poulet au minimum 20 min — idéalement 1 heure au réfrigérateur.',
+        'Embrocher les lanières en accordéon sur des brochettes préalablement trempées dans l\'eau 15 min pour éviter qu\'elles ne brûlent.',
+        'Cuire les brochettes sur grill ou plancha très chaude, 3 à 4 min par côté sans y toucher pendant la cuisson — laisser se former la croûte dorée.',
+        'Pendant la cuisson : chauffer doucement beurre de cacahuète, lait de coco, jus de citron vert restant et piment émincé à feu doux 3 min en fouettant. La sauce doit napper la cuillère sans être épaisse.',
+        'Servir brochettes sur la sauce, parsemer de cacahuètes concassées et coriandre fraîche.'
       ]
     },
     {
@@ -2376,9 +2546,11 @@
         { name: 'Coriandre fraîche', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Sauter crevettes avec ail dans huile 3 min. Assaisonner.',
-        'Couper avocat en tranches, tomates en 2.',
-        'Dresser salade, crevettes, avocat, tomates. Arroser citron vert, garnir coriandre.'
+        'Sécher soigneusement les crevettes sur papier absorbant. Des crevettes humides bouillent dans leur eau au lieu de sauter — c\'est la règle d\'or.',
+        'Chauffer l\'huile d\'olive à feu très vif jusqu\'à légère fumée. Saisir les crevettes en une seule couche, 1 min 30 par côté sans les toucher. Ajouter l\'ail haché en fin de cuisson, 30 secondes. Assaisonner et réserver.',
+        'Couper l\'avocat en deux, retirer le noyau, trancher dans la peau puis détacher à la cuillère. Arroser immédiatement de jus de citron vert pour conserver la couleur.',
+        'Préparer la vinaigrette : huile d\'olive, jus de citron vert, sel, poivre. Assaisonner légèrement la salade mélangée en premier.',
+        'Dresser : lit de salade assaisonnée, avocat en éventail, crevettes encore chaudes, tomates cerises. Parsemer généreusement de coriandre fraîche ciselée. Servir immédiatement.'
       ]
     },
     {
@@ -2405,9 +2577,12 @@
         { name: 'Huile de sésame', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Cuire quinoa. Décongeler edamame.',
-        'Sauce verte : tahini + citron vert + eau + huile sésame.',
-        'Dresser bowl : quinoa, épinards, edamame, avocat, concombre. Napper sauce tahini.'
+        'Rincer le quinoa à l\'eau froide, puis le cuire dans 2 volumes d\'eau salée à ébullition. Couvrir, réduire à feu doux 12 min, éteindre et laisser gonfler 5 min à couvert avant d\'égrener à la fourchette.',
+        'Décongeler l\'edamame à l\'eau bouillante salée 3 min, égoutter et refroidir immédiatement sous l\'eau froide pour fixer la couleur verte.',
+        'Préparer la sauce : fouetter le tahini avec le jus de citron vert, l\'huile de sésame et 2 cuillères à soupe d\'eau froide jusqu\'à obtenir une consistance fluide et nacrée. Saler légèrement.',
+        'Couper l\'avocat en tranches régulières et le concombre en demi-lunes fines. Citronner l\'avocat aussitôt pour éviter l\'oxydation.',
+        'Dresser le bowl en secteurs distincts — quinoa chaud, feuilles d\'épinards frais, edamame, avocat, concombre — pour un effet visuel soigné.',
+        'Napper généreusement de sauce tahini au moment du service. Ajouter une pincée de graines de sésame si disponible.'
       ]
     },
     {
@@ -2433,9 +2608,11 @@
         { name: 'Fruits rouges', qty: 60, unit: 'g' }
       ],
       steps: [
-        'Battre œufs + lait + cannelle. Tremper tranches de pain 30 secondes.',
-        'Cuire à poêle antiadhésive 2 min/côté jusqu\'à dorure.',
-        'Servir avec yaourt grec, fruits rouges et miel.'
+        'Fouetter vivement les œufs avec le lait écrémé, une pincée de cannelle et une pincée de sel fin jusqu\'à émulsion légère — le mélange doit être homogène et légèrement mousseux.',
+        'Tremper chaque tranche de pain complet 20 secondes de chaque côté, en appuyant doucement pour que l\'appareil pénètre sans déstructurer le pain.',
+        'Chauffer une poêle antiadhésive à sec sur feu moyen-vif. Quand elle est chaude, déposer les tranches et cuire 2 min sans toucher jusqu\'à coloration dorée-ambrée, retourner et répéter.',
+        'Pendant la cuisson, détendre le yaourt grec avec quelques gouttes de citron et le miel pour obtenir une crème souple.',
+        'Dresser le pain perdu encore chaud avec la crème de yaourt mielléee et les fruits rouges disposés avec soin. Servir immédiatement.'
       ]
     },
     {
@@ -2462,9 +2639,12 @@
         { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Griller poulet assaisonné 6 min/côté. Trancher en lamelles.',
-        'Sauce César légère : yaourt + moutarde + ail + huile.',
-        'Garnir tortillas : laitue, poulet, sauce César, parmesan. Rouler serré.'
+        'Aplatir légèrement les blancs de poulet entre deux feuilles de papier sulfurisé à l\'aide d\'une casserole — épaisseur uniforme de 1,5 cm — pour une cuisson homogène et une viande juteuse.',
+        'Saisir le poulet dans une poêle bien chaude avec l\'huile d\'olive, 5 min sur la première face sans bouger pour former une belle croûte, puis 4 min sur l\'autre face. Laisser reposer 3 min avant de trancher en lamelles biais.',
+        'Préparer la sauce César allégée : écraser l\'ail en purée fine, incorporer la moutarde de Dijon, puis le yaourt grec en fouettant. Saler, poivrer, ajouter quelques gouttes de citron.',
+        'Réchauffer les tortillas 30 secondes dans la poêle chaude à sec — elles deviennent souples et légèrement marbrées, bien meilleures que réchauffées au micro-ondes.',
+        'Garnir : étaler la sauce César sur la tortilla, déposer la laitue romaine, les lamelles de poulet, saupoudrer généreusement de parmesan râpé.',
+        'Rouler serré en rabattant d\'abord les côtés, puis couper en deux en biais d\'un geste franc. Servir immédiatement.'
       ]
     },
     {
@@ -2490,9 +2670,12 @@
         { name: 'Curcuma', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon, gingembre, curcuma dans huile 3 min.',
-        'Ajouter carottes en rondelles, bouillon. Cuire 20 min.',
-        'Mixer, incorporer lait de coco. Ajuster assaisonnement.'
+        'Émincer finement l\'oignon. Chauffer l\'huile à feu moyen dans une cocotte, faire suer l\'oignon 5 min à couvert jusqu\'à translucidité sans coloration — c\'est la base aromatique.',
+        'Ajouter le gingembre frais râpé fin et le curcuma, faire revenir 1 min en remuant jusqu\'à ce que les épices libèrent leurs arômes — vous les sentirez s\'épanouir.',
+        'Ajouter les carottes taillées en rondelles de 1 cm, mouiller avec le bouillon de légumes chaud. Porter à ébullition, puis cuire à frémissement 20 min jusqu\'à ce qu\'une pointe de couteau entre sans résistance.',
+        'Mixer au mixeur plongeant jusqu\'à obtenir une texture parfaitement lisse et veloutée. Pour un velouté de restaurant, passer au chinois fin.',
+        'Incorporer le lait de coco hors du feu, rectifier l\'assaisonnement. Réchauffer doucement sans bouillir pour préserver la rondeur du coco.',
+        'Servir avec un filet de lait de coco tourbillonné en surface et une pincée de curcuma pour la couleur.'
       ]
     },
     {
@@ -2519,9 +2702,12 @@
         { name: 'Citron (jus)', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Mariner poulet dans huile, citron, ail, origan.',
-        'Griller poulet à poêle 6 min/côté. Ajouter tomates cerises, cuire 3 min.',
-        'Parsemer olives et feta. Servir immédiatement.'
+        'Préparer la marinade : mélanger l\'huile d\'olive, le jus de citron, l\'ail écrasé en purée et l\'origan séché. Inciser légèrement les blancs de poulet en surface — la marinade pénètre mieux. Mariner 10 min minimum.',
+        'Chauffer une poêle en inox ou fonte à feu vif jusqu\'à ce qu\'elle fume légèrement. Déposer le poulet, ne pas toucher pendant 5-6 min pour obtenir une croûte d\'or. Retourner, cuire 5 min.',
+        'Débarrasser le poulet sur une assiette, couvrir de papier d\'aluminium. Dans la même poêle, ajouter les tomates cerises entières et laisser compoter 3 min à feu moyen en les pressant légèrement.',
+        'Déglacer avec un filet de jus de citron en grattant les sucs de cuisson — c\'est là que se concentre toute la saveur.',
+        'Trancher le poulet en biseau, dresser sur les tomates fondantes. Parsemer les olives noires et la feta émiettée à la main.',
+        'Finir avec quelques feuilles d\'origan frais si disponible et un filet d\'huile d\'olive à cru. Servir sans attendre.'
       ]
     },
     {
@@ -2548,9 +2734,12 @@
         { name: 'Miel', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Préparer vinaigrette : huile + vinaigre de cidre + miel + sel.',
-        'Couper pomme en fines tranches, oignon en rondelles.',
-        'Mélanger épinards, pomme, noix, feta, oignon. Assaisonner vinaigrette.'
+        'Préparer la vinaigrette en premier : dissoudre une pincée de sel fin dans le vinaigre de cidre, ajouter le miel, fouetter en incorporant l\'huile d\'olive en filet pour obtenir une émulsion stable.',
+        'Torréfier les noix à sec dans une poêle 2-3 min jusqu\'à ce qu\'elles craquent et embaument — ce geste simple double leur saveur.',
+        'Tailler la pomme en fines lamelles régulières à la mandoline ou au couteau, et les plonger aussitôt dans un bol d\'eau froide citronnée pour préserver leur blancheur.',
+        'Émincer l\'oignon rouge en rondelles très fines. Les tremper 5 min dans l\'eau froide pour adoucir leur piquant tout en gardant le croquant.',
+        'Égoutter soigneusement la pomme et l\'oignon. Effeuiller les épinards frais et les sécher si nécessaire — l\'eau tue la vinaigrette.',
+        'Assembler la salade au moment du service : mélanger épinards, pomme, oignon, noix tièdes et feta émiettée. Assaisonner de vinaigrette en tournant délicatement à la main pour ne pas écraser.'
       ]
     },
     {
@@ -2575,9 +2764,12 @@
         { name: 'Cannelle', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Mixer tous les ingrédients jusqu\'à obtenir une pâte homogène.',
-        'Chauffer poêle antiadhésive légèrement huilée à feu moyen.',
-        'Verser louches, cuire 2-3 min/côté. Servir avec fruits frais.'
+        'Mixer les flocons d\'avoine seuls 30 secondes pour obtenir une farine grossière — c\'est la base qui donne de la tenue aux pancakes sans alourdir la pâte.',
+        'Écraser la banane très mûre à la fourchette jusqu\'à purée lisse. Incorporer les œufs un à un, puis le lait, la levure et la cannelle. Ajouter la farine d\'avoine et mélanger sans trop travailler la pâte — quelques grumeaux sont bons signe.',
+        'Laisser reposer la pâte 5 min : la levure s\'active et les flocons s\'hydratent pour des pancakes plus moelleux.',
+        'Chauffer une poêle antiadhésive à feu moyen-doux — pas trop fort, les pancakes à l\'avoine brûlent vite. Essuyer avec un papier huilé.',
+        'Verser des cercles de pâte de 8-10 cm. Quand des bulles apparaissent en surface et que les bords semblent secs (2-3 min), retourner d\'un geste vif et cuire 1 min 30 côté face.',
+        'Superposer les pancakes au fur et à mesure sur une assiette chaude. Servir immédiatement avec des fruits frais.'
       ]
     },
     {
@@ -2603,9 +2795,12 @@
         { name: 'Aneth frais', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Toaster le pain. Écraser avocat avec citron vert et sel.',
-        'Étaler guacamole sur pain toasté.',
-        'Disposer saumon fumé, câpres, oignon rouge émincé et aneth.'
+        'Toaster le pain complet à chaleur vive jusqu\'à ce qu\'il soit bien croustillant et légèrement marbré — la tartine doit soutenir la garniture sans se détremper.',
+        'Écraser l\'avocat à la fourchette avec le jus de citron vert et une pincée de sel de mer en flocons, en laissant quelques morceaux pour la texture — un guacamole lisse est sans personnalité.',
+        'Émincer l\'oignon rouge en anneaux très fins. Rincer les câpres si elles sont au sel, les égoutter si elles sont au vinaigre.',
+        'Étaler généreusement l\'écrasé d\'avocat sur les tartines encore chaudes, débordant jusqu\'aux bords.',
+        'Disposer le saumon fumé en ondulations naturelles — jamais à plat, jamais froissé. Répartir les câpres et l\'oignon rouge.',
+        'Finir avec les feuilles d\'aneth frais effeuillées à la main et un dernier trait de citron vert au service. Déguster dans la minute.'
       ]
     },
     {
@@ -2631,9 +2826,12 @@
         { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Piquer patates, cuire four 40 min à 200 °C jusqu\'à fondantes.',
-        'Rôtir pois chiches 15 min avec huile, paprika, sel.',
-        'Ouvrir patates en deux, garnir épinards, pois chiches, yaourt citronné.'
+        'Préchauffer le four à 200 °C. Piquer les patates douces en plusieurs endroits avec une fourchette, les frotter d\'un filet d\'huile d\'olive et les enfourner directement sur la grille 40-45 min — elles sont prêtes quand elles cèdent sous une pression légère.',
+        'Pendant ce temps, égoutter et rincer les pois chiches, les sécher soigneusement avec du papier absorbant — un pois chiche humide ne croustille jamais. Les mélanger avec l\'huile restante, le paprika fumé, le sel et un peu de cumin si disponible.',
+        'Rôtir les pois chiches sur plaque à 200 °C pendant les 20 dernières minutes de cuisson des patates, en les retournant à mi-temps, jusqu\'à ce qu\'ils soient dorés et craquants.',
+        'Préparer le yaourt citronné : mélanger le yaourt grec avec le jus de citron, une pincée de sel et un peu de cumin. Goûter et ajuster.',
+        'Inciser les patates en croix dans la longueur, écarter la chair avec les pouces pour former un nid. Ajouter une poignée d\'épinards frais dans la cavité chaude — ils fondent légèrement au contact.',
+        'Garnir généreusement de pois chiches croustillants, napper de yaourt citronné. Servir sans attendre pour conserver le croustillant des pois chiches.'
       ]
     },
     {
@@ -2661,9 +2859,12 @@
         { name: 'Graines de sésame', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Cuire riz. Sauter crevettes dans huile sésame + sauce soja 3 min.',
-        'Couper avocat, mangue et concombre en dés.',
-        'Dresser bowl : riz, crevettes, fruits et légumes. Arroser citron vert, sésame.'
+        'Rincer le riz basmati jusqu\'à ce que l\'eau soit claire. Cuire à l\'eau salée — 1 volume de riz pour 1,5 volume d\'eau froide, porter à ébullition, couvrir hermétiquement et cuire 10 min à feu très doux, puis laisser reposer 5 min sans soulever le couvercle.',
+        'Sécher les crevettes sur du papier absorbant — l\'humidité empêche la coloration. Chauffer l\'huile de sésame dans une poêle très chaude, saisir les crevettes 1 min 30 sur chaque face jusqu\'à coloration rosée-dorée. Déglacer avec la sauce soja et retirer du feu immédiatement.',
+        'Tailler l\'avocat et la mangue en dés réguliers de 1,5 cm. Le concombre en demi-lunes fines. Citronner l\'avocat aussitôt.',
+        'Préparer la sauce du bowl : mélanger le jus de citron vert restant avec les sucs de cuisson des crevettes pour un assaisonnement équilibré.',
+        'Dresser le riz en base légèrement tassée. Disposer en quartiers distincts les crevettes chaudes, les dés d\'avocat, la mangue et le concombre — couleurs séparées, volumes généreux.',
+        'Napper de la sauce citron-soja, parsemer les graines de sésame torréfiées à sec 1 min si possible. Servir sans délai — les crevettes doivent rester chaudes sur le riz tiède.'
       ]
     },
     {
@@ -2690,9 +2891,12 @@
         { name: 'Cumin moulu', qty: 4, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon et ail dans huile 3 min.',
-        'Ajouter pois chiches, tomates, bouillon et cumin. Cuire 12 min.',
-        'Incorporer épinards, cuire 3 min. Servir chaud avec pain complet.'
+        'Faire torréfier le cumin à sec dans la casserole 30 secondes jusqu\'à ce qu\'il embaume, puis ajouter l\'huile d\'olive.',
+        'Faire suer l\'oignon émincé 5 minutes à feu moyen jusqu\'à transparence, ajouter l\'ail haché et cuire 1 minute.',
+        'Incorporer les tomates concassées, monter le feu et laisser réduire 3 minutes pour concentrer les saveurs.',
+        'Verser le bouillon et les pois chiches égouttés. Écraser grossièrement 1/4 des pois chiches à la fourchette pour lier la soupe naturellement.',
+        'Laisser mijoter 12 minutes à feu doux. Hors du feu, incorporer les épinards frais et couvrir 3 minutes — ils cuisent à la chaleur résiduelle sans perdre leur couleur.',
+        'Rectifier l\'assaisonnement, arroser d\'un filet d\'huile d\'olive crue au moment du service.'
       ]
     },
     {
@@ -2719,9 +2923,11 @@
         { name: 'Herbes de Provence', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Préchauffer four 200 °C. Couper légumes, arroser huile, herbes. Rôtir 25 min.',
-        'Cuire quinoa 12 min.',
-        'Mélanger quinoa, légumes rôtis, citron. Émietter feta dessus.'
+        'Préchauffer le four à 220 °C (chaleur tournante). Couper poivrons, courgette et oignon rouge en morceaux réguliers de 3 cm — l\'uniformité assure une cuisson homogène.',
+        'Disposer les légumes sur la plaque en une seule couche (ne pas superposer), arroser d\'huile d\'olive, saupoudrer d\'herbes de Provence, saler. Rôtir 25 minutes sans remuer : laisser les faces caraméliser.',
+        'Rincer le quinoa à l\'eau froide. Le faire toaster à sec dans une casserole 2 minutes, puis ajouter 300 ml d\'eau froide salée. Porter à ébullition, couvrir, cuire 12 minutes à feu doux. Retirer du feu, laisser gonfler 5 minutes à couvert.',
+        'Égrainer le quinoa à la fourchette. Verser le jus de citron et mélanger à chaud pour que les grains absorbent l\'acidité.',
+        'Dresser : quinoa en base, légumes rôtis par-dessus, feta émiettée en dernier pour préserver ses arômes. Servir tiède.'
       ]
     },
     {
@@ -2749,9 +2955,12 @@
         { name: 'Huile de tournesol', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Cuire poulet en dés à la poêle, réserver. Faire œufs frits, réserver.',
-        'Faire revenir oignon, ail, sambal. Ajouter riz et sauces.',
-        'Incorporer poulet, mélanger à feu vif 3 min. Servir avec œuf frit dessus.'
+        'Tailler le poulet en petits dés réguliers de 1,5 cm. Chauffer la poêle ou le wok à feu maximal jusqu\'à légère fumée — c\'est la condition du "wok hei", ce goût fumé caractéristique.',
+        'Saisir les dés de poulet 3 minutes sans les remuer pour obtenir une belle coloration. Réserver.',
+        'Dans la même poêle très chaude, faire revenir oignon et ail émincés 1 minute, ajouter le sambal et mélanger 30 secondes pour le torréfier légèrement.',
+        'Ajouter le riz froid (déjà égrainé à la main) en une seule fois. Presser contre la poêle 1 minute sans remuer pour faire griller le fond, puis sauter vivement.',
+        'Verser sauce soja et kecap manis en filet sur les bords de la poêle (non sur le riz) pour qu\'elles caramélisent avant d\'être incorporées. Ajouter le poulet, mélanger 2 minutes à feu vif.',
+        'Faire les œufs frits dans une poêle séparée avec une goutte d\'huile — le blanc doit être croustillant sur les bords, le jaune coulant. Poser sur le riz au moment du service.'
       ]
     },
     {
@@ -2777,9 +2986,11 @@
         { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
       ],
       steps: [
-        'Cuire quinoa 12 min, rincer eau froide, égoutter complètement.',
-        'Hacher persil, menthe. Couper tomates en petits dés.',
-        'Mélanger quinoa froid + légumes + herbes. Assaisonner huile + citron + sel.'
+        'Cuire le quinoa dans 320 ml d\'eau salée : porter à ébullition, couvrir, 12 minutes à feu doux. Étaler sur une plaque et laisser refroidir complètement — un quinoa chaud fait ramollir les herbes.',
+        'Pendant ce temps, hacher finement le persil (feuilles seulement, sans les tiges) et la menthe à la main au couteau — jamais au mixeur qui oxyde les herbes et les noircit.',
+        'Couper les tomates en petits dés de 5 mm, les saler légèrement dans une passoire 5 minutes pour éliminer l\'excès d\'eau qui diluerait la vinaigrette.',
+        'Préparer la vinaigrette : émulsionner le jus de citron avec l\'huile d\'olive et une pincée de sel en fouettant vivement.',
+        'Assembler quinoa froid, herbes, tomates égouttées et oignons verts. Verser la vinaigrette, mélanger délicatement. Laisser reposer 15 minutes au frais avant de servir : le quinoa s\'imprègne des saveurs.'
       ]
     },
     {
@@ -2803,9 +3014,11 @@
         { name: 'Sel, poivre, herbes', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Faire revenir champignons en lamelles dans poêle avec un peu d\'huile 3 min.',
-        'Battre blancs d\'œufs avec sel et poivre.',
-        'Verser sur champignons, cuire à feu doux 4 min. Plier. Garnir oignon vert.'
+        'Émincer les champignons en lamelles de 5 mm d\'épaisseur. Chauffer la poêle à feu vif sans matière grasse d\'abord — laisser l\'eau des champignons s\'évaporer 1 minute, puis ajouter l\'huile.',
+        'Saisir les champignons à feu vif sans remuer 2 minutes pour les dorer. Les champignons bouillis sont sans intérêt ; les champignons dorés ont un goût de noisette. Saler, poivrer en fin de saisie. Réserver hors de la poêle.',
+        'Battre les blancs d\'œufs à la fourchette jusqu\'à ce qu\'ils soient légèrement mousseux — pas en neige ferme, juste aérés. Saler.',
+        'Dans la poêle essuyée, chauffer un filet d\'huile à feu doux. Verser les blancs, couvrir immédiatement avec un couvercle. Cuire 3 à 4 minutes : les blancs prennent sans brunir dessous.',
+        'Déposer les champignons sur une moitié de l\'omelette, plier et glisser dans l\'assiette. Parsemer d\'oignon vert ciselé. Servir sans attendre.'
       ]
     },
     {
@@ -2833,9 +3046,12 @@
         { name: 'Coriandre fraîche', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon, ail, gingembre dans huile 3 min. Ajouter pâte de curry.',
-        'Incorporer lait de coco, tomates cerises. Mijoter 8 min.',
-        'Ajouter crevettes, cuire 4 min. Garnir coriandre. Servir avec riz basmati.'
+        'Faire revenir oignon finement ciselé dans l\'huile 5 minutes à feu moyen jusqu\'à légère coloration dorée. Ajouter ail et gingembre râpés, cuire 1 minute.',
+        'Ajouter la pâte de curry rouge. Faire frire en remuant constamment 2 minutes à feu moyen-vif : la pâte doit "chanter" dans la poêle et perdre son odeur de cru.',
+        'Verser le lait de coco en une seule fois. Racler les sucs caramélisés au fond de la poêle — c\'est là que se cache le goût. Incorporer les tomates cerises entières.',
+        'Laisser mijoter à feu doux 8 minutes à découvert pour réduire légèrement la sauce et concentrer les saveurs.',
+        'Hors du feu ou sur feu très doux, ajouter les crevettes. Couvrir 3 à 4 minutes : elles cuisent à la chaleur de la sauce sans devenir caoutchouteuses.',
+        'Vérifier l\'assaisonnement. Parsemer généreusement de coriandre fraîche ciselée au dernier moment. Servir avec riz basmati.'
       ]
     },
     {
@@ -2861,9 +3077,12 @@
         { name: 'Vanille', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Mélanger farine, yaourt, œufs, lait, levure, miel, vanille.',
-        'Chauffer poêle antiadhésive légèrement huilée à feu moyen.',
-        'Cuire petites galettes 2 min/côté. Servir avec fruits frais et sirop d\'agave.'
+        'Dans un grand bol, mélanger les ingrédients secs : farine d\'avoine, levure chimique, pincée de sel.',
+        'Dans un autre bol, fouetter les œufs avec le yaourt grec, le lait, le miel et la vanille jusqu\'à homogénéité.',
+        'Verser les ingrédients liquides sur les secs. Mélanger à la spatule en 10 à 12 mouvements seulement : la pâte doit rester légèrement grumeleuse. Un mélange trop travaillé donne des pancakes durs et plats.',
+        'Chauffer une poêle antiadhésive à feu moyen. Tester la température : une goutte d\'eau doit "danser" et s\'évaporer immédiatement. Huiler très légèrement avec un papier absorbant.',
+        'Verser des louches de 60 ml de pâte. Quand des bulles apparaissent en surface et ne se referment plus (environ 2 minutes), retourner une seule fois. Cuire 1 minute 30 sur l\'autre face.',
+        'Empiler les pancakes sur une assiette chaude, couverts d\'un linge propre pour qu\'ils restent moelleux. Servir avec fruits frais de saison.'
       ]
     },
     {
@@ -2890,9 +3109,12 @@
         { name: 'Moutarde', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire pâtes al dente. Rincer eau froide, égoutter.',
-        'Égoutter thon. Couper tomates et concombre.',
-        'Mélanger pâtes, thon, légumes. Assaisonner huile d\'olive + citron + moutarde.'
+        'Cuire les fusilli dans une grande quantité d\'eau bouillante fortement salée (l\'eau doit "goûter la mer") jusqu\'à al dente — 1 minute de moins que le temps indiqué sur le paquet.',
+        'Pendant la cuisson, préparer la vinaigrette : fouetter la moutarde avec le jus de citron, puis incorporer l\'huile d\'olive en filet en fouettant pour obtenir une émulsion stable. Saler, poivrer.',
+        'Égoutter les pâtes. Les rincer brièvement sous l\'eau froide pour stopper la cuisson, puis égoutter soigneusement — des pâtes trop humides diluent la vinaigrette.',
+        'Mélanger les pâtes encore légèrement tièdes avec la vinaigrette : tièdes, elles absorbent mieux les saveurs qu\'entièrement froides.',
+        'Incorporer délicatement le thon émietté en gros morceaux (ne pas réduire en bouillie), les tomates cerises coupées en deux, le concombre en demi-rondelles et le maïs égoutté.',
+        'Réfrigérer au moins 10 minutes avant de servir. Rectifier l\'assaisonnement et arroser d\'un filet d\'huile d\'olive crue au moment du dressage.'
       ]
     },
     {
@@ -2919,9 +3141,11 @@
         { name: 'Câpres', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Écraser avocat avec citron vert et sel.',
-        'Mélanger thon égoutté avec yaourt, câpres, sel.',
-        'Garnir tortillas : laitue, guacamole, thon, tomates. Rouler et servir.'
+        'Écraser l\'avocat à la fourchette en conservant quelques morceaux — une texture rustique vaut mieux qu\'une purée lisse. Incorporer immédiatement le jus de citron vert et une pincée de sel pour éviter l\'oxydation.',
+        'Égoutter soigneusement le thon, l\'émietter en gros flocons. Mélanger délicatement avec le yaourt grec, les câpres hachées grossièrement et une pincée de poivre. Ne pas réduire en pâte.',
+        'Passer chaque tortilla 20 secondes à sec dans une poêle chaude ou 10 secondes au micro-ondes : une tortilla tiède est souple et ne se casse pas au roulage.',
+        'Garnir chaque tortilla en laissant 3 cm libres en bas : feuilles de laitue romaine en premier (elles font barrière contre l\'humidité), puis guacamole, puis thon, tomates cerises coupées en deux.',
+        'Replier le bord inférieur sur la garniture, puis rouler fermement en serrant. Couper en diagonale à mi-hauteur pour le dressage — la coupe révèle les couches colorées.'
       ]
     },
     {
@@ -2947,9 +3171,12 @@
         { name: 'Persil frais', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Aplatir blancs de poulet pour cuisson uniforme. Saler, poivrer.',
-        'Saisir dans huile + beurre 5 min/côté à feu vif. Réserver au chaud.',
-        'Déglacer poêle avec jus de citron + ail haché + thym. Réduire 2 min. Napper le poulet. Garnir persil.'
+        'Placer les blancs de poulet entre deux feuilles de film alimentaire. Battre au rouleau à pâtisserie jusqu\'à 1,5 cm d\'épaisseur uniforme : une épaisseur régulière garantit une cuisson homogène.',
+        'Assaisonner généreusement les deux faces. Chauffer l\'huile d\'olive dans une poêle à feu vif jusqu\'à ce qu\'elle frémisse légèrement.',
+        'Saisir les blancs 4 minutes côté premier sans les bouger — résister à l\'envie de déplacer la viande pour obtenir une belle croûte dorée. Retourner, baisser à feu moyen, ajouter le beurre et cuire 4 minutes en arrosant continuellement avec le beurre fondu.',
+        'Vérifier la cuisson : le jus qui s\'écoule doit être clair, non rosé. Retirer le poulet et le laisser reposer 3 minutes sur une planche — ce repos redistribue les jus dans la chair.',
+        'Dans la même poêle, jeter l\'ail haché 30 secondes à feu moyen, puis déglacer avec le jus de citron en grattant vigoureusement les sucs caramélisés. Ajouter le thym, réduire 2 minutes jusqu\'à légère consistance sirupeuse.',
+        'Napper les blancs de sauce au moment du service, parsemer de persil haché. Ne jamais napper à l\'avance — la sauce doit arriver chaude sur la viande reposée.'
       ]
     },
 
@@ -2979,12 +3206,12 @@
         { name: 'Ail', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire les haricots verts à la vapeur 8 min. Rafraîchir sous l\'eau froide.',
-        'Cuire les œufs 8 min dans l\'eau bouillante. Écaler et couper en quartiers.',
-        'Couper les tomates en quartiers. Égoutter le thon.',
-        'Préparer la vinaigrette : huile d\'olive + jus de citron + moutarde + ail écrasé.',
-        'Assembler salade, haricots, tomates, thon, œufs et olives.',
-        'Arroser de vinaigrette. Servir immédiatement.'
+        'Porter 1 L d\'eau à ébullition. Cuire les haricots verts 6 min exactement, égoutter et plonger immédiatement dans un bain d\'eau glacée 2 min : ils restent verts et croquants.',
+        'Dans la même eau frémissante, cuire les œufs 9 min (jaune fondant). Écaler sous l\'eau froide, couper en quartiers nets.',
+        'Vinaigrette : fouetter moutarde + jus de citron + ail râpé jusqu\'à émulsion, puis incorporer l\'huile d\'olive en filet. Assaisonner.',
+        'Couper les tomates en quartiers épais, saler légèrement, laisser dégorger 3 min sur papier absorbant.',
+        'Dresser d\'abord la romaine, puis disposer haricots, tomates, thon émietté en gros morceaux, œufs et olives par zones distinctes — ne jamais mélanger.',
+        'Napper de vinaigrette au dernier moment. Servir sans attendre.'
       ]
     },
 
@@ -3010,11 +3237,12 @@
         { name: 'Paprika doux', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Cuire le quinoa dans 120 ml d\'eau salée 12 min. Laisser refroidir.',
-        'Assaisonner le poulet avec cumin + paprika + sel. Griller 5 min par côté.',
-        'Couper poulet en tranches, avocat en lamelles, concombre et carotte en bâtonnets.',
-        'Assembler le bowl : quinoa en base, garnitures côte à côte.',
-        'Arroser d\'huile d\'olive + jus de citron. Servir tiède ou froid.'
+        'Rincer le quinoa sous l\'eau froide 30 secondes pour éliminer l\'amertume. Cuire dans 120 ml d\'eau bouillante salée, couvrir, feu doux 12 min. Laisser reposer 5 min hors feu, égrener à la fourchette.',
+        'Badigeonner le poulet d\'huile d\'olive, cumin et paprika. Cuire sur poêle très chaude 5-6 min par côté sans toucher — la croûte se forme seule. Laisser reposer 3 min avant de trancher.',
+        'Râper la carotte en julienne fine, tailler le concombre en demi-rondelles de 3 mm. Trancher l\'avocat à la dernière minute et citronner aussitôt.',
+        'Assembler en zones séparées autour du quinoa : légumes d\'un côté, poulet de l\'autre, avocat au centre.',
+        'Émulsionner huile d\'olive + jus de citron + une pincée de cumin, napper au moment du service.',
+        'Servir tiède : le contraste chaud-froid entre le poulet et les légumes crus est la signature du bowl réussi.'
       ]
     },
 
@@ -3040,11 +3268,12 @@
         { name: 'Moutarde', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Griller le poulet 5 min par côté. Couper en lamelles.',
-        'Couper le pain en dés. Faire dorer dans poêle sèche 3 min.',
-        'Sauce légère : yaourt + huile d\'olive + citron + ail + moutarde + sel.',
-        'Déchirer la romaine. Mélanger avec sauce.',
-        'Garnir de poulet, croûtons et parmesan. Servir aussitôt.'
+        'Frotter le poulet avec ail râpé, sel et poivre. Cuire sur poêle chaude à sec 5-6 min par côté. Laisser reposer 3 min, trancher en biais — des lamelles élégantes, pas des cubes.',
+        'Couper le pain complet en petits dés de 1 cm. Toaster à sec dans la poêle encore chaude 3-4 min en remuant : ils dorent et parfument sans une goutte de matière grasse.',
+        'Sauce César légère : fouetter yaourt 0% + moutarde + jus de citron + ail râpé + huile d\'olive jusqu\'à texture lisse et crémeuse. Ajuster le sel.',
+        'Déchirer la romaine à la main en morceaux généreux — jamais au couteau, cela oxyde les feuilles.',
+        'Enrober la romaine de sauce juste avant de dresser. Déposer le poulet, parsemer les croûtons et terminer par le parmesan râpé à la minute.',
+        'Servir immédiatement : une César, ça n\'attend pas.'
       ]
     },
 
@@ -3072,11 +3301,12 @@
         { name: 'Paprika doux', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Si poulpe entier : cuire dans eau bouillante salée 40 min. Laisser refroidir.',
-        'Couper le poulpe en tronçons. Couper tomates, poivrons et oignon en dés.',
-        'Préparer la vinaigrette : huile d\'olive + citron + cumin + paprika + sel.',
-        'Mélanger poulpe, légumes et olives dans un saladier.',
-        'Arroser de vinaigrette. Garnir de persil haché. Servir frais.'
+        'Si poulpe cru : le cuire dans une grande casserole d\'eau frémissante non bouillante (80-85 °C) avec une feuille de laurier et une tranche de citron pendant 40-45 min. Tester avec la pointe d\'un couteau : elle doit entrer sans résistance. Laisser refroidir dans le bouillon.',
+        'Couper les tentacules en tronçons de 3 cm. Saisir 1-2 min sur poêle très chaude avec un filet d\'huile pour créer une légère caramélisation en surface.',
+        'Tailler tomates, poivrons et oignon rouge en dés réguliers de 1 cm — l\'uniformité est la marque d\'un travail soigné.',
+        'Vinaigrette : huile d\'olive + jus de citron + cumin + paprika + sel. Laisser infuser 5 min avant d\'utiliser.',
+        'Mélanger poulpe tiède, légumes et olives. Arroser de vinaigrette, mélanger délicatement.',
+        'Laisser reposer 10 min au frais, puis parsemer de persil haché grossièrement au moment du service.'
       ]
     },
 
@@ -3101,11 +3331,12 @@
         { name: 'Citron (jus)', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Couvrir le boulghour d\'eau bouillante, couvrir 10 min. Égoutter, laisser refroidir.',
-        'Griller le poulet assaisonné 5 min par côté. Couper en petits dés.',
-        'Hacher très finement persil et menthe. Couper tomates et oignons en tout petits dés.',
-        'Mélanger boulghour + herbes + tomates + oignons + poulet.',
-        'Assaisonner généreusement : huile d\'olive + citron + sel. Réfrigérer 15 min avant service.'
+        'Verser le boulghour fin dans un bol, couvrir exactement d\'eau bouillante salée (pas plus). Couvrir d\'une assiette, laisser gonfler 10 min. Égrener à la fourchette, étaler sur une plaque pour refroidir rapidement.',
+        'Griller le poulet assaisonné de sel et poivre 5-6 min par côté. Laisser tiédir, tailler en petits dés de 8 mm — de la même taille que les légumes.',
+        'Hacher le persil et la menthe très finement au couteau (jamais au mixeur : ça brûle les herbes). La proportion doit être généreuse — le taboulé, c\'est les herbes d\'abord.',
+        'Épépiner les tomates, les couper en brunoise de 5 mm. Épépiner évite l\'eau en excès dans le taboulé.',
+        'Assembler boulghour + herbes + tomates + oignons verts + poulet. Assaisonner avec huile d\'olive + jus de citron généreux + sel.',
+        'Réfrigérer 20 min minimum avant service : le taboulé se bonifie en reposant, les saveurs s\'harmonisent.'
       ]
     },
 
@@ -3130,11 +3361,12 @@
         { name: 'Origan séché', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Cuire les lentilles 20 min dans l\'eau salée. Égoutter et refroidir.',
-        'Couper tomates cerises en deux, oignon en fines rondelles.',
-        'Préparer vinaigrette : huile d\'olive + vinaigre balsamique + origan + sel.',
-        'Assembler épinards + lentilles + tomates + oignon.',
-        'Émietter la feta. Arroser de vinaigrette. Servir tiède ou froid.'
+        'Rincer les lentilles. Les cuire dans 3 fois leur volume d\'eau froide non salée, porter à ébullition, puis feu moyen 18-20 min. Saler uniquement les 5 dernières minutes — le sel en début de cuisson durcit la peau.',
+        'Égoutter et étaler les lentilles sur une plaque pour arrêter la cuisson et conserver la tenue. Elles ne doivent pas être en purée.',
+        'Préparer la vinaigrette à chaud pendant que les lentilles sont encore tièdes : huile d\'olive + vinaigre balsamique + origan + sel. Les lentilles tièdes absorbent mieux l\'assaisonnement.',
+        'Trancher finement l\'oignon rouge. Couper les tomates cerises en deux.',
+        'Assembler épinards frais en base, lentilles tièdes par-dessus — la chaleur légère flétrit légèrement les épinards, ce qui est voulu.',
+        'Déposer les tomates et l\'oignon, émietter la feta à la main en gros morceaux généreux. Napper de vinaigrette et servir aussitôt.'
       ]
     },
 
@@ -3159,11 +3391,12 @@
         { name: 'Coriandre fraîche', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Faire sauter les crevettes dans une poêle chaude 2-3 min. Assaisonner.',
-        'Couper avocat en lamelles, mangue en dés.',
-        'Préparer la vinaigrette : citron vert + huile + piment + sel.',
-        'Disposer roquette en base, garnir avocat, mangue, crevettes.',
-        'Arroser de vinaigrette. Parsemer de coriandre. Servir frais.'
+        'Sécher impérativement les crevettes sur papier absorbant avant cuisson — l\'humidité empêche la coloration.',
+        'Chauffer la poêle à feu vif jusqu\'à légère fumée. Saisir les crevettes 1 min sans toucher, retourner, 1 min encore. Elles doivent être nacrées et légèrement dorées. Assaisonner en fin de cuisson seulement.',
+        'Tailler la mangue en dés de 1,5 cm. Couper l\'avocat en lamelles de 5 mm juste avant de dresser, citronner au citron vert immédiatement pour éviter l\'oxydation.',
+        'Vinaigrette acidulée : jus de citron vert + huile d\'olive + piment doux + une pincée de sel. Fouetter vigoureusement.',
+        'Dresser la roquette en couronne, disposer avocat et mangue en alternance, poser les crevettes chaudes au centre.',
+        'Napper de vinaigrette, parsemer de coriandre fraîche hachée grossièrement. Servir dans la minute — le contraste chaud-froid est l\'âme de ce plat.'
       ]
     },
 
@@ -3190,11 +3423,12 @@
         { name: 'Citron vert (jus)', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Cuire le riz brun 18-20 min. Laisser refroidir.',
-        'Cuire le saumon à la poêle 3 min par côté. Émietter en gros morceaux.',
-        'Réchauffer l\'edamame. Couper concombre et carotte en bâtonnets fins.',
-        'Mélanger sauce soja + huile de sésame + gingembre râpé + citron vert.',
-        'Assembler le bowl : riz, saumon, edamame, légumes. Arroser de sauce. Parsemer sésame.'
+        'Cuire le riz brun dans 2 fois son volume d\'eau salée : porter à ébullition, couvrir, feu doux 18 min. Éteindre, laisser reposer 5 min couvert — le riz fini de cuire à la vapeur résiduelle.',
+        'Sécher le saumon, assaisonner de sel. Chauffer une poêle antiadhésive à feu vif. Cuire côté peau 3 min jusqu\'à ce qu\'elle soit croustillante, retourner 1 min 30. Émietter en gros flocons.',
+        'Réchauffer l\'edamame dans un bol d\'eau bouillante 3 min. Couper le concombre en fines rondelles obliques, la carotte en julienne ou spaghetti au économe.',
+        'Sauce : sauce soja + huile de sésame + gingembre frais râpé + jus de citron vert. Goûter et ajuster.',
+        'Assembler le bowl : riz en base, saumon côté peau visible, légumes et edamame par zones distinctes et colorées.',
+        'Verser la sauce, parsemer de sésame toasté. Servir tiède en appréciant la peau croustillante du saumon.'
       ]
     },
 
@@ -3220,11 +3454,12 @@
         { name: 'Citron (jus)', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Cuire les pâtes al dente selon emballage. Égoutter et rincer à l\'eau froide.',
-        'Couper tomates en dés. Égoutter thon, olives et câpres.',
-        'Vinaigrette : huile d\'olive + jus citron + sel + poivre.',
-        'Mélanger pâtes + thon + tomates + olives + câpres + oignon.',
-        'Assaisonner et garnir de basilic frais. Servir frais.'
+        'Porter à ébullition une grande casserole d\'eau généreusement salée (10 g de sel par litre). Cuire les fusilli 1 minute de moins que le temps indiqué : ils doivent rester fermes, la cuisson continue après égouttage.',
+        'Égoutter, rincer brièvement à l\'eau froide pour stopper la cuisson, puis arroser immédiatement d\'un filet d\'huile d\'olive pour éviter l\'agglutination.',
+        'Préparer la vinaigrette en premier : fouetter huile d\'olive + jus de citron + sel + poivre. Verser sur les pâtes encore tièdes pour qu\'elles s\'imprègnent.',
+        'Égoutter soigneusement thon, olives et câpres. Couper les tomates en dés réguliers, l\'oignon rouge en brunoise fine pour adoucir son piquant.',
+        'Mélanger délicatement pâtes + thon en gros morceaux + tomates + olives + câpres + oignon. Ne pas trop travailler.',
+        'Rectifier l\'assaisonnement, déchirer le basilic frais à la main (jamais haché au couteau). Servir frais mais pas glacé : les saveurs ressortent mieux à 15 °C.'
       ]
     },
 
@@ -3252,11 +3487,12 @@
         { name: 'Cannelle moulue', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Réhydrater le couscous avec eau bouillante + 1 c.à.c d\'huile. Couvrir 5 min. Égrener.',
-        'Faire revenir l\'oignon émincé dans l\'huile. Ajouter l\'agneau + épices. Cuire 8 min.',
-        'Torréfier les amandes à sec dans une poêle 2 min.',
-        'Assembler couscous + agneau + raisins secs + amandes.',
-        'Garnir de menthe et persil hachés. Arroser de jus de citron. Servir tiède.'
+        'Réhydrater le couscous : verser l\'eau bouillante salée exactement à hauteur du grain, ajouter 1 c.à.c d\'huile d\'olive, couvrir hermétiquement 5 min. Égrener à la fourchette en travaillant de bas en haut pour aérer.',
+        'Torréfier les amandes effilées à sec dans une poêle froide montée progressivement à feu moyen 2-3 min, en secouant sans arrêt — elles colorent vite et brûlent encore plus vite. Réserver.',
+        'Faire revenir l\'oignon émincé fin dans l\'huile d\'olive à feu moyen 4 min jusqu\'à translucidité. Ajouter l\'agneau haché, monter le feu, cuire 6-7 min en écrasant les grumeaux. Incorporer ras el hanout + cannelle les 2 dernières minutes.',
+        'Déposer les raisins secs sur l\'agneau encore chaud hors feu : ils se réhydratent dans la vapeur résiduelle.',
+        'Assembler couscous en base, agneau aux épices par-dessus avec son jus, amandes torréfiées, puis arroser de jus de citron.',
+        'Parsemer de menthe et persil hachés grossièrement au dernier moment. Servir tiède : c\'est à cette température que les épices marocaines expriment toute leur profondeur.'
       ]
     },
 
@@ -3281,11 +3517,12 @@
         { name: 'Aneth frais', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Griller le pain et le couper en dés pour croûtons.',
-        'Couper l\'avocat en lamelles. Arroser d\'un filet de citron.',
-        'Disposer la roquette en base du saladier.',
-        'Garnir : saumon fumé roulé, lamelles d\'avocat, câpres, croûtons.',
-        'Vinaigrette : huile d\'olive + citron + sel. Arroser et parsemer d\'aneth.'
+        'Griller le pain en tranches entières sous le gril du four 2 min par face — la croûte doit chanter. Couper en dés réguliers de 1 cm à froid.',
+        'Ouvrir l\'avocat en deux, retirer le noyau avec le plat du couteau. Tailler en lamelles dans la peau, extraire à la cuillère. Arroser aussitôt du jus de citron pour préserver la couleur.',
+        'Préparer la vinaigrette dans un bol : dissoudre une pincée de sel dans le citron restant, incorporer l\'huile d\'olive en filet en fouettant pour émulsionner légèrement.',
+        'Disposer la roquette en base du saladier. Assaisonner directement la roquette avec la moitié de la vinaigrette — les feuilles doivent juste briller, sans flétrir.',
+        'Disposer en éventail les lamelles d\'avocat, les tranches de saumon fumé légèrement roulées et les câpres. Ajouter les croûtons.',
+        'Napper du reste de vinaigrette. Parsemer généreusement d\'aneth effeuillé à la main. Servir dans les 2 minutes.'
       ]
     },
 
@@ -3311,11 +3548,12 @@
         { name: 'Paprika fumé', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Préchauffer four à 200 °C. Couper patate douce en dés. Mélanger avec huile + cumin.',
-        'Rôtir patate douce et pois chiches sur plaque 20 min.',
-        'Griller le poulet assaisonné 5 min par côté. Couper en tranches.',
-        'Sauce tahini : tahini + citron + 2 c.à.s d\'eau + sel.',
-        'Assembler épinards + patate douce + pois chiches + poulet. Napper de sauce tahini.'
+        'Préchauffer le four à 210 °C chaleur tournante. Couper la patate douce en dés de 2 cm, peau lavée conservée pour la fibre. Égoutter et sécher les pois chiches sur du papier absorbant — un pois chiche sec rôtit, un pois chiche humide cuit à la vapeur.',
+        'Mélanger dés de patate douce et pois chiches avec l\'huile, le cumin, le paprika, sel et poivre. Étaler sur une seule couche sur la plaque — sans chevauchement. Rôtir 20-22 min sans remuer avant mi-cuisson.',
+        'Aplatir légèrement le blanc de poulet avec la paume pour l\'uniformiser à 2 cm d\'épaisseur. Assaisonner sel, poivre, paprika. Saisir dans une poêle très chaude 4 min par face — ne pas déplacer avant d\'avoir une croûte dorée.',
+        'Laisser reposer le poulet 3 min sous une feuille d\'aluminium. Trancher en biais à 1 cm d\'épaisseur.',
+        'Sauce tahini : fouetter tahini + jus de citron + 2 c.à.s d\'eau froide + sel jusqu\'à consistance crémeuse fluide. Elle doit couler en ruban.',
+        'Assembler : épinards frais en base, patate douce et pois chiches chauds, tranches de poulet en éventail. Napper de sauce tahini en zigzag.'
       ]
     },
 
@@ -3342,11 +3580,12 @@
         { name: 'Piment doux', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Égoutter et rincer haricots noirs et maïs.',
-        'Couper tomate et oignon en petits dés. Écraser grossièrement l\'avocat.',
-        'Vinaigrette : citron vert + huile + cumin + piment + sel.',
-        'Mélanger haricots + maïs + tomate + oignon + avocat.',
-        'Arroser de vinaigrette. Garnir de coriandre fraîche. Servir frais.'
+        'Égoutter et rincer les haricots noirs et le maïs à l\'eau froide. Sécher délicatement — l\'eau résiduelle dilue la vinaigrette et rend la salade fade.',
+        'Couper tomates et oignon rouge en brunoise fine (5 mm). Mettre l\'oignon rouge 5 min dans un peu de jus de citron vert — il perd son agressivité et devient translucide.',
+        'Couper l\'avocat en dés réguliers de 1,5 cm. Ne pas écraser : on veut des morceaux nets, pas une purée.',
+        'Vinaigrette : jus de citron vert + huile d\'olive + cumin + piment + sel. Émulsionner à la fourchette.',
+        'Assembler dans l\'ordre : haricots et maïs d\'abord, puis tomate et oignon égoutté, enfin l\'avocat posé délicatement sur le dessus sans mélanger encore.',
+        'Verser la vinaigrette sur l\'ensemble. Mélanger une seule fois, en soulevant de bas en haut. Couvrir de coriandre fraîche ciselée. Servir dans les 10 minutes.'
       ]
     },
 
@@ -3372,11 +3611,12 @@
         { name: 'Citron (jus)', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Faire sauter les crevettes dans une poêle chaude 2-3 min. Réserver.',
-        'Couper tomates et concombre en dés. Couper le pita en triangles et griller.',
-        'Vinaigrette : huile d\'olive + citron + origan + sel.',
-        'Assembler tomates, concombre, olives, crevettes et pita grillé.',
-        'Émietter la feta. Arroser de vinaigrette. Servir immédiatement.'
+        'Sécher les crevettes sur du papier absorbant — c\'est la règle d\'or avant toute saisie. Chauffer la poêle à feu vif jusqu\'à ce qu\'elle fume légèrement.',
+        'Saisir les crevettes en une seule couche, 1 min 30 par face sans toucher. Elles doivent se recouvrir d\'une carapace dorée. Saler en fin de cuisson seulement. Réserver à température ambiante.',
+        'Griller les triangles de pita sous le gril du four 3 min — ils doivent croustiller sans sécher.',
+        'Couper tomates en quartiers (pas en dés), concombre en demi-lunes de 5 mm. Tailler la feta en cubes de 1 cm à la main — jamais râpée.',
+        'Vinaigrette : huile d\'olive + citron + origan + sel. Fouetter 30 secondes pour lier.',
+        'Assembler tomates, concombre et olives. Disposer les crevettes tièdes sur le dessus, la feta, le pita grillé. Arroser de vinaigrette au moment de servir.'
       ]
     },
 
@@ -3401,11 +3641,12 @@
         { name: 'Citron (jus)', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Cuire le quinoa dans 120 ml d\'eau salée 12 min. Laisser refroidir.',
-        'Hacher finement le persil. Couper tomates, concombre et oignons en petits dés.',
-        'Égoutter et rincer les pois chiches.',
-        'Mélanger tous les ingrédients dans un saladier.',
-        'Assaisonner généreusement : huile d\'olive + citron + sel. Réfrigérer 10 min avant service.'
+        'Rincer soigneusement le quinoa sous l\'eau froide 1 min — les saponines en surface donnent l\'amertume. Cuire dans 120 ml d\'eau bouillante salée à couvert 12 min. Éteindre et laisser gonfler 3 min à couvert. Étaler sur une plaque pour refroidir vite.',
+        'Hacher le persil au couteau, pas au robot : les feuilles doivent rester vivantes, pas oxydées. Réserver les tiges pour un bouillon.',
+        'Couper tomates, concombre et oignons verts en brunoise régulière de 4-5 mm — l\'homogénéité des dés est la signature d\'un bon taboulé.',
+        'Égoutter et rincer les pois chiches. Les sécher brièvement sur du papier absorbant.',
+        'Assembler quinoa froid + pois chiches + légumes + persil dans un grand saladier.',
+        'Assaisonner : huile d\'olive en filet, jus de citron, sel, poivre. Mélanger en soulevant délicatement. Couvrir et réfrigérer 15 min minimum — le taboulé doit reposer pour que les saveurs se fondent.'
       ]
     },
 
@@ -3433,11 +3674,12 @@
         { name: 'Piment doux', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Réhydrater les vermicelles dans l\'eau chaude 5 min. Égoutter et refroidir.',
-        'Griller le steak 3-4 min par côté pour rosé. Laisser reposer 2 min. Trancher finement.',
-        'Julienner carotte et concombre. Hacher ail.',
-        'Sauce : sauce soja + huile sésame + citron vert + ail + piment.',
-        'Assembler vermicelles + légumes + bœuf + herbes. Arroser de sauce. Servir frais.'
+        'Sortir le rumsteak du réfrigérateur 15 min avant cuisson — une viande froide saisie à cœur se contracte et durcit. Réhydrater les vermicelles dans l\'eau chaude (non bouillante) 4-5 min. Égoutter, rincer à l\'eau froide, réserver.',
+        'Chauffer une poêle ou une grille à feu maximum. Saisir le steak 3 min par face sans le déplacer pour obtenir une croûte marquée. Pour un rosé : appuyer légèrement au doigt — la viande doit céder légèrement mais pas s\'enfoncer.',
+        'Laisser reposer le steak sur une planche 3 min recouvert d\'un bol retourné — jamais d\'aluminium, qui fait cuire la viande à la vapeur. Trancher en biais finement contre le fil du muscle.',
+        'Julienner carotte et concombre en filaments de 4-5 cm. L\'homogénéité avec les vermicelles est essentielle pour la bouche.',
+        'Sauce : sauce soja + huile de sésame + jus de citron vert + ail haché très fin + piment. Goûter et équilibrer — elle doit être vive, parfumée, légèrement salée.',
+        'Assembler vermicelles + légumes + herbes fraîches entières (menthe, coriandre). Poser les tranches de bœuf. Napper de sauce au dernier moment. Servir aussitôt.'
       ]
     },
 
@@ -3464,11 +3706,12 @@
         { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Cuire le riz brun 18-20 min. Réserver.',
-        'Presser le tofu pour enlever l\'eau. Couper en cubes.',
-        'Faire dorer le tofu dans l\'huile d\'olive 4 min de chaque côté.',
-        'Sauce : sauce soja + huile de sésame + gingembre râpé + citron vert.',
-        'Assembler riz + edamame chaud + carotte râpée + tofu. Arroser de sauce. Parsemer sésame.'
+        'Cuire le riz brun dans deux fois son volume d\'eau salée, à couvert, 18-20 min à feu doux. Éteindre et laisser reposer 5 min à couvert — les grains achèvent de gonfler sans accrocher.',
+        'Presser le tofu ferme entre deux assiettes avec un poids (une boîte de conserve) pendant 10 min. Cette étape est décisive : un tofu bien pressé dore, un tofu humide frit dans sa propre eau.',
+        'Couper le tofu en cubes de 2 cm. Chauffer l\'huile d\'olive dans une poêle anti-adhésive à feu moyen-vif. Saisir les cubes 4 min sans les toucher, puis retourner et cuire 3-4 min — chaque face doit être uniformément dorée.',
+        'Déglacer le tofu avec la sauce soja directement dans la poêle hors feu — elle caramélise en quelques secondes et enrobe chaque cube.',
+        'Sauce : huile de sésame + gingembre finement râpé + jus de citron vert. Ne pas chauffer l\'huile de sésame — elle se consomme crue pour préserver ses arômes.',
+        'Assembler : riz en base, edamame réchauffé, carotte râpée, cubes de tofu laqués. Napper de sauce. Parsemer généreusement de sésame toasté.'
       ]
     },
 
@@ -3493,11 +3736,12 @@
         { name: 'Vinaigre balsamique', qty: 8, unit: 'ml' }
       ],
       steps: [
-        'Griller le pain complet et couper en dés.',
-        'Couper tomates et mozzarella en tranches. Rouler les tranches de dinde.',
-        'Disposer la roquette en base du plat.',
-        'Alterner tranches de tomate, mozzarella et dinde roulée.',
-        'Arroser d\'huile d\'olive + balsamique. Garnir de basilic et croûtons.'
+        'Griller le pain complet entier sous le gril du four, 2 min par face. Couper en dés de 1 cm à chaud — le pain chaud se coupe net et refroidit croustillant.',
+        'Sortir la mozzarella du réfrigérateur 15 min avant — elle révèle ses arômes à température ambiante. Égoutter et sécher dans du papier absorbant. Couper en tranches de 8 mm.',
+        'Couper les tomates en tranches régulières de 8 mm. Rouler serré chaque tranche de jambon de dinde.',
+        'Préparer le dressing : dissoudre une pincée de sel dans le vinaigre balsamique, puis incorporer l\'huile d\'olive en filet en émulsionnant à la fourchette.',
+        'Disposer la roquette en lit. Alterner sur le dessus — comme une caprese — les tranches de tomate et de mozzarella, intercalées des rouleaux de dinde.',
+        'Arroser de dressing au moment de servir. Déposer les feuilles de basilic entières (jamais ciselées — elles noircissent), puis les croûtons en finition.'
       ]
     },
 
@@ -3523,12 +3767,12 @@
         { name: 'Vinaigre balsamique', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Faire revenir les lardons de dinde 3 min. Ajouter champignons émincés. Cuire 3 min.',
-        'Griller le pain et couper en dés pour croûtons.',
-        'Porter à ébullition de l\'eau vinaigrée. Former un tourbillon. Pocher les œufs 3 min.',
-        'Vinaigrette : huile + balsamique + moutarde + sel.',
-        'Assembler épinards + champignons + lardons + croûtons. Poser les œufs pochés dessus.',
-        'Arroser de vinaigrette. Servir immédiatement.'
+        'Faire revenir les lardons de dinde à sec dans une poêle chaude 3 min jusqu\'à légère coloration. Ajouter les champignons émincés en fine tranche, saisir à feu vif 3 min sans remuer pour qu\'ils colorent — jamais à feu doux ou ils rendent leur eau.',
+        'Griller le pain et tailler les croûtons à 1 cm. Préparer la vinaigrette tiède : déglacer la poêle des lardons avec le vinaigre balsamique, ajouter l\'huile d\'olive et la moutarde hors feu. Fouetter.',
+        'Porter 1 litre d\'eau avec le vinaigre blanc à frémissement (90 °C — jamais à ébullition pleine). Former un tourbillon avec une cuillère. Casser l\'œuf dans un ramequin, le glisser au centre du tourbillon.',
+        'Pocher 3 min : le blanc doit être pris, le jaune encore tremblant. Égoutter sur du papier absorbant. Répéter pour le second œuf.',
+        'Assaisonner les épinards crus avec la vinaigrette tiède — ils s\'attendrissent légèrement sans cuire.',
+        'Dresser : épinards, champignons et lardons, croûtons. Poser les œufs pochés au sommet. Servir immédiatement — l\'œuf doit être chaud quand le jaune est percé.'
       ]
     },
 
@@ -3555,11 +3799,12 @@
         { name: 'Cumin moulu', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Cuire les falafels au four 200 °C pendant 15-18 min selon emballage.',
-        'Cuire le riz brun 18-20 min. Laisser tiédir.',
-        'Couper concombre, tomate et oignon en petits dés.',
-        'Assembler le bowl : riz brun en base, houmous d\'un côté, légumes de l\'autre.',
-        'Disposer les falafels chauds. Arroser citron + huile. Garnir de persil et cumin.'
+        'Préchauffer le four à 200 °C chaleur tournante. Disposer les falafels sur une grille (pas une plaque pleine) pour que la chaleur circule tout autour et les rende croustillants uniformément. Enfourner 16-18 min sans ouvrir le four avant 12 min.',
+        'Cuire le riz brun dans deux fois son volume d\'eau salée, couvercle fermé, 18 min à feu doux. Laisser reposer 5 min à couvert. Égrener avec une fourchette.',
+        'Couper concombre et tomate en dés de 1 cm. Émincer l\'oignon rouge finement. Faire mariner l\'oignon dans le jus de citron 5 min — il perd son piquant.',
+        'Assembler le riz tiède en base du bowl. Déposer le houmous en quenelle d\'un côté avec une cuillère à soupe passée sous l\'eau chaude — geste qui donne la forme parfaite.',
+        'Disposer les légumes marinés de l\'autre côté. Placer les falafels chauds au centre, légèrement inclinés pour le visuel.',
+        'Arroser d\'un filet d\'huile d\'olive et de jus de citron. Parsemer de persil ciselé et d\'une pincée de cumin. Servir immédiatement, falafels chauds sur houmous froid.'
       ]
     },
     {
@@ -3580,9 +3825,11 @@
         { name: "Lait d'amande", qty: 100, unit: 'ml' }
       ],
       steps: [
-        "Mixer l'açaí en poudre avec la banane et le lait d'amande jusqu'à consistance épaisse.",
-        'Verser dans un bol.',
-        'Garnir de granola, fruits rouges et miel.'
+        'Congeler la banane en rondelles la veille : elle donnera une texture crémeuse sans glace.',
+        'Mixer l\'açaí en poudre avec la banane congelée et le lait d\'amande, en démarrant à vitesse lente puis en montant — 30 secondes suffisent. La base doit tenir à la cuillère, pas couler.',
+        'Verser d\'un seul geste dans un bol bien froid (passé 5 min au congélateur).',
+        'Disposer le granola en bande d\'un côté, les fruits rouges de l\'autre : l\'œil mange avant la bouche.',
+        'Finir avec un filet de miel en spirale au centre. Servir immédiatement.'
       ]
     },
     {
@@ -3602,9 +3849,12 @@
         { name: 'Tomate', qty: 40, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 180 °C. Huiler légèrement un moule à muffins.',
-        'Battre les œufs. Ajouter épinards hachés, fromage, dinde et tomates en dés.',
-        'Verser dans les moules. Cuire 18-20 min jusqu\'à ce que les œufs soient pris.'
+        'Préchauffer le four à 175 °C chaleur tournante. Huiler les alvéoles au pinceau, puis les fariner légèrement — les muffins se démoulent nets.',
+        'Émincer finement les épinards et les dés de tomate ; les éponger dans un torchon pour éliminer l\'excès d\'eau qui rendrait les muffins spongieux.',
+        'Battre les œufs à la fourchette juste 20 secondes — on veut une liaison homogène, pas une mousse. Saler, poivrer.',
+        'Incorporer épinards, jambon de dinde en petits dés, tomates et fromage râpé. Mélanger sans excès.',
+        'Remplir chaque alvéole aux trois-quarts. Enfourner 17-19 min : la surface doit être dorée et à peine tremblante au centre.',
+        'Laisser tiédir 3 min avant de démouler en passant la lame d\'un couteau sur le bord.'
       ]
     },
     {
@@ -3623,9 +3873,11 @@
         { name: 'Miel', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Mélanger les graines de chia avec le lait de coco et le miel.',
-        'Réfrigérer au moins 4h ou toute la nuit.',
-        'Servir avec la mangue coupée en dés.'
+        'Fouetter le lait de coco et le miel dans un bol jusqu\'à ce que le miel soit dissous — ne laissez pas de grumeaux de lait de coco figé.',
+        'Verser les graines de chia en pluie en remuant constamment. Attendre 2 min, remuer à nouveau vigoureusement pour éviter les agrégats.',
+        'Couvrir et réfrigérer au minimum 4h, idéalement toute la nuit. Le pudding doit avoir la consistance d\'un tapioca : ni liquide, ni béton.',
+        'Au moment de servir, trancher la mangue en brunoise régulière de 1 cm — la régularité fait la différence visuelle et en bouche.',
+        'Déposer la mangue sur le pudding en dôme. Servir bien frais.'
       ]
     },
     {
@@ -3646,9 +3898,11 @@
         { name: 'Graines de chia', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Mixer épinards, banane et lait végétal jusqu\'à texture épaisse et lisse.',
-        'Verser dans un bol.',
-        'Garnir de kiwi tranché, granola et graines de chia.'
+        'Congeler la banane en tronçons la veille. Peler et trancher le kiwi ; réserver au frais.',
+        'Mixer les épinards avec le lait d\'amande en premier, 20 secondes à pleine puissance — les feuilles doivent être parfaitement lisses sans trace de fibre verte.',
+        'Ajouter la banane congelée et mixer à nouveau jusqu\'à obtenir une base épaisse qui ne coule pas du mixeur retourné.',
+        'Verser dans un bol froid. Disposer les tranches de kiwi en éventail, le granola en ligne nette, les graines de chia saupoudrées en dernier.',
+        'Servir aussitôt : le granola doit rester croquant.'
       ]
     },
     {
@@ -3669,9 +3923,11 @@
         { name: 'Aneth (frais ou séché)', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Griller le pain complet.',
-        "Écraser l'avocat avec le jus de citron, sel et poivre.",
-        'Étaler sur le pain, déposer le saumon fumé, câpres et aneth.'
+        'Griller le pain complet jusqu\'à coloration dorée uniforme des deux côtés — pas brûlé, mais assez chaud pour tenir la garniture sans se ramollir.',
+        'Écraser l\'avocat à la fourchette (pas au mixeur) avec le jus du demi-citron, une pincée de sel et de poivre : on veut une texture rustique avec des morceaux.',
+        'Étaler généreusement l\'écrasé d\'avocat sur le pain chaud, bord à bord, en couche régulière d\'environ 5 mm.',
+        'Déposer les tranches de saumon fumé en rosace légère, en les pliant à mi-hauteur pour créer du volume.',
+        'Parsemer les câpres, effeuiller l\'aneth frais par-dessus. Terminer d\'un trait de citron au moment de servir.'
       ]
     },
     {
@@ -3691,9 +3947,12 @@
         { name: 'Sirop d\'érable', qty: 15, unit: 'ml' }
       ],
       steps: [
-        'Mixer les flocons avec la banane et les œufs pour former une pâte.',
-        'Cuire à la poêle anti-adhésive 2-3 min par face.',
-        'Servir avec myrtilles fraîches et sirop d\'érable.'
+        'Mixer les flocons d\'avoine seuls 10 secondes pour obtenir une farine grossière — cela donne des pancakes plus légers qu\'avec des flocons entiers.',
+        'Ajouter la banane et les œufs, mixer 15 secondes : la pâte doit être homogène mais pas aérée. Laisser reposer 3 min pour que la farine s\'hydrate.',
+        'Chauffer une poêle anti-adhésive à feu moyen. Quand une goutte d\'eau saute au contact, la poêle est prête. Pas d\'huile : la banane suffit à empêcher l\'adhérence.',
+        'Verser une louche, parsemer quelques myrtilles sur la pâte crue. Cuire jusqu\'à l\'apparition de bulles en surface (environ 2 min) avant de retourner.',
+        'Cuire 1 min sur l\'autre face. Empiler les pancakes dans une assiette tiède.',
+        'Servir avec les myrtilles fraîches restantes et le sirop d\'érable versé en dernier, jamais pendant la cuisson.'
       ]
     },
     {
@@ -3713,9 +3972,11 @@
         { name: 'Miel', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Verser le skyr dans un bol.',
-        'Déposer les fruits rouges et les noix concassées.',
-        'Arroser de miel.'
+        'Sortir le skyr 5 min avant de servir : trop froid, il est dense et acide — légèrement tempéré, sa douceur naturelle s\'exprime mieux.',
+        'Fouetter brièvement le skyr à la fourchette pour l\'assouplir et créer une texture onctueuse, presque comme une crème.',
+        'Laver et équeuter les fraises ; les couper en quatre si elles sont grosses, en deux si elles sont petites — l\'uniformité compte.',
+        'Concasser grossièrement les noix au couteau (pas au mortier) pour avoir des éclats de tailles différentes : la mâche sera plus intéressante.',
+        'Verser le skyr dans le bol, disposer les fruits en couronne, parsemer les noix. Finir d\'un filet de miel en spirale juste avant de servir.'
       ]
     },
     {
@@ -3735,9 +3996,12 @@
         { name: 'Persil frais', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Faire revenir les champignons émincés dans l\'huile 3 min.',
-        'Battre les œufs, verser sur les champignons à feu doux.',
-        'Remuer doucement pour des œufs crémeux. Finir avec le fromage frais et le persil.'
+        'Émincer les champignons en tranches régulières de 3-4 mm. Chauffer l\'huile d\'olive à feu vif dans une petite poêle anti-adhésive.',
+        'Sauter les champignons à feu vif sans remuer les 2 premières minutes : ils doivent dorer, pas suer. Saler en fin de cuisson seulement.',
+        'Battre les œufs avec le fromage frais, sel et poivre. Baisser le feu au minimum — c\'est la règle d\'or des œufs brouillés.',
+        'Verser les œufs sur les champignons. Avec une spatule souple, ramener doucement les bords vers le centre en mouvements lents et circulaires.',
+        'Retirer du feu alors qu\'ils semblent encore légèrement sous-cuits : la chaleur résiduelle finit la cuisson hors flamme en 30 secondes.',
+        'Dresser et parsemer de persil frais ciselé fin au dernier moment.'
       ]
     },
     {
@@ -3758,9 +4022,12 @@
         { name: 'Cannelle', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Cuire le quinoa dans le lait d\'amande 12 min à feu doux.',
-        'Laisser tiédir légèrement.',
-        'Garnir de banane tranchée, pêche, amandes et cannelle.'
+        'Rincer le quinoa à l\'eau froide dans une passoire fine jusqu\'à ce que l\'eau soit claire — cette étape élimine la saponine, responsable de l\'amertume.',
+        'Porter le lait d\'amande à frémissement avec la cannelle. Verser le quinoa, couvrir et cuire à feu doux 12-13 min sans soulever le couvercle.',
+        'Éteindre le feu, laisser gonfler 3 min couvert. Le quinoa est prêt quand le germe blanc se détache en anneau autour du grain.',
+        'Pendant ce temps, trancher la banane en biais et dénoyauter la pêche en lamelles régulières.',
+        'Verser le quinoa dans le bol, disposer les fruits en alternance par couleur. Parsemer les amandes effilées toastées à sec 2 min à la poêle.',
+        'Servir tiède — ni chaud brûlant, ni froid : c\'est ainsi que les arômes de cannelle s\'expriment pleinement.'
       ]
     },
     {
@@ -3780,9 +4047,12 @@
         { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Mélanger la farine avec 150ml d\'eau, une pincée de sel. Laisser reposer 30 min.',
-        'Cuire les galettes dans une poêle huilée. Casser un œuf au centre, plier.',
-        'Servir avec avocat écrasé et épinards frais.'
+        'Mélanger la farine de sarrasin avec 150 ml d\'eau froide et une pincée de sel en fouettant sans grumeaux. Laisser reposer 30 min à température ambiante — indispensable pour que le gluten de sarrasin se détende.',
+        'Chauffer la poêle à feu moyen-vif, huiler légèrement avec un papier absorbant huilé. Verser la pâte en inclinant la poêle pour couvrir toute la surface en fine couche.',
+        'Cuire 2 min jusqu\'à ce que les bords se décollent et la surface soit mate. Casser un œuf au centre, poivrer.',
+        'Couvrir avec un couvercle 2 min : le blanc se fige, le jaune reste coulant — c\'est la texture idéale.',
+        'Replier les quatre bords en carré autour de l\'œuf. Glisser sur l\'assiette.',
+        'Écraser l\'avocat à la fourchette avec quelques gouttes de citron, sel. Déposer sur la galette avec les épinards frais assaisonnés d\'un filet d\'huile d\'olive.'
       ]
     },
     {
@@ -4049,10 +4319,12 @@
         { name: 'Cumin moulu', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Cuire les lentilles 20 min dans l\'eau salée. Égoutter.',
-        'Griller le halloumi à la poêle sèche 2 min par face.',
-        'Mélanger lentilles, épinards, tomate. Assaisonner huile + citron + cumin.',
-        'Disposer le halloumi grillé sur le bowl.'
+        'Rincer les lentilles. Les plonger dans 3 fois leur volume d\'eau froide non salée, porter à ébullition puis saler en fin de cuisson (20 min). Égoutter et laisser légèrement tiédir : saler trop tôt les durcirait.',
+        'Sécher soigneusement le halloumi avec du papier absorbant. Le cuire dans une poêle sèche très chaude, 2 min par face, sans bouger : une croûte dorée se détache naturellement quand elle est prête.',
+        'Préparer la vinaigrette directement dans le bol : jus de citron, huile d\'olive, cumin, sel. Émulsionner à la fourchette.',
+        'Ajouter les lentilles tièdes et les épinards frais dans le bol. Les épinards vont légèrement fondre au contact de la chaleur — c\'est voulu.',
+        'Couper la tomate en dés, l\'incorporer délicatement.',
+        'Disposer les tranches de halloumi grillé sur le dessus au dernier moment pour conserver leur croustillant.'
       ]
     },
     {
@@ -4075,9 +4347,12 @@
         { name: 'Cumin moulu', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Cuire le riz. Assaisonner le poulet avec paprika + cumin + sel. Cuire à la poêle.',
-        'Couper le poulet en lanières.',
-        'Assembler : riz, poulet épicé, maïs, haricots noirs, tomates, avocat.'
+        'Lancer le riz en premier (absorption : 1 volume riz / 1,5 eau, à couvert, feu doux 12 min). Il attend, le reste s\'organise autour.',
+        'Tailler le blanc de poulet en fines lamelles dans le sens transversal des fibres. Assaisonner : paprika fumé, cumin, sel, une touche d\'huile. Masser 2 min pour que les épices pénètrent.',
+        'Cuire les lamelles à feu vif dans une poêle très chaude, 2-3 min sans remuer puis retourner une seule fois. Le poulet doit être doré, non bouilli.',
+        'Pendant la cuisson, couper la tomate en dés, trancher l\'avocat. Égoutter le maïs et les haricots noirs.',
+        'Dresser le riz chaud au fond du bol, disposer chaque élément en segments séparés — couleurs et textures distinctes.',
+        'Finir avec l\'avocat en dernier, un filet de jus de citron vert pour l\'empêcher de noircir.'
       ]
     },
     {
@@ -4101,9 +4376,12 @@
         { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Cuire le riz. Faire revenir oignon et poivron à la poêle.',
-        'Ajouter le bœuf haché + épices. Cuire 8 min.',
-        'Assembler : riz, bœuf épicé, haricots, poivrons, tomates.'
+        'Cuire le riz par absorption (eau froide + sel, couvercle hermétique, feu doux). Ne jamais soulever le couvercle pendant les 12 premières minutes.',
+        'Émincer finement l\'oignon. Le faire revenir dans l\'huile à feu moyen jusqu\'à translucidité (3-4 min), puis ajouter le poivron rouge coupé en brunoise. 2 min supplémentaires.',
+        'Pousser légumes sur le côté, monter le feu à vif. Ajouter le bœuf haché en une seule couche : ne pas remuer immédiatement, laisser caraméliser 2 min avant de briser en morceaux.',
+        'Saupoudrer cumin et paprika fumé sur le bœuf, mélanger, cuire encore 3 min. Goûter et rectifier le sel.',
+        'Couper la tomate en dés, l\'incorporer hors feu : elle apporte fraîcheur sans cuire.',
+        'Dresser : riz en base, bœuf épicé avec légumes au centre, haricots noirs et tomate fraîche en accompagnement.'
       ]
     },
     {
@@ -4125,9 +4403,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire le riz. Tiédir et assaisonner avec vinaigre de riz + sel.',
-        'Couper saumon, avocat et concombre en tranches fines.',
-        'Disposer harmonieusement sur le riz. Sésame + sauce soja en accompagnement.'
+        'Rincer le riz jusqu\'à eau claire. Cuire par absorption (eau froide, couvrir, feu doux 12 min, repos 5 min couvercle fermé).',
+        'Préparer le shari : verser le vinaigre de riz légèrement chauffé (avec une pincée de sel dissous) sur le riz encore chaud. Incorporer avec des gestes tranchants et rapides — jamais circulaires, pour ne pas écraser les grains. Refroidir à température ambiante, jamais au réfrigérateur.',
+        'Pendant que le riz refroidit, placer le filet de saumon 5 min au congélateur : légèrement fermi, il se tranche beaucoup plus nettement.',
+        'Couper le saumon en tranches biais de 5 mm, le concombre en rondelles fines, l\'avocat en éventail.',
+        'Disposer le riz dans le bol, puis arranger les garnitures en zones colorées distinctes — l\'œil mange avant la bouche.',
+        'Parsemer de graines de sésame. Servir la sauce soja à part, pas versée dessus : chaque bouchée doit garder son identité.'
       ]
     },
     {
@@ -4150,9 +4431,12 @@
         { name: 'Persil frais', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Cuire le quinoa et les edamames. Griller le poulet assaisonné.',
-        'Sauce green goddess : mixer tahini + citron + persil + 2cs eau.',
-        'Assembler : quinoa, poulet, avocat, concombre, edamame. Napper de sauce verte.'
+        'Cuire le quinoa dans 1,5 fois son volume d\'eau salée, à couvert, 12 min. Laisser gonfler 3 min hors feu, égrener à la fourchette.',
+        'Cuire les edamames surgelés à l\'eau bouillante salée, 3 min. Égoutter, passer sous l\'eau froide immédiatement pour fixer la couleur verte.',
+        'Saler et huiler légèrement le blanc de poulet. Le griller dans une poêle striée (ou poêle ordinaire très chaude) 5-6 min par face. Laisser reposer 3 min avant de trancher : les jus se redistribuent.',
+        'Préparer la sauce green goddess : tahini + jus de citron + persil ciselé + 2-3 cuillères d\'eau froide. Fouetter jusqu\'à consistance crémeuse et fluide. Goûter, rectifier l\'acidité.',
+        'Trancher le poulet en diagonale — coupe nette, présentation plus généreuse.',
+        'Dresser le quinoa en base, disposer poulet, avocat en tranches, concombre, edamames. Napper de sauce verte au moment du service.'
       ]
     },
     {
@@ -4174,10 +4458,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Mélanger miso + miel + sauce soja. Enduire le saumon. Mariner 10 min.',
-        'Cuire le riz brun. Blanchir le bok choy 2 min.',
-        'Cuire le saumon au four 200°C 12 min ou à la poêle 4 min par face.',
-        'Servir sur riz brun avec bok choy. Parsemer de sésame.'
+        'Préparer la marinade miso : mélanger pâte miso + miel + sauce soja jusqu\'à obtenir une laque lisse et homogène. Enduire le saumon côté chair uniquement — pas la peau.',
+        'Laisser mariner minimum 15 min à température ambiante (ou 1h au réfrigérateur si on anticipe) : le miso pénètre et attendrit les fibres.',
+        'Lancer le riz brun (plus long : 25 min). Placer le saumon sur une plaque légèrement huilée, four préchauffé 200°C, grille haute. Cuire 10-12 min : la laque doit être légèrement caramélisée mais non brûlée.',
+        'Pendant la cuisson du saumon, faire sauter le bok choy à la poêle très chaude avec un filet d\'eau, 2 min : il doit rester ferme et brillant, jamais flasque.',
+        'Dresser : riz brun en base, bok choy sauté d\'un côté, saumon laqué posé délicatement par-dessus sans briser la croûte caramélisée.',
+        'Parsemer de graines de sésame au dernier moment. Servir immédiatement : le contraste chaud/croustillant/fondant ne dure que quelques minutes.'
       ]
     },
     {
@@ -4200,9 +4486,12 @@
         { name: 'Riz basmati', qty: 60, unit: 'g' }
       ],
       steps: [
-        'Mariner le poulet en dés dans yaourt + garam masala + curcuma 10 min.',
-        'Faire revenir l\'oignon. Ajouter tomates concassées + gingembre. Mijoter 10 min.',
-        'Ajouter le poulet. Cuire 15 min à feu moyen. Servir sur riz basmati.'
+        'Couper le poulet en dés de 3 cm. Mélanger dans un bol : yaourt 0%, garam masala, curcuma, sel. Enrober le poulet et laisser mariner au moins 15 min — le yaourt attendrit les protéines et la marinade devient une vraie base de sauce.',
+        'Dans une casserole à fond épais, faire suer l\'oignon émincé à feu moyen-doux 5 min sans coloration. Ajouter le gingembre râpé finement, cuire 1 min.',
+        'Ajouter les tomates concassées. Monter le feu, cuire 8 min à feu moyen en remuant régulièrement jusqu\'à ce que la sauce épaississe et que l\'huile commence à se séparer de la tomate — signe que la base est cuite.',
+        'Incorporer le poulet avec sa marinade. Mélanger, couvrir, cuire 15 min à feu doux. Goûter et rectifier sel et épices en fin de cuisson uniquement.',
+        'Pendant ce temps, cuire le riz basmati rincé par absorption : eau froide + sel, couvercle, 10 min feu doux.',
+        'Servir le curry sur le riz basmati. Un filet de citron juste avant de table pour réveiller tous les arômes.'
       ]
     },
     {
@@ -4225,9 +4514,12 @@
         { name: 'Fromage râpé', qty: 15, unit: 'g' }
       ],
       steps: [
-        'Faire revenir oignon + ail dans l\'huile. Ajouter bœuf haché, cuire 5 min.',
-        'Ajouter tomates concassées + origan. Mijoter 15 min.',
-        'Cuire les pâtes al dente. Servir avec la bolognaise et fromage râpé.'
+        'Émincer finement l\'oignon, écraser et hacher l\'ail. Les faire fondre à feu doux dans l\'huile d\'olive 4-5 min sans coloration — la douceur de l\'oignon est la fondation de la sauce.',
+        'Ajouter le bœuf haché : monter le feu à vif, ne pas remuer pendant 2 min pour obtenir une belle coloration. Briser ensuite avec une spatule, assaisonner en sel.',
+        'Concasser les tomates à la main directement dans la casserole (ou les mixer grossièrement). Ajouter l\'origan. Cuire à feu moyen 15-18 min à découvert : la sauce doit réduire et devenir brillante, onctueuse.',
+        'Cuire les pâtes dans un grand volume d\'eau très salée (l\'eau doit être "aussi salée que la Méditerranée"). Les arrêter 1 minute avant la fin indiquée : elles finiront dans la sauce.',
+        'Verser les pâtes égouttées — conserver une louche d\'eau de cuisson — dans la sauce. Faire sauter 1 min à feu vif en ajoutant un peu d\'eau de cuisson : elle contient l\'amidon qui lie sauce et pâtes.',
+        'Servir dans l\'assiette chaude, fromage râpé parsemé au dernier moment.'
       ]
     },
     {
@@ -4250,9 +4542,12 @@
         { name: 'Riz basmati', qty: 60, unit: 'g' }
       ],
       steps: [
-        'Faire revenir l\'oignon. Ajouter épices + tomates. Cuire 5 min.',
-        'Ajouter pois chiches + lait de coco. Mijoter 12 min.',
-        'Incorporer les épinards en fin de cuisson. Servir sur riz basmati.'
+        'Émincer l\'oignon. Le faire revenir à feu moyen dans une casserole à fond épais avec un filet d\'eau ou d\'huile, 5 min, jusqu\'à translucidité.',
+        'Ajouter garam masala et curcuma directement sur l\'oignon chaud (sans liquide) : 30 secondes de tostage à sec libèrent les arômes liposolubles des épices — c\'est la différence entre une sauce fade et un curry profond.',
+        'Ajouter les tomates concassées, mélanger, cuire 5 min à feu moyen jusqu\'à légère réduction.',
+        'Égoutter et rincer les pois chiches. Les incorporer avec le lait de coco. Mijoter 12 min à couvert, feu doux. Écraser légèrement quelques pois chiches contre la paroi pour épaissir naturellement la sauce.',
+        'Hors feu, incorporer les épinards frais par poignées : la chaleur résiduelle suffit à les faire fondre en 1-2 min sans les décolorer.',
+        'Servir sur riz basmati. Un filet de jus de citron au dernier moment rehausse toutes les épices.'
       ]
     },
     {
@@ -4275,9 +4570,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Mariner le bœuf : sauce soja + miel + huile sésame + gingembre 10 min.',
-        'Cuire le riz. Saisir le bœuf à feu vif 5 min.',
-        'Assembler : riz, bœuf bulgogi, salade, sésame.'
+        'Préparer la marinade bulgogi : sauce soja + miel + huile de sésame + gingembre râpé finement. Bien mélanger pour dissoudre le miel.',
+        'Placer le bœuf haché 10 min au congélateur pour le raffermir légèrement, puis le façonner en galette fine de 1 cm. Incision plus facile, cuisson plus homogène. Mariner 10 min dans la sauce.',
+        'Cuire le riz par absorption : 1 volume de riz / 1,5 volume d\'eau froide salée, couvercle hermétique, feu doux 12 min. Ne pas soulever le couvercle.',
+        'Chauffer une poêle à feu très vif jusqu\'à légère fumée. Déposer le bœuf : cuire 2-3 min sans toucher, laisser la croûte se former. Retourner une seule fois. Le miel caramélise rapidement — surveiller pour ne pas brûler.',
+        'Laisser reposer la viande 2 min, puis briser en morceaux irréguliers : le contraste entre les parties caramélisées et les zones tendres est l\'âme du bulgogi.',
+        'Dresser le riz, disposer le bœuf bulgogi, la salade romaine ciselée. Parsemer de graines de sésame. Un filet d\'huile de sésame en finition.'
       ]
     },
     {
@@ -4300,9 +4598,12 @@
         { name: 'Pain pita complet', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Faire revenir oignon + poivron à l\'huile. Ajouter tomates + épices.',
-        'Mijoter 10 min jusqu\'à sauce épaisse. Creuser 3 puits.',
-        'Casser un œuf dans chaque puits. Couvrir et cuire 5-7 min. Servir avec pita.'
+        'Émincer finement l\'oignon et le poivron en brunoise régulière. Faire suer à feu moyen dans l\'huile d\'olive 3 min sans coloration.',
+        'Ajouter les tomates concassées grossièrement à la main, le cumin et le paprika fumé. Saler. Cuire à feu moyen 8-10 min en remuant jusqu\'à obtenir une sauce épaisse qui se détache des bords.',
+        'Réduire le feu au minimum. Creuser 3 puits bien distincts avec le dos d\'une cuillère.',
+        'Casser chaque œuf délicatement dans un ramequin, puis le glisser dans son puits — jamais directement depuis la coquille.',
+        'Couvrir et cuire 5-6 min : le blanc doit être pris, le jaune encore tremblotant. Surveiller sans soulever le couvercle inutilement.',
+        'Servir directement dans la poêle avec le pita chaud. Quelques feuilles de coriandre si disponibles.'
       ]
     },
     {
@@ -4324,9 +4625,12 @@
         { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
       ],
       steps: [
-        'Mariner le poulet avec jus de citron + herbes + huile + sel.',
-        'Cuire au four 200°C avec patate douce et courgette en morceaux, 22-25 min.',
-        'Servir avec les légumes rôtis.'
+        'Inciser le blanc de poulet en profondeur sur 3-4 endroits avec la pointe du couteau. Insérer thym et romarin dans les entailles : les arômes pénètrent la chair, pas seulement la surface.',
+        'Mariner 10 min minimum : jus et zeste de citron + huile d\'olive + sel. Le zeste est obligatoire — le jus seul ne parfume pas.',
+        'Couper la patate douce en cubes de 2 cm réguliers, la courgette en demi-lunes de 1 cm. Taille uniforme = cuisson uniforme.',
+        'Disposer les légumes en couche unique sur la plaque. Poser le poulet par-dessus. Four à 200°C (chaleur tournante), 22-25 min.',
+        'À mi-cuisson (12 min), retourner les légumes. Ne pas toucher au poulet.',
+        'Laisser reposer le poulet 3 min hors du four avant de trancher — les jus se redistribuent, la chair reste juteuse.'
       ]
     },
     {
@@ -4347,9 +4651,12 @@
         { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
       ],
       steps: [
-        'Mélanger chapelure + persil haché + zeste citron + huile.',
-        'Déposer sur le cabillaud. Cuire au four 200°C / 12 min.',
-        'Cuire les haricots verts vapeur 6 min. Servir ensemble.'
+        'Sécher impérativement le filet de cabillaud avec du papier absorbant. Un poisson humide ne croûte pas — il cuit à la vapeur.',
+        'Mélanger chapelure + persil haché finement + zeste de citron + huile d\'olive. La préparation doit tenir en boule quand on la presse : ni trop sèche ni huileuse.',
+        'Poser le poisson sur une plaque légèrement huilée. Tasser la croûte uniformément sur toute la surface avec la paume — épaisseur de 3-4 mm.',
+        'Enfourner à 200°C, 10-12 min sans ouvrir le four. La croûte doit être dorée, le poisson nacré à cœur — une légère résistance sous le doigt, jamais ferme.',
+        'Pendant ce temps, cuire les haricots verts 5 min à l\'eau bouillante salée, pas à la vapeur : ils restent verts et légèrement croquants.',
+        'Égoutter, assaisonner les haricots d\'un filet d\'huile d\'olive et de fleur de sel. Dresser le poisson dessus pour ne pas le casser.'
       ]
     },
     {
@@ -4372,9 +4679,12 @@
         { name: 'Riz basmati', qty: 60, unit: 'g' }
       ],
       steps: [
-        'Mariner poulet en dés avec yaourt + épices 15 min.',
-        'Faire revenir oignon. Ajouter tomates + épices. Mijoter 10 min. Mixer la sauce.',
-        'Ajouter le poulet, cuire 15 min. Sauce onctueuse sans crème. Servir sur riz basmati.'
+        'Détailler le poulet en cubes de 3 cm. Mélanger avec yaourt + garam masala + curcuma + gingembre râpé finement + sel. Couvrir et laisser mariner 15 min minimum — c\'est ici que tout se joue.',
+        'Lancer la cuisson du riz basmati à l\'eau froide salée, porter à ébullition puis couvrir à feu minimal.',
+        'Faire fondre l\'oignon émincé finement dans une casserole à feu moyen sans coloration. Ajouter les tomates pelées et concassées + une pincée de garam masala. Mijoter 10 min.',
+        'Mixer la sauce tomate-oignon jusqu\'à consistance lisse et veloutée. Remettre sur le feu.',
+        'Incorporer le poulet mariné dans la sauce chaude. Cuire à feu moyen 12-15 min en remuant régulièrement. La marinade au yaourt crée naturellement l\'onctuosité — pas besoin de crème.',
+        'Vérifier l\'assaisonnement. Servir sur riz basmati. Une pincée de garam masala frais au dressage ravive tous les arômes.'
       ]
     },
     {
@@ -4397,9 +4707,12 @@
         { name: 'Huile de sésame', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Cuire le riz. Blanchir le brocoli 2 min.',
-        'Saisir le bœuf à feu vif avec ail + gingembre, 4 min.',
-        'Ajouter brocoli + sauce soja + sauce huître. Sauter 2 min. Finir avec huile sésame.'
+        'Cuire le riz. Préparer tous les ingrédients avant d\'allumer le feu — un stir-fry, ça ne vous attend pas.',
+        'Blanchir le brocoli en petits bouquets 2 min à l\'eau bouillante salée. Plonger immédiatement dans l\'eau glacée pour fixer la couleur et stopper la cuisson. Égoutter.',
+        'Chauffer la poêle ou le wok à feu maximum 2 min à vide. Elle doit être très chaude — une goutte d\'eau doit s\'évaporer instantanément.',
+        'Saisir le bœuf haché en l\'étalant sans remuer 90 secondes : laisser la croûte se former. Puis émietter et ajouter l\'ail et le gingembre râpé, encore 1 min.',
+        'Ajouter le brocoli, la sauce soja et la sauce huître. Sauter en remuant vivement 90 secondes à feu vif — pas une seconde de plus pour garder le croquant.',
+        'Hors du feu, filet d\'huile de sésame. Servir aussitôt sur le riz : un stir-fry qui attend est un stir-fry raté.'
       ]
     },
     {
@@ -4420,9 +4733,12 @@
         { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
       ],
       steps: [
-        'Cuire les gnocchi selon emballage (2-3 min eau bouillante). Égoutter.',
-        'Faire revenir ail + épinards à l\'huile 2 min. Ajouter la ricotta.',
-        'Mélanger gnocchi + sauce épinards-ricotta. Parsemer de fromage râpé.'
+        'Porter une grande casserole d\'eau à ébullition avec une bonne poignée de gros sel. L\'eau doit être "aussi salée que la mer".',
+        'Dans une poêle, faire dorer légèrement l\'ail émincé dans l\'huile d\'olive à feu moyen — blond, jamais brun.',
+        'Jeter les épinards frais dans la poêle, monter le feu, saler légèrement. Les retourner 1 min jusqu\'à ce qu\'ils tombent complètement. Retirer du feu.',
+        'Plonger les gnocchi dans l\'eau bouillante. Ils sont cuits quand ils remontent à la surface (2-3 min) — les repêcher à l\'écumoire sans attendre.',
+        'Ajouter la ricotta dans la poêle avec les épinards, feu doux, et bien mélanger pour obtenir une crème homogène. Incorporer les gnocchi égouttés avec une louche d\'eau de cuisson — c\'est elle qui lie la sauce.',
+        'Dresser et parsemer de fromage râpé. Quelques tours de poivre du moulin.'
       ]
     },
     {
@@ -4443,9 +4759,12 @@
         { name: 'Oignon vert', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Cuire le riz. Réhydrater le wakame 5 min dans l\'eau froide.',
-        'Porter 400ml d\'eau à frémissement (ne pas bouillir). Dissoudre le miso.',
-        'Ajouter tofu en dés, wakame, sauce soja. Servir avec riz et oignon vert émincé.'
+        'Cuire le riz à part. Réhydrater le wakame 5 min dans de l\'eau froide — il triple de volume. Égoutter et presser délicatement.',
+        'Porter 400 ml d\'eau à 70-75°C : des frémissements apparaissent mais aucune bulle ne monte. Utiliser un thermomètre si possible, sinon éteindre le feu dès les premiers frémissements.',
+        'Dans un bol, délayer la pâte miso avec 3-4 cuillères d\'eau chaude pour la fluidifier avant de l\'incorporer — jamais de grumeaux.',
+        'Verser le miso dilué dans l\'eau chaude hors du feu. Remuer doucement. Ne jamais faire bouillir : la chaleur détruit les ferments vivants et l\'arôme.',
+        'Couper le tofu soyeux en cubes de 1,5 cm avec un couteau bien aiguisé — le tofu soyeux est fragile. Ajouter délicatement dans le bouillon avec le wakame et la sauce soja.',
+        'Laisser chauffer 1 min sans bouillir. Servir dans un bol préchauffé avec le riz, garnir d\'oignon vert émincé en biseaux fins.'
       ]
     },
     {
@@ -4467,9 +4786,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Couper le saumon ultra-frais en petits dés. Assaisonner : citron + sauce soja + huile sésame.',
-        'Écraser l\'avocat en guacamole léger avec citron + sel.',
-        'Dresser : guacamole en base, tartare de saumon dessus. Toast pain complet. Sésame.'
+        'Placer le filet de saumon 10 min au congélateur avant de le couper : la chair légèrement ferme se taille beaucoup plus nettement en dés réguliers de 7-8 mm.',
+        'Couper au couteau bien aiguisé, jamais de hachoir. Des dés francs, pas de la chair écrasée. Réserver au frais immédiatement.',
+        'Préparer l\'assaisonnement séparément dans un bol : jus de citron + sauce soja + huile de sésame. Mélanger puis verser sur le saumon au dernier moment — pas avant, l\'acide "cuit" le poisson.',
+        'Écraser l\'avocat à la fourchette grossièrement — de la texture, pas de la purée. Citron + sel. Couvrir d\'un film au contact pour éviter l\'oxydation.',
+        'Au moment de servir : toast le pain complet. Disposer l\'avocat en base avec un emporte-pièce ou une cuillère, tartare de saumon par-dessus.',
+        'Parsemer de graines de sésame légèrement torréfiées 1 min à sec dans une poêle. Servir sans attendre : un tartare se dresse et se mange aussitôt.'
       ]
     },
     {
@@ -4491,9 +4813,12 @@
         { name: 'Pain complet', qty: 2, unit: 'pce' }
       ],
       steps: [
-        'Nettoyer et gratter les moules. Jeter celles qui restent ouvertes.',
-        'Faire revenir ail + oignon à l\'huile. Ajouter 150ml de bouillon chaud.',
-        'Ajouter les moules, couvrir, cuire 4-5 min jusqu\'à ouverture. Parsemer de persil. Servir avec pain.'
+        'Gratter les moules sous l\'eau froide courante. Arracher le byssus (le "filament") d\'un coup sec vers la pointe. Jeter sans hésiter toute moule ouverte qui ne se referme pas quand on la frappe sur le plan de travail.',
+        'Faire revenir oignon émincé + ail écrasé dans l\'huile d\'olive à feu vif jusqu\'à légère coloration dorée — l\'arôme doit se libérer.',
+        'Préparer 150 ml de bouillon de légumes chaud. Verser dans la casserole avec les oignons. Porter à ébullition.',
+        'Jeter toutes les moules d\'un coup dans la casserole bouillante. Couvrir hermétiquement. Cuire à feu maximum 4-5 min en secouant la casserole à mi-cuisson.',
+        'Dès que les moules sont ouvertes, stopper immédiatement le feu — une moule trop cuite est caoutchouteuse. Jeter toute moule restée fermée.',
+        'Ciseler le persil frais grossièrement, parsemer sur les moules dans la casserole. Servir avec le pain complet toasté pour saucer le bouillon.'
       ]
     },
     {
@@ -4516,9 +4841,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Mariner le poulet en lanières : sauce soja + miel + citron 10 min. Griller à la poêle.',
-        'Sauce satay : beurre de cacahuète + 2cs eau chaude + sauce soja + miel. Fouetter.',
-        'Servir le poulet sur riz jasmin avec concombre et sauce cacahuète. Sésame.'
+        'Tailler le poulet en lanières régulières de 1,5 cm d\'épaisseur — l\'uniformité est la garantie d\'une cuisson homogène. Mariner 10 min minimum : sauce soja + miel + jus de citron.',
+        'Lancer le riz jasmin à l\'eau froide (ratio 1:1,5), porter à ébullition, couvrir, feu minimal 12 min. Ne jamais soulever le couvercle.',
+        'Préparer la sauce satay : beurre de cacahuète + 3 cs d\'eau chaude + sauce soja + miel. Fouetter vigoureusement en ajoutant l\'eau progressivement jusqu\'à consistance nappante et lisse. La sauce doit couler du dos d\'une cuillère.',
+        'Essuyer le surplus de marinade sur le poulet avant de griller — le miel brûle vite. Poêle antiadhésive ou gril à feu vif, sans matière grasse supplémentaire.',
+        'Cuire 3-4 min par face sans bouger les lanières : laisser la caramélisation se former. Vérifier la cuisson à cœur — les jus doivent être clairs.',
+        'Dresser : riz en base, poulet grillé posé dessus, filet de sauce satay. Concombre tranché finement en éventail sur le côté. Graines de sésame torréfiées à sec, servir le reste de sauce à part.'
       ]
     },
     {
@@ -4539,9 +4867,12 @@
         { name: 'Graines de chia', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Mélanger flocons + lait d\'amande + graines de chia + miel dans un bocal.',
-        'Réfrigérer toute la nuit.',
-        'Matin : garnir de beurre de cacahuète et banane tranchée.'
+        'Dans un bocal hermétique, verser les graines de chia et le miel. Mélanger vigoureusement pour éviter les grumeaux.',
+        'Ajouter les flocons d\'avoine puis verser le lait d\'amande en filet tout en remuant — les flocons doivent être bien immergés.',
+        'Fermer le bocal, secouer 10 secondes, réfrigérer minimum 8 heures (une nuit idéalement).',
+        'Le matin, sortir le bocal 5 minutes à température ambiante pour réveiller les saveurs.',
+        'Trancher la banane en rondelles obliques (coupe à 45° pour plus d\'élégance). Réchauffer légèrement le beurre de cacahuète 10 secondes au micro-ondes pour le rendre coulant.',
+        'Napper d\'un filet de beurre de cacahuète et disposer les rondelles de banane en rosace. Déguster immédiatement.'
       ]
     },
     {
@@ -4562,9 +4893,12 @@
         { name: 'Fraises', qty: 80, unit: 'g' }
       ],
       steps: [
-        'Battre œufs + lait + cannelle dans un bol.',
-        'Tremper les tranches de pain dans le mélange.',
-        'Cuire à la poêle huilée 2-3 min par face jusqu\'à dorure. Servir avec fraises + miel.'
+        'Battre vigoureusement les 2 œufs avec le lait d\'amande et la cannelle jusqu\'à obtenir un appareil homogène et légèrement mousseux.',
+        'Tremper chaque tranche de pain 30 secondes par face dans l\'appareil — le pain doit absorber sans se désintégrer. Un pain complet légèrement rassis est idéal.',
+        'Chauffer une poêle antiadhésive à feu moyen. Quand une goutte d\'eau saute, la température est parfaite — graisser d\'un filet d\'huile de coco.',
+        'Cuire les tranches 2 minutes par face sans les toucher pour obtenir une croûte dorée et caramélisée.',
+        'Éponger les fraises, les couper en quartiers et les mélanger avec une pointe de miel.',
+        'Dresser les toasts en éventail, napper du reste de miel, disposer les fraises. Servir aussitôt — le French Toast n\'attend pas.'
       ]
     },
     {
@@ -4585,9 +4919,12 @@
         { name: 'Paprika fumé', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Brouiller les œufs avec paprika. Réchauffer les haricots.',
-        'Réchauffer la tortilla.',
-        'Garnir : œufs, haricots, avocat écrasé, tomates. Rouler.'
+        'Casser les 3 œufs dans un bol, assaisonner avec le paprika fumé, sel et poivre. Battre à la fourchette jusqu\'à ce que le mélange soit homogène mais non mousseux.',
+        'Égoutter et rincer les haricots noirs, les réchauffer 2 minutes à la poêle sèche à feu vif pour les assécher légèrement — ils tiendront mieux dans le wrap.',
+        'Dans une poêle à feu doux avec un filet d\'huile d\'olive, verser les œufs battus. Mélanger lentement avec une spatule en raclant le fond pour obtenir des œufs brouillés crémeux. Retirer du feu quand encore légèrement tremblotants.',
+        'Réchauffer la tortilla 30 secondes dans une poêle sèche bien chaude jusqu\'à apparition de petites bulles dorées.',
+        'Écraser l\'avocat grossièrement à la fourchette avec une pincée de sel et quelques gouttes de citron. Couper la tomate en dés nets.',
+        'Garnir la tortilla dans l\'ordre : avocat, haricots, œufs brouillés, dés de tomate. Rouler serré en repliant d\'abord les côtés. Couper en biais pour le service.'
       ]
     },
     {
@@ -4608,9 +4945,12 @@
         { name: 'Noix', qty: 15, unit: 'g' }
       ],
       steps: [
-        'Cuire les flocons dans le lait d\'amande à feu moyen 5 min en remuant.',
-        'Râper la pomme ou couper en dés. Mélanger avec cannelle.',
-        'Servir le porridge avec pomme, noix et miel.'
+        'Éplucher la pomme, la couper en deux. Râper une moitié grossièrement, tailler l\'autre en petits dés réguliers de 5 mm — deux textures qui s\'opposent dans le bol.',
+        'Faire chauffer le lait d\'amande à feu moyen jusqu\'aux premiers frémissements. Verser les flocons en pluie en remuant immédiatement.',
+        'Cuire 5 à 6 minutes à feu doux en remuant régulièrement en forme de 8 pour une cuisson homogène. Ajouter la pomme râpée et la moitié de la cannelle en cours de cuisson.',
+        'Quand le porridge atteint la consistance d\'une crème (il épaissit encore en refroidissant), retirer du feu.',
+        'Verser dans le bol. Disposer les dés de pomme au centre, concasser les noix grossièrement à la main pour des morceaux irréguliers et gourmands.',
+        'Saupoudrer le reste de cannelle, arroser d\'un filet de miel en spirale. Servir sans attendre pour profiter de la vapeur parfumée.'
       ]
     },
     {
@@ -4630,9 +4970,12 @@
         { name: 'Amandes effilées', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Lisser la ricotta dans un bol.',
-        'Disposer les fruits rouges et amandes effilées.',
-        'Arroser de miel.'
+        'Sortir la ricotta 10 minutes avant de la travailler — à température ambiante, elle se lisse mieux.',
+        'Battre la ricotta à la fourchette en ajoutant la moitié du miel et une pincée de sel fin. Fouetter 30 secondes jusqu\'à obtenir une texture aérée, presque comme une crème fouettée.',
+        'Rincer délicatement les myrtilles et les fraises à l\'eau froide. Équeuter les fraises, les couper en quartiers nets.',
+        'Verser la ricotta montée dans le bol en faisant un mouvement circulaire avec la cuillère pour créer un léger creux au centre.',
+        'Déposer les fruits dans le creux en jouant sur les couleurs : alterner rouge et bleu-violet pour un effet visuel appétissant.',
+        'Parsemer les amandes effilées grillées à sec 1 minute dans une poêle chaude, puis arroser du reste de miel en filet fin.'
       ]
     },
     {
@@ -4655,9 +4998,12 @@
         { name: 'Salade romaine', qty: 60, unit: 'g' }
       ],
       steps: [
-        'Cuire les haricots verts vapeur 6 min. Cuire les œufs durs 10 min.',
-        'Dresser : salade, haricots verts, tomates, thon, olives, œufs coupés.',
-        'Vinaigrette : huile d\'olive + balsamique + moutarde + sel.'
+        'Porter une casserole d\'eau salée à ébullition. Plonger les œufs 9 minutes exactement, puis les transférer dans un bain d\'eau glacée pour stopper la cuisson — le jaune restera légèrement moelleux au centre.',
+        'Dans la même eau, cuire les haricots verts 4 minutes : ils doivent rester verts vifs et croquants. Les refroidir immédiatement dans l\'eau glacée pour fixer leur couleur.',
+        'Préparer la vinaigrette : émulsionner l\'huile d\'olive avec le vinaigre balsamique et une pointe de moutarde en fouettant énergiquement. Assaisonner avec sel et poivre.',
+        'Égoutter et effeuilletez soigneusement le thon. Couper les tomates en quartiers nets. Écaler les œufs et les couper en deux.',
+        'Assaisonner la romaine avec la moitié de la vinaigrette, mélanger délicatement. La salade doit briller légèrement, pas nager.',
+        'Dresser : romaine en base, puis déposer chaque élément en bouquet distinct — thon, haricots, tomates, olives, œufs. Arroser du reste de vinaigrette au moment de servir.'
       ]
     },
     {
@@ -4680,9 +5026,12 @@
         { name: 'Origan', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Cuire le quinoa 12 min. Laisser tiédir.',
-        'Couper tomates, concombre, olives. Émietter la feta.',
-        'Mélanger quinoa + légumes + feta. Assaisonner huile + citron + origan.'
+        'Rincer le quinoa sous l\'eau froide 30 secondes dans une passoire fine — cette étape élimine la saponine amère que beaucoup oublient.',
+        'Cuire le quinoa dans 140 ml d\'eau salée à ébullition, couvrir et réduire à feu doux 12 minutes. Retirer du feu, laisser reposer 5 minutes couvert, puis égrener à la fourchette.',
+        'Pendant la cuisson, couper les tomates cerises en deux, le concombre en demi-rondelles après l\'avoir épépiné — l\'épépinage évite l\'excès d\'eau qui détrempe le bowl.',
+        'Préparer la vinaigrette : jus de citron, huile d\'olive, origan émietté entre les doigts pour libérer les arômes, sel et poivre. Émulsionner à la fourchette.',
+        'Mélanger le quinoa tiède avec la vinaigrette — il l\'absorbera mieux chaud que froid.',
+        'Dresser en bowl : quinoa en base, légumes disposés par zones de couleur, émietter la feta grossièrement à la main par-dessus. Terminer avec quelques olives et un dernier filet d\'huile d\'olive.'
       ]
     },
     {
@@ -4705,9 +5054,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Faire tremper les nouilles de riz 8 min dans l\'eau chaude.',
-        'Dorer le tofu en cubes à la poêle. Râper la carotte.',
-        'Sauce : beurre de cacahuète + sauce soja + citron + 2cs eau. Assembler le bowl.'
+        'Réhydrater les nouilles de riz dans de l\'eau très chaude (non bouillante) pendant 8 minutes exactement, puis les égoutter et les rincer à l\'eau froide pour stopper la cuisson et éviter le collage.',
+        'Couper le tofu ferme en cubes de 2 cm après l\'avoir soigneusement séché avec du papier absorbant — un tofu humide ne se dore jamais.',
+        'Faire dorer les cubes de tofu dans une poêle très chaude avec un filet d\'huile, sans les bouger pendant 2 minutes par face pour obtenir une croûte bien croustillante.',
+        'Préparer la sauce : mélanger beurre de cacahuète + sauce soja + jus de citron + 2 cuillères à soupe d\'eau tiède. Fouetter jusqu\'à consistance lisse et nappante. Goûter et ajuster.',
+        'Tailler la carotte en julienne fine au couteau ou à l\'économe. Trancher le concombre en demi-lunes après l\'avoir épépiné.',
+        'Assembler le bowl : nouilles en base, déposer tofu doré, carotte, concombre en zones distinctes. Napper généreusement de sauce cacahuète. Terminer par une pluie de graines de sésame grillées.'
       ]
     },
     {
@@ -4729,9 +5081,12 @@
         { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
       ],
       steps: [
-        'Couper concombre et tomates en dés.',
-        'Dresser l\'assiette : houmous au centre, légumes autour, olives, feta émiettée.',
-        'Arroser d\'huile d\'olive. Servir avec pita grillé.'
+        'Sortir le houmous du réfrigérateur 15 minutes avant le service — il gagnera en onctuosité et en arômes à température ambiante.',
+        'Couper le concombre en bâtonnets réguliers après l\'avoir épépiné. Tailler les tomates en quartiers ou en dés selon votre humeur, mais avec précision — des coupes nettes témoignent du respect pour les ingrédients.',
+        'Griller le pain pita directement sur la flamme du gaz ou dans une poêle sèche très chaude 30 secondes par face jusqu\'à l\'apparition de taches brunes légèrement carbonisées — cette légère amertume est un équilibre parfait avec le houmous.',
+        'Lisser le houmous dans un bol creux avec le dos d\'une cuillère en faisant un mouvement en spirale, en creusant légèrement au centre pour recevoir l\'huile.',
+        'Arroser le houmous d\'un généreux filet d\'huile d\'olive dans le creux central. Saupoudrer d\'une pincée de paprika ou de cumin.',
+        'Dresser l\'assiette : houmous au centre, légumes disposés en rayons, olives à gauche, feta émiettée à la main à droite. Pita grillé découpé en triangles, posé en éventail. Simple, beau, honnête.'
       ]
     },
     {
@@ -4752,9 +5107,12 @@
         { name: 'Moutarde', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Griller les tranches de pain. Cuire le poulet à la poêle et trancher.',
-        'Cuire l\'œuf au plat.',
-        'Monter le club : pain + moutarde + salade + tomate + poulet + œuf + pain.'
+        'Assaisonner le blanc de poulet avec sel, poivre et une pincée de paprika. Le poser dans une poêle chaude avec un filet d\'huile d\'olive — ne pas bouger pendant 4 minutes pour former une belle croûte dorée, retourner, cuire encore 3 minutes.',
+        'Retirer le poulet, le couvrir de papier aluminium et laisser reposer 3 minutes — ce repos redistribue les jus et garantit un poulet tendre, pas sec.',
+        'Dans la même poêle, cuire l\'œuf au plat à feu doux avec un couvercle 2 minutes : le blanc est pris, le jaune reste légèrement coulant.',
+        'Griller les 3 tranches de pain dans le grille-pain ou à la poêle sèche jusqu\'à coloration dorée et uniforme des deux côtés.',
+        'Trancher le poulet en lamelles fines en biais, couper les tomates en rondelles épaisses, essuyer les feuilles de romaine.',
+        'Monter le club : pain n°1 tartiné de moutarde + romaine + tomates + lamelles de poulet / pain n°2 + œuf au plat + poivre / pain n°3. Maintenir avec un pic. Couper en diagonale — la coupe révèle les couches, c\'est la signature du club sandwich.'
       ]
     },
     {
@@ -4776,9 +5134,12 @@
         { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Faire revenir oignon + champignons. Ajouter poulet en dés, cuire 5 min.',
-        'Ajouter le riz, nacrer 1 min. Verser le bouillon chaud louche par louche.',
-        'Remuer 20 min. Finir avec fromage râpé. Crémeux sans beurre.'
+        'Chauffer 400 ml de bouillon de poulet dans une casserole. Garder à frémissement constant — un bouillon froid tue le risotto.',
+        'Dans une sauteuse, chauffer l\'huile d\'olive à feu moyen-vif. Colorer le poulet en dés 3 min sur chaque face sans remuer. Réserver.',
+        'Dans la même sauteuse, faire suer l\'oignon émincé 2 min. Ajouter les champignons en lamelles, cuire 4 min jusqu\'à évaporation complète de l\'eau.',
+        'Verser le riz, remuer 1 min à feu vif jusqu\'à ce qu\'il devienne translucide : c\'est la nacre qui va libérer l\'amidon.',
+        'Verser le bouillon chaud louche par louche (environ 80 ml), en remuant constamment. Attendre absorption complète avant chaque ajout — 18 min au total.',
+        'Hors feu, ajouter le poulet réservé et le fromage râpé, remuer vivement 30 sec. Couvrir 1 min avant de servir.'
       ]
     },
     {
@@ -4801,9 +5162,12 @@
         { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Rincer les lentilles. Faire revenir oignon + gingembre + épices.',
-        'Ajouter lentilles + tomates + 300ml eau. Cuire 20 min.',
-        'Incorporer lait de coco, cuire 5 min. Servir avec riz ou pain pita.'
+        'Rincer les lentilles vertes à l\'eau froide jusqu\'à ce que l\'eau soit claire.',
+        'Chauffer l\'huile d\'olive à feu moyen. Faire revenir l\'oignon émincé 4 min jusqu\'à légère coloration dorée.',
+        'Ajouter le gingembre râpé, le curcuma et le garam masala : faire "bloomer" les épices 60 secondes en remuant — elles doivent embaumer mais pas brûler.',
+        'Incorporer les tomates concassées, cuire 2 min. Verser les lentilles + 350 ml d\'eau froide. Porter à ébullition puis mijoter à couvert 20 min à feu doux.',
+        'Verser le lait de coco, remuer et cuire encore 5 min à découvert pour épaissir légèrement.',
+        'Rectifier l\'assaisonnement en sel, servir avec un filet de jus de citron pour réveiller l\'ensemble.'
       ]
     },
     {
@@ -4823,9 +5187,12 @@
         { name: 'Moutarde', qty: 8, unit: 'g' }
       ],
       steps: [
-        'Tartiner de moutarde. Garnir avec fromage, jambon de dinde, tomates.',
-        'Fermer le sandwich.',
-        'Cuire à la poêle à feu moyen 3-4 min par face jusqu\'à fromage fondu.'
+        'Tartiner généreusement l\'intérieur de chaque tranche de pain complet avec la moutarde — elle agit comme barrière contre l\'humidité des tomates.',
+        'Disposer le jambon de dinde sur une tranche, puis les tomates en rondelles fines épongées sur papier absorbant, enfin le fromage râpé sur l\'autre tranche.',
+        'Refermer le sandwich en pressant fermement pour bien souder les bords.',
+        'Poser à sec dans une poêle froide (sans matière grasse). Chauffer à feu moyen-doux : la chaleur progressive fond le fromage uniformément avant de griller le pain.',
+        'Cuire 3-4 min par face en appuyant avec une spatule — une légère pression assure un contact total pour une croûte régulière.',
+        'Sortir quand la croûte est dorée et que le fromage est filant. Laisser reposer 1 min avant de couper en diagonal.'
       ]
     },
     {
@@ -4848,9 +5215,11 @@
         { name: 'Coriandre fraîche', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Porter bouillon + lait de coco + gingembre à frémissement.',
-        'Ajouter champignons, cuire 5 min. Ajouter crevettes, cuire 3 min.',
-        'Assaisonner citron + sauce soja. Garnir de coriandre.'
+        'Porter le bouillon de légumes à frémissement avec le gingembre pelé en fines lamelles et 150 ml d\'eau. Infuser 5 min à couvert.',
+        'Ajouter les champignons en quartiers, cuire 4 min à feu moyen. Verser le lait de coco, porter à frémissement sans jamais bouillir — l\'ébullition fait grainer le coco.',
+        'Ajouter les crevettes : cuire exactement 2-3 min jusqu\'à ce qu\'elles s\'enroulent en virgule et rossissent. Stopper immédiatement le feu — une crevette trop cuite est du caoutchouc.',
+        'Assaisonner hors feu avec la sauce soja et le jus de citron. Goûter et ajuster.',
+        'Servir immédiatement dans un bol chaud, garnir de feuilles de coriandre fraîche entières.'
       ]
     },
     {
@@ -4873,9 +5242,12 @@
         { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Mariner poulet dans yaourt + épices 15 min minimum.',
-        'Cuire le poulet au four 200°C 20-25 min avec légumes découpés.',
-        'Servir avec pain pita ou riz basmati.'
+        'Mélanger le yaourt 0% avec le garam masala, le curcuma, le paprika fumé, une pincée de sel et 5 ml d\'huile. Inciser le blanc de poulet en diagonale (coupes de 5 mm) pour que la marinade pénètre en profondeur.',
+        'Enrober le poulet de marinade et laisser reposer minimum 15 min à température ambiante (1h au réfrigérateur si possible).',
+        'Préchauffer le four à 220°C. Tailler la courgette en demi-rondelles et le poivron en lanières. Étaler sur une plaque avec l\'huile restante, sel, et une pincée de paprika.',
+        'Placer le poulet mariné sur la plaque avec les légumes. Enfourner 20 min. À mi-cuisson, retourner le poulet et remuer les légumes.',
+        'Passer 2 min sous le gril pour obtenir des légères traces de carbonisation typiques du tandoori — c\'est là que réside le goût.',
+        'Laisser reposer le poulet 3 min avant de trancher, pour que les jus se redistribuent.'
       ]
     },
     {
@@ -4897,9 +5269,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Pâte : farine + 60ml eau chaude, pétrir, laisser reposer 20 min.',
-        'Farce : dinde + chou haché + sauce soja + gingembre + huile sésame.',
-        'Former des petites galettes, garnir, plier en demi-lune. Cuire à la poêle huilée + 3cs eau, couvrir 5 min.'
+        'Pâte : mélanger la farine avec 60 ml d\'eau bouillante progressivement, pétrir 5 min jusqu\'à obtenir une pâte lisse et non collante. Envelopper dans un linge humide, reposer 20 min.',
+        'Farce : ciseler finement le chou, le saler légèrement et laisser dégorger 5 min, puis essorer à la main — l\'excès d\'eau rend les gyoza mous. Mélanger avec le hachis de dinde, sauce soja, gingembre râpé, huile de sésame.',
+        'Diviser la pâte en 10-12 portions. Abaisser chaque morceau en disque fin de 8 cm. Déposer 1 cuillère à café de farce au centre.',
+        'Plier en demi-lune et pincer le bord supérieur en formant 4-5 petits plis (le "kata") — ce pliage n\'est pas décoratif, il soude hermétiquement.',
+        'Chauffer une poêle antiadhésive avec quelques gouttes d\'huile. Dorer les gyoza à plat 2 min. Verser 3 cuillères à soupe d\'eau, couvrir immédiatement. Cuire à la vapeur 4-5 min.',
+        'Retirer le couvercle, laisser l\'eau s\'évaporer 1 min pour que la base redevienne croustillante. Parsemer de graines de sésame. Servir avec sauce soja.'
       ]
     },
     {
@@ -4922,9 +5297,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire le riz. Mélanger thon égoutté + sriracha + sauce soja.',
-        'Cuire les edamames 3 min.',
-        'Assembler : riz, thon épicé, avocat, concombre, edamame. Sésame.'
+        'Cuire le riz blanc : rincer 3 fois, couvrir d\'eau à hauteur +1 cm, porter à ébullition, couvrir et cuire à feu minimal 12 min. Éteindre, laisser reposer 5 min sans soulever le couvercle.',
+        'Cuire les edamames dans de l\'eau bouillante salée 3 min, refroidir sous l\'eau froide pour fixer la couleur verte vive.',
+        'Mélanger le thon égoutté avec la sriracha, la sauce soja et une goutte d\'huile de sésame si disponible. Goûter — le piquant doit titiller sans agresser.',
+        'Tailler l\'avocat en tranches régulières au dernier moment, arroser de quelques gouttes de citron pour éviter l\'oxydation. Trancher le concombre en demi-rondelles fines.',
+        'Dresser le bol : riz en base, les garnitures en segments bien distincts (thon, avocat, concombre, edamame) — l\'esthétique fait partie de l\'expérience.',
+        'Finir avec les graines de sésame et un dernier filet de sauce soja. Servir immédiatement sans mélanger — chaque cuillère doit capturer plusieurs saveurs.'
       ]
     },
     {
@@ -4945,9 +5323,12 @@
         { name: 'Riz blanc', qty: 60, unit: 'g' }
       ],
       steps: [
-        'Cuire le riz.',
-        'Chauffer l\'huile. Saisir l\'ail émincé 30 sec. Ajouter crevettes, cuire 3 min par face.',
-        'Finir avec jus de citron + persil haché. Servir sur riz.'
+        'Cuire le riz blanc en parallèle : rincer, couvrir d\'eau +1 cm, bouillir, couvrir feu minimal 12 min, repos 5 min couvercle fermé.',
+        'Sécher les crevettes sur papier absorbant — l\'humidité empêche la coloration et crée de la vapeur au lieu de la croûte.',
+        'Chauffer l\'huile d\'olive à feu vif jusqu\'à légère fumée. Ajouter l\'ail émincé finement, faire revenir 20-30 secondes sans colorer — l\'ail brûlé amargue tout.',
+        'Ajouter les crevettes en une seule couche, sans surcharger la poêle. Saisir 90 secondes sans toucher, retourner uniquement quand elles commencent à rosir sur les bords.',
+        'Cuire 60 secondes côté opposé. Les crevettes sont prêtes quand elles forment une virgule et ne sont plus translucides — stopper le feu immédiatement.',
+        'Hors feu, ajouter le jus de citron frais et le persil ciselé. Remuer et dresser immédiatement sur le riz. Le citron ajouté hors feu garde toute sa fraîcheur.'
       ]
     },
     {
@@ -4970,9 +5351,12 @@
         { name: 'Riz jasmin', qty: 60, unit: 'g' }
       ],
       steps: [
-        'Dorer le tofu en cubes à la poêle. Réserver.',
-        'Faire revenir gingembre + épices. Ajouter légumes + lait de coco. Mijoter 12 min.',
-        'Ajouter tofu + sauce soja. Cuire 3 min. Servir sur riz jasmin.'
+        'Sortir le tofu ferme de son emballage, l\'envelopper dans du papier absorbant et poser un poids dessus 10 min : éliminer l\'eau rend le tofu croustillant à la cuisson.',
+        'Cuire le riz jasmin : rincer soigneusement, cuire selon ratio 1:1.5 eau, à couvert feu doux 12 min. Réserver.',
+        'Couper le tofu en cubes de 2 cm. Chauffer une poêle à sec (sans huile) à feu vif, dorer les cubes 2-3 min par face jusqu\'à croûte dorée. Réserver.',
+        'Dans la même poêle, verser un filet d\'huile, faire revenir le gingembre râpé et le garam masala 1 min. Ajouter la courgette en demi-rondelles et le poivron vert en lanières, sauter 3 min à feu vif.',
+        'Verser le lait de coco et la sauce soja. Porter à frémissement (jamais à ébullition), mijoter 8 min à feu doux pour marier les saveurs.',
+        'Incorporer les cubes de tofu dorés, mélanger délicatement pour ne pas les briser, chauffer 2 min. Servir sur le riz jasmin avec une touche de coriandre fraîche si disponible.'
       ]
     },
     {
@@ -4994,9 +5378,12 @@
         { name: 'Haricots verts', qty: 120, unit: 'g' }
       ],
       steps: [
-        'Sauce vierge : tomates en dés + ail émincé + huile + citron + basilic. Réserver.',
-        'Cuire les haricots verts vapeur 6 min.',
-        'Saisir le thon à la poêle 2-3 min par face (rosé au centre). Napper de sauce vierge.'
+        'Préparer la sauce vierge en avance : tailler les tomates en brunoise fine, émincer l\'ail en lamelles très fines. Mélanger avec l\'huile d\'olive, le jus de citron, le basilic ciselé au dernier moment, sel et poivre. Laisser infuser 10 min — les arômes se développent à température ambiante.',
+        'Cuire les haricots verts dans de l\'eau bouillante abondamment salée 5 min (ils doivent rester légèrement croquants). Refroidir immédiatement dans de l\'eau glacée pour fixer la chlorophylle et le vert vif.',
+        'Sortir le thon de la boîte, bien égoutter et façonner en pavé compact entre les paumes. Sécher la surface avec du papier absorbant.',
+        'Chauffer une poêle à fond épais à feu très vif, sans matière grasse. Quand elle fume légèrement, déposer le pavé de thon.',
+        'Saisir 1 min 30 sec par face sans toucher — obtenir une croûte dorée avec un cœur rosé. Le thon se mange rosé : cuit à coeur, il perd toute sa noblesse.',
+        'Dresser les haricots verts en fagot, poser le thon saisi par-dessus, napper généreusement de sauce vierge à la dernière seconde. Servir immédiatement.'
       ]
     },
     {
@@ -5016,9 +5403,11 @@
         { name: 'Piment rouge (frais)', qty: 0.5, unit: 'pce' }
       ],
       steps: [
-        'Griller le pain. Écraser l\'avocat avec citron + sel + piment.',
-        'Pocher les œufs dans eau frémissante vinaigrée 3 min.',
-        'Étaler l\'avocat sur le pain. Déposer les œufs pochés. Poivre + fleur de sel.'
+        'Porter 1L d\'eau à frémissement (90°C, jamais à gros bouillon). Ajouter 2 cs de vinaigre blanc. Créer un tourbillon avec une cuillère.',
+        'Casser chaque œuf dans une tasse, puis faire glisser délicatement au centre du tourbillon. Pocher 3 min exactement. Égoutter sur papier absorbant.',
+        'Pendant ce temps, écraser l\'avocat à la fourchette avec le jus de citron, le piment finement émincé et une pincée de sel. Garder une texture légèrement chunky — ne pas mixer.',
+        'Griller les tranches de pain complet 2 min sous le grill du four pour une croûte uniforme.',
+        'Étaler généreusement l\'avocat sur le pain chaud. Poser les œufs pochés égouttés. Finir avec fleur de sel et un tour de poivre noir du moulin.'
       ]
     },
     {
@@ -5039,9 +5428,11 @@
         { name: 'Lait d\'amande', qty: 150, unit: 'ml' }
       ],
       steps: [
-        'Mélanger flocons + amandes + cajou + miel + huile. Étaler sur plaque.',
-        'Cuire au four 160°C / 20 min en remuant à mi-cuisson.',
-        'Laisser refroidir. Servir avec lait d\'amande.'
+        'Préchauffer le four à 150°C chaleur tournante. Tapisser une plaque de papier cuisson.',
+        'Dans un saladier, mélanger les flocons d\'avoine avec les amandes effilées et les noix de cajou grossièrement concassées.',
+        'Faire tiédir le miel avec l\'huile d\'olive (30 sec au micro-ondes ou dans une petite casserole). Verser sur le mélange sec et mélanger jusqu\'à enrobage homogène.',
+        'Étaler en couche fine sur la plaque. Enfourner 20 min : remuer une seule fois à mi-cuisson, puis ne plus toucher jusqu\'à la sortie du four.',
+        'Laisser refroidir entièrement sur la plaque sans remuer — c\'est là que se forment les clusters. Servir avec le lait d\'amande.'
       ]
     },
     {
@@ -5062,9 +5453,11 @@
         { name: 'Miel', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Mixer tous les ingrédients jusqu\'à consistance lisse.',
-        'Ajuster la consistance avec plus de lait si nécessaire.',
-        'Servir frais avec quelques glaçons.'
+        'Couper la mangue en morceaux. Si possible, la congeler 30 min à l\'avance pour obtenir une texture plus épaisse et glacée naturellement.',
+        'Râper finement le gingembre frais (ou l\'émincer très fin) pour libérer ses huiles essentielles.',
+        'Placer dans le blender dans cet ordre : lait d\'amande d\'abord (pour protéger les lames), puis skyr, mangue, curcuma, gingembre, miel et une pincée de poivre noir.',
+        'Mixer à vitesse maximale 60 secondes jusqu\'à consistance parfaitement lisse et mousseuse. Goûter et ajuster le miel.',
+        'Servir immédiatement dans un grand verre bien froid.'
       ]
     },
     {
@@ -5085,9 +5478,11 @@
         { name: 'Fraises', qty: 80, unit: 'g' }
       ],
       steps: [
-        'Mixer flocons en farine. Mélanger avec banane écrasée, œufs, lait, miel.',
-        'Cuire dans un gaufrier huilé 4-5 min.',
-        'Servir avec fraises fraîches.'
+        'Mixer les flocons d\'avoine à sec 30 secondes pour obtenir une farine grossière — pas trop fine, une légère texture apporte du moelleux.',
+        'Écraser la banane très mûre (peau tachetée) à la fourchette jusqu\'à obtenir une purée lisse. La mélanger aux œufs battus, au lait d\'amande et au miel.',
+        'Incorporer la farine d\'avoine et mélanger sans trop travailler la pâte. Laisser reposer 3 min : la farine s\'hydrate et la pâte gonfle légèrement.',
+        'Huiler légèrement le gaufrier avec du papier absorbant. Verser la pâte, fermer et cuire 4-5 min sans ouvrir — la résistance disparaît quand la gaufre est prête.',
+        'Couper les fraises en deux. Dresser les gaufres et disposer les fraises sur le dessus au dernier moment pour qu\'elles gardent leur fraîcheur.'
       ]
     },
     {
@@ -5108,9 +5503,11 @@
         { name: 'Persil frais', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Couper la betterave cuite en petits dés.',
-        'Mélanger avec feta émiettée, noix concassées, huile + balsamique.',
-        'Garnir de persil. Servir frais.'
+        'Couper la betterave cuite en brunoise régulière de 5 mm — une coupe uniforme est essentielle pour un tartare élégant et une bonne mâche.',
+        'Torréfier les noix à sec 2-3 min à la poêle jusqu\'à légère coloration. Laisser refroidir, puis concasser grossièrement au couteau (pas au mixer).',
+        'Préparer la vinaigrette dans un bol : huile d\'olive + vinaigre balsamique + sel + poivre. Émulsionner à la fourchette.',
+        'Assaisonner la betterave avec la vinaigrette et laisser mariner 5 min. Émietter la feta par-dessus sans mélanger davantage pour garder les morceaux distincts.',
+        'Dresser à l\'emporte-pièce ou en dôme libre. Parsemer de noix torréfiées et de persil ciselé. Servir frais.'
       ]
     },
     {
@@ -5132,9 +5529,11 @@
         { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Faire revenir oignon + carotte en dés dans l\'huile. Ajouter cumin.',
-        'Ajouter lentilles rincées + 500ml eau + cube de bouillon. Cuire 20 min.',
-        'Ajouter épinards. Cuire 3 min. Mixer partiellement pour texture crémeuse.'
+        'Rincer les lentilles vertes à l\'eau froide. Émincer finement l\'oignon, tailler la carotte en petits dés réguliers de 5 mm.',
+        'Chauffer l\'huile d\'olive à feu moyen dans une casserole. Faire revenir l\'oignon 3-4 min jusqu\'à translucidité. Ajouter le cumin moulu et mélanger 30 secondes — le cumin doit griller légèrement pour libérer ses arômes.',
+        'Ajouter les dés de carotte, mélanger 2 min. Incorporer les lentilles rincées, le cube de bouillon et 500 ml d\'eau bouillante.',
+        'Porter à ébullition, réduire le feu, couvrir et cuire 20 min à frémissement jusqu\'à ce que les lentilles soient fondantes.',
+        'Ajouter les épinards frais, couvrir 2 min hors du feu — ils cuisent dans la vapeur et gardent leur couleur vive. Mixer partiellement (2-3 coups de mixeur plongeant) pour obtenir une texture mi-crémeuse mi-rustique.'
       ]
     },
     {
@@ -5156,9 +5555,11 @@
         { name: 'Graines de chia', qty: 8, unit: 'g' }
       ],
       steps: [
-        'Mixer açaí + banane + skyr jusqu\'à base épaisse.',
-        'Verser dans le bol.',
-        'Garnir de mangue, kiwi, granola, chia.'
+        'Couper la banane en rondelles et la congeler la veille (ou au minimum 2h). Une banane congelée est indispensable pour la texture épaisse et glacée.',
+        'Couper la mangue et le kiwi en cubes réguliers. Réserver au frais.',
+        'Dans le blender : mettre la banane congelée, l\'açaí en poudre et le skyr. Mixer par impulsions courtes — utiliser le moins de liquide possible. La base doit être épaisse comme une crème glacée, pas fluide comme un smoothie.',
+        'Verser immédiatement dans un bol bien froid (préalablement passé 5 min au congélateur).',
+        'Garnir en bandes distinctes : mangue d\'un côté, kiwi de l\'autre, granola au centre. Parsemer les graines de chia en dernier. Servir sans attendre.'
       ]
     },
     {
@@ -5178,9 +5579,11 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Couper le poulet en cubes. Mariner dans la sauce teriyaki 10 min.',
-        'Enfiler sur des piques. Griller au four ou barbecue 10-12 min en retournant.',
-        'Servir sur riz jasmin avec oignons verts et sésame.'
+        'Faire cuire le riz jasmin dans 120 ml d\'eau froide : porter à ébullition, couvrir, réduire au minimum 10 min, puis éteindre et laisser reposer 5 min couvercle fermé.',
+        'Couper le poulet en cubes réguliers de 3 cm. Mariner dans la sauce teriyaki à température ambiante 10 min — pas au réfrigérateur, le froid bloque la pénétration de la marinade.',
+        'Enfiler les cubes sur des piques en bois préalablement trempés 10 min dans l\'eau (pour éviter qu\'ils brûlent). Alterner poulet et morceaux d\'oignon vert si désiré.',
+        'Préchauffer le grill au maximum. Cuire les brochettes 5 min d\'un côté. Retourner, badigeonner avec la marinade restante, cuire encore 5 min. La sauce doit caraméliser et former un laquage brillant.',
+        'Dresser les brochettes sur le riz. Parsemer de graines de sésame et d\'oignons verts émincés en biais. Servir immédiatement.'
       ]
     },
     {
@@ -5203,9 +5606,11 @@
         { name: 'Moutarde', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire le poulet à la poêle, trancher. Couper le pain en dés et toaster.',
-        'Sauce légère : moutarde + sauce soja + huile + citron.',
-        'Assembler : romaine + poulet + croûtons + fromage. Napper de sauce.'
+        'Sortir le blanc de poulet 15 min avant cuisson. Sécher avec du papier absorbant — une surface sèche garantit une belle croûte dorée. Saler, poivrer des deux côtés.',
+        'Chauffer une poêle à feu vif avec un filet d\'huile. Saisir le poulet 4 min sans toucher, retourner, cuire encore 3-4 min. Couvrir hors du feu 2 min pour que les jus se redistribuent. Trancher en biais.',
+        'Préparer l\'émulsion : fouetter ensemble moutarde + sauce soja + jus de citron. Incorporer l\'huile d\'olive en filet en fouettant pour créer une liaison lisse.',
+        'Couper le pain en dés de 1 cm. Toaster à sec dans la poêle encore chaude 2-3 min en remuant — ils absorbent les sucs de cuisson du poulet et deviennent dorés et parfumés.',
+        'Dans un grand saladier, mélanger la romaine déchirée avec la sauce. Dresser, poser les tranches de poulet, répartir les croûtons chauds, râper le fromage par-dessus. Servir aussitôt.'
       ]
     },
     {
@@ -5227,9 +5632,11 @@
         { name: 'Citron (pce)', qty: 0.5, unit: 'pce' }
       ],
       steps: [
-        'Cuire les falafels au four 200°C / 18 min.',
-        'Griller courgette et poivron à la poêle avec un filet d\'huile.',
-        'Étaler houmous sur la tortilla. Garnir de légumes grillés + falafels + roquette + citron.'
+        'Préchauffer le four à 200°C. Disposer les falafels sur une grille (pas sur une plaque) pour que l\'air chaud circule tout autour — cuire 18 min pour une croûte uniformément croustillante.',
+        'Pendant ce temps, couper la courgette en bâtonnets et le poivron en lanières. Chauffer une poêle à feu vif sans matière grasse jusqu\'à ce qu\'elle fume légèrement. Griller les légumes 3-4 min sans remuer — laisser les marques se former avant de retourner.',
+        'Presser quelques gouttes de citron sur les légumes grillés. Saler légèrement.',
+        'Chauffer la tortilla 30 secondes dans la poêle sèche pour la rendre souple. Étaler le houmous sur toute la surface en laissant 2 cm de bord.',
+        'Disposer la roquette, les légumes grillés et les falafels chauds en ligne au centre. Plier d\'abord les côtés, puis rouler fermement depuis le bas. Couper en biais et servir immédiatement.'
       ]
     },
     {
@@ -5489,13 +5896,12 @@
         { name: 'Érythritol (ou sucre)', qty: 30, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 180°C. Garnir un moule à 6 muffins de caissettes papier.',
-        'Mélanger farine d\'avoine, whey vanille, levure et érythritol dans un grand bol.',
-        'Dans un autre bol, fouetter fromage blanc, œufs, zeste de citron râpé et extrait de vanille.',
-        'Incorporer les ingrédients liquides aux secs en mélangeant délicatement. Ne pas trop travailler.',
-        'Ajouter les pistaches hachées en réservant quelques morceaux pour la déco.',
-        'Répartir dans les 6 moules. Parsemer des pistaches réservées. Cuire 20-22 min.',
-        'Vérifier la cuisson avec un cure-dent. Laisser refroidir 10 min avant de démouler.'
+        'Préchauffer le four à 180°C. Râper finement le zeste d\'un citron non traité sur le sucre érythritol et frotter du bout des doigts : le sucre capture les huiles essentielles et parfume toute la pâte.',
+        'Dans un grand bol, assembler les secs : farine d\'avoine, whey vanille, levure chimique et le sucre zesté. Mélanger au fouet 30 secondes pour aérer.',
+        'Dans un second bol, fouetter vigoureusement le fromage blanc avec les œufs et l\'extrait de vanille jusqu\'à obtenir une crème lisse et homogène.',
+        'Verser les liquides sur les secs. Incorporer en croix avec une Maryse, 10 à 12 coups seulement — des stries blanches peuvent subsister. Trop mélanger rend les muffins caoutchouteux.',
+        'Ajouter les pistaches hachées en réservant une cuillère à soupe pour la décoration. Plier délicatement. Garnir les caissettes aux deux tiers.',
+        'Parsemer les pistaches réservées sur chaque muffin. Enfourner 20-22 min. Piquer au centre avec un cure-dent : il doit ressortir propre. Laisser reposer 10 min sur grille avant de démouler.'
       ]
     },
     {
@@ -5518,12 +5924,12 @@
         { name: 'Huile de coco', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Mixer les flocons d\'avoine en farine fine au blender.',
-        'Ajouter banane en morceaux, œufs, whey, lait d\'amande et cannelle. Mixer jusqu\'à pâte homogène.',
-        'Laisser reposer 5 min. Ajouter levure et mélanger à la spatule.',
-        'Chauffer une poêle antiadhésive à feu moyen avec un peu d\'huile de coco.',
-        'Verser des louches de pâte. Cuire 2-3 min jusqu\'à formation de bulles, retourner, cuire 1-2 min.',
-        'Servir chaud, empilés. Accompagner de cannelle supplémentaire, yaourt grec et quelques rondelles de banane.'
+        'Mixer les flocons d\'avoine 45 secondes à pleine puissance pour obtenir une farine fine et régulière — c\'est la base de la texture moelleuse.',
+        'Ajouter dans le blender la banane bien mûre en morceaux (plus elle est noire, plus elle est sucrée et liante), les œufs, la whey, le lait d\'amande et la cannelle. Mixer 30 secondes jusqu\'à pâte parfaitement lisse.',
+        'Transvaser dans un bol. Incorporer la levure chimique à la Maryse. Laisser reposer 5 min : la pâte épaissit et les bulles se forment — signe que la levure est active.',
+        'Chauffer une poêle antiadhésive à feu moyen-doux avec une noisette d\'huile de coco essuyée au papier. La poêle est prête quand une goutte de pâte dore en 30 secondes.',
+        'Verser une louche de pâte par pancake. Attendre les bulles en surface et les bords secs — 2 à 3 min. Retourner d\'un geste vif, cuire encore 1 min. Ne jamais appuyer sur les pancakes.',
+        'Empiler les pancakes pour conserver la chaleur. Servir immédiatement avec rondelles de banane et cannelle fraîchement moulue.'
       ]
     },
     {
@@ -5547,13 +5953,12 @@
         { name: 'Extrait de vanille', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Préchauffer le four à 175°C. Garnir un moule à 8 muffins.',
-        'Faire tremper les dattes dans l\'eau chaude 10 min. Égoutter et mixer en purée lisse.',
-        'Torréfier les noix de cajou à sec 3 min à la poêle. Hacher grossièrement.',
-        'Mélanger farine d\'avoine, whey chocolat, cacao et levure.',
-        'Fouetter œufs avec purée de dattes, lait d\'amande et vanille.',
-        'Incorporer l\'appareil humide aux secs. Ajouter les cajous hachés. Mélanger délicatement.',
-        'Répartir dans les 8 moules. Cuire 18-20 min. Refroidir sur grille avant dégustation.'
+        'Préchauffer le four à 175°C. Faire tremper les dattes dans de l\'eau bouillante 10 min. Pendant ce temps, torréfier les noix de cajou à sec dans une poêle 3 min à feu vif en remuant sans arrêt, jusqu\'à légère coloration dorée et parfum de noisette. Hacher grossièrement.',
+        'Égoutter et sécher les dattes. Les mixer en purée lisse et brillante — cette purée remplace tout sucre ajouté.',
+        'Dans un bol, fouetter énergiquement les œufs avec la purée de dattes, le lait d\'amande et l\'extrait de vanille.',
+        'Dans un grand bol, mélanger au fouet la farine d\'avoine, la whey chocolat, le cacao et la levure. Creuser un puits au centre.',
+        'Verser l\'appareil humide dans le puits. Incorporer en mouvements circulaires larges avec une Maryse, juste jusqu\'à disparition du sec. Ajouter les cajous et plier deux fois.',
+        'Répartir dans les 8 caissettes. Cuire 18-20 min. Sortir du four quand le centre est encore légèrement tremblant — le muffin se raffermit en refroidissant sur grille.'
       ]
     },
     {
@@ -5576,11 +5981,12 @@
         { name: 'Yaourt grec 0%', qty: 80, unit: 'g' }
       ],
       steps: [
-        'Mixer flocons en farine. Mélanger avec levure.',
-        'Fouetter skyr, œufs et lait d\'amande. Incorporer aux secs. Laisser reposer 5 min.',
-        'Incorporer délicatement les myrtilles à la pâte (réserver quelques-unes pour la garniture).',
-        'Cuire à feu moyen dans une poêle légèrement huilée, 2-3 min par face.',
-        'Sauce : mélanger yaourt grec + miel. Servir les pancakes nappés de sauce et des myrtilles réservées.'
+        'Mixer les flocons d\'avoine en farine fine. Mélanger au fouet avec la levure dans un bol.',
+        'Dans un second bol, fouetter le skyr avec les œufs et le lait d\'amande jusqu\'à obtenir une crème fluide et sans grumeaux.',
+        'Incorporer les liquides aux secs à la Maryse, sans excès. Laisser reposer 5 min — la pâte épaissit légèrement.',
+        'Plier délicatement la moitié des myrtilles dans la pâte sans les écraser. Réserver le reste pour le dressage.',
+        'Cuire les pancakes à feu moyen dans une poêle huilée, 2 à 3 min par face, jusqu\'à coloration homogène. Ne jamais écraser.',
+        'Mélanger le yaourt grec avec le miel pour créer la sauce. Dresser les pancakes, napper de sauce et disposer les myrtilles fraîches par-dessus. Servir aussitôt.'
       ]
     },
     {
@@ -5606,13 +6012,12 @@
         { name: 'Érythritol (ou sucre)', qty: 30, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 180°C. Préparer un moule à 6 muffins.',
-        'Râper finement les carottes. Hacher grossièrement les noix.',
-        'Mélanger farine d\'avoine, whey, levure, érythritol, cannelle, gingembre et muscade.',
-        'Fouetter fromage blanc et œufs. Ajouter les carottes râpées et bien mélanger.',
-        'Incorporer le mélange humide aux secs en quelques coups de spatule. Ajouter les noix.',
-        'Répartir dans les moules. Cuire 20-22 min. Vérifier la cuisson avec un cure-dent.',
-        'Laisser refroidir complètement. Optionnel : glacer avec un voile de fromage frais allégé et cannelle.'
+        'Préchauffer le four à 180°C. Râper les carottes à la grosse grille et les déposer sur un torchon propre : tordre fermement pour en extraire l\'excès d\'eau — une carotte bien essorée donne un muffin qui ne s\'affaisse pas.',
+        'Torréfier les noix 5 min au four sur plaque. Laisser tiédir, hacher grossièrement.',
+        'Dans un grand bol, mélanger au fouet la farine d\'avoine, la whey, la levure, l\'érythritol, la cannelle, le gingembre et la muscade.',
+        'Fouetter le fromage blanc avec les œufs. Incorporer les carottes essorées. Mélanger pour bien lier.',
+        'Verser l\'appareil humide sur les secs. Plier en 8 coups de Maryse maximum. Ajouter les noix, deux coups de plus.',
+        'Répartir dans les caissettes. Enfourner 20-22 min. Cure-dent propre = muffin prêt. Refroidir sur grille, glacer si souhaité avec fromage frais allégé et une pincée de cannelle.'
       ]
     },
     {
@@ -5635,13 +6040,12 @@
         { name: 'Levure chimique', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Fouetter jaune d\'œuf + fromage blanc + miel + matcha jusqu\'à homogène. Ajouter farine de riz, whey et levure.',
-        'Monter les blancs d\'œufs en neige très ferme (pointes dressées). C\'est la clé de la texture soufflée.',
-        'Incorporer ¼ des blancs en neige vigoureusement pour détendre la base, puis plier délicatement le reste en 2 fois.',
-        'Chauffer une poêle à couvercle à feu très doux. Huiler légèrement.',
-        'Déposer des cercles épais de pâte (3 pancakes). Ajouter quelques gouttes d\'eau sur le côté, couvrir. Cuire 4-5 min.',
-        'Retourner très délicatement. Couvrir. Cuire encore 3-4 min.',
-        'Servir immédiatement saupoudrés de matcha, sucre glace (léger) et myrtilles fraîches.'
+        'Séparer les blancs des jaunes. Dans un bol, fouetter le jaune d\'œuf avec le fromage blanc, le miel et le matcha jusqu\'à parfaite homogénéité et belle couleur verte. Tamiser la farine de riz, la whey et la levure par-dessus ; incorporer délicatement.',
+        'Monter les blancs en neige très ferme avec une pincée de sel : ils doivent former des pointes dressées qui ne bougent pas quand vous retournez le bol. C\'est toute la légèreté du soufflé.',
+        'Prélever un quart des blancs et les fouetter vigoureusement dans la base matcha pour la détendre. Puis incorporer le reste en deux fois avec une grande Maryse, en mouvements de bas en haut, sans jamais tourner.',
+        'Chauffer une poêle à couvercle à feu très doux (3/10). Huiler au pinceau avec un carré de papier absorbant — juste un voile.',
+        'Déposer 3 cercles épais de pâte à la cuillère. Verser 2 cuillères à soupe d\'eau sur le côté de la poêle (pas sur la pâte). Couvrir immédiatement. Cuire 4-5 min : la vapeur cuit le dessus.',
+        'Retourner les pancakes avec deux spatules simultanément, avec la plus grande douceur. Couvrir. Cuire 3 min. Servir dans la seconde avec un voile de matcha et quelques myrtilles.'
       ]
     },
     {
@@ -5665,12 +6069,12 @@
         { name: 'Extrait de vanille', qty: 3, unit: 'ml' }
       ],
       steps: [
-        'Fouetter vigoureusement œufs, lait d\'amande, whey vanille, vanille et cannelle dans un plat creux.',
-        'Tremper les tranches de pain épais dans l\'appareil 2 min de chaque côté pour bien imbiber.',
-        'Dorer dans une poêle antiadhésive à feu moyen 3-4 min par face, jusqu\'à belle couleur dorée.',
-        'Pendant ce temps, torréfier les amandes effilées à sec dans une petite poêle 2-3 min.',
-        'Couper les figues séchées en quartiers.',
-        'Servir le french toast nappé de miel, garni de figues et amandes effilées torréfiées. Saupoudrer de cannelle.'
+        'Dans un plat creux, fouetter vigoureusement les œufs, le lait d\'amande, la whey vanille, l\'extrait de vanille et la cannelle jusqu\'à disparition de tout grumeau de whey.',
+        'Trancher le pain épais en deux belles tranches. Les plonger dans l\'appareil, retourner après 1 min de chaque côté : le pain doit être imbibé jusqu\'au cœur sans se décomposer.',
+        'Pendant le trempage, torréfier les amandes effilées à sec dans une petite poêle chaude, 2-3 min en remuant sans arrêt. Elles dorent vite — ne pas quitter des yeux. Réserver.',
+        'Chauffer une poêle antiadhésive à feu moyen avec quelques gouttes d\'huile. Dorer les tranches 3-4 min par face jusqu\'à croûte bien caramélisée et cœur chaud.',
+        'Couper les figues séchées en quartiers fins pour libérer leur caramel naturel.',
+        'Dresser le french toast sur assiette chaude, napper de miel en filet, disposer les figues en éventail, parsemer les amandes torréfiées et finir d\'un trait de cannelle. Servir immédiatement.'
       ]
     },
 
@@ -5693,11 +6097,11 @@
         { name: 'Sel', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 160°C. Mélanger flocons d\'avoine, whey vanille, noix de coco et sel dans un grand bol.',
-        'Dans un bol séparé, mélanger le miel fondu et l\'huile de coco. Verser sur le mélange sec et bien enrober.',
-        'Étaler uniformément sur une plaque recouverte de papier sulfurisé. Parsemer les pistaches concassées par-dessus.',
-        'Cuire 20-25 min en remuant doucement à mi-cuisson pour former des clusters généreux. Surveiller la couleur dorée.',
-        'Laisser refroidir complètement sans remuer (crucial pour le croustillant). Conserver en boîte hermétique 2 semaines.'
+        'Préchauffer le four à 160°C, chaleur tournante. Dans un grand bol, mélanger les flocons d\'avoine, la whey vanille, la noix de coco râpée et le sel au fouet.',
+        'Dans une petite casserole, chauffer doucement le miel avec l\'huile de coco jusqu\'à fluidité. Ne pas faire bouillir. Verser immédiatement sur le mélange sec et travailler à la spatule pour un enrobage uniforme de chaque flocon.',
+        'Étaler le granola en une couche épaisse et compacte sur une plaque à four recouverte de papier sulfurisé. Appuyer légèrement avec le dos de la spatule pour tasser — les clusters naissent là.',
+        'Enfourner 12 min. Parsemer alors les pistaches concassées sur le dessus — elles torréfient en finissant sans brûler. Remettre 8-10 min jusqu\'à belle coloration miel dorée.',
+        'Sortir la plaque. Ne pas toucher. Laisser refroidir intégralement à température ambiante, au moins 30 min : c\'est le refroidissement qui cristallise le miel et crée le croustillant final. Briser en gros clusters. Conserver en boîte hermétique 2 semaines.'
       ]
     },
 
@@ -5721,11 +6125,11 @@
         { name: 'Sel', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 160°C. Mélanger flocons, whey chocolat, cacao et sel. Hacher grossièrement les noisettes.',
-        'Faire fondre doucement le beurre de noisette avec le sirop d\'érable et l\'huile de coco. Verser sur le mélange sec.',
-        'Incorporer les noisettes et mélanger jusqu\'à enrobage uniforme. Étaler en couche épaisse sur plaque sulfurisée.',
-        'Cuire 22-25 min en retournant à mi-cuisson. Former des gros clusters style "Ferrero Rocher" avant refroidissement.',
-        'Refroidir totalement avant de briser en morceaux. Conserver hermétiquement jusqu\'à 2 semaines.'
+        'Préchauffer le four à 160°C, chaleur tournante. Hacher les noisettes entières au couteau en deux : un côté grossier pour le croquant, un côté fin pour lier. Dans un grand bol, mélanger les flocons, la whey chocolat, le cacao tamisé et le sel.',
+        'Dans une petite casserole, faire fondre à feu doux le beurre de noisette avec le sirop d\'érable et l\'huile de coco, en remuant. Dès que le mélange est lisse et chaud (pas bouillant), retirer du feu.',
+        'Verser le mélange chaud sur les secs. Incorporer les noisettes. Mélanger à la spatule pour un enrobage complet et homogène.',
+        'Étaler en couche épaisse sur plaque sulfurisée. Tasser fermement avec la paume. Enfourner 12 min. À mi-cuisson, retourner délicatement par grandes plaques avec une spatule large — pas de miettes.',
+        'Cuire encore 10-12 min. Sortir et laisser refroidir sans toucher au moins 30 min. Le granola durcit en refroidissant. Briser en gros clusters "façon Ferrero". Conserver hermétiquement 2 semaines.'
       ]
     },
 
@@ -5748,11 +6152,12 @@
         { name: 'Eau', qty: 20, unit: 'ml' }
       ],
       steps: [
-        'Mixer les amandes en grossier dans un robot. Réserver. Mixer les dattes jusqu\'à obtenir une pâte collante.',
-        'Ajouter whey vanille, flocons d\'avoine, cannelle et sel à la pâte de dattes. Mixer brièvement pour combiner.',
-        'Incorporer les amandes concassées. Si trop sec, ajouter l\'eau cuillère à soupe par cuillère jusqu\'à cohésion.',
-        'Presser uniformément dans un moule rectangulaire tapissé de film alimentaire sur 2 cm d\'épaisseur.',
-        'Réfrigérer 2h minimum. Couper en 10 barres égales. Conserver au frigo 1 semaine ou congeler 3 mois.'
+        'Préchauffer une poêle sèche à feu vif. Torréfier les amandes entières 3-4 min en remuant jusqu\'à craquement et parfum intense. Laisser tiédir, puis mixer en poudre grossière avec quelques morceaux intacts pour le croquant.',
+        'Mixer les dattes Medjool dénoyautées seules jusqu\'à obtenir une pâte collante et brillante. Si elles sont trop sèches, ajouter l\'eau cuillère par cuillère et mixer à nouveau.',
+        'Ajouter à la pâte de dattes : whey vanille, flocons d\'avoine, cannelle et sel de mer. Mixer brièvement en impulsions, 4 à 5 fois — la texture doit rester rustique, pas lisse.',
+        'Incorporer les amandes concassées à la spatule, à la main dans le bol : certains morceaux doivent rester entiers pour la mâche.',
+        'Tapisser un moule rectangulaire (environ 20×15 cm) de film alimentaire en laissant dépasser. Verser la masse et presser fermement sur 2 cm d\'épaisseur uniforme avec les paumes — plus c\'est compact, mieux les barres tiennent.',
+        'Réfrigérer minimum 2h. Soulever le film, démouler sur une planche. Couper en 10 barres nettes au couteau humide. Emballer individuellement. Se conservent 1 semaine au frigo, 3 mois au congélateur.'
       ]
     },
 
@@ -12904,11 +13309,11 @@
       { name: 'Fleur de sel', qty: 2, unit: 'g' }
     ],
     steps: [
-      'Égoutter le thon et l\'émietter grossièrement à la fourchette.',
-      'Trancher la mozzarella et les tomates en rondelles épaisses, puis l\'avocat en lamelles.',
-      'Disposer en cercle dans le bol en alternant tomates, mozzarella et avocat.',
-      'Répartir le thon émietté au centre et parsemer de basilic frais ciselé.',
-      'Arroser d\'huile d\'olive et de jus de citron, assaisonner de fleur de sel et poivre.'
+      'Sortir la mozzarella 15 min avant de travailler — le froid tue le goût. Trancher tomates et mozzarella à 8 mm exactement, l\'avocat en lamelles régulières.',
+      'Égoutter le thon 2 min dans une passoire fine, puis l\'émietter à la fourchette en gardant des morceaux généreux — jamais une purée.',
+      'Sur assiette froide, disposer en cercle en alternant : tomate, mozzarella, avocat. Recouvrir légèrement comme des tuiles.',
+      'Déposer le thon au centre en dôme léger. Parsemer de basilic ciselé à la main (jamais au couteau, cela noircit).',
+      'Émulsionner à la fourchette huile d\'olive et citron, assaisonner. Arroser au dernier moment, finir de fleur de sel. Servir sans attendre.'
     ]
   },
   {
@@ -12935,11 +13340,11 @@
       { name: 'Poivre noir', qty: 2, unit: 'g' }
     ],
     steps: [
-      'Sortir le carpaccio du réfrigérateur 5 min avant de servir et disposer les tranches à plat sur les assiettes.',
-      'Répartir la roquette fraîche au centre de chaque assiette.',
-      'Parsemer de copeaux de parmesan obtenus avec un économe et de câpres égouttées.',
-      'Arroser généreusement d\'huile d\'olive extra-vierge et de jus de citron frais.',
-      'Terminer avec un généreux tour de moulin à poivre et servir immédiatement.'
+      'Poser les tranches de bœuf entre deux feuilles de film alimentaire et aplatir légèrement au fond d\'une casserole — elles doivent être translucides. Sortir du frigo 5 min avant service.',
+      'Préparer la vinaigrette : fouetter huile d\'olive, jus de citron, sel. L\'émulsion doit être homogène et légèrement nacrée.',
+      'Disposer les tranches en rosace sur assiette froide, bord à bord sans superposer. Arroser de la moitié de la vinaigrette directement sur la viande.',
+      'Déposer la roquette au centre, assaisonnée avec le reste de vinaigrette. Parsemer les câpres égouttées et essuyées.',
+      'Réaliser de larges copeaux de parmesan à l\'économe. Terminer par un généreux tour de moulin à poivre. Servir immédiatement.'
     ]
   },
   {
@@ -12966,11 +13371,11 @@
       { name: 'Fleur de sel', qty: 2, unit: 'g' }
     ],
     steps: [
-      'Couper la ciabatta en tranches épaisses et faire griller au four ou à la poêle jusqu\'à dorure.',
-      'Frotter légèrement chaque tranche de pain grillé avec la gousse d\'ail coupée en deux.',
-      'Mélanger la ricotta avec une pincée de sel, du poivre et un filet d\'huile d\'olive.',
-      'Couper les tomates cerises en deux et les assaisonner de fleur de sel et basilic ciselé.',
-      'Tartiner chaque bruschetta de ricotta assaisonnée et garnir de tomates cerises marinées.'
+      'Trancher la ciabatta en biseau à 1,5 cm d\'épaisseur. Griller au four à 220 °C, 4-5 min côté mie vers le haut, jusqu\'à un doré uniforme avec des bords légèrement croustillants.',
+      'Dès la sortie du four, frotter vigoureusement la surface avec la gousse d\'ail coupée — la chaleur ouvre la mie et l\'ail s\'y incruste naturellement.',
+      'Battre la ricotta à la fourchette avec sel fin, poivre et un filet d\'huile d\'olive pour la rendre lisse et aérée.',
+      'Couper les tomates cerises en deux, les assaisonner de fleur de sel et basilic ciselé à la main. Laisser mariner 3 min — elles rendront un jus précieux.',
+      'Tartiner généreusement la ricotta sur les tartines chaudes, garnir des tomates avec leur jus. Servir dans la minute.'
     ]
   },
   {
@@ -12998,11 +13403,12 @@
       { name: 'Ail', qty: 5, unit: 'g' }
     ],
     steps: [
-      'Cuire les pommes de terre à l\'eau bouillante salée 20 min, égoutter et laisser tiédir.',
-      'Couper le poulpe cuit en tronçons de 2 cm et les pommes de terre en morceaux.',
-      'Émincer finement le céleri et hacher le persil frais.',
-      'Préparer la vinaigrette avec l\'huile d\'olive, le jus de citron et l\'ail écrasé.',
-      'Mélanger poulpe, pommes de terre, céleri et olives, arroser de vinaigrette et garnir de persil.'
+      'Cuire les pommes de terre en robe des champs dans une eau bien salée (10 g/litre) 20 min. Égoutter et peler à chaud — la chair absorbe mieux l\'assaisonnement.',
+      'Couper les pommes de terre encore tièdes en morceaux irréguliers de 3 cm. Le tiède est capital : il permet à la vinaigrette de pénétrer.',
+      'Couper le poulpe cuit en tronçons nets de 2 cm. Si les tentacules sont épaisses, les fendre en deux dans la longueur.',
+      'Préparer la vinaigrette : écraser l\'ail en purée fine avec une pincée de sel, fouetter avec huile d\'olive et jus de citron.',
+      'Mélanger délicatement poulpe, pommes de terre tièdes, céleri en fines tranches et olives. Arroser de vinaigrette, laisser reposer 5 min.',
+      'Dresser dans des assiettes creuses, parsemer de persil haché grossièrement. Servir tiède — jamais glacé.'
     ]
   },
   {
@@ -13030,11 +13436,11 @@
       { name: 'Huile d\'olive', qty: 15, unit: 'ml' }
     ],
     steps: [
-      'Disposer la bresaola et le prosciutto en éventail dans deux bols larges.',
-      'Ajouter les artichauts marinés égouttés, les poivrons grillés en lanières et les olives.',
-      'Placer un bouquet de roquette au centre de chaque bol.',
-      'Parsemer de copeaux de parmesan réalisés à l\'économe.',
-      'Arroser d\'un filet d\'huile d\'olive extra-vierge et servir avec du pain grillé si désiré.'
+      'Égoutter artichauts et poivrons sur papier absorbant — l\'excès de marinade noie le plat et détruit l\'équilibre des saveurs.',
+      'Disposer la bresaola en éventail sur une moitié du bol, le prosciutto rosé plié en deux sur l\'autre moitié — jamais à plat, toujours en volume.',
+      'Couper les poivrons grillés en lanières de 1 cm, répartir avec les artichauts et les olives dans les espaces libres.',
+      'Placer un bouquet de roquette au centre, légèrement en hauteur pour donner du relief.',
+      'Réaliser de larges copeaux de parmesan à l\'économe. Arroser d\'un filet d\'huile d\'olive en spirale. Poivrer, servir immédiatement.'
     ]
   },
   {
@@ -13063,11 +13469,12 @@
       { name: 'Herbes de Provence', qty: 3, unit: 'g' }
     ],
     steps: [
-      'Cuire le farro dans l\'eau bouillante salée selon les instructions (env. 25 min), égoutter et refroidir.',
-      'Couper la courgette en petits dés et la faire revenir 3 min à la poêle avec un filet d\'huile d\'olive.',
-      'Torréfier les pignons de pin à sec 2 min dans une poêle jusqu\'à dorure légère.',
-      'Mélanger le farro refroidi avec la courgette, les tomates séchées émincées et les épinards.',
-      'Émietter la feta, ajouter les pignons, arroser d\'huile et citron, assaisonner aux herbes de Provence.'
+      'Cuire le farro dans une eau bien salée portée à ébullition. Réduire à feu moyen, cuire 25 min jusqu\'à ce que les grains soient tendres mais gardent du mordant. Égoutter et étaler sur plaque pour refroidir rapidement.',
+      'Couper la courgette en dés de 1 cm réguliers. Saisir à la poêle très chaude avec un filet d\'huile, 3 min sans remuer — coloration = saveur.',
+      'Torréfier les pignons à sec dans une poêle froide montée en chaleur progressive, 2 min en remuant. Retirer dès qu\'ils sont dorés : ils cuisent hors du feu.',
+      'Préparer la vinaigrette citron-herbes : huile d\'olive, citron, herbes de Provence, sel, poivre. Goûter et ajuster l\'acidité.',
+      'Mélanger le farro tiède avec courgette, tomates séchées émincées et épinards. Arroser de vinaigrette, mélanger délicatement.',
+      'Dresser dans les bols, émietter la feta à la main en morceaux généreux, parsemer des pignons. Servir tiède ou à température ambiante.'
     ]
   },
   {
@@ -13096,11 +13503,12 @@
       { name: 'Basilic frais', qty: 10, unit: 'g' }
     ],
     steps: [
-      'Couper l\'aubergine en cubes de 2 cm, saler et laisser dégorger 10 min, puis éponger.',
-      'Faire revenir l\'aubergine et le céleri émincé dans l\'huile d\'olive à feu vif 8-10 min.',
-      'Ajouter les tomates cerises coupées en deux, les olives, les câpres et les pois chiches.',
-      'Verser le vinaigre de vin rouge, mélanger et cuire encore 5 min à feu moyen.',
-      'Servir tiède ou froid dans des bols, garni de basilic frais ciselé.'
+      'Couper l\'aubergine en cubes de 2 cm. Saler généreusement, mélanger et laisser dégorger 10 min dans une passoire. Éponger soigneusement avec du papier absorbant — cette étape est la différence entre crémeux et huileux.',
+      'Chauffer l\'huile à feu vif dans une sauteuse large. Saisir l\'aubergine en une seule couche, sans remuer, 4 min. Retourner, cuire encore 3 min. Réserver.',
+      'Dans la même sauteuse, faire revenir le céleri émincé 2 min. Ajouter les tomates cerises coupées en deux, les olives et les câpres. Cuire 3 min à feu vif.',
+      'Ajouter les pois chiches et l\'aubergine réservée. Verser le vinaigre de vin rouge, réduire 1 min à feu vif pour caraméliser légèrement les sucs.',
+      'Goûter et ajuster l\'équilibre aigre-doux — c\'est l\'âme sicilienne : si trop acide, une pincée de sel ; si trop plat, quelques gouttes de vinaigre.',
+      'Laisser tiédir 5 min hors du feu. Dresser dans des bols, parsemer de basilic ciselé à la main. La caponata est meilleure le lendemain.'
     ]
   },
   {
@@ -13129,11 +13537,12 @@
       { name: 'Vinaigre de vin', qty: 10, unit: 'ml' }
     ],
     steps: [
-      'Cuire les haricots verts à l\'eau bouillante salée 5-6 min, ils doivent rester croquants, égoutter et refroidir.',
-      'Faire cuire les œufs durs 9 min dans l\'eau bouillante, puis les refroidir et les écaler.',
-      'Émincer les tomates en quartiers, couper les œufs en deux et émietter le thon.',
-      'Dresser la laitue dans les assiettes puis disposer harmonieusement tous les ingrédients.',
-      'Arroser de vinaigrette à l\'huile d\'olive, poser les anchois sur le dessus et servir.'
+      'Cuire les haricots verts dans une eau bouillante très salée (15 g/litre), 5 min chrono. Les plonger immédiatement dans un bain d\'eau glacée 2 min — ils gardent leur vert vif et leur croquant.',
+      'Cuire les œufs dans l\'eau bouillante exactement 9 min. Refroidir sous eau froide, écaler délicatement. Couper en deux : le jaune doit être cuit mais encore légèrement moelleux au cœur.',
+      'Préparer la vinaigrette dans un bol : huile d\'olive, vinaigre de vin, sel, poivre. Émulsionner à la fourchette jusqu\'à ce qu\'elle soit liée.',
+      'Émincer les tomates en quartiers, égoutter et émietter le thon en morceaux généreux.',
+      'Dresser la laitue en fond d\'assiette, disposer en compartiments distincts les haricots, tomates, thon, olives et œufs. Ne pas mélanger — la beauté de la niçoise est dans ses couleurs séparées.',
+      'Déposer les anchois en croix sur le dessus. Arroser de vinaigrette au dernier moment. Servir sans attendre.'
     ]
   },
   {
@@ -13160,11 +13569,12 @@
       { name: 'Fleur de sel', qty: 2, unit: 'g' }
     ],
     steps: [
-      'Disposer les tranches de saumon bien à plat en une seule couche sur deux grandes assiettes froides.',
-      'Émincer l\'oignon rouge en très fines rondelles et les répartir sur le saumon.',
-      'Parsemer de câpres égouttées et de brins d\'aneth frais.',
-      'Arroser d\'un filet d\'huile d\'olive extra-vierge et du jus de citron fraîchement pressé.',
-      'Assaisonner de fleur de sel et poivre noir, laisser mariner 2 min et servir immédiatement.'
+      'Placer les tranches de saumon 15 min au congélateur avant de les dresser — le froid ferme légèrement la chair et permet un tranchage net si non pré-tranché.',
+      'Disposer les tranches en une seule couche sur assiette froide, en les faisant se chevaucher légèrement comme des pétales. Couvrir et réserver 2 min au frais.',
+      'Émincer l\'oignon rouge en tranches papier (2 mm) à la mandoline ou au couteau très tranchant. Les rincer 30 secondes à l\'eau froide pour adoucir le piquant.',
+      'Répartir oignon rouge, câpres égouttées et brins d\'aneth frais sur le saumon.',
+      'Arroser d\'un filet d\'huile d\'olive puis du jus de citron fraîchement pressé. Assaisonner de fleur de sel et poivre noir. Laisser mariner exactement 2 minutes.',
+      'Servir immédiatement : au-delà de 3 min, le citron cuit le saumon et change sa texture. C\'est un carpaccio, pas un ceviche.'
     ]
   },
 
@@ -13221,11 +13631,12 @@
       { name: 'Amandes effilées', qty: 10, unit: 'g' }
     ],
     steps: [
-      'Préchauffer le four à 190°C.',
-      'Découper la pâte en triangles et tartiner de ricotta mélangée au miel.',
-      'Déposer des tranches de figue sur chaque triangle.',
-      "Rouler les cornetti et enfourner 12 min jusqu'à dorure.",
-      "Parsemer d'amandes effilées à la sortie du four."
+      'Préchauffer le four à 190 °C chaleur tournante. Sortir la pâte 5 min avant pour la détendre.',
+      'Mélanger ricotta et miel à la fourchette jusqu\'à texture lisse ; réserver au frais.',
+      'Détailler la pâte en 4 triangles réguliers. Tailler les figues en lamelles fines de 3 mm.',
+      'Déposer une cuillère à soupe de crème ricotta à la base de chaque triangle, puis 2-3 lamelles de figue. Ne pas aller jusqu\'aux bords.',
+      'Rouler chaque triangle fermement de la base vers la pointe en maintenant une légère tension ; courber en croissant. Presser la pointe contre la pâte pour sceller.',
+      'Parsemer d\'amandes effilées en appuyant légèrement pour qu\'elles adhèrent. Enfourner 11-13 min jusqu\'à dorure miel. Laisser tiédir 3 min avant de servir.'
     ]
   },
 
@@ -13252,11 +13663,12 @@
       { name: 'Miel', qty: 20, unit: 'g' }
     ],
     steps: [
-      'Préchauffer le four à 170°C.',
-      "Mélanger flocons, pistaches concassées, zeste et jus d'orange, huile et miel.",
-      'Étaler sur plaque et cuire 20 min en remuant à mi-cuisson.',
-      'Laisser refroidir complètement pour obtenir des clusters croquants.',
-      'Servir avec du yaourt grec ou du lait végétal.'
+      'Préchauffer le four à 160 °C chaleur tournante. Tapisser une plaque de papier cuisson.',
+      'Concasser grossièrement les pistaches au couteau (morceaux irréguliers, pas de poudre).',
+      'Dans un saladier, mélanger flocons d\'avoine, pistaches, zeste d\'orange. Verser huile d\'olive et miel tièdes (30 secondes au micro-ondes) ; mélanger jusqu\'à enrobage homogène.',
+      'Étaler en couche fine et uniforme sur la plaque. Tasser légèrement avec le dos d\'une spatule — c\'est ce tassage qui crée les clusters.',
+      'Cuire 18-22 min sans toucher, jusqu\'à coloration dorée en surface. Arroser du jus d\'orange la dernière minute.',
+      'Sortir et laisser refroidir entièrement sur la plaque avant de briser en morceaux. Le granola durcit en refroidissant.'
     ]
   },
 
@@ -13284,10 +13696,12 @@
       { name: 'Feuilles de menthe', qty: 5, unit: 'g' }
     ],
     steps: [
-      "Mixer la banane congelée, l'orange sanguine pelée et le jus de citron.",
-      "Ajouter le yaourt grec et mixer jusqu'à consistance épaisse et lisse.",
-      'Verser dans deux bols.',
-      'Garnir de granola, pistaches concassées et feuilles de menthe.'
+      'Peler l\'orange à vif au couteau (retirer peau et membrane blanche) pour éviter l\'amertume.',
+      'Mixer d\'abord la banane congelée seule 20 secondes jusqu\'à consistance crémeuse, puis ajouter l\'orange, le jus de citron et le yaourt grec. Mixer par impulsions courtes pour garder la texture épaisse — ne pas surchauffer.',
+      'Goûter et ajuster l\'acidité avec quelques gouttes de citron supplémentaires si nécessaire.',
+      'Répartir dans deux bols froids (préalablement passés 5 min au congélateur).',
+      'Déposer granola, pistaches concassées et feuilles de menthe en lignes ou en quartiers distincts pour le visuel et le contraste de textures.',
+      'Servir immédiatement — le bol doit rester épais, pas bu à la paille.'
     ]
   },
 
@@ -13315,11 +13729,12 @@
       { name: 'Poivre noir', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      'Toaster les tranches de ciabatta 3-4 min au grill.',
-      "Écraser l'avocat avec le jus de citron et le poivre.",
-      "Tartiner les crostini d'avocat écrasé.",
-      "Déposer un filet d'anchois et une demi-tomate cerise sur chaque crostino.",
-      'Décorer de feuilles de basilic frais.'
+      'Couper la ciabatta en tranches de 1,5 cm. Passer au grill ou dans un four à 220 °C 3-4 min jusqu\'à croquant en surface, moelleux à cœur.',
+      'Frotter immédiatement chaque tranche avec la face coupée d\'une gousse d\'ail — la chaleur du pain extrait les arômes. C\'est le geste fondateur du crostino.',
+      'Écraser l\'avocat à la fourchette avec jus de citron et poivre noir au dernier moment pour éviter l\'oxydation. Texture grossière, pas lisse.',
+      'Couper les tomates cerises en deux ; les assaisonner d\'une pincée de sel et d\'une goutte d\'huile d\'olive.',
+      'Tartiner les crostini d\'avocat, déposer un filet d\'anchois plié en deux, une demi-tomate et une feuille de basilic entière.',
+      'Servir dans les 3 minutes qui suivent l\'assemblage — le pain perd son croquant rapidement.'
     ]
   },
 
@@ -13346,10 +13761,12 @@
       { name: "Huile d'olive extra vierge", qty: 10, unit: 'ml' }
     ],
     steps: [
-      "Toaster les tranches de pain et les frotter avec une gousse d'ail.",
-      "Mélanger la ricotta avec un filet d'huile d'olive et du poivre.",
-      'Tartiner généreusement de ricotta assaisonnée.',
-      'Disposer les tomates séchées égouttées et les feuilles de basilic frais.'
+      'Égoutter la ricotta 5 min dans un linge propre ou une passoire fine pour éliminer l\'excès de sérum — la tartine restera sèche et la saveur plus concentrée.',
+      'Éponger les tomates séchées sur du papier absorbant pour retirer l\'huile de conservation.',
+      'Toaster les tranches de pain de campagne jusqu\'à coloration uniforme. Frotter aussitôt avec la gousse d\'ail fendue en deux.',
+      'Fouetter la ricotta égouttée avec l\'huile d\'olive, poivre et une pincée de sel ; la texture doit être crémeuse et se tenir.',
+      'Tartiner généreusement de ricotta. Disposer les tomates séchées en éventail et les feuilles de basilic entières par-dessus.',
+      'Finir d\'un filet d\'huile d\'olive en spirale. Servir sans attendre.'
     ]
   },
 
@@ -13376,10 +13793,12 @@
       { name: "Extrait d'amande", qty: 2, unit: 'ml' }
     ],
     steps: [
-      'Émietter finement les amaretti.',
-      "Mélanger tous les ingrédients jusqu'à obtenir une pâte malléable.",
-      "Si la pâte est trop sèche, ajouter quelques gouttes d'eau.",
-      'Former 8 boules de taille égale et réfrigérer 30 min avant de servir.'
+      'Émietter les amaretti en poudre fine au pilon ou au robot — la régularité de la poudre garantit une pâte homogène.',
+      'Mélanger dans un saladier : poudre d\'amaretti, cacao, protéine vanille. Incorporer le beurre d\'amande et le miel ; malaxer à la main jusqu\'à pâte compacte.',
+      'Ajouter l\'extrait d\'amande. Si la pâte ne se compacte pas, ajouter 1 c. à café de lait écrémé (pas d\'eau — cela dilue les arômes).',
+      'Peser la pâte totale et diviser en 8 portions égales au couteau. Rouler chaque portion entre les paumes en mouvements circulaires réguliers.',
+      'Déposer sur une assiette et réfrigérer 30 min minimum — la texture se raffermit à froid.',
+      'Servir directement du réfrigérateur ; les energy balls se conservent 4 jours au frais.'
     ]
   },
 
@@ -13406,10 +13825,12 @@
       { name: 'Cacao en poudre', qty: 5, unit: 'g' }
     ],
     steps: [
-      "Fouetter ricotta, mascarpone et protéine en poudre jusqu'à texture lisse.",
-      'Tremper rapidement les biscuits dans le café froid.',
-      'Alterner couches de biscuits imbibés et crème dans deux verres.',
-      'Saupoudrer de cacao tamisé et réfrigérer 5 min avant de servir.'
+      'Préparer le café espresso ; le laisser refroidir complètement — un café chaud réchauffe la crème et dissout la texture.',
+      'Fouetter ricotta et mascarpone ensemble au fouet électrique 1 minute pour incorporer de l\'air. Ajouter la protéine vanille en poudre et fouetter encore 30 secondes. La crème doit être légère, pas compacte.',
+      'Verser le café froid dans une assiette creuse. Tremper chaque biscuit 1 seconde de chaque côté — pas plus. Un biscuit trop imbibé s\'effondre et noie la couche de crème.',
+      'Disposer une couche de biscuits dans le fond de deux verres. Verser la crème en couche régulière à l\'aide d\'une poche à douille ou d\'une cuillère à soupe.',
+      'Répéter : biscuits, puis crème. Terminer par la crème.',
+      'Tamiser le cacao sur le dessus depuis 20 cm de hauteur pour une couverture uniforme et sans grumeaux. Réfrigérer 10 min minimum avant de servir.'
     ]
   },
 
@@ -13437,11 +13858,12 @@
       { name: 'Levure chimique', qty: 3, unit: 'g' }
     ],
     steps: [
-      "Mixer les flocons d'avoine en farine fine.",
-      "Mélanger tous les ingrédients jusqu'à pâte homogène sans grumeaux.",
-      'Chauffer une poêle antiadhésive légèrement huilée à feu moyen.',
-      'Verser des petites louches de pâte et cuire 2 min par côté.',
-      'Servir avec miel et fruits frais de saison.'
+      'Mixer les flocons d\'avoine en farine fine pendant 45 secondes à vitesse maximale — aucun flocon entier ne doit subsister.',
+      'Dans un saladier, fouetter œufs, ricotta, lait et miel jusqu\'à mélange lisse. Tamiser la farine d\'avoine et la levure chimique par-dessus ; incorporer en soulevant la masse sans trop travailler — quelques traces de farine acceptables.',
+      'Laisser reposer la pâte 3 min : la levure commence à agir, les pancakes seront plus aérés.',
+      'Chauffer une poêle antiadhésive à feu moyen-vif. Frotter avec un papier absorbant légèrement huilé. La poêle est prête quand une goutte d\'eau dansote en perles.',
+      'Verser des louches de 60 ml. Cuire jusqu\'à l\'apparition de bulles en surface et de bords secs (environ 2 min). Retourner une seule fois ; cuire 1 min 30 de l\'autre côté.',
+      'Garder au chaud dans un four à 70 °C. Servir empilés avec un filet de miel et des fruits frais de saison.'
     ]
   },
 
@@ -13468,12 +13890,12 @@
       { name: 'Yaourt grec 0%', qty: 100, unit: 'g' }
     ],
     steps: [
-      "Faire tremper la gélatine dans l'eau froide 5 min.",
-      'Chauffer le lait de coco à feu doux avec le miel sans faire bouillir.',
-      'Incorporer la gélatine essorée et la protéine en poudre hors du feu.',
-      'Mélanger avec le yaourt grec pour une texture plus légère.',
-      'Verser dans des verrines et réfrigérer au minimum 2h.',
-      'Servir avec les fruits rouges frais et quelques feuilles de menthe.'
+      'Faire ramollir la gélatine dans un grand volume d\'eau froide pendant exactement 5 min — pas moins, elle ne serait pas hydratée ; pas plus, elle se dissoudrait.',
+      'Chauffer le lait de coco avec le miel à feu doux jusqu\'à frémissement (80 °C) sans ébullition — l\'ébullition détruit les propriétés gélifiantes.',
+      'Hors du feu, essorez la gélatine entre vos mains et l\'incorporer en fouettant vigoureusement. Attendre que le mélange tiédisse à 50 °C avant d\'ajouter la protéine en poudre en pluie fine tout en fouettant pour éviter les grumeaux.',
+      'Incorporer le yaourt grec à la spatule en mouvements enveloppants pour préserver la légèreté.',
+      'Verser dans des verrines humidifiées (le démoulage est plus aisé). Réfrigérer au minimum 2 h, idéalement une nuit.',
+      'Au service, écraser légèrement 30 g de fruits rouges avec une fourchette pour former une sauce naturelle ; verser sur la panna cotta et décorer avec les fruits entiers restants et quelques feuilles de menthe.'
     ]
   }
 ,
@@ -13508,10 +13930,12 @@
         { name: 'Basilic frais', qty: 10, unit: 'g' }
       ],
       steps: [
-        "Chauffer l'huile d'olive dans une grande casserole. Faire revenir l'ail émincé, la carotte et le céleri en dés 3 minutes à feu moyen.",
-        'Ajouter la courgette en dés, les tomates concassées et le bouillon. Porter à ébullition, puis réduire et mijoter 15 minutes.',
-        'Incorporer les haricots blancs et les épinards, cuire encore 5 minutes. Assaisonner de sel, poivre et basilic frais.',
-        "Servir dans des bols profonds, parsemer de parmesan râpé et d'un filet d'huile d'olive extra-vierge."
+        'Tailler tous les légumes en dés réguliers de 1 cm — carotte, céleri, courgette. L\'uniformité n\'est pas une coquetterie : c\'est la garantie d\'une cuisson homogène.',
+        'Chauffer l\'huile d\'olive à feu moyen dans une cocotte. Faire suer l\'ail écrasé, carotte et céleri 4 min sans coloration — le soffritto doit devenir translucide et parfumé.',
+        'Ajouter les tomates pelées écrasées à la main et le bouillon chaud. Porter à frémissement, jamais à gros bouillon — le minestrone se construit lentement.',
+        'Incorporer la courgette. Mijoter à feu doux 15 min à couvert. Goûter le bouillon et ajuster le sel : c\'est maintenant, pas à la fin.',
+        'Hors du feu, ajouter haricots blancs et épinards frais. Couvrir 3 min : la chaleur résiduelle cuit les épinards doucement, sans les réduire en bouillie.',
+        'Dresser dans des bols profonds, effeuiller le basilic à la main sur le dessus. Déposer le parmesan râpé au centre et un filet d\'huile d\'olive extra-vierge en finition.'
       ]
     },
 

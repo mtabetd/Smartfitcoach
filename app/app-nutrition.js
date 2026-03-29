@@ -3219,26 +3219,26 @@ var WHEY_SMOOTHIES = [
   // === NATURE / UNFLAVORED ===
   { id:'sm_nature_01', name:'Clean Shake Neutre', flavors:['unflavored'], goal:['muscle','fat_loss'], timing:'anytime', cal:280, p:33, c:28, f:5, prep:'2min',
     ingredients:[{name:'Whey nature',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Flocons d\'avoine',qty:25,unit:'g'},{name:'Amandes effilées',qty:10,unit:'g'}],
-    steps:['Mixer tout ensemble 20 secondes','Goûter — ajuster avec miel si nécessaire','Consommer immédiatement'],
-    tips:'Base neutre : ajouter fruits frais selon humeur. Très digestible.' },
+    steps:['Mixer les flocons d\'avoine avec la moitié du lait écrémé 20 secondes à pleine puissance pour créer une base "lait d\'avoine maison" lisse — les flocons hydratés s\'intègrent parfaitement et épaississent sans morceaux.','Ajouter le reste du lait froid, la whey nature et les amandes effilées ; mixer 20 secondes à vitesse moyenne — les amandes doivent être réduites en micro-éclats qui apportent le croquant, pas en poudre uniforme.','Goûter avant de servir : sur une base neutre, l\'équilibre est tout. Ajuster avec une pincée de fleur de sel si la whey manque de relief — le sel est l\'exhausteur de goût le plus puissant sur les protéines.'],
+    tips:'Une base neutre n\'est pas une base fade : c\'est une toile blanche. La fleur de sel est le geste du pâtissier — elle ne sale pas, elle révèle. Une pincée change tout ce que la whey nature a à dire.' },
   { id:'sm_nature_02', name:'Athlete\'s Functional Shake', flavors:['unflavored'], goal:['performance','recovery'], timing:'post', cal:360, p:38, c:38, f:7, prep:'3min',
     ingredients:[{name:'Whey nature',qty:35,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Jus d\'orange frais',qty:150,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Curcuma',qty:1,unit:'g'},{name:'Poivre noir',qty:0.5,unit:'g'}],
-    steps:['Mixer yaourt + jus d\'orange + banane','Ajouter whey, curcuma, poivre','Mixer 20 secondes','Boire dans les 30 min post-séance'],
-    tips:'Le poivre active la biodisponibilité de la curcumine x20. Anti-inflammatoire puissant.' },
+    steps:['Commencer par mixer banane + jus d\'orange + poivre noir fraîchement moulu ensemble 15 secondes : le poivre doit se disperser dans la matière sucrée acide pour que la pipérine s\'active au contact des lipides du yaourt qui suivent.','Ajouter le yaourt grec et le curcuma, mixer 20 secondes — le curcuma se fixe sur les matières grasses du yaourt pour une absorption optimale ; ne jamais le dissoudre dans le liquide seul.','Incorporer la whey nature en dernier, mixer 15 secondes à vitesse modérée. Consommer dans les 20 minutes post-séance : la fenêtre anabolique et anti-inflammatoire combinées est maximale à ce créneau.'],
+    tips:'Curcuma + poivre + matière grasse : c\'est le trio de biodisponibilité. Changer l\'ordre d\'incorporation revient à ignorer la chimie — et perdre jusqu\'à 80 % de l\'effet anti-inflammatoire du curcuma.' },
 
   // === MULTI-PARFUMS ===
   { id:'sm_multi_01', name:'Reese\'s Smoothie Bowl', flavors:['peanut','chocolate'], goal:['muscle'], timing:'anytime', cal:520, p:42, c:55, f:15, prep:'5min',
     ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Beurre de cacahuète',qty:20,unit:'g'},{name:'Banane congelée',qty:150,unit:'g'},{name:'Lait',qty:100,unit:'ml'},{name:'Granola',qty:30,unit:'g'}],
-    steps:['Mixer banane + lait + whey + beurre de cacahuète','Texture épaisse (peu de lait)','Verser dans un bol','Garnir de granola'],
-    tips:'Format bowl = plus rassasiant (mastication). Ajouter fruits frais en saison.' },
+    steps:['Congeler la banane coupée en rondelles minimum 2 heures à l\'avance — c\'est l\'unique secret d\'un bowl dense et crémeux sans glace diluante.','Mixer banane congelée + lait à vitesse maximale 10 secondes seulement : stopper dès que la texture "nice cream" est atteinte, ne jamais sur-mixer ou elle devient liquide.','Ajouter le beurre de cacahuète et la whey chocolat, mixer 5 secondes en impulsions courtes pour marbrer sans homogénéiser complètement — les veines de cacahuète sont la signature visuelle.','Verser immédiatement dans un bol froid (passé 5 minutes au congélateur), déposer le granola en dernière seconde pour qu\'il reste croustillant — jamais dans le blender.'],
+    tips:'La texture bowl ne se fabrique pas avec moins de liquide : elle se fabrique avec une banane congelée. C\'est la différence entre un shake raté et un vrai bowl ferme qui tient la cuillère à la verticale.' },
   { id:'sm_multi_02', name:'Sunrise Recovery', flavors:['strawberry','banana'], goal:['recovery','muscle'], timing:'post', cal:390, p:34, c:50, f:5, prep:'3min',
     ingredients:[{name:'Whey vanille ou fraise',qty:25,unit:'g'},{name:'Fraises',qty:100,unit:'g'},{name:'Banane',qty:100,unit:'g'},{name:'Jus d\'orange',qty:100,unit:'ml'},{name:'Miel',qty:8,unit:'g'},{name:'Glaçons',qty:80,unit:'g'}],
-    steps:['Mixer fruits + jus d\'orange','Ajouter whey, miel, glaçons','Mixer 30 secondes','Servir immédiatement'],
-    tips:'Ratio glucides/protéines 1.5:1 = optimal pour resynthèse glycogène post-WOD.' },
+    steps:['Congeler les fraises entières et la banane en rondelles la veille : les fruits congelés remplacent les glaçons sans diluer les arômes — la concentration en saveur est incomparablement supérieure.','Mixer jus d\'orange + miel ensemble 5 secondes pour dissoudre le miel à froid — ne jamais ajouter un sucrant cristallisé directement sur des fruits congelés qui le bloqueraient en grumeaux.','Ajouter les fruits congelés et mixer à pleine puissance 25 secondes ; incorporer la whey en dernier, mixer 10 secondes supplémentaires — la whey ajoutée trop tôt mousse excessivement et perd en onctuosité.'],
+    tips:'La règle d\'or du smoothie fruité post-effort : zéro glaçon, 100 % fruits congelés. Le froid vient des fruits, les arômes restent intacts, et la texture est soyeuse — pas aqueuse.' },
   { id:'sm_multi_03', name:'Mocha Hazelnut Dream', flavors:['coffee','hazelnut'], goal:['performance'], timing:'pre', cal:340, p:32, c:35, f:9, prep:'4min',
     ingredients:[{name:'Whey café ou noisette',qty:30,unit:'g'},{name:'Café expresso',qty:60,unit:'ml'},{name:'Pâte de noisette',qty:10,unit:'g'},{name:'Lait écrémé',qty:200,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'}],
-    steps:['Préparer expresso refroidi','Mixer avec lait, whey, noisette, cacao','Servir sur glaçons','Boire 20-30 min avant séance'],
-    tips:'Combo caféine + théobromine (cacao) = stimulation durable sans crash.' },
+    steps:['Préparer l\'expresso et le verser immédiatement sur la pâte de noisette dans le blender à chaud : la chaleur du café émulsionne instantanément la matière grasse de la noisette en une base soyeuse et parfumée.','Laisser la préparation café-noisette refroidir 5 minutes, puis ajouter le lait écrémé froid et le cacao tamisé (jamais en vrac : les grumeaux de cacao ne se défont plus une fois mixés).','Ajouter la whey en dernier, mixer 20 secondes à vitesse moyenne — pas maximale : le café carboné sur-agité devient amer. Servir immédiatement sur glaçons sans remuer.'],
+    tips:'L\'expresso chaud sur la pâte de noisette n\'est pas un hasard : c\'est une émulsion à chaud, comme une ganache. Le résultat est un corps en bouche que le simple mixage à froid ne peut jamais donner.' },
 
   // === BANANE #2 ===
   { id:'sm_ban_02', name:'Banana Split Recovery', flavors:['banana','vanilla'], goal:['recovery'], timing:'post', cal:380, p:36, c:48, f:6, prep:'3min',
@@ -3255,8 +3255,8 @@ var WHEY_SMOOTHIES = [
   // === MULTI #4 — Lemon Matcha Zen ===
   { id:'sm_multi_04', name:'Lemon Matcha Zen', flavors:['lemon','matcha'], goal:['fat_loss','performance'], timing:'pre', cal:260, p:30, c:28, f:4, prep:'3min',
     ingredients:[{name:'Whey nature ou citron',qty:25,unit:'g'},{name:'Matcha cérémonie',qty:3,unit:'g'},{name:'Jus de citron frais',qty:30,unit:'ml'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Miel',qty:8,unit:'g'},{name:'Gingembre frais',qty:5,unit:'g'}],
-    steps:['Dissoudre matcha dans un peu d\'eau chaude, laisser refroidir','Mixer eau de coco + citron + gingembre + whey','Ajouter matcha dissous','Mixer 15 secondes et servir sur glaçons'],
-    tips:'Association catéchines (matcha) + vitamine C (citron) = absorption antioxydants x4. Idéal fasted cardio.' },
+    steps:['Dissoudre le matcha dans 30 ml d\'eau à 70 °C précis (jamais bouillante : au-dessus de 80 °C les catéchines s\'oxydent et le matcha vire amer), fouetter en zigzag 30 secondes avec un chasen ou un petit fouet à main.','Râper finement le gingembre frais et le presser dans le jus de citron : le jus de citron extrait les arômes du gingembre bien mieux que le simple mixage — laisser macérer 2 minutes.','Verser l\'eau de coco bien froide et la whey dans le blender, mixer 15 secondes, puis incorporer le matcha refroidi et la macération citron-gingembre en dernier. Mixer 5 secondes seulement — les arômes du matcha sont volatils.'],
+    tips:'Le matcha est un ingrédient thermosensible et fragile : il se dissout avant, il refroidit, il s\'incorpore en dernier. Chaque étape dans le désordre coûte la moitié du parfum.' },
 
   // === PISTACHE ===
   { id:'sm_pist_01', name:'Pistache Baklava Dream', flavors:['pistachio'], goal:['muscle'], timing:'post', cal:420, p:36, c:31, f:17, prep:'3min',
