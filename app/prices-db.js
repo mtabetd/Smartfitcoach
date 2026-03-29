@@ -3348,8 +3348,9 @@
     'Ananas': 'Ananas (boîte)',
     'Citron': 'Citron zeste+jus',
     'Lait écrémé': 'Lait demi-écrémé',
-    'Yaourt grec 0%': 'Yaourt grec nature',
-    'Fromage blanc 0%': 'Fromage blanc nature',
+    'Cacao pur': 'Cacao non sucré',
+    'Lait d\'avoine': 'Lait d\'amande',
+    'Beurre d\'arachide': 'Beurre de cacahuète',
     'Datte Medjool': 'Dattes Medjool dénoyautées',
     'Menthe': 'Menthe fraîche',
     // Aliases parfums whey nouveaux

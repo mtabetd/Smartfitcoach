@@ -3865,10 +3865,26 @@ function showSmoothieModal(sm) {
   });
   header.appendChild(macrosRow);
 
-  // Prep time
+  // Prep time + coût estimé
+  var prepRow = h('div', {style:'display:flex;align-items:center;justify-content:space-between;margin-top:8px'});
   if (sm.prep) {
-    header.appendChild(h('div', {style:'font-size:11px;color:rgba(255,255,255,0.65);margin-top:8px'}, '⏱ Préparation : '+sm.prep));
+    prepRow.appendChild(h('div', {style:'font-size:11px;color:rgba(255,255,255,0.65)'}, '⏱ Préparation : '+sm.prep));
   }
+  // Calcul coût estimé via getPricePer
+  if (sm.ingredients && sm.ingredients.length && window.getPricePer) {
+    var totalCost = 0;
+    var allPriced = true;
+    sm.ingredients.forEach(function(ing) {
+      var price = window.getPricePer(ing.name, ing.unit);
+      if (price !== null && price >= 0) { totalCost += price * (ing.qty || 0); }
+      else { allPriced = false; }
+    });
+    var costLabel = allPriced
+      ? '~' + Math.round(totalCost) + ' DH'
+      : '~' + Math.round(totalCost) + ' DH*';
+    prepRow.appendChild(h('div', {style:'font-size:11px;color:rgba(255,255,255,0.8);font-weight:700;background:rgba(255,255,255,0.12);border-radius:8px;padding:2px 8px'}, '💰 ' + costLabel));
+  }
+  header.appendChild(prepRow);
   box.appendChild(header);
 
   // ── BODY (scrollable) ──
