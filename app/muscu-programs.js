@@ -1634,6 +1634,141 @@ function getStyleProgram(style, muscle, level) {
   return s.programs[muscle].masse || s.programs[muscle].intermediate || s.programs[muscle].beginner || s.programs[muscle];
 }
 
+// ─── Programme 100% personnalisé ────────────────────────────────────────────
+function buildPersonalizedMuscuPlan(S) {
+  S = S || {};
+
+  // 1. NIVEAU : détecté depuis profil
+  var level = 'beginner';
+  if (S.sportLevel === 'advanced' || (S.muscuWeek >= 4 && S.activity === 'very_active')) {
+    level = 'advanced';
+  } else if (S.sportLevel === 'intermediate' || S.muscuWeek >= 2 || S.activity === 'active' || S.activity === 'moderate') {
+    level = 'intermediate';
+  }
+
+  // 2. STYLE : selon objectif + sexe + niveau
+  var style = 'fusion';
+  var goal = S.goal || '';
+  var sportGoals = S.sportGoals || [];
+  if (goal === 'performance' || sportGoals.indexOf('performance') >= 0) {
+    style = level === 'beginner' ? 'classic' : 'intensity';
+  } else if (goal === 'weight_loss' || goal === 'sèche') {
+    style = level === 'advanced' ? 'fst7' : 'volume';
+  } else if (goal === 'muscle_gain' || goal === 'masse') {
+    style = level === 'beginner' ? 'volume' : 'fusion';
+  } else if (goal === 'maintenance') {
+    style = 'classic';
+  }
+  // Femme : privilégier le volume (meilleur pour fessiers/jambes)
+  if (S.sex === 'female' && style === 'intensity') style = 'fusion';
+
+  var styleObj = TRAINING_STYLES[style] || TRAINING_STYLES.fusion;
+
+  // 3. SPLIT : selon jours disponibles
+  var days = Math.min(6, Math.max(3, S.muscuWeek || S.sportDays || 3));
+  var availSplits = styleObj.splits || {};
+  var splitDays = days;
+  // Trouve le split disponible le plus proche
+  if (!availSplits[splitDays]) {
+    var keys = Object.keys(availSplits).map(Number).sort(function(a,b){return a-b;});
+    splitDays = keys.reduce(function(prev, cur) {
+      return Math.abs(cur - days) < Math.abs(prev - days) ? cur : prev;
+    }, keys[0]);
+  }
+  var split = availSplits[splitDays] || availSplits[Object.keys(availSplits)[0]];
+
+  // 4. PHASE MACRO : selon semaine du cycle (muscuCycle 1-12)
+  var cycleWeek = Math.max(1, Math.min(12, S.muscuCycle || 1));
+  var macro = styleObj.macro || FUSION_PROGRAMS.macro_cycle_12w;
+  var currentPhase = macro[macro.length - 1]; // décharge par défaut
+  for (var pi = 0; pi < macro.length; pi++) {
+    var ph = macro[pi];
+    var weeks = ph.weeks || [ph.week];
+    if (weeks.indexOf(cycleWeek) >= 0) { currentPhase = ph; break; }
+  }
+
+  // 5. ZONES PRIORITAIRES : bodyZones / weakZones / sexe
+  var priorityMuscles = [];
+  if (S.sex === 'female') priorityMuscles = ['fessiers', 'jambes'];
+  var bz = S.bodyZones || {};
+  Object.keys(bz).forEach(function(z) { if (bz[z] === 'high' && priorityMuscles.indexOf(z) < 0) priorityMuscles.push(z); });
+  (S.weakZones || []).forEach(function(z) { if (priorityMuscles.indexOf(z) < 0) priorityMuscles.push(z); });
+
+  // 6. ÉQUIPEMENT : filtre exercices selon matériel disponible
+  var equip = S.sportEquipment || 'gym';
+  function equipOk(ex) {
+    if (equip === 'gym') return true;
+    if (equip === 'dumbbells') return ['halteres','poids_corps','banc','haltères','barre_ez'].indexOf(ex.equipment) >= 0;
+    if (equip === 'home') return ['poids_corps','elastique'].indexOf(ex.equipment) >= 0;
+    return true;
+  }
+
+  // 7. PROGRAMME SEMAINE : construit jour par jour
+  var activeDays = (split.days || []).filter(function(d) { return d.muscles && d.muscles.length > 0; });
+  var weekProgram = activeDays.map(function(dayPlan, idx) {
+    var allExercises = [];
+    (dayPlan.muscles || []).forEach(function(muscle) {
+      var prog = getStyleProgram(style, muscle, level);
+      if (!prog || !prog.exercises) return;
+      var exos = prog.exercises.filter(equipOk);
+      // Priorité : si muscle prioritaire, met en premier
+      if (priorityMuscles.indexOf(muscle) >= 0 && idx > 0) {
+        exos = exos.slice(); // copie
+      }
+      // Ajuste volume selon phase macro
+      var volMod = currentPhase.volume_modifier || 1;
+      exos = exos.map(function(ex) {
+        var adjusted = {};
+        for (var k in ex) adjusted[k] = ex[k];
+        if (volMod < 1 && !ex.is_fst7) {
+          adjusted.sets = Math.max(1, Math.round((ex.sets || 3) * volMod));
+        }
+        return adjusted;
+      });
+      allExercises = allExercises.concat(exos);
+    });
+
+    // Durée estimée : ~4min/série en moyenne
+    var totalSets = allExercises.reduce(function(acc, ex) { return acc + (ex.sets || 3); }, 0);
+    var estimatedMin = Math.round(totalSets * 4 + 10); // +10min échauffement
+
+    return {
+      dayIndex: idx + 1,
+      day: dayPlan.day,
+      label: dayPlan.label,
+      muscles: dayPlan.muscles,
+      exercises: allExercises,
+      estimatedDuration: estimatedMin + ' min',
+      warmup: '5-10 min cardio léger + mobilité articulaire ciblée'
+    };
+  });
+
+  // 8. CONSEILS PERSONNALISÉS
+  var tips = [];
+  if (S.age >= 50) tips.push('Récupération allongée recommandée : 48-72h entre les séances par groupe musculaire.');
+  if (S.sex === 'female') tips.push('Priorité fessiers et jambes : 2× par semaine recommandé pour résultats optimaux.');
+  if (S.sleep && S.sleep < 7) tips.push('Sommeil < 7h détecté : la récupération musculaire est compromise, dormez plus.');
+  if (goal === 'weight_loss') tips.push('En déficit calorique : maintenez les charges — l\'objectif est de préserver le muscle.');
+  if (level === 'beginner') tips.push('Débutant : maîtrise technique avant d\'augmenter les charges. Filmez-vous si possible.');
+  if (equip === 'home') tips.push('Entraînement maison : progressez via les variantes (prise, tempo, unilateral).');
+
+  return {
+    style: style,
+    styleLabel: styleObj.meta ? styleObj.meta.name : style,
+    level: level,
+    splitDays: splitDays,
+    split: split,
+    cycleWeek: cycleWeek,
+    currentPhase: currentPhase,
+    weekProgram: weekProgram,
+    priorityMuscles: priorityMuscles,
+    personalizedTips: tips,
+    meta: styleObj.meta || {}
+  };
+}
+
+window.buildPersonalizedMuscuPlan = buildPersonalizedMuscuPlan;
+
 window.YATES_PROGRAMS = YATES_PROGRAMS;
 window.COLEMAN_PROGRAMS = COLEMAN_PROGRAMS;
 window.RAMBOD_PROGRAMS = RAMBOD_PROGRAMS;
