@@ -14513,6 +14513,21 @@
             dayMAD += mealEntry.costMAD;
             pricedMeals++;
           }
+        } else if (recipe._smoothie && recipe.ingredients && recipe.ingredients.length) {
+          // Smoothie whey — ingrédients déjà présents dans l'objet weekPlan (format {name,qty,unit})
+          var smoothieCost = 0;
+          recipe.ingredients.forEach(function(ing) {
+            var price = window.getPricePer ? window.getPricePer(ing.name, ing.unit) : null;
+            if (price !== null && price > 0) {
+              smoothieCost += price * (ing.qty || 0);
+            }
+          });
+          if (smoothieCost > 0) {
+            mealEntry.costMAD = Math.round(smoothieCost * 100) / 100;
+            mealEntry.scaled  = true;
+            dayMAD += mealEntry.costMAD;
+            pricedMeals++;
+          }
         } else if (recipe._id) {
           // Recette R201+ : utilise le _scalingRatio stocké par enrichWithScaling
           var ratio = recipe._scalingRatio || 1;
@@ -14522,6 +14537,21 @@
             mealEntry.scaled  = true;
             dayMAD += mealEntry.costMAD;
             pricedMeals++;
+          } else if (!cost && recipe.ingredients && recipe.ingredients.length && window.getPricePer) {
+            // Recette non trouvée dans RECIPES_DB mais ingrédients disponibles dans l'objet
+            var fallbackCost = 0;
+            recipe.ingredients.forEach(function(ing) {
+              var price = window.getPricePer(ing.name, ing.unit);
+              if (price !== null && price > 0) {
+                fallbackCost += price * (ing.qty || 0);
+              }
+            });
+            if (fallbackCost > 0) {
+              mealEntry.costMAD = Math.round(fallbackCost * 100) / 100;
+              mealEntry.scaled  = true;
+              dayMAD += mealEntry.costMAD;
+              pricedMeals++;
+            }
           }
         }
         // Recette legacy sans _id : prix non disponible (pas dans prices-db)
