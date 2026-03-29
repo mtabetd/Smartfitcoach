@@ -129,7 +129,7 @@ var NFC_PROGRAMS = {
       warmup: '5 min rameur + rotations \u00e9paules',
       exercises: [
         {order:1, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res', sets:4, reps:10, rest:'1min30', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
-        {order:2, name:'D\u00e9velopp\u00e9 Arnold', sets:4, reps:12, rest:'1min', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
+        {order:2, name:'D\u00e9velopp\u00e9 haltères rotatif', sets:4, reps:12, rest:'1min', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
         {order:3, name:'\u00c9l\u00e9vation frontale + Face pull', sets:4, reps:'12+12', rest:'1min', technique:'Superset', muscle:'\u00e9paules', type:'superset', equipment:'halteres+poulie'},
         {order:4, name:'\u00c9l\u00e9vation lat\u00e9rale', sets:4, reps:15, rest:'45s', technique:'1 moiti\u00e9 + 1 compl\u00e8te', muscle:'\u00e9paules', type:'isolation', equipment:'halteres'},
         {order:5, name:'Shrug barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'trap\u00e8zes', type:'isolation', equipment:'barre'},
@@ -1170,7 +1170,7 @@ var RAMBOD_PROGRAMS = {
         description: 'FST-7 épaules intermédiaire. 4 exercices + FST-7.',
         exercises: [
           {order:1, name:'Développé militaire barre', sets:4, reps:'8-12', rest:'90s', technique:'4 séries. Montée progressive. Amplitude complète.', muscle:'epaules', type:'compound', equipment:'barre', rest_pause:false},
-          {order:2, name:'Développé Arnold', sets:3, reps:'10-12', rest:'90s', technique:'3 séries. Rotation des poignets. Amplitude maximale. Tous les faisceaux.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
+          {order:2, name:'Développé haltères rotatif', sets:3, reps:'10-12', rest:'90s', technique:'3 séries. Rotation des poignets. Amplitude maximale. Tous les faisceaux.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
           {order:3, name:'Oiseau poulie basse (arrière)', sets:3, reps:'12-15', rest:'60s', technique:'3 séries. Poulies croisées. Amplitude complète. Faisceau postérieur.', muscle:'epaules', type:'isolation', equipment:'poulie', rest_pause:false},
           {order:4, name:'Élévations frontales haltères', sets:3, reps:'12-15', rest:'60s', technique:'3 séries. Faisceau antérieur. Bras alternés. Contraction en haut.', muscle:'epaules', type:'isolation', equipment:'halteres', rest_pause:false},
           {order:5, name:'Élévations latérales poulie (FST-7)', sets:7, reps:'12-15', rest:'35s', technique:'FST-7 FINISHER: 7 séries, 35s repos. Étirer épaule en passant le bras derrière le dos 30s. Poulie basse = tension constante. Pompe maximale.', muscle:'epaules', type:'isolation', equipment:'poulie', is_fst7:true, interset_stretch:true, fst7_sets:7, rest_pause:false}
@@ -1181,7 +1181,7 @@ var RAMBOD_PROGRAMS = {
         description: 'FST-7 épaules avancé. Volume élevé + FST-7 intensifié.',
         exercises: [
           {order:1, name:'Développé militaire barre', sets:5, reps:'6-10', rest:'2min', technique:'5 séries lourdes. Progression maximale. Amplitude complète.', muscle:'epaules', type:'compound', equipment:'barre', rest_pause:false},
-          {order:2, name:'Développé Arnold', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Rotation complète. Amplitude maximale.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
+          {order:2, name:'Développé haltères rotatif', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Rotation complète. Amplitude maximale.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
           {order:3, name:'Oiseau machine', sets:4, reps:'12-15', rest:'60s', technique:'4 séries. Amplitude complète. Squeeze en fin de mouvement.', muscle:'epaules', type:'isolation', equipment:'machine', rest_pause:false},
           {order:4, name:'Élévations frontales haltères', sets:3, reps:'12-15', rest:'60s', technique:'3 séries. Faisceau antérieur. Alternés.', muscle:'epaules', type:'isolation', equipment:'halteres', rest_pause:false},
           {order:5, name:'Élévations latérales haltères (FST-7)', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 FINISHER AVANCÉ: 7 séries, 30s repos. Étirer épaule 30s entre séries. Drop set 6e série. Pompe maximale. Fascia étiré.', muscle:'epaules', type:'isolation', equipment:'halteres', is_fst7:true, interset_stretch:true, fst7_sets:7, rest_pause:false}
