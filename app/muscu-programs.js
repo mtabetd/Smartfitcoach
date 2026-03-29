@@ -116,14 +116,14 @@ var NFC_PROGRAMS = {
       warmup: '5 min rameur + rotations \u00e9paules + bande \u00e9lastique',
       exercises: [
         {order:1, name:'D\u00e9velopp\u00e9 militaire barre (debout)', sets:4, reps:6, rest:'3min', technique:'Compos\u00e9 principal CNS frais. Debout = gainage total engag\u00e9. Prise l\u00e9g\u00e8rement plus large que les \u00e9paules. Pas d\'arc excessif.', muscle:'\u00e9paules (faisceau ant)', type:'compound', equipment:'barre'},
-        {order:2, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res assis', sets:4, reps:8, rest:'2min', technique:'Plus safe que l\'Arnold pour les rotateurs — ROM complet (halt\u00e8res \u00e0 l\'oreille). Coudes l\u00e9g\u00e8rement devant le plan frontal. Prise neutre possible.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
+        {order:2, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res assis', sets:4, reps:8, rest:'2min', technique:'Plus safe que le d\u00e9velopp\u00e9 halt\u00e8res rotatif pour les rotateurs — ROM complet (halt\u00e8res \u00e0 l\'oreille). Coudes l\u00e9g\u00e8rement devant le plan frontal. Prise neutre possible.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
         {order:3, name:'\u00c9l\u00e9vation lat\u00e9rale c\u00e2ble (unilat\u00e9ral)', sets:4, reps:12, rest:'1min30', technique:'C\u00e2ble = tension CONSTANTE tout le ROM contrairement aux halt\u00e8res. Poignet l\u00e9g\u00e8rement en avant du coude. Coude \u00e0 90\u00b0 max.', muscle:'\u00e9paules (faisceau lat\u00e9ral)', type:'isolation', equipment:'poulie'},
         {order:4, name:'\u00c9l\u00e9vation post\u00e9rieure (oiseau) halt\u00e8res', sets:4, reps:15, rest:'1min', technique:'3s excentrique — Buste pench\u00e9 \u00e0 90\u00b0, coudes l\u00e9g\u00e8rement fl\u00e9chis. CRUCIAL pour look 3D \u00e9paules. Faisceau post = cl\u00e9 de vote de l\u00e9\u00e9quilibre articulaire.', muscle:'\u00e9paules (faisceau post)', type:'isolation', equipment:'halteres'},
         {order:5, name:'Face pull corde (poulie haute)', sets:4, reps:'10+10', rest:'1min30', technique:'Superset avec \u00e9l\u00e9vation frontale. Tirer vers le visage, coudes HAUTS. Rotation externe maximale = protection coiffe des rotateurs.', muscle:'\u00e9paules (post + rotateurs)', type:'superset', equipment:'poulie+halteres'},
         {order:6, name:'Abdos rouleau (ab wheel)', sets:4, reps:12, rest:'1min', technique:'Dos neutre tout le mouvement. Gainage actif. Rentrez le ventre \u00e0 la remonter.', muscle:'abdominaux+transverse', type:'isolation', equipment:'rouleau'},
         {order:7, name:'Relev\u00e9 de jambes suspendu', sets:4, reps:'max', rest:'1min', technique:'Mouvement contr\u00f4l\u00e9 — pas d\'eslan. Montez les jambes \u00e0 90\u00b0 minimum. Descente lente 3s.', muscle:'abdominaux (bas)', type:'isolation', equipment:'barre fixe'}
       ],
-      notes: '\u00c9PAULES PRO LEVEL: Militaire debout (force) → militaire halt\u00e8res (volume) → lat\u00e9rales c\u00e2ble (tension continue) → POST\u00c9RIEURES (3D look!) → face pull (protection rotateurs). L\'Arnold press est \u00e9VITE\u00c9 car il cr\u00e9e de l\u00e9impingement sous-acromial sur charges lourdes. Les 3 faisceaux = 3D shoulder. Ne N\u00c9GLIGEZ JAMAIS le faisceau post\u00e9rieur.'
+      notes: '\u00c9PAULES PRO LEVEL: Militaire debout (force) → militaire halt\u00e8res (volume) → lat\u00e9rales c\u00e2ble (tension continue) → POST\u00c9RIEURES (3D look!) → face pull (protection rotateurs). Le d\u00e9velopp\u00e9 halt\u00e8res rotatif est \u00e9VITE\u00c9 car il cr\u00e9e de l\u00e9impingement sous-acromial sur charges lourdes. Les 3 faisceaux = 3D shoulder. Ne N\u00c9GLIGEZ JAMAIS le faisceau post\u00e9rieur.'
     },
     seche: {
       warmup: '5 min rameur + rotations \u00e9paules',
@@ -251,7 +251,7 @@ var NFC_PROGRAMS_FORCE = {
         {order:4, name:'Dips (lest\u00e9)', sets:3, reps:6, rest:'2min30', technique:'Corps l\u00e9g\u00e8rement pench\u00e9 en avant pour cibler le bas pectoral. Lest = progressive overload. Stretch profond en bas.', muscle:'pectoraux (bas)', type:'compound', equipment:'barres', rirTarget:2},
         {order:5, name:'\u00c9cart\u00e9 poulie crois\u00e9e (cable crossover)', sets:3, reps:12, rest:'1min30', technique:'3s pic contraction en bas — Tension constante = impossible avec halt\u00e8res. Finisseur pump.', muscle:'pectoraux', type:'isolation', equipment:'poulie', rirTarget:3}
       ],
-      notes: '\u26a1 PHASE FORCE PECTORAUX: 5\u00d73 bench = fondation de TOUS les gains pectoraux. Notez vos charges chaque s\u00e9ance. Double progression: reps d\'abord (3\u21923), puis charge (+2.5kg). 4min repos = non-n\u00e9gociable pour le CNS. Programme Dorian Yates + Ronnie Coleman = toujours bas\u00e9 sur force brute d\'abord.'
+      notes: '\u26a1 PHASE FORCE PECTORAUX: 5\u00d73 bench = fondation de TOUS les gains pectoraux. Notez vos charges chaque s\u00e9ance. Double progression: reps d\'abord (3\u21923), puis charge (+2.5kg). 4min repos = non-n\u00e9gociable pour le CNS. Les m\u00e9thodes intensit\u00e9 maximale et volume progressif = toujours bas\u00e9es sur force brute d\'abord.'
     }
   },
   dos: {
@@ -264,7 +264,7 @@ var NFC_PROGRAMS_FORCE = {
         {order:4, name:'Soulevé de terre en déficit (5cm)', sets:3, reps:5, rest:'3min', technique:'@75% 1RM — Plaques de 5cm sous les pieds. ROM augment\u00e9 = stretch lombaires + ischios + ischio plus grand.', muscle:'dos+jambes', type:'compound', equipment:'barre', rirTarget:2},
         {order:5, name:'Tirage vertical prise neutre', sets:3, reps:8, rest:'2min', technique:'2s excentrique — Prise neutre = moins biceps, plus dorsal. Tirer les coudes VERS LE BAS (pas en arri\u00e8re). Finisseur technique.', muscle:'dos (grand dorsal)', type:'compound', equipment:'poulie', rirTarget:3}
       ],
-      notes: '\u26a1 PHASE FORCE DOS: Soulev\u00e9 de terre en 1er (CNS frais). Dorian Yates: \'Le dos se construit avec le soulev\u00e9 de terre. Point.\' Ronnie Coleman: 800lb deadlift. Phil Heath: tractions lest\u00e9es. La force de traction = la masse dorsale. Tracking charges OBLIGATOIRE.'
+      notes: '\u26a1 PHASE FORCE DOS: Soulev\u00e9 de terre en 1er (CNS frais). Principe fondamental: \'Le dos se construit avec le soulev\u00e9 de terre. Point.\' 800lb deadlift r\u00e9alis\u00e9. Tractions lest\u00e9es au programme. La force de traction = la masse dorsale. Tracking charges OBLIGATOIRE.'
     }
   },
   jambes: {
@@ -274,7 +274,7 @@ var NFC_PROGRAMS_FORCE = {
         {order:1, name:'Squat barre arri\u00e8re (high bar)', sets:5, reps:3, rest:'4min', technique:'@87-93% 1RM — ATG si mobilit\u00e9 permet, parall\u00e8le minimum. Bracing 360\u00b0 (Valsalva maneuver). Genoux dans l\'axe. Drive du sol EXPLOSIF. C\'est ici que se cr\u00e9ent les cuisses des champions.', muscle:'quadriceps+fessiers+ischio', type:'compound', equipment:'barre', rirTarget:1},
         {order:2, name:'Soulev\u00e9 de terre roumain (RDL)', sets:4, reps:5, rest:'3min30', technique:'@75-80% 1RM — Hanches EN ARRI\u00c8RE (hip hinge pur), dos neutre, barre glisse le long des jambes. Stretch ischios = brutal et n\u00e9cessaire.', muscle:'ischio-jambiers+fessiers', type:'compound', equipment:'barre', rirTarget:2},
         {order:3, name:'Fente bulgare barre (forc\u00e9)', sets:3, reps:5, rest:'3min', technique:'@70-75% 1RM — 5 reps chaque jambe (sans pause). Pied arri\u00e8re sur banc haut. Genou avant 1cm du sol. Force et symétrie = priorités.', muscle:'quadriceps+fessiers (unilat\u00e9ral)', type:'compound', equipment:'barre', rirTarget:2},
-        {order:4, name:'Good Morning barre', sets:3, reps:8, rest:'2min30', technique:'@50-60% du squat max — Dos neutre, hanches en arri\u00e8re, l\u00e9ger fl\u00e9chissement des genoux. Force ischio en \u00e9tirement = pattern DL. Ronnie Coleman jurait dessus.', muscle:'ischio-jambiers+bas du dos', type:'compound', equipment:'barre', rirTarget:2},
+        {order:4, name:'Good Morning barre', sets:3, reps:8, rest:'2min30', technique:'@50-60% du squat max — Dos neutre, hanches en arri\u00e8re, l\u00e9ger fl\u00e9chissement des genoux. Force ischio en \u00e9tirement = pattern DL. M\u00e9thode volume progressif: exercice cl\u00e9.', muscle:'ischio-jambiers+bas du dos', type:'compound', equipment:'barre', rirTarget:2},
         {order:5, name:'Leg press (pieds hauts, charge maximale)', sets:4, reps:8, rest:'2min30', technique:'Pieds hauts sur la plateforme. Charges tr\u00e8s lourdes possibles (sécurité genoux assur\u00e9e par la machine). Tom Platz: 13 reps @500kg \u2014 c\'est ce niveau de jambes qui gagne.', muscle:'jambes compl\u00e8tes', type:'compound', equipment:'machine', rirTarget:2}
       ],
       notes: '\u26a1 PHASE FORCE JAMBES: Squat = trone, tout le reste est une branche. Tom Platz avait les meilleures jambes de l\'histoire parce qu\'il squattait 500kg+ pour des reps. Les jambes sont le groupe le plus dur \u00e0 d\u00e9velopper. La phase force BRISE les plafonds. Courage oblig\u00e9.'
@@ -284,13 +284,13 @@ var NFC_PROGRAMS_FORCE = {
     force: {
       warmup: 'Activation: 3\u00d715 Face pull + 3\u00d715 Band pull-apart + 3\u00d710 YTW \u00e9lastique + 2 sets militaire @50%, @70%',
       exercises: [
-        {order:1, name:'D\u00e9velopp\u00e9 militaire barre (debout)', sets:5, reps:3, rest:'4min', technique:'@87-93% 1RM — Debout = gainage total engag\u00e9. Prise l\u00e9g\u00e8rement plus large que les \u00e9paules. Pas de trop grande extension lombaire. Press explosif — stabilisateurs = travaillés. Arnold pressait debout toujours.', muscle:'\u00e9paules (faisceau ant\u00e9rieur)', type:'compound', equipment:'barre', rirTarget:1},
+        {order:1, name:'D\u00e9velopp\u00e9 militaire barre (debout)', sets:5, reps:3, rest:'4min', technique:'@87-93% 1RM — Debout = gainage total engag\u00e9. Prise l\u00e9g\u00e8rement plus large que les \u00e9paules. Pas de trop grande extension lombaire. Press explosif — stabilisateurs = travaillés. Presse debout = gainage total du corps.', muscle:'\u00e9paules (faisceau ant\u00e9rieur)', type:'compound', equipment:'barre', rirTarget:1},
         {order:2, name:'Développé militaire haltères assis', sets:4, reps:5, rest:'3min30', technique:'@75-80% 1RM — ROM complet (halt\u00e8res \u00e0 la hauteur des oreilles en bas). Coudes l\u00e9g\u00e8rement devant le plan frontal = pr\u00e9serve les rotateurs.', muscle:'\u00e9paules (3 faisceaux)', type:'compound', equipment:'halteres', rirTarget:2},
         {order:3, name:'Développé derrière la nuque (barre légère)', sets:3, reps:6, rest:'3min', technique:'@65-70% 1RM — UNIQUEMENT si mobilit\u00e9 \u00e9paules parfaite. Cible le faisceau lat\u00e9ral directement. Douleur = arr\u00eatez.', muscle:'\u00e9paules (faisceau lat + post)', type:'compound', equipment:'barre', rirTarget:2},
-        {order:4, name:'\u00c9l\u00e9vation lat\u00e9rale c\u00e2ble lourd (unilatéral)', sets:4, reps:10, rest:'2min', technique:'Tension maximale du d\u00e9but \u00e0 la fin. C\u00e2ble via le bas du corps. Lee Haney: \'le d\u00e9lto\u00efde lat\u00e9ral est ce qui cr\u00e9e la largeur que tout le monde veut\'.', muscle:'\u00e9paules (faisceau lat\u00e9ral)', type:'isolation', equipment:'poulie', rirTarget:2},
+        {order:4, name:'\u00c9l\u00e9vation lat\u00e9rale c\u00e2ble lourd (unilatéral)', sets:4, reps:10, rest:'2min', technique:'Tension maximale du d\u00e9but \u00e0 la fin. C\u00e2ble via le bas du corps. Principe cl\u00e9: \'le d\u00e9lto\u00efde lat\u00e9ral est ce qui cr\u00e9e la largeur que tout le monde veut\'.', muscle:'\u00e9paules (faisceau lat\u00e9ral)', type:'isolation', equipment:'poulie', rirTarget:2},
         {order:5, name:'Face pull corde + \u00e9l\u00e9vation post\u00e9rieure', sets:4, reps:'10+12', rest:'1min30', technique:'Superset — Face pull corde lourde (rotation externe) puis Oiseau halt\u00e8res. Protège les rotateurs ET construit le 3D shoulder. Jamais saut\u00e9.', muscle:'\u00e9paules (post + rotateurs)', type:'superset', equipment:'poulie+halteres', rirTarget:3}
       ],
-      notes: '\u26a1 PHASE FORCE \u00c9PAULES: Militaire debout = test de force totale du corps. Frank Zane, Lee Haney, Arnold = tous basaient leurs \u00e9paules sur le militaire lourd. Le 3D shoulder = faisceau lat\u00e9ral + POST\u00c9RIEUR bien développés. Ne jamais blesser les rotateurs = carri\u00e8re courte.'
+      notes: '\u26a1 PHASE FORCE \u00c9PAULES: Militaire debout = test de force totale du corps. Les grands champions = tous basaient leurs \u00e9paules sur le militaire lourd. Le 3D shoulder = faisceau lat\u00e9ral + POST\u00c9RIEUR bien développés. Ne jamais blesser les rotateurs = carri\u00e8re courte.'
     }
   },
   bras: {
@@ -300,10 +300,10 @@ var NFC_PROGRAMS_FORCE = {
         {order:1, name:'Curl barre droite (lourd)', sets:4, reps:5, rest:'3min', technique:'@80% 1RM — Pas de balancement. Coudes fixes. Supination compl\u00e8te au sommet. Descente 3s excentrique. Larry Scott (1er Mr Olympia) = curl barre lourd toujours.', muscle:'biceps', type:'compound', equipment:'barre', rirTarget:1},
         {order:2, name:'D\u00e9velopp\u00e9 couch\u00e9 prise serr\u00e9e (lourd)', sets:4, reps:5, rest:'3min', technique:'@80% 1RM — Prise \u00e0 largeur d\u00e9\u00e9paules. Coudes proches du corps. Chef long + chef lat\u00e9ral triceps = 2/3 du bras.', muscle:'triceps', type:'compound', equipment:'barre', rirTarget:1},
         {order:3, name:'Curl pupitre (chef court)', sets:4, reps:6, rest:'2min30', technique:'@75% 1RM — Peak contraction 2s. 3s excentrique. Isolation pure. Le secret du biceps piqué.', muscle:'biceps (chef court)', type:'isolation', equipment:'pupitre', rirTarget:2},
-        {order:4, name:'Barre au front (skull crushers) + DC serr\u00e9', sets:4, reps:'6+6', rest:'2min30', technique:'Superset lourd — Skull crushers @70% puis transition imm\u00e9diate en DC serr\u00e9 (m\u00eame barre). Technique Dorian Yates.', muscle:'triceps', type:'superset', equipment:'barre EZ', rirTarget:2},
+        {order:4, name:'Barre au front (skull crushers) + DC serr\u00e9', sets:4, reps:'6+6', rest:'2min30', technique:'Superset lourd — Skull crushers @70% puis transition imm\u00e9diate en DC serr\u00e9 (m\u00eame barre). Technique Heavy Duty.', muscle:'triceps', type:'superset', equipment:'barre EZ', rirTarget:2},
         {order:5, name:'Curl incliné haltères (chef long)', sets:3, reps:8, rest:'2min', technique:'Banc \u00e0 45\u00b0 = stretch du chef long maximal. Halt\u00e8res pendent derri\u00e8re le banc en bas. Rotation supination compl\u00e8te en haut.', muscle:'biceps (chef long)', type:'isolation', equipment:'halteres+banc', rirTarget:3}
       ],
-      notes: '\u26a1 PHASE FORCE BRAS: Les bras ne grossissent pas sans force de base sur composés. Curl barre lourd + DC serr\u00e9 lourd = fondation. L\'isolation seule = plafond rapide. Sergio Oliva, Arnold, Ronnie = tous soulevaient lourd sur curl barre.'
+      notes: '\u26a1 PHASE FORCE BRAS: Les bras ne grossissent pas sans force de base sur composés. Curl barre lourd + DC serr\u00e9 lourd = fondation. L\'isolation seule = plafond rapide. Les champions du volume et de l\'intensit\u00e9 = tous soulevaient lourd sur curl barre.'
     }
   }
 };
@@ -356,8 +356,8 @@ var ADVANCED_TECHNIQUES_DB = {
     bestFor: ['biceps', 'triceps', '\u00e9paules (lat\u00e9rales)']
   },
   rest_pause: {
-    name: 'Rest-Pause (Dorian Yates)',
-    ref: 'Dorian Yates — 6x Mr. Olympia. Technique signature Heavy Duty',
+    name: 'Rest-Pause (Intensit\u00e9 Maximale)',
+    ref: 'Méthode Intensité Maximale. Technique signature Heavy Duty',
     desc: '1 s\u00e9rie \u00e0 l\u00e9chec, pause 15-20s, continuer jusqu\u00e0 l\u00e9chec x2. Triple l\u00e9amplitude de recrutement.',
     example: 'Rowing barre 10 reps \u00e0 l\u00e9chec | 15s | 4-5 reps | 15s | 2-3 reps',
     frequency: '1-2x/muscle/semaine max',
@@ -380,8 +380,8 @@ var ADVANCED_TECHNIQUES_DB = {
     bestFor: ['biceps', 'triceps', 'pectoraux']
   },
   pre_exhaustion: {
-    name: 'Pr\u00e9-Exhaustion (M\u00e9thode Arnold)',
-    ref: 'Arnold Schwarzenegger — The New Encyclopedia of Modern Bodybuilding',
+    name: 'Pr\u00e9-Exhaustion (M\u00e9thode Classique)',
+    ref: 'Encyclopédie Moderne du Bodybuilding — Méthode classique',
     desc: 'Fatiguer le muscle cible avec un isolant AVANT le compos\u00e9. Force le muscle principal \u00e0 travailler malgr\u00e9 les synergistes frais.',
     example: 'Pectoraux: \u00c9cart\u00e9 4×12 → imm\u00e9diatement D\u00e9velopp\u00e9 couch\u00e9 (pecs d\u00e9j\u00e0 fatigu\u00e9s, triceps encore frais)',
     frequency: '1x/s\u00e9ance pour le muscle prioritaire',
@@ -389,7 +389,7 @@ var ADVANCED_TECHNIQUES_DB = {
   },
   twenty_ones: {
     name: '21s (7+7+7 — Time Under Tension)',
-    ref: 'Arnold Schwarzenegger — technique classique pump + recrutement total',
+    ref: 'Méthode classique pump + recrutement total',
     desc: '7 reps demi-ROM bas + 7 reps demi-ROM haut + 7 reps ROM complet = 21 reps TUT maximal.',
     example: 'Curl barre: 7× (0\u00b0\u219290\u00b0) + 7× (90\u00b0\u2192haut) + 7× ROM complet',
     frequency: '1 exercice/s\u00e9ance en finisseur',
@@ -397,7 +397,7 @@ var ADVANCED_TECHNIQUES_DB = {
   },
   giant_set: {
     name: 'Giant Set (4+ exercices enchaîn\u00e9s)',
-    ref: 'Arnold routine — densit\u00e9 d\u00e9entra\u00eenement maximale pour d\u00e9finition + volume',
+    ref: 'Routine classique — densit\u00e9 d\'entra\u00eenement maximale pour d\u00e9finition + volume',
     desc: '4 exercices pour le m\u00eame muscle ou groupe antagoniste, sans repos entre les exercices. 2-3min entre les r\u00e9p\u00e9titions de giant sets.',
     example: '\u00c9paules: Militaire + Lat\u00e9rales + Frontales + Oiseau (4 exercices, 0s repos entre)',
     frequency: '1 giant set de 3-4 rounds en fin de s\u00e9ance',
@@ -409,7 +409,7 @@ window.NFC_PROGRAMS_FORCE = NFC_PROGRAMS_FORCE;
 
 var WEEKLY_SPLITS = {
   3: {name:'Full Body 3j', days:[{day:'Lundi',muscles:['pectoraux','dos'],label:'Haut du corps A'},{day:'Mercredi',muscles:['jambes','epaules'],label:'Bas + \u00c9paules'},{day:'Vendredi',muscles:['bras','abdos_dedied'],label:'Bras + Abdos'}]},
-  4: {name:'Heavy Duty 4j (Dorian Yates)', days:[{day:'Lundi',muscles:['pectoraux','bras'],label:'Push — Pecs + Biceps'},{day:'Mardi',muscles:['jambes'],label:'Legs — Jambes compl\u00e8tes'},{day:'Jeudi',muscles:['epaules','bras'],label:'\u00c9paules + Triceps'},{day:'Vendredi',muscles:['dos'],label:'Pull — Dos + Ischios (Deadlift day)'}], notes:'Repos mercredi, samedi, dimanche. Chaque muscle 1x/semaine avec intensit\u00e9 MAXIMALE (Dorian Yates Heavy Duty). D\u00e9ficit CNS entre les s\u00e9ances. Qualit\u00e9 > quantit\u00e9.'},
+  4: {name:'Heavy Duty 4j (Intensit\u00e9 Maximale)', days:[{day:'Lundi',muscles:['pectoraux','bras'],label:'Push — Pecs + Biceps'},{day:'Mardi',muscles:['jambes'],label:'Legs — Jambes compl\u00e8tes'},{day:'Jeudi',muscles:['epaules','bras'],label:'\u00c9paules + Triceps'},{day:'Vendredi',muscles:['dos'],label:'Pull — Dos + Ischios (Deadlift day)'}], notes:'Repos mercredi, samedi, dimanche. Chaque muscle 1x/semaine avec intensit\u00e9 MAXIMALE (M\u00e9thode Intensit\u00e9 Maximale). D\u00e9ficit CNS entre les s\u00e9ances. Qualit\u00e9 > quantit\u00e9.'},
   5: {name:'Split 5j (Pro)', days:[{day:'Lundi',muscles:['pectoraux'],label:'Pectoraux'},{day:'Mardi',muscles:['dos'],label:'Dos'},{day:'Jeudi',muscles:['bras'],label:'Bras'},{day:'Vendredi',muscles:['jambes'],label:'Jambes'},{day:'Samedi',muscles:['epaules'],label:'\u00c9paules'}], notes:'Repos mercredi et dimanche. Espacer pectoraux et \u00e9paules de 48h min.'},
   6: {name:'PPL 6j', days:[{day:'Lundi',muscles:['pectoraux'],label:'Push: Pecs'},{day:'Mardi',muscles:['dos'],label:'Pull: Dos'},{day:'Mercredi',muscles:['jambes'],label:'Legs'},{day:'Jeudi',muscles:['epaules'],label:'Push: \u00c9paules'},{day:'Vendredi',muscles:['dos'],label:'Pull: Dos+Bras'},{day:'Samedi',muscles:['jambes','fessiers_dedied'],label:'Legs+Fessiers'}]}
 };
@@ -533,7 +533,7 @@ function getWeeklySplit(daysPerWeek, userProfile) {
 var YATES_PROGRAMS = {
   meta: {
     name: 'Heavy Duty',
-    athlete: 'Dorian Yates 6× Mr. Olympia',
+    athlete: 'Méthode Intensité Maximale',
     philosophy: 'Intensité maximale, volume minimal. 1-2 séries de travail à l\'échec complet avec rest-pause et pre-exhaustion. Séances 35-45 min, 3-4j/sem.',
     frequency: '3-4 jours/semaine',
     session_duration: '35-45 min',
@@ -780,7 +780,7 @@ var YATES_PROGRAMS = {
 var COLEMAN_PROGRAMS = {
   meta: {
     name: 'High Volume',
-    athlete: 'Ronnie Coleman 8× Mr. Olympia',
+    athlete: 'Méthode Volume Progressif',
     philosophy: 'Volume extrême, fréquence élevée. 5+ séries, 20-25 sets/muscle/sem. Supersets, drop sets. Ain\'t nothing but a peanut! 4-6j/sem.',
     frequency: '4-6 jours/semaine',
     session_duration: '60-90 min',
@@ -1079,7 +1079,7 @@ var COLEMAN_PROGRAMS = {
 var RAMBOD_PROGRAMS = {
   meta: {
     name: 'FST-7',
-    athlete: 'Hany Rambod — Coach de Phil Heath & Jay Cutler',
+    athlete: 'Méthode FST-7',
     philosophy: 'Fascia Stretch Training 7. Dernier exercice chaque muscle = 7 séries × 12-15 reps, 30-45s repos, étirement inter-séries. Pompe extrême pour étirer le fascia.',
     frequency: '4-5 jours/semaine',
     session_duration: '60-75 min',
@@ -1349,14 +1349,14 @@ var RAMBOD_PROGRAMS = {
 };
 
 var TRAINING_STYLES = {
-  nfc:     { label:'NFC Classic',    programs: NFC_PROGRAMS,     splits: WEEKLY_SPLITS },
-  yates:   { label:'Heavy Duty',     programs: YATES_PROGRAMS.programs, splits: YATES_PROGRAMS.splits, meta: YATES_PROGRAMS.meta, macro: YATES_PROGRAMS.macro_cycle_12w },
-  coleman: { label:'High Volume',    programs: COLEMAN_PROGRAMS.programs, splits: COLEMAN_PROGRAMS.splits, meta: COLEMAN_PROGRAMS.meta, macro: COLEMAN_PROGRAMS.macro_cycle_12w },
-  rambod:  { label:'FST-7',          programs: RAMBOD_PROGRAMS.programs, splits: RAMBOD_PROGRAMS.splits, meta: RAMBOD_PROGRAMS.meta, macro: RAMBOD_PROGRAMS.macro_cycle_12w }
+  classic:   { label:'Programme Classique',   programs: NFC_PROGRAMS,              splits: WEEKLY_SPLITS },
+  intensity: { label:'Intensité Maximale',    programs: YATES_PROGRAMS.programs,   splits: YATES_PROGRAMS.splits,   meta: YATES_PROGRAMS.meta,   macro: YATES_PROGRAMS.macro_cycle_12w },
+  volume:    { label:'Volume Progressif',     programs: COLEMAN_PROGRAMS.programs, splits: COLEMAN_PROGRAMS.splits, meta: COLEMAN_PROGRAMS.meta, macro: COLEMAN_PROGRAMS.macro_cycle_12w },
+  fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w }
 };
 
 function getStyleProgram(style, muscle, level) {
-  var s = TRAINING_STYLES[style] || TRAINING_STYLES.nfc;
+  var s = TRAINING_STYLES[style] || TRAINING_STYLES.classic;
   if (!s.programs[muscle]) return null;
   if (level && s.programs[muscle][level]) return s.programs[muscle][level];
   return s.programs[muscle].masse || s.programs[muscle].intermediate || s.programs[muscle].beginner || s.programs[muscle];
@@ -1366,6 +1366,7 @@ window.YATES_PROGRAMS = YATES_PROGRAMS;
 window.COLEMAN_PROGRAMS = COLEMAN_PROGRAMS;
 window.RAMBOD_PROGRAMS = RAMBOD_PROGRAMS;
 window.TRAINING_STYLES = TRAINING_STYLES;
+window.TRAINING_STYLE_KEYS = ['classic', 'intensity', 'volume', 'fst7'];
 window.getStyleProgram = getStyleProgram;
 window.NFC_PROGRAMS = NFC_PROGRAMS;
 window.WEEKLY_SPLITS = WEEKLY_SPLITS;
