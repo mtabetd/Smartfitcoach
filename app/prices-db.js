@@ -920,6 +920,7 @@
     'Dattes Medjool dénoyautées': {
       name: 'Dattes Medjool dénoyautées',
       pricePerG: r(60 / 1000),
+      pricePerPce: r(60 / 1000 * 25), // ~25g par datte Medjool
       source: 'marjane',
       updatedAt: '2026-03'
     },
@@ -2751,6 +2752,7 @@
     'Datte Medjool': {
       name: 'Datte Medjool',
       pricePerG: r(80 / 1000),
+      pricePerPce: r(80 / 1000 * 25), // ~25g par datte Medjool
       source: 'souk',
       updatedAt: '2026-03'
     },
