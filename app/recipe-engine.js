@@ -15981,8 +15981,9 @@
       }
     }
 
-    // ── Beurre ────────────────────────────────────────────────────────────
-    if (n.indexOf('beurre') >= 0) {
+    // ── Beurre laitier UNIQUEMENT (pas beurres de noix/oléagineux) ───────
+    var isDairyButter = n.indexOf('beurre') >= 0 && !/beurre\s+d[e']\s*(cacahu|amande|noix|cajou|noisette|pistache|arachide)/i.test(n);
+    if (isDairyButter) {
       if (u === 'g') {
         if (Math.round(q) === 5)  return { qty: 1, unit: 'c.à.café' };
         if (Math.round(q) === 10) return { qty: 2, unit: 'c.à.café' };
@@ -16010,12 +16011,8 @@
       if (q >= 9 && q <= 10)  return { qty: '1½', unit: 'c.à.soupe' };
     }
 
-    // ── Fromages râpés ────────────────────────────────────────────────────
-    var isGratedCheese = (n.indexOf('parmesan') >= 0 || n.indexOf('gruyere') >= 0 || n.indexOf('gruyère') >= 0 || n.indexOf('feta') >= 0);
-    if (isGratedCheese && u === 'g') {
-      if (Math.round(q) === 15) return { qty: 1, unit: 'c.à.soupe' };
-      if (Math.round(q) === 30) return { qty: 2, unit: 'c.à.soupe' };
-    }
+    // ── Fromages : TOUJOURS en grammes (jamais en cuillères) ─────────────
+    // Parmesan, gruyère, feta, pecorino, etc. → unité professionnelle = grammes
 
     // ── Légumes & fruits frais ────────────────────────────────────────────
     if (n.indexOf('avocat') >= 0 && u === 'g') {
@@ -16348,9 +16345,17 @@
       return { qty: n, unit: 'pce' };
     }
 
-    // ── Cuillères (épices / condiments) → garder tel quel ─────────────────
+    // ── Cuillères : condiments/épices → garder, solides → reconvertir en g ─
     if (unit === 'cs' || unit === 'cc') {
-      return { qty: Math.ceil(qty), unit: unit };
+      var isLiquidCond = /huile|vinaigre|sauce\s+soja|tamari|miso|pesto|moutarde|miel|sirop|harissa|sriracha|nuoc|kecap|teriyaki|worcestershire|fish\s+sauce|colorant|arôme|extrait/i.test(lname);
+      var isDrySpice   = /sel|poivre|cumin|paprika|cannelle|gingembre|curry|curcuma|coriandre|ras\s+el|garam|masala|piment|safran|muscade|cardamome|clou|sumac|zaatar|levure|bicarbonate|cacao.*poudre|matcha|farine/i.test(lname);
+      if (isLiquidCond || isDrySpice) {
+        return { qty: Math.ceil(qty), unit: unit };
+      }
+      // Ingrédient solide affiché en cuillères (beurre, tahini, etc.) : reconvertir en grammes
+      // 1 c.à.soupe ≈ 15 g  |  1 c.à.café ≈ 5 g
+      var inG_spoon = unit === 'cs' ? qty * 15 : qty * 5;
+      return toMarketQty(name, inG_spoon, 'g', cat);
     }
 
     // ── Normaliser en ml ou en g ───────────────────────────────────────────
