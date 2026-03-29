@@ -3271,7 +3271,37 @@ var WHEY_SMOOTHIES = [
   { id:'sm_ban_03', name:'Banana Bread Shake', flavors:['banana','vanilla'], goal:['muscle'], timing:'anytime', cal:430, p:35, c:43, f:14, prep:'4min',
     ingredients:[{name:'Whey banane ou vanille',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Flocons d\'avoine',qty:30,unit:'g'},{name:'Cannelle',qty:1,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Noix',qty:5,unit:'g'}],
     steps:['Mixer lait entier + flocons d\'avoine 15 secondes','Ajouter whey, miel et cannelle','Mixer 20 secondes jusqu\'à consistance veloutée','Terminer avec les noix concassées en garniture'],
-    tips:'Les flocons ralentissent l\'absorption et prolongent la satiété. La cannelle améliore la sensibilité à l\'insuline. Idéal collation de journée ou post-entraînement léger.' }
+    tips:'Les flocons ralentissent l\'absorption et prolongent la satiété. La cannelle améliore la sensibilité à l\'insuline. Idéal collation de journée ou post-entraînement léger.' },
+
+  // === CHOCOLAT #4 — Choco Framboise Express ===
+  { id:'sm_choco_04', name:'Choco Framboise Express', flavors:['chocolate','strawberry'], goal:['fat_loss','recovery'], timing:'post', cal:290, p:32, c:30, f:5, prep:'3min',
+    ingredients:[{name:'Whey chocolat',qty:30,unit:'g'},{name:'Fraises congelées',qty:100,unit:'g'},{name:'Lait écrémé',qty:200,unit:'ml'},{name:'Miel',qty:5,unit:'g'},{name:'Glaçons',qty:80,unit:'g'}],
+    steps:['Mixer tout ensemble 30 secondes','Boire froid'],
+    tips:'Le combo chocolat-framboise est un classique pâtissier. Fraises congelées = texture épaisse sans glace.' },
+
+  // === VANILLE #4 — Vanille Caramel Salé ===
+  { id:'sm_van_04', name:'Vanille Caramel Salé', flavors:['vanilla'], goal:['muscle','recovery'], timing:'anytime', cal:400, p:35, c:48, f:7, prep:'3min',
+    ingredients:[{name:'Whey vanille',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Miel',qty:15,unit:'g'},{name:'Flocons d\'avoine',qty:30,unit:'g'},{name:'Sel',qty:1,unit:'g'}],
+    steps:['Mixer lait + flocons 15 secondes','Ajouter whey + miel + sel','Mixer 20 secondes'],
+    tips:'La pincée de sel transforme le miel en caramel salé. Simple et addictif.' },
+
+  // === CAFÉ #3 — Café Express ===
+  { id:'sm_coffee_03', name:'Café Express Glacé', flavors:['coffee'], goal:['performance','fat_loss'], timing:'pre', cal:230, p:30, c:20, f:4, prep:'1min',
+    ingredients:[{name:'Whey café',qty:30,unit:'g'},{name:'Lait entier',qty:150,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'}],
+    steps:['Mettre dans le shaker avec glaçons','Shaker 20 secondes','Boire immédiatement'],
+    tips:'3 ingrédients, 1 minute. Le shaker suffit, pas besoin de blender.' },
+
+  // === FRAISE #3 — Fraise Simple ===
+  { id:'sm_straw_03', name:'Fraise Pure', flavors:['strawberry'], goal:['fat_loss','recovery'], timing:'anytime', cal:270, p:38, c:25, f:2, prep:'2min',
+    ingredients:[{name:'Whey fraise',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:200,unit:'g'},{name:'Fraises congelées',qty:80,unit:'g'},{name:'Eau',qty:100,unit:'ml'}],
+    steps:['Mixer tout 20 secondes','C\'est prêt'],
+    tips:'Le yaourt grec donne une texture épaisse type smoothie bowl. Peut se manger à la cuillère.' },
+
+  // === NOISETTE #4 — Noisette Rapide ===
+  { id:'sm_hazel_04', name:'Noisette Rapide', flavors:['hazelnut'], goal:['muscle'], timing:'anytime', cal:330, p:36, c:28, f:10, prep:'1min',
+    ingredients:[{name:'Whey noisette',qty:35,unit:'g'},{name:'Lait entier',qty:300,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'}],
+    steps:['Shaker 15 secondes','Pas besoin de blender'],
+    tips:'Le smoothie protéiné le plus rapide du bar. En shaker = zéro vaisselle.' }
 ];
 
 // ─── RECIPE PICKER ───────────────────────────────────────────────────────────
