@@ -2721,18 +2721,98 @@ function enrichWithScaling(recipe, targetKcal) {
 
   return recipe;
 }
-function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var split=getMealSplit();var meals=s.mealsPerDay||3;for(var d=0;d<7;d++){var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
+// ─── SMOOTHIE → COLLATION ─────────────────────────────────────────────────────
+// Sélectionne un smoothie WHEY_SMOOTHIES adapté au profil et à la cible calorique.
+// Retourne un objet au format plan (k/p/g/l/f/_id/_smoothie/ingredients/steps).
+function pickSmoothieForPlan(targetKcal, usedIds) {
+  var smDB = window.WHEY_SMOOTHIES;
+  if (!smDB || !smDB.length) return null;
+  var s = window.S;
+  var goalKey = (s.goal !== null && s.goal !== undefined && GOALS[s.goal]) ? GOALS[s.goal].key : 'maintain';
+  // Objectif → tags smoothie
+  var wantedGoals;
+  if (goalKey === 'bulk' || goalKey === 'lean_bulk') wantedGoals = ['muscle', 'performance', 'recovery'];
+  else if (goalKey === 'cut' || goalKey === 'shred')  wantedGoals = ['fat_loss', 'performance'];
+  else                                                 wantedGoals = ['muscle', 'fat_loss', 'performance', 'recovery'];
+  // Timing préféré selon heure d'entraînement
+  var preferTiming = (s.trainTime === 'morning' || s.trainTime === 'noon') ? 'pre'
+                   : (s.trainTime === 'evening') ? 'post' : null;
+  // Pool de départ — exclure déjà utilisés cette semaine
+  var pool = smDB.filter(function(sm) { return !usedIds || !usedIds.has(sm.id); });
+  if (!pool.length) pool = smDB.slice(); // reset si tous utilisés
+  // Filtre objectif (soft — garder au moins 3)
+  var gPool = pool.filter(function(sm) {
+    return sm.goal && sm.goal.some(function(g) { return wantedGoals.indexOf(g) !== -1; });
+  });
+  if (gPool.length >= 3) pool = gPool;
+  // Filtre timing (soft — garder au moins 2)
+  if (preferTiming) {
+    var tPool = pool.filter(function(sm) { return sm.timing === preferTiming || sm.timing === 'anytime'; });
+    if (tPool.length >= 2) pool = tPool;
+  }
+  // Trier par proximité calorique, choisir parmi top 5
+  pool.sort(function(a, b) { return Math.abs(a.cal - targetKcal) - Math.abs(b.cal - targetKcal); });
+  var top = pool.slice(0, Math.min(5, pool.length));
+  var sm = top[Math.floor(Math.random() * top.length)];
+  if (!sm) return null;
+  if (usedIds) usedIds.add(sm.id);
+  // Convertir au format plan : g=glucides(sm.c), l=lipides(sm.f), f=emoji
+  return {
+    _id: sm.id, n: sm.name,
+    k: sm.cal, p: sm.p, g: sm.c, l: sm.f,
+    f: '\uD83E\uDD5B', // 🥤
+    _smoothie: true,
+    ingredients: sm.ingredients || [],
+    steps: sm.steps || [],
+    w: 1, lv: 1,
+    tags: ['smoothie', 'whey'],
+    i: sm.name
+  };
+}
+window.pickSmoothieForPlan = pickSmoothieForPlan;
+
+function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var split=getMealSplit();var meals=s.mealsPerDay||3;
+// useSmoothing : whey activé + WHEY_SMOOTHIES disponible
+var _useSmoothing=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length);
+for(var d=0;d<7;d++){var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
-if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS);else if(s.whey&&pSW.length>0&&d%2===0)sR=pickRecipe(pSW,sT,uS);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
+// Si whey activé → smoothie remplace la collation
+if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS);else if(_useSmoothing)sR=pickSmoothieForPlan(sT,uSM);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
 // Dîner : généré seulement si mealsPerDay >= 3 (pas pour jeûne intermittent 2 repas)
 if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD);
 // Scaling sur mesure : enrichit les recettes R201+ avec macros/ingrédients scalés
-bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR)sR=enrichWithScaling(sR,sT);if(dR)dR=enrichWithScaling(dR,dT);
+// (smoothies déjà calibrés — enrichWithScaling passthrough sans effet sur _smoothie:true)
+bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR&&!sR._smoothie)sR=enrichWithScaling(sR,sT);if(dR)dR=enrichWithScaling(dR,dT);
 // Ajustement itératif ±5% : corriger le slot le plus déviant jusqu'à convergence (max 8 passes)
-var isDessertDayPool=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;var sPool=meals>=4&&sT>0?(isDessertDayPool?pSD:(s.whey&&pSW.length>0&&d%2===0?pSW:(pSN.length>0?pSN:pS))):null;
+// Quand smoothie dans le snack → slot fixe (choix utilisateur), ajustement sur B/L/D uniquement
+var isDessertDayPool=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;var sPool=meals>=4&&sT>0&&!_useSmoothing?(isDessertDayPool?pSD:(pSN.length>0?pSN:pS)):null;
 for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
 plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
-function swapMeal(di,slot){var s=window.S;if(!s.weekPlan||!s.weekPlan[di])return;if(!s._nm&&window.computeNutritionState)window.computeNutritionState(false);var pool=filterRecipes(getPool(slot),slot);var cur=s.weekPlan[di][slot];var av=pool.filter(function(r){return r.n!==cur.n});if(!av.length)return;var c=calcTarget(),split=getMealSplit();var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});var top=av.slice(0,Math.min(5,av.length));var nr=top[Math.floor(Math.random()*top.length)];nr=enrichWithScaling(nr,tgt);s.weekPlan[di][slot]=nr;if(typeof window.render==='function')window.render()}
+function swapMeal(di,slot){
+  var s=window.S;
+  if(!s.weekPlan||!s.weekPlan[di])return;
+  if(!s._nm&&window.computeNutritionState)window.computeNutritionState(false);
+  var c=calcTarget(),split=getMealSplit();
+  var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);
+  // Snack + whey → swapper vers un autre smoothie (pas une collation normale)
+  if(slot==='snack'&&s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length){
+    var curId=(s.weekPlan[di][slot]&&s.weekPlan[di][slot]._id)||'';
+    var usedSm=new Set([curId]);
+    var nrSm=pickSmoothieForPlan(tgt,usedSm);
+    if(nrSm){s.weekPlan[di][slot]=nrSm;if(typeof window.render==='function')window.render();return;}
+  }
+  // Autres slots — swap recette normale
+  var pool=filterRecipes(getPool(slot),slot);
+  var cur=s.weekPlan[di][slot];
+  var av=pool.filter(function(r){return r.n!==cur.n});
+  if(!av.length)return;
+  av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});
+  var top=av.slice(0,Math.min(5,av.length));
+  var nr=top[Math.floor(Math.random()*top.length)];
+  nr=enrichWithScaling(nr,tgt);
+  s.weekPlan[di][slot]=nr;
+  if(typeof window.render==='function')window.render();
+}
 
 window.getPool = getPool;
 window.filterRecipes = filterRecipes;
