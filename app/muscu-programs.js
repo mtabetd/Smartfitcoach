@@ -563,7 +563,7 @@ var YATES_PROGRAMS = {
       },
       advanced: {
         name: 'Heavy Duty Pectoraux — Avancé',
-        description: 'Intensité Yates maximale. Rest-pause, pre-exhaust + 1 série de travail à l\'échec absolu.',
+        description: 'Intensité maximale. Rest-pause, pre-exhaust + 1 série de travail à l\'échec absolu.',
         exercises: [
           {order:1, name:'Écarté poulie croisée (pre-exhaust)', sets:1, reps:'10-12', rest:'0s', technique:'Pre-exhaust sans repos avant le composé. Aller directement au développé couché. Brûlure maximale.', muscle:'pectoraux', type:'isolation', equipment:'poulie', rest_pause:false},
           {order:2, name:'Développé couché barre', sets:1, reps:'6-8', rest:'3min', technique:'1 série de travail à l\'échec complet. Descente 4s contrôlée, explosion à la montée. Rest-pause si nécessaire.', muscle:'pectoraux', type:'compound', equipment:'barre', rest_pause:true},
@@ -588,17 +588,17 @@ var YATES_PROGRAMS = {
         description: 'Pre-exhaustion avec pull-over. 1-2 séries à l\'échec sur rowing lourd.',
         exercises: [
           {order:1, name:'Pull-over poulie (pre-exhaust)', sets:1, reps:'12-15', rest:'0s', technique:'Pre-exhaust grand dorsal. Pas de repos avant le rowing. Isolation pure du dorsal.', muscle:'dos', type:'isolation', equipment:'poulie', rest_pause:false},
-          {order:2, name:'Rowing barre Yates', sets:2, reps:'6-8', rest:'3min', technique:'Prise pronation, barre soulevée vers le bas du ventre. Légère inclinaison. Échec sur 2e série.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:true},
+          {order:2, name:'Rowing barre penché', sets:2, reps:'6-8', rest:'3min', technique:'Prise pronation, barre soulevée vers le bas du ventre. Légère inclinaison. Échec sur 2e série.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:true},
           {order:3, name:'Tirage vertical prise neutre', sets:1, reps:'8-10', rest:'3min', technique:'1 série à l\'échec. Prise neutre = meilleure activation grand dorsal. Coudes le long du corps.', muscle:'dos', type:'compound', equipment:'poulie', rest_pause:false},
           {order:4, name:'Tirage horizontal prise étroite', sets:1, reps:'8-10', rest:'2min', technique:'Focus sur les rhomboïdes. Coudes en arrière. Contraction peak 2s.', muscle:'dos', type:'compound', equipment:'poulie', rest_pause:false}
         ]
       },
       advanced: {
         name: 'Heavy Duty Dos — Avancé',
-        description: 'Intensité maximale. Pre-exhaust + rowing Yates à l\'échec absolu + rest-pause.',
+        description: 'Intensité maximale. Pre-exhaust + rowing penché à l\'échec absolu + rest-pause.',
         exercises: [
           {order:1, name:'Pull-over machine (pre-exhaust)', sets:1, reps:'12-15', rest:'0s', technique:'Pre-exhaust sans repos. Isolation parfaite du dorsal avant le composé lourd.', muscle:'dos', type:'isolation', equipment:'machine', rest_pause:false},
-          {order:2, name:'Rowing barre Yates', sets:1, reps:'6-8', rest:'3min', technique:'1 série à l\'échec absolu. Rest-pause: 10s repos puis 2-3 reps supplémentaires. Charge maximale.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:true},
+          {order:2, name:'Rowing barre penché', sets:1, reps:'6-8', rest:'3min', technique:'1 série à l\'échec absolu. Rest-pause: 10s repos puis 2-3 reps supplémentaires. Charge maximale.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:true},
           {order:3, name:'Tirage vertical prise large', sets:1, reps:'6-8', rest:'3min', technique:'1 série à l\'échec. Amplitude complète. Étirement au sommet. Explosion vers le bas.', muscle:'dos', type:'compound', equipment:'poulie', rest_pause:true},
           {order:4, name:'Rowing machine bilatéral', sets:1, reps:'8-10', rest:'2min', technique:'Finisher. Concentration sur rhomboïdes et trapèzes. Squeeze à la fin.', muscle:'dos', type:'compound', equipment:'machine', rest_pause:false}
         ]
@@ -736,7 +736,7 @@ var YATES_PROGRAMS = {
   splits: {
     3: {
       name: 'Heavy Duty 3 jours',
-      description: 'Split Yates classique. 3 séances/semaine avec jours de repos entre chaque.',
+      description: 'Split Intensité classique. 3 séances/semaine avec jours de repos entre chaque.',
       days: [
         {day:1, label:'Pectoraux + Dos', muscles:['pectoraux','dos']},
         {day:2, label:'Repos'},
@@ -790,7 +790,7 @@ var COLEMAN_PROGRAMS = {
     pectoraux: {
       beginner: {
         name: 'High Volume Pectoraux — Débutant',
-        description: 'Introduction au volume Coleman. 4-5 exercices, 3-4 séries chacun.',
+        description: 'Introduction au Volume Progressif. 4-5 exercices, 3-4 séries chacun.',
         exercises: [
           {order:1, name:'Développé couché barre', sets:4, reps:'10-12', rest:'90s', technique:'4 séries de travail. Montée progressive des charges. Descente 2s, explosion. Amplitude complète.', muscle:'pectoraux', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Développé incliné haltères', sets:3, reps:'10-12', rest:'90s', technique:'3 séries. Focus partie haute. Descente jusqu\'à étirement complet. Pousser vers le plafond.', muscle:'pectoraux', type:'compound', equipment:'halteres', rest_pause:false},
@@ -801,7 +801,7 @@ var COLEMAN_PROGRAMS = {
       },
       intermediate: {
         name: 'High Volume Pectoraux — Intermédiaire',
-        description: 'Volume Coleman intermédiaire. 5 exercices, supersets en fin de séance.',
+        description: 'Volume Progressif intermédiaire. 5 exercices, supersets en fin de séance.',
         exercises: [
           {order:1, name:'Développé couché barre', sets:5, reps:'8-12', rest:'90s', technique:'5 séries. Pyramide montante. Dernier set le plus lourd. Amplitude complète.', muscle:'pectoraux', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Développé incliné barre', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. 30° d\'inclinaison. Contrôle total. Isolation partie haute.', muscle:'pectoraux', type:'compound', equipment:'barre', rest_pause:false},
@@ -812,7 +812,7 @@ var COLEMAN_PROGRAMS = {
       },
       advanced: {
         name: 'High Volume Pectoraux — Avancé',
-        description: 'Volume Coleman maximum. 6 exercices, drop sets, supersets, 25+ séries totales.',
+        description: 'Volume Progressif maximum. 6 exercices, drop sets, supersets, 25+ séries totales.',
         exercises: [
           {order:1, name:'Développé couché barre', sets:5, reps:'6-10', rest:'2min', technique:'5 séries lourdes. Dernier set drop set (-20% charge, max reps). Amplitude complète.', muscle:'pectoraux', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Développé incliné barre', sets:5, reps:'8-12', rest:'90s', technique:'5 séries. Montée progressive. 4e et 5e séries à l\'échec. Focus haut des pecs.', muscle:'pectoraux', type:'compound', equipment:'barre', rest_pause:false},
@@ -826,7 +826,7 @@ var COLEMAN_PROGRAMS = {
     dos: {
       beginner: {
         name: 'High Volume Dos — Débutant',
-        description: 'Volume dos Coleman débutant. 4-5 exercices, multiples angles.',
+        description: 'Volume Progressif dos débutant. 4-5 exercices, multiples angles.',
         exercises: [
           {order:1, name:'Tirage vertical prise large', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Prise large pronation. Tirer vers le sternum. Omoplate en rotation.', muscle:'dos', type:'compound', equipment:'poulie', rest_pause:false},
           {order:2, name:'Rowing barre', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Buste à 45°. Barre vers nombril. Contraction peak. Descente contrôlée.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:false},
@@ -837,10 +837,10 @@ var COLEMAN_PROGRAMS = {
       },
       intermediate: {
         name: 'High Volume Dos — Intermédiaire',
-        description: 'Volume Coleman dos intermédiaire. Supersets, 5 exercices.',
+        description: 'Volume Progressif dos intermédiaire. Supersets, 5 exercices.',
         exercises: [
           {order:1, name:'Tractions pronation', sets:5, reps:'8-10', rest:'90s', technique:'5 séries. Lestage si nécessaire. Amplitude complète. Étirement en haut.', muscle:'dos', type:'compound', equipment:'barre_de_traction', rest_pause:false},
-          {order:2, name:'Rowing barre Yates', sets:5, reps:'8-12', rest:'90s', technique:'5 séries. Prise pronation. Coudes hauts. Tirer vers bas ventre.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:false},
+          {order:2, name:'Rowing barre penché', sets:5, reps:'8-12', rest:'90s', technique:'5 séries. Prise pronation. Coudes hauts. Tirer vers bas ventre.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:false},
           {order:3, name:'Tirage vertical prise étroite', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Prise neutre rapprochée. Coudes devant. Meilleure activation dorsale.', muscle:'dos', type:'compound', equipment:'poulie', rest_pause:false},
           {order:4, name:'Rowing machine bilatéral', sets:3, reps:'12-15', rest:'60s', technique:'3 séries. Superset avec pull-over. 0s repos. Volume maximal.', muscle:'dos', type:'compound', equipment:'machine', superset_with:'pull_over'},
           {order:5, name:'Pull-over poulie', sets:3, reps:'12-15', rest:'60s', technique:'Superset suite. Grand dorsal isolé. Arc complet du mouvement.', muscle:'dos', type:'isolation', equipment:'poulie', rest_pause:false}
@@ -848,7 +848,7 @@ var COLEMAN_PROGRAMS = {
       },
       advanced: {
         name: 'High Volume Dos — Avancé',
-        description: 'Volume dos maximum Coleman. 6 exercices, drop sets, 25+ séries.',
+        description: 'Volume Progressif dos maximum. 6 exercices, drop sets, 25+ séries.',
         exercises: [
           {order:1, name:'Tractions lestées', sets:5, reps:'6-10', rest:'2min', technique:'5 séries lourdes. Dernier set drop (enlever lest, max reps). Amplitude totale.', muscle:'dos', type:'compound', equipment:'barre_de_traction', rest_pause:false},
           {order:2, name:'Rowing barre', sets:5, reps:'8-12', rest:'90s', technique:'5 séries. Progression de charge. 5e série drop set. Contraction maximale.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:false},
@@ -862,7 +862,7 @@ var COLEMAN_PROGRAMS = {
     epaules: {
       beginner: {
         name: 'High Volume Épaules — Débutant',
-        description: 'Volume Coleman épaules débutant. 4-5 exercices, tous faisceaux.',
+        description: 'Volume Progressif épaules débutant. 4-5 exercices, tous faisceaux.',
         exercises: [
           {order:1, name:'Développé militaire barre', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Descente 3s, explosion. Pas de verrouillage. Amplitude complète.', muscle:'epaules', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Développé haltères assis', sets:3, reps:'10-12', rest:'90s', technique:'3 séries. Amplitude complète. Rotation naturelle des poignets. Contrôle.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
@@ -873,7 +873,7 @@ var COLEMAN_PROGRAMS = {
       },
       intermediate: {
         name: 'High Volume Épaules — Intermédiaire',
-        description: 'Volume Coleman épaules intermédiaire. Supersets, 5 exercices.',
+        description: 'Volume Progressif épaules intermédiaire. Supersets, 5 exercices.',
         exercises: [
           {order:1, name:'Développé militaire barre', sets:5, reps:'8-12', rest:'90s', technique:'5 séries. Montée progressive. Dernier set drop set. Amplitude complète.', muscle:'epaules', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Élévations latérales haltères', sets:4, reps:'12-15', rest:'60s', technique:'4 séries. Superset avec élévations frontales. 0s repos entre les deux.', muscle:'epaules', type:'isolation', equipment:'halteres', superset_with:'elevations_frontales'},
@@ -884,7 +884,7 @@ var COLEMAN_PROGRAMS = {
       },
       advanced: {
         name: 'High Volume Épaules — Avancé',
-        description: 'Volume max Coleman épaules. 6 exercices, drop sets, 25+ séries.',
+        description: 'Volume Progressif max épaules. 6 exercices, drop sets, 25+ séries.',
         exercises: [
           {order:1, name:'Développé militaire barre', sets:5, reps:'6-10', rest:'2min', technique:'5 séries lourdes. Drop set dernière série. Amplitude complète.', muscle:'epaules', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Développé haltères debout', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Instabilité = plus de deltoïdes. Amplitude maximum.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
@@ -898,7 +898,7 @@ var COLEMAN_PROGRAMS = {
     bras: {
       beginner: {
         name: 'High Volume Bras — Débutant',
-        description: 'Volume bras Coleman débutant. Biceps + triceps, volume équilibré.',
+        description: 'Volume Progressif bras débutant. Biceps + triceps, volume équilibré.',
         exercises: [
           {order:1, name:'Curl barre EZ', sets:4, reps:'10-12', rest:'60s', technique:'4 séries biceps. Descente lente 3s. Pas de balancement. Coudes fixes.', muscle:'bras', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Curl incliné haltères', sets:3, reps:'10-12', rest:'60s', technique:'3 séries. Étirement maximal. Supination en montant. Contraction peak.', muscle:'bras', type:'isolation', equipment:'halteres', rest_pause:false},
@@ -909,7 +909,7 @@ var COLEMAN_PROGRAMS = {
       },
       intermediate: {
         name: 'High Volume Bras — Intermédiaire',
-        description: 'Volume Coleman bras intermédiaire. Supersets biceps/triceps.',
+        description: 'Volume Progressif bras intermédiaire. Supersets biceps/triceps.',
         exercises: [
           {order:1, name:'Curl barre', sets:5, reps:'8-12', rest:'60s', technique:'5 séries. Superset avec extensions. Volume biceps maximum.', muscle:'bras', type:'compound', equipment:'barre', superset_with:'extensions_triceps'},
           {order:2, name:'Extensions triceps poulie', sets:5, reps:'8-12', rest:'60s', technique:'Superset suite. Coudes fixes. Extension complète. Drop set dernière série.', muscle:'bras', type:'isolation', equipment:'poulie', rest_pause:false},
@@ -920,7 +920,7 @@ var COLEMAN_PROGRAMS = {
       },
       advanced: {
         name: 'High Volume Bras — Avancé',
-        description: 'Volume max Coleman bras. 6 exercices, supersets, drop sets.',
+        description: 'Volume Progressif max bras. 6 exercices, supersets, drop sets.',
         exercises: [
           {order:1, name:'Curl barre EZ', sets:5, reps:'8-12', rest:'60s', technique:'5 séries lourdes. Superset avec skull crushers. Volume extrême.', muscle:'bras', type:'compound', equipment:'barre', superset_with:'skull_crushers'},
           {order:2, name:'Skull crushers barre EZ', sets:5, reps:'8-12', rest:'60s', technique:'Superset suite triceps. Coudes fixes. Contrôle total. Drop set finale.', muscle:'bras', type:'isolation', equipment:'barre', rest_pause:false},
@@ -934,7 +934,7 @@ var COLEMAN_PROGRAMS = {
     jambes: {
       beginner: {
         name: 'High Volume Jambes — Débutant',
-        description: 'Volume Coleman jambes débutant. Squat + leg press + isolation.',
+        description: 'Volume Progressif jambes débutant. Squat + leg press + isolation.',
         exercises: [
           {order:1, name:'Squat barre', sets:5, reps:'10-12', rest:'2min', technique:'5 séries. Montée progressive. Profondeur parallèle. Descente 3s.', muscle:'jambes', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Leg press 45°', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Pieds moyens. Amplitude complète. Pas de verrouillage.', muscle:'jambes', type:'compound', equipment:'machine', rest_pause:false},
@@ -945,7 +945,7 @@ var COLEMAN_PROGRAMS = {
       },
       intermediate: {
         name: 'High Volume Jambes — Intermédiaire',
-        description: 'Volume Coleman jambes intermédiaire. Volume élevé, supersets.',
+        description: 'Volume Progressif jambes intermédiaire. Volume élevé, supersets.',
         exercises: [
           {order:1, name:'Squat barre', sets:5, reps:'8-12', rest:'2min', technique:'5 séries. Montée en charges. 4e-5e série à l\'échec. Full depth.', muscle:'jambes', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Leg press 45°', sets:5, reps:'10-12', rest:'90s', technique:'5 séries. Drop set dernier. Amplitude maximale.', muscle:'jambes', type:'compound', equipment:'machine', rest_pause:false},
@@ -957,7 +957,7 @@ var COLEMAN_PROGRAMS = {
       },
       advanced: {
         name: 'High Volume Jambes — Avancé',
-        description: 'Volume Coleman jambes maximum. 7 exercices, supersets, drop sets.',
+        description: 'Volume Progressif jambes maximum. 7 exercices, supersets, drop sets.',
         exercises: [
           {order:1, name:'Squat barre', sets:6, reps:'6-12', rest:'2min', technique:'6 séries. Charge maximale. Drop set 6e série. Full depth obligatoire.', muscle:'jambes', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Leg press 45°', sets:5, reps:'10-15', rest:'90s', technique:'5 séries. Pieds hauts pour ischio/fessiers. Drop set finale.', muscle:'jambes', type:'compound', equipment:'machine', rest_pause:false},
@@ -972,7 +972,7 @@ var COLEMAN_PROGRAMS = {
     fessiers: {
       beginner: {
         name: 'High Volume Fessiers — Débutant',
-        description: 'Volume Coleman fessiers débutant. 4-5 exercices, fessiers ciblés.',
+        description: 'Volume Progressif fessiers débutant. 4-5 exercices, fessiers ciblés.',
         exercises: [
           {order:1, name:'Hip thrust barre', sets:5, reps:'10-12', rest:'90s', technique:'5 séries. Contraction 2s en haut. Bascule du bassin. Montée progressive.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Squat bulgare haltères', sets:4, reps:'10-12', rest:'90s', technique:'4 séries/côté. Descente 3s. Focus fessier. Poussée sur talon.', muscle:'fessiers', type:'compound', equipment:'halteres', rest_pause:false},
@@ -983,7 +983,7 @@ var COLEMAN_PROGRAMS = {
       },
       intermediate: {
         name: 'High Volume Fessiers — Intermédiaire',
-        description: 'Volume fessiers intermédiaire Coleman. Supersets, volume élevé.',
+        description: 'Volume Progressif fessiers intermédiaire. Supersets, volume élevé.',
         exercises: [
           {order:1, name:'Hip thrust barre', sets:5, reps:'8-12', rest:'90s', technique:'5 séries lourdes. Progression de charge. Contraction maximale.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Squat bulgare barre', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Charge sur barre. Focus fessier et quadriceps.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:false},
@@ -994,7 +994,7 @@ var COLEMAN_PROGRAMS = {
       },
       advanced: {
         name: 'High Volume Fessiers — Avancé',
-        description: 'Volume max Coleman fessiers. 6 exercices, supersets, drop sets.',
+        description: 'Volume Progressif max fessiers. 6 exercices, supersets, drop sets.',
         exercises: [
           {order:1, name:'Hip thrust barre', sets:6, reps:'8-12', rest:'90s', technique:'6 séries. Drop set dernière. Charge maximale. Contraction 2s en haut.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:false},
           {order:2, name:'Squat bulgare barre', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Charge élevée. Amplitude maximale. Focus fessiers.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:false},
@@ -1009,7 +1009,7 @@ var COLEMAN_PROGRAMS = {
   splits: {
     3: {
       name: 'High Volume 3 jours',
-      description: 'Split Coleman 3j. Volume condensé pour ceux limités en temps.',
+      description: 'Split Volume Progressif 3j. Volume condensé pour ceux limités en temps.',
       days: [
         {day:1, label:'Push — Pectoraux + Épaules + Triceps', muscles:['pectoraux','epaules','bras']},
         {day:2, label:'Repos'},
@@ -1022,7 +1022,7 @@ var COLEMAN_PROGRAMS = {
     },
     4: {
       name: 'High Volume 4 jours',
-      description: 'Split Coleman 4j. Volume élevé par groupe, 2 groupes par séance.',
+      description: 'Split Volume Progressif 4j. Volume élevé par groupe, 2 groupes par séance.',
       days: [
         {day:1, label:'Pectoraux + Triceps', muscles:['pectoraux','bras']},
         {day:2, label:'Dos + Biceps', muscles:['dos','bras']},
@@ -1035,7 +1035,7 @@ var COLEMAN_PROGRAMS = {
     },
     5: {
       name: 'High Volume 5 jours',
-      description: 'Split Coleman 5j. Un groupe par séance, volume maximal.',
+      description: 'Split Volume Progressif 5j. Un groupe par séance, volume maximal.',
       days: [
         {day:1, label:'Pectoraux', muscles:['pectoraux']},
         {day:2, label:'Dos', muscles:['dos']},
@@ -1048,7 +1048,7 @@ var COLEMAN_PROGRAMS = {
     },
     6: {
       name: 'High Volume 6 jours',
-      description: 'Split Coleman professionnel 6j. Un seul groupe musculaire par séance.',
+      description: 'Split Volume Progressif professionnel 6j. Un seul groupe musculaire par séance.',
       days: [
         {day:1, label:'Pectoraux', muscles:['pectoraux']},
         {day:2, label:'Dos', muscles:['dos']},
@@ -1136,7 +1136,7 @@ var RAMBOD_PROGRAMS = {
         description: 'FST-7 dos intermédiaire. 4 composés + finisher FST-7.',
         exercises: [
           {order:1, name:'Tractions pronation', sets:4, reps:'8-10', rest:'2min', technique:'4 séries. Amplitude complète. Étirement en haut. Lestage progressif.', muscle:'dos', type:'compound', equipment:'barre_de_traction', rest_pause:false},
-          {order:2, name:'Rowing barre Yates', sets:4, reps:'8-12', rest:'90s', technique:'4 séries. Prise pronation. Coudes hauts. Tirer vers bas ventre.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:false},
+          {order:2, name:'Rowing barre penché', sets:4, reps:'8-12', rest:'90s', technique:'4 séries. Prise pronation. Coudes hauts. Tirer vers bas ventre.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:false},
           {order:3, name:'Tirage vertical prise neutre', sets:3, reps:'10-12', rest:'90s', technique:'3 séries. Grand dorsal. Coudes devant. Amplitude complète.', muscle:'dos', type:'compound', equipment:'poulie', rest_pause:false},
           {order:4, name:'Rowing haltère unilatéral', sets:3, reps:'10-12', rest:'60s', technique:'3 séries par bras. Amplitude maximale. Focus grand dorsal.', muscle:'dos', type:'compound', equipment:'halteres', rest_pause:false},
           {order:5, name:'Pull-over machine (FST-7)', sets:7, reps:'12-15', rest:'35s', technique:'FST-7 FINISHER: 7 séries, 35s repos. Étirer le dos bras tendus en l\'air 30s entre séries. Machine = tension constante. Pompe grand dorsal maximale.', muscle:'dos', type:'isolation', equipment:'machine', is_fst7:true, interset_stretch:true, fst7_sets:7, rest_pause:false}
@@ -1294,7 +1294,7 @@ var RAMBOD_PROGRAMS = {
   splits: {
     3: {
       name: 'FST-7 3 jours',
-      description: 'Split Rambod 3j. FST-7 condensé, idéal pour débutants ou emploi du temps chargé.',
+      description: 'Split FST-7 3j. FST-7 condensé, idéal pour débutants ou emploi du temps chargé.',
       days: [
         {day:1, label:'Push — Pectoraux + Épaules + Triceps', muscles:['pectoraux','epaules','bras']},
         {day:2, label:'Repos'},
@@ -1307,7 +1307,7 @@ var RAMBOD_PROGRAMS = {
     },
     4: {
       name: 'FST-7 4 jours',
-      description: 'Split Rambod 4j. Un groupe par séance, temps pour FST-7.',
+      description: 'Split FST-7 4j. Un groupe par séance, temps pour FST-7.',
       days: [
         {day:1, label:'Pectoraux + Triceps', muscles:['pectoraux','bras']},
         {day:2, label:'Dos + Biceps', muscles:['dos','bras']},
@@ -1320,7 +1320,7 @@ var RAMBOD_PROGRAMS = {
     },
     5: {
       name: 'FST-7 5 jours',
-      description: 'Split Rambod 5j. Séparation optimale pour FST-7 complet.',
+      description: 'Split FST-7 5j. Séparation optimale pour FST-7 complet.',
       days: [
         {day:1, label:'Pectoraux', muscles:['pectoraux']},
         {day:2, label:'Dos', muscles:['dos']},
@@ -1348,16 +1348,288 @@ var RAMBOD_PROGRAMS = {
   ]
 };
 
+
+// fusion_bloc1.js — Partie 1/2
+var FUSION_PROGRAMS = {
+  meta: {
+    name: 'Programme Élite Fusion',
+    description: 'Fusion des 3 meilleures méthodes : intensité maximale, volume progressif et FST-7. Le meilleur de chaque approche selon ton niveau.',
+    principles: [
+      'Pré-exhaustion avant les composés (intermédiaire et avancé)',
+      'Rest-pause sur les séries de travail (avancé)',
+      'FST-7 sur le dernier exercice : 7 séries × 12-15 reps, 30-45s repos',
+      'Étirement fascial interset pour maximiser le pump',
+      'Progression de charge chaque semaine',
+      'Débutant : maîtrise technique avant intensité'
+    ],
+    session_duration: '45-60 min',
+    frequency: '3-5 séances/semaine',
+    ideal_for: 'Tous niveaux — adapte automatiquement volume et intensité',
+    methods_combined: ['pre_exhaustion', 'rest_pause', 'fst7', 'progressive_overload', 'drop_set']
+  },
+  programs: {
+    pectoraux: {
+      beginner: {
+        exercises: [
+          {order:1, name:'Développé couché barre', sets:3, reps:'8-10', rest:'2min', technique:'Descendre la barre lentement jusqu\'au thorax, coudes à 75°. Pousser en expirant jusqu\'à extension complète.', muscle:'pectoraux', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:2, name:'Développé incliné haltères', sets:3, reps:'10-12', rest:'90s', technique:'Incliner le banc à 30-45°, descendre les haltères en contrôle. Contracter les pectoraux en haut du mouvement.', muscle:'pectoraux', type:'compound', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Pompes', sets:3, reps:'10-15', rest:'90s', technique:'Corps aligné de la tête aux talons, descendre jusqu\'à effleurer le sol. Pousser de façon explosive pour revenir en position haute.', muscle:'pectoraux', type:'compound', equipment:'poids du corps', rest_pause:false, pre_exhaustion:false, is_fst7:false}
+        ],
+        notes: 'Focus sur la maîtrise technique avant d\'augmenter les charges. Repos complets entre les séries.',
+        tips: 'Augmente le poids uniquement quand tu complètes toutes les répétitions avec une forme parfaite.'
+      },
+      intermediate: {
+        exercises: [
+          {order:1, name:'Écarté haltères couché', sets:3, reps:'12-15', rest:'60s', technique:'Pré-exhaustion : isoler le pectoral avant le composé. Étirer au maximum en bas, contracter fort en haut.', muscle:'pectoraux', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Développé couché barre', sets:4, reps:'8-10', rest:'2min', technique:'Pectoral déjà fatigué, utiliser un poids légèrement réduit. Contrôle parfait, descente en 3 secondes.', muscle:'pectoraux', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Développé incliné haltères', sets:3, reps:'10-12', rest:'90s', technique:'Incliner à 30°, rotation externe des poignets en haut. Étirer le pectoral supérieur en fin de descente.', muscle:'pectoraux', type:'compound', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Écarté poulie basse croisée', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries avec 30s de repos. Étirer le pectoral entre chaque série en ouvrant les bras largement.', muscle:'pectoraux', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'La pré-exhaustion fatigue le pectoral avant le press, forçant un recrutement musculaire maximal.',
+        tips: 'Sur le FST-7, maintiens l\'étirement 20-30s entre chaque série pour maximiser l\'expansion fasciale.'
+      },
+      advanced: {
+        exercises: [
+          {order:1, name:'Écarté haltères couché', sets:3, reps:'12-15', rest:'45s', technique:'Pré-exhaustion complète du pectoral avant le composé. Concentration maximale sur la contraction musculaire.', muscle:'pectoraux', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Développé couché barre', sets:4, reps:'6-8', rest:'2min30s', technique:'Série à l\'échec absolu, puis rest-pause 15s et 2-3 reps supplémentaires. Partenaire de sécurité obligatoire.', muscle:'pectoraux', type:'compound', equipment:'barre', rest_pause:true, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Développé incliné barre', sets:3, reps:'8-10', rest:'2min', technique:'Travailler le pectoral supérieur à haute intensité. Tempo 3-1-1, descendre en 3 secondes.', muscle:'pectoraux', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Dips lest', sets:3, reps:'8-10', rest:'90s', technique:'Pencher le buste en avant pour maximiser l\'activation pectorale. Descendre jusqu\'à 90° de flexion du coude.', muscle:'pectoraux', type:'compound', equipment:'barre parallèle', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:5, name:'Écarté câble croisé', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries avec 30s de repos. Étirer le pectoral entre chaque série en ouvrant les bras largement.', muscle:'pectoraux', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'Programme haute intensité combinant pré-exhaustion, rest-pause et FST-7. Récupération de 5-7 jours entre deux séances pectoraux.',
+        tips: 'Sur le rest-pause, la série après la pause doit être aussi proche de l\'échec que la première.'
+      }
+    },
+    dos: {
+      beginner: {
+        exercises: [
+          {order:1, name:'Tirage horizontal poulie basse', sets:3, reps:'10-12', rest:'90s', technique:'Tirer les coudes vers l\'arrière en serrant les omoplates. Dos droit, ne pas balancer le buste.', muscle:'dos', type:'compound', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:2, name:'Tirage vertical barre', sets:3, reps:'10-12', rest:'2min', technique:'Prise légèrement plus large que les épaules, tirer la barre vers la clavicule. Étirer les dorsaux en haut.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Rowing haltère unilatéral', sets:3, reps:'10-12', rest:'90s', technique:'Appuyer le genou et la main sur un banc, tirer l\'haltère vers la hanche. Coude proche du corps.', muscle:'dos', type:'compound', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false}
+        ],
+        notes: 'Apprendre à sentir le dos travailler avant tout. Éviter de compenser avec les biceps.',
+        tips: 'Pense à "écraser une noix entre tes omoplates" à chaque répétition pour activer les dorsaux.'
+      },
+      intermediate: {
+        exercises: [
+          {order:1, name:'Pull-over haltère', sets:3, reps:'12-15', rest:'60s', technique:'Pré-exhaustion des dorsaux en isolation. Étirer en haut, contracter le dorsal en ramenant l\'haltère.', muscle:'dos', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Tirage vertical barre', sets:4, reps:'8-10', rest:'2min', technique:'Dorsaux pré-fatigués, tirer la barre en engageant d\'abord les coudes. Pause en bas pour maximiser la contraction.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Rowing barre', sets:3, reps:'8-10', rest:'2min', technique:'Buste incliné à 45°, tirer la barre vers le nombril. Garder le dos plat, contrôle total du mouvement.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Tirage horizontal poulie', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries avec 30s de repos. Étirer les dorsaux en tendant les bras entre chaque série.', muscle:'dos', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'La pré-exhaustion au pull-over cible spécifiquement les dorsaux sans fatigue préalable des biceps.',
+        tips: 'Sur le FST-7, tendre les bras complètement et légèrement en avant pour maximiser l\'étirement dorsal.'
+      },
+      advanced: {
+        exercises: [
+          {order:1, name:'Pull-over poulie haute', sets:3, reps:'12-15', rest:'45s', technique:'Pré-exhaustion des dorsaux avant tous les composés. Coudes légèrement fléchis, mouvement ample.', muscle:'dos', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Tirage vertical barre prise large', sets:4, reps:'6-8', rest:'2min30s', technique:'Série à l\'échec, puis rest-pause 15s et 2-3 reps supplémentaires. Tirer la barre vers le sternum.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:true, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Rowing barre prise pronation', sets:3, reps:'8-10', rest:'2min', technique:'Buste quasi horizontal à 30°, tirer vers le bas-ventre. Insister sur la contraction des rhomboïdes.', muscle:'dos', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Traction lestée', sets:3, reps:'6-8', rest:'2min', technique:'Traction avec lest, prise neutre ou supination selon confort. Monter le menton au-dessus de la barre.', muscle:'dos', type:'compound', equipment:'barre de traction', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:5, name:'Tirage poitrine poulie haute', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries avec 30s de repos. Étirer les dorsaux en tendant les bras entre chaque série.', muscle:'dos', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'Programme dos haute intensité : pré-exhaustion + rest-pause + volume FST-7. Récupération complète obligatoire.',
+        tips: 'Le rest-pause au tirage vertical doit être effectué avec un spot si nécessaire pour sécuriser le mouvement.'
+      }
+    },
+    epaules: {
+      beginner: {
+        exercises: [
+          {order:1, name:'Développé militaire barre', sets:3, reps:'8-10', rest:'2min', technique:'Prise légèrement plus large que les épaules, pousser la barre au-dessus de la tête. Rentrer le menton au passage de la barre.', muscle:'épaules', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:2, name:'Élévations latérales haltères', sets:3, reps:'12-15', rest:'90s', technique:'Lever les bras à hauteur des épaules, légèrement en avant. Contrôle de la descente, éviter le balancement.', muscle:'épaules', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Oiseau haltères', sets:3, reps:'12-15', rest:'90s', technique:'Buste incliné, lever les bras sur les côtés en arc de cercle. Pincer les omoplates en haut du mouvement.', muscle:'épaules', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false}
+        ],
+        notes: 'Priorité à la stabilité de l\'épaule avant d\'augmenter les charges. Les épaules sont une articulation fragile.',
+        tips: 'Ne monte jamais les coudes au-dessus des épaules sur les élévations latérales pour protéger la coiffe des rotateurs.'
+      },
+      intermediate: {
+        exercises: [
+          {order:1, name:'Élévations latérales haltères', sets:3, reps:'15-20', rest:'45s', technique:'Pré-exhaustion du faisceau médian avant le développé. Lever jusqu\'à l\'horizontale, pinkies légèrement en bas.', muscle:'épaules', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Développé militaire haltères', sets:4, reps:'8-10', rest:'2min', technique:'Deltoïdes pré-fatigués, utiliser une charge modérée. Pousser en arc au-dessus de la tête, sans verrouiller les coudes.', muscle:'épaules', type:'compound', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Développé rotatif haltères', sets:3, reps:'10-12', rest:'90s', technique:'Rotation des poignets pendant le développé pour activer tous les faisceaux. Partir paumes vers soi, finir paumes vers l\'avant.', muscle:'épaules', type:'compound', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Élévations latérales poulie basse', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries avec 30s de repos. Étirer le deltoïde en baissant le bras entre chaque série.', muscle:'épaules', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'La pré-exhaustion au latéral isole le deltoïde médian avant de le solliciter lors du développé composé.',
+        tips: 'Sur le FST-7, croiser légèrement le câble devant le corps pour un meilleur angle sur le deltoïde médian.'
+      },
+      advanced: {
+        exercises: [
+          {order:1, name:'Élévations latérales haltères', sets:3, reps:'15-20', rest:'45s', technique:'Pré-exhaustion du deltoïde médian à l\'échec. Tempo lent, 3 secondes de descente contrôlée.', muscle:'épaules', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Développé militaire barre', sets:4, reps:'6-8', rest:'2min30s', technique:'Série à l\'échec absolu puis rest-pause 15s et 2-3 reps supplémentaires. Prise pronation, coudes sous la barre.', muscle:'épaules', type:'compound', equipment:'barre', rest_pause:true, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Oiseau haltères', sets:3, reps:'10-12', rest:'90s', technique:'Faisceau postérieur à haute intensité, buste parallèle au sol. Élever les bras jusqu\'à l\'horizontale, pause en haut.', muscle:'épaules', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Élévation frontale barre', sets:3, reps:'10-12', rest:'90s', technique:'Faisceau antérieur avec barre, prise pronation légèrement plus large que les épaules. Monter à hauteur des yeux.', muscle:'épaules', type:'isolation', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:5, name:'Élévations latérales poulie basse', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries avec 30s de repos. Étirer le deltoïde en baissant le bras entre chaque série.', muscle:'épaules', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'Programme épaules complet : tous les faisceaux travaillés avec les trois techniques d\'intensité combinées.',
+        tips: 'La récupération des épaules est plus lente : minimum 5 jours entre deux séances dédiées aux deltoïdes.'
+      }
+    },
+    bras: {
+      beginner: {
+        exercises: [
+          {order:1, name:'Curl barre', sets:3, reps:'8-10', rest:'2min', technique:'Coudes fixes le long du corps, monter la barre jusqu\'au front en supination. Descendre lentement en 3 secondes pour garder la tension.', muscle:'biceps', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:2, name:'Extension triceps poulie haute', sets:3, reps:'10-12', rest:'90s', technique:'Coudes fixes près du corps, pousser la corde vers le bas jusqu\'à extension complète. Contracter les triceps en bas, remonter lentement.', muscle:'triceps', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Curl haltères alterné', sets:3, reps:'10-12', rest:'90s', technique:'Alterner les bras, supiner le poignet pendant la montée. Garder le coude fixe et éviter de balancer le buste.', muscle:'biceps', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Dips banc triceps', sets:3, reps:'10-15', rest:'90s', technique:'Mains sur un banc derrière soi, descendre les fesses vers le sol en pliant les coudes. Pousser pour revenir en gardant les coudes proches du corps.', muscle:'triceps', type:'compound', equipment:'banc', rest_pause:false, pre_exhaustion:false, is_fst7:false}
+        ],
+        notes: 'Biceps et triceps travaillés en alternance. Priorité à la technique et à la connexion neuromusculaire.',
+        tips: 'Les bras progressent mieux quand on les isole : concentre-toi sur la contraction à chaque répétition plutôt que sur le poids.'
+      },
+      intermediate: {
+        exercises: [
+          {order:1, name:'Curl concentration haltère', sets:3, reps:'12-15', rest:'45s', technique:'Pré-exhaustion : coude posé contre la cuisse, monter l\'haltère en supination maximale. Pic de contraction 1 seconde en haut.', muscle:'biceps', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Curl barre EZ', sets:4, reps:'8-10', rest:'2min', technique:'Biceps pré-fatigués, prise pronée sur la barre EZ pour réduire le stress des poignets. Coudes fixes, tempo 2-0-2.', muscle:'biceps', type:'compound', equipment:'barre EZ', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Extension crâne barre EZ', sets:4, reps:'8-10', rest:'2min', technique:'Allongé sur banc, descendre la barre EZ vers le front en pliant les coudes. Coudes pointés au plafond, extension explosive.', muscle:'triceps', type:'compound', equipment:'barre EZ', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Curl marteau haltères', sets:3, reps:'10-12', rest:'90s', technique:'Prise neutre (marteau), travailler le brachial et le brachioradial. Monter en gardant les coudes fixes, alterner ou simultané.', muscle:'biceps', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:5, name:'Curl câble barre droite', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries, 30s repos. Étirer le biceps entre chaque série en laissant le câble tendre le bras complètement vers le bas.', muscle:'biceps', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'La pré-exhaustion au curl concentration maximise l\'activation du chef court du biceps avant le travail lourd.',
+        tips: 'Sur le FST-7 câble, le passage entre chaque série doit inclure un étirement actif du biceps bras tendu pendant 20 secondes.'
+      },
+      advanced: {
+        exercises: [
+          {order:1, name:'Curl incliné haltères', sets:3, reps:'12-15', rest:'45s', technique:'Pré-exhaustion sur banc incliné à 45°, bras pendants derrière le corps pour étirer le biceps au maximum. Supination complète pendant la montée.', muscle:'biceps', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Curl barre debout', sets:4, reps:'6-8', rest:'2min30s', technique:'Série à l\'échec absolu puis rest-pause 15s et 2-3 reps supplémentaires. Coudes fixes, contraction maximale en haut.', muscle:'biceps', type:'compound', equipment:'barre', rest_pause:true, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Extension triceps barre EZ couché', sets:4, reps:'6-8', rest:'2min30s', technique:'Série à l\'échec puis rest-pause 15s et 2-3 reps. Descendre vers le front, extension explosive, coudes fixes au plafond.', muscle:'triceps', type:'compound', equipment:'barre EZ', rest_pause:true, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Dips lest triceps', sets:3, reps:'8-10', rest:'2min', technique:'Buste droit pour isoler les triceps, lest sur les hanches. Descendre jusqu\'à 90° de flexion du coude, pousser de façon explosive.', muscle:'triceps', type:'compound', equipment:'barre parallèle', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:5, name:'Curl câble unilatéral', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries, 30s repos. Étirer le biceps entre chaque série en laissant le bras descendre complètement derrière le corps.', muscle:'biceps', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'Programme bras haute intensité : pré-exhaustion, double rest-pause et FST-7. Récupération de 5 jours entre deux séances bras.',
+        tips: 'Biceps et triceps étant synergistes, alterner leur travail dans la séance évite la fatigue accumulative et optimise le pump global.'
+      }
+    },
+    jambes: {
+      beginner: {
+        exercises: [
+          {order:1, name:'Squat barre', sets:3, reps:'8-10', rest:'2min30s', technique:'Pieds largeur épaules, descendre jusqu\'à ce que les cuisses soient parallèles au sol. Genoux dans l\'axe des orteils, dos droit tout au long du mouvement.', muscle:'quadriceps', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:2, name:'Leg curl couché', sets:3, reps:'10-12', rest:'90s', technique:'Allongé face vers le bas, ramener les talons vers les fessiers en contractant les ischio-jambiers. Éviter de soulever les hanches pendant le mouvement.', muscle:'ischio-jambiers', type:'isolation', equipment:'machine', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Presse à jambes', sets:3, reps:'10-12', rest:'2min', technique:'Pieds à mi-hauteur de la plateforme, descendre en contrôle jusqu\'à 90° de flexion. Ne jamais verrouiller les genoux en extension.', muscle:'quadriceps', type:'compound', equipment:'machine', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Mollets debout machine', sets:3, reps:'15-20', rest:'60s', technique:'Monter sur la pointe des pieds le plus haut possible, pause 1 seconde en haut. Descendre lentement pour étirer le mollet au maximum.', muscle:'mollets', type:'isolation', equipment:'machine', rest_pause:false, pre_exhaustion:false, is_fst7:false}
+        ],
+        notes: 'Quadriceps, ischio-jambiers et mollets travaillés à chaque séance. Maîtrise du squat avant tout.',
+        tips: 'Sur le squat, filmer de côté pour vérifier que les genoux ne s\'inclinent pas vers l\'intérieur lors de la montée.'
+      },
+      intermediate: {
+        exercises: [
+          {order:1, name:'Leg extension', sets:3, reps:'15-20', rest:'45s', technique:'Pré-exhaustion des quadriceps avant le squat. Extension complète en haut, pause 1 seconde, descente lente en 3 secondes.', muscle:'quadriceps', type:'isolation', equipment:'machine', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Squat barre', sets:4, reps:'8-10', rest:'2min30s', technique:'Quadriceps pré-fatigués, utiliser une charge légèrement réduite. Profondeur complète, talons au sol, genou dans l\'axe.', muscle:'quadriceps', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Romanian deadlift', sets:4, reps:'10-12', rest:'2min', technique:'Barre proche des jambes, descendre en gardant le dos plat jusqu\'à sentir l\'étirement des ischios. Hanches en arrière, pas les épaules.', muscle:'ischio-jambiers', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Fentes haltères marchées', sets:3, reps:'12 par jambe', rest:'90s', technique:'Grand pas vers l\'avant, genou avant à 90°, genou arrière effleure le sol. Pousser sur le talon avant pour revenir.', muscle:'quadriceps', type:'compound', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:5, name:'Leg extension câble assis', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries, 30s repos. Étirer le quadriceps entre chaque série en pliant le genou au maximum vers l\'arrière.', muscle:'quadriceps', type:'isolation', equipment:'machine', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'La pré-exhaustion au leg extension pré-fatigue le quadriceps vaste externe avant le squat pour un recrutement maximal.',
+        tips: 'Sur le FST-7, entre chaque série, plier le genou en arrière et tenir 20 secondes pour étirer le quadriceps en profondeur.'
+      },
+      advanced: {
+        exercises: [
+          {order:1, name:'Leg extension', sets:3, reps:'15-20', rest:'45s', technique:'Pré-exhaustion maximale des quadriceps à l\'échec. Tempo 2-1-3, 1 seconde de contraction isométrique en haut.', muscle:'quadriceps', type:'isolation', equipment:'machine', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Squat barre profond', sets:4, reps:'6-8', rest:'3min', technique:'Série à l\'échec absolu puis rest-pause 15s et 2-3 reps supplémentaires. Descente en dessous du parallèle, dos neutre.', muscle:'quadriceps', type:'compound', equipment:'barre', rest_pause:true, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Romanian deadlift barre', sets:4, reps:'8-10', rest:'2min', technique:'Ischio-jambiers à haute intensité, charge lourde avec ceinture si nécessaire. Descendre jusqu\'à l\'étirement maximal des ischios.', muscle:'ischio-jambiers', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Leg curl assis', sets:3, reps:'10-12', rest:'90s', technique:'Position assise pour maximiser l\'étirement des ischios. Ramener les talons sous le siège, contraction maximale en bas.', muscle:'ischio-jambiers', type:'isolation', equipment:'machine', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:5, name:'Mollets debout presse', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries, 30s repos. Étirer le mollet entre chaque série en laissant le talon descendre au maximum sur la plateforme.', muscle:'mollets', type:'isolation', equipment:'machine', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'Programme jambes complet : quadriceps, ischio-jambiers et mollets avec les trois techniques d\'intensité. Récupération de 5-7 jours.',
+        tips: 'Après une séance jambes avancée, marcher 10 minutes et s\'étirer 15 minutes aide à éliminer les métabolites et réduire les courbatures.'
+      }
+    },
+    fessiers: {
+      beginner: {
+        exercises: [
+          {order:1, name:'Hip thrust barre', sets:3, reps:'10-12', rest:'2min', technique:'Épaules sur banc, barre sur les hanches, pousser les hanches vers le plafond jusqu\'à alignement. Serrer les fessiers en haut et tenir 1 seconde.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:2, name:'Squat sumo haltères', sets:3, reps:'12-15', rest:'90s', technique:'Écartement large des pieds, orteils pointés à 45°, descendre en gardant le buste droit. Les genoux suivent la direction des pieds.', muscle:'fessiers', type:'compound', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Abduction hanche machine', sets:3, reps:'15-20', rest:'60s', technique:'Assis sur la machine, écarter les jambes contre la résistance en contractant les fessiers. Revenir lentement sans laisser les poids se toucher.', muscle:'fessiers', type:'isolation', equipment:'machine', rest_pause:false, pre_exhaustion:false, is_fst7:false}
+        ],
+        notes: 'Focus sur l\'activation des fessiers à chaque répétition. Beaucoup de pratiquants ont du mal à les sentir au début.',
+        tips: 'Avant la séance, faire 2 séries de 20 abductions avec élastique debout pour activer les fessiers et améliorer leur recrutement.'
+      },
+      intermediate: {
+        exercises: [
+          {order:1, name:'Abduction câble debout', sets:3, reps:'15-20', rest:'45s', technique:'Pré-exhaustion du grand fessier avant le composé. Câble à la cheville, lever la jambe sur le côté en gardant le buste droit.', muscle:'fessiers', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Hip thrust barre', sets:4, reps:'8-10', rest:'2min', technique:'Fessiers pré-fatigués, charge maximale sur les hanches. Monter jusqu\'à alignement parfait, serrer fort en haut pendant 2 secondes.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Fente arrière barre', sets:3, reps:'10-12 par jambe', rest:'2min', technique:'Reculer un pied, genou arrière proche du sol. Pousser sur le talon avant pour solliciter prioritairement le fessier.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Kickback câble à 4 pattes', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries, 30s repos. Étirer le fessier entre chaque série en ramenant le genou vers la poitrine pendant 15 secondes.', muscle:'fessiers', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'La pré-exhaustion à l\'abduction câble préactive le grand fessier avant le hip thrust pour un recrutement supérieur.',
+        tips: 'Sur le FST-7 kickback, l\'étirement du fessier entre les séries (genou vers la poitrine) est crucial pour l\'expansion fasciale.'
+      },
+      advanced: {
+        exercises: [
+          {order:1, name:'Abduction élastique debout', sets:3, reps:'20-25', rest:'30s', technique:'Pré-exhaustion complète du grand fessier à l\'échec avec élastique fort. Activation totale avant le travail lourd.', muscle:'fessiers', type:'isolation', equipment:'élastique', rest_pause:false, pre_exhaustion:true, is_fst7:false},
+          {order:2, name:'Hip thrust barre lourde', sets:4, reps:'6-8', rest:'2min30s', technique:'Série à l\'échec puis rest-pause 15s et 2-3 reps supplémentaires. Charge maximale, serrer les fessiers avec force en haut.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:true, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Romanian deadlift jambes tendues', sets:3, reps:'10-12', rest:'2min', technique:'Focus fessiers en gardant les hanches hautes pendant la descente. Étirer le fessier et les ischios au maximum en bas.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:4, name:'Fente bulgare barre', sets:3, reps:'8-10 par jambe', rest:'2min', technique:'Pied arrière surélevé sur banc, descendre en profondeur pour maximiser l\'étirement du fessier avant. Pousser sur le talon.', muscle:'fessiers', type:'compound', equipment:'barre', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:5, name:'Kickback câble unilatéral', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries, 30s repos. Étirer le fessier entre chaque série en ramenant le genou vers la poitrine et tenir 20 secondes.', muscle:'fessiers', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
+        ],
+        notes: 'Programme fessiers haute intensité combinant les trois méthodes. Récupération de 5-7 jours pour une croissance optimale.',
+        tips: 'Sur le rest-pause hip thrust, utiliser un pad de protection épais sur les hanches et garder une ceinture lombaire pour les charges maximales.'
+      }
+    }
+  },
+  splits: {
+    3: {
+      name: 'Fusion 3 jours',
+      days: [
+        {day:1, label:'Push — Pectoraux + Épaules + Triceps', muscles:['pectoraux','epaules','bras']},
+        {day:2, label:'Repos'},
+        {day:3, label:'Pull — Dos + Biceps', muscles:['dos','bras']},
+        {day:4, label:'Repos'},
+        {day:5, label:'Jambes + Fessiers', muscles:['jambes','fessiers']},
+        {day:6, label:'Repos'},
+        {day:7, label:'Repos'}
+      ],
+      notes: 'Idéal pour débutants. Récupération optimale entre les séances.'
+    },
+    4: {
+      name: 'Fusion 4 jours',
+      days: [
+        {day:1, label:'Pectoraux + Triceps', muscles:['pectoraux','bras']},
+        {day:2, label:'Dos + Biceps', muscles:['dos','bras']},
+        {day:3, label:'Repos'},
+        {day:4, label:'Épaules', muscles:['epaules']},
+        {day:5, label:'Jambes + Fessiers', muscles:['jambes','fessiers']},
+        {day:6, label:'Repos'},
+        {day:7, label:'Repos'}
+      ],
+      notes: 'Équilibre volume et récupération. Recommandé pour intermédiaires.'
+    },
+    5: {
+      name: 'Fusion 5 jours',
+      days: [
+        {day:1, label:'Pectoraux', muscles:['pectoraux']},
+        {day:2, label:'Dos', muscles:['dos']},
+        {day:3, label:'Épaules + Bras', muscles:['epaules','bras']},
+        {day:4, label:'Jambes', muscles:['jambes']},
+        {day:5, label:'Fessiers + Rattrapage', muscles:['fessiers']},
+        {day:6, label:'Repos'},
+        {day:7, label:'Repos'}
+      ],
+      notes: 'Un groupe par séance. Volume maximal. Pour avancés.'
+    }
+  },
+  macro_cycle_12w: [
+    {weeks:[1,2,3], phase:'Fondation', intensity:'Modérée', rirTarget:3, volume_modifier:0.8, focus:'Maîtrise technique et activation musculaire. Trouver les charges de travail. Introduction progressive FST-7.'},
+    {weeks:[4,5,6], phase:'Progression', intensity:'Élevée', rirTarget:2, volume_modifier:1.0, focus:'Augmentation des charges. Pré-exhaustion systématique. FST-7 complet sur finisher.'},
+    {weeks:[7,8,9,10], phase:'Intensification', intensity:'Maximale', rirTarget:1, volume_modifier:1.0, focus:'Rest-pause sur composés. Échec musculaire contrôlé. Surcharge progressive.'},
+    {weeks:[11,12], phase:'Décharge', intensity:'Légère', rirTarget:4, volume_modifier:0.5, isDeload:true, focus:'Récupération active. 50% charges. Maintien technique. Super-compensation.'}
+  ]
+};
+
 var TRAINING_STYLES = {
   classic:   { label:'Programme Classique',   programs: NFC_PROGRAMS,              splits: WEEKLY_SPLITS },
   intensity: { label:'Intensité Maximale',    programs: YATES_PROGRAMS.programs,   splits: YATES_PROGRAMS.splits,   meta: YATES_PROGRAMS.meta,   macro: YATES_PROGRAMS.macro_cycle_12w },
   volume:    { label:'Volume Progressif',     programs: COLEMAN_PROGRAMS.programs, splits: COLEMAN_PROGRAMS.splits, meta: COLEMAN_PROGRAMS.meta, macro: COLEMAN_PROGRAMS.macro_cycle_12w },
-  fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w }
+  fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w },
+  fusion:    { label:'Programme Élite Fusion', programs: FUSION_PROGRAMS.programs,  splits: FUSION_PROGRAMS.splits,  meta: FUSION_PROGRAMS.meta,  macro: FUSION_PROGRAMS.macro_cycle_12w }
 };
 
 function getStyleProgram(style, muscle, level) {
   var s = TRAINING_STYLES[style] || TRAINING_STYLES.classic;
-  if (!s.programs[muscle]) return null;
+  // Fallback cross-style si le muscle est absent (ex: classic n'a pas fessiers)
+  if (!s.programs[muscle]) {
+    var fallback = TRAINING_STYLES.fusion || TRAINING_STYLES.volume;
+    if (!fallback || !fallback.programs[muscle]) return null;
+    s = fallback;
+  }
   if (level && s.programs[muscle][level]) return s.programs[muscle][level];
   return s.programs[muscle].masse || s.programs[muscle].intermediate || s.programs[muscle].beginner || s.programs[muscle];
 }
@@ -1365,8 +1637,9 @@ function getStyleProgram(style, muscle, level) {
 window.YATES_PROGRAMS = YATES_PROGRAMS;
 window.COLEMAN_PROGRAMS = COLEMAN_PROGRAMS;
 window.RAMBOD_PROGRAMS = RAMBOD_PROGRAMS;
+window.FUSION_PROGRAMS = FUSION_PROGRAMS;
 window.TRAINING_STYLES = TRAINING_STYLES;
-window.TRAINING_STYLE_KEYS = ['classic', 'intensity', 'volume', 'fst7'];
+window.TRAINING_STYLE_KEYS = ['classic', 'intensity', 'volume', 'fst7', 'fusion'];
 window.getStyleProgram = getStyleProgram;
 window.NFC_PROGRAMS = NFC_PROGRAMS;
 window.WEEKLY_SPLITS = WEEKLY_SPLITS;
