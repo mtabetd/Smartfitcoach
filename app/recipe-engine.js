@@ -16272,6 +16272,26 @@
    * @param {string} iStr
    * @returns {Array<{name, qty, unit}>}
    */
+  // Normalise un nom d'ingrédient pour la clé d'agrégation liste de courses :
+  // accents → ascii, singulier/pluriel → forme de base, minuscules.
+  function _normIngKey(name) {
+    return (name || '').trim().toLowerCase()
+      .replace(/[éèêë]/g,'e').replace(/[àâä]/g,'a').replace(/[îï]/g,'i')
+      .replace(/[ùûü]/g,'u').replace(/[ôö]/g,'o').replace(/ç/g,'c')
+      .replace(/œ/g,'oe').replace(/æ/g,'ae')
+      .replace(/s\s*$/, '');   // retirer le 's' final (pluriel → singulier)
+  }
+
+  // Normalise les unités d'affichage françaises vers les codes standards.
+  function _normUnit(unit) {
+    var u = (unit || '').trim().toLowerCase();
+    if (/^(œuf[s]?|oeuf[s]?|blanc[s]?|jaune[s]?)$/.test(u)) return 'pce';
+    if (/^c\.?à\.?soupe$|^c\.?a\.?soupe$|^c\.\u00e0\.soupe$/.test(u)) return 'cs';
+    if (/^c\.?à\.?caf[eé]$|^c\.?a\.?cafe$/.test(u)) return 'cc';
+    if (u === 'cl') return 'ml'; // on ramènera cl→ml lors de l'accumulation
+    return u;
+  }
+
   function parseIngredientsString(iStr) {
     if (!iStr || typeof iStr !== 'string') return [];
     return iStr.split(',').map(function(part) {
@@ -16279,7 +16299,19 @@
       // Nettoyer les parenthèses ex: "Riz japonais 120g (cuit 240g)" → "Riz japonais 120g"
       part = part.replace(/\s*\([^)]*\)/g, '').trim();
 
-      // Format NxM : "Œufs 3x60g" → name:"Œufs", qty:180, unit:"g"
+      // ── Format "qty unit name" produit par toSimpleFormat ─────────────────
+      // Ex: "2 pce Œuf", "100 ml Lait écrémé", "1 c.à.soupe Beurre"
+      var mFwd = part.match(/^([\d.]+)\s+(g|ml|kg|l|L|pce|cs|cc|cl)\s+(.+)$/i);
+      if (mFwd) {
+        return { name: mFwd[3].trim(), qty: parseFloat(mFwd[1]), unit: mFwd[2].toLowerCase() };
+      }
+      // Unités d'affichage françaises : "1 œuf Name", "2 c.à.soupe Name"
+      var mFr = part.match(/^([\d.]+)\s+(œuf[s]?|oeuf[s]?|blanc[s]?|jaune[s]?|c\.à\.soupe|c\.à\.café|c\.a\.soupe|c\.a\.cafe)\s+(.+)$/i);
+      if (mFr) {
+        return { name: mFr[3].trim(), qty: parseFloat(mFr[1]), unit: _normUnit(mFr[2]) };
+      }
+
+      // ── Format NxM : "Œufs 3x60g" → name:"Œufs", qty:180, unit:"g" ───────
       var mNxM = part.match(/^(.+?)\s+(\d+)\s*[x×]\s*([\d.]+)\s*(g|ml|kg|l|pce|cs|cc|cl)$/i);
       if (mNxM) {
         var count = parseInt(mNxM[2]);
@@ -16288,7 +16320,7 @@
         return { name: mNxM[1].trim(), qty: Math.round(count * single * 10) / 10, unit: unit };
       }
 
-      // Format standard : "Flocons d'avoine 80g"
+      // ── Format standard "name qty unit" : "Flocons d'avoine 80g" ──────────
       var m = part.match(/^(.+?)\s+([\d.]+)\s*(g|ml|kg|l|pce|cs|cc|cl)$/i);
       if (m) {
         return { name: m[1].trim(), qty: parseFloat(m[2]), unit: m[3].toLowerCase() };
@@ -16514,13 +16546,20 @@
         var recipeName = recipe.n || recipe.name || slot;
         var scalingRatio = recipe._scalingRatio || 1;
 
+        // Helper interne : ajouter un ingrédient au consolidated avec clé normalisée.
+        // La clé = nom normalisé + unité normalisée → agrège singulier/pluriel/accents/unités FR.
+        function _addIng(name, qty, unit) {
+          var normU = _normUnit(unit);
+          var key   = _normIngKey(name) + '||' + normU;
+          if (!consolidated[key]) consolidated[key] = { name: name, qty: 0, unit: normU, recipes: [] };
+          consolidated[key].qty += qty || 0;
+          if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
+        }
+
         // Recettes R201+ : utilise les ingrédients scalés si disponibles
         if (recipe._id && recipe._scaledIngredients && recipe._scaledIngredients.length > 0) {
           recipe._scaledIngredients.forEach(function(ing) {
-            var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim().toLowerCase();
-            if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
-            consolidated[key].qty += ing.scaledQty || ing.qty || 0;
-            if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
+            _addIng(ing.name, ing.scaledQty || ing.qty || 0, ing.unit);
           });
         } else if (recipe._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
           // Recette R201+ sans ingrédients scalés : utilise findRecipe + scalingRatio
@@ -16528,21 +16567,15 @@
           if (fullRecipe && fullRecipe.ingredients) {
             fullRecipe.ingredients.forEach(function(ing) {
               var scaledQty = Math.round((ing.qty / fullRecipe.servings) * scalingRatio * 10) / 10;
-              var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim().toLowerCase();
-              if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
-              consolidated[key].qty += scaledQty;
-              if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
+              _addIng(ing.name, scaledQty, ing.unit);
             });
           } else if (recipe.i) {
-            // Fallback : recette avec champ `i` string (cas de repas libres)
+            // Fallback : recette avec champ `i` string (cas de repas libres / L-series)
             var scalingRatioFallback = recipe._scalingRatio || 1;
             var parsedIngredients = parseIngredientsString(recipe.i);
             parsedIngredients.forEach(function(ing) {
               var qty = Math.round(ing.qty * scalingRatioFallback * 10) / 10;
-              var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim().toLowerCase();
-              if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
-              consolidated[key].qty += qty;
-              if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
+              _addIng(ing.name, qty, ing.unit);
             });
           }
           // Smoothie whey — lookup depuis WHEY_SMOOTHIES si findRecipe a échoué
@@ -16552,23 +16585,13 @@
               if (window.WHEY_SMOOTHIES[si].id === recipe._id) { sm = window.WHEY_SMOOTHIES[si]; break; }
             }
             if (sm && sm.ingredients) {
-              sm.ingredients.forEach(function(ing) {
-                var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim().toLowerCase();
-                if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
-                consolidated[key].qty += ing.qty || 0;
-                if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
-              });
+              sm.ingredients.forEach(function(ing) { _addIng(ing.name, ing.qty || 0, ing.unit); });
             }
           }
         } else if (recipe.i) {
           // Recette sans _id : parser le champ `i` string (fallback Repas libre)
           var parsedFallback = parseIngredientsString(recipe.i);
-          parsedFallback.forEach(function(ing) {
-            var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim().toLowerCase();
-            if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
-            consolidated[key].qty += ing.qty || 0;
-            if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
-          });
+          parsedFallback.forEach(function(ing) { _addIng(ing.name, ing.qty || 0, ing.unit); });
         }
       });
     });
