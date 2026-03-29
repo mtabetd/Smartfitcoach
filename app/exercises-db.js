@@ -1542,3 +1542,4 @@ var EXERCISES = {
     }
   ]
 };
+window.EXERCISES = EXERCISES;

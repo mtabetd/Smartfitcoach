@@ -2566,7 +2566,7 @@ function calcSessionKcal(exercises, durationMin) {
   var s = window.S;
   var weight = s.weight || 75;
   var age = s.age || 30;
-  var sex = s.sex || (s.sex === 'femme' ? 'femme' : 'homme'); // BUG-15 fix: respect null sex
+  var sex = (s.sex === 'femme') ? 'femme' : 'homme'; // BUG-15 fix: respect null sex
   // Phase courante → RPE
   var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
   var rpe = phase ? phase.rpe : 7;
@@ -5571,5 +5571,64 @@ function renderCalisthenicsProgram(content) {
   var backBtn = h('button', {'class':'btn-back', style:'margin-top:16px', onclick:function(){ S.sStep=24; window.render(); }}, '← Modifier les objectifs');
   content.appendChild(backBtn);
 }
+
+// ─── EXPORT SPORT PDF ───
+function exportSportPDF() {
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (bibliothèque non chargée)'); return; }
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({unit: 'mm', format: 'a4'});
+  var W = 210, M = 20, CW = W - 2 * M, y = 0;
+  var ivory = [250, 250, 247], black = [10, 10, 9], grey = [107, 107, 101], border = [216, 216, 208];
+
+  // Header
+  doc.setFillColor(black[0], black[1], black[2]);
+  doc.rect(0, 0, W, 30, 'F');
+  doc.setTextColor(ivory[0], ivory[1], ivory[2]);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
+  doc.text('MTD MACRO CALCULATOR', M, 10);
+  doc.setFont('times', 'italic'); doc.setFontSize(18);
+  doc.text('Programme Sport', M, 22);
+  y = 38;
+
+  // Sport type & goals
+  var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'triathlon' ? 'Triathlon' : S.sportType === 'yoga' ? 'Yoga' : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisthénie' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : 'Musculation';
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(black[0], black[1], black[2]);
+  doc.text('Type : ' + sportLabel, M, y); y += 7;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text('Jours / semaine : ' + (S.sportDays || '?'), M, y); y += 7;
+  if (S.sportGoals && S.sportGoals.length) {
+    doc.text('Objectifs : ' + S.sportGoals.join(', '), M, y); y += 7;
+  }
+  y += 4;
+
+  // Program days
+  var prog = S.sportProgram || [];
+  prog.forEach(function(day, di) {
+    if (y > 265) { doc.addPage(); y = 20; }
+    doc.setFillColor(244, 244, 240); doc.setDrawColor(border[0], border[1], border[2]);
+    doc.rect(M, y, CW, 8, 'FD');
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(black[0], black[1], black[2]);
+    doc.text('Jour ' + (di + 1) + (day.label ? ' \u2014 ' + day.label : ''), M + 3, y + 5.5);
+    y += 12;
+    var exs = day.exercises || day.content || [];
+    exs.forEach(function(ex) {
+      if (y > 275) { doc.addPage(); y = 20; }
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(black[0], black[1], black[2]);
+      var line = (ex.name || ex.n || '?');
+      if (ex.sets) line += '  \u2014  ' + ex.sets + (ex.reps ? '\u00d7' + ex.reps : '');
+      if (ex.rest) line += '  (repos ' + ex.rest + ')';
+      var lines = doc.splitTextToSize('\u2022  ' + line, CW - 6);
+      doc.text(lines, M + 3, y); y += lines.length * 5;
+    });
+    y += 4;
+  });
+
+  // Footer
+  doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
+  doc.text('MTD Macro Calculator', M, 290);
+  doc.save('programme-sport.pdf');
+}
+window.exportSportPDF = exportSportPDF;
+window.getPregnancySportWarning = getPregnancySportWarning;
 
 })();

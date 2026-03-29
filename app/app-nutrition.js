@@ -4537,6 +4537,8 @@ window.openSaladComposer = function openSaladComposer(slotKey) {
   root.appendChild(overlay);
 };
 
+window.WHEY_SMOOTHIES = WHEY_SMOOTHIES;
+
 // ─── PUBLIC API ───
 window.NUTRITION = {
   render: function(p) {
