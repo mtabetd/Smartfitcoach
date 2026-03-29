@@ -3203,7 +3203,7 @@ var WHEY_SMOOTHIES = [
     tips:'Infuser la vanille dans le lait froid 10 minutes avant de mixer : l\'arôme se diffuse de façon infiniment plus profonde qu\'en ajout direct.' },
 
   // === CACAHUÈTE ===
-  { id:'sm_peanut_01', name:'PB&J Power Shake', flavors:['peanut','strawberry'], goal:['muscle','performance'], timing:'post', cal:450, p:42, c:45, f:14, prep:'3min',
+  { id:'sm_peanut_01', name:'PB&J Power Shake', flavors:['peanut','strawberry'], goal:['muscle','performance'], timing:'post', cal:474, p:42, c:45, f:14, prep:'3min',
     ingredients:[{name:'Whey cacahuète',qty:30,unit:'g'},{name:'Beurre de cacahuète',qty:20,unit:'g'},{name:'Fraises congelées',qty:80,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Congeler les fraises 1h minimum — elles épaississent sans diluer.','Chauffer légèrement le beurre de cacahuète 10 secondes au micro-ondes pour le fluidifier avant de mixer.','Mixer à pleine puissance 45 secondes, puis incorporer le miel en filet et mixer 5 secondes.'],
     tips:'Une goutte d\'extrait de vanille révèle la noisette naturelle de la cacahuète. La fraise apporte l\'acidité qui équilibre — ne pas la supprimer.' },
@@ -3233,7 +3233,7 @@ var WHEY_SMOOTHIES = [
     tips:'Le miel de lavande est le véritable secret de cette recette : son parfum floral évoque la Provence et transforme un simple smoothie protéiné en accord gastronomique. Un miel d\'acacia fonctionne aussi si la lavande est introuvable.' },
 
   // === NOIX DE COCO ===
-  { id:'sm_coco_01', name:'Tropical Gainz', flavors:['coconut','banana'], goal:['muscle','performance'], timing:'post', cal:460, p:36, c:58, f:12, prep:'4min',
+  { id:'sm_coco_01', name:'Tropical Gainz', flavors:['coconut','banana'], goal:['muscle','performance'], timing:'post', cal:484, p:36, c:58, f:12, prep:'4min',
     ingredients:[{name:'Whey coco ou vanille',qty:30,unit:'g'},{name:'Lait de coco',qty:150,unit:'ml'},{name:'Banane',qty:120,unit:'g'},{name:'Ananas',qty:100,unit:'g'},{name:'Flocons de coco',qty:10,unit:'g'}],
     steps:['Couper banane et ananas en morceaux et congeler 2h minimum — le froid tropical est indispensable.','Mixer fruits congelés + lait de coco jusqu\'à texture épaisse type sorbet.','Ajouter la whey, mixer 20 secondes, garnir de flocons de coco légèrement torréfiés à sec.'],
     tips:'Torréfier les flocons de coco à sec 2 minutes dans une poêle — la différence aromatique entre coco crue et coco torréfiée est celle entre un ingrédient et une signature. La bromélaïne de l\'ananas est un bonus, le goût est la raison principale.' },
