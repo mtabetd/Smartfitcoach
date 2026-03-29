@@ -64,7 +64,18 @@ var PROFILE_KEYS = [
  */
 function slimMeal(meal) {
   if (!meal) return null;
-  return { _id: meal._id, n: meal.n, k: meal.k, p: meal.p, g: meal.g, l: meal.l, w: meal.w, lv: meal.lv };
+  var slim = { _id: meal._id, n: meal.n, k: meal.k, p: meal.p, g: meal.g, l: meal.l, w: meal.w, lv: meal.lv };
+  // Preserve ingredient data for custom recipes (SALAD_, sm_) that are not in RECIPES_DB
+  // and cannot be re-fetched via RecipeEngine.findRecipe().
+  var id = meal._id || '';
+  var isCustom = id.indexOf('SALAD_') === 0 || id.indexOf('sm_') === 0;
+  if (isCustom) {
+    if (meal.i) slim.i = meal.i;
+    if (meal._scaledIngredients) slim._scaledIngredients = meal._scaledIngredients;
+    if (meal._scalingRatio !== undefined) slim._scalingRatio = meal._scalingRatio;
+    if (meal.f) slim.f = meal.f;
+  }
+  return slim;
 }
 
 // Keys that affect the meal plan — changing any of these should invalidate weekPlan
