@@ -3539,7 +3539,7 @@ var WHEY_SMOOTHIES = [
   // === CHEESECAKE CITRON #2-3 ===
   { id:'sm_cheesecake_02', name:'Cheesecake Frais Express', flavors:['cheesecake_citron'], goal:['fat_loss','muscle'], timing:'anytime', cal:218, p:42, c:8, f:2, prep:'1min',
     ingredients:[{name:'Whey cheesecake citron',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Jus de citron',qty:30,unit:'ml'}],
-    steps:['Verser le fromage blanc dans un bol, fouetter 10 secondes à la main pour l\'aérer légèrement.','Ajouter whey + jus de citron, shaker ou fouet 20 secondes — conserver la texture dense.'],
+    steps:['Verser le fromage blanc dans un bol, fouetter 10 secondes à la main pour l\'aérer légèrement.','Ajouter whey + jus de citron, shaker ou fouet 20 secondes — conserver la texture dense.','Réfrigérer 5 minutes avant de déguster pour que la texture se raffermisse.'],
     tips:'Le fromage blanc fouetté avant l\'ajout de la whey incorpore de l\'air et donne une texture beaucoup plus légère — comme une mousse de cheesecake plutôt qu\'un simple shake.' },
   { id:'sm_cheesecake_03', name:'Fraise Cheesecake Glacé', flavors:['cheesecake_citron'], goal:['fat_loss','recovery'], timing:'anytime', cal:246, p:35, c:22, f:2, prep:'4min',
     ingredients:[{name:'Whey cheesecake citron',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Fraises congelées',qty:100,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
@@ -3549,7 +3549,7 @@ var WHEY_SMOOTHIES = [
   // === TOFFEE #2-3 ===
   { id:'sm_toffee_02', name:'Toffee Lait Flash', flavors:['toffee'], goal:['muscle'], timing:'anytime', cal:253, p:31, c:12, f:9, prep:'1min',
     ingredients:[{name:'Whey toffee',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'}],
-    steps:['Sortir le lait du réfrigérateur au dernier moment — lait à 4°C maximum.','Verser dans le shaker, ajouter whey toffee, shaker 20 secondes à amplitude complète.'],
+    steps:['Sortir le lait du réfrigérateur au dernier moment — lait à 4°C maximum.','Verser dans le shaker, ajouter whey toffee, shaker 20 secondes à amplitude complète.','Servir immédiatement dans un verre froid pour préserver la saveur caramel.'],
     tips:'Le lait entier est le seul medium qui révèle le toffee dans toute sa complexité : les matières grasses portent les arômes caramel beurré là où l\'eau ou le lait écrémé les aplatissent.' },
   { id:'sm_toffee_03', name:'Toffee Banane Cacahuète', flavors:['toffee'], goal:['muscle','performance'], timing:'pre', cal:392, p:34, c:37, f:12, prep:'4min',
     ingredients:[{name:'Whey toffee',qty:30,unit:'g'},{name:'Banane',qty:100,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'},{name:'Lait demi-écrémé',qty:150,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'}],
@@ -3559,7 +3559,7 @@ var WHEY_SMOOTHIES = [
   // === CHOCOLAT BLANC #2-3 ===
   { id:'sm_whitechoc_02', name:'Coco Blanc Léger', flavors:['white_chocolate'], goal:['fat_loss','recovery'], timing:'anytime', cal:178, p:25, c:15, f:2, prep:'1min',
     ingredients:[{name:'Whey chocolat blanc',qty:30,unit:'g'},{name:'Eau de coco',qty:250,unit:'ml'}],
-    steps:['Utiliser une eau de coco bien froide, sortie du réfrigérateur.','Verser dans le shaker, ajouter whey chocolat blanc, shaker 20 secondes.'],
+    steps:['Utiliser une eau de coco bien froide, sortie du réfrigérateur.','Verser dans le shaker, ajouter whey chocolat blanc, shaker 20 secondes.','Servir immédiatement dans un verre givré.'],
     tips:'L\'accord chocolat blanc + noix de coco est l\'un des plus classiques de la pâtisserie — deux sources de sucrosité douce qui se complètent sans se dominer. Idéal après un effort sous la chaleur.' },
   { id:'sm_whitechoc_03', name:'Chocolat Blanc Myrtille Amande', flavors:['white_chocolate'], goal:['muscle','recovery'], timing:'post', cal:337, p:33, c:22, f:13, prep:'4min',
     ingredients:[{name:'Whey chocolat blanc',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:150,unit:'ml'},{name:'Myrtilles congelées',qty:80,unit:'g'},{name:'Purée d\'amande',qty:15,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
