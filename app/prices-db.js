@@ -920,6 +920,7 @@
     'Dattes Medjool dénoyautées': {
       name: 'Dattes Medjool dénoyautées',
       pricePerG: r(60 / 1000),
+      pricePerPce: r(60 / 1000 * 25), // ~25g par datte Medjool
       source: 'marjane',
       updatedAt: '2026-03'
     },
@@ -2751,6 +2752,7 @@
     'Datte Medjool': {
       name: 'Datte Medjool',
       pricePerG: r(80 / 1000),
+      pricePerPce: r(80 / 1000 * 25), // ~25g par datte Medjool
       source: 'souk',
       updatedAt: '2026-03'
     },
@@ -2942,6 +2944,290 @@
       source: 'estimation',
       updatedAt: '2026-03'
     },
+
+    // ── Whey & Suppléments ─────────────────────────────────────────────────────
+    'Whey fraise': {
+      name: 'Whey fraise',
+      pricePerG: r(220 / 1000),   // ~220 DH/kg whey premium Maroc
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey noisette': {
+      name: 'Whey noisette',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey cacahuète': {
+      name: 'Whey cacahuète',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey café': {
+      name: 'Whey café',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey nature': {
+      name: 'Whey nature',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey framboise': {
+      name: 'Whey framboise',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey caramel salé': {
+      name: 'Whey caramel salé',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey cookies': {
+      name: 'Whey cookies',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey tiramisu': {
+      name: 'Whey tiramisu',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey orange': {
+      name: 'Whey orange',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey birthday cake': {
+      name: 'Whey birthday cake',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey cannelle': {
+      name: 'Whey cannelle',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey cheesecake citron': {
+      name: 'Whey cheesecake citron',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey toffee': {
+      name: 'Whey toffee',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey chocolat blanc': {
+      name: 'Whey chocolat blanc',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey piña colada': {
+      name: 'Whey piña colada',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey vanille cannelle': {
+      name: 'Whey vanille cannelle',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey spéculoos': {
+      name: 'Whey spéculoos',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey cappuccino': {
+      name: 'Whey cappuccino',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    "Whey pain d'épices": {
+      name: "Whey pain d'épices",
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey pistache': {
+      name: 'Whey pistache',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey myrtille': {
+      name: 'Whey myrtille',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey coco': {
+      name: 'Whey coco',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey citron': {
+      name: 'Whey citron',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey banane': {
+      name: 'Whey banane',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey matcha': {
+      name: 'Whey matcha',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+
+    // ── Boissons & Liquides spéciaux ──────────────────────────────────────────
+    'Eau de coco': {
+      name: 'Eau de coco',
+      pricePerMl: r(18 / 330),    // ~18 DH brique 330ml Carrefour
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Eau pétillante': {
+      name: 'Eau pétillante',
+      pricePerMl: r(4 / 500),     // ~4 DH bouteille 500ml
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Café expresso': {
+      name: 'Café expresso',
+      pricePerMl: r(0.015),       // ~3 DH / 200ml café préparé
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Cold brew concentré': {
+      name: 'Cold brew concentré',
+      pricePerMl: r(0.06),        // ~0.06 DH/ml (concentré ≈ 3x espresso)
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Jus de citron frais': {
+      name: 'Jus de citron frais',
+      pricePerMl: r(6 / 100),     // ~6 DH/100ml jus frais pressé
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+
+    // ── Fruits spéciaux & Congelés ────────────────────────────────────────────
+    'Fraises congelées': {
+      name: 'Fraises congelées',
+      pricePerG: r(25 / 500),     // ~25 DH sachet 500g surgelées Carrefour
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Myrtilles congelées': {
+      name: 'Myrtilles congelées',
+      pricePerG: r(35 / 500),     // ~35 DH sachet 500g surgelées
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Pomme verte': {
+      name: 'Pomme verte',
+      pricePerG: r(12 / 1000),    // ~12 DH/kg Maroc
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+
+    // ── Condiments & Aromatiques spéciaux ────────────────────────────────────
+    'Matcha grade cérémonial': {
+      name: 'Matcha grade cérémonial',
+      pricePerG: r(150 / 50),     // ~150 DH boîte 50g matcha cérémonie
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Matcha cérémonie': {
+      name: 'Matcha cérémonie',
+      pricePerG: r(150 / 50),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Miel de manuka': {
+      name: 'Miel de manuka',
+      pricePerG: r(350 / 250),    // ~350 DH pot 250g (premium)
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Miel de lavande': {
+      name: 'Miel de lavande',
+      pricePerG: r(80 / 500),     // ~80 DH pot 500g
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Gingembre râpé': {
+      name: 'Gingembre râpé',
+      pricePerG: r(8 / 100),      // ~8 DH/100g frais
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Flocons de coco': {
+      name: 'Flocons de coco',
+      pricePerG: r(20 / 200),     // ~20 DH sachet 200g
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Purée de noisette complète': {
+      name: 'Purée de noisette complète',
+      pricePerG: r(60 / 250),     // ~60 DH pot 250g
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Extrait vanille': {
+      name: 'Extrait vanille',
+      pricePerMl: r(25 / 30),     // ~25 DH flacon 30ml
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Ricotta légère': {
+      name: 'Ricotta légère',
+      pricePerG: r(18 / 250),     // ~18 DH barquette 250g
+      source: 'carrefour',
+      updatedAt: '2026-03'
+    },
+    'Poivre noir': {
+      name: 'Poivre noir',
+      pricePerG: r(15 / 50),      // ~15 DH flacon 50g
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
+    'Glaçons': {
+      name: 'Glaçons',
+      pricePerG: r(0.001),        // quasi gratuit (eau du robinet congelée)
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Citron zeste+jus': {
+      name: 'Citron zeste+jus',
+      pricePerPce: r(1.5),        // ~1.5 DH/citron
+      source: 'marjane',
+      updatedAt: '2026-03'
+    },
   };
 
   /**
@@ -3028,6 +3314,91 @@
     'Vinaigrette au miso': 'Sauce miso',
     'Caesar légère': 'Vinaigrette légère',
     'Crevettes tigre': 'Crevettes décortiquées',
+    // ── Alias Whey multi-parfums → base whey ──────────────────────────────────
+    'Whey nature ou vanille': 'Whey nature',
+    'Whey nature ou citron': 'Whey nature',
+    'Whey noisette ou chocolat': 'Whey noisette',
+    'Whey café ou noisette': 'Whey café',
+    'Whey citron ou vanille': 'Whey nature',
+    'Whey citron ou nature': 'Whey nature',
+    'Whey coco ou vanille': 'Whey nature',
+    'Whey myrtille ou vanille': 'Whey nature',
+    'Whey fraise ou vanille': 'Whey fraise',
+    'Whey banane ou vanille': 'Whey nature',
+    'Whey vanille ou fraise': 'Whey fraise',
+    // Alias ingrédients smoothie
+    'Café expresso froid': 'Café expresso',
+    'Café fort': 'Café expresso',
+    'Pâte de noisette': 'Purée de noisette complète',
+    'Pâte de noisette pure': 'Purée de noisette complète',
+    'Vanille extrait': 'Extrait vanille',
+    'Jus d\'orange frais': 'Jus de citron frais',
+    'Jus d\'orange': 'Jus de citron frais',
+    'Matcha': 'Matcha grade cérémonial',
+    'Gingembre frais': 'Gingembre râpé',
+    'Gingembre': 'Gingembre râpé',
+    'Lait': 'Lait entier',
+    'Stevia': 'Miel',
+    'Eau': 'Eau pétillante',
+    'Curcuma': 'Cannelle moulue',
+    'Cannelle': 'Cannelle moulue',
+    'Granola': 'Flocons d\'avoine',
+    'Graines de chia': 'Graines de lin',
+    'Amandes effilées': 'Amandes',
+    'Fraises': 'Fraises congelées',
+    'Myrtilles': 'Myrtilles (surgelées)',
+    'Ananas': 'Ananas (boîte)',
+    'Citron': 'Citron zeste+jus',
+    'Lait écrémé': 'Lait demi-écrémé',
+    'Cacao pur': 'Cacao non sucré',
+    'Lait d\'avoine': 'Lait d\'amande',
+    'Beurre d\'arachide': 'Beurre de cacahuète',
+    'Datte Medjool': 'Dattes Medjool dénoyautées',
+    'Menthe': 'Menthe fraîche',
+    // Aliases parfums whey nouveaux
+    'Whey framboise': 'Whey framboise',
+    'Whey caramel salé': 'Whey caramel salé',
+    'Whey cookies': 'Whey cookies',
+    'Whey tiramisu': 'Whey tiramisu',
+    'Whey orange': 'Whey orange',
+    'Whey birthday cake': 'Whey birthday cake',
+    'Whey cannelle': 'Whey cannelle',
+    'Whey cheesecake citron': 'Whey cheesecake citron',
+    'Whey toffee': 'Whey toffee',
+    'Whey chocolat blanc': 'Whey chocolat blanc',
+    'Whey piña colada': 'Whey piña colada',
+    'Whey vanille cannelle': 'Whey vanille cannelle',
+    'Whey spéculoos': 'Whey spéculoos',
+    'Whey cappuccino': 'Whey cappuccino',
+    "Whey pain d'épices": "Whey pain d'épices",
+    'Whey pistache': 'Whey pistache',
+    'Whey matcha': 'Whey matcha',
+    'Whey banane': 'Whey banane',
+    'Whey citron': 'Whey citron',
+    'Whey coco': 'Whey coco',
+    'Whey myrtille': 'Whey myrtille',
+    // Ingredients smoothie nouveaux
+    'Fruits rouges surgelés': 'Fruits rouges surgelés',
+    'Lait demi-écrémé': 'Lait demi-écrémé',
+    'Café expresso froid': 'Café expresso',
+    'Jus de citron': 'Jus de citron',
+    'Cannelle': 'Cannelle moulue',
+    'Pincée de sel': 'Sel',
+    "Purée d'amande": "Beurre d'amande",
+    // ─── RECIPES_DB ingredient aliases (unit pièce / non-standard names) ───────
+    'Galette de blé (tortilla)': 'Tortilla de blé',
+    'Tortilla de maïs': 'Tortilla de blé',
+    'Tomates': 'Tomate',
+    'Piment rouge frais': 'Poivron rouge',
+    'Paprika': 'Paprika doux',
+    'Sel, poivre': 'Sel',
+    'Sel, poivre noir': 'Sel',
+    'Sel, poivre blanc': 'Sel',
+    'Sel, poivre, origan séché': 'Sel',
+    'Ail en poudre, sel, poivre': 'Sel',
+    'Noix de muscade': 'Muscade moulue',
+    'Romarin frais': 'Thym frais',
+    'Bouillon cube légumes': 'Bouillon de légumes',
   };
 
   function getPricePer(ingredientName, unit) {
@@ -3053,8 +3424,36 @@
         return null;
 
       case 'pce':
+      case 'pcs':    // alias (variante orthographique)
+      case 'pièce':  // alias (format RECIPES_DB)
         if (entry.pricePerPce !== undefined) return entry.pricePerPce;
         console.warn('[prices-db] pricePerPce non disponible pour "' + ingredientName + '"');
+        return null;
+
+      case 'kg':
+        if (entry.pricePerG !== undefined) return entry.pricePerG * 1000;
+        console.warn('[prices-db] pricePerG non disponible pour "' + ingredientName + '" (kg)');
+        return null;
+
+      case 'l':
+      case 'L':      // alias (majuscule — toMarketQty output)
+        if (entry.pricePerMl !== undefined) return entry.pricePerMl * 1000;
+        if (entry.pricePerG !== undefined) return entry.pricePerG * 1000;
+        console.warn('[prices-db] pricePerMl non disponible pour "' + ingredientName + '" (l/L)');
+        return null;
+
+      case 'cs':
+      case 'c.à.soupe': // alias (format display RECIPES_DB)
+        // Cuillère à soupe ≈ 15ml ou 12g selon l'ingrédient
+        if (entry.pricePerMl !== undefined) return entry.pricePerMl * 15;
+        if (entry.pricePerG !== undefined) return entry.pricePerG * 12;
+        return null;
+
+      case 'cc':
+      case 'c.à.café': // alias (format display RECIPES_DB)
+        // Cuillère à café ≈ 5ml ou 4g
+        if (entry.pricePerMl !== undefined) return entry.pricePerMl * 5;
+        if (entry.pricePerG !== undefined) return entry.pricePerG * 4;
         return null;
 
       default:

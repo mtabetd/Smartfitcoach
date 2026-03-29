@@ -439,8 +439,15 @@ function generateSportProgram() {
         // Pregnancy: longer rest
         if (pregTri) ex.rest = '90-120s';
         // Cycle phase: reduce sets during low-intensity phases (luteal/menstruation)
-        if (!pregTri && cycleIntensityFactor < 0.9 && typeof ex.sets === 'number') {
-          ex.sets = Math.max(2, Math.round(ex.sets * cycleIntensityFactor));
+        if (!pregTri && cycleIntensityFactor < 0.9) {
+          if (typeof ex.sets === 'number') {
+            ex.sets = Math.max(2, Math.round(ex.sets * cycleIntensityFactor));
+          } else if (typeof ex.sets === 'string') {
+            // sets is formatted as "N×reps" — reduce the leading set count
+            ex.sets = ex.sets.replace(/^(\d+)/, function(match, n) {
+              return String(Math.max(2, Math.round(parseInt(n) * cycleIntensityFactor)));
+            });
+          }
         }
 
         // Add rep suffix for shred/weightloss
@@ -2947,10 +2954,19 @@ function renderMusculationProgram(p) {
   if (day) {
     p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus));
 
-    (day.exercises || []).forEach(function(ex) {
+    (day.exercises || []).forEach(function(ex, exIdx) {
       var card = h('div', {'class': 'exercise-card', onclick: function(){ S.sportModalExercise = ex; window.render(); }});
       card.appendChild(h('div', {'class': 'exercise-muscle'}, ex.m));
-      card.appendChild(h('div', {'class': 'exercise-name'}, ex.n));
+      var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n);
+      // FST-7 badge: highlight exercises that use the Fascial Stretch Training 7-set technique
+      if (ex.is_fst7) {
+        var fst7Badge = h('span', {
+          style: 'display:inline-block;margin-left:8px;padding:2px 6px;background:#C0392B;color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;border-radius:2px;vertical-align:middle'
+        }, 'FST-7');
+        _exNameEl.appendChild(fst7Badge);
+        card.style.borderLeft = '3px solid #C0392B';
+      }
+      card.appendChild(_exNameEl);
       card.appendChild(h('div', {'class': 'exercise-sets'}, ex.sets + ' \u2014 Repos ' + ex.rest));
       card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
 
@@ -2961,14 +2977,15 @@ function renderMusculationProgram(p) {
         card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:' + intColor + ';margin-top:4px'}, 'Intensit\u00e9 cycle : ' + intPct + '%'));
       }
 
-      // Video link (guard: only render if video URL exists)
-      if (ex.video) {
-        var vlink = h('a', {'class': 'exercise-video', href: ex.video, target: '_blank', rel: 'noopener', onclick: function(e){
+      // Video link — auto-generate URL if not preset in exercise data
+      var _videoUrl = ex.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(ex.n) : null);
+      if (_videoUrl) {
+        var vlink = h('a', {'class': 'exercise-video', href: _videoUrl, target: '_blank', rel: 'noopener', onclick: function(e){
           e.stopPropagation();
           window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
           var count = window.GAMIFICATION ? GAMIFICATION.incrementCounter('exercises_viewed') : 0;
           if (count >= 20 && window.GAMIFICATION) GAMIFICATION.unlockBadge('exercises_20');
-        }}, '▶ Voir la technique');
+        }}, '\u25b6 Voir la technique');
         card.appendChild(vlink);
       }
 
@@ -3161,6 +3178,62 @@ function renderMusculationProgram(p) {
 
         card.appendChild(setTable);
       })(ex, eqType === 'bodyweight');
+
+      // ─── SWAP EXERCISE BUTTON ───────────────────────────────────────────
+      (function(exRef, dayI, exI) {
+        var swapKey = dayI + '_' + exI;
+        var isOpen = S.swapPanel === swapKey;
+        var swapBtn = h('button', {
+          style: 'margin-top:10px;width:100%;padding:8px 12px;border:1px dashed var(--border,#DDDBD0);background:transparent;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--grey);border-radius:4px;transition:border-color .15s',
+          onclick: function(e) {
+            e.stopPropagation();
+            S.swapPanel = isOpen ? null : swapKey;
+            window.render();
+          }
+        }, isOpen ? '\u25b2 Annuler' : '\u21c4 Changer cet exercice');
+        card.appendChild(swapBtn);
+
+        if (isOpen) {
+          var alts = window.getAlternativeExercises ? window.getAlternativeExercises(exRef.m, exRef.n, 4) : [];
+          var altPanel = h('div', {style: 'margin-top:6px;border:1px solid var(--border,#DDDBD0);border-radius:6px;overflow:hidden;background:var(--ivory2,#F5F4EF)'});
+          var altTitle = h('div', {style: 'padding:8px 12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border)'}, 'Exercices pour les m\u00eames muscles');
+          altPanel.appendChild(altTitle);
+
+          if (alts.length === 0) {
+            altPanel.appendChild(h('div', {style: 'padding:12px;text-align:center;font-size:12px;color:var(--grey);font-style:italic'}, 'Aucune alternative disponible.'));
+          } else {
+            alts.forEach(function(alt) {
+              var altRow = h('div', {
+                style: 'padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border,#DDDBD0);transition:background .1s',
+                onclick: function(e) {
+                  e.stopPropagation();
+                  var newEx = { n: alt.n, m: alt.m, eq: alt.eq, sets: alt.sets || exRef.sets, rest: alt.rest || exRef.rest };
+                  newEx.video = alt.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(alt.n) : null);
+                  S.sportProgram[dayI].exercises[exI] = newEx;
+                  S.swapPanel = null;
+                  window.render();
+                },
+                onmouseover: function() { this.style.background = 'var(--ivory,#FAFAF7)'; },
+                onmouseout: function() { this.style.background = ''; }
+              });
+              var altTop = h('div', {style: 'display:flex;justify-content:space-between;align-items:center'});
+              altTop.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09)'}, alt.n));
+              var altVideoUrl = alt.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(alt.n) : null);
+              if (altVideoUrl) {
+                altTop.appendChild(h('a', {
+                  href: altVideoUrl, target: '_blank', rel: 'noopener',
+                  style: 'font-size:10px;color:#C0392B;text-decoration:none;flex-shrink:0;margin-left:8px',
+                  onclick: function(e) { e.stopPropagation(); }
+                }, '\u25b6 Vid\u00e9o'));
+              }
+              altRow.appendChild(altTop);
+              altRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px'}, alt.m + (alt.eq ? '  \u2014  ' + alt.eq : '')));
+              altPanel.appendChild(altRow);
+            });
+          }
+          card.appendChild(altPanel);
+        }
+      })(ex, S.selectedSportDay, exIdx);
 
       p.appendChild(card);
     });

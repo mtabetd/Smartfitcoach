@@ -1,12 +1,16 @@
 // MTD Macro Calculator — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'mtd-v9';
-const RUNTIME_CACHE = 'mtd-runtime-v9';
+const CACHE_VERSION = 'mtd-v10';
+const RUNTIME_CACHE = 'mtd-runtime-v10';
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [
   './',
   './index.html',
+  './security-init.js',
+  './gate.js',
+  './error-boundary.js',
+  './sw-register.js',
   './app-core.js',
   './app-main.js',
   './app-sport.js',
