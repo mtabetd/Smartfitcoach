@@ -3380,6 +3380,7 @@
     'Jus de citron': 'Jus de citron',
     'Cannelle': 'Cannelle moulue',
     'Pincée de sel': 'Sel',
+    "Purée d'amande": "Beurre d'amande",
   };
 
   function getPricePer(ingredientName, unit) {

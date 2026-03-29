@@ -3406,7 +3406,157 @@ var WHEY_SMOOTHIES = [
   { id:'sm_gingerbread_01', name:"Pain d'\u00c9pices Hivernal", flavors:['gingerbread'], goal:['recovery','muscle'], timing:'anytime', cal:290, p:31, c:22, f:9, prep:'2min',
     ingredients:[{name:'Whey pain d\'\u00e9pices',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Gingembre r\u00e2p\u00e9',qty:5,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
     steps:['Mixer tous les ingrédients 20 secondes','Saupoudrer de cannelle si souhaité'],
-    tips:'Le gingembre frais amplifie les épices de la whey. Excellent en récupération hivernale.' }
+    tips:'Le gingembre frais amplifie les épices de la whey. Excellent en récupération hivernale.' },
+
+  // === RASPBERRY #2-3 ===
+  { id:'sm_rasp_02', name:'Framboise Coco Flash', flavors:['raspberry'], goal:['fat_loss','recovery'], timing:'post', cal:192, p:25, c:19, f:2, prep:'1min',
+    ingredients:[{name:'Whey framboise',qty:30,unit:'g'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Fraises congelées',qty:80,unit:'g'}],
+    steps:['Verser l\'eau de coco dans le shaker','Ajouter la whey framboise, shaker 20 secondes','Écraser les fraises congelées dans le verre avant de servir'],
+    tips:'Les fraises congelées rafraîchissent sans blender — écrasez-les légèrement à la fourchette.' },
+  { id:'sm_rasp_03', name:'Framboise Myrtille Grec', flavors:['raspberry'], goal:['muscle','recovery'], timing:'post', cal:253, p:35, c:24, f:2, prep:'3min',
+    ingredients:[{name:'Whey framboise',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Myrtilles congelées',qty:80,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
+    steps:['Placer myrtilles + glaçons dans le blender','Ajouter yaourt, whey et miel','Mixer 30 secondes jusqu\'à texture lisse'],
+    tips:'Les myrtilles surgelées remplacent la glace pilée — texture naturellement épaisse et crémeuse.' },
+
+  // === CARAMEL SALÉ #2-3 ===
+  { id:'sm_caramel_02', name:'Caramel Lait Flash', flavors:['caramel_sale'], goal:['muscle','performance'], timing:'anytime', cal:280, p:32, c:15, f:10, prep:'1min',
+    ingredients:[{name:'Whey caramel salé',qty:30,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'}],
+    steps:['Verser le lait froid dans le shaker','Ajouter la whey caramel salé, shaker 30 secondes'],
+    tips:'Lait bien froid = mousse plus dense et goût caramel plus prononcé.' },
+  { id:'sm_caramel_03', name:'Caramel Banane Peanut Power', flavors:['caramel_sale'], goal:['muscle','performance'], timing:'pre', cal:391, p:34, c:37, f:12, prep:'4min',
+    ingredients:[{name:'Whey caramel salé',qty:30,unit:'g'},{name:'Banane',qty:100,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'},{name:'Lait demi-écrémé',qty:150,unit:'ml'}],
+    steps:['Couper la banane, mettre dans le blender avec le lait','Ajouter whey + beurre de cacahuète','Mixer 40 secondes'],
+    tips:'Une pincée de fleur de sel intensifie le contraste caramel-cacahuète.' },
+
+  // === COOKIES & CREAM #2-3 ===
+  { id:'sm_cookies_02', name:'Cookies Cacao Shaker', flavors:['cookies_cream'], goal:['muscle','fat_loss'], timing:'post', cal:282, p:34, c:20, f:8, prep:'1min',
+    ingredients:[{name:'Whey cookies',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:250,unit:'ml'},{name:'Cacao pur',qty:10,unit:'g'}],
+    steps:['Verser le lait dans le shaker, ajouter le cacao d\'abord pour éviter les grumeaux','Ajouter la whey cookies, shaker 30 secondes'],
+    tips:'Ajouter le cacao avant la whey évite qu\'il colle au fond du shaker.' },
+  { id:'sm_cookies_03', name:'Cookies Cream Banana Split', flavors:['cookies_cream'], goal:['muscle'], timing:'post', cal:363, p:41, c:28, f:10, prep:'4min',
+    ingredients:[{name:'Whey cookies',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:100,unit:'g'},{name:'Banane',qty:80,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'}],
+    steps:['Placer banane coupée, fromage blanc et beurre de cacahuète dans le blender','Ajouter la whey cookies','Mixer 45 secondes — texture épaisse à manger à la cuillère'],
+    tips:'Congeler la banane 2h avant pour une texture façon glace sans glaçons.' },
+
+  // === TIRAMISU #2-3 ===
+  { id:'sm_tiramisu_02', name:'Tiramisu Expresso Shaker', flavors:['tiramisu'], goal:['performance','muscle'], timing:'pre', cal:249, p:31, c:12, f:9, prep:'1min',
+    ingredients:[{name:'Whey tiramisu',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Café expresso froid',qty:60,unit:'ml'}],
+    steps:['Préparer un expresso et le laisser refroidir 2 min','Verser lait + café dans le shaker, ajouter la whey, shaker 20 secondes'],
+    tips:'La caféine amplifie la performance — idéal 30 min avant l\'effort.' },
+  { id:'sm_tiramisu_03', name:'Tiramisu Fromage Blanc Café', flavors:['tiramisu'], goal:['fat_loss','muscle'], timing:'anytime', cal:263, p:44, c:13, f:4, prep:'3min',
+    ingredients:[{name:'Whey tiramisu',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Café expresso froid',qty:80,unit:'ml'},{name:'Cacao pur',qty:10,unit:'g'},{name:'Cannelle',qty:2,unit:'g'}],
+    steps:['Verser le café froid dans le blender avec le fromage blanc','Ajouter whey, cacao et cannelle','Mixer 20 secondes — saupoudrer de cacao avant de servir'],
+    tips:'Texture épaisse façon dessert — peut se manger en bol avec des myrtilles.' },
+
+  // === ORANGE #2-3 ===
+  { id:'sm_orange_02', name:'Orange Coco Vitesse', flavors:['orange'], goal:['fat_loss','recovery'], timing:'post', cal:173, p:25, c:15, f:2, prep:'1min',
+    ingredients:[{name:'Whey orange',qty:30,unit:'g'},{name:'Eau de coco',qty:250,unit:'ml'}],
+    steps:['Verser l\'eau de coco froide dans le shaker','Ajouter la whey orange, shaker 20 secondes'],
+    tips:'Eau de coco + électrolytes naturels — idéal récupération cardio.' },
+  { id:'sm_orange_03', name:'Orange Ananas Tropical Grec', flavors:['orange'], goal:['recovery','performance'], timing:'post', cal:264, p:35, c:27, f:2, prep:'4min',
+    ingredients:[{name:'Whey orange',qty:30,unit:'g'},{name:'Ananas',qty:120,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Eau de coco',qty:100,unit:'ml'}],
+    steps:['Couper l\'ananas en morceaux, mettre dans le blender avec l\'eau de coco','Ajouter yaourt grec + whey orange','Mixer 30 secondes, servir avec dés d\'ananas frais'],
+    tips:'L\'ananas contient de la bromélaïne — enzyme anti-inflammatoire qui favorise la récupération.' },
+
+  // === BIRTHDAY CAKE #2-3 ===
+  { id:'sm_birthday_02', name:'Birthday Shake Express', flavors:['birthday_cake'], goal:['muscle'], timing:'anytime', cal:217, p:31, c:12, f:5, prep:'1min',
+    ingredients:[{name:'Whey birthday cake',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:200,unit:'ml'}],
+    steps:['Verser le lait dans le shaker','Ajouter la whey birthday cake, shaker 20 secondes'],
+    tips:'Boire immédiatement pour une texture mousseuse optimale.' },
+  { id:'sm_birthday_03', name:"Gâteau d'Anniversaire Tropical", flavors:['birthday_cake'], goal:['muscle','performance'], timing:'post', cal:327, p:30, c:36, f:7, prep:'3min',
+    ingredients:[{name:'Whey birthday cake',qty:30,unit:'g'},{name:'Lait entier',qty:150,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
+    steps:['Couper la banane, placer dans le blender','Ajouter lait, whey et miel','Mixer 30-45 secondes jusqu\'à texture lisse'],
+    tips:'Idéal dans les 30 min post-entraînement pour recharger les glucides.' },
+
+  // === CANNELLE #2-3 ===
+  { id:'sm_cinnamon_02', name:'Cannelle Pure Power', flavors:['cinnamon'], goal:['fat_loss'], timing:'anytime', cal:126, p:24, c:4, f:2, prep:'1min',
+    ingredients:[{name:'Whey cannelle',qty:30,unit:'g'},{name:'Eau',qty:250,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
+    steps:['Verser l\'eau froide dans le shaker','Ajouter whey cannelle + cannelle moulue, shaker 20 secondes'],
+    tips:'La cannelle amplifie le goût de la whey et aide à réguler la glycémie.' },
+  { id:'sm_cinnamon_03', name:'Bowl Cannelle Douce', flavors:['cinnamon'], goal:['muscle','recovery'], timing:'post', cal:326, p:41, c:36, f:2, prep:'3min',
+    ingredients:[{name:'Whey cannelle',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:150,unit:'g'},{name:'Banane',qty:80,unit:'g'},{name:'Cannelle',qty:2,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
+    steps:['Placer banane + yaourt grec + whey + cannelle + miel dans le blender','Mixer 30 secondes à pleine puissance'],
+    tips:'Riche en protéines, faible en graisses — parfait pour la récupération musculaire.' },
+
+  // === CHEESECAKE CITRON #2-3 ===
+  { id:'sm_cheesecake_02', name:'Cheesecake Frais Express', flavors:['cheesecake_citron'], goal:['fat_loss','muscle'], timing:'anytime', cal:218, p:42, c:8, f:2, prep:'1min',
+    ingredients:[{name:'Whey cheesecake citron',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Jus de citron',qty:30,unit:'ml'}],
+    steps:['Verser le fromage blanc dans le shaker large','Ajouter whey + jus de citron, shaker ou fouet 20 secondes'],
+    tips:'Le jus de citron frais renforce l\'acidité et donne un effet cheesecake très authentique.' },
+  { id:'sm_cheesecake_03', name:'Fraise Cheesecake Glacé', flavors:['cheesecake_citron'], goal:['fat_loss','recovery'], timing:'anytime', cal:246, p:35, c:22, f:2, prep:'4min',
+    ingredients:[{name:'Whey cheesecake citron',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Fraises congelées',qty:100,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
+    steps:['Placer fraises congelées + yaourt + whey + miel dans le blender','Ajouter glaçons, mixer 45 secondes jusqu\'à texture épaisse et glacée'],
+    tips:'Les fraises congelées accentuent la fraîcheur citronnée — ne pas décongeler avant usage.' },
+
+  // === TOFFEE #2-3 ===
+  { id:'sm_toffee_02', name:'Toffee Lait Flash', flavors:['toffee'], goal:['muscle'], timing:'anytime', cal:253, p:31, c:12, f:9, prep:'1min',
+    ingredients:[{name:'Whey toffee',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'}],
+    steps:['Verser le lait entier froid dans le shaker','Ajouter la whey toffee, shaker 20 secondes'],
+    tips:'Lait entier = profil caramel du toffee encore plus gourmand.' },
+  { id:'sm_toffee_03', name:'Toffee Banane Cacahuète', flavors:['toffee'], goal:['muscle','performance'], timing:'pre', cal:392, p:34, c:37, f:12, prep:'4min',
+    ingredients:[{name:'Whey toffee',qty:30,unit:'g'},{name:'Banane',qty:100,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'},{name:'Lait demi-écrémé',qty:150,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'}],
+    steps:['Couper la banane, mettre dans le blender avec le lait','Ajouter whey + beurre de cacahuète + glaçons','Mixer 45 secondes à pleine puissance'],
+    tips:'Glucides rapides (banane) + énergie durable (cacahuète) = pré-workout parfait.' },
+
+  // === CHOCOLAT BLANC #2-3 ===
+  { id:'sm_whitechoc_02', name:'Coco Blanc Léger', flavors:['white_chocolate'], goal:['fat_loss','recovery'], timing:'anytime', cal:178, p:25, c:15, f:2, prep:'1min',
+    ingredients:[{name:'Whey chocolat blanc',qty:30,unit:'g'},{name:'Eau de coco',qty:250,unit:'ml'}],
+    steps:['Verser l\'eau de coco fraîche dans le shaker','Ajouter la whey chocolat blanc, shaker 20 secondes'],
+    tips:'Eau de coco + électrolytes naturels — idéal après effort intense sous la chaleur.' },
+  { id:'sm_whitechoc_03', name:'Chocolat Blanc Myrtille Amande', flavors:['white_chocolate'], goal:['muscle','recovery'], timing:'post', cal:337, p:33, c:22, f:13, prep:'4min',
+    ingredients:[{name:'Whey chocolat blanc',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:150,unit:'ml'},{name:'Myrtilles congelées',qty:80,unit:'g'},{name:'Purée d\'amande',qty:15,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
+    steps:['Verser le lait dans le blender, ajouter myrtilles congelées + glaçons','Incorporer whey + purée d\'amande','Mixer 45 secondes jusqu\'à texture onctueuse et violacée'],
+    tips:'Myrtilles riches en antioxydants — parfaites pour réduire l\'inflammation post-effort.' },
+
+  // === PIÑA COLADA #2-3 ===
+  { id:'sm_pina_02', name:'Coco Express', flavors:['pina_colada'], goal:['muscle','performance'], timing:'post', cal:173, p:25, c:15, f:2, prep:'1min',
+    ingredients:[{name:'Whey piña colada',qty:30,unit:'g'},{name:'Eau de coco',qty:250,unit:'ml'}],
+    steps:['Verser l\'eau de coco dans le shaker','Ajouter la whey piña colada, shaker 20 secondes'],
+    tips:'L\'eau de coco froide rend le shaker ultra-rafraîchissant après l\'effort.' },
+  { id:'sm_pina_03', name:'Tropicale Crémeuse', flavors:['pina_colada'], goal:['muscle','recovery'], timing:'post', cal:217, p:25, c:21, f:4, prep:'3min',
+    ingredients:[{name:'Whey piña colada',qty:30,unit:'g'},{name:'Ananas',qty:100,unit:'g'},{name:'Eau de coco',qty:100,unit:'ml'},{name:'Lait de coco',qty:30,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'}],
+    steps:['Couper l\'ananas, mettre dans le blender avec glaçons','Ajouter eau de coco + lait de coco','Incorporer la whey, mixer 30 secondes à pleine puissance'],
+    tips:'Un filet de jus de citron vert rehausse l\'acidité naturelle de l\'ananas.' },
+
+  // === VANILLE CANNELLE #2-3 ===
+  { id:'sm_vanilla_cinn_02', name:'Lait Vanille Cannelle Flash', flavors:['vanilla_cinnamon'], goal:['muscle','recovery'], timing:'anytime', cal:253, p:31, c:13, f:9, prep:'1min',
+    ingredients:[{name:'Whey vanille cannelle',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
+    steps:['Verser le lait entier froid dans le shaker','Ajouter whey + cannelle, shaker 25 secondes'],
+    tips:'Lait entier bien froid pour une texture plus onctueuse et mousseuse.' },
+  { id:'sm_vanilla_cinn_03', name:'Banana Vanille Épicée', flavors:['vanilla_cinnamon'], goal:['muscle','performance'], timing:'pre', cal:333, p:44, c:32, f:3, prep:'4min',
+    ingredients:[{name:'Whey vanille cannelle',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:150,unit:'g'},{name:'Banane',qty:80,unit:'g'},{name:'Lait demi-écrémé',qty:100,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
+    steps:['Éplucher et couper la banane en rondelles','Mettre yaourt + banane + lait dans le blender','Ajouter whey + cannelle, mixer 30 secondes'],
+    tips:'Congeler la banane à l\'avance pour un smoothie glacé sans glaçons.' },
+
+  // === SPÉCULOOS #2-3 ===
+  { id:'sm_speculoos_02', name:'Shaker Biscuit Lacté', flavors:['speculoos'], goal:['muscle','fat_loss'], timing:'post', cal:237, p:32, c:16, f:5, prep:'1min',
+    ingredients:[{name:'Whey spéculoos',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:250,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
+    steps:['Verser le lait froid dans le shaker','Ajouter whey spéculoos + cannelle, shaker 20 secondes'],
+    tips:'La cannelle amplifie les notes épicées du spéculoos sans ajouter de calories.' },
+  { id:'sm_speculoos_03', name:'Fromage Blanc Épice Dorée', flavors:['speculoos'], goal:['fat_loss','muscle'], timing:'anytime', cal:319, p:43, c:33, f:2, prep:'4min',
+    ingredients:[{name:'Whey spéculoos',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Banane',qty:70,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Cannelle',qty:2,unit:'g'}],
+    steps:['Couper la banane, placer dans le blender avec fromage blanc + miel','Ajouter whey + cannelle','Mixer 25 secondes jusqu\'à crème homogène'],
+    tips:'Texture épaisse — peut se manger à la cuillère comme un bol protéiné.' },
+
+  // === CAPPUCCINO #2-3 ===
+  { id:'sm_cappuccino_02', name:'Expresso Lait Flash', flavors:['cappuccino'], goal:['performance','muscle'], timing:'pre', cal:253, p:31, c:13, f:9, prep:'1min',
+    ingredients:[{name:'Whey cappuccino',qty:30,unit:'g'},{name:'Café expresso froid',qty:100,unit:'ml'},{name:'Lait entier',qty:200,unit:'ml'}],
+    steps:['Préparer un double expresso, laisser refroidir','Verser café + lait dans le shaker, ajouter whey, shaker 20 secondes'],
+    tips:'La caféine double l\'effet énergisant avant l\'entraînement.' },
+  { id:'sm_cappuccino_03', name:'Frozen Cappuccino Banana', flavors:['cappuccino'], goal:['muscle','recovery'], timing:'post', cal:255, p:35, c:25, f:2, prep:'4min',
+    ingredients:[{name:'Whey cappuccino',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Café expresso froid',qty:50,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
+    steps:['Préparer un expresso simple, laisser refroidir','Couper la banane en rondelles','Mixer tous les ingrédients + glaçons 40 secondes'],
+    tips:'Banane bien mûre pour équilibrer l\'amertume du café.' },
+
+  // === PAIN D'ÉPICES #2-3 ===
+  { id:'sm_gingerbread_02', name:"Shaker Pain d'Épices Lacté", flavors:['gingerbread'], goal:['muscle','recovery'], timing:'post', cal:233, p:32, c:15, f:5, prep:'1min',
+    ingredients:[{name:"Whey pain d'épices",qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:250,unit:'ml'},{name:'Gingembre râpé',qty:5,unit:'g'}],
+    steps:['Verser le lait froid dans le shaker','Ajouter whey + gingembre râpé, shaker 25 secondes'],
+    tips:'Le gingembre frais râpé donne un piquant naturel qui réveille les saveurs du pain d\'épices.' },
+  { id:'sm_gingerbread_03', name:'Bol Épicé Fromage Banane', flavors:['gingerbread'], goal:['fat_loss','muscle'], timing:'anytime', cal:315, p:43, c:32, f:2, prep:'4min',
+    ingredients:[{name:"Whey pain d'épices",qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Banane',qty:70,unit:'g'},{name:'Gingembre râpé',qty:5,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
+    steps:['Couper la banane en morceaux','Placer fromage blanc + banane + miel dans le blender','Ajouter whey + gingembre râpé, mixer 30 secondes'],
+    tips:'Râper le gingembre très finement pour éviter les morceaux fibreux dans la texture.' }
 ];
 
 // ─── RECIPE PICKER ───────────────────────────────────────────────────────────
