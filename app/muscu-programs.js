@@ -1769,6 +1769,145 @@ function buildPersonalizedMuscuPlan(S) {
 
 window.buildPersonalizedMuscuPlan = buildPersonalizedMuscuPlan;
 
+// ─── VIDEO URL GENERATOR ─────────────────────────────────────────────────────
+function getExerciseVideoUrl(name) {
+  if (!name) return null;
+  var q = name.toLowerCase()
+    .replace(/[éèêë]/g, 'e').replace(/[àâä]/g, 'a').replace(/[îï]/g, 'i')
+    .replace(/[ùûü]/g, 'u').replace(/[ôö]/g, 'o').replace(/ç/g, 'c')
+    .replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '+');
+  return 'https://www.youtube.com/results?search_query=' + q + '+exercise+tutorial&sp=EgIYAQ%253D%253D';
+}
+window.getExerciseVideoUrl = getExerciseVideoUrl;
+
+// ─── EXERCISE ALTERNATIVES DATABASE ──────────────────────────────────────────
+// Organized by muscle group. Used by swap button in exercise cards.
+var EXERCISE_ALTERNATIVES = {
+  pectoraux: [
+    { n: 'Développé couché', m: 'Pectoraux', eq: 'Barre + banc', sets: '4×8-12', rest: '90s' },
+    { n: 'Développé haltères couché', m: 'Pectoraux', eq: 'Haltères + banc', sets: '4×10-12', rest: '90s' },
+    { n: 'Développé incliné haltères', m: 'Pectoraux supérieurs', eq: 'Haltères + banc incliné', sets: '3×10-12', rest: '75s' },
+    { n: 'Pompes classiques', m: 'Pectoraux', eq: 'Poids du corps', sets: '4×15-20', rest: '60s' },
+    { n: 'Pompes déclinées', m: 'Pectoraux supérieurs', eq: 'Poids du corps', sets: '3×12-15', rest: '60s' },
+    { n: 'Écarté haltères couché', m: 'Pectoraux', eq: 'Haltères + banc', sets: '3×12-15', rest: '60s' },
+    { n: 'Écarté poulie basse croisée', m: 'Pectoraux', eq: 'Poulie basse', sets: '3×12-15', rest: '60s' },
+    { n: 'Dips prise large', m: 'Pectoraux / Triceps', eq: 'Barres parallèles', sets: '3×10-15', rest: '90s' }
+  ],
+  dos: [
+    { n: 'Tractions pronation', m: 'Grand dorsal', eq: 'Barre de traction', sets: '4×6-10', rest: '120s' },
+    { n: 'Tractions supination', m: 'Grand dorsal / Biceps', eq: 'Barre de traction', sets: '4×6-10', rest: '120s' },
+    { n: 'Tirage barre nuque', m: 'Grand dorsal', eq: 'Poulie haute', sets: '4×10-12', rest: '90s' },
+    { n: 'Tirage horizontal câble', m: 'Dorsaux / Rhomboïdes', eq: 'Câble horizontal', sets: '4×10-12', rest: '90s' },
+    { n: 'Rowing haltère unilatéral', m: 'Grand dorsal / Trapèzes', eq: 'Haltère + banc', sets: '4×10-12', rest: '75s' },
+    { n: 'Rowing barre', m: 'Grand dorsal / Trapèzes', eq: 'Barre', sets: '4×8-12', rest: '90s' },
+    { n: 'Shrugs haltères', m: 'Trapèzes supérieurs', eq: 'Haltères', sets: '4×12-15', rest: '60s' },
+    { n: 'Deadlift roumain', m: 'Dorsaux / Ischios / Fessiers', eq: 'Barre', sets: '4×8-10', rest: '120s' }
+  ],
+  epaules: [
+    { n: 'Développé militaire barre', m: 'Épaules', eq: 'Barre', sets: '4×8-12', rest: '90s' },
+    { n: 'Développé haltères assis', m: 'Épaules', eq: 'Haltères + banc', sets: '4×10-12', rest: '75s' },
+    { n: 'Élévations latérales', m: 'Deltoïde latéral', eq: 'Haltères', sets: '4×12-15', rest: '60s' },
+    { n: 'Élévations frontales', m: 'Deltoïde antérieur', eq: 'Haltères', sets: '3×12-15', rest: '60s' },
+    { n: 'Oiseau haltères', m: 'Deltoïde postérieur', eq: 'Haltères', sets: '4×12-15', rest: '60s' },
+    { n: 'Face pull câble', m: 'Deltoïde postérieur / Trapèzes', eq: 'Câble + corde', sets: '4×15', rest: '60s' },
+    { n: 'Arnold press', m: 'Épaules (3 chefs)', eq: 'Haltères', sets: '3×10-12', rest: '75s' },
+    { n: 'Tirage menton', m: 'Deltoïde / Trapèzes', eq: 'Barre ou câble', sets: '3×12', rest: '60s' }
+  ],
+  biceps: [
+    { n: 'Curl barre droite', m: 'Biceps', eq: 'Barre', sets: '4×10-12', rest: '60s' },
+    { n: 'Curl haltères alterné', m: 'Biceps / Brachial', eq: 'Haltères', sets: '4×10-12', rest: '60s' },
+    { n: 'Curl marteau', m: 'Brachioradial / Biceps', eq: 'Haltères', sets: '3×12', rest: '60s' },
+    { n: 'Curl incliné haltères', m: 'Biceps chef long', eq: 'Haltères + banc incliné', sets: '3×10-12', rest: '60s' },
+    { n: 'Curl pupitre (scott curl)', m: 'Biceps chef court', eq: 'Barre + pupitre', sets: '3×10-12', rest: '60s' },
+    { n: 'Curl câble basse poulie', m: 'Biceps', eq: 'Câble bas', sets: '3×12-15', rest: '60s' },
+    { n: 'Curl concentré', m: 'Biceps (peak)', eq: 'Haltère', sets: '3×12-15', rest: '45s' }
+  ],
+  triceps: [
+    { n: 'Dips triceps banc', m: 'Triceps', eq: 'Banc', sets: '4×12-15', rest: '60s' },
+    { n: 'Extension barre couché', m: 'Triceps', eq: 'Barre EZ + banc', sets: '4×10-12', rest: '75s' },
+    { n: 'Extension haltère tête', m: 'Triceps chef long', eq: 'Haltère', sets: '3×12', rest: '60s' },
+    { n: 'Pushdown câble corde', m: 'Triceps', eq: 'Câble + corde', sets: '4×12-15', rest: '60s' },
+    { n: 'Pushdown câble barre', m: 'Triceps', eq: 'Câble + barre', sets: '4×12-15', rest: '60s' },
+    { n: 'Kick-back haltère', m: 'Triceps chef latéral', eq: 'Haltère', sets: '3×12-15', rest: '45s' },
+    { n: 'Close grip bench press', m: 'Triceps / Pectoraux', eq: 'Barre + banc', sets: '4×8-10', rest: '90s' }
+  ],
+  quadriceps: [
+    { n: 'Squat barre', m: 'Quadriceps / Fessiers', eq: 'Barre + rack', sets: '5×5-8', rest: '180s' },
+    { n: 'Leg press', m: 'Quadriceps / Fessiers', eq: 'Machine leg press', sets: '4×10-15', rest: '120s' },
+    { n: 'Fente avant haltères', m: 'Quadriceps / Fessiers', eq: 'Haltères', sets: '4×10-12', rest: '90s' },
+    { n: 'Fente bulgare haltères', m: 'Quadriceps / Fessiers', eq: 'Haltères + banc', sets: '4×10-12', rest: '90s' },
+    { n: 'Extension jambes machine', m: 'Quadriceps', eq: 'Machine extension', sets: '4×12-15', rest: '60s' },
+    { n: 'Squat gobelet kettlebell', m: 'Quadriceps / Fessiers', eq: 'Kettlebell', sets: '4×12-15', rest: '75s' },
+    { n: 'Squat poids de corps', m: 'Quadriceps / Fessiers', eq: 'Poids du corps', sets: '4×15-20', rest: '60s' },
+    { n: 'Hack squat machine', m: 'Quadriceps', eq: 'Machine hack squat', sets: '4×10-12', rest: '120s' }
+  ],
+  ischios: [
+    { n: 'Deadlift roumain barre', m: 'Ischios / Fessiers / Dorsaux', eq: 'Barre', sets: '4×8-12', rest: '120s' },
+    { n: 'Leg curl allongé', m: 'Ischios', eq: 'Machine leg curl', sets: '4×10-12', rest: '75s' },
+    { n: 'Leg curl assis', m: 'Ischios', eq: 'Machine leg curl assis', sets: '4×10-12', rest: '75s' },
+    { n: 'Deadlift sumo', m: 'Ischios / Fessiers / Adducteurs', eq: 'Barre', sets: '4×6-10', rest: '150s' },
+    { n: 'Good morning', m: 'Ischios / Bas du dos', eq: 'Barre', sets: '3×10-12', rest: '90s' },
+    { n: 'Nordic curl', m: 'Ischios excentrique', eq: 'Partenaire ou machine', sets: '3×6-8', rest: '120s' }
+  ],
+  fessiers: [
+    { n: 'Hip thrust barre', m: 'Fessiers', eq: 'Barre + banc', sets: '4×10-15', rest: '90s' },
+    { n: 'Hip thrust haltère', m: 'Fessiers', eq: 'Haltère + banc', sets: '4×12-15', rest: '75s' },
+    { n: 'Squat sumo', m: 'Fessiers / Adducteurs', eq: 'Barre ou haltère', sets: '4×10-15', rest: '90s' },
+    { n: 'Fente reverse haltères', m: 'Fessiers / Quadriceps', eq: 'Haltères', sets: '4×12', rest: '75s' },
+    { n: 'Abduction hanche câble', m: 'Fessiers / Abducteurs', eq: 'Câble bas', sets: '4×15-20', rest: '60s' },
+    { n: 'Donkey kicks', m: 'Grand fessier', eq: 'Poids du corps', sets: '3×15-20', rest: '45s' },
+    { n: 'Glute bridge bilatéral', m: 'Fessiers', eq: 'Poids du corps', sets: '4×15-20', rest: '45s' }
+  ],
+  mollets: [
+    { n: 'Mollets debout machine', m: 'Mollets', eq: 'Machine mollets', sets: '5×12-20', rest: '60s' },
+    { n: 'Mollets debout haltères', m: 'Mollets', eq: 'Haltères', sets: '4×15-20', rest: '60s' },
+    { n: 'Mollets assis machine', m: 'Soléaire', eq: 'Machine mollets assis', sets: '4×15-20', rest: '60s' },
+    { n: 'Mollets marche sur pointes', m: 'Mollets', eq: 'Poids du corps', sets: '3×20-30', rest: '30s' },
+    { n: 'Mollets unilatéraux', m: 'Mollets', eq: 'Poids du corps ou haltère', sets: '4×15', rest: '45s' }
+  ],
+  abdos: [
+    { n: 'Crunch classique', m: 'Abdominaux', eq: 'Poids du corps', sets: '4×20', rest: '45s' },
+    { n: 'Relevé de jambes suspendu', m: 'Abdominaux bas', eq: 'Barre de traction', sets: '4×10-15', rest: '60s' },
+    { n: 'Planche abdominale', m: 'Abdominaux / Core', eq: 'Poids du corps', sets: '4×30-60s', rest: '45s' },
+    { n: 'Russian twist', m: 'Obliques', eq: 'Poids du corps ou disque', sets: '3×20', rest: '45s' },
+    { n: 'Roulette abdominale', m: 'Abdominaux / Core', eq: 'Roulette', sets: '4×10-15', rest: '60s' },
+    { n: 'Mountain climbers', m: 'Abdominaux / Core', eq: 'Poids du corps', sets: '4×30s', rest: '30s' },
+    { n: 'Crunch câble poulie haute', m: 'Abdominaux', eq: 'Câble + corde', sets: '4×15-20', rest: '45s' }
+  ]
+};
+
+function getAlternativeExercises(muscle, excludeName, maxCount) {
+  if (!muscle) return [];
+  var ml = muscle.toLowerCase();
+  // Map incoming muscle strings to alternative DB keys
+  var dbKey = null;
+  var keyMap = [
+    ['pectoraux', 'pectoraux'], ['poitrine', 'pectoraux'], ['chest', 'pectoraux'],
+    ['dos', 'dos'], ['dorsal', 'dos'], ['dorsaux', 'dos'], ['back', 'dos'], ['trapèze', 'dos'], ['trapeze', 'dos'],
+    ['épaule', 'epaules'], ['epaule', 'epaules'], ['deltoïde', 'epaules'], ['shoulder', 'epaules'],
+    ['biceps', 'biceps'], ['brachial', 'biceps'],
+    ['triceps', 'triceps'],
+    ['quadriceps', 'quadriceps'], ['quad', 'quadriceps'], ['jambes', 'quadriceps'], ['cuisse', 'quadriceps'],
+    ['ischios', 'ischios'], ['ischio', 'ischios'], ['hamstring', 'ischios'],
+    ['fessier', 'fessiers'], ['glute', 'fessiers'], ['fesses', 'fessiers'],
+    ['mollet', 'mollets'], ['calf', 'mollets'], ['calves', 'mollets'],
+    ['abdo', 'abdos'], ['abdominaux', 'abdos'], ['core', 'abdos']
+  ];
+  for (var ki = 0; ki < keyMap.length; ki++) {
+    if (ml.indexOf(keyMap[ki][0]) !== -1) { dbKey = keyMap[ki][1]; break; }
+  }
+  if (!dbKey) return [];
+  var pool = EXERCISE_ALTERNATIVES[dbKey] || [];
+  var exLow = excludeName ? excludeName.toLowerCase() : '';
+  var results = [];
+  for (var pi = 0; pi < pool.length; pi++) {
+    if (pool[pi].n.toLowerCase() !== exLow) results.push(pool[pi]);
+    if (results.length >= (maxCount || 3)) break;
+  }
+  return results;
+}
+window.getAlternativeExercises = getAlternativeExercises;
+
 window.YATES_PROGRAMS = YATES_PROGRAMS;
 window.COLEMAN_PROGRAMS = COLEMAN_PROGRAMS;
 window.RAMBOD_PROGRAMS = RAMBOD_PROGRAMS;
