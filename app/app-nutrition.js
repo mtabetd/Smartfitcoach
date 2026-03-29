@@ -1160,10 +1160,14 @@ function renderStep7(p) {
       {id: 'lemon',      label: 'Citron',           icon: '\uD83C\uDF4B'},
       {id: 'banana',     label: 'Banane',           icon: '\uD83C\uDF4C'},
       {id: 'hazelnut',   label: 'Noisette',         icon: '\uD83C\uDF30'},
+      {id: 'pistachio',  label: 'Pistache',         icon: '\uD83FAB'},
       {id: 'matcha',     label: 'Matcha',           icon: '\uD83C\uDF75'},
       {id: 'unflavored', label: 'Nature/Unflavored', icon: '\uD83E\uDED9'}
     ];
-    p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:12px'}, 'Parfums pr\u00e9f\u00e9r\u00e9s'));
+    var wheyLabel = h('div', {'class': 'section-label', style: 'margin-top:12px'});
+    wheyLabel.appendChild(document.createTextNode('Parfums que vous poss\u00e9dez'));
+    p.appendChild(wheyLabel);
+    p.appendChild(h('div', {style:'font-size:12px;color:var(--fg2,#888);margin-bottom:8px;line-height:1.4'}, 'S\u00e9lectionnez les parfums de whey que vous avez chez vous. Seules les recettes compatibles vous seront propos\u00e9es.'));
     var flavorGrid = h('div', {'class': 'chip-wrap', style: 'gap:8px;margin-top:4px'});
     wheyFlavors.forEach(function(f) {
       var selected = S.wheyFlavors.indexOf(f.id) !== -1;
@@ -3324,6 +3328,12 @@ function renderSmoothieBar(p) {
   var flavors = S.wheyFlavors || [];
   var allergies = (S.allergies || []).filter(function(a) { return a !== 'Aucune'; });
   var intolerances = (S.intolerances || []).filter(function(a) { return a !== 'Aucune'; });
+  if (!flavors.length) {
+    var flavorTip = h('div', {style:'background:rgba(107,63,160,0.08);border-left:3px solid #6B3FA0;padding:12px 16px;border-radius:0 10px 10px 0;margin-bottom:16px'});
+    flavorTip.appendChild(h('div', {style:'font-size:13px;font-weight:700;color:#6B3FA0;margin-bottom:4px'}, '\uD83D\uDCA1 S\u00e9lectionnez vos parfums'));
+    flavorTip.appendChild(h('div', {style:'font-size:12px;color:var(--fg2,#666);line-height:1.5'}, 'Vous voyez toutes les recettes car aucun parfum n\'est s\u00e9lectionn\u00e9. Pour filtrer selon ce que vous avez chez vous, allez dans Pr\u00e9f\u00e9rences > Whey & Suppl\u00e9ments et cochez vos parfums.'));
+    p.appendChild(flavorTip);
+  }
   // Vérifie si un smoothie contient un ingrédient allergène ou intolérant
   function smoothieHasAllergen(sm) {
     var ingText = (sm.ingredients || []).map(function(i) { return i.name; }).join(' ').toLowerCase();
