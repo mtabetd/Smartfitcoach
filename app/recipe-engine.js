@@ -16285,7 +16285,8 @@
     if (/^(œuf[s]?|oeuf[s]?|blanc[s]?|jaune[s]?)$/.test(u)) return 'pce';
     if (/^c\.?à\.?soupe$|^c\.?a\.?soupe$|^c\.\u00e0\.soupe$/.test(u)) return 'cs';
     if (/^c\.?à\.?caf[eé]$|^c\.?a\.?cafe$/.test(u)) return 'cc';
-    if (u === 'cl') return 'ml'; // on ramènera cl→ml lors de l'accumulation
+    if (u === 'cl') return 'ml';
+    if (/^pinc[eé][e]?s?$/.test(u)) return 'pincee'; // pincée / pincee / pincées → clé d'agrégation unique
     return u;
   }
 
@@ -16297,13 +16298,13 @@
       part = part.replace(/\s*\([^)]*\)/g, '').trim();
 
       // ── Format "qty unit name" produit par toSimpleFormat ─────────────────
-      // Ex: "2 pce Œuf", "100 ml Lait écrémé", "1 c.à.soupe Beurre"
-      var mFwd = part.match(/^([\d.]+)\s+(g|ml|kg|l|L|pce|cs|cc|cl)\s+(.+)$/i);
+      // Ex: "2 pce Œuf", "100 ml Lait écrémé", "1 c.à.soupe Beurre", "1 pincée Sel"
+      var mFwd = part.match(/^([\d.]+)\s+(g|ml|kg|l|L|pce|cs|cc|cl|pinc[eé][e]?s?)\s+(.+)$/i);
       if (mFwd) {
-        return { name: mFwd[3].trim(), qty: parseFloat(mFwd[1]), unit: mFwd[2].toLowerCase() };
+        return { name: mFwd[3].trim(), qty: parseFloat(mFwd[1]), unit: _normUnit(mFwd[2]) };
       }
-      // Unités d'affichage françaises : "1 œuf Name", "2 c.à.soupe Name"
-      var mFr = part.match(/^([\d.]+)\s+(œuf[s]?|oeuf[s]?|blanc[s]?|jaune[s]?|c\.à\.soupe|c\.à\.café|c\.a\.soupe|c\.a\.cafe)\s+(.+)$/i);
+      // Unités d'affichage françaises : "1 œuf Name", "2 c.à.soupe Name", "1 pincée Sel"
+      var mFr = part.match(/^([\d.]+)\s+(œuf[s]?|oeuf[s]?|blanc[s]?|jaune[s]?|c\.à\.soupe|c\.à\.café|c\.a\.soupe|c\.a\.cafe|pinc[eé][e]?s?)\s+(.+)$/i);
       if (mFr) {
         return { name: mFr[3].trim(), qty: parseFloat(mFr[1]), unit: _normUnit(mFr[2]) };
       }
@@ -16318,7 +16319,7 @@
       }
 
       // ── Format standard "name qty unit" : "Flocons d'avoine 80g" ──────────
-      var m = part.match(/^(.+?)\s+([\d.]+)\s*(g|ml|kg|l|pce|cs|cc|cl)$/i);
+      var m = part.match(/^(.+?)\s+([\d.]+)\s*(g|ml|kg|l|pce|cs|cc|cl|pinc[eé][e]?s?)$/i);
       if (m) {
         return { name: m[1].trim(), qty: parseFloat(m[2]), unit: m[3].toLowerCase() };
       }
@@ -16343,6 +16344,11 @@
       // Œufs → arrondir au pack de 6
       if (/oeuf|œuf/i.test(lname)) n = Math.ceil(n / 6) * 6;
       return { qty: n, unit: 'pce' };
+    }
+
+    // ── Pincée (épices en trace) → garder tel quel ────────────────────────
+    if (unit === 'pincee' || unit === 'pincée') {
+      return { qty: Math.max(1, Math.ceil(qty)), unit: 'pincée' };
     }
 
     // ── Cuillères : condiments/épices → garder, solides → reconvertir en g ─
@@ -16485,6 +16491,22 @@
       // Whey / protéine poudre → sac 500 g min
       if (/whey|prot[eé]ine.*poudre|caséine|collagène/i.test(lname)) {
         return { qty: Math.max(500, Math.ceil(inG / 500) * 500), unit: 'g' };
+      }
+      // Tahini / purée de sésame → pot 250 g min
+      if (/tahini|pur[eé]e.*s[eé]same|beurre.*s[eé]same/i.test(lname)) {
+        return { qty: Math.max(250, Math.ceil(inG / 250) * 250), unit: 'g' };
+      }
+      // Pâte miso → barquette 200 g min
+      if (/miso/i.test(lname)) {
+        return { qty: Math.max(200, Math.ceil(inG / 200) * 200), unit: 'g' };
+      }
+      // Pesto → pot 190 g standard
+      if (/pesto/i.test(lname)) {
+        return { qty: Math.max(190, Math.ceil(inG / 190) * 190), unit: 'g' };
+      }
+      // Beurre de noix/oléagineux → pot 250 g min (si catégorisé en épicerie sèche)
+      if (/beurre\s+de\s+(cacahu|amande|noix|cajou|noisette|pistache|arachide)/i.test(lname)) {
+        return { qty: Math.max(250, Math.ceil(inG / 250) * 250), unit: 'g' };
       }
       // Chocolat → tablette 100 g
       if (/chocolat/i.test(lname)) {
