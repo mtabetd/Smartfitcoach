@@ -2053,7 +2053,7 @@ function renderStep9(p) {
               break;
             }
           }
-        } else if (r._id.indexOf('R') === 0) {
+        } else {
           var _cost = window.RecipeEngine.calcRecipeCost(r._id, r._scalingRatio || 1);
           if (_cost && _cost.totalMAD > 0) {
             mealPrice = '~' + Math.round(_cost.totalMAD) + ' DH';

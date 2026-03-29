@@ -3412,6 +3412,29 @@
         console.warn('[prices-db] pricePerPce non disponible pour "' + ingredientName + '"');
         return null;
 
+      case 'kg':
+        if (entry.pricePerG !== undefined) return entry.pricePerG * 1000;
+        console.warn('[prices-db] pricePerG non disponible pour "' + ingredientName + '" (kg)');
+        return null;
+
+      case 'l':
+        if (entry.pricePerMl !== undefined) return entry.pricePerMl * 1000;
+        if (entry.pricePerG !== undefined) return entry.pricePerG * 1000;
+        console.warn('[prices-db] pricePerMl non disponible pour "' + ingredientName + '" (l)');
+        return null;
+
+      case 'cs':
+        // Cuillère à soupe ≈ 15ml ou 12g selon l'ingrédient
+        if (entry.pricePerMl !== undefined) return entry.pricePerMl * 15;
+        if (entry.pricePerG !== undefined) return entry.pricePerG * 12;
+        return null;
+
+      case 'cc':
+        // Cuillère à café ≈ 5ml ou 4g
+        if (entry.pricePerMl !== undefined) return entry.pricePerMl * 5;
+        if (entry.pricePerG !== undefined) return entry.pricePerG * 4;
+        return null;
+
       default:
         console.warn('[prices-db] Unité inconnue "' + unit + '" pour "' + ingredientName + '"');
         return null;

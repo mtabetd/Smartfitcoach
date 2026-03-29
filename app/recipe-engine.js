@@ -16513,7 +16513,7 @@
         // Recettes R201+ : utilise les ingrédients scalés si disponibles
         if (recipe._id && recipe._scaledIngredients && recipe._scaledIngredients.length > 0) {
           recipe._scaledIngredients.forEach(function(ing) {
-            var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim();
+            var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim().toLowerCase();
             if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
             consolidated[key].qty += ing.scaledQty || ing.qty || 0;
             if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
@@ -16524,7 +16524,7 @@
           if (fullRecipe && fullRecipe.ingredients) {
             fullRecipe.ingredients.forEach(function(ing) {
               var scaledQty = Math.round((ing.qty / fullRecipe.servings) * scalingRatio * 10) / 10;
-              var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim();
+              var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim().toLowerCase();
               if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
               consolidated[key].qty += scaledQty;
               if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
@@ -16535,7 +16535,7 @@
             var parsedIngredients = parseIngredientsString(recipe.i);
             parsedIngredients.forEach(function(ing) {
               var qty = Math.round(ing.qty * scalingRatioFallback * 10) / 10;
-              var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim();
+              var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim().toLowerCase();
               if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
               consolidated[key].qty += qty;
               if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
@@ -16549,7 +16549,7 @@
             }
             if (sm && sm.ingredients) {
               sm.ingredients.forEach(function(ing) {
-                var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim();
+                var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim().toLowerCase();
                 if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
                 consolidated[key].qty += ing.qty || 0;
                 if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
@@ -16560,7 +16560,7 @@
           // Recette sans _id : parser le champ `i` string (fallback Repas libre)
           var parsedFallback = parseIngredientsString(recipe.i);
           parsedFallback.forEach(function(ing) {
-            var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim();
+            var key = ing.name.trim().toLowerCase() + '||' + ing.unit.trim().toLowerCase();
             if (!consolidated[key]) consolidated[key] = { name: ing.name, qty: 0, unit: ing.unit, recipes: [] };
             consolidated[key].qty += ing.qty || 0;
             if (consolidated[key].recipes.indexOf(recipeName) < 0) consolidated[key].recipes.push(recipeName);
