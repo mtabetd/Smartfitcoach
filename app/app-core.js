@@ -2804,6 +2804,7 @@ function swapMeal(di,slot){
   // Autres slots — swap recette normale
   var pool=filterRecipes(getPool(slot),slot);
   var cur=s.weekPlan[di][slot];
+  if(!cur)return; // slot vide (plan IF 2-3 repas) → rien à swapper
   var av=pool.filter(function(r){return r.n!==cur.n});
   if(!av.length)return;
   av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});
