@@ -6511,10 +6511,12 @@
         { name: 'Miel', qty: 20, unit: 'g' }
       ],
       steps: [
-        'Mixer 120g de noix de cajou jusqu\'à obtenir une pâte lisse. Ajouter whey neutre, huile de coco fondue, matcha et miel. Mixer jusqu\'à homogénéité. La pâte doit être souple et non collante.',
-        'Si trop molle, réfrigérer 20 min. Prélever ~25g de pâte, former un disque, placer une noix de cajou entière au centre, refermer et rouler en boule parfaite.',
-        'Rouler chaque bouchée dans la noix de coco râpée pour obtenir l\'enrobage blanc caractéristique. Appuyer légèrement pour que la coco adhère.',
-        'Disposer sur une plaque. Réfrigérer 1h minimum. Les bouchées se bonifient le lendemain. Conservation : 10 jours au frigo.'
+        'Mixer 120 g de noix de cajou à sec pendant 2 min jusqu\'à obtenir une pâte de cajou lisse et légèrement huileuse — c\'est cette texture naturelle qui lie la bouchée sans ajout excessif de matière grasse.',
+        'Tamiser le matcha au-dessus du bol avant de l\'incorporer : cela évite les grumeaux verts et garantit une couleur uniforme. Ajouter la whey, l\'huile de coco fondue (pas chaude) et le miel. Mixer 30 secondes.',
+        'Tester la consistance : la pâte doit se détacher des parois et former une boule sans coller. Si elle est trop molle, réfrigérer 20 min à plat sur une assiette, pas dans un récipient fermé (condensation évitée).',
+        'Peser des portions de 25 g avec une cuillère à glace pour l\'uniformité. Aplatir chaque portion en disque, déposer une cajou entière au centre, refermer en pinçant bien les bords, puis rouler entre les paumes en mouvements circulaires fermes.',
+        'Verser la noix de coco râpée dans une assiette creuse. Déposer la boule et la faire rouler en appuyant légèrement — l\'enrobage doit adhérer en une couche dense et blanche, caractéristique du Raffaello.',
+        'Disposer sur une plaque chemisée et réfrigérer 1 h minimum. Les bouchées sont meilleures le lendemain : le matcha développe ses arômes au froid.'
       ]
     },
 
@@ -6538,12 +6540,12 @@
         { name: 'Stevia', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Faire tremper les feuilles de gélatine 5 min dans de l\'eau froide.',
-        'Chauffer le lait à feu doux (sans bouillir). Essorer la gélatine et la dissoudre dans le lait chaud. Laisser tiédir 5 min.',
-        'Incorporer le fromage blanc, le miel et la vanille au lait. Fouetter jusqu\'à obtenir un mélange lisse.',
-        'Répartir dans 4 verrines ou ramequins. Réfrigérer au minimum 2h (ou toute la nuit).',
-        'Préparer le coulis : chauffer les fruits rouges surgelés dans une casserole avec le jus de citron et la stevia 5 min. Mixer et filtrer si désiré.',
-        'Au moment de servir, napper chaque panna cotta du coulis fruits rouges refroidi.'
+        'Plonger les feuilles de gélatine dans un grand volume d\'eau froide (pas tiède) pendant exactement 5 min. Une gélatine bien réhydratée fond proprement et ne laisse aucun fil.',
+        'Chauffer le lait à 80 °C (premier frémissement, jamais à ébullition). Essorer la gélatine entre les mains pour en chasser toute l\'eau, puis la dissoudre dans le lait chaud en fouettant 30 secondes. Laisser redescendre à 40 °C.',
+        'Dans un saladier froid, lisser le fromage blanc à la spatule souple. Verser le lait gélatineux en filet tout en mélangeant — ne jamais verser le fromage blanc dans le lait chaud, cela caille la protéine.',
+        'Ajouter le miel et la vanille. Passer le mélange au travers d\'une passoire fine pour une texture parfaitement soyeuse. Répartir dans 4 verrines sans les remplir à ras bord.',
+        'Couvrir d\'un film alimentaire au contact et réfrigérer 2 h minimum. Le froid doit être progressif : ne pas mettre au congélateur pour accélérer.',
+        'Pour le coulis : chauffer les fruits rouges avec le jus de citron et la stevia 5 min, écraser à la fourchette, filtrer au chinois pour un coulis brillant. Refroidir avant de napper chaque verrine au service.'
       ]
     },
 
@@ -6565,12 +6567,12 @@
         { name: 'Sel', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Faire fondre le chocolat noir au bain-marie ou au micro-ondes par tranches de 30 sec. Laisser tiédir 5 min.',
-        'Dans un grand bol, mélanger le fromage blanc avec le cacao et la stevia jusqu\'à homogénéité.',
-        'Incorporer le chocolat fondu tiédi au mélange fromage blanc-cacao. Bien mélanger.',
-        'Monter les blancs d\'œufs en neige ferme avec une pincée de sel.',
-        'Incorporer les blancs en neige en 3 fois, en soulevant délicatement la masse de bas en haut pour conserver la légèreté.',
-        'Répartir en 4 verrines et réfrigérer 1h minimum avant de servir.'
+        'Fondre le chocolat au bain-marie (eau à 60 °C, bol hors contact de l\'eau) en remuant lentement. Retirer dès que fondu et lisser à la spatule. Laisser tiédir à 35 °C — au-delà, il cuit le fromage blanc ; en-dessous, il se fige.',
+        'Lisser le fromage blanc à la spatule dans un grand bol froid. Tamiser le cacao et la stevia dessus, mélanger énergiquement pour obtenir une crème chocolatée dense et homogène.',
+        'Incorporer le chocolat fondu tiédi en un seul versement sur la crème. Mélanger rapidement au fouet jusqu\'à brillance totale — le geste doit être décidé, pas hésitant.',
+        'Monter les blancs : démarrer au batteur à vitesse lente 30 sec (les blancs se structurent), ajouter la pincée de sel, puis passer à vitesse maximale jusqu\'à bec d\'oiseau ferme. Les blancs surdimensionnés (trop fermes) cassent la mousse.',
+        'Incorporer ¼ des blancs en neige dans le chocolat en fouettant sans ménagement pour détendre la masse. Ajouter le reste en 2 fois à la maryse, en soulevant depuis le bas vers le haut — 10 gestes larges maximum.',
+        'Répartir immédiatement en verrines sans tasser. Réfrigérer 1 h. Ne pas couvrir pendant la prise pour éviter la condensation en surface.'
       ]
     },
 
@@ -6593,12 +6595,12 @@
         { name: 'Sucre de coco (pour caraméliser)', qty: 20, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 150°C. Dissoudre le café soluble dans 2 cuillères à soupe d\'eau chaude.',
-        'Fouetter les œufs avec le sucre de coco jusqu\'à blanchiment léger. Incorporer le yaourt grec, le lait, le café dissous et la vanille.',
-        'Filtrer le mélange au travers d\'une passoire fine pour éliminer les grumeaux.',
-        'Verser dans 4 ramequins. Cuire au bain-marie 25 min jusqu\'à ce que les crèmes soient tremblotantes au centre.',
-        'Réfrigérer au moins 2h. Avant de servir, saupoudrer 1 cc de sucre de coco sur chaque crème.',
-        'Passer sous le gril du four (position haute) 2-3 min ou utiliser un chalumeau pour caraméliser. Servir immédiatement.'
+        'Préchauffer le four à 150 °C chaleur statique (jamais ventilée : le flux d\'air craquelle la surface). Dissoudre le café soluble dans 2 cs d\'eau chaude pour obtenir un café concentré.',
+        'Fouetter les œufs avec le sucre de coco jusqu\'à légère mousse — pas de ruban, juste l\'incorporation du sucre. Incorporer le yaourt grec, le lait tiède, le café et la vanille en mélangeant doucement.',
+        'Passer au travers d\'une passoire fine : cette étape retire les chalazas et donne une surface lisse et nette. Laisser reposer 5 min pour que les bulles montent et s\'effacent.',
+        'Verser sans verser de bulles : incliner les ramequins et couler le mélange contre la paroi. Placer les ramequins dans un plat à four, verser de l\'eau chaude (80 °C) jusqu\'à mi-hauteur des ramequins.',
+        'Enfourner 25–28 min. La crème est prête quand les bords sont pris et que le centre tremble encore légèrement (comme une gelée). Sortir, laisser refroidir à température ambiante puis réfrigérer 2 h minimum.',
+        'Au moment de servir, saupoudrer 5 g de sucre de coco en couche uniforme et fine. Passer le chalumeau en mouvements circulaires réguliers à 3 cm de la surface jusqu\'à caramel brun-ambré. Servir dans les 2 minutes.'
       ]
     },
 
@@ -6623,12 +6625,12 @@
         { name: 'Cannelle moulue', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Mixer les dattes, les flocons d\'avoine et les noix de cajou jusqu\'à obtenir une pâte collante.',
-        'Presser la pâte dans le fond d\'un moule à tarte (Ø 22 cm) en remontant légèrement sur les bords. Réfrigérer 15 min.',
-        'Mélanger le fromage blanc avec le miel, la vanille et la cannelle jusqu\'à obtenir une crème lisse.',
-        'Étaler la crème sur le fond de tarte refroidi.',
-        'Couper les bananes en rondelles et les disposer harmonieusement sur la crème.',
-        'Râper ou hacher finement le chocolat noir et en parsemer le dessus. Servir frais.'
+        'Dénoyauter les dattes si nécessaire et les tremper 5 min dans de l\'eau tiède pour les assouplir. Égoutter et sécher. Mixer dattes + flocons d\'avoine + noix de cajou par impulsions courtes : la pâte doit être humide et compacte, pas liquide.',
+        'Foncer un moule à tarte (Ø 22 cm) chemisé de film alimentaire : presser la pâte du centre vers les bords avec le pouce en remontant à 2 cm sur les parois. Égaliser l\'épaisseur à ~5 mm. Réfrigérer 15 min.',
+        'Fouetter le fromage blanc avec le miel, la vanille et la cannelle. Travailler 1 min à la spatule pour serrer la texture et chasser l\'excès d\'humidité — une crème trop liquide détrempera le fond.',
+        'Étaler la crème sur le fond de tarte froid en une couche régulière, en laissant 1 cm de bord libre pour la présentation.',
+        'Couper les bananes en biais (coupe oblique à 45°) pour de plus belles tranches. Les disposer en rosace ou en rangées serrées, en légère superposition.',
+        'Râper le chocolat noir à la microplane directement au-dessus de la tarte pour des copeaux fins et homogènes. Servir frais dans l\'heure — les bananes noircissent si elles attendent.'
       ]
     },
 
@@ -6653,12 +6655,12 @@
         { name: 'Blancs d\'œufs', qty: 80, unit: 'g' }
       ],
       steps: [
-        'Préparer un café fort et laisser refroidir complètement.',
-        'Fouetter ensemble le fromage blanc, le skyr, le mascarpone, le sucre de coco et la vanille jusqu\'à homogénéité.',
-        'Monter les blancs en neige ferme et les incorporer délicatement à la crème pour l\'alléger.',
-        'Tremper rapidement les boudoirs dans le café froid (2 sec max pour ne pas les ramollir trop).',
-        'Disposer une couche de boudoirs imbibés dans un plat ou 6 verrines. Couvrir d\'une couche de crème.',
-        'Répéter l\'opération (boudoirs + crème). Saupoudrer généreusement de cacao tamisé. Réfrigérer 2h minimum.'
+        'Préparer un café fort (type café turc ou espresso serré) et le refroidir complètement au réfrigérateur. Un café tiède ramollit trop vite les boudoirs et noie le dessert.',
+        'Fouetter ensemble le fromage blanc, le skyr, le mascarpone, le sucre de coco et la vanille pendant 2 min au fouet électrique. La crème doit être dense et tenir légèrement au fouet — le mascarpone apporte la structure grasse essentielle.',
+        'Monter les blancs en neige ferme avec une pincée de sel. Incorporer ¼ des blancs à la crème en fouettant pour la détendre, puis le reste en 2 fois à la maryse — geste souple, de bas en haut.',
+        'Tremper chaque boudoir dans le café froid exactement 2 secondes par face. Égoutter sur la main : il doit être imbibé mais non détrempé — il se casse si on appuie.',
+        'Monter le tiramisu : couche de boudoirs + couche de crème (1,5 cm). Recommencer. Lisser le dessus à la palette.',
+        'Tamiser le cacao non sucré en couche généreuse sur toute la surface. Filmer au contact et réfrigérer 2 h minimum — la nuit est idéale pour que les saveurs fusionnent.'
       ]
     },
 
@@ -6682,12 +6684,12 @@
         { name: 'Sel', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 200°C. Beurrer et saupoudrer de cacao 4 ramequins individuels.',
-        'Faire fondre le chocolat noir avec le beurre au bain-marie. Mélanger jusqu\'à obtenir une ganache lisse. Laisser tiédir 5 min.',
-        'Fouetter les œufs avec le sucre de coco jusqu\'à blanchiment. Incorporer le fromage blanc.',
-        'Verser le chocolat fondu sur le mélange œufs-fromage blanc. Ajouter la farine d\'avoine, le cacao et le sel. Mélanger délicatement.',
-        'Répartir dans les 4 ramequins. (Astuce : réfrigérer 30 min avant cuisson pour un cœur plus coulant.)',
-        'Enfourner exactement 10 min à 200°C. Démouler immédiatement en retournant sur l\'assiette. Servir sans attendre.'
+        'Préchauffer le four à 200 °C chaleur statique. Beurrer généreusement les ramequins au pinceau, puis saupoudrer de cacao tamisé — pas de farine. Retourner et tapoter pour enlever l\'excès. Réfrigérer les ramequins garnis.',
+        'Fondre chocolat et beurre au bain-marie en remuant lentement jusqu\'à ganache lisse. Retirer du feu et laisser tiédir à 35 °C — c\'est la température où le chocolat s\'incorpore sans cuire les œufs.',
+        'Fouetter les œufs avec le sucre de coco jusqu\'à léger blanchiment. Ajouter le fromage blanc et mélanger. Verser le chocolat tiédi en filet tout en fouettant pour tempérer progressivement.',
+        'Tamiser ensemble farine d\'avoine, cacao et sel directement dans la masse. Incorporer à la maryse en 5 gestes — ne pas surmélanger, les fondants trop travaillés deviennent caoutchouteux.',
+        'Remplir les ramequins froids aux ¾. Filmer et réfrigérer 30 min minimum : le contraste chaud/froid est ce qui crée le cœur coulant.',
+        'Enfourner exactement 10 min (four précis à 200 °C). Les bords sont pris, le centre tremble légèrement. Laisser reposer 1 min dans le ramequin, puis retourner d\'un geste sec sur l\'assiette. Servir immédiatement.'
       ]
     },
 
@@ -6712,12 +6714,12 @@
         { name: 'Pistaches concassées (topping)', qty: 30, unit: 'g' }
       ],
       steps: [
-        'Mixer les dattes, 80g de pistaches et les flocons d\'avoine pour obtenir une pâte homogène. Presser dans le fond d\'un moule à charnière (Ø 20 cm). Réfrigérer 15 min.',
-        'Tremper la gélatine 5 min dans l\'eau froide. La dissoudre dans 3 cuillères à soupe d\'eau chaude.',
-        'Fouetter le fromage frais avec le skyr, le jus et zeste de citron, et le miel jusqu\'à parfaite homogénéité.',
-        'Incorporer la gélatine dissoute tiédie à la crème au fromage. Bien mélanger.',
-        'Verser la crème sur le fond de tarte. Lisser le dessus. Réfrigérer 3h minimum (idéalement une nuit).',
-        'Démouler délicatement. Parsemer de pistaches concassées et de zeste de citron râpé avant de servir.'
+        'Torréfier les 80 g de pistaches à sec dans une poêle 2 min : la chaleur réveille les huiles et intensifie le goût. Laisser refroidir avant de mixer avec les dattes et les flocons d\'avoine par impulsions.',
+        'Chemiser un moule à charnière (Ø 20 cm) d\'un disque de papier cuisson. Presser la base pistache-dattes uniformément à ~6 mm d\'épaisseur avec le dos d\'une cuillère humide. Réfrigérer 15 min.',
+        'Réhydrater la gélatine 5 min dans de l\'eau froide. La dissoudre dans 3 cs d\'eau chaude (pas bouillante). Laisser tiédir à 35 °C — incorporer une gélatine trop chaude dans le fromage frais crée des fils.',
+        'Fouetter le fromage frais à la spatule pour le lisser. Incorporer le skyr, le jus et zeste de citron, et le miel. Fouetter 1 min pour une crème aérée et homogène.',
+        'Verser la gélatine tiédie en filet sur la crème en mélangeant sans s\'arrêter. Couler immédiatement sur le fond de tarte — la gélatine commence à figer dès 25 °C. Lisser à la palette.',
+        'Réfrigérer 3 h minimum, idéalement une nuit. Pour démouler proprement : passer une lame de couteau chaude le long du bord avant d\'ouvrir la charnière. Parsemer pistaches concassées et zeste frais au dernier moment.'
       ]
     },
 
@@ -6741,13 +6743,12 @@
         { name: 'Cannelle moulue', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Chauffer le lait à feu doux avec la moitié de la vanille et la stevia. Ne pas faire bouillir.',
-        'Monter les blancs d\'œufs en neige très ferme. Former des quenelles à l\'aide de deux cuillères à soupe.',
-        'Pocher les îles flottantes dans le lait frémissant 2 min de chaque côté. Les égoutter sur du papier absorbant.',
-        'Préparer la crème anglaise : fouetter les jaunes avec la stevia dans un bol. Verser le lait vanillé chaud progressivement en remuant.',
-        'Remettre sur feu doux en remuant constamment jusqu\'à ce que la crème nappe la cuillère (82°C). Filtrer et laisser tiédir.',
-        'Préparer le coulis caramel léger : chauffer le miel avec le beurre 2 min jusqu\'à légère coloration. Incorporer 2 cs de lait et la cannelle.',
-        'Dresser : verser la crème anglaise dans 4 assiettes creuses, déposer les îles flottantes, napper d\'un filet de caramel au miel.'
+        'Chauffer le lait avec la moitié de la vanille et la stevia à 82 °C (frémissement léger, pas de bouillons). Laisser infuser 5 min hors du feu pour que la vanille exprime tous ses arômes.',
+        'Monter les blancs en neige très ferme : commencer vitesse lente 30 sec, puis vitesse maximale jusqu\'à bec d\'oiseau droit. Un blanc trop mou se disloque au pochage.',
+        'Former les îles à la cuillère à soupe : deux cuillères face à face pour façonner une quenelle régulière. Les pocher 2 min de chaque côté dans le lait frémissant (jamais bouillant). Égoutter sur un linge propre, pas du papier absorbant qui colle.',
+        'Crème anglaise : fouetter les jaunes avec la stevia jusqu\'à ruban. Verser le lait vanillé chaud en trois fois sur les jaunes en remuant — jamais l\'inverse. Reverser dans la casserole.',
+        'Cuire à 82 °C sans cesser de remuer à la spatule en faisant des 8. Stopper à la nappe : la crème trace une ligne nette sur le dos de la spatule. Filtrer au chinois, couvrir au contact, refroidir.',
+        'Caramel au miel : chauffer miel et beurre à feu moyen 2 min jusqu\'à légère coloration ambrée. Décuire avec 2 cs de lait chaud, ajouter la cannelle. Dresser la crème anglaise froide, poser les îles, napper de caramel au moment de servir.'
       ]
     },
 
@@ -6770,11 +6771,12 @@
         { name: 'Cannelle moulue', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Rincer le riz à l\'eau froide. Le mettre dans une casserole avec le lait entier froid.',
-        'Cuire à feu moyen-doux 20-25 min en remuant régulièrement jusqu\'à consistance crémeuse. Le riz doit être très tendre et le lait bien absorbé.',
-        'Hors du feu, incorporer le miel, l\'eau de rose et la cannelle. Mélanger doucement.',
-        'Laisser tiédir 5 min puis incorporer le skyr à la spatule pour un résultat crémeux.',
-        'Répartir dans 4 coupes. Saupoudrer de pistaches concassées et d\'une pincée de cannelle. Servir tiède ou frais.'
+        'Rincer le riz à l\'eau froide jusqu\'à ce que l\'eau soit claire — cela retire l\'amidon de surface et évite que le riz ne colle en masse. Égoutter.',
+        'Verser le riz dans le lait entier froid (départ à froid : le riz s\'ouvre progressivement et libère son amidon interne, ce qui crée la texture crémeuse). Porter à feu moyen en remuant dès les premiers frémissements.',
+        'Cuire 20–25 min à feu doux en remuant toutes les 2 min avec une cuillère en bois. La texture est prête quand le riz est très tendre et que la masse se détache légèrement des parois — ni liquide, ni compact.',
+        'Hors du feu, incorporer le miel et la cannelle. Attendre que la température descende à 50 °C avant d\'ajouter l\'eau de rose : au-delà, les composés aromatiques s\'évaporent et le parfum disparaît.',
+        'Laisser tiédir 5 min à 45 °C, puis incorporer le skyr à la spatule en deux fois — le skyr ne doit jamais bouillir, il granulerait. La masse doit rester onctueuse.',
+        'Dresser dans 4 coupes. Saupoudrer de pistaches concassées et d\'une pincée de cannelle. Servir tiède ou réfrigérer 1 h et servir frais — les deux versions sont excellentes.'
       ]
     },
 
@@ -7432,10 +7434,12 @@
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Préchauffer le four à 200 °C. Tapisser un plat de papier cuisson.',
-        'Mélanger l\'huile d\'olive, l\'ail finement haché, le persil, le romarin et le thym. Ajouter le zeste et le jus de citron.',
-        'Déposer les filets de bar dans le plat, napper de la marinade aux herbes et assaisonner.',
-        'Enfourner 15-18 min jusqu\'à ce que le poisson se défasse facilement à la fourchette. Servir avec des tranches de citron.'
+        'Sortir les filets de bar du réfrigérateur 10 min avant cuisson. Préchauffer le four à 220 °C chaleur tournante avec la plaque à l\'intérieur.',
+        'Hacher finement ail, persil, romarin et thym. Incorporer le zeste râpé du citron et l\'huile d\'olive ; saler, poivrer. On obtient une gremolata liquide.',
+        'Inciser la peau des filets en deux traits en biais au couteau d\'office — cela empêche la rétraction et permet à la marinade de pénétrer.',
+        'Poser les filets peau vers le bas sur la plaque chaude huilée. Napper généreusement de gremolata liquide.',
+        'Enfourner 12-14 min : la chair doit s\'opacifier jusqu\'au centre et se détacher à la pression du doigt — ne pas attendre qu\'elle se fissure.',
+        'Arroser d\'un filet de jus de citron frais à la sortie du four et servir dans la minute pour préserver les arômes volatils des herbes.'
       ]
     },
 
@@ -7464,10 +7468,12 @@
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Préchauffer le four à 190 °C. Faire tomber les épinards à sec dans une poêle avec l\'ail haché. Laisser refroidir et presser pour éliminer l\'excès d\'eau.',
-        'Mélanger les épinards égouttés avec la ricotta, le parmesan et la muscade. Assaisonner.',
-        'Étaler les escalopes, répartir la farce, rouler serré et maintenir avec un pic en bois. Badigeonner d\'huile d\'olive.',
-        'Cuire au four 18-20 min. Laisser reposer 2 min avant de retirer les pics et servir avec une salade verte.'
+        'Faire tomber les épinards à feu vif avec l\'ail haché, 2 min sans matière grasse. Étaler sur un torchon propre, rouler serré et tordre les extrémités pour extraire toute l\'eau — une farce humide ferait éclater les rouleaux.',
+        'Mélanger les épinards bien secs avec la ricotta, le parmesan et la muscade. Goûter et assaisonner : la farce doit être légèrement trop salée car la dinde est fade.',
+        'Placer chaque escalope entre deux feuilles de film alimentaire, aplatir au rouleau jusqu\'à 5 mm. Étaler la farce en laissant 1 cm de bord, rouler fermement, piquer avec deux cure-dents en X.',
+        'Préchauffer le four à 190 °C. Saisir les involtini dans l\'huile chaude 2 min sur toutes leurs faces pour sceller les sucs.',
+        'Transférer dans un plat, enfourner 15 min. Vérifier à cœur : 74 °C à la sonde ou jus clair à la pique.',
+        'Retirer les cure-dents, laisser reposer 3 min avant de trancher en biseau pour révéler la spirale verte.'
       ]
     },
 
@@ -7496,10 +7502,12 @@
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Aplatir les escalopes finement entre deux films. Fariner légèrement et secouer l\'excédent.',
-        'Chauffer l\'huile dans une grande poêle à feu vif. Cuire les escalopes 1-2 min de chaque côté. Réserver au chaud.',
-        'Déglacer la poêle avec le jus de citron et le bouillon. Ajouter les câpres et réduire 2 min.',
-        'Remettre les escalopes dans la sauce, parsemer de persil ciselé et servir immédiatement.'
+        'Placer les escalopes entre deux films, aplatir au rouleau à 4 mm d\'épaisseur uniforme — l\'uniformité garantit une cuisson homogène à la seconde près.',
+        'Saupoudrer de farine de riz des deux côtés, secouer vigoureusement : une couche translucide, pas un enrobage blanc, est ce qu\'on cherche.',
+        'Chauffer l\'huile à feu maximal jusqu\'à légère fumée. Cuire les escalopes 1 min 30 s par face ; elles doivent être dorées, pas grises. Sortir et maintenir au chaud sur une assiette couverte.',
+        'Baisser à feu moyen. Déglacer la poêle avec le jus de citron en grattant les sucs caramélisés. Verser le bouillon, ajouter les câpres et réduire 2 min jusqu\'à consistance sirupeuse.',
+        'Remettre les escalopes 30 s dans la sauce pour les lustrer. Parsemer de persil ciselé à la dernière seconde.',
+        'Servir immédiatement : les scaloppine attendent personne — la farine de riz ramollit en moins de 3 min.'
       ]
     },
 
@@ -7528,10 +7536,12 @@
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Préparer la salsa sicilienne : couper les tomates cerises en deux, mélanger avec les olives, les câpres, l\'origan, le zeste de citron et la moitié de l\'huile.',
-        'Badigeonner les pavés de saumon du reste d\'huile, saler et poivrer. Chauffer un grill ou une poêle grillée à feu vif.',
-        'Cuire le saumon 3-4 min de chaque côté selon l\'épaisseur, jusqu\'à caramélisation des bords.',
-        'Dresser les pavés sur assiette, napper de salsa sicilienne et arroser d\'un filet de jus de citron.'
+        'Préparer la salsa : couper les tomates cerises en deux, écraser légèrement à la fourchette pour libérer leur jus. Mélanger avec les olives, les câpres rincées, l\'origan, le zeste de citron et la moitié de l\'huile. Laisser macérer 10 min.',
+        'Sécher soigneusement les pavés avec du papier absorbant — toute humidité provoque une adhérence au grill. Badigeonner du reste d\'huile côté peau uniquement.',
+        'Chauffer la poêle grill en fonte à feu maximal 3 min : elle doit fumer légèrement. Poser les pavés peau vers le bas sans les toucher.',
+        'Cuire 3-4 min côté peau jusqu\'à ce que la cuisson remonte aux trois quarts de la chair (on voit la couleur changer sur le côté). Retourner une seule fois, 1 min 30 s côté chair.',
+        'Laisser reposer 1 min hors feu : le centre finit de cuire à la chaleur résiduelle et reste nacré.',
+        'Dresser la salsa sur le pavé — jamais en dessous, pour ne pas ramollir la peau croustillante.'
       ]
     },
 
@@ -7561,10 +7571,12 @@
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Mélanger la dinde hachée avec l\'œuf, le parmesan, l\'ail et le persil hachés. Assaisonner et former des boulettes de 3 cm.',
-        'Dorer les boulettes dans l\'huile à feu moyen-vif 3-4 min en les tournant régulièrement.',
-        'Verser les tomates concassées, couvrir et mijoter 15 min à feu doux en remuant de temps en temps.',
-        'Parsemer de basilic ciselé et servir avec du pain grillé aux céréales ou des légumes vapeur.'
+        'Mélanger la dinde hachée, l\'œuf, le parmesan, l\'ail et le persil hachés, sel et poivre. Travailler le mélange à la main 30 s seulement : trop pétrir rend les boulettes dures.',
+        'Former des boulettes de 3 cm (environ 25 g) en les roulant dans les paumes mouillées — les mains humides évitent que la viande colle et donnent une surface lisse.',
+        'Chauffer l\'huile à feu vif. Dorer les boulettes en les faisant rouler dans la poêle par rotation du poignet (ne pas piquer avec une fourchette) — 3-4 min pour une croûte uniforme.',
+        'Baisser à feu doux. Verser les tomates concassées, écraser légèrement avec la cuillère pour libérer leur jus. Couvrir et mijoter 15 min.',
+        'Découvrir les 3 dernières minutes pour concentrer la sauce. Elle doit napper les boulettes sans être liquide.',
+        'Parsemer de basilic déchiré à la main (jamais ciselé au couteau — le métal oxyde le basilic en secondes) et servir.'
       ]
     },
 
@@ -7592,10 +7604,12 @@
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Mélanger les graines de sésame blanc et noir dans une assiette creuse. Rouler les pavés de thon dans les graines pour les enrober uniformément.',
-        'Chauffer une poêle à feu très vif sans matière grasse. Saisir le thon 45 secondes à 1 min par face : l\'extérieur doit être doré, l\'intérieur rosé.',
-        'Pendant ce temps, assaisonner la roquette avec l\'huile d\'olive, le jus de citron et la sauce soja.',
-        'Trancher le thon en médaillons et disposer sur le lit de roquette. Terminer avec le zeste de citron et servir immédiatement.'
+        'Sortir le thon du froid 10 min avant cuisson. Sécher les pavés avec du papier absorbant — l\'humidité est l\'ennemie de la croûte de sésame.',
+        'Verser les graines de sésame dans une assiette creuse. Rouler chaque pavé en pressant fermement sur chaque face — tapoter doucement pour faire adhérer sans excès.',
+        'Chauffer une poêle en inox ou en fonte à feu maximal, à sec, 2 min. La poêle est prête quand une goutte d\'eau s\'évapore instantanément.',
+        'Saisir 45 s par face grande, puis 15 s sur chaque tranche fine. Le sésame doit être doré noisette — jamais brun foncé. L\'intérieur reste cru et translucide.',
+        'Pendant la cuisson, assaisonner la roquette avec l\'huile d\'olive, le jus et le zeste de citron, la sauce soja : mélanger délicatement à la main.',
+        'Trancher le thon en médaillons de 1 cm au couteau bien aiguisé d\'un seul mouvement — scier abîme la chair. Dresser sur la roquette et servir dans la seconde.'
       ]
     },
 
@@ -7624,10 +7638,12 @@
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Couper les blancs de poulet en fines tranches dans l\'épaisseur. Assaisonner de sel, poivre et thym.',
-        'Chauffer l\'huile à feu moyen-vif. Saisir le poulet 3 min de chaque côté. Retirer et réserver.',
-        'Dans la même poêle, faire revenir l\'ail haché 30 s, déglacer au jus de citron et au bouillon. Ajouter les câpres et le zeste. Réduire 3 min.',
-        'Remettre le poulet dans la sauce, chauffer 2 min et servir nappé de sauce au citron-câpres.'
+        'Couper les blancs de poulet en escalopes de 8 mm dans l\'épaisseur (technique du papillon ou tranches bias). Poser à plat, couvrir de film et aplatir légèrement au rouleau.',
+        'Assaisonner généreusement des deux côtés. Chauffer l\'huile à feu vif jusqu\'à léger tremblement. Saisir les tranches 2 min 30 s par face sans les bouger — une belle coloration dorée avant de retourner.',
+        'Retirer le poulet, baisser à feu moyen. Jeter l\'excès de gras si nécessaire. Faire blondir l\'ail haché 20 s en remuant.',
+        'Déglacer avec le jus des deux citrons en grattant les sucs. Verser le bouillon, ajouter les câpres et le zeste. Réduire 3 min à feu vif jusqu\'à consistance légèrement sirupeuse.',
+        'Remettre le poulet, ajouter les brins de thym et chauffer 1 min en nappant de sauce à la cuillère — c\'est le geste du beurrage, ici sans beurre.',
+        'Dresser et napper de sauce généreusement. Servir avec un légume vert vapeur pour ne pas noyer les saveurs.'
       ]
     },
 
@@ -7655,10 +7671,12 @@
         { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Sécher les crevettes avec du papier absorbant. Hacher l\'ail et le persil. Émincer finement le piment.',
-        'Chauffer l\'huile à feu vif dans une grande poêle. Ajouter l\'ail et le piment, faire revenir 30 secondes jusqu\'à dorure légère.',
-        'Ajouter les crevettes en une seule couche, cuire 2 min de chaque côté jusqu\'à ce qu\'elles soient rosées et légèrement caramélisées.',
-        'Hors du feu, ajouter le persil haché et le jus de citron. Mélanger et servir immédiatement avec des quartiers de citron.'
+        'Sécher les crevettes sur plusieurs épaisseurs de papier absorbant, retirer le boyau dorsal d\'un coup de couteau superficiel. Humidité et boyau = amertume garantie.',
+        'Hacher l\'ail en brunoise très fine (pas pressé — la presse libère un jus acre). Émincer finement le piment, retirer les graines pour doser la chaleur. Ciseler le persil au dernier moment.',
+        'Chauffer l\'huile à feu vif jusqu\'à frémissement. Ajouter l\'ail et le piment, mélanger vivement 20 s — ail blond, jamais brun.',
+        'Ajouter les crevettes en une couche unique, bien espacées. Saisir 1 min 30 s sans toucher, retourner d\'un geste, 1 min 30 s de l\'autre côté. Elles sont cuites quand elles forment un C — un O signifie surcuisson.',
+        'Hors du feu immédiatement, presser le jus de citron et ajouter le persil. La chaleur résiduelle finit le travail sans durcir la chair.',
+        'Servir sans attendre avec des quartiers de citron : les crevettes continuent de cuire dans l\'assiette chaude.'
       ]
     },
 
@@ -7686,10 +7704,12 @@
         { name: 'Sel de mer, poivre noir', qty: 1, unit: 'pincée' }
       ],
       steps: [
-        'Préparer la gremolata : hacher finement le persil, l\'ail et le romarin, mélanger avec le zeste de citron et 5 ml d\'huile. Réserver.',
-        'Sortir la viande 15 min avant cuisson. Badigeonner du reste d\'huile, saler et poivrer généreusement des deux côtés.',
-        'Chauffer un grill en fonte à feu maximal jusqu\'à ce qu\'il soit très chaud. Saisir le steak 3-4 min de chaque côté pour une cuisson saignante à à point.',
-        'Laisser reposer la viande 3 min sous une feuille d\'aluminium. Trancher et servir nappé de gremolata.'
+        'Préparer la gremolata 30 min à l\'avance : hacher persil, ail et romarin le plus finement possible, zester le citron par-dessus, mélanger avec 5 ml d\'huile. Le repos libère les huiles essentielles.',
+        'Sortir la viande 20 min avant cuisson. Badigeonner d\'huile des deux côtés, saler au sel de mer en pressant les cristaux dans la chair — ne jamais saler à l\'avance, le sel fait exsuder le jus.',
+        'Chauffer la grille en fonte à feu maximal 4-5 min : elle doit être quasi incandescente — tester avec une goutte d\'eau qui doit s\'évaporer instantanément.',
+        'Poser le steak perpendiculairement aux nervures de la grille. Saisir 3 min sans toucher. Tourner à 90° (pas retourner) pour marquer le quadrillage. Retourner, 3 min de l\'autre côté.',
+        'Transférer sur une grille (jamais une assiette plate — la vapeur ramollit la croûte). Couvrir lâchement de papier aluminium, reposer 4 min. Le cœur monte de 3-4 °C pendant le repos.',
+        'Trancher en biseau contre le fil de la viande. Déposer la gremolata sur les tranches chaudes — la chaleur diffuse les arômes dans toute la pièce.'
       ]
     },
 
@@ -13339,11 +13359,12 @@
       { name: 'Ail', qty: 5, unit: 'g' }
     ],
     steps: [
-      'Couper le pain en cubes et le toaster 5 min au four à 180°C jusqu\'à ce qu\'il soit doré et croustillant.',
-      'Griller les blancs de poulet assaisonnés à feu vif 4-5 min par face, puis trancher en lanières.',
-      'Couper les tomates cerises en deux, émincer finement le concombre et l\'oignon rouge.',
-      'Préparer la vinaigrette : mélanger l\'huile d\'olive, le vinaigre balsamique et l\'ail écrasé.',
-      'Assembler tous les ingrédients dans un grand bol, arroser de vinaigrette et garnir de basilic frais.'
+      'Déchirer le pain en morceaux irréguliers de 2-3 cm (jamais couper — les surfaces déchirées absorbent mieux la vinaigrette). Toaster 6-7 min à 200 °C jusqu\'à croûte dorée sur tout le pourtour.',
+      'Assaisonner les blancs de poulet. Chauffer une poêle grill à feu maximal à sec. Griller 4-5 min par face sans presser — les marques de grill signifient des sucs caramélisés. Laisser reposer 3 min avant de trancher en biseau.',
+      'Couper les tomates cerises en deux, les écraser légèrement avec le pouce pour libérer leur jus — ce jus va imprégner le pain. Émincer l\'oignon rouge très fin ; le faire tremper 5 min dans de l\'eau froide pour enlever l\'âcreté.',
+      'Préparer la vinaigrette : écraser l\'ail en pommade avec une pincée de sel (couteau à plat), mélanger avec le vinaigre balsamique, puis monter à l\'huile d\'olive en filet.',
+      'Assembler dans l\'ordre : pain, tomates avec leur jus, concombre, oignon égoutté, vinaigrette. Mélanger et laisser reposer 5 min — le pain doit absorber les jus tout en gardant un cœur ferme.',
+      'Ajouter les lanières de poulet et les feuilles de basilic entières déchirées à la main au dernier moment. Servir sans attendre — la panzanella ne supporte pas l\'attente.'
     ]
   },
   {
@@ -13664,10 +13685,11 @@
       { name: 'Cannelle', qty: 1, unit: 'pincée' }
     ],
     steps: [
-      "Fouetter la ricotta avec le zeste de citron jusqu'à obtenir une texture crémeuse.",
-      'Répartir la ricotta dans deux bols.',
-      'Concasser grossièrement les noisettes torréfiées.',
-      'Napper de miel, parsemer de noisettes et saupoudrer de cannelle.'
+      'Sortir la ricotta du réfrigérateur 10 minutes avant : à température ambiante, elle s\'incorpore plus facilement et la texture finale est bien plus soyeuse.',
+      'Zester le citron directement au-dessus du bol de ricotta — les huiles essentielles du zeste tombent ainsi dans le fromage sans perte d\'arôme.',
+      'Fouetter vigoureusement la ricotta et le zeste 1 minute à la fourchette ou au petit fouet jusqu\'à obtenir une crème lisse et aérienne. C\'est ce travail mécanique qui fait toute la différence.',
+      'Concasser grossièrement les noisettes torréfiées au couteau — des morceaux de tailles variées, pas une poudre. Le contraste de texture est essentiel.',
+      'Répartir la ricotta dans deux bols. Napper de miel en spirale, parsemer les noisettes, saupoudrer la cannelle. Servir immédiatement.'
     ]
   },
 
@@ -14028,10 +14050,12 @@
         { name: 'Ail', qty: 2, unit: 'pce' }
       ],
       steps: [
-        "Dans une casserole, faire revenir l'oignon, la carotte et l'ail hachés dans l'huile d'olive 4 minutes jusqu'à légère coloration.",
-        'Ajouter le chou noir émincé, les tomates et le bouillon. Mijoter 15 minutes à feu moyen-doux.',
-        'Incorporer les haricots cannellini et le pain rassis émietté. Cuire encore 5 minutes en remuant pour que le pain épaississe la soupe.',
-        "Terminer avec le romarin ciselé, un filet d'huile d'olive à cru et du poivre noir fraîchement moulu."
+        'Tailler l\'oignon, la carotte et l\'ail en brunoise fine (5 mm). Les faire suer à feu doux dans l\'huile d\'olive 5 minutes sans coloration — le fond doit rester blond.',
+        'Ajouter le chou noir en chiffonnade, monter à feu moyen et laisser tomber 3 minutes en remuant : il doit réduire de moitié et s\'attendrir.',
+        'Incorporer les tomates concassées à la main, le bouillon chaud et le romarin entier. Porter à frémissement (jamais à gros bouillon) et mijoter 15 minutes à couvert.',
+        'Écraser grossièrement 1/3 des haricots cannellini à la fourchette avant de les ajouter avec le reste : ce geste lie la soupe naturellement sans farine.',
+        'Émietter le pain rassis en morceaux irréguliers sur le dessus, couvrir 3 minutes hors du feu — le pain gonfle et épaissit sans se désagréger.',
+        'Retirer le romarin, poivrer au moulin. Servir avec un filet d\'huile d\'olive versé en spirale au dernier moment.'
       ]
     },
 
@@ -14061,10 +14085,11 @@
         { name: 'Jus de citron', qty: 15, unit: 'ml' }
       ],
       steps: [
-        "Faire revenir l'oignon et l'ail émincés dans l'huile d'olive 3 minutes. Ajouter le cumin et une branche de romarin.",
-        'Incorporer les lentilles rincées, les tomates concassées et le bouillon. Porter à ébullition.',
-        "Réduire le feu et mijoter 25 minutes jusqu'à ce que les lentilles soient tendres. Retirer le romarin.",
-        "Mixer partiellement pour une texture mi-lisse mi-rustique. Finir avec le jus de citron, le romarin ciselé et un filet d'huile d'olive."
+        'Faire chauffer l\'huile à feu moyen. Y faire revenir l\'oignon émincé 4 minutes jusqu\'à translucidité. Ajouter l\'ail haché et le cumin : torréfier 1 minute en remuant pour libérer les arômes.',
+        'Glisser une branche de romarin entière dans la casserole. Verser les lentilles rincées (jamais salées à ce stade — le sel durcit la peau). Ajouter les tomates écrasées à la main.',
+        'Couvrir avec le bouillon chaud. Porter à ébullition, écumer si nécessaire, puis réduire à feu doux. Mijoter 25 minutes à couvert sans remuer inutilement.',
+        'Retirer le romarin. Prélever 2 louches de lentilles et les mixer séparément jusqu\'à crème lisse, puis les réincorporer : texture veloutée sans perdre le caractère rustique.',
+        'Saler en fin de cuisson, presser le citron. Ciseler les aiguilles de romarin frais (2 g) et les parsemer sur le dessus avec un filet d\'huile d\'olive à cru.'
       ]
     },
 
@@ -14095,10 +14120,11 @@
         { name: 'Pecorino râpé', qty: 15, unit: 'g' }
       ],
       steps: [
-        "Faire revenir l'oignon, le céleri et le poivron en dés dans l'huile d'olive 5 minutes. Ajouter les tomates coupées et la sauge.",
-        'Verser le bouillon, porter à ébullition puis mijoter 10 minutes. Assaisonner de sel et poivre.',
-        "Créer deux creux dans la soupe frémissante et y casser délicatement les œufs. Pocher 3-4 minutes jusqu'à blanc coagulé et jaune coulant.",
-        "Placer une tranche de pain grillé au fond de chaque bol, verser la soupe avec l'œuf par-dessus. Finir avec le pecorino et un filet d'huile d'olive."
+        'Tailler oignon, céleri et poivron en dés réguliers de 1 cm. Les faire suer dans l\'huile d\'olive à feu doux 6 minutes jusqu\'à légère compotion — pas de coloration.',
+        'Ajouter les tomates grossièrement concassées et les feuilles de sauge entières. Monter à feu moyen et cuire 5 minutes pour concentrer. Verser le bouillon chaud, mijoter 8 minutes. Saler, poivrer.',
+        'Pour le pochage : abaisser le feu au strict frémissement (quelques bulles en surface). Casser chaque œuf dans une tasse, créer un léger tourbillon dans la soupe, y glisser l\'œuf délicatement. Pocher 3 minutes pour un jaune coulant.',
+        'Frotter le pain grillé avec une gousse d\'ail crue : ce geste simple apporte une profondeur aromatique remarquable. Déposer une tranche au fond de chaque bol.',
+        'Verser la soupe et l\'œuf par-dessus avec une grande cuillère. Finir avec le pecorino râpé et un filet d\'huile d\'olive extra-vierge.'
       ]
     },
 
@@ -14128,10 +14154,11 @@
         { name: 'Thym frais', qty: 5, unit: 'g' }
       ],
       steps: [
-        "Dans une casserole, faire revenir l'oignon et l'ail hachés dans l'huile d'olive 3 minutes. Ajouter les tomates et le laurier.",
-        'Incorporer le farro rincé et le bouillon. Porter à ébullition puis mijoter 20 minutes à couvert.',
-        "Ajouter les haricots borlotti et le thym. Poursuivre 5-7 minutes jusqu'à ce que le farro soit al dente et le bouillon légèrement épaissi.",
-        "Retirer le laurier. Rectifier l'assaisonnement et servir avec un filet d'huile d'olive extra-vierge et du poivre concassé."
+        'Faire suer l\'oignon et l\'ail en brunoise dans l\'huile d\'olive à feu doux 4 minutes. Ajouter les tomates écrasées à la main et les feuilles de laurier. Cuire 3 minutes pour concentrer.',
+        'Rincer le farro perlé à l\'eau froide. L\'incorporer et le nacrer 1 minute dans le soffritto — comme pour un risotto, ce geste crée une couche protectrice qui lui garde de la tenue.',
+        'Verser le bouillon chaud en une seule fois. Porter à ébullition, réduire, couvrir et mijoter 20 minutes à feu doux.',
+        'Écraser 1/4 des borlotti à la fourchette, puis ajouter tous les haricots et le thym frais effeuillé. Cuire encore 5 minutes : la soupe doit être épaisse, presque comme une crème.',
+        'Retirer le laurier, rectifier le sel. Laisser reposer 2 minutes hors du feu avant de servir avec un trait d\'huile d\'olive et du poivre concassé au moulin.'
       ]
     },
 
@@ -14161,10 +14188,11 @@
         { name: 'Basilic frais', qty: 8, unit: 'g' }
       ],
       steps: [
-        "Préchauffer le four à 180°C. Dans une poêle allant au four, faire revenir l'oignon et les légumes coupés en dés dans l'huile 5 minutes.",
-        "Battre les œufs avec l'origan, du sel et du poivre. Incorporer les épinards aux légumes poêlés, puis verser le mélange d'œufs par-dessus.",
-        "Parsemer de feta émiettée et enfourner 12-15 minutes jusqu'à ce que la frittata soit prise et légèrement dorée en surface.",
-        'Laisser tiédir 2 minutes avant de démouler. Garnir de basilic frais et servir en parts avec une salade verte.'
+        'Préchauffer le four à 180°C. Tailler courgette, poivron et oignon rouge en dés de 1 cm. Les faire sauter à feu vif dans la poêle huilée 5 minutes — les légumes doivent colorer légèrement, pas compoter.',
+        'Ajouter les épinards et mélanger 1 minute hors du feu jusqu\'à flétrissement. Laisser tiédir 2 minutes : verser des légumes brûlants sur les œufs les cuit partiellement avant la cuisson.',
+        'Battre les œufs fermement (pas en neige) avec l\'origan, sel et poivre. Le mélange doit être homogène et légèrement mousseux. Verser sur les légumes tièdes en poêle.',
+        'Parsemer la feta émiettée uniformément. Enfourner 12-14 minutes — la frittata est prête quand le centre ne tremble plus et que les bords se décollent légèrement.',
+        'Laisser reposer 3 minutes dans la poêle : la frittata se stabilise et se démoule proprement. Garnir de basilic frais déchiré à la main, jamais au couteau.'
       ]
     },
 
@@ -14192,10 +14220,11 @@
         { name: 'Pecorino romano râpé', qty: 20, unit: 'g' }
       ],
       steps: [
-        "Dans une poêle large, faire revenir l'ail émincé et le piment émietté dans l'huile d'olive 2 minutes jusqu'à légère coloration.",
-        "Ajouter les tomates pelées concassées à la main. Assaisonner de sel et cuire à feu moyen 10 minutes jusqu'à légère réduction.",
-        "Créer 4 creux dans la sauce et y casser les œufs délicatement. Couvrir et cuire 6-8 minutes selon la cuisson désirée (jaune coulant ou ferme).",
-        'Parsemer de pecorino râpé et de basilic frais déchiré. Servir directement dans la poêle avec du pain de campagne grillé.'
+        'Écraser les gousses d\'ail avec le plat du couteau — ne pas les hacher. Les faire confire avec le piment émietté dans l\'huile d\'olive à feu très doux 3 minutes : l\'ail doit blondir sans brunir.',
+        'Ajouter les tomates pelées écrasées à la main (jamais au mixeur, la texture doit rester grossière). Assaisonner et cuire à feu moyen-vif 8 minutes en remuant : la sauce doit réduire et se concentrer.',
+        'Réduire à feu doux. Créer 4 creux à la cuillère, casser chaque œuf dans une tasse puis le glisser délicatement dans son creux — jamais directement de la coquille.',
+        'Couvrir et cuire 5-6 minutes pour un jaune coulant, 8 minutes pour un jaune ferme. Ne pas remuer : les œufs cuisent à la vapeur de la sauce.',
+        'Parsemer le pecorino et le basilic déchiré. Servir directement dans la poêle sur la table — c\'est un plat de convivialité.'
       ]
     },
 
@@ -14225,10 +14254,12 @@
         { name: 'Persil frais', qty: 10, unit: 'g' }
       ],
       steps: [
-        "Porter le bouillon et le lait à ébullition dans une casserole. Verser la polenta en pluie en fouettant constamment. Cuire 5-7 minutes jusqu'à épaississement crémeux.",
-        'Incorporer la moitié du parmesan à la polenta. Assaisonner de sel et poivre, couvrir et réserver hors du feu.',
-        "Dans une poêle chaude, faire sauter les champignons tranchés dans l'huile d'olive avec l'ail et le thym 8-10 minutes jusqu'à dorure. Assaisonner.",
-        "Dresser la polenta crémeuse dans les assiettes, disposer les champignons par-dessus. Finir avec le parmesan restant, le persil ciselé et un filet d'huile d'olive."
+        'Porter le bouillon et le lait à ébullition dans une casserole à fond épais. Verser la polenta en pluie fine avec une main, fouetter de l\'autre en continu — ce geste évite tous les grumeaux.',
+        'Réduire le feu au minimum. Cuire 5-7 minutes en remuant avec une cuillère en bois à intervalles réguliers. La polenta est prête quand elle se décolle des parois.',
+        'Incorporer hors du feu la moitié du parmesan en fouettant vigoureusement pour créer une émulsion crémeuse. Couvrir et réserver.',
+        'Essuyer les champignons avec un linge humide — jamais les laver à l\'eau, ils s\'imbiberaient. Faire chauffer la poêle à feu très vif jusqu\'à légère fumée. Saisir les champignons tranchés sans les remuer pendant 2 minutes pour obtenir une belle coloration.',
+        'Ajouter l\'ail haché et le thym, mélanger et cuire encore 2 minutes. Saler en fin de cuisson seulement — le sel libère l\'eau des champignons et empêche la coloration.',
+        'Dresser la polenta, garnir des champignons, finir avec le reste du parmesan, le persil ciselé et un filet d\'huile d\'olive à cru.'
       ]
     },
 
@@ -14256,10 +14287,12 @@
         { name: 'Poivre noir', qty: 2, unit: 'g' }
       ],
       steps: [
-        "Fouetter la farine de pois chiches avec l'eau froide jusqu'à pâte lisse et sans grumeaux. Laisser reposer 30 minutes (ou 5 min si pressé).",
-        "Préchauffer le four à 230°C avec la plaque huilée à l'intérieur. Émincer finement l'oignon rouge et les aiguilles de romarin.",
-        "Incorporer la moitié de l'huile d'olive, l'oignon et le romarin à la pâte. Verser sur la plaque chaude huilée en couche fine (3-4 mm).",
-        "Enfourner 15-18 minutes jusqu'à bords dorés et croustillants et centre légèrement ferme. Arroser du reste d'huile, saler et poivrer. Servir immédiatement."
+        'Mélanger la farine de pois chiches, l\'eau froide et une pincée de sel dans un bol. Fouetter jusqu\'à pâte parfaitement lisse. Laisser reposer au minimum 30 minutes à température ambiante — ce repos hydrate la farine et donne une texture souple.',
+        'Préchauffer le four à 230°C en chaleur tournante avec la plaque (ou poêle en fonte) à l\'intérieur. La plaque très chaude est la clé de la croûte croustillante.',
+        'Incorporer la moitié de l\'huile d\'olive à la pâte reposée, l\'oignon rouge en fines rondelles et les aiguilles de romarin. Écumer la mousse en surface si présente.',
+        'Sortir la plaque brûlante, la huiler avec les 10 ml restants. Verser la pâte rapidement en couche de 3-4 mm maximum — trop épaisse et elle reste molle.',
+        'Enfourner immédiatement 15-18 minutes sans ouvrir le four. La farinata est prête quand les bords sont dorés et que la surface présente de légères craquelures dorées.',
+        'Assaisonner généreusement de sel de mer et poivre noir fraîchement moulu dès la sortie du four. Servir en parts directement sur la plaque, sans attendre.'
       ]
     },
 
@@ -14287,10 +14320,12 @@
         { name: 'Piment rouge séché', qty: 1, unit: 'pce' }
       ],
       steps: [
-        "Dans une casserole, faire revenir l'ail écrasé et le piment dans l'huile d'olive 2 minutes. Ajouter les tomates et écraser grossièrement à la cuillère.",
-        'Verser le bouillon chaud et porter à frémissement. Émietter le pain rassis dans la soupe en morceaux irréguliers.',
-        "Cuire 10-12 minutes en remuant fréquemment jusqu'à consistance épaisse et crémeuse, comme une bouillie rustique. Le pain doit être complètement absorbé.",
-        "Retirer du feu, incorporer généreusement le basilic frais déchiré. Laisser reposer 2 minutes. Servir tiède avec un filet d'huile d'olive extra-vierge et du basilic supplémentaire."
+        'Écraser l\'ail avec le plat de la lame et le faire confire à feu très doux dans l\'huile d\'olive avec le piment 3 minutes. L\'huile doit frémir doucement, jamais grésiller fort.',
+        'Ajouter les tomates pelées et les écraser grossièrement à la main directement dans la casserole — les morceaux irréguliers créent la texture rustique caractéristique. Cuire 5 minutes à feu vif en remuant.',
+        'Verser le bouillon chaud (jamais froid — cela rompt la cuisson). Réduire à feu moyen et porter à frémissement.',
+        'Déchirer le pain rassis à la main en morceaux de 3-4 cm et l\'ajouter dans la soupe. Cuire 10 minutes en remuant régulièrement avec une cuillère en bois — le pain doit fondre dans la soupe pour une consistance épaisse et veloutée.',
+        'Retirer du feu. Déchirer abondamment le basilic frais à la main et l\'incorporer. Couvrir 2 minutes : la chaleur résiduelle libère les huiles essentielles du basilic sans les détruire.',
+        'Servir tiède — jamais bouillant, jamais froid. Un filet généreux d\'huile d\'olive extra-vierge versé en dernière seconde dans chaque bol.'
       ]
     }
 
