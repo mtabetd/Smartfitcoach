@@ -4075,9 +4075,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire le riz. Rincer le saumon, couper en dés, mariner 10 min sauce soja + huile sésame.',
-        'Cuire les edamames surgelés 3 min à l\'eau bouillante.',
-        'Assembler : riz en base, saumon, avocat, concombre, edamame. Parsemer de sésame.'
+        'Rincer le riz à l\'eau froide jusqu\'à ce que l\'eau soit claire, puis cuire à l\'absorption (eau froide départ, ratio 1:1,5). Laisser reposer 5 min à couvert.',
+        'Pendant la cuisson du riz, couper le saumon en dés de 2 cm nets au couteau bien aiguisé. Mélanger sauce soja + huile de sésame, immerger le saumon et laisser mariner 8 min — pas davantage, l\'acidité cuit la chair.',
+        'Cuire les edamames 3 min à l\'eau bouillante salée, égoutter et refroidir sous eau froide pour fixer la couleur verte.',
+        'Tailler l\'avocat en tranches régulières au dernier moment. Passer la lame dans un filet de jus de citron pour éviter le noircissement.',
+        'Couper le concombre en demi-lunes de 3 mm d\'épaisseur, côté peau conservée pour le croquant.',
+        'Assembler le bowl : riz légèrement tiède en base, saumon égoutté (réserver la marinade comme sauce), légumes disposés en secteurs distincts. Napper d\'un trait de marinade, parsemer de sésame toasté à sec 30 secondes à la poêle.'
       ]
     },
     {
@@ -4097,9 +4100,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire le poulet en lanières à la poêle. Verser la sauce teriyaki, caraméliser 2 min.',
-        'Réchauffer les bao vapeur (cuiseur vapeur ou micro-ondes 45 sec).',
-        'Garnir les bao de poulet teriyaki, concombre et sésame.'
+        'Aplatir légèrement le blanc de poulet au rouleau entre deux feuilles de film pour uniformiser l\'épaisseur à 1,5 cm : cuisson homogène garantie.',
+        'Chauffer la poêle à feu vif jusqu\'à légère fumée. Déposer le poulet sans matière grasse, saisir 3 min sans bouger pour former une croûte dorée. Retourner, cuire 3 min.',
+        'Baisser à feu moyen, verser la sauce teriyaki. Laisser caraméliser en retournant le poulet deux fois jusqu\'à enrobage brillant et laqué (environ 2 min). Retirer du feu, laisser reposer 2 min avant de trancher en lanières en biais.',
+        'Placer les bao dans un cuiseur vapeur (ou une passoire fine sur casserole d\'eau frémissante) 3 min. Éviter le micro-ondes : il rend la pâte caoutchouteuse.',
+        'Couper le concombre en bâtonnets fins et longs, assaisonner d\'une pincée de sel, laisser 2 min puis éponger : il perdra son eau et restera croquant dans le bao.',
+        'Garnir les bao ouverts : lanières de poulet laqué, concombre, sésame toasté. Refermer délicatement sans écraser.'
       ]
     },
     {
@@ -4123,9 +4129,12 @@
         { name: 'Gochujang (pâte pimentée coréenne)', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Cuire le riz. Faire revenir le bœuf haché avec sauce soja et ail. Réserver.',
-        'Sauter séparément courgette, carotte et épinards avec un filet d\'huile de sésame.',
-        'Assembler le bowl : riz en base, légumes et bœuf disposés en secteurs, œuf au plat au centre, gochujang sur le dessus.'
+        'Cuire le riz à l\'absorption. Pendant ce temps, assaisonner le bœuf haché de sauce soja + une gousse d\'ail écrasée. Réserver.',
+        'Traiter chaque légume séparément à la poêle très chaude avec une goutte d\'huile de sésame : courgette en julienne 2 min, carotte râpée grossièrement 2 min, épinards 1 min juste flétris. Saler légèrement chaque fois. Ce soin des "namul" est l\'âme du bibimbap.',
+        'Sauter le bœuf haché à feu vif 3-4 min en l\'émiettant à la spatule. La viande doit être colorée, pas bouillie — ne pas couvrir.',
+        'Cuire l\'œuf au plat dans une poêle légèrement huilée : blanc pris, jaune coulant. C\'est ce jaune qui servira de sauce naturelle au moment du mélange.',
+        'Chauffer légèrement le bol (eau chaude puis essuyer) avant de dresser : riz en base compacte, légumes disposés en quartiers distincts et colorés, bœuf au centre, œuf au plat par-dessus.',
+        'Déposer le gochujang sur l\'œuf. Servir immédiatement — le convive mélange lui-même le tout (bibim = mélanger).'
       ]
     },
     {
@@ -4148,9 +4157,12 @@
         { name: 'Coriandre fraîche', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Cuire le riz jasmin. Griller le poulet assaisonné sel/poivre/citron.',
-        'Couper carottes et concombre en julienne. Mariner 5 min dans jus de citron + sel.',
-        'Assembler : riz, poulet, légumes marinés, coriandre, sauce soja + sriracha.'
+        'Couper la carotte en julienne fine à la mandoline ou au couteau. Faire de même avec le concombre (épépiner au préalable). Mélanger avec le jus de citron, une pincée de sel et une de sucre. Laisser mariner 10 min minimum : les légumes vont rendre de l\'eau et s\'attendrir tout en gardant leur croquant.',
+        'Cuire le riz jasmin à l\'absorption. Le riz jasmin ne supporte pas le trempage — utiliser directement eau froide et couvercle.',
+        'Mariner le poulet 5 min dans sauce soja + sriracha + jus de citron. Chauffer une poêle-gril à feu vif et griller le poulet 4 min de chaque côté. Laisser reposer 2 min, trancher en biseau.',
+        'Égoutter les légumes marinés en les pressant légèrement entre les paumes — l\'excès d\'eau diluerait le bowl.',
+        'Préparer une sauce rapide : 1 cs sauce soja + quelques gouttes sriracha + 1 cs jus de citron. Goûter et ajuster le piquant.',
+        'Dresser le bowl : riz, poulet tranché, légumes marinés pressés, coriandre fraîche en branches, sauce à part ou nappée au dernier moment.'
       ]
     },
     {
@@ -4172,10 +4184,12 @@
         { name: 'Citron (pce)', qty: 0.5, unit: 'pce' }
       ],
       steps: [
-        'Cuire le quinoa. Rôtir la patate douce en cubes au four 200°C / 20 min.',
-        'Couper le tofu en cubes, dorer à la poêle avec sel et paprika.',
-        'Sauce tahini : mélanger tahini + jus citron + 2cs eau.',
-        'Assembler : quinoa, épinards, patate douce, tofu, graines, sauce tahini.'
+        'Éponger le tofu entre deux feuilles de papier absorbant, poser une assiette lestée dessus 10 min. Cette étape est indispensable : un tofu humide ne dorera jamais.',
+        'Pendant le pressage, enfourner la patate douce en cubes de 2 cm à 200°C sur plaque huilée, en une couche sans chevauchement. Assaisonner sel + paprika. Cuire 20 min en retournant à mi-cuisson.',
+        'Cuire le quinoa : porter l\'eau salée à ébullition, ajouter le quinoa rincé, couvrir et cuire 12 min à feu doux. Laisser gonfler 5 min hors feu.',
+        'Couper le tofu pressé en cubes de 2 cm. Chauffer une poêle à sec à feu vif, dorer le tofu sur toutes ses faces 6-7 min sans remuer trop souvent — la croûte se forme dans la patience.',
+        'Sauce tahini : délayer le tahini avec le jus de citron, ajouter 2-3 cuillères à soupe d\'eau froide en fouettant jusqu\'à consistance nappante et crémeuse. Saler.',
+        'Assembler : quinoa en base, épinards frais, cubes de patate douce caramélisés, tofu doré, graines de tournesol. Napper généreusement de sauce tahini au moment de servir.'
       ]
     },
     {
@@ -4196,9 +4210,12 @@
         { name: 'Citron (pce)', qty: 0.5, unit: 'pce' }
       ],
       steps: [
-        'Griller le halloumi à la poêle sèche 2-3 min par face jusqu\'à coloration dorée.',
-        'Réchauffer la tortilla. Étaler le houmous.',
-        'Garnir de halloumi, tomates cerises, roquette, jus de citron. Rouler.'
+        'Sortir le halloumi du réfrigérateur 10 min avant cuisson. Éponger soigneusement — l\'humidité de surface est l\'ennemi de la coloration.',
+        'Couper le halloumi en tranches de 8 mm régulières. Chauffer une poêle à fond épais (fonte ou inox) à feu vif sans matière grasse. Poser les tranches et ne plus y toucher pendant 2 min : une croûte dorée doit se former naturellement avant de retourner. Encore 2 min côté deux.',
+        'Couper les tomates cerises en deux. Mélanger avec la roquette, un filet de jus de citron et une pincée de sel au dernier moment — la roquette flétrit vite.',
+        'Réchauffer la tortilla 30 secondes à la poêle sèche sur feu moyen, ou 20 secondes directement sur la flamme vive du gaz pour une légère coloration aromatique.',
+        'Étaler le houmous sur toute la surface de la tortilla en laissant 2 cm de bord. Disposer les tranches de halloumi au centre, puis la salade de roquette-tomates.',
+        'Rouler fermement en serrant avec les paumes, replier les côtés vers l\'intérieur à mi-chemin pour contenir la garniture. Couper en biais pour un beau visuel.'
       ]
     },
     {
@@ -4220,10 +4237,12 @@
         { name: 'Sauce soja', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Porter 500ml d\'eau à ébullition avec le cube de bouillon. Dissoudre le miso.',
-        'Cuire le poulet en lanières dans le bouillon 8 min.',
-        'Couper la courgette en spirales (zoodles). Cuire l\'œuf mollet 7 min.',
-        'Servir : bouillon + poulet + zoodles + œuf coupé + nori.'
+        'Porter 500 ml d\'eau à ébullition, dissoudre le cube de bouillon. Baisser à frémissement doux. Ne jamais faire bouillir le bouillon avec le miso : la chaleur excessive tue ses ferments actifs et son arôme. Réserver le miso pour la fin.',
+        'Plonger le blanc de poulet entier dans le bouillon frémissant (pas bouillant) et pocher 10 min. Sortir, laisser tiédir 2 min, puis effilocher à la fourchette en suivant les fibres de la viande — cette technique donne des morceaux tendres et souvenirs de texture.',
+        'Spiraliser la courgette (zoodles) à l\'économe ou au couteau en longs rubans. Plonger 30 secondes dans le bouillon chaud, pas plus — ils doivent rester al dente.',
+        'Cuire l\'œuf dans de l\'eau frémissante (non bouillante) exactement 6 minutes et 30 secondes pour un jaune coulant. Plonger aussitôt dans de l\'eau glacée 2 min. Écaler délicatement, couper en deux d\'un coup sec.',
+        'Diluer le miso dans une petite louche de bouillon tiédi (moins de 70°C), puis incorporer au reste du bouillon hors du feu. Goûter et ajuster la sauce soja.',
+        'Dresser dans un bol chaud : zoodles en fond, bouillon miso versé chaud, poulet effiloché, demi-œuf mollet, feuille de nori dressée sur le bord du bol.'
       ]
     },
     {
@@ -4246,9 +4265,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Faire tremper les nouilles de riz 8 min dans l\'eau chaude. Égoutter.',
-        'Sauter les crevettes à feu vif 2 min. Pousser sur le côté, brouiller l\'œuf.',
-        'Ajouter les nouilles, sauce soja, fish sauce, beurre de cacahuète. Mélanger. Finir avec citron et sésame.'
+        'Réhydrater les nouilles de riz dans de l\'eau chaude (non bouillante, environ 70°C) pendant 8 min. Elles doivent rester légèrement fermes — elles finiront de cuire au wok. Égoutter et réserver.',
+        'Préparer la sauce à l\'avance dans un bol : sauce soja + nuoc-mâm + beurre de cacahuète + jus de citron. Fouetter jusqu\'à homogénéité. Avoir tout prêt avant d\'allumer le wok : la cuisson sera trop rapide pour chercher les ingrédients.',
+        'Chauffer le wok ou une grande poêle à feu maximum jusqu\'à légère fumée. Saisir les crevettes 1 min 30 sec sans les bouger — une face doit être rosée et légèrement dorée. Retourner 30 sec, pousser sur le bord.',
+        'Dans l\'espace libéré, verser l\'œuf battu et brouiller rapidement avec une spatule en écrasant les morceaux à la texture souhaitée. Mélanger avec les crevettes.',
+        'Ajouter les nouilles, verser la sauce en filet tout en remuant énergiquement par mouvements circulaires. Cuire 2 min à feu vif en mélangeant constamment — les nouilles doivent absorber la sauce et prendre de la couleur.',
+        'Hors du feu, presser le jus de citron et parsemer de sésame toasté. Servir immédiatement dans un bol chaud — le pad thaï n\'attend pas.'
       ]
     },
     {
@@ -4271,9 +4293,12 @@
         { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
       ],
       steps: [
-        'Cuire les falafels au four 200°C / 18 min. Cuire le quinoa.',
-        'Taboulé : mélanger quinoa, tomates et concombre en dés, persil haché, citron, huile.',
-        'Assembler : taboulé quinoa, houmous, falafels dorés.'
+        'Préchauffer le four à 200°C chaleur tournante. Disposer les falafels surgelés sur une grille (et non une plaque) pour que la chaleur circule tout autour — la grille donne du croustillant sur toute la surface. Enfourner 20 min en retournant à mi-cuisson.',
+        'Cuire le quinoa : rincer abondamment (enlève l\'amertume de la saponine), porter à ébullition dans le double de son volume d\'eau salée, couvrir et cuire 12 min à feu doux. Égrener à la fourchette après 5 min de repos.',
+        'Pendant la cuisson, tailler tomates et concombre en dés de 5 mm réguliers. Hacher finement le persil (feuilles uniquement, pas les tiges). C\'est la précision de la coupe qui fait un taboulé élégant.',
+        'Préparer la vinaigrette : huile d\'olive + jus de citron + une pincée de sel. Émulsionner à la fourchette. Assaisonner le quinoa tiède avec cette vinaigrette pendant qu\'il est encore chaud pour qu\'il l\'absorbe.',
+        'Incorporer tomates, concombre et persil au quinoa vinaigrette. Goûter et rectifier l\'acidité avec quelques gouttes de citron supplémentaires.',
+        'Dresser le bowl : taboulé quinoa en base généreuse, quenelle de houmous sur le côté, falafels croustillants posés en dernier pour préserver leur croustillant. Ne pas les enfoncer dans le taboulé.'
       ]
     },
     {
@@ -4295,9 +4320,12 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire les soba 4-5 min. Rincer à l\'eau froide.',
-        'Égoutter le thon.',
-        'Assembler : soba, thon, concombre en rondelles, avocat. Sauce soja + huile sésame. Parsemer de sésame.'
+        'Porter une grande casserole d\'eau non salée à ébullition franche. Cuire les soba 4 min exactement (elles continuent à cuire hors de l\'eau). Les sortir et rincer immédiatement sous un filet d\'eau froide abondant en les frottant entre les mains — ce geste élimine l\'amidon de surface et les rend brillantes et non collantes.',
+        'Égoutter le thon en boîte dans une passoire fine. Effeuiller à la fourchette en morceaux grossiers — pas en pâte. Un thon bien égoutté et effeuillé reste en bouche et ne détrempe pas le bowl.',
+        'Couper le concombre en rondelles fines de 2 mm en biais pour l\'élégance. Tailler l\'avocat en éventail ou en quartiers réguliers au dernier moment.',
+        'Préparer la sauce : sauce soja + huile de sésame + quelques gouttes d\'eau froide pour l\'alléger. La sauce doit napper légèrement la cuillère sans être trop épaisse.',
+        'Toaster les graines de sésame 30 secondes dans une poêle sèche à feu moyen, en remuant constamment — elles brûlent vite. Retirer dès les premières volutes de fumée parfumée.',
+        'Dresser le bowl : soba en nid au fond, thon effeuillé, éventail d\'avocat et rondelles de concombre. Napper de sauce soja-sésame, parsemer de sésame toasté. Servir frais.'
       ]
     },
     {
@@ -5658,9 +5686,11 @@
         { name: 'Coriandre fraîche', qty: 1, unit: 'pce' }
       ],
       steps: [
-        'Blanchir les crevettes 2 min. Laisser mariner 15 min dans jus de citron (cuisson à froid).',
-        'Couper avocat, concombre, tomate en dés.',
-        'Mélanger tout. Garnir de coriandre et oignon vert. Servir très frais.'
+        'Décortiquer et déveiner les crevettes. Les blanchir 90 secondes dans de l\'eau bouillante salée, puis plonger immédiatement dans de l\'eau glacée pour stopper la cuisson. Éponger.',
+        'Presser les 2 citrons. Dans un bol froid, coucher les crevettes dans le jus. Filmer et réfrigérer 10 minutes exactement — le jus "cuit" la chair en surface sans la durcir.',
+        'Pendant ce temps, tailler avocat, concombre et tomate en brunoise de 5 mm. Émincer les oignons verts très finement en biseau.',
+        'Égoutter les crevettes, réserver la moitié du jus de marinade. Incorporer délicatement les légumes aux crevettes sans écraser l\'avocat.',
+        'Remettre le jus réservé, ajuster sel, poivre de Cayenne. Disposer en verrine ou assiette creuse froide. Parsemer de coriandre ciselée et d\'oignon vert. Servir aussitôt.'
       ]
     },
     {
@@ -5680,9 +5710,11 @@
         { name: 'Fromage râpé', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Cuire les pâtes al dente. Cuire le poulet et trancher.',
-        'Mélanger pâtes égouttées + pesto + poulet + tomates cerises coupées.',
-        'Parsemer de fromage râpé. Servir chaud ou froid.'
+        'Cuire les fusilli dans une grande eau très salée (10 g sel/litre) jusqu\'à al dente, soit 2 minutes de moins que l\'indication du paquet. Réserver 60 ml d\'eau de cuisson avant d\'égoutter.',
+        'Pendant la cuisson des pâtes, saisir le blanc de poulet à feu vif dans une poêle chaude à sec 3 minutes par face. Couvrir hors feu 3 minutes — le centre finit de cuire doucement. Trancher en biais.',
+        'Dans la même poêle, à feu moyen, colorer les tomates cerises entières 2 minutes jusqu\'à ce qu\'elles craquèlent légèrement.',
+        'Hors du feu, mélanger les pâtes chaudes avec le pesto et 2 cuillères à soupe d\'eau de cuisson réservée. L\'amidon émulsionne le pesto et enrobe chaque fusilli uniformément.',
+        'Ajouter le poulet et les tomates. Mélanger délicatement. Rectifier l\'assaisonnement. Parsemer de fromage râpé et servir immédiatement dans l\'assiette chaude.'
       ]
     },
     {
@@ -5702,9 +5734,11 @@
         { name: 'Poivron rouge', qty: 60, unit: 'g' }
       ],
       steps: [
-        'Cuire patate douce en rondelles fines et oignon dans l\'huile à feu doux 10 min.',
-        'Ajouter poivron. Verser les œufs battus. Cuire 5 min à couvert.',
-        'Retourner l\'omelette. Cuire 3 min. Servir chaud ou froid.'
+        'Couper la patate douce en rondelles de 3 mm d\'épaisseur, l\'oignon en rondelles fines, le poivron en lanières. Dans une poêle à bord haut de 20 cm, chauffer l\'huile à feu très doux.',
+        'Confire les légumes à feu doux pendant 12 minutes, en remuant régulièrement : ils doivent être tendres et fondants, jamais colorés. C\'est la confiserie, pas la friture.',
+        'Battre les œufs vigoureusement avec une pincée de sel. Verser sur les légumes hors du feu. Mélanger doucement 30 secondes pour bien enrober. Laisser reposer 2 minutes à feu très doux jusqu\'à ce que les bords soient pris.',
+        'Couvrir la poêle d\'une grande assiette plate. D\'un geste ferme et rapide, retourner poêle + assiette ensemble. Faire glisser la tortilla de l\'assiette vers la poêle, côté cru en bas.',
+        'Cuire encore 3 minutes à feu doux. Le cœur doit rester légèrement tremblotant — il finit de coaguler hors du feu. Laisser reposer 5 minutes avant de couper.'
       ]
     },
     {
@@ -5726,9 +5760,11 @@
         { name: 'Huile d\'olive', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Cuire le quinoa 12 min. Laisser refroidir complètement.',
-        'Couper tomates + concombre en petits dés. Hacher persil + menthe.',
-        'Mélanger quinoa + légumes + herbes. Assaisonner abondamment citron + huile + sel.'
+        'Rincer abondamment le quinoa à l\'eau froide jusqu\'à ce que l\'eau soit claire — cela élimine la saponine amère. Cuire 12 minutes dans 2 volumes d\'eau salée. Égoutter et étaler sur une plaque pour refroidir rapidement.',
+        'Épépiner les tomates, les couper en brunoise de 4 mm. Saler légèrement, laisser dégorger 5 minutes, puis éponger avec du papier absorbant — cela évite que le tabboulé ne soit détrempé.',
+        'Hacher séparément le persil (tiges exclues, ciseler fin) et la menthe. La quantité de persil doit être généreuse — dans un vrai tabboulé, l\'herbe est la vedette, pas le grain.',
+        'Dans un bol, préparer la vinaigrette en premier : jus de citron + huile d\'olive + sel + poivre. Émulsionner à la fourchette.',
+        'Incorporer quinoa refroidi + légumes + herbes à la vinaigrette. Mélanger avec les mains (propres) pour sentir la texture. Filmer et réfrigérer 15 minutes minimum avant de servir — le repos est indispensable à l\'équilibre des saveurs.'
       ]
     },
     {
@@ -5750,9 +5786,11 @@
         { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
       ],
       steps: [
-        'Mélanger thon + fromage + sel/poivre. Étaler sur une feuille de brick (ou pâte fine).',
-        'Casser l\'œuf au centre. Replier. Dorer à la poêle huilée 3 min par face.',
-        'Servir avec salade + tomates en vinaigrette.'
+        'Égoutter soigneusement le thon et l\'émietter dans un bol avec le fromage râpé, sel, poivre et une pointe de harissa si désiré. La farce doit être sèche — pas de liquide résiduel qui ramollirait la brick.',
+        'Sur plan de travail, étaler la feuille de brick. Déposer la farce de thon en arc de cercle, en laissant 5 cm de bords libres et un espace central pour l\'œuf. Casser délicatement l\'œuf entier au centre sans crever le jaune.',
+        'Replier les deux bords latéraux sur la farce, puis rabattre le bas vers le haut pour former un rectangle hermétique. Pincer les bords — un paquet bien fermé ne fuit pas à la cuisson.',
+        'Chauffer la poêle avec l\'huile d\'olive à feu moyen (pas fort). Poser la brick côté fermeture en dessous. Dorer 2 minutes et demie par face en appuyant légèrement avec une spatule. Le jaune doit rester coulant.',
+        'Éponger sur papier absorbant 30 secondes. Dresser sur assiette avec la salade romaine et la tomate assaisonnées d\'un filet de citron. Manger immédiatement — la brick se ramollit en refroidissant.'
       ]
     },
     {
@@ -5774,9 +5812,11 @@
         { name: 'Sauce soja', qty: 10, unit: 'ml' }
       ],
       steps: [
-        'Porter 600ml eau + cube bouillon + gingembre râpé + ail à ébullition.',
-        'Ajouter poulet en lanières + riz. Cuire 18 min à feu moyen.',
-        'Finir avec sauce soja + oignons verts. Servir brûlant.'
+        'Peler et râper finement le gingembre. Écraser l\'ail en chemise avec le plat du couteau. Dans une casserole, verser un filet d\'huile et faire revenir gingembre + ail 1 minute à feu moyen — le sauté libère les huiles essentielles et décuple l\'arôme.',
+        'Verser 600 ml d\'eau chaude, ajouter le cube de bouillon. Porter à frémissement (pas à gros bouillon — cela trouble le consommé et durcit les protéines).',
+        'Ajouter le riz. Cuire 8 minutes à feu doux. Couper le blanc de poulet en lamelles fines de 5 mm dans le sens perpendiculaire aux fibres — elles cuisent en 4 à 5 minutes seulement dans le bouillon frémissant.',
+        'Ajouter les lamelles de poulet. Cuire 5 minutes. Vérifier la cuisson : la chair doit être blanche jusqu\'au centre. Ajouter la sauce soja hors du feu pour préserver ses arômes volatils.',
+        'Servir brûlant dans un bol chaud. Garnir d\'oignons verts ciselés en brunoise fine et d\'un voile de gingembre râpé frais par-dessus pour la fraîcheur.'
       ]
     },
     {
@@ -5796,9 +5836,11 @@
         { name: 'Huile d\'olive', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Cuire la patate douce en frites au four 200°C / 20 min (couper en bâtonnets, huiler).',
-        'Former le steak haché avec oignon émincé + moutarde + sel/poivre.',
-        'Cuire le steak à la poêle 3-4 min par face. Servir avec les frites de patate douce.'
+        'Préchauffer le four à 210°C. Couper la patate douce en bâtonnets réguliers de 1 cm de côté — l\'uniformité est la clé d\'une cuisson homogène. Enrober avec la moitié de l\'huile, sel. Enfourner 20 minutes, en retournant à mi-cuisson.',
+        'Mélanger la viande hachée avec l\'oignon finement ciselé, la moutarde, sel et poivre. Travailler la farce avec la paume de la main, pas avec les doigts — cela évite de réchauffer la graisse. Former un palet de 2 cm d\'épaisseur maximum, bords légèrement pincés pour qu\'il ne se déforme pas à la cuisson.',
+        'Sortir le steak du réfrigérateur 5 minutes avant cuisson. Chauffer la poêle à sec à feu très vif jusqu\'à légère fumée. Saisir le steak 1 minute à feu vif pour la croûte de Maillard, puis baisser à feu moyen.',
+        'Cuire 2 à 3 minutes par face selon l\'épaisseur pour une cuisson rosée à cœur. Ne jamais écraser le steak avec la spatule — vous exprimez le jus et obtenez un galette sèche.',
+        'Laisser reposer le steak 2 minutes sur une grille ou assiette chaude avant de servir. Les jus se redistribuent et la chair reste juteuse. Dresser avec les frites de patate douce et un filet de moutarde.'
       ]
     },
     {
@@ -5819,9 +5861,11 @@
         { name: 'Huile d\'olive', qty: 8, unit: 'ml' }
       ],
       steps: [
-        'Assaisonner le blanc de poulet avec herbes de Provence, sel et huile d\'olive.',
-        'Préparer la ratatouille : courgette + tomate + poivron en dés, 15 min à la poêle.',
-        'Cuire le poulet au four 200°C / 20 min jusqu\'à dorure. Servir avec la ratatouille provençale.'
+        'Inciser le blanc de poulet en croisillons superficiels côté chair (3 mm de profondeur) : cela favorise la pénétration des arômes et accélère la cuisson. Frotter avec les herbes de Provence, sel, la moitié de l\'huile et un trait de jus de citron. Laisser mariner 10 minutes.',
+        'Couper courgette, tomate et poivron rouge en dés de 2 cm. Dans une poêle chaude, chauffer le reste de l\'huile à feu vif. Saisir d\'abord le poivron 3 minutes, puis ajouter courgette et tomate. Assaisonner, cuire 8 minutes à feu moyen. Les légumes doivent garder de la tenue.',
+        'Dans la même poêle (retirée du feu), saisir le blanc de poulet côté lisse à feu vif 2 minutes pour le colorer. Retourner, puis enfourner directement la poêle allant au four à 200°C pendant 12 minutes.',
+        'Vérifier la cuisson avec la pointe d\'un couteau au plus épais : le jus qui s\'écoule doit être parfaitement clair. Laisser reposer le poulet 3 minutes sous une feuille d\'aluminium avant de trancher.',
+        'Trancher le poulet en biais, dresser sur lit de légumes du soleil. Napper du jus de cuisson récupéré dans la poêle. Servir immédiatement.'
       ]
     },
     {
@@ -5844,9 +5888,11 @@
         { name: 'Sésame (graines)', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Cuire le riz. Assaisonner avec vinaigre de riz + sel. Laisser tiédir.',
-        'Couper saumon + avocat + concombre en dés. Ciseler le nori.',
-        'Bowl : riz en base, garnitures en secteurs, nori ciselé, sauce soja, sésame.'
+        'Rincer le riz à l\'eau froide 3 fois jusqu\'à eau claire. Cuire à l\'eau (ratio 1:1,2) à couvert, à feu doux : porter à ébullition, baisser au minimum, cuire 12 minutes, puis éteindre et laisser gonfler 5 minutes couvercle fermé. Ne jamais soulever le couvercle en cours de cuisson.',
+        'Dans une petite casserole, chauffer le vinaigre de riz avec une pincée de sel à feu doux jusqu\'à dissolution (ne pas bouillir). Verser sur le riz chaud dans un grand bol. Mélanger en effectuant des mouvements de coupe latéraux avec une spatule plate — pas de mouvements circulaires qui écrasent les grains. Éventer pour refroidir à température ambiante.',
+        'Couper le saumon frais en cubes de 1,5 cm. Si le saumon est destiné à être consommé cru, vérifier sa fraîcheur : chair ferme, couleur vive, odeur marine (jamais âcre). Assaisonner d\'un trait de sauce soja légère directement sur les cubes.',
+        'Couper l\'avocat en tranches régulières, le concombre en demi-lunes de 3 mm. Ciseler les feuilles de nori en fines lanières à l\'aide de ciseaux.',
+        'Dresser le riz en base du bowl, légèrement tassé. Disposer saumon, avocat, concombre en secteurs distincts — l\'esthétique du bowl, c\'est la séparation des couleurs. Finir avec le nori ciselé, les graines de sésame et la sauce soja sur le côté.'
       ]
     },
     {
@@ -5870,9 +5916,11 @@
         { name: 'Citron (pce)', qty: 0.5, unit: 'pce' }
       ],
       steps: [
-        'Cuire quinoa (12 min) + patate douce rôtie au four (20 min) + edamames (3 min).',
-        'Griller le poulet assaisonné. Sauce : tahini + citron + 2cs eau.',
-        'Assembler le bowl : tous les éléments disposés en secteurs colorés. Graines de tournesol. Sauce tahini.'
+        'Organiser la mise en place : préchauffer le four à 210°C. Couper la patate douce en cubes de 2 cm, enrober d\'une pointe d\'huile + cumin + sel. Enfourner 20 minutes. Pendant ce temps, cuire le quinoa rincé dans 2 volumes d\'eau salée, 12 minutes à frémissement — puis égoutter et étaler pour refroidir.',
+        'Cuire les edamames surgelés 3 minutes dans eau bouillante salée. Égoutter, rafraîchir à l\'eau froide pour fixer la couleur vert vif.',
+        'Assaisonner le blanc de poulet avec sel, poivre et paprika. Cuire à la poêle chaude à feu moyen-vif : 4 minutes par face, sans bouger la viande pour obtenir une belle croûte. Couvrir hors feu 3 minutes. Trancher en diagonale.',
+        'Préparer la sauce tahini : mélanger le tahini avec le jus de citron, puis délayer progressivement avec 2 à 3 cuillères à soupe d\'eau froide jusqu\'à consistance nappante. Saler, une pointe d\'ail râpé si désiré. La sauce doit tomber lentement du cuillère — ni trop épaisse, ni liquide.',
+        'Dresser le bowl méthodiquement : épinards frais en base, puis quinoa, patate douce rôtie, poulet tranché, edamames, tranches d\'avocat disposées en éventail. Parsemer les graines de tournesol. Verser la sauce tahini en filet harmonieux sur l\'ensemble. Servir sans attendre.'
       ]
     },
     {
@@ -6181,11 +6229,12 @@
         { name: 'Sel', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Mixer les noix de cajou jusqu\'à obtenir une farine grossière. Concasser légèrement les pistaches et réserver.',
-        'Ajouter protéine de pois, zeste, jus de citron vert, sirop d\'agave et sel. Mixer brièvement pour combiner.',
-        'Verser l\'huile de coco fondue et mixer jusqu\'à obtenir une pâte qui se tient. Incorporer les pistaches à la main.',
-        'Étaler dans un moule tapissé de papier sulfurisé sur 1,5 cm d\'épaisseur. Décorer de pistaches entières.',
-        'Réfrigérer 1h30. Couper en 8 barres. Conserver au frigo 5 jours. Texture "Larabar" premium.'
+        'Placer les noix de cajou au robot et pulser par impulsions courtes : on veut une semoule irrégulière, pas une poudre fine. L\'irrégularité donne de la mâche.',
+        'Concasser les pistaches au couteau, à la main — jamais au robot. Réserver grossièrement pour les garder entières en bouche.',
+        'Zester le citron vert sur une râpe fine directement au-dessus du bol : les huiles essentielles tombent dans la masse. Presser le jus. Ajouter protéine de pois, sirop d\'agave, sel. Mixer 10 secondes chrono, pas davantage.',
+        'Verser l\'huile de coco fondue mais tiède (pas brûlante). Mixer 5 secondes. La pâte doit former une boule qui se détache des parois. Si elle colle, ajouter 5g de protéine ; si elle s\'effrite, 5ml d\'huile de coco.',
+        'Incorporer les pistaches à la spatule, geste enveloppant, sans écraser. Étaler entre deux feuilles de papier sulfurisé sur 1,5 cm ; passer un rouleau pour lisser. Décorer de pistaches entières en appuyant légèrement.',
+        'Réfrigérer 2h à plat. Démouler froid, couper d\'un coup de couteau chaud et sec (tremper la lame, essuyer entre chaque coupe). Conservation : 5 jours au frigo, 1 mois au congélateur.'
       ]
     },
 
@@ -6209,11 +6258,12 @@
         { name: 'Fleur de sel', qty: 2, unit: 'g' }
       ],
       steps: [
-        'Base biscuit : mixer flocons + whey + beurre d\'amande + 2cs eau jusqu\'à obtenir une pâte homogène. Presser dans moule tapissé de 2 cm.',
-        'Cuire la base 12 min à 175°C jusqu\'à légère dorure. Laisser refroidir complètement.',
-        'Caramel : mixer dattes + beurre de cacahuète + lait de coco jusqu\'à consistance lisse et collante.',
-        'Étaler le caramel sur la base refroidie en couche uniforme d\'1 cm. Réfrigérer 30 min.',
-        'Faire fondre le chocolat noir au bain-marie. Couper en 8 barres, enrober chacune de chocolat. Déposer sur grille, saupoudrer de fleur de sel. Réfrigérer 45 min.'
+        'Base biscuit : mixer flocons + whey vanille + beurre d\'amande. Ajouter l\'eau, cuillère à soupe par cuillère, jusqu\'à obtenir une pâte qui se presse sans coller. Presser fermement dans le moule tapissé sur 1 cm d\'épaisseur uniforme — utiliser le fond d\'un verre pour compacter.',
+        'Cuire la base 12 min à 175°C. Elle doit sonner creux en tapotant et dorer légèrement sur les bords. Laisser refroidir sur une grille, pas dans le moule — l\'humidité condenserait en dessous.',
+        'Caramel : mixer dattes dénoyautées + beurre de cacahuète + lait de coco. Travailler 2 min à haute vitesse jusqu\'à obtenir un ruban lisse qui tombe en nappe. Goûter et ajuster : une pincée de sel révèle tout.',
+        'Étaler le caramel sur la base froide en couche d\'1 cm. Lisser à la spatule trempée dans l\'eau chaude. Réfrigérer 30 min ferme.',
+        'Faire fondre le chocolat noir au bain-marie à 50°C, puis le tempérer en remuant hors feu jusqu\'à 31°C : le glaçage sera brillant et claquant. Couper en 8 barres, enrober chacune en la plongeant et en la soulevant sur une fourchette.',
+        'Déposer sur grille, parsemer de fleur de sel en effleurant. Réfrigérer 45 min. Démouler à température ambiante pour éviter la condensation.'
       ]
     },
 
@@ -6236,11 +6286,12 @@
         { name: 'Sel', qty: 1, unit: 'g' }
       ],
       steps: [
-        'Couper la mangue séchée en petits morceaux. Mixer les noix de cajou en grossier dans un robot.',
-        'Ajouter whey vanille, gingembre râpé, miel, huile de coco et sel. Mixer brièvement pour combiner.',
-        'Incorporer les morceaux de mangue séchée et mélanger à la main pour les répartir uniformément dans la pâte.',
-        'La pâte doit se tenir : si trop sèche, ajouter 1cs d\'eau ; si trop collante, ajouter un peu plus de whey.',
-        'Étaler dans moule tapissé sur 1,5 cm, réfrigérer 2h. Couper en 8 barres. Conserver 1 semaine au frigo.'
+        'Ciseler la mangue séchée en morceaux de 5 mm au couteau — des morceaux nets, pas déchirés. Cette taille crée des "explosions" de saveur à chaque bouchée sans déséquilibrer la barre.',
+        'Pulser les noix de cajou par impulsions de 2 secondes : arrêter dès qu\'on voit du grossier. Râper le gingembre frais à la microplane au-dessus du bol — le jus tombe en même temps que la pulpe.',
+        'Ajouter whey vanille, miel et huile de coco fondue tiède. Mixer 8 secondes. La pâte doit se tenir entre deux doigts sans s\'émietter. Ajuster : eau si trop sèche, whey si trop collante.',
+        'Incorporer la mangue ciselée à la spatule, geste vif et enveloppant. Répartir sans écraser les morceaux.',
+        'Étaler entre deux feuilles de sulfurisé sur 1,5 cm. Passer un rouleau. Réfrigérer 2h à plat.',
+        'Couper en 8 barres avec un couteau humide et chaud. Conserver au frigo 1 semaine, au congélateur 1 mois.'
       ]
     },
 
@@ -6262,10 +6313,11 @@
         { name: 'Miel', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Verser le skyr dans un bol large. Lisser avec une cuillère pour un effet crémeux et uniforme.',
-        'Déposer le granola pistache-coco sur le côté du bol pour préserver son croustillant jusqu\'au service.',
-        'Disposer les myrtilles et framboises en secteurs colorés. Saupoudrer les graines de chia.',
-        'Drizzler le miel en filet sur l\'ensemble. Servir immédiatement pour profiter du contraste croustillant/crémeux.'
+        'Sortir le skyr du frigo 5 min avant : légèrement tempéré, il se lisse mieux et révèle plus d\'arômes. Verser dans un bol large et creux.',
+        'Lisser le skyr en ramenant la cuillère du bord vers le centre en spirale : obtenir une surface légèrement concave qui accueillera les toppings sans qu\'ils roulent.',
+        'Disposer le granola sur un côté uniquement — jamais tout autour — pour préserver son croustillant jusqu\'à la dernière cuillère. Il absorbera l\'humidité du skyr progressivement.',
+        'Répartir myrtilles et framboises en quartiers distincts, couleurs contrastées. Saupoudrer les graines de chia.',
+        'Drizzler le miel en spirale continue depuis le bord : il glisse sur les fruits et entre dans le granola, créant trois textures sucrées différentes. Servir immédiatement.'
       ]
     },
 
@@ -6288,10 +6340,11 @@
         { name: 'Extrait de vanille', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Mixer les amandes en poudre grossière. Réserver 30g de pistaches concassées pour l\'enrobage.',
-        'Mixer les dattes Medjool jusqu\'à obtenir une pâte collante. Ajouter amandes, whey chocolat, cacao, vanille et fleur de sel. Mixer jusqu\'à homogénéité.',
-        'Diviser en 14 portions égales (~35g). Rouler en boules de 2 cm de diamètre entre les paumes.',
-        'Rouler chaque ball dans les pistaches concassées ou le cacao en poudre. Réfrigérer 1h avant dégustation. Conservation : 7 jours au frigo.'
+        'Mixer les amandes seules 10 secondes : on veut une poudre avec des éclats, pas une crème. Réserver 30g de pistaches concassées au couteau pour l\'enrobage — la régularité des éclats compte.',
+        'Mixer les dattes Medjool dénoyautées 1 min jusqu\'à pâte homogène et collante. Ajouter amandes, whey chocolat, cacao, vanille et fleur de sel. Pulser 5 fois, 2 secondes chacune — stopper dès que c\'est amalgamé.',
+        'Tester la cohésion : presser une boule entre les paumes. Elle doit tenir sans coller aux mains. Si elle colle, ajouter 5g de cacao ; si elle s\'effrite, 5ml d\'eau froide.',
+        'Peser 14 portions de 35g. Rouler chaque boule entre les paumes en mouvement circulaire continu — la chaleur des mains soude la masse. Travailler vite.',
+        'Rouler la moitié dans les pistaches concassées, l\'autre moitié dans le cacao tamisé. Déposer sur plaque. Réfrigérer 1h minimum avant dégustation. Conservation : 7 jours au frigo.'
       ]
     },
 
@@ -6312,10 +6365,11 @@
         { name: 'Cranberries séchées', qty: 40, unit: 'g' }
       ],
       steps: [
-        'Mélanger beurre de cacahuète et miel dans un saladier. Chauffer 30 sec au micro-ondes pour faciliter le mélange.',
-        'Incorporer les flocons d\'avoine, la whey vanille et les cranberries séchées. Mélanger jusqu\'à obtenir une pâte homogène.',
-        'Si trop collante, réfrigérer 20 min. Former 12 boules compactes (~50g chacune) en pressant fermement.',
-        'Déposer sur une plaque tapissée de papier cuisson. Réfrigérer au moins 30 min. Conservation : 10 jours au frigo.'
+        'Chauffer le beurre de cacahuète et le miel ensemble 20 sec au micro-ondes — mélanger immédiatement à la spatule jusqu\'à obtenir un ruban brillant homogène. La chaleur ouvre les arômes du beurre de cacahuète.',
+        'Ajouter les flocons d\'avoine en une fois, mélanger. Incorporer la whey vanille en pluie fine en tournant : éviter les grumeaux. La masse doit devenir dense et non collante.',
+        'Incorporer les cranberries séchées à la spatule. Si la pâte colle aux doigts, placer 20 min au frigo sans couvrir : elle se raffermira en surface.',
+        'Former 12 boules de 50g chacune en pressant d\'abord dans la paume en creux, puis en faisant rouler entre les deux paumes. La précompression évite les fissures.',
+        'Déposer sur plaque sulfurisée sans se toucher. Réfrigérer 30 min minimum. Conservation : 10 jours au frigo dans une boîte hermétique.'
       ]
     },
 
@@ -6341,10 +6395,12 @@
         { name: 'Miel', qty: 20, unit: 'g' }
       ],
       steps: [
-        'Base : mixer dattes + amandes + cajou jusqu\'à obtenir une pâte collante. Presser uniformément au fond d\'un moule 20cm tapissé de papier sulfurisé.',
-        'Crème : fouetter cream cheese allégé + skyr + whey vanille + jus et zeste de citron + miel jusqu\'à obtenir un appareil lisse et aérien.',
-        'Verser la crème sur la base. Lisser. Filmer et réfrigérer minimum 4h (idéalement une nuit).',
-        'Coulis : mixer 100g de framboises avec quelques gouttes de citron. Verser sur le cheesecake froid. Décorer avec les framboises entières restantes. Couper en 6 parts.'
+        'Base : mixer dattes + amandes + cajou jusqu\'à pâte collante qui forme une boule. Presser uniformément au fond d\'un moule 20cm tapissé de papier sulfurisé — utiliser le fond d\'un verre fariné pour compacter et lisser. Réfrigérer pendant la préparation de la crème.',
+        'Crème : fouetter d\'abord le cream cheese seul 1 min pour le détendre et l\'aérer. Ajouter skyr, puis whey en pluie, puis miel, jus de citron et zeste. Fouetter jusqu\'à obtenir un appareil qui forme des vagues fermes sous le fouet.',
+        'Verser la crème sur la base froide depuis le centre, en spirale vers les bords — la pression est plus douce et évite les trous d\'air. Tapoter le moule deux fois sur le plan de travail pour chasser les bulles.',
+        'Lisser à la spatule trempée dans l\'eau chaude. Filmer au contact pour éviter une peau. Réfrigérer minimum 4h, idéalement une nuit.',
+        'Coulis : mixer 100g de framboises avec quelques gouttes de citron. Passer au tamis fin pour éliminer les graines — texture veloutée garantie. Verser sur le cheesecake froid en partant du centre.',
+        'Décorer les framboises entières en cercles concentriques. Couper en 6 parts avec un couteau chaud et sec, essuyé entre chaque coupe.'
       ]
     },
 
@@ -6368,10 +6424,12 @@
         { name: 'Bicarbonate de soude', qty: 3, unit: 'g' }
       ],
       steps: [
-        'Préchauffer le four à 175°C. Mélanger beurre de cajou + œufs jusqu\'à consistance crémeuse.',
-        'Incorporer farine d\'avoine, whey chocolat, cacao, sel et bicarbonate. Mélanger sans excès. Ajouter les pépites de chocolat.',
-        'Former 10 boules (~55g). Déposer sur plaque avec papier cuisson. Aplatir légèrement. Saupoudrer d\'une pincée de sel de mer.',
-        'Cuire 10-12 min. Le centre doit paraître légèrement sous-cuit : il se raffermira en refroidissant. Laisser refroidir 10 min sur la plaque avant de déguster.'
+        'Préchauffer le four à 175°C. Fouetter beurre de cajou + œufs à la main jusqu\'à obtenir un appareil lisse et légèrement pâle — 1 min de fouet vif suffit. Ne pas utiliser de batteur électrique : on ne veut pas d\'air.',
+        'Tamiser ensemble farine d\'avoine, whey chocolat, cacao, sel et bicarbonate directement au-dessus du bol. Incorporer en trois fois à la spatule, geste en "J" — stopper dès que la farine disparaît. Trop mélanger durcit le cookie.',
+        'Incorporer les pépites de chocolat d\'un geste rapide. La pâte doit être ferme mais malleable. Si elle colle, placer 10 min au frigo.',
+        'Peser 10 portions de 55g. Rouler en boules. Déposer sur plaque sulfurisée en laissant 5 cm entre chaque. Aplatir avec la paume à 1,5 cm d\'épaisseur — ni plus, ni moins.',
+        'Parsemer une pincée de sel de mer sur chaque cookie. Enfourner 10-11 min : le contour est mat, le centre brille légèrement — c\'est le signe qu\'ils sont parfaits.',
+        'Sortir du four et ne pas toucher pendant 10 min : ils continuent de cuire sur la plaque chaude. C\'est ce repos qui crée le cœur fondant.'
       ]
     },
 
@@ -6397,9 +6455,11 @@
         { name: 'Miel', qty: 5, unit: 'g' }
       ],
       steps: [
-        'Mixer açaï + mangue congelée + banane congelée + whey vanille + lait de coco jusqu\'à obtenir une texture épaisse, crémeuse et lisse. Utiliser le minimum de liquide.',
-        'Verser dans un bol profond. La texture doit être suffisamment épaisse pour tenir une cuillère droite.',
-        'Disposer les toppings en rangées harmonieuses : granola, noix de cajou, noix de coco râpée, myrtilles fraîches. Finir par un filet de miel. Servir immédiatement.'
+        'Sortir les fruits congelés 3 min avant : juste assez pour que le robot les attaque sans forcer son moteur. Verser d\'abord le lait de coco au fond du bol du mixeur, puis les fruits congelés par-dessus.',
+        'Mixer par impulsions de 3 secondes, scraper les bords entre chaque impulsion. Ajouter la whey vanille. Mixer jusqu\'à texture épaisse et homogène — résister à l\'envie d\'ajouter du liquide. La texture doit tenir une cuillère droite.',
+        'Verser dans un bol froid (sorti du congélateur 2 min avant). Lisser la surface en ramenant la spatule du bord vers le centre.',
+        'Placer granola, noix de cajou, noix de coco râpée et myrtilles en rangées nettes perpendiculaires au bord du bol — la géométrie transforme un bol ordinaire en bol instagrammable et appétissant.',
+        'Drizzler le miel en zig-zag par-dessus. Servir immédiatement : chaque minute qui passe ramollit le granola et liquéfie la base.'
       ]
     },
 
@@ -6423,10 +6483,12 @@
         { name: 'Extrait de vanille', qty: 5, unit: 'ml' }
       ],
       steps: [
-        'Préchauffer le four à 170°C. Cuire la patate douce à la vapeur ou au four, éplucher et réduire en purée lisse.',
-        'Mélanger purée tiède + beurre de cajou + œufs + vanille jusqu\'à homogénéité. Ajouter whey chocolat, cacao et sel. Mélanger sans excès.',
-        'Verser dans un moule carré 20×20cm tapissé de papier sulfurisé. Parsemer de noix de cajou concassées. Appuyer légèrement.',
-        'Cuire 22-25 min. Le centre doit être encore légèrement tremblotant. Laisser refroidir complètement avant de découper en 9 carrés. Réfrigérer pour une texture fudgey optimale.'
+        'Cuire la patate douce à la vapeur (pas au four) : elle reste plus humide et absorbe moins de saveurs parasites. Éplucher à chaud et écraser immédiatement à la fourchette — la chaleur libère l\'amidon et facilite l\'émulsion avec les œufs.',
+        'Pendant que la purée est encore tiède (pas brûlante), incorporer le beurre de cajou et fouetter énergiquement : la chaleur fait fondre les corps gras et crée une émulsion lisse. Ajouter les œufs un par un en fouettant entre chaque.',
+        'Incorporer vanille, puis tamiser whey chocolat + cacao + sel directement au-dessus de la masse. Mélanger à la spatule en geste enveloppant, 15 rotations maximum — le brownie doit rester dense, pas aéré.',
+        'Verser dans un moule 20×20cm tapissé de papier sulfurisé. Tapoter le moule sur le plan de travail 3 fois pour chasser les bulles. Parsemer les noix de cajou concassées en appuyant légèrement pour qu\'elles adhèrent.',
+        'Cuire à 170°C pendant 20-22 min. Tester avec un cure-dent : il doit ressortir avec quelques miettes humides collées — pas propre, pas coulant. Ce détail est la frontière entre fudgey et sec.',
+        'Laisser refroidir complètement dans le moule. Réfrigérer 2h avant de découper : le froid fixe la structure fudgey. Couper en 9 carrés d\'un geste net, couteau chaud et sec, essuyé entre chaque coupe.'
       ]
     },
 
