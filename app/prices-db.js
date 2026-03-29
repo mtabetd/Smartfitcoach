@@ -3408,6 +3408,8 @@
         return null;
 
       case 'pce':
+      case 'pcs':    // alias (variante orthographique)
+      case 'pièce':  // alias (format RECIPES_DB)
         if (entry.pricePerPce !== undefined) return entry.pricePerPce;
         console.warn('[prices-db] pricePerPce non disponible pour "' + ingredientName + '"');
         return null;
@@ -3418,18 +3420,21 @@
         return null;
 
       case 'l':
+      case 'L':      // alias (majuscule — toMarketQty output)
         if (entry.pricePerMl !== undefined) return entry.pricePerMl * 1000;
         if (entry.pricePerG !== undefined) return entry.pricePerG * 1000;
-        console.warn('[prices-db] pricePerMl non disponible pour "' + ingredientName + '" (l)');
+        console.warn('[prices-db] pricePerMl non disponible pour "' + ingredientName + '" (l/L)');
         return null;
 
       case 'cs':
+      case 'c.à.soupe': // alias (format display RECIPES_DB)
         // Cuillère à soupe ≈ 15ml ou 12g selon l'ingrédient
         if (entry.pricePerMl !== undefined) return entry.pricePerMl * 15;
         if (entry.pricePerG !== undefined) return entry.pricePerG * 12;
         return null;
 
       case 'cc':
+      case 'c.à.café': // alias (format display RECIPES_DB)
         // Cuillère à café ≈ 5ml ou 4g
         if (entry.pricePerMl !== undefined) return entry.pricePerMl * 5;
         if (entry.pricePerG !== undefined) return entry.pricePerG * 4;

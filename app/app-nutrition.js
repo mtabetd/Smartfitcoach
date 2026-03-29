@@ -4517,7 +4517,7 @@ window.openSaladComposer = function openSaladComposer(slotKey) {
 
     // e. Build virtual recipe object
     var saladRecipe = {
-      _id: 'custom_salad_' + Date.now(),
+      _id: 'SALAD_' + Date.now(),
       n: 'Ma Salade Personnalisée',
       type: slotKey,
       cal: scaledCals,
