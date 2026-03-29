@@ -3383,6 +3383,20 @@
     'Cannelle': 'Cannelle moulue',
     'Pincée de sel': 'Sel',
     "Purée d'amande": "Beurre d'amande",
+    // ─── RECIPES_DB ingredient aliases (unit pièce / non-standard names) ───────
+    'Galette de blé (tortilla)': 'Tortilla de blé',
+    'Tortilla de maïs': 'Tortilla de blé',
+    'Tomates': 'Tomate',
+    'Piment rouge frais': 'Poivron rouge',
+    'Paprika': 'Paprika doux',
+    'Sel, poivre': 'Sel',
+    'Sel, poivre noir': 'Sel',
+    'Sel, poivre blanc': 'Sel',
+    'Sel, poivre, origan séché': 'Sel',
+    'Ail en poudre, sel, poivre': 'Sel',
+    'Noix de muscade': 'Muscade moulue',
+    'Romarin frais': 'Thym frais',
+    'Bouillon cube légumes': 'Bouillon de légumes',
   };
 
   function getPricePer(ingredientName, unit) {

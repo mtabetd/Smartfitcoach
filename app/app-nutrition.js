@@ -3569,7 +3569,7 @@ var WHEY_SMOOTHIES = [
   // === PIÑA COLADA #2-3 ===
   { id:'sm_pina_02', name:'Coco Express', flavors:['pina_colada'], goal:['muscle','performance'], timing:'post', cal:173, p:25, c:15, f:2, prep:'1min',
     ingredients:[{name:'Whey piña colada',qty:30,unit:'g'},{name:'Eau de coco',qty:250,unit:'ml'}],
-    steps:['Utiliser de l\'eau de coco nature — non sucrée, non aromatisée, sortie du réfrigérateur.','Verser dans le shaker, ajouter la whey piña colada, shaker 20 secondes.'],
+    steps:['Utiliser de l\'eau de coco nature — non sucrée, non aromatisée, sortie du réfrigérateur.','Verser dans le shaker, ajouter la whey piña colada, shaker 20 secondes.','Servir dans un verre glacé pour une expérience tropicale rafraîchissante.'],
     tips:'Ce shake minimaliste repose entièrement sur la qualité de la whey — une eau de coco bien froide fait ressortir les notes d\'ananas et de noix de coco sans artifice.' },
   { id:'sm_pina_03', name:'Tropicale Crémeuse', flavors:['pina_colada'], goal:['muscle','recovery'], timing:'post', cal:217, p:25, c:21, f:4, prep:'3min',
     ingredients:[{name:'Whey piña colada',qty:30,unit:'g'},{name:'Ananas',qty:100,unit:'g'},{name:'Eau de coco',qty:100,unit:'ml'},{name:'Lait de coco',qty:30,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'}],
@@ -3579,7 +3579,7 @@ var WHEY_SMOOTHIES = [
   // === VANILLE CANNELLE #2-3 ===
   { id:'sm_vanilla_cinn_02', name:'Lait Vanille Cannelle Flash', flavors:['vanilla_cinnamon'], goal:['muscle','recovery'], timing:'anytime', cal:253, p:31, c:13, f:9, prep:'1min',
     ingredients:[{name:'Whey vanille cannelle',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
-    steps:['Infuser la cannelle dans le lait entier froid 3 minutes avant de shaker.','Ajouter la whey vanille cannelle, shaker 25 secondes vigoureusement.'],
+    steps:['Infuser la cannelle dans le lait entier froid 3 minutes avant de shaker.','Ajouter la whey vanille cannelle, shaker 25 secondes vigoureusement.','Servir dans un verre froid, saupoudrer une pincée de cannelle au service.'],
     tips:'Lait entier + cannelle infusée à froid : la texture est onctueuse, la cannelle est diffuse mais présente — jamais dominante. C\'est un lait de Noël protéiné.' },
   { id:'sm_vanilla_cinn_03', name:'Banana Vanille Épicée', flavors:['vanilla_cinnamon'], goal:['muscle','performance'], timing:'pre', cal:333, p:44, c:32, f:3, prep:'4min',
     ingredients:[{name:'Whey vanille cannelle',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:150,unit:'g'},{name:'Banane',qty:80,unit:'g'},{name:'Lait demi-écrémé',qty:100,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
@@ -3589,7 +3589,7 @@ var WHEY_SMOOTHIES = [
   // === SPÉCULOOS #2-3 ===
   { id:'sm_speculoos_02', name:'Shaker Biscuit Lacté', flavors:['speculoos'], goal:['muscle','fat_loss'], timing:'post', cal:237, p:32, c:16, f:5, prep:'1min',
     ingredients:[{name:'Whey spéculoos',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:250,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
-    steps:['Verser le lait froid dans le shaker, ajouter la cannelle en premier.','Ajouter la whey spéculoos, shaker 20 secondes à amplitude maximale.'],
+    steps:['Verser le lait froid dans le shaker, ajouter la cannelle en premier.','Ajouter la whey spéculoos, shaker 20 secondes à amplitude maximale.','Servir immédiatement pour profiter de la texture mousseuse et des arômes de biscuit.'],
     tips:'La cannelle dans un lait froid diffuse lentement ses arômes — si vous préparez ce shake 2 minutes avant de le boire, laissez la cannelle reposer dans le lait avant de fermer le shaker.' },
   { id:'sm_speculoos_03', name:'Fromage Blanc Épice Dorée', flavors:['speculoos'], goal:['fat_loss','muscle'], timing:'anytime', cal:319, p:43, c:33, f:2, prep:'4min',
     ingredients:[{name:'Whey spéculoos',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Banane',qty:70,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Cannelle',qty:2,unit:'g'}],
@@ -3599,7 +3599,7 @@ var WHEY_SMOOTHIES = [
   // === CAPPUCCINO #2-3 ===
   { id:'sm_cappuccino_02', name:'Expresso Lait Flash', flavors:['cappuccino'], goal:['performance','muscle'], timing:'pre', cal:253, p:31, c:13, f:9, prep:'1min',
     ingredients:[{name:'Whey cappuccino',qty:30,unit:'g'},{name:'Café expresso froid',qty:100,unit:'ml'},{name:'Lait entier',qty:200,unit:'ml'}],
-    steps:['Préparer un double ristretto (pas un long expresso), laisser refroidir à température ambiante — jamais le mettre chaud au shaker.','Verser café refroidi + lait dans le shaker, ajouter la whey, shaker 20 secondes.'],
+    steps:['Préparer un double ristretto (pas un long expresso), laisser refroidir à température ambiante — jamais le mettre chaud au shaker.','Verser café refroidi + lait dans le shaker, ajouter la whey, shaker 20 secondes.','Servir dans un verre givre et déguster aussitôt.'],
     tips:'Un double ristretto concentre les arômes de café sans excès d\'eau — la caféine est identique mais le goût est deux fois plus intense. C\'est la base d\'un cappuccino digne d\'un bar milanais.' },
   { id:'sm_cappuccino_03', name:'Frozen Cappuccino Banana', flavors:['cappuccino'], goal:['muscle','recovery'], timing:'post', cal:255, p:35, c:25, f:2, prep:'4min',
     ingredients:[{name:'Whey cappuccino',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Café expresso froid',qty:50,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Glaçons',qty:100,unit:'g'}],
@@ -3609,7 +3609,7 @@ var WHEY_SMOOTHIES = [
   // === PAIN D'ÉPICES #2-3 ===
   { id:'sm_gingerbread_02', name:"Shaker Pain d'Épices Lacté", flavors:['gingerbread'], goal:['muscle','recovery'], timing:'post', cal:233, p:32, c:15, f:5, prep:'1min',
     ingredients:[{name:"Whey pain d'épices",qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:250,unit:'ml'},{name:'Gingembre râpé',qty:5,unit:'g'}],
-    steps:['Râper finement le gingembre frais, récupérer le jus en pressant la pulpe entre les doigts.','Verser lait froid + jus de gingembre dans le shaker, ajouter la whey, shaker 25 secondes.'],
+    steps:['Râper finement le gingembre frais, récupérer le jus en pressant la pulpe entre les doigts.','Verser lait froid + jus de gingembre dans le shaker, ajouter la whey, shaker 25 secondes.','Servir dans un verre froid et consommer dans les 5 minutes.'],
     tips:'Le jus de gingembre pressé se disperse mieux que la pulpe râpée — texture plus lisse, piquant mieux distribué. Ce shake est un digestif autant qu\'une récupération musculaire.' },
   { id:'sm_gingerbread_03', name:'Bol Épicé Fromage Banane', flavors:['gingerbread'], goal:['fat_loss','muscle'], timing:'anytime', cal:315, p:43, c:32, f:2, prep:'4min',
     ingredients:[{name:"Whey pain d'épices",qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Banane',qty:70,unit:'g'},{name:'Gingembre râpé',qty:5,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
