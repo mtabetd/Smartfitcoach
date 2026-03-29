@@ -3241,7 +3241,37 @@ var WHEY_SMOOTHIES = [
   { id:'sm_multi_04', name:'Lemon Matcha Zen', flavors:['lemon','matcha'], goal:['fat_loss','performance'], timing:'pre', cal:260, p:30, c:28, f:4, prep:'3min',
     ingredients:[{name:'Whey nature ou citron',qty:25,unit:'g'},{name:'Matcha cérémonie',qty:3,unit:'g'},{name:'Jus de citron frais',qty:30,unit:'ml'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Miel',qty:8,unit:'g'},{name:'Gingembre frais',qty:5,unit:'g'}],
     steps:['Dissoudre matcha dans un peu d\'eau chaude, laisser refroidir','Mixer eau de coco + citron + gingembre + whey','Ajouter matcha dissous','Mixer 15 secondes et servir sur glaçons'],
-    tips:'Association catéchines (matcha) + vitamine C (citron) = absorption antioxydants x4. Idéal fasted cardio.' }
+    tips:'Association catéchines (matcha) + vitamine C (citron) = absorption antioxydants x4. Idéal fasted cardio.' },
+
+  // === PISTACHE ===
+  { id:'sm_pist_01', name:'Pistache Baklava Dream', flavors:['pistachio'], goal:['muscle'], timing:'post', cal:420, p:36, c:31, f:17, prep:'3min',
+    ingredients:[{name:'Whey pistache',qty:30,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Miel',qty:15,unit:'g'},{name:'Pistaches concassées',qty:20,unit:'g'},{name:'Eau de rose',qty:5,unit:'ml'},{name:'Glaçons',qty:80,unit:'g'}],
+    steps:['Concasser grossièrement les pistaches','Mixer lait entier, whey et miel 20 secondes','Ajouter pistaches concassées et eau de rose','Mixer 15 secondes puis servir sur glaçons'],
+    tips:'L\'eau de rose est optionnelle mais transforme ce shake en vrai baklava liquide. Les pistaches apportent de bonnes graisses mono-insaturées.' },
+  { id:'sm_pist_02', name:'Pistache Citron Frais', flavors:['pistachio','lemon'], goal:['fat_loss'], timing:'pre', cal:280, p:40, c:25, f:2, prep:'3min',
+    ingredients:[{name:'Whey pistache',qty:30,unit:'g'},{name:'Lait écrémé',qty:250,unit:'ml'},{name:'Jus de citron frais',qty:30,unit:'ml'},{name:'Yaourt grec 0%',qty:80,unit:'g'},{name:'Glaçons',qty:100,unit:'g'},{name:'Stevia',qty:1,unit:'g'}],
+    steps:['Mixer lait écrémé, yaourt grec et whey','Ajouter jus de citron et stevia','Mixer avec glaçons 30 secondes','Boire frais 20-30 min avant l\'effort'],
+    tips:'Moins de 280 kcal pour 40g de protéines — ratio exceptionnel pour la sèche. Le citron masque l\'amertume du stevia et rafraîchit.' },
+  { id:'sm_pist_03', name:'Pistache Vanille Royale', flavors:['pistachio','vanilla'], goal:['recovery'], timing:'anytime', cal:380, p:44, c:27, f:9, prep:'4min',
+    ingredients:[{name:'Whey pistache',qty:25,unit:'g'},{name:'Whey vanille',qty:10,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
+    steps:['Mixer lait entier et yaourt grec','Ajouter les deux wheys et le miel','Mixer 25 secondes à pleine puissance','Servir immédiatement pour texture optimale'],
+    tips:'Le mix whey pistache + vanille crée un profil aminoacidé ultra-complet. Le yaourt grec double la densité protéique sans alourdir les lipides.' },
+  { id:'sm_pist_04', name:'Pistache Matcha Green', flavors:['pistachio','matcha'], goal:['performance'], timing:'pre', cal:300, p:27, c:36, f:6, prep:'4min',
+    ingredients:[{name:'Whey pistache',qty:30,unit:'g'},{name:'Matcha grade cérémonial',qty:3,unit:'g'},{name:'Lait d\'amande',qty:250,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Gingembre frais',qty:2,unit:'g'}],
+    steps:['Dissoudre le matcha dans 30ml d\'eau chaude et laisser refroidir','Mixer banane + lait d\'amande + whey + miel','Ajouter matcha dissous et gingembre râpé','Mixer 20 secondes et boire 25 min avant séance'],
+    tips:'Pistache + matcha = duo antioxydants de compétition. La L-théanine du matcha combinée à la caféine naturelle offre un focus sans nervosité. Idéal avant séance technique.' },
+
+  // === NOISETTE #3 ===
+  { id:'sm_hazel_03', name:'Nutella Sportif', flavors:['hazelnut','chocolate'], goal:['muscle'], timing:'post', cal:460, p:39, c:47, f:13, prep:'4min',
+    ingredients:[{name:'Whey noisette',qty:35,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Cacao pur',qty:8,unit:'g'},{name:'Banane mûre',qty:80,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
+    steps:['Peler et couper la banane en morceaux','Mixer lait entier + banane + miel 15 secondes','Ajouter whey noisette et cacao pur','Mixer 30 secondes — texture onctueuse garantie'],
+    tips:'Tout le plaisir du Nutella avec des macros d\'athlète et zéro huile de palme. Le cacao pur multiplie les flavonoïdes anti-inflammatoires. Parfait dans les 30 min post-WOD.' },
+
+  // === BANANE #3 ===
+  { id:'sm_ban_03', name:'Banana Bread Shake', flavors:['banana','vanilla'], goal:['muscle'], timing:'anytime', cal:430, p:35, c:43, f:14, prep:'4min',
+    ingredients:[{name:'Whey banane ou vanille',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Flocons d\'avoine',qty:30,unit:'g'},{name:'Cannelle',qty:1,unit:'g'},{name:'Miel',qty:10,unit:'g'},{name:'Noix',qty:5,unit:'g'}],
+    steps:['Mixer lait entier + flocons d\'avoine 15 secondes','Ajouter whey, miel et cannelle','Mixer 20 secondes jusqu\'à consistance veloutée','Terminer avec les noix concassées en garniture'],
+    tips:'Les flocons ralentissent l\'absorption et prolongent la satiété. La cannelle améliore la sensibilité à l\'insuline. Idéal collation de journée ou post-entraînement léger.' }
 ];
 
 // ─── RECIPE PICKER ───────────────────────────────────────────────────────────
