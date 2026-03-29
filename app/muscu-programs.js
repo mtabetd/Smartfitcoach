@@ -1660,7 +1660,8 @@ function buildPersonalizedMuscuPlan(S) {
     style = 'classic';
   }
   // Femme : privilégier le volume (meilleur pour fessiers/jambes)
-  if (S.sex === 'female' && style === 'intensity') style = 'fusion';
+  var isFemale = S.sex === 'female' || S.sex === 'femme';
+  if (isFemale && style === 'intensity') style = 'fusion';
 
   var styleObj = TRAINING_STYLES[style] || TRAINING_STYLES.fusion;
 
@@ -1689,7 +1690,7 @@ function buildPersonalizedMuscuPlan(S) {
 
   // 5. ZONES PRIORITAIRES : bodyZones / weakZones / sexe
   var priorityMuscles = [];
-  if (S.sex === 'female') priorityMuscles = ['fessiers', 'jambes'];
+  if (isFemale) priorityMuscles = ['fessiers', 'jambes'];
   var bz = S.bodyZones || {};
   Object.keys(bz).forEach(function(z) { if (bz[z] === 'high' && priorityMuscles.indexOf(z) < 0) priorityMuscles.push(z); });
   (S.weakZones || []).forEach(function(z) { if (priorityMuscles.indexOf(z) < 0) priorityMuscles.push(z); });
@@ -1720,8 +1721,32 @@ function buildPersonalizedMuscuPlan(S) {
       exos = exos.map(function(ex) {
         var adjusted = {};
         for (var k in ex) adjusted[k] = ex[k];
-        if (volMod < 1 && !ex.is_fst7) {
-          adjusted.sets = Math.max(1, Math.round((ex.sets || 3) * volMod));
+        // Normalize field names to n/m/eq/sets format expected by exercise card
+        adjusted.n = ex.n || ex.name || '';
+        adjusted.m = ex.m || ex.muscle || '';
+        adjusted.eq = ex.eq || ex.equipment || '';
+        // Format sets as "NxR" string if sets is a number and reps is provided
+        if (typeof ex.sets === 'number' && ex.reps !== undefined) {
+          var setsNum = ex.sets;
+          if (volMod < 1 && !ex.is_fst7) {
+            setsNum = Math.max(1, Math.round(setsNum * volMod));
+          }
+          adjusted.sets = setsNum + '\u00d7' + ex.reps;
+        } else if (typeof ex.sets === 'number') {
+          var setsNum2 = ex.sets;
+          if (volMod < 1 && !ex.is_fst7) {
+            setsNum2 = Math.max(1, Math.round(setsNum2 * volMod));
+          }
+          adjusted.sets = String(setsNum2) + '\u00d73';
+        } else if (volMod < 1 && !ex.is_fst7 && typeof ex.sets === 'string') {
+          // If sets is already formatted string, adjust leading number
+          adjusted.sets = ex.sets.replace(/^(\d+)/, function(m, n) {
+            return String(Math.max(1, Math.round(parseInt(n) * volMod)));
+          });
+        }
+        // Ensure video URL is set (auto-generate if missing)
+        if (!adjusted.video && typeof window !== 'undefined' && window.getExerciseVideoUrl) {
+          adjusted.video = window.getExerciseVideoUrl(adjusted.n);
         }
         return adjusted;
       });
@@ -1735,7 +1760,9 @@ function buildPersonalizedMuscuPlan(S) {
     return {
       dayIndex: idx + 1,
       day: dayPlan.day,
+      name: 'Jour ' + (idx + 1),
       label: dayPlan.label,
+      focus: dayPlan.label || (dayPlan.muscles || []).join(' + '),
       muscles: dayPlan.muscles,
       exercises: allExercises,
       estimatedDuration: estimatedMin + ' min',
@@ -1746,7 +1773,7 @@ function buildPersonalizedMuscuPlan(S) {
   // 8. CONSEILS PERSONNALISÉS
   var tips = [];
   if (S.age >= 50) tips.push('Récupération allongée recommandée : 48-72h entre les séances par groupe musculaire.');
-  if (S.sex === 'female') tips.push('Priorité fessiers et jambes : 2× par semaine recommandé pour résultats optimaux.');
+  if (isFemale) tips.push('Priorité fessiers et jambes : 2× par semaine recommandé pour résultats optimaux.');
   if (S.sleep && S.sleep < 7) tips.push('Sommeil < 7h détecté : la récupération musculaire est compromise, dormez plus.');
   if (goal === 'weight_loss') tips.push('En déficit calorique : maintenez les charges — l\'objectif est de préserver le muscle.');
   if (level === 'beginner') tips.push('Débutant : maîtrise technique avant d\'augmenter les charges. Filmez-vous si possible.');
@@ -1884,14 +1911,16 @@ function getAlternativeExercises(muscle, excludeName, maxCount) {
   var keyMap = [
     ['pectoraux', 'pectoraux'], ['poitrine', 'pectoraux'], ['chest', 'pectoraux'],
     ['dos', 'dos'], ['dorsal', 'dos'], ['dorsaux', 'dos'], ['back', 'dos'], ['trapèze', 'dos'], ['trapeze', 'dos'],
-    ['épaule', 'epaules'], ['epaule', 'epaules'], ['deltoïde', 'epaules'], ['shoulder', 'epaules'],
+    ['épaule', 'epaules'], ['epaule', 'epaules'], ['deltoïde', 'epaules'], ['deltoid', 'epaules'], ['shoulder', 'epaules'],
     ['biceps', 'biceps'], ['brachial', 'biceps'],
     ['triceps', 'triceps'],
     ['quadriceps', 'quadriceps'], ['quad', 'quadriceps'], ['jambes', 'quadriceps'], ['cuisse', 'quadriceps'],
-    ['ischios', 'ischios'], ['ischio', 'ischios'], ['hamstring', 'ischios'],
+    ['ischio-jambiers', 'ischios'], ['ischios', 'ischios'], ['ischio', 'ischios'], ['hamstring', 'ischios'],
     ['fessier', 'fessiers'], ['glute', 'fessiers'], ['fesses', 'fessiers'],
-    ['mollet', 'mollets'], ['calf', 'mollets'], ['calves', 'mollets'],
-    ['abdo', 'abdos'], ['abdominaux', 'abdos'], ['core', 'abdos']
+    ['soléaire', 'mollets'], ['solaire', 'mollets'], ['mollet', 'mollets'], ['calf', 'mollets'], ['calves', 'mollets'],
+    ['grand droit', 'abdos'], ['oblique', 'abdos'], ['transverse', 'abdos'],
+    ['abdo', 'abdos'], ['abdominaux', 'abdos'], ['core', 'abdos'],
+    ['bras', 'biceps']
   ];
   for (var ki = 0; ki < keyMap.length; ki++) {
     if (ml.indexOf(keyMap[ki][0]) !== -1) { dbKey = keyMap[ki][1]; break; }

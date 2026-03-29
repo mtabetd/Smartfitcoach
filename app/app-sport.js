@@ -439,8 +439,15 @@ function generateSportProgram() {
         // Pregnancy: longer rest
         if (pregTri) ex.rest = '90-120s';
         // Cycle phase: reduce sets during low-intensity phases (luteal/menstruation)
-        if (!pregTri && cycleIntensityFactor < 0.9 && typeof ex.sets === 'number') {
-          ex.sets = Math.max(2, Math.round(ex.sets * cycleIntensityFactor));
+        if (!pregTri && cycleIntensityFactor < 0.9) {
+          if (typeof ex.sets === 'number') {
+            ex.sets = Math.max(2, Math.round(ex.sets * cycleIntensityFactor));
+          } else if (typeof ex.sets === 'string') {
+            // sets is formatted as "N×reps" — reduce the leading set count
+            ex.sets = ex.sets.replace(/^(\d+)/, function(match, n) {
+              return String(Math.max(2, Math.round(parseInt(n) * cycleIntensityFactor)));
+            });
+          }
         }
 
         // Add rep suffix for shred/weightloss
@@ -2950,7 +2957,16 @@ function renderMusculationProgram(p) {
     (day.exercises || []).forEach(function(ex, exIdx) {
       var card = h('div', {'class': 'exercise-card', onclick: function(){ S.sportModalExercise = ex; window.render(); }});
       card.appendChild(h('div', {'class': 'exercise-muscle'}, ex.m));
-      card.appendChild(h('div', {'class': 'exercise-name'}, ex.n));
+      var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n);
+      // FST-7 badge: highlight exercises that use the Fascial Stretch Training 7-set technique
+      if (ex.is_fst7) {
+        var fst7Badge = h('span', {
+          style: 'display:inline-block;margin-left:8px;padding:2px 6px;background:#C0392B;color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;border-radius:2px;vertical-align:middle'
+        }, 'FST-7');
+        _exNameEl.appendChild(fst7Badge);
+        card.style.borderLeft = '3px solid #C0392B';
+      }
+      card.appendChild(_exNameEl);
       card.appendChild(h('div', {'class': 'exercise-sets'}, ex.sets + ' \u2014 Repos ' + ex.rest));
       card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
 
