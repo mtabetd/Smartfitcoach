@@ -10722,7 +10722,8 @@
     ],
     steps: [
       'Trancher la pomme en quartiers.',
-      'Servir avec le beurre d\'amande pour tremper.'
+      'Servir avec le beurre d\'amande pour tremper.',
+      'Consommer immédiatement pour éviter l\'oxydation de la pomme.'
     ]
   },
 
@@ -11104,7 +11105,8 @@
     ],
     steps: [
       'Verser le yaourt dans un bol.',
-      'Garnir de granola, abricots et noix.'
+      'Garnir de granola, abricots et noix.',
+      'Déguster immédiatement pour conserver le croquant du granola.'
     ]
   },
 
@@ -11179,7 +11181,8 @@
     ],
     steps: [
       'Tartiner les galettes de riz de beurre de cacahuète.',
-      'Garnir de rondelles de banane.'
+      'Garnir de rondelles de banane.',
+      'Consommer aussitôt pour préserver le croquant des galettes.'
     ]
   },
 
@@ -11880,7 +11883,8 @@
     ],
     steps: [
       'Verser le cottage cheese dans un bol.',
-      'Garnir d\'ananas, noix de coco et miel.'
+      'Garnir d\'ananas, noix de coco et miel.',
+      'Mélanger légèrement avant de déguster pour homogénéiser les saveurs.'
     ]
   },
 
