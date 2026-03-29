@@ -3361,7 +3361,7 @@ var WHEY_SMOOTHIES = [
   // === CAFÉ #3 — Café Express ===
   { id:'sm_coffee_03', name:'Café Express Glacé', flavors:['coffee'], goal:['performance','fat_loss'], timing:'pre', cal:230, p:30, c:20, f:4, prep:'1min',
     ingredients:[{name:'Whey café',qty:30,unit:'g'},{name:'Lait entier',qty:150,unit:'ml'},{name:'Glaçons',qty:100,unit:'g'}],
-    steps:['Remplir le shaker de glaçons en premier, ajouter le lait froid puis la whey café.','Shaker 20 secondes avec vigueur — le froid extrait le maximum d\'arômes de la whey.'],
+    steps:['Remplir le shaker de glaçons en premier, ajouter le lait froid puis la whey café.','Shaker 20 secondes avec vigueur — le froid extrait le maximum d\'arômes de la whey.','Servir immédiatement dans un verre préalablement réfrigéré pour conserver la température idéale.'],
     tips:'La règle d\'or des baristas : le froid en premier, le chaud en dernier. Ici tout est froid — le glaçon n\'est pas une option, c\'est la technique.' },
 
   // === FRAISE #3 — Fraise Simple ===
@@ -3373,7 +3373,7 @@ var WHEY_SMOOTHIES = [
   // === NOISETTE #4 — Noisette Rapide ===
   { id:'sm_hazel_04', name:'Noisette Rapide', flavors:['hazelnut'], goal:['muscle'], timing:'anytime', cal:330, p:36, c:28, f:10, prep:'1min',
     ingredients:[{name:'Whey noisette',qty:35,unit:'g'},{name:'Lait entier',qty:300,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'}],
-    steps:['Verser lait, whey noisette et cacao dans le shaker.','Shaker énergiquement 20 secondes, puis 10 secondes supplémentaires après retournement.'],
+    steps:['Verser lait, whey noisette et cacao dans le shaker.','Shaker énergiquement 20 secondes, puis 10 secondes supplémentaires après retournement.','Servir dans un verre froid et déguster dans les 5 minutes.'],
     tips:'Trois ingrédients, zéro compromis sur la saveur. Ajouter une pincée de sel avant de shaker — cela amplifie la noisette sans ajouter une calorie.' },
 
   // === FRAMBOISE ===
@@ -3409,7 +3409,7 @@ var WHEY_SMOOTHIES = [
   // === BIRTHDAY CAKE ===
   { id:'sm_birthday_01', name:'Birthday Cake Shake', flavors:['birthday_cake'], goal:['muscle'], timing:'post', cal:285, p:32, c:16, f:10, prep:'1min',
     ingredients:[{name:'Whey birthday cake',qty:30,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Extrait vanille',qty:3,unit:'ml'}],
-    steps:['Gratter les graines d\'une demi-gousse de vanille dans le lait avant de shaker, ou utiliser l\'extrait.','Verser lait + extrait de vanille, ajouter la whey, shaker 20 secondes vigoureusement.'],
+    steps:['Gratter les graines d\'une demi-gousse de vanille dans le lait avant de shaker, ou utiliser l\'extrait.','Verser lait + extrait de vanille, ajouter la whey, shaker 20 secondes vigoureusement.','Servir dans un verre froid, éventuellement avec quelques sprinkles colorés pour l\'esprit fête.'],
     tips:'La vanille vraie — même 3 ml d\'extrait pur — transforme radicalement ce shake : la vanilline synthétique de la whey devient ronde et profonde, comme un sablé breton fraîchement sorti du four.' },
 
   // === CANNELLE ===
@@ -3479,7 +3479,7 @@ var WHEY_SMOOTHIES = [
   // === CARAMEL SALÉ #2-3 ===
   { id:'sm_caramel_02', name:'Caramel Lait Flash', flavors:['caramel_sale'], goal:['muscle','performance'], timing:'anytime', cal:280, p:32, c:15, f:10, prep:'1min',
     ingredients:[{name:'Whey caramel salé',qty:30,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'}],
-    steps:['Refroidir le shaker 2 minutes au congélateur avant usage.','Verser le lait entier glacé, ajouter la whey, shaker 30 secondes vigoureusement.'],
+    steps:['Refroidir le shaker 2 minutes au congélateur avant usage.','Verser le lait entier glacé, ajouter la whey, shaker 30 secondes vigoureusement.','Servir dans un verre froid et consommer immédiatement.'],
     tips:'Un shaker froid produit une mousse plus serrée et exalte les notes de caramel beurré — la température est un ingrédient à part entière.' },
   { id:'sm_caramel_03', name:'Caramel Banane Peanut Power', flavors:['caramel_sale'], goal:['muscle','performance'], timing:'pre', cal:391, p:34, c:37, f:12, prep:'4min',
     ingredients:[{name:'Whey caramel salé',qty:30,unit:'g'},{name:'Banane',qty:100,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'},{name:'Lait demi-écrémé',qty:150,unit:'ml'}],
@@ -3489,7 +3489,7 @@ var WHEY_SMOOTHIES = [
   // === COOKIES & CREAM #2-3 ===
   { id:'sm_cookies_02', name:'Cookies Cacao Shaker', flavors:['cookies_cream'], goal:['muscle','fat_loss'], timing:'post', cal:282, p:34, c:20, f:8, prep:'1min',
     ingredients:[{name:'Whey cookies',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:250,unit:'ml'},{name:'Cacao pur',qty:10,unit:'g'}],
-    steps:['Verser le lait dans le shaker, incorporer le cacao en pluie fine en agitant doucement — il se disperse sans coller.','Ajouter la whey cookies, fermer et shaker 30 secondes à amplitude maximale.'],
+    steps:['Verser le lait dans le shaker, incorporer le cacao en pluie fine en agitant doucement — il se disperse sans coller.','Ajouter la whey cookies, fermer et shaker 30 secondes à amplitude maximale.','Servir dans un verre froid dès la fin du shaking pour profiter de la mousse.'],
     tips:'Le cacao froid se disperse mieux que le cacao ajouté après la whey — une astuce de pâtissier pour un résultat sans grumeaux ni fond chocolaté.' },
   { id:'sm_cookies_03', name:'Cookies Cream Banana Split', flavors:['cookies_cream'], goal:['muscle'], timing:'post', cal:363, p:41, c:28, f:10, prep:'4min',
     ingredients:[{name:'Whey cookies',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:100,unit:'g'},{name:'Banane',qty:80,unit:'g'},{name:'Beurre de cacahuète',qty:15,unit:'g'}],
@@ -3499,7 +3499,7 @@ var WHEY_SMOOTHIES = [
   // === TIRAMISU #2-3 ===
   { id:'sm_tiramisu_02', name:'Tiramisu Expresso Shaker', flavors:['tiramisu'], goal:['performance','muscle'], timing:'pre', cal:249, p:31, c:12, f:9, prep:'1min',
     ingredients:[{name:'Whey tiramisu',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Café expresso froid',qty:60,unit:'ml'}],
-    steps:['Préparer un ristretto serré, laisser refroidir 5 minutes — un expresso trop dilué noie les arômes.','Verser lait + café dans le shaker, ajouter la whey, shaker 20 secondes.'],
+    steps:['Préparer un ristretto serré, laisser refroidir 5 minutes — un expresso trop dilué noie les arômes.','Verser lait + café dans le shaker, ajouter la whey, shaker 20 secondes.','Servir aussitôt pour que le café conserve toute sa puissance aromatique.'],
     tips:'Un ristretto plutôt qu\'un long expresso concentre les arômes torréfiés sans excès d\'eau — la caféine active les performances, l\'intensité aromatique fait le reste.' },
   { id:'sm_tiramisu_03', name:'Tiramisu Fromage Blanc Café', flavors:['tiramisu'], goal:['fat_loss','muscle'], timing:'anytime', cal:263, p:44, c:13, f:4, prep:'3min',
     ingredients:[{name:'Whey tiramisu',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Café expresso froid',qty:80,unit:'ml'},{name:'Cacao pur',qty:10,unit:'g'},{name:'Cannelle',qty:2,unit:'g'}],
@@ -3509,7 +3509,7 @@ var WHEY_SMOOTHIES = [
   // === ORANGE #2-3 ===
   { id:'sm_orange_02', name:'Orange Coco Vitesse', flavors:['orange'], goal:['fat_loss','recovery'], timing:'post', cal:173, p:25, c:15, f:2, prep:'1min',
     ingredients:[{name:'Whey orange',qty:30,unit:'g'},{name:'Eau de coco',qty:250,unit:'ml'}],
-    steps:['Utiliser une eau de coco sortie du réfrigérateur — jamais à température ambiante.','Verser dans le shaker, ajouter la whey orange, shaker 20 secondes.'],
+    steps:['Utiliser une eau de coco sortie du réfrigérateur — jamais à température ambiante.','Verser dans le shaker, ajouter la whey orange, shaker 20 secondes.','Servir dans un verre givré pour maximiser la sensation de fraîcheur.'],
     tips:'L\'eau de coco froide accentue le côté agrumes de la whey orange — deux sources d\'électrolytes qui se renforcent mutuellement pour une récupération cardio optimale.' },
   { id:'sm_orange_03', name:'Orange Ananas Tropical Grec', flavors:['orange'], goal:['recovery','performance'], timing:'post', cal:264, p:35, c:27, f:2, prep:'4min',
     ingredients:[{name:'Whey orange',qty:30,unit:'g'},{name:'Ananas',qty:120,unit:'g'},{name:'Yaourt grec 0%',qty:100,unit:'g'},{name:'Eau de coco',qty:100,unit:'ml'}],
@@ -3519,7 +3519,7 @@ var WHEY_SMOOTHIES = [
   // === BIRTHDAY CAKE #2-3 ===
   { id:'sm_birthday_02', name:'Birthday Shake Express', flavors:['birthday_cake'], goal:['muscle'], timing:'anytime', cal:217, p:31, c:12, f:5, prep:'1min',
     ingredients:[{name:'Whey birthday cake',qty:30,unit:'g'},{name:'Lait demi-écrémé',qty:200,unit:'ml'}],
-    steps:['Mettre le shaker et le lait au réfrigérateur 10 minutes avant.','Verser lait froid, ajouter whey birthday cake, shaker 20 secondes fermes.'],
+    steps:['Mettre le shaker et le lait au réfrigérateur 10 minutes avant.','Verser lait froid, ajouter whey birthday cake, shaker 20 secondes fermes.','Servir immédiatement pour profiter de la texture mousseuse.'],
     tips:'Boire dans les 3 minutes après shaking pour profiter de la texture mousseuse maximale — au-delà, la mousse retombe et le shake perd son côté festif.' },
   { id:'sm_birthday_03', name:"Gâteau d'Anniversaire Tropical", flavors:['birthday_cake'], goal:['muscle','performance'], timing:'post', cal:327, p:30, c:36, f:7, prep:'3min',
     ingredients:[{name:'Whey birthday cake',qty:30,unit:'g'},{name:'Lait entier',qty:150,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
@@ -3529,11 +3529,11 @@ var WHEY_SMOOTHIES = [
   // === CANNELLE #2-3 ===
   { id:'sm_cinnamon_02', name:'Cannelle Pure Power', flavors:['cinnamon'], goal:['fat_loss'], timing:'anytime', cal:126, p:24, c:4, f:2, prep:'1min',
     ingredients:[{name:'Whey cannelle',qty:30,unit:'g'},{name:'Eau',qty:250,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'}],
-    steps:['Verser l\'eau froide dans le shaker, ajouter la cannelle en premier et agiter 5 secondes pour la disperser.','Incorporer la whey cannelle, shaker 20 secondes.'],
+    steps:['Verser l\'eau froide dans le shaker, ajouter la cannelle en premier et agiter 5 secondes pour la disperser.','Incorporer la whey cannelle, shaker 20 secondes.','Servir aussitôt — la cannelle se redépose rapidement si laissée au repos.'],
     tips:'Eau très froide + cannelle = amertume nulle, arôme épicé net. Pour réguler la glycémie en même temps qu\'on hydrate : une association rare et efficace.' },
   { id:'sm_cinnamon_03', name:'Bowl Cannelle Douce', flavors:['cinnamon'], goal:['muscle','recovery'], timing:'post', cal:326, p:41, c:36, f:2, prep:'3min',
     ingredients:[{name:'Whey cannelle',qty:30,unit:'g'},{name:'Yaourt grec 0%',qty:150,unit:'g'},{name:'Banane',qty:80,unit:'g'},{name:'Cannelle',qty:2,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
-    steps:['Mixer banane + yaourt grec + miel 20 secondes — base crémeuse bien homogène.','Ajouter whey + cannelle, mixer 15 secondes à vitesse réduite pour préserver les arômes volatils.'],
+    steps:['Mixer banane + yaourt grec + miel 20 secondes — base crémeuse bien homogène.','Ajouter whey + cannelle, mixer 15 secondes à vitesse réduite pour préserver les arômes volatils.','Verser dans un bol, garnir d\'un trait de miel et d\'une pincée de cannelle pour le service.'],
     tips:'Le miel de châtaignier renforce les notes épicées de la cannelle là où le miel toutes fleurs les adoucit — choisissez selon l\'intensité souhaitée. Ce bol protéiné se sert à température fraîche, pas glacée.' },
 
   // === CHEESECAKE CITRON #2-3 ===
