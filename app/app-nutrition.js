@@ -2875,10 +2875,15 @@ function renderSaladBar(p) {
     { label: 'G', cur: macros.g, tgt: tgtMacros.g, cssClass: 'macro-fill-carbs' },
     { label: 'L', cur: macros.l, tgt: tgtMacros.l, cssClass: 'macro-fill-fat' }
   ].forEach(function(m) {
-    chipsRow.appendChild(h('div', { style: 'flex:1;background:var(--card);border-radius:8px;padding:4px 8px;text-align:center;border:1px solid var(--border)' },
+    var macroColor = m.cssClass === 'macro-fill-protein' ? 'var(--green)' : m.cssClass === 'macro-fill-carbs' ? 'var(--blue, #6A9ADA)' : 'var(--orange)';
+    var valEl = h('div', { style: 'font-size:12px;font-weight:700;color:' + macroColor });
+    valEl.appendChild(document.createTextNode(m.cur));
+    var tgtSpan = h('span', { style: 'font-weight:400;color:var(--grey)' }, '/' + m.tgt + 'g');
+    valEl.appendChild(tgtSpan);
+    chipsRow.appendChild(h('div', { style: 'flex:1;background:var(--card);border-radius:8px;padding:4px 8px;text-align:center;border:1px solid var(--border)' }, [
       h('div', { style: 'font-size:9px;color:var(--grey);text-transform:uppercase;letter-spacing:1px' }, m.label),
-      h('div', { style: 'font-size:12px;font-weight:700;color:' + (m.cssClass === 'macro-fill-protein' ? 'var(--green)' : m.cssClass === 'macro-fill-carbs' ? 'var(--blue, #6A9ADA)' : 'var(--orange)') }, m.cur + '<span style="font-weight:400;color:var(--grey)">/' + m.tgt + 'g</span>')
-    ));
+      valEl
+    ]));
   });
   progressBar.appendChild(chipsRow);
   p.appendChild(progressBar);
@@ -3895,7 +3900,7 @@ function showSmoothieModal(sm) {
 
   // Titre
   var titleRow = h('div', {style:'display:flex;align-items:flex-start;justify-content:space-between;gap:12px'});
-  titleRow.appendChild(h('div', {style:'font-size:20px;font-weight:800;color:#fff;line-height:1.2;flex:1'}, sm.name));
+  titleRow.appendChild(h('div', {style:'font-size:20px;font-weight:800;color:#fff;line-height:1.2;flex:1'}, '\uD83E\uDD5B ' + sm.name));
   titleRow.appendChild(h('button', {
     style:'flex-shrink:0;width:32px;height:32px;background:rgba(255,255,255,0.18);border:none;color:#fff;font-size:20px;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1;margin-top:-2px',
     onclick:function(){ var el=document.getElementById('_smoothie_modal_ov'); if(el&&el.parentNode) el.parentNode.removeChild(el); }

@@ -6759,8 +6759,8 @@
       mealTypes: ['snack'],
       tags: ['snack', 'dessert', 'healthy', 'maroc', 'high-protein', 'rose', 'pistaches', 'sans-gluten'],
       difficulty: 1, prepTime: 10, cookTime: 25, servings: 4,
-      // P×4 + G×4 + L×9 = 56×4 + 116×4 + 40×9 = 224 + 464 + 360 = 1048 kcal (~1040 déclaré, 0.77%) ✓
-      baseNutrition: { calories: 1040, proteinGrams: 56, carbsGrams: 116, fatGrams: 40 },
+      // P×4 + G×4 + L×9 = 56×4 + 116×4 + 40×9 = 224 + 464 + 360 = 1048 ✓
+      baseNutrition: { calories: 1048, proteinGrams: 56, carbsGrams: 116, fatGrams: 40 },
       ingredients: [
         { name: 'Riz rond', qty: 160, unit: 'g' },
         { name: 'Lait entier', qty: 800, unit: 'ml' },
@@ -9081,7 +9081,7 @@
     prepTime: 5,
     cookTime: 7,
     servings: 1,
-    baseNutrition: { calories: 378, proteinGrams: 14, carbsGrams: 64, fatGrams: 10 },
+    baseNutrition: { calories: 402, proteinGrams: 14, carbsGrams: 64, fatGrams: 10 },
     ingredients: [
       { name: 'Flocons d\'avoine', qty: 90, unit: 'g' },
       { name: 'Lait d\'amande', qty: 250, unit: 'ml' },
@@ -9107,7 +9107,7 @@
     prepTime: 8,
     cookTime: 0,
     servings: 1,
-    baseNutrition: { calories: 392, proteinGrams: 18, carbsGrams: 58, fatGrams: 12 },
+    baseNutrition: { calories: 412, proteinGrams: 18, carbsGrams: 58, fatGrams: 12 },
     ingredients: [
       { name: 'Mangue', qty: 150, unit: 'g' },
       { name: 'Lait de coco', qty: 100, unit: 'ml' },
@@ -9134,7 +9134,7 @@
     prepTime: 5,
     cookTime: 2,
     servings: 1,
-    baseNutrition: { calories: 396, proteinGrams: 20, carbsGrams: 40, fatGrams: 18 },
+    baseNutrition: { calories: 402, proteinGrams: 20, carbsGrams: 40, fatGrams: 18 },
     ingredients: [
       { name: 'Pain complet', qty: 80, unit: 'g' },
       { name: 'Avocat', qty: 140, unit: 'g' },
@@ -9160,7 +9160,7 @@
     prepTime: 5,
     cookTime: 12,
     servings: 1,
-    baseNutrition: { calories: 404, proteinGrams: 22, carbsGrams: 54, fatGrams: 12 },
+    baseNutrition: { calories: 412, proteinGrams: 22, carbsGrams: 54, fatGrams: 12 },
     ingredients: [
       { name: 'Quinoa', qty: 90, unit: 'g' },
       { name: 'Lait d\'amande', qty: 200, unit: 'ml' },
@@ -9187,7 +9187,7 @@
     prepTime: 5,
     cookTime: 0,
     servings: 1,
-    baseNutrition: { calories: 418, proteinGrams: 24, carbsGrams: 38, fatGrams: 18 },
+    baseNutrition: { calories: 410, proteinGrams: 24, carbsGrams: 38, fatGrams: 18 },
     ingredients: [
       { name: 'Graines de chia', qty: 50, unit: 'g' },
       { name: 'Lait d\'avoine', qty: 300, unit: 'ml' },
@@ -9213,7 +9213,7 @@
     prepTime: 10,
     cookTime: 12,
     servings: 1,
-    baseNutrition: { calories: 386, proteinGrams: 16, carbsGrams: 62, fatGrams: 10 },
+    baseNutrition: { calories: 402, proteinGrams: 16, carbsGrams: 62, fatGrams: 10 },
     ingredients: [
       { name: 'Flocons d\'avoine', qty: 100, unit: 'g' },
       { name: 'Banane', qty: 120, unit: 'g' },
@@ -9240,7 +9240,7 @@
     prepTime: 5,
     cookTime: 2,
     servings: 1,
-    baseNutrition: { calories: 374, proteinGrams: 18, carbsGrams: 44, fatGrams: 16 },
+    baseNutrition: { calories: 392, proteinGrams: 18, carbsGrams: 44, fatGrams: 16 },
     ingredients: [
       { name: 'Pain complet', qty: 80, unit: 'g' },
       { name: 'Beurre d\'amande', qty: 40, unit: 'g' },
@@ -9266,7 +9266,7 @@
     prepTime: 5,
     cookTime: 45,
     servings: 1,
-    baseNutrition: { calories: 412, proteinGrams: 16, carbsGrams: 60, fatGrams: 14 },
+    baseNutrition: { calories: 430, proteinGrams: 16, carbsGrams: 60, fatGrams: 14 },
     ingredients: [
       { name: 'Patate douce', qty: 250, unit: 'g' },
       { name: 'Beurre de noisette', qty: 30, unit: 'g' },
