@@ -1160,9 +1160,24 @@ function renderStep7(p) {
       {id: 'lemon',      label: 'Citron',           icon: '\uD83C\uDF4B'},
       {id: 'banana',     label: 'Banane',           icon: '\uD83C\uDF4C'},
       {id: 'hazelnut',   label: 'Noisette',         icon: '\uD83C\uDF30'},
-      {id: 'pistachio',  label: 'Pistache',         icon: '\uD83FAB'},
-      {id: 'matcha',     label: 'Matcha',           icon: '\uD83C\uDF75'},
-      {id: 'unflavored', label: 'Nature/Unflavored', icon: '\uD83E\uDED9'}
+      {id: 'pistachio',       label: 'Pistache',          icon: '\uD83FAB'},
+      {id: 'matcha',          label: 'Matcha',            icon: '\uD83C\uDF75'},
+      {id: 'raspberry',       label: 'Framboise',         icon: '\uD83C\uDF53'},
+      {id: 'caramel_sale',    label: 'Caramel Sal\u00e9', icon: '\uD83E\uDDC2'},
+      {id: 'cookies_cream',   label: 'Cookies & Cream',   icon: '\uD83C\uDF6A'},
+      {id: 'tiramisu',        label: 'Tiramisu',          icon: '\uD83C\uDF70'},
+      {id: 'orange',          label: 'Orange',            icon: '\uD83C\uDF4A'},
+      {id: 'birthday_cake',   label: 'Birthday Cake',     icon: '\uD83C\uDF82'},
+      {id: 'cinnamon',        label: 'Cannelle',          icon: '\uD83E\uDEB5'},
+      {id: 'cheesecake_citron', label: 'Cheesecake Citron', icon: '\uD83C\uDF4B'},
+      {id: 'toffee',          label: 'Toffee Choco',      icon: '\uD83C\uDF6C'},
+      {id: 'white_chocolate', label: 'Chocolat Blanc',    icon: '\uD83E\uDD5B'},
+      {id: 'pina_colada',     label: 'Pi\u00f1a Colada',  icon: '\uD83C\uDF34'},
+      {id: 'vanilla_cinnamon',label: 'Vanille Cannelle',  icon: '\uD83C\uDF00'},
+      {id: 'speculoos',       label: 'Sp\u00e9culoos',    icon: '\uD83C\uDF6A'},
+      {id: 'cappuccino',      label: 'Cappuccino',        icon: '\u2615'},
+      {id: 'gingerbread',     label: "Pain d'\u00c9pices", icon: '\uD83C\uDF2B'},
+      {id: 'unflavored',      label: 'Nature/Unflavored',  icon: '\uD83E\uDED9'}
     ];
     var wheyLabel = h('div', {'class': 'section-label', style: 'margin-top:12px'});
     wheyLabel.appendChild(document.createTextNode('Parfums que vous poss\u00e9dez'));
@@ -3301,7 +3316,97 @@ var WHEY_SMOOTHIES = [
   { id:'sm_hazel_04', name:'Noisette Rapide', flavors:['hazelnut'], goal:['muscle'], timing:'anytime', cal:330, p:36, c:28, f:10, prep:'1min',
     ingredients:[{name:'Whey noisette',qty:35,unit:'g'},{name:'Lait entier',qty:300,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'}],
     steps:['Shaker 15 secondes','Pas besoin de blender'],
-    tips:'Le smoothie protéiné le plus rapide du bar. En shaker = zéro vaisselle.' }
+    tips:'Le smoothie protéiné le plus rapide du bar. En shaker = zéro vaisselle.' },
+
+  // === FRAMBOISE ===
+  { id:'sm_rasp_01', name:'Framboise Express', flavors:['raspberry'], goal:['fat_loss','recovery'], timing:'anytime', cal:260, p:31, c:22, f:5, prep:'2min',
+    ingredients:[{name:'Whey framboise',qty:30,unit:'g'},{name:'Lait demi-\u00e9cr\u00e9m\u00e9',qty:200,unit:'ml'},{name:'Fruits rouges surgel\u00e9s',qty:80,unit:'g'}],
+    steps:['Mixer 20 secondes','Servir avec quelques framboises fra\u00eeches si dispo'],
+    tips:'Les fruits surgelés donnent une texture glacée parfaite sans glaçons.' },
+
+  // === CARAMEL SALÉ ===
+  { id:'sm_caramel_01', name:'Caramel Salé Express', flavors:['caramel_sale'], goal:['muscle','recovery'], timing:'post', cal:310, p:31, c:26, f:9, prep:'2min',
+    ingredients:[{name:'Whey caramel sal\u00e9',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Banane',qty:60,unit:'g'},{name:'Pincée de sel',qty:1,unit:'g'}],
+    steps:['Mixer banane + lait 10 secondes','Ajouter la whey + sel','Shaker 15 secondes'],
+    tips:'La pincée de sel amplifie le goût caramel. Secret de chef !' },
+
+  // === COOKIES & CREAM ===
+  { id:'sm_cookies_01', name:'Cookies & Cream Shake', flavors:['cookies_cream'], goal:['muscle'], timing:'post', cal:300, p:33, c:17, f:11, prep:'1min',
+    ingredients:[{name:'Whey cookies',qty:30,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Cacao pur',qty:8,unit:'g'}],
+    steps:['Shaker 20 secondes — pas besoin de blender','Boire froid'],
+    tips:'Ajouter 2 glaçons pour une texture encore plus gourmande.' },
+
+  // === TIRAMISU ===
+  { id:'sm_tiramisu_01', name:'Tiramisu Protéiné', flavors:['tiramisu'], goal:['muscle','recovery'], timing:'anytime', cal:265, p:31, c:14, f:9, prep:'2min',
+    ingredients:[{name:'Whey tiramisu',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Caf\u00e9 expresso froid',qty:50,unit:'ml'},{name:'Cacao pur',qty:5,unit:'g'}],
+    steps:['Mélanger café froid + lait','Ajouter whey + cacao','Shaker 20 secondes'],
+    tips:'Préparer le café la veille et le mettre au frigo pour un tiramisu glacé.' },
+
+  // === ORANGE ===
+  { id:'sm_orange_01', name:'Orange Soleil', flavors:['orange'], goal:['performance','fat_loss'], timing:'pre', cal:240, p:29, c:21, f:4, prep:'2min',
+    ingredients:[{name:'Whey orange',qty:30,unit:'g'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Lait demi-\u00e9cr\u00e9m\u00e9',qty:150,unit:'ml'},{name:'Jus de citron',qty:20,unit:'ml'}],
+    steps:['Mélanger eau de coco + lait','Ajouter whey + jus citron','Shaker 20 secondes'],
+    tips:'L\'eau de coco apporte des électrolytes naturels — idéal avant l\'effort.' },
+
+  // === BIRTHDAY CAKE ===
+  { id:'sm_birthday_01', name:'Birthday Cake Shake', flavors:['birthday_cake'], goal:['muscle'], timing:'post', cal:285, p:32, c:16, f:10, prep:'1min',
+    ingredients:[{name:'Whey birthday cake',qty:30,unit:'g'},{name:'Lait entier',qty:250,unit:'ml'},{name:'Extrait vanille',qty:3,unit:'ml'}],
+    steps:['Shaker 20 secondes','C\'est prêt'],
+    tips:'Simple et festif. Parfait comme récompense post-entraînement.' },
+
+  // === CANNELLE ===
+  { id:'sm_cinnamon_01', name:'Cannelle Dorée', flavors:['cinnamon'], goal:['muscle','fat_loss'], timing:'anytime', cal:305, p:31, c:26, f:9, prep:'2min',
+    ingredients:[{name:'Whey cannelle',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Banane',qty:50,unit:'g'},{name:'Cannelle',qty:3,unit:'g'}],
+    steps:['Mixer banane + lait','Ajouter whey + cannelle','Shaker 15 secondes'],
+    tips:'La cannelle régule la glycémie — excellent pour stabiliser l\'énergie.' },
+
+  // === CHEESECAKE CITRON ===
+  { id:'sm_cheesecake_01', name:'Cheesecake Citron Frais', flavors:['cheesecake_citron'], goal:['fat_loss','recovery'], timing:'anytime', cal:260, p:42, c:19, f:2, prep:'2min',
+    ingredients:[{name:'Whey cheesecake citron',qty:30,unit:'g'},{name:'Fromage blanc 0%',qty:150,unit:'g'},{name:'Jus de citron',qty:30,unit:'ml'},{name:'Miel',qty:10,unit:'g'}],
+    steps:['Mixer fromage blanc + jus citron + miel','Ajouter la whey','Mixer 15 secondes'],
+    tips:'Texture ultra-crémeuse. Peut se manger en smoothie bowl avec des fruits.' },
+
+  // === TOFFEE ===
+  { id:'sm_toffee_01', name:'Toffee Choco Banane', flavors:['toffee'], goal:['muscle'], timing:'post', cal:345, p:32, c:32, f:9, prep:'2min',
+    ingredients:[{name:'Whey toffee',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Cacao pur',qty:5,unit:'g'}],
+    steps:['Mixer banane + lait + cacao','Ajouter la whey','Shaker 15 secondes'],
+    tips:'La banane + toffee = combo caramel naturel sans sucre ajouté.' },
+
+  // === CHOCOLAT BLANC ===
+  { id:'sm_whitechoc_01', name:'Chocolat Blanc Fraise', flavors:['white_chocolate'], goal:['recovery','muscle'], timing:'post', cal:300, p:31, c:23, f:9, prep:'2min',
+    ingredients:[{name:'Whey chocolat blanc',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Fraises congel\u00e9es',qty:80,unit:'g'}],
+    steps:['Mixer fraises + lait 20 secondes','Ajouter la whey','Mixer 10 secondes'],
+    tips:'Le contraste chocolat blanc + fraise est exceptionnel. Un dessert protéiné.' },
+
+  // === PIÑA COLADA ===
+  { id:'sm_pina_01', name:'Pi\u00f1a Colada Protéinée', flavors:['pina_colada'], goal:['recovery','performance'], timing:'post', cal:285, p:25, c:27, f:9, prep:'3min',
+    ingredients:[{name:'Whey pi\u00f1a colada',qty:30,unit:'g'},{name:'Eau de coco',qty:200,unit:'ml'},{name:'Ananas',qty:100,unit:'g'},{name:'Lait de coco',qty:30,unit:'ml'}],
+    steps:['Mixer ananas + eau de coco + lait de coco','Ajouter la whey','Mixer 15 secondes'],
+    tips:'Fermer les yeux, boire lentement. Vous êtes à la plage.' },
+
+  // === VANILLE CANNELLE ===
+  { id:'sm_vanilla_cinn_01', name:'Vanille Cannelle Douce', flavors:['vanilla_cinnamon'], goal:['muscle','recovery'], timing:'anytime', cal:285, p:31, c:20, f:9, prep:'1min',
+    ingredients:[{name:'Whey vanille cannelle',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Cannelle',qty:2,unit:'g'},{name:'Miel',qty:8,unit:'g'}],
+    steps:['Tout dans le shaker','Shaker 20 secondes'],
+    tips:'La cannelle double l\'effet saveur sans calorie. Parfait en hiver.' },
+
+  // === SPÉCULOOS ===
+  { id:'sm_speculoos_01', name:'Sp\u00e9culoos Shake', flavors:['speculoos'], goal:['muscle'], timing:'post', cal:340, p:31, c:33, f:9, prep:'2min',
+    ingredients:[{name:'Whey sp\u00e9culoos',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Banane',qty:80,unit:'g'},{name:'Cannelle',qty:2,unit:'g'}],
+    steps:['Mixer banane + lait','Ajouter whey + cannelle','Shaker 15 secondes'],
+    tips:'La banane mûre + cannelle mime parfaitement le biscuit spéculoos.' },
+
+  // === CAPPUCCINO ===
+  { id:'sm_cappuccino_01', name:'Cappuccino Glacé', flavors:['cappuccino'], goal:['performance','fat_loss'], timing:'pre', cal:255, p:31, c:13, f:9, prep:'2min',
+    ingredients:[{name:'Whey cappuccino',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Caf\u00e9 expresso froid',qty:80,unit:'ml'},{name:'Gla\u00e7ons',qty:80,unit:'g'}],
+    steps:['Préparer le café et laisser refroidir','Shaker tous les ingrédients avec glaçons','Boire immédiatement'],
+    tips:'Distinct du café classique : le cappuccino whey donne un goût plus mousseux et doux.' },
+
+  // === PAIN D'ÉPICES ===
+  { id:'sm_gingerbread_01', name:"Pain d'\u00c9pices Hivernal", flavors:['gingerbread'], goal:['recovery','muscle'], timing:'anytime', cal:290, p:31, c:22, f:9, prep:'2min',
+    ingredients:[{name:'Whey pain d\'\u00e9pices',qty:30,unit:'g'},{name:'Lait entier',qty:200,unit:'ml'},{name:'Gingembre r\u00e2p\u00e9',qty:5,unit:'g'},{name:'Miel',qty:10,unit:'g'}],
+    steps:['Mixer tous les ingrédients 20 secondes','Saupoudrer de cannelle si souhaité'],
+    tips:'Le gingembre frais amplifie les épices de la whey. Excellent en récupération hivernale.' }
 ];
 
 // ─── RECIPE PICKER ───────────────────────────────────────────────────────────

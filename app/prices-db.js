@@ -2974,6 +2974,132 @@
       source: 'estimation',
       updatedAt: '2026-03'
     },
+    'Whey framboise': {
+      name: 'Whey framboise',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey caramel salé': {
+      name: 'Whey caramel salé',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey cookies': {
+      name: 'Whey cookies',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey tiramisu': {
+      name: 'Whey tiramisu',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey orange': {
+      name: 'Whey orange',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey birthday cake': {
+      name: 'Whey birthday cake',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey cannelle': {
+      name: 'Whey cannelle',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey cheesecake citron': {
+      name: 'Whey cheesecake citron',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey toffee': {
+      name: 'Whey toffee',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey chocolat blanc': {
+      name: 'Whey chocolat blanc',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey piña colada': {
+      name: 'Whey piña colada',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey vanille cannelle': {
+      name: 'Whey vanille cannelle',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey spéculoos': {
+      name: 'Whey spéculoos',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey cappuccino': {
+      name: 'Whey cappuccino',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    "Whey pain d'épices": {
+      name: "Whey pain d'épices",
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey pistache': {
+      name: 'Whey pistache',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey myrtille': {
+      name: 'Whey myrtille',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey coco': {
+      name: 'Whey coco',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey citron': {
+      name: 'Whey citron',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey banane': {
+      name: 'Whey banane',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
+    'Whey matcha': {
+      name: 'Whey matcha',
+      pricePerG: r(220 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
 
     // ── Boissons & Liquides spéciaux ──────────────────────────────────────────
     'Eau de coco': {
@@ -3225,6 +3351,35 @@
     'Fromage blanc 0%': 'Fromage blanc nature',
     'Datte Medjool': 'Dattes Medjool dénoyautées',
     'Menthe': 'Menthe fraîche',
+    // Aliases parfums whey nouveaux
+    'Whey framboise': 'Whey framboise',
+    'Whey caramel salé': 'Whey caramel salé',
+    'Whey cookies': 'Whey cookies',
+    'Whey tiramisu': 'Whey tiramisu',
+    'Whey orange': 'Whey orange',
+    'Whey birthday cake': 'Whey birthday cake',
+    'Whey cannelle': 'Whey cannelle',
+    'Whey cheesecake citron': 'Whey cheesecake citron',
+    'Whey toffee': 'Whey toffee',
+    'Whey chocolat blanc': 'Whey chocolat blanc',
+    'Whey piña colada': 'Whey piña colada',
+    'Whey vanille cannelle': 'Whey vanille cannelle',
+    'Whey spéculoos': 'Whey spéculoos',
+    'Whey cappuccino': 'Whey cappuccino',
+    "Whey pain d'épices": "Whey pain d'épices",
+    'Whey pistache': 'Whey pistache',
+    'Whey matcha': 'Whey matcha',
+    'Whey banane': 'Whey banane',
+    'Whey citron': 'Whey citron',
+    'Whey coco': 'Whey coco',
+    'Whey myrtille': 'Whey myrtille',
+    // Ingredients smoothie nouveaux
+    'Fruits rouges surgelés': 'Fruits rouges surgelés',
+    'Lait demi-écrémé': 'Lait demi-écrémé',
+    'Café expresso froid': 'Café expresso',
+    'Jus de citron': 'Jus de citron',
+    'Cannelle': 'Cannelle moulue',
+    'Pincée de sel': 'Sel',
   };
 
   function getPricePer(ingredientName, unit) {
