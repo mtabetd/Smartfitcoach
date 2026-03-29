@@ -13808,6 +13808,1155 @@
       ]
     }
 
+  // ═══════════════════════════════════════════════════
+  //  CUISINE ITALIENNE — R490-R499
+  // ═══════════════════════════════════════════════════
+
+// === R490 — Bowl Quinoa Risotto Parmesan Champignons ===
+  {
+    id: 'R490',
+    name: 'Bowl Quinoa Risotto Parmesan & Champignons',
+    category: 'italian',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🍚',
+    origin: '🇮🇹',
+    tags: ['high-protein', 'vegetarian', 'meal-prep', 'balanced', 'anti-inflammatory'],
+    servings: 2,
+    prepTime: 10,
+    cookTime: 25,
+    difficulty: 2,
+    // Vérif : 52×4 + 58×4 + 18×9 = 208 + 232 + 162 = 602 kcal ✓
+    baseNutrition: { calories: 602, proteinGrams: 52, carbsGrams: 58, fatGrams: 18 },
+    ingredients: [
+      { name: 'Quinoa (sec)', qty: 180, unit: 'g' },
+      { name: 'Champignons de Paris', qty: 300, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 60, unit: 'g' },
+      { name: 'Bouillon de légumes (cube)', qty: 500, unit: 'ml' },
+      { name: 'Oignon jaune', qty: 80, unit: 'g' },
+      { name: 'Ail', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Persil frais', qty: 15, unit: 'g' },
+      { name: 'Citron (jus)', qty: 20, unit: 'ml' },
+      { name: 'Sel, poivre noir, noix de muscade', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Rincer le quinoa. Porter le bouillon à frémissement dans une casserole.',
+      'Dans une grande poêle, faire revenir l\'oignon émincé et l\'ail dans l\'huile d\'olive 3 min à feu moyen.',
+      'Ajouter les champignons tranchés, une pincée de sel et de poivre noir, cuire 5 min jusqu\'à évaporation de l\'eau.',
+      'Verser le quinoa dans la poêle avec les champignons, puis ajouter le bouillon chaud louche par louche (comme un risotto), en remuant, sur 15-18 min.',
+      'Hors du feu, incorporer le parmesan râpé, une râpée de noix de muscade et le jus de citron ; mélanger vivement pour créer un liant crémeux.',
+      'Répartir dans deux bols, parsemer de persil haché et d\'un tour de poivre noir avant de servir.'
+    ]
+  },
+
+  // === R491 — Poulet Cacciatore Léger ===
+  {
+    id: 'R491',
+    name: 'Poulet Cacciatore Léger Tomates & Olives',
+    category: 'italian',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🍗',
+    origin: '🇮🇹',
+    tags: ['high-protein', 'dairy-free', 'gluten-free', 'meal-prep', 'anti-inflammatory'],
+    servings: 2,
+    prepTime: 15,
+    cookTime: 35,
+    difficulty: 2,
+    // Vérif : 64×4 + 22×4 + 20×9 = 256 + 88 + 180 = 524 kcal ✓
+    baseNutrition: { calories: 524, proteinGrams: 64, carbsGrams: 22, fatGrams: 20 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 500, unit: 'g' },
+      { name: 'Tomates concassées en boîte', qty: 400, unit: 'g' },
+      { name: 'Tomates cerises', qty: 150, unit: 'g' },
+      { name: 'Olives noires dénoyautées', qty: 60, unit: 'g' },
+      { name: 'Câpres', qty: 20, unit: 'g' },
+      { name: 'Poivron rouge', qty: 150, unit: 'g' },
+      { name: 'Oignon', qty: 80, unit: 'g' },
+      { name: 'Ail', qty: 12, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Origan séché', qty: 3, unit: 'g' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Sel, poivre, piment doux', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Couper les blancs de poulet en gros morceaux, les assaisonner de sel, poivre et origan.',
+      'Faire dorer le poulet 3 min de chaque côté dans l\'huile d\'olive à feu vif, puis réserver.',
+      'Dans la même poêle, faire revenir l\'oignon émincé, l\'ail et le poivron coupé en lanières 4 min à feu moyen.',
+      'Ajouter les tomates concassées, les tomates cerises, les olives, les câpres et une pincée de piment ; laisser mijoter 5 min.',
+      'Remettre le poulet dans la sauce, couvrir et cuire à feu doux 20 min jusqu\'à ce qu\'il soit cuit à cœur.',
+      'Parsemer de basilic frais ciselé et servir directement dans la poêle ou dans des assiettes creuses.'
+    ]
+  },
+
+  // === R492 — Pasta e Fagioli Protéinée ===
+  {
+    id: 'R492',
+    name: 'Pasta e Fagioli Protéinée Haricots & Pâtes Complètes',
+    category: 'italian',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🍲',
+    origin: '🇮🇹',
+    tags: ['high-protein', 'vegetarian', 'meal-prep', 'balanced', 'budget'],
+    servings: 2,
+    prepTime: 10,
+    cookTime: 25,
+    difficulty: 1,
+    // Vérif : 32×4 + 90×4 + 14×9 = 128 + 360 + 126 = 614 kcal ✓
+    baseNutrition: { calories: 614, proteinGrams: 32, carbsGrams: 90, fatGrams: 14 },
+    ingredients: [
+      { name: 'Pâtes complètes (ditalini ou pennette)', qty: 160, unit: 'g' },
+      { name: 'Haricots blancs en boîte (égouttés)', qty: 400, unit: 'g' },
+      { name: 'Tomates concassées en boîte', qty: 300, unit: 'g' },
+      { name: 'Bouillon de légumes', qty: 600, unit: 'ml' },
+      { name: 'Oignon', qty: 80, unit: 'g' },
+      { name: 'Ail', qty: 12, unit: 'g' },
+      { name: 'Carotte', qty: 80, unit: 'g' },
+      { name: 'Branche de céleri', qty: 60, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Romarin frais', qty: 3, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+      { name: 'Sel, poivre, piment doux', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Faire revenir dans l\'huile d\'olive l\'oignon, l\'ail, la carotte et le céleri tous finement émincés avec le romarin, 5 min à feu moyen avec une pincée de sel.',
+      'Ajouter les tomates concassées et cuire 3 min en remuant.',
+      'Verser le bouillon et les haricots blancs ; mixer grossièrement au mixeur plongeant (juste la moitié pour garder du morceaux) et porter à ébullition.',
+      'Ajouter les pâtes et cuire selon le temps indiqué sur le paquet en remuant régulièrement, jusqu\'à consistance de soupe épaisse.',
+      'Rectifier avec sel, poivre et une pincée de piment ; si la soupe épaissit trop, ajouter un peu de bouillon chaud.',
+      'Servir dans des bols profonds, filet d\'huile d\'olive et parmesan râpé par-dessus.'
+    ]
+  },
+
+  // === R493 — Frittata Épinards Ricotta au Four ===
+  {
+    id: 'R493',
+    name: 'Frittata Épinards & Ricotta au Four',
+    category: 'italian',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🥚',
+    origin: '🇮🇹',
+    tags: ['high-protein', 'vegetarian', 'gluten-free', 'low-carb', 'meal-prep', 'quick'],
+    servings: 2,
+    prepTime: 10,
+    cookTime: 20,
+    difficulty: 1,
+    // Vérif : 46×4 + 10×4 + 28×9 = 184 + 40 + 252 = 476 kcal ✓
+    baseNutrition: { calories: 476, proteinGrams: 46, carbsGrams: 10, fatGrams: 28 },
+    ingredients: [
+      { name: 'Œufs entiers', qty: 6, unit: 'pce' },
+      { name: 'Ricotta', qty: 150, unit: 'g' },
+      { name: 'Épinards frais (ou surgelés décongelés)', qty: 200, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+      { name: 'Tomates cerises', qty: 100, unit: 'g' },
+      { name: 'Ail', qty: 8, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Noix de muscade', qty: 1, unit: 'pincée' },
+      { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Préchauffer le four à 180°C. Faire revenir l\'ail dans l\'huile d\'olive 1 min, ajouter les épinards avec une pincée de sel et de muscade, cuire 3 min jusqu\'à ce qu\'ils soient tendres.',
+      'Dans un grand bol, battre les œufs avec la ricotta, le parmesan, du sel et du poivre noir jusqu\'à mélange homogène.',
+      'Incorporer les épinards égouttés à la préparation aux œufs.',
+      'Verser dans un plat à four légèrement huilé (ou une poêle allant au four), disposer les tomates cerises coupées en deux sur le dessus.',
+      'Cuire au four 18-20 min jusqu\'à ce que la frittata soit gonflée, dorée sur les bords et prise au centre.',
+      'Laisser tiédir 2 min avant de couper en parts et de servir avec une salade verte.'
+    ]
+  },
+
+  // === R494 — Salade Lentilles Vertes Caprese Style ===
+  {
+    id: 'R494',
+    name: 'Salade Lentilles Vertes Style Caprese',
+    category: 'italian',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🥗',
+    origin: '🇮🇹',
+    tags: ['high-protein', 'vegetarian', 'gluten-free', 'meal-prep', 'anti-inflammatory', 'balanced'],
+    servings: 2,
+    prepTime: 15,
+    cookTime: 20,
+    difficulty: 1,
+    // Vérif : 36×4 + 56×4 + 20×9 = 144 + 224 + 180 = 548 kcal ✓
+    baseNutrition: { calories: 548, proteinGrams: 36, carbsGrams: 56, fatGrams: 20 },
+    ingredients: [
+      { name: 'Lentilles vertes (sèches)', qty: 200, unit: 'g' },
+      { name: 'Mozzarella (boule)', qty: 125, unit: 'g' },
+      { name: 'Tomates mûres', qty: 300, unit: 'g' },
+      { name: 'Tomates cerises', qty: 100, unit: 'g' },
+      { name: 'Basilic frais', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive extra-vierge', qty: 20, unit: 'ml' },
+      { name: 'Vinaigre balsamique', qty: 15, unit: 'ml' },
+      { name: 'Citron (jus)', qty: 15, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre noir, origan séché', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Rincer les lentilles et les cuire 20 min dans une grande casserole d\'eau salée non couverte, jusqu\'à ce qu\'elles soient tendres mais encore fermes ; égoutter et refroidir sous eau froide.',
+      'Couper les tomates en rondelles, les tomates cerises en deux, la mozzarella en tranches. Ciseler le basilic.',
+      'Préparer la vinaigrette en fouettant l\'huile d\'olive, le vinaigre balsamique, le jus de citron, l\'ail pressé, une pincée de sel, poivre et origan.',
+      'Dans un grand saladier, mélanger les lentilles tièdes avec la moitié de la vinaigrette, laisser absorber 5 min.',
+      'Disposer les lentilles en base dans les assiettes, placer alternativement les tranches de tomates et de mozzarella par-dessus.',
+      'Arroser du reste de vinaigrette, parsemer de basilic frais ciselé et servir immédiatement ou après 15 min pour que les saveurs se mêlent.'
+    ]
+  },
+
+  // === R495 — Saumon à l'Agrodolce Sicilienne ===
+  {
+    id: 'R495',
+    name: 'Saumon Agrodolce Sicilienne Tomates Cerises',
+    category: 'italian',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🐟',
+    origin: '🇮🇹',
+    tags: ['high-protein', 'gluten-free', 'dairy-free', 'omega3', 'anti-inflammatory', 'quick'],
+    servings: 2,
+    prepTime: 10,
+    cookTime: 15,
+    difficulty: 2,
+    // Vérif : 52×4 + 20×4 + 24×9 = 208 + 80 + 216 = 504 kcal ✓
+    baseNutrition: { calories: 504, proteinGrams: 52, carbsGrams: 20, fatGrams: 24 },
+    ingredients: [
+      { name: 'Filets de saumon (sans peau)', qty: 400, unit: 'g' },
+      { name: 'Tomates cerises', qty: 250, unit: 'g' },
+      { name: 'Vinaigre balsamique', qty: 30, unit: 'ml' },
+      { name: 'Miel', qty: 15, unit: 'g' },
+      { name: 'Olives vertes dénoyautées', qty: 50, unit: 'g' },
+      { name: 'Câpres', qty: 20, unit: 'g' },
+      { name: 'Ail', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Basilic frais', qty: 10, unit: 'g' },
+      { name: 'Sel, poivre, piment doux', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Assaisonner les filets de saumon avec sel, poivre et piment doux sur les deux faces.',
+      'Chauffer l\'huile d\'olive dans une poêle antiadhésive à feu vif ; saisir le saumon 3 min côté peau puis 2 min côté chair ; réserver sur une assiette.',
+      'Dans la même poêle à feu moyen, faire revenir l\'ail émincé 1 min, puis ajouter les tomates cerises coupées en deux et cuire 3 min jusqu\'à ce qu\'elles commencent à fondre.',
+      'Verser le vinaigre balsamique et le miel, mélanger et laisser réduire 2 min pour former une sauce agrodolce brillante.',
+      'Ajouter les olives et les câpres dans la sauce, chauffer 1 min.',
+      'Remettre le saumon dans la poêle, napper de sauce, parsemer de basilic frais et servir immédiatement avec du quinoa ou des légumes vapeur.'
+    ]
+  },
+
+  // === R496 — Zucchini Ripieni Thon-Ricotta ===
+  {
+    id: 'R496',
+    name: 'Zucchini Ripieni Thon & Ricotta',
+    category: 'italian',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🥒',
+    origin: '🇮🇹',
+    tags: ['high-protein', 'gluten-free', 'low-carb', 'omega3', 'meal-prep', 'balanced'],
+    servings: 2,
+    prepTime: 15,
+    cookTime: 25,
+    difficulty: 2,
+    // Vérif : 48×4 + 16×4 + 20×9 = 192 + 64 + 180 = 436 kcal ✓
+    baseNutrition: { calories: 436, proteinGrams: 48, carbsGrams: 16, fatGrams: 20 },
+    ingredients: [
+      { name: 'Courgettes (grandes)', qty: 600, unit: 'g' },
+      { name: 'Thon en boîte au naturel (égoutté)', qty: 240, unit: 'g' },
+      { name: 'Ricotta', qty: 120, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+      { name: 'Tomates cerises', qty: 100, unit: 'g' },
+      { name: 'Câpres', qty: 15, unit: 'g' },
+      { name: 'Ail', qty: 8, unit: 'g' },
+      { name: 'Persil frais', qty: 15, unit: 'g' },
+      { name: 'Citron (jus + zeste)', qty: 30, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Sel, poivre noir, origan', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Préchauffer le four à 190°C. Couper les courgettes en deux dans la longueur, vider la chair avec une cuillère en laissant 5 mm de bord ; hacher grossièrement la chair prélevée.',
+      'Faire revenir la chair de courgette avec l\'ail dans l\'huile d\'olive, sel et poivre, 4 min à feu moyen ; retirer du feu et laisser refroidir légèrement.',
+      'Dans un bol, mélanger le thon émietté, la ricotta, le parmesan, les câpres, le jus et le zeste de citron, le persil haché, et la chair de courgette sautée.',
+      'Assaisonner la farce de poivre et d\'origan, puis garnir généreusement les barques de courgettes.',
+      'Déposer une demi-tomate cerise sur chaque courgette farcie ; placer sur une plaque huilée et cuire 22-25 min jusqu\'à ce que les courgettes soient tendres et dorées.',
+      'Servir chaud ou tiède, avec un filet d\'huile d\'olive et persil frais ciselé.'
+    ]
+  },
+
+  // === R497 — Panzanella Moderne Thon & Légumes ===
+  {
+    id: 'R497',
+    name: 'Panzanella Moderne Thon, Tomates & Pain Complet Grillé',
+    category: 'italian',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🥙',
+    origin: '🇮🇹',
+    tags: ['high-protein', 'dairy-free', 'omega3', 'meal-prep', 'balanced', 'anti-inflammatory'],
+    servings: 2,
+    prepTime: 20,
+    cookTime: 10,
+    difficulty: 1,
+    // Vérif : 44×4 + 48×4 + 20×9 = 176 + 192 + 180 = 548 kcal ✓
+    baseNutrition: { calories: 548, proteinGrams: 44, carbsGrams: 48, fatGrams: 20 },
+    ingredients: [
+      { name: 'Pain complet rassis (ou pain de campagne)', qty: 120, unit: 'g' },
+      { name: 'Thon en boîte au naturel (égoutté)', qty: 240, unit: 'g' },
+      { name: 'Tomates mûres', qty: 300, unit: 'g' },
+      { name: 'Tomates cerises', qty: 100, unit: 'g' },
+      { name: 'Concombre', qty: 150, unit: 'g' },
+      { name: 'Poivron rouge', qty: 100, unit: 'g' },
+      { name: 'Oignon rouge', qty: 60, unit: 'g' },
+      { name: 'Basilic frais', qty: 15, unit: 'g' },
+      { name: 'Huile d\'olive extra-vierge', qty: 20, unit: 'ml' },
+      { name: 'Vinaigre de vin rouge', qty: 15, unit: 'ml' },
+      { name: 'Ail', qty: 5, unit: 'g' },
+      { name: 'Sel, poivre, origan séché', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Couper le pain en cubes de 2 cm ; les frotter d\'ail et les griller à sec à la poêle ou au four 180°C pendant 8 min jusqu\'à ce qu\'ils soient croustillants.',
+      'Couper les tomates et le concombre en morceaux, les tomates cerises en deux, le poivron en dés et l\'oignon rouge en fines lamelles.',
+      'Fouetter l\'huile d\'olive avec le vinaigre de vin rouge, une pincée de sel, poivre et origan pour former la vinaigrette.',
+      'Dans un grand saladier, mélanger les légumes avec la moitié de la vinaigrette ; laisser dégorger 5 min.',
+      'Ajouter le thon émietté et les croûtons, arroser du reste de vinaigrette ; mélanger délicatement pour que le pain absorbe les jus sans se défaire.',
+      'Parsemer de basilic frais ciselé, rectifier l\'assaisonnement en sel et poivre, servir immédiatement ou après 10 min de repos.'
+    ]
+  },
+
+  // === R498 — Minestrone Express Haute Protéine ===
+  {
+    id: 'R498',
+    name: 'Minestrone Express Haute Protéine Lentilles & Légumes',
+    category: 'italian',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🍜',
+    origin: '🇮🇹',
+    tags: ['high-protein', 'vegetarian', 'dairy-free', 'meal-prep', 'budget', 'anti-inflammatory'],
+    servings: 2,
+    prepTime: 12,
+    cookTime: 28,
+    difficulty: 1,
+    // Vérif : 34×4 + 72×4 + 10×9 = 136 + 288 + 90 = 514 kcal ✓
+    baseNutrition: { calories: 514, proteinGrams: 34, carbsGrams: 72, fatGrams: 10 },
+    ingredients: [
+      { name: 'Lentilles corail (sèches)', qty: 120, unit: 'g' },
+      { name: 'Pâtes complètes (ditalini ou macaroni)', qty: 80, unit: 'g' },
+      { name: 'Tomates concassées en boîte', qty: 400, unit: 'g' },
+      { name: 'Bouillon de légumes', qty: 800, unit: 'ml' },
+      { name: 'Courgette', qty: 150, unit: 'g' },
+      { name: 'Carotte', qty: 100, unit: 'g' },
+      { name: 'Haricots verts surgelés', qty: 100, unit: 'g' },
+      { name: 'Oignon', qty: 80, unit: 'g' },
+      { name: 'Ail', qty: 10, unit: 'g' },
+      { name: 'Céleri', qty: 60, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Thym, laurier, origan', qty: 3, unit: 'g' },
+      { name: 'Sel, poivre, piment doux', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Émincer l\'oignon, l\'ail, le céleri et couper la carotte et la courgette en dés de 1 cm.',
+      'Dans une grande casserole, chauffer l\'huile d\'olive à feu moyen, faire revenir l\'oignon, le céleri et la carotte 5 min avec sel, poivre et herbes jusqu\'à légère coloration.',
+      'Ajouter l\'ail 1 min, puis les tomates concassées, mélanger et cuire 3 min.',
+      'Verser le bouillon et les lentilles corail rincées ; porter à ébullition, réduire le feu et cuire 12 min en remuant de temps en temps (les lentilles épaississent la soupe naturellement).',
+      'Ajouter les pâtes, la courgette et les haricots verts ; cuire encore 10 min à feu doux jusqu\'à ce que les pâtes soient al dente.',
+      'Rectifier l\'assaisonnement en sel, poivre et piment doux ; servir bien chaud avec un filet d\'huile d\'olive et une pincée d\'origan.'
+    ]
+  },
+
+  // === R499 — Pollo alla Milanese Légère au Four ===
+  {
+    id: 'R499',
+    name: 'Pollo alla Milanese Légère au Four & Roquette Citron',
+    category: 'italian',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🍋',
+    origin: '🇮🇹',
+    tags: ['high-protein', 'dairy-free', 'meal-prep', 'balanced', 'festive'],
+    servings: 2,
+    prepTime: 15,
+    cookTime: 22,
+    difficulty: 2,
+    // Vérif : 66×4 + 38×4 + 18×9 = 264 + 152 + 162 = 578 kcal ✓
+    baseNutrition: { calories: 578, proteinGrams: 66, carbsGrams: 38, fatGrams: 18 },
+    ingredients: [
+      { name: 'Blanc de poulet', qty: 500, unit: 'g' },
+      { name: 'Chapelure complète (ou flocons d\'avoine mixés)', qty: 60, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 30, unit: 'g' },
+      { name: 'Œuf entier', qty: 1, unit: 'pce' },
+      { name: 'Roquette fraîche', qty: 80, unit: 'g' },
+      { name: 'Tomates cerises', qty: 150, unit: 'g' },
+      { name: 'Citron (jus + zeste)', qty: 40, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Ail en poudre', qty: 3, unit: 'g' },
+      { name: 'Origan séché', qty: 2, unit: 'g' },
+      { name: 'Sel, poivre noir', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Préchauffer le four à 200°C avec une grille huilée. Placer les blancs de poulet entre deux feuilles de film alimentaire et les aplatir à 1 cm avec un rouleau à pâtisserie.',
+      'Mélanger la chapelure avec le parmesan, l\'ail en poudre, l\'origan, le sel et le poivre dans une assiette creuse.',
+      'Battre l\'œuf dans une assiette. Tremper chaque escalope dans l\'œuf battu, puis dans le mélange chapelure-parmesan en pressant bien pour faire adhérer.',
+      'Déposer les escalopes panées sur la grille huilée, arroser d\'un filet d\'huile d\'olive et cuire au four 20-22 min en retournant à mi-cuisson, jusqu\'à dorure croustillante.',
+      'Pendant ce temps, couper les tomates cerises en deux, préparer la vinaigrette en fouettant le jus de citron avec le reste d\'huile, sel et poivre.',
+      'Dresser les escalopes avec la roquette et les tomates cerises assaisonnées de vinaigrette citron ; terminer avec le zeste de citron râpé.'
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════
+  //  CUISINE FRANÇAISE — R500-R509
+  // ═══════════════════════════════════════════════════
+
+// === R500 — SALADE NIÇOISE REVISITÉE ===
+  {
+    id: 'R500',
+    name: 'Salade Niçoise Revisitée',
+    category: 'french',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🥗',
+    origin: '🇫🇷',
+    tags: ['high-protein', 'omega3', 'gluten-free', 'dairy-free', 'anti-inflammatory', 'no-cook', 'balanced'],
+    servings: 2,
+    prepTime: 15,
+    cookTime: 10,
+    difficulty: 1,
+    // 56*4 + 22*4 + 26*9 = 224 + 88 + 234 = 546 ✓
+    baseNutrition: { calories: 546, proteinGrams: 56, carbsGrams: 22, fatGrams: 26 },
+    ingredients: [
+      { name: 'Thon en conserve au naturel', qty: 280, unit: 'g' },
+      { name: 'Œufs', qty: 3, unit: 'pce' },
+      { name: 'Haricots verts frais', qty: 180, unit: 'g' },
+      { name: 'Tomates cerises', qty: 150, unit: 'g' },
+      { name: 'Olives noires dénoyautées', qty: 40, unit: 'g' },
+      { name: 'Feuilles de laitue romaine', qty: 80, unit: 'g' },
+      { name: 'Huile d\'olive extra vierge', qty: 20, unit: 'ml' },
+      { name: 'Vinaigre de vin', qty: 10, unit: 'ml' },
+      { name: 'Moutarde de Dijon', qty: 8, unit: 'g' },
+      { name: 'Citron (jus)', qty: 15, unit: 'ml' },
+      { name: 'Câpres', qty: 15, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Cuire les œufs durs 9 minutes dans l\'eau bouillante, refroidir sous eau froide, écaler et couper en quartiers.',
+      'Blanchir les haricots verts 4 minutes dans eau bouillante salée, égoutter et plonger dans eau glacée pour fixer la couleur.',
+      'Préparer la vinaigrette : fouetter huile d\'olive, vinaigre, moutarde, jus de citron, sel et poivre.',
+      'Dresser la laitue dans les assiettes, répartir haricots verts, tomates cerises coupées en deux, thon égoutté et effeuillé, olives et câpres.',
+      'Poser les quartiers d\'œufs sur la salade, napper de vinaigrette et servir immédiatement.'
+    ]
+  },
+
+  // === R501 — POULET BASQUAISE EXPRESS ===
+  {
+    id: 'R501',
+    name: 'Poulet Basquaise Express',
+    category: 'french',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🍗',
+    origin: '🇫🇷',
+    tags: ['high-protein', 'gluten-free', 'dairy-free', 'anti-inflammatory', 'balanced', 'meal-prep'],
+    servings: 2,
+    prepTime: 15,
+    cookTime: 30,
+    difficulty: 2,
+    // 62*4 + 28*4 + 18*9 = 248 + 112 + 162 = 522 ✓
+    baseNutrition: { calories: 522, proteinGrams: 62, carbsGrams: 28, fatGrams: 18 },
+    ingredients: [
+      { name: 'Blancs de poulet', qty: 400, unit: 'g' },
+      { name: 'Poivrons rouges', qty: 200, unit: 'g' },
+      { name: 'Poivron vert', qty: 100, unit: 'g' },
+      { name: 'Tomates pelées en conserve', qty: 300, unit: 'g' },
+      { name: 'Jambon de dinde fumé', qty: 60, unit: 'g' },
+      { name: 'Oignon', qty: 100, unit: 'g' },
+      { name: 'Ail', qty: 3, unit: 'gousses' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Piment doux (paprika fumé)', qty: 5, unit: 'g' },
+      { name: 'Thym, laurier', qty: 1, unit: 'pincée' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Couper les poivrons en lanières, émincer l\'oignon et hacher l\'ail. Détailler le poulet en gros cubes.',
+      'Faire revenir le poulet 3 minutes de chaque côté dans l\'huile d\'olive à feu vif. Réserver.',
+      'Dans la même poêle, faire suer l\'oignon 3 minutes, ajouter l\'ail, les poivrons et le jambon de dinde. Cuire 5 minutes.',
+      'Ajouter les tomates, le paprika fumé, le thym et le laurier. Laisser mijoter 10 minutes.',
+      'Remettre le poulet dans la sauce, couvrir et cuire encore 15 minutes à feu doux jusqu\'à tendreté. Rectifier l\'assaisonnement.'
+    ]
+  },
+
+  // === R502 — SOUPE DE LENTILLES VERTES À LA FRANÇAISE ===
+  {
+    id: 'R502',
+    name: 'Soupe de Lentilles Vertes à la Française',
+    category: 'french',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🥣',
+    origin: '🇫🇷',
+    tags: ['vegetarian', 'high-protein', 'balanced', 'meal-prep', 'budget', 'anti-inflammatory'],
+    servings: 2,
+    prepTime: 10,
+    cookTime: 35,
+    difficulty: 1,
+    // 32*4 + 62*4 + 10*9 = 128 + 248 + 90 = 466 ✓
+    baseNutrition: { calories: 466, proteinGrams: 32, carbsGrams: 62, fatGrams: 10 },
+    ingredients: [
+      { name: 'Lentilles vertes sèches', qty: 200, unit: 'g' },
+      { name: 'Carottes', qty: 150, unit: 'g' },
+      { name: 'Oignon', qty: 100, unit: 'g' },
+      { name: 'Céleri branche', qty: 80, unit: 'g' },
+      { name: 'Ail', qty: 2, unit: 'gousses' },
+      { name: 'Bouillon de légumes (cube)', qty: 800, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Cumin moulu', qty: 3, unit: 'g' },
+      { name: 'Thym séché', qty: 2, unit: 'g' },
+      { name: 'Laurier', qty: 1, unit: 'feuille' },
+      { name: 'Persil frais', qty: 10, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Rincer les lentilles à l\'eau froide. Éplucher et tailler carottes, oignon et céleri en dés.',
+      'Faire suer l\'oignon et le céleri dans l\'huile d\'olive 3 minutes, ajouter l\'ail haché et le cumin, cuire 1 minute.',
+      'Ajouter les carottes, les lentilles, le thym et le laurier. Verser le bouillon chaud.',
+      'Porter à ébullition puis laisser mijoter 30 minutes à feu doux jusqu\'à ce que les lentilles soient fondantes.',
+      'Mixer partiellement pour une texture crémeuse avec des morceaux. Rectifier l\'assaisonnement, parsemer de persil frais et servir.'
+    ]
+  },
+
+  // === R503 — SOLE MEUNIÈRE LÉGÈRE ===
+  {
+    id: 'R503',
+    name: 'Sole Meunière Légère Huile d\'Olive',
+    category: 'french',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🐟',
+    origin: '🇫🇷',
+    tags: ['high-protein', 'omega3', 'gluten-free', 'dairy-free', 'low-carb', 'quick', 'anti-inflammatory'],
+    servings: 2,
+    prepTime: 10,
+    cookTime: 15,
+    difficulty: 2,
+    // 58*4 + 8*4 + 22*9 = 232 + 32 + 198 = 462 ✓
+    baseNutrition: { calories: 462, proteinGrams: 58, carbsGrams: 8, fatGrams: 22 },
+    ingredients: [
+      { name: 'Filets de sole (ou merlan)', qty: 500, unit: 'g' },
+      { name: 'Farine de riz', qty: 20, unit: 'g' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+      { name: 'Persil plat frais', qty: 15, unit: 'g' },
+      { name: 'Câpres', qty: 20, unit: 'g' },
+      { name: 'Ail', qty: 1, unit: 'gousse' },
+      { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Sécher les filets de sole avec du papier absorbant. Assaisonner de sel et poivre, fariner légèrement avec la farine de riz (secouer l\'excédent).',
+      'Chauffer l\'huile d\'olive dans une grande poêle antiadhésive à feu moyen-vif. Cuire les filets 2-3 minutes de chaque côté jusqu\'à dorure légère.',
+      'Retirer les filets, réserver au chaud. Baisser le feu, ajouter l\'ail haché dans la poêle, faire blondir 30 secondes.',
+      'Déglacer avec le jus de citron, ajouter les câpres et le zeste. Gratter les sucs de cuisson 1 minute.',
+      'Verser la sauce citronnée sur les filets, parsemer de persil haché et servir aussitôt avec une salade verte ou haricots verts vapeur.'
+    ]
+  },
+
+  // === R504 — ŒUFS COCOTTE CHAMPIGNONS ÉPINARDS ===
+  {
+    id: 'R504',
+    name: 'Œufs Cocotte Champignons Épinards',
+    category: 'french',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🥚',
+    origin: '🇫🇷',
+    tags: ['vegetarian', 'high-protein', 'low-carb', 'gluten-free', 'quick', 'anti-inflammatory'],
+    servings: 2,
+    prepTime: 10,
+    cookTime: 15,
+    difficulty: 1,
+    // 34*4 + 10*4 + 24*9 = 136 + 40 + 216 = 392 ✓
+    baseNutrition: { calories: 392, proteinGrams: 34, carbsGrams: 10, fatGrams: 24 },
+    ingredients: [
+      { name: 'Œufs frais', qty: 4, unit: 'pce' },
+      { name: 'Champignons de Paris', qty: 200, unit: 'g' },
+      { name: 'Épinards frais', qty: 150, unit: 'g' },
+      { name: 'Yaourt grec 0%', qty: 80, unit: 'g' },
+      { name: 'Fromage de chèvre frais (Jaouda)', qty: 50, unit: 'g' },
+      { name: 'Ail', qty: 1, unit: 'gousse' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Muscade moulue', qty: 1, unit: 'pincée' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Préchauffer le four à 180°C. Émincer finement les champignons, hacher l\'ail.',
+      'Faire sauter les champignons et l\'ail dans l\'huile d\'olive 4 minutes jusqu\'à évaporation. Ajouter les épinards, cuire 2 minutes jusqu\'à ce qu\'ils tombent. Assaisonner sel, poivre, muscade.',
+      'Mélanger le yaourt grec avec la moitié du chèvre émietté. Huiler deux ramequins.',
+      'Répartir le mélange champignons-épinards dans les ramequins, creuser un nid et casser 2 œufs dans chacun. Déposer le reste du chèvre, napper d\'une cuillerée de yaourt.',
+      'Cuire au bain-marie au four 12-14 minutes jusqu\'à ce que les blancs soient pris et les jaunes encore coulants. Servir immédiatement.'
+    ]
+  },
+
+  // === R505 — SALADE LYONNAISE MODERNISÉE ===
+  {
+    id: 'R505',
+    name: 'Salade Lyonnaise Modernisée',
+    category: 'french',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🥗',
+    origin: '🇫🇷',
+    tags: ['high-protein', 'gluten-free', 'dairy-free', 'balanced', 'quick', 'low-carb'],
+    servings: 2,
+    prepTime: 12,
+    cookTime: 10,
+    difficulty: 2,
+    // 44*4 + 10*4 + 26*9 = 176 + 40 + 234 = 450 ✓
+    baseNutrition: { calories: 450, proteinGrams: 44, carbsGrams: 10, fatGrams: 26 },
+    ingredients: [
+      { name: 'Œufs frais (pour pocher)', qty: 4, unit: 'pce' },
+      { name: 'Lardons de dinde fumés', qty: 120, unit: 'g' },
+      { name: 'Roquette', qty: 80, unit: 'g' },
+      { name: 'Frisée (chicorée)', qty: 60, unit: 'g' },
+      { name: 'Tomates cerises', qty: 100, unit: 'g' },
+      { name: 'Vinaigre blanc', qty: 30, unit: 'ml' },
+      { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+      { name: 'Moutarde de Dijon', qty: 8, unit: 'g' },
+      { name: 'Vinaigre balsamique', qty: 10, unit: 'ml' },
+      { name: 'Échalote', qty: 30, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Faire revenir les lardons de dinde dans une poêle chaude sans matière grasse 3-4 minutes jusqu\'à ce qu\'ils soient dorés et légèrement croustillants.',
+      'Préparer la vinaigrette tiède : dans les lardons retirés, faire suer l\'échalote émincée finement, déglacer avec le vinaigre balsamique, ajouter l\'huile d\'olive et la moutarde.',
+      'Pocher les œufs : porter l\'eau à frémissement avec le vinaigre blanc. Casser chaque œuf dans un bol, créer un tourbillon et glisser l\'œuf. Cuire 3 minutes. Égoutter sur papier absorbant.',
+      'Dresser roquette et frisée dans les assiettes, ajouter les tomates cerises et les lardons chauds, napper de vinaigrette tiède.',
+      'Déposer 2 œufs pochés par assiette, assaisonner et servir immédiatement.'
+    ]
+  },
+
+  // === R506 — GRATIN DE COURGETTES AU CHÈVRE FRAIS ===
+  {
+    id: 'R506',
+    name: 'Gratin de Courgettes au Chèvre Frais',
+    category: 'french',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🥦',
+    origin: '🇫🇷',
+    tags: ['vegetarian', 'gluten-free', 'balanced', 'anti-inflammatory', 'meal-prep', 'low-carb'],
+    servings: 2,
+    prepTime: 15,
+    cookTime: 30,
+    difficulty: 2,
+    // 28*4 + 14*4 + 22*9 = 112 + 56 + 198 = 366 ✓
+    baseNutrition: { calories: 366, proteinGrams: 28, carbsGrams: 14, fatGrams: 22 },
+    ingredients: [
+      { name: 'Courgettes', qty: 500, unit: 'g' },
+      { name: 'Fromage de chèvre frais (Jaouda)', qty: 120, unit: 'g' },
+      { name: 'Yaourt grec 0%', qty: 100, unit: 'g' },
+      { name: 'Œufs', qty: 2, unit: 'pce' },
+      { name: 'Ail', qty: 2, unit: 'gousses' },
+      { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+      { name: 'Thym frais', qty: 4, unit: 'g' },
+      { name: 'Parmesan râpé', qty: 20, unit: 'g' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Préchauffer le four à 190°C. Couper les courgettes en rondelles de 5 mm. Faire revenir avec l\'ail émincé dans l\'huile d\'olive 5 minutes, assaisonner.',
+      'Dans un bol, fouetter les œufs avec le yaourt grec, les 3/4 du chèvre émietté, le thym, sel et poivre.',
+      'Disposer les courgettes dans un plat à gratin légèrement huilé, verser l\'appareil yaourt-chèvre par-dessus.',
+      'Émietter le reste du chèvre sur le dessus, parsemer de parmesan râpé.',
+      'Cuire 25-30 minutes jusqu\'à ce que le gratin soit doré et ferme. Laisser tiédir 5 minutes avant de servir.'
+    ]
+  },
+
+  // === R507 — RILLETTES DE SARDINES ===
+  {
+    id: 'R507',
+    name: 'Rillettes de Sardines aux Herbes',
+    category: 'french',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🐟',
+    origin: '🇫🇷',
+    tags: ['high-protein', 'omega3', 'gluten-free', 'no-cook', 'quick', 'anti-inflammatory', 'budget'],
+    servings: 2,
+    prepTime: 10,
+    cookTime: 0,
+    difficulty: 1,
+    // 38*4 + 6*4 + 28*9 = 152 + 24 + 252 = 428 ✓
+    baseNutrition: { calories: 428, proteinGrams: 38, carbsGrams: 6, fatGrams: 28 },
+    ingredients: [
+      { name: 'Sardines en conserve à l\'huile d\'olive', qty: 240, unit: 'g' },
+      { name: 'Fromage blanc 0% (ou yaourt grec égoutté)', qty: 80, unit: 'g' },
+      { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+      { name: 'Échalotes', qty: 30, unit: 'g' },
+      { name: 'Ciboulette fraîche', qty: 10, unit: 'g' },
+      { name: 'Persil plat frais', qty: 10, unit: 'g' },
+      { name: 'Moutarde de Dijon', qty: 8, unit: 'g' },
+      { name: 'Câpres', qty: 10, unit: 'g' },
+      { name: 'Poivre noir, piment doux', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Égoutter les sardines en conservant 1 cuillère à soupe d\'huile d\'olive. Retirer les arêtes centrales si nécessaire.',
+      'Émincer finement l\'échalote, hacher la ciboulette et le persil.',
+      'Écraser les sardines à la fourchette dans un bol. Incorporer le fromage blanc, la moutarde, le jus de citron et le zeste.',
+      'Ajouter l\'échalote, les herbes, les câpres et le piment. Mélanger grossièrement pour garder une texture rustique.',
+      'Réfrigérer 15 minutes avant de servir sur des tranches de pain de seigle grillé ou des crackers, garni de rondelles de concombre.'
+    ]
+  },
+
+  // === R508 — BOURGUIGNON DE POULET ALLÉGÉ ===
+  {
+    id: 'R508',
+    name: 'Bourguignon de Poulet Allégé',
+    category: 'french',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🍲',
+    origin: '🇫🇷',
+    tags: ['high-protein', 'dairy-free', 'balanced', 'meal-prep', 'anti-inflammatory'],
+    servings: 2,
+    prepTime: 20,
+    cookTime: 45,
+    difficulty: 3,
+    // 68*4 + 24*4 + 16*9 = 272 + 96 + 144 = 512 ✓
+    baseNutrition: { calories: 512, proteinGrams: 68, carbsGrams: 24, fatGrams: 16 },
+    ingredients: [
+      { name: 'Cuisses de poulet désossées sans peau', qty: 450, unit: 'g' },
+      { name: 'Champignons de Paris', qty: 200, unit: 'g' },
+      { name: 'Carottes', qty: 150, unit: 'g' },
+      { name: 'Oignon', qty: 100, unit: 'g' },
+      { name: 'Tomates pelées en conserve', qty: 200, unit: 'g' },
+      { name: 'Bouillon de poulet dégraissé', qty: 250, unit: 'ml' },
+      { name: 'Vin rouge (optionnel, 1 verre)', qty: 100, unit: 'ml' },
+      { name: 'Ail', qty: 3, unit: 'gousses' },
+      { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+      { name: 'Concentré de tomate', qty: 15, unit: 'g' },
+      { name: 'Thym, laurier, persil', qty: 1, unit: 'bouquet' },
+      { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Couper le poulet en gros morceaux (4-5 cm), assaisonner. Faire dorer vivement dans l\'huile d\'olive 4 minutes de chaque côté. Réserver.',
+      'Dans la même cocotte, faire revenir l\'oignon émincé et les carottes en dés 5 minutes. Ajouter l\'ail haché, le concentré de tomate, cuire 1 minute.',
+      'Déglacer avec le vin rouge si utilisé (ou bouillon). Gratter les sucs, laisser réduire 3 minutes.',
+      'Ajouter les tomates concassées, le bouillon, le thym et le laurier. Remettre le poulet. Porter à ébullition, couvrir et mijoter 30 minutes.',
+      'Ajouter les champignons entiers les 15 dernières minutes. Rectifier l\'assaisonnement, parsemer de persil haché et servir avec pommes vapeur ou haricots verts.'
+    ]
+  },
+
+  // === R509 — TARTARE DE THON FAÇON FRANÇAISE ===
+  {
+    id: 'R509',
+    name: 'Tartare de Thon Façon Française',
+    category: 'french',
+    mealTypes: ['lunch', 'dinner'],
+    emoji: '🥩',
+    origin: '🇫🇷',
+    tags: ['high-protein', 'omega3', 'gluten-free', 'dairy-free', 'low-carb', 'no-cook', 'quick', 'anti-inflammatory', 'festive'],
+    servings: 2,
+    prepTime: 15,
+    cookTime: 0,
+    difficulty: 2,
+    // 52*4 + 8*4 + 18*9 = 208 + 32 + 162 = 402 ✓
+    baseNutrition: { calories: 402, proteinGrams: 52, carbsGrams: 8, fatGrams: 18 },
+    ingredients: [
+      { name: 'Thon frais (ou thon en conserve premium à l\'huile d\'olive)', qty: 320, unit: 'g' },
+      { name: 'Câpres', qty: 20, unit: 'g' },
+      { name: 'Échalotes', qty: 40, unit: 'g' },
+      { name: 'Cornichons fins', qty: 30, unit: 'g' },
+      { name: 'Ciboulette fraîche', qty: 10, unit: 'g' },
+      { name: 'Persil plat frais', qty: 8, unit: 'g' },
+      { name: 'Moutarde de Dijon', qty: 10, unit: 'g' },
+      { name: 'Huile d\'olive extra vierge', qty: 20, unit: 'ml' },
+      { name: 'Citron (jus)', qty: 20, unit: 'ml' },
+      { name: 'Sauce soja légère', qty: 10, unit: 'ml' },
+      { name: 'Poivre noir, fleur de sel', qty: 1, unit: 'pincée' }
+    ],
+    steps: [
+      'Si thon frais : s\'assurer qu\'il est très frais (sashimi grade). Couper en petits dés de 5 mm au couteau bien aiguisé. Si conserve premium : égoutter et effeuiller grossièrement.',
+      'Émincer finement l\'échalote, hacher les cornichons, les câpres, la ciboulette et le persil.',
+      'Préparer la sauce : mélanger moutarde, jus de citron, sauce soja, huile d\'olive, poivre.',
+      'Combiner le thon avec l\'échalote, les cornichons, les câpres et les herbes. Incorporer la sauce délicatement. Goûter et ajuster citron/sel.',
+      'Former le tartare à l\'aide d\'un cercle dans les assiettes, parsemer de fleur de sel et ciboulette. Servir avec roquette et crackers de seigle ou concombre en lamelles.'
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════
+  //  CUISINE MEXICAINE — R510-R519
+  // ═══════════════════════════════════════════════════
+
+// === R510 — BURRITO BOWL POULET GRILLÉ ===
+{
+  id: 'R510',
+  name: 'Burrito Bowl Poulet Grillé',
+  category: 'mexican',
+  mealTypes: ['lunch', 'dinner'],
+  emoji: '🌯',
+  origin: '🇲🇽',
+  tags: ['high-protein', 'meal-prep', 'balanced', 'dairy-free'],
+  servings: 2,
+  prepTime: 15,
+  cookTime: 20,
+  difficulty: 1,
+  // Vérif macros (total 2 portions) : 58×4 + 72×4 + 18×9 = 232 + 288 + 162 = 682 kcal → ok (±30)
+  baseNutrition: { calories: 682, proteinGrams: 58, carbsGrams: 72, fatGrams: 18 },
+  ingredients: [
+    { name: 'Blanc de poulet', qty: 400, unit: 'g' },
+    { name: 'Riz blanc', qty: 160, unit: 'g' },
+    { name: 'Haricots noirs (boîte, égouttés)', qty: 240, unit: 'g' },
+    { name: 'Maïs en boîte (égoutté)', qty: 120, unit: 'g' },
+    { name: 'Avocat', qty: 120, unit: 'g' },
+    { name: 'Tomate', qty: 150, unit: 'g' },
+    { name: 'Oignon rouge', qty: 60, unit: 'g' },
+    { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+    { name: 'Citron vert', qty: 30, unit: 'ml' },
+    { name: 'Cumin moulu', qty: 4, unit: 'g' },
+    { name: 'Paprika fumé', qty: 3, unit: 'g' },
+    { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+    { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+  ],
+  steps: [
+    'Cuire le riz blanc selon les indications. Réserver au chaud.',
+    'Mélanger le cumin, le paprika fumé, le sel et le poivre. Enduire les blancs de poulet de ce mélange.',
+    'Faire chauffer l\'huile dans une poêle à feu moyen-fort. Cuire le poulet 6-7 min de chaque côté jusqu\'à dorure. Laisser reposer 5 min puis émincer.',
+    'Préparer le guacamole express : écraser l\'avocat avec le jus de citron vert, sel et la moitié de la coriandre.',
+    'Préparer la salsa : couper la tomate et l\'oignon rouge en dés, mélanger avec le reste de coriandre et un filet de citron vert.',
+    'Assembler les bowls : riz, haricots noirs, maïs, poulet émincé, guacamole et salsa. Servir aussitôt.'
+  ]
+},
+
+// === R511 — TACOS DE POULET SPICY AU FOUR ===
+{
+  id: 'R511',
+  name: 'Tacos de Poulet Spicy au Four',
+  category: 'mexican',
+  mealTypes: ['lunch', 'dinner'],
+  emoji: '🌮',
+  origin: '🇲🇽',
+  tags: ['high-protein', 'quick', 'balanced'],
+  servings: 2,
+  prepTime: 15,
+  cookTime: 20,
+  difficulty: 1,
+  // Vérif macros : 54×4 + 58×4 + 20×9 = 216 + 232 + 180 = 628 kcal → ok
+  baseNutrition: { calories: 628, proteinGrams: 54, carbsGrams: 58, fatGrams: 20 },
+  ingredients: [
+    { name: 'Blanc de poulet', qty: 360, unit: 'g' },
+    { name: 'Galette de blé (tortilla)', qty: 4, unit: 'pièce' },
+    { name: 'Tomates', qty: 200, unit: 'g' },
+    { name: 'Avocat', qty: 120, unit: 'g' },
+    { name: 'Oignon rouge', qty: 60, unit: 'g' },
+    { name: 'Piment rouge frais', qty: 20, unit: 'g' },
+    { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+    { name: 'Citron vert', qty: 30, unit: 'ml' },
+    { name: 'Yaourt grec 0%', qty: 80, unit: 'g' },
+    { name: 'Cumin moulu', qty: 4, unit: 'g' },
+    { name: 'Paprika', qty: 3, unit: 'g' },
+    { name: 'Origan séché', qty: 2, unit: 'g' },
+    { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+    { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+  ],
+  steps: [
+    'Préchauffer le four à 200 °C. Mélanger le cumin, le paprika, l\'origan, le sel et un filet d\'huile. Enduire les blancs de poulet de cette marinade.',
+    'Enfourner le poulet 18-20 min jusqu\'à cuisson complète. Laisser reposer puis couper en lanières.',
+    'Préparer la salsa fraîche : couper tomates, oignon rouge et piment en petits dés. Ajouter la coriandre et le jus de citron vert.',
+    'Écraser l\'avocat avec une pincée de sel et un filet de citron vert pour un guacamole rapide.',
+    'Tiédir les galettes de blé 1 min dans une poêle sèche.',
+    'Garnir chaque galette de lanières de poulet, salsa fraîche, guacamole et une cuillerée de yaourt grec. Plier et servir.'
+  ]
+},
+
+// === R512 — CHILI CON CARNE LIGHT ===
+{
+  id: 'R512',
+  name: 'Chili con Carne Light',
+  category: 'mexican',
+  mealTypes: ['lunch', 'dinner'],
+  emoji: '🌶️',
+  origin: '🇲🇽',
+  tags: ['high-protein', 'meal-prep', 'balanced', 'anti-inflammatory'],
+  servings: 2,
+  prepTime: 10,
+  cookTime: 30,
+  difficulty: 1,
+  // Vérif macros : 62×4 + 44×4 + 14×9 = 248 + 176 + 126 = 550 kcal → ok
+  baseNutrition: { calories: 550, proteinGrams: 62, carbsGrams: 44, fatGrams: 14 },
+  ingredients: [
+    { name: 'Bœuf haché 5% MG', qty: 400, unit: 'g' },
+    { name: 'Haricots rouges (boîte, égouttés)', qty: 240, unit: 'g' },
+    { name: 'Tomates pelées en boîte', qty: 400, unit: 'g' },
+    { name: 'Poivron rouge', qty: 120, unit: 'g' },
+    { name: 'Oignon', qty: 80, unit: 'g' },
+    { name: 'Ail', qty: 3, unit: 'gousse' },
+    { name: 'Piment rouge frais', qty: 15, unit: 'g' },
+    { name: 'Cumin moulu', qty: 5, unit: 'g' },
+    { name: 'Paprika fumé', qty: 4, unit: 'g' },
+    { name: 'Origan séché', qty: 2, unit: 'g' },
+    { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+    { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+  ],
+  steps: [
+    'Émincer l\'oignon, l\'ail et le piment. Couper le poivron en dés.',
+    'Faire revenir l\'oignon dans l\'huile d\'olive 3 min à feu moyen, puis ajouter l\'ail, le poivron et le piment. Faire sauter 2 min.',
+    'Ajouter le bœuf haché, égrener à la spatule et saisir jusqu\'à coloration complète.',
+    'Incorporer les tomates pelées, le cumin, le paprika fumé et l\'origan. Mélanger, saler, poivrer.',
+    'Ajouter les haricots rouges égouttés. Porter à frémissement puis laisser mijoter 20 min à couvert.',
+    'Rectifier l\'assaisonnement. Servir avec une cuillerée de yaourt grec et de la coriandre fraîche si souhaité.'
+  ]
+},
+
+// === R513 — GUACAMOLE HAUTE PROTÉINE ===
+{
+  id: 'R513',
+  name: 'Guacamole Haute Protéine',
+  category: 'mexican',
+  mealTypes: ['lunch', 'dinner'],
+  emoji: '🥑',
+  origin: '🇲🇽',
+  tags: ['high-protein', 'vegetarian', 'gluten-free', 'no-cook', 'quick', 'anti-inflammatory'],
+  servings: 2,
+  prepTime: 10,
+  cookTime: 0,
+  difficulty: 1,
+  // Vérif macros : 22×4 + 18×4 + 22×9 = 88 + 72 + 198 = 358 kcal → ok
+  baseNutrition: { calories: 358, proteinGrams: 22, carbsGrams: 18, fatGrams: 22 },
+  ingredients: [
+    { name: 'Avocat mûr', qty: 250, unit: 'g' },
+    { name: 'Cottage cheese (fromage blanc granuleux)', qty: 200, unit: 'g' },
+    { name: 'Citron vert (jus)', qty: 30, unit: 'ml' },
+    { name: 'Tomate', qty: 100, unit: 'g' },
+    { name: 'Oignon rouge', qty: 40, unit: 'g' },
+    { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+    { name: 'Piment rouge frais', qty: 10, unit: 'g' },
+    { name: 'Ail', qty: 1, unit: 'gousse' },
+    { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+  ],
+  steps: [
+    'Couper les avocats en deux, retirer le noyau et récupérer la chair dans un bol.',
+    'Écraser l\'avocat à la fourchette en gardant une texture légèrement rustique.',
+    'Incorporer le cottage cheese, le jus de citron vert, l\'ail pressé, le sel et le poivre. Bien mélanger.',
+    'Ajouter la tomate coupée en tout petits dés, l\'oignon rouge finement haché et le piment émincé.',
+    'Parsemer de coriandre fraîche ciselée. Servir immédiatement avec des galettes de blé grillées ou des crudités.'
+  ]
+},
+
+// === R514 — POÊLÉE DE CREVETTES À LA MEXICAINE ===
+{
+  id: 'R514',
+  name: 'Poêlée de Crevettes à la Mexicaine',
+  category: 'mexican',
+  mealTypes: ['lunch', 'dinner'],
+  emoji: '🍤',
+  origin: '🇲🇽',
+  tags: ['high-protein', 'gluten-free', 'dairy-free', 'quick', 'low-carb', 'omega3', 'anti-inflammatory'],
+  servings: 2,
+  prepTime: 10,
+  cookTime: 10,
+  difficulty: 1,
+  // Vérif macros : 48×4 + 14×4 + 16×9 = 192 + 56 + 144 = 392 kcal → ok
+  baseNutrition: { calories: 392, proteinGrams: 48, carbsGrams: 14, fatGrams: 16 },
+  ingredients: [
+    { name: 'Crevettes décortiquées crues', qty: 500, unit: 'g' },
+    { name: 'Poivron rouge', qty: 120, unit: 'g' },
+    { name: 'Poivron jaune', qty: 100, unit: 'g' },
+    { name: 'Ail', qty: 4, unit: 'gousse' },
+    { name: 'Piment rouge frais', qty: 20, unit: 'g' },
+    { name: 'Citron vert (jus)', qty: 40, unit: 'ml' },
+    { name: 'Coriandre fraîche', qty: 20, unit: 'g' },
+    { name: 'Cumin moulu', qty: 4, unit: 'g' },
+    { name: 'Paprika fumé', qty: 3, unit: 'g' },
+    { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+    { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+  ],
+  steps: [
+    'Émincer finement l\'ail et le piment. Couper les poivrons en lanières.',
+    'Sécher les crevettes avec du papier absorbant. Les assaisonner de cumin, paprika, sel et poivre.',
+    'Faire chauffer l\'huile dans une grande poêle à feu vif. Saisir les crevettes 1-2 min de chaque côté jusqu\'à coloration rosée. Réserver.',
+    'Dans la même poêle, faire revenir les poivrons 4-5 min à feu moyen. Ajouter l\'ail et le piment, cuire 1 min.',
+    'Remettre les crevettes dans la poêle. Verser le jus de citron vert, bien mélanger et cuire 30 secondes.',
+    'Parsemer de coriandre fraîche ciselée. Servir avec du riz ou des galettes de blé tièdes.'
+  ]
+},
+
+// === R515 — ENCHILADAS DE POULET LÉGÈRES ===
+{
+  id: 'R515',
+  name: 'Enchiladas de Poulet Légères',
+  category: 'mexican',
+  mealTypes: ['lunch', 'dinner'],
+  emoji: '🫔',
+  origin: '🇲🇽',
+  tags: ['high-protein', 'meal-prep', 'balanced'],
+  servings: 2,
+  prepTime: 20,
+  cookTime: 25,
+  difficulty: 2,
+  // Vérif macros : 62×4 + 52×4 + 18×9 = 248 + 208 + 162 = 618 kcal → ok
+  baseNutrition: { calories: 618, proteinGrams: 62, carbsGrams: 52, fatGrams: 18 },
+  ingredients: [
+    { name: 'Blanc de poulet', qty: 380, unit: 'g' },
+    { name: 'Galette de blé (tortilla)', qty: 4, unit: 'pièce' },
+    { name: 'Tomates pelées en boîte', qty: 400, unit: 'g' },
+    { name: 'Oignon', qty: 80, unit: 'g' },
+    { name: 'Ail', qty: 2, unit: 'gousse' },
+    { name: 'Poivron rouge', qty: 100, unit: 'g' },
+    { name: 'Mozzarella râpée', qty: 60, unit: 'g' },
+    { name: 'Yaourt grec 0%', qty: 80, unit: 'g' },
+    { name: 'Cumin moulu', qty: 4, unit: 'g' },
+    { name: 'Paprika fumé', qty: 3, unit: 'g' },
+    { name: 'Piment rouge frais', qty: 15, unit: 'g' },
+    { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+    { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+    { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+  ],
+  steps: [
+    'Préchauffer le four à 190 °C. Pocher les blancs de poulet dans de l\'eau bouillante salée 15 min. Égoutter et effilocher à la fourchette.',
+    'Préparer la sauce enchilada : faire revenir l\'oignon et l\'ail dans l\'huile 3 min. Ajouter les tomates, le cumin, le paprika, le piment, saler et mijoter 10 min. Mixer légèrement.',
+    'Mélanger le poulet effiloché avec la moitié de la sauce et la coriandre ciselée.',
+    'Garnir chaque galette de blé de farce poulet, rouler serré et disposer dans un plat à gratin huilé.',
+    'Napper avec le reste de sauce, parsemer de mozzarella. Enfourner 15-18 min jusqu\'à gratinage.',
+    'Servir avec une cuillerée de yaourt grec à la place de la crème acide.'
+  ]
+},
+
+// === R516 — SOUPE TORTILLA PROTÉINÉE ===
+{
+  id: 'R516',
+  name: 'Soupe Tortilla Protéinée',
+  category: 'mexican',
+  mealTypes: ['lunch', 'dinner'],
+  emoji: '🍲',
+  origin: '🇲🇽',
+  tags: ['high-protein', 'meal-prep', 'balanced', 'anti-inflammatory'],
+  servings: 2,
+  prepTime: 10,
+  cookTime: 25,
+  difficulty: 1,
+  // Vérif macros : 52×4 + 46×4 + 12×9 = 208 + 184 + 108 = 500 kcal → ok
+  baseNutrition: { calories: 500, proteinGrams: 52, carbsGrams: 46, fatGrams: 12 },
+  ingredients: [
+    { name: 'Blanc de poulet', qty: 320, unit: 'g' },
+    { name: 'Bouillon de poulet (faible sel)', qty: 800, unit: 'ml' },
+    { name: 'Haricots noirs (boîte, égouttés)', qty: 160, unit: 'g' },
+    { name: 'Maïs en boîte (égoutté)', qty: 100, unit: 'g' },
+    { name: 'Tomates pelées en boîte', qty: 200, unit: 'g' },
+    { name: 'Galette de blé (tortilla)', qty: 2, unit: 'pièce' },
+    { name: 'Oignon', qty: 60, unit: 'g' },
+    { name: 'Ail', qty: 2, unit: 'gousse' },
+    { name: 'Piment rouge frais', qty: 15, unit: 'g' },
+    { name: 'Cumin moulu', qty: 4, unit: 'g' },
+    { name: 'Paprika', qty: 3, unit: 'g' },
+    { name: 'Citron vert (jus)', qty: 20, unit: 'ml' },
+    { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+    { name: 'Huile d\'olive', qty: 8, unit: 'ml' },
+    { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+  ],
+  steps: [
+    'Préchauffer le four à 200 °C. Couper les galettes de blé en lanières fines. Disposer sur une plaque, arroser d\'un filet d\'huile et enfourner 8-10 min jusqu\'à dorure croustillante.',
+    'Faire revenir l\'oignon, l\'ail et le piment dans le reste d\'huile 3 min.',
+    'Ajouter les tomates, le cumin, le paprika. Cuire 5 min, puis verser le bouillon de poulet. Porter à ébullition.',
+    'Ajouter les blancs de poulet entiers. Cuire 15 min à frémissement. Retirer le poulet, effilocher, puis remettre dans la soupe.',
+    'Incorporer les haricots noirs et le maïs. Laisser mijoter 5 min. Ajuster l\'assaisonnement et ajouter le jus de citron vert.',
+    'Servir en bols avec les lanières de galette croustillantes et la coriandre fraîche.'
+  ]
+},
+
+// === R517 — SALADE MEXICAINE DE QUINOA ===
+{
+  id: 'R517',
+  name: 'Salade Mexicaine de Quinoa',
+  category: 'mexican',
+  mealTypes: ['lunch', 'dinner'],
+  emoji: '🥗',
+  origin: '🇲🇽',
+  tags: ['vegetarian', 'gluten-free', 'dairy-free', 'meal-prep', 'balanced', 'anti-inflammatory', 'high-protein'],
+  servings: 2,
+  prepTime: 15,
+  cookTime: 15,
+  difficulty: 1,
+  // Vérif macros : 26×4 + 72×4 + 18×9 = 104 + 288 + 162 = 554 kcal → ok
+  baseNutrition: { calories: 554, proteinGrams: 26, carbsGrams: 72, fatGrams: 18 },
+  ingredients: [
+    { name: 'Quinoa (cru)', qty: 180, unit: 'g' },
+    { name: 'Haricots noirs (boîte, égouttés)', qty: 160, unit: 'g' },
+    { name: 'Maïs en boîte (égoutté)', qty: 120, unit: 'g' },
+    { name: 'Avocat', qty: 120, unit: 'g' },
+    { name: 'Tomates cerises', qty: 150, unit: 'g' },
+    { name: 'Poivron rouge', qty: 100, unit: 'g' },
+    { name: 'Oignon rouge', qty: 50, unit: 'g' },
+    { name: 'Coriandre fraîche', qty: 20, unit: 'g' },
+    { name: 'Citron vert (jus)', qty: 40, unit: 'ml' },
+    { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+    { name: 'Cumin moulu', qty: 3, unit: 'g' },
+    { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+  ],
+  steps: [
+    'Rincer le quinoa à l\'eau froide. Cuire dans 360 ml d\'eau bouillante salée 12-14 min à couvert jusqu\'à absorption. Laisser refroidir.',
+    'Préparer la vinaigrette : mélanger le jus de citron vert, l\'huile d\'olive, le cumin, le sel et le poivre.',
+    'Couper les tomates cerises en deux, le poivron en dés, l\'avocat en cubes et l\'oignon rouge en fines rondelles.',
+    'Dans un grand saladier, mélanger le quinoa refroidi, les haricots noirs, le maïs, les légumes et l\'avocat.',
+    'Arroser de vinaigrette et parsemer de coriandre fraîche ciselée. Bien mélanger délicatement.',
+    'Laisser reposer 5 min avant de servir pour que les saveurs se mêlent. Se conserve 24 h au réfrigérateur.'
+  ]
+},
+
+// === R518 — BOWL CHOU-FLEUR RÔTI FAÇON TACOS ===
+{
+  id: 'R518',
+  name: 'Bowl Chou-fleur Rôti Façon Tacos',
+  category: 'mexican',
+  mealTypes: ['lunch', 'dinner'],
+  emoji: '🥦',
+  origin: '🇲🇽',
+  tags: ['vegetarian', 'gluten-free', 'balanced', 'anti-inflammatory', 'low-carb'],
+  servings: 2,
+  prepTime: 15,
+  cookTime: 25,
+  difficulty: 2,
+  // Vérif macros : 22×4 + 38×4 + 20×9 = 88 + 152 + 180 = 420 kcal → ok
+  baseNutrition: { calories: 420, proteinGrams: 22, carbsGrams: 38, fatGrams: 20 },
+  ingredients: [
+    { name: 'Chou-fleur', qty: 600, unit: 'g' },
+    { name: 'Haricots noirs (boîte, égouttés)', qty: 160, unit: 'g' },
+    { name: 'Yaourt grec 0%', qty: 160, unit: 'g' },
+    { name: 'Avocat', qty: 120, unit: 'g' },
+    { name: 'Maïs en boîte (égoutté)', qty: 80, unit: 'g' },
+    { name: 'Tomate', qty: 120, unit: 'g' },
+    { name: 'Oignon rouge', qty: 50, unit: 'g' },
+    { name: 'Coriandre fraîche', qty: 20, unit: 'g' },
+    { name: 'Citron vert (jus)', qty: 30, unit: 'ml' },
+    { name: 'Cumin moulu', qty: 5, unit: 'g' },
+    { name: 'Paprika fumé', qty: 4, unit: 'g' },
+    { name: 'Piment rouge frais', qty: 15, unit: 'g' },
+    { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+    { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+  ],
+  steps: [
+    'Préchauffer le four à 220 °C. Détailler le chou-fleur en petits fleurons. Mélanger avec l\'huile, le cumin, le paprika, le sel et le poivre.',
+    'Étaler les fleurons en une seule couche sur une plaque. Rôtir 22-25 min en retournant à mi-cuisson, jusqu\'à belle coloration dorée.',
+    'Préparer la sauce : mélanger le yaourt grec avec un filet de jus de citron vert, une pincée de cumin et de sel.',
+    'Préparer la salsa : couper la tomate et l\'oignon rouge en dés, mélanger avec le piment haché, la coriandre et le jus de citron vert restant.',
+    'Écraser légèrement l\'avocat avec sel et citron pour un guacamole express.',
+    'Assembler les bowls : chou-fleur rôti, haricots noirs, maïs, guacamole, salsa. Napper de sauce au yaourt et garnir de coriandre.'
+  ]
+},
+
+// === R519 — CEVICHE DE THON À LA MEXICAINE ===
+{
+  id: 'R519',
+  name: 'Ceviche de Thon à la Mexicaine',
+  category: 'mexican',
+  mealTypes: ['lunch', 'dinner'],
+  emoji: '🐟',
+  origin: '🇲🇽',
+  tags: ['high-protein', 'gluten-free', 'dairy-free', 'no-cook', 'quick', 'low-carb', 'omega3', 'anti-inflammatory'],
+  servings: 2,
+  prepTime: 15,
+  cookTime: 0,
+  difficulty: 1,
+  // Vérif macros : 46×4 + 16×4 + 18×9 = 184 + 64 + 162 = 410 kcal → ok
+  baseNutrition: { calories: 410, proteinGrams: 46, carbsGrams: 16, fatGrams: 18 },
+  ingredients: [
+    { name: 'Thon en conserve au naturel (égoutté)', qty: 320, unit: 'g' },
+    { name: 'Avocat mûr', qty: 160, unit: 'g' },
+    { name: 'Tomates', qty: 150, unit: 'g' },
+    { name: 'Concombre', qty: 120, unit: 'g' },
+    { name: 'Oignon rouge', qty: 60, unit: 'g' },
+    { name: 'Piment rouge frais', qty: 20, unit: 'g' },
+    { name: 'Coriandre fraîche', qty: 20, unit: 'g' },
+    { name: 'Citron vert (jus)', qty: 60, unit: 'ml' },
+    { name: 'Citron jaune (jus)', qty: 20, unit: 'ml' },
+    { name: 'Huile d\'olive', qty: 12, unit: 'ml' },
+    { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+  ],
+  steps: [
+    'Égoutter soigneusement le thon. L\'émietter grossièrement dans un saladier.',
+    'Couper les tomates, le concombre et l\'oignon rouge en petits dés réguliers. Émincer finement le piment.',
+    'Couper l\'avocat en cubes de taille moyenne. Réserver séparément pour éviter l\'oxydation.',
+    'Mélanger le thon, les légumes (sauf l\'avocat) avec le jus de citron vert, le jus de citron jaune et l\'huile d\'olive. Assaisonner de sel et poivre.',
+    'Laisser mariner 5-10 min au frais pour que les saveurs se développent.',
+    'Incorporer délicatement l\'avocat et la coriandre fraîche. Servir frais, accompagné de galettes de blé grillées ou de feuilles de laitue.'
+  ]
+}
 
   ];
 
