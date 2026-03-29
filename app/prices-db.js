@@ -3331,6 +3331,7 @@
     'Pâte de noisette pure': 'Purée de noisette complète',
     'Vanille extrait': 'Extrait vanille',
     'Jus d\'orange frais': 'Jus de citron frais',
+    'Jus d\'orange': 'Jus de citron frais',
     'Matcha': 'Matcha grade cérémonial',
     'Gingembre frais': 'Gingembre râpé',
     'Gingembre': 'Gingembre râpé',
