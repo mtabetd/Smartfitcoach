@@ -48,6 +48,7 @@ var PROFILE_KEYS = [
   // Musculation
   'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
   'bonusExercises','sessionHistory',
+  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment',
   // Nutrition plan
   'shopChecked','weekPlan','selectedDay',
   // System
@@ -83,7 +84,7 @@ function slimMeal(meal) {
 var NUTRITION_PLAN_KEYS = [
   'goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height',
   'regime', 'halal', 'excluded', 'cookLevel', 'wantsDessert',
-  'allergies', 'intolerances', 'cuisines', 'whey'
+  'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime'
 ];
 
 function saveProfile() {

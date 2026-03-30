@@ -1887,3 +1887,210 @@ body.dark-mode .auth-container {
   font-weight: 700;
   color: var(--black, #0A0A09);
 }
+
+/* -------------------------------------------------------
+   SET VALIDATE BUTTON
+   ------------------------------------------------------- */
+.set-validate-btn {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #27AE60, #2ECC71);
+  color: #fff;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.set-validate-btn:active {
+  transform: scale(0.95);
+}
+.set-validate-btn-disabled {
+  background: var(--border, #BDC3C7);
+  color: var(--grey, #888);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.set-row-validated {
+  background: rgba(39, 174, 96, 0.06) !important;
+}
+
+/* -------------------------------------------------------
+   REST TIMER OVERLAY — Full-screen countdown between sets
+   ------------------------------------------------------- */
+.rest-timer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 9, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.rest-timer-card {
+  text-align: center;
+  padding: 32px 28px;
+  max-width: 320px;
+  width: 90%;
+}
+.rest-timer-label {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  color: #FAFAF7;
+  font-weight: 700;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rest-timer-sublabel {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
+  color: rgba(250, 250, 247, 0.5);
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+}
+.rest-timer-circle-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 20px;
+}
+.rest-timer-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.rest-timer-track {
+  fill: none;
+  stroke: rgba(250, 250, 247, 0.1);
+  stroke-width: 6;
+}
+.rest-timer-progress {
+  fill: none;
+  stroke: #27AE60;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.9s linear, stroke 0.3s;
+}
+.rest-timer-urgent .rest-timer-progress {
+  stroke: #E74C3C;
+}
+.rest-timer-urgent .rest-timer-time {
+  color: #E74C3C !important;
+  animation: timerPulse 0.5s ease-in-out infinite alternate;
+}
+.rest-timer-done .rest-timer-progress {
+  stroke: #27AE60;
+  stroke-dashoffset: 0 !important;
+}
+.rest-timer-time {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: #FAFAF7;
+  letter-spacing: -1px;
+}
+.rest-timer-go {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #27AE60;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  animation: timerPulse 0.6s ease-in-out infinite alternate;
+}
+@keyframes timerPulse {
+  from { opacity: 0.6; transform: scale(0.96); }
+  to   { opacity: 1;   transform: scale(1.04); }
+}
+.rest-timer-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.rest-timer-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.rest-timer-btn:active {
+  transform: scale(0.95);
+}
+.rest-timer-btn-add {
+  background: rgba(250, 250, 247, 0.12);
+  color: #FAFAF7;
+  border: 1px solid rgba(250, 250, 247, 0.2);
+}
+.rest-timer-btn-skip {
+  background: rgba(231, 76, 60, 0.15);
+  color: #E74C3C;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+.rest-timer-btn-go {
+  background: linear-gradient(135deg, #27AE60, #2ECC71);
+  color: #fff;
+  padding: 14px 32px;
+  font-size: 15px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+
+/* -------------------------------------------------------
+   TRANSITION TIMER — Between exercises (blue/purple theme)
+   ------------------------------------------------------- */
+.rest-timer-transition .rest-timer-label {
+  color: #A8DAFF;
+}
+.rest-timer-transition .rest-timer-sublabel {
+  color: rgba(168, 218, 255, 0.6);
+  font-size: 12px;
+}
+.rest-timer-reason {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 10px;
+  color: rgba(250, 250, 247, 0.35);
+  letter-spacing: 0.3px;
+  margin-bottom: 16px;
+}
+.rest-timer-progress-transition {
+  stroke: #5B8DEF !important;
+}
+.rest-timer-transition.rest-timer-urgent .rest-timer-progress-transition {
+  stroke: #E74C3C !important;
+}
+.rest-timer-transition.rest-timer-done .rest-timer-progress-transition {
+  stroke: #5B8DEF !important;
+}
+.rest-timer-transition .rest-timer-go {
+  color: #5B8DEF;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+.rest-timer-btn-go-transition {
+  background: linear-gradient(135deg, #5B8DEF, #7C4DFF);
+  color: #fff;
+  padding: 14px 32px;
+  font-size: 15px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
