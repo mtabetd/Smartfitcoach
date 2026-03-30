@@ -2568,11 +2568,17 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
       document.body.appendChild(el);
     }
     el.style.display = 'flex';
-    // Override extras.js legacy CSS that sets transform:translateY(100%) and wrong z-index
-    el.style.transform = 'none';
-    el.style.zIndex = '9999';
+    // FIX: force all layout properties inline to prevent any stylesheet conflict
+    el.style.position = 'fixed';
     el.style.inset = '0';
+    el.style.zIndex = '9999';
+    el.style.transform = 'none';
+    el.style.transition = 'none';
     el.style.background = 'rgba(10, 10, 9, 0.85)';
+    el.style.alignItems = 'center';
+    el.style.justifyContent = 'center';
+    el.style.flexDirection = 'column';
+    el.style.color = '#FAFAF7';
 
     var pct = _state.total > 0 ? (_state.seconds / _state.total) : 0;
     var min = Math.floor(_state.seconds / 60);
@@ -3440,8 +3446,9 @@ function renderMusculationProgram(p) {
         // Per-set scheme from getSetScheme (ascending/descending loads)
         var _setScheme = null;
         if (window.getSetScheme && !isBodyweight) {
-          var _phaseName = exPhase ? (exPhase.name || '').toLowerCase() : 'hypertrophie';
-          var _cycleKey = /force/.test(_phaseName) ? 'force' : /puissance|power/.test(_phaseName) ? 'puissance' : /deload|decharge/.test(_phaseName) ? 'deload' : /volume/.test(_phaseName) ? 'volume' : 'hypertrophie';
+          // FIX: MUSCU_PHASES uses .label not .name; also map phase.id for accuracy
+          var _phaseName = exPhase ? (exPhase.id || exPhase.label || '').toLowerCase() : 'hypertrophie';
+          var _cycleKey = /intensification/.test(_phaseName) ? 'force' : /decharge|deload/.test(_phaseName) ? 'deload' : /adaptation/.test(_phaseName) ? 'volume' : 'hypertrophie';
           _setScheme = window.getSetScheme(exRef.n, S.weight || 70, S.sex || 'homme', S.sportLevel || 'intermediate', _cycleKey, numSets);
         }
 
