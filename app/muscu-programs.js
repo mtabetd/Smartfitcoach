@@ -1647,16 +1647,18 @@ function buildPersonalizedMuscuPlan(S) {
   }
 
   // 2. STYLE : selon objectif + sexe + niveau
+  // S.goal is a numeric index into window.GOALS — resolve to key string for comparison.
   var style = 'fusion';
-  var goal = S.goal || '';
+  var goalKey = (S.goal !== null && S.goal !== undefined && window.GOALS && window.GOALS[S.goal])
+    ? window.GOALS[S.goal].key : '';
   var sportGoals = S.sportGoals || [];
-  if (goal === 'performance' || sportGoals.indexOf('performance') >= 0) {
+  if (sportGoals.indexOf('performance') >= 0) {
     style = level === 'beginner' ? 'classic' : 'intensity';
-  } else if (goal === 'weight_loss' || goal === 'sèche') {
+  } else if (goalKey === 'cut' || goalKey === 'shred') {
     style = level === 'advanced' ? 'fst7' : 'volume';
-  } else if (goal === 'muscle_gain' || goal === 'masse') {
+  } else if (goalKey === 'bulk' || goalKey === 'lean_bulk' || goalKey === 'recomposition') {
     style = level === 'beginner' ? 'volume' : 'fusion';
-  } else if (goal === 'maintenance') {
+  } else if (goalKey === 'maintain') {
     style = 'classic';
   }
   // Femme : privilégier le volume (meilleur pour fessiers/jambes)
@@ -1936,6 +1938,234 @@ function getAlternativeExercises(muscle, excludeName, maxCount) {
   return results;
 }
 window.getAlternativeExercises = getAlternativeExercises;
+
+// ─── BODYWEIGHT RATIO TABLE FOR 1RM ESTIMATION ──────────────────────────────
+// Format: [male_beg, male_inter, male_adv, female_beg, female_inter, female_adv]
+var BW_RATIO = {
+  'squat':             [0.75, 1.25, 1.75, 0.50, 0.85, 1.20],
+  'deadlift':          [0.85, 1.50, 2.00, 0.60, 1.00, 1.40],
+  'bench':             [0.50, 0.85, 1.25, 0.30, 0.55, 0.80],
+  'press':             [0.30, 0.55, 0.80, 0.18, 0.35, 0.55],
+  'row':               [0.50, 0.85, 1.20, 0.30, 0.55, 0.80],
+  'traction':          [0.00, 0.25, 0.50, 0.00, 0.10, 0.30],
+  'dip':               [0.00, 0.20, 0.40, 0.00, 0.10, 0.25],
+  'curl':              [0.25, 0.45, 0.65, 0.15, 0.28, 0.42],
+  'triceps':           [0.20, 0.40, 0.60, 0.12, 0.25, 0.38],
+  'leg press':         [1.20, 1.80, 2.50, 0.80, 1.30, 1.80],
+  'hip thrust':        [0.80, 1.30, 1.80, 0.60, 1.00, 1.40],
+  'rdl':               [0.60, 1.00, 1.40, 0.40, 0.70, 1.00],
+  'ecarte':            [0.15, 0.25, 0.35, 0.10, 0.17, 0.25],
+  'elevation':         [0.10, 0.20, 0.30, 0.07, 0.14, 0.22],
+  'extension':         [0.20, 0.35, 0.50, 0.12, 0.22, 0.35],
+  'crunch':            [0.00, 0.10, 0.25, 0.00, 0.05, 0.15],
+  'default':           [0.40, 0.70, 1.00, 0.25, 0.45, 0.65]
+};
+
+// ─── EXERCISE NAME → RATIO KEY RESOLVER ─────────────────────────────────────
+function _resolveRatioKey(name) {
+  var n = (name || '').toLowerCase()
+    .replace(/[éèêë]/g, 'e').replace(/[àâä]/g, 'a').replace(/[ùûü]/g, 'u')
+    .replace(/[ôö]/g, 'o').replace(/[îï]/g, 'i').replace(/ç/g, 'c');
+  // Direct keyword matching (order matters — most specific first)
+  if (/souleve\s+de\s+terre|deadlift/.test(n)) return 'deadlift';
+  if (/hip\s*thrust|releve\s+de\s+bassin|pont\s+fessier/.test(n)) return 'hip thrust';
+  if (/leg\s*press|presse\s+a?\s*jambe/.test(n)) return 'leg press';
+  if (/rdl|roumain/.test(n)) return 'rdl';
+  if (/squat|accroupissement|goblet|fente|lunge/.test(n)) return 'squat';
+  if (/developpe\s+couche|bench\s+press|dc\b/.test(n)) return 'bench';
+  if (/developpe\s+(militaire|epaule)|press|ohp|arnol/.test(n)) return 'press';
+  if (/traction|pull[\s-]?up|tirage\s+vert/.test(n)) return 'traction';
+  if (/dip/.test(n)) return 'dip';
+  if (/rowing|tirage|row/.test(n)) return 'row';
+  if (/curl|bicep/.test(n)) return 'curl';
+  if (/tricep|extension\s+poulie|barre\s+au\s+front/.test(n)) return 'triceps';
+  if (/ecarte|fly|crossover|cable\s+cross/.test(n)) return 'ecarte';
+  if (/elevation|lateral|frontal|oiseau/.test(n)) return 'elevation';
+  if (/extension|leg\s+ext/.test(n)) return 'extension';
+  if (/crunch|abdo|gainage|planche/.test(n)) return 'crunch';
+  return 'default';
+}
+
+// ─── estimateBaseLoad(exerciceName, bw, sex, level) ──────────────────────────
+// Retourne le 1RM estimé en kg à partir de ratios poids de corps (Lander/Epley)
+function estimateBaseLoad(exerciceName, bw, sex, level) {
+  var bwKg = bw || 70;
+  var key = _resolveRatioKey(exerciceName);
+  var ratios = BW_RATIO[key] || BW_RATIO['default'];
+  var isFemale = (sex === 'femme' || sex === 'female');
+  var levelIdx = { 'beginner': 0, 'debutant': 0, 'intermediate': 1, 'intermediaire': 1, 'advanced': 2, 'avance': 2 }[level] || 0;
+  var offset = isFemale ? 3 : 0;
+  var ratio = ratios[offset + levelIdx];
+  var oneRM = Math.round(bwKg * ratio / 2.5) * 2.5;
+  return Math.max(oneRM, 5);
+}
+window.estimateBaseLoad = estimateBaseLoad;
+
+// ─── CYCLE CONFIG ────────────────────────────────────────────────────────────
+var CYCLE_CONFIG = {
+  'volume':       { reps: [12,12,10,10,8],  pcts: [0.60, 0.63, 0.67, 0.67, 0.72], type: 'constant' },
+  'hypertrophie': { reps: [10,10,8,8,6],    pcts: [0.65, 0.68, 0.72, 0.75, 0.78], type: 'ascending' },
+  'force':        { reps: [6,5,4,3,3],      pcts: [0.75, 0.80, 0.85, 0.88, 0.90], type: 'ascending' },
+  'puissance':    { reps: [5,4,3,3,2],      pcts: [0.80, 0.83, 0.87, 0.90, 0.92], type: 'ascending' },
+  'deload':       { reps: [12,12,12,12,12], pcts: [0.50, 0.50, 0.50, 0.55, 0.55], type: 'constant' }
+};
+
+// ─── getSetScheme(exerciceName, bw, sex, level, muscuCycle, nSets) ───────────
+// Retourne un tableau de séries : [{setNum, targetReps, loadKg, pctOf1RM, deltaFromPrev}]
+function getSetScheme(exerciceName, bw, sex, level, muscuCycle, nSets) {
+  var oneRM = estimateBaseLoad(exerciceName, bw, sex, level);
+  var n = nSets || 4;
+  var cfg = CYCLE_CONFIG[muscuCycle] || CYCLE_CONFIG['hypertrophie'];
+  var sets = [];
+
+  for (var i = 0; i < n; i++) {
+    var pct = cfg.pcts[Math.min(i, cfg.pcts.length - 1)];
+    var reps = cfg.reps[Math.min(i, cfg.reps.length - 1)];
+    var loadKg = Math.round(oneRM * pct / 2.5) * 2.5;
+    loadKg = Math.max(loadKg, 2.5);
+
+    var deltaFromPrev = null;
+    if (i > 0) {
+      var prevLoad = sets[i - 1].loadKg;
+      deltaFromPrev = prevLoad > 0 ? Math.round(((loadKg - prevLoad) / prevLoad) * 100) : 0;
+    }
+
+    sets.push({
+      setNum: i + 1,
+      targetReps: reps,
+      loadKg: loadKg,
+      pctOf1RM: Math.round(pct * 100),
+      deltaFromPrev: deltaFromPrev
+    });
+  }
+  return sets;
+}
+window.getSetScheme = getSetScheme;
+
+// ─── checkProgressionSuggestion(exerciceName, muscuWeek, sessionLog) ─────────
+// sessionLog : [{week, sets: [{reps, load, targetReps}]}]
+// Retourne null ou {type, message, newLoad}
+function checkProgressionSuggestion(exerciceName, muscuWeek, sessionLog) {
+  if (!sessionLog || sessionLog.length < 2) return null;
+
+  var recent = sessionLog[sessionLog.length - 1];
+  var prev = sessionLog[sessionLog.length - 2];
+  if (!recent || !recent.sets || !prev || !prev.sets) return null;
+
+  // Toutes les reps réalisées au target ?
+  var allCompleted = recent.sets.every(function(s) { return s.reps >= (s.targetReps || s.reps); });
+  var sameLoadAsPrev = recent.sets.every(function(s, i) {
+    return prev.sets[i] && Math.abs(s.load - prev.sets[i].load) < 1;
+  });
+
+  if (allCompleted && sameLoadAsPrev) {
+    var currentLoad = recent.sets[recent.sets.length - 1].load;
+    return {
+      type: 'increase_load',
+      message: '\uD83C\uDFAF Progression sugg\u00e9r\u00e9e : +2.5 kg la semaine prochaine !',
+      newLoad: currentLoad + 2.5
+    };
+  }
+
+  var avgRepsNow = recent.sets.reduce(function(a, s) { return a + s.reps; }, 0) / recent.sets.length;
+  var avgRepsPrev = prev.sets.reduce(function(a, s) { return a + s.reps; }, 0) / prev.sets.length;
+
+  if (avgRepsNow > avgRepsPrev + 1) {
+    return {
+      type: 'increase_reps',
+      message: '\uD83D\uDCAA Belle progression ! Maintiens ce rythme.',
+      newLoad: null
+    };
+  }
+
+  return null;
+}
+window.checkProgressionSuggestion = checkProgressionSuggestion;
+
+// ─── renderSetTable(exerciceName, sets, exerciceId) ──────────────────────────
+// Génère le HTML DOM pour la table interactive de séries
+function renderSetTable(exerciceName, sets, exerciceId) {
+  var container = h('div', {'class': 'set-table-container', id: 'sets-' + exerciceId});
+  var table = h('table', {'class': 'set-table'});
+  var thead = h('thead');
+  var hrow = h('tr');
+  ['S\u00e9rie', 'Reps', 'Charge (kg)', '\u00c9volution', '\u2713'].forEach(function(t) {
+    hrow.appendChild(h('th', {}, t));
+  });
+  thead.appendChild(hrow);
+  table.appendChild(thead);
+
+  var tbody = h('tbody');
+  sets.forEach(function(s) {
+    var deltaHtml = '';
+    var row = h('tr', {'class': 'set-row', 'data-set': String(s.setNum)});
+
+    // Série number
+    row.appendChild(h('td', {'class': 'set-num'}, String(s.setNum)));
+
+    // Reps input
+    var repsInput = h('input', {
+      'class': 'set-reps-input', type: 'number', min: '1', max: '30',
+      value: String(s.targetReps), 'data-target': String(s.targetReps),
+      onclick: function(e) { e.stopPropagation(); }
+    });
+    row.appendChild(h('td', {}, [repsInput]));
+
+    // Load input
+    var loadInput = h('input', {
+      'class': 'set-load-input', type: 'number', min: '0', max: '500', step: '2.5',
+      value: String(s.loadKg),
+      onclick: function(e) { e.stopPropagation(); }
+    });
+    row.appendChild(h('td', {}, [loadInput]));
+
+    // Delta
+    var deltaCell = h('td');
+    if (s.deltaFromPrev !== null && s.deltaFromPrev !== 0) {
+      var cls = s.deltaFromPrev > 0 ? 'delta-up' : 'delta-down';
+      var arrow = s.deltaFromPrev > 0 ? '\u25B2' : '\u25BC';
+      deltaCell.appendChild(h('span', {'class': 'set-delta ' + cls}, arrow + ' ' + Math.abs(s.deltaFromPrev) + '%'));
+    } else if (s.deltaFromPrev === 0 && s.setNum > 1) {
+      deltaCell.appendChild(h('span', {'class': 'set-delta delta-flat'}, '\u2192 0%'));
+    }
+    row.appendChild(deltaCell);
+
+    // Checkbox
+    var checkbox = h('input', {
+      type: 'checkbox', 'class': 'set-check',
+      onclick: function(e) { e.stopPropagation(); },
+      onchange: function(e) {
+        var r = e.target.closest('tr.set-row') || row;
+        if (e.target.checked) r.classList.add('set-validated');
+        else r.classList.remove('set-validated');
+        // Check all validated
+        var allChecked = Array.from(container.querySelectorAll('.set-check')).every(function(c) { return c.checked; });
+        var badge = container.querySelector('.set-progress-badge');
+        if (badge) {
+          if (allChecked) { badge.textContent = '\u2705 Exercice termin\u00e9 ! Super travail !'; badge.style.display = 'block'; }
+          else { badge.style.display = 'none'; }
+        }
+      }
+    });
+    row.appendChild(h('td', {}, [checkbox]));
+
+    tbody.appendChild(row);
+  });
+
+  table.appendChild(tbody);
+  container.appendChild(table);
+
+  // 1RM info
+  if (sets.length > 0) {
+    container.appendChild(h('div', {style: 'font-size:10px;color:var(--grey,#888);margin-top:4px;text-align:right'}, '1RM estim\u00e9 : ' + Math.round(sets[0].loadKg / (sets[0].pctOf1RM / 100)) + ' kg'));
+  }
+
+  // Progress badge (hidden by default)
+  container.appendChild(h('div', {'class': 'set-progress-badge', style: 'display:none'}));
+
+  return container;
+}
+window.renderSetTable = renderSetTable;
 
 window.YATES_PROGRAMS = YATES_PROGRAMS;
 window.COLEMAN_PROGRAMS = COLEMAN_PROGRAMS;

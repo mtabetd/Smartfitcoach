@@ -1125,7 +1125,7 @@ function renderDedicatedPrograms(p) {
 
 // ─── STEP 1: MUSCULATION OBJECTIVES ───
 // Mapping nutrition goal key → sport goal id
-var NUTRITION_TO_SPORT_GOAL = { bulk: 'muscle', maintain: 'general', cut: 'weightloss', shred: 'shred', recomposition: 'general' };
+var NUTRITION_TO_SPORT_GOAL = { bulk: 'muscle', lean_bulk: 'muscle', maintain: 'general', cut: 'weightloss', shred: 'shred', recomposition: 'general' };
 window.NUTRITION_TO_SPORT_GOAL = NUTRITION_TO_SPORT_GOAL;
 // Mapping sport goal id → nutrition goal index (priority order when multi-select)
 var SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 2, shred: 3, endurance: 1, flexibility: 1, general: 1 };
@@ -1151,9 +1151,14 @@ function syncSportGoalsToNutrition() {
   if (S.pregnant && S.sex === 'femme') return; // ÉLEVÉ-4: grossesse → ne pas écraser le maintien forcé
   if (S.sportGoals.length === 0) { S.goal = 1; return; } // ÉLEVÉ-2: désélection totale → reset maintien
   // Priority: shred > muscle > weightloss > others (→ maintain)
+  // For 'muscle': preserve lean_bulk (index 1) if already set — both are mass-building goals.
+  // Only force bulk (index 0) if current goal is not already a mass-building goal.
   var newIdx = 1;
   if (S.sportGoals.indexOf('shred') !== -1) newIdx = 3;
-  else if (S.sportGoals.indexOf('muscle') !== -1) newIdx = 0;
+  else if (S.sportGoals.indexOf('muscle') !== -1) {
+    var currentKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
+    newIdx = (currentKey === 'lean_bulk') ? 1 : 0; // preserve lean_bulk, otherwise default to bulk
+  }
   else if (S.sportGoals.indexOf('weightloss') !== -1) newIdx = 2;
   S.goal = newIdx;
 }
@@ -2285,12 +2290,25 @@ function getSuggestedWeight(exerciseName, reps, phase) {
     }
   }
   // Priority 2: fall back to generic getMusculationWeight
-  if (!window.getMusculationWeight) return null;
-  var baseW = window.getMusculationWeight(exerciseName, null, reps);
-  if (!baseW || baseW <= 0) return null;
-  // Adjust proportionally to phase pct1rm (reference: 0.72 = progression phase)
-  var adjusted = Math.round(baseW * (pct / 0.72) / 2.5) * 2.5;
-  return Math.max(adjusted, 5);
+  if (window.getMusculationWeight) {
+    var baseW = window.getMusculationWeight(exerciseName, null, reps);
+    if (baseW && baseW > 0) {
+      var adjusted = Math.round(baseW * (pct / 0.72) / 2.5) * 2.5;
+      return Math.max(adjusted, 5);
+    }
+  }
+  // Priority 3: BW-ratio estimation (estimateBaseLoad from muscu-programs.js)
+  if (window.estimateBaseLoad) {
+    var _lvl = S.sportLevel || 'intermediate';
+    var _sex = S.sex || 'homme';
+    var _bw = S.weight || 70;
+    var est1RM = window.estimateBaseLoad(exerciseName, _bw, _sex, _lvl);
+    if (est1RM > 0) {
+      var estLoad = Math.round(est1RM * pct / 2.5) * 2.5;
+      return Math.max(estLoad, 2.5);
+    }
+  }
+  return null;
 }
 
 function renderSparkline(values, color) {
@@ -3059,15 +3077,27 @@ function renderMusculationProgram(p) {
         var sugWeight = getSuggestedWeight(exRef.n, minReps, exPhase) || 0;
         var progressiveWeight = getProgressiveWeight(exRef.n, sugWeight, S.muscuCycle || 1);
 
+        // Per-set scheme from getSetScheme (ascending/descending loads)
+        var _setScheme = null;
+        if (window.getSetScheme && !isBodyweight) {
+          var _phaseName = exPhase ? (exPhase.name || '').toLowerCase() : 'hypertrophie';
+          var _cycleKey = /force/.test(_phaseName) ? 'force' : /puissance|power/.test(_phaseName) ? 'puissance' : /deload|decharge/.test(_phaseName) ? 'deload' : /volume/.test(_phaseName) ? 'volume' : 'hypertrophie';
+          _setScheme = window.getSetScheme(exRef.n, S.weight || 70, S.sex || 'homme', S.sportLevel || 'intermediate', _cycleKey, numSets);
+        }
+
         var today = new Date().toISOString().slice(0, 10);
         if (!S.muscuSessionLog[today]) S.muscuSessionLog[today] = {};
         if (!S.muscuSessionLog[today][exRef.n]) {
           S.muscuSessionLog[today][exRef.n] = [];
           for (var si2 = 0; si2 < numSets; si2++) {
+            // Use per-set scheme if available, otherwise flat weight
+            var _schSet = (_setScheme && _setScheme[si2]) ? _setScheme[si2] : null;
             S.muscuSessionLog[today][exRef.n].push({
               set: si2 + 1,
-              targetWeight: progressiveWeight,
-              targetReps: si2 < 2 ? maxReps : minReps,
+              targetWeight: _schSet ? _schSet.loadKg : progressiveWeight,
+              targetReps: _schSet ? _schSet.targetReps : (si2 < 2 ? maxReps : minReps),
+              pctOf1RM: _schSet ? _schSet.pctOf1RM : null,
+              deltaFromPrev: _schSet ? _schSet.deltaFromPrev : null,
               actualWeight: null,
               actualReps: null
             });
@@ -3079,22 +3109,39 @@ function renderMusculationProgram(p) {
         var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:6px;overflow:hidden'});
 
         // Header
-        var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 1fr;background:var(--surface,var(--ivory2));padding:6px 8px;font-size:10px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
+        var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;background:var(--surface,var(--ivory2));padding:6px 8px;font-size:10px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
         setHeader.appendChild(h('div', {}, '#'));
         setHeader.appendChild(h('div', {}, 'Conseill\u00e9'));
+        setHeader.appendChild(h('div', {style:'text-align:center'}, '\u0394'));
         setHeader.appendChild(h('div', {}, 'R\u00e9alis\u00e9'));
         setTable.appendChild(setHeader);
 
         // Rows
         setData.forEach(function(setRow, si3) {
-          var row = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 1fr;padding:6px 8px;border-top:1px solid var(--border);align-items:center'});
+          var row = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;padding:6px 8px;border-top:1px solid var(--border);align-items:center'});
 
           row.appendChild(h('div', {style: 'font-size:12px;font-weight:700;color:var(--text)'}, String(setRow.set)));
 
-          var conseilleStr = (progressiveWeight > 0 && !isBodyweight)
-            ? (progressiveWeight + ' kg \u00d7 ' + setRow.targetReps)
+          var conseilleEl = h('div', {style: 'font-size:12px;color:var(--grey)'});
+          var conseilleStr = (setRow.targetWeight > 0 && !isBodyweight)
+            ? (setRow.targetWeight + ' kg \u00d7 ' + setRow.targetReps)
             : (setRow.targetReps + ' reps');
-          row.appendChild(h('div', {style: 'font-size:12px;color:var(--grey)'}, conseilleStr));
+          conseilleEl.appendChild(h('span', {}, conseilleStr));
+          if (setRow.pctOf1RM) {
+            conseilleEl.appendChild(h('span', {style:'font-size:9px;color:var(--blue,#1A3C5E);margin-left:4px'}, setRow.pctOf1RM + '%1RM'));
+          }
+          row.appendChild(conseilleEl);
+
+          // Delta column
+          var deltaCell = h('div', {style:'text-align:center'});
+          if (setRow.deltaFromPrev !== null && setRow.deltaFromPrev !== undefined && setRow.deltaFromPrev !== 0) {
+            var _dcls = setRow.deltaFromPrev > 0 ? 'delta-up' : 'delta-down';
+            var _darr = setRow.deltaFromPrev > 0 ? '\u25B2' : '\u25BC';
+            deltaCell.appendChild(h('span', {'class': 'set-delta ' + _dcls}, _darr + Math.abs(setRow.deltaFromPrev) + '%'));
+          } else if (si3 > 0) {
+            deltaCell.appendChild(h('span', {'class': 'set-delta delta-flat'}, '\u2192'));
+          }
+          row.appendChild(deltaCell);
 
           var inputZone = h('div', {style: 'display:flex;align-items:center;gap:4px', onclick: function(e){ e.stopPropagation(); }});
 
@@ -3161,6 +3208,25 @@ function renderMusculationProgram(p) {
           progressNote.appendChild(h('span', {style: 'color:var(--green,#1A4A1A)'}, '\uD83D\uDCC8 '));
           progressNote.appendChild(h('span', {}, 'Objectif semaine prochaine\u00a0: ' + (progressiveWeight + nextIncr) + '\u00a0kg si toutes s\u00e9ries r\u00e9ussies'));
           setTable.appendChild(progressNote);
+        }
+
+        // Suggestion de progression automatique (basée sur historique)
+        if (window.checkProgressionSuggestion && !isBodyweight) {
+          var _sessLog = [];
+          var _sortedDates = Object.keys(S.muscuSessionLog).sort();
+          _sortedDates.forEach(function(d) {
+            if (S.muscuSessionLog[d] && S.muscuSessionLog[d][exRef.n]) {
+              var _sSets = S.muscuSessionLog[d][exRef.n].filter(function(s) { return s.actualReps !== null; });
+              if (_sSets.length > 0) {
+                _sessLog.push({ week: d, sets: _sSets.map(function(s) { return { reps: s.actualReps, load: s.actualWeight || 0, targetReps: s.targetReps }; }) });
+              }
+            }
+          });
+          var _progSug = window.checkProgressionSuggestion(exRef.n, S.muscuWeek || 1, _sessLog);
+          if (_progSug) {
+            var _sugBadge = h('div', {'class': 'set-progress-badge', style: 'display:block;margin-top:4px'}, _progSug.message);
+            setTable.appendChild(_sugBadge);
+          }
         }
 
         // Mini graphe progression si >= 3 entrées historique

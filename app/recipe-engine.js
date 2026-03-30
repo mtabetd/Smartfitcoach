@@ -16297,6 +16297,14 @@
       // Nettoyer les parenthèses ex: "Riz japonais 120g (cuit 240g)" → "Riz japonais 120g"
       part = part.replace(/\s*\([^)]*\)/g, '').trim();
 
+      // ── Préprocesser les fractions Unicode → décimales ────────────────────
+      // Ex: "1½ c.à.café" → "1.5 c.à.café", "¼ c.à.café" → "0.25 c.à.café"
+      part = part
+        .replace(/(\d+)\s*¾/g, function(_, n) { return String(+n + 0.75); })
+        .replace(/(\d+)\s*½/g, function(_, n) { return String(+n + 0.5); })
+        .replace(/(\d+)\s*¼/g, function(_, n) { return String(+n + 0.25); })
+        .replace(/¾/g, '0.75').replace(/½/g, '0.5').replace(/¼/g, '0.25');
+
       // ── Format "qty unit name" produit par toSimpleFormat ─────────────────
       // Ex: "2 pce Œuf", "100 ml Lait écrémé", "1 c.à.soupe Beurre", "1 pincée Sel"
       var mFwd = part.match(/^([\d.]+)\s+(g|ml|kg|l|L|pce|cs|cc|cl|pinc[eé][e]?s?)\s+(.+)$/i);
@@ -16307,6 +16315,16 @@
       var mFr = part.match(/^([\d.]+)\s+(œuf[s]?|oeuf[s]?|blanc[s]?|jaune[s]?|c\.à\.soupe|c\.à\.café|c\.a\.soupe|c\.a\.cafe|pinc[eé][e]?s?)\s+(.+)$/i);
       if (mFr) {
         return { name: mFr[3].trim(), qty: parseFloat(mFr[1]), unit: _normUnit(mFr[2]) };
+      }
+
+      // ── Unités pièce françaises → grammes (pour agréger avec _scaledIngredients) ─
+      // Ex: "3 gousses Ail" → {name:'Ail', qty:15, unit:'g'}
+      // Ex: "1 avocat Avocat" → {name:'Avocat', qty:150, unit:'g'}
+      var mPce = part.match(/^([\d.]+)\s+(gousse[s]?|avocat[s]?|tomate[s]?|citron[s]?|oignon[s]?(?:\s+moyen)?|[eé]chalote[s]?)\s+(.+)$/i);
+      if (mPce) {
+        var pceKey = mPce[2].toLowerCase().replace(/[éèê]/g,'e').replace(/s$/,'');
+        var pceGram = { gousse:5, avocat:150, tomate:120, citron:120, oignon:100, echalote:40 }[pceKey] || 1;
+        return { name: mPce[3].trim(), qty: Math.round(parseFloat(mPce[1]) * pceGram * 10) / 10, unit: 'g' };
       }
 
       // ── Format NxM : "Œufs 3x60g" → name:"Œufs", qty:180, unit:"g" ───────
@@ -16576,6 +16594,7 @@
         // Helper interne : ajouter un ingrédient au consolidated avec clé normalisée.
         // La clé = nom normalisé + unité normalisée → agrège singulier/pluriel/accents/unités FR.
         function _addIng(name, qty, unit) {
+          if (!name || !unit) return; // ingrédient incomplet → ignorer
           var normU = _normUnit(unit);
           var key   = _normIngKey(name) + '||' + normU;
           if (!consolidated[key]) consolidated[key] = { name: name, qty: 0, unit: normU, recipes: [] };
@@ -16602,7 +16621,12 @@
             var parsedIngredients = parseIngredientsString(recipe.i);
             parsedIngredients.forEach(function(ing) {
               var qty = Math.round(ing.qty * scalingRatioFallback * 10) / 10;
-              _addIng(ing.name, qty, ing.unit);
+              var unit = ing.unit;
+              // Normaliser cs/cc → g ou ml pour que la clé d'agrégation corresponde
+              // au chemin _scaledIngredients (qui utilise les unités originales de la recette)
+              if (unit === 'cs') { qty = Math.round(qty * 15 * 10) / 10; unit = /huile|vinaigre|sauce|tamari|soja|miel|sirop/i.test(ing.name) ? 'ml' : 'g'; }
+              if (unit === 'cc') { qty = Math.round(qty *  5 * 10) / 10; unit = /huile|vinaigre|sauce|tamari|soja|miel|sirop/i.test(ing.name) ? 'ml' : 'g'; }
+              _addIng(ing.name, qty, unit);
             });
           }
           // Smoothie whey — lookup depuis WHEY_SMOOTHIES si findRecipe a échoué
@@ -16618,7 +16642,12 @@
         } else if (recipe.i) {
           // Recette sans _id : parser le champ `i` string (fallback Repas libre)
           var parsedFallback = parseIngredientsString(recipe.i);
-          parsedFallback.forEach(function(ing) { _addIng(ing.name, ing.qty || 0, ing.unit); });
+          parsedFallback.forEach(function(ing) {
+            var qty = ing.qty || 0, unit = ing.unit;
+            if (unit === 'cs') { qty = Math.round(qty * 15 * 10) / 10; unit = /huile|vinaigre|sauce|tamari|soja|miel|sirop/i.test(ing.name) ? 'ml' : 'g'; }
+            if (unit === 'cc') { qty = Math.round(qty *  5 * 10) / 10; unit = /huile|vinaigre|sauce|tamari|soja|miel|sirop/i.test(ing.name) ? 'ml' : 'g'; }
+            _addIng(ing.name, qty, unit);
+          });
         }
       });
     });
