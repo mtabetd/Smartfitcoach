@@ -2466,6 +2466,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
     _state.total = seconds;
     _state.exerciseName = exerciseName || '';
     _state.setNum = setNum || 0;
+    _state.isTransition = false;
     _state.onComplete = onComplete || null;
     _updateUI();
     _timerId = setInterval(function() {
@@ -2480,8 +2481,9 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
         clearInterval(_timerId);
         _timerId = null;
         playBeep();
-        _updateUI();
-        if (_state.onComplete) _state.onComplete();
+        // Inter-série : auto-dismiss après le bip (pas d'interaction requise)
+        var _cb = _state.onComplete;
+        setTimeout(function() { stop(); if (_cb) _cb(); }, 1200);
       } else {
         _updateUI();
       }
@@ -2490,9 +2492,13 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
 
   function stop() {
     if (_timerId) { clearInterval(_timerId); _timerId = null; }
+    var _cb = _state.onComplete;
     _state.active = false;
     _state.seconds = 0;
+    _state.onComplete = null;
     _updateUI();
+    // Appeler le callback (re-render) après fermeture
+    if (_cb) _cb();
   }
 
   function addTime(sec) {
@@ -2532,8 +2538,9 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
         clearInterval(_timerId);
         _timerId = null;
         playBeep();
+        // Transition : afficher "Commencer" et attendre le clic
+        // onComplete sera appelé par stop() quand l'utilisateur clique
         _updateUI();
-        if (_state.onComplete) _state.onComplete();
       } else {
         _updateUI();
       }
