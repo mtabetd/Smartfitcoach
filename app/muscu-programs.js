@@ -1704,7 +1704,7 @@ function buildPersonalizedMuscuPlan(S) {
   function equipOk(ex) {
     if (equip === 'gym') return true;
     if (equip === 'dumbbells') return ['halteres','haltères','poids_corps','poids du corps','banc','barre_ez'].indexOf(ex.equipment) >= 0;
-    if (equip === 'home') return ['poids_corps','poids du corps','elastique','sol','banc','barre fixe','aucun'].indexOf(ex.equipment) >= 0;
+    if (equip === 'home') return ['poids_corps','poids du corps','elastique','\u00e9lastique','sol','banc','barre fixe','barre_de_traction','barre de traction','aucun'].indexOf(ex.equipment) >= 0;
     return true;
   }
 
@@ -1716,6 +1716,11 @@ function buildPersonalizedMuscuPlan(S) {
       var prog = getStyleProgram(style, muscle, level);
       if (!prog || !prog.exercises) return;
       var exos = prog.exercises.filter(equipOk);
+      // Fallback : si le filtre équipement supprime tout, injecter des alternatives bodyweight
+      if (exos.length === 0 && window.getAlternativeExercises) {
+        var altExos = window.getAlternativeExercises(muscle, null, 4);
+        exos = altExos.filter(function(a) { return !a.eq || /corps|body|aucun|sol|elastique/i.test(a.eq); });
+      }
       // Priorité : si muscle prioritaire, met en premier
       if (priorityMuscles.indexOf(muscle) >= 0 && idx > 0) {
         exos = exos.slice(); // copie
@@ -1766,7 +1771,7 @@ function buildPersonalizedMuscuPlan(S) {
     }
 
     // Durée estimée : ~4min/série en moyenne
-    var totalSets = allExercises.reduce(function(acc, ex) { return acc + (ex.sets || 3); }, 0);
+    var totalSets = allExercises.reduce(function(acc, ex) { var s = typeof ex.sets === 'string' ? (parseInt(ex.sets, 10) || 3) : (ex.sets || 3); return acc + s; }, 0);
     var estimatedMin = Math.round(totalSets * 4 + 10); // +10min échauffement
 
     return {
