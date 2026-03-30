@@ -1,6 +1,6 @@
 (function(){
   var GATE_KEY='mtd_gate_access';
-  var GATE_HASH='21rn9y'; // simpleHash('FROUITS')
+  var GATE_HASH='21rn9y';
   var GATE_HASH_LEGACY='b7e2g90d3f';
   function simpleHash(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h=h&h;}return(h>>>0).toString(36).slice(0,10);}
   function checkGate(){

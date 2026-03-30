@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "SmartFitCoach - Application PWA de nutrition et fitness",
   "scripts": {
-    "start": "live-server app --port=3000 --host=0.0.0.0 --no-browser --entry-file=index.html"
+    "start": "live-server app --port=3000 --host=0.0.0.0 --no-browser --entry-file=index.html",
+    "test": "jest --verbose"
   },
   "devDependencies": {
+    "jest": "^30.3.0",
     "live-server": "^1.2.2"
   },
   "dependencies": {

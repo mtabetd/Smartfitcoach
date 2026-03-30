@@ -20,9 +20,9 @@ window.onerror = function(msg, url, line, col, err) {
     app.innerHTML = '';
     app.appendChild(wrap);
   }
-  console.error('GLOBAL ERROR:', msg, url, line, col, err);
+  console.error('GLOBAL ERROR:', msg, '(line ' + line + ')');
   return true;
 };
 window.addEventListener('unhandledrejection', function(event) {
-  console.error('UNHANDLED PROMISE REJECTION:', event.reason);
+  console.error('UNHANDLED PROMISE REJECTION:', event.reason && event.reason.message ? event.reason.message : 'unknown');
 });

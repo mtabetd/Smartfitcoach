@@ -179,7 +179,7 @@ function getDailyQuote() {
 // ─── COUNTERS (for badge tracking) ───
 function incrementCounter(counterName) {
   var user = window.AUTH ? window.AUTH.getUser() : null;
-  if (!user) return 0;
+  if (!user || !user.id) return 0;
   var key = 'mtd_counter_' + counterName + '_' + user.id;
   var count = parseInt(localStorage.getItem(key) || '0') + 1;
   localStorage.setItem(key, String(count));

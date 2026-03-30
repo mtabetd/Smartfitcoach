@@ -2974,7 +2974,7 @@ function calcSessionKcal(exercises, durationMin) {
   var s = window.S;
   var weight = s.weight || 75;
   var age = s.age || 30;
-  var sex = s.sex || (s.sex === 'femme' ? 'femme' : 'homme'); // BUG-15 fix: respect null sex
+  var sex = (s.sex === 'femme') ? 'femme' : 'homme'; // Default to 'homme' if null/undefined
   // Phase courante → RPE
   var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
   var rpe = phase ? phase.rpe : 7;
@@ -2984,7 +2984,8 @@ function calcSessionKcal(exercises, durationMin) {
   var cardioCount = 0;
   (exercises || []).forEach(function(ex) {
     var m_lower = (ex.m || '').toLowerCase();
-    cardioKeywords.forEach(function(kw) { if (m_lower.indexOf(kw) >= 0) cardioCount++; });
+    var hasCardio = cardioKeywords.some(function(kw) { return m_lower.indexOf(kw) >= 0; });
+    if (hasCardio) cardioCount++;
   });
   var isCardioSession = (exercises && exercises.length > 0) && (cardioCount / exercises.length >= 0.5);
 

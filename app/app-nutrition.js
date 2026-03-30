@@ -2823,11 +2823,11 @@ function resolveSignatureBowl(sig) {
 
 function calcSaladMacros(sb) {
   var total = { k: 0, p: 0, g: 0, l: 0 };
-  if (sb.base) { total.k += sb.base.k; total.p += sb.base.p; total.g += sb.base.g; total.l += sb.base.l; }
-  (sb.proteins || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  (sb.veggies || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  (sb.fats || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  if (sb.sauce) { total.k += sb.sauce.k; total.p += sb.sauce.p; total.g += sb.sauce.g; total.l += sb.sauce.l; }
+  if (sb.base) { total.k += (sb.base.k||0); total.p += (sb.base.p||0); total.g += (sb.base.g||0); total.l += (sb.base.l||0); }
+  (sb.proteins || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  (sb.veggies || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  (sb.fats || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  if (sb.sauce) { total.k += (sb.sauce.k||0); total.p += (sb.sauce.p||0); total.g += (sb.sauce.g||0); total.l += (sb.sauce.l||0); }
   return { k: Math.round(total.k), p: Math.round(total.p), g: Math.round(total.g), l: Math.round(total.l) };
 }
 
