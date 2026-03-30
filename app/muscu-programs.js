@@ -1647,16 +1647,18 @@ function buildPersonalizedMuscuPlan(S) {
   }
 
   // 2. STYLE : selon objectif + sexe + niveau
+  // S.goal is a numeric index into window.GOALS — resolve to key string for comparison.
   var style = 'fusion';
-  var goal = S.goal || '';
+  var goalKey = (S.goal !== null && S.goal !== undefined && window.GOALS && window.GOALS[S.goal])
+    ? window.GOALS[S.goal].key : '';
   var sportGoals = S.sportGoals || [];
-  if (goal === 'performance' || sportGoals.indexOf('performance') >= 0) {
+  if (sportGoals.indexOf('performance') >= 0) {
     style = level === 'beginner' ? 'classic' : 'intensity';
-  } else if (goal === 'weight_loss' || goal === 'sèche') {
+  } else if (goalKey === 'cut' || goalKey === 'shred') {
     style = level === 'advanced' ? 'fst7' : 'volume';
-  } else if (goal === 'muscle_gain' || goal === 'masse') {
+  } else if (goalKey === 'bulk' || goalKey === 'lean_bulk' || goalKey === 'recomposition') {
     style = level === 'beginner' ? 'volume' : 'fusion';
-  } else if (goal === 'maintenance') {
+  } else if (goalKey === 'maintain') {
     style = 'classic';
   }
   // Femme : privilégier le volume (meilleur pour fessiers/jambes)
