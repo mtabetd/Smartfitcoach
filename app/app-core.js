@@ -320,18 +320,22 @@ function getAdaptedMealSplit(dayIndex) {
   var baseSplit = getMealSplit();
 
   if (!dayInfo.isTraining) {
-    // Jour de repos : léger déficit, distribution plus uniforme
+    // Jour de repos : réduction adaptée à l'objectif
+    // Bulk/lean_bulk : −5% seulement (préserver le surplus anabolique — ISSN 2017)
+    // Cut/shred/maintain/recomp : −10% (Helms 2014 calorie cycling)
+    var _gk = (window.S.goal !== null && window.GOALS && window.GOALS[window.S.goal]) ? window.GOALS[window.S.goal].key : '';
+    var _restMult = (_gk === 'bulk' || _gk === 'lean_bulk') ? 0.95 : 0.90;
     var meals = window.S.mealsPerDay || 3;
     if (meals >= 4) {
       return { pctBreak: 0.25, pctLunch: 0.30, pctSnack: 0.15, pctDinner: 0.30,
-               restDay: true, calMultiplier: 0.90, dayInfo: dayInfo };
+               restDay: true, calMultiplier: _restMult, dayInfo: dayInfo };
     }
     if (meals <= 2) {
       return { pctBreak: 0.40, pctLunch: 0.60, pctSnack: 0, pctDinner: 0,
-               restDay: true, calMultiplier: 0.90, dayInfo: dayInfo };
+               restDay: true, calMultiplier: _restMult, dayInfo: dayInfo };
     }
     return { pctBreak: 0.30, pctLunch: 0.40, pctSnack: 0, pctDinner: 0.30,
-             restDay: true, calMultiplier: 0.90, dayInfo: dayInfo };
+             restDay: true, calMultiplier: _restMult, dayInfo: dayInfo };
   }
 
   // Jour d'entraînement : utilise la base + timing déjà calculé par getMealSplit()
@@ -2373,6 +2377,8 @@ if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*
 var effectivePAL=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
 var kcalFloor=s.sex==='femme'?(effectivePAL>=1.375?1400:1200):1500;
 base=Math.max(base,kcalFloor);
+// Plancher BMR : le déficit ne doit JAMAIS descendre sous le métabolisme de base (sécurité métabolique)
+var bmrFloor=calcBMR();if(bmrFloor>0)base=Math.max(base,bmrFloor);
 // Alcool : déduire les calories hebdo/7 du budget calorique journalier pour un calcul réaliste
 // Ex : 500 kcal alcool/semaine ÷ 7 = 71 kcal/j que l'on retire de l'objectif alimentaire
 // (l'alcool ne nourrit pas : 7kcal/g sans micronutriments, inhibe oxydation des graisses)
@@ -2467,9 +2473,9 @@ function calcMacros(){
       } else if(actFactor>=1.55){
         ppk=isFemale?1.6:1.9;   // Modéré coupe : H=1.9, F=1.6
       } else if(actFactor>=1.375){
-        ppk=isFemale?1.4:1.7;   // Léger coupe : H=1.7, F=1.4
+        ppk=isFemale?1.6:1.7;   // Léger coupe : H=1.7, F=1.6 (plancher Helms 2014 : ≥1.6g/kg en déficit)
       } else {
-        ppk=isFemale?1.2:1.5;   // Sédentaire coupe : H=1.5, F=1.2 (EFSA 2012 +20% déficit)
+        ppk=isFemale?1.6:1.6;   // Sédentaire coupe : plancher 1.6g/kg en déficit (Helms 2014, ISSN 2017)
       }
     }
   }
@@ -2501,6 +2507,8 @@ function calcMacros(){
   var lipidMin=s.sex==='femme'?0.7:0.5;
   fpk=Math.max(lipidMin,Math.min(1.5,fpk));
   var lGrams=Math.round(bw*fpk);var lCal=lGrams*9;
+  // Plancher 20% lipides (santé hormonale — ISSN 2017, Volek 2006)
+  var minFatCal=Math.round(c*0.20);if(lCal<minFatCal){lGrams=Math.round(minFatCal/9);lCal=lGrams*9;}
   // Carbs fill remaining calories
   var gCal=c-pCal-lCal;
   if(gCal<200){lCal=Math.max(bw*0.5*9,c-pCal-200);lGrams=Math.round(lCal/9);gCal=c-pCal-lCal;if(gCal<200){pCal=c-lCal-200;pGrams=Math.round(pCal/4);gCal=200}}
