@@ -2568,6 +2568,11 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
       document.body.appendChild(el);
     }
     el.style.display = 'flex';
+    // Override extras.js legacy CSS that sets transform:translateY(100%) and wrong z-index
+    el.style.transform = 'none';
+    el.style.zIndex = '9999';
+    el.style.inset = '0';
+    el.style.background = 'rgba(10, 10, 9, 0.85)';
 
     var pct = _state.total > 0 ? (_state.seconds / _state.total) : 0;
     var min = Math.floor(_state.seconds / 60);
