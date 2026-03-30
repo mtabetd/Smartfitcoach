@@ -460,9 +460,10 @@ window.AUTH = {
           name: name,
           email: email
         };
-        _currentSession = u;
+        // NE PAS assigner _currentSession ici — l'email n'est pas encore confirmé
+        // L'utilisateur doit confirmer son email avant d'avoir accès
         BLACKBOX.log('register', { email: email });
-        return { ok: true, user: u };
+        return { ok: true, user: u, needsConfirmation: true };
       }
       return { ok: false, error: 'Erreur de connexion. R\u00e9essayez.' };
     }).catch(function(err) {
