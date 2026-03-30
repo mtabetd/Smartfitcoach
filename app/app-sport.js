@@ -2508,13 +2508,49 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
   }
 
   function _updateUI() {
+    // Placeholder — remplacé par la version enrichie ci-dessous (transition support)
+  }
+
+  // Timer transition inter-exercice (UI différente : bleu, nom du prochain exercice)
+  function startTransition(seconds, fromEx, toEx, onComplete) {
+    stop();
+    _state.active = true;
+    _state.seconds = seconds;
+    _state.total = seconds;
+    _state.exerciseName = fromEx || '';
+    _state.nextExercise = toEx || '';
+    _state.setNum = 0;
+    _state.isTransition = true;
+    _state.onComplete = onComplete || null;
+    _updateUI();
+    _timerId = setInterval(function() {
+      _state.seconds--;
+      if (_state.seconds <= 3 && _state.seconds > 0) playTick();
+      if (_state.seconds <= 0) {
+        _state.seconds = 0;
+        _state.active = false;
+        clearInterval(_timerId);
+        _timerId = null;
+        playBeep();
+        _updateUI();
+        if (_state.onComplete) _state.onComplete();
+      } else {
+        _updateUI();
+      }
+    }, 1000);
+  }
+
+  // Mise à jour de _updateUI pour gérer le mode transition
+  var _origUpdateUI = _updateUI;
+  _updateUI = function() {
     var el = document.getElementById('rest-timer-overlay');
     if (!_state.active && !_state.seconds) {
       if (el) el.style.display = 'none';
+      _state.isTransition = false;
+      _state.nextExercise = '';
       return;
     }
     if (!el) {
-      // Créer l'overlay du timer
       el = document.createElement('div');
       el.id = 'rest-timer-overlay';
       el.className = 'rest-timer-overlay';
@@ -2528,23 +2564,43 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
     var timeStr = (min > 0 ? min + ':' : '') + (sec < 10 && min > 0 ? '0' : '') + sec;
     var isUrgent = _state.seconds <= 5 && _state.active;
     var isDone = _state.seconds <= 0 && !_state.active;
+    var isTrans = _state.isTransition;
 
-    // SVG cercle progressif
     var radius = 54;
     var circ = 2 * Math.PI * radius;
     var dashoffset = circ * (1 - pct);
 
-    el.innerHTML = '<div class="rest-timer-card' + (isUrgent ? ' rest-timer-urgent' : '') + (isDone ? ' rest-timer-done' : '') + '">' +
-      '<div class="rest-timer-label">' + (_state.exerciseName ? _state.exerciseName : 'Repos') + '</div>' +
-      '<div class="rest-timer-sublabel">S\u00e9rie ' + _state.setNum + ' termin\u00e9e \u2014 repos</div>' +
+    var cardClass = 'rest-timer-card';
+    if (isTrans) cardClass += ' rest-timer-transition';
+    if (isUrgent) cardClass += ' rest-timer-urgent';
+    if (isDone) cardClass += ' rest-timer-done';
+
+    var labelText = isTrans ? 'Transition' : (_state.exerciseName || 'Repos');
+    var subText = isTrans
+      ? (_state.exerciseName + ' \u2192 ' + (_state.nextExercise || 'Suivant'))
+      : ('S\u00e9rie ' + _state.setNum + ' termin\u00e9e \u2014 repos');
+
+    var goText = isTrans
+      ? ('\uD83C\uDFCB\uFE0F ' + (_state.nextExercise || 'Exercice suivant'))
+      : 'GO !';
+
+    // Temps formaté lisible
+    var totalMin = Math.floor(_state.total / 60);
+    var totalSec = _state.total % 60;
+    var totalStr = totalMin > 0 ? totalMin + 'min' + (totalSec > 0 ? totalSec : '') : totalSec + 's';
+
+    el.innerHTML = '<div class="' + cardClass + '">' +
+      '<div class="rest-timer-label">' + labelText + '</div>' +
+      '<div class="rest-timer-sublabel">' + subText + '</div>' +
+      (isTrans ? '<div class="rest-timer-reason">Repos adapt\u00e9 : ' + totalStr + ' (profil + charge + objectif)</div>' : '') +
       '<div class="rest-timer-circle-wrap">' +
         '<svg viewBox="0 0 120 120" class="rest-timer-svg">' +
           '<circle cx="60" cy="60" r="' + radius + '" class="rest-timer-track"/>' +
-          '<circle cx="60" cy="60" r="' + radius + '" class="rest-timer-progress" ' +
+          '<circle cx="60" cy="60" r="' + radius + '" class="rest-timer-progress' + (isTrans ? ' rest-timer-progress-transition' : '') + '" ' +
             'style="stroke-dasharray:' + circ.toFixed(1) + ';stroke-dashoffset:' + dashoffset.toFixed(1) + '"/>' +
         '</svg>' +
         '<div class="rest-timer-time">' + (isDone ? '\u2705' : timeStr) + '</div>' +
-        (isDone ? '<div class="rest-timer-go">GO !</div>' : '') +
+        (isDone ? '<div class="rest-timer-go">' + goText + '</div>' : '') +
       '</div>' +
       '<div class="rest-timer-actions">' +
         ((_state.active) ?
@@ -2552,14 +2608,16 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
           '<button class="rest-timer-btn rest-timer-btn-add" onclick="window.RestTimer.addTime(30)">+30s</button>' +
           '<button class="rest-timer-btn rest-timer-btn-skip" onclick="window.RestTimer.stop()">Passer \u25b6</button>'
         :
-          '<button class="rest-timer-btn rest-timer-btn-go" onclick="window.RestTimer.stop()">C\u2019est parti !</button>'
+          '<button class="rest-timer-btn ' + (isTrans ? 'rest-timer-btn-go-transition' : 'rest-timer-btn-go') + '" onclick="window.RestTimer.stop()">' +
+            (isTrans ? '\uD83C\uDFCB\uFE0F Commencer !' : 'C\u2019est parti !') + '</button>'
         ) +
       '</div>' +
     '</div>';
-  }
+  };
 
   window.RestTimer = {
     start: start,
+    startTransition: startTransition,
     stop: stop,
     addTime: addTime,
     getState: getState,
@@ -2581,6 +2639,90 @@ function parseRestTime(restStr) {
   var num = parseInt(s);
   return isNaN(num) ? 90 : (num < 10 ? num * 60 : num); // "2" → 120s, "90" → 90s
 }
+
+// ─── TRANSITION TIME BETWEEN EXERCISES ────────────────────────────────────
+// Calcul du temps de repos optimal entre deux exercices basé sur :
+// - Type d'exercice (compound→compound, compound→isolation, isolation→isolation)
+// - Intensité de la charge (%1RM via la phase du cycle)
+// - Niveau de l'utilisateur (débutant = +30% repos, avancé = −10%)
+// - Objectif (force = long repos, sèche = court repos)
+// - Standards NSCA (Haff & Triplett 2016), ACSM 2009, de Salles 2009
+//
+// Standards internationaux (NSCA Essentials, 4th ed.):
+//   Compound → Compound (même groupe) : 3-5 min
+//   Compound → Isolation             : 2-3 min
+//   Isolation → Isolation             : 1-2 min
+//   Compound → Compound (diff groupe) : 2-3 min
+function getExerciseTransitionTime(prevEx, nextEx) {
+  if (!prevEx || !nextEx) return 120; // défaut 2min
+
+  var s = window.S;
+  var level = s.sportLevel || 'intermediate';
+  var goalKey = (s.goal !== null && window.GOALS && window.GOALS[s.goal]) ? window.GOALS[s.goal].key : 'maintain';
+
+  // Phase du cycle → intensité de la charge
+  var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
+  var pct1rm = phase ? (phase.pct1rm || 0.72) : 0.72;
+
+  // Déterminer le type d'exercice (compound vs isolation)
+  var prevType = (prevEx.type || '').toLowerCase();
+  var nextType = (nextEx.type || '').toLowerCase();
+  var prevIsCompound = prevType === 'compound' || prevType === 'superset';
+  var nextIsCompound = nextType === 'compound' || nextType === 'superset';
+
+  // Même groupe musculaire ?
+  var prevMuscle = (prevEx.m || prevEx.muscle || '').toLowerCase();
+  var nextMuscle = (nextEx.m || nextEx.muscle || '').toLowerCase();
+  var sameMuscle = prevMuscle && nextMuscle && (
+    prevMuscle.indexOf(nextMuscle.split(/[+(,]/)[0].trim()) >= 0 ||
+    nextMuscle.indexOf(prevMuscle.split(/[+(,]/)[0].trim()) >= 0
+  );
+
+  // ── Base time (secondes) selon le pattern NSCA ──
+  var baseTime;
+  if (prevIsCompound && nextIsCompound) {
+    baseTime = sameMuscle ? 240 : 180;  // 4min même muscle, 3min diff
+  } else if (prevIsCompound || nextIsCompound) {
+    baseTime = 150; // 2min30 compound→isolation ou inverse
+  } else {
+    baseTime = 90;  // 1min30 isolation→isolation
+  }
+
+  // ── Modificateur intensité (charge lourde = plus de repos) ──
+  // >85% 1RM (force) : +40%  |  70-85% (hypertrophie) : +0%  |  <70% (endurance) : −20%
+  if (pct1rm >= 0.85) baseTime = Math.round(baseTime * 1.4);
+  else if (pct1rm < 0.70) baseTime = Math.round(baseTime * 0.80);
+
+  // ── Modificateur objectif ──
+  // Force/puissance : +20% (récupération neuromusculaire — NSCA)
+  // Sèche/shred : −25% (stress métabolique, densité de l'entraînement — Schoenfeld 2010)
+  // Volume/hypertrophie : +0% (standard)
+  if (goalKey === 'bulk' || goalKey === 'lean_bulk') {
+    // Phase de prise : tendance force → repos allongé
+    baseTime = Math.round(baseTime * 1.10);
+  } else if (goalKey === 'shred') {
+    baseTime = Math.round(baseTime * 0.75);
+  } else if (goalKey === 'cut') {
+    baseTime = Math.round(baseTime * 0.85);
+  }
+
+  // ── Modificateur niveau ──
+  // Débutant : +30% (CNS moins entraîné, récupération plus lente — Kraemer 2002)
+  // Intermédiaire : +0%
+  // Avancé : −10% (meilleure capacité de récupération — Rhea 2003)
+  if (level === 'beginner' || level === 'debutant') {
+    baseTime = Math.round(baseTime * 1.30);
+  } else if (level === 'advanced' || level === 'avance') {
+    baseTime = Math.round(baseTime * 0.90);
+  }
+
+  // ── Âge : +15% si ≥50 ans (récupération neuromusculaire ralentie — Hunter 2004) ──
+  if (s.age && s.age >= 50) baseTime = Math.round(baseTime * 1.15);
+
+  // ── Clamp : minimum 60s, maximum 360s (6min) ──
+  return Math.max(60, Math.min(360, Math.round(baseTime / 5) * 5)); // arrondi 5s
+}
+window.getExerciseTransitionTime = getExerciseTransitionTime;
 
 function saveMuscuSessionLog() {
   try {
@@ -3261,7 +3403,7 @@ function renderMusculationProgram(p) {
       }
 
       // ─── TRACKER SÉRIES : recommandations + saisie réelle ───
-      (function(exRef, isBodyweight) {
+      (function(exRef, isBodyweight, _exIdx, _dayExercises) {
         var setsMatch = (exRef.sets || '').match(/^(\d+)\s*[x\u00d7]\s*(\d+)(?:-(\d+))?/);
         var numSets = setsMatch ? parseInt(setsMatch[1]) : 3;
         var minReps = setsMatch ? parseInt(setsMatch[2]) : 10;
@@ -3385,7 +3527,7 @@ function renderMusculationProgram(p) {
           inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, window.t('muscu.reps')));
 
           // Bouton validation série + déclenchement timer repos
-          (function(_sr, _si, _exRef, _numSets, _isBody) {
+          (function(_sr, _si, _exRef, _numSets, _isBody, _exI, _allEx) {
             var isValidated = _sr.validated === true;
             var hasData = _sr.actualReps !== null && (_sr.actualWeight !== null || _isBody);
 
@@ -3408,16 +3550,26 @@ function renderMusculationProgram(p) {
                   // Tick de confirmation
                   if (window.RestTimer) window.RestTimer.playTick();
 
-                  // Parser le rest time de l'exercice
-                  var restSec = parseRestTime(_exRef.rest);
-
-                  // Si c'est la dernière série, pas de timer
                   var isLastSet = _si >= _numSets - 1;
-                  if (!isLastSet && window.RestTimer) {
-                    window.RestTimer.start(restSec, _exRef.n, _sr.set, function() {
-                      // Timer terminé → re-render pour mettre à jour l'UI
-                      if (window.render) window.render();
-                    });
+
+                  if (!isLastSet) {
+                    // ── Timer repos inter-série ──
+                    var restSec = parseRestTime(_exRef.rest);
+                    if (window.RestTimer) {
+                      window.RestTimer.start(restSec, _exRef.n, _sr.set, function() {
+                        if (window.render) window.render();
+                      });
+                    }
+                  } else {
+                    // ── Dernière série → timer transition inter-exercice ──
+                    var nextExIdx = _exI + 1;
+                    var nextEx = (_allEx && nextExIdx < _allEx.length) ? _allEx[nextExIdx] : null;
+                    if (nextEx && window.RestTimer && window.getExerciseTransitionTime) {
+                      var transSec = window.getExerciseTransitionTime(_exRef, nextEx);
+                      window.RestTimer.startTransition(transSec, _exRef.n, nextEx.n || nextEx.name, function() {
+                        if (window.render) window.render();
+                      });
+                    }
                   }
                   // Re-render immédiat pour afficher le checkmark
                   if (window.render) window.render();
@@ -3425,7 +3577,7 @@ function renderMusculationProgram(p) {
               }, '\u2705 S\u00e9rie OK');
               inputZone.appendChild(valBtn);
             }
-          })(setRow, si3, exRef, numSets, isBodyweight);
+          })(setRow, si3, exRef, numSets, isBodyweight, _exIdx, _dayExercises);
 
           row.appendChild(inputZone);
           setTable.appendChild(row);
@@ -3474,7 +3626,7 @@ function renderMusculationProgram(p) {
         }
 
         card.appendChild(setTable);
-      })(ex, eqType === 'bodyweight');
+      })(ex, eqType === 'bodyweight', exIdx, day.exercises);
 
       // ─── SWAP EXERCISE BUTTON ───────────────────────────────────────────
       (function(exRef, dayI, exI) {

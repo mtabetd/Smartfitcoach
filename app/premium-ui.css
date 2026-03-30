@@ -2054,3 +2054,43 @@ body.dark-mode .auth-container {
   border-radius: 12px;
   letter-spacing: 0.5px;
 }
+
+/* -------------------------------------------------------
+   TRANSITION TIMER — Between exercises (blue/purple theme)
+   ------------------------------------------------------- */
+.rest-timer-transition .rest-timer-label {
+  color: #A8DAFF;
+}
+.rest-timer-transition .rest-timer-sublabel {
+  color: rgba(168, 218, 255, 0.6);
+  font-size: 12px;
+}
+.rest-timer-reason {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 10px;
+  color: rgba(250, 250, 247, 0.35);
+  letter-spacing: 0.3px;
+  margin-bottom: 16px;
+}
+.rest-timer-progress-transition {
+  stroke: #5B8DEF !important;
+}
+.rest-timer-transition.rest-timer-urgent .rest-timer-progress-transition {
+  stroke: #E74C3C !important;
+}
+.rest-timer-transition.rest-timer-done .rest-timer-progress-transition {
+  stroke: #5B8DEF !important;
+}
+.rest-timer-transition .rest-timer-go {
+  color: #5B8DEF;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+.rest-timer-btn-go-transition {
+  background: linear-gradient(135deg, #5B8DEF, #7C4DFF);
+  color: #fff;
+  padding: 14px 32px;
+  font-size: 15px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
