@@ -1709,7 +1709,10 @@ window.S = {
   calisthPullups: null, calisthPushups: null,
   calisthenicsProgram: null, calisthenicsWeek: 1, selectedCalisthDay: 0,
   // Yoga
-  yogaLevel: null, yogaGoal: null, yogaDays: 3
+  yogaLevel: null, yogaGoal: null, yogaDays: 3,
+  yogaStyle: null, yogaDuration: null, yogaObjectif: null,
+  // Calisthenics onboarding
+  calisthenicsOnboardingStep: null
 };
 
 // ═══════════════════════════════════════════════════════════════

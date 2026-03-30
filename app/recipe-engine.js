@@ -16576,6 +16576,7 @@
         // Helper interne : ajouter un ingrédient au consolidated avec clé normalisée.
         // La clé = nom normalisé + unité normalisée → agrège singulier/pluriel/accents/unités FR.
         function _addIng(name, qty, unit) {
+          if (!name || !unit) return; // ingrédient incomplet → ignorer
           var normU = _normUnit(unit);
           var key   = _normIngKey(name) + '||' + normU;
           if (!consolidated[key]) consolidated[key] = { name: name, qty: 0, unit: normU, recipes: [] };
