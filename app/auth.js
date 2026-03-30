@@ -1,18 +1,15 @@
 /* ═══════════════════════════════════════════════════════════════
    AUTH.JS — Authentication & BlackBox Activity Tracking
    MTD Macro Calculator
-   localStorage-based auth with hashed passwords and session management
+   Supabase Auth with localStorage fallback
    ═══════════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
 
-// ─── PASSWORD HASHING (SubtleCrypto PBKDF2 / SHA-256, NIST-compliant) ───
-// Async: returns Promise<string>
-// Salt is per-user (stored alongside hash as "salt:hash")
-// Falls back to legacy FNV-1a only when verifying old hashes
+// ─── LEGACY PASSWORD HASHING (kept for localStorage fallback) ───
 
 var PBKDF2_ITERATIONS = 100000;
-var PBKDF2_KEYLEN = 32; // 256 bits
+var PBKDF2_KEYLEN = 32;
 
 function bufToHex(buf) {
   return Array.from(new Uint8Array(buf)).map(function(b){ return ('00'+b.toString(16)).slice(-2); }).join('');
@@ -39,11 +36,9 @@ function hashPasswordAsync(password, saltHex) {
   });
 }
 
-// Verify password against stored hash (handles both PBKDF2 and legacy FNV-1a)
 function verifyPasswordAsync(password, storedHash) {
   if (storedHash && storedHash.indexOf('pbkdf2:') === 0) {
     var parts = storedHash.split(':');
-    // format: pbkdf2:<saltHex>:<hashHex>
     if (parts.length === 3) {
       return hashPasswordAsync(password, parts[1]).then(function(computed) {
         return computed === storedHash;
@@ -51,11 +46,9 @@ function verifyPasswordAsync(password, storedHash) {
     }
     return Promise.resolve(false);
   }
-  // Legacy FNV-1a hash — verify then migrate on next login
   return Promise.resolve(legacyHashPassword(password) === storedHash);
 }
 
-// Legacy FNV-1a (kept only for backward compatibility with existing accounts)
 function legacyHashPassword(password) {
   var salt = 'MtdMacroCalculator2024!';
   var str = salt + password + salt;
@@ -71,7 +64,7 @@ function legacyHashPassword(password) {
   return (hash >>> 0).toString(36);
 }
 
-// Anti-timing-attack delay: normalize response time to ~300ms minimum
+// ─── TIMING DELAY ───
 function withTimingDelay(promise, startTime) {
   var MIN_DELAY = 300;
   return promise.then(function(result) {
@@ -138,14 +131,13 @@ function setRateLimit(email, attempts, lockedUntil) {
   try {
     var data = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{}');
     data[email] = { attempts: attempts, lockedUntil: lockedUntil || 0 };
-    // Clean old entries (> 24h)
     var now = Date.now();
     Object.keys(data).forEach(function(k) {
       if (data[k].lockedUntil < now - 86400000 && data[k].attempts < MAX_ATTEMPTS) delete data[k];
     });
     localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
   } catch (e) {
-    // Storage unavailable — fail open (don't block legitimate users)
+    // Storage unavailable — fail open
   }
 }
 
@@ -166,7 +158,6 @@ function checkRateLimit(email) {
 function recordFailedAttempt(email) {
   var rl = getRateLimit(email);
   var now = Date.now();
-  // Reset if previous lockout has expired
   if (rl.lockedUntil && now >= rl.lockedUntil) {
     rl.attempts = 0;
     rl.lockedUntil = 0;
@@ -176,7 +167,7 @@ function recordFailedAttempt(email) {
   setRateLimit(email, rl.attempts, lockout);
 }
 
-// ─── USER STORAGE HELPERS ───
+// ─── LEGACY USER STORAGE HELPERS (localStorage fallback) ───
 function getUsers() {
   try {
     return JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
@@ -188,12 +179,10 @@ function getUsers() {
 function saveUsers(users) {
   try {
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  } catch (e) {
-    // Storage full or unavailable
-  }
+  } catch (e) {}
 }
 
-function getSession() {
+function getLegacySession() {
   try {
     var s = localStorage.getItem(SESSION_KEY);
     return s ? JSON.parse(s) : null;
@@ -213,7 +202,7 @@ function buildFingerprint() {
   } catch(e) { return 'unknown'; }
 }
 
-function setSession(user) {
+function setLegacySession(user) {
   try {
     var token = generateSessionToken();
     var fingerprint = buildFingerprint();
@@ -226,18 +215,202 @@ function setSession(user) {
       tokenIssuedAt: Date.now()
     }));
     localStorage.setItem(SESSION_START_KEY, String(Date.now()));
-  } catch (e) {
-    // Storage unavailable
-  }
+  } catch (e) {}
 }
 
-function clearSession() {
+function clearLegacySession() {
   try {
     localStorage.removeItem(SESSION_KEY);
     localStorage.removeItem(SESSION_START_KEY);
-  } catch (e) {
-    // Ignore
+  } catch (e) {}
+}
+
+function isLegacySessionValid() {
+  var s = getLegacySession();
+  if (!s) return false;
+  var now = Date.now();
+  var start = parseInt(localStorage.getItem(SESSION_START_KEY) || '0');
+  if (start && now - start > 30 * 24 * 60 * 60 * 1000) {
+    clearLegacySession();
+    return false;
   }
+  if (s.fingerprint) {
+    var currentFP = buildFingerprint();
+    if (currentFP !== s.fingerprint) {
+      clearLegacySession();
+      return false;
+    }
+  }
+  if (s.tokenIssuedAt && now - s.tokenIssuedAt > 24 * 60 * 60 * 1000) {
+    try {
+      var updated = JSON.parse(localStorage.getItem(SESSION_KEY));
+      if (updated) {
+        updated.token = generateSessionToken();
+        updated.tokenIssuedAt = now;
+        localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
+      }
+    } catch(e) {}
+  }
+  return true;
+}
+
+// ─── SUPABASE ERROR MAPPING ───
+function mapSupabaseError(err) {
+  var msg = (err && err.message) ? err.message : String(err || '');
+  if (msg.indexOf('Invalid login credentials') !== -1) return 'Email ou mot de passe incorrect';
+  if (msg.indexOf('User already registered') !== -1) return 'Cet email est d\u00e9j\u00e0 utilis\u00e9';
+  if (msg.indexOf('Password should be at least 6 characters') !== -1) return 'Le mot de passe doit contenir au moins 6 caract\u00e8res';
+  if (msg.indexOf('Unable to validate email address') !== -1) return 'Format d\'email invalide';
+  return 'Erreur de connexion. R\u00e9essayez.';
+}
+
+// ─── SUPABASE AVAILABILITY CHECK ───
+function _getClient() {
+  try {
+    return (window.getSupabaseClient && window.getSupabaseClient()) || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+// ─── SESSION LOCALE (pour le mode synchrone) ───
+var _currentSession = null; // {id, name, email}
+var _useSupabase = false;
+
+function _extractUser(supaUser) {
+  if (!supaUser) return null;
+  return {
+    id: supaUser.id,
+    name: (supaUser.user_metadata && supaUser.user_metadata.name) || supaUser.email.split('@')[0],
+    email: supaUser.email
+  };
+}
+
+// ─── INIT : charger la session Supabase au boot ───
+function _initAuth() {
+  var client = _getClient();
+  if (!client) {
+    // Fallback localStorage : charger session existante
+    if (isLegacySessionValid()) {
+      var s = getLegacySession();
+      if (s) {
+        _currentSession = { id: s.id, name: s.name, email: s.email };
+      }
+    }
+    return;
+  }
+
+  _useSupabase = true;
+
+  // Ecouter les changements d'auth
+  client.auth.onAuthStateChange(function(event, session) {
+    if (session && session.user) {
+      _currentSession = _extractUser(session.user);
+    } else {
+      _currentSession = null;
+    }
+  });
+
+  // Charger la session existante (async, mais met a jour _currentSession rapidement)
+  client.auth.getSession().then(function(result) {
+    if (result.data && result.data.session && result.data.session.user) {
+      _currentSession = _extractUser(result.data.session.user);
+    }
+  }).catch(function() {
+    // Fallback : tenter la session legacy
+    if (isLegacySessionValid()) {
+      var s = getLegacySession();
+      if (s) {
+        _currentSession = { id: s.id, name: s.name, email: s.email };
+      }
+    }
+  });
+}
+
+// ─── FALLBACK REGISTER (localStorage) ───
+function _fallbackRegister(name, email, password, startTime) {
+  var users = getUsers();
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].email === email) {
+      return withTimingDelay(Promise.resolve({ ok: false, error: 'Cet email est d\u00e9j\u00e0 utilis\u00e9' }), startTime);
+    }
+  }
+
+  var promise = hashPasswordAsync(password).then(function(pwHash) {
+    var user = {
+      id: 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+      name: name,
+      email: email,
+      pwHash: pwHash,
+      createdAt: Date.now()
+    };
+    var currentUsers = getUsers();
+    for (var j = 0; j < currentUsers.length; j++) {
+      if (currentUsers[j].email === email) {
+        return { ok: false, error: 'Cet email est d\u00e9j\u00e0 utilis\u00e9' };
+      }
+    }
+    currentUsers.push(user);
+    saveUsers(currentUsers);
+    setLegacySession(user);
+    _currentSession = { id: user.id, name: user.name, email: user.email };
+    BLACKBOX.log('register', { email: email });
+    return { ok: true, user: { id: user.id, name: user.name, email: user.email } };
+  });
+
+  return withTimingDelay(promise, startTime);
+}
+
+// ─── FALLBACK LOGIN (localStorage) ───
+function _fallbackLogin(email, password, startTime) {
+  var users = getUsers();
+  var user = null;
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].email === email) { user = users[i]; break; }
+  }
+
+  if (!user) {
+    recordFailedAttempt(email);
+    var dummyPromise = hashPasswordAsync(password).then(function() {
+      return { ok: false, error: 'Email ou mot de passe incorrect' };
+    });
+    return withTimingDelay(dummyPromise, startTime);
+  }
+
+  var loginPromise = verifyPasswordAsync(password, user.pwHash).then(function(valid) {
+    if (!valid) {
+      recordFailedAttempt(email);
+      BLACKBOX.log('login_failed', { email: email });
+      var rlAfter = getRateLimit(email);
+      var attemptsLeft = Math.max(0, MAX_ATTEMPTS - rlAfter.attempts);
+      var errMsg = 'Email ou mot de passe incorrect';
+      if (attemptsLeft > 0 && attemptsLeft <= 2) {
+        errMsg += ' (' + attemptsLeft + ' tentative' + (attemptsLeft > 1 ? 's' : '') + ' restante' + (attemptsLeft > 1 ? 's' : '') + ')';
+      }
+      return { ok: false, error: errMsg };
+    }
+
+    if (user.pwHash && user.pwHash.indexOf('pbkdf2:') !== 0) {
+      hashPasswordAsync(password).then(function(newHash) {
+        var freshUsers = getUsers();
+        for (var k = 0; k < freshUsers.length; k++) {
+          if (freshUsers[k].id === user.id) {
+            freshUsers[k].pwHash = newHash;
+            saveUsers(freshUsers);
+            break;
+          }
+        }
+      }).catch(function() {});
+    }
+
+    clearRateLimit(email);
+    setLegacySession(user);
+    _currentSession = { id: user.id, name: user.name, email: user.email };
+    BLACKBOX.log('login', { email: email });
+    return { ok: true, user: { id: user.id, name: user.name, email: user.email } };
+  });
+
+  return withTimingDelay(loginPromise, startTime);
 }
 
 // ─── AUTH MODULE ───
@@ -245,63 +418,60 @@ window.AUTH = {
 
   /**
    * Register a new user (async — returns Promise)
-   * @param {string} name - User's first name
-   * @param {string} email - User's email
-   * @param {string} password - User's password (min 6 chars)
+   * @param {string} name
+   * @param {string} email
+   * @param {string} password
    * @returns {Promise<{ok:boolean, user?:object, error?:string}>}
    */
   register: function(name, email, password) {
     var startTime = Date.now();
-    // Sanitize inputs
     name = sanitize((name || '').trim());
     email = sanitize((email || '').trim().toLowerCase());
 
-    // Validate -- apply timing delay even on validation failure to prevent user enumeration
-    var _startValidation = Date.now();
+    // Validation locale
     if (!validateName(name)) {
-      return withTimingDelay(Promise.resolve({ ok: false, error: 'Pr\u00e9nom requis (min 2 caract\u00e8res)' }), _startValidation);
+      return withTimingDelay(Promise.resolve({ ok: false, error: 'Pr\u00e9nom requis (min 2 caract\u00e8res)' }), startTime);
     }
     if (!validateEmail(email)) {
-      return withTimingDelay(Promise.resolve({ ok: false, error: 'Email invalide' }), _startValidation);
+      return withTimingDelay(Promise.resolve({ ok: false, error: 'Email invalide' }), startTime);
     }
     if (!validatePassword(password)) {
-      return withTimingDelay(Promise.resolve({ ok: false, error: 'Mot de passe min 6 caract\u00e8res' }), _startValidation);
+      return withTimingDelay(Promise.resolve({ ok: false, error: 'Mot de passe min 6 caract\u00e8res' }), startTime);
     }
 
-    // Check for duplicate email
-    var users = getUsers();
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].email === email) {
-        return Promise.resolve({ ok: false, error: 'Cet email est d\u00e9j\u00e0 utilis\u00e9' });
-      }
+    // Tenter Supabase
+    var client = _getClient();
+    if (!client) {
+      return _fallbackRegister(name, email, password, startTime);
     }
 
-    var promise = hashPasswordAsync(password).then(function(pwHash) {
-      // Create user object
-      var user = {
-        id: 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
-        name: name,
-        email: email,
-        pwHash: pwHash,
-        createdAt: Date.now()
-      };
-
-      // Save
-      var currentUsers = getUsers();
-      // Double-check for race condition duplicates
-      for (var j = 0; j < currentUsers.length; j++) {
-        if (currentUsers[j].email === email) {
-          return { ok: false, error: 'Cet email est d\u00e9j\u00e0 utilis\u00e9' };
-        }
+    var promise = client.auth.signUp({
+      email: email,
+      password: password,
+      options: { data: { name: name } }
+    }).then(function(result) {
+      if (result.error) {
+        return { ok: false, error: mapSupabaseError(result.error) };
       }
-      currentUsers.push(user);
-      saveUsers(currentUsers);
-      setSession(user);
-
-      // Log registration
-      BLACKBOX.log('register', { email: email });
-
-      return { ok: true, user: { id: user.id, name: user.name, email: user.email } };
+      var data = result.data;
+      if (data && data.user) {
+        var u = {
+          id: data.user.id,
+          name: name,
+          email: email
+        };
+        _currentSession = u;
+        BLACKBOX.log('register', { email: email });
+        return { ok: true, user: u };
+      }
+      return { ok: false, error: 'Erreur de connexion. R\u00e9essayez.' };
+    }).catch(function(err) {
+      // Fallback localStorage en cas d'erreur reseau
+      try {
+        return _fallbackRegister(name, email, password, Date.now()).then(function(r) { return r; });
+      } catch (e2) {
+        return { ok: false, error: mapSupabaseError(err) };
+      }
     });
 
     return withTimingDelay(promise, startTime);
@@ -321,66 +491,54 @@ window.AUTH = {
       return Promise.resolve({ ok: false, error: 'Email invalide' });
     }
 
-    // Rate limiting — brute force protection
+    // Rate limiting
     var rl = checkRateLimit(email);
     if (rl.blocked) {
       var mins = Math.ceil(rl.remaining / 60);
       return Promise.resolve({ ok: false, error: 'Trop de tentatives. R\u00e9essayez dans ' + mins + ' minute' + (mins > 1 ? 's' : '') + '.' });
     }
 
-    var users = getUsers();
-    var user = null;
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].email === email) {
-        user = users[i];
-        break;
-      }
+    // Tenter Supabase
+    var client = _getClient();
+    if (!client) {
+      return _fallbackLogin(email, password, startTime);
     }
 
-    if (!user) {
-      recordFailedAttempt(email);
-      // Run a dummy hash to prevent timing-based user enumeration
-      var dummyPromise = hashPasswordAsync(password).then(function() {
-        return { ok: false, error: 'Email ou mot de passe incorrect' };
-      });
-      return withTimingDelay(dummyPromise, startTime);
-    }
-
-    var loginPromise = verifyPasswordAsync(password, user.pwHash).then(function(valid) {
-      if (!valid) {
+    var promise = client.auth.signInWithPassword({
+      email: email,
+      password: password
+    }).then(function(result) {
+      if (result.error) {
         recordFailedAttempt(email);
         BLACKBOX.log('login_failed', { email: email });
         var rlAfter = getRateLimit(email);
         var attemptsLeft = Math.max(0, MAX_ATTEMPTS - rlAfter.attempts);
-        var errMsg = 'Email ou mot de passe incorrect';
+        var errMsg = mapSupabaseError(result.error);
         if (attemptsLeft > 0 && attemptsLeft <= 2) {
           errMsg += ' (' + attemptsLeft + ' tentative' + (attemptsLeft > 1 ? 's' : '') + ' restante' + (attemptsLeft > 1 ? 's' : '') + ')';
         }
         return { ok: false, error: errMsg };
       }
-
-      // Successful login — migrate legacy hash to PBKDF2 if needed
-      if (user.pwHash && user.pwHash.indexOf('pbkdf2:') !== 0) {
-        hashPasswordAsync(password).then(function(newHash) {
-          var freshUsers = getUsers();
-          for (var k = 0; k < freshUsers.length; k++) {
-            if (freshUsers[k].id === user.id) {
-              freshUsers[k].pwHash = newHash;
-              saveUsers(freshUsers);
-              break;
-            }
-          }
-        }).catch(function() { /* migration failed silently */ });
+      var data = result.data;
+      if (data && data.user) {
+        var u = _extractUser(data.user);
+        _currentSession = u;
+        clearRateLimit(email);
+        BLACKBOX.log('login', { email: email });
+        return { ok: true, user: u };
       }
-
-      clearRateLimit(email);
-      setSession(user);
-      BLACKBOX.log('login', { email: email });
-
-      return { ok: true, user: { id: user.id, name: user.name, email: user.email } };
+      return { ok: false, error: 'Erreur de connexion. R\u00e9essayez.' };
+    }).catch(function(err) {
+      // Fallback localStorage en cas d'erreur reseau
+      try {
+        return _fallbackLogin(email, password, Date.now()).then(function(r) { return r; });
+      } catch (e2) {
+        recordFailedAttempt(email);
+        return { ok: false, error: mapSupabaseError(err) };
+      }
     });
 
-    return withTimingDelay(loginPromise, startTime);
+    return withTimingDelay(promise, startTime);
   },
 
   /**
@@ -388,47 +546,31 @@ window.AUTH = {
    */
   logout: function() {
     BLACKBOX.log('logout', { duration: BLACKBOX.getSessionMinutes() });
-    clearSession();
+
+    // Arreter la sync
+    if (window.SupaSync) {
+      try { SupaSync.stopAutoSync(); } catch (e) {}
+    }
+
+    // Supabase signOut
+    var client = _getClient();
+    if (client) {
+      try {
+        client.auth.signOut().catch(function() {});
+      } catch (e) {}
+    }
+
+    // Nettoyer la session locale + legacy
+    _currentSession = null;
+    clearLegacySession();
   },
 
   /**
    * Check if a user is currently logged in
-   * Validates session expiry (30 days), token rotation (24h), and device fingerprint
    * @returns {boolean}
    */
   isLoggedIn: function() {
-    var s = getSession();
-    if (!s) return false;
-    var now = Date.now();
-    // Session expiry: 30 days
-    var start = parseInt(localStorage.getItem(SESSION_START_KEY) || '0');
-    if (start && now - start > 30 * 24 * 60 * 60 * 1000) {
-      localStorage.removeItem(SESSION_KEY);
-      localStorage.removeItem(SESSION_START_KEY);
-      return false;
-    }
-    // Fingerprint check — detect localStorage theft
-    if (s.fingerprint) {
-      var currentFP = buildFingerprint();
-      if (currentFP !== s.fingerprint) {
-        // Fingerprint mismatch: possible session theft — invalidate session
-        localStorage.removeItem(SESSION_KEY);
-        localStorage.removeItem(SESSION_START_KEY);
-        return false;
-      }
-    }
-    // Session token rotation: regenerate token every 24h if session is active
-    if (s.tokenIssuedAt && now - s.tokenIssuedAt > 24 * 60 * 60 * 1000) {
-      try {
-        var updated = JSON.parse(localStorage.getItem(SESSION_KEY));
-        if (updated) {
-          updated.token = generateSessionToken();
-          updated.tokenIssuedAt = now;
-          localStorage.setItem(SESSION_KEY, JSON.stringify(updated));
-        }
-      } catch(e) { /* ignore */ }
-    }
-    return true;
+    return _currentSession !== null;
   },
 
   /**
@@ -436,7 +578,7 @@ window.AUTH = {
    * @returns {{id:string, name:string, email:string}|null}
    */
   getUser: function() {
-    return getSession();
+    return _currentSession;
   },
 
   /**
@@ -445,27 +587,38 @@ window.AUTH = {
    * @returns {{ok:boolean, error?:string}}
    */
   updateProfile: function(newName) {
-    var session = getSession();
-    if (!session) return { ok: false, error: 'Non connect\u00e9' };
+    if (!_currentSession) return { ok: false, error: 'Non connect\u00e9' };
 
     newName = sanitize((newName || '').trim());
     if (!validateName(newName)) {
       return { ok: false, error: 'Pr\u00e9nom invalide (min 2 caract\u00e8res)' };
     }
 
+    // Mettre a jour Supabase (fire and forget)
+    var client = _getClient();
+    if (client) {
+      try {
+        client.auth.updateUser({ data: { name: newName } }).catch(function(e) {
+          console.warn('[AUTH] updateProfile Supabase error:', e);
+        });
+      } catch (e) {}
+    }
+
+    // Mettre a jour la session locale immediatement
+    _currentSession.name = newName;
+
+    // Fallback : aussi mettre a jour le localStorage legacy
     var users = getUsers();
     for (var i = 0; i < users.length; i++) {
-      if (users[i].id === session.id) {
+      if (users[i].id === _currentSession.id) {
         users[i].name = newName;
         saveUsers(users);
-        session.name = newName;
-        setSession(session);
-        BLACKBOX.log('profile_update', { name: newName });
-        return { ok: true };
+        break;
       }
     }
 
-    return { ok: false, error: 'Utilisateur introuvable' };
+    BLACKBOX.log('profile_update', { name: newName });
+    return { ok: true };
   },
 
   /**
@@ -475,81 +628,154 @@ window.AUTH = {
    * @returns {Promise<{ok:boolean, error?:string}>}
    */
   changePassword: function(currentPassword, newPassword) {
-    var session = getSession();
-    if (!session) return Promise.resolve({ ok: false, error: 'Non connect\u00e9' });
+    if (!_currentSession) return Promise.resolve({ ok: false, error: 'Non connect\u00e9' });
 
     if (!validatePassword(newPassword)) {
       return Promise.resolve({ ok: false, error: 'Nouveau mot de passe min 6 caract\u00e8res' });
     }
 
-    var users = getUsers();
-    var targetUser = null;
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].id === session.id) { targetUser = users[i]; break; }
-    }
-    if (!targetUser) return Promise.resolve({ ok: false, error: 'Utilisateur introuvable' });
-
-    return verifyPasswordAsync(currentPassword, targetUser.pwHash).then(function(valid) {
-      if (!valid) return { ok: false, error: 'Mot de passe actuel incorrect' };
-      return hashPasswordAsync(newPassword).then(function(newHash) {
-        var freshUsers = getUsers();
-        for (var j = 0; j < freshUsers.length; j++) {
-          if (freshUsers[j].id === session.id) {
-            freshUsers[j].pwHash = newHash;
-            saveUsers(freshUsers);
-            BLACKBOX.log('password_change', {});
-            return { ok: true };
-          }
+    // Tenter Supabase
+    var client = _getClient();
+    if (client) {
+      return client.auth.updateUser({ password: newPassword }).then(function(result) {
+        if (result.error) {
+          return { ok: false, error: mapSupabaseError(result.error) };
         }
-        return { ok: false, error: 'Utilisateur introuvable' };
+        BLACKBOX.log('password_change', {});
+        return { ok: true };
+      }).catch(function(err) {
+        // Fallback localStorage
+        return _fallbackChangePassword(currentPassword, newPassword);
       });
-    });
+    }
+
+    // Fallback localStorage
+    return _fallbackChangePassword(currentPassword, newPassword);
   },
 
   /**
    * Delete the current user account (async — returns Promise)
-   * @param {string} password - Must confirm with password
+   * @param {string} password
    * @returns {Promise<{ok:boolean, error?:string}>}
    */
   deleteAccount: function(password) {
-    var session = getSession();
-    if (!session) return Promise.resolve({ ok: false, error: 'Non connect\u00e9' });
+    if (!_currentSession) return Promise.resolve({ ok: false, error: 'Non connect\u00e9' });
 
-    var users = getUsers();
-    var targetUser = null;
-    for (var i = 0; i < users.length; i++) {
-      if (users[i].id === session.id) { targetUser = users[i]; break; }
+    var sessionId = _currentSession.id;
+    var sessionEmail = _currentSession.email;
+
+    // Tenter Supabase
+    var client = _getClient();
+    if (client) {
+      // La suppression reelle necessite une Edge Function (pas encore en place)
+      // Pour l'instant : deconnecter + supprimer les donnees locales
+      BLACKBOX.log('account_deleted', { email: sessionEmail });
+
+      // Arreter la sync
+      if (window.SupaSync) {
+        try { SupaSync.stopAutoSync(); } catch (e) {}
+      }
+
+      return client.auth.signOut().then(function() {
+        _currentSession = null;
+        clearLegacySession();
+        // Nettoyer les donnees locales
+        _cleanupLocalData(sessionId);
+        return { ok: true };
+      }).catch(function() {
+        _currentSession = null;
+        clearLegacySession();
+        _cleanupLocalData(sessionId);
+        return { ok: true };
+      });
     }
-    if (!targetUser) return Promise.resolve({ ok: false, error: 'Utilisateur introuvable' });
 
-    return verifyPasswordAsync(password, targetUser.pwHash).then(function(valid) {
-      if (!valid) return { ok: false, error: 'Mot de passe incorrect' };
-      BLACKBOX.log('account_deleted', { email: targetUser.email });
+    // Fallback localStorage
+    return _fallbackDeleteAccount(password, sessionId);
+  }
+};
+
+// ─── FALLBACK CHANGE PASSWORD (localStorage) ───
+function _fallbackChangePassword(currentPassword, newPassword) {
+  var session = _currentSession;
+  if (!session) return Promise.resolve({ ok: false, error: 'Non connect\u00e9' });
+
+  var users = getUsers();
+  var targetUser = null;
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].id === session.id) { targetUser = users[i]; break; }
+  }
+  if (!targetUser) return Promise.resolve({ ok: false, error: 'Utilisateur introuvable' });
+
+  return verifyPasswordAsync(currentPassword, targetUser.pwHash).then(function(valid) {
+    if (!valid) return { ok: false, error: 'Mot de passe actuel incorrect' };
+    return hashPasswordAsync(newPassword).then(function(newHash) {
       var freshUsers = getUsers();
       for (var j = 0; j < freshUsers.length; j++) {
         if (freshUsers[j].id === session.id) {
-          freshUsers.splice(j, 1);
+          freshUsers[j].pwHash = newHash;
           saveUsers(freshUsers);
-          clearSession();
+          BLACKBOX.log('password_change', {});
           return { ok: true };
         }
       }
       return { ok: false, error: 'Utilisateur introuvable' };
     });
+  });
+}
+
+// ─── FALLBACK DELETE ACCOUNT (localStorage) ───
+function _fallbackDeleteAccount(password, sessionId) {
+  var users = getUsers();
+  var targetUser = null;
+  for (var i = 0; i < users.length; i++) {
+    if (users[i].id === sessionId) { targetUser = users[i]; break; }
   }
-};
+  if (!targetUser) return Promise.resolve({ ok: false, error: 'Utilisateur introuvable' });
+
+  return verifyPasswordAsync(password, targetUser.pwHash).then(function(valid) {
+    if (!valid) return { ok: false, error: 'Mot de passe incorrect' };
+    BLACKBOX.log('account_deleted', { email: targetUser.email });
+    var freshUsers = getUsers();
+    for (var j = 0; j < freshUsers.length; j++) {
+      if (freshUsers[j].id === sessionId) {
+        freshUsers.splice(j, 1);
+        saveUsers(freshUsers);
+        _currentSession = null;
+        clearLegacySession();
+        return { ok: true };
+      }
+    }
+    return { ok: false, error: 'Utilisateur introuvable' };
+  });
+}
+
+// ─── CLEANUP LOCAL DATA ───
+function _cleanupLocalData(userId) {
+  try {
+    // Supprimer le user du localStorage legacy
+    var users = getUsers();
+    for (var j = 0; j < users.length; j++) {
+      if (users[j].id === userId) {
+        users.splice(j, 1);
+        saveUsers(users);
+        break;
+      }
+    }
+  } catch (e) {}
+}
 
 // ─── BLACKBOX — Activity Logging ───
 window.BLACKBOX = {
 
   /**
    * Log an activity event
-   * @param {string} action - Action name (e.g., 'login', 'page_view', 'calculate')
-   * @param {object} data - Additional data payload
+   * @param {string} action
+   * @param {object} data
    */
   log: function(action, data) {
     try {
-      var user = getSession();
+      var user = _currentSession;
       var logs = [];
       try {
         logs = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
@@ -567,7 +793,6 @@ window.BLACKBOX = {
         page: window.location.pathname
       });
 
-      // Keep last 10000 entries max to prevent storage overflow
       if (logs.length > 10000) {
         logs = logs.slice(-10000);
       }
@@ -594,7 +819,7 @@ window.BLACKBOX = {
 
   /**
    * Get all logs, optionally filtered by userId
-   * @param {string} [userId] - Filter by user ID
+   * @param {string} [userId]
    * @returns {Array}
    */
   getUserLogs: function(userId) {
@@ -611,7 +836,7 @@ window.BLACKBOX = {
 
   /**
    * Get a summary report of user activity
-   * @param {string} [userId] - Filter by user ID
+   * @param {string} [userId]
    * @returns {{totalActions:number, actions:object, firstSeen:string|null, lastSeen:string|null}}
    */
   getReport: function(userId) {
@@ -649,9 +874,7 @@ window.BLACKBOX = {
   clearLogs: function() {
     try {
       localStorage.removeItem(LOG_KEY);
-    } catch (e) {
-      // Ignore
-    }
+    } catch (e) {}
   },
 
   /**
@@ -667,7 +890,6 @@ window.BLACKBOX = {
 
 // ─── AUTOMATIC SESSION TRACKING ───
 
-// Track page visibility changes for session time accuracy
 document.addEventListener('visibilitychange', function() {
   if (document.hidden) {
     BLACKBOX.log('page_hidden', {});
@@ -676,13 +898,22 @@ document.addEventListener('visibilitychange', function() {
   }
 });
 
-// Resume session tracking on page load
-if (AUTH.isLoggedIn()) {
-  if (!localStorage.getItem(SESSION_START_KEY)) {
-    localStorage.setItem(SESSION_START_KEY, String(Date.now()));
-  }
-  BLACKBOX.log('session_resume', {});
+// ─── INIT BOOT ───
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', _initAuth);
+} else {
+  _initAuth();
 }
+
+// Resume session tracking on page load (after init)
+setTimeout(function() {
+  if (AUTH.isLoggedIn()) {
+    if (!localStorage.getItem(SESSION_START_KEY)) {
+      localStorage.setItem(SESSION_START_KEY, String(Date.now()));
+    }
+    BLACKBOX.log('session_resume', {});
+  }
+}, 0);
 
 // Track unload for session duration
 window.addEventListener('beforeunload', function() {
