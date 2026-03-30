@@ -3560,10 +3560,13 @@ function renderMusculationProgram(p) {
             var hasData = _sr.actualReps !== null && (_sr.actualWeight !== null || _isBody);
 
             if (isValidated) {
-              // Série déjà validée : afficher le checkmark
+              // Série déjà validée : afficher le checkmark + verrouiller les inputs
               var ok = _sr.actualReps >= _sr.targetReps && (_isBody || _sr.actualWeight >= _sr.targetWeight);
               inputZone.appendChild(h('span', {'class': ok ? 'set-success' : 'set-fail', style: 'font-size:14px'}, ok ? '\u2713' : '\u2717'));
               row.classList.add('set-row-validated');
+              // Désactiver les inputs de la row validée
+              var _rowInputs = row.querySelectorAll('input');
+              for (var _ri = 0; _ri < _rowInputs.length; _ri++) { _rowInputs[_ri].disabled = true; _rowInputs[_ri].style.opacity = '0.5'; }
             } else {
               // Bouton de validation
               var valBtn = h('button', {
