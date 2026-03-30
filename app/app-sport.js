@@ -2768,9 +2768,9 @@ function saveMuscuSessionLog() {
     if (_todayLog) {
       Object.keys(_todayLog).forEach(function(exName) {
         var sets = _todayLog[exName];
-        var completed = sets.filter(function(s) { return s.actualWeight !== null; });
+        var completed = sets.filter(function(s) { return s.actualWeight !== null || s.actualReps !== null; });
         if (completed.length === 0) return;
-        var avgWeight = completed.reduce(function(sum, s) { return sum + s.actualWeight; }, 0) / completed.length;
+        var avgWeight = completed.reduce(function(sum, s) { return sum + (s.actualWeight || 0); }, 0) / completed.length;
         var avgReps = completed.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / completed.length;
 
         if (!S.muscuProgressionHistory[exName]) S.muscuProgressionHistory[exName] = [];
@@ -3380,14 +3380,6 @@ function renderMusculationProgram(p) {
         card.appendChild(vlink);
       }
 
-      // ─── AI-suggested weight from strength profile ───
-      var _setParts = ex.sets ? ex.sets.split('\u00d7') : [];
-      var suggestedReps = _setParts.length > 1 ? parseInt(_setParts[1]) : null;
-      var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
-      if (suggested && suggested > 0) {
-        card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#27AE60;margin-top:6px;padding:4px 8px;background:rgba(39,174,96,0.06);border-left:2px solid #27AE60'}, '\uD83D\uDCA1 Charge sugg\u00e9r\u00e9e : ' + (window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + 'kg')));
-      }
-
       // ─── Weight/Load tracking ───
       var eqType = 'barre';
       var eqLower = (ex.eq || '').toLowerCase();
@@ -3396,6 +3388,16 @@ function renderMusculationProgram(p) {
       else if (/kettle|kb/i.test(eqLower)) eqType = 'kb';
       else if (/^(poids du corps|corps seul|bodyweight|body\s?weight|aucun|none)$/.test(eqLower)) eqType = 'bodyweight';
       else if (/barre|barbell/i.test(eqLower)) eqType = 'barre';
+
+      // ─── AI-suggested weight from strength profile (skip for bodyweight) ───
+      if (eqType !== 'bodyweight') {
+        var _setParts = ex.sets ? ex.sets.split('\u00d7') : [];
+        var suggestedReps = _setParts.length > 1 ? parseInt(_setParts[1]) : null;
+        var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
+        if (suggested && suggested > 0) {
+          card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#27AE60;margin-top:6px;padding:4px 8px;background:rgba(39,174,96,0.06);border-left:2px solid #27AE60'}, '\uD83D\uDCA1 Charge sugg\u00e9r\u00e9e : ' + (window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + 'kg')));
+        }
+      }
 
       var savedWeight = S.musculationWeights[ex.n] || {};
       var currentWeight = savedWeight.weight || '';
@@ -3645,10 +3647,15 @@ function renderMusculationProgram(p) {
           progressNote.appendChild(h('span', {style: 'color:var(--green,#1A4A1A)'}, '\uD83D\uDCC8 '));
           progressNote.appendChild(h('span', {}, 'Objectif semaine prochaine\u00a0: ' + (progressiveWeight + nextIncr) + '\u00a0kg si toutes s\u00e9ries r\u00e9ussies'));
           setTable.appendChild(progressNote);
+        } else if (isBodyweight) {
+          var bwProgressNote = h('div', {style: 'padding:6px 8px;background:var(--greenbg,rgba(26,74,26,.06));border-top:1px solid var(--border);font-size:10px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif'});
+          bwProgressNote.appendChild(h('span', {style: 'color:var(--green,#1A4A1A)'}, '\uD83D\uDCC8 '));
+          bwProgressNote.appendChild(h('span', {}, 'Objectif\u00a0: +1-2 reps par s\u00e9rie si toutes s\u00e9ries r\u00e9ussies'));
+          setTable.appendChild(bwProgressNote);
         }
 
         // Suggestion de progression automatique (basée sur historique)
-        if (window.checkProgressionSuggestion && !isBodyweight) {
+        if (window.checkProgressionSuggestion) {
           var _sessLog = [];
           var _sortedDates = Object.keys(S.muscuSessionLog).sort();
           _sortedDates.forEach(function(d) {
@@ -3670,12 +3677,15 @@ function renderMusculationProgram(p) {
         var progHist = S.muscuProgressionHistory[exRef.n];
         if (progHist && progHist.length >= 3) {
           var lastFive = progHist.slice(-5);
-          var progressValues = lastFive.map(function(e) { return e.weight; });
+          var progressValues = isBodyweight
+            ? lastFive.map(function(e) { return e.reps || 0; })
+            : lastFive.map(function(e) { return e.weight; });
+          var _sparkUnit = isBodyweight ? 'reps' : (window.UNITS ? window.UNITS.weightLabel() : 'kg');
           var progGraph = h('div', {style: 'padding:6px 8px;border-top:1px solid var(--border);font-size:10px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;display:flex;align-items:center;gap:6px'});
           progGraph.appendChild(h('span', {style: 'color:#27AE60'}, '\uD83D\uDCCA '));
           var sparkSvg = renderSparkline(progressValues, '#27AE60');
           if (sparkSvg) progGraph.appendChild(sparkSvg);
-          progGraph.appendChild(h('span', {style: 'margin-left:4px'}, progressValues[0] + '\u00a0kg \u2192 ' + progressValues[progressValues.length - 1] + '\u00a0kg'));
+          progGraph.appendChild(h('span', {style: 'margin-left:4px'}, progressValues[0] + '\u00a0' + _sparkUnit + ' \u2192 ' + progressValues[progressValues.length - 1] + '\u00a0' + _sparkUnit));
           setTable.appendChild(progGraph);
         }
 
