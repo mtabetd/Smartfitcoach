@@ -256,6 +256,91 @@ function getMealSplit(){
   return _applyTrainTiming(_getMealSplitBase(), window.S && window.S.trainTime);
 }
 window.getMealSplit=getMealSplit;
+
+// ─── TRAINING DAY DETECTION ────────────────────────────────────────────────
+// getDayType(dayIndex) — détermine si un jour de la semaine (0=Lun..6=Dim)
+// est un jour d'entraînement ou de repos. Distribue N jours d'entraînement
+// sur la semaine de manière optimale (repos répartis uniformément).
+// Retourne {isTraining, trainSlot, preSlot, postSlot}
+function getDayType(dayIndex) {
+  var s = window.S;
+  var nDays = s.sportDays || 0;
+  if (nDays <= 0) return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
+
+  // Distribution standard des jours d'entraînement sur 7 jours
+  var LAYOUTS = {
+    1: [0],              // Lun
+    2: [0, 3],           // Lun, Jeu
+    3: [0, 2, 4],        // Lun, Mer, Ven
+    4: [0, 1, 3, 4],     // Lun, Mar, Jeu, Ven
+    5: [0, 1, 2, 3, 4],  // Lun-Ven
+    6: [0, 1, 2, 3, 4, 5] // Lun-Sam
+  };
+  var trainingDays = LAYOUTS[Math.min(nDays, 6)] || LAYOUTS[3];
+  var isTraining = trainingDays.indexOf(dayIndex) >= 0;
+
+  if (!isTraining) {
+    return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
+  }
+
+  var meals = s.mealsPerDay || 3;
+  var trainTime = s.trainTime || 'afternoon';
+  var trainSlot, preSlot, postSlot;
+
+  if (meals >= 4) {
+    // slots: 0=breakfast, 1=lunch, 2=snack, 3=dinner
+    switch (trainTime) {
+      case 'morning':   trainSlot = 0; preSlot = null; postSlot = 1; break;
+      case 'noon':      trainSlot = 1; preSlot = 0;    postSlot = 2; break;
+      case 'afternoon': trainSlot = 2; preSlot = 1;    postSlot = 3; break;
+      case 'evening':
+      default:          trainSlot = 3; preSlot = 2;    postSlot = null; break;
+    }
+  } else {
+    // 2-3 repas : slots 0=breakfast, 1=lunch, 2=dinner
+    switch (trainTime) {
+      case 'morning':   trainSlot = 0; preSlot = null; postSlot = 1; break;
+      case 'noon':
+      case 'afternoon': trainSlot = 1; preSlot = 0;    postSlot = 2; break;
+      case 'evening':
+      default:          trainSlot = 2; preSlot = 1;    postSlot = null; break;
+    }
+  }
+  return { isTraining: true, trainSlot: trainSlot, preSlot: preSlot, postSlot: postSlot };
+}
+window.getDayType = getDayType;
+
+// ─── ADAPTIVE MEAL SPLIT PER DAY ──────────────────────────────────────────
+// getAdaptedMealSplit(dayIndex) — adapte la répartition calorique selon
+// le type de jour (entraînement vs repos).
+// Jour d'entraînement : boost pré/post séance, calMultiplier=1.0
+// Jour de repos : répartition équilibrée, calMultiplier=0.90 (−10%)
+function getAdaptedMealSplit(dayIndex) {
+  var dayInfo = getDayType(dayIndex);
+  var baseSplit = getMealSplit();
+
+  if (!dayInfo.isTraining) {
+    // Jour de repos : léger déficit, distribution plus uniforme
+    var meals = window.S.mealsPerDay || 3;
+    if (meals >= 4) {
+      return { pctBreak: 0.25, pctLunch: 0.30, pctSnack: 0.15, pctDinner: 0.30,
+               restDay: true, calMultiplier: 0.90, dayInfo: dayInfo };
+    }
+    if (meals <= 2) {
+      return { pctBreak: 0.40, pctLunch: 0.60, pctSnack: 0, pctDinner: 0,
+               restDay: true, calMultiplier: 0.90, dayInfo: dayInfo };
+    }
+    return { pctBreak: 0.30, pctLunch: 0.40, pctSnack: 0, pctDinner: 0.30,
+             restDay: true, calMultiplier: 0.90, dayInfo: dayInfo };
+  }
+
+  // Jour d'entraînement : utilise la base + timing déjà calculé par getMealSplit()
+  return { pctBreak: baseSplit.pctBreak, pctLunch: baseSplit.pctLunch,
+           pctSnack: baseSplit.pctSnack, pctDinner: baseSplit.pctDinner,
+           restDay: false, calMultiplier: 1.0, dayInfo: dayInfo,
+           note: baseSplit.note, trainTimingNote: baseSplit.trainTimingNote };
+}
+window.getAdaptedMealSplit = getAdaptedMealSplit;
 var DAY_NAMES=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 var SHOPPING=[
   {cat:'FRÉQUENCE',items:[
@@ -2774,10 +2859,10 @@ function pickSmoothieForPlan(targetKcal, usedIds) {
 }
 window.pickSmoothieForPlan = pickSmoothieForPlan;
 
-function generateWeek(){var s=window.S;var c=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var split=getMealSplit();var meals=s.mealsPerDay||3;
+function generateWeek(){var s=window.S;var cBase=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
 // useSmoothing : whey activé + WHEY_SMOOTHIES disponible
 var _useSmoothing=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length);
-for(var d=0;d<7;d++){var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
+for(var d=0;d<7;d++){var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
 // Si whey activé → smoothie remplace la collation
 if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS);else if(_useSmoothing)sR=pickSmoothieForPlan(sT,uSM);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
@@ -2795,7 +2880,7 @@ function swapMeal(di,slot){
   var s=window.S;
   if(!s.weekPlan||!s.weekPlan[di])return;
   if(!s._nm&&window.computeNutritionState)window.computeNutritionState(false);
-  var c=calcTarget(),split=getMealSplit();
+  var cBase=calcTarget(),split=getAdaptedMealSplit(di);var c=Math.round(cBase*(split.calMultiplier||1));
   var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);
   // Snack + whey → swapper vers un autre smoothie (pas une collation normale)
   if(slot==='snack'&&s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length){

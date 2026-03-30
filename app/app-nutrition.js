@@ -1924,6 +1924,18 @@ function renderStep9(p) {
   });
   p.appendChild(tabs);
 
+  // Day type indicator (training vs rest)
+  var _selDayInfo = window.getDayType ? window.getDayType(S.selectedDay) : null;
+  if (_selDayInfo) {
+    var _dayAdapt = window.getAdaptedMealSplit ? window.getAdaptedMealSplit(S.selectedDay) : null;
+    if (_selDayInfo.isTraining) {
+      var _tNote = (_dayAdapt && _dayAdapt.trainTimingNote) ? ' \u2014 ' + _dayAdapt.trainTimingNote : '';
+      p.appendChild(h('div', {'class': 'day-training-indicator'}, '\uD83C\uDFCB\uFE0F Jour d\u2019entra\u00eenement' + _tNote));
+    } else {
+      p.appendChild(h('div', {'class': 'day-rest-indicator'}, '\uD83D\uDE34 Jour de repos \u2014 calories adapt\u00e9es (\u221210%)'));
+    }
+  }
+
   // Quick action buttons — Salad bar & Smoothie bar
   var quickActions = h('div', {style: 'display:flex;gap:8px;margin:12px 0 4px'});
   quickActions.appendChild(h('button', {
@@ -2026,14 +2038,18 @@ function renderStep9(p) {
       }
       window.render();
     }});
-    // Badge nutrient-timing : post-séance ou pré-séance selon trainTime
+    // Badge nutrient-timing : pré-séance / post-séance / récupération selon jour
     var timingBadge = null;
-    var tt = S.trainTime;
-    if (tt) {
-      var POST = {morning: 'breakfast', noon: 'lunch', evening: 'dinner'};
-      var PRE  = {morning: null, noon: 'breakfast', evening: 'lunch'};
-      if (POST[tt] === sl.key) timingBadge = h('span', {style: 'font-size:10px;font-weight:700;color:#fff;background:#1A8C1A;border-radius:4px;padding:1px 6px;margin-left:6px'}, '\uD83D\uDCAA Post-s\u00e9ance');
-      else if (PRE[tt] === sl.key) timingBadge = h('span', {style: 'font-size:10px;font-weight:700;color:#fff;background:#E07B00;border-radius:4px;padding:1px 6px;margin-left:6px'}, '\u26A1 Pr\u00e9-s\u00e9ance');
+    var _dayInfo = window.getDayType ? window.getDayType(S.selectedDay) : null;
+    if (_dayInfo && _dayInfo.isTraining) {
+      var slotIdx = {breakfast: 0, lunch: 1, snack: 2, dinner: 3}[sl.key];
+      if (slotIdx !== undefined && _dayInfo.preSlot === slotIdx) {
+        timingBadge = h('span', {'class': 'meal-badge badge-pre'}, '\u26A1 Pr\u00e9-s\u00e9ance');
+      } else if (slotIdx !== undefined && _dayInfo.postSlot === slotIdx) {
+        timingBadge = h('span', {'class': 'meal-badge badge-post'}, '\uD83D\uDCAA Post-s\u00e9ance');
+      }
+    } else if (_dayInfo && !_dayInfo.isTraining && sl.key === 'dinner') {
+      timingBadge = h('span', {'class': 'meal-badge badge-rest'}, '\uD83D\uDE34 R\u00e9cup\u00e9ration');
     }
     var mealTypeEl = h('div', {'class': 'meal-type'});
     mealTypeEl.appendChild(document.createTextNode(sl.label));
