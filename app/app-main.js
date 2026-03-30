@@ -216,7 +216,7 @@ function render() {
   // User bar
   var user = AUTH.getUser();
   var ub = h('div', {'class': 'user-bar'});
-  ub.appendChild(h('span', {'class': 'user-name'}, '◆ ' + user.name));
+  ub.appendChild(h('span', {'class': 'user-name'}, '◆ ' + (user.name || user.email || 'Utilisateur')));
   var ubRight = h('div', {style: 'display:flex;align-items:center;gap:12px'});
   // Session time
   ubRight.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey3)'}, (window.BLACKBOX ? window.BLACKBOX.getSessionMinutes() : 0) + ' min'));
@@ -327,11 +327,13 @@ function renderLogin(app) {
   form.appendChild(f2);
 
   // Login button
-  form.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
+  var loginBtn = h('button', {'class': 'btn-primary', onclick: function(){
     var email = emailInput.value.trim();
     var pw = pwInput.value;
     if (!email || !pw) { S.authError = 'Veuillez remplir tous les champs'; render(); return; }
     if (!window.canAttemptAuth(email)) { S.authError = window.t('auth.rate_limit'); render(); return; }
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Connexion...';
     AUTH.login(email, pw).then(function(result) {
       if (result.ok) {
         S.authError = '';
@@ -346,7 +348,8 @@ function renderLogin(app) {
       S.authError = 'Erreur de connexion. Réessayez.';
       render();
     });
-  }}, window.t('auth.login_btn')));
+  }}, window.t('auth.login_btn'));
+  form.appendChild(loginBtn);
 
   c.appendChild(form);
 
@@ -403,7 +406,7 @@ function renderRegister(app) {
   form.appendChild(f3);
 
   // Register button
-  form.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
+  var regBtn = h('button', {'class': 'btn-primary', onclick: function(){
     var name = nameInput.value.trim();
     var email = emailInput.value.trim();
     var pw = pwInput.value;
@@ -413,6 +416,8 @@ function renderRegister(app) {
     if (pw !== pw2) { S.authError = window.t('auth.error_password_match'); render(); return; }
     if (pw.length < 6) { S.authError = window.t('auth.error_password_length'); render(); return; }
 
+    regBtn.disabled = true;
+    regBtn.textContent = 'Création...';
     AUTH.register(name, email, pw).then(function(result) {
       if (result.ok) {
         S.authError = '';
@@ -427,7 +432,8 @@ function renderRegister(app) {
       S.authError = 'Erreur lors de la création du compte. Réessayez.';
       render();
     });
-  }}, window.t('auth.register_btn')));
+  }}, window.t('auth.register_btn'));
+  form.appendChild(regBtn);
 
   c.appendChild(form);
 

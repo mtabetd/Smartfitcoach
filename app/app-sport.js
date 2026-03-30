@@ -2553,6 +2553,8 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
   }
 
   // Mise à jour de _updateUI pour gérer le mode transition
+  // IMPORTANT: Utilise la création DOM avec addEventListener au lieu de innerHTML+onclick
+  // car la CSP (script-src sans 'unsafe-inline') bloque les onclick en attributs HTML.
   var _origUpdateUI = _updateUI;
   _updateUI = function() {
     var el = document.getElementById('rest-timer-overlay');
@@ -2566,10 +2568,13 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
       el = document.createElement('div');
       el.id = 'rest-timer-overlay';
       el.className = 'rest-timer-overlay';
+      // Tap overlay background to dismiss (fallback)
+      el.addEventListener('click', function(e) {
+        if (e.target === el) window.RestTimer.stop();
+      });
       document.body.appendChild(el);
     }
     el.style.display = 'flex';
-    // FIX: force all layout properties inline to prevent any stylesheet conflict
     el.style.position = 'fixed';
     el.style.inset = '0';
     el.style.zIndex = '9999';
@@ -2607,35 +2612,98 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
       ? ('\uD83C\uDFCB\uFE0F ' + (_state.nextExercise || 'Exercice suivant'))
       : 'GO !';
 
-    // Temps formaté lisible
     var totalMin = Math.floor(_state.total / 60);
     var totalSec = _state.total % 60;
     var totalStr = totalMin > 0 ? totalMin + 'min' + (totalSec > 0 ? totalSec : '') : totalSec + 's';
 
-    el.innerHTML = '<div class="' + cardClass + '">' +
-      '<div class="rest-timer-label">' + labelText + '</div>' +
-      '<div class="rest-timer-sublabel">' + subText + '</div>' +
-      (isTrans ? '<div class="rest-timer-reason">Repos adapt\u00e9 : ' + totalStr + ' (profil + charge + objectif)</div>' : '') +
-      '<div class="rest-timer-circle-wrap">' +
-        '<svg viewBox="0 0 120 120" class="rest-timer-svg">' +
-          '<circle cx="60" cy="60" r="' + radius + '" class="rest-timer-track"/>' +
-          '<circle cx="60" cy="60" r="' + radius + '" class="rest-timer-progress' + (isTrans ? ' rest-timer-progress-transition' : '') + '" ' +
-            'style="stroke-dasharray:' + circ.toFixed(1) + ';stroke-dashoffset:' + dashoffset.toFixed(1) + '"/>' +
-        '</svg>' +
-        '<div class="rest-timer-time">' + (isDone ? '\u2705' : timeStr) + '</div>' +
-        (isDone ? '<div class="rest-timer-go">' + goText + '</div>' : '') +
-      '</div>' +
-      '<div class="rest-timer-actions">' +
-        ((_state.active) ?
-          '<button class="rest-timer-btn rest-timer-btn-add" onclick="window.RestTimer.addTime(15)">+15s</button>' +
-          '<button class="rest-timer-btn rest-timer-btn-add" onclick="window.RestTimer.addTime(30)">+30s</button>' +
-          '<button class="rest-timer-btn rest-timer-btn-skip" onclick="window.RestTimer.stop()">Passer \u25b6</button>'
-        :
-          '<button class="rest-timer-btn ' + (isTrans ? 'rest-timer-btn-go-transition' : 'rest-timer-btn-go') + '" onclick="window.RestTimer.stop()">' +
-            (isTrans ? '\uD83C\uDFCB\uFE0F Commencer !' : 'C\u2019est parti !') + '</button>'
-        ) +
-      '</div>' +
-    '</div>';
+    // Build DOM instead of innerHTML to comply with CSP (no inline onclick)
+    el.innerHTML = '';
+
+    var card = document.createElement('div');
+    card.className = cardClass;
+
+    var label = document.createElement('div');
+    label.className = 'rest-timer-label';
+    label.textContent = labelText;
+    card.appendChild(label);
+
+    var sub = document.createElement('div');
+    sub.className = 'rest-timer-sublabel';
+    sub.textContent = subText;
+    card.appendChild(sub);
+
+    if (isTrans) {
+      var reason = document.createElement('div');
+      reason.className = 'rest-timer-reason';
+      reason.textContent = 'Repos adapt\u00e9 : ' + totalStr + ' (profil + charge + objectif)';
+      card.appendChild(reason);
+    }
+
+    // SVG circle
+    var circleWrap = document.createElement('div');
+    circleWrap.className = 'rest-timer-circle-wrap';
+    var ns = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 120 120');
+    svg.setAttribute('class', 'rest-timer-svg');
+    var trackCircle = document.createElementNS(ns, 'circle');
+    trackCircle.setAttribute('cx', '60'); trackCircle.setAttribute('cy', '60');
+    trackCircle.setAttribute('r', String(radius));
+    trackCircle.setAttribute('class', 'rest-timer-track');
+    svg.appendChild(trackCircle);
+    var progressCircle = document.createElementNS(ns, 'circle');
+    progressCircle.setAttribute('cx', '60'); progressCircle.setAttribute('cy', '60');
+    progressCircle.setAttribute('r', String(radius));
+    progressCircle.setAttribute('class', 'rest-timer-progress' + (isTrans ? ' rest-timer-progress-transition' : ''));
+    progressCircle.style.strokeDasharray = circ.toFixed(1);
+    progressCircle.style.strokeDashoffset = dashoffset.toFixed(1);
+    svg.appendChild(progressCircle);
+    circleWrap.appendChild(svg);
+
+    var timeEl = document.createElement('div');
+    timeEl.className = 'rest-timer-time';
+    timeEl.textContent = isDone ? '\u2705' : timeStr;
+    circleWrap.appendChild(timeEl);
+
+    if (isDone) {
+      var goEl = document.createElement('div');
+      goEl.className = 'rest-timer-go';
+      goEl.textContent = goText;
+      circleWrap.appendChild(goEl);
+    }
+    card.appendChild(circleWrap);
+
+    // Action buttons — using addEventListener (CSP-safe)
+    var actions = document.createElement('div');
+    actions.className = 'rest-timer-actions';
+
+    if (_state.active) {
+      var btn15 = document.createElement('button');
+      btn15.className = 'rest-timer-btn rest-timer-btn-add';
+      btn15.textContent = '+15s';
+      btn15.addEventListener('click', function() { window.RestTimer.addTime(15); });
+      actions.appendChild(btn15);
+
+      var btn30 = document.createElement('button');
+      btn30.className = 'rest-timer-btn rest-timer-btn-add';
+      btn30.textContent = '+30s';
+      btn30.addEventListener('click', function() { window.RestTimer.addTime(30); });
+      actions.appendChild(btn30);
+
+      var skipBtn = document.createElement('button');
+      skipBtn.className = 'rest-timer-btn rest-timer-btn-skip';
+      skipBtn.textContent = 'Passer \u25b6';
+      skipBtn.addEventListener('click', function() { window.RestTimer.stop(); });
+      actions.appendChild(skipBtn);
+    } else {
+      var goBtn = document.createElement('button');
+      goBtn.className = 'rest-timer-btn ' + (isTrans ? 'rest-timer-btn-go-transition' : 'rest-timer-btn-go');
+      goBtn.textContent = isTrans ? '\uD83C\uDFCB\uFE0F Commencer !' : 'C\u2019est parti !';
+      goBtn.addEventListener('click', function() { window.RestTimer.stop(); });
+      actions.appendChild(goBtn);
+    }
+    card.appendChild(actions);
+    el.appendChild(card);
   };
 
   window.RestTimer = {
@@ -3551,21 +3619,23 @@ function renderMusculationProgram(p) {
             inputZone.appendChild(weightInput);
             inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, (window.UNITS ? window.UNITS.weightLabel() : 'kg')));
           } else {
+            // Exercice poids du corps : champ lest optionnel (gilet lesté, élastique...)
             var pcLabel = h('input', {
-              type: 'number', min: '0', max: '200', step: '1',
-              placeholder: 'PC',
-              value: setRow.actualWeight !== null ? String(setRow.actualWeight) : '',
-              style: 'width:40px;padding:3px 5px;border:1px solid var(--border);border-radius:4px;font-size:11px;text-align:center;background:var(--bg,var(--ivory))',
+              type: 'number', min: '0', max: '200', step: '0.5',
+              placeholder: 'Lest',
+              value: setRow.actualWeight !== null && setRow.actualWeight > 0 ? String(setRow.actualWeight) : '',
+              style: 'width:40px;padding:3px 5px;border:1px solid var(--border);border-radius:4px;font-size:11px;text-align:center;background:var(--bg,var(--ivory));color:var(--grey)',
               oninput: (function(sr){ return function(e) {
                 var v = parseFloat(e.target.value);
-                sr.actualWeight = isNaN(v) ? null : v;
+                sr.actualWeight = isNaN(v) ? 0 : v;
                 saveMuscuSessionLog();
+                // Pour PDC, le bouton ne dépend PAS du poids — seulement des reps
                 var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
                 if (_btn) { var _ok = sr.actualReps !== null; _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
               }; })(setRow)
             });
             inputZone.appendChild(pcLabel);
-            inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, (window.UNITS ? window.UNITS.weightLabel() : 'kg') + '+'));
+            inputZone.appendChild(h('span', {style: 'font-size:8px;color:var(--grey3,#8A8A84)'}, 'kg\u00b1'));
           }
 
           var repsInput = h('input', {

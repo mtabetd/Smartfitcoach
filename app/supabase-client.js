@@ -51,16 +51,14 @@
       return client.auth.signOut();
     },
 
-    // User actuel
+    // User actuel (async — returns Promise)
     getUser: function() {
       var client = getClient();
-      if (!client) return null;
-      // Supabase v2 stocke la session en mémoire
-      var session = null;
-      try {
-        client.auth.getSession().then(function(r) { session = r.data.session; });
-      } catch(e) {}
-      return session ? session.user : null;
+      if (!client) return Promise.resolve(null);
+      return client.auth.getSession().then(function(r) {
+        var session = r.data && r.data.session;
+        return session ? session.user : null;
+      }).catch(function() { return null; });
     },
 
     // Session actuelle (async)

@@ -279,10 +279,11 @@ var _useSupabase = false;
 
 function _extractUser(supaUser) {
   if (!supaUser) return null;
+  var email = supaUser.email || '';
   return {
     id: supaUser.id,
-    name: (supaUser.user_metadata && supaUser.user_metadata.name) || supaUser.email.split('@')[0],
-    email: supaUser.email
+    name: (supaUser.user_metadata && supaUser.user_metadata.name) || email.split('@')[0] || 'Utilisateur',
+    email: email
   };
 }
 
