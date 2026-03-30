@@ -559,6 +559,9 @@ function generateSportProgram() {
   return program;
 }
 
+// ─── EXPORTS ───
+window.getPregnancySportWarning = getPregnancySportWarning;
+
 // ─── RENDER ───
 window.SPORT = {
   render: function(p) {
@@ -2483,6 +2486,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
         playBeep();
         // Inter-série : auto-dismiss après le bip (pas d'interaction requise)
         var _cb = _state.onComplete;
+        _state.onComplete = null; // évite double-callback via stop()
         setTimeout(function() { stop(); if (_cb) _cb(); }, 1200);
       } else {
         _updateUI();
@@ -2734,6 +2738,10 @@ window.getExerciseTransitionTime = getExerciseTransitionTime;
 function saveMuscuSessionLog() {
   try {
     var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+    // ── Pruning : garder les 90 derniers jours de session log (évite quota localStorage) ──
+    var _cutoff = new Date(); _cutoff.setDate(_cutoff.getDate() - 90);
+    var _cutStr = _cutoff.toISOString().slice(0, 10);
+    Object.keys(S.muscuSessionLog).forEach(function(d) { if (d < _cutStr) delete S.muscuSessionLog[d]; });
     localStorage.setItem('mtd_muscu_session_' + uid, JSON.stringify(S.muscuSessionLog));
 
     // Mettre à jour l'historique de progression
@@ -2755,6 +2763,10 @@ function saveMuscuSessionLog() {
             weight: Math.round(avgWeight * 2) / 2,
             reps: Math.round(avgReps)
           });
+          // Cap à 365 entrées par exercice
+          if (S.muscuProgressionHistory[exName].length > 365) {
+            S.muscuProgressionHistory[exName] = S.muscuProgressionHistory[exName].slice(-365);
+          }
         }
       });
     });
@@ -3449,7 +3461,7 @@ function renderMusculationProgram(p) {
         var setData = S.muscuSessionLog[today][exRef.n];
 
         // Tableau des séries
-        var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:6px;overflow:hidden'});
+        var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:6px;overflow-x:auto;-webkit-overflow-scrolling:touch'});
 
         // Header
         var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;background:var(--surface,var(--ivory2));padding:6px 8px;font-size:10px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
@@ -3466,8 +3478,9 @@ function renderMusculationProgram(p) {
           row.appendChild(h('div', {style: 'font-size:12px;font-weight:700;color:var(--text)'}, String(setRow.set)));
 
           var conseilleEl = h('div', {style: 'font-size:12px;color:var(--grey)'});
+          var _dispW = (window.UNITS && window.UNITS.displayWeight) ? window.UNITS.displayWeight(setRow.targetWeight) : (setRow.targetWeight + ' kg');
           var conseilleStr = (setRow.targetWeight > 0 && !isBodyweight)
-            ? (setRow.targetWeight + ' kg \u00d7 ' + setRow.targetReps)
+            ? (_dispW + ' \u00d7 ' + setRow.targetReps)
             : (setRow.targetReps + ' reps');
           conseilleEl.appendChild(h('span', {}, conseilleStr));
           if (setRow.pctOf1RM) {
@@ -3795,6 +3808,9 @@ function renderMusculationProgram(p) {
       var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
         if (!S.sessionHistory) S.sessionHistory = {};
         S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
+        // Pruning : garder les 365 dernières sessions max
+        var _shKeys = Object.keys(S.sessionHistory).sort();
+        if (_shKeys.length > 365) { _shKeys.slice(0, _shKeys.length - 365).forEach(function(k) { delete S.sessionHistory[k]; }); }
         S.sessionCompleting = false; S._sessionDuration = null;
         window.BLACKBOX && window.BLACKBOX.log('session_done', {day: S.selectedSportDay, kcal: kcalRes.total, duration: realDur});
         window.render();
