@@ -2871,7 +2871,7 @@ function pickSmoothieForPlan(targetKcal, usedIds) {
 }
 window.pickSmoothieForPlan = pickSmoothieForPlan;
 
-function generateWeek(){var s=window.S;var cBase=calcTarget(),plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
+function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
 // useSmoothing : whey activé + WHEY_SMOOTHIES disponible
 var _useSmoothing=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length);
 for(var d=0;d<7;d++){var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
