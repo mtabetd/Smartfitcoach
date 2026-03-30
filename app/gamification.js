@@ -108,6 +108,8 @@ function updateStreak() {
   data.dates.push(today);
 
   localStorage.setItem(STREAK_KEY + user.id, JSON.stringify(data));
+  // Sync streak vers Supabase
+  if (window.SupaSync) SupaSync.saveStreak({current: data.current, best: data.best, lastDate: data.lastDate, dates: data.dates});
 
   // Check streak badges
   if (data.current >= 3) unlockBadge('streak_3');
@@ -135,6 +137,8 @@ function unlockBadge(badgeId) {
 
   badges.push({id: badgeId, unlockedAt: Date.now()});
   localStorage.setItem(BADGES_KEY + user.id, JSON.stringify(badges));
+  // Sync badge vers Supabase
+  if (window.SupaSync) SupaSync.saveBadge(badgeId);
 
   // Show toast notification
   showToast(def.icon + ' ' + def.name + ' débloqué !');

@@ -1364,6 +1364,12 @@ function renderStep7(p) {
       // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
       if (window.computeNutritionState) { window.computeNutritionState(false); }
       S.weekPlan = generateWeek();
+      // Sync plan nutrition vers Supabase
+      if (window.SupaSync) {
+        var _monday = new Date();
+        _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+        SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+      }
       bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
       if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
       goStep(8);
@@ -1720,6 +1726,8 @@ function renderStep8(p) {
       var uid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
       localStorage.setItem('mtd_weight_history_' + uid, JSON.stringify(S.weightHistory));
     } catch(e) {}
+    // Sync poids vers Supabase
+    if (window.SupaSync) SupaSync.saveWeight(today, v);
     bb('weight_logged', {weight: v});
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) {
       window.GAMIFICATION.unlockBadge('first_weigh');
@@ -2283,6 +2291,12 @@ function renderStep9(p) {
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
     if (window.computeNutritionState) window.computeNutritionState(false);
     S.weekPlan = generateWeek();
+    // Sync plan nutrition vers Supabase
+    if (window.SupaSync) {
+      var _monday = new Date();
+      _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+      SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+    }
     bb('week_regenerated', {});
     window.render();
   }}, '\u21bb ' + window.t('onb.s9.generate')));

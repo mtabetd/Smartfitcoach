@@ -136,12 +136,16 @@ function saveProfile() {
       var encoded = window._storageEncode(data);
       if (encoded) {
         localStorage.setItem('mtd_profile_' + uid, encoded);
+        // Sync vers Supabase (debounced)
+        if (window.SupaSync) SupaSync.scheduleSave();
         return;
       }
     }
     // Fallback: plain JSON (if encoding unavailable)
     localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
   } catch(e) {}
+  // Sync vers Supabase (debounced)
+  if (window.SupaSync) SupaSync.scheduleSave();
 }
 function loadProfile() {
   try {
@@ -201,6 +205,7 @@ function render() {
   // Not logged in → auth screens
   if (!AUTH.isLoggedIn()) {
     if (S.view === 'authRegister') renderRegister(app);
+    else if (S.view === 'authVerify') renderVerifyEmail(app);
     else renderLogin(app);
     return;
   }
@@ -411,9 +416,8 @@ function renderRegister(app) {
     AUTH.register(name, email, pw).then(function(result) {
       if (result.ok) {
         S.authError = '';
-        S.view = 'nutrition'; // Nouveau compte → onboarding nutrition obligatoire
-        S.nStep = 0;
-        if (window.GAMIFICATION) { GAMIFICATION.unlockBadge('first_login'); }
+        S.view = 'authVerify';
+        S.authVerifyEmail = email;
         render();
       } else {
         S.authError = result.error;
@@ -432,6 +436,105 @@ function renderRegister(app) {
   sw.appendChild(txt(window.t('auth.has_account') + ' '));
   sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'auth'; render(); }}, window.t('auth.login')));
   c.appendChild(sw);
+
+  app.appendChild(c);
+}
+
+// ─── AUTH: VERIFY EMAIL SCREEN ───
+function renderVerifyEmail(app) {
+  var c = h('div', {'class': 'auth-container'});
+  c.appendChild(h('div', {'class': 'auth-logo'}, 'MTD'));
+  c.appendChild(h('div', {'class': 'auth-sub'}, 'V\u00e9rifie ton email'));
+  c.appendChild(h('div', {'class': 'auth-line'}));
+
+  var form = h('div', {'class': 'auth-form'});
+
+  // Title
+  form.appendChild(h('h2', {style: 'text-align:center;margin:0 0 8px 0;font-size:22px'}, 'V\u00e9rifie ton email'));
+
+  // Subtitle
+  form.appendChild(h('p', {style: 'text-align:center;margin:0 0 6px 0;color:var(--grey);font-size:14px'}, 'Un email de confirmation a \u00e9t\u00e9 envoy\u00e9 \u00e0 :'));
+
+  // Email display
+  form.appendChild(h('p', {style: 'text-align:center;margin:0 0 20px 0;font-weight:bold;font-size:16px'}, S.authVerifyEmail || ''));
+
+  // Instruction
+  form.appendChild(h('p', {style: 'text-align:center;margin:0 0 24px 0;color:var(--grey);font-size:13px;line-height:1.6'}, 'Clique sur le lien dans l\u2019email pour activer ton compte.'));
+
+  // Status message container
+  var statusMsg = h('div', {style: 'text-align:center;min-height:24px;margin-bottom:12px;font-size:13px'});
+  form.appendChild(statusMsg);
+
+  // Resend button
+  form.appendChild(h('button', {
+    'class': 'btn-primary',
+    style: 'background:transparent;border:1px solid var(--border);color:var(--fg);margin-bottom:10px;width:100%',
+    onclick: function() {
+      var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
+      if (!client) {
+        statusMsg.textContent = 'Erreur : client non disponible.';
+        statusMsg.style.color = '#e74c3c';
+        return;
+      }
+      statusMsg.textContent = 'Envoi en cours...';
+      statusMsg.style.color = 'var(--grey)';
+      client.auth.resend({type: 'signup', email: S.authVerifyEmail}).then(function(res) {
+        if (res.error) {
+          statusMsg.textContent = res.error.message || 'Erreur lors du renvoi.';
+          statusMsg.style.color = '#e74c3c';
+        } else {
+          statusMsg.textContent = 'Email renvoy\u00e9 !';
+          statusMsg.style.color = '#27AE60';
+        }
+      }).catch(function() {
+        statusMsg.textContent = 'Erreur r\u00e9seau. R\u00e9essaye.';
+        statusMsg.style.color = '#e74c3c';
+      });
+    }
+  }, 'Renvoyer l\u2019email'));
+
+  // Confirm button
+  form.appendChild(h('button', {
+    'class': 'btn-primary',
+    style: 'width:100%',
+    onclick: function() {
+      var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
+      if (!client) {
+        statusMsg.textContent = 'Erreur : client non disponible.';
+        statusMsg.style.color = '#e74c3c';
+        return;
+      }
+      statusMsg.textContent = 'V\u00e9rification...';
+      statusMsg.style.color = 'var(--grey)';
+      client.auth.getSession().then(function(res) {
+        var session = res.data && res.data.session;
+        var user = session && session.user;
+        if (user && user.email_confirmed_at) {
+          S.authError = '';
+          S.view = 'nutrition';
+          S.nStep = 0;
+          if (window.GAMIFICATION) { GAMIFICATION.unlockBadge('first_login'); }
+          render();
+        } else {
+          statusMsg.textContent = 'Email pas encore confirm\u00e9. V\u00e9rifie ta bo\u00eete mail (et les spams).';
+          statusMsg.style.color = '#e74c3c';
+        }
+      }).catch(function() {
+        statusMsg.textContent = 'Erreur de v\u00e9rification. R\u00e9essaye.';
+        statusMsg.style.color = '#e74c3c';
+      });
+    }
+  }, 'J\u2019ai confirm\u00e9 mon email'));
+
+  c.appendChild(form);
+
+  // Back to login link
+  var sw = h('div', {'class': 'auth-switch'});
+  sw.appendChild(h('a', {onclick: function() { S.authError = ''; S.view = 'auth'; render(); }}, 'Retour \u00e0 la connexion'));
+  c.appendChild(sw);
+
+  // Spam hint
+  c.appendChild(h('p', {style: 'text-align:center;margin-top:16px;font-size:11px;color:var(--grey3,#888)'}, 'Tu ne trouves pas l\u2019email ? V\u00e9rifie ton dossier spam.'));
 
   app.appendChild(c);
 }
@@ -500,6 +603,11 @@ if (AUTH.isLoggedIn()) {
   // Migrate existing performance data into perf-history (no-op if already done)
   if (window.PERF_HISTORY) {
     try { PERF_HISTORY.migrateExistingData(); } catch(e) {}
+  }
+  // Demarrer la sync Supabase si disponible
+  if (window.SupaSync) {
+    SupaSync.syncOnLogin();
+    SupaSync.startAutoSync();
   }
 } else {
   S.view = 'auth';
