@@ -2389,6 +2389,199 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
   return baseWeight;
 }
 
+// ─── REST TIMER MODULE ────────────────────────────────────────────────────
+// Minuteur automatique entre les séries avec bip sonore via Web Audio API.
+// Se lance automatiquement quand l'utilisateur valide une série.
+// Persiste entre les re-renders via window.RestTimer.
+(function initRestTimer() {
+  if (window.RestTimer) return; // déjà initialisé
+
+  var _audioCtx = null;
+  function _getAudioCtx() {
+    if (!_audioCtx) {
+      try { _audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { console.warn('[RestTimer] AudioContext indisponible'); }
+    }
+    return _audioCtx;
+  }
+
+  // Bip fort : 3 bips courts puis 1 bip long
+  function playBeep() {
+    var ctx = _getAudioCtx();
+    if (!ctx) return;
+    // Resume si suspendu (autoplay policy)
+    if (ctx.state === 'suspended') ctx.resume();
+    var now = ctx.currentTime;
+    // 3 bips courts (0.12s chacun, 880Hz)
+    for (var i = 0; i < 3; i++) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'square';
+      osc.frequency.value = 880;
+      gain.gain.value = 0.4;
+      osc.start(now + i * 0.2);
+      osc.stop(now + i * 0.2 + 0.12);
+    }
+    // 1 bip long (0.4s, 1050Hz)
+    var oscL = ctx.createOscillator();
+    var gainL = ctx.createGain();
+    oscL.connect(gainL); gainL.connect(ctx.destination);
+    oscL.type = 'square';
+    oscL.frequency.value = 1050;
+    gainL.gain.value = 0.5;
+    oscL.start(now + 0.7);
+    oscL.stop(now + 1.1);
+    // Vibration si disponible
+    if (navigator.vibrate) try { navigator.vibrate([200, 100, 200, 100, 400]); } catch(e) {}
+  }
+
+  // Bip court de confirmation (validation série)
+  function playTick() {
+    var ctx = _getAudioCtx();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = 660;
+    gain.gain.value = 0.2;
+    osc.start(); osc.stop(ctx.currentTime + 0.08);
+  }
+
+  var _timerId = null;
+  var _state = {
+    active: false,
+    seconds: 0,
+    total: 0,
+    exerciseName: '',
+    setNum: 0,
+    onComplete: null
+  };
+
+  function start(seconds, exerciseName, setNum, onComplete) {
+    stop(); // clear any existing timer
+    _state.active = true;
+    _state.seconds = seconds;
+    _state.total = seconds;
+    _state.exerciseName = exerciseName || '';
+    _state.setNum = setNum || 0;
+    _state.onComplete = onComplete || null;
+    _updateUI();
+    _timerId = setInterval(function() {
+      _state.seconds--;
+      if (_state.seconds <= 3 && _state.seconds > 0) {
+        // Tick sonore pour les 3 dernières secondes
+        playTick();
+      }
+      if (_state.seconds <= 0) {
+        _state.seconds = 0;
+        _state.active = false;
+        clearInterval(_timerId);
+        _timerId = null;
+        playBeep();
+        _updateUI();
+        if (_state.onComplete) _state.onComplete();
+      } else {
+        _updateUI();
+      }
+    }, 1000);
+  }
+
+  function stop() {
+    if (_timerId) { clearInterval(_timerId); _timerId = null; }
+    _state.active = false;
+    _state.seconds = 0;
+    _updateUI();
+  }
+
+  function addTime(sec) {
+    if (_state.active) {
+      _state.seconds += sec;
+      _state.total += sec;
+      _updateUI();
+    }
+  }
+
+  function getState() {
+    return { active: _state.active, seconds: _state.seconds, total: _state.total, exerciseName: _state.exerciseName, setNum: _state.setNum };
+  }
+
+  function _updateUI() {
+    var el = document.getElementById('rest-timer-overlay');
+    if (!_state.active && !_state.seconds) {
+      if (el) el.style.display = 'none';
+      return;
+    }
+    if (!el) {
+      // Créer l'overlay du timer
+      el = document.createElement('div');
+      el.id = 'rest-timer-overlay';
+      el.className = 'rest-timer-overlay';
+      document.body.appendChild(el);
+    }
+    el.style.display = 'flex';
+
+    var pct = _state.total > 0 ? (_state.seconds / _state.total) : 0;
+    var min = Math.floor(_state.seconds / 60);
+    var sec = _state.seconds % 60;
+    var timeStr = (min > 0 ? min + ':' : '') + (sec < 10 && min > 0 ? '0' : '') + sec;
+    var isUrgent = _state.seconds <= 5 && _state.active;
+    var isDone = _state.seconds <= 0 && !_state.active;
+
+    // SVG cercle progressif
+    var radius = 54;
+    var circ = 2 * Math.PI * radius;
+    var dashoffset = circ * (1 - pct);
+
+    el.innerHTML = '<div class="rest-timer-card' + (isUrgent ? ' rest-timer-urgent' : '') + (isDone ? ' rest-timer-done' : '') + '">' +
+      '<div class="rest-timer-label">' + (_state.exerciseName ? _state.exerciseName : 'Repos') + '</div>' +
+      '<div class="rest-timer-sublabel">S\u00e9rie ' + _state.setNum + ' termin\u00e9e \u2014 repos</div>' +
+      '<div class="rest-timer-circle-wrap">' +
+        '<svg viewBox="0 0 120 120" class="rest-timer-svg">' +
+          '<circle cx="60" cy="60" r="' + radius + '" class="rest-timer-track"/>' +
+          '<circle cx="60" cy="60" r="' + radius + '" class="rest-timer-progress" ' +
+            'style="stroke-dasharray:' + circ.toFixed(1) + ';stroke-dashoffset:' + dashoffset.toFixed(1) + '"/>' +
+        '</svg>' +
+        '<div class="rest-timer-time">' + (isDone ? '\u2705' : timeStr) + '</div>' +
+        (isDone ? '<div class="rest-timer-go">GO !</div>' : '') +
+      '</div>' +
+      '<div class="rest-timer-actions">' +
+        ((_state.active) ?
+          '<button class="rest-timer-btn rest-timer-btn-add" onclick="window.RestTimer.addTime(15)">+15s</button>' +
+          '<button class="rest-timer-btn rest-timer-btn-add" onclick="window.RestTimer.addTime(30)">+30s</button>' +
+          '<button class="rest-timer-btn rest-timer-btn-skip" onclick="window.RestTimer.stop()">Passer \u25b6</button>'
+        :
+          '<button class="rest-timer-btn rest-timer-btn-go" onclick="window.RestTimer.stop()">C\u2019est parti !</button>'
+        ) +
+      '</div>' +
+    '</div>';
+  }
+
+  window.RestTimer = {
+    start: start,
+    stop: stop,
+    addTime: addTime,
+    getState: getState,
+    playBeep: playBeep,
+    playTick: playTick
+  };
+})();
+
+// Utilitaire : parse rest time string ("2min", "1min30", "90s", "45s") → secondes
+function parseRestTime(restStr) {
+  if (!restStr) return 90; // défaut 90s
+  var s = String(restStr).toLowerCase().trim();
+  var mMatch = s.match(/^(\d+)\s*min\s*(\d+)?/);
+  if (mMatch) {
+    return parseInt(mMatch[1]) * 60 + (mMatch[2] ? parseInt(mMatch[2]) : 0);
+  }
+  var sMatch = s.match(/^(\d+)\s*s/);
+  if (sMatch) return parseInt(sMatch[1]);
+  var num = parseInt(s);
+  return isNaN(num) ? 90 : (num < 10 ? num * 60 : num); // "2" → 120s, "90" → 90s
+}
+
 function saveMuscuSessionLog() {
   try {
     var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
@@ -3191,11 +3384,48 @@ function renderMusculationProgram(p) {
           inputZone.appendChild(repsInput);
           inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, window.t('muscu.reps')));
 
-          // Indicateur succès/échec
-          if (setRow.actualReps !== null && (setRow.actualWeight !== null || isBodyweight)) {
-            var ok = setRow.actualReps >= setRow.targetReps && (isBodyweight || setRow.actualWeight >= setRow.targetWeight);
-            inputZone.appendChild(h('span', {'class': ok ? 'set-success' : 'set-fail', style: 'font-size:14px'}, ok ? '\u2713' : '\u2717'));
-          }
+          // Bouton validation série + déclenchement timer repos
+          (function(_sr, _si, _exRef, _numSets, _isBody) {
+            var isValidated = _sr.validated === true;
+            var hasData = _sr.actualReps !== null && (_sr.actualWeight !== null || _isBody);
+
+            if (isValidated) {
+              // Série déjà validée : afficher le checkmark
+              var ok = _sr.actualReps >= _sr.targetReps && (_isBody || _sr.actualWeight >= _sr.targetWeight);
+              inputZone.appendChild(h('span', {'class': ok ? 'set-success' : 'set-fail', style: 'font-size:14px'}, ok ? '\u2713' : '\u2717'));
+              row.classList.add('set-row-validated');
+            } else {
+              // Bouton de validation
+              var valBtn = h('button', {
+                'class': 'set-validate-btn' + (hasData ? '' : ' set-validate-btn-disabled'),
+                disabled: !hasData,
+                onclick: function(e) {
+                  e.stopPropagation();
+                  // Marquer la série comme validée
+                  _sr.validated = true;
+                  saveMuscuSessionLog();
+
+                  // Tick de confirmation
+                  if (window.RestTimer) window.RestTimer.playTick();
+
+                  // Parser le rest time de l'exercice
+                  var restSec = parseRestTime(_exRef.rest);
+
+                  // Si c'est la dernière série, pas de timer
+                  var isLastSet = _si >= _numSets - 1;
+                  if (!isLastSet && window.RestTimer) {
+                    window.RestTimer.start(restSec, _exRef.n, _sr.set, function() {
+                      // Timer terminé → re-render pour mettre à jour l'UI
+                      if (window.render) window.render();
+                    });
+                  }
+                  // Re-render immédiat pour afficher le checkmark
+                  if (window.render) window.render();
+                }
+              }, '\u2705 S\u00e9rie OK');
+              inputZone.appendChild(valBtn);
+            }
+          })(setRow, si3, exRef, numSets, isBodyweight);
 
           row.appendChild(inputZone);
           setTable.appendChild(row);
