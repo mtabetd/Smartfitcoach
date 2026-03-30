@@ -2079,7 +2079,19 @@ function checkProgressionSuggestion(exerciceName, muscuWeek, sessionLog) {
     return i < prev.sets.length && prev.sets[i] && Math.abs(s.load - prev.sets[i].load) < 1;
   });
 
+  // Detect bodyweight: all loads are 0
+  var _allLoadsZero = recent.sets.every(function(s) { return !s.load || s.load === 0; })
+    && prev.sets.every(function(s) { return !s.load || s.load === 0; });
+
   if (allCompleted && sameLoadAsPrev) {
+    if (_allLoadsZero) {
+      // Bodyweight: suggest more reps instead of more weight
+      return {
+        type: 'increase_reps',
+        message: '\uD83C\uDFAF Tu as fait toutes tes reps \u2014 essaie +1-2 reps par s\u00e9rie la semaine prochaine\u00a0!',
+        newLoad: null
+      };
+    }
     var currentLoad = recent.sets[recent.sets.length - 1].load;
     var isLower = /squat|leg|fessier|ischios|mollet|presse|hip.*thrust|rdl|deadlift|soulev|cuisse|jambe/i.test(exerciceName);
     var increment = isLower ? 5 : 2.5;
