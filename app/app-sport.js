@@ -1037,7 +1037,7 @@ function renderDedicatedPrograms(p) {
   p.appendChild(h('h1', {html: 'Programmes<br><em>dédiés</em>'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'S\u00e9ances cibl\u00e9es, vari\u00e9es (A/B), pr\u00eates \u00e0 l\u2019emploi.'));
 
-  // ─── SUIVI 6 SEMAINES ───
+  // ─── SUIVI 7 SEMAINES ───
   renderWeekTracker(p);
 
   var allDedicated = [
@@ -3178,7 +3178,7 @@ function renderMusculationProgram(p) {
   p.appendChild(h('p', {'class': 'subtitle'}, S.sportDays + ' jours/semaine — ' + goalNames));
   if (window.TIPS) TIPS.renderTip(p, 'sportProgram');
 
-  // ─── SUIVI 6 SEMAINES ───
+  // ─── SUIVI 7 SEMAINES ───
   renderWeekTracker(p);
 
   // Show zone focus with star count
