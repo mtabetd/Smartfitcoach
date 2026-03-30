@@ -3461,7 +3461,7 @@ function renderMusculationProgram(p) {
         var setData = S.muscuSessionLog[today][exRef.n];
 
         // Tableau des séries
-        var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:6px;overflow:hidden'});
+        var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:6px;overflow-x:auto;-webkit-overflow-scrolling:touch'});
 
         // Header
         var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;background:var(--surface,var(--ivory2));padding:6px 8px;font-size:10px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
@@ -3478,8 +3478,9 @@ function renderMusculationProgram(p) {
           row.appendChild(h('div', {style: 'font-size:12px;font-weight:700;color:var(--text)'}, String(setRow.set)));
 
           var conseilleEl = h('div', {style: 'font-size:12px;color:var(--grey)'});
+          var _dispW = (window.UNITS && window.UNITS.displayWeight) ? window.UNITS.displayWeight(setRow.targetWeight) : (setRow.targetWeight + ' kg');
           var conseilleStr = (setRow.targetWeight > 0 && !isBodyweight)
-            ? (setRow.targetWeight + ' kg \u00d7 ' + setRow.targetReps)
+            ? (_dispW + ' \u00d7 ' + setRow.targetReps)
             : (setRow.targetReps + ' reps');
           conseilleEl.appendChild(h('span', {}, conseilleStr));
           if (setRow.pctOf1RM) {

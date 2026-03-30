@@ -19,7 +19,7 @@
 :root {
   --ivory:#FAFAF7; --ivory2:#F4F4F0; --ivory3:#EEEDE8; --ivory4:#E5E4DE;
   --black:#0A0A09; --black2:#1A1A18;
-  --grey:#5A5A54; --grey2:#9A9A94; --grey3:#C8C8C0;
+  --grey:#5A5A54; --grey2:#6A6A64; --grey3:#8A8A84;
   --border:#D8D8D0;
   --green:#1A4A1A; --greenbg:rgba(26,74,26,.06);
   --blue:#1A3A6A; --bluebg:rgba(26,58,106,.06);
@@ -109,7 +109,7 @@ h1 em{font-style:italic}
 
 /* ── CHIPS ── */
 .chip-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.chip{font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:10px;padding:4px 10px;border:1px solid var(--border);cursor:pointer;background:var(--ivory2);transition:all .2s cubic-bezier(.25,.46,.45,.94);-webkit-user-select:none;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.chip{font-family:'Montserrat','Helvetica Neue',sans-serif;font-size:10px;padding:10px 14px;min-height:44px;box-sizing:border-box;border:1px solid var(--border);cursor:pointer;background:var(--ivory2);transition:all .2s cubic-bezier(.25,.46,.45,.94);-webkit-user-select:none;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .chip:hover{border-color:var(--black2)}
 .chip.on{background:var(--black);border-color:var(--black);color:var(--ivory)}
 
@@ -118,7 +118,7 @@ h1 em{font-style:italic}
 .check-item{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;border:1px solid var(--border);cursor:pointer;transition:all .2s;background:var(--ivory2);-webkit-user-select:none;user-select:none}
 .check-item:hover{border-color:var(--black2)}
 .check-item.on{border-color:var(--green);background:var(--greenbg)}
-.check-box{width:11px;height:11px;min-width:11px;border:1px solid var(--grey2);display:flex;align-items:center;justify-content:center;font-size:7px;color:transparent;margin-top:2px;transition:all .2s}
+.check-box{width:18px;height:18px;min-width:18px;border:1px solid var(--grey2);display:flex;align-items:center;justify-content:center;font-size:7px;color:transparent;margin-top:2px;transition:all .2s}
 .check-item.on .check-box{background:var(--green);border-color:var(--green);color:var(--ivory)}
 .check-label{font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--black);line-height:1.3}
 .check-sub{font-size:9px;color:var(--grey);margin-top:1px}
@@ -295,7 +295,7 @@ canvas.weight-chart{width:100%;height:200px}
 .exercise-video:hover{background:var(--bluebg)}
 .exercise-sets{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--black);margin-top:6px}
 .body-silhouette{text-align:center;padding:20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.muscle-tag{display:inline-block;padding:4px 10px;margin:3px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;border:1px solid var(--border);cursor:pointer;transition:all .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.muscle-tag{display:inline-block;padding:10px 14px;min-height:44px;box-sizing:border-box;margin:3px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;border:1px solid var(--border);cursor:pointer;transition:all .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .muscle-tag.strong{background:var(--greenbg);border-color:var(--green);color:var(--green)}
 .muscle-tag.weak{background:var(--redbg);border-color:var(--red);color:var(--red)}
 
