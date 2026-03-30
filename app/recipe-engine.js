@@ -16605,7 +16605,12 @@
         // Recettes R201+ : utilise les ingrédients scalés si disponibles
         if (recipe._id && recipe._scaledIngredients && recipe._scaledIngredients.length > 0) {
           recipe._scaledIngredients.forEach(function(ing) {
-            _addIng(ing.name, ing.scaledQty || ing.qty || 0, ing.unit);
+            var _qty = ing.scaledQty || ing.qty || 0;
+            var _unit = ing.unit;
+            // Normaliser cs/cc → g ou ml pour cohérence avec les autres chemins
+            if (_unit === 'cs' || _unit === 'c.à.soupe') { _qty = Math.round(_qty * 15 * 10) / 10; _unit = /huile|vinaigre|sauce|tamari|soja|miel|sirop/i.test(ing.name) ? 'ml' : 'g'; }
+            if (_unit === 'cc' || _unit === 'c.à.café') { _qty = Math.round(_qty *  5 * 10) / 10; _unit = /huile|vinaigre|sauce|tamari|soja|miel|sirop/i.test(ing.name) ? 'ml' : 'g'; }
+            _addIng(ing.name, _qty, _unit);
           });
         } else if (recipe._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
           // Recette R201+ sans ingrédients scalés : utilise findRecipe + scalingRatio
