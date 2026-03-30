@@ -136,12 +136,16 @@ function saveProfile() {
       var encoded = window._storageEncode(data);
       if (encoded) {
         localStorage.setItem('mtd_profile_' + uid, encoded);
+        // Sync vers Supabase (debounced)
+        if (window.SupaSync) SupaSync.scheduleSave();
         return;
       }
     }
     // Fallback: plain JSON (if encoding unavailable)
     localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
   } catch(e) {}
+  // Sync vers Supabase (debounced)
+  if (window.SupaSync) SupaSync.scheduleSave();
 }
 function loadProfile() {
   try {
@@ -500,6 +504,11 @@ if (AUTH.isLoggedIn()) {
   // Migrate existing performance data into perf-history (no-op if already done)
   if (window.PERF_HISTORY) {
     try { PERF_HISTORY.migrateExistingData(); } catch(e) {}
+  }
+  // Demarrer la sync Supabase si disponible
+  if (window.SupaSync) {
+    SupaSync.syncOnLogin();
+    SupaSync.startAutoSync();
   }
 } else {
   S.view = 'auth';

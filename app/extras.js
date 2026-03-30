@@ -228,6 +228,7 @@ window.WATER_TRACKER = {
     if (current < this._getTarget()) {
       all[today] = current + 1;
       this._saveAll(all);
+      if (window.SupaSync) SupaSync.saveWater(today, all[today]);
       log('water_add', { glasses: all[today], date: today });
     }
     return this.getToday();
@@ -240,6 +241,7 @@ window.WATER_TRACKER = {
     if (current > 0) {
       all[today] = current - 1;
       this._saveAll(all);
+      if (window.SupaSync) SupaSync.saveWater(today, all[today]);
       log('water_remove', { glasses: all[today], date: today });
     }
     return this.getToday();
@@ -287,6 +289,7 @@ window.WATER_TRACKER = {
               var today = todayKey();
               all[today] = idx;
               self._saveAll(all);
+              if (window.SupaSync) SupaSync.saveWater(today, idx);
               log('water_set', { glasses: idx, date: today });
             } else {
               // Click empty glass: fill up to this level + 1
@@ -294,6 +297,7 @@ window.WATER_TRACKER = {
               var today = todayKey();
               all[today] = idx + 1;
               self._saveAll(all);
+              if (window.SupaSync) SupaSync.saveWater(today, idx + 1);
               log('water_set', { glasses: idx + 1, date: today });
             }
             buildGlasses();
@@ -1405,6 +1409,17 @@ window.FOOD_JOURNAL = {
       source: arguments[7] || 'manual'
     });
     localStorage.setItem(key, JSON.stringify(journal));
+    // Sync vers Supabase
+    if (window.SupaSync) SupaSync.saveFoodEntry({
+      date: today,
+      meal: meal,
+      name: name,
+      kcal: Math.round(kcal),
+      p: Math.round(protein * 10) / 10,
+      g: Math.round(carbs * 10) / 10,
+      l: Math.round(fat * 10) / 10,
+      qty: quantity || '100g'
+    });
     if (window.BLACKBOX) BLACKBOX.log('food_logged', {meal: meal, name: name, kcal: kcal});
   },
 

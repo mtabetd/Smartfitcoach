@@ -995,6 +995,8 @@ function openWeightPrompt() {
     try { wh = JSON.parse(localStorage.getItem(whKey) || '[]'); } catch(e){ wh = []; }
     wh.push({ date: new Date().toISOString().split('T')[0], weight: valKg });
     try { localStorage.setItem(whKey, JSON.stringify(wh)); } catch(e){}
+    // Sync poids vers Supabase
+    if (window.SupaSync) SupaSync.saveWeight(new Date().toISOString().split('T')[0], valKg);
 
     // Update S.weightHistory for other modules
     if (window.S && Array.isArray(window.S.weightHistory)) {

@@ -2761,6 +2761,16 @@ function saveMuscuSessionLog() {
     var _cutStr = _cutoff.toISOString().slice(0, 10);
     Object.keys(S.muscuSessionLog).forEach(function(d) { if (d < _cutStr) delete S.muscuSessionLog[d]; });
     localStorage.setItem('mtd_muscu_session_' + uid, JSON.stringify(S.muscuSessionLog));
+    // Sync vers Supabase
+    if (window.SupaSync) {
+      var _today = new Date().toISOString().slice(0, 10);
+      var _todayLog = S.muscuSessionLog[_today];
+      if (_todayLog) {
+        Object.keys(_todayLog).forEach(function(exName) {
+          SupaSync.saveMuscuLog(_today, exName, _todayLog[exName]);
+        });
+      }
+    }
 
     // Mettre à jour l'historique de progression — SEULEMENT pour la date du jour
     var _today2 = new Date().toISOString().slice(0, 10);
@@ -3862,6 +3872,15 @@ function renderMusculationProgram(p) {
         // Pruning : garder les 365 dernières sessions max
         var _shKeys = Object.keys(S.sessionHistory).sort();
         if (_shKeys.length > 365) { _shKeys.slice(0, _shKeys.length - 365).forEach(function(k) { delete S.sessionHistory[k]; }); }
+        // Sync session vers Supabase
+        if (window.SupaSync) SupaSync.saveSession({
+          date: todayKey,
+          dayIndex: S.selectedSportDay,
+          duration: realDur,
+          kcalBase: kcalRes.base,
+          kcalEpoc: kcalRes.epoc,
+          kcalTotal: kcalRes.total
+        });
         S.sessionCompleting = false; S._sessionDuration = null;
         window.BLACKBOX && window.BLACKBOX.log('session_done', {day: S.selectedSportDay, kcal: kcalRes.total, duration: realDur});
         window.render();
@@ -4026,6 +4045,8 @@ function renderWeightChartSport(container) {
       var today = new Date().toISOString().split('T')[0];
       hist.push({date: today, weight: v});
       try { localStorage.setItem(key, JSON.stringify(hist)); } catch(e) { console.warn('[weight_history] localStorage error:', e); }
+      // Sync poids vers Supabase
+      if (window.SupaSync) SupaSync.saveWeight(today, v);
       S.weight = v;
       // Sync with S.weightHistory
       if (!S.weightHistory) S.weightHistory = [];
