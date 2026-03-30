@@ -1128,7 +1128,8 @@ function renderDedicatedPrograms(p) {
 var NUTRITION_TO_SPORT_GOAL = { bulk: 'muscle', lean_bulk: 'muscle', maintain: 'general', cut: 'weightloss', shred: 'shred', recomposition: 'general' };
 window.NUTRITION_TO_SPORT_GOAL = NUTRITION_TO_SPORT_GOAL;
 // Mapping sport goal id → nutrition goal index (priority order when multi-select)
-var SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 2, shred: 3, endurance: 1, flexibility: 1, general: 1 };
+// GOALS: [0=bulk, 1=lean_bulk, 2=maintain, 3=cut, 4=shred, 5=recomposition]
+var SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 3, shred: 4, endurance: 2, flexibility: 2, general: 2 };
 
   // ─── CONTEXTE NUTRITIONNEL (source : NutritionMaster via window.S._nm) ────
   function getNutritionContext() {
@@ -1149,17 +1150,17 @@ var SPORT_TO_NUTRITION_GOAL = { muscle: 0, weightloss: 2, shred: 3, endurance: 1
 function syncSportGoalsToNutrition() {
   if (S.goal === null) return; // only sync if nutrition was filled first
   if (S.pregnant && S.sex === 'femme') return; // ÉLEVÉ-4: grossesse → ne pas écraser le maintien forcé
-  if (S.sportGoals.length === 0) { S.goal = 1; return; } // ÉLEVÉ-2: désélection totale → reset maintien
+  // GOALS: [0=bulk, 1=lean_bulk, 2=maintain, 3=cut, 4=shred, 5=recomposition]
+  if (S.sportGoals.length === 0) { S.goal = 2; return; } // désélection totale → reset maintien
   // Priority: shred > muscle > weightloss > others (→ maintain)
   // For 'muscle': preserve lean_bulk (index 1) if already set — both are mass-building goals.
-  // Only force bulk (index 0) if current goal is not already a mass-building goal.
-  var newIdx = 1;
-  if (S.sportGoals.indexOf('shred') !== -1) newIdx = 3;
+  var newIdx = 2; // maintain par défaut
+  if (S.sportGoals.indexOf('shred') !== -1) newIdx = 4; // shred
   else if (S.sportGoals.indexOf('muscle') !== -1) {
     var currentKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
     newIdx = (currentKey === 'lean_bulk') ? 1 : 0; // preserve lean_bulk, otherwise default to bulk
   }
-  else if (S.sportGoals.indexOf('weightloss') !== -1) newIdx = 2;
+  else if (S.sportGoals.indexOf('weightloss') !== -1) newIdx = 3; // cut
   S.goal = newIdx;
 }
 

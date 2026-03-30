@@ -23,9 +23,9 @@ var NFC_PROGRAMS = {
         {order:1, name:'D\u00e9velopp\u00e9 couch\u00e9 barre', sets:4, reps:10, rest:'1min30', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
         {order:2, name:'D\u00e9velopp\u00e9 inclin\u00e9 barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
         {order:3, name:'D\u00e9velopp\u00e9 inclin\u00e9 halt\u00e8res', sets:3, reps:12, rest:'1min', technique:'3s pic contraction', muscle:'pectoraux', type:'compound', equipment:'halteres'},
-        {order:4, name:'\u00c9cart\u00e9 poulie basse', sets:4, reps:15, rest:'45s', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'poulie'},
-        {order:5, name:'\u00c9cart\u00e9 couch\u00e9', sets:4, reps:15, rest:'45s', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'halteres'},
-        {order:6, name:'Crunch banc d\u00e9clin\u00e9', sets:4, reps:20, rest:'45s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'banc'}
+        {order:4, name:'\u00c9cart\u00e9 poulie basse', sets:3, reps:15, rest:'60s', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'poulie'},
+        {order:5, name:'\u00c9cart\u00e9 couch\u00e9', sets:3, reps:15, rest:'60s', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'halteres'},
+        {order:6, name:'Crunch banc d\u00e9clin\u00e9', sets:3, reps:20, rest:'60s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'banc'}
       ],
       notes: 'Composés d\'abord, repos courts, tempo rapide.'
     }
@@ -102,11 +102,12 @@ var NFC_PROGRAMS = {
       warmup: '5 min v\u00e9lo + squats \u00e0 vide',
       exercises: [
         {order:1, name:'Squat barre', sets:4, reps:12, rest:'1min30', technique:null, muscle:'quadriceps+fessiers', type:'compound', equipment:'barre'},
-        {order:2, name:'Fente bulgare', sets:4, reps:12, rest:'1min30', technique:null, muscle:'quadriceps+fessiers', type:'compound', equipment:'halteres'},
-        {order:3, name:'Presse', sets:4, reps:15, rest:'1min', technique:'3s excentrique', muscle:'quadriceps', type:'compound', equipment:'machine'},
-        {order:4, name:'Leg extension', sets:4, reps:15, rest:'1min', technique:'3s excentrique', muscle:'quadriceps', type:'isolation', equipment:'machine'},
-        {order:5, name:'Leg curl', sets:4, reps:15, rest:'1min', technique:'3s excentrique', muscle:'ischio-jambiers', type:'isolation', equipment:'machine'},
-        {order:6, name:'Mollets presse', sets:4, reps:15, rest:'45s', technique:null, muscle:'mollets', type:'isolation', equipment:'machine'}
+        {order:2, name:'Soulev\u00e9 de terre roumain', sets:3, reps:12, rest:'1min30', technique:'Hip hinge, stretch ischios, dos neutre. Pr\u00e9serve la masse ischio-jambi\u00e8re en d\u00e9ficit.', muscle:'ischio-jambiers+fessiers', type:'compound', equipment:'barre'},
+        {order:3, name:'Fente bulgare', sets:3, reps:12, rest:'1min30', technique:null, muscle:'quadriceps+fessiers', type:'compound', equipment:'halteres'},
+        {order:4, name:'Presse', sets:3, reps:15, rest:'1min', technique:'3s excentrique', muscle:'quadriceps', type:'compound', equipment:'machine'},
+        {order:5, name:'Leg extension', sets:3, reps:15, rest:'60s', technique:'3s excentrique', muscle:'quadriceps', type:'isolation', equipment:'machine'},
+        {order:6, name:'Leg curl', sets:3, reps:15, rest:'60s', technique:'3s excentrique', muscle:'ischio-jambiers', type:'isolation', equipment:'machine'},
+        {order:7, name:'Mollets presse', sets:3, reps:15, rest:'60s', technique:null, muscle:'mollets', type:'isolation', equipment:'machine'}
       ],
       notes: 'Les jambes br\u00fblent le plus de calories. Profitez-en en s\u00e8che.'
     }
@@ -129,12 +130,12 @@ var NFC_PROGRAMS = {
       warmup: '5 min rameur + rotations \u00e9paules',
       exercises: [
         {order:1, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res', sets:4, reps:10, rest:'1min30', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
-        {order:2, name:'D\u00e9velopp\u00e9 haltères rotatif', sets:4, reps:12, rest:'1min', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
+        {order:2, name:'D\u00e9velopp\u00e9 halt\u00e8res assis', sets:4, reps:12, rest:'1min', technique:'Prise neutre ou pronation. Coudes l\u00e9g\u00e8rement devant le plan frontal.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
         {order:3, name:'\u00c9l\u00e9vation frontale + Face pull', sets:4, reps:'12+12', rest:'1min', technique:'Superset', muscle:'\u00e9paules', type:'superset', equipment:'halteres+poulie'},
-        {order:4, name:'\u00c9l\u00e9vation lat\u00e9rale', sets:4, reps:15, rest:'45s', technique:'1 moiti\u00e9 + 1 compl\u00e8te', muscle:'\u00e9paules', type:'isolation', equipment:'halteres'},
+        {order:4, name:'\u00c9l\u00e9vation lat\u00e9rale', sets:4, reps:15, rest:'60s', technique:'1 moiti\u00e9 + 1 compl\u00e8te', muscle:'\u00e9paules', type:'isolation', equipment:'halteres'},
         {order:5, name:'Shrug barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'trap\u00e8zes', type:'isolation', equipment:'barre'},
-        {order:6, name:'Abdos rouleau', sets:4, reps:15, rest:'45s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'rouleau'},
-        {order:7, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'30s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
+        {order:6, name:'Abdos rouleau', sets:3, reps:15, rest:'60s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'rouleau'},
+        {order:7, name:'Relev\u00e9 de jambes', sets:3, reps:'max', rest:'60s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
       notes: '\u00c9paules + abdos en s\u00e8che = silhouette sculpt\u00e9e.'
     }
@@ -408,8 +409,8 @@ window.ADVANCED_TECHNIQUES_DB = ADVANCED_TECHNIQUES_DB;
 window.NFC_PROGRAMS_FORCE = NFC_PROGRAMS_FORCE;
 
 var WEEKLY_SPLITS = {
-  3: {name:'Full Body 3j', days:[{day:'Lundi',muscles:['pectoraux','dos'],label:'Haut du corps A'},{day:'Mercredi',muscles:['jambes','epaules'],label:'Bas + \u00c9paules'},{day:'Vendredi',muscles:['bras','abdos_dedied'],label:'Bras + Abdos'}]},
-  4: {name:'Heavy Duty 4j (Intensit\u00e9 Maximale)', days:[{day:'Lundi',muscles:['pectoraux','bras'],label:'Push — Pecs + Biceps'},{day:'Mardi',muscles:['jambes'],label:'Legs — Jambes compl\u00e8tes'},{day:'Jeudi',muscles:['epaules','bras'],label:'\u00c9paules + Triceps'},{day:'Vendredi',muscles:['dos'],label:'Pull — Dos + Ischios (Deadlift day)'}], notes:'Repos mercredi, samedi, dimanche. Chaque muscle 1x/semaine avec intensit\u00e9 MAXIMALE (M\u00e9thode Intensit\u00e9 Maximale). D\u00e9ficit CNS entre les s\u00e9ances. Qualit\u00e9 > quantit\u00e9.'},
+  3: {name:'Upper/Lower/Arms 3j', days:[{day:'Lundi',muscles:['pectoraux','dos'],label:'Haut du corps A'},{day:'Mercredi',muscles:['jambes','epaules'],label:'Bas + \u00c9paules'},{day:'Vendredi',muscles:['bras','abdos_dedied'],label:'Bras + Abdos'}]},
+  4: {name:'Heavy Duty 4j (Intensit\u00e9 Maximale)', days:[{day:'Lundi',muscles:['pectoraux','bras'],label:'Push \u2014 Pecs + Triceps'},{day:'Mardi',muscles:['jambes'],label:'Legs \u2014 Jambes compl\u00e8tes'},{day:'Jeudi',muscles:['epaules','bras'],label:'\u00c9paules + Biceps'},{day:'Vendredi',muscles:['dos'],label:'Pull \u2014 Dos + Ischios (Deadlift day)'}], notes:'Repos mercredi, samedi, dimanche. Chaque muscle 1x/semaine avec intensit\u00e9 MAXIMALE (M\u00e9thode Intensit\u00e9 Maximale). D\u00e9ficit CNS entre les s\u00e9ances. Qualit\u00e9 > quantit\u00e9.'},
   5: {name:'Split 5j (Pro)', days:[{day:'Lundi',muscles:['pectoraux'],label:'Pectoraux'},{day:'Mardi',muscles:['dos'],label:'Dos'},{day:'Jeudi',muscles:['bras'],label:'Bras'},{day:'Vendredi',muscles:['jambes'],label:'Jambes'},{day:'Samedi',muscles:['epaules'],label:'\u00c9paules'}], notes:'Repos mercredi et dimanche. Espacer pectoraux et \u00e9paules de 48h min.'},
   6: {name:'PPL 6j', days:[{day:'Lundi',muscles:['pectoraux'],label:'Push: Pecs'},{day:'Mardi',muscles:['dos'],label:'Pull: Dos'},{day:'Mercredi',muscles:['jambes'],label:'Legs'},{day:'Jeudi',muscles:['epaules'],label:'Push: \u00c9paules'},{day:'Vendredi',muscles:['dos'],label:'Pull: Dos+Bras'},{day:'Samedi',muscles:['jambes','fessiers_dedied'],label:'Legs+Fessiers'}]}
 };
@@ -1639,10 +1640,11 @@ function buildPersonalizedMuscuPlan(S) {
   S = S || {};
 
   // 1. NIVEAU : détecté depuis profil
+  // S.activity est un index numérique (0=sédentaire...5=élite) — pas une string
   var level = 'beginner';
-  if (S.sportLevel === 'advanced' || (S.muscuWeek >= 4 && S.activity === 'very_active')) {
+  if (S.sportLevel === 'advanced' || (S.muscuWeek >= 4 && S.activity >= 3)) {
     level = 'advanced';
-  } else if (S.sportLevel === 'intermediate' || S.muscuWeek >= 2 || S.activity === 'active' || S.activity === 'moderate') {
+  } else if (S.sportLevel === 'intermediate' || S.muscuWeek >= 2 || (S.activity !== null && S.activity >= 2)) {
     level = 'intermediate';
   }
 
@@ -1784,7 +1786,8 @@ function buildPersonalizedMuscuPlan(S) {
   var tips = [];
   if (S.age >= 50) tips.push('Récupération allongée recommandée : 48-72h entre les séances par groupe musculaire.');
   if (isFemale) tips.push('Priorité fessiers et jambes : 2× par semaine recommandé pour résultats optimaux.');
-  if (S.sleep && S.sleep < 7) tips.push('Sommeil < 7h détecté : la récupération musculaire est compromise, dormez plus.');
+  // S.sleep est un index : 0='<6h', 1='6-7h', 2='7-8h', 3='8h+'
+  if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) tips.push('Sommeil insuffisant d\u00e9tect\u00e9 : la r\u00e9cup\u00e9ration musculaire est compromise, dormez plus.');
   if (goalKey === 'cut' || goalKey === 'shred') tips.push('En déficit calorique : maintenez les charges — l\'objectif est de préserver le muscle.');
   if (level === 'beginner') tips.push('Débutant : maîtrise technique avant d\'augmenter les charges. Filmez-vous si possible.');
   if (equip === 'home') tips.push('Entraînement maison : progressez via les variantes (prise, tempo, unilateral).');

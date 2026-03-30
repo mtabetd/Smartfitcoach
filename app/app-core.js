@@ -2823,8 +2823,12 @@ function pickSmoothieForPlan(targetKcal, usedIds) {
   else if (goalKey === 'cut' || goalKey === 'shred')  wantedGoals = ['fat_loss', 'performance'];
   else                                                 wantedGoals = ['muscle', 'fat_loss', 'performance', 'recovery'];
   // Timing préféré selon heure d'entraînement
-  var preferTiming = (s.trainTime === 'morning' || s.trainTime === 'noon') ? 'pre'
-                   : (s.trainTime === 'evening') ? 'post' : null;
+  // Smoothie = snack slot (index 2). Déterminer si le snack est pré ou post-séance.
+  // morning: snack=slot2, postSlot=1 → snack n'est ni pré ni post
+  // noon: snack=slot2, postSlot=2 → snack IS post-séance
+  // evening: snack=slot2, preSlot=2 → snack IS pré-séance
+  var preferTiming = (s.trainTime === 'noon') ? 'post'
+                   : (s.trainTime === 'evening') ? 'pre' : null;
   // Pool de départ — exclure déjà utilisés cette semaine
   var pool = smDB.filter(function(sm) { return !usedIds || !usedIds.has(sm.id); });
   if (!pool.length) pool = smDB.slice(); // reset si tous utilisés
