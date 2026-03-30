@@ -3473,7 +3473,7 @@ function renderMusculationProgram(p) {
 
         // Rows
         setData.forEach(function(setRow, si3) {
-          var row = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;padding:6px 8px;border-top:1px solid var(--border);align-items:center'});
+          var row = h('div', {'class': 'set-row', style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;padding:6px 8px;border-top:1px solid var(--border);align-items:center'});
 
           row.appendChild(h('div', {style: 'font-size:12px;font-weight:700;color:var(--text)'}, String(setRow.set)));
 
@@ -3508,10 +3508,13 @@ function renderMusculationProgram(p) {
               placeholder: weightPlaceholder,
               value: setRow.actualWeight !== null ? String(setRow.actualWeight) : '',
               style: 'width:48px;padding:3px 5px;border:1px solid var(--border);border-radius:4px;font-size:11px;text-align:center;background:var(--bg,var(--ivory))',
-              oninput: (function(sr){ return function(e) {
+              oninput: (function(sr, _valBtnRef){ return function(e) {
                 var v = parseFloat(e.target.value);
                 sr.actualWeight = isNaN(v) ? null : v;
                 saveMuscuSessionLog();
+                // Réactiver le bouton validation en temps réel
+                var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
+                if (_btn) { var _ok = sr.actualReps !== null && sr.actualWeight !== null; _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
               }; })(setRow)
             });
             inputZone.appendChild(weightInput);
@@ -3526,6 +3529,8 @@ function renderMusculationProgram(p) {
                 var v = parseFloat(e.target.value);
                 sr.actualWeight = isNaN(v) ? null : v;
                 saveMuscuSessionLog();
+                var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
+                if (_btn) { var _ok = sr.actualReps !== null; _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
               }; })(setRow)
             });
             inputZone.appendChild(pcLabel);
@@ -3537,11 +3542,14 @@ function renderMusculationProgram(p) {
             placeholder: String(setRow.targetReps),
             value: setRow.actualReps !== null ? String(setRow.actualReps) : '',
             style: 'width:36px;padding:3px 5px;border:1px solid var(--border);border-radius:4px;font-size:11px;text-align:center;background:var(--bg,var(--ivory))',
-            oninput: (function(sr){ return function(e) {
+            oninput: (function(sr, _isBw){ return function(e) {
               var v = parseInt(e.target.value);
               sr.actualReps = isNaN(v) ? null : v;
               saveMuscuSessionLog();
-            }; })(setRow)
+              // Réactiver le bouton validation en temps réel
+              var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
+              if (_btn) { var _ok = sr.actualReps !== null && (sr.actualWeight !== null || _isBw); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+            }; })(setRow, isBodyweight)
           });
           inputZone.appendChild(repsInput);
           inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, window.t('muscu.reps')));
