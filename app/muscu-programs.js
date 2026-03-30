@@ -1841,7 +1841,7 @@ var EXERCISE_ALTERNATIVES = {
   dos: [
     { n: 'Tractions pronation', m: 'Grand dorsal', eq: 'Barre de traction', sets: '4×6-10', rest: '120s' },
     { n: 'Tractions supination', m: 'Grand dorsal / Biceps', eq: 'Barre de traction', sets: '4×6-10', rest: '120s' },
-    { n: 'Tirage barre nuque', m: 'Grand dorsal', eq: 'Poulie haute', sets: '4×10-12', rest: '90s' },
+    { n: 'Tirage vertical prise large', m: 'Dos (largeur)', eq: 'Machine / Poulie haute', sets: '4x10', rest: '90s' },
     { n: 'Tirage horizontal câble', m: 'Dorsaux / Rhomboïdes', eq: 'Câble horizontal', sets: '4×10-12', rest: '90s' },
     { n: 'Rowing haltère unilatéral', m: 'Grand dorsal / Trapèzes', eq: 'Haltère + banc', sets: '4×10-12', rest: '75s' },
     { n: 'Rowing barre', m: 'Grand dorsal / Trapèzes', eq: 'Barre', sets: '4×8-12', rest: '90s' },
@@ -1943,8 +1943,13 @@ function getAlternativeExercises(muscle, excludeName, maxCount) {
   for (var ki = 0; ki < keyMap.length; ki++) {
     if (ml.indexOf(keyMap[ki][0]) !== -1) { dbKey = keyMap[ki][1]; break; }
   }
-  if (!dbKey) return [];
-  var pool = EXERCISE_ALTERNATIVES[dbKey] || [];
+  var pool;
+  if (ml.indexOf('bras') !== -1 && ml.indexOf('biceps') === -1 && ml.indexOf('triceps') === -1) {
+    pool = (EXERCISE_ALTERNATIVES['biceps'] || []).concat(EXERCISE_ALTERNATIVES['triceps'] || []);
+  } else {
+    if (!dbKey) return [];
+    pool = EXERCISE_ALTERNATIVES[dbKey] || [];
+  }
   var exLow = excludeName ? excludeName.toLowerCase() : '';
   var results = [];
   for (var pi = 0; pi < pool.length; pi++) {
@@ -2009,7 +2014,7 @@ function estimateBaseLoad(exerciceName, bw, sex, level) {
   var key = _resolveRatioKey(exerciceName);
   var ratios = BW_RATIO[key] || BW_RATIO['default'];
   var isFemale = (sex === 'femme' || sex === 'female');
-  var levelIdx = { 'beginner': 0, 'debutant': 0, 'intermediate': 1, 'intermediaire': 1, 'advanced': 2, 'avance': 2 }[level] || 0;
+  var levelIdx = { 'beginner': 0, 'debutant': 0, 'débutant': 0, 'intermediate': 1, 'intermediaire': 1, 'intermédiaire': 1, 'advanced': 2, 'avance': 2, 'avancé': 2, 'expert': 2 }[String(level).toLowerCase()] || 0;
   var offset = isFemale ? 3 : 0;
   var ratio = ratios[offset + levelIdx];
   var oneRM = Math.round(bwKg * ratio / 2.5) * 2.5;
@@ -2069,9 +2074,9 @@ function checkProgressionSuggestion(exerciceName, muscuWeek, sessionLog) {
   if (!recent || !recent.sets || !prev || !prev.sets) return null;
 
   // Toutes les reps réalisées au target ?
-  var allCompleted = recent.sets.every(function(s) { return s.reps >= (s.targetReps || s.reps); });
+  var allCompleted = recent.sets.every(function(s) { return s.targetReps > 0 ? s.reps >= s.targetReps : true; });
   var sameLoadAsPrev = recent.sets.every(function(s, i) {
-    return prev.sets[i] && Math.abs(s.load - prev.sets[i].load) < 1;
+    return i < prev.sets.length && prev.sets[i] && Math.abs(s.load - prev.sets[i].load) < 1;
   });
 
   if (allCompleted && sameLoadAsPrev) {

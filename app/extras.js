@@ -1353,124 +1353,31 @@ window.WEEKLY_SUMMARY = {
 })();
 
 
-/* ── REST TIMER ───────────────────────────────────────────── */
+/* ── REST TIMER (LEGACY — DISABLED) ──────────────────────────
+   Désactivé : app-sport.js contient window.RestTimer qui gère
+   le timer repos avec une UI plein écran + SVG + transitions.
+   L'ancien code injectait du CSS conflictuel (transform:translateY(100%))
+   qui cachait l'overlay du nouveau RestTimer.
+   On conserve uniquement parseRestTime pour compatibilité.
+   ──────────────────────────────────────────────────────────── */
 window.REST_TIMER = (function(){
-  var timerInterval = null;
-  var timerSeconds = 0;
-  var timerCallback = null;
-  var timerActive = false;
-
-  // Inject CSS
-  var style = document.createElement('style');
-  style.textContent = `
-    .rest-timer-btn { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border:1px solid var(--border,#D8D8D0); background:var(--ivory2,#F4F4F0); cursor:pointer; font-family:'Helvetica Neue',sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--grey,#6B6B65); transition:all 0.2s; margin-top:6px; }
-    .rest-timer-btn:hover { border-color:var(--black,#0A0A09); color:var(--black,#0A0A09); }
-    .rest-timer-btn.running { border-color:var(--green,#1A4A1A); color:var(--green,#1A4A1A); background:var(--greenbg,rgba(26,74,26,.06)); }
-    .rest-timer-display { font-family:Georgia,serif; font-size:28px; font-style:italic; text-align:center; padding:8px 0; }
-    .rest-timer-overlay { position:fixed; bottom:0; left:0; right:0; background:var(--black,#0A0A09); color:var(--ivory,#FAFAF7); padding:16px 24px; z-index:999; display:flex; align-items:center; justify-content:space-between; transform:translateY(100%); transition:transform 0.3s ease; }
-    .rest-timer-overlay.active { transform:translateY(0); }
-    .rest-timer-overlay .timer-time { font-family:Georgia,serif; font-size:36px; font-style:italic; }
-    .rest-timer-overlay .timer-label { font-family:'Helvetica Neue',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; opacity:0.6; }
-    .rest-timer-overlay .timer-stop { background:none; border:1px solid rgba(250,250,247,0.3); color:var(--ivory,#FAFAF7); padding:8px 16px; cursor:pointer; font-family:'Helvetica Neue',sans-serif; font-size:9px; letter-spacing:2px; text-transform:uppercase; }
-  `;
-  document.head.appendChild(style);
-
-  // Audio beep
-  function beep() {
-    try {
-      var ctx = new (window.AudioContext || window.webkitAudioContext)();
-      [0, 200, 400].forEach(function(delay) {
-        var osc = ctx.createOscillator();
-        var gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.frequency.value = delay === 400 ? 880 : 660;
-        gain.gain.value = 0.3;
-        osc.start(ctx.currentTime + delay / 1000);
-        osc.stop(ctx.currentTime + delay / 1000 + 0.15);
-      });
-    } catch(e) {}
-  }
-
-  function formatTime(secs) {
-    var m = Math.floor(secs / 60);
-    var s = secs % 60;
-    return m + ':' + (s < 10 ? '0' : '') + s;
-  }
-
-  // Create or update the floating overlay
-  function ensureOverlay() {
-    var overlay = document.getElementById('rest-timer-overlay');
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.id = 'rest-timer-overlay';
-      overlay.className = 'rest-timer-overlay';
-      overlay.innerHTML = '<div><div class="timer-label">Repos</div><div class="timer-time" id="rest-timer-time">0:00</div></div><button class="timer-stop" id="rest-timer-stop">Stop</button>';
-      document.body.appendChild(overlay);
-      document.getElementById('rest-timer-stop').onclick = function() { stop(); };
-    }
-    return overlay;
-  }
-
-  function start(seconds) {
-    stop(); // clear any existing
-    timerSeconds = seconds;
-    timerActive = true;
-    var overlay = ensureOverlay();
-    overlay.classList.add('active');
-    document.getElementById('rest-timer-time').textContent = formatTime(timerSeconds);
-
-    timerInterval = setInterval(function() {
-      timerSeconds--;
-      document.getElementById('rest-timer-time').textContent = formatTime(timerSeconds);
-      if (timerSeconds <= 0) {
-        beep();
-        stop();
-        if (window.GAMIFICATION) GAMIFICATION.showToast('Repos terminé — C\'est reparti ! 💪');
-      }
-    }, 1000);
-
-    if (window.BLACKBOX) BLACKBOX.log('rest_timer_start', {seconds: seconds});
-  }
-
-  function stop() {
-    timerActive = false;
-    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-    var overlay = document.getElementById('rest-timer-overlay');
-    if (overlay) overlay.classList.remove('active');
-  }
-
   function parseRestTime(restStr) {
-    // Parse "90s", "2min", "60-90s", "2:00" etc
     if (!restStr) return 60;
     var str = String(restStr).toLowerCase().trim();
     if (/(\d+)\s*min/.test(str)) return parseInt(RegExp.$1) * 60;
-    if (/(\d+)\s*s/.test(str)) return parseInt(RegExp.$1);
     if (/(\d+):(\d+)/.test(str)) return parseInt(RegExp.$1) * 60 + parseInt(RegExp.$2);
     if (/(\d+)-(\d+)/.test(str)) return Math.round((parseInt(RegExp.$1) + parseInt(RegExp.$2)) / 2);
+    if (/(\d+)\s*s/.test(str)) return parseInt(RegExp.$1);
     var n = parseInt(str);
     return isNaN(n) ? 60 : (n > 10 ? n : n * 60);
   }
-
-  // Create a rest timer button for an exercise card
-  function createButton(restTimeStr) {
-    var seconds = parseRestTime(restTimeStr);
-    var btn = document.createElement('div');
-    btn.className = 'rest-timer-btn';
-    btn.textContent = '⏱ Repos ' + formatTime(seconds);
-    btn.onclick = function(e) {
-      e.stopPropagation();
-      start(seconds);
-    };
-    return btn;
-  }
-
+  // Stubs pour éviter les crashs si du code legacy appelle REST_TIMER.start/stop
   return {
-    start: start,
-    stop: stop,
-    createButton: createButton,
+    start: function() { if (window.RestTimer) window.RestTimer.start.apply(null, arguments); },
+    stop: function() { if (window.RestTimer) window.RestTimer.stop(); },
+    createButton: function() { return document.createElement('div'); },
     parseRestTime: parseRestTime,
-    isActive: function() { return timerActive; }
+    isActive: function() { return window.RestTimer ? window.RestTimer.getState().active : false; }
   };
 })();
 
