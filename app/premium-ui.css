@@ -1831,13 +1831,6 @@ body.dark-mode .auth-container {
 .set-row:nth-child(even) {
   background: var(--ivory2, #F8F9FA);
 }
-.set-row.set-validated {
-  background: #D5F5E3 !important;
-  opacity: 0.7;
-}
-.set-row.set-validated td {
-  text-decoration: line-through;
-}
 .set-load-input, .set-reps-input {
   width: 54px;
   padding: 4px;
@@ -1914,7 +1907,7 @@ body.dark-mode .auth-container {
   opacity: 0.6;
 }
 .set-row-validated {
-  background: rgba(39, 174, 96, 0.06) !important;
+  background: rgba(39, 174, 96, 0.08) !important;
 }
 
 /* -------------------------------------------------------

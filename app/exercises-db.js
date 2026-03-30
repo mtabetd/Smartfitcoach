@@ -140,7 +140,7 @@ var EXERCISES = {
     },
     {
       n: "Pompes déclinées",
-      m: "Pectoraux inférieurs",
+      m: "Pectoraux supérieurs",
       eq: "Poids du corps + banc",
       sets: "3\u00d712-20",
       rest: "60s",

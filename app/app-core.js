@@ -1708,7 +1708,7 @@ window.S = {
   supplements: [],
   // Musculation weight tracking
   musculationWeights: {},  // { exerciseName: { weight: Number, type: 'barre'|'haltere'|'machine'|'kb'|'bodyweight' } },
-  muscuWeek: 1, muscuCycle: 1, muscuProgramStart: null, sportSplashDone: false,
+  muscuWeek: 1, muscuCycle: 1, muscuProgramStart: null, swapPanel: null, sportSplashDone: false,
   bonusExercises: {},  // { dayIndex: [{n,m,eq,sets,rest,_bonus:true}] }
   sessionHistory: {},  // { 'dayIndex_YYYY-MM-DD': { duration, kcalBase, kcalEpoc, kcalTotal } }
   sessionCompleting: false,  // dayIndex en cours de bilan, ou false

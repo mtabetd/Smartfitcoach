@@ -1365,9 +1365,9 @@ window.REST_TIMER = (function(){
     if (!restStr) return 60;
     var str = String(restStr).toLowerCase().trim();
     if (/(\d+)\s*min/.test(str)) return parseInt(RegExp.$1) * 60;
-    if (/(\d+)\s*s/.test(str)) return parseInt(RegExp.$1);
     if (/(\d+):(\d+)/.test(str)) return parseInt(RegExp.$1) * 60 + parseInt(RegExp.$2);
     if (/(\d+)-(\d+)/.test(str)) return Math.round((parseInt(RegExp.$1) + parseInt(RegExp.$2)) / 2);
+    if (/(\d+)\s*s/.test(str)) return parseInt(RegExp.$1);
     var n = parseInt(str);
     return isNaN(n) ? 60 : (n > 10 ? n : n * 60);
   }
