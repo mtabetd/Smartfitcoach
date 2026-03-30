@@ -49,8 +49,8 @@ var NFC_PROGRAMS = {
         {order:1, name:'Traction PDC', sets:4, reps:12, rest:'1min', technique:null, muscle:'dos', type:'compound', equipment:'barre fixe'},
         {order:2, name:'T-barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'dos', type:'compound', equipment:'barre'},
         {order:3, name:'Tirage vertical prise large', sets:4, reps:12, rest:'1min', technique:'2s excentrique', muscle:'dos', type:'compound', equipment:'poulie'},
-        {order:4, name:'Tirage poulie haute', sets:4, reps:15, rest:'45s', technique:'pic contraction', muscle:'dos', type:'isolation', equipment:'poulie'},
-        {order:5, name:'Rowing halt\u00e8re', sets:4, reps:15, rest:'45s', technique:null, muscle:'dos', type:'compound', equipment:'halteres'},
+        {order:4, name:'Rowing halt\u00e8re', sets:4, reps:15, rest:'45s', technique:null, muscle:'dos', type:'compound', equipment:'halteres'},
+        {order:5, name:'Tirage poulie haute', sets:4, reps:15, rest:'45s', technique:'pic contraction', muscle:'dos', type:'isolation', equipment:'poulie'},
         {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'45s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
       notes: 'Volume \u00e9lev\u00e9, repos courts.'
@@ -771,7 +771,7 @@ var YATES_PROGRAMS = {
     {week:6, phase:'Surcharge', intensity:'92%', focus:'Atteindre l\'échec absolu sur chaque série de travail.'},
     {week:7, phase:'Peak', intensity:'95%', focus:'Intensité maximale. PRs sur tous les exercices composés.'},
     {week:8, phase:'Peak', intensity:'97%', focus:'Surcharge progressive. Chercher nouveaux PRs chaque séance.'},
-    {week:9, phase:'Décharge', intensity:'60%', focus:'Réduction volume et intensité. Récupération active. Maintien technique.'},
+    {week:9, phase:'Décharge', intensity:'60%', volume_modifier:0.5, isDeload:true, focus:'Réduction volume et intensité. Récupération active. Maintien technique.'},
     {week:10, phase:'Transition', intensity:'75%', focus:'Reprise progressive. Évaluation des gains. Ajustement du programme.'},
     {week:11, phase:'Nouveau cycle', intensity:'80%', focus:'Recommencer avec charges supérieures. Nouveaux objectifs.'},
     {week:12, phase:'Bilan', intensity:'85%', focus:'Évaluation finale. Photos, mensurations. Planification cycle suivant.'}
@@ -1070,7 +1070,7 @@ var COLEMAN_PROGRAMS = {
     {week:6, phase:'Intensification', intensity:'85%', focus:'Charges maximales avec volume. Drop sets et supersets intenses.'},
     {week:7, phase:'Peak Volume', intensity:'88%', focus:'Semaine de volume extrême. Maximum de séries et de charges.'},
     {week:8, phase:'Peak Volume', intensity:'90%', focus:'PRs sur tous les exercices. Volume + intensité = hypertrophie maximale.'},
-    {week:9, phase:'Décharge', intensity:'60%', focus:'Réduction à 3 séries. Récupération. Maintien des acquis.'},
+    {week:9, phase:'Décharge', intensity:'60%', volume_modifier:0.5, isDeload:true, focus:'Réduction à 3 séries. Récupération. Maintien des acquis.'},
     {week:10, phase:'Transition', intensity:'72%', focus:'Reprise progressive. Évaluation des gains. Ajustement des charges.'},
     {week:11, phase:'Nouveau cycle', intensity:'80%', focus:'Nouveau cycle avec charges supérieures. Nouvelles techniques de volume.'},
     {week:12, phase:'Bilan', intensity:'85%', focus:'Évaluation finale. Photos comparatives. Planification cycle suivant.'}
@@ -1342,7 +1342,7 @@ var RAMBOD_PROGRAMS = {
     {week:6, phase:'Intensification', intensity:'82%', focus:'Progression maximale. FST-7 à 35s. Pompe extrême sur tous les muscles.'},
     {week:7, phase:'Peak FST-7', intensity:'85%', focus:'Intensité FST-7 maximale. 30s de repos. Drop sets possibles sur 6e série FST-7.'},
     {week:8, phase:'Peak FST-7', intensity:'88%', focus:'PRs sur composés. FST-7 extrême. Pompe maximale. Fascia étiré au maximum.'},
-    {week:9, phase:'Décharge', intensity:'55%', focus:'Réduction volume. FST-7 à 5 séries seulement. Récupération active. Maintien technique.'},
+    {week:9, phase:'Décharge', intensity:'55%', volume_modifier:0.5, isDeload:true, focus:'Réduction volume. FST-7 à 5 séries seulement. Récupération active. Maintien technique.'},
     {week:10, phase:'Transition', intensity:'68%', focus:'Reprise FST-7 complet. Évaluation gains. Nouveaux objectifs de charges.'},
     {week:11, phase:'Nouveau cycle', intensity:'75%', focus:'Nouveau cycle avec bases solides. Charges supérieures sur composés.'},
     {week:12, phase:'Bilan', intensity:'82%', focus:'Évaluation finale. Photos. Mensurations. Bilan FST-7 complet. Planification.'}

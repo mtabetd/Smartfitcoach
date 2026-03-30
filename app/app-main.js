@@ -84,7 +84,7 @@ function slimMeal(meal) {
 var NUTRITION_PLAN_KEYS = [
   'goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height',
   'regime', 'halal', 'excluded', 'cookLevel', 'wantsDessert',
-  'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime'
+  'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical'
 ];
 
 function saveProfile() {
