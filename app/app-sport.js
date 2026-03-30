@@ -2359,7 +2359,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
   if (history.length > 0) {
     var last = history[history.length - 1];
     // Règle de progression : si toutes séries réussies → +2.5kg (upper body) ou +5kg (lower body)
-    var lowerBodyKeywords = /squat|leg|fessier|ischios|mollet/i;
+    var lowerBodyKeywords = /squat|leg|fessier|ischios|mollet|presse|hip.*thrust|rdl|deadlift|soulev|cuisse|jambe/i;
     var increment = lowerBodyKeywords.test(exerciseName) ? 5 : 2.5;
 
     // Vérifier si la dernière session était "réussie" (toutes reps atteintes)
@@ -2377,7 +2377,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
       var allSucceeded = lastLog.sets.every(function(s) {
         return s.actualReps >= s.targetReps && s.actualWeight >= s.targetWeight;
       });
-      if (allSucceeded) return Math.round((last.weight + increment) * 2) / 2; // arrondi 0.5kg
+      if (allSucceeded) return Math.round((last.weight + increment) / 2.5) * 2.5; // arrondi 2.5kg (disques standard)
       // Échec → maintenir le poids
       return last.weight;
     }
@@ -3202,7 +3202,7 @@ function renderMusculationProgram(p) {
 
         // Note progression semaine prochaine
         if (progressiveWeight > 0 && !isBodyweight) {
-          var lbKeywords = /squat|leg|fessier|ischios|mollet/i;
+          var lbKeywords = /squat|leg|fessier|ischios|mollet|presse|hip.*thrust|rdl|deadlift|soulev|cuisse|jambe/i;
           var nextIncr = lbKeywords.test(exRef.n) ? 5 : 2.5;
           var progressNote = h('div', {style: 'padding:6px 8px;background:var(--greenbg,rgba(26,74,26,.06));border-top:1px solid var(--border);font-size:10px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif'});
           progressNote.appendChild(h('span', {style: 'color:var(--green,#1A4A1A)'}, '\uD83D\uDCC8 '));

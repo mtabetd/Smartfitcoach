@@ -37,8 +37,8 @@ var NFC_PROGRAMS = {
         {order:1, name:'Traction (lest\u00e9/PDC/assist\u00e9)', sets:4, reps:10, rest:'1min30', technique:null, muscle:'dos', type:'compound', equipment:'barre fixe'},
         {order:2, name:'T-barre (ou rowing barre)', sets:4, reps:8, rest:'2min', technique:null, muscle:'dos', type:'compound', equipment:'barre'},
         {order:3, name:'Tirage vertical prise large', sets:4, reps:10, rest:'2min', technique:'2s excentrique', muscle:'dos', type:'compound', equipment:'poulie'},
-        {order:4, name:'Tirage genoux poulie haute', sets:4, reps:10, rest:'1min30', technique:'5s pic contraction x3', muscle:'dos', type:'isolation', equipment:'poulie'},
-        {order:5, name:'Rowing halt\u00e8re chaise romaine', sets:5, reps:12, rest:'1min30', technique:null, muscle:'dos', type:'compound', equipment:'halteres'},
+        {order:4, name:'Rowing halt\u00e8re chaise romaine', sets:5, reps:12, rest:'1min30', technique:null, muscle:'dos', type:'compound', equipment:'halteres'},
+        {order:5, name:'Tirage genoux poulie haute', sets:4, reps:10, rest:'1min30', technique:'5s pic contraction x3', muscle:'dos', type:'isolation', equipment:'poulie'},
         {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
       notes: 'Le dos est le plus grand muscle du haut du corps. Intensit\u00e9 maximale.'
@@ -1701,8 +1701,8 @@ function buildPersonalizedMuscuPlan(S) {
   var equip = S.sportEquipment || 'gym';
   function equipOk(ex) {
     if (equip === 'gym') return true;
-    if (equip === 'dumbbells') return ['halteres','poids_corps','banc','haltères','barre_ez'].indexOf(ex.equipment) >= 0;
-    if (equip === 'home') return ['poids_corps','elastique'].indexOf(ex.equipment) >= 0;
+    if (equip === 'dumbbells') return ['halteres','haltères','poids_corps','poids du corps','banc','barre_ez'].indexOf(ex.equipment) >= 0;
+    if (equip === 'home') return ['poids_corps','poids du corps','elastique','sol','banc','barre fixe','aucun'].indexOf(ex.equipment) >= 0;
     return true;
   }
 
@@ -1755,6 +1755,14 @@ function buildPersonalizedMuscuPlan(S) {
       allExercises = allExercises.concat(exos);
     });
 
+    // Grossesse : filtrer les exercices contre-indiqués (ACOG 2020, IOC 2018)
+    if (S.pregnant && isFemale) {
+      var pregForbid = /valsalva|soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|d[eé]clin[eé]|presse\s+jambe/i;
+      allExercises = allExercises.filter(function(ex) {
+        return !pregForbid.test(ex.n || ex.name || '');
+      });
+    }
+
     // Durée estimée : ~4min/série en moyenne
     var totalSets = allExercises.reduce(function(acc, ex) { return acc + (ex.sets || 3); }, 0);
     var estimatedMin = Math.round(totalSets * 4 + 10); // +10min échauffement
@@ -1777,7 +1785,7 @@ function buildPersonalizedMuscuPlan(S) {
   if (S.age >= 50) tips.push('Récupération allongée recommandée : 48-72h entre les séances par groupe musculaire.');
   if (isFemale) tips.push('Priorité fessiers et jambes : 2× par semaine recommandé pour résultats optimaux.');
   if (S.sleep && S.sleep < 7) tips.push('Sommeil < 7h détecté : la récupération musculaire est compromise, dormez plus.');
-  if (goal === 'weight_loss') tips.push('En déficit calorique : maintenez les charges — l\'objectif est de préserver le muscle.');
+  if (goalKey === 'cut' || goalKey === 'shred') tips.push('En déficit calorique : maintenez les charges — l\'objectif est de préserver le muscle.');
   if (level === 'beginner') tips.push('Débutant : maîtrise technique avant d\'augmenter les charges. Filmez-vous si possible.');
   if (equip === 'home') tips.push('Entraînement maison : progressez via les variantes (prise, tempo, unilateral).');
 
@@ -2060,10 +2068,12 @@ function checkProgressionSuggestion(exerciceName, muscuWeek, sessionLog) {
 
   if (allCompleted && sameLoadAsPrev) {
     var currentLoad = recent.sets[recent.sets.length - 1].load;
+    var isLower = /squat|leg|fessier|ischios|mollet|presse|hip.*thrust|rdl|deadlift|soulev|cuisse|jambe/i.test(exerciceName);
+    var increment = isLower ? 5 : 2.5;
     return {
       type: 'increase_load',
-      message: '\uD83C\uDFAF Progression sugg\u00e9r\u00e9e : +2.5 kg la semaine prochaine !',
-      newLoad: currentLoad + 2.5
+      message: '\uD83C\uDFAF Progression sugg\u00e9r\u00e9e : +' + increment + ' kg la semaine prochaine !',
+      newLoad: currentLoad + increment
     };
   }
 
