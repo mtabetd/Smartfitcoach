@@ -133,7 +133,9 @@ function setRateLimit(email, attempts, lockedUntil) {
     data[email] = { attempts: attempts, lockedUntil: lockedUntil || 0 };
     var now = Date.now();
     Object.keys(data).forEach(function(k) {
-      if (data[k].lockedUntil < now - 86400000 && data[k].attempts < MAX_ATTEMPTS) delete data[k];
+      // Clean up expired lockouts AND old entries (>24h)
+      if (data[k].lockedUntil && data[k].lockedUntil < now) delete data[k];
+      else if (!data[k].lockedUntil && data[k].attempts < MAX_ATTEMPTS) delete data[k];
     });
     localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
   } catch (e) {
@@ -460,7 +462,18 @@ window.AUTH = {
   ready: function() {
     var timeout = new Promise(function(resolve) {
       setTimeout(function() {
-        console.warn('[AUTH] ready() timed out after 5s, proceeding');
+        console.warn('[AUTH] ready() timed out after 5s, clearing stale tokens');
+        // Clear stale Supabase auth tokens that caused getSession() to hang.
+        // Keep _useSupabase = true so login() still tries Supabase.
+        // The login retry mechanism will reset the client if needed.
+        try {
+          Object.keys(localStorage).forEach(function(k) {
+            if (k.indexOf('sb-') === 0 && k.indexOf('-auth-token') !== -1) {
+              localStorage.removeItem(k);
+            }
+          });
+          console.log('[AUTH] Cleared stale Supabase tokens');
+        } catch (e) {}
         resolve();
       }, 5000);
     });
@@ -558,32 +571,54 @@ window.AUTH = {
       return _fallbackLogin(email, password, startTime);
     }
 
-    var promise = client.auth.signInWithPassword({
-      email: email,
-      password: password
-    }).then(function(result) {
-      if (result.error) {
-        console.error('[AUTH] Supabase login error:', result.error.message || result.error);
-        recordFailedAttempt(email);
-        BLACKBOX.log('login_failed', { email: email });
-        var rlAfter = getRateLimit(email);
-        var attemptsLeft = Math.max(0, MAX_ATTEMPTS - rlAfter.attempts);
-        var errMsg = mapSupabaseError(result.error);
-        if (attemptsLeft > 0 && attemptsLeft <= 2) {
-          errMsg += ' (' + attemptsLeft + ' tentative' + (attemptsLeft > 1 ? 's' : '') + ' restante' + (attemptsLeft > 1 ? 's' : '') + ')';
+    var _retried = false;
+
+    function _trySupabaseLogin(c) {
+      return c.auth.signInWithPassword({
+        email: email,
+        password: password
+      }).then(function(result) {
+        if (result.error) {
+          console.error('[AUTH] Supabase login error:', result.error.message || result.error);
+
+          // If credentials rejected and we haven't retried yet, the Supabase client
+          // may be stuck from a hung getSession(). Reset and retry once.
+          if (!_retried && result.error.message &&
+              result.error.message.indexOf('Invalid login credentials') !== -1 &&
+              window.resetSupabaseClient) {
+            _retried = true;
+            console.log('[AUTH] Retrying login with fresh Supabase client');
+            var freshClient = window.resetSupabaseClient();
+            if (freshClient) {
+              _useSupabase = true;
+              return _trySupabaseLogin(freshClient);
+            }
+          }
+
+          recordFailedAttempt(email);
+          BLACKBOX.log('login_failed', { email: email });
+          var rlAfter = getRateLimit(email);
+          var attemptsLeft = Math.max(0, MAX_ATTEMPTS - rlAfter.attempts);
+          var errMsg = mapSupabaseError(result.error);
+          if (attemptsLeft > 0 && attemptsLeft <= 2) {
+            errMsg += ' (' + attemptsLeft + ' tentative' + (attemptsLeft > 1 ? 's' : '') + ' restante' + (attemptsLeft > 1 ? 's' : '') + ')';
+          }
+          return { ok: false, error: errMsg };
         }
-        return { ok: false, error: errMsg };
-      }
-      var data = result.data;
-      if (data && data.user) {
-        var u = _extractUser(data.user);
-        _currentSession = u;
-        clearRateLimit(email);
-        BLACKBOX.log('login', { email: email });
-        return { ok: true, user: u };
-      }
-      return { ok: false, error: 'Erreur de connexion. R\u00e9essayez.' };
-    }).catch(function(err) {
+        var data = result.data;
+        if (data && data.user) {
+          var u = _extractUser(data.user);
+          _currentSession = u;
+          _useSupabase = true;
+          clearRateLimit(email);
+          BLACKBOX.log('login', { email: email });
+          return { ok: true, user: u };
+        }
+        return { ok: false, error: 'Erreur de connexion. R\u00e9essayez.' };
+      });
+    }
+
+    var promise = _trySupabaseLogin(client).catch(function(err) {
       console.error('[AUTH] Supabase login exception:', err);
       // Fallback localStorage en cas d'erreur reseau
       try {
