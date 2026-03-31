@@ -206,6 +206,7 @@ function render() {
   if (!AUTH.isLoggedIn()) {
     if (S.view === 'authRegister') renderRegister(app);
     else if (S.view === 'authVerify') renderVerifyEmail(app);
+    else if (S.view === 'authForgot') renderForgotPassword(app);
     else renderLogin(app);
     return;
   }
@@ -351,6 +352,14 @@ function renderLogin(app) {
     });
   }}, window.t('auth.login_btn'));
   form.appendChild(loginBtn);
+
+  // Forgot password link
+  var forgotLink = h('div', {style: 'text-align:center;margin-top:16px'});
+  forgotLink.appendChild(h('a', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);cursor:pointer;text-decoration:underline',
+    onclick: function(){ S.authError = ''; S.view = 'authForgot'; render(); }
+  }, 'Mot de passe oubli\u00e9 ?'));
+  form.appendChild(forgotLink);
 
   c.appendChild(form);
 
@@ -543,6 +552,81 @@ function renderVerifyEmail(app) {
 
   // Spam hint
   c.appendChild(h('p', {style: 'text-align:center;margin-top:16px;font-size:11px;color:var(--grey3,#888)'}, 'Tu ne trouves pas l\u2019email ? V\u00e9rifie ton dossier spam.'));
+
+  app.appendChild(c);
+}
+
+// ─── AUTH: FORGOT PASSWORD SCREEN ───
+function renderForgotPassword(app) {
+  var c = h('div', {'class': 'auth-container'});
+  c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
+  c.appendChild(h('div', {'class': 'auth-sub'}, 'R\u00e9initialisation'));
+  c.appendChild(h('div', {'class': 'auth-line'}));
+
+  if (S.authError) {
+    c.appendChild(h('div', {'class': 'auth-error'}, S.authError));
+  }
+
+  if (S._resetSent) {
+    // Confirmation screen
+    c.appendChild(h('div', {style: 'text-align:center;padding:24px 0'}, [
+      h('div', {style: 'font-family:Georgia,serif;font-size:24px;margin-bottom:16px'}, 'Email envoy\u00e9'),
+      h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px'},
+        'Un lien de r\u00e9initialisation a \u00e9t\u00e9 envoy\u00e9 \u00e0 ' + (S._resetEmail || '') + '. V\u00e9rifiez votre bo\u00eete de r\u00e9ception et votre dossier spam.'),
+      h('button', {'class': 'btn-secondary', onclick: function() {
+        S._resetSent = false;
+        S._resetEmail = '';
+        S.authError = '';
+        S.view = 'auth';
+        render();
+      }}, 'Retour \u00e0 la connexion')
+    ]));
+    app.appendChild(c);
+    return;
+  }
+
+  var form = h('div', {'class': 'auth-form'});
+
+  form.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px;text-align:center'},
+    'Entrez votre adresse email. Vous recevrez un lien pour cr\u00e9er un nouveau mot de passe.'));
+
+  // Email field
+  var f1 = h('div', {'class': 'field'});
+  f1.appendChild(h('label', {'class': 'field-label'}, 'Email'));
+  var emailInput = h('input', {type: 'email', placeholder: 'votre@email.com', autocomplete: 'email'});
+  f1.appendChild(emailInput);
+  form.appendChild(f1);
+
+  // Send button
+  var sendBtn = h('button', {'class': 'btn-primary', onclick: function() {
+    if (sendBtn.disabled) return;
+    var email = emailInput.value.trim();
+    if (!email) { S.authError = 'Veuillez entrer votre adresse email'; render(); return; }
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Envoi en cours...';
+    AUTH.resetPassword(email).then(function(result) {
+      if (result.ok) {
+        S.authError = '';
+        S._resetSent = true;
+        S._resetEmail = email;
+        render();
+      } else {
+        S.authError = result.error;
+        render();
+      }
+    }).catch(function() {
+      S.authError = 'Erreur r\u00e9seau. R\u00e9essayez.';
+      render();
+    });
+  }}, 'Envoyer le lien');
+  form.appendChild(sendBtn);
+
+  c.appendChild(form);
+
+  // Back to login
+  var sw = h('div', {'class': 'auth-switch'});
+  sw.appendChild(h('a', {onclick: function() { S.authError = ''; S.view = 'auth'; render(); }}, 'Retour \u00e0 la connexion'));
+  c.appendChild(sw);
 
   app.appendChild(c);
 }
