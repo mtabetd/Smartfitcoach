@@ -3,6 +3,7 @@
 'use strict';
 var S = window.S;
 if (!S) { console.error('[SFC] window.S not initialized'); return; }
+if (!window.h) { console.error('[SFC] DOM helpers not loaded'); return; }
 var h = window.h, txt = window.txt, svgRing = window.svgRing;
 
 if (!window.t) window.t = function(k){ return k; };
@@ -304,7 +305,7 @@ function renderStep1(p) {
           if (wgPreg) {
             var wgCard = h('div', {style: 'border-left:3px solid ' + triColor + ';padding:14px 16px;background:var(--ivory2);margin-bottom:12px'});
             wgCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:8px'}, 'Prise de poids recommand\u00e9e (IOM 2009)'));
-            var preBmi = S.prePregnancyWeight ? S.prePregnancyWeight / Math.pow(S.height / 100, 2) : (calcBMI ? (calcBMI() || 0) : 0);
+            var preBmi = (S.prePregnancyWeight && S.height && S.height >= 100) ? S.prePregnancyWeight / Math.pow(S.height / 100, 2) : (calcBMI ? (calcBMI() || 0) : 0);
             wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'IMC pr\u00e9-grossesse : ' + (preBmi || 0).toFixed(1) + ' (' + wgPreg.category + ')'));
             wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'Gain total recommand\u00e9 : ' + wgPreg.totalGainMin + ' \u2014 ' + wgPreg.totalGainMax + ' kg'));
             wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, '\u00c0 la semaine ' + S.pregnancyWeek + ' : +' + wgPreg.currentExpectedGainMin + ' \u00e0 +' + wgPreg.currentExpectedGainMax + ' kg attendus'));
@@ -983,7 +984,7 @@ function renderStep6(p) {
         setTimeout(function() {
           if (typeof Chart === 'undefined' || !curveCanvas.getContext) return;
           var baseW = parseFloat(S.prePregnancyWeight || S.weight);
-          if (isNaN(baseW) || baseW <= 0) return;
+          if (isNaN(baseW) || baseW <= 0 || !wgObj || !wgObj.weeklyGainRange) return;
           var labels = [];
           var minData = [];
           var maxData = [];
@@ -2280,7 +2281,7 @@ function renderStep9(p) {
   }
 
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
-  var _shopList = (window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan, {shopFreq: S.shopFreq}) : [];
+  var _shopList = ((window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan, {shopFreq: S.shopFreq}) : []) || [];
   var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
   var _shopLabel = '\uD83D\uDECD ' + window.t('shop.title') + (_shopTotal > 0 ? ' (' + _shopTotal + ' articles)' : '');
   var btnShop = h('button', {
@@ -3749,7 +3750,7 @@ function renderRecipePicker(p) {
   // Recipe list
   var listWrap = h('div', { style: 'flex:1;overflow-y:auto;padding:12px 16px' });
 
-  var pool = (typeof getPool === 'function') ? getPool(slotKey) : (window.RecipeEngine ? window.RecipeEngine.getPool(slotKey) : []);
+  var pool = ((typeof getPool === 'function') ? getPool(slotKey) : (window.RecipeEngine ? window.RecipeEngine.getPool(slotKey) : [])) || [];
   var q = query.toLowerCase().trim();
   var filtered = q ? pool.filter(function(r) { return r.n.toLowerCase().indexOf(q) >= 0; }) : pool;
 
