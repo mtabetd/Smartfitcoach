@@ -307,7 +307,6 @@ function _initAuth() {
   // Ecouter les changements d'auth
   client.auth.onAuthStateChange(function(event, session) {
     if (event === 'PASSWORD_RECOVERY') {
-      // User clicked password reset link — show new password screen
       if (session && session.user) {
         _currentSession = _extractUser(session.user);
       }
@@ -320,12 +319,6 @@ function _initAuth() {
     }
     if (session && session.user) {
       _currentSession = _extractUser(session.user);
-      // Re-render if app already loaded and user was on auth screen
-      if (window.S && window.S.view && window.S.view.indexOf('auth') === 0 && window.render) {
-        window.S.view = 'dashboard';
-        window.S.authError = '';
-        window.render();
-      }
     } else {
       _currentSession = null;
     }
