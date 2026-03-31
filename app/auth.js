@@ -276,6 +276,7 @@ function _getClient() {
 // ─── SESSION LOCALE (pour le mode synchrone) ───
 var _currentSession = null; // {id, name, email}
 var _useSupabase = false;
+var _authReady = Promise.resolve(); // resolved when Supabase session is loaded
 
 function _extractUser(supaUser) {
   if (!supaUser) return null;
@@ -305,15 +306,34 @@ function _initAuth() {
 
   // Ecouter les changements d'auth
   client.auth.onAuthStateChange(function(event, session) {
+    if (event === 'PASSWORD_RECOVERY') {
+      // User clicked password reset link — show new password screen
+      if (session && session.user) {
+        _currentSession = _extractUser(session.user);
+      }
+      if (window.S) {
+        window.S.view = 'authNewPassword';
+        window.S.authError = '';
+      }
+      if (window.render) window.render();
+      return;
+    }
     if (session && session.user) {
       _currentSession = _extractUser(session.user);
+      // Re-render if app already loaded and user was on auth screen
+      if (window.S && window.S.view && window.S.view.indexOf('auth') === 0 && window.render) {
+        window.S.view = 'dashboard';
+        window.S.authError = '';
+        window.render();
+      }
     } else {
       _currentSession = null;
     }
   });
 
-  // Charger la session existante (async, mais met a jour _currentSession rapidement)
-  client.auth.getSession().then(function(result) {
+  // Charger la session existante (async)
+  // Store the promise so app-main.js can await it before first render
+  _authReady = client.auth.getSession().then(function(result) {
     if (result.data && result.data.session && result.data.session.user) {
       _currentSession = _extractUser(result.data.session.user);
     }
@@ -417,6 +437,9 @@ function _fallbackLogin(email, password, startTime) {
 // ─── AUTH MODULE ───
 window.AUTH = {
 
+  /** Promise that resolves when the initial session check is done */
+  ready: function() { return _authReady; },
+
   /**
    * Register a new user (async — returns Promise)
    * @param {string} name
@@ -427,7 +450,7 @@ window.AUTH = {
   register: function(name, email, password) {
     var startTime = Date.now();
     name = sanitize((name || '').trim());
-    email = sanitize((email || '').trim().toLowerCase());
+    email = (email || '').trim().toLowerCase();
 
     // Validation locale
     if (!validateName(name)) {
@@ -487,7 +510,7 @@ window.AUTH = {
    */
   login: function(email, password) {
     var startTime = Date.now();
-    email = sanitize((email || '').trim().toLowerCase());
+    email = (email || '').trim().toLowerCase();
 
     if (!validateEmail(email)) {
       return Promise.resolve({ ok: false, error: 'Email invalide' });

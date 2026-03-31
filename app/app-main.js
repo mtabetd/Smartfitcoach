@@ -203,6 +203,7 @@ function render() {
   }
 
   // Not logged in → auth screens
+  if (S.view === 'authNewPassword') { renderNewPassword(app); return; }
   if (!AUTH.isLoggedIn()) {
     if (S.view === 'authRegister') renderRegister(app);
     else if (S.view === 'authVerify') renderVerifyEmail(app);
@@ -234,7 +235,7 @@ function render() {
   // Day/night toggle
   var _isDark = document.body.classList.contains('dark-mode');
   ubRight.appendChild(h('button', {style:'font-size:16px;padding:12px;min-height:44px;min-width:44px;box-sizing:border-box;background:none;border:1px solid var(--border);border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center', onclick: function(){ document.body.classList.toggle('dark-mode'); try{localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode')?'true':'false');}catch(e){} render(); }}, _isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'));
-  ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; render(); }}, window.t('auth.logout')));
+  ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; S.authError = ''; S._resetSent = false; S._resetEmail = ''; S._passwordUpdated = false; S.authVerifyEmail = ''; render(); }}, window.t('auth.logout')));
   ub.appendChild(ubRight);
   wrap.appendChild(ub);
 
@@ -333,11 +334,9 @@ function renderLogin(app) {
     var email = emailInput.value.trim();
     var pw = pwInput.value;
     if (!email || !pw) { S.authError = 'Veuillez remplir tous les champs'; render(); return; }
-    if (!window.canAttemptAuth(email)) { S.authError = window.t('auth.rate_limit'); render(); return; }
     loginBtn.disabled = true;
     loginBtn.textContent = 'Connexion...';
     AUTH.login(email, pw).then(function(result) {
-      if (S.view !== 'auth') return;
       if (result.ok) {
         S.authError = '';
         S.view = 'dashboard';
@@ -525,9 +524,10 @@ function renderVerifyEmail(app) {
       }
       statusMsg.textContent = 'V\u00e9rification...';
       statusMsg.style.color = 'var(--grey)';
-      client.auth.getSession().then(function(res) {
-        var session = res.data && res.data.session;
-        var user = session && session.user;
+      // Try getUser (server-side check) first, fallback to getSession
+      var checkFn = client.auth.getUser ? client.auth.getUser() : client.auth.getSession();
+      checkFn.then(function(res) {
+        var user = res.data && (res.data.user || (res.data.session && res.data.session.user));
         if (user && user.email_confirmed_at) {
           S.authError = '';
           S.view = 'nutrition';
@@ -633,6 +633,82 @@ function renderForgotPassword(app) {
   app.appendChild(c);
 }
 
+// ─── AUTH: SET NEW PASSWORD (after reset link clicked) ───
+function renderNewPassword(app) {
+  var c = h('div', {'class': 'auth-container'});
+  c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
+  c.appendChild(h('div', {'class': 'auth-sub'}, 'Nouveau mot de passe'));
+  c.appendChild(h('div', {'class': 'auth-line'}));
+
+  if (S.authError) {
+    c.appendChild(h('div', {'class': 'auth-error'}, S.authError));
+  }
+
+  if (S._passwordUpdated) {
+    c.appendChild(h('div', {style: 'text-align:center;padding:24px 0'}, [
+      h('div', {style: 'font-family:Georgia,serif;font-size:24px;margin-bottom:16px'}, 'Mot de passe modifi\u00e9'),
+      h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px'},
+        'Votre mot de passe a \u00e9t\u00e9 mis \u00e0 jour. Vous pouvez maintenant vous connecter.'),
+      h('button', {'class': 'btn-primary', onclick: function() {
+        S._passwordUpdated = false;
+        S.authError = '';
+        S.view = 'auth';
+        render();
+      }}, 'Se connecter')
+    ]));
+    app.appendChild(c);
+    return;
+  }
+
+  var form = h('div', {'class': 'auth-form'});
+  form.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px;text-align:center'},
+    'Choisissez un nouveau mot de passe (minimum 6 caract\u00e8res).'));
+
+  var f1 = h('div', {'class': 'field'});
+  f1.appendChild(h('label', {'class': 'field-label'}, 'Nouveau mot de passe'));
+  var pw1 = h('input', {type: 'password', placeholder: '\u2022\u2022\u2022\u2022\u2022\u2022', autocomplete: 'new-password'});
+  f1.appendChild(pw1);
+  form.appendChild(f1);
+
+  var f2 = h('div', {'class': 'field'});
+  f2.appendChild(h('label', {'class': 'field-label'}, 'Confirmer'));
+  var pw2 = h('input', {type: 'password', placeholder: '\u2022\u2022\u2022\u2022\u2022\u2022', autocomplete: 'new-password'});
+  f2.appendChild(pw2);
+  form.appendChild(f2);
+
+  var saveBtn = h('button', {'class': 'btn-primary', onclick: function() {
+    if (saveBtn.disabled) return;
+    var p1 = pw1.value, p2 = pw2.value;
+    if (!p1 || p1.length < 6) { S.authError = 'Minimum 6 caract\u00e8res'; render(); return; }
+    if (p1 !== p2) { S.authError = 'Les mots de passe ne correspondent pas'; render(); return; }
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Mise \u00e0 jour...';
+    var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
+    if (client && client.auth) {
+      client.auth.updateUser({ password: p1 }).then(function(result) {
+        if (result.error) {
+          S.authError = result.error.message || 'Erreur lors de la mise \u00e0 jour';
+          render();
+        } else {
+          S.authError = '';
+          S._passwordUpdated = true;
+          render();
+        }
+      }).catch(function() {
+        S.authError = 'Erreur r\u00e9seau. R\u00e9essayez.';
+        render();
+      });
+    } else {
+      S.authError = 'Service indisponible';
+      render();
+    }
+  }}, 'Enregistrer');
+  form.appendChild(saveBtn);
+
+  c.appendChild(form);
+  app.appendChild(c);
+}
+
 // ─── MAKE RENDER GLOBAL ───
 window.render = render;
 
@@ -667,7 +743,7 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
 }
 
 // ─── INIT ───
-// Auto-login check
+function _doAutoLogin() {
 if (AUTH.isLoggedIn()) {
   S.view = 'dashboard';
   if (window.GAMIFICATION) GAMIFICATION.updateStreak();
@@ -706,9 +782,15 @@ if (AUTH.isLoggedIn()) {
 } else {
   S.view = 'auth';
 }
-
-// First render
 render();
+}
+
+// Wait for Supabase session before first render
+if (AUTH.ready) {
+  AUTH.ready().then(_doAutoLogin).catch(_doAutoLogin);
+} else {
+  _doAutoLogin();
+}
 
 // SECURITY: Integrity check — verify critical functions were not tampered by extensions
 if (window._verifyCriticalFunctions) {
