@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    AUTH.JS — Authentication & BlackBox Activity Tracking
-   MTD Macro Calculator
+   Smart Fit Coach
    Supabase Auth with localStorage fallback
    ═══════════════════════════════════════════════════════════════ */
 (function(){

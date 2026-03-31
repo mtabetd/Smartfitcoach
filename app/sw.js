@@ -1,7 +1,7 @@
-// MTD Macro Calculator — Service Worker
+// Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'mtd-v10';
-const RUNTIME_CACHE = 'mtd-runtime-v10';
+const CACHE_VERSION = 'sfc-v11';
+const RUNTIME_CACHE = 'sfc-runtime-v11';
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [
@@ -34,12 +34,15 @@ const APP_SHELL = [
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  './jspdf.umd.min.js'
+  './jspdf.umd.min.js',
+  './supabase-client.js',
+  './recipes-db.js'
 ];
 
 // Third-party CDN scripts to pre-cache.
 const CDN_ASSETS = [
-  'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js'
+  'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js'
 ];
 
 // ---------------------------------------------------------------------------
@@ -166,10 +169,10 @@ function offlineFallback() {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTD — Hors ligne</title>
+  <title>Smart Fit Coach — Hors ligne</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:Georgia,serif;background:#FAFAF7;color:#0A0A09;
+    body{font-family:Georgia,serif;background:#FAF9F6;color:#0A0A09;
          display:flex;align-items:center;justify-content:center;
          min-height:100vh;text-align:center;padding:2rem}
     h1{font-size:1.5rem;margin-bottom:.75rem}

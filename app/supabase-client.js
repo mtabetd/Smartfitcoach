@@ -66,7 +66,7 @@
       var client = getClient();
       if (!client) return Promise.reject('Supabase not loaded');
       return client.auth.getSession().then(function(result) {
-        return result.data.session;
+        return (result && result.data) ? result.data.session : null;
       });
     },
 
@@ -95,7 +95,7 @@
       if (!client) return;
 
       return SupaAuth.getSession().then(function(session) {
-        if (!session) return; // pas connecté
+        if (!session || !session.user) return; // pas connecté
 
         var userId = session.user.id;
         // Copier S sans les propriétés transitoires
@@ -132,7 +132,7 @@
       if (!client) return Promise.reject('No client');
 
       return SupaAuth.getSession().then(function(session) {
-        if (!session) return null;
+        if (!session || !session.user) return null;
 
         return client
           .from('profiles')
@@ -152,7 +152,7 @@
       if (!client) return;
 
       return SupaAuth.getSession().then(function(session) {
-        if (!session) return;
+        if (!session || !session.user) return;
         return client
           .from('weight_history')
           .upsert({
@@ -169,7 +169,7 @@
       if (!client) return;
 
       return SupaAuth.getSession().then(function(session) {
-        if (!session) return;
+        if (!session || !session.user) return;
         return client
           .from('sport_sessions')
           .insert({
@@ -193,7 +193,7 @@
       if (!client) return;
 
       return SupaAuth.getSession().then(function(session) {
-        if (!session) return;
+        if (!session || !session.user) return;
         return client
           .from('muscu_session_logs')
           .upsert({
@@ -211,7 +211,7 @@
       if (!client) return;
 
       return SupaAuth.getSession().then(function(session) {
-        if (!session) return;
+        if (!session || !session.user) return;
         return client
           .from('food_journal')
           .insert({
@@ -236,7 +236,7 @@
       if (!client) return;
 
       return SupaAuth.getSession().then(function(session) {
-        if (!session) return;
+        if (!session || !session.user) return;
         return client
           .from('water_log')
           .upsert({
@@ -253,7 +253,7 @@
       if (!client) return;
 
       return SupaAuth.getSession().then(function(session) {
-        if (!session) return;
+        if (!session || !session.user) return;
         return client
           .from('badges')
           .upsert({
@@ -269,7 +269,7 @@
       if (!client) return;
 
       return SupaAuth.getSession().then(function(session) {
-        if (!session) return;
+        if (!session || !session.user) return;
         return client
           .from('streaks')
           .upsert({
@@ -288,7 +288,7 @@
       if (!client) return;
 
       return SupaAuth.getSession().then(function(session) {
-        if (!session) return;
+        if (!session || !session.user) return;
         return client
           .from('meal_plans')
           .upsert({

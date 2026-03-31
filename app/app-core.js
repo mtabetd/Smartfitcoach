@@ -1,4 +1,4 @@
-// app-core.js — MTD Macro Calculator: Core State, Constants, Helpers, Formulas
+// app-core.js — Smart Fit Coach: Core State, Constants, Helpers, Formulas
 (function(){
 'use strict';
 
@@ -2148,12 +2148,13 @@ function getCurrentCyclePhase() {
   var start = new Date(s.lastPeriodDate);
   var now = new Date();
   var diffDays = Math.floor((now - start) / 86400000);
-  var dayInCycle = ((diffDays % s.cycleLength) + s.cycleLength) % s.cycleLength + 1;
+  var cycleLen = s.cycleLength || 28;
+  var dayInCycle = ((diffDays % cycleLen) + cycleLen) % cycleLen + 1;
 
   for (var i = 0; i < CYCLE_PHASES.length; i++) {
     var phase = CYCLE_PHASES[i];
-    var phaseStart = Math.round(phase.days[0] * s.cycleLength / 28);
-    var phaseEnd = Math.round(phase.days[1] * s.cycleLength / 28);
+    var phaseStart = Math.round(phase.days[0] * cycleLen / 28);
+    var phaseEnd = Math.round(phase.days[1] * cycleLen / 28);
     if (dayInCycle >= phaseStart && dayInCycle <= phaseEnd) {
       return {
         phase: phase,
@@ -2293,7 +2294,7 @@ window.getPregnancyTrimester = getPregnancyTrimester;
 function getPregnancyWeightGuideline() {
   var s = window.S;
   if (!s.pregnant) return null;
-  var bmi = s.prePregnancyWeight ? s.prePregnancyWeight / Math.pow(s.height / 100, 2) : calcBMI();
+  var bmi = (s.prePregnancyWeight && s.height && s.height >= 100) ? s.prePregnancyWeight / Math.pow(s.height / 100, 2) : calcBMI();
   var guideline = null;
   for (var i = 0; i < PREGNANCY_WEIGHT_GAIN.length; i++) {
     var pg = PREGNANCY_WEIGHT_GAIN[i];
@@ -2394,7 +2395,7 @@ if(s.alcoholFreq&&s.alcoholFreq!=='never'&&typeof alcoholWeeklyKcal==='function'
 return base} // ACSM: plancher universel ≥1200 kcal/j (femme) / ≥1400 kcal/j (homme)
 function calcMacros(){
   var s=window.S;var c=calcTarget();
-  if(!c||s.goal===null)return{g:0,p:0,l:0};
+  if(!c||s.goal===null||s.goal===undefined||!GOALS[s.goal])return{g:0,p:0,l:0};
   // Pour les macros g/kg : utiliser le poids ajusté si obèse (ASPEN 2016, ESPEN 2015)
   // Les calories (calcTarget/TDEE) restent basées sur le poids réel
   var bw=calcAdjustedWeight()||75;var goalKey=GOALS[s.goal].key;
@@ -2719,7 +2720,7 @@ window.calcWeightProjection=calcWeightProjection; window.alcoholWeeklyKcal=alcoh
 
 // ─── RECIPE FILTERING ───
 function getPool(t){
-  return window.RecipeEngine.getPool(t);
+  return window.RecipeEngine ? window.RecipeEngine.getPool(t) : [];
 }
 function filterRecipes(pool,type){
   var s=window.S;
@@ -2728,7 +2729,7 @@ function filterRecipes(pool,type){
   if(!s.whey)r=r.filter(function(x){return!x.w});
   if((s.allergies||[]).length>0&&(s.allergies||[]).indexOf('Aucune')===-1){
     r=r.filter(function(x){
-      var ing=(x.i+' '+x.tags.join(' ')).toLowerCase();
+      var ing=(x.i+' '+(x.tags||[]).join(' ')).toLowerCase();
       for(var a=0;a<s.allergies.length;a++){
         var al=s.allergies[a].toLowerCase();
         if(al==='fruits \u00e0 coque'){var nc=ing.replace(/noix de coco|noix de muscade/g,'');if((/amande|noix|noisette|cajou|pistache|pecan|macadamia|pignon/).test(nc))return false;}
@@ -2746,7 +2747,7 @@ function filterRecipes(pool,type){
   }
   if((s.intolerances||[]).length>0&&(s.intolerances||[]).indexOf('Aucune')===-1){
     r=r.filter(function(x){
-      var ing=(x.i+' '+x.tags.join(' ')).toLowerCase();
+      var ing=(x.i+' '+(x.tags||[]).join(' ')).toLowerCase();
       for(var t=0;t<s.intolerances.length;t++){
         var it=s.intolerances[t].toLowerCase();
         if(it==='lactose'&&(/lait|fromage|yaourt|beurre|crème|ricotta|cottage|whey|feta|parmesan|mozzarella|skyr|emmental|gruyère|comté|camembert|mascarpone|kéfir|labneh|ghee|cheddar|gouda/).test(ing))return false;
@@ -2758,13 +2759,13 @@ function filterRecipes(pool,type){
   }
   // Diabetics: soft-filter high-GI ingredients (prioritize low-GI sources — ADA 2023)
   var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);
-  if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioch[eé]|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|sucre\s+\d|sucre vanill|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
-  if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon|merguez|canard|lapin|foie/).test(i)});
-  if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|merguez|gambas|lotte|morue|foie|anchois|truite|colin/).test(i)});
-  if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|daurade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|miel|whey|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|truite|anchois|colin|branzino|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|lapin|foie de|jambon|charcuterie/;r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;if(/beurre/.test(i)&&!/beurre de cacahu|beurre d.amande|beurre de noisette|beurre de noix|beurre de coco/.test(i))return false;return true});} // beurre végétal (cacahuète, amande, noisette) autorisé en vegan
+  if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioch[eé]|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|sucre\s+\d|sucre vanill|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=(x.i+' '+(x.tags||[]).join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
+  if(s.regime===1)r=r.filter(function(x){var i=(x.i+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon|merguez|canard|lapin|foie/).test(i)});
+  if(s.regime===2)r=r.filter(function(x){var i=(x.i+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|merguez|gambas|lotte|morue|foie|anchois|truite|colin/).test(i)});
+  if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|daurade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|miel|whey|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|truite|anchois|colin|branzino|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|lapin|foie de|jambon|charcuterie/;r=r.filter(function(x){var i=(x.i+' '+(x.tags||[]).join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;if(/beurre/.test(i)&&!/beurre de cacahu|beurre d.amande|beurre de noisette|beurre de noix|beurre de coco/.test(i))return false;return true});} // beurre végétal (cacahuète, amande, noisette) autorisé en vegan
   // Halal : exclut porc, charcuterie porcine et alcool
-  if(s.halal)r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin/).test(i)});
-  if(s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=(x.i+' '+x.tags.join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
+  if(s.halal)r=r.filter(function(x){var i=(x.i+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin/).test(i)});
+  if(s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=(x.i+' '+(x.tags||[]).join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
   if(s.cuisines.indexOf(0)===-1&&s.cuisines.length>0){var flags=[];for(var c=0;c<s.cuisines.length;c++){var co=CUISINES[s.cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0)r=r.filter(function(x){return flags.indexOf(x.f)!==-1})}
   return r;
 }
@@ -3063,7 +3064,7 @@ window.getSupplementRecommendations = getSupplementRecommendations;
 // Seuils : Femmes < 30 kcal/kg LBM/j (risque RED-S) | Hommes < 25 kcal/kg LBM/j
 function detectREDS() {
   var s = window.S;
-  if(!s||!s.weight||!s.height)return null;
+  if(!s||!s.weight||!s.height||!s.age)return null;
   var target=calcTarget();var tdeeVal=calcTDEE();
   if(!target||!tdeeVal)return null;
   // Estimate LBM: use Navy/Boer formula approximation
@@ -3128,7 +3129,7 @@ function detectMedicalConflicts() {
   }
   // Conflit 2 : TCA + objectif shred/cut
   if(med.indexOf('tca')!==-1){
-    var goalKey=s.goal!==null?GOALS[s.goal].key:null;
+    var goalKey=(s.goal!==null&&GOALS[s.goal])?GOALS[s.goal].key:null;
     if(goalKey==='shred'||goalKey==='cut'){
       conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : TCA + objectif sèche/coupe — Objectif automatiquement remplacé par maintenance. Un suivi médical et psychologique est OBLIGATOIRE avant tout déficit calorique.'});
     }
@@ -3164,20 +3165,20 @@ function detectMedicalConflicts() {
   // ADA 2023 : chez le diabétique T2, un surplus calorique agressif amplifie la résistance à l'insuline
   // Le bulk peut être envisagé uniquement sous supervision médicale avec contrôle glycémique strict
   if(med.indexOf('diabete_t2')!==-1||med.indexOf('prediabete')!==-1){
-    var goalKeyDiab=s.goal!==null?GOALS[s.goal].key:null;
+    var goalKeyDiab=(s.goal!==null&&GOALS[s.goal])?GOALS[s.goal].key:null;
     if(goalKeyDiab==='bulk'||goalKeyDiab==='lean_bulk'){
       conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Diabète T2 / Pré-diabète + Prise de masse — Un surplus calorique chez un diabétique T2 peut aggraver la résistance à l\'insuline et perturber le contrôle glycémique (ADA 2023). Recommandation : privilégiez la recomposition corporelle (maintien calorique + protéines 1.4-1.6g/kg + résistance musculaire) plutôt qu\'un surplus. Consultez votre diabétologue avant de modifier significativement votre alimentation.'});
     }
   }
   // Conflit 7 : IRC + régime hyperprotéiné (si objectif prise de masse sans pathologie déclarée)
   if(med.indexOf('irc')!==-1){
-    var goalKeyIRC=s.goal!==null?GOALS[s.goal].key:null;
+    var goalKeyIRC=(s.goal!==null&&GOALS[s.goal])?GOALS[s.goal].key:null;
     if(goalKeyIRC==='bulk'||goalKeyIRC==='lean_bulk'){
       conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : IRC + Prise de masse — L\'objectif "prise de masse" est incompatible avec une insuffisance rénale chronique. Les protéines sont plafonnées à 0.55-0.60g/kg/j (KDOQI 2020). Un excès protéique accélère la progression de l\'insuffisance rénale. Consultation néphrologue OBLIGATOIRE avant de modifier l\'alimentation.'});
     }
   }
   // Conflit 8 : Grossesse + sèche/coupe — risque déficit pour le fœtus
-  if(s.pregnant&&s.goal!==null){
+  if(s.pregnant&&s.goal!==null&&GOALS[s.goal]){
     var pGoalKey=GOALS[s.goal].key;
     if(pGoalKey==='cut'||pGoalKey==='shred'){
       conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : Grossesse + déficit calorique — Tout déficit calorique pendant la grossesse est contre-indiqué (ACOG 2018). Les besoins augmentent de +300 kcal/j (T2-T3). La restriction calorique pendant la grossesse est associée à un retard de croissance intra-utérin (RCIU). Objectif automatiquement corrigé.'});
@@ -3185,7 +3186,7 @@ function detectMedicalConflicts() {
   }
   // Conflit 9 : Nutrition "Prise de masse" + objectif sport "Sèche" — contradiction calorique directe
   // Bulk = surplus +15% | Sèche sport = brûler gras → les deux sont incompatibles simultanément
-  var nutGoalKey9=s.goal!==null?GOALS[s.goal].key:null;
+  var nutGoalKey9=(s.goal!==null&&GOALS[s.goal])?GOALS[s.goal].key:null;
   if((nutGoalKey9==='bulk'||nutGoalKey9==='lean_bulk')&&s.sportGoals&&s.sportGoals.indexOf('shred')!==-1){
     conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT objectif : Alimentation "Prise de masse" (+15% calories) + Objectif sport "Sèche" — Ces objectifs sont contradictoires. La prise de masse nécessite un surplus calorique, la sèche nécessite un déficit. Choisissez : (1) Recomposition corporelle = maintenance calorique si vous débutez ou revenez après une pause ; (2) Bulk + programme musculaire, puis sèche séparément (Helms 2014, ISSN 2017).'});
   }

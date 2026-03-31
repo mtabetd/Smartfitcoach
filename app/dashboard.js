@@ -16,8 +16,8 @@ styleEl.textContent = [
   '.dash-label:first-of-type { margin-top:0; }',
 
   /* Greeting */
-  '.dash-greeting { font-family:Georgia,serif; font-size:28px; font-style:italic; line-height:1.25; margin:0 0 2px; color:var(--black,#181818); }',
-  '.dash-date { font-size:12px; color:var(--grey,#6B6B65); letter-spacing:1px; margin:0 0 24px; }',
+  '.dash-greeting { font-family:Georgia,serif; font-size:24px; font-style:italic; line-height:1.25; margin:0 0 2px; color:var(--black,#181818); }',
+  '.dash-date { font-size:13px; color:var(--grey,#6B6B65); letter-spacing:1px; margin:0 0 24px; }',
 
   /* Cards */
   '.dash-card { background:var(--ivory2,#F4F4F0); border:1px solid var(--border,#D8D8D0); padding:16px; margin-bottom:12px; }',
@@ -26,15 +26,15 @@ styleEl.textContent = [
 
   /* Big number */
   '.dash-big { font-family:Georgia,serif; font-style:italic; font-size:26px; line-height:1.1; color:var(--black,#181818); }',
-  '.dash-unit { font-size:12px; font-style:normal; color:var(--grey,#6B6B65); margin-left:2px; }',
-  '.dash-card-title { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--grey,#6B6B65); margin:0 0 8px; }',
+  '.dash-unit { font-size:13px; font-style:normal; color:var(--grey,#6B6B65); margin-left:2px; }',
+  '.dash-card-title { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--grey,#6B6B65); margin:0 0 8px; }',
 
   /* Quick-action cards */
   '.dash-action { background:var(--ivory2,#F4F4F0); border:1px solid var(--border,#D8D8D0); padding:20px 16px; cursor:pointer; transition:all .2s ease; text-align:center; }',
   '.dash-action:hover { background:var(--black,#181818); color:var(--ivory,#FAF9F6); border-color:var(--black,#181818); }',
   '.dash-action:hover .dash-action-sub { color:var(--ivory,#FAF9F6); opacity:.7; }',
   '.dash-action:hover .dash-action-icon { color:var(--ivory,#FAF9F6); }',
-  '.dash-action-icon { font-size:22px; margin-bottom:8px; display:block; transition:all .2s ease; }',
+  '.dash-action-icon { font-size:24px; margin-bottom:8px; display:block; transition:all .2s ease; }',
   '.dash-action-name { font-family:Georgia,serif; font-size:16px; font-style:italic; margin:0 0 4px; transition:all .2s ease; }',
   '.dash-action-sub { font-size:11px; color:var(--grey,#6B6B65); margin:0; transition:all .2s ease; }',
 
@@ -43,7 +43,7 @@ styleEl.textContent = [
   '.dash-nav:hover { background:var(--ivory,#FAF9F6); color:var(--black,#181818); }',
   '.dash-nav:hover .dash-nav-sub { color:var(--grey,#6B6B65); }',
   '.dash-nav-icon { font-size:18px; margin-bottom:10px; display:block; }',
-  '.dash-nav-name { font-family:Georgia,serif; font-size:20px; font-style:italic; margin:0 0 4px; }',
+  '.dash-nav-name { font-family:Georgia,serif; font-size:18px; font-style:italic; margin:0 0 4px; }',
   '.dash-nav-sub { font-size:11px; opacity:.65; margin:0; transition:all .2s ease; }',
 
   /* Mini badges */
@@ -53,7 +53,7 @@ styleEl.textContent = [
   '.dash-badge-link:hover { color:var(--black,#181818); }',
 
   /* Session footer */
-  '.dash-session { font-size:10px; letter-spacing:1px; color:var(--grey,#6B6B65); text-align:center; margin-top:32px; padding-top:12px; border-top:1px solid var(--border,#D8D8D0); }',
+  '.dash-session { font-size:11px; letter-spacing:1px; color:var(--grey,#6B6B65); text-align:center; margin-top:32px; padding-top:12px; border-top:1px solid var(--border,#D8D8D0); }',
 
   /* Widget containers */
   '.dash-widget-box { margin-bottom:12px; }',
@@ -69,18 +69,18 @@ styleEl.textContent = [
   /* Measurements modal overlay */
   '.dash-modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(24,24,24,.45); z-index:9000; display:flex; align-items:center; justify-content:center; }',
   '.dash-modal-box { background:var(--ivory,#FAF9F6); max-width:480px; width:90%; max-height:80vh; overflow-y:auto; padding:28px 24px; position:relative; }',
-  '.dash-modal-close { position:absolute; top:12px; right:16px; background:none; border:none; font-size:20px; cursor:pointer; color:var(--grey,#6B6B65); transition:all .2s ease; }',
+  '.dash-modal-close { position:absolute; top:12px; right:16px; background:none; border:none; font-size:18px; cursor:pointer; color:var(--grey,#6B6B65); transition:all .2s ease; }',
   '.dash-modal-close:hover { color:var(--black,#181818); }',
 
   /* Data management buttons */
   '.dash-data-section { margin-top:32px; }',
   '.dash-data-btns { display:flex; flex-direction:column; gap:10px; }',
-  '.dash-btn-primary { width:100%; padding:14px; background:var(--black,#181818); color:var(--ivory,#FAF9F6); border:none; font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
+  '.dash-btn-primary { width:100%; padding:14px; background:var(--black,#181818); color:var(--ivory,#FAF9F6); border:none; font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
   '.dash-btn-primary:hover { opacity:.85; }',
-  '.dash-btn-secondary { width:100%; padding:14px; background:var(--ivory2,#F4F4F0); color:var(--black,#181818); border:1px solid var(--border,#D8D8D0); font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
+  '.dash-btn-secondary { width:100%; padding:14px; background:var(--ivory2,#F4F4F0); color:var(--black,#181818); border:1px solid var(--border,#D8D8D0); font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
   '.dash-btn-secondary:hover { background:var(--black,#181818); color:var(--ivory,#FAF9F6); }',
-  '.dash-btn-danger { width:100%; padding:14px; background:transparent; color:var(--red,#5A1010); border:1px solid var(--red,#5A1010); font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
-  '.dash-btn-danger:hover { background:var(--red,#5A1010); color:var(--ivory,#FAFAF7); }',
+  '.dash-btn-danger { width:100%; padding:14px; background:transparent; color:var(--red,#5A1010); border:1px solid var(--red,#5A1010); font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
+  '.dash-btn-danger:hover { background:var(--red,#5A1010); color:var(--ivory,#FAF9F6); }',
 
   /* Responsive */
   '@media(max-width:480px){ .dash-card-grid,.dash-card-grid-3{grid-template-columns:1fr;} .dash-greeting{font-size:24px;} }',
@@ -228,7 +228,7 @@ function renderWelcomeScreen(container) {
   welcomeCard.appendChild(icon);
 
   var title = document.createElement('p');
-  title.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:20px;margin:0 0 10px;color:var(--black,#181818);';
+  title.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:18px;margin:0 0 10px;color:var(--black,#181818);';
   title.textContent = 'Votre programme personnalisé vous attend';
   welcomeCard.appendChild(title);
 
@@ -430,7 +430,7 @@ window.DASHBOARD = {
             document.createTextNode(Math.max(0, netKcal)),
             h('span', 'dash-unit', 'kcal')
           ]),
-          h('p', {style: 'font-size:10px;color:var(--grey,#6B6B65);margin:4px 0 0;font-family:"Helvetica Neue",Arial,sans-serif'}, 'Objectif \u2212 dépense = disponible récupération')
+          h('p', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin:4px 0 0;font-family:"Helvetica Neue",Arial,sans-serif'}, 'Objectif \u2212 dépense = disponible récupération')
         ]);
         grid.appendChild(netCard);
       }
@@ -446,9 +446,9 @@ window.DASHBOARD = {
       root.appendChild(h('div', 'dash-label', 'Macros du jour'));
       var macroCard = h('div', 'dash-card');
       var macroItems = [
-        {label: 'Protéines', val: macros.p, color: '#4CAF50', kcalPerG: 4},
-        {label: 'Glucides',  val: macros.g, color: '#2196F3', kcalPerG: 4},
-        {label: 'Lipides',   val: macros.l, color: '#FF9800', kcalPerG: 9}
+        {label: 'Protéines', val: macros.p, color: '#1A4A1A', kcalPerG: 4},
+        {label: 'Glucides',  val: macros.g, color: '#1A3A6A', kcalPerG: 4},
+        {label: 'Lipides',   val: macros.l, color: '#6A4A1A', kcalPerG: 9}
       ];
       macroItems.forEach(function(item) {
         var row = document.createElement('div');
@@ -487,10 +487,10 @@ window.DASHBOARD = {
         root.appendChild(h('div', 'dash-label', 'Grossesse — Semaine ' + pregTri.week));
         var pregCard = document.createElement('div');
         pregCard.className = 'dash-card';
-        pregCard.style.cssText = 'border-left:4px solid #E91E63;padding:16px;background:rgba(233,30,99,0.03);margin-bottom:12px;';
+        pregCard.style.cssText = 'border-left:4px solid #5A1010;padding:16px;background:rgba(233,30,99,0.03);margin-bottom:12px;';
 
         var pregTitle = document.createElement('div');
-        pregTitle.style.cssText = 'font-family:Georgia,serif;font-size:17px;color:#C2185B;margin-bottom:4px;';
+        pregTitle.style.cssText = 'font-family:Georgia,serif;font-size:17px;color:#5A1010;margin-bottom:4px;';
         pregTitle.textContent = '\uD83E\uDD30 ' + pregTri.trimester.name + ' \u2014 ' + pregTri.trimester.desc;
         pregCard.appendChild(pregTitle);
 
@@ -503,13 +503,13 @@ window.DASHBOARD = {
         var pregBarBg = document.createElement('div');
         pregBarBg.style.cssText = 'height:6px;background:rgba(0,0,0,0.08);border-radius:3px;overflow:hidden;margin-bottom:12px;';
         var pregBarFill = document.createElement('div');
-        pregBarFill.style.cssText = 'height:6px;width:' + pregTri.progress + '%;background:#E91E63;border-radius:3px;';
+        pregBarFill.style.cssText = 'height:6px;width:' + pregTri.progress + '%;background:#5A1010;border-radius:3px;';
         pregBarBg.appendChild(pregBarFill);
         pregCard.appendChild(pregBarBg);
 
         // Calorie info
         var pregCal = document.createElement('div');
-        pregCal.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#880E4F;margin-bottom:6px;';
+        pregCal.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#5A1010;margin-bottom:6px;';
         var extraKcal = pregTri.trimester.calorieExtra || 0;
         pregCal.textContent = extraKcal > 0 ? '+' + extraKcal + ' kcal/jour (besoins grossesse inclus dans votre cible)' : 'T1 : pas de calories supplémentaires nécessaires';
         pregCard.appendChild(pregCal);
@@ -524,12 +524,12 @@ window.DASHBOARD = {
 
         // Nutrition tips (top 3)
         var tipsTitle = document.createElement('div');
-        tipsTitle.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E91E63;margin-bottom:6px;';
+        tipsTitle.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#5A1010;margin-bottom:6px;';
         tipsTitle.textContent = 'Conseils nutrition ce trimestre';
         pregCard.appendChild(tipsTitle);
         (pregTri.trimester.nutritionTips || []).slice(0, 3).forEach(function(tip) {
           var tipEl = document.createElement('div');
-          tipEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-bottom:3px;padding-left:8px;';
+          tipEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:3px;padding-left:8px;';
           tipEl.textContent = '\u2022 ' + tip;
           pregCard.appendChild(tipEl);
         });
@@ -538,7 +538,7 @@ window.DASHBOARD = {
         var pregSportWarn = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
         if (pregSportWarn) {
           var warnBox = document.createElement('div');
-          warnBox.style.cssText = 'margin-top:10px;padding:8px 10px;background:rgba(233,30,99,0.07);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#C2185B;border-radius:2px;';
+          warnBox.style.cssText = 'margin-top:10px;padding:8px 10px;background:rgba(233,30,99,0.07);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A1010;border-radius:2px;';
           warnBox.textContent = pregSportWarn;
           pregCard.appendChild(warnBox);
         }
@@ -554,13 +554,13 @@ window.DASHBOARD = {
       if (hasDiabDash) {
         root.appendChild(h('div', 'dash-label', 'Suivi médical'));
         var diabWarnCard = document.createElement('div');
-        diabWarnCard.style.cssText = 'background:#FFF8E1;border-left:4px solid #F9A825;padding:14px 16px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.6;';
+        diabWarnCard.style.cssText = 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:14px 16px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;line-height:1.6;';
         var diabWarnTitle = document.createElement('div');
-        diabWarnTitle.style.cssText = 'font-weight:700;color:#F57F17;margin-bottom:6px;font-size:12px;letter-spacing:1px;text-transform:uppercase;';
+        diabWarnTitle.style.cssText = 'font-weight:700;color:#6A4A1A;margin-bottom:6px;font-size:13px;letter-spacing:1px;text-transform:uppercase;';
         diabWarnTitle.textContent = '\u26A0 Diabète — Recommandations importantes';
         diabWarnCard.appendChild(diabWarnTitle);
         var diabWarnMsg = document.createElement('div');
-        diabWarnMsg.style.cssText = 'color:#5D4037;';
+        diabWarnMsg.style.cssText = 'color:#6A4A1A;';
         diabWarnMsg.textContent = 'Consultez votre médecin ou diabétologue avant de modifier votre alimentation ou votre programme sportif. Mesurez votre glycémie régulièrement, notamment avant et après l\'effort. Privilegiez les aliments à index glycémique bas.';
         diabWarnCard.appendChild(diabWarnMsg);
         root.appendChild(diabWarnCard);
@@ -726,7 +726,7 @@ window.DASHBOARD = {
       if (filteredData.length < 2) return;
       if (window._dashWeightChart) { try { window._dashWeightChart.destroy(); } catch(e2) {} window._dashWeightChart = null; }
       var isDark = document.body.classList.contains('dark-mode') || window.matchMedia('(prefers-color-scheme: dark)').matches;
-      var chartAccent = isDark ? '#4ABA4A' : '#1A4A1A';
+      var chartAccent = isDark ? '#1A4A1A' : '#1A4A1A';
       var chartAccentBg = isDark ? 'rgba(74,186,74,0.08)' : 'rgba(26,74,26,0.08)';
       var chartGrid = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
       window._dashWeightChart = (window.createChart ? window.createChart(ctx, {
@@ -784,7 +784,7 @@ window.DASHBOARD = {
         var kcalGreen = isDark2 ? 'rgba(74,186,74,0.7)' : 'rgba(26,74,26,0.7)';
         var kcalGreenFull = isDark2 ? 'rgba(74,186,74,0.9)' : 'rgba(26,74,26,0.9)';
         var kcalRed = isDark2 ? 'rgba(218,106,106,0.7)' : 'rgba(180,40,40,0.7)';
-        var kcalRedLine = isDark2 ? '#DA6A6A' : '#B22222';
+        var kcalRedLine = isDark2 ? '#5A1010' : '#5A1010';
         var kcalGrid2 = isDark2 ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
         window._dashKcalChart = (window.createChart ? window.createChart(ctx2, {
           type: 'bar',
@@ -868,8 +868,10 @@ window.DASHBOARD = {
     var badges = getBadges();
     if (badges.length > 0) {
       badges.forEach(function(b) {
-        var mini = h('div', 'dash-badge-mini', b.icon || b.emoji || '\u2605');
-        if (b.name) mini.title = b.name;
+        var def = (window.GAMIFICATION && window.GAMIFICATION.BADGE_DEFS) ? window.GAMIFICATION.BADGE_DEFS.find(function(d){ return d.id === b.id; }) : null;
+        var mini = h('div', 'dash-badge-mini', (def && def.icon) || b.icon || b.emoji || '\u2605');
+        if (def && def.name) mini.title = def.name;
+        else if (b.name) mini.title = b.name;
         badgesRow.appendChild(mini);
       });
     } else {
@@ -883,7 +885,7 @@ window.DASHBOARD = {
       badgesRow.appendChild(b2);
       badgesRow.appendChild(b3);
       var badgeEncouragement = document.createElement('p');
-      badgeEncouragement.style.cssText = 'font-size:11px;color:var(--grey,#5A5A54);margin:8px 0 0;font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.5;';
+      badgeEncouragement.style.cssText = 'font-size:11px;color:var(--grey,#6B6B65);margin:8px 0 0;font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.5;';
       badgeEncouragement.textContent = 'Continuez \u2014 vos premiers badges vous attendent !';
       badgesCard.appendChild(badgeEncouragement);
     }
@@ -963,7 +965,7 @@ function openWeightPrompt() {
   input.type = 'number';
   input.step = '0.1';
   input.placeholder = 'Ex : 72.5';
-  input.style.cssText = 'width:100%;padding:12px;font-family:Georgia,serif;font-size:20px;font-style:italic;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);color:var(--black,#181818);box-sizing:border-box;outline:none;margin-bottom:12px;';
+  input.style.cssText = 'width:100%;padding:12px;font-family:Georgia,serif;font-size:18px;font-style:italic;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);color:var(--black,#181818);box-sizing:border-box;outline:none;margin-bottom:12px;';
   form.appendChild(input);
 
   var unit = h('p', null, window.UNITS ? window.UNITS.weightLabel() : 'kg');
@@ -972,7 +974,7 @@ function openWeightPrompt() {
 
   var saveBtn = document.createElement('button');
   saveBtn.textContent = 'Enregistrer';
-  saveBtn.style.cssText = 'width:100%;padding:12px;background:var(--black,#181818);color:var(--ivory,#FAF9F6);border:none;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;';
+  saveBtn.style.cssText = 'width:100%;padding:12px;background:var(--black,#181818);color:var(--ivory,#FAF9F6);border:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;';
   saveBtn.addEventListener('mouseenter', function(){ saveBtn.style.opacity = '.8'; });
   saveBtn.addEventListener('mouseleave', function(){ saveBtn.style.opacity = '1'; });
   saveBtn.addEventListener('click', function() {
@@ -1041,11 +1043,11 @@ function openMeasurementsModal() {
   if (window.MEASUREMENTS && window.MEASUREMENTS.renderForm) {
     try { window.MEASUREMENTS.renderForm(formContainer); } catch(e) {
       formContainer.appendChild(h('p', null, 'Module mensurations indisponible.'));
-      if (formContainer.lastChild) formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
+      if (formContainer.lastChild) formContainer.lastChild.style.cssText = 'font-size:13px;color:var(--grey,#6B6B65);';
     }
   } else {
     formContainer.appendChild(h('p', null, 'Module mensurations non chargé.'));
-    if (formContainer.lastChild) formContainer.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
+    if (formContainer.lastChild) formContainer.lastChild.style.cssText = 'font-size:13px;color:var(--grey,#6B6B65);';
   }
   box.appendChild(formContainer);
 
@@ -1071,7 +1073,7 @@ function openBadgesModal() {
   if (window.GAMIFICATION && window.GAMIFICATION.renderBadgesPanel) {
     try { window.GAMIFICATION.renderBadgesPanel(panel); } catch(e) {
       panel.appendChild(h('p', null, 'Panneau badges indisponible.'));
-      if (panel.lastChild) panel.lastChild.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);';
+      if (panel.lastChild) panel.lastChild.style.cssText = 'font-size:13px;color:var(--grey,#6B6B65);';
     }
   }
   box.appendChild(panel);
@@ -1082,6 +1084,8 @@ function openBadgesModal() {
 }
 
 function openKitchenTimer() {
+  // Clear any previous kitchen timer interval
+  if (window._kitchenTimerInterval) { clearInterval(window._kitchenTimerInterval); window._kitchenTimerInterval = null; }
   var overlay = h('div', 'dash-modal-overlay');
   var box = h('div', 'dash-modal-box');
   box.style.textAlign = 'center';
@@ -1147,7 +1151,7 @@ function openKitchenTimer() {
     if (totalSeconds <= 0) return;
     running = true;
     startBtn.textContent = 'En cours...';
-    interval = setInterval(function() {
+    interval = window._kitchenTimerInterval = setInterval(function() {
       totalSeconds--;
       updateDisplay();
       if (totalSeconds <= 0) {

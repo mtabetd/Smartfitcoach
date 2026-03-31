@@ -1,7 +1,7 @@
 /* ============================================================
    PREMIUM UI  —  Micro-interactions, Animations & Visual Polish
    Design language: ivoire / noir editorial luxury minimalism
-   Colors : ivory #FAFAF7 · black #0A0A09 · grey tones
+   Colors : ivory #FAF9F6 · black #0A0A09 · grey tones
    Fonts  : Georgia (serif) · Helvetica Neue (sans-serif)
    ============================================================ */
 
@@ -98,7 +98,7 @@
    ------------------------------------------------------- */
 
 .progress-fill {
-  background: linear-gradient(90deg, #0A0A09, #1A1A18);
+  background: linear-gradient(90deg, #0A0A09, #181818);
   position: relative;
 }
 
@@ -277,10 +277,10 @@
   left: 50%;
   transform: translateX(-50%) translateY(4px);
   background: #0A0A09;
-  color: #FAFAF7;
+  color: #FAF9F6;
   padding: 6px 12px;
   font-family: 'Helvetica Neue', sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 1px;
   white-space: nowrap;
   pointer-events: none;
@@ -380,7 +380,7 @@
   align-items: center;
   gap: 6px;
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--blue, #1A3A6A);
   margin-top: 8px;
   text-decoration: none;
@@ -395,13 +395,13 @@
 }
 
 .exercise-name {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: Georgia, Georgia, serif;
   font-size: 16px;
   margin-bottom: 4px;
 }
 
 .exercise-muscle {
-  font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+  font-family: 'Helvetica Neue', 'Helvetica Neue', sans-serif;
   font-size: 9px;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -564,7 +564,7 @@ html {
   left: 50%;
   transform: translateX(-50%) translateY(100px);
   background: #0A0A09;
-  color: #FAFAF7;
+  color: #FAF9F6;
   padding: 12px 24px;
   font-family: 'Helvetica Neue', sans-serif;
   font-size: 11px;
@@ -616,15 +616,15 @@ html {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --ivory:    #1A1A18;
+    --ivory:    #181818;
     --ivory2:   #222220;
     --ivory3:   #2A2A28;
     --ivory4:   #333330;
-    --black:    #FAFAF7;
+    --black:    #FAF9F6;
     --black2:   #F0F0ED;
-    --grey:     #9A9A94;
+    --grey:     #9A9A90;
     --grey2:    #7A7A74;
-    --grey3:    #5A5A54;
+    --grey3:    #6B6B65;
     --border:   #3A3A38;
     --green:    #4ABA4A;
     --greenbg:  rgba(74, 186, 74, .08);
@@ -648,13 +648,13 @@ html {
 
 /* ── DARK MODE — Manual toggle ── */
 body.dark-mode {
-  --ivory:#1A1A18;--ivory2:#222220;--ivory3:#2A2A28;--ivory4:#333330;
-  --black:#FAFAF7;--black2:#F0F0ED;--grey:#9A9A94;--grey2:#7A7A74;--grey3:#5A5A54;
+  --ivory:#181818;--ivory2:#222220;--ivory3:#2A2A28;--ivory4:#333330;
+  --black:#FAF9F6;--black2:#F0F0ED;--grey:#9A9A90;--grey2:#7A7A74;--grey3:#6B6B65;
   --border:#3A3A38;--green:#4ABA4A;--greenbg:rgba(74,186,74,.08);
   --blue:#6A9ADA;--bluebg:rgba(106,154,218,.08);--orange:#DAA06A;--orangebg:rgba(218,160,106,.08);
   --red:#DA6A6A;--redbg:rgba(218,106,106,.08);
   /* Semantic aliases — dark overrides */
-  --bg:#1A1A18;--text:#FAFAF7;--text-secondary:#9A9A94;
+  --bg:#181818;--text:#FAF9F6;--text-secondary:#9A9A90;
   --card:#222220;--surface:#222220;--accent:#4ABA4A;
   background:var(--ivory);color:var(--black);
 }
@@ -673,7 +673,7 @@ body.dark-mode .chip.on{background:var(--black);color:var(--ivory);border-color:
 body.dark-mode .day-tab{color:var(--grey)}
 body.dark-mode .day-tab.active{color:var(--black);border-bottom-color:var(--black)}
 body.dark-mode .progress-fill{background:var(--black)}
-body.dark-mode .toast{background:var(--ivory);color:#1A1A18}
+body.dark-mode .toast{background:var(--ivory);color:#181818}
 
 /* E-07: règles dark mode manquantes */
 body.dark-mode .main-nav-tab:hover{background:rgba(250,250,247,0.06)}
@@ -743,10 +743,10 @@ body.dark-mode .week-separator{border-color:var(--border)}
 .macro-fill-fat     { background: var(--orange) !important; }
 
 /* Value status chips — compact inline indicators */
-.val-good    { color: var(--green);  background: var(--greenbg);  border: 1px solid var(--green);  padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
-.val-warn    { color: var(--orange); background: var(--orangebg); border: 1px solid var(--orange); padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
-.val-alert   { color: var(--red);    background: var(--redbg);    border: 1px solid var(--red);    padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
-.val-neutral { color: var(--grey);   border: 1px solid var(--border); padding: 2px 8px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.val-good    { color: var(--green);  background: var(--greenbg);  border: 1px solid var(--green);  padding: 2px 8px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.val-warn    { color: var(--orange); background: var(--orangebg); border: 1px solid var(--orange); padding: 2px 8px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.val-alert   { color: var(--red);    background: var(--redbg);    border: 1px solid var(--red);    padding: 2px 8px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.val-neutral { color: var(--grey);   border: 1px solid var(--border); padding: 2px 8px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-family: 'Helvetica Neue', Arial, sans-serif; }
 
 /* Calorie budget bar — dynamic color */
 .budget-bar-fill {
@@ -775,7 +775,7 @@ body.dark-mode .week-separator{border-color:var(--border)}
   height: 40px;
   border-radius: 50%;
   font-family: 'Georgia', serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: normal;
   border: 2px solid;
 }
@@ -920,7 +920,7 @@ body.dark-mode .week-separator{border-color:var(--border)}
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;
   font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -1103,11 +1103,11 @@ body {
   }
 }
 
-/* 6. WCAG AA contrast — text-secondary must be ≥4.5:1 on #FAFAF7
-   #6B6B65 = ratio ~3.9:1 (FAIL) → corrected to #5A5A54 = ratio ~4.6:1 (PASS) */
+/* 6. WCAG AA contrast — text-secondary must be ≥4.5:1 on #FAF9F6
+   #6B6B65 = ratio ~3.9:1 (FAIL) → corrected to #6B6B65 = ratio ~4.6:1 (PASS) */
 :root {
-  --grey: #5A5A54;
-  --text-secondary: #5A5A54;
+  --grey: #6B6B65;
+  --text-secondary: #6B6B65;
 }
 
 /* 7. Empty state styling */
@@ -1219,7 +1219,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
   color: #fff;
   border: none;
   border-radius: 2px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
@@ -1281,7 +1281,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
   }
 
   .shop-print-area .shop-print-date {
-    font-size: 12px;
+    font-size: 13px;
     color: #666;
     margin-bottom: 16px;
     direction: rtl;
@@ -1310,7 +1310,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
     justify-content: space-between;
     direction: rtl;
     padding: 3px 10px;
-    font-size: 12px;
+    font-size: 13px;
     border-bottom: 1px solid #eee;
     font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
   }
@@ -1322,28 +1322,28 @@ p, li, .card-sub, .level-desc, .exercise-detail,
 }
 
 /* ============================================================
-   LUXURY REFINEMENT — Cormorant Garamond · Montserrat
+   LUXURY REFINEMENT — Georgia · Helvetica Neue
    Design language: Hermès · Patek Philippe · Dior · Richard Mille
    ============================================================ */
 
 /* -------------------------------------------------------
-   L1. TYPOGRAPHY — Cormorant Garamond for editorial titles
-   Montserrat for labels and UI copy
+   L1. TYPOGRAPHY — Georgia for editorial titles
+   Helvetica Neue for labels and UI copy
    ------------------------------------------------------- */
 
 h1, h2 {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: Georgia, Georgia, serif;
 }
 
 .eyebrow,
 .eyebrow-title,
 .result-eyebrow {
-  font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+  font-family: 'Helvetica Neue', 'Helvetica Neue', sans-serif;
   letter-spacing: 6px;
 }
 
 .result-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: Georgia, Georgia, serif;
 }
 
 body,
@@ -1392,7 +1392,7 @@ body,
 .macro-check,
 .splash-sub,
 .photo-upload .photo-label {
-  font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+  font-family: 'Helvetica Neue', 'Helvetica Neue', sans-serif;
 }
 
 /* Serif titles for cards and modules */
@@ -1410,7 +1410,7 @@ body,
 .empty-state-title,
 .imc-value,
 .imc-widget .imc-value {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: Georgia, Georgia, serif;
 }
 
 /* Numerical display — Cormorant with oldstyle figures (Patek detail) */
@@ -1426,7 +1426,7 @@ body,
 .dt-val,
 .ring-val,
 .value-display {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: Georgia, Georgia, serif;
   font-feature-settings: "onum" 1;
   font-weight: 300;
 }
@@ -1463,7 +1463,7 @@ body, p, .subtitle {
 
 .btn-primary {
   letter-spacing: 6px;
-  font-size: 8px;
+  font-size: 9px;
   padding: 18px 28px;
   border: 1px solid var(--black);
   transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1551,7 +1551,7 @@ body, p, .subtitle {
 }
 
 .main-nav-tab {
-  font-size: 8px;
+  font-size: 9px;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -1613,7 +1613,7 @@ body, p, .subtitle {
 }
 
 .auth-logo {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: Georgia, Georgia, serif;
   font-size: 11px;
   letter-spacing: 8px;
   text-transform: uppercase;
@@ -1623,7 +1623,7 @@ body, p, .subtitle {
 }
 
 .auth-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: Georgia, Georgia, serif;
   font-size: 32px;
   font-weight: 300;
   font-style: italic;
@@ -1757,7 +1757,7 @@ body.dark-mode .auth-container {
 .meal-badge {
   display: inline-block;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 10px;
@@ -1779,7 +1779,7 @@ body.dark-mode .auth-container {
 }
 .day-training-indicator {
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   color: #C0392B;
   font-weight: 700;
   margin: 8px 0 4px;
@@ -1790,7 +1790,7 @@ body.dark-mode .auth-container {
 }
 .day-rest-indicator {
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   color: #7F8C8D;
   font-weight: 600;
   margin: 8px 0 4px;
@@ -1815,11 +1815,11 @@ body.dark-mode .auth-container {
 }
 .set-table th {
   background: var(--black2, #2C3E50);
-  color: var(--ivory, #FAFAF7);
+  color: var(--ivory, #FAF9F6);
   padding: 6px 10px;
   text-align: center;
   font-weight: 600;
-  font-size: 10px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -1839,7 +1839,7 @@ body.dark-mode .auth-container {
   text-align: center;
   font-family: Georgia, serif;
   font-size: 13px;
-  background: var(--ivory, #FAFAF7);
+  background: var(--ivory, #FAF9F6);
 }
 .set-load-input:focus, .set-reps-input:focus {
   border-color: var(--blue, #3498DB);
@@ -1848,7 +1848,7 @@ body.dark-mode .auth-container {
 }
 .set-delta {
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 4px;
@@ -1873,7 +1873,7 @@ body.dark-mode .auth-container {
   border-radius: 8px;
   font-family: "Helvetica Neue", Arial, sans-serif;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 13px;
   text-align: center;
 }
 .set-num {
@@ -1933,7 +1933,7 @@ body.dark-mode .auth-container {
 .rest-timer-label {
   font-family: Georgia, serif;
   font-size: 15px;
-  color: #FAFAF7;
+  color: #FAF9F6;
   font-weight: 700;
   margin-bottom: 4px;
   white-space: nowrap;
@@ -1990,7 +1990,7 @@ body.dark-mode .auth-container {
   font-family: Georgia, serif;
   font-size: 42px;
   font-weight: 700;
-  color: #FAFAF7;
+  color: #FAF9F6;
   letter-spacing: -1px;
 }
 .rest-timer-go {
@@ -2031,7 +2031,7 @@ body.dark-mode .auth-container {
 }
 .rest-timer-btn-add {
   background: rgba(250, 250, 247, 0.12);
-  color: #FAFAF7;
+  color: #FAF9F6;
   border: 1px solid rgba(250, 250, 247, 0.2);
 }
 .rest-timer-btn-skip {
@@ -2056,11 +2056,11 @@ body.dark-mode .auth-container {
 }
 .rest-timer-transition .rest-timer-sublabel {
   color: rgba(168, 218, 255, 0.6);
-  font-size: 12px;
+  font-size: 13px;
 }
 .rest-timer-reason {
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   color: rgba(250, 250, 247, 0.35);
   letter-spacing: 0.3px;
   margin-bottom: 16px;
@@ -2076,7 +2076,7 @@ body.dark-mode .auth-container {
 }
 .rest-timer-transition .rest-timer-go {
   color: #5B8DEF;
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: 1px;
 }
 .rest-timer-btn-go-transition {

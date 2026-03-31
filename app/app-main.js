@@ -1,4 +1,4 @@
-// app-main.js — MTD: Router, Auth Screens, Init
+// app-main.js — Smart Fit Coach: Router, Auth Screens, Init
 (function(){
 'use strict';
 var S = window.S;
@@ -216,14 +216,14 @@ function render() {
   // User bar
   var user = AUTH.getUser();
   var ub = h('div', {'class': 'user-bar'});
-  ub.appendChild(h('span', {'class': 'user-name'}, '◆ ' + (user.name || user.email || 'Utilisateur')));
+  ub.appendChild(h('span', {'class': 'user-name'}, '◆ ' + (user ? (user.name || user.email || 'Utilisateur') : 'Utilisateur')));
   var ubRight = h('div', {style: 'display:flex;align-items:center;gap:12px'});
   // Session time
   ubRight.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey3)'}, (window.BLACKBOX ? window.BLACKBOX.getSessionMinutes() : 0) + ' min'));
   // Language toggle FR / EN
   var _curLang = (window.I18N ? window.I18N.current : (S.lang || 'fr'));
   var langBtn = h('button', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;padding:4px 10px;background:none;border:1px solid var(--border);cursor:pointer;color:var(--grey)',
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;padding:12px 16px;min-height:44px;box-sizing:border-box;background:none;border:1px solid var(--border);border-radius:2px;cursor:pointer;color:var(--grey)',
     onclick: function() {
       var next = (window.I18N ? window.I18N.current : (S.lang || 'fr')) === 'fr' ? 'en' : 'fr';
       if (window.I18N && window.I18N.setLang) { window.I18N.setLang(next); } else { S.lang = next; render(); }
@@ -232,7 +232,7 @@ function render() {
   ubRight.appendChild(langBtn);
   // Day/night toggle
   var _isDark = document.body.classList.contains('dark-mode');
-  ubRight.appendChild(h('button', {style:'font-size:16px;padding:2px 8px;background:none;border:1px solid var(--border);cursor:pointer', onclick: function(){ document.body.classList.toggle('dark-mode'); try{localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode')?'true':'false');}catch(e){} render(); }}, _isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'));
+  ubRight.appendChild(h('button', {style:'font-size:16px;padding:12px;min-height:44px;min-width:44px;box-sizing:border-box;background:none;border:1px solid var(--border);border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center', onclick: function(){ document.body.classList.toggle('dark-mode'); try{localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode')?'true':'false');}catch(e){} render(); }}, _isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'));
   ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; render(); }}, window.t('auth.logout')));
   ub.appendChild(ubRight);
   wrap.appendChild(ub);
@@ -274,7 +274,7 @@ function render() {
   wrap.appendChild(content);
 
   // Footer
-  wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'MTD Macro Calculator')]));
+  wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'Smart Fit Coach')]));
   app.appendChild(wrap);
 
   // Post-render scroll: reset .app container and window after content is in DOM
@@ -300,8 +300,8 @@ function render() {
 // ─── AUTH: LOGIN SCREEN ───
 function renderLogin(app) {
   var c = h('div', {'class': 'auth-container'});
-  c.appendChild(h('div', {'class': 'auth-logo'}, 'MTD'));
-  c.appendChild(h('div', {'class': 'auth-sub'}, 'Macro Calculator'));
+  c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
+  c.appendChild(h('div', {'class': 'auth-sub'}, 'Nutrition & Sport'));
   c.appendChild(h('div', {'class': 'auth-line'}));
 
   if (window.TIPS) TIPS.renderToggle(c);
@@ -328,6 +328,7 @@ function renderLogin(app) {
 
   // Login button
   var loginBtn = h('button', {'class': 'btn-primary', onclick: function(){
+    if (loginBtn.disabled) return;
     var email = emailInput.value.trim();
     var pw = pwInput.value;
     if (!email || !pw) { S.authError = 'Veuillez remplir tous les champs'; render(); return; }
@@ -365,7 +366,7 @@ function renderLogin(app) {
 // ─── AUTH: REGISTER SCREEN ───
 function renderRegister(app) {
   var c = h('div', {'class': 'auth-container'});
-  c.appendChild(h('div', {'class': 'auth-logo'}, 'MTD'));
+  c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
   c.appendChild(h('div', {'class': 'auth-sub'}, window.t('auth.register')));
   c.appendChild(h('div', {'class': 'auth-line'}));
 
@@ -407,6 +408,7 @@ function renderRegister(app) {
 
   // Register button
   var regBtn = h('button', {'class': 'btn-primary', onclick: function(){
+    if (regBtn.disabled) return;
     var name = nameInput.value.trim();
     var email = emailInput.value.trim();
     var pw = pwInput.value;
@@ -449,17 +451,17 @@ function renderRegister(app) {
 // ─── AUTH: VERIFY EMAIL SCREEN ───
 function renderVerifyEmail(app) {
   var c = h('div', {'class': 'auth-container'});
-  c.appendChild(h('div', {'class': 'auth-logo'}, 'MTD'));
+  c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
   c.appendChild(h('div', {'class': 'auth-sub'}, 'V\u00e9rifie ton email'));
   c.appendChild(h('div', {'class': 'auth-line'}));
 
   var form = h('div', {'class': 'auth-form'});
 
   // Title
-  form.appendChild(h('h2', {style: 'text-align:center;margin:0 0 8px 0;font-size:22px'}, 'V\u00e9rifie ton email'));
+  form.appendChild(h('h2', {style: 'text-align:center;margin:0 0 8px 0;font-size:24px'}, 'V\u00e9rifie ton email'));
 
   // Subtitle
-  form.appendChild(h('p', {style: 'text-align:center;margin:0 0 6px 0;color:var(--grey);font-size:14px'}, 'Un email de confirmation a \u00e9t\u00e9 envoy\u00e9 \u00e0 :'));
+  form.appendChild(h('p', {style: 'text-align:center;margin:0 0 6px 0;color:var(--grey);font-size:13px'}, 'Un email de confirmation a \u00e9t\u00e9 envoy\u00e9 \u00e0 :'));
 
   // Email display
   form.appendChild(h('p', {style: 'text-align:center;margin:0 0 20px 0;font-weight:bold;font-size:16px'}, S.authVerifyEmail || ''));
@@ -479,7 +481,7 @@ function renderVerifyEmail(app) {
       var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
       if (!client) {
         statusMsg.textContent = 'Erreur : client non disponible.';
-        statusMsg.style.color = '#e74c3c';
+        statusMsg.style.color = '#5A1010';
         return;
       }
       statusMsg.textContent = 'Envoi en cours...';
@@ -487,14 +489,14 @@ function renderVerifyEmail(app) {
       client.auth.resend({type: 'signup', email: S.authVerifyEmail}).then(function(res) {
         if (res.error) {
           statusMsg.textContent = res.error.message || 'Erreur lors du renvoi.';
-          statusMsg.style.color = '#e74c3c';
+          statusMsg.style.color = '#5A1010';
         } else {
           statusMsg.textContent = 'Email renvoy\u00e9 !';
-          statusMsg.style.color = '#27AE60';
+          statusMsg.style.color = '#1A4A1A';
         }
       }).catch(function() {
         statusMsg.textContent = 'Erreur r\u00e9seau. R\u00e9essaye.';
-        statusMsg.style.color = '#e74c3c';
+        statusMsg.style.color = '#5A1010';
       });
     }
   }, 'Renvoyer l\u2019email'));
@@ -507,7 +509,7 @@ function renderVerifyEmail(app) {
       var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
       if (!client) {
         statusMsg.textContent = 'Erreur : client non disponible.';
-        statusMsg.style.color = '#e74c3c';
+        statusMsg.style.color = '#5A1010';
         return;
       }
       statusMsg.textContent = 'V\u00e9rification...';
@@ -523,11 +525,11 @@ function renderVerifyEmail(app) {
           render();
         } else {
           statusMsg.textContent = 'Email pas encore confirm\u00e9. V\u00e9rifie ta bo\u00eete mail (et les spams).';
-          statusMsg.style.color = '#e74c3c';
+          statusMsg.style.color = '#5A1010';
         }
       }).catch(function() {
         statusMsg.textContent = 'Erreur de v\u00e9rification. R\u00e9essaye.';
-        statusMsg.style.color = '#e74c3c';
+        statusMsg.style.color = '#5A1010';
       });
     }
   }, 'J\u2019ai confirm\u00e9 mon email'));
