@@ -719,21 +719,38 @@ window.AUTH = {
       return Promise.resolve({ ok: false, error: 'Adresse email invalide' });
     }
 
-    var client = _getClient();
+    // Use raw client for reset — this must work even if _useSupabase is false
+    var client = _getClient() || _getRawClient();
     if (!client) {
       return Promise.resolve({ ok: false, error: 'Service indisponible. R\u00e9essayez plus tard.' });
     }
 
+    var redirectUrl = window.location.origin + window.location.pathname;
+    console.log('[AUTH] resetPassword for:', email, 'redirectTo:', redirectUrl);
+
     return client.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + window.location.pathname
+      redirectTo: redirectUrl
     }).then(function(result) {
       if (result.error) {
         console.error('[AUTH] Supabase resetPassword error:', result.error.message || result.error);
-        return { ok: false, error: mapSupabaseError(result.error) };
+        var msg = (result.error.message || '').toLowerCase();
+        if (msg.indexOf('security') !== -1 || msg.indexOf('60 second') !== -1) {
+          return { ok: false, error: 'Veuillez patienter 60 secondes avant de r\u00e9essayer.' };
+        }
+        if (msg.indexOf('rate') !== -1 || msg.indexOf('limit') !== -1) {
+          return { ok: false, error: 'Trop de tentatives. R\u00e9essayez dans quelques minutes.' };
+        }
+        if (msg.indexOf('not found') !== -1 || msg.indexOf('not registered') !== -1) {
+          // Don't reveal if email exists — always show success for security
+          BLACKBOX.log('password_reset_requested', { email: email });
+          return { ok: true };
+        }
+        return { ok: false, error: 'Erreur lors de l\u2019envoi. R\u00e9essayez.' };
       }
       BLACKBOX.log('password_reset_requested', { email: email });
       return { ok: true };
-    }).catch(function() {
+    }).catch(function(err) {
+      console.error('[AUTH] resetPassword exception:', err);
       return { ok: false, error: 'Erreur r\u00e9seau. V\u00e9rifiez votre connexion.' };
     });
   },
