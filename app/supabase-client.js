@@ -3,7 +3,7 @@
 // ─── SUPABASE CLIENT ────────────────────────────────────────
 (function() {
   var SUPABASE_URL = 'https://uwaoxkgsgbzohakzgyvq.supabase.co';
-  var SUPABASE_KEY = 'sb_publishable_lvtbxe0D25WrmPL_dQNtEQ_xZt4D5ax';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3YW94a2dzZ2J6b2hha3pneXZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4ODUxMjUsImV4cCI6MjA5MDQ2MTEyNX0.N2ohXmi6ctG322205S0yE2UaE4fS43QCc8xBhO9iVyo';
 
   // Attendre que le SDK soit chargé
   var _client = null;
