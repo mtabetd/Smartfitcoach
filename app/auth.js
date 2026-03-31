@@ -462,17 +462,11 @@ window.AUTH = {
   ready: function() {
     var timeout = new Promise(function(resolve) {
       setTimeout(function() {
-        console.warn('[AUTH] ready() timed out after 5s, resetting Supabase client');
-        // CRITICAL: if getSession() never resolved, the Supabase GoTrueClient
-        // is stuck in INITIAL_SESSION state. All subsequent signInWithPassword()
-        // calls will fail. We must disable Supabase and clear stale tokens.
-        _useSupabase = false;
-        _loadLegacySession();
-        // Clear stale Supabase auth tokens from localStorage
+        console.warn('[AUTH] ready() timed out after 5s, clearing stale tokens');
+        // Clear stale Supabase auth tokens that caused getSession() to hang.
+        // Keep _useSupabase = true so login() still tries Supabase.
+        // The login retry mechanism will reset the client if needed.
         try {
-          var prefix = 'sb-uwaoxkgsgbzohakzgyvq-auth-token';
-          localStorage.removeItem(prefix);
-          // Also try the alternate key format
           Object.keys(localStorage).forEach(function(k) {
             if (k.indexOf('sb-') === 0 && k.indexOf('-auth-token') !== -1) {
               localStorage.removeItem(k);
