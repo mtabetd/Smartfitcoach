@@ -1084,6 +1084,8 @@ function openBadgesModal() {
 }
 
 function openKitchenTimer() {
+  // Clear any previous kitchen timer interval
+  if (window._kitchenTimerInterval) { clearInterval(window._kitchenTimerInterval); window._kitchenTimerInterval = null; }
   var overlay = h('div', 'dash-modal-overlay');
   var box = h('div', 'dash-modal-box');
   box.style.textAlign = 'center';
@@ -1149,7 +1151,7 @@ function openKitchenTimer() {
     if (totalSeconds <= 0) return;
     running = true;
     startBtn.textContent = 'En cours...';
-    interval = setInterval(function() {
+    interval = window._kitchenTimerInterval = setInterval(function() {
       totalSeconds--;
       updateDisplay();
       if (totalSeconds <= 0) {

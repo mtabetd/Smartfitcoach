@@ -106,6 +106,7 @@ function updateStreak() {
   data.lastDate = today;
   if (!data.dates) data.dates = [];
   data.dates.push(today);
+  if (data.dates.length > 400) data.dates = data.dates.slice(-400);
 
   try { localStorage.setItem(STREAK_KEY + user.id, JSON.stringify(data)); } catch(e) {}
   // Sync streak vers Supabase

@@ -328,6 +328,7 @@ function renderLogin(app) {
 
   // Login button
   var loginBtn = h('button', {'class': 'btn-primary', onclick: function(){
+    if (loginBtn.disabled) return;
     var email = emailInput.value.trim();
     var pw = pwInput.value;
     if (!email || !pw) { S.authError = 'Veuillez remplir tous les champs'; render(); return; }
@@ -407,6 +408,7 @@ function renderRegister(app) {
 
   // Register button
   var regBtn = h('button', {'class': 'btn-primary', onclick: function(){
+    if (regBtn.disabled) return;
     var name = nameInput.value.trim();
     var email = emailInput.value.trim();
     var pw = pwInput.value;
