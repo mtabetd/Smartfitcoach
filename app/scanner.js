@@ -16,12 +16,12 @@ style.textContent = `
   .scan-frame { width:200px; height:120px; border:2px solid rgba(250,250,247,0.6); position:relative; }
   .scan-frame::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--green,#1A4A1A); animation:scanLine 2s ease-in-out infinite; }
   @keyframes scanLine { 0%,100% { top:0; } 50% { top:calc(100% - 2px); } }
-  .camera-close { position:absolute; top:8px; right:8px; width:28px; height:28px; background:rgba(0,0,0,0.6); color:white; border:none; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; pointer-events:auto; z-index:2; }
+  .camera-close { position:absolute; top:8px; right:8px; width:44px; height:44px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:2px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; pointer-events:auto; z-index:2; }
 
   .manual-barcode { display:flex; gap:8px; margin:8px 0; }
-  .manual-barcode input { flex:1; padding:10px 14px; border:1px solid var(--border,#D8D8D0); font-family:'Helvetica Neue',sans-serif; font-size:13px; background:var(--ivory,#FAFAF7); outline:none; }
+  .manual-barcode input { flex:1; padding:12px 16px; border:1px solid var(--border,#D8D8D0); border-radius:2px; font-family:'Helvetica Neue',sans-serif; font-size:16px; background:var(--ivory,#FAF9F6); outline:none; }
   .manual-barcode input:focus { border-color:var(--black,#0A0A09); }
-  .manual-barcode button { padding:10px 16px; background:var(--black,#0A0A09); color:var(--ivory,#FAFAF7); border:none; cursor:pointer; font-family:'Helvetica Neue',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; }
+  .manual-barcode button { padding:10px 16px; background:var(--black,#0A0A09); color:var(--ivory,#FAF9F6); border:none; cursor:pointer; font-family:'Helvetica Neue',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; }
 
   .product-card { border:1px solid var(--border,#D8D8D0); background:var(--ivory2,#F4F4F0); padding:20px; margin:16px 0; }
   .product-header { display:flex; gap:16px; align-items:flex-start; margin-bottom:16px; }
@@ -29,21 +29,21 @@ style.textContent = `
   .product-info { flex:1; }
   .product-name { font-family:Georgia,serif; font-size:18px; margin-bottom:4px; }
   .product-brand { font-family:'Helvetica Neue',sans-serif; font-size:11px; color:var(--grey,#6B6B65); }
-  .product-quantity { font-family:'Helvetica Neue',sans-serif; font-size:10px; color:var(--grey2,#9A9A94); margin-top:2px; }
+  .product-quantity { font-family:'Helvetica Neue',sans-serif; font-size:11px; color:var(--grey2,#9A9A90); margin-top:2px; }
 
   .health-score { text-align:center; padding:20px; margin:12px 0; border:1px solid var(--border,#D8D8D0); }
   .score-circle { width:100px; height:100px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 12px; border:4px solid; }
-  .score-value { font-family:Georgia,serif; font-size:32px; font-style:italic; }
-  .score-label { font-family:'Helvetica Neue',sans-serif; font-size:8px; letter-spacing:3px; text-transform:uppercase; }
+  .score-value { font-family:Georgia,serif; font-size:24px; font-style:italic; }
+  .score-label { font-family:'Helvetica Neue',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; }
   .score-excellent { border-color:var(--green,#1A4A1A); color:var(--green,#1A4A1A); background:var(--greenbg,rgba(26,74,26,.06)); }
   .score-good { border-color:#4A7A1A; color:#4A7A1A; background:rgba(74,122,26,.06); }
   .score-average { border-color:var(--orange,#6A4A1A); color:var(--orange,#6A4A1A); background:var(--orangebg,rgba(106,74,26,.06)); }
   .score-poor { border-color:var(--red,#5A1010); color:var(--red,#5A1010); background:var(--redbg,rgba(90,16,16,.06)); }
 
   .nutri-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(60px,1fr)); gap:6px; margin:12px 0; }
-  .nutri-cell { text-align:center; padding:10px 6px; border:1px solid var(--border,#D8D8D0); background:var(--ivory,#FAFAF7); }
+  .nutri-cell { text-align:center; padding:10px 6px; border:1px solid var(--border,#D8D8D0); background:var(--ivory,#FAF9F6); }
   .nutri-cell .nv { font-family:Georgia,serif; font-size:16px; }
-  .nutri-cell .nl { font-family:'Helvetica Neue',sans-serif; font-size:8px; letter-spacing:2px; text-transform:uppercase; color:var(--grey,#6B6B65); margin-top:2px; }
+  .nutri-cell .nl { font-family:'Helvetica Neue',sans-serif; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--grey,#6B6B65); margin-top:2px; }
 
   .fit-verdict { padding:12px 16px; margin:12px 0; font-family:'Helvetica Neue',sans-serif; font-size:11px; line-height:1.6; }
   .fit-yes { border-left:3px solid var(--green,#1A4A1A); background:var(--greenbg,rgba(26,74,26,.06)); color:var(--green); }
@@ -51,10 +51,10 @@ style.textContent = `
   .fit-warning { border-left:3px solid var(--orange,#6A4A1A); background:var(--orangebg,rgba(106,74,26,.06)); color:var(--orange); }
 
   .alternatives-section { margin:16px 0; }
-  .alt-item { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:1px solid var(--border,#D8D8D0); background:var(--ivory,#FAFAF7); margin-bottom:4px; cursor:pointer; transition:all 0.2s; }
+  .alt-item { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:1px solid var(--border,#D8D8D0); background:var(--ivory,#FAF9F6); margin-bottom:4px; cursor:pointer; transition:all 0.2s; }
   .alt-item:hover { border-color:var(--green,#1A4A1A); }
-  .alt-name { font-family:'Helvetica Neue',sans-serif; font-size:12px; }
-  .alt-score { font-family:Georgia,serif; font-size:14px; font-style:italic; }
+  .alt-name { font-family:'Helvetica Neue',sans-serif; font-size:13px; }
+  .alt-score { font-family:Georgia,serif; font-size:13px; font-style:italic; }
 
   .scan-loading { text-align:center; padding:30px; font-family:'Helvetica Neue',sans-serif; font-size:11px; color:var(--grey,#6B6B65); letter-spacing:2px; text-transform:uppercase; }
   .scan-error { text-align:center; padding:16px; font-family:'Helvetica Neue',sans-serif; font-size:11px; color:var(--red,#5A1010); border:1px solid var(--red); background:var(--redbg); margin:12px 0; }
@@ -474,7 +474,7 @@ window.SCANNER = {
     var histSection = document.createElement('div');
     histSection.className = 'scan-history';
     var histLabel = document.createElement('div');
-    histLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#5A5A54);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border,#D8D8D0)';
+    histLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border,#D8D8D0)';
     histLabel.textContent = window.t('scan.history');
     histSection.appendChild(histLabel);
     if (history.length > 0) {
@@ -492,7 +492,7 @@ window.SCANNER = {
         nameSpan.appendChild(brandSpan);
         var scoreSpan = document.createElement('span');
         scoreSpan.className = getScoreClass(item.score);
-        scoreSpan.style.cssText = 'font-family:Georgia;font-style:italic;padding:2px 8px;font-size:12px';
+        scoreSpan.style.cssText = 'font-family:Georgia;font-style:italic;padding:2px 8px;font-size:13px';
         scoreSpan.textContent = item.score + '%';
         row.appendChild(nameSpan);
         row.appendChild(scoreSpan);
@@ -557,7 +557,7 @@ window.SCANNER = {
       if (!barcodeDetector) {
         // No native barcode support - show message and skip camera
         var msg = document.createElement('div');
-        msg.style.cssText = 'text-align:center;padding:12px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey)';
+        msg.style.cssText = 'text-align:center;padding:12px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey)';
         msg.textContent = 'Scan automatique non supporté sur ce navigateur. Utilisez la saisie manuelle ci-dessous.';
         cameraContainer.appendChild(msg);
       } else {
@@ -675,7 +675,7 @@ window.SCANNER = {
       // Nutri-Score badge if available
       if (p.nutriscore) {
         var ns = document.createElement('div');
-        ns.style.cssText = 'font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey);margin-top:8px';
+        ns.style.cssText = 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-top:8px';
         ns.textContent = 'Nutri-Score : ' + p.nutriscore.toUpperCase() + (p.nova ? ' \u00b7 NOVA ' + p.nova : '');
         scoreDiv.appendChild(ns);
       }

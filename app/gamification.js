@@ -226,17 +226,17 @@ function renderBadgesPanel(container) {
     badge.style.cssText = 'text-align:center;padding:12px 8px;border:1px solid ' + (isUnlocked ? '#1A4A1A' : '#D8D8D0') + ';background:' + (isUnlocked ? 'rgba(26,74,26,.06)' : '#F4F4F0') + ';opacity:' + (isUnlocked ? '1' : '0.5');
 
     var icon = _h('div', '');
-    icon.style.cssText = 'font-size:20px;margin-bottom:4px';
+    icon.style.cssText = 'font-size:18px;margin-bottom:4px';
     icon.textContent = def.icon;
     badge.appendChild(icon);
 
     var name = _h('div', '');
-    name.style.cssText = 'font-family:Georgia;font-size:12px;margin-bottom:2px';
+    name.style.cssText = 'font-family:Georgia;font-size:13px;margin-bottom:2px';
     name.textContent = def.name;
     badge.appendChild(name);
 
     var desc = _h('div', '');
-    desc.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:8px;color:#9A9A94;letter-spacing:1px';
+    desc.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:#9A9A90;letter-spacing:1px';
     desc.textContent = isUnlocked ? '✓ Débloqué' : def.desc;
     badge.appendChild(desc);
 
@@ -255,7 +255,7 @@ function renderStreakWidget(container) {
 
   // Streak number
   var num = _h('div', '');
-  num.style.cssText = 'font-family:Georgia;font-size:32px;font-style:italic;min-width:60px;text-align:center';
+  num.style.cssText = 'font-family:Georgia;font-size:24px;font-style:italic;min-width:60px;text-align:center';
   num.textContent = String(streak.current);
   widget.appendChild(num);
 
@@ -267,7 +267,7 @@ function renderStreakWidget(container) {
   info.appendChild(label);
 
   var best = _h('div', '');
-  best.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#9A9A94;margin-top:2px';
+  best.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#9A9A90;margin-top:2px';
   best.textContent = 'Record : ' + streak.best + ' jours';
   info.appendChild(best);
 
@@ -277,7 +277,7 @@ function renderStreakWidget(container) {
   if (streak.current > 0) {
     var flame = _h('div', '');
     flame.style.cssText = 'margin-left:auto;font-size:24px';
-    flame.textContent = streak.current >= 7 ? '🔥' : '◆';
+    flame.textContent = streak.current >= 7 ? '◆' : '◇';
     widget.appendChild(flame);
   }
 
@@ -291,12 +291,12 @@ function renderDailyQuoteWidget(container) {
   widget.style.cssText = 'border-left:2px solid #0A0A09;padding:12px 16px;margin:16px 0;background:rgba(10,10,9,0.02)';
 
   var text = _h('div', '');
-  text.style.cssText = 'font-family:Georgia;font-size:14px;font-style:italic;line-height:1.7;color:#0A0A09';
+  text.style.cssText = 'font-family:Georgia;font-size:13px;font-style:italic;line-height:1.7;color:#0A0A09';
   text.textContent = '"' + quote.text + '"';
   widget.appendChild(text);
 
   var author = _h('div', '');
-  author.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#9A9A94;margin-top:6px';
+  author.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#9A9A90;margin-top:6px';
   author.textContent = '— ' + quote.author;
   widget.appendChild(author);
 

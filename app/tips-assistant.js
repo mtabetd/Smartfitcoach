@@ -10,16 +10,16 @@ style.textContent = `
   .tip-toggle.on { border-color:var(--green,#1A4A1A); background:rgba(26,74,26,.04); }
   .tip-toggle-label { font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; }
   .tip-toggle-sub { font-family:'Helvetica Neue',Arial,sans-serif; font-size:9px; color:var(--grey,#6B6B65); margin-top:2px; }
-  .tip-toggle-switch { width:36px; height:20px; border-radius:10px; background:var(--grey3,#C8C8C0); position:relative; transition:background 0.2s; }
+  .tip-toggle-switch { width:36px; height:20px; border-radius:2px; background:var(--grey3,#C8C8C0); position:relative; transition:background 0.2s; }
   .tip-toggle.on .tip-toggle-switch { background:var(--green,#1A4A1A); }
   .tip-toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:white; transition:transform 0.2s; }
   .tip-toggle.on .tip-toggle-switch::after { transform:translateX(16px); }
 
-  .tip-bubble { display:flex; gap:10px; align-items:flex-start; padding:10px 14px; margin:8px 0 16px; border-left:2px solid var(--blue,#1A3A6A); background:var(--bluebg,rgba(26,58,106,.06)); animation:tipIn 0.3s ease; }
+  .tip-bubble { display:flex; gap:12px; align-items:flex-start; padding:12px 16px; margin:8px 0 16px; border-left:2px solid var(--blue,#1A3A6A); background:var(--bluebg,rgba(26,58,106,.06)); animation:tipIn 0.2s ease; }
   @keyframes tipIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
-  .tip-icon { font-size:14px; flex-shrink:0; margin-top:1px; }
-  .tip-text { font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; color:var(--black2,#1A1A18); line-height:1.5; }
-  .tip-source { font-family:'Helvetica Neue',Arial,sans-serif; font-size:8px; color:var(--grey2,#9A9A94); margin-top:3px; letter-spacing:1px; }
+  .tip-icon { font-size:13px; flex-shrink:0; margin-top:1px; }
+  .tip-text { font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; color:var(--black2,#181818); line-height:1.5; }
+  .tip-source { font-family:'Helvetica Neue',Arial,sans-serif; font-size:9px; color:var(--grey2,#9A9A90); margin-top:3px; letter-spacing:1px; }
 `;
 document.head.appendChild(style);
 

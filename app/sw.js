@@ -172,7 +172,7 @@ function offlineFallback() {
   <title>Smart Fit Coach — Hors ligne</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:Georgia,serif;background:#FAFAF7;color:#0A0A09;
+    body{font-family:Georgia,serif;background:#FAF9F6;color:#0A0A09;
          display:flex;align-items:center;justify-content:center;
          min-height:100vh;text-align:center;padding:2rem}
     h1{font-size:1.5rem;margin-bottom:.75rem}

@@ -4,8 +4,8 @@
   "description": "Smart Fit Coach — Nutrition personnalisée et programmes sportifs sur mesure",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#FAFAF7",
-  "theme_color": "#FAFAF7",
+  "background_color": "#FAF9F6",
+  "theme_color": "#FAF9F6",
   "orientation": "portrait",
   "icons": [
     {

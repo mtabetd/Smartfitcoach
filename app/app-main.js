@@ -223,7 +223,7 @@ function render() {
   // Language toggle FR / EN
   var _curLang = (window.I18N ? window.I18N.current : (S.lang || 'fr'));
   var langBtn = h('button', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;padding:4px 10px;background:none;border:1px solid var(--border);cursor:pointer;color:var(--grey)',
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;padding:12px 16px;min-height:44px;box-sizing:border-box;background:none;border:1px solid var(--border);border-radius:2px;cursor:pointer;color:var(--grey)',
     onclick: function() {
       var next = (window.I18N ? window.I18N.current : (S.lang || 'fr')) === 'fr' ? 'en' : 'fr';
       if (window.I18N && window.I18N.setLang) { window.I18N.setLang(next); } else { S.lang = next; render(); }
@@ -232,7 +232,7 @@ function render() {
   ubRight.appendChild(langBtn);
   // Day/night toggle
   var _isDark = document.body.classList.contains('dark-mode');
-  ubRight.appendChild(h('button', {style:'font-size:16px;padding:2px 8px;background:none;border:1px solid var(--border);cursor:pointer', onclick: function(){ document.body.classList.toggle('dark-mode'); try{localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode')?'true':'false');}catch(e){} render(); }}, _isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'));
+  ubRight.appendChild(h('button', {style:'font-size:16px;padding:12px;min-height:44px;min-width:44px;box-sizing:border-box;background:none;border:1px solid var(--border);border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center', onclick: function(){ document.body.classList.toggle('dark-mode'); try{localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode')?'true':'false');}catch(e){} render(); }}, _isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'));
   ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; render(); }}, window.t('auth.logout')));
   ub.appendChild(ubRight);
   wrap.appendChild(ub);
@@ -458,10 +458,10 @@ function renderVerifyEmail(app) {
   var form = h('div', {'class': 'auth-form'});
 
   // Title
-  form.appendChild(h('h2', {style: 'text-align:center;margin:0 0 8px 0;font-size:22px'}, 'V\u00e9rifie ton email'));
+  form.appendChild(h('h2', {style: 'text-align:center;margin:0 0 8px 0;font-size:24px'}, 'V\u00e9rifie ton email'));
 
   // Subtitle
-  form.appendChild(h('p', {style: 'text-align:center;margin:0 0 6px 0;color:var(--grey);font-size:14px'}, 'Un email de confirmation a \u00e9t\u00e9 envoy\u00e9 \u00e0 :'));
+  form.appendChild(h('p', {style: 'text-align:center;margin:0 0 6px 0;color:var(--grey);font-size:13px'}, 'Un email de confirmation a \u00e9t\u00e9 envoy\u00e9 \u00e0 :'));
 
   // Email display
   form.appendChild(h('p', {style: 'text-align:center;margin:0 0 20px 0;font-weight:bold;font-size:16px'}, S.authVerifyEmail || ''));
@@ -481,7 +481,7 @@ function renderVerifyEmail(app) {
       var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
       if (!client) {
         statusMsg.textContent = 'Erreur : client non disponible.';
-        statusMsg.style.color = '#e74c3c';
+        statusMsg.style.color = '#5A1010';
         return;
       }
       statusMsg.textContent = 'Envoi en cours...';
@@ -489,14 +489,14 @@ function renderVerifyEmail(app) {
       client.auth.resend({type: 'signup', email: S.authVerifyEmail}).then(function(res) {
         if (res.error) {
           statusMsg.textContent = res.error.message || 'Erreur lors du renvoi.';
-          statusMsg.style.color = '#e74c3c';
+          statusMsg.style.color = '#5A1010';
         } else {
           statusMsg.textContent = 'Email renvoy\u00e9 !';
-          statusMsg.style.color = '#27AE60';
+          statusMsg.style.color = '#1A4A1A';
         }
       }).catch(function() {
         statusMsg.textContent = 'Erreur r\u00e9seau. R\u00e9essaye.';
-        statusMsg.style.color = '#e74c3c';
+        statusMsg.style.color = '#5A1010';
       });
     }
   }, 'Renvoyer l\u2019email'));
@@ -509,7 +509,7 @@ function renderVerifyEmail(app) {
       var client = window.getSupabaseClient ? window.getSupabaseClient() : null;
       if (!client) {
         statusMsg.textContent = 'Erreur : client non disponible.';
-        statusMsg.style.color = '#e74c3c';
+        statusMsg.style.color = '#5A1010';
         return;
       }
       statusMsg.textContent = 'V\u00e9rification...';
@@ -525,11 +525,11 @@ function renderVerifyEmail(app) {
           render();
         } else {
           statusMsg.textContent = 'Email pas encore confirm\u00e9. V\u00e9rifie ta bo\u00eete mail (et les spams).';
-          statusMsg.style.color = '#e74c3c';
+          statusMsg.style.color = '#5A1010';
         }
       }).catch(function() {
         statusMsg.textContent = 'Erreur de v\u00e9rification. R\u00e9essaye.';
-        statusMsg.style.color = '#e74c3c';
+        statusMsg.style.color = '#5A1010';
       });
     }
   }, 'J\u2019ai confirm\u00e9 mon email'));
