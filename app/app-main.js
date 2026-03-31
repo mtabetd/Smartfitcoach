@@ -337,6 +337,7 @@ function renderLogin(app) {
     loginBtn.disabled = true;
     loginBtn.textContent = 'Connexion...';
     AUTH.login(email, pw).then(function(result) {
+      if (S.view !== 'auth') return;
       if (result.ok) {
         S.authError = '';
         S.view = 'dashboard';
@@ -347,6 +348,7 @@ function renderLogin(app) {
         render();
       }
     }).catch(function() {
+      if (S.view !== 'auth') return;
       S.authError = 'Erreur de connexion. Réessayez.';
       render();
     });
