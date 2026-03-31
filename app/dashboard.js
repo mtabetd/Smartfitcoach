@@ -868,8 +868,10 @@ window.DASHBOARD = {
     var badges = getBadges();
     if (badges.length > 0) {
       badges.forEach(function(b) {
-        var mini = h('div', 'dash-badge-mini', b.icon || b.emoji || '\u2605');
-        if (b.name) mini.title = b.name;
+        var def = (window.GAMIFICATION && window.GAMIFICATION.BADGE_DEFS) ? window.GAMIFICATION.BADGE_DEFS.find(function(d){ return d.id === b.id; }) : null;
+        var mini = h('div', 'dash-badge-mini', (def && def.icon) || b.icon || b.emoji || '\u2605');
+        if (def && def.name) mini.title = def.name;
+        else if (b.name) mini.title = b.name;
         badgesRow.appendChild(mini);
       });
     } else {

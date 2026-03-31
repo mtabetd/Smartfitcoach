@@ -437,7 +437,7 @@ window.MEAL_TIMER = {
     container.innerHTML = '';
 
     var wrap = el('div', 'extras-widget timer-section');
-    var recipeLabel = el('div', 'timer-recipe', '&nbsp;');
+    var recipeLabel = el('div', 'timer-recipe', '\u00A0');
     wrap.appendChild(recipeLabel);
 
     var display = el('div', 'timer-display', '00:00');
@@ -1107,9 +1107,9 @@ window.FOOD_CALC = {
         // Calculer les macros scalées à la quantité saisie
         var ratio = g / 100;
         var kcal   = Math.round((food.energy_100g || food.kcal || 0) * ratio);
-        var prot   = Math.round((food.proteins_100g || food.p || 0) * ratio * 10) / 10;
-        var carbs  = Math.round((food.carbohydrates_100g || food.g || 0) * ratio * 10) / 10;
-        var fat    = Math.round((food.fat_100g || food.l || 0) * ratio * 10) / 10;
+        var prot   = Math.round((food.proteins_100g || food.protein || food.p || 0) * ratio * 10) / 10;
+        var carbs  = Math.round((food.carbohydrates_100g || food.carbs || food.g || 0) * ratio * 10) / 10;
+        var fat    = Math.round((food.fat_100g || food.fat || food.l || 0) * ratio * 10) / 10;
         // Déterminer le repas selon l'heure
         var h = new Date().getHours();
         var mealSlot = h < 10 ? 'breakfast' : h < 14 ? 'lunch' : h < 17 ? 'snack' : 'dinner';
@@ -1155,7 +1155,11 @@ window.FOOD_CALC = {
           })(results[i]);
         }
         if (results.length === 0 && q.length >= 2) {
-          resultsList.appendChild(el('div', 'food-result-item', '<span style="color:var(--grey,#6B6B65);font-style:italic">Aucun resultat</span>'));
+          var noResult = el('div', 'food-result-item');
+          noResult.style.color = 'var(--grey,#6B6B65)';
+          noResult.style.fontStyle = 'italic';
+          noResult.textContent = 'Aucun résultat';
+          resultsList.appendChild(noResult);
         }
       }, 250);
     });
@@ -1687,7 +1691,11 @@ window.PHOTO_PROGRESS = {
     });
     // Keep max 20 photos (localStorage size limit)
     if (photos.length > 20) photos = photos.slice(-20);
-    localStorage.setItem(key, JSON.stringify(photos));
+    try {
+      localStorage.setItem(key, JSON.stringify(photos));
+    } catch(e) {
+      if (photos.length > 1) { photos.shift(); try { localStorage.setItem(key, JSON.stringify(photos)); } catch(e2) {} }
+    }
     if (window.BLACKBOX) BLACKBOX.log('progress_photo_saved', {type: type});
   },
 

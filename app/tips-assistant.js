@@ -146,11 +146,11 @@ var TIPS = {
 var TIPS_KEY = 'mtd_tips_enabled';
 
 function isTipsEnabled() {
-  return localStorage.getItem(TIPS_KEY) === 'true';
+  try { return localStorage.getItem(TIPS_KEY) === 'true'; } catch(e) { return false; }
 }
 
 function setTipsEnabled(val) {
-  localStorage.setItem(TIPS_KEY, val ? 'true' : 'false');
+  try { localStorage.setItem(TIPS_KEY, val ? 'true' : 'false'); } catch(e) {}
 }
 
 // ─── GET TIP FOR CONTEXT ───

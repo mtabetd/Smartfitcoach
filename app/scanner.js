@@ -242,7 +242,7 @@ function checkFitness(product) {
   }
 
   // Check macros alignment
-  var goalKey = window.GOALS && S.goal !== null ? window.GOALS[S.goal].key : 'maintain';
+  var goalKey = (window.GOALS && S.goal !== null && window.GOALS[S.goal]) ? window.GOALS[S.goal].key : 'maintain';
 
   if ((goalKey === 'cut' || goalKey === 'shred') && product.sugar > 15) {
     issues.push('Trop de sucres pour un objectif de ' + (goalKey === 'cut' ? 'perte de poids' : 'sèche'));
@@ -257,7 +257,7 @@ function checkFitness(product) {
   }
 
   if (issues.length === 0) {
-    return { fits: true, message: 'Ce produit est compatible avec votre plan nutritionnel (' + window.GOALS[S.goal].name + ')' };
+    return { fits: true, message: 'Ce produit est compatible avec votre plan nutritionnel (' + ((window.GOALS && window.GOALS[S.goal]) ? window.GOALS[S.goal].name : '') + ')' };
   }
 
   return { fits: false, message: issues.join('. ') + '.' };
@@ -316,7 +316,7 @@ function addToScanHistory(product, score) {
     date: new Date().toISOString().split('T')[0]
   });
   if (history.length > 50) history = history.slice(0, 50);
-  localStorage.setItem(key, JSON.stringify(history));
+  try { localStorage.setItem(key, JSON.stringify(history)); } catch(e) {}
 }
 
 // ─── CAMERA SCANNING ───
@@ -413,7 +413,9 @@ function stopCamera() {
 
 // ─── RENDER ───
 window.SCANNER = {
+  stopCamera: stopCamera,
   renderWidget: function(container) {
+    stopCamera(); // Clean up any previous camera stream on re-render
     var scannerDiv = document.createElement('div');
     scannerDiv.className = 'scanner-container';
 
@@ -553,12 +555,12 @@ window.SCANNER = {
       cameraContainer.appendChild(view);
 
       if (!barcodeDetector) {
-        // No native barcode support - show message
+        // No native barcode support - show message and skip camera
         var msg = document.createElement('div');
         msg.style.cssText = 'text-align:center;padding:12px;font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey)';
-        msg.textContent = 'Scan automatique non supporté sur ce navigateur. Utilisez la saisie manuelle.';
+        msg.textContent = 'Scan automatique non supporté sur ce navigateur. Utilisez la saisie manuelle ci-dessous.';
         cameraContainer.appendChild(msg);
-      }
+      } else {
 
       startCamera(video, function(barcode) {
         showCamera = false;
@@ -575,6 +577,7 @@ window.SCANNER = {
         errDiv.textContent = errorMsg;
         cameraContainer.appendChild(errDiv);
       });
+      } // end else (barcodeDetector exists)
     }
 
     function lookupAndAnalyze(barcode) {

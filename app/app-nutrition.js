@@ -2,7 +2,10 @@
 (function(){
 'use strict';
 var S = window.S;
+if (!S) { console.error('[SFC] window.S not initialized'); return; }
 var h = window.h, txt = window.txt, svgRing = window.svgRing;
+
+if (!window.t) window.t = function(k){ return k; };
 
 // ─── DISPLAY ROUNDING ───
 function roundDisplayQty(qty, unit) {
@@ -17,19 +20,19 @@ function roundDisplayQty(qty, unit) {
 }
 
 // ─── LOCAL REFERENCES ───
-var ACTIVITIES = window.ACTIVITIES;
-var GOALS = window.GOALS;
-var TRAINS = window.TRAINS;
-var SLEEPS = window.SLEEPS;
+var ACTIVITIES = window.ACTIVITIES || [];
+var GOALS = window.GOALS || [];
+var TRAINS = window.TRAINS || [];
+var SLEEPS = window.SLEEPS || [];
 var MEDICAL = window.MEDICAL;
 var MEDICAL_ADVICE = window.MEDICAL_ADVICE;
 var COOK_LEVELS = window.COOK_LEVELS;
-var ALLERGIES = window.ALLERGIES;
-var INTOLERANCES = window.INTOLERANCES;
-var REGIMES = window.REGIMES;
+var ALLERGIES = window.ALLERGIES || [];
+var INTOLERANCES = window.INTOLERANCES || [];
+var REGIMES = window.REGIMES || [];
 var CUISINES = window.CUISINES;
 var CUISINE_FLAGS = window.CUISINE_FLAGS;
-var SHOPPING = window.SHOPPING;
+var SHOPPING = window.SHOPPING || [];
 var STAPLES = window.STAPLES;
 var DAY_NAMES = window.DAY_NAMES;
 var MEAL_SPLIT = window.MEAL_SPLIT;
@@ -43,18 +46,18 @@ var BODY_ZONES = window.BODY_ZONES;
 var SUPPLEMENTS_DB = window.SUPPLEMENTS_DB;
 var getSupplementRecommendations = window.getSupplementRecommendations;
 
-var calcBMR = window.calcBMR;
-var calcTDEE = window.calcTDEE;
-var calcTarget = window.calcTarget;
-var calcMacros = window.calcMacros;
-var calcBMI = window.calcBMI;
-var bmiInfo = window.bmiInfo;
-var calcWeightProjection = window.calcWeightProjection;
-var alcoholWeeklyKcal = window.alcoholWeeklyKcal;
+var calcBMR = window.calcBMR || function(){return 0;};
+var calcTDEE = window.calcTDEE || function(){return 0;};
+var calcTarget = window.calcTarget || function(){return 0;};
+var calcMacros = window.calcMacros || function(){return{g:0,p:0,l:0};};
+var calcBMI = window.calcBMI || function(){return null;};
+var bmiInfo = window.bmiInfo || function(){return{label:'',color:'#999'};};
+var calcWeightProjection = window.calcWeightProjection || function(){return[];};
+var alcoholWeeklyKcal = window.alcoholWeeklyKcal || function(){return 0;};
 
-var filterRecipes = window.filterRecipes;
-var generateWeek = window.generateWeek;
-var swapMeal = window.swapMeal;
+var filterRecipes = window.filterRecipes || function(p){return p||[];};
+var generateWeek = window.generateWeek || function(){return[];};
+var swapMeal = window.swapMeal || function(){};
 var getPool = window.getPool;
 var pickRecipe = window.pickRecipe;
 
@@ -184,7 +187,7 @@ function renderStep1(p) {
 
           // Progress bar showing position in cycle
           var barWrap = h('div', {style: 'margin-top:10px;height:8px;background:var(--border);border-radius:4px;overflow:hidden;display:flex'});
-          var CYCLE_PHASES = window.CYCLE_PHASES;
+          var CYCLE_PHASES = window.CYCLE_PHASES || [];
           var barColors = {menstruation: '#C0392B', follicular: '#E67E22', ovulation: '#27AE60', luteal: '#E67E22'};
           for (var ci = 0; ci < CYCLE_PHASES.length; ci++) {
             var cp = CYCLE_PHASES[ci];
@@ -1058,7 +1061,8 @@ function renderStep6(p) {
     p.appendChild(bn);
 
     // Target weight
-    var goalKey = GOALS[S.goal].key;
+    var goalObj8 = (S.goal !== null && GOALS[S.goal]) ? GOALS[S.goal] : null;
+    var goalKey = goalObj8 ? goalObj8.key : 'maintain';
     var needsTarget = goalKey === 'cut' || goalKey === 'shred' || goalKey === 'bulk' || goalKey === 'lean_bulk';
     var twLabel = h('div', {'class': 'section-label'});
     twLabel.appendChild(txt('Poids objectif'));
@@ -1099,7 +1103,7 @@ function renderStep6(p) {
   p.appendChild(h('div', {style: 'height:16px'}));
   var goalOk = S.goal !== null;
   var _tcaConflict = false;
-  if (goalOk && S.goal !== null) {
+  if (goalOk && S.goal !== null && GOALS[S.goal]) {
     var gk = GOALS[S.goal].key;
     if ((gk === 'cut' || gk === 'shred' || gk === 'bulk' || gk === 'lean_bulk') && !S.targetWeight) goalOk = false;
     if ((gk === 'cut' || gk === 'shred') && S.medical && S.medical.indexOf('tca') !== -1) {
@@ -1112,7 +1116,7 @@ function renderStep6(p) {
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !goalOk, onclick: function() {
     if (goalOk) {
-      bb('nutrition_goal', {goal: GOALS[S.goal].key, target: calcTarget(), targetWeight: S.targetWeight});
+      bb('nutrition_goal', {goal: (GOALS[S.goal]||{}).key, target: calcTarget(), targetWeight: S.targetWeight});
       goStep(7);
     }
   }}, window.t('onb.next')));
@@ -1311,7 +1315,7 @@ function renderStep7(p) {
   // Frequency
   p.appendChild(h('div', {'class': 'section-label'}, 'Fr\u00e9quence de courses'));
   var sfg = h('div', {'class': 'card-grid-2'});
-  SHOPPING[0].items.forEach(function(it) {
+  (SHOPPING[0]?SHOPPING[0].items:[]).forEach(function(it) {
     sfg.appendChild(h('div', {'class': 'sel-card' + (S.shopFreq === it.id ? ' on' : ''), onclick: function() { S.shopFreq = it.id; window.render(); }}, [
       h('div', {'class': 'card-name', style: 'font-size:13px'}, it.name),
       h('div', {'class': 'card-sub'}, it.desc)
@@ -1322,7 +1326,7 @@ function renderStep7(p) {
   // Stores
   p.appendChild(h('div', {'class': 'section-label'}, 'O\u00f9 faites-vous vos courses ?'));
   var sg = h('div', {'class': 'chip-wrap'});
-  SHOPPING[1].items.forEach(function(it) {
+  (SHOPPING[1]?SHOPPING[1].items:[]).forEach(function(it) {
     var on = S.shopStores.indexOf(it.id) !== -1;
     sg.appendChild(h('span', {'class': 'chip' + (on ? ' on' : ''), onclick: function() {
       if (on) S.shopStores = S.shopStores.filter(function(x) { return x !== it.id; });
@@ -1336,7 +1340,7 @@ function renderStep7(p) {
   // Budget
   p.appendChild(h('div', {'class': 'section-label'}, 'Budget alimentaire'));
   var bg = h('div', {'class': 'card-grid-3'});
-  SHOPPING[2].items.forEach(function(it) {
+  (SHOPPING[2]?SHOPPING[2].items:[]).forEach(function(it) {
     bg.appendChild(h('div', {'class': 'sel-card' + (S.shopBudget === it.id ? ' on' : ''), onclick: function() { S.shopBudget = it.id; window.render(); }}, [
       h('div', {'class': 'card-name', style: 'font-size:13px'}, it.name),
       h('div', {'class': 'card-sub'}, it.desc)
@@ -1347,7 +1351,7 @@ function renderStep7(p) {
   // Preferences
   p.appendChild(h('div', {'class': 'section-label'}, 'Pr\u00e9f\u00e9rences produits'));
   var pg = h('div', {'class': 'chip-wrap'});
-  SHOPPING[3].items.forEach(function(it) {
+  (SHOPPING[3]?SHOPPING[3].items:[]).forEach(function(it) {
     var on = S.shopPrefs.indexOf(it.id) !== -1;
     pg.appendChild(h('span', {'class': 'chip' + (on ? ' on' : ''), onclick: function() {
       if (on) S.shopPrefs = S.shopPrefs.filter(function(x) { return x !== it.id; });
@@ -1694,7 +1698,7 @@ function renderStep8(p) {
       // Calorie adjustment note
       if (cycleInfo.phase.calorieAdjust !== 0) {
         var adjPct = Math.round(cycleInfo.phase.calorieAdjust * 100);
-        var baseCal = Math.round(calcTDEE() * GOALS[S.goal].mult);
+        var baseCal = Math.round(calcTDEE() * ((S.goal !== null && GOALS[S.goal]) ? GOALS[S.goal].mult : 1));
         var adjCal = tgt;
         var adjNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + phaseColor + ';margin-top:8px;padding:6px 10px;background:rgba(0,0,0,0.03);border-radius:2px'});
         adjNote.textContent = 'Calories adapt\u00e9es : ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal';
@@ -3018,7 +3022,7 @@ function renderSaladBar(p) {
   function computeItemMacros(item) {
     var dbItem = findInDb(item.name);
     if (!dbItem) return { k: item.k, p: item.p, g: item.g, l: item.l };
-    var ratio = item.qty / dbItem.qty;
+    var ratio = dbItem.qty ? (item.qty / dbItem.qty) : 1;
     return {
       k: Math.round(dbItem.k * ratio),
       p: Math.round(dbItem.p * ratio * 10) / 10,
@@ -3042,7 +3046,7 @@ function renderSaladBar(p) {
     var dbItem = findInDb(item.name);
     var minQty = dbItem ? Math.round(dbItem.qty / 4) : 10;
     var newQty = Math.max(minQty, item.qty + delta);
-    var ratio = newQty / (dbItem ? dbItem.qty : item.qty);
+    var ratio = newQty / (dbItem ? (dbItem.qty || 1) : (item.qty || 1));
     item.qty = newQty;
     if (dbItem) {
       item.k = Math.round(dbItem.k * ratio);
@@ -4042,7 +4046,7 @@ function showSmoothieModal(sm) {
       }
       var smoothieAsRecipe = {
         n: sm.name, f: '🥛', k: sm.cal, p: sm.p, g: sm.c, l: sm.f,
-        i: sm.ingredients.map(function(ing){ return ing.qty+' '+ing.unit+' '+ing.name; }).join(', '),
+        i: (sm.ingredients||[]).map(function(ing){ return ing.qty+' '+ing.unit+' '+ing.name; }).join(', '),
         ingredients: sm.ingredients, st: sm.steps, w: true,
         tags: ['whey','smoothie'].concat(sm.goal || []),
         lv: 1, _id: sm.id, _smoothie: true

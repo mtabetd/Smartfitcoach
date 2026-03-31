@@ -216,7 +216,7 @@ function render() {
   // User bar
   var user = AUTH.getUser();
   var ub = h('div', {'class': 'user-bar'});
-  ub.appendChild(h('span', {'class': 'user-name'}, '◆ ' + (user.name || user.email || 'Utilisateur')));
+  ub.appendChild(h('span', {'class': 'user-name'}, '◆ ' + (user ? (user.name || user.email || 'Utilisateur') : 'Utilisateur')));
   var ubRight = h('div', {style: 'display:flex;align-items:center;gap:12px'});
   // Session time
   ubRight.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey3)'}, (window.BLACKBOX ? window.BLACKBOX.getSessionMinutes() : 0) + ' min'));

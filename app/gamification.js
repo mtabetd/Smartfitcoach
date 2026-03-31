@@ -107,7 +107,7 @@ function updateStreak() {
   if (!data.dates) data.dates = [];
   data.dates.push(today);
 
-  localStorage.setItem(STREAK_KEY + user.id, JSON.stringify(data));
+  try { localStorage.setItem(STREAK_KEY + user.id, JSON.stringify(data)); } catch(e) {}
   // Sync streak vers Supabase
   if (window.SupaSync) SupaSync.saveStreak({current: data.current, best: data.best, lastDate: data.lastDate, dates: data.dates});
 
@@ -136,7 +136,7 @@ function unlockBadge(badgeId) {
   if (!def) return;
 
   badges.push({id: badgeId, unlockedAt: Date.now()});
-  localStorage.setItem(BADGES_KEY + user.id, JSON.stringify(badges));
+  try { localStorage.setItem(BADGES_KEY + user.id, JSON.stringify(badges)); } catch(e) {}
   // Sync badge vers Supabase
   if (window.SupaSync) SupaSync.saveBadge(badgeId);
 
@@ -182,7 +182,7 @@ function incrementCounter(counterName) {
   if (!user) return 0;
   var key = 'mtd_counter_' + counterName + '_' + user.id;
   var count = parseInt(localStorage.getItem(key) || '0') + 1;
-  localStorage.setItem(key, String(count));
+  try { localStorage.setItem(key, String(count)); } catch(e) {}
   return count;
 }
 

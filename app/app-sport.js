@@ -180,12 +180,13 @@ function generateSportProgram() {
   var program = [];
 
   // Adjust splits based on goals
-  var hasCardio = S.sportGoals.some(function(g){ return g === 'endurance' || g === 'weightloss' || g === 'shred'; });
-  var hasMuscle = S.sportGoals.some(function(g){ return g === 'muscle'; });
-  var hasShred = S.sportGoals.indexOf('shred') !== -1;
-  var hasEndurance = S.sportGoals.indexOf('endurance') !== -1;
-  var hasWeightloss = S.sportGoals.indexOf('weightloss') !== -1;
-  var hasFlexibility = S.sportGoals.indexOf('flexibility') !== -1;
+  var _goals = S.sportGoals || [];
+  var hasCardio = _goals.some(function(g){ return g === 'endurance' || g === 'weightloss' || g === 'shred'; });
+  var hasMuscle = _goals.some(function(g){ return g === 'muscle'; });
+  var hasShred = _goals.indexOf('shred') !== -1;
+  var hasEndurance = _goals.indexOf('endurance') !== -1;
+  var hasWeightloss = _goals.indexOf('weightloss') !== -1;
+  var hasFlexibility = _goals.indexOf('flexibility') !== -1;
 
   // Map zone names to exercise categories
   var zoneToCategory = {
@@ -195,9 +196,10 @@ function generateSportProgram() {
   };
 
   // Sort zones by priority (highest first)
-  var priorityZones = Object.keys(S.sportFocus)
-    .filter(function(z){ return S.sportFocus[z] > 0; })
-    .sort(function(a, b){ return S.sportFocus[b] - S.sportFocus[a]; });
+  var _focus = S.sportFocus || {};
+  var priorityZones = Object.keys(_focus)
+    .filter(function(z){ return _focus[z] > 0; })
+    .sort(function(a, b){ return _focus[b] - _focus[a]; });
 
   // Flatten zone name to categories array
   function zoneCategories(zoneName) {
@@ -350,7 +352,7 @@ function generateSportProgram() {
     var dayExercises = [];
 
     groups.forEach(function(group) {
-      var pool = window.EXERCISES[group] || [];
+      var pool = (window.EXERCISES && window.EXERCISES[group]) || [];
       var available = pool.filter(function(ex){ return ex.lv <= maxLv; });
       if (!available.length) available = pool.slice();
 
@@ -1928,6 +1930,8 @@ function renderCrossfitProgram(p) {
     var displayEl = h('div', {style: 'font-family:Georgia,serif;font-size:36px;text-align:center;letter-spacing:2px;color:#0A0A09;margin:8px 0'}, '00:00');
     timerContainer.appendChild(displayEl);
 
+    // Clear any previous timer interval to prevent leaks on re-render
+    if (window._wodTimerInterval) clearInterval(window._wodTimerInterval);
     var _timerRunning = false;
     var _timerInterval = null;
     var _elapsed = 0;
@@ -1957,7 +1961,7 @@ function renderCrossfitProgram(p) {
       } else {
         _timerRunning = true;
         _timerStartTime = Date.now() - _elapsed * 1000;
-        _timerInterval = setInterval(function() {
+        _timerInterval = window._wodTimerInterval = setInterval(function() {
           _elapsed = Math.floor((Date.now() - _timerStartTime) / 1000);
           updateDisplay();
           if (isCountdown && _elapsed >= totalSeconds) {
@@ -4075,7 +4079,7 @@ function renderMusculationProgram(p) {
   }}, '↻ Régénérer le programme'));
 
   // Export PDF
-  p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { window.exportSportPDF(); }}, '\u21e9 Exporter le programme en PDF'));
+  p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); }}, '\u21e9 Exporter le programme en PDF'));
 
   // Weight chart removed (was crashing)
 
@@ -4342,7 +4346,7 @@ function renderRunningConfig(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
     if (ok) {
       var goalObj = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
-      S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
+      if (typeof window.generateRunningProgram === 'function') S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
       S.runningWeek = 1;
       S.selectedRunDay = 0;
       S.sStep = 8;
@@ -4357,7 +4361,7 @@ function renderRunningConfig(p) {
 function renderRunningProgram(p) {
   if (!S.runningProgram || S.runningProgram.length === 0) {
     var goalObj = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
-    S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
+    if (typeof window.generateRunningProgram === 'function') S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
   }
 
   var program = S.runningProgram;
