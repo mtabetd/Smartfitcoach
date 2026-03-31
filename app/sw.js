@@ -1,7 +1,7 @@
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'sfc-v13';
-const RUNTIME_CACHE = 'sfc-runtime-v13';
+const CACHE_VERSION = 'sfc-v14';
+const RUNTIME_CACHE = 'sfc-runtime-v14';
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [
