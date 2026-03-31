@@ -10,7 +10,13 @@
 
   function getClient() {
     if (!_client && window.supabase) {
-      _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      try {
+        _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log('[Supabase] Client created OK');
+      } catch (e) {
+        console.error('[Supabase] createClient failed:', e);
+        _client = null;
+      }
     }
     return _client;
   }
