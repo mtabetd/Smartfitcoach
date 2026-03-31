@@ -21,6 +21,21 @@
     return _client;
   }
 
+  // Force-recreate a fresh client (used when auth state is stuck)
+  function resetClient() {
+    console.log('[Supabase] Resetting client');
+    _client = null;
+    // Clear stale auth tokens
+    try {
+      Object.keys(localStorage).forEach(function(k) {
+        if (k.indexOf('sb-') === 0 && k.indexOf('-auth-token') !== -1) {
+          localStorage.removeItem(k);
+        }
+      });
+    } catch (e) {}
+    return getClient();
+  }
+
   // ─── AUTH MODULE ──────────────────────────────────────────
   var SupaAuth = {
     // Inscription
@@ -363,4 +378,5 @@
   window.SupaAuth = SupaAuth;
   window.SupaSync = SupaSync;
   window.getSupabaseClient = getClient;
+  window.resetSupabaseClient = resetClient;
 })();
