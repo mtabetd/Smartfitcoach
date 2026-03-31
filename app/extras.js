@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    EXTRAS.JS — Premium Feature Modules
-   MTD Macro Calculator
+   Smart Fit Coach
    Water Tracker, Meal Timer, Body Measurements, Sleep Tracker,
    Food Calculator, Weekly Summary
    Design: ivoire/noir editorial luxury minimalism

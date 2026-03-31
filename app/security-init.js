@@ -22,7 +22,7 @@
       if ((widthThreshold || heightThreshold) && !devtoolsOpen) {
         devtoolsOpen = true;
         if (typeof console !== 'undefined' && console.warn) {
-          console.warn('[MTD] DevTools detected. This application is for personal use only.');
+          console.warn('[SFC] DevTools detected. This application is for personal use only.');
         }
       } else if (!widthThreshold && !heightThreshold) {
         devtoolsOpen = false;

@@ -1,4 +1,4 @@
-// app-core.js — MTD Macro Calculator: Core State, Constants, Helpers, Formulas
+// app-core.js — Smart Fit Coach: Core State, Constants, Helpers, Formulas
 (function(){
 'use strict';
 

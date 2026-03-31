@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    EXERCISES-DB.JS — Base de donnees exercices
-   MTD Macro Calculator
+   Smart Fit Coach
    72+ exercices, 9 groupes musculaires, liens video YouTube
    ═══════════════════════════════════════════════════════════════ */
 var EXERCISES = {

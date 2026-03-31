@@ -1,4 +1,4 @@
-// app-nutrition.js — MTD: Nutrition Wizard (10 steps)
+// app-nutrition.js — Smart Fit Coach: Nutrition Wizard (10 steps)
 (function(){
 'use strict';
 var S = window.S;
@@ -87,7 +87,7 @@ function goStep(n) {
 // ─── STEP 0: SPLASH ───
 function renderSplash(app) {
   var sp = h('div', {id: 'splash'});
-  sp.appendChild(h('div', {'class': 'splash-logo'}, 'MTD'));
+  sp.appendChild(h('div', {'class': 'splash-logo'}, 'SMARTFITCOACH'));
   sp.appendChild(h('div', {'class': 'splash-sub'}, 'Nutrition & Sport personnalis\u00e9s'));
   sp.appendChild(h('div', {'class': 'splash-line'}));
   var quotes = [
@@ -2418,7 +2418,7 @@ function exportDayPDF(dayIdx) {
   doc.rect(0, 0, W, 38, 'F');
   doc.setTextColor(ivory[0], ivory[1], ivory[2]);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
-  doc.text('MTD MACRO CALCULATOR', M, 14);
+  doc.text('SMART FIT COACH', M, 14);
   doc.setFontSize(16); doc.setFont('times', 'italic');
   doc.text(DAY_NAMES[dayIdx] + ' \u2014 Plan du jour', M, 26);
   doc.setFontSize(7); doc.setFont('helvetica', 'normal');
@@ -2492,7 +2492,7 @@ function exportDayPDF(dayIdx) {
   var pages = doc.internal.getNumberOfPages();
   for (var i = 1; i <= pages; i++) {
     doc.setPage(i); doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
-    doc.text('MTD Macro Calculator \u2014 g\u00e9n\u00e9r\u00e9 le ' + new Date().toLocaleDateString('fr-FR'), M, 290);
+    doc.text('Smart Fit Coach \u2014 g\u00e9n\u00e9r\u00e9 le ' + new Date().toLocaleDateString('fr-FR'), M, 290);
     doc.text('Page ' + i + '/' + pages, W - M, 290, {align: 'right'});
   }
   var safeDayName = (DAY_NAMES[dayIdx] || 'jour').toLowerCase()
@@ -2516,7 +2516,7 @@ function exportRecipePDF(r) {
   doc.rect(0, 0, W, 34, 'F');
   doc.setTextColor(ivory[0], ivory[1], ivory[2]);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
-  doc.text('MTD MACRO CALCULATOR', M, 12);
+  doc.text('SMART FIT COACH', M, 12);
   doc.setFont('times', 'italic'); doc.setFontSize(18);
   var recTitleLines = doc.splitTextToSize(r.n || 'Recette', W - 2 * M);
   doc.text(recTitleLines, M, 25);
@@ -2565,7 +2565,7 @@ function exportRecipePDF(r) {
 
   // Footer
   doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
-  doc.text('MTD Macro Calculator', M, 290);
+  doc.text('Smart Fit Coach', M, 290);
   var safeName = (r.n || 'recette').toLowerCase()
     .replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e')
     .replace(/[îï]/g, 'i').replace(/[ôõö]/g, 'o')
@@ -4591,7 +4591,7 @@ window.NUTRITION = {
     // Header with step indicator and progress bar
     if (S.nStep >= 1 && S.nStep <= 9) {
       var hdr = h('header', {'class': 'header'});
-      hdr.appendChild(h('div', {'class': 'logo', html: 'MTD<span>Nutrition & Sport</span>'}));
+      hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>Nutrition & Sport</span>'}));
       hdr.appendChild(h('div', {'class': 'step-indicator'}, window.t('onb.step') + ' ' + S.nStep + ' ' + window.t('onb.of') + ' 9'));
       p.appendChild(hdr);
       var pb = h('div', {'class': 'progress-bar'});

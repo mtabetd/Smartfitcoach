@@ -571,7 +571,7 @@ window.SPORT = {
     if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16 && S.sStep !== 20) {
       var hdr = h('header', {'class': 'header'});
       var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? 'Yoga & Mobilit\u00e9' : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
-      hdr.appendChild(h('div', {'class': 'logo', html: 'MTD<span>' + sportLabel + '</span>'}));
+      hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>' + sportLabel + '</span>'}));
       var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
       var currentDisplay = S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sportType === 'calisthenics' ? S.sStep - 23 : S.sStep;
       hdr.appendChild(h('div', {'class': 'step-indicator'}, 'Étape ' + currentDisplay + ' / ' + totalSteps));
@@ -639,7 +639,7 @@ function renderObjectif(p) {
   if (!S.sportSplashDone) {
     var q = SPORT_QUOTES[Math.floor(Math.random() * SPORT_QUOTES.length)];
     var splash = h('div', {style: 'text-align:center;padding:60px 24px 40px'});
-    splash.appendChild(h('div', {'class': 'splash-logo'}, 'MTD'));
+    splash.appendChild(h('div', {'class': 'splash-logo'}, 'SMARTFITCOACH'));
     splash.appendChild(h('div', {'class': 'splash-sub'}, 'Sport'));
     splash.appendChild(h('div', {'class': 'splash-line'}));
     var quoteDiv = h('div', {'class': 'splash-quote'});

@@ -1,4 +1,4 @@
-// app-main.js — MTD: Router, Auth Screens, Init
+// app-main.js — Smart Fit Coach: Router, Auth Screens, Init
 (function(){
 'use strict';
 var S = window.S;
@@ -274,7 +274,7 @@ function render() {
   wrap.appendChild(content);
 
   // Footer
-  wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'MTD Macro Calculator')]));
+  wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'Smart Fit Coach')]));
   app.appendChild(wrap);
 
   // Post-render scroll: reset .app container and window after content is in DOM
@@ -300,8 +300,8 @@ function render() {
 // ─── AUTH: LOGIN SCREEN ───
 function renderLogin(app) {
   var c = h('div', {'class': 'auth-container'});
-  c.appendChild(h('div', {'class': 'auth-logo'}, 'MTD'));
-  c.appendChild(h('div', {'class': 'auth-sub'}, 'Macro Calculator'));
+  c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
+  c.appendChild(h('div', {'class': 'auth-sub'}, 'Nutrition & Sport'));
   c.appendChild(h('div', {'class': 'auth-line'}));
 
   if (window.TIPS) TIPS.renderToggle(c);
@@ -365,7 +365,7 @@ function renderLogin(app) {
 // ─── AUTH: REGISTER SCREEN ───
 function renderRegister(app) {
   var c = h('div', {'class': 'auth-container'});
-  c.appendChild(h('div', {'class': 'auth-logo'}, 'MTD'));
+  c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
   c.appendChild(h('div', {'class': 'auth-sub'}, window.t('auth.register')));
   c.appendChild(h('div', {'class': 'auth-line'}));
 
@@ -449,7 +449,7 @@ function renderRegister(app) {
 // ─── AUTH: VERIFY EMAIL SCREEN ───
 function renderVerifyEmail(app) {
   var c = h('div', {'class': 'auth-container'});
-  c.appendChild(h('div', {'class': 'auth-logo'}, 'MTD'));
+  c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
   c.appendChild(h('div', {'class': 'auth-sub'}, 'V\u00e9rifie ton email'));
   c.appendChild(h('div', {'class': 'auth-line'}));
 
