@@ -2148,12 +2148,13 @@ function getCurrentCyclePhase() {
   var start = new Date(s.lastPeriodDate);
   var now = new Date();
   var diffDays = Math.floor((now - start) / 86400000);
-  var dayInCycle = ((diffDays % s.cycleLength) + s.cycleLength) % s.cycleLength + 1;
+  var cycleLen = s.cycleLength || 28;
+  var dayInCycle = ((diffDays % cycleLen) + cycleLen) % cycleLen + 1;
 
   for (var i = 0; i < CYCLE_PHASES.length; i++) {
     var phase = CYCLE_PHASES[i];
-    var phaseStart = Math.round(phase.days[0] * s.cycleLength / 28);
-    var phaseEnd = Math.round(phase.days[1] * s.cycleLength / 28);
+    var phaseStart = Math.round(phase.days[0] * cycleLen / 28);
+    var phaseEnd = Math.round(phase.days[1] * cycleLen / 28);
     if (dayInCycle >= phaseStart && dayInCycle <= phaseEnd) {
       return {
         phase: phase,
@@ -2293,7 +2294,7 @@ window.getPregnancyTrimester = getPregnancyTrimester;
 function getPregnancyWeightGuideline() {
   var s = window.S;
   if (!s.pregnant) return null;
-  var bmi = s.prePregnancyWeight ? s.prePregnancyWeight / Math.pow(s.height / 100, 2) : calcBMI();
+  var bmi = (s.prePregnancyWeight && s.height && s.height >= 100) ? s.prePregnancyWeight / Math.pow(s.height / 100, 2) : calcBMI();
   var guideline = null;
   for (var i = 0; i < PREGNANCY_WEIGHT_GAIN.length; i++) {
     var pg = PREGNANCY_WEIGHT_GAIN[i];
