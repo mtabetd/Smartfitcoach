@@ -259,13 +259,29 @@ function mapSupabaseError(err) {
   var msg = (err && err.message) ? err.message : String(err || '');
   if (msg.indexOf('Invalid login credentials') !== -1) return 'Email ou mot de passe incorrect';
   if (msg.indexOf('User already registered') !== -1) return 'Cet email est d\u00e9j\u00e0 utilis\u00e9';
+  if (msg.indexOf('Email not confirmed') !== -1) return 'Email non confirm\u00e9. V\u00e9rifiez votre bo\u00eete mail.';
   if (msg.indexOf('Password should be at least 6 characters') !== -1) return 'Le mot de passe doit contenir au moins 6 caract\u00e8res';
   if (msg.indexOf('Unable to validate email address') !== -1) return 'Format d\'email invalide';
+  if (msg.indexOf('Invalid API key') !== -1 || msg.indexOf('apikey') !== -1) return 'Erreur serveur. Contactez le support.';
+  if (msg.indexOf('rate limit') !== -1 || msg.indexOf('too many') !== -1) return 'Trop de tentatives. R\u00e9essayez dans quelques minutes.';
+  if (msg.indexOf('network') !== -1 || msg.indexOf('fetch') !== -1) return 'Erreur r\u00e9seau. V\u00e9rifiez votre connexion.';
+  console.warn('[AUTH] Unmapped Supabase error:', msg);
   return 'Erreur de connexion. R\u00e9essayez.';
 }
 
 // ─── SUPABASE AVAILABILITY CHECK ───
 function _getClient() {
+  if (!_useSupabase) return null;
+  try {
+    return (window.getSupabaseClient && window.getSupabaseClient()) || null;
+  } catch (e) {
+    console.error('[AUTH] getClient error:', e);
+    return null;
+  }
+}
+
+// Get raw client (bypasses _useSupabase flag, for init only)
+function _getRawClient() {
   try {
     return (window.getSupabaseClient && window.getSupabaseClient()) || null;
   } catch (e) {
@@ -277,6 +293,16 @@ function _getClient() {
 var _currentSession = null; // {id, name, email}
 var _useSupabase = false;
 var _authReady = Promise.resolve(); // resolved when Supabase session is loaded
+
+function _loadLegacySession() {
+  if (isLegacySessionValid()) {
+    var s = getLegacySession();
+    if (s) {
+      _currentSession = { id: s.id, name: s.name, email: s.email };
+      console.log('[AUTH] Legacy session restored for:', s.email);
+    }
+  }
+}
 
 function _extractUser(supaUser) {
   if (!supaUser) return null;
@@ -290,15 +316,10 @@ function _extractUser(supaUser) {
 
 // ─── INIT : charger la session Supabase au boot ───
 function _initAuth() {
-  var client = _getClient();
+  var client = _getRawClient();
   if (!client) {
-    // Fallback localStorage : charger session existante
-    if (isLegacySessionValid()) {
-      var s = getLegacySession();
-      if (s) {
-        _currentSession = { id: s.id, name: s.name, email: s.email };
-      }
-    }
+    console.warn('[AUTH] Supabase SDK not loaded, using localStorage fallback');
+    _loadLegacySession();
     return;
   }
 
@@ -306,8 +327,8 @@ function _initAuth() {
 
   // Ecouter les changements d'auth
   client.auth.onAuthStateChange(function(event, session) {
+    console.log('[AUTH] onAuthStateChange:', event);
     if (event === 'PASSWORD_RECOVERY') {
-      // User clicked password reset link — show new password screen
       if (session && session.user) {
         _currentSession = _extractUser(session.user);
       }
@@ -320,12 +341,6 @@ function _initAuth() {
     }
     if (session && session.user) {
       _currentSession = _extractUser(session.user);
-      // Re-render if app already loaded and user was on auth screen
-      if (window.S && window.S.view && window.S.view.indexOf('auth') === 0 && window.render) {
-        window.S.view = 'dashboard';
-        window.S.authError = '';
-        window.render();
-      }
     } else {
       _currentSession = null;
     }
@@ -334,17 +349,21 @@ function _initAuth() {
   // Charger la session existante (async)
   // Store the promise so app-main.js can await it before first render
   _authReady = client.auth.getSession().then(function(result) {
+    if (result.error) {
+      console.error('[AUTH] Supabase getSession error:', result.error.message || result.error);
+      _useSupabase = false;
+      _loadLegacySession();
+      return;
+    }
+    console.log('[AUTH] Supabase connected OK');
     if (result.data && result.data.session && result.data.session.user) {
       _currentSession = _extractUser(result.data.session.user);
+      console.log('[AUTH] Session restored for:', _currentSession.email);
     }
-  }).catch(function() {
-    // Fallback : tenter la session legacy
-    if (isLegacySessionValid()) {
-      var s = getLegacySession();
-      if (s) {
-        _currentSession = { id: s.id, name: s.name, email: s.email };
-      }
-    }
+  }).catch(function(err) {
+    console.error('[AUTH] Supabase connection failed:', err);
+    _useSupabase = false;
+    _loadLegacySession();
   });
 }
 
@@ -437,8 +456,16 @@ function _fallbackLogin(email, password, startTime) {
 // ─── AUTH MODULE ───
 window.AUTH = {
 
-  /** Promise that resolves when the initial session check is done */
-  ready: function() { return _authReady; },
+  /** Promise that resolves when the initial session check is done (with 5s timeout) */
+  ready: function() {
+    var timeout = new Promise(function(resolve) {
+      setTimeout(function() {
+        console.warn('[AUTH] ready() timed out after 5s, proceeding');
+        resolve();
+      }, 5000);
+    });
+    return Promise.race([_authReady, timeout]);
+  },
 
   /**
    * Register a new user (async — returns Promise)
@@ -475,6 +502,7 @@ window.AUTH = {
       options: { data: { name: name } }
     }).then(function(result) {
       if (result.error) {
+        console.error('[AUTH] Supabase register error:', result.error.message || result.error);
         return { ok: false, error: mapSupabaseError(result.error) };
       }
       var data = result.data;
@@ -491,6 +519,7 @@ window.AUTH = {
       }
       return { ok: false, error: 'Erreur de connexion. R\u00e9essayez.' };
     }).catch(function(err) {
+      console.error('[AUTH] Supabase register exception:', err);
       // Fallback localStorage en cas d'erreur reseau
       try {
         return _fallbackRegister(name, email, password, Date.now()).then(function(r) { return r; });
@@ -534,6 +563,7 @@ window.AUTH = {
       password: password
     }).then(function(result) {
       if (result.error) {
+        console.error('[AUTH] Supabase login error:', result.error.message || result.error);
         recordFailedAttempt(email);
         BLACKBOX.log('login_failed', { email: email });
         var rlAfter = getRateLimit(email);
@@ -554,6 +584,7 @@ window.AUTH = {
       }
       return { ok: false, error: 'Erreur de connexion. R\u00e9essayez.' };
     }).catch(function(err) {
+      console.error('[AUTH] Supabase login exception:', err);
       // Fallback localStorage en cas d'erreur reseau
       try {
         return _fallbackLogin(email, password, Date.now()).then(function(r) { return r; });
@@ -697,6 +728,7 @@ window.AUTH = {
       redirectTo: window.location.origin + window.location.pathname
     }).then(function(result) {
       if (result.error) {
+        console.error('[AUTH] Supabase resetPassword error:', result.error.message || result.error);
         return { ok: false, error: mapSupabaseError(result.error) };
       }
       BLACKBOX.log('password_reset_requested', { email: email });
