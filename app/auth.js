@@ -656,6 +656,34 @@ window.AUTH = {
   },
 
   /**
+   * Send a password reset email via Supabase
+   * @param {string} email
+   * @returns {Promise<{ok:boolean, error?:string}>}
+   */
+  resetPassword: function(email) {
+    if (!email || !validateEmail(email)) {
+      return Promise.resolve({ ok: false, error: 'Adresse email invalide' });
+    }
+
+    var client = _getClient();
+    if (!client) {
+      return Promise.resolve({ ok: false, error: 'Service indisponible. R\u00e9essayez plus tard.' });
+    }
+
+    return client.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + window.location.pathname
+    }).then(function(result) {
+      if (result.error) {
+        return { ok: false, error: mapSupabaseError(result.error) };
+      }
+      BLACKBOX.log('password_reset_requested', { email: email });
+      return { ok: true };
+    }).catch(function() {
+      return { ok: false, error: 'Erreur r\u00e9seau. V\u00e9rifiez votre connexion.' };
+    });
+  },
+
+  /**
    * Delete the current user account (async — returns Promise)
    * @param {string} password
    * @returns {Promise<{ok:boolean, error?:string}>}
