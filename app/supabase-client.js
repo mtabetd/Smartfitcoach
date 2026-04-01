@@ -348,7 +348,19 @@
         var hasValidLocalData = false;
         try {
           var user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null;
-          var uid = user ? user.id : 'anon';
+          // Fallback: try to get uid from Supabase session directly (avoids async timing issue)
+          var uid = (user && user.id) ? user.id : null;
+          if (!uid) {
+            try {
+              var _sbClient = window.getSupabaseClient ? window.getSupabaseClient() : null;
+              if (_sbClient) {
+                // Synchronous session cache in supabase-js v2
+                var _cachedSession = _sbClient.auth.session ? _sbClient.auth.session() : null;
+                if (_cachedSession && _cachedSession.user) uid = _cachedSession.user.id;
+              }
+            } catch(e2) {}
+          }
+          uid = uid || 'anon';
           var raw = localStorage.getItem('mtd_profile_' + uid);
           if (raw) {
             var localData = null;
