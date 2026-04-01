@@ -1961,14 +1961,67 @@ function renderCrossfitProgram(p) {
  // Parse AMRAP/EMOM duration in minutes, or cap for For Time
  var totalSeconds = 0;
  var isCountdown = false;
+ var isEmom = (wodType.indexOf('EMOM') !== -1);
  var capMatch = wodType.match(/(\d+)\s*(?:MIN|MINUTES?)/);
  if (capMatch) {
  totalSeconds = parseInt(capMatch[1]) * 60;
  isCountdown = true;
  }
+ var totalRounds = isEmom && totalSeconds > 0 ? Math.floor(totalSeconds / 60) : 0;
+
+ // Local Web Audio helper for WOD timer (used when RestTimer not available)
+ function _wodPlayBeep(type) {
+ if (window._sfcMuted) return;
+ if (window.RestTimer && window.RestTimer.playBeep && type !== 'tick') {
+ window.RestTimer.playBeep();
+ return;
+ }
+ if (window.RestTimer && window.RestTimer.playTick && type === 'tick') {
+ window.RestTimer.playTick();
+ return;
+ }
+ try {
+ var ctx = new (window.AudioContext || window.webkitAudioContext)();
+ if (ctx.state === 'suspended') ctx.resume();
+ var now = ctx.currentTime;
+ if (type === 'tick') {
+ var osc = ctx.createOscillator();
+ var gain = ctx.createGain();
+ osc.connect(gain); gain.connect(ctx.destination);
+ osc.type = 'sine'; osc.frequency.value = 660; gain.gain.value = 0.2;
+ osc.start(now); osc.stop(now + 0.08);
+ } else if (type === 'start') {
+ var osc2 = ctx.createOscillator();
+ var gain2 = ctx.createGain();
+ osc2.connect(gain2); gain2.connect(ctx.destination);
+ osc2.type = 'sine'; osc2.frequency.value = 880; gain2.gain.value = 0.3;
+ osc2.start(now); osc2.stop(now + 0.12);
+ } else {
+ for (var i = 0; i < 3; i++) {
+ var oscB = ctx.createOscillator();
+ var gainB = ctx.createGain();
+ oscB.connect(gainB); gainB.connect(ctx.destination);
+ oscB.type = 'square'; oscB.frequency.value = 880; gainB.gain.value = 0.4;
+ oscB.start(now + i * 0.2); oscB.stop(now + i * 0.2 + 0.12);
+ }
+ var oscL = ctx.createOscillator();
+ var gainL = ctx.createGain();
+ oscL.connect(gainL); gainL.connect(ctx.destination);
+ oscL.type = 'square'; oscL.frequency.value = 1050; gainL.gain.value = 0.5;
+ oscL.start(now + 0.7); oscL.stop(now + 1.1);
+ }
+ } catch(e) {}
+ }
 
  var displayEl = h('div', {style: 'font-family:Georgia,serif;font-size:36px;text-align:center;letter-spacing:2px;color:#0A0A09;margin:8px 0'}, '00:00');
  timerContainer.appendChild(displayEl);
+
+ // EMOM round counter element
+ var roundEl = null;
+ if (isEmom && totalRounds > 0) {
+ roundEl = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;text-align:center;color:var(--grey);margin-bottom:4px'}, 'Round — / ' + totalRounds);
+ timerContainer.appendChild(roundEl);
+ }
 
  // Clear any previous timer interval to prevent leaks on re-render
  if (window._wodTimerInterval) clearInterval(window._wodTimerInterval);
@@ -1976,6 +2029,7 @@ function renderCrossfitProgram(p) {
  var _timerInterval = null;
  var _elapsed = 0;
  var _timerStartTime = 0;
+ var _lastTickSecond = -1;
 
  function formatTime(secs) {
  var m = Math.floor(Math.abs(secs) / 60);
@@ -1989,6 +2043,12 @@ function renderCrossfitProgram(p) {
  if (isCountdown && shown === 0) {
  displayEl.style.color = '#5A1010';
  }
+ // Update EMOM round counter
+ if (roundEl && isEmom && totalRounds > 0) {
+ var currentRound = Math.min(totalRounds, Math.floor(_elapsed / 60) + 1);
+ if (_elapsed >= totalSeconds && totalSeconds > 0) currentRound = totalRounds;
+ roundEl.textContent = 'Round ' + currentRound + ' / ' + totalRounds;
+ }
  }
 
  var btnRow = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap'});
@@ -1999,26 +2059,39 @@ function renderCrossfitProgram(p) {
  clearInterval(_timerInterval);
  startBtn.textContent = 'Reprendre';
  } else {
+ // Son de démarrage
+ _wodPlayBeep('start');
  _timerRunning = true;
+ _lastTickSecond = -1;
  _timerStartTime = Date.now() - _elapsed * 1000;
  _timerInterval = window._wodTimerInterval = setInterval(function() {
  _elapsed = Math.floor((Date.now() - _timerStartTime) / 1000);
  updateDisplay();
- if (isCountdown && _elapsed >= totalSeconds) {
+ if (isCountdown) {
+ var remaining = totalSeconds - _elapsed;
+ // Tick pour les 3 dernières secondes (une seule fois par seconde)
+ if (remaining > 0 && remaining <= 3 && remaining !== _lastTickSecond) {
+ _lastTickSecond = remaining;
+ _wodPlayBeep('tick');
+ }
+ if (_elapsed >= totalSeconds) {
  _timerRunning = false;
  clearInterval(_timerInterval);
- startBtn.textContent = 'Temps écoulé';
+ startBtn.textContent = 'Temps \u00e9coul\u00e9';
+ _wodPlayBeep('end');
+ }
  }
  }, 250);
  startBtn.textContent = 'Pause';
  }
- }}, 'Démarrer');
+ }}, 'D\u00e9marrer');
 
  var resetBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:8px 16px;margin:0', onclick: function() {
  _timerRunning = false;
  clearInterval(_timerInterval);
  _elapsed = 0;
- startBtn.textContent = 'Démarrer';
+ _lastTickSecond = -1;
+ startBtn.textContent = 'D\u00e9marrer';
  displayEl.style.color = '#0A0A09';
  updateDisplay();
  }}, 'Reset');
@@ -2028,9 +2101,9 @@ function renderCrossfitProgram(p) {
  timerContainer.appendChild(btnRow);
 
  if (isCountdown) {
- timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px'}, 'Compte à rebours ' + (_wod.type || '')));
+ timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px'}, 'Compte \u00e0 rebours ' + (_wod.type || '')));
  } else {
- timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px'}, 'Chrono — ' + (_wod.type || '')));
+ timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px'}, 'Chrono \u2014 ' + (_wod.type || '')));
  }
  updateDisplay();
  p.appendChild(timerContainer);
@@ -2453,6 +2526,10 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
 
  // Bip fort : 3 bips courts puis 1 bip long
  function playBeep() {
+ if (window._sfcMuted) {
+ if (navigator.vibrate) try { navigator.vibrate([200, 100, 200, 100, 400]); } catch(e) {}
+ return;
+ }
  var ctx = _getAudioCtx();
  if (!ctx) return;
  // Resume si suspendu (autoplay policy)
@@ -2484,6 +2561,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
 
  // Bip court de confirmation (validation série)
  function playTick() {
+ if (window._sfcMuted) return;
  var ctx = _getAudioCtx();
  if (!ctx) return;
  if (ctx.state === 'suspended') ctx.resume();
@@ -2739,6 +2817,17 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  skipBtn.textContent = 'Passer \u25b6';
  skipBtn.addEventListener('click', function() { window.RestTimer.stop(); });
  actions.appendChild(skipBtn);
+
+ var muteBtn = document.createElement('button');
+ muteBtn.className = 'rest-timer-btn rest-timer-btn-mute';
+ muteBtn.textContent = window._sfcMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
+ muteBtn.title = window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper';
+ muteBtn.addEventListener('click', function() {
+ window._sfcMuted = !window._sfcMuted;
+ muteBtn.textContent = window._sfcMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
+ muteBtn.title = window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper';
+ });
+ actions.appendChild(muteBtn);
  } else {
  var goBtn = document.createElement('button');
  goBtn.className = 'rest-timer-btn ' + (isTrans ? 'rest-timer-btn-go-transition' : 'rest-timer-btn-go');
