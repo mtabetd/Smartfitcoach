@@ -321,6 +321,10 @@ function render() {
  if (_w2) _w2.scrollTop = 0;
  });
  }
+ // Translate DOM if EN
+ if (window.I18N && window.I18N.current === 'en' && window.I18N.translateDOM) {
+   try { window.I18N.translateDOM(); } catch(e) {}
+ }
  } finally { render._lock = false; }
 }
 

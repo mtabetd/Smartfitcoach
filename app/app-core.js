@@ -1258,6 +1258,256 @@ window.I18N = {
 // Raccourci global
 window.t = function(key) { return window.I18N.t(key); };
 
+// ─── DOM TRANSLATOR (post-render, EN only) ───
+window.I18N._frToEn = null; // lazy init
+
+window.I18N.buildMap = function() {
+  if (window.I18N._frToEn) return;
+  window.I18N._frToEn = new Map([
+    // Navigation & Structure
+    ['Tableau de bord', 'Dashboard'],
+    ['Connexion', 'Sign In'],
+    ['Déconnexion', 'Sign Out'],
+    ['Créer un compte', 'Create Account'],
+    ['Continuer', 'Continue'],
+    ['Retour', 'Back'],
+    ['Commencer', 'Get Started'],
+    ['Voir mon programme', 'View My Program'],
+    ['Enregistrer', 'Save'],
+    ['Annuler', 'Cancel'],
+    ['Fermer', 'Close'],
+    ['Chargement...', 'Loading...'],
+    ['Modifier', 'Edit'],
+    ['Supprimer', 'Delete'],
+    ['Confirmer', 'Confirm'],
+    // Wizard step titles & subtitles
+    ['Votre identité', 'Your Identity'],
+    ['Votre morphologie', 'Your Morphology'],
+    ['Votre activité', 'Your Activity'],
+    ['Votre santé', 'Your Health'],
+    ['Vos habitudes alimentaires', 'Your Eating Habits'],
+    ['Votre objectif', 'Your Goal'],
+    ['Vos préférences', 'Your Preferences'],
+    ['Votre semaine', 'Your Week'],
+    ['Les bases pour un programme calibré sur mesure.', 'The basics for a tailor-made program.'],
+    ['Poids et taille pour un calibrage précis de vos besoins.', 'Weight and height for precise calibration.'],
+    ['Décrivez votre rythme pour adapter votre programme.', 'Describe your routine to tailor your program.'],
+    ['Vos conditions de santé pour des recommandations sûres.', 'Your health conditions for safe recommendations.'],
+    ['Vos habitudes au quotidien pour un plan réaliste.', 'Your daily habits for a realistic plan.'],
+    ["Allergies, cuisine et goûts pour des recettes qui vous ressemblent.", 'Allergies, cuisine and taste for recipes that suit you.'],
+    // Wizard labels
+    ['Sexe biologique', 'Biological Sex'],
+    ['Homme', 'Male'],
+    ['Femme', 'Female'],
+    ['Poids', 'Weight'],
+    ['Taille', 'Height'],
+    ['Âge', 'Age'],
+    ['Date de naissance', 'Date of Birth'],
+    ['Fréquence sport', 'Training Frequency'],
+    ["Type d'entraînement", 'Training Type'],
+    ['Heures de sommeil / nuit', 'Hours of Sleep / Night'],
+    ['Aucune condition particulière', 'No specific conditions'],
+    ['Nombre de repas par jour', 'Meals per Day'],
+    ['Budget alimentaire', 'Food Budget'],
+    ['Niveau cuisine', 'Cooking Level'],
+    ['Allergies alimentaires', 'Food Allergies'],
+    ['Régime alimentaire', 'Diet Type'],
+    ['Cuisines préférées', 'Preferred Cuisines'],
+    ['Poids cible', 'Target Weight'],
+    ['Photo de profil', 'Profile Photo'],
+    ['Ajouter une photo', 'Add Photo'],
+    ['AJOUTER UNE PHOTO', 'ADD PHOTO'],
+    ['CHANGER LA PHOTO', 'CHANGE PHOTO'],
+    ['SUPPRIMER', 'DELETE'],
+    ['Mode sombre', 'Dark Mode'],
+    // Meal types
+    ['Petit-déjeuner', 'Breakfast'],
+    ['Déjeuner', 'Lunch'],
+    ['Dîner', 'Dinner'],
+    ['Collation', 'Snack'],
+    // Dashboard
+    ['Bonjour', 'Good morning'],
+    ['Bon après-midi', 'Good afternoon'],
+    ['Bonsoir', 'Good evening'],
+    ['Citation du jour', 'Quote of the Day'],
+    ['Votre série', 'Your Streak'],
+    ["Aperçu du jour", "Today's Overview"],
+    ['Accès rapide', 'Quick Access'],
+    ['Enregistrer mon poids', 'Log My Weight'],
+    ['Mensurations', 'Measurements'],
+    ['Planifiez vos repas', 'Plan your meals'],
+    ['Votre programme', 'Your program'],
+    ['Bienvenue sur SmartFitCoach', 'Welcome to SmartFitCoach'],
+    ['Commencer mon programme', 'Start my program'],
+    ['Résultats personnalisés', 'Personalized Results'],
+    ['Vos macros', 'Your Macros'],
+    // Macros & Nutrition labels
+    ['Protéines', 'Protein'],
+    ['Glucides', 'Carbs'],
+    ['Lipides', 'Fat'],
+    ['Calories', 'Calories'],
+    ['Métabolisme de base', 'Basal Metabolic Rate'],
+    ['Dépense totale', 'Total Daily Energy'],
+    ['Cible calorique', 'Calorie Target'],
+    ['Objectif', 'Goal'],
+    ['Hydratation', 'Hydration'],
+    ['Fibres', 'Fiber'],
+    ['Suppléments', 'Supplements'],
+    // Sport
+    ['Choisissez votre sport', 'Choose Your Sport'],
+    ['Musculation', 'Strength Training'],
+    ['Course à pied', 'Running'],
+    ['Cyclisme', 'Cycling'],
+    ['Natation', 'Swimming'],
+    ['CrossFit', 'CrossFit'],
+    ['Yoga', 'Yoga'],
+    ['Triathlon', 'Triathlon'],
+    ['Calisthenics', 'Calisthenics'],
+    ['Padel', 'Padel'],
+    ['Golf', 'Golf'],
+    ['Niveau', 'Level'],
+    ['Débutant', 'Beginner'],
+    ['Intermédiaire', 'Intermediate'],
+    ['Avancé', 'Advanced'],
+    ['Élite', 'Elite'],
+    ['Jours / semaine', 'Days / week'],
+    ['Mon programme', 'My Program'],
+    ['Semaine', 'Week'],
+    ['Séries', 'Sets'],
+    ['Répétitions', 'Reps'],
+    ['Repos', 'Rest'],
+    ['Charge', 'Load'],
+    ['Bilan de séance', 'Session Summary'],
+    ['Durée', 'Duration'],
+    // Shopping
+    ['Liste de courses', 'Shopping List'],
+    ['Réinitialiser', 'Reset'],
+    ['Exporter PDF', 'Export PDF'],
+    ['articles', 'items'],
+    ['rayons', 'aisles'],
+    // Scanner
+    ['Scanner un produit', 'Scan a Product'],
+    ['Saisie manuelle', 'Manual Entry'],
+    ['Rechercher', 'Search'],
+    ['Historique', 'History'],
+    ['Score santé', 'Health Score'],
+    // Common
+    ['Voir le profil', 'View Profile'],
+    ['Générer un nouveau plan', 'Generate New Plan'],
+    ['Planning', 'Weekly Plan'],
+    // Supplements timing
+    ['matin', 'morning'],
+    ['soir', 'evening'],
+    ['avec les repas', 'with meals'],
+    ["avant l'entraînement", 'before training'],
+    ["après l'entraînement", 'after training'],
+    // Medical
+    ['Diabète', 'Diabetes'],
+    ['Hypertension', 'Hypertension'],
+    ['Hypothyroïdie', 'Hypothyroidism'],
+    ['Hyperthyroïdie', 'Hyperthyroidism'],
+    ['Cholestérol élevé', 'High Cholesterol'],
+    ['Végétarien', 'Vegetarian'],
+    ['Végane', 'Vegan'],
+    ['Pescétarien', 'Pescatarian'],
+    ['Omnivore', 'Omnivore'],
+    // Goals
+    ['Prise de masse', 'Muscle Gain'],
+    ['Prise de masse douce', 'Lean Bulk'],
+    ['Maintien', 'Maintenance'],
+    ['Sèche', 'Cut'],
+    ['Recomposition', 'Recomposition'],
+    // IMC
+    ['IMC', 'BMI'],
+    ['Poids normal', 'Normal Weight'],
+    ['Surpoids', 'Overweight'],
+    ['Obésité', 'Obesity'],
+    ['Insuffisance pondérale', 'Underweight'],
+    // Misc
+    ['Étape', 'Step'],
+    ['sur', 'of'],
+    ['ans', 'years old'],
+    ['kcal brûlées', 'kcal burned'],
+    ['/ jour', '/ day'],
+    ['/ semaine', '/ week'],
+    ['g / kg', 'g / kg'],
+    ['Série réussie', 'Set completed'],
+    ['Série échouée', 'Set failed'],
+    // Step labels not yet covered
+    ['Votre profil', 'Your Profile'],
+    ['Mensurations', 'Measurements'],
+    ["Niveau d'activité", 'Activity Level'],
+    ['Santé & Antécédents', 'Health & Medical History'],
+    ['Préférences alimentaires', 'Food Preferences'],
+    ['Votre programme nutritionnel', 'Your Nutrition Plan'],
+    ['Votre plan semaine', 'Your Weekly Plan'],
+    ['Cible', 'Target'],
+    ['Total', 'Total'],
+    ['Générer un nouveau plan', 'Generate New Plan'],
+    ['Liste de courses', 'Shopping List'],
+    // Activity levels
+    ['Sédentaire', 'Sedentary'],
+    ['Légèrement actif', 'Lightly Active'],
+    ['Modérément actif', 'Moderately Active'],
+    ['Très actif', 'Very Active'],
+    ['Extrêmement actif', 'Extremely Active'],
+    ['Athlète élite', 'Elite Athlete'],
+    // Body zones
+    ['Épaules', 'Shoulders'],
+    ['Coudes', 'Elbows'],
+    ['Poignets', 'Wrists'],
+    ['Nuque / Cou', 'Neck'],
+    ['Haut du dos', 'Upper Back'],
+    ['Bas du dos', 'Lower Back'],
+    ['Hanches', 'Hips'],
+    ['Genoux', 'Knees'],
+    ['Chevilles', 'Ankles'],
+    // Pain levels
+    ['Aucune', 'None'],
+    ['Légère', 'Mild'],
+    ['Modérée', 'Moderate'],
+    ['Sévère', 'Severe'],
+    // Scan labels
+    ['Alternatives plus saines', 'Healthier Alternatives'],
+    ['PROTÉINES', 'PROTEIN'],
+    ['GLUCIDES', 'CARBS'],
+    ['LIPIDES', 'FATS'],
+    ['SUCRES', 'SUGARS'],
+    ['FIBRES', 'FIBER'],
+    ['SEL', 'SALT'],
+    ['GRAS SAT.', 'SAT. FAT'],
+    // Extras
+    ['Calculateur nutritionnel', 'Nutrition Calculator'],
+    ['Mesures corporelles', 'Body Measurements'],
+    ['Minuteur', 'Timer'],
+    ['Démarrer', 'Start'],
+    ['Arrêter', 'Stop'],
+    ['Sommeil', 'Sleep'],
+    ['verres', 'glasses'],
+    // Minor warning
+    ["Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé.", 'For users under 18, this program should be followed under the supervision of a healthcare professional.'],
+  ]);
+};
+
+window.I18N.translateDOM = function() {
+  if (window.I18N.current !== 'en') return;
+  window.I18N.buildMap();
+  var map = window.I18N._frToEn;
+  var appEl = document.getElementById('app');
+  if (!appEl) return;
+  // Walk all text nodes
+  var walker = document.createTreeWalker(appEl, NodeFilter.SHOW_TEXT, null, false);
+  var node;
+  while ((node = walker.nextNode())) {
+    var txt = node.nodeValue;
+    if (!txt || !txt.trim()) continue;
+    var trimmed = txt.trim();
+    if (map.has(trimmed)) {
+      node.nodeValue = txt.replace(trimmed, map.get(trimmed));
+    }
+  }
+};
+
 // ═══════════════════════════════════════════════════════════════
 // SHOP_AR — Dictionnaire arabe marocain (darija) pour la liste de courses
 // Namespace séparé, n'affecte PAS window.I18N (FR/EN intact)
