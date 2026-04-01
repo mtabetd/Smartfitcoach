@@ -1634,6 +1634,17 @@ var EXERCISES = {
       tips: ["Jambes tendues pour plus de difficulté", "Controle de la rotation — ne pas balancer", "Progresser avec jambes fléchies"],
       lv: 3,
       tags: ["abdos", "obliques", "avance", "suspension"]
+    },
+    {
+      n: "Obliques chaise romaine",
+      m: "Obliques",
+      eq: "Chaise romaine",
+      sets: "4\u00d712 par c\u00f4t\u00e9",
+      rest: "45s",
+      desc: "Installé sur la chaise romaine, effectuer des rotations latérales contrôlées en fléchissant le tronc sur le côté.",
+      tips: ["12 reps chaque côté", "Rotation latérale contrôlée — ne pas utiliser l'inertie", "Contrôler la montée et la descente", "Amplitude complète pour maximiser l'activation des obliques"],
+      lv: 2,
+      tags: ["abdos", "obliques", "chaise romaine", "lateral"]
     }
   ],
 
