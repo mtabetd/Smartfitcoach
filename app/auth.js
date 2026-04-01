@@ -651,6 +651,31 @@ window.AUTH = {
       } catch (e) {}
     }
 
+    // Reset window.S profile data to prevent stale values from polluting next login
+    // (localStorage data is kept intact so returning users can restore from it)
+    if (window.S) {
+      window.S.sex = null; window.S.age = 28; window.S.weight = 75; window.S.height = 175;
+      window.S.activity = null; window.S.train = []; window.S.sleep = null;
+      window.S.medical = []; window.S.goal = null; window.S.targetWeight = null;
+      window.S.mealsPerDay = 3; window.S.eatingLocation = null; window.S.mealPrepTime = null;
+      window.S.snacking = null; window.S.alcoholFreq = null; window.S.alcoholTypes = [];
+      window.S.hydration = null; window.S.cookLevel = 2; window.S.whey = null;
+      window.S.allergies = []; window.S.intolerances = []; window.S.regime = 0;
+      window.S.halal = false; window.S.excluded = ''; window.S.cuisines = [0];
+      window.S.weekPlan = null; window.S.selectedDay = 0;
+      window.S.nStep = 0; window.S.sStep = 0;
+      window.S.sportType = null; window.S.sportGoals = []; window.S.sportLevel = null;
+      window.S.sportDays = 3; window.S.sportEquipment = 'gym';
+      window.S.weightHistory = [];
+      window.S.bodyZones = {}; window.S.strongZones = []; window.S.weakZones = [];
+      window.S.muscuWeek = 1; window.S.muscuCycle = 1; window.S.sportSplashDone = false;
+      window.S.bonusExercises = {}; window.S.sessionHistory = {};
+      window.S.muscuSessionLog = {}; window.S.muscuProgressionHistory = {};
+      window.S.musculationWeights = {};
+      window.S.crossfitLevel = null; window.S.cfCurrentDay = 1; window.S.cfProgress = {};
+      window.S.crossfit1RM = {}; window.S.muscuStrengthProfile = {};
+    }
+
     // Nettoyer la session locale + legacy
     _currentSession = null;
     clearLegacySession();

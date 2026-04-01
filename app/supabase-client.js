@@ -109,6 +109,7 @@
     _lastSync: 0,
     _syncInterval: null,
     _debounceTimer: null,
+    _syncPending: false,
 
     // Sauvegarder le profil complet vers Supabase
     saveProfile: function() {
@@ -324,6 +325,8 @@
     // Sync le profil toutes les 30 secondes (debounced)
     scheduleSave: function() {
       var self = this;
+      // Don't save while initial cloud sync is pending (prevents overwriting cloud data with defaults)
+      if (self._syncPending) return;
       if (self._debounceTimer) clearTimeout(self._debounceTimer);
       self._debounceTimer = setTimeout(function() {
         self.saveProfile();
@@ -333,13 +336,29 @@
     // Sync initial au login : charger depuis Supabase si localStorage vide
     syncOnLogin: function() {
       var self = this;
+      self._syncPending = true;
       return self.loadProfile().then(function(cloudData) {
-        if (!cloudData) return; // pas de données cloud
+        self._syncPending = false;
+        if (!cloudData) return 'no_cloud_data';
 
-        // Si localStorage est vide (nouvel appareil), charger depuis le cloud
-        var hasLocalData = window.S.goal !== null || window.S.sex !== null;
-        if (!hasLocalData && cloudData.goal !== null) {
-          console.log('[SupaSync] Loading profile from cloud (new device detected)');
+        // Check localStorage directly for this user's actual persisted data
+        // (don't rely on window.S which may have stale values from a previous session)
+        var hasValidLocalData = false;
+        try {
+          var user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null;
+          var uid = user ? user.id : 'anon';
+          var raw = localStorage.getItem('mtd_profile_' + uid);
+          if (raw) {
+            var localData = null;
+            if (window._storageDecode) { localData = window._storageDecode(raw); }
+            if (!localData) { try { localData = JSON.parse(raw); } catch(e2) {} }
+            // Local data is valid only if the user completed onboarding (goal is set)
+            hasValidLocalData = localData && localData.goal != null;
+          }
+        } catch(e) {}
+
+        if (!hasValidLocalData && cloudData.goal != null) {
+          console.log('[SupaSync] Loading profile from cloud (no valid local data for user)');
           for (var k in cloudData) {
             if (cloudData.hasOwnProperty(k)) {
               window.S[k] = cloudData[k];
@@ -350,6 +369,7 @@
         }
         return 'local_data_exists';
       }).catch(function(e) {
+        self._syncPending = false;
         console.warn('[SupaSync] syncOnLogin failed:', e);
       });
     },
