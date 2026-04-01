@@ -1606,6 +1606,9 @@ window.I18N.buildMap = function() {
     // Auth — additional hardcoded strings
     ['Votre prénom', 'Your first name'],
     ['Min. 6 caractères', 'Min. 6 characters'],
+    ['Ex: avocat, bœuf, saumon...', 'e.g. avocado, beef, salmon...'],
+    ['Code-barres (EAN-13)', 'Barcode (EAN-13)'],
+    ['Mot de passe', 'Password'],
     ['Création...', 'Creating...'],
     ['Erreur lors de la création du compte. Réessayez.', 'Error creating account. Please try again.'],
     ['Erreur de connexion. Réessayez.', 'Connection error. Please try again.'],
@@ -1624,22 +1627,165 @@ window.I18N.buildMap = function() {
   ]);
 };
 
+window.I18N._frToEnPartial = null; // lazy init for partial match list
+
+window.I18N.buildPartialMap = function() {
+  if (window.I18N._frToEnPartial) return;
+  window.I18N._frToEnPartial = [
+    // Dynamic text with variables — handled via partial string replacement
+    ['Votre questionnaire est en cours (étape ', 'Your questionnaire is in progress (step '],
+    ['). Terminez-le pour accéder à votre tableau de bord complet.', '). Complete it to access your full dashboard.'],
+    ['kcal/jour (besoins grossesse inclus dans votre cible)', 'kcal/day (pregnancy needs included in your target)'],
+    ['T1 : pas de calories supplémentaires nécessaires', 'T1: no additional calories needed'],
+    ['Poids attendu à SA', 'Expected weight at week'],
+    ['kg (gain cible : +', 'kg (target gain: +'],
+    ['Consultez votre médecin ou diabétologue avant de modifier votre alimentation ou votre programme sportif. Mesurez votre glycémie régulièrement, notamment avant et après l\'effort. Privilegiez les aliments à index glycémique bas.', 'Consult your doctor or diabetologist before changing your diet or workout program. Monitor your blood sugar regularly, especially before and after exercise. Favor low glycemic index foods.'],
+    ['\u26A0 Diabète — Recommandations importantes', '\u26A0 Diabetes — Important Recommendations'],
+    ['Grossesse — Semaine ', 'Pregnancy — Week '],
+    ['Série de 7 jours', '7-day streak'],
+    ['Dernière visite : ', 'Last visit: '],
+    [' ans', ' years old'],
+    ['Nutrition & Sport', 'Nutrition & Workout'],
+    // Sport partial
+    ['\uD83D\uDCC9 Semaine ', '\uD83D\uDCC9 Week '],
+    [' / 100 jours complétés (', ' / 100 days completed ('],
+    ['% des ingrédients', '% of ingredients'],
+    ['pour la recette', 'for the recipe'],
+    [' mouvement(s) retiré(s) pour restriction médicale', ' movement(s) removed for medical restriction'],
+    ['Compte à rebours ', 'Countdown '],
+    ['Chrono — ', 'Timer — '],
+    ['SUIVI WOD — Jour ', 'WOD TRACKING — Day '],
+    [' WOD complété le ', ' WOD completed on '],
+    [' — Score : ', ' — Score: '],
+    ['Score (rounds, temps, reps, kg) — optionnel', 'Score (rounds, time, reps, kg) — optional'],
+    ['Charges adaptées pour : ', 'Adapted loads for: '],
+    ['Début : ', 'Start: '],
+    [' complétés (', ' completed ('],
+    ['Tous les WODs sont adaptés à votre niveau', 'All WODs are adapted to your level'],
+    ['Pour des charges de travail précises, renseignez vos 1RM', 'For precise workloads, enter your 1RM values'],
+    ['Laissez vide les exercices que vous ne pratiquez pas.', 'Leave blank exercises you do not practice.'],
+    ['Indiquez la charge ET le nombre de reps pour un calcul précis du 1RM', 'Enter the load AND reps for an accurate 1RM calculation'],
+    ['Réduisez le volume de 40-50', 'Reduce volume by 40-50'],
+    // DH budget
+    [' DH pour ', ' DH for '],
+    // Nutrition partial
+    ['\uD83C\uDFCB\uFE0F Jour d\'entraînement', '\uD83C\uDFCB\uFE0F Training day'],
+    ['\uD83D\uDE34 Jour de repos', '\uD83D\uDE34 Rest day'],
+    ['\uD83D\uDE34 Récupération', '\uD83D\uDE34 Recovery'],
+    ['\u26A1 Pré-séance', '\u26A1 Pre-session'],
+    ['\uD83D\uDCAA Post-séance', '\uD83D\uDCAA Post-session'],
+    ['kcal EPOC (afterburn) inclus', 'kcal EPOC (afterburn) included'],
+    [' repas/j)', ' meals/day)'],
+    [' repas/jour · 489 recettes', ' meals/day · 489 recipes'],
+    ['7 jours · ', '7 days · '],
+    ['Semaine d\'', 'Week of '],
+    ['Liste pour ', 'List for '],
+    ['Sélectionné dans vos compléments', 'Selected from your supplements'],
+    ['Dose recommandée : ', 'Recommended dose: '],
+    ['Hydratation quotidienne', 'Daily Hydration'],
+    ['Détail de consommation', 'Consumption Details'],
+    ['Objectif alimentaire ajusté (net)', 'Adjusted food goal (net)'],
+    ['Objectif : G ', 'Goal: C '],
+    ['Répartition par repas (', 'Meal breakdown ('],
+    ['Supplément sélectionné dans vos compléments', 'Supplement selected from your supplements'],
+    ['Supplémentation recommandée', 'Recommended Supplementation'],
+    ['Supplémentation', 'Supplementation'],
+    ['Suivi du cycle menstruel (optionnel)', 'Menstrual cycle tracking (optional)'],
+    ['Cycle menstruel — Phase actuelle', 'Menstrual cycle — Current phase'],
+    ['Date des dernières règles', 'Last menstrual period'],
+    ['Durée moyenne : 28 jours', 'Average duration: 28 days'],
+    ['Activer le suivi du cycle', 'Enable cycle tracking'],
+    ['Courbe de poids — Grossesse', 'Pregnancy weight curve'],
+    ['Suivi de poids grossesse', 'Pregnancy weight tracking'],
+    ['Nutrition adaptée à chaque trimestre de votre grossesse.', 'Nutrition adapted to each trimester of your pregnancy.'],
+    ["Êtes-vous enceinte ?", 'Are you pregnant?'],
+    ['Pour calculer la prise de poids recommandée', 'To calculate recommended weight gain'],
+    ['Semaine de grossesse', 'Week of pregnancy'],
+    ['Ajouter un repas', 'Add a meal'],
+    ['Choisir une recette', 'Choose a recipe'],
+    ['Aliments exclus', 'Excluded foods'],
+    ['Budget / jour', 'Budget / day'],
+    ['Budget / semaine', 'Budget / week'],
+    ['Budget alimentaire', 'Food Budget'],
+    ['Habitudes de courses', 'Shopping Habits'],
+    ['Où faites-vous vos courses ?', 'Where do you shop?'],
+    ['Fréquence de courses', 'Shopping Frequency'],
+    ['Grignotage', 'Snacking'],
+    ['Consommation d\'alcool', 'Alcohol consumption'],
+    ['Niveau cuisine', 'Cooking Level'],
+    ['Préférences produits', 'Product Preferences'],
+    ['Cuisines préférées', 'Preferred Cuisines'],
+    ['Je suis en bonne santé', "I'm in good health"],
+    ['Entre 14 et 80 ans', 'Between 14 and 80 years old'],
+    ['Halal — exclure porc & alcool', 'Halal — exclude pork & alcohol'],
+    ['Substitution Whey Végétale', 'Plant-based Whey Substitution'],
+    ['L eau/jour', 'L water/day'],
+    ['Composez votre création ou partez d\'une composition signature ci-dessus', 'Compose your creation or start from a signature composition above'],
+    ['Résultats personnalisés', 'Personalized Results'],
+    ['Nutrition & Sport personnalisés', 'Personalized Nutrition & Workout'],
+    ['Photo de dos', 'Back photo'],
+    ['Photo de face', 'Front photo'],
+    ['Photo de profil (optionnel)', 'Profile photo (optional)'],
+    ['Photo de progression (optionnel)', 'Progress photo (optional)'],
+    ['Zones corporelles', 'Body Zones'],
+    ['Vérif : ', 'Check: '],
+    ['Évolution du poids', 'Weight Progress'],
+    ['Smoothies Whey', 'Whey Smoothies'],
+    ['Prends ta whey dans les 30 min après l\'', 'Take your whey within 30 min after '],
+    ['Prenez-vous de la créatine ?', 'Are you taking creatine?'],
+  ];
+};
+
 window.I18N.translateDOM = function() {
   if (window.I18N.current !== 'en') return;
   window.I18N.buildMap();
+  window.I18N.buildPartialMap();
   var map = window.I18N._frToEn;
+  var partial = window.I18N._frToEnPartial;
   var appEl = document.getElementById('app');
   if (!appEl) return;
   // Walk all text nodes
   var walker = document.createTreeWalker(appEl, NodeFilter.SHOW_TEXT, null, false);
+  var nodes = [];
   var node;
-  while ((node = walker.nextNode())) {
-    var txt = node.nodeValue;
+  while ((node = walker.nextNode())) { nodes.push(node); }
+  for (var i = 0; i < nodes.length; i++) {
+    var n = nodes[i];
+    var txt = n.nodeValue;
     if (!txt || !txt.trim()) continue;
     var trimmed = txt.trim();
+    // Exact match first
     if (map.has(trimmed)) {
-      node.nodeValue = txt.replace(trimmed, map.get(trimmed));
+      n.nodeValue = txt.replace(trimmed, map.get(trimmed));
+      continue;
     }
+    // Partial match for dynamic strings
+    var changed = false;
+    for (var j = 0; j < partial.length; j++) {
+      var fr = partial[j][0];
+      var en = partial[j][1];
+      if (txt.indexOf(fr) !== -1) {
+        txt = txt.split(fr).join(en);
+        changed = true;
+      }
+    }
+    if (changed) n.nodeValue = txt;
+  }
+  // Also translate placeholder attributes
+  var inputs = appEl.querySelectorAll('input[placeholder], textarea[placeholder]');
+  for (var k = 0; k < inputs.length; k++) {
+    var ph = inputs[k].getAttribute('placeholder');
+    if (!ph) continue;
+    if (map.has(ph)) { inputs[k].setAttribute('placeholder', map.get(ph)); continue; }
+    var phChanged = false;
+    var phTxt = ph;
+    for (var m = 0; m < partial.length; m++) {
+      if (phTxt.indexOf(partial[m][0]) !== -1) {
+        phTxt = phTxt.split(partial[m][0]).join(partial[m][1]);
+        phChanged = true;
+      }
+    }
+    if (phChanged) inputs[k].setAttribute('placeholder', phTxt);
   }
 };
 
