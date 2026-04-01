@@ -570,16 +570,20 @@ window.SPORT = {
  var content = h('div', {'class': 'fade-in'});
 
  // Header with progress (only shown after step 0, not on intro pages)
- if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16 && S.sStep !== 20) {
+ // sStep 20 = medical questionnaire (muscu pre-step), include it in progress
+ if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16) {
  var hdr = h('header', {'class': 'header'});
  var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? 'Yoga & Mobilit\u00e9' : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
  hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>' + sportLabel + '</span>'}));
  var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
- var currentDisplay = S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sportType === 'calisthenics' ? S.sStep - 23 : S.sStep;
- hdr.appendChild(h('div', {'class': 'step-indicator'}, 'Étape ' + currentDisplay + ' / ' + totalSteps));
+ // sStep 20 (medical) maps to display step 0 for musculation (shown as "Éval. médicale")
+ var currentDisplay = S.sStep === 20 ? 0 : S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sportType === 'calisthenics' ? S.sStep - 23 : S.sStep;
+ var stepLabel = S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : ('\u00c9tape ' + currentDisplay + ' / ' + totalSteps);
+ hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
  p.appendChild(hdr);
  var pb = h('div', {'class': 'progress-bar'});
- pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + (currentDisplay / totalSteps * 100) + '%'}));
+ var _pbPct = S.sStep === 20 ? 5 : (currentDisplay / totalSteps * 100);
+ pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + _pbPct + '%'}));
  p.appendChild(pb);
  }
 
@@ -830,7 +834,7 @@ function renderMuscuMedicalQ(p) {
 
  // Header with back button
  var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
- hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
  p.appendChild(hdr);
 
@@ -1378,7 +1382,7 @@ function renderCrossfitLevel(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.crossfitWeek = 1; S.selectedCrossfitDay = 0; S.sStep = 6; window.BLACKBOX && window.BLACKBOX.log('crossfit_level', {level: S.crossfitLevel, days: S.sportDays}); window.render(); }
  }}, 'Continuer'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── CROSSFIT HELPERS ───
@@ -3583,9 +3587,16 @@ function renderMusculationProgram(p) {
  if (day) {
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus));
 
+ var _totalExercises = (day.exercises || []).length;
  (day.exercises || []).forEach(function(ex, exIdx) {
  var card = h('div', {'class': 'exercise-card', onclick: function(){ S.sportModalExercise = ex; window.render(); }});
- card.appendChild(h('div', {'class': 'exercise-muscle'}, ex.m));
+
+ // ── PROGRESS INDICATOR: "Exercice X/N" ──
+ var _exProgressRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:2px'});
+ _exProgressRow.appendChild(h('div', {'class': 'exercise-muscle'}, ex.m));
+ _exProgressRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:0.5px;white-space:nowrap'}, 'Ex. ' + (exIdx + 1) + '\u00a0/\u00a0' + _totalExercises));
+ card.appendChild(_exProgressRow);
+
  var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n);
  // FST-7 badge: highlight exercises that use the Fascial Stretch Training 7-set technique
  if (ex.is_fst7) {
@@ -3633,7 +3644,13 @@ function renderMusculationProgram(p) {
  var suggestedReps = _setParts.length > 1 ? parseInt(_setParts[1]) : null;
  var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
  if (suggested && suggested > 0) {
- card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:6px;padding:4px 8px;background:rgba(39,174,96,0.06);border-left:2px solid #1A4A1A'}, '\uD83D\uDCA1 Charge sugg\u00e9r\u00e9e : ' + (window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + 'kg')));
+ var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(26,74,26,0.08);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+ var _sugLeft = h('div', {});
+ _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#1A4A1A;margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+ _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A4A1A;line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
+ _sugBanner.appendChild(_sugLeft);
+ _sugBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
+ card.appendChild(_sugBanner);
  }
  }
 
@@ -3722,13 +3739,18 @@ function renderMusculationProgram(p) {
  // Tableau des séries
  var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:2px;overflow-x:auto;-webkit-overflow-scrolling:touch'});
 
- // Header
- var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;background:var(--surface,var(--ivory2));padding:6px 8px;font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
+ // Header with set progress counter
+ var _doneCount = setData.filter(function(s){ return s.validated === true; }).length;
+ var setHeaderWrap = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;background:var(--surface,var(--ivory2));padding:6px 8px;border-bottom:1px solid var(--border)'});
+ var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;flex:1;font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
  setHeader.appendChild(h('div', {}, '#'));
  setHeader.appendChild(h('div', {}, 'Conseill\u00e9'));
  setHeader.appendChild(h('div', {style:'text-align:center'}, '\u0394'));
  setHeader.appendChild(h('div', {}, 'R\u00e9alis\u00e9'));
- setTable.appendChild(setHeader);
+ setHeaderWrap.appendChild(setHeader);
+ var _serieProgressEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px;padding:2px 6px;border-radius:10px;' + (_doneCount === numSets ? 'background:#1A4A1A;color:#fff' : 'background:var(--border);color:var(--grey)')}, _doneCount + '\u00a0/\u00a0' + numSets + ' s\u00e9ries');
+ setHeaderWrap.appendChild(_serieProgressEl);
+ setTable.appendChild(setHeaderWrap);
 
  // Rows
  setData.forEach(function(setRow, si3) {
@@ -3930,6 +3952,27 @@ function renderMusculationProgram(p) {
  }
 
  card.appendChild(setTable);
+
+ // ── NEXT EXERCISE NUDGE : shown when all sets are validated ──
+ (function(_exRef, _exIdx2, _dayExercises2) {
+ var _today2 = new Date().toISOString().slice(0, 10);
+ var _exSets2 = S.muscuSessionLog[_today2] && S.muscuSessionLog[_today2][_exRef.n] ? S.muscuSessionLog[_today2][_exRef.n] : [];
+ var _allValidated = _exSets2.length > 0 && _exSets2.every(function(s) { return s.validated === true; });
+ if (_allValidated) {
+ var _nextEx2 = (_dayExercises2 && _exIdx2 + 1 < _dayExercises2.length) ? _dayExercises2[_exIdx2 + 1] : null;
+ var _nudge = h('div', {style: 'margin-top:8px;padding:10px 14px;background:#1A4A1A;border-radius:2px;display:flex;align-items:center;justify-content:space-between'});
+ _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#fff;font-weight:700'}, '\u2713 Exercice termin\u00e9'));
+ if (_nextEx2) {
+ var _nudgeRight = h('div', {style: 'text-align:right'});
+ _nudgeRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px'}, 'Suivant'));
+ _nudgeRight.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:#fff;max-width:140px;text-align:right'}, _nextEx2.n));
+ _nudge.appendChild(_nudgeRight);
+ } else {
+ _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8)'}, '\uD83C\uDFC6 Derni\u00e8r exercice'));
+ }
+ card.appendChild(_nudge);
+ }
+ })(ex, exIdx, day.exercises);
  })(ex, eqType === 'bodyweight', exIdx, day.exercises);
 
  // ─── SWAP EXERCISE BUTTON ───────────────────────────────────────────
@@ -4041,6 +4084,32 @@ function renderMusculationProgram(p) {
  var kcalRes = calcSessionKcal(allEx, realDur);
  var compPanel = h('div', {style: 'border:1px solid var(--border);background:var(--ivory2);padding:16px;margin-top:8px'});
  compPanel.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:12px'}, window.t('muscu.session_summary')));
+
+ // ── PER-EXERCISE RECAP ──
+ var _recapToday = new Date().toISOString().slice(0, 10);
+ var _recapLog = S.muscuSessionLog[_recapToday] || {};
+ var _recapExNames = Object.keys(_recapLog);
+ if (_recapExNames.length > 0) {
+ var recapBox = h('div', {style: 'margin-bottom:14px;border:1px solid var(--border);background:var(--ivory)'});
+ recapBox.appendChild(h('div', {style: 'padding:6px 10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border);font-weight:700'}, 'R\u00e9cap. des exercices'));
+ _recapExNames.forEach(function(exName) {
+ var _sets = _recapLog[exName] || [];
+ var _validSets = _sets.filter(function(s) { return s.validated === true; });
+ if (_validSets.length === 0) return;
+ var _row = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border)'});
+ _row.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'}, exName));
+ var _summary = _validSets.length + ' s\u00e9ries';
+ var _firstValid = _validSets[0];
+ if (_firstValid.actualWeight && _firstValid.actualWeight > 0) {
+ _summary += ' \u2014 ' + (window.UNITS ? window.UNITS.displayWeight(_firstValid.actualWeight) : _firstValid.actualWeight + ' kg');
+ }
+ _row.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-left:8px;white-space:nowrap'}, _summary));
+ _row.appendChild(h('span', {style: 'color:#1A4A1A;font-size:14px;margin-left:6px'}, '\u2713'));
+ recapBox.appendChild(_row);
+ });
+ compPanel.appendChild(recapBox);
+ }
+
  // Durée
  var durRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:14px'});
  durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex:1'}, 'Dur\u00e9e r\u00e9elle'));
@@ -4510,7 +4579,7 @@ function renderRunningConfig(p) {
  window.render();
  }
  }}, 'Générer mon plan'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 8: RUNNING PROGRAM ───
@@ -4724,7 +4793,7 @@ function renderHyroxConfig(p) {
  window.render();
  }
  }}, 'Générer mon plan'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 10: HYROX PROGRAM ───
@@ -4914,7 +4983,7 @@ function renderPadelConfig(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; window.render(); }
  }}, 'Générer mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 function renderPadelProgram(p) {
@@ -5031,7 +5100,7 @@ function renderGolfConfig(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; window.render(); }
  }}, 'Générer mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 function renderGolfProgram(p) {
@@ -5225,7 +5294,7 @@ function renderTriathlonConfig(p) {
  }
  window.render();
  }}, 'Générer mon programme →'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 0; window.render(); }, html: backArrow + 'Retour'}));
 }
 
 // ─── STEP 18: TRIATHLON PROGRAM ───
@@ -5513,7 +5582,7 @@ function renderYogaOnboarding(p) {
  window.render();
  }
  }}, 'G\u00e9n\u00e9rer mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 21: YOGA PROGRAM ───
