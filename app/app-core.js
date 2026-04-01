@@ -2378,6 +2378,7 @@ window.S = {
   // Yoga
   yogaLevel: null, yogaGoal: null, yogaDays: 3,
   yogaStyle: null, yogaDuration: null, yogaObjectif: null,
+  yogaWeek: 1, yogaDay: 0,
   // Calisthenics onboarding
   calisthenicsOnboardingStep: null
 };

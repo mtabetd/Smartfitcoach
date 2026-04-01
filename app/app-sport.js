@@ -981,7 +981,7 @@ function renderChargesQuestionnaire(p) {
  ]));
  }
 
- if (Object.keys(S.muscuStrengthProfile).length === 0) {
+ if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
  var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var saved = localStorage.getItem('mtd_muscu_strength_' + userId);
  if (saved) { try { S.muscuStrengthProfile = JSON.parse(saved); } catch(e) {} }
@@ -1305,7 +1305,7 @@ function renderCrossfitLevel(p) {
 
  // ─── 1RM QUESTIONNAIRE (OPTIONAL) ───
  // Load saved 1RM data
- if (Object.keys(S.crossfit1RM).length === 0) {
+ if (Object.keys(S.crossfit1RM || {}).length === 0) {
  var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var saved1rm = localStorage.getItem('mtd_cf_1rm_' + userId);
  if (saved1rm) { try { S.crossfit1RM = JSON.parse(saved1rm); } catch(e) {} }
@@ -1716,7 +1716,7 @@ function renderCrossfitProgram(p) {
  }
 
  // Objectives banner
- var goalNames = S.sportGoals.map(function(gid){
+ var goalNames = (S.sportGoals || []).map(function(gid){
  var g2 = (window.SPORT_GOALS || []).find(function(x){ return x.id === gid; });
  return g2 ? g2.icon + ' ' + g2.name : '';
  }).join(' \u00B7 ');
@@ -2113,8 +2113,17 @@ function renderCrossfitProgram(p) {
  updateDisplay();
  }}, 'Reset');
 
+ // Mute button for WOD timer sounds
+ var wodMuteBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:8px 12px;margin:0;font-size:16px', title: window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper',
+ onclick: function() {
+ window._sfcMuted = !window._sfcMuted;
+ wodMuteBtn.textContent = window._sfcMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
+ wodMuteBtn.title = window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper';
+ }}, window._sfcMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A');
+
  btnRow.appendChild(startBtn);
  btnRow.appendChild(resetBtn);
+ btnRow.appendChild(wodMuteBtn);
  timerContainer.appendChild(btnRow);
 
  if (isCountdown) {
@@ -2364,7 +2373,7 @@ function renderMusculationZones(p) {
  p.appendChild(durGrid);
 
  p.appendChild(h('div', {style: 'height:16px'}));
- var selectedZones = Object.keys(S.sportFocus).filter(function(z){ return S.sportFocus[z] > 0; });
+ var selectedZones = Object.keys(S.sportFocus || {}).filter(function(z){ return S.sportFocus[z] > 0; });
  var ok = selectedZones.length >= 2 && S.sportSessionDuration !== null;
  if (selectedZones.length < 2) {
  p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez au moins 2 zones'));
@@ -2978,7 +2987,7 @@ function saveMuscuSessionLog() {
  // ── Pruning : garder les 90 derniers jours de session log (évite quota localStorage) ──
  var _cutoff = new Date(); _cutoff.setDate(_cutoff.getDate() - 90);
  var _cutStr = _cutoff.toISOString().slice(0, 10);
- Object.keys(S.muscuSessionLog).forEach(function(d) { if (d < _cutStr) delete S.muscuSessionLog[d]; });
+ Object.keys(S.muscuSessionLog || {}).forEach(function(d) { if (d < _cutStr) delete S.muscuSessionLog[d]; });
  localStorage.setItem('mtd_muscu_session_' + uid, JSON.stringify(S.muscuSessionLog));
  // Sync vers Supabase
  if (window.SupaSync) {
@@ -3245,14 +3254,14 @@ function renderMusculationProgram(p) {
  if (!S.sportProgram || !S.sportProgram.length) { S.sportProgram = generateSportProgram(); S.selectedSportDay = 0; }
 
  // Load saved musculation weights from localStorage
- if (Object.keys(S.musculationWeights).length === 0) {
+ if (Object.keys(S.musculationWeights || {}).length === 0) {
  var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var saved = localStorage.getItem('mtd_muscu_weights_' + userId);
  if (saved) { try { S.musculationWeights = JSON.parse(saved); } catch(e) {} }
  }
 
  // Load saved strength profile
- if (Object.keys(S.muscuStrengthProfile).length === 0) {
+ if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
  var userId2 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var savedStr = localStorage.getItem('mtd_muscu_strength_' + userId2);
  if (savedStr) { try { S.muscuStrengthProfile = JSON.parse(savedStr); } catch(e) {} }
@@ -3283,7 +3292,7 @@ function renderMusculationProgram(p) {
  }
 
  // Load session log and progression history
- if (Object.keys(S.muscuSessionLog).length === 0) {
+ if (Object.keys(S.muscuSessionLog || {}).length === 0) {
  var userId3 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var savedLog = localStorage.getItem('mtd_muscu_session_' + userId3);
  if (savedLog) { try { S.muscuSessionLog = JSON.parse(savedLog); } catch(e) {} }
@@ -3295,7 +3304,7 @@ function renderMusculationProgram(p) {
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
 
  // CS-01: Bannière charges estimées si profil de force non renseigné
- if (Object.keys(S.muscuStrengthProfile).length === 0) {
+ if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
  var estBanner = h('div', {style: 'border-left:3px solid #6A4A1A;padding:10px 14px;background:var(--orangebg,rgba(106,74,26,.06));margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A'});
  estBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:3px'}, 'Charges estimées'));
  estBanner.appendChild(h('div', {}, 'Les poids affichés sont calculés d\'après votre poids de corps et niveau. Pour des charges personnalisées,\u00a0'));
@@ -3400,7 +3409,7 @@ function renderMusculationProgram(p) {
  p.appendChild(h('div', {style: 'background:#FFF8E1;border-left:4px solid #F9A825;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'}, sleepMsg));
  }
 
- var goalNames = S.sportGoals.map(function(gid){
+ var goalNames = (S.sportGoals || []).map(function(gid){
  var g = (window.SPORT_GOALS || []).find(function(x){ return x.id === gid; });
  return g ? g.name : '';
  }).join(' + ');
@@ -3411,7 +3420,7 @@ function renderMusculationProgram(p) {
  renderWeekTracker(p);
 
  // Show zone focus with star count
- var focusZones = Object.keys(S.sportFocus)
+ var focusZones = Object.keys(S.sportFocus || {})
  .filter(function(z){ return S.sportFocus[z] > 0; })
  .sort(function(a, b){ return S.sportFocus[b] - S.sportFocus[a]; });
  if (focusZones.length > 0) {
@@ -3888,7 +3897,7 @@ function renderMusculationProgram(p) {
  // Suggestion de progression automatique (basée sur historique)
  if (window.checkProgressionSuggestion) {
  var _sessLog = [];
- var _sortedDates = Object.keys(S.muscuSessionLog).sort();
+ var _sortedDates = Object.keys(S.muscuSessionLog || {}).sort();
  _sortedDates.forEach(function(d) {
  if (S.muscuSessionLog[d] && S.muscuSessionLog[d][exRef.n]) {
  var _sSets = S.muscuSessionLog[d][exRef.n].filter(function(s) { return s.actualReps !== null; });
@@ -4091,7 +4100,7 @@ function renderMusculationProgram(p) {
  if (!S.sessionHistory) S.sessionHistory = {};
  S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
  // Pruning : garder les 365 dernières sessions max
- var _shKeys = Object.keys(S.sessionHistory).sort();
+ var _shKeys = Object.keys(S.sessionHistory || {}).sort();
  if (_shKeys.length > 365) { _shKeys.slice(0, _shKeys.length - 365).forEach(function(k) { delete S.sessionHistory[k]; }); }
  // Sync session vers Supabase
  if (window.SupaSync) SupaSync.saveSession({
@@ -4120,7 +4129,7 @@ function renderMusculationProgram(p) {
  'Abdominaux': ['abdos_dedied'],
  'Bras': ['biceps_dedied', 'triceps_dedied']
  };
- var selectedZonesForDedicated = Object.keys(S.sportFocus).filter(function(z){ return S.sportFocus[z] > 0; });
+ var selectedZonesForDedicated = Object.keys(S.sportFocus || {}).filter(function(z){ return S.sportFocus[z] > 0; });
  var dedicatedToShow = [];
  selectedZonesForDedicated.forEach(function(zone) {
  if (dedicatedMap[zone]) {
@@ -4815,7 +4824,7 @@ function renderHyroxProgram(p) {
  }
 
  // Benchmarks comparison if filled
- var hasBenchmarks = Object.keys(S.hyroxBenchmarks).some(function(k){ return S.hyroxBenchmarks[k]; });
+ var hasBenchmarks = Object.keys(S.hyroxBenchmarks || {}).some(function(k){ return S.hyroxBenchmarks[k]; });
  if (hasBenchmarks && S.hyroxLevel) {
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Vos benchmarks vs standards'));
  var bmCard = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;background:var(--ivory2);margin-bottom:16px'});
