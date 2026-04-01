@@ -1,7 +1,7 @@
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'sfc-v18';
-const RUNTIME_CACHE = 'sfc-runtime-v18';
+const CACHE_VERSION = 'sfc-v19';
+const RUNTIME_CACHE = 'sfc-runtime-v19';
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [
@@ -35,13 +35,13 @@ const APP_SHELL = [
   './icon-192.png',
   './icon-512.png',
   './jspdf.umd.min.js',
-  './supabase-client.js'
+  './supabase-client.js',
+  './supabase.min.js'
 ];
 
 // Third-party CDN scripts to pre-cache.
 const CDN_ASSETS = [
-  'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
-  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js'
+  'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js'
 ];
 
 // ---------------------------------------------------------------------------

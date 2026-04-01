@@ -352,7 +352,7 @@ function renderLogin(app) {
  c.appendChild(h('div', {'class': 'auth-error'}, S.authError));
  }
 
- var form = h('div', {'class': 'auth-form'});
+ var form = h('form', {'class': 'auth-form', onsubmit: function(e){ e.preventDefault(); }, autocomplete: 'on'});
 
  // Email
  var f1 = h('div', {'class': 'field'});
@@ -480,7 +480,7 @@ function renderRegister(app) {
  c.appendChild(h('div', {'class': 'auth-error'}, S.authError));
  }
 
- var form = h('div', {'class': 'auth-form'});
+ var form = h('form', {'class': 'auth-form', onsubmit: function(e){ e.preventDefault(); }, autocomplete: 'on'});
 
  // Name
  var f0 = h('div', {'class': 'field'});
@@ -559,7 +559,7 @@ function renderVerifyEmail(app) {
  c.appendChild(h('div', {'class': 'auth-sub'}, 'V\u00e9rifie ton email'));
  c.appendChild(h('div', {'class': 'auth-line'}));
 
- var form = h('div', {'class': 'auth-form'});
+ var form = h('form', {'class': 'auth-form', onsubmit: function(e){ e.preventDefault(); }, autocomplete: 'on'});
 
  // Title
  form.appendChild(h('h2', {style: 'text-align:center;margin:0 0 8px 0;font-size:24px'}, 'V\u00e9rifie ton email'));
@@ -681,7 +681,7 @@ function renderForgotPassword(app) {
  return;
  }
 
- var form = h('div', {'class': 'auth-form'});
+ var form = h('form', {'class': 'auth-form', onsubmit: function(e){ e.preventDefault(); }, autocomplete: 'on'});
 
  form.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px;text-align:center'},
  'Entrez votre adresse email. Vous recevrez un lien pour cr\u00e9er un nouveau mot de passe.'));
@@ -754,7 +754,7 @@ function renderNewPassword(app) {
  return;
  }
 
- var form = h('div', {'class': 'auth-form'});
+ var form = h('form', {'class': 'auth-form', onsubmit: function(e){ e.preventDefault(); }, autocomplete: 'on'});
  form.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px;text-align:center'},
  'Choisissez un nouveau mot de passe (minimum 6 caract\u00e8res).'));
 
