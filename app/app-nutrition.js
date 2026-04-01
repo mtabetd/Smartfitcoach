@@ -105,10 +105,19 @@ function renderSplash(app) {
   sp.appendChild(h('div', {'class': 'splash-sub'}, 'Nutrition & Sport personnalis\u00e9s'));
   sp.appendChild(h('div', {'class': 'splash-line'}));
   var quotes = [
-    "La nourriture que vous mangez peut \u00eatre la forme de m\u00e9decine la plus s\u00fbre ou la plus lente forme de poison.",
     "Que ton aliment soit ta seule m\u00e9decine.",
-    "Le corps est le serviteur de l\u2019esprit.",
+    "La nourriture que vous mangez peut \u00eatre la forme de m\u00e9decine la plus s\u00fbre ou la plus lente forme de poison.",
+    "Manger est un besoin. Savoir choisir ce que l\u2019on mange est une sagesse.",
+    "La nutrition est l\u2019architecture invisible de votre performance.",
     "Prends soin de ton corps, c\u2019est le seul endroit o\u00f9 tu es oblig\u00e9 de vivre.",
+    "La sant\u00e9 est la plus grande des richesses.",
+    "Mange pour vivre, ne vis pas pour manger.",
+    "Chaque repas est une opportunit\u00e9 de nourrir votre corps avec excellence.",
+    "L\u2019alimentation est la pharmacologie la plus ancienne.",
+    "Manger sainement est une forme de respect envers soi-m\u00eame.",
+    "Tout exc\u00e8s est un ennemi de l\u2019\u00e9quilibre.",
+    "Un gramme de pr\u00e9vention vaut mieux qu\u2019un kilogramme de rem\u00e8de.",
+    "Le corps accomplit ce que l\u2019esprit choisit de nourrir.",
     "La sant\u00e9 n\u2019est pas tout, mais sans la sant\u00e9 tout n\u2019est rien."
   ];
   sp.appendChild(h('div', {'class': 'splash-quote'}, quotes[Math.floor(Math.random() * quotes.length)]));
@@ -495,6 +504,41 @@ function renderStep1(p) {
     onclick: function() { fileInput.click(); }
   }, S.profilePhoto ? 'CHANGER LA PHOTO' : 'AJOUTER UNE PHOTO'));
   p.appendChild(photoWrap);
+
+  p.appendChild(h('div', {style: 'height:16px'}));
+
+  // ── Dark mode toggle ──
+  (function() {
+    var _dmRow = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:16px'});
+    _dmRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:var(--grey)'}, 'Mode sombre'));
+    var _dmActive = document.body.classList.contains('dark-mode');
+    var _dmToggle = h('div', {
+      style: 'display:flex;align-items:center;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)',
+      onclick: function() {
+        document.body.classList.toggle('dark-mode');
+        try { localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode') ? 'true' : 'false'); } catch(e) {}
+        window.render();
+      }
+    });
+    _dmToggle.appendChild(h('span', {}, _dmActive ? '●' : '○'));
+    _dmRow.appendChild(_dmToggle);
+    p.appendChild(_dmRow);
+  })();
+
+  // ── Déconnexion ──
+  p.appendChild(h('button', {
+    'class': 'btn-back',
+    onclick: function() {
+      if (window.AUTH) { AUTH.logout(); }
+      window.S.view = 'auth';
+      window.S.authError = '';
+      window.S._resetSent = false;
+      window.S._resetEmail = '';
+      window.S._passwordUpdated = false;
+      window.S.authVerifyEmail = '';
+      window.render();
+    }
+  }, window.t ? window.t('auth.logout') : 'Déconnexion'));
 
   p.appendChild(h('div', {style: 'height:16px'}));
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex || !_dobValid, onclick: function() { if (S.sex && _dobValid) { bb('nutrition_identity', {sex: S.sex, age: getAge(), birthDate: S.birthDate}); goStep(2); } }}, window.t('onb.next')));

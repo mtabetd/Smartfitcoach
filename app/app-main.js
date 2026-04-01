@@ -217,12 +217,27 @@ function render() {
  // Logged in → app
  var wrap = h('div', {'class': 'app'});
 
- // User bar
+ // User bar — épuré : logo gauche | langue + avatar droite
  var user = AUTH.getUser();
  var ub = h('div', {'class': 'user-bar'});
- ub.appendChild(h('span', {'class': 'user-name'}, '◆ ' + (user ? (user.name || user.email || 'Utilisateur') : 'Utilisateur')));
- var ubRight = h('div', {style: 'display:flex;align-items:center;gap:12px'});
- // Profile photo / initials avatar (persistent top-right, clickable → profil step 1)
+ ub.appendChild(h('span', {'class': 'user-name'}, '◆ SMARTFITCOACH'));
+ var ubRight = h('div', {style: 'display:flex;align-items:center;gap:16px'});
+ // Language toggle FR·EN — touch target sur le wrapper, texte épuré
+ (function() {
+   var _curLang = (window.I18N ? window.I18N.current : (S.lang || 'fr'));
+   var _langWrap = h('div', {
+     style: 'display:flex;align-items:center;min-height:44px;cursor:pointer',
+     onclick: function() {
+       var _next = (window.I18N ? window.I18N.current : (S.lang || 'fr')) === 'fr' ? 'en' : 'fr';
+       if (window.I18N && window.I18N.setLang) { window.I18N.setLang(_next); } else { S.lang = _next; render(); }
+     }
+   });
+   _langWrap.appendChild(h('span', {
+     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;cursor:pointer;color:var(--grey);background:none;border:none;padding:4px 0'
+   }, _curLang === 'fr' ? 'FR·EN' : 'EN·FR'));
+   ubRight.appendChild(_langWrap);
+ })();
+ // Avatar (clickable → profil step 1)
  (function() {
    var _avatarBtn = h('button', {
      'class': 'user-bar-avatar-btn',
@@ -230,13 +245,11 @@ function render() {
      title: 'Voir le profil'
    });
    if (S.profilePhoto) {
-     var _ubPhoto = h('img', {
+     _avatarBtn.appendChild(h('img', {
        src: S.profilePhoto,
        'class': 'user-bar-avatar-photo'
-     });
-     _avatarBtn.appendChild(_ubPhoto);
+     }));
    } else {
-     // Initials avatar fallback — derived from name or email
      var _uInitials = (function() {
        var _un = user ? (user.name || user.email || '') : '';
        if (!_un) return 'S';
@@ -244,29 +257,10 @@ function render() {
        if (_parts.length >= 2) return (_parts[0][0] + _parts[_parts.length - 1][0]).toUpperCase();
        return _un[0].toUpperCase();
      })();
-     var _ubAvatar = h('div', {
-       'class': 'user-bar-avatar-initials'
-     }, _uInitials);
-     _avatarBtn.appendChild(_ubAvatar);
+     _avatarBtn.appendChild(h('div', {'class': 'user-bar-avatar-initials'}, _uInitials));
    }
    ubRight.appendChild(_avatarBtn);
  })();
- // Session time
- ubRight.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey3)'}, (window.BLACKBOX ? window.BLACKBOX.getSessionMinutes() : 0) + ' min'));
- // Language toggle FR / EN
- var _curLang = (window.I18N ? window.I18N.current : (S.lang || 'fr'));
- var langBtn = h('button', {
- style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;padding:12px 16px;min-height:44px;box-sizing:border-box;background:none;border:1px solid var(--border);border-radius:2px;cursor:pointer;color:var(--grey)',
- onclick: function() {
- var next = (window.I18N ? window.I18N.current : (S.lang || 'fr')) === 'fr' ? 'en' : 'fr';
- if (window.I18N && window.I18N.setLang) { window.I18N.setLang(next); } else { S.lang = next; render(); }
- }
- }, _curLang === 'fr' ? 'EN' : 'FR');
- ubRight.appendChild(langBtn);
- // Day/night toggle
- var _isDark = document.body.classList.contains('dark-mode');
- ubRight.appendChild(h('button', {style:'font-size:16px;padding:12px;min-height:44px;min-width:44px;box-sizing:border-box;background:none;border:1px solid var(--border);border-radius:2px;cursor:pointer;display:flex;align-items:center;justify-content:center', onclick: function(){ document.body.classList.toggle('dark-mode'); try{localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode')?'true':'false');}catch(e){} render(); }}, _isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'));
- ubRight.appendChild(h('button', {'class': 'user-logout', onclick: function(){ AUTH.logout(); S.view = 'auth'; S.authError = ''; S._resetSent = false; S._resetEmail = ''; S._passwordUpdated = false; S.authVerifyEmail = ''; render(); }}, window.t('auth.logout')));
  ub.appendChild(ubRight);
  wrap.appendChild(ub);
 
