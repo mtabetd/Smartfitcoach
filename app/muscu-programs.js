@@ -456,7 +456,7 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
   }
   if (S.sportLevel === 'beginner') {
     result.exercises = result.exercises.slice(0, 5);
-    result.exercises.forEach(function(ex) { if (typeof ex.sets === 'number') ex.sets = Math.max(2, ex.sets - 1); ex.technique = null; });
+    result.exercises.forEach(function(ex) { if (typeof ex.sets === 'number') ex.sets = Math.max(2, ex.sets - 1); ex.technique = ex.technique || 'Concentrez-vous sur la technique avant la charge.'; });
     result.notes = (result.notes || '') + ' D\u00e9butant : concentrez-vous sur la technique avant les charges.';
   }
   if (S.sportFocus && typeof S.sportFocus === 'object') {
@@ -1847,7 +1847,7 @@ var EXERCISE_ALTERNATIVES = {
   dos: [
     { n: 'Tractions pronation', m: 'Grand dorsal', eq: 'Barre de traction', sets: '4×6-10', rest: '120s' },
     { n: 'Chin-ups (traction supination)', m: 'Grand dorsal / Biceps', eq: 'Barre de traction', sets: '4×6-10', rest: '120s' },
-    { n: 'Tirage vertical prise large', m: 'Dos (largeur)', eq: 'Machine / Poulie haute', sets: '4x10', rest: '90s' },
+    { n: 'Tirage vertical prise large', m: 'Dos (largeur)', eq: 'Machine / Poulie haute', sets: '4×10', rest: '90s' },
     { n: 'Tirage horizontal câble', m: 'Dorsaux / Rhomboïdes', eq: 'Câble horizontal', sets: '4×10-12', rest: '90s' },
     { n: 'Rowing haltère unilatéral', m: 'Grand dorsal / Trapèzes', eq: 'Haltère + banc', sets: '4×10-12', rest: '75s' },
     { n: 'Rowing barre', m: 'Grand dorsal / Trapèzes', eq: 'Barre', sets: '4×8-12', rest: '90s' },
@@ -1898,8 +1898,8 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Overhead extension câble', m: 'Triceps chef long', eq: 'Câble haute poulie', sets: '3×12-15', rest: '60s' },
     { n: 'Skull crushers EZ', m: 'Triceps', eq: 'Barre EZ + banc', sets: '4×10-12', rest: '90s' },
     { n: 'Extension triceps machine', m: 'Triceps', eq: 'Machine triceps', sets: '3×12-15', rest: '60s' },
-    { n: 'JM Press', m: 'Triceps', eq: 'Barre + banc', sets: '4×8-10', rest: '90s' },
-    { n: 'JM Press', m: 'Triceps (chef long)', eq: 'Barre EZ + banc', sets: '4×8-10', rest: '90s' }
+    { n: 'JM Press barre', m: 'Triceps', eq: 'Barre + banc', sets: '4×8-10', rest: '90s' },
+    { n: 'JM Press EZ', m: 'Triceps (chef long)', eq: 'Barre EZ + banc', sets: '4×8-10', rest: '90s' }
   ],
   quadriceps: [
     { n: 'Squat barre', m: 'Quadriceps / Fessiers', eq: 'Barre + rack', sets: '5×5-8', rest: '180s' },
