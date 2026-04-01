@@ -364,6 +364,12 @@
               window.S[k] = cloudData[k];
             }
           }
+          // Restore language & units before render so UI shows correct locale
+          if (window.I18N && window.S.lang) window.I18N.current = window.S.lang;
+          if (window.UNITS) {
+            window.UNITS.weight = window.S.weightUnit || 'kg';
+            window.UNITS.height = window.S.heightUnit || 'cm';
+          }
           if (window.render) window.render();
           return 'loaded_from_cloud';
         }
