@@ -425,7 +425,11 @@ function renderStep1(p) {
     p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 14 et 80 ans'));
   }
 
-  if (_computedAge && _computedAge < 18) {
+  if (_computedAge && _computedAge < 16) {
+    var under16Warn = h('div', {style: 'background:rgba(180,60,0,0.1);border:1px solid #8A2A0A;border-radius:2px;padding:10px 12px;font-size:11px;color:#8A2A0A;margin-top:8px;line-height:1.5'},
+      'Les programmes sport sont adaptés aux +16 ans. Pour les moins de 16 ans, consultez un médecin ou un entraîneur spécialisé jeunesse avant de commencer.');
+    p.appendChild(under16Warn);
+  } else if (_computedAge && _computedAge < 18) {
     var minorWarn = h('div', {style: 'background:rgba(180,120,0,0.1);border:1px solid #6A4A1A;border-radius:2px;padding:10px 12px;font-size:11px;color:#6A4A1A;margin-top:8px;line-height:1.5'},
       'Pour les moins de 18 ans, ce programme doit \u00eatre suivi avec l\'accompagnement d\'un professionnel de sant\u00e9 ou d\'un m\u00e9decin.');
     p.appendChild(minorWarn);
@@ -588,6 +592,9 @@ function renderStep2(p) {
   ww.appendChild(h('span', {'class': 'num-unit'}, window.UNITS ? window.UNITS.weightLabel() : 'kg'));
   p.appendChild(ww);
   p.appendChild(h('div', {'class': 'num-hint'}, window.UNITS && window.UNITS.weight === 'lbs' ? 'Entre 66 et 660 lbs' : 'Entre 30 et 300 kg'));
+  if (S.weight !== null && S.weight !== undefined && S.weight <= 0) {
+    p.appendChild(h('div', {'class': 'field-error', style: 'margin-top:4px'}, 'Le poids doit être supérieur à 0.'));
+  }
   p.appendChild(h('div', {style: 'height:16px'}));
 
   // Height (MANDATORY)
@@ -626,6 +633,9 @@ function renderStep2(p) {
   hw.appendChild(h('span', {'class': 'num-unit'}, window.UNITS ? window.UNITS.heightLabel() : 'cm'));
   p.appendChild(hw);
   p.appendChild(h('div', {'class': 'num-hint'}, window.UNITS && window.UNITS.height === 'ft' ? 'En pouces d\u00e9cimaux (ex: 70.9 = 5\'11")' : 'Entre 120 et 250 cm'));
+  if (S.height !== null && S.height !== undefined && S.height > 0 && S.height < 100) {
+    p.appendChild(h('div', {'class': 'field-error', style: 'margin-top:4px'}, 'La taille semble incorrecte (minimum 100 cm).'));
+  }
 
   // BMI
   var bmi = calcBMI();

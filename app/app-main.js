@@ -145,7 +145,7 @@ function saveProfile() {
  }
  // Fallback: plain JSON (if encoding unavailable)
  localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
- } catch(e) {}
+ } catch(e) { console.warn('Storage quota exceeded ou erreur localStorage:', e); }
  // Sync vers Supabase (debounced)
  if (window.SupaSync) SupaSync.scheduleSave();
 }

@@ -4798,6 +4798,8 @@ function renderHyroxConfig(p) {
 
 // ─── STEP 10: HYROX PROGRAM ───
 function renderHyroxProgram(p) {
+ // Guard: si config non remplie, rediriger vers la config
+ if (!S.hyroxLevel || !S.hyroxGoal) { S.sStep = 9; window.render(); return; }
  if (!S.hyroxProgram || S.hyroxProgram.length === 0) {
  S.hyroxProgram = window.generateHyroxProgram(S.hyroxDays, S.hyroxLevel, S.hyroxGoal);
  }
