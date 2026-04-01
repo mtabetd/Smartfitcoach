@@ -513,7 +513,7 @@ var EXERCISES = {
         tags: ["dos", "force", "compose"]
     },
     {
-        n: "Pendlay row",
+        n: "Pendlay row strict",
         m: "Grand dorsal / Rhomboïdes / Biceps",
         eq: "Barre olympique",
         sets: "4×5-8",
@@ -1061,7 +1061,7 @@ var EXERCISES = {
       warn: "Contre-indiqué si douleur rotulienne, syndrome femoro-patellaire, LCA fragile ou opere, menisque lese — flexion >120 degrés impossible sans risque ligamentaire",
       desc: "Squat sur une jambe, l'autre jambe tendue devant soi.",
       tips: ["Commencer avec un support", "Exige force et mobilite", "Exercice avance", "Ne pas forcer si douleur rotulienne", "Exige LCA et menisques sains — bilan medical obligatoire avant"],
-      lv: 4,
+      lv: 3,
       tags: ["jambes", "équilibre", "avance", "poids du corps"]
     },
     {
@@ -1599,7 +1599,7 @@ var EXERCISES = {
       warn: "Contre-indiqué si hernie discale (flexion lombaire excentrique sous charge corporelle totale), ostéoporose (contrainte en flexion sur T6-L2 — Sinaki, Spine 2002) ou HTA sévère (effort isometrique maximal = pic tensionnel). Exercice expert uniquement.",
       desc: "Allongé, tenir la barre derrière la tête, monter et descendre le corps raide comme une planche.",
       tips: ["Corps RIGIDE comme une planche", "Exercice de Bruce Lee —  très difficile", "Commencer avec les jambes fléchies"],
-      lv: 4,
+      lv: 3,
       tags: ["abdos", "core", "avance", "expert"]
     },
     {
@@ -1621,7 +1621,7 @@ var EXERCISES = {
       rest: "60s",
       desc: "Soutenu sur les mains, jambes tendues horizontales. Tenir.",
       tips: ["Progression : 1 jambe → 2 jambes pliees → L-sit complet", "Jambes parfaitement horizontales", "Force abdos + flexion hanche"],
-      lv: 4,
+      lv: 3,
       tags: ["abdos", "psoas", "calisthenics", "avance"]
     },
     {
@@ -1632,7 +1632,7 @@ var EXERCISES = {
       rest: "60s",
       desc: "Suspendu à la barre, jambes tendues, basculer de gauche a droite comme des essuie-glaces.",
       tips: ["Jambes tendues pour plus de difficulté", "Controle de la rotation — ne pas balancer", "Progresser avec jambes fléchies"],
-      lv: 4,
+      lv: 3,
       tags: ["abdos", "obliques", "avance", "suspension"]
     }
   ],
