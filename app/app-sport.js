@@ -623,7 +623,6 @@ var SPORT_QUOTES = [
  {t:"La force ne vient pas de la capacit\u00e9 physique. Elle vient d'une volont\u00e9 indomptable.",a:"Gandhi"},
  {t:"Le succ\u00e8s n'est pas d\u00e9finitif, l'\u00e9chec n'est pas fatal. C'est le courage de continuer qui compte.",a:"Winston Churchill"},
  {t:"Ne comptez pas les jours, faites que les jours comptent.",a:"Muhammad Ali"},
- {t:"Chaque champion a un jour \u00e9t\u00e9 un comp\u00e9titeur qui a refus\u00e9 d'abandonner.",a:"Rocky Balboa"},
  {t:"Le sport ne forge pas le caract\u00e8re. Il le r\u00e9v\u00e8le.",a:"Heywood Broun"},
  {t:"La discipline est le pont entre les objectifs et l'accomplissement.",a:"Jim Rohn"},
  {t:"Le sport va chercher la peur pour la dominer, la fatigue pour en triompher.",a:"Pierre de Coubertin"},
@@ -631,8 +630,35 @@ var SPORT_QUOTES = [
  {t:"Un champion est quelqu'un qui se rel\u00e8ve quand il ne peut pas.",a:"Jack Dempsey"},
  {t:"La pers\u00e9v\u00e9rance n'est pas une longue course. C'est plusieurs courtes courses l'une apr\u00e8s l'autre.",a:"Walter Elliot"},
  {t:"La victoire appartient au plus pers\u00e9v\u00e9rant.",a:"Napol\u00e9on Bonaparte"},
- {t:"Vous n'\u00eates qu'\u00e0 un entra\u00eenement d'une bonne humeur.",a:"Inconnu"},
- {t:"La sueur d'aujourd'hui est la force de demain.",a:"Inconnu"}
+ {t:"La sueur d'aujourd'hui est la force de demain.",a:""},
+ {t:"Vous n'\u00eates qu'\u00e0 un entra\u00eenement d'une bonne humeur.",a:""},
+ {t:"Le plus grand ennemi de la performance est l'impatience.",a:"Tiger Woods"},
+ {t:"Soit tu souffres de la douleur de la discipline, soit tu souffres du regret.",a:"Jim Rohn"},
+ {t:"Je n'ai jamais perdu. J'ai seulement appris.",a:"Nelson Mandela"},
+ {t:"La pr\u00e9paration, c'est tout.",a:"Alexander Graham Bell"},
+ {t:"Aucun raccourci ne m\u00e8ne au sommet.",a:"Tenzing Norgay"},
+ {t:"Le mental est l'athl\u00e8te. Le corps, simplement l'instrument.",a:"Clarence Greene"},
+ {t:"Chaque record battu \u00e9tait autrefois consid\u00e9r\u00e9 impossible.",a:""},
+ {t:"La r\u00e9gularit\u00e9 construit ce que l'intensit\u00e9 seule ne peut pas.",a:""},
+ {t:"Un athl\u00e8te accompli sait que la r\u00e9cup\u00e9ration est aussi importante que l'effort.",a:""},
+ {t:"Le corps devient ce qu'il fait r\u00e9guli\u00e8rement.",a:"Aristote"},
+ {t:"Ce n'est pas la force qui gagne, c'est la technique et la volont\u00e9.",a:""},
+ {t:"On ne devient pas athl\u00e8te en un jour, mais on peut d\u00e9cider de l'\u00eatre en un instant.",a:""},
+ {t:"La douleur est temporaire. La r\u00e9ussite est permanente.",a:""},
+ {t:"L'ath\u00e8te vit dans deux mondes simultan\u00e9ment : la r\u00e9alit\u00e9 et le possible.",a:"Wilma Rudolph"},
+ {t:"La pr\u00e9paration d'hier est la performance d'aujourd'hui.",a:""},
+ {t:"Chaque entra\u00eenement est une promesse tenue \u00e0 soi-m\u00eame.",a:""},
+ {t:"La comp\u00e9tition commence l\u00e0 o\u00f9 les autres s'arr\u00eatent.",a:""},
+ {t:"L'excellence n'est pas un acte, c'est une habitude.",a:"Aristote"},
+ {t:"Le champion d'hier s'est entra\u00een\u00e9 quand personne ne regardait.",a:""},
+ {t:"Fixez des objectifs si hauts que vos r\u00eaves semblent petits en comparaison.",a:""},
+ {t:"La vitesse s'acquiert. L'endurance se construit. Le mental se forge.",a:""},
+ {t:"Repoussez vos limites \u2014 non pas pour les d\u00e9passer, mais pour d\u00e9couvrir o\u00f9 elles sont vraiment.",a:""},
+ {t:"Le secret des champions est simple : ils s'entra\u00eenent quand \u00e7a ne leur convient pas.",a:""},
+ {t:"Ce qui ne te brise pas te construit, \u00e0 condition de continuer.",a:""},
+ {t:"Gagner c'est bien. Progresser, c'est mieux.",a:""},
+ {t:"La discipline du corps lib\u00e8re l'esprit.",a:""},
+ {t:"L'entra\u00eenement dur pr\u00e9pare aux comp\u00e9titions faciles.",a:""}
 ];
 
 // ─── STEP 0: TYPE SELECTION ONLY ───
@@ -646,7 +672,9 @@ function renderObjectif(p) {
  splash.appendChild(h('div', {'class': 'splash-line'}));
  var quoteDiv = h('div', {'class': 'splash-quote'});
  quoteDiv.appendChild(h('em', {}, '\u201C' + q.t + '\u201D'));
- quoteDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:12px'}, '\u2014 ' + q.a));
+ if (q.a) {
+   quoteDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:12px'}, '\u2014 ' + q.a));
+ }
  splash.appendChild(quoteDiv);
  splash.appendChild(h('button', {'class': 'splash-btn btn-primary', style: 'margin-top:32px', onclick: function(){ S.sportSplashDone = true; if(window.BLACKBOX)BLACKBOX.log('sport_splash_done'); window.render(); }}, 'Commencer'));
  p.appendChild(splash);
