@@ -1869,7 +1869,7 @@
       // 15*4+85*4+28*9 = 60+340+252 = 652 ✓
       ingredients: [
         { name: 'Flocons d\'avoine', qty: 300, unit: 'g' },
-        { name: 'Miel', qty: 80, unit: 'g' },
+        { name: 'Sirop d\'agave', qty: 80, unit: 'g' },
         { name: 'Huile de coco', qty: 40, unit: 'ml' },
         { name: 'Amandes effilées', qty: 60, unit: 'g' },
         { name: 'Noix de cajou', qty: 60, unit: 'g' },
@@ -1878,7 +1878,7 @@
       ],
       steps: [
         'Préchauffer le four à 160 °C chaleur tournante — jamais plus chaud : le granola doit sécher et dorer doucement, pas griller.',
-        'Faire fondre l\'huile de coco avec le miel dans une casserole à feu très doux jusqu\'à liquéfaction. Verser ce mélange chaud sur les flocons et la cannelle ; mélanger à la spatule pour enrober chaque flocon.',
+        'Faire fondre l\'huile de coco avec le sirop d\'agave dans une casserole à feu très doux jusqu\'à liquéfaction. Verser ce mélange chaud sur les flocons et la cannelle ; mélanger à la spatule pour enrober chaque flocon.',
         'Étaler en couche fine et régulière (max 1 cm) sur une plaque recouverte de papier cuisson. Une couche épaisse cuit à l\'étouffée ; une couche fine devient croustillante.',
         'Enfourner 20-25 min. Mélanger délicatement toutes les 8-10 min avec une grande spatule en retournant les bords (qui colorent plus vite) vers le centre. Le granola est prêt quand il est doré ambré — il paraît encore mou au four.',
         'Sortir du four et laisser refroidir COMPLÈTEMENT sur la plaque sans y toucher — au moins 20 min. Le croustillant se forme en refroidissant, pas en cuisant.',
@@ -3821,7 +3821,7 @@
         { name: 'Banane', qty: 120, unit: 'g' },
         { name: 'Granola', qty: 40, unit: 'g' },
         { name: 'Fruits rouges', qty: 80, unit: 'g' },
-        { name: 'Miel', qty: 10, unit: 'g' },
+        { name: 'Sirop d\'agave', qty: 10, unit: 'g' },
         { name: "Lait d'amande", qty: 100, unit: 'ml' }
       ],
       steps: [
@@ -3829,7 +3829,7 @@
         'Mixer l\'açaí en poudre avec la banane congelée et le lait d\'amande, en démarrant à vitesse lente puis en montant — 30 secondes suffisent. La base doit tenir à la cuillère, pas couler.',
         'Verser d\'un seul geste dans un bol bien froid (passé 5 min au congélateur).',
         'Disposer le granola en bande d\'un côté, les fruits rouges de l\'autre : l\'œil mange avant la bouche.',
-        'Finir avec un filet de miel en spirale au centre. Servir immédiatement.'
+        'Finir avec un filet de sirop d\'agave en spirale au centre. Servir immédiatement.'
       ]
     },
     {
@@ -3870,10 +3870,10 @@
         { name: 'Graines de chia', qty: 30, unit: 'g' },
         { name: 'Lait de coco (brique)', qty: 200, unit: 'ml' },
         { name: 'Mangue (fraîche)', qty: 100, unit: 'g' },
-        { name: 'Miel', qty: 10, unit: 'g' }
+        { name: 'Sirop d\'agave', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Fouetter le lait de coco et le miel dans un bol jusqu\'à ce que le miel soit dissous — ne laissez pas de grumeaux de lait de coco figé.',
+        'Fouetter le lait de coco et le sirop d\'agave dans un bol jusqu\'à ce que le miel soit dissous — ne laissez pas de grumeaux de lait de coco figé.',
         'Verser les graines de chia en pluie en remuant constamment. Attendre 2 min, remuer à nouveau vigoureusement pour éviter les agrégats.',
         'Couvrir et réfrigérer au minimum 4h, idéalement toute la nuit. Le pudding doit avoir la consistance d\'un tapioca : ni liquide, ni béton.',
         'Au moment de servir, trancher la mangue en brunoise régulière de 1 cm — la régularité fait la différence visuelle et en bouche.',
@@ -7034,12 +7034,12 @@
         { name: 'Cacao en poudre non sucré', qty: 15, unit: 'g' },
         { name: 'Beurre de noisette', qty: 30, unit: 'g' },
         { name: 'Lait d\'amande non sucré', qty: 60, unit: 'ml' },
-        { name: 'Whey chocolat ou vanille', qty: 30, unit: 'g' },
+        { name: 'Protéine végétale chocolat ou vanille', qty: 30, unit: 'g' },
         { name: 'Stevia', qty: 2, unit: 'g' }
       ],
       steps: [
         'Sortir les bananes congelées 2-3 min à température ambiante — elles doivent rester très froides mais se laisser couper au couteau. Les casser en morceaux grossiers pour faciliter le démarrage du blender.',
-        'Placer la whey au fond du blender (elle favorise l\'émulsion), puis les morceaux de banane, le cacao tamisé, le beurre de noisette et le lait d\'amande. Laisser la stevia pour l\'ajustement final.',
+        'Placer la protéine végétale au fond du blender (elle favorise l\'émulsion), puis les morceaux de banane, le cacao tamisé, le beurre de noisette et le lait d\'amande. Laisser la stevia pour l\'ajustement final.',
         'Mixer par impulsions courtes 4-5 fois pour briser les blocs, puis en continu 45-60 sec jusqu\'à texture crémeuse et dense. Si le blender force, ajouter 1 cuillère à soupe de lait d\'amande supplémentaire — pas plus.',
         'Goûter : ajuster en stevia ou en cacao selon la préférence. Pour une texture parfaite, la nice cream doit être épaisse comme une crème glacée artisanale.',
         'Servir immédiatement dans des bols froids pour la texture soft-serve. Pour une glace plus ferme, verser dans un récipient plat, couvrir au contact et passer 20 min au congélateur. Garnir d\'une pincée de cacao et de noisettes concassées torréfiées.'
@@ -15736,7 +15736,7 @@
     var HALAL_EXCLUSIONS = ['porc', 'cochon', 'lard', 'bacon', 'jambon porc', 'saucisson',
                             'pepperoni', 'chorizo', 'pancetta', 'gélatine de porc',
                             'alcool', 'vin blanc', 'vin rouge', 'bière', 'rhum',
-                            'cognac', 'whisky', 'vodka', 'porto', 'amaretto', 'mirin'];
+                            'cognac', 'whisky', 'vodka', 'porto', 'amaretto'];
     var halalExclusions = [];
     if (filters.halal) {
       halalExclusions = HALAL_EXCLUSIONS;
@@ -15777,6 +15777,15 @@
 
       // ── Filtre ingrédients exclus (allergies + intolérances + régime ingrédient) ──
       if (allExclusions.length && !recipeHasNoExcludedIngredients(r, allExclusions)) return false;
+
+      // ── Filtre mirin (halal exception: "mirin halal" est autorisé) ──
+      if (filters.halal) {
+        var ings = r.ingredients || [];
+        for (var mi = 0; mi < ings.length; mi++) {
+          var iName = (ings[mi].name || '').toLowerCase();
+          if (iName.indexOf('mirin') !== -1 && iName.indexOf('mirin halal') === -1) return false;
+        }
+      }
 
       return true;
     }).sort(function (a, b) {
@@ -16120,7 +16129,7 @@
     // ── Appliquer filtre halal si S.halal = true (cohérence avec app-core.js filterRecipes) ──
     var s = window.S;
     if (s && s.halal) {
-      var HALAL_BAN = /porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin/;
+      var HALAL_BAN = /porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/;
       pool = pool.filter(function(r) {
         var ingText = ((r.i || '') + ' ' + (r.tags || []).join(' ')).toLowerCase();
         return !HALAL_BAN.test(ingText);

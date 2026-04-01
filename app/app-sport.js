@@ -1847,12 +1847,20 @@ function renderCrossfitProgram(p) {
  wodCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:#5A1010;margin-bottom:10px'}, _wod.type || ''));
 
  var movList = h('div', {style: 'margin-bottom:10px'});
+ var _cfMedFiltered = 0;
  (_wod.movements || []).forEach(function(mov) {
+ if (S.muscuMedical && S.muscuMedical.done && !filterExerciseByMedical(mov, S.muscuMedical)) {
+   _cfMedFiltered++;
+   return;
+ }
  var movText = formatCFMovement(mov);
  var movDiv = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;padding:4px 0;border-bottom:1px solid var(--border)'}, movText);
  movList.appendChild(movDiv);
  });
  wodCard.appendChild(movList);
+ if (_cfMedFiltered > 0) {
+ wodCard.appendChild(h('div', {style: 'background:#FFF3CD;border-left:3px solid #FF6B6B;padding:8px 12px;margin-top:8px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#C00'}, _cfMedFiltered + ' mouvement(s) retiré(s) pour restriction médicale — voir scaling ci-dessous'));
+ }
 
  if (_wod.notes) {
  wodCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:6px'}, _wod.notes));
@@ -1866,6 +1874,7 @@ function renderCrossfitProgram(p) {
  scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E07B00;margin-bottom:6px'}, '⬇ SCALING'));
  if (Array.isArray(_sc.movements) && _sc.movements.length) {
  _sc.movements.forEach(function(m) {
+ if (S.muscuMedical && S.muscuMedical.done && !filterExerciseByMedical(m, S.muscuMedical)) return;
  var txt = (m.name || '') + (m.note ? ' ' + m.note : '');
  if (!txt.trim()) return;
  scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);padding:2px 0'}, txt.trim()));
