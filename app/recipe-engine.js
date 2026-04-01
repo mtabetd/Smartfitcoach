@@ -25173,7 +25173,7 @@
 
   /**
    * Retourne le pool de recettes pour un type de repas.
-   * Toutes les 439 recettes (R201-R439 + L001-L350 migrées) sont dans RECIPES_DB.
+   * Toutes les 527 recettes (R201-R519 + L001-L208 migrées) sont dans RECIPES_DB.
    * @param {'breakfast'|'lunch'|'snack'|'dinner'} mealType
    * @returns {Array} Pool de recettes au format simplifié
    */

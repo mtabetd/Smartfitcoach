@@ -2102,7 +2102,7 @@ function renderStep9(p) {
   renderProgressBar(p, 9, 9);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, 'Planning'));
   p.appendChild(h('h1', {html: 'Votre<br><em>semaine</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 489 recettes'));
+  p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 527 recettes'));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
   if (!S._nm && window.computeNutritionState) window.computeNutritionState(false);

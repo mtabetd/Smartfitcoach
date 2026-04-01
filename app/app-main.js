@@ -165,6 +165,14 @@ function loadProfile() {
  }
  if (!data) return;
  PROFILE_KEYS.forEach(function(k) { if (data[k] !== undefined) S[k] = data[k]; });
+ // Defensive rehydration: ensure object/array fields are never null after load
+ var _objFields = ['sportFocus','bonusExercises','sessionHistory','muscuSessionLog',
+ 'muscuProgressionHistory','musculationWeights','muscuStrengthProfile','crossfit1RM',
+ 'hyroxBenchmarks'];
+ _objFields.forEach(function(f) { if (!S[f] || typeof S[f] !== 'object' || Array.isArray(S[f])) S[f] = {}; });
+ var _arrFields = ['sportGoals','medical','allergies','intolerances','excluded','cuisines',
+ 'shopStores','shopPrefs','bodyZones','strongZones','weakZones'];
+ _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
  // Reset ephemeral UI state that should not persist across sessions
  S.shopListOpen = false;
  S.smoothieBarOpen = false;

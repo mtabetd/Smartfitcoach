@@ -1676,7 +1676,7 @@ window.I18N.buildPartialMap = function() {
     ['\uD83D\uDCAA Post-séance', '\uD83D\uDCAA Post-session'],
     ['kcal EPOC (afterburn) inclus', 'kcal EPOC (afterburn) included'],
     [' repas/j)', ' meals/day)'],
-    [' repas/jour · 489 recettes', ' meals/day · 489 recipes'],
+    [' repas/jour · 527 recettes', ' meals/day · 527 recipes'],
     ['7 jours · ', '7 days · '],
     ['Semaine d\'', 'Week of '],
     ['Liste pour ', 'List for '],
