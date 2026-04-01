@@ -15,7 +15,7 @@ window.APP_RENDER = function() {
 
 // ─── PROFILE PERSISTENCE (E-01) ───
 var PROFILE_KEYS = [
- 'sex','age','weight','height','activity','train','sleep','medical','goal','targetWeight',
+ 'sex','age','birthDate','weight','height','activity','train','sleep','medical','goal','targetWeight',
  'mealsPerDay','eatingLocation','mealPrepTime','snacking','alcoholFreq','alcoholTypes','hydration',
  'cookLevel','whey','allergies','intolerances','regime','halal','excluded','cuisines',
  'shopFreq','shopStores','shopBudget','shopPrefs',
@@ -56,7 +56,8 @@ var PROFILE_KEYS = [
  'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
  'heartRateRest','yogaLevel','yogaGoal','yogaDays',
  'wantsDessert',
- 'wheyFlavors','saladBuilder'
+ 'wheyFlavors','saladBuilder',
+ 'emailOptin'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.

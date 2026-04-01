@@ -135,6 +135,8 @@
             id: userId,
             email: session.user.email,
             name: data.name || session.user.user_metadata.name || '',
+            birth_date: data.birthDate || null,
+            email_optin: (data.emailOptin !== undefined) ? data.emailOptin : true,
             data: data,
             updated_at: new Date().toISOString()
           }, { onConflict: 'id' })

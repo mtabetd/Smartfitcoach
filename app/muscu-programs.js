@@ -1791,7 +1791,7 @@ function buildPersonalizedMuscuPlan(S) {
 
   // 8. CONSEILS PERSONNALISÉS
   var tips = [];
-  if (S.age >= 50) tips.push('Récupération allongée recommandée : 48-72h entre les séances par groupe musculaire.');
+  if (getAge() >= 50) tips.push('Récupération allongée recommandée : 48-72h entre les séances par groupe musculaire.');
   if (isFemale) tips.push('Priorité fessiers et jambes : 2× par semaine recommandé pour résultats optimaux.');
   // S.sleep est un index : 0='<6h', 1='6-7h', 2='7-8h', 3='8h+'
   if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) tips.push('Sommeil insuffisant d\u00e9tect\u00e9 : la r\u00e9cup\u00e9ration musculaire est compromise, dormez plus.');

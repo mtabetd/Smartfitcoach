@@ -940,7 +940,7 @@ function renderChargesQuestionnaire(p) {
  h('div', {style: 'color:#6A4A1A'}, 'Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (RPE max 7/10 les 4 premières semaines).')
  ]));
  }
- if (S.age >= 50) {
+ if (getAge() >= 50) {
  p.appendChild(h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border-left:4px solid #1A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:13px'}, [
  h('div', {style: 'font-weight:700;color:#1A4A1A;margin-bottom:4px'}, '\uD83D\uDCAA Athlète 50+ — Adaptations recommandées'),
  h('div', {style: 'color:#1A4A1A'}, 'Échauffement prolongé 15-20 min (vs 5-10 min standard). Décharge toutes les 4-5 semaines (vs 6 semaines). Préférez machines guidées aux barres libres pour les charges maximales. Récupération inter-séance 48-72h minimum. Contrôle médical annuel conseillé.')
@@ -2830,7 +2830,7 @@ function getExerciseTransitionTime(prevEx, nextEx) {
  }
 
  // ── Âge : +15% si ≥50 ans (récupération neuromusculaire ralentie — Hunter 2004) ──
- if (s.age && s.age >= 50) baseTime = Math.round(baseTime * 1.15);
+ var _ageR = getAge(); if (_ageR && _ageR >= 50) baseTime = Math.round(baseTime * 1.15);
 
  // ── Clamp : minimum 60s, maximum 360s (6min) ──
  return Math.max(60, Math.min(360, Math.round(baseTime / 5) * 5)); // arrondi 5s
@@ -3057,7 +3057,7 @@ function calcSessionDuration(exercises) {
 function calcSessionKcal(exercises, durationMin) {
  var s = window.S;
  var weight = s.weight || 75;
- var age = s.age || 30;
+ var age = getAge() || 30;
  var sex = (s.sex === 'femme') ? 'femme' : 'homme';
  // Phase courante → RPE
  var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
@@ -3229,12 +3229,12 @@ function renderMusculationProgram(p) {
  : ' Diabète : Vérifiez votre glycémie avant/après chaque séance. Gardez du sucre rapide à portée. Intensité maximale RPE 8/10 — jamais à l\'échec. Hydratation ×1.5.';
  p.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'}, diabMsg));
  }
- if (S.age >= 50) {
+ if (getAge() >= 50) {
  p.appendChild(h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border-left:4px solid #1A4A1A;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1A4A1A'}, ' 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.'));
  }
  // Cardiopathie : zones FC Karvonen + avertissement beta-bloquants (AHA 2018, ACSM 2021)
  if (S.medical && S.medical.indexOf('cardio') !== -1) {
- var age = S.age || 40;
+ var age = getAge() || 40;
  var hrMax = Math.round(208 - 0.7 * age); // Tanaka 2001 — plus précis que Fox (AHA 2010)
  var hrRest = S.heartRateRest || 65; // Utilisateur peut renseigner sa FC repos
  // Karvonen: Target HR = (HRmax - HRrest) × %intensity + HRrest
@@ -5768,7 +5768,7 @@ function renderCyclingProgram(p) {
  if (med.hypertension) warnings.push(' HTA : évitez Z4/Z5 (Valsalva interdit) — restez en Z1-Z3 maximum');
  if (med.herniaDisc || med.lowerBack) warnings.push(' Hernie discale : position aérodynamique déconseillée — vélo droit recommandé, guidon surélevé');
  if (med.knees || med.meniscus) warnings.push(' Gonarthrose / Ménisque : cadence élevée (>90 RPM) recommandée — évitez les grosses relances');
- if (S.age && S.age >= 50) warnings.push(' 50+ : échauffement 15 min minimum obligatoire, zones 1-3 prioritaires, récupération 48h entre séances intenses');
+ if (getAge() >= 50) warnings.push(' 50+ : échauffement 15 min minimum obligatoire, zones 1-3 prioritaires, récupération 48h entre séances intenses');
  if (warnings.length) {
  var warnBox = h('div', {style: 'border:1.5px solid #6A4A1A;padding:12px 16px;background:var(--orangebg,rgba(106,74,26,.06));margin-bottom:16px'});
  warnings.forEach(function(w) {

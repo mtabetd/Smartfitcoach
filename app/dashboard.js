@@ -314,6 +314,17 @@ window.DASHBOARD = {
     var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
     root.appendChild(h('p', 'dash-date', dateStr));
 
+    /* ═══ BIRTHDAY BANNER ═══ */
+    if (window.isBirthday && window.isBirthday()) {
+      var _bdAge = window.getAge ? window.getAge() : null;
+      var _bdBanner = h('div', null);
+      _bdBanner.style.cssText = 'background:linear-gradient(135deg,#FFD700 0%,#FFA500 100%);border-radius:8px;padding:16px 20px;margin-bottom:16px;text-align:center;position:relative;overflow:hidden';
+      _bdBanner.innerHTML = '<div style="font-size:28px;margin-bottom:4px">\uD83C\uDF82\uD83C\uDF89\uD83C\uDF81</div>' +
+        '<div style="font-family:Georgia,serif;font-size:18px;color:#0A0A09;font-weight:bold">Joyeux anniversaire' + (_bdAge ? ' — ' + _bdAge + ' ans' : '') + ' !</div>' +
+        '<div style="font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:#333;margin-top:4px">Toute l\'\u00e9quipe SmartFitCoach vous souhaite une merveilleuse journ\u00e9e</div>';
+      root.appendChild(_bdBanner);
+    }
+
     /* ═══ TIPS TOGGLE ═══ */
     if (window.TIPS) TIPS.renderToggle(root);
 

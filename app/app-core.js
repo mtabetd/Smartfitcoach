@@ -1649,7 +1649,7 @@ window.S = {
   view: 'auth', // 'auth','authRegister','dashboard','nutrition','sport'
   authError: '',
   // Nutrition wizard
-  nStep: 0, sex: null, age: 28, weight: 75, height: 175,
+  nStep: 0, sex: null, age: 28, birthDate: null, weight: 75, height: 175,
   lang: 'fr', weightUnit: 'kg', heightUnit: 'cm',
   activity: null, train: [], sleep: null, medical: [], goal: null,
   cookLevel: 2, whey: null, wheyFlavors: [], allergies: [], intolerances: [],
@@ -1671,6 +1671,7 @@ window.S = {
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,
   wantsDessert: false,        // inclure des desserts healthy 2-3x/semaine dans le plan
+  emailOptin: true,            // opt-in emails (anniversaire, rappels, etc.)
   // Alcohol
   alcoholFreq: null, alcoholTypes: [],
   // Weight
@@ -2338,7 +2339,7 @@ function calcAdjustedWeight(){
 }
 window.calcAdjustedWeight=calcAdjustedWeight;
 
-function calcBMR(){var s=window.S;if(!s.sex)return 0;if(!s.age||s.age<13||s.age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;
+function calcBMR(){var s=window.S;if(!s.sex)return 0;var _age=getAge();if(!_age||_age<13||_age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;
 // GROSSESSE : utiliser le poids pré-grossesse pour le BMR de base (ACOG 2018, OMS 2016)
 // Les calories supplémentaires (+340 T2 / +450 T3) s'ajoutent à ce TDEE de référence via calcTarget()
 // Utiliser s.weight actuel (gonflé par la grossesse) surestimerait le TDEE de base et additionnerait
@@ -2350,7 +2351,7 @@ else if(s.pregnant&&!s.prePregnancyWeight&&s.pregnancyWeek){
   var _estGain=s.pregnancyWeek>12?Math.round((s.pregnancyWeek-12)*0.5):0;
   bw=Math.max(40,s.weight-_estGain);
 }
-if(s.sex==='homme')return Math.round((10*bw)+(6.25*s.height)-(5*s.age)+5);return Math.round((10*bw)+(6.25*s.height)-(5*s.age)-161)} // Mifflin-St Jeor 1990 (Frankenfield 2005: best accuracy general population)
+if(s.sex==='homme')return Math.round((10*bw)+(6.25*s.height)-(5*_age)+5);return Math.round((10*bw)+(6.25*s.height)-(5*_age)-161)} // Mifflin-St Jeor 1990 (Frankenfield 2005: best accuracy general population)
 function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
@@ -2366,7 +2367,7 @@ if(s.medical&&s.medical.indexOf('allaitement')!==-1){return Math.max(Math.round(
 if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
 // Adolescent (13-17 ans) : déficit max -300kcal/j (ACSM 2007, IOC 2018 — préservation croissance + pic de masse osseuse)
 // Surplus max +300kcal/j en bulk (ACSM adolescent — éviter accumulation graisseuse pendant croissance hormonale)
-if(s.age>=13&&s.age<18&&tdeeVal>0){
+var _ageT=getAge();if(_ageT>=13&&_ageT<18&&tdeeVal>0){
   var minCalTeen=Math.round(tdeeVal-300);if(base<minCalTeen)base=minCalTeen;
   if(goalKey==='bulk'||goalKey==='lean_bulk'){var maxCalTeen=Math.round(tdeeVal+300);if(base>maxCalTeen)base=maxCalTeen;}
 }
@@ -2548,7 +2549,7 @@ var femaleOnly=['menopause','sopk','grossesse','allaitement'];if(femaleOnly.inde
   if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){var gdCarbMax=Math.min(200,Math.max(175,gGrams));if(gGrams>gdCarbMax)gGrams=gdCarbMax;}
   // Master athlete 60+ : résistance anabolique → leucine seuil 40g/meal (Churchward-Venne 2016, Moore 2015)
   // Augmenter protéines de 10% pour compenser la résistance anabolique (recommandation ESPEN 2019)
-  if(s.age>=60&&(!s.medical||s.medical.indexOf('irc')===-1)){pGrams=Math.max(pGrams,Math.round(bw*1.2));} // ESPEN 2014: plancher 1.2g/kg pour 60+ (résistance anabolique)
+  if(getAge()>=60&&(!s.medical||s.medical.indexOf('irc')===-1)){pGrams=Math.max(pGrams,Math.round(bw*1.2));} // ESPEN 2014: plancher 1.2g/kg pour 60+ (résistance anabolique)
   // Apply cycle-phase macro adjustments (only for non-pregnant women with cycle tracking)
   if(!s.pregnant&&s.sex==='femme'&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
 gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0)));// Never reduce protein during cycle — keep stable
@@ -2699,7 +2700,7 @@ function calcFiberTarget(){
   // IRC : limiter les fibres riches en potassium (légumineuses, fruits secs)
   if(s.medical&&s.medical.indexOf('irc')!==-1){base=Math.min(base,25);adjustments.push('IRC : éviter fibres riches en potassium (légumineuses, fruits secs) — KDOQI 2020');}
   // 60+ : transit, microbiote, prévention cancer colorectal
-  if(s.age>=60&&!adjustments.length){base=Math.max(base,30);adjustments.push('60+ : ≥ 30g/j pour microbiote et transit (EFSA 2017)');}
+  if(getAge()>=60&&!adjustments.length){base=Math.max(base,30);adjustments.push('60+ : ≥ 30g/j pour microbiote et transit (EFSA 2017)');}
   return{
     target:base,
     adjustments:adjustments,
@@ -2713,6 +2714,10 @@ function calcFiberTarget(){
   };
 }
 window.calcFiberTarget=calcFiberTarget;
+
+function getAge(){var s=window.S;if(s.birthDate){var today=new Date();var b=new Date(s.birthDate);if(!isNaN(b.getTime())){var a=today.getFullYear()-b.getFullYear();var m=today.getMonth()-b.getMonth();if(m<0||(m===0&&today.getDate()<b.getDate()))a--;return a;}}return s.age||28;}
+function isBirthday(){var s=window.S;if(!s.birthDate)return false;var today=new Date();var b=new Date(s.birthDate);if(isNaN(b.getTime()))return false;return today.getMonth()===b.getMonth()&&today.getDate()===b.getDate();}
+window.getAge=getAge;window.isBirthday=isBirthday;
 
 window.calcBMR=calcBMR; window.calcTDEE=calcTDEE; window.calcTarget=calcTarget;
 window.calcMacros=calcMacros; window.calcBMI=calcBMI; window.bmiInfo=bmiInfo;
@@ -2936,7 +2941,7 @@ var SUPPLEMENTS_DB = [
     unnecessary_if:'Inutile si vous atteignez vos prot\u00e9ines via l\'alimentation seule',
     dosageCalc:function(s){var d=s.weight>80?35:25;return{dose:d,unit:'g/prise',timing:'Post-entra\u00eenement ou petit-d\u00e9jeuner',note:'Objectif total : '+Math.round(s.weight*1.8)+'g prot/jour (alimentation + whey)'};}},
   {id:'creatine',name:'Cr\u00e9atine Monohydrate',icon:'\uD83D\uDC8A',desc:'Force, masse musculaire, r\u00e9cup\u00e9ration',evidence:'ISSN 2017 \u2014 Niveau A (500+ \u00e9tudes, le suppl\u00e9ment le plus \u00e9tudi\u00e9)',grade:'A',
-    condition:function(s){if(s.pregnant||s.age<18)return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
+    condition:function(s){if(s.pregnant||getAge()<18)return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
     unnecessary_if:'Non n\u00e9cessaire si objectif uniquement endurance/cardio sans musculation',
     dosageCalc:function(s){return{dose:'3-5',unit:'g/jour',timing:'Apr\u00e8s l\'entra\u00eenement avec glucides',note:'Tous les jours y compris repos. Pas de phase de charge n\u00e9cessaire'};}},
   {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'75% des Europ\u00e9ens sont carenc\u00e9s',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
@@ -2948,8 +2953,8 @@ var SUPPLEMENTS_DB = [
       var d=2000;
       if(bmi>30)d=4000; // Endocrine Society 2011 : obèse → 6000 UI correction, 4000 UI maintenance
       else if(bmi>25)d=2500; // Surpoids léger : légère séquestration
-      if(s.age>70)d=Math.max(d,3000); // 70+ : synthèse cutanée réduite de 75% (Holick 2007)
-      else if(s.age>50)d=Math.max(d,2500); // 50-70 : synthèse réduite
+      var _ageD=getAge();if(_ageD>70)d=Math.max(d,3000); // 70+ : synthèse cutanée réduite de 75% (Holick 2007)
+      else if(_ageD>50)d=Math.max(d,2500); // 50-70 : synthèse réduite
       return{dose:d,unit:'UI/jour',timing:'Petit-d\u00e9jeuner avec repas gras',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Obésité : D3 séquestrée dans tissu adipeux, besoins × 2-3 (Endocrine Society 2011). Associer à Vitamine K2 (MK-7) si ≥50 ans — prévient calcifications artérielles (Plaza 2021).'};}},
   {id:'omega3',name:'Om\u00e9ga-3 (EPA/DHA)',icon:'\uD83D\uDC1F',desc:'Anti-inflammatoire, c\u0153ur, cognition',evidence:'AHA 2019 \u2014 Recommandation',grade:'A',
     condition:function(s){return s.regime!==3&&(s.allergies||[]).indexOf('Poisson')===-1&&(s.allergies||[]).indexOf('Crustac\u00e9s')===-1;}, // Vegan : utiliser DHA algues à la place
@@ -2960,9 +2965,9 @@ var SUPPLEMENTS_DB = [
     unnecessary_if:'Non prioritaire si bon sommeil, entra\u00eenement mod\u00e9r\u00e9 et absence de diab\u00e8te/pr\u00e9-diab\u00e8te',
     dosageCalc:function(s){var d=s.sex==='homme'?400:310;if(s.activity!==null&&s.activity>=3)d+=50;var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('prediabete')!==-1);return{dose:d,unit:'mg/jour',timing:'Le soir avant le coucher',note:hasDiab?'Forme bisglycinate mieux tol\u00e9r\u00e9e. Le magn\u00e9sium am\u00e9liore la sensibilit\u00e9 \u00e0 l\'insuline et r\u00e9duit l\'insulino-r\u00e9sistance (ADA 2023, Guerrero-Romero 2011). Bilan magn\u00e9s\u00e9mie conseill\u00e9.':'Forme bisglycinate mieux tol\u00e9r\u00e9e'};}},
   {id:'fer',name:'Fer',icon:'\uD83E\uDE78',desc:'Transport d\'oxyg\u00e8ne, \u00e9nergie',evidence:'OMS \u2014 Recommandation (femmes)',grade:'A',
-    condition:function(s){return (s.sex==='femme'&&s.age<51)||s.pregnant;},
+    condition:function(s){return (s.sex==='femme'&&getAge()<51)||s.pregnant;},
     unnecessary_if:'Hommes : ne suppl\u00e9mentez PAS sans analyse de sang (surdosage dangereux)',warning:'\u26A0 Dosage sanguin (ferritine) OBLIGATOIRE avant suppl\u00e9mentation',
-    dosageCalc:function(s){var d=s.pregnant?27:18;if(s.sex==='femme'&&s.age>50)d=8;return{dose:d,unit:'mg/jour',timing:'\u00c0 jeun avec vitamine C',note:'Surdosage dangereux. Toujours sur avis m\u00e9dical'};}},
+    dosageCalc:function(s){var d=s.pregnant?27:18;if(s.sex==='femme'&&getAge()>50)d=8;return{dose:d,unit:'mg/jour',timing:'\u00c0 jeun avec vitamine C',note:'Surdosage dangereux. Toujours sur avis m\u00e9dical'};}},
   {id:'folique',name:'Acide folique',icon:'\uD83E\uDD30',desc:'Pr\u00e9vention spina bifida (grossesse)',evidence:'ACOG 2020 \u2014 Recommandation forte',grade:'A',
     condition:function(s){return s.pregnant===true;},
     unnecessary_if:'Uniquement pendant la grossesse (et id\u00e9alement d\u00e8s le projet de grossesse)',
@@ -3038,7 +3043,7 @@ var SUPPLEMENTS_DB = [
       var hasOsteo=s.medical&&s.medical.indexOf('osteoporose')!==-1;
       var hasCardio=s.medical&&(s.medical.indexOf('cardio')!==-1||s.medical.indexOf('insuffisance_card')!==-1);
       var isMenopause=s.medical&&s.medical.indexOf('menopause')!==-1;
-      var isOlder=s.age>=50;
+      var isOlder=getAge()>=50;
       return hasOsteo||hasCardio||isMenopause||isOlder;
     },
     unnecessary_if:'Moins prioritaire chez adultes jeunes < 50 ans sans facteur de risque osseux ou cardiovasculaire',
@@ -3064,7 +3069,7 @@ window.getSupplementRecommendations = getSupplementRecommendations;
 // Seuils : Femmes < 30 kcal/kg LBM/j (risque RED-S) | Hommes < 25 kcal/kg LBM/j
 function detectREDS() {
   var s = window.S;
-  if(!s||!s.weight||!s.height||!s.age)return null;
+  if(!s||!s.weight||!s.height||!getAge())return null;
   var target=calcTarget();var tdeeVal=calcTDEE();
   if(!target||!tdeeVal)return null;
   // Estimate LBM: use Navy/Boer formula approximation
@@ -3072,8 +3077,8 @@ function detectREDS() {
   // Fat % estimate from BMI (crude but functional)
   var bmi=s.weight/((s.height/100)*(s.height/100));
   var fatPct;
-  if(s.sex==='femme'){fatPct=1.20*bmi+0.23*s.age-5.4;}
-  else{fatPct=1.20*bmi+0.23*s.age-16.2;}
+  var _ageF=getAge();if(s.sex==='femme'){fatPct=1.20*bmi+0.23*_ageF-5.4;}
+  else{fatPct=1.20*bmi+0.23*_ageF-16.2;}
   fatPct=Math.max(10,Math.min(45,fatPct))/100;
   var lbm=s.weight*(1-fatPct);
   // EA = (caloric intake - exercise energy expenditure) / LBM
@@ -3796,7 +3801,7 @@ function buildNMInputs(trainingDay) {
   var genderMap = { homme: 'male', femme: 'female' };
   return {
     gender:        genderMap[s.sex] || 'male',
-    age:           s.age   || 25,
+    age:           getAge() || 25,
     weightKg:      s.weight || 75,
     heightCm:      s.height || 175,
     activityLevel: s.activity !== null && ACTIVITIES[s.activity]

@@ -654,7 +654,7 @@ window.AUTH = {
     // Reset window.S profile data to prevent stale values from polluting next login
     // (localStorage data is kept intact so returning users can restore from it)
     if (window.S) {
-      window.S.sex = null; window.S.age = 28; window.S.weight = 75; window.S.height = 175;
+      window.S.sex = null; window.S.age = 28; window.S.birthDate = null; window.S.weight = 75; window.S.height = 175;
       window.S.activity = null; window.S.train = []; window.S.sleep = null;
       window.S.medical = []; window.S.goal = null; window.S.targetWeight = null;
       window.S.mealsPerDay = 3; window.S.eatingLocation = null; window.S.mealPrepTime = null;
@@ -740,6 +740,7 @@ window.AUTH = {
       window.S.calisthenicsProgram = null; window.S.calisthenicsWeek = 1; window.S.selectedCalisthDay = 0;
       // Lang/Units (reset to defaults)
       window.S.lang = 'fr'; window.S.weightUnit = 'kg'; window.S.heightUnit = 'cm';
+      window.S.emailOptin = true;
       // UI state
       window.S.view = 'auth'; window.S.authError = '';
       window.S.cfCalendarOpen = false;

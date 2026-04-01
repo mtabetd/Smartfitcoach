@@ -328,32 +328,98 @@ function renderStep1(p) {
     p.appendChild(h('div', {style: 'height:8px'}));
   }
 
-  // Age (MANDATORY 14-70)
-  var ageLabel = h('div', {'class': 'section-label'});
-  ageLabel.appendChild(txt(window.t('onb.s2.age')));
-  ageLabel.appendChild(reqDot());
-  p.appendChild(ageLabel);
-  var aw = h('div', {'class': 'num-input-wrap'});
-  aw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '14', max: '70', step: '1', value: String(S.age), inputmode: 'numeric', placeholder: '28', oninput: function(e) {
-    var v = parseInt(e.target.value);
-    if (!isNaN(v) && v >= 14 && v <= 70) S.age = v;
-  }, onblur: function(e) {
-    var v = parseInt(e.target.value);
-    if (isNaN(v) || v < 14) e.target.value = S.age = 14;
-    else if (v > 70) e.target.value = S.age = 70;
-  }}));
-  aw.appendChild(h('span', {'class': 'num-unit'}, 'ans'));
-  p.appendChild(aw);
-  p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 14 et 70 ans'));
+  // Date de naissance (MANDATORY — calcule l'âge dynamiquement)
+  var dobLabel = h('div', {'class': 'section-label'});
+  dobLabel.appendChild(txt('Date de naissance'));
+  dobLabel.appendChild(reqDot());
+  p.appendChild(dobLabel);
 
-  if (S.age && S.age < 18) {
+  // Parse existing birthDate or fallback
+  var _bd = S.birthDate ? new Date(S.birthDate) : null;
+  var _bdValid = _bd && !isNaN(_bd.getTime());
+  var _curDay = _bdValid ? _bd.getDate() : 0;
+  var _curMonth = _bdValid ? (_bd.getMonth() + 1) : 0;
+  var _curYear = _bdValid ? _bd.getFullYear() : 0;
+
+  var _dobWrap = h('div', {style: 'display:flex;gap:8px;align-items:center'});
+
+  // Day select
+  var _daySelect = h('select', {'class': 'num-input', style: 'flex:1;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
+  _daySelect.appendChild(h('option', {value: '0', selected: !_curDay}, 'Jour'));
+  for (var _d = 1; _d <= 31; _d++) {
+    var _dOpt = h('option', {value: String(_d)}, String(_d));
+    if (_d === _curDay) _dOpt.selected = true;
+    _daySelect.appendChild(_dOpt);
+  }
+
+  // Month select
+  var _mNames = ['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
+  var _monthSelect = h('select', {'class': 'num-input', style: 'flex:1.5;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
+  _monthSelect.appendChild(h('option', {value: '0', selected: !_curMonth}, 'Mois'));
+  for (var _m = 0; _m < 12; _m++) {
+    var _mOpt = h('option', {value: String(_m + 1)}, _mNames[_m]);
+    if ((_m + 1) === _curMonth) _mOpt.selected = true;
+    _monthSelect.appendChild(_mOpt);
+  }
+
+  // Year select (current year - 80 to current year - 14)
+  var _thisYear = new Date().getFullYear();
+  var _yearSelect = h('select', {'class': 'num-input', style: 'flex:1.2;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
+  _yearSelect.appendChild(h('option', {value: '0', selected: !_curYear}, 'Ann\u00e9e'));
+  for (var _y = _thisYear - 14; _y >= _thisYear - 80; _y--) {
+    var _yOpt = h('option', {value: String(_y)}, String(_y));
+    if (_y === _curYear) _yOpt.selected = true;
+    _yearSelect.appendChild(_yOpt);
+  }
+
+  function _updateBirthDate() {
+    var dy = parseInt(_daySelect.value) || 0;
+    var mo = parseInt(_monthSelect.value) || 0;
+    var yr = parseInt(_yearSelect.value) || 0;
+    if (dy && mo && yr) {
+      // Clamp day to valid range for the month
+      var maxDay = new Date(yr, mo, 0).getDate();
+      if (dy > maxDay) dy = maxDay;
+      var pad = function(n) { return n < 10 ? '0' + n : String(n); };
+      S.birthDate = yr + '-' + pad(mo) + '-' + pad(dy);
+      S.age = getAge();
+    }
+    // Re-render to update age display and minor warning
+    window.render();
+  }
+
+  _daySelect.onchange = _updateBirthDate;
+  _monthSelect.onchange = _updateBirthDate;
+  _yearSelect.onchange = _updateBirthDate;
+
+  _dobWrap.appendChild(_daySelect);
+  _dobWrap.appendChild(_monthSelect);
+  _dobWrap.appendChild(_yearSelect);
+  p.appendChild(_dobWrap);
+
+  // Display computed age
+  var _computedAge = S.birthDate ? getAge() : (S.age || null);
+  if (_computedAge) {
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-top:6px'}, 'Vous avez ' + _computedAge + ' ans'));
+  } else {
+    p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 14 et 80 ans'));
+  }
+
+  if (_computedAge && _computedAge < 18) {
     var minorWarn = h('div', {style: 'background:rgba(180,120,0,0.1);border:1px solid #6A4A1A;border-radius:2px;padding:10px 12px;font-size:11px;color:#6A4A1A;margin-top:8px;line-height:1.5'},
       'Pour les moins de 18 ans, ce programme doit \u00eatre suivi avec l\'accompagnement d\'un professionnel de sant\u00e9 ou d\'un m\u00e9decin.');
     p.appendChild(minorWarn);
   }
 
+  // Migration banner for users with age but no birthDate
+  if (!S.birthDate && S.age) {
+    p.appendChild(h('div', {style: 'background:rgba(0,100,180,0.08);border:1px solid rgba(0,100,180,0.2);border-radius:2px;padding:8px 12px;font-size:11px;color:#005;margin-top:8px;line-height:1.5'},
+      'Renseignez votre date de naissance pour un suivi plus pr\u00e9cis. Votre \u00e2ge sera calcul\u00e9 automatiquement.'));
+  }
+
+  var _dobValid = !!S.birthDate || !!S.age;
   p.appendChild(h('div', {style: 'height:16px'}));
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex, onclick: function() { if (S.sex) { bb('nutrition_identity', {sex: S.sex, age: S.age}); goStep(2); } }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex || !_dobValid, onclick: function() { if (S.sex && _dobValid) { bb('nutrition_identity', {sex: S.sex, age: getAge(), birthDate: S.birthDate}); goStep(2); } }}, window.t('onb.next')));
 }
 
 // ─── STEP 2: MORPHOLOGIE ───
@@ -1401,7 +1467,7 @@ function renderStep8(p) {
     rh.appendChild(titleDiv);
   })();
   rh.appendChild(h('div', {'class': 'result-rule'}));
-  var _profItems = [S.sex==='homme'?'Homme':'Femme', S.age+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
+  var _profItems = [S.sex==='homme'?'Homme':'Femme', getAge()+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
   if(S.activity!==null&&S.activity!==undefined&&ACTIVITIES[S.activity])_profItems.push(ACTIVITIES[S.activity].name);
   if(S.goal!==null&&S.goal!==undefined&&GOALS[S.goal])_profItems.push(GOALS[S.goal].name);
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));
