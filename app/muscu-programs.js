@@ -20,12 +20,12 @@ var NFC_PROGRAMS = {
     seche: {
       warmup: '5 min rameur + rotations \u00e9paules',
       exercises: [
-        {order:1, name:'D\u00e9velopp\u00e9 couch\u00e9 barre', sets:4, reps:10, rest:'1min30', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
-        {order:2, name:'D\u00e9velopp\u00e9 inclin\u00e9 barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'pectoraux', type:'compound', equipment:'barre'},
-        {order:3, name:'D\u00e9velopp\u00e9 inclin\u00e9 halt\u00e8res', sets:3, reps:12, rest:'1min', technique:'3s pic contraction', muscle:'pectoraux', type:'compound', equipment:'halteres'},
-        {order:4, name:'\u00c9cart\u00e9 poulie basse', sets:3, reps:15, rest:'60s', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'poulie'},
-        {order:5, name:'\u00c9cart\u00e9 couch\u00e9', sets:3, reps:15, rest:'60s', technique:'3s pic contraction', muscle:'pectoraux', type:'isolation', equipment:'halteres'},
-        {order:6, name:'Crunch banc d\u00e9clin\u00e9', sets:3, reps:20, rest:'60s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'banc'}
+        {order:1, name:'D\u00e9velopp\u00e9 couch\u00e9 barre', sets:4, reps:10, rest:'1min30', technique:'3s excentrique contr\u00f4l\u00e9e, drive explosif. En s\u00e8che : charges r\u00e9duites \u00e0 65-70% 1RM, priorit\u00e9 au TUT.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+        {order:2, name:'D\u00e9velopp\u00e9 inclin\u00e9 barre', sets:4, reps:12, rest:'1min', technique:'30\u00b0 d\'inclinaison. Cibler le faisceau sup\u00e9rieur. Descente 2s, push contr\u00f4l\u00e9.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+        {order:3, name:'D\u00e9velopp\u00e9 inclin\u00e9 halt\u00e8res', sets:3, reps:12, rest:'1min', technique:'3s pic contraction — amplitude maximale en bas, halt\u00e8res se touchent en haut.', muscle:'pectoraux', type:'compound', equipment:'halteres'},
+        {order:4, name:'C\u00e2ble crossover bas', sets:3, reps:15, rest:'60s', technique:'3s pic contraction — poulies basses, vecteur montant cible le faisceau inf\u00e9rieur. Tension continue.', muscle:'pectoraux', type:'isolation', equipment:'poulie'},
+        {order:5, name:'\u00c9cart\u00e9 halt\u00e8res', sets:3, reps:15, rest:'60s', technique:'3s pic contraction — stretch profond en bas (coudes 160\u00b0 max), contraction forte en haut.', muscle:'pectoraux', type:'isolation', equipment:'halteres'},
+        {order:6, name:'Crunch banc d\u00e9clin\u00e9', sets:3, reps:20, rest:'60s', technique:'3s excentrique — mains \u00e0 la tempe. Expirer en montant, contr\u00f4ler la descente.', muscle:'abdominaux', type:'isolation', equipment:'banc'}
       ],
       notes: 'Composés d\'abord, repos courts, tempo rapide.'
     }
@@ -37,8 +37,8 @@ var NFC_PROGRAMS = {
         {order:1, name:'Traction (lest\u00e9/PDC/assist\u00e9)', sets:4, reps:10, rest:'1min30', technique:null, muscle:'dos', type:'compound', equipment:'barre fixe'},
         {order:2, name:'T-barre (ou rowing barre)', sets:4, reps:8, rest:'2min', technique:null, muscle:'dos', type:'compound', equipment:'barre'},
         {order:3, name:'Tirage vertical prise large', sets:4, reps:10, rest:'2min', technique:'2s excentrique', muscle:'dos', type:'compound', equipment:'poulie'},
-        {order:4, name:'Rowing halt\u00e8re chaise romaine', sets:5, reps:12, rest:'1min30', technique:null, muscle:'dos', type:'compound', equipment:'halteres'},
-        {order:5, name:'Tirage genoux poulie haute', sets:4, reps:10, rest:'1min30', technique:'5s pic contraction x3', muscle:'dos', type:'isolation', equipment:'poulie'},
+        {order:4, name:'Rowing halt\u00e8re unilat\u00e9ral', sets:5, reps:12, rest:'1min30', technique:'12 reps chaque bras. Genou et main appuy\u00e9s sur banc. Tirer le coude vers le plafond en serrant l\'omoplate. Contr\u00f4ler la descente 2s.', muscle:'dos', type:'compound', equipment:'halteres'},
+        {order:5, name:'Pulldown prise serr\u00e9e', sets:4, reps:10, rest:'1min30', technique:'5s pic contraction x3 — Prise neutre triangle, coudes le long du corps. Tirer vers la poitrine. Isoler le grand dorsal.', muscle:'dos', type:'isolation', equipment:'poulie'},
         {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
       notes: 'Le dos est le plus grand muscle du haut du corps. Intensit\u00e9 maximale.'
@@ -1173,7 +1173,7 @@ var RAMBOD_PROGRAMS = {
         description: 'FST-7 épaules intermédiaire. 4 exercices + FST-7.',
         exercises: [
           {order:1, name:'Développé militaire barre', sets:4, reps:'8-12', rest:'90s', technique:'4 séries. Montée progressive. Amplitude complète.', muscle:'epaules', type:'compound', equipment:'barre', rest_pause:false},
-          {order:2, name:'Développé haltères rotatif', sets:3, reps:'10-12', rest:'90s', technique:'3 séries. Rotation des poignets. Amplitude maximale. Tous les faisceaux.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
+          {order:2, name:'D\u00e9velopp\u00e9 militaire halteres', sets:3, reps:'10-12', rest:'90s', technique:'3 s\u00e9ries. Coudes l\u00e9g\u00e8rement devant le plan frontal. Amplitude compl\u00e8te (halt\u00e8res \u00e0 hauteur des oreilles en bas). Prise neutre possible pour prot\u00e9ger la coiffe.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
           {order:3, name:'Oiseau poulie basse (arrière)', sets:3, reps:'12-15', rest:'60s', technique:'3 séries. Poulies croisées. Amplitude complète. Faisceau postérieur.', muscle:'epaules', type:'isolation', equipment:'poulie', rest_pause:false},
           {order:4, name:'Élévations frontales haltères', sets:3, reps:'12-15', rest:'60s', technique:'3 séries. Faisceau antérieur. Bras alternés. Contraction en haut.', muscle:'epaules', type:'isolation', equipment:'halteres', rest_pause:false},
           {order:5, name:'Élévations latérales poulie (FST-7)', sets:7, reps:'12-15', rest:'35s', technique:'FST-7 FINISHER: 7 séries, 35s repos. Étirer épaule en passant le bras derrière le dos 30s. Poulie basse = tension constante. Pompe maximale.', muscle:'epaules', type:'isolation', equipment:'poulie', is_fst7:true, interset_stretch:true, fst7_sets:7, rest_pause:false}
@@ -1184,7 +1184,7 @@ var RAMBOD_PROGRAMS = {
         description: 'FST-7 épaules avancé. Volume élevé + FST-7 intensifié.',
         exercises: [
           {order:1, name:'Développé militaire barre', sets:5, reps:'6-10', rest:'2min', technique:'5 séries lourdes. Progression maximale. Amplitude complète.', muscle:'epaules', type:'compound', equipment:'barre', rest_pause:false},
-          {order:2, name:'Développé haltères rotatif', sets:4, reps:'10-12', rest:'90s', technique:'4 séries. Rotation complète. Amplitude maximale.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
+          {order:2, name:'D\u00e9velopp\u00e9 militaire halteres', sets:4, reps:'10-12', rest:'90s', technique:'4 s\u00e9ries. Coudes l\u00e9g\u00e8rement devant le plan frontal pour pr\u00e9server les rotateurs. Amplitude compl\u00e8te. Prise neutre possible.', muscle:'epaules', type:'compound', equipment:'halteres', rest_pause:false},
           {order:3, name:'Oiseau machine', sets:4, reps:'12-15', rest:'60s', technique:'4 séries. Amplitude complète. Squeeze en fin de mouvement.', muscle:'epaules', type:'isolation', equipment:'machine', rest_pause:false},
           {order:4, name:'Élévations frontales haltères', sets:3, reps:'12-15', rest:'60s', technique:'3 séries. Faisceau antérieur. Alternés.', muscle:'epaules', type:'isolation', equipment:'halteres', rest_pause:false},
           {order:5, name:'Élévations latérales haltères (FST-7)', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 FINISHER AVANCÉ: 7 séries, 30s repos. Étirer épaule 30s entre séries. Drop set 6e série. Pompe maximale. Fascia étiré.', muscle:'epaules', type:'isolation', equipment:'halteres', is_fst7:true, interset_stretch:true, fst7_sets:7, rest_pause:false}
@@ -1449,7 +1449,7 @@ var FUSION_PROGRAMS = {
         exercises: [
           {order:1, name:'Élévations latérales haltères', sets:3, reps:'15-20', rest:'45s', technique:'Pré-exhaustion du faisceau médian avant le développé. Lever jusqu\'à l\'horizontale, pinkies légèrement en bas.', muscle:'épaules', type:'isolation', equipment:'haltères', rest_pause:false, pre_exhaustion:true, is_fst7:false},
           {order:2, name:'Développé militaire haltères', sets:4, reps:'8-10', rest:'2min', technique:'Deltoïdes pré-fatigués, utiliser une charge modérée. Pousser en arc au-dessus de la tête, sans verrouiller les coudes.', muscle:'épaules', type:'compound', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
-          {order:3, name:'Développé rotatif haltères', sets:3, reps:'10-12', rest:'90s', technique:'Rotation des poignets pendant le développé pour activer tous les faisceaux. Partir paumes vers soi, finir paumes vers l\'avant.', muscle:'épaules', type:'compound', equipment:'haltères', rest_pause:false, pre_exhaustion:false, is_fst7:false},
+          {order:3, name:'Arnold press', sets:3, reps:'10-12', rest:'90s', technique:'Rotation des poignets pendant le d\u00e9velopp\u00e9 pour activer tous les faisceaux. Partir paumes vers soi (halt\u00e8res \u00e0 hauteur des \u00e9paules), finir paumes vers l\'avant en haut. Contr\u00f4ler la descente 2s.', muscle:'\u00e9paules', type:'compound', equipment:'halt\u00e8res', rest_pause:false, pre_exhaustion:false, is_fst7:false},
           {order:4, name:'Élévations latérales poulie basse', sets:7, reps:'12-15', rest:'30s', technique:'FST-7 : 7 séries avec 30s de repos. Étirer le deltoïde en baissant le bras entre chaque série.', muscle:'épaules', type:'isolation', equipment:'poulie', rest_pause:false, pre_exhaustion:false, is_fst7:true, fst7_sets:7, interset_stretch:true}
         ],
         notes: 'La pré-exhaustion au latéral isole le deltoïde médian avant de le solliciter lors du développé composé.',
