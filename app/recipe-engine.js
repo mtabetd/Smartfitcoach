@@ -15490,7 +15490,9088 @@
     'Servir dans des bols refroidis au congélateur 5 min. Accompagner de galettes de blé légèrement grillées ou de feuilles de laitue iceberg en cups.'
   ]
 }
-
+,
+{
+  "id": "R520",
+  "name": "Pasta Proteica Pesto Genovese",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍝",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "viral",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 481,
+    "proteinGrams": 35,
+    "carbsGrams": 56,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Pâtes penne",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc de poulet",
+      "qty": 130,
+      "unit": "g"
+    },
+    {
+      "name": "Pesto basilic",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 15,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Cuire les pâtes al dente 10 min dans de l'eau salée.",
+    "Griller le poulet coupé en dés 6 min à feu vif.",
+    "Mélanger pâtes égouttées, poulet et pesto. Parsemer de parmesan râpé."
+  ]
+},
+{
+  "id": "R521",
+  "name": "Risotto Poulet Citron Ail",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍚",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "comfort",
+    "classic"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 489,
+    "proteinGrams": 38,
+    "carbsGrams": 55,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Riz arborio",
+      "qty": 75,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc de poulet",
+      "qty": 140,
+      "unit": "g"
+    },
+    {
+      "name": "Bouillon de volaille",
+      "qty": 300,
+      "unit": "ml"
+    },
+    {
+      "name": "Ail",
+      "qty": 2,
+      "unit": "gousses"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 15,
+      "unit": "ml"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Faire revenir l'ail émincé dans l'huile d'olive 1 min.",
+    "Ajouter le riz et nacrer 2 min. Incorporer le bouillon louche par louche sur 18 min.",
+    "Griller le poulet séparément 7 min. Finir le risotto avec citron, poulet et parmesan."
+  ]
+},
+{
+  "id": "R522",
+  "name": "Pollo al Limone Express",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍋",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-carb",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 15,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 460,
+    "proteinGrams": 42,
+    "carbsGrams": 46,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 30,
+      "unit": "ml"
+    },
+    {
+      "name": "Zeste de citron",
+      "qty": 1,
+      "unit": "pièce"
+    },
+    {
+      "name": "Ail",
+      "qty": 2,
+      "unit": "gousses"
+    },
+    {
+      "name": "Riz complet cuit",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Persil frais",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Aplatir le poulet à 1 cm. Mariner 5 min avec citron, ail et zeste.",
+    "Cuire à la poêle chaude 6 min par face dans l'huile d'olive.",
+    "Servir sur riz complet, arroser du jus de cuisson et parsemer de persil."
+  ]
+},
+{
+  "id": "R523",
+  "name": "Frittata Épinards Feta",
+  "category": "italian",
+  "mealTypes": [
+    "breakfast",
+    "lunch"
+  ],
+  "emoji": "🥚",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "vegetarian",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 10,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 350,
+    "proteinGrams": 28,
+    "carbsGrams": 37,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Œufs entiers",
+      "qty": 3,
+      "unit": "pièces"
+    },
+    {
+      "name": "Épinards frais",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Feta",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Pain de seigle",
+      "qty": 2,
+      "unit": "tranches"
+    },
+    {
+      "name": "Ail",
+      "qty": 1,
+      "unit": "gousse"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Faire tomber les épinards avec l'ail dans l'huile d'olive 2 min.",
+    "Battre les œufs, verser sur les épinards. Parsemer de feta émiettée.",
+    "Cuire à feu doux couvert 5 min. Servir avec le pain de seigle grillé."
+  ]
+},
+{
+  "id": "R524",
+  "name": "Zucchini Pasta Turkey Bolognese",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥒",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-carb",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 470,
+    "proteinGrams": 36,
+    "carbsGrams": 59,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Dinde hachée",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Courgettes",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Pâtes tagliatelles",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates concassées",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 2,
+      "unit": "gousses"
+    },
+    {
+      "name": "Herbes de Provence",
+      "qty": 3,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Cuire les tagliatelles al dente. Faire revenir oignon et ail 2 min.",
+    "Ajouter la dinde hachée, dorer 5 min. Incorporer les tomates et herbes, mijoter 10 min.",
+    "Faire sauter les courgettes en spirales 3 min. Mélanger pâtes, bolognese et courgettes."
+  ]
+},
+{
+  "id": "R525",
+  "name": "Caprese Burrata Protéinée",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "snack"
+  ],
+  "emoji": "🧀",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "vegetarian",
+    "no-cook"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 320,
+    "proteinGrams": 22,
+    "carbsGrams": 31,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Burrata",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates cerises",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Jambon cuit dégraissé",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Pain complet",
+      "qty": 1,
+      "unit": "tranche"
+    },
+    {
+      "name": "Basilic frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Vinaigre balsamique",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Couper les tomates cerises en deux et les disposer dans l'assiette.",
+    "Déposer la burrata au centre, ajouter les tranches de jambon.",
+    "Arroser d'huile d'olive et balsamique. Garnir de basilic frais. Servir avec pain grillé."
+  ]
+},
+{
+  "id": "R526",
+  "name": "Minestrone Pois Chiches",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍲",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "vegan",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 381,
+    "proteinGrams": 24,
+    "carbsGrams": 51,
+    "fatGrams": 9
+  },
+  "ingredients": [
+    {
+      "name": "Pois chiches cuits",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Petites pâtes (ditalini)",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Courgettes",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Carottes",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates concassées",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Bouillon de légumes",
+      "qty": 400,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "ml"
+    },
+    {
+      "name": "Basilic",
+      "qty": 3,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Faire revenir carottes et courgettes en dés dans l'huile 3 min.",
+    "Ajouter tomates, bouillon et pois chiches. Porter à ébullition, mijoter 15 min.",
+    "Ajouter les pâtes, cuire 8 min. Servir avec basilic frais."
+  ]
+},
+{
+  "id": "R527",
+  "name": "Saltimbocca Dinde Sauge",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🦃",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-carb",
+    "classic"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 44,
+    "carbsGrams": 43,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Escalope de dinde",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Jambon de Parme",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Feuilles de sauge",
+      "qty": 6,
+      "unit": "pièces"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "Riz basmati cuit",
+      "qty": 130,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Aplatir les escalopes, déposer 1 feuille de sauge et 1 tranche de jambon, fixer avec un cure-dent.",
+    "Saisir côté jambon 3 min dans l'huile, retourner 3 min. Déglacer au vin blanc, laisser réduire 2 min.",
+    "Servir les saltimbocca sur riz basmati, napper de la sauce au vin."
+  ]
+},
+{
+  "id": "R528",
+  "name": "Pollo Cacciatore Light",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍗",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-fat",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 30,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 450,
+    "proteinGrams": 40,
+    "carbsGrams": 50,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 170,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates pelées",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Poivrons rouges",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Champignons",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Polenta",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Vin rouge",
+      "qty": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "Olives noires",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Dorer le poulet 5 min dans l'huile. Réserver. Faire revenir poivrons et champignons 4 min.",
+    "Remettre le poulet, déglacer au vin rouge. Ajouter tomates et olives, mijoter 20 min à couvert.",
+    "Préparer la polenta selon les instructions. Servir le cacciatore sur la polenta crémeuse."
+  ]
+},
+{
+  "id": "R529",
+  "name": "Branzino al Forno Herbes",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-fat",
+    "omega3"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 390,
+    "proteinGrams": 38,
+    "carbsGrams": 37,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Filet de bar (branzino)",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Pommes de terre",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Citron",
+      "qty": 1,
+      "unit": "pièce"
+    },
+    {
+      "name": "Ail",
+      "qty": 3,
+      "unit": "gousses"
+    },
+    {
+      "name": "Romarin frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Thym frais",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 200°C. Couper les pommes de terre en rondelles, disposer dans un plat avec l'ail et l'huile.",
+    "Enfourner 15 min. Déposer le filet de bar sur les pommes de terre, garnir de citron en rondelles, romarin et thym.",
+    "Cuire encore 12 min jusqu'à ce que le poisson soit nacré. Servir immédiatement."
+  ]
+},
+{
+  "id": "R530",
+  "name": "Pasta e Fagioli Haute Protéine",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🫘",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "easy",
+    "comfort-food"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 30,
+    "carbsGrams": 48,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Pâtes courtes (ditalini)",
+      "qty": 70,
+      "unit": "g"
+    },
+    {
+      "name": "Haricots cannellini en boîte",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc de poulet cuit",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates concassées",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Bouillon de poulet (dégraissé)",
+      "qty": 300,
+      "unit": "ml"
+    },
+    {
+      "name": "Ail",
+      "qty": 2,
+      "unit": "gousse"
+    },
+    {
+      "name": "Romarin frais",
+      "qty": 1,
+      "unit": "brin"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "ml"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Faire revenir l'ail émincé dans l'huile d'olive 1 min à feu moyen.",
+    "Ajouter les tomates concassées et cuire 5 min. Incorporer les haricots égouttés et le bouillon.",
+    "Porter à ébullition, ajouter les pâtes et cuire al dente (8-10 min). Ajouter le romarin.",
+    "Incorporer le blanc de poulet émietté, mélanger et chauffer 2 min.",
+    "Servir chaud avec le parmesan râpé et une touche de poivre noir."
+  ]
+},
+{
+  "id": "R531",
+  "name": "Involtini Veau Épinards Parmesan",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥩",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-carb",
+    "gourmet"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 20,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 410,
+    "proteinGrams": 35,
+    "carbsGrams": 29,
+    "fatGrams": 17
+  },
+  "ingredients": [
+    {
+      "name": "Escalopes de veau fines",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Épinards frais",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Jambon de Parme (1 tranche)",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 1,
+      "unit": "gousse"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "Bouillon de veau",
+      "qty": 100,
+      "unit": "ml"
+    },
+    {
+      "name": "Sauge fraîche",
+      "qty": 4,
+      "unit": "feuilles"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Faire tomber les épinards à la poêle avec l'ail. Égoutter, hacher et mélanger avec le parmesan.",
+    "Aplatir les escalopes, poser une tranche de jambon de Parme et la farce épinards-parmesan. Rouler et ficeler.",
+    "Faire dorer les involtini dans l'huile d'olive avec la sauge, 3 min de chaque côté.",
+    "Déglacer au vin blanc, laisser réduire 2 min, ajouter le bouillon.",
+    "Couvrir et cuire 12 min à feu doux. Retirer la ficelle, napper de sauce et servir."
+  ]
+},
+{
+  "id": "R532",
+  "name": "Grigliata Mista Light",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🔥",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-carb",
+    "grilled"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 440,
+    "proteinGrams": 45,
+    "carbsGrams": 20,
+    "fatGrams": 20
+  },
+  "ingredients": [
+    {
+      "name": "Filet de poulet",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Merguez de veau (fine)",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Gambas crues",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Courgette",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Poivron rouge",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Champignons portobello",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 12,
+      "unit": "ml"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 20,
+      "unit": "ml"
+    },
+    {
+      "name": "Herbes de Provence",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Ail en poudre",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Mariner poulet, gambas et légumes avec huile d'olive, jus de citron, herbes et ail 10 min.",
+    "Préchauffer le gril ou la plancha à feu vif.",
+    "Griller le poulet 6-7 min de chaque côté, la merguez 5 min en tournant.",
+    "Griller les gambas 2-3 min de chaque côté et les légumes 4-5 min.",
+    "Dresser l'assiette et arroser d'un filet de citron avant de servir."
+  ]
+},
+{
+  "id": "R533",
+  "name": "Ribollita Toscane Légère",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥬",
+  "origin": "🇮🇹",
+  "tags": [
+    "vegetarian",
+    "high-fiber",
+    "low-calorie"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 30,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 320,
+    "proteinGrams": 20,
+    "carbsGrams": 42,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Haricots borlotti cuits",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Chou noir (cavolo nero)",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Pain toscan rassis (ou pain complet)",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates pelées en boîte",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Carotte",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Céleri",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 2,
+      "unit": "gousses"
+    },
+    {
+      "name": "Bouillon de légumes",
+      "qty": 400,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "ml"
+    },
+    {
+      "name": "Thym, romarin",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Faire revenir oignon, carotte, céleri et ail dans l'huile d'olive 5 min.",
+    "Ajouter les tomates, le chou noir émincé et les herbes. Cuire 5 min.",
+    "Incorporer les haricots et le bouillon. Laisser mijoter 20 min à feu doux.",
+    "Écraser grossièrement quelques haricots pour épaissir la soupe. Ajouter le pain en morceaux.",
+    "Laisser reposer 5 min pour que le pain absorbe le bouillon. Servir avec un filet d'huile d'olive."
+  ]
+},
+{
+  "id": "R534",
+  "name": "Panzanella Poulet Grillé",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥗",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "salad",
+    "summer"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 15,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 430,
+    "proteinGrams": 32,
+    "carbsGrams": 42,
+    "fatGrams": 15
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Pain ciabatta rassis",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates cerises",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Concombre",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon rouge",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Basilic frais",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Vinaigre balsamique",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Moutarde de Dijon",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Assaisonner le poulet avec sel, poivre et un filet d'huile. Griller 6-7 min par côté puis laisser reposer.",
+    "Couper le pain en cubes, toaster à sec à la poêle jusqu'à dorure.",
+    "Couper les tomates cerises en deux, le concombre en demi-lunes, l'oignon en fines lamelles.",
+    "Préparer la vinaigrette : mélanger huile, vinaigre balsamique, moutarde, sel et poivre.",
+    "Assembler tomates, concombre, oignon, croûtons et poulet tranché. Arroser de vinaigrette et garnir de basilic."
+  ]
+},
+{
+  "id": "R535",
+  "name": "Acqua Pazza Daurade",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-carb",
+    "mediterranean"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 380,
+    "proteinGrams": 36,
+    "carbsGrams": 20,
+    "fatGrams": 17
+  },
+  "ingredients": [
+    {
+      "name": "Daurade royale (filet)",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates cerises",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 3,
+      "unit": "gousses"
+    },
+    {
+      "name": "Olives noires dénoyautées",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Câpres",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Eau",
+      "qty": 100,
+      "unit": "ml"
+    },
+    {
+      "name": "Persil plat",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 12,
+      "unit": "ml"
+    },
+    {
+      "name": "Piment de Cayenne",
+      "qty": 1,
+      "unit": "pincée"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Chauffer l'huile d'olive dans une large poêle. Faire revenir l'ail émincé 1 min.",
+    "Ajouter les tomates cerises coupées en deux et cuire 3 min jusqu'à ce qu'elles ramollissent.",
+    "Incorporer olives, câpres, vin blanc, eau et piment. Porter à légère ébullition.",
+    "Déposer le filet de daurade dans le liquide frémissant. Couvrir et pocher 10-12 min à feu doux.",
+    "Parsemer de persil frais haché et servir dans la poêle avec du pain grillé (optionnel)."
+  ]
+},
+{
+  "id": "R536",
+  "name": "Polenta Crémeuse Champignons",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍄",
+  "origin": "🇮🇹",
+  "tags": [
+    "vegetarian",
+    "comfort-food",
+    "gluten-free"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 350,
+    "proteinGrams": 18,
+    "carbsGrams": 38,
+    "fatGrams": 14
+  },
+  "ingredients": [
+    {
+      "name": "Polenta (farine de maïs)",
+      "qty": 70,
+      "unit": "g"
+    },
+    {
+      "name": "Champignons de Paris",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Champignons shiitake",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage ricotta",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Lait demi-écrémé",
+      "qty": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "Eau",
+      "qty": 200,
+      "unit": "ml"
+    },
+    {
+      "name": "Ail",
+      "qty": 2,
+      "unit": "gousses"
+    },
+    {
+      "name": "Thym frais",
+      "qty": 3,
+      "unit": "brins"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "ml"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Porter eau et lait à ébullition avec une pincée de sel. Verser la polenta en pluie en remuant sans cesse.",
+    "Cuire la polenta 15-20 min à feu doux en remuant régulièrement jusqu'à épaississement.",
+    "Hors du feu, incorporer ricotta et parmesan. Poivrer, réserver au chaud.",
+    "Faire sauter les champignons dans l'huile d'olive avec ail et thym à feu vif 8 min jusqu'à dorure.",
+    "Dresser la polenta crémeuse dans un bol, garnir des champignons sautés et servir immédiatement."
+  ]
+},
+{
+  "id": "R537",
+  "name": "Arancini Protéinés Mozza",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍙",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "meal-prep",
+    "baked"
+  ],
+  "servings": 1,
+  "prepTime": 20,
+  "cookTime": 25,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 380,
+    "proteinGrams": 25,
+    "carbsGrams": 43,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Riz arborio cuit",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc de poulet haché",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Mozzarella light",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Oeuf entier",
+      "qty": 1,
+      "unit": "unité"
+    },
+    {
+      "name": "Chapelure complète",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce tomate",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Persil",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Ail en poudre",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive (spray)",
+      "qty": 4,
+      "unit": "ml"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 200°C. Mélanger le riz refroidi avec parmesan, oeuf, ail et persil.",
+    "Faire revenir le poulet haché avec sel et poivre 5 min. Mélanger avec sauce tomate.",
+    "Former des boules de riz, creuser un puit, insérer farce poulet et un cube de mozzarella. Refermer.",
+    "Rouler chaque arancino dans la chapelure, déposer sur plaque huilée.",
+    "Cuire au four 20-25 min en retournant à mi-cuisson jusqu'à dorure croustillante."
+  ]
+},
+{
+  "id": "R538",
+  "name": "Tiramisu Protéiné Sans Sucre",
+  "category": "italian",
+  "mealTypes": [
+    "snack",
+    "dessert"
+  ],
+  "emoji": "☕",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-sugar",
+    "dessert"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 0,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 320,
+    "proteinGrams": 28,
+    "carbsGrams": 21,
+    "fatGrams": 14
+  },
+  "ingredients": [
+    {
+      "name": "Fromage blanc 0% MG",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Whey protéine vanille",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Mascarpone light",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Biscuits à la cuillère (2 pièces)",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Café espresso refroidi",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Cacao en poudre non sucré",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 2,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Mélanger fromage blanc, mascarpone light, whey vanille, édulcorant et extrait de vanille jusqu'à consistance lisse.",
+    "Tremper brièvement les biscuits à la cuillère dans le café refroidi (ne pas les détremper).",
+    "Dans une verrine, déposer une couche de biscuits imbibés puis couvrir avec la crème protéinée.",
+    "Réfrigérer au moins 1 heure (idéalement 3h) pour que les saveurs se développent.",
+    "Au moment de servir, saupoudrer généralement de cacao non sucré et déguster frais."
+  ]
+},
+{
+  "id": "R539",
+  "name": "Gelato Whey Vanille",
+  "category": "italian",
+  "mealTypes": [
+    "snack",
+    "dessert"
+  ],
+  "emoji": "🍨",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-sugar",
+    "dessert",
+    "frozen"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 250,
+    "proteinGrams": 20,
+    "carbsGrams": 25,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Yaourt grec 0% MG",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Whey protéine vanille",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Lait d'amande non sucré",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 3,
+      "unit": "ml"
+    },
+    {
+      "name": "Graines de vanille (1/2 gousse)",
+      "qty": 1,
+      "unit": "unité"
+    },
+    {
+      "name": "Lécithine de soja (stabilisant)",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mixer yaourt grec, whey vanille, lait d'amande, édulcorant, extrait et graines de vanille jusqu'à consistance homogène.",
+    "Ajouter la lécithine de soja et mixer à nouveau 30 secondes pour émulsifier.",
+    "Verser dans un bac et congeler 2h. Sortir toutes les 30 min et fouetter pour éviter les cristaux.",
+    "Alternativement, utiliser une sorbetière pendant 20-25 min pour un résultat optimal.",
+    "Servir immédiatement à la sortie de sorbetière ou laisser tempérer 10 min si sorti du congélateur."
+  ]
+},
+{
+  "id": "R540",
+  "name": "Poulet Rôti Herbes Provence",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍗",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "easy",
+    "classic"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 35,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 490,
+    "proteinGrams": 48,
+    "carbsGrams": 22,
+    "fatGrams": 23
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 15,
+      "unit": "ml"
+    },
+    {
+      "name": "Herbes de Provence",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Pomme de terre",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Citron",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 200°C. Badigeonner le blanc de poulet d'huile d'olive, saupoudrer d'herbes de Provence, d'ail écrasé, de sel et de poivre.",
+    "Couper les pommes de terre en quartiers, les disposer autour du poulet dans un plat allant au four.",
+    "Presser le jus de citron sur l'ensemble, enfourner 30-35 min jusqu'à ce que le poulet soit doré et les pommes de terre cuites. Servir chaud."
+  ]
+},
+{
+  "id": "R541",
+  "name": "Saumon Papillote Légumes",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "healthy",
+    "omega3"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 430,
+    "proteinGrams": 42,
+    "carbsGrams": 20,
+    "fatGrams": 20
+  },
+  "ingredients": [
+    {
+      "name": "Pavé de saumon",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Courgette",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Carotte",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Citron",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Aneth frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 180°C. Découper courgette et carotte en julienne. Disposer les légumes au centre d'une feuille de papier sulfurisé.",
+    "Poser le pavé de saumon sur les légumes, arroser d'huile d'olive et de jus de citron, parsemer d'aneth, saler et poivrer.",
+    "Refermer la papillote hermétiquement et enfourner 18-20 min. Servir directement dans la papillote pour préserver les arômes."
+  ]
+},
+{
+  "id": "R542",
+  "name": "Ratatouille Poulet Confit",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🫕",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "mediterranean",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 40,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 460,
+    "proteinGrams": 38,
+    "carbsGrams": 28,
+    "fatGrams": 22
+  },
+  "ingredients": [
+    {
+      "name": "Cuisse de poulet désossée",
+      "qty": 160,
+      "unit": "g"
+    },
+    {
+      "name": "Aubergine",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Courgette",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Poivron rouge",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates concassées",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 15,
+      "unit": "ml"
+    },
+    {
+      "name": "Ail, thym, basilic",
+      "qty": 10,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Couper tous les légumes en dés. Dans une cocotte, faire dorer la cuisse de poulet dans l'huile d'olive 5 min de chaque côté, réserver.",
+    "Dans la même cocotte, faire revenir ail et légumes 10 min à feu moyen, ajouter les tomates concassées, thym et basilic.",
+    "Remettre le poulet, couvrir et laisser mijoter 25 min à feu doux. Rectifier l'assaisonnement et servir."
+  ]
+},
+{
+  "id": "R543",
+  "name": "Quiche Légère Saumon Épinards",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥧",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "light",
+    "classic"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 30,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 32,
+    "carbsGrams": 30,
+    "fatGrams": 19
+  },
+  "ingredients": [
+    {
+      "name": "Saumon fumé",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Épinards frais",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Œufs entiers",
+      "qty": 2,
+      "unit": "unité"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Pâte brisée allégée",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Lait écrémé",
+      "qty": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "Muscade, sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 180°C. Foncer un moule individuel avec la pâte brisée. Faire tomber les épinards à la poêle avec une noisette de beurre, égoutter.",
+    "Battre les œufs avec le fromage blanc, le lait, la muscade, sel et poivre. Disposer épinards et saumon sur le fond de tarte.",
+    "Verser l'appareil par-dessus et enfourner 28-30 min jusqu'à ce que la quiche soit dorée et prise. Laisser tiédir avant de démouler."
+  ]
+},
+{
+  "id": "R544",
+  "name": "Soupe Lentilles Carotte Cumin",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥣",
+  "origin": "🇫🇷",
+  "tags": [
+    "plant-based",
+    "fiber",
+    "budget"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 30,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 350,
+    "proteinGrams": 22,
+    "carbsGrams": 45,
+    "fatGrams": 9
+  },
+  "ingredients": [
+    {
+      "name": "Lentilles corail",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Carotte",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Cumin en poudre",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Bouillon de légumes",
+      "qty": 400,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "ml"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Émincer l'oignon, peler et couper les carottes en rondelles. Faire revenir oignon et carotte dans l'huile d'olive avec le cumin 5 min.",
+    "Rincer les lentilles, les ajouter avec le bouillon chaud. Porter à ébullition puis laisser mijoter 20-25 min à feu doux jusqu'à ce que les lentilles soient fondantes.",
+    "Mixer finement au blender jusqu'à obtenir un velouté lisse. Rectifier l'assaisonnement et servir bien chaud."
+  ]
+},
+{
+  "id": "R545",
+  "name": "Poulet Moutarde Crème Légère",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍛",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "classic",
+    "comfort"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 470,
+    "proteinGrams": 44,
+    "carbsGrams": 18,
+    "fatGrams": 25
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Moutarde de Dijon",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Crème fraîche légère",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Échalote",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Bouillon de volaille",
+      "qty": 100,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Persil, sel, poivre",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Émincer l'échalote. Faire dorer le blanc de poulet dans l'huile d'olive 5 min de chaque côté à feu vif. Réserver au chaud.",
+    "Dans la même poêle, faire revenir l'échalote 2 min, déglacer au bouillon, laisser réduire de moitié.",
+    "Incorporer la moutarde et la crème fraîche, mélanger. Remettre le poulet dans la sauce, laisser mijoter 10 min à feu doux. Parsemer de persil et servir."
+  ]
+},
+{
+  "id": "R546",
+  "name": "Taboulé Quinoa Herbes Fraîches",
+  "category": "french",
+  "mealTypes": [
+    "lunch"
+  ],
+  "emoji": "🥗",
+  "origin": "🇫🇷",
+  "tags": [
+    "vegetarian",
+    "fresh",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 15,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 380,
+    "proteinGrams": 18,
+    "carbsGrams": 55,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Quinoa",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates cerises",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Concombre",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Persil frais",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Menthe fraîche",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 30,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Rincer le quinoa et le cuire dans deux fois son volume d'eau salée 12-15 min. Égoutter et laisser refroidir complètement.",
+    "Couper les tomates cerises en deux, le concombre en petits dés. Ciseler finement persil et menthe.",
+    "Mélanger le quinoa refroidi avec les légumes et les herbes. Assaisonner de jus de citron et d'huile d'olive. Réfrigérer 30 min avant de servir."
+  ]
+},
+{
+  "id": "R547",
+  "name": "Omelette Champignons Chèvre",
+  "category": "french",
+  "mealTypes": [
+    "breakfast",
+    "lunch"
+  ],
+  "emoji": "🍳",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "quick",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 10,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 340,
+    "proteinGrams": 24,
+    "carbsGrams": 8,
+    "fatGrams": 24
+  },
+  "ingredients": [
+    {
+      "name": "Œufs entiers",
+      "qty": 3,
+      "unit": "unité"
+    },
+    {
+      "name": "Champignons de Paris",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage de chèvre frais",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Ciboulette fraîche",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Émincer les champignons et les faire sauter dans la moitié du beurre jusqu'à évaporation de l'eau, saler, poivrer. Réserver.",
+    "Battre les œufs avec sel et poivre. Dans une poêle antiadhésive chaude avec le reste du beurre, verser les œufs battus et remuer doucement jusqu'à début de prise.",
+    "Disposer les champignons et le fromage de chèvre émiettés sur la moitié de l'omelette, plier, parsemer de ciboulette et servir aussitôt."
+  ]
+},
+{
+  "id": "R548",
+  "name": "Salade Niçoise Thon Frais",
+  "category": "french",
+  "mealTypes": [
+    "lunch"
+  ],
+  "emoji": "🥗",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "mediterranean",
+    "no-cook"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 15,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 38,
+    "carbsGrams": 15,
+    "fatGrams": 23
+  },
+  "ingredients": [
+    {
+      "name": "Thon frais grillé",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Haricots verts",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Œuf dur",
+      "qty": 1,
+      "unit": "unité"
+    },
+    {
+      "name": "Tomates",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Olives noires",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Anchois à l'huile",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive, vinaigre",
+      "qty": 15,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Cuire les haricots verts à l'eau bouillante salée 8 min, refroidir sous eau froide. Faire griller le thon à la poêle ou au grill 2-3 min de chaque côté, laisser tiédir.",
+    "Cuire l'œuf dur 10 min, écailler et couper en quartiers. Couper les tomates en quartiers.",
+    "Dresser les légumes dans un grand bol, disposer le thon émietté, l'œuf, les olives et les anchois. Arroser d'une vinaigrette huile-vinaigre et servir."
+  ]
+},
+{
+  "id": "R549",
+  "name": "Velouté Butternut Coco Protéiné",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍵",
+  "origin": "🇫🇷",
+  "tags": [
+    "vegetarian",
+    "light",
+    "warming"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 320,
+    "proteinGrams": 18,
+    "carbsGrams": 32,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Courge butternut",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Lait de coco allégé",
+      "qty": 100,
+      "unit": "ml"
+    },
+    {
+      "name": "Tofu soyeux",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Bouillon de légumes",
+      "qty": 200,
+      "unit": "ml"
+    },
+    {
+      "name": "Gingembre frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Graines de courge",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre, noix de muscade",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Peler et couper la courge butternut en cubes. Cuire avec le bouillon et le gingembre râpé 20 min jusqu'à tendreté.",
+    "Ajouter le tofu soyeux et le lait de coco. Mixer finement au blender jusqu'à obtenir un velouté onctueux.",
+    "Rectifier l'assaisonnement avec sel, poivre et muscade. Servir chaud, garni de graines de courge toastées."
+  ]
+},
+{
+  "id": "R550",
+  "name": "Filet de Bar Beurre Blanc Light",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "low-carb"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 410,
+    "proteinGrams": 40,
+    "carbsGrams": 22,
+    "fatGrams": 18
+  },
+  "ingredients": [
+    {
+      "name": "Filet de bar (loup)",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre demi-sel allégé",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Échalote",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "Crème légère 5%",
+      "qty": 30,
+      "unit": "ml"
+    },
+    {
+      "name": "Citron",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Ciboulette fraîche",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Sel et poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 180°C. Assaisonner le filet de bar avec sel, poivre et jus de citron.",
+    "Enfourner le filet dans un plat légèrement huilé pendant 15 minutes.",
+    "Pendant ce temps, ciseler l'échalote et la faire revenir 2 minutes dans une petite casserole avec un peu de vin blanc.",
+    "Ajouter le reste du vin blanc et laisser réduire de moitié à feu moyen.",
+    "Incorporer la crème légère, puis le beurre froid en petits morceaux hors du feu en fouettant vigoureusement.",
+    "Rectifier l'assaisonnement, ajouter la ciboulette ciselée et napper le filet de bar avant de servir."
+  ]
+},
+{
+  "id": "R551",
+  "name": "Tartare Bœuf Maison",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥩",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "raw",
+    "classic"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 0,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 380,
+    "proteinGrams": 35,
+    "carbsGrams": 24,
+    "fatGrams": 16
+  },
+  "ingredients": [
+    {
+      "name": "Bœuf haché façon tartare (extra frais)",
+      "qty": 160,
+      "unit": "g"
+    },
+    {
+      "name": "Câpres",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Cornichons",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Échalote",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Moutarde de Dijon",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Jaune d'œuf",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Persil frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Tabasco",
+      "qty": 2,
+      "unit": "ml"
+    },
+    {
+      "name": "Worcestershire sauce",
+      "qty": 5,
+      "unit": "ml"
+    },
+    {
+      "name": "Pain de seigle",
+      "qty": 40,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Hacher finement l'échalote, les câpres, les cornichons et le persil.",
+    "Dans un bol, mélanger le bœuf haché avec la moutarde, le jaune d'œuf, le tabasco et la sauce Worcestershire.",
+    "Incorporer les aromates hachés et mélanger délicatement à la fourchette.",
+    "Assaisonner avec sel et poivre, former un disque à l'aide d'un emporte-pièce dans l'assiette.",
+    "Servir immédiatement avec les tranches de pain de seigle grillées en accompagnement."
+  ]
+},
+{
+  "id": "R552",
+  "name": "Blanquette Veau Express",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍲",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "comfort-food",
+    "classic"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 30,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 470,
+    "proteinGrams": 42,
+    "carbsGrams": 35,
+    "fatGrams": 18
+  },
+  "ingredients": [
+    {
+      "name": "Épaule de veau en dés",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Carottes",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Champignons de Paris",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Crème légère 15%",
+      "qty": 40,
+      "unit": "ml"
+    },
+    {
+      "name": "Farine de blé T80",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre allégé",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Bouquet garni",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Riz blanc cuit",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre, noix de muscade",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Faire blanchir les dés de veau 5 minutes dans l'eau bouillante salée, égoutter et réserver.",
+    "Dans une cocotte, faire fondre le beurre, ajouter les oignons émincés et les carottes en rondelles, faire revenir 3 minutes.",
+    "Ajouter le veau et couvrir d'eau à hauteur avec le bouquet garni. Cuire 25 minutes à feu doux.",
+    "Retirer la viande, filtrer le bouillon. Préparer un roux avec beurre et farine, mouiller avec le bouillon progressivement.",
+    "Ajouter les champignons émincés, la crème légère et une pincée de muscade. Remettre le veau 5 minutes.",
+    "Rectifier l'assaisonnement et servir avec le riz blanc."
+  ]
+},
+{
+  "id": "R553",
+  "name": "Cake Salé Courgette Feta",
+  "category": "french",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🫒",
+  "origin": "🇫🇷",
+  "tags": [
+    "vegetarian",
+    "snack",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 30,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 320,
+    "proteinGrams": 20,
+    "carbsGrams": 24,
+    "fatGrams": 16
+  },
+  "ingredients": [
+    {
+      "name": "Farine de blé T65",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Œuf entier",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Feta allégée",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Courgette",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Lait écrémé",
+      "qty": 40,
+      "unit": "ml"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "ml"
+    },
+    {
+      "name": "Herbes de Provence",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 180°C. Râper la courgette et la presser dans un torchon pour en extraire l'excès d'eau.",
+    "Dans un bol, mélanger la farine avec la levure, puis incorporer l'œuf battu, le lait et l'huile d'olive.",
+    "Émietter la feta, ajouter la courgette râpée et les herbes de Provence. Bien mélanger.",
+    "Verser dans un moule à cake individuel et enfourner 30 minutes jusqu'à ce que la pointe d'un couteau ressorte propre.",
+    "Laisser refroidir 5 minutes avant de démouler. Peut se conserver 3 jours au réfrigérateur."
+  ]
+},
+{
+  "id": "R554",
+  "name": "Crêpes Sarrasin Saumon Fumé",
+  "category": "french",
+  "mealTypes": [
+    "breakfast",
+    "lunch"
+  ],
+  "emoji": "🥞",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "breton",
+    "omega-3"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 390,
+    "proteinGrams": 30,
+    "carbsGrams": 27,
+    "fatGrams": 18
+  },
+  "ingredients": [
+    {
+      "name": "Farine de sarrasin",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Œuf entier",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Lait demi-écrémé",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Saumon fumé",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Citron",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Aneth frais",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de colza",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Préparer la pâte à crêpes : mélanger la farine de sarrasin, l'œuf, le lait et une pincée de sel. Laisser reposer 10 minutes.",
+    "Cuire 2 galettes dans une poêle antiadhésive légèrement huilée, 2 minutes par face.",
+    "Mélanger le fromage blanc avec le jus de citron et l'aneth ciselé pour obtenir une sauce fraîche.",
+    "Étaler la sauce sur chaque galette, disposer les tranches de saumon fumé et plier en quatre.",
+    "Servir immédiatement avec un quartier de citron."
+  ]
+},
+{
+  "id": "R555",
+  "name": "Soufflé Fromage Léger",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🧀",
+  "origin": "🇫🇷",
+  "tags": [
+    "vegetarian",
+    "gourmet",
+    "light"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 20,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 310,
+    "proteinGrams": 22,
+    "carbsGrams": 15,
+    "fatGrams": 18
+  },
+  "ingredients": [
+    {
+      "name": "Œuf entier",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Comté râpé allégé",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Lait écrémé",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Farine de blé T65",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre allégé",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Noix de muscade",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Sel et poivre",
+      "qty": 1,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 200°C. Beurrer et chemiser un ramequin individuel de farine.",
+    "Préparer une béchamel légère : faire fondre le beurre, ajouter la farine puis le lait chaud progressivement. Cuire 3 minutes en remuant.",
+    "Hors du feu, incorporer le fromage râpé et 2 jaunes d'œufs. Assaisonner avec sel, poivre et muscade.",
+    "Monter les 2 blancs d'œufs en neige ferme et les incorporer délicatement à la préparation en 3 fois.",
+    "Verser dans le ramequin et enfourner immédiatement 18-20 minutes sans ouvrir le four. Servir sans attendre."
+  ]
+},
+{
+  "id": "R556",
+  "name": "Magret Canard Orange Miel",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🦆",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "festive"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 450,
+    "proteinGrams": 38,
+    "carbsGrams": 16,
+    "fatGrams": 26
+  },
+  "ingredients": [
+    {
+      "name": "Magret de canard (côté chair)",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Jus d'orange frais",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Miel d'acacia",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Vinaigre balsamique",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Zeste d'orange",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Échalote",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Sel et poivre",
+      "qty": 1,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Inciser le gras du magret en croisillons sans atteindre la chair. Assaisonner les deux faces.",
+    "Déposer le magret côté gras dans une poêle froide et monter à feu moyen. Cuire 8-10 minutes jusqu'à fonte du gras.",
+    "Retourner le magret et cuire 4-5 minutes côté chair pour une cuisson rosée. Réserver sous papier aluminium.",
+    "Dégraisser la poêle, faire revenir l'échalote ciselée 1 minute, puis déglacer avec le jus d'orange.",
+    "Ajouter le miel, le vinaigre balsamique et le zeste d'orange. Réduire 3-4 minutes à feu vif.",
+    "Trancher le magret en biais et napper de sauce orange-miel avant de servir."
+  ]
+},
+{
+  "id": "R557",
+  "name": "Pot-au-Feu Express Poulet",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍗",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "comfort-food",
+    "low-fat"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 30,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 480,
+    "proteinGrams": 48,
+    "carbsGrams": 18,
+    "fatGrams": 24
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Carottes",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Navet",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Poireau",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Pomme de terre",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Bouquet garni",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Bouillon de volaille dégraissé",
+      "qty": 400,
+      "unit": "ml"
+    },
+    {
+      "name": "Fleur de sel et poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Éplucher et couper les légumes en morceaux réguliers. Porter le bouillon à ébullition dans une cocotte.",
+    "Ajouter les carottes, navets et pommes de terre. Cuire 10 minutes à feu moyen.",
+    "Ajouter le blanc de poulet entier et le poireau. Cuire encore 20 minutes à feu doux avec le bouquet garni.",
+    "Vérifier la cuisson en piquant le poulet (jus clair). Sortir le poulet et le trancher finement.",
+    "Disposer le poulet tranché et les légumes dans un bol, arroser de bouillon chaud et assaisonner de fleur de sel."
+  ]
+},
+{
+  "id": "R558",
+  "name": "Mousse Chocolat Noir Légère",
+  "category": "french",
+  "mealTypes": [
+    "dessert"
+  ],
+  "emoji": "🍫",
+  "origin": "🇫🇷",
+  "tags": [
+    "dessert",
+    "light",
+    "chocolate"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 0,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 261,
+    "proteinGrams": 15,
+    "carbsGrams": 30,
+    "fatGrams": 9
+  },
+  "ingredients": [
+    {
+      "name": "Chocolat noir 85%",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc d'œuf",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Cacao amer en poudre",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 2,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Faire fondre le chocolat noir au bain-marie et laisser tiédir 5 minutes.",
+    "Mélanger le fromage blanc avec le cacao, l'édulcorant et l'extrait de vanille jusqu'à obtenir une crème lisse.",
+    "Incorporer le chocolat fondu à la préparation fromage blanc et bien mélanger.",
+    "Monter les blancs d'œufs en neige ferme avec une pincée de sel.",
+    "Incorporer délicatement les blancs en neige en 3 fois à la préparation chocolatée en soulevant la masse.",
+    "Répartir dans un ramequin et réfrigérer au moins 1h avant de déguster."
+  ]
+},
+{
+  "id": "R559",
+  "name": "Crème Brûlée Légère Vanille",
+  "category": "french",
+  "mealTypes": [
+    "dessert"
+  ],
+  "emoji": "🍮",
+  "origin": "🇫🇷",
+  "tags": [
+    "dessert",
+    "classic",
+    "light"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 40,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 280,
+    "proteinGrams": 18,
+    "carbsGrams": 25,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Lait écrémé",
+      "qty": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "Œuf entier",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Cassonade",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Gousse de vanille",
+      "qty": 1,
+      "unit": "pc"
+    },
+    {
+      "name": "Cassonade pour brûler",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 150°C. Fendre la gousse de vanille et gratter les graines.",
+    "Chauffer le lait avec la vanille jusqu'à frémissement, puis laisser infuser 5 minutes hors du feu.",
+    "Fouetter l'œuf avec l'édulcorant et la cassonade, puis incorporer le lait vanillé filtré et le fromage blanc.",
+    "Verser dans un ramequin allant au four. Cuire au bain-marie 35-40 minutes jusqu'à ce que la crème soit prise (légèrement tremblotante).",
+    "Laisser refroidir, puis réfrigérer 2h minimum.",
+    "Au moment de servir, saupoudrer de cassonade et caraméliser au chalumeau de cuisine jusqu'à obtenir une croûte dorée."
+  ]
+},
+{
+  "id": "R560",
+  "name": "BBQ Chicken Bowl",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍗",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 490,
+    "proteinGrams": 42,
+    "carbsGrams": 52,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Riz brun cuit",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce BBQ sans sucre ajouté",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Maïs en grains",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Haricots noirs cuits",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon rouge",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Coriandre fraîche",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Couper le blanc de poulet en cubes et le faire revenir dans l'huile d'olive à feu moyen-vif 8–10 min jusqu'à coloration.",
+    "Ajouter la sauce BBQ sur le poulet, mélanger et cuire 2 min supplémentaires à feu doux.",
+    "Monter le bowl : riz brun en base, puis maïs, haricots noirs, oignon rouge émincé et poulet BBQ. Garnir de coriandre fraîche."
+  ]
+},
+{
+  "id": "R561",
+  "name": "Turkey Taco Bowl",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🌮",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "meal-prep",
+    "low-fat"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 470,
+    "proteinGrams": 38,
+    "carbsGrams": 50,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Dinde hachée (5% MG)",
+      "qty": 160,
+      "unit": "g"
+    },
+    {
+      "name": "Riz brun cuit",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Épices taco (cumin, paprika, ail)",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates cerises",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Avocat",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Jus de citron vert",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Faire chauffer l'huile dans une poêle et cuire la dinde hachée avec les épices taco 8–10 min en l'émiettant à la spatule.",
+    "Préparer le bowl avec le riz brun en base et déposer la dinde épicée par-dessus.",
+    "Garnir de tomates cerises coupées, d'avocat en tranches, d'une cuillère de fromage blanc et d'un filet de citron vert."
+  ]
+},
+{
+  "id": "R562",
+  "name": "Salmon Power Bowl",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "omega-3",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 450,
+    "proteinGrams": 40,
+    "carbsGrams": 44,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Filet de saumon",
+      "qty": 160,
+      "unit": "g"
+    },
+    {
+      "name": "Quinoa cuit",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Épinards frais",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Concombre",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Edamame cuits",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce soja allégée",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Graines de sésame",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de sésame",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Assaisonner le filet de saumon avec la sauce soja et l'huile de sésame, puis le cuire à la poêle 4–5 min de chaque côté.",
+    "Disposer le quinoa dans un bol, puis les épinards, le concombre en rondelles et les edamame.",
+    "Poser le saumon feuilleté sur le bowl et parsemer de graines de sésame."
+  ]
+},
+{
+  "id": "R563",
+  "name": "Buffalo Chicken Wrap",
+  "category": "american",
+  "mealTypes": [
+    "lunch"
+  ],
+  "emoji": "🌯",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "spicy",
+    "viral"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 430,
+    "proteinGrams": 35,
+    "carbsGrams": 45,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Tortilla de blé complète (25 cm)",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce buffalo (piquante)",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Laitue romaine",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Céleri",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Carotte râpée",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Ail en poudre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Cuire le blanc de poulet assaisonné d'ail en poudre dans une poêle antiadhésive 6–7 min de chaque côté, puis l'effilocher à la fourchette.",
+    "Mélanger le poulet effiloché avec la sauce buffalo jusqu'à enrobage complet.",
+    "Garnir la tortilla de fromage blanc, laitue, céleri, carotte et poulet buffalo, puis rouler fermement en wrap."
+  ]
+},
+{
+  "id": "R564",
+  "name": "Greek Yogurt Parfait Protéiné",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🫙",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "no-cook",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 350,
+    "proteinGrams": 25,
+    "carbsGrams": 45,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Yaourt grec 0% MG",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine whey vanille",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Flocons d'avoine",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Myrtilles fraîches",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Fraises",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Miel",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Amandes effilées",
+      "qty": 10,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mélanger le yaourt grec avec la poudre de protéine whey jusqu'à obtention d'une texture homogène.",
+    "Dans un verre ou bol, alterner une couche de yaourt protéiné, une couche de flocons d'avoine et une couche de fruits.",
+    "Finir avec un filet de miel et les amandes effilées en garniture."
+  ]
+},
+{
+  "id": "R565",
+  "name": "Protein Pancakes Myrtilles",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🥞",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 15,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 32,
+    "carbsGrams": 48,
+    "fatGrams": 11
+  },
+  "ingredients": [
+    {
+      "name": "Flocons d'avoine mixés (farine)",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine whey nature",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc d'œuf",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Œuf entier",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Lait écrémé",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Myrtilles fraîches",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Sirop d'érable light",
+      "qty": 15,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mixer les flocons d'avoine en farine, puis mélanger avec la whey, la levure, l'œuf, les blancs d'œuf et le lait jusqu'à pâte homogène.",
+    "Cuire des petites pancakes dans une poêle antiadhésive légèrement huilée 2–3 min de chaque côté à feu moyen.",
+    "Dresser les pancakes en pile, garnir de myrtilles fraîches et napper de sirop d'érable light."
+  ]
+},
+{
+  "id": "R566",
+  "name": "Egg White Breakfast Burrito",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🌯",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "low-fat",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 10,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 380,
+    "proteinGrams": 28,
+    "carbsGrams": 42,
+    "fatGrams": 11
+  },
+  "ingredients": [
+    {
+      "name": "Blancs d'œuf",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Tortilla de blé complète (25 cm)",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Poivron rouge",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Épinards frais",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage allégé râpé",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Salsa maison ou du commerce",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de coco",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Faire sauter l'oignon et le poivron dans l'huile de coco 3–4 min, puis ajouter les épinards 1 min.",
+    "Verser les blancs d'œuf sur les légumes et brouiller à feu doux jusqu'à cuisson complète, saler et poivrer.",
+    "Garnir la tortilla avec les œufs brouillés aux légumes, le fromage râpé et la salsa, puis rouler en burrito."
+  ]
+},
+{
+  "id": "R567",
+  "name": "Chicken Caesar Salad",
+  "category": "american",
+  "mealTypes": [
+    "lunch"
+  ],
+  "emoji": "🥗",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "classic",
+    "low-carb"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 38,
+    "carbsGrams": 28,
+    "fatGrams": 17
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 160,
+      "unit": "g"
+    },
+    {
+      "name": "Laitue romaine",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Croûtons de pain complet",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce Caesar allégée",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Ail en poudre",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Assaisonner le poulet d'ail en poudre et le cuire dans l'huile d'olive 6–7 min de chaque côté, puis le laisser reposer et le trancher.",
+    "Déchirer la romaine en morceaux, ajouter les croûtons et arroser de sauce Caesar et de jus de citron, mélanger.",
+    "Disposer les tranches de poulet sur la salade et parsemer de parmesan râpé."
+  ]
+},
+{
+  "id": "R568",
+  "name": "Turkey Burger Healthy",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍔",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 460,
+    "proteinGrams": 42,
+    "carbsGrams": 44,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Dinde hachée (5% MG)",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Pain burger complet",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Laitue",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Tomate",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon rouge",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Moutarde de Dijon",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Ail en poudre, sel, poivre",
+      "qty": 3,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mélanger la dinde hachée avec l'ail en poudre, sel et poivre, former un steak et cuire 5–6 min de chaque côté à feu moyen.",
+    "Toaster le pain burger complet et étaler la moutarde et le fromage blanc sur chaque face.",
+    "Assembler le burger avec la laitue, la tomate, l'oignon rouge et le steak de dinde."
+  ]
+},
+{
+  "id": "R569",
+  "name": "Tuna Avocado Toast",
+  "category": "american",
+  "mealTypes": [
+    "breakfast",
+    "lunch"
+  ],
+  "emoji": "🥑",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "omega-3",
+    "no-cook"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 5,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 370,
+    "proteinGrams": 28,
+    "carbsGrams": 36,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Thon en boîte au naturel",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Pain de seigle (2 tranches)",
+      "qty": 70,
+      "unit": "g"
+    },
+    {
+      "name": "Avocat",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Tomate cerise",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Câpres",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Aneth frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Flocons de piment",
+      "qty": 1,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Toaster les tranches de pain de seigle, puis écraser l'avocat avec le jus de citron, sel et poivre.",
+    "Égoutter le thon et le mélanger avec les câpres et un peu d'aneth.",
+    "Tartiner les toasts d'avocat écrasé, répartir le thon par-dessus, garnir de tomates cerises coupées, d'aneth et de flocons de piment."
+  ]
+},
+{
+  "id": "R570",
+  "name": "Cottage Cheese Protein Bowl",
+  "category": "american",
+  "mealTypes": [
+    "breakfast",
+    "snack"
+  ],
+  "emoji": "🥣",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "easy",
+    "no-cook"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 360,
+    "proteinGrams": 30,
+    "carbsGrams": 42,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Cottage cheese (faible en gras)",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Banane",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Granola avoine",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Miel",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Graines de chia",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Myrtilles fraîches",
+      "qty": 50,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Verser le cottage cheese dans un bol.",
+    "Couper la banane en rondelles et les disposer sur le cottage cheese.",
+    "Ajouter le granola, les myrtilles et les graines de chia.",
+    "Arroser de miel et servir immédiatement."
+  ]
+},
+{
+  "id": "R571",
+  "name": "Shrimp Stir Fry Asiatique",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍤",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "low-carb",
+    "quick"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 10,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 380,
+    "proteinGrams": 35,
+    "carbsGrams": 35,
+    "fatGrams": 11
+  },
+  "ingredients": [
+    {
+      "name": "Crevettes décortiquées",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Brocoli",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Poivron rouge",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Carottes",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce soja allégée",
+      "qty": 20,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile de sésame",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Ail",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Gingembre frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Riz basmati cuit",
+      "qty": 80,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Faire chauffer l'huile de sésame dans un wok à feu vif.",
+    "Faire sauter l'ail et le gingembre émincés pendant 30 secondes.",
+    "Ajouter les crevettes et cuire 3 minutes jusqu'à ce qu'elles soient roses.",
+    "Incorporer les légumes coupés en morceaux et faire sauter 4 minutes.",
+    "Verser la sauce soja, mélanger et servir sur le riz basmati."
+  ]
+},
+{
+  "id": "R572",
+  "name": "Sweet Potato Turkey Hash",
+  "category": "american",
+  "mealTypes": [
+    "breakfast",
+    "lunch"
+  ],
+  "emoji": "🍠",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "meal-prep",
+    "gluten-free"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 430,
+    "proteinGrams": 32,
+    "carbsGrams": 46,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Dinde hachée (maigre)",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Patate douce",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Poivron vert",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Paprika fumé",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Sel et poivre",
+      "qty": 1,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Éplucher et couper la patate douce en petits dés, puis la faire cuire à la vapeur 8 minutes.",
+    "Chauffer l'huile d'olive dans une grande poêle et faire revenir l'oignon et le poivron 3 minutes.",
+    "Ajouter la dinde hachée et cuire en l'émiettant jusqu'à ce qu'elle soit bien dorée.",
+    "Incorporer la patate douce cuite, assaisonner de paprika, sel et poivre.",
+    "Mélanger et cuire encore 5 minutes à feu moyen jusqu'à coloration dorée, puis servir."
+  ]
+},
+{
+  "id": "R573",
+  "name": "Overnight Oats Protein Vanille",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🌙",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "meal-prep",
+    "easy",
+    "no-cook"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 390,
+    "proteinGrams": 28,
+    "carbsGrams": 49,
+    "fatGrams": 9
+  },
+  "ingredients": [
+    {
+      "name": "Flocons d'avoine",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Lait d'amande non sucré",
+      "qty": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "Whey protéine vanille",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Graines de chia",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 2,
+      "unit": "ml"
+    },
+    {
+      "name": "Fraises",
+      "qty": 50,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Dans un bocal, mélanger les flocons d'avoine, la whey protéine et les graines de chia.",
+    "Ajouter le yaourt grec, le lait d'amande et l'extrait de vanille.",
+    "Bien mélanger, couvrir et réfrigérer toute la nuit (minimum 4 heures).",
+    "Au moment de servir, garnir de fraises coupées en morceaux."
+  ]
+},
+{
+  "id": "R574",
+  "name": "Chicken Tikka Masala Light",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍛",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "meal-prep",
+    "spicy"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 25,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 460,
+    "proteinGrams": 40,
+    "carbsGrams": 44,
+    "fatGrams": 14
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates concassées en boîte",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Gingembre frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de coco",
+      "qty": 8,
+      "unit": "ml"
+    },
+    {
+      "name": "Épices tikka masala",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Riz basmati cuit",
+      "qty": 80,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Couper le poulet en cubes et mariner 10 minutes dans la moitié du yaourt et les épices tikka.",
+    "Faire revenir l'oignon, l'ail et le gingembre dans l'huile de coco pendant 3 minutes.",
+    "Ajouter le poulet mariné et cuire 6 minutes à feu moyen-vif jusqu'à dorure.",
+    "Incorporer les tomates concassées, couvrir et mijoter 12 minutes.",
+    "Hors du feu, ajouter le reste du yaourt pour onctuosité et servir sur le riz basmati."
+  ]
+},
+{
+  "id": "R575",
+  "name": "Beef Stir Fry Teriyaki",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥩",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "quick",
+    "viral"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 12,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 450,
+    "proteinGrams": 38,
+    "carbsGrams": 43,
+    "fatGrams": 14
+  },
+  "ingredients": [
+    {
+      "name": "Bœuf maigre (rumsteck)",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Brocoli",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Poivron rouge",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce teriyaki allégée",
+      "qty": 30,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile de sésame",
+      "qty": 8,
+      "unit": "ml"
+    },
+    {
+      "name": "Ail",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Sésame grillé",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Riz jasmin cuit",
+      "qty": 80,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Couper le bœuf en fines lanières contre le grain.",
+    "Chauffer l'huile de sésame dans un wok à feu très vif et saisir le bœuf 3 minutes.",
+    "Réserver le bœuf, puis faire sauter l'ail, le brocoli et le poivron 4 minutes.",
+    "Remettre le bœuf dans le wok, verser la sauce teriyaki et mélanger 2 minutes.",
+    "Servir sur le riz jasmin et parsemer de sésame grillé."
+  ]
+},
+{
+  "id": "R576",
+  "name": "Smashed Chickpea Avocado Toast",
+  "category": "american",
+  "mealTypes": [
+    "breakfast",
+    "lunch"
+  ],
+  "emoji": "🥑",
+  "origin": "🇺🇸",
+  "tags": [
+    "vegan",
+    "high-fiber",
+    "viral",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 8,
+  "cookTime": 2,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 380,
+    "proteinGrams": 18,
+    "carbsGrams": 46,
+    "fatGrams": 14
+  },
+  "ingredients": [
+    {
+      "name": "Pain complet grillé",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Pois chiches en boîte (égouttés)",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Avocat mûr",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Flocons de piment rouge",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Sel et poivre",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Graines de chanvre",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Coriandre fraîche",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Écraser les pois chiches à la fourchette en gardant une texture grossière.",
+    "Écraser séparément l'avocat avec le jus de citron, sel et poivre.",
+    "Griller le pain complet jusqu'à obtenir une belle coloration dorée.",
+    "Étaler l'avocat sur le pain, puis déposer les pois chiches écrasés dessus.",
+    "Garnir de graines de chanvre, flocons de piment et coriandre fraîche."
+  ]
+},
+{
+  "id": "R577",
+  "name": "Protein Acai Bowl",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🫐",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "antioxidant",
+    "viral",
+    "gluten-free"
+  ],
+  "servings": 1,
+  "prepTime": 8,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 410,
+    "proteinGrams": 25,
+    "carbsGrams": 53,
+    "fatGrams": 11
+  },
+  "ingredients": [
+    {
+      "name": "Purée d'açaï surgelée",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Banane congelée",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Whey protéine vanille",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Lait d'amande",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Granola avoine",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Myrtilles fraîches",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre d'amande",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Noix de coco râpée",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mixer la purée d'açaï, la banane congelée, la whey et le lait d'amande jusqu'à obtenir une texture épaisse et crémeuse.",
+    "Verser dans un bol en vérifiant que la consistance est bien ferme.",
+    "Disposer harmonieusement le granola, les myrtilles et la noix de coco sur le dessus.",
+    "Finir avec un filet de beurre d'amande et servir immédiatement."
+  ]
+},
+{
+  "id": "R578",
+  "name": "Baked Lemon Herb Salmon",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "omega-3",
+    "gluten-free",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 8,
+  "cookTime": 18,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 430,
+    "proteinGrams": 44,
+    "carbsGrams": 21,
+    "fatGrams": 19
+  },
+  "ingredients": [
+    {
+      "name": "Filet de saumon",
+      "qty": 220,
+      "unit": "g"
+    },
+    {
+      "name": "Haricots verts",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Citron",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Ail",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Aneth frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Persil frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Sel et poivre",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Quinoa cuit",
+      "qty": 60,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 200°C. Placer le saumon sur une plaque recouverte de papier cuisson.",
+    "Mélanger l'huile d'olive, l'ail émincé, l'aneth, le persil, le jus de citron, sel et poivre.",
+    "Enduire le saumon de cette marinade et disposer les haricots verts autour.",
+    "Enfourner 16 à 18 minutes jusqu'à ce que le saumon soit cuit à cœur et légèrement doré.",
+    "Servir sur le quinoa avec des rondelles de citron."
+  ]
+},
+{
+  "id": "R579",
+  "name": "Energy Balls Peanut Butter",
+  "category": "american",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🥜",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "meal-prep",
+    "no-cook",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 280,
+    "proteinGrams": 16,
+    "carbsGrams": 25,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Beurre de cacahuète naturel",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Flocons d'avoine",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Whey protéine chocolat",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Miel",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Pépites de chocolat noir 70%",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Graines de lin moulues",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Dans un saladier, mélanger le beurre de cacahuète, le miel et la whey protéine jusqu'à homogénéité.",
+    "Incorporer les flocons d'avoine, les graines de lin et les pépites de chocolat.",
+    "Réfrigérer la pâte 15 minutes pour qu'elle se raffermisse.",
+    "Former 4 à 5 boules de taille égale avec les mains légèrement humidifiées et conserver au frais."
+  ]
+},
+{
+  "id": "R580",
+  "name": "Pancakes Fluffy Ricotta Citron",
+  "category": "french",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🥞",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "viral",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 10,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 422,
+    "proteinGrams": 32,
+    "carbsGrams": 42,
+    "fatGrams": 14
+  },
+  "ingredients": [
+    {
+      "name": "Ricotta",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Œufs entiers",
+      "qty": 2,
+      "unit": "unités"
+    },
+    {
+      "name": "Flocons d'avoine mixés",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Zeste de citron",
+      "qty": 1,
+      "unit": "citron"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 15,
+      "unit": "ml"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 3,
+      "unit": "ml"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de coco (pour cuisson)",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Dans un grand bol, fouetter la ricotta avec les 2 œufs jusqu'à obtenir un mélange homogène et crémeux.",
+    "Ajouter les flocons d'avoine mixés, le zeste et le jus de citron, l'extrait de vanille et l'érythritol. Mélanger jusqu'à incorporation.",
+    "Incorporer la levure chimique et laisser reposer la pâte 3 minutes pour qu'elle gonfle légèrement.",
+    "Chauffer une poêle antiadhésive à feu moyen avec l'huile de coco. Verser des petites louches de pâte (Ø 8 cm) et cuire 2-3 min par face jusqu'à dorure.",
+    "Servir chaud avec quelques zestes de citron supplémentaires et un filet de sirop d'érable si désiré."
+  ]
+},
+{
+  "id": "R581",
+  "name": "Protein Pancakes Avoine Banane Choco",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🍫",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "meal-prep",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 10,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 461,
+    "proteinGrams": 35,
+    "carbsGrams": 51,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Flocons d'avoine",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Banane mûre",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Poudre de protéines chocolat",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Œufs entiers",
+      "qty": 2,
+      "unit": "unités"
+    },
+    {
+      "name": "Lait écrémé",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Cacao en poudre non sucré",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 4,
+      "unit": "g"
+    },
+    {
+      "name": "Pépites de chocolat noir 70%",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de coco (cuisson)",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mixer les flocons d'avoine en farine fine, puis écraser la banane à la fourchette jusqu'à obtenir une purée lisse.",
+    "Dans un bol, mélanger la farine d'avoine, la poudre de protéines, le cacao et la levure. Creuser un puits au centre.",
+    "Ajouter les œufs, la purée de banane et le lait écrémé dans le puits. Fouetter jusqu'à pâte homogène. Incorporer les pépites de chocolat.",
+    "Chauffer une poêle antiadhésive à feu moyen avec l'huile de coco. Verser des louches de pâte et cuire 2 min par face.",
+    "Empiler les pancakes et servir avec une tranche de banane et quelques pépites supplémentaires."
+  ]
+},
+{
+  "id": "R582",
+  "name": "Crêpes Sarrasin Protéinées",
+  "category": "french",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🫓",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "gluten-free",
+    "traditional"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 390,
+    "proteinGrams": 28,
+    "carbsGrams": 47,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Farine de sarrasin",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Poudre de protéines nature",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Œufs entiers",
+      "qty": 2,
+      "unit": "unités"
+    },
+    {
+      "name": "Lait écrémé",
+      "qty": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Sel",
+      "qty": 1,
+      "unit": "pincée"
+    },
+    {
+      "name": "Huile de tournesol (cuisson)",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mélanger la farine de sarrasin et la poudre de protéines dans un bol. Faire un puits, y casser les œufs et commencer à mélanger.",
+    "Incorporer progressivement le lait écrémé en fouettant pour éviter les grumeaux. Ajouter le fromage blanc et le sel.",
+    "Laisser reposer la pâte 15 minutes à température ambiante (étape clé pour des crêpes souples).",
+    "Chauffer une crêpière huilée à feu moyen-vif. Verser une louche de pâte et étaler en cercle fin. Cuire 1-2 min par face.",
+    "Garnir selon votre goût (œuf, fromage, jambon) et servir roulé ou plié en quatre."
+  ]
+},
+{
+  "id": "R583",
+  "name": "Soufflé Pancakes Japonais Healthy",
+  "category": "pastry",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "☁️",
+  "origin": "🇯🇵",
+  "tags": [
+    "viral",
+    "high-protein",
+    "low-fat"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 15,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 372,
+    "proteinGrams": 25,
+    "carbsGrams": 50,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Blancs d'œufs",
+      "qty": 4,
+      "unit": "unités"
+    },
+    {
+      "name": "Jaunes d'œufs",
+      "qty": 2,
+      "unit": "unités"
+    },
+    {
+      "name": "Farine d'avoine fine",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Poudre de protéines vanille",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 3,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile de coco spray (cuisson)",
+      "qty": 3,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Séparer les blancs des jaunes. Battre les jaunes avec le fromage blanc, la vanille, l'érythritol et la poudre de protéines.",
+    "Incorporer la farine d'avoine et la levure dans le mélange jaunes. Réserver.",
+    "Monter les blancs en neige ferme avec une pincée de sel. Incorporer délicatement 1/3 des blancs dans la pâte pour l'alléger, puis incorporer le reste en soulevant.",
+    "Chauffer une poêle à feu très doux avec spray de coco. Déposer de hautes portions de pâte (environ 5 cm de haut), couvrir et cuire 4-5 min par face.",
+    "Servir immédiatement pour profiter de l'effet soufflé, garnir de fruits frais et de sirop zéro calorie."
+  ]
+},
+{
+  "id": "R584",
+  "name": "Pancakes Patate Douce Cannelle",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🍠",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "anti-inflammatory",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 10,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 412,
+    "proteinGrams": 30,
+    "carbsGrams": 46,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Patate douce cuite en purée",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Œufs entiers",
+      "qty": 2,
+      "unit": "unités"
+    },
+    {
+      "name": "Poudre de protéines vanille",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Farine d'avoine",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Cannelle moulue",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Muscade",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 4,
+      "unit": "g"
+    },
+    {
+      "name": "Lait d'amande non sucré",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile de coco (cuisson)",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Éplucher et cuire la patate douce à la vapeur ou au micro-ondes, puis la réduire en purée lisse. Laisser refroidir légèrement.",
+    "Dans un grand bol, mélanger la purée de patate douce avec les œufs battus et le lait d'amande.",
+    "Ajouter la poudre de protéines, la farine d'avoine, la cannelle, la muscade et la levure. Mélanger jusqu'à pâte homogène.",
+    "Chauffer une poêle antiadhésive avec l'huile de coco à feu moyen. Verser de petites louches de pâte et cuire 2-3 min par face.",
+    "Servir empilés avec une pincée de cannelle et quelques noix de pécan concassées pour le croquant."
+  ]
+},
+{
+  "id": "R585",
+  "name": "Galette Complète Jambon Gruyère Light",
+  "category": "french",
+  "mealTypes": [
+    "lunch"
+  ],
+  "emoji": "🧀",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "traditional",
+    "balanced"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 10,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 439,
+    "proteinGrams": 33,
+    "carbsGrams": 43,
+    "fatGrams": 15
+  },
+  "ingredients": [
+    {
+      "name": "Farine de sarrasin",
+      "qty": 70,
+      "unit": "g"
+    },
+    {
+      "name": "Œuf entier",
+      "qty": 1,
+      "unit": "unité"
+    },
+    {
+      "name": "Lait écrémé",
+      "qty": 100,
+      "unit": "ml"
+    },
+    {
+      "name": "Jambon blanc dégraissé",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Gruyère râpé allégé",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Œuf (pour garnir)",
+      "qty": 1,
+      "unit": "unité"
+    },
+    {
+      "name": "Sel et poivre",
+      "qty": 1,
+      "unit": "pincée"
+    },
+    {
+      "name": "Beurre demi-sel (cuisson)",
+      "qty": 8,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préparer la pâte à galette : mélanger la farine de sarrasin, l'œuf, le lait et le sel. Laisser reposer 10 min.",
+    "Chauffer la crêpière avec le beurre à feu moyen-vif. Verser la pâte en une galette fine de grande taille.",
+    "Quand les bords se décollent, casser l'œuf au centre de la galette, poser le jambon et saupoudrer le gruyère râpé.",
+    "Replier les 4 côtés de la galette pour former un carré, laisser l'œuf se cuire selon votre préférence (coulant ou cuit).",
+    "Poivrer et servir immédiatement avec une salade verte assaisonnée."
+  ]
+},
+{
+  "id": "R586",
+  "name": "Muffins Myrtilles Protéinés Meal Prep",
+  "category": "american",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🫐",
+  "origin": "🇺🇸",
+  "tags": [
+    "meal-prep",
+    "high-protein",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 288,
+    "proteinGrams": 20,
+    "carbsGrams": 34,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Farine d'avoine",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Poudre de protéines vanille",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Myrtilles fraîches ou surgelées",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Œuf entier",
+      "qty": 1,
+      "unit": "unité"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Lait écrémé",
+      "qty": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de coco fondue",
+      "qty": 8,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 180°C. Chemiser un moule à muffins (6 cavités) avec des caissettes en papier.",
+    "Dans un bol, mélanger la farine d'avoine, la poudre de protéines, la levure et l'érythritol.",
+    "Dans un autre bol, fouetter l'œuf, le yaourt grec, le lait écrémé et l'huile de coco fondue.",
+    "Incorporer les ingrédients liquides aux secs sans trop mélanger (quelques grumeaux sont normaux). Plier délicatement les myrtilles.",
+    "Répartir la pâte dans les caissettes et cuire 18-20 min. Laisser refroidir avant de démouler. Se conserve 4 jours au frigo."
+  ]
+},
+{
+  "id": "R587",
+  "name": "Muffins Chocolat Coulant Protéiné",
+  "category": "pastry",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🍫",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "indulgent",
+    "viral"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 12,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 320,
+    "proteinGrams": 25,
+    "carbsGrams": 28,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Poudre de protéines chocolat",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Cacao en poudre non sucré",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Farine d'avoine fine",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Œufs entiers",
+      "qty": 2,
+      "unit": "unités"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Chocolat noir 85% (cœur coulant)",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 4,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de coco fondue",
+      "qty": 8,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 200°C. Graisser légèrement des moules à muffins individuels résistants à la chaleur.",
+    "Mélanger la poudre de protéines, le cacao, la farine d'avoine, la levure et l'érythritol dans un bol.",
+    "Fouetter les œufs, le fromage blanc et l'huile de coco fondue. Incorporer aux ingrédients secs pour former une pâte épaisse.",
+    "Remplir les moules à mi-hauteur, déposer un carré de chocolat noir au centre, puis couvrir avec le reste de pâte.",
+    "Cuire exactement 10-12 min. Le cœur doit rester légèrement tremblotant. Démouler délicatement et déguster immédiatement."
+  ]
+},
+{
+  "id": "R588",
+  "name": "Banana Bread Protéiné Noix Pécan",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🍌",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "meal-prep",
+    "comfort-food"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 45,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 401,
+    "proteinGrams": 28,
+    "carbsGrams": 43,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Bananes très mûres",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Poudre de protéines vanille",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Farine d'avoine",
+      "qty": 70,
+      "unit": "g"
+    },
+    {
+      "name": "Œufs entiers",
+      "qty": 2,
+      "unit": "unités"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Noix de pécan concassées",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Cannelle moulue",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 3,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 175°C. Chemiser un moule à cake (20×10 cm) de papier cuisson.",
+    "Écraser les bananes en purée fine dans un grand bol. Ajouter les œufs battus, le yaourt grec et l'extrait de vanille. Bien mélanger.",
+    "Incorporer la farine d'avoine, la poudre de protéines, la levure, la cannelle et l'érythritol. Mélanger sans trop travailler.",
+    "Plier les 3/4 des noix de pécan dans la pâte, puis verser dans le moule. Parsemer le reste des noix sur le dessus.",
+    "Cuire 40-45 min (tester avec un couteau : il doit ressortir propre). Laisser refroidir 10 min avant de trancher."
+  ]
+},
+{
+  "id": "R589",
+  "name": "Muffins Courgette Feta Herbes",
+  "category": "french",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🥒",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "savory",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 22,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 284,
+    "proteinGrams": 18,
+    "carbsGrams": 26,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Courgette râpée (essorée)",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Feta light émiettée",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Œufs entiers",
+      "qty": 2,
+      "unit": "unités"
+    },
+    {
+      "name": "Farine d'épeautre",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Menthe fraîche ciselée",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Ciboulette ciselée",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 4,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Poivre noir et sel",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 180°C. Râper la courgette, la saler légèrement et laisser dégorger 5 min, puis presser dans un torchon pour éliminer l'excès d'eau.",
+    "Dans un bol, fouetter les œufs avec l'huile d'olive et le yaourt grec. Ajouter la courgette essorée.",
+    "Incorporer la farine d'épeautre, la levure, les herbes fraîches et bien poivrer. Mélanger jusqu'à pâte homogène.",
+    "Plier délicatement la feta émiettée dans la pâte pour garder de beaux morceaux. Répartir dans un moule à muffins huilé (6 cavités).",
+    "Cuire 20-22 min jusqu'à dorure et fermeté. Laisser tiédir 5 min avant de démouler. Idéal chaud ou froid au bureau."
+  ]
+},
+{
+  "id": "R590",
+  "name": "Madeleines Protéinées Citron",
+  "category": "french",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🍋",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "easy",
+    "baked"
+  ],
+  "servings": 6,
+  "prepTime": 15,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 260,
+    "proteinGrams": 15,
+    "carbsGrams": 22,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Farine de blé",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine whey vanille",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Œuf",
+      "qty": 2,
+      "unit": "pièce"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Zeste de citron",
+      "qty": 1,
+      "unit": "pièce"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 20,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile de coco",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 200°C. Beurrer un moule à madeleines.",
+    "Fouetter les œufs avec l'érythritol jusqu'à blanchissement. Incorporer le yaourt grec, le jus et le zeste de citron.",
+    "Mélanger la farine, la whey et la levure. Incorporer au mélange humide sans trop travailler.",
+    "Ajouter l'huile de coco fondue et mélanger délicatement.",
+    "Répartir la pâte dans le moule et réfrigérer 10 min (choc thermique pour la bosse).",
+    "Enfourner 12–14 min jusqu'à ce que les madeleines soient dorées. Démouler et laisser refroidir."
+  ]
+},
+{
+  "id": "R591",
+  "name": "Baked Oats Pomme Cannelle",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🍎",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "easy",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 25,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 30,
+    "carbsGrams": 52,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Flocons d'avoine",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine whey vanille",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Lait d'amande non sucré",
+      "qty": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "Œuf",
+      "qty": 1,
+      "unit": "pièce"
+    },
+    {
+      "name": "Pomme",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Cannelle",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Levure chimique",
+      "qty": 3,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 180°C. Éplucher et couper la pomme en petits dés.",
+    "Mélanger les flocons d'avoine, la whey, la levure, la cannelle et l'érythritol dans un bol.",
+    "Ajouter le lait d'amande et l'œuf battu. Bien mélanger pour obtenir une pâte homogène.",
+    "Incorporer les dés de pomme et verser dans un ramequin huilé.",
+    "Enfourner 22–25 min jusqu'à ce que le dessus soit doré et le centre pris.",
+    "Laisser tiédir 5 min et servir directement dans le ramequin, éventuellement avec un filet de beurre de cacahuète."
+  ]
+},
+{
+  "id": "R592",
+  "name": "Tiramisu Protéiné Sans Sucre",
+  "category": "italian",
+  "mealTypes": [
+    "dessert"
+  ],
+  "emoji": "☕",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "no-sugar",
+    "make-ahead"
+  ],
+  "servings": 2,
+  "prepTime": 20,
+  "cookTime": 0,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 320,
+    "proteinGrams": 30,
+    "carbsGrams": 22,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Ricotta allégée",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine whey café ou vanille",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Biscuits à la cuillère allégés",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Espresso refroidi",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Cacao en poudre non sucré",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 2,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Mélanger la ricotta, le fromage blanc, la whey, l'érythritol et la vanille jusqu'à obtenir une crème lisse.",
+    "Tremper rapidement les biscuits dans l'espresso refroidi (sans les détremper).",
+    "Dans des verrines, alterner une couche de biscuits imbibés et une couche de crème protéinée.",
+    "Répéter l'opération pour obtenir 2 couches de chaque.",
+    "Saupoudrer généreusement de cacao amer en poudre.",
+    "Réfrigérer au moins 2 heures avant de servir pour que les saveurs se développent."
+  ]
+},
+{
+  "id": "R593",
+  "name": "Panna Cotta Vanille Fraise",
+  "category": "italian",
+  "mealTypes": [
+    "dessert"
+  ],
+  "emoji": "🍓",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "low-sugar",
+    "elegant"
+  ],
+  "servings": 2,
+  "prepTime": 10,
+  "cookTime": 5,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 250,
+    "proteinGrams": 20,
+    "carbsGrams": 24,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Lait de coco léger",
+      "qty": 200,
+      "unit": "ml"
+    },
+    {
+      "name": "Protéine whey vanille",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Gélatine en feuilles",
+      "qty": 4,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Gousse de vanille",
+      "qty": 1,
+      "unit": "pièce"
+    },
+    {
+      "name": "Fraises fraîches",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 10,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Faire tremper la gélatine dans de l'eau froide pendant 5 min.",
+    "Chauffer le lait de coco avec les graines de vanille et l'érythritol à feu doux sans bouillir.",
+    "Essorer la gélatine et la dissoudre dans le lait chaud. Laisser tiédir.",
+    "Incorporer le fromage blanc et la whey en fouettant pour obtenir une préparation lisse.",
+    "Verser dans des ramequins et réfrigérer minimum 4 heures.",
+    "Mixer les fraises avec le jus de citron pour le coulis. Démouler les panna cottas et napper de coulis avant de servir."
+  ]
+},
+{
+  "id": "R594",
+  "name": "Mousse Chocolat Avocat Vegan",
+  "category": "french",
+  "mealTypes": [
+    "dessert"
+  ],
+  "emoji": "🥑",
+  "origin": "🇫🇷",
+  "tags": [
+    "vegan",
+    "high-protein",
+    "no-bake",
+    "gluten-free"
+  ],
+  "servings": 2,
+  "prepTime": 10,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 280,
+    "proteinGrams": 15,
+    "carbsGrams": 26,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Avocat mûr",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine whey chocolat ou protéine végétale chocolat",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Cacao en poudre non sucré",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Lait d'amande non sucré",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Édulcorant (sirop d'agave ou érythritol)",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 2,
+      "unit": "ml"
+    },
+    {
+      "name": "Pincée de sel",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Couper les avocats en deux, retirer le noyau et récupérer la chair.",
+    "Mixer la chair d'avocat avec le cacao, la whey, le lait d'amande, l'édulcorant, la vanille et le sel.",
+    "Mixer jusqu'à obtenir une mousse parfaitement lisse et crémeuse (2–3 min).",
+    "Goûter et ajuster la douceur selon les préférences.",
+    "Répartir dans des verrines et réfrigérer au moins 30 min.",
+    "Servir bien frais, éventuellement garni de copeaux de chocolat noir ou de framboises fraîches."
+  ]
+},
+{
+  "id": "R595",
+  "name": "Cheesecake No-Bake Citron",
+  "category": "american",
+  "mealTypes": [
+    "dessert"
+  ],
+  "emoji": "🍰",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "no-bake",
+    "make-ahead"
+  ],
+  "servings": 4,
+  "prepTime": 20,
+  "cookTime": 0,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 310,
+    "proteinGrams": 22,
+    "carbsGrams": 28,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Fromage frais allégé (type Philadelphia light)",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine whey vanille ou citron",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Biscuits type digestive",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre allégé",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Zeste de 2 citrons",
+      "qty": 1,
+      "unit": "pièce"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 40,
+      "unit": "ml"
+    },
+    {
+      "name": "Gélatine en feuilles",
+      "qty": 4,
+      "unit": "g"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 30,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mixer les biscuits et mélanger avec le beurre fondu. Presser dans le fond d'un moule à charnière et réfrigérer.",
+    "Faire tremper la gélatine dans l'eau froide. Chauffer le jus de citron et y dissoudre la gélatine essorée.",
+    "Fouetter le fromage frais avec le yaourt grec, la whey, l'érythritol et le zeste de citron.",
+    "Incorporer le mélange gélatine-citron refroidi à la crème et mélanger vigoureusement.",
+    "Verser la garniture sur la base biscuitée. Lisser la surface.",
+    "Réfrigérer minimum 4 heures (idéalement une nuit). Décorer de tranches de citron avant de servir."
+  ]
+},
+{
+  "id": "R596",
+  "name": "Energy Balls Dattes Amandes",
+  "category": "pastry",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🟤",
+  "origin": "🌍",
+  "tags": [
+    "high-protein",
+    "no-bake",
+    "meal-prep",
+    "vegan"
+  ],
+  "servings": 8,
+  "prepTime": 15,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 240,
+    "proteinGrams": 12,
+    "carbsGrams": 26,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Dattes Medjool dénoyautées",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Amandes entières",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine whey vanille ou végétale",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre d'amande",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Cacao en poudre non sucré",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Flocons d'avoine",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 2,
+      "unit": "ml"
+    },
+    {
+      "name": "Pincée de sel",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Faire tremper les dattes dans l'eau tiède 10 min si elles sont trop fermes, puis égoutter.",
+    "Mixer les amandes grossièrement dans un robot. Ajouter les dattes et mixer jusqu'à obtenir une pâte.",
+    "Ajouter le beurre d'amande, la whey, le cacao, les flocons d'avoine, la vanille et le sel.",
+    "Mixer à nouveau jusqu'à obtenir une masse compacte et homogène. Ajuster avec un peu d'eau si nécessaire.",
+    "Former des boules de la taille d'une noix (environ 30 g chacune) en pressant bien la pâte.",
+    "Rouler dans du cacao ou des éclats d'amandes. Réfrigérer 1 heure minimum. Se conserve 1 semaine au frais."
+  ]
+},
+{
+  "id": "R597",
+  "name": "Crème Brûlée Protéinée",
+  "category": "french",
+  "mealTypes": [
+    "dessert"
+  ],
+  "emoji": "🔥",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "elegant",
+    "low-sugar"
+  ],
+  "servings": 2,
+  "prepTime": 10,
+  "cookTime": 35,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 270,
+    "proteinGrams": 20,
+    "carbsGrams": 16,
+    "fatGrams": 14
+  },
+  "ingredients": [
+    {
+      "name": "Lait entier",
+      "qty": 200,
+      "unit": "ml"
+    },
+    {
+      "name": "Protéine whey vanille",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Jaunes d'œuf",
+      "qty": 3,
+      "unit": "pièce"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Gousse de vanille",
+      "qty": 1,
+      "unit": "pièce"
+    },
+    {
+      "name": "Édulcorant (érythritol)",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Cassonade (pour caraméliser)",
+      "qty": 10,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 150°C. Gratter la gousse de vanille.",
+    "Chauffer le lait avec les graines de vanille à feu doux sans bouillir.",
+    "Fouetter les jaunes d'œuf avec l'érythritol. Incorporer le fromage blanc et la whey, mélanger lisse.",
+    "Verser le lait chaud progressivement sur le mélange en fouettant constamment.",
+    "Filtrer et répartir dans des ramequins. Cuire au bain-marie au four 30–35 min (crème encore tremblotante).",
+    "Réfrigérer 3 heures. Au moment de servir, saupoudrer de cassonade et brûler au chalumeau de cuisine."
+  ]
+},
+{
+  "id": "R598",
+  "name": "Açaï Bowl Instagram Perfect",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🫐",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "vegan",
+    "antioxidants",
+    "easy"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 25,
+    "carbsGrams": 52,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Purée d'açaï surgelée",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine whey vanille ou végétale",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Banane congelée",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Lait d'amande non sucré",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Myrtilles fraîches",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Granola faible en sucre",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre d'amande",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Graines de chia",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Tranches de banane fraîche",
+      "qty": 50,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Sortir la purée d'açaï du congélateur et la laisser légèrement décongeler (5 min).",
+    "Mixer la purée d'açaï, la banane congelée, le lait d'amande et la whey jusqu'à obtenir une consistance épaisse et crémeuse.",
+    "Verser la base dans un bol en lissant la surface.",
+    "Disposer artistiquement les topping : myrtilles, tranches de banane, granola, graines de chia.",
+    "Terminer par un filet de beurre d'amande en zigzag.",
+    "Servir immédiatement et photographier avant de déguster !"
+  ]
+},
+{
+  "id": "R599",
+  "name": "Smoothie Bowl Mangue Passion Granola",
+  "category": "pastry",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🥭",
+  "origin": "🌺",
+  "tags": [
+    "high-protein",
+    "tropical",
+    "easy",
+    "colorful"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 390,
+    "proteinGrams": 22,
+    "carbsGrams": 58,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Mangue congelée",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine whey vanille ou tropicale",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Lait de coco léger",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Fruit de la passion (pulpe)",
+      "qty": 2,
+      "unit": "pièce"
+    },
+    {
+      "name": "Granola faible en sucre",
+      "qty": 35,
+      "unit": "g"
+    },
+    {
+      "name": "Kiwi",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Noix de coco râpée",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Graines de chanvre",
+      "qty": 10,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mixer la mangue congelée, le yaourt grec, le lait de coco et la whey jusqu'à obtenir une base épaisse et onctueuse.",
+    "La base doit être assez épaisse pour tenir une cuillère — ajouter moins de lait si nécessaire.",
+    "Verser dans un bol large et lisser la surface avec le dos d'une cuillère.",
+    "Découper le kiwi en tranches fines. Couper le fruit de la passion en deux et récupérer la pulpe.",
+    "Disposer le granola, les tranches de kiwi, la pulpe de passion, la noix de coco et les graines de chanvre.",
+    "Servir immédiatement pour que le granola reste croquant."
+  ]
+},
+{
+  "id": "R600",
+  "name": "Green Smoothie Bowl Épinards Avocat",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🥑",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "instagram"
+  ],
+  "servings": 1,
+  "prepTime": 8,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 400,
+    "proteinGrams": 28,
+    "carbsGrams": 36,
+    "fatGrams": 16
+  },
+  "ingredients": [
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Épinards frais",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Avocat",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Banane congelée",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine vanille",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Lait d'amande",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Granola",
+      "qty": 20,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mixer les épinards, l'avocat, la banane congelée, le yaourt grec et le lait d'amande jusqu'à obtenir une texture épaisse et lisse.",
+    "Incorporer la poudre de protéines et mixer à nouveau 30 secondes.",
+    "Verser dans un bol, parsemer de granola et servir immédiatement."
+  ]
+},
+{
+  "id": "R601",
+  "name": "Smoothie Bowl Fraise Hibiscus",
+  "category": "french",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🍓",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "viral",
+    "instagram"
+  ],
+  "servings": 1,
+  "prepTime": 8,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 360,
+    "proteinGrams": 20,
+    "carbsGrams": 52,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Fraises congelées",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine fraise",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Thé hibiscus refroidi",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Miel",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Granola",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Fraises fraîches",
+      "qty": 50,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préparer le thé hibiscus et le laisser refroidir complètement au réfrigérateur.",
+    "Mixer les fraises congelées, le yaourt grec, la poudre de protéines et le thé hibiscus jusqu'à obtenir une consistance épaisse.",
+    "Verser dans un bol, drizzler de miel, disposer les fraises fraîches et le granola en topping."
+  ]
+},
+{
+  "id": "R602",
+  "name": "Smoothie Bowl Cacao Beurre Cacahuète",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🍫",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "instagram"
+  ],
+  "servings": 1,
+  "prepTime": 8,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 450,
+    "proteinGrams": 32,
+    "carbsGrams": 51,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Banane congelée",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine chocolat",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Cacao en poudre non sucré",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre de cacahuète",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Lait d'amande",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Granola",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Pépites de chocolat noir",
+      "qty": 10,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mixer la banane congelée, le yaourt grec, la poudre de protéines chocolat, le cacao et le lait d'amande jusqu'à texture crémeuse et épaisse.",
+    "Verser dans un bol et napper de beurre de cacahuète en filet.",
+    "Garnir de granola et de pépites de chocolat noir, puis servir aussitôt."
+  ]
+},
+{
+  "id": "R603",
+  "name": "Overnight Oats Passion Coco",
+  "category": "pastry",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🥥",
+  "origin": "🌍",
+  "tags": [
+    "high-protein",
+    "viral",
+    "instagram"
+  ],
+  "servings": 1,
+  "prepTime": 8,
+  "cookTime": 0,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 410,
+    "proteinGrams": 26,
+    "carbsGrams": 58,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Flocons d'avoine",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Yaourt grec 0%",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine vanille",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Lait de coco allégé",
+      "qty": 100,
+      "unit": "ml"
+    },
+    {
+      "name": "Fruit de la passion",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Noix de coco râpée",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Graines de chia",
+      "qty": 10,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mélanger les flocons d'avoine, le yaourt grec, la poudre de protéines, les graines de chia et le lait de coco dans un bocal.",
+    "Remuer vigoureusement, couvrir et réfrigérer toute une nuit (minimum 6h).",
+    "Au moment de servir, couper les fruits de la passion en deux, verser la pulpe sur les oats et parsemer de noix de coco râpée."
+  ]
+},
+{
+  "id": "R604",
+  "name": "Protein Cookies Choco Chunk Soft",
+  "category": "american",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🍪",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "instagram"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 12,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 290,
+    "proteinGrams": 20,
+    "carbsGrams": 30,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Protéine chocolat",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Farine d'avoine",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre de cacahuète",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc d'œuf",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Erythritol",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Pépites de chocolat noir 85%",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Bicarbonate",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 2,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 175°C. Mélanger la farine d'avoine, la poudre de protéines, l'érythritol et le bicarbonate dans un bol.",
+    "Incorporer le beurre de cacahuète, les blancs d'œufs et l'extrait de vanille. Mélanger jusqu'à formation d'une pâte homogène, puis plier les pépites de chocolat.",
+    "Former des boules de pâte sur une plaque recouverte de papier cuisson, aplatir légèrement et cuire 10-12 min jusqu'à ce que les bords soient dorés. Laisser refroidir avant de déguster."
+  ]
+},
+{
+  "id": "R605",
+  "name": "Brownie Haricots Noirs Sans Farine",
+  "category": "american",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🫘",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "instagram"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 270,
+    "proteinGrams": 18,
+    "carbsGrams": 27,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Haricots noirs cuits",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Cacao en poudre non sucré",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine chocolat",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Œuf entier",
+      "qty": 55,
+      "unit": "g"
+    },
+    {
+      "name": "Erythritol",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de coco",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 2,
+      "unit": "ml"
+    },
+    {
+      "name": "Pépites de chocolat noir",
+      "qty": 10,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 180°C. Égoutter et rincer les haricots noirs, puis les mixer finement avec l'œuf, l'huile de coco et l'extrait de vanille.",
+    "Incorporer le cacao, la poudre de protéines et l'érythritol. Mélanger jusqu'à obtenir une pâte lisse et homogène.",
+    "Verser dans un moule à brownie huilé, parsemer de pépites de chocolat et cuire 18-20 min. Laisser refroidir complètement avant de découper en carrés."
+  ]
+},
+{
+  "id": "R606",
+  "name": "Barres Granola Maison Miel Avoine",
+  "category": "pastry",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🍯",
+  "origin": "🌍",
+  "tags": [
+    "high-protein",
+    "viral",
+    "instagram"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 280,
+    "proteinGrams": 15,
+    "carbsGrams": 37,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Flocons d'avoine",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine vanille",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Miel",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre d'amande",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Graines de tournesol",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Canneberges séchées",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de coco",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 170°C. Mélanger les flocons d'avoine, la poudre de protéines, les graines de tournesol et les canneberges dans un saladier.",
+    "Faire fondre le miel, le beurre d'amande et l'huile de coco ensemble, puis verser sur le mélange sec et bien combiner.",
+    "Tasser le mélange dans un moule rectangulaire chemisé, cuire 12-15 min jusqu'à dorure, puis laisser refroidir totalement avant de couper en barres."
+  ]
+},
+{
+  "id": "R607",
+  "name": "Cookies Avoine Raisins Noix Coco",
+  "category": "american",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🥜",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "instagram"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 12,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 260,
+    "proteinGrams": 14,
+    "carbsGrams": 33,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Flocons d'avoine",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine vanille",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc d'œuf",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Raisins secs",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Noix de coco râpée",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Miel",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de coco",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Cannelle",
+      "qty": 1,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 175°C. Mélanger les flocons d'avoine, la poudre de protéines, la noix de coco râpée et la cannelle.",
+    "Ajouter le blanc d'œuf, le miel et l'huile de coco fondue. Mélanger pour obtenir une pâte collante, puis incorporer les raisins secs.",
+    "Déposer des petits tas sur une plaque recouverte de papier cuisson, aplatir et cuire 10-12 min jusqu'à dorure légère."
+  ]
+},
+{
+  "id": "R608",
+  "name": "Biscotti Amandes Canneberges",
+  "category": "italian",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🫐",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "viral",
+    "instagram"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 30,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 240,
+    "proteinGrams": 12,
+    "carbsGrams": 30,
+    "fatGrams": 8
+  },
+  "ingredients": [
+    {
+      "name": "Farine d'amande",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine vanille",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc d'œuf",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Erythritol",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Amandes entières",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Canneberges séchées",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Zeste d'orange",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 2,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 160°C. Mélanger la farine d'amande, la poudre de protéines et l'érythritol. Incorporer le blanc d'œuf, l'extrait de vanille et le zeste d'orange pour former une pâte ferme.",
+    "Ajouter les amandes et les canneberges, façonner en un boudin aplati sur une plaque et cuire 20-22 min jusqu'à ce que la pâte soit ferme.",
+    "Sortir du four, laisser tiédir 10 min, trancher en diagonale en biscotti de 1 cm d'épaisseur, remettre à plat et cuire encore 8-10 min jusqu'à ce qu'ils soient croustillants."
+  ]
+},
+{
+  "id": "R609",
+  "name": "Rochers Coco Protéinés Chocolat Noir",
+  "category": "pastry",
+  "mealTypes": [
+    "snack"
+  ],
+  "emoji": "🍫",
+  "origin": "🌍",
+  "tags": [
+    "high-protein",
+    "viral",
+    "instagram"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 5,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 270,
+    "proteinGrams": 16,
+    "carbsGrams": 29,
+    "fatGrams": 10
+  },
+  "ingredients": [
+    {
+      "name": "Noix de coco râpée",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine vanille",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc d'œuf",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Erythritol",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Chocolat noir 85%",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Extrait de vanille",
+      "qty": 2,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 170°C. Mélanger la noix de coco râpée, la poudre de protéines et l'érythritol dans un bol.",
+    "Incorporer les blancs d'œufs et l'extrait de vanille. Former des petits rochers avec les mains humides et les placer sur une plaque. Cuire 12-14 min jusqu'à dorure.",
+    "Faire fondre le chocolat noir au bain-marie, tremper la base de chaque rocher dans le chocolat fondu et laisser figer sur une feuille de papier cuisson avant de servir."
+  ]
+},
+{
+  "id": "R610",
+  "name": "Sole Meunière Light Bocuse 2.0",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "low-carb",
+    "fish"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 12,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 38,
+    "carbsGrams": 22,
+    "fatGrams": 20
+  },
+  "ingredients": [
+    {
+      "name": "Filet de sole",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Farine de blé T80",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre demi-sel",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "ml"
+    },
+    {
+      "name": "Citron jaune",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Persil plat",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Câpres",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Sécher les filets de sole avec du papier absorbant, assaisonner sel et poivre, fariner légèrement en tapotant pour enlever l'excès.",
+    "Chauffer l'huile dans une poêle antiadhésive à feu vif, déposer les filets côté peau, cuire 2 min puis retourner délicatement et cuire 1 min supplémentaire.",
+    "Hors du feu, ajouter le beurre, le jus de citron et les câpres, napper les filets et dresser aussitôt parsemé de persil haché."
+  ]
+},
+{
+  "id": "R611",
+  "name": "Blanquette Veau Express Légère",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥩",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "comfort-food"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 25,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 489,
+    "proteinGrams": 45,
+    "carbsGrams": 30,
+    "fatGrams": 21
+  },
+  "ingredients": [
+    {
+      "name": "Épaule de veau maigre",
+      "qty": 220,
+      "unit": "g"
+    },
+    {
+      "name": "Champignons de Paris",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Carotte",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Crème fraîche allégée 15%",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Farine de blé T80",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Bouillon de volaille dégraissé",
+      "qty": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "Thym, laurier",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Jus de citron",
+      "qty": 10,
+      "unit": "ml"
+    }
+  ],
+  "steps": [
+    "Couper le veau en cubes de 3 cm, blanchir 5 min dans de l'eau bouillante salée, égoutter et réserver.",
+    "Dans une casserole, faire revenir oignon et carotte sans coloration, singer avec la farine, mouiller avec le bouillon chaud, ajouter le veau, les champignons, le thym et le laurier, cuire 20 min à couvert.",
+    "Hors du feu, incorporer la crème allégée et le jus de citron, rectifier l'assaisonnement et servir sans délai."
+  ]
+},
+{
+  "id": "R612",
+  "name": "Suprême Poulet Moutarde Ancienne",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍗",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "quick"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 18,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 490,
+    "proteinGrams": 48,
+    "carbsGrams": 16,
+    "fatGrams": 26
+  },
+  "ingredients": [
+    {
+      "name": "Suprême de poulet Label Rouge",
+      "qty": 250,
+      "unit": "g"
+    },
+    {
+      "name": "Moutarde à l'ancienne",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Crème fraîche allégée 15%",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Échalote",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "ml"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 30,
+      "unit": "ml"
+    },
+    {
+      "name": "Thym frais",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Aplatir légèrement le suprême, assaisonner généreusement, saisir à l'huile chaude 5 min côté peau jusqu'à coloration dorée, retourner et cuire 4 min.",
+    "Débarrasser le poulet, faire suer l'échalote ciselée dans la poêle, déglacer au vin blanc, réduire de moitié, ajouter la moutarde et la crème, porter à frémissement 3 min.",
+    "Remettre le suprême dans la sauce, enrober, laisser mijoter 2 min à feu doux et dresser avec le thym frais."
+  ]
+},
+{
+  "id": "R613",
+  "name": "Tartare Bœuf Façon Bocuse",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥩",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "raw",
+    "no-cook"
+  ],
+  "servings": 1,
+  "prepTime": 20,
+  "cookTime": 0,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 40,
+    "carbsGrams": 20,
+    "fatGrams": 20
+  },
+  "ingredients": [
+    {
+      "name": "Bœuf charolais rumsteck",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Jaune d'œuf",
+      "qty": 18,
+      "unit": "g"
+    },
+    {
+      "name": "Câpres",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Cornichons",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Échalote",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Moutarde de Dijon",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce Worcestershire",
+      "qty": 5,
+      "unit": "ml"
+    },
+    {
+      "name": "Tabasco",
+      "qty": 1,
+      "unit": "ml"
+    },
+    {
+      "name": "Pain de seigle grillé",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Persil plat, ciboulette",
+      "qty": 8,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Hacher le bœuf au couteau en brunoise fine, réserver au froid ; émincer finement échalote, câpres et cornichons.",
+    "Dans un cul-de-poule, mélanger le jaune d'œuf, la moutarde, le Worcestershire et le Tabasco, incorporer délicatement la viande et la garniture aromatique.",
+    "Façonner en cercle sur l'assiette froide, parsemer d'herbes ciselées et servir immédiatement avec le pain de seigle grillé."
+  ]
+},
+{
+  "id": "R614",
+  "name": "Velouté Champignons Truffé Léger",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍄",
+  "origin": "🇫🇷",
+  "tags": [
+    "gourmet",
+    "vegetarian",
+    "low-calorie",
+    "soup"
+  ],
+  "servings": 1,
+  "prepTime": 12,
+  "cookTime": 20,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 320,
+    "proteinGrams": 22,
+    "carbsGrams": 22,
+    "fatGrams": 16
+  },
+  "ingredients": [
+    {
+      "name": "Champignons de Paris",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Cèpes séchés",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Lait demi-écrémé",
+      "qty": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "Bouillon de légumes",
+      "qty": 200,
+      "unit": "ml"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de truffe",
+      "qty": 5,
+      "unit": "ml"
+    },
+    {
+      "name": "Échalote",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Maïzena",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre blanc",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Réhydrater les cèpes dans 50 ml d'eau tiède 10 min, faire suer échalote et ail sans coloration, ajouter les champignons de Paris émincés et les cèpes égouttés, saisir 5 min à feu vif.",
+    "Mouiller avec le bouillon et le lait, porter à frémissement 15 min, mixer finement, délayer la Maïzena dans le jus de trempage des cèpes filtré et incorporer pour épaissir légèrement.",
+    "Hors du feu, ajouter le fromage blanc, rectifier l'assaisonnement, verser en assiette creuse chaude et terminer d'un filet d'huile de truffe."
+  ]
+},
+{
+  "id": "R615",
+  "name": "Quenelles Brochet Sauce Nantua Light",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "fish",
+    "classic"
+  ],
+  "servings": 1,
+  "prepTime": 25,
+  "cookTime": 20,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 460,
+    "proteinGrams": 42,
+    "carbsGrams": 28,
+    "fatGrams": 20
+  },
+  "ingredients": [
+    {
+      "name": "Chair de brochet",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc d'œuf",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Semoule fine",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Lait demi-écrémé",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Bisque de homard allégée",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Crème fraîche allégée 15%",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Écrevisse décortiquée",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Beurre",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Muscade",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Mixer finement la chair de brochet refroidie avec le blanc d'œuf, la semoule, le lait chaud, la muscade, sel et poivre jusqu'à obtenir une farce lisse ; réfrigérer 15 min.",
+    "Façonner 2 quenelles à la cuillère, pocher 8 min dans de l'eau frémissante salée jusqu'à ce qu'elles gonflent et remontent, égoutter délicatement.",
+    "Chauffer la bisque avec la crème allégée, incorporer le beurre et les écrevisses, napper les quenelles et gratiner 5 min au gril."
+  ]
+},
+{
+  "id": "R616",
+  "name": "Gratin Dauphinois Allégé Butternut",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🎃",
+  "origin": "🇫🇷",
+  "tags": [
+    "vegetarian",
+    "gourmet",
+    "comfort-food",
+    "low-fat"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 35,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 350,
+    "proteinGrams": 20,
+    "carbsGrams": 36,
+    "fatGrams": 14
+  },
+  "ingredients": [
+    {
+      "name": "Butternut",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Pomme de terre",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Lait demi-écrémé",
+      "qty": 100,
+      "unit": "ml"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Gruyère râpé",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Muscade",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Thym",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 180°C, frotter un plat à gratin avec l'ail ; éplucher et mandoliner butternut et pomme de terre en tranches de 3 mm.",
+    "Mélanger le lait, le fromage blanc, la muscade, sel et poivre ; alterner couches de butternut et de pomme de terre en arrosant de la préparation lactée à chaque couche.",
+    "Parsemer de gruyère râpé et de thym, cuire 35 min jusqu'à ce que la lame d'un couteau s'enfonce sans résistance et que le dessus soit doré."
+  ]
+},
+{
+  "id": "R617",
+  "name": "Pot-au-Feu Express Haute Performance",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍲",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "low-fat",
+    "meal-prep"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 30,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 500,
+    "proteinGrams": 55,
+    "carbsGrams": 25,
+    "fatGrams": 20
+  },
+  "ingredients": [
+    {
+      "name": "Gîte de bœuf maigre",
+      "qty": 250,
+      "unit": "g"
+    },
+    {
+      "name": "Os à moelle",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Carotte",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Navet",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Poireau",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Céleri branche",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon brûlé",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Bouquet garni",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Fleur de sel, poivre en grains",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Moutarde de Dijon",
+      "qty": 15,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Placer le bœuf et l'os à moelle dans une cocotte-minute, couvrir d'eau froide, porter à ébullition, écumer soigneusement, ajouter l'oignon brûlé et le bouquet garni.",
+    "Ajouter les légumes coupés en tronçons réguliers, fermer la cocotte et cuire 25 min sous pression ; dégraisser le bouillon à l'aide d'une louche.",
+    "Servir la viande et les légumes dans une assiette creuse chaude arrosée de bouillon parfumé, accompagner de moutarde de Dijon et fleur de sel."
+  ]
+},
+{
+  "id": "R618",
+  "name": "Soufflé Fromage Sans Culpabilité",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🧀",
+  "origin": "🇫🇷",
+  "tags": [
+    "gourmet",
+    "vegetarian",
+    "high-protein",
+    "classic"
+  ],
+  "servings": 1,
+  "prepTime": 20,
+  "cookTime": 22,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 340,
+    "proteinGrams": 28,
+    "carbsGrams": 12,
+    "fatGrams": 20
+  },
+  "ingredients": [
+    {
+      "name": "Blanc d'œuf",
+      "qty": 90,
+      "unit": "g"
+    },
+    {
+      "name": "Jaune d'œuf",
+      "qty": 36,
+      "unit": "g"
+    },
+    {
+      "name": "Comté râpé",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Maïzena",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Lait demi-écrémé",
+      "qty": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "Moutarde de Dijon",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Muscade",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 190°C sans ventilation ; beurrer légèrement un ramequin de 16 cm et fariner ; préparer la béchamel légère en chauffant le lait avec la Maïzena jusqu'à épaississement, incorporer jaunes, fromage blanc, Comté, moutarde et muscade.",
+    "Monter les blancs en neige ferme avec une pincée de sel ; incorporer un tiers des blancs énergiquement dans la base fromagère pour l'alléger, puis incorporer délicatement le reste en soulevant la masse.",
+    "Verser dans le ramequin en lissant le dessus, passer le pouce tout autour du bord pour créer un chapeau, enfourner immédiatement 22 min sans ouvrir le four et servir à la sortie du four."
+  ]
+},
+{
+  "id": "R619",
+  "name": "Poulet Rôti Citron Thym Ultra-Tendre",
+  "category": "french",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍋",
+  "origin": "🇫🇷",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "low-carb",
+    "roasted"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 30,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 490,
+    "proteinGrams": 52,
+    "carbsGrams": 30,
+    "fatGrams": 18
+  },
+  "ingredients": [
+    {
+      "name": "Suprême de poulet avec os",
+      "qty": 280,
+      "unit": "g"
+    },
+    {
+      "name": "Citron jaune",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Thym frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Ail en chemise",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "ml"
+    },
+    {
+      "name": "Pomme de terre grenaille",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Fleur de sel",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Poivre noir concassé",
+      "qty": 1,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 200°C ; badigeonner le suprême d'huile d'olive, zester le citron sur la chair, glisser des brins de thym sous la peau et frotter avec la fleur de sel et le poivre.",
+    "Disposer dans un plat avec les gousses d'ail en chemise, les grenailles coupées en deux et les rondelles de citron, enfourner 28 à 30 min en arrosant à mi-cuisson jusqu'à ce que la peau soit croustillante et dorée.",
+    "Laisser reposer 5 min hors du four sous une feuille d'aluminium, dresser avec les grenailles rôties et les gousses d'ail confites à presser sur la viande."
+  ]
+},
+{
+  "id": "R620",
+  "name": "Osso Buco Milanais Light",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥩",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "slow-cook"
+  ],
+  "servings": 1,
+  "prepTime": 20,
+  "cookTime": 90,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 511,
+    "proteinGrams": 50,
+    "carbsGrams": 35,
+    "fatGrams": 19
+  },
+  "ingredients": [
+    {
+      "name": "Jarret de veau (osso buco)",
+      "qty": 250,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates pelées en dés",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon blanc",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Carotte",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Céleri",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Bouillon de veau dégraissé",
+      "qty": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Zeste de citron",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Persil plat haché",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Farine de riz",
+      "qty": 10,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Fariner légèrement le jarret de veau des deux côtés avec la farine de riz.",
+    "Dans une cocotte, chauffer l'huile d'olive et faire dorer le jarret 3 min de chaque côté à feu vif.",
+    "Retirer la viande, faire revenir l'oignon, la carotte et le céleri émincés 5 min à feu moyen.",
+    "Ajouter l'ail écrasé, déglacer avec le vin blanc et laisser réduire de moitié.",
+    "Incorporer les tomates en dés et le bouillon, remettre le jarret, couvrir et mijoter 80 min à feu doux.",
+    "Préparer la gremolata : mélanger le zeste de citron, le persil haché et une gousse d'ail râpée.",
+    "Servir l'osso buco nappé de sauce, parsemé de gremolata."
+  ]
+},
+{
+  "id": "R621",
+  "name": "Risotto Truffes Noires Allégé",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍚",
+  "origin": "🇮🇹",
+  "tags": [
+    "gourmet",
+    "vegetarian",
+    "comfort-food"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 419,
+    "proteinGrams": 28,
+    "carbsGrams": 52,
+    "fatGrams": 11
+  },
+  "ingredients": [
+    {
+      "name": "Riz arborio",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Truffe noire en lamelles (ou truffe en conserve)",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Bouillon de légumes chaud",
+      "qty": 400,
+      "unit": "ml"
+    },
+    {
+      "name": "Échalote",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile de truffe",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine de lactosérum neutre",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre noir",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Faire revenir l'échalote émincée dans l'huile de truffe à feu moyen 2 min.",
+    "Ajouter le riz arborio et nacrer 2 min en remuant constamment.",
+    "Déglacer avec le vin blanc, laisser absorber.",
+    "Ajouter le bouillon chaud louche par louche en remuant, sur 18 min environ.",
+    "Hors du feu, incorporer le fromage blanc, le parmesan et la protéine de lactosérum dissoute dans un peu de bouillon.",
+    "Disposer les lamelles de truffe sur le risotto, saler, poivrer et servir immédiatement."
+  ]
+},
+{
+  "id": "R622",
+  "name": "Saltimbocca Poulet Sauge Prosciutto",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍗",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "quick"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 465,
+    "proteinGrams": 48,
+    "carbsGrams": 30,
+    "fatGrams": 17
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Prosciutto di Parma (tranches fines)",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Feuilles de sauge fraîche",
+      "qty": 6,
+      "unit": "g"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Bouillon de poulet dégraissé",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Farine de riz",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Haricots verts cuits",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Citron (jus)",
+      "qty": 15,
+      "unit": "ml"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Aplatir le blanc de poulet à 1 cm d'épaisseur, saler et poivrer légèrement.",
+    "Poser 2-3 feuilles de sauge sur chaque escalope, enrouler une tranche de prosciutto autour.",
+    "Fariner légèrement et faire dorer dans l'huile 3 min de chaque côté côté prosciutto en premier.",
+    "Déglacer avec le vin blanc, ajouter le bouillon et laisser réduire 5 min à feu vif.",
+    "Arroser de jus de citron et servir avec les haricots verts réchauffés."
+  ]
+},
+{
+  "id": "R623",
+  "name": "Pasta al Limone Gambas",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍋",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "seafood",
+    "gourmet"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 487,
+    "proteinGrams": 42,
+    "carbsGrams": 46,
+    "fatGrams": 15
+  },
+  "ingredients": [
+    {
+      "name": "Pâtes linguine complètes",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Gambas crues décortiquées",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Citron (jus + zeste)",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Basilic frais",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Piment rouge (optionnel)",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Cuire les linguine al dente selon les indications du paquet, réserver 50 ml d'eau de cuisson.",
+    "Dans une poêle, chauffer l'huile d'olive, faire revenir l'ail haché et le piment 1 min.",
+    "Ajouter les gambas, cuire 2 min de chaque côté jusqu'à coloration rose.",
+    "Baisser le feu, incorporer le fromage blanc, le jus et le zeste de citron avec un peu d'eau de cuisson.",
+    "Ajouter les pâtes égouttées, bien enrober, parsemer de parmesan et de basilic ciselé, servir."
+  ]
+},
+{
+  "id": "R624",
+  "name": "Parmigiana Aubergines Light",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍆",
+  "origin": "🇮🇹",
+  "tags": [
+    "vegetarian",
+    "gourmet",
+    "comfort-food"
+  ],
+  "servings": 1,
+  "prepTime": 20,
+  "cookTime": 35,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 421,
+    "proteinGrams": 32,
+    "carbsGrams": 44,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Aubergine",
+      "qty": 300,
+      "unit": "g"
+    },
+    {
+      "name": "Blanc de poulet haché",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Mozzarella allégée",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce tomate maison (tomates, ail, basilic)",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Basilic frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 200°C. Couper les aubergines en tranches de 1 cm, saler et laisser dégorger 10 min.",
+    "Sécher les tranches, les badigeonner légèrement d'huile d'olive et les faire griller au four 15 min.",
+    "Cuire le blanc de poulet haché dans une poêle antiadhésive avec l'ail, assaisonner.",
+    "Dans un plat, alterner couches d'aubergines grillées, sauce tomate, poulet haché et mozzarella.",
+    "Terminer par du parmesan râpé et enfourner 20 min jusqu'à gratinage doré.",
+    "Laisser reposer 5 min, parsemer de basilic frais et servir."
+  ]
+},
+{
+  "id": "R625",
+  "name": "Involtini Veau Épinards Parmesan",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥩",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "low-carb"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 20,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 459,
+    "proteinGrams": 45,
+    "carbsGrams": 27,
+    "fatGrams": 19
+  },
+  "ingredients": [
+    {
+      "name": "Escalope de veau fine",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Épinards frais",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Ricotta allégée",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Prosciutto di Parma",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Bouillon de veau",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre, muscade",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Faire tomber les épinards à la poêle avec l'ail 2 min, presser pour éliminer l'eau, hacher grossièrement.",
+    "Mélanger les épinards avec la ricotta, le parmesan, sel, poivre et une pincée de muscade.",
+    "Aplatir les escalopes, déposer une tranche de prosciutto puis la farce aux épinards, rouler et ficeler.",
+    "Faire dorer les involtini dans l'huile d'olive 3 min sur toutes les faces.",
+    "Déglacer avec le vin blanc, ajouter le bouillon, couvrir et cuire 15 min à feu doux.",
+    "Réduire la sauce à feu vif 2 min, napper les involtini et servir."
+  ]
+},
+{
+  "id": "R626",
+  "name": "Acqua Pazza Poisson Court-Bouillon",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "light",
+    "seafood",
+    "low-carb"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 20,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 380,
+    "proteinGrams": 40,
+    "carbsGrams": 28,
+    "fatGrams": 12
+  },
+  "ingredients": [
+    {
+      "name": "Filet de daurade ou de bar",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates cerises",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Olives noires dénoyautées",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Câpres",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 80,
+      "unit": "ml"
+    },
+    {
+      "name": "Eau",
+      "qty": 150,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Persil plat",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Piment rouge",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Dans une grande poêle, chauffer l'huile d'olive, faire revenir l'ail émincé et le piment 1 min.",
+    "Ajouter les tomates cerises coupées en deux, cuire 3 min jusqu'à ce qu'elles ramollissent.",
+    "Verser le vin blanc et l'eau, ajouter les câpres et les olives, porter à frémissement.",
+    "Déposer le filet de poisson dans ce court-bouillon, couvrir et cuire 8-10 min selon l'épaisseur.",
+    "Parsemer de persil plat haché et servir directement dans la poêle avec du pain grillé (optionnel)."
+  ]
+},
+{
+  "id": "R627",
+  "name": "Cacio e Pepe Protéiné Légère",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🧀",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "comfort-food"
+  ],
+  "servings": 1,
+  "prepTime": 5,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 481,
+    "proteinGrams": 39,
+    "carbsGrams": 52,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Spaghetti de konjac ou spaghetti complets",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Pecorino Romano râpé",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine de lactosérum neutre",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Poivre noir fraîchement moulu",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Eau de cuisson des pâtes",
+      "qty": 100,
+      "unit": "ml"
+    },
+    {
+      "name": "Sel",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Cuire les spaghetti al dente, réserver 100 ml d'eau de cuisson amidonnée.",
+    "Griller le poivre noir concassé à sec dans une poêle 1 min pour le torréfier.",
+    "Hors du feu, mélanger le pecorino et le parmesan râpés avec le fromage blanc et la protéine de lactosérum.",
+    "Ajouter l'eau de cuisson chaude petit à petit en remuant pour créer une crème lisse sans grumeaux.",
+    "Incorporer les pâtes égouttées dans la crème au fromage, mélanger vigoureusement hors du feu.",
+    "Servir immédiatement avec une généreuse quantité de poivre fraîchement moulu."
+  ]
+},
+{
+  "id": "R628",
+  "name": "Branzino al Forno Limone Capperi",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇮🇹",
+  "tags": [
+    "high-protein",
+    "light",
+    "seafood",
+    "low-carb"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 409,
+    "proteinGrams": 44,
+    "carbsGrams": 20,
+    "fatGrams": 17
+  },
+  "ingredients": [
+    {
+      "name": "Bar (branzino) entier vidé",
+      "qty": 300,
+      "unit": "g"
+    },
+    {
+      "name": "Citron tranché",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Câpres",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Olives vertes dénoyautées",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates cerises",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Thym, romarin frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Vin blanc sec",
+      "qty": 50,
+      "unit": "ml"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préchauffer le four à 200°C. Entailler le bar sur les flancs, assaisonner l'intérieur de sel, poivre et herbes.",
+    "Farcir la cavité avec des tranches de citron, de l'ail écrasé et des brins de romarin.",
+    "Placer le poisson dans un plat, entourer des tomates cerises, des câpres et des olives.",
+    "Arroser d'huile d'olive et de vin blanc, couvrir de papier aluminium et enfourner 15 min.",
+    "Retirer le papier, poursuivre la cuisson 10 min pour dorer la peau.",
+    "Servir directement dans le plat avec le jus de cuisson citronné."
+  ]
+},
+{
+  "id": "R629",
+  "name": "Polenta Crémeuse Champignons Sauvages",
+  "category": "italian",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍄",
+  "origin": "🇮🇹",
+  "tags": [
+    "vegetarian",
+    "gourmet",
+    "comfort-food"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 381,
+    "proteinGrams": 26,
+    "carbsGrams": 49,
+    "fatGrams": 9
+  },
+  "ingredients": [
+    {
+      "name": "Polenta à cuisson rapide",
+      "qty": 70,
+      "unit": "g"
+    },
+    {
+      "name": "Champignons sauvages mélangés (girolles, cèpes, shiitake)",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Protéine de lactosérum neutre",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0%",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Bouillon de légumes chaud",
+      "qty": 300,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Échalote",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Thym frais",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Persil plat haché",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 2,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Porter le bouillon à ébullition, verser la polenta en pluie en fouettant constamment.",
+    "Cuire 5 min à feu doux en remuant, incorporer hors du feu le fromage blanc, le parmesan et la protéine dissoute.",
+    "Dans une poêle, faire sauter l'échalote et l'ail dans l'huile d'olive 2 min.",
+    "Ajouter les champignons nettoyés et coupés, cuire à feu vif 8-10 min jusqu'à évaporation de l'eau.",
+    "Assaisonner les champignons de thym, sel et poivre, incorporer le persil en fin de cuisson.",
+    "Dresser la polenta crémeuse dans un bol, napper des champignons sauvages et servir."
+  ]
+},
+{
+  "id": "R630",
+  "name": "Smash Burger Dinde Truffe",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍔",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "gourmet"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 489,
+    "proteinGrams": 45,
+    "carbsGrams": 39,
+    "fatGrams": 17
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de dinde haché",
+      "qty": 180,
+      "unit": "g"
+    },
+    {
+      "name": "Brioche burger complète",
+      "qty": 70,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage de chèvre frais",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Huile de truffe",
+      "qty": 5,
+      "unit": "ml"
+    },
+    {
+      "name": "Roquette",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Tomate",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Oignon rouge",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Moutarde à l'ancienne",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Façonner la viande en boule loose de 180 g sans trop la travailler.",
+    "Chauffer une poêle en fonte à feu vif jusqu'à légère fumée, déposer la boule et écraser fermement avec une spatule pour obtenir un galette fine ; cuire 2 min par face.",
+    "Toaster la brioche, tartiner de moutarde, poser le smash patty, arroser d'huile de truffe, garnir de fromage de chèvre, roquette, tomate et oignon rouge."
+  ]
+},
+{
+  "id": "R631",
+  "name": "Lobster Roll Light Céleri Citron",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🦞",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "light",
+    "gourmet"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 10,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 420,
+    "proteinGrams": 38,
+    "carbsGrams": 31,
+    "fatGrams": 16
+  },
+  "ingredients": [
+    {
+      "name": "Chair de homard cuit",
+      "qty": 160,
+      "unit": "g"
+    },
+    {
+      "name": "Hot dog bun brioché",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Céleri branche",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0 %",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Mayo légère",
+      "qty": 15,
+      "unit": "g"
+    },
+    {
+      "name": "Citron jaune (jus)",
+      "qty": 20,
+      "unit": "ml"
+    },
+    {
+      "name": "Ciboulette fraîche",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Paprika fumé",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Mélanger la chair de homard effilochée avec fromage blanc, mayo légère, jus de citron, céleri coupé en brunoise, ciboulette ciselée, sel et poivre.",
+    "Toaster légèrement le hot dog bun à sec dans une poêle anti-adhésive 1 min par face.",
+    "Garnir généreusement le bun du mélange homard, saupoudrer de paprika fumé et servir immédiatement."
+  ]
+},
+{
+  "id": "R632",
+  "name": "BBQ Chicken Wings Air Fryer Healthy",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🍗",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "air-fryer",
+    "bbq"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 459,
+    "proteinGrams": 42,
+    "carbsGrams": 30,
+    "fatGrams": 19
+  },
+  "ingredients": [
+    {
+      "name": "Ailes de poulet (sans peau)",
+      "qty": 280,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce BBQ sans sucre ajouté",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Ail en poudre",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Paprika fumé",
+      "qty": 3,
+      "unit": "g"
+    },
+    {
+      "name": "Piment de Cayenne",
+      "qty": 1,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive spray",
+      "qty": 5,
+      "unit": "ml"
+    },
+    {
+      "name": "Céleri branche",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0 %",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Sécher les ailes de poulet, les assaisonner avec ail, paprika, Cayenne, sel et poivre, puis vaporiser d'huile d'olive.",
+    "Cuire à l'air fryer à 200 °C pendant 20 min en retournant à mi-cuisson, puis badigeonner de sauce BBQ et cuire encore 5 min.",
+    "Servir avec bâtonnets de céleri et fromage blanc nature en dip."
+  ]
+},
+{
+  "id": "R633",
+  "name": "Salmon Poke Bowl Hawaii Style",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🐟",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "bowl",
+    "healthy"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 20,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 470,
+    "proteinGrams": 40,
+    "carbsGrams": 46,
+    "fatGrams": 14
+  },
+  "ingredients": [
+    {
+      "name": "Saumon frais (sashimi grade)",
+      "qty": 160,
+      "unit": "g"
+    },
+    {
+      "name": "Riz à sushi cuit",
+      "qty": 130,
+      "unit": "g"
+    },
+    {
+      "name": "Edamame cuit",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Concombre",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Mangue",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Avocat",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce soja légère",
+      "qty": 15,
+      "unit": "ml"
+    },
+    {
+      "name": "Huile de sésame",
+      "qty": 5,
+      "unit": "ml"
+    },
+    {
+      "name": "Graines de sésame",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Gingembre frais râpé",
+      "qty": 5,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Couper le saumon en cubes de 2 cm, le mariner 10 min avec sauce soja et huile de sésame.",
+    "Cuire le riz et le laisser refroidir légèrement ; disposer dans un bol.",
+    "Garnir le bol de saumon mariné, edamame, concombre en rondelles, mangue, avocat en tranches et saupoudrer de sésame et gingembre râpé."
+  ]
+},
+{
+  "id": "R634",
+  "name": "Clam Chowder Light Nouvelle-Angleterre",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥣",
+  "origin": "🇺🇸",
+  "tags": [
+    "light",
+    "comfort-food",
+    "soup"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 381,
+    "proteinGrams": 32,
+    "carbsGrams": 34,
+    "fatGrams": 13
+  },
+  "ingredients": [
+    {
+      "name": "Palourdes en conserve (égouttées)",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Pomme de terre",
+      "qty": 120,
+      "unit": "g"
+    },
+    {
+      "name": "Lait de coco allégé",
+      "qty": 100,
+      "unit": "ml"
+    },
+    {
+      "name": "Bouillon de poisson",
+      "qty": 200,
+      "unit": "ml"
+    },
+    {
+      "name": "Oignon",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Céleri branche",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Maïzena",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Thym frais",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Faire revenir oignon et céleri dans une casserole anti-adhésive à sec 3 min, ajouter les pommes de terre coupées en dés et le bouillon de poisson, cuire 15 min.",
+    "Délayer la maïzena dans le lait de coco allégé, verser dans la casserole et cuire 3 min en remuant jusqu'à légère épaisseur.",
+    "Ajouter les palourdes, le thym, assaisonner et réchauffer 2 min sans ébullition."
+  ]
+},
+{
+  "id": "R635",
+  "name": "Chicken Caesar Wrap Viral TikTok",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🌯",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "viral",
+    "wrap"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 441,
+    "proteinGrams": 38,
+    "carbsGrams": 52,
+    "fatGrams": 9
+  },
+  "ingredients": [
+    {
+      "name": "Escalope de poulet grillée",
+      "qty": 150,
+      "unit": "g"
+    },
+    {
+      "name": "Grande tortilla complète",
+      "qty": 70,
+      "unit": "g"
+    },
+    {
+      "name": "Romaine ciselée",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Parmesan râpé",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Sauce Caesar légère",
+      "qty": 25,
+      "unit": "g"
+    },
+    {
+      "name": "Câpres",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Anchois (filets)",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Citron (jus)",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Poivre noir",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Griller l'escalope de poulet assaisonnée sel/poivre 6-7 min par face, laisser reposer 2 min puis trancher.",
+    "Mélanger la romaine, sauce Caesar, parmesan, câpres, anchois et jus de citron dans un bol.",
+    "Étaler la garniture au centre de la tortilla, ajouter le poulet tranché, rouler fermement et couper en deux en diagonale."
+  ]
+},
+{
+  "id": "R636",
+  "name": "Eggs Benedict Hollandaise Light",
+  "category": "american",
+  "mealTypes": [
+    "breakfast"
+  ],
+  "emoji": "🍳",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "brunch",
+    "gourmet"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 15,
+  "difficulty": 3,
+  "baseNutrition": {
+    "calories": 430,
+    "proteinGrams": 35,
+    "carbsGrams": 32,
+    "fatGrams": 18
+  },
+  "ingredients": [
+    {
+      "name": "Œuf entier",
+      "qty": 2,
+      "unit": "unité"
+    },
+    {
+      "name": "Jambon de dinde tranché",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Muffin anglais complet",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0 %",
+      "qty": 60,
+      "unit": "g"
+    },
+    {
+      "name": "Jaune d'œuf",
+      "qty": 1,
+      "unit": "unité"
+    },
+    {
+      "name": "Citron (jus)",
+      "qty": 15,
+      "unit": "ml"
+    },
+    {
+      "name": "Moutarde de Dijon",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Vinaigre blanc",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Ciboulette",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Paprika",
+      "qty": 1,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préparer la hollandaise légère : fouetter jaune d'œuf, fromage blanc, jus de citron et moutarde à feu très doux 5 min jusqu'à légère épaisseur ; ne pas faire bouillir.",
+    "Pocher les 2 œufs entiers 3 min dans de l'eau frémissante vinaigrée, toaster le muffin et réchauffer le jambon de dinde.",
+    "Assembler : muffin, jambon, œuf poché, napper de hollandaise légère, décorer de ciboulette et paprika."
+  ]
+},
+{
+  "id": "R637",
+  "name": "NY Strip Steak Sauce Chimichurri",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥩",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "gourmet",
+    "steak"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 10,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 480,
+    "proteinGrams": 52,
+    "carbsGrams": 14,
+    "fatGrams": 24
+  },
+  "ingredients": [
+    {
+      "name": "NY Strip steak (faux-filet)",
+      "qty": 220,
+      "unit": "g"
+    },
+    {
+      "name": "Persil plat frais",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Ail",
+      "qty": 10,
+      "unit": "g"
+    },
+    {
+      "name": "Huile d'olive",
+      "qty": 15,
+      "unit": "ml"
+    },
+    {
+      "name": "Vinaigre de vin rouge",
+      "qty": 10,
+      "unit": "ml"
+    },
+    {
+      "name": "Piment rouge frais",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Origan séché",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Sel de mer",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Poivre noir concassé",
+      "qty": 1,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    "Préparer le chimichurri : mixer finement persil, ail, piment, origan, vinaigre et huile d'olive ; assaisonner et laisser reposer 10 min.",
+    "Sortir le steak 15 min avant cuisson, assaisonner généreusement des deux côtés ; saisir 3 min par face dans une poêle en fonte très chaude pour une cuisson saignante à point.",
+    "Laisser reposer le steak 3 min sous alu, trancher en biais et napper généreusement de chimichurri frais."
+  ]
+},
+{
+  "id": "R638",
+  "name": "Mac Cheese Cauliflower Gratin Healthy",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🧀",
+  "origin": "🇺🇸",
+  "tags": [
+    "comfort-food",
+    "healthy",
+    "gratin"
+  ],
+  "servings": 1,
+  "prepTime": 10,
+  "cookTime": 25,
+  "difficulty": 2,
+  "baseNutrition": {
+    "calories": 400,
+    "proteinGrams": 28,
+    "carbsGrams": 36,
+    "fatGrams": 16
+  },
+  "ingredients": [
+    {
+      "name": "Chou-fleur",
+      "qty": 200,
+      "unit": "g"
+    },
+    {
+      "name": "Macaronis complets cuits",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Fromage blanc 0 %",
+      "qty": 100,
+      "unit": "g"
+    },
+    {
+      "name": "Cheddar allégé râpé",
+      "qty": 40,
+      "unit": "g"
+    },
+    {
+      "name": "Lait demi-écrémé",
+      "qty": 60,
+      "unit": "ml"
+    },
+    {
+      "name": "Maïzena",
+      "qty": 8,
+      "unit": "g"
+    },
+    {
+      "name": "Moutarde de Dijon",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Paprika fumé",
+      "qty": 2,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre, noix de muscade",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Cuire le chou-fleur en fleurettes à la vapeur 8 min, réserver ; préchauffer le four à 200 °C.",
+    "Préparer la sauce : chauffer lait, maïzena délayée et fromage blanc en remuant 3 min, incorporer moutarde, paprika, muscade et la moitié du cheddar.",
+    "Mélanger macaronis et chou-fleur dans un plat à gratin, napper de sauce, parsemer du reste de cheddar et gratiner au four 12 min."
+  ]
+},
+{
+  "id": "R639",
+  "name": "Cobb Salad Revisitée Premium",
+  "category": "american",
+  "mealTypes": [
+    "lunch",
+    "dinner"
+  ],
+  "emoji": "🥗",
+  "origin": "🇺🇸",
+  "tags": [
+    "high-protein",
+    "salad",
+    "premium"
+  ],
+  "servings": 1,
+  "prepTime": 15,
+  "cookTime": 10,
+  "difficulty": 1,
+  "baseNutrition": {
+    "calories": 450,
+    "proteinGrams": 40,
+    "carbsGrams": 32,
+    "fatGrams": 18
+  },
+  "ingredients": [
+    {
+      "name": "Blanc de poulet grillé",
+      "qty": 130,
+      "unit": "g"
+    },
+    {
+      "name": "Œuf dur",
+      "qty": 1,
+      "unit": "unité"
+    },
+    {
+      "name": "Bacon de dinde grillé",
+      "qty": 30,
+      "unit": "g"
+    },
+    {
+      "name": "Avocat",
+      "qty": 50,
+      "unit": "g"
+    },
+    {
+      "name": "Tomates cerises",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Romaine",
+      "qty": 80,
+      "unit": "g"
+    },
+    {
+      "name": "Bleu léger émietté",
+      "qty": 20,
+      "unit": "g"
+    },
+    {
+      "name": "Vinaigrette balsamique légère",
+      "qty": 20,
+      "unit": "ml"
+    },
+    {
+      "name": "Ciboulette",
+      "qty": 5,
+      "unit": "g"
+    },
+    {
+      "name": "Sel, poivre",
+      "qty": 1,
+      "unit": "pincée"
+    }
+  ],
+  "steps": [
+    "Griller le blanc de poulet 6 min par face et le bacon de dinde 2 min, puis trancher ; cuire l'œuf dur 9 min, écaler et couper en quartiers.",
+    "Dresser la romaine en base dans un grand bol, disposer en rangées séparées le poulet, œuf, bacon, avocat en tranches, tomates cerises et bleu émietté.",
+    "Arroser de vinaigrette balsamique, assaisonner, parsemer de ciboulette et servir aussitôt."
+  ]
+}
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
