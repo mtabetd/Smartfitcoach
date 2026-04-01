@@ -438,44 +438,62 @@ function renderStep1(p) {
   p.appendChild(photoDivider);
 
   var photoWrap = h('div', {style: 'text-align:center;margin-bottom:16px'});
-  if (S.profilePhoto) {
-    var _photoCircle = h('div', {'class': 'photo-upload has-photo', style: 'width:96px;height:96px;border-radius:50%;border:2px solid var(--border,#D8D8D0);display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;overflow:hidden'});
-    var img = h('img', {src: S.profilePhoto, style: 'width:100%;height:100%;object-fit:cover;display:block'});
-    _photoCircle.appendChild(img);
-    photoWrap.appendChild(_photoCircle);
-    photoWrap.appendChild(h('br'));
-    photoWrap.appendChild(h('button', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border,#D8D8D0);padding:6px 16px;cursor:pointer;color:var(--grey,#6B6B65)', onclick: function() { S.profilePhoto = null; window.render(); }}, 'Supprimer'));
-  } else {
-    var placeholder = h('div', {'class': 'photo-upload', style: 'width:96px;height:96px;border-radius:50%;border:2px dashed var(--border,#D8D8D0);display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;color:var(--grey,#6B6B65);font-size:28px;cursor:pointer'}, '\uD83D\uDCF7');
-    photoWrap.appendChild(placeholder);
-  }
+  // fileInput declared early so placeholder onclick can reference it
   var fileInput = h('input', {type: 'file', accept: 'image/*', style: 'display:none', onchange: function(e) {
     var file = e.target.files && e.target.files[0];
     if (!file) return;
-    if (file.size > 10 * 1024 * 1024) { alert('Image trop volumineuse (max 10 Mo)'); return; }
+    if (file.size > 10 * 1024 * 1024) { alert('Image trop volumineuse (max 10\u00a0Mo)'); return; }
     var reader = new FileReader();
     reader.onload = function(ev) {
-      var img = new Image();
-      img.onload = function() {
+      var _loadImg = new Image();
+      _loadImg.onload = function() {
         var canvas = document.createElement('canvas');
         var size = 256;
         canvas.width = size; canvas.height = size;
         var ctx = canvas.getContext('2d');
-        // Crop center square
-        var sw = Math.min(img.width, img.height);
-        var sx = (img.width - sw) / 2;
-        var sy = (img.height - sw) / 2;
-        ctx.drawImage(img, sx, sy, sw, sw, 0, 0, size, size);
+        // Crop to center square
+        var sw = Math.min(_loadImg.width, _loadImg.height);
+        var sx = (_loadImg.width - sw) / 2;
+        var sy = (_loadImg.height - sw) / 2;
+        ctx.drawImage(_loadImg, sx, sy, sw, sw, 0, 0, size, size);
         S.profilePhoto = canvas.toDataURL('image/jpeg', 0.7);
         window.render();
       };
-      img.src = ev.target.result;
+      _loadImg.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   }});
   photoWrap.appendChild(fileInput);
+  if (S.profilePhoto) {
+    // has-photo: solid border via CSS .photo-upload.has-photo (border-color via CSS var)
+    var _photoCircle = h('div', {
+      'class': 'photo-upload has-photo',
+      style: 'width:96px;height:96px;border-radius:50%;border-width:2px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;overflow:hidden;cursor:pointer',
+      onclick: function() { fileInput.click(); },
+      title: 'Changer la photo'
+    });
+    _photoCircle.appendChild(h('img', {src: S.profilePhoto, style: 'width:100%;height:100%;object-fit:cover;display:block'}));
+    photoWrap.appendChild(_photoCircle);
+    photoWrap.appendChild(h('br'));
+    photoWrap.appendChild(h('button', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border,#D8D8D0);padding:6px 16px;cursor:pointer;color:var(--grey,#6B6B65);margin-top:4px',
+      onclick: function() { S.profilePhoto = null; window.render(); }
+    }, 'SUPPRIMER'));
+  } else {
+    // Placeholder: dashed circle, clicking it triggers file input directly
+    var placeholder = h('div', {
+      'class': 'photo-upload',
+      style: 'width:96px;height:96px;border-radius:50%;border:2px dashed var(--border,#D8D8D0);display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;color:var(--grey,#6B6B65);font-size:28px;cursor:pointer',
+      onclick: function() { fileInput.click(); },
+      title: 'Ajouter une photo'
+    }, '\uD83D\uDCF7');
+    photoWrap.appendChild(placeholder);
+  }
   photoWrap.appendChild(h('br'));
-  photoWrap.appendChild(h('button', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border,#D8D8D0);padding:8px 20px;cursor:pointer;color:var(--black,#0A0A09);margin-top:4px', onclick: function() { fileInput.click(); }}, S.profilePhoto ? 'CHANGER LA PHOTO' : 'AJOUTER UNE PHOTO'));
+  photoWrap.appendChild(h('button', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border,#D8D8D0);padding:8px 20px;cursor:pointer;color:var(--black,#0A0A09);margin-top:4px',
+    onclick: function() { fileInput.click(); }
+  }, S.profilePhoto ? 'CHANGER LA PHOTO' : 'AJOUTER UNE PHOTO'));
   p.appendChild(photoWrap);
 
   p.appendChild(h('div', {style: 'height:16px'}));

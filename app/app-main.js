@@ -225,20 +225,18 @@ function render() {
  // Profile photo / initials avatar (persistent top-right, clickable → profil step 1)
  (function() {
    var _avatarBtn = h('button', {
-     style: 'background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:50%;min-width:44px;min-height:44px',
+     'class': 'user-bar-avatar-btn',
      onclick: function() { S.view = 'nutrition'; S.nStep = 1; window.render(); },
      title: 'Voir le profil'
    });
    if (S.profilePhoto) {
      var _ubPhoto = h('img', {
        src: S.profilePhoto,
-       style: 'width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--border,#D8D8D0);flex-shrink:0;display:block;transition:box-shadow 0.2s',
-       onmouseover: function() { this.style.boxShadow = '0 0 0 2px rgba(10,10,9,0.15)'; },
-       onmouseout: function() { this.style.boxShadow = 'none'; }
+       'class': 'user-bar-avatar-photo'
      });
      _avatarBtn.appendChild(_ubPhoto);
    } else {
-     // Initials avatar fallback
+     // Initials avatar fallback — derived from name or email
      var _uInitials = (function() {
        var _un = user ? (user.name || user.email || '') : '';
        if (!_un) return 'S';
@@ -247,9 +245,7 @@ function render() {
        return _un[0].toUpperCase();
      })();
      var _ubAvatar = h('div', {
-       style: 'width:36px;height:36px;border-radius:50%;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#0A0A09);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:500;color:var(--black,#0A0A09);letter-spacing:0.5px;transition:box-shadow 0.2s',
-       onmouseover: function() { this.style.boxShadow = '0 0 0 2px rgba(10,10,9,0.15)'; },
-       onmouseout: function() { this.style.boxShadow = 'none'; }
+       'class': 'user-bar-avatar-initials'
      }, _uInitials);
      _avatarBtn.appendChild(_ubAvatar);
    }
