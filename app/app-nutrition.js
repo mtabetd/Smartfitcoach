@@ -25,22 +25,22 @@ var ACTIVITIES = window.ACTIVITIES || [];
 var GOALS = window.GOALS || [];
 var TRAINS = window.TRAINS || [];
 var SLEEPS = window.SLEEPS || [];
-var MEDICAL = window.MEDICAL;
-var MEDICAL_ADVICE = window.MEDICAL_ADVICE;
-var COOK_LEVELS = window.COOK_LEVELS;
+var MEDICAL = window.MEDICAL || [];
+var MEDICAL_ADVICE = window.MEDICAL_ADVICE || {};
+var COOK_LEVELS = window.COOK_LEVELS || [];
 var ALLERGIES = window.ALLERGIES || [];
 var INTOLERANCES = window.INTOLERANCES || [];
 var REGIMES = window.REGIMES || [];
-var CUISINES = window.CUISINES;
-var CUISINE_FLAGS = window.CUISINE_FLAGS;
+var CUISINES = window.CUISINES || [];
+var CUISINE_FLAGS = window.CUISINE_FLAGS || {};
 var SHOPPING = window.SHOPPING || [];
-var STAPLES = window.STAPLES;
-var DAY_NAMES = window.DAY_NAMES;
-var MEAL_SPLIT = window.MEAL_SPLIT;
-var RATIOS = window.RATIOS;
+var STAPLES = window.STAPLES || [];
+var DAY_NAMES = window.DAY_NAMES || ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+var MEAL_SPLIT = window.MEAL_SPLIT || {};
+var RATIOS = window.RATIOS || {};
 
-var ALCOHOL_DB = window.ALCOHOL_DB;
-var ALCOHOL_FREQS = window.ALCOHOL_FREQS;
+var ALCOHOL_DB = window.ALCOHOL_DB || [];
+var ALCOHOL_FREQS = window.ALCOHOL_FREQS || [];
 var FOOD_HABITS_MEALS = window.FOOD_HABITS_MEALS;
 var EATING_LOCATIONS = window.EATING_LOCATIONS;
 var BODY_ZONES = window.BODY_ZONES;
@@ -940,7 +940,7 @@ function renderStep6(p) {
     p.appendChild(h('p', {'class': 'subtitle'}, 'Pendant la grossesse, l\'objectif est le maintien + les besoins suppl\u00e9mentaires de la grossesse.'));
 
     // Auto-select maintain
-    S.goal = 1; // index of "Maintien" in GOALS
+    S.goal = 2; // index of "Maintien" in GOALS (0=bulk, 1=lean_bulk, 2=maintain)
 
     var pregObjCard = h('div', {style: 'border-left:3px solid #E8A87C;padding:16px;background:var(--ivory2);margin-bottom:16px'});
     pregObjCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px'}, '\uD83E\uDD30 ' + window.t('onb.s6.maintain') + ' + besoins grossesse'));

@@ -44,7 +44,7 @@ function filterExerciseByMedical(ex, med) {
  // Crunch/sit-up classique = flexion lombaire répétée → déconseillé en hernie active.
  // RDL, rowing buste penché = flexion du tronc sous charge.
  if (med.lowerBack || med.herniaDisc) {
- if (/soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning|jefferson|squat barre|back squat|hack squat|presse.*cuisse|leg press|rowing barre|pendlay row|rowing t.?bar|t.?bar row|crunch|sit.?up|ab wheel|roue abdominal|hyperextension/.test(n)) return false;
+ if (/soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning|jefferson|squat barre|back squat|front squat|hack squat|presse.*cuisse|leg press|rowing barre|pendlay row|rowing t.?bar|t.?bar row|crunch|sit.?up|ab wheel|roue abdominal|hyperextension/.test(n)) return false;
  }
 
  // ── HERNIE INGUINALE ──
@@ -1847,12 +1847,23 @@ function renderCrossfitProgram(p) {
  wodCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:#5A1010;margin-bottom:10px'}, _wod.type || ''));
 
  var movList = h('div', {style: 'margin-bottom:10px'});
+ var _cfMedFiltered = 0;
  (_wod.movements || []).forEach(function(mov) {
+ if (S.muscuMedical && S.muscuMedical.done && !filterExerciseByMedical(mov, S.muscuMedical)) {
+   _cfMedFiltered++;
+   return;
+ }
  var movText = formatCFMovement(mov);
  var movDiv = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;padding:4px 0;border-bottom:1px solid var(--border)'}, movText);
  movList.appendChild(movDiv);
  });
  wodCard.appendChild(movList);
+ if (_cfMedFiltered > 0) {
+ if (!movList.children.length) {
+   movList.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey);padding:8px 0;font-style:italic'}, 'Aucun mouvement compatible — consultez les options de scaling ci-dessous'));
+ }
+ wodCard.appendChild(h('div', {style: 'background:#FFF3CD;border-left:3px solid #FF6B6B;padding:8px 12px;margin-top:8px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#C00'}, _cfMedFiltered + ' mouvement(s) retiré(s) pour restriction médicale'));
+ }
 
  if (_wod.notes) {
  wodCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:6px'}, _wod.notes));
@@ -1866,6 +1877,7 @@ function renderCrossfitProgram(p) {
  scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#E07B00;margin-bottom:6px'}, '⬇ SCALING'));
  if (Array.isArray(_sc.movements) && _sc.movements.length) {
  _sc.movements.forEach(function(m) {
+ if (S.muscuMedical && S.muscuMedical.done && !filterExerciseByMedical(m, S.muscuMedical)) return;
  var txt = (m.name || '') + (m.note ? ' ' + m.note : '');
  if (!txt.trim()) return;
  scCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);padding:2px 0'}, txt.trim()));
@@ -2361,7 +2373,7 @@ function renderSparkline(values, color) {
 
 function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  // Récupère l'historique de cet exercice
- var history = S.muscuProgressionHistory[exerciseName] || [];
+ var history = (S.muscuProgressionHistory || {})[exerciseName] || [];
 
  // Si historique disponible, utilise la dernière session
  if (history.length > 0) {
@@ -2374,7 +2386,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  // Exclure la session d'aujourd'hui (initialisée avec des nulls, pas encore validée)
  var today = new Date().toISOString().slice(0, 10);
  var lastLog = null;
- var sortedDates = Object.keys(S.muscuSessionLog).filter(function(d) { return d !== today; }).sort();
+ var sortedDates = Object.keys(S.muscuSessionLog || {}).filter(function(d) { return d !== today; }).sort();
  sortedDates.forEach(function(date) {
  if (S.muscuSessionLog[date][exerciseName]) {
  lastLog = { date: date, sets: S.muscuSessionLog[date][exerciseName] };
@@ -3046,7 +3058,7 @@ function calcSessionKcal(exercises, durationMin) {
  var s = window.S;
  var weight = s.weight || 75;
  var age = s.age || 30;
- var sex = s.sex || (s.sex === 'femme' ? 'femme' : 'homme'); // BUG-15 fix: respect null sex
+ var sex = (s.sex === 'femme') ? 'femme' : 'homme';
  // Phase courante → RPE
  var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
  var rpe = phase ? phase.rpe : 7;

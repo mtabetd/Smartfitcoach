@@ -674,6 +674,75 @@ window.AUTH = {
       window.S.musculationWeights = {};
       window.S.crossfitLevel = null; window.S.cfCurrentDay = 1; window.S.cfProgress = {};
       window.S.crossfit1RM = {}; window.S.muscuStrengthProfile = {};
+      // Pregnancy & cycle
+      window.S.pregnant = null; window.S.pregnancyWeek = null; window.S.dueDate = null;
+      window.S.prePregnancyWeight = null;
+      window.S.cycleTracking = false; window.S.cycleLength = 28; window.S.lastPeriodDate = null;
+      // Supplements
+      window.S.creatine = false; window.S.creatineDose = 0;
+      window.S.supplements = []; window.S.wheyFlavors = [];
+      // Photos
+      window.S.photoFront = null; window.S.photoBack = null;
+      // Nutrition extras
+      window.S.wantsDessert = null; window.S.saladBar = null; window.S.saladBuilder = null;
+      window.S.smoothieBarOpen = false; window.S.modalRecipe = null; window.S.modalSmoothie = null;
+      window.S._nm = null; window.S.calories = null; window.S.caloriesTarget = 2000;
+      // Shopping
+      window.S.shopListOpen = false; window.S.shopArMode = null;
+      window.S.shopFreq = null; window.S.shopStores = []; window.S.shopBudget = null;
+      window.S.shopPrefs = []; window.S.shopChecked = {};
+      // Sport general
+      window.S.sportFocus = {}; window.S.sportModalExercise = null;
+      window.S.sportProgram = null; window.S.sportSessionDuration = null;
+      window.S.muscuMedical = {}; window.S.muscuProgramStart = null;
+      window.S.swapPanel = null; window.S.sessionCompleting = null;
+      window.S.selectedSportDay = 0; window.S.crossfitCycleWeek = 1;
+      window.S.trainTime = null; window.S.heartRateRest = null;
+      // Running
+      window.S.runningDays = null; window.S.runningGoal = null;
+      window.S.runningLevel = null; window.S.runningPace = null;
+      window.S.runningWeek = 1; window.S.runningProgram = null; window.S.selectedRunDay = 0;
+      // Cycling
+      window.S.cyclingDays = null; window.S.cyclingGoal = null;
+      window.S.cyclingLevel = null; window.S.cyclingType = null;
+      window.S.cyclingSpeed = null; window.S.cyclingFTP = null;
+      window.S.cyclingRelief = null; window.S.cyclingWeek = 1;
+      window.S.cyclingPlan = null; window.S.selectedCyclingDay = 0;
+      // Triathlon
+      window.S.triathlonGoal = null; window.S.triathlonLevel = null;
+      window.S.triathlonWeek = 1; window.S.triathlonProgram = null;
+      window.S.selectedTriDay = 0; window.S.triathlonSwimPace = null;
+      window.S.triathlonBikePace = null; window.S.triathlonRunPace = null;
+      window.S.triathlonWeak = null;
+      // Hyrox
+      window.S.hyroxDays = null; window.S.hyroxGoal = null;
+      window.S.hyroxLevel = null; window.S.hyroxWeek = 1;
+      window.S.hyroxProgram = null; window.S.selectedHyroxDay = 0;
+      window.S.hyroxBenchmarks = {};
+      // Padel
+      window.S.padelDays = null; window.S.padelGoal = null;
+      window.S.padelLevel = null; window.S.padelWeek = 1;
+      window.S.padelProgram = null; window.S.selectedPadelDay = 0;
+      window.S.padelProfile = null;
+      // Golf
+      window.S.golfDays = null; window.S.golfGoal = null;
+      window.S.golfLevel = null; window.S.golfHandicap = null;
+      window.S.golfWeek = 1; window.S.golfProgram = null;
+      window.S.selectedGolfDay = 0; window.S.golfProfile = null;
+      // Yoga
+      window.S.yogaLevel = null; window.S.yogaDays = 3;
+      window.S.yogaDuration = null; window.S.yogaStyle = null;
+      window.S.yogaObjectif = null; window.S.yogaWeek = 1; window.S.yogaDay = 0;
+      // Calisthenics
+      window.S.calisthenicsLevel = null; window.S.calisthenicsGoal = [];
+      window.S.calisthPullups = null; window.S.calisthPushups = null;
+      window.S.calisthenicsdays = 3; window.S.calisthenicsOnboardingStep = 'A';
+      window.S.calisthenicsProgram = null; window.S.calisthenicsWeek = 1; window.S.selectedCalisthDay = 0;
+      // Lang/Units (reset to defaults)
+      window.S.lang = 'fr'; window.S.weightUnit = 'kg'; window.S.heightUnit = 'cm';
+      // UI state
+      window.S.view = 'auth'; window.S.authError = '';
+      window.S.cfCalendarOpen = false;
     }
 
     // Nettoyer la session locale + legacy

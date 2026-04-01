@@ -767,6 +767,12 @@
       source: 'estimation',
       updatedAt: '2026-03'
     },
+    'Protéine végétale': {
+      name: 'Protéine végétale',
+      pricePerG: r(380 / 1000),
+      source: 'estimation',
+      updatedAt: '2026-03'
+    },
 
     // ── Légumes & herbes supplémentaires ───────────────────────────────────────
     'Champignons shiitake': {
@@ -3246,6 +3252,7 @@
     'Whey chocolat': 'Protéines de lactosérum (whey)',
     'Whey neutre': 'Protéines de lactosérum (whey)',
     'Protéine de pois neutre (ou whey neutre)': 'Protéines de lactosérum (whey)',
+    'Protéine végétale chocolat ou vanille': 'Protéine végétale',
     'Skyr nature': 'Skyr / Yaourt islandais',
     'Blancs d\'\u0153ufs': 'Blanc d\'\u0153uf',
     'Blanc d\'\u0153ufs': 'Blanc d\'\u0153uf',
@@ -3335,15 +3342,9 @@
     'Jus d\'orange frais': 'Jus de citron frais',
     'Jus d\'orange': 'Jus de citron frais',
     'Matcha': 'Matcha grade cérémonial',
-    'Gingembre frais': 'Gingembre râpé',
-    'Gingembre': 'Gingembre râpé',
+    'Gingembre': 'Gingembre frais',
     'Lait': 'Lait entier',
-    'Stevia': 'Miel',
-    'Eau': 'Eau pétillante',
-    'Curcuma': 'Cannelle moulue',
     'Cannelle': 'Cannelle moulue',
-    'Granola': 'Flocons d\'avoine',
-    'Graines de chia': 'Graines de lin',
     'Amandes effilées': 'Amandes',
     'Fraises': 'Fraises congelées',
     'Myrtilles': 'Myrtilles (surgelées)',
