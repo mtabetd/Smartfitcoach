@@ -4969,7 +4969,7 @@
         { name: 'Lait d\'amande', qty: 250, unit: 'ml' },
         { name: 'Pomme', qty: 1, unit: 'pce' },
         { name: 'Cannelle', qty: 3, unit: 'g' },
-        { name: 'Miel', qty: 15, unit: 'g' },
+        { name: 'Sirop d\'agave', qty: 15, unit: 'g' },
         { name: 'Noix', qty: 15, unit: 'g' }
       ],
       steps: [
@@ -4978,7 +4978,7 @@
         'Cuire 5 à 6 minutes à feu doux en remuant régulièrement en forme de 8 pour une cuisson homogène. Ajouter la pomme râpée et la moitié de la cannelle en cours de cuisson.',
         'Quand le porridge atteint la consistance d\'une crème (il épaissit encore en refroidissant), retirer du feu.',
         'Verser dans le bol. Disposer les dés de pomme au centre, concasser les noix grossièrement à la main pour des morceaux irréguliers et gourmands.',
-        'Saupoudrer le reste de cannelle, arroser d\'un filet de miel en spirale. Servir sans attendre pour profiter de la vapeur parfumée.'
+        'Saupoudrer le reste de cannelle, arroser d\'un filet de sirop d\'agave en spirale. Servir sans attendre pour profiter de la vapeur parfumée.'
       ]
     },
     {

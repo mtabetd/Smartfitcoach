@@ -222,6 +222,11 @@ function render() {
  var ub = h('div', {'class': 'user-bar'});
  ub.appendChild(h('span', {'class': 'user-name'}, '◆ ' + (user ? (user.name || user.email || 'Utilisateur') : 'Utilisateur')));
  var ubRight = h('div', {style: 'display:flex;align-items:center;gap:12px'});
+ // Profile photo (persistent top-right)
+ if (S.profilePhoto) {
+   var _ubPhoto = h('img', {src: S.profilePhoto, style: 'width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--border,#D8D8D0);flex-shrink:0'});
+   ubRight.appendChild(_ubPhoto);
+ }
  // Session time
  ubRight.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey3)'}, (window.BLACKBOX ? window.BLACKBOX.getSessionMinutes() : 0) + ' min'));
  // Language toggle FR / EN
