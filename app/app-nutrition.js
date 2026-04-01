@@ -403,9 +403,10 @@ function renderStep1(p) {
       var pad = function(n) { return n < 10 ? '0' + n : String(n); };
       S.birthDate = yr + '-' + pad(mo) + '-' + pad(dy);
       S.age = getAge();
+      // Only re-render when all 3 fields are complete — avoids resetting partial selections
+      window.render();
     }
-    // Re-render to update age display and minor warning
-    window.render();
+    // If partial (only 1-2 fields filled), do NOT re-render — keeps select values intact
   }
 
   _daySelect.onchange = _updateBirthDate;

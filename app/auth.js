@@ -458,25 +458,27 @@ function _fallbackLogin(email, password, startTime) {
 // ─── AUTH MODULE ───
 window.AUTH = {
 
-  /** Promise that resolves when the initial session check is done (with 5s timeout) */
+  /** Promise that resolves when the initial session check is done (with 12s timeout) */
   ready: function() {
     var timeout = new Promise(function(resolve) {
       setTimeout(function() {
-        console.warn('[AUTH] ready() timed out after 5s, clearing stale tokens');
-        // Clear stale Supabase auth tokens that caused getSession() to hang.
-        // Keep _useSupabase = true so login() still tries Supabase.
-        // The login retry mechanism will reset the client if needed.
-        try {
-          Object.keys(localStorage).forEach(function(k) {
-            if (k.indexOf('sb-') === 0 && k.indexOf('-auth-token') !== -1) {
-              localStorage.removeItem(k);
-            }
-          });
-          console.log('[AUTH] Cleared stale Supabase tokens');
-        } catch (e) {}
+        // Timeout: Supabase is slow (free tier cold start can take 10-15s).
+        // DO NOT clear tokens here — they may still be valid when Supabase responds.
+        // Just let the app continue; _authReady will resolve later and _currentSession
+        // will be set, triggering a re-render via the _authReady.then() callback below.
+        console.warn('[AUTH] ready() timed out after 12s — continuing without session (Supabase may be slow)');
         resolve();
-      }, 5000);
+      }, 12000);
     });
+    // When _authReady resolves AFTER the timeout (late Supabase response),
+    // trigger a re-render so the user sees their dashboard instead of login.
+    _authReady.then(function() {
+      if (_currentSession && window.S && window.S.view === 'auth') {
+        console.log('[AUTH] Late session restore — re-rendering dashboard');
+        window.S.view = 'dashboard';
+        if (window.render) window.render();
+      }
+    }).catch(function() {});
     return Promise.race([_authReady, timeout]);
   },
 

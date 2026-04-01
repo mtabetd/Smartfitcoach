@@ -170,9 +170,12 @@ function loadProfile() {
  'muscuProgressionHistory','musculationWeights','muscuStrengthProfile','crossfit1RM',
  'hyroxBenchmarks'];
  _objFields.forEach(function(f) { if (!S[f] || typeof S[f] !== 'object' || Array.isArray(S[f])) S[f] = {}; });
- var _arrFields = ['sportGoals','medical','allergies','intolerances','excluded','cuisines',
- 'shopStores','shopPrefs','bodyZones','strongZones','weakZones'];
+ var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
+ 'shopStores','shopPrefs','bodyZones','strongZones','weakZones',
+ 'train','supplements','wheyFlavors','alcoholTypes'];
  _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
+ // excluded is a string (comma-separated), not an array — guard separately
+ if (typeof S.excluded !== 'string') S.excluded = '';
  // Reset ephemeral UI state that should not persist across sessions
  S.shopListOpen = false;
  S.smoothieBarOpen = false;
@@ -377,6 +380,20 @@ function renderLogin(app) {
  if (result.ok) {
  S.authError = '';
  S.view = 'dashboard';
+ // Migrate anon profile data to this user's key (data entered before login)
+ try {
+ var _loginUser = AUTH.getUser();
+ var _loginUid = _loginUser ? _loginUser.id : null;
+ if (_loginUid && _loginUid !== 'anon') {
+ var _anonRaw = localStorage.getItem('mtd_profile_anon');
+ var _userRaw = localStorage.getItem('mtd_profile_' + _loginUid);
+ if (_anonRaw && !_userRaw) {
+ // User filled onboarding anonymously — migrate to their account key
+ localStorage.setItem('mtd_profile_' + _loginUid, _anonRaw);
+ localStorage.removeItem('mtd_profile_anon');
+ }
+ }
+ } catch(e) {}
  // Restore profile from localStorage for this user
  loadProfile();
  // Fix nStep for returning users who completed onboarding
