@@ -384,7 +384,7 @@ var EXERCISES = {
       tags: ["dos", "lombaires", "poids du corps"]
     },
     {
-      n: "Straight-arm pulldown",
+      n: "Straight-arm pulldown barre",
       m: "Grand dorsal (stretch)",
       eq: "Câble poulie haute",
       sets: "3\u00d715",
@@ -1346,12 +1346,12 @@ var EXERCISES = {
       tags: ["fessiers", "force", "compose", "roi-fessiers"]
     },
     {
-      n: "Hip thrust unilateral",
+      n: "Hip thrust unilatéral léger",
       m: "Grand fessier (unilateral)",
       eq: "Haltere ou barre + banc",
       sets: "3\u00d712 par cote",
       rest: "75s",
-      desc: "Même position que le hip thrust, mais sur une seule jambe.",
+      desc: "Même position que le hip thrust, mais sur une seule jambe. Version légère pour correction d'asymétries.",
       tips: ["Correction asymétries fessières", "Charge réduite vs bilateral", "Excellent pour sportifs"],
       lv: 3,
       tags: ["fessiers", "unilateral", "asymetrie"]
