@@ -21,9 +21,7 @@
       var heightThreshold = window.outerHeight - window.innerHeight > 160;
       if ((widthThreshold || heightThreshold) && !devtoolsOpen) {
         devtoolsOpen = true;
-        if (typeof console !== 'undefined' && console.warn) {
-          console.warn('[SFC] DevTools detected. This application is for personal use only.');
-        }
+        // Silent detection — no console output in production
       } else if (!widthThreshold && !heightThreshold) {
         devtoolsOpen = false;
       }
