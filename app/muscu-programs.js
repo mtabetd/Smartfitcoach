@@ -34,36 +34,36 @@ var NFC_PROGRAMS = {
     masse: {
       warmup: '5 min rameur + mobilit\u00e9 \u00e9paules',
       exercises: [
-        {order:1, name:'Traction (lest\u00e9/PDC/assist\u00e9)', sets:4, reps:10, rest:'1min30', technique:null, muscle:'dos', type:'compound', equipment:'barre fixe'},
-        {order:2, name:'T-barre (ou rowing barre)', sets:4, reps:8, rest:'2min', technique:null, muscle:'dos', type:'compound', equipment:'barre'},
+        {order:1, name:'Tractions pronation', sets:4, reps:10, rest:'1min30', technique:'Compos\u00e9 principal \u2014 largeur dorsale. Dead hang complet. Scapulae d\u00e9prim\u00e9es \u00e0 l\'initiation. Prise l\u00e9g\u00e8rement plus large que les \u00e9paules. Lest\u00e9 si 10 reps trop faciles \u2014 progressive overload.', muscle:'dos', type:'compound', equipment:'barre fixe'},
+        {order:2, name:'Rowing T-bar', sets:4, reps:8, rest:'2min', technique:'Compos\u00e9 \u00e9paisseur. Dos \u00e0 45\u00b0, gainage permanent. Tirer les coudes vers l\'arri\u00e8re, serrer les omoplates en haut 1s. Ne pas balancer.', muscle:'dos', type:'compound', equipment:'barre'},
         {order:3, name:'Tirage vertical prise large', sets:4, reps:10, rest:'2min', technique:'2s excentrique', muscle:'dos', type:'compound', equipment:'poulie'},
         {order:4, name:'Rowing halt\u00e8re unilat\u00e9ral', sets:5, reps:12, rest:'1min30', technique:'12 reps chaque bras. Genou et main appuy\u00e9s sur banc. Tirer le coude vers le plafond en serrant l\'omoplate. Contr\u00f4ler la descente 2s.', muscle:'dos', type:'compound', equipment:'halteres'},
         {order:5, name:'Pulldown prise serr\u00e9e', sets:4, reps:10, rest:'1min30', technique:'5s pic contraction x3 — Prise neutre triangle, coudes le long du corps. Tirer vers la poitrine. Isoler le grand dorsal.', muscle:'dos', type:'isolation', equipment:'poulie'},
         {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
-      notes: 'Le dos est le plus grand muscle du haut du corps. Intensit\u00e9 maximale.'
+      notes: 'DOS MASSE PRO LEVEL: Tractions lest\u00e9es (largeur) \u2192 T-bar/Rowing barre (\u00e9paisseur) \u2192 Tirage vertical large (dorsaux) \u2192 Rowing halt\u00e8re unilat\u00e9ral (\u00e9quilibre) \u2192 Pulldown serr\u00e9 (finisseur). Le dos = groupe le plus difficile \u00e0 sentir. Penser \u00e0 initier chaque tirage par la d\u00e9pression scapulaire, PAS par la flexion du coude. Le biceps ne doit \u00eatre qu\'un lien.'
     },
     seche: {
       warmup: '5 min rameur + mobilit\u00e9 \u00e9paules',
       exercises: [
-        {order:1, name:'Traction PDC', sets:4, reps:12, rest:'1min', technique:null, muscle:'dos', type:'compound', equipment:'barre fixe'},
-        {order:2, name:'T-barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'dos', type:'compound', equipment:'barre'},
-        {order:3, name:'Tirage vertical prise large', sets:4, reps:12, rest:'1min', technique:'2s excentrique', muscle:'dos', type:'compound', equipment:'poulie'},
-        {order:4, name:'Rowing halt\u00e8re', sets:4, reps:15, rest:'45s', technique:null, muscle:'dos', type:'compound', equipment:'halteres'},
-        {order:5, name:'Tirage poulie haute', sets:4, reps:15, rest:'45s', technique:'pic contraction', muscle:'dos', type:'isolation', equipment:'poulie'},
+        {order:1, name:'Tractions pronation', sets:4, reps:12, rest:'1min', technique:'Dead hang compl\u00e8t, tirer le menton au-dessus de la barre. Scapulae d\u00e9prim\u00e9es \u00e0 l\'initiation. Si impossibles: assist\u00e9es ou \u00e9lastique.', muscle:'dos', type:'compound', equipment:'barre fixe'},
+        {order:2, name:'Rowing T-bar', sets:4, reps:12, rest:'1min', technique:'Dos \u00e0 45\u00b0, tirer vers la poitrine. Gainage permanent. Retraction scapulaire en fin de mouvement. 2s excentrique.', muscle:'dos', type:'compound', equipment:'barre'},
+        {order:3, name:'Tirage vertical', sets:4, reps:12, rest:'1min', technique:'2s excentrique — Prise pronation large. Tirer TOUJOURS devant la poitrine, jamais derri\u00e8re la nuque.', muscle:'dos', type:'compound', equipment:'poulie'},
+        {order:4, name:'Rowing halt\u00e8re unilat\u00e9ral', sets:4, reps:15, rest:'45s', technique:'Genou et main sur banc. Tirer coude vers le plafond. Amplitude compl\u00e8te. Coudes l\u00e9g\u00e8rement derri\u00e8re le dos en haut.', muscle:'dos', type:'compound', equipment:'halteres'},
+        {order:5, name:'Straight-arm pulldown', sets:4, reps:15, rest:'45s', technique:'Pic contraction — bras quasi tendus. Isolation pure du grand dorsal. Excellent pour la connexion neuromusculaire dorsale.', muscle:'dos', type:'isolation', equipment:'poulie'},
         {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'45s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
-      notes: 'Volume \u00e9lev\u00e9, repos courts.'
+      notes: 'DOS S\u00c8CHE: Tractions PDC (force relative maintenue) \u2192 Rowing T-bar (volume) \u2192 Tirage vertical (dorsal) \u2192 Rowing halt\u00e8re (unilat\u00e9ral) \u2192 Straight-arm pulldown (finisseur isolation). Repos courts (45-60s) pour densit\u00e9 maximale. En d\u00e9ficit calorique : maintenir les charges — l\'objectif est la r\u00e9tention musculaire, pas la performance.'
     }
   },
   bras: {
     masse: {
       warmup: '5 min rameur + rotations poignets',
       exercises: [
-        {order:1, name:'Curl barre + Barre au front', sets:4, reps:'10+10', rest:'1min30', technique:'Superset', muscle:'biceps+triceps', type:'superset', equipment:'barre'},
-        {order:2, name:'Curl pupitre + DC serr\u00e9', sets:4, reps:'10+10', rest:'1min30', technique:'Superset', muscle:'biceps+triceps', type:'superset', equipment:'barre'},
-        {order:3, name:'Curl spider + Dips', sets:4, reps:'10+10', rest:'1min30', technique:'Superset', muscle:'biceps+triceps', type:'superset', equipment:'banc'},
-        {order:4, name:'Curl concentr\u00e9 marteau', sets:4, reps:12, rest:'1min30', technique:'12 reps chaque bras', muscle:'biceps', type:'isolation', equipment:'halteres'},
+        {order:1, name:'Curl barre droite + Skull crushers (barre front)', sets:4, reps:'10+10', rest:'1min30', technique:'Superset agoniste/antagoniste \u2014 Curl barre strict (coudes fixes) puis transition imm\u00e9diate en skull crushers EZ (coudes vers le plafond). Pas de repos entre les deux exercices.', muscle:'biceps+triceps', type:'superset', equipment:'barre'},
+        {order:2, name:'Curl pupitre (Larry Scott) + D\u00e9velopp\u00e9 couch\u00e9 prise serr\u00e9e', sets:4, reps:'10+10', rest:'1min30', technique:'Superset \u2014 Curl pupitre barre EZ (3s excentrique, stretch max en bas) puis transition DC serr\u00e9 (prise largeur \u00e9paules, coudes pr\u00e8s du corps).', muscle:'biceps+triceps', type:'superset', equipment:'barre'},
+        {order:3, name:'Curl spider (araignee) + Dips', sets:4, reps:'10+10', rest:'1min30', technique:'Superset \u2014 Curl spider banc inclin\u00e9 45\u00b0 (mouvement tr\u00e8s strict, impossible de tricher) puis Dips banc (buste droit = triceps pur). Peak contraction sur les deux.', muscle:'biceps+triceps', type:'superset', equipment:'banc'},
+        {order:4, name:'Curl concentr\u00e9', sets:4, reps:12, rest:'1min30', technique:'12 reps chaque bras. Coude appuy\u00e9 contre la cuisse int\u00e9rieure. Supination maximale en haut. Pic contraction 2s. Pour le "pic" du biceps.', muscle:'biceps', type:'isolation', equipment:'halteres'},
         {order:5, name:'Crunch banc d\u00e9clin\u00e9', sets:4, reps:12, rest:'1min', technique:'3s excentrique', muscle:'abdominaux', type:'isolation', equipment:'banc'},
         {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'},
         {order:7, name:'Obliques chaise romaine', sets:4, reps:12, rest:'1min', technique:'12 reps chaque c\u00f4t\u00e9', muscle:'abdominaux', type:'isolation', equipment:'chaise romaine'}
@@ -73,13 +73,13 @@ var NFC_PROGRAMS = {
     seche: {
       warmup: '5 min rameur + rotations poignets',
       exercises: [
-        {order:1, name:'Curl barre + Barre au front', sets:4, reps:'12+12', rest:'1min', technique:'Superset', muscle:'biceps+triceps', type:'superset', equipment:'barre'},
-        {order:2, name:'Curl pupitre + DC serr\u00e9', sets:4, reps:'12+12', rest:'1min', technique:'Superset', muscle:'biceps+triceps', type:'superset', equipment:'barre'},
-        {order:3, name:'Curl spider + Dips', sets:4, reps:'12+12', rest:'1min', technique:'Superset', muscle:'biceps+triceps', type:'superset', equipment:'banc'},
-        {order:4, name:'Curl marteau', sets:4, reps:15, rest:'45s', technique:null, muscle:'biceps', type:'isolation', equipment:'halteres'},
-        {order:5, name:'Crunch', sets:4, reps:20, rest:'45s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'banc'},
-        {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'30s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'},
-        {order:7, name:'Obliques', sets:4, reps:15, rest:'30s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'chaise romaine'}
+        {order:1, name:'Curl barre droite + Skull crushers (barre front)', sets:4, reps:'12+12', rest:'1min', technique:'Superset \u2014 Repos courts en s\u00e8che = cardio int\u00e9gr\u00e9. Charges r\u00e9duites de 15-20% vs masse. Qualit\u00e9 d\'ex\u00e9cution prioritaire.', muscle:'biceps+triceps', type:'superset', equipment:'barre'},
+        {order:2, name:'Curl pupitre (Larry Scott) + D\u00e9velopp\u00e9 couch\u00e9 prise serr\u00e9e', sets:4, reps:'12+12', rest:'1min', technique:'Superset \u2014 Tension maximale tout le long du mouvement. Pas de repos entre les deux exercices.', muscle:'biceps+triceps', type:'superset', equipment:'barre'},
+        {order:3, name:'Curl spider (araignee) + Dips banc', sets:4, reps:'12+12', rest:'1min', technique:'Superset \u2014 Curl spider strict (aucun triche possible) + dips banc. Bonne finition en densit\u00e9.', muscle:'biceps+triceps', type:'superset', equipment:'banc'},
+        {order:4, name:'Curl marteau', sets:4, reps:15, rest:'45s', technique:'Prise neutre (pouces vers le haut). Cible brachioradial + brachial sous le biceps. Am\u00e9liore l\'\u00e9paisseur et la largeur du bras.', muscle:'biceps', type:'isolation', equipment:'halteres'},
+        {order:5, name:'Crunch banc d\u00e9clin\u00e9', sets:4, reps:20, rest:'45s', technique:'3s excentrique \u2014 mains \u00e0 la tempe (pas derri\u00e8re la nuque). Amplitude 30\u00b0 uniquement = meilleure activation grand droit.', muscle:'abdominaux', type:'isolation', equipment:'banc'},
+        {order:6, name:'Relev\u00e9 de jambes suspendu', sets:4, reps:'max', rest:'30s', technique:'Contr\u00f4ler la descente. Jambes tendues si possible. Monter \u00e0 90\u00b0 minimum. Ne pas balancer.', muscle:'abdominaux', type:'isolation', equipment:'barre fixe'},
+        {order:7, name:'Obliques chaise romaine', sets:4, reps:15, rest:'30s', technique:'12-15 reps chaque c\u00f4t\u00e9. Rotation lat\u00e9rale contr\u00f4l\u00e9e. Pas de rotation inertiellement. Contr\u00f4ler la mont\u00e9e et la descente.', muscle:'abdominaux', type:'isolation', equipment:'chaise romaine'}
       ],
       notes: 'Supersets + repos courts = cardio int\u00e9gr\u00e9.'
     }
@@ -101,13 +101,13 @@ var NFC_PROGRAMS = {
     seche: {
       warmup: '5 min v\u00e9lo + squats \u00e0 vide',
       exercises: [
-        {order:1, name:'Squat barre', sets:4, reps:12, rest:'1min30', technique:null, muscle:'quadriceps+fessiers', type:'compound', equipment:'barre'},
-        {order:2, name:'Soulev\u00e9 de terre roumain', sets:3, reps:12, rest:'1min30', technique:'Hip hinge, stretch ischios, dos neutre. Pr\u00e9serve la masse ischio-jambi\u00e8re en d\u00e9ficit.', muscle:'ischio-jambiers+fessiers', type:'compound', equipment:'barre'},
-        {order:3, name:'Fente bulgare', sets:3, reps:12, rest:'1min30', technique:null, muscle:'quadriceps+fessiers', type:'compound', equipment:'halteres'},
-        {order:4, name:'Presse', sets:3, reps:15, rest:'1min', technique:'3s excentrique', muscle:'quadriceps', type:'compound', equipment:'machine'},
-        {order:5, name:'Leg extension', sets:3, reps:15, rest:'60s', technique:'3s excentrique', muscle:'quadriceps', type:'isolation', equipment:'machine'},
-        {order:6, name:'Leg curl', sets:3, reps:15, rest:'60s', technique:'3s excentrique', muscle:'ischio-jambiers', type:'isolation', equipment:'machine'},
-        {order:7, name:'Mollets presse', sets:3, reps:15, rest:'60s', technique:null, muscle:'mollets', type:'isolation', equipment:'machine'}
+        {order:1, name:'Squat barre', sets:4, reps:12, rest:'1min30', technique:'Profondeur parall\u00e8le minimum. Dos neutre, regard droit. Genoux dans l\'axe des orteils. En s\u00e8che : charges r\u00e9duites \u00e0 65-70% 1RM mais profondeur maintenue.', muscle:'quadriceps+fessiers', type:'compound', equipment:'barre'},
+        {order:2, name:'Soulevé de terre roumain', sets:3, reps:12, rest:'1min30', technique:'Hip hinge pur \u2014 hanches EN ARRI\u00c8RE (pas les genoux en avant). Dos neutre OBLIGATOIRE. Stretch ischios ressenti = bonne position. Pr\u00e9serve la masse ischio-jambi\u00e8re en d\u00e9ficit.', muscle:'ischio-jambiers+fessiers', type:'compound', equipment:'barre'},
+        {order:3, name:'Squat bulgare', sets:3, reps:12, rest:'1min30', technique:'Pied arri\u00e8re sur banc. Genou avant \u00e0 2cm du sol. Torse l\u00e9g\u00e8rement pench\u00e9 = plus de fessiers. 12 reps chaque jambe.', muscle:'quadriceps+fessiers', type:'compound', equipment:'halteres'},
+        {order:4, name:'Presse a cuisses', sets:3, reps:15, rest:'1min', technique:'3s excentrique \u2014 pieds \u00e0 mi-hauteur. Ne pas verrouiller les genoux. Amplitude compl\u00e8te = stimulus maximal.', muscle:'quadriceps', type:'compound', equipment:'machine'},
+        {order:5, name:'Leg extension (quadriceps)', sets:3, reps:15, rest:'60s', technique:'3s excentrique \u2014 pic contraction 1s en haut. Charges mod\u00e9r\u00e9es pour pr\u00e9server l\'articulation genoux.', muscle:'quadriceps', type:'isolation', equipment:'machine'},
+        {order:6, name:'Leg curl (ischios)', sets:3, reps:15, rest:'60s', technique:'3s excentrique \u2014 orteils en flexion dorsale = plus d\'activation ischios. Ne pas soul\u00e9ver les hanches. ROM complet.', muscle:'ischio-jambiers', type:'isolation', equipment:'machine'},
+        {order:7, name:'Mollets debout', sets:3, reps:15, rest:'60s', technique:'ROM COMPLET obligatoire: stretch total en bas (talon sous la plateforme), mont\u00e9e maximale sur orteils. Pause 1s en haut.', muscle:'mollets', type:'isolation', equipment:'machine'}
       ],
       notes: 'Les jambes br\u00fblent le plus de calories. Profitez-en en s\u00e8che.'
     }
@@ -129,15 +129,15 @@ var NFC_PROGRAMS = {
     seche: {
       warmup: '5 min rameur + rotations \u00e9paules',
       exercises: [
-        {order:1, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res', sets:4, reps:10, rest:'1min30', technique:null, muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
-        {order:2, name:'D\u00e9velopp\u00e9 halt\u00e8res assis', sets:4, reps:12, rest:'1min', technique:'Prise neutre ou pronation. Coudes l\u00e9g\u00e8rement devant le plan frontal.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
+        {order:1, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res', sets:4, reps:10, rest:'1min30', technique:'Compos\u00e9 principal. Coudes l\u00e9g\u00e8rement devant le plan frontal. Descente 3s, push contr\u00f4l\u00e9. En s\u00e8che : charges \u00e0 ~70% 1RM, priorit\u00e9 au TUT.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
+        {order:2, name:'Arnold press', sets:4, reps:12, rest:'1min', technique:'Rotation des poignets du bas vers le haut \u2014 active les 3 faisceaux. Partir paumes vers soi, finir paumes vers l\'avant. Mouvement lent = contr\u00f4le maximum.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
         {order:3, name:'\u00c9l\u00e9vation frontale + Face pull', sets:4, reps:'12+12', rest:'1min', technique:'Superset', muscle:'\u00e9paules', type:'superset', equipment:'halteres+poulie'},
         {order:4, name:'\u00c9l\u00e9vation lat\u00e9rale', sets:4, reps:15, rest:'60s', technique:'1 moiti\u00e9 + 1 compl\u00e8te', muscle:'\u00e9paules', type:'isolation', equipment:'halteres'},
         {order:5, name:'Shrug barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'trap\u00e8zes', type:'isolation', equipment:'barre'},
         {order:6, name:'Abdos rouleau', sets:3, reps:15, rest:'60s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'rouleau'},
         {order:7, name:'Relev\u00e9 de jambes', sets:3, reps:'max', rest:'60s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
-      notes: '\u00c9paules + abdos en s\u00e8che = silhouette sculpt\u00e9e.'
+      notes: '\u00c9PAULES S\u00c8CHE: Militaire halt\u00e8res (compos\u00e9 principal) \u2192 Arnold press (3 faisceaux) \u2192 Superset \u00e9l\u00e9vations frontales+face pull \u2192 Lat\u00e9rales (faisceau moyen) \u2192 Shrug (trap\u00e8zes). Repos courts (60-90s) pour densifier la s\u00e9ance. Ne jamais sacrifier la technique pour le volume en s\u00e8che \u2014 le muscle \u00e9paule se blesse facilement en d\u00e9ficit.'
     }
   },
   fessiers_dedied: {
@@ -409,10 +409,10 @@ window.ADVANCED_TECHNIQUES_DB = ADVANCED_TECHNIQUES_DB;
 window.NFC_PROGRAMS_FORCE = NFC_PROGRAMS_FORCE;
 
 var WEEKLY_SPLITS = {
-  3: {name:'Upper/Lower/Arms 3j', days:[{day:'Lundi',muscles:['pectoraux','dos'],label:'Haut du corps A'},{day:'Mercredi',muscles:['jambes','epaules'],label:'Bas + \u00c9paules'},{day:'Vendredi',muscles:['bras','abdos_dedied'],label:'Bras + Abdos'}]},
-  4: {name:'Heavy Duty 4j (Intensit\u00e9 Maximale)', days:[{day:'Lundi',muscles:['pectoraux','bras'],label:'Push \u2014 Pecs + Triceps'},{day:'Mardi',muscles:['jambes'],label:'Legs \u2014 Jambes compl\u00e8tes'},{day:'Jeudi',muscles:['epaules','bras'],label:'\u00c9paules + Biceps'},{day:'Vendredi',muscles:['dos'],label:'Pull \u2014 Dos + Ischios (Deadlift day)'}], notes:'Repos mercredi, samedi, dimanche. Chaque muscle 1x/semaine avec intensit\u00e9 MAXIMALE (M\u00e9thode Intensit\u00e9 Maximale). D\u00e9ficit CNS entre les s\u00e9ances. Qualit\u00e9 > quantit\u00e9.'},
-  5: {name:'Split 5j (Pro)', days:[{day:'Lundi',muscles:['pectoraux'],label:'Pectoraux'},{day:'Mardi',muscles:['dos'],label:'Dos'},{day:'Jeudi',muscles:['bras'],label:'Bras'},{day:'Vendredi',muscles:['jambes'],label:'Jambes'},{day:'Samedi',muscles:['epaules'],label:'\u00c9paules'}], notes:'Repos mercredi et dimanche. Espacer pectoraux et \u00e9paules de 48h min.'},
-  6: {name:'PPL 6j', days:[{day:'Lundi',muscles:['pectoraux'],label:'Push: Pecs'},{day:'Mardi',muscles:['dos'],label:'Pull: Dos'},{day:'Mercredi',muscles:['jambes'],label:'Legs'},{day:'Jeudi',muscles:['epaules'],label:'Push: \u00c9paules'},{day:'Vendredi',muscles:['dos'],label:'Pull: Dos+Bras'},{day:'Samedi',muscles:['jambes','fessiers_dedied'],label:'Legs+Fessiers'}]}
+  3: {name:'Push-Pull-Legs 3j', days:[{day:'Lundi',muscles:['pectoraux','epaules'],label:'Push \u2014 Pecs + \u00c9paules'},{day:'Mercredi',muscles:['dos','bras'],label:'Pull \u2014 Dos + Bras'},{day:'Vendredi',muscles:['jambes','fessiers_dedied'],label:'Legs \u2014 Jambes + Fessiers'}], notes:'Split PPL simplifi\u00e9 3j. Chaque groupe musculaire 1x/semaine avec volume concentr\u00e9. R\u00e9cup\u00e9ration optimale (72h min entre s\u00e9ances m\u00eames groupes). Id\u00e9al d\u00e9butants ou emploi du temps serr\u00e9.'},
+  4: {name:'Heavy Duty 4j (Intensit\u00e9 Maximale)', days:[{day:'Lundi',muscles:['pectoraux','triceps_dedied'],label:'Push \u2014 Pecs + Triceps'},{day:'Mardi',muscles:['jambes'],label:'Legs \u2014 Jambes compl\u00e8tes'},{day:'Jeudi',muscles:['epaules','biceps_dedied'],label:'\u00c9paules + Biceps'},{day:'Vendredi',muscles:['dos'],label:'Pull \u2014 Dos + Ischios (Deadlift day)'}], notes:'Repos mercredi, samedi, dimanche. Chaque muscle 1x/semaine avec intensit\u00e9 MAXIMALE (M\u00e9thode Intensit\u00e9 Maximale). S\u00e9curit\u00e9 r\u00e9cup : pectoraux/triceps lundi, 72h repos, \u00e9paules/biceps jeudi, pecs et \u00e9paules ne se chevauchent pas. Qualit\u00e9 > quantit\u00e9.'},
+  5: {name:'Split 5j (Pro)', days:[{day:'Lundi',muscles:['pectoraux'],label:'Pectoraux'},{day:'Mardi',muscles:['dos'],label:'Dos'},{day:'Mercredi',muscles:['epaules'],label:'\u00c9paules'},{day:'Jeudi',muscles:['bras'],label:'Bras'},{day:'Vendredi',muscles:['jambes'],label:'Jambes'}], notes:'Repos samedi et dimanche. Logique : pectoraux lundi \u2192 \u00e9paules mercredi (48h r\u00e9cup pecs avant sollicitation deltoide ant\u00e9rieur partag\u00e9) \u2192 bras jeudi (biceps + triceps frais) \u2192 jambes vendredi. DOS mardi = antago push du lundi. Structure optimale pour r\u00e9cup\u00e9ration et performance.'},
+  6: {name:'PPL 6j', days:[{day:'Lundi',muscles:['pectoraux'],label:'Push: Pecs'},{day:'Mardi',muscles:['dos'],label:'Pull: Dos'},{day:'Mercredi',muscles:['jambes'],label:'Legs'},{day:'Jeudi',muscles:['epaules','triceps_dedied'],label:'Push: \u00c9paules + Triceps'},{day:'Vendredi',muscles:['dos','biceps_dedied'],label:'Pull: Dos + Biceps'},{day:'Samedi',muscles:['jambes','fessiers_dedied'],label:'Legs + Fessiers'}], notes:'PPL 6j professionnel. Chaque groupe stimul\u00e9 2x/semaine. Pecs lundi + \u00e9paules jeudi (3j r\u00e9cup du faisceau ant\u00e9rieur). Dos 2x/semaine (fr\u00e9quence optimale pour le grand dorsal). Jambes 2x/semaine = maximum de stimulation. REPOS DIMANCHE obligatoire \u2014 le surena\u00eeenement brise les gains.'}
 };
 
 function getPersonalizedProgram(muscleGroup, userProfile) {
@@ -1837,22 +1837,22 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Pompes classiques', m: 'Pectoraux', eq: 'Poids du corps', sets: '4×15-20', rest: '60s' },
     { n: 'Pompes déclinées', m: 'Pectoraux supérieurs', eq: 'Poids du corps', sets: '3×12-15', rest: '60s' },
     { n: 'Écarté haltères couché', m: 'Pectoraux', eq: 'Haltères + banc', sets: '3×12-15', rest: '60s' },
-    { n: 'Écarté poulie basse croisée', m: 'Pectoraux', eq: 'Poulie basse', sets: '3×12-15', rest: '60s' },
+    { n: 'Câble crossover bas', m: 'Pectoraux inférieurs', eq: 'Câble poulie basse', sets: '3×12-15', rest: '60s' },
     { n: 'Dips prise large', m: 'Pectoraux / Triceps', eq: 'Barres parallèles', sets: '3×10-15', rest: '90s' },
     { n: 'Chest press machine', m: 'Pectoraux', eq: 'Machine convergente', sets: '3×12-15', rest: '60s' },
     { n: 'Câble crossover', m: 'Pectoraux', eq: 'Câble double poulie', sets: '3×12-15', rest: '60s' },
-    { n: 'Pec deck machine', m: 'Pectoraux', eq: 'Machine pec deck', sets: '3×12-15', rest: '60s' },
+    { n: 'Pec deck / Butterfly', m: 'Pectoraux', eq: 'Machine pec deck', sets: '3×12-15', rest: '60s' },
     { n: 'Landmine press', m: 'Pectoraux', eq: 'Barre landmine', sets: '4×10-12', rest: '90s' }
   ],
   dos: [
     { n: 'Tractions pronation', m: 'Grand dorsal', eq: 'Barre de traction', sets: '4×6-10', rest: '120s' },
-    { n: 'Tractions supination', m: 'Grand dorsal / Biceps', eq: 'Barre de traction', sets: '4×6-10', rest: '120s' },
+    { n: 'Chin-ups (traction supination)', m: 'Grand dorsal / Biceps', eq: 'Barre de traction', sets: '4×6-10', rest: '120s' },
     { n: 'Tirage vertical prise large', m: 'Dos (largeur)', eq: 'Machine / Poulie haute', sets: '4x10', rest: '90s' },
     { n: 'Tirage horizontal câble', m: 'Dorsaux / Rhomboïdes', eq: 'Câble horizontal', sets: '4×10-12', rest: '90s' },
     { n: 'Rowing haltère unilatéral', m: 'Grand dorsal / Trapèzes', eq: 'Haltère + banc', sets: '4×10-12', rest: '75s' },
     { n: 'Rowing barre', m: 'Grand dorsal / Trapèzes', eq: 'Barre', sets: '4×8-12', rest: '90s' },
     { n: 'Shrugs haltères', m: 'Trapèzes supérieurs', eq: 'Haltères', sets: '4×12-15', rest: '60s' },
-    { n: 'Deadlift roumain', m: 'Dorsaux / Ischios / Fessiers', eq: 'Barre', sets: '4×8-10', rest: '120s' },
+    { n: 'Soulevé de terre roumain', m: 'Dorsaux / Ischios / Fessiers', eq: 'Barre', sets: '4×8-10', rest: '120s' },
     { n: 'Chest supported row', m: 'Dos', eq: 'Banc incliné + haltères', sets: '4×10-12', rest: '90s' },
     { n: 'Straight arm pulldown câble', m: 'Dos', eq: 'Câble haute poulie', sets: '3×12-15', rest: '60s' },
     { n: 'Rack pull', m: 'Dos', eq: 'Barre + rack', sets: '4×6-8', rest: '120s' },
@@ -1882,10 +1882,10 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Curl câble basse poulie', m: 'Biceps', eq: 'Câble bas', sets: '3×12-15', rest: '60s' },
     { n: 'Curl concentré', m: 'Biceps (peak)', eq: 'Haltère', sets: '3×12-15', rest: '45s' },
     { n: 'Curl EZ barre', m: 'Biceps', eq: 'Barre EZ', sets: '4×10-12', rest: '60s' },
-    { n: 'Drag curl', m: 'Biceps chef long', eq: 'Barre droite', sets: '3×10-12', rest: '60s' },
-    { n: 'Curl reverse grip', m: 'Brachioradial / Biceps', eq: 'Barre EZ', sets: '3×12-15', rest: '60s' },
+    { n: 'Curl spider (araignee)', m: 'Biceps (pic)', eq: 'Barre EZ ou haltères + banc incliné', sets: '3×10-12', rest: '60s' },
+    { n: 'Curl marteau câble', m: 'Brachial / Brachio-radial', eq: 'Câble poulie basse + corde', sets: '3×12-15', rest: '60s' },
     { n: 'Chin-up supination', m: 'Biceps / Grand dorsal', eq: 'Barre de traction', sets: '4×6-10', rest: '90s' },
-    { n: 'Curl Zottman', m: 'Biceps / Brachioradial', eq: 'Haltères', sets: '3×10-12', rest: '60s' }
+    { n: 'Curl 21s', m: 'Biceps (complet)', eq: 'Barre EZ ou halteres', sets: '3×21 (7+7+7)', rest: '90s' }
   ],
   triceps: [
     { n: 'Dips triceps banc', m: 'Triceps', eq: 'Banc', sets: '4×12-15', rest: '60s' },
@@ -1899,7 +1899,7 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Skull crushers EZ', m: 'Triceps', eq: 'Barre EZ + banc', sets: '4×10-12', rest: '90s' },
     { n: 'Extension triceps machine', m: 'Triceps', eq: 'Machine triceps', sets: '3×12-15', rest: '60s' },
     { n: 'JM Press', m: 'Triceps', eq: 'Barre + banc', sets: '4×8-10', rest: '90s' },
-    { n: 'Tate press', m: 'Triceps chef latéral', eq: 'Haltères + banc', sets: '3×12-15', rest: '60s' }
+    { n: 'JM Press', m: 'Triceps (chef long)', eq: 'Barre EZ + banc', sets: '4×8-10', rest: '90s' }
   ],
   quadriceps: [
     { n: 'Squat barre', m: 'Quadriceps / Fessiers', eq: 'Barre + rack', sets: '5×5-8', rest: '180s' },
@@ -1919,7 +1919,7 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Deadlift roumain barre', m: 'Ischios / Fessiers / Dorsaux', eq: 'Barre', sets: '4×8-12', rest: '120s' },
     { n: 'Leg curl allongé', m: 'Ischios', eq: 'Machine leg curl', sets: '4×10-12', rest: '75s' },
     { n: 'Leg curl assis', m: 'Ischios', eq: 'Machine leg curl assis', sets: '4×10-12', rest: '75s' },
-    { n: 'Deadlift sumo', m: 'Ischios / Fessiers / Adducteurs', eq: 'Barre', sets: '4×6-10', rest: '150s' },
+    { n: 'Sumo deadlift', m: 'Fessiers / Ischios / Adducteurs', eq: 'Barre', sets: '4×5-8', rest: '120s' },
     { n: 'Good morning', m: 'Ischios / Bas du dos', eq: 'Barre', sets: '3×10-12', rest: '90s' },
     { n: 'Nordic curl', m: 'Ischios excentrique', eq: 'Partenaire ou machine', sets: '3×6-8', rest: '120s' },
     { n: 'Leg curl debout câble', m: 'Ischio-jambiers', eq: 'Câble basse poulie', sets: '3×12-15', rest: '60s' },
@@ -1937,7 +1937,7 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Glute bridge bilatéral', m: 'Fessiers', eq: 'Poids du corps', sets: '4×15-20', rest: '45s' },
     { n: 'Hip thrust unilatéral', m: 'Fessiers', eq: 'Banc + haltère', sets: '3×10-12', rest: '60s' },
     { n: 'Frog pump', m: 'Grand fessier', eq: 'Poids de corps', sets: '3×15-20', rest: '30s' },
-    { n: 'Squat sumo haltère pause', m: 'Fessiers / Adducteurs', eq: 'Haltère', sets: '4×10-12', rest: '90s' },
+    { n: 'Sumo squat haltere', m: 'Fessiers / Adducteurs', eq: 'Haltere', sets: '4×10-12', rest: '90s' },
     { n: 'Cable pull-through', m: 'Fessiers / Ischios', eq: 'Câble basse poulie', sets: '3×12-15', rest: '60s' },
     { n: 'Abduction debout élastique', m: 'Fessiers / Abducteurs', eq: 'Élastique', sets: '3×15-20', rest: '30s' }
   ],
