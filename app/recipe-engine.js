@@ -15830,7 +15830,7 @@
       recipeId:       recipeId,
       recipeName:     recipe.name,
       totalMAD:       totalMAD,
-      pricePerServing: Math.round((totalMAD / recipe.servings) * 100) / 100,
+      pricePerServing: totalMAD,  // totalMAD is already per-serving (qty divided by servings at line 15822)
       breakdown:      breakdown,
       missing:        missing,           // ingrédients sans prix dans prices-db
       coveragePct:    recipe.ingredients.length > 0

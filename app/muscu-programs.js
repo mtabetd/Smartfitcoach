@@ -442,6 +442,8 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
   var program = NFC_PROGRAMS[muscleGroup];
   if (!program) return null;
   if (program.exercises) { try { return JSON.parse(JSON.stringify(program)); } catch(e) { return program; } }
+  // Programmes dédiés (fessiers, abdos, biceps, triceps) utilisent des variations au lieu de masse/sèche
+  if (program.variations) { try { return JSON.parse(JSON.stringify(program)); } catch(e) { return program; } }
   var template = program[goalKey] || program.masse;
   if (!template) return null;
   var result; try { result = JSON.parse(JSON.stringify(template)); } catch(e) { return null; }
@@ -512,7 +514,7 @@ function getWeeklySplit(daysPerWeek, userProfile) {
     var alreadyPresent = split.days.some(function(d){ return d.muscles.indexOf(dediedKey) !== -1; });
     if (alreadyPresent) return;
     // Find the best day to inject (jambes day for fessiers, bras/abdos day for others)
-    var parentGroup = {fessiers_dedied:'jambes', abdos_dedied:'bras', biceps_dedied:'bras', triceps_dedied:'bras'}[dediedKey] || 'jambes';
+    var parentGroup = {fessiers_dedied:'jambes', abdos_dedied:'abdos', biceps_dedied:'bras', triceps_dedied:'bras'}[dediedKey] || 'jambes';
     var targetDay = null;
     // Find day with parent group, preferring the last occurrence
     for (var di = split.days.length - 1; di >= 0; di--) {

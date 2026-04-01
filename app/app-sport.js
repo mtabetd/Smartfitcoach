@@ -44,7 +44,7 @@ function filterExerciseByMedical(ex, med) {
  // Crunch/sit-up classique = flexion lombaire répétée → déconseillé en hernie active.
  // RDL, rowing buste penché = flexion du tronc sous charge.
  if (med.lowerBack || med.herniaDisc) {
- if (/soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning|jefferson|squat barre|back squat|hack squat|presse.*cuisse|leg press|rowing barre|pendlay row|rowing t.?bar|t.?bar row|crunch|sit.?up|ab wheel|roue abdominal|hyperextension/.test(n)) return false;
+ if (/soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning|jefferson|squat barre|back squat|front squat|hack squat|presse.*cuisse|leg press|rowing barre|pendlay row|rowing t.?bar|t.?bar row|crunch|sit.?up|ab wheel|roue abdominal|hyperextension/.test(n)) return false;
  }
 
  // ── HERNIE INGUINALE ──
@@ -2361,7 +2361,7 @@ function renderSparkline(values, color) {
 
 function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  // Récupère l'historique de cet exercice
- var history = S.muscuProgressionHistory[exerciseName] || [];
+ var history = (S.muscuProgressionHistory || {})[exerciseName] || [];
 
  // Si historique disponible, utilise la dernière session
  if (history.length > 0) {
@@ -2374,7 +2374,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  // Exclure la session d'aujourd'hui (initialisée avec des nulls, pas encore validée)
  var today = new Date().toISOString().slice(0, 10);
  var lastLog = null;
- var sortedDates = Object.keys(S.muscuSessionLog).filter(function(d) { return d !== today; }).sort();
+ var sortedDates = Object.keys(S.muscuSessionLog || {}).filter(function(d) { return d !== today; }).sort();
  sortedDates.forEach(function(date) {
  if (S.muscuSessionLog[date][exerciseName]) {
  lastLog = { date: date, sets: S.muscuSessionLog[date][exerciseName] };
@@ -3046,7 +3046,7 @@ function calcSessionKcal(exercises, durationMin) {
  var s = window.S;
  var weight = s.weight || 75;
  var age = s.age || 30;
- var sex = s.sex || (s.sex === 'femme' ? 'femme' : 'homme'); // BUG-15 fix: respect null sex
+ var sex = (s.sex === 'femme') ? 'femme' : 'homme';
  // Phase courante → RPE
  var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
  var rpe = phase ? phase.rpe : 7;
