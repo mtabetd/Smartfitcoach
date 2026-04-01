@@ -340,6 +340,46 @@ function renderLogin(app) {
  if (result.ok) {
  S.authError = '';
  S.view = 'dashboard';
+ // Restore profile from localStorage for this user
+ loadProfile();
+ // Fix nStep for returning users who completed onboarding
+ if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
+ S.nStep = S.weekPlan ? 9 : (S.goal ? 8 : 1);
+ }
+ // Restore language preference
+ if (window.I18N && S.lang) window.I18N.current = S.lang;
+ // Restore unit preferences
+ if (window.UNITS) {
+ window.UNITS.weight = S.weightUnit || 'kg';
+ window.UNITS.height = S.heightUnit || 'cm';
+ }
+ // Load weight history (stored separately)
+ try {
+ var user = AUTH.getUser();
+ var userId = user ? user.id : 'anon';
+ var savedWH = localStorage.getItem('mtd_weight_history_' + userId);
+ if (savedWH) S.weightHistory = JSON.parse(savedWH);
+ } catch(e) {}
+ // Migrate performance data
+ if (window.PERF_HISTORY) {
+ try { PERF_HISTORY.migrateExistingData(); } catch(e) {}
+ }
+ // Sync from cloud (async — will re-render if cloud data was loaded)
+ if (window.SupaSync) {
+ SupaSync.syncOnLogin().then(function(syncResult) {
+ if (syncResult === 'loaded_from_cloud') {
+ if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
+ S.nStep = S.weekPlan ? 9 : (S.goal ? 8 : 1);
+ }
+ if (window.I18N && S.lang) window.I18N.current = S.lang;
+ if (window.UNITS) {
+ window.UNITS.weight = S.weightUnit || 'kg';
+ window.UNITS.height = S.heightUnit || 'cm';
+ }
+ }
+ });
+ SupaSync.startAutoSync();
+ }
  if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
  render();
  } else {

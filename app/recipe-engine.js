@@ -16657,6 +16657,143 @@
       });
     });
 
+    // ── CONSOLIDATION g↔ml : fusionner les doublons d'un même ingrédient ──────
+    // Quand un ingrédient apparaît à la fois en "g" et en "ml", convertir tout
+    // vers une seule unité grâce à la table de densités, puis supprimer le doublon.
+    (function _consolidateGramsMl() {
+      // Table de densités : 1 ml = X g  (ingrédients courants marocains)
+      var DENSITY = {
+        'miel':            1.40,
+        'huile d\'olive':  0.92, 'huile d olive': 0.92,
+        'huile de coco':   0.92, 'huile de sesame': 0.92, 'huile de tournesol': 0.92,
+        'huile':           0.92,
+        'lait':            1.03, 'lait ecreme': 1.03, 'lait demi-ecreme': 1.03, 'lait entier': 1.03,
+        'lait d\'amande':  1.03, 'lait d amande': 1.03, 'lait de coco': 1.03,
+        'lait de soja':    1.03, 'lait d\'avoine': 1.03, 'lait d avoine': 1.03,
+        'lait vegetal':    1.03,
+        'creme fraiche':   1.00, 'creme liquide': 1.00, 'creme':  1.00,
+        'beurre fondu':    0.91, 'beurre':  0.91,
+        'sirop d\'erable': 1.35, 'sirop d erable': 1.35, 'sirop d\'agave': 1.35,
+        'sirop d agave':   1.35, 'sirop':   1.35,
+        'vinaigre':        1.01, 'vinaigre balsamique': 1.01, 'vinaigre de cidre': 1.01,
+        'sauce soja':      1.10, 'tamari':  1.10,
+        'eau':             1.00, 'eau de rose': 1.00,
+        'nuoc mam':        1.10, 'fish sauce': 1.10,
+        'kecap manis':     1.30, 'teriyaki': 1.10,
+        'harissa':         1.05, 'sriracha': 1.10,
+        'moutarde':        1.05, 'pesto':   1.05,
+        'yaourt':          1.03, 'yaourt grec': 1.05, 'skyr': 1.05,
+        'mascarpone':      1.00, 'ricotta': 1.02
+      };
+
+      // Chercher la densité d'un ingrédient par correspondance partielle
+      function _findDensity(normName) {
+        // Essai exact d'abord
+        if (DENSITY[normName] !== undefined) return DENSITY[normName];
+        // Correspondance partielle : chercher si le nom contient une clé connue
+        var keys = Object.keys(DENSITY);
+        for (var d = 0; d < keys.length; d++) {
+          if (normName.indexOf(keys[d]) >= 0 || keys[d].indexOf(normName) >= 0) {
+            return DENSITY[keys[d]];
+          }
+        }
+        return null; // pas de densité connue → on ne peut pas convertir
+      }
+
+      // Déterminer l'unité cible pour un ingrédient donné :
+      // liquides → ml/g selon ce qui est le plus naturel
+      var IS_LIQUID = /huile|vinaigre|sauce|lait|creme|sirop|jus|eau|nuoc|tamari|kecap|teriyaki|sriracha|fish sauce|moutarde|pesto|harissa|yaourt|skyr|mascarpone|ricotta/i;
+      // Miel est visqueux mais vendu en pots pesés en g au Maroc
+      var PREFER_GRAMS = /miel|beurre|tahini|puree.*sesame|confiture|miso|pesto|mascarpone|ricotta/i;
+
+      // Collecter les noms normalisés qui ont PLUSIEURS unités parmi g/ml/kg/l
+      var ingUnits = {};  // { normName: { g: key, ml: key, ... } }
+      Object.keys(consolidated).forEach(function(key) {
+        var parts = key.split('||');
+        var normName = parts[0];
+        var normU    = parts[1];
+        if (normU === 'g' || normU === 'ml' || normU === 'kg' || normU === 'l') {
+          if (!ingUnits[normName]) ingUnits[normName] = {};
+          ingUnits[normName][normU] = key;
+        }
+      });
+
+      Object.keys(ingUnits).forEach(function(normName) {
+        var units = ingUnits[normName];
+        var unitKeys = Object.keys(units);
+        if (unitKeys.length < 2) return; // une seule unité → rien à fusionner
+
+        // Normaliser kg→g et l→ml d'abord
+        if (units['kg'] && units['g']) {
+          consolidated[units['g']].qty += consolidated[units['kg']].qty * 1000;
+          var kgRecipes = consolidated[units['kg']].recipes;
+          for (var ri = 0; ri < kgRecipes.length; ri++) {
+            if (consolidated[units['g']].recipes.indexOf(kgRecipes[ri]) < 0) {
+              consolidated[units['g']].recipes.push(kgRecipes[ri]);
+            }
+          }
+          delete consolidated[units['kg']];
+          delete units['kg'];
+        }
+        if (units['l'] && units['ml']) {
+          consolidated[units['ml']].qty += consolidated[units['l']].qty * 1000;
+          var lRecipes = consolidated[units['l']].recipes;
+          for (var rj = 0; rj < lRecipes.length; rj++) {
+            if (consolidated[units['ml']].recipes.indexOf(lRecipes[rj]) < 0) {
+              consolidated[units['ml']].recipes.push(lRecipes[rj]);
+            }
+          }
+          delete consolidated[units['l']];
+          delete units['l'];
+        }
+
+        // Maintenant : fusionner g ↔ ml si les deux existent
+        unitKeys = Object.keys(units);
+        if (unitKeys.length < 2) return;
+        if (!units['g'] || !units['ml']) return; // pas de paire g/ml → on ne sait pas convertir
+
+        var density = _findDensity(normName);
+        if (!density) return; // pas de densité connue → garder les deux lignes séparément
+
+        var itemG  = consolidated[units['g']];
+        var itemMl = consolidated[units['ml']];
+        var originalName = itemG.name || itemMl.name;
+
+        // Choisir l'unité cible
+        var targetUnit;
+        if (PREFER_GRAMS.test(originalName)) {
+          targetUnit = 'g';
+        } else if (IS_LIQUID.test(originalName)) {
+          targetUnit = 'ml';
+        } else {
+          // Par défaut : convertir les deux en grammes pour comparer équitablement
+          var mlAsGrams = itemMl.qty * density;
+          targetUnit = itemG.qty >= mlAsGrams ? 'g' : 'ml';
+        }
+
+        if (targetUnit === 'g') {
+          // Convertir ml → g : g = ml * densité
+          itemG.qty += Math.round(itemMl.qty * density * 10) / 10;
+          // Fusionner les recettes
+          for (var rk = 0; rk < itemMl.recipes.length; rk++) {
+            if (itemG.recipes.indexOf(itemMl.recipes[rk]) < 0) {
+              itemG.recipes.push(itemMl.recipes[rk]);
+            }
+          }
+          delete consolidated[units['ml']];
+        } else {
+          // Convertir g → ml : ml = g / densité
+          itemMl.qty += Math.round((itemG.qty / density) * 10) / 10;
+          for (var rl = 0; rl < itemG.recipes.length; rl++) {
+            if (itemMl.recipes.indexOf(itemG.recipes[rl]) < 0) {
+              itemMl.recipes.push(itemG.recipes[rl]);
+            }
+          }
+          delete consolidated[units['g']];
+        }
+      });
+    })();
+
     // Regrouper par catégorie + arrondir aux quantités d'achat réalistes
     var categorized = {};
     Object.keys(consolidated).forEach(function(key) {
