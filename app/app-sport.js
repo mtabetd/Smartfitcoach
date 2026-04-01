@@ -1962,10 +1962,27 @@ function renderCrossfitProgram(p) {
  var totalSeconds = 0;
  var isCountdown = false;
  var isEmom = (wodType.indexOf('EMOM') !== -1);
+ // Match explicit "Xmin" or "X MIN" (For Time cap, EMOM with unit)
  var capMatch = wodType.match(/(\d+)\s*(?:MIN|MINUTES?)/);
  if (capMatch) {
  totalSeconds = parseInt(capMatch[1]) * 60;
  isCountdown = true;
+ }
+ // AMRAP X or EMOM X (no "min" suffix) — number is the duration in minutes
+ if (!isCountdown) {
+ var amrapMatch = wodType.match(/^(?:AMRAP|EMOM)\s+(\d+)/);
+ if (amrapMatch) {
+ totalSeconds = parseInt(amrapMatch[1]) * 60;
+ isCountdown = true;
+ }
+ }
+ // EMOM X (Y rounds) — use X as total minutes even if no "min" suffix
+ if (!isCountdown && isEmom) {
+ var emomAny = wodType.match(/EMOM\s+(\d+)/);
+ if (emomAny) {
+ totalSeconds = parseInt(emomAny[1]) * 60;
+ isCountdown = true;
+ }
  }
  var totalRounds = isEmom && totalSeconds > 0 ? Math.floor(totalSeconds / 60) : 0;
 
@@ -2819,13 +2836,14 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  actions.appendChild(skipBtn);
 
  var muteBtn = document.createElement('button');
- muteBtn.className = 'rest-timer-btn rest-timer-btn-mute';
+ muteBtn.className = 'rest-timer-btn rest-timer-btn-mute' + (window._sfcMuted ? ' muted' : '');
  muteBtn.textContent = window._sfcMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
  muteBtn.title = window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper';
  muteBtn.addEventListener('click', function() {
  window._sfcMuted = !window._sfcMuted;
  muteBtn.textContent = window._sfcMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
  muteBtn.title = window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper';
+ if (window._sfcMuted) { muteBtn.classList.add('muted'); } else { muteBtn.classList.remove('muted'); }
  });
  actions.appendChild(muteBtn);
  } else {
@@ -4581,7 +4599,7 @@ function renderRunningProgram(p) {
 function renderHyroxConfig(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Hyrox'));
  p.appendChild(h('h1', {html: 'Préparation<br><em>Hyrox</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, '8 semaines pour être prêt le jour J'));
+ p.appendChild(h('p', {'class': 'subtitle'}, '12 semaines pour être prêt le jour J'));
 
  // Goal selection (mandatory)
  p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));

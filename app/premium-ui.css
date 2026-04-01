@@ -1893,6 +1893,13 @@ body.dark-mode .auth-container {
   text-align: center;
   border-bottom: 1px solid var(--border, #ECF0F1);
 }
+.set-row {
+  display: grid;
+  align-items: center;
+  padding: 6px 8px;
+  border-top: 1px solid var(--border);
+  transition: background 0.15s ease;
+}
 .set-row:nth-child(even) {
   background: var(--ivory2, #F8F9FA);
 }
@@ -2113,6 +2120,10 @@ body.dark-mode .auth-container {
 }
 .rest-timer-btn-mute:hover {
   background: rgba(250, 250, 247, 0.15);
+}
+.rest-timer-btn-mute.muted {
+  opacity: 0.45;
+  text-decoration: line-through;
 }
 .rest-timer-btn-go {
   background: linear-gradient(135deg, #27AE60, #2ECC71);

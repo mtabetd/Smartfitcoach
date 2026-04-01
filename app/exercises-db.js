@@ -1935,3 +1935,8 @@ var EXERCISES = {
     }
   ]
 };
+
+// Export to window so app-sport.js can access EXERCISES via window.EXERCISES
+if (typeof window !== 'undefined') {
+  window.EXERCISES = EXERCISES;
+}
