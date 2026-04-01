@@ -171,6 +171,103 @@ var EXERCISES = {
       lv: 3,
       tags: ["pectoraux", "puissance", "explosif", "poids du corps"]
     }
+,
+    {
+        n: "Développé couché unilatéral haltère",
+        m: "Pectoraux",
+        eq: "Haltère + banc",
+        sets: "3×10-12",
+        rest: "75s",
+        video: "https://www.youtube.com/results?search_query=single+arm+dumbbell+bench+press+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Allongé sur le banc, presser un seul haltère tout en stabilisant activement la scapula controlatérale. Alterner les côtés.",
+        tips: ["Engager le grand dentelé pour plaquer l'omoplate contre la cage thoracique", "Ne pas laisser le tronc pivoter — core braced tout au long du mouvement", "Le bras libre peut rester tendu le long du corps ou appuyer sur la cuisse", "Idéal pour corriger les déséquilibres droite/gauche"],
+        lv: 2,
+        tags: ["pectoraux", "triceps", "unilateral", "hypertrophie"]
+    },
+    {
+        n: "Svend press",
+        m: "Pectoraux",
+        eq: "Disques de fonte",
+        sets: "3×12-15",
+        rest: "60s",
+        video: "https://www.youtube.com/results?search_query=svend+press+chest+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Debout ou assis, tenir deux petits disques pincés entre les paumes, bras tendus devant la poitrine. Presser les disques l'un contre l'autre isométriquement tout en poussant vers l'avant et en ramenant.",
+        tips: ["Maintenir la pression d'adduction maximale pendant toute l'amplitude — c'est l'élément clé", "Contrôler la phase de retour en résistant à l'écartement des mains", "Commencer léger (2×5 kg) — la tension isométrique est intense malgré la charge faible", "Excellent comme finition ou pump set en fin de séance pectoraux"],
+        lv: 2,
+        tags: ["pectoraux", "isolation", "finition", "hypertrophie"]
+    },
+    {
+        n: "Floor press haltères",
+        m: "Pectoraux",
+        eq: "Haltères",
+        sets: "4×8-12",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=dumbbell+floor+press+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Allongé au sol, genoux fléchis, haltères en position de press. Descendre jusqu'à ce que les triceps touchent le sol, puis pousser.",
+        tips: ["Le sol limite naturellement l'amplitude — élimine le stress sur la capsule antérieure de l'épaule", "La pause au sol (dead stop) renforce la phase de démarrage concentrique", "Garder les coudes à 45 degrés du tronc pour protéger l'épaule", "Idéal en phase de décharge ou pour les pratiquants avec antécédents d'épaule"],
+        lv: 1,
+        tags: ["pectoraux", "triceps", "force", "hypertrophie"]
+    },
+    {
+        n: "Pompes aux anneaux",
+        m: "Pectoraux",
+        eq: "Anneaux de gymnastique",
+        sets: "3×8-12",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=ring+push+ups+gymnastic+rings+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Mains dans les anneaux réglés à hauteur de genou. Effectuer des pompes en rotation externe des anneaux en bas, neutre en haut pour maximiser l'activation pectorale.",
+        tips: ["Tourner les anneaux vers l'extérieur en bas — supination active le grand pectoral et protège l'épaule", "L'instabilité recrute le grand dentelé et les stabilisateurs scapulaires en continu", "Plus les anneaux sont bas, plus l'exercice est difficile — régler la hauteur selon le niveau", "Ajouter une légère phase d'adduction en haut pour maximiser le pic de contraction"],
+        lv: 3,
+        tags: ["pectoraux", "triceps", "poids du corps", "hypertrophie"]
+    },
+    {
+        n: "Low cable crossover",
+        m: "Pectoraux inférieurs",
+        eq: "Câble double poulie basse",
+        sets: "3×12-15",
+        rest: "60s",
+        video: "https://www.youtube.com/results?search_query=low+cable+crossover+chest+fly+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Poulies réglées en position basse. Debout au centre, ramener les câbles vers le haut et croiser les mains devant la poitrine en arc montant.",
+        tips: ["Le vecteur montant cible le faisceau sternal inférieur du pectoral — rôle d'adduction + dépression humérale", "Légère flexion du tronc vers l'avant pour aligner l'axe de force avec les fibres ciblées", "Ne pas verrouiller les coudes — maintenir une légère flexion tout au long", "Phase excentrique lente (3 secondes) pour maximiser le stimulus d'hypertrophie"],
+        lv: 2,
+        tags: ["pectoraux", "cable", "isolation", "finition"]
+    },
+    {
+        n: "Incline cable fly",
+        m: "Pectoraux supérieurs",
+        eq: "Câble double poulie haute + banc incliné",
+        sets: "3×12-15",
+        rest: "60s",
+        video: "https://www.youtube.com/results?search_query=incline+cable+fly+upper+chest+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Banc incliné à 30-45° positionné entre deux poulies hautes. Réaliser un écarté câble vers le haut, en arc descendant croisant les mains.",
+        tips: ["Les poulies hautes créent un vecteur descendant qui cible les fibres claviculaires du pectoral", "Maintenir une légère flexion des coudes pendant toute l'amplitude — jamais bras tendus", "Sentir l'étirement maximal en position ouverte — c'est le signal d'étirement mécanique optimal", "Croiser légèrement les mains en fin de mouvement pour maximiser l'adduction du pectoral supérieur"],
+        lv: 2,
+        tags: ["pectoraux", "cable", "isolation", "hypertrophie"]
+    },
+    {
+        n: "Pompes archer",
+        m: "Pectoraux",
+        eq: "Poids du corps",
+        sets: "3×6-10",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=archer+push+ups+unilateral+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Position de pompe, mains très écartées. Descendre d'un côté en pliant ce bras tandis que l'autre reste tendu, en décalant le poids d'un côté à l'autre.",
+        tips: ["Le bras tendu peut pointer le doigt vers le sol ou rester à plat selon la souplesse du poignet", "Plus les mains sont éloignées, plus la charge sur le bras plié est élevée — progresser par écartement", "Maintenir le bassin stable et le core contracté pour éviter la rotation du tronc", "Étape progressive vers le one-arm push-up — entraîne la stabilisation scapulaire unilatérale"],
+        lv: 3,
+        tags: ["pectoraux", "triceps", "poids du corps", "unilateral"]
+    },
+    {
+        n: "Landmine press",
+        m: "Pectoraux / Épaules",
+        eq: "Barre olympique + landmine ou coin mur",
+        sets: "4×8-12",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=landmine+press+chest+shoulder+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Barre fichée dans un landmine, saisir l'extrémité à hauteur de poitrine. Pousser en arc vers le haut-avant jusqu'à extension complète, contrôler la descente.",
+        tips: ["Le vecteur oblique (45°) réduit le cisaillement sous-acromial par rapport au développé vertical — épaule-friendly", "Prise neutre (pouces vers le haut) tout au long — favorise la stabilité de la coiffe des rotateurs", "Version unilatérale : ajouter une légère rotation du tronc côté opposé pour intégrer le core", "Idéal comme alternative au développé militaire pour les pratiquants avec antécédents d'épaule"],
+        lv: 2,
+        tags: ["pectoraux", "epaules", "triceps", "compose", "force"]
+    }
   ],
 
   // ─── DOS ───
@@ -287,7 +384,7 @@ var EXERCISES = {
       tags: ["dos", "lombaires", "poids du corps"]
     },
     {
-      n: "Straight-arm pulldown",
+      n: "Straight-arm pulldown barre",
       m: "Grand dorsal (stretch)",
       eq: "Câble poulie haute",
       sets: "3\u00d715",
@@ -340,6 +437,105 @@ var EXERCISES = {
       tips: ["Buste fixe à 45 degrés", "Tirer les coudes vers l'arrière", "Amplitude complete — etirer les dorsaux en bas"],
       lv: 2,
       tags: ["dos", "dorsaux", "force", "compose"]
+    }
+,
+    {
+        n: "Meadow row",
+        m: "Grand dorsal / Rhomboïdes",
+        eq: "Barre olympique + landmine ou coin",
+        sets: "4×8-12",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=meadows+row+back+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Barre au sol dans un landmine. Stance en fente, main côté arrière saisit l'extrémité en prise surélevée, tirer vers la hanche ipsilatérale en rotation légère du tronc.",
+        tips: ["La prise surélevée (neutral-overhand) permet une amplitude d'extension plus grande qu'un rowing haltère classique", "Tirer le coude haut et en arrière — rétraction scapulaire complète en fin de mouvement", "Le pied avant peut s'appuyer sur un support pour maintenir l'équilibre et isoler le dos", "Exercice favorisé par John Meadows pour le développement des épaisseurs dorsales latérales"],
+        lv: 2,
+        tags: ["dos", "unilateral", "compose", "hypertrophie"]
+    },
+    {
+        n: "Chest supported row machine",
+        m: "Grand dorsal / Rhomboïdes",
+        eq: "Machine rowing pectoraux appuyés",
+        sets: "4×10-12",
+        rest: "75s",
+        video: "https://www.youtube.com/results?search_query=chest+supported+row+machine+back+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Poitrine appuyée sur le pad incliné de la machine. Tirer les poignées vers les hanches en rétractant les omoplates, relâcher lentement.",
+        tips: ["L'appui pectoral élimine totalement la compensation lombaire — isolation pure des dorsaux", "Idéal en fin de séance ou pour les pratiquants avec lombalgie — aucun stress sur L4-L5", "Serrer les omoplates à fond en fin de mouvement et tenir 1 seconde (peak contraction)", "Varier la prise (large, neutre, serrée) pour cibler différentes portions des dorsaux et rhomboïdes"],
+        lv: 1,
+        tags: ["dos", "machine", "isolation", "hypertrophie"]
+    },
+    {
+        n: "Tirage vertical prise neutre",
+        m: "Grand dorsal",
+        eq: "Poulie haute + triangle V-bar",
+        sets: "4×8-12",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=v+bar+pulldown+neutral+grip+lat+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Barre V ou triangle accroché à la poulie haute. Tirer vers le bas jusqu'au niveau du menton en gardant le buste légèrement incliné vers l'arrière.",
+        tips: ["La prise neutre (paumes face à face) réduit le stress sur l'épicondyle latéral versus la prise pronation", "Initier le mouvement par la dépression scapulaire, pas par la flexion des coudes", "Coudes guidés vers les poches — trajet en V plutôt qu'en ligne droite pour respecter l'anatomie", "Excellent compromis entre tirage vertical large (dorsaux) et prise serrée (dentelé + trapèze moyen)"],
+        lv: 2,
+        tags: ["dos", "cable", "compose", "hypertrophie"]
+    },
+    {
+        n: "Seal row",
+        m: "Grand dorsal / Rhomboïdes / Trapèze moyen",
+        eq: "Haltères + banc surélevé",
+        sets: "4×8-12",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=seal+row+prone+dumbbell+row+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Allongé face contre terre sur un banc surélevé (ou deux pliometrics boxes), haltères en main, tirer vers les hanches sans possibilité de tricher avec le bas du dos.",
+        tips: ["La position allongée élimine toute énergie cinétique et tout rebond — isolation pure et concentration maximale", "Retract and depress les omoplates avant même d'initier la traction — préparer la « plateforme »", "Variation : barre olympique pour augmenter la charge — nécessite banc plus haut ou support spécifique", "Mouvement lent et contrôlé (2s montée / 2s descente) — priorité à la qualité sur la quantité"],
+        lv: 2,
+        tags: ["dos", "hypertrophie", "isolation", "compose"]
+    },
+    {
+        n: "Straight arm pulldown",
+        m: "Grand dorsal",
+        eq: "Poulie haute + barre droite ou corde",
+        sets: "3×12-15",
+        rest: "60s",
+        video: "https://www.youtube.com/results?search_query=straight+arm+pulldown+lat+isolation+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Debout face à la poulie haute, légère flexion vers l'avant. Bras quasi tendus, descendre la barre en arc jusqu'aux cuisses par extension pure de l'épaule.",
+        tips: ["Mouvement d'extension d'épaule pur — les coudes ne fléchissent pas, biceps neutralisés", "Le grand dorsal est en isolation maximale — excellent pour établir la connexion neuromusculaire", "Placer consciemment les omoplates en légère dépression avant de tirer — activer le serratuer", "Idéal en échauffement dorsal ou en finition pour le pump du grand dorsal"],
+        lv: 2,
+        tags: ["dos", "cable", "isolation", "finition"]
+    },
+    {
+        n: "Rack pull",
+        m: "Grand dorsal / Trapèze / Ischios-jambiers",
+        eq: "Barre + rack + bumper plates",
+        sets: "4×4-6",
+        rest: "120s",
+        video: "https://www.youtube.com/results?search_query=rack+pull+partial+deadlift+back+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        warn: "Dos PLAT impératif — même logique que le soulevé de terre. Déconseillé si hernie discale active. Ne pas dépasser la capacité de préhension sans sangles.",
+        desc: "Barre posée dans le rack à hauteur de genou ou mi-cuisse. Soulever la barre jusqu'à l'extension complète des hanches, maintenir 1 seconde, reposer.",
+        tips: ["La position de départ haute réduit l'amplitude et permet de soulever des charges 20-40% supérieures au deadlift complet", "Focus sur la rétraction scapulaire et l'extension thoracique — c'est ce qui protège le dos sous charge maximale", "Idéal pour développer la force de poigne, des trapèzes épais et la force de fin de mouvement du deadlift", "Progresser par petits incréments — le rack pull permet rapidement de dépasser ses maxima habituels"],
+        lv: 3,
+        tags: ["dos", "force", "compose"]
+    },
+    {
+        n: "Pendlay row strict",
+        m: "Grand dorsal / Rhomboïdes / Biceps",
+        eq: "Barre olympique",
+        sets: "4×5-8",
+        rest: "120s",
+        video: "https://www.youtube.com/results?search_query=pendlay+row+explosive+barbell+row+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        warn: "Contre-indiqué si lombalgie active ou hernie discale L4/L5 — la position horizontale stricte maintient une tension lombaire continue. Dos plat obligatoire.",
+        desc: "Barre au sol, torse horizontal et dos plat. Tirer la barre de manière explosive jusqu'au sternum, la reposer complètement au sol entre chaque rep (dead stop).",
+        tips: ["La pause complète au sol élimine le stretch-reflex — chaque répétition repart de zéro, force de démarrage pure", "Torse strictement horizontal (parallèle au sol) — différence clé avec le rowing barre classique", "Tirer vers le bas-sternum, coudes dans l'axe ou légèrement au-dessus du dos", "Phase concentrique explosive, phase excentrique contrôlée — ne pas laisser tomber la barre"],
+        lv: 3,
+        tags: ["dos", "force", "compose"]
+    },
+    {
+        n: "Cable row prise large",
+        m: "Rhomboïdes / Trapèze moyen",
+        eq: "Poulie basse + longue barre droite",
+        sets: "4×10-15",
+        rest: "75s",
+        video: "https://www.youtube.com/results?search_query=wide+grip+cable+row+rhomboids+back+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Assis face à la poulie basse, barre longue avec prise pronation large (>81 cm). Tirer vers le bas-abdomen en amenant les coudes en abduction maximale.",
+        tips: ["La prise large dirige les coudes vers l'extérieur — cible les rhomboïdes et le trapèze moyen vs prise serrée qui cible le grand dorsal", "Penser à « serrer un crayon entre les omoplates » en fin de mouvement pour maximiser la rétraction", "Ne pas laisser les épaules se protacter trop loin en phase excentrique — garder une légère tension scapulaire", "Idéal après les tirages verticaux — complémentarité des vecteurs pour un développement dorsal complet"],
+        lv: 2,
+        tags: ["dos", "cable", "isolation", "hypertrophie"]
     }
   ],
 
@@ -865,7 +1061,7 @@ var EXERCISES = {
       warn: "Contre-indiqué si douleur rotulienne, syndrome femoro-patellaire, LCA fragile ou opere, menisque lese — flexion >120 degrés impossible sans risque ligamentaire",
       desc: "Squat sur une jambe, l'autre jambe tendue devant soi.",
       tips: ["Commencer avec un support", "Exige force et mobilite", "Exercice avance", "Ne pas forcer si douleur rotulienne", "Exige LCA et menisques sains — bilan medical obligatoire avant"],
-      lv: 4,
+      lv: 3,
       tags: ["jambes", "équilibre", "avance", "poids du corps"]
     },
     {
@@ -936,6 +1132,106 @@ var EXERCISES = {
       tips: ["Excellent pour apprendre le squat profond", "Coudes poussent les genoux vers l'extérieur", "Ideal débutants et mobilité cheville"],
       lv: 1,
       tags: ["jambes", "fessiers", "débutant", "mobilite"]
+    }
+,
+    {
+        n: "Squat Zercher",
+        m: "Quadriceps",
+        eq: "Barre",
+        sets: "4×6-10",
+        rest: "120s",
+        video: "https://www.youtube.com/results?search_query=zercher+squat+animation+tutorial&sp=EgIYAQ%253D%253D",
+        warn: "Risque de blessure aux biceps et avant-bras si la barre glisse — utiliser une serviette ou des manchons de protection.",
+        desc: "Squat avec la barre logée dans le pli des coudes, forçant un tronc ultra-droit et une activation du core maximale.",
+        tips: ["Placer la barre dans le creux des coudes fléchis à 90°, les avant-bras croisés ou parallèles devant vous", "Garder les coudes relevés pendant toute la descente pour éviter que la barre roule", "Descendre jusqu'à ce que les cuisses soient parallèles ou en dessous — la position haute du torse y aide naturellement", "Engager fortement les abdominaux et pousser la poitrine vers le haut à la montée"],
+        lv: 3,
+        tags: ["quadriceps", "fessiers", "core", "prehab"]
+    },
+    {
+        n: "Fente espagnole",
+        m: "Quadriceps",
+        eq: "Barre + rack",
+        sets: "4×6-8",
+        rest: "120s",
+        video: "https://www.youtube.com/results?search_query=spanish+squat+animation+tutorial&sp=EgIYAQ%253D%253D",
+        warn: "Ne pas forcer la descente si la mobilité de cheville ou de hanche est insuffisante — progresser graduellement.",
+        desc: "Fente avec la barre en position basse dorsale et les pieds bloqués contre un rack, permettant un split profond et un genou très avancé.",
+        tips: ["Positionner les pieds contre les montants du rack, légèrement en avant de l'axe de la barre", "Laisser le genou avant avancer au maximum au-dessus du pied — c'est l'objectif de cet exercice", "Maintenir le talon arrière au sol pendant toute la durée du mouvement", "Contrôler la descente sur 3 secondes pour maximiser le travail excentrique des quadriceps"],
+        lv: 3,
+        tags: ["quadriceps", "fessiers", "unilateral", "mobilite"]
+    },
+    {
+        n: "Leg press prise étroite",
+        m: "Quadriceps",
+        eq: "Machine leg press",
+        sets: "4×10-15",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=leg+press+narrow+stance+quadriceps+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Leg press avec les pieds rapprochés et centrés bas sur la plateforme pour cibler le vaste interne et externe du quadriceps.",
+        tips: ["Placer les pieds à largeur de hanches ou plus étroit, bas sur la plateforme", "Les orteils légèrement tournés vers l'extérieur (15-20°) pour protéger les genoux", "Descendre jusqu'à 90° de flexion sans décoller le dos du dossier", "Expirer et pousser fort en contractant le quadriceps en haut du mouvement"],
+        lv: 1,
+        tags: ["quadriceps", "machine"]
+    },
+    {
+        n: "Leg press unilatéral",
+        m: "Quadriceps",
+        eq: "Machine leg press",
+        sets: "4×10-12",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=single+leg+press+unilateral+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Leg press exécuté une jambe à la fois pour corriger les déséquilibres de force gauche/droite et renforcer la stabilité.",
+        tips: ["Réduire la charge à 50-60% de la charge bilatérale habituelle", "Placer le pied au centre de la plateforme, aligné avec la hanche", "Garder la jambe inactive détendue hors de la plateforme sans appuyer dessus", "Compléter toutes les répétitions d'un côté avant de changer — noter l'écart de force entre les deux jambes"],
+        lv: 2,
+        tags: ["quadriceps", "fessiers", "machine", "unilateral", "prevention"]
+    },
+    {
+        n: "Squat Cossaque",
+        m: "Adducteurs",
+        eq: "Poids du corps ou haltère",
+        sets: "3×8-12",
+        rest: "60s",
+        video: "https://www.youtube.com/results?search_query=cossack+squat+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Squat latéral profond alternant d'un côté à l'autre, développant la mobilité des hanches et l'étirement des adducteurs.",
+        tips: ["Partir en position écartée large (environ 2x la largeur des épaules), orteils vers l'extérieur", "Descendre latéralement sur une jambe en fléchissant le genou, l'autre jambe reste tendue", "Le pied de la jambe tendue peut rester à plat ou pivoter sur le talon selon la mobilité", "Tenir un haltère devant vous pour contrebalancer et faciliter la descente"],
+        lv: 2,
+        tags: ["adducteurs", "quadriceps", "mobilite", "poids du corps", "unilateral"]
+    },
+    {
+        n: "Reverse nordique",
+        m: "Quadriceps",
+        eq: "Poids du corps",
+        sets: "3×5-8",
+        rest: "120s",
+        video: "https://www.youtube.com/results?search_query=nordic+hamstring+reverse+quadriceps+animation+tutorial&sp=EgIYAQ%253D%253D",
+        warn: "Exercice excentrique intense — risque de courbatures sévères les premiers jours. Progresser très lentement.",
+        desc: "Descente lente vers l'avant depuis la position agenouillée, travaillant les quadriceps en excentrique profond pour prévenir les blessures.",
+        tips: ["S'agenouiller sur une surface rembourrée, les pieds bloqués sous un banc ou tenus par un partenaire", "Corps aligné genoux-hanches-épaules, ne pas plier les hanches pendant la descente", "Descendre le plus lentement possible (3 à 5 secondes) en contractant les quadriceps", "Commencer par des demi-descentes et progresser vers la descente complète sur plusieurs semaines"],
+        lv: 3,
+        tags: ["quadriceps", "excentrique", "prehab", "prevention", "poids du corps"]
+    },
+    {
+        n: "Pendulum squat machine",
+        m: "Quadriceps",
+        eq: "Machine pendulum squat",
+        sets: "4×10-15",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=pendulum+squat+machine+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Squat sur machine à pendule offrant une charge axiale quasi nulle sur la colonne, idéal pour cibler les quadriceps sans stress lombaire.",
+        tips: ["Positionner les épaules bien calées sous les épaulières, dos droit contre le dossier", "Placer les pieds légèrement en avant du centre de la plateforme pour maximiser le travail des quadriceps", "Descendre jusqu'à ce que les cuisses soient parallèles ou en dessous", "Pousser à travers tout le pied en remontant — ne pas décoller les talons"],
+        lv: 2,
+        tags: ["quadriceps", "machine", "prevention"]
+    },
+    {
+        n: "Tibial raise",
+        m: "Tibialis anterior",
+        eq: "Poids du corps ou lest",
+        sets: "3×15-20",
+        rest: "60s",
+        video: "https://www.youtube.com/results?search_query=tibialis+anterior+raise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Flexion dorsale du pied contre résistance pour renforcer le tibial antérieur et prévenir les shin splints et douleurs de tibia.",
+        tips: ["S'adosser contre un mur, talons à 20-30 cm du mur, jambes tendues", "Soulever les orteils et l'avant-pied le plus haut possible en contractant le tibia", "Maintenir la contraction 1 seconde en haut avant de redescendre lentement", "Pour progresser, utiliser un lest sur le pied ou une bande élastique autour de la cheville"],
+        lv: 1,
+        tags: ["mollets", "prehab", "prevention", "poids du corps"]
     }
   ],
 
@@ -1050,12 +1346,12 @@ var EXERCISES = {
       tags: ["fessiers", "force", "compose", "roi-fessiers"]
     },
     {
-      n: "Hip thrust unilateral",
+      n: "Hip thrust unilatéral léger",
       m: "Grand fessier (unilateral)",
       eq: "Haltere ou barre + banc",
       sets: "3\u00d712 par cote",
       rest: "75s",
-      desc: "Même position que le hip thrust, mais sur une seule jambe.",
+      desc: "Même position que le hip thrust, mais sur une seule jambe. Version légère pour correction d'asymétries.",
       tips: ["Correction asymétries fessières", "Charge réduite vs bilateral", "Excellent pour sportifs"],
       lv: 3,
       tags: ["fessiers", "unilateral", "asymetrie"]
@@ -1092,6 +1388,92 @@ var EXERCISES = {
       tips: ["Pied pointe vers l'extérieur du cote qui flechit", "Excellent pour les adducteurs et moyen fessier", "Contrôler le genou dans l'axe du pied"],
       lv: 2,
       tags: ["fessiers", "adducteurs", "unilateral"]
+    }
+,
+    {
+        n: "Hip thrust unilatéral",
+        m: "Fessiers",
+        eq: "Barre ou haltère",
+        sets: "4×10-12",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=single+leg+hip+thrust+unilateral+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Hip thrust exécuté sur une seule jambe pour corriger les déséquilibres fessiers et maximiser l'activation unilatérale.",
+        tips: ["S'appuyer sur le banc avec les omoplates, la jambe libre fléchie à 90° ou tendue selon le niveau", "Pousser à travers le talon de la jambe de travail jusqu'à l'extension complète de la hanche", "Éviter la rotation du bassin — garder le bassin horizontal tout au long du mouvement", "Compléter toutes les répétitions avant de changer — noter l'écart de force entre les deux côtés"],
+        lv: 2,
+        tags: ["fessiers", "unilateral", "prevention"]
+    },
+    {
+        n: "Frog pump",
+        m: "Fessiers",
+        eq: "Poids du corps ou élastique",
+        sets: "3×20-30",
+        rest: "60s",
+        video: "https://www.youtube.com/results?search_query=frog+pump+glute+activation+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Pont fessier avec les plantes de pieds collées ensemble, rotation externe des hanches, activant les fessiers sans charge sur les lombaires.",
+        tips: ["Allonger sur le dos, plantes de pieds en contact, genoux écartés comme une grenouille", "Rapprocher les talons au maximum du bassin pour augmenter la rotation externe", "Monter le bassin en contractant fort les fessiers — les lombaires ne doivent pas cambrer", "Réaliser des séries longues (20-30 reps) pour maximiser le pump et l'activation neuromusculaire"],
+        lv: 1,
+        tags: ["fessiers", "poids du corps", "prehab", "prevention"]
+    },
+    {
+        n: "Cable pull-through",
+        m: "Fessiers",
+        eq: "Câble poulie basse",
+        sets: "4×12-15",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=cable+pull+through+hip+hinge+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Exercice de hip hinge avec câble passé entre les jambes, développant la chaîne postérieure fessiers et ischios sans charge axiale.",
+        tips: ["Se placer dos à la poulie basse, saisir la corde entre les jambes, pieds à largeur d'épaules", "Pencher le buste en avant en poussant les hanches vers l'arrière — dos neutre, genoux légèrement fléchis", "Ramener les hanches vers l'avant puissamment en contractant les fessiers et en étendant le tronc", "Le mouvement vient des hanches, pas du dos — penser à 'tirer avec les fessiers'"],
+        lv: 1,
+        tags: ["fessiers", "ischios", "machine", "prevention"]
+    },
+    {
+        n: "Romanian deadlift unilatéral haltère",
+        m: "Ischios-jambiers",
+        eq: "Haltère",
+        sets: "4×10-12",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=single+leg+romanian+deadlift+dumbbell+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Romanian deadlift sur une jambe avec haltère, développant la force et la stabilité unilatérale de la chaîne postérieure.",
+        tips: ["Se tenir sur une jambe, haltère dans la main opposée ou ipsilatérale selon le niveau", "Pencher le buste en avant en soulevant la jambe libre vers l'arrière pour contrebalancer", "Descendre l'haltère le long de la jambe d'appui en maintenant le dos neutre et plat", "Sentir l'étirement de l'ischio de la jambe d'appui en bas — remonter en contractant fessier et ischio"],
+        lv: 2,
+        tags: ["ischios", "fessiers", "unilateral", "prevention"]
+    },
+    {
+        n: "Sumo deadlift",
+        m: "Fessiers",
+        eq: "Barre",
+        sets: "4×5-8",
+        rest: "120s",
+        video: "https://www.youtube.com/results?search_query=sumo+deadlift+animation+tutorial&sp=EgIYAQ%253D%253D",
+        warn: "Maîtriser le deadlift conventionnel avant de passer au sumo — la technique de rotation externe des hanches est critique.",
+        desc: "Soulevé de terre en stance large avec orteils tournés vers l'extérieur, accentuant l'activation des fessiers et des adducteurs.",
+        tips: ["Écarter les pieds à 1,5-2x la largeur des épaules, orteils pointés vers l'extérieur à 45°", "Saisir la barre en prise moyenne (mains entre les jambes), bras tendus verticalement", "Pousser les genoux vers l'extérieur en ligne avec les orteils dès le début de la traction", "Garder la barre proche du corps tout au long du mouvement — terminer en contractant fort les fessiers"],
+        lv: 2,
+        tags: ["fessiers", "adducteurs", "ischios", "quadriceps"]
+    },
+    {
+        n: "Squat pause en bas",
+        m: "Quadriceps",
+        eq: "Barre ou haltères",
+        sets: "4×6-10",
+        rest: "120s",
+        video: "https://www.youtube.com/results?search_query=pause+squat+bottom+position+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Squat avec pause de 2-3 secondes au point le plus bas, éliminant le rebond et maximisant l'activation musculaire au creux.",
+        tips: ["Descendre jusqu'en dessous du parallèle et marquer une pause complète de 2 à 3 secondes", "Maintenir la tension du core et le dos neutre pendant toute la durée de la pause", "Éviter de relâcher les genoux vers l'intérieur pendant la pause — garder le gainage total", "Réduire la charge de 20-30% par rapport au squat normal — la pause rend l'exercice nettement plus difficile"],
+        lv: 2,
+        tags: ["quadriceps", "fessiers", "excentrique"]
+    },
+    {
+        n: "Abduction debout élastique",
+        m: "Fessiers",
+        eq: "Élastique",
+        sets: "3×15-20",
+        rest: "60s",
+        video: "https://www.youtube.com/results?search_query=standing+hip+abduction+resistance+band+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Abduction de la hanche debout avec élastique autour des chevilles ou genoux, ciblant le fessier moyen pour la stabilité du bassin.",
+        tips: ["Placer l'élastique autour des chevilles ou des genoux, se tenir sur une jambe d'appui", "Soulever la jambe libre sur le côté en maintenant le tronc droit — ne pas incliner le buste", "Contrôler le retour à la position initiale sans laisser l'élastique ramener brusquement la jambe", "Pour progresser, augmenter la résistance de l'élastique ou éloigner la jambe de 30 à 45°"],
+        lv: 1,
+        tags: ["fessiers", "poids du corps", "prehab", "prevention", "unilateral"]
     }
   ],
 
@@ -1217,7 +1599,7 @@ var EXERCISES = {
       warn: "Contre-indiqué si hernie discale (flexion lombaire excentrique sous charge corporelle totale), ostéoporose (contrainte en flexion sur T6-L2 — Sinaki, Spine 2002) ou HTA sévère (effort isometrique maximal = pic tensionnel). Exercice expert uniquement.",
       desc: "Allongé, tenir la barre derrière la tête, monter et descendre le corps raide comme une planche.",
       tips: ["Corps RIGIDE comme une planche", "Exercice de Bruce Lee —  très difficile", "Commencer avec les jambes fléchies"],
-      lv: 4,
+      lv: 3,
       tags: ["abdos", "core", "avance", "expert"]
     },
     {
@@ -1239,7 +1621,7 @@ var EXERCISES = {
       rest: "60s",
       desc: "Soutenu sur les mains, jambes tendues horizontales. Tenir.",
       tips: ["Progression : 1 jambe → 2 jambes pliees → L-sit complet", "Jambes parfaitement horizontales", "Force abdos + flexion hanche"],
-      lv: 4,
+      lv: 3,
       tags: ["abdos", "psoas", "calisthenics", "avance"]
     },
     {
@@ -1250,8 +1632,19 @@ var EXERCISES = {
       rest: "60s",
       desc: "Suspendu à la barre, jambes tendues, basculer de gauche a droite comme des essuie-glaces.",
       tips: ["Jambes tendues pour plus de difficulté", "Controle de la rotation — ne pas balancer", "Progresser avec jambes fléchies"],
-      lv: 4,
+      lv: 3,
       tags: ["abdos", "obliques", "avance", "suspension"]
+    },
+    {
+      n: "Obliques chaise romaine",
+      m: "Obliques",
+      eq: "Chaise romaine",
+      sets: "4\u00d712 par c\u00f4t\u00e9",
+      rest: "45s",
+      desc: "Installé sur la chaise romaine, effectuer des rotations latérales contrôlées en fléchissant le tronc sur le côté.",
+      tips: ["12 reps chaque côté", "Rotation latérale contrôlée — ne pas utiliser l'inertie", "Contrôler la montée et la descente", "Amplitude complète pour maximiser l'activation des obliques"],
+      lv: 2,
+      tags: ["abdos", "obliques", "chaise romaine", "lateral"]
     }
   ],
 
@@ -1542,3 +1935,8 @@ var EXERCISES = {
     }
   ]
 };
+
+// Export to window so app-sport.js can access EXERCISES via window.EXERCISES
+if (typeof window !== 'undefined') {
+  window.EXERCISES = EXERCISES;
+}

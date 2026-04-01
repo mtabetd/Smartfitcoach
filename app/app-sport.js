@@ -570,16 +570,20 @@ window.SPORT = {
  var content = h('div', {'class': 'fade-in'});
 
  // Header with progress (only shown after step 0, not on intro pages)
- if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16 && S.sStep !== 20) {
+ // sStep 20 = medical questionnaire (muscu pre-step), include it in progress
+ if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16) {
  var hdr = h('header', {'class': 'header'});
  var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? 'Yoga & Mobilit\u00e9' : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
  hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>' + sportLabel + '</span>'}));
  var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
- var currentDisplay = S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sportType === 'calisthenics' ? S.sStep - 23 : S.sStep;
- hdr.appendChild(h('div', {'class': 'step-indicator'}, 'Étape ' + currentDisplay + ' / ' + totalSteps));
+ // sStep 20 (medical) maps to display step 0 for musculation (shown as "Éval. médicale")
+ var currentDisplay = S.sStep === 20 ? 0 : S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sportType === 'calisthenics' ? S.sStep - 23 : S.sStep;
+ var stepLabel = S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : ('\u00c9tape ' + currentDisplay + ' / ' + totalSteps);
+ hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
  p.appendChild(hdr);
  var pb = h('div', {'class': 'progress-bar'});
- pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + (currentDisplay / totalSteps * 100) + '%'}));
+ var _pbPct = S.sStep === 20 ? 5 : (currentDisplay / totalSteps * 100);
+ pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + _pbPct + '%'}));
  p.appendChild(pb);
  }
 
@@ -623,7 +627,6 @@ var SPORT_QUOTES = [
  {t:"La force ne vient pas de la capacit\u00e9 physique. Elle vient d'une volont\u00e9 indomptable.",a:"Gandhi"},
  {t:"Le succ\u00e8s n'est pas d\u00e9finitif, l'\u00e9chec n'est pas fatal. C'est le courage de continuer qui compte.",a:"Winston Churchill"},
  {t:"Ne comptez pas les jours, faites que les jours comptent.",a:"Muhammad Ali"},
- {t:"Chaque champion a un jour \u00e9t\u00e9 un comp\u00e9titeur qui a refus\u00e9 d'abandonner.",a:"Rocky Balboa"},
  {t:"Le sport ne forge pas le caract\u00e8re. Il le r\u00e9v\u00e8le.",a:"Heywood Broun"},
  {t:"La discipline est le pont entre les objectifs et l'accomplissement.",a:"Jim Rohn"},
  {t:"Le sport va chercher la peur pour la dominer, la fatigue pour en triompher.",a:"Pierre de Coubertin"},
@@ -631,8 +634,35 @@ var SPORT_QUOTES = [
  {t:"Un champion est quelqu'un qui se rel\u00e8ve quand il ne peut pas.",a:"Jack Dempsey"},
  {t:"La pers\u00e9v\u00e9rance n'est pas une longue course. C'est plusieurs courtes courses l'une apr\u00e8s l'autre.",a:"Walter Elliot"},
  {t:"La victoire appartient au plus pers\u00e9v\u00e9rant.",a:"Napol\u00e9on Bonaparte"},
- {t:"Vous n'\u00eates qu'\u00e0 un entra\u00eenement d'une bonne humeur.",a:"Inconnu"},
- {t:"La sueur d'aujourd'hui est la force de demain.",a:"Inconnu"}
+ {t:"La sueur d'aujourd'hui est la force de demain.",a:""},
+ {t:"Vous n'\u00eates qu'\u00e0 un entra\u00eenement d'une bonne humeur.",a:""},
+ {t:"Le plus grand ennemi de la performance est l'impatience.",a:"Tiger Woods"},
+ {t:"Soit tu souffres de la douleur de la discipline, soit tu souffres du regret.",a:"Jim Rohn"},
+ {t:"Je n'ai jamais perdu. J'ai seulement appris.",a:"Nelson Mandela"},
+ {t:"La pr\u00e9paration, c'est tout.",a:"Alexander Graham Bell"},
+ {t:"Aucun raccourci ne m\u00e8ne au sommet.",a:"Tenzing Norgay"},
+ {t:"Le mental est l'athl\u00e8te. Le corps, simplement l'instrument.",a:"Clarence Greene"},
+ {t:"Chaque record battu \u00e9tait autrefois consid\u00e9r\u00e9 impossible.",a:""},
+ {t:"La r\u00e9gularit\u00e9 construit ce que l'intensit\u00e9 seule ne peut pas.",a:""},
+ {t:"Un athl\u00e8te accompli sait que la r\u00e9cup\u00e9ration est aussi importante que l'effort.",a:""},
+ {t:"Le corps devient ce qu'il fait r\u00e9guli\u00e8rement.",a:"Aristote"},
+ {t:"Ce n'est pas la force qui gagne, c'est la technique et la volont\u00e9.",a:""},
+ {t:"On ne devient pas athl\u00e8te en un jour, mais on peut d\u00e9cider de l'\u00eatre en un instant.",a:""},
+ {t:"La douleur est temporaire. La r\u00e9ussite est permanente.",a:""},
+ {t:"L'ath\u00e8te vit dans deux mondes simultan\u00e9ment : la r\u00e9alit\u00e9 et le possible.",a:"Wilma Rudolph"},
+ {t:"La pr\u00e9paration d'hier est la performance d'aujourd'hui.",a:""},
+ {t:"Chaque entra\u00eenement est une promesse tenue \u00e0 soi-m\u00eame.",a:""},
+ {t:"La comp\u00e9tition commence l\u00e0 o\u00f9 les autres s'arr\u00eatent.",a:""},
+ {t:"L'excellence n'est pas un acte, c'est une habitude.",a:"Aristote"},
+ {t:"Le champion d'hier s'est entra\u00een\u00e9 quand personne ne regardait.",a:""},
+ {t:"Fixez des objectifs si hauts que vos r\u00eaves semblent petits en comparaison.",a:""},
+ {t:"La vitesse s'acquiert. L'endurance se construit. Le mental se forge.",a:""},
+ {t:"Repoussez vos limites \u2014 non pas pour les d\u00e9passer, mais pour d\u00e9couvrir o\u00f9 elles sont vraiment.",a:""},
+ {t:"Le secret des champions est simple : ils s'entra\u00eenent quand \u00e7a ne leur convient pas.",a:""},
+ {t:"Ce qui ne te brise pas te construit, \u00e0 condition de continuer.",a:""},
+ {t:"Gagner c'est bien. Progresser, c'est mieux.",a:""},
+ {t:"La discipline du corps lib\u00e8re l'esprit.",a:""},
+ {t:"L'entra\u00eenement dur pr\u00e9pare aux comp\u00e9titions faciles.",a:""}
 ];
 
 // ─── STEP 0: TYPE SELECTION ONLY ───
@@ -646,7 +676,9 @@ function renderObjectif(p) {
  splash.appendChild(h('div', {'class': 'splash-line'}));
  var quoteDiv = h('div', {'class': 'splash-quote'});
  quoteDiv.appendChild(h('em', {}, '\u201C' + q.t + '\u201D'));
- quoteDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:12px'}, '\u2014 ' + q.a));
+ if (q.a) {
+   quoteDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:12px'}, '\u2014 ' + q.a));
+ }
  splash.appendChild(quoteDiv);
  splash.appendChild(h('button', {'class': 'splash-btn btn-primary', style: 'margin-top:32px', onclick: function(){ S.sportSplashDone = true; if(window.BLACKBOX)BLACKBOX.log('sport_splash_done'); window.render(); }}, 'Commencer'));
  p.appendChild(splash);
@@ -802,7 +834,7 @@ function renderMuscuMedicalQ(p) {
 
  // Header with back button
  var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
- hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
  p.appendChild(hdr);
 
@@ -940,7 +972,7 @@ function renderChargesQuestionnaire(p) {
  h('div', {style: 'color:#6A4A1A'}, 'Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (RPE max 7/10 les 4 premières semaines).')
  ]));
  }
- if (S.age >= 50) {
+ if (getAge() >= 50) {
  p.appendChild(h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border-left:4px solid #1A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:13px'}, [
  h('div', {style: 'font-weight:700;color:#1A4A1A;margin-bottom:4px'}, '\uD83D\uDCAA Athlète 50+ — Adaptations recommandées'),
  h('div', {style: 'color:#1A4A1A'}, 'Échauffement prolongé 15-20 min (vs 5-10 min standard). Décharge toutes les 4-5 semaines (vs 6 semaines). Préférez machines guidées aux barres libres pour les charges maximales. Récupération inter-séance 48-72h minimum. Contrôle médical annuel conseillé.')
@@ -953,7 +985,7 @@ function renderChargesQuestionnaire(p) {
  ]));
  }
 
- if (Object.keys(S.muscuStrengthProfile).length === 0) {
+ if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
  var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var saved = localStorage.getItem('mtd_muscu_strength_' + userId);
  if (saved) { try { S.muscuStrengthProfile = JSON.parse(saved); } catch(e) {} }
@@ -1030,7 +1062,7 @@ function renderChargesQuestionnaire(p) {
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-bottom:16px'}, 'Laissez vide les exercices que vous ne pratiquez pas. Indiquez la charge ET le nombre de reps pour un calcul précis du 1RM (formule d\'Epley : charge × (1 + N/30)).'));
 
  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ S.sStep = 15; window.render(); }}, 'Continuer'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 20; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 15: PROGRAMMES DÉDIÉS ───
@@ -1277,7 +1309,7 @@ function renderCrossfitLevel(p) {
 
  // ─── 1RM QUESTIONNAIRE (OPTIONAL) ───
  // Load saved 1RM data
- if (Object.keys(S.crossfit1RM).length === 0) {
+ if (Object.keys(S.crossfit1RM || {}).length === 0) {
  var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var saved1rm = localStorage.getItem('mtd_cf_1rm_' + userId);
  if (saved1rm) { try { S.crossfit1RM = JSON.parse(saved1rm); } catch(e) {} }
@@ -1350,7 +1382,7 @@ function renderCrossfitLevel(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.crossfitWeek = 1; S.selectedCrossfitDay = 0; S.sStep = 6; window.BLACKBOX && window.BLACKBOX.log('crossfit_level', {level: S.crossfitLevel, days: S.sportDays}); window.render(); }
  }}, 'Continuer'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── CROSSFIT HELPERS ───
@@ -1688,7 +1720,7 @@ function renderCrossfitProgram(p) {
  }
 
  // Objectives banner
- var goalNames = S.sportGoals.map(function(gid){
+ var goalNames = (S.sportGoals || []).map(function(gid){
  var g2 = (window.SPORT_GOALS || []).find(function(x){ return x.id === gid; });
  return g2 ? g2.icon + ' ' + g2.name : '';
  }).join(' \u00B7 ');
@@ -1933,14 +1965,84 @@ function renderCrossfitProgram(p) {
  // Parse AMRAP/EMOM duration in minutes, or cap for For Time
  var totalSeconds = 0;
  var isCountdown = false;
+ var isEmom = (wodType.indexOf('EMOM') !== -1);
+ // Match explicit "Xmin" or "X MIN" (For Time cap, EMOM with unit)
  var capMatch = wodType.match(/(\d+)\s*(?:MIN|MINUTES?)/);
  if (capMatch) {
  totalSeconds = parseInt(capMatch[1]) * 60;
  isCountdown = true;
  }
+ // AMRAP X or EMOM X (no "min" suffix) — number is the duration in minutes
+ if (!isCountdown) {
+ var amrapMatch = wodType.match(/^(?:AMRAP|EMOM)\s+(\d+)/);
+ if (amrapMatch) {
+ totalSeconds = parseInt(amrapMatch[1]) * 60;
+ isCountdown = true;
+ }
+ }
+ // EMOM X (Y rounds) — use X as total minutes even if no "min" suffix
+ if (!isCountdown && isEmom) {
+ var emomAny = wodType.match(/EMOM\s+(\d+)/);
+ if (emomAny) {
+ totalSeconds = parseInt(emomAny[1]) * 60;
+ isCountdown = true;
+ }
+ }
+ var totalRounds = isEmom && totalSeconds > 0 ? Math.floor(totalSeconds / 60) : 0;
+
+ // Local Web Audio helper for WOD timer (used when RestTimer not available)
+ function _wodPlayBeep(type) {
+ if (window._sfcMuted) return;
+ if (window.RestTimer && window.RestTimer.playBeep && type !== 'tick') {
+ window.RestTimer.playBeep();
+ return;
+ }
+ if (window.RestTimer && window.RestTimer.playTick && type === 'tick') {
+ window.RestTimer.playTick();
+ return;
+ }
+ try {
+ var ctx = new (window.AudioContext || window.webkitAudioContext)();
+ if (ctx.state === 'suspended') ctx.resume();
+ var now = ctx.currentTime;
+ if (type === 'tick') {
+ var osc = ctx.createOscillator();
+ var gain = ctx.createGain();
+ osc.connect(gain); gain.connect(ctx.destination);
+ osc.type = 'sine'; osc.frequency.value = 660; gain.gain.value = 0.2;
+ osc.start(now); osc.stop(now + 0.08);
+ } else if (type === 'start') {
+ var osc2 = ctx.createOscillator();
+ var gain2 = ctx.createGain();
+ osc2.connect(gain2); gain2.connect(ctx.destination);
+ osc2.type = 'sine'; osc2.frequency.value = 880; gain2.gain.value = 0.3;
+ osc2.start(now); osc2.stop(now + 0.12);
+ } else {
+ for (var i = 0; i < 3; i++) {
+ var oscB = ctx.createOscillator();
+ var gainB = ctx.createGain();
+ oscB.connect(gainB); gainB.connect(ctx.destination);
+ oscB.type = 'square'; oscB.frequency.value = 880; gainB.gain.value = 0.4;
+ oscB.start(now + i * 0.2); oscB.stop(now + i * 0.2 + 0.12);
+ }
+ var oscL = ctx.createOscillator();
+ var gainL = ctx.createGain();
+ oscL.connect(gainL); gainL.connect(ctx.destination);
+ oscL.type = 'square'; oscL.frequency.value = 1050; gainL.gain.value = 0.5;
+ oscL.start(now + 0.7); oscL.stop(now + 1.1);
+ }
+ } catch(e) {}
+ }
 
  var displayEl = h('div', {style: 'font-family:Georgia,serif;font-size:36px;text-align:center;letter-spacing:2px;color:#0A0A09;margin:8px 0'}, '00:00');
  timerContainer.appendChild(displayEl);
+
+ // EMOM round counter element
+ var roundEl = null;
+ if (isEmom && totalRounds > 0) {
+ roundEl = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;text-align:center;color:var(--grey);margin-bottom:4px'}, 'Round — / ' + totalRounds);
+ timerContainer.appendChild(roundEl);
+ }
 
  // Clear any previous timer interval to prevent leaks on re-render
  if (window._wodTimerInterval) clearInterval(window._wodTimerInterval);
@@ -1948,6 +2050,7 @@ function renderCrossfitProgram(p) {
  var _timerInterval = null;
  var _elapsed = 0;
  var _timerStartTime = 0;
+ var _lastTickSecond = -1;
 
  function formatTime(secs) {
  var m = Math.floor(Math.abs(secs) / 60);
@@ -1961,6 +2064,12 @@ function renderCrossfitProgram(p) {
  if (isCountdown && shown === 0) {
  displayEl.style.color = '#5A1010';
  }
+ // Update EMOM round counter
+ if (roundEl && isEmom && totalRounds > 0) {
+ var currentRound = Math.min(totalRounds, Math.floor(_elapsed / 60) + 1);
+ if (_elapsed >= totalSeconds && totalSeconds > 0) currentRound = totalRounds;
+ roundEl.textContent = 'Round ' + currentRound + ' / ' + totalRounds;
+ }
  }
 
  var btnRow = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap'});
@@ -1971,38 +2080,60 @@ function renderCrossfitProgram(p) {
  clearInterval(_timerInterval);
  startBtn.textContent = 'Reprendre';
  } else {
+ // Son de démarrage
+ _wodPlayBeep('start');
  _timerRunning = true;
+ _lastTickSecond = -1;
  _timerStartTime = Date.now() - _elapsed * 1000;
  _timerInterval = window._wodTimerInterval = setInterval(function() {
  _elapsed = Math.floor((Date.now() - _timerStartTime) / 1000);
  updateDisplay();
- if (isCountdown && _elapsed >= totalSeconds) {
+ if (isCountdown) {
+ var remaining = totalSeconds - _elapsed;
+ // Tick pour les 3 dernières secondes (une seule fois par seconde)
+ if (remaining > 0 && remaining <= 3 && remaining !== _lastTickSecond) {
+ _lastTickSecond = remaining;
+ _wodPlayBeep('tick');
+ }
+ if (_elapsed >= totalSeconds) {
  _timerRunning = false;
  clearInterval(_timerInterval);
- startBtn.textContent = 'Temps écoulé';
+ startBtn.textContent = 'Temps \u00e9coul\u00e9';
+ _wodPlayBeep('end');
+ }
  }
  }, 250);
  startBtn.textContent = 'Pause';
  }
- }}, 'Démarrer');
+ }}, 'D\u00e9marrer');
 
  var resetBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:8px 16px;margin:0', onclick: function() {
  _timerRunning = false;
  clearInterval(_timerInterval);
  _elapsed = 0;
- startBtn.textContent = 'Démarrer';
+ _lastTickSecond = -1;
+ startBtn.textContent = 'D\u00e9marrer';
  displayEl.style.color = '#0A0A09';
  updateDisplay();
  }}, 'Reset');
 
+ // Mute button for WOD timer sounds
+ var wodMuteBtn = h('button', {'class': 'btn-secondary', style: 'width:auto;padding:8px 12px;margin:0;font-size:16px', title: window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper',
+ onclick: function() {
+ window._sfcMuted = !window._sfcMuted;
+ wodMuteBtn.textContent = window._sfcMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
+ wodMuteBtn.title = window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper';
+ }}, window._sfcMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A');
+
  btnRow.appendChild(startBtn);
  btnRow.appendChild(resetBtn);
+ btnRow.appendChild(wodMuteBtn);
  timerContainer.appendChild(btnRow);
 
  if (isCountdown) {
- timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px'}, 'Compte à rebours ' + (_wod.type || '')));
+ timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px'}, 'Compte \u00e0 rebours ' + (_wod.type || '')));
  } else {
- timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px'}, 'Chrono — ' + (_wod.type || '')));
+ timerContainer.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px'}, 'Chrono \u2014 ' + (_wod.type || '')));
  }
  updateDisplay();
  p.appendChild(timerContainer);
@@ -2246,7 +2377,7 @@ function renderMusculationZones(p) {
  p.appendChild(durGrid);
 
  p.appendChild(h('div', {style: 'height:16px'}));
- var selectedZones = Object.keys(S.sportFocus).filter(function(z){ return S.sportFocus[z] > 0; });
+ var selectedZones = Object.keys(S.sportFocus || {}).filter(function(z){ return S.sportFocus[z] > 0; });
  var ok = selectedZones.length >= 2 && S.sportSessionDuration !== null;
  if (selectedZones.length < 2) {
  p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez au moins 2 zones'));
@@ -2425,6 +2556,10 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
 
  // Bip fort : 3 bips courts puis 1 bip long
  function playBeep() {
+ if (window._sfcMuted) {
+ if (navigator.vibrate) try { navigator.vibrate([200, 100, 200, 100, 400]); } catch(e) {}
+ return;
+ }
  var ctx = _getAudioCtx();
  if (!ctx) return;
  // Resume si suspendu (autoplay policy)
@@ -2456,6 +2591,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
 
  // Bip court de confirmation (validation série)
  function playTick() {
+ if (window._sfcMuted) return;
  var ctx = _getAudioCtx();
  if (!ctx) return;
  if (ctx.state === 'suspended') ctx.resume();
@@ -2711,6 +2847,18 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  skipBtn.textContent = 'Passer \u25b6';
  skipBtn.addEventListener('click', function() { window.RestTimer.stop(); });
  actions.appendChild(skipBtn);
+
+ var muteBtn = document.createElement('button');
+ muteBtn.className = 'rest-timer-btn rest-timer-btn-mute' + (window._sfcMuted ? ' muted' : '');
+ muteBtn.textContent = window._sfcMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
+ muteBtn.title = window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper';
+ muteBtn.addEventListener('click', function() {
+ window._sfcMuted = !window._sfcMuted;
+ muteBtn.textContent = window._sfcMuted ? '\uD83D\uDD07' : '\uD83D\uDD0A';
+ muteBtn.title = window._sfcMuted ? 'Son coupé — cliquer pour activer' : 'Son actif — cliquer pour couper';
+ if (window._sfcMuted) { muteBtn.classList.add('muted'); } else { muteBtn.classList.remove('muted'); }
+ });
+ actions.appendChild(muteBtn);
  } else {
  var goBtn = document.createElement('button');
  goBtn.className = 'rest-timer-btn ' + (isTrans ? 'rest-timer-btn-go-transition' : 'rest-timer-btn-go');
@@ -2830,7 +2978,7 @@ function getExerciseTransitionTime(prevEx, nextEx) {
  }
 
  // ── Âge : +15% si ≥50 ans (récupération neuromusculaire ralentie — Hunter 2004) ──
- if (s.age && s.age >= 50) baseTime = Math.round(baseTime * 1.15);
+ var _ageR = getAge(); if (_ageR && _ageR >= 50) baseTime = Math.round(baseTime * 1.15);
 
  // ── Clamp : minimum 60s, maximum 360s (6min) ──
  return Math.max(60, Math.min(360, Math.round(baseTime / 5) * 5)); // arrondi 5s
@@ -2843,7 +2991,7 @@ function saveMuscuSessionLog() {
  // ── Pruning : garder les 90 derniers jours de session log (évite quota localStorage) ──
  var _cutoff = new Date(); _cutoff.setDate(_cutoff.getDate() - 90);
  var _cutStr = _cutoff.toISOString().slice(0, 10);
- Object.keys(S.muscuSessionLog).forEach(function(d) { if (d < _cutStr) delete S.muscuSessionLog[d]; });
+ Object.keys(S.muscuSessionLog || {}).forEach(function(d) { if (d < _cutStr) delete S.muscuSessionLog[d]; });
  localStorage.setItem('mtd_muscu_session_' + uid, JSON.stringify(S.muscuSessionLog));
  // Sync vers Supabase
  if (window.SupaSync) {
@@ -3057,7 +3205,7 @@ function calcSessionDuration(exercises) {
 function calcSessionKcal(exercises, durationMin) {
  var s = window.S;
  var weight = s.weight || 75;
- var age = s.age || 30;
+ var age = getAge() || 30;
  var sex = (s.sex === 'femme') ? 'femme' : 'homme';
  // Phase courante → RPE
  var phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(s.muscuWeek || 1) : null;
@@ -3110,14 +3258,14 @@ function renderMusculationProgram(p) {
  if (!S.sportProgram || !S.sportProgram.length) { S.sportProgram = generateSportProgram(); S.selectedSportDay = 0; }
 
  // Load saved musculation weights from localStorage
- if (Object.keys(S.musculationWeights).length === 0) {
+ if (Object.keys(S.musculationWeights || {}).length === 0) {
  var userId = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var saved = localStorage.getItem('mtd_muscu_weights_' + userId);
  if (saved) { try { S.musculationWeights = JSON.parse(saved); } catch(e) {} }
  }
 
  // Load saved strength profile
- if (Object.keys(S.muscuStrengthProfile).length === 0) {
+ if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
  var userId2 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var savedStr = localStorage.getItem('mtd_muscu_strength_' + userId2);
  if (savedStr) { try { S.muscuStrengthProfile = JSON.parse(savedStr); } catch(e) {} }
@@ -3148,7 +3296,7 @@ function renderMusculationProgram(p) {
  }
 
  // Load session log and progression history
- if (Object.keys(S.muscuSessionLog).length === 0) {
+ if (Object.keys(S.muscuSessionLog || {}).length === 0) {
  var userId3 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var savedLog = localStorage.getItem('mtd_muscu_session_' + userId3);
  if (savedLog) { try { S.muscuSessionLog = JSON.parse(savedLog); } catch(e) {} }
@@ -3160,7 +3308,7 @@ function renderMusculationProgram(p) {
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
 
  // CS-01: Bannière charges estimées si profil de force non renseigné
- if (Object.keys(S.muscuStrengthProfile).length === 0) {
+ if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
  var estBanner = h('div', {style: 'border-left:3px solid #6A4A1A;padding:10px 14px;background:var(--orangebg,rgba(106,74,26,.06));margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A'});
  estBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:3px'}, 'Charges estimées'));
  estBanner.appendChild(h('div', {}, 'Les poids affichés sont calculés d\'après votre poids de corps et niveau. Pour des charges personnalisées,\u00a0'));
@@ -3229,12 +3377,12 @@ function renderMusculationProgram(p) {
  : ' Diabète : Vérifiez votre glycémie avant/après chaque séance. Gardez du sucre rapide à portée. Intensité maximale RPE 8/10 — jamais à l\'échec. Hydratation ×1.5.';
  p.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'}, diabMsg));
  }
- if (S.age >= 50) {
+ if (getAge() >= 50) {
  p.appendChild(h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border-left:4px solid #1A4A1A;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1A4A1A'}, ' 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.'));
  }
  // Cardiopathie : zones FC Karvonen + avertissement beta-bloquants (AHA 2018, ACSM 2021)
  if (S.medical && S.medical.indexOf('cardio') !== -1) {
- var age = S.age || 40;
+ var age = getAge() || 40;
  var hrMax = Math.round(208 - 0.7 * age); // Tanaka 2001 — plus précis que Fox (AHA 2010)
  var hrRest = S.heartRateRest || 65; // Utilisateur peut renseigner sa FC repos
  // Karvonen: Target HR = (HRmax - HRrest) × %intensity + HRrest
@@ -3265,7 +3413,7 @@ function renderMusculationProgram(p) {
  p.appendChild(h('div', {style: 'background:#FFF8E1;border-left:4px solid #F9A825;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'}, sleepMsg));
  }
 
- var goalNames = S.sportGoals.map(function(gid){
+ var goalNames = (S.sportGoals || []).map(function(gid){
  var g = (window.SPORT_GOALS || []).find(function(x){ return x.id === gid; });
  return g ? g.name : '';
  }).join(' + ');
@@ -3276,7 +3424,7 @@ function renderMusculationProgram(p) {
  renderWeekTracker(p);
 
  // Show zone focus with star count
- var focusZones = Object.keys(S.sportFocus)
+ var focusZones = Object.keys(S.sportFocus || {})
  .filter(function(z){ return S.sportFocus[z] > 0; })
  .sort(function(a, b){ return S.sportFocus[b] - S.sportFocus[a]; });
  if (focusZones.length > 0) {
@@ -3439,9 +3587,16 @@ function renderMusculationProgram(p) {
  if (day) {
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus));
 
+ var _totalExercises = (day.exercises || []).length;
  (day.exercises || []).forEach(function(ex, exIdx) {
  var card = h('div', {'class': 'exercise-card', onclick: function(){ S.sportModalExercise = ex; window.render(); }});
- card.appendChild(h('div', {'class': 'exercise-muscle'}, ex.m));
+
+ // ── PROGRESS INDICATOR: "Exercice X/N" ──
+ var _exProgressRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:2px'});
+ _exProgressRow.appendChild(h('div', {'class': 'exercise-muscle'}, ex.m));
+ _exProgressRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:0.5px;white-space:nowrap'}, 'Ex. ' + (exIdx + 1) + '\u00a0/\u00a0' + _totalExercises));
+ card.appendChild(_exProgressRow);
+
  var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n);
  // FST-7 badge: highlight exercises that use the Fascial Stretch Training 7-set technique
  if (ex.is_fst7) {
@@ -3489,7 +3644,13 @@ function renderMusculationProgram(p) {
  var suggestedReps = _setParts.length > 1 ? parseInt(_setParts[1]) : null;
  var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
  if (suggested && suggested > 0) {
- card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:6px;padding:4px 8px;background:rgba(39,174,96,0.06);border-left:2px solid #1A4A1A'}, '\uD83D\uDCA1 Charge sugg\u00e9r\u00e9e : ' + (window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + 'kg')));
+ var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(26,74,26,0.08);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+ var _sugLeft = h('div', {});
+ _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#1A4A1A;margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+ _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A4A1A;line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
+ _sugBanner.appendChild(_sugLeft);
+ _sugBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
+ card.appendChild(_sugBanner);
  }
  }
 
@@ -3578,13 +3739,18 @@ function renderMusculationProgram(p) {
  // Tableau des séries
  var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:2px;overflow-x:auto;-webkit-overflow-scrolling:touch'});
 
- // Header
- var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;background:var(--surface,var(--ivory2));padding:6px 8px;font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
+ // Header with set progress counter
+ var _doneCount = setData.filter(function(s){ return s.validated === true; }).length;
+ var setHeaderWrap = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;background:var(--surface,var(--ivory2));padding:6px 8px;border-bottom:1px solid var(--border)'});
+ var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;flex:1;font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
  setHeader.appendChild(h('div', {}, '#'));
  setHeader.appendChild(h('div', {}, 'Conseill\u00e9'));
  setHeader.appendChild(h('div', {style:'text-align:center'}, '\u0394'));
  setHeader.appendChild(h('div', {}, 'R\u00e9alis\u00e9'));
- setTable.appendChild(setHeader);
+ setHeaderWrap.appendChild(setHeader);
+ var _serieProgressEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px;padding:2px 6px;border-radius:10px;' + (_doneCount === numSets ? 'background:#1A4A1A;color:#fff' : 'background:var(--border);color:var(--grey)')}, _doneCount + '\u00a0/\u00a0' + numSets + ' s\u00e9ries');
+ setHeaderWrap.appendChild(_serieProgressEl);
+ setTable.appendChild(setHeaderWrap);
 
  // Rows
  setData.forEach(function(setRow, si3) {
@@ -3753,7 +3919,7 @@ function renderMusculationProgram(p) {
  // Suggestion de progression automatique (basée sur historique)
  if (window.checkProgressionSuggestion) {
  var _sessLog = [];
- var _sortedDates = Object.keys(S.muscuSessionLog).sort();
+ var _sortedDates = Object.keys(S.muscuSessionLog || {}).sort();
  _sortedDates.forEach(function(d) {
  if (S.muscuSessionLog[d] && S.muscuSessionLog[d][exRef.n]) {
  var _sSets = S.muscuSessionLog[d][exRef.n].filter(function(s) { return s.actualReps !== null; });
@@ -3786,6 +3952,27 @@ function renderMusculationProgram(p) {
  }
 
  card.appendChild(setTable);
+
+ // ── NEXT EXERCISE NUDGE : shown when all sets are validated ──
+ (function(_exRef, _exIdx2, _dayExercises2) {
+ var _today2 = new Date().toISOString().slice(0, 10);
+ var _exSets2 = S.muscuSessionLog[_today2] && S.muscuSessionLog[_today2][_exRef.n] ? S.muscuSessionLog[_today2][_exRef.n] : [];
+ var _allValidated = _exSets2.length > 0 && _exSets2.every(function(s) { return s.validated === true; });
+ if (_allValidated) {
+ var _nextEx2 = (_dayExercises2 && _exIdx2 + 1 < _dayExercises2.length) ? _dayExercises2[_exIdx2 + 1] : null;
+ var _nudge = h('div', {style: 'margin-top:8px;padding:10px 14px;background:#1A4A1A;border-radius:2px;display:flex;align-items:center;justify-content:space-between'});
+ _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#fff;font-weight:700'}, '\u2713 Exercice termin\u00e9'));
+ if (_nextEx2) {
+ var _nudgeRight = h('div', {style: 'text-align:right'});
+ _nudgeRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px'}, 'Suivant'));
+ _nudgeRight.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:#fff;max-width:140px;text-align:right'}, _nextEx2.n));
+ _nudge.appendChild(_nudgeRight);
+ } else {
+ _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8)'}, '\uD83C\uDFC6 Derni\u00e8r exercice'));
+ }
+ card.appendChild(_nudge);
+ }
+ })(ex, exIdx, day.exercises);
  })(ex, eqType === 'bodyweight', exIdx, day.exercises);
 
  // ─── SWAP EXERCISE BUTTON ───────────────────────────────────────────
@@ -3897,6 +4084,32 @@ function renderMusculationProgram(p) {
  var kcalRes = calcSessionKcal(allEx, realDur);
  var compPanel = h('div', {style: 'border:1px solid var(--border);background:var(--ivory2);padding:16px;margin-top:8px'});
  compPanel.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:12px'}, window.t('muscu.session_summary')));
+
+ // ── PER-EXERCISE RECAP ──
+ var _recapToday = new Date().toISOString().slice(0, 10);
+ var _recapLog = S.muscuSessionLog[_recapToday] || {};
+ var _recapExNames = Object.keys(_recapLog);
+ if (_recapExNames.length > 0) {
+ var recapBox = h('div', {style: 'margin-bottom:14px;border:1px solid var(--border);background:var(--ivory)'});
+ recapBox.appendChild(h('div', {style: 'padding:6px 10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border);font-weight:700'}, 'R\u00e9cap. des exercices'));
+ _recapExNames.forEach(function(exName) {
+ var _sets = _recapLog[exName] || [];
+ var _validSets = _sets.filter(function(s) { return s.validated === true; });
+ if (_validSets.length === 0) return;
+ var _row = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border)'});
+ _row.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'}, exName));
+ var _summary = _validSets.length + ' s\u00e9ries';
+ var _firstValid = _validSets[0];
+ if (_firstValid.actualWeight && _firstValid.actualWeight > 0) {
+ _summary += ' \u2014 ' + (window.UNITS ? window.UNITS.displayWeight(_firstValid.actualWeight) : _firstValid.actualWeight + ' kg');
+ }
+ _row.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-left:8px;white-space:nowrap'}, _summary));
+ _row.appendChild(h('span', {style: 'color:#1A4A1A;font-size:14px;margin-left:6px'}, '\u2713'));
+ recapBox.appendChild(_row);
+ });
+ compPanel.appendChild(recapBox);
+ }
+
  // Durée
  var durRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:14px'});
  durRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex:1'}, 'Dur\u00e9e r\u00e9elle'));
@@ -3956,7 +4169,7 @@ function renderMusculationProgram(p) {
  if (!S.sessionHistory) S.sessionHistory = {};
  S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
  // Pruning : garder les 365 dernières sessions max
- var _shKeys = Object.keys(S.sessionHistory).sort();
+ var _shKeys = Object.keys(S.sessionHistory || {}).sort();
  if (_shKeys.length > 365) { _shKeys.slice(0, _shKeys.length - 365).forEach(function(k) { delete S.sessionHistory[k]; }); }
  // Sync session vers Supabase
  if (window.SupaSync) SupaSync.saveSession({
@@ -3985,7 +4198,7 @@ function renderMusculationProgram(p) {
  'Abdominaux': ['abdos_dedied'],
  'Bras': ['biceps_dedied', 'triceps_dedied']
  };
- var selectedZonesForDedicated = Object.keys(S.sportFocus).filter(function(z){ return S.sportFocus[z] > 0; });
+ var selectedZonesForDedicated = Object.keys(S.sportFocus || {}).filter(function(z){ return S.sportFocus[z] > 0; });
  var dedicatedToShow = [];
  selectedZonesForDedicated.forEach(function(zone) {
  if (dedicatedMap[zone]) {
@@ -4366,7 +4579,7 @@ function renderRunningConfig(p) {
  window.render();
  }
  }}, 'Générer mon plan'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 8: RUNNING PROGRAM ───
@@ -4464,7 +4677,7 @@ function renderRunningProgram(p) {
 function renderHyroxConfig(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Hyrox'));
  p.appendChild(h('h1', {html: 'Préparation<br><em>Hyrox</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, '8 semaines pour être prêt le jour J'));
+ p.appendChild(h('p', {'class': 'subtitle'}, '12 semaines pour être prêt le jour J'));
 
  // Goal selection (mandatory)
  p.appendChild(h('div', {'class': 'section-label'}, 'Objectif'));
@@ -4580,11 +4793,13 @@ function renderHyroxConfig(p) {
  window.render();
  }
  }}, 'Générer mon plan'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 10: HYROX PROGRAM ───
 function renderHyroxProgram(p) {
+ // Guard: si config non remplie, rediriger vers la config
+ if (!S.hyroxLevel || !S.hyroxGoal) { S.sStep = 9; window.render(); return; }
  if (!S.hyroxProgram || S.hyroxProgram.length === 0) {
  S.hyroxProgram = window.generateHyroxProgram(S.hyroxDays, S.hyroxLevel, S.hyroxGoal);
  }
@@ -4605,14 +4820,14 @@ function renderHyroxProgram(p) {
  var levelObj = (window.HYROX_LEVELS || []).find(function(l){ return l.id === S.hyroxLevel; });
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Hyrox'));
- p.appendChild(h('h1', {html: 'Préparation<br><em>8 semaines</em>'}));
+ p.appendChild(h('h1', {html: 'Préparation<br><em>12 semaines</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Phase ' + currentWeekData.phase + ' · ' + (goalObj ? goalObj.name : '') + ' · ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '')));
 
  // Competition week banner
- if (S.hyroxWeek === 8) {
+ if (S.hyroxWeek === 12) {
  var banner = h('div', {style: 'border:2px solid #5A1010;padding:16px;background:rgba(192,57,43,0.04);margin-bottom:16px;text-align:center'});
- banner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:#5A1010;margin-bottom:4px'}, ' COMPETITION WEEK'));
- banner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Simulation complète + repos. Vous êtes prêt !'));
+ banner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:#5A1010;margin-bottom:4px'}, ' RACE WEEK — GO TIME'));
+ banner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Activation légère. Visualisation. Repos maximal. Vous êtes prêt !'));
  p.appendChild(banner);
  }
 
@@ -4628,7 +4843,7 @@ function renderHyroxProgram(p) {
  p.appendChild(weekNav);
 
  // Phase info
- var phaseColors = {Base: '#1A3A6A', 'Développement': '#6A4A1A', 'Compétition': '#5A1010'};
+ var phaseColors = {Base: '#1A3A6A', Build: '#6A4A1A', Peak: '#5A1010', Taper: '#2E7D32', 'Développement': '#6A4A1A', 'Compétition': '#5A1010'};
  var phaseColor = phaseColors[currentWeekData.phase] || '#0A0A09';
  var infoCard = h('div', {style: 'border-left:3px solid ' + phaseColor + ';padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
  infoCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + phaseColor + ';margin-bottom:4px'}, 'Phase : ' + currentWeekData.phase));
@@ -4680,7 +4895,7 @@ function renderHyroxProgram(p) {
  }
 
  // Benchmarks comparison if filled
- var hasBenchmarks = Object.keys(S.hyroxBenchmarks).some(function(k){ return S.hyroxBenchmarks[k]; });
+ var hasBenchmarks = Object.keys(S.hyroxBenchmarks || {}).some(function(k){ return S.hyroxBenchmarks[k]; });
  if (hasBenchmarks && S.hyroxLevel) {
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Vos benchmarks vs standards'));
  var bmCard = h('div', {style: 'border:1px solid var(--border);padding:14px 16px;background:var(--ivory2);margin-bottom:16px'});
@@ -4770,7 +4985,7 @@ function renderPadelConfig(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; window.render(); }
  }}, 'Générer mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 function renderPadelProgram(p) {
@@ -4887,7 +5102,7 @@ function renderGolfConfig(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; window.render(); }
  }}, 'Générer mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 function renderGolfProgram(p) {
@@ -5081,7 +5296,7 @@ function renderTriathlonConfig(p) {
  }
  window.render();
  }}, 'Générer mon programme →'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 0; window.render(); }, html: backArrow + 'Retour'}));
 }
 
 // ─── STEP 18: TRIATHLON PROGRAM ───
@@ -5369,7 +5584,7 @@ function renderYogaOnboarding(p) {
  window.render();
  }
  }}, 'G\u00e9n\u00e9rer mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 21: YOGA PROGRAM ───
@@ -5714,7 +5929,7 @@ function renderCyclingOnboarding(p) {
  if (window.BLACKBOX) BLACKBOX.log('cycling_config', {level: S.cyclingLevel, goal: S.cyclingGoal, days: S.cyclingDays, ftp: S.cyclingFTP});
  window.render();
  }}, 'Générer mon plan'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: backArrow + 'Retour'}));
 }
 
 // ─── STEP 23: CYCLISME PROGRAMME ───
@@ -5768,7 +5983,7 @@ function renderCyclingProgram(p) {
  if (med.hypertension) warnings.push(' HTA : évitez Z4/Z5 (Valsalva interdit) — restez en Z1-Z3 maximum');
  if (med.herniaDisc || med.lowerBack) warnings.push(' Hernie discale : position aérodynamique déconseillée — vélo droit recommandé, guidon surélevé');
  if (med.knees || med.meniscus) warnings.push(' Gonarthrose / Ménisque : cadence élevée (>90 RPM) recommandée — évitez les grosses relances');
- if (S.age && S.age >= 50) warnings.push(' 50+ : échauffement 15 min minimum obligatoire, zones 1-3 prioritaires, récupération 48h entre séances intenses');
+ if (getAge() >= 50) warnings.push(' 50+ : échauffement 15 min minimum obligatoire, zones 1-3 prioritaires, récupération 48h entre séances intenses');
  if (warnings.length) {
  var warnBox = h('div', {style: 'border:1.5px solid #6A4A1A;padding:12px 16px;background:var(--orangebg,rgba(106,74,26,.06));margin-bottom:16px'});
  warnings.forEach(function(w) {
@@ -6080,7 +6295,7 @@ function renderCalisthenicsOnboarding(p) {
  window.render();
  }
  }}, 'Générer mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 25: CALISTHENICS PROGRAM ───

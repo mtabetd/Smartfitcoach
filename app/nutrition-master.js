@@ -6,14 +6,15 @@
 
   // ─── CONSTANTES ───────────────────────────────────────────────────────────────
   var GOAL_ADJUSTMENTS = {
-    bulk:        +0.15,
-    lean_bulk:   +0.10,  // Prise de masse douce — ISSN 2023 : surplus modéré préserve le ratio masse maigre/grasse
-    maintain:    +0.00,
-    cut:         -0.15,
+    bulk:          +0.15,
+    lean_bulk:     +0.10,  // Prise de masse douce — ISSN 2023 : surplus modéré préserve le ratio masse maigre/grasse
+    maintain:      +0.00,
+    recomposition: +0.00,  // Recomposition corporelle : calorie neutre (Barakat 2020, NSCA) — mult=1.00 comme maintain
+    cut:           -0.15,
     // ACSM 2009 / Helms 2014 : déficit max -500 kcal/j pour préserver la masse maigre.
     // -0.20 (vs -0.25) est un plafond plus sûr ; calcCaloriesTarget applique en plus
     // le cap 500 kcal/j via la contrainte Math.max(tdee-500, floor).
-    shred:       -0.20
+    shred:         -0.20
   };
 
   // PROT_DEFAULT : valeur médiane ISSN Position Stand 2023 pour non-élite en résistance
@@ -33,7 +34,7 @@
   var KCAL_PER_FAT        = 9;    // kcal/g lipides
 
   var VALID_GENDERS = { male: true, female: true };
-  var VALID_GOALS   = { bulk: true, lean_bulk: true, maintain: true, cut: true, shred: true };
+  var VALID_GOALS   = { bulk: true, lean_bulk: true, maintain: true, recomposition: true, cut: true, shred: true };
 
   // ─── FONCTIONS PURES ──────────────────────────────────────────────────────────
 
@@ -60,7 +61,7 @@
     return Math.round(bmr * activityLevel);
   }
 
-  var KCAL_FLOOR_MALE          = 1400; // ACSM / QA spec — plancher absolu homme
+  var KCAL_FLOOR_MALE          = 1500; // ACSM — plancher physiologique masculin (cohérent avec app-core.js calcTarget)
   var KCAL_FLOOR_FEMALE        = 1200; // ACSM — plancher absolu femme sédentaire
   var KCAL_FLOOR_FEMALE_ACTIVE = 1400; // ACSM / IOC 2018 — plancher femme sportive (RED-S prevention)
   // Seuil d'activité : PAL ≥ 1.375 (légèrement actif, ≥1x/semaine) → plancher 1400 kcal

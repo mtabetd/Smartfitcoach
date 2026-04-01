@@ -8,36 +8,69 @@ var ACHIEVEMENTS_KEY = 'mtd_achievements_';
 
 // ─── DAILY QUOTES (French, motivational, nutrition/health themed) ───
 var QUOTES = [
-  {text: "La nourriture que vous mangez peut être la forme de médecine la plus sûre ou la plus lente forme de poison.", author: "Ann Wigmore"},
-  {text: "Que ton aliment soit ta seule médecine.", author: "Hippocrate"},
+  {text: "La nourriture que vous mangez peut \u00eatre la forme de m\u00e9decine la plus s\u00fbre ou la plus lente forme de poison.", author: "Ann Wigmore"},
+  {text: "Que ton aliment soit ta seule m\u00e9decine.", author: "Hippocrate"},
   {text: "Le corps est le serviteur de l'esprit.", author: "James Allen"},
-  {text: "Prends soin de ton corps, c'est le seul endroit où tu es obligé de vivre.", author: "Jim Rohn"},
-  {text: "La santé n'est pas tout, mais sans la santé tout n'est rien.", author: "Schopenhauer"},
-  {text: "Le succès, c'est la somme de petits efforts répétés jour après jour.", author: "Robert Collier"},
+  {text: "Prends soin de ton corps, c'est le seul endroit o\u00f9 tu es oblig\u00e9 de vivre.", author: "Jim Rohn"},
+  {text: "La sant\u00e9 n'est pas tout, mais sans la sant\u00e9 tout n'est rien.", author: "Schopenhauer"},
+  {text: "Le succ\u00e8s, c'est la somme de petits efforts r\u00e9p\u00e9t\u00e9s jour apr\u00e8s jour.", author: "Robert Collier"},
   {text: "La discipline est le pont entre les objectifs et l'accomplissement.", author: "Jim Rohn"},
-  {text: "Votre corps peut résister à presque tout. C'est votre esprit qu'il faut convaincre.", author: "Inconnu"},
-  {text: "Le meilleur moment pour commencer était hier. Le deuxième meilleur moment, c'est maintenant.", author: "Proverbe"},
-  {text: "Chaque journée est une nouvelle chance de changer votre vie.", author: "Inconnu"},
-  {text: "La force ne vient pas de la capacité physique. Elle vient d'une volonté indomptable.", author: "Gandhi"},
-  {text: "Le seul mauvais entraînement est celui que vous n'avez pas fait.", author: "Inconnu"},
-  {text: "Manger sainement est une forme de respect envers soi-même.", author: "Inconnu"},
+  {text: "Votre corps peut r\u00e9sister \u00e0 presque tout. C'est votre esprit qu'il faut convaincre.", author: ""},
+  {text: "Chaque journ\u00e9e est une nouvelle chance de changer votre vie.", author: ""},
+  {text: "La force ne vient pas de la capacit\u00e9 physique. Elle vient d'une volont\u00e9 indomptable.", author: "Gandhi"},
+  {text: "Manger sainement est une forme de respect envers soi-m\u00eame.", author: ""},
   {text: "Le voyage de mille lieues commence par un pas.", author: "Lao Tseu"},
   {text: "N'abandonnez pas. Souffrez maintenant et vivez le reste de votre vie comme un champion.", author: "Muhammad Ali"},
-  {text: "Le corps accomplit ce que l'esprit croit.", author: "Inconnu"},
-  {text: "La persévérance n'est pas une longue course, c'est plusieurs courtes courses l'une après l'autre.", author: "Walter Elliot"},
-  {text: "Un objectif sans plan n'est qu'un souhait.", author: "Antoine de Saint-Exupéry"},
-  {text: "Cuisiner est un acte d'amour envers soi-même et les autres.", author: "Inconnu"},
+  {text: "La pers\u00e9v\u00e9rance n'est pas une longue course, c'est plusieurs courtes courses l'une apr\u00e8s l'autre.", author: "Walter Elliot"},
+  {text: "Un objectif sans plan n'est qu'un souhait.", author: "Antoine de Saint-Exup\u00e9ry"},
   {text: "Le changement ne viendra pas si nous attendons une autre personne ou un autre moment.", author: "Barack Obama"},
-  {text: "La constance vaut mieux que l'intensité.", author: "Inconnu"},
-  {text: "Manger est une nécessité. Manger intelligemment est un art.", author: "La Rochefoucauld"},
-  {text: "Les limites n'existent que dans votre esprit.", author: "Inconnu"},
-  {text: "Ce n'est pas le nombre de fois où l'on tombe qui compte, mais le nombre de fois où l'on se relève.", author: "Inconnu"},
-  {text: "La meilleure version de vous-même attend de l'autre côté de l'effort.", author: "Inconnu"},
-  {text: "Chaque repas est une opportunité de nourrir votre corps avec excellence.", author: "Inconnu"},
+  {text: "Manger est une n\u00e9cessit\u00e9. Manger intelligemment est un art.", author: "La Rochefoucauld"},
+  {text: "La meilleure version de vous-m\u00eame attend de l'autre c\u00f4t\u00e9 de l'effort.", author: ""},
+  {text: "Chaque repas est une opportunit\u00e9 de nourrir votre corps avec excellence.", author: ""},
   {text: "La motivation vous met en route. L'habitude vous fait continuer.", author: "Jim Ryun"},
-  {text: "Investir dans votre santé produira d'énormes dividendes.", author: "Inconnu"},
-  {text: "Les champions ne sont pas faits dans les salles de sport. Ils sont faits à partir de quelque chose de profond.", author: "Muhammad Ali"},
-  {text: "Votre santé est un investissement, pas une dépense.", author: "Inconnu"}
+  {text: "Les champions ne sont pas faits dans les salles de sport. Ils sont faits \u00e0 partir de quelque chose de profond.", author: "Muhammad Ali"},
+  {text: "La perfection n'est pas atteignable, mais en la poursuivant nous atteignons l'excellence.", author: "Vince Lombardi"},
+  {text: "Le corps humain est le meilleur tableau de bord que nous ayons.", author: "Arbuthnot Lane"},
+  {text: "Mange pour vivre, ne vis pas pour manger.", author: "Socrate"},
+  {text: "La sant\u00e9 est la plus grande des richesses.", author: "Virgile"},
+  {text: "Nul ne peut atteindre l'aube sans passer par le chemin de la nuit.", author: "Khalil Gibran"},
+  {text: "Ce que nous sommes est le r\u00e9sultat de ce que nous avons pens\u00e9.", author: "Bouddha"},
+  {text: "Le mouvement est la vie. La vie est le mouvement.", author: "Moshe Feldenkrais"},
+  {text: "Le corps sait des choses que l'esprit refuse d'admettre.", author: "Paul Val\u00e9ry"},
+  {text: "Chaque victoire commence dans les profondeurs d'un esprit qui dit : je peux.", author: "Mary Kay Ash"},
+  {text: "Ce n'est pas la montagne que nous conqu\u00e9rons, mais nous-m\u00eames.", author: "Edmund Hillary"},
+  {text: "La force n'est pas dans les muscles. Elle est dans la d\u00e9cision.", author: ""},
+  {text: "Manger est un besoin. Savoir choisir ce que l'on mange est une sagesse.", author: ""},
+  {text: "L'alimentation est la pharmacologie la plus ancienne.", author: ""},
+  {text: "Chaque s\u00e9ance d'entra\u00eenement est un rendez-vous avec la meilleure version de soi.", author: ""},
+  {text: "La fatigue est temporaire. La fiert\u00e9 de l'effort dure toujours.", author: ""},
+  {text: "Respecter son corps, c'est respecter la vie.", author: ""},
+  {text: "Le changement est difficile au d\u00e9but, d\u00e9sordonn\u00e9 au milieu, magnifique \u00e0 la fin.", author: "Robin Sharma"},
+  {text: "Un gramme de pr\u00e9vention vaut mieux qu'un kilogramme de rem\u00e8de.", author: ""},
+  {text: "Votre sant\u00e9 n'attend pas. Commencez maintenant.", author: ""},
+  {text: "Le sommeil est la r\u00e9cup\u00e9ration active de l'esprit et du corps.", author: "Matthew Walker"},
+  {text: "L'entra\u00eenement te donnera ce que tu lui donnes.", author: ""},
+  {text: "La nutrition est l'architecture invisible de votre performance.", author: ""},
+  {text: "Tout exc\u00e8s est un ennemi de l'\u00e9quilibre.", author: ""},
+  {text: "Courir n'est pas une fuite. C'est un retour \u00e0 soi-m\u00eame.", author: ""},
+  {text: "Le poids que vous soulevez dans la salle n'a rien \u00e0 voir avec le poids que vous portez en sortant.", author: ""},
+  {text: "Les habitudes forment le corps avant m\u00eame que l'esprit s'en aper\u00e7oive.", author: ""},
+  {text: "La sant\u00e9 mentale et la sant\u00e9 physique ne font qu'un.", author: "Ren\u00e9 Dubos"},
+  {text: "Ton corps est ton instrument. Prends soin de lui comme un musicien prend soin du sien.", author: ""},
+  {text: "La discipline, c'est se souvenir de ce que l'on veut vraiment.", author: "David Campbell"},
+  {text: "Le seul mauvais entra\u00eenement est celui que vous n'avez pas fait.", author: ""},
+  {text: "La constance vaut mieux que l'intensit\u00e9.", author: ""},
+  {text: "Cuisiner est un acte d'amour envers soi-m\u00eame et les autres.", author: ""},
+  {text: "Votre sant\u00e9 est un investissement, pas une d\u00e9pense.", author: ""},
+  {text: "L'effort d'aujourd'hui est la facilit\u00e9 de demain.", author: ""},
+  {text: "Le corps accomplit ce que l'esprit choisit de nourrir.", author: ""},
+  {text: "On ne r\u00e9colte que ce que l'on a sem\u00e9. Nourrissez-vous avec intention.", author: ""},
+  {text: "L'\u00e9quilibre n'est pas une destination, c'est une pratique quotidienne.", author: ""},
+  {text: "Chaque bouchon de soin que tu prends aujourd'hui est un cadeau \u00e0 ton futur.", author: ""},
+  {text: "La v\u00e9ritable force est celle qui permet de se lever demain matin avec \u00e9nergie.", author: ""},
+  {text: "Un esprit sain dans un corps sain \u2014 non pas l'un ou l'autre, mais les deux.", author: ""},
+  {text: "Ce que l'on mange en priv\u00e9 se voit en public.", author: ""},
+  {text: "La r\u00e9gularit\u00e9 construit ce que l'intensit\u00e9 seule ne peut pas.", author: ""}
 ];
 
 // ─── ACHIEVEMENTS/BADGES ───
@@ -295,10 +328,12 @@ function renderDailyQuoteWidget(container) {
   text.textContent = '"' + quote.text + '"';
   widget.appendChild(text);
 
-  var author = _h('div', '');
-  author.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#9A9A90;margin-top:6px';
-  author.textContent = '— ' + quote.author;
-  widget.appendChild(author);
+  if (quote.author) {
+    var author = _h('div', '');
+    author.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#9A9A90;margin-top:6px';
+    author.textContent = '\u2014 ' + quote.author;
+    widget.appendChild(author);
+  }
 
   container.appendChild(widget);
 }

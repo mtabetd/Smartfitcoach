@@ -1258,6 +1258,582 @@ window.I18N = {
 // Raccourci global
 window.t = function(key) { return window.I18N.t(key); };
 
+// ─── DOM TRANSLATOR (post-render, EN only) ───
+window.I18N._frToEn = null; // lazy init
+
+window.I18N.buildMap = function() {
+  if (window.I18N._frToEn) return;
+  window.I18N._frToEn = new Map([
+    // Navigation & Structure
+    ['Tableau de bord', 'Dashboard'],
+    ['Connexion', 'Sign In'],
+    ['Déconnexion', 'Sign Out'],
+    ['Créer un compte', 'Create Account'],
+    ['Continuer', 'Continue'],
+    ['Retour', 'Back'],
+    ['Commencer', 'Get Started'],
+    ['Voir mon programme', 'View My Program'],
+    ['Enregistrer', 'Save'],
+    ['Annuler', 'Cancel'],
+    ['Fermer', 'Close'],
+    ['Chargement...', 'Loading...'],
+    ['Modifier', 'Edit'],
+    ['Supprimer', 'Delete'],
+    ['Confirmer', 'Confirm'],
+    // Wizard step titles & subtitles
+    ['Votre identité', 'Your Identity'],
+    ['Votre morphologie', 'Your Morphology'],
+    ['Votre activité', 'Your Activity'],
+    ['Votre santé', 'Your Health'],
+    ['Vos habitudes alimentaires', 'Your Eating Habits'],
+    ['Votre objectif', 'Your Goal'],
+    ['Vos préférences', 'Your Preferences'],
+    ['Votre semaine', 'Your Week'],
+    ['Les bases pour un programme calibré sur mesure.', 'The basics for a tailor-made program.'],
+    ['Poids et taille pour un calibrage précis de vos besoins.', 'Weight and height for precise calibration.'],
+    ['Décrivez votre rythme pour adapter votre programme.', 'Describe your routine to tailor your program.'],
+    ['Vos conditions de santé pour des recommandations sûres.', 'Your health conditions for safe recommendations.'],
+    ['Vos habitudes au quotidien pour un plan réaliste.', 'Your daily habits for a realistic plan.'],
+    ["Allergies, cuisine et goûts pour des recettes qui vous ressemblent.", 'Allergies, cuisine and taste for recipes that suit you.'],
+    // Wizard labels
+    ['Sexe biologique', 'Biological Sex'],
+    ['Homme', 'Male'],
+    ['Femme', 'Female'],
+    ['Poids', 'Weight'],
+    ['Taille', 'Height'],
+    ['Âge', 'Age'],
+    ['Date de naissance', 'Date of Birth'],
+    ['Fréquence sport', 'Training Frequency'],
+    ["Type d'entraînement", 'Training Type'],
+    ['Heures de sommeil / nuit', 'Hours of Sleep / Night'],
+    ['Aucune condition particulière', 'No specific conditions'],
+    ['Nombre de repas par jour', 'Meals per Day'],
+    ['Budget alimentaire', 'Food Budget'],
+    ['Niveau cuisine', 'Cooking Level'],
+    ['Allergies alimentaires', 'Food Allergies'],
+    ['Régime alimentaire', 'Diet Type'],
+    ['Cuisines préférées', 'Preferred Cuisines'],
+    ['Poids cible', 'Target Weight'],
+    ['Photo de profil', 'Profile Photo'],
+    ['Ajouter une photo', 'Add Photo'],
+    ['AJOUTER UNE PHOTO', 'ADD PHOTO'],
+    ['CHANGER LA PHOTO', 'CHANGE PHOTO'],
+    ['SUPPRIMER', 'DELETE'],
+    ['Mode sombre', 'Dark Mode'],
+    // Meal types
+    ['Petit-déjeuner', 'Breakfast'],
+    ['Déjeuner', 'Lunch'],
+    ['Dîner', 'Dinner'],
+    ['Collation', 'Snack'],
+    // Dashboard
+    ['Bonjour', 'Good morning'],
+    ['Bon après-midi', 'Good afternoon'],
+    ['Bonsoir', 'Good evening'],
+    ['Citation du jour', 'Quote of the Day'],
+    ['Votre série', 'Your Streak'],
+    ["Aperçu du jour", "Today's Overview"],
+    ['Accès rapide', 'Quick Access'],
+    ['Enregistrer mon poids', 'Log My Weight'],
+    ['Mensurations', 'Measurements'],
+    ['Planifiez vos repas', 'Plan your meals'],
+    ['Votre programme', 'Your program'],
+    ['Bienvenue sur SmartFitCoach', 'Welcome to SmartFitCoach'],
+    ['Commencer mon programme', 'Start my program'],
+    ['Résultats personnalisés', 'Personalized Results'],
+    ['Vos macros', 'Your Macros'],
+    // Macros & Nutrition labels
+    ['Protéines', 'Protein'],
+    ['Glucides', 'Carbs'],
+    ['Lipides', 'Fat'],
+    ['Calories', 'Calories'],
+    ['Métabolisme de base', 'Basal Metabolic Rate'],
+    ['Dépense totale', 'Total Daily Energy'],
+    ['Cible calorique', 'Calorie Target'],
+    ['Objectif', 'Goal'],
+    ['Hydratation', 'Hydration'],
+    ['Fibres', 'Fiber'],
+    ['Suppléments', 'Supplements'],
+    // Sport
+    ['Choisissez votre sport', 'Choose Your Sport'],
+    ['Musculation', 'Strength Training'],
+    ['Course à pied', 'Running'],
+    ['Cyclisme', 'Cycling'],
+    ['Natation', 'Swimming'],
+    ['CrossFit', 'CrossFit'],
+    ['Yoga', 'Yoga'],
+    ['Triathlon', 'Triathlon'],
+    ['Calisthenics', 'Calisthenics'],
+    ['Padel', 'Padel'],
+    ['Golf', 'Golf'],
+    ['Niveau', 'Level'],
+    ['Débutant', 'Beginner'],
+    ['Intermédiaire', 'Intermediate'],
+    ['Avancé', 'Advanced'],
+    ['Élite', 'Elite'],
+    ['Jours / semaine', 'Days / week'],
+    ['Mon programme', 'My Program'],
+    ['Semaine', 'Week'],
+    ['Séries', 'Sets'],
+    ['Répétitions', 'Reps'],
+    ['Repos', 'Rest'],
+    ['Charge', 'Load'],
+    ['Bilan de séance', 'Session Summary'],
+    ['Durée', 'Duration'],
+    // Shopping
+    ['Liste de courses', 'Shopping List'],
+    ['Réinitialiser', 'Reset'],
+    ['Exporter PDF', 'Export PDF'],
+    ['articles', 'items'],
+    ['rayons', 'aisles'],
+    // Scanner
+    ['Scanner un produit', 'Scan a Product'],
+    ['Saisie manuelle', 'Manual Entry'],
+    ['Rechercher', 'Search'],
+    ['Historique', 'History'],
+    ['Score santé', 'Health Score'],
+    // Common
+    ['Voir le profil', 'View Profile'],
+    ['Générer un nouveau plan', 'Generate New Plan'],
+    ['Planning', 'Weekly Plan'],
+    // Supplements timing
+    ['matin', 'morning'],
+    ['soir', 'evening'],
+    ['avec les repas', 'with meals'],
+    ["avant l'entraînement", 'before training'],
+    ["après l'entraînement", 'after training'],
+    // Medical
+    ['Diabète', 'Diabetes'],
+    ['Hypertension', 'Hypertension'],
+    ['Hypothyroïdie', 'Hypothyroidism'],
+    ['Hyperthyroïdie', 'Hyperthyroidism'],
+    ['Cholestérol élevé', 'High Cholesterol'],
+    ['Végétarien', 'Vegetarian'],
+    ['Végane', 'Vegan'],
+    ['Pescétarien', 'Pescatarian'],
+    ['Omnivore', 'Omnivore'],
+    // Goals
+    ['Prise de masse', 'Muscle Gain'],
+    ['Prise de masse douce', 'Lean Bulk'],
+    ['Maintien', 'Maintenance'],
+    ['Sèche', 'Cut'],
+    ['Recomposition', 'Recomposition'],
+    // IMC
+    ['IMC', 'BMI'],
+    ['Poids normal', 'Normal Weight'],
+    ['Surpoids', 'Overweight'],
+    ['Obésité', 'Obesity'],
+    ['Insuffisance pondérale', 'Underweight'],
+    // Misc
+    ['Étape', 'Step'],
+    ['sur', 'of'],
+    ['ans', 'years old'],
+    ['kcal brûlées', 'kcal burned'],
+    ['/ jour', '/ day'],
+    ['/ semaine', '/ week'],
+    ['g / kg', 'g / kg'],
+    ['Série réussie', 'Set completed'],
+    ['Série échouée', 'Set failed'],
+    // Step labels not yet covered
+    ['Votre profil', 'Your Profile'],
+    ['Mensurations', 'Measurements'],
+    ["Niveau d'activité", 'Activity Level'],
+    ['Santé & Antécédents', 'Health & Medical History'],
+    ['Préférences alimentaires', 'Food Preferences'],
+    ['Votre programme nutritionnel', 'Your Nutrition Plan'],
+    ['Votre plan semaine', 'Your Weekly Plan'],
+    ['Cible', 'Target'],
+    ['Total', 'Total'],
+    ['Générer un nouveau plan', 'Generate New Plan'],
+    ['Liste de courses', 'Shopping List'],
+    // Activity levels
+    ['Sédentaire', 'Sedentary'],
+    ['Légèrement actif', 'Lightly Active'],
+    ['Modérément actif', 'Moderately Active'],
+    ['Très actif', 'Very Active'],
+    ['Extrêmement actif', 'Extremely Active'],
+    ['Athlète élite', 'Elite Athlete'],
+    // Body zones
+    ['Épaules', 'Shoulders'],
+    ['Coudes', 'Elbows'],
+    ['Poignets', 'Wrists'],
+    ['Nuque / Cou', 'Neck'],
+    ['Haut du dos', 'Upper Back'],
+    ['Bas du dos', 'Lower Back'],
+    ['Hanches', 'Hips'],
+    ['Genoux', 'Knees'],
+    ['Chevilles', 'Ankles'],
+    // Pain levels
+    ['Aucune', 'None'],
+    ['Légère', 'Mild'],
+    ['Modérée', 'Moderate'],
+    ['Sévère', 'Severe'],
+    // Scan labels
+    ['Alternatives plus saines', 'Healthier Alternatives'],
+    ['PROTÉINES', 'PROTEIN'],
+    ['GLUCIDES', 'CARBS'],
+    ['LIPIDES', 'FATS'],
+    ['SUCRES', 'SUGARS'],
+    ['FIBRES', 'FIBER'],
+    ['SEL', 'SALT'],
+    ['GRAS SAT.', 'SAT. FAT'],
+    // Extras
+    ['Calculateur nutritionnel', 'Nutrition Calculator'],
+    ['Mesures corporelles', 'Body Measurements'],
+    ['Minuteur', 'Timer'],
+    ['Démarrer', 'Start'],
+    ['Arrêter', 'Stop'],
+    ['Sommeil', 'Sleep'],
+    ['verres', 'glasses'],
+    // Minor warning
+    ["Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé.", 'For users under 18, this program should be followed under the supervision of a healthcare professional.'],
+    // Dashboard — additional labels
+    ['Explorer les programmes', 'Browse Programs'],
+    ['Macros du jour', "Today's Macros"],
+    ['Suivi hydratation', 'Hydration Tracker'],
+    ['Suivi sommeil', 'Sleep Tracker'],
+    ['Résumé hebdomadaire', 'Weekly Summary'],
+    ['Ma progression', 'My Progress'],
+    ['Journal alimentaire', 'Food Journal'],
+    ['Badges', 'Badges'],
+    ['Tous les badges', 'All Badges'],
+    ['Voir tous les badges \u2192', 'View all badges \u2192'],
+    ['Série en cours', 'Current Streak'],
+    ['Mes données', 'My Data'],
+    ['Mes mensurations', 'My Measurements'],
+    ['Timer cuisine', 'Kitchen Timer'],
+    ['Suivi médical', 'Medical Tracking'],
+    ['Module hydratation indisponible', 'Hydration module unavailable'],
+    ['Module hydratation non chargé', 'Hydration module not loaded'],
+    ['Module sommeil indisponible', 'Sleep module unavailable'],
+    ['Module sommeil non chargé', 'Sleep module not loaded'],
+    ['Résumé indisponible', 'Summary unavailable'],
+    ['Module résumé non chargé', 'Summary module not loaded'],
+    ['Progression indisponible', 'Progress unavailable'],
+    ['Module progression non chargé', 'Progress module not loaded'],
+    ['Panneau badges indisponible.', 'Badges panel unavailable.'],
+    ['Module mensurations indisponible.', 'Measurements module unavailable.'],
+    ['Module mensurations non chargé.', 'Measurements module not loaded.'],
+    ['\uD83C\uDFCB\uFE0F Brûlées', '\uD83C\uDFCB\uFE0F Burned'],
+    ['\u26a1 Kcal nettes récupération', '\u26a1 Net kcal recovery'],
+    ['CALORIES PAR JOUR — PLAN SEMAINE', 'CALORIES PER DAY — WEEKLY PLAN'],
+    ['Aucun plan semaine généré', 'No weekly plan generated yet'],
+    ['Votre programme personnalisé vous attend', 'Your personalized program is ready'],
+    ['Complétez le questionnaire Nutrition pour générer votre plan alimentaire et sportif personnalisé.', 'Complete the Nutrition questionnaire to generate your personalized meal and workout plan.'],
+    ['Générez votre plan semaine dans Nutrition pour commencer le suivi de vos calories et performances.', 'Generate your weekly plan in Nutrition to start tracking calories and performance.'],
+    ['Générez votre plan semaine dans Nutrition pour commencer à suivre vos calories.', 'Generate your weekly plan in Nutrition to start tracking your calories.'],
+    ['Démarrer le questionnaire', 'Start the questionnaire'],
+    ["Continuer l'onboarding", 'Continue setup'],
+    ['Exporter mes données', 'Export my data'],
+    ['\u2B07 Exporter mes données', '\u2B07 Export my data'],
+    ['Supprimer toutes mes données', 'Delete all my data'],
+    ['Dernière visite : ', 'Last visit: '],
+    ['Joyeux anniversaire', 'Happy Birthday'],
+    ['Objectif \u2212 dépense = disponible récupération', 'Goal \u2212 expenditure = available for recovery'],
+    // Nutrition — additional labels
+    ['Ingrédients', 'Ingredients'],
+    ['Préparation', 'Instructions'],
+    ['Ingrédients non disponibles.', 'Ingredients not available.'],
+    ['Étapes non disponibles.', 'Steps not available.'],
+    ['Aucune recette trouvée.', 'No recipe found.'],
+    ['Budget courses estimé', 'Estimated grocery budget'],
+    ['Budget total estimé', 'Estimated total budget'],
+    ['Générez d\'abord votre plan semaine', 'Generate your weekly plan first'],
+    ["Générez d'abord votre plan de repas.", 'Generate your meal plan first.'],
+    ['Aucun ingrédient détecté dans le plan.', 'No ingredients detected in the plan.'],
+    ['Séances musculation — 7 derniers jours', 'Strength sessions — last 7 days'],
+    ['\uD83C\uDFCB\uFE0F Séances musculation — 7 derniers jours', '\uD83C\uDFCB\uFE0F Strength sessions — last 7 days'],
+    ['Séance validée aujourd\'hui — dépense', 'Session logged today — expenditure'],
+    ['\uD83C\uDFCB\uFE0F Séance validée aujourd\'hui — dépense', '\uD83C\uDFCB\uFE0F Session logged today — expenditure'],
+    ['2-3 fois par semaine en collation', '2-3 times per week as a snack'],
+    ['🍮 Desserts healthy dans mon plan', '🍮 Healthy desserts in my plan'],
+    ['⚠ CONFLIT : Objectif sèche/coupe incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.', '⚠ CONFLICT: Cut/shred goal is incompatible with an eating disorder history. Choose Maintenance or Muscle Gain.'],
+    ['Faites 2 courses par semaine — renouvelez dans 4 jours', 'Shop twice a week — restock in 4 days'],
+    ["Courses pour aujourd'hui uniquement", 'Shopping for today only'],
+    ['Quantités déjà doublées pour 14 jours — stock et surgelés recommandés', 'Quantities already doubled for 14 days — pantry staples and frozen food recommended'],
+    ['Courses pour toute la semaine', 'Shopping for the whole week'],
+    ['Aucune recette pour ces parfums. Sélectionnez d\'autres parfums dans vos préférences.', 'No recipe for these flavors. Select other flavors in your preferences.'],
+    // Sport — additional labels
+    ['Évaluation médicale', 'Medical Assessment'],
+    ['Bilan\nmedical muscu', 'Medical\nassessment'],
+    ['Avant de générer votre programme, aidez-nous à adapter les exercices à votre situation physique.', 'Before generating your program, help us adapt exercises to your physical condition.'],
+    ['Avez-vous des douleurs ou fragilités ?', 'Do you have any pain or vulnerabilities?'],
+    ['Avez-vous un diagnostic confirmé ?', 'Do you have a confirmed diagnosis?'],
+    ["Quelle est l'intensité générale ?", 'What is your general pain intensity?'],
+    ['\u26A0 Douleur sévère ou antécédent grave détecté. Nous adapterons le programme en mode réhabilitation.', '\u26A0 Severe pain or serious history detected. We will adapt the program to rehabilitation mode.'],
+    ['Consultez impérativement un médecin ou kinésithérapeute avant de reprendre la musculation lourde.', 'Consult a doctor or physiotherapist before resuming heavy strength training.'],
+    ['\u26A0 Diabète — Précautions sportives', '\u26A0 Diabetes — Sports Precautions'],
+    ['Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (RPE max 7/10 les 4 premières semaines).', 'Check blood sugar before/after each session. Avoid training if blood sugar < 4.0 mmol/L or > 14.0 mmol/L. Always carry fast-acting sugar. Progressive intensity recommended (max RPE 7/10 for the first 4 weeks).'],
+    ['\uD83D\uDCAA Athlète 50+ — Adaptations recommandées', '\uD83D\uDCAA 50+ Athlete — Recommended Adaptations'],
+    ['\uD83E\uDD30 Grossesse — Exercices autorisés seulement', '\uD83E\uDD30 Pregnancy — Authorized Exercises Only'],
+    ['Évitez les charges lourdes, exercices allongés sur le dos (après 20 SA), abdominaux hyperpressifs, sauts et HIIT intense. Privilégiez marche, natation, yoga prénatal, Kegel. Consultez votre médecin avant tout entraînement.', 'Avoid heavy loads, lying on your back (after 20 weeks), high-pressure ab work, jumping and intense HIIT. Favor walking, swimming, prenatal yoga, Kegel. Consult your doctor before any training.'],
+    ['Charges estimées', 'Estimated Loads'],
+    ['Groupes musculaires — Priorité', 'Muscle Groups — Priority'],
+    ['Attribuez 1 à 5 étoiles pour définir la priorité. Cliquez à nouveau pour retirer.', 'Assign 1 to 5 stars to set priority. Click again to remove.'],
+    ['Durée de tes séances', 'Session Duration'],
+    ["Quelle est la durée de tes séances ?", 'How long are your sessions?'],
+    ['Sélectionnez au moins 2 zones', 'Select at least 2 zones'],
+    ['Sélectionnez une durée de séance', 'Select a session duration'],
+    ['Sélectionnez au moins 2 zones à cibler dans votre programme.', 'Select at least 2 zones to target in your program.'],
+    ['Sélectionnez votre niveau pour adapter les charges et mouvements.', 'Select your level to adapt loads and movements.'],
+    ["Vue d'ensemble — cliquez sur un jour pour y accéder", 'Overview — click on a day to access it'],
+    [' Terminé', ' Completed'],
+    ['▶ Aujourd\'hui', '▶ Today'],
+    ['Plan d\'entraînement course à pied', 'Running Training Plan'],
+    ['Préparation Hyrox complète', 'Full Hyrox Preparation'],
+    ['Technique · Tactique · Match · Physique', 'Technique · Tactics · Match · Physical'],
+    ['Progresser au golf — méthode Dave Pelz', 'Improve at golf — Dave Pelz method'],
+    ['Programme Jan Frodeno · Patrick Lange · Daniela Ryf', 'Jan Frodeno · Patrick Lange · Daniela Ryf program'],
+    ['Optionnel — laissez vide si variable', 'Optional — leave blank if variable'],
+    ['Type de vélo', 'Bike Type'],
+    ['Configuration', 'Configuration'],
+    ['Discipline à renforcer (optionnel)', 'Discipline to improve (optional)'],
+    ['Auto-évaluation (optionnel)', 'Self-assessment (optional)'],
+    ['Allures estimées par zone', 'Estimated paces by zone'],
+    ['Plan basé sur les zones FTP (méthode Andy Coggan)', 'Plan based on FTP zones (Andy Coggan method)'],
+    ['Programmation basée sur la méthode Jack Daniels & Pfitzinger', 'Programming based on Jack Daniels & Pfitzinger method'],
+    ['Aucun skill sélectionné', 'No skill selected'],
+    ['Charge de travail', 'Workload'],
+    ['Suivi du poids', 'Weight Tracking'],
+    ['Technique, tactique et préparation physique.', 'Technique, tactics and physical preparation.'],
+    ['Street workout, mouvements au poids du corps', 'Street workout, bodyweight movements'],
+    ['Street workout, progressions au poids du corps.', 'Street workout, bodyweight progressions.'],
+    ["Route, VTT, indoor \u2014 améliore l'", 'Road, MTB, indoor \u2014 improves '],
+    ['Niveau d\'expérience et fréquence d\'entraînement.', 'Experience level and training frequency.'],
+    ['Vos zones de puissance', 'Your Power Zones'],
+    ['Volume hebdomadaire', 'Weekly Volume'],
+    ['Vos charges actuelles (optionnel)', 'Your current loads (optional)'],
+    ['Programme ciblé par groupes musculaires', 'Program targeting muscle groups'],
+    // Auth — additional hardcoded strings
+    ['Votre prénom', 'Your first name'],
+    ['Min. 6 caractères', 'Min. 6 characters'],
+    ['Ex: avocat, bœuf, saumon...', 'e.g. avocado, beef, salmon...'],
+    ['Code-barres (EAN-13)', 'Barcode (EAN-13)'],
+    ['Mot de passe', 'Password'],
+    ['Création...', 'Creating...'],
+    ['Erreur lors de la création du compte. Réessayez.', 'Error creating account. Please try again.'],
+    ['Erreur de connexion. Réessayez.', 'Connection error. Please try again.'],
+    ['Veuillez remplir tous les champs', 'Please fill in all fields'],
+    ['Tous les champs sont obligatoires', 'All fields are required'],
+    ['Retour à la connexion', 'Back to sign in'],
+    ['Veuillez entrer votre adresse email', 'Please enter your email address'],
+    ['Terminé !', 'Done!'],
+    ['Cela remplacera vos données actuelles. Continuer ?', 'This will replace your current data. Continue?'],
+    ['Êtes-vous sûr ? Toutes vos données seront supprimées définitivement.', 'Are you sure? All your data will be permanently deleted.'],
+    ['Dernière confirmation : cette action est irréversible. Continuer ?', 'Final confirmation: this action is irreversible. Continue?'],
+    // Quotes
+    ['La discipline est le pont entre les objectifs et les résultats.', 'Discipline is the bridge between goals and accomplishments.'],
+    ["Prenez soin de votre corps, c'est le seul endroit où vous vivez.", 'Take care of your body. It\'s the only place you have to live.'],
+    ['Le succès est la somme de petits efforts répétés jour après jour.', 'Success is the sum of small efforts repeated day in and day out.'],
+  ]);
+};
+
+window.I18N._frToEnPartial = null; // lazy init for partial match list
+
+window.I18N.buildPartialMap = function() {
+  if (window.I18N._frToEnPartial) return;
+  window.I18N._frToEnPartial = [
+    // Dynamic text with variables — handled via partial string replacement
+    ['Votre questionnaire est en cours (étape ', 'Your questionnaire is in progress (step '],
+    ['). Terminez-le pour accéder à votre tableau de bord complet.', '). Complete it to access your full dashboard.'],
+    ['kcal/jour (besoins grossesse inclus dans votre cible)', 'kcal/day (pregnancy needs included in your target)'],
+    ['T1 : pas de calories supplémentaires nécessaires', 'T1: no additional calories needed'],
+    ['Poids attendu à SA', 'Expected weight at week'],
+    ['kg (gain cible : +', 'kg (target gain: +'],
+    ['Consultez votre médecin ou diabétologue avant de modifier votre alimentation ou votre programme sportif. Mesurez votre glycémie régulièrement, notamment avant et après l\'effort. Privilegiez les aliments à index glycémique bas.', 'Consult your doctor or diabetologist before changing your diet or workout program. Monitor your blood sugar regularly, especially before and after exercise. Favor low glycemic index foods.'],
+    ['\u26A0 Diabète — Recommandations importantes', '\u26A0 Diabetes — Important Recommendations'],
+    ['Grossesse — Semaine ', 'Pregnancy — Week '],
+    ['Série de 7 jours', '7-day streak'],
+    ['Dernière visite : ', 'Last visit: '],
+    [' ans', ' years old'],
+    ['Nutrition & Sport', 'Nutrition & Workout'],
+    // Sport partial
+    ['\uD83D\uDCC9 Semaine ', '\uD83D\uDCC9 Week '],
+    [' / 100 jours complétés (', ' / 100 days completed ('],
+    ['% des ingrédients', '% of ingredients'],
+    ['pour la recette', 'for the recipe'],
+    [' mouvement(s) retiré(s) pour restriction médicale', ' movement(s) removed for medical restriction'],
+    ['Compte à rebours ', 'Countdown '],
+    ['Chrono — ', 'Timer — '],
+    ['SUIVI WOD — Jour ', 'WOD TRACKING — Day '],
+    [' WOD complété le ', ' WOD completed on '],
+    [' — Score : ', ' — Score: '],
+    ['Score (rounds, temps, reps, kg) — optionnel', 'Score (rounds, time, reps, kg) — optional'],
+    ['Charges adaptées pour : ', 'Adapted loads for: '],
+    ['Début : ', 'Start: '],
+    [' complétés (', ' completed ('],
+    ['Tous les WODs sont adaptés à votre niveau', 'All WODs are adapted to your level'],
+    ['Pour des charges de travail précises, renseignez vos 1RM', 'For precise workloads, enter your 1RM values'],
+    ['Laissez vide les exercices que vous ne pratiquez pas.', 'Leave blank exercises you do not practice.'],
+    ['Indiquez la charge ET le nombre de reps pour un calcul précis du 1RM', 'Enter the load AND reps for an accurate 1RM calculation'],
+    ['Réduisez le volume de 40-50', 'Reduce volume by 40-50'],
+    // DH budget
+    [' DH pour ', ' DH for '],
+    // Nutrition partial
+    ['\uD83C\uDFCB\uFE0F Jour d\'entraînement', '\uD83C\uDFCB\uFE0F Training day'],
+    ['\uD83D\uDE34 Jour de repos', '\uD83D\uDE34 Rest day'],
+    ['\uD83D\uDE34 Récupération', '\uD83D\uDE34 Recovery'],
+    ['\u26A1 Pré-séance', '\u26A1 Pre-session'],
+    ['\uD83D\uDCAA Post-séance', '\uD83D\uDCAA Post-session'],
+    ['kcal EPOC (afterburn) inclus', 'kcal EPOC (afterburn) included'],
+    [' repas/j)', ' meals/day)'],
+    [' repas/jour · 527 recettes', ' meals/day · 527 recipes'],
+    ['7 jours · ', '7 days · '],
+    ['Semaine d\'', 'Week of '],
+    ['Liste pour ', 'List for '],
+    ['Sélectionné dans vos compléments', 'Selected from your supplements'],
+    ['Dose recommandée : ', 'Recommended dose: '],
+    ['Hydratation quotidienne', 'Daily Hydration'],
+    ['Détail de consommation', 'Consumption Details'],
+    ['Objectif alimentaire ajusté (net)', 'Adjusted food goal (net)'],
+    ['Objectif : G ', 'Goal: C '],
+    ['Répartition par repas (', 'Meal breakdown ('],
+    ['Supplément sélectionné dans vos compléments', 'Supplement selected from your supplements'],
+    ['Supplémentation recommandée', 'Recommended Supplementation'],
+    ['Supplémentation', 'Supplementation'],
+    ['Suivi du cycle menstruel (optionnel)', 'Menstrual cycle tracking (optional)'],
+    ['Cycle menstruel — Phase actuelle', 'Menstrual cycle — Current phase'],
+    ['Date des dernières règles', 'Last menstrual period'],
+    ['Durée moyenne : 28 jours', 'Average duration: 28 days'],
+    ['Activer le suivi du cycle', 'Enable cycle tracking'],
+    ['Courbe de poids — Grossesse', 'Pregnancy weight curve'],
+    ['Suivi de poids grossesse', 'Pregnancy weight tracking'],
+    ['Nutrition adaptée à chaque trimestre de votre grossesse.', 'Nutrition adapted to each trimester of your pregnancy.'],
+    ["Êtes-vous enceinte ?", 'Are you pregnant?'],
+    ['Pour calculer la prise de poids recommandée', 'To calculate recommended weight gain'],
+    ['Semaine de grossesse', 'Week of pregnancy'],
+    ['Ajouter un repas', 'Add a meal'],
+    ['Choisir une recette', 'Choose a recipe'],
+    ['Aliments exclus', 'Excluded foods'],
+    ['Budget / jour', 'Budget / day'],
+    ['Budget / semaine', 'Budget / week'],
+    ['Budget alimentaire', 'Food Budget'],
+    ['Habitudes de courses', 'Shopping Habits'],
+    ['Où faites-vous vos courses ?', 'Where do you shop?'],
+    ['Fréquence de courses', 'Shopping Frequency'],
+    ['Grignotage', 'Snacking'],
+    ['Consommation d\'alcool', 'Alcohol consumption'],
+    ['Niveau cuisine', 'Cooking Level'],
+    ['Préférences produits', 'Product Preferences'],
+    ['Cuisines préférées', 'Preferred Cuisines'],
+    ['Je suis en bonne santé', "I'm in good health"],
+    ['Entre 14 et 80 ans', 'Between 14 and 80 years old'],
+    ['Halal — exclure porc & alcool', 'Halal — exclude pork & alcohol'],
+    ['Substitution Whey Végétale', 'Plant-based Whey Substitution'],
+    ['L eau/jour', 'L water/day'],
+    ['Composez votre création ou partez d\'une composition signature ci-dessus', 'Compose your creation or start from a signature composition above'],
+    ['Résultats personnalisés', 'Personalized Results'],
+    ['Nutrition & Sport personnalisés', 'Personalized Nutrition & Workout'],
+    ['Photo de dos', 'Back photo'],
+    ['Photo de face', 'Front photo'],
+    ['Photo de profil (optionnel)', 'Profile photo (optional)'],
+    ['Photo de progression (optionnel)', 'Progress photo (optional)'],
+    ['Zones corporelles', 'Body Zones'],
+    ['Vérif : ', 'Check: '],
+    ['Évolution du poids', 'Weight Progress'],
+    ['Smoothies Whey', 'Whey Smoothies'],
+    ['Prends ta whey dans les 30 min après l\'', 'Take your whey within 30 min after '],
+    ['Prenez-vous de la créatine ?', 'Are you taking creatine?'],
+    // Hyrox program strings
+    ['Programme Hyrox', 'Hyrox Program'],
+    ['Préparation\nHyrox', 'Hyrox\nPreparation'],
+    ['Préparation<br><em>Hyrox</em>', 'Preparation<br><em>Hyrox</em>'],
+    ['Préparation<br><em>12 semaines</em>', 'Preparation<br><em>12 weeks</em>'],
+    ['Zone 2 Run — Endurance de base', 'Zone 2 Run — Base Endurance'],
+    ['Force fonctionnelle Hyrox', 'Hyrox Functional Strength'],
+    ['Simulation Hyrox (', 'Hyrox Simulation ('],
+    [' stations)', ' stations)'],
+    ['Full Simulation Hyrox — 8 stations', 'Full Hyrox Simulation — 8 stations'],
+    ['Endurance aérobie', 'Aerobic endurance'],
+    ['Semaine de compétition', 'Race Week'],
+    ['Semaine de récupération', 'Recovery Week'],
+    ['Phase Build', 'Build Phase'],
+    ['isDeload', 'isDeload'],
+    ['Finir', 'Finish'],
+    ['Niveau débutant', 'Beginner level'],
+    ['Standard ', 'Standard '],
+    ['Objectif : Finir', 'Goal: Finish'],
+    ['/ ' , '/ '],
+    // Rest timer strings
+    ['Transition', 'Transition'],
+    ['Repos adapté : ', 'Adapted rest: '],
+    ['Série ', 'Set '],
+    [' terminée — repos', ' completed — rest'],
+    ['Commencer !', 'Start!'],
+    ["C\u2019est parti !", "Let's go!"],
+    ['Son coupé — cliquer pour activer', 'Sound off — click to enable'],
+    ['Son actif — cliquer pour couper', 'Sound on — click to mute'],
+    ['Passer ▶', 'Skip ▶'],
+    // Golf / Padel program labels
+    ['Petit jeu (60% du score)', 'Short game (60% of score)'],
+    ['Long jeu', 'Long game'],
+    ['Parcours', 'Course play'],
+    ['Physique golf', 'Golf fitness'],
+    ['Mental & Routine', 'Mental & Routine'],
+    ['Fondamentaux', 'Fundamentals'],
+    ['Développement', 'Development'],
+    ['Performance', 'Performance'],
+    ['Compétition', 'Competition'],
+    ['Semaine légère', 'Light week'],
+    ['Technique Padel', 'Padel Technique'],
+    ['Prépa physique Padel', 'Padel Physical Prep'],
+    ['Tactique', 'Tactics'],
+    ['Récupération', 'Recovery'],
+  ];
+};
+
+window.I18N.translateDOM = function() {
+  if (window.I18N.current !== 'en') return;
+  window.I18N.buildMap();
+  window.I18N.buildPartialMap();
+  var map = window.I18N._frToEn;
+  var partial = window.I18N._frToEnPartial;
+  var appEl = document.getElementById('app');
+  if (!appEl) return;
+  // Walk all text nodes
+  var walker = document.createTreeWalker(appEl, NodeFilter.SHOW_TEXT, null, false);
+  var nodes = [];
+  var node;
+  while ((node = walker.nextNode())) { nodes.push(node); }
+  for (var i = 0; i < nodes.length; i++) {
+    var n = nodes[i];
+    var txt = n.nodeValue;
+    if (!txt || !txt.trim()) continue;
+    var trimmed = txt.trim();
+    // Exact match first
+    if (map.has(trimmed)) {
+      n.nodeValue = txt.replace(trimmed, map.get(trimmed));
+      continue;
+    }
+    // Partial match for dynamic strings
+    var changed = false;
+    for (var j = 0; j < partial.length; j++) {
+      var fr = partial[j][0];
+      var en = partial[j][1];
+      if (txt.indexOf(fr) !== -1) {
+        txt = txt.split(fr).join(en);
+        changed = true;
+      }
+    }
+    if (changed) n.nodeValue = txt;
+  }
+  // Also translate placeholder attributes
+  var inputs = appEl.querySelectorAll('input[placeholder], textarea[placeholder]');
+  for (var k = 0; k < inputs.length; k++) {
+    var ph = inputs[k].getAttribute('placeholder');
+    if (!ph) continue;
+    if (map.has(ph)) { inputs[k].setAttribute('placeholder', map.get(ph)); continue; }
+    var phChanged = false;
+    var phTxt = ph;
+    for (var m = 0; m < partial.length; m++) {
+      if (phTxt.indexOf(partial[m][0]) !== -1) {
+        phTxt = phTxt.split(partial[m][0]).join(partial[m][1]);
+        phChanged = true;
+      }
+    }
+    if (phChanged) inputs[k].setAttribute('placeholder', phTxt);
+  }
+};
+
 // ═══════════════════════════════════════════════════════════════
 // SHOP_AR — Dictionnaire arabe marocain (darija) pour la liste de courses
 // Namespace séparé, n'affecte PAS window.I18N (FR/EN intact)
@@ -1649,7 +2225,7 @@ window.S = {
   view: 'auth', // 'auth','authRegister','dashboard','nutrition','sport'
   authError: '',
   // Nutrition wizard
-  nStep: 0, sex: null, age: 28, weight: 75, height: 175,
+  nStep: 0, sex: null, age: 28, birthDate: null, weight: 75, height: 175,
   lang: 'fr', weightUnit: 'kg', heightUnit: 'cm',
   activity: null, train: [], sleep: null, medical: [], goal: null,
   cookLevel: 2, whey: null, wheyFlavors: [], allergies: [], intolerances: [],
@@ -1671,6 +2247,8 @@ window.S = {
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,
   wantsDessert: false,        // inclure des desserts healthy 2-3x/semaine dans le plan
+  emailOptin: true,            // opt-in emails (anniversaire, rappels, etc.)
+  profilePhoto: null,          // base64 data URL (compressed JPEG)
   // Alcohol
   alcoholFreq: null, alcoholTypes: [],
   // Weight
@@ -1800,6 +2378,7 @@ window.S = {
   // Yoga
   yogaLevel: null, yogaGoal: null, yogaDays: 3,
   yogaStyle: null, yogaDuration: null, yogaObjectif: null,
+  yogaWeek: 1, yogaDay: 0,
   // Calisthenics onboarding
   calisthenicsOnboardingStep: null
 };
@@ -2338,7 +2917,7 @@ function calcAdjustedWeight(){
 }
 window.calcAdjustedWeight=calcAdjustedWeight;
 
-function calcBMR(){var s=window.S;if(!s.sex)return 0;if(!s.age||s.age<13||s.age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;
+function calcBMR(){var s=window.S;if(!s.sex)return 0;var _age=getAge();if(!_age||_age<13||_age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;
 // GROSSESSE : utiliser le poids pré-grossesse pour le BMR de base (ACOG 2018, OMS 2016)
 // Les calories supplémentaires (+340 T2 / +450 T3) s'ajoutent à ce TDEE de référence via calcTarget()
 // Utiliser s.weight actuel (gonflé par la grossesse) surestimerait le TDEE de base et additionnerait
@@ -2350,7 +2929,7 @@ else if(s.pregnant&&!s.prePregnancyWeight&&s.pregnancyWeek){
   var _estGain=s.pregnancyWeek>12?Math.round((s.pregnancyWeek-12)*0.5):0;
   bw=Math.max(40,s.weight-_estGain);
 }
-if(s.sex==='homme')return Math.round((10*bw)+(6.25*s.height)-(5*s.age)+5);return Math.round((10*bw)+(6.25*s.height)-(5*s.age)-161)} // Mifflin-St Jeor 1990 (Frankenfield 2005: best accuracy general population)
+if(s.sex==='homme')return Math.round((10*bw)+(6.25*s.height)-(5*_age)+5);return Math.round((10*bw)+(6.25*s.height)-(5*_age)-161)} // Mifflin-St Jeor 1990 (Frankenfield 2005: best accuracy general population)
 function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
@@ -2366,7 +2945,7 @@ if(s.medical&&s.medical.indexOf('allaitement')!==-1){return Math.max(Math.round(
 if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
 // Adolescent (13-17 ans) : déficit max -300kcal/j (ACSM 2007, IOC 2018 — préservation croissance + pic de masse osseuse)
 // Surplus max +300kcal/j en bulk (ACSM adolescent — éviter accumulation graisseuse pendant croissance hormonale)
-if(s.age>=13&&s.age<18&&tdeeVal>0){
+var _ageT=getAge();if(_ageT>=13&&_ageT<18&&tdeeVal>0){
   var minCalTeen=Math.round(tdeeVal-300);if(base<minCalTeen)base=minCalTeen;
   if(goalKey==='bulk'||goalKey==='lean_bulk'){var maxCalTeen=Math.round(tdeeVal+300);if(base>maxCalTeen)base=maxCalTeen;}
 }
@@ -2548,7 +3127,7 @@ var femaleOnly=['menopause','sopk','grossesse','allaitement'];if(femaleOnly.inde
   if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){var gdCarbMax=Math.min(200,Math.max(175,gGrams));if(gGrams>gdCarbMax)gGrams=gdCarbMax;}
   // Master athlete 60+ : résistance anabolique → leucine seuil 40g/meal (Churchward-Venne 2016, Moore 2015)
   // Augmenter protéines de 10% pour compenser la résistance anabolique (recommandation ESPEN 2019)
-  if(s.age>=60&&(!s.medical||s.medical.indexOf('irc')===-1)){pGrams=Math.max(pGrams,Math.round(bw*1.2));} // ESPEN 2014: plancher 1.2g/kg pour 60+ (résistance anabolique)
+  if(getAge()>=60&&(!s.medical||s.medical.indexOf('irc')===-1)){pGrams=Math.max(pGrams,Math.round(bw*1.2));} // ESPEN 2014: plancher 1.2g/kg pour 60+ (résistance anabolique)
   // Apply cycle-phase macro adjustments (only for non-pregnant women with cycle tracking)
   if(!s.pregnant&&s.sex==='femme'&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
 gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0)));// Never reduce protein during cycle — keep stable
@@ -2699,7 +3278,7 @@ function calcFiberTarget(){
   // IRC : limiter les fibres riches en potassium (légumineuses, fruits secs)
   if(s.medical&&s.medical.indexOf('irc')!==-1){base=Math.min(base,25);adjustments.push('IRC : éviter fibres riches en potassium (légumineuses, fruits secs) — KDOQI 2020');}
   // 60+ : transit, microbiote, prévention cancer colorectal
-  if(s.age>=60&&!adjustments.length){base=Math.max(base,30);adjustments.push('60+ : ≥ 30g/j pour microbiote et transit (EFSA 2017)');}
+  if(getAge()>=60&&!adjustments.length){base=Math.max(base,30);adjustments.push('60+ : ≥ 30g/j pour microbiote et transit (EFSA 2017)');}
   return{
     target:base,
     adjustments:adjustments,
@@ -2713,6 +3292,10 @@ function calcFiberTarget(){
   };
 }
 window.calcFiberTarget=calcFiberTarget;
+
+function getAge(){var s=window.S;if(s.birthDate){var today=new Date();var b=new Date(s.birthDate);if(!isNaN(b.getTime())){var a=today.getFullYear()-b.getFullYear();var m=today.getMonth()-b.getMonth();if(m<0||(m===0&&today.getDate()<b.getDate()))a--;return a;}}return s.age||28;}
+function isBirthday(){var s=window.S;if(!s.birthDate)return false;var today=new Date();var b=new Date(s.birthDate);if(isNaN(b.getTime()))return false;return today.getMonth()===b.getMonth()&&today.getDate()===b.getDate();}
+window.getAge=getAge;window.isBirthday=isBirthday;
 
 window.calcBMR=calcBMR; window.calcTDEE=calcTDEE; window.calcTarget=calcTarget;
 window.calcMacros=calcMacros; window.calcBMI=calcBMI; window.bmiInfo=bmiInfo;
@@ -2769,9 +3352,34 @@ function filterRecipes(pool,type){
   if(s.cuisines.indexOf(0)===-1&&s.cuisines.length>0){var flags=[];for(var c=0;c<s.cuisines.length;c++){var co=CUISINES[s.cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0)r=r.filter(function(x){return flags.indexOf(x.f)!==-1})}
   return r;
 }
-function pickRecipe(pool,targetK,used){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();
-// Score composite : proximité calorique + adéquation macros selon objectif
-var s=window.S||{};var goalKey=(s.goal!==null&&s.goal!==undefined&&GOALS[s.goal])?GOALS[s.goal].key:'maintain';var scored=av.map(function(r){var calScore=Math.abs((r.k||0)-targetK);var macroScore=0;var totalMacroKcal=(r.p||0)*4+(r.g||0)*4+(r.l||0)*9;if(totalMacroKcal>0){var protPct=(r.p||0)*4/totalMacroKcal;if((goalKey==='cut'||goalKey==='shred'||goalKey==='recomposition')&&protPct<0.25){macroScore=100;}else if((goalKey==='bulk'||goalKey==='lean_bulk')&&protPct>0.45){macroScore=50;}}return{recipe:r,score:calScore+macroScore};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked)used.add(picked.n);return picked||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+// ─── PROTEIN SOURCE DETECTION ───
+var _PROT_MAP=[
+{cat:'volaille',re:/poulet|dinde|escalope de dinde|blanc de poulet|cuisse de poulet/},
+{cat:'poisson',re:/saumon|thon|cabillaud|sardine|dorade|daurade|maquereau|crevette|gambas|sole|lotte|morue|truite|bar |hareng|tilapia|merlu|anchois|colin|poulpe|poisson/},
+{cat:'viande_rouge',re:/boeuf|b\u0153uf|veau|agneau|kefta|steak hach|filet de boeuf/},
+{cat:'oeufs',re:/oeuf|\u0153uf|omelette|frittata/},
+{cat:'legumineuses',re:/lentille|pois chiche|haricot|f\u00e8ve|edamame|houmous/},
+{cat:'tofu_seitan',re:/tofu|tempeh|seitan/}
+];
+function getRecipeProtein(r){
+var txt=((r.i||'')+(r.ingredients?r.ingredients.map(function(ig){return ig.name||''}).join(' '):'')).toLowerCase();
+for(var i=0;i<_PROT_MAP.length;i++){if(_PROT_MAP[i].re.test(txt))return _PROT_MAP[i].cat;}
+return null;
+}
+function getRecipeMainIngredient(r){
+if(r.ingredients&&r.ingredients.length){var best=r.ingredients[0];for(var i=1;i<r.ingredients.length;i++){if((r.ingredients[i].qty||0)>(best.qty||0))best=r.ingredients[i];}return(best.name||'').toLowerCase();}
+var txt=(r.i||'').toLowerCase();var parts=txt.split(',');return parts.length?parts[0].replace(/\d+\s*[a-z]*\s*/,'').trim():'';
+}
+
+function pickRecipe(pool,targetK,used,dayProteins,weekProtBudget){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();
+// Score composite : proximité calorique + adéquation macros + diversité protéines
+var s=window.S||{};var goalKey=(s.goal!==null&&s.goal!==undefined&&GOALS[s.goal])?GOALS[s.goal].key:'maintain';var scored=av.map(function(r){var calScore=Math.abs((r.k||0)-targetK);var macroScore=0;var totalMacroKcal=(r.p||0)*4+(r.g||0)*4+(r.l||0)*9;if(totalMacroKcal>0){var protPct=(r.p||0)*4/totalMacroKcal;if((goalKey==='cut'||goalKey==='shred'||goalKey==='recomposition')&&protPct<0.25){macroScore=100;}else if((goalKey==='bulk'||goalKey==='lean_bulk')&&protPct>0.45){macroScore=50;}}
+// Pénaliser si même source protéique déjà dans la journée
+var protCat=getRecipeProtein(r);var diversityPenalty=0;
+if(protCat&&dayProteins&&dayProteins.indexOf(protCat)!==-1)diversityPenalty=80;
+// Pénaliser si catégorie protéique sur-représentée dans la semaine
+if(protCat&&weekProtBudget){var cnt=weekProtBudget[protCat]||0;var maxW={volaille:3,poisson:3,viande_rouge:2,oeufs:3,legumineuses:3,tofu_seitan:2};if(cnt>=(maxW[protCat]||3))diversityPenalty+=60;else if(cnt>=2)diversityPenalty+=20;}
+return{recipe:r,score:calScore+macroScore+diversityPenalty};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
@@ -2877,22 +3485,22 @@ function pickSmoothieForPlan(targetKcal, usedIds) {
 }
 window.pickSmoothieForPlan = pickSmoothieForPlan;
 
-function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
+function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var weekProtBudget={};var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
 // useSmoothing : whey activé + WHEY_SMOOTHIES disponible
 var _useSmoothing=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length);
-for(var d=0;d<7;d++){var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
+for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget),lR=pickRecipe(pL,lT,uL,dayProteins,weekProtBudget),sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
 // Si whey activé → smoothie remplace la collation
-if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS);else if(_useSmoothing)sR=pickSmoothieForPlan(sT,uSM);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
+if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS,dayProteins,weekProtBudget);else if(_useSmoothing)sR=pickSmoothieForPlan(sT,uSM);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS,dayProteins,weekProtBudget);else sR=pickRecipe(pS,sT,uS,dayProteins,weekProtBudget);}
 // Dîner : généré seulement si mealsPerDay >= 3 (pas pour jeûne intermittent 2 repas)
-if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD);
+if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD,dayProteins,weekProtBudget);
 // Scaling sur mesure : enrichit les recettes R201+ avec macros/ingrédients scalés
 // (smoothies déjà calibrés — enrichWithScaling passthrough sans effet sur _smoothie:true)
 bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR&&!sR._smoothie)sR=enrichWithScaling(sR,sT);if(dR)dR=enrichWithScaling(dR,dT);
 // Ajustement itératif ±5% : corriger le slot le plus déviant jusqu'à convergence (max 8 passes)
 // Quand smoothie dans le snack → slot fixe (choix utilisateur), ajustement sur B/L/D uniquement
 var isDessertDayPool=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;var sPool=meals>=4&&sT>0&&!_useSmoothing?(isDessertDayPool?pSD:(pSN.length>0?pSN:pS)):null;
-for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
+for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used,dayProteins,weekProtBudget);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
 plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
 function swapMeal(di,slot){
   var s=window.S;
@@ -2921,6 +3529,31 @@ function swapMeal(di,slot){
   if(typeof window.render==='function')window.render();
 }
 
+// ─── NUTRITIONAL SYNERGY TIPS ───
+function getNutritionalTips(meal){
+if(!meal)return[];
+var tips=[];
+var txt=((meal.i||'')+(meal.ingredients?meal.ingredients.map(function(ig){return ig.name||''}).join(' '):'')+' '+(meal.tags||[]).join(' ')).toLowerCase();
+// Fer végétal + vitamine C
+if(/lentille|pois chiche|haricot|épinard|edamame/.test(txt)){
+  if(!/citron|kiwi|poivron|orange|tomate/.test(txt))tips.push('Ajoutez un filet de citron ou un kiwi — la vitamine C multiplie par 3 l\u2019absorption du fer v\u00e9g\u00e9tal.');
+}
+// Curcuma sans poivre
+if(/curcuma/.test(txt)&&!/poivre/.test(txt)){
+  tips.push('Le curcuma seul a une biodisponibilit\u00e9 de 1%. Ajoutez du poivre noir (pip\u00e9rine \u00d72000%) ou des lipides.');
+}
+// Protéines >40g par repas
+if(meal.p&&meal.p>40){
+  tips.push('Ce repas contient '+meal.p+'g de prot\u00e9ines. Au-del\u00e0 de 40g/repas, r\u00e9partissez sur plusieurs repas pour une meilleure synth\u00e8se musculaire.');
+}
+// Vitamines liposolubles (A, D, E, K) sans lipides
+if(/carotte|patate douce|\u00e9pinard|brocoli|mangue|abricot/.test(txt)&&meal.l&&meal.l<5){
+  tips.push('Ce repas est riche en vitamines liposolubles (A, K). Ajoutez un filet d\u2019huile d\u2019olive pour am\u00e9liorer leur absorption.');
+}
+return tips;
+}
+window.getNutritionalTips=getNutritionalTips;
+
 window.getPool = getPool;
 window.filterRecipes = filterRecipes;
 window.pickRecipe = pickRecipe;
@@ -2936,10 +3569,10 @@ var SUPPLEMENTS_DB = [
     unnecessary_if:'Inutile si vous atteignez vos prot\u00e9ines via l\'alimentation seule',
     dosageCalc:function(s){var d=s.weight>80?35:25;return{dose:d,unit:'g/prise',timing:'Post-entra\u00eenement ou petit-d\u00e9jeuner',note:'Objectif total : '+Math.round(s.weight*1.8)+'g prot/jour (alimentation + whey)'};}},
   {id:'creatine',name:'Cr\u00e9atine Monohydrate',icon:'\uD83D\uDC8A',desc:'Force, masse musculaire, r\u00e9cup\u00e9ration',evidence:'ISSN 2017 \u2014 Niveau A (500+ \u00e9tudes, le suppl\u00e9ment le plus \u00e9tudi\u00e9)',grade:'A',
-    condition:function(s){if(s.pregnant||s.age<18)return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
+    condition:function(s){if(s.pregnant||getAge()<18)return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
     unnecessary_if:'Non n\u00e9cessaire si objectif uniquement endurance/cardio sans musculation',
     dosageCalc:function(s){return{dose:'3-5',unit:'g/jour',timing:'Apr\u00e8s l\'entra\u00eenement avec glucides',note:'Tous les jours y compris repos. Pas de phase de charge n\u00e9cessaire'};}},
-  {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'75% des Europ\u00e9ens sont carenc\u00e9s',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
+  {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'Carence fr\u00e9quente m\u00eame en climat ensoleill\u00e9 (travail en int\u00e9rieur, cr\u00e8me solaire)',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
     condition:function(){return true;},
     unnecessary_if:'V\u00e9rifiez par prise de sang (objectif 40-60 ng/mL)',
     dosageCalc:function(s){
@@ -2948,9 +3581,9 @@ var SUPPLEMENTS_DB = [
       var d=2000;
       if(bmi>30)d=4000; // Endocrine Society 2011 : obèse → 6000 UI correction, 4000 UI maintenance
       else if(bmi>25)d=2500; // Surpoids léger : légère séquestration
-      if(s.age>70)d=Math.max(d,3000); // 70+ : synthèse cutanée réduite de 75% (Holick 2007)
-      else if(s.age>50)d=Math.max(d,2500); // 50-70 : synthèse réduite
-      return{dose:d,unit:'UI/jour',timing:'Petit-d\u00e9jeuner avec repas gras',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Obésité : D3 séquestrée dans tissu adipeux, besoins × 2-3 (Endocrine Society 2011). Associer à Vitamine K2 (MK-7) si ≥50 ans — prévient calcifications artérielles (Plaza 2021).'};}},
+      var _ageD=getAge();if(_ageD>70)d=Math.max(d,3000); // 70+ : synthèse cutanée réduite de 75% (Holick 2007)
+      else if(_ageD>50)d=Math.max(d,2500); // 50-70 : synthèse réduite
+      return{dose:d,unit:'UI/jour',timing:'Au petit-d\u00e9jeuner ou d\u00e9jeuner, avec une source de lipides (\u0153ufs, avocat, huile d\u2019olive). Vitamine liposoluble : jamais \u00e0 jeun.',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Obésité : D3 séquestrée dans tissu adipeux, besoins × 2-3 (Endocrine Society 2011). Associer à Vitamine K2 (MK-7) si ≥50 ans — prévient calcifications artérielles (Plaza 2021).'};}},
   {id:'omega3',name:'Om\u00e9ga-3 (EPA/DHA)',icon:'\uD83D\uDC1F',desc:'Anti-inflammatoire, c\u0153ur, cognition',evidence:'AHA 2019 \u2014 Recommandation',grade:'A',
     condition:function(s){return s.regime!==3&&(s.allergies||[]).indexOf('Poisson')===-1&&(s.allergies||[]).indexOf('Crustac\u00e9s')===-1;}, // Vegan : utiliser DHA algues à la place
     unnecessary_if:'Inutile si vous mangez du poisson gras 2-3x/semaine (saumon, sardines, maquereau)',
@@ -2960,9 +3593,9 @@ var SUPPLEMENTS_DB = [
     unnecessary_if:'Non prioritaire si bon sommeil, entra\u00eenement mod\u00e9r\u00e9 et absence de diab\u00e8te/pr\u00e9-diab\u00e8te',
     dosageCalc:function(s){var d=s.sex==='homme'?400:310;if(s.activity!==null&&s.activity>=3)d+=50;var hasDiab=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('prediabete')!==-1);return{dose:d,unit:'mg/jour',timing:'Le soir avant le coucher',note:hasDiab?'Forme bisglycinate mieux tol\u00e9r\u00e9e. Le magn\u00e9sium am\u00e9liore la sensibilit\u00e9 \u00e0 l\'insuline et r\u00e9duit l\'insulino-r\u00e9sistance (ADA 2023, Guerrero-Romero 2011). Bilan magn\u00e9s\u00e9mie conseill\u00e9.':'Forme bisglycinate mieux tol\u00e9r\u00e9e'};}},
   {id:'fer',name:'Fer',icon:'\uD83E\uDE78',desc:'Transport d\'oxyg\u00e8ne, \u00e9nergie',evidence:'OMS \u2014 Recommandation (femmes)',grade:'A',
-    condition:function(s){return (s.sex==='femme'&&s.age<51)||s.pregnant;},
+    condition:function(s){return (s.sex==='femme'&&getAge()<51)||s.pregnant;},
     unnecessary_if:'Hommes : ne suppl\u00e9mentez PAS sans analyse de sang (surdosage dangereux)',warning:'\u26A0 Dosage sanguin (ferritine) OBLIGATOIRE avant suppl\u00e9mentation',
-    dosageCalc:function(s){var d=s.pregnant?27:18;if(s.sex==='femme'&&s.age>50)d=8;return{dose:d,unit:'mg/jour',timing:'\u00c0 jeun avec vitamine C',note:'Surdosage dangereux. Toujours sur avis m\u00e9dical'};}},
+    dosageCalc:function(s){var d=s.pregnant?27:18;if(s.sex==='femme'&&getAge()>50)d=8;return{dose:d,unit:'mg/jour',timing:'\u00c0 jeun avec vitamine C',note:'Surdosage dangereux. Toujours sur avis m\u00e9dical'};}},
   {id:'folique',name:'Acide folique',icon:'\uD83E\uDD30',desc:'Pr\u00e9vention spina bifida (grossesse)',evidence:'ACOG 2020 \u2014 Recommandation forte',grade:'A',
     condition:function(s){return s.pregnant===true;},
     unnecessary_if:'Uniquement pendant la grossesse (et id\u00e9alement d\u00e8s le projet de grossesse)',
@@ -3038,11 +3671,11 @@ var SUPPLEMENTS_DB = [
       var hasOsteo=s.medical&&s.medical.indexOf('osteoporose')!==-1;
       var hasCardio=s.medical&&(s.medical.indexOf('cardio')!==-1||s.medical.indexOf('insuffisance_card')!==-1);
       var isMenopause=s.medical&&s.medical.indexOf('menopause')!==-1;
-      var isOlder=s.age>=50;
+      var isOlder=getAge()>=50;
       return hasOsteo||hasCardio||isMenopause||isOlder;
     },
     unnecessary_if:'Moins prioritaire chez adultes jeunes < 50 ans sans facteur de risque osseux ou cardiovasculaire',
-    dosageCalc:function(){return{dose:90,unit:'\u00b5g/jour (femme) / 120\u00b5g/jour (homme)',timing:'Avec un repas contenant des graisses',note:'Forme MK-7 (ménaquinone-7) = demi-vie 72h, supérieure à MK-4. Synergie obligatoire avec vitamine D3. Sources alimentaires : natto (fermenté), certains fromages, jaune d\'œuf.'};}}
+    dosageCalc:function(){return{dose:90,unit:'\u00b5g/jour (femme) / 120\u00b5g/jour (homme)',timing:'Au d\u00e9jeuner ou d\u00eener, avec lipides (vitamine liposoluble). Prendre en m\u00eame temps que la D3.',note:'Forme MK-7 (ménaquinone-7) = demi-vie 72h, supérieure à MK-4. Synergie obligatoire avec vitamine D3. Sources alimentaires : natto (fermenté), certains fromages, jaune d\'œuf.'};}}
 ];
 window.SUPPLEMENTS_DB = SUPPLEMENTS_DB;
 
@@ -3064,7 +3697,7 @@ window.getSupplementRecommendations = getSupplementRecommendations;
 // Seuils : Femmes < 30 kcal/kg LBM/j (risque RED-S) | Hommes < 25 kcal/kg LBM/j
 function detectREDS() {
   var s = window.S;
-  if(!s||!s.weight||!s.height||!s.age)return null;
+  if(!s||!s.weight||!s.height||!getAge())return null;
   var target=calcTarget();var tdeeVal=calcTDEE();
   if(!target||!tdeeVal)return null;
   // Estimate LBM: use Navy/Boer formula approximation
@@ -3072,8 +3705,8 @@ function detectREDS() {
   // Fat % estimate from BMI (crude but functional)
   var bmi=s.weight/((s.height/100)*(s.height/100));
   var fatPct;
-  if(s.sex==='femme'){fatPct=1.20*bmi+0.23*s.age-5.4;}
-  else{fatPct=1.20*bmi+0.23*s.age-16.2;}
+  var _ageF=getAge();if(s.sex==='femme'){fatPct=1.20*bmi+0.23*_ageF-5.4;}
+  else{fatPct=1.20*bmi+0.23*_ageF-16.2;}
   fatPct=Math.max(10,Math.min(45,fatPct))/100;
   var lbm=s.weight*(1-fatPct);
   // EA = (caloric intake - exercise energy expenditure) / LBM
@@ -3551,182 +4184,352 @@ window.generateRunningProgram = generateRunningProgram;
 // ─── HYROX PROGRAM GENERATION ───
 function generateHyroxProgram(daysPerWeek, level, goal) {
   var program = [];
-  var totalWeeks = 8;
+  var totalWeeks = 12;
 
-  var templates = {
-    3: [
-      {focus: 'Run + Stations', type: 'mixed'},
-      {focus: 'Strength + Ergs', type: 'strength'},
-      {focus: 'Simulation Hyrox', type: 'simulation'}
-    ],
-    4: [
-      {focus: 'Running Intervals', type: 'run'},
-      {focus: 'Upper Body + Ergs', type: 'upper'},
-      {focus: 'Lower Body + Carry', type: 'lower'},
-      {focus: 'Simulation Hyrox', type: 'simulation'}
-    ],
-    5: [
-      {focus: 'Running Intervals', type: 'run'},
-      {focus: 'Upper Body + SkiErg', type: 'upper'},
-      {focus: 'Lower Body + Sled', type: 'lower'},
-      {focus: 'Stations Practice', type: 'stations'},
-      {focus: 'Simulation Hyrox', type: 'simulation'}
-    ],
-    6: [
-      {focus: 'Running Tempo', type: 'run'},
-      {focus: 'Upper Body + SkiErg', type: 'upper'},
-      {focus: 'Running Intervals', type: 'run_intervals'},
-      {focus: 'Lower Body + Sled', type: 'lower'},
-      {focus: 'Stations Practice', type: 'stations'},
-      {focus: 'Full Simulation', type: 'simulation'}
-    ]
+  // ─── Pacing targets par objectif ───
+  var PACE = {
+    finish:  {run1km: '6:00', skierg1k: '5:00', row1k: '4:30', wallballs100: '7:00', burpee80: '8:00', sled50: '3:30', farmers200: '3:00', lunges100: '5:00'},
+    sub90:   {run1km: '5:30', skierg1k: '4:00', row1k: '3:45', wallballs100: '5:30', burpee80: '6:00', sled50: '2:45', farmers200: '2:20', lunges100: '4:00'},
+    sub75:   {run1km: '4:45', skierg1k: '3:30', row1k: '3:15', wallballs100: '4:30', burpee80: '4:30', sled50: '2:15', farmers200: '1:50', lunges100: '3:15'},
+    sub60:   {run1km: '4:00', skierg1k: '3:00', row1k: '2:50', wallballs100: '3:30', burpee80: '3:30', sled50: '1:50', farmers200: '1:30', lunges100: '2:30'},
+    podium:  {run1km: '3:45', skierg1k: '2:50', row1k: '2:40', wallballs100: '3:00', burpee80: '3:00', sled50: '1:40', farmers200: '1:20', lunges100: '2:15'}
+  };
+  var pace = PACE[goal] || PACE['finish'];
+
+  // ─── Volume de base par niveau ───
+  var VOL = {
+    beginner:     {runKm: 20, sessionMin: 50,  wbReps: 20, skiErgDist: '500m', rowDist: '500m', farmersM: 50, lungesM: 25},
+    intermediate: {runKm: 35, sessionMin: 65,  wbReps: 30, skiErgDist: '750m', rowDist: '750m', farmersM: 100, lungesM: 50},
+    advanced:     {runKm: 50, sessionMin: 80,  wbReps: 50, skiErgDist: '1000m', rowDist: '1000m', farmersM: 200, lungesM: 100},
+    pro:          {runKm: 70, sessionMin: 100, wbReps: 75, skiErgDist: '1500m', rowDist: '1000m', farmersM: 200, lungesM: 100}
+  };
+  var vol = VOL[level] || VOL['beginner'];
+
+  // ─── Progression du volume (multiplicateurs par semaine) ───
+  var WEEK_MULT = [1.0, 1.1, 1.2, 0.6, 1.3, 1.4, 1.5, 1.6, 1.7, 0.8, 0.5, 0.3];
+
+  // ─── Gabarits de jours par splits ───
+  var TEMPLATES = {
+    3: ['zone2_run', 'upper_ergs', 'sim_partial'],
+    4: ['interval_run', 'upper_ergs', 'lower_strength', 'sim_partial'],
+    5: ['zone2_run', 'interval_run', 'upper_ergs', 'lower_strength', 'sim_partial'],
+    6: ['zone2_run', 'interval_run', 'upper_ergs', 'lower_strength', 'stations_drill', 'sim_full']
+  };
+  var dayTypes = TEMPLATES[daysPerWeek] || TEMPLATES[4];
+
+  // ─── Générateurs de sessions ───
+  function makeZone2Run(w, wMult) {
+    var km = Math.round(vol.runKm * 0.3 * wMult);
+    if (km < 3) km = 3;
+    return {
+      name: 'Zone 2 Run — Endurance de base',
+      focus: 'Endurance aérobie',
+      duration: Math.round(km * (goal === 'podium' ? 4.5 : goal === 'sub60' ? 5 : goal === 'sub75' ? 5.5 : goal === 'sub90' ? 6 : 7)),
+      intensity: 'Z2',
+      exercises: [
+        {name: 'Échauffement marche/footing', detail: '5min transition Z1→Z2'},
+        {name: 'Zone 2 footing', detail: km + 'km à allure confortable — vous devez pouvoir parler en phrases complètes. FC max 70-75%.'},
+        {name: 'Retour au calme', detail: '5min footing Z1 + étirements dynamiques 5min'}
+      ],
+      notes: 'JAMAIS dépasser Z2. C\'est la fondation. Phil Maffetone : 80% de l\'entraînement Hyrox doit être ici.'
+    };
+  }
+
+  function makeIntervalRun(w, wMult) {
+    var repsInfo;
+    if (w <= 3) repsInfo = {reps: Math.round(6 * wMult), dist: '400m', rest: '90s'};
+    else if (w <= 6) repsInfo = {reps: Math.round(5 * wMult), dist: '800m', rest: '90s'};
+    else if (w <= 9) repsInfo = {reps: Math.round(4 * wMult), dist: '1km', rest: '2min'};
+    else repsInfo = {reps: 3, dist: '1km', rest: '90s'};
+    if (repsInfo.reps < 2) repsInfo.reps = 2;
+    return {
+      name: 'Run Intervals — Puissance aérobie',
+      focus: 'VO2max / Seuil lactique',
+      duration: Math.round(repsInfo.reps * (repsInfo.dist === '400m' ? 3 : repsInfo.dist === '800m' ? 6 : 9) + 20),
+      intensity: w <= 6 ? 'Z3-Z4' : 'Z4-Z5',
+      exercises: [
+        {name: 'Échauffement', detail: '10min footing Z2 + 4 strides 20s'},
+        {name: repsInfo.reps + 'x' + repsInfo.dist + ' @allure Hyrox', detail: 'Cible : ' + pace.run1km + '/km — repos ' + repsInfo.rest + ' entre chaque'},
+        {name: 'Retour au calme', detail: '10min footing Z1 + étirements 5min'}
+      ],
+      notes: 'Hyrox = 8x1km run entre chaque station. Ces intervalles simulent exactement cela. Tenez la même allure sur toutes les répétitions.'
+    };
+  }
+
+  function makeUpperErgs(w, wMult) {
+    var sets = (level === 'beginner') ? 3 : 4;
+    var skiDist = vol.skiErgDist;
+    var rowDist = vol.rowDist;
+    var wbReps = Math.round(vol.wbReps * wMult);
+    if (wbReps < 10) wbReps = 10;
+    return {
+      name: 'SkiErg + Haut du corps',
+      focus: 'Poussée / Tirage / SkiErg',
+      duration: vol.sessionMin,
+      intensity: 'Z3',
+      exercises: [
+        {name: skiDist + ' SkiErg (technique)', detail: 'Cible : ' + pace.skierg1k + ' /1000m — Double poling, genoux fléchis, core engagé'},
+        {name: sets + 'x12 Push Press haltères', detail: (level === 'beginner' ? '2x8kg' : level === 'intermediate' ? '2x14kg' : level === 'advanced' ? '2x20kg' : '2x28kg') + ' — explosif, lockout complet'},
+        {name: sets + 'x15 Inverted rows / Tractions', detail: 'Tirage horizontal strict — simulation Sled Pull'},
+        {name: sets + 'x' + wbReps + ' Wall Balls', detail: (level === 'beginner' ? '6kg' : level === 'intermediate' ? '9kg' : '9kg') + ' cible 3m — rythme continu cible ' + pace.wallballs100 + ' /100 reps'},
+        {name: skiDist + ' SkiErg (finisher)', detail: 'For time — tout donner. Notez votre temps.'},
+        {name: '3x20 Triceps push-downs', detail: 'Récupération active des épaules'}
+      ],
+      notes: 'SkiErg : tirez avec les DORSAUX pas les bras. Inclinez le buste vers l\'avant, bras hauts, puis poussez en fléchissant tout le corps.'
+    };
+  }
+
+  function makeLowerStrength(w, wMult) {
+    var sets = (level === 'beginner') ? 3 : 4;
+    var farmersM = Math.round(vol.farmersM * wMult);
+    if (farmersM < 25) farmersM = 25;
+    var lungesM = Math.round(vol.lungesM * wMult);
+    if (lungesM < 10) lungesM = 10;
+    return {
+      name: 'Force jambes + Sled + Carry',
+      focus: 'Puissance / Endurance musculaire',
+      duration: vol.sessionMin,
+      intensity: 'Z3-Z4',
+      exercises: [
+        {name: '4x' + Math.round(50 * wMult) + 'm Sled Push', detail: (level === 'beginner' ? '60% poids compétition' : '80% poids compétition') + ' — cible ' + pace.sled50 + '/50m'},
+        {name: sets + 'x' + (6 + Math.round(w / 2)) + ' Back Squat', detail: (level === 'beginner' ? '65%' : level === 'intermediate' ? '70%' : '75%') + ' 1RM — tempo 3-1-1, core bracing'},
+        {name: sets + 'x10 Romanian Deadlift', detail: 'Ischio-jambiers — descente 3s, montée explosive'},
+        {name: '4x' + farmersM + 'm Farmers Carry', detail: (level === 'beginner' ? '2x16kg' : level === 'intermediate' ? '2x24kg' : level === 'advanced' ? '2x24kg' : '2x32kg') + ' — marche rapide, épaules en arrière. Cible ' + pace.farmers200 + '/200m'},
+        {name: lungesM + 'm Lunges (sandbag)', detail: (level === 'beginner' ? '0kg' : level === 'intermediate' ? '10kg' : level === 'advanced' ? '20kg' : '30kg') + ' sandbag — pas longs, genou arrière effleure. Cible ' + pace.lunges100 + '/100m'},
+        {name: vol.rowDist + ' Rowing finisher', detail: 'For time — cible ' + pace.row1k + '/1000m'}
+      ],
+      notes: 'Sled + Lunges + Farmers = 3 des 8 stations. Maîtrisez ces 3 là et vous gagnez 4-5 minutes en course.'
+    };
+  }
+
+  function makeStationsDrill(w, wMult) {
+    var wbReps = Math.round(vol.wbReps * 1.5 * wMult);
+    if (wbReps < 20) wbReps = 20;
+    var burpee = (level === 'beginner') ? 20 : (level === 'intermediate') ? 40 : 60;
+    return {
+      name: 'Stations Drill — Technique pure',
+      focus: 'Maîtrise technique toutes stations',
+      duration: Math.round(vol.sessionMin * 0.85),
+      intensity: 'Z2-Z3',
+      exercises: [
+        {name: '2x' + vol.skiErgDist + ' SkiErg', detail: 'Focus technique — double poling, genoux, hanche. Repos 2min. Notez écart de temps entre les 2.'},
+        {name: wbReps + ' Wall Balls', detail: 'Sets de ' + (level === 'beginner' ? '10' : '20') + ', repos 30s — cible : zéro ballon tombé'},
+        {name: burpee + ' Burpee Broad Jumps', detail: 'Rythme constant — saut long pas haut, réception douce. Cible ' + pace.burpee80 + '/80 reps'},
+        {name: '2x' + vol.rowDist + ' Rowing', detail: 'Technique : 60% jambes, 20% buste, 20% bras. Drive puissant, récupération lente. Repos 90s'},
+        {name: '2x50m Sled Pull', detail: 'Main sur main, hanche basse, traction régulière'},
+        {name: '50m Lunges', detail: 'Sans charge — technique parfaite avant d\'ajouter du poids'}
+      ],
+      notes: 'Intensité réduite, technique maximale. Filmez-vous si possible. 1 défaut technique = 30-60s perdu en course.'
+    };
+  }
+
+  function makeSimPartial(w, wMult) {
+    var stations = w <= 3 ? 4 : w <= 6 ? 6 : 7;
+    var runDist = (level === 'beginner') ? '500m' : '1km';
+    return {
+      name: 'Simulation Hyrox (' + stations + ' stations)',
+      focus: 'Race simulation — pacing',
+      duration: Math.round(stations * (goal === 'podium' ? 8 : goal === 'sub60' ? 9 : goal === 'sub75' ? 11 : goal === 'sub90' ? 13 : 16)),
+      intensity: 'Z4',
+      exercises: [
+        {name: stations + ' rounds AMRAP chrono', detail: runDist + ' Run + 1 station Hyrox à rotation'},
+        {name: 'Stations en rotation', detail: 'SkiErg ' + vol.skiErgDist + ', Wall Balls x' + vol.wbReps + ', Row ' + vol.rowDist + ', Burpee x' + (level === 'beginner' ? 20 : 40) + ', Farmers ' + Math.round(vol.farmersM/2) + 'm, Lunges ' + Math.round(vol.lungesM/2) + 'm, Sled Push 25m, Sled Pull 25m'},
+        {name: 'Transitions', detail: 'Simulez les transitions en marchant 30s max entre run et station'}
+      ],
+      notes: 'Pacing cible : 1km run en ' + pace.run1km + '. Commencez CONSERVATEUR. Beaucoup de personnes explosent dès le début. L\'objectif : finir plus vite que vous n\'avez commencé.'
+    };
+  }
+
+  function makeSimFull(w, wMult) {
+    return {
+      name: 'Full Simulation Hyrox — 8 stations',
+      focus: 'Race day simulation — chrono complet',
+      duration: goal === 'podium' ? 65 : goal === 'sub60' ? 70 : goal === 'sub75' ? 85 : goal === 'sub90' ? 100 : 110,
+      intensity: 'Z4-Z5',
+      exercises: [
+        {name: '8x(1km Run + Station)', detail: 'FORMAT COMPÉTITION EXACT. Chronométrez chaque split.'},
+        {name: 'Station 1 : 1000m SkiErg', detail: 'Cible : ' + pace.skierg1k},
+        {name: 'Station 2 : 50m Sled Push', detail: 'Poids compétition. Cible : ' + pace.sled50},
+        {name: 'Station 3 : 50m Sled Pull', detail: 'Cible : ' + pace.sled50},
+        {name: 'Station 4 : 80 Burpee Broad Jumps', detail: 'Cible : ' + pace.burpee80},
+        {name: 'Station 5 : 1000m Rowing', detail: 'Cible : ' + pace.row1k},
+        {name: 'Station 6 : 200m Farmers Carry', detail: 'Cible : ' + pace.farmers200},
+        {name: 'Station 7 : 100m Lunges + sandbag', detail: 'Cible : ' + pace.lunges100},
+        {name: 'Station 8 : 100 Wall Balls', detail: 'Cible : ' + pace.wallballs100},
+        {name: 'Analyse post-simulation', detail: 'Notez les 3 stations les plus lentes → focus semaine suivante'}
+      ],
+      notes: 'C\'est votre test. Comparez à chaque simulation précédente. Progressez sur votre goulot d\'étranglement, pas sur vos points forts.'
+    };
+  }
+
+  function makeForceFonctionnelle(w, wMult) {
+    var sets = (level === 'beginner') ? 3 : (level === 'intermediate') ? 4 : 4;
+    return {
+      name: 'Force fonctionnelle Hyrox',
+      focus: 'Capacité de travail / Conditioning',
+      duration: vol.sessionMin,
+      intensity: 'Z3',
+      exercises: [
+        {name: sets + 'x6 Deadlift', detail: (level === 'beginner' ? '70%' : '80%') + ' 1RM — transfert direct Sled Push/Pull'},
+        {name: sets + 'x8 Front Squat', detail: 'Tempo 3-1-1 — position Hyrox lunges'},
+        {name: sets + 'x12 DB Push Press explosif', detail: 'Transfert Wall Balls / SkiErg'},
+        {name: '3x1min Sled Push AMRAP', detail: 'Poids léger — maximum de distance. Repos 2min'},
+        {name: '3x1min Farmers Carry AMRAP', detail: 'Maximum de distance. Repos 2min'},
+        {name: '50 Wall Balls for time', detail: 'Cible ' + Math.round(parseInt(pace.wallballs100) / 2) + 'min'}
+      ],
+      notes: 'Chaque exercice a un transfert DIRECT sur une station Hyrox. Force + endurance musculaire = la combinaison gagnante.'
+    };
+  }
+
+  function makeMobiliteRecup(w) {
+    return {
+      name: 'Mobilité & Récupération active',
+      focus: 'Prévention / Régénération',
+      duration: 45,
+      intensity: 'Z1',
+      exercises: [
+        {name: 'Foam rolling', detail: '2min/zone : mollets, IT band, quads, ischio, dorsaux, épaules'},
+        {name: 'Mobilité hanches', detail: '90/90 stretch 2x90s chaque côté — crucial pour lunges et squats'},
+        {name: 'Thoracique', detail: 'Foam roll thoracique + rotations assis 3x10 — crucial pour SkiErg'},
+        {name: 'Activation fessiers', detail: 'Clamshells 3x20, Hip thrusts BW 3x20 — prévention genou/dos'},
+        {name: 'Yoga flow', detail: 'Chien tête en bas → Guerrier I → II → Pigeon posture. 2 tours'},
+        {name: 'Respiration diaphragmatique', detail: '5min box breathing : 4s inspire, 4s hold, 4s expire, 4s hold'}
+      ],
+      notes: 'Les blessures = fin de prépa. 1 journée de récupération active remplace 3 jours de repos passif. Hyrox sollicite massivement épaules, genoux et bas du dos.'
+    };
+  }
+
+  function makeRaceWeek(w) {
+    return {
+      name: 'Race Week — Activation pré-compétition',
+      focus: 'Affûtage / Préparation mentale',
+      duration: 30,
+      intensity: 'Z2-Z3',
+      exercises: [
+        {name: '2x300m Run strides', detail: 'Allure Hyrox + 10s/km. Reveil musculaire. NE PAS forcer.'},
+        {name: '3x5 Wall Balls technique', detail: 'Mouvement parfait, rythme respiratoire. Pas d\'effort.'},
+        {name: '200m SkiErg technique', detail: 'Double poling parfait à 60% effort'},
+        {name: 'Visualisation complète', detail: '15min yeux fermés : visualisez les 8km run + 8 stations, sentez le rythme, les transitions, la ligne d\'arrivée'},
+        {name: 'Checklist matériel', detail: 'Chaussures, tenue, gants SkiErg/Rowing, ceinture Hyrox, nutrition, hydratation'},
+        {name: 'Repos', detail: 'DORMEZ. Visez 9h de sommeil les 3 derniers jours.'}
+      ],
+      notes: 'Race week : plus rien à gagner physiquement, tout à perdre. Réduisez le volume de 70%. Maintenez quelques efforts intenses courts pour garder les jambes réactives.'
+    };
+  }
+
+  // ─── Sélecteur de session par type ───
+  var SESSION_MAP = {
+    'zone2_run':       makeZone2Run,
+    'interval_run':    makeIntervalRun,
+    'upper_ergs':      makeUpperErgs,
+    'lower_strength':  makeLowerStrength,
+    'stations_drill':  makeStationsDrill,
+    'sim_partial':     makeSimPartial,
+    'sim_full':        makeSimFull,
+    'force_fonct':     makeForceFonctionnelle,
+    'mobilite':        makeMobiliteRecup,
+    'race_week':       makeRaceWeek
   };
 
-  var weekTemplate = templates[daysPerWeek] || templates[4];
-
-  var HYROX_SESSIONS = {
-    run: function(w, lvl) {
-      var intervals = lvl === 'beginner' ? '6x400m @allure 5km, repos 90s' :
-                      lvl === 'intermediate' ? '8x400m @allure 5km, repos 60s' :
-                      '10x400m @allure 5km, repos 45s';
-      return {
-        name: '🏃 Running Intervals',
-        exercises: [
-          {name: 'Échauffement', detail: '10min footing facile'},
-          {name: 'Intervalles', detail: intervals},
-          {name: 'Retour au calme', detail: '10min footing + étirements'}
-        ],
-        notes: 'L\'objectif est de tenir la même allure sur toutes les répétitions. Hyrox = 8×1km !'
-      };
-    },
-    run_intervals: function(w, lvl) {
-      return {
-        name: '🏃 Running Tempo',
-        exercises: [
-          {name: 'Échauffement', detail: '2km facile'},
-          {name: 'Tempo Run', detail: (lvl === 'beginner' ? '3' : lvl === 'intermediate' ? '5' : '8') + 'km @allure semi-marathon'},
-          {name: 'Retour au calme', detail: '2km facile'}
-        ],
-        notes: 'Allure confortablement inconfortable. Vous devez tenir mais c\'est dur.'
-      };
-    },
-    upper: function(w, lvl) {
-      var sets = lvl === 'beginner' ? 3 : 4;
-      return {
-        name: '💪 Upper Body + SkiErg',
-        exercises: [
-          {name: '1000m SkiErg', detail: 'Objectif : ' + (lvl === 'beginner' ? '< 5:00' : lvl === 'intermediate' ? '< 4:00' : '< 3:30')},
-          {name: sets + 'x12 DB Strict Press', detail: 'Épaules — contrôle'},
-          {name: sets + 'x15 Push-ups', detail: 'Poitrine — explosif'},
-          {name: sets + 'x12 Bent Over Row', detail: 'Dos — tirage lourd'},
-          {name: sets + 'x20 Wall Balls', detail: 'Simulation station — ' + (lvl === 'beginner' ? '6kg' : '9kg')},
-          {name: '500m SkiErg sprint', detail: 'Finisher — tout donner'}
-        ],
-        notes: 'Le SkiErg est la station la plus technique. Tirez avec le dos, pas les bras.'
-      };
-    },
-    lower: function(w, lvl) {
-      var sets = lvl === 'beginner' ? 3 : 4;
-      return {
-        name: '🦵 Lower Body + Sled/Carry',
-        exercises: [
-          {name: '4x50m Sled Push', detail: 'Simulation — poids compétition'},
-          {name: sets + 'x10 Back Squat', detail: 'Force jambes'},
-          {name: sets + 'x12 Romanian Deadlift', detail: 'Ischio-jambiers'},
-          {name: '4x50m Farmers Carry', detail: lvl === 'beginner' ? '2x16kg' : '2x24kg'},
-          {name: sets + 'x20 Walking Lunges', detail: lvl === 'beginner' ? 'Sans charge' : 'Avec sandbag'},
-          {name: '1000m Row', detail: 'Objectif : ' + (lvl === 'beginner' ? '< 4:30' : '< 3:45')}
-        ],
-        notes: 'Les jambes font la différence en Hyrox. Sled + Lunges + Running = tout.'
-      };
-    },
-    stations: function(w, lvl) {
-      return {
-        name: '🎯 Stations Practice',
-        exercises: [
-          {name: '1000m SkiErg', detail: 'Travail technique + pacing'},
-          {name: '50 Wall Balls', detail: 'Sets de ' + (lvl === 'beginner' ? '10' : '25') + ', repos 30s'},
-          {name: '40 Burpee Broad Jumps', detail: 'Rythme constant, pas de sprint'},
-          {name: '1000m Row', detail: 'Technique long pull'},
-          {name: '100m Sled Pull', detail: 'Main sur main, pas de pause'},
-          {name: '100m Lunges', detail: 'Avec ' + (lvl === 'beginner' ? '0kg' : '10kg') + ' sandbag'}
-        ],
-        notes: 'Pratiquez les transitions entre stations. En compétition, chaque seconde compte.'
-      };
-    },
-    simulation: function(w, lvl) {
-      var rounds = w <= 3 ? 4 : w <= 6 ? 6 : 8;
-      return {
-        name: '🔥 Simulation Hyrox (' + rounds + ' stations)',
-        exercises: [
-          {name: rounds + ' rounds de :', detail: ''},
-          {name: '→ 500m Run', detail: '(1km en compétition)'},
-          {name: '→ 1 Station Hyrox', detail: 'Alternez les stations à chaque round'},
-          {name: '', detail: 'Stations en rotation : SkiErg 500m, Wall Balls ×50, Row 500m, Burpee BJ ×40, Farmers 100m, Lunges 50m, Sled Push 25m, Sled Pull 25m'}
-        ],
-        notes: rounds === 8 ? '🏆 FULL SIMULATION ! Donnez tout. C\'est votre test.' : '📈 Simulation partielle — focus sur le pacing et les transitions.'
-      };
-    },
-    mixed: function(w, lvl) {
-      return {
-        name: '🔄 Mixed: Run + Stations',
-        exercises: [
-          {name: '3x1km Run', detail: 'Allure Hyrox cible, repos 2min'},
-          {name: '3x250m SkiErg', detail: 'Repos 60s'},
-          {name: '3x250m Row', detail: 'Repos 60s'},
-          {name: '50 Wall Balls', detail: 'For time'},
-          {name: '2x100m Farmers Carry', detail: lvl === 'beginner' ? '2x16kg' : '2x24kg'}
-        ],
-        notes: 'Entraînement mixte. L\'objectif est d\'enchaîner sans temps mort.'
-      };
-    },
-    strength: function(w, lvl) {
-      var sets = lvl === 'beginner' ? 3 : 4;
-      return {
-        name: '🏋️ Strength + Conditioning',
-        exercises: [
-          {name: sets + 'x8 Deadlift', detail: 'Lourd'},
-          {name: sets + 'x10 Front Squat', detail: 'Tempo 3-1-1'},
-          {name: sets + 'x12 DB Push Press', detail: 'Explosif'},
-          {name: '1000m SkiErg', detail: 'For time'},
-          {name: '1000m Row', detail: 'For time'},
-          {name: '3x20 Wall Balls', detail: 'Repos 45s'}
-        ],
-        notes: 'Force fonctionnelle. Chaque exercice a un transfert direct sur une station Hyrox.'
-      };
-    }
-  };
-
+  // ─── Génération semaine par semaine ───
   for (var w = 1; w <= totalWeeks; w++) {
-    var weekSessions = [];
-    var phase = w <= 3 ? 'Base' : w <= 6 ? 'Développement' : 'Compétition';
+    var phase, isDeload, notes, weekDayTypes;
+    var wMult = WEEK_MULT[w - 1];
 
-    weekTemplate.forEach(function(day, idx) {
-      var sessionFn = HYROX_SESSIONS[day.type];
-      if (sessionFn) {
-        var session = sessionFn(w, level);
-        session.dayNumber = idx + 1;
-        session.focus = day.focus;
+    if (w <= 3) {
+      phase = 'Base';
+      isDeload = false;
+      notes = 'Phase Base S' + w + ' : volume x' + wMult.toFixed(1) + '. Construction aérobie. Technique stations. Pas d\'effort >Z3.';
+    } else if (w === 4) {
+      phase = 'Build';
+      isDeload = true;
+      notes = 'DELOAD S4 : volume -40%. Récupération active. Résistez à l\'envie d\'en faire plus. Les adaptations se font au repos.';
+    } else if (w <= 6) {
+      phase = 'Build';
+      isDeload = false;
+      notes = 'Phase Build S' + w + ' : volume x' + wMult.toFixed(1) + '. Intensité montante. Simulations partielles 4-6 stations.';
+    } else if (w <= 9) {
+      phase = 'Peak';
+      isDeload = false;
+      notes = 'Phase Peak S' + w + ' : intensité maximale. Full simulations. VO2max work. Récupérez bien entre les sessions.';
+    } else if (w === 10) {
+      phase = 'Taper';
+      isDeload = true;
+      notes = 'TAPER S10 : volume -30%. Maintenez l\'intensité, réduisez le volume. Corps en super-compensation.';
+    } else if (w === 11) {
+      phase = 'Taper';
+      isDeload = false;
+      notes = 'TAPER S11 : volume -50%. Séances courtes et nettes. Vous avez fait le travail. Faites confiance.';
+    } else {
+      phase = 'Taper';
+      isDeload = false;
+      notes = 'RACE WEEK S12 : activation légère, visualisation, récupération maximale. RACE DAY approche.';
+    }
+
+    // Adapter les types de sessions selon la semaine
+    if (w === 12) {
+      weekDayTypes = [];
+      for (var d = 0; d < Math.min(daysPerWeek, 4); d++) {
+        if (d < 2) weekDayTypes.push('race_week');
+        else weekDayTypes.push('mobilite');
+      }
+    } else if (w >= 10) {
+      weekDayTypes = [];
+      for (var d2 = 0; d2 < daysPerWeek; d2++) {
+        if (d2 === 0) weekDayTypes.push('zone2_run');
+        else if (d2 === 1) weekDayTypes.push('upper_ergs');
+        else if (d2 === 2) weekDayTypes.push('lower_strength');
+        else if (d2 === 3) weekDayTypes.push('sim_partial');
+        else weekDayTypes.push('mobilite');
+      }
+    } else if (w >= 7) {
+      weekDayTypes = [];
+      for (var d3 = 0; d3 < daysPerWeek; d3++) {
+        if (d3 === 0) weekDayTypes.push('interval_run');
+        else if (d3 === 1) weekDayTypes.push('upper_ergs');
+        else if (d3 === 2) weekDayTypes.push('lower_strength');
+        else if (d3 === 3) weekDayTypes.push(daysPerWeek >= 6 ? 'stations_drill' : 'sim_full');
+        else if (d3 === 4) weekDayTypes.push('sim_full');
+        else weekDayTypes.push('mobilite');
+      }
+    } else {
+      weekDayTypes = [];
+      for (var d4 = 0; d4 < daysPerWeek; d4++) {
+        weekDayTypes.push(dayTypes[d4] || dayTypes[dayTypes.length - 1]);
+      }
+    }
+
+    var weekSessions = [];
+    for (var di = 0; di < weekDayTypes.length; di++) {
+      var sType = weekDayTypes[di];
+      var fn = SESSION_MAP[sType];
+      if (fn) {
+        var session = fn(w, wMult);
+        session.dayNumber = di + 1;
+        session.type = sType;
         weekSessions.push(session);
       }
-    });
+    }
+
+    var totalMin = 0;
+    for (var si = 0; si < weekSessions.length; si++) {
+      totalMin += (weekSessions[si].duration || 60);
+    }
 
     program.push({
       week: w,
       phase: phase,
       sessions: weekSessions,
-      isDeload: w === 4,
-      notes: w === 4 ? '📉 Semaine de décharge — volume réduit de 30%' :
-             w === 8 ? '🏆 Semaine de compétition — simulation complète + repos' :
-             phase === 'Base' ? '🏗️ Construction endurance + apprentissage stations' :
-             phase === 'Développement' ? '📈 Montée en intensité + simulations partielles' :
-             '🎯 Simulations complètes + affûtage'
+      isDeload: isDeload,
+      totalDuration: totalMin,
+      notes: notes
     });
   }
 
   return program;
 }
 window.generateHyroxProgram = generateHyroxProgram;
+
 
 // ─── PADEL ───
 var PADEL_LEVELS=[{id:'beginner',name:'Débutant',desc:'< 6 mois',icon:'🟢'},{id:'intermediate',name:'Intermédiaire',desc:'6 mois-2 ans',icon:'🟡'},{id:'advanced',name:'Avancé',desc:'2+ ans, compétitions',icon:'🟠'},{id:'competition',name:'Compétition',desc:'Tournois, classé',icon:'🔴'}];
@@ -3796,7 +4599,7 @@ function buildNMInputs(trainingDay) {
   var genderMap = { homme: 'male', femme: 'female' };
   return {
     gender:        genderMap[s.sex] || 'male',
-    age:           s.age   || 25,
+    age:           getAge() || 25,
     weightKg:      s.weight || 75,
     heightCm:      s.height || 175,
     activityLevel: s.activity !== null && ACTIVITIES[s.activity]

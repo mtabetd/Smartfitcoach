@@ -654,7 +654,7 @@ window.AUTH = {
     // Reset window.S profile data to prevent stale values from polluting next login
     // (localStorage data is kept intact so returning users can restore from it)
     if (window.S) {
-      window.S.sex = null; window.S.age = 28; window.S.weight = 75; window.S.height = 175;
+      window.S.sex = null; window.S.age = 28; window.S.birthDate = null; window.S.weight = 75; window.S.height = 175;
       window.S.activity = null; window.S.train = []; window.S.sleep = null;
       window.S.medical = []; window.S.goal = null; window.S.targetWeight = null;
       window.S.mealsPerDay = 3; window.S.eatingLocation = null; window.S.mealPrepTime = null;
@@ -675,7 +675,7 @@ window.AUTH = {
       window.S.crossfitLevel = null; window.S.cfCurrentDay = 1; window.S.cfProgress = {};
       window.S.crossfit1RM = {}; window.S.muscuStrengthProfile = {};
       // Pregnancy & cycle
-      window.S.pregnant = null; window.S.pregnancyWeek = null; window.S.dueDate = null;
+      window.S.pregnant = false; window.S.pregnancyWeek = null; window.S.dueDate = null;
       window.S.prePregnancyWeight = null;
       window.S.cycleTracking = false; window.S.cycleLength = 28; window.S.lastPeriodDate = null;
       // Supplements
@@ -684,7 +684,7 @@ window.AUTH = {
       // Photos
       window.S.photoFront = null; window.S.photoBack = null;
       // Nutrition extras
-      window.S.wantsDessert = null; window.S.saladBar = null; window.S.saladBuilder = null;
+      window.S.wantsDessert = false; window.S.saladBar = null; window.S.saladBuilder = null;
       window.S.smoothieBarOpen = false; window.S.modalRecipe = null; window.S.modalSmoothie = null;
       window.S._nm = null; window.S.calories = null; window.S.caloriesTarget = 2000;
       // Shopping
@@ -730,16 +730,17 @@ window.AUTH = {
       window.S.golfWeek = 1; window.S.golfProgram = null;
       window.S.selectedGolfDay = 0; window.S.golfProfile = null;
       // Yoga
-      window.S.yogaLevel = null; window.S.yogaDays = 3;
+      window.S.yogaLevel = null; window.S.yogaGoal = null; window.S.yogaDays = 3;
       window.S.yogaDuration = null; window.S.yogaStyle = null;
       window.S.yogaObjectif = null; window.S.yogaWeek = 1; window.S.yogaDay = 0;
       // Calisthenics
-      window.S.calisthenicsLevel = null; window.S.calisthenicsGoal = [];
+      window.S.calisthenicsLevel = null; window.S.calisthenicsGoal = null;
       window.S.calisthPullups = null; window.S.calisthPushups = null;
-      window.S.calisthenicsdays = 3; window.S.calisthenicsOnboardingStep = 'A';
+      window.S.calisthenicsdays = 3; window.S.calisthenicsOnboardingStep = null;
       window.S.calisthenicsProgram = null; window.S.calisthenicsWeek = 1; window.S.selectedCalisthDay = 0;
       // Lang/Units (reset to defaults)
       window.S.lang = 'fr'; window.S.weightUnit = 'kg'; window.S.heightUnit = 'cm';
+      window.S.emailOptin = true; window.S.profilePhoto = null;
       // UI state
       window.S.view = 'auth'; window.S.authError = '';
       window.S.cfCalendarOpen = false;
