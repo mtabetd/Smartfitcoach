@@ -1672,6 +1672,7 @@ window.S = {
   snacking: null,
   wantsDessert: false,        // inclure des desserts healthy 2-3x/semaine dans le plan
   emailOptin: true,            // opt-in emails (anniversaire, rappels, etc.)
+  profilePhoto: null,          // base64 data URL (compressed JPEG)
   // Alcohol
   alcoholFreq: null, alcoholTypes: [],
   // Weight
@@ -2774,9 +2775,34 @@ function filterRecipes(pool,type){
   if(s.cuisines.indexOf(0)===-1&&s.cuisines.length>0){var flags=[];for(var c=0;c<s.cuisines.length;c++){var co=CUISINES[s.cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0)r=r.filter(function(x){return flags.indexOf(x.f)!==-1})}
   return r;
 }
-function pickRecipe(pool,targetK,used){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();
-// Score composite : proximité calorique + adéquation macros selon objectif
-var s=window.S||{};var goalKey=(s.goal!==null&&s.goal!==undefined&&GOALS[s.goal])?GOALS[s.goal].key:'maintain';var scored=av.map(function(r){var calScore=Math.abs((r.k||0)-targetK);var macroScore=0;var totalMacroKcal=(r.p||0)*4+(r.g||0)*4+(r.l||0)*9;if(totalMacroKcal>0){var protPct=(r.p||0)*4/totalMacroKcal;if((goalKey==='cut'||goalKey==='shred'||goalKey==='recomposition')&&protPct<0.25){macroScore=100;}else if((goalKey==='bulk'||goalKey==='lean_bulk')&&protPct>0.45){macroScore=50;}}return{recipe:r,score:calScore+macroScore};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked)used.add(picked.n);return picked||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+// ─── PROTEIN SOURCE DETECTION ───
+var _PROT_MAP=[
+{cat:'volaille',re:/poulet|dinde|escalope de dinde|blanc de poulet|cuisse de poulet/},
+{cat:'poisson',re:/saumon|thon|cabillaud|sardine|dorade|daurade|maquereau|crevette|gambas|sole|lotte|morue|truite|bar |hareng|tilapia|merlu|anchois|colin|poulpe|poisson/},
+{cat:'viande_rouge',re:/boeuf|b\u0153uf|veau|agneau|kefta|steak hach|filet de boeuf/},
+{cat:'oeufs',re:/oeuf|\u0153uf|omelette|frittata/},
+{cat:'legumineuses',re:/lentille|pois chiche|haricot|f\u00e8ve|edamame|houmous/},
+{cat:'tofu_seitan',re:/tofu|tempeh|seitan/}
+];
+function getRecipeProtein(r){
+var txt=((r.i||'')+(r.ingredients?r.ingredients.map(function(ig){return ig.name||''}).join(' '):'')).toLowerCase();
+for(var i=0;i<_PROT_MAP.length;i++){if(_PROT_MAP[i].re.test(txt))return _PROT_MAP[i].cat;}
+return null;
+}
+function getRecipeMainIngredient(r){
+if(r.ingredients&&r.ingredients.length){var best=r.ingredients[0];for(var i=1;i<r.ingredients.length;i++){if((r.ingredients[i].qty||0)>(best.qty||0))best=r.ingredients[i];}return(best.name||'').toLowerCase();}
+var txt=(r.i||'').toLowerCase();var parts=txt.split(',');return parts.length?parts[0].replace(/\d+\s*[a-z]*\s*/,'').trim():'';
+}
+
+function pickRecipe(pool,targetK,used,dayProteins,weekProtBudget){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();
+// Score composite : proximité calorique + adéquation macros + diversité protéines
+var s=window.S||{};var goalKey=(s.goal!==null&&s.goal!==undefined&&GOALS[s.goal])?GOALS[s.goal].key:'maintain';var scored=av.map(function(r){var calScore=Math.abs((r.k||0)-targetK);var macroScore=0;var totalMacroKcal=(r.p||0)*4+(r.g||0)*4+(r.l||0)*9;if(totalMacroKcal>0){var protPct=(r.p||0)*4/totalMacroKcal;if((goalKey==='cut'||goalKey==='shred'||goalKey==='recomposition')&&protPct<0.25){macroScore=100;}else if((goalKey==='bulk'||goalKey==='lean_bulk')&&protPct>0.45){macroScore=50;}}
+// Pénaliser si même source protéique déjà dans la journée
+var protCat=getRecipeProtein(r);var diversityPenalty=0;
+if(protCat&&dayProteins&&dayProteins.indexOf(protCat)!==-1)diversityPenalty=80;
+// Pénaliser si catégorie protéique sur-représentée dans la semaine
+if(protCat&&weekProtBudget){var cnt=weekProtBudget[protCat]||0;var maxW={volaille:3,poisson:3,viande_rouge:2,oeufs:3,legumineuses:3,tofu_seitan:2};if(cnt>=(maxW[protCat]||3))diversityPenalty+=60;else if(cnt>=2)diversityPenalty+=20;}
+return{recipe:r,score:calScore+macroScore+diversityPenalty};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
@@ -2882,22 +2908,22 @@ function pickSmoothieForPlan(targetKcal, usedIds) {
 }
 window.pickSmoothieForPlan = pickSmoothieForPlan;
 
-function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
+function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var weekProtBudget={};var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
 // useSmoothing : whey activé + WHEY_SMOOTHIES disponible
 var _useSmoothing=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length);
-for(var d=0;d<7;d++){var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB),lR=pickRecipe(pL,lT,uL),sR=null,dR=null;
+for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget),lR=pickRecipe(pL,lT,uL,dayProteins,weekProtBudget),sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
 // Si whey activé → smoothie remplace la collation
-if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS);else if(_useSmoothing)sR=pickSmoothieForPlan(sT,uSM);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS);else sR=pickRecipe(pS,sT,uS);}
+if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS,dayProteins,weekProtBudget);else if(_useSmoothing)sR=pickSmoothieForPlan(sT,uSM);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS,dayProteins,weekProtBudget);else sR=pickRecipe(pS,sT,uS,dayProteins,weekProtBudget);}
 // Dîner : généré seulement si mealsPerDay >= 3 (pas pour jeûne intermittent 2 repas)
-if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD);
+if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD,dayProteins,weekProtBudget);
 // Scaling sur mesure : enrichit les recettes R201+ avec macros/ingrédients scalés
 // (smoothies déjà calibrés — enrichWithScaling passthrough sans effet sur _smoothie:true)
 bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR&&!sR._smoothie)sR=enrichWithScaling(sR,sT);if(dR)dR=enrichWithScaling(dR,dT);
 // Ajustement itératif ±5% : corriger le slot le plus déviant jusqu'à convergence (max 8 passes)
 // Quand smoothie dans le snack → slot fixe (choix utilisateur), ajustement sur B/L/D uniquement
 var isDessertDayPool=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;var sPool=meals>=4&&sT>0&&!_useSmoothing?(isDessertDayPool?pSD:(pSN.length>0?pSN:pS)):null;
-for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
+for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used,dayProteins,weekProtBudget);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
 plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
 function swapMeal(di,slot){
   var s=window.S;
@@ -2926,6 +2952,31 @@ function swapMeal(di,slot){
   if(typeof window.render==='function')window.render();
 }
 
+// ─── NUTRITIONAL SYNERGY TIPS ───
+function getNutritionalTips(meal){
+if(!meal)return[];
+var tips=[];
+var txt=((meal.i||'')+(meal.ingredients?meal.ingredients.map(function(ig){return ig.name||''}).join(' '):'')+' '+(meal.tags||[]).join(' ')).toLowerCase();
+// Fer végétal + vitamine C
+if(/lentille|pois chiche|haricot|épinard|edamame/.test(txt)){
+  if(!/citron|kiwi|poivron|orange|tomate/.test(txt))tips.push('Ajoutez un filet de citron ou un kiwi — la vitamine C multiplie par 3 l\u2019absorption du fer v\u00e9g\u00e9tal.');
+}
+// Curcuma sans poivre
+if(/curcuma/.test(txt)&&!/poivre/.test(txt)){
+  tips.push('Le curcuma seul a une biodisponibilit\u00e9 de 1%. Ajoutez du poivre noir (pip\u00e9rine \u00d72000%) ou des lipides.');
+}
+// Protéines >40g par repas
+if(meal.p&&meal.p>40){
+  tips.push('Ce repas contient '+meal.p+'g de prot\u00e9ines. Au-del\u00e0 de 40g/repas, r\u00e9partissez sur plusieurs repas pour une meilleure synth\u00e8se musculaire.');
+}
+// Vitamines liposolubles (A, D, E, K) sans lipides
+if(/carotte|patate douce|\u00e9pinard|brocoli|mangue|abricot/.test(txt)&&meal.l&&meal.l<5){
+  tips.push('Ce repas est riche en vitamines liposolubles (A, K). Ajoutez un filet d\u2019huile d\u2019olive pour am\u00e9liorer leur absorption.');
+}
+return tips;
+}
+window.getNutritionalTips=getNutritionalTips;
+
 window.getPool = getPool;
 window.filterRecipes = filterRecipes;
 window.pickRecipe = pickRecipe;
@@ -2944,7 +2995,7 @@ var SUPPLEMENTS_DB = [
     condition:function(s){if(s.pregnant||getAge()<18)return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
     unnecessary_if:'Non n\u00e9cessaire si objectif uniquement endurance/cardio sans musculation',
     dosageCalc:function(s){return{dose:'3-5',unit:'g/jour',timing:'Apr\u00e8s l\'entra\u00eenement avec glucides',note:'Tous les jours y compris repos. Pas de phase de charge n\u00e9cessaire'};}},
-  {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'75% des Europ\u00e9ens sont carenc\u00e9s',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
+  {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'Carence fr\u00e9quente m\u00eame en climat ensoleill\u00e9 (travail en int\u00e9rieur, cr\u00e8me solaire)',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
     condition:function(){return true;},
     unnecessary_if:'V\u00e9rifiez par prise de sang (objectif 40-60 ng/mL)',
     dosageCalc:function(s){
@@ -2955,7 +3006,7 @@ var SUPPLEMENTS_DB = [
       else if(bmi>25)d=2500; // Surpoids léger : légère séquestration
       var _ageD=getAge();if(_ageD>70)d=Math.max(d,3000); // 70+ : synthèse cutanée réduite de 75% (Holick 2007)
       else if(_ageD>50)d=Math.max(d,2500); // 50-70 : synthèse réduite
-      return{dose:d,unit:'UI/jour',timing:'Petit-d\u00e9jeuner avec repas gras',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Obésité : D3 séquestrée dans tissu adipeux, besoins × 2-3 (Endocrine Society 2011). Associer à Vitamine K2 (MK-7) si ≥50 ans — prévient calcifications artérielles (Plaza 2021).'};}},
+      return{dose:d,unit:'UI/jour',timing:'Au petit-d\u00e9jeuner ou d\u00e9jeuner, avec une source de lipides (\u0153ufs, avocat, huile d\u2019olive). Vitamine liposoluble : jamais \u00e0 jeun.',note:'Dosage sanguin recommand\u00e9 (objectif 40-60 ng/mL). Obésité : D3 séquestrée dans tissu adipeux, besoins × 2-3 (Endocrine Society 2011). Associer à Vitamine K2 (MK-7) si ≥50 ans — prévient calcifications artérielles (Plaza 2021).'};}},
   {id:'omega3',name:'Om\u00e9ga-3 (EPA/DHA)',icon:'\uD83D\uDC1F',desc:'Anti-inflammatoire, c\u0153ur, cognition',evidence:'AHA 2019 \u2014 Recommandation',grade:'A',
     condition:function(s){return s.regime!==3&&(s.allergies||[]).indexOf('Poisson')===-1&&(s.allergies||[]).indexOf('Crustac\u00e9s')===-1;}, // Vegan : utiliser DHA algues à la place
     unnecessary_if:'Inutile si vous mangez du poisson gras 2-3x/semaine (saumon, sardines, maquereau)',
@@ -3047,7 +3098,7 @@ var SUPPLEMENTS_DB = [
       return hasOsteo||hasCardio||isMenopause||isOlder;
     },
     unnecessary_if:'Moins prioritaire chez adultes jeunes < 50 ans sans facteur de risque osseux ou cardiovasculaire',
-    dosageCalc:function(){return{dose:90,unit:'\u00b5g/jour (femme) / 120\u00b5g/jour (homme)',timing:'Avec un repas contenant des graisses',note:'Forme MK-7 (ménaquinone-7) = demi-vie 72h, supérieure à MK-4. Synergie obligatoire avec vitamine D3. Sources alimentaires : natto (fermenté), certains fromages, jaune d\'œuf.'};}}
+    dosageCalc:function(){return{dose:90,unit:'\u00b5g/jour (femme) / 120\u00b5g/jour (homme)',timing:'Au d\u00e9jeuner ou d\u00eener, avec lipides (vitamine liposoluble). Prendre en m\u00eame temps que la D3.',note:'Forme MK-7 (ménaquinone-7) = demi-vie 72h, supérieure à MK-4. Synergie obligatoire avec vitamine D3. Sources alimentaires : natto (fermenté), certains fromages, jaune d\'œuf.'};}}
 ];
 window.SUPPLEMENTS_DB = SUPPLEMENTS_DB;
 

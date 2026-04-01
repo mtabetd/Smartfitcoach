@@ -57,7 +57,8 @@ var PROFILE_KEYS = [
  'heartRateRest','yogaLevel','yogaGoal','yogaDays',
  'wantsDessert',
  'wheyFlavors','saladBuilder',
- 'emailOptin'
+ 'emailOptin',
+ 'profilePhoto'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.

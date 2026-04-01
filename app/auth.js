@@ -740,7 +740,7 @@ window.AUTH = {
       window.S.calisthenicsProgram = null; window.S.calisthenicsWeek = 1; window.S.selectedCalisthDay = 0;
       // Lang/Units (reset to defaults)
       window.S.lang = 'fr'; window.S.weightUnit = 'kg'; window.S.heightUnit = 'cm';
-      window.S.emailOptin = true;
+      window.S.emailOptin = true; window.S.profilePhoto = null;
       // UI state
       window.S.view = 'auth'; window.S.authError = '';
       window.S.cfCalendarOpen = false;

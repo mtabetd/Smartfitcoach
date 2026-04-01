@@ -205,8 +205,17 @@ function renderWelcomeScreen(container) {
   var user = tryGetUser();
   var root = h('div', 'dash-root');
 
-  /* Greeting */
+  /* Profile photo + Greeting */
   var now = new Date();
+  if (window.S && S.profilePhoto) {
+    var _phWrap = document.createElement('div');
+    _phWrap.style.cssText = 'text-align:center;margin-bottom:12px;';
+    var _phImg = document.createElement('img');
+    _phImg.src = S.profilePhoto;
+    _phImg.style.cssText = 'width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--border,#D8D8D0);';
+    _phWrap.appendChild(_phImg);
+    root.appendChild(_phWrap);
+  }
   var greeting = greetingWord() + (user && user.name ? ', ' + firstName(user.name) : '');
   root.appendChild(h('h1', 'dash-greeting', greeting));
   var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
@@ -309,6 +318,15 @@ window.DASHBOARD = {
     var now = new Date();
 
     /* ═══ GREETING ═══ */
+    if (window.S && S.profilePhoto) {
+      var _phWrap2 = document.createElement('div');
+      _phWrap2.style.cssText = 'text-align:center;margin-bottom:12px;';
+      var _phImg2 = document.createElement('img');
+      _phImg2.src = S.profilePhoto;
+      _phImg2.style.cssText = 'width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--border,#D8D8D0);';
+      _phWrap2.appendChild(_phImg2);
+      root.appendChild(_phWrap2);
+    }
     var greeting = greetingWord() + (user && user.name ? ', ' + firstName(user.name) : '');
     root.appendChild(h('h1', 'dash-greeting', greeting));
     var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
