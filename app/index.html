@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#FAF9F6">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org https://*.supabase.co https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Smart Fit Coach — Nutrition personnalisée et programmes sportifs sur mesure">
@@ -344,8 +344,10 @@ canvas.weight-chart{width:100%;height:200px}
 <div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px">Accès restreint</div>
 <div style="width:48px;height:1px;background:var(--black,#0A0A09);margin:0 auto 24px"></div>
 <div id="gate-error" style="display:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--red,#5A1010);text-align:center;padding:8px;border:1px solid var(--red,#5A1010);background:var(--redbg,rgba(90,16,16,.06));margin-bottom:12px"></div>
-<input id="gate-pw" type="password" placeholder="Mot de passe" style="width:100%;padding:12px 14px;border:1px solid var(--border,#D8D8D0);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);outline:none;text-align:center;letter-spacing:2px;margin-bottom:12px" autofocus>
-<button id="gate-btn" style="width:100%;padding:14px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;cursor:pointer">Entrer</button>
+<form id="gate-form" onsubmit="return false;" autocomplete="off">
+<input id="gate-pw" type="password" placeholder="Mot de passe" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1px solid var(--border,#D8D8D0);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);outline:none;text-align:center;letter-spacing:2px;margin-bottom:12px" autofocus>
+<button id="gate-btn" type="submit" style="width:100%;padding:14px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;cursor:pointer">Entrer</button>
+</form>
 </div>
 </div>
 <div id="app" style="display:none"></div>
