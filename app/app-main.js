@@ -170,9 +170,11 @@ function loadProfile() {
  'muscuProgressionHistory','musculationWeights','muscuStrengthProfile','crossfit1RM',
  'hyroxBenchmarks'];
  _objFields.forEach(function(f) { if (!S[f] || typeof S[f] !== 'object' || Array.isArray(S[f])) S[f] = {}; });
- var _arrFields = ['sportGoals','medical','allergies','intolerances','excluded','cuisines',
+ var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','bodyZones','strongZones','weakZones'];
  _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
+ // excluded is a string (comma-separated), not an array — guard separately
+ if (typeof S.excluded !== 'string') S.excluded = '';
  // Reset ephemeral UI state that should not persist across sessions
  S.shopListOpen = false;
  S.smoothieBarOpen = false;
