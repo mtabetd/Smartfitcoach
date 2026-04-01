@@ -16766,8 +16766,9 @@
         } else if (IS_LIQUID.test(originalName)) {
           targetUnit = 'ml';
         } else {
-          // Par défaut : prendre l'unité qui a la plus grande quantité
-          targetUnit = itemG.qty >= itemMl.qty ? 'g' : 'ml';
+          // Par défaut : convertir les deux en grammes pour comparer équitablement
+          var mlAsGrams = itemMl.qty * density;
+          targetUnit = itemG.qty >= mlAsGrams ? 'g' : 'ml';
         }
 
         if (targetUnit === 'g') {
