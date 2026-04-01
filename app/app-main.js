@@ -222,11 +222,39 @@ function render() {
  var ub = h('div', {'class': 'user-bar'});
  ub.appendChild(h('span', {'class': 'user-name'}, '◆ ' + (user ? (user.name || user.email || 'Utilisateur') : 'Utilisateur')));
  var ubRight = h('div', {style: 'display:flex;align-items:center;gap:12px'});
- // Profile photo (persistent top-right)
- if (S.profilePhoto) {
-   var _ubPhoto = h('img', {src: S.profilePhoto, style: 'width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--border,#D8D8D0);flex-shrink:0'});
-   ubRight.appendChild(_ubPhoto);
- }
+ // Profile photo / initials avatar (persistent top-right, clickable → profil step 1)
+ (function() {
+   var _avatarBtn = h('button', {
+     style: 'background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:50%;min-width:44px;min-height:44px',
+     onclick: function() { S.view = 'nutrition'; S.nStep = 1; window.render(); },
+     title: 'Voir le profil'
+   });
+   if (S.profilePhoto) {
+     var _ubPhoto = h('img', {
+       src: S.profilePhoto,
+       style: 'width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--border,#D8D8D0);flex-shrink:0;display:block;transition:box-shadow 0.2s',
+       onmouseover: function() { this.style.boxShadow = '0 0 0 2px rgba(10,10,9,0.15)'; },
+       onmouseout: function() { this.style.boxShadow = 'none'; }
+     });
+     _avatarBtn.appendChild(_ubPhoto);
+   } else {
+     // Initials avatar fallback
+     var _uInitials = (function() {
+       var _un = user ? (user.name || user.email || '') : '';
+       if (!_un) return 'S';
+       var _parts = _un.trim().split(/\s+/);
+       if (_parts.length >= 2) return (_parts[0][0] + _parts[_parts.length - 1][0]).toUpperCase();
+       return _un[0].toUpperCase();
+     })();
+     var _ubAvatar = h('div', {
+       style: 'width:36px;height:36px;border-radius:50%;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#0A0A09);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:500;color:var(--black,#0A0A09);letter-spacing:0.5px;transition:box-shadow 0.2s',
+       onmouseover: function() { this.style.boxShadow = '0 0 0 2px rgba(10,10,9,0.15)'; },
+       onmouseout: function() { this.style.boxShadow = 'none'; }
+     }, _uInitials);
+     _avatarBtn.appendChild(_ubAvatar);
+   }
+   ubRight.appendChild(_avatarBtn);
+ })();
  // Session time
  ubRight.appendChild(h('span', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey3)'}, (window.BLACKBOX ? window.BLACKBOX.getSessionMinutes() : 0) + ' min'));
  // Language toggle FR / EN
