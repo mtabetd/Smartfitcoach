@@ -3873,7 +3873,7 @@
         { name: 'Sirop d\'agave', qty: 10, unit: 'g' }
       ],
       steps: [
-        'Fouetter le lait de coco et le sirop d\'agave dans un bol jusqu\'à ce que le miel soit dissous — ne laissez pas de grumeaux de lait de coco figé.',
+        'Fouetter le lait de coco et le sirop d\'agave dans un bol jusqu\'à dissolution complète — ne laissez pas de grumeaux de lait de coco figé.',
         'Verser les graines de chia en pluie en remuant constamment. Attendre 2 min, remuer à nouveau vigoureusement pour éviter les agrégats.',
         'Couvrir et réfrigérer au minimum 4h, idéalement toute la nuit. Le pudding doit avoir la consistance d\'un tapioca : ni liquide, ni béton.',
         'Au moment de servir, trancher la mangue en brunoise régulière de 1 cm — la régularité fait la différence visuelle et en bouche.',

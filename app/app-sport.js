@@ -1859,7 +1859,10 @@ function renderCrossfitProgram(p) {
  });
  wodCard.appendChild(movList);
  if (_cfMedFiltered > 0) {
- wodCard.appendChild(h('div', {style: 'background:#FFF3CD;border-left:3px solid #FF6B6B;padding:8px 12px;margin-top:8px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#C00'}, _cfMedFiltered + ' mouvement(s) retiré(s) pour restriction médicale — voir scaling ci-dessous'));
+ if (!movList.children.length) {
+   movList.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:var(--grey);padding:8px 0;font-style:italic'}, 'Aucun mouvement compatible — consultez les options de scaling ci-dessous'));
+ }
+ wodCard.appendChild(h('div', {style: 'background:#FFF3CD;border-left:3px solid #FF6B6B;padding:8px 12px;margin-top:8px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#C00'}, _cfMedFiltered + ' mouvement(s) retiré(s) pour restriction médicale'));
  }
 
  if (_wod.notes) {

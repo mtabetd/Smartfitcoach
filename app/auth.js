@@ -677,9 +677,9 @@ window.AUTH = {
       // Pregnancy & cycle
       window.S.pregnant = null; window.S.pregnancyWeek = null; window.S.dueDate = null;
       window.S.prePregnancyWeight = null;
-      window.S.cycleTracking = null; window.S.cycleLength = 21; window.S.lastPeriodDate = null;
+      window.S.cycleTracking = false; window.S.cycleLength = 28; window.S.lastPeriodDate = null;
       // Supplements
-      window.S.creatine = null; window.S.creatineDose = 0;
+      window.S.creatine = false; window.S.creatineDose = 0;
       window.S.supplements = []; window.S.wheyFlavors = [];
       // Photos
       window.S.photoFront = null; window.S.photoBack = null;
@@ -697,7 +697,7 @@ window.AUTH = {
       window.S.muscuMedical = {}; window.S.muscuProgramStart = null;
       window.S.swapPanel = null; window.S.sessionCompleting = null;
       window.S.selectedSportDay = 0; window.S.crossfitCycleWeek = 1;
-      window.S.trainTime = null; window.S.heartRateRest = 65;
+      window.S.trainTime = null; window.S.heartRateRest = null;
       // Running
       window.S.runningDays = null; window.S.runningGoal = null;
       window.S.runningLevel = null; window.S.runningPace = null;
@@ -731,12 +731,13 @@ window.AUTH = {
       window.S.selectedGolfDay = 0; window.S.golfProfile = null;
       // Yoga
       window.S.yogaLevel = null; window.S.yogaDays = 3;
-      window.S.yogaDuration = '30min'; window.S.yogaStyle = 'hatha';
+      window.S.yogaDuration = null; window.S.yogaStyle = null;
       window.S.yogaObjectif = null; window.S.yogaWeek = 1; window.S.yogaDay = 0;
       // Calisthenics
       window.S.calisthenicsLevel = null; window.S.calisthenicsGoal = [];
-      window.S.calisthPullups = 0; window.S.calisthPushups = 0;
+      window.S.calisthPullups = null; window.S.calisthPushups = null;
       window.S.calisthenicsdays = 3; window.S.calisthenicsOnboardingStep = 'A';
+      window.S.calisthenicsProgram = null; window.S.calisthenicsWeek = 1; window.S.selectedCalisthDay = 0;
       // Lang/Units (reset to defaults)
       window.S.lang = 'fr'; window.S.weightUnit = 'kg'; window.S.heightUnit = 'cm';
       // UI state
