@@ -5927,7 +5927,7 @@ function renderCyclingOnboarding(p) {
  if (window.BLACKBOX) BLACKBOX.log('cycling_config', {level: S.cyclingLevel, goal: S.cyclingGoal, days: S.cyclingDays, ftp: S.cyclingFTP});
  window.render();
  }}, 'Générer mon plan'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: backArrow + 'Retour'}));
 }
 
 // ─── STEP 23: CYCLISME PROGRAMME ───
@@ -6293,7 +6293,7 @@ function renderCalisthenicsOnboarding(p) {
  window.render();
  }
  }}, 'Générer mon programme'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 25: CALISTHENICS PROGRAM ───
