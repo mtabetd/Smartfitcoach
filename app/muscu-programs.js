@@ -39,7 +39,7 @@ var NFC_PROGRAMS = {
         {order:3, name:'Tirage vertical prise large', sets:4, reps:10, rest:'2min', technique:'2s excentrique', muscle:'dos', type:'compound', equipment:'poulie'},
         {order:4, name:'Rowing halt\u00e8re unilat\u00e9ral', sets:5, reps:12, rest:'1min30', technique:'12 reps chaque bras. Genou et main appuy\u00e9s sur banc. Tirer le coude vers le plafond en serrant l\'omoplate. Contr\u00f4ler la descente 2s.', muscle:'dos', type:'compound', equipment:'halteres'},
         {order:5, name:'Pulldown prise serr\u00e9e', sets:4, reps:10, rest:'1min30', technique:'5s pic contraction x3 — Prise neutre triangle, coudes le long du corps. Tirer vers la poitrine. Isoler le grand dorsal.', muscle:'dos', type:'isolation', equipment:'poulie'},
-        {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
+        {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:'Suspendre aux barres parall\u00e8les ou barre fixe. Jambes tendues si possible, sinon fl\u00e9chies. Contr\u00f4ler la descente 3s. Initier le mouvement par le bassin, pas par les jambes.', muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
       notes: 'DOS MASSE PRO LEVEL: Tractions lest\u00e9es (largeur) \u2192 T-bar/Rowing barre (\u00e9paisseur) \u2192 Tirage vertical large (dorsaux) \u2192 Rowing halt\u00e8re unilat\u00e9ral (\u00e9quilibre) \u2192 Pulldown serr\u00e9 (finisseur). Le dos = groupe le plus difficile \u00e0 sentir. Penser \u00e0 initier chaque tirage par la d\u00e9pression scapulaire, PAS par la flexion du coude. Le biceps ne doit \u00eatre qu\'un lien.'
     },
@@ -51,7 +51,7 @@ var NFC_PROGRAMS = {
         {order:3, name:'Tirage vertical', sets:4, reps:12, rest:'1min', technique:'2s excentrique — Prise pronation large. Tirer TOUJOURS devant la poitrine, jamais derri\u00e8re la nuque.', muscle:'dos', type:'compound', equipment:'poulie'},
         {order:4, name:'Rowing halt\u00e8re unilat\u00e9ral', sets:4, reps:15, rest:'45s', technique:'Genou et main sur banc. Tirer coude vers le plafond. Amplitude compl\u00e8te. Coudes l\u00e9g\u00e8rement derri\u00e8re le dos en haut.', muscle:'dos', type:'compound', equipment:'halteres'},
         {order:5, name:'Straight-arm pulldown', sets:4, reps:15, rest:'45s', technique:'Pic contraction — bras quasi tendus. Isolation pure du grand dorsal. Excellent pour la connexion neuromusculaire dorsale.', muscle:'dos', type:'isolation', equipment:'poulie'},
-        {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'45s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
+        {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'45s', technique:'Jambes tendues si possible. Contr\u00f4ler la descente. En s\u00e8che : densit\u00e9 maximale avec repos courts.', muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
       notes: 'DOS S\u00c8CHE: Tractions PDC (force relative maintenue) \u2192 Rowing T-bar (volume) \u2192 Tirage vertical (dorsal) \u2192 Rowing halt\u00e8re (unilat\u00e9ral) \u2192 Straight-arm pulldown (finisseur isolation). Repos courts (45-60s) pour densit\u00e9 maximale. En d\u00e9ficit calorique : maintenir les charges — l\'objectif est la r\u00e9tention musculaire, pas la performance.'
     }
@@ -65,7 +65,7 @@ var NFC_PROGRAMS = {
         {order:3, name:'Curl spider (araignee) + Dips', sets:4, reps:'10+10', rest:'1min30', technique:'Superset \u2014 Curl spider banc inclin\u00e9 45\u00b0 (mouvement tr\u00e8s strict, impossible de tricher) puis Dips banc (buste droit = triceps pur). Peak contraction sur les deux.', muscle:'biceps+triceps', type:'superset', equipment:'banc'},
         {order:4, name:'Curl concentr\u00e9', sets:4, reps:12, rest:'1min30', technique:'12 reps chaque bras. Coude appuy\u00e9 contre la cuisse int\u00e9rieure. Supination maximale en haut. Pic contraction 2s. Pour le "pic" du biceps.', muscle:'biceps', type:'isolation', equipment:'halteres'},
         {order:5, name:'Crunch banc d\u00e9clin\u00e9', sets:4, reps:12, rest:'1min', technique:'3s excentrique', muscle:'abdominaux', type:'isolation', equipment:'banc'},
-        {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'},
+        {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:'Barre fixe ou chaise romaine. Jambes tendues si possible. Contr\u00f4ler la descente. Initier par la flexion lombaire.', muscle:'abdominaux', type:'isolation', equipment:'barre fixe'},
         {order:7, name:'Obliques chaise romaine', sets:4, reps:12, rest:'1min', technique:'12 reps chaque c\u00f4t\u00e9', muscle:'abdominaux', type:'isolation', equipment:'chaise romaine'}
       ],
       notes: 'Supersets biceps/triceps = pump maximal. Agoniste/antagoniste.'
@@ -133,9 +133,9 @@ var NFC_PROGRAMS = {
         {order:2, name:'Arnold press', sets:4, reps:12, rest:'1min', technique:'Rotation des poignets du bas vers le haut \u2014 active les 3 faisceaux. Partir paumes vers soi, finir paumes vers l\'avant. Mouvement lent = contr\u00f4le maximum.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
         {order:3, name:'\u00c9l\u00e9vation frontale + Face pull', sets:4, reps:'12+12', rest:'1min', technique:'Superset', muscle:'\u00e9paules', type:'superset', equipment:'halteres+poulie'},
         {order:4, name:'\u00c9l\u00e9vation lat\u00e9rale', sets:4, reps:15, rest:'60s', technique:'1 moiti\u00e9 + 1 compl\u00e8te', muscle:'\u00e9paules', type:'isolation', equipment:'halteres'},
-        {order:5, name:'Shrug barre', sets:4, reps:12, rest:'1min', technique:null, muscle:'trap\u00e8zes', type:'isolation', equipment:'barre'},
-        {order:6, name:'Abdos rouleau', sets:3, reps:15, rest:'60s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'rouleau'},
-        {order:7, name:'Relev\u00e9 de jambes', sets:3, reps:'max', rest:'60s', technique:null, muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
+        {order:5, name:'Shrug barre', sets:4, reps:12, rest:'1min', technique:'Monter les \u00e9paules vers les oreilles, tenir 1s en haut, descendre contr\u00f4l\u00e9. Ne pas rouler les \u00e9paules vers l\'arri\u00e8re. Prise pronation, barre devant.', muscle:'trap\u00e8zes', type:'isolation', equipment:'barre'},
+        {order:6, name:'Abdos rouleau', sets:3, reps:15, rest:'60s', technique:'Partir à genoux, avancer le rouleau jusqu’à quasi-extension, puis ramener via le gainage. DOS DROIT — ne pas laisser les hanches descendre.', muscle:'abdominaux', type:'isolation', equipment:'rouleau'},
+        {order:7, name:'Relev\u00e9 de jambes', sets:3, reps:'max', rest:'60s', technique:'Barre fixe ou chaise romaine. Jambes tendues si possible. Contr\u00f4ler la descente lente. Finir la s\u00e9ance par ce core work.', muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
       ],
       notes: '\u00c9PAULES S\u00c8CHE: Militaire halt\u00e8res (compos\u00e9 principal) \u2192 Arnold press (3 faisceaux) \u2192 Superset \u00e9l\u00e9vations frontales+face pull \u2192 Lat\u00e9rales (faisceau moyen) \u2192 Shrug (trap\u00e8zes). Repos courts (60-90s) pour densifier la s\u00e9ance. Ne jamais sacrifier la technique pour le volume en s\u00e8che \u2014 le muscle \u00e9paule se blesse facilement en d\u00e9ficit.'
     }
@@ -148,7 +148,7 @@ var NFC_PROGRAMS = {
         label: 'S\u00e9ance A \u2014 Compound',
         exercises: [
           {order:1, name:'Hip Thrust barre', sets:4, reps:10, rest:'2min', technique:'3s pic contraction', muscle:'fessiers', equipment:'barre+banc'},
-          {order:2, name:'Squat sumo', sets:4, reps:12, rest:'1min30', technique:null, muscle:'fessiers+adducteurs', equipment:'barre'},
+          {order:2, name:'Squat sumo', sets:4, reps:12, rest:'1min30', technique:'Pieds écartés environ 140%, pointes vers l\'extérieur 45°. Genoux suivent les orteils. Fessiers plus sollicités que le squat classique. Contrôler la descente 2s.', muscle:'fessiers+adducteurs', equipment:'barre'},
           {order:3, name:'Romanian Deadlift', sets:4, reps:10, rest:'2min', technique:'3s excentrique', muscle:'fessiers+ischio', equipment:'barre'},
           {order:4, name:'Abduction machine', sets:4, reps:15, rest:'1min', technique:'2s pic contraction', muscle:'fessiers (moyen)', equipment:'machine'}
         ]
@@ -173,7 +173,7 @@ var NFC_PROGRAMS = {
         label: 'S\u00e9ance A \u2014 Grand droit',
         exercises: [
           {order:1, name:'Crunch banc d\u00e9clin\u00e9', sets:4, reps:20, rest:'45s', technique:'3s excentrique', muscle:'grand droit', equipment:'banc'},
-          {order:2, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'45s', technique:null, muscle:'grand droit (bas)', equipment:'barre fixe'},
+          {order:2, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'45s', technique:'Barre fixe ou barres parall\u00e8les. Initier le mouvement en basculant le bassin. Jambes tendues \u2014 fl\u00e9chies si trop dur. Descente contr\u00f4l\u00e9e.', muscle:'grand droit (bas)', equipment:'barre fixe'},
           {order:3, name:'Planche', sets:4, reps:'45s', rest:'30s', technique:'Gainage statique', muscle:'transverse', equipment:'sol'},
           {order:4, name:'Ab wheel', sets:3, reps:12, rest:'1min', technique:'Contr\u00f4le total', muscle:'grand droit+transverse', equipment:'rouleau'}
         ]
@@ -197,9 +197,9 @@ var NFC_PROGRAMS = {
       {
         label: 'S\u00e9ance A \u2014 Force',
         exercises: [
-          {order:1, name:'Curl barre droite', sets:4, reps:8, rest:'2min', technique:null, muscle:'biceps', equipment:'barre'},
+          {order:1, name:'Curl barre droite', sets:4, reps:8, rest:'2min', technique:'Composé principal force. Coudes fixes le long du corps. Pas de balancement du dos. Supination maximale en haut. Descente contrôlée 3s.', muscle:'biceps', equipment:'barre'},
           {order:2, name:'Curl pupitre', sets:4, reps:10, rest:'1min30', technique:'3s excentrique', muscle:'biceps (chef court)', equipment:'pupitre'},
-          {order:3, name:'Curl marteau', sets:4, reps:10, rest:'1min30', technique:null, muscle:'brachial', equipment:'halteres'}
+          {order:3, name:'Curl marteau', sets:4, reps:10, rest:'1min30', technique:'Prise neutre (pouce vers le haut). Cible le brachio-radialis et le brachial. Mouvement strict, coudes fixes. Excellent pour lépaisseur du bras.', muscle:'brachial', equipment:'halteres'}
         ]
       },
       {
