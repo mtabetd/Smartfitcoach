@@ -4633,14 +4633,14 @@ function renderHyroxProgram(p) {
  var levelObj = (window.HYROX_LEVELS || []).find(function(l){ return l.id === S.hyroxLevel; });
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Hyrox'));
- p.appendChild(h('h1', {html: 'Préparation<br><em>8 semaines</em>'}));
+ p.appendChild(h('h1', {html: 'Préparation<br><em>12 semaines</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Phase ' + currentWeekData.phase + ' · ' + (goalObj ? goalObj.name : '') + ' · ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '')));
 
  // Competition week banner
- if (S.hyroxWeek === 8) {
+ if (S.hyroxWeek === 12) {
  var banner = h('div', {style: 'border:2px solid #5A1010;padding:16px;background:rgba(192,57,43,0.04);margin-bottom:16px;text-align:center'});
- banner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:#5A1010;margin-bottom:4px'}, ' COMPETITION WEEK'));
- banner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Simulation complète + repos. Vous êtes prêt !'));
+ banner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:#5A1010;margin-bottom:4px'}, ' RACE WEEK — GO TIME'));
+ banner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Activation légère. Visualisation. Repos maximal. Vous êtes prêt !'));
  p.appendChild(banner);
  }
 
@@ -4656,7 +4656,7 @@ function renderHyroxProgram(p) {
  p.appendChild(weekNav);
 
  // Phase info
- var phaseColors = {Base: '#1A3A6A', 'Développement': '#6A4A1A', 'Compétition': '#5A1010'};
+ var phaseColors = {Base: '#1A3A6A', Build: '#6A4A1A', Peak: '#5A1010', Taper: '#2E7D32', 'Développement': '#6A4A1A', 'Compétition': '#5A1010'};
  var phaseColor = phaseColors[currentWeekData.phase] || '#0A0A09';
  var infoCard = h('div', {style: 'border-left:3px solid ' + phaseColor + ';padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
  infoCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + phaseColor + ';margin-bottom:4px'}, 'Phase : ' + currentWeekData.phase));

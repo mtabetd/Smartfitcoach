@@ -4138,182 +4138,352 @@ window.generateRunningProgram = generateRunningProgram;
 // ─── HYROX PROGRAM GENERATION ───
 function generateHyroxProgram(daysPerWeek, level, goal) {
   var program = [];
-  var totalWeeks = 8;
+  var totalWeeks = 12;
 
-  var templates = {
-    3: [
-      {focus: 'Run + Stations', type: 'mixed'},
-      {focus: 'Strength + Ergs', type: 'strength'},
-      {focus: 'Simulation Hyrox', type: 'simulation'}
-    ],
-    4: [
-      {focus: 'Running Intervals', type: 'run'},
-      {focus: 'Upper Body + Ergs', type: 'upper'},
-      {focus: 'Lower Body + Carry', type: 'lower'},
-      {focus: 'Simulation Hyrox', type: 'simulation'}
-    ],
-    5: [
-      {focus: 'Running Intervals', type: 'run'},
-      {focus: 'Upper Body + SkiErg', type: 'upper'},
-      {focus: 'Lower Body + Sled', type: 'lower'},
-      {focus: 'Stations Practice', type: 'stations'},
-      {focus: 'Simulation Hyrox', type: 'simulation'}
-    ],
-    6: [
-      {focus: 'Running Tempo', type: 'run'},
-      {focus: 'Upper Body + SkiErg', type: 'upper'},
-      {focus: 'Running Intervals', type: 'run_intervals'},
-      {focus: 'Lower Body + Sled', type: 'lower'},
-      {focus: 'Stations Practice', type: 'stations'},
-      {focus: 'Full Simulation', type: 'simulation'}
-    ]
+  // ─── Pacing targets par objectif ───
+  var PACE = {
+    finish:  {run1km: '6:00', skierg1k: '5:00', row1k: '4:30', wallballs100: '7:00', burpee80: '8:00', sled50: '3:30', farmers200: '3:00', lunges100: '5:00'},
+    sub90:   {run1km: '5:30', skierg1k: '4:00', row1k: '3:45', wallballs100: '5:30', burpee80: '6:00', sled50: '2:45', farmers200: '2:20', lunges100: '4:00'},
+    sub75:   {run1km: '4:45', skierg1k: '3:30', row1k: '3:15', wallballs100: '4:30', burpee80: '4:30', sled50: '2:15', farmers200: '1:50', lunges100: '3:15'},
+    sub60:   {run1km: '4:00', skierg1k: '3:00', row1k: '2:50', wallballs100: '3:30', burpee80: '3:30', sled50: '1:50', farmers200: '1:30', lunges100: '2:30'},
+    podium:  {run1km: '3:45', skierg1k: '2:50', row1k: '2:40', wallballs100: '3:00', burpee80: '3:00', sled50: '1:40', farmers200: '1:20', lunges100: '2:15'}
+  };
+  var pace = PACE[goal] || PACE['finish'];
+
+  // ─── Volume de base par niveau ───
+  var VOL = {
+    beginner:     {runKm: 20, sessionMin: 50,  wbReps: 20, skiErgDist: '500m', rowDist: '500m', farmersM: 50, lungesM: 25},
+    intermediate: {runKm: 35, sessionMin: 65,  wbReps: 30, skiErgDist: '750m', rowDist: '750m', farmersM: 100, lungesM: 50},
+    advanced:     {runKm: 50, sessionMin: 80,  wbReps: 50, skiErgDist: '1000m', rowDist: '1000m', farmersM: 200, lungesM: 100},
+    pro:          {runKm: 70, sessionMin: 100, wbReps: 75, skiErgDist: '1500m', rowDist: '1000m', farmersM: 200, lungesM: 100}
+  };
+  var vol = VOL[level] || VOL['beginner'];
+
+  // ─── Progression du volume (multiplicateurs par semaine) ───
+  var WEEK_MULT = [1.0, 1.1, 1.2, 0.6, 1.3, 1.4, 1.5, 1.6, 1.7, 0.8, 0.5, 0.3];
+
+  // ─── Gabarits de jours par splits ───
+  var TEMPLATES = {
+    3: ['zone2_run', 'upper_ergs', 'sim_partial'],
+    4: ['interval_run', 'upper_ergs', 'lower_strength', 'sim_partial'],
+    5: ['zone2_run', 'interval_run', 'upper_ergs', 'lower_strength', 'sim_partial'],
+    6: ['zone2_run', 'interval_run', 'upper_ergs', 'lower_strength', 'stations_drill', 'sim_full']
+  };
+  var dayTypes = TEMPLATES[daysPerWeek] || TEMPLATES[4];
+
+  // ─── Générateurs de sessions ───
+  function makeZone2Run(w, wMult) {
+    var km = Math.round(vol.runKm * 0.3 * wMult);
+    if (km < 3) km = 3;
+    return {
+      name: 'Zone 2 Run — Endurance de base',
+      focus: 'Endurance aérobie',
+      duration: Math.round(km * (goal === 'podium' ? 4.5 : goal === 'sub60' ? 5 : goal === 'sub75' ? 5.5 : goal === 'sub90' ? 6 : 7)),
+      intensity: 'Z2',
+      exercises: [
+        {name: 'Échauffement marche/footing', detail: '5min transition Z1→Z2'},
+        {name: 'Zone 2 footing', detail: km + 'km à allure confortable — vous devez pouvoir parler en phrases complètes. FC max 70-75%.'},
+        {name: 'Retour au calme', detail: '5min footing Z1 + étirements dynamiques 5min'}
+      ],
+      notes: 'JAMAIS dépasser Z2. C\'est la fondation. Phil Maffetone : 80% de l\'entraînement Hyrox doit être ici.'
+    };
+  }
+
+  function makeIntervalRun(w, wMult) {
+    var repsInfo;
+    if (w <= 3) repsInfo = {reps: Math.round(6 * wMult), dist: '400m', rest: '90s'};
+    else if (w <= 6) repsInfo = {reps: Math.round(5 * wMult), dist: '800m', rest: '90s'};
+    else if (w <= 9) repsInfo = {reps: Math.round(4 * wMult), dist: '1km', rest: '2min'};
+    else repsInfo = {reps: 3, dist: '1km', rest: '90s'};
+    if (repsInfo.reps < 2) repsInfo.reps = 2;
+    return {
+      name: 'Run Intervals — Puissance aérobie',
+      focus: 'VO2max / Seuil lactique',
+      duration: Math.round(repsInfo.reps * (repsInfo.dist === '400m' ? 3 : repsInfo.dist === '800m' ? 6 : 9) + 20),
+      intensity: w <= 6 ? 'Z3-Z4' : 'Z4-Z5',
+      exercises: [
+        {name: 'Échauffement', detail: '10min footing Z2 + 4 strides 20s'},
+        {name: repsInfo.reps + 'x' + repsInfo.dist + ' @allure Hyrox', detail: 'Cible : ' + pace.run1km + '/km — repos ' + repsInfo.rest + ' entre chaque'},
+        {name: 'Retour au calme', detail: '10min footing Z1 + étirements 5min'}
+      ],
+      notes: 'Hyrox = 8x1km run entre chaque station. Ces intervalles simulent exactement cela. Tenez la même allure sur toutes les répétitions.'
+    };
+  }
+
+  function makeUpperErgs(w, wMult) {
+    var sets = (level === 'beginner') ? 3 : 4;
+    var skiDist = vol.skiErgDist;
+    var rowDist = vol.rowDist;
+    var wbReps = Math.round(vol.wbReps * wMult);
+    if (wbReps < 10) wbReps = 10;
+    return {
+      name: 'SkiErg + Haut du corps',
+      focus: 'Poussée / Tirage / SkiErg',
+      duration: vol.sessionMin,
+      intensity: 'Z3',
+      exercises: [
+        {name: skiDist + ' SkiErg (technique)', detail: 'Cible : ' + pace.skierg1k + ' /1000m — Double poling, genoux fléchis, core engagé'},
+        {name: sets + 'x12 Push Press haltères', detail: (level === 'beginner' ? '2x8kg' : level === 'intermediate' ? '2x14kg' : level === 'advanced' ? '2x20kg' : '2x28kg') + ' — explosif, lockout complet'},
+        {name: sets + 'x15 Inverted rows / Tractions', detail: 'Tirage horizontal strict — simulation Sled Pull'},
+        {name: sets + 'x' + wbReps + ' Wall Balls', detail: (level === 'beginner' ? '6kg' : level === 'intermediate' ? '9kg' : '9kg') + ' cible 3m — rythme continu cible ' + pace.wallballs100 + ' /100 reps'},
+        {name: skiDist + ' SkiErg (finisher)', detail: 'For time — tout donner. Notez votre temps.'},
+        {name: '3x20 Triceps push-downs', detail: 'Récupération active des épaules'}
+      ],
+      notes: 'SkiErg : tirez avec les DORSAUX pas les bras. Inclinez le buste vers l\'avant, bras hauts, puis poussez en fléchissant tout le corps.'
+    };
+  }
+
+  function makeLowerStrength(w, wMult) {
+    var sets = (level === 'beginner') ? 3 : 4;
+    var farmersM = Math.round(vol.farmersM * wMult);
+    if (farmersM < 25) farmersM = 25;
+    var lungesM = Math.round(vol.lungesM * wMult);
+    if (lungesM < 10) lungesM = 10;
+    return {
+      name: 'Force jambes + Sled + Carry',
+      focus: 'Puissance / Endurance musculaire',
+      duration: vol.sessionMin,
+      intensity: 'Z3-Z4',
+      exercises: [
+        {name: '4x' + Math.round(50 * wMult) + 'm Sled Push', detail: (level === 'beginner' ? '60% poids compétition' : '80% poids compétition') + ' — cible ' + pace.sled50 + '/50m'},
+        {name: sets + 'x' + (6 + Math.round(w / 2)) + ' Back Squat', detail: (level === 'beginner' ? '65%' : level === 'intermediate' ? '70%' : '75%') + ' 1RM — tempo 3-1-1, core bracing'},
+        {name: sets + 'x10 Romanian Deadlift', detail: 'Ischio-jambiers — descente 3s, montée explosive'},
+        {name: '4x' + farmersM + 'm Farmers Carry', detail: (level === 'beginner' ? '2x16kg' : level === 'intermediate' ? '2x24kg' : level === 'advanced' ? '2x24kg' : '2x32kg') + ' — marche rapide, épaules en arrière. Cible ' + pace.farmers200 + '/200m'},
+        {name: lungesM + 'm Lunges (sandbag)', detail: (level === 'beginner' ? '0kg' : level === 'intermediate' ? '10kg' : level === 'advanced' ? '20kg' : '30kg') + ' sandbag — pas longs, genou arrière effleure. Cible ' + pace.lunges100 + '/100m'},
+        {name: vol.rowDist + ' Rowing finisher', detail: 'For time — cible ' + pace.row1k + '/1000m'}
+      ],
+      notes: 'Sled + Lunges + Farmers = 3 des 8 stations. Maîtrisez ces 3 là et vous gagnez 4-5 minutes en course.'
+    };
+  }
+
+  function makeStationsDrill(w, wMult) {
+    var wbReps = Math.round(vol.wbReps * 1.5 * wMult);
+    if (wbReps < 20) wbReps = 20;
+    var burpee = (level === 'beginner') ? 20 : (level === 'intermediate') ? 40 : 60;
+    return {
+      name: 'Stations Drill — Technique pure',
+      focus: 'Maîtrise technique toutes stations',
+      duration: Math.round(vol.sessionMin * 0.85),
+      intensity: 'Z2-Z3',
+      exercises: [
+        {name: '2x' + vol.skiErgDist + ' SkiErg', detail: 'Focus technique — double poling, genoux, hanche. Repos 2min. Notez écart de temps entre les 2.'},
+        {name: wbReps + ' Wall Balls', detail: 'Sets de ' + (level === 'beginner' ? '10' : '20') + ', repos 30s — cible : zéro ballon tombé'},
+        {name: burpee + ' Burpee Broad Jumps', detail: 'Rythme constant — saut long pas haut, réception douce. Cible ' + pace.burpee80 + '/80 reps'},
+        {name: '2x' + vol.rowDist + ' Rowing', detail: 'Technique : 60% jambes, 20% buste, 20% bras. Drive puissant, récupération lente. Repos 90s'},
+        {name: '2x50m Sled Pull', detail: 'Main sur main, hanche basse, traction régulière'},
+        {name: '50m Lunges', detail: 'Sans charge — technique parfaite avant d\'ajouter du poids'}
+      ],
+      notes: 'Intensité réduite, technique maximale. Filmez-vous si possible. 1 défaut technique = 30-60s perdu en course.'
+    };
+  }
+
+  function makeSimPartial(w, wMult) {
+    var stations = w <= 3 ? 4 : w <= 6 ? 6 : 7;
+    var runDist = (level === 'beginner') ? '500m' : '1km';
+    return {
+      name: 'Simulation Hyrox (' + stations + ' stations)',
+      focus: 'Race simulation — pacing',
+      duration: Math.round(stations * (goal === 'podium' ? 8 : goal === 'sub60' ? 9 : goal === 'sub75' ? 11 : goal === 'sub90' ? 13 : 16)),
+      intensity: 'Z4',
+      exercises: [
+        {name: stations + ' rounds AMRAP chrono', detail: runDist + ' Run + 1 station Hyrox à rotation'},
+        {name: 'Stations en rotation', detail: 'SkiErg ' + vol.skiErgDist + ', Wall Balls x' + vol.wbReps + ', Row ' + vol.rowDist + ', Burpee x' + (level === 'beginner' ? 20 : 40) + ', Farmers ' + Math.round(vol.farmersM/2) + 'm, Lunges ' + Math.round(vol.lungesM/2) + 'm, Sled Push 25m, Sled Pull 25m'},
+        {name: 'Transitions', detail: 'Simulez les transitions en marchant 30s max entre run et station'}
+      ],
+      notes: 'Pacing cible : 1km run en ' + pace.run1km + '. Commencez CONSERVATEUR. Beaucoup de personnes explosent dès le début. L\'objectif : finir plus vite que vous n\'avez commencé.'
+    };
+  }
+
+  function makeSimFull(w, wMult) {
+    return {
+      name: 'Full Simulation Hyrox — 8 stations',
+      focus: 'Race day simulation — chrono complet',
+      duration: goal === 'podium' ? 65 : goal === 'sub60' ? 70 : goal === 'sub75' ? 85 : goal === 'sub90' ? 100 : 110,
+      intensity: 'Z4-Z5',
+      exercises: [
+        {name: '8x(1km Run + Station)', detail: 'FORMAT COMPÉTITION EXACT. Chronométrez chaque split.'},
+        {name: 'Station 1 : 1000m SkiErg', detail: 'Cible : ' + pace.skierg1k},
+        {name: 'Station 2 : 50m Sled Push', detail: 'Poids compétition. Cible : ' + pace.sled50},
+        {name: 'Station 3 : 50m Sled Pull', detail: 'Cible : ' + pace.sled50},
+        {name: 'Station 4 : 80 Burpee Broad Jumps', detail: 'Cible : ' + pace.burpee80},
+        {name: 'Station 5 : 1000m Rowing', detail: 'Cible : ' + pace.row1k},
+        {name: 'Station 6 : 200m Farmers Carry', detail: 'Cible : ' + pace.farmers200},
+        {name: 'Station 7 : 100m Lunges + sandbag', detail: 'Cible : ' + pace.lunges100},
+        {name: 'Station 8 : 100 Wall Balls', detail: 'Cible : ' + pace.wallballs100},
+        {name: 'Analyse post-simulation', detail: 'Notez les 3 stations les plus lentes → focus semaine suivante'}
+      ],
+      notes: 'C\'est votre test. Comparez à chaque simulation précédente. Progressez sur votre goulot d\'étranglement, pas sur vos points forts.'
+    };
+  }
+
+  function makeForceFonctionnelle(w, wMult) {
+    var sets = (level === 'beginner') ? 3 : (level === 'intermediate') ? 4 : 4;
+    return {
+      name: 'Force fonctionnelle Hyrox',
+      focus: 'Capacité de travail / Conditioning',
+      duration: vol.sessionMin,
+      intensity: 'Z3',
+      exercises: [
+        {name: sets + 'x6 Deadlift', detail: (level === 'beginner' ? '70%' : '80%') + ' 1RM — transfert direct Sled Push/Pull'},
+        {name: sets + 'x8 Front Squat', detail: 'Tempo 3-1-1 — position Hyrox lunges'},
+        {name: sets + 'x12 DB Push Press explosif', detail: 'Transfert Wall Balls / SkiErg'},
+        {name: '3x1min Sled Push AMRAP', detail: 'Poids léger — maximum de distance. Repos 2min'},
+        {name: '3x1min Farmers Carry AMRAP', detail: 'Maximum de distance. Repos 2min'},
+        {name: '50 Wall Balls for time', detail: 'Cible ' + Math.round(parseInt(pace.wallballs100) / 2) + 'min'}
+      ],
+      notes: 'Chaque exercice a un transfert DIRECT sur une station Hyrox. Force + endurance musculaire = la combinaison gagnante.'
+    };
+  }
+
+  function makeMobiliteRecup(w) {
+    return {
+      name: 'Mobilité & Récupération active',
+      focus: 'Prévention / Régénération',
+      duration: 45,
+      intensity: 'Z1',
+      exercises: [
+        {name: 'Foam rolling', detail: '2min/zone : mollets, IT band, quads, ischio, dorsaux, épaules'},
+        {name: 'Mobilité hanches', detail: '90/90 stretch 2x90s chaque côté — crucial pour lunges et squats'},
+        {name: 'Thoracique', detail: 'Foam roll thoracique + rotations assis 3x10 — crucial pour SkiErg'},
+        {name: 'Activation fessiers', detail: 'Clamshells 3x20, Hip thrusts BW 3x20 — prévention genou/dos'},
+        {name: 'Yoga flow', detail: 'Chien tête en bas → Guerrier I → II → Pigeon posture. 2 tours'},
+        {name: 'Respiration diaphragmatique', detail: '5min box breathing : 4s inspire, 4s hold, 4s expire, 4s hold'}
+      ],
+      notes: 'Les blessures = fin de prépa. 1 journée de récupération active remplace 3 jours de repos passif. Hyrox sollicite massivement épaules, genoux et bas du dos.'
+    };
+  }
+
+  function makeRaceWeek(w) {
+    return {
+      name: 'Race Week — Activation pré-compétition',
+      focus: 'Affûtage / Préparation mentale',
+      duration: 30,
+      intensity: 'Z2-Z3',
+      exercises: [
+        {name: '2x300m Run strides', detail: 'Allure Hyrox + 10s/km. Reveil musculaire. NE PAS forcer.'},
+        {name: '3x5 Wall Balls technique', detail: 'Mouvement parfait, rythme respiratoire. Pas d\'effort.'},
+        {name: '200m SkiErg technique', detail: 'Double poling parfait à 60% effort'},
+        {name: 'Visualisation complète', detail: '15min yeux fermés : visualisez les 8km run + 8 stations, sentez le rythme, les transitions, la ligne d\'arrivée'},
+        {name: 'Checklist matériel', detail: 'Chaussures, tenue, gants SkiErg/Rowing, ceinture Hyrox, nutrition, hydratation'},
+        {name: 'Repos', detail: 'DORMEZ. Visez 9h de sommeil les 3 derniers jours.'}
+      ],
+      notes: 'Race week : plus rien à gagner physiquement, tout à perdre. Réduisez le volume de 70%. Maintenez quelques efforts intenses courts pour garder les jambes réactives.'
+    };
+  }
+
+  // ─── Sélecteur de session par type ───
+  var SESSION_MAP = {
+    'zone2_run':       makeZone2Run,
+    'interval_run':    makeIntervalRun,
+    'upper_ergs':      makeUpperErgs,
+    'lower_strength':  makeLowerStrength,
+    'stations_drill':  makeStationsDrill,
+    'sim_partial':     makeSimPartial,
+    'sim_full':        makeSimFull,
+    'force_fonct':     makeForceFonctionnelle,
+    'mobilite':        makeMobiliteRecup,
+    'race_week':       makeRaceWeek
   };
 
-  var weekTemplate = templates[daysPerWeek] || templates[4];
-
-  var HYROX_SESSIONS = {
-    run: function(w, lvl) {
-      var intervals = lvl === 'beginner' ? '6x400m @allure 5km, repos 90s' :
-                      lvl === 'intermediate' ? '8x400m @allure 5km, repos 60s' :
-                      '10x400m @allure 5km, repos 45s';
-      return {
-        name: '🏃 Running Intervals',
-        exercises: [
-          {name: 'Échauffement', detail: '10min footing facile'},
-          {name: 'Intervalles', detail: intervals},
-          {name: 'Retour au calme', detail: '10min footing + étirements'}
-        ],
-        notes: 'L\'objectif est de tenir la même allure sur toutes les répétitions. Hyrox = 8×1km !'
-      };
-    },
-    run_intervals: function(w, lvl) {
-      return {
-        name: '🏃 Running Tempo',
-        exercises: [
-          {name: 'Échauffement', detail: '2km facile'},
-          {name: 'Tempo Run', detail: (lvl === 'beginner' ? '3' : lvl === 'intermediate' ? '5' : '8') + 'km @allure semi-marathon'},
-          {name: 'Retour au calme', detail: '2km facile'}
-        ],
-        notes: 'Allure confortablement inconfortable. Vous devez tenir mais c\'est dur.'
-      };
-    },
-    upper: function(w, lvl) {
-      var sets = lvl === 'beginner' ? 3 : 4;
-      return {
-        name: '💪 Upper Body + SkiErg',
-        exercises: [
-          {name: '1000m SkiErg', detail: 'Objectif : ' + (lvl === 'beginner' ? '< 5:00' : lvl === 'intermediate' ? '< 4:00' : '< 3:30')},
-          {name: sets + 'x12 DB Strict Press', detail: 'Épaules — contrôle'},
-          {name: sets + 'x15 Push-ups', detail: 'Poitrine — explosif'},
-          {name: sets + 'x12 Bent Over Row', detail: 'Dos — tirage lourd'},
-          {name: sets + 'x20 Wall Balls', detail: 'Simulation station — ' + (lvl === 'beginner' ? '6kg' : '9kg')},
-          {name: '500m SkiErg sprint', detail: 'Finisher — tout donner'}
-        ],
-        notes: 'Le SkiErg est la station la plus technique. Tirez avec le dos, pas les bras.'
-      };
-    },
-    lower: function(w, lvl) {
-      var sets = lvl === 'beginner' ? 3 : 4;
-      return {
-        name: '🦵 Lower Body + Sled/Carry',
-        exercises: [
-          {name: '4x50m Sled Push', detail: 'Simulation — poids compétition'},
-          {name: sets + 'x10 Back Squat', detail: 'Force jambes'},
-          {name: sets + 'x12 Romanian Deadlift', detail: 'Ischio-jambiers'},
-          {name: '4x50m Farmers Carry', detail: lvl === 'beginner' ? '2x16kg' : '2x24kg'},
-          {name: sets + 'x20 Walking Lunges', detail: lvl === 'beginner' ? 'Sans charge' : 'Avec sandbag'},
-          {name: '1000m Row', detail: 'Objectif : ' + (lvl === 'beginner' ? '< 4:30' : '< 3:45')}
-        ],
-        notes: 'Les jambes font la différence en Hyrox. Sled + Lunges + Running = tout.'
-      };
-    },
-    stations: function(w, lvl) {
-      return {
-        name: '🎯 Stations Practice',
-        exercises: [
-          {name: '1000m SkiErg', detail: 'Travail technique + pacing'},
-          {name: '50 Wall Balls', detail: 'Sets de ' + (lvl === 'beginner' ? '10' : '25') + ', repos 30s'},
-          {name: '40 Burpee Broad Jumps', detail: 'Rythme constant, pas de sprint'},
-          {name: '1000m Row', detail: 'Technique long pull'},
-          {name: '100m Sled Pull', detail: 'Main sur main, pas de pause'},
-          {name: '100m Lunges', detail: 'Avec ' + (lvl === 'beginner' ? '0kg' : '10kg') + ' sandbag'}
-        ],
-        notes: 'Pratiquez les transitions entre stations. En compétition, chaque seconde compte.'
-      };
-    },
-    simulation: function(w, lvl) {
-      var rounds = w <= 3 ? 4 : w <= 6 ? 6 : 8;
-      return {
-        name: '🔥 Simulation Hyrox (' + rounds + ' stations)',
-        exercises: [
-          {name: rounds + ' rounds de :', detail: ''},
-          {name: '→ 500m Run', detail: '(1km en compétition)'},
-          {name: '→ 1 Station Hyrox', detail: 'Alternez les stations à chaque round'},
-          {name: '', detail: 'Stations en rotation : SkiErg 500m, Wall Balls ×50, Row 500m, Burpee BJ ×40, Farmers 100m, Lunges 50m, Sled Push 25m, Sled Pull 25m'}
-        ],
-        notes: rounds === 8 ? '🏆 FULL SIMULATION ! Donnez tout. C\'est votre test.' : '📈 Simulation partielle — focus sur le pacing et les transitions.'
-      };
-    },
-    mixed: function(w, lvl) {
-      return {
-        name: '🔄 Mixed: Run + Stations',
-        exercises: [
-          {name: '3x1km Run', detail: 'Allure Hyrox cible, repos 2min'},
-          {name: '3x250m SkiErg', detail: 'Repos 60s'},
-          {name: '3x250m Row', detail: 'Repos 60s'},
-          {name: '50 Wall Balls', detail: 'For time'},
-          {name: '2x100m Farmers Carry', detail: lvl === 'beginner' ? '2x16kg' : '2x24kg'}
-        ],
-        notes: 'Entraînement mixte. L\'objectif est d\'enchaîner sans temps mort.'
-      };
-    },
-    strength: function(w, lvl) {
-      var sets = lvl === 'beginner' ? 3 : 4;
-      return {
-        name: '🏋️ Strength + Conditioning',
-        exercises: [
-          {name: sets + 'x8 Deadlift', detail: 'Lourd'},
-          {name: sets + 'x10 Front Squat', detail: 'Tempo 3-1-1'},
-          {name: sets + 'x12 DB Push Press', detail: 'Explosif'},
-          {name: '1000m SkiErg', detail: 'For time'},
-          {name: '1000m Row', detail: 'For time'},
-          {name: '3x20 Wall Balls', detail: 'Repos 45s'}
-        ],
-        notes: 'Force fonctionnelle. Chaque exercice a un transfert direct sur une station Hyrox.'
-      };
-    }
-  };
-
+  // ─── Génération semaine par semaine ───
   for (var w = 1; w <= totalWeeks; w++) {
-    var weekSessions = [];
-    var phase = w <= 3 ? 'Base' : w <= 6 ? 'Développement' : 'Compétition';
+    var phase, isDeload, notes, weekDayTypes;
+    var wMult = WEEK_MULT[w - 1];
 
-    weekTemplate.forEach(function(day, idx) {
-      var sessionFn = HYROX_SESSIONS[day.type];
-      if (sessionFn) {
-        var session = sessionFn(w, level);
-        session.dayNumber = idx + 1;
-        session.focus = day.focus;
+    if (w <= 3) {
+      phase = 'Base';
+      isDeload = false;
+      notes = 'Phase Base S' + w + ' : volume x' + wMult.toFixed(1) + '. Construction aérobie. Technique stations. Pas d\'effort >Z3.';
+    } else if (w === 4) {
+      phase = 'Build';
+      isDeload = true;
+      notes = 'DELOAD S4 : volume -40%. Récupération active. Résistez à l\'envie d\'en faire plus. Les adaptations se font au repos.';
+    } else if (w <= 6) {
+      phase = 'Build';
+      isDeload = false;
+      notes = 'Phase Build S' + w + ' : volume x' + wMult.toFixed(1) + '. Intensité montante. Simulations partielles 4-6 stations.';
+    } else if (w <= 9) {
+      phase = 'Peak';
+      isDeload = false;
+      notes = 'Phase Peak S' + w + ' : intensité maximale. Full simulations. VO2max work. Récupérez bien entre les sessions.';
+    } else if (w === 10) {
+      phase = 'Taper';
+      isDeload = true;
+      notes = 'TAPER S10 : volume -30%. Maintenez l\'intensité, réduisez le volume. Corps en super-compensation.';
+    } else if (w === 11) {
+      phase = 'Taper';
+      isDeload = false;
+      notes = 'TAPER S11 : volume -50%. Séances courtes et nettes. Vous avez fait le travail. Faites confiance.';
+    } else {
+      phase = 'Taper';
+      isDeload = false;
+      notes = 'RACE WEEK S12 : activation légère, visualisation, récupération maximale. RACE DAY approche.';
+    }
+
+    // Adapter les types de sessions selon la semaine
+    if (w === 12) {
+      weekDayTypes = [];
+      for (var d = 0; d < Math.min(daysPerWeek, 4); d++) {
+        if (d < 2) weekDayTypes.push('race_week');
+        else weekDayTypes.push('mobilite');
+      }
+    } else if (w >= 10) {
+      weekDayTypes = [];
+      for (var d2 = 0; d2 < daysPerWeek; d2++) {
+        if (d2 === 0) weekDayTypes.push('zone2_run');
+        else if (d2 === 1) weekDayTypes.push('upper_ergs');
+        else if (d2 === 2) weekDayTypes.push('lower_strength');
+        else if (d2 === 3) weekDayTypes.push('sim_partial');
+        else weekDayTypes.push('mobilite');
+      }
+    } else if (w >= 7) {
+      weekDayTypes = [];
+      for (var d3 = 0; d3 < daysPerWeek; d3++) {
+        if (d3 === 0) weekDayTypes.push('interval_run');
+        else if (d3 === 1) weekDayTypes.push('upper_ergs');
+        else if (d3 === 2) weekDayTypes.push('lower_strength');
+        else if (d3 === 3) weekDayTypes.push(daysPerWeek >= 6 ? 'stations_drill' : 'sim_full');
+        else if (d3 === 4) weekDayTypes.push('sim_full');
+        else weekDayTypes.push('mobilite');
+      }
+    } else {
+      weekDayTypes = [];
+      for (var d4 = 0; d4 < daysPerWeek; d4++) {
+        weekDayTypes.push(dayTypes[d4] || dayTypes[dayTypes.length - 1]);
+      }
+    }
+
+    var weekSessions = [];
+    for (var di = 0; di < weekDayTypes.length; di++) {
+      var sType = weekDayTypes[di];
+      var fn = SESSION_MAP[sType];
+      if (fn) {
+        var session = fn(w, wMult);
+        session.dayNumber = di + 1;
+        session.type = sType;
         weekSessions.push(session);
       }
-    });
+    }
+
+    var totalMin = 0;
+    for (var si = 0; si < weekSessions.length; si++) {
+      totalMin += (weekSessions[si].duration || 60);
+    }
 
     program.push({
       week: w,
       phase: phase,
       sessions: weekSessions,
-      isDeload: w === 4,
-      notes: w === 4 ? '📉 Semaine de décharge — volume réduit de 30%' :
-             w === 8 ? '🏆 Semaine de compétition — simulation complète + repos' :
-             phase === 'Base' ? '🏗️ Construction endurance + apprentissage stations' :
-             phase === 'Développement' ? '📈 Montée en intensité + simulations partielles' :
-             '🎯 Simulations complètes + affûtage'
+      isDeload: isDeload,
+      totalDuration: totalMin,
+      notes: notes
     });
   }
 
   return program;
 }
 window.generateHyroxProgram = generateHyroxProgram;
+
 
 // ─── PADEL ───
 var PADEL_LEVELS=[{id:'beginner',name:'Débutant',desc:'< 6 mois',icon:'🟢'},{id:'intermediate',name:'Intermédiaire',desc:'6 mois-2 ans',icon:'🟡'},{id:'advanced',name:'Avancé',desc:'2+ ans, compétitions',icon:'🟠'},{id:'competition',name:'Compétition',desc:'Tournois, classé',icon:'🔴'}];
