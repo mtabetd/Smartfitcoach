@@ -445,14 +445,12 @@ function renderStep1(p) {
   var _dobValid = !!S.birthDate || !!S.age;
 
   // ── Photo de profil (optionnelle) ──
-  var photoDivider = h('div', {'class': 'divider', style: 'margin:20px 0 12px'});
-  photoDivider.appendChild(h('div', {'class': 'divider-line'}));
-  photoDivider.appendChild(h('div', {'class': 'divider-text'}, 'Photo de profil (optionnel)'));
-  photoDivider.appendChild(h('div', {'class': 'divider-line'}));
-  p.appendChild(photoDivider);
+  var photoWrap = h('div', {'class': 'profile-photo-section'});
 
-  var photoWrap = h('div', {style: 'text-align:center;margin-bottom:16px'});
-  // fileInput declared early so placeholder onclick can reference it
+  // Label editorial uppercase
+  photoWrap.appendChild(h('div', {'class': 'profile-photo-label'}, 'PHOTO DE PROFIL'));
+
+  // fileInput hidden — triggered by click on the zone
   var fileInput = h('input', {type: 'file', accept: 'image/*', style: 'display:none', onchange: function(e) {
     var file = e.target.files && e.target.files[0];
     if (!file) return;
@@ -478,36 +476,64 @@ function renderStep1(p) {
     reader.readAsDataURL(file);
   }});
   photoWrap.appendChild(fileInput);
+
   if (S.profilePhoto) {
-    // has-photo: solid border via CSS .photo-upload.has-photo (border-color via CSS var)
-    var _photoCircle = h('div', {
-      'class': 'photo-upload has-photo',
-      style: 'width:96px;height:96px;border-radius:50%;border-width:2px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;overflow:hidden;cursor:pointer',
+    // ── État photo chargée : carré épuré, photo plein cadre ──
+    var _photoFrame = h('div', {
+      'class': 'profile-photo-frame has-photo',
       onclick: function() { fileInput.click(); },
       title: 'Changer la photo'
     });
-    _photoCircle.appendChild(h('img', {src: S.profilePhoto, style: 'width:100%;height:100%;object-fit:cover;display:block'}));
-    photoWrap.appendChild(_photoCircle);
-    photoWrap.appendChild(h('br'));
-    photoWrap.appendChild(h('button', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border,#D8D8D0);padding:6px 16px;cursor:pointer;color:var(--grey,#6B6B65);margin-top:4px',
+    _photoFrame.appendChild(h('img', {src: S.profilePhoto, 'class': 'profile-photo-img'}));
+    photoWrap.appendChild(_photoFrame);
+    // Actions discrètes en dessous
+    var _photoActions = h('div', {'class': 'profile-photo-actions'});
+    _photoActions.appendChild(h('button', {
+      'class': 'profile-photo-btn',
+      onclick: function() { fileInput.click(); }
+    }, 'MODIFIER'));
+    _photoActions.appendChild(h('span', {'class': 'profile-photo-sep'}, '·'));
+    _photoActions.appendChild(h('button', {
+      'class': 'profile-photo-btn profile-photo-btn--muted',
       onclick: function() { S.profilePhoto = null; window.render(); }
     }, 'SUPPRIMER'));
+    photoWrap.appendChild(_photoActions);
   } else {
-    // Placeholder: dashed circle, clicking it triggers file input directly
-    var placeholder = h('div', {
-      'class': 'photo-upload',
-      style: 'width:96px;height:96px;border-radius:50%;border:2px dashed var(--border,#D8D8D0);display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;color:var(--grey,#6B6B65);font-size:28px;cursor:pointer',
+    // ── Placeholder : carré minimaliste, silhouette SVG inline ──
+    var _photoPlaceholder = h('div', {
+      'class': 'profile-photo-frame',
       onclick: function() { fileInput.click(); },
-      title: 'Ajouter une photo'
-    }, '\uD83D\uDCF7');
-    photoWrap.appendChild(placeholder);
+      title: 'Ajouter une photo de profil'
+    });
+    // SVG silhouette monogramme — sobre, éditorial
+    var _svgNS = 'http://www.w3.org/2000/svg';
+    var _svg = document.createElementNS(_svgNS, 'svg');
+    _svg.setAttribute('width', '48');
+    _svg.setAttribute('height', '48');
+    _svg.setAttribute('viewBox', '0 0 48 48');
+    _svg.setAttribute('fill', 'none');
+    _svg.setAttribute('class', 'profile-photo-silhouette');
+    // Head circle
+    var _head = document.createElementNS(_svgNS, 'circle');
+    _head.setAttribute('cx', '24');
+    _head.setAttribute('cy', '18');
+    _head.setAttribute('r', '8');
+    _head.setAttribute('stroke', 'currentColor');
+    _head.setAttribute('stroke-width', '1');
+    _svg.appendChild(_head);
+    // Shoulders arc
+    var _shoulders = document.createElementNS(_svgNS, 'path');
+    _shoulders.setAttribute('d', 'M8 44c0-8.837 7.163-16 16-16s16 7.163 16 16');
+    _shoulders.setAttribute('stroke', 'currentColor');
+    _shoulders.setAttribute('stroke-width', '1');
+    _svg.appendChild(_shoulders);
+    _photoPlaceholder.appendChild(_svg);
+    photoWrap.appendChild(_photoPlaceholder);
+    // CTA discret
+    var _photoCta = h('div', {'class': 'profile-photo-cta'}, 'Ajouter');
+    photoWrap.appendChild(_photoCta);
   }
-  photoWrap.appendChild(h('br'));
-  photoWrap.appendChild(h('button', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border,#D8D8D0);padding:8px 20px;cursor:pointer;color:var(--black,#0A0A09);margin-top:4px',
-    onclick: function() { fileInput.click(); }
-  }, S.profilePhoto ? 'CHANGER LA PHOTO' : 'AJOUTER UNE PHOTO'));
+
   p.appendChild(photoWrap);
 
   p.appendChild(h('div', {style: 'height:16px'}));

@@ -313,15 +313,15 @@
 
 
 /* -------------------------------------------------------
-   14. PHOTO UPLOAD ZONES
+   14. PHOTO UPLOAD ZONES (generic)
    ------------------------------------------------------- */
 
 .photo-upload {
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .photo-upload:hover {
-  border-color: #0A0A09;
+  border-color: var(--black, #0A0A09);
   background: rgba(10, 10, 9, 0.02);
 }
 
@@ -331,12 +331,134 @@
 }
 
 @keyframes photoIn {
-  from { opacity: 0; transform: scale(0.9); }
+  from { opacity: 0; transform: scale(0.97); }
   to   { opacity: 1; transform: scale(1); }
 }
 
 .photo-upload img {
-  animation: photoIn 0.3s ease;
+  animation: photoIn 0.2s ease;
+}
+
+
+/* -------------------------------------------------------
+   14b. PROFILE PHOTO — Luxury editorial redesign
+   Inspiration: Hermès, Bottega Veneta, Aesop
+   ------------------------------------------------------- */
+
+.profile-photo-section {
+  margin: 28px 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.profile-photo-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--grey, #6B6B65);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* Cadre carré — 96×96, border fine 1px, radius 2px */
+.profile-photo-frame {
+  width: 96px;
+  height: 96px;
+  border: 1px solid var(--border, #D8D8D0);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--ivory2, #F4F4F0);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+  position: relative;
+}
+
+.profile-photo-frame:hover {
+  border-color: var(--black, #0A0A09);
+}
+
+.profile-photo-frame.has-photo {
+  border-color: var(--black, #0A0A09);
+}
+
+.profile-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: photoIn 0.2s ease;
+}
+
+/* Silhouette SVG placeholder — couleur grise douce */
+.profile-photo-silhouette {
+  color: var(--grey3, #9A9A90);
+  display: block;
+}
+
+/* CTA discret sous le placeholder */
+.profile-photo-cta {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--grey3, #9A9A90);
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Actions sous photo chargée */
+.profile-photo-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.profile-photo-sep {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  color: var(--grey3, #9A9A90);
+}
+
+.profile-photo-btn {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--black, #0A0A09);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.profile-photo-btn:hover {
+  color: var(--grey, #6B6B65);
+}
+
+.profile-photo-btn--muted {
+  color: var(--grey3, #9A9A90);
+}
+
+.profile-photo-btn--muted:hover {
+  color: var(--red, #5A1010);
+}
+
+/* Dark mode */
+body.dark-mode .profile-photo-frame {
+  background: var(--ivory2);
+  border-color: var(--border);
+}
+body.dark-mode .profile-photo-frame:hover,
+body.dark-mode .profile-photo-frame.has-photo {
+  border-color: var(--black);
 }
 
 
