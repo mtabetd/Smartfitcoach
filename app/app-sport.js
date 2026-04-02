@@ -1367,10 +1367,82 @@ function renderCrossfitLevel(p) {
 
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;text-align:center;margin-bottom:16px'}, 'Si vous ne connaissez pas vos 1RM, les charges seront bas\u00E9es sur les standards internationaux pour votre niveau.'));
 
+ // ─── BENCHMARKS ACTUELS ───
+ p.appendChild(h('div', {style: 'height:16px'}));
+ p.appendChild(h('div', {style: 'border-top:1px solid var(--border);margin:0 0 16px;padding-top:16px'}));
+ p.appendChild(h('div', {'class': 'section-label'}, 'Vos benchmarks CrossFit (optionnel)'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:14px'}, 'Ces donn\u00E9es permettent de suivre votre progression sur les WODs officiels du CrossFit.'));
+
+ S.crossfitBenchmarks = S.crossfitBenchmarks || {};
+ var benchmarkFields = [
+ {key: 'fran_time', label: 'Fran (21-15-9 Thruster + Pull-ups)', placeholder: 'Ex: 4:32', type: 'text'},
+ {key: 'grace_time', label: 'Grace (30 Clean & Jerk)', placeholder: 'Ex: 2:15', type: 'text'},
+ {key: 'helen_time', label: 'Helen (3 rounds 400m/KB/Pull-ups)', placeholder: 'Ex: 9:45', type: 'text'},
+ {key: 'max_pullups', label: 'Max Pull-ups strict (unbroken)', placeholder: 'Ex: 15', type: 'number'},
+ {key: 'max_hspu', label: 'Max HSPU strict (unbroken)', placeholder: 'Ex: 8', type: 'number'},
+ {key: 'max_du', label: 'Max Double Unders unbroken', placeholder: 'Ex: 50', type: 'number'}
+ ];
+ var bmGrid = h('div', {style: 'margin-bottom:16px'});
+ benchmarkFields.forEach(function(bf) {
+ var bRow = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border:1px solid var(--border);background:var(--ivory2);margin-bottom:4px'});
+ bRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg,#0A0A09);flex:1'}, bf.label));
+ var bInp = h('input', {
+ type: bf.type || 'text',
+ placeholder: bf.placeholder,
+ style: 'width:90px;padding:5px 8px;border:1px solid var(--border);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory);color:#0A0A09;text-align:center',
+ value: S.crossfitBenchmarks[bf.key] || ''
+ });
+ (function(fieldKey) {
+ bInp.addEventListener('input', function(e) {
+ S.crossfitBenchmarks = S.crossfitBenchmarks || {};
+ S.crossfitBenchmarks[fieldKey] = e.target.value;
+ });
+ })(bf.key);
+ bRow.appendChild(bInp);
+ bmGrid.appendChild(bRow);
+ });
+ p.appendChild(bmGrid);
+
+ // ─── OBJECTIF COMPETITION ───
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, 'Objectif comp\u00E9tition'));
+ var compGoals = [
+ {id: 'loisir', label: 'Loisir — Forme physique et fun', desc: 'Pas de competition prevue'},
+ {id: 'open', label: 'CrossFit Open', desc: 'Qualifier pour les phases suivantes'},
+ {id: 'sanctional', label: 'Regionals / Sanctionals', desc: 'Niveau elite — competition serieuse'}
+ ];
+ var compList = h('div', {style: 'margin-bottom:14px'});
+ compGoals.forEach(function(cg) {
+ var isOn = (S.crossfitCompGoal === cg.id);
+ var cgRow = h('div', {
+ style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid ' + (isOn ? 'var(--black,#0A0A09)' : 'var(--border)') + ';background:' + (isOn ? 'var(--ivory2)' : 'transparent') + ';margin-bottom:4px;cursor:pointer',
+ onclick: function() { S.crossfitCompGoal = cg.id; window.render(); }
+ });
+ var cgLeft = h('div', {});
+ cgLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, cg.label));
+ cgLeft.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey)'}, cg.desc));
+ cgRow.appendChild(cgLeft);
+ if (isOn) cgRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--black)'}, '\u2713'));
+ compList.appendChild(cgRow);
+ });
+ p.appendChild(compList);
+
+ // ─── DATE DE L'OPEN ───
+ if (S.crossfitCompGoal === 'open' || S.crossfitCompGoal === 'sanctional') {
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:8px'}, 'Date du CrossFit Open (optionnel)'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;text-align:center'}, 'Le programme adaptera les semaines 18-20 en pr\u00E9paration Open.'));
+ var openDateInp = h('input', {
+ type: 'date',
+ style: 'width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:var(--ivory);color:#0A0A09;margin-bottom:16px',
+ value: S.crossfitOpenDate || ''
+ });
+ openDateInp.addEventListener('change', function(e) { S.crossfitOpenDate = e.target.value; });
+ p.appendChild(openDateInp);
+ }
+
  p.appendChild(h('div', {style: 'height:16px'}));
  var ok = S.crossfitLevel !== null;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { S.crossfitWeek = 1; S.selectedCrossfitDay = 0; S.sStep = 6; window.BLACKBOX && window.BLACKBOX.log('crossfit_level', {level: S.crossfitLevel, days: S.sportDays}); window.render(); }
+ if (ok) { S.crossfitWeek = 1; S.selectedCrossfitDay = 0; S.sStep = 6; window.BLACKBOX && window.BLACKBOX.log('crossfit_level', {level: S.crossfitLevel, days: S.sportDays, compGoal: S.crossfitCompGoal}); window.render(); }
  }}, 'Continuer'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
