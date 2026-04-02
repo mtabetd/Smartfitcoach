@@ -4,7 +4,7 @@
 (function(){
 'use strict';
 
-window.CF_WODS_FULL = [
+window.CF_WODS_CYCLE1 = [
 // ============ WEEK 1-17 ============
 {
   day: 1, week: 1, name: 'IGNITION', theme: 'Haltéro Lourd + Aérobie Base',
