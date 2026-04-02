@@ -624,7 +624,7 @@ var CF_WODS = [
       {name: 'Box Jumps', reps: 12, gymnastics: 'box_jump'},
       {name: 'Thrusters', reps: 9, weight: 'thruster'},
       {name: 'Bar Muscle-ups', reps: 3, gymnastics: 'muscle_ups_bar'}
-    ], notes: 'Inspiré de Mayhem. Respirez sur les KB swings, explosive sur les BMU.' },
+    ], notes: 'Inspiré des standards Games Athletes. Respirez sur les KB swings, explosive sur les BMU.' },
     gym: { name: 'Skill: HSPU / Pike Push-ups', drills: ['3x5 Strict HSPU (ou pike push-ups)', '3x5 Kipping HSPU (ou abmat)', 'Max unbroken HSPU test', '3x15 DB Strict Press léger (épaule santé)'] }
   },
   {

@@ -1486,7 +1486,7 @@ function generateCrossfitWeek(weekNumber, daysPerWeek) {
  var allWods = window.CF_WODS || [];
  if (!allWods.length) return [];
 
- // Semaines de décharge CrossFit : 4, 8, 12, 16... (cycle 3+1 semaines — protocole Mayhem/Games)
+ // Semaines de décharge CrossFit : 4, 8, 12, 16... (cycle 3+1 semaines — cycle 3+1 semaines elite)
  // Volume réduit 40-50%, intensité plafonnée à 70% max, pas de PR ni de test.
  var isDeloadWeek = (weekNumber % 4 === 0);
 
@@ -1693,7 +1693,7 @@ function renderCrossfitProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
  var levelObj = (window.CROSSFIT_LEVELS || []).find(function(l) { return l.id === S.crossfitLevel; });
- p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' jours/semaine \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '') + ' \u2014 Inspir\u00E9 Mayhem / Games Athletes'));
+ p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' jours/semaine \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '') + ' \u2014 Inspir\u00E9 Games Athletes Athletes'));
 
  // ─── BIENVENUE SCALED / DÉBUTANT ───
  // Afficher un message d'accueil et un CTA 1RM uniquement pour les nouveaux utilisateurs scaled sans 1RM définis
@@ -1779,7 +1779,7 @@ function renderCrossfitProgram(p) {
  p.appendChild(calBtn);
 
  // ─── CROSSFIT DELOAD BANNER (semaines 4, 8, 12, 16) ───
- // Protocole Mayhem / Games : 3 semaines d'intensité + 1 semaine de décharge.
+ // Protocole Games Athletes : 3 semaines d'intensité + 1 semaine de décharge.
  // Volume réduit de 40-50%, intensité maintenue à 70% max. Récupération CNS + articulaire.
  var cfWeekNum = S.crossfitWeek || 1;
  var isCFDeload = (cfWeekNum % 4 === 0);
