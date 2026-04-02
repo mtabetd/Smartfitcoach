@@ -660,7 +660,7 @@ var CF_ELITE_COMPLEXES = [
     name: 'Snatch Complex Elite',
     description: '1 Power Snatch + 1 OHS + 1 Squat Snatch — le complexe elite',
     scheme: '6 series de 1 complexe @ 65-75%. Repos 2min. Focus: transition fluide P.Snatch → OHS → Squat Snatch.',
-    coaching: 'Le Power Snatch etablit la reception haute. L'OHS construit la stabilite overhead (10s hold si possible). Le Squat Snatch complete avec reception basse. Echauffement elite recommande avant les wods snatch lourds.',
+    coaching: 'Le Power Snatch etablit la reception haute. L\'OHS construit la stabilite overhead (10s hold si possible). Le Squat Snatch complete avec reception basse. Echauffement elite recommande avant les wods snatch lourds.',
     levels: { scaled: '45-55%', inter: '55-65%', rx: '65-75%', rx_plus: '72-80%' }
   },
   {

@@ -1734,6 +1734,10 @@ function renderCrossfitProgram(p) {
  // Guard: cfCurrentDay bounds
  if (!S.cfCurrentDay || S.cfCurrentDay < 1) S.cfCurrentDay = 1;
  if (S.cfCurrentDay > 100) S.cfCurrentDay = 100;
+ // Guard: ELITE state objects — defensive initialization
+ S.crossfitBenchmarks = S.crossfitBenchmarks || {};
+ S.crossfitCompGoal = S.crossfitCompGoal || 'loisir';
+ if (S.cfDeloadRecommended === undefined) S.cfDeloadRecommended = false;
 
  // Load saved 1RM data if not already loaded
  if (!S.crossfit1RM || Object.keys(S.crossfit1RM).length === 0) {
@@ -2091,10 +2095,10 @@ function renderCrossfitProgram(p) {
  // For non-haltero days, gym was already shown before the WOD
 
 
- // ─── HWPO: AEROBIC CAPACITY (5eme composante) ───
+ // ─── ELITE: AEROBIC CAPACITY (5eme composante) ───
  if (wod.aerobic && wod.aerobic.type) {
   var aerCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #1A5A5A;background:rgba(26,90,90,0.03)'});
-  aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1A5A5A;margin-bottom:6px'}, 'AEROBIE (5e composante HWPO)'));
+  aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1A5A5A;margin-bottom:6px'}, 'AEROBIE (5e composante ELITE)'));
   aerCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:4px'}, wod.aerobic.type));
   aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, wod.aerobic.desc || ''));
   if (wod.aerobic.rpe !== undefined) {
@@ -2103,10 +2107,10 @@ function renderCrossfitProgram(p) {
   p.appendChild(aerCard);
  }
 
- // ─── HWPO: RECOVERY / MOBILITE (5e composante) ───
+ // ─── ELITE: RECOVERY / MOBILITE (5e composante) ───
  if (wod.recovery && wod.recovery.protocol && wod.recovery.protocol.length) {
   var recCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #5A5A1A;background:rgba(90,90,26,0.03)'});
-  recCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#5A5A1A;margin-bottom:6px'}, 'RECOVERY & MOBILITE (Protocole Fraser)'));
+  recCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#5A5A1A;margin-bottom:6px'}, 'RECOVERY & MOBILITE (Protocole champion)'));
   if (wod.recovery.targets && wod.recovery.targets.length) {
    recCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:6px'}, 'Zones cibles : ' + wod.recovery.targets.join(', ')));
   }
@@ -2118,15 +2122,15 @@ function renderCrossfitProgram(p) {
   p.appendChild(recCard);
  }
 
- // ─── HWPO MODE (RX+ uniquement) ───
+ // ─── ELITE MODE (RX+ uniquement) ───
  if (S.crossfitLevel === 'rx_plus') {
   var hwpoCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #8B2FC9;background:rgba(139,47,201,0.04)'});
-  hwpoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8B2FC9;margin-bottom:6px'}, 'HWPO MODE — Fraser Mental Framework'));
+  hwpoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8B2FC9;margin-bottom:6px'}, 'ELITE MODE — champion Mental Framework'));
   var hwpoPoints = [
    'INTENT: Chaque WOD a un objectif precis dans la programmation. Lis les notes du WOD AVANT de commencer.',
-   'PACING: Fraser ne commence jamais a 100% avant le round 3. Reserve 15% de capacite pour la fin.',
-   'JOURNAL: Note ton score, ton RPE, et tes observations. La progression vient de l'analyse, pas juste du travail.',
-   'RECOVERY: Le muscle grandit pendant le repos, pas pendant l'entrainement. Dors 8h minimum ce soir.',
+   'PACING: champion ne commence jamais a 100% avant le round 3. Reserve 15% de capacite pour la fin.',
+   'JOURNAL: Note ton score, ton RPE, et tes observations. La progression vient de l\'analyse, pas juste du travail.',
+   'RECOVERY: Le muscle grandit pendant le repos, pas pendant l\'entrainement. Dors 8h minimum ce soir.',
    'MENTAL: "Les jours difficiles sont les jours qui nous construisent. Les jours faciles sont des jours de maintenance."'
   ];
   var hwpoList = h('div', {});
@@ -2137,11 +2141,15 @@ function renderCrossfitProgram(p) {
   p.appendChild(hwpoCard);
  }
 
- // Day summary
- var sectionCount = currentDay.hasHaltero ? 3 : 2;
+ // Day summary — ELITE 5 composantes
+ var hasAerobic = wod.aerobic && wod.aerobic.type;
+ var hasRecovery = wod.recovery && wod.recovery.protocol && wod.recovery.protocol.length;
+ var hwpoCompCount = (currentDay.hasHaltero ? 1 : 0) + 1 + 1 + (hasAerobic ? 1 : 0) + (hasRecovery ? 1 : 0); // strength+WOD+gym+aerobic+recovery
  var summary = h('div', {'class': 'day-total'});
- summary.appendChild(h('div', {'class': 'dt-label'}, sectionCount + ' sections'));
- summary.appendChild(h('div', {'class': 'dt-val'}, currentDay.hasHaltero ? '~60-75 min' : '~45-60 min'));
+ summary.appendChild(h('div', {'class': 'dt-label'}, hwpoCompCount + ' composantes ELITE'));
+ var durStr = currentDay.hasHaltero ? '~75-90 min' : '~50-65 min';
+ if (hasAerobic) durStr += ' + 20-40 min Z2 sep.';
+ summary.appendChild(h('div', {'class': 'dt-val'}, durStr));
  p.appendChild(summary);
 
  // ─── WOD TIMER ───
@@ -2375,6 +2383,62 @@ function renderCrossfitProgram(p) {
  doneCard.appendChild(doneBtn);
  }
  p.appendChild(doneCard);
+
+ // ─── ELITE: RPE TRACKER ───
+ (function() {
+  if (!S.cfProgress) S.cfProgress = {};
+  var wodDay2 = wod && wod.day;
+  if (!wodDay2) return;
+  var isWodDone2 = !!(S.cfProgress[wodDay2] && S.cfProgress[wodDay2].done);
+  if (!isWodDone2) return; // Only show RPE after marking done
+
+  var existingRpe = S.cfProgress[wodDay2] && S.cfProgress[wodDay2].rpe;
+  var rpeCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;margin:4px 0 8px;background:var(--ivory2)'});
+  rpeCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'NOTER MA SEANCE (RPE)'));
+  rpeCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px'}, 'Comment s\'est passe ce WOD ?'));
+
+  var rpeRow = h('div', {style: 'display:flex;gap:8px'});
+  var rpeOptions = [
+   {val: 'easy', label: 'Facile', color: '#1A4A1A', bg: 'rgba(26,74,26,0.08)'},
+   {val: 'good', label: 'Bon effort', color: '#1A3A6A', bg: 'rgba(26,58,106,0.08)'},
+   {val: 'hard', label: 'Epuisant', color: '#5A1010', bg: 'rgba(90,16,16,0.08)'}
+  ];
+  rpeOptions.forEach(function(rpeOpt) {
+   var isSelected = (existingRpe === rpeOpt.val);
+   var rpeBtn = h('button', {
+    style: 'flex:1;padding:8px 4px;border:1px solid ' + (isSelected ? rpeOpt.color : 'var(--border)') + ';background:' + (isSelected ? rpeOpt.bg : 'transparent') + ';font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:' + rpeOpt.color + ';cursor:pointer;border-radius:2px',
+    onclick: (function(rv) {
+     return function() {
+      if (!S.cfProgress) S.cfProgress = {};
+      if (!S.cfProgress[wodDay2]) S.cfProgress[wodDay2] = { done: true };
+      S.cfProgress[wodDay2].rpe = rv;
+      // Check for 5 consecutive "hard" RPE -> deload recommendation
+      var hardCount = 0;
+      var dayNums = Object.keys(S.cfProgress).map(Number).sort(function(a, b) { return a - b; });
+      var lastFive = dayNums.slice(-5);
+      for (var li = 0; li < lastFive.length; li++) {
+       if (S.cfProgress[lastFive[li]] && S.cfProgress[lastFive[li]].rpe === 'hard') hardCount++;
+      }
+      if (hardCount >= 5) {
+       S.cfDeloadRecommended = true;
+      }
+      window.render();
+     };
+    })(rpeOpt.val)
+   }, rpeOpt.label);
+   rpeRow.appendChild(rpeBtn);
+  });
+  rpeCard.appendChild(rpeRow);
+
+  // Deload recommendation
+  if (S.cfDeloadRecommended) {
+   var deloadRec = h('div', {style: 'margin-top:10px;padding:8px 12px;background:rgba(224,123,0,0.08);border-left:2px solid #E07B00;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#E07B00'});
+   deloadRec.textContent = 'DELOAD RECOMMANDE : 5 seances consecutives Epuisant detectees. La semaine prochaine, reduisez le volume de 40% et l\'intensite a 70% max. Votre systeme nerveux central a besoin de recuperation.';
+   rpeCard.appendChild(deloadRec);
+  }
+
+  p.appendChild(rpeCard);
+ })();
  })();
 
  // Regenerate (shuffle order)
