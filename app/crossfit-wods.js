@@ -981,4 +981,134 @@ if (window.CF_WODS_FULL && window.CF_WODS_FULL.length > 0) {
   window.CF_WODS = window.CF_WODS_FULL;
 }
 
+// ─── ELITE BENCHMARK WODS ───
+// Benchmarks officiels CrossFit integres dans le cycle de programmation
+// A inserer au bon moment (semaine 4, 8, 12, 16) via getCFBenchmarkForWeek()
+window.CF_BENCHMARKS = {
+  FRAN: {
+    id: 'FRAN', name: 'FRAN', week_target: 4,
+    type: 'For Time',
+    movements: [{name: 'Thruster', reps: 21, weight: 'thruster'}, {name: 'Pull-ups', reps: 21, gymnastics: 'pullups'}, {name: 'Thruster', reps: 15, weight: 'thruster'}, {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'}, {name: 'Thruster', reps: 9, weight: 'thruster'}, {name: 'Pull-ups', reps: 9, gymnastics: 'pullups'}],
+    score_targets: {scaled: '< 10min', inter: '< 7min', rx: '< 5min', elite: '< 3:30'},
+    notes: 'INTENT: Le benchmark fondateur du CrossFit. Test glycolytique pur — 21-15-9 thrusters + pull-ups. Enregistrez TOUJOURS votre temps Fran — c\'est votre jalon de reference pour les 12 prochains mois. SCORES: Scaled <10min, Inter <7min, RX <5min, Elite <3:30 (World Class). COACH ELITE: "Fran, c\'est 3-4 minutes de souffrance absolue. Je pars a 100% et j\'accepte la douleur. 21 thrusters unbroken, 21 pull-ups butterfly 15-6, 15 thrusters unbroken, 15 pull-ups 10-5, 9 tout d\'un coup. Pas de repos planifie." ERREURS: 1) Poser la barre entre les 21 thrusters. 2) Partir en trop grands sets de pull-ups (crash au round 2). 3) Respirer incorrectement — expirez AU-DESSUS de chaque thruster. MENTAL: "Fran est une interview avec ton seuil lactique. Chaque seconde au-dessus de ton PR est une information — pas une defaite."',
+    benchmark: true
+  },
+  GRACE: {
+    id: 'GRACE', name: 'GRACE', week_target: 8,
+    type: 'For Time',
+    movements: [{name: 'Clean & Jerk', reps: 30, weight: 'clean'}],
+    score_targets: {scaled: '< 6min', inter: '< 4min', rx: '< 2:30', elite: '< 1:30'},
+    notes: 'INTENT: Test de la puissance haltero pure — 30 Clean & Jerks. Grace teste la capacite a maintenir la qualite technique sous fatigue lactique maximale. SCORES: Scaled <6min, Inter <4min, RX <2:30, Elite <1:30 (World Class). COACH ELITE: "Grace = vitesse et efficacite. Je fais du Touch-and-Go les 15 premieres reps, puis je switch en singles rapides. Mon split: 15 TnG / 8 singles rapides / 7 singles donner-tout." ERREURS: 1) TnG sur tout (grip crash a la rep 20). 2) Jerk trop complexe (push jerk simple > split jerk pour la vitesse). 3) Perdre la position sur les derniers reps. MENTAL: "30 reps. Chaque rep te rapproche de la fin. Ne pense pas aux 30 — pense a la prochaine."',
+    benchmark: true
+  },
+  HELEN: {
+    id: 'HELEN', name: 'HELEN', week_target: 12,
+    type: '3 Rounds For Time',
+    movements: [{name: 'Run 400m', reps: 1, special: 'run_400'}, {name: 'KB Swing', reps: 21, gymnastics: 'kb_swing'}, {name: 'Pull-ups', reps: 12, gymnastics: 'pullups'}],
+    score_targets: {scaled: '< 15min', inter: '< 12min', rx: '< 10min', elite: '< 8min'},
+    notes: 'INTENT: Benchmark d\'endurance metabolique pure. Helen teste le systeme aerobie-lactique sur 3 rounds. C\'est un test de ta condition physique generale. SCORES: Scaled <15min, Inter <12min, RX <10min, Elite <8min. COACH ELITE: "Je cours le 400m a un pace que je peux maintenir 3 fois. Mon split ideal: 1:35 / 1:35 / 1:25 (acceleration finale). KB Swing americain 21 unbroken. Pull-ups butterfly 12 unbroken." ERREURS: 1) Premier 400m trop rapide (killer). 2) Pause sur les KB swings — hanches, pas les bras. 3) Pull-ups: trop grands sets au round 1 = effondrement round 3. MENTAL: "Round 3 arrive plus vite qu\'on croit si on gere bien les 2 premiers. Patience = performance."',
+    benchmark: true
+  },
+  MURPH: {
+    id: 'MURPH', name: 'MURPH (Hero WOD)', week_target: 16,
+    type: 'For Time (avec gilet 9/7kg)',
+    movements: [{name: 'Run 1 Mile', reps: 1, special: 'run_400'}, {name: 'Pull-ups', reps: 100, gymnastics: 'pullups'}, {name: 'Push-ups', reps: 200, gymnastics: 'pushups'}, {name: 'Air Squat', reps: 300, gymnastics: 'air_squat'}, {name: 'Run 1 Mile', reps: 1, special: 'run_400'}],
+    score_targets: {scaled: '< 60min', inter: '< 50min', rx: '< 40min', elite: '< 35min'},
+    notes: 'INTENT: Hommage au Lt. Michael Murphy. Le WOD Hero le plus emblematique du CrossFit. Test de VO2max, force mentale, et endurance absolue. Se prepare comme une competition. SCORES: Scaled <60min (sans gilet OK), Inter <50min, RX <40min avec gilet, Elite <35min. COACH ELITE: "Murph se partitionne: 20 rounds de Cindy (5 pull-ups / 10 push-ups / 15 squats) entre les 2 miles. Je ne m\'arrete jamais sur les squats. Les pull-ups sont mon limiteur — sets de 3-4 si besoin." ERREURS: 1) Ne pas partitionner (impossible de faire 100 pull-ups d\'un coup). 2) Premier mile trop rapide. 3) Push-ups qui s\'effondrent. MENTAL: "Chaque round de Cindy est une victoire. 20 victoires pour finir Murph."',
+    hero: true, benchmark: true
+  },
+  DIANE: {
+    id: 'DIANE', name: 'DIANE', week_target: 6,
+    type: 'For Time',
+    movements: [{name: 'Deadlift', reps: 21, weight: 'deadlift'}, {name: 'HSPU', reps: 21, gymnastics: 'hspu'}, {name: 'Deadlift', reps: 15, weight: 'deadlift'}, {name: 'HSPU', reps: 15, gymnastics: 'hspu'}, {name: 'Deadlift', reps: 9, weight: 'deadlift'}, {name: 'HSPU', reps: 9, gymnastics: 'hspu'}],
+    score_targets: {scaled: '< 10min', inter: '< 7min', rx: '< 5min', elite: '< 3min'},
+    notes: 'INTENT: Diane teste la puissance posterior chain (DL) combinee a la force pression inversee (HSPU). Complementaire a Fran. SCORES: Scaled <10min, Inter <7min, RX <5min, Elite <3min. COACH ELITE: "DL a 102/70kg doit etre touch-and-go les 21 premieres reps. HSPU kipping: sets de 7-7-7 pour les 21." ERREURS: 1) DL: dos qui arrondit sous fatigue. 2) HSPU: pompes trop larges. 3) Transition DL vers HSPU trop longue. MENTAL: "21 reps c\'est le plus dur. Si tu tiens le 21 proprement, le 15 et le 9 sont gagnables."',
+    benchmark: true
+  },
+  ELIZABETH: {
+    id: 'ELIZABETH', name: 'ELIZABETH', week_target: 10,
+    type: 'For Time',
+    movements: [{name: 'Squat Clean', reps: 21, weight: 'squat_clean'}, {name: 'Ring Dip', reps: 21, gymnastics: 'ring_dips'}, {name: 'Squat Clean', reps: 15, weight: 'squat_clean'}, {name: 'Ring Dip', reps: 15, gymnastics: 'ring_dips'}, {name: 'Squat Clean', reps: 9, weight: 'squat_clean'}, {name: 'Ring Dip', reps: 9, gymnastics: 'ring_dips'}],
+    score_targets: {scaled: '< 12min', inter: '< 9min', rx: '< 7min', elite: '< 5min'},
+    notes: 'INTENT: Elizabeth teste la puissance des hanches (squat clean) combinee a la force de poussee sur anneaux. SCORES: Scaled <12min, Inter <9min, RX <7min, Elite <5min. COACH ELITE: "Squat clean a 60/43kg = assez leger pour des sets de 5-6 TnG. Ring dips: descent controle, lockout complet." ERREURS: 1) Squat clean: ne pas descendre en squat complet. 2) Ring dips: aller trop vite et perdre la tension. MENTAL: "Les ring dips en fatigue de clean = ce que tu as entraine. Confiance dans ton travail."',
+    benchmark: true
+  },
+  CINDY: {
+    id: 'CINDY', name: 'CINDY', week_target: 14,
+    type: 'AMRAP 20',
+    movements: [{name: 'Pull-ups', reps: 5, gymnastics: 'pullups'}, {name: 'Push-ups', reps: 10, gymnastics: 'pushups'}, {name: 'Air Squat', reps: 15, gymnastics: 'air_squat'}],
+    score_targets: {scaled: '15 rounds', inter: '20 rounds', rx: '25 rounds', elite: '30+ rounds'},
+    notes: 'INTENT: Cindy est le test d\'endurance gymnastics le plus pur du CrossFit. SCORES: Scaled 15 rounds, Inter 20 rounds, RX 25 rounds, Elite 30+ rounds (Legends). COACH ELITE: "Cindy c\'est le metronome. 1 round par minute = 20 rounds = RX correct. Je target 1 round en 45 secondes les 10 premiers rounds, puis je laisse glisser a 60 secondes. Round 20 = sprint." ERREURS: 1) Pull-ups: trop grands sets. 2) Push-ups: perdre la planche. 3) Squats: pas assez profonds. MENTAL: "Chaque round identique. Pas de heros au round 1 — heros au round 20."',
+    benchmark: true
+  }
+};
+
+// ─── 1RM TEST WEEK PROTOCOL ───
+// Utilise dans renderCrossfitProgram pour afficher le protocole de test
+window.CF_1RM_TEST_PROTOCOL = {
+  description: 'Semaine de test 1RM — toutes les 5 semaines (S5, S10, S15, S20)',
+  lifts: [
+    { name: 'Back Squat 1RM', warmup_protocol: '50%x5, 60%x3, 70%x2, 80%x1, 87%x1, 92%x1, 97%x1, 100%+ tentative PR', notes: 'Repos complet 4-5min entre les tentatives lourdes. Stop si technique degradee.', key: 'back_squat' },
+    { name: 'Clean & Jerk 1RM', warmup_protocol: '55%x3, 65%x2, 75%x1, 83%x1, 88%x1, 93%x1, 100%+ tentative PR', notes: 'Visualisez chaque levee avant de commencer. Echauffement long (30min minimum).', key: 'squat_clean' },
+    { name: 'Snatch 1RM', warmup_protocol: '55%x3, 65%x2, 72%x1, 80%x1, 87%x1, 93%x1, 100%+ tentative PR', notes: 'Test le plus technique — ne pas tester si fatigue ou stress eleve.', key: 'snatch' },
+    { name: 'Deadlift 1RM', warmup_protocol: '50%x5, 60%x3, 70%x2, 80%x1, 87%x1, 93%x1, 100%+ tentative PR', notes: 'Hook grip ou mixed grip. Chalk obligatoire. Retenir la respiration en Valsalva sur le pull.', key: 'deadlift' },
+    { name: 'Push Press 1RM', warmup_protocol: '55%x5, 65%x3, 75%x2, 83%x1, 90%x1, 95%x1, 100%+ tentative PR', notes: 'Ne pas confondre avec Strict Press. Dip rapide et court, drive agressif des jambes.', key: 'push_press' }
+  ],
+  is1rmTestWeek: function(weekNumber) {
+    return weekNumber > 0 && (weekNumber % 5 === 0);
+  }
+};
+
+// ─── CROSSFIT OPEN PREP WEEKS (Semaines 18-20) ───
+window.CF_OPEN_PREP = [
+  {
+    week: 18,
+    name: 'OPEN PREP S1 — Style & Tiebreak',
+    focus: 'Simulation des WODs style Open — transitions rapides, strategie de tiebreak',
+    wods: [
+      { name: 'OPEN SIM 18.A', type: 'For Time (cap 20min) — OPEN STYLE', movements: [{name: 'Wall Balls', reps: 55, gymnastics: 'wall_ball'}, {name: 'Double Unders', reps: 55, gymnastics: 'double_unders'}, {name: 'Cal Row', reps: 55, special: 'row_cal'}], tiebreak: 'Tiebreak: Temps a la fin des Wall Balls, puis a la fin des DU.', notes: 'INTENT: Simuler un WOD Open typique. Strategie tiebreak: finir les Wall Balls VITE pour marquer le premier tiebreak. SCORES: Scaled <20min, Inter <17min, RX <14min, Elite <11min. OPEN STRATEGY: Chaque seconde compte sur le tiebreak — ne jamais s\'arreter juste avant un tiebreak.' },
+      { name: 'OPEN SIM 18.B', type: 'AMRAP 20 — OPEN STYLE', movements: [{name: 'Thruster', reps: 5, weight: 'thruster'}, {name: 'Chest-to-Bar Pull-ups', reps: 7, gymnastics: 'pullups'}, {name: 'Thruster', reps: 5, weight: 'thruster'}, {name: 'Bar Muscle-ups', reps: 3, gymnastics: 'muscle_ups_bar'}], notes: 'INTENT: AMRAP Open classic. Score = reps totales. Regularite sur 20 minutes. SCORES: Scaled 12 rounds, Inter 15 rounds, RX 18 rounds, Elite 22+ rounds.' }
+    ]
+  },
+  {
+    week: 19,
+    name: 'OPEN PREP S2 — Volume & Endurance',
+    focus: 'Workouts 20+ minutes, resistance a la fatigue mentale',
+    wods: [
+      { name: 'OPEN SIM 19.A', type: 'For Time (cap 25min) — OPEN STYLE', movements: [{name: 'Squat Cleans', reps: 10, weight: 'squat_clean'}, {name: 'Ring Muscle-ups', reps: 4, gymnastics: 'muscle_ups_ring'}, {name: 'Squat Cleans', reps: 10, weight: 'squat_clean'}, {name: 'Ring Muscle-ups', reps: 6, gymnastics: 'muscle_ups_ring'}, {name: 'Squat Cleans', reps: 10, weight: 'squat_clean'}, {name: 'Ring Muscle-ups', reps: 8, gymnastics: 'muscle_ups_ring'}], tiebreak: 'Tiebreak: Temps a la fin des 10 premiers Squat Cleans.', notes: 'INTENT: WOD Open type ascending ladder. Ne jamais ralentir sur les Squat Cleans — ils sont ton levier. COACH ELITE: "Les muscle-ups Open, je les prends 1 par 1 si besoin. Chaque rep comptee = victoire."' }
+    ]
+  },
+  {
+    week: 20,
+    name: 'OPEN PREP S3 — Peak & Simulate',
+    focus: 'Simulation complete Open avec juge, strategie finale, peak performance',
+    wods: [
+      { name: 'FRAN RETEST FINAL', type: 'For Time — RETESTER FRAN', movements: [{name: 'Thruster', reps: 21, weight: 'thruster'}, {name: 'Pull-ups', reps: 21, gymnastics: 'pullups'}, {name: 'Thruster', reps: 15, weight: 'thruster'}, {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'}, {name: 'Thruster', reps: 9, weight: 'thruster'}, {name: 'Pull-ups', reps: 9, gymnastics: 'pullups'}], notes: 'INTENT: Retester FRAN en conditions Open — avec judge, camera si possible. Apres 20 semaines de programmation elite, votre Fran DOIT etre notablement amelioree. SCORES CIBLES S20: Scaled <8min (-2min vs S4), Inter <5:30 (-1:30), RX <4min (-1min), Elite <3min. MENTAL FINAL: "Ce n\'est pas juste un WOD — c\'est la preuve de 20 semaines de travail. Allez le chercher."', benchmark: true, benchmark_retest: true, benchmark_id: 'FRAN' }
+    ]
+  }
+];
+
+// ─── HELPER: Get benchmark info for a given week ───
+window.getCFBenchmarkForWeek = function(weekNumber) {
+  var bmarks = window.CF_BENCHMARKS || {};
+  for (var k in bmarks) {
+    if (bmarks[k].week_target === weekNumber) return bmarks[k];
+  }
+  return null;
+};
+
+// ─── HELPER: Check if week is a 1RM test week ───
+window.isCF1RMTestWeek = function(weekNumber) {
+  return !!(window.CF_1RM_TEST_PROTOCOL && window.CF_1RM_TEST_PROTOCOL.is1rmTestWeek(weekNumber));
+};
+
+// ─── HELPER: Get Open Prep week data ───
+window.getCFOpenPrepWeek = function(weekNumber) {
+  var prep = window.CF_OPEN_PREP || [];
+  for (var i = 0; i < prep.length; i++) {
+    if (prep[i].week === weekNumber) return prep[i];
+  }
+  return null;
+};
+
 })();
