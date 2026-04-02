@@ -25530,6 +25530,173 @@
         "Déglacer au vin blanc ; incorporer progressivement le bouillon chaud louche par louche en remuant, en ajoutant l'encre de seiche dès le début.",
         "Cuire 18-20 min jusqu'à absorption ; le riz doit être crémeux et noir ; rectifier assaisonnement, parsemer de persil et servir immédiatement."
       ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  MIX NOBLES  (R665–R669)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R665',
+      name: 'Saint-Pierre & Saint-Jacques aux Agrumes',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium', 'show-stopper'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 10,
+      difficulty: 3,
+      // 76×4 + 8×4 + 12×9 = 304+32+108 = 444 ✓
+      baseNutrition: { calories: 444, proteinGrams: 76, carbsGrams: 8, fatGrams: 12 },
+      ingredients: [
+        { name: 'Saint-Pierre (filets)', qty: 240, unit: 'g' },
+        { name: 'Noix de Saint-Jacques', qty: 160, unit: 'g' },
+        { name: 'Orange (jus + suprêmes)', qty: 1, unit: 'pce' },
+        { name: 'Pamplemousse rose (suprêmes)', qty: 0.5, unit: 'pce' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Beurre', qty: 15, unit: 'g' },
+        { name: 'Ciboulette', qty: 10, unit: 'g' },
+        { name: 'Fleur de sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Saisir les noix de Saint-Jacques dans beurre moussant 90 sec par face ; réserver au chaud. Dans la même poêle, poêler les filets de saint-pierre 3 min par face.",
+        "Déglacer avec jus d'orange et citron vert, réduire 2 min pour former le jus d'agrumes.",
+        "Dresser les suprêmes d'agrumes en éventail, poser le poisson et les saint-jacques, napper du jus réduit, fleur de sel et ciboulette."
+      ]
+    },
+
+    {
+      id: 'R666',
+      name: 'Brodetto Espadon, Turbot & Saint-Pierre',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇮🇹',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'balanced', 'convivial'],
+      servings: 4,
+      prepTime: 25,
+      cookTime: 30,
+      difficulty: 2,
+      // 120×4 + 20×4 + 20×9 = 480+80+180 = 740 ✓
+      baseNutrition: { calories: 740, proteinGrams: 120, carbsGrams: 20, fatGrams: 20 },
+      ingredients: [
+        { name: 'Espadon (dés)', qty: 250, unit: 'g' },
+        { name: 'Turbot (filets)', qty: 250, unit: 'g' },
+        { name: 'Saint-Pierre (filets)', qty: 250, unit: 'g' },
+        { name: 'Tomates San Marzano (boîte)', qty: 400, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Vin blanc sec', qty: 150, unit: 'ml' },
+        { name: "Huile d'olive", qty: 30, unit: 'ml' },
+        { name: 'Safran', qty: 0.2, unit: 'g' },
+        { name: 'Persil, basilic', qty: 20, unit: 'g' },
+        { name: 'Sel, poivre, piment', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Faire revenir oignon et ail dans huile d'olive 3 min ; déglacer au vin blanc, ajouter tomates, safran et piment ; mijoter 15 min.",
+        "Ajouter les poissons en commençant par les plus fermes (espadon) puis turbot et saint-pierre, cuire à frémissement 8-10 min.",
+        "Rectifier assaisonnement, parsemer de persil et basilic ; servir en cocotte avec pain grillé frotté à l'ail."
+      ]
+    },
+
+    {
+      id: 'R667',
+      name: 'Carpaccio Thon Rouge & Espadon',
+      category: 'fusion',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇮🇹',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'raw', 'premium', 'light'],
+      servings: 2,
+      prepTime: 25,
+      cookTime: 0,
+      difficulty: 2,
+      // 60×4 + 4×4 + 10×9 = 240+16+90 = 346 ✓
+      baseNutrition: { calories: 346, proteinGrams: 60, carbsGrams: 4, fatGrams: 10 },
+      ingredients: [
+        { name: 'Thon rouge (bloc sashimi grade)', qty: 150, unit: 'g' },
+        { name: 'Espadon (bloc sashimi grade)', qty: 150, unit: 'g' },
+        { name: "Huile d'olive extra vierge", qty: 20, unit: 'ml' },
+        { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Roquette bébé', qty: 30, unit: 'g' },
+        { name: 'Copeaux de parmesan', qty: 15, unit: 'g' },
+        { name: 'Fleur de sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Congeler les blocs de poisson 30 min pour faciliter le tranchage ; trancher très finement (2-3 mm) et alterner thon et espadon en rosace sur assiette froide.",
+        "Arroser d'huile d'olive extra vierge et jus de citron au moment du service.",
+        "Garnir de câpres, roquette, copeaux de parmesan, zeste de citron et fleur de sel ; servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R668',
+      name: 'Marmite de la Mer aux Poissons Nobles',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'balanced', 'convivial', 'premium'],
+      servings: 4,
+      prepTime: 30,
+      cookTime: 35,
+      difficulty: 3,
+      // 128×4 + 24×4 + 20×9 = 512+96+180 = 788 ✓
+      baseNutrition: { calories: 788, proteinGrams: 128, carbsGrams: 24, fatGrams: 20 },
+      ingredients: [
+        { name: 'Thon rouge (cubes)', qty: 200, unit: 'g' },
+        { name: 'Saint-Pierre (filets)', qty: 200, unit: 'g' },
+        { name: 'Turbot (filets)', qty: 200, unit: 'g' },
+        { name: 'Calamars (anneaux)', qty: 200, unit: 'g' },
+        { name: 'Bouillon de poisson', qty: 600, unit: 'ml' },
+        { name: 'Poireaux', qty: 150, unit: 'g' },
+        { name: 'Fenouil', qty: 120, unit: 'g' },
+        { name: 'Carottes', qty: 100, unit: 'g' },
+        { name: 'Safran', qty: 0.3, unit: 'g' },
+        { name: "Huile d'olive", qty: 30, unit: 'ml' },
+        { name: 'Herbes de Provence, sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Faire revenir poireaux, fenouil et carottes en brunoise dans l'huile 8 min ; ajouter le bouillon de poisson et safran, porter à frémissement.",
+        "Ajouter les calamars en premier (5 min), puis les morceaux de turbot et saint-pierre (5 min), terminer par le thon (3 min) en maintenant un léger frémissement.",
+        "Rectifier assaisonnement, parsemer d'herbes fraîches ; servir en marmite à table avec rouille et croûtons."
+      ]
+    },
+
+    {
+      id: 'R669',
+      name: 'Plateau Cru de Poissons Nobles — 3 Sauces',
+      category: 'fusion',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'raw', 'premium', 'show-stopper'],
+      servings: 4,
+      prepTime: 45,
+      cookTime: 0,
+      difficulty: 3,
+      // 120×4 + 12×4 + 20×9 = 480+48+180 = 708 ✓
+      baseNutrition: { calories: 708, proteinGrams: 120, carbsGrams: 12, fatGrams: 20 },
+      ingredients: [
+        { name: 'Thon rouge (sashimi grade)', qty: 200, unit: 'g' },
+        { name: 'Espadon (sashimi grade)', qty: 200, unit: 'g' },
+        { name: 'Saint-Pierre (sashimi grade)', qty: 200, unit: 'g' },
+        { name: 'Sauce ponzu', qty: 40, unit: 'ml' },
+        { name: 'Sauce vierge (tomates, câpres, basilic)', qty: 80, unit: 'ml' },
+        { name: 'Crème de wasabi', qty: 20, unit: 'g' },
+        { name: "Huile d'olive extra vierge", qty: 20, unit: 'ml' },
+        { name: 'Fleur de sel, poivre mignonette', qty: 1, unit: 'pincée' },
+        { name: 'Herbes fraîches assorties', qty: 20, unit: 'g' }
+      ],
+      steps: [
+        "Congeler les blocs 30-45 min pour faciliter le tranchage ; trancher chaque poisson différemment : thon en tataki épais, espadon en carpaccio fin, saint-pierre en sashimi biseauté.",
+        "Dresser sur plateau glacé en sections distinctes : thon pour la sauce ponzu, espadon pour la sauce vierge, saint-pierre pour la crème wasabi.",
+        "Garnir de fleur de sel, herbes fraîches, filet d'huile d'olive sur le saint-pierre ; servir sans attendre avec les 3 sauces en ramequins séparés."
+      ]
     }
   ];
 
