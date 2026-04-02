@@ -486,13 +486,13 @@ body.dark-mode .profile-photo-frame.has-photo {
 }
 
 .exercise-name {
-  font-family: Georgia, Georgia, serif;
+  font-family: Georgia, serif;
   font-size: 16px;
   margin-bottom: 4px;
 }
 
 .exercise-muscle {
-  font-family: 'Helvetica Neue', 'Helvetica Neue', sans-serif;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 9px;
   letter-spacing: 3px;
   text-transform: uppercase;

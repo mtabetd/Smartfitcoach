@@ -34,7 +34,7 @@ styleEl.textContent = [
   '.dash-action:hover { background:var(--black,#181818); color:var(--ivory,#FAF9F6); border-color:var(--black,#181818); }',
   '.dash-action:hover .dash-action-sub { color:var(--ivory,#FAF9F6); opacity:.7; }',
   '.dash-action:hover .dash-action-icon { color:var(--ivory,#FAF9F6); }',
-  '.dash-action-icon { font-size:24px; margin-bottom:8px; display:block; transition:all .2s ease; }',
+  '.dash-action-icon { display:none; }',
   '.dash-action-name { font-family:Georgia,serif; font-size:16px; font-style:italic; margin:0 0 4px; transition:all .2s ease; }',
   '.dash-action-sub { font-size:11px; color:var(--grey,#6B6B65); margin:0; transition:all .2s ease; }',
 
@@ -42,13 +42,13 @@ styleEl.textContent = [
   '.dash-nav { background:var(--black,#181818); color:var(--ivory,#FAF9F6); border:1px solid var(--black,#181818); padding:28px 20px; cursor:pointer; transition:all .2s ease; }',
   '.dash-nav:hover { background:var(--ivory,#FAF9F6); color:var(--black,#181818); }',
   '.dash-nav:hover .dash-nav-sub { color:var(--grey,#6B6B65); }',
-  '.dash-nav-icon { font-size:18px; margin-bottom:10px; display:block; }',
+  '.dash-nav-icon { display:none; }',
   '.dash-nav-name { font-family:Georgia,serif; font-size:18px; font-style:italic; margin:0 0 4px; }',
   '.dash-nav-sub { font-size:11px; opacity:.65; margin:0; transition:all .2s ease; }',
 
   /* Mini badges */
   '.dash-badges-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }',
-  '.dash-badge-mini { width:44px; height:44px; border-radius:50%; background:var(--ivory2,#F4F4F0); border:1px solid var(--border,#D8D8D0); display:flex; align-items:center; justify-content:center; font-size:18px; }',
+  '.dash-badge-mini { width:36px; height:36px; border-radius:2px; background:var(--ivory2,#F4F4F0); border:1px solid var(--border,#D8D8D0); display:flex; align-items:center; justify-content:center; font-size:14px; }',
   '.dash-badge-link { font-size:11px; color:var(--grey,#6B6B65); cursor:pointer; margin-left:auto; transition:all .2s ease; text-decoration:none; }',
   '.dash-badge-link:hover { color:var(--black,#181818); }',
 
@@ -318,10 +318,10 @@ window.DASHBOARD = {
     if (window.isBirthday && window.isBirthday()) {
       var _bdAge = window.getAge ? window.getAge() : null;
       var _bdBanner = h('div', null);
-      _bdBanner.style.cssText = 'background:linear-gradient(135deg,#FFD700 0%,#FFA500 100%);border-radius:8px;padding:16px 20px;margin-bottom:16px;text-align:center;position:relative;overflow:hidden';
-      _bdBanner.innerHTML = '<div style="font-size:28px;margin-bottom:4px">\uD83C\uDF82\uD83C\uDF89\uD83C\uDF81</div>' +
-        '<div style="font-family:Georgia,serif;font-size:18px;color:#0A0A09;font-weight:bold">Joyeux anniversaire' + (_bdAge ? ' — ' + _bdAge + ' ans' : '') + ' !</div>' +
-        '<div style="font-family:Helvetica Neue,Arial,sans-serif;font-size:12px;color:#333;margin-top:4px">Toute l\'\u00e9quipe SmartFitCoach vous souhaite une merveilleuse journ\u00e9e</div>';
+      _bdBanner.style.cssText = 'background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:20px;margin-bottom:16px;text-align:center';
+      _bdBanner.innerHTML = '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Anniversaire</div>' +
+        '<div style="font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09)">Joyeux anniversaire' + (_bdAge ? ' — ' + _bdAge + ' ans' : '') + '</div>' +
+        '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:6px">Toute l\'\u00e9quipe SmartFitCoach vous souhaite une merveilleuse journ\u00e9e</div>';
       root.appendChild(_bdBanner);
     }
 
@@ -478,10 +478,10 @@ window.DASHBOARD = {
         row.appendChild(labelRow);
         // Bar
         var barBg = document.createElement('div');
-        barBg.style.cssText = 'height:6px;background:rgba(0,0,0,0.08);border-radius:3px;overflow:hidden';
+        barBg.style.cssText = 'height:2px;background:var(--ivory3,#EEEDE8);overflow:hidden';
         var pct = Math.min(100, Math.round(item.val * item.kcalPerG / macroTarget * 100));
         var barFill = document.createElement('div');
-        barFill.style.cssText = 'height:6px;width:' + pct + '%;background:' + item.color + ';border-radius:3px;transition:width 0.3s';
+        barFill.style.cssText = 'height:2px;width:' + pct + '%;background:var(--black,#0A0A09);transition:width 0.3s';
         barBg.appendChild(barFill);
         row.appendChild(barBg);
         macroCard.appendChild(row);

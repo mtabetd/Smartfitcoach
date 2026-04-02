@@ -783,7 +783,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'yoga'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, '\uD83E\uDDD8'),
  h('div', {'class': 'card-name'}, 'Yoga & Mobilit\u00e9'),
  h('div', {'class': 'card-sub'}, 'Flexibilit\u00e9, force, \u00e9quilibre, pleine conscience'),
  h('div', {'class': 'card-tag'}, 'Hatha \u00b7 Vinyasa \u00b7 Yin \u00b7 Ashtanga')
@@ -796,7 +795,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'cycling'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, '\uD83D\uDEB4'),
  h('div', {'class': 'card-name'}, 'Cyclisme'),
  h('div', {'class': 'card-sub'}, 'Route, VTT, indoor \u2014 am\u00e9liore l\'endurance et la puissance'),
  h('div', {'class': 'card-tag'}, 'Route \u00b7 VTT \u00b7 Indoor \u00b7 Gravel \u00b7 FTP')
@@ -810,7 +808,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'calisthenics'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, '\uD83D\uDCAA'),
  h('div', {'class': 'card-name'}, 'Callisth\u00e9nie'),
  h('div', {'class': 'card-sub'}, 'Street workout, mouvements au poids du corps'),
  h('div', {'class': 'card-tag'}, 'Muscle-up \u00b7 Handstand \u00b7 Planche \u00b7 Front Lever')

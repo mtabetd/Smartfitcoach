@@ -133,7 +133,7 @@ function renderStep1(p) {
     p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-style:italic;margin-bottom:20px'}, 'Bonjour, ' + user.name));
   }
   renderProgressBar(p, 1, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' I'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' I'));
   p.appendChild(h('h1', {html: 'Votre<br><em>identit\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Les bases pour un programme calibr\u00e9 sur mesure.'));
   if (window.TIPS) TIPS.renderTip(p, 'identity');
@@ -144,9 +144,8 @@ function renderStep1(p) {
   sexLabel.appendChild(reqDot());
   p.appendChild(sexLabel);
   var g = h('div', {'class': 'card-grid-2'});
-  [{icon: '\u2642', name: window.t('onb.s1.male'), val: 'homme'}, {icon: '\u2640', name: window.t('onb.s1.female'), val: 'femme'}].forEach(function(o) {
+  [{name: window.t('onb.s1.male'), val: 'homme'}, {name: window.t('onb.s1.female'), val: 'femme'}].forEach(function(o) {
     g.appendChild(h('div', {'class': 'sel-card' + (S.sex === o.val ? ' on' : ''), onclick: function() { S.sex = o.val; window.render(); }}, [
-      h('span', {'class': 'card-icon'}, o.icon),
       h('div', {'class': 'card-name'}, o.name)
     ]));
   });
@@ -578,7 +577,7 @@ function renderStep1(p) {
 // ─── STEP 2: MORPHOLOGIE ───
 function renderStep2(p) {
   renderProgressBar(p, 2, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' II'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' II'));
   p.appendChild(h('h1', {html: 'Votre<br><em>morphologie</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Poids et taille pour un calibrage pr\u00e9cis de vos besoins.'));
   if (window.TIPS) TIPS.renderTip(p, 'morphology');
@@ -805,7 +804,7 @@ function renderStep2(p) {
 // ─── STEP 3: ACTIVITE ───
 function renderStep3(p) {
   renderProgressBar(p, 3, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' III'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' III'));
   p.appendChild(h('h1', {html: 'Votre<br><em>activit\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'D\u00e9crivez votre rythme pour adapter votre programme.'));
   if (window.TIPS) TIPS.renderTip(p, 'activity');
@@ -818,7 +817,7 @@ function renderStep3(p) {
   var list = h('div', {'class': 'level-list'});
   ACTIVITIES.forEach(function(a, i) {
     list.appendChild(h('div', {'class': 'level-item' + (S.activity === i ? ' on' : ''), onclick: function() { S.activity = i; window.render(); }}, [
-      h('div', {}, [h('div', {'class': 'level-name'}, a.icon + ' ' + a.name), h('div', {'class': 'level-desc'}, a.desc)]),
+      h('div', {}, [h('div', {'class': 'level-name'}, a.name), h('div', {'class': 'level-desc'}, a.desc)]),
       h('span', {'class': 'level-badge'}, '\u00d7' + a.factor)
     ]));
   });
@@ -831,7 +830,7 @@ function renderStep3(p) {
   p.appendChild(trainLabel);
   var cw = h('div', {'class': 'chip-wrap'});
   TRAINS.forEach(function(t, i) {
-    cw.appendChild(h('span', {'class': 'chip' + (S.train.indexOf(i) !== -1 ? ' on' : ''), onclick: function() { var idx = S.train.indexOf(i); if (idx === -1) S.train.push(i); else S.train.splice(idx, 1); window.render(); }}, t.icon + ' ' + t.name));
+    cw.appendChild(h('span', {'class': 'chip' + (S.train.indexOf(i) !== -1 ? ' on' : ''), onclick: function() { var idx = S.train.indexOf(i); if (idx === -1) S.train.push(i); else S.train.splice(idx, 1); window.render(); }}, t.name));
   });
   p.appendChild(cw);
   p.appendChild(h('div', {style: 'height:16px'}));
@@ -856,7 +855,7 @@ function renderStep3(p) {
 // ─── STEP 4: SANTE ───
 function renderStep4(p) {
   renderProgressBar(p, 4, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' IV'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Vos conditions de sant\u00e9 pour des recommandations s\u00fbres.'));
   if (window.TIPS) TIPS.renderTip(p, 'health');
@@ -913,7 +912,7 @@ function renderStep4(p) {
 // ─── STEP 5: HABITUDES ALIMENTAIRES ───
 function renderStep5(p) {
   renderProgressBar(p, 5, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' V'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V'));
   p.appendChild(h('h1', {html: 'Vos<br><em>habitudes alimentaires</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Vos habitudes au quotidien pour un plan r\u00e9aliste.'));
   if (window.TIPS) TIPS.renderTip(p, 'habits');
@@ -1201,7 +1200,7 @@ function renderStep5(p) {
 // ─── STEP 6: OBJECTIF ───
 function renderStep6(p) {
   renderProgressBar(p, 6, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' VI'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VI'));
   p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   if (window.TIPS) TIPS.renderTip(p, 'goal');
 
@@ -1301,7 +1300,6 @@ function renderStep6(p) {
       // ─────────────────────────────────────────────────────────────────────
       window.render();
     }}, [
-      h('span', {'class': 'card-icon'}, gl.icon),
       h('div', {'class': 'card-name'}, gl.name),
       h('div', {'class': 'card-sub'}, gl.desc)
     ]));
@@ -1381,7 +1379,7 @@ function renderStep6(p) {
 // ─── STEP 7: PREFERENCES ───
 function renderStep7(p) {
   renderProgressBar(p, 7, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' VII'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VII'));
   p.appendChild(h('h1', {html: 'Vos<br><em>pr\u00e9f\u00e9rences</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Allergies et pr\u00e9f\u00e9rences pour des recettes \u00e0 votre image.'));
   if (window.TIPS) TIPS.renderTip(p, 'preferences');
@@ -1448,9 +1446,6 @@ function renderStep7(p) {
       var selected = S.wheyFlavors.indexOf(f.id) !== -1;
       var btn = h('span', {
         'class': 'chip' + (selected ? ' on' : ''),
-        style: selected
-          ? 'border:2px solid var(--orange,#f07b29);background:var(--orangebg,#fff3e6);'
-          : 'border:2px solid #ccc;',
         onclick: (function(fid) {
           return function() {
             var idx = S.wheyFlavors.indexOf(fid);
@@ -1459,7 +1454,7 @@ function renderStep7(p) {
             window.render();
           };
         })(f.id)
-      }, f.icon + '\u00a0' + f.label);
+      }, f.label);
       flavorGrid.appendChild(btn);
     });
     p.appendChild(flavorGrid);
@@ -2176,7 +2171,7 @@ function renderWeightChart(p) {
 // ─── STEP 9: PLANNING ───
 function renderStep9(p) {
   renderProgressBar(p, 9, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, 'Planning'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, 'Planning'));
   p.appendChild(h('h1', {html: 'Votre<br><em>semaine</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 527 recettes'));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
@@ -2252,27 +2247,27 @@ function renderStep9(p) {
             style: 'background:var(--card,#FFFFFF);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 1px 3px rgba(0,0,0,0.08)'
           });
           sheet.appendChild(h('div', {
-            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:15px;font-weight:700;color:var(--black,#0A0A09);margin-bottom:16px;text-align:center'
+            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center'
           }, 'Ajouter \u00e0 ' + slotLabel));
           var choiceRow = h('div', {style: 'display:flex;gap:12px'});
           choiceRow.appendChild(h('button', {
-            style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--border,#E5E4DE);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+            style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
             onclick: function(e) {
               e.stopPropagation();
               S._addMealModalSlot = null;
               S._recipePicker = { slotKey: slotKey, query: '' };
               window.render();
             }
-          }, [h('span', {style: 'font-size:24px'}, '\uD83C\uDF7D'), h('span', {}, 'Choisir une recette')]));
+          }, 'Recette'));
           choiceRow.appendChild(h('button', {
-            style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--blue,#1A3C5E);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--blue,#1A3C5E);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+            style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
             onclick: function(e) {
               e.stopPropagation();
               S._addMealModalSlot = null;
               window.render();
               if (window.openSaladComposer) window.openSaladComposer(slotKey);
             }
-          }, [h('span', {style: 'font-size:24px'}, '\uD83E\uDD57'), h('span', {}, 'Composer une salade')]));
+          }, 'Salade'));
           sheet.appendChild(choiceRow);
           overlay.appendChild(sheet);
           var root = document.getElementById('app') || p;
@@ -2403,30 +2398,30 @@ function renderStep9(p) {
           }
         });
         var sheet = h('div', {
-          style: 'background:var(--card,#FFFFFF);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 1px 3px rgba(0,0,0,0.08)'
+          style: 'background:var(--ivory,#FAF9F6);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;border-top:1px solid var(--border,#D8D8D0)'
         });
         sheet.appendChild(h('div', {
-          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:15px;font-weight:700;color:var(--black,#0A0A09);margin-bottom:16px;text-align:center'
-        }, 'Remplacer ce repas — ' + slotLabel));
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center'
+        }, 'Remplacer \u2014 ' + slotLabel));
         var choiceRow = h('div', {style: 'display:flex;gap:12px'});
         var btnRecipe = h('button', {
-          style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--border,#E5E4DE);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+          style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
           onclick: function(e) {
             e.stopPropagation();
             S._addMealModalSlot = null;
             S._recipePicker = { slotKey: slotKey, query: '' };
             window.render();
           }
-        }, [h('span', {style: 'font-size:24px'}, '\uD83C\uDF7D'), h('span', {}, 'Choisir une recette')]);
+        }, 'Recette');
         var btnSalad = h('button', {
-          style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--blue,#1A3C5E);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--blue,#1A3C5E);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+          style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
           onclick: function(e) {
             e.stopPropagation();
             S._addMealModalSlot = null;
             window.render();
             if (window.openSaladComposer) window.openSaladComposer(slotKey);
           }
-        }, [h('span', {style: 'font-size:24px'}, '\uD83E\uDD57'), h('span', {}, 'Composer une salade')]);
+        }, 'Salade');
         choiceRow.appendChild(btnRecipe);
         choiceRow.appendChild(btnSalad);
         sheet.appendChild(choiceRow);
@@ -2477,14 +2472,14 @@ function renderStep9(p) {
     if (!todaySess || !todaySess.kcalTotal) return;
     var burned = todaySess.kcalTotal;
     var netTarget = tgtCal + burned; // calories nettes à consommer = objectif + brûlées
-    var netDiv = h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border:1px solid #1A4A1A;border-radius:2px;padding:10px 14px;margin:8px 0;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1A4A1A'});
+    var netDiv = h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border:1px solid var(--green,#1A4A1A);border-radius:2px;padding:10px 14px;margin:8px 0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#1A4A1A)'});
     var netRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px'});
-    netRow.appendChild(h('span', {style: 'font-weight:700'}, '\uD83C\uDFCB\uFE0F S\u00e9ance valid\u00e9e aujourd\'hui — d\u00e9pense'));
-    netRow.appendChild(h('span', {style: 'font-weight:700'}, '+' + burned + ' kcal'));
+    netRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase'}, 'S\u00e9ance valid\u00e9e — d\u00e9pense'));
+    netRow.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px'}, '+' + burned + ' kcal'));
     netDiv.appendChild(netRow);
     var netRow2 = h('div', {style: 'display:flex;justify-content:space-between;align-items:center'});
-    netRow2.appendChild(h('span', {style: 'color:#1A4A1A'}, 'Objectif alimentaire ajust\u00e9 (net)'));
-    netRow2.appendChild(h('span', {style: 'font-weight:600;color:#1A4A1A'}, netTarget + ' kcal'));
+    netRow2.appendChild(h('span', {style: 'color:var(--green,#1A4A1A)'}, 'Objectif ajust\u00e9 (net)'));
+    netRow2.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--green,#1A4A1A)'}, netTarget + ' kcal'));
     netDiv.appendChild(netRow2);
     if (todaySess.kcalEpoc) {
       var epocNote = h('div', {style: 'color:#5A8A5A;font-size:9px;margin-top:3px'}, 'dont +' + todaySess.kcalEpoc + ' kcal EPOC (afterburn) inclus');
@@ -2526,7 +2521,7 @@ function renderStep9(p) {
           var budgetStatus = overBudget
             ? '\u26a0\ufe0f Au-dessus de votre fourchette (' + dayLimit + ' DH/j)'
             : '\u2713 Dans votre fourchette budget';
-          budgetBlock.appendChild(h('div', { style: 'font-size:13px;font-weight:600;color:' + (overBudget ? 'var(--red,#5A1010)' : 'var(--accent)') + ';margin-top:8px;text-align:center' }, budgetStatus));
+          budgetBlock.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + (overBudget ? 'var(--red,#5A1010)' : 'var(--green,#1A4A1A)') + ';margin-top:8px;text-align:center' }, budgetStatus));
         }
       }
       if (budget.coveragePct < 100) {
@@ -2546,9 +2541,10 @@ function renderStep9(p) {
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
   var _shopList = ((window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan, {shopFreq: S.shopFreq}) : []) || [];
   var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
-  var _shopLabel = '\uD83D\uDECD ' + window.t('shop.title') + (_shopTotal > 0 ? ' (' + _shopTotal + ' articles)' : '');
+  var _shopLabel = window.t('shop.title') + (_shopTotal > 0 ? ' — ' + _shopTotal + ' articles' : '');
   var btnShop = h('button', {
-    style: 'width:100%;padding:12px;margin:8px 0;background:var(--card);border:1.5px solid var(--border);border-radius:2px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
+    'class': 'btn-secondary',
+    style: 'margin:8px 0',
     onclick: function() { window.S.shopListOpen = true; if(window.render) window.render(); }
   }, _shopLabel);
   p.appendChild(btnShop);
@@ -2605,12 +2601,9 @@ function renderModal(app) {
     if (r._id && window.RecipeEngine && window.RecipeEngine.calcRecipeCost && window.getPricePer) {
       var costInfo = window.RecipeEngine.calcRecipeCost(r._id, 1);
       if (costInfo && costInfo.totalMAD > 0) {
-        var priceDiv = h('div', {style:'display:flex;align-items:center;gap:8px;margin:8px 0;padding:8px 12px;background:rgba(26,74,26,0.06);border-radius:2px'});
-        priceDiv.appendChild(h('span', {style:'font-size:13px'}, '💰'));
-        priceDiv.appendChild(h('div', {style:'flex:1'},[
-          h('div', {style:'font-size:13px;font-weight:600;color:var(--text)'}, '~' + Math.round(costInfo.totalMAD) + ' DH pour ' + (costInfo.missing && costInfo.missing.length ? costInfo.coveragePct + '% des ingrédients' : 'la recette')),
-          h('div', {style:'font-size:11px;color:var(--text-secondary)'}, '~' + Math.round(costInfo.pricePerServing) + ' DH / portion')
-        ]));
+        var priceDiv = h('div', {style:'margin:8px 0;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,0.06));border:1px solid var(--green,#1A4A1A);border-radius:2px'});
+        priceDiv.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#1A4A1A)'}, '~' + Math.round(costInfo.totalMAD) + ' DH' + (costInfo.missing && costInfo.missing.length ? ' — ' + costInfo.coveragePct + '% des ingr\u00e9dients' : '')));
+        priceDiv.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;color:var(--grey,#6B6B65);margin-top:2px'}, '~' + Math.round(costInfo.pricePerServing) + ' DH / portion'));
         body.appendChild(priceDiv);
       }
     }
@@ -3149,7 +3142,7 @@ function renderSaladBar(p) {
     { slot: 'dinner',    label: window.t('onb.s9.dinner') }
   ].forEach(function(item) {
     toggleWrap.appendChild(h('button', {
-      style: 'padding:4px 10px;border-radius:20px;border:1.5px solid ' + (sb.mealTarget === item.slot ? barColor : 'var(--border)') + ';background:' + (sb.mealTarget === item.slot ? barColor : 'transparent') + ';color:' + (sb.mealTarget === item.slot ? '#fff' : 'var(--text)') + ';font-size:13px;cursor:pointer;font-weight:600',
+      style: 'padding:6px 14px;border-radius:20px;border:1px solid ' + (sb.mealTarget === item.slot ? 'var(--black,#0A0A09)' : 'var(--border)') + ';background:' + (sb.mealTarget === item.slot ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (sb.mealTarget === item.slot ? 'var(--ivory,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
       onclick: (function(s) { return function() { sb.mealTarget = s; window.render(); }; })(item.slot)
     }, item.label));
   });
@@ -3157,9 +3150,9 @@ function renderSaladBar(p) {
   p.appendChild(header);
 
   // ── Macro progress bar (sticky) ──
-  var progressBar = h('div', { style: 'position:sticky;top:0;z-index:10;background:var(--bg);padding:10px 16px;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.06)' });
+  var progressBar = h('div', { style: 'position:sticky;top:0;z-index:10;background:var(--ivory,#FAF9F6);padding:10px 16px;border-bottom:1px solid var(--border,#D8D8D0)' });
   var kcalRow = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px' });
-  kcalRow.appendChild(h('span', { style: 'font-size:13px;font-weight:700;color:' + barColor }, macros.k + ' / ' + tgtMacros.k + ' kcal'));
+  kcalRow.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:14px;color:' + barColor }, macros.k + ' / ' + tgtMacros.k + ' kcal'));
   kcalRow.appendChild(h('span', { style: 'font-size:11px;color:var(--grey)' }, Math.round(pct * 100) + '%'));
   progressBar.appendChild(kcalRow);
 
@@ -3260,16 +3253,16 @@ function renderSaladBar(p) {
       var qtyWrap = h('div', { style: 'margin-top:8px;display:flex;flex-direction:column;gap:4px' });
       selList.forEach(function(sel, idx) {
         var qRow = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:2px;padding:4px 10px;border:1px solid var(--border)' });
-        qRow.appendChild(h('span', { style: 'font-size:13px;font-weight:600;color:var(--text)' }, sel.name));
+        qRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)' }, sel.name));
         var qCtrl = h('div', { style: 'display:flex;align-items:center;gap:6px' });
         var step = sel.unit === 'ml' ? 10 : 25;
         qCtrl.appendChild(h('button', {
-          style: 'width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:var(--bg);font-size:13px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center',
+          style: 'width:24px;height:24px;border-radius:2px;border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);font-size:13px;cursor:pointer;color:var(--grey,#6B6B65);display:flex;align-items:center;justify-content:center;transition:border-color .2s',
           onclick: function() { onQty(sel, -step); }
         }, '\u2212'));
-        qCtrl.appendChild(h('span', { style: 'font-size:13px;min-width:50px;text-align:center;color:var(--text)' }, sel.qty + sel.unit));
+        qCtrl.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:13px;min-width:50px;text-align:center;color:var(--black,#0A0A09)' }, sel.qty + sel.unit));
         qCtrl.appendChild(h('button', {
-          style: 'width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:var(--bg);font-size:13px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center',
+          style: 'width:24px;height:24px;border-radius:2px;border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);font-size:13px;cursor:pointer;color:var(--grey,#6B6B65);display:flex;align-items:center;justify-content:center;transition:border-color .2s',
           onclick: function() { onQty(sel, step); }
         }, '+'));
         var selMacros = computeItemMacros(sel);
@@ -3450,7 +3443,7 @@ function renderSaladBar(p) {
   actWrap.appendChild(btnAdd);
 
   actWrap.appendChild(h('button', {
-    style: 'width:100%;padding:12px;border-radius:2px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:13px;font-weight:600;cursor:pointer',
+    'class': 'btn-secondary',
     onclick: function() {
       sb.base = null; sb.proteins = []; sb.veggies = []; sb.fats = []; sb.sauce = null;
       window.render();
@@ -4041,10 +4034,10 @@ function renderRecipePicker(p) {
         }
       });
       var left = h('div', { style: 'flex:1;min-width:0' });
-      left.appendChild(h('div', { style: 'font-size:13px;font-weight:600;color:var(--black,#0A0A09);white-space:nowrap;overflow:hidden;text-overflow:ellipsis' }, (recipe.f || '') + ' ' + recipe.n));
-      left.appendChild(h('div', { style: 'font-size:13px;color:#888;margin-top:2px' }, recipe.k + ' kcal · ' + recipe.p + 'g prot · ' + recipe.g + 'g glu · ' + recipe.l + 'g lip'));
+      left.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);white-space:nowrap;overflow:hidden;text-overflow:ellipsis' }, (recipe.f || '') + ' ' + recipe.n));
+      left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px' }, recipe.k + ' kcal · ' + recipe.p + 'g prot · ' + recipe.g + 'g glu · ' + recipe.l + 'g lip'));
       card.appendChild(left);
-      card.appendChild(h('div', { style: 'color:#1A3C5E;font-size:18px;margin-left:10px' }, '\u276F'));
+      card.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;color:var(--grey2,#7A7A74);font-size:13px;margin-left:10px' }, '\u276F'));
       listWrap.appendChild(card);
     });
   }
