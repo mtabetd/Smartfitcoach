@@ -1862,6 +1862,86 @@ function renderCrossfitProgram(p) {
  p.appendChild(cfDeloadBanner);
  }
 
+
+ // ─── PROGRESS TRACKER ───
+ (function() {
+  var cfWkN = S.crossfitWeek || 1;
+  var totalDays = 100;
+  var doneDays = 0;
+  if (S.cfProgress) { for (var dkk in S.cfProgress) { if (S.cfProgress[dkk] && S.cfProgress[dkk].done) doneDays++; } }
+  var pctDone = Math.min(100, Math.round(doneDays / totalDays * 100));
+  var nextTestWeek = 5;
+  while (nextTestWeek < cfWkN) nextTestWeek += 5;
+  var daysToTest = Math.max(0, (nextTestWeek - cfWkN) * (S.sportDays || 4));
+
+  var tracker = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;margin-bottom:12px;background:var(--ivory2)'});
+  tracker.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'PROGRESSION PROGRAMME'));
+  var trackerRow = h('div', {style: 'display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px'});
+  trackerRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, doneDays + ' / ' + totalDays + ' jours'));
+  trackerRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);padding-top:2px'}, pctDone + '% du programme'));
+  if (nextTestWeek <= 20 && daysToTest > 0) {
+   trackerRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--blue,#1A3A6A);padding-top:2px'}, 'Test 1RM S' + nextTestWeek + ' dans ~' + daysToTest + ' seances'));
+  }
+  tracker.appendChild(trackerRow);
+  var tBar = h('div', {style: 'background:#E5E4DE;height:4px;border-radius:2px;overflow:hidden'});
+  tBar.appendChild(h('div', {style: 'background:#1A4A1A;height:100%;width:' + pctDone + '%;transition:width 0.4s'}));
+  tracker.appendChild(tBar);
+
+  // Benchmark de la semaine
+  var bmarkWeek = window.getCFBenchmarkForWeek && window.getCFBenchmarkForWeek(cfWkN);
+  if (bmarkWeek) {
+   var bmBanner = h('div', {style: 'margin-top:10px;padding:8px 12px;background:rgba(90,16,16,0.06);border-left:2px solid var(--red,#5A1010)'});
+   bmBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red,#5A1010);margin-bottom:4px'}, 'BENCHMARK OFFICIEL — SEMAINE ' + cfWkN));
+   bmBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:4px'}, bmarkWeek.name));
+   if (bmarkWeek.score_targets) {
+    var lvlKey2 = S.crossfitLevel === 'rx_plus' ? 'elite' : (S.crossfitLevel || 'rx');
+    var target2 = bmarkWeek.score_targets[lvlKey2] || bmarkWeek.score_targets.rx;
+    if (target2) bmBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--red,#5A1010)'}, 'Votre cible : ' + target2));
+    var tParts = [];
+    if (bmarkWeek.score_targets.scaled) tParts.push('Scaled: ' + bmarkWeek.score_targets.scaled);
+    if (bmarkWeek.score_targets.inter) tParts.push('Inter: ' + bmarkWeek.score_targets.inter);
+    if (bmarkWeek.score_targets.rx) tParts.push('RX: ' + bmarkWeek.score_targets.rx);
+    if (bmarkWeek.score_targets.elite) tParts.push('Elite: ' + bmarkWeek.score_targets.elite);
+    if (tParts.length) bmBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:3px'}, tParts.join(' | ')));
+   }
+   S.crossfitBenchmarks = S.crossfitBenchmarks || {};
+   var prKey = bmarkWeek.id ? bmarkWeek.id.toLowerCase() + '_time' : null;
+   if (prKey && S.crossfitBenchmarks[prKey]) {
+    bmBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--green,#1A4A1A);margin-top:4px'}, 'Votre PR : ' + S.crossfitBenchmarks[prKey]));
+   }
+   tracker.appendChild(bmBanner);
+  }
+
+  // 1RM test week banner
+  if (window.isCF1RMTestWeek && window.isCF1RMTestWeek(cfWkN)) {
+   var testBanner = h('div', {style: 'margin-top:10px;padding:10px 14px;background:rgba(26,58,106,0.07);border-left:2px solid var(--blue,#1A3A6A)'});
+   testBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue,#1A3A6A);margin-bottom:6px'}, 'SEMAINE TEST 1RM — S' + cfWkN));
+   testBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:6px'}, 'Protocole de test complet — objectif PR sur chaque levee :'));
+   if (window.CF_1RM_TEST_PROTOCOL && window.CF_1RM_TEST_PROTOCOL.lifts) {
+    window.CF_1RM_TEST_PROTOCOL.lifts.forEach(function(lift) {
+     var lRow = h('div', {style: 'padding:4px 0;border-bottom:1px solid var(--border)'});
+     lRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px'}, lift.name));
+     lRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey)'}, lift.warmup_protocol));
+     lRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey);font-style:italic'}, lift.notes));
+     testBanner.appendChild(lRow);
+    });
+   }
+   tracker.appendChild(testBanner);
+  }
+
+  // Open prep week banner
+  var openPrepData = window.getCFOpenPrepWeek && window.getCFOpenPrepWeek(cfWkN);
+  if (openPrepData) {
+   var openBanner = h('div', {style: 'margin-top:10px;padding:8px 12px;background:rgba(139,47,201,0.06);border-left:2px solid #8B2FC9'});
+   openBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8B2FC9;margin-bottom:4px'}, 'CROSSFIT OPEN PREP'));
+   openBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:4px'}, openPrepData.name));
+   openBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, openPrepData.focus));
+   tracker.appendChild(openBanner);
+  }
+
+  p.appendChild(tracker);
+ })();
+
  // ─── HALTERO CYCLE INFO ───
  if (window.HALTERO_CYCLES) {
  var cycleWeek = S.crossfitCycleWeek || 1;
@@ -2009,6 +2089,53 @@ function renderCrossfitProgram(p) {
  p.appendChild(gymCard);
  }
  // For non-haltero days, gym was already shown before the WOD
+
+
+ // ─── HWPO: AEROBIC CAPACITY (5eme composante) ───
+ if (wod.aerobic && wod.aerobic.type) {
+  var aerCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #1A5A5A;background:rgba(26,90,90,0.03)'});
+  aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1A5A5A;margin-bottom:6px'}, 'AEROBIE (5e composante HWPO)'));
+  aerCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:4px'}, wod.aerobic.type));
+  aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, wod.aerobic.desc || ''));
+  if (wod.aerobic.rpe !== undefined) {
+   aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#1A5A5A;margin-top:6px'}, 'RPE cible : ' + wod.aerobic.rpe + '/10 — Effort Zone 2 confortable'));
+  }
+  p.appendChild(aerCard);
+ }
+
+ // ─── HWPO: RECOVERY / MOBILITE (5e composante) ───
+ if (wod.recovery && wod.recovery.protocol && wod.recovery.protocol.length) {
+  var recCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #5A5A1A;background:rgba(90,90,26,0.03)'});
+  recCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#5A5A1A;margin-bottom:6px'}, 'RECOVERY & MOBILITE (Protocole Fraser)'));
+  if (wod.recovery.targets && wod.recovery.targets.length) {
+   recCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:6px'}, 'Zones cibles : ' + wod.recovery.targets.join(', ')));
+  }
+  var recList = h('div', {});
+  wod.recovery.protocol.forEach(function(step, idx) {
+   recList.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);padding:3px 0'}, (idx + 1) + '. ' + step));
+  });
+  recCard.appendChild(recList);
+  p.appendChild(recCard);
+ }
+
+ // ─── HWPO MODE (RX+ uniquement) ───
+ if (S.crossfitLevel === 'rx_plus') {
+  var hwpoCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #8B2FC9;background:rgba(139,47,201,0.04)'});
+  hwpoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8B2FC9;margin-bottom:6px'}, 'HWPO MODE — Fraser Mental Framework'));
+  var hwpoPoints = [
+   'INTENT: Chaque WOD a un objectif precis dans la programmation. Lis les notes du WOD AVANT de commencer.',
+   'PACING: Fraser ne commence jamais a 100% avant le round 3. Reserve 15% de capacite pour la fin.',
+   'JOURNAL: Note ton score, ton RPE, et tes observations. La progression vient de l'analyse, pas juste du travail.',
+   'RECOVERY: Le muscle grandit pendant le repos, pas pendant l'entrainement. Dors 8h minimum ce soir.',
+   'MENTAL: "Les jours difficiles sont les jours qui nous construisent. Les jours faciles sont des jours de maintenance."'
+  ];
+  var hwpoList = h('div', {});
+  hwpoPoints.forEach(function(pt, idx) {
+   hwpoList.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#8B2FC9;padding:3px 0;border-bottom:1px solid rgba(139,47,201,0.15)'}, (idx + 1) + '. ' + pt));
+  });
+  hwpoCard.appendChild(hwpoList);
+  p.appendChild(hwpoCard);
+ }
 
  // Day summary
  var sectionCount = currentDay.hasHaltero ? 3 : 2;

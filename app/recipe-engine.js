@@ -24889,6 +24889,166 @@
         'Trancher finement et dresser sur assiette froide ; arroser de sauce ponzu et jus de citron vert.',
         'Garnir de daikon râpé, gingembre julienne, ciboulette et flocons de piment ; servir immédiatement.'
       ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  ESPADON  (R645–R649)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R645',
+      name: 'Espadon Marinade Japonaise',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'asian'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 10,
+      difficulty: 2,
+      // 82×4 + 8×4 + 10×9 = 328+32+90 = 450 ✓
+      baseNutrition: { calories: 450, proteinGrams: 82, carbsGrams: 8, fatGrams: 10 },
+      ingredients: [
+        { name: 'Espadon (darnes)', qty: 400, unit: 'g' },
+        { name: 'Sauce soja tamari', qty: 40, unit: 'ml' },
+        { name: 'Mirin', qty: 20, unit: 'ml' },
+        { name: 'Gingembre frais râpé', qty: 10, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Sésame blanc grillé', qty: 10, unit: 'g' },
+        { name: 'Ciboulette asiatique', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger tamari, mirin, gingembre râpé, ail écrasé et huile de sésame ; mariner les darnes 30 min au frais.',
+        'Saisir les darnes dans une poêle chaude (ou griller) 3-4 min par face en nappant avec la marinade.',
+        'Saupoudrer de sésame grillé et de ciboulette ciselée ; servir avec du riz vapeur ou des nouilles soba.'
+      ]
+    },
+
+    {
+      id: 'R646',
+      name: 'Espadon Grillé Sauce Vierge',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'light'],
+      servings: 2,
+      prepTime: 12,
+      cookTime: 10,
+      difficulty: 1,
+      // 80×4 + 6×4 + 12×9 = 320+24+108 = 452 ✓
+      baseNutrition: { calories: 452, proteinGrams: 80, carbsGrams: 6, fatGrams: 12 },
+      ingredients: [
+        { name: 'Espadon (darnes)', qty: 400, unit: 'g' },
+        { name: 'Tomates mûres', qty: 150, unit: 'g' },
+        { name: 'Olives vertes', qty: 30, unit: 'g' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Basilic frais', qty: 15, unit: 'g' },
+        { name: "Huile d'olive", qty: 25, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Préparer la sauce vierge : concasser les tomates, hacher olives et câpres, ciseler le basilic ; mélanger avec huile d'olive et jus de citron.",
+        "Griller les darnes d'espadon sur grille très chaude 3-4 min par face ; elles doivent rester légèrement nacrées au centre.",
+        'Dresser et napper généreusement de sauce vierge ; servir avec des légumes grillés.'
+      ]
+    },
+
+    {
+      id: 'R647',
+      name: "Brochettes d'Espadon Tapenade",
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 10,
+      difficulty: 1,
+      // 78×4 + 5×4 + 14×9 = 312+20+126 = 458 ✓
+      baseNutrition: { calories: 458, proteinGrams: 78, carbsGrams: 5, fatGrams: 14 },
+      ingredients: [
+        { name: 'Espadon (cubes 3 cm)', qty: 400, unit: 'g' },
+        { name: 'Tapenade noire', qty: 40, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Courgette', qty: 100, unit: 'g' },
+        { name: "Huile d'olive", qty: 15, unit: 'ml' },
+        { name: 'Thym, herbes de Provence', qty: 2, unit: 'pincées' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Alterner sur des brochettes les cubes d'espadon, poivron rouge et courgette taillés en morceaux ; badigeonner d'huile d'olive et herbes.",
+        'Griller les brochettes au barbecue ou en grilloir 4-5 min par face.',
+        'Servir avec une cuillère de tapenade sur chaque brochette et une salade de roquette.'
+      ]
+    },
+
+    {
+      id: 'R648',
+      name: 'Espadon Court-Bouillon Ratatouille',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'balanced'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 30,
+      difficulty: 2,
+      // 76×4 + 18×4 + 10×9 = 304+72+90 = 466 ✓
+      baseNutrition: { calories: 466, proteinGrams: 76, carbsGrams: 18, fatGrams: 10 },
+      ingredients: [
+        { name: 'Espadon (darnes)', qty: 380, unit: 'g' },
+        { name: 'Courgette', qty: 150, unit: 'g' },
+        { name: 'Aubergine', qty: 120, unit: 'g' },
+        { name: 'Tomates', qty: 150, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'c. à café' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préparer la ratatouille : faire revenir oignon et ail, ajouter les légumes en dés, assaisonner et mijoter 20 min à couvert.',
+        'Préparer un court-bouillon (eau, laurier, thym, grains de poivre) ; pocher les darnes à frémissement 8-10 min.',
+        "Dresser le poisson sur la ratatouille, arroser d'un filet d'huile d'olive et parsemer de basilic frais."
+      ]
+    },
+
+    {
+      id: 'R649',
+      name: 'Tataki Espadon Ponzu',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'asian', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 5,
+      difficulty: 3,
+      // 72×4 + 6×4 + 8×9 = 288+24+72 = 384 ✓
+      baseNutrition: { calories: 384, proteinGrams: 72, carbsGrams: 6, fatGrams: 8 },
+      ingredients: [
+        { name: 'Espadon (bloc sashimi grade)', qty: 360, unit: 'g' },
+        { name: 'Sauce ponzu', qty: 40, unit: 'ml' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Daikon râpé', qty: 50, unit: 'g' },
+        { name: 'Ciboulette asiatique', qty: 10, unit: 'g' },
+        { name: 'Flocons de piment togarashi', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Saisir le bloc d'espadon 30 secondes sur chaque face dans une poêle très chaude légèrement huilée ; l'intérieur doit rester cru.",
+        'Trancher finement et dresser sur assiette froide ; arroser de sauce ponzu et jus de citron vert.',
+        'Garnir de daikon râpé, gingembre julienne, ciboulette et flocons de piment ; servir immédiatement.'
+      ]
     }
   ];
 
