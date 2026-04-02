@@ -776,52 +776,142 @@ function generateTriathlonProgram(goal, level, weakDiscipline, opts) {
     var pname = phase.name;
     var factor = isTaper ? 0.5 : isDeload ? 0.65 : 1.0;
     var sessions = [];
+    // Rotation modulo to vary sessions within same phase across weeks
+    var rot = w % 3; // 0, 1, 2
 
     // Jours : Lun Mar Mer Jeu Ven Sam Dim
     if (pname === 'Base') {
-      sessions = [
-        Object.assign({ day: 'Lundi' }, swimTechnique(w)),
-        Object.assign({ day: 'Mardi' }, bikeZ2(w)),
-        Object.assign({ day: 'Mercredi' }, runEasy(w)),
-        Object.assign({ day: 'Jeudi' }, swimEndurance(w)),
-        Object.assign({ day: 'Vendredi' }, REST),
-        Object.assign({ day: 'Samedi' }, brickShort(w)),
-        Object.assign({ day: 'Dimanche' }, runLong(w))
-      ];
+      if (rot === 0) {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimTechnique(w)),
+          Object.assign({ day: 'Mardi' }, bikeZ2(w)),
+          Object.assign({ day: 'Mercredi' }, runEasy(w)),
+          Object.assign({ day: 'Jeudi' }, swimEndurance(w)),
+          Object.assign({ day: 'Vendredi' }, REST),
+          Object.assign({ day: 'Samedi' }, brickShort(w)),
+          Object.assign({ day: 'Dimanche' }, runLong(w))
+        ];
+      } else if (rot === 1) {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimKick(w)),
+          Object.assign({ day: 'Mardi' }, bikeRecovery(w)),
+          Object.assign({ day: 'Mercredi' }, runStrides(w)),
+          Object.assign({ day: 'Jeudi' }, swimLong(w)),
+          Object.assign({ day: 'Vendredi' }, REST),
+          Object.assign({ day: 'Samedi' }, brickShort(w)),
+          Object.assign({ day: 'Dimanche' }, runLong(w))
+        ];
+      } else {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimTechnique(w)),
+          Object.assign({ day: 'Mardi' }, bikeAero(w)),
+          Object.assign({ day: 'Mercredi' }, runEasy(w)),
+          Object.assign({ day: 'Jeudi' }, swimOpenWater(w)),
+          Object.assign({ day: 'Vendredi' }, REST),
+          Object.assign({ day: 'Samedi' }, brickT1Practice(w)),
+          Object.assign({ day: 'Dimanche' }, runLong(w))
+        ];
+      }
     } else if (pname === 'Build' || pname === 'Build 1') {
-      sessions = [
-        Object.assign({ day: 'Lundi' }, swimEndurance(w)),
-        Object.assign({ day: 'Mardi' }, bikeSweetspot(w)),
-        Object.assign({ day: 'Mercredi' }, runTempo(w)),
-        Object.assign({ day: 'Jeudi' }, swimThreshold(w)),
-        Object.assign({ day: 'Vendredi' }, REST_LIGHT),
-        Object.assign({ day: 'Samedi' }, brickMedium(w)),
-        Object.assign({ day: 'Dimanche' }, runLong(w))
-      ];
+      if (rot === 0) {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimEndurance(w)),
+          Object.assign({ day: 'Mardi' }, bikeSweetspot(w)),
+          Object.assign({ day: 'Mercredi' }, runTempo(w)),
+          Object.assign({ day: 'Jeudi' }, swimThreshold(w)),
+          Object.assign({ day: 'Vendredi' }, REST_LIGHT),
+          Object.assign({ day: 'Samedi' }, brickMedium(w)),
+          Object.assign({ day: 'Dimanche' }, runLong(w))
+        ];
+      } else if (rot === 1) {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimFartlek(w)),
+          Object.assign({ day: 'Mardi' }, bikeTempo(w)),
+          Object.assign({ day: 'Mercredi' }, runHills(w)),
+          Object.assign({ day: 'Jeudi' }, swimDescending(w)),
+          Object.assign({ day: 'Vendredi' }, REST),
+          Object.assign({ day: 'Samedi' }, brickMedium(w)),
+          Object.assign({ day: 'Dimanche' }, runLong(w))
+        ];
+      } else {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimPyramid(w)),
+          Object.assign({ day: 'Mardi' }, bikeClimbs(w)),
+          Object.assign({ day: 'Mercredi' }, runFartlek(w)),
+          Object.assign({ day: 'Jeudi' }, swimStrength(w)),
+          Object.assign({ day: 'Vendredi' }, REST_LIGHT),
+          Object.assign({ day: 'Samedi' }, brickMedium(w)),
+          Object.assign({ day: 'Dimanche' }, runMarathonPace(w))
+        ];
+      }
     } else if (pname === 'Build 2') {
-      sessions = [
-        Object.assign({ day: 'Lundi' }, swimThreshold(w)),
-        Object.assign({ day: 'Mardi' }, bikeThreshold(w)),
-        Object.assign({ day: 'Mercredi' }, runIntervals(w)),
-        Object.assign({ day: 'Jeudi' }, swimEndurance(w)),
-        Object.assign({ day: 'Vendredi' }, REST),
-        Object.assign({ day: 'Samedi' }, brickLong(w)),
-        Object.assign({ day: 'Dimanche' }, runLong(w))
-      ];
+      if (rot === 0) {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimThreshold(w)),
+          Object.assign({ day: 'Mardi' }, bikeThreshold(w)),
+          Object.assign({ day: 'Mercredi' }, runIntervals(w)),
+          Object.assign({ day: 'Jeudi' }, swimEndurance(w)),
+          Object.assign({ day: 'Vendredi' }, REST),
+          Object.assign({ day: 'Samedi' }, brickLong(w)),
+          Object.assign({ day: 'Dimanche' }, runLong(w))
+        ];
+      } else if (rot === 1) {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimVO2(w)),
+          Object.assign({ day: 'Mardi' }, bikeSpikeIntervals(w)),
+          Object.assign({ day: 'Mercredi' }, run400s(w)),
+          Object.assign({ day: 'Jeudi' }, swimNegSplit(w)),
+          Object.assign({ day: 'Vendredi' }, REST),
+          Object.assign({ day: 'Samedi' }, brickLong(w)),
+          Object.assign({ day: 'Dimanche' }, runNegSplit(w))
+        ];
+      } else {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimContinuous(w)),
+          Object.assign({ day: 'Mardi' }, bikeMountainRide(w)),
+          Object.assign({ day: 'Mercredi' }, runVO2(w)),
+          Object.assign({ day: 'Jeudi' }, swimThreshold(w)),
+          Object.assign({ day: 'Vendredi' }, REST),
+          Object.assign({ day: 'Samedi' }, brickLong(w)),
+          Object.assign({ day: 'Dimanche' }, runLong(w))
+        ];
+      }
     } else if (pname === 'Peak') {
-      sessions = [
-        Object.assign({ day: 'Lundi' }, swimRaceSim()),
-        Object.assign({ day: 'Mardi' }, bikeRacePace(w)),
-        Object.assign({ day: 'Mercredi' }, runTempo(w)),
-        Object.assign({ day: 'Jeudi' }, swimThreshold(w)),
-        Object.assign({ day: 'Vendredi' }, REST),
-        Object.assign({ day: 'Samedi' }, brickLong(w)),
-        Object.assign({ day: 'Dimanche' }, runRacePace(w))
-      ];
+      if (rot === 0) {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimRaceSim()),
+          Object.assign({ day: 'Mardi' }, bikeRacePace(w)),
+          Object.assign({ day: 'Mercredi' }, runTempo(w)),
+          Object.assign({ day: 'Jeudi' }, swimThreshold(w)),
+          Object.assign({ day: 'Vendredi' }, REST),
+          Object.assign({ day: 'Samedi' }, brickLong(w)),
+          Object.assign({ day: 'Dimanche' }, runRacePace(w))
+        ];
+      } else if (rot === 1) {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimTT(w)),
+          Object.assign({ day: 'Mardi' }, bikeFTP(w)),
+          Object.assign({ day: 'Mercredi' }, runMarathonPace(w)),
+          Object.assign({ day: 'Jeudi' }, swimRaceSim()),
+          Object.assign({ day: 'Vendredi' }, REST),
+          Object.assign({ day: 'Samedi' }, brickRaceDay(w)),
+          Object.assign({ day: 'Dimanche' }, runRecovery(w))
+        ];
+      } else {
+        sessions = [
+          Object.assign({ day: 'Lundi' }, swimDescending(w)),
+          Object.assign({ day: 'Mardi' }, bikePaceRaceSpecific(w)),
+          Object.assign({ day: 'Mercredi' }, runIntervals(w)),
+          Object.assign({ day: 'Jeudi' }, swimNegSplit(w)),
+          Object.assign({ day: 'Vendredi' }, REST),
+          Object.assign({ day: 'Samedi' }, brickLong(w)),
+          Object.assign({ day: 'Dimanche' }, runNegSplit(w))
+        ];
+      }
     } else { // Taper / Race Week
       sessions = [
         Object.assign({ day: 'Lundi' }, swimTechnique(w)),
-        Object.assign({ day: 'Mardi' }, bikeZ2(w)),
+        Object.assign({ day: 'Mardi' }, bikeShort(w)),
         Object.assign({ day: 'Mercredi' }, runEasy(w)),
         Object.assign({ day: 'Jeudi' }, swimRaceSim()),
         Object.assign({ day: 'Vendredi' }, REST),
@@ -837,14 +927,18 @@ function generateTriathlonProgram(goal, level, weakDiscipline, opts) {
       ];
     }
 
-    // Extra session pour discipline faible (hors Taper)
+    // Extra session pour discipline faible (hors Taper) — +1 session spécifique/semaine
     if (weakDiscipline && !isTaper && factor >= 1.0) {
-      var bonusMap = {
-        swim: Object.assign({ day: 'Bonus Natation' }, swimEndurance(w)),
-        bike: Object.assign({ day: 'Bonus Vélo' }, bikeLong(w)),
-        run: Object.assign({ day: 'Bonus Run' }, runEasy(w))
+      var bonusSessions = {
+        swim: [swimEndurance, swimThreshold, swimPyramid, swimKick, swimFartlek],
+        bike: [bikeLong, bikeSweetspot, bikeZ2, bikeTempo, bikeRecovery],
+        run: [runEasy, runTempo, runStrides, runFartlek, runRecovery]
       };
-      if (bonusMap[weakDiscipline]) sessions.push(bonusMap[weakDiscipline]);
+      var bonusPool = bonusSessions[weakDiscipline];
+      if (bonusPool) {
+        var bonusFn = bonusPool[w % bonusPool.length];
+        sessions.push(Object.assign({ day: 'Bonus ' + (weakDiscipline === 'swim' ? 'Natation' : weakDiscipline === 'bike' ? 'Vélo' : 'Run') }, bonusFn(w)));
+      }
     }
 
     // Réduction volume Taper / Deload
@@ -874,17 +968,17 @@ function generateTriathlonProgram(goal, level, weakDiscipline, opts) {
     // Notes de semaine
     var notes = '';
     if (isTaper) {
-      notes = '🎯 Affûtage : volume -40-50%, maintenir quelques séances d\'intensité. "Les jambes fraiches arrivent à Kona" — Jan Frodeno.';
+      notes = 'Affûtage : volume -40-50%, maintenir quelques séances d\'intensité. "Les jambes fraiches arrivent à Kona" — Jan Frodeno.';
     } else if (isDeload) {
-      notes = '📉 Semaine de récupération : volume -35%. Normal de se sentir "rouillé". C\'est le corps qui s\'adapte et progresse.';
+      notes = 'Semaine de récupération : volume -35%. Normal de se sentir "rouillé". C\'est le corps qui s\'adapte et progresse.';
     } else if (pname === 'Base') {
-      notes = '🔷 Base : 80% en Z2. Si tu ne peux pas tenir une conversation, ralentis. "Low & slow builds the engine" — Mark Allen, 6× champion Kona.';
+      notes = 'Base : 80% en Z2. Si tu ne peux pas tenir une conversation, ralentis. "Low & slow builds the engine" — Mark Allen, 6× champion Kona.';
     } else if (pname === 'Build' || pname === 'Build 1') {
-      notes = '🟡 Build 1 : max 2 séances intenses/semaine. Le reste en Z2. Sommeil 8h minimum selon Jan Frodeno.';
+      notes = 'Build 1 : max 2 séances intenses/semaine. Le reste en Z2. Sommeil 8h minimum selon Jan Frodeno.';
     } else if (pname === 'Build 2') {
-      notes = '🟠 Build 2 : semaines les plus dures. "Train tired to race fresh" — Mirinda Carfrae, 3× championne Kona.';
+      notes = 'Build 2 : semaines les plus dures. "Train tired to race fresh" — Mirinda Carfrae, 3× championne Kona.';
     } else if (pname === 'Peak') {
-      notes = '🔴 Peak : simuler la course — nutrition, équipement, rythme doivent être validés. Pas d\'expérimentation le jour J.';
+      notes = 'Peak : simuler la course — nutrition, équipement, rythme doivent être validés. Pas d\'expérimentation le jour J.';
     }
 
     return {
@@ -910,6 +1004,19 @@ function generateTriathlonProgram(goal, level, weakDiscipline, opts) {
     // Masters 40+ : réduction volume 10% (récupération inter-session 72h minimum)
     if (window.getAge && window.getAge() >= 40 && !isTaper) vf = Math.min(vf, levelObj.vol * 0.9);
     program.push(buildWeek(w, phase, isDeload, isTaper));
+  }
+
+  // Attach zone reference to first week (for display in UI)
+  if (program.length > 0) {
+    program[0].zoneRef = {
+      swim: swimZones || null,
+      bike: bikeZones || null,
+      run: runZones || null,
+      ftp: ftpVal > 0 ? ftpVal : null
+    };
+    if (opts.raceDate) {
+      program[0].raceDate = opts.raceDate;
+    }
   }
 
   return program;

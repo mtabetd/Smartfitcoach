@@ -5495,7 +5495,39 @@ function renderTriathlonConfig(p) {
  oninput: function(e) { S.triathlonRunPace = e.target.value; }
  }));
  paceGrid.appendChild(runWrap);
+
+ var ftpWrap = h('div', {style: 'display:flex;flex-direction:column;gap:4px'});
+ ftpWrap.appendChild(h('div', {style: 'font-size:11px;color:var(--grey)'}, ' FTP (watts)'));
+ ftpWrap.appendChild(h('input', {'class': 'num-input', type: 'number', placeholder: '200', value: S.triathlonFTP || '', style: 'width:100%;text-align:center',
+ oninput: function(e) { S.triathlonFTP = e.target.value; }
+ }));
+ paceGrid.appendChild(ftpWrap);
+
  p.appendChild(paceGrid);
+
+ // ── Date de course (optionnel) ──
+ p.appendChild(h('div', {style: 'height:16px'}));
+ p.appendChild(h('div', {style: 'width:100%;height:1px;background:var(--border);margin-bottom:16px'}));
+ p.appendChild(h('div', {'class': 'section-label'}, 'Date de course (optionnel)'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px'}, 'Le nombre de semaines sera adapté automatiquement à votre date de course'));
+ var dateWrap = h('div', {style: 'display:flex;align-items:center;gap:12px'});
+ var dateInput = h('input', {'class': 'num-input', type: 'date', value: S.triathlonRaceDate || '', style: 'flex:1',
+ oninput: function(e) { S.triathlonRaceDate = e.target.value; }
+ });
+ dateWrap.appendChild(dateInput);
+ if (S.triathlonRaceDate) {
+  try {
+   var rdMs = new Date(S.triathlonRaceDate).getTime();
+   var nowMs2 = Date.now();
+   var diffW = Math.floor((rdMs - nowMs2) / (7 * 24 * 3600 * 1000));
+   if (diffW > 0) {
+    dateWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--grey);font-style:italic'}, diffW + ' semaines'));
+   } else if (diffW <= 0) {
+    dateWrap.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#C0392B'}, 'Date passée'));
+   }
+  } catch(e2) {}
+ }
+ p.appendChild(dateWrap);
 
  // Temps de course estimé si allures renseignées
  if (S.triathlonGoal && S.triathlonBikePace && S.triathlonRunPace && S.triathlonSwimPace) {
@@ -5536,11 +5568,18 @@ function renderTriathlonConfig(p) {
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
  if (!ok) return;
- S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null);
+ var triopts = {
+  swimPace: S.triathlonSwimPace || null,
+  bikeSpeed: S.triathlonBikePace || null,
+  runPace: S.triathlonRunPace || null,
+  raceDate: S.triathlonRaceDate || null,
+  ftp: S.triathlonFTP || null
+ };
+ S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts);
  S.triathlonWeek = 1;
  S.selectedTriDay = 0;
  S.sStep = 18;
- if (window.BLACKBOX) window.BLACKBOX.log('triathlon_config', {goal: S.triathlonGoal, level: S.triathlonLevel, weak: S.triathlonWeak});
+ if (window.BLACKBOX) window.BLACKBOX.log('triathlon_config', {goal: S.triathlonGoal, level: S.triathlonLevel, weak: S.triathlonWeak, raceDate: S.triathlonRaceDate || null, ftp: S.triathlonFTP || null});
  // Enregistrer les allures triathlon dans l'historique
  if (window.PERF_HISTORY) {
  if (S.triathlonSwimPace) PERF_HISTORY.recordTriathlonPace('swim', S.triathlonSwimPace, 'min/100m');
@@ -5555,7 +5594,14 @@ function renderTriathlonConfig(p) {
 // ─── STEP 18: TRIATHLON PROGRAM ───
 function renderTriathlonProgram(p) {
  if (!S.triathlonProgram || !S.triathlonProgram.length) {
- S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null);
+  var triopts2 = {
+   swimPace: S.triathlonSwimPace || null,
+   bikeSpeed: S.triathlonBikePace || null,
+   runPace: S.triathlonRunPace || null,
+   raceDate: S.triathlonRaceDate || null,
+   ftp: S.triathlonFTP || null
+  };
+  S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts2);
  }
 
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -5579,7 +5625,41 @@ function renderTriathlonProgram(p) {
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Triathlon / IRONMAN'));
  p.appendChild(h('h1', {html: (goalObj ? goalObj.name : 'Triathlon') + '<br><em>Programme</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, totalWeeks + ' semaines · ' + (levelObj ? levelObj.name : '') + ' · 80/20 · Méthode Jan Frodeno'));
+ var subtitleParts = [totalWeeks + ' semaines', (levelObj ? levelObj.name : ''), '80/20', 'Méthode Jan Frodeno'];
+ if (program[0] && program[0].raceDate) { try { var rdDisp = new Date(program[0].raceDate); subtitleParts.unshift('Course : ' + rdDisp.toLocaleDateString('fr-FR', {day:'numeric',month:'short',year:'numeric'})); } catch(e) {} }
+ p.appendChild(h('p', {'class': 'subtitle'}, subtitleParts.join(' · ')));
+
+ // ── Zones de référence (si allures renseignées) ──
+ var zref = program[0] && program[0].zoneRef;
+ if (zref && (zref.swim || zref.bike || zref.run)) {
+  var zoneCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
+  zoneCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:8px'}, 'Vos zones personnalisées'));
+  var zoneGrid = h('div', {style: 'display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px'});
+  if (zref.swim) {
+   var sz = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
+   sz.appendChild(h('div', {style: 'font-weight:bold;color:#1A3A6A;margin-bottom:4px'}, ' Nage'));
+   sz.appendChild(h('div', {}, 'Z2 : ' + (zref.swim.z2 || '—')));
+   sz.appendChild(h('div', {}, 'CSS : ' + (zref.swim.css || '—')));
+   zoneGrid.appendChild(sz);
+  }
+  if (zref.bike) {
+   var bz = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
+   bz.appendChild(h('div', {style: 'font-weight:bold;color:#6A4A1A;margin-bottom:4px'}, ' Vélo'));
+   bz.appendChild(h('div', {}, 'Z2 : ' + (zref.bike.z2 || '—')));
+   bz.appendChild(h('div', {}, 'Sweetspot : ' + (zref.bike.sweetspot || '—')));
+   if (zref.ftp) bz.appendChild(h('div', {style: 'color:#E67E22'}, 'FTP : ' + zref.ftp + 'W'));
+   zoneGrid.appendChild(bz);
+  }
+  if (zref.run) {
+   var rz = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
+   rz.appendChild(h('div', {style: 'font-weight:bold;color:#1A4A1A;margin-bottom:4px'}, ' Run'));
+   rz.appendChild(h('div', {}, 'Z2 : ' + (zref.run.z2 || '—')));
+   rz.appendChild(h('div', {}, 'Seuil : ' + (zref.run.z4 || '—')));
+   zoneGrid.appendChild(rz);
+  }
+  zoneCard.appendChild(zoneGrid);
+  p.appendChild(zoneCard);
+ }
 
  // ── Navigation semaines ──
  var weekNav = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0'});
