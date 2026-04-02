@@ -24571,7 +24571,165 @@
     "Dresser la romaine en base dans un grand bol, disposer en rangées séparées le poulet, œuf, bacon, avocat en tranches, tomates cerises et bleu émietté.",
     "Arroser de vinaigrette balsamique, assaisonner, parsemer de ciboulette et servir aussitôt."
   ]
-}
+},
+
+    // ═══════════════════════════════════════════════════
+    //  SAINT-PIERRE  (R640–R644)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R640',
+      name: 'Saint-Pierre Vapeur Citron-Gingembre',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'light'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 15,
+      difficulty: 1,
+      // 80×4 + 4×4 + 8×9 = 320+16+72 = 408 ✓
+      baseNutrition: { calories: 408, proteinGrams: 80, carbsGrams: 4, fatGrams: 8 },
+      ingredients: [
+        { name: 'Saint-Pierre (filets)', qty: 400, unit: 'g' },
+        { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: 'Gingembre frais râpé', qty: 15, unit: 'g' },
+        { name: 'Citronnelle', qty: 1, unit: 'tige' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Poser les filets de saint-pierre sur du papier cuisson dans le panier vapeur ; frotter avec le zeste de citron et le gingembre râpé.',
+        'Glisser la citronnelle coupée en deux sous les filets ; cuire à la vapeur 12-14 min selon l\'épaisseur.',
+        'Arroser de jus de citron et d\'huile d\'olive au sortir du feu, parsemer de coriandre ciselée et servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R641',
+      name: 'Saint-Pierre Poêlé Beurre Blanc',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 2,
+      // 78×4 + 3×4 + 14×9 = 312+12+126 = 450 ✓
+      baseNutrition: { calories: 450, proteinGrams: 78, carbsGrams: 3, fatGrams: 14 },
+      ingredients: [
+        { name: 'Saint-Pierre (filets)', qty: 380, unit: 'g' },
+        { name: 'Échalotes', qty: 50, unit: 'g' },
+        { name: 'Vin blanc sec', qty: 80, unit: 'ml' },
+        { name: 'Beurre demi-sel', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 0.5, unit: 'pce' },
+        { name: 'Persil plat', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Saisir les filets côté peau dans l\'huile bien chaude 3 min ; retourner et cuire encore 2 min, réserver au chaud.',
+        'Faire réduire échalotes ciselées + vin blanc à 80 % dans la même poêle ; incorporer le beurre froid en petits dés hors du feu en fouettant pour monter la sauce.',
+        'Assaisonner le beurre blanc d\'un trait de citron, napper les filets et parsemer de persil haché.'
+      ]
+    },
+
+    {
+      id: 'R642',
+      name: 'Saint-Pierre en Papillote Méditerranéenne',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'meal-prep'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 20,
+      difficulty: 1,
+      // 76×4 + 10×4 + 10×9 = 304+40+90 = 434 ✓
+      baseNutrition: { calories: 434, proteinGrams: 76, carbsGrams: 10, fatGrams: 10 },
+      ingredients: [
+        { name: 'Saint-Pierre (filets)', qty: 380, unit: 'g' },
+        { name: 'Tomates cerises', qty: 120, unit: 'g' },
+        { name: 'Olives noires dénoyautées', qty: 30, unit: 'g' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Thym, romarin', qty: 2, unit: 'brins' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préchauffer le four à 190 °C ; disposer chaque filet sur une feuille de papier sulfurisé.',
+        'Répartir tomates cerises coupées, olives, câpres et ail émincé autour du poisson ; arroser d\'huile d\'olive et ajouter les herbes.',
+        'Fermer hermétiquement les papillotes et enfourner 18-20 min ; servir directement dans la papillote ouverte à table.'
+      ]
+    },
+
+    {
+      id: 'R643',
+      name: 'Saint-Pierre en Croûte d\'Herbes',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'omega3', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 18,
+      difficulty: 2,
+      // 75×4 + 15×4 + 12×9 = 300+60+108 = 468 ✓
+      baseNutrition: { calories: 468, proteinGrams: 75, carbsGrams: 15, fatGrams: 12 },
+      ingredients: [
+        { name: 'Saint-Pierre (filets)', qty: 380, unit: 'g' },
+        { name: 'Chapelure panko', qty: 40, unit: 'g' },
+        { name: 'Persil, ciboulette, estragon', qty: 20, unit: 'g' },
+        { name: 'Moutarde de Dijon', qty: 15, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Ail', qty: 1, unit: 'gousse' },
+        { name: 'Zeste de citron', qty: 1, unit: 'pce' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préchauffer le four à 200 °C ; mélanger chapelure, herbes ciselées, ail haché, zeste de citron et huile d\'olive pour former la croûte.',
+        'Badigeonner le dessus des filets de moutarde ; appuyer fermement la croûte d\'herbes sur la moutarde.',
+        'Cuire au four 16-18 min jusqu\'à ce que la croûte soit dorée et croustillante ; servir avec une salade verte.'
+      ]
+    },
+
+    {
+      id: 'R644',
+      name: 'Saint-Pierre Ceviche Agrumes',
+      category: 'fusion',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇵🇪',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'raw', 'light'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 0,
+      difficulty: 2,
+      // 64×4 + 8×4 + 6×9 = 256+32+54 = 342 ✓
+      baseNutrition: { calories: 342, proteinGrams: 64, carbsGrams: 8, fatGrams: 6 },
+      ingredients: [
+        { name: 'Saint-Pierre très frais (sashimi grade)', qty: 320, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 3, unit: 'pce' },
+        { name: 'Orange (jus)', qty: 1, unit: 'pce' },
+        { name: 'Piment rouge doux', qty: 0.5, unit: 'pce' },
+        { name: 'Oignon rouge', qty: 40, unit: 'g' },
+        { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Sel fin', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Détailler le saint-pierre en dés de 1 cm ; mariner dans le jus de citron vert et d\'orange avec une pincée de sel 10-12 min au réfrigérateur.',
+        'Ajouter l\'oignon rouge en fines lamelles, le piment épépiné haché et la coriandre ciselée ; arroser d\'huile d\'olive.',
+        'Servir immédiatement dans des verrines ou assiettes froides avec des tranches d\'avocat en accompagnement.'
+      ]
+    }
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
