@@ -94,7 +94,7 @@ h1 em{font-style:italic}
 .sel-card.on{background:var(--black);border-color:var(--black);color:var(--ivory)}
 .sel-card.on .card-sub{color:rgba(255,255,255,.55)}
 .sel-card.on .card-tag{color:rgba(255,255,255,.45)}
-.card-icon{font-size:18px;margin-bottom:8px;display:block;font-style:normal}
+.card-icon{display:none}
 .card-name{font-family:Georgia,serif;font-size:15px;margin-bottom:4px}
 .card-sub{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.4}
 .card-tag{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey2);margin-top:4px;display:block}
@@ -198,8 +198,8 @@ h1 em{font-style:italic}
 .dt-val{font-family:'Georgia',serif;font-size:18px}
 .dt-diff{font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;margin-left:8px}
 
-.whey-tip{border-left:2px solid var(--green);padding:12px 16px;margin-top:16px;background:var(--greenbg)}
-.whey-tip strong{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:600}
+.whey-tip{border:1px solid var(--green);padding:12px 16px;margin-top:16px;background:var(--greenbg);border-radius:2px}
+.whey-tip strong{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;font-weight:300;color:var(--green)}
 .whey-tip span{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--grey)}
 
 .regen-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border:1px solid var(--border);border-radius:2px;background:transparent;color:var(--grey);font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .2s ease;margin-top:12px}
@@ -276,11 +276,11 @@ canvas.weight-chart{width:100%;height:200px}
 
 /* ── PHOTO UPLOAD ── */
 .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
-.photo-upload{border:2px dashed var(--border);border-radius:2px;padding:24px;text-align:center;cursor:pointer;transition:all .2s ease;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--ivory2)}
+.photo-upload{border:1px solid var(--border);border-radius:2px;padding:24px;text-align:center;cursor:pointer;transition:border-color .2s ease;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--ivory2)}
 .photo-upload:hover{border-color:var(--black)}
 .photo-upload img{max-width:100%;max-height:160px;object-fit:contain}
-.photo-upload .photo-label{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:8px}
-.photo-upload .photo-icon{font-size:24px;color:var(--grey3);margin-bottom:8px}
+.photo-upload .photo-label{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey3);margin-top:12px}
+.photo-icon-svg{color:var(--grey3);display:block;margin-bottom:4px}
 
 /* ── ALCOHOL SECTION ── */
 .alcohol-item{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border:1px solid var(--border);border-radius:2px;background:var(--ivory2);margin-bottom:4px}
@@ -345,6 +345,7 @@ canvas.weight-chart{width:100%;height:200px}
 <div style="width:48px;height:1px;background:var(--black,#0A0A09);margin:0 auto 24px"></div>
 <div id="gate-error" style="display:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--red,#5A1010);text-align:center;padding:8px;border:1px solid var(--red,#5A1010);background:var(--redbg,rgba(90,16,16,.06));margin-bottom:12px"></div>
 <form id="gate-form" onsubmit="return false;" autocomplete="off">
+<input type="text" name="username" autocomplete="username" style="display:none" aria-hidden="true">
 <input id="gate-pw" type="password" placeholder="Mot de passe" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1px solid var(--border,#D8D8D0);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);outline:none;text-align:center;letter-spacing:2px;margin-bottom:12px" autofocus>
 <button id="gate-btn" type="submit" style="width:100%;padding:14px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;cursor:pointer">Entrer</button>
 </form>
@@ -361,6 +362,9 @@ canvas.weight-chart{width:100%;height:200px}
 <script src="supabase-client.js"></script>
 <script src="./exercises-db.js"></script>
 <script src="./crossfit-wods.js"></script>
+<script src="./crossfit-wods-cycle2.js"></script>
+<script src="./crossfit-wods-cycle3.js"></script>
+<script src="./crossfit-wods-merge.js"></script>
 <script src="./crossfit-haltero-cycles.js"></script>
 <script src="./auth.js"></script>
 <script src="./gamification.js"></script>
@@ -374,6 +378,7 @@ canvas.weight-chart{width:100%;height:200px}
 <script src="./perf-history.js"></script>
 <script src="./dashboard.js"></script>
 <script src="./app-nutrition.js"></script>
+<script src="./calisthenics-program.js"></script>
 <script src="./app-sport.js"></script>
 <script src="./app-main.js"></script>
 <script src="./sw-register.js"></script>

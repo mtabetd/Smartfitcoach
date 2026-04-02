@@ -323,7 +323,7 @@ function generateSportProgram() {
  var pregIntensityFactor = 1.0;
  if (S.pregnant && S.sex === 'femme' && window.getPregnancyTrimester) {
  pregTri = window.getPregnancyTrimester();
- if (pregTri) {
+ if (pregTri && pregTri.trimester) {
  pregForbidden = pregTri.trimester.forbiddenExercises || [];
  pregIntensityFactor = pregTri.trimester.intensityFactor || 0.5;
  }
@@ -333,7 +333,7 @@ function generateSportProgram() {
  var cyclePhaseInfo = null;
  if (!S.pregnant && S.sex === 'femme' && S.cycleTracking && window.getCurrentCyclePhase) {
  cyclePhaseInfo = window.getCurrentCyclePhase();
- if (cyclePhaseInfo && cyclePhaseInfo.phase.intensityFactor) {
+ if (cyclePhaseInfo && cyclePhaseInfo.phase && cyclePhaseInfo.phase.intensityFactor) {
  cycleIntensityFactor = cyclePhaseInfo.phase.intensityFactor;
  }
  }
@@ -379,7 +379,7 @@ function generateSportProgram() {
  // Pregnancy: filter forbidden exercises
  if (pregTri && pregForbidden.length > 0) {
  available = available.filter(function(ex) {
- var exName = ex.n.toLowerCase();
+ var exName = (ex.n || ex.name || '').toLowerCase();
  for (var fi = 0; fi < pregForbidden.length; fi++) {
  if (exName.indexOf(pregForbidden[fi].toLowerCase()) !== -1) return false;
  }
@@ -456,7 +456,7 @@ function generateSportProgram() {
  if (repSuffix && ex.sets) ex.sets = ex.sets + repSuffix;
 
  // Add superset note for shred
- if (supersetNote && i > 0 && i % 2 === 0) ex.n = ex.n + supersetNote;
+ if (supersetNote && i > 0 && i % 2 === 0 && ex.n) ex.n = ex.n + supersetNote;
 
  dayExercises.push(ex);
  }
@@ -699,7 +699,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'musculation'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, '\uD83C\uDFCB\uFE0F'),
  h('div', {'class': 'card-name'}, 'Musculation'),
  h('div', {'class': 'card-sub'}, 'Programme cibl\u00e9 par groupes musculaires'),
  h('div', {'class': 'card-tag'}, 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance')
@@ -712,7 +711,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'crossfit'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, '\u26A1'),
  h('div', {'class': 'card-name'}, 'Cross Training'),
  h('div', {'class': 'card-sub'}, 'Halt\u00e9rophilie \u00b7 WOD \u00b7 Gymnastique'),
  h('div', {'class': 'card-tag'}, '100 WODs \u00b7 Cycles 6 semaines \u00b7 Scaled/Inter/RX')
@@ -725,7 +723,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'running'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, ''),
  h('div', {'class': 'card-name'}, 'Running'),
  h('div', {'class': 'card-sub'}, 'Plan d\'entraînement course à pied'),
  h('div', {'class': 'card-tag'}, '5K · 10K · Semi · Marathon · Trail')
@@ -738,7 +735,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'hyrox'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, ''),
  h('div', {'class': 'card-name'}, 'Hyrox'),
  h('div', {'class': 'card-sub'}, 'Préparation Hyrox complète'),
  h('div', {'class': 'card-tag'}, '8 stations · Run · Simulation')
@@ -751,7 +747,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'padel'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, ''),
  h('div', {'class': 'card-name'}, 'Padel'),
  h('div', {'class': 'card-sub'}, 'Programme technique et physique padel'),
  h('div', {'class': 'card-tag'}, 'Technique · Tactique · Match · Physique')
@@ -764,7 +759,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'golf'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, ''),
  h('div', {'class': 'card-name'}, 'Golf'),
  h('div', {'class': 'card-sub'}, 'Progresser au golf — méthode Dave Pelz'),
  h('div', {'class': 'card-tag'}, 'Petit jeu · Long jeu · Parcours · Mental')
@@ -777,7 +771,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'triathlon'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, ''),
  h('div', {'class': 'card-name'}, 'Triathlon / IRONMAN'),
  h('div', {'class': 'card-sub'}, 'Programme Jan Frodeno · Patrick Lange · Daniela Ryf'),
  h('div', {'class': 'card-tag'}, 'Sprint · Olympic · 70.3 · IRONMAN 140.6')
@@ -790,7 +783,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'yoga'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, '\uD83E\uDDD8'),
  h('div', {'class': 'card-name'}, 'Yoga & Mobilit\u00e9'),
  h('div', {'class': 'card-sub'}, 'Flexibilit\u00e9, force, \u00e9quilibre, pleine conscience'),
  h('div', {'class': 'card-tag'}, 'Hatha \u00b7 Vinyasa \u00b7 Yin \u00b7 Ashtanga')
@@ -803,7 +795,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'cycling'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, '\uD83D\uDEB4'),
  h('div', {'class': 'card-name'}, 'Cyclisme'),
  h('div', {'class': 'card-sub'}, 'Route, VTT, indoor \u2014 am\u00e9liore l\'endurance et la puissance'),
  h('div', {'class': 'card-tag'}, 'Route \u00b7 VTT \u00b7 Indoor \u00b7 Gravel \u00b7 FTP')
@@ -817,7 +808,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'calisthenics'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, '\uD83D\uDCAA'),
  h('div', {'class': 'card-name'}, 'Callisth\u00e9nie'),
  h('div', {'class': 'card-sub'}, 'Street workout, mouvements au poids du corps'),
  h('div', {'class': 'card-tag'}, 'Muscle-up \u00b7 Handstand \u00b7 Planche \u00b7 Front Lever')
@@ -839,7 +829,7 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(hdr);
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
- p.appendChild(h('h1', {html: '\uD83C\uDFE5 Bilan<br><em>médical muscu</em>'}));
+ p.appendChild(h('h1', {html: 'Bilan<br><em>médical muscu</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de générer votre programme, aidez-nous à adapter les exercices à votre situation physique.'));
 
  // ─── Section 1 : Zones douloureuses ───
@@ -933,9 +923,9 @@ function renderMuscuMedicalQ(p) {
  // ─── Avertissement si sévère ou antécédent grave ───
  var hasSevere = med.painLevel === 3 || med.herniaDisc || med.rotatorCuff || med.acl || med.fibromyalgia || med.meniscus || med.osteoporosis || med.hypertension || med.spondylarthritis || med.rheumatoidArthritis;
  if (hasSevere) {
- var warn = h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border-left:4px solid #5A1010;padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#5A1010;line-height:1.6'});
- warn.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, '\u26A0 Douleur sévère ou antécédent grave détecté. Nous adapterons le programme en mode réhabilitation.'));
- warn.appendChild(h('strong', {}, 'Consultez impérativement un médecin ou kinésithérapeute avant de reprendre la musculation lourde.'));
+ var warn = h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border:1px solid var(--red,#5A1010);padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);line-height:1.6'});
+ warn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px'}, 'Attention — Antécédent grave détecté'));
+ warn.appendChild(h('span', {}, 'Programme adapté en mode réhabilitation. Consultez un médecin ou kinésithérapeute avant de reprendre la musculation lourde.'));
  p.appendChild(warn);
  }
 
@@ -967,21 +957,21 @@ function renderChargesQuestionnaire(p) {
  // Medical/age safety warnings
  var hasDiabetes = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
  if (hasDiabetes) {
- p.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:13px'}, [
- h('div', {style: 'font-weight:700;color:#6A4A1A;margin-bottom:4px'}, '\u26A0 Diabète — Précautions sportives'),
- h('div', {style: 'color:#6A4A1A'}, 'Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (RPE max 7/10 les 4 premières semaines).')
+ p.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border:1px solid var(--orange,#6A4A1A);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
+ h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#6A4A1A);margin-bottom:6px'}, 'Diabète — Précautions sportives'),
+ h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (RPE max 7/10 les 4 premières semaines).')
  ]));
  }
  if (getAge() >= 50) {
- p.appendChild(h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border-left:4px solid #1A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:13px'}, [
- h('div', {style: 'font-weight:700;color:#1A4A1A;margin-bottom:4px'}, '\uD83D\uDCAA Athlète 50+ — Adaptations recommandées'),
- h('div', {style: 'color:#1A4A1A'}, 'Échauffement prolongé 15-20 min (vs 5-10 min standard). Décharge toutes les 4-5 semaines (vs 6 semaines). Préférez machines guidées aux barres libres pour les charges maximales. Récupération inter-séance 48-72h minimum. Contrôle médical annuel conseillé.')
+ p.appendChild(h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border:1px solid var(--green,#1A4A1A);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
+ h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:6px'}, 'Athlète 50+ — Adaptations recommandées'),
+ h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Échauffement prolongé 15-20 min (vs 5-10 min standard). Décharge toutes les 4-5 semaines (vs 6 semaines). Préférez machines guidées aux barres libres pour les charges maximales. Récupération inter-séance 48-72h minimum. Contrôle médical annuel conseillé.')
  ]));
  }
  if (S.pregnant) {
- p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border-left:4px solid #5A1010;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:13px'}, [
- h('div', {style: 'font-weight:700;color:#5A1010;margin-bottom:4px'}, '\uD83E\uDD30 Grossesse — Exercices autorisés seulement'),
- h('div', {style: 'color:#5A1010'}, 'Évitez les charges lourdes, exercices allongés sur le dos (après 20 SA), abdominaux hyperpressifs, sauts et HIIT intense. Privilégiez marche, natation, yoga prénatal, Kegel. Consultez votre médecin avant tout entraînement.')
+ p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border:1px solid var(--red,#5A1010);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
+ h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--red,#5A1010);margin-bottom:6px'}, 'Grossesse — Exercices autorisés seulement'),
+ h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Évitez les charges lourdes, exercices allongés sur le dos (après 20 SA), abdominaux hyperpressifs, sauts et HIIT intense. Privilégiez marche, natation, yoga prénatal, Kegel. Consultez votre médecin avant tout entraînement.')
  ]));
  }
 
@@ -1113,8 +1103,8 @@ function renderDedicatedPrograms(p) {
  prog.variations.forEach(function(v, idx) {
  var isActive = varIdx === idx;
  var tab = h('div', {
- style: 'flex:1;padding:10px;text-align:center;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;border-right:1px solid var(--border);' +
- (isActive ? 'background:var(--black);color:#fff;font-weight:bold' : 'background:var(--ivory);color:var(--grey)'),
+ style: 'flex:1;padding:10px;text-align:center;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;border-right:1px solid var(--border);' +
+ (isActive ? 'background:var(--black);color:var(--ivory,#FAF9F6)' : 'background:var(--ivory);color:var(--grey)'),
  onclick: function(e) { e.stopPropagation(); S[varKey] = idx; window.render(); }
  }, v.label);
  tabs.appendChild(tab);
@@ -1136,7 +1126,7 @@ function renderDedicatedPrograms(p) {
  if (sugW && sugW > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:2px'}, '\u2192 Charge cible : ~' + (window.UNITS ? window.UNITS.displayWeight(sugW) : sugW + ' kg')));
  row.appendChild(left);
  var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
- right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:bold'}, ex.sets + '\u00d7' + ex.reps));
+ right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:normal'}, ex.sets + '\u00d7' + ex.reps));
  right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, ex.rest));
  row.appendChild(right);
  card.appendChild(row);
@@ -1211,9 +1201,9 @@ function renderMusculationGoals(p) {
  if (S.goal !== null) {
  // Reminder banner (pre-sélection déplacée dans le handler du bouton "Créer programme")
  var nutName = (window.GOALS || [])[S.goal] ? window.GOALS[S.goal].name : '';
- var banner = h('div', {style: 'border-left:3px solid var(--accent,#C8A96E);padding:12px 16px;background:var(--ivory2,#F5F4EF);margin-bottom:16px'});
- banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:bold;color:var(--text,#0A0A09);margin-bottom:4px'}, 'Objectif d\u00e9fini en Nutrition\u00a0: ' + nutName));
- banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, 'Si vous le modifiez ici, il sera automatiquement mis \u00e0 jour dans la section Nutrition.'));
+ var banner = h('div', {style: 'border:1px solid var(--border,#D8D8D0);padding:12px 16px;background:var(--ivory2,#F4F4F0);margin-bottom:16px;border-radius:2px'});
+ banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, 'Objectif Nutrition\u00a0: ' + nutName));
+ banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, 'Toute modification sera synchronis\u00e9e avec votre plan nutrition.'));
  p.appendChild(banner);
  }
  // ──────────────────────────────────────────────────────────────────────
@@ -1336,7 +1326,7 @@ function renderCrossfitLevel(p) {
  var lvlIdx = S.crossfitLevel === 'scaled' ? 0 : S.crossfitLevel === 'inter' ? 1 : S.crossfitLevel === 'rx_plus' ? 3 : 2;
  var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : lvlIdx === 3 ? 0.80 : 0.75;
  var estWeight = Math.round(currentVal * wodPct);
- leftDiv.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#1A3A6A;margin-top:2px;font-weight:bold'}, 'WOD \u2248 ' + (window.UNITS ? window.UNITS.displayWeight(estWeight) : estWeight + 'kg')));
+ leftDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px'}, 'WOD \u2248 ' + (window.UNITS ? window.UNITS.displayWeight(estWeight) : estWeight + 'kg')));
  }
  row.appendChild(leftDiv);
 
@@ -1377,10 +1367,82 @@ function renderCrossfitLevel(p) {
 
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;text-align:center;margin-bottom:16px'}, 'Si vous ne connaissez pas vos 1RM, les charges seront bas\u00E9es sur les standards internationaux pour votre niveau.'));
 
+ // ─── BENCHMARKS ACTUELS ───
+ p.appendChild(h('div', {style: 'height:16px'}));
+ p.appendChild(h('div', {style: 'border-top:1px solid var(--border);margin:0 0 16px;padding-top:16px'}));
+ p.appendChild(h('div', {'class': 'section-label'}, 'Vos benchmarks CrossFit (optionnel)'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:14px'}, 'Ces donn\u00E9es permettent de suivre votre progression sur les WODs officiels du CrossFit.'));
+
+ S.crossfitBenchmarks = S.crossfitBenchmarks || {};
+ var benchmarkFields = [
+ {key: 'fran_time', label: 'Fran (21-15-9 Thruster + Pull-ups)', placeholder: 'Ex: 4:32', type: 'text'},
+ {key: 'grace_time', label: 'Grace (30 Clean & Jerk)', placeholder: 'Ex: 2:15', type: 'text'},
+ {key: 'helen_time', label: 'Helen (3 rounds 400m/KB/Pull-ups)', placeholder: 'Ex: 9:45', type: 'text'},
+ {key: 'max_pullups', label: 'Max Pull-ups strict (unbroken)', placeholder: 'Ex: 15', type: 'number'},
+ {key: 'max_hspu', label: 'Max HSPU strict (unbroken)', placeholder: 'Ex: 8', type: 'number'},
+ {key: 'max_du', label: 'Max Double Unders unbroken', placeholder: 'Ex: 50', type: 'number'}
+ ];
+ var bmGrid = h('div', {style: 'margin-bottom:16px'});
+ benchmarkFields.forEach(function(bf) {
+ var bRow = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border:1px solid var(--border);background:var(--ivory2);margin-bottom:4px'});
+ bRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg,#0A0A09);flex:1'}, bf.label));
+ var bInp = h('input', {
+ type: bf.type || 'text',
+ placeholder: bf.placeholder,
+ style: 'width:90px;padding:5px 8px;border:1px solid var(--border);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory);color:#0A0A09;text-align:center',
+ value: S.crossfitBenchmarks[bf.key] || ''
+ });
+ (function(fieldKey) {
+ bInp.addEventListener('input', function(e) {
+ S.crossfitBenchmarks = S.crossfitBenchmarks || {};
+ S.crossfitBenchmarks[fieldKey] = e.target.value;
+ });
+ })(bf.key);
+ bRow.appendChild(bInp);
+ bmGrid.appendChild(bRow);
+ });
+ p.appendChild(bmGrid);
+
+ // ─── OBJECTIF COMPETITION ───
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, 'Objectif comp\u00E9tition'));
+ var compGoals = [
+ {id: 'loisir', label: 'Loisir — Forme physique et fun', desc: 'Pas de competition prevue'},
+ {id: 'open', label: 'CrossFit Open', desc: 'Qualifier pour les phases suivantes'},
+ {id: 'sanctional', label: 'Regionals / Sanctionals', desc: 'Niveau elite — competition serieuse'}
+ ];
+ var compList = h('div', {style: 'margin-bottom:14px'});
+ compGoals.forEach(function(cg) {
+ var isOn = (S.crossfitCompGoal === cg.id);
+ var cgRow = h('div', {
+ style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid ' + (isOn ? 'var(--black,#0A0A09)' : 'var(--border)') + ';background:' + (isOn ? 'var(--ivory2)' : 'transparent') + ';margin-bottom:4px;cursor:pointer',
+ onclick: function() { S.crossfitCompGoal = cg.id; window.render(); }
+ });
+ var cgLeft = h('div', {});
+ cgLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, cg.label));
+ cgLeft.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey)'}, cg.desc));
+ cgRow.appendChild(cgLeft);
+ if (isOn) cgRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--black)'}, '\u2713'));
+ compList.appendChild(cgRow);
+ });
+ p.appendChild(compList);
+
+ // ─── DATE DE L'OPEN ───
+ if (S.crossfitCompGoal === 'open' || S.crossfitCompGoal === 'sanctional') {
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:8px'}, 'Date du CrossFit Open (optionnel)'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;text-align:center'}, 'Le programme adaptera les semaines 18-20 en pr\u00E9paration Open.'));
+ var openDateInp = h('input', {
+ type: 'date',
+ style: 'width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:var(--ivory);color:#0A0A09;margin-bottom:16px',
+ value: S.crossfitOpenDate || ''
+ });
+ openDateInp.addEventListener('change', function(e) { S.crossfitOpenDate = e.target.value; });
+ p.appendChild(openDateInp);
+ }
+
  p.appendChild(h('div', {style: 'height:16px'}));
  var ok = S.crossfitLevel !== null;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { S.crossfitWeek = 1; S.selectedCrossfitDay = 0; S.sStep = 6; window.BLACKBOX && window.BLACKBOX.log('crossfit_level', {level: S.crossfitLevel, days: S.sportDays}); window.render(); }
+ if (ok) { S.crossfitWeek = 1; S.selectedCrossfitDay = 0; S.sStep = 6; window.BLACKBOX && window.BLACKBOX.log('crossfit_level', {level: S.crossfitLevel, days: S.sportDays, compGoal: S.crossfitCompGoal}); window.render(); }
  }}, 'Continuer'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
@@ -1496,7 +1558,7 @@ function generateCrossfitWeek(weekNumber, daysPerWeek) {
  var allWods = window.CF_WODS || [];
  if (!allWods.length) return [];
 
- // Semaines de décharge CrossFit : 4, 8, 12, 16... (cycle 3+1 semaines — protocole Mayhem/Games)
+ // Semaines de décharge CrossFit : 4, 8, 12, 16... (cycle 3+1 semaines — cycle 3+1 semaines elite)
  // Volume réduit 40-50%, intensité plafonnée à 70% max, pas de PR ni de test.
  var isDeloadWeek = (weekNumber % 4 === 0);
 
@@ -1641,13 +1703,13 @@ function renderCFCalendar(p) {
 
  // Numéro + nom du WOD
  card.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + textColor + ';margin-bottom:3px'}, 'JOUR ' + dayNum));
- card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:' + textColor + ';font-weight:bold;line-height:1.2;word-break:break-word'}, wod.name || ('WOD ' + dayNum)));
+ card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:' + textColor + ';font-weight:normal;line-height:1.2;word-break:break-word'}, wod.name || ('WOD ' + dayNum)));
 
  // Indicateur état
  if (isDone) {
  card.appendChild(h('div', {style: 'font-size:11px;color:#1A4A1A;margin-top:4px'}, ' Terminé'));
  } else if (isCurrent) {
- card.appendChild(h('div', {style: 'font-size:11px;color:#1A3C5E;margin-top:4px;font-weight:bold'}, '▶ Aujourd\'hui'));
+ card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px'}, 'Aujourd\'hui'));
  }
 
  grid.appendChild(card);
@@ -1672,6 +1734,10 @@ function renderCrossfitProgram(p) {
  // Guard: cfCurrentDay bounds
  if (!S.cfCurrentDay || S.cfCurrentDay < 1) S.cfCurrentDay = 1;
  if (S.cfCurrentDay > 100) S.cfCurrentDay = 100;
+ // Guard: ELITE state objects — defensive initialization
+ S.crossfitBenchmarks = S.crossfitBenchmarks || {};
+ S.crossfitCompGoal = S.crossfitCompGoal || 'loisir';
+ if (S.cfDeloadRecommended === undefined) S.cfDeloadRecommended = false;
 
  // Load saved 1RM data if not already loaded
  if (!S.crossfit1RM || Object.keys(S.crossfit1RM).length === 0) {
@@ -1703,7 +1769,7 @@ function renderCrossfitProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
  var levelObj = (window.CROSSFIT_LEVELS || []).find(function(l) { return l.id === S.crossfitLevel; });
- p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' jours/semaine \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '') + ' \u2014 Inspir\u00E9 Mayhem / Games Athletes'));
+ p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' jours/semaine \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '') + ' \u2014 Inspir\u00E9 Games Athletes Athletes'));
 
  // ─── BIENVENUE SCALED / DÉBUTANT ───
  // Afficher un message d'accueil et un CTA 1RM uniquement pour les nouveaux utilisateurs scaled sans 1RM définis
@@ -1789,7 +1855,7 @@ function renderCrossfitProgram(p) {
  p.appendChild(calBtn);
 
  // ─── CROSSFIT DELOAD BANNER (semaines 4, 8, 12, 16) ───
- // Protocole Mayhem / Games : 3 semaines d'intensité + 1 semaine de décharge.
+ // Protocole Games Athletes : 3 semaines d'intensité + 1 semaine de décharge.
  // Volume réduit de 40-50%, intensité maintenue à 70% max. Récupération CNS + articulaire.
  var cfWeekNum = S.crossfitWeek || 1;
  var isCFDeload = (cfWeekNum % 4 === 0);
@@ -1799,6 +1865,86 @@ function renderCrossfitProgram(p) {
  cfDeloadBanner.appendChild(h('div', {}, 'Réduisez le volume de 40-50\u00a0% (ex. 3 séries au lieu de 5). Intensité \u226470\u00a0% du max. Gardez les mêmes mouvements — c\'est la récupération CNS et articulaire qui permet les PR des semaines suivantes. Pas de PR ni de test de max cette semaine.'));
  p.appendChild(cfDeloadBanner);
  }
+
+
+ // ─── PROGRESS TRACKER ───
+ (function() {
+  var cfWkN = S.crossfitWeek || 1;
+  var totalDays = 100;
+  var doneDays = 0;
+  if (S.cfProgress) { for (var dkk in S.cfProgress) { if (S.cfProgress[dkk] && S.cfProgress[dkk].done) doneDays++; } }
+  var pctDone = Math.min(100, Math.round(doneDays / totalDays * 100));
+  var nextTestWeek = 5;
+  while (nextTestWeek < cfWkN) nextTestWeek += 5;
+  var daysToTest = Math.max(0, (nextTestWeek - cfWkN) * (S.sportDays || 4));
+
+  var tracker = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;margin-bottom:12px;background:var(--ivory2)'});
+  tracker.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'PROGRESSION PROGRAMME'));
+  var trackerRow = h('div', {style: 'display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px'});
+  trackerRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px'}, doneDays + ' / ' + totalDays + ' jours'));
+  trackerRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);padding-top:2px'}, pctDone + '% du programme'));
+  if (nextTestWeek <= 20 && daysToTest > 0) {
+   trackerRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--blue,#1A3A6A);padding-top:2px'}, 'Test 1RM S' + nextTestWeek + ' dans ~' + daysToTest + ' seances'));
+  }
+  tracker.appendChild(trackerRow);
+  var tBar = h('div', {style: 'background:#E5E4DE;height:4px;border-radius:2px;overflow:hidden'});
+  tBar.appendChild(h('div', {style: 'background:#1A4A1A;height:100%;width:' + pctDone + '%;transition:width 0.4s'}));
+  tracker.appendChild(tBar);
+
+  // Benchmark de la semaine
+  var bmarkWeek = window.getCFBenchmarkForWeek && window.getCFBenchmarkForWeek(cfWkN);
+  if (bmarkWeek) {
+   var bmBanner = h('div', {style: 'margin-top:10px;padding:8px 12px;background:rgba(90,16,16,0.06);border-left:2px solid var(--red,#5A1010)'});
+   bmBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red,#5A1010);margin-bottom:4px'}, 'BENCHMARK OFFICIEL — SEMAINE ' + cfWkN));
+   bmBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:4px'}, bmarkWeek.name));
+   if (bmarkWeek.score_targets) {
+    var lvlKey2 = S.crossfitLevel === 'rx_plus' ? 'elite' : (S.crossfitLevel || 'rx');
+    var target2 = bmarkWeek.score_targets[lvlKey2] || bmarkWeek.score_targets.rx;
+    if (target2) bmBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--red,#5A1010)'}, 'Votre cible : ' + target2));
+    var tParts = [];
+    if (bmarkWeek.score_targets.scaled) tParts.push('Scaled: ' + bmarkWeek.score_targets.scaled);
+    if (bmarkWeek.score_targets.inter) tParts.push('Inter: ' + bmarkWeek.score_targets.inter);
+    if (bmarkWeek.score_targets.rx) tParts.push('RX: ' + bmarkWeek.score_targets.rx);
+    if (bmarkWeek.score_targets.elite) tParts.push('Elite: ' + bmarkWeek.score_targets.elite);
+    if (tParts.length) bmBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:3px'}, tParts.join(' | ')));
+   }
+   S.crossfitBenchmarks = S.crossfitBenchmarks || {};
+   var prKey = bmarkWeek.id ? bmarkWeek.id.toLowerCase() + '_time' : null;
+   if (prKey && S.crossfitBenchmarks[prKey]) {
+    bmBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--green,#1A4A1A);margin-top:4px'}, 'Votre PR : ' + S.crossfitBenchmarks[prKey]));
+   }
+   tracker.appendChild(bmBanner);
+  }
+
+  // 1RM test week banner
+  if (window.isCF1RMTestWeek && window.isCF1RMTestWeek(cfWkN)) {
+   var testBanner = h('div', {style: 'margin-top:10px;padding:10px 14px;background:rgba(26,58,106,0.07);border-left:2px solid var(--blue,#1A3A6A)'});
+   testBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue,#1A3A6A);margin-bottom:6px'}, 'SEMAINE TEST 1RM — S' + cfWkN));
+   testBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:6px'}, 'Protocole de test complet — objectif PR sur chaque levee :'));
+   if (window.CF_1RM_TEST_PROTOCOL && window.CF_1RM_TEST_PROTOCOL.lifts) {
+    window.CF_1RM_TEST_PROTOCOL.lifts.forEach(function(lift) {
+     var lRow = h('div', {style: 'padding:4px 0;border-bottom:1px solid var(--border)'});
+     lRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px'}, lift.name));
+     lRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey)'}, lift.warmup_protocol));
+     lRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;color:var(--grey);font-style:italic'}, lift.notes));
+     testBanner.appendChild(lRow);
+    });
+   }
+   tracker.appendChild(testBanner);
+  }
+
+  // Open prep week banner
+  var openPrepData = window.getCFOpenPrepWeek && window.getCFOpenPrepWeek(cfWkN);
+  if (openPrepData) {
+   var openBanner = h('div', {style: 'margin-top:10px;padding:8px 12px;background:rgba(139,47,201,0.06);border-left:2px solid #8B2FC9'});
+   openBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8B2FC9;margin-bottom:4px'}, 'CROSSFIT OPEN PREP'));
+   openBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:4px'}, openPrepData.name));
+   openBanner.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, openPrepData.focus));
+   tracker.appendChild(openBanner);
+  }
+
+  p.appendChild(tracker);
+ })();
 
  // ─── HALTERO CYCLE INFO ───
  if (window.HALTERO_CYCLES) {
@@ -1948,11 +2094,62 @@ function renderCrossfitProgram(p) {
  }
  // For non-haltero days, gym was already shown before the WOD
 
- // Day summary
- var sectionCount = currentDay.hasHaltero ? 3 : 2;
+
+ // ─── ELITE: AEROBIC CAPACITY (5eme composante) ───
+ if (wod.aerobic && wod.aerobic.type) {
+  var aerCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #1A5A5A;background:rgba(26,90,90,0.03)'});
+  aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1A5A5A;margin-bottom:6px'}, 'AEROBIE (5e composante ELITE)'));
+  aerCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:4px'}, wod.aerobic.type));
+  aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'}, wod.aerobic.desc || ''));
+  if (wod.aerobic.rpe !== undefined) {
+   aerCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#1A5A5A;margin-top:6px'}, 'RPE cible : ' + wod.aerobic.rpe + '/10 — Effort Zone 2 confortable'));
+  }
+  p.appendChild(aerCard);
+ }
+
+ // ─── ELITE: RECOVERY / MOBILITE (5e composante) ───
+ if (wod.recovery && wod.recovery.protocol && wod.recovery.protocol.length) {
+  var recCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #5A5A1A;background:rgba(90,90,26,0.03)'});
+  recCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#5A5A1A;margin-bottom:6px'}, 'RECOVERY & MOBILITE (Protocole champion)'));
+  if (wod.recovery.targets && wod.recovery.targets.length) {
+   recCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:6px'}, 'Zones cibles : ' + wod.recovery.targets.join(', ')));
+  }
+  var recList = h('div', {});
+  wod.recovery.protocol.forEach(function(step, idx) {
+   recList.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);padding:3px 0'}, (idx + 1) + '. ' + step));
+  });
+  recCard.appendChild(recList);
+  p.appendChild(recCard);
+ }
+
+ // ─── ELITE MODE (RX+ uniquement) ───
+ if (S.crossfitLevel === 'rx_plus') {
+  var eliteCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #8B2FC9;background:rgba(139,47,201,0.04)'});
+  eliteCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8B2FC9;margin-bottom:6px'}, 'ELITE MODE — Champion Mental Framework'));
+  var elitePoints = [
+   'INTENT: Chaque WOD a un objectif precis dans la programmation. Lis les notes du WOD AVANT de commencer.',
+   'PACING: Un champion ne commence jamais a 100% avant le round 3. Reserve 15% de capacite pour la fin.',
+   'JOURNAL: Note ton score, ton RPE, et tes observations. La progression vient de l\'analyse, pas juste du travail.',
+   'RECOVERY: Le muscle grandit pendant le repos, pas pendant l\'entrainement. Dors 8h minimum ce soir.',
+   'MENTAL: "Les jours difficiles sont les jours qui nous construisent. Les jours faciles sont des jours de maintenance."'
+  ];
+  var eliteList = h('div', {});
+  elitePoints.forEach(function(pt, idx) {
+   eliteList.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:10px;color:#8B2FC9;padding:3px 0;border-bottom:1px solid rgba(139,47,201,0.15)'}, (idx + 1) + '. ' + pt));
+  });
+  eliteCard.appendChild(eliteList);
+  p.appendChild(eliteCard);
+ }
+
+ // Day summary — ELITE 5 composantes
+ var hasAerobic = wod.aerobic && wod.aerobic.type;
+ var hasRecovery = wod.recovery && wod.recovery.protocol && wod.recovery.protocol.length;
+ var eliteCompCount = (currentDay.hasHaltero ? 1 : 0) + 1 + 1 + (hasAerobic ? 1 : 0) + (hasRecovery ? 1 : 0); // strength+WOD+gym+aerobic+recovery
  var summary = h('div', {'class': 'day-total'});
- summary.appendChild(h('div', {'class': 'dt-label'}, sectionCount + ' sections'));
- summary.appendChild(h('div', {'class': 'dt-val'}, currentDay.hasHaltero ? '~60-75 min' : '~45-60 min'));
+ summary.appendChild(h('div', {'class': 'dt-label'}, eliteCompCount + ' composantes ELITE'));
+ var durStr = currentDay.hasHaltero ? '~75-90 min' : '~50-65 min';
+ if (hasAerobic) durStr += ' + 20-40 min Z2 sep.';
+ summary.appendChild(h('div', {'class': 'dt-val'}, durStr));
  p.appendChild(summary);
 
  // ─── WOD TIMER ───
@@ -2186,6 +2383,62 @@ function renderCrossfitProgram(p) {
  doneCard.appendChild(doneBtn);
  }
  p.appendChild(doneCard);
+
+ // ─── ELITE: RPE TRACKER ───
+ (function() {
+  if (!S.cfProgress) S.cfProgress = {};
+  var wodDay2 = wod && wod.day;
+  if (!wodDay2) return;
+  var isWodDone2 = !!(S.cfProgress[wodDay2] && S.cfProgress[wodDay2].done);
+  if (!isWodDone2) return; // Only show RPE after marking done
+
+  var existingRpe = S.cfProgress[wodDay2] && S.cfProgress[wodDay2].rpe;
+  var rpeCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;margin:4px 0 8px;background:var(--ivory2)'});
+  rpeCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'NOTER MA SEANCE (RPE)'));
+  rpeCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px'}, 'Comment s\'est passe ce WOD ?'));
+
+  var rpeRow = h('div', {style: 'display:flex;gap:8px'});
+  var rpeOptions = [
+   {val: 'easy', label: 'Facile', color: '#1A4A1A', bg: 'rgba(26,74,26,0.08)'},
+   {val: 'good', label: 'Bon effort', color: '#1A3A6A', bg: 'rgba(26,58,106,0.08)'},
+   {val: 'hard', label: 'Epuisant', color: '#5A1010', bg: 'rgba(90,16,16,0.08)'}
+  ];
+  rpeOptions.forEach(function(rpeOpt) {
+   var isSelected = (existingRpe === rpeOpt.val);
+   var rpeBtn = h('button', {
+    style: 'flex:1;padding:8px 4px;border:1px solid ' + (isSelected ? rpeOpt.color : 'var(--border)') + ';background:' + (isSelected ? rpeOpt.bg : 'transparent') + ';font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:' + rpeOpt.color + ';cursor:pointer;border-radius:2px',
+    onclick: (function(rv) {
+     return function() {
+      if (!S.cfProgress) S.cfProgress = {};
+      if (!S.cfProgress[wodDay2]) S.cfProgress[wodDay2] = { done: true };
+      S.cfProgress[wodDay2].rpe = rv;
+      // Check for 5 consecutive "hard" RPE -> deload recommendation
+      var hardCount = 0;
+      var dayNums = Object.keys(S.cfProgress).map(Number).sort(function(a, b) { return a - b; });
+      var lastFive = dayNums.slice(-5);
+      for (var li = 0; li < lastFive.length; li++) {
+       if (S.cfProgress[lastFive[li]] && S.cfProgress[lastFive[li]].rpe === 'hard') hardCount++;
+      }
+      if (hardCount >= 5) {
+       S.cfDeloadRecommended = true;
+      }
+      window.render();
+     };
+    })(rpeOpt.val)
+   }, rpeOpt.label);
+   rpeRow.appendChild(rpeBtn);
+  });
+  rpeCard.appendChild(rpeRow);
+
+  // Deload recommendation
+  if (S.cfDeloadRecommended) {
+   var deloadRec = h('div', {style: 'margin-top:10px;padding:8px 12px;background:rgba(224,123,0,0.08);border-left:2px solid #E07B00;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#E07B00'});
+   deloadRec.textContent = 'DELOAD RECOMMANDE : 5 seances consecutives Epuisant detectees. La semaine prochaine, reduisez le volume de 40% et l\'intensite a 70% max. Votre systeme nerveux central a besoin de recuperation.';
+   rpeCard.appendChild(deloadRec);
+  }
+
+  p.appendChild(rpeCard);
+ })();
  })();
 
  // Regenerate (shuffle order)
@@ -3486,22 +3739,22 @@ function renderMusculationProgram(p) {
  // ─── GROSSESSE — Adaptations sport ───
  if (S.pregnant && S.sex === 'femme') {
  var triSport = window.getPregnancyTrimester ? window.getPregnancyTrimester() : null;
- if (triSport) {
+ if (triSport && triSport.trimester) {
  var triSportColor = '#5A1010';
- var intensitySport = Math.round(triSport.trimester.intensityFactor * 100);
+ var intensitySport = Math.round((triSport.trimester.intensityFactor || 0.5) * 100);
 
  var pregSportCard = h('div', {style: 'border:2px solid ' + triSportColor + ';padding:16px;background:rgba(192,57,43,0.04);margin-bottom:16px'});
- pregSportCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:' + triSportColor + ';margin-bottom:8px'}, '\uD83E\uDD30 Programme adapt\u00e9 grossesse \u2014 ' + triSport.trimester.name));
+ pregSportCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:' + triSportColor + ';margin-bottom:8px'}, '\uD83E\uDD30 Programme adapt\u00e9 grossesse \u2014 ' + (triSport.trimester.name || '')));
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:10px'}, 'Intensit\u00e9 : ' + intensitySport + '% \u2014 \u00c9coutez votre corps'));
 
  // Sport tips
- triSport.trimester.sportTips.forEach(function(tip) {
+ if (triSport.trimester.sportTips) triSport.trimester.sportTips.forEach(function(tip) {
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
  });
 
  // Forbidden exercises
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + triSportColor + ';margin:10px 0 6px'}, 'Exercices interdits ce trimestre'));
- triSport.trimester.forbiddenExercises.forEach(function(ex) {
+ if (triSport.trimester.forbiddenExercises) triSport.trimester.forbiddenExercises.forEach(function(ex) {
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + triSportColor + ';margin-bottom:2px;padding-left:8px'}, '\u2716 ' + ex));
  });
 
@@ -4260,7 +4513,7 @@ function renderMusculationProgram(p) {
  if (sugW4 && sugW4 > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:2px'}, '\u2192 ~' + (window.UNITS ? window.UNITS.displayWeight(sugW4) : sugW4 + ' kg')));
  row.appendChild(left);
  var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
- right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:bold'}, ex.sets + '\u00d7' + ex.reps));
+ right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:normal'}, ex.sets + '\u00d7' + ex.reps));
  right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, ex.rest));
  // Bouton + / Ajouté — ajoute l'exercice en bonus à la séance courante
  var bonusArr = S.bonusExercises[S.selectedSportDay] || [];
@@ -5242,7 +5495,39 @@ function renderTriathlonConfig(p) {
  oninput: function(e) { S.triathlonRunPace = e.target.value; }
  }));
  paceGrid.appendChild(runWrap);
+
+ var ftpWrap = h('div', {style: 'display:flex;flex-direction:column;gap:4px'});
+ ftpWrap.appendChild(h('div', {style: 'font-size:11px;color:var(--grey)'}, ' FTP (watts)'));
+ ftpWrap.appendChild(h('input', {'class': 'num-input', type: 'number', placeholder: '200', value: S.triathlonFTP || '', style: 'width:100%;text-align:center',
+ oninput: function(e) { S.triathlonFTP = e.target.value; }
+ }));
+ paceGrid.appendChild(ftpWrap);
+
  p.appendChild(paceGrid);
+
+ // ── Date de course (optionnel) ──
+ p.appendChild(h('div', {style: 'height:16px'}));
+ p.appendChild(h('div', {style: 'width:100%;height:1px;background:var(--border);margin-bottom:16px'}));
+ p.appendChild(h('div', {'class': 'section-label'}, 'Date de course (optionnel)'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px'}, 'Le nombre de semaines sera adapté automatiquement à votre date de course'));
+ var dateWrap = h('div', {style: 'display:flex;align-items:center;gap:12px'});
+ var dateInput = h('input', {'class': 'num-input', type: 'date', value: S.triathlonRaceDate || '', style: 'flex:1',
+ oninput: function(e) { S.triathlonRaceDate = e.target.value; }
+ });
+ dateWrap.appendChild(dateInput);
+ if (S.triathlonRaceDate) {
+  try {
+   var rdMs = new Date(S.triathlonRaceDate).getTime();
+   var nowMs2 = Date.now();
+   var diffW = Math.floor((rdMs - nowMs2) / (7 * 24 * 3600 * 1000));
+   if (diffW > 0) {
+    dateWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--grey);font-style:italic'}, diffW + ' semaines'));
+   } else if (diffW <= 0) {
+    dateWrap.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#C0392B'}, 'Date passée'));
+   }
+  } catch(e2) {}
+ }
+ p.appendChild(dateWrap);
 
  // Temps de course estimé si allures renseignées
  if (S.triathlonGoal && S.triathlonBikePace && S.triathlonRunPace && S.triathlonSwimPace) {
@@ -5283,11 +5568,18 @@ function renderTriathlonConfig(p) {
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
  if (!ok) return;
- S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null);
+ var triopts = {
+  swimPace: S.triathlonSwimPace || null,
+  bikeSpeed: S.triathlonBikePace || null,
+  runPace: S.triathlonRunPace || null,
+  raceDate: S.triathlonRaceDate || null,
+  ftp: S.triathlonFTP || null
+ };
+ S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts);
  S.triathlonWeek = 1;
  S.selectedTriDay = 0;
  S.sStep = 18;
- if (window.BLACKBOX) window.BLACKBOX.log('triathlon_config', {goal: S.triathlonGoal, level: S.triathlonLevel, weak: S.triathlonWeak});
+ if (window.BLACKBOX) window.BLACKBOX.log('triathlon_config', {goal: S.triathlonGoal, level: S.triathlonLevel, weak: S.triathlonWeak, raceDate: S.triathlonRaceDate || null, ftp: S.triathlonFTP || null});
  // Enregistrer les allures triathlon dans l'historique
  if (window.PERF_HISTORY) {
  if (S.triathlonSwimPace) PERF_HISTORY.recordTriathlonPace('swim', S.triathlonSwimPace, 'min/100m');
@@ -5302,7 +5594,14 @@ function renderTriathlonConfig(p) {
 // ─── STEP 18: TRIATHLON PROGRAM ───
 function renderTriathlonProgram(p) {
  if (!S.triathlonProgram || !S.triathlonProgram.length) {
- S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null);
+  var triopts2 = {
+   swimPace: S.triathlonSwimPace || null,
+   bikeSpeed: S.triathlonBikePace || null,
+   runPace: S.triathlonRunPace || null,
+   raceDate: S.triathlonRaceDate || null,
+   ftp: S.triathlonFTP || null
+  };
+  S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts2);
  }
 
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -5326,7 +5625,41 @@ function renderTriathlonProgram(p) {
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Triathlon / IRONMAN'));
  p.appendChild(h('h1', {html: (goalObj ? goalObj.name : 'Triathlon') + '<br><em>Programme</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, totalWeeks + ' semaines · ' + (levelObj ? levelObj.name : '') + ' · 80/20 · Méthode Jan Frodeno'));
+ var subtitleParts = [totalWeeks + ' semaines', (levelObj ? levelObj.name : ''), '80/20', 'Méthode Jan Frodeno'];
+ if (program[0] && program[0].raceDate) { try { var rdDisp = new Date(program[0].raceDate); subtitleParts.unshift('Course : ' + rdDisp.toLocaleDateString('fr-FR', {day:'numeric',month:'short',year:'numeric'})); } catch(e) {} }
+ p.appendChild(h('p', {'class': 'subtitle'}, subtitleParts.join(' · ')));
+
+ // ── Zones de référence (si allures renseignées) ──
+ var zref = program[0] && program[0].zoneRef;
+ if (zref && (zref.swim || zref.bike || zref.run)) {
+  var zoneCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
+  zoneCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;margin-bottom:8px'}, 'Vos zones personnalisées'));
+  var zoneGrid = h('div', {style: 'display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px'});
+  if (zref.swim) {
+   var sz = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
+   sz.appendChild(h('div', {style: 'font-weight:bold;color:#1A3A6A;margin-bottom:4px'}, ' Nage'));
+   sz.appendChild(h('div', {}, 'Z2 : ' + (zref.swim.z2 || '—')));
+   sz.appendChild(h('div', {}, 'CSS : ' + (zref.swim.css || '—')));
+   zoneGrid.appendChild(sz);
+  }
+  if (zref.bike) {
+   var bz = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
+   bz.appendChild(h('div', {style: 'font-weight:bold;color:#6A4A1A;margin-bottom:4px'}, ' Vélo'));
+   bz.appendChild(h('div', {}, 'Z2 : ' + (zref.bike.z2 || '—')));
+   bz.appendChild(h('div', {}, 'Sweetspot : ' + (zref.bike.sweetspot || '—')));
+   if (zref.ftp) bz.appendChild(h('div', {style: 'color:#E67E22'}, 'FTP : ' + zref.ftp + 'W'));
+   zoneGrid.appendChild(bz);
+  }
+  if (zref.run) {
+   var rz = h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
+   rz.appendChild(h('div', {style: 'font-weight:bold;color:#1A4A1A;margin-bottom:4px'}, ' Run'));
+   rz.appendChild(h('div', {}, 'Z2 : ' + (zref.run.z2 || '—')));
+   rz.appendChild(h('div', {}, 'Seuil : ' + (zref.run.z4 || '—')));
+   zoneGrid.appendChild(rz);
+  }
+  zoneCard.appendChild(zoneGrid);
+  p.appendChild(zoneCard);
+ }
 
  // ── Navigation semaines ──
  var weekNav = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0'});
@@ -6085,187 +6418,141 @@ function renderCyclingProgram(p) {
 }
 
 // ═══════════════════════════════════════
-// CALLISTHÉNIE MODULE
+// CALLISTHENIE MODULE — Version 2.0
+// Skills complets, sessions adaptees, equipement, periodisation
 // ═══════════════════════════════════════
 
-var CALISTHENICS_SKILLS = {
- planche: {
- name: 'Planche',
- icon: '',
- description: 'Force de poussée horizontale — gainage total',
- restTime: '3-5 min (skill statique)',
- progressions: [
- { level: 'A', name: 'Planche Frog (équilibre)', duration: '5-10s', weeks: '1-3', prep: ['Hollow body 3×20s', 'Wrist prep 2min', 'Pike push-up 3×8'], cue: 'Mains à plat, doigts écartés, épaules protractées — soulever les genoux' },
- { level: 'B', name: 'Planche Tuck (genoux groupés)', duration: '10-20s', weeks: '4-8', prep: ['Pseudo planche push-up 3×6', 'Shoulder protraction hold 3×20s', 'Wrist circles 2min'], cue: 'Genoux au niveau de la poitrine, dos rond, épaules devant les mains' },
- { level: 'C', name: 'Advanced Tuck (hanche à 90°)', duration: '8-15s', weeks: '9-16', prep: ['Pseudo planche push-up incliné 3×6', 'Tuck planche push-up 3×4', 'Bulgarian bag shoulder 3×10'], cue: 'Ouvrir progressivement la hanche, garder le dos arrondi' },
- { level: 'D', name: 'Straddle Planche', duration: '5-10s', weeks: '17-28', prep: ['Advanced tuck push-up 3×5', 'Planche lean 30s', 'Maltese lean 15s'], cue: 'Jambes écartées à 90°+ — angle optimal pour réduire le bras de levier' },
- { level: 'E', name: 'Full Planche', duration: '3-8s', weeks: '29-52+', prep: ['Straddle planche push-up 3×3', 'Planche lean maximal 30s', 'Handstand 30s minimum requis'], cue: 'Jambes jointes et horizontales — temps de maîtrise réaliste : 1-2 ans' }
- ]
- },
- frontLever: {
- name: 'Front Lever',
- icon: '',
- description: 'Force de traction horizontale — grand dorsal + core',
- restTime: '3-5 min (skill statique)',
- progressions: [
- { level: 'A', name: 'Tuck Front Lever (genoux groupés)', duration: '8-15s', weeks: '1-4', prep: ['Australian pull-up 3×10', 'Dead hang 3×30s', 'Scapular pull-up 3×10'], cue: 'Corps en boule, hanches à hauteur des épaules, dos plat' },
- { level: 'B', name: 'Advanced Tuck (dos plat, hanche à 90°)', duration: '8-15s', weeks: '5-10', prep: ['Slow pull-up eccentric 5s 3×5', 'Tuck front lever pull-up 3×3', 'Band-assisted front lever 3×15s'], cue: 'Hanche ouverte, cuisse horizontale, dos plat — progression clé' },
- { level: 'C', name: 'Straddle Front Lever', duration: '5-10s', weeks: '11-20', prep: ['Front lever pull-up tuck 3×3', 'Windshield wipers 3×5', 'L-sit pull-up 3×5'], cue: 'Jambes écartées — réduire l\'écartement semaine par semaine' },
- { level: 'D', name: 'Full Front Lever', duration: '3-8s', weeks: '21-36+', prep: ['Straddle pull-up 3×3', 'Front lever raise tuck 3×5', 'Hanging leg raise weighted 3×8'], cue: 'Corps parfaitement horizontal, bras tendus, scapulas déprimées' }
- ]
- },
- muscleUp: {
- name: 'Muscle-up',
- icon: '',
- description: 'Passage traction → poussée — force explosive',
- restTime: '3-4 min',
- progressions: [
- { level: 'A', name: 'Pull-up strict fausse prise', duration: '3×5 reps', weeks: '1-4', prep: ['Dead hang 30s', 'Scapular pull-up 3×10', 'Jumping muscle-up x5'], cue: 'Maîtriser 10 tractions strictes en fausse prise avant de progresser' },
- { level: 'B', name: 'Explosion + transition barre', duration: '3×5 chaque', weeks: '5-8', prep: ['Bar dip 3×10', 'Pull-up fausse prise explosif 3×5', 'Negative muscle-up 3×3 5s'], cue: 'Explosion au-dessus de la barre, transition rapide en appui de poussée' },
- { level: 'C', name: 'Kipping muscle-up (bascule)', duration: '3×3 reps', weeks: '9-14', prep: ['Kipping swing maîtrisé', 'Pull-up explosif 3×5', 'Bar dip strict 3×12'], cue: 'Kipping comme outil d\'apprentissage — viser le strict ensuite' },
- { level: 'D', name: 'Strict muscle-up', duration: '1-5 reps', weeks: '15-28+', prep: ['Weighted pull-up +10kg 3×5', 'Weighted dip +10kg 3×8', 'Ring muscle-up transition 3×3'], cue: 'Strict = force pure. Bras qui passent en ligne droite au-dessus du support' }
- ]
- },
- handstand: {
- name: 'Handstand',
- icon: '',
- description: 'Équilibre inversé — proprioception et force épaules',
- restTime: '2-3 min',
- progressions: [
- { level: 'A', name: 'Wall Handstand Hold', duration: '3×20-30s', weeks: '1-4', prep: ['Pike hold 3×20s', 'Wrist mobility 3min/jour', 'Shoulder shrugs inverted 3×10'], cue: 'Face au mur, ventre collé, corps gainé, pousser le sol vers le bas' },
- { level: 'B', name: 'Kick-up + Hold (loin du mur)', duration: '5-15s', weeks: '5-10', prep: ['Wall handstand kick-up 3×5', 'Forward rolls de secours', 'Finger pressure balance 3×20s'], cue: 'Alignement talons-fesses-épaules-poignets, micro-corrections doigts' },
- { level: 'C', name: 'Freestanding Handstand 10-30s', duration: '10-30s', weeks: '11-24', prep: ['Pirouette contre mur 3×5', 'Handstand touches 3×10', 'One arm supported 3×10s'], cue: 'Regarder les mains, micro-ajustements onglets, 10min/jour de pratique' },
- { level: 'D', name: 'Handstand Push-up (HSPU)', duration: '3×3-8 reps', weeks: '20-36+', prep: ['Pike push-up 3×10', 'Wall HSPU negatives 3×5', 'Pike HSPU box 3×8'], cue: 'Tête entre les mains, coudes à 45°, plein amplitude menton-sol' }
- ]
- }
-};
-
-var CALISTHENICS_WEEKLY_STRUCTURE = {
- debutant: {
- days: 3,
- sessions: [
- { name: 'Poussée + Équilibre', focus: 'push', exercises: ['Hollow body 3×20s', 'Pike hold 3×15s', 'Push-up 3×10', 'Pseudo planche lean 3×10s', 'Pike push-up 3×8', 'Dip 3×8'] },
- { name: 'Traction + Core', focus: 'pull', exercises: ['Dead hang 3×20s', 'Scapular pull-up 3×10', 'Australian pull-up 3×8', 'L-sit parallettes 3×10s', 'Hanging knee raise 3×10'] },
- { name: 'Jambes + Gainage', focus: 'legs', exercises: ['Squat 3×15', 'Bulgarian split squat 3×10', 'Hip thrust 3×12', 'Plank 3×45s', 'Side plank 3×30s', 'Bridge 3×15'] }
- ]
- },
- intermediaire: {
- days: 4,
- sessions: [
- { name: 'Planche progressions', focus: 'planche', exercises: ['Wrist prep 3min', 'Frog stand 3×15s', 'Tuck planche 4×10s', 'Pseudo planche push-up 4×6', 'Planche lean 3×15s', 'Ring dip 4×8'] },
- { name: 'Front Lever + Traction', focus: 'frontlever', exercises: ['Scapular pull-up 4×10', 'Tuck front lever 4×12s', 'Advanced tuck FL 4×8s', 'Slow pull-up 4×5 3s descente', 'L-sit pull-up 3×5'] },
- { name: 'Handstand + Poussée', focus: 'handstand', exercises: ['Wrist mobility 3min', 'Wall handstand 4×20s', 'Pike HSPU 4×6', 'Ring push-up 4×10', 'Handstand kick-up 4×5 essais'] },
- { name: 'Conditionnement + Core', focus: 'conditioning', exercises: ['Pull-up explosif 4×5', 'Muscle-up transition ring 4×3', 'Windshield wiper 3×8', 'Dragon flag 3×5', 'Pistol squat 3×5 par jambe'] }
- ]
- },
- avance: {
- days: 5,
- sessions: [
- { name: 'Planche — Volume skill', focus: 'planche', exercises: ['Wrist prep 3min', 'Advanced tuck planche 5×12s', 'Straddle planche 5×8s', 'Full planche attempts 5×3-5s', 'Planche push-up 4×3', 'Maltese lean 3×20s'] },
- { name: 'Front Lever — Volume skill', focus: 'frontlever', exercises: ['Advanced tuck FL 5×12s', 'Straddle FL 5×8s', 'Full front lever 5×3-5s', 'FL pull-up 4×3', 'Front lever raise 3×5'] },
- { name: 'Muscle-up + Handstand', focus: 'muscleup', exercises: ['Bar muscle-up strict 5×3', 'Ring muscle-up 4×3', 'Freestanding handstand 5×15-20s', 'HSPU 4×5', 'Handstand walk 2×5m'] },
- { name: 'Force + Explosivité', focus: 'strength', exercises: ['Weighted pull-up +10kg 4×5', 'Weighted dip +10kg 4×8', 'Archer push-up 4×6', 'One-arm pull-up progression 4×3 assisté', 'Manna progression 4×8s'] },
- { name: 'Mobilité + Récupération active', focus: 'mobility', exercises: ['Hip flexor stretch 3×60s par côté', 'Shoulder circles 3×20', 'Bridge walk-out 3×10', 'Pancake stretch 3×60s', 'Wrist rehabilitation 5min'] }
- ]
- }
-};
-
-function generateCalisthenicsPlan(level, goal) {
- var structure = CALISTHENICS_WEEKLY_STRUCTURE[level] || CALISTHENICS_WEEKLY_STRUCTURE.debutant;
- var totalWeeks = level === 'debutant' ? 12 : level === 'intermediaire' ? 16 : 20;
- var plan = [];
- for (var w = 1; w <= totalWeeks; w++) {
- var isDeload = (w % 4 === 0);
- var phase = w <= Math.round(totalWeeks * 0.3) ? 'Fondations' :
- w <= Math.round(totalWeeks * 0.6) ? 'Développement' :
- w <= Math.round(totalWeeks * 0.85) ? 'Spécifique' : 'Pic/Test';
- var weekFocus = isDeload ? 'Décharge — 50% volume, RIR élevé, consolider les acquis' :
- (w % 4 === 1 ? 'Accumulation — augmentation volume, RIR 3-4' :
- w % 4 === 2 ? 'Intensification — augmentation intensité, RIR 2' :
- 'Réalisation — effort maximum, RIR 1');
- var weekObj = {
- week: w, phase: phase, isDeload: isDeload, focus: weekFocus,
- sessions: structure.sessions.map(function(sess) {
- return {
- name: isDeload ? sess.name + ' (allégé)' : sess.name,
- focus: sess.focus,
- exercises: isDeload ? sess.exercises.slice(0, Math.max(2, Math.ceil(sess.exercises.length * 0.5))) : sess.exercises
- };
- })
- };
- plan.push(weekObj);
- }
- return plan;
-}
-
+// ═══════════════════════════════════════
+// CALLISTHENIE MODULE — Version 2.0
+// Skills complets, sessions adaptees, equipement, periodisation
+// ═══════════════════════════════════════
 
 // ─── STEP 24: CALISTHENICS ONBOARDING ───
 function renderCalisthenicsOnboarding(p) {
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Callisthénie'));
- p.appendChild(h('h1', {html: 'Votre programme<br><em>callisthénie</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Street workout, progressions au poids du corps.'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, 'Callisthenie'));
+ p.appendChild(h('h1', {html: 'Votre programme<br><em>callisthenie</em>'}));
+ p.appendChild(h('p', {'class': 'subtitle'}, 'Street workout — progressions au poids du corps. Personnalise selon votre niveau reel.'));
 
  // Niveau
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
  var lvlList = h('div', {'class': 'level-list'});
  [
- { id: 'debutant', icon: '', name: window.t('sport.beginner'), desc: 'Moins de 5 tractions, bases à construire' },
- { id: 'intermediaire', icon: '', name: window.t('sport.intermediate'), desc: '5-12 tractions, maîtrise des fondamentaux' },
- { id: 'avance', icon: '', name: window.t('sport.advanced'), desc: '12+ tractions, apprentissage des skills' },
- { id: 'elite', icon: '', name: window.t('sport.elite'), desc: 'Maîtrise complète, skills de haut niveau' }
+  { id: 'debutant', icon: '', name: window.t('sport.beginner'), desc: 'Moins de 5 tractions — bases a construire' },
+  { id: 'intermediaire', icon: '', name: window.t('sport.intermediate'), desc: '5-12 tractions — maitrise des fondamentaux' },
+  { id: 'avance', icon: '', name: window.t('sport.advanced'), desc: '12+ tractions — apprentissage des skills avances' },
+  { id: 'elite', icon: '', name: window.t('sport.elite'), desc: 'Maitrise complete — skills de haut niveau' }
  ].forEach(function(lv) {
- var isOn = S.calisthenicsLevel === lv.id;
- lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.calisthenicsLevel = lv.id; window.render(); }}, [
- h('div', {}, [
- h('div', {'class': 'level-name'}, lv.icon + ' ' + lv.name),
- h('div', {'class': 'level-desc'}, lv.desc)
- ]),
- isOn ? h('span', {'class': 'level-badge'}, '') : h('span', {})
- ]));
+  var isOn = S.calisthenicsLevel === lv.id;
+  lvlList.appendChild(h('div', {'class': 'level-item' + (isOn ? ' on' : ''), onclick: function(){ S.calisthenicsLevel = lv.id; window.render(); }}, [
+   h('div', {}, [
+    h('div', {'class': 'level-name'}, lv.icon + ' ' + lv.name),
+    h('div', {'class': 'level-desc'}, lv.desc)
+   ]),
+   isOn ? h('span', {'class': 'level-badge'}, '') : h('span', {})
+  ]));
  });
  p.appendChild(lvlList);
 
+ // Equipement disponible
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Equipement disponible'));
+ if (!Array.isArray(S.calisthenicsEquipment)) { S.calisthenicsEquipment = ['bar']; }
+ var equipOptions = [
+  { id: 'bar', label: 'Barre de traction' },
+  { id: 'parallettes', label: 'Parallettes' },
+  { id: 'rings', label: 'Anneaux' },
+  { id: 'floor_only', label: 'Sol uniquement' }
+ ];
+ var equipChips = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px'});
+ equipOptions.forEach(function(eq) {
+  var isOn = S.calisthenicsEquipment.indexOf(eq.id) >= 0;
+  equipChips.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), onclick: function(){
+   if (!Array.isArray(S.calisthenicsEquipment)) { S.calisthenicsEquipment = []; }
+   var idx = S.calisthenicsEquipment.indexOf(eq.id);
+   if (idx >= 0) { S.calisthenicsEquipment.splice(idx, 1); }
+   else {
+    // floor_only is exclusive
+    if (eq.id === 'floor_only') { S.calisthenicsEquipment = ['floor_only']; }
+    else {
+     var floorIdx = S.calisthenicsEquipment.indexOf('floor_only');
+     if (floorIdx >= 0) { S.calisthenicsEquipment.splice(floorIdx, 1); }
+     S.calisthenicsEquipment.push(eq.id);
+    }
+   }
+   window.render();
+  }}, eq.label));
+ });
+ p.appendChild(equipChips);
+ // Note si sol uniquement ou pas de barre
+ var hasBar = S.calisthenicsEquipment.indexOf('bar') >= 0;
+ if (!hasBar) {
+  p.appendChild(h('div', {'class': 'num-hint', style: 'color:var(--accent,#1A4A1A)'}, 'Pas de barre ? Programme sol adapte avec alternatives.'));
+ }
+
  // Pull-ups max
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Pull-ups max (en une série)'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Pull-ups max (en une serie)'));
  var puWrap = h('div', {'class': 'num-input-wrap'});
  puWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '0', max: '50', value: String(S.calisthPullups || 0), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 0 && v <= 50) { S.calisthPullups = v; } },
- onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 0) { e.target.value = '0'; S.calisthPullups = 0; } else if (v > 50) { e.target.value = '50'; S.calisthPullups = 50; } }
+  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 0 && v <= 50) { S.calisthPullups = v; } },
+  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 0) { e.target.value = '0'; S.calisthPullups = 0; } else if (v > 50) { e.target.value = '50'; S.calisthPullups = 50; } }
  }));
  puWrap.appendChild(h('span', {'class': 'num-unit'}, 'reps'));
  p.appendChild(puWrap);
- p.appendChild(h('div', {'class': 'num-hint'}, '0 à 50 répétitions'));
+ if ((S.calisthPullups || 0) === 0) {
+  p.appendChild(h('div', {'class': 'num-hint', style: 'color:var(--accent,#1A4A1A)'}, '0 traction ? Programme debute avec les alternatives (negatifs, australien).'));
+ } else {
+  p.appendChild(h('div', {'class': 'num-hint'}, '0 a 50 repetitions'));
+ }
 
  // Push-ups max
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Push-ups max (en une série)'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Push-ups max (en une serie)'));
  var ppWrap = h('div', {'class': 'num-input-wrap'});
  ppWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '0', max: '100', value: String(S.calisthPushups || 0), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 0 && v <= 100) { S.calisthPushups = v; } },
- onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 0) { e.target.value = '0'; S.calisthPushups = 0; } else if (v > 100) { e.target.value = '100'; S.calisthPushups = 100; } }
+  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 0 && v <= 100) { S.calisthPushups = v; } },
+  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 0) { e.target.value = '0'; S.calisthPushups = 0; } else if (v > 100) { e.target.value = '100'; S.calisthPushups = 100; } }
  }));
  ppWrap.appendChild(h('span', {'class': 'num-unit'}, 'reps'));
  p.appendChild(ppWrap);
- p.appendChild(h('div', {'class': 'num-hint'}, '0 à 100 répétitions'));
+ p.appendChild(h('div', {'class': 'num-hint'}, '0 a 100 repetitions'));
 
- // Objectifs (multi-select chips)
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Objectifs (plusieurs choix possibles)'));
+ // Dips max
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Dips max (en une serie)'));
+ var dpWrap = h('div', {'class': 'num-input-wrap'});
+ dpWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '0', max: '50', value: String(S.calisthDips || 0), inputmode: 'numeric',
+  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 0 && v <= 50) { S.calisthDips = v; } },
+  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 0) { e.target.value = '0'; S.calisthDips = 0; } else if (v > 50) { e.target.value = '50'; S.calisthDips = 50; } }
+ }));
+ dpWrap.appendChild(h('span', {'class': 'num-unit'}, 'reps'));
+ p.appendChild(dpWrap);
+ p.appendChild(h('div', {'class': 'num-hint'}, '0 a 50 repetitions'));
+
+ // Objectifs — skills cibles
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, 'Objectifs — Skills cibles (plusieurs choix possibles)'));
  var goalChips = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px'});
  var GOAL_OPTIONS = [
- { id: 'muscle_up', label: 'Muscle-up' },
- { id: 'handstand', label: 'Handstand' },
- { id: 'front_lever', label: 'Front lever' },
- { id: 'planche', label: 'Planche' },
- { id: 'lsit', label: 'L-sit' },
- { id: 'dragon_flag', label: 'Dragon flag' }
+  { id: 'muscle_up', label: 'Muscle-up barre' },
+  { id: 'muscle_up_rings', label: 'Muscle-up anneaux' },
+  { id: 'handstand', label: 'Handstand mur' },
+  { id: 'handstand_free', label: 'Handstand libre' },
+  { id: 'front_lever', label: 'Front lever' },
+  { id: 'back_lever', label: 'Back lever' },
+  { id: 'planche', label: 'Planche' },
+  { id: 'planche_lean', label: 'Planche lean' },
+  { id: 'lsit', label: 'L-sit' },
+  { id: 'lsit_bars', label: 'L-sit parallettes' },
+  { id: 'dragon_flag', label: 'Dragon flag' },
+  { id: 'human_flag', label: 'Human flag' },
+  { id: 'pistol_squat', label: 'Pistol squat' },
+  { id: 'one_arm_pullup', label: 'One arm pull-up' }
  ];
- if (!S.calisthenicsGoal) S.calisthenicsGoal = [];
+ if (!Array.isArray(S.calisthenicsGoal)) { S.calisthenicsGoal = []; }
  GOAL_OPTIONS.forEach(function(g) {
- var isOn = S.calisthenicsGoal.indexOf(g.id) >= 0;
- goalChips.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), onclick: function(){
- var idx = S.calisthenicsGoal.indexOf(g.id);
- if (idx >= 0) { S.calisthenicsGoal.splice(idx, 1); } else { S.calisthenicsGoal.push(g.id); }
- window.render();
- }}, g.label));
+  var isOn = S.calisthenicsGoal.indexOf(g.id) >= 0;
+  goalChips.appendChild(h('span', {'class': 'chip' + (isOn ? ' on' : ''), onclick: function(){
+   if (!Array.isArray(S.calisthenicsGoal)) { S.calisthenicsGoal = []; }
+   var idx = S.calisthenicsGoal.indexOf(g.id);
+   if (idx >= 0) { S.calisthenicsGoal.splice(idx, 1); } else { S.calisthenicsGoal.push(g.id); }
+   window.render();
+  }}, g.label));
  });
  p.appendChild(goalChips);
 
@@ -6273,221 +6560,244 @@ function renderCalisthenicsOnboarding(p) {
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '5', value: String(S.calisthenicsdays || 3), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.calisthenicsdays = v; } },
- onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = '2'; S.calisthenicsdays = 2; } else if (v > 5) { e.target.value = '5'; S.calisthenicsdays = 5; } }
+  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 5) { S.calisthenicsdays = v; } },
+  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { e.target.value = '2'; S.calisthenicsdays = 2; } else if (v > 5) { e.target.value = '5'; S.calisthenicsdays = 5; } }
  }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
- p.appendChild(h('div', {'class': 'num-hint'}, '2 à 5 jours par semaine'));
+ p.appendChild(h('div', {'class': 'num-hint'}, '2 a 5 jours par semaine'));
 
  p.appendChild(h('div', {style: 'height:20px'}));
- var ok = S.calisthenicsLevel && S.calisthenicsGoal && S.calisthenicsGoal.length > 0;
+ var ok = S.calisthenicsLevel && Array.isArray(S.calisthenicsGoal) && S.calisthenicsGoal.length > 0;
  if (!ok) {
- p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez un niveau et au moins un objectif'));
+  p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Selectionnez un niveau et au moins un objectif'));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) {
- if (!S.calisthenicsdays) S.calisthenicsdays = 3;
- if (!S.calisthPullups) S.calisthPullups = 0;
- if (!S.calisthPushups) S.calisthPushups = 0;
- S.sStep = 25;
- window.BLACKBOX && window.BLACKBOX.log('calisthenics_config', { level: S.calisthenicsLevel, goal: S.calisthenicsGoal, days: S.calisthenicsdays });
- window.render();
- }
- }}, 'Générer mon programme'));
+  if (ok) {
+   if (!S.calisthenicsdays) { S.calisthenicsdays = 3; }
+   if (!S.calisthPullups) { S.calisthPullups = 0; }
+   if (!S.calisthPushups) { S.calisthPushups = 0; }
+   if (!S.calisthDips) { S.calisthDips = 0; }
+   if (!Array.isArray(S.calisthenicsEquipment) || S.calisthenicsEquipment.length === 0) { S.calisthenicsEquipment = ['bar']; }
+   S.sStep = 25;
+   window.BLACKBOX && window.BLACKBOX.log('calisthenics_config', { level: S.calisthenicsLevel, goal: S.calisthenicsGoal, days: S.calisthenicsdays });
+   window.render();
+  }
+ }}, 'Generer mon programme'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
+
 // ─── STEP 25: CALISTHENICS PROGRAM ───
 function renderCalisthenicsProgram(content) {
- if (!S.calisthenicsLevel) { S.sStep = 24; window.render(); return; } // guard: onboarding requis
- var skills = S.calisthenicsGoal || [];
+ if (!S.calisthenicsLevel) { S.sStep = 24; window.render(); return; }
+ var skills = Array.isArray(S.calisthenicsGoal) ? S.calisthenicsGoal : [];
  var level = S.calisthenicsLevel || 'debutant';
  var pullups = parseInt(S.calisthPullups) || 0;
+ var pushups = parseInt(S.calisthPushups) || 0;
+ var dips = parseInt(S.calisthDips) || 0;
+ var days = parseInt(S.calisthenicsdays) || 3;
+ var equipment = Array.isArray(S.calisthenicsEquipment) && S.calisthenicsEquipment.length > 0 ? S.calisthenicsEquipment : ['bar'];
 
- var SKILLS = {
- 'muscle_up': {
- name: 'Muscle-up barre', emoji: '',
- prereqs: '8+ pull-ups explosifs, dip complet',
- time: {debutant:'8-12 mois', intermediaire:'4-6 mois', avance:'2-3 mois', elite:'2-6 semaines'},
- steps: [
- 'Semaines 1-4 : Pull-ups stricts 5×5 — tirer coudes vers hanches',
- 'Semaines 4-8 : Pull-ups explosifs 5×3 — toucher la barre avec la poitrine',
- 'Semaines 6-10 : Fausse prise 5×3 — poignet par-dessus la barre',
- 'Semaines 8-14 : Muscle-up négatif 5×3 — transition lente 5 sec',
- 'Semaines 12+ : Muscle-up strict 3×1-3 reps'
- ],
- video: 'https://www.youtube.com/watch?v=_UNWnDiMnyM'
- },
- 'handstand': {
- name: 'Handstand (ATR)', emoji: '',
- prereqs: 'Push-ups corrects, core solide, poignets renforcés',
- time: {debutant:'6-12 mois', intermediaire:'3-6 mois', avance:'1-3 mois', elite:'2-4 semaines'},
- steps: [
- 'Quotidien : Wrist warm-up 3×30 sec — OBLIGATOIRE avant chaque session',
- 'Semaines 1-3 : Pike hold contre mur 4×30 sec',
- 'Semaines 2-6 : Wall handstand face au mur 4×20-30 sec',
- 'Semaines 4-10 : Kick-up + bail — apprendre à tomber proprement d\'abord',
- 'Semaines 8-16 : Chest-to-wall + tentatives libres',
- 'Semaines 12+ : Freestanding — 10 min de pratique quotidienne'
- ],
- video: 'https://www.youtube.com/watch?v=v61TBViFh0g'
- },
- 'front_lever': {
- name: 'Front lever', emoji: '',
- prereqs: '15+ pull-ups, hollow body 30 sec',
- time: {debutant:'18-24 mois', intermediaire:'10-14 mois', avance:'5-8 mois', elite:'2-4 mois'},
- steps: [
- 'Semaines 1-4 : Tuck front lever 4×10 sec — genoux serrés contre poitrine',
- 'Semaines 4-8 : Advanced tuck 4×8 sec — dos plat',
- 'Semaines 8-14 : One leg front lever 4×6 sec',
- 'Semaines 12-20 : Straddle 3×5 sec — jambes écartées',
- 'Semaines 18+ : Full front lever 3×3-5 sec'
- ],
- video: 'https://www.youtube.com/watch?v=IhhgTE2WxKE'
- },
- 'planche': {
- name: 'Planche', emoji: '',
- prereqs: 'Planche lean 45°, core extrême, années de pratique',
- time: {debutant:'3-5 ans', intermediaire:'2-3 ans', avance:'1-2 ans', elite:'6-12 mois'},
- steps: [
- 'Mois 1-6 : Planche lean — incliner le corps vers l\'avant progressivement',
- 'Mois 6-12 : Tuck planche 4×5-10 sec',
- 'Mois 12-18 : Advanced tuck planche 4×5 sec',
- 'Mois 18-30 : Straddle planche 3×3-5 sec',
- 'Mois 30+ : Full planche — quelques secondes'
- ],
- video: 'https://www.youtube.com/watch?v=MWA7p2sXNiE'
- },
- 'lsit': {
- name: 'L-sit', emoji: '🅻',
- prereqs: 'Dips complets, souplesse ischios',
- time: {debutant:'2-5 mois', intermediaire:'1-2 mois', avance:'2-6 semaines', elite:'1-3 semaines'},
- steps: [
- 'Semaines 1-2 : Flexion genoux au sol (tuck L-sit) 4×5-10 sec',
- 'Semaines 2-4 : Une jambe tendue, une fléchie 4×8 sec',
- 'Semaines 4-8 : L-sit complet 4×10 sec',
- 'Semaines 8+ : L-sit tenu 30+ sec'
- ],
- video: 'https://www.youtube.com/watch?v=16a529mtX68'
- },
- 'dragon_flag': {
- name: 'Dragon flag', emoji: '',
- prereqs: 'L-sit 20 sec, leg raise strict, core fort',
- time: {debutant:'4-8 mois', intermediaire:'2-4 mois', avance:'1-2 mois', elite:'1-3 semaines'},
- steps: [
- 'Semaines 1-3 : Leg raise strict 4×10 — jambes tendues',
- 'Semaines 3-6 : Dragon flag négatif 4×5 — descente lente 5 sec',
- 'Semaines 6-10 : Dragon flag partiel 4×5 sec hold',
- 'Semaines 10+ : Dragon flag complet 3×3-5 reps'
- ],
- video: 'https://www.youtube.com/watch?v=moyFIvRrS0s'
+ // Guard: check calisthenics-program.js is loaded
+ if (typeof window.generateCalisthenicsPlan !== 'function') {
+  content.appendChild(h('div', {'class': 'card'}, [
+   h('div', {'class': 'label-caps', style: 'margin-bottom:8px'}, 'ERREUR DE CHARGEMENT'),
+   h('div', {style: 'font-size:13px;color:var(--grey3)'}, 'Le module calisthenics-program.js est introuvable. Verifiez le chargement du fichier.')
+  ]));
+  return;
  }
- };
 
- // Header
- var header = h('div', {'class':'card', style:'margin-bottom:16px'}, [
- h('div', {'class':'label-caps', style:'margin-bottom:4px'}, ' CALLISTHÉNIE'),
- h('div', {style:'font-size:13px;color:var(--grey3)'}, 'Niveau: ' + level + ' — ' + (skills.length || 0) + ' skill(s) sélectionné(s)')
- ]);
- content.appendChild(header);
+ // Generate the full plan
+ var planData;
+ try {
+  planData = window.generateCalisthenicsPlan(level, skills, pullups, pushups, days, equipment);
+ } catch(e) {
+  content.appendChild(h('div', {'class': 'card'}, h('div', {style: 'color:red;font-size:13px'}, 'Erreur generation programme: ' + e.message)));
+  return;
+ }
 
- // Pregnancy warning (ACOG 2020)
+ // State for current week display
+ if (!S.calisthCurrentWeek || S.calisthCurrentWeek < 1) { S.calisthCurrentWeek = 1; }
+ if (S.calisthCurrentWeek > planData.totalWeeks) { S.calisthCurrentWeek = planData.totalWeeks; }
+
+ // ── HEADER ──
+ var headerCard = h('div', {'class': 'card', style: 'margin-bottom:16px'});
+ headerCard.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:4px'}, 'CALLISTHENIE'));
+ headerCard.appendChild(h('div', {style: 'font-weight:600;font-size:16px;margin-bottom:4px'}, 'Programme ' + level + ' — ' + days + ' j/sem'));
+ var equipStr = equipment.join(', ');
+ headerCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey3)'}, 'Equipement: ' + equipStr + ' | Pull-ups: ' + pullups + ' | Push-ups: ' + pushups + ' | Dips: ' + dips));
+ headerCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey3);margin-top:2px'}, planData.totalWeeks + ' semaines de programme'));
+ content.appendChild(headerCard);
+
+ // ── PREGNANCY WARNING ──
  var _pregCalisth = getPregnancySportWarning();
  if (_pregCalisth) {
- content.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;line-height:1.6'}, _pregCalisth));
+  content.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:12px;font-size:11px;color:#6A4A1A;line-height:1.6'}, _pregCalisth));
  }
 
- // Avertissements médicaux
+ // ── MEDICAL WARNINGS ──
  if (S.muscuMedical) {
- var warns = [];
- if (S.muscuMedical.shoulders || S.muscuMedical.rotatorCuff) warns.push('Épaules : progresser avec assistance élastique uniquement, éviter HSPU et planche');
- if (S.muscuMedical.hernia || S.muscuMedical.herniaDisc) warns.push('Hernie : éviter dragon flag, L-sit et human flag (compression discale)');
- if (S.muscuMedical.wrists) warns.push('Poignets : renforcement 4-6 semaines AVANT tout appui');
- if (warns.length) {
- var warnDiv = h('div', {style:'background:rgba(180,100,0,0.1);border:1px solid #6A4A1A;border-radius:2px;padding:12px;margin-bottom:16px'});
- warns.forEach(function(w) { warnDiv.appendChild(h('div', {style:'font-size:13px;margin-bottom:4px'}, ' ' + w)); });
- content.appendChild(warnDiv);
- }
- }
-
- // Skills sélectionnés
- if (!skills || skills.length === 0) {
- content.appendChild(h('div', {'class':'empty-state'}, [
- h('div', {'class':'empty-state-icon'}, ''),
- h('div', {'class':'empty-state-title'}, 'Aucun skill sélectionné'),
- h('div', {style:'font-size:13px;color:var(--grey3);margin-top:8px'}, 'Retournez à l\'onboarding pour choisir vos objectifs.')
- ]));
- } else {
- skills.forEach(function(skillId) {
- var sk = SKILLS[skillId];
- if (!sk) return;
- var card = h('div', {'class':'card', style:'margin-bottom:16px'});
- // Header skill
- card.appendChild(h('div', {style:'display:flex;align-items:center;gap:8px;margin-bottom:12px'}, [
- h('span', {style:'font-size:24px'}, sk.emoji),
- h('div', {}, [
- h('div', {style:'font-weight:600;font-size:15px'}, sk.name),
- h('div', {style:'font-size:11px;color:var(--grey3)'}, 'Prérequis: ' + sk.prereqs)
- ])
- ]));
- // Temps de maîtrise
- card.appendChild(h('div', {style:'background:var(--surface,#F4F4F0);border-radius:2px;padding:8px 12px;margin-bottom:12px;font-size:13px'}, [
- h('span', {style:'font-weight:600'}, '⏱ Temps estimé: '),
- h('span', {style:'color:var(--grey3)'}, sk.time[level] || sk.time['debutant'])
- ]));
- // Étapes de progression
- var stepsDiv = h('div', {style:'margin-bottom:12px'});
- stepsDiv.appendChild(h('div', {'class':'label-caps', style:'margin-bottom:8px;font-size:9px'}, 'PROGRESSION'));
- sk.steps.forEach(function(step, i) {
- stepsDiv.appendChild(h('div', {style:'display:flex;gap:8px;margin-bottom:6px;font-size:13px;line-height:1.4'}, [
- h('span', {style:'color:var(--accent,#1A4A1A);font-weight:700;flex-shrink:0'}, (i+1) + '.'),
- h('span', {style:'color:var(--text,#0A0A09)'}, step)
- ]));
- });
- card.appendChild(stepsDiv);
- // Vidéo (guard: only render if URL exists)
- if (sk.video) {
- card.appendChild(h('a', {href:sk.video, target:'_blank', rel:'noopener', style:'display:inline-block;font-size:13px;color:var(--accent,#1A4A1A);text-decoration:underline'}, '▶ Voir la démonstration vidéo'));
- }
- content.appendChild(card);
- });
+  var warns = [];
+  if (S.muscuMedical.shoulders || S.muscuMedical.rotatorCuff) { warns.push('Epaules : progresser avec assistance elastique uniquement, eviter HSPU et planche'); }
+  if (S.muscuMedical.hernia || S.muscuMedical.herniaDisc) { warns.push('Hernie : eviter dragon flag, L-sit et human flag (compression discale)'); }
+  if (S.muscuMedical.wrists) { warns.push('Poignets : renforcement 4-6 semaines AVANT tout appui'); }
+  if (warns.length > 0) {
+   var warnDiv = h('div', {style: 'background:rgba(180,100,0,0.1);border:1px solid #6A4A1A;border-radius:2px;padding:12px;margin-bottom:16px'});
+   for (var wi = 0; wi < warns.length; wi++) {
+    warnDiv.appendChild(h('div', {style: 'font-size:13px;margin-bottom:4px'}, warns[wi]));
+   }
+   content.appendChild(warnDiv);
+  }
  }
 
- // Programme hebdomadaire
- var progCard = h('div', {'class':'card', style:'margin-bottom:16px'});
- progCard.appendChild(h('div', {'class':'label-caps', style:'margin-bottom:12px'}, 'PROGRAMME HEBDOMADAIRE'));
- var days = S.calisthenicsdays || 3;
- var weekPlan = [];
- if (days >= 2) weekPlan.push({day:'Lundi', focus:'Pull (tractions, skills barre)', warmup:'5 min: scapular pull-ups 3×10, dead hangs 3×20 sec'});
- if (days >= 2) weekPlan.push({day:'Mercredi', focus:'Push (dips, HSPU, handstand)', warmup:'5 min: wrist circles, pike push-ups, shoulder circles'});
- if (days >= 3) weekPlan.push({day:'Vendredi', focus:'Core & Skills statiques (L-sit, planche)', warmup:'5 min: hollow body 3×20 sec, arch hold, planche lean'});
- if (days >= 4) weekPlan.push({day:'Samedi', focus:'Full body skills + pratique libre', warmup:'10 min activation générale'});
- if (days >= 5) weekPlan.push({day:'Dimanche', focus:'Récupération active + mobilité', warmup:'Stretching 20 min'});
- weekPlan.forEach(function(d) {
- var dayDiv = h('div', {style:'margin-bottom:10px;padding:10px;background:var(--surface,#F4F4F0);border-radius:2px'});
- dayDiv.appendChild(h('div', {style:'font-weight:600;font-size:13px;margin-bottom:4px'}, d.day + ' — ' + d.focus));
- dayDiv.appendChild(h('div', {style:'font-size:11px;color:var(--grey3)'}, ' ' + d.warmup));
- progCard.appendChild(dayDiv);
- });
- content.appendChild(progCard);
+ // ── SKILLS PROGRESSION OVERVIEW ──
+ if (planData.skills && planData.skills.length > 0) {
+  var skillsCard = h('div', {'class': 'card', style: 'margin-bottom:16px'});
+  skillsCard.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:12px'}, 'VOS SKILLS CIBLES'));
+  planData.skills.forEach(function(sd) {
+   var sk = sd.skill;
+   if (!sk) { return; }
+   var totalSteps = sk.progressions ? sk.progressions.length : 1;
+   var currentStep = sd.currentStep || 1;
+   var pct = Math.round((currentStep / totalSteps) * 100);
+   var skillRow = h('div', {style: 'margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)'});
+   // Skill name + time
+   skillRow.appendChild(h('div', {style: 'display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px'}, [
+    h('div', {style: 'font-weight:600;font-size:14px'}, (sk.icon || '') + ' ' + sk.name),
+    h('div', {style: 'font-size:11px;color:var(--grey3)'}, sk.time ? (sk.time[level] || sk.time.debutant) : '')
+   ]));
+   // Prereqs
+   skillRow.appendChild(h('div', {style: 'font-size:11px;color:var(--grey3);margin-bottom:8px'}, 'Prerequis: ' + (sk.prereqs || '')));
+   // Progress bar
+   var barWrap = h('div', {style: 'margin-bottom:8px'});
+   barWrap.appendChild(h('div', {style: 'display:flex;justify-content:space-between;font-size:10px;color:var(--grey3);margin-bottom:3px'}, [
+    h('span', {}, 'Etape ' + currentStep + ' / ' + totalSteps),
+    h('span', {}, pct + '%')
+   ]));
+   var barBg = h('div', {style: 'height:4px;background:var(--border);border-radius:2px'});
+   barBg.appendChild(h('div', {style: 'height:4px;background:var(--accent,#1A4A1A);width:' + pct + '%;border-radius:2px;transition:width 0.3s'}));
+   barWrap.appendChild(barBg);
+   skillRow.appendChild(barWrap);
+   // Current step description
+   if (sk.progressions && sk.progressions[currentStep - 1]) {
+    var stepData = sk.progressions[currentStep - 1];
+    var stepCard = h('div', {style: 'background:var(--surface,#F4F4F0);padding:8px 12px;border-radius:2px;font-size:12px'});
+    stepCard.appendChild(h('div', {style: 'font-weight:600;margin-bottom:2px'}, 'En cours: ' + stepData.name));
+    stepCard.appendChild(h('div', {style: 'color:var(--grey3)'}, stepData.sets > 0 ? (stepData.sets + 'x' + stepData.reps + ' — Repos: ' + stepData.rest) : stepData.reps));
+    stepCard.appendChild(h('div', {style: 'color:var(--accent,#1A4A1A);margin-top:4px;font-size:11px'}, stepData.coaching || ''));
+    skillRow.appendChild(stepCard);
+   }
+   // Injury alert
+   if (sk.injuryAlert) {
+    skillRow.appendChild(h('div', {style: 'font-size:11px;color:#5A1010;margin-top:6px;padding-left:8px;border-left:2px solid #5A1010'}, sk.injuryAlert));
+   }
+   skillsCard.appendChild(skillRow);
+  });
+  content.appendChild(skillsCard);
+ }
 
- // Règles d'or
- var rulesCard = h('div', {'class':'card'});
- rulesCard.appendChild(h('div', {'class':'label-caps', style:'margin-bottom:12px'}, 'RÈGLES D\'OR CALLISTHÉNIE'));
- ['La régularité bat l\'intensité — 20 min/jour > 2h/semaine',
- 'Repos 3-5 min entre séries de skills (pas 60 sec)',
- 'Maîtrisez les prérequis AVANT de progresser',
- 'Qualité > quantité — 1 rep parfaite vaut 10 reps bâclées',
- 'Échauffez les poignets SYSTÉMATIQUEMENT'
- ].forEach(function(rule) {
- rulesCard.appendChild(h('div', {style:'font-size:13px;margin-bottom:6px;padding-left:12px;border-left:2px solid var(--accent,#1A4A1A)'}, rule));
- });
+ // ── WEEKLY PROGRAM NAVIGATION ──
+ var currentWeek = S.calisthCurrentWeek || 1;
+ var weekData = planData.plan[currentWeek - 1];
+
+ if (weekData) {
+  // Week navigation header
+  var navCard = h('div', {'class': 'card', style: 'margin-bottom:12px'});
+  var navHeader = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:8px'});
+  var prevBtn = h('button', {style: 'background:none;border:1px solid var(--border);padding:6px 12px;border-radius:2px;cursor:pointer;font-size:12px',
+   onclick: function(){ if (S.calisthCurrentWeek > 1) { S.calisthCurrentWeek--; window.render(); } }
+  }, '< Prev');
+  var nextBtn = h('button', {style: 'background:none;border:1px solid var(--border);padding:6px 12px;border-radius:2px;cursor:pointer;font-size:12px',
+   onclick: function(){ if (S.calisthCurrentWeek < planData.totalWeeks) { S.calisthCurrentWeek++; window.render(); } }
+  }, 'Suiv >');
+  if (currentWeek <= 1) { prevBtn.disabled = true; }
+  if (currentWeek >= planData.totalWeeks) { nextBtn.disabled = true; }
+  navHeader.appendChild(prevBtn);
+  var weekLabel = h('div', {style: 'text-align:center'}, [
+   h('div', {style: 'font-weight:600;font-size:14px'}, 'Semaine ' + currentWeek + ' / ' + planData.totalWeeks),
+   h('div', {style: 'font-size:11px;color:var(--grey3)'}, weekData.macroPhase)
+  ]);
+  navHeader.appendChild(weekLabel);
+  navHeader.appendChild(nextBtn);
+  navCard.appendChild(navHeader);
+  // Periodization info
+  var periodStyle = weekData.isDeload ?
+   'background:var(--bluebg,rgba(26,58,106,.06));border-left:3px solid #1A3A6A;padding:8px 12px;font-size:12px;color:#1A3A6A' :
+   'background:var(--greenbg,rgba(26,74,26,.06));border-left:3px solid var(--accent,#1A4A1A);padding:8px 12px;font-size:12px;color:var(--accent,#1A4A1A)';
+  navCard.appendChild(h('div', {style: periodStyle}, weekData.focus));
+  content.appendChild(navCard);
+
+  // Sessions for this week
+  var sessions = weekData.sessions || [];
+  for (var si = 0; si < sessions.length; si++) {
+   var sess = sessions[si];
+   var sessCard = h('div', {'class': 'card', style: 'margin-bottom:12px'});
+   // Session header
+   var sessHdr = h('div', {style: 'display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px'});
+   sessHdr.appendChild(h('div', {style: 'font-weight:600;font-size:14px'}, 'J' + (si + 1) + ' — ' + sess.name));
+   if (sess.duration) { sessHdr.appendChild(h('div', {style: 'font-size:11px;color:var(--grey3)'}, sess.duration)); }
+   sessCard.appendChild(sessHdr);
+   // Warmup
+   if (sess.warmup && sess.warmup.length > 0) {
+    var warmDiv = h('div', {style: 'background:var(--surface,#F4F4F0);padding:8px 12px;border-radius:2px;margin-bottom:8px'});
+    warmDiv.appendChild(h('div', {style: 'font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey3);margin-bottom:4px'}, 'ECHAUFFEMENT'));
+    var warmList = sess.warmup.join(' | ');
+    warmDiv.appendChild(h('div', {style: 'font-size:11px;color:var(--grey3)'}, warmList));
+    sessCard.appendChild(warmDiv);
+   }
+   // Exercises
+   var exercises = sess.exercises || [];
+   for (var ei = 0; ei < exercises.length; ei++) {
+    var ex = exercises[ei];
+    var exDiv = h('div', {style: 'padding:8px 0;border-bottom:1px solid var(--border)'});
+    // Exercise header row
+    var exHdr = h('div', {style: 'display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px'});
+    exHdr.appendChild(h('div', {style: 'font-weight:600;font-size:13px'}, ex.name || ''));
+    var setsReps = ex.sets > 0 ? (ex.sets + 'x' + ex.reps) : ex.reps;
+    exHdr.appendChild(h('div', {style: 'font-size:12px;color:var(--grey3)'}, setsReps));
+    exDiv.appendChild(exHdr);
+    // Rest + skill link
+    var metaRow = h('div', {style: 'display:flex;gap:12px;margin-bottom:3px'});
+    if (ex.rest) { metaRow.appendChild(h('div', {style: 'font-size:11px;color:var(--grey3)'}, 'Repos: ' + ex.rest)); }
+    if (ex.skill_link) { metaRow.appendChild(h('div', {style: 'font-size:11px;color:var(--accent,#1A4A1A)'}, 'Skill: ' + ex.skill_link.replace(/_/g, ' '))); }
+    exDiv.appendChild(metaRow);
+    // Coaching note
+    if (ex.coaching) {
+     exDiv.appendChild(h('div', {style: 'font-size:11px;color:var(--grey3);font-style:italic;margin-top:2px'}, ex.coaching));
+    }
+    sessCard.appendChild(exDiv);
+   }
+   // Cooldown
+   if (sess.cooldown && sess.cooldown.length > 0) {
+    var coolDiv = h('div', {style: 'background:var(--surface,#F4F4F0);padding:8px 12px;border-radius:2px;margin-top:8px'});
+    coolDiv.appendChild(h('div', {style: 'font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey3);margin-bottom:4px'}, 'RETOUR AU CALME'));
+    var coolList = sess.cooldown.join(' | ');
+    coolDiv.appendChild(h('div', {style: 'font-size:11px;color:var(--grey3)'}, coolList));
+    sessCard.appendChild(coolDiv);
+   }
+   content.appendChild(sessCard);
+  }
+ }
+
+ // ── GOLDEN RULES ──
+ var rulesCard = h('div', {'class': 'card', style: 'margin-bottom:16px'});
+ rulesCard.appendChild(h('div', {'class': 'label-caps', style: 'margin-bottom:12px'}, 'REGLES D OR CALLISTHENIE'));
+ var rules = [
+  'La regularite bat l intensite — 20 min/jour > 2h/semaine',
+  'Repos 3-5 min entre series de skills (pas 60 sec)',
+  'Maitrisez les prerequis AVANT de progresser',
+  'Qualite > quantite — 1 rep parfaite vaut 10 reps baclees',
+  'Echauffez les poignets SYSTEMATIQUEMENT',
+  'La planche prend des annees — c est normal et c est beau'
+ ];
+ for (var ri = 0; ri < rules.length; ri++) {
+  rulesCard.appendChild(h('div', {style: 'font-size:13px;margin-bottom:6px;padding-left:12px;border-left:2px solid var(--accent,#1A4A1A)'}, rules[ri]));
+ }
  content.appendChild(rulesCard);
 
- // Bouton retour
- var backBtn = h('button', {'class':'btn-back', style:'margin-top:16px', onclick:function(){ S.sStep=24; window.render(); }}, '← Modifier les objectifs');
- content.appendChild(backBtn);
+ // ── BACK BUTTON ──
+ content.appendChild(h('button', {'class': 'btn-back', style: 'margin-top:16px', onclick: function(){ S.sStep = 24; window.render(); }}, '< Modifier les objectifs'));
 }
 
 })();

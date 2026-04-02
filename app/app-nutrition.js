@@ -133,7 +133,7 @@ function renderStep1(p) {
     p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-style:italic;margin-bottom:20px'}, 'Bonjour, ' + user.name));
   }
   renderProgressBar(p, 1, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' I'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' I'));
   p.appendChild(h('h1', {html: 'Votre<br><em>identit\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Les bases pour un programme calibr\u00e9 sur mesure.'));
   if (window.TIPS) TIPS.renderTip(p, 'identity');
@@ -144,9 +144,8 @@ function renderStep1(p) {
   sexLabel.appendChild(reqDot());
   p.appendChild(sexLabel);
   var g = h('div', {'class': 'card-grid-2'});
-  [{icon: '\u2642', name: window.t('onb.s1.male'), val: 'homme'}, {icon: '\u2640', name: window.t('onb.s1.female'), val: 'femme'}].forEach(function(o) {
+  [{name: window.t('onb.s1.male'), val: 'homme'}, {name: window.t('onb.s1.female'), val: 'femme'}].forEach(function(o) {
     g.appendChild(h('div', {'class': 'sel-card' + (S.sex === o.val ? ' on' : ''), onclick: function() { S.sex = o.val; window.render(); }}, [
-      h('span', {'class': 'card-icon'}, o.icon),
       h('div', {'class': 'card-name'}, o.name)
     ]));
   });
@@ -438,21 +437,19 @@ function renderStep1(p) {
 
   // Migration banner for users with age but no birthDate
   if (!S.birthDate && S.age) {
-    p.appendChild(h('div', {style: 'background:rgba(0,100,180,0.08);border:1px solid rgba(0,100,180,0.2);border-radius:2px;padding:8px 12px;font-size:11px;color:#005;margin-top:8px;line-height:1.5'},
+    p.appendChild(h('div', {style: 'background:var(--ivory3,#EEEDE8);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:8px 12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:8px;line-height:1.5'},
       'Renseignez votre date de naissance pour un suivi plus pr\u00e9cis. Votre \u00e2ge sera calcul\u00e9 automatiquement.'));
   }
 
   var _dobValid = !!S.birthDate || !!S.age;
 
   // ── Photo de profil (optionnelle) ──
-  var photoDivider = h('div', {'class': 'divider', style: 'margin:20px 0 12px'});
-  photoDivider.appendChild(h('div', {'class': 'divider-line'}));
-  photoDivider.appendChild(h('div', {'class': 'divider-text'}, 'Photo de profil (optionnel)'));
-  photoDivider.appendChild(h('div', {'class': 'divider-line'}));
-  p.appendChild(photoDivider);
+  var photoWrap = h('div', {'class': 'profile-photo-section'});
 
-  var photoWrap = h('div', {style: 'text-align:center;margin-bottom:16px'});
-  // fileInput declared early so placeholder onclick can reference it
+  // Label editorial uppercase
+  photoWrap.appendChild(h('div', {'class': 'profile-photo-label'}, 'PHOTO DE PROFIL'));
+
+  // fileInput hidden — triggered by click on the zone
   var fileInput = h('input', {type: 'file', accept: 'image/*', style: 'display:none', onchange: function(e) {
     var file = e.target.files && e.target.files[0];
     if (!file) return;
@@ -478,36 +475,64 @@ function renderStep1(p) {
     reader.readAsDataURL(file);
   }});
   photoWrap.appendChild(fileInput);
+
   if (S.profilePhoto) {
-    // has-photo: solid border via CSS .photo-upload.has-photo (border-color via CSS var)
-    var _photoCircle = h('div', {
-      'class': 'photo-upload has-photo',
-      style: 'width:96px;height:96px;border-radius:50%;border-width:2px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;overflow:hidden;cursor:pointer',
+    // ── État photo chargée : carré épuré, photo plein cadre ──
+    var _photoFrame = h('div', {
+      'class': 'profile-photo-frame has-photo',
       onclick: function() { fileInput.click(); },
       title: 'Changer la photo'
     });
-    _photoCircle.appendChild(h('img', {src: S.profilePhoto, style: 'width:100%;height:100%;object-fit:cover;display:block'}));
-    photoWrap.appendChild(_photoCircle);
-    photoWrap.appendChild(h('br'));
-    photoWrap.appendChild(h('button', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border,#D8D8D0);padding:6px 16px;cursor:pointer;color:var(--grey,#6B6B65);margin-top:4px',
+    _photoFrame.appendChild(h('img', {src: S.profilePhoto, 'class': 'profile-photo-img'}));
+    photoWrap.appendChild(_photoFrame);
+    // Actions discrètes en dessous
+    var _photoActions = h('div', {'class': 'profile-photo-actions'});
+    _photoActions.appendChild(h('button', {
+      'class': 'profile-photo-btn',
+      onclick: function() { fileInput.click(); }
+    }, 'MODIFIER'));
+    _photoActions.appendChild(h('span', {'class': 'profile-photo-sep'}, '·'));
+    _photoActions.appendChild(h('button', {
+      'class': 'profile-photo-btn profile-photo-btn--muted',
       onclick: function() { S.profilePhoto = null; window.render(); }
     }, 'SUPPRIMER'));
+    photoWrap.appendChild(_photoActions);
   } else {
-    // Placeholder: dashed circle, clicking it triggers file input directly
-    var placeholder = h('div', {
-      'class': 'photo-upload',
-      style: 'width:96px;height:96px;border-radius:50%;border:2px dashed var(--border,#D8D8D0);display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;color:var(--grey,#6B6B65);font-size:28px;cursor:pointer',
+    // ── Placeholder : carré minimaliste, silhouette SVG inline ──
+    var _photoPlaceholder = h('div', {
+      'class': 'profile-photo-frame',
       onclick: function() { fileInput.click(); },
-      title: 'Ajouter une photo'
-    }, '\uD83D\uDCF7');
-    photoWrap.appendChild(placeholder);
+      title: 'Ajouter une photo de profil'
+    });
+    // SVG silhouette monogramme — sobre, éditorial
+    var _svgNS = 'http://www.w3.org/2000/svg';
+    var _svg = document.createElementNS(_svgNS, 'svg');
+    _svg.setAttribute('width', '48');
+    _svg.setAttribute('height', '48');
+    _svg.setAttribute('viewBox', '0 0 48 48');
+    _svg.setAttribute('fill', 'none');
+    _svg.setAttribute('class', 'profile-photo-silhouette');
+    // Head circle
+    var _head = document.createElementNS(_svgNS, 'circle');
+    _head.setAttribute('cx', '24');
+    _head.setAttribute('cy', '18');
+    _head.setAttribute('r', '8');
+    _head.setAttribute('stroke', 'currentColor');
+    _head.setAttribute('stroke-width', '1');
+    _svg.appendChild(_head);
+    // Shoulders arc
+    var _shoulders = document.createElementNS(_svgNS, 'path');
+    _shoulders.setAttribute('d', 'M8 44c0-8.837 7.163-16 16-16s16 7.163 16 16');
+    _shoulders.setAttribute('stroke', 'currentColor');
+    _shoulders.setAttribute('stroke-width', '1');
+    _svg.appendChild(_shoulders);
+    _photoPlaceholder.appendChild(_svg);
+    photoWrap.appendChild(_photoPlaceholder);
+    // CTA discret
+    var _photoCta = h('div', {'class': 'profile-photo-cta'}, 'Ajouter');
+    photoWrap.appendChild(_photoCta);
   }
-  photoWrap.appendChild(h('br'));
-  photoWrap.appendChild(h('button', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--border,#D8D8D0);padding:8px 20px;cursor:pointer;color:var(--black,#0A0A09);margin-top:4px',
-    onclick: function() { fileInput.click(); }
-  }, S.profilePhoto ? 'CHANGER LA PHOTO' : 'AJOUTER UNE PHOTO'));
+
   p.appendChild(photoWrap);
 
   p.appendChild(h('div', {style: 'height:16px'}));
@@ -552,7 +577,7 @@ function renderStep1(p) {
 // ─── STEP 2: MORPHOLOGIE ───
 function renderStep2(p) {
   renderProgressBar(p, 2, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' II'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' II'));
   p.appendChild(h('h1', {html: 'Votre<br><em>morphologie</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Poids et taille pour un calibrage pr\u00e9cis de vos besoins.'));
   if (window.TIPS) TIPS.renderTip(p, 'morphology');
@@ -672,10 +697,30 @@ function renderStep2(p) {
   var frontZone = h('div', {'class': 'photo-upload', onclick: function() { frontInput.click(); }});
   if (S.photoFront) {
     frontZone.appendChild(h('img', {src: S.photoFront, alt: 'Photo de face'}));
-    frontZone.appendChild(h('div', {'class': 'photo-label'}, 'Photo de face'));
+    frontZone.appendChild(h('div', {'class': 'photo-label'}, 'FACE'));
   } else {
-    frontZone.appendChild(h('div', {'class': 'photo-icon'}, '\ud83d\udcf7'));
-    frontZone.appendChild(h('div', {'class': 'photo-label'}, 'Photo de face'));
+    (function() {
+      var _svgNS = 'http://www.w3.org/2000/svg';
+      var _ico = document.createElementNS(_svgNS, 'svg');
+      _ico.setAttribute('width', '20'); _ico.setAttribute('height', '20');
+      _ico.setAttribute('viewBox', '0 0 20 20'); _ico.setAttribute('fill', 'none');
+      _ico.setAttribute('class', 'photo-icon-svg');
+      var _rect = document.createElementNS(_svgNS, 'rect');
+      _rect.setAttribute('x', '1'); _rect.setAttribute('y', '4');
+      _rect.setAttribute('width', '18'); _rect.setAttribute('height', '13');
+      _rect.setAttribute('rx', '1'); _rect.setAttribute('stroke', 'currentColor'); _rect.setAttribute('stroke-width', '1');
+      _ico.appendChild(_rect);
+      var _circ = document.createElementNS(_svgNS, 'circle');
+      _circ.setAttribute('cx', '10'); _circ.setAttribute('cy', '10.5');
+      _circ.setAttribute('r', '3'); _circ.setAttribute('stroke', 'currentColor'); _circ.setAttribute('stroke-width', '1');
+      _ico.appendChild(_circ);
+      var _line = document.createElementNS(_svgNS, 'path');
+      _line.setAttribute('d', 'M6 4l1.5-2h5L14 4');
+      _line.setAttribute('stroke', 'currentColor'); _line.setAttribute('stroke-width', '1');
+      _ico.appendChild(_line);
+      frontZone.appendChild(_ico);
+    })();
+    frontZone.appendChild(h('div', {'class': 'photo-label'}, 'FACE'));
   }
   frontZone.appendChild(frontInput);
   photoGrid.appendChild(frontZone);
@@ -697,10 +742,30 @@ function renderStep2(p) {
   var backZone = h('div', {'class': 'photo-upload', onclick: function() { backInput.click(); }});
   if (S.photoBack) {
     backZone.appendChild(h('img', {src: S.photoBack, alt: 'Photo de dos'}));
-    backZone.appendChild(h('div', {'class': 'photo-label'}, 'Photo de dos'));
+    backZone.appendChild(h('div', {'class': 'photo-label'}, 'DOS'));
   } else {
-    backZone.appendChild(h('div', {'class': 'photo-icon'}, '\ud83d\udcf7'));
-    backZone.appendChild(h('div', {'class': 'photo-label'}, 'Photo de dos'));
+    (function() {
+      var _svgNS = 'http://www.w3.org/2000/svg';
+      var _ico = document.createElementNS(_svgNS, 'svg');
+      _ico.setAttribute('width', '20'); _ico.setAttribute('height', '20');
+      _ico.setAttribute('viewBox', '0 0 20 20'); _ico.setAttribute('fill', 'none');
+      _ico.setAttribute('class', 'photo-icon-svg');
+      var _rect = document.createElementNS(_svgNS, 'rect');
+      _rect.setAttribute('x', '1'); _rect.setAttribute('y', '4');
+      _rect.setAttribute('width', '18'); _rect.setAttribute('height', '13');
+      _rect.setAttribute('rx', '1'); _rect.setAttribute('stroke', 'currentColor'); _rect.setAttribute('stroke-width', '1');
+      _ico.appendChild(_rect);
+      var _circ = document.createElementNS(_svgNS, 'circle');
+      _circ.setAttribute('cx', '10'); _circ.setAttribute('cy', '10.5');
+      _circ.setAttribute('r', '3'); _circ.setAttribute('stroke', 'currentColor'); _circ.setAttribute('stroke-width', '1');
+      _ico.appendChild(_circ);
+      var _line = document.createElementNS(_svgNS, 'path');
+      _line.setAttribute('d', 'M6 4l1.5-2h5L14 4');
+      _line.setAttribute('stroke', 'currentColor'); _line.setAttribute('stroke-width', '1');
+      _ico.appendChild(_line);
+      backZone.appendChild(_ico);
+    })();
+    backZone.appendChild(h('div', {'class': 'photo-label'}, 'DOS'));
   }
   backZone.appendChild(backInput);
   photoGrid.appendChild(backZone);
@@ -739,7 +804,7 @@ function renderStep2(p) {
 // ─── STEP 3: ACTIVITE ───
 function renderStep3(p) {
   renderProgressBar(p, 3, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' III'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' III'));
   p.appendChild(h('h1', {html: 'Votre<br><em>activit\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'D\u00e9crivez votre rythme pour adapter votre programme.'));
   if (window.TIPS) TIPS.renderTip(p, 'activity');
@@ -752,7 +817,7 @@ function renderStep3(p) {
   var list = h('div', {'class': 'level-list'});
   ACTIVITIES.forEach(function(a, i) {
     list.appendChild(h('div', {'class': 'level-item' + (S.activity === i ? ' on' : ''), onclick: function() { S.activity = i; window.render(); }}, [
-      h('div', {}, [h('div', {'class': 'level-name'}, a.icon + ' ' + a.name), h('div', {'class': 'level-desc'}, a.desc)]),
+      h('div', {}, [h('div', {'class': 'level-name'}, a.name), h('div', {'class': 'level-desc'}, a.desc)]),
       h('span', {'class': 'level-badge'}, '\u00d7' + a.factor)
     ]));
   });
@@ -765,7 +830,7 @@ function renderStep3(p) {
   p.appendChild(trainLabel);
   var cw = h('div', {'class': 'chip-wrap'});
   TRAINS.forEach(function(t, i) {
-    cw.appendChild(h('span', {'class': 'chip' + (S.train.indexOf(i) !== -1 ? ' on' : ''), onclick: function() { var idx = S.train.indexOf(i); if (idx === -1) S.train.push(i); else S.train.splice(idx, 1); window.render(); }}, t.icon + ' ' + t.name));
+    cw.appendChild(h('span', {'class': 'chip' + (S.train.indexOf(i) !== -1 ? ' on' : ''), onclick: function() { var idx = S.train.indexOf(i); if (idx === -1) S.train.push(i); else S.train.splice(idx, 1); window.render(); }}, t.name));
   });
   p.appendChild(cw);
   p.appendChild(h('div', {style: 'height:16px'}));
@@ -790,7 +855,7 @@ function renderStep3(p) {
 // ─── STEP 4: SANTE ───
 function renderStep4(p) {
   renderProgressBar(p, 4, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' IV'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Vos conditions de sant\u00e9 pour des recommandations s\u00fbres.'));
   if (window.TIPS) TIPS.renderTip(p, 'health');
@@ -847,7 +912,7 @@ function renderStep4(p) {
 // ─── STEP 5: HABITUDES ALIMENTAIRES ───
 function renderStep5(p) {
   renderProgressBar(p, 5, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' V'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V'));
   p.appendChild(h('h1', {html: 'Vos<br><em>habitudes alimentaires</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Vos habitudes au quotidien pour un plan r\u00e9aliste.'));
   if (window.TIPS) TIPS.renderTip(p, 'habits');
@@ -1135,7 +1200,7 @@ function renderStep5(p) {
 // ─── STEP 6: OBJECTIF ───
 function renderStep6(p) {
   renderProgressBar(p, 6, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' VI'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VI'));
   p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   if (window.TIPS) TIPS.renderTip(p, 'goal');
 
@@ -1235,7 +1300,6 @@ function renderStep6(p) {
       // ─────────────────────────────────────────────────────────────────────
       window.render();
     }}, [
-      h('span', {'class': 'card-icon'}, gl.icon),
       h('div', {'class': 'card-name'}, gl.name),
       h('div', {'class': 'card-sub'}, gl.desc)
     ]));
@@ -1301,7 +1365,7 @@ function renderStep6(p) {
     }
   }
   if (_tcaConflict) {
-    p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border-left:4px solid #5A1010;padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A1010;line-height:1.6'}, '⚠ CONFLIT : Objectif sèche/coupe incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
+    p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border:1px solid var(--red,#5A1010);padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);line-height:1.6'}, 'Objectif sèche/coupe incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !goalOk, onclick: function() {
     if (goalOk) {
@@ -1315,7 +1379,7 @@ function renderStep6(p) {
 // ─── STEP 7: PREFERENCES ───
 function renderStep7(p) {
   renderProgressBar(p, 7, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, window.t('onb.step') + ' VII'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VII'));
   p.appendChild(h('h1', {html: 'Vos<br><em>pr\u00e9f\u00e9rences</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Allergies et pr\u00e9f\u00e9rences pour des recettes \u00e0 votre image.'));
   if (window.TIPS) TIPS.renderTip(p, 'preferences');
@@ -1382,9 +1446,6 @@ function renderStep7(p) {
       var selected = S.wheyFlavors.indexOf(f.id) !== -1;
       var btn = h('span', {
         'class': 'chip' + (selected ? ' on' : ''),
-        style: selected
-          ? 'border:2px solid var(--orange,#f07b29);background:var(--orangebg,#fff3e6);'
-          : 'border:2px solid #ccc;',
         onclick: (function(fid) {
           return function() {
             var idx = S.wheyFlavors.indexOf(fid);
@@ -1393,7 +1454,7 @@ function renderStep7(p) {
             window.render();
           };
         })(f.id)
-      }, f.icon + '\u00a0' + f.label);
+      }, f.label);
       flavorGrid.appendChild(btn);
     });
     p.appendChild(flavorGrid);
@@ -1458,16 +1519,16 @@ function renderStep7(p) {
 
   // Halal option
   var halalRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:8px 0;cursor:pointer', onclick: function() { S.halal = !S.halal; window.render(); }});
-  var halalBox = h('div', {style: 'width:20px;height:20px;border-radius:4px;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;background:' + (S.halal ? 'var(--accent)' : 'transparent') + ';flex-shrink:0'}, S.halal ? h('span', {style: 'color:#fff;font-size:13px;font-weight:700'}, '\u2713') : null);
+  var halalBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.halal ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.halal ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
   halalRow.appendChild(halalBox);
-  halalRow.appendChild(h('div', {style: 'font-size:13px;font-weight:500'}, '\u262a\ufe0f Halal \u2014 exclure porc & alcool'));
+  halalRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Halal \u2014 exclure porc & alcool'));
   p.appendChild(halalRow);
 
   // Salade builder toggle
   var saladRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:8px 0;cursor:pointer', onclick: function() { S.saladBuilder = !S.saladBuilder; window.render(); }});
-  var saladBox = h('div', {style: 'width:20px;height:20px;border-radius:4px;border:2px solid var(--blue,#1A3C5E);display:flex;align-items:center;justify-content:center;background:' + (S.saladBuilder ? 'var(--blue,#1A3C5E)' : 'transparent') + ';flex-shrink:0'}, S.saladBuilder ? h('span', {style: 'color:#fff;font-size:13px;font-weight:700'}, '\u2713') : null);
+  var saladBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.saladBuilder ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.saladBuilder ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
   saladRow.appendChild(saladBox);
-  saladRow.appendChild(h('div', {style: 'font-size:13px;font-weight:500;font-family:"Helvetica Neue",Arial,sans-serif'}, '\uD83E\uDD57 Salades \u00e0 composer'));
+  saladRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Salades \u00e0 composer'));
   p.appendChild(saladRow);
   if (S.saladBuilder) {
     p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#9A9A90);margin:4px 0 8px 30px;line-height:1.5'}, 'Vous pourrez composer vos salades directement dans votre plan de repas.'));
@@ -1625,10 +1686,9 @@ function renderStep8(p) {
   if (window.detectMedicalConflicts) {
     var conflicts = window.detectMedicalConflicts() || [];
     conflicts.forEach(function(c) {
-      var bg = c.level === 'CRITIQUE' ? '#FFEBEE' : c.level === 'ÉLEVÉ' ? '#FFF3E0' : '#E3F2FD';
-      var border = c.level === 'CRITIQUE' ? '#5A1010' : c.level === 'ÉLEVÉ' ? '#6A4A1A' : '#1A3A6A';
-      var color = c.level === 'CRITIQUE' ? '#7B1A1A' : c.level === 'ÉLEVÉ' ? '#5D4037' : '#0D47A1';
-      p.appendChild(h('div', {style: 'background:' + bg + ';border-left:4px solid ' + border + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:' + color + ';line-height:1.5'}, c.message));
+      var bg = c.level === 'CRITIQUE' ? 'var(--redbg,rgba(90,16,16,.06))' : c.level === 'ÉLEVÉ' ? 'var(--orangebg,rgba(106,74,26,.06))' : 'var(--greenbg,rgba(26,74,26,.06))';
+      var border = c.level === 'CRITIQUE' ? 'var(--red,#5A1010)' : c.level === 'ÉLEVÉ' ? 'var(--orange,#6A4A1A)' : 'var(--green,#1A4A1A)';
+      p.appendChild(h('div', {style: 'background:' + bg + ';border:1px solid ' + border + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5'}, c.message));
     });
   }
 
@@ -1670,12 +1730,12 @@ function renderStep8(p) {
       var tdeeTrainPart = bmrVal > 0 ? Math.round((tdee / bmrVal - 1.2) * bmrVal * 7) : 0;
       var coherenceOk = tdeeTrainPart > 0 && Math.abs(totalWkKcal - tdeeTrainPart) / tdeeTrainPart < 0.35;
       var cohColor = coherenceOk ? '#1A4A1A' : '#6A4A1A';
-      var cohBg = coherenceOk ? 'var(--greenbg,rgba(26,74,26,.06))' : '#FFF3E0';
-      var cohBorder = coherenceOk ? '#1A4A1A' : '#6A4A1A';
-      var sessBox = h('div', {style: 'background:' + cohBg + ';border:1px solid ' + cohBorder + ';padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:11px'});
+      var cohBg = coherenceOk ? 'var(--greenbg,rgba(26,74,26,.06))' : 'var(--orangebg,rgba(106,74,26,.06))';
+      var cohBorder = coherenceOk ? 'var(--green,#1A4A1A)' : 'var(--orange,#6A4A1A)';
+      var sessBox = h('div', {style: 'background:' + cohBg + ';border:1px solid ' + cohBorder + ';padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px'});
       var sessTitle = h('div', {style: 'display:flex;justify-content:space-between;margin-bottom:4px'});
-      sessTitle.appendChild(h('span', {style: 'font-weight:bold;color:' + cohColor}, '\uD83C\uDFCB\uFE0F S\u00e9ances musculation — 7 derniers jours'));
-      sessTitle.appendChild(h('span', {style: 'font-weight:bold;color:' + cohColor}, totalWkKcal + '\u00a0kcal'));
+      sessTitle.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cohBorder}, 'S\u00e9ances musculation — 7 jours'));
+      sessTitle.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;color:' + cohBorder}, totalWkKcal + '\u00a0kcal'));
       sessBox.appendChild(sessTitle);
       sessBox.appendChild(h('div', {style: 'color:var(--grey)'}, weekSess.length + '\u00a0s\u00e9ance' + (weekSess.length > 1 ? 's' : '') + ' valid\u00e9e' + (weekSess.length > 1 ? 's' : '') + ' \u2014 moy. ' + avgPerSess + '\u00a0kcal/s\u00e9ance'));
       sessBox.appendChild(h('div', {style: 'color:var(--grey);margin-top:4px;font-style:italic;font-size:9px'}, coherenceOk ? '\u2713 Coh\u00e9rent avec votre facteur d\'activit\u00e9 TDEE' : '\u26a0 D\u00e9calage vs facteur d\'activit\u00e9 s\u00e9lectionn\u00e9 \u2014 pensez \u00e0 mettre \u00e0 jour votre niveau d\'activit\u00e9 dans votre profil'));
@@ -2111,7 +2171,7 @@ function renderWeightChart(p) {
 // ─── STEP 9: PLANNING ───
 function renderStep9(p) {
   renderProgressBar(p, 9, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:11px;letter-spacing:6px;color:var(--grey,#6B6B65);font-weight:600'}, 'Planning'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, 'Planning'));
   p.appendChild(h('h1', {html: 'Votre<br><em>semaine</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 527 recettes'));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
@@ -2143,14 +2203,14 @@ function renderStep9(p) {
   // Quick action buttons — Salad bar & Smoothie bar
   var quickActions = h('div', {style: 'display:flex;gap:8px;margin:12px 0 4px'});
   quickActions.appendChild(h('button', {
-    style: 'flex:1;padding:10px 8px;background:var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
+    style: 'flex:1;padding:12px 8px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
     onclick: function() { if (!window.S.saladBar) window.S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' }; window.S.saladBar.open = true; if(window.render) window.render(); }
-  }, [h('span', {style:'font-size:18px'}, '\uD83E\uDD57'), h('span', {}, 'Composer une salade')]));
+  }, 'Salade'));
   if (S.whey === true || S.whey === 1) {
     quickActions.appendChild(h('button', {
-      style: 'flex:1;padding:12px 8px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
+      style: 'flex:1;padding:12px 8px;min-height:44px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
       onclick: function() { window.S.smoothieBarOpen = true; if(window.render) window.render(); }
-    }, [h('span', {style:'font-size:18px'}, '\uD83E\uDD64'), h('span', {}, 'Smoothies Whey')]));
+    }, 'Smoothie'));
   }
   p.appendChild(quickActions);
 
@@ -2187,27 +2247,27 @@ function renderStep9(p) {
             style: 'background:var(--card,#FFFFFF);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 1px 3px rgba(0,0,0,0.08)'
           });
           sheet.appendChild(h('div', {
-            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:15px;font-weight:700;color:var(--black,#0A0A09);margin-bottom:16px;text-align:center'
+            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center'
           }, 'Ajouter \u00e0 ' + slotLabel));
           var choiceRow = h('div', {style: 'display:flex;gap:12px'});
           choiceRow.appendChild(h('button', {
-            style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--border,#E5E4DE);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+            style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
             onclick: function(e) {
               e.stopPropagation();
               S._addMealModalSlot = null;
               S._recipePicker = { slotKey: slotKey, query: '' };
               window.render();
             }
-          }, [h('span', {style: 'font-size:24px'}, '\uD83C\uDF7D'), h('span', {}, 'Choisir une recette')]));
+          }, 'Recette'));
           choiceRow.appendChild(h('button', {
-            style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--blue,#1A3C5E);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--blue,#1A3C5E);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+            style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
             onclick: function(e) {
               e.stopPropagation();
               S._addMealModalSlot = null;
               window.render();
               if (window.openSaladComposer) window.openSaladComposer(slotKey);
             }
-          }, [h('span', {style: 'font-size:24px'}, '\uD83E\uDD57'), h('span', {}, 'Composer une salade')]));
+          }, 'Salade'));
           sheet.appendChild(choiceRow);
           overlay.appendChild(sheet);
           var root = document.getElementById('app') || p;
@@ -2338,30 +2398,30 @@ function renderStep9(p) {
           }
         });
         var sheet = h('div', {
-          style: 'background:var(--card,#FFFFFF);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 1px 3px rgba(0,0,0,0.08)'
+          style: 'background:var(--ivory,#FAF9F6);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;border-top:1px solid var(--border,#D8D8D0)'
         });
         sheet.appendChild(h('div', {
-          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:15px;font-weight:700;color:var(--black,#0A0A09);margin-bottom:16px;text-align:center'
-        }, 'Remplacer ce repas — ' + slotLabel));
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center'
+        }, 'Remplacer \u2014 ' + slotLabel));
         var choiceRow = h('div', {style: 'display:flex;gap:12px'});
         var btnRecipe = h('button', {
-          style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--border,#E5E4DE);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+          style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
           onclick: function(e) {
             e.stopPropagation();
             S._addMealModalSlot = null;
             S._recipePicker = { slotKey: slotKey, query: '' };
             window.render();
           }
-        }, [h('span', {style: 'font-size:24px'}, '\uD83C\uDF7D'), h('span', {}, 'Choisir une recette')]);
+        }, 'Recette');
         var btnSalad = h('button', {
-          style: 'flex:1;padding:14px 8px;background:var(--card,#FFFFFF);border:1.5px solid var(--blue,#1A3C5E);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--blue,#1A3C5E);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px',
+          style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
           onclick: function(e) {
             e.stopPropagation();
             S._addMealModalSlot = null;
             window.render();
             if (window.openSaladComposer) window.openSaladComposer(slotKey);
           }
-        }, [h('span', {style: 'font-size:24px'}, '\uD83E\uDD57'), h('span', {}, 'Composer une salade')]);
+        }, 'Salade');
         choiceRow.appendChild(btnRecipe);
         choiceRow.appendChild(btnSalad);
         sheet.appendChild(choiceRow);
@@ -2412,14 +2472,14 @@ function renderStep9(p) {
     if (!todaySess || !todaySess.kcalTotal) return;
     var burned = todaySess.kcalTotal;
     var netTarget = tgtCal + burned; // calories nettes à consommer = objectif + brûlées
-    var netDiv = h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border:1px solid #1A4A1A;border-radius:2px;padding:10px 14px;margin:8px 0;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1A4A1A'});
+    var netDiv = h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border:1px solid var(--green,#1A4A1A);border-radius:2px;padding:10px 14px;margin:8px 0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#1A4A1A)'});
     var netRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px'});
-    netRow.appendChild(h('span', {style: 'font-weight:700'}, '\uD83C\uDFCB\uFE0F S\u00e9ance valid\u00e9e aujourd\'hui — d\u00e9pense'));
-    netRow.appendChild(h('span', {style: 'font-weight:700'}, '+' + burned + ' kcal'));
+    netRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase'}, 'S\u00e9ance valid\u00e9e — d\u00e9pense'));
+    netRow.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px'}, '+' + burned + ' kcal'));
     netDiv.appendChild(netRow);
     var netRow2 = h('div', {style: 'display:flex;justify-content:space-between;align-items:center'});
-    netRow2.appendChild(h('span', {style: 'color:#1A4A1A'}, 'Objectif alimentaire ajust\u00e9 (net)'));
-    netRow2.appendChild(h('span', {style: 'font-weight:600;color:#1A4A1A'}, netTarget + ' kcal'));
+    netRow2.appendChild(h('span', {style: 'color:var(--green,#1A4A1A)'}, 'Objectif ajust\u00e9 (net)'));
+    netRow2.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--green,#1A4A1A)'}, netTarget + ' kcal'));
     netDiv.appendChild(netRow2);
     if (todaySess.kcalEpoc) {
       var epocNote = h('div', {style: 'color:#5A8A5A;font-size:9px;margin-top:3px'}, 'dont +' + todaySess.kcalEpoc + ' kcal EPOC (afterburn) inclus');
@@ -2461,7 +2521,7 @@ function renderStep9(p) {
           var budgetStatus = overBudget
             ? '\u26a0\ufe0f Au-dessus de votre fourchette (' + dayLimit + ' DH/j)'
             : '\u2713 Dans votre fourchette budget';
-          budgetBlock.appendChild(h('div', { style: 'font-size:13px;font-weight:600;color:' + (overBudget ? 'var(--red,#5A1010)' : 'var(--accent)') + ';margin-top:8px;text-align:center' }, budgetStatus));
+          budgetBlock.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + (overBudget ? 'var(--red,#5A1010)' : 'var(--green,#1A4A1A)') + ';margin-top:8px;text-align:center' }, budgetStatus));
         }
       }
       if (budget.coveragePct < 100) {
@@ -2481,9 +2541,10 @@ function renderStep9(p) {
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
   var _shopList = ((window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan, {shopFreq: S.shopFreq}) : []) || [];
   var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
-  var _shopLabel = '\uD83D\uDECD ' + window.t('shop.title') + (_shopTotal > 0 ? ' (' + _shopTotal + ' articles)' : '');
+  var _shopLabel = window.t('shop.title') + (_shopTotal > 0 ? ' — ' + _shopTotal + ' articles' : '');
   var btnShop = h('button', {
-    style: 'width:100%;padding:12px;margin:8px 0;background:var(--card);border:1.5px solid var(--border);border-radius:2px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
+    'class': 'btn-secondary',
+    style: 'margin:8px 0',
     onclick: function() { window.S.shopListOpen = true; if(window.render) window.render(); }
   }, _shopLabel);
   p.appendChild(btnShop);
@@ -2540,12 +2601,9 @@ function renderModal(app) {
     if (r._id && window.RecipeEngine && window.RecipeEngine.calcRecipeCost && window.getPricePer) {
       var costInfo = window.RecipeEngine.calcRecipeCost(r._id, 1);
       if (costInfo && costInfo.totalMAD > 0) {
-        var priceDiv = h('div', {style:'display:flex;align-items:center;gap:8px;margin:8px 0;padding:8px 12px;background:rgba(26,74,26,0.06);border-radius:2px'});
-        priceDiv.appendChild(h('span', {style:'font-size:13px'}, '💰'));
-        priceDiv.appendChild(h('div', {style:'flex:1'},[
-          h('div', {style:'font-size:13px;font-weight:600;color:var(--text)'}, '~' + Math.round(costInfo.totalMAD) + ' DH pour ' + (costInfo.missing && costInfo.missing.length ? costInfo.coveragePct + '% des ingrédients' : 'la recette')),
-          h('div', {style:'font-size:11px;color:var(--text-secondary)'}, '~' + Math.round(costInfo.pricePerServing) + ' DH / portion')
-        ]));
+        var priceDiv = h('div', {style:'margin:8px 0;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,0.06));border:1px solid var(--green,#1A4A1A);border-radius:2px'});
+        priceDiv.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#1A4A1A)'}, '~' + Math.round(costInfo.totalMAD) + ' DH' + (costInfo.missing && costInfo.missing.length ? ' — ' + costInfo.coveragePct + '% des ingr\u00e9dients' : '')));
+        priceDiv.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;color:var(--grey,#6B6B65);margin-top:2px'}, '~' + Math.round(costInfo.pricePerServing) + ' DH / portion'));
         body.appendChild(priceDiv);
       }
     }
@@ -3084,7 +3142,7 @@ function renderSaladBar(p) {
     { slot: 'dinner',    label: window.t('onb.s9.dinner') }
   ].forEach(function(item) {
     toggleWrap.appendChild(h('button', {
-      style: 'padding:4px 10px;border-radius:20px;border:1.5px solid ' + (sb.mealTarget === item.slot ? barColor : 'var(--border)') + ';background:' + (sb.mealTarget === item.slot ? barColor : 'transparent') + ';color:' + (sb.mealTarget === item.slot ? '#fff' : 'var(--text)') + ';font-size:13px;cursor:pointer;font-weight:600',
+      style: 'padding:6px 14px;border-radius:20px;border:1px solid ' + (sb.mealTarget === item.slot ? 'var(--black,#0A0A09)' : 'var(--border)') + ';background:' + (sb.mealTarget === item.slot ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (sb.mealTarget === item.slot ? 'var(--ivory,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
       onclick: (function(s) { return function() { sb.mealTarget = s; window.render(); }; })(item.slot)
     }, item.label));
   });
@@ -3092,9 +3150,9 @@ function renderSaladBar(p) {
   p.appendChild(header);
 
   // ── Macro progress bar (sticky) ──
-  var progressBar = h('div', { style: 'position:sticky;top:0;z-index:10;background:var(--bg);padding:10px 16px;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.06)' });
+  var progressBar = h('div', { style: 'position:sticky;top:0;z-index:10;background:var(--ivory,#FAF9F6);padding:10px 16px;border-bottom:1px solid var(--border,#D8D8D0)' });
   var kcalRow = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px' });
-  kcalRow.appendChild(h('span', { style: 'font-size:13px;font-weight:700;color:' + barColor }, macros.k + ' / ' + tgtMacros.k + ' kcal'));
+  kcalRow.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:14px;color:' + barColor }, macros.k + ' / ' + tgtMacros.k + ' kcal'));
   kcalRow.appendChild(h('span', { style: 'font-size:11px;color:var(--grey)' }, Math.round(pct * 100) + '%'));
   progressBar.appendChild(kcalRow);
 
@@ -3195,16 +3253,16 @@ function renderSaladBar(p) {
       var qtyWrap = h('div', { style: 'margin-top:8px;display:flex;flex-direction:column;gap:4px' });
       selList.forEach(function(sel, idx) {
         var qRow = h('div', { style: 'display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:2px;padding:4px 10px;border:1px solid var(--border)' });
-        qRow.appendChild(h('span', { style: 'font-size:13px;font-weight:600;color:var(--text)' }, sel.name));
+        qRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)' }, sel.name));
         var qCtrl = h('div', { style: 'display:flex;align-items:center;gap:6px' });
         var step = sel.unit === 'ml' ? 10 : 25;
         qCtrl.appendChild(h('button', {
-          style: 'width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:var(--bg);font-size:13px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center',
+          style: 'width:24px;height:24px;border-radius:2px;border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);font-size:13px;cursor:pointer;color:var(--grey,#6B6B65);display:flex;align-items:center;justify-content:center;transition:border-color .2s',
           onclick: function() { onQty(sel, -step); }
         }, '\u2212'));
-        qCtrl.appendChild(h('span', { style: 'font-size:13px;min-width:50px;text-align:center;color:var(--text)' }, sel.qty + sel.unit));
+        qCtrl.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:13px;min-width:50px;text-align:center;color:var(--black,#0A0A09)' }, sel.qty + sel.unit));
         qCtrl.appendChild(h('button', {
-          style: 'width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:var(--bg);font-size:13px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center',
+          style: 'width:24px;height:24px;border-radius:2px;border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);font-size:13px;cursor:pointer;color:var(--grey,#6B6B65);display:flex;align-items:center;justify-content:center;transition:border-color .2s',
           onclick: function() { onQty(sel, step); }
         }, '+'));
         var selMacros = computeItemMacros(sel);
@@ -3385,7 +3443,7 @@ function renderSaladBar(p) {
   actWrap.appendChild(btnAdd);
 
   actWrap.appendChild(h('button', {
-    style: 'width:100%;padding:12px;border-radius:2px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:13px;font-weight:600;cursor:pointer',
+    'class': 'btn-secondary',
     onclick: function() {
       sb.base = null; sb.proteins = []; sb.veggies = []; sb.fats = []; sb.sauce = null;
       window.render();
@@ -3976,10 +4034,10 @@ function renderRecipePicker(p) {
         }
       });
       var left = h('div', { style: 'flex:1;min-width:0' });
-      left.appendChild(h('div', { style: 'font-size:13px;font-weight:600;color:var(--black,#0A0A09);white-space:nowrap;overflow:hidden;text-overflow:ellipsis' }, (recipe.f || '') + ' ' + recipe.n));
-      left.appendChild(h('div', { style: 'font-size:13px;color:#888;margin-top:2px' }, recipe.k + ' kcal · ' + recipe.p + 'g prot · ' + recipe.g + 'g glu · ' + recipe.l + 'g lip'));
+      left.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);white-space:nowrap;overflow:hidden;text-overflow:ellipsis' }, (recipe.f || '') + ' ' + recipe.n));
+      left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px' }, recipe.k + ' kcal · ' + recipe.p + 'g prot · ' + recipe.g + 'g glu · ' + recipe.l + 'g lip'));
       card.appendChild(left);
-      card.appendChild(h('div', { style: 'color:#1A3C5E;font-size:18px;margin-left:10px' }, '\u276F'));
+      card.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;color:var(--grey2,#7A7A74);font-size:13px;margin-left:10px' }, '\u276F'));
       listWrap.appendChild(card);
     });
   }

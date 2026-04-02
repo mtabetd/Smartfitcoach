@@ -1,7 +1,7 @@
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'sfc-v19';
-const RUNTIME_CACHE = 'sfc-runtime-v19';
+const CACHE_VERSION = 'sfc-v21';
+const RUNTIME_CACHE = 'sfc-runtime-v21';
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [
@@ -24,6 +24,10 @@ const APP_SHELL = [
   './scanner.js',
   './crossfit-haltero-cycles.js',
   './crossfit-wods.js',
+  './crossfit-wods-cycle2.js',
+  './crossfit-wods-cycle3.js',
+  './crossfit-wods-merge.js',
+  './calisthenics-program.js',
   './muscu-programs.js',
   './triathlon-program.js',
   './dashboard.js',

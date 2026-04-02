@@ -1,49 +1,60 @@
 // crossfit-wods.js — 100 WODs CrossFit Programming Elite
 // 100 WODs Games-Level — Phase 1-20 complète avec scaling et RX+
+// Elite-Level update: Benchmark WODs, aerobic track, recovery, 1RM test weeks, coaching notes
 (function(){
 'use strict';
 
-window.CF_WODS_FULL = [
+window.CF_WODS_CYCLE1 = [
 // ============ WEEK 1-17 ============
 {
   day: 1, week: 1, name: 'IGNITION', theme: 'Haltéro Lourd + Aérobie Base',
   haltero: { name: 'Back Squat', desc: 'Montée progressive en 5 séries. Focus: descent contrôlée 3 secondes, position du dos irréprochable, drive des hanches. Repos complet entre les séries.', scheme: 'E3MOM 15min — 5 sets x 5 reps @ 65-70% 1RM', weights: 'back_squat' },
-  wod: { name: 'IGNITION', type: 'AMRAP 20', movements: [{name: 'Calories Row', reps: 15, special: 'row_cal'}, {name: 'Thruster', reps: 10, weight: 'thruster'}, {name: 'Toes-to-Bar', reps: 10, gymnastics: 'toes_to_bar'}], notes: 'Pace conversationnel sur le rower — 15 calories à environ 85% effort, tu dois pouvoir parler. Les thrusters RX à 43/29kg restent ininterrompus les 3-4 premiers rounds. TTB en sets de 5-5 si nécessaire. Objectif: 6-8 rounds complets. Ne pars jamais à 100% en semaine 1 — cette base aérobie te servira semaines 8-12. Cible: sortir du WOD à 80% d\'effort max.' },
-  gym: { name: 'Skill: Hollow Body + Kipping', drills: ['Hollow rock hold: 4 x 20 secondes, serrer abs et fessiers, lombaires au sol', 'Arch rock: 4 x 20 secondes, bras et jambes tendus, position inverse', 'Kipping swing sur barre: 3 x 10 swings contrôlés, focus amplitude', 'Kipping pull-up progressif: 3 x 5 reps, touch-and-go, no butterfly yet'] },
-  scaled: { movements: [{name: 'Calories Row', reps: 12, note: '→ même intensité, volume réduit'}, {name: 'Thruster', reps: 8, note: '→ poids léger technique, 20-25kg'}, {name: 'Hanging Knee Raise', reps: 10, note: '→ genoux à la poitrine au lieu de TTB'}], note: 'Scaled: conserver le même rythme aérobie, pas de pause entre les mouvements.' },
+  wod: { name: 'IGNITION', type: 'AMRAP 20', movements: [{name: 'Calories Row', reps: 15, special: 'row_cal'}, {name: 'Thruster', reps: 10, weight: 'thruster'}, {name: 'Toes-to-Bar', reps: 10, gymnastics: 'toes_to_bar'}], notes: 'INTENT: Construire la base aerobie glycolytique et etablir ton pace de reference pour les 20 semaines a venir. Ce WOD teste ta capacite a maintenir une allure constante sur un effort mixte. SCORES: Scaled <12 rounds, Inter <15 rounds, RX <18 rounds, Elite 20+ rounds. COACH ELITE: "Je ne pars jamais a fond les 2 premiers rounds — j\'economise pour accelerer les 2 derniers. Mon round 20 est toujours plus rapide que mon round 1." ERREURS: 1) Partir trop vite et exploser au round 5. 2) Pause trop longue avant les TTB en fatigue. 3) Rythme de rower inegal. MENTAL: "Chaque round est une nouvelle chance. Respire profondement avant chaque set de TTB. Un mouvement lent et controle = plus rapide qu\'un mouvement explosif rate."' },
+  gym: { name: 'Skill: Hollow Body + Kipping', drills: ['Hollow rock hold: 4 x 20 secondes, serrer abs et fessiers, lombaires au sol', 'Arch rock: 4 x 20 secondes, bras et jambes tendus, position inverse', 'Kipping swing sur barre: 3 x 10 swings controles, focus amplitude', 'Kipping pull-up progressif: 3 x 5 reps, touch-and-go, no butterfly yet'] },
+  aerobic: { type: 'Zone 2 Row', desc: 'Apres le WOD — 25min rowing Zone 2 a FC 60-70% FCmax (conversation possible). Objectif: recuperation active + base aerobie. Pace cible: 2:10-2:30/500m selon ton niveau. Ne pas accelerer — Zone 2 pure = adaptation mitochondriale.', rpe: 3 },
+  recovery: { targets: ['hanches', 'epaules', 'thoracique'], protocol: ['3min: Hip flexor stretch au sol chaque cote (dragon pose)', '2min: Lat stretch avec bande ou rack chaque bras', '2min: Thoracic extension sur foam roller (12 rotations lentes)', '2min: Pigeon pose chaque jambe', 'Glace si genoux ou poignets ont ete sollicites.'] },
+  scaled: { movements: [{name: 'Calories Row', reps: 12, note: '→ meme intensite, volume reduit'}, {name: 'Thruster', reps: 8, note: '→ poids leger technique, 20-25kg'}, {name: 'Hanging Knee Raise', reps: 10, note: '→ genoux a la poitrine au lieu de TTB'}], note: 'Scaled: conserver le meme rythme aerobie, pas de pause entre les mouvements.' },
   rxPlus: { note: 'RX+ : 20 cal row / 15 thrusters / 15 TTB — ajouter 5kg sur le thruster standard.' }
 },
 {
   day: 2, week: 1, name: 'GROUNDWORK', theme: 'Haltéro Technique + Gymnast',
   haltero: { name: 'Hang Power Clean', desc: 'Technique hang position: barbell au-dessus des genoux, shrug explosif, coudes hauts et rapides. 3 reps par set, pause 2 sec en hang entre chaque. Vidéo chaque série si possible.', scheme: 'Every 90s x 10 sets — 3 reps @ 60-65% 1RM', weights: 'hang_clean' },
-  wod: { name: 'GROUNDWORK', type: 'For Time (cap 18min)', movements: [{name: 'Double Unders', reps: 100, gymnastics: 'double_unders'}, {name: 'Deadlift', reps: 21, weight: 'deadlift'}, {name: 'Pull-ups', reps: 21, gymnastics: 'pullups'}, {name: 'Double Unders', reps: 75, gymnastics: 'double_unders'}, {name: 'Deadlift', reps: 15, weight: 'deadlift'}, {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'}, {name: 'Double Unders', reps: 50, gymnastics: 'double_unders'}, {name: 'Deadlift', reps: 9, weight: 'deadlift'}, {name: 'Pull-ups', reps: 9, gymnastics: 'pullups'}], notes: 'Cible élite: sous 12 minutes. DL à 102/70kg — hips back, jamais arrondir le dos, surtout en fatigue. DU en sets non-stop si possible: 100 unbroken = 90 secondes, pas de panique si tu trébuches. Pull-ups en grandes séries: 15-6 / 10-5 / 9 unbroken. Le set de 9 final doit partir en sprint. Gestion clé: ne jamais te reposer plus de 15 secondes sur les DL.' },
-  gym: { name: 'Skill: Handstand Walk Fondamentaux', drills: ['Box handstand hold: 3 x 30 secondes, corps aligné, regard entre les mains', 'Kick-up contre mur: 3 x 10, focus engagement épaules actives', 'Shoulder tap contre mur: 3 x 8 chaque côté, contrôle latéral', 'Handstand push-up négatif: 4 x 3 reps, 5 secondes de descente'] },
+  wod: { name: 'GROUNDWORK', type: 'For Time (cap 18min)', movements: [{name: 'Double Unders', reps: 100, gymnastics: 'double_unders'}, {name: 'Deadlift', reps: 21, weight: 'deadlift'}, {name: 'Pull-ups', reps: 21, gymnastics: 'pullups'}, {name: 'Double Unders', reps: 75, gymnastics: 'double_unders'}, {name: 'Deadlift', reps: 15, weight: 'deadlift'}, {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'}, {name: 'Double Unders', reps: 50, gymnastics: 'double_unders'}, {name: 'Deadlift', reps: 9, weight: 'deadlift'}, {name: 'Pull-ups', reps: 9, gymnastics: 'pullups'}], notes: 'INTENT: Developper la capacite a maintenir un grip fort et une position de DL impeccable sous fatigue — prerequis pour les WODs lourds des semaines 8-16. SCORES: Scaled <18min, Inter <15min, RX <12min, Elite <9:30. COACH ELITE: "Je ne m\'arrete jamais sur les DL tant que mon dos est droit. Si mon dos arrondit, je pose — 3 respirations — repart. Jamais sacrifier la technique pour la vitesse." ERREURS: 1) DL avec dos rond en fin de set. 2) Trop de repos apres les DU — 3 secondes max puis barre. 3) Pull-ups: partir en trop grands sets et exploser au round 2. MENTAL: "Le set de 9 final est ton sprint. Tu as deja fait 21+15 = 36 reps. 9 de plus c\'est rien. ALLEZ."' },
+  gym: { name: 'Skill: Handstand Walk Fondamentaux', drills: ['Box handstand hold: 3 x 30 secondes, corps aligne, regard entre les mains', 'Kick-up contre mur: 3 x 10, focus engagement epaules actives', 'Shoulder tap contre mur: 3 x 8 chaque cote, controle lateral', 'Handstand push-up negatif: 4 x 3 reps, 5 secondes de descente'] },
+  aerobic: { type: 'Run Zone 2', desc: 'Session separee (apres 2h de recuperation ou le soir) — 20min run confortable, FC 60-70% FCmax. Pace 5:30-6:30/km selon niveau. Respiration nasale uniquement si possible. Objectif: adaptation aerobie de base, independante des WODs.', rpe: 3 },
+  recovery: { targets: ['lombaires', 'ischio-jambiers', 'epaules'], protocol: ['3min: Legs up the wall (lombes au sol, jambes sur mur vertical)', '2min: Seated forward fold chaque jambe (ischio)', '2min: Child\'s pose elargie (thoracique + epaules)', '2min: Doorway chest stretch', 'Massage ball sur pied plantar si DU.'] },
   scaled: { movements: [{name: 'Single Unders', reps: 150, note: '→ x1.5 le volume en singles'}, {name: 'Deadlift', reps: 21, note: '→ 60-70% du poids RX, priorité dos droit'}, {name: 'Ring Row ou Band Pull-up', reps: 21, note: '→ maintenir l\'horizontalité du corps en ring row'}], note: 'Scaled: le principal est de finir avant le cap avec de bonnes positions.' },
   rxPlus: { note: 'RX+ : ajouter 10kg sur le deadlift, butterfly pull-ups obligatoires, DU unbroken chaque set ou recommencer.' }
 },
 {
   day: 3, week: 1, name: 'ATLAS', theme: 'Chipper Complet',
   haltero: { name: 'Overhead Squat', desc: 'Snatch grip, barre au-dessus de la tête verrouillée, descent lente 3 secondes. Focus: lat engagement, genoux tracking, regard droit devant. Ne pas laisser les coudes plier.', scheme: 'E2MOM 12min — 6 sets x 3 reps @ 55-60% 1RM', weights: 'overhead_squat' },
-  wod: { name: 'ATLAS', type: 'For Time (cap 25min)', movements: [{name: 'Calories Assault Bike', reps: 30, special: 'assault_bike'}, {name: 'Wall Ball', reps: 40, gymnastics: 'wall_ball'}, {name: 'Box Jump', reps: 30, gymnastics: 'box_jump'}, {name: 'KB Swing', reps: 40, gymnastics: 'kb_swing'}, {name: 'Burpee', reps: 20, gymnastics: 'burpee'}, {name: 'Wall Ball', reps: 30, gymnastics: 'wall_ball'}, {name: 'Calories Assault Bike', reps: 20, special: 'assault_bike'}], notes: 'Le chipper est une course contre ta gestion de l\'énergie. Assault Bike: commencer à 70-75 RPM, pas plus. Wall Ball: sets de 10-10-10-10, toucher la cible à chaque rep. Box Jump: step down si nécessaire pour préserver les jambes. KB Swing: russe ou américain selon programme — hanches, pas les bras. Burpees: pace constant 10-12/min. La seconde moitié du chipper doit être exécutée sans arrêt. Cible: sous 20 min.' },
-  gym: { name: 'Skill: Rope Climb Technique', drills: ['Foot lock drilling au sol: 10 reps chaque pied, S-wrap et J-hook', 'Squat à la corde: 5 montées à mi-hauteur, focus pieds seuls', 'Rope climb complet avec jambes: 3 montées technique lente', 'Legless negative: descente lente sans jambes x 3, force core'] },
-  scaled: { movements: [{name: 'Calories Assault Bike', reps: 20, note: '→ 2/3 du volume'}, {name: 'Wall Ball', reps: 30, note: '→ balle plus légère, 6kg'}, {name: 'Box Jump', reps: 25, note: '→ box step-up si sauts non maîtrisés'}, {name: 'KB Swing', reps: 30, note: '→ swing russe uniquement, 16/12kg'}, {name: 'Burpee', reps: 15, note: '→ pace détendu, qualité du mouvement'}], note: 'Scaled: réduire le volume global de 25-30%, garder l\'intention de compléter sans cap.' },
-  rxPlus: { note: 'RX+ : doubler les calories bike (60/40), ajouter 10 muscle-ups anneaux après les 40 KB swing, finir par 20 HSPU.' }
+  wod: { name: 'ATLAS', type: 'For Time (cap 25min)', movements: [{name: 'Calories Assault Bike', reps: 30, special: 'assault_bike'}, {name: 'Wall Ball', reps: 40, gymnastics: 'wall_ball'}, {name: 'Box Jump', reps: 30, gymnastics: 'box_jump'}, {name: 'KB Swing', reps: 40, gymnastics: 'kb_swing'}, {name: 'Burpee', reps: 20, gymnastics: 'burpee'}, {name: 'Wall Ball', reps: 30, gymnastics: 'wall_ball'}, {name: 'Calories Assault Bike', reps: 20, special: 'assault_bike'}], notes: 'INTENT: Tester la capacite a maintenir la puissance sur un chipper metabolique multimodal. Ce WOD forme le systeme glycolytique sur une duree de 15-20min. SCORES: Scaled <25min, Inter <20min, RX <16min, Elite <13min. COACH ELITE: "Sur les chippers, je ne m\'arrete jamais a mi-station. Si j\'arrive a 20 Wall Balls, je FINIS les 40 meme lentement — le temps de repos entre stations est fixe, pas entre les reps." ERREURS: 1) Partir trop vite sur le bike (>85 RPM round 1). 2) Wall Ball: viser trop haut et manquer la cible. 3) Burpees: s\'allonger en pause. MENTAL: "La 2eme serie de Wall Balls est la ou les vrais gagnants se separent. Tout le monde souffre — les meilleurs continuent quand meme."' },
+  gym: { name: 'Skill: Rope Climb Technique', drills: ['Foot lock drilling au sol: 10 reps chaque pied, S-wrap et J-hook', 'Squat a la corde: 5 montees a mi-hauteur, focus pieds seuls', 'Rope climb complet avec jambes: 3 montees technique lente', 'Legless negative: descente lente sans jambes x 3, force core'] },
+  aerobic: { type: 'Bike Zone 2', desc: '20min Assault Bike ou Airbike a FC 60-70% FCmax (Zone 2 pur). Pas de sprint. Si tu peux parler en phrases completes = bonne Zone 2. Objectif developpement moteur aerobie. Peut etre fait le soir separement.', rpe: 3 },
+  recovery: { targets: ['fessiers', 'quadriceps', 'thoracique'], protocol: ['3min: Pigeon pose chaque jambe (fessiers post-KB swing)', '2min: Quad stretch debout chaque jambe', '2min: Foam roller thoracique (10 rotations lentes)', '2min: Hip flexor lunge stretch chaque cote (post-box jumps)', 'Hydratation: 500ml eau + electrolytes post-WOD.'] },
+  scaled: { movements: [{name: 'Calories Assault Bike', reps: 20, note: '→ 2/3 du volume'}, {name: 'Wall Ball', reps: 30, note: '→ balle plus legere, 6kg'}, {name: 'Box Jump', reps: 25, note: '→ box step-up si sauts non maitrise'}, {name: 'KB Swing', reps: 30, note: '→ swing russe uniquement, 16/12kg'}, {name: 'Burpee', reps: 15, note: '→ pace detendu, qualite du mouvement'}], note: 'Scaled: reduire le volume global de 25-30%, garder l\'intention de completer sans cap.' },
+  rxPlus: { note: 'RX+ : doubler les calories bike (60/40), ajouter 10 muscle-ups anneaux apres les 40 KB swing, finir par 20 HSPU.' }
 },
 {
   day: 4, week: 1, name: 'VELOCITY', theme: 'Sprint / Intervals',
   haltero: { name: 'Push Press', desc: 'Dip-drive-press explosif. 3 séries légères, puis intervalles intenses. Focus: lockout complet au-dessus, jambes se verrouillent avant les bras poussent, pas de re-dip.', scheme: 'Every 2min x 8 sets — 5 reps @ 65% 1RM, explosif', weights: 'push_press' },
-  wod: { name: 'VELOCITY', type: 'EMOM 20 (5 rounds x 4 mouvements)', movements: [{name: 'Calories Row', reps: 12, special: 'row_cal'}, {name: 'Thruster', reps: 9, weight: 'thruster'}, {name: 'Toes-to-Bar', reps: 12, gymnastics: 'toes_to_bar'}, {name: 'Rest', reps: 1, note: 'Minute de repos'}], notes: 'EMOM format: chaque minute a 1 mouvement + repos sur la 4ème minute. Objectif: terminer chaque mouvement en 40-45 secondes MAX pour avoir 15-20 sec de repos. Si tu déborde sur la minute suivante, scale immédiatement. Le rower à fond pour 12 cal = 25-30 secondes. 9 thrusters = 20-25 sec. 12 TTB = 25-30 sec. Totale: 18-20 sec de repos par round. Ce format EMOM développe la capacité à répéter des efforts intenses. Cible: maintenir le même rythme du round 1 au round 5.' },
-  gym: { name: 'Skill: Double Unders Consistency', drills: ['Singles rapides: 100 unbroken en rythme, focus poignets', 'DU par 5: 10 séries de 5 DU avec 5 singles entre, corde petite', 'DU par 10: 8 séries de 10 DU, récup 30 sec', 'DU par 30: 3 séries, tester le rythme de compétition'] },
-  scaled: { movements: [{name: 'Calories Row', reps: 8, note: '→ pace identique, volume réduit'}, {name: 'Thruster', reps: 7, note: '→ réduire charge de 30%, garder vitesse'}, {name: 'Hanging Knee Raise', reps: 10, note: '→ position hollow body maintenue'}], note: 'Scaled EMOM: l\'essentiel est de finir chaque mouvement en moins de 45 secondes.' },
-  rxPlus: { note: 'RX+ : 15 cal row / 12 thrusters avec +5kg / 15 TTB — objectif 0 sec de repos, enchaîner direct sans pause.' }
+  wod: { name: 'VELOCITY', type: 'EMOM 20 (5 rounds x 4 mouvements)', movements: [{name: 'Calories Row', reps: 12, special: 'row_cal'}, {name: 'Thruster', reps: 9, weight: 'thruster'}, {name: 'Toes-to-Bar', reps: 12, gymnastics: 'toes_to_bar'}, {name: 'Rest', reps: 1, note: 'Minute de repos'}], notes: 'INTENT: Developper la capacite a repeter des efforts intenses avec recuperation partielle. Le format EMOM force la regularite — impossible de "gerer" son pace quand la minute impose la structure. SCORES: Scaled 4/5 rounds complets, Inter 5/5 <45s chaque, RX 5/5 <40s chaque, Elite 5/5 <35s chaque. COACH ELITE: "L\'EMOM, c\'est la machine a discipliner le cerveau. Tu veux t\'arreter mais la minute te force a repartir. C\'est comme ca qu\'on construit la resilience mentale." ERREURS: 1) Trop de repos entre le rower et les thrusters (max 5sec). 2) TTB: partir en trop grands sets et rater la serie suivante. 3) Pas de strategy sur les 12 TTB (4-4-4 est plus fiable que 12 unbroken). MENTAL: "Round 4 est le plus dur mentalement — tu es fatigue et il en reste encore 1. C\'est exactement la que tu decides qui tu es."' },
+  gym: { name: 'Skill: Double Unders Consistency', drills: ['Singles rapides: 100 unbroken en rythme, focus poignets', 'DU par 5: 10 series de 5 DU avec 5 singles entre, corde petite', 'DU par 10: 8 series de 10 DU, recup 30 sec', 'DU par 30: 3 series, tester le rythme de competition'] },
+  aerobic: { type: 'Intervals Run', desc: '6 x 400m run avec 90sec repos entre chaque. Pace: 5-10% plus rapide que ton pace AMRAP 30min. Ces intervals developpent le systeme lactique et augmentent le VO2max. Faits le lendemain matin si possible (session separee).', rpe: 7 },
+  recovery: { targets: ['epaules', 'poignets', 'lombaires'], protocol: ['2min: Doorway chest stretch (post-thrusters)', '2min: Prayer stretch poignets (post-TTB et thrusters)', '2min: Child\'s pose elargie avec rotation thoracique', '2min: Supine twist chaque cote (lombaires)', 'Foam roller mollets 2min (post-row).'] },
+  scaled: { movements: [{name: 'Calories Row', reps: 8, note: '→ pace identique, volume reduit'}, {name: 'Thruster', reps: 7, note: '→ reduire charge de 30%, garder vitesse'}, {name: 'Hanging Knee Raise', reps: 10, note: '→ position hollow body maintenue'}], note: 'Scaled EMOM: l\'essentiel est de finir chaque mouvement en moins de 45 secondes.' },
+  rxPlus: { note: 'RX+ : 15 cal row / 12 thrusters avec +5kg / 15 TTB — objectif 0 sec de repos, enchainer direct sans pause.' }
 },
 {
   day: 5, week: 1, name: 'BEDROCK', theme: 'AMRAP Aérobie Long',
   haltero: { name: 'Front Squat', desc: 'Clean grip ou croix-bras. Position: coudes hauts, dos droit, descent parallèle ou sous. 5 reps controlled, pause 1 sec en bas. Temps de repos généreux entre sets.', scheme: 'E3MOM 15min — 5 sets x 5 reps @ 65% 1RM', weights: 'front_squat' },
-  wod: { name: 'BEDROCK', type: 'AMRAP 30', movements: [{name: 'Run 400m', reps: 1, special: 'run_400'}, {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'}, {name: 'Deadlift', reps: 15, weight: 'deadlift'}], notes: 'AMRAP 30 minutes = entraînement de capacité aérobie pure. Le 400m doit être couru à un pace que tu peux maintenir 30 min — environ 5:00-5:30/km pour les élites. Pull-ups en sets larges: 15 unbroken ou 10-5. DL: dos toujours droit, ne jamais sacrifier la position pour la vitesse. Objectif: 6-8 rounds complets. Conserve la même vitesse de course du round 1 au dernier. Si tu ralentis plus de 15 sec sur le 400m, tu es parti trop vite. Ce WOD teste ta base aérobie et ton capacity à tenir une charge de travail constante.' },
-  gym: { name: 'Skill: Pistol Squat Progression', drills: ['Box pistol: 3 x 5 chaque jambe sur box basse, talon sur bord', 'Pistol assisté élastique: 3 x 5 chaque jambe, tension légère', 'Pistol with counterweight: 3 x 3 chaque jambe, haltère 5kg devant', 'Pistol complet tentative: 3 x max reps chaque jambe'] },
-  scaled: { movements: [{name: 'Run 400m', reps: 1, note: '→ marche rapide si cardio insuffisant'}, {name: 'Ring Row', reps: 15, note: '→ corps horizontal ou incliné 45°'}, {name: 'Deadlift', reps: 12, note: '→ 60% RX, focus technique chaque rep'}], note: 'Scaled AMRAP 30: l\'objectif est de ne jamais s\'arrêter. Rythme lent mais constant.' },
-  rxPlus: { note: 'RX+ : remplacer pull-ups par muscle-ups anneaux (10 reps), ajouter 10kg sur le deadlift, run à pace soutenu 4:30/km.' }
+  wod: { name: 'BEDROCK', type: 'AMRAP 30', movements: [{name: 'Run 400m', reps: 1, special: 'run_400'}, {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'}, {name: 'Deadlift', reps: 15, weight: 'deadlift'}], notes: 'INTENT: Construire la fondation aerobie oxydative longue duree — la capacite a maintenir un effort soutenu sur 30 minutes. Ce WOD est le test de ta base aerobe de semaine 1. SCORES: Scaled 4 rounds, Inter 6 rounds, RX 7 rounds, Elite 8+ rounds. COACH ELITE: "Je connais exactement mon pace 400m pour chaque WOD de 30min. En semaine 1, je cours a 5:00/km. Jamais plus vite — l\'objectif est la regularite, pas le sprint." ERREURS: 1) Courir le premier 400m trop vite (killer). 2) Pull-ups: trop grands sets au debut puis effondrement. 3) DL: dos qui arrondit en fin de round. MENTAL: "A 25 minutes tu veux t\'arreter. Tout le monde veut s\'arreter. Ceux qui continuent sont ceux qui ont decide avant de partir qu\'ils ne s\'arreteraient pas."' },
+  gym: { name: 'Skill: Pistol Squat Progression', drills: ['Box pistol: 3 x 5 chaque jambe sur box basse, talon sur bord', 'Pistol assiste elastique: 3 x 5 chaque jambe, tension legere', 'Pistol with counterweight: 3 x 3 chaque jambe, haltere 5kg devant', 'Pistol complet tentative: 3 x max reps chaque jambe'] },
+  aerobic: { type: 'Z2 Long Run — session separee', desc: 'Jour de repos ou soiree: 30-40min run Zone 2, FC 60-70% FCmax. Respiration NASALE uniquement (test: si tu dois ouvrir la bouche pour respirer = trop vite). Ce travail Z2 separe des WODs constitue 40% de l\'adaptation aerobie a long terme selon les donnees de la recherche en physiologie du sport.', rpe: 2 },
+  recovery: { targets: ['ischio-jambiers', 'mollets', 'lombaires', 'epaules'], protocol: ['5min: Legs up the wall (recuperation veineuse post-AMRAP 30)', '3min: Couch stretch chaque jambe (hip flexors, post-run)', '2min: Seated forward fold (ischio)', '2min: Massage foam roller mollets', '10min: Ice bath pieds si disponible (protocole elite post-long WOD).'] },
+  scaled: { movements: [{name: 'Run 400m', reps: 1, note: '→ marche rapide si cardio insuffisant'}, {name: 'Ring Row', reps: 15, note: '→ corps horizontal ou incline 45'}, {name: 'Deadlift', reps: 12, note: '→ 60% RX, focus technique chaque rep'}], note: 'Scaled AMRAP 30: l\'objectif est de ne jamais s\'arreter. Rythme lent mais constant.' },
+  rxPlus: { note: 'RX+ : remplacer pull-ups par muscle-ups anneaux (10 reps), ajouter 10kg sur le deadlift, run a pace soutenu 4:30/km.' }
 },
 {
   day: 6, week: 2, name: 'THUNDERSTRIKE', theme: 'Haltéro Lourd + Gymnast',
@@ -969,5 +980,135 @@ window.CF_WODS_FULL = [
 if (window.CF_WODS_FULL && window.CF_WODS_FULL.length > 0) {
   window.CF_WODS = window.CF_WODS_FULL;
 }
+
+// ─── ELITE BENCHMARK WODS ───
+// Benchmarks officiels CrossFit integres dans le cycle de programmation
+// A inserer au bon moment (semaine 4, 8, 12, 16) via getCFBenchmarkForWeek()
+window.CF_BENCHMARKS = {
+  FRAN: {
+    id: 'FRAN', name: 'FRAN', week_target: 4,
+    type: 'For Time',
+    movements: [{name: 'Thruster', reps: 21, weight: 'thruster'}, {name: 'Pull-ups', reps: 21, gymnastics: 'pullups'}, {name: 'Thruster', reps: 15, weight: 'thruster'}, {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'}, {name: 'Thruster', reps: 9, weight: 'thruster'}, {name: 'Pull-ups', reps: 9, gymnastics: 'pullups'}],
+    score_targets: {scaled: '< 10min', inter: '< 7min', rx: '< 5min', elite: '< 3:30'},
+    notes: 'INTENT: Le benchmark fondateur du CrossFit. Test glycolytique pur — 21-15-9 thrusters + pull-ups. Enregistrez TOUJOURS votre temps Fran — c\'est votre jalon de reference pour les 12 prochains mois. SCORES: Scaled <10min, Inter <7min, RX <5min, Elite <3:30 (World Class). COACH ELITE: "Fran, c\'est 3-4 minutes de souffrance absolue. Je pars a 100% et j\'accepte la douleur. 21 thrusters unbroken, 21 pull-ups butterfly 15-6, 15 thrusters unbroken, 15 pull-ups 10-5, 9 tout d\'un coup. Pas de repos planifie." ERREURS: 1) Poser la barre entre les 21 thrusters. 2) Partir en trop grands sets de pull-ups (crash au round 2). 3) Respirer incorrectement — expirez AU-DESSUS de chaque thruster. MENTAL: "Fran est une interview avec ton seuil lactique. Chaque seconde au-dessus de ton PR est une information — pas une defaite."',
+    benchmark: true
+  },
+  GRACE: {
+    id: 'GRACE', name: 'GRACE', week_target: 8,
+    type: 'For Time',
+    movements: [{name: 'Clean & Jerk', reps: 30, weight: 'clean'}],
+    score_targets: {scaled: '< 6min', inter: '< 4min', rx: '< 2:30', elite: '< 1:30'},
+    notes: 'INTENT: Test de la puissance haltero pure — 30 Clean & Jerks. Grace teste la capacite a maintenir la qualite technique sous fatigue lactique maximale. SCORES: Scaled <6min, Inter <4min, RX <2:30, Elite <1:30 (World Class). COACH ELITE: "Grace = vitesse et efficacite. Je fais du Touch-and-Go les 15 premieres reps, puis je switch en singles rapides. Mon split: 15 TnG / 8 singles rapides / 7 singles donner-tout." ERREURS: 1) TnG sur tout (grip crash a la rep 20). 2) Jerk trop complexe (push jerk simple > split jerk pour la vitesse). 3) Perdre la position sur les derniers reps. MENTAL: "30 reps. Chaque rep te rapproche de la fin. Ne pense pas aux 30 — pense a la prochaine."',
+    benchmark: true
+  },
+  HELEN: {
+    id: 'HELEN', name: 'HELEN', week_target: 12,
+    type: '3 Rounds For Time',
+    movements: [{name: 'Run 400m', reps: 1, special: 'run_400'}, {name: 'KB Swing', reps: 21, gymnastics: 'kb_swing'}, {name: 'Pull-ups', reps: 12, gymnastics: 'pullups'}],
+    score_targets: {scaled: '< 15min', inter: '< 12min', rx: '< 10min', elite: '< 8min'},
+    notes: 'INTENT: Benchmark d\'endurance metabolique pure. Helen teste le systeme aerobie-lactique sur 3 rounds. C\'est un test de ta condition physique generale. SCORES: Scaled <15min, Inter <12min, RX <10min, Elite <8min. COACH ELITE: "Je cours le 400m a un pace que je peux maintenir 3 fois. Mon split ideal: 1:35 / 1:35 / 1:25 (acceleration finale). KB Swing americain 21 unbroken. Pull-ups butterfly 12 unbroken." ERREURS: 1) Premier 400m trop rapide (killer). 2) Pause sur les KB swings — hanches, pas les bras. 3) Pull-ups: trop grands sets au round 1 = effondrement round 3. MENTAL: "Round 3 arrive plus vite qu\'on croit si on gere bien les 2 premiers. Patience = performance."',
+    benchmark: true
+  },
+  MURPH: {
+    id: 'MURPH', name: 'MURPH (Hero WOD)', week_target: 16,
+    type: 'For Time (avec gilet 9/7kg)',
+    movements: [{name: 'Run 1 Mile', reps: 1, special: 'run_400'}, {name: 'Pull-ups', reps: 100, gymnastics: 'pullups'}, {name: 'Push-ups', reps: 200, gymnastics: 'pushups'}, {name: 'Air Squat', reps: 300, gymnastics: 'air_squat'}, {name: 'Run 1 Mile', reps: 1, special: 'run_400'}],
+    score_targets: {scaled: '< 60min', inter: '< 50min', rx: '< 40min', elite: '< 35min'},
+    notes: 'INTENT: Hommage au Lt. Michael Murphy. Le WOD Hero le plus emblematique du CrossFit. Test de VO2max, force mentale, et endurance absolue. Se prepare comme une competition. SCORES: Scaled <60min (sans gilet OK), Inter <50min, RX <40min avec gilet, Elite <35min. COACH ELITE: "Murph se partitionne: 20 rounds de Cindy (5 pull-ups / 10 push-ups / 15 squats) entre les 2 miles. Je ne m\'arrete jamais sur les squats. Les pull-ups sont mon limiteur — sets de 3-4 si besoin." ERREURS: 1) Ne pas partitionner (impossible de faire 100 pull-ups d\'un coup). 2) Premier mile trop rapide. 3) Push-ups qui s\'effondrent. MENTAL: "Chaque round de Cindy est une victoire. 20 victoires pour finir Murph."',
+    hero: true, benchmark: true
+  },
+  DIANE: {
+    id: 'DIANE', name: 'DIANE', week_target: 6,
+    type: 'For Time',
+    movements: [{name: 'Deadlift', reps: 21, weight: 'deadlift'}, {name: 'HSPU', reps: 21, gymnastics: 'hspu'}, {name: 'Deadlift', reps: 15, weight: 'deadlift'}, {name: 'HSPU', reps: 15, gymnastics: 'hspu'}, {name: 'Deadlift', reps: 9, weight: 'deadlift'}, {name: 'HSPU', reps: 9, gymnastics: 'hspu'}],
+    score_targets: {scaled: '< 10min', inter: '< 7min', rx: '< 5min', elite: '< 3min'},
+    notes: 'INTENT: Diane teste la puissance posterior chain (DL) combinee a la force pression inversee (HSPU). Complementaire a Fran. SCORES: Scaled <10min, Inter <7min, RX <5min, Elite <3min. COACH ELITE: "DL a 102/70kg doit etre touch-and-go les 21 premieres reps. HSPU kipping: sets de 7-7-7 pour les 21." ERREURS: 1) DL: dos qui arrondit sous fatigue. 2) HSPU: pompes trop larges. 3) Transition DL vers HSPU trop longue. MENTAL: "21 reps c\'est le plus dur. Si tu tiens le 21 proprement, le 15 et le 9 sont gagnables."',
+    benchmark: true
+  },
+  ELIZABETH: {
+    id: 'ELIZABETH', name: 'ELIZABETH', week_target: 10,
+    type: 'For Time',
+    movements: [{name: 'Squat Clean', reps: 21, weight: 'squat_clean'}, {name: 'Ring Dip', reps: 21, gymnastics: 'ring_dips'}, {name: 'Squat Clean', reps: 15, weight: 'squat_clean'}, {name: 'Ring Dip', reps: 15, gymnastics: 'ring_dips'}, {name: 'Squat Clean', reps: 9, weight: 'squat_clean'}, {name: 'Ring Dip', reps: 9, gymnastics: 'ring_dips'}],
+    score_targets: {scaled: '< 12min', inter: '< 9min', rx: '< 7min', elite: '< 5min'},
+    notes: 'INTENT: Elizabeth teste la puissance des hanches (squat clean) combinee a la force de poussee sur anneaux. SCORES: Scaled <12min, Inter <9min, RX <7min, Elite <5min. COACH ELITE: "Squat clean a 60/43kg = assez leger pour des sets de 5-6 TnG. Ring dips: descent controle, lockout complet." ERREURS: 1) Squat clean: ne pas descendre en squat complet. 2) Ring dips: aller trop vite et perdre la tension. MENTAL: "Les ring dips en fatigue de clean = ce que tu as entraine. Confiance dans ton travail."',
+    benchmark: true
+  },
+  CINDY: {
+    id: 'CINDY', name: 'CINDY', week_target: 14,
+    type: 'AMRAP 20',
+    movements: [{name: 'Pull-ups', reps: 5, gymnastics: 'pullups'}, {name: 'Push-ups', reps: 10, gymnastics: 'pushups'}, {name: 'Air Squat', reps: 15, gymnastics: 'air_squat'}],
+    score_targets: {scaled: '15 rounds', inter: '20 rounds', rx: '25 rounds', elite: '30+ rounds'},
+    notes: 'INTENT: Cindy est le test d\'endurance gymnastics le plus pur du CrossFit. SCORES: Scaled 15 rounds, Inter 20 rounds, RX 25 rounds, Elite 30+ rounds (Legends). COACH ELITE: "Cindy c\'est le metronome. 1 round par minute = 20 rounds = RX correct. Je target 1 round en 45 secondes les 10 premiers rounds, puis je laisse glisser a 60 secondes. Round 20 = sprint." ERREURS: 1) Pull-ups: trop grands sets. 2) Push-ups: perdre la planche. 3) Squats: pas assez profonds. MENTAL: "Chaque round identique. Pas de heros au round 1 — heros au round 20."',
+    benchmark: true
+  }
+};
+
+// ─── 1RM TEST WEEK PROTOCOL ───
+// Utilise dans renderCrossfitProgram pour afficher le protocole de test
+window.CF_1RM_TEST_PROTOCOL = {
+  description: 'Semaine de test 1RM — toutes les 5 semaines (S5, S10, S15, S20)',
+  lifts: [
+    { name: 'Back Squat 1RM', warmup_protocol: '50%x5, 60%x3, 70%x2, 80%x1, 87%x1, 92%x1, 97%x1, 100%+ tentative PR', notes: 'Repos complet 4-5min entre les tentatives lourdes. Stop si technique degradee.', key: 'back_squat' },
+    { name: 'Clean & Jerk 1RM', warmup_protocol: '55%x3, 65%x2, 75%x1, 83%x1, 88%x1, 93%x1, 100%+ tentative PR', notes: 'Visualisez chaque levee avant de commencer. Echauffement long (30min minimum).', key: 'squat_clean' },
+    { name: 'Snatch 1RM', warmup_protocol: '55%x3, 65%x2, 72%x1, 80%x1, 87%x1, 93%x1, 100%+ tentative PR', notes: 'Test le plus technique — ne pas tester si fatigue ou stress eleve.', key: 'snatch' },
+    { name: 'Deadlift 1RM', warmup_protocol: '50%x5, 60%x3, 70%x2, 80%x1, 87%x1, 93%x1, 100%+ tentative PR', notes: 'Hook grip ou mixed grip. Chalk obligatoire. Retenir la respiration en Valsalva sur le pull.', key: 'deadlift' },
+    { name: 'Push Press 1RM', warmup_protocol: '55%x5, 65%x3, 75%x2, 83%x1, 90%x1, 95%x1, 100%+ tentative PR', notes: 'Ne pas confondre avec Strict Press. Dip rapide et court, drive agressif des jambes.', key: 'push_press' }
+  ],
+  is1rmTestWeek: function(weekNumber) {
+    return weekNumber > 0 && (weekNumber % 5 === 0);
+  }
+};
+
+// ─── CROSSFIT OPEN PREP WEEKS (Semaines 18-20) ───
+window.CF_OPEN_PREP = [
+  {
+    week: 18,
+    name: 'OPEN PREP S1 — Style & Tiebreak',
+    focus: 'Simulation des WODs style Open — transitions rapides, strategie de tiebreak',
+    wods: [
+      { name: 'OPEN SIM 18.A', type: 'For Time (cap 20min) — OPEN STYLE', movements: [{name: 'Wall Balls', reps: 55, gymnastics: 'wall_ball'}, {name: 'Double Unders', reps: 55, gymnastics: 'double_unders'}, {name: 'Cal Row', reps: 55, special: 'row_cal'}], tiebreak: 'Tiebreak: Temps a la fin des Wall Balls, puis a la fin des DU.', notes: 'INTENT: Simuler un WOD Open typique. Strategie tiebreak: finir les Wall Balls VITE pour marquer le premier tiebreak. SCORES: Scaled <20min, Inter <17min, RX <14min, Elite <11min. OPEN STRATEGY: Chaque seconde compte sur le tiebreak — ne jamais s\'arreter juste avant un tiebreak.' },
+      { name: 'OPEN SIM 18.B', type: 'AMRAP 20 — OPEN STYLE', movements: [{name: 'Thruster', reps: 5, weight: 'thruster'}, {name: 'Chest-to-Bar Pull-ups', reps: 7, gymnastics: 'pullups'}, {name: 'Thruster', reps: 5, weight: 'thruster'}, {name: 'Bar Muscle-ups', reps: 3, gymnastics: 'muscle_ups_bar'}], notes: 'INTENT: AMRAP Open classic. Score = reps totales. Regularite sur 20 minutes. SCORES: Scaled 12 rounds, Inter 15 rounds, RX 18 rounds, Elite 22+ rounds.' }
+    ]
+  },
+  {
+    week: 19,
+    name: 'OPEN PREP S2 — Volume & Endurance',
+    focus: 'Workouts 20+ minutes, resistance a la fatigue mentale',
+    wods: [
+      { name: 'OPEN SIM 19.A', type: 'For Time (cap 25min) — OPEN STYLE', movements: [{name: 'Squat Cleans', reps: 10, weight: 'squat_clean'}, {name: 'Ring Muscle-ups', reps: 4, gymnastics: 'muscle_ups_ring'}, {name: 'Squat Cleans', reps: 10, weight: 'squat_clean'}, {name: 'Ring Muscle-ups', reps: 6, gymnastics: 'muscle_ups_ring'}, {name: 'Squat Cleans', reps: 10, weight: 'squat_clean'}, {name: 'Ring Muscle-ups', reps: 8, gymnastics: 'muscle_ups_ring'}], tiebreak: 'Tiebreak: Temps a la fin des 10 premiers Squat Cleans.', notes: 'INTENT: WOD Open type ascending ladder. Ne jamais ralentir sur les Squat Cleans — ils sont ton levier. COACH ELITE: "Les muscle-ups Open, je les prends 1 par 1 si besoin. Chaque rep comptee = victoire."' }
+    ]
+  },
+  {
+    week: 20,
+    name: 'OPEN PREP S3 — Peak & Simulate',
+    focus: 'Simulation complete Open avec juge, strategie finale, peak performance',
+    wods: [
+      { name: 'FRAN RETEST FINAL', type: 'For Time — RETESTER FRAN', movements: [{name: 'Thruster', reps: 21, weight: 'thruster'}, {name: 'Pull-ups', reps: 21, gymnastics: 'pullups'}, {name: 'Thruster', reps: 15, weight: 'thruster'}, {name: 'Pull-ups', reps: 15, gymnastics: 'pullups'}, {name: 'Thruster', reps: 9, weight: 'thruster'}, {name: 'Pull-ups', reps: 9, gymnastics: 'pullups'}], notes: 'INTENT: Retester FRAN en conditions Open — avec judge, camera si possible. Apres 20 semaines de programmation elite, votre Fran DOIT etre notablement amelioree. SCORES CIBLES S20: Scaled <8min (-2min vs S4), Inter <5:30 (-1:30), RX <4min (-1min), Elite <3min. MENTAL FINAL: "Ce n\'est pas juste un WOD — c\'est la preuve de 20 semaines de travail. Allez le chercher."', benchmark: true, benchmark_retest: true, benchmark_id: 'FRAN' }
+    ]
+  }
+];
+
+// ─── HELPER: Get benchmark info for a given week ───
+window.getCFBenchmarkForWeek = function(weekNumber) {
+  var bmarks = window.CF_BENCHMARKS || {};
+  for (var k in bmarks) {
+    if (bmarks[k].week_target === weekNumber) return bmarks[k];
+  }
+  return null;
+};
+
+// ─── HELPER: Check if week is a 1RM test week ───
+window.isCF1RMTestWeek = function(weekNumber) {
+  return !!(window.CF_1RM_TEST_PROTOCOL && window.CF_1RM_TEST_PROTOCOL.is1rmTestWeek(weekNumber));
+};
+
+// ─── HELPER: Get Open Prep week data ───
+window.getCFOpenPrepWeek = function(weekNumber) {
+  var prep = window.CF_OPEN_PREP || [];
+  for (var i = 0; i < prep.length; i++) {
+    if (prep[i].week === weekNumber) return prep[i];
+  }
+  return null;
+};
 
 })();

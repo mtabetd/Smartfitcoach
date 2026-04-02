@@ -24571,7 +24571,1133 @@
     "Dresser la romaine en base dans un grand bol, disposer en rangées séparées le poulet, œuf, bacon, avocat en tranches, tomates cerises et bleu émietté.",
     "Arroser de vinaigrette balsamique, assaisonner, parsemer de ciboulette et servir aussitôt."
   ]
-}
+},
+
+    // ═══════════════════════════════════════════════════
+    //  SAINT-PIERRE  (R640–R644)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R640',
+      name: 'Saint-Pierre Vapeur Citron-Gingembre',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'light'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 15,
+      difficulty: 1,
+      // 80×4 + 4×4 + 8×9 = 320+16+72 = 408 ✓
+      baseNutrition: { calories: 408, proteinGrams: 80, carbsGrams: 4, fatGrams: 8 },
+      ingredients: [
+        { name: 'Saint-Pierre (filets)', qty: 400, unit: 'g' },
+        { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: 'Gingembre frais râpé', qty: 15, unit: 'g' },
+        { name: 'Citronnelle', qty: 1, unit: 'tige' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Coriandre fraîche', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Poser les filets de saint-pierre sur du papier cuisson dans le panier vapeur ; frotter avec le zeste de citron et le gingembre râpé.',
+        'Glisser la citronnelle coupée en deux sous les filets ; cuire à la vapeur 12-14 min selon l\'épaisseur.',
+        'Arroser de jus de citron et d\'huile d\'olive au sortir du feu, parsemer de coriandre ciselée et servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R641',
+      name: 'Saint-Pierre Poêlé Beurre Blanc',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 2,
+      // 78×4 + 3×4 + 14×9 = 312+12+126 = 450 ✓
+      baseNutrition: { calories: 450, proteinGrams: 78, carbsGrams: 3, fatGrams: 14 },
+      ingredients: [
+        { name: 'Saint-Pierre (filets)', qty: 380, unit: 'g' },
+        { name: 'Échalotes', qty: 50, unit: 'g' },
+        { name: 'Vin blanc sec', qty: 80, unit: 'ml' },
+        { name: 'Beurre demi-sel', qty: 30, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 10, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 0.5, unit: 'pce' },
+        { name: 'Persil plat', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Saisir les filets côté peau dans l\'huile bien chaude 3 min ; retourner et cuire encore 2 min, réserver au chaud.',
+        'Faire réduire échalotes ciselées + vin blanc à 80 % dans la même poêle ; incorporer le beurre froid en petits dés hors du feu en fouettant pour monter la sauce.',
+        'Assaisonner le beurre blanc d\'un trait de citron, napper les filets et parsemer de persil haché.'
+      ]
+    },
+
+    {
+      id: 'R642',
+      name: 'Saint-Pierre en Papillote Méditerranéenne',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'meal-prep'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 20,
+      difficulty: 1,
+      // 76×4 + 10×4 + 10×9 = 304+40+90 = 434 ✓
+      baseNutrition: { calories: 434, proteinGrams: 76, carbsGrams: 10, fatGrams: 10 },
+      ingredients: [
+        { name: 'Saint-Pierre (filets)', qty: 380, unit: 'g' },
+        { name: 'Tomates cerises', qty: 120, unit: 'g' },
+        { name: 'Olives noires dénoyautées', qty: 30, unit: 'g' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Thym, romarin', qty: 2, unit: 'brins' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préchauffer le four à 190 °C ; disposer chaque filet sur une feuille de papier sulfurisé.',
+        'Répartir tomates cerises coupées, olives, câpres et ail émincé autour du poisson ; arroser d\'huile d\'olive et ajouter les herbes.',
+        'Fermer hermétiquement les papillotes et enfourner 18-20 min ; servir directement dans la papillote ouverte à table.'
+      ]
+    },
+
+    {
+      id: 'R643',
+      name: 'Saint-Pierre en Croûte d\'Herbes',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'omega3', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 18,
+      difficulty: 2,
+      // 75×4 + 15×4 + 12×9 = 300+60+108 = 468 ✓
+      baseNutrition: { calories: 468, proteinGrams: 75, carbsGrams: 15, fatGrams: 12 },
+      ingredients: [
+        { name: 'Saint-Pierre (filets)', qty: 380, unit: 'g' },
+        { name: 'Chapelure panko', qty: 40, unit: 'g' },
+        { name: 'Persil, ciboulette, estragon', qty: 20, unit: 'g' },
+        { name: 'Moutarde de Dijon', qty: 15, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 20, unit: 'ml' },
+        { name: 'Ail', qty: 1, unit: 'gousse' },
+        { name: 'Zeste de citron', qty: 1, unit: 'pce' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préchauffer le four à 200 °C ; mélanger chapelure, herbes ciselées, ail haché, zeste de citron et huile d\'olive pour former la croûte.',
+        'Badigeonner le dessus des filets de moutarde ; appuyer fermement la croûte d\'herbes sur la moutarde.',
+        'Cuire au four 16-18 min jusqu\'à ce que la croûte soit dorée et croustillante ; servir avec une salade verte.'
+      ]
+    },
+
+    {
+      id: 'R644',
+      name: 'Saint-Pierre Ceviche Agrumes',
+      category: 'fusion',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇵🇪',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'raw', 'light'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 0,
+      difficulty: 2,
+      // 64×4 + 8×4 + 6×9 = 256+32+54 = 342 ✓
+      baseNutrition: { calories: 342, proteinGrams: 64, carbsGrams: 8, fatGrams: 6 },
+      ingredients: [
+        { name: 'Saint-Pierre très frais (sashimi grade)', qty: 320, unit: 'g' },
+        { name: 'Citron vert (jus)', qty: 3, unit: 'pce' },
+        { name: 'Orange (jus)', qty: 1, unit: 'pce' },
+        { name: 'Piment rouge doux', qty: 0.5, unit: 'pce' },
+        { name: 'Oignon rouge', qty: 40, unit: 'g' },
+        { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+        { name: 'Huile d\'olive', qty: 15, unit: 'ml' },
+        { name: 'Sel fin', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Détailler le saint-pierre en dés de 1 cm ; mariner dans le jus de citron vert et d\'orange avec une pincée de sel 10-12 min au réfrigérateur.',
+        'Ajouter l\'oignon rouge en fines lamelles, le piment épépiné haché et la coriandre ciselée ; arroser d\'huile d\'olive.',
+        'Servir immédiatement dans des verrines ou assiettes froides avec des tranches d\'avocat en accompagnement.'
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  ESPADON  (R645–R649)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R645',
+      name: 'Espadon Marinade Japonaise',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'asian'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 10,
+      difficulty: 2,
+      // 82×4 + 8×4 + 10×9 = 328+32+90 = 450 ✓
+      baseNutrition: { calories: 450, proteinGrams: 82, carbsGrams: 8, fatGrams: 10 },
+      ingredients: [
+        { name: 'Espadon (darnes)', qty: 400, unit: 'g' },
+        { name: 'Sauce soja tamari', qty: 40, unit: 'ml' },
+        { name: 'Mirin', qty: 20, unit: 'ml' },
+        { name: 'Gingembre frais râpé', qty: 10, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Sésame blanc grillé', qty: 10, unit: 'g' },
+        { name: 'Ciboulette asiatique', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger tamari, mirin, gingembre râpé, ail écrasé et huile de sésame ; mariner les darnes 30 min au frais.',
+        'Saisir les darnes dans une poêle chaude (ou griller) 3-4 min par face en nappant avec la marinade.',
+        'Saupoudrer de sésame grillé et de ciboulette ciselée ; servir avec du riz vapeur ou des nouilles soba.'
+      ]
+    },
+
+    {
+      id: 'R646',
+      name: 'Espadon Grillé Sauce Vierge',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'light'],
+      servings: 2,
+      prepTime: 12,
+      cookTime: 10,
+      difficulty: 1,
+      // 80×4 + 6×4 + 12×9 = 320+24+108 = 452 ✓
+      baseNutrition: { calories: 452, proteinGrams: 80, carbsGrams: 6, fatGrams: 12 },
+      ingredients: [
+        { name: 'Espadon (darnes)', qty: 400, unit: 'g' },
+        { name: 'Tomates mûres', qty: 150, unit: 'g' },
+        { name: 'Olives vertes', qty: 30, unit: 'g' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Basilic frais', qty: 15, unit: 'g' },
+        { name: "Huile d'olive", qty: 25, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Préparer la sauce vierge : concasser les tomates, hacher olives et câpres, ciseler le basilic ; mélanger avec huile d'olive et jus de citron.",
+        "Griller les darnes d'espadon sur grille très chaude 3-4 min par face ; elles doivent rester légèrement nacrées au centre.",
+        'Dresser et napper généreusement de sauce vierge ; servir avec des légumes grillés.'
+      ]
+    },
+
+    {
+      id: 'R647',
+      name: "Brochettes d'Espadon Tapenade",
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 10,
+      difficulty: 1,
+      // 78×4 + 5×4 + 14×9 = 312+20+126 = 458 ✓
+      baseNutrition: { calories: 458, proteinGrams: 78, carbsGrams: 5, fatGrams: 14 },
+      ingredients: [
+        { name: 'Espadon (cubes 3 cm)', qty: 400, unit: 'g' },
+        { name: 'Tapenade noire', qty: 40, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Courgette', qty: 100, unit: 'g' },
+        { name: "Huile d'olive", qty: 15, unit: 'ml' },
+        { name: 'Thym, herbes de Provence', qty: 2, unit: 'pincées' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Alterner sur des brochettes les cubes d'espadon, poivron rouge et courgette taillés en morceaux ; badigeonner d'huile d'olive et herbes.",
+        'Griller les brochettes au barbecue ou en grilloir 4-5 min par face.',
+        'Servir avec une cuillère de tapenade sur chaque brochette et une salade de roquette.'
+      ]
+    },
+
+    {
+      id: 'R648',
+      name: 'Espadon Court-Bouillon Ratatouille',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'balanced'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 30,
+      difficulty: 2,
+      // 76×4 + 18×4 + 10×9 = 304+72+90 = 466 ✓
+      baseNutrition: { calories: 466, proteinGrams: 76, carbsGrams: 18, fatGrams: 10 },
+      ingredients: [
+        { name: 'Espadon (darnes)', qty: 380, unit: 'g' },
+        { name: 'Courgette', qty: 150, unit: 'g' },
+        { name: 'Aubergine', qty: 120, unit: 'g' },
+        { name: 'Tomates', qty: 150, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'c. à café' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préparer la ratatouille : faire revenir oignon et ail, ajouter les légumes en dés, assaisonner et mijoter 20 min à couvert.',
+        'Préparer un court-bouillon (eau, laurier, thym, grains de poivre) ; pocher les darnes à frémissement 8-10 min.',
+        "Dresser le poisson sur la ratatouille, arroser d'un filet d'huile d'olive et parsemer de basilic frais."
+      ]
+    },
+
+    {
+      id: 'R649',
+      name: 'Tataki Espadon Ponzu',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'asian', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 5,
+      difficulty: 3,
+      // 72×4 + 6×4 + 8×9 = 288+24+72 = 384 ✓
+      baseNutrition: { calories: 384, proteinGrams: 72, carbsGrams: 6, fatGrams: 8 },
+      ingredients: [
+        { name: 'Espadon (bloc sashimi grade)', qty: 360, unit: 'g' },
+        { name: 'Sauce ponzu', qty: 40, unit: 'ml' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Daikon râpé', qty: 50, unit: 'g' },
+        { name: 'Ciboulette asiatique', qty: 10, unit: 'g' },
+        { name: 'Flocons de piment togarashi', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Saisir le bloc d'espadon 30 secondes sur chaque face dans une poêle très chaude légèrement huilée ; l'intérieur doit rester cru.",
+        'Trancher finement et dresser sur assiette froide ; arroser de sauce ponzu et jus de citron vert.',
+        'Garnir de daikon râpé, gingembre julienne, ciboulette et flocons de piment ; servir immédiatement.'
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  ESPADON  (R645–R649)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R645',
+      name: 'Espadon Marinade Japonaise',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'asian'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 10,
+      difficulty: 2,
+      // 82×4 + 8×4 + 10×9 = 328+32+90 = 450 ✓
+      baseNutrition: { calories: 450, proteinGrams: 82, carbsGrams: 8, fatGrams: 10 },
+      ingredients: [
+        { name: 'Espadon (darnes)', qty: 400, unit: 'g' },
+        { name: 'Sauce soja tamari', qty: 40, unit: 'ml' },
+        { name: 'Mirin', qty: 20, unit: 'ml' },
+        { name: 'Gingembre frais râpé', qty: 10, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Sésame blanc grillé', qty: 10, unit: 'g' },
+        { name: 'Ciboulette asiatique', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Mélanger tamari, mirin, gingembre râpé, ail écrasé et huile de sésame ; mariner les darnes 30 min au frais.',
+        'Saisir les darnes dans une poêle chaude (ou griller) 3-4 min par face en nappant avec la marinade.',
+        'Saupoudrer de sésame grillé et de ciboulette ciselée ; servir avec du riz vapeur ou des nouilles soba.'
+      ]
+    },
+
+    {
+      id: 'R646',
+      name: 'Espadon Grillé Sauce Vierge',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'light'],
+      servings: 2,
+      prepTime: 12,
+      cookTime: 10,
+      difficulty: 1,
+      // 80×4 + 6×4 + 12×9 = 320+24+108 = 452 ✓
+      baseNutrition: { calories: 452, proteinGrams: 80, carbsGrams: 6, fatGrams: 12 },
+      ingredients: [
+        { name: 'Espadon (darnes)', qty: 400, unit: 'g' },
+        { name: 'Tomates mûres', qty: 150, unit: 'g' },
+        { name: 'Olives vertes', qty: 30, unit: 'g' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Basilic frais', qty: 15, unit: 'g' },
+        { name: "Huile d'olive", qty: 25, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Préparer la sauce vierge : concasser les tomates, hacher olives et câpres, ciseler le basilic ; mélanger avec huile d'olive et jus de citron.",
+        "Griller les darnes d'espadon sur grille très chaude 3-4 min par face ; elles doivent rester légèrement nacrées au centre.",
+        'Dresser et napper généreusement de sauce vierge ; servir avec des légumes grillés.'
+      ]
+    },
+
+    {
+      id: 'R647',
+      name: "Brochettes d'Espadon Tapenade",
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 10,
+      difficulty: 1,
+      // 78×4 + 5×4 + 14×9 = 312+20+126 = 458 ✓
+      baseNutrition: { calories: 458, proteinGrams: 78, carbsGrams: 5, fatGrams: 14 },
+      ingredients: [
+        { name: 'Espadon (cubes 3 cm)', qty: 400, unit: 'g' },
+        { name: 'Tapenade noire', qty: 40, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Courgette', qty: 100, unit: 'g' },
+        { name: "Huile d'olive", qty: 15, unit: 'ml' },
+        { name: 'Thym, herbes de Provence', qty: 2, unit: 'pincées' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Alterner sur des brochettes les cubes d'espadon, poivron rouge et courgette taillés en morceaux ; badigeonner d'huile d'olive et herbes.",
+        'Griller les brochettes au barbecue ou en grilloir 4-5 min par face.',
+        'Servir avec une cuillère de tapenade sur chaque brochette et une salade de roquette.'
+      ]
+    },
+
+    {
+      id: 'R648',
+      name: 'Espadon Court-Bouillon Ratatouille',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'balanced'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 30,
+      difficulty: 2,
+      // 76×4 + 18×4 + 10×9 = 304+72+90 = 466 ✓
+      baseNutrition: { calories: 466, proteinGrams: 76, carbsGrams: 18, fatGrams: 10 },
+      ingredients: [
+        { name: 'Espadon (darnes)', qty: 380, unit: 'g' },
+        { name: 'Courgette', qty: 150, unit: 'g' },
+        { name: 'Aubergine', qty: 120, unit: 'g' },
+        { name: 'Tomates', qty: 150, unit: 'g' },
+        { name: 'Poivron rouge', qty: 100, unit: 'g' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'c. à café' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préparer la ratatouille : faire revenir oignon et ail, ajouter les légumes en dés, assaisonner et mijoter 20 min à couvert.',
+        'Préparer un court-bouillon (eau, laurier, thym, grains de poivre) ; pocher les darnes à frémissement 8-10 min.',
+        "Dresser le poisson sur la ratatouille, arroser d'un filet d'huile d'olive et parsemer de basilic frais."
+      ]
+    },
+
+    {
+      id: 'R649',
+      name: 'Tataki Espadon Ponzu',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🗡️',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'asian', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 5,
+      difficulty: 3,
+      // 72×4 + 6×4 + 8×9 = 288+24+72 = 384 ✓
+      baseNutrition: { calories: 384, proteinGrams: 72, carbsGrams: 6, fatGrams: 8 },
+      ingredients: [
+        { name: 'Espadon (bloc sashimi grade)', qty: 360, unit: 'g' },
+        { name: 'Sauce ponzu', qty: 40, unit: 'ml' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Daikon râpé', qty: 50, unit: 'g' },
+        { name: 'Ciboulette asiatique', qty: 10, unit: 'g' },
+        { name: 'Flocons de piment togarashi', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Saisir le bloc d'espadon 30 secondes sur chaque face dans une poêle très chaude légèrement huilée ; l'intérieur doit rester cru.",
+        'Trancher finement et dresser sur assiette froide ; arroser de sauce ponzu et jus de citron vert.',
+        'Garnir de daikon râpé, gingembre julienne, ciboulette et flocons de piment ; servir immédiatement.'
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  THON ROUGE  (R650–R654)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R650',
+      name: 'Thon Rouge Mi-Cuit Sésame & Soba',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'omega3', 'asian', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 2,
+      // 85×4 + 35×4 + 10×9 = 340+140+90 = 570 ✓
+      baseNutrition: { calories: 570, proteinGrams: 85, carbsGrams: 35, fatGrams: 10 },
+      ingredients: [
+        { name: 'Thon rouge (pavés)', qty: 400, unit: 'g' },
+        { name: 'Nouilles soba', qty: 100, unit: 'g' },
+        { name: 'Sésame noir et blanc', qty: 20, unit: 'g' },
+        { name: 'Sauce soja tamari', qty: 30, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Avocat', qty: 60, unit: 'g' },
+        { name: 'Ciboulette asiatique', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Cuire les soba 4 min, rincer à froid ; mélanger tamari, huile de sésame et gingembre râpé pour la sauce.',
+        'Enrober les pavés de sésame mélangé ; saisir 1 min par face dans une poêle très chaude — le centre doit rester rouge.',
+        'Trancher les pavés, dresser sur les soba avec concombre julienne, avocat en éventail ; arroser de sauce et parsemer de ciboulette.'
+      ]
+    },
+
+    {
+      id: 'R651',
+      name: 'Tataki de Thon Rouge Ponzu Maison',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'asian', 'premium', 'raw'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 3,
+      difficulty: 3,
+      // 74×4 + 5×4 + 6×9 = 296+20+54 = 370 ✓
+      baseNutrition: { calories: 370, proteinGrams: 74, carbsGrams: 5, fatGrams: 6 },
+      ingredients: [
+        { name: 'Thon rouge (bloc sashimi grade)', qty: 370, unit: 'g' },
+        { name: 'Sauce soja yuzu (ou citron vert)', qty: 30, unit: 'ml' },
+        { name: 'Mirin', qty: 15, unit: 'ml' },
+        { name: 'Vinaigre de riz', qty: 10, unit: 'ml' },
+        { name: 'Gingembre frais', qty: 8, unit: 'g' },
+        { name: 'Daikon râpé', qty: 60, unit: 'g' },
+        { name: 'Ciboule verte', qty: 15, unit: 'g' },
+        { name: 'Flocons de piment', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préparer le ponzu maison : mélanger sauce soja, mirin, vinaigre de riz et jus de yuzu (ou citron vert) ; laisser reposer 10 min.',
+        'Saisir très rapidement le bloc de thon 15-20 sec par face sur toutes les faces dans une poêle de fonte brûlante ; refroidir immédiatement.',
+        'Trancher finement, disposer en éventail ; arroser de ponzu maison, garnir de daikon, gingembre et ciboule ; servir sans attendre.'
+      ]
+    },
+
+    {
+      id: 'R652',
+      name: 'Thon Rouge Grillé Sauce Câpres-Citron',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'light'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 10,
+      difficulty: 1,
+      // 78×4 + 4×4 + 10×9 = 312+16+90 = 418 ✓
+      baseNutrition: { calories: 418, proteinGrams: 78, carbsGrams: 4, fatGrams: 10 },
+      ingredients: [
+        { name: 'Thon rouge (pavés)', qty: 400, unit: 'g' },
+        { name: 'Câpres', qty: 25, unit: 'g' },
+        { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Ail', qty: 1, unit: 'gousse' },
+        { name: 'Persil plat', qty: 15, unit: 'g' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Huiler et assaisonner les pavés ; griller sur grille très chaude 2-3 min par face selon épaisseur, le centre doit rester rosé.',
+        'Chauffer huile, ail haché et câpres 1 min dans une petite casserole ; hors du feu, ajouter zeste et jus de citron.',
+        'Napper les pavés de sauce câpres-citron, parsemer de persil ciselé et servir avec des haricots verts vapeur.'
+      ]
+    },
+
+    {
+      id: 'R653',
+      name: 'Salade Niçoise au Thon Rouge Frais',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'salad', 'balanced'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 15,
+      difficulty: 1,
+      // 68×4 + 22×4 + 14×9 = 272+88+126 = 486 ✓
+      baseNutrition: { calories: 486, proteinGrams: 68, carbsGrams: 22, fatGrams: 14 },
+      ingredients: [
+        { name: 'Thon rouge (pavé)', qty: 340, unit: 'g' },
+        { name: 'Haricots verts fins', qty: 150, unit: 'g' },
+        { name: 'Pommes de terre rattes', qty: 150, unit: 'g' },
+        { name: 'Tomates cerises', qty: 120, unit: 'g' },
+        { name: 'Olives noires niçoises', qty: 40, unit: 'g' },
+        { name: 'Anchois au sel rincés', qty: 20, unit: 'g' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Vinaigre de Xérès', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire rattes à la vapeur 15 min et haricots verts 5 min ; saisir le pavé de thon 1-2 min par face pour rester mi-cuit.',
+        'Dresser haricots, pommes de terre, tomates cerises et anchois dans les assiettes.',
+        "Trancher le thon, disposer sur la salade avec les olives ; émulsionner huile d'olive et vinaigre, arroser et servir."
+      ]
+    },
+
+    {
+      id: 'R654',
+      name: 'Bowl de Thon Rouge Mariné',
+      category: 'fusion',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'omega3', 'asian', 'bowl', 'balanced'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 10,
+      difficulty: 2,
+      // 72×4 + 50×4 + 10×9 = 288+200+90 = 578 ✓
+      baseNutrition: { calories: 578, proteinGrams: 72, carbsGrams: 50, fatGrams: 10 },
+      ingredients: [
+        { name: 'Thon rouge (sashimi grade, dés)', qty: 360, unit: 'g' },
+        { name: 'Riz à sushi cuit', qty: 200, unit: 'g' },
+        { name: 'Sauce soja tamari', qty: 30, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Avocat', qty: 80, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Edamames décortiqués', qty: 60, unit: 'g' },
+        { name: 'Nori en lanières', qty: 5, unit: 'g' },
+        { name: 'Sésame grillé', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Mariner les dés de thon dans tamari et huile de sésame 10 min au frais.',
+        'Disposer le riz sushi en base dans les bols ; ajouter thon mariné, avocat en tranches, concombre julienne et edamames.',
+        'Garnir de nori en lanières et sésame grillé ; arroser du reste de marinade avant de servir.'
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  TURBOT  (R655–R659)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R655',
+      name: 'Turbot Vapeur au Safran',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐡',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium', 'light'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 15,
+      difficulty: 2,
+      // 76×4 + 4×4 + 6×9 = 304+16+54 = 374 ✓
+      baseNutrition: { calories: 374, proteinGrams: 76, carbsGrams: 4, fatGrams: 6 },
+      ingredients: [
+        { name: 'Turbot (filets)', qty: 400, unit: 'g' },
+        { name: 'Safran (filaments)', qty: 0.2, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 200, unit: 'ml' },
+        { name: 'Échalotes', qty: 40, unit: 'g' },
+        { name: "Huile d'olive", qty: 15, unit: 'ml' },
+        { name: 'Fenouil (bulbe)', qty: 80, unit: 'g' },
+        { name: 'Cerfeuil frais', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Infuser le safran 10 min dans le bouillon de légumes chaud ; préparer le panier vapeur avec le fenouil émincé en base.',
+        'Poser les filets sur le fenouil, verser le bouillon safran dans le fond du cuiseur vapeur et cuire 12-14 min.',
+        "Pendant ce temps, faire revenir les échalotes à l'huile d'olive ; dresser les filets sur lit de fenouil, napper du jus safran réduit et garnir de cerfeuil."
+      ]
+    },
+
+    {
+      id: 'R656',
+      name: 'Turbot Beurre Citron-Câpres Allégé',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐡',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 2,
+      // 74×4 + 3×4 + 10×9 = 296+12+90 = 398 ✓
+      baseNutrition: { calories: 398, proteinGrams: 74, carbsGrams: 3, fatGrams: 10 },
+      ingredients: [
+        { name: 'Turbot (filets)', qty: 380, unit: 'g' },
+        { name: 'Beurre allégé', qty: 20, unit: 'g' },
+        { name: 'Câpres', qty: 20, unit: 'g' },
+        { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: 'Fumet de poisson', qty: 100, unit: 'ml' },
+        { name: "Huile d'olive", qty: 10, unit: 'ml' },
+        { name: 'Persil plat', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Pocher les filets de turbot dans le fumet frémissant 8-10 min ; réserver au chaud sur assiette.',
+        'Réduire le fumet de moitié dans une petite casserole ; incorporer le beurre allégé en dés en fouettant hors du feu.',
+        'Ajouter câpres rincées, zeste et jus de citron à la sauce ; napper les filets, garnir de persil haché et servir aussitôt.'
+      ]
+    },
+
+    {
+      id: 'R657',
+      name: 'Turbot en Croûte de Sel',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐡',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium', 'show-stopper'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 25,
+      difficulty: 3,
+      // 72×4 + 2×4 + 8×9 = 288+8+72 = 368 ✓
+      baseNutrition: { calories: 368, proteinGrams: 72, carbsGrams: 2, fatGrams: 8 },
+      ingredients: [
+        { name: 'Turbot entier (vidé, écaillé)', qty: 800, unit: 'g' },
+        { name: 'Gros sel de mer', qty: 600, unit: 'g' },
+        { name: 'Blancs de 2 œufs', qty: 60, unit: 'ml' },
+        { name: 'Herbes fraîches (thym, romarin, laurier)', qty: 20, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: "Huile d'olive", qty: 15, unit: 'ml' },
+        { name: 'Poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préchauffer le four à 220 °C ; mélanger gros sel et blancs en neige montés pour former la pâte de sel ; garnir le ventre du turbot avec herbes et tranches de citron.',
+        'Recouvrir entièrement le poisson de la croûte de sel (épaisseur 1 cm), enfourner 22-25 min.',
+        'Casser la croûte à table en spectacle, lever les filets délicatement ; arroser des jus recueillis et servir avec une vinaigrette légère.'
+      ]
+    },
+
+    {
+      id: 'R658',
+      name: 'Turbot Crème Citron Vert & Asperges',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐡',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 20,
+      difficulty: 2,
+      // 70×4 + 8×4 + 12×9 = 280+32+108 = 420 ✓
+      baseNutrition: { calories: 420, proteinGrams: 70, carbsGrams: 8, fatGrams: 12 },
+      ingredients: [
+        { name: 'Turbot (filets)', qty: 360, unit: 'g' },
+        { name: 'Asperges vertes', qty: 200, unit: 'g' },
+        { name: 'Crème fraîche allégée (15 %)', qty: 80, unit: 'ml' },
+        { name: 'Citron vert (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: 'Échalotes', qty: 40, unit: 'g' },
+        { name: "Huile d'olive", qty: 15, unit: 'ml' },
+        { name: 'Estragon frais', qty: 8, unit: 'g' },
+        { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les asperges à la vapeur 8 min ; faire revenir les échalotes à feu doux dans une poêle, ajouter crème et zeste de citron vert, réduire 3 min.',
+        'Poêler les filets de turbot côté peau 3-4 min, retourner 2 min ; ajouter jus de citron vert et estragon à la crème.',
+        'Dresser asperges en éventail, poser le filet, napper de sauce crémeuse et servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R659',
+      name: 'Taboulé de Quinoa au Turbot',
+      category: 'fusion',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐡',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'balanced', 'meal-prep'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 15,
+      difficulty: 1,
+      // 64×4 + 42×4 + 10×9 = 256+168+90 = 514 ✓
+      baseNutrition: { calories: 514, proteinGrams: 64, carbsGrams: 42, fatGrams: 10 },
+      ingredients: [
+        { name: 'Turbot (filets cuits, effilés)', qty: 320, unit: 'g' },
+        { name: 'Quinoa', qty: 120, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Menthe fraîche', qty: 15, unit: 'g' },
+        { name: 'Persil plat', qty: 15, unit: 'g' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire le quinoa 12 min dans 2 volumes eau salée, égoutter et laisser refroidir complètement.',
+        'Pocher ou vapeur les filets de turbot 8 min, laisser refroidir et les effilocher grossièrement.',
+        "Mélanger quinoa, tomates coupées, concombre en dés, herbes ciselées ; ajouter le turbot effilé, assaisonner d'huile d'olive et citron ; réfrigérer 30 min avant service."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  CALAMARS  (R660–R664)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R660',
+      name: 'Calamars Ail-Citron-Persil',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦑',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'light', 'quick'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 8,
+      difficulty: 1,
+      // 54×4 + 4×4 + 10×9 = 216+16+90 = 322 ✓
+      baseNutrition: { calories: 322, proteinGrams: 54, carbsGrams: 4, fatGrams: 10 },
+      ingredients: [
+        { name: 'Calamars (anneaux ou corps entiers)', qty: 500, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Persil plat frais', qty: 20, unit: 'g' },
+        { name: "Piment d'Espelette", qty: 1, unit: 'pincée' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Sécher soigneusement les calamars avec du papier absorbant — l'humidité empêche la coloration.",
+        "Saisir à feu vif dans huile très chaude 2-3 min par face (ou 3 min pour les anneaux) sans couvrir ; ajouter l'ail émincé la dernière minute.",
+        'Hors du feu, arroser de jus de citron, parsemer de zeste, persil haché et piment ; servir sans attendre.'
+      ]
+    },
+
+    {
+      id: 'R661',
+      name: 'Calamars à la Harissa Douce',
+      category: 'north-african',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦑',
+      origin: '🇹🇳',
+      tags: ['high-protein', 'gluten-free', 'spicy', 'quick'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 10,
+      difficulty: 1,
+      // 52×4 + 8×4 + 12×9 = 208+32+108 = 348 ✓
+      baseNutrition: { calories: 348, proteinGrams: 52, carbsGrams: 8, fatGrams: 12 },
+      ingredients: [
+        { name: 'Calamars (rondelles)', qty: 480, unit: 'g' },
+        { name: 'Harissa douce', qty: 25, unit: 'g' },
+        { name: 'Tomates pelées en dés', qty: 150, unit: 'g' },
+        { name: 'Oignon rouge', qty: 60, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Faire revenir oignon et ail dans huile 3 min ; ajouter harissa et tomates, laisser réduire 5 min.',
+        'Ajouter les calamars, cuire à feu vif 4-5 min en remuant ; stopper dès que les calamars sont tendres.',
+        'Parsemer de coriandre fraîche et servir avec un pain pita ou du riz vapeur.'
+      ]
+    },
+
+    {
+      id: 'R662',
+      name: 'Calamars Farcis aux Légumes du Soleil',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦑',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'balanced', 'premium'],
+      servings: 2,
+      prepTime: 25,
+      cookTime: 25,
+      difficulty: 3,
+      // 50×4 + 12×4 + 12×9 = 200+48+108 = 356 ✓
+      baseNutrition: { calories: 356, proteinGrams: 50, carbsGrams: 12, fatGrams: 12 },
+      ingredients: [
+        { name: 'Calamars entiers (avec tentacules)', qty: 500, unit: 'g' },
+        { name: 'Courgette', qty: 80, unit: 'g' },
+        { name: 'Poivron rouge', qty: 80, unit: 'g' },
+        { name: 'Tomates séchées', qty: 30, unit: 'g' },
+        { name: 'Fromage de brebis frais', qty: 30, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'c. à café' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Hacher les tentacules ; faire revenir avec courgette, poivron et ail en petits dés 5 min ; mélanger tomates séchées hachées, fromage frais et herbes.",
+        "Farcir les corps des calamars aux 3/4 avec la farce ; fermer avec une pique en bois.",
+        "Snacker les calamars farcis 4 min par face à feu vif ; terminer 10 min au four à 180 °C ; servir avec coulis de tomates frais."
+      ]
+    },
+
+    {
+      id: 'R663',
+      name: 'Salade Tiède Calamars & Pois Chiches',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦑',
+      origin: '🇪🇸',
+      tags: ['high-protein', 'gluten-free', 'balanced', 'salad'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 1,
+      // 50×4 + 30×4 + 12×9 = 200+120+108 = 428 ✓
+      baseNutrition: { calories: 428, proteinGrams: 50, carbsGrams: 30, fatGrams: 12 },
+      ingredients: [
+        { name: 'Calamars (anneaux)', qty: 400, unit: 'g' },
+        { name: 'Pois chiches (boîte, égouttés)', qty: 200, unit: 'g' },
+        { name: 'Roquette', qty: 60, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Oignon rouge', qty: 50, unit: 'g' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Paprika fumé', qty: 1, unit: 'c. à café' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Poêler les pois chiches avec paprika fumé et huile 5 min jusqu'à légère dorure ; réserver.",
+        'Saisir les anneaux de calamars à feu très vif 3 min ; assaisonner et mélanger avec les pois chiches chauds.',
+        'Dresser roquette, tomates et oignon rouge en base ; déposer le mélange calamars-pois chiches chaud, arroser de jus de citron.'
+      ]
+    },
+
+    {
+      id: 'R664',
+      name: "Riz Noir à l'Encre de Seiche et Calamars",
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦑',
+      origin: '🇪🇸',
+      tags: ['high-protein', 'omega3', 'balanced', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 2,
+      // 52×4 + 64×4 + 14×9 = 208+256+126 = 590 ✓
+      baseNutrition: { calories: 590, proteinGrams: 52, carbsGrams: 64, fatGrams: 14 },
+      ingredients: [
+        { name: 'Calamars (anneaux + tentacules)', qty: 400, unit: 'g' },
+        { name: 'Riz à risotto (Arborio)', qty: 160, unit: 'g' },
+        { name: 'Encre de seiche', qty: 8, unit: 'g' },
+        { name: 'Bouillon de poisson', qty: 500, unit: 'ml' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Vin blanc sec', qty: 80, unit: 'ml' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Persil, sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Faire revenir oignon et ail dans huile ; ajouter les calamars 3 min puis le riz, nacrer 2 min.",
+        "Déglacer au vin blanc ; incorporer progressivement le bouillon chaud louche par louche en remuant, en ajoutant l'encre de seiche dès le début.",
+        "Cuire 18-20 min jusqu'à absorption ; le riz doit être crémeux et noir ; rectifier assaisonnement, parsemer de persil et servir immédiatement."
+      ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  MIX NOBLES  (R665–R669)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R665',
+      name: 'Saint-Pierre & Saint-Jacques aux Agrumes',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium', 'show-stopper'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 10,
+      difficulty: 3,
+      // 76×4 + 8×4 + 12×9 = 304+32+108 = 444 ✓
+      baseNutrition: { calories: 444, proteinGrams: 76, carbsGrams: 8, fatGrams: 12 },
+      ingredients: [
+        { name: 'Saint-Pierre (filets)', qty: 240, unit: 'g' },
+        { name: 'Noix de Saint-Jacques', qty: 160, unit: 'g' },
+        { name: 'Orange (jus + suprêmes)', qty: 1, unit: 'pce' },
+        { name: 'Pamplemousse rose (suprêmes)', qty: 0.5, unit: 'pce' },
+        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Beurre', qty: 15, unit: 'g' },
+        { name: 'Ciboulette', qty: 10, unit: 'g' },
+        { name: 'Fleur de sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Saisir les noix de Saint-Jacques dans beurre moussant 90 sec par face ; réserver au chaud. Dans la même poêle, poêler les filets de saint-pierre 3 min par face.",
+        "Déglacer avec jus d'orange et citron vert, réduire 2 min pour former le jus d'agrumes.",
+        "Dresser les suprêmes d'agrumes en éventail, poser le poisson et les saint-jacques, napper du jus réduit, fleur de sel et ciboulette."
+      ]
+    },
+
+    {
+      id: 'R666',
+      name: 'Brodetto Espadon, Turbot & Saint-Pierre',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇮🇹',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'balanced', 'convivial'],
+      servings: 4,
+      prepTime: 25,
+      cookTime: 30,
+      difficulty: 2,
+      // 120×4 + 20×4 + 20×9 = 480+80+180 = 740 ✓
+      baseNutrition: { calories: 740, proteinGrams: 120, carbsGrams: 20, fatGrams: 20 },
+      ingredients: [
+        { name: 'Espadon (dés)', qty: 250, unit: 'g' },
+        { name: 'Turbot (filets)', qty: 250, unit: 'g' },
+        { name: 'Saint-Pierre (filets)', qty: 250, unit: 'g' },
+        { name: 'Tomates San Marzano (boîte)', qty: 400, unit: 'g' },
+        { name: 'Oignon', qty: 80, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Vin blanc sec', qty: 150, unit: 'ml' },
+        { name: "Huile d'olive", qty: 30, unit: 'ml' },
+        { name: 'Safran', qty: 0.2, unit: 'g' },
+        { name: 'Persil, basilic', qty: 20, unit: 'g' },
+        { name: 'Sel, poivre, piment', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Faire revenir oignon et ail dans huile d'olive 3 min ; déglacer au vin blanc, ajouter tomates, safran et piment ; mijoter 15 min.",
+        "Ajouter les poissons en commençant par les plus fermes (espadon) puis turbot et saint-pierre, cuire à frémissement 8-10 min.",
+        "Rectifier assaisonnement, parsemer de persil et basilic ; servir en cocotte avec pain grillé frotté à l'ail."
+      ]
+    },
+
+    {
+      id: 'R667',
+      name: 'Carpaccio Thon Rouge & Espadon',
+      category: 'fusion',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇮🇹',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'raw', 'premium', 'light'],
+      servings: 2,
+      prepTime: 25,
+      cookTime: 0,
+      difficulty: 2,
+      // 60×4 + 4×4 + 10×9 = 240+16+90 = 346 ✓
+      baseNutrition: { calories: 346, proteinGrams: 60, carbsGrams: 4, fatGrams: 10 },
+      ingredients: [
+        { name: 'Thon rouge (bloc sashimi grade)', qty: 150, unit: 'g' },
+        { name: 'Espadon (bloc sashimi grade)', qty: 150, unit: 'g' },
+        { name: "Huile d'olive extra vierge", qty: 20, unit: 'ml' },
+        { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: 'Câpres', qty: 15, unit: 'g' },
+        { name: 'Roquette bébé', qty: 30, unit: 'g' },
+        { name: 'Copeaux de parmesan', qty: 15, unit: 'g' },
+        { name: 'Fleur de sel, poivre noir', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Congeler les blocs de poisson 30 min pour faciliter le tranchage ; trancher très finement (2-3 mm) et alterner thon et espadon en rosace sur assiette froide.",
+        "Arroser d'huile d'olive extra vierge et jus de citron au moment du service.",
+        "Garnir de câpres, roquette, copeaux de parmesan, zeste de citron et fleur de sel ; servir immédiatement."
+      ]
+    },
+
+    {
+      id: 'R668',
+      name: 'Marmite de la Mer aux Poissons Nobles',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'balanced', 'convivial', 'premium'],
+      servings: 4,
+      prepTime: 30,
+      cookTime: 35,
+      difficulty: 3,
+      // 128×4 + 24×4 + 20×9 = 512+96+180 = 788 ✓
+      baseNutrition: { calories: 788, proteinGrams: 128, carbsGrams: 24, fatGrams: 20 },
+      ingredients: [
+        { name: 'Thon rouge (cubes)', qty: 200, unit: 'g' },
+        { name: 'Saint-Pierre (filets)', qty: 200, unit: 'g' },
+        { name: 'Turbot (filets)', qty: 200, unit: 'g' },
+        { name: 'Calamars (anneaux)', qty: 200, unit: 'g' },
+        { name: 'Bouillon de poisson', qty: 600, unit: 'ml' },
+        { name: 'Poireaux', qty: 150, unit: 'g' },
+        { name: 'Fenouil', qty: 120, unit: 'g' },
+        { name: 'Carottes', qty: 100, unit: 'g' },
+        { name: 'Safran', qty: 0.3, unit: 'g' },
+        { name: "Huile d'olive", qty: 30, unit: 'ml' },
+        { name: 'Herbes de Provence, sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Faire revenir poireaux, fenouil et carottes en brunoise dans l'huile 8 min ; ajouter le bouillon de poisson et safran, porter à frémissement.",
+        "Ajouter les calamars en premier (5 min), puis les morceaux de turbot et saint-pierre (5 min), terminer par le thon (3 min) en maintenant un léger frémissement.",
+        "Rectifier assaisonnement, parsemer d'herbes fraîches ; servir en marmite à table avec rouille et croûtons."
+      ]
+    },
+
+    {
+      id: 'R669',
+      name: 'Plateau Cru de Poissons Nobles — 3 Sauces',
+      category: 'fusion',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐟',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'raw', 'premium', 'show-stopper'],
+      servings: 4,
+      prepTime: 45,
+      cookTime: 0,
+      difficulty: 3,
+      // 120×4 + 12×4 + 20×9 = 480+48+180 = 708 ✓
+      baseNutrition: { calories: 708, proteinGrams: 120, carbsGrams: 12, fatGrams: 20 },
+      ingredients: [
+        { name: 'Thon rouge (sashimi grade)', qty: 200, unit: 'g' },
+        { name: 'Espadon (sashimi grade)', qty: 200, unit: 'g' },
+        { name: 'Saint-Pierre (sashimi grade)', qty: 200, unit: 'g' },
+        { name: 'Sauce ponzu', qty: 40, unit: 'ml' },
+        { name: 'Sauce vierge (tomates, câpres, basilic)', qty: 80, unit: 'ml' },
+        { name: 'Crème de wasabi', qty: 20, unit: 'g' },
+        { name: "Huile d'olive extra vierge", qty: 20, unit: 'ml' },
+        { name: 'Fleur de sel, poivre mignonette', qty: 1, unit: 'pincée' },
+        { name: 'Herbes fraîches assorties', qty: 20, unit: 'g' }
+      ],
+      steps: [
+        "Congeler les blocs 30-45 min pour faciliter le tranchage ; trancher chaque poisson différemment : thon en tataki épais, espadon en carpaccio fin, saint-pierre en sashimi biseauté.",
+        "Dresser sur plateau glacé en sections distinctes : thon pour la sauce ponzu, espadon pour la sauce vierge, saint-pierre pour la crème wasabi.",
+        "Garnir de fleur de sel, herbes fraîches, filet d'huile d'olive sur le saint-pierre ; servir sans attendre avec les 3 sauces en ramequins séparés."
+      ]
+    }
   ];
 
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────

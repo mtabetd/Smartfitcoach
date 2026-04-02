@@ -529,12 +529,180 @@ function renderCycleInfo(container, totalWeeks, sex, level) {
   container.appendChild(card);
 }
 
+// ─── CONJUGATE STRENGTH CYCLE (Methode Westside adaptee CrossFit) ───
+// Pour niveaux RX et RX+. Rotation Max Effort / Dynamic Effort chaque semaine.
+// Reference: Simmons 1999, adapte CrossFit Games athletes (Games Athletes)
+var CONJUGATE_CYCLE = {
+  id: 'conjugate',
+  name: 'Cycle Conjugue — Methode Westside CrossFit',
+  focus: 'Force maximale + puissance explosive. RX et RX+ uniquement.',
+  duration: '4 semaines (rotatif)',
+  for_levels: ['rx', 'rx_plus'],
+  weeks: [
+    {
+      week: 1, type: 'Max Effort Lower',
+      main: { name: 'Back Squat', scheme: '1RM du jour — montee progressive jusqu\'au max', notes: 'Echauffement: 50%x5, 60%x3, 70%x2, 80%x1, puis montee au max. Repos 4-5min entre les lourdes.' },
+      supplemental: [
+        { name: 'Good Morning', scheme: '4 x 5 @ 50% Back Squat', notes: 'Force ischio-jambiers et lombaires — base du squat' },
+        { name: 'Leg Press ou Bulgarian Split Squat', scheme: '3 x 8 lourd', notes: 'Travail unilateral pour corriger les desequilibres' }
+      ],
+      dynamic: { name: 'Dynamic Effort Box Squat', scheme: '10 x 2 @ 50-55% avec bandes ou chaines', notes: 'Vitesse maximale sur chaque rep — explosivite pure' }
+    },
+    {
+      week: 2, type: 'Max Effort Upper',
+      main: { name: 'Push Press 1RM', scheme: '1RM du jour — montee progressive', notes: 'Comparer avec 1RM precedent. Si progres: cycle fonctionne.' },
+      supplemental: [
+        { name: 'Strict Press', scheme: '4 x 5 @ 75% Push Press', notes: 'Force stricte — base de la stabilite overhead' },
+        { name: 'Z-Press (assis au sol, sans dossier)', scheme: '3 x 8', notes: 'Isole les epaules et le core — exercice elite pour force overhead' }
+      ],
+      dynamic: { name: 'Push Jerk speed work', scheme: '8 x 3 @ 55% avec focus vitesse', notes: 'Drive des jambes maximise — timing de lockout' }
+    },
+    {
+      week: 3, type: 'Max Effort Lower — Variation',
+      main: { name: 'Front Squat ou Pause Squat 3s 1RM', scheme: '1RM du jour sur variation', notes: 'Alterner Front Squat / Pause Squat / Box Squat chaque cycle pour varier le stimulus.' },
+      supplemental: [
+        { name: 'Romanian Deadlift', scheme: '4 x 6 @ 60% Deadlift', notes: 'Force ischio-jambiers en position allongee — base du premier tirage haltero' },
+        { name: 'Single-leg Deadlift', scheme: '3 x 8 chaque jambe', notes: 'Stabilite et force unilaterale — correction desequilibres' }
+      ],
+      dynamic: { name: 'Clean Pull speed', scheme: '8 x 2 @ 90-100% du Clean 1RM', notes: 'Force de tirage maximale avec acceleration — transfere directement au Clean' }
+    },
+    {
+      week: 4, type: 'Max Effort Upper — Variation',
+      main: { name: 'Strict Pull-up Weighted 1RM ou Bench Press 1RM', scheme: '1RM du jour', notes: 'Le pull-up leste est CRUCIAL pour les gymnastic — chaque kg de plus = pull-ups plus faciles en WOD.' },
+      supplemental: [
+        { name: 'Pendlay Row', scheme: '4 x 5 @ 70% Deadlift', notes: 'Force de tirage horizontale — dorsaux pour la position du clean' },
+        { name: 'Face Pull', scheme: '3 x 15 avec bande', notes: 'Sante des epaules — rotation externe — previent les blessures rotateus' }
+      ],
+      dynamic: { name: 'Kipping Pull-up Speed', scheme: '6 x 6 avec focus vitesse de kipping', notes: 'Pas de repos entre reps — rhythm kipping — acceleration de la phase de poussee' }
+    }
+  ]
+};
+
+// ─── SNATCH TECHNIQUE CYCLE (6 semaines, position par position) ───
+// Base sur la methode sovietique adaptee elite — progresser techniquement avant d\'ajouter de la charge
+var SNATCH_TECHNIQUE_CYCLE = {
+  id: 'snatch_technique',
+  name: 'Cycle Snatch Technique — 6 semaines sovietiques',
+  focus: 'Perfectionnement technique position par position. Charge = outil, pas objectif.',
+  duration: '6 semaines',
+  weeks: [
+    {
+      week: 1, focus: 'Position 1 — Sol et premier tirage',
+      drills: [
+        'Snatch Grip Deadlift: 5 x 5 @ 60-65% — lent, pause 2s a chaque checkpoint (tibias / genoux / hanches)',
+        'Halting Snatch Deadlift: 3 x 5 @ 60% — stop 3s au niveau du genou (position de puissance)',
+        'Segment Snatch: 4 x 3 @ 55-60% — arreter 2s sous le genou, puis 2s au niveau du genou'
+      ],
+      notes: 'Semaine 1: aucune charge lourde. 100% focus sur la position du dos et le trajet de barre du sol au genou. Photograph/video chaque serie. Objectif: que la barre reste le long des tibias, dos neutre, epaules AU-DESSUS de la barre a la position de depart.'
+    },
+    {
+      week: 2, focus: 'Position 2 — Deuxieme tirage et extension',
+      drills: [
+        'Snatch High Pull: 5 x 5 @ 65-70% — extension complete hanches + genoux + orteils avant de tirer',
+        'Hang Snatch High Pull: 4 x 5 @ 65% — depuis la position "power position" (hanches)',
+        'Muscle Snatch: 4 x 4 @ 50% — isolation du tirage sous — coudes hauts et dehors'
+      ],
+      notes: 'Semaine 2: focus explosion des hanches. La barre doit "sauter" naturellement quand les hanches frapent. Ne pas tirer avec les bras avant l\'extension complete. Cue: "pousse le sol, pas tire la barre".'
+    },
+    {
+      week: 3, focus: 'Position 3 — Reception et stabilite overhead',
+      drills: [
+        'Snatch Balance: 4 x 5 @ 60-70% — drop rapide sous la barre, reception stable',
+        'Drop Snatch: 3 x 5 @ 50-55% — depuis les epaules, drop pur sans tirage',
+        'OHS Pause 5s: 4 x 3 @ 65-70% OHS — test de la stabilite et mobilite overhead'
+      ],
+      notes: 'Semaine 3: la reception est ACTIVE. Sous la barre, pousser le sol ET la barre. Epaules engagees en rotation externe — "break the bar". Stabilite = genoux out, chest up, regard droit devant.'
+    },
+    {
+      week: 4, focus: 'Assemblage — Combinaison des positions',
+      drills: [
+        'Snatch depuis blocs (position genou): 5 x 3 @ 70-75% — focus connexion pos 2 → reception',
+        'Hang Snatch (dessus genou): 5 x 3 @ 70-75% — timing court et agressif',
+        'Full Snatch: 5 x 2 @ 70-75% — assembler toutes les positions'
+      ],
+      notes: 'Semaine 4: premiers snatches complets a charge modeste. Chaque rep doit montrer tous les checkpoints des semaines 1-3. Si une position echappe: revenir a l\'exercice isole de cette semaine.'
+    },
+    {
+      week: 5, focus: 'Intensification — Montee en charge sur base technique',
+      drills: [
+        'Snatch: E2MOM 12min — 2 reps @ 78-83%',
+        'Power Snatch: 4 x 2 @ 75-80% — speed under + stabilite',
+        'Hang Snatch: 3 x 2 @ 80% — timing agressif depuis position haute'
+      ],
+      notes: 'Semaine 5: les charges augmentent mais la technique prime TOUJOURS. Si une rep est laide: reduire de 5-10% et recommencer. Aucune rep technique ne vaut rien — elle ancre les mauvaises habitudes.'
+    },
+    {
+      week: 6, focus: 'Test 1RM — Exprimer la technique sous charge maximale',
+      drills: [
+        'Echauffement technique: 5 x 2 @ 60-65% — technique parfaite',
+        'Montee progressive: 1 x 1 @ 75%, 80%, 85%, 90%, 95%, 100%+ tentative PR',
+        'Post-test: video de votre PR et comparer a la semaine 1 — amelioration technique visible?'
+      ],
+      notes: 'JOUR DE PR. Echauffement long (30min). Visualisez chaque levee 30s avant. Si une tentative echoue: verifiez QUELLE position a flanchi et travaillez ce point au prochain cycle.'
+    }
+  ]
+};
+
+// ─── ELITE COMPLEXES ───
+// Complexes haltero utilises par les athletes Games elite
+// A integrer dans les echauffements ou comme sessions supplementaires
+var CF_ELITE_COMPLEXES = [
+  {
+    id: 'clean_complex',
+    name: 'Clean Complex Elite',
+    description: '1 Clean Deadlift (lent) + 1 Hang Clean + 1 Squat Clean + 1 Front Squat — Elite Staple',
+    scheme: '5 series de 1 complexe. Montee progressive de 60% a 80%. Repos 2-3min.',
+    coaching: 'Chaque partie du complexe est un mouvement distinct avec reset. Le deadlift lent etablit la position. Le hang clean travaille l\'explosion. Le squat clean teste la reception. Le front squat = force pure en rack position.',
+    levels: { scaled: '50-65%', inter: '65-75%', rx: '72-82%', rx_plus: '78-88%' }
+  },
+  {
+    id: 'snatch_complex',
+    name: 'Snatch Complex Elite',
+    description: '1 Power Snatch + 1 OHS + 1 Squat Snatch — le complexe elite',
+    scheme: '6 series de 1 complexe @ 65-75%. Repos 2min. Focus: transition fluide P.Snatch → OHS → Squat Snatch.',
+    coaching: 'Le Power Snatch etablit la reception haute. L\'OHS construit la stabilite overhead (10s hold si possible). Le Squat Snatch complete avec reception basse. Echauffement elite recommande avant les wods snatch lourds.',
+    levels: { scaled: '45-55%', inter: '55-65%', rx: '65-75%', rx_plus: '72-80%' }
+  },
+  {
+    id: 'jerk_complex',
+    name: 'Jerk Footwork Complex',
+    description: '1 Push Press + 1 Push Jerk + 1 Split Jerk — "Triplet Jerk"',
+    scheme: '5 series de 1 complexe. Montee progressive de 65% a 85% du jerk 1RM. Repos 2-3min.',
+    coaching: 'Le Push Press isole la force des jambes. Le Push Jerk ajoute la vitesse de lockout. Le Split Jerk teste la position finale. Si le Split Jerk est plus lourd que le Push Jerk = bonne technique de split. Si c\'est l\'inverse: travaillez le footwork.',
+    levels: { scaled: '55-65%', inter: '65-75%', rx: '72-82%', rx_plus: '80-90%' }
+  },
+  {
+    id: 'squat_complex',
+    name: 'Squat Complex Force',
+    description: '2 Pause Front Squat (3s) + 2 Front Squat + 2 Back Squat — "Ascending Squat"',
+    scheme: '4 series de 1 complexe @ 70-80% du Front Squat. Repos 3min. Technique parfaite sur chaque rep.',
+    coaching: 'Les Pause Squats etablissent la force excentrique. Les Front Squats reguliers accelerent. Les Back Squats finissent avec le systeme neuromusculaire active. Ce complexe remplace avantageusement une seance de squat classique — moins de volume, meilleur stimulus.',
+    levels: { scaled: '55-65% FS', inter: '65-72% FS', rx: '72-80% FS', rx_plus: '78-85% FS' }
+  }
+];
+
+// ─── ONDULATING PERIODIZATION (progression non lineaire) ───
+// Amelioration de la periodisation de base — ondulation semaine par semaine
+// Evite la stagnation et maintient l\'adaptation neuromusculaire active
+var ONDULATING_PERIODIZATION = [
+  { week: 1, phase: 'Volume', sets: 5, reps: 5, pct: 70, intensity: 'Moyen', note: 'Volume eleve, intensite moderee. Base de l\'adaptation.' },
+  { week: 2, phase: 'Intensite', sets: 4, reps: 3, pct: 82, intensity: 'Haut', note: 'Reduction volume, hausse intensite — stimulus neuromusculaire fort.' },
+  { week: 3, phase: 'Volume+', sets: 5, reps: 4, pct: 75, intensity: 'Moyen-Haut', note: 'Volume eleve + charge moderee — endurance de force.' },
+  { week: 4, phase: 'Intensite+', sets: 3, reps: 2, pct: 88, intensity: 'Tres Haut', note: 'Volume faible, intensite tres haute — proche du max sans teater.' },
+  { week: 5, phase: 'Decharge', sets: 3, reps: 5, pct: 65, intensity: 'Bas', note: 'Recuperation active. Preparation au test de la semaine suivante.' },
+  { week: 6, phase: 'Test', sets: 2, reps: 1, pct: 100, intensity: 'Maximal', note: 'PR day — donnez tout. Echauffement long et montee progressive.' }
+];
+
 // ─── PUBLIC API ───
 window.HALTERO_CYCLES = {
   PERIODIZATION: PERIODIZATION,
   CYCLES: HALTERO_CYCLES,
   INTER_CYCLE_DELOAD: INTER_CYCLE_DELOAD,
   OHS_PERCENTAGE_FACTOR: OHS_PERCENTAGE_FACTOR,
+  CONJUGATE_CYCLE: CONJUGATE_CYCLE,
+  SNATCH_TECHNIQUE_CYCLE: SNATCH_TECHNIQUE_CYCLE,
+  CF_ELITE_COMPLEXES: CF_ELITE_COMPLEXES,
+  ONDULATING_PERIODIZATION: ONDULATING_PERIODIZATION,
   getCurrentCycle: getCurrentCycle,
   getHalteroSession: getHalteroSession,
   calcWorkingWeight: calcWorkingWeight,
