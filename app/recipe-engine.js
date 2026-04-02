@@ -25049,6 +25049,167 @@
         'Trancher finement et dresser sur assiette froide ; arroser de sauce ponzu et jus de citron vert.',
         'Garnir de daikon râpé, gingembre julienne, ciboulette et flocons de piment ; servir immédiatement.'
       ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  THON ROUGE  (R650–R654)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R650',
+      name: 'Thon Rouge Mi-Cuit Sésame & Soba',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'omega3', 'asian', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 15,
+      difficulty: 2,
+      // 85×4 + 35×4 + 10×9 = 340+140+90 = 570 ✓
+      baseNutrition: { calories: 570, proteinGrams: 85, carbsGrams: 35, fatGrams: 10 },
+      ingredients: [
+        { name: 'Thon rouge (pavés)', qty: 400, unit: 'g' },
+        { name: 'Nouilles soba', qty: 100, unit: 'g' },
+        { name: 'Sésame noir et blanc', qty: 20, unit: 'g' },
+        { name: 'Sauce soja tamari', qty: 30, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Gingembre frais', qty: 10, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Avocat', qty: 60, unit: 'g' },
+        { name: 'Ciboulette asiatique', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Cuire les soba 4 min, rincer à froid ; mélanger tamari, huile de sésame et gingembre râpé pour la sauce.',
+        'Enrober les pavés de sésame mélangé ; saisir 1 min par face dans une poêle très chaude — le centre doit rester rouge.',
+        'Trancher les pavés, dresser sur les soba avec concombre julienne, avocat en éventail ; arroser de sauce et parsemer de ciboulette.'
+      ]
+    },
+
+    {
+      id: 'R651',
+      name: 'Tataki de Thon Rouge Ponzu Maison',
+      category: 'japanese',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'asian', 'premium', 'raw'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 3,
+      difficulty: 3,
+      // 74×4 + 5×4 + 6×9 = 296+20+54 = 370 ✓
+      baseNutrition: { calories: 370, proteinGrams: 74, carbsGrams: 5, fatGrams: 6 },
+      ingredients: [
+        { name: 'Thon rouge (bloc sashimi grade)', qty: 370, unit: 'g' },
+        { name: 'Sauce soja yuzu (ou citron vert)', qty: 30, unit: 'ml' },
+        { name: 'Mirin', qty: 15, unit: 'ml' },
+        { name: 'Vinaigre de riz', qty: 10, unit: 'ml' },
+        { name: 'Gingembre frais', qty: 8, unit: 'g' },
+        { name: 'Daikon râpé', qty: 60, unit: 'g' },
+        { name: 'Ciboule verte', qty: 15, unit: 'g' },
+        { name: 'Flocons de piment', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préparer le ponzu maison : mélanger sauce soja, mirin, vinaigre de riz et jus de yuzu (ou citron vert) ; laisser reposer 10 min.',
+        'Saisir très rapidement le bloc de thon 15-20 sec par face sur toutes les faces dans une poêle de fonte brûlante ; refroidir immédiatement.',
+        'Trancher finement, disposer en éventail ; arroser de ponzu maison, garnir de daikon, gingembre et ciboule ; servir sans attendre.'
+      ]
+    },
+
+    {
+      id: 'R652',
+      name: 'Thon Rouge Grillé Sauce Câpres-Citron',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'light'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 10,
+      difficulty: 1,
+      // 78×4 + 4×4 + 10×9 = 312+16+90 = 418 ✓
+      baseNutrition: { calories: 418, proteinGrams: 78, carbsGrams: 4, fatGrams: 10 },
+      ingredients: [
+        { name: 'Thon rouge (pavés)', qty: 400, unit: 'g' },
+        { name: 'Câpres', qty: 25, unit: 'g' },
+        { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Ail', qty: 1, unit: 'gousse' },
+        { name: 'Persil plat', qty: 15, unit: 'g' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Huiler et assaisonner les pavés ; griller sur grille très chaude 2-3 min par face selon épaisseur, le centre doit rester rosé.',
+        'Chauffer huile, ail haché et câpres 1 min dans une petite casserole ; hors du feu, ajouter zeste et jus de citron.',
+        'Napper les pavés de sauce câpres-citron, parsemer de persil ciselé et servir avec des haricots verts vapeur.'
+      ]
+    },
+
+    {
+      id: 'R653',
+      name: 'Salade Niçoise au Thon Rouge Frais',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'salad', 'balanced'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 15,
+      difficulty: 1,
+      // 68×4 + 22×4 + 14×9 = 272+88+126 = 486 ✓
+      baseNutrition: { calories: 486, proteinGrams: 68, carbsGrams: 22, fatGrams: 14 },
+      ingredients: [
+        { name: 'Thon rouge (pavé)', qty: 340, unit: 'g' },
+        { name: 'Haricots verts fins', qty: 150, unit: 'g' },
+        { name: 'Pommes de terre rattes', qty: 150, unit: 'g' },
+        { name: 'Tomates cerises', qty: 120, unit: 'g' },
+        { name: 'Olives noires niçoises', qty: 40, unit: 'g' },
+        { name: 'Anchois au sel rincés', qty: 20, unit: 'g' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Vinaigre de Xérès', qty: 10, unit: 'ml' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire rattes à la vapeur 15 min et haricots verts 5 min ; saisir le pavé de thon 1-2 min par face pour rester mi-cuit.',
+        'Dresser haricots, pommes de terre, tomates cerises et anchois dans les assiettes.',
+        "Trancher le thon, disposer sur la salade avec les olives ; émulsionner huile d'olive et vinaigre, arroser et servir."
+      ]
+    },
+
+    {
+      id: 'R654',
+      name: 'Bowl de Thon Rouge Mariné',
+      category: 'fusion',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐠',
+      origin: '🇯🇵',
+      tags: ['high-protein', 'omega3', 'asian', 'bowl', 'balanced'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 10,
+      difficulty: 2,
+      // 72×4 + 50×4 + 10×9 = 288+200+90 = 578 ✓
+      baseNutrition: { calories: 578, proteinGrams: 72, carbsGrams: 50, fatGrams: 10 },
+      ingredients: [
+        { name: 'Thon rouge (sashimi grade, dés)', qty: 360, unit: 'g' },
+        { name: 'Riz à sushi cuit', qty: 200, unit: 'g' },
+        { name: 'Sauce soja tamari', qty: 30, unit: 'ml' },
+        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
+        { name: 'Avocat', qty: 80, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Edamames décortiqués', qty: 60, unit: 'g' },
+        { name: 'Nori en lanières', qty: 5, unit: 'g' },
+        { name: 'Sésame grillé', qty: 10, unit: 'g' }
+      ],
+      steps: [
+        'Mariner les dés de thon dans tamari et huile de sésame 10 min au frais.',
+        'Disposer le riz sushi en base dans les bols ; ajouter thon mariné, avocat en tranches, concombre julienne et edamames.',
+        'Garnir de nori en lanières et sésame grillé ; arroser du reste de marinade avant de servir.'
+      ]
     }
   ];
 
