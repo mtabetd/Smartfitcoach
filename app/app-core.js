@@ -617,14 +617,14 @@ var CF_WODS = [
     gym: { name: 'Skill: Ring Muscle-ups', drills: ['3x5 Strict Ring Dips', '3x3 Kipping Swing to Hip (ring)', '5x1-3 Ring Muscle-up attempts', '3x8 Banded Transitions (si nécessaire)', 'Accumulate 1min L-sit on rings'] }
   },
   {
-    day: 4, name: 'MAYHEM',
+    day: 4, name: 'STORM',
     haltero: { name: 'Clean & Jerk', desc: '1 Squat Clean + 1 Push Jerk + 1 Split Jerk', scheme: 'E2MOM 14min — Build to heavy', weights: 'squat_clean' },
-    wod: { name: 'MAYHEM TRIBUTE', type: 'AMRAP 20', movements: [
+    wod: { name: 'STORM', type: 'AMRAP 20', movements: [
       {name: 'KB Swings', reps: 15, gymnastics: 'kb_swing'},
       {name: 'Box Jumps', reps: 12, gymnastics: 'box_jump'},
       {name: 'Thrusters', reps: 9, weight: 'thruster'},
       {name: 'Bar Muscle-ups', reps: 3, gymnastics: 'muscle_ups_bar'}
-    ], notes: 'Inspiré des standards Games Athletes. Respirez sur les KB swings, explosive sur les BMU.' },
+    ], notes: 'Standards Games Athletes. Respirez sur les KB swings, explosive sur les BMU.' },
     gym: { name: 'Skill: HSPU / Pike Push-ups', drills: ['3x5 Strict HSPU (ou pike push-ups)', '3x5 Kipping HSPU (ou abmat)', 'Max unbroken HSPU test', '3x15 DB Strict Press léger (épaule santé)'] }
   },
   {
