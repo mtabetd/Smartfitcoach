@@ -25210,6 +25210,165 @@
         'Disposer le riz sushi en base dans les bols ; ajouter thon mariné, avocat en tranches, concombre julienne et edamames.',
         'Garnir de nori en lanières et sésame grillé ; arroser du reste de marinade avant de servir.'
       ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  TURBOT  (R655–R659)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R655',
+      name: 'Turbot Vapeur au Safran',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐡',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium', 'light'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 15,
+      difficulty: 2,
+      // 76×4 + 4×4 + 6×9 = 304+16+54 = 374 ✓
+      baseNutrition: { calories: 374, proteinGrams: 76, carbsGrams: 4, fatGrams: 6 },
+      ingredients: [
+        { name: 'Turbot (filets)', qty: 400, unit: 'g' },
+        { name: 'Safran (filaments)', qty: 0.2, unit: 'g' },
+        { name: 'Bouillon de légumes', qty: 200, unit: 'ml' },
+        { name: 'Échalotes', qty: 40, unit: 'g' },
+        { name: "Huile d'olive", qty: 15, unit: 'ml' },
+        { name: 'Fenouil (bulbe)', qty: 80, unit: 'g' },
+        { name: 'Cerfeuil frais', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Infuser le safran 10 min dans le bouillon de légumes chaud ; préparer le panier vapeur avec le fenouil émincé en base.',
+        'Poser les filets sur le fenouil, verser le bouillon safran dans le fond du cuiseur vapeur et cuire 12-14 min.',
+        "Pendant ce temps, faire revenir les échalotes à l'huile d'olive ; dresser les filets sur lit de fenouil, napper du jus safran réduit et garnir de cerfeuil."
+      ]
+    },
+
+    {
+      id: 'R656',
+      name: 'Turbot Beurre Citron-Câpres Allégé',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐡',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 12,
+      difficulty: 2,
+      // 74×4 + 3×4 + 10×9 = 296+12+90 = 398 ✓
+      baseNutrition: { calories: 398, proteinGrams: 74, carbsGrams: 3, fatGrams: 10 },
+      ingredients: [
+        { name: 'Turbot (filets)', qty: 380, unit: 'g' },
+        { name: 'Beurre allégé', qty: 20, unit: 'g' },
+        { name: 'Câpres', qty: 20, unit: 'g' },
+        { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: 'Fumet de poisson', qty: 100, unit: 'ml' },
+        { name: "Huile d'olive", qty: 10, unit: 'ml' },
+        { name: 'Persil plat', qty: 10, unit: 'g' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Pocher les filets de turbot dans le fumet frémissant 8-10 min ; réserver au chaud sur assiette.',
+        'Réduire le fumet de moitié dans une petite casserole ; incorporer le beurre allégé en dés en fouettant hors du feu.',
+        'Ajouter câpres rincées, zeste et jus de citron à la sauce ; napper les filets, garnir de persil haché et servir aussitôt.'
+      ]
+    },
+
+    {
+      id: 'R657',
+      name: 'Turbot en Croûte de Sel',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐡',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium', 'show-stopper'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 25,
+      difficulty: 3,
+      // 72×4 + 2×4 + 8×9 = 288+8+72 = 368 ✓
+      baseNutrition: { calories: 368, proteinGrams: 72, carbsGrams: 2, fatGrams: 8 },
+      ingredients: [
+        { name: 'Turbot entier (vidé, écaillé)', qty: 800, unit: 'g' },
+        { name: 'Gros sel de mer', qty: 600, unit: 'g' },
+        { name: 'Blancs de 2 œufs', qty: 60, unit: 'ml' },
+        { name: 'Herbes fraîches (thym, romarin, laurier)', qty: 20, unit: 'g' },
+        { name: 'Citron', qty: 1, unit: 'pce' },
+        { name: "Huile d'olive", qty: 15, unit: 'ml' },
+        { name: 'Poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Préchauffer le four à 220 °C ; mélanger gros sel et blancs en neige montés pour former la pâte de sel ; garnir le ventre du turbot avec herbes et tranches de citron.',
+        'Recouvrir entièrement le poisson de la croûte de sel (épaisseur 1 cm), enfourner 22-25 min.',
+        'Casser la croûte à table en spectacle, lever les filets délicatement ; arroser des jus recueillis et servir avec une vinaigrette légère.'
+      ]
+    },
+
+    {
+      id: 'R658',
+      name: 'Turbot Crème Citron Vert & Asperges',
+      category: 'french',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐡',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 20,
+      difficulty: 2,
+      // 70×4 + 8×4 + 12×9 = 280+32+108 = 420 ✓
+      baseNutrition: { calories: 420, proteinGrams: 70, carbsGrams: 8, fatGrams: 12 },
+      ingredients: [
+        { name: 'Turbot (filets)', qty: 360, unit: 'g' },
+        { name: 'Asperges vertes', qty: 200, unit: 'g' },
+        { name: 'Crème fraîche allégée (15 %)', qty: 80, unit: 'ml' },
+        { name: 'Citron vert (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: 'Échalotes', qty: 40, unit: 'g' },
+        { name: "Huile d'olive", qty: 15, unit: 'ml' },
+        { name: 'Estragon frais', qty: 8, unit: 'g' },
+        { name: 'Sel, poivre blanc', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire les asperges à la vapeur 8 min ; faire revenir les échalotes à feu doux dans une poêle, ajouter crème et zeste de citron vert, réduire 3 min.',
+        'Poêler les filets de turbot côté peau 3-4 min, retourner 2 min ; ajouter jus de citron vert et estragon à la crème.',
+        'Dresser asperges en éventail, poser le filet, napper de sauce crémeuse et servir immédiatement.'
+      ]
+    },
+
+    {
+      id: 'R659',
+      name: 'Taboulé de Quinoa au Turbot',
+      category: 'fusion',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🐡',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'omega3', 'balanced', 'meal-prep'],
+      servings: 2,
+      prepTime: 20,
+      cookTime: 15,
+      difficulty: 1,
+      // 64×4 + 42×4 + 10×9 = 256+168+90 = 514 ✓
+      baseNutrition: { calories: 514, proteinGrams: 64, carbsGrams: 42, fatGrams: 10 },
+      ingredients: [
+        { name: 'Turbot (filets cuits, effilés)', qty: 320, unit: 'g' },
+        { name: 'Quinoa', qty: 120, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Concombre', qty: 80, unit: 'g' },
+        { name: 'Menthe fraîche', qty: 15, unit: 'g' },
+        { name: 'Persil plat', qty: 15, unit: 'g' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Cuire le quinoa 12 min dans 2 volumes eau salée, égoutter et laisser refroidir complètement.',
+        'Pocher ou vapeur les filets de turbot 8 min, laisser refroidir et les effilocher grossièrement.',
+        "Mélanger quinoa, tomates coupées, concombre en dés, herbes ciselées ; ajouter le turbot effilé, assaisonner d'huile d'olive et citron ; réfrigérer 30 min avant service."
+      ]
     }
   ];
 
