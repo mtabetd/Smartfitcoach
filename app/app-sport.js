@@ -323,7 +323,7 @@ function generateSportProgram() {
  var pregIntensityFactor = 1.0;
  if (S.pregnant && S.sex === 'femme' && window.getPregnancyTrimester) {
  pregTri = window.getPregnancyTrimester();
- if (pregTri) {
+ if (pregTri && pregTri.trimester) {
  pregForbidden = pregTri.trimester.forbiddenExercises || [];
  pregIntensityFactor = pregTri.trimester.intensityFactor || 0.5;
  }
@@ -333,7 +333,7 @@ function generateSportProgram() {
  var cyclePhaseInfo = null;
  if (!S.pregnant && S.sex === 'femme' && S.cycleTracking && window.getCurrentCyclePhase) {
  cyclePhaseInfo = window.getCurrentCyclePhase();
- if (cyclePhaseInfo && cyclePhaseInfo.phase.intensityFactor) {
+ if (cyclePhaseInfo && cyclePhaseInfo.phase && cyclePhaseInfo.phase.intensityFactor) {
  cycleIntensityFactor = cyclePhaseInfo.phase.intensityFactor;
  }
  }
@@ -379,7 +379,7 @@ function generateSportProgram() {
  // Pregnancy: filter forbidden exercises
  if (pregTri && pregForbidden.length > 0) {
  available = available.filter(function(ex) {
- var exName = ex.n.toLowerCase();
+ var exName = (ex.n || ex.name || '').toLowerCase();
  for (var fi = 0; fi < pregForbidden.length; fi++) {
  if (exName.indexOf(pregForbidden[fi].toLowerCase()) !== -1) return false;
  }
@@ -456,7 +456,7 @@ function generateSportProgram() {
  if (repSuffix && ex.sets) ex.sets = ex.sets + repSuffix;
 
  // Add superset note for shred
- if (supersetNote && i > 0 && i % 2 === 0) ex.n = ex.n + supersetNote;
+ if (supersetNote && i > 0 && i % 2 === 0 && ex.n) ex.n = ex.n + supersetNote;
 
  dayExercises.push(ex);
  }
@@ -3739,22 +3739,22 @@ function renderMusculationProgram(p) {
  // ─── GROSSESSE — Adaptations sport ───
  if (S.pregnant && S.sex === 'femme') {
  var triSport = window.getPregnancyTrimester ? window.getPregnancyTrimester() : null;
- if (triSport) {
+ if (triSport && triSport.trimester) {
  var triSportColor = '#5A1010';
- var intensitySport = Math.round(triSport.trimester.intensityFactor * 100);
+ var intensitySport = Math.round((triSport.trimester.intensityFactor || 0.5) * 100);
 
  var pregSportCard = h('div', {style: 'border:2px solid ' + triSportColor + ';padding:16px;background:rgba(192,57,43,0.04);margin-bottom:16px'});
- pregSportCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:' + triSportColor + ';margin-bottom:8px'}, '\uD83E\uDD30 Programme adapt\u00e9 grossesse \u2014 ' + triSport.trimester.name));
+ pregSportCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:' + triSportColor + ';margin-bottom:8px'}, '\uD83E\uDD30 Programme adapt\u00e9 grossesse \u2014 ' + (triSport.trimester.name || '')));
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:10px'}, 'Intensit\u00e9 : ' + intensitySport + '% \u2014 \u00c9coutez votre corps'));
 
  // Sport tips
- triSport.trimester.sportTips.forEach(function(tip) {
+ if (triSport.trimester.sportTips) triSport.trimester.sportTips.forEach(function(tip) {
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
  });
 
  // Forbidden exercises
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + triSportColor + ';margin:10px 0 6px'}, 'Exercices interdits ce trimestre'));
- triSport.trimester.forbiddenExercises.forEach(function(ex) {
+ if (triSport.trimester.forbiddenExercises) triSport.trimester.forbiddenExercises.forEach(function(ex) {
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + triSportColor + ';margin-bottom:2px;padding-left:8px'}, '\u2716 ' + ex));
  });
 
