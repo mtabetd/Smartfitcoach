@@ -75,12 +75,12 @@ styleEl.textContent = [
   /* Data management buttons */
   '.dash-data-section { margin-top:32px; }',
   '.dash-data-btns { display:flex; flex-direction:column; gap:10px; }',
-  '.dash-btn-primary { width:100%; padding:14px; background:var(--black,#181818); color:var(--ivory,#FAF9F6); border:none; font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
-  '.dash-btn-primary:hover { opacity:.85; }',
-  '.dash-btn-secondary { width:100%; padding:14px; background:var(--ivory2,#F4F4F0); color:var(--black,#181818); border:1px solid var(--border,#D8D8D0); font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
-  '.dash-btn-secondary:hover { background:var(--black,#181818); color:var(--ivory,#FAF9F6); }',
-  '.dash-btn-danger { width:100%; padding:14px; background:transparent; color:var(--red,#5A1010); border:1px solid var(--red,#5A1010); font-size:13px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
-  '.dash-btn-danger:hover { background:var(--red,#5A1010); color:var(--ivory,#FAF9F6); }',
+  '.dash-btn-primary { width:100%; padding:18px 28px; background:var(--black,#0A0A09); color:var(--ivory,#FAF9F6); border:1px solid var(--black,#0A0A09); border-radius:2px; font-size:9px; letter-spacing:6px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
+  '.dash-btn-primary:hover { background:var(--black2,#181818); }',
+  '.dash-btn-secondary { width:100%; padding:12px 24px; background:transparent; color:var(--grey,#6B6B65); border:1px solid var(--border,#D8D8D0); border-radius:2px; font-size:9px; letter-spacing:4px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
+  '.dash-btn-secondary:hover { border-color:var(--black,#0A0A09); color:var(--black,#0A0A09); }',
+  '.dash-btn-danger { width:100%; padding:12px 24px; background:transparent; color:var(--red,#5A1010); border:1px solid var(--red,#5A1010); border-radius:2px; font-size:9px; letter-spacing:4px; text-transform:uppercase; cursor:pointer; transition:all .2s ease; font-family:"Helvetica Neue",Arial,sans-serif; }',
+  '.dash-btn-danger:hover { background:var(--redbg,rgba(90,16,16,.06)); }',
 
   /* Responsive */
   '@media(max-width:480px){ .dash-card-grid,.dash-card-grid-3{grid-template-columns:1fr;} .dash-greeting{font-size:24px;} }',
@@ -498,11 +498,11 @@ window.DASHBOARD = {
         root.appendChild(h('div', 'dash-label', 'Grossesse — Semaine ' + pregTri.week));
         var pregCard = document.createElement('div');
         pregCard.className = 'dash-card';
-        pregCard.style.cssText = 'border-left:4px solid #5A1010;padding:16px;background:rgba(233,30,99,0.03);margin-bottom:12px;';
+        pregCard.style.cssText = 'border:1px solid var(--red,#5A1010);padding:16px;background:var(--redbg,rgba(90,16,16,.06));margin-bottom:12px;';
 
         var pregTitle = document.createElement('div');
-        pregTitle.style.cssText = 'font-family:Georgia,serif;font-size:17px;color:#5A1010;margin-bottom:4px;';
-        pregTitle.textContent = '\uD83E\uDD30 ' + pregTri.trimester.name + ' \u2014 ' + pregTri.trimester.desc;
+        pregTitle.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--red,#5A1010);margin-bottom:8px;';
+        pregTitle.textContent = pregTri.trimester.name + ' \u2014 ' + pregTri.trimester.desc;
         pregCard.appendChild(pregTitle);
 
         var pregProgress = document.createElement('div');
@@ -512,9 +512,9 @@ window.DASHBOARD = {
 
         // Progress bar
         var pregBarBg = document.createElement('div');
-        pregBarBg.style.cssText = 'height:6px;background:rgba(0,0,0,0.08);border-radius:3px;overflow:hidden;margin-bottom:12px;';
+        pregBarBg.style.cssText = 'height:2px;background:var(--ivory4,#E5E4DE);overflow:hidden;margin-bottom:12px;';
         var pregBarFill = document.createElement('div');
-        pregBarFill.style.cssText = 'height:6px;width:' + pregTri.progress + '%;background:#5A1010;border-radius:3px;';
+        pregBarFill.style.cssText = 'height:2px;width:' + pregTri.progress + '%;background:var(--red,#5A1010);';
         pregBarBg.appendChild(pregBarFill);
         pregCard.appendChild(pregBarBg);
 
@@ -565,13 +565,13 @@ window.DASHBOARD = {
       if (hasDiabDash) {
         root.appendChild(h('div', 'dash-label', 'Suivi médical'));
         var diabWarnCard = document.createElement('div');
-        diabWarnCard.style.cssText = 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:14px 16px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;line-height:1.6;';
+        diabWarnCard.style.cssText = 'background:var(--orangebg,rgba(106,74,26,.06));border:1px solid var(--orange,#6A4A1A);padding:14px 16px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6;';
         var diabWarnTitle = document.createElement('div');
-        diabWarnTitle.style.cssText = 'font-weight:700;color:#6A4A1A;margin-bottom:6px;font-size:13px;letter-spacing:1px;text-transform:uppercase;';
-        diabWarnTitle.textContent = '\u26A0 Diabète — Recommandations importantes';
+        diabWarnTitle.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#6A4A1A);margin-bottom:6px;';
+        diabWarnTitle.textContent = 'Diab\u00e8te \u2014 Recommandations';
         diabWarnCard.appendChild(diabWarnTitle);
         var diabWarnMsg = document.createElement('div');
-        diabWarnMsg.style.cssText = 'color:#6A4A1A;';
+        diabWarnMsg.style.cssText = 'color:var(--grey,#6B6B65);';
         diabWarnMsg.textContent = 'Consultez votre médecin ou diabétologue avant de modifier votre alimentation ou votre programme sportif. Mesurez votre glycémie régulièrement, notamment avant et après l\'effort. Privilegiez les aliments à index glycémique bas.';
         diabWarnCard.appendChild(diabWarnMsg);
         root.appendChild(diabWarnCard);
