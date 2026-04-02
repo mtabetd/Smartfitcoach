@@ -25369,6 +25369,167 @@
         'Pocher ou vapeur les filets de turbot 8 min, laisser refroidir et les effilocher grossièrement.',
         "Mélanger quinoa, tomates coupées, concombre en dés, herbes ciselées ; ajouter le turbot effilé, assaisonner d'huile d'olive et citron ; réfrigérer 30 min avant service."
       ]
+    },
+
+    // ═══════════════════════════════════════════════════
+    //  CALAMARS  (R660–R664)
+    // ═══════════════════════════════════════════════════
+
+    {
+      id: 'R660',
+      name: 'Calamars Ail-Citron-Persil',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦑',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'light', 'quick'],
+      servings: 2,
+      prepTime: 10,
+      cookTime: 8,
+      difficulty: 1,
+      // 54×4 + 4×4 + 10×9 = 216+16+90 = 322 ✓
+      baseNutrition: { calories: 322, proteinGrams: 54, carbsGrams: 4, fatGrams: 10 },
+      ingredients: [
+        { name: 'Calamars (anneaux ou corps entiers)', qty: 500, unit: 'g' },
+        { name: 'Ail', qty: 3, unit: 'gousses' },
+        { name: 'Citron (jus + zeste)', qty: 1, unit: 'pce' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Persil plat frais', qty: 20, unit: 'g' },
+        { name: "Piment d'Espelette", qty: 1, unit: 'pincée' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Sécher soigneusement les calamars avec du papier absorbant — l'humidité empêche la coloration.",
+        "Saisir à feu vif dans huile très chaude 2-3 min par face (ou 3 min pour les anneaux) sans couvrir ; ajouter l'ail émincé la dernière minute.",
+        'Hors du feu, arroser de jus de citron, parsemer de zeste, persil haché et piment ; servir sans attendre.'
+      ]
+    },
+
+    {
+      id: 'R661',
+      name: 'Calamars à la Harissa Douce',
+      category: 'north-african',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦑',
+      origin: '🇹🇳',
+      tags: ['high-protein', 'gluten-free', 'spicy', 'quick'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 10,
+      difficulty: 1,
+      // 52×4 + 8×4 + 12×9 = 208+32+108 = 348 ✓
+      baseNutrition: { calories: 348, proteinGrams: 52, carbsGrams: 8, fatGrams: 12 },
+      ingredients: [
+        { name: 'Calamars (rondelles)', qty: 480, unit: 'g' },
+        { name: 'Harissa douce', qty: 25, unit: 'g' },
+        { name: 'Tomates pelées en dés', qty: 150, unit: 'g' },
+        { name: 'Oignon rouge', qty: 60, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Coriandre fraîche', qty: 15, unit: 'g' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        'Faire revenir oignon et ail dans huile 3 min ; ajouter harissa et tomates, laisser réduire 5 min.',
+        'Ajouter les calamars, cuire à feu vif 4-5 min en remuant ; stopper dès que les calamars sont tendres.',
+        'Parsemer de coriandre fraîche et servir avec un pain pita ou du riz vapeur.'
+      ]
+    },
+
+    {
+      id: 'R662',
+      name: 'Calamars Farcis aux Légumes du Soleil',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦑',
+      origin: '🇫🇷',
+      tags: ['high-protein', 'gluten-free', 'balanced', 'premium'],
+      servings: 2,
+      prepTime: 25,
+      cookTime: 25,
+      difficulty: 3,
+      // 50×4 + 12×4 + 12×9 = 200+48+108 = 356 ✓
+      baseNutrition: { calories: 356, proteinGrams: 50, carbsGrams: 12, fatGrams: 12 },
+      ingredients: [
+        { name: 'Calamars entiers (avec tentacules)', qty: 500, unit: 'g' },
+        { name: 'Courgette', qty: 80, unit: 'g' },
+        { name: 'Poivron rouge', qty: 80, unit: 'g' },
+        { name: 'Tomates séchées', qty: 30, unit: 'g' },
+        { name: 'Fromage de brebis frais', qty: 30, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Herbes de Provence', qty: 1, unit: 'c. à café' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Hacher les tentacules ; faire revenir avec courgette, poivron et ail en petits dés 5 min ; mélanger tomates séchées hachées, fromage frais et herbes.",
+        "Farcir les corps des calamars aux 3/4 avec la farce ; fermer avec une pique en bois.",
+        "Snacker les calamars farcis 4 min par face à feu vif ; terminer 10 min au four à 180 °C ; servir avec coulis de tomates frais."
+      ]
+    },
+
+    {
+      id: 'R663',
+      name: 'Salade Tiède Calamars & Pois Chiches',
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦑',
+      origin: '🇪🇸',
+      tags: ['high-protein', 'gluten-free', 'balanced', 'salad'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 12,
+      difficulty: 1,
+      // 50×4 + 30×4 + 12×9 = 200+120+108 = 428 ✓
+      baseNutrition: { calories: 428, proteinGrams: 50, carbsGrams: 30, fatGrams: 12 },
+      ingredients: [
+        { name: 'Calamars (anneaux)', qty: 400, unit: 'g' },
+        { name: 'Pois chiches (boîte, égouttés)', qty: 200, unit: 'g' },
+        { name: 'Roquette', qty: 60, unit: 'g' },
+        { name: 'Tomates cerises', qty: 100, unit: 'g' },
+        { name: 'Oignon rouge', qty: 50, unit: 'g' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
+        { name: 'Paprika fumé', qty: 1, unit: 'c. à café' },
+        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Poêler les pois chiches avec paprika fumé et huile 5 min jusqu'à légère dorure ; réserver.",
+        'Saisir les anneaux de calamars à feu très vif 3 min ; assaisonner et mélanger avec les pois chiches chauds.',
+        'Dresser roquette, tomates et oignon rouge en base ; déposer le mélange calamars-pois chiches chaud, arroser de jus de citron.'
+      ]
+    },
+
+    {
+      id: 'R664',
+      name: "Riz Noir à l'Encre de Seiche et Calamars",
+      category: 'mediterranean',
+      mealTypes: ['lunch', 'dinner'],
+      emoji: '🦑',
+      origin: '🇪🇸',
+      tags: ['high-protein', 'omega3', 'balanced', 'premium'],
+      servings: 2,
+      prepTime: 15,
+      cookTime: 25,
+      difficulty: 2,
+      // 52×4 + 64×4 + 14×9 = 208+256+126 = 590 ✓
+      baseNutrition: { calories: 590, proteinGrams: 52, carbsGrams: 64, fatGrams: 14 },
+      ingredients: [
+        { name: 'Calamars (anneaux + tentacules)', qty: 400, unit: 'g' },
+        { name: 'Riz à risotto (Arborio)', qty: 160, unit: 'g' },
+        { name: 'Encre de seiche', qty: 8, unit: 'g' },
+        { name: 'Bouillon de poisson', qty: 500, unit: 'ml' },
+        { name: 'Oignon', qty: 60, unit: 'g' },
+        { name: 'Ail', qty: 2, unit: 'gousses' },
+        { name: 'Vin blanc sec', qty: 80, unit: 'ml' },
+        { name: "Huile d'olive", qty: 20, unit: 'ml' },
+        { name: 'Persil, sel, poivre', qty: 1, unit: 'pincée' }
+      ],
+      steps: [
+        "Faire revenir oignon et ail dans huile ; ajouter les calamars 3 min puis le riz, nacrer 2 min.",
+        "Déglacer au vin blanc ; incorporer progressivement le bouillon chaud louche par louche en remuant, en ajoutant l'encre de seiche dès le début.",
+        "Cuire 18-20 min jusqu'à absorption ; le riz doit être crémeux et noir ; rectifier assaisonnement, parsemer de persil et servir immédiatement."
+      ]
     }
   ];
 
