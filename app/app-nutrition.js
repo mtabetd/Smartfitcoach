@@ -438,7 +438,7 @@ function renderStep1(p) {
 
   // Migration banner for users with age but no birthDate
   if (!S.birthDate && S.age) {
-    p.appendChild(h('div', {style: 'background:rgba(0,100,180,0.08);border:1px solid rgba(0,100,180,0.2);border-radius:2px;padding:8px 12px;font-size:11px;color:#005;margin-top:8px;line-height:1.5'},
+    p.appendChild(h('div', {style: 'background:var(--ivory3,#EEEDE8);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:8px 12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:8px;line-height:1.5'},
       'Renseignez votre date de naissance pour un suivi plus pr\u00e9cis. Votre \u00e2ge sera calcul\u00e9 automatiquement.'));
   }
 
@@ -698,10 +698,30 @@ function renderStep2(p) {
   var frontZone = h('div', {'class': 'photo-upload', onclick: function() { frontInput.click(); }});
   if (S.photoFront) {
     frontZone.appendChild(h('img', {src: S.photoFront, alt: 'Photo de face'}));
-    frontZone.appendChild(h('div', {'class': 'photo-label'}, 'Photo de face'));
+    frontZone.appendChild(h('div', {'class': 'photo-label'}, 'FACE'));
   } else {
-    frontZone.appendChild(h('div', {'class': 'photo-icon'}, '\ud83d\udcf7'));
-    frontZone.appendChild(h('div', {'class': 'photo-label'}, 'Photo de face'));
+    (function() {
+      var _svgNS = 'http://www.w3.org/2000/svg';
+      var _ico = document.createElementNS(_svgNS, 'svg');
+      _ico.setAttribute('width', '20'); _ico.setAttribute('height', '20');
+      _ico.setAttribute('viewBox', '0 0 20 20'); _ico.setAttribute('fill', 'none');
+      _ico.setAttribute('class', 'photo-icon-svg');
+      var _rect = document.createElementNS(_svgNS, 'rect');
+      _rect.setAttribute('x', '1'); _rect.setAttribute('y', '4');
+      _rect.setAttribute('width', '18'); _rect.setAttribute('height', '13');
+      _rect.setAttribute('rx', '1'); _rect.setAttribute('stroke', 'currentColor'); _rect.setAttribute('stroke-width', '1');
+      _ico.appendChild(_rect);
+      var _circ = document.createElementNS(_svgNS, 'circle');
+      _circ.setAttribute('cx', '10'); _circ.setAttribute('cy', '10.5');
+      _circ.setAttribute('r', '3'); _circ.setAttribute('stroke', 'currentColor'); _circ.setAttribute('stroke-width', '1');
+      _ico.appendChild(_circ);
+      var _line = document.createElementNS(_svgNS, 'path');
+      _line.setAttribute('d', 'M6 4l1.5-2h5L14 4');
+      _line.setAttribute('stroke', 'currentColor'); _line.setAttribute('stroke-width', '1');
+      _ico.appendChild(_line);
+      frontZone.appendChild(_ico);
+    })();
+    frontZone.appendChild(h('div', {'class': 'photo-label'}, 'FACE'));
   }
   frontZone.appendChild(frontInput);
   photoGrid.appendChild(frontZone);
@@ -723,10 +743,30 @@ function renderStep2(p) {
   var backZone = h('div', {'class': 'photo-upload', onclick: function() { backInput.click(); }});
   if (S.photoBack) {
     backZone.appendChild(h('img', {src: S.photoBack, alt: 'Photo de dos'}));
-    backZone.appendChild(h('div', {'class': 'photo-label'}, 'Photo de dos'));
+    backZone.appendChild(h('div', {'class': 'photo-label'}, 'DOS'));
   } else {
-    backZone.appendChild(h('div', {'class': 'photo-icon'}, '\ud83d\udcf7'));
-    backZone.appendChild(h('div', {'class': 'photo-label'}, 'Photo de dos'));
+    (function() {
+      var _svgNS = 'http://www.w3.org/2000/svg';
+      var _ico = document.createElementNS(_svgNS, 'svg');
+      _ico.setAttribute('width', '20'); _ico.setAttribute('height', '20');
+      _ico.setAttribute('viewBox', '0 0 20 20'); _ico.setAttribute('fill', 'none');
+      _ico.setAttribute('class', 'photo-icon-svg');
+      var _rect = document.createElementNS(_svgNS, 'rect');
+      _rect.setAttribute('x', '1'); _rect.setAttribute('y', '4');
+      _rect.setAttribute('width', '18'); _rect.setAttribute('height', '13');
+      _rect.setAttribute('rx', '1'); _rect.setAttribute('stroke', 'currentColor'); _rect.setAttribute('stroke-width', '1');
+      _ico.appendChild(_rect);
+      var _circ = document.createElementNS(_svgNS, 'circle');
+      _circ.setAttribute('cx', '10'); _circ.setAttribute('cy', '10.5');
+      _circ.setAttribute('r', '3'); _circ.setAttribute('stroke', 'currentColor'); _circ.setAttribute('stroke-width', '1');
+      _ico.appendChild(_circ);
+      var _line = document.createElementNS(_svgNS, 'path');
+      _line.setAttribute('d', 'M6 4l1.5-2h5L14 4');
+      _line.setAttribute('stroke', 'currentColor'); _line.setAttribute('stroke-width', '1');
+      _ico.appendChild(_line);
+      backZone.appendChild(_ico);
+    })();
+    backZone.appendChild(h('div', {'class': 'photo-label'}, 'DOS'));
   }
   backZone.appendChild(backInput);
   photoGrid.appendChild(backZone);
@@ -1327,7 +1367,7 @@ function renderStep6(p) {
     }
   }
   if (_tcaConflict) {
-    p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border-left:4px solid #5A1010;padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A1010;line-height:1.6'}, '⚠ CONFLIT : Objectif sèche/coupe incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
+    p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border:1px solid var(--red,#5A1010);padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);line-height:1.6'}, 'Objectif sèche/coupe incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !goalOk, onclick: function() {
     if (goalOk) {
@@ -1484,16 +1524,16 @@ function renderStep7(p) {
 
   // Halal option
   var halalRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:8px 0;cursor:pointer', onclick: function() { S.halal = !S.halal; window.render(); }});
-  var halalBox = h('div', {style: 'width:20px;height:20px;border-radius:4px;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;background:' + (S.halal ? 'var(--accent)' : 'transparent') + ';flex-shrink:0'}, S.halal ? h('span', {style: 'color:#fff;font-size:13px;font-weight:700'}, '\u2713') : null);
+  var halalBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.halal ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.halal ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
   halalRow.appendChild(halalBox);
-  halalRow.appendChild(h('div', {style: 'font-size:13px;font-weight:500'}, '\u262a\ufe0f Halal \u2014 exclure porc & alcool'));
+  halalRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Halal \u2014 exclure porc & alcool'));
   p.appendChild(halalRow);
 
   // Salade builder toggle
   var saladRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin:8px 0;cursor:pointer', onclick: function() { S.saladBuilder = !S.saladBuilder; window.render(); }});
-  var saladBox = h('div', {style: 'width:20px;height:20px;border-radius:4px;border:2px solid var(--blue,#1A3C5E);display:flex;align-items:center;justify-content:center;background:' + (S.saladBuilder ? 'var(--blue,#1A3C5E)' : 'transparent') + ';flex-shrink:0'}, S.saladBuilder ? h('span', {style: 'color:#fff;font-size:13px;font-weight:700'}, '\u2713') : null);
+  var saladBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.saladBuilder ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0'}, S.saladBuilder ? h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2713') : null);
   saladRow.appendChild(saladBox);
-  saladRow.appendChild(h('div', {style: 'font-size:13px;font-weight:500;font-family:"Helvetica Neue",Arial,sans-serif'}, '\uD83E\uDD57 Salades \u00e0 composer'));
+  saladRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09)'}, 'Salades \u00e0 composer'));
   p.appendChild(saladRow);
   if (S.saladBuilder) {
     p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#9A9A90);margin:4px 0 8px 30px;line-height:1.5'}, 'Vous pourrez composer vos salades directement dans votre plan de repas.'));
@@ -1651,10 +1691,9 @@ function renderStep8(p) {
   if (window.detectMedicalConflicts) {
     var conflicts = window.detectMedicalConflicts() || [];
     conflicts.forEach(function(c) {
-      var bg = c.level === 'CRITIQUE' ? '#FFEBEE' : c.level === 'ÉLEVÉ' ? '#FFF3E0' : '#E3F2FD';
-      var border = c.level === 'CRITIQUE' ? '#5A1010' : c.level === 'ÉLEVÉ' ? '#6A4A1A' : '#1A3A6A';
-      var color = c.level === 'CRITIQUE' ? '#7B1A1A' : c.level === 'ÉLEVÉ' ? '#5D4037' : '#0D47A1';
-      p.appendChild(h('div', {style: 'background:' + bg + ';border-left:4px solid ' + border + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:' + color + ';line-height:1.5'}, c.message));
+      var bg = c.level === 'CRITIQUE' ? 'var(--redbg,rgba(90,16,16,.06))' : c.level === 'ÉLEVÉ' ? 'var(--orangebg,rgba(106,74,26,.06))' : 'var(--greenbg,rgba(26,74,26,.06))';
+      var border = c.level === 'CRITIQUE' ? 'var(--red,#5A1010)' : c.level === 'ÉLEVÉ' ? 'var(--orange,#6A4A1A)' : 'var(--green,#1A4A1A)';
+      p.appendChild(h('div', {style: 'background:' + bg + ';border:1px solid ' + border + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5'}, c.message));
     });
   }
 
@@ -1696,12 +1735,12 @@ function renderStep8(p) {
       var tdeeTrainPart = bmrVal > 0 ? Math.round((tdee / bmrVal - 1.2) * bmrVal * 7) : 0;
       var coherenceOk = tdeeTrainPart > 0 && Math.abs(totalWkKcal - tdeeTrainPart) / tdeeTrainPart < 0.35;
       var cohColor = coherenceOk ? '#1A4A1A' : '#6A4A1A';
-      var cohBg = coherenceOk ? 'var(--greenbg,rgba(26,74,26,.06))' : '#FFF3E0';
-      var cohBorder = coherenceOk ? '#1A4A1A' : '#6A4A1A';
-      var sessBox = h('div', {style: 'background:' + cohBg + ';border:1px solid ' + cohBorder + ';padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:11px'});
+      var cohBg = coherenceOk ? 'var(--greenbg,rgba(26,74,26,.06))' : 'var(--orangebg,rgba(106,74,26,.06))';
+      var cohBorder = coherenceOk ? 'var(--green,#1A4A1A)' : 'var(--orange,#6A4A1A)';
+      var sessBox = h('div', {style: 'background:' + cohBg + ';border:1px solid ' + cohBorder + ';padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px'});
       var sessTitle = h('div', {style: 'display:flex;justify-content:space-between;margin-bottom:4px'});
-      sessTitle.appendChild(h('span', {style: 'font-weight:bold;color:' + cohColor}, '\uD83C\uDFCB\uFE0F S\u00e9ances musculation — 7 derniers jours'));
-      sessTitle.appendChild(h('span', {style: 'font-weight:bold;color:' + cohColor}, totalWkKcal + '\u00a0kcal'));
+      sessTitle.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cohBorder}, 'S\u00e9ances musculation — 7 jours'));
+      sessTitle.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;color:' + cohBorder}, totalWkKcal + '\u00a0kcal'));
       sessBox.appendChild(sessTitle);
       sessBox.appendChild(h('div', {style: 'color:var(--grey)'}, weekSess.length + '\u00a0s\u00e9ance' + (weekSess.length > 1 ? 's' : '') + ' valid\u00e9e' + (weekSess.length > 1 ? 's' : '') + ' \u2014 moy. ' + avgPerSess + '\u00a0kcal/s\u00e9ance'));
       sessBox.appendChild(h('div', {style: 'color:var(--grey);margin-top:4px;font-style:italic;font-size:9px'}, coherenceOk ? '\u2713 Coh\u00e9rent avec votre facteur d\'activit\u00e9 TDEE' : '\u26a0 D\u00e9calage vs facteur d\'activit\u00e9 s\u00e9lectionn\u00e9 \u2014 pensez \u00e0 mettre \u00e0 jour votre niveau d\'activit\u00e9 dans votre profil'));
@@ -2169,14 +2208,14 @@ function renderStep9(p) {
   // Quick action buttons — Salad bar & Smoothie bar
   var quickActions = h('div', {style: 'display:flex;gap:8px;margin:12px 0 4px'});
   quickActions.appendChild(h('button', {
-    style: 'flex:1;padding:10px 8px;background:var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
+    style: 'flex:1;padding:12px 8px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
     onclick: function() { if (!window.S.saladBar) window.S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' }; window.S.saladBar.open = true; if(window.render) window.render(); }
-  }, [h('span', {style:'font-size:18px'}, '\uD83E\uDD57'), h('span', {}, 'Composer une salade')]));
+  }, 'Salade'));
   if (S.whey === true || S.whey === 1) {
     quickActions.appendChild(h('button', {
-      style: 'flex:1;padding:12px 8px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
+      style: 'flex:1;padding:12px 8px;min-height:44px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
       onclick: function() { window.S.smoothieBarOpen = true; if(window.render) window.render(); }
-    }, [h('span', {style:'font-size:18px'}, '\uD83E\uDD64'), h('span', {}, 'Smoothies Whey')]));
+    }, 'Smoothie'));
   }
   p.appendChild(quickActions);
 

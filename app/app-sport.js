@@ -699,7 +699,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'musculation'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, '\uD83C\uDFCB\uFE0F'),
  h('div', {'class': 'card-name'}, 'Musculation'),
  h('div', {'class': 'card-sub'}, 'Programme cibl\u00e9 par groupes musculaires'),
  h('div', {'class': 'card-tag'}, 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance')
@@ -712,7 +711,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'crossfit'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, '\u26A1'),
  h('div', {'class': 'card-name'}, 'Cross Training'),
  h('div', {'class': 'card-sub'}, 'Halt\u00e9rophilie \u00b7 WOD \u00b7 Gymnastique'),
  h('div', {'class': 'card-tag'}, '100 WODs \u00b7 Cycles 6 semaines \u00b7 Scaled/Inter/RX')
@@ -725,7 +723,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'running'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, ''),
  h('div', {'class': 'card-name'}, 'Running'),
  h('div', {'class': 'card-sub'}, 'Plan d\'entraînement course à pied'),
  h('div', {'class': 'card-tag'}, '5K · 10K · Semi · Marathon · Trail')
@@ -738,7 +735,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'hyrox'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, ''),
  h('div', {'class': 'card-name'}, 'Hyrox'),
  h('div', {'class': 'card-sub'}, 'Préparation Hyrox complète'),
  h('div', {'class': 'card-tag'}, '8 stations · Run · Simulation')
@@ -751,7 +747,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'padel'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, ''),
  h('div', {'class': 'card-name'}, 'Padel'),
  h('div', {'class': 'card-sub'}, 'Programme technique et physique padel'),
  h('div', {'class': 'card-tag'}, 'Technique · Tactique · Match · Physique')
@@ -764,7 +759,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'golf'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, ''),
  h('div', {'class': 'card-name'}, 'Golf'),
  h('div', {'class': 'card-sub'}, 'Progresser au golf — méthode Dave Pelz'),
  h('div', {'class': 'card-tag'}, 'Petit jeu · Long jeu · Parcours · Mental')
@@ -777,7 +771,6 @@ function renderObjectif(p) {
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'triathlon'});
  window.render();
  }}, [
- h('span', {'class': 'card-icon'}, ''),
  h('div', {'class': 'card-name'}, 'Triathlon / IRONMAN'),
  h('div', {'class': 'card-sub'}, 'Programme Jan Frodeno · Patrick Lange · Daniela Ryf'),
  h('div', {'class': 'card-tag'}, 'Sprint · Olympic · 70.3 · IRONMAN 140.6')
@@ -839,7 +832,7 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(hdr);
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
- p.appendChild(h('h1', {html: '\uD83C\uDFE5 Bilan<br><em>médical muscu</em>'}));
+ p.appendChild(h('h1', {html: 'Bilan<br><em>médical muscu</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de générer votre programme, aidez-nous à adapter les exercices à votre situation physique.'));
 
  // ─── Section 1 : Zones douloureuses ───
@@ -933,9 +926,9 @@ function renderMuscuMedicalQ(p) {
  // ─── Avertissement si sévère ou antécédent grave ───
  var hasSevere = med.painLevel === 3 || med.herniaDisc || med.rotatorCuff || med.acl || med.fibromyalgia || med.meniscus || med.osteoporosis || med.hypertension || med.spondylarthritis || med.rheumatoidArthritis;
  if (hasSevere) {
- var warn = h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border-left:4px solid #5A1010;padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#5A1010;line-height:1.6'});
- warn.appendChild(h('div', {style: 'font-weight:700;margin-bottom:4px'}, '\u26A0 Douleur sévère ou antécédent grave détecté. Nous adapterons le programme en mode réhabilitation.'));
- warn.appendChild(h('strong', {}, 'Consultez impérativement un médecin ou kinésithérapeute avant de reprendre la musculation lourde.'));
+ var warn = h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border:1px solid var(--red,#5A1010);padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);line-height:1.6'});
+ warn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px'}, 'Attention — Antécédent grave détecté'));
+ warn.appendChild(h('span', {}, 'Programme adapté en mode réhabilitation. Consultez un médecin ou kinésithérapeute avant de reprendre la musculation lourde.'));
  p.appendChild(warn);
  }
 
@@ -967,21 +960,21 @@ function renderChargesQuestionnaire(p) {
  // Medical/age safety warnings
  var hasDiabetes = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
  if (hasDiabetes) {
- p.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:13px'}, [
- h('div', {style: 'font-weight:700;color:#6A4A1A;margin-bottom:4px'}, '\u26A0 Diabète — Précautions sportives'),
- h('div', {style: 'color:#6A4A1A'}, 'Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (RPE max 7/10 les 4 premières semaines).')
+ p.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border:1px solid var(--orange,#6A4A1A);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
+ h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#6A4A1A);margin-bottom:6px'}, 'Diabète — Précautions sportives'),
+ h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Mesurez votre glycémie avant/après chaque séance. Évitez l\'entraînement si glycémie < 4,0 mmol/L ou > 14,0 mmol/L. Gardez toujours une source de sucres rapides à portée de main. Intensité progressive recommandée (RPE max 7/10 les 4 premières semaines).')
  ]));
  }
  if (getAge() >= 50) {
- p.appendChild(h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border-left:4px solid #1A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:13px'}, [
- h('div', {style: 'font-weight:700;color:#1A4A1A;margin-bottom:4px'}, '\uD83D\uDCAA Athlète 50+ — Adaptations recommandées'),
- h('div', {style: 'color:#1A4A1A'}, 'Échauffement prolongé 15-20 min (vs 5-10 min standard). Décharge toutes les 4-5 semaines (vs 6 semaines). Préférez machines guidées aux barres libres pour les charges maximales. Récupération inter-séance 48-72h minimum. Contrôle médical annuel conseillé.')
+ p.appendChild(h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border:1px solid var(--green,#1A4A1A);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
+ h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:6px'}, 'Athlète 50+ — Adaptations recommandées'),
+ h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Échauffement prolongé 15-20 min (vs 5-10 min standard). Décharge toutes les 4-5 semaines (vs 6 semaines). Préférez machines guidées aux barres libres pour les charges maximales. Récupération inter-séance 48-72h minimum. Contrôle médical annuel conseillé.')
  ]));
  }
  if (S.pregnant) {
- p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border-left:4px solid #5A1010;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",sans-serif;font-size:13px'}, [
- h('div', {style: 'font-weight:700;color:#5A1010;margin-bottom:4px'}, '\uD83E\uDD30 Grossesse — Exercices autorisés seulement'),
- h('div', {style: 'color:#5A1010'}, 'Évitez les charges lourdes, exercices allongés sur le dos (après 20 SA), abdominaux hyperpressifs, sauts et HIIT intense. Privilégiez marche, natation, yoga prénatal, Kegel. Consultez votre médecin avant tout entraînement.')
+ p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border:1px solid var(--red,#5A1010);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
+ h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--red,#5A1010);margin-bottom:6px'}, 'Grossesse — Exercices autorisés seulement'),
+ h('div', {style: 'color:var(--grey,#6B6B65)'}, 'Évitez les charges lourdes, exercices allongés sur le dos (après 20 SA), abdominaux hyperpressifs, sauts et HIIT intense. Privilégiez marche, natation, yoga prénatal, Kegel. Consultez votre médecin avant tout entraînement.')
  ]));
  }
 
@@ -1113,8 +1106,8 @@ function renderDedicatedPrograms(p) {
  prog.variations.forEach(function(v, idx) {
  var isActive = varIdx === idx;
  var tab = h('div', {
- style: 'flex:1;padding:10px;text-align:center;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;border-right:1px solid var(--border);' +
- (isActive ? 'background:var(--black);color:#fff;font-weight:bold' : 'background:var(--ivory);color:var(--grey)'),
+ style: 'flex:1;padding:10px;text-align:center;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;border-right:1px solid var(--border);' +
+ (isActive ? 'background:var(--black);color:var(--ivory,#FAF9F6)' : 'background:var(--ivory);color:var(--grey)'),
  onclick: function(e) { e.stopPropagation(); S[varKey] = idx; window.render(); }
  }, v.label);
  tabs.appendChild(tab);
@@ -1136,7 +1129,7 @@ function renderDedicatedPrograms(p) {
  if (sugW && sugW > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:2px'}, '\u2192 Charge cible : ~' + (window.UNITS ? window.UNITS.displayWeight(sugW) : sugW + ' kg')));
  row.appendChild(left);
  var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
- right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:bold'}, ex.sets + '\u00d7' + ex.reps));
+ right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:normal'}, ex.sets + '\u00d7' + ex.reps));
  right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, ex.rest));
  row.appendChild(right);
  card.appendChild(row);
@@ -1211,9 +1204,9 @@ function renderMusculationGoals(p) {
  if (S.goal !== null) {
  // Reminder banner (pre-sélection déplacée dans le handler du bouton "Créer programme")
  var nutName = (window.GOALS || [])[S.goal] ? window.GOALS[S.goal].name : '';
- var banner = h('div', {style: 'border-left:3px solid var(--accent,#C8A96E);padding:12px 16px;background:var(--ivory2,#F5F4EF);margin-bottom:16px'});
- banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:bold;color:var(--text,#0A0A09);margin-bottom:4px'}, 'Objectif d\u00e9fini en Nutrition\u00a0: ' + nutName));
- banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, 'Si vous le modifiez ici, il sera automatiquement mis \u00e0 jour dans la section Nutrition.'));
+ var banner = h('div', {style: 'border:1px solid var(--border,#D8D8D0);padding:12px 16px;background:var(--ivory2,#F4F4F0);margin-bottom:16px;border-radius:2px'});
+ banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, 'Objectif Nutrition\u00a0: ' + nutName));
+ banner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, 'Toute modification sera synchronis\u00e9e avec votre plan nutrition.'));
  p.appendChild(banner);
  }
  // ──────────────────────────────────────────────────────────────────────
@@ -1336,7 +1329,7 @@ function renderCrossfitLevel(p) {
  var lvlIdx = S.crossfitLevel === 'scaled' ? 0 : S.crossfitLevel === 'inter' ? 1 : S.crossfitLevel === 'rx_plus' ? 3 : 2;
  var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : lvlIdx === 3 ? 0.80 : 0.75;
  var estWeight = Math.round(currentVal * wodPct);
- leftDiv.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#1A3A6A;margin-top:2px;font-weight:bold'}, 'WOD \u2248 ' + (window.UNITS ? window.UNITS.displayWeight(estWeight) : estWeight + 'kg')));
+ leftDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px'}, 'WOD \u2248 ' + (window.UNITS ? window.UNITS.displayWeight(estWeight) : estWeight + 'kg')));
  }
  row.appendChild(leftDiv);
 
@@ -1641,13 +1634,13 @@ function renderCFCalendar(p) {
 
  // Numéro + nom du WOD
  card.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + textColor + ';margin-bottom:3px'}, 'JOUR ' + dayNum));
- card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:' + textColor + ';font-weight:bold;line-height:1.2;word-break:break-word'}, wod.name || ('WOD ' + dayNum)));
+ card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:' + textColor + ';font-weight:normal;line-height:1.2;word-break:break-word'}, wod.name || ('WOD ' + dayNum)));
 
  // Indicateur état
  if (isDone) {
  card.appendChild(h('div', {style: 'font-size:11px;color:#1A4A1A;margin-top:4px'}, ' Terminé'));
  } else if (isCurrent) {
- card.appendChild(h('div', {style: 'font-size:11px;color:#1A3C5E;margin-top:4px;font-weight:bold'}, '▶ Aujourd\'hui'));
+ card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px'}, 'Aujourd\'hui'));
  }
 
  grid.appendChild(card);
@@ -4260,7 +4253,7 @@ function renderMusculationProgram(p) {
  if (sugW4 && sugW4 > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:2px'}, '\u2192 ~' + (window.UNITS ? window.UNITS.displayWeight(sugW4) : sugW4 + ' kg')));
  row.appendChild(left);
  var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
- right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:bold'}, ex.sets + '\u00d7' + ex.reps));
+ right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:normal'}, ex.sets + '\u00d7' + ex.reps));
  right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, ex.rest));
  // Bouton + / Ajouté — ajoute l'exercice en bonus à la séance courante
  var bonusArr = S.bonusExercises[S.selectedSportDay] || [];
