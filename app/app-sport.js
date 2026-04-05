@@ -5334,6 +5334,15 @@ function renderHyroxProgram(p) {
  }
  p.appendChild(infoCard);
 
+ // ─── ESTIMATION CALORIQUE HYROX ───
+ (function() {
+  var hyroxLevel = S.hyroxLevel || 'intermediaire';
+  var SESSION_DUR_HYROX = { debutant: 60, intermediaire: 75, avance: 90, elite: 105 };
+  var hyroxDur = SESSION_DUR_HYROX[hyroxLevel] || 75;
+  var hyroxKcal = estimateKcal('hyrox', hyroxLevel, hyroxDur);
+  p.appendChild(buildKcalCard(hyroxKcal, hyroxDur));
+ }());
+
  // Day tabs
  var sessions = currentWeekData.sessions;
  if (S.selectedHyroxDay >= sessions.length) S.selectedHyroxDay = 0;
