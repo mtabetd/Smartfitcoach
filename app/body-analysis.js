@@ -485,7 +485,7 @@ function buildPanel() {
 function updateBtn() {
   var btn = document.getElementById('ba-btn');
   if (!btn) return;
-  btn.disabled = !(_photos.face || _photos.dos);
+  btn.disabled = !(_photos.face && _photos.dos);
 }
 
 function openPanel() {
@@ -667,6 +667,9 @@ function _patchRender() {
       }
     } catch(e) {}
   };
+  // Forward all patch flags from the previous render so other modules
+  // don't re-patch an already-patched function when they check their own flag.
+  if (prevRender._coachPatched) window.render._coachPatched = true;
   window.render._baPatched = true;
 }
 

@@ -474,6 +474,9 @@ function _patchRender() {
       }
     } catch(e) {}
   };
+  // Forward all patch flags from the previous render so other modules
+  // don't re-patch an already-patched function when they check their own flag.
+  if (_origRender._baPatched) window.render._baPatched = true;
   window.render._coachPatched = true;
 }
 
