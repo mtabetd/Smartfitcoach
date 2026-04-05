@@ -37,10 +37,17 @@ exports.handler = async function(event, context) {
     return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Au moins une photo est requise.' }) };
   }
 
-  // Valider que les images sont des base64 valides (vérification basique)
+  // Valider que les images sont des base64 valides
+  var MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB après décodage
   for (var i = 0; i < images.length; i++) {
-    if (typeof images[i] !== 'string' || images[i].length < 100) {
+    var img = images[i];
+    if (typeof img !== 'string' || img.length < 100) {
       return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Image invalide.' }) };
+    }
+    // Vérifier taille estimée (base64 est ~1.33x la taille brute)
+    var sizeEstimate = (img.length * 3) / 4;
+    if (sizeEstimate > MAX_IMAGE_SIZE) {
+      return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Image trop volumineuse (max 5MB).' }) };
     }
   }
 
@@ -56,9 +63,11 @@ exports.handler = async function(event, context) {
     var imgData = images[j];
     if (imgData.startsWith('data:')) {
       var parts = imgData.split(',');
-      var mimeMatch = parts[0].match(/data:([^;]+);/);
-      if (mimeMatch) mediaType = mimeMatch[1];
-      imgData = parts[1];
+      if (parts.length === 2) {
+        var mimeMatch = parts[0].match(/data:([^;]+);/);
+        if (mimeMatch) mediaType = mimeMatch[1];
+        imgData = parts[1];
+      }
     }
     messageContent.push({
       type: 'image',
@@ -118,9 +127,12 @@ exports.handler = async function(event, context) {
     // Parser le JSON de la réponse (Claude peut ajouter du texte autour)
     var result = null;
     try {
-      // Extraire le JSON entre les premières { et dernières }
-      var jsonMatch = rawText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) result = JSON.parse(jsonMatch[0]);
+      // Extraire le JSON entre le premier { et le dernier } (robuste aux textes parasites)
+      var jsonStart = rawText.indexOf('{');
+      var jsonEnd = rawText.lastIndexOf('}');
+      if (jsonStart !== -1 && jsonEnd > jsonStart) {
+        result = JSON.parse(rawText.substring(jsonStart, jsonEnd + 1));
+      }
     } catch(e) {
       return { statusCode: 200, headers: headers, body: JSON.stringify({ rawText: rawText, parseError: true }) };
     }

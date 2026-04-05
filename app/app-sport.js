@@ -912,7 +912,7 @@ function renderMuscuMedicalQ(p) {
  zonesData.forEach(function(z) {
  var active = med[z.key];
  var chip = h('div', {
- style: 'padding:8px 14px;border-radius:20px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
+ style: 'padding:8px 14px;border-radius:2px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
  onclick: (function(key){ return function(){ S.muscuMedical[key] = !S.muscuMedical[key]; window.render(); }; })(z.key)
  }, z.icon + ' ' + z.label);
  zonesGrid.appendChild(chip);
@@ -941,7 +941,7 @@ function renderMuscuMedicalQ(p) {
  antecedentsData.forEach(function(a) {
  var active = med[a.key];
  var chip = h('div', {
- style: 'padding:8px 14px;border-radius:20px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
+ style: 'padding:8px 14px;border-radius:2px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
  onclick: (function(key){ return function(){ S.muscuMedical[key] = !S.muscuMedical[key]; window.render(); }; })(a.key)
  }, a.label);
  antGrid.appendChild(chip);
@@ -962,7 +962,7 @@ function renderMuscuMedicalQ(p) {
  painLevels.forEach(function(pl) {
  var active = med.painLevel === pl.val;
  var btn = h('div', {
- style: 'padding:8px 16px;border-radius:20px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
+ style: 'padding:8px 16px;border-radius:2px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
  onclick: (function(v){ return function(){ S.muscuMedical.painLevel = v; window.render(); }; })(pl.val)
  }, pl.label);
  painRow.appendChild(btn);
@@ -4248,7 +4248,7 @@ function renderMusculationProgram(p) {
  setHeader.appendChild(h('div', {style:'text-align:center'}, '\u0394'));
  setHeader.appendChild(h('div', {}, 'R\u00e9alis\u00e9'));
  setHeaderWrap.appendChild(setHeader);
- var _serieProgressEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px;padding:2px 6px;border-radius:10px;' + (_doneCount === numSets ? 'background:#1A4A1A;color:#fff' : 'background:var(--border);color:var(--grey)')}, _doneCount + '\u00a0/\u00a0' + numSets + ' s\u00e9ries');
+ var _serieProgressEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px;padding:2px 6px;border-radius:2px;' + (_doneCount === numSets ? 'background:#1A4A1A;color:#fff' : 'background:var(--border);color:var(--grey)')}, _doneCount + '\u00a0/\u00a0' + numSets + ' s\u00e9ries');
  setHeaderWrap.appendChild(_serieProgressEl);
  setTable.appendChild(setHeaderWrap);
 

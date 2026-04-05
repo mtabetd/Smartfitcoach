@@ -245,7 +245,7 @@ function renderBadgesPanel(container) {
 
   // Header
   var header = _h('div', '', '');
-  header.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#6B6B65;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #D8D8D0';
+  header.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border,#D8D8D0)';
   header.textContent = 'Badges — ' + unlocked.length + ' / ' + BADGE_DEFS.length;
   section.appendChild(header);
 
@@ -284,7 +284,7 @@ function renderStreakWidget(container) {
   var streak = getStreak();
 
   var widget = _h('div', '');
-  widget.style.cssText = 'display:flex;align-items:center;gap:16px;padding:12px 16px;border:1px solid #D8D8D0;background:#F4F4F0;margin-bottom:12px';
+  widget.style.cssText = 'display:flex;align-items:center;gap:16px;padding:12px 16px;border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);margin-bottom:12px';
 
   // Streak number
   var num = _h('div', '');
@@ -295,7 +295,7 @@ function renderStreakWidget(container) {
   // Info
   var info = _h('div', '');
   var label = _h('div', '');
-  label.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#6B6B65';
+  label.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65)';
   label.textContent = 'Jours consécutifs';
   info.appendChild(label);
 
@@ -321,10 +321,10 @@ function renderDailyQuoteWidget(container) {
   var quote = getDailyQuote();
 
   var widget = _h('div', '');
-  widget.style.cssText = 'border-left:2px solid #0A0A09;padding:12px 16px;margin:16px 0;background:rgba(10,10,9,0.02)';
+  widget.style.cssText = 'border-left:2px solid var(--black,#0A0A09);padding:12px 16px;margin:16px 0;background:rgba(10,10,9,0.02)';
 
   var text = _h('div', '');
-  text.style.cssText = 'font-family:Georgia;font-size:13px;font-style:italic;line-height:1.7;color:#0A0A09';
+  text.style.cssText = 'font-family:Georgia;font-size:13px;font-style:italic;line-height:1.7;color:var(--black,#0A0A09)';
   text.textContent = '"' + quote.text + '"';
   widget.appendChild(text);
 

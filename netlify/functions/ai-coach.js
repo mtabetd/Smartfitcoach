@@ -39,7 +39,7 @@ exports.handler = async function(event, context) {
     return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Corps de requête invalide' }) };
   }
 
-  var userMessages = body.messages || [];
+  var userMessages = Array.isArray(body.messages) ? body.messages : [];
   var userContext = body.context || {};
 
   // Construire le system prompt avec le contexte utilisateur
@@ -167,7 +167,7 @@ function buildSystemPrompt(ctx) {
     lines.push('');
     lines.push('## CONTRAINTES ALIMENTAIRES');
     if (ctx.regime) lines.push('Régime : ' + ctx.regime);
-    if (ctx.allergies && ctx.allergies.length) lines.push('Allergies : ' + ctx.allergies.join(', '));
+    if (Array.isArray(ctx.allergies) && ctx.allergies.length) lines.push('Allergies : ' + ctx.allergies.join(', '));
     if (ctx.excluded) lines.push('Exclusions : ' + ctx.excluded);
   }
 

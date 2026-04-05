@@ -206,7 +206,7 @@ function renderStep1(p) {
           phaseCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic'}, cycleInfo.phase.desc));
 
           // Progress bar showing position in cycle
-          var barWrap = h('div', {style: 'margin-top:10px;height:8px;background:var(--border);border-radius:4px;overflow:hidden;display:flex'});
+          var barWrap = h('div', {style: 'margin-top:10px;height:8px;background:var(--border);border-radius:2px;overflow:hidden;display:flex'});
           var CYCLE_PHASES = window.CYCLE_PHASES || [];
           var barColors = {menstruation: '#5A1010', follicular: '#6A4A1A', ovulation: '#1A4A1A', luteal: '#6A4A1A'};
           for (var ci = 0; ci < CYCLE_PHASES.length; ci++) {
@@ -299,7 +299,7 @@ function renderStep1(p) {
           triCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, triInfo.trimester.icon + ' ' + triInfo.trimester.name + ' \u2014 Semaine ' + triInfo.week + '/40'));
 
           // Progress bar
-          var progWrap = h('div', {style: 'height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:8px 0'});
+          var progWrap = h('div', {style: 'height:8px;background:var(--border);border-radius:2px;overflow:hidden;margin:8px 0'});
           var t1Pct = 13 / 40 * 100;
           var t2Pct = 14 / 40 * 100;
           var t3Pct = 100 - t1Pct - t2Pct;
@@ -592,7 +592,7 @@ function renderStep2(p) {
   ['kg', 'lbs'].forEach(function(u) {
     var isActive = window.UNITS ? window.UNITS.weight === u : u === 'kg';
     var btn = h('button', {
-      style: 'padding:6px 16px;border-radius:20px;font-size:13px;border:1px solid var(--border,#D8D8D0);cursor:pointer;' +
+      style: 'padding:6px 16px;border-radius:2px;font-size:13px;border:1px solid var(--border,#D8D8D0);cursor:pointer;' +
         'background:' + (isActive ? 'var(--black,#0A0A09)' : 'transparent') + ';' +
         'color:' + (isActive ? 'var(--ivory,#FAF9F6)' : 'var(--text,#0A0A09)'),
       onclick: function(e) {
@@ -633,7 +633,7 @@ function renderStep2(p) {
   ['cm', 'ft'].forEach(function(u) {
     var isActiveH = window.UNITS ? window.UNITS.height === u : u === 'cm';
     var btnH = h('button', {
-      style: 'padding:6px 16px;border-radius:20px;font-size:13px;border:1px solid var(--border,#D8D8D0);cursor:pointer;' +
+      style: 'padding:6px 16px;border-radius:2px;font-size:13px;border:1px solid var(--border,#D8D8D0);cursor:pointer;' +
         'background:' + (isActiveH ? 'var(--black,#0A0A09)' : 'transparent') + ';' +
         'color:' + (isActiveH ? 'var(--ivory,#FAF9F6)' : 'var(--text,#0A0A09)'),
       onclick: function(e) {
@@ -1819,7 +1819,7 @@ function renderStep8(p) {
       pregResCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, triRes.trimester.icon + ' Grossesse \u2014 ' + triRes.trimester.name + ' (Semaine ' + triRes.week + '/40)'));
 
       // Progress bar
-      var pregProgW = h('div', {style: 'height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:8px 0;display:flex'});
+      var pregProgW = h('div', {style: 'height:8px;background:var(--border);border-radius:2px;overflow:hidden;margin:8px 0;display:flex'});
       pregProgW.appendChild(h('div', {style: 'width:' + (13/40*100) + '%;background:#E8A87C;opacity:' + (triRes.trimesterNumber === 1 ? '1' : '0.3')}));
       pregProgW.appendChild(h('div', {style: 'width:' + (14/40*100) + '%;background:#C38D6B;opacity:' + (triRes.trimesterNumber === 2 ? '1' : '0.3')}));
       pregProgW.appendChild(h('div', {style: 'width:' + ((100-13/40*100-14/40*100)) + '%;background:#D4A5A5;opacity:' + (triRes.trimesterNumber === 3 ? '1' : '0.3')}));
@@ -3145,7 +3145,7 @@ function renderSaladBar(p) {
     { slot: 'dinner',    label: window.t('onb.s9.dinner') }
   ].forEach(function(item) {
     toggleWrap.appendChild(h('button', {
-      style: 'padding:6px 14px;border-radius:20px;border:1px solid ' + (sb.mealTarget === item.slot ? 'var(--black,#0A0A09)' : 'var(--border)') + ';background:' + (sb.mealTarget === item.slot ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (sb.mealTarget === item.slot ? 'var(--ivory,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
+      style: 'padding:6px 14px;border-radius:2px;border:1px solid ' + (sb.mealTarget === item.slot ? 'var(--black,#0A0A09)' : 'var(--border)') + ';background:' + (sb.mealTarget === item.slot ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (sb.mealTarget === item.slot ? 'var(--ivory,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
       onclick: (function(s) { return function() { sb.mealTarget = s; window.render(); }; })(item.slot)
     }, item.label));
   });
@@ -3159,8 +3159,8 @@ function renderSaladBar(p) {
   kcalRow.appendChild(h('span', { style: 'font-size:11px;color:var(--grey)' }, Math.round(pct * 100) + '%'));
   progressBar.appendChild(kcalRow);
 
-  var barTrack = h('div', { style: 'height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:8px' });
-  barTrack.appendChild(h('div', { style: 'height:100%;width:' + Math.min(pct * 100, 100) + '%;background:' + barColor + ';border-radius:4px;transition:width 0.2s ease' }));
+  var barTrack = h('div', { style: 'height:8px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:8px' });
+  barTrack.appendChild(h('div', { style: 'height:100%;width:' + Math.min(pct * 100, 100) + '%;background:' + barColor + ';border-radius:2px;transition:width 0.2s ease' }));
   progressBar.appendChild(barTrack);
 
   var chipsRow = h('div', { style: 'display:flex;gap:8px' });
@@ -3235,7 +3235,7 @@ function renderSaladBar(p) {
       }
       var isSel = selIdx >= 0;
       var canAdd = isSel || isRadio || selectedItems.length < maxSel;
-      var chipStyle = 'padding:5px 10px;border-radius:20px;border:1.5px solid ' +
+      var chipStyle = 'padding:5px 10px;border-radius:2px;border:1.5px solid ' +
         (isSel ? 'var(--green,#1A4A1A)' : 'var(--border)') +
         ';background:' + (isSel ? 'var(--greenbg,rgba(26,74,26,.06))' : 'var(--card)') +
         ';color:var(--text);font-size:13px;cursor:' + (canAdd ? 'pointer' : 'not-allowed') +
@@ -4122,7 +4122,7 @@ function renderSmoothieBar(p) {
 
     // Ligne 1 : badge timing + temps préparation
     var topRow = h('div', {style:'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px'});
-    topRow.appendChild(h('span', {style:'display:inline-block;background:'+tColors[tKey]+';color:#fff;font-size:11px;font-weight:700;letter-spacing:0.4px;padding:3px 9px;border-radius:20px;text-transform:uppercase'}, tLabels[tKey]));
+    topRow.appendChild(h('span', {style:'display:inline-block;background:'+tColors[tKey]+';color:#fff;font-size:11px;font-weight:700;letter-spacing:0.4px;padding:3px 9px;border-radius:2px;text-transform:uppercase'}, tLabels[tKey]));
     if (sm.prep) topRow.appendChild(h('span', {style:'font-size:11px;color:var(--fg2,#888)'}, '⏱ ' + sm.prep));
     card.appendChild(topRow);
 
@@ -4141,7 +4141,7 @@ function renderSmoothieBar(p) {
       {v: 'L ' + sm.f + 'g', bg: 'rgba(26,74,26,0.05)', c: 'var(--text,#0A0A09)'}
     ];
     macroItems.forEach(function(mi) {
-      macroRow.appendChild(h('span', {style:'font-size:11px;font-weight:600;padding:3px 8px;background:'+mi.bg+';color:'+mi.c+';border-radius:20px'}, mi.v));
+      macroRow.appendChild(h('span', {style:'font-size:11px;font-weight:600;padding:3px 8px;background:'+mi.bg+';color:'+mi.c+';border-radius:2px'}, mi.v));
     });
     card.appendChild(macroRow);
 
@@ -4190,7 +4190,7 @@ function showSmoothieModal(sm) {
   var header = h('div', {style:'background:var(--green,#1A4A1A);padding:20px 20px 16px;position:relative;flex-shrink:0'});
 
   // Badge timing
-  header.appendChild(h('span', {style:'display:inline-block;background:'+tColor+';color:#fff;font-size:11px;font-weight:700;letter-spacing:0.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;margin-bottom:10px'}, timingLabels[tKey]));
+  header.appendChild(h('span', {style:'display:inline-block;background:'+tColor+';color:#fff;font-size:11px;font-weight:700;letter-spacing:0.5px;padding:3px 10px;border-radius:2px;text-transform:uppercase;margin-bottom:10px'}, timingLabels[tKey]));
 
   // Titre
   var titleRow = h('div', {style:'display:flex;align-items:flex-start;justify-content:space-between;gap:12px'});
@@ -4524,7 +4524,7 @@ function renderShoppingList(p) {
       });
 
       // Checkbox custom
-      var cbStyle = 'width:20px;height:20px;border-radius:5px;border:2px solid ' + (isChecked ? 'var(--accent)' : 'var(--border)') +
+      var cbStyle = 'width:20px;height:20px;border-radius:2px;border:2px solid ' + (isChecked ? 'var(--accent)' : 'var(--border)') +
         ';flex-shrink:0;display:flex;align-items:center;justify-content:center;background:' + (isChecked ? 'var(--accent)' : 'transparent') +
         (arMode ? ';margin-left:12px;margin-right:0' : ';margin-right:12px');
       var cb = h('div', {style: cbStyle, 'class':'shop-cb'});
@@ -4585,7 +4585,7 @@ function printShoppingListAR(list) {
     '.shop-print-title{font-size:24px;font-weight:700;margin-bottom:4px;}' +
     '.shop-print-date{font-size:13px;color:#666;margin-bottom:16px;}' +
     '.shop-cat-block{margin-bottom:12px;page-break-inside:avoid;}' +
-    '.shop-cat-name{font-size:13px;font-weight:700;background:#f0f0f0;padding:6px 10px;border-radius:4px;margin-bottom:4px;}' +
+    '.shop-cat-name{font-size:13px;font-weight:700;background:#f0f0f0;padding:6px 10px;border-radius:2px;margin-bottom:4px;}' +
     '.shop-print-item{display:flex;justify-content:space-between;padding:3px 10px;font-size:13px;border-bottom:1px solid #eee;}' +
     '@media print{body{padding:10px;}}' +
     '</style></head><body>' + html + '</body></html>';

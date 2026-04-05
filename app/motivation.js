@@ -127,11 +127,13 @@ var NUTRITION_SLOT_MESSAGES = {
 
 // Sélectionner un message selon le jour ou un index aléatoire
 function getDailyMessage(arr) {
+  if (!Array.isArray(arr) || arr.length === 0) return '';
   var idx = new Date().getDay();
   return arr[idx % arr.length];
 }
 
 function getRandomMessage(arr) {
+  if (!Array.isArray(arr) || arr.length === 0) return '';
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
