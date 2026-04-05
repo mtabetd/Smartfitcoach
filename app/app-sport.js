@@ -855,6 +855,7 @@ function estimateKcal(sportType, level, durationMins) {
  var duree = dureeMin / 60;
  return Math.round(met * poids * duree);
 }
+window.estimateKcal = estimateKcal;
 
 // Creer une carte estimation calorique pour les programmes sport
 function buildKcalCard(kcal, durationMins) {
@@ -1889,6 +1890,7 @@ function getWellnessAdaptation() {
  if (score >= 2) return { level: 'peak', label: 'Forme optimale', color: '#27AE60', advice: 'Excellent etat de forme. Vous pouvez pousser sur les sets lourds.' };
  return { level: 'normal', label: 'Forme correcte', color: '#1A3A6A', advice: 'Bonne seance en perspective. Respectez les temps de repos.' };
 }
+window.getWellnessAdaptation = getWellnessAdaptation;
 
 function appendWellnessBanner(p) {
   var adapt = getWellnessAdaptation();
