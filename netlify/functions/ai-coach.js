@@ -353,6 +353,14 @@ function buildSystemPrompt(ctx) {
     if (ctx.triathlonLevel) lines.push('Niveau triathlon : ' + ctx.triathlonLevel);
     if (ctx.triathlonFTP) lines.push('FTP vélo : ' + ctx.triathlonFTP + 'W');
     if (ctx.calisthenicsLevel) lines.push('Niveau callisthénie : ' + ctx.calisthenicsLevel);
+    if (ctx.hyroxLevel) lines.push('Niveau Hyrox : ' + ctx.hyroxLevel);
+    if (ctx.hyroxGoal) lines.push('Objectif Hyrox : ' + ctx.hyroxGoal);
+    if (ctx.hyroxWeek) lines.push('Semaine programme Hyrox : ' + ctx.hyroxWeek + '/12');
+    if (ctx.runningLevel) lines.push('Niveau running : ' + ctx.runningLevel);
+    if (ctx.runningGoal) lines.push('Objectif running : ' + ctx.runningGoal);
+    if (ctx.runningWeek) lines.push('Semaine programme running : ' + ctx.runningWeek);
+    if (ctx.cyclingLevel) lines.push('Niveau cyclisme : ' + ctx.cyclingLevel);
+    if (ctx.cyclingGoal) lines.push('Objectif cyclisme : ' + ctx.cyclingGoal);
   }
 
   if (ctx.wellness) {

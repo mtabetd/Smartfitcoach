@@ -127,7 +127,15 @@ var BADGE_DEFS = [
 
   // Photos
   {id: 'first_photo', name: 'Selfie', desc: 'Première photo de progression', icon: '□', category: 'photos'},
-  {id: 'both_photos', name: 'Analyse Complète', desc: 'Photos face + dos', icon: '□', category: 'photos'}
+  {id: 'both_photos', name: 'Analyse Complète', desc: 'Photos face + dos', icon: '□', category: 'photos'},
+
+  // Hyrox badges
+  {id: 'hyrox_first_program', name: 'Hyrox Starter', desc: 'Premier programme Hyrox généré', icon: '◇', category: 'hyrox'},
+  {id: 'hyrox_week_4', name: 'Mois Hyrox', desc: '4 semaines de préparation Hyrox', icon: '△', category: 'hyrox'},
+  {id: 'hyrox_week_12', name: 'Prépa Complète', desc: '12 semaines de préparation Hyrox terminées', icon: '◆', category: 'hyrox'},
+  {id: 'hyrox_sub90', name: 'Sub 1h30', desc: 'Objectif Hyrox sub 1h30 atteint', icon: '★', category: 'hyrox'},
+  {id: 'hyrox_sub60', name: 'Sub 1h00', desc: 'Objectif Hyrox sub 1h00 atteint', icon: '★', category: 'hyrox'},
+  {id: 'hyrox_pro', name: 'Élite Hyrox', desc: 'Programme niveau Pro/Élite', icon: '★', category: 'hyrox'}
 ];
 
 // ─── STREAK TRACKING ───
