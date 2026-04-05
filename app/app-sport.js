@@ -858,17 +858,23 @@ function estimateKcal(sportType, level, durationMins) {
 
 // Creer une carte estimation calorique pour les programmes sport
 function buildKcalCard(kcal, durationMins) {
- var dureeStr = durationMins ? (durationMins + ' min') : '--';
- var kcalCard = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;background:var(--ivory2,#F4F4F0);margin-bottom:16px;display:flex;align-items:center;gap:16px'});
- kcalCard.appendChild(h('div', {}, [
-  h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:2px'}, 'Estimation seance'),
-  h('div', {style: 'font-family:Georgia,serif;font-size:20px;font-style:italic'}, '~' + kcal + ' kcal')
- ]));
- kcalCard.appendChild(h('div', {style: 'border-left:1px solid var(--border);padding-left:16px'}, [
-  h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:2px'}, 'Duree'),
-  h('div', {style: 'font-family:Georgia,serif;font-size:20px;font-style:italic'}, dureeStr)
- ]));
- return kcalCard;
+  var dureeStr = durationMins ? (durationMins + ' min') : '--';
+  var kcalCard = h('div', {style: 'border:1px solid var(--border);background:var(--ivory2,#F4F4F0);padding:16px 20px;margin-bottom:20px;display:flex;align-items:stretch;gap:0'});
+
+  var leftCol = h('div', {style: 'flex:1;padding-right:20px'});
+  leftCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Estimation séance'));
+  leftCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:26px;font-style:italic;color:var(--black);line-height:1'}, '~' + kcal + ' kcal'));
+  kcalCard.appendChild(leftCol);
+
+  var divider = h('div', {style: 'width:1px;background:var(--border);flex-shrink:0'});
+  kcalCard.appendChild(divider);
+
+  var rightCol = h('div', {style: 'padding-left:20px;display:flex;flex-direction:column;justify-content:center'});
+  rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Durée'));
+  rightCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:26px;font-style:italic;color:var(--black);line-height:1'}, dureeStr));
+  kcalCard.appendChild(rightCol);
+
+  return kcalCard;
 }
 
 // ─── STEP 20: QUESTIONNAIRE MÉDICAL MUSCU ───
@@ -1885,15 +1891,33 @@ function getWellnessAdaptation() {
 }
 
 function appendWellnessBanner(p) {
- var adapt = getWellnessAdaptation();
- var banner = h('div', {style: 'border-left:3px solid ' + adapt.color + ';padding:12px 16px;background:rgba(0,0,0,0.02);margin-bottom:16px'});
- banner.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + adapt.color + ';margin-bottom:4px'}, adapt.label));
- banner.appendChild(h('div', {style: 'font-size:11px;color:var(--grey)'}, adapt.advice));
- var rebtn = h('div', {style: 'font-size:9px;color:var(--grey);cursor:pointer;margin-top:8px;letter-spacing:1px;text-transform:uppercase;border-top:1px solid var(--border);padding-top:6px',
-  onclick: function() { S.todayWellness = null; window.render(); }
- }, 'Refaire le bilan');
- banner.appendChild(rebtn);
- p.appendChild(banner);
+  var adapt = getWellnessAdaptation();
+  // Map level to CSS variables
+  var colorMap = {
+    'peak':     { borderColor: 'var(--green,#1A4A1A)',   textColor: 'var(--green,#1A4A1A)',   bg: 'var(--greenbg,rgba(26,74,26,.06))' },
+    'normal':   { borderColor: 'var(--blue,#1A3A6A)',    textColor: 'var(--blue,#1A3A6A)',    bg: 'var(--bluebg,rgba(26,58,106,.06))' },
+    'reduced':  { borderColor: 'var(--orange,#6A4A1A)',  textColor: 'var(--orange,#6A4A1A)',  bg: 'var(--orangebg,rgba(106,74,26,.06))' },
+    'recovery': { borderColor: 'var(--red,#5A1010)',     textColor: 'var(--red,#5A1010)',     bg: 'var(--redbg,rgba(90,16,16,.06))' }
+  };
+  var cm = colorMap[adapt.level] || colorMap['normal'];
+
+  var banner = h('div', {style: 'border-left:2px solid ' + cm.borderColor + ';padding:14px 20px;background:' + cm.bg + ';margin-bottom:20px;border-radius:0 2px 2px 0'});
+
+  var labelEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:' + cm.textColor + ';margin-bottom:6px'}, adapt.label);
+  banner.appendChild(labelEl);
+
+  var adviceEl = h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:10px'}, adapt.advice);
+  banner.appendChild(adviceEl);
+
+  var rebtn = h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey3,#9A9A90);cursor:pointer;transition:color 0.2s ease',
+    onclick: function() { S.todayWellness = null; window.render(); }
+  }, '↺ Refaire le bilan');
+  rebtn.onmouseenter = function() { this.style.color = 'var(--black,#0A0A09)'; };
+  rebtn.onmouseleave = function() { this.style.color = 'var(--grey3,#9A9A90)'; };
+  banner.appendChild(rebtn);
+
+  p.appendChild(banner);
 }
 
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───

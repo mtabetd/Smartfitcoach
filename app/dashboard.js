@@ -344,22 +344,51 @@ window.DASHBOARD = {
           dashKcal = Math.round(dashMetVal * dashPoids * (dashDurSport / 60));
         }
         var dashDurFinal = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevel] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
-        var dashKcalLine = dashKcal > 0 ? ('<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:12px">~' + dashKcal + ' kcal · ' + dashDurFinal + ' min</div>') : '';
         var sportCard = document.createElement('div');
-        sportCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:20px;margin-bottom:16px;cursor:pointer;';
-        sportCard.innerHTML = '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Seance du jour</div>' +
-          '<div style="font-family:Georgia,serif;font-size:18px;font-style:italic;color:var(--black,#181818);margin-bottom:8px">' + sportLabel + '</div>' +
-          dashKcalLine +
-          '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--black,#181818);background:var(--black,#181818);color:var(--ivory,#FAF9F6);padding:10px 16px;text-align:center;letter-spacing:2px;text-transform:uppercase;font-size:9px">Commencer la seance</div>';
+        sportCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:24px 20px;margin-bottom:16px;cursor:pointer;transition:all 0.25s ease;border-left:3px solid var(--black,#0A0A09);';
+
+        sportCard.onmouseenter = function() {
+          this.style.background = 'var(--black,#0A0A09)';
+          this.style.borderColor = 'var(--black,#0A0A09)';
+          this.style.borderLeftColor = 'var(--black,#0A0A09)';
+          var sub = this.querySelector('.sport-card-sub');
+          if (sub) sub.style.color = 'rgba(250,249,246,0.6)';
+          var label = this.querySelector('.sport-card-label');
+          if (label) label.style.color = 'rgba(250,249,246,0.5)';
+          var title = this.querySelector('.sport-card-title');
+          if (title) title.style.color = 'var(--ivory,#FAF9F6)';
+          var cta = this.querySelector('.sport-card-cta');
+          if (cta) { cta.style.background = 'var(--ivory,#FAF9F6)'; cta.style.color = 'var(--black,#0A0A09)'; }
+        };
+        sportCard.onmouseleave = function() {
+          this.style.background = 'var(--ivory2,#F4F4F0)';
+          this.style.borderColor = 'var(--border,#D8D8D0)';
+          this.style.borderLeftColor = 'var(--black,#0A0A09)';
+          var sub = this.querySelector('.sport-card-sub');
+          if (sub) sub.style.color = 'var(--grey,#6B6B65)';
+          var label = this.querySelector('.sport-card-label');
+          if (label) label.style.color = 'var(--grey,#6B6B65)';
+          var title = this.querySelector('.sport-card-title');
+          if (title) title.style.color = 'var(--black,#0A0A09)';
+          var cta = this.querySelector('.sport-card-cta');
+          if (cta) { cta.style.background = 'var(--black,#0A0A09)'; cta.style.color = 'var(--ivory,#FAF9F6)'; }
+        };
+        sportCard.innerHTML =
+          '<div class="sport-card-label" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease">Séance du jour</div>' +
+          '<div class="sport-card-title" style="font-family:Georgia,serif;font-size:22px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:' + (dashKcal > 0 ? '6px' : '20px') + ';line-height:1.2;transition:color 0.25s ease">' + sportLabel + '</div>' +
+          (dashKcal > 0 ? '<div class="sport-card-sub" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:20px;letter-spacing:1px;transition:color 0.25s ease">~' + dashKcal + ' kcal · ' + dashDurFinal + ' min</div>' : '') +
+          '<div class="sport-card-cta" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:12px 20px;display:inline-block;border-radius:2px;transition:all 0.25s ease">Commencer la séance</div>';
         sportCard.addEventListener('click', function() {
           if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport');
         });
         root.appendChild(sportCard);
       } else if (isRestDay) {
         var restCard = document.createElement('div');
-        restCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:16px;margin-bottom:16px;';
-        restCard.innerHTML = '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px">Aujourd\'hui</div>' +
-          '<div style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--grey,#6B6B65)">Journee de recuperation</div>';
+        restCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:20px;margin-bottom:16px;border-left:2px solid var(--border,#D8D8D0);';
+        restCard.innerHTML =
+          '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Aujourd\'hui</div>' +
+          '<div style="font-family:Georgia,serif;font-size:18px;font-style:italic;color:var(--grey,#6B6B65)">Journée de récupération</div>' +
+          '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-top:6px;letter-spacing:0.5px">Repos actif · Mobilité · Hydratation</div>';
         root.appendChild(restCard);
       }
     })();
@@ -391,11 +420,28 @@ window.DASHBOARD = {
 
       var kcal = meal.k || 0;
       var nutCard = document.createElement('div');
-      nutCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:20px;margin-bottom:16px;cursor:pointer;';
-      nutCard.innerHTML = '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">' + mealLabel + '</div>' +
-        '<div style="font-family:Georgia,serif;font-size:16px;font-style:italic;color:var(--black,#181818);margin-bottom:4px">' + mealName + '</div>' +
-        (kcal ? '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:12px">' + kcal + ' kcal</div>' : '') +
-        '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);letter-spacing:2px;text-transform:uppercase;border-top:1px solid var(--border,#D8D8D0);padding-top:10px;">Voir le plan nutrition</div>';
+      nutCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:24px 20px;margin-bottom:16px;cursor:pointer;transition:all 0.25s ease;';
+      nutCard.onmouseenter = function() {
+        this.style.background = 'var(--black,#0A0A09)';
+        this.style.borderColor = 'var(--black,#0A0A09)';
+        this.querySelectorAll('[data-nut-label]').forEach(function(el){ el.style.color = 'rgba(250,249,246,0.5)'; });
+        this.querySelectorAll('[data-nut-title]').forEach(function(el){ el.style.color = 'var(--ivory,#FAF9F6)'; });
+        this.querySelectorAll('[data-nut-sub]').forEach(function(el){ el.style.color = 'rgba(250,249,246,0.55)'; });
+        this.querySelectorAll('[data-nut-cta]').forEach(function(el){ el.style.color = 'rgba(250,249,246,0.5)'; el.style.borderTopColor = 'rgba(250,249,246,0.15)'; });
+      };
+      nutCard.onmouseleave = function() {
+        this.style.background = 'var(--ivory2,#F4F4F0)';
+        this.style.borderColor = 'var(--border,#D8D8D0)';
+        this.querySelectorAll('[data-nut-label]').forEach(function(el){ el.style.color = 'var(--grey,#6B6B65)'; });
+        this.querySelectorAll('[data-nut-title]').forEach(function(el){ el.style.color = 'var(--black,#0A0A09)'; });
+        this.querySelectorAll('[data-nut-sub]').forEach(function(el){ el.style.color = 'var(--grey,#6B6B65)'; });
+        this.querySelectorAll('[data-nut-cta]').forEach(function(el){ el.style.color = 'var(--grey,#6B6B65)'; el.style.borderTopColor = 'var(--border,#D8D8D0)'; });
+      };
+      nutCard.innerHTML =
+        '<div data-nut-label style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease">' + mealLabel + '</div>' +
+        '<div data-nut-title style="font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.3;transition:color 0.25s ease">' + mealName + '</div>' +
+        (kcal ? '<div data-nut-sub style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:16px;letter-spacing:1px;transition:color 0.25s ease">' + kcal + ' kcal</div>' : '<div style="margin-bottom:16px"></div>') +
+        '<div data-nut-cta style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);letter-spacing:3px;text-transform:uppercase;border-top:1px solid var(--border,#D8D8D0);padding-top:12px;transition:all 0.25s ease">Voir le plan nutrition →</div>';
       nutCard.addEventListener('click', function() {
         if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
       });
