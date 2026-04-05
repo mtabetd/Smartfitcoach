@@ -61,7 +61,8 @@ var PROFILE_KEYS = [
  'wheyFlavors','saladBuilder',
  'emailOptin',
  'profilePhoto',
- 'todayWellness'
+ 'todayWellness',
+ 'aiCoachHistory'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -254,6 +255,14 @@ function render() {
      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;cursor:pointer;color:var(--grey);background:none;border:none;padding:4px 0'
    }, _curLang === 'fr' ? 'FR·EN' : 'EN·FR'));
    ubRight.appendChild(_langWrap);
+ })();
+ // Coach IA button
+ (function() {
+   var _coachBtn = h('button', {
+     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;cursor:pointer;color:var(--green);background:none;border:1px solid var(--green);border-radius:3px;padding:4px 8px',
+     onclick: function() { if (window.AI_COACH) window.AI_COACH.toggle(); }
+   }, '◆ COACH IA');
+   ubRight.appendChild(_coachBtn);
  })();
  // Avatar (clickable → profil step 1)
  (function() {
