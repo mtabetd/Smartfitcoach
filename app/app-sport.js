@@ -5925,6 +5925,28 @@ function renderTriathlonProgram(p) {
  if (weekData.isTaper) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:6px;font-weight:bold'}, ' Affûtage — Volume réduit, intensité maintenue'));
  p.appendChild(phaseCard);
 
+ // ─── ESTIMATION CALORIQUE TRIATHLON ───
+ (function() {
+  var triLevel = S.triathlonLevel || 'intermediate';
+  // Additionner les durees swim + bike + run de la semaine courante
+  var triSessions = weekData.sessions || [];
+  var totalTriMins = 0;
+  triSessions.forEach(function(ts) {
+   if (ts.durationMins) {
+    totalTriMins += ts.durationMins;
+   } else if (ts.duration && typeof ts.duration === 'string') {
+    var m = ts.duration.match(/(\d+)\s*min/i);
+    var h2 = ts.duration.match(/(\d+)\s*h/i);
+    if (m) totalTriMins += parseInt(m[1]);
+    if (h2) totalTriMins += parseInt(h2[1]) * 60;
+   }
+  });
+  var SESSION_DUR_TRI = { beginner: 75, intermediate: 90, advanced: 105, elite: 120 };
+  var triDur = totalTriMins > 0 ? Math.round(totalTriMins / Math.max(1, triSessions.length)) : (SESSION_DUR_TRI[triLevel] || 90);
+  var triKcal = estimateKcal('triathlon', triLevel, triDur);
+  p.appendChild(buildKcalCard(triKcal, triDur));
+ }());
+
  // ── Tabs jours ──
  var sessions = weekData.sessions || [];
  if (S.selectedTriDay >= sessions.length) S.selectedTriDay = 0;
@@ -6617,6 +6639,15 @@ function renderCyclingProgram(p) {
  p.appendChild(ftpBox);
  }
 
+ // ─── ESTIMATION CALORIQUE CYCLING ───
+ (function() {
+  var cycLevel = S.cyclingLevel || 'intermediaire';
+  var SESSION_DUR_CYC = { debutant: 60, intermediaire: 75, avance: 90, elite: 120 };
+  var cycDur = SESSION_DUR_CYC[cycLevel] || 75;
+  var cycKcal = estimateKcal('cycling', cycLevel, cycDur);
+  p.appendChild(buildKcalCard(cycKcal, cycDur));
+ }());
+
  var sessions = weekData.sessions || [];
  if (S.selectedCyclingDay < 0 || S.selectedCyclingDay >= sessions.length) S.selectedCyclingDay = 0;
  var tabs = h('div', {'class': 'day-tabs', style: 'flex-wrap:wrap'});
@@ -6957,6 +6988,15 @@ function renderCalisthenicsProgram(content) {
   });
   content.appendChild(skillsCard);
  }
+
+ // ─── ESTIMATION CALORIQUE CALISTHENICS ───
+ (function() {
+  var calisthLevel = S.calisthenicsLevel || 'debutant';
+  var SESSION_DUR_CALISTH = { debutant: 50, intermediaire: 65, avance: 80, elite: 90 };
+  var calisthDur = SESSION_DUR_CALISTH[calisthLevel] || 60;
+  var calisthKcal = estimateKcal('calisthenics', calisthLevel, calisthDur);
+  content.appendChild(buildKcalCard(calisthKcal, calisthDur));
+ }());
 
  // ── WEEKLY PROGRAM NAVIGATION ──
  var currentWeek = S.calisthCurrentWeek || 1;
