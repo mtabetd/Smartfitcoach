@@ -24,7 +24,7 @@ var PROFILE_KEYS = [
  'cycleLength','lastPeriodDate','cycleTracking',
  'creatine','creatineDose','supplements',
  'sportGoals','sportLevel','sportDays','sportSessionDuration','sportFocus',
- 'sportType','crossfitLevel',
+ 'sportType','crossfitLevel','crossfitCompGoal','crossfitOpenDate',
  'trainTime',
  // CrossFit progress (calendar, current day, weekly cycle)
  'cfProgress','cfCurrentDay','crossfitWeek','crossfitCycleWeek','selectedCrossfitDay',
@@ -39,11 +39,13 @@ var PROFILE_KEYS = [
  // Triathlon
  'triathlonGoal','triathlonLevel','triathlonWeak',
  'triathlonSwimPace','triathlonBikePace','triathlonRunPace','triathlonWeek','selectedTriDay',
+ 'triathlonFTP','triathlonRaceDate',
  // Cycling
  'cyclingLevel','cyclingGoal','cyclingDays','cyclingType','cyclingFTP','cyclingSpeed','cyclingRelief',
  'cyclingWeek','selectedCyclingDay',
  // Calisthenics
  'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
+ 'calisthenicsEquipment','calisthDips','calisthCurrentWeek',
  'calisthenicsWeek','selectedCalisthDay',
  // Musculation
  'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
@@ -186,6 +188,10 @@ function loadProfile() {
  if (S.saladBar) S.saladBar.open = false;
  } catch(e) {}
 }
+
+// Expose persistence functions globally so other modules can call them
+window.saveProfile = saveProfile;
+window.loadProfile = loadProfile;
 
 // ─── MAIN RENDER ───
 function render() {
@@ -848,6 +854,12 @@ if (AUTH.isLoggedIn()) {
  if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
  S.nStep = S.weekPlan ? 9 : (S.goal ? 8 : 1);
  }
+ // Retour utilisateur : toujours commencer sur le dashboard, pas sur un step sport intermédiaire
+ // Mais préserver sStep si l'utilisateur avait un programme actif (>= 20)
+ // Les steps d'onboarding sport (1-19) sont réinitialisés pour éviter un affichage incohérent
+ if (S.sStep > 0 && S.sStep < 20) {
+ S.sStep = 20;
+ }
  // Restaurer la langue
  if (window.I18N && S.lang) {
  window.I18N.current = S.lang;
@@ -890,5 +902,15 @@ if (AUTH.ready) {
 if (window._verifyCriticalFunctions) {
  try { window._verifyCriticalFunctions(); } catch(e) {}
 }
+
+// ─── AUTOSAVE & BEFOREUNLOAD ───
+// Save on tab/browser close to avoid losing last unsaved state
+window.addEventListener('beforeunload', function() {
+ try { if (AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
+});
+// Periodic autosave every 30s as safety net (render() already saves on interaction)
+setInterval(function() {
+ try { if (AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
+}, 30000);
 
 })();

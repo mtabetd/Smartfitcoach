@@ -294,9 +294,11 @@ window.DASHBOARD = {
 
     var S = window.S || {};
 
-    /* ─── WELCOME SCREEN: afficher uniquement si weekPlan non généré (jour 0 / setup incomplet) ─── */
+    /* ─── WELCOME SCREEN: afficher uniquement si onboarding non complété ─── */
     var hasPlan = Array.isArray(S.weekPlan) && S.weekPlan.length > 0;
-    if (!hasPlan) {
+    // Returning sport user (a completed sport onboarding) → show dashboard even without weekPlan
+    var hasProfile = !!(S.sex || S.goal || S.sportType || S.sStep >= 20);
+    if (!hasPlan && !hasProfile) {
       renderWelcomeScreen(container);
       return;
     }
@@ -313,6 +315,78 @@ window.DASHBOARD = {
     root.appendChild(h('h1', 'dash-greeting', greeting));
     var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
     root.appendChild(h('p', 'dash-date', dateStr));
+
+    /* ═══ SPORT DU JOUR ═══ */
+    (function() {
+      var todayIdx = now.getDay(); // 0=dim, 1=lun, ..., 6=sam
+      // weekPlan[0]=lundi ... weekPlan[6]=dimanche
+      var planIdx = todayIdx === 0 ? 6 : todayIdx - 1;
+      var sportType = S.sportType || '';
+      var sportLabels = {
+        crossfit: 'Cross Training', running: 'Running', triathlon: 'Triathlon',
+        calisthenics: 'Callisthenie', cycling: 'Cyclisme', hyrox: 'Hyrox',
+        muscu: 'Musculation', yoga: 'Yoga', padel: 'Padel', golf: 'Golf'
+      };
+      var sportLabel = sportLabels[sportType] || sportType;
+      // Detect rest day from weekPlan structure (check if session is empty/rest)
+      var todayPlanDay = Array.isArray(S.weekPlan) && S.weekPlan[planIdx] ? S.weekPlan[planIdx] : null;
+      var isRestDay = todayPlanDay && todayPlanDay.type === 'rest';
+      if (sportType && !isRestDay) {
+        var sportCard = document.createElement('div');
+        sportCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:20px;margin-bottom:16px;cursor:pointer;';
+        sportCard.innerHTML = '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Seance du jour</div>' +
+          '<div style="font-family:Georgia,serif;font-size:18px;font-style:italic;color:var(--black,#181818);margin-bottom:12px">' + sportLabel + '</div>' +
+          '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--black,#181818);background:var(--black,#181818);color:var(--ivory,#FAF9F6);padding:10px 16px;text-align:center;letter-spacing:2px;text-transform:uppercase;font-size:9px">Commencer la seance</div>';
+        sportCard.addEventListener('click', function() {
+          if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport');
+        });
+        root.appendChild(sportCard);
+      } else if (isRestDay) {
+        var restCard = document.createElement('div');
+        restCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:16px;margin-bottom:16px;';
+        restCard.innerHTML = '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px">Aujourd\'hui</div>' +
+          '<div style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--grey,#6B6B65)">Journee de recuperation</div>';
+        root.appendChild(restCard);
+      }
+    })();
+
+    /* ═══ NUTRITION CONTEXTUELLE ═══ */
+    (function() {
+      var hour = now.getHours();
+      var mealSlot, mealLabel;
+      if (hour >= 6 && hour < 10) { mealSlot = 'breakfast'; mealLabel = 'Petit-dejeuner'; }
+      else if (hour >= 11 && hour < 14) { mealSlot = 'lunch'; mealLabel = 'Dejeuner'; }
+      else if (hour >= 14 && hour < 18) { mealSlot = 'snack'; mealLabel = 'Collation'; }
+      else if (hour >= 18) { mealSlot = 'dinner'; mealLabel = 'Diner ce soir'; }
+      else { mealSlot = null; mealLabel = null; }
+
+      if (!mealSlot) return;
+
+      var todayIdx2 = now.getDay();
+      var planIdx2 = todayIdx2 === 0 ? 6 : todayIdx2 - 1;
+      var todayPlan2 = Array.isArray(S.weekPlan) && S.weekPlan[planIdx2] ? S.weekPlan[planIdx2] : null;
+      var meal = todayPlan2 ? todayPlan2[mealSlot] : null;
+      if (!meal) return;
+
+      // Rehydrate meal name from recipe engine if needed
+      var mealName = meal.n || '';
+      if (!mealName && meal._id && window.RecipeEngine && RecipeEngine.findRecipe) {
+        try { var rf = RecipeEngine.findRecipe(meal._id); if (rf) mealName = rf.n || ''; } catch(e) {}
+      }
+      if (!mealName) return;
+
+      var kcal = meal.k || 0;
+      var nutCard = document.createElement('div');
+      nutCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:20px;margin-bottom:16px;cursor:pointer;';
+      nutCard.innerHTML = '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">' + mealLabel + '</div>' +
+        '<div style="font-family:Georgia,serif;font-size:16px;font-style:italic;color:var(--black,#181818);margin-bottom:4px">' + mealName + '</div>' +
+        (kcal ? '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:12px">' + kcal + ' kcal</div>' : '') +
+        '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);letter-spacing:2px;text-transform:uppercase;border-top:1px solid var(--border,#D8D8D0);padding-top:10px;">Voir le plan nutrition</div>';
+      nutCard.addEventListener('click', function() {
+        if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
+      });
+      root.appendChild(nutCard);
+    })();
 
     /* ═══ BIRTHDAY BANNER ═══ */
     if (window.isBirthday && window.isBirthday()) {
