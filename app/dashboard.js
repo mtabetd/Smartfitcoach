@@ -419,10 +419,19 @@ window.DASHBOARD = {
       } else if (isRestDay) {
         var restCard = document.createElement('div');
         restCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:20px;margin-bottom:16px;border-left:2px solid var(--border,#D8D8D0);';
-        restCard.innerHTML =
-          '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Aujourd\'hui</div>' +
-          '<div style="font-family:Georgia,serif;font-size:18px;font-style:italic;color:var(--grey,#6B6B65)">Journée de récupération</div>' +
-          '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-top:6px;letter-spacing:0.5px">Repos actif · Mobilité · Hydratation</div>';
+        // Static content — built via DOM for consistency
+        var _rcLine1 = document.createElement('div');
+        _rcLine1.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px';
+        _rcLine1.textContent = 'Aujourd\'hui';
+        var _rcLine2 = document.createElement('div');
+        _rcLine2.style.cssText = 'font-family:Georgia,serif;font-size:18px;font-style:italic;color:var(--grey,#6B6B65)';
+        _rcLine2.textContent = 'Journ\u00e9e de r\u00e9cup\u00e9ration';
+        var _rcLine3 = document.createElement('div');
+        _rcLine3.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-top:6px;letter-spacing:0.5px';
+        _rcLine3.textContent = 'Repos actif \u00b7 Mobilit\u00e9 \u00b7 Hydratation';
+        restCard.appendChild(_rcLine1);
+        restCard.appendChild(_rcLine2);
+        restCard.appendChild(_rcLine3);
         root.appendChild(restCard);
       }
     })();

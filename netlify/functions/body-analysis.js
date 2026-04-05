@@ -7,6 +7,8 @@ const MAX_TOKENS = 4096;
 // Domaines autorisés pour CORS
 var ALLOWED_ORIGINS = [
   'https://smartfitcoach.netlify.app',
+  'https://smartfitcoach.fr',
+  'https://www.smartfitcoach.fr',
   'http://localhost:8888',
   'http://localhost:3000',
   'http://127.0.0.1:8888',

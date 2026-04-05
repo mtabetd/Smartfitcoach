@@ -120,9 +120,9 @@
         if (!session || !session.user) return; // pas connecté
 
         var userId = session.user.id;
-        // Copier S sans les propriétés transitoires
+        // Copier S sans les propriétés transitoires ni les clés dangereuses
         var data = {};
-        var skip = ['authError', 'view', 'sessionCompleting', 'swapPanel', 'nStep', 'sStep'];
+        var skip = ['authError', 'view', 'sessionCompleting', 'swapPanel', 'nStep', 'sStep', '__proto__', 'constructor', 'prototype'];
         for (var k in window.S) {
           if (window.S.hasOwnProperty(k) && skip.indexOf(k) === -1) {
             data[k] = window.S[k];
@@ -373,8 +373,10 @@
 
         if (!hasValidLocalData && cloudData.goal != null) {
           console.log('[SupaSync] Loading profile from cloud (no valid local data for user)');
+          // Prototype pollution guard: skip __proto__, constructor, prototype keys
+          var _PROTO_BLOCKED = ['__proto__', 'constructor', 'prototype'];
           for (var k in cloudData) {
-            if (cloudData.hasOwnProperty(k)) {
+            if (cloudData.hasOwnProperty(k) && _PROTO_BLOCKED.indexOf(k) === -1) {
               window.S[k] = cloudData[k];
             }
           }

@@ -283,7 +283,11 @@ function deltaTag(delta, unit, invertColors) {
 function renderProgressionWidget(container) {
   if (!container) return;
   try { _renderProgressionWidget(container); } catch(e) {
-    container.innerHTML = '<p style="font-size:12px;color:var(--grey,#6B6B65);padding:8px">Progression non disponible.</p>';
+    container.innerHTML = '';
+    var _pgErr = document.createElement('p');
+    _pgErr.style.cssText = 'font-size:12px;color:var(--grey,#6B6B65);padding:8px';
+    _pgErr.textContent = 'Progression non disponible.';
+    container.appendChild(_pgErr);
   }
 }
 

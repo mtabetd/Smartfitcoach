@@ -4640,7 +4640,7 @@ function renderMusculationProgram(p) {
  compPanel.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:3px solid var(--orange,#6A4A1A);padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--text,#0A0A09);line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
  // Contexte nutritionnel : montre l'impact de la session sur le budget calorique
  var nc = getNutritionContext();
- var nutritionContextHtml = '';
+ // XSS fix: build nutrition context panel via DOM — values are numeric but use textContent for safety
  if (nc && nc.caloriesTarget > 0 && kcalRes && kcalRes.total > 0) {
  var pct = Math.round((kcalRes.total / nc.caloriesTarget) * 100);
  var warningColor = pct > 40 ? 'var(--red,#5A1010)' : pct > 25 ? 'var(--orange,#6A4A1A)' : 'var(--green,#1A4A1A)';
@@ -4649,24 +4649,42 @@ function renderMusculationProgram(p) {
  : pct > 25
  ? '\uD83D\uDD36 Session mod\u00e9r\u00e9e \u2014 nutrition pr\u00e9/post recommand\u00e9e'
  : '\u2705 Session \u00e9quilibr\u00e9e pour votre objectif';
- nutritionContextHtml =
- '<div style="margin-top:12px;padding:10px 14px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:13px">' +
- '<div style="font-weight:600;margin-bottom:6px;color:var(--text)">\uD83C\uDF7D\ufe0f Impact nutritionnel</div>' +
- '<div style="display:flex;justify-content:space-between;margin-bottom:4px">' +
- '<span>Cible calorique du jour</span>' +
- '<span style="font-weight:600">' + nc.caloriesTarget + ' kcal</span>' +
- '</div>' +
- '<div style="display:flex;justify-content:space-between;margin-bottom:4px">' +
- '<span>Calories br\u00fcl\u00e9es en session</span>' +
- '<span style="font-weight:600;color:' + warningColor + '">\u2212' + kcalRes.total + ' kcal (' + pct + '%)</span>' +
- '</div>' +
- '<div style="display:flex;justify-content:space-between;margin-bottom:8px">' +
- '<span>Cible prot\u00e9ines</span>' +
- '<span style="font-weight:600">' + nc.proteinGrams + ' g</span>' +
- '</div>' +
- '<div style="font-size:13px;color:' + warningColor + '">' + warningMsg + '</div>' +
- '</div>';
- compPanel.appendChild(h('div', {html: nutritionContextHtml}));
+ var _ncWrap = document.createElement('div');
+ _ncWrap.style.cssText = 'margin-top:12px;padding:10px 14px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:13px';
+ var _ncTitle = document.createElement('div');
+ _ncTitle.style.cssText = 'font-weight:600;margin-bottom:6px;color:var(--text)';
+ _ncTitle.textContent = '\uD83C\uDF7D\ufe0f Impact nutritionnel';
+ _ncWrap.appendChild(_ncTitle);
+ function _ncRow(label, value, valueStyle) {
+   var row = document.createElement('div');
+   row.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:4px';
+   var lbl = document.createElement('span');
+   lbl.textContent = label;
+   var val = document.createElement('span');
+   val.style.fontWeight = '600';
+   if (valueStyle) val.style.color = valueStyle;
+   val.textContent = value;
+   row.appendChild(lbl);
+   row.appendChild(val);
+   return row;
+ }
+ _ncWrap.appendChild(_ncRow('Cible calorique du jour', nc.caloriesTarget + ' kcal', null));
+ _ncWrap.appendChild(_ncRow('Calories br\u00fcl\u00e9es en session', '\u2212' + kcalRes.total + ' kcal (' + pct + '%)', warningColor));
+ var _ncProRow = document.createElement('div');
+ _ncProRow.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:8px';
+ var _ncProLbl = document.createElement('span');
+ _ncProLbl.textContent = 'Cible prot\u00e9ines';
+ var _ncProVal = document.createElement('span');
+ _ncProVal.style.fontWeight = '600';
+ _ncProVal.textContent = nc.proteinGrams + ' g';
+ _ncProRow.appendChild(_ncProLbl);
+ _ncProRow.appendChild(_ncProVal);
+ _ncWrap.appendChild(_ncProRow);
+ var _ncMsg = document.createElement('div');
+ _ncMsg.style.cssText = 'font-size:13px;color:' + warningColor;
+ _ncMsg.textContent = warningMsg;
+ _ncWrap.appendChild(_ncMsg);
+ compPanel.appendChild(_ncWrap);
  }
  var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
  if (!S.sessionHistory) S.sessionHistory = {};
