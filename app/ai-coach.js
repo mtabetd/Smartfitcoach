@@ -178,7 +178,12 @@ function buildUI() {
   // Bouton flottant
   var btn = document.createElement('button');
   btn.id = 'ai-coach-btn';
-  btn.innerHTML = '<span style="font-size:14px">◆</span> Smart Fit Coach';
+  // Static button content: built via DOM for CSP compliance
+  var _btnIcon = document.createElement('span');
+  _btnIcon.style.fontSize = '14px';
+  _btnIcon.textContent = '\u25C6';
+  btn.appendChild(_btnIcon);
+  btn.appendChild(document.createTextNode(' Smart Fit Coach'));
   btn.addEventListener('click', togglePanel);
   document.body.appendChild(btn);
 
@@ -190,7 +195,15 @@ function buildUI() {
   var header = document.createElement('div');
   header.id = 'ai-coach-header';
   var headerText = document.createElement('div');
-  headerText.innerHTML = '<div id="ai-coach-header-title">Smart Fit Coach</div><div id="ai-coach-header-sub">Nutrition · Sport · Progression</div>';
+  // Static header: built via DOM for CSP compliance
+  var _aiHeaderTitle = document.createElement('div');
+  _aiHeaderTitle.id = 'ai-coach-header-title';
+  _aiHeaderTitle.textContent = 'Smart Fit Coach';
+  var _aiHeaderSub = document.createElement('div');
+  _aiHeaderSub.id = 'ai-coach-header-sub';
+  _aiHeaderSub.textContent = 'Nutrition \u00b7 Sport \u00b7 Progression';
+  headerText.appendChild(_aiHeaderTitle);
+  headerText.appendChild(_aiHeaderSub);
   var closeBtn = document.createElement('button');
   closeBtn.id = 'ai-coach-close';
   closeBtn.textContent = '×';
