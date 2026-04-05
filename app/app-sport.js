@@ -1795,6 +1795,14 @@ function renderWellnessCheckin(p, onComplete) {
  p.appendChild(h('h1', {html: 'Comment<br><em>vous sentez-vous ?</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Quelques questions pour adapter votre seance du jour.'));
 
+  // Message d'encouragement checkin
+  if (window.MOTIVATION) {
+    var checkinMotiv = document.createElement('p');
+    checkinMotiv.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey,#6B6B65);margin:0 0 24px;line-height:1.6;border-left:2px solid var(--border,#D8D8D0);padding-left:14px;';
+    checkinMotiv.textContent = 'Prendre une minute pour évaluer ton état, c\'est déjà un acte de performance.';
+    p.appendChild(checkinMotiv);
+  }
+
  // Question 1 — Sommeil
  var q1 = h('div', {style: 'margin-bottom:24px'});
  q1.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, 'Qualite du sommeil'));
@@ -1920,6 +1928,16 @@ function appendWellnessBanner(p) {
   banner.appendChild(rebtn);
 
   p.appendChild(banner);
+
+  // Message de soutien selon le niveau de forme
+  if (window.MOTIVATION) {
+    var motivLevel = adapt.level || 'normal';
+    var motivText = window.MOTIVATION.getWellnessMessage(motivLevel);
+    var motivEl = document.createElement('p');
+    motivEl.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);margin:0 0 20px;line-height:1.6;';
+    motivEl.textContent = motivText;
+    p.appendChild(motivEl);
+  }
 }
 
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───

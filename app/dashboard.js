@@ -212,6 +212,14 @@ function renderWelcomeScreen(container) {
   var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
   root.appendChild(h('p', 'dash-date', dateStr));
 
+  // Message motivation du jour
+  if (window.MOTIVATION) {
+    var motivMsg = document.createElement('p');
+    motivMsg.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey,#6B6B65);margin:0 0 20px;line-height:1.6;border-left:2px solid var(--border,#D8D8D0);padding-left:14px;';
+    motivMsg.textContent = window.MOTIVATION.getDailySportMessage();
+    root.appendChild(motivMsg);
+  }
+
   /* Tips toggle */
   if (window.TIPS) TIPS.renderToggle(root);
 
@@ -315,6 +323,14 @@ window.DASHBOARD = {
     root.appendChild(h('h1', 'dash-greeting', greeting));
     var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
     root.appendChild(h('p', 'dash-date', dateStr));
+
+    // Message motivation du jour
+    if (window.MOTIVATION) {
+      var motivMsg = document.createElement('p');
+      motivMsg.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey,#6B6B65);margin:0 0 20px;line-height:1.6;border-left:2px solid var(--border,#D8D8D0);padding-left:14px;';
+      motivMsg.textContent = window.MOTIVATION.getDailySportMessage();
+      root.appendChild(motivMsg);
+    }
 
     /* ═══ SPORT DU JOUR ═══ */
     (function() {
@@ -446,6 +462,14 @@ window.DASHBOARD = {
         if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
       });
       root.appendChild(nutCard);
+
+      // Message nutrition contextuelle
+      if (window.MOTIVATION) {
+        var nutMotiv = document.createElement('p');
+        nutMotiv.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin:-8px 0 16px;letter-spacing:0.5px;line-height:1.5;';
+        nutMotiv.textContent = window.MOTIVATION.getNutritionSlotMessage(mealSlot);
+        root.appendChild(nutMotiv);
+      }
     })();
 
     /* ═══ BIRTHDAY BANNER ═══ */
