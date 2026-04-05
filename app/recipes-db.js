@@ -1,3 +1,16 @@
+// Schéma recette compact (recipes-db.js) :
+// _id: string — identifiant unique
+// n: string — nom de la recette
+// k: number — calories (kcal)
+// p: number — protéines (g)
+// g: number — glucides (g)
+// l: number — lipides (g)
+// lv: number — difficulté (1=facile, 2=moyen, 3=difficile)
+// w: boolean — isLiquid (true = shake/smoothie/boisson, false = aliment solide)
+// i: string — ingrédients en texte libre ("80g flocons d'avoine, 200ml lait...")
+// st: array — étapes de préparation ["Étape 1.", "Étape 2."]
+// tags: array — catégories ["breakfast", "high-protein", ...]
+
 var breakfast = [
   {
     _id: 'L001',

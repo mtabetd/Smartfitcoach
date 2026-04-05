@@ -2624,8 +2624,11 @@ function renderModal(app) {
     } else if (r._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
       // Fallback direct RECIPES_DB lookup — always works even for old/cached weekPlans
       var fullR = window.RecipeEngine.findRecipe(r._id);
-      if (fullR && fullR.ingredients && fullR.ingredients.length > 0) {
+      // findRecipe() retourne un format normalisé où ingredients est une string (schéma unifié)
+      if (fullR && Array.isArray(fullR.ingredients) && fullR.ingredients.length > 0) {
         fullR.ingredients.forEach(function(ing) { ingredList.appendChild(h('li', {}, fmtIng(ing))); });
+      } else if (fullR && typeof fullR.ingredients === 'string' && fullR.ingredients.length > 0) {
+        fullR.ingredients.split(',').forEach(function(ing) { if (ing.trim()) ingredList.appendChild(h('li', {}, ing.trim())); });
       } else {
         ingredList.appendChild(h('li', {style: 'color:var(--grey);font-style:italic'}, 'Ingr\u00e9dients non disponibles.'));
       }
