@@ -384,8 +384,8 @@ window.DASHBOARD = {
 
       // Rehydrate meal name from recipe engine if needed
       var mealName = meal.n || '';
-      if (!mealName && meal._id && window.RecipeEngine && RecipeEngine.findRecipe) {
-        try { var rf = RecipeEngine.findRecipe(meal._id); if (rf) mealName = rf.n || ''; } catch(e) {}
+      if (!mealName && meal._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
+        try { var rf = window.RecipeEngine.findRecipe(meal._id); if (rf) mealName = rf.n || ''; } catch(e) {}
       }
       if (!mealName) return;
 
