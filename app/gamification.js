@@ -405,6 +405,22 @@ function checkCalisthenicsBadges(profile) {
   if (pullups > 0) unlockBadge('calisth_first_pullup');
 }
 
+// ─── HYROX BADGE CHECKER ───
+// Call when Hyrox program is generated or week advances.
+// profile: { currentWeek, level, goal } from S state (S.hyroxWeek, S.hyroxLevel, S.hyroxGoal)
+function checkHyroxBadges(profile) {
+  if (!profile) return;
+  unlockBadge('hyrox_first_program');
+  unlockBadge('first_workout');
+  var week = parseInt(profile.currentWeek) || 1;
+  if (week >= 4)  unlockBadge('hyrox_week_4');
+  if (week >= 12) unlockBadge('hyrox_week_12');
+  if (profile.level === 'pro') unlockBadge('hyrox_pro');
+  var goal = profile.goal || '';
+  if (goal === 'sub90' || goal === 'sub75' || goal === 'sub60' || goal === 'podium') unlockBadge('hyrox_sub90');
+  if (goal === 'sub60' || goal === 'podium') unlockBadge('hyrox_sub60');
+}
+
 // ─── PUBLIC API ───
 window.GAMIFICATION = {
   updateStreak: updateStreak,
@@ -417,6 +433,7 @@ window.GAMIFICATION = {
   showToast: showToast,
   checkMuscuBadges: checkMuscuBadges,
   checkCalisthenicsBadges: checkCalisthenicsBadges,
+  checkHyroxBadges: checkHyroxBadges,
   renderBadgesPanel: renderBadgesPanel,
   renderStreakWidget: renderStreakWidget,
   renderDailyQuoteWidget: renderDailyQuoteWidget,
