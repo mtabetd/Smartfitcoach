@@ -818,6 +818,65 @@ function renderObjectif(p) {
  // No Continue button needed - cards auto-navigate
 }
 
+// ─── ESTIMATION CALORIQUE PAR SEANCE ───
+// Formule MET : kcal = MET x poids_kg x duree_heures (Ainsworth 2011)
+function estimateKcal(sportType, level, durationMins) {
+ var MET_VALUES = {
+  crossfit: { scaled: 7, rx: 9, rx_plus: 12, 'default': 9 },
+  running: { debutant: 7, intermediaire: 9, avance: 11, elite: 12, 'default': 9 },
+  triathlon: { beginner: 8, intermediate: 10, advanced: 12, elite: 13, 'default': 10 },
+  calisthenics: { debutant: 4, intermediaire: 6, avance: 8, elite: 9, 'default': 6 },
+  cycling: { debutant: 6, intermediaire: 8, avance: 10, elite: 12, 'default': 8 },
+  hyrox: { debutant: 9, intermediaire: 11, avance: 13, elite: 14, 'default': 11 },
+  muscu: { debutant: 4, intermediaire: 5, avance: 6, elite: 7, 'default': 5 },
+  yoga: { debutant: 2.5, intermediaire: 3, avance: 4, elite: 4, 'default': 3 },
+  padel: { debutant: 6, intermediaire: 8, avance: 9, elite: 10, 'default': 8 },
+  golf: { debutant: 3.5, intermediaire: 4, avance: 4.5, elite: 5, 'default': 4 }
+ };
+ var SESSION_DURATION_DEFAULTS = {
+  crossfit: { scaled: 60, rx: 75, rx_plus: 90 },
+  running: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 },
+  triathlon: { beginner: 75, intermediate: 90, advanced: 105, elite: 120 },
+  calisthenics: { debutant: 50, intermediaire: 65, avance: 80, elite: 90 },
+  cycling: { debutant: 60, intermediaire: 75, avance: 90, elite: 120 },
+  hyrox: { debutant: 60, intermediaire: 75, avance: 90, elite: 105 },
+  muscu: { debutant: 50, intermediaire: 60, avance: 75, elite: 90 },
+  yoga: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 },
+  padel: { debutant: 60, intermediaire: 75, avance: 90, elite: 90 },
+  golf: { debutant: 90, intermediaire: 120, avance: 150, elite: 180 }
+ };
+ var met = 8;
+ if (MET_VALUES[sportType]) {
+  met = MET_VALUES[sportType][level] || MET_VALUES[sportType]['default'] || 8;
+ }
+ var poids = parseFloat(S.weight) || 75;
+ var defaultDur = SESSION_DURATION_DEFAULTS[sportType] ? (SESSION_DURATION_DEFAULTS[sportType][level] || 60) : 60;
+ var dureeMin = durationMins || defaultDur;
+ var duree = dureeMin / 60;
+ return Math.round(met * poids * duree);
+}
+
+// Creer une carte estimation calorique pour les programmes sport
+function buildKcalCard(kcal, durationMins) {
+  var dureeStr = durationMins ? (durationMins + ' min') : '--';
+  var kcalCard = h('div', {style: 'border:1px solid var(--border);background:var(--ivory2,#F4F4F0);padding:16px 20px;margin-bottom:20px;display:flex;align-items:stretch;gap:0'});
+
+  var leftCol = h('div', {style: 'flex:1;padding-right:20px'});
+  leftCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Estimation séance'));
+  leftCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:26px;font-style:italic;color:var(--black);line-height:1'}, '~' + kcal + ' kcal'));
+  kcalCard.appendChild(leftCol);
+
+  var divider = h('div', {style: 'width:1px;background:var(--border);flex-shrink:0'});
+  kcalCard.appendChild(divider);
+
+  var rightCol = h('div', {style: 'padding-left:20px;display:flex;flex-direction:column;justify-content:center'});
+  rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Durée'));
+  rightCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:26px;font-style:italic;color:var(--black);line-height:1'}, dureeStr));
+  kcalCard.appendChild(rightCol);
+
+  return kcalCard;
+}
+
 // ─── STEP 20: QUESTIONNAIRE MÉDICAL MUSCU ───
 function renderMuscuMedicalQ(p) {
  var med = S.muscuMedical;
@@ -1727,8 +1786,148 @@ function renderCFCalendar(p) {
  p.appendChild(backBtn2);
 }
 
+// ─── WELLNESS CHECKIN ───
+function renderWellnessCheckin(p, onComplete) {
+ var state = { sleep: 0, muscles: '', energy: '' };
+
+ p.appendChild(h('div', {'class': 'eyebrow'}, 'Bilan de forme'));
+ p.appendChild(h('h1', {html: 'Comment<br><em>vous sentez-vous ?</em>'}));
+ p.appendChild(h('p', {'class': 'subtitle'}, 'Quelques questions pour adapter votre seance du jour.'));
+
+ // Question 1 — Sommeil
+ var q1 = h('div', {style: 'margin-bottom:24px'});
+ q1.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, 'Qualite du sommeil'));
+ var sleepLabels = ['Tres mauvais', 'Mauvais', 'Moyen', 'Bon', 'Excellent'];
+ var sleepBtns = [];
+ var sleepRow = h('div', {style: 'display:flex;gap:6px;flex-wrap:wrap'});
+ sleepLabels.forEach(function(label, i) {
+  var val = i + 1;
+  var btn = h('div', {'class': 'sel-card', style: 'flex:1;min-width:56px;text-align:center;cursor:pointer;padding:10px 4px', onclick: function() {
+   state.sleep = val;
+   sleepBtns.forEach(function(b) { b.className = 'sel-card'; });
+   btn.className = 'sel-card on';
+   updateStartBtn();
+  }});
+  btn.appendChild(h('div', {style: 'font-size:13px;font-family:Georgia,serif;margin-bottom:2px'}, String(val)));
+  btn.appendChild(h('div', {style: 'font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--grey)'}, label));
+  sleepBtns.push(btn);
+  sleepRow.appendChild(btn);
+ });
+ q1.appendChild(sleepRow);
+ p.appendChild(q1);
+
+ // Question 2 — Muscles
+ var q2 = h('div', {style: 'margin-bottom:24px'});
+ q2.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, 'Etat musculaire'));
+ var muscleOpts = [['frais', 'Frais'], ['courbatures', 'Legeres courbatures'], ['douleurs', 'Douleurs reelles']];
+ var muscleBtns = [];
+ var muscleRow = h('div', {style: 'display:flex;gap:6px;flex-wrap:wrap'});
+ muscleOpts.forEach(function(opt) {
+  var val = opt[0], label = opt[1];
+  var btn = h('div', {'class': 'sel-card', style: 'flex:1;text-align:center;cursor:pointer;padding:10px 4px', onclick: function() {
+   state.muscles = val;
+   muscleBtns.forEach(function(b) { b.className = 'sel-card'; });
+   btn.className = 'sel-card on';
+   updateStartBtn();
+  }});
+  btn.appendChild(h('div', {style: 'font-size:9px;letter-spacing:1px;text-transform:uppercase'}, label));
+  muscleBtns.push(btn);
+  muscleRow.appendChild(btn);
+ });
+ q2.appendChild(muscleRow);
+ p.appendChild(q2);
+
+ // Question 3 — Energie
+ var q3 = h('div', {style: 'margin-bottom:24px'});
+ q3.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, 'Niveau d\'energie'));
+ var energyOpts = [['bas', 'Basse'], ['moyen', 'Moyenne'], ['haut', 'Haute']];
+ var energyBtns = [];
+ var energyRow = h('div', {style: 'display:flex;gap:6px;flex-wrap:wrap'});
+ energyOpts.forEach(function(opt) {
+  var val = opt[0], label = opt[1];
+  var btn = h('div', {'class': 'sel-card', style: 'flex:1;text-align:center;cursor:pointer;padding:10px 4px', onclick: function() {
+   state.energy = val;
+   energyBtns.forEach(function(b) { b.className = 'sel-card'; });
+   btn.className = 'sel-card on';
+   updateStartBtn();
+  }});
+  btn.appendChild(h('div', {style: 'font-size:9px;letter-spacing:1px;text-transform:uppercase'}, label));
+  energyBtns.push(btn);
+  energyRow.appendChild(btn);
+ });
+ q3.appendChild(energyRow);
+ p.appendChild(q3);
+
+ // Bouton Commencer
+ var startBtn = h('button', {'class': 'btn-primary', style: 'width:100%;opacity:0.4;pointer-events:none', onclick: function() {
+  var today = new Date().toISOString().slice(0, 10);
+  S.todayWellness = { date: today, sleep: state.sleep, muscles: state.muscles, energy: state.energy };
+  if (onComplete) onComplete();
+ }}, 'Commencer la seance');
+ p.appendChild(startBtn);
+
+ function updateStartBtn() {
+  if (state.sleep && state.muscles && state.energy) {
+   startBtn.style.opacity = '1';
+   startBtn.style.pointerEvents = 'auto';
+  }
+ }
+}
+
+function getWellnessAdaptation() {
+ var w = S.todayWellness || {};
+ var score = 0;
+ if (w.sleep <= 2) score -= 2;
+ else if (w.sleep >= 4) score += 1;
+ if (w.muscles === 'douleurs') score -= 3;
+ else if (w.muscles === 'courbatures') score -= 1;
+ if (w.energy === 'bas') score -= 2;
+ else if (w.energy === 'haut') score += 1;
+
+ if (score <= -3) return { level: 'recovery', label: 'Seance recuperation recommandee', color: '#C0392B', advice: 'Votre etat de forme necessite une seance legere. Intensite reduite de 40%.' };
+ if (score <= -1) return { level: 'reduced', label: 'Intensite reduite', color: '#E67E22', advice: 'Legere fatigue detectee. Intensite reduite de 20%. Ecoutez votre corps.' };
+ if (score >= 2) return { level: 'peak', label: 'Forme optimale', color: '#27AE60', advice: 'Excellent etat de forme. Vous pouvez pousser sur les sets lourds.' };
+ return { level: 'normal', label: 'Forme correcte', color: '#1A3A6A', advice: 'Bonne seance en perspective. Respectez les temps de repos.' };
+}
+
+function appendWellnessBanner(p) {
+  var adapt = getWellnessAdaptation();
+  // Map level to CSS variables
+  var colorMap = {
+    'peak':     { borderColor: 'var(--green,#1A4A1A)',   textColor: 'var(--green,#1A4A1A)',   bg: 'var(--greenbg,rgba(26,74,26,.06))' },
+    'normal':   { borderColor: 'var(--blue,#1A3A6A)',    textColor: 'var(--blue,#1A3A6A)',    bg: 'var(--bluebg,rgba(26,58,106,.06))' },
+    'reduced':  { borderColor: 'var(--orange,#6A4A1A)',  textColor: 'var(--orange,#6A4A1A)',  bg: 'var(--orangebg,rgba(106,74,26,.06))' },
+    'recovery': { borderColor: 'var(--red,#5A1010)',     textColor: 'var(--red,#5A1010)',     bg: 'var(--redbg,rgba(90,16,16,.06))' }
+  };
+  var cm = colorMap[adapt.level] || colorMap['normal'];
+
+  var banner = h('div', {style: 'border-left:2px solid ' + cm.borderColor + ';padding:14px 20px;background:' + cm.bg + ';margin-bottom:20px;border-radius:0 2px 2px 0'});
+
+  var labelEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:' + cm.textColor + ';margin-bottom:6px'}, adapt.label);
+  banner.appendChild(labelEl);
+
+  var adviceEl = h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:10px'}, adapt.advice);
+  banner.appendChild(adviceEl);
+
+  var rebtn = h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey3,#9A9A90);cursor:pointer;transition:color 0.2s ease',
+    onclick: function() { S.todayWellness = null; window.render(); }
+  }, '↺ Refaire le bilan');
+  rebtn.onmouseenter = function() { this.style.color = 'var(--black,#0A0A09)'; };
+  rebtn.onmouseleave = function() { this.style.color = 'var(--grey3,#9A9A90)'; };
+  banner.appendChild(rebtn);
+
+  p.appendChild(banner);
+}
+
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
+ var today = new Date().toISOString().slice(0, 10);
+ var _w = S.todayWellness || {};
+ if (!_w.date || _w.date !== today) {
+  renderWellnessCheckin(p, function() { window.render(); });
+  return;
+ }
  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
  if (!S.cfProgress || typeof S.cfProgress !== 'object') S.cfProgress = {};
  // Guard: cfCurrentDay bounds
@@ -1770,6 +1969,8 @@ function renderCrossfitProgram(p) {
  p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
  var levelObj = (window.CROSSFIT_LEVELS || []).find(function(l) { return l.id === S.crossfitLevel; });
  p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' jours/semaine \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '') + ' \u2014 Inspir\u00E9 Games Athletes Athletes'));
+
+ appendWellnessBanner(p);
 
  // ─── BIENVENUE SCALED / DÉBUTANT ───
  // Afficher un message d'accueil et un CTA 1RM uniquement pour les nouveaux utilisateurs scaled sans 1RM définis
@@ -1830,6 +2031,15 @@ function renderCrossfitProgram(p) {
 
  // ─── STRENGTH GRADE ───
  if (window.renderStrengthGrade) renderStrengthGrade(p);
+
+ // ─── ESTIMATION CALORIQUE CROSSFIT ───
+ (function() {
+  var cfLevel = S.crossfitLevel || 'rx';
+  var SESSION_DUR_CF = { scaled: 60, rx: 75, rx_plus: 90 };
+  var cfDur = SESSION_DUR_CF[cfLevel] || 75;
+  var cfKcal = estimateKcal('crossfit', cfLevel, cfDur);
+  p.appendChild(buildKcalCard(cfKcal, cfDur));
+ }());
 
  // ─── WEEK NAVIGATION ───
  var weekNav = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0'});
@@ -3508,6 +3718,12 @@ function calcSessionKcal(exercises, durationMin) {
 }
 
 function renderMusculationProgram(p) {
+ var today = new Date().toISOString().slice(0, 10);
+ var _w = S.todayWellness || {};
+ if (!_w.date || _w.date !== today) {
+  renderWellnessCheckin(p, function() { window.render(); });
+  return;
+ }
  if (!S.sportProgram || !S.sportProgram.length) { S.sportProgram = generateSportProgram(); S.selectedSportDay = 0; }
 
  // Load saved musculation weights from localStorage
@@ -3559,6 +3775,8 @@ function renderMusculationProgram(p) {
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
+
+ appendWellnessBanner(p);
 
  // CS-01: Bannière charges estimées si profil de force non renseigné
  if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
@@ -3827,6 +4045,15 @@ function renderMusculationProgram(p) {
  cafTip.appendChild(h('span', {}, cafDose + 'mg 30-60 min avant la s\u00e9ance'));
  p.appendChild(cafTip);
  }
+
+ // ─── ESTIMATION CALORIQUE MUSCU ───
+ (function() {
+  var muscuLevel = S.sportLevel || 'intermediaire';
+  var SESSION_DUR_MUSCU = { debutant: 50, intermediaire: 60, avance: 75, elite: 90 };
+  var muscuDur = SESSION_DUR_MUSCU[muscuLevel] || 60;
+  var muscuKcal = estimateKcal('muscu', muscuLevel, muscuDur);
+  p.appendChild(buildKcalCard(muscuKcal, muscuDur));
+ }());
 
  // Day tabs
  var tabs = h('div', {'class': 'day-tabs'});
@@ -4837,6 +5064,12 @@ function renderRunningConfig(p) {
 
 // ─── STEP 8: RUNNING PROGRAM ───
 function renderRunningProgram(p) {
+ var today = new Date().toISOString().slice(0, 10);
+ var _w = S.todayWellness || {};
+ if (!_w.date || _w.date !== today) {
+  renderWellnessCheckin(p, function() { window.render(); });
+  return;
+ }
  if (!S.runningProgram || S.runningProgram.length === 0) {
  var goalObj = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
  if (typeof window.generateRunningProgram === 'function') S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
@@ -4860,6 +5093,8 @@ function renderRunningProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: (goalObj2 ? goalObj2.name : 'Running') + '<br><em>Plan</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, totalWeeks + ' semaines · ' + S.runningDays + ' jours/semaine · Niveau ' + (levelObj ? levelObj.name : '')));
+
+ appendWellnessBanner(p);
 
  // Week navigation
  var weekNav = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0'});
@@ -4885,6 +5120,15 @@ function renderRunningProgram(p) {
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:6px;font-weight:bold'}, ' Affûtage — gardez l\'intensité, réduisez le volume'));
  }
  p.appendChild(infoCard);
+
+ // ─── ESTIMATION CALORIQUE RUNNING ───
+ (function() {
+  var runLevel = S.runningLevel || 'intermediaire';
+  var SESSION_DUR_RUN = { debutant: 45, intermediaire: 60, avance: 75, elite: 90 };
+  var runDur = SESSION_DUR_RUN[runLevel] || 60;
+  var runKcal = estimateKcal('running', runLevel, runDur);
+  p.appendChild(buildKcalCard(runKcal, runDur));
+ }());
 
  // Day tabs
  var sessions = currentWeekData.sessions;
@@ -5051,6 +5295,12 @@ function renderHyroxConfig(p) {
 
 // ─── STEP 10: HYROX PROGRAM ───
 function renderHyroxProgram(p) {
+ var today = new Date().toISOString().slice(0, 10);
+ var _w = S.todayWellness || {};
+ if (!_w.date || _w.date !== today) {
+  renderWellnessCheckin(p, function() { window.render(); });
+  return;
+ }
  // Guard: si config non remplie, rediriger vers la config
  if (!S.hyroxLevel || !S.hyroxGoal) { S.sStep = 9; window.render(); return; }
  if (!S.hyroxProgram || S.hyroxProgram.length === 0) {
@@ -5075,6 +5325,8 @@ function renderHyroxProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme Hyrox'));
  p.appendChild(h('h1', {html: 'Préparation<br><em>12 semaines</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Phase ' + currentWeekData.phase + ' · ' + (goalObj ? goalObj.name : '') + ' · ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '')));
+
+ appendWellnessBanner(p);
 
  // Competition week banner
  if (S.hyroxWeek === 12) {
@@ -5105,6 +5357,15 @@ function renderHyroxProgram(p) {
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#6A4A1A;margin-top:6px;font-weight:bold'}, ' Semaine de décharge'));
  }
  p.appendChild(infoCard);
+
+ // ─── ESTIMATION CALORIQUE HYROX ───
+ (function() {
+  var hyroxLevel = S.hyroxLevel || 'intermediaire';
+  var SESSION_DUR_HYROX = { debutant: 60, intermediaire: 75, avance: 90, elite: 105 };
+  var hyroxDur = SESSION_DUR_HYROX[hyroxLevel] || 75;
+  var hyroxKcal = estimateKcal('hyrox', hyroxLevel, hyroxDur);
+  p.appendChild(buildKcalCard(hyroxKcal, hyroxDur));
+ }());
 
  // Day tabs
  var sessions = currentWeekData.sessions;
@@ -5593,6 +5854,12 @@ function renderTriathlonConfig(p) {
 
 // ─── STEP 18: TRIATHLON PROGRAM ───
 function renderTriathlonProgram(p) {
+ var today = new Date().toISOString().slice(0, 10);
+ var _w = S.todayWellness || {};
+ if (!_w.date || _w.date !== today) {
+  renderWellnessCheckin(p, function() { window.render(); });
+  return;
+ }
  if (!S.triathlonProgram || !S.triathlonProgram.length) {
   var triopts2 = {
    swimPace: S.triathlonSwimPace || null,
@@ -5628,6 +5895,8 @@ function renderTriathlonProgram(p) {
  var subtitleParts = [totalWeeks + ' semaines', (levelObj ? levelObj.name : ''), '80/20', 'Méthode Jan Frodeno'];
  if (program[0] && program[0].raceDate) { try { var rdDisp = new Date(program[0].raceDate); subtitleParts.unshift('Course : ' + rdDisp.toLocaleDateString('fr-FR', {day:'numeric',month:'short',year:'numeric'})); } catch(e) {} }
  p.appendChild(h('p', {'class': 'subtitle'}, subtitleParts.join(' · ')));
+
+ appendWellnessBanner(p);
 
  // ── Zones de référence (si allures renseignées) ──
  var zref = program[0] && program[0].zoneRef;
@@ -5679,6 +5948,28 @@ function renderTriathlonProgram(p) {
  if (weekData.isDeload) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#6A4A1A;margin-top:6px;font-weight:bold'}, ' Semaine de récupération — volume réduit'));
  if (weekData.isTaper) phaseCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:6px;font-weight:bold'}, ' Affûtage — Volume réduit, intensité maintenue'));
  p.appendChild(phaseCard);
+
+ // ─── ESTIMATION CALORIQUE TRIATHLON ───
+ (function() {
+  var triLevel = S.triathlonLevel || 'intermediate';
+  // Additionner les durees swim + bike + run de la semaine courante
+  var triSessions = weekData.sessions || [];
+  var totalTriMins = 0;
+  triSessions.forEach(function(ts) {
+   if (ts.durationMins) {
+    totalTriMins += ts.durationMins;
+   } else if (ts.duration && typeof ts.duration === 'string') {
+    var m = ts.duration.match(/(\d+)\s*min/i);
+    var h2 = ts.duration.match(/(\d+)\s*h/i);
+    if (m) totalTriMins += parseInt(m[1]);
+    if (h2) totalTriMins += parseInt(h2[1]) * 60;
+   }
+  });
+  var SESSION_DUR_TRI = { beginner: 75, intermediate: 90, advanced: 105, elite: 120 };
+  var triDur = totalTriMins > 0 ? Math.round(totalTriMins / Math.max(1, triSessions.length)) : (SESSION_DUR_TRI[triLevel] || 90);
+  var triKcal = estimateKcal('triathlon', triLevel, triDur);
+  p.appendChild(buildKcalCard(triKcal, triDur));
+ }());
 
  // ── Tabs jours ──
  var sessions = weekData.sessions || [];
@@ -6267,6 +6558,12 @@ function renderCyclingOnboarding(p) {
 
 // ─── STEP 23: CYCLISME PROGRAMME ───
 function renderCyclingProgram(p) {
+ var today = new Date().toISOString().slice(0, 10);
+ var _w = S.todayWellness || {};
+ if (!_w.date || _w.date !== today) {
+  renderWellnessCheckin(p, function() { window.render(); });
+  return;
+ }
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
  if (!S.cyclingPlan || !S.cyclingPlan.length) {
@@ -6310,6 +6607,8 @@ function renderCyclingProgram(p) {
  (ftpTarget ? ' \u2192 cible : ~' + ftpTarget + 'W' : '') +
  (speedTarget ? ' · Vitesse cible : ~' + speedTarget + ' km/h' : '');
  p.appendChild(h('p', {'class': 'subtitle'}, infoLine));
+
+ appendWellnessBanner(p);
 
  var med = S.muscuMedical || {};
  var warnings = [];
@@ -6363,6 +6662,15 @@ function renderCyclingProgram(p) {
  ftpBox.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.6'}, 'Effectuez un effort maximal de 20 minutes en régime stable. Votre FTP estimée ≈ puissance moyenne sur 20 min × 0,95. Renseignez-la dans la configuration pour afficher vos zones personnalisées.'));
  p.appendChild(ftpBox);
  }
+
+ // ─── ESTIMATION CALORIQUE CYCLING ───
+ (function() {
+  var cycLevel = S.cyclingLevel || 'intermediaire';
+  var SESSION_DUR_CYC = { debutant: 60, intermediaire: 75, avance: 90, elite: 120 };
+  var cycDur = SESSION_DUR_CYC[cycLevel] || 75;
+  var cycKcal = estimateKcal('cycling', cycLevel, cycDur);
+  p.appendChild(buildKcalCard(cycKcal, cycDur));
+ }());
 
  var sessions = weekData.sessions || [];
  if (S.selectedCyclingDay < 0 || S.selectedCyclingDay >= sessions.length) S.selectedCyclingDay = 0;
@@ -6590,6 +6898,12 @@ function renderCalisthenicsOnboarding(p) {
 
 // ─── STEP 25: CALISTHENICS PROGRAM ───
 function renderCalisthenicsProgram(content) {
+ var today = new Date().toISOString().slice(0, 10);
+ var _w = S.todayWellness || {};
+ if (!_w.date || _w.date !== today) {
+  renderWellnessCheckin(content, function() { window.render(); });
+  return;
+ }
  if (!S.calisthenicsLevel) { S.sStep = 24; window.render(); return; }
  var skills = Array.isArray(S.calisthenicsGoal) ? S.calisthenicsGoal : [];
  var level = S.calisthenicsLevel || 'debutant';
@@ -6629,6 +6943,8 @@ function renderCalisthenicsProgram(content) {
  headerCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey3)'}, 'Equipement: ' + equipStr + ' | Pull-ups: ' + pullups + ' | Push-ups: ' + pushups + ' | Dips: ' + dips));
  headerCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey3);margin-top:2px'}, planData.totalWeeks + ' semaines de programme'));
  content.appendChild(headerCard);
+
+ appendWellnessBanner(content);
 
  // ── PREGNANCY WARNING ──
  var _pregCalisth = getPregnancySportWarning();
@@ -6696,6 +7012,15 @@ function renderCalisthenicsProgram(content) {
   });
   content.appendChild(skillsCard);
  }
+
+ // ─── ESTIMATION CALORIQUE CALISTHENICS ───
+ (function() {
+  var calisthLevel = S.calisthenicsLevel || 'debutant';
+  var SESSION_DUR_CALISTH = { debutant: 50, intermediaire: 65, avance: 80, elite: 90 };
+  var calisthDur = SESSION_DUR_CALISTH[calisthLevel] || 60;
+  var calisthKcal = estimateKcal('calisthenics', calisthLevel, calisthDur);
+  content.appendChild(buildKcalCard(calisthKcal, calisthDur));
+ }());
 
  // ── WEEKLY PROGRAM NAVIGATION ──
  var currentWeek = S.calisthCurrentWeek || 1;

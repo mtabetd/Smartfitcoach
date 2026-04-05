@@ -294,9 +294,11 @@ window.DASHBOARD = {
 
     var S = window.S || {};
 
-    /* ─── WELCOME SCREEN: afficher uniquement si weekPlan non généré (jour 0 / setup incomplet) ─── */
+    /* ─── WELCOME SCREEN: afficher uniquement si onboarding non complété ─── */
     var hasPlan = Array.isArray(S.weekPlan) && S.weekPlan.length > 0;
-    if (!hasPlan) {
+    // Returning sport user (a completed sport onboarding) → show dashboard even without weekPlan
+    var hasProfile = !!(S.sex || S.goal || S.sportType || S.sStep >= 20);
+    if (!hasPlan && !hasProfile) {
       renderWelcomeScreen(container);
       return;
     }
@@ -313,6 +315,138 @@ window.DASHBOARD = {
     root.appendChild(h('h1', 'dash-greeting', greeting));
     var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
     root.appendChild(h('p', 'dash-date', dateStr));
+
+    /* ═══ SPORT DU JOUR ═══ */
+    (function() {
+      var todayIdx = now.getDay(); // 0=dim, 1=lun, ..., 6=sam
+      // weekPlan[0]=lundi ... weekPlan[6]=dimanche
+      var planIdx = todayIdx === 0 ? 6 : todayIdx - 1;
+      var sportType = S.sportType || '';
+      var sportLabels = {
+        crossfit: 'Cross Training', running: 'Running', triathlon: 'Triathlon',
+        calisthenics: 'Callisthenie', cycling: 'Cyclisme', hyrox: 'Hyrox',
+        muscu: 'Musculation', yoga: 'Yoga', padel: 'Padel', golf: 'Golf'
+      };
+      var sportLabel = sportLabels[sportType] || sportType;
+      // Detect rest day from weekPlan structure (check if session is empty/rest)
+      var todayPlanDay = Array.isArray(S.weekPlan) && S.weekPlan[planIdx] ? S.weekPlan[planIdx] : null;
+      var isRestDay = todayPlanDay && todayPlanDay.type === 'rest';
+      if (sportType && !isRestDay) {
+        // Calcul calories estimées (MET × poids × durée)
+        var sportLevel = S.crossfitLevel || S.runningLevel || S.hyroxLevel || S.triathlonLevel || S.cyclingLevel || S.calisthenicsLevel || S.sportLevel || 'intermediaire';
+        var dashKcal = (typeof window.estimateKcal === 'function') ? window.estimateKcal(sportType, sportLevel, null) : 0;
+        var dashMET = { crossfit: { scaled: 7, rx: 9, rx_plus: 12 }, running: { debutant: 7, intermediaire: 9, avance: 11, elite: 12 }, triathlon: { beginner: 8, intermediate: 10, advanced: 12, elite: 13 }, calisthenics: { debutant: 4, intermediaire: 6, avance: 8, elite: 9 }, cycling: { debutant: 6, intermediaire: 8, avance: 10, elite: 12 }, hyrox: { debutant: 9, intermediaire: 11, avance: 13, elite: 14 }, muscu: { debutant: 4, intermediaire: 5, avance: 6, elite: 7 }, yoga: { debutant: 2.5, intermediaire: 3, avance: 4, elite: 4 }, padel: { debutant: 6, intermediaire: 8, avance: 9, elite: 10 }, golf: { debutant: 3.5, intermediaire: 4, avance: 4.5, elite: 5 } };
+        var dashDurMap = { crossfit: { scaled: 60, rx: 75, rx_plus: 90, intermediaire: 75 }, running: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 }, triathlon: { beginner: 75, intermediate: 90, advanced: 105, elite: 120, intermediaire: 90 }, calisthenics: { debutant: 50, intermediaire: 65, avance: 80, elite: 90 }, cycling: { debutant: 60, intermediaire: 75, avance: 90, elite: 120 }, hyrox: { debutant: 60, intermediaire: 75, avance: 90, elite: 105 }, muscu: { debutant: 50, intermediaire: 60, avance: 75, elite: 90 }, yoga: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 }, padel: { debutant: 60, intermediaire: 75, avance: 90, elite: 90 }, golf: { debutant: 90, intermediaire: 120, avance: 150, elite: 180 } };
+        if (!dashKcal && dashMET[sportType]) {
+          var dashMetVal = dashMET[sportType][sportLevel] || dashMET[sportType]['intermediaire'] || 8;
+          var dashDurSport = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevel] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
+          var dashPoids = parseFloat(S.weight) || 75;
+          dashKcal = Math.round(dashMetVal * dashPoids * (dashDurSport / 60));
+        }
+        var dashDurFinal = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevel] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
+        var sportCard = document.createElement('div');
+        sportCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:24px 20px;margin-bottom:16px;cursor:pointer;transition:all 0.25s ease;border-left:3px solid var(--black,#0A0A09);';
+
+        sportCard.onmouseenter = function() {
+          this.style.background = 'var(--black,#0A0A09)';
+          this.style.borderColor = 'var(--black,#0A0A09)';
+          this.style.borderLeftColor = 'var(--black,#0A0A09)';
+          var sub = this.querySelector('.sport-card-sub');
+          if (sub) sub.style.color = 'rgba(250,249,246,0.6)';
+          var label = this.querySelector('.sport-card-label');
+          if (label) label.style.color = 'rgba(250,249,246,0.5)';
+          var title = this.querySelector('.sport-card-title');
+          if (title) title.style.color = 'var(--ivory,#FAF9F6)';
+          var cta = this.querySelector('.sport-card-cta');
+          if (cta) { cta.style.background = 'var(--ivory,#FAF9F6)'; cta.style.color = 'var(--black,#0A0A09)'; }
+        };
+        sportCard.onmouseleave = function() {
+          this.style.background = 'var(--ivory2,#F4F4F0)';
+          this.style.borderColor = 'var(--border,#D8D8D0)';
+          this.style.borderLeftColor = 'var(--black,#0A0A09)';
+          var sub = this.querySelector('.sport-card-sub');
+          if (sub) sub.style.color = 'var(--grey,#6B6B65)';
+          var label = this.querySelector('.sport-card-label');
+          if (label) label.style.color = 'var(--grey,#6B6B65)';
+          var title = this.querySelector('.sport-card-title');
+          if (title) title.style.color = 'var(--black,#0A0A09)';
+          var cta = this.querySelector('.sport-card-cta');
+          if (cta) { cta.style.background = 'var(--black,#0A0A09)'; cta.style.color = 'var(--ivory,#FAF9F6)'; }
+        };
+        sportCard.innerHTML =
+          '<div class="sport-card-label" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease">Séance du jour</div>' +
+          '<div class="sport-card-title" style="font-family:Georgia,serif;font-size:22px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:' + (dashKcal > 0 ? '6px' : '20px') + ';line-height:1.2;transition:color 0.25s ease">' + sportLabel + '</div>' +
+          (dashKcal > 0 ? '<div class="sport-card-sub" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:20px;letter-spacing:1px;transition:color 0.25s ease">~' + dashKcal + ' kcal · ' + dashDurFinal + ' min</div>' : '') +
+          '<div class="sport-card-cta" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:12px 20px;display:inline-block;border-radius:2px;transition:all 0.25s ease">Commencer la séance</div>';
+        sportCard.addEventListener('click', function() {
+          if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport');
+        });
+        root.appendChild(sportCard);
+      } else if (isRestDay) {
+        var restCard = document.createElement('div');
+        restCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:20px;margin-bottom:16px;border-left:2px solid var(--border,#D8D8D0);';
+        restCard.innerHTML =
+          '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Aujourd\'hui</div>' +
+          '<div style="font-family:Georgia,serif;font-size:18px;font-style:italic;color:var(--grey,#6B6B65)">Journée de récupération</div>' +
+          '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-top:6px;letter-spacing:0.5px">Repos actif · Mobilité · Hydratation</div>';
+        root.appendChild(restCard);
+      }
+    })();
+
+    /* ═══ NUTRITION CONTEXTUELLE ═══ */
+    (function() {
+      var hour = now.getHours();
+      var mealSlot, mealLabel;
+      if (hour >= 6 && hour < 10) { mealSlot = 'breakfast'; mealLabel = 'Petit-dejeuner'; }
+      else if (hour >= 11 && hour < 14) { mealSlot = 'lunch'; mealLabel = 'Dejeuner'; }
+      else if (hour >= 14 && hour < 18) { mealSlot = 'snack'; mealLabel = 'Collation'; }
+      else if (hour >= 18) { mealSlot = 'dinner'; mealLabel = 'Diner ce soir'; }
+      else { mealSlot = null; mealLabel = null; }
+
+      if (!mealSlot) return;
+
+      var todayIdx2 = now.getDay();
+      var planIdx2 = todayIdx2 === 0 ? 6 : todayIdx2 - 1;
+      var todayPlan2 = Array.isArray(S.weekPlan) && S.weekPlan[planIdx2] ? S.weekPlan[planIdx2] : null;
+      var meal = todayPlan2 ? todayPlan2[mealSlot] : null;
+      if (!meal) return;
+
+      // Rehydrate meal name from recipe engine if needed
+      var mealName = meal.n || '';
+      if (!mealName && meal._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
+        try { var rf = window.RecipeEngine.findRecipe(meal._id); if (rf) mealName = rf.n || ''; } catch(e) {}
+      }
+      if (!mealName) return;
+
+      var kcal = meal.k || 0;
+      var nutCard = document.createElement('div');
+      nutCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:24px 20px;margin-bottom:16px;cursor:pointer;transition:all 0.25s ease;';
+      nutCard.onmouseenter = function() {
+        this.style.background = 'var(--black,#0A0A09)';
+        this.style.borderColor = 'var(--black,#0A0A09)';
+        this.querySelectorAll('[data-nut-label]').forEach(function(el){ el.style.color = 'rgba(250,249,246,0.5)'; });
+        this.querySelectorAll('[data-nut-title]').forEach(function(el){ el.style.color = 'var(--ivory,#FAF9F6)'; });
+        this.querySelectorAll('[data-nut-sub]').forEach(function(el){ el.style.color = 'rgba(250,249,246,0.55)'; });
+        this.querySelectorAll('[data-nut-cta]').forEach(function(el){ el.style.color = 'rgba(250,249,246,0.5)'; el.style.borderTopColor = 'rgba(250,249,246,0.15)'; });
+      };
+      nutCard.onmouseleave = function() {
+        this.style.background = 'var(--ivory2,#F4F4F0)';
+        this.style.borderColor = 'var(--border,#D8D8D0)';
+        this.querySelectorAll('[data-nut-label]').forEach(function(el){ el.style.color = 'var(--grey,#6B6B65)'; });
+        this.querySelectorAll('[data-nut-title]').forEach(function(el){ el.style.color = 'var(--black,#0A0A09)'; });
+        this.querySelectorAll('[data-nut-sub]').forEach(function(el){ el.style.color = 'var(--grey,#6B6B65)'; });
+        this.querySelectorAll('[data-nut-cta]').forEach(function(el){ el.style.color = 'var(--grey,#6B6B65)'; el.style.borderTopColor = 'var(--border,#D8D8D0)'; });
+      };
+      nutCard.innerHTML =
+        '<div data-nut-label style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease">' + mealLabel + '</div>' +
+        '<div data-nut-title style="font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.3;transition:color 0.25s ease">' + mealName + '</div>' +
+        (kcal ? '<div data-nut-sub style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:16px;letter-spacing:1px;transition:color 0.25s ease">' + kcal + ' kcal</div>' : '<div style="margin-bottom:16px"></div>') +
+        '<div data-nut-cta style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);letter-spacing:3px;text-transform:uppercase;border-top:1px solid var(--border,#D8D8D0);padding-top:12px;transition:all 0.25s ease">Voir le plan nutrition →</div>';
+      nutCard.addEventListener('click', function() {
+        if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
+      });
+      root.appendChild(nutCard);
+    })();
 
     /* ═══ BIRTHDAY BANNER ═══ */
     if (window.isBirthday && window.isBirthday()) {
