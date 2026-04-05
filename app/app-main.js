@@ -60,7 +60,8 @@ var PROFILE_KEYS = [
  'wantsDessert',
  'wheyFlavors','saladBuilder',
  'emailOptin',
- 'profilePhoto'
+ 'profilePhoto',
+ 'todayWellness'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
