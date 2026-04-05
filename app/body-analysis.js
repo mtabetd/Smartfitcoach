@@ -615,9 +615,9 @@ async function runAnalysis() {
       resultZone.appendChild(errEl2);
     }
     if (reset) reset.style.display = 'block';
+  } finally {
+    _analyzing = false;
   }
-
-  _analyzing = false;
 }
 
 // ─── BOUTON DÉCLENCHEUR (injecté dans panel Coach IA) ────────────────────────

@@ -26025,7 +26025,9 @@
       'noix': 'Fruits à coque',
       'arachide': 'Arachides',
       'cacahuete': 'Arachides',
-      'sesame': 'Sésame'
+      'sesame': 'Sésame',
+      'soy': 'Soja',
+      'soja': 'Soja'
     };
     var allergyExclusions = [];
     if (filters.allergies && filters.allergies.length) {
