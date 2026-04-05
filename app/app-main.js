@@ -15,7 +15,7 @@ window.APP_RENDER = function() {
 
 // ─── PROFILE PERSISTENCE (E-01) ───
 var PROFILE_KEYS = [
- 'sex','age','birthDate','weight','height','activity','train','sleep','medical','goal','targetWeight',
+ 'prenom','sex','age','birthDate','weight','height','activity','train','sleep','medical','goal','targetWeight',
  'mealsPerDay','eatingLocation','mealPrepTime','snacking','alcoholFreq','alcoholTypes','hydration',
  'cookLevel','whey','allergies','intolerances','regime','halal','excluded','cuisines',
  'shopFreq','shopStores','shopBudget','shopPrefs',
@@ -168,6 +168,13 @@ function loadProfile() {
  try { data = JSON.parse(raw); } catch(e2) { return; }
  }
  if (!data) return;
+ // Prototype pollution guard: reject any parsed object that carries dangerous keys
+ if (Object.prototype.hasOwnProperty.call(data, '__proto__') ||
+     Object.prototype.hasOwnProperty.call(data, 'constructor') ||
+     Object.prototype.hasOwnProperty.call(data, 'prototype')) {
+   console.warn('[loadProfile] Prototype pollution attempt detected — ignoring localStorage data');
+   return;
+ }
  PROFILE_KEYS.forEach(function(k) { if (data[k] !== undefined) S[k] = data[k]; });
  // Defensive rehydration: ensure object/array fields are never null after load
  var _objFields = ['sportFocus','bonusExercises','sessionHistory','muscuSessionLog',
@@ -176,7 +183,8 @@ function loadProfile() {
  _objFields.forEach(function(f) { if (!S[f] || typeof S[f] !== 'object' || Array.isArray(S[f])) S[f] = {}; });
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','bodyZones','strongZones','weakZones',
- 'train','supplements','wheyFlavors','alcoholTypes'];
+ 'train','supplements','wheyFlavors','alcoholTypes',
+ 'calisthenicsEquipment','calisthenicsGoal'];
  _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
  // excluded is a string (comma-separated), not an array — guard separately
  if (typeof S.excluded !== 'string') S.excluded = '';

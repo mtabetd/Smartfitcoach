@@ -3325,8 +3325,8 @@ function filterRecipes(pool,type){
         if(al==='poisson'&&(/saumon|thon|cabillaud|dorade|sardine|maquereau|poisson|anchois|merlu|truite|sole|lotte|morue/).test(ing))return false;
         if(al==='crustac\u00e9s'&&(/crevette|crustac|homard|crabe|gambas/).test(ing))return false;
         if(al==='soja'&&(/soja|tofu|edamame|tempeh|tamari|miso|natto/).test(ing))return false;
-        if(al==='lait/produits laitiers'){var dl=ing.replace(/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz|beurre de cacahu/g,'');if((/lait|fromage|yaourt|beurre|cr\u00e8me|ricotta|mozzarella|parmesan|emmental|feta|cottage|skyr|labneh|k\u00e9fir|whey/).test(dl))return false;}
-        if(al==='gluten/bl\u00e9'){var gl=ing.replace(/galette de riz|farine de riz|farine de sarrasin|p\u00e2te miso/g,'');if((/pain|bl\u00e9|farine|p\u00e2te|seigle|couscous|semoule|tortilla|wrap|naan|galette|cr\u00eape|pancake|muffin|avoine|orge|\u00e9peautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari/).test(gl))return false;} // BUG FIX : avoine (contamination croisée fréquente — AFDIAG), orge, épeautre, boulgour, seitan, kamut, sauce soja/tamari (gluten caché) manquaient
+        if(al==='lait/produits laitiers'||al==='lactose'){var dl=ing.replace(/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz|beurre de cacahu/g,'');if((/lait|fromage|yaourt|beurre|cr\u00e8me|ricotta|mozzarella|parmesan|emmental|feta|cottage|skyr|labneh|k\u00e9fir|whey/).test(dl))return false;}
+        if(al==='gluten/bl\u00e9'||al==='gluten'){var gl=ing.replace(/galette de riz|farine de riz|farine de sarrasin|p\u00e2te miso/g,'');if((/pain|bl\u00e9|farine|p\u00e2te|seigle|couscous|semoule|tortilla|wrap|naan|galette|cr\u00eape|pancake|muffin|avoine|orge|\u00e9peautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari/).test(gl))return false;} // BUG FIX : avoine (contamination croisée fréquente — AFDIAG), orge, épeautre, boulgour, seitan, kamut, sauce soja/tamari (gluten caché) manquaient; also accept 'gluten' alias
         if(al==='sésame'&&(/sésame/).test(ing))return false;
         if(al==='moutarde'&&(/moutarde/).test(ing))return false;
       }return true;

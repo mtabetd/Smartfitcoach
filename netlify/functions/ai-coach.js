@@ -82,7 +82,10 @@ function sanitizeContext(ctx) {
     'sportType', 'sportLevel', 'sportDays', 'crossfitWeek',
     'triathlonGoal', 'triathlonLevel', 'triathlonFTP',
     'calisthenicsLevel', 'wellness', 'todayNutrition',
-    'regime', 'allergies', 'excluded', 'muscuWeights'
+    'regime', 'allergies', 'excluded', 'muscuWeights',
+    'hyroxLevel', 'hyroxGoal', 'hyroxWeek',
+    'runningLevel', 'runningGoal', 'runningWeek',
+    'cyclingLevel', 'cyclingGoal'
   ];
 
   var safe = {};

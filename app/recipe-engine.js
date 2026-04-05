@@ -26013,10 +26013,25 @@
       : null;
 
     // ── Build exclusion list from filters.allergies ──
+    // Normalize legacy/short allergy keys to canonical ALLERGIES constant labels
+    var ALLERGY_ALIASES = {
+      'gluten': 'Gluten/Blé',
+      'gluten/ble': 'Gluten/Blé',
+      'oeufs': 'Oeufs',
+      'œufs': 'Oeufs',
+      'lait': 'Lait/Produits laitiers',
+      'lactose': 'Lait/Produits laitiers',
+      'fruits a coque': 'Fruits à coque',
+      'noix': 'Fruits à coque',
+      'arachide': 'Arachides',
+      'cacahuete': 'Arachides',
+      'sesame': 'Sésame'
+    };
     var allergyExclusions = [];
     if (filters.allergies && filters.allergies.length) {
       filters.allergies.forEach(function (allergyLabel) {
-        var terms = ALLERGY_INGREDIENT_MAP[allergyLabel];
+        var canonical = ALLERGY_ALIASES[allergyLabel.toLowerCase()] || allergyLabel;
+        var terms = ALLERGY_INGREDIENT_MAP[canonical] || ALLERGY_INGREDIENT_MAP[allergyLabel];
         if (terms) allergyExclusions = allergyExclusions.concat(terms);
       });
     }

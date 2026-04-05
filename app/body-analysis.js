@@ -119,7 +119,11 @@ function buildContext() {
     prenom: user && user.name ? user.name.split(' ')[0] : (S.prenom || ''),
     sex: S.sex || '', age: S.age || '', weight: S.weight || '',
     height: S.height || '', goal: S.goal || '',
-    sportType: S.sportType || '', sportLevel: S.sportLevel || ''
+    sportType: S.sportType || '', sportLevel: S.sportLevel || '',
+    triathlonFTP: S.triathlonFTP || null,
+    triathlonGoal: S.triathlonGoal || null,
+    triathlonLevel: S.triathlonLevel || null,
+    triathlonRaceDate: S.triathlonRaceDate || null
   };
 }
 

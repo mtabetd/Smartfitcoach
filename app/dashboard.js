@@ -347,19 +347,31 @@ window.DASHBOARD = {
       // Detect rest day from weekPlan structure (check if session is empty/rest)
       var todayPlanDay = Array.isArray(S.weekPlan) && S.weekPlan[planIdx] ? S.weekPlan[planIdx] : null;
       var isRestDay = todayPlanDay && todayPlanDay.type === 'rest';
+      // For triathlon users: also check current week's session by day index (triathlon REST sessions)
+      if (!isRestDay && sportType === 'triathlon' && Array.isArray(S.triathlonProgram) && S.triathlonProgram.length > 0) {
+        var triWeekIdx = Math.max(0, (S.triathlonWeek || 1) - 1);
+        var triWeekData = S.triathlonProgram[Math.min(triWeekIdx, S.triathlonProgram.length - 1)];
+        if (triWeekData && Array.isArray(triWeekData.sessions) && triWeekData.sessions[planIdx]) {
+          var triTodaySess = triWeekData.sessions[planIdx];
+          if (triTodaySess.discipline === 'rest') isRestDay = true;
+        }
+      }
       if (sportType && !isRestDay) {
         // Calcul calories estimées (MET × poids × durée)
         var sportLevel = S.crossfitLevel || S.runningLevel || S.hyroxLevel || S.triathlonLevel || S.cyclingLevel || S.calisthenicsLevel || S.sportLevel || 'intermediaire';
+        // Normalize English level keys to French for dashDurMap/dashMET lookups
+        var _LEVEL_FR_DASH = { beginner: 'debutant', intermediate: 'intermediaire', advanced: 'avance' };
+        var sportLevelFr = _LEVEL_FR_DASH[sportLevel] || sportLevel;
         var dashKcal = (typeof window.estimateKcal === 'function') ? window.estimateKcal(sportType, sportLevel, null) : 0;
-        var dashMET = { crossfit: { scaled: 7, rx: 9, rx_plus: 12 }, running: { debutant: 7, intermediaire: 9, avance: 11, elite: 12 }, triathlon: { beginner: 8, intermediate: 10, advanced: 12, elite: 13 }, calisthenics: { debutant: 4, intermediaire: 6, avance: 8, elite: 9 }, cycling: { debutant: 6, intermediaire: 8, avance: 10, elite: 12 }, hyrox: { debutant: 9, intermediaire: 11, avance: 13, elite: 14 }, muscu: { debutant: 4, intermediaire: 5, avance: 6, elite: 7 }, yoga: { debutant: 2.5, intermediaire: 3, avance: 4, elite: 4 }, padel: { debutant: 6, intermediaire: 8, avance: 9, elite: 10 }, golf: { debutant: 3.5, intermediaire: 4, avance: 4.5, elite: 5 } };
-        var dashDurMap = { crossfit: { scaled: 60, rx: 75, rx_plus: 90, intermediaire: 75 }, running: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 }, triathlon: { beginner: 75, intermediate: 90, advanced: 105, elite: 120, intermediaire: 90 }, calisthenics: { debutant: 50, intermediaire: 65, avance: 80, elite: 90 }, cycling: { debutant: 60, intermediaire: 75, avance: 90, elite: 120 }, hyrox: { debutant: 60, intermediaire: 75, avance: 90, elite: 105 }, muscu: { debutant: 50, intermediaire: 60, avance: 75, elite: 90 }, yoga: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 }, padel: { debutant: 60, intermediaire: 75, avance: 90, elite: 90 }, golf: { debutant: 90, intermediaire: 120, avance: 150, elite: 180 } };
+        var dashMET = { crossfit: { scaled: 7, inter: 8, rx: 9, rx_plus: 12 }, running: { debutant: 7, intermediaire: 9, avance: 11, elite: 12 }, triathlon: { beginner: 8, intermediate: 10, advanced: 12, elite: 13 }, calisthenics: { debutant: 4, intermediaire: 6, avance: 8, elite: 9 }, cycling: { debutant: 6, intermediaire: 8, avance: 10, elite: 12 }, hyrox: { debutant: 9, intermediaire: 11, avance: 13, elite: 14 }, muscu: { debutant: 4, intermediaire: 5, avance: 6, elite: 7 }, yoga: { debutant: 2.5, intermediaire: 3, avance: 4, elite: 4 }, padel: { debutant: 6, intermediaire: 8, avance: 9, elite: 10 }, golf: { debutant: 3.5, intermediaire: 4, avance: 4.5, elite: 5 } };
+        var dashDurMap = { crossfit: { scaled: 60, inter: 70, rx: 75, rx_plus: 90, intermediaire: 75 }, running: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 }, triathlon: { beginner: 75, intermediate: 90, advanced: 105, elite: 120, intermediaire: 90 }, calisthenics: { debutant: 50, intermediaire: 65, avance: 80, elite: 90 }, cycling: { debutant: 60, intermediaire: 75, avance: 90, elite: 120 }, hyrox: { debutant: 60, intermediaire: 75, avance: 90, elite: 105 }, muscu: { debutant: 50, intermediaire: 60, avance: 75, elite: 90 }, yoga: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 }, padel: { debutant: 60, intermediaire: 75, avance: 90, elite: 90 }, golf: { debutant: 90, intermediaire: 120, avance: 150, elite: 180 } };
         if (!dashKcal && dashMET[sportType]) {
-          var dashMetVal = dashMET[sportType][sportLevel] || dashMET[sportType]['intermediaire'] || 8;
-          var dashDurSport = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevel] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
+          var dashMetVal = dashMET[sportType][sportLevelFr] || dashMET[sportType]['intermediaire'] || 8;
+          var dashDurSport = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevelFr] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
           var dashPoids = parseFloat(S.weight) || 75;
           dashKcal = Math.round(dashMetVal * dashPoids * (dashDurSport / 60));
         }
-        var dashDurFinal = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevel] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
+        var dashDurFinal = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevelFr] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
         var sportCard = document.createElement('div');
         sportCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:24px 20px;margin-bottom:16px;cursor:pointer;transition:all 0.25s ease;border-left:3px solid var(--black,#0A0A09);';
 

@@ -821,8 +821,11 @@ function renderObjectif(p) {
 // ─── ESTIMATION CALORIQUE PAR SEANCE ───
 // Formule MET : kcal = MET x poids_kg x duree_heures (Ainsworth 2011)
 function estimateKcal(sportType, level, durationMins) {
+ // Normalise English sportLevel keys (SPORT_LEVELS ids) to French MET keys used below
+ var LEVEL_FR = { beginner: 'debutant', intermediate: 'intermediaire', advanced: 'avance', pro: 'elite' };
+ var levelNorm = LEVEL_FR[level] || level;
  var MET_VALUES = {
-  crossfit: { scaled: 7, rx: 9, rx_plus: 12, 'default': 9 },
+  crossfit: { scaled: 7, inter: 8, rx: 9, rx_plus: 12, 'default': 9 },
   running: { debutant: 7, intermediaire: 9, avance: 11, elite: 12, 'default': 9 },
   triathlon: { beginner: 8, intermediate: 10, advanced: 12, elite: 13, 'default': 10 },
   calisthenics: { debutant: 4, intermediaire: 6, avance: 8, elite: 9, 'default': 6 },
@@ -834,7 +837,7 @@ function estimateKcal(sportType, level, durationMins) {
   golf: { debutant: 3.5, intermediaire: 4, avance: 4.5, elite: 5, 'default': 4 }
  };
  var SESSION_DURATION_DEFAULTS = {
-  crossfit: { scaled: 60, rx: 75, rx_plus: 90 },
+  crossfit: { scaled: 60, inter: 70, rx: 75, rx_plus: 90 },
   running: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 },
   triathlon: { beginner: 75, intermediate: 90, advanced: 105, elite: 120 },
   calisthenics: { debutant: 50, intermediaire: 65, avance: 80, elite: 90 },
@@ -847,10 +850,11 @@ function estimateKcal(sportType, level, durationMins) {
  };
  var met = 8;
  if (MET_VALUES[sportType]) {
-  met = MET_VALUES[sportType][level] || MET_VALUES[sportType]['default'] || 8;
+  met = MET_VALUES[sportType][levelNorm] || MET_VALUES[sportType][level] || MET_VALUES[sportType]['default'] || 8;
  }
- var poids = parseFloat(S.weight) || 75;
- var defaultDur = SESSION_DURATION_DEFAULTS[sportType] ? (SESSION_DURATION_DEFAULTS[sportType][level] || 60) : 60;
+ var _rawWeight = parseFloat(S.weight);
+ var poids = (_rawWeight > 0) ? _rawWeight : 75;
+ var defaultDur = SESSION_DURATION_DEFAULTS[sportType] ? (SESSION_DURATION_DEFAULTS[sportType][levelNorm] || SESSION_DURATION_DEFAULTS[sportType][level] || 60) : 60;
  var dureeMin = durationMins || defaultDur;
  var duree = dureeMin / 60;
  return Math.round(met * poids * duree);
@@ -1073,6 +1077,7 @@ function renderChargesQuestionnaire(p) {
  var repsVal = S.muscuStrengthProfile[key + '_reps'] || 8;
  PERF_HISTORY.recordMuscuStrength(key, v, repsVal);
  }
+ if (window.GAMIFICATION) GAMIFICATION.checkMuscuBadges(S.muscuStrengthProfile);
  }; })(exDef.key)
  });
  inputWrap.appendChild(inp);
@@ -1886,12 +1891,30 @@ function renderWellnessCheckin(p, onComplete) {
 function getWellnessAdaptation() {
  var w = S.todayWellness || {};
  var score = 0;
- if (w.sleep <= 2) score -= 2;
- else if (w.sleep >= 4) score += 1;
- if (w.muscles === 'douleurs') score -= 3;
- else if (w.muscles === 'courbatures') score -= 1;
- if (w.energy === 'bas') score -= 2;
- else if (w.energy === 'haut') score += 1;
+ // sleep: UI stores numeric 1-5; normalise legacy English strings just in case
+ var sleepVal = w.sleep;
+ if (sleepVal === 'good' || sleepVal === 'bien') sleepVal = 4;
+ else if (sleepVal === 'excellent') sleepVal = 5;
+ else if (sleepVal === 'average' || sleepVal === 'moyen') sleepVal = 3;
+ else if (sleepVal === 'bad' || sleepVal === 'mauvais') sleepVal = 2;
+ else if (sleepVal === 'very_bad' || sleepVal === 'tres_mauvais') sleepVal = 1;
+ sleepVal = parseFloat(sleepVal);
+ if (!isNaN(sleepVal)) {
+  if (sleepVal <= 2) score -= 2;
+  else if (sleepVal >= 4) score += 1;
+ }
+ // muscles: UI stores 'frais' / 'courbatures' / 'douleurs'; also accept English aliases
+ var musclesVal = w.muscles;
+ if (musclesVal === 'fresh' || musclesVal === 'average' || musclesVal === 'normal') musclesVal = 'frais';
+ if (musclesVal === 'douleurs' || musclesVal === 'sore') score -= 3;
+ else if (musclesVal === 'courbatures' || musclesVal === 'doms') score -= 1;
+ // energy: UI stores 'bas' / 'moyen' / 'haut'; also accept English aliases
+ var energyVal = w.energy;
+ if (energyVal === 'high') energyVal = 'haut';
+ else if (energyVal === 'low') energyVal = 'bas';
+ else if (energyVal === 'average' || energyVal === 'medium' || energyVal === 'normal') energyVal = 'moyen';
+ if (energyVal === 'bas') score -= 2;
+ else if (energyVal === 'haut') score += 1;
 
  if (score <= -3) return { level: 'recovery', label: 'Seance recuperation recommandee', color: '#C0392B', advice: 'Votre etat de forme necessite une seance legere. Intensite reduite de 40%.' };
  if (score <= -1) return { level: 'reduced', label: 'Intensite reduite', color: '#E67E22', advice: 'Legere fatigue detectee. Intensite reduite de 20%. Ecoutez votre corps.' };
@@ -3517,6 +3540,15 @@ function saveMuscuSessionLog() {
  });
  }
  localStorage.setItem('mtd_muscu_progression_' + uid, JSON.stringify(S.muscuProgressionHistory));
+
+ // Track muscu session count for badges
+ if (window.GAMIFICATION) {
+  var sessionCount = GAMIFICATION.incrementCounter('muscu_sessions');
+  if (sessionCount >= 10) GAMIFICATION.unlockBadge('muscu_sessions_10');
+  if (sessionCount >= 50) GAMIFICATION.unlockBadge('muscu_sessions_50');
+  // Check strength profile badges on each session save
+  if (S.muscuStrengthProfile) GAMIFICATION.checkMuscuBadges(S.muscuStrengthProfile);
+ }
  } catch (e) {
  console.warn('[saveMuscuSessionLog] localStorage error:', e);
  }
@@ -5165,8 +5197,11 @@ function renderRunningProgram(p) {
  // ─── ESTIMATION CALORIQUE RUNNING ───
  (function() {
   var runLevel = S.runningLevel || 'intermediaire';
+  // Normalize English level keys to French for SESSION_DUR_RUN lookup
+  var LEVEL_FR_RUN = { beginner: 'debutant', intermediate: 'intermediaire', advanced: 'avance' };
+  var runLevelFr = LEVEL_FR_RUN[runLevel] || runLevel;
   var SESSION_DUR_RUN = { debutant: 45, intermediaire: 60, avance: 75, elite: 90 };
-  var runDur = SESSION_DUR_RUN[runLevel] || 60;
+  var runDur = SESSION_DUR_RUN[runLevelFr] || 60;
   var runKcal = estimateKcal('running', runLevel, runDur);
   p.appendChild(buildKcalCard(runKcal, runDur));
  }());
@@ -6966,7 +7001,7 @@ function renderCalisthenicsProgram(content) {
  // Generate the full plan
  var planData;
  try {
-  planData = window.generateCalisthenicsPlan(level, skills, pullups, pushups, days, equipment);
+  planData = window.generateCalisthenicsPlan(level, skills, pullups, pushups, days, equipment, dips);
  } catch(e) {
   content.appendChild(h('div', {'class': 'card'}, h('div', {style: 'color:red;font-size:13px'}, 'Erreur generation programme: ' + e.message)));
   return;
@@ -6975,6 +7010,11 @@ function renderCalisthenicsProgram(content) {
  // State for current week display
  if (!S.calisthCurrentWeek || S.calisthCurrentWeek < 1) { S.calisthCurrentWeek = 1; }
  if (S.calisthCurrentWeek > planData.totalWeeks) { S.calisthCurrentWeek = planData.totalWeeks; }
+
+ // Gamification: unlock calisthenics badges on program load
+ if (window.GAMIFICATION && window.GAMIFICATION.checkCalisthenicsBadges) {
+  window.GAMIFICATION.checkCalisthenicsBadges({ currentWeek: S.calisthCurrentWeek, pullups: pullups });
+ }
 
  // ── HEADER ──
  var headerCard = h('div', {'class': 'card', style: 'margin-bottom:16px'});

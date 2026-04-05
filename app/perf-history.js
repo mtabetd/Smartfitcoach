@@ -98,6 +98,28 @@ function recordTriathlonPace(discipline, value, unit) {
 }
 
 /**
+ * Enregistre une séance de running (distance km, durée min, allure mm:ss/km optionnelle).
+ * Liée au profil utilisateur via getUid().
+ */
+function recordRunSession(distanceKm, durationMin, paceMmss) {
+  if (!distanceKm || isNaN(distanceKm) || distanceKm <= 0) return;
+  if (!durationMin || isNaN(durationMin) || durationMin <= 0) return;
+  var paceDisplay = paceMmss || (function() {
+    var paceSec = Math.round((durationMin * 60) / distanceKm);
+    return secToMmss(paceSec);
+  }());
+  var history = loadHistory('running');
+  history.push({
+    date: todayISO(),
+    ts: Date.now(),
+    distanceKm: Math.round(distanceKm * 100) / 100,
+    durationMin: Math.round(durationMin),
+    pace: paceDisplay
+  });
+  saveHistory('running', history);
+}
+
+/**
  * Enregistre les macros journalières — une seule entrée par jour (remplace si même date).
  */
 function recordNutrition(kcal, proteins, carbs, fats) {
@@ -472,6 +494,69 @@ function _renderProgressionWidget(container) {
     }
   }
 
+  /* ── RUNNING ── */
+  var runHistory = loadHistory('running');
+  if (runHistory.length >= 1) {
+    hasData = true;
+    var secRun = document.createElement('div');
+    secRun.className = 'ph-section';
+    secRun.appendChild(createLabel('Running — Séances'));
+    var runSorted = runHistory.slice().sort(function(a, b) { return a.ts - b.ts; });
+    // Show last 3 sessions
+    var recentRuns = runSorted.slice(-3).reverse();
+    recentRuns.forEach(function(entry) {
+      var row = document.createElement('div');
+      row.className = 'ph-row';
+      var left = document.createElement('div');
+      var nameEl = document.createElement('div');
+      nameEl.className = 'ph-name';
+      nameEl.textContent = entry.date;
+      left.appendChild(nameEl);
+      var subEl = document.createElement('div');
+      subEl.className = 'ph-muscle';
+      subEl.textContent = entry.distanceKm + ' km · ' + entry.durationMin + ' min';
+      left.appendChild(subEl);
+      row.appendChild(left);
+      var right = document.createElement('div');
+      right.style.textAlign = 'right';
+      var valEl = document.createElement('div');
+      valEl.className = 'ph-val';
+      valEl.textContent = entry.pace + '/km';
+      right.appendChild(valEl);
+      row.appendChild(right);
+      secRun.appendChild(row);
+    });
+    // Distance delta vs 30 days ago
+    if (runSorted.length >= 2) {
+      var latestRun = runSorted[runSorted.length - 1];
+      var cutoff30run = Date.now() - 30 * 86400000;
+      var prevRun = null;
+      for (var ri = runSorted.length - 2; ri >= 0; ri--) {
+        if (runSorted[ri].ts <= cutoff30run) { prevRun = runSorted[ri]; break; }
+      }
+      if (!prevRun) prevRun = runSorted[0];
+      if (prevRun && prevRun !== latestRun) {
+        var distDelta = +(latestRun.distanceKm - prevRun.distanceKm).toFixed(2);
+        var summaryRow = document.createElement('div');
+        summaryRow.className = 'ph-row';
+        var sl = document.createElement('div');
+        sl.className = 'ph-name';
+        sl.textContent = 'Distance (vs 30j)';
+        summaryRow.appendChild(sl);
+        var sr = document.createElement('div');
+        var sign = distDelta >= 0 ? '+' : '';
+        var color = distDelta >= 0 ? '#27AE60' : '#C0392B';
+        var span = document.createElement('span');
+        span.style.cssText = 'font-size:11px;color:' + color + ';font-family:Helvetica Neue,Arial,sans-serif';
+        span.textContent = sign + distDelta + ' km';
+        sr.appendChild(span);
+        summaryRow.appendChild(sr);
+        secRun.appendChild(summaryRow);
+      }
+    }
+    container.appendChild(secRun);
+  }
+
   /* ── NUTRITION ── */
   var nutHistory = loadHistory('nutrition');
   if (nutHistory.length >= 2) {
@@ -611,6 +696,7 @@ window.PERF_HISTORY = {
   recordCF1RM: recordCF1RM,
   recordHyroxBenchmark: recordHyroxBenchmark,
   recordTriathlonPace: recordTriathlonPace,
+  recordRunSession: recordRunSession,
   recordNutrition: recordNutrition,
   // Migration
   migrateExistingData: migrateExistingData,

@@ -104,6 +104,27 @@ var BADGE_DEFS = [
   {id: 'first_workout', name: 'Sportif', desc: 'Premier programme sport', icon: '△', category: 'sport'},
   {id: 'exercises_20', name: 'Athlète', desc: '20 exercices consultés', icon: '△', category: 'sport'},
 
+  // Calisthenics progression badges
+  {id: 'calisth_first_session', name: 'Callisthéniste', desc: 'Premier programme callisthénie généré', icon: '◇', category: 'calisthenics'},
+  {id: 'calisth_week_4', name: 'Mois Callisthénie', desc: '4 semaines de callisthénie complétées', icon: '△', category: 'calisthenics'},
+  {id: 'calisth_week_12', name: 'Trimestriel Calisth.', desc: '12 semaines de callisthénie complétées', icon: '◆', category: 'calisthenics'},
+  {id: 'calisth_first_pullup', name: 'Première Traction', desc: 'Première traction stricte réalisée', icon: '★', category: 'calisthenics'},
+  {id: 'calisth_muscle_up', name: 'Muscle-Up', desc: 'Muscle-up strict maîtrisé', icon: '★', category: 'calisthenics'},
+
+  // Musculation PR badges
+  {id: 'bench_100', name: 'Centenaire', desc: 'Développé couché : 100 kg', icon: '◆', category: 'muscu'},
+  {id: 'bench_120', name: 'Power Chest', desc: 'Développé couché : 120 kg', icon: '◆', category: 'muscu'},
+  {id: 'squat_100', name: 'Squatteur', desc: 'Squat : 100 kg', icon: '◆', category: 'muscu'},
+  {id: 'squat_140', name: 'Jambes de Fer', desc: 'Squat : 140 kg', icon: '★', category: 'muscu'},
+  {id: 'deadlift_100', name: 'Terrasseur', desc: 'Soulevé de terre : 100 kg', icon: '◆', category: 'muscu'},
+  {id: 'deadlift_160', name: 'Force Brute', desc: 'Soulevé de terre : 160 kg', icon: '★', category: 'muscu'},
+  {id: 'overhead_70', name: 'Bras au Ciel', desc: 'Développé militaire : 70 kg', icon: '◆', category: 'muscu'},
+  {id: 'total_300', name: 'Powerlifter', desc: 'Total (bench+squat+dl) ≥ 300 kg', icon: '★', category: 'muscu'},
+  {id: 'total_400', name: 'Elite Force', desc: 'Total (bench+squat+dl) ≥ 400 kg', icon: '★', category: 'muscu'},
+  {id: 'muscu_sessions_10', name: 'Régularité Fer', desc: '10 séances muscu enregistrées', icon: '△', category: 'muscu'},
+  {id: 'muscu_sessions_50', name: 'Dédicace', desc: '50 séances muscu enregistrées', icon: '★', category: 'muscu'},
+  {id: 'first_pr', name: 'Premier PR', desc: 'Premier record personnel établi', icon: '◇', category: 'muscu'},
+
   // Photos
   {id: 'first_photo', name: 'Selfie', desc: 'Première photo de progression', icon: '□', category: 'photos'},
   {id: 'both_photos', name: 'Analyse Complète', desc: 'Photos face + dos', icon: '□', category: 'photos'}
@@ -338,6 +359,44 @@ function renderDailyQuoteWidget(container) {
   container.appendChild(widget);
 }
 
+// ─── MUSCU BADGE CHECKER ───
+// Call after each muscu session or weight update to unlock PR badges.
+// profile: { bench_press, squat, deadlift, overhead_press } in kg (1RM estimated)
+function checkMuscuBadges(profile) {
+  if (!profile) return;
+  var bench = parseFloat(profile.bench_press) || 0;
+  var squat = parseFloat(profile.squat) || 0;
+  var dl = parseFloat(profile.deadlift) || 0;
+  var ohp = parseFloat(profile.overhead_press) || 0;
+  var total = bench + squat + dl;
+
+  if (bench >= 100) unlockBadge('bench_100');
+  if (bench >= 120) unlockBadge('bench_120');
+  if (squat >= 100) unlockBadge('squat_100');
+  if (squat >= 140) unlockBadge('squat_140');
+  if (dl >= 100) unlockBadge('deadlift_100');
+  if (dl >= 160) unlockBadge('deadlift_160');
+  if (ohp >= 70) unlockBadge('overhead_70');
+  if (total >= 300) unlockBadge('total_300');
+  if (total >= 400) unlockBadge('total_400');
+  // First PR: any lift > 0
+  if (bench > 0 || squat > 0 || dl > 0 || ohp > 0) unlockBadge('first_pr');
+}
+
+// ─── CALISTHENICS BADGE CHECKER ───
+// Call when calisthenics program is generated or week advances.
+// profile: { currentWeek, pullups } from S state
+function checkCalisthenicsBadges(profile) {
+  if (!profile) return;
+  unlockBadge('calisth_first_session');
+  unlockBadge('first_workout');
+  var week = parseInt(profile.currentWeek) || 1;
+  if (week >= 4)  unlockBadge('calisth_week_4');
+  if (week >= 12) unlockBadge('calisth_week_12');
+  var pullups = parseInt(profile.pullups) || 0;
+  if (pullups > 0) unlockBadge('calisth_first_pullup');
+}
+
 // ─── PUBLIC API ───
 window.GAMIFICATION = {
   updateStreak: updateStreak,
@@ -348,6 +407,8 @@ window.GAMIFICATION = {
   incrementCounter: incrementCounter,
   getCounter: getCounter,
   showToast: showToast,
+  checkMuscuBadges: checkMuscuBadges,
+  checkCalisthenicsBadges: checkCalisthenicsBadges,
   renderBadgesPanel: renderBadgesPanel,
   renderStreakWidget: renderStreakWidget,
   renderDailyQuoteWidget: renderDailyQuoteWidget,

@@ -97,6 +97,20 @@ function buildContext() {
     ctx.calisthPullups = S.calisthPullups || 0;
     ctx.calisthPushups = S.calisthPushups || 0;
   }
+  if (S.sportType === 'hyrox') {
+    ctx.hyroxLevel = S.hyroxLevel || '';
+    ctx.hyroxGoal = S.hyroxGoal || '';
+    ctx.hyroxWeek = S.hyroxWeek || 1;
+  }
+  if (S.sportType === 'running') {
+    ctx.runningLevel = S.runningLevel || '';
+    ctx.runningGoal = S.runningGoal || '';
+    ctx.runningWeek = S.runningWeek || 1;
+  }
+  if (S.sportType === 'cycling') {
+    ctx.cyclingLevel = S.cyclingLevel || '';
+    ctx.cyclingGoal = S.cyclingGoal || '';
+  }
   if (S.musculationWeights && Object.keys(S.musculationWeights).length) {
     ctx.muscuWeights = S.musculationWeights;
   }
