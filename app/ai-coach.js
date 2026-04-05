@@ -175,7 +175,7 @@ function buildUI() {
   // Bouton flottant
   var btn = document.createElement('button');
   btn.id = 'ai-coach-btn';
-  btn.innerHTML = '<span style="font-size:14px">◆</span> Coach IA';
+  btn.innerHTML = '<span style="font-size:14px">◆</span> Smart Fit Coach';
   btn.addEventListener('click', togglePanel);
   document.body.appendChild(btn);
 
@@ -187,7 +187,7 @@ function buildUI() {
   var header = document.createElement('div');
   header.id = 'ai-coach-header';
   var headerText = document.createElement('div');
-  headerText.innerHTML = '<div id="ai-coach-header-title">Coach IA</div><div id="ai-coach-header-sub">Nutrition · Sport · Progression</div>';
+  headerText.innerHTML = '<div id="ai-coach-header-title">Smart Fit Coach</div><div id="ai-coach-header-sub">Nutrition · Sport · Progression</div>';
   var closeBtn = document.createElement('button');
   closeBtn.id = 'ai-coach-close';
   closeBtn.textContent = '×';
@@ -243,7 +243,7 @@ function appendCoachMessage(container, text) {
   wrap.className = 'ai-msg ai-msg-coach';
   var name = document.createElement('div');
   name.className = 'ai-msg-coach-name';
-  name.textContent = 'Coach IA';
+  name.textContent = 'Smart Fit Coach';
   var msg = document.createElement('div');
   msg.className = 'ai-msg-text';
   msg.textContent = text;
@@ -269,7 +269,7 @@ function appendTyping(container) {
   wrap.className = 'ai-msg ai-msg-coach';
   var name = document.createElement('div');
   name.className = 'ai-msg-coach-name';
-  name.textContent = 'Coach IA';
+  name.textContent = 'Smart Fit Coach';
   var msg = document.createElement('div');
   msg.className = 'ai-msg-text ai-msg-typing';
   msg.textContent = 'En train de réfléchir...';
