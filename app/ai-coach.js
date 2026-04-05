@@ -203,7 +203,9 @@ function buildUI() {
   var messages = document.createElement('div');
   messages.id = 'ai-coach-messages';
   // Message de bienvenue
-  appendCoachMessage(messages, 'Bonjour ! Je suis ton coach IA. Pose-moi n\'importe quelle question sur ta nutrition, ta programmation sport ou tes charges — j\'ai accès à ton profil complet.');
+  var ctx0 = buildContext();
+  var prenom0 = ctx0.prenom ? (', ' + ctx0.prenom) : '';
+  appendCoachMessage(messages, 'La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd\'hui' + prenom0 + ' ?');
   panel.appendChild(messages);
 
   // Suggestions
@@ -423,12 +425,37 @@ window.AI_COACH = {
   buildContext: buildContext
 };
 
-// Exposer getWellnessAdaptation pour le contexte (défini dans app-sport.js)
-// L'init attend que le DOM soit prêt
+// Le coach ne s'initialise qu'après une vraie session authentifiée.
+// On patche window.render : à chaque appel, si l'utilisateur est connecté
+// et que le bouton n'existe pas encore → init. S'il est déconnecté → cleanup.
+var _origRender = null;
+function _patchRender() {
+  if (typeof window.render !== 'function') return;
+  if (window.render._coachPatched) return;
+  _origRender = window.render;
+  window.render = function() {
+    _origRender.apply(this, arguments);
+    try {
+      var loggedIn = window.AUTH && window.AUTH.isLoggedIn && window.AUTH.isLoggedIn();
+      if (loggedIn && !document.getElementById('ai-coach-btn')) {
+        buildUI();
+      } else if (!loggedIn) {
+        var btn = document.getElementById('ai-coach-btn');
+        var panel = document.getElementById('ai-coach-panel');
+        if (btn) btn.remove();
+        if (panel) panel.remove();
+      }
+    } catch(e) {}
+  };
+  window.render._coachPatched = true;
+}
+
+// Tenter le patch dès que possible, puis à nouveau après DOMContentLoaded
+_patchRender();
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', buildUI);
+  document.addEventListener('DOMContentLoaded', _patchRender);
 } else {
-  buildUI();
+  _patchRender();
 }
 
 })();
