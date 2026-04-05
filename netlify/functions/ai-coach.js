@@ -129,7 +129,8 @@ function sanitizeContext(ctx) {
         safe.muscuWeights = safeWeights;
       }
     } else if (field === 'age' || field === 'weight' || field === 'height' ||
-               field === 'sportDays' || field === 'crossfitWeek' || field === 'triathlonFTP') {
+               field === 'sportDays' || field === 'crossfitWeek' || field === 'triathlonFTP' ||
+               field === 'hyroxWeek' || field === 'runningWeek') {
       // Champs numériques
       var num = parseFloat(val);
       if (!isNaN(num) && isFinite(num)) safe[field] = num;
