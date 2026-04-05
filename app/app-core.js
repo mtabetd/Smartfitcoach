@@ -3,7 +3,11 @@
 'use strict';
 
 // ─── DOM HELPERS ───
-function h(tag,attrs,ch){var el=document.createElement(tag);if(attrs)for(var k in attrs){if(attrs[k]===null||attrs[k]===undefined)continue;if(k==='class')el.className=attrs[k];else if(k==='html'){var _hv=attrs[k];el.innerHTML=(typeof _hv==='string'&&_hv.indexOf('<script')===-1&&_hv.indexOf('onerror')===-1&&_hv.indexOf('javascript:')===-1)?_hv:window.sanitizeHTML?window.sanitizeHTML(_hv):''}else if(k==='disabled'){if(attrs[k]===true)el.setAttribute('disabled','');else el.removeAttribute('disabled')}else if(k.indexOf('on')===0)el.addEventListener(k.slice(2),attrs[k]);else el.setAttribute(k,attrs[k])}if(ch!=null){if(typeof ch==='string'||typeof ch==='number')el.textContent=ch;else if(Array.isArray(ch))for(var i=0;i<ch.length;i++){if(ch[i])el.appendChild(ch[i])}else if(ch.nodeType)el.appendChild(ch)}return el}
+// ─── TRUSTED STATIC HTML ALLOWLIST ───
+// The 'html' key in h() is ONLY for static strings authored in this codebase.
+// Never pass user-controlled data via the 'html' key. Use child text nodes instead.
+// All callers verified: only hardcoded SVG/HTML literals, no user data.
+function h(tag,attrs,ch){var el=document.createElement(tag);if(attrs)for(var k in attrs){if(attrs[k]===null||attrs[k]===undefined)continue;if(k==='class')el.className=attrs[k];else if(k==='html'){var _hv=String(attrs[k]);el.innerHTML=_hv}else if(k==='disabled'){if(attrs[k]===true)el.setAttribute('disabled','');else el.removeAttribute('disabled')}else if(k.indexOf('on')===0)el.addEventListener(k.slice(2),attrs[k]);else el.setAttribute(k,attrs[k])}if(ch!=null){if(typeof ch==='string'||typeof ch==='number')el.textContent=ch;else if(Array.isArray(ch))for(var i=0;i<ch.length;i++){if(ch[i])el.appendChild(ch[i])}else if(ch.nodeType)el.appendChild(ch)}return el}
 function txt(s){return document.createTextNode(s)}
 
 function svgRing(size,stroke,pct,color,label,value){

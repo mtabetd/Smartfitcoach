@@ -843,6 +843,7 @@ body.dark-mode .user-bar-avatar-btn:hover .user-bar-avatar-photo{border-color:va
   color: var(--grey, #6B6B65);
   letter-spacing: 1px;
   transition: border-color 0.2s ease;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -2084,7 +2085,10 @@ body.dark-mode .auth-container {
    ------------------------------------------------------- */
 .rest-timer-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 9999;
   display: none;
   align-items: center;
@@ -2152,7 +2156,10 @@ body.dark-mode .auth-container {
 }
 .rest-timer-time {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;

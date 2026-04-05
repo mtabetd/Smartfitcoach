@@ -353,6 +353,8 @@ window.MEAL_TIMER = {
     try {
       var ctx = this._audioCtx || new (window.AudioContext || window.webkitAudioContext)();
       this._audioCtx = ctx;
+      // Resume if suspended (Safari autoplay policy)
+      if (ctx.state === 'suspended') { try { ctx.resume(); } catch(e) {} }
       // Play three short beeps
       var times = [0, 0.25, 0.5];
       for (var i = 0; i < times.length; i++) {
@@ -395,6 +397,16 @@ window.MEAL_TIMER = {
     this._recipeName = recipeName || '';
     this._endTime = Date.now() + (minutes * 60 * 1000);
     var self = this;
+    // Pre-initialize AudioContext during user interaction (required by Safari autoplay policy).
+    // If we wait until the timer fires (setInterval), Safari will block new AudioContext creation.
+    if (!this._audioCtx) {
+      try {
+        this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      } catch(e) { /* Web Audio not available */ }
+    }
+    if (this._audioCtx && this._audioCtx.state === 'suspended') {
+      try { this._audioCtx.resume(); } catch(e) {}
+    }
     log('timer_start', { minutes: minutes, recipe: recipeName });
 
     this._interval = setInterval(function() {

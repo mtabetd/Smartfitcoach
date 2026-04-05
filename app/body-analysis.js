@@ -16,7 +16,7 @@ style.textContent = [
   '#ba-trigger:hover{background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border-color:var(--black,#0A0A09);}',
 
   // Panel principal
-  '#ba-panel{position:fixed;inset:0;z-index:9500;background:var(--ivory,#FAF9F6);display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);}',
+  '#ba-panel{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9500;background:var(--ivory,#FAF9F6);display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);}',
   '#ba-panel.open{transform:translateY(0);}',
 
   // Header
@@ -248,7 +248,13 @@ function renderResult(container, result) {
 
         var weekHeader = document.createElement('div');
         weekHeader.className = 'ba-week-header';
-        weekHeader.innerHTML = '<span>Semaine ' + sem.numero + (sem.focus ? ' — ' + sem.focus : '') + '</span><span>+</span>';
+        // XSS fix: sem.focus comes from AI JSON response — use DOM construction
+        var _whSpan1 = document.createElement('span');
+        _whSpan1.textContent = 'Semaine ' + sem.numero + (sem.focus ? ' \u2014 ' + sem.focus : '');
+        var _whSpan2 = document.createElement('span');
+        _whSpan2.textContent = '+';
+        weekHeader.appendChild(_whSpan1);
+        weekHeader.appendChild(_whSpan2);
         weekEl.appendChild(weekHeader);
 
         var weekBody = document.createElement('div');
@@ -342,7 +348,15 @@ function buildPanel() {
   var header = document.createElement('div');
   header.id = 'ba-header';
   var headerText = document.createElement('div');
-  headerText.innerHTML = '<div id="ba-header-title">Analyse corporelle IA</div><div id="ba-header-sub">Morphologie · Programme sur mesure</div>';
+  // Static-only header: built via DOM for CSP compliance
+  var _baHeaderTitle = document.createElement('div');
+  _baHeaderTitle.id = 'ba-header-title';
+  _baHeaderTitle.textContent = 'Analyse corporelle IA';
+  var _baHeaderSub = document.createElement('div');
+  _baHeaderSub.id = 'ba-header-sub';
+  _baHeaderSub.textContent = 'Morphologie \u00b7 Programme sur mesure';
+  headerText.appendChild(_baHeaderTitle);
+  headerText.appendChild(_baHeaderSub);
   var closeBtn = document.createElement('button');
   closeBtn.id = 'ba-close';
   closeBtn.textContent = '×';
@@ -434,7 +448,17 @@ function buildPanel() {
   // Loader
   var loader = document.createElement('div');
   loader.id = 'ba-loader';
-  loader.innerHTML = '<div><span class="ba-dot"></span><span class="ba-dot"></span><span class="ba-dot"></span></div><p>Analyse en cours par votre coach IA...<br>Cela peut prendre 30 à 60 secondes.</p>';
+  // Static loader: built via DOM for CSP compliance
+  var _loaderDots = document.createElement('div');
+  ['ba-dot', 'ba-dot', 'ba-dot'].forEach(function() {
+    var dot = document.createElement('span');
+    dot.className = 'ba-dot';
+    _loaderDots.appendChild(dot);
+  });
+  var _loaderTxt = document.createElement('p');
+  _loaderTxt.textContent = 'Analyse en cours par votre coach IA... Cela peut prendre 30 \u00e0 60 secondes.';
+  loader.appendChild(_loaderDots);
+  loader.appendChild(_loaderTxt);
   content.appendChild(loader);
 
   // Zone résultat

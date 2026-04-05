@@ -2238,7 +2238,7 @@ function renderStep9(p) {
 
         if (S._addMealModalSlot === slotKey) {
           var overlay = h('div', {
-            style: 'position:fixed;inset:0;background:rgba(10,10,9,0.45);z-index:9000;display:flex;align-items:flex-end;justify-content:center',
+            style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.45);z-index:9000;display:flex;align-items:flex-end;justify-content:center',
             onclick: function(e) {
               if (e.target === overlay) { S._addMealModalSlot = null; window.render(); }
             }
@@ -2392,7 +2392,7 @@ function renderStep9(p) {
 
       if (S._addMealModalSlot === slotKey) {
         var overlay = h('div', {
-          style: 'position:fixed;inset:0;background:rgba(10,10,9,0.45);z-index:9000;display:flex;align-items:flex-end;justify-content:center',
+          style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.45);z-index:9000;display:flex;align-items:flex-end;justify-content:center',
           onclick: function(e) {
             if (e.target === overlay) { S._addMealModalSlot = null; window.render(); }
           }
@@ -3982,7 +3982,7 @@ function renderRecipePicker(p) {
   var slotLabel = slotLabels[slotKey] || slotKey;
 
   var overlay = h('div', {
-    style: 'position:fixed;inset:0;background:var(--bg,#F4F3EE);z-index:9200;display:flex;flex-direction:column;overflow:hidden'
+    style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg,#F4F3EE);z-index:9200;display:flex;flex-direction:column;overflow:hidden'
   });
 
   // Header
@@ -4175,7 +4175,7 @@ function showSmoothieModal(sm) {
   if (old && old.parentNode) old.parentNode.removeChild(old);
 
   // Overlay impératif
-  var ov = h('div', {id:'_smoothie_modal_ov', style:'position:fixed;inset:0;background:rgba(10,10,9,0.55);z-index:99999;display:flex;align-items:flex-end;justify-content:center;padding:0',
+  var ov = h('div', {id:'_smoothie_modal_ov', style:'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.55);z-index:99999;display:flex;align-items:flex-end;justify-content:center;padding:0',
     onclick:function(e){ if(e.target===ov){ var el=document.getElementById('_smoothie_modal_ov'); if(el&&el.parentNode) el.parentNode.removeChild(el); } }});
 
   // Sheet bottom-up (style bottom sheet mobile)

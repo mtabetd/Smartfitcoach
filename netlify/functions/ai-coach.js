@@ -5,13 +5,150 @@ const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const MODEL = 'claude-haiku-4-5-20251001';
 const MAX_TOKENS = 1024;
 
+// Domaines autorisés pour CORS
+var ALLOWED_ORIGINS = [
+  'https://smartfitcoach.netlify.app',
+  'http://localhost:8888',
+  'http://localhost:3000',
+  'http://127.0.0.1:8888',
+  'http://127.0.0.1:3000'
+];
+
+// ── Rate Limiting ────────────────────────────────────────────────────────────
+var _rateLimitStore = {};
+var RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
+var RATE_LIMIT_MAX_AI_COACH = 20; // max 20 req/min pour ai-coach
+
+function checkRateLimit(ip, maxRequests) {
+  var now = Date.now();
+  if (!_rateLimitStore[ip]) _rateLimitStore[ip] = [];
+  // Nettoyer les entrées expirées (sliding window)
+  _rateLimitStore[ip] = _rateLimitStore[ip].filter(function(t) {
+    return now - t < RATE_LIMIT_WINDOW_MS;
+  });
+  if (_rateLimitStore[ip].length >= maxRequests) {
+    return false; // Rate limit dépassé
+  }
+  _rateLimitStore[ip].push(now);
+  return true;
+}
+
+// Nettoyer périodiquement le store pour éviter la fuite mémoire
+function pruneRateLimitStore() {
+  var now = Date.now();
+  Object.keys(_rateLimitStore).forEach(function(ip) {
+    _rateLimitStore[ip] = _rateLimitStore[ip].filter(function(t) {
+      return now - t < RATE_LIMIT_WINDOW_MS;
+    });
+    if (_rateLimitStore[ip].length === 0) delete _rateLimitStore[ip];
+  });
+}
+
+// ── Input Sanitization ───────────────────────────────────────────────────────
+var PROMPT_INJECTION_PATTERNS = [
+  /ignore\s+(all\s+)?(previous|prior|above)\s+instructions/gi,
+  /disregard\s+(all\s+)?(previous|prior|above)\s+instructions/gi,
+  /forget\s+(all\s+)?(previous|prior|above)\s+instructions/gi,
+  /reveal\s+(the\s+)?(api\s+key|secret|password|token)/gi,
+  /act\s+as\s+(if\s+you\s+are|a\s+different)/gi,
+  /you\s+are\s+now\s+(a\s+)?/gi,
+  /système\s*:\s*/gi,
+  /system\s*:\s*/gi,
+  /\[system\]/gi,
+  /<<<|>>>/g,
+  /###\s*(system|instructions|prompt)/gi
+];
+
+function sanitizeString(str, maxLen) {
+  if (typeof str !== 'string') return '';
+  // Retirer les caractères de contrôle (sauf \n et \t légitimes)
+  str = str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+  // Retirer les séquences de prompt injection connues
+  PROMPT_INJECTION_PATTERNS.forEach(function(pattern) {
+    str = str.replace(pattern, '[FILTRÉ]');
+  });
+  // Tronquer
+  return str.slice(0, maxLen || 200);
+}
+
+function sanitizeContext(ctx) {
+  if (!ctx || typeof ctx !== 'object' || Array.isArray(ctx)) return {};
+
+  // Whitelist des champs autorisés uniquement
+  var ALLOWED_FIELDS = [
+    'prenom', 'sex', 'age', 'weight', 'height', 'goal', 'activity',
+    'sportType', 'sportLevel', 'sportDays', 'crossfitWeek',
+    'triathlonGoal', 'triathlonLevel', 'triathlonFTP',
+    'calisthenicsLevel', 'wellness', 'todayNutrition',
+    'regime', 'allergies', 'excluded', 'muscuWeights'
+  ];
+
+  var safe = {};
+
+  ALLOWED_FIELDS.forEach(function(field) {
+    if (!(field in ctx)) return;
+    var val = ctx[field];
+
+    if (field === 'wellness') {
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        safe.wellness = {
+          sleep: sanitizeString(String(val.sleep || ''), 10),
+          muscles: sanitizeString(String(val.muscles || ''), 100),
+          energy: sanitizeString(String(val.energy || ''), 100),
+          adaptation: sanitizeString(String(val.adaptation || ''), 200)
+        };
+      }
+    } else if (field === 'todayNutrition') {
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        safe.todayNutrition = {
+          breakfast: sanitizeString(String(val.breakfast || ''), 300),
+          lunch: sanitizeString(String(val.lunch || ''), 300),
+          snack: sanitizeString(String(val.snack || ''), 300),
+          dinner: sanitizeString(String(val.dinner || ''), 300),
+          totalKcal: sanitizeString(String(val.totalKcal || ''), 20)
+        };
+      }
+    } else if (field === 'allergies') {
+      if (Array.isArray(val)) {
+        safe.allergies = val.slice(0, 20).map(function(a) {
+          return sanitizeString(String(a), 100);
+        });
+      }
+    } else if (field === 'muscuWeights') {
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        var safeWeights = {};
+        Object.keys(val).slice(0, 30).forEach(function(k) {
+          var safeKey = sanitizeString(k, 50);
+          safeWeights[safeKey] = sanitizeString(String(val[k] || ''), 20);
+        });
+        safe.muscuWeights = safeWeights;
+      }
+    } else if (field === 'age' || field === 'weight' || field === 'height' ||
+               field === 'sportDays' || field === 'crossfitWeek' || field === 'triathlonFTP') {
+      // Champs numériques
+      var num = parseFloat(val);
+      if (!isNaN(num) && isFinite(num)) safe[field] = num;
+    } else {
+      // Champs textuels simples
+      safe[field] = sanitizeString(String(val), 200);
+    }
+  });
+
+  return safe;
+}
+
 exports.handler = async function(event, context) {
-  // CORS headers
+  // ── CORS dynamique ─────────────────────────────────────────────────────────
+  var origin = event.headers['origin'] || event.headers['Origin'] || '';
+  var allowedOrigin = ALLOWED_ORIGINS.indexOf(origin) !== -1 ? origin : ALLOWED_ORIGINS[0];
+
   var headers = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Content-Type': 'application/json'
+    'Access-Control-Allow-Credentials': 'false',
+    'Content-Type': 'application/json',
+    'X-Content-Type-Options': 'nosniff'
   };
 
   // Handle preflight
@@ -20,33 +157,98 @@ exports.handler = async function(event, context) {
   }
 
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, headers: headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+    return { statusCode: 405, headers: headers, body: JSON.stringify({ error: 'Méthode non autorisée' }) };
   }
 
+  // ── Content-Type validation ────────────────────────────────────────────────
+  var contentType = event.headers['content-type'] || event.headers['Content-Type'] || '';
+  if (!contentType.includes('application/json')) {
+    return { statusCode: 415, headers: headers, body: JSON.stringify({ error: 'Content-Type doit être application/json' }) };
+  }
+
+  // ── Rate Limiting ──────────────────────────────────────────────────────────
+  pruneRateLimitStore();
+  var clientIp = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'unknown';
+  // Prendre uniquement la première IP si liste (x-forwarded-for peut contenir plusieurs IPs)
+  clientIp = clientIp.split(',')[0].trim();
+
+  if (!checkRateLimit(clientIp, RATE_LIMIT_MAX_AI_COACH)) {
+    return {
+      statusCode: 429,
+      headers: Object.assign({}, headers, { 'Retry-After': '60' }),
+      body: JSON.stringify({ error: 'Trop de requêtes. Veuillez patienter avant de réessayer.' })
+    };
+  }
+
+  // ── API Key ────────────────────────────────────────────────────────────────
   var apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return {
       statusCode: 500,
       headers: headers,
-      body: JSON.stringify({ error: 'ANTHROPIC_API_KEY non configurée dans les variables Netlify.' })
+      body: JSON.stringify({ error: 'Service temporairement indisponible.' })
     };
   }
 
+  // ── Request Size Limit (1MB) ───────────────────────────────────────────────
+  var MAX_BODY_SIZE = 1 * 1024 * 1024; // 1MB
+  var rawBody = event.body || '';
+  if (rawBody.length > MAX_BODY_SIZE) {
+    return { statusCode: 413, headers: headers, body: JSON.stringify({ error: 'Requête trop volumineuse (max 1MB).' }) };
+  }
+
+  // ── JSON Parsing ───────────────────────────────────────────────────────────
   var body;
   try {
-    body = JSON.parse(event.body);
+    body = JSON.parse(rawBody);
   } catch(e) {
     return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Corps de requête invalide' }) };
   }
 
-  var userMessages = Array.isArray(body.messages) ? body.messages : [];
-  var userContext = body.context || {};
+  // ── Input Validation ───────────────────────────────────────────────────────
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Corps de requête invalide' }) };
+  }
 
-  // Construire le system prompt avec le contexte utilisateur
+  // Valider messages
+  if (!Array.isArray(body.messages)) {
+    return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Le champ messages doit être un tableau.' }) };
+  }
+
+  var MAX_MESSAGES = 20;
+  var MAX_CONTENT_LENGTH = 4000;
+  var VALID_ROLES = ['user', 'assistant'];
+
+  var rawMessages = body.messages.slice(0, MAX_MESSAGES);
+  var validatedMessages = [];
+
+  for (var i = 0; i < rawMessages.length; i++) {
+    var msg = rawMessages[i];
+    if (!msg || typeof msg !== 'object') continue;
+    if (typeof msg.role !== 'string' || VALID_ROLES.indexOf(msg.role) === -1) {
+      return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Rôle de message invalide. Valeurs autorisées : user, assistant.' }) };
+    }
+    if (typeof msg.content !== 'string') {
+      return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Le contenu du message doit être une chaîne de caractères.' }) };
+    }
+    if (msg.content.length > MAX_CONTENT_LENGTH) {
+      return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Message trop long (max ' + MAX_CONTENT_LENGTH + ' caractères).' }) };
+    }
+    validatedMessages.push({ role: msg.role, content: msg.content });
+  }
+
+  if (validatedMessages.length === 0) {
+    return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Au moins un message est requis.' }) };
+  }
+
+  // ── Sanitize Context (anti-prompt injection) ───────────────────────────────
+  var userContext = sanitizeContext(body.context || {});
+
+  // Construire le system prompt avec le contexte sanitisé
   var systemPrompt = buildSystemPrompt(userContext);
 
   // Limiter l'historique à 10 messages pour maîtriser les coûts
-  var messages = userMessages.slice(-10);
+  var messages = validatedMessages.slice(-10);
 
   try {
     var https = require('https');
@@ -84,8 +286,9 @@ exports.handler = async function(event, context) {
     });
 
     if (response.status !== 200) {
-      var errMsg = (response.body && response.body.error && response.body.error.message) || 'Erreur API Anthropic';
-      return { statusCode: response.status, headers: headers, body: JSON.stringify({ error: errMsg }) };
+      // Ne pas exposer les détails d'erreur API à l'extérieur
+      console.error('[ai-coach] Erreur API Anthropic status:', response.status);
+      return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Erreur du service IA. Veuillez réessayer.' }) };
     }
 
     var replyText = response.body.content && response.body.content[0] && response.body.content[0].text || '';
@@ -96,10 +299,12 @@ exports.handler = async function(event, context) {
     };
 
   } catch(err) {
+    // Logger l'erreur interne sans exposer les détails à l'extérieur
+    console.error('[ai-coach] Erreur interne:', err.message);
     return {
       statusCode: 500,
       headers: headers,
-      body: JSON.stringify({ error: 'Erreur serveur : ' + (err.message || 'inconnue') })
+      body: JSON.stringify({ error: 'Erreur serveur. Veuillez réessayer.' })
     };
   }
 };

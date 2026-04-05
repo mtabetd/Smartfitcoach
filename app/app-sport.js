@@ -3211,7 +3211,10 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  }
  el.style.display = 'flex';
  el.style.position = 'fixed';
- el.style.inset = '0';
+ el.style.top = '0';
+ el.style.left = '0';
+ el.style.right = '0';
+ el.style.bottom = '0';
  el.style.zIndex = '9999';
  el.style.transform = 'none';
  el.style.transition = 'none';

@@ -389,11 +389,29 @@ window.DASHBOARD = {
           var cta = this.querySelector('.sport-card-cta');
           if (cta) { cta.style.background = 'var(--black,#0A0A09)'; cta.style.color = 'var(--ivory,#FAF9F6)'; }
         };
-        sportCard.innerHTML =
-          '<div class="sport-card-label" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease">Séance du jour</div>' +
-          '<div class="sport-card-title" style="font-family:Georgia,serif;font-size:22px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:' + (dashKcal > 0 ? '6px' : '20px') + ';line-height:1.2;transition:color 0.25s ease">' + sportLabel + '</div>' +
-          (dashKcal > 0 ? '<div class="sport-card-sub" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:20px;letter-spacing:1px;transition:color 0.25s ease">~' + dashKcal + ' kcal · ' + dashDurFinal + ' min</div>' : '') +
-          '<div class="sport-card-cta" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:12px 20px;display:inline-block;border-radius:2px;transition:all 0.25s ease">Commencer la séance</div>';
+        // XSS fix: build card via DOM — sportLabel comes from S.sportType (localStorage) and must not be injected via innerHTML
+        var _scLabel = document.createElement('div');
+        _scLabel.className = 'sport-card-label';
+        _scLabel.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease';
+        _scLabel.textContent = 'Séance du jour';
+        var _scTitle = document.createElement('div');
+        _scTitle.className = 'sport-card-title';
+        _scTitle.style.cssText = 'font-family:Georgia,serif;font-size:22px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:' + (dashKcal > 0 ? '6px' : '20px') + ';line-height:1.2;transition:color 0.25s ease';
+        _scTitle.textContent = sportLabel;
+        var _scCta = document.createElement('div');
+        _scCta.className = 'sport-card-cta';
+        _scCta.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:12px 20px;display:inline-block;border-radius:2px;transition:all 0.25s ease';
+        _scCta.textContent = 'Commencer la séance';
+        sportCard.appendChild(_scLabel);
+        sportCard.appendChild(_scTitle);
+        if (dashKcal > 0) {
+          var _scSub = document.createElement('div');
+          _scSub.className = 'sport-card-sub';
+          _scSub.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:20px;letter-spacing:1px;transition:color 0.25s ease';
+          _scSub.textContent = '~' + dashKcal + ' kcal · ' + dashDurFinal + ' min';
+          sportCard.appendChild(_scSub);
+        }
+        sportCard.appendChild(_scCta);
         sportCard.addEventListener('click', function() {
           if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport');
         });
@@ -453,11 +471,31 @@ window.DASHBOARD = {
         this.querySelectorAll('[data-nut-sub]').forEach(function(el){ el.style.color = 'var(--grey,#6B6B65)'; });
         this.querySelectorAll('[data-nut-cta]').forEach(function(el){ el.style.color = 'var(--grey,#6B6B65)'; el.style.borderTopColor = 'var(--border,#D8D8D0)'; });
       };
-      nutCard.innerHTML =
-        '<div data-nut-label style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease">' + mealLabel + '</div>' +
-        '<div data-nut-title style="font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.3;transition:color 0.25s ease">' + mealName + '</div>' +
-        (kcal ? '<div data-nut-sub style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:16px;letter-spacing:1px;transition:color 0.25s ease">' + kcal + ' kcal</div>' : '<div style="margin-bottom:16px"></div>') +
-        '<div data-nut-cta style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);letter-spacing:3px;text-transform:uppercase;border-top:1px solid var(--border,#D8D8D0);padding-top:12px;transition:all 0.25s ease">Voir le plan nutrition →</div>';
+      // XSS fix: build card via DOM — mealName comes from weekPlan (localStorage/Supabase) and mealLabel is a computed string
+      var _nutLabelEl = document.createElement('div');
+      _nutLabelEl.setAttribute('data-nut-label', '');
+      _nutLabelEl.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease';
+      _nutLabelEl.textContent = mealLabel;
+      var _nutTitleEl = document.createElement('div');
+      _nutTitleEl.setAttribute('data-nut-title', '');
+      _nutTitleEl.style.cssText = 'font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.3;transition:color 0.25s ease';
+      _nutTitleEl.textContent = mealName;
+      var _nutSubEl = document.createElement('div');
+      if (kcal) {
+        _nutSubEl.setAttribute('data-nut-sub', '');
+        _nutSubEl.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:16px;letter-spacing:1px;transition:color 0.25s ease';
+        _nutSubEl.textContent = kcal + ' kcal';
+      } else {
+        _nutSubEl.style.marginBottom = '16px';
+      }
+      var _nutCtaEl = document.createElement('div');
+      _nutCtaEl.setAttribute('data-nut-cta', '');
+      _nutCtaEl.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);letter-spacing:3px;text-transform:uppercase;border-top:1px solid var(--border,#D8D8D0);padding-top:12px;transition:all 0.25s ease';
+      _nutCtaEl.textContent = 'Voir le plan nutrition →';
+      nutCard.appendChild(_nutLabelEl);
+      nutCard.appendChild(_nutTitleEl);
+      nutCard.appendChild(_nutSubEl);
+      nutCard.appendChild(_nutCtaEl);
       nutCard.addEventListener('click', function() {
         if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
       });
@@ -477,9 +515,19 @@ window.DASHBOARD = {
       var _bdAge = window.getAge ? window.getAge() : null;
       var _bdBanner = h('div', null);
       _bdBanner.style.cssText = 'background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:20px;margin-bottom:16px;text-align:center';
-      _bdBanner.innerHTML = '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Anniversaire</div>' +
-        '<div style="font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09)">Joyeux anniversaire' + (_bdAge ? ' — ' + _bdAge + ' ans' : '') + '</div>' +
-        '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:6px">Toute l\'\u00e9quipe SmartFitCoach vous souhaite une merveilleuse journ\u00e9e</div>';
+      // XSS fix: build birthday banner via DOM — _bdAge is derived from localStorage birthDate
+      var _bdLine1 = document.createElement('div');
+      _bdLine1.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px';
+      _bdLine1.textContent = 'Anniversaire';
+      var _bdLine2 = document.createElement('div');
+      _bdLine2.style.cssText = 'font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09)';
+      _bdLine2.textContent = 'Joyeux anniversaire' + (_bdAge ? ' \u2014 ' + parseInt(_bdAge, 10) + ' ans' : '');
+      var _bdLine3 = document.createElement('div');
+      _bdLine3.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:6px';
+      _bdLine3.textContent = 'Toute l\'\u00e9quipe SmartFitCoach vous souhaite une merveilleuse journ\u00e9e';
+      _bdBanner.appendChild(_bdLine1);
+      _bdBanner.appendChild(_bdLine2);
+      _bdBanner.appendChild(_bdLine3);
       root.appendChild(_bdBanner);
     }
 
