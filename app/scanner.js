@@ -12,7 +12,7 @@ style.textContent = `
 
   .camera-view { position:relative; width:100%; max-width:400px; margin:12px auto; background:#000; overflow:hidden; }
   .camera-view video { width:100%; display:block; }
-  .camera-overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+  .camera-overlay { position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; pointer-events:none; }
   .scan-frame { width:200px; height:120px; border:2px solid rgba(250,250,247,0.6); position:relative; }
   .scan-frame::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--green,#1A4A1A); animation:scanLine 2s ease-in-out infinite; }
   @keyframes scanLine { 0%,100% { top:0; } 50% { top:calc(100% - 2px); } }

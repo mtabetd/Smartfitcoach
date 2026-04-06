@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#FAF9F6">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org https://*.supabase.co https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org https://*.supabase.co https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self'; manifest-src 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta name="robots" content="noindex, nofollow">
@@ -230,7 +230,7 @@ h1 em{font-style:italic}
 .imc-badge{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border:2px solid;font-family:Georgia,serif;font-size:15px;letter-spacing:1px;margin-top:12px;border-radius:2px;font-weight:normal;transition:all .2s ease}
 
 /* ── SPLASH ── */
-#splash{position:fixed;inset:0;background:var(--ivory);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;transition:opacity .6s ease,visibility .6s ease}
+#splash{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--ivory);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;transition:opacity .6s ease,visibility .6s ease}
 #splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .splash-logo{font-family:Georgia,serif;font-size:11px;letter-spacing:8px;text-transform:uppercase;color:var(--black);opacity:0;animation:splashFadeUp .8s ease .2s forwards;margin-bottom:6px}
 .splash-sub{font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);opacity:0;animation:splashFadeUp .8s ease .5s forwards;margin-bottom:32px}
@@ -338,7 +338,7 @@ canvas.weight-chart{width:100%;height:200px}
 </head>
 <body>
 <script src="./security-init.js"></script>
-<div id="gate" style="position:fixed;inset:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;align-items:center;justify-content:center">
+<div id="gate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;align-items:center;justify-content:center">
 <div style="text-align:center;max-width:340px;padding:24px">
 <div style="font-family:Georgia,serif;font-size:11px;letter-spacing:8px;text-transform:uppercase;margin-bottom:6px;color:var(--black,#0A0A09)">SMARTFITCOACH</div>
 <div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px">Accès restreint</div>
@@ -354,7 +354,7 @@ canvas.weight-chart{width:100%;height:200px}
 <div id="app" style="display:none"></div>
 <script src="./gate.js"></script>
 <script src="./error-boundary.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb"></script>
 <script src="./jspdf.umd.min.js"></script>
 <script src="./prices-db.js"></script>
 <script src="./recipe-engine.js"></script>
@@ -380,8 +380,10 @@ canvas.weight-chart{width:100%;height:200px}
 <script src="./app-nutrition.js"></script>
 <script src="./calisthenics-program.js"></script>
 <script src="./app-sport.js"></script>
+<script src="./motivation.js"></script>
 <script src="./app-main.js"></script>
 <script src="./ai-coach.js"></script>
+<script src="./body-analysis.js"></script>
 <script src="./sw-register.js"></script>
 </body>
 </html>

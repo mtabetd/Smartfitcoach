@@ -25700,16 +25700,108 @@
     }
   ];
 
+  // ─── NORMALISATION ─────────────────────────────────────────────────────────────
+  /**
+   * Normalise une recette quelle que soit sa source (compact recipes-db ou étendu RECIPES_DB).
+   * Retourne toujours le schéma unifié :
+   *   _id, n, k, p, g, l, lv, isLiquid, ingredients (string), steps (array),
+   *   tags (array), servings, prepTime, cookTime, category, mealTypes
+   *
+   * Détection du format :
+   *  - Compact (recipes-db.js) : r.k existe ET r.baseNutrition n'existe pas
+   *  - Étendu (RECIPES_DB)     : r.baseNutrition existe
+   */
+  function normalizeRecipe(r) {
+    if (!r) return null;
+    try {
+      var isCompact = (r.k !== undefined && r.k !== null) && !r.baseNutrition;
+
+      if (isCompact) {
+        // ── Format compact (recipes-db.js) ──────────────────────────────────────
+        return {
+          _id:         r._id || r.id || '',
+          n:           r.n || '',
+          k:           typeof r.k === 'number' ? r.k : 0,
+          p:           typeof r.p === 'number' ? r.p : 0,
+          g:           typeof r.g === 'number' ? r.g : 0,
+          l:           typeof r.l === 'number' ? r.l : 0,
+          lv:          typeof r.lv === 'number' ? Math.min(r.lv, 3) : 1,
+          isLiquid:    r.w === true,
+          ingredients: typeof r.i === 'string' ? r.i : '',
+          steps:       Array.isArray(r.st) ? r.st : [],
+          tags:        Array.isArray(r.tags) ? r.tags : [],
+          servings:    r.servings || null,
+          prepTime:    r.prepTime || null,
+          cookTime:    r.cookTime || null,
+          category:    r.category || null,
+          mealTypes:   Array.isArray(r.mealTypes) ? r.mealTypes : null
+        };
+      } else {
+        // ── Format étendu (recipe-engine.js RECIPES_DB) ─────────────────────────
+        var bn = r.baseNutrition || {};
+        var ingsArr = r.ingredients || [];
+        var ingrStr;
+        if (Array.isArray(ingsArr)) {
+          ingrStr = ingsArr.map(function(i) {
+            return ((i.qty != null ? i.qty : '') + (i.unit ? i.unit : '') + ' ' + (i.name || '')).trim();
+          }).join(', ');
+        } else {
+          ingrStr = typeof ingsArr === 'string' ? ingsArr : '';
+        }
+        return {
+          _id:         r.id || r._id || '',
+          n:           r.name || r.n || '',
+          k:           typeof bn.calories === 'number' ? bn.calories : 0,
+          p:           typeof bn.proteinGrams === 'number' ? bn.proteinGrams : 0,
+          g:           typeof bn.carbsGrams === 'number' ? bn.carbsGrams : 0,
+          l:           typeof bn.fatGrams === 'number' ? bn.fatGrams : 0,
+          lv:          typeof r.difficulty === 'number' ? Math.min(r.difficulty, 3) : 1,
+          isLiquid:    false,
+          ingredients: ingrStr,
+          steps:       Array.isArray(r.steps) ? r.steps : (Array.isArray(r.st) ? r.st : []),
+          tags:        Array.isArray(r.tags) ? r.tags : [],
+          servings:    r.servings || null,
+          prepTime:    r.prepTime || null,
+          cookTime:    r.cookTime || null,
+          category:    r.category || null,
+          mealTypes:   Array.isArray(r.mealTypes) ? r.mealTypes : null
+        };
+      }
+    } catch (e) {
+      // Sécurité : retourner un objet minimal plutôt que de crasher
+      return {
+        _id: (r && (r._id || r.id)) || '',
+        n: (r && (r.n || r.name)) || '',
+        k: 0, p: 0, g: 0, l: 0,
+        lv: 1, isLiquid: false,
+        ingredients: '', steps: [], tags: [],
+        servings: null, prepTime: null, cookTime: null,
+        category: null, mealTypes: null
+      };
+    }
+  }
+
   // ─── MOTEUR ────────────────────────────────────────────────────────────────────
 
   /**
-   * Trouver une recette par son ID.
+   * Recherche interne (format brut) — usage exclusif des fonctions du moteur qui
+   * ont besoin de baseNutrition, ingredients[] structuré, servings, etc.
+   * @private
    */
-  function findRecipe(recipeId) {
+  function _findRawRecipe(recipeId) {
     for (var i = 0; i < RECIPES_DB.length; i++) {
       if (RECIPES_DB[i].id === recipeId) return RECIPES_DB[i];
     }
     return null;
+  }
+
+  /**
+   * Trouver une recette par son ID.
+   * Retourne la recette au format normalisé (schéma unifié).
+   */
+  function findRecipe(recipeId) {
+    var raw = _findRawRecipe(recipeId);
+    return raw ? normalizeRecipe(raw) : null;
   }
 
   /**
@@ -25724,7 +25816,7 @@
    * @returns {object|null} recette adaptée avec ingrédients scalés, macros recalculées, flag tolérance
    */
   function getAdaptedRecipe(recipeId, userState, options) {
-    var recipe = findRecipe(recipeId);
+    var recipe = _findRawRecipe(recipeId);
     if (!recipe) return null;
     if (!userState || !userState.caloriesTarget) return null;
 
@@ -25921,10 +26013,27 @@
       : null;
 
     // ── Build exclusion list from filters.allergies ──
+    // Normalize legacy/short allergy keys to canonical ALLERGIES constant labels
+    var ALLERGY_ALIASES = {
+      'gluten': 'Gluten/Blé',
+      'gluten/ble': 'Gluten/Blé',
+      'oeufs': 'Oeufs',
+      'œufs': 'Oeufs',
+      'lait': 'Lait/Produits laitiers',
+      'lactose': 'Lait/Produits laitiers',
+      'fruits a coque': 'Fruits à coque',
+      'noix': 'Fruits à coque',
+      'arachide': 'Arachides',
+      'cacahuete': 'Arachides',
+      'sesame': 'Sésame',
+      'soy': 'Soja',
+      'soja': 'Soja'
+    };
     var allergyExclusions = [];
     if (filters.allergies && filters.allergies.length) {
       filters.allergies.forEach(function (allergyLabel) {
-        var terms = ALLERGY_INGREDIENT_MAP[allergyLabel];
+        var canonical = ALLERGY_ALIASES[allergyLabel.toLowerCase()] || allergyLabel;
+        var terms = ALLERGY_INGREDIENT_MAP[canonical] || ALLERGY_INGREDIENT_MAP[allergyLabel];
         if (terms) allergyExclusions = allergyExclusions.concat(terms);
       });
     }
@@ -26000,7 +26109,7 @@
       var calA = Math.abs((a.baseNutrition.calories / a.servings) - mealTarget);
       var calB = Math.abs((b.baseNutrition.calories / b.servings) - mealTarget);
       return calA - calB;
-    });
+    }).map(function(r) { return normalizeRecipe(r); });
   }
 
   /**
@@ -26020,7 +26129,7 @@
    * @returns {{ totalMAD: number, breakdown: Array, pricePerServing: number } | null}
    */
   function calcRecipeCost(recipeId, scalingRatio) {
-    var recipe = findRecipe(recipeId);
+    var recipe = _findRawRecipe(recipeId);
     if (!recipe) return null;
     if (!window.getPricePer) return null;
     scalingRatio = scalingRatio || 1;

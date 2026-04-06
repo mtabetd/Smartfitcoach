@@ -212,6 +212,14 @@ function renderWelcomeScreen(container) {
   var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
   root.appendChild(h('p', 'dash-date', dateStr));
 
+  // Message motivation du jour
+  if (window.MOTIVATION) {
+    var motivMsg = document.createElement('p');
+    motivMsg.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey,#6B6B65);margin:0 0 20px;line-height:1.6;border-left:2px solid var(--border,#D8D8D0);padding-left:14px;';
+    motivMsg.textContent = window.MOTIVATION.getDailySportMessage();
+    root.appendChild(motivMsg);
+  }
+
   /* Tips toggle */
   if (window.TIPS) TIPS.renderToggle(root);
 
@@ -316,6 +324,14 @@ window.DASHBOARD = {
     var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
     root.appendChild(h('p', 'dash-date', dateStr));
 
+    // Message motivation du jour
+    if (window.MOTIVATION) {
+      var motivMsg = document.createElement('p');
+      motivMsg.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey,#6B6B65);margin:0 0 20px;line-height:1.6;border-left:2px solid var(--border,#D8D8D0);padding-left:14px;';
+      motivMsg.textContent = window.MOTIVATION.getDailySportMessage();
+      root.appendChild(motivMsg);
+    }
+
     /* ═══ SPORT DU JOUR ═══ */
     (function() {
       var todayIdx = now.getDay(); // 0=dim, 1=lun, ..., 6=sam
@@ -331,19 +347,31 @@ window.DASHBOARD = {
       // Detect rest day from weekPlan structure (check if session is empty/rest)
       var todayPlanDay = Array.isArray(S.weekPlan) && S.weekPlan[planIdx] ? S.weekPlan[planIdx] : null;
       var isRestDay = todayPlanDay && todayPlanDay.type === 'rest';
+      // For triathlon users: also check current week's session by day index (triathlon REST sessions)
+      if (!isRestDay && sportType === 'triathlon' && Array.isArray(S.triathlonProgram) && S.triathlonProgram.length > 0) {
+        var triWeekIdx = Math.max(0, (S.triathlonWeek || 1) - 1);
+        var triWeekData = S.triathlonProgram[Math.min(triWeekIdx, S.triathlonProgram.length - 1)];
+        if (triWeekData && Array.isArray(triWeekData.sessions) && triWeekData.sessions[planIdx]) {
+          var triTodaySess = triWeekData.sessions[planIdx];
+          if (triTodaySess.discipline === 'rest') isRestDay = true;
+        }
+      }
       if (sportType && !isRestDay) {
         // Calcul calories estimées (MET × poids × durée)
         var sportLevel = S.crossfitLevel || S.runningLevel || S.hyroxLevel || S.triathlonLevel || S.cyclingLevel || S.calisthenicsLevel || S.sportLevel || 'intermediaire';
+        // Normalize English level keys to French for dashDurMap/dashMET lookups
+        var _LEVEL_FR_DASH = { beginner: 'debutant', intermediate: 'intermediaire', advanced: 'avance' };
+        var sportLevelFr = _LEVEL_FR_DASH[sportLevel] || sportLevel;
         var dashKcal = (typeof window.estimateKcal === 'function') ? window.estimateKcal(sportType, sportLevel, null) : 0;
-        var dashMET = { crossfit: { scaled: 7, rx: 9, rx_plus: 12 }, running: { debutant: 7, intermediaire: 9, avance: 11, elite: 12 }, triathlon: { beginner: 8, intermediate: 10, advanced: 12, elite: 13 }, calisthenics: { debutant: 4, intermediaire: 6, avance: 8, elite: 9 }, cycling: { debutant: 6, intermediaire: 8, avance: 10, elite: 12 }, hyrox: { debutant: 9, intermediaire: 11, avance: 13, elite: 14 }, muscu: { debutant: 4, intermediaire: 5, avance: 6, elite: 7 }, yoga: { debutant: 2.5, intermediaire: 3, avance: 4, elite: 4 }, padel: { debutant: 6, intermediaire: 8, avance: 9, elite: 10 }, golf: { debutant: 3.5, intermediaire: 4, avance: 4.5, elite: 5 } };
-        var dashDurMap = { crossfit: { scaled: 60, rx: 75, rx_plus: 90, intermediaire: 75 }, running: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 }, triathlon: { beginner: 75, intermediate: 90, advanced: 105, elite: 120, intermediaire: 90 }, calisthenics: { debutant: 50, intermediaire: 65, avance: 80, elite: 90 }, cycling: { debutant: 60, intermediaire: 75, avance: 90, elite: 120 }, hyrox: { debutant: 60, intermediaire: 75, avance: 90, elite: 105 }, muscu: { debutant: 50, intermediaire: 60, avance: 75, elite: 90 }, yoga: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 }, padel: { debutant: 60, intermediaire: 75, avance: 90, elite: 90 }, golf: { debutant: 90, intermediaire: 120, avance: 150, elite: 180 } };
+        var dashMET = { crossfit: { scaled: 7, inter: 8, rx: 9, rx_plus: 12 }, running: { debutant: 7, intermediaire: 9, avance: 11, elite: 12 }, triathlon: { beginner: 8, intermediate: 10, advanced: 12, elite: 13 }, calisthenics: { debutant: 4, intermediaire: 6, avance: 8, elite: 9 }, cycling: { debutant: 6, intermediaire: 8, avance: 10, elite: 12 }, hyrox: { debutant: 9, intermediaire: 11, avance: 13, elite: 14 }, muscu: { debutant: 4, intermediaire: 5, avance: 6, elite: 7 }, yoga: { debutant: 2.5, intermediaire: 3, avance: 4, elite: 4 }, padel: { debutant: 6, intermediaire: 8, avance: 9, elite: 10 }, golf: { debutant: 3.5, intermediaire: 4, avance: 4.5, elite: 5 } };
+        var dashDurMap = { crossfit: { scaled: 60, inter: 70, rx: 75, rx_plus: 90, intermediaire: 75 }, running: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 }, triathlon: { beginner: 75, intermediate: 90, advanced: 105, elite: 120, intermediaire: 90 }, calisthenics: { debutant: 50, intermediaire: 65, avance: 80, elite: 90 }, cycling: { debutant: 60, intermediaire: 75, avance: 90, elite: 120 }, hyrox: { debutant: 60, intermediaire: 75, avance: 90, elite: 105 }, muscu: { debutant: 50, intermediaire: 60, avance: 75, elite: 90 }, yoga: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 }, padel: { debutant: 60, intermediaire: 75, avance: 90, elite: 90 }, golf: { debutant: 90, intermediaire: 120, avance: 150, elite: 180 } };
         if (!dashKcal && dashMET[sportType]) {
-          var dashMetVal = dashMET[sportType][sportLevel] || dashMET[sportType]['intermediaire'] || 8;
-          var dashDurSport = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevel] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
+          var dashMetVal = dashMET[sportType][sportLevelFr] || dashMET[sportType]['intermediaire'] || 8;
+          var dashDurSport = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevelFr] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
           var dashPoids = parseFloat(S.weight) || 75;
           dashKcal = Math.round(dashMetVal * dashPoids * (dashDurSport / 60));
         }
-        var dashDurFinal = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevel] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
+        var dashDurFinal = dashDurMap[sportType] ? (dashDurMap[sportType][sportLevelFr] || dashDurMap[sportType]['intermediaire'] || 60) : 60;
         var sportCard = document.createElement('div');
         sportCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:24px 20px;margin-bottom:16px;cursor:pointer;transition:all 0.25s ease;border-left:3px solid var(--black,#0A0A09);';
 
@@ -373,11 +401,29 @@ window.DASHBOARD = {
           var cta = this.querySelector('.sport-card-cta');
           if (cta) { cta.style.background = 'var(--black,#0A0A09)'; cta.style.color = 'var(--ivory,#FAF9F6)'; }
         };
-        sportCard.innerHTML =
-          '<div class="sport-card-label" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease">Séance du jour</div>' +
-          '<div class="sport-card-title" style="font-family:Georgia,serif;font-size:22px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:' + (dashKcal > 0 ? '6px' : '20px') + ';line-height:1.2;transition:color 0.25s ease">' + sportLabel + '</div>' +
-          (dashKcal > 0 ? '<div class="sport-card-sub" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:20px;letter-spacing:1px;transition:color 0.25s ease">~' + dashKcal + ' kcal · ' + dashDurFinal + ' min</div>' : '') +
-          '<div class="sport-card-cta" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:12px 20px;display:inline-block;border-radius:2px;transition:all 0.25s ease">Commencer la séance</div>';
+        // XSS fix: build card via DOM — sportLabel comes from S.sportType (localStorage) and must not be injected via innerHTML
+        var _scLabel = document.createElement('div');
+        _scLabel.className = 'sport-card-label';
+        _scLabel.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease';
+        _scLabel.textContent = 'Séance du jour';
+        var _scTitle = document.createElement('div');
+        _scTitle.className = 'sport-card-title';
+        _scTitle.style.cssText = 'font-family:Georgia,serif;font-size:22px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:' + (dashKcal > 0 ? '6px' : '20px') + ';line-height:1.2;transition:color 0.25s ease';
+        _scTitle.textContent = sportLabel;
+        var _scCta = document.createElement('div');
+        _scCta.className = 'sport-card-cta';
+        _scCta.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:12px 20px;display:inline-block;border-radius:2px;transition:all 0.25s ease';
+        _scCta.textContent = 'Commencer la séance';
+        sportCard.appendChild(_scLabel);
+        sportCard.appendChild(_scTitle);
+        if (dashKcal > 0) {
+          var _scSub = document.createElement('div');
+          _scSub.className = 'sport-card-sub';
+          _scSub.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:20px;letter-spacing:1px;transition:color 0.25s ease';
+          _scSub.textContent = '~' + dashKcal + ' kcal · ' + dashDurFinal + ' min';
+          sportCard.appendChild(_scSub);
+        }
+        sportCard.appendChild(_scCta);
         sportCard.addEventListener('click', function() {
           if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport');
         });
@@ -385,10 +431,19 @@ window.DASHBOARD = {
       } else if (isRestDay) {
         var restCard = document.createElement('div');
         restCard.style.cssText = 'border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);padding:20px;margin-bottom:16px;border-left:2px solid var(--border,#D8D8D0);';
-        restCard.innerHTML =
-          '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Aujourd\'hui</div>' +
-          '<div style="font-family:Georgia,serif;font-size:18px;font-style:italic;color:var(--grey,#6B6B65)">Journée de récupération</div>' +
-          '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-top:6px;letter-spacing:0.5px">Repos actif · Mobilité · Hydratation</div>';
+        // Static content — built via DOM for consistency
+        var _rcLine1 = document.createElement('div');
+        _rcLine1.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px';
+        _rcLine1.textContent = 'Aujourd\'hui';
+        var _rcLine2 = document.createElement('div');
+        _rcLine2.style.cssText = 'font-family:Georgia,serif;font-size:18px;font-style:italic;color:var(--grey,#6B6B65)';
+        _rcLine2.textContent = 'Journ\u00e9e de r\u00e9cup\u00e9ration';
+        var _rcLine3 = document.createElement('div');
+        _rcLine3.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-top:6px;letter-spacing:0.5px';
+        _rcLine3.textContent = 'Repos actif \u00b7 Mobilit\u00e9 \u00b7 Hydratation';
+        restCard.appendChild(_rcLine1);
+        restCard.appendChild(_rcLine2);
+        restCard.appendChild(_rcLine3);
         root.appendChild(restCard);
       }
     })();
@@ -437,15 +492,43 @@ window.DASHBOARD = {
         this.querySelectorAll('[data-nut-sub]').forEach(function(el){ el.style.color = 'var(--grey,#6B6B65)'; });
         this.querySelectorAll('[data-nut-cta]').forEach(function(el){ el.style.color = 'var(--grey,#6B6B65)'; el.style.borderTopColor = 'var(--border,#D8D8D0)'; });
       };
-      nutCard.innerHTML =
-        '<div data-nut-label style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease">' + mealLabel + '</div>' +
-        '<div data-nut-title style="font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.3;transition:color 0.25s ease">' + mealName + '</div>' +
-        (kcal ? '<div data-nut-sub style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:16px;letter-spacing:1px;transition:color 0.25s ease">' + kcal + ' kcal</div>' : '<div style="margin-bottom:16px"></div>') +
-        '<div data-nut-cta style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);letter-spacing:3px;text-transform:uppercase;border-top:1px solid var(--border,#D8D8D0);padding-top:12px;transition:all 0.25s ease">Voir le plan nutrition →</div>';
+      // XSS fix: build card via DOM — mealName comes from weekPlan (localStorage/Supabase) and mealLabel is a computed string
+      var _nutLabelEl = document.createElement('div');
+      _nutLabelEl.setAttribute('data-nut-label', '');
+      _nutLabelEl.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;transition:color 0.25s ease';
+      _nutLabelEl.textContent = mealLabel;
+      var _nutTitleEl = document.createElement('div');
+      _nutTitleEl.setAttribute('data-nut-title', '');
+      _nutTitleEl.style.cssText = 'font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:6px;line-height:1.3;transition:color 0.25s ease';
+      _nutTitleEl.textContent = mealName;
+      var _nutSubEl = document.createElement('div');
+      if (kcal) {
+        _nutSubEl.setAttribute('data-nut-sub', '');
+        _nutSubEl.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:16px;letter-spacing:1px;transition:color 0.25s ease';
+        _nutSubEl.textContent = kcal + ' kcal';
+      } else {
+        _nutSubEl.style.marginBottom = '16px';
+      }
+      var _nutCtaEl = document.createElement('div');
+      _nutCtaEl.setAttribute('data-nut-cta', '');
+      _nutCtaEl.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);letter-spacing:3px;text-transform:uppercase;border-top:1px solid var(--border,#D8D8D0);padding-top:12px;transition:all 0.25s ease';
+      _nutCtaEl.textContent = 'Voir le plan nutrition →';
+      nutCard.appendChild(_nutLabelEl);
+      nutCard.appendChild(_nutTitleEl);
+      nutCard.appendChild(_nutSubEl);
+      nutCard.appendChild(_nutCtaEl);
       nutCard.addEventListener('click', function() {
         if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
       });
       root.appendChild(nutCard);
+
+      // Message nutrition contextuelle
+      if (window.MOTIVATION) {
+        var nutMotiv = document.createElement('p');
+        nutMotiv.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin:-8px 0 16px;letter-spacing:0.5px;line-height:1.5;';
+        nutMotiv.textContent = window.MOTIVATION.getNutritionSlotMessage(mealSlot);
+        root.appendChild(nutMotiv);
+      }
     })();
 
     /* ═══ BIRTHDAY BANNER ═══ */
@@ -453,9 +536,19 @@ window.DASHBOARD = {
       var _bdAge = window.getAge ? window.getAge() : null;
       var _bdBanner = h('div', null);
       _bdBanner.style.cssText = 'background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:20px;margin-bottom:16px;text-align:center';
-      _bdBanner.innerHTML = '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px">Anniversaire</div>' +
-        '<div style="font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09)">Joyeux anniversaire' + (_bdAge ? ' — ' + _bdAge + ' ans' : '') + '</div>' +
-        '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:6px">Toute l\'\u00e9quipe SmartFitCoach vous souhaite une merveilleuse journ\u00e9e</div>';
+      // XSS fix: build birthday banner via DOM — _bdAge is derived from localStorage birthDate
+      var _bdLine1 = document.createElement('div');
+      _bdLine1.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px';
+      _bdLine1.textContent = 'Anniversaire';
+      var _bdLine2 = document.createElement('div');
+      _bdLine2.style.cssText = 'font-family:Georgia,serif;font-size:20px;font-style:italic;color:var(--black,#0A0A09)';
+      _bdLine2.textContent = 'Joyeux anniversaire' + (_bdAge ? ' \u2014 ' + parseInt(_bdAge, 10) + ' ans' : '');
+      var _bdLine3 = document.createElement('div');
+      _bdLine3.style.cssText = 'font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:6px';
+      _bdLine3.textContent = 'Toute l\'\u00e9quipe SmartFitCoach vous souhaite une merveilleuse journ\u00e9e';
+      _bdBanner.appendChild(_bdLine1);
+      _bdBanner.appendChild(_bdLine2);
+      _bdBanner.appendChild(_bdLine3);
       root.appendChild(_bdBanner);
     }
 

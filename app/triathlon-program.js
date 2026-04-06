@@ -782,7 +782,13 @@ function generateTriathlonProgram(goal, level, weakDiscipline, opts) {
       focus: focus,
       totalHours: (totalMins / 60).toFixed(1) + 'h',
       sessions: sessions,
-      notes: notes
+      notes: notes,
+      zoneRef: {
+        swim: swimZones ? { z2: swimZones.Z2, css: swimZones.Z3 } : null,
+        bike: bikeZones ? { z2: (bikeZones.unit === 'watts' ? bikeZones.Z2 + 'W' : bikeZones.Z2 + 'km/h'), sweetspot: (bikeZones.unit === 'watts' ? bikeZones.Z3 + '-' + bikeZones.Z4 + 'W' : bikeZones.Z3 + '-' + bikeZones.Z4 + 'km/h') } : null,
+        run: runZones ? { z2: runZones.Z2, z4: runZones.Z4 } : null,
+        ftp: bikeZones && bikeZones.unit === 'watts' ? bikeZones.ftp : null
+      }
     };
   }
 

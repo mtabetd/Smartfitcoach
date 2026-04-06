@@ -97,6 +97,20 @@ function buildContext() {
     ctx.calisthPullups = S.calisthPullups || 0;
     ctx.calisthPushups = S.calisthPushups || 0;
   }
+  if (S.sportType === 'hyrox') {
+    ctx.hyroxLevel = S.hyroxLevel || '';
+    ctx.hyroxGoal = S.hyroxGoal || '';
+    ctx.hyroxWeek = S.hyroxWeek || 1;
+  }
+  if (S.sportType === 'running') {
+    ctx.runningLevel = S.runningLevel || '';
+    ctx.runningGoal = S.runningGoal || '';
+    ctx.runningWeek = S.runningWeek || 1;
+  }
+  if (S.sportType === 'cycling') {
+    ctx.cyclingLevel = S.cyclingLevel || '';
+    ctx.cyclingGoal = S.cyclingGoal || '';
+  }
   if (S.musculationWeights && Object.keys(S.musculationWeights).length) {
     ctx.muscuWeights = S.musculationWeights;
   }
@@ -178,7 +192,12 @@ function buildUI() {
   // Bouton flottant
   var btn = document.createElement('button');
   btn.id = 'ai-coach-btn';
-  btn.innerHTML = '<span style="font-size:14px">◆</span> Smart Fit Coach';
+  // Static button content: built via DOM for CSP compliance
+  var _btnIcon = document.createElement('span');
+  _btnIcon.style.fontSize = '14px';
+  _btnIcon.textContent = '\u25C6';
+  btn.appendChild(_btnIcon);
+  btn.appendChild(document.createTextNode(' Smart Fit Coach'));
   btn.addEventListener('click', togglePanel);
   document.body.appendChild(btn);
 
@@ -190,7 +209,15 @@ function buildUI() {
   var header = document.createElement('div');
   header.id = 'ai-coach-header';
   var headerText = document.createElement('div');
-  headerText.innerHTML = '<div id="ai-coach-header-title">Smart Fit Coach</div><div id="ai-coach-header-sub">Nutrition · Sport · Progression</div>';
+  // Static header: built via DOM for CSP compliance
+  var _aiHeaderTitle = document.createElement('div');
+  _aiHeaderTitle.id = 'ai-coach-header-title';
+  _aiHeaderTitle.textContent = 'Smart Fit Coach';
+  var _aiHeaderSub = document.createElement('div');
+  _aiHeaderSub.id = 'ai-coach-header-sub';
+  _aiHeaderSub.textContent = 'Nutrition \u00b7 Sport \u00b7 Progression';
+  headerText.appendChild(_aiHeaderTitle);
+  headerText.appendChild(_aiHeaderSub);
   var closeBtn = document.createElement('button');
   closeBtn.id = 'ai-coach-close';
   closeBtn.textContent = '×';
@@ -203,7 +230,9 @@ function buildUI() {
   var messages = document.createElement('div');
   messages.id = 'ai-coach-messages';
   // Message de bienvenue
-  appendCoachMessage(messages, 'Bonjour ! Je suis ton coach IA. Pose-moi n\'importe quelle question sur ta nutrition, ta programmation sport ou tes charges — j\'ai accès à ton profil complet.');
+  var ctx0 = buildContext();
+  var prenom0 = ctx0.prenom ? (', ' + ctx0.prenom) : '';
+  appendCoachMessage(messages, 'La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd\'hui' + prenom0 + ' ?');
   panel.appendChild(messages);
 
   // Suggestions
@@ -423,12 +452,40 @@ window.AI_COACH = {
   buildContext: buildContext
 };
 
-// Exposer getWellnessAdaptation pour le contexte (défini dans app-sport.js)
-// L'init attend que le DOM soit prêt
+// Le coach ne s'initialise qu'après une vraie session authentifiée.
+// On patche window.render : à chaque appel, si l'utilisateur est connecté
+// et que le bouton n'existe pas encore → init. S'il est déconnecté → cleanup.
+var _origRender = null;
+function _patchRender() {
+  if (typeof window.render !== 'function') return;
+  if (window.render._coachPatched) return;
+  _origRender = window.render;
+  window.render = function() {
+    _origRender.apply(this, arguments);
+    try {
+      var loggedIn = window.AUTH && window.AUTH.isLoggedIn && window.AUTH.isLoggedIn();
+      if (loggedIn && !document.getElementById('ai-coach-btn')) {
+        buildUI();
+      } else if (!loggedIn) {
+        var btn = document.getElementById('ai-coach-btn');
+        var panel = document.getElementById('ai-coach-panel');
+        if (btn) btn.remove();
+        if (panel) panel.remove();
+      }
+    } catch(e) {}
+  };
+  // Forward all patch flags from the previous render so other modules
+  // don't re-patch an already-patched function when they check their own flag.
+  if (_origRender._baPatched) window.render._baPatched = true;
+  window.render._coachPatched = true;
+}
+
+// Tenter le patch dès que possible, puis à nouveau après DOMContentLoaded
+_patchRender();
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', buildUI);
+  document.addEventListener('DOMContentLoaded', _patchRender);
 } else {
-  buildUI();
+  _patchRender();
 }
 
 })();

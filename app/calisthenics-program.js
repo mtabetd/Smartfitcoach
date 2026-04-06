@@ -1132,7 +1132,7 @@ var CALISTHENICS_SESSION_TEMPLATES = {
 // ── PLAN GENERATION ────────────────────────────────────────────────────────
 
 // Adapt sessions based on pullup/pushup count and equipment
-function adaptSessionToLevel(session, pullups, pushups, equipment) {
+function adaptSessionToLevel(session, pullups, pushups, equipment, dips) {
   var adapted = {
     name: session.name,
     focus: session.focus,
@@ -1141,6 +1141,7 @@ function adaptSessionToLevel(session, pullups, pushups, equipment) {
     cooldown: session.cooldown ? session.cooldown.slice() : [],
     exercises: []
   };
+  var safeDips = (typeof dips === 'number' && !isNaN(dips)) ? dips : 0;
   var hasBar = Array.isArray(equipment) && equipment.indexOf('bar') >= 0;
   var hasParallettes = Array.isArray(equipment) && equipment.indexOf('parallettes') >= 0;
   var hasRings = Array.isArray(equipment) && equipment.indexOf('rings') >= 0;
@@ -1198,6 +1199,18 @@ function adaptSessionToLevel(session, pullups, pushups, equipment) {
         adapted_ex.name = 'Push-up incline (mains sur chaise ou mur)';
         adapted_ex.reps = '8-10';
         adapted_ex.coaching = 'Mains sureleves reduisent la difficulte. Progresser vers plat.';
+      }
+    }
+
+    // Dips adaptation: if user can do many dips, add weighted dips option
+    if (safeDips >= 15) {
+      if (ex.name === 'Dip' || ex.name === 'Dips') {
+        adapted_ex.coaching = (adapted_ex.coaching ? adapted_ex.coaching + ' ' : '') + 'Niveau avance detecte (' + safeDips + ' dips): ajouter charge progressive.';
+      }
+    } else if (safeDips === 0) {
+      if (ex.name === 'Dip' || ex.name === 'Dips') {
+        adapted_ex.name = 'Dip negatif (descente 5s) ou Bench dip';
+        adapted_ex.coaching = 'Demarrer par les negatifs. Monter sur un appui, descendre lentement.';
       }
     }
 
@@ -1282,12 +1295,13 @@ function applyDeloadToSessions(sessions, volumeMult) {
 
 // ── MAIN EXPORT ─────────────────────────────────────────────────────────────
 
-window.generateCalisthenicsPlan = function(level, goals, pullups, pushups, daysPerWeek, equipment) {
+window.generateCalisthenicsPlan = function(level, goals, pullups, pushups, daysPerWeek, equipment, dips) {
   // Defensive defaults
   var safeLevel = level || 'debutant';
   var safeGoals = Array.isArray(goals) ? goals : [];
   var safePullups = (typeof pullups === 'number' && !isNaN(pullups)) ? pullups : 0;
   var safePushups = (typeof pushups === 'number' && !isNaN(pushups)) ? pushups : 0;
+  var safeDips = (typeof dips === 'number' && !isNaN(dips)) ? dips : 0;
   var safeDays = (typeof daysPerWeek === 'number' && daysPerWeek >= 2 && daysPerWeek <= 5) ? daysPerWeek : 3;
   var safeEquip = Array.isArray(equipment) && equipment.length > 0 ? equipment : ['bar'];
 
@@ -1310,7 +1324,7 @@ window.generateCalisthenicsPlan = function(level, goals, pullups, pushups, daysP
   // Adapt sessions to equipment and fitness level
   var adaptedSessions = [];
   for (var s = 0; s < levelSessions.length; s++) {
-    adaptedSessions.push(adaptSessionToLevel(levelSessions[s], safePullups, safePushups, safeEquip));
+    adaptedSessions.push(adaptSessionToLevel(levelSessions[s], safePullups, safePushups, safeEquip, safeDips));
   }
 
   // Get relevant skill data
@@ -1357,6 +1371,7 @@ window.generateCalisthenicsPlan = function(level, goals, pullups, pushups, daysP
     goals: safeGoals,
     pullups: safePullups,
     pushups: safePushups,
+    dips: safeDips,
     daysPerWeek: safeDays,
     equipment: safeEquip,
     totalWeeks: totalWeeks,

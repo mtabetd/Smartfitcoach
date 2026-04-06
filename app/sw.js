@@ -1,7 +1,7 @@
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'sfc-v22';
-const RUNTIME_CACHE = 'sfc-runtime-v22';
+const CACHE_VERSION = 'sfc-v24';
+const RUNTIME_CACHE = 'sfc-runtime-v24';
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [
@@ -31,6 +31,8 @@ const APP_SHELL = [
   './muscu-programs.js',
   './triathlon-program.js',
   './ai-coach.js',
+  './motivation.js',
+  './body-analysis.js',
   './dashboard.js',
   './prices-db.js',
   './nutrition-master.js',

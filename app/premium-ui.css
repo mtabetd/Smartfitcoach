@@ -843,6 +843,7 @@ body.dark-mode .user-bar-avatar-btn:hover .user-bar-avatar-photo{border-color:va
   color: var(--grey, #6B6B65);
   letter-spacing: 1px;
   transition: border-color 0.2s ease;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -962,13 +963,13 @@ body.dark-mode .user-bar-avatar-btn:hover .user-bar-avatar-photo{border-color:va
 .macro-bar-track {
   height: 6px;
   background: var(--border);
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
   margin: 4px 0 8px;
 }
 .macro-bar-fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: 2px;
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
 }
 
@@ -1460,7 +1461,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
     font-weight: 700;
     background: #f0f0f0;
     padding: 6px 10px;
-    border-radius: 4px;
+    border-radius: 2px;
     margin-bottom: 4px;
     direction: rtl;
     text-align: right;
@@ -1922,7 +1923,7 @@ body.dark-mode .auth-container {
   font-size: 11px;
   font-weight: 700;
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: 2px;
   margin-left: 6px;
   vertical-align: middle;
   letter-spacing: 0.3px;
@@ -1947,7 +1948,7 @@ body.dark-mode .auth-container {
   margin: 8px 0 4px;
   padding: 6px 10px;
   background: rgba(192, 57, 43, 0.06);
-  border-radius: 8px;
+  border-radius: 2px;
   border-left: 3px solid #C0392B;
 }
 .day-rest-indicator {
@@ -1958,7 +1959,7 @@ body.dark-mode .auth-container {
   margin: 8px 0 4px;
   padding: 6px 10px;
   background: rgba(127, 140, 141, 0.06);
-  border-radius: 8px;
+  border-radius: 2px;
   border-left: 3px solid #8E44AD;
 }
 
@@ -2004,7 +2005,7 @@ body.dark-mode .auth-container {
   width: 54px;
   padding: 4px;
   border: 1px solid var(--border, #BDC3C7);
-  border-radius: 4px;
+  border-radius: 2px;
   text-align: center;
   font-family: Georgia, serif;
   font-size: 13px;
@@ -2020,7 +2021,7 @@ body.dark-mode .auth-container {
   font-size: 11px;
   font-weight: 700;
   padding: 1px 5px;
-  border-radius: 4px;
+  border-radius: 2px;
   display: inline-block;
 }
 .delta-up {
@@ -2039,7 +2040,7 @@ body.dark-mode .auth-container {
   padding: 8px 12px;
   background: linear-gradient(135deg, #27AE60, #2ECC71);
   color: #fff;
-  border-radius: 8px;
+  border-radius: 2px;
   font-family: "Helvetica Neue", Arial, sans-serif;
   font-weight: 600;
   font-size: 13px;
@@ -2056,7 +2057,7 @@ body.dark-mode .auth-container {
 .set-validate-btn {
   padding: 4px 10px;
   border: none;
-  border-radius: 6px;
+  border-radius: 2px;
   background: linear-gradient(135deg, #27AE60, #2ECC71);
   color: #fff;
   font-family: "Helvetica Neue", Arial, sans-serif;
@@ -2084,7 +2085,10 @@ body.dark-mode .auth-container {
    ------------------------------------------------------- */
 .rest-timer-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 9999;
   display: none;
   align-items: center;
@@ -2152,7 +2156,10 @@ body.dark-mode .auth-container {
 }
 .rest-timer-time {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2188,7 +2195,7 @@ body.dark-mode .auth-container {
 .rest-timer-btn {
   padding: 10px 18px;
   border: none;
-  border-radius: 10px;
+  border-radius: 2px;
   font-family: "Helvetica Neue", Arial, sans-serif;
   font-size: 13px;
   font-weight: 700;
@@ -2227,7 +2234,7 @@ body.dark-mode .auth-container {
   color: #fff;
   padding: 14px 32px;
   font-size: 15px;
-  border-radius: 12px;
+  border-radius: 2px;
   letter-spacing: 0.5px;
 }
 
@@ -2267,6 +2274,6 @@ body.dark-mode .auth-container {
   color: #fff;
   padding: 14px 32px;
   font-size: 15px;
-  border-radius: 12px;
+  border-radius: 2px;
   letter-spacing: 0.5px;
 }

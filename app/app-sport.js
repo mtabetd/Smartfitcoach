@@ -821,8 +821,11 @@ function renderObjectif(p) {
 // ─── ESTIMATION CALORIQUE PAR SEANCE ───
 // Formule MET : kcal = MET x poids_kg x duree_heures (Ainsworth 2011)
 function estimateKcal(sportType, level, durationMins) {
+ // Normalise English sportLevel keys (SPORT_LEVELS ids) to French MET keys used below
+ var LEVEL_FR = { beginner: 'debutant', intermediate: 'intermediaire', advanced: 'avance', pro: 'elite' };
+ var levelNorm = LEVEL_FR[level] || level;
  var MET_VALUES = {
-  crossfit: { scaled: 7, rx: 9, rx_plus: 12, 'default': 9 },
+  crossfit: { scaled: 7, inter: 8, rx: 9, rx_plus: 12, 'default': 9 },
   running: { debutant: 7, intermediaire: 9, avance: 11, elite: 12, 'default': 9 },
   triathlon: { beginner: 8, intermediate: 10, advanced: 12, elite: 13, 'default': 10 },
   calisthenics: { debutant: 4, intermediaire: 6, avance: 8, elite: 9, 'default': 6 },
@@ -834,7 +837,7 @@ function estimateKcal(sportType, level, durationMins) {
   golf: { debutant: 3.5, intermediaire: 4, avance: 4.5, elite: 5, 'default': 4 }
  };
  var SESSION_DURATION_DEFAULTS = {
-  crossfit: { scaled: 60, rx: 75, rx_plus: 90 },
+  crossfit: { scaled: 60, inter: 70, rx: 75, rx_plus: 90 },
   running: { debutant: 45, intermediaire: 60, avance: 75, elite: 90 },
   triathlon: { beginner: 75, intermediate: 90, advanced: 105, elite: 120 },
   calisthenics: { debutant: 50, intermediaire: 65, avance: 80, elite: 90 },
@@ -847,14 +850,16 @@ function estimateKcal(sportType, level, durationMins) {
  };
  var met = 8;
  if (MET_VALUES[sportType]) {
-  met = MET_VALUES[sportType][level] || MET_VALUES[sportType]['default'] || 8;
+  met = MET_VALUES[sportType][levelNorm] || MET_VALUES[sportType][level] || MET_VALUES[sportType]['default'] || 8;
  }
- var poids = parseFloat(S.weight) || 75;
- var defaultDur = SESSION_DURATION_DEFAULTS[sportType] ? (SESSION_DURATION_DEFAULTS[sportType][level] || 60) : 60;
+ var _rawWeight = parseFloat(S.weight);
+ var poids = (_rawWeight > 0) ? _rawWeight : 75;
+ var defaultDur = SESSION_DURATION_DEFAULTS[sportType] ? (SESSION_DURATION_DEFAULTS[sportType][levelNorm] || SESSION_DURATION_DEFAULTS[sportType][level] || 60) : 60;
  var dureeMin = durationMins || defaultDur;
  var duree = dureeMin / 60;
  return Math.round(met * poids * duree);
 }
+window.estimateKcal = estimateKcal;
 
 // Creer une carte estimation calorique pour les programmes sport
 function buildKcalCard(kcal, durationMins) {
@@ -911,7 +916,7 @@ function renderMuscuMedicalQ(p) {
  zonesData.forEach(function(z) {
  var active = med[z.key];
  var chip = h('div', {
- style: 'padding:8px 14px;border-radius:20px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
+ style: 'padding:8px 14px;border-radius:2px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
  onclick: (function(key){ return function(){ S.muscuMedical[key] = !S.muscuMedical[key]; window.render(); }; })(z.key)
  }, z.icon + ' ' + z.label);
  zonesGrid.appendChild(chip);
@@ -940,7 +945,7 @@ function renderMuscuMedicalQ(p) {
  antecedentsData.forEach(function(a) {
  var active = med[a.key];
  var chip = h('div', {
- style: 'padding:8px 14px;border-radius:20px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
+ style: 'padding:8px 14px;border-radius:2px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
  onclick: (function(key){ return function(){ S.muscuMedical[key] = !S.muscuMedical[key]; window.render(); }; })(a.key)
  }, a.label);
  antGrid.appendChild(chip);
@@ -961,7 +966,7 @@ function renderMuscuMedicalQ(p) {
  painLevels.forEach(function(pl) {
  var active = med.painLevel === pl.val;
  var btn = h('div', {
- style: 'padding:8px 16px;border-radius:20px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
+ style: 'padding:8px 16px;border-radius:2px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
  onclick: (function(v){ return function(){ S.muscuMedical.painLevel = v; window.render(); }; })(pl.val)
  }, pl.label);
  painRow.appendChild(btn);
@@ -1072,6 +1077,7 @@ function renderChargesQuestionnaire(p) {
  var repsVal = S.muscuStrengthProfile[key + '_reps'] || 8;
  PERF_HISTORY.recordMuscuStrength(key, v, repsVal);
  }
+ if (window.GAMIFICATION) GAMIFICATION.checkMuscuBadges(S.muscuStrengthProfile);
  }; })(exDef.key)
  });
  inputWrap.appendChild(inp);
@@ -1794,6 +1800,14 @@ function renderWellnessCheckin(p, onComplete) {
  p.appendChild(h('h1', {html: 'Comment<br><em>vous sentez-vous ?</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Quelques questions pour adapter votre seance du jour.'));
 
+  // Message d'encouragement checkin
+  if (window.MOTIVATION) {
+    var checkinMotiv = document.createElement('p');
+    checkinMotiv.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey,#6B6B65);margin:0 0 24px;line-height:1.6;border-left:2px solid var(--border,#D8D8D0);padding-left:14px;';
+    checkinMotiv.textContent = 'Prendre une minute pour évaluer ton état, c\'est déjà un acte de performance.';
+    p.appendChild(checkinMotiv);
+  }
+
  // Question 1 — Sommeil
  var q1 = h('div', {style: 'margin-bottom:24px'});
  q1.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px'}, 'Qualite du sommeil'));
@@ -1877,18 +1891,37 @@ function renderWellnessCheckin(p, onComplete) {
 function getWellnessAdaptation() {
  var w = S.todayWellness || {};
  var score = 0;
- if (w.sleep <= 2) score -= 2;
- else if (w.sleep >= 4) score += 1;
- if (w.muscles === 'douleurs') score -= 3;
- else if (w.muscles === 'courbatures') score -= 1;
- if (w.energy === 'bas') score -= 2;
- else if (w.energy === 'haut') score += 1;
+ // sleep: UI stores numeric 1-5; normalise legacy English strings just in case
+ var sleepVal = w.sleep;
+ if (sleepVal === 'good' || sleepVal === 'bien') sleepVal = 4;
+ else if (sleepVal === 'excellent') sleepVal = 5;
+ else if (sleepVal === 'average' || sleepVal === 'moyen') sleepVal = 3;
+ else if (sleepVal === 'bad' || sleepVal === 'mauvais') sleepVal = 2;
+ else if (sleepVal === 'very_bad' || sleepVal === 'tres_mauvais') sleepVal = 1;
+ sleepVal = parseFloat(sleepVal);
+ if (!isNaN(sleepVal)) {
+  if (sleepVal <= 2) score -= 2;
+  else if (sleepVal >= 4) score += 1;
+ }
+ // muscles: UI stores 'frais' / 'courbatures' / 'douleurs'; also accept English aliases
+ var musclesVal = w.muscles;
+ if (musclesVal === 'fresh' || musclesVal === 'average' || musclesVal === 'normal') musclesVal = 'frais';
+ if (musclesVal === 'douleurs' || musclesVal === 'sore') score -= 3;
+ else if (musclesVal === 'courbatures' || musclesVal === 'doms') score -= 1;
+ // energy: UI stores 'bas' / 'moyen' / 'haut'; also accept English aliases
+ var energyVal = w.energy;
+ if (energyVal === 'high') energyVal = 'haut';
+ else if (energyVal === 'low') energyVal = 'bas';
+ else if (energyVal === 'average' || energyVal === 'medium' || energyVal === 'normal') energyVal = 'moyen';
+ if (energyVal === 'bas') score -= 2;
+ else if (energyVal === 'haut') score += 1;
 
  if (score <= -3) return { level: 'recovery', label: 'Seance recuperation recommandee', color: '#C0392B', advice: 'Votre etat de forme necessite une seance legere. Intensite reduite de 40%.' };
  if (score <= -1) return { level: 'reduced', label: 'Intensite reduite', color: '#E67E22', advice: 'Legere fatigue detectee. Intensite reduite de 20%. Ecoutez votre corps.' };
  if (score >= 2) return { level: 'peak', label: 'Forme optimale', color: '#27AE60', advice: 'Excellent etat de forme. Vous pouvez pousser sur les sets lourds.' };
  return { level: 'normal', label: 'Forme correcte', color: '#1A3A6A', advice: 'Bonne seance en perspective. Respectez les temps de repos.' };
 }
+window.getWellnessAdaptation = getWellnessAdaptation;
 
 function appendWellnessBanner(p) {
   var adapt = getWellnessAdaptation();
@@ -1918,6 +1951,16 @@ function appendWellnessBanner(p) {
   banner.appendChild(rebtn);
 
   p.appendChild(banner);
+
+  // Message de soutien selon le niveau de forme
+  if (window.MOTIVATION) {
+    var motivLevel = adapt.level || 'normal';
+    var motivText = window.MOTIVATION.getWellnessMessage(motivLevel);
+    var motivEl = document.createElement('p');
+    motivEl.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);margin:0 0 20px;line-height:1.6;';
+    motivEl.textContent = motivText;
+    p.appendChild(motivEl);
+  }
 }
 
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
@@ -3191,7 +3234,10 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  }
  el.style.display = 'flex';
  el.style.position = 'fixed';
- el.style.inset = '0';
+ el.style.top = '0';
+ el.style.left = '0';
+ el.style.right = '0';
+ el.style.bottom = '0';
  el.style.zIndex = '9999';
  el.style.transform = 'none';
  el.style.transition = 'none';
@@ -3494,6 +3540,15 @@ function saveMuscuSessionLog() {
  });
  }
  localStorage.setItem('mtd_muscu_progression_' + uid, JSON.stringify(S.muscuProgressionHistory));
+
+ // Track muscu session count for badges
+ if (window.GAMIFICATION) {
+  var sessionCount = GAMIFICATION.incrementCounter('muscu_sessions');
+  if (sessionCount >= 10) GAMIFICATION.unlockBadge('muscu_sessions_10');
+  if (sessionCount >= 50) GAMIFICATION.unlockBadge('muscu_sessions_50');
+  // Check strength profile badges on each session save
+  if (S.muscuStrengthProfile) GAMIFICATION.checkMuscuBadges(S.muscuStrengthProfile);
+ }
  } catch (e) {
  console.warn('[saveMuscuSessionLog] localStorage error:', e);
  }
@@ -4228,7 +4283,7 @@ function renderMusculationProgram(p) {
  setHeader.appendChild(h('div', {style:'text-align:center'}, '\u0394'));
  setHeader.appendChild(h('div', {}, 'R\u00e9alis\u00e9'));
  setHeaderWrap.appendChild(setHeader);
- var _serieProgressEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px;padding:2px 6px;border-radius:10px;' + (_doneCount === numSets ? 'background:#1A4A1A;color:#fff' : 'background:var(--border);color:var(--grey)')}, _doneCount + '\u00a0/\u00a0' + numSets + ' s\u00e9ries');
+ var _serieProgressEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px;padding:2px 6px;border-radius:2px;' + (_doneCount === numSets ? 'background:#1A4A1A;color:#fff' : 'background:var(--border);color:var(--grey)')}, _doneCount + '\u00a0/\u00a0' + numSets + ' s\u00e9ries');
  setHeaderWrap.appendChild(_serieProgressEl);
  setTable.appendChild(setHeaderWrap);
 
@@ -4617,7 +4672,7 @@ function renderMusculationProgram(p) {
  compPanel.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:3px solid var(--orange,#6A4A1A);padding:8px 12px;margin-bottom:14px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--text,#0A0A09);line-height:1.5'}, '\u26a0 Ces calories sont d\u00e9j\u00e0 int\u00e9gr\u00e9es dans votre TDEE via votre facteur d\'activit\u00e9. Ce bilan confirme votre d\u00e9pense r\u00e9elle — ne les d\u00e9duisez pas en plus de votre objectif calorique journalier.'));
  // Contexte nutritionnel : montre l'impact de la session sur le budget calorique
  var nc = getNutritionContext();
- var nutritionContextHtml = '';
+ // XSS fix: build nutrition context panel via DOM — values are numeric but use textContent for safety
  if (nc && nc.caloriesTarget > 0 && kcalRes && kcalRes.total > 0) {
  var pct = Math.round((kcalRes.total / nc.caloriesTarget) * 100);
  var warningColor = pct > 40 ? 'var(--red,#5A1010)' : pct > 25 ? 'var(--orange,#6A4A1A)' : 'var(--green,#1A4A1A)';
@@ -4626,24 +4681,42 @@ function renderMusculationProgram(p) {
  : pct > 25
  ? '\uD83D\uDD36 Session mod\u00e9r\u00e9e \u2014 nutrition pr\u00e9/post recommand\u00e9e'
  : '\u2705 Session \u00e9quilibr\u00e9e pour votre objectif';
- nutritionContextHtml =
- '<div style="margin-top:12px;padding:10px 14px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:13px">' +
- '<div style="font-weight:600;margin-bottom:6px;color:var(--text)">\uD83C\uDF7D\ufe0f Impact nutritionnel</div>' +
- '<div style="display:flex;justify-content:space-between;margin-bottom:4px">' +
- '<span>Cible calorique du jour</span>' +
- '<span style="font-weight:600">' + nc.caloriesTarget + ' kcal</span>' +
- '</div>' +
- '<div style="display:flex;justify-content:space-between;margin-bottom:4px">' +
- '<span>Calories br\u00fcl\u00e9es en session</span>' +
- '<span style="font-weight:600;color:' + warningColor + '">\u2212' + kcalRes.total + ' kcal (' + pct + '%)</span>' +
- '</div>' +
- '<div style="display:flex;justify-content:space-between;margin-bottom:8px">' +
- '<span>Cible prot\u00e9ines</span>' +
- '<span style="font-weight:600">' + nc.proteinGrams + ' g</span>' +
- '</div>' +
- '<div style="font-size:13px;color:' + warningColor + '">' + warningMsg + '</div>' +
- '</div>';
- compPanel.appendChild(h('div', {html: nutritionContextHtml}));
+ var _ncWrap = document.createElement('div');
+ _ncWrap.style.cssText = 'margin-top:12px;padding:10px 14px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);font-size:13px';
+ var _ncTitle = document.createElement('div');
+ _ncTitle.style.cssText = 'font-weight:600;margin-bottom:6px;color:var(--text)';
+ _ncTitle.textContent = '\uD83C\uDF7D\ufe0f Impact nutritionnel';
+ _ncWrap.appendChild(_ncTitle);
+ function _ncRow(label, value, valueStyle) {
+   var row = document.createElement('div');
+   row.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:4px';
+   var lbl = document.createElement('span');
+   lbl.textContent = label;
+   var val = document.createElement('span');
+   val.style.fontWeight = '600';
+   if (valueStyle) val.style.color = valueStyle;
+   val.textContent = value;
+   row.appendChild(lbl);
+   row.appendChild(val);
+   return row;
+ }
+ _ncWrap.appendChild(_ncRow('Cible calorique du jour', nc.caloriesTarget + ' kcal', null));
+ _ncWrap.appendChild(_ncRow('Calories br\u00fcl\u00e9es en session', '\u2212' + kcalRes.total + ' kcal (' + pct + '%)', warningColor));
+ var _ncProRow = document.createElement('div');
+ _ncProRow.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:8px';
+ var _ncProLbl = document.createElement('span');
+ _ncProLbl.textContent = 'Cible prot\u00e9ines';
+ var _ncProVal = document.createElement('span');
+ _ncProVal.style.fontWeight = '600';
+ _ncProVal.textContent = nc.proteinGrams + ' g';
+ _ncProRow.appendChild(_ncProLbl);
+ _ncProRow.appendChild(_ncProVal);
+ _ncWrap.appendChild(_ncProRow);
+ var _ncMsg = document.createElement('div');
+ _ncMsg.style.cssText = 'font-size:13px;color:' + warningColor;
+ _ncMsg.textContent = warningMsg;
+ _ncWrap.appendChild(_ncMsg);
+ compPanel.appendChild(_ncWrap);
  }
  var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
  if (!S.sessionHistory) S.sessionHistory = {};
@@ -5124,8 +5197,11 @@ function renderRunningProgram(p) {
  // ─── ESTIMATION CALORIQUE RUNNING ───
  (function() {
   var runLevel = S.runningLevel || 'intermediaire';
+  // Normalize English level keys to French for SESSION_DUR_RUN lookup
+  var LEVEL_FR_RUN = { beginner: 'debutant', intermediate: 'intermediaire', advanced: 'avance' };
+  var runLevelFr = LEVEL_FR_RUN[runLevel] || runLevel;
   var SESSION_DUR_RUN = { debutant: 45, intermediaire: 60, avance: 75, elite: 90 };
-  var runDur = SESSION_DUR_RUN[runLevel] || 60;
+  var runDur = SESSION_DUR_RUN[runLevelFr] || 60;
   var runKcal = estimateKcal('running', runLevel, runDur);
   p.appendChild(buildKcalCard(runKcal, runDur));
  }());
@@ -6925,7 +7001,7 @@ function renderCalisthenicsProgram(content) {
  // Generate the full plan
  var planData;
  try {
-  planData = window.generateCalisthenicsPlan(level, skills, pullups, pushups, days, equipment);
+  planData = window.generateCalisthenicsPlan(level, skills, pullups, pushups, days, equipment, dips);
  } catch(e) {
   content.appendChild(h('div', {'class': 'card'}, h('div', {style: 'color:red;font-size:13px'}, 'Erreur generation programme: ' + e.message)));
   return;
@@ -6934,6 +7010,11 @@ function renderCalisthenicsProgram(content) {
  // State for current week display
  if (!S.calisthCurrentWeek || S.calisthCurrentWeek < 1) { S.calisthCurrentWeek = 1; }
  if (S.calisthCurrentWeek > planData.totalWeeks) { S.calisthCurrentWeek = planData.totalWeeks; }
+
+ // Gamification: unlock calisthenics badges on program load
+ if (window.GAMIFICATION && window.GAMIFICATION.checkCalisthenicsBadges) {
+  window.GAMIFICATION.checkCalisthenicsBadges({ currentWeek: S.calisthCurrentWeek, pullups: pullups });
+ }
 
  // ── HEADER ──
  var headerCard = h('div', {'class': 'card', style: 'margin-bottom:16px'});

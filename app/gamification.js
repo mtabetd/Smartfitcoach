@@ -104,9 +104,38 @@ var BADGE_DEFS = [
   {id: 'first_workout', name: 'Sportif', desc: 'Premier programme sport', icon: '△', category: 'sport'},
   {id: 'exercises_20', name: 'Athlète', desc: '20 exercices consultés', icon: '△', category: 'sport'},
 
+  // Calisthenics progression badges
+  {id: 'calisth_first_session', name: 'Callisthéniste', desc: 'Premier programme callisthénie généré', icon: '◇', category: 'calisthenics'},
+  {id: 'calisth_week_4', name: 'Mois Callisthénie', desc: '4 semaines de callisthénie complétées', icon: '△', category: 'calisthenics'},
+  {id: 'calisth_week_12', name: 'Trimestriel Calisth.', desc: '12 semaines de callisthénie complétées', icon: '◆', category: 'calisthenics'},
+  {id: 'calisth_first_pullup', name: 'Première Traction', desc: 'Première traction stricte réalisée', icon: '★', category: 'calisthenics'},
+  {id: 'calisth_muscle_up', name: 'Muscle-Up', desc: 'Muscle-up strict maîtrisé', icon: '★', category: 'calisthenics'},
+
+  // Musculation PR badges
+  {id: 'bench_100', name: 'Centenaire', desc: 'Développé couché : 100 kg', icon: '◆', category: 'muscu'},
+  {id: 'bench_120', name: 'Power Chest', desc: 'Développé couché : 120 kg', icon: '◆', category: 'muscu'},
+  {id: 'squat_100', name: 'Squatteur', desc: 'Squat : 100 kg', icon: '◆', category: 'muscu'},
+  {id: 'squat_140', name: 'Jambes de Fer', desc: 'Squat : 140 kg', icon: '★', category: 'muscu'},
+  {id: 'deadlift_100', name: 'Terrasseur', desc: 'Soulevé de terre : 100 kg', icon: '◆', category: 'muscu'},
+  {id: 'deadlift_160', name: 'Force Brute', desc: 'Soulevé de terre : 160 kg', icon: '★', category: 'muscu'},
+  {id: 'overhead_70', name: 'Bras au Ciel', desc: 'Développé militaire : 70 kg', icon: '◆', category: 'muscu'},
+  {id: 'total_300', name: 'Powerlifter', desc: 'Total (bench+squat+dl) ≥ 300 kg', icon: '★', category: 'muscu'},
+  {id: 'total_400', name: 'Elite Force', desc: 'Total (bench+squat+dl) ≥ 400 kg', icon: '★', category: 'muscu'},
+  {id: 'muscu_sessions_10', name: 'Régularité Fer', desc: '10 séances muscu enregistrées', icon: '△', category: 'muscu'},
+  {id: 'muscu_sessions_50', name: 'Dédicace', desc: '50 séances muscu enregistrées', icon: '★', category: 'muscu'},
+  {id: 'first_pr', name: 'Premier PR', desc: 'Premier record personnel établi', icon: '◇', category: 'muscu'},
+
   // Photos
   {id: 'first_photo', name: 'Selfie', desc: 'Première photo de progression', icon: '□', category: 'photos'},
-  {id: 'both_photos', name: 'Analyse Complète', desc: 'Photos face + dos', icon: '□', category: 'photos'}
+  {id: 'both_photos', name: 'Analyse Complète', desc: 'Photos face + dos', icon: '□', category: 'photos'},
+
+  // Hyrox badges
+  {id: 'hyrox_first_program', name: 'Hyrox Starter', desc: 'Premier programme Hyrox généré', icon: '◇', category: 'hyrox'},
+  {id: 'hyrox_week_4', name: 'Mois Hyrox', desc: '4 semaines de préparation Hyrox', icon: '△', category: 'hyrox'},
+  {id: 'hyrox_week_12', name: 'Prépa Complète', desc: '12 semaines de préparation Hyrox terminées', icon: '◆', category: 'hyrox'},
+  {id: 'hyrox_sub90', name: 'Sub 1h30', desc: 'Objectif Hyrox sub 1h30 atteint', icon: '★', category: 'hyrox'},
+  {id: 'hyrox_sub60', name: 'Sub 1h00', desc: 'Objectif Hyrox sub 1h00 atteint', icon: '★', category: 'hyrox'},
+  {id: 'hyrox_pro', name: 'Élite Hyrox', desc: 'Programme niveau Pro/Élite', icon: '★', category: 'hyrox'}
 ];
 
 // ─── STREAK TRACKING ───
@@ -245,7 +274,7 @@ function renderBadgesPanel(container) {
 
   // Header
   var header = _h('div', '', '');
-  header.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#6B6B65;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #D8D8D0';
+  header.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border,#D8D8D0)';
   header.textContent = 'Badges — ' + unlocked.length + ' / ' + BADGE_DEFS.length;
   section.appendChild(header);
 
@@ -284,7 +313,7 @@ function renderStreakWidget(container) {
   var streak = getStreak();
 
   var widget = _h('div', '');
-  widget.style.cssText = 'display:flex;align-items:center;gap:16px;padding:12px 16px;border:1px solid #D8D8D0;background:#F4F4F0;margin-bottom:12px';
+  widget.style.cssText = 'display:flex;align-items:center;gap:16px;padding:12px 16px;border:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);margin-bottom:12px';
 
   // Streak number
   var num = _h('div', '');
@@ -295,7 +324,7 @@ function renderStreakWidget(container) {
   // Info
   var info = _h('div', '');
   var label = _h('div', '');
-  label.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#6B6B65';
+  label.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65)';
   label.textContent = 'Jours consécutifs';
   info.appendChild(label);
 
@@ -321,10 +350,10 @@ function renderDailyQuoteWidget(container) {
   var quote = getDailyQuote();
 
   var widget = _h('div', '');
-  widget.style.cssText = 'border-left:2px solid #0A0A09;padding:12px 16px;margin:16px 0;background:rgba(10,10,9,0.02)';
+  widget.style.cssText = 'border-left:2px solid var(--black,#0A0A09);padding:12px 16px;margin:16px 0;background:rgba(10,10,9,0.02)';
 
   var text = _h('div', '');
-  text.style.cssText = 'font-family:Georgia;font-size:13px;font-style:italic;line-height:1.7;color:#0A0A09';
+  text.style.cssText = 'font-family:Georgia;font-size:13px;font-style:italic;line-height:1.7;color:var(--black,#0A0A09)';
   text.textContent = '"' + quote.text + '"';
   widget.appendChild(text);
 
@@ -338,6 +367,60 @@ function renderDailyQuoteWidget(container) {
   container.appendChild(widget);
 }
 
+// ─── MUSCU BADGE CHECKER ───
+// Call after each muscu session or weight update to unlock PR badges.
+// profile: { bench_press, squat, deadlift, overhead_press } in kg (1RM estimated)
+function checkMuscuBadges(profile) {
+  if (!profile) return;
+  var bench = parseFloat(profile.bench_press) || 0;
+  var squat = parseFloat(profile.squat) || 0;
+  var dl = parseFloat(profile.deadlift) || 0;
+  var ohp = parseFloat(profile.overhead_press) || 0;
+  var total = bench + squat + dl;
+
+  if (bench >= 100) unlockBadge('bench_100');
+  if (bench >= 120) unlockBadge('bench_120');
+  if (squat >= 100) unlockBadge('squat_100');
+  if (squat >= 140) unlockBadge('squat_140');
+  if (dl >= 100) unlockBadge('deadlift_100');
+  if (dl >= 160) unlockBadge('deadlift_160');
+  if (ohp >= 70) unlockBadge('overhead_70');
+  if (total >= 300) unlockBadge('total_300');
+  if (total >= 400) unlockBadge('total_400');
+  // First PR: any lift > 0
+  if (bench > 0 || squat > 0 || dl > 0 || ohp > 0) unlockBadge('first_pr');
+}
+
+// ─── CALISTHENICS BADGE CHECKER ───
+// Call when calisthenics program is generated or week advances.
+// profile: { currentWeek, pullups } from S state
+function checkCalisthenicsBadges(profile) {
+  if (!profile) return;
+  unlockBadge('calisth_first_session');
+  unlockBadge('first_workout');
+  var week = parseInt(profile.currentWeek) || 1;
+  if (week >= 4)  unlockBadge('calisth_week_4');
+  if (week >= 12) unlockBadge('calisth_week_12');
+  var pullups = parseInt(profile.pullups) || 0;
+  if (pullups > 0) unlockBadge('calisth_first_pullup');
+}
+
+// ─── HYROX BADGE CHECKER ───
+// Call when Hyrox program is generated or week advances.
+// profile: { currentWeek, level, goal } from S state (S.hyroxWeek, S.hyroxLevel, S.hyroxGoal)
+function checkHyroxBadges(profile) {
+  if (!profile) return;
+  unlockBadge('hyrox_first_program');
+  unlockBadge('first_workout');
+  var week = parseInt(profile.currentWeek) || 1;
+  if (week >= 4)  unlockBadge('hyrox_week_4');
+  if (week >= 12) unlockBadge('hyrox_week_12');
+  if (profile.level === 'pro') unlockBadge('hyrox_pro');
+  var goal = profile.goal || '';
+  if (goal === 'sub90' || goal === 'sub75' || goal === 'sub60' || goal === 'podium') unlockBadge('hyrox_sub90');
+  if (goal === 'sub60' || goal === 'podium') unlockBadge('hyrox_sub60');
+}
+
 // ─── PUBLIC API ───
 window.GAMIFICATION = {
   updateStreak: updateStreak,
@@ -348,6 +431,9 @@ window.GAMIFICATION = {
   incrementCounter: incrementCounter,
   getCounter: getCounter,
   showToast: showToast,
+  checkMuscuBadges: checkMuscuBadges,
+  checkCalisthenicsBadges: checkCalisthenicsBadges,
+  checkHyroxBadges: checkHyroxBadges,
   renderBadgesPanel: renderBadgesPanel,
   renderStreakWidget: renderStreakWidget,
   renderDailyQuoteWidget: renderDailyQuoteWidget,
