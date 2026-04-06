@@ -2,7 +2,7 @@
 // Analyse corporelle par vision IA — clé API côté serveur uniquement
 
 const MODEL = 'claude-sonnet-4-6';
-const MAX_TOKENS = 4096;
+const MAX_TOKENS = 600; // Réduit : analyse structurée courte
 
 // Domaines autorisés pour CORS
 var ALLOWED_ORIGINS = [
@@ -15,33 +15,58 @@ var ALLOWED_ORIGINS = [
   'http://127.0.0.1:3000'
 ];
 
-// ── Rate Limiting ────────────────────────────────────────────────────────────
-var _rateLimitStore = {};
-var RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
-var RATE_LIMIT_MAX_BODY_ANALYSIS = 5; // max 5 req/min (vision = coûteux)
+// ── Rate Limiting (sliding window horaire + quota journalier) ────────────────
+var _hourStore = new Map(); // ip -> [{ts}]
+var _dayStore = new Map();  // ip -> {date: 'YYYY-MM-DD', count: N}
 
-function checkRateLimit(ip, maxRequests) {
-  var now = Date.now();
-  if (!_rateLimitStore[ip]) _rateLimitStore[ip] = [];
-  // Nettoyer les entrées expirées (sliding window)
-  _rateLimitStore[ip] = _rateLimitStore[ip].filter(function(t) {
-    return now - t < RATE_LIMIT_WINDOW_MS;
-  });
-  if (_rateLimitStore[ip].length >= maxRequests) {
-    return false; // Rate limit dépassé
-  }
-  _rateLimitStore[ip].push(now);
-  return true;
+var HOUR_WINDOW_MS = 3600000; // 1 heure
+var HOUR_MAX = 3;  // max 3 req/heure par IP (vision = très coûteux)
+var DAY_MAX = 5;   // max 5 req/jour par IP
+
+function getTodayUTC() {
+  return new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
 }
 
-// Nettoyer périodiquement le store pour éviter la fuite mémoire
+function checkRateLimit(ip) {
+  var now = Date.now();
+  var today = getTodayUTC();
+
+  // ── Quota journalier ──
+  var dayEntry = _dayStore.get(ip);
+  if (!dayEntry || dayEntry.date !== today) {
+    dayEntry = { date: today, count: 0 };
+  }
+  if (dayEntry.count >= DAY_MAX) {
+    return { allowed: false, reason: 'quota_day' };
+  }
+
+  // ── Sliding window horaire ──
+  var hourList = _hourStore.get(ip) || [];
+  hourList = hourList.filter(function(t) { return now - t < HOUR_WINDOW_MS; });
+  if (hourList.length >= HOUR_MAX) {
+    return { allowed: false, reason: 'quota_hour' };
+  }
+
+  // Enregistrer la requête
+  hourList.push(now);
+  _hourStore.set(ip, hourList);
+  dayEntry.count += 1;
+  _dayStore.set(ip, dayEntry);
+
+  return { allowed: true };
+}
+
+// Nettoyer périodiquement pour éviter la fuite mémoire
 function pruneRateLimitStore() {
   var now = Date.now();
-  Object.keys(_rateLimitStore).forEach(function(ip) {
-    _rateLimitStore[ip] = _rateLimitStore[ip].filter(function(t) {
-      return now - t < RATE_LIMIT_WINDOW_MS;
-    });
-    if (_rateLimitStore[ip].length === 0) delete _rateLimitStore[ip];
+  var today = getTodayUTC();
+  _hourStore.forEach(function(list, ip) {
+    var filtered = list.filter(function(t) { return now - t < HOUR_WINDOW_MS; });
+    if (filtered.length === 0) _hourStore.delete(ip);
+    else _hourStore.set(ip, filtered);
+  });
+  _dayStore.forEach(function(entry, ip) {
+    if (entry.date !== today) _dayStore.delete(ip);
   });
 }
 
@@ -133,11 +158,16 @@ exports.handler = async function(event, context) {
   // Prendre uniquement la première IP si liste (x-forwarded-for peut contenir plusieurs IPs)
   clientIp = clientIp.split(',')[0].trim();
 
-  if (!checkRateLimit(clientIp, RATE_LIMIT_MAX_BODY_ANALYSIS)) {
+  var rl = checkRateLimit(clientIp);
+  if (!rl.allowed) {
+    var retryAfter = rl.reason === 'quota_hour' ? '3600' : '86400';
+    var rlMsg = rl.reason === 'quota_day'
+      ? 'Quota journalier atteint (5 analyses/jour). Revenez demain.'
+      : 'Trop de requêtes (max 3 analyses/heure). Veuillez patienter.';
     return {
       statusCode: 429,
-      headers: Object.assign({}, headers, { 'Retry-After': '60' }),
-      body: JSON.stringify({ error: 'Trop de requêtes. Veuillez patienter avant de réessayer.' })
+      headers: Object.assign({}, headers, { 'Retry-After': retryAfter }),
+      body: JSON.stringify({ error: rlMsg })
     };
   }
 
@@ -321,72 +351,34 @@ exports.handler = async function(event, context) {
 };
 
 function buildSystemPrompt(ctx, exercisesDb) {
-  var prenom = ctx.prenom || 'cet utilisateur';
-  var exercisesList = exercisesDb.length > 0 ? exercisesDb.join(', ') : 'Développé couché, Squat, Soulevé de terre, Tractions, Dips, Rowing barre, Curl biceps, Extension triceps, Presse à cuisses, Fentes, Hip thrust, Gainage, Crunch, Burpee, Box jump, Kettlebell swing, Thruster, Wall ball, Double under, Row ergomètre, Ski erg';
+  var prenom = ctx.prenom || 'toi';
+  // Limiter la liste d'exercices pour réduire les tokens en entrée
+  var defaultExs = 'Développé couché, Squat, Soulevé de terre, Tractions, Dips, Rowing barre, Curl biceps, Presse à cuisses, Fentes, Hip thrust, Gainage, Burpee, Kettlebell swing, Thruster';
+  var exercisesList = exercisesDb.length > 0 ? exercisesDb.slice(0, 30).join(', ') : defaultExs;
 
   var lines = [
-    'Tu es le coach morphologique privé de ' + prenom + ' sur SmartFitCoach.',
-    'Tu analyses des photos corporelles avec bienveillance, précision et expertise.',
-    '',
-    'RÈGLES ABSOLUES :',
-    '- Appelle toujours ' + prenom + ' par son prénom',
-    '- Réponds TOUJOURS en français',
-    '- Formule TOUT en termes positifs : "potentiel de développement", "axe de progression", jamais de critique négative',
-    '- Si les photos ne montrent pas clairement un corps humain, retourne {"error": "Photos non exploitables pour l\'analyse"}',
-    '- Ta programmation utilise UNIQUEMENT les exercices listés dans EXERCISES_AVAILABLE',
-    '- Tu peux combiner plusieurs disciplines si optimal (ex: musculation + crossfit, muscu + hyrox)',
-    '- Réponds UNIQUEMENT en JSON valide, sans texte autour',
-    '',
-    '## PROFIL DE ' + prenom.toUpperCase()
+    'Coach morpho de ' + prenom + ' sur SmartFitCoach. Analyse photos corporelles.',
+    'RÈGLES: français, termes positifs, JSON valide uniquement, exercices depuis EXERCISES_AVAILABLE seulement.',
+    'Photos illisibles → {"error":"Photos non exploitables"}',
+    ''
   ];
 
-  if (ctx.sex) lines.push('Sexe : ' + ctx.sex);
-  if (ctx.age) lines.push('Âge : ' + ctx.age + ' ans');
-  if (ctx.weight) lines.push('Poids : ' + ctx.weight + ' kg');
-  if (ctx.height) lines.push('Taille : ' + ctx.height + ' cm');
-  if (ctx.goal) lines.push('Objectif : ' + ctx.goal);
-  if (ctx.sportType) lines.push('Sport actuel : ' + ctx.sportType);
-  if (ctx.sportLevel) lines.push('Niveau : ' + ctx.sportLevel);
+  // Profil compact
+  var profile = [];
+  if (ctx.sex) profile.push('Sexe:' + ctx.sex);
+  if (ctx.age) profile.push('Âge:' + ctx.age);
+  if (ctx.weight) profile.push('Poids:' + ctx.weight + 'kg');
+  if (ctx.height) profile.push('Taille:' + ctx.height + 'cm');
+  if (ctx.goal) profile.push('Obj:' + ctx.goal);
+  if (ctx.sportType) profile.push('Sport:' + ctx.sportType);
+  if (ctx.sportLevel) profile.push('Niv:' + ctx.sportLevel);
+  if (profile.length) lines.push('PROFIL: ' + profile.join(' | '));
+
+  lines.push('EXERCISES_AVAILABLE: ' + exercisesList);
 
   lines.push('');
-  lines.push('## EXERCISES_AVAILABLE');
-  lines.push(exercisesList);
-
-  lines.push('');
-  lines.push('## FORMAT DE RÉPONSE JSON OBLIGATOIRE');
-  lines.push(JSON.stringify({
-    analyse: {
-      pointsForts: ['string — point fort formulé positivement', '...'],
-      axesDeveloppement: ['string — opportunité de progression', '...'],
-      postureNotes: 'string — observation posturale bienveillante',
-      morphologie: 'string — type morpho + implications pour la programmation'
-    },
-    programme: {
-      titre: 'string — ex: "Programme Force & Symétrie — 12 semaines"',
-      disciplines: ['muscu', 'crossfit'],
-      objectif: 'string — objectif principal en 1 phrase',
-      duree: '12 semaines',
-      frequence: '4 jours/semaine',
-      semaines: [
-        {
-          numero: 1,
-          focus: 'string — focus de la semaine',
-          seances: [
-            {
-              jour: 'Lundi',
-              discipline: 'muscu',
-              titre: 'string — titre de la séance',
-              exercices: [
-                { nom: 'string — nom EXACT depuis EXERCISES_AVAILABLE', series: 4, reps: '8-10', repos: '90s', note: 'string — conseil technique court' }
-              ]
-            }
-          ]
-        }
-      ],
-      conseilsNutrition: 'string — nutrition adaptée à l\'objectif morphologique',
-      messageCoach: 'string — message motivant personnalisé de clôture avec prénom'
-    }
-  }, null, 0));
+  lines.push('JSON ATTENDU:');
+  lines.push('{"analyse":{"pointsForts":["..."],"axesDeveloppement":["..."],"postureNotes":"...","morphologie":"..."},"programme":{"titre":"...","disciplines":["muscu"],"objectif":"...","duree":"12 semaines","frequence":"4j/sem","semaines":[{"numero":1,"focus":"...","seances":[{"jour":"Lundi","discipline":"muscu","titre":"...","exercices":[{"nom":"NOM_EXACT","series":4,"reps":"8-10","repos":"90s","note":"..."}]}]}],"conseilsNutrition":"...","messageCoach":"..."}}');
 
   return lines.join('\n');
 }

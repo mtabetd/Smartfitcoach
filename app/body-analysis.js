@@ -112,18 +112,19 @@ function getExercisesList() {
 }
 
 function buildContext() {
+  // Contexte minimal pour réduire les tokens envoyés au serveur
   var S = window.S || {};
   var user = null;
   try { user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null; } catch(e) {}
   return {
     prenom: user && user.name ? user.name.split(' ')[0] : (S.prenom || ''),
-    sex: S.sex || '', age: S.age || '', weight: S.weight || '',
-    height: S.height || '', goal: S.goal || '',
-    sportType: S.sportType || '', sportLevel: S.sportLevel || '',
-    triathlonFTP: S.triathlonFTP || null,
-    triathlonGoal: S.triathlonGoal || null,
-    triathlonLevel: S.triathlonLevel || null,
-    triathlonRaceDate: S.triathlonRaceDate || null
+    sex: S.sex || '',
+    age: S.age || '',
+    weight: S.weight || '',
+    height: S.height || '',
+    goal: S.goal || '',
+    sportType: S.sportType || '',
+    sportLevel: S.sportLevel || ''
   };
 }
 
@@ -578,7 +579,8 @@ async function runAnalysis() {
 
   try {
     var ctx = buildContext();
-    var exercisesDb = getExercisesList();
+    // Limiter à 30 exercices max pour réduire les tokens en entrée
+    var exercisesDb = getExercisesList().slice(0, 30);
 
     var resp = await fetch(FUNCTION_URL, {
       method: 'POST',
