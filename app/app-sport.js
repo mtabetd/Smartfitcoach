@@ -3917,12 +3917,22 @@ function renderMusculationProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
 
- // Bouton générateur de programme personnalisé via IA
+ // Bloc premium : eyebrow + tagline + bouton générateur de programme personnalisé via IA
+ var muscuGenWrap = h('div', {
+   style: 'margin:20px 0 8px 0;text-align:center;'
+ });
+ muscuGenWrap.appendChild(h('div', {
+   style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);font-family:Georgia,serif;margin-bottom:8px;'
+ }, 'PROGRAMME PERSONNEL'));
+ muscuGenWrap.appendChild(h('div', {
+   style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:14px;'
+ }, 'Construit \u00e0 partir de tes chiffres, calibr\u00e9 sur ton corps.'));
  var muscuGenBtn = h('button', {
    onclick: function() { if (window.openMuscuProgramGenerator) window.openMuscuProgramGenerator(); },
-   style: 'margin:16px 0;padding:14px 24px;background:var(--accent,#1A4A1A);color:#fff;border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;width:100%;'
- }, '\u26A1 G\u00e9n\u00e9rer mon programme 100% personnalis\u00e9');
- p.appendChild(muscuGenBtn);
+   style: 'padding:14px 24px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;width:100%;'
+ }, '\u26A1 G\u00e9n\u00e9rer mon programme');
+ muscuGenWrap.appendChild(muscuGenBtn);
+ p.appendChild(muscuGenWrap);
 
  appendWellnessBanner(p);
 
