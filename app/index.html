@@ -112,7 +112,7 @@ h1 em{font-style:italic}
 
 /* ── CHIPS ── */
 .chip-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.chip{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:10px 14px;min-height:44px;box-sizing:border-box;border:1px solid var(--border);border-radius:20px;cursor:pointer;background:var(--ivory2);transition:all .2s ease;-webkit-user-select:none;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.chip{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:10px 14px;min-height:44px;box-sizing:border-box;border:1px solid var(--border);border-radius:2px;cursor:pointer;background:var(--ivory2);transition:all .2s ease;-webkit-user-select:none;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .chip:hover{border-color:var(--black2)}
 .chip.on{background:var(--black);border-color:var(--black);color:var(--ivory)}
 
@@ -385,7 +385,7 @@ canvas.weight-chart{width:100%;height:200px}
 <script defer src="./ai-coach.js"></script>
 <script defer src="./body-analysis.js"></script>
 <script defer src="./sw-register.js"></script>
-<div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:#ff6b35;color:#fff;text-align:center;padding:8px;font-size:13px;font-weight:600;">
+<div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:#ff6b35;color:#fff;text-align:center;padding:8px;font-size:13px;font-weight:600;">
   &#x26A1; Mode hors ligne — vos données sont sauvegardées localement
 </div>
 </body>
