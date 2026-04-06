@@ -3,7 +3,9 @@
 
   var PUSH_KEY = 'mtd_push_prefs'; // Préférences stockées en localStorage
 
-  window.PushManager = {
+  // NOTE: window.PushManager is reserved by the Web Push API (browsers expose it natively).
+  // We use window.SFCPushManager to avoid clobbering the native interface.
+  window.SFCPushManager = {
     // Demande la permission et configure les notifications locales
     init: function() {
       if (!('Notification' in window)) return;
@@ -11,22 +13,22 @@
       if (prefs.asked) return; // Ne demander qu'une fois
       // Délai de 30 secondes après le premier chargement pour ne pas spammer
       setTimeout(function() {
-        window.PushManager.askPermission();
+        window.SFCPushManager.askPermission();
       }, 30000);
     },
 
     askPermission: function() {
       if (Notification.permission === 'granted') {
-        window.PushManager.scheduleLocalNotifs();
+        window.SFCPushManager.scheduleLocalNotifs();
         return;
       }
       if (Notification.permission !== 'denied') {
         Notification.requestPermission().then(function(perm) {
-          var prefs = window.PushManager.getPrefs();
+          var prefs = window.SFCPushManager.getPrefs();
           prefs.asked = true;
           prefs.granted = perm === 'granted';
-          window.PushManager.savePrefs(prefs);
-          if (perm === 'granted') window.PushManager.scheduleLocalNotifs();
+          window.SFCPushManager.savePrefs(prefs);
+          if (perm === 'granted') window.SFCPushManager.scheduleLocalNotifs();
         });
       }
     },
@@ -48,7 +50,7 @@
         if (now < reminderTime) {
           var delay = reminderTime - now;
           setTimeout(function() {
-            window.PushManager.showLocal('SmartFitCoach', 'Bonjour ! Comment vous sentez-vous aujourd\'hui ? Faites votre bilan en 30 secondes.', 'checkin');
+            window.SFCPushManager.showLocal('SmartFitCoach', 'Bonjour ! Comment vous sentez-vous aujourd\'hui ? Faites votre bilan en 30 secondes.', 'checkin');
           }, delay);
         }
       }
@@ -59,7 +61,7 @@
       if (new Date() < eveningTime) {
         var eveningDelay = eveningTime - new Date();
         setTimeout(function() {
-          window.PushManager.showLocal('SmartFitCoach', 'N\'oubliez pas de clôturer votre journal alimentaire pour aujourd\'hui.', 'journal');
+          window.SFCPushManager.showLocal('SmartFitCoach', 'N\'oubliez pas de clôturer votre journal alimentaire pour aujourd\'hui.', 'journal');
         }, eveningDelay);
       }
     },
@@ -74,7 +76,7 @@
           requireInteraction: false
         });
       } catch(e) {
-        console.warn('[PushManager] Notification error:', e);
+        console.warn('[SFCPushManager] Notification error:', e);
       }
     },
 
@@ -90,8 +92,8 @@
 
   // Init automatique au chargement
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() { window.PushManager.init(); });
+    document.addEventListener('DOMContentLoaded', function() { window.SFCPushManager.init(); });
   } else {
-    window.PushManager.init();
+    window.SFCPushManager.init();
   }
 })();
