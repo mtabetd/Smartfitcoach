@@ -22,7 +22,7 @@
 :root {
   --ivory:#FAF9F6; --ivory2:#F4F4F0; --ivory3:#EEEDE8; --ivory4:#E5E4DE;
   --black:#0A0A09; --black2:#181818;
-  --grey:#6B6B65; --grey2:#7A7A74; --grey3:#9A9A90;
+  --grey:#6B6B65; --grey2:#7A7A74; --grey3:#7A7A72;
   --border:#D8D8D0;
   --green:#1A4A1A; --greenbg:rgba(26,74,26,.06);
   --blue:#1A3A6A; --bluebg:rgba(26,58,106,.06);
@@ -346,7 +346,7 @@ canvas.weight-chart{width:100%;height:200px}
 <div id="gate-error" style="display:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--red,#5A1010);text-align:center;padding:8px;border:1px solid var(--red,#5A1010);background:var(--redbg,rgba(90,16,16,.06));margin-bottom:12px"></div>
 <form id="gate-form" onsubmit="return false;" autocomplete="off">
 <input type="text" name="username" autocomplete="username" style="display:none" aria-hidden="true">
-<input id="gate-pw" type="password" placeholder="Mot de passe" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1px solid var(--border,#D8D8D0);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);outline:none;text-align:center;letter-spacing:2px;margin-bottom:12px" autofocus>
+<input id="gate-pw" type="password" aria-label="Mot de passe d'accès" placeholder="Mot de passe" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1px solid var(--border,#D8D8D0);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);outline:none;text-align:center;letter-spacing:2px;margin-bottom:12px" autofocus>
 <button id="gate-btn" type="submit" style="width:100%;padding:14px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;cursor:pointer">Entrer</button>
 </form>
 </div>
@@ -393,11 +393,11 @@ canvas.weight-chart{width:100%;height:200px}
   <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px">REPOS</div>
   <div class="timer-count" style="font-family:Georgia,serif;font-size:28px;font-weight:700;line-height:1">1:30</div>
   <div style="display:flex;gap:6px;margin-top:8px;justify-content:center">
-    <button onclick="startRestTimer(60)" aria-label="D\u00e9marrer repos de 1 minute" style="font-size:9px;padding:8px 10px;min-height:32px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">1'</button>
-    <button onclick="startRestTimer(90)" aria-label="D\u00e9marrer repos de 1 minute 30" style="font-size:9px;padding:8px 10px;min-height:32px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">1'30</button>
-    <button onclick="startRestTimer(120)" aria-label="D\u00e9marrer repos de 2 minutes" style="font-size:9px;padding:8px 10px;min-height:32px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">2'</button>
-    <button onclick="startRestTimer(180)" aria-label="D\u00e9marrer repos de 3 minutes" style="font-size:9px;padding:8px 10px;min-height:32px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">3'</button>
-    <button onclick="stopRestTimer()" style="font-size:9px;padding:3px 6px;background:transparent;border:1px solid var(--red,#c0392b);color:var(--red,#c0392b);cursor:pointer;border-radius:2px">&#x2715;</button>
+    <button onclick="startRestTimer(60)" aria-label="D\u00e9marrer repos de 1 minute" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">1'</button>
+    <button onclick="startRestTimer(90)" aria-label="D\u00e9marrer repos de 1 minute 30" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">1'30</button>
+    <button onclick="startRestTimer(120)" aria-label="D\u00e9marrer repos de 2 minutes" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">2'</button>
+    <button onclick="startRestTimer(180)" aria-label="D\u00e9marrer repos de 3 minutes" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">3'</button>
+    <button onclick="stopRestTimer()" aria-label="Arr\u00eater le timer de repos" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--red,#c0392b);color:var(--red,#c0392b);cursor:pointer;border-radius:2px">&#x2715;</button>
   </div>
 </div>
 </body>
