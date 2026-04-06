@@ -2933,6 +2933,1783 @@ var dinner = [
     w: false,
     tags: ["bœuf", "champignons", "crème", "oignon", "persil"]
   }
+,
+{
+    _id: 'L351',
+    n: "Pancakes Cottage Cheese TikTok",
+    f: "🇺🇸",
+    k: 479,
+    p: 37,
+    g: 47,
+    l: 16,
+    lv: 1,
+    i: "Cottage cheese 150g, avoine 50g, œuf entier 1, blancs d'œufs 2 (60g), banane 60g, extrait de vanille 1 c.à.c., levure chimique 1 c.à.c.",
+    st: [
+      "Mixer cottage cheese, avoine, œuf, blancs d'œufs, banane et vanille jusqu'à obtenir une pâte lisse.",
+      "Chauffer une poêle antiadhésive à feu moyen, verser des petits cercles de pâte et cuire 2-3 min par face jusqu'à ce que des bulles se forment.",
+      "Servir avec des fruits frais ou un filet de miel."
+    ],
+    w: false,
+    tags: ["tiktok-viral", "cottage-cheese", "pancakes", "sans-farine", "batch-cooking"]
+  },
+  {
+    _id: 'L352',
+    n: "Baked Oats Protéinés Banane Whey",
+    f: "🇬🇧",
+    k: 484,
+    p: 48,
+    g: 50,
+    l: 11,
+    lv: 1,
+    i: "Avoine 50g, whey vanille 30g, yaourt grec 0% 100g, banane 60g, œuf entier 1 (60g), lait écrémé 50ml, levure chimique 1 c.à.c.",
+    st: [
+      "Préchauffer le four à 180°C. Écraser la banane en purée, puis mélanger tous les ingrédients dans un bol jusqu'à consistance homogène.",
+      "Verser dans un ramequin graissé ou un moule individuel et enfourner 20-25 min jusqu'à ce que le dessus soit doré.",
+      "Laisser tiédir 5 min et garnir de yaourt grec et de fruits frais."
+    ],
+    w: false,
+    tags: ["baked-oats", "meal-prep", "four", "whey", "viral-uk"]
+  },
+  {
+    _id: 'L353',
+    n: "French Toast Ricotta High-Protein",
+    f: "🇫🇷",
+    k: 371,
+    p: 33,
+    g: 41,
+    l: 9,
+    lv: 2,
+    i: "Pain complet 2 tranches (80g), ricotta 50g, blancs d'œufs 3 (90g), whey vanille 15g, cannelle 1 c.à.c., extrait de vanille 1 c.à.c., sirop d'agave 5ml",
+    st: [
+      "Fouetter les blancs d'œufs avec la whey, la cannelle et la vanille dans un bol peu profond.",
+      "Tremper les tranches de pain dans le mélange en les retournant pour bien imbiber les deux faces.",
+      "Cuire à feu moyen dans une poêle antiadhésive 2-3 min par face jusqu'à dorure.",
+      "Garnir de ricotta et d'un filet de sirop d'agave pour servir."
+    ],
+    w: false,
+    tags: ["french-toast", "ricotta", "high-protein", "brunch", "viral-instagram"]
+  },
+  {
+    _id: 'L354',
+    n: "Scrambled Eggs Saumon Style Gordon Ramsay Healthy",
+    f: "🇬🇧",
+    k: 374,
+    p: 42,
+    g: 2,
+    l: 22,
+    lv: 2,
+    i: "Œufs entiers 3 (180g), blancs d'œufs 2 (60g), saumon fumé 50g, fromage blanc 0% 50g, ciboulette fraîche 10g, poivre noir, sel",
+    st: [
+      "Battre œufs entiers et blancs d'œufs ensemble. Chauffer une casserole à feu doux et verser les œufs avec une noix de fromage blanc.",
+      "Remuer en continu à la spatule en retirant parfois la casserole du feu, créant une texture crémeuse et onctueuse.",
+      "Hors du feu, incorporer le reste de fromage blanc, déposer le saumon fumé et parsemer de ciboulette ciselée."
+    ],
+    w: false,
+    tags: ["scrambled-eggs", "saumon", "low-carb", "keto-friendly", "chef"]
+  },
+  {
+    _id: 'L355',
+    n: "Overnight Oats Chocolat Noisette Protéinés",
+    f: "🇺🇸",
+    k: 531,
+    p: 47,
+    g: 49,
+    l: 16,
+    lv: 1,
+    i: "Avoine 60g, yaourt grec 0% 150g, whey chocolat 25g, lait demi-écrémé 100ml, noisettes concassées 15g, cacao en poudre non sucré 5g",
+    st: [
+      "Mélanger avoine, yaourt grec, whey, lait et cacao dans un bocal hermétique jusqu'à consistance homogène.",
+      "Fermer le bocal et réfrigérer toute la nuit (minimum 6h).",
+      "Le matin, remuer, ajouter les noisettes concassées et déguster directement dans le bocal."
+    ],
+    w: false,
+    tags: ["overnight-oats", "meal-prep", "chocolat", "no-cook", "tiktok-viral"]
+  },
+  {
+    _id: 'L356',
+    n: "Omelette Blancs d'Œufs Épinards Feta",
+    f: "🇬🇷",
+    k: 365,
+    p: 40,
+    g: 4,
+    l: 21,
+    lv: 1,
+    i: "Blancs d'œufs 6 (180g), œufs entiers 2 (120g), feta émiettée 40g, épinards frais 80g, tomates cerises 60g, ail en poudre 1 c.à.c., origan séché",
+    st: [
+      "Battre les blancs d'œufs et les œufs entiers, assaisonner d'ail en poudre et d'origan.",
+      "Faire revenir les épinards et les tomates cerises coupées en deux dans une poêle antiadhésive 2 min, puis verser le mélange d'œufs.",
+      "Parsemer de feta, couvrir et cuire 3-4 min à feu moyen jusqu'à ce que l'omelette soit bien prise."
+    ],
+    w: false,
+    tags: ["omelette", "high-protein", "low-carb", "epinards", "feta"]
+  },
+  {
+    _id: 'L357',
+    n: "Granola Protéiné Maison Amandes Miel",
+    f: "🇺🇸",
+    k: 458,
+    p: 37,
+    g: 50,
+    l: 12,
+    lv: 2,
+    i: "Avoine 60g, whey vanille 20g, amandes effilées 15g, miel 10g, yaourt grec 0% 100g (pour servir), huile de coco 5ml, cannelle 1 c.à.c.",
+    st: [
+      "Préchauffer le four à 170°C. Mélanger avoine, whey, amandes, miel, huile de coco et cannelle jusqu'à ce que tout soit bien enrobé.",
+      "Étaler sur une plaque recouverte de papier cuisson et enfourner 15-18 min en remuant à mi-cuisson pour une dorure uniforme.",
+      "Laisser refroidir complètement (le granola durcit en refroidissant), puis servir sur yaourt grec."
+    ],
+    w: false,
+    tags: ["granola", "meal-prep", "maison", "whey", "crunchy"]
+  },
+  {
+    _id: 'L358',
+    n: "Greek Yogurt Bark Congelé Fruits Rouges",
+    f: "🇺🇸",
+    k: 370,
+    p: 50,
+    g: 23,
+    l: 8,
+    lv: 1,
+    i: "Yaourt grec 0% 300g, whey fraise 20g, fruits rouges surgelés 80g, beurre de cacahuète 15g",
+    st: [
+      "Mélanger yaourt grec et whey fraise jusqu'à consistance homogène et lisse.",
+      "Étaler le mélange sur une plaque recouverte de papier cuisson en une couche d'environ 1 cm. Déposer les fruits rouges et faire des tourbillons de beurre de cacahuète.",
+      "Congeler minimum 3h. Casser en morceaux irréguliers et servir directement congelé ou légèrement décongelé."
+    ],
+    w: false,
+    tags: ["yogurt-bark", "congelé", "no-bake", "viral-tiktok", "fruits-rouges"]
+  },
+  {
+    _id: 'L359',
+    n: "Breakfast Bowl Smash Burger Egg",
+    f: "🇺🇸",
+    k: 460,
+    p: 44,
+    g: 30,
+    l: 18,
+    lv: 2,
+    i: "Bœuf haché 5% MG 100g, œufs entiers 2 (120g), fromage blanc 0% 50g, riz complet cuit 100g, épinards frais 50g, sauce sriracha, paprika fumé, sel, poivre",
+    st: [
+      "Façonner le bœuf haché en galette fine, assaisonner de paprika fumé, sel et poivre, puis cuire 2-3 min par face à feu vif en écrasant légèrement (style smash).",
+      "Dans la même poêle, faire revenir les épinards 1 min, puis cuire les œufs au plat ou brouillés.",
+      "Dresser le riz complet dans un bol, déposer les épinards, la galette de bœuf et les œufs, napper de fromage blanc et de sriracha."
+    ],
+    w: false,
+    tags: ["smash-burger", "breakfast-bowl", "high-protein", "viral-tiktok", "riz"]
+  },
+  {
+    _id: 'L360',
+    n: "Muffins Banane Avoine Protéinés",
+    f: "🇺🇸",
+    k: 486,
+    p: 43,
+    g: 67,
+    l: 5,
+    lv: 2,
+    i: "Banane mûre 120g, avoine 60g, whey vanille 30g, blancs d'œufs 2 (60g), fromage blanc 0% 50g, levure chimique 1 c.à.c., cannelle 1 c.à.c.",
+    st: [
+      "Préchauffer le four à 180°C. Écraser la banane en purée lisse, puis incorporer fromage blanc, blancs d'œufs et vanille.",
+      "Ajouter avoine, whey, levure et cannelle, mélanger jusqu'à consistance homogène sans trop travailler la pâte.",
+      "Répartir dans 6 moules à muffins et enfourner 18-20 min jusqu'à ce qu'un couteau ressorte propre. Laisser refroidir sur grille."
+    ],
+    w: false,
+    tags: ["muffins", "banane", "meal-prep", "sans-sucre-ajouté", "batch-cooking"]
+  },
+{
+    _id: 'L361',
+    n: "Salmon Poke Bowl",
+    f: "🇯🇵",
+    k: 590,
+    p: 36,
+    g: 57,
+    l: 24,
+    lv: 1,
+    i: "Saumon cru 100g, riz cuit 150g, edamame 80g, avocat 50g, sauce soja 15ml, graines de sésame 5g",
+    st: [
+      "Cuire le riz japonais et laisser tiédir. Couper le saumon en dés de 2 cm et l'avocat en lamelles.",
+      "Disposer le riz en base du bol, puis disposer le saumon, l'edamame et l'avocat en sections.",
+      "Arroser de sauce soja, parsemer de graines de sésame et servir immédiatement."
+    ],
+    w: false,
+    tags: ["poke", "bowl", "saumon", "japonais", "viral", "meal-prep"]
+  },
+  {
+    _id: 'L362',
+    n: "Bowl Thon Riz Haute Protéine",
+    f: "🐟",
+    k: 477,
+    p: 37,
+    g: 62,
+    l: 9,
+    lv: 1,
+    i: "Thon en conserve 120g, riz cuit 150g, concombre 100g, maïs 60g, mayonnaise allégée 20g, citron 1/2",
+    st: [
+      "Égoutter le thon et l'émietter. Couper le concombre en demi-rondelles.",
+      "Disposer le riz chaud dans le bol, ajouter le thon, le maïs égoutté et le concombre.",
+      "Napper de mayonnaise, presser le citron et mélanger avant de déguster."
+    ],
+    w: false,
+    tags: ["thon", "bowl", "high-protein", "budget", "meal-prep", "rapide"]
+  },
+  {
+    _id: 'L363',
+    n: "Teriyaki Chicken Bowl",
+    f: "🇯🇵",
+    k: 504,
+    p: 55,
+    g: 53,
+    l: 8,
+    lv: 1,
+    i: "Poulet cuit 150g, riz cuit 130g, brocoli vapeur 100g, sauce teriyaki 30g, graines de sésame 5g, oignon vert 20g",
+    st: [
+      "Couper le poulet en lanières et le faire revenir 2 min dans la sauce teriyaki à feu vif.",
+      "Disposer le riz dans le bol, ajouter le brocoli vapeur et le poulet laqué.",
+      "Garnir d'oignon vert émincé et de graines de sésame grillées."
+    ],
+    w: false,
+    tags: ["teriyaki", "poulet", "bowl", "japonais", "meal-prep", "fitness"]
+  },
+  {
+    _id: 'L364',
+    n: "Salade Grecque Pois Chiches Rôtis",
+    f: "🇬🇷",
+    k: 559,
+    p: 27,
+    g: 52,
+    l: 27,
+    lv: 1,
+    i: "Pois chiches cuits 150g, feta 40g, concombre 100g, tomates 150g, olives noires 30g, oeuf dur 50g, huile d'olive 5ml, origan, citron",
+    st: [
+      "Rôtir les pois chiches égouttés 20 min à 200°C avec huile, sel et cumin jusqu'à dorure.",
+      "Couper concombre, tomates en dés, émietter la feta, couper l'oeuf en quartiers.",
+      "Assembler la salade, ajouter les pois chiches chauds, arroser d'huile d'olive et de jus de citron, parsemer d'origan."
+    ],
+    w: false,
+    tags: ["grec", "salade", "pois-chiches", "végétarien", "méditerranéen", "viral"]
+  },
+  {
+    _id: 'L365',
+    n: "Burrito Bowl Mexicain",
+    f: "🇲🇽",
+    k: 592,
+    p: 47,
+    g: 78,
+    l: 10,
+    lv: 1,
+    i: "Poulet cuit 100g, riz cuit 120g, haricots noirs cuits 100g, maïs 60g, salsa tomate 50g, crème fraîche légère 30g, coriandre fraîche",
+    st: [
+      "Assaisonner le poulet avec cumin, paprika fumé et le couper en lanières.",
+      "Disposer le riz en base, puis le poulet, les haricots noirs et le maïs en sections distinctes.",
+      "Garnir de salsa, crème fraîche et feuilles de coriandre fraîche."
+    ],
+    w: false,
+    tags: ["mexicain", "burrito-bowl", "poulet", "haricots", "viral", "meal-prep"]
+  },
+  {
+    _id: 'L366',
+    n: "Sushi Bowl Démocratisé",
+    f: "🇯🇵",
+    k: 546,
+    p: 28,
+    g: 53,
+    l: 25,
+    lv: 1,
+    i: "Saumon cru 100g, riz cuit 150g, vinaigre de riz 10ml, concombre 80g, avocat 60g, nori émietté 5g, sauce soja 10ml, mayonnaise sriracha 15g",
+    st: [
+      "Assaisonner le riz tiède avec vinaigre de riz et une pincée de sucre. Couper saumon et avocat en dés.",
+      "Disposer le riz vinaigré dans le bol, garnir de saumon, avocat et concombre en julienne.",
+      "Parsemer de nori, arroser de sauce soja et de mayo sriracha en filet."
+    ],
+    w: false,
+    tags: ["sushi-bowl", "saumon", "japonais", "avocat", "viral", "tiktok"]
+  },
+  {
+    _id: 'L367',
+    n: "Buddha Bowl Quinoa Avocat Poulet",
+    f: "🌿",
+    k: 536,
+    p: 42,
+    g: 42,
+    l: 22,
+    lv: 1,
+    i: "Quinoa cuit 150g, poulet cuit 100g, avocat 60g, tomates cerises 80g, concombre 60g, tahini 15g, citron, graines de courge 10g",
+    st: [
+      "Cuire le quinoa à l'eau salée 12 min, égoutter. Trancher le poulet en lanières, l'avocat en demi-lunes.",
+      "Composer le bol en disposant quinoa, poulet, avocat, tomates cerises et concombre en sections.",
+      "Préparer la sauce tahini citron (tahini + jus citron + eau), napper le bol et parsemer de graines de courge."
+    ],
+    w: false,
+    tags: ["buddha-bowl", "quinoa", "avocat", "wellness", "équilibré", "meal-prep"]
+  },
+  {
+    _id: 'L368',
+    n: "Bibimbap Coréen Simplifié",
+    f: "🇰🇷",
+    k: 548,
+    p: 41,
+    g: 60,
+    l: 16,
+    lv: 2,
+    i: "Riz cuit 150g, boeuf haché 5% 100g, épinards 80g, carotte râpée 80g, oeuf 50g, sauce gochujang 20g, huile de sésame 5ml",
+    st: [
+      "Faire revenir le boeuf haché avec sauce soja et ail. Blanchir les épinards 1 min à l'eau bouillante.",
+      "Disposer le riz au centre du bol, entourer de boeuf, épinards essorés et carotte râpée assaisonnée.",
+      "Faire un oeuf au plat dans la même poêle, le poser au centre. Verser la sauce gochujang et l'huile de sésame, mélanger avant de manger."
+    ],
+    w: false,
+    tags: ["bibimbap", "coréen", "boeuf", "riz", "viral", "épicé"]
+  },
+  {
+    _id: 'L369',
+    n: "Açaï Bowl Protéiné Sport",
+    f: "🫐",
+    k: 645,
+    p: 35,
+    g: 79,
+    l: 21,
+    lv: 1,
+    i: "Purée açaï 100g, banane 100g, whey vanille 30g, granola 40g, lait d'amande 100ml, myrtilles 50g, beurre d'amande 15g",
+    st: [
+      "Mixer la purée d'açaï avec la banane, le lait d'amande et la whey vanille jusqu'à consistance crémeuse et épaisse.",
+      "Verser dans le bol bien froid, garnir de granola, myrtilles fraîches et une cuillère de beurre d'amande.",
+      "Servir immédiatement avant que la base ne fonde."
+    ],
+    w: false,
+    tags: ["acai-bowl", "sport", "petit-déjeuner", "whey", "antioxydant", "tiktok"]
+  },
+  {
+    _id: 'L370',
+    n: "Falafel Bowl Tzatziki",
+    f: "🇱🇧",
+    k: 581,
+    p: 25,
+    g: 73,
+    l: 21,
+    lv: 1,
+    i: "Falafel 100g, quinoa cuit 80g, pois chiches rôtis 80g, tzatziki 80g, tomates cerises 80g, concombre 80g, houmous 30g, persil frais",
+    st: [
+      "Réchauffer les falafel au four 10 min à 180°C pour les rendre croustillants. Rôtir les pois chiches avec paprika et huile d'olive.",
+      "Disposer le quinoa en base, ajouter les falafel chauds, pois chiches, tomates cerises coupées et concombre en dés.",
+      "Napper de tzatziki et houmous, parsemer de persil frais haché et servir."
+    ],
+    w: false,
+    tags: ["falafel", "bowl", "libanais", "végétarien", "tzatziki", "méditerranéen"]
+  },
+{
+    _id: 'L371',
+    n: "Soupe Miso Protéinée aux Crevettes",
+    f: "🇯🇵",
+    k: 303,
+    p: 32,
+    g: 30,
+    l: 6,
+    lv: 1,
+    i: "Crevettes cuites 80g, tofu ferme 100g, soba cuites 100g, miso blanc 20g, bouillon dashi 400ml, oignons verts 20g, algues wakamé 5g",
+    st: [
+      "Dissoudre le miso dans le bouillon dashi chaud (ne pas faire bouillir) et porter à frémissement.",
+      "Ajouter le tofu en dés, les crevettes, les algues wakamé et les soba cuites.",
+      "Servir dans un bol, garnir d'oignons verts émincés."
+    ],
+    w: false,
+    tags: ["soupe", "asiatique", "miso", "crevettes", "japonais", "lowcal", "highprotein"]
+  },
+  {
+    _id: 'L372',
+    n: "Gyoza Poulet Vapeur",
+    f: "🇯🇵",
+    k: 341,
+    p: 34,
+    g: 40,
+    l: 5,
+    lv: 2,
+    i: "Poulet haché 120g, pâte à gyoza 12 pièces 120g, chou chinois 80g, gingembre frais 10g, sauce soja 10ml, huile de sésame 2ml, ail 5g",
+    st: [
+      "Mélanger le poulet haché, le chou finement ciselé, le gingembre râpé, l'ail et la sauce soja.",
+      "Garnir chaque pâte à gyoza d'une cuillère de farce, plier et pincer les bords.",
+      "Cuire à la vapeur 8 minutes, servir avec sauce soja et huile de sésame en dip."
+    ],
+    w: false,
+    tags: ["gyoza", "vapeur", "poulet", "asiatique", "japonais", "tiktok", "highprotein"]
+  },
+  {
+    _id: 'L373',
+    n: "Pad Thai Crevettes Version Légère",
+    f: "🇹🇭",
+    k: 393,
+    p: 40,
+    g: 31,
+    l: 12,
+    lv: 2,
+    i: "Crevettes cuites 150g, vermicelles de riz cuits 120g, oeuf entier 1 (50g), sauce soja 15ml, huile de sésame 5ml, pousses de soja 50g, citron vert 1, oignons verts 20g, piment optionnel",
+    st: [
+      "Faire revenir les crevettes dans l'huile de sésame 2 min, ajouter l'oeuf battu et brouiller rapidement.",
+      "Incorporer les vermicelles égouttés, la sauce soja et les pousses de soja, sauter à feu vif 2 min.",
+      "Servir avec jus de citron vert et oignons verts, piment selon goût."
+    ],
+    w: false,
+    tags: ["pad thai", "crevettes", "thaï", "asiatique", "tiktok", "highprotein", "rapide"]
+  },
+  {
+    _id: 'L374',
+    n: "Ramen Healthy au Poulet et Miso",
+    f: "🇯🇵",
+    k: 450,
+    p: 50,
+    g: 40,
+    l: 10,
+    lv: 2,
+    i: "Blanc de poulet cuit 150g, soba cuites 150g, oeuf mollet 1 (50g), miso blanc 20g, bouillon de poulet 500ml, épinards frais 40g, maïs doux 30g, oignons verts 15g, algues nori 1 feuille",
+    st: [
+      "Dissoudre le miso dans le bouillon chaud, ajouter les épinards et laisser mijoter 2 min.",
+      "Disposer les soba dans un grand bol, verser le bouillon miso bien chaud par-dessus.",
+      "Garnir du poulet émincé, de l'oeuf mollet coupé, du maïs, des oignons verts et du nori."
+    ],
+    w: false,
+    tags: ["ramen", "poulet", "miso", "japonais", "asiatique", "highprotein", "healthy"]
+  },
+  {
+    _id: 'L375',
+    n: "Dumplings Vapeur Porc et Chou (Viral TikTok)",
+    f: "🇨🇳",
+    k: 409,
+    p: 29,
+    g: 53,
+    l: 9,
+    lv: 2,
+    i: "Porc haché maigre 100g, pâte à dumpling 8 pièces 80g, chou chinois 60g, gingembre frais 10g, sauce soja 15ml, huile de sésame 5ml, ail 5g, ciboulette 10g",
+    st: [
+      "Mélanger le porc, le chou finement haché, le gingembre, l'ail, la ciboulette et la moitié de la sauce soja.",
+      "Farcir chaque pâte, plier en demi-lune et pincer fermement, cuire à la vapeur 10 min.",
+      "Servir avec sauce dip : reste de sauce soja + huile de sésame + vinaigre de riz."
+    ],
+    w: false,
+    tags: ["dumplings", "vapeur", "porc", "chinois", "asiatique", "tiktok", "viral"]
+  },
+  {
+    _id: 'L376',
+    n: "Tamago Sando (Sandwich Japonais à l'Oeuf)",
+    f: "🇯🇵",
+    k: 447,
+    p: 25,
+    g: 41,
+    l: 20,
+    lv: 1,
+    i: "Pain de mie japonais shokupan 2 tranches 80g, oeufs durs 3 (150g), mayonnaise légère 20g, moutarde de Dijon 5g, sel, poivre blanc, ciboulette 5g",
+    st: [
+      "Écraser les oeufs durs avec la mayonnaise légère, la moutarde, le sel et le poivre blanc jusqu'à texture crémeuse.",
+      "Tartiner généreusement sur une tranche de pain, refermer, couper les croûtes et trancher en deux diagonal.",
+      "Garnir de ciboulette, servir immédiatement ou filmer au réfrigérateur 30 min pour un résultat parfait."
+    ],
+    w: false,
+    tags: ["tamago sando", "sandwich", "oeuf", "japonais", "asiatique", "tiktok", "viral", "lunch"]
+  },
+  {
+    _id: 'L377',
+    n: "Japchae Nouilles Coréennes au Boeuf",
+    f: "🇰🇷",
+    k: 437,
+    p: 22,
+    g: 60,
+    l: 12,
+    lv: 2,
+    i: "Vermicelles de patate douce cuites 80g, boeuf émincé maigre 80g, épinards 80g, carotte 60g, champignons shiitake 40g, sauce soja 15ml, huile de sésame 5ml, ail 5g, sucre 5g",
+    st: [
+      "Faire revenir séparément le boeuf, la carotte en julienne et les champignons avec l'ail et la moitié de la sauce soja.",
+      "Blanchir les épinards 1 min, essorer. Mélanger tous les ingrédients avec les vermicelles, le reste de sauce soja et l'huile de sésame.",
+      "Servir tiède ou à température ambiante, parsemer de graines de sésame."
+    ],
+    w: false,
+    tags: ["japchae", "coréen", "nouilles", "boeuf", "asiatique", "tiktok", "meal prep"]
+  },
+  {
+    _id: 'L378',
+    n: "Rouleaux de Printemps Vietnamiens aux Crevettes",
+    f: "🇻🇳",
+    k: 358,
+    p: 27,
+    g: 60,
+    l: 1,
+    lv: 1,
+    i: "Crevettes cuites 100g, galettes de riz 3 pièces 45g, vermicelles de riz cuits 80g, salade verte 40g, carotte râpée 40g, menthe fraîche 10g, concombre 40g, sauce nuoc-mâm légère 20ml",
+    st: [
+      "Tremper chaque galette de riz 15 secondes dans l'eau tiède, étaler sur un plan propre.",
+      "Disposer au centre la salade, les vermicelles, la carotte, le concombre, les crevettes et la menthe, rouler fermement en serrant bien.",
+      "Servir avec la sauce nuoc-mâm légèrement sucrée-citronée pour tremper."
+    ],
+    w: false,
+    tags: ["rouleaux de printemps", "crevettes", "vietnamien", "asiatique", "frais", "lowcal", "instagram"]
+  },
+  {
+    _id: 'L379',
+    n: "Saumon Teriyaki Simple et Riz",
+    f: "🇯🇵",
+    k: 524,
+    p: 35,
+    g: 49,
+    l: 21,
+    lv: 1,
+    i: "Pavé de saumon 150g, riz cuit 120g, sauce teriyaki 20ml, gingembre frais 5g, huile de sésame 3ml, brocoli 80g, graines de sésame 5g, oignons verts 10g",
+    st: [
+      "Mariner le saumon 10 min dans la sauce teriyaki et le gingembre râpé.",
+      "Cuire le saumon à la poêle 3-4 min par face, badigeonner avec le reste de marinade en fin de cuisson. Cuire le brocoli vapeur 5 min.",
+      "Servir sur le riz, arroser d'huile de sésame, parsemer de graines de sésame et d'oignons verts."
+    ],
+    w: false,
+    tags: ["saumon", "teriyaki", "japonais", "asiatique", "highprotein", "instagram", "healthy"]
+  },
+  {
+    _id: 'L380',
+    n: "Fried Rice Healthy à la Courgette",
+    f: "🇨🇳",
+    k: 367,
+    p: 18,
+    g: 40,
+    l: 15,
+    lv: 1,
+    i: "Riz cuit (veille) 120g, oeufs entiers 2 (100g), courgette 150g, sauce soja 15ml, huile de sésame 5ml, ail 5g, gingembre frais 5g, oignons verts 20g, piment optionnel",
+    st: [
+      "Faire revenir l'ail et le gingembre dans l'huile de sésame, ajouter la courgette en dés et sauter 3 min à feu vif.",
+      "Pousser les légumes sur le côté, verser les oeufs battus, brouiller puis incorporer le riz froid et la sauce soja.",
+      "Sauter 2-3 min à feu maximum pour grainer le riz, servir avec oignons verts et piment."
+    ],
+    w: false,
+    tags: ["fried rice", "courgette", "chinois", "asiatique", "tiktok", "lowcal", "meal prep", "rapide"]
+  },
+{
+    _id: 'L381',
+    n: "Salade Grecque Revisitée",
+    f: "🇬🇷",
+    k: 370,
+    p: 12,
+    g: 13,
+    l: 30,
+    lv: 1,
+    i: "Tomate 200g, concombre 100g, feta 60g, olives noires 30g, oignon rouge 40g, huile olive 10ml, origan séché 2g",
+    st: [
+      "Couper la tomate en quartiers, le concombre en demi-rondelles et l'oignon rouge en lamelles fines.",
+      "Émietter la feta grossièrement sur les légumes, ajouter les olives entières.",
+      "Arroser d'huile d'olive, parsemer d'origan séché et de fleur de sel. Servir immédiatement."
+    ],
+    w: false,
+    tags: ["mediterraneen", "salade", "vegetarien", "healthy", "sans-gluten", "viral"]
+  },
+  {
+    _id: 'L382',
+    n: "Poulet Souvlaki Wrap",
+    f: "🇬🇷",
+    k: 366,
+    p: 41,
+    g: 37,
+    l: 6,
+    lv: 2,
+    i: "Poulet grillé 100g, pain pita 60g, tomate 80g, yaourt grec 0% 50g, concombre 50g, ail 5g, jus de citron 10ml, paprika 2g",
+    st: [
+      "Découper le poulet grillé en lanières. Mélanger le yaourt grec avec l'ail émincé, le jus de citron et le paprika pour la sauce tzatziki express.",
+      "Réchauffer le pain pita 1 minute à la poêle sèche. Tartiner de sauce tzatziki.",
+      "Disposer les lanières de poulet, les dés de tomate et le concombre émincé. Rouler serré et servir."
+    ],
+    w: false,
+    tags: ["mediterraneen", "high-protein", "wrap", "poulet", "viral", "meal-prep"]
+  },
+  {
+    _id: 'L383',
+    n: "Hummus High-Protein Bowl",
+    f: "🫘",
+    k: 448,
+    p: 22,
+    g: 45,
+    l: 20,
+    lv: 1,
+    i: "Pois chiches cuits 150g, tahini 20g, pain pita 40g, huile olive 5ml, citron 20ml, ail 5g, cumin 2g, paprika fumé 2g, graines de sésame 10g",
+    st: [
+      "Mixer les pois chiches avec le tahini, le jus de citron, l'ail et le cumin jusqu'à obtenir une texture lisse et crémeuse. Ajouter de l'eau si nécessaire.",
+      "Dresser le hummus dans un bol en faisant un puits au centre. Verser un filet d'huile d'olive.",
+      "Saupoudrer de paprika fumé et de graines de sésame. Servir avec le pain pita grillé coupé en triangles."
+    ],
+    w: false,
+    tags: ["mediterraneen", "vegetarien", "high-protein", "bowl", "viral", "sans-gluten"]
+  },
+  {
+    _id: 'L384',
+    n: "Halloumi Grillé aux Légumes",
+    f: "🧀",
+    k: 389,
+    p: 20,
+    g: 12,
+    l: 29,
+    lv: 2,
+    i: "Halloumi 80g, courgette 150g, poivron rouge 100g, huile olive 10ml, thym frais 5g, citron 15ml, ail 5g",
+    st: [
+      "Couper le halloumi en tranches de 1 cm, la courgette en rondelles et le poivron en lanières. Badigeonner d'huile d'olive et d'ail émincé.",
+      "Griller le halloumi et les légumes sur un gril chaud 3-4 minutes de chaque côté jusqu'à obtenir de belles marques dorées.",
+      "Dresser sur une assiette, presser le citron, parsemer de thym frais. Servir chaud."
+    ],
+    w: false,
+    tags: ["mediterraneen", "vegetarien", "grille", "sans-gluten", "viral", "healthy"]
+  },
+  {
+    _id: 'L385',
+    n: "Mousakka Légère",
+    f: "🇬🇷",
+    k: 398,
+    p: 28,
+    g: 31,
+    l: 18,
+    lv: 3,
+    i: "Aubergine 200g, boeuf haché 5% 100g, tomates concassées 100g, lait demi-écrémé 100ml, farine 10g, huile olive 10ml, cannelle 2g, ail 5g, oignon 50g",
+    st: [
+      "Trancher l'aubergine, badigeonner d'huile et griller au four 200°C pendant 15 minutes. Faire revenir l'oignon, l'ail, ajouter la viande, les tomates et la cannelle. Mijoter 10 minutes.",
+      "Préparer une béchamel légère : faire un roux avec farine et un peu de lait, incorporer le reste du lait chaud en fouettant jusqu'à épaississement.",
+      "Alterner couches d'aubergine et de viande dans un plat. Napper de béchamel. Cuire 25 minutes à 180°C."
+    ],
+    w: false,
+    tags: ["mediterraneen", "grece", "viande", "four", "viral", "comfort-food"]
+  },
+  {
+    _id: 'L386',
+    n: "Salade Fattoush",
+    f: "🇱🇧",
+    k: 386,
+    p: 10,
+    g: 37,
+    l: 22,
+    lv: 1,
+    i: "Laitue romaine 80g, tomate 150g, radis 50g, pain pita grillé 40g, feta 30g, huile olive 15ml, sumac 3g, menthe fraîche 10g, citron 15ml",
+    st: [
+      "Griller le pain pita sous le grill ou à la poêle jusqu'à ce qu'il soit croustillant. Laisser refroidir et casser en morceaux.",
+      "Mélanger la laitue déchirée, la tomate en dés, les radis en rondelles et la menthe ciselée dans un saladier.",
+      "Assaisonner avec huile d'olive, jus de citron et sumac. Ajouter la feta émiettée et les croutons de pita au moment de servir."
+    ],
+    w: false,
+    tags: ["mediterraneen", "liban", "salade", "vegetarien", "viral", "frais"]
+  },
+  {
+    _id: 'L387',
+    n: "Tabboulé Quinoa Moderne",
+    f: "🌿",
+    k: 439,
+    p: 16,
+    g: 60,
+    l: 15,
+    lv: 1,
+    i: "Quinoa cuit 150g, persil frais 40g, tomate 100g, concombre 80g, pois chiches cuits 80g, huile olive 10ml, citron 20ml, sel, poivre",
+    st: [
+      "Ciseler finement le persil, couper la tomate et le concombre en très petits dés. Rincertles pois chiches.",
+      "Mélanger le quinoa refroidi avec tous les légumes et les pois chiches dans un grand saladier.",
+      "Assaisonner généreusement avec le jus de citron, l'huile d'olive, le sel et le poivre. Réfrigérer 30 minutes avant de servir pour amplifier les saveurs."
+    ],
+    w: false,
+    tags: ["mediterraneen", "liban", "quinoa", "vegetarien", "viral", "meal-prep", "sans-gluten"]
+  },
+  {
+    _id: 'L388',
+    n: "Poisson Blanc Méditerranéen au Four",
+    f: "🐟",
+    k: 328,
+    p: 31,
+    g: 6,
+    l: 20,
+    lv: 2,
+    i: "Poisson blanc 150g (cabillaud ou bar), tomates cerises 150g, olives vertes 20g, câpres 10g, huile olive 15ml, ail 10g, thym 3g, citron 20ml",
+    st: [
+      "Préchauffer le four à 200°C. Déposer le filet de poisson dans un plat. Émincer l'ail et le déposer sur le poisson.",
+      "Entourer avec les tomates cerises, les olives et les câpres. Arroser d'huile d'olive et du jus de citron. Parsemer de thym.",
+      "Enfourner 18-20 minutes jusqu'à ce que le poisson soit nacré et se détache facilement. Servir avec le jus de cuisson."
+    ],
+    w: false,
+    tags: ["mediterraneen", "poisson", "four", "sans-gluten", "viral", "healthy", "omega3"]
+  },
+  {
+    _id: 'L389',
+    n: "Dolmades Agneau & Riz",
+    f: "🇬🇷",
+    k: 370,
+    p: 20,
+    g: 32,
+    l: 18,
+    lv: 3,
+    i: "Feuilles de vigne en saumure 60g (10 feuilles), riz à grains ronds cuit 100g, agneau haché 80g, oignon 30g, menthe séchée 3g, aneth 3g, huile olive 10ml, citron 20ml",
+    st: [
+      "Rincer les feuilles de vigne. Faire revenir l'oignon émincé dans l'huile, ajouter l'agneau haché, le riz, la menthe et l'aneth. Assaisonner.",
+      "Déposer une cuillère de farce au centre de chaque feuille, replier les côtés puis rouler serré. Ranger les dolmades dans une casserole tapissée de feuilles.",
+      "Ajouter le jus de citron et de l'eau à hauteur. Poser une assiette dessus pour maintenir. Cuire à couvert 40 minutes à feu doux."
+    ],
+    w: false,
+    tags: ["mediterraneen", "grece", "farcis", "agneau", "viral", "traditionnel"]
+  },
+  {
+    _id: 'L390',
+    n: "Stracciatella & Tomates Burrata Style",
+    f: "🇮🇹",
+    k: 466,
+    p: 13,
+    g: 36,
+    l: 30,
+    lv: 1,
+    i: "Stracciatella 80g, tomates cerises multicolores 200g, basilic frais 10g, huile olive 15ml, pain ciabatta 50g, fleur de sel, poivre noir, vinaigre balsamique 10ml",
+    st: [
+      "Couper les tomates cerises en deux, assaisonner avec la fleur de sel, le poivre et le vinaigre balsamique. Laisser mariner 5 minutes.",
+      "Griller les tranches de ciabatta à la poêle ou au grille-pain jusqu'à dorure.",
+      "Déposer la stracciatella au centre de l'assiette, disposer les tomates marinées autour, parsemer de feuilles de basilic et finir avec un généreux filet d'huile d'olive."
+    ],
+    w: false,
+    tags: ["mediterraneen", "italie", "fromage", "vegetarien", "viral", "frais", "ete"]
+  },
+{
+    _id: 'L391',
+    n: "Tofu Scramble Viral TikTok",
+    f: "🌱",
+    k: 382,
+    p: 22,
+    g: 33,
+    l: 18,
+    lv: 1,
+    i: "Tofu ferme 150g, pain complet 80g, levure nutritionnelle 10g, poivron rouge 60g, épinards frais 40g, huile d'olive 10g, curcuma 2g, sel noir kala namak 1g",
+    st: [
+      "Émietter le tofu ferme à la fourchette, assaisonner de curcuma, sel noir et poivre pour imiter les œufs brouillés.",
+      "Faire revenir le poivron et les épinards dans l'huile d'olive 3 min, ajouter le tofu émietté et la levure nutritionnelle, cuire 5 min à feu vif.",
+      "Toaster le pain complet et servir le scramble de tofu par-dessus. Garnir de graines de sésame."
+    ],
+    w: false,
+    tags: ["vegan", "plant-based", "tofu", "petit-dejeuner", "viral-tiktok", "sans-gluten-option", "high-protein"]
+  },
+  {
+    _id: 'L392',
+    n: "Salade Pois Chiches Style Thon",
+    f: "🌱",
+    k: 379,
+    p: 16,
+    g: 45,
+    l: 15,
+    lv: 1,
+    i: "Pois chiches cuits 150g, tahini 20g, céleri 60g, cornichons 40g, jus de citron 15ml, moutarde de Dijon 10g, câpres 10g, persil frais 10g",
+    st: [
+      "Écraser grossièrement les pois chiches à la fourchette pour obtenir une texture feuilletée rappelant le thon.",
+      "Mélanger le tahini, le jus de citron, la moutarde et les câpres pour former la sauce, incorporer au mélange de pois chiches.",
+      "Ajouter le céleri émincé, les cornichons hachés et le persil. Servir en sandwich, wrap ou sur crackers."
+    ],
+    w: false,
+    tags: ["vegan", "plant-based", "pois-chiches", "dejeuner", "viral-instagram", "sans-cuisson", "high-protein"]
+  },
+  {
+    _id: 'L393',
+    n: "Bolognaise de Lentilles Maison",
+    f: "🌱",
+    k: 471,
+    p: 25,
+    g: 77,
+    l: 7,
+    lv: 1,
+    i: "Lentilles vertes cuites 200g, pâtes complètes cuites 100g, sauce tomate 100g, oignon 60g, ail 10g, carotte 60g, huile d'olive 5g, herbes de Provence 3g",
+    st: [
+      "Faire revenir l'oignon, l'ail et la carotte dans l'huile d'olive 5 min. Ajouter les lentilles cuites et la sauce tomate.",
+      "Laisser mijoter 15 min à feu doux en écrasant légèrement les lentilles pour une texture bolognaise. Assaisonner avec les herbes.",
+      "Servir sur les pâtes complètes cuites al dente. Parsemer de levure nutritionnelle en option."
+    ],
+    w: false,
+    tags: ["vegan", "plant-based", "lentilles", "pasta", "viral-tiktok", "comfort-food", "high-protein"]
+  },
+  {
+    _id: 'L394',
+    n: "Tacos Jackfruit Pulled Pork Vegan",
+    f: "🌱",
+    k: 466,
+    p: 16,
+    g: 78,
+    l: 10,
+    lv: 1,
+    i: "Jackfruit en conserve 150g, haricots noirs cuits 100g, tortillas de maïs 2x30g, avocat 50g, sauce BBQ smoky 30g, chou rouge émincé 50g, coriandre fraîche 10g, citron vert 15ml",
+    st: [
+      "Égoutter et émietter le jackfruit, le faire revenir à feu vif avec la sauce BBQ 8 min jusqu'à caramélisation et texture effilochée.",
+      "Chauffer les tortillas, garnir de jackfruit effiloché, haricots noirs, chou rouge et avocat écrasé.",
+      "Finaliser avec la coriandre fraîche et le jus de citron vert. Servir immédiatement."
+    ],
+    w: false,
+    tags: ["vegan", "plant-based", "jackfruit", "tacos", "viral-tiktok", "mexique", "street-food"]
+  },
+  {
+    _id: 'L395',
+    n: "Burger Haricots Noirs Maison",
+    f: "🌱",
+    k: 568,
+    p: 25,
+    g: 90,
+    l: 12,
+    lv: 2,
+    i: "Haricots noirs cuits 150g, flocons d'avoine 40g, pain burger complet 1x65g, avocat 30g, tomate 50g, laitue 20g, oignon rouge 30g, sauce tahini-citron 20g, paprika fumé 3g",
+    st: [
+      "Mixer les haricots noirs avec les flocons d'avoine, le paprika fumé, sel et poivre. Former un steak, laisser reposer 10 min au frais.",
+      "Cuire le steak 4 min de chaque côté à la poêle anti-adhésive huilée jusqu'à coloration.",
+      "Toaster le pain burger, garnir de laitue, tomate, oignon rouge, steak de haricots, avocat écrasé et sauce tahini-citron."
+    ],
+    w: false,
+    tags: ["vegan", "plant-based", "haricots-noirs", "burger", "viral-instagram", "meal-prep", "high-protein"]
+  },
+  {
+    _id: 'L396',
+    n: "Stir-Fry Tempeh Sauce Soja Sésame",
+    f: "🌱",
+    k: 477,
+    p: 26,
+    g: 55,
+    l: 17,
+    lv: 1,
+    i: "Tempeh 100g, riz basmati cuit 150g, brocoli 80g, carottes 50g, courgette 50g, sauce soja 15ml, huile de sésame 10g, gingembre frais 5g, ail 5g, graines de sésame 5g",
+    st: [
+      "Couper le tempeh en cubes, le faire revenir dans la moitié de l'huile de sésame 4 min jusqu'à dorure. Réserver.",
+      "Faire sauter les légumes avec le gingembre et l'ail 5 min à feu vif. Remettre le tempeh, ajouter la sauce soja et le reste d'huile de sésame.",
+      "Servir sur le riz basmati chaud, parsemer de graines de sésame."
+    ],
+    w: false,
+    tags: ["vegan", "plant-based", "tempeh", "stir-fry", "viral-tiktok", "asiatique", "high-protein"]
+  },
+  {
+    _id: 'L397',
+    n: "Pasta Crémeuse Sauce Cajou",
+    f: "🌱",
+    k: 447,
+    p: 20,
+    g: 58,
+    l: 15,
+    lv: 1,
+    i: "Pâtes complètes cuites 150g, noix de cajou trempées 30g, levure nutritionnelle 15g, ail rôti 10g, épinards frais 50g, jus de citron 15ml, eau de cuisson pâtes 60ml, muscade 1g",
+    st: [
+      "Mixer les noix de cajou (trempées 2h) avec la levure nutritionnelle, l'ail rôti, le jus de citron et l'eau de cuisson jusqu'à obtenir une crème lisse.",
+      "Faire tomber les épinards à la poêle 2 min. Verser la sauce cajou et les pâtes cuites, mélanger à feu doux 3 min.",
+      "Assaisonner de muscade, sel et poivre. Servir immédiatement avec un filet d'huile d'olive."
+    ],
+    w: false,
+    tags: ["vegan", "plant-based", "pasta", "cajou", "viral-instagram", "comfort-food", "cremeux"]
+  },
+  {
+    _id: 'L398',
+    n: "Poivrons Farcis Quinoa & Pois Chiches",
+    f: "🌱",
+    k: 462,
+    p: 17,
+    g: 67,
+    l: 14,
+    lv: 2,
+    i: "Quinoa cuit 150g, pois chiches cuits 100g, poivrons rouges 2x80g, tomates pelées 100g, oignon 50g, huile d'olive 8g, paprika 3g, cumin 2g, persil frais 15g",
+    st: [
+      "Préchauffer le four à 200°C. Couper les poivrons en deux, évider et huiler légèrement.",
+      "Mélanger le quinoa, les pois chiches, les tomates écrasées, l'oignon sauté, le paprika et le cumin. Farcir les demi-poivrons.",
+      "Enfourner 25 min jusqu'à ce que les poivrons soient tendres et dorés. Parsemer de persil frais avant de servir."
+    ],
+    w: false,
+    tags: ["vegan", "plant-based", "quinoa", "poivrons-farcis", "viral-instagram", "meal-prep", "four"]
+  },
+  {
+    _id: 'L399',
+    n: "Soupe de Lentilles Virale Hiver",
+    f: "🌱",
+    k: 431,
+    p: 20,
+    g: 54,
+    l: 15,
+    lv: 1,
+    i: "Lentilles corail cuites 200g, carottes 80g, céleri 40g, oignon 50g, lait de coco 50ml, huile d'olive 8g, cumin 3g, curcuma 2g, paprika fumé 2g, jus de citron 15ml",
+    st: [
+      "Faire revenir l'oignon, les carottes et le céleri dans l'huile avec les épices 5 min. Ajouter les lentilles et couvrir d'eau (600ml).",
+      "Mijoter 20 min puis mixer partiellement pour un rendu crémeux mais texturé. Incorporer le lait de coco.",
+      "Ajuster l'assaisonnement, finir avec le jus de citron. Servir avec du pain complet et un filet d'huile d'olive."
+    ],
+    w: false,
+    tags: ["vegan", "plant-based", "lentilles", "soupe", "viral-tiktok", "hiver", "comfort-food", "high-protein"]
+  },
+  {
+    _id: 'L400',
+    n: "Ailes de Chou-fleur Buffalo Vegan",
+    f: "🌱",
+    k: 361,
+    p: 13,
+    g: 48,
+    l: 13,
+    lv: 2,
+    i: "Chou-fleur 200g, sauce buffalo piquante 30ml, pâte de noix de cajou 25g, pain pita complet 60g, lait végétal 40ml, farine de pois chiche 30g, ail en poudre 3g, sauce ranch vegan 20g",
+    st: [
+      "Mélanger la farine de pois chiche avec le lait végétal et l'ail en poudre. Tremper les fleurettes de chou-fleur dans la pâte et enfourner 20 min à 220°C.",
+      "Badigeonner généreusement de sauce buffalo, remettre au four 10 min jusqu'à caramélisation et légère croustillance.",
+      "Mélanger la pâte de cajou avec de l'eau pour la sauce dip. Servir les ailes de chou-fleur avec le pain pita et la sauce ranch vegan."
+    ],
+    w: false,
+    tags: ["vegan", "plant-based", "chou-fleur", "buffalo", "viral-tiktok", "aperitif", "finger-food", "piquant"]
+  },
+{
+    _id: 'L401',
+    n: "Protein Balls Chocolat-Amande",
+    f: "🇺🇸",
+    k: 340,
+    p: 24,
+    g: 30,
+    l: 14,
+    lv: 1,
+    i: "Flocons d'avoine 25g, whey protéine chocolat 20g, amandes concassées 20g, miel 8g, cacao en poudre 5g",
+    st: [
+      "Mélanger les flocons d'avoine, la whey, le cacao et les amandes concassées dans un bol.",
+      "Ajouter le miel et malaxer jusqu'à obtenir une pâte homogène pouvant se former en boules.",
+      "Former 4 boules égales, réfrigérer 30 min avant dégustation."
+    ],
+    w: false,
+    tags: ["snack", "high-protein", "no-cook", "meal-prep", "viral"]
+  },
+  {
+    _id: 'L402',
+    n: "Edamame Épicé Croustillant",
+    f: "🇯🇵",
+    k: 230,
+    p: 16,
+    g: 15,
+    l: 12,
+    lv: 1,
+    i: "Edamame décortiqué surgelé 150g, huile d'olive 5g, piment de Cayenne 1g, ail en poudre 1g, sel de mer 1g",
+    st: [
+      "Décongeler et sécher parfaitement l'edamame avec du papier absorbant.",
+      "Mélanger avec l'huile d'olive, le piment, l'ail en poudre et le sel.",
+      "Cuire au four à 200°C pendant 20 min en remuant à mi-cuisson, jusqu'à ce que les fèves soient dorées et croustillantes."
+    ],
+    w: false,
+    tags: ["snack", "high-protein", "vegan", "épicé", "viral"]
+  },
+  {
+    _id: 'L403',
+    n: "Dip Cottage Cheese Crudités",
+    f: "🇺🇸",
+    k: 165,
+    p: 17,
+    g: 11,
+    l: 6,
+    lv: 1,
+    i: "Cottage cheese 150g, carottes bâtonnets 60g, concombre tranches 40g, ciboulette fraîche 5g, poivre noir, sel",
+    st: [
+      "Mixer le cottage cheese avec la ciboulette, sel et poivre jusqu'à texture lisse et crémeuse.",
+      "Disposer les bâtonnets de carottes et les tranches de concombre autour du dip dans une assiette.",
+      "Servir immédiatement ou réfrigérer jusqu'à 24h."
+    ],
+    w: false,
+    tags: ["snack", "high-protein", "low-calorie", "gluten-free", "viral"]
+  },
+  {
+    _id: 'L404',
+    n: "Egg Bites Épinards-Féta",
+    f: "🇺🇸",
+    k: 225,
+    p: 18,
+    g: 3,
+    l: 16,
+    lv: 1,
+    i: "Œufs entiers 2 (120g), épinards frais 30g, féta émiettée 20g, huile d'olive spray, poivre noir, noix de muscade",
+    st: [
+      "Préchauffer le four à 175°C. Huiler légèrement 4 empreintes d'un moule à muffins.",
+      "Battre les œufs avec les épinards hachés, la féta, le poivre et la muscade.",
+      "Verser dans les moules et cuire 18-20 min jusqu'à ce que les bites soient fermes au centre."
+    ],
+    w: false,
+    tags: ["snack", "high-protein", "low-carb", "keto", "meal-prep"]
+  },
+  {
+    _id: 'L405',
+    n: "Rice Cakes Beurre de Cacahuète Banane",
+    f: "🇺🇸",
+    k: 320,
+    p: 16,
+    g: 43,
+    l: 9,
+    lv: 1,
+    i: "Galettes de riz soufflé 2 (36g), beurre de cacahuète naturel 15g, banane 40g, whey protéine vanille 10g, cannelle",
+    st: [
+      "Mélanger le beurre de cacahuète avec la whey vanille et une pincée de cannelle.",
+      "Tartiner généreusement ce mélange sur les deux galettes de riz.",
+      "Disposer les rondelles de banane sur le dessus et servir immédiatement."
+    ],
+    w: false,
+    tags: ["snack", "high-protein", "energy", "pre-workout", "viral"]
+  },
+  {
+    _id: 'L406',
+    n: "Bark Protéiné Chocolat Noir Amandes",
+    f: "🇺🇸",
+    k: 290,
+    p: 17,
+    g: 19,
+    l: 16,
+    lv: 1,
+    i: "Chocolat noir 70% 20g, amandes effilées 15g, whey protéine chocolat 15g, cranberries séchées 10g, fleur de sel",
+    st: [
+      "Faire fondre le chocolat noir au bain-marie, puis incorporer hors du feu la whey en mélangeant vigoureusement.",
+      "Étaler finement sur une plaque recouverte de papier cuisson, parsemer d'amandes, cranberries et fleur de sel.",
+      "Réfrigérer 1h, casser en morceaux irréguliers et conserver au frais."
+    ],
+    w: false,
+    tags: ["snack", "high-protein", "chocolat", "meal-prep", "viral"]
+  },
+  {
+    _id: 'L407',
+    n: "Rouleaux Concombre Saumon-Cream Cheese",
+    f: "🇺🇸",
+    k: 170,
+    p: 16,
+    g: 8,
+    l: 8,
+    lv: 1,
+    i: "Concombre 200g, saumon fumé 50g, fromage frais light 50g, aneth frais 3g, jus de citron 5ml, poivre noir",
+    st: [
+      "Mélanger le fromage frais avec l'aneth haché, le jus de citron et le poivre.",
+      "Trancher le concombre en fines lamelles à la mandoline (ou économe), étaler une couche de cream cheese sur chaque lamelle.",
+      "Déposer une lanière de saumon fumé, rouler fermement et maintenir avec un cure-dent."
+    ],
+    w: false,
+    tags: ["snack", "high-protein", "low-carb", "gluten-free", "viral"]
+  },
+  {
+    _id: 'L408',
+    n: "Wraps Laitue Thon Avocat",
+    f: "🇺🇸",
+    k: 180,
+    p: 22,
+    g: 7,
+    l: 7,
+    lv: 1,
+    i: "Thon en conserve au naturel 80g, feuilles de laitue iceberg 4 (40g), avocat 40g, maïs doux 30g, jus de citron vert, sel, poivre",
+    st: [
+      "Égoutter soigneusement le thon, mélanger avec l'avocat écrasé, le maïs, le jus de citron vert, sel et poivre.",
+      "Déposer une cuillère généreuse de garniture au centre de chaque feuille de laitue.",
+      "Refermer les feuilles en wrap et maintenir avec un cure-dent, servir frais."
+    ],
+    w: false,
+    tags: ["snack", "high-protein", "low-carb", "gluten-free", "viral"]
+  },
+  {
+    _id: 'L409',
+    n: "Pois Chiches Croustillants Air Fryer",
+    f: "🇺🇸",
+    k: 270,
+    p: 15,
+    g: 34,
+    l: 8,
+    lv: 1,
+    i: "Pois chiches cuits égouttés 150g, huile d'olive 5g, parmesan râpé 10g, paprika fumé 2g, ail en poudre 1g, sel, poivre",
+    st: [
+      "Sécher les pois chiches avec du papier absorbant, mélanger avec l'huile, le paprika, l'ail, sel et poivre.",
+      "Cuire à l'air fryer à 200°C pendant 15-18 min en secouant le panier toutes les 5 min jusqu'à texture croquante.",
+      "Saupoudrer de parmesan en sortant du fryer, laisser tiédir 5 min avant dégustation."
+    ],
+    w: false,
+    tags: ["snack", "high-protein", "vegan-option", "crunchy", "viral"]
+  },
+  {
+    _id: 'L410',
+    n: "Pudding Chia Protéiné Vanille-Framboise",
+    f: "🇺🇸",
+    k: 275,
+    p: 21,
+    g: 30,
+    l: 8,
+    lv: 1,
+    i: "Graines de chia 20g, lait végétal d'avoine 150ml, whey protéine vanille 20g, framboises fraîches ou surgelées 60g, miel 5g",
+    st: [
+      "Fouetter vigoureusement le lait d'avoine avec la whey vanille pour éviter les grumeaux.",
+      "Incorporer les graines de chia et le miel, mélanger à nouveau, réfrigérer minimum 4h (idéalement une nuit).",
+      "Au moment de servir, remuer le pudding et disposer les framboises sur le dessus."
+    ],
+    w: false,
+    tags: ["snack", "high-protein", "meal-prep", "no-cook", "viral"]
+  },
+{
+    _id: 'L411',
+    n: "Feta Pasta Baked TikTok",
+    f: "🇮🇹",
+    k: 489,
+    p: 20,
+    g: 64,
+    l: 17,
+    lv: 1,
+    i: "Pâtes sèches 80g, feta 50g, tomates cerises 200g, huile d'olive 5ml, ail 2 gousses, basilic frais",
+    st: [
+      "Préchauffer le four à 200°C. Disposer les tomates cerises dans un plat, déposer le bloc de feta au centre, arroser d'huile d'olive et ajouter l'ail écrasé.",
+      "Enfourner 25-30 min jusqu'à ce que la feta soit dorée et les tomates confites et éclatées.",
+      "Cuire les pâtes al dente, égoutter en réservant 50ml d'eau de cuisson. Écraser la feta avec les tomates, ajouter l'eau de cuisson et mélanger aux pâtes. Parsemer de basilic."
+    ],
+    w: false,
+    tags: ["pates", "pasta", "feta", "viral", "tiktok", "vegetarien", "four"]
+  },
+  {
+    _id: 'L412',
+    n: "One-Pot Pasta Protéinée Poulet",
+    f: "🍝",
+    k: 562,
+    p: 48,
+    g: 61,
+    l: 14,
+    lv: 1,
+    i: "Pâtes sèches 80g, blanc de poulet émincé 100g, tomates cerises 150g, parmesan râpé 15g, huile d'olive 5ml, bouillon de poule 400ml, ail, persil",
+    st: [
+      "Dans une grande casserole, faire revenir le poulet émincé avec l'huile d'olive et l'ail 3 minutes. Ajouter les tomates cerises et faire sauter 2 minutes.",
+      "Verser les pâtes sèches et le bouillon chaud. Cuire à feu moyen en remuant régulièrement jusqu'à absorption complète du liquide (10-12 min).",
+      "Hors du feu, incorporer le parmesan et le persil ciselé. Servir immédiatement."
+    ],
+    w: false,
+    tags: ["pates", "pasta", "poulet", "one-pot", "proteine", "rapide"]
+  },
+  {
+    _id: 'L413',
+    n: "Carbonara Légère au Poulet",
+    f: "🇮🇹",
+    k: 581,
+    p: 50,
+    g: 48,
+    l: 21,
+    lv: 2,
+    i: "Spaghetti secs 70g, blanc de poulet 80g, lardons fumés 25g, parmesan râpé 15g, 1 œuf entier, poivre noir, sel",
+    st: [
+      "Cuire les spaghetti al dente. Pendant ce temps, griller les lardons à sec dans une poêle jusqu'à légère dorure, puis ajouter le poulet émincé et cuire 5 minutes.",
+      "Dans un bol, fouetter l'œuf avec le parmesan et une généreuse quantité de poivre noir.",
+      "Égoutter les pâtes en réservant 80ml d'eau de cuisson. Hors du feu, mélanger pâtes, viandes, puis verser le mélange œuf-parmesan en remuant vivement avec l'eau de cuisson pour créer une sauce crémeuse sans coaguler."
+    ],
+    w: false,
+    tags: ["pates", "pasta", "carbonara", "poulet", "lardons", "italien", "proteine"]
+  },
+  {
+    _id: 'L414',
+    n: "Peanut Noodles Soba Beurre Cacahuète",
+    f: "🥜",
+    k: 597,
+    p: 46,
+    g: 65,
+    l: 17,
+    lv: 1,
+    i: "Nouilles soba sèches 70g, blanc de poulet 80g, beurre de cacahuète naturel 25g, sauce soja 10ml, concombre 80g, coriandre fraîche, gingembre râpé, jus de citron vert",
+    st: [
+      "Cuire les soba 5 min dans l'eau bouillante, rincer à l'eau froide et réserver. Cuire le poulet à la vapeur ou grillé, laisser tiédir et effilocher.",
+      "Préparer la sauce : mélanger le beurre de cacahuète, la sauce soja, le gingembre râpé et le jus de citron vert avec 2-3 cuillères d'eau chaude jusqu'à consistance lisse.",
+      "Mélanger les soba avec la sauce, ajouter le poulet effiloché, le concombre en juliennes et la coriandre. Servir à température ambiante."
+    ],
+    w: false,
+    tags: ["nouilles", "soba", "peanut", "asiatique", "viral", "poulet", "cacahuete"]
+  },
+  {
+    _id: 'L415',
+    n: "Pasta e Fagioli Maison",
+    f: "🇮🇹",
+    k: 527,
+    p: 25,
+    g: 73,
+    l: 15,
+    lv: 1,
+    i: "Pâtes courtes sèches 60g, haricots blancs cuits 120g, tomates pelées 100g, huile d'olive 10ml, parmesan râpé 15g, ail 2 gousses, romarin, sel, poivre",
+    st: [
+      "Faire revenir l'ail écrasé dans l'huile d'olive. Ajouter les tomates et laisser mijoter 5 min. Incorporer les haricots blancs et 300ml d'eau ou bouillon, porter à ébullition.",
+      "Ajouter les pâtes directement dans la soupe et cuire selon les indications du paquet en remuant régulièrement. La soupe doit être épaisse.",
+      "Hors du feu, écraser grossièrement quelques haricots à la fourchette pour épaissir davantage. Servir avec le parmesan et un tour de poivre."
+    ],
+    w: false,
+    tags: ["pates", "pasta", "haricots", "soupe", "vegetarien", "italien", "fibres"]
+  },
+  {
+    _id: 'L416',
+    n: "Spaghetti Aglio e Olio Protéiné",
+    f: "🇮🇹",
+    k: 580,
+    p: 43,
+    g: 57,
+    l: 20,
+    lv: 2,
+    i: "Spaghetti secs 80g, blanc de poulet émincé 80g, huile d'olive 10ml, parmesan râpé 20g, ail 4 gousses, piment rouge séché, persil plat, sel",
+    st: [
+      "Cuire les spaghetti al dente. Pendant ce temps, faire dorer l'ail émincé et le piment dans l'huile d'olive à feu doux jusqu'à légère coloration.",
+      "Ajouter le poulet émincé dans la poêle et cuire 5-6 minutes à feu moyen jusqu'à dorure.",
+      "Égoutter les pâtes en réservant 100ml d'eau de cuisson. Ajouter pâtes et eau de cuisson à la poêle, mélanger vivement. Hors du feu, incorporer le parmesan et le persil ciselé."
+    ],
+    w: false,
+    tags: ["pates", "pasta", "aglio", "poulet", "simple", "italien", "proteine"]
+  },
+  {
+    _id: 'L417',
+    n: "Cold Sesame Noodles Virales",
+    f: "🥢",
+    k: 552,
+    p: 26,
+    g: 67,
+    l: 20,
+    lv: 1,
+    i: "Nouilles soba sèches 70g, edamame surgelés 50g, beurre de cacahuète 20g, sauce soja 15ml, huile de sésame 5ml, concombre 100g, carottes râpées 50g, vinaigre de riz 10ml, gingembre râpé",
+    st: [
+      "Cuire les soba 5 min, rincer abondamment à l'eau froide pour stopper la cuisson et éviter qu'elles collent. Cuire les edamame selon les indications.",
+      "Préparer la sauce sésame : fouetter le beurre de cacahuète, la sauce soja, l'huile de sésame, le vinaigre de riz et le gingembre avec un peu d'eau chaude.",
+      "Mélanger les soba froides avec la sauce, puis ajouter les edamame, le concombre en rondelles fines et les carottes râpées. Servir froid."
+    ],
+    w: false,
+    tags: ["nouilles", "soba", "froid", "sesame", "viral", "asiatique", "vegetarien"]
+  },
+  {
+    _id: 'L418',
+    n: "High-Protein Mac and Cheese",
+    f: "🧀",
+    k: 616,
+    p: 55,
+    g: 63,
+    l: 16,
+    lv: 1,
+    i: "Pâtes courtes sèches 80g, cottage cheese 150g, blanc de poulet 60g, cheddar allégé râpé 30g, lait écrémé 50ml, moutarde de Dijon 5g, paprika fumé, sel, poivre",
+    st: [
+      "Cuire les pâtes al dente. Griller le poulet en dés à la poêle avec le paprika fumé.",
+      "Dans un blender, mixer le cottage cheese, le lait, la moutarde, sel et poivre jusqu'à consistance lisse et crémeuse.",
+      "Égoutter les pâtes, verser la sauce cottage cheese dans la casserole chaude, ajouter le cheddar râpé et remuer jusqu'à fonte. Incorporer les dés de poulet et servir immédiatement."
+    ],
+    w: false,
+    tags: ["pates", "pasta", "mac-cheese", "proteine", "cottage", "poulet", "viral"]
+  },
+  {
+    _id: 'L419',
+    n: "Puttanesca Healthy aux Anchois",
+    f: "🇮🇹",
+    k: 553,
+    p: 25,
+    g: 66,
+    l: 21,
+    lv: 2,
+    i: "Spaghetti secs 80g, tomates concassées 200g, anchois à l'huile 20g, olives noires 30g, câpres 10g, huile d'olive 10ml, parmesan râpé 15g, ail 2 gousses, piment, persil",
+    st: [
+      "Faire fondre les anchois dans l'huile d'olive chaude avec l'ail et le piment pendant 2 minutes — ils se dissoudront complètement dans l'huile.",
+      "Ajouter les tomates concassées, les olives et les câpres. Laisser mijoter 12-15 minutes à feu moyen jusqu'à réduction.",
+      "Cuire les spaghetti al dente, égoutter et mélanger à la sauce. Servir avec le parmesan et le persil ciselé."
+    ],
+    w: false,
+    tags: ["pates", "pasta", "puttanesca", "anchois", "mediteraneen", "olives", "rapide"]
+  },
+  {
+    _id: 'L420',
+    n: "Creamy Tomato Pasta Cottage Cheese",
+    f: "🍅",
+    k: 525,
+    p: 31,
+    g: 62,
+    l: 17,
+    lv: 1,
+    i: "Pâtes complètes sèches 80g, cottage cheese 100g, tomates cerises 150g, parmesan râpé 20g, huile d'olive 5ml, ail 2 gousses, basilic frais, sel, poivre",
+    st: [
+      "Cuire les pâtes complètes al dente. Pendant ce temps, faire revenir les tomates cerises avec l'ail dans l'huile d'olive jusqu'à ce qu'elles éclatent et forment une sauce.",
+      "Dans un blender, mixer le cottage cheese jusqu'à consistance lisse, puis l'ajouter hors du feu aux tomates avec la moitié du parmesan. Bien mélanger.",
+      "Égoutter les pâtes en réservant 60ml d'eau de cuisson. Incorporer les pâtes à la sauce crémeuse en ajoutant l'eau de cuisson si nécessaire. Servir avec le reste du parmesan et le basilic frais."
+    ],
+    w: false,
+    tags: ["pates", "pasta", "cottage", "tomate", "complet", "cremeux", "vegetarien", "viral"]
+  },
+{
+    _id: 'L421',
+    n: "Green Goddess Smoothie",
+    f: "🥤",
+    k: 318,
+    p: 14,
+    g: 52,
+    l: 6,
+    lv: 1,
+    i: "Épinards frais 50g, banane 120g, lait amande 200ml, yaourt grec 0% 100g, graines chia 10g, miel 10g",
+    st: ["Peler la banane et la couper en tronçons, laver les épinards.", "Mixer tous les ingrédients jusqu'à obtenir une texture lisse et crémeuse.", "Servir immédiatement dans un grand verre avec des glaçons."],
+    w: true,
+    tags: ["smoothie", "boisson", "green", "tiktok", "épinards", "detox", "viral"]
+  },
+  {
+    _id: 'L422',
+    n: "Protein Milkshake Cottage Cheese",
+    f: "🥛",
+    k: 336,
+    p: 46,
+    g: 29,
+    l: 4,
+    lv: 1,
+    i: "Cottage cheese 150g, lait écrémé 200ml, whey protéine chocolat 25g, cacao en poudre 10g, miel 10g",
+    st: ["Mixer le cottage cheese avec le lait écrémé jusqu'à texture parfaitement lisse.", "Ajouter la whey, le cacao et le miel, mixer 30 secondes supplémentaires.", "Servir frais avec des glaçons pour un shake post-entraînement ultra-protéiné."],
+    w: true,
+    tags: ["smoothie", "boisson", "high-protein", "cottage-cheese", "milkshake", "post-workout", "viral"]
+  },
+  {
+    _id: 'L423',
+    n: "Gut Health Power Shot",
+    f: "🧡",
+    k: 172,
+    p: 2,
+    g: 43,
+    l: 0,
+    lv: 1,
+    i: "Gingembre frais 20g, curcuma frais 5g, jus de citron 30ml, jus d'orange frais 100ml, jus de carotte 100ml, miel 15g, poivre noir 1g",
+    st: ["Presser le citron et l'orange, éplucher et râper finement le gingembre et le curcuma.", "Mixer ou passer tous les ingrédients à l'extracteur de jus avec le poivre noir.", "Boire d'un trait le matin à jeun pour booster la digestion et l'immunité."],
+    w: true,
+    tags: ["boisson", "shot", "gingembre", "curcuma", "gut-health", "immunité", "detox", "viral"]
+  },
+  {
+    _id: 'L424',
+    n: "Matcha Latte Protéiné",
+    f: "🍵",
+    k: 217,
+    p: 22,
+    g: 21,
+    l: 5,
+    lv: 1,
+    i: "Lait d'amande 250ml, whey vanille 25g, matcha en poudre 5g, miel 10g",
+    st: ["Tiédir légèrement le lait d'amande (pas bouillant), fouetter le matcha en poudre avec 2 cuillères à soupe d'eau chaude.", "Mixer tous les ingrédients avec la whey vanille et le miel jusqu'à ce que ce soit mousseux.", "Servir chaud ou sur glaçons selon la saison, saupoudrer de matcha pour la présentation."],
+    w: true,
+    tags: ["boisson", "smoothie", "matcha", "latte", "protéine", "antioxydant", "tendance", "viral"]
+  },
+  {
+    _id: 'L425',
+    n: "Watermelon Mint Refresher",
+    f: "🍉",
+    k: 159,
+    p: 3,
+    g: 30,
+    l: 3,
+    lv: 1,
+    i: "Pastèque sans pépins 300g, menthe fraîche 5g, jus de citron vert 20ml, graines chia 10g",
+    st: ["Couper la pastèque en cubes, effeuiller la menthe fraîche.", "Mixer la pastèque avec la menthe et le jus de citron vert jusqu'à consistance liquide.", "Verser sur glaçons, ajouter les graines chia et laisser gonfler 5 minutes avant de servir."],
+    w: true,
+    tags: ["boisson", "smoothie", "pastèque", "menthe", "été", "hydratation", "tiktok", "viral", "detox"]
+  },
+  {
+    _id: 'L426',
+    n: "Turmeric Golden Milk",
+    f: "✨",
+    k: 157,
+    p: 2,
+    g: 26,
+    l: 5,
+    lv: 1,
+    i: "Lait d'amande 300ml, curcuma en poudre 5g, gingembre frais 5g, cannelle moulue 2g, miel 15g, poivre noir moulu 1g",
+    st: ["Chauffer le lait d'amande à feu doux avec le curcuma, la cannelle et le gingembre râpé pendant 5 minutes.", "Filtrer si besoin, ajouter le miel et une pincée de poivre noir pour activer la curcumine.", "Servir chaud dans un mug ou refroidir pour une version iced golden latte."],
+    w: true,
+    tags: ["boisson", "golden-milk", "curcuma", "anti-inflammatoire", "bien-être", "ayurvédique", "viral"]
+  },
+  {
+    _id: 'L427',
+    n: "Açaï Smoothie Drink",
+    f: "💜",
+    k: 318,
+    p: 5,
+    g: 52,
+    l: 10,
+    lv: 1,
+    i: "Açaï poudre 20g, banane 100g, fruits rouges congelés 100g, lait d'amande 150ml, graines chia 10g",
+    st: ["Laisser les fruits rouges décongeler légèrement, couper la banane en rondelles.", "Mixer l'açaï, la banane, les fruits rouges et le lait d'amande jusqu'à texture crémeuse et homogène.", "Verser dans un grand verre, saupoudrer les graines chia et déguster immédiatement."],
+    w: true,
+    tags: ["smoothie", "boisson", "açaï", "antioxydant", "fruits-rouges", "superfood", "bowl-drink", "viral"]
+  },
+  {
+    _id: 'L428',
+    n: "Pre-Workout Banana Oat Smoothie",
+    f: "⚡",
+    k: 436,
+    p: 16,
+    g: 66,
+    l: 12,
+    lv: 1,
+    i: "Banane 120g, flocons d'avoine 40g, lait écrémé 200ml, beurre d'amande 15g",
+    st: ["Mixer l'avoine 10 secondes seule pour la réduire en fine poudre.", "Ajouter la banane, le lait écrémé et le beurre d'amande, mixer 45 secondes jusqu'à consistance crémeuse.", "Consommer 30 à 45 minutes avant l'entraînement pour une énergie optimale et durable."],
+    w: true,
+    tags: ["smoothie", "boisson", "pre-workout", "avoine", "banane", "énergie", "sport", "performance"]
+  },
+  {
+    _id: 'L429',
+    n: "High-Protein Chocolate Shake",
+    f: "🍫",
+    k: 411,
+    p: 39,
+    g: 39,
+    l: 11,
+    lv: 1,
+    i: "Whey protéine chocolat 30g, lait écrémé 250ml, cacao en poudre non sucré 10g, beurre d'amande 15g, banane 80g",
+    st: ["Couper la banane en morceaux et la congeler idéalement 2h pour une texture plus épaisse.", "Mixer tous les ingrédients ensemble pendant 1 minute jusqu'à obtenir un shake épais et onctueux.", "Servir immédiatement après l'entraînement pour maximiser la récupération musculaire."],
+    w: true,
+    tags: ["smoothie", "boisson", "high-protein", "chocolat", "post-workout", "musculation", "whey", "viral"]
+  },
+  {
+    _id: 'L430',
+    n: "Collagen Beauty Smoothie",
+    f: "🌸",
+    k: 273,
+    p: 25,
+    g: 32,
+    l: 5,
+    lv: 1,
+    i: "Yaourt grec 0% 100g, fruits rouges congelés 80g, lait d'amande 150ml, peptides de collagène 15g, miel 10g, graines chia 10g",
+    st: ["Sortir les fruits rouges du congélateur 10 minutes avant pour une texture idéale.", "Mixer le yaourt grec, les fruits rouges, le lait d'amande, le collagène et le miel jusqu'à lisse.", "Verser dans un verre, saupoudrer les graines chia, laisser reposer 3 minutes et déguster."],
+    w: true,
+    tags: ["smoothie", "boisson", "collagène", "beauté", "peau", "anti-âge", "fruits-rouges", "bien-être", "viral"]
+  },
+{
+    _id: 'L431',
+    n: "Chicken Meal Prep Monday Citron Herbes",
+    f: "🇺🇸",
+    k: 516,
+    p: 43,
+    g: 59,
+    l: 12,
+    lv: 1,
+    i: "Blanc de poulet 150g, riz basmati cuit 200g, brocoli 150g, huile d'olive 10g, jus de citron 20ml, ail 5g, origan séché 2g, sel, poivre",
+    st: [
+      "Préchauffer le four à 200°C. Assaisonner le blanc de poulet avec l'ail, l'origan, le jus de citron, le sel et le poivre, puis cuire 25 min au four.",
+      "Pendant ce temps, cuire le riz basmati selon les instructions et blanchir le brocoli 5 min à l'eau bouillante salée, puis sauter 3 min à l'huile d'olive.",
+      "Laisser reposer le poulet 5 min avant de le trancher. Répartir le riz, le brocoli et le poulet en parts égales dans 3 boîtes hermétiques.",
+      "Conserver au réfrigérateur jusqu'à 4 jours. Réchauffer 2 min au micro-ondes avant de servir."
+    ],
+    w: false,
+    tags: ["meal-prep", "four", "poulet", "riz", "batch-cooking"]
+  },
+  {
+    _id: 'L432',
+    n: "Sheet Pan Saumon Légumes Rôtis",
+    f: "🇺🇸",
+    k: 434,
+    p: 35,
+    g: 15,
+    l: 26,
+    lv: 1,
+    i: "Filet de saumon 150g, asperges 150g, poivron rouge 150g, huile d'olive 8g, ail 5g, citron 30g, paprika fumé 2g, sel, poivre",
+    st: [
+      "Préchauffer le four à 220°C. Disposer les asperges et le poivron coupé en lanières sur une plaque recouverte de papier sulfurisé, arroser de 5g d'huile d'olive, saler et poivrer.",
+      "Placer le filet de saumon sur la même plaque, badigeonner avec le reste d'huile d'olive, saupoudrer de paprika fumé et d'ail haché.",
+      "Enfourner 18-20 min jusqu'à ce que le saumon soit cuit et les légumes légèrement caramélisés. Presser le citron en fin de cuisson.",
+      "Servir immédiatement ou préparer plusieurs portions en avance et réfrigérer jusqu'à 3 jours."
+    ],
+    w: false,
+    tags: ["meal-prep", "four", "saumon", "sheet-pan", "sans-gluten"]
+  },
+  {
+    _id: 'L433',
+    n: "Cuisses de Poulet Teriyaki au Four",
+    f: "🇯🇵",
+    k: 527,
+    p: 48,
+    g: 59,
+    l: 11,
+    lv: 2,
+    i: "Cuisse de poulet sans peau 200g, sauce soja 30ml, miel 20g, riz jasmin cuit 150g, gingembre frais 5g, ail 5g, huile de sésame 3ml, graines de sésame 5g",
+    st: [
+      "Préparer la marinade teriyaki en mélangeant la sauce soja, le miel, le gingembre râpé, l'ail écrasé et l'huile de sésame. Faire mariner les cuisses de poulet au moins 30 min au réfrigérateur.",
+      "Préchauffer le four à 200°C. Disposer les cuisses dans un plat allant au four, napper de marinade et enfourner 35-40 min en arrosant à mi-cuisson.",
+      "Pendant la cuisson, préparer le riz jasmin. En fin de cuisson, faire réduire le jus du plat 2 min à la casserole pour obtenir une sauce épaisse.",
+      "Napper les cuisses de sauce réduite, parsemer de graines de sésame et servir avec le riz. Répartir en boîtes pour le meal prep de la semaine."
+    ],
+    w: false,
+    tags: ["meal-prep", "four", "poulet", "teriyaki", "japonais"]
+  },
+  {
+    _id: 'L434',
+    n: "Bowl Pois Chiches Rôtis Tahini",
+    f: "🇮🇱",
+    k: 522,
+    p: 19,
+    g: 80,
+    l: 14,
+    lv: 1,
+    i: "Pois chiches rôtis 100g, riz cuit 150g, épinards frais 100g, tahini 20g, tomate 100g, jus de citron 20ml, ail 3g, cumin 2g, paprika 2g, huile d'olive 5g, sel",
+    st: [
+      "Préchauffer le four à 220°C. Égoutter et sécher les pois chiches, les enrober de cumin, paprika et huile d'olive, puis les rôtir 25-30 min sur une plaque jusqu'à ce qu'ils soient croustillants.",
+      "Préparer la sauce tahini en mélangeant le tahini, le jus de citron, l'ail écrasé et 2 cuillères à soupe d'eau froide jusqu'à obtenir une sauce lisse.",
+      "Faire revenir rapidement les épinards frais à la poêle avec un filet d'huile d'olive jusqu'à ce qu'ils soient tombés.",
+      "Assembler les bowls avec le riz en base, les épinards, la tomate coupée en dés, les pois chiches croustillants et napper de sauce tahini."
+    ],
+    w: false,
+    tags: ["meal-prep", "four", "vegetarien", "pois-chiches", "bowl"]
+  },
+  {
+    _id: 'L435',
+    n: "Boulettes de Dinde Meal Prep Sauce Tomate",
+    f: "🇮🇹",
+    k: 447,
+    p: 45,
+    g: 33,
+    l: 15,
+    lv: 2,
+    i: "Dinde hachée 150g, œuf 60g, chapelure 30g, sauce tomate 100g, courgette 100g, parmesan râpé 15g, ail 5g, persil frais 5g, sel, poivre, huile d'olive 5g",
+    st: [
+      "Mélanger la dinde hachée, l'œuf, la chapelure, l'ail haché, le persil ciselé et le parmesan. Assaisonner généreusement et former des boulettes de 30g environ.",
+      "Préchauffer le four à 200°C. Déposer les boulettes sur une plaque huilée et enfourner 20-22 min, en les retournant à mi-cuisson.",
+      "Pendant ce temps, couper la courgette en rondelles et la faire revenir 5 min à l'huile d'olive, puis ajouter la sauce tomate et laisser mijoter 10 min.",
+      "Incorporer les boulettes dorées dans la sauce. Répartir en boîtes hermétiques, à conserver 4 jours au réfrigérateur ou 3 mois au congélateur."
+    ],
+    w: false,
+    tags: ["meal-prep", "four", "dinde", "boulettes", "batch-cooking"]
+  },
+  {
+    _id: 'L436',
+    n: "Egg Muffins Épinards Feta Batch Cooking",
+    f: "🇺🇸",
+    k: 381,
+    p: 29,
+    g: 10,
+    l: 25,
+    lv: 1,
+    i: "Œufs 3×60g, épinards frais 80g, poivron rouge 100g, feta 40g, lait 30ml, ail en poudre 2g, origan 2g, sel, poivre",
+    st: [
+      "Préchauffer le four à 180°C. Graisser un moule à 6 muffins. Faire revenir les épinards à sec 2 min pour les faire tomber, couper le poivron en petits dés.",
+      "Fouetter les œufs avec le lait, l'ail en poudre, l'origan, le sel et le poivre. Répartir les épinards et le poivron dans les moules à muffins.",
+      "Verser l'appareil à œufs sur les légumes à hauteur des 3/4. Émietter la feta sur chaque muffin et enfourner 18-20 min jusqu'à ce qu'ils soient pris et légèrement dorés.",
+      "Laisser refroidir avant de démouler. Conserver en boîte hermétique 4 jours au réfrigérateur. Réchauffer 45 secondes au micro-ondes."
+    ],
+    w: false,
+    tags: ["meal-prep", "four", "oeufs", "batch-cooking", "sans-gluten"]
+  },
+  {
+    _id: 'L437',
+    n: "Patate Douce Farcie Haricots Noirs Four",
+    f: "🇲🇽",
+    k: 466,
+    p: 20,
+    g: 65,
+    l: 14,
+    lv: 1,
+    i: "Patate douce 200g, haricots noirs cuits 100g, fromage râpé 30g, crème fraîche légère 30g, cumin 2g, paprika fumé 2g, coriandre fraîche 5g, sel, poivre",
+    st: [
+      "Préchauffer le four à 200°C. Piquer la patate douce à la fourchette et l'envelopper dans du papier d'aluminium. Enfourner 45-50 min jusqu'à ce qu'elle soit tendre.",
+      "Pendant ce temps, assaisonner les haricots noirs avec le cumin, le paprika fumé, le sel et le poivre. Les réchauffer 5 min à la poêle à feu moyen.",
+      "Couper la patate douce en deux dans la longueur, l'écraser légèrement avec une fourchette. Garnir avec les haricots noirs épicés et le fromage râpé.",
+      "Remettre au four 5 min pour faire fondre le fromage. Servir avec la crème fraîche et la coriandre fraîche ciselée."
+    ],
+    w: false,
+    tags: ["meal-prep", "four", "vegetarien", "patate-douce", "mexicain"]
+  },
+  {
+    _id: 'L438',
+    n: "One-Sheet Saumon Asperges Pommes de Terre",
+    f: "🇫🇷",
+    k: 528,
+    p: 36,
+    g: 33,
+    l: 28,
+    lv: 1,
+    i: "Filet de saumon 150g, asperges 150g, pommes de terre 150g, huile d'olive 10g, moutarde de Dijon 10g, citron 30g, thym frais 3g, ail 5g, sel, poivre",
+    st: [
+      "Préchauffer le four à 220°C. Couper les pommes de terre en rondelles de 5mm, les déposer sur une plaque avec 5g d'huile d'olive, le thym et l'ail. Enfourner 15 min.",
+      "Ajouter les asperges parées sur la plaque, arroser du reste d'huile d'olive. Badigeonner le filet de saumon de moutarde de Dijon et le placer entre les légumes.",
+      "Poursuivre la cuisson 15-18 min jusqu'à ce que le saumon soit cuit à cœur et les légumes dorés.",
+      "Presser le citron sur l'ensemble, ajuster l'assaisonnement et servir directement sur la plaque. Préparer plusieurs plaques pour le batch du dimanche."
+    ],
+    w: false,
+    tags: ["meal-prep", "four", "saumon", "one-sheet", "francais"]
+  },
+  {
+    _id: 'L439',
+    n: "Soupe Poulet Haricots Blancs Mijoteuse",
+    f: "🇺🇸",
+    k: 431,
+    p: 50,
+    g: 51,
+    l: 3,
+    lv: 1,
+    i: "Blanc de poulet 150g, haricots blancs cuits 150g, carotte 100g, céleri 80g, bouillon de poulet 400ml, ail 10g, oignon 80g, thym 2g, laurier 1 feuille, sel, poivre",
+    st: [
+      "Couper la carotte, le céleri et l'oignon en dés. Placer tous les ingrédients dans la mijoteuse : poulet entier, légumes, haricots blancs, ail écrasé, bouillon, thym et laurier.",
+      "Cuire à basse température 6-8h ou à haute température 3-4h. Le poulet doit être très tendre et se défaire facilement.",
+      "Retirer le poulet, l'effilocher à l'aide de deux fourchettes, puis le remettre dans la soupe. Retirer la feuille de laurier et ajuster l'assaisonnement.",
+      "Répartir en portions de 400ml dans des boîtes hermétiques. Conserver 5 jours au réfrigérateur ou 3 mois au congélateur."
+    ],
+    w: false,
+    tags: ["meal-prep", "mijoteuse", "poulet", "soupe", "batch-cooking"]
+  },
+  {
+    _id: 'L440',
+    n: "Bolognese Batch Courgette Pâtes",
+    f: "🇮🇹",
+    k: 468,
+    p: 41,
+    g: 58,
+    l: 8,
+    lv: 2,
+    i: "Bœuf haché 5%MG 150g, courgette 200g, tomate concassée 200g, pâtes cuites 150g, oignon 80g, ail 10g, carotte 80g, concentré de tomate 15g, basilic 3g, huile d'olive 5g, sel, poivre",
+    st: [
+      "Faire revenir l'oignon et la carotte émincés dans l'huile d'olive 5 min à feu moyen. Ajouter l'ail haché et le bœuf haché, faire colorer en émiettant la viande.",
+      "Râper grossièrement la courgette et l'incorporer à la viande. Ajouter le concentré de tomate, mélanger 1 min, puis verser les tomates concassées. Assaisonner.",
+      "Laisser mijoter à feu doux 25-30 min en remuant régulièrement jusqu'à ce que la sauce soit épaisse et savoureuse. Ajouter le basilic ciselé en fin de cuisson.",
+      "Cuire les pâtes al dente. Répartir sauce bolognese et pâtes séparément dans des boîtes pour le meal prep — mélanger au moment de réchauffer. Conservation 4 jours."
+    ],
+    w: false,
+    tags: ["meal-prep", "boeuf", "bolognese", "pates", "batch-cooking"]
+  },
+{
+    _id: 'L441',
+    n: "Birria Tacos Bœuf Confit",
+    f: "🇲🇽",
+    k: 452,
+    p: 43,
+    g: 30,
+    l: 17,
+    lv: 2,
+    i: "Bœuf haché 5% 150g, tortillas maïs 2x25g, oignon blanc 50g, fromage Oaxaca râpé 20g, piment guajillo 5g, cumin 2g, coriandre fraîche 10g, consommé bœuf 100ml",
+    st: [
+      "Faire mariner le bœuf haché avec le piment guajillo réhydraté, le cumin et l'ail écrasé 30 min, puis braiser à feu doux dans le consommé 1h jusqu'à tendreté.",
+      "Chauffer les tortillas de maïs à sec dans une poêle bien chaude, les tremper brièvement dans le gras de cuisson du birria pour les colorer et les parfumer.",
+      "Garnir chaque tortilla de bœuf effiloché, de fromage Oaxaca râpé, d'oignon émincé et de coriandre fraîche.",
+      "Servir avec un bol de consommé chaud pour tremper les tacos — le fameux 'quesabirria dip' viral TikTok."
+    ],
+    w: false,
+    tags: ["mexicain", "birria", "tacos", "viral", "tiktok", "bœuf", "street-food"]
+  },
+  {
+    _id: 'L442',
+    n: "Elotes Street Corn Bowl Poulet",
+    f: "🇲🇽",
+    k: 529,
+    p: 49,
+    g: 43,
+    l: 19,
+    lv: 2,
+    i: "Poulet grillé 120g, maïs en épi ou surgelé 200g, mayonnaise légère 20g, fromage cotija émietté 30g, piment de Cayenne 2g, paprika fumé 2g, lime jus 30ml, coriandre 10g",
+    st: [
+      "Griller le poulet assaisonné paprika-cumin à feu vif 6 min de chaque côté, laisser reposer 5 min puis émincer en lamelles.",
+      "Faire griller les grains de maïs à sec dans une poêle bien chaude jusqu'à obtenir des points de carbonisation caracteristiques du 'elote'.",
+      "Mélanger le maïs grillé avec la mayonnaise légère, la moitié du fromage cotija, le piment de Cayenne et le jus de lime.",
+      "Dresser en bowl avec le poulet par-dessus, parsemer du reste du cotija, de paprika fumé et de coriandre fraîche."
+    ],
+    w: false,
+    tags: ["mexicain", "elotes", "street-food", "bowl", "viral", "instagram", "poulet"]
+  },
+  {
+    _id: 'L443',
+    n: "Ceviche Crevettes Healthy Avocat",
+    f: "🇵🇪",
+    k: 358,
+    p: 39,
+    g: 28,
+    l: 10,
+    lv: 1,
+    i: "Crevettes crues 200g, avocat 60g, tomate 100g, concombre 100g, maïs cuit 60g, lime jus 60ml, piment ají amarillo 5g, coriandre fraîche 15g, oignon rouge 40g, sel, poivre",
+    st: [
+      "Décortiquer les crevettes, les couper en morceaux et les 'cuire' à froid dans le jus de lime 15-20 min jusqu'à ce qu'elles deviennent opaques — la leche de tigre péruvienne.",
+      "Émincer finement l'oignon rouge, couper le concombre et la tomate en petits dés, incorporer avec le piment ají amarillo haché et la coriandre.",
+      "Ajouter l'avocat coupé en cubes au dernier moment pour éviter l'oxydation, mélanger délicatement et rectifier l'assaisonnement."
+    ],
+    w: false,
+    tags: ["péruvien", "ceviche", "crevettes", "healthy", "sans-gluten", "light", "frais"]
+  },
+  {
+    _id: 'L444',
+    n: "Chimichurri Steak Patate Douce",
+    f: "🇦🇷",
+    k: 558,
+    p: 49,
+    g: 27,
+    l: 27,
+    lv: 2,
+    i: "Bavette de bœuf 180g, huile d'olive 15ml, persil plat 20g, origan séché 3g, ail 3 gousses, vinaigre de vin rouge 15ml, piment rouge séché 2g, poivron grillé 100g, patate douce 100g",
+    st: [
+      "Préparer le chimichurri en mixant grossièrement le persil, l'ail, l'origan, le piment avec l'huile d'olive et le vinaigre — laisser reposer 30 min pour développer les arômes.",
+      "Cuire la patate douce en cubes au four 200°C 20 min avec un filet d'huile et paprika fumé.",
+      "Saisir la bavette sur plancha très chaude 3 min par face pour une cuisson saignante, laisser reposer 5 min avant de trancher en biais.",
+      "Dresser la bavette tranchée sur les légumes, napper généreusement de chimichurri verde."
+    ],
+    w: false,
+    tags: ["argentin", "chimichurri", "steak", "bœuf", "paléo", "sans-gluten", "viral"]
+  },
+  {
+    _id: 'L445',
+    n: "Arepa con Pollo y Aguacate",
+    f: "🇨🇴",
+    k: 568,
+    p: 44,
+    g: 68,
+    l: 13,
+    lv: 2,
+    i: "Farine de maïs pré-cuite (masarepa) 80g, eau tiède 120ml, poulet effiloché cuit 120g, avocat 50g, tomate 50g, coriandre 10g, sel, cumin 2g, ail en poudre 2g",
+    st: [
+      "Mélanger la masarepa avec l'eau tiède, le sel et le cumin, pétrir jusqu'à obtenir une pâte lisse, former deux disques d'environ 1 cm d'épaisseur.",
+      "Cuire les arepas sur une plancha légèrement huilée 5 min de chaque côté jusqu'à obtenir une croûte dorée et sonner creux à la pression.",
+      "Assaisonner le poulet effiloché avec ail, cumin et coriandre, écraser l'avocat avec sel et lime en guacamole rapide.",
+      "Ouvrir les arepas en deux, garnir de poulet, guacamole et tomate fraîche — la recette colombienne la plus partagée d'Instagram."
+    ],
+    w: false,
+    tags: ["colombien", "arepa", "poulet", "avocat", "street-food", "sans-gluten", "instagram"]
+  },
+  {
+    _id: 'L446',
+    n: "Lomo Saltado Péruvien Chifa",
+    f: "🇵🇪",
+    k: 542,
+    p: 43,
+    g: 56,
+    l: 18,
+    lv: 2,
+    i: "Bœuf émincé 150g, riz blanc cuit 150g, poivron rouge 100g, tomate 100g, oignon rouge 80g, sauce soja 20ml, huile de sésame 8ml, vinaigre de riz 10ml, ají amarillo 5g, coriandre 10g",
+    st: [
+      "Mariner le bœuf émincé avec sauce soja, ail et un peu de vinaigre de riz 15 min — la fusion sino-péruvienne 'chifa' typique de Lima.",
+      "Saisir le bœuf à feu très vif dans un wok avec l'huile de sésame 2 min par face, réserver, faire sauter rapidement l'oignon et le poivron 3 min pour qu'ils gardent du croquant.",
+      "Remettre le bœuf, ajouter la tomate en quartiers et l'ají amarillo, déglacer avec sauce soja et vinaigre, flamber optionnel pour la caramélisation.",
+      "Servir immédiatement sur le riz blanc, garnir de coriandre fraîche — le sauté wok péruvien le plus viral des food blogs 2024."
+    ],
+    w: false,
+    tags: ["péruvien", "lomo-saltado", "bœuf", "wok", "fusion", "chifa", "viral"]
+  },
+  {
+    _id: 'L447',
+    n: "Bandeja Paisa Légère Équilibrée",
+    f: "🇨🇴",
+    k: 565,
+    p: 51,
+    g: 56,
+    l: 15,
+    lv: 3,
+    i: "Poulet grillé 100g, haricots noirs cuits 100g, riz blanc cuit 100g, œuf entier 60g, avocat 30g, tomate 50g, oignon vert 20g, cumin 2g, ail 2 gousses, huile d'olive 5ml",
+    st: [
+      "Assaisonner les haricots noirs avec ail, cumin et oignon vert, réchauffer à feu doux 5 min pour développer les saveurs du 'frijoles' colombien.",
+      "Griller le poulet assaisonné à l'adobo colombien (ail, cumin, paprika, origan) sur plancha chaude, cuire l'œuf au plat dans l'huile d'olive.",
+      "Dresser en assiette partagée — riz, haricots, poulet, œuf au plat et quartiers d'avocat — version allégée de la bandeja paisa traditionnelle.",
+    ],
+    w: false,
+    tags: ["colombien", "bandeja-paisa", "poulet", "haricots", "bowl", "meal-prep", "équilibré"]
+  },
+  {
+    _id: 'L448',
+    n: "Guacamole Bowl High-Protein Crevettes",
+    f: "🇲🇽",
+    k: 543,
+    p: 38,
+    g: 48,
+    l: 24,
+    lv: 1,
+    i: "Avocat 150g, crevettes cuites 100g, fromage blanc 0% 150g, tortillas maïs 2x25g, tomate 80g, oignon rouge 30g, lime jus 30ml, coriandre 15g, jalapeño 10g, sel, cumin 2g",
+    st: [
+      "Écraser l'avocat avec le fromage blanc 0% — le hack protéiné viral TikTok qui booste les protéines du guacamole x3 sans changer la texture crémeuse.",
+      "Incorporer tomate, oignon rouge et jalapeño finement émincés, coriandre et jus de lime, assaisonner de sel et cumin.",
+      "Poêler les crevettes à l'ail 2 min, disposer sur le guacamole high-protein, servir avec les tortillas chaudes pour tremper.",
+    ],
+    w: false,
+    tags: ["mexicain", "guacamole", "crevettes", "high-protein", "hack", "tiktok", "viral"]
+  },
+  {
+    _id: 'L449',
+    n: "Tacos Al Pastor Ananas Grillé",
+    f: "🇲🇽",
+    k: 490,
+    p: 36,
+    g: 45,
+    l: 18,
+    lv: 2,
+    i: "Porc filet émincé 150g, tortillas maïs 3x25g, ananas frais 50g, oignon blanc 50g, coriandre fraîche 10g, piment guajillo séché 5g, achiote 3g, vinaigre d'ananas 10ml, lime jus 20ml, ail 2 gousses",
+    st: [
+      "Mariner le porc émincé dans la pasta de achiote (achiote + piment guajillo + ail + vinaigre d'ananas + cumin) minimum 2h — la marinade pastor d'origine libanaise arrivée au Mexique.",
+      "Griller le porc mariné sur plancha très chaude jusqu'à caramélisation des bords, simultanément griller les tranches d'ananas pour les caraméliser.",
+      "Chauffer les tortillas de maïs, les garnir de porc al pastor, d'ananas grillé, d'oignon émincé et de coriandre fraîche — un filet de lime pour finir.",
+    ],
+    w: false,
+    tags: ["mexicain", "al-pastor", "tacos", "porc", "ananas", "street-food", "tiktok", "viral"]
+  },
+  {
+    _id: 'L450',
+    n: "Açaí Bowl Protéiné Lunch Brésilien",
+    f: "🇧🇷",
+    k: 584,
+    p: 32,
+    g: 67,
+    l: 22,
+    lv: 1,
+    i: "Purée d'açaí surgelée 100g, banane 100g, whey protéine vanille 30g, granola avoine 40g, lait de coco 50ml, fruits rouges mélange 50g, beurre de cacahuète 10g, miel 5g",
+    st: [
+      "Mixer la purée d'açaí encore semi-congelée avec la banane, le lait de coco et la whey protéine jusqu'à obtenir une consistance épaisse et crémeuse — ne pas trop mixer pour garder la texture 'sorbet'.",
+      "Verser dans un bol froid, lisser la surface et dresser les toppings en rangées graphiques : granola, fruits rouges, un trait de beurre de cacahuète et un filet de miel.",
+      "Servir immédiatement pour profiter de la texture semi-glacée — le bowl brésilien version lunch high-protein le plus viral d'Instagram 2024-2025.",
+    ],
+    w: true,
+    tags: ["brésilien", "açaí", "bowl", "high-protein", "petit-déjeuner", "viral", "instagram", "healthy"]
+  }
 ];
 
 window.breakfast = breakfast;
