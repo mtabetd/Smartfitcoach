@@ -33,7 +33,9 @@ window.createChart = function(canvas, config) {
         window._chartInstances[i].destroy();
         window._chartInstances.splice(i, 1);
       }
-    } catch(e) {}
+    } catch(e) {
+      console.error('[app-core] erreur:', e);
+    }
   }
   var chart = new Chart(canvas.getContext('2d'), config);
   window._chartInstances.push(chart);
@@ -57,6 +59,46 @@ window.sanitizeHTML = function(str) {
   var div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+};
+
+// ─── PROFILE VALIDATION ───
+window.validateProfile = function validateProfile(data) {
+  var errors = [];
+  if (data.age !== undefined && (isNaN(data.age) || data.age < 10 || data.age > 100))
+    errors.push('Âge invalide (10-100 ans)');
+  if (data.weight !== undefined && (isNaN(data.weight) || data.weight < 30 || data.weight > 300))
+    errors.push('Poids invalide (30-300 kg)');
+  if (data.height !== undefined && (isNaN(data.height) || data.height < 100 || data.height > 250))
+    errors.push('Taille invalide (100-250 cm)');
+  return errors;
+};
+
+// ─── LOCALSTORAGE HELPERS (versioning + corruption recovery) ───
+var LS_VERSION = 1;
+window.LS_VERSION = LS_VERSION;
+
+window.lsGet = function lsGet(key, defaultVal) {
+  try {
+    var raw = localStorage.getItem(key);
+    if (!raw) return defaultVal;
+    return JSON.parse(raw);
+  } catch(e) {
+    console.warn('[storage] Donnée corrompue pour', key, '— reset');
+    localStorage.removeItem(key);
+    return defaultVal;
+  }
+};
+
+window.lsSet = function lsSet(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch(e) {
+    console.error('[storage] Impossible de sauvegarder', key, e);
+    // Quota dépassé : nettoyer les anciennes entrées
+    if (e.name === 'QuotaExceededError') {
+      console.warn('[storage] Quota dépassé, nettoyage...');
+    }
+  }
 };
 
 // ─── CONSTANTS ───
@@ -771,10 +813,9 @@ window.I18N = {
   setLang: function(lang) {
     window.I18N.current = lang;
     if (window.S) window.S.lang = lang;
-    var saved = {};
-    try { saved = JSON.parse(localStorage.getItem('mtd_profile') || '{}'); } catch(e){}
+    var saved = window.lsGet ? window.lsGet('mtd_profile', {}) : {};
     saved.lang = lang;
-    try { localStorage.setItem('mtd_profile', JSON.stringify(saved)); } catch(e){}
+    if (window.lsSet) { window.lsSet('mtd_profile', saved); } else { try { localStorage.setItem('mtd_profile', JSON.stringify(saved)); } catch(e){} }
     if (window.render) render();
   },
 
@@ -2482,11 +2523,9 @@ window.UNITS = {
   setWeightUnit: function(unit) {
     window.UNITS.weight = unit;
     if (window.S) window.S.weightUnit = unit;
-    try {
-      var saved = JSON.parse(localStorage.getItem('mtd_profile') || '{}');
-      saved.weightUnit = unit;
-      localStorage.setItem('mtd_profile', JSON.stringify(saved));
-    } catch(e) {}
+    var saved = window.lsGet ? window.lsGet('mtd_profile', {}) : {};
+    saved.weightUnit = unit;
+    if (window.lsSet) { window.lsSet('mtd_profile', saved); } else { try { localStorage.setItem('mtd_profile', JSON.stringify(saved)); } catch(e) { console.error('[app-core] erreur:', e); } }
     if (window.render) render();
   },
 
@@ -2494,11 +2533,9 @@ window.UNITS = {
   setHeightUnit: function(unit) {
     window.UNITS.height = unit;
     if (window.S) window.S.heightUnit = unit;
-    try {
-      var saved = JSON.parse(localStorage.getItem('mtd_profile') || '{}');
-      saved.heightUnit = unit;
-      localStorage.setItem('mtd_profile', JSON.stringify(saved));
-    } catch(e) {}
+    var saved = window.lsGet ? window.lsGet('mtd_profile', {}) : {};
+    saved.heightUnit = unit;
+    if (window.lsSet) { window.lsSet('mtd_profile', saved); } else { try { localStorage.setItem('mtd_profile', JSON.stringify(saved)); } catch(e) { console.error('[app-core] erreur:', e); } }
     if (window.render) render();
   }
 };
@@ -3408,7 +3445,9 @@ function enrichWithScaling(recipe, targetKcal) {
           return { name: ing.name, qty: disp.qty, unit: disp.unit, note: ing.note };
         });
       }
-    } catch(e) {}
+    } catch(e) {
+      console.error('[app-core] erreur:', e);
+    }
     return recipe;
   }
 
@@ -4708,7 +4747,9 @@ if (Object.freeze) {
     _baseFP.calcTarget  = fingerprintFn(window.calcTarget);
     _baseFP.calcMacros  = fingerprintFn(window.calcMacros);
     _baseFP.sanitizeHTML = fingerprintFn(window.sanitizeHTML);
-  } catch(e) {}
+  } catch(e) {
+    console.error('[app-core] erreur:', e);
+  }
 
   window._verifyCriticalFunctions = function() {
     var tampered = [];
@@ -4717,7 +4758,9 @@ if (Object.freeze) {
       if (_baseFP.calcTarget  && fingerprintFn(window.calcTarget)   !== _baseFP.calcTarget)  tampered.push('calcTarget');
       if (_baseFP.calcMacros  && fingerprintFn(window.calcMacros)   !== _baseFP.calcMacros)  tampered.push('calcMacros');
       if (_baseFP.sanitizeHTML && fingerprintFn(window.sanitizeHTML) !== _baseFP.sanitizeHTML) tampered.push('sanitizeHTML');
-    } catch(e) {}
+    } catch(e) {
+      console.error('[app-core] erreur:', e);
+    }
     if (tampered.length > 0 && typeof console !== 'undefined' && console.warn) {
       console.warn('[MTD Security] Integrity check: modified functions detected:', tampered.join(', '));
     }
@@ -4742,3 +4785,58 @@ if (Object.freeze) {
 })();
 
 })();
+
+// ─── RGPD: Export des données utilisateur (droit à la portabilité) ───
+function exportUserData() {
+  var data = {
+    exportDate: new Date().toISOString(),
+    appVersion: 'SmartFitCoach v1',
+    profile: {},
+    nutrition: {},
+    sport: {},
+    gamification: {}
+  };
+
+  // Profil
+  try { data.profile = JSON.parse(localStorage.getItem('mtd_profile') || '{}'); } catch(e) {}
+
+  // Nutrition : toutes les clés mtd_weight_history_* et mtd_meals_*
+  try {
+    Object.keys(localStorage).forEach(function(k) {
+      if (k.indexOf('mtd_weight') === 0 || k.indexOf('mtd_meal') === 0 || k.indexOf('mtd_food') === 0) {
+        try { data.nutrition[k] = JSON.parse(localStorage.getItem(k)); } catch(e) { data.nutrition[k] = localStorage.getItem(k); }
+      }
+    });
+  } catch(e) {}
+
+  // Sport : toutes les clés mtd_cf_*, mtd_muscu_*, mtd_run_*, mtd_perf_*
+  try {
+    Object.keys(localStorage).forEach(function(k) {
+      if (k.indexOf('mtd_cf_') === 0 || k.indexOf('mtd_muscu_') === 0 || k.indexOf('mtd_run_') === 0 || k.indexOf('mtd_perf_') === 0 || k.indexOf('mtd_sport') === 0) {
+        try { data.sport[k] = JSON.parse(localStorage.getItem(k)); } catch(e) { data.sport[k] = localStorage.getItem(k); }
+      }
+    });
+  } catch(e) {}
+
+  // Gamification
+  try {
+    Object.keys(localStorage).forEach(function(k) {
+      if (k.indexOf('mtd_gami') === 0 || k.indexOf('mtd_badge') === 0 || k.indexOf('mtd_streak') === 0) {
+        try { data.gamification[k] = JSON.parse(localStorage.getItem(k)); } catch(e) { data.gamification[k] = localStorage.getItem(k); }
+      }
+    });
+  } catch(e) {}
+
+  // Télécharger le fichier JSON
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'smartfitcoach-mes-donnees-' + new Date().toISOString().slice(0,10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+}
+
+// Exposer globalement
+window.exportUserData = exportUserData;

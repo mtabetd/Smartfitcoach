@@ -194,7 +194,9 @@ function getBadges() {
       var badges = []; try { badges = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { badges = []; }
       if (Array.isArray(badges)) return badges.slice(-3);
     }
-  } catch(e){}
+  } catch(e) {
+    console.error('[dashboard] erreur:', e);
+  }
   return [];
 }
 
@@ -1148,6 +1150,12 @@ window.DASHBOARD = {
     exportBtn.textContent = '\u2B07 Exporter mes données';
     exportBtn.addEventListener('click', function() { exportAllData(); });
     dataBtns.appendChild(exportBtn);
+
+    var rgpdBtn = document.createElement('button');
+    rgpdBtn.style.cssText = 'margin-top:12px;padding:10px 16px;background:transparent;border:1px solid var(--accent,#ff6b35);color:var(--accent,#ff6b35);border-radius:2px;cursor:pointer;font-size:13px;width:100%;';
+    rgpdBtn.textContent = '\u2B07 Exporter mes données (RGPD)';
+    rgpdBtn.addEventListener('click', function() { if (typeof exportUserData === 'function') exportUserData(); });
+    dataBtns.appendChild(rgpdBtn);
 
     var importBtn = document.createElement('button');
     importBtn.className = 'dash-btn-secondary';
