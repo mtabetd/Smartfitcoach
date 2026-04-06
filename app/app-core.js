@@ -4840,3 +4840,15 @@ function exportUserData() {
 
 // Exposer globalement
 window.exportUserData = exportUserData;
+
+// ─── OFFLINE BANNER ───
+(function() {
+  var banner = document.getElementById('offline-banner');
+  if (!banner) return;
+  function update() {
+    banner.style.display = navigator.onLine ? 'none' : 'block';
+  }
+  window.addEventListener('online', update);
+  window.addEventListener('offline', update);
+  update();
+})();

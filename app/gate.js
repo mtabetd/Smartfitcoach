@@ -32,7 +32,7 @@
 
   // Brute-force protection: max attempts per session
   var _attempts = 0;
-  var MAX_ATTEMPTS = 10;
+  var MAX_ATTEMPTS = 5;
   var _lockedUntil = 0;
 
   function checkGate(){

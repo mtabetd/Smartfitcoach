@@ -6,15 +6,12 @@ const MODEL = 'claude-haiku-4-5-20251001';
 const MAX_TOKENS = 400; // Réduit : réponses courtes suffisent pour un coach
 
 // Domaines autorisés pour CORS
-var ALLOWED_ORIGINS = [
-  'https://smartfitcoach.netlify.app',
-  'https://smartfitcoach.fr',
-  'https://www.smartfitcoach.fr',
-  'http://localhost:8888',
-  'http://localhost:3000',
-  'http://127.0.0.1:8888',
-  'http://127.0.0.1:3000'
-];
+var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr')
+  .split(',').map(function(o){ return o.trim(); });
+// Ajouter localhost UNIQUEMENT en dev
+if (process.env.NODE_ENV !== 'production' && process.env.NETLIFY_DEV === 'true') {
+  ALLOWED_ORIGINS.push('http://localhost:8888', 'http://127.0.0.1:3000', 'http://localhost:3000');
+}
 
 // ── Rate Limiting (sliding window horaire + quota journalier) ────────────────
 var _hourStore = new Map(); // ip -> [{ts}]
@@ -83,7 +80,20 @@ var PROMPT_INJECTION_PATTERNS = [
   /system\s*:\s*/gi,
   /\[system\]/gi,
   /<<<|>>>/g,
-  /###\s*(system|instructions|prompt)/gi
+  /###\s*(system|instructions|prompt)/gi,
+  // Formats alternatifs LLM
+  /\[INST\]|\[\/INST\]/gi,
+  /<sys>|<\/sys>/gi,
+  /<\|system\|>|<\|user\|>|<\|assistant\|>/gi,
+  // Unicode tricks
+  /\u202e|\u200b|\u200c|\u200d/g,
+  // Encodages base64 suspects (longues chaînes)
+  /[A-Za-z0-9+\/]{100,}={0,2}/g,
+  // Tentatives de jailbreak courantes
+  /DAN\s*(mode|prompt)/gi,
+  /jailbreak/gi,
+  /grandma\s*(trick|exploit)/gi,
+  /do\s+anything\s+now/gi,
 ];
 
 function sanitizeString(str, maxLen) {
