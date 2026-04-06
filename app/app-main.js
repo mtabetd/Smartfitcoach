@@ -98,6 +98,15 @@ function saveProfile() {
  var user = AUTH.getUser();
  var uid = user ? user.id : 'anon';
 
+ // Validate profile data before saving
+ if (window.validateProfile) {
+   var _valErrors = window.validateProfile({ age: S.age, weight: S.weight, height: S.height });
+   if (_valErrors.length > 0) {
+     alert(_valErrors.join('\n'));
+     return;
+   }
+ }
+
  // Check if nutrition-relevant values changed vs what is currently persisted.
  // If so, weekPlan is stale and must be invalidated before saving.
  (function() {

@@ -4,7 +4,9 @@
 'use strict';
 
 var FUNCTION_URL = '/.netlify/functions/ai-coach';
-var MAX_HISTORY = 20; // messages max en mémoire
+var MAX_HISTORY = 20;    // messages max en mémoire locale
+var MAX_API_MESSAGES = 10; // max messages envoyés à l'API (5 échanges)
+var MAX_MSG_CHARS = 500;   // tronquer chaque message à 500 chars avant envoi
 var _panelOpen = false;
 var _sending = false;
 
@@ -192,6 +194,7 @@ function buildUI() {
   // Bouton flottant
   var btn = document.createElement('button');
   btn.id = 'ai-coach-btn';
+  btn.setAttribute('aria-label', 'Ouvrir le coach IA');
   // Static button content: built via DOM for CSP compliance
   var _btnIcon = document.createElement('span');
   _btnIcon.style.fontSize = '14px';
@@ -398,9 +401,9 @@ function sendMessage() {
   // Afficher "en train de réfléchir"
   var typingEl = appendTyping(messages);
 
-  // Préparer les messages pour l'API (historique format Anthropic)
-  var apiMessages = S.aiCoachHistory.map(function(m) {
-    return { role: m.role, content: m.content };
+  // Préparer les messages pour l'API — limiter à 5 derniers échanges, tronquer à 500 chars
+  var apiMessages = S.aiCoachHistory.slice(-MAX_API_MESSAGES).map(function(m) {
+    return { role: m.role, content: m.content.slice(0, MAX_MSG_CHARS) };
   });
 
   // Contexte utilisateur
@@ -472,7 +475,9 @@ function _patchRender() {
         if (btn) btn.remove();
         if (panel) panel.remove();
       }
-    } catch(e) {}
+    } catch(e) {
+      console.error('[ai-coach] erreur:', e);
+    }
   };
   // Forward all patch flags from the previous render so other modules
   // don't re-patch an already-patched function when they check their own flag.

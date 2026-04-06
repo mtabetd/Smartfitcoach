@@ -3390,6 +3390,92 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  };
 })();
 
+// ─── CALCULATEUR DE PLAQUES ──────────────────────────────────────────────────
+// Calcule les plaques à mettre de chaque côté de la barre pour atteindre targetKg
+function renderPlateCalculator(targetKg, barKg) {
+  var PLATES = [25, 20, 15, 10, 5, 2.5, 1.25];
+  barKg = barKg || 20; // barre olympique standard
+  var remaining = (targetKg - barKg) / 2; // par côté
+  var result = [];
+
+  PLATES.forEach(function(plate) {
+    var count = Math.floor(remaining / plate);
+    if (count > 0) {
+      result.push({ plate: plate, count: count });
+      remaining -= count * plate;
+    }
+  });
+
+  var html = '<div class="plate-calc" style="margin:12px 0;padding:12px;border:1px solid var(--border);background:var(--ivory2)">';
+  html += '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;color:var(--grey)">PLAQUES PAR CÔTÉ — ' + targetKg + 'kg</div>';
+
+  if (result.length === 0 && remaining <= 0.1) {
+    html += '<div style="font-size:12px;color:var(--grey)">Barre seule (' + barKg + 'kg)</div>';
+  } else {
+    result.forEach(function(r) {
+      // Couleurs cohérentes design system (palette --green/--blue/--orange/--grey)
+      var color = r.plate >= 20 ? 'var(--green,#1A4A1A)' : r.plate >= 10 ? 'var(--blue,#1A3A6A)' : r.plate >= 5 ? 'var(--orange,#6A4A1A)' : 'var(--grey,#6B6B65)';
+      html += '<span style="display:inline-block;margin:2px 4px;padding:4px 10px;background:' + color + ';color:var(--ivory,#FAF9F6);font-size:11px;font-weight:700;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:0.5px">' + r.plate + 'kg × ' + r.count + '</span>';
+    });
+    if (remaining > 0.1) {
+      html += '<div style="font-size:10px;color:var(--grey);margin-top:4px">⚠ Différence : ' + remaining.toFixed(2) + 'kg (microplaques)</div>';
+    }
+  }
+  html += '</div>';
+  return html;
+}
+window.renderPlateCalculator = renderPlateCalculator;
+
+// ─── TIMER DE REPOS SIMPLE (overlay fixe bas-droite) ─────────────────────────
+var _restTimerInterval = null;
+var _restTimerSeconds = 0;
+
+function startRestTimer(seconds) {
+  if (_restTimerInterval) clearInterval(_restTimerInterval);
+  _restTimerSeconds = seconds || 90;
+  var el = document.getElementById('rest-timer-display');
+  if (!el) return;
+
+  el.style.display = 'block';
+  var countEl = el.querySelector('.timer-count');
+  if (countEl) {
+    var m0 = Math.floor(_restTimerSeconds / 60);
+    var s0 = _restTimerSeconds % 60;
+    countEl.textContent = m0 + ':' + (s0 < 10 ? '0' : '') + s0;
+    countEl.style.color = 'var(--ivory,#FAF9F6)';
+  }
+
+  _restTimerInterval = setInterval(function() {
+    _restTimerSeconds--;
+    var m = Math.floor(_restTimerSeconds / 60);
+    var s = _restTimerSeconds % 60;
+    var display = m + ':' + (s < 10 ? '0' : '') + s;
+    var timerEl = document.getElementById('rest-timer-display');
+    if (!timerEl) { clearInterval(_restTimerInterval); return; }
+    var tc = timerEl.querySelector('.timer-count');
+    if (tc) {
+      tc.textContent = display;
+      if (_restTimerSeconds <= 10) {
+        tc.style.color = 'var(--red,#c0392b)';
+      }
+    }
+    if (_restTimerSeconds <= 0) {
+      clearInterval(_restTimerInterval);
+      if (tc) tc.textContent = 'GO!';
+      if (navigator.vibrate) { try { navigator.vibrate([200, 100, 200]); } catch(e) {} }
+    }
+  }, 1000);
+}
+
+function stopRestTimer() {
+  if (_restTimerInterval) clearInterval(_restTimerInterval);
+  var el = document.getElementById('rest-timer-display');
+  if (el) el.style.display = 'none';
+}
+
+window.startRestTimer = startRestTimer;
+window.stopRestTimer = stopRestTimer;
+
 // Utilitaire : parse rest time string ("2min", "1min30", "90s", "45s") → secondes
 function parseRestTime(restStr) {
  if (!restStr) return 90; // défaut 90s
@@ -3831,6 +3917,23 @@ function renderMusculationProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
 
+ // Bloc premium : eyebrow + tagline + bouton générateur de programme personnalisé via IA
+ var muscuGenWrap = h('div', {
+   style: 'margin:20px 0 8px 0;text-align:center;'
+ });
+ muscuGenWrap.appendChild(h('div', {
+   style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);font-family:Georgia,serif;margin-bottom:8px;'
+ }, 'PROGRAMME PERSONNEL'));
+ muscuGenWrap.appendChild(h('div', {
+   style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:14px;'
+ }, 'Construit \u00e0 partir de tes chiffres, calibr\u00e9 sur ton corps.'));
+ var muscuGenBtn = h('button', {
+   onclick: function() { if (window.openMuscuProgramGenerator) window.openMuscuProgramGenerator(); },
+   style: 'padding:14px 24px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;width:100%;'
+ }, '\u26A1 G\u00e9n\u00e9rer mon programme');
+ muscuGenWrap.appendChild(muscuGenBtn);
+ p.appendChild(muscuGenWrap);
+
  appendWellnessBanner(p);
 
  // CS-01: Bannière charges estimées si profil de force non renseigné
@@ -4145,6 +4248,35 @@ function renderMusculationProgram(p) {
  card.appendChild(h('div', {'class': 'exercise-sets'}, (ex.sets || '4x10') + ' \u2014 Repos ' + (ex.rest || '90s')));
  card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
 
+ // ─── BOUTON TIMER DE REPOS ───
+ (function(_ex) {
+ var _exLow = (_ex.n || '').toLowerCase();
+ var _restSec;
+ if (/squat|deadlift|soulevé.*terre|soulev[eé]|bench press|développé.*couché|dével.*couch/.test(_exLow)) {
+  _restSec = 180; // composés lourds
+ } else if (/row|rowing|overhead press|développé|dével|pull|chin|dips|fente|hip thrust|rdl/.test(_exLow)) {
+  _restSec = 120; // composés légers
+ } else {
+  _restSec = 60;  // isolation
+ }
+ // Utiliser le temps de repos de l'exercice si défini
+ if (_ex.rest) {
+  var _parsed = parseRestTime(_ex.rest);
+  if (_parsed > 0) _restSec = _parsed;
+ }
+ var _restMin = Math.floor(_restSec / 60);
+ var _restRemS = _restSec % 60;
+ var _restLabel = _restMin > 0 ? (_restMin + '\'' + (_restRemS > 0 ? _restRemS + '"' : '')) : (_restSec + '"');
+ var restBtn = h('button', {
+  style: 'margin-top:6px;padding:4px 10px;border:1px solid var(--border);background:transparent;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);border-radius:2px;transition:border-color .15s',
+  onclick: function(e) {
+  e.stopPropagation();
+  if (window.startRestTimer) window.startRestTimer(_restSec);
+  }
+ }, '\u23F1 Repos ' + _restLabel);
+ card.appendChild(restBtn);
+ })(ex);
+
  // Cycle intensity badge
  if (S.sex === 'femme' && S.cycleTracking && cycleInfo) {
  var intPct = Math.round(cycleInfo.phase.intensityFactor * 100);
@@ -4227,6 +4359,13 @@ function renderMusculationProgram(p) {
  }
 
  card.appendChild(weightRow);
+
+ // ─── CALCULATEUR DE PLAQUES (barre uniquement, si charge définie) ───
+ if (eqType === 'barre' && currentWeight && currentWeight > 0) {
+ var plateDiv = h('div', {});
+ plateDiv.innerHTML = window.renderPlateCalculator(currentWeight, 20);
+ card.appendChild(plateDiv);
+ }
  } else {
  card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-top:6px;font-style:italic'}, 'Poids de corps'));
  }
@@ -4953,7 +5092,7 @@ function renderWeightChartSport(container) {
 
 // ─── SPORT MODAL (exercise detail) ───
 function renderSportModal(app) {
- var ov = h('div', {'class': 'modal-overlay' + (S.sportModalExercise ? ' open' : ''), onclick: function(e){ if (e.target === ov) { S.sportModalExercise = null; window.render(); } }});
+ var ov = h('div', {'class': 'modal-overlay' + (S.sportModalExercise ? ' open' : ''), role: 'dialog', 'aria-modal': 'true', onclick: function(e){ if (e.target === ov) { S.sportModalExercise = null; window.render(); } }});
  var sheet = h('div', {'class': 'modal-sheet'});
 
  if (S.sportModalExercise) {
@@ -4966,7 +5105,7 @@ function renderSportModal(app) {
 
  var hdr = h('div', {'class': 'modal-header'});
  hdr.appendChild(h('div', {'class': 'modal-title'}, ex.n));
- hdr.appendChild(h('button', {'class': 'modal-close', onclick: function(){ S.sportModalExercise = null; window.render(); }}, ''));
+ hdr.appendChild(h('button', {'class': 'modal-close', 'aria-label': 'Retour', onclick: function(){ S.sportModalExercise = null; window.render(); }}, ''));
  sheet.appendChild(hdr);
 
  var body = h('div', {'class': 'modal-body'});

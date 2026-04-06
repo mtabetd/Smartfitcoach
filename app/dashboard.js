@@ -194,7 +194,9 @@ function getBadges() {
       var badges = []; try { badges = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { badges = []; }
       if (Array.isArray(badges)) return badges.slice(-3);
     }
-  } catch(e){}
+  } catch(e) {
+    console.error('[dashboard] erreur:', e);
+  }
   return [];
 }
 
@@ -469,7 +471,7 @@ window.DASHBOARD = {
       // Rehydrate meal name from recipe engine if needed
       var mealName = meal.n || '';
       if (!mealName && meal._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
-        try { var rf = window.RecipeEngine.findRecipe(meal._id); if (rf) mealName = rf.n || ''; } catch(e) {}
+        try { var rf = window.RecipeEngine.findRecipe(meal._id); if (rf) mealName = rf.n || ''; } catch(e) { console.warn('[dashboard] recipe lookup fail:', meal._id, e); }
       }
       if (!mealName) return;
 
@@ -571,7 +573,7 @@ window.DASHBOARD = {
     /* ═══ STREAK ═══ */
     root.appendChild(h('div', 'dash-label', 'Votre série'));
     if (window.GAMIFICATION && window.GAMIFICATION.updateStreak) {
-      try { window.GAMIFICATION.updateStreak(); } catch(e){}
+      try { window.GAMIFICATION.updateStreak(); } catch(e) { console.error('[dashboard] erreur:', e); }
     }
     var streakBox = h('div', 'dash-widget-box');
     if (window.GAMIFICATION && window.GAMIFICATION.renderStreakWidget) {
@@ -1087,7 +1089,7 @@ window.DASHBOARD = {
     root.appendChild(h('div', 'dash-label', 'Journal alimentaire'));
     var foodJournalWidget = h('div', 'dash-widget-box');
     if (window.FOOD_JOURNAL) {
-      try { FOOD_JOURNAL.renderWidget(foodJournalWidget); } catch(e) {}
+      try { FOOD_JOURNAL.renderWidget(foodJournalWidget); } catch(e) { console.error('[dashboard] erreur:', e); }
     }
     root.appendChild(foodJournalWidget);
 
@@ -1095,7 +1097,7 @@ window.DASHBOARD = {
     /* ═══ PROGRESS PHOTOS ═══ */
     if (window.PHOTO_PROGRESS && window.PHOTO_PROGRESS.renderWidget) {
       var photoWidget = h('div', 'dash-widget-box');
-      try { PHOTO_PROGRESS.renderWidget(photoWidget); } catch(e) {}
+      try { PHOTO_PROGRESS.renderWidget(photoWidget); } catch(e) { console.error('[dashboard] erreur:', e); }
       root.appendChild(photoWidget);
     }
 
@@ -1149,6 +1151,12 @@ window.DASHBOARD = {
     exportBtn.addEventListener('click', function() { exportAllData(); });
     dataBtns.appendChild(exportBtn);
 
+    var rgpdBtn = document.createElement('button');
+    rgpdBtn.style.cssText = 'margin-top:12px;padding:10px 16px;background:transparent;border:1px solid var(--accent,#ff6b35);color:var(--accent,#ff6b35);border-radius:2px;cursor:pointer;font-size:13px;width:100%;';
+    rgpdBtn.textContent = '\u2B07 Exporter mes données (RGPD)';
+    rgpdBtn.addEventListener('click', function() { if (typeof exportUserData === 'function') exportUserData(); });
+    dataBtns.appendChild(rgpdBtn);
+
     var importBtn = document.createElement('button');
     importBtn.className = 'dash-btn-secondary';
     importBtn.textContent = '\u2B06 Importer une sauvegarde';
@@ -1175,6 +1183,18 @@ window.DASHBOARD = {
     }
     root.appendChild(h('div', 'dash-session', sessionParts.join(' | ')));
 
+    /* ─── SIGNATURE ─── */
+    var igWrap = document.createElement('div');
+    igWrap.style.cssText = 'text-align:center;margin-top:14px;padding-bottom:8px;';
+    var igLink = document.createElement('a');
+    igLink.href = 'https://instagram.com/smart.fitcoach';
+    igLink.target = '_blank';
+    igLink.rel = 'noopener noreferrer';
+    igLink.textContent = '@smart.fitcoach';
+    igLink.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;letter-spacing:1px;';
+    igWrap.appendChild(igLink);
+    root.appendChild(igWrap);
+
 
     /* ─── MOUNT ─── */
     container.appendChild(root);
@@ -1186,6 +1206,8 @@ window.DASHBOARD = {
 
 function openWeightPrompt() {
   var overlay = h('div', 'dash-modal-overlay');
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
   var box = h('div', 'dash-modal-box');
 
   var closeBtn = document.createElement('button');
@@ -1249,7 +1271,9 @@ function openWeightPrompt() {
         GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg'));
         GAMIFICATION.unlockBadge('first_weigh');
         if (wh.length >= 10) GAMIFICATION.unlockBadge('weight_10');
-      } catch(e){}
+      } catch(e) {
+        console.error('[dashboard] erreur:', e);
+      }
     }
 
     document.body.removeChild(overlay);
@@ -1266,6 +1290,8 @@ function openWeightPrompt() {
 
 function openMeasurementsModal() {
   var overlay = h('div', 'dash-modal-overlay');
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
   var box = h('div', 'dash-modal-box');
 
   var closeBtn = document.createElement('button');
@@ -1296,6 +1322,8 @@ function openMeasurementsModal() {
 
 function openBadgesModal() {
   var overlay = h('div', 'dash-modal-overlay');
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
   var box = h('div', 'dash-modal-box');
 
   var closeBtn = document.createElement('button');
@@ -1325,6 +1353,8 @@ function openKitchenTimer() {
   // Clear any previous kitchen timer interval
   if (window._kitchenTimerInterval) { clearInterval(window._kitchenTimerInterval); window._kitchenTimerInterval = null; }
   var overlay = h('div', 'dash-modal-overlay');
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
   var box = h('div', 'dash-modal-box');
   box.style.textAlign = 'center';
 
@@ -1398,7 +1428,7 @@ function openKitchenTimer() {
         startBtn.textContent = window.t('extras.start');
         display.textContent = 'Terminé !';
         display.style.color = 'var(--black,#181818)';
-        try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate([200,100,200]); } catch(e){}
+        try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate([200,100,200]); } catch(e) { console.error('[dashboard] erreur:', e); }
       }
     }, 1000);
   });
@@ -1504,7 +1534,7 @@ function deleteAllData() {
   });
 
   if (window.AUTH && window.AUTH.logout) {
-    try { window.AUTH.logout(); } catch(e){}
+    try { window.AUTH.logout(); } catch(e) { console.error('[dashboard] erreur:', e); }
   }
 
   if (window.GAMIFICATION) GAMIFICATION.showToast('Données supprimées.');
@@ -1530,7 +1560,9 @@ function renderFallbackQuote(container) {
     try {
       var q = window.GAMIFICATION.getDailyQuote();
       if (q) quoteText = typeof q === 'string' ? q : (q.text || q.quote || quoteText);
-    } catch(e){}
+    } catch(e) {
+      console.error('[dashboard] erreur:', e);
+    }
   }
 
   var card = h('div', 'dash-quote-card');
@@ -1542,7 +1574,7 @@ function renderFallbackQuote(container) {
 function renderFallbackStreak(container) {
   var streak = 0;
   if (window.GAMIFICATION && window.GAMIFICATION.getStreak) {
-    try { var s = window.GAMIFICATION.getStreak(); streak = (s && typeof s === 'object') ? (s.current || 0) : (s || 0); } catch(e){}
+    try { var s = window.GAMIFICATION.getStreak(); streak = (s && typeof s === 'object') ? (s.current || 0) : (s || 0); } catch(e) { console.error('[dashboard] erreur:', e); }
   }
   var card = h('div', 'dash-card');
   card.appendChild(h('p', 'dash-card-title', 'Série en cours'));

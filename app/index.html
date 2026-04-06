@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#FAF9F6">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org https://*.supabase.co https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self'; manifest-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org https://*.supabase.co https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self'; manifest-src 'self'; require-trusted-types-for 'script';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta name="robots" content="noindex, nofollow">
@@ -22,7 +22,7 @@
 :root {
   --ivory:#FAF9F6; --ivory2:#F4F4F0; --ivory3:#EEEDE8; --ivory4:#E5E4DE;
   --black:#0A0A09; --black2:#181818;
-  --grey:#6B6B65; --grey2:#7A7A74; --grey3:#9A9A90;
+  --grey:#6B6B65; --grey2:#7A7A74; --grey3:#7A7A72;
   --border:#D8D8D0;
   --green:#1A4A1A; --greenbg:rgba(26,74,26,.06);
   --blue:#1A3A6A; --bluebg:rgba(26,58,106,.06);
@@ -112,7 +112,7 @@ h1 em{font-style:italic}
 
 /* ── CHIPS ── */
 .chip-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.chip{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:10px 14px;min-height:44px;box-sizing:border-box;border:1px solid var(--border);border-radius:20px;cursor:pointer;background:var(--ivory2);transition:all .2s ease;-webkit-user-select:none;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.chip{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:10px 14px;min-height:44px;box-sizing:border-box;border:1px solid var(--border);border-radius:2px;cursor:pointer;background:var(--ivory2);transition:all .2s ease;-webkit-user-select:none;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .chip:hover{border-color:var(--black2)}
 .chip.on{background:var(--black);border-color:var(--black);color:var(--ivory)}
 
@@ -346,44 +346,61 @@ canvas.weight-chart{width:100%;height:200px}
 <div id="gate-error" style="display:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--red,#5A1010);text-align:center;padding:8px;border:1px solid var(--red,#5A1010);background:var(--redbg,rgba(90,16,16,.06));margin-bottom:12px"></div>
 <form id="gate-form" onsubmit="return false;" autocomplete="off">
 <input type="text" name="username" autocomplete="username" style="display:none" aria-hidden="true">
-<input id="gate-pw" type="password" placeholder="Mot de passe" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1px solid var(--border,#D8D8D0);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);outline:none;text-align:center;letter-spacing:2px;margin-bottom:12px" autofocus>
+<input id="gate-pw" type="password" aria-label="Mot de passe d'accès" placeholder="Mot de passe" autocomplete="current-password" style="width:100%;padding:12px 14px;border:1px solid var(--border,#D8D8D0);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);outline:none;text-align:center;letter-spacing:2px;margin-bottom:12px" autofocus>
 <button id="gate-btn" type="submit" style="width:100%;padding:14px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;cursor:pointer">Entrer</button>
 </form>
+<div style="font-family:Georgia,serif;font-style:italic;font-size:12px;letter-spacing:1px;color:var(--grey,#6B6B65);margin-top:32px;text-align:center;line-height:1.6">Le standard n&rsquo;existe pas.</div>
+<div style="margin-top:14px;text-align:center"><a href="https://instagram.com/smart.fitcoach" target="_blank" rel="noopener noreferrer" style="font-family:Georgia,serif;font-style:italic;font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;letter-spacing:1px">@smart.fitcoach</a></div>
 </div>
 </div>
 <div id="app" style="display:none"></div>
 <script src="./gate.js"></script>
 <script src="./error-boundary.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb"></script>
-<script src="./jspdf.umd.min.js"></script>
-<script src="./prices-db.js"></script>
-<script src="./recipe-engine.js"></script>
-<script src="./supabase.min.js"></script>
-<script src="supabase-client.js"></script>
-<script src="./exercises-db.js"></script>
-<script src="./crossfit-wods.js"></script>
-<script src="./crossfit-wods-cycle2.js"></script>
-<script src="./crossfit-wods-cycle3.js"></script>
-<script src="./crossfit-wods-merge.js"></script>
-<script src="./crossfit-haltero-cycles.js"></script>
-<script src="./auth.js"></script>
-<script src="./gamification.js"></script>
-<script src="./extras.js"></script>
-<script src="./tips-assistant.js"></script>
-<script src="./scanner.js"></script>
-<script src="./muscu-programs.js"></script>
-<script src="./nutrition-master.js"></script>
-<script src="./app-core.js"></script>
-<script src="./triathlon-program.js"></script>
-<script src="./perf-history.js"></script>
-<script src="./dashboard.js"></script>
-<script src="./app-nutrition.js"></script>
-<script src="./calisthenics-program.js"></script>
-<script src="./app-sport.js"></script>
-<script src="./motivation.js"></script>
-<script src="./app-main.js"></script>
-<script src="./ai-coach.js"></script>
-<script src="./body-analysis.js"></script>
-<script src="./sw-register.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb"></script>
+<script defer src="./jspdf.umd.min.js"></script>
+<script defer src="./prices-db.js"></script>
+<script defer src="./recipe-engine.js"></script>
+<script defer src="./supabase.min.js"></script>
+<script defer src="supabase-client.js"></script>
+<script defer src="./exercises-db.js"></script>
+<script defer src="./crossfit-wods.js"></script>
+<script defer src="./crossfit-wods-cycle2.js"></script>
+<script defer src="./crossfit-wods-cycle3.js"></script>
+<script defer src="./crossfit-wods-merge.js"></script>
+<script defer src="./crossfit-haltero-cycles.js"></script>
+<script defer src="./auth.js"></script>
+<script defer src="./gamification.js"></script>
+<script defer src="./extras.js"></script>
+<script defer src="./tips-assistant.js"></script>
+<script defer src="./scanner.js"></script>
+<script defer src="./muscu-programs.js"></script>
+<script defer src="./nutrition-master.js"></script>
+<script defer src="./app-core.js"></script>
+<script defer src="./triathlon-program.js"></script>
+<script defer src="./perf-history.js"></script>
+<script defer src="./dashboard.js"></script>
+<script defer src="./app-nutrition.js"></script>
+<script defer src="./calisthenics-program.js"></script>
+<script defer src="./app-sport.js"></script>
+<script defer src="./motivation.js"></script>
+<script defer src="./app-main.js"></script>
+<script defer src="./ai-coach.js"></script>
+<script defer src="./body-analysis.js"></script>
+<script defer src="./muscu-program-generator.js"></script>
+<script defer src="./sw-register.js"></script>
+<div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:var(--orange,#6A4A1A);color:var(--ivory,#FAF9F6);text-align:center;padding:8px;font-size:12px;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:1px;">
+  &#x26A1; Mode hors ligne — vos données sont sauvegardées localement
+</div>
+<div id="rest-timer-display" style="display:none;position:fixed;bottom:80px;right:16px;z-index:500;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:12px 16px;border-radius:2px;text-align:center;min-width:80px;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
+  <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px">REPOS</div>
+  <div class="timer-count" style="font-family:Georgia,serif;font-size:28px;font-weight:700;line-height:1">1:30</div>
+  <div style="display:flex;gap:6px;margin-top:8px;justify-content:center">
+    <button onclick="startRestTimer(60)" aria-label="D\u00e9marrer repos de 1 minute" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">1'</button>
+    <button onclick="startRestTimer(90)" aria-label="D\u00e9marrer repos de 1 minute 30" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">1'30</button>
+    <button onclick="startRestTimer(120)" aria-label="D\u00e9marrer repos de 2 minutes" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">2'</button>
+    <button onclick="startRestTimer(180)" aria-label="D\u00e9marrer repos de 3 minutes" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px">3'</button>
+    <button onclick="stopRestTimer()" aria-label="Arr\u00eater le timer de repos" style="font-size:9px;padding:12px 14px;min-height:44px;min-width:44px;background:transparent;border:1px solid var(--red,#c0392b);color:var(--red,#c0392b);cursor:pointer;border-radius:2px">&#x2715;</button>
+  </div>
+</div>
 </body>
 </html>

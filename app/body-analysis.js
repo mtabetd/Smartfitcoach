@@ -112,18 +112,19 @@ function getExercisesList() {
 }
 
 function buildContext() {
+  // Contexte minimal pour réduire les tokens envoyés au serveur
   var S = window.S || {};
   var user = null;
   try { user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null; } catch(e) {}
   return {
     prenom: user && user.name ? user.name.split(' ')[0] : (S.prenom || ''),
-    sex: S.sex || '', age: S.age || '', weight: S.weight || '',
-    height: S.height || '', goal: S.goal || '',
-    sportType: S.sportType || '', sportLevel: S.sportLevel || '',
-    triathlonFTP: S.triathlonFTP || null,
-    triathlonGoal: S.triathlonGoal || null,
-    triathlonLevel: S.triathlonLevel || null,
-    triathlonRaceDate: S.triathlonRaceDate || null
+    sex: S.sex || '',
+    age: S.age || '',
+    weight: S.weight || '',
+    height: S.height || '',
+    goal: S.goal || '',
+    sportType: S.sportType || '',
+    sportLevel: S.sportLevel || ''
   };
 }
 
@@ -133,13 +134,13 @@ function compressImage(file, callback) {
     var img = new Image();
     img.onload = function() {
       var canvas = document.createElement('canvas');
-      var maxW = 1024, maxH = 1024;
+      var maxW = 1440, maxH = 1440;
       var w = img.width, h = img.height;
       if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
       if (h > maxH) { w = Math.round(w * maxH / h); h = maxH; }
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      var b64 = canvas.toDataURL('image/jpeg', 0.75);
+      var b64 = canvas.toDataURL('image/jpeg', 0.92);
       callback(b64);
     };
     img.src = e.target.result;
@@ -340,7 +341,50 @@ function renderResult(container, result) {
       container.appendChild(coachMsg);
     }
   }
+
+  // Bouton Partager (Web Share API)
+  var shareWrap = document.createElement('div');
+  shareWrap.style.cssText = 'margin-top:24px;text-align:center;';
+  var shareBtn = document.createElement('button');
+  shareBtn.id = 'ba-share-btn';
+  shareBtn.textContent = '⤴ Partager mon analyse';
+  shareBtn.style.cssText = 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;padding:14px 28px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all 0.2s ease;';
+  shareBtn.addEventListener('click', shareBodyAnalysis);
+  shareWrap.appendChild(shareBtn);
+  container.appendChild(shareWrap);
+
+  // Signature Instagram — discrète, en fin d'analyse
+  var igWrap = document.createElement('div');
+  igWrap.style.cssText = 'margin-top:14px;text-align:center;';
+  var igLink = document.createElement('a');
+  igLink.href = 'https://instagram.com/smart.fitcoach';
+  igLink.target = '_blank';
+  igLink.rel = 'noopener noreferrer';
+  igLink.textContent = '@smart.fitcoach';
+  igLink.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;letter-spacing:1px;';
+  igWrap.appendChild(igLink);
+  container.appendChild(igWrap);
 }
+
+function shareBodyAnalysis() {
+  var shareData = {
+    title: 'Mon analyse corporelle Smart Fit Coach',
+    text: 'Je viens de faire analyser ma composition corporelle par l\'IA Smart Fit Coach. Programme personnalisé généré en 60 secondes.',
+    url: window.location.origin
+  };
+  if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+    navigator.share(shareData).catch(function(e) {
+      if (e.name !== 'AbortError') console.error('[body-analysis] share error:', e);
+    });
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareData.title + '\n' + shareData.text + '\n' + shareData.url)
+      .then(function() { alert('Lien copié dans le presse-papier !'); })
+      .catch(function() { alert('Partage non disponible.'); });
+  } else {
+    alert('Partage non disponible sur ce navigateur.');
+  }
+}
+window.shareBodyAnalysis = shareBodyAnalysis;
 
 // ─── PANEL UI ─────────────────────────────────────────────────────────────────
 function buildPanel() {
@@ -444,6 +488,7 @@ function buildPanel() {
   // Bouton analyser
   var btn = document.createElement('button');
   btn.id = 'ba-btn';
+  btn.setAttribute('aria-label', 'Analyser ma composition corporelle');
   btn.textContent = 'Lancer l\'analyse';
   btn.disabled = true;
   btn.addEventListener('click', runAnalysis);
@@ -578,7 +623,8 @@ async function runAnalysis() {
 
   try {
     var ctx = buildContext();
-    var exercisesDb = getExercisesList();
+    // Limiter à 30 exercices max pour réduire les tokens en entrée
+    var exercisesDb = getExercisesList().slice(0, 30);
 
     var resp = await fetch(FUNCTION_URL, {
       method: 'POST',
@@ -627,6 +673,7 @@ function injectTrigger() {
   if (suggestions && !document.getElementById('ba-trigger')) {
     var trigger = document.createElement('button');
     trigger.id = 'ba-trigger';
+    trigger.setAttribute('aria-label', 'Analyser ma composition corporelle');
     trigger.textContent = '◆ Analyse corporelle IA';
     trigger.addEventListener('click', openPanel);
     suggestions.parentNode.insertBefore(trigger, suggestions);
@@ -681,5 +728,14 @@ if (document.readyState === 'loading') {
 }
 
 window.BODY_ANALYSIS = { open: openPanel, close: closePanel };
+
+// WCAG 2.1 — Escape key closes the body-analysis modal
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Escape') return;
+  var panel = document.getElementById('ba-panel');
+  if (panel && panel.classList.contains('open')) {
+    closePanel();
+  }
+});
 
 })();

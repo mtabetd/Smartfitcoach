@@ -2,46 +2,58 @@
 // Analyse corporelle par vision IA — clé API côté serveur uniquement
 
 const MODEL = 'claude-sonnet-4-6';
-const MAX_TOKENS = 4096;
+const MAX_TOKENS = 600; // Réduit : analyse structurée courte
 
 // Domaines autorisés pour CORS
-var ALLOWED_ORIGINS = [
-  'https://smartfitcoach.netlify.app',
-  'https://smartfitcoach.fr',
-  'https://www.smartfitcoach.fr',
-  'http://localhost:8888',
-  'http://localhost:3000',
-  'http://127.0.0.1:8888',
-  'http://127.0.0.1:3000'
-];
-
-// ── Rate Limiting ────────────────────────────────────────────────────────────
-var _rateLimitStore = {};
-var RATE_LIMIT_WINDOW_MS = 60000; // 1 minute
-var RATE_LIMIT_MAX_BODY_ANALYSIS = 5; // max 5 req/min (vision = coûteux)
-
-function checkRateLimit(ip, maxRequests) {
-  var now = Date.now();
-  if (!_rateLimitStore[ip]) _rateLimitStore[ip] = [];
-  // Nettoyer les entrées expirées (sliding window)
-  _rateLimitStore[ip] = _rateLimitStore[ip].filter(function(t) {
-    return now - t < RATE_LIMIT_WINDOW_MS;
-  });
-  if (_rateLimitStore[ip].length >= maxRequests) {
-    return false; // Rate limit dépassé
-  }
-  _rateLimitStore[ip].push(now);
-  return true;
+var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr')
+  .split(',').map(function(o){ return o.trim(); });
+// Ajouter localhost UNIQUEMENT en dev
+if (process.env.NODE_ENV !== 'production' && process.env.NETLIFY_DEV === 'true') {
+  ALLOWED_ORIGINS.push('http://localhost:8888', 'http://127.0.0.1:3000', 'http://localhost:3000');
 }
 
-// Nettoyer périodiquement le store pour éviter la fuite mémoire
-function pruneRateLimitStore() {
+// ── Rate Limiting (quota hebdomadaire) ───────────────────────────────────────
+var _weekStore = new Map(); // ip -> {week: 'YYYY-WXX', count: N, firstTs: N}
+
+var WEEK_MAX = 1; // max 1 analyse/semaine par IP (Sonnet = coûteux)
+
+function getWeekUTC() {
+  // Retourne 'YYYY-WXX' (numéro de semaine ISO)
+  var d = new Date();
+  var jan4 = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+  var dayOfYear = Math.floor((d - new Date(Date.UTC(d.getUTCFullYear(), 0, 1))) / 86400000) + 1;
+  var weekNum = Math.ceil((dayOfYear + jan4.getUTCDay()) / 7);
+  return d.getUTCFullYear() + '-W' + String(weekNum).padStart(2, '0');
+}
+
+function checkRateLimit(ip) {
   var now = Date.now();
-  Object.keys(_rateLimitStore).forEach(function(ip) {
-    _rateLimitStore[ip] = _rateLimitStore[ip].filter(function(t) {
-      return now - t < RATE_LIMIT_WINDOW_MS;
-    });
-    if (_rateLimitStore[ip].length === 0) delete _rateLimitStore[ip];
+  var week = getWeekUTC();
+
+  var entry = _weekStore.get(ip);
+  if (!entry || entry.week !== week) {
+    entry = { week: week, count: 0, firstTs: now };
+  }
+  if (entry.count >= WEEK_MAX) {
+    // Calculer les secondes restantes jusqu'à lundi minuit UTC
+    var d = new Date();
+    var msUntilMonday = (7 - d.getUTCDay() || 7) * 86400000
+      - d.getUTCHours() * 3600000
+      - d.getUTCMinutes() * 60000
+      - d.getUTCSeconds() * 1000;
+    return { allowed: false, reason: 'quota_week', retryAfter: Math.ceil(msUntilMonday / 1000) };
+  }
+
+  entry.count += 1;
+  _weekStore.set(ip, entry);
+  return { allowed: true };
+}
+
+// Nettoyer périodiquement pour éviter la fuite mémoire
+function pruneRateLimitStore() {
+  var week = getWeekUTC();
+  _weekStore.forEach(function(entry, ip) {
+    if (entry.week !== week) _weekStore.delete(ip);
   });
 }
 
@@ -57,7 +69,20 @@ var PROMPT_INJECTION_PATTERNS = [
   /system\s*:\s*/gi,
   /\[system\]/gi,
   /<<<|>>>/g,
-  /###\s*(system|instructions|prompt)/gi
+  /###\s*(system|instructions|prompt)/gi,
+  // Formats alternatifs LLM
+  /\[INST\]|\[\/INST\]/gi,
+  /<sys>|<\/sys>/gi,
+  /<\|system\|>|<\|user\|>|<\|assistant\|>/gi,
+  // Unicode tricks
+  /\u202e|\u200b|\u200c|\u200d/g,
+  // Encodages base64 suspects (longues chaînes)
+  /[A-Za-z0-9+\/]{100,}={0,2}/g,
+  // Tentatives de jailbreak courantes
+  /DAN\s*(mode|prompt)/gi,
+  /jailbreak/gi,
+  /grandma\s*(trick|exploit)/gi,
+  /do\s+anything\s+now/gi,
 ];
 
 function sanitizeString(str, maxLen) {
@@ -133,11 +158,14 @@ exports.handler = async function(event, context) {
   // Prendre uniquement la première IP si liste (x-forwarded-for peut contenir plusieurs IPs)
   clientIp = clientIp.split(',')[0].trim();
 
-  if (!checkRateLimit(clientIp, RATE_LIMIT_MAX_BODY_ANALYSIS)) {
+  var rl = checkRateLimit(clientIp);
+  if (!rl.allowed) {
+    var retryAfter = String(rl.retryAfter || 604800);
+    var rlMsg = 'Analyse corporelle disponible 1 fois par semaine. Revenez lundi pour une nouvelle analyse !';
     return {
       statusCode: 429,
-      headers: Object.assign({}, headers, { 'Retry-After': '60' }),
-      body: JSON.stringify({ error: 'Trop de requêtes. Veuillez patienter avant de réessayer.' })
+      headers: Object.assign({}, headers, { 'Retry-After': retryAfter }),
+      body: JSON.stringify({ error: rlMsg })
     };
   }
 
@@ -321,72 +349,34 @@ exports.handler = async function(event, context) {
 };
 
 function buildSystemPrompt(ctx, exercisesDb) {
-  var prenom = ctx.prenom || 'cet utilisateur';
-  var exercisesList = exercisesDb.length > 0 ? exercisesDb.join(', ') : 'Développé couché, Squat, Soulevé de terre, Tractions, Dips, Rowing barre, Curl biceps, Extension triceps, Presse à cuisses, Fentes, Hip thrust, Gainage, Crunch, Burpee, Box jump, Kettlebell swing, Thruster, Wall ball, Double under, Row ergomètre, Ski erg';
+  var prenom = ctx.prenom || 'toi';
+  // Limiter la liste d'exercices pour réduire les tokens en entrée
+  var defaultExs = 'Développé couché, Squat, Soulevé de terre, Tractions, Dips, Rowing barre, Curl biceps, Presse à cuisses, Fentes, Hip thrust, Gainage, Burpee, Kettlebell swing, Thruster';
+  var exercisesList = exercisesDb.length > 0 ? exercisesDb.slice(0, 30).join(', ') : defaultExs;
 
   var lines = [
-    'Tu es le coach morphologique privé de ' + prenom + ' sur SmartFitCoach.',
-    'Tu analyses des photos corporelles avec bienveillance, précision et expertise.',
-    '',
-    'RÈGLES ABSOLUES :',
-    '- Appelle toujours ' + prenom + ' par son prénom',
-    '- Réponds TOUJOURS en français',
-    '- Formule TOUT en termes positifs : "potentiel de développement", "axe de progression", jamais de critique négative',
-    '- Si les photos ne montrent pas clairement un corps humain, retourne {"error": "Photos non exploitables pour l\'analyse"}',
-    '- Ta programmation utilise UNIQUEMENT les exercices listés dans EXERCISES_AVAILABLE',
-    '- Tu peux combiner plusieurs disciplines si optimal (ex: musculation + crossfit, muscu + hyrox)',
-    '- Réponds UNIQUEMENT en JSON valide, sans texte autour',
-    '',
-    '## PROFIL DE ' + prenom.toUpperCase()
+    'Coach morpho de ' + prenom + ' sur SmartFitCoach. Analyse photos corporelles.',
+    'RÈGLES: français, termes positifs, JSON valide uniquement, exercices depuis EXERCISES_AVAILABLE seulement.',
+    'Photos illisibles → {"error":"Photos non exploitables"}',
+    ''
   ];
 
-  if (ctx.sex) lines.push('Sexe : ' + ctx.sex);
-  if (ctx.age) lines.push('Âge : ' + ctx.age + ' ans');
-  if (ctx.weight) lines.push('Poids : ' + ctx.weight + ' kg');
-  if (ctx.height) lines.push('Taille : ' + ctx.height + ' cm');
-  if (ctx.goal) lines.push('Objectif : ' + ctx.goal);
-  if (ctx.sportType) lines.push('Sport actuel : ' + ctx.sportType);
-  if (ctx.sportLevel) lines.push('Niveau : ' + ctx.sportLevel);
+  // Profil compact
+  var profile = [];
+  if (ctx.sex) profile.push('Sexe:' + ctx.sex);
+  if (ctx.age) profile.push('Âge:' + ctx.age);
+  if (ctx.weight) profile.push('Poids:' + ctx.weight + 'kg');
+  if (ctx.height) profile.push('Taille:' + ctx.height + 'cm');
+  if (ctx.goal) profile.push('Obj:' + ctx.goal);
+  if (ctx.sportType) profile.push('Sport:' + ctx.sportType);
+  if (ctx.sportLevel) profile.push('Niv:' + ctx.sportLevel);
+  if (profile.length) lines.push('PROFIL: ' + profile.join(' | '));
+
+  lines.push('EXERCISES_AVAILABLE: ' + exercisesList);
 
   lines.push('');
-  lines.push('## EXERCISES_AVAILABLE');
-  lines.push(exercisesList);
-
-  lines.push('');
-  lines.push('## FORMAT DE RÉPONSE JSON OBLIGATOIRE');
-  lines.push(JSON.stringify({
-    analyse: {
-      pointsForts: ['string — point fort formulé positivement', '...'],
-      axesDeveloppement: ['string — opportunité de progression', '...'],
-      postureNotes: 'string — observation posturale bienveillante',
-      morphologie: 'string — type morpho + implications pour la programmation'
-    },
-    programme: {
-      titre: 'string — ex: "Programme Force & Symétrie — 12 semaines"',
-      disciplines: ['muscu', 'crossfit'],
-      objectif: 'string — objectif principal en 1 phrase',
-      duree: '12 semaines',
-      frequence: '4 jours/semaine',
-      semaines: [
-        {
-          numero: 1,
-          focus: 'string — focus de la semaine',
-          seances: [
-            {
-              jour: 'Lundi',
-              discipline: 'muscu',
-              titre: 'string — titre de la séance',
-              exercices: [
-                { nom: 'string — nom EXACT depuis EXERCISES_AVAILABLE', series: 4, reps: '8-10', repos: '90s', note: 'string — conseil technique court' }
-              ]
-            }
-          ]
-        }
-      ],
-      conseilsNutrition: 'string — nutrition adaptée à l\'objectif morphologique',
-      messageCoach: 'string — message motivant personnalisé de clôture avec prénom'
-    }
-  }, null, 0));
+  lines.push('JSON ATTENDU:');
+  lines.push('{"analyse":{"pointsForts":["..."],"axesDeveloppement":["..."],"postureNotes":"...","morphologie":"..."},"programme":{"titre":"...","disciplines":["muscu"],"objectif":"...","duree":"12 semaines","frequence":"4j/sem","semaines":[{"numero":1,"focus":"...","seances":[{"jour":"Lundi","discipline":"muscu","titre":"...","exercices":[{"nom":"NOM_EXACT","series":4,"reps":"8-10","repos":"90s","note":"..."}]}]}],"conseilsNutrition":"...","messageCoach":"..."}}');
 
   return lines.join('\n');
 }

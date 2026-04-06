@@ -1617,12 +1617,490 @@ var FUSION_PROGRAMS = {
   ]
 };
 
+// ─── STARTING STRENGTH (Mark Rippetoe) ───────────────────────────────────────
+var STARTING_STRENGTH_PROGRAMS = {
+  meta: {
+    name: 'Starting Strength',
+    athlete: 'Méthode Mark Rippetoe',
+    philosophy: 'Force pure pour débutants. Progression linéaire +2.5kg par séance sur les composés. 5 exercices, 3x5 partout (sauf deadlift 1x5). Full body 3j/sem.',
+    frequency: '3 jours/semaine',
+    session_duration: '60-75 min',
+    key_principles: ['Progression linéaire', '3x5 sur les composés', 'Full body', 'Focus barbell uniquement', 'Aucune isolation']
+  },
+  programs: {
+    pectoraux: {
+      beginner: {
+        name: 'Starting Strength A — Push',
+        description: 'Workout A : Squat + Bench + Deadlift',
+        warmup: '5 min vélo + mobilité épaules + sets de warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Back Squat', sets:3, reps:5, rest:'3-5min', technique:'Low bar position. Descente contrôlée jusqu\'au parallèle. Drive des hanches.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Bench Press', sets:3, reps:5, rest:'3-5min', technique:'Pieds plantés, arc lombaire, omoplates rétractées. Touch-and-go autorisé.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:3, name:'Deadlift', sets:1, reps:5, rest:'5min', technique:'Une seule série lourde. Reset chaque rep. Hip hinge, pas un squat.', muscle:'dos', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Progression: +2.5kg par séance sur Squat/Bench, +5kg sur Deadlift. Si échec 2x: deload -10%.'
+      }
+    },
+    dos: {
+      beginner: {
+        name: 'Starting Strength B — Pull',
+        description: 'Workout B : Squat + Press + Power Clean',
+        warmup: '5 min vélo + mobilité épaules + sets de warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Back Squat', sets:3, reps:5, rest:'3-5min', technique:'Identique au Workout A. Le squat est fait à CHAQUE séance.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Overhead Press', sets:3, reps:5, rest:'3-5min', technique:'Standing strict press. Pas de push press. Pieds largeur hanches, gainage total.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:3, name:'Power Clean', sets:5, reps:3, rest:'3min', technique:'Triple extension explosive. Réception en quart de squat. Reset chaque rep.', muscle:'dos', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Workout B alterne avec Workout A: A-B-A semaine 1, B-A-B semaine 2.'
+      }
+    },
+    epaules: {
+      beginner: {
+        name: 'Starting Strength — Press',
+        description: 'Overhead Press inclus dans Workout B',
+        warmup: '5 min vélo + rotations épaules + sets warm-up',
+        exercises: [
+          {order:1, name:'Overhead Press', sets:3, reps:5, rest:'3-5min', technique:'Strict press, gainage abdominal, pas de mouvement de jambes.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:2, name:'Back Squat', sets:3, reps:5, rest:'3-5min', technique:'Le squat est central — toujours présent.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:3, name:'Power Clean', sets:5, reps:3, rest:'3min', technique:'Explosivité maximale. Triple extension cheville-genou-hanche.', muscle:'dos', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Press progresse plus lentement: +1.25kg par séance après les 2 premières semaines.'
+      }
+    },
+    jambes: {
+      beginner: {
+        name: 'Starting Strength — Squat',
+        description: 'Squat à chaque séance, base du programme',
+        warmup: '5 min vélo + mobilité hanches + warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Back Squat', sets:3, reps:5, rest:'3-5min', technique:'Low bar, descente jusqu\'au parallèle, drive explosif des hanches. À chaque séance.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Deadlift', sets:1, reps:5, rest:'5min', technique:'Une seule série lourde. Setup parfait à chaque rep.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:3, name:'Bench Press ou Press', sets:3, reps:5, rest:'3-5min', technique:'Alterne A/B avec Press.', muscle:'pectoraux', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Le squat est l\'exercice CENTRAL. Présent à chaque séance. +2.5kg par séance pendant ~3 mois.'
+      }
+    },
+    bras: {
+      beginner: {
+        name: 'Starting Strength — Pas d\'isolation',
+        description: 'Starting Strength ne contient AUCUNE isolation des bras. Les bras travaillent indirectement via Bench Press, Press, Power Clean et Deadlift.',
+        warmup: 'Voir workouts A et B',
+        exercises: [
+          {order:1, name:'Bench Press', sets:3, reps:5, rest:'3-5min', technique:'Sollicitation triceps importante.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:2, name:'Overhead Press', sets:3, reps:5, rest:'3-5min', technique:'Sollicitation triceps maximale en lockout.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:3, name:'Power Clean', sets:5, reps:3, rest:'3min', technique:'Sollicitation biceps en réception.', muscle:'dos', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Rippetoe interdit explicitement curls et extensions triceps en programme novice. Les bras se développent via les composés.'
+      }
+    }
+  },
+  splits: {
+    '3': [
+      { day: 'Lundi',    type: 'workoutA', label: 'Workout A: Squat + Bench + Deadlift' },
+      { day: 'Mercredi', type: 'workoutB', label: 'Workout B: Squat + Press + Power Clean' },
+      { day: 'Vendredi', type: 'workoutA', label: 'Workout A: Squat + Bench + Deadlift' }
+    ]
+  }
+};
+window.STARTING_STRENGTH_PROGRAMS = STARTING_STRENGTH_PROGRAMS;
+
+// ─── GREYSKULL LP (John Sheaffer / Johnny Pain) ──────────────────────────────
+var GREYSKULL_PROGRAMS = {
+  meta: {
+    name: 'Greyskull LP',
+    athlete: 'Méthode John Sheaffer (Johnny Pain)',
+    philosophy: 'Force + Masse débutant/intermédiaire. 2x5 + AMRAP set final ("Reps For Reps"). Plug sets optionnels pour bras. Plus de fréquence sur le bench que Starting Strength.',
+    frequency: '3 jours/semaine',
+    session_duration: '45-60 min',
+    key_principles: ['2x5 + AMRAP set', 'Reps For Reps progression', 'Bench/Press alterné', 'Plug sets bras optionnels', 'Pas de Power Clean']
+  },
+  programs: {
+    pectoraux: {
+      beginner: {
+        name: 'Greyskull A — Bench Day',
+        description: 'Bench Press + Squat + Plug sets bras',
+        warmup: '5 min vélo + mobilité épaules + warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Bench Press', sets:3, reps:'5/5/5+', rest:'3min', technique:'2x5 normaux + 1 set AMRAP (autant de reps que possible). Si AMRAP ≥ 10 reps: +5kg séance suivante.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:2, name:'Back Squat', sets:3, reps:'5/5/5+', rest:'3min', technique:'2x5 + AMRAP. Low bar, descente parallèle. Progression linéaire +2.5kg.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:3, name:'Chin-Ups (plug)', sets:2, reps:'max', rest:'90s', technique:'Optional plug set: tractions supination pour biceps. Progression: ajouter 1 rep par séance.', muscle:'dos', type:'compound', equipment:'barre fixe'},
+          {order:4, name:'Curl barre (plug)', sets:2, reps:8, rest:'90s', technique:'Plug set bras optionnel — Greyskull autorise l\'isolation contrairement à Starting Strength.', muscle:'bras', type:'isolation', equipment:'barre'}
+        ],
+        notes: 'AMRAP set (5+) est la signature Greyskull. Si AMRAP ≥ 10: double progression (+5kg). Sinon +2.5kg classique.'
+      }
+    },
+    epaules: {
+      beginner: {
+        name: 'Greyskull B — Press Day',
+        description: 'Overhead Press + Deadlift + Plug sets',
+        warmup: '5 min vélo + mobilité épaules + warm-up',
+        exercises: [
+          {order:1, name:'Overhead Press', sets:3, reps:'5/5/5+', rest:'3min', technique:'2x5 + AMRAP. Strict press, gainage abdominal. Press progresse plus lentement (+1.25kg).', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:2, name:'Deadlift', sets:1, reps:'5+', rest:'5min', technique:'Une seule série avec AMRAP. Reset chaque rep. +5kg si AMRAP ≥ 6.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:3, name:'Dips ou Tractions (plug)', sets:2, reps:'max', rest:'90s', technique:'Plug set: dips lestés pour triceps OU tractions pour dos. Alterner.', muscle:'bras', type:'compound', equipment:'barres parallèles'},
+          {order:4, name:'Curl haltères (plug)', sets:2, reps:10, rest:'90s', technique:'Plug set isolation biceps — autorisé en Greyskull.', muscle:'bras', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'B alterne avec A et C: Bench → Press → Bench → Press en rotation. Press toujours après bench.'
+      }
+    },
+    dos: {
+      beginner: {
+        name: 'Greyskull — Deadlift focus',
+        description: 'Deadlift dans Workout B avec AMRAP set',
+        warmup: '5 min vélo + mobilité hanches + warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Deadlift', sets:1, reps:'5+', rest:'5min', technique:'Une série lourde avec AMRAP. Hip hinge, dos neutre, drive de jambes.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:2, name:'Overhead Press', sets:3, reps:'5/5/5+', rest:'3min', technique:'Strict press 2x5 + AMRAP.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:3, name:'Pendlay Row (alt)', sets:3, reps:8, rest:'2min', technique:'Alternative au deadlift les semaines de récupération. Tirage explosif depuis le sol.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:4, name:'Chin-Ups (plug)', sets:2, reps:'max', rest:'90s', technique:'Plug set tractions supination pour biceps + dos.', muscle:'dos', type:'compound', equipment:'barre fixe'}
+        ],
+        notes: 'Deadlift fait 1 fois sur 2 (alternance avec Pendlay Row). Évite le burnout lombaire de Starting Strength.'
+      }
+    },
+    jambes: {
+      beginner: {
+        name: 'Greyskull — Squat à chaque séance',
+        description: 'Le squat reste central, présent à chaque workout',
+        warmup: '5 min vélo + mobilité hanches + warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Back Squat', sets:3, reps:'5/5/5+', rest:'3min', technique:'2x5 + AMRAP. À chaque séance. Progression +2.5kg si AMRAP ≥ 5.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Bench ou Press', sets:3, reps:'5/5/5+', rest:'3min', technique:'Alternance bench/press selon le jour.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:3, name:'Deadlift (1x/sem)', sets:1, reps:'5+', rest:'5min', technique:'Deadlift une fois sur deux, alterné avec Pendlay Row.', muscle:'dos', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Squat à chaque séance, AMRAP final pour la double progression.'
+      }
+    },
+    bras: {
+      beginner: {
+        name: 'Greyskull — Plug Sets autorisés',
+        description: 'Contrairement à Starting Strength, Greyskull AUTORISE les plug sets bras (isolation curls + extensions)',
+        warmup: 'Voir workouts A/B',
+        exercises: [
+          {order:1, name:'Curl barre (plug)', sets:2, reps:8, rest:'90s', technique:'Plug set après les composés. Strict, contrôlé.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:2, name:'Extensions triceps couché (plug)', sets:2, reps:10, rest:'90s', technique:'Plug set triceps. Skull crushers contrôlés.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:3, name:'Chin-Ups', sets:2, reps:'max', rest:'90s', technique:'Tractions supination = compound bras (biceps + dos).', muscle:'dos', type:'compound', equipment:'barre fixe'},
+          {order:4, name:'Dips lestés', sets:2, reps:'max', rest:'90s', technique:'Compound triceps + pectoraux bas.', muscle:'bras', type:'compound', equipment:'barres parallèles'}
+        ],
+        notes: 'Plug sets en fin de séance UNIQUEMENT — jamais avant les composés.'
+      }
+    }
+  },
+  splits: {
+    '3': [
+      { day: 'Lundi',    type: 'workoutA', label: 'Workout A: Bench + Squat + Plug' },
+      { day: 'Mercredi', type: 'workoutB', label: 'Workout B: Press + Deadlift + Plug' },
+      { day: 'Vendredi', type: 'workoutA', label: 'Workout A: Bench + Squat + Plug' }
+    ]
+  }
+};
+window.GREYSKULL_PROGRAMS = GREYSKULL_PROGRAMS;
+
+// ─── TEXAS METHOD (Mark Rippetoe — Intermédiaire) ────────────────────────────
+var TEXAS_METHOD_PROGRAMS = {
+  meta: {
+    name: 'Texas Method',
+    athlete: 'Méthode Mark Rippetoe (Practical Programming)',
+    philosophy: 'Périodisation hebdomadaire pour intermédiaires. Lundi = Volume Day (5x5 @ 90% du 5RM). Mercredi = Recovery Day (charges légères, technique). Vendredi = Intensity Day (1x5 PR weekly).',
+    frequency: '3 jours/semaine',
+    session_duration: '60-90 min',
+    key_principles: ['Volume Day Lundi 5x5', 'Recovery Day Mercredi', 'Intensity Day Vendredi 1x5 PR', 'PR hebdomadaire', 'Périodisation à la semaine']
+  },
+  programs: {
+    pectoraux: {
+      intermediate: {
+        name: 'Texas Method — Bench Cycle',
+        description: 'Bench Press 3x/sem avec périodisation Volume/Recovery/Intensity',
+        warmup: '5 min vélo + mobilité épaules + warm-up barre vide → 60% → 80% → 90%',
+        exercises: [
+          {order:1, name:'Bench Press (Volume Day Lundi)', sets:5, reps:5, rest:'3-5min', technique:'5x5 @ 90% du 5RM. Volume maximum de la semaine. Touch-and-go contrôlé.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:2, name:'Bench Press (Recovery Day Mercredi)', sets:3, reps:5, rest:'2min', technique:'3x5 @ 80% du Lundi. Léger, focus technique pure. Pas d\'échec.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:3, name:'Bench Press (Intensity Day Vendredi)', sets:1, reps:5, rest:'5min', technique:'1x5 PR weekly. Tente +2.5kg vs vendredi précédent. C\'est LE moment de progression.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:4, name:'Dips lestés', sets:3, reps:8, rest:'2min', technique:'Accessoire bench du Lundi pour volume triceps + pectoraux bas.', muscle:'bras', type:'compound', equipment:'barres parallèles'}
+        ],
+        notes: 'Le bench progresse de +2.5kg PAR SEMAINE (PR du vendredi). Sur 12 semaines: +30kg potentiels.'
+      }
+    },
+    jambes: {
+      intermediate: {
+        name: 'Texas Method — Squat Cycle',
+        description: 'Squat 3x/sem avec progression hebdomadaire',
+        warmup: '5 min vélo + mobilité hanches + warm-up barre vide → 60% → 75% → 90%',
+        exercises: [
+          {order:1, name:'Back Squat (Volume Day Lundi)', sets:5, reps:5, rest:'3-5min', technique:'5x5 @ 90% du 5RM. C\'est le plus dur de la semaine. Volume max.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Back Squat (Recovery Day Mercredi)', sets:2, reps:5, rest:'2min', technique:'2x5 @ 80% du Lundi. Récupération active. Vitesse de barre.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:3, name:'Back Squat (Intensity Day Vendredi)', sets:1, reps:5, rest:'5min', technique:'1x5 PR weekly. Tente +2.5kg vs semaine passée. Attempt unique.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:4, name:'Front Squat (alt Mercredi)', sets:3, reps:5, rest:'2min30', technique:'Alternative au Recovery Day pour varier le stimulus quad.', muscle:'jambes', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Squat = exercice central. PR weekly hardgainer-friendly. +2.5kg/sem pendant 8-12 semaines réalistes.'
+      }
+    },
+    dos: {
+      intermediate: {
+        name: 'Texas Method — Deadlift Cycle',
+        description: 'Deadlift 1x/semaine (Vendredi Intensity Day) — récupération nerveuse',
+        warmup: '5 min vélo + warm-up barre vide → 60% → 80% → 90%',
+        exercises: [
+          {order:1, name:'Deadlift (Vendredi)', sets:1, reps:5, rest:'5min', technique:'1x5 PR weekly. UNE série lourde par semaine. +2.5-5kg vs semaine passée.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:2, name:'Power Clean (Lundi Volume)', sets:5, reps:3, rest:'3min', technique:'5x3 explosif. Alternative au pull dans Volume Day.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:3, name:'Pendlay Row (Mercredi)', sets:3, reps:5, rest:'2min', technique:'Tirage explosif depuis le sol. Recovery Day, charges modérées.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:4, name:'Chin-Ups (accessoire)', sets:3, reps:'max', rest:'2min', technique:'Accessoire dos. Lestés si possible. AMRAP final.', muscle:'dos', type:'compound', equipment:'barre fixe'}
+        ],
+        notes: 'Deadlift seulement le Vendredi: la récupération nerveuse est cruciale. Alternance Power Clean (Lundi) + Pendlay Row (Mercredi).'
+      }
+    },
+    epaules: {
+      intermediate: {
+        name: 'Texas Method — Press Cycle',
+        description: 'Overhead Press alterné avec Bench (Lundi/Vendredi)',
+        warmup: '5 min vélo + mobilité épaules + warm-up',
+        exercises: [
+          {order:1, name:'Overhead Press (Volume Day Lundi)', sets:5, reps:5, rest:'3min', technique:'5x5 @ 90% du 5RM. Strict press, gainage abdominal.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:2, name:'OHP (Recovery Day Mercredi)', sets:3, reps:5, rest:'2min', technique:'3x5 @ 80%. Focus technique pure.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:3, name:'OHP (Intensity Day Vendredi)', sets:1, reps:5, rest:'5min', technique:'1x5 PR weekly. +1.25-2.5kg vs vendredi passé.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:4, name:'Élévations latérales', sets:3, reps:12, rest:'90s', technique:'Accessoire épaules pour volume sans surcharger CNS.', muscle:'epaules', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'OHP progresse +1.25kg/sem (microplaques recommandées). Plus lent que squat/bench.'
+      }
+    },
+    bras: {
+      intermediate: {
+        name: 'Texas Method — Accessoires Bras',
+        description: 'Curls + extensions en accessoires (jamais en exercice principal)',
+        warmup: 'Voir cycles bench/press',
+        exercises: [
+          {order:1, name:'Curl barre', sets:3, reps:8, rest:'90s', technique:'Accessoire après les composés. Strict.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:2, name:'Extensions triceps couché (skull crushers)', sets:3, reps:10, rest:'90s', technique:'Accessoire triceps. Barre EZ.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:3, name:'Curl haltères marteau', sets:3, reps:10, rest:'90s', technique:'Hammer curl pour brachial.', muscle:'bras', type:'isolation', equipment:'halteres'},
+          {order:4, name:'Pushdown corde', sets:3, reps:12, rest:'90s', technique:'Finisseur triceps poulie haute.', muscle:'bras', type:'isolation', equipment:'poulie'}
+        ],
+        notes: 'Bras = accessoire pur en Texas Method. Volume modéré, jamais à l\'échec.'
+      }
+    }
+  },
+  splits: {
+    '3': [
+      { day: 'Lundi',    type: 'volume',    label: 'Volume Day: 5x5 @ 90%' },
+      { day: 'Mercredi', type: 'recovery',  label: 'Recovery Day: 80% du Lundi' },
+      { day: 'Vendredi', type: 'intensity', label: 'Intensity Day: 1x5 PR weekly' }
+    ]
+  }
+};
+window.TEXAS_METHOD_PROGRAMS = TEXAS_METHOD_PROGRAMS;
+
+// ─── nSuns 5/3/1 (Powerbuilding hybride) ─────────────────────────────────────
+var NSUNS_PROGRAMS = {
+  meta: {
+    name: 'nSuns 5/3/1',
+    athlete: 'Variant nSuns du Wendler 5/3/1',
+    philosophy: 'Powerbuilding intermédiaire/avancé. Lift principal en 5/3/1 + Lift secondaire 3x8-12 + Accessoires hypertrophie. 5-6j/sem. Rotation Squat/Bench/Deadlift/OHP. Beaucoup plus de volume que Wendler classique.',
+    frequency: '5-6 jours/semaine',
+    session_duration: '75-90 min',
+    key_principles: ['5/3/1 sur lift principal', 'Lift secondaire 3x8-12', 'Accessoires hypertrophie', 'AMRAP set final', 'Training Max = 90% du 1RM']
+  },
+  programs: {
+    pectoraux: {
+      intermediate: {
+        name: 'nSuns Bench Day',
+        description: 'Bench Press (T1) + OHP (T2) + Accessoires',
+        warmup: '5 min vélo + mobilité épaules + warm-up barre vide → 50% → 70% → 80%',
+        exercises: [
+          {order:1, name:'Bench Press T1 (5/3/1+)', sets:9, reps:'8/6/4/4/4/5/6/7/8+', rest:'3min', technique:'9 sets nSuns: 8@65%/6@75%/4@85%/4@85%/4@85%/5@80%/6@75%/7@70%/8+@65% (AMRAP). Training Max = 90% 1RM.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:2, name:'Overhead Press T2', sets:8, reps:'6/5/3/5/7/4/6/8', rest:'2min30', technique:'Lift secondaire 8 sets nSuns. Strict press, gainage abdominal.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:3, name:'Dips lestés', sets:3, reps:8, rest:'2min', technique:'Accessoire pectoraux + triceps. Lestés si possible.', muscle:'pectoraux', type:'compound', equipment:'barres parallèles'},
+          {order:4, name:'Élévations latérales', sets:4, reps:12, rest:'90s', technique:'Accessoire isolation épaules pour volume.', muscle:'epaules', type:'isolation', equipment:'halteres'},
+          {order:5, name:'Pushdown corde', sets:4, reps:12, rest:'90s', technique:'Accessoire triceps poulie haute.', muscle:'bras', type:'isolation', equipment:'poulie'}
+        ],
+        notes: 'Le 9e set est AMRAP — battre les reps du PR précédent. Training Max augmente quand on bat le PR.'
+      }
+    },
+    jambes: {
+      intermediate: {
+        name: 'nSuns Squat Day',
+        description: 'Back Squat (T1) + Deadlift (T2) + Accessoires jambes',
+        warmup: '5 min vélo + mobilité hanches + warm-up barre vide → 50% → 70% → 80%',
+        exercises: [
+          {order:1, name:'Back Squat T1 (5/3/1+)', sets:9, reps:'5/3/1+/3/3/3/5/5/5+', rest:'3min', technique:'9 sets: 5@75%/3@85%/1+@95%(AMRAP)/3@90%/3@85%/3@80%/5@75%/5@70%/5+@65%. Volume + intensité combinés.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Deadlift T2 (Sumo)', sets:8, reps:'5/5/3/5/7/4/6/8', rest:'2min30', technique:'Sumo deadlift en lift secondaire. Variation pour économiser le bas du dos.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:3, name:'Leg Press', sets:4, reps:12, rest:'2min', technique:'Accessoire quadriceps pour volume.', muscle:'jambes', type:'compound', equipment:'machine'},
+          {order:4, name:'Leg Curl couché', sets:4, reps:12, rest:'90s', technique:'Accessoire ischios.', muscle:'jambes', type:'isolation', equipment:'machine'},
+          {order:5, name:'Calf Raise debout', sets:4, reps:15, rest:'60s', technique:'Accessoire mollets.', muscle:'jambes', type:'isolation', equipment:'machine'}
+        ],
+        notes: 'Les jours T1 alternent: Squat → Bench → Deadlift → OHP → Squat variation. 5j/sem rotatif.'
+      }
+    },
+    dos: {
+      intermediate: {
+        name: 'nSuns Deadlift Day',
+        description: 'Deadlift (T1) + Front Squat (T2) + Accessoires dos',
+        warmup: '5 min vélo + warm-up barre vide → 50% → 70% → 80%',
+        exercises: [
+          {order:1, name:'Deadlift T1 (5/3/1+)', sets:9, reps:'5/3/1+/3/3/3/5/5/5+', rest:'4min', technique:'9 sets: 5@75%/3@85%/1+@95%(AMRAP)/3@90%/.../5+@65%. Reset chaque rep, technique parfaite.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:2, name:'Front Squat T2', sets:8, reps:'5/5/3/5/7/4/6/8', rest:'2min30', technique:'Front squat en secondaire — taille élancée + quad focus.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:3, name:'Pendlay Row', sets:4, reps:8, rest:'2min', technique:'Accessoire dos épaisseur. Tirage explosif depuis le sol.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:4, name:'Pull-Ups lestés', sets:4, reps:8, rest:'2min', technique:'Accessoire largeur dorsale. Lestés.', muscle:'dos', type:'compound', equipment:'barre fixe'},
+          {order:5, name:'Face Pull corde', sets:4, reps:15, rest:'60s', technique:'Accessoire arrière-épaules + santé scapulaire.', muscle:'epaules', type:'isolation', equipment:'poulie'}
+        ],
+        notes: 'Deadlift jour le plus exigeant — récupération critique. Privilégier sommeil + nutrition.'
+      }
+    },
+    epaules: {
+      intermediate: {
+        name: 'nSuns OHP Day',
+        description: 'Overhead Press (T1) + Bench (T2) + Accessoires épaules',
+        warmup: '5 min vélo + mobilité épaules + warm-up',
+        exercises: [
+          {order:1, name:'Overhead Press T1 (5/3/1+)', sets:9, reps:'5/3/1+/3/3/3/5/5/5+', rest:'3min', technique:'9 sets nSuns. Strict press uniquement. AMRAP set 3.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:2, name:'Bench Press T2 (Close Grip)', sets:8, reps:'6/5/3/5/7/4/6/8', rest:'2min30', technique:'Close-grip bench en secondaire — focus triceps + lockout.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:3, name:'Élévations latérales', sets:5, reps:12, rest:'90s', technique:'Accessoire isolation épaules — volume élevé.', muscle:'epaules', type:'isolation', equipment:'halteres'},
+          {order:4, name:'Face Pull', sets:4, reps:15, rest:'60s', technique:'Arrière épaules + santé scapulaire.', muscle:'epaules', type:'isolation', equipment:'poulie'},
+          {order:5, name:'Curl barre', sets:4, reps:10, rest:'90s', technique:'Accessoire biceps.', muscle:'bras', type:'isolation', equipment:'barre'}
+        ],
+        notes: 'OHP est le lift le plus dur à progresser — patience requise. AMRAP set crucial pour stimulation.'
+      }
+    },
+    bras: {
+      intermediate: {
+        name: 'nSuns Arms Accessoires',
+        description: 'Les bras travaillent en accessoires sur tous les jours principaux',
+        warmup: 'Voir cycles principaux',
+        exercises: [
+          {order:1, name:'Curl barre', sets:4, reps:10, rest:'90s', technique:'Accessoire biceps en fin de séance.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:2, name:'Curl haltères incliné', sets:4, reps:12, rest:'90s', technique:'Stretch maximum biceps, position inclinée.', muscle:'bras', type:'isolation', equipment:'halteres'},
+          {order:3, name:'Pushdown corde', sets:4, reps:12, rest:'90s', technique:'Accessoire triceps.', muscle:'bras', type:'isolation', equipment:'poulie'},
+          {order:4, name:'Skull crushers', sets:4, reps:10, rest:'90s', technique:'Extension triceps couché barre EZ.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:5, name:'Hammer curl', sets:3, reps:12, rest:'60s', technique:'Brachial + avant-bras.', muscle:'bras', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'Volume bras = 12-16 sets/semaine répartis sur tous les jours.'
+      }
+    }
+  },
+  splits: {
+    '5': [
+      { day: 'Lundi',    type: 'bench',    label: 'Bench T1 + OHP T2 + Accessoires' },
+      { day: 'Mardi',    type: 'squat',    label: 'Squat T1 + Sumo DL T2 + Quads' },
+      { day: 'Mercredi', type: 'ohp',      label: 'OHP T1 + Close Bench T2 + Épaules' },
+      { day: 'Jeudi',    type: 'deadlift', label: 'Deadlift T1 + Front Squat T2 + Dos' },
+      { day: 'Vendredi', type: 'bench2',   label: 'Bench T1 + OHP T2 (variante)' }
+    ]
+  }
+};
+window.NSUNS_PROGRAMS = NSUNS_PROGRAMS;
+
+// ─── CBUM HYPERTROPHY (Chris Bumstead — Classic Physique) ────────────────────
+var CBUM_PROGRAMS = {
+  meta: {
+    name: 'CBum Classic Physique',
+    athlete: 'Inspiré Chris Bumstead (Mr. Olympia Classic Physique)',
+    philosophy: 'Hypertrophie esthétique moderne. PPL étendu sur 5j avec 2x jambes. Volume modéré-élevé, supersets sur isolation, FST-7 sur finisher, drop sets occasionnels. Focus shape + symétrie.',
+    frequency: '5 jours/semaine',
+    session_duration: '75-90 min',
+    key_principles: ['Volume modéré-élevé (16-20 sets/groupe)', 'Supersets isolation', 'FST-7 finisher', 'Drop sets sur ext./curls', 'Mind-muscle connection']
+  },
+  programs: {
+    pectoraux: {
+      intermediate: {
+        name: 'CBum Chest + Triceps Day',
+        description: 'Lundi: Pectoraux focus + triceps en finisher',
+        warmup: '5 min vélo + rotations épaules + 2 sets warm-up bench barre vide',
+        exercises: [
+          {order:1, name:'Bench Press incliné haltères', sets:4, reps:'10-12', rest:'2min', technique:'Composé principal CBum: incliné AVANT le bench plat pour prioriser le haut pectoral. Stretch profond, contraction au sommet.', muscle:'pectoraux', type:'compound', equipment:'halteres'},
+          {order:2, name:'Bench Press plat', sets:4, reps:'8-10', rest:'2min', technique:'Bench classique en deuxième. Touch-and-go contrôlé, focus pectoral.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:3, name:'Pec Deck (Butterfly)', sets:4, reps:'12-15', rest:'90s', technique:'Isolation pure, contraction pic 1s. Focus mind-muscle.', muscle:'pectoraux', type:'isolation', equipment:'machine'},
+          {order:4, name:'Cable crossover bas-vers-haut', sets:3, reps:'15', rest:'60s', technique:'FST-7 finisher: 7 sets de 12-15 reps, repos 30s entre sets. Pump maximal.', muscle:'pectoraux', type:'isolation', equipment:'poulie'},
+          {order:5, name:'Skull crushers + Pushdown (superset)', sets:3, reps:'10+12', rest:'90s', technique:'Superset triceps: skull crushers immédiat suivi de pushdown corde sans repos.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:6, name:'Overhead extension corde', sets:3, reps:12, rest:'60s', technique:'Stretch maximum triceps long head. Drop set sur dernière série.', muscle:'bras', type:'isolation', equipment:'poulie'}
+        ],
+        notes: 'Volume total pectoraux: 15 sets. Supersets et FST-7 = pump maximal en fin de séance.'
+      }
+    },
+    dos: {
+      intermediate: {
+        name: 'CBum Back + Biceps Day',
+        description: 'Mardi: Dos largeur + épaisseur + biceps en superset',
+        warmup: '5 min rameur + scapular pull-ups + activation lats',
+        exercises: [
+          {order:1, name:'Pull-Ups lestés', sets:4, reps:'8-10', rest:'2min', technique:'Composé principal largeur. Lestés si possible. Dead hang complet.', muscle:'dos', type:'compound', equipment:'barre fixe'},
+          {order:2, name:'Rowing T-bar', sets:4, reps:'10-12', rest:'2min', technique:'Composé épaisseur. Tirer vers le nombril, scapula contraction.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:3, name:'Tirage vertical prise neutre', sets:4, reps:'12', rest:'90s', technique:'Cible le grand dorsal, prise triangle. 2s pic contraction.', muscle:'dos', type:'compound', equipment:'poulie'},
+          {order:4, name:'Single arm cable row', sets:3, reps:'12 par bras', rest:'60s', technique:'Unilatéral pour symétrie. Stretch maximum + rotation thoracique.', muscle:'dos', type:'compound', equipment:'poulie'},
+          {order:5, name:'Straight arm pulldown (FST-7)', sets:7, reps:12, rest:'30s', technique:'FST-7 finisher dos: 7 sets, 30s repos. Pump dorsal maximum.', muscle:'dos', type:'isolation', equipment:'poulie'},
+          {order:6, name:'Curl barre + Curl haltères incliné (superset)', sets:3, reps:'10+10', rest:'90s', technique:'Superset biceps: curl barre immédiat suivi curl haltères incliné stretch.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:7, name:'Hammer curl', sets:3, reps:12, rest:'60s', technique:'Brachial + avant-bras. Drop set sur dernière série.', muscle:'bras', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'Volume dos: 18 sets. Variation des angles pour développement complet (largeur + épaisseur + détail).'
+      }
+    },
+    epaules: {
+      intermediate: {
+        name: 'CBum Shoulders Day',
+        description: 'Mercredi: Épaules complet 3 chefs (deltoïdes ant/lat/post)',
+        warmup: '5 min vélo + rotations épaules + bandes élastiques face pull',
+        exercises: [
+          {order:1, name:'Overhead Press haltères', sets:4, reps:'10-12', rest:'2min', technique:'Composé principal épaules. Haltères pour ROM maximal. Pas de balancement.', muscle:'epaules', type:'compound', equipment:'halteres'},
+          {order:2, name:'Élévations latérales debout', sets:5, reps:'15', rest:'60s', technique:'Isolation deltoïde latéral. Élever jusqu\'à parallèle au sol. Coude légèrement plié.', muscle:'epaules', type:'isolation', equipment:'halteres'},
+          {order:3, name:'Cable lateral raise', sets:4, reps:'12 par bras', rest:'60s', technique:'Tension constante, position légèrement inclinée. Stretch maximum.', muscle:'epaules', type:'isolation', equipment:'poulie'},
+          {order:4, name:'Reverse Pec Deck', sets:4, reps:'15', rest:'60s', technique:'Isolation arrière épaules. Contraction pic 1s. Volume élevé.', muscle:'epaules', type:'isolation', equipment:'machine'},
+          {order:5, name:'Face Pull corde', sets:7, reps:15, rest:'30s', technique:'FST-7 finisher arrière épaules. Santé scapulaire + esthétique.', muscle:'epaules', type:'isolation', equipment:'poulie'},
+          {order:6, name:'Front raise haltères + Élévations latérales (drop set)', sets:3, reps:'10+10', rest:'90s', technique:'Superset deltoïde antérieur + latéral. Drop set finisseur.', muscle:'epaules', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'Volume épaules: 22 sets. Focus deltoïde latéral (18 sets/sem cumulés) pour shape 3D.'
+      }
+    },
+    jambes: {
+      intermediate: {
+        name: 'CBum Legs Quad-Focus Day',
+        description: 'Jeudi: Quadriceps prioritaire + accessoires fessiers',
+        warmup: '5 min vélo + mobilité hanches + 2 sets warm-up squat barre vide',
+        exercises: [
+          {order:1, name:'Back Squat', sets:4, reps:'8-10', rest:'2min30', technique:'Composé principal quad. High bar pour cibler quad davantage. Profondeur sous parallèle.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Hack Squat machine', sets:4, reps:'10-12', rest:'2min', technique:'Quad pure isolation. Pieds bas pour quad max. Stretch profond.', muscle:'jambes', type:'compound', equipment:'machine'},
+          {order:3, name:'Leg Press', sets:4, reps:'12-15', rest:'2min', technique:'Pieds bas et serrés pour cibler quadriceps. Amplitude complète.', muscle:'jambes', type:'compound', equipment:'machine'},
+          {order:4, name:'Leg Extension (FST-7)', sets:7, reps:15, rest:'30s', technique:'FST-7 finisher quadriceps. Pic contraction 2s. Pump intense.', muscle:'jambes', type:'isolation', equipment:'machine'},
+          {order:5, name:'Bulgarian split squat', sets:3, reps:'10 par jambe', rest:'90s', technique:'Unilatéral pour symétrie + accessoire fessiers.', muscle:'jambes', type:'compound', equipment:'halteres'},
+          {order:6, name:'Calf raise debout', sets:4, reps:15, rest:'60s', technique:'Mollets debout, amplitude complète, 2s pic contraction.', muscle:'jambes', type:'isolation', equipment:'machine'}
+        ],
+        notes: 'Volume quad: 19 sets. Jeudi quad-focus, samedi posterior-focus pour volume jambes total 38 sets/sem.'
+      }
+    },
+    bras: {
+      intermediate: {
+        name: 'CBum Arms Volume',
+        description: 'Bras travaillés en supersets sur Lundi (triceps) et Mardi (biceps)',
+        warmup: 'Voir cycles Chest et Back',
+        exercises: [
+          {order:1, name:'Curl barre EZ', sets:4, reps:10, rest:'90s', technique:'Composé biceps. Strict, contrôlé.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:2, name:'Curl haltères incliné (stretch)', sets:4, reps:12, rest:'60s', technique:'Stretch maximal biceps long head. Position inclinée 45°.', muscle:'bras', type:'isolation', equipment:'halteres'},
+          {order:3, name:'Skull crushers EZ bar', sets:4, reps:10, rest:'90s', technique:'Composé triceps. Long head focus.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:4, name:'Pushdown corde + Overhead extension (superset)', sets:3, reps:'12+12', rest:'90s', technique:'Superset triceps: pushdown puis overhead sans repos. Pump maximal.', muscle:'bras', type:'isolation', equipment:'poulie'},
+          {order:5, name:'Hammer curl drop set', sets:3, reps:'12+8+6', rest:'60s', technique:'Drop set: 12 reps lourd → drop 30% → 8 reps → drop 30% → 6 reps.', muscle:'bras', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'Volume bras: 18 sets total/sem (biceps 9 + triceps 9). Drop sets et supersets pour intensité maximale.'
+      }
+    }
+  },
+  splits: {
+    '5': [
+      { day: 'Lundi',    type: 'chest_tris',     label: 'Chest + Triceps' },
+      { day: 'Mardi',    type: 'back_bis',       label: 'Back + Biceps' },
+      { day: 'Mercredi', type: 'shoulders',      label: 'Shoulders' },
+      { day: 'Jeudi',    type: 'legs_quad',      label: 'Legs Quad-Focus' },
+      { day: 'Samedi',   type: 'legs_posterior', label: 'Legs Posterior + Glutes' }
+    ]
+  }
+};
+window.CBUM_PROGRAMS = CBUM_PROGRAMS;
+
 var TRAINING_STYLES = {
   classic:   { label:'Programme Classique',   programs: NFC_PROGRAMS,              splits: WEEKLY_SPLITS },
   intensity: { label:'Intensité Maximale',    programs: YATES_PROGRAMS.programs,   splits: YATES_PROGRAMS.splits,   meta: YATES_PROGRAMS.meta,   macro: YATES_PROGRAMS.macro_cycle_12w },
   volume:    { label:'Volume Progressif',     programs: COLEMAN_PROGRAMS.programs, splits: COLEMAN_PROGRAMS.splits, meta: COLEMAN_PROGRAMS.meta, macro: COLEMAN_PROGRAMS.macro_cycle_12w },
   fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w },
-  fusion:    { label:'Programme Élite Fusion', programs: FUSION_PROGRAMS.programs,  splits: FUSION_PROGRAMS.splits,  meta: FUSION_PROGRAMS.meta,  macro: FUSION_PROGRAMS.macro_cycle_12w }
+  fusion:    { label:'Programme Élite Fusion', programs: FUSION_PROGRAMS.programs,  splits: FUSION_PROGRAMS.splits,  meta: FUSION_PROGRAMS.meta,  macro: FUSION_PROGRAMS.macro_cycle_12w },
+  starting:  { label:'Starting Strength',      programs: STARTING_STRENGTH_PROGRAMS.programs, splits: STARTING_STRENGTH_PROGRAMS.splits, meta: STARTING_STRENGTH_PROGRAMS.meta },
+  greyskull: { label:'Greyskull LP',            programs: GREYSKULL_PROGRAMS.programs,         splits: GREYSKULL_PROGRAMS.splits,         meta: GREYSKULL_PROGRAMS.meta },
+  texas:     { label:'Texas Method',            programs: TEXAS_METHOD_PROGRAMS.programs,      splits: TEXAS_METHOD_PROGRAMS.splits,      meta: TEXAS_METHOD_PROGRAMS.meta },
+  nsuns:     { label:'nSuns 5/3/1',             programs: NSUNS_PROGRAMS.programs,             splits: NSUNS_PROGRAMS.splits,             meta: NSUNS_PROGRAMS.meta },
+  cbum:      { label:'CBum Classic Physique',   programs: CBUM_PROGRAMS.programs,              splits: CBUM_PROGRAMS.splits,              meta: CBUM_PROGRAMS.meta }
 };
 
 function getStyleProgram(style, muscle, level) {
@@ -2253,7 +2731,7 @@ window.COLEMAN_PROGRAMS = COLEMAN_PROGRAMS;
 window.RAMBOD_PROGRAMS = RAMBOD_PROGRAMS;
 window.FUSION_PROGRAMS = FUSION_PROGRAMS;
 window.TRAINING_STYLES = TRAINING_STYLES;
-window.TRAINING_STYLE_KEYS = ['classic', 'intensity', 'volume', 'fst7', 'fusion'];
+window.TRAINING_STYLE_KEYS = ['classic', 'intensity', 'volume', 'fst7', 'fusion', 'starting', 'greyskull', 'texas', 'nsuns', 'cbum'];
 window.getStyleProgram = getStyleProgram;
 window.NFC_PROGRAMS = NFC_PROGRAMS;
 window.WEEKLY_SPLITS = WEEKLY_SPLITS;

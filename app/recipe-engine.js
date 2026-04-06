@@ -1,6 +1,6 @@
 // recipe-engine.js — RecipeEngine : moteur de recettes adaptatif
 // Intègre avec window.NutritionMaster (USER_STATE)
-// R201-R210 : bloc 1/30 (structure extensible jusqu'à R500)
+// 662 recettes : R201-R669 (354 recettes R) + L001-L450 (308 recettes L, format étendu)
 (function () {
   'use strict';
 
@@ -13346,6 +13346,3700 @@
     ]
   },
 
+
+  // ─── BATCH L351-L450 (migré depuis recipes-db.js) ──────────────────────────
+
+  {
+    id: 'L351',
+    name: "Pancakes Cottage Cheese TikTok",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["breakfast"],
+    tags: ["tiktok-viral","cottage-cheese","pancakes","sans-farine","batch-cooking"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 479, proteinGrams: 37, carbsGrams: 47, fatGrams: 16 },
+    ingredients: [
+      { name: "Cottage cheese", qty: 150, unit: 'g' },
+      { name: "avoine", qty: 50, unit: 'g' },
+      { name: "œuf entier 1", qty: 0, unit: 'g' },
+      { name: "blancs d'œufs", qty: 60, unit: 'g', note: "2 unité(s)" },
+      { name: "banane", qty: 60, unit: 'g' },
+      { name: "extrait de vanille 1 c.à.c.", qty: 0, unit: 'g' },
+      { name: "levure chimique 1 c.à.c.", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Mixer cottage cheese, avoine, œuf, blancs d'œufs, banane et vanille jusqu'à obtenir une pâte lisse.",
+      "Chauffer une poêle antiadhésive à feu moyen, verser des petits cercles de pâte et cuire 2-3 min par face jusqu'à ce que des bulles se forment.",
+      "Servir avec des fruits frais ou un filet de miel.",
+    ]
+  },
+
+  {
+    id: 'L352',
+    name: "Baked Oats Protéinés Banane Whey",
+    emoji: "🇬🇧",
+    origin: "🇬🇧",
+    mealTypes: ["breakfast"],
+    tags: ["baked-oats","meal-prep","four","whey","viral-uk"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 484, proteinGrams: 48, carbsGrams: 50, fatGrams: 11 },
+    ingredients: [
+      { name: "Avoine", qty: 50, unit: 'g' },
+      { name: "whey vanille", qty: 30, unit: 'g' },
+      { name: "yaourt grec 0%", qty: 100, unit: 'g' },
+      { name: "banane", qty: 60, unit: 'g' },
+      { name: "œuf entier", qty: 60, unit: 'g', note: "1 unité(s)" },
+      { name: "lait écrémé", qty: 50, unit: 'ml' },
+      { name: "levure chimique 1 c.à.c.", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 180°C. Écraser la banane en purée, puis mélanger tous les ingrédients dans un bol jusqu'à consistance homogène.",
+      "Verser dans un ramequin graissé ou un moule individuel et enfourner 20-25 min jusqu'à ce que le dessus soit doré.",
+      "Laisser tiédir 5 min et garnir de yaourt grec et de fruits frais.",
+    ]
+  },
+
+  {
+    id: 'L353',
+    name: "French Toast Ricotta High-Protein",
+    emoji: "🇫🇷",
+    origin: "🇫🇷",
+    mealTypes: ["breakfast"],
+    tags: ["french-toast","ricotta","high-protein","brunch","viral-instagram"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 371, proteinGrams: 33, carbsGrams: 41, fatGrams: 9 },
+    ingredients: [
+      { name: "Pain complet 2 tranches (80g)", qty: 0, unit: 'g' },
+      { name: "ricotta", qty: 50, unit: 'g' },
+      { name: "blancs d'œufs", qty: 90, unit: 'g', note: "3 unité(s)" },
+      { name: "whey vanille", qty: 15, unit: 'g' },
+      { name: "cannelle 1 c.à.c.", qty: 0, unit: 'g' },
+      { name: "extrait de vanille 1 c.à.c.", qty: 0, unit: 'g' },
+      { name: "sirop d'agave", qty: 5, unit: 'ml' },
+    ],
+    steps: [
+      "Fouetter les blancs d'œufs avec la whey, la cannelle et la vanille dans un bol peu profond.",
+      "Tremper les tranches de pain dans le mélange en les retournant pour bien imbiber les deux faces.",
+      "Cuire à feu moyen dans une poêle antiadhésive 2-3 min par face jusqu'à dorure.",
+      "Garnir de ricotta et d'un filet de sirop d'agave pour servir.",
+    ]
+  },
+
+  {
+    id: 'L354',
+    name: "Scrambled Eggs Saumon Style Gordon Ramsay Healthy",
+    emoji: "🇬🇧",
+    origin: "🇬🇧",
+    mealTypes: ["breakfast"],
+    tags: ["scrambled-eggs","saumon","low-carb","keto-friendly","chef"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 374, proteinGrams: 42, carbsGrams: 2, fatGrams: 22 },
+    ingredients: [
+      { name: "Œufs entiers", qty: 180, unit: 'g', note: "3 unité(s)" },
+      { name: "blancs d'œufs", qty: 60, unit: 'g', note: "2 unité(s)" },
+      { name: "saumon fumé", qty: 50, unit: 'g' },
+      { name: "fromage blanc 0%", qty: 50, unit: 'g' },
+      { name: "ciboulette fraîche", qty: 10, unit: 'g' },
+      { name: "poivre noir", qty: 0, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Battre œufs entiers et blancs d'œufs ensemble. Chauffer une casserole à feu doux et verser les œufs avec une noix de fromage blanc.",
+      "Remuer en continu à la spatule en retirant parfois la casserole du feu, créant une texture crémeuse et onctueuse.",
+      "Hors du feu, incorporer le reste de fromage blanc, déposer le saumon fumé et parsemer de ciboulette ciselée.",
+    ]
+  },
+
+  {
+    id: 'L355',
+    name: "Overnight Oats Chocolat Noisette Protéinés",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["breakfast"],
+    tags: ["overnight-oats","meal-prep","chocolat","no-cook","tiktok-viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 531, proteinGrams: 47, carbsGrams: 49, fatGrams: 16 },
+    ingredients: [
+      { name: "Avoine", qty: 60, unit: 'g' },
+      { name: "yaourt grec 0%", qty: 150, unit: 'g' },
+      { name: "whey chocolat", qty: 25, unit: 'g' },
+      { name: "lait demi-écrémé", qty: 100, unit: 'ml' },
+      { name: "noisettes concassées", qty: 15, unit: 'g' },
+      { name: "cacao en poudre non sucré", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Mélanger avoine, yaourt grec, whey, lait et cacao dans un bocal hermétique jusqu'à consistance homogène.",
+      "Fermer le bocal et réfrigérer toute la nuit (minimum 6h).",
+      "Le matin, remuer, ajouter les noisettes concassées et déguster directement dans le bocal.",
+    ]
+  },
+
+  {
+    id: 'L356',
+    name: "Omelette Blancs d'Œufs Épinards Feta",
+    emoji: "🇬🇷",
+    origin: "🇬🇷",
+    mealTypes: ["lunch","dinner"],
+    tags: ["omelette","high-protein","low-carb","epinards","feta"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 365, proteinGrams: 40, carbsGrams: 4, fatGrams: 21 },
+    ingredients: [
+      { name: "Blancs d'œufs", qty: 180, unit: 'g', note: "6 unité(s)" },
+      { name: "œufs entiers", qty: 120, unit: 'g', note: "2 unité(s)" },
+      { name: "feta émiettée", qty: 40, unit: 'g' },
+      { name: "épinards frais", qty: 80, unit: 'g' },
+      { name: "tomates cerises", qty: 60, unit: 'g' },
+      { name: "ail en poudre 1 c.à.c.", qty: 0, unit: 'g' },
+      { name: "origan séché", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Battre les blancs d'œufs et les œufs entiers, assaisonner d'ail en poudre et d'origan.",
+      "Faire revenir les épinards et les tomates cerises coupées en deux dans une poêle antiadhésive 2 min, puis verser le mélange d'œufs.",
+      "Parsemer de feta, couvrir et cuire 3-4 min à feu moyen jusqu'à ce que l'omelette soit bien prise.",
+    ]
+  },
+
+  {
+    id: 'L357',
+    name: "Granola Protéiné Maison Amandes Miel",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["breakfast"],
+    tags: ["granola","meal-prep","maison","whey","crunchy"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 458, proteinGrams: 37, carbsGrams: 50, fatGrams: 12 },
+    ingredients: [
+      { name: "Avoine", qty: 60, unit: 'g' },
+      { name: "whey vanille", qty: 20, unit: 'g' },
+      { name: "amandes effilées", qty: 15, unit: 'g' },
+      { name: "miel", qty: 10, unit: 'g' },
+      { name: "yaourt grec 0% 100g (pour servir)", qty: 0, unit: 'g' },
+      { name: "huile de coco", qty: 5, unit: 'ml' },
+      { name: "cannelle 1 c.à.c.", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 170°C. Mélanger avoine, whey, amandes, miel, huile de coco et cannelle jusqu'à ce que tout soit bien enrobé.",
+      "Étaler sur une plaque recouverte de papier cuisson et enfourner 15-18 min en remuant à mi-cuisson pour une dorure uniforme.",
+      "Laisser refroidir complètement (le granola durcit en refroidissant), puis servir sur yaourt grec.",
+    ]
+  },
+
+  {
+    id: 'L358',
+    name: "Greek Yogurt Bark Congelé Fruits Rouges",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["breakfast"],
+    tags: ["yogurt-bark","congelé","no-bake","viral-tiktok","fruits-rouges"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 370, proteinGrams: 50, carbsGrams: 23, fatGrams: 8 },
+    ingredients: [
+      { name: "Yaourt grec 0%", qty: 300, unit: 'g' },
+      { name: "whey fraise", qty: 20, unit: 'g' },
+      { name: "fruits rouges surgelés", qty: 80, unit: 'g' },
+      { name: "beurre de cacahuète", qty: 15, unit: 'g' },
+    ],
+    steps: [
+      "Mélanger yaourt grec et whey fraise jusqu'à consistance homogène et lisse.",
+      "Étaler le mélange sur une plaque recouverte de papier cuisson en une couche d'environ 1 cm. Déposer les fruits rouges et faire des tourbillons de beurre de cacahuète.",
+      "Congeler minimum 3h. Casser en morceaux irréguliers et servir directement congelé ou légèrement décongelé.",
+    ]
+  },
+
+  {
+    id: 'L359',
+    name: "Breakfast Bowl Smash Burger Egg",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["breakfast"],
+    tags: ["smash-burger","breakfast-bowl","high-protein","viral-tiktok","riz"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 460, proteinGrams: 44, carbsGrams: 30, fatGrams: 18 },
+    ingredients: [
+      { name: "Bœuf haché 5% MG", qty: 100, unit: 'g' },
+      { name: "œufs entiers", qty: 120, unit: 'g', note: "2 unité(s)" },
+      { name: "fromage blanc 0%", qty: 50, unit: 'g' },
+      { name: "riz complet cuit", qty: 100, unit: 'g' },
+      { name: "épinards frais", qty: 50, unit: 'g' },
+      { name: "sauce sriracha", qty: 0, unit: 'g' },
+      { name: "paprika fumé", qty: 0, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Façonner le bœuf haché en galette fine, assaisonner de paprika fumé, sel et poivre, puis cuire 2-3 min par face à feu vif en écrasant légèrement (style smash).",
+      "Dans la même poêle, faire revenir les épinards 1 min, puis cuire les œufs au plat ou brouillés.",
+      "Dresser le riz complet dans un bol, déposer les épinards, la galette de bœuf et les œufs, napper de fromage blanc et de sriracha.",
+    ]
+  },
+
+  {
+    id: 'L360',
+    name: "Muffins Banane Avoine Protéinés",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["breakfast"],
+    tags: ["muffins","banane","meal-prep","sans-sucre-ajouté","batch-cooking"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 486, proteinGrams: 43, carbsGrams: 67, fatGrams: 5 },
+    ingredients: [
+      { name: "Banane mûre", qty: 120, unit: 'g' },
+      { name: "avoine", qty: 60, unit: 'g' },
+      { name: "whey vanille", qty: 30, unit: 'g' },
+      { name: "blancs d'œufs", qty: 60, unit: 'g', note: "2 unité(s)" },
+      { name: "fromage blanc 0%", qty: 50, unit: 'g' },
+      { name: "levure chimique 1 c.à.c.", qty: 0, unit: 'g' },
+      { name: "cannelle 1 c.à.c.", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 180°C. Écraser la banane en purée lisse, puis incorporer fromage blanc, blancs d'œufs et vanille.",
+      "Ajouter avoine, whey, levure et cannelle, mélanger jusqu'à consistance homogène sans trop travailler la pâte.",
+      "Répartir dans 6 moules à muffins et enfourner 18-20 min jusqu'à ce qu'un couteau ressorte propre. Laisser refroidir sur grille.",
+    ]
+  },
+
+  {
+    id: 'L361',
+    name: "Salmon Poke Bowl",
+    emoji: "🇯🇵",
+    origin: "🇯🇵",
+    mealTypes: ["lunch","dinner"],
+    category: "asian",
+    tags: ["poke","bowl","saumon","japonais","viral","meal-prep"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 590, proteinGrams: 36, carbsGrams: 57, fatGrams: 24 },
+    ingredients: [
+      { name: "Saumon cru", qty: 100, unit: 'g' },
+      { name: "riz cuit", qty: 150, unit: 'g' },
+      { name: "edamame", qty: 80, unit: 'g' },
+      { name: "avocat", qty: 50, unit: 'g' },
+      { name: "sauce soja", qty: 15, unit: 'ml' },
+      { name: "graines de sésame", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Cuire le riz japonais et laisser tiédir. Couper le saumon en dés de 2 cm et l'avocat en lamelles.",
+      "Disposer le riz en base du bol, puis disposer le saumon, l'edamame et l'avocat en sections.",
+      "Arroser de sauce soja, parsemer de graines de sésame et servir immédiatement.",
+    ]
+  },
+
+  {
+    id: 'L362',
+    name: "Bowl Thon Riz Haute Protéine",
+    emoji: "🐟",
+    origin: "🐟",
+    mealTypes: ["lunch","dinner"],
+    tags: ["thon","bowl","high-protein","budget","meal-prep","rapide"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 477, proteinGrams: 37, carbsGrams: 62, fatGrams: 9 },
+    ingredients: [
+      { name: "Thon en conserve", qty: 120, unit: 'g' },
+      { name: "riz cuit", qty: 150, unit: 'g' },
+      { name: "concombre", qty: 100, unit: 'g' },
+      { name: "maïs", qty: 60, unit: 'g' },
+      { name: "mayonnaise allégée", qty: 20, unit: 'g' },
+      { name: "citron 1/2", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Égoutter le thon et l'émietter. Couper le concombre en demi-rondelles.",
+      "Disposer le riz chaud dans le bol, ajouter le thon, le maïs égoutté et le concombre.",
+      "Napper de mayonnaise, presser le citron et mélanger avant de déguster.",
+    ]
+  },
+
+  {
+    id: 'L363',
+    name: "Teriyaki Chicken Bowl",
+    emoji: "🇯🇵",
+    origin: "🇯🇵",
+    mealTypes: ["lunch","dinner"],
+    category: "asian",
+    tags: ["teriyaki","poulet","bowl","japonais","meal-prep","fitness"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 504, proteinGrams: 55, carbsGrams: 53, fatGrams: 8 },
+    ingredients: [
+      { name: "Poulet cuit", qty: 150, unit: 'g' },
+      { name: "riz cuit", qty: 130, unit: 'g' },
+      { name: "brocoli vapeur", qty: 100, unit: 'g' },
+      { name: "sauce teriyaki", qty: 30, unit: 'g' },
+      { name: "graines de sésame", qty: 5, unit: 'g' },
+      { name: "oignon vert", qty: 20, unit: 'g' },
+    ],
+    steps: [
+      "Couper le poulet en lanières et le faire revenir 2 min dans la sauce teriyaki à feu vif.",
+      "Disposer le riz dans le bol, ajouter le brocoli vapeur et le poulet laqué.",
+      "Garnir d'oignon vert émincé et de graines de sésame grillées.",
+    ]
+  },
+
+  {
+    id: 'L364',
+    name: "Salade Grecque Pois Chiches Rôtis",
+    emoji: "🇬🇷",
+    origin: "🇬🇷",
+    mealTypes: ["lunch","dinner"],
+    tags: ["grec","salade","pois-chiches","végétarien","méditerranéen","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 559, proteinGrams: 27, carbsGrams: 52, fatGrams: 27 },
+    ingredients: [
+      { name: "Pois chiches cuits", qty: 150, unit: 'g' },
+      { name: "feta", qty: 40, unit: 'g' },
+      { name: "concombre", qty: 100, unit: 'g' },
+      { name: "tomates", qty: 150, unit: 'g' },
+      { name: "olives noires", qty: 30, unit: 'g' },
+      { name: "oeuf dur", qty: 50, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'ml' },
+      { name: "origan", qty: 0, unit: 'g' },
+      { name: "citron", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Rôtir les pois chiches égouttés 20 min à 200°C avec huile, sel et cumin jusqu'à dorure.",
+      "Couper concombre, tomates en dés, émietter la feta, couper l'oeuf en quartiers.",
+      "Assembler la salade, ajouter les pois chiches chauds, arroser d'huile d'olive et de jus de citron, parsemer d'origan.",
+    ]
+  },
+
+  {
+    id: 'L365',
+    name: "Burrito Bowl Mexicain",
+    emoji: "🇲🇽",
+    origin: "🇲🇽",
+    mealTypes: ["lunch","dinner"],
+    category: "mexican",
+    tags: ["mexicain","burrito-bowl","poulet","haricots","viral","meal-prep"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 592, proteinGrams: 47, carbsGrams: 78, fatGrams: 10 },
+    ingredients: [
+      { name: "Poulet cuit", qty: 100, unit: 'g' },
+      { name: "riz cuit", qty: 120, unit: 'g' },
+      { name: "haricots noirs cuits", qty: 100, unit: 'g' },
+      { name: "maïs", qty: 60, unit: 'g' },
+      { name: "salsa tomate", qty: 50, unit: 'g' },
+      { name: "crème fraîche légère", qty: 30, unit: 'g' },
+      { name: "coriandre fraîche", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Assaisonner le poulet avec cumin, paprika fumé et le couper en lanières.",
+      "Disposer le riz en base, puis le poulet, les haricots noirs et le maïs en sections distinctes.",
+      "Garnir de salsa, crème fraîche et feuilles de coriandre fraîche.",
+    ]
+  },
+
+  {
+    id: 'L366',
+    name: "Sushi Bowl Démocratisé",
+    emoji: "🇯🇵",
+    origin: "🇯🇵",
+    mealTypes: ["lunch","dinner"],
+    category: "asian",
+    tags: ["sushi-bowl","saumon","japonais","avocat","viral","tiktok"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 546, proteinGrams: 28, carbsGrams: 53, fatGrams: 25 },
+    ingredients: [
+      { name: "Saumon cru", qty: 100, unit: 'g' },
+      { name: "riz cuit", qty: 150, unit: 'g' },
+      { name: "vinaigre de riz", qty: 10, unit: 'ml' },
+      { name: "concombre", qty: 80, unit: 'g' },
+      { name: "avocat", qty: 60, unit: 'g' },
+      { name: "nori émietté", qty: 5, unit: 'g' },
+      { name: "sauce soja", qty: 10, unit: 'ml' },
+      { name: "mayonnaise sriracha", qty: 15, unit: 'g' },
+    ],
+    steps: [
+      "Assaisonner le riz tiède avec vinaigre de riz et une pincée de sucre. Couper saumon et avocat en dés.",
+      "Disposer le riz vinaigré dans le bol, garnir de saumon, avocat et concombre en julienne.",
+      "Parsemer de nori, arroser de sauce soja et de mayo sriracha en filet.",
+    ]
+  },
+
+  {
+    id: 'L367',
+    name: "Buddha Bowl Quinoa Avocat Poulet",
+    emoji: "🌿",
+    origin: "🌿",
+    mealTypes: ["lunch","dinner"],
+    tags: ["buddha-bowl","quinoa","avocat","wellness","équilibré","meal-prep"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 536, proteinGrams: 42, carbsGrams: 42, fatGrams: 22 },
+    ingredients: [
+      { name: "Quinoa cuit", qty: 150, unit: 'g' },
+      { name: "poulet cuit", qty: 100, unit: 'g' },
+      { name: "avocat", qty: 60, unit: 'g' },
+      { name: "tomates cerises", qty: 80, unit: 'g' },
+      { name: "concombre", qty: 60, unit: 'g' },
+      { name: "tahini", qty: 15, unit: 'g' },
+      { name: "citron", qty: 0, unit: 'g' },
+      { name: "graines de courge", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Cuire le quinoa à l'eau salée 12 min, égoutter. Trancher le poulet en lanières, l'avocat en demi-lunes.",
+      "Composer le bol en disposant quinoa, poulet, avocat, tomates cerises et concombre en sections.",
+      "Préparer la sauce tahini citron (tahini + jus citron + eau), napper le bol et parsemer de graines de courge.",
+    ]
+  },
+
+  {
+    id: 'L368',
+    name: "Bibimbap Coréen Simplifié",
+    emoji: "🇰🇷",
+    origin: "🇰🇷",
+    mealTypes: ["lunch","dinner"],
+    tags: ["bibimbap","coréen","boeuf","riz","viral","épicé"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 548, proteinGrams: 41, carbsGrams: 60, fatGrams: 16 },
+    ingredients: [
+      { name: "Riz cuit", qty: 150, unit: 'g' },
+      { name: "boeuf haché 5%", qty: 100, unit: 'g' },
+      { name: "épinards", qty: 80, unit: 'g' },
+      { name: "carotte râpée", qty: 80, unit: 'g' },
+      { name: "oeuf", qty: 50, unit: 'g' },
+      { name: "sauce gochujang", qty: 20, unit: 'g' },
+      { name: "huile de sésame", qty: 5, unit: 'ml' },
+    ],
+    steps: [
+      "Faire revenir le boeuf haché avec sauce soja et ail. Blanchir les épinards 1 min à l'eau bouillante.",
+      "Disposer le riz au centre du bol, entourer de boeuf, épinards essorés et carotte râpée assaisonnée.",
+      "Faire un oeuf au plat dans la même poêle, le poser au centre. Verser la sauce gochujang et l'huile de sésame, mélanger avant de manger.",
+    ]
+  },
+
+  {
+    id: 'L369',
+    name: "Açaï Bowl Protéiné Sport",
+    emoji: "🫐",
+    origin: "🫐",
+    mealTypes: ["breakfast"],
+    tags: ["acai-bowl","sport","petit-déjeuner","whey","antioxydant","tiktok"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 645, proteinGrams: 35, carbsGrams: 79, fatGrams: 21 },
+    ingredients: [
+      { name: "Purée açaï", qty: 100, unit: 'g' },
+      { name: "banane", qty: 100, unit: 'g' },
+      { name: "whey vanille", qty: 30, unit: 'g' },
+      { name: "granola", qty: 40, unit: 'g' },
+      { name: "lait d'amande", qty: 100, unit: 'ml' },
+      { name: "myrtilles", qty: 50, unit: 'g' },
+      { name: "beurre d'amande", qty: 15, unit: 'g' },
+    ],
+    steps: [
+      "Mixer la purée d'açaï avec la banane, le lait d'amande et la whey vanille jusqu'à consistance crémeuse et épaisse.",
+      "Verser dans le bol bien froid, garnir de granola, myrtilles fraîches et une cuillère de beurre d'amande.",
+      "Servir immédiatement avant que la base ne fonde.",
+    ]
+  },
+
+  {
+    id: 'L370',
+    name: "Falafel Bowl Tzatziki",
+    emoji: "🇱🇧",
+    origin: "🇱🇧",
+    mealTypes: ["lunch","dinner"],
+    tags: ["falafel","bowl","libanais","végétarien","tzatziki","méditerranéen"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 581, proteinGrams: 25, carbsGrams: 73, fatGrams: 21 },
+    ingredients: [
+      { name: "Falafel", qty: 100, unit: 'g' },
+      { name: "quinoa cuit", qty: 80, unit: 'g' },
+      { name: "pois chiches rôtis", qty: 80, unit: 'g' },
+      { name: "tzatziki", qty: 80, unit: 'g' },
+      { name: "tomates cerises", qty: 80, unit: 'g' },
+      { name: "concombre", qty: 80, unit: 'g' },
+      { name: "houmous", qty: 30, unit: 'g' },
+      { name: "persil frais", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Réchauffer les falafel au four 10 min à 180°C pour les rendre croustillants. Rôtir les pois chiches avec paprika et huile d'olive.",
+      "Disposer le quinoa en base, ajouter les falafel chauds, pois chiches, tomates cerises coupées et concombre en dés.",
+      "Napper de tzatziki et houmous, parsemer de persil frais haché et servir.",
+    ]
+  },
+
+  {
+    id: 'L371',
+    name: "Soupe Miso Protéinée aux Crevettes",
+    emoji: "🇯🇵",
+    origin: "🇯🇵",
+    mealTypes: ["lunch","dinner"],
+    category: "asian",
+    tags: ["soupe","asiatique","miso","crevettes","japonais","lowcal","highprotein"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 303, proteinGrams: 32, carbsGrams: 30, fatGrams: 6 },
+    ingredients: [
+      { name: "Crevettes cuites", qty: 80, unit: 'g' },
+      { name: "tofu ferme", qty: 100, unit: 'g' },
+      { name: "soba cuites", qty: 100, unit: 'g' },
+      { name: "miso blanc", qty: 20, unit: 'g' },
+      { name: "bouillon dashi", qty: 400, unit: 'ml' },
+      { name: "oignons verts", qty: 20, unit: 'g' },
+      { name: "algues wakamé", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Dissoudre le miso dans le bouillon dashi chaud (ne pas faire bouillir) et porter à frémissement.",
+      "Ajouter le tofu en dés, les crevettes, les algues wakamé et les soba cuites.",
+      "Servir dans un bol, garnir d'oignons verts émincés.",
+    ]
+  },
+
+  {
+    id: 'L372',
+    name: "Gyoza Poulet Vapeur",
+    emoji: "🇯🇵",
+    origin: "🇯🇵",
+    mealTypes: ["lunch","dinner"],
+    category: "asian",
+    tags: ["gyoza","vapeur","poulet","asiatique","japonais","tiktok","highprotein"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 341, proteinGrams: 34, carbsGrams: 40, fatGrams: 5 },
+    ingredients: [
+      { name: "Poulet haché", qty: 120, unit: 'g' },
+      { name: "pâte à gyoza 12 pièces", qty: 120, unit: 'g' },
+      { name: "chou chinois", qty: 80, unit: 'g' },
+      { name: "gingembre frais", qty: 10, unit: 'g' },
+      { name: "sauce soja", qty: 10, unit: 'ml' },
+      { name: "huile de sésame", qty: 2, unit: 'ml' },
+      { name: "ail", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Mélanger le poulet haché, le chou finement ciselé, le gingembre râpé, l'ail et la sauce soja.",
+      "Garnir chaque pâte à gyoza d'une cuillère de farce, plier et pincer les bords.",
+      "Cuire à la vapeur 8 minutes, servir avec sauce soja et huile de sésame en dip.",
+    ]
+  },
+
+  {
+    id: 'L373',
+    name: "Pad Thai Crevettes Version Légère",
+    emoji: "🇹🇭",
+    origin: "🇹🇭",
+    mealTypes: ["lunch","dinner"],
+    tags: ["pad thai","crevettes","thaï","asiatique","tiktok","highprotein","rapide"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 393, proteinGrams: 40, carbsGrams: 31, fatGrams: 12 },
+    ingredients: [
+      { name: "Crevettes cuites", qty: 150, unit: 'g' },
+      { name: "vermicelles de riz cuits", qty: 120, unit: 'g' },
+      { name: "oeuf entier", qty: 50, unit: 'g', note: "1 unité(s)" },
+      { name: "sauce soja", qty: 15, unit: 'ml' },
+      { name: "huile de sésame", qty: 5, unit: 'ml' },
+      { name: "pousses de soja", qty: 50, unit: 'g' },
+      { name: "citron vert 1", qty: 0, unit: 'g' },
+      { name: "oignons verts", qty: 20, unit: 'g' },
+      { name: "piment optionnel", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Faire revenir les crevettes dans l'huile de sésame 2 min, ajouter l'oeuf battu et brouiller rapidement.",
+      "Incorporer les vermicelles égouttés, la sauce soja et les pousses de soja, sauter à feu vif 2 min.",
+      "Servir avec jus de citron vert et oignons verts, piment selon goût.",
+    ]
+  },
+
+  {
+    id: 'L374',
+    name: "Ramen Healthy au Poulet et Miso",
+    emoji: "🇯🇵",
+    origin: "🇯🇵",
+    mealTypes: ["lunch","dinner"],
+    category: "asian",
+    tags: ["ramen","poulet","miso","japonais","asiatique","highprotein","healthy"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 450, proteinGrams: 50, carbsGrams: 40, fatGrams: 10 },
+    ingredients: [
+      { name: "Blanc de poulet cuit", qty: 150, unit: 'g' },
+      { name: "soba cuites", qty: 150, unit: 'g' },
+      { name: "oeuf mollet", qty: 50, unit: 'g', note: "1 unité(s)" },
+      { name: "miso blanc", qty: 20, unit: 'g' },
+      { name: "bouillon de poulet", qty: 500, unit: 'ml' },
+      { name: "épinards frais", qty: 40, unit: 'g' },
+      { name: "maïs doux", qty: 30, unit: 'g' },
+      { name: "oignons verts", qty: 15, unit: 'g' },
+      { name: "algues nori 1 feuille", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Dissoudre le miso dans le bouillon chaud, ajouter les épinards et laisser mijoter 2 min.",
+      "Disposer les soba dans un grand bol, verser le bouillon miso bien chaud par-dessus.",
+      "Garnir du poulet émincé, de l'oeuf mollet coupé, du maïs, des oignons verts et du nori.",
+    ]
+  },
+
+  {
+    id: 'L375',
+    name: "Dumplings Vapeur Porc et Chou (Viral TikTok)",
+    emoji: "🇨🇳",
+    origin: "🇨🇳",
+    mealTypes: ["lunch","dinner"],
+    tags: ["dumplings","vapeur","porc","chinois","asiatique","tiktok","viral"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 409, proteinGrams: 29, carbsGrams: 53, fatGrams: 9 },
+    ingredients: [
+      { name: "Porc haché maigre", qty: 100, unit: 'g' },
+      { name: "pâte à dumpling 8 pièces", qty: 80, unit: 'g' },
+      { name: "chou chinois", qty: 60, unit: 'g' },
+      { name: "gingembre frais", qty: 10, unit: 'g' },
+      { name: "sauce soja", qty: 15, unit: 'ml' },
+      { name: "huile de sésame", qty: 5, unit: 'ml' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "ciboulette", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Mélanger le porc, le chou finement haché, le gingembre, l'ail, la ciboulette et la moitié de la sauce soja.",
+      "Farcir chaque pâte, plier en demi-lune et pincer fermement, cuire à la vapeur 10 min.",
+      "Servir avec sauce dip : reste de sauce soja + huile de sésame + vinaigre de riz.",
+    ]
+  },
+
+  {
+    id: 'L376',
+    name: "Tamago Sando (Sandwich Japonais à l'Oeuf)",
+    emoji: "🇯🇵",
+    origin: "🇯🇵",
+    mealTypes: ["lunch","dinner"],
+    category: "asian",
+    tags: ["tamago sando","sandwich","oeuf","japonais","asiatique","tiktok","viral","lunch"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 447, proteinGrams: 25, carbsGrams: 41, fatGrams: 20 },
+    ingredients: [
+      { name: "Pain de mie japonais shokupan 2 tranches", qty: 80, unit: 'g' },
+      { name: "oeufs durs", qty: 150, unit: 'g', note: "3 unité(s)" },
+      { name: "mayonnaise légère", qty: 20, unit: 'g' },
+      { name: "moutarde de Dijon", qty: 5, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre blanc", qty: 0, unit: 'g' },
+      { name: "ciboulette", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Écraser les oeufs durs avec la mayonnaise légère, la moutarde, le sel et le poivre blanc jusqu'à texture crémeuse.",
+      "Tartiner généreusement sur une tranche de pain, refermer, couper les croûtes et trancher en deux diagonal.",
+      "Garnir de ciboulette, servir immédiatement ou filmer au réfrigérateur 30 min pour un résultat parfait.",
+    ]
+  },
+
+  {
+    id: 'L377',
+    name: "Japchae Nouilles Coréennes au Boeuf",
+    emoji: "🇰🇷",
+    origin: "🇰🇷",
+    mealTypes: ["lunch","dinner"],
+    tags: ["japchae","coréen","nouilles","boeuf","asiatique","tiktok","meal prep"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 437, proteinGrams: 22, carbsGrams: 60, fatGrams: 12 },
+    ingredients: [
+      { name: "Vermicelles de patate douce cuites", qty: 80, unit: 'g' },
+      { name: "boeuf émincé maigre", qty: 80, unit: 'g' },
+      { name: "épinards", qty: 80, unit: 'g' },
+      { name: "carotte", qty: 60, unit: 'g' },
+      { name: "champignons shiitake", qty: 40, unit: 'g' },
+      { name: "sauce soja", qty: 15, unit: 'ml' },
+      { name: "huile de sésame", qty: 5, unit: 'ml' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "sucre", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Faire revenir séparément le boeuf, la carotte en julienne et les champignons avec l'ail et la moitié de la sauce soja.",
+      "Blanchir les épinards 1 min, essorer. Mélanger tous les ingrédients avec les vermicelles, le reste de sauce soja et l'huile de sésame.",
+      "Servir tiède ou à température ambiante, parsemer de graines de sésame.",
+    ]
+  },
+
+  {
+    id: 'L378',
+    name: "Rouleaux de Printemps Vietnamiens aux Crevettes",
+    emoji: "🇻🇳",
+    origin: "🇻🇳",
+    mealTypes: ["snack"],
+    tags: ["rouleaux de printemps","crevettes","vietnamien","asiatique","frais","lowcal","instagram"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 358, proteinGrams: 27, carbsGrams: 60, fatGrams: 1 },
+    ingredients: [
+      { name: "Crevettes cuites", qty: 100, unit: 'g' },
+      { name: "galettes de riz 3 pièces", qty: 45, unit: 'g' },
+      { name: "vermicelles de riz cuits", qty: 80, unit: 'g' },
+      { name: "salade verte", qty: 40, unit: 'g' },
+      { name: "carotte râpée", qty: 40, unit: 'g' },
+      { name: "menthe fraîche", qty: 10, unit: 'g' },
+      { name: "concombre", qty: 40, unit: 'g' },
+      { name: "sauce nuoc-mâm légère", qty: 20, unit: 'ml' },
+    ],
+    steps: [
+      "Tremper chaque galette de riz 15 secondes dans l'eau tiède, étaler sur un plan propre.",
+      "Disposer au centre la salade, les vermicelles, la carotte, le concombre, les crevettes et la menthe, rouler fermement en serrant bien.",
+      "Servir avec la sauce nuoc-mâm légèrement sucrée-citronée pour tremper.",
+    ]
+  },
+
+  {
+    id: 'L379',
+    name: "Saumon Teriyaki Simple et Riz",
+    emoji: "🇯🇵",
+    origin: "🇯🇵",
+    mealTypes: ["lunch","dinner"],
+    category: "asian",
+    tags: ["saumon","teriyaki","japonais","asiatique","highprotein","instagram","healthy"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 524, proteinGrams: 35, carbsGrams: 49, fatGrams: 21 },
+    ingredients: [
+      { name: "Pavé de saumon", qty: 150, unit: 'g' },
+      { name: "riz cuit", qty: 120, unit: 'g' },
+      { name: "sauce teriyaki", qty: 20, unit: 'ml' },
+      { name: "gingembre frais", qty: 5, unit: 'g' },
+      { name: "huile de sésame", qty: 3, unit: 'ml' },
+      { name: "brocoli", qty: 80, unit: 'g' },
+      { name: "graines de sésame", qty: 5, unit: 'g' },
+      { name: "oignons verts", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Mariner le saumon 10 min dans la sauce teriyaki et le gingembre râpé.",
+      "Cuire le saumon à la poêle 3-4 min par face, badigeonner avec le reste de marinade en fin de cuisson. Cuire le brocoli vapeur 5 min.",
+      "Servir sur le riz, arroser d'huile de sésame, parsemer de graines de sésame et d'oignons verts.",
+    ]
+  },
+
+  {
+    id: 'L380',
+    name: "Fried Rice Healthy à la Courgette",
+    emoji: "🇨🇳",
+    origin: "🇨🇳",
+    mealTypes: ["lunch","dinner"],
+    tags: ["fried rice","courgette","chinois","asiatique","tiktok","lowcal","meal prep","rapide"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 367, proteinGrams: 18, carbsGrams: 40, fatGrams: 15 },
+    ingredients: [
+      { name: "Riz cuit (veille)", qty: 120, unit: 'g' },
+      { name: "oeufs entiers", qty: 100, unit: 'g', note: "2 unité(s)" },
+      { name: "courgette", qty: 150, unit: 'g' },
+      { name: "sauce soja", qty: 15, unit: 'ml' },
+      { name: "huile de sésame", qty: 5, unit: 'ml' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "gingembre frais", qty: 5, unit: 'g' },
+      { name: "oignons verts", qty: 20, unit: 'g' },
+      { name: "piment optionnel", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Faire revenir l'ail et le gingembre dans l'huile de sésame, ajouter la courgette en dés et sauter 3 min à feu vif.",
+      "Pousser les légumes sur le côté, verser les oeufs battus, brouiller puis incorporer le riz froid et la sauce soja.",
+      "Sauter 2-3 min à feu maximum pour grainer le riz, servir avec oignons verts et piment.",
+    ]
+  },
+
+  {
+    id: 'L381',
+    name: "Salade Grecque Revisitée",
+    emoji: "🇬🇷",
+    origin: "🇬🇷",
+    mealTypes: ["lunch","dinner"],
+    tags: ["mediterraneen","salade","vegetarien","healthy","sans-gluten","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 370, proteinGrams: 12, carbsGrams: 13, fatGrams: 30 },
+    ingredients: [
+      { name: "Tomate", qty: 200, unit: 'g' },
+      { name: "concombre", qty: 100, unit: 'g' },
+      { name: "feta", qty: 60, unit: 'g' },
+      { name: "olives noires", qty: 30, unit: 'g' },
+      { name: "oignon rouge", qty: 40, unit: 'g' },
+      { name: "huile olive", qty: 10, unit: 'ml' },
+      { name: "origan séché", qty: 2, unit: 'g' },
+    ],
+    steps: [
+      "Couper la tomate en quartiers, le concombre en demi-rondelles et l'oignon rouge en lamelles fines.",
+      "Émietter la feta grossièrement sur les légumes, ajouter les olives entières.",
+      "Arroser d'huile d'olive, parsemer d'origan séché et de fleur de sel. Servir immédiatement.",
+    ]
+  },
+
+  {
+    id: 'L382',
+    name: "Poulet Souvlaki Wrap",
+    emoji: "🇬🇷",
+    origin: "🇬🇷",
+    mealTypes: ["lunch","dinner"],
+    tags: ["mediterraneen","high-protein","wrap","poulet","viral","meal-prep"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 366, proteinGrams: 41, carbsGrams: 37, fatGrams: 6 },
+    ingredients: [
+      { name: "Poulet grillé", qty: 100, unit: 'g' },
+      { name: "pain pita", qty: 60, unit: 'g' },
+      { name: "tomate", qty: 80, unit: 'g' },
+      { name: "yaourt grec 0%", qty: 50, unit: 'g' },
+      { name: "concombre", qty: 50, unit: 'g' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "jus de citron", qty: 10, unit: 'ml' },
+      { name: "paprika", qty: 2, unit: 'g' },
+    ],
+    steps: [
+      "Découper le poulet grillé en lanières. Mélanger le yaourt grec avec l'ail émincé, le jus de citron et le paprika pour la sauce tzatziki express.",
+      "Réchauffer le pain pita 1 minute à la poêle sèche. Tartiner de sauce tzatziki.",
+      "Disposer les lanières de poulet, les dés de tomate et le concombre émincé. Rouler serré et servir.",
+    ]
+  },
+
+  {
+    id: 'L383',
+    name: "Hummus High-Protein Bowl",
+    emoji: "🫘",
+    origin: "🫘",
+    mealTypes: ["lunch","dinner"],
+    tags: ["mediterraneen","vegetarien","high-protein","bowl","viral","sans-gluten"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 448, proteinGrams: 22, carbsGrams: 45, fatGrams: 20 },
+    ingredients: [
+      { name: "Pois chiches cuits", qty: 150, unit: 'g' },
+      { name: "tahini", qty: 20, unit: 'g' },
+      { name: "pain pita", qty: 40, unit: 'g' },
+      { name: "huile olive", qty: 5, unit: 'ml' },
+      { name: "citron", qty: 20, unit: 'ml' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "cumin", qty: 2, unit: 'g' },
+      { name: "paprika fumé", qty: 2, unit: 'g' },
+      { name: "graines de sésame", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Mixer les pois chiches avec le tahini, le jus de citron, l'ail et le cumin jusqu'à obtenir une texture lisse et crémeuse. Ajouter de l'eau si nécessaire.",
+      "Dresser le hummus dans un bol en faisant un puits au centre. Verser un filet d'huile d'olive.",
+      "Saupoudrer de paprika fumé et de graines de sésame. Servir avec le pain pita grillé coupé en triangles.",
+    ]
+  },
+
+  {
+    id: 'L384',
+    name: "Halloumi Grillé aux Légumes",
+    emoji: "🧀",
+    origin: "🧀",
+    mealTypes: ["lunch","dinner"],
+    tags: ["mediterraneen","vegetarien","grille","sans-gluten","viral","healthy"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 389, proteinGrams: 20, carbsGrams: 12, fatGrams: 29 },
+    ingredients: [
+      { name: "Halloumi", qty: 80, unit: 'g' },
+      { name: "courgette", qty: 150, unit: 'g' },
+      { name: "poivron rouge", qty: 100, unit: 'g' },
+      { name: "huile olive", qty: 10, unit: 'ml' },
+      { name: "thym frais", qty: 5, unit: 'g' },
+      { name: "citron", qty: 15, unit: 'ml' },
+      { name: "ail", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Couper le halloumi en tranches de 1 cm, la courgette en rondelles et le poivron en lanières. Badigeonner d'huile d'olive et d'ail émincé.",
+      "Griller le halloumi et les légumes sur un gril chaud 3-4 minutes de chaque côté jusqu'à obtenir de belles marques dorées.",
+      "Dresser sur une assiette, presser le citron, parsemer de thym frais. Servir chaud.",
+    ]
+  },
+
+  {
+    id: 'L385',
+    name: "Mousakka Légère",
+    emoji: "🇬🇷",
+    origin: "🇬🇷",
+    mealTypes: ["lunch","dinner"],
+    tags: ["mediterraneen","grece","viande","four","viral","comfort-food"],
+    difficulty: 3,
+    servings: 1,
+    baseNutrition: { calories: 398, proteinGrams: 28, carbsGrams: 31, fatGrams: 18 },
+    ingredients: [
+      { name: "Aubergine", qty: 200, unit: 'g' },
+      { name: "boeuf haché 5%", qty: 100, unit: 'g' },
+      { name: "tomates concassées", qty: 100, unit: 'g' },
+      { name: "lait demi-écrémé", qty: 100, unit: 'ml' },
+      { name: "farine", qty: 10, unit: 'g' },
+      { name: "huile olive", qty: 10, unit: 'ml' },
+      { name: "cannelle", qty: 2, unit: 'g' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "oignon", qty: 50, unit: 'g' },
+    ],
+    steps: [
+      "Trancher l'aubergine, badigeonner d'huile et griller au four 200°C pendant 15 minutes. Faire revenir l'oignon, l'ail, ajouter la viande, les tomates et la cannelle. Mijoter 10 minutes.",
+      "Préparer une béchamel légère : faire un roux avec farine et un peu de lait, incorporer le reste du lait chaud en fouettant jusqu'à épaississement.",
+      "Alterner couches d'aubergine et de viande dans un plat. Napper de béchamel. Cuire 25 minutes à 180°C.",
+    ]
+  },
+
+  {
+    id: 'L386',
+    name: "Salade Fattoush",
+    emoji: "🇱🇧",
+    origin: "🇱🇧",
+    mealTypes: ["lunch","dinner"],
+    tags: ["mediterraneen","liban","salade","vegetarien","viral","frais"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 386, proteinGrams: 10, carbsGrams: 37, fatGrams: 22 },
+    ingredients: [
+      { name: "Laitue romaine", qty: 80, unit: 'g' },
+      { name: "tomate", qty: 150, unit: 'g' },
+      { name: "radis", qty: 50, unit: 'g' },
+      { name: "pain pita grillé", qty: 40, unit: 'g' },
+      { name: "feta", qty: 30, unit: 'g' },
+      { name: "huile olive", qty: 15, unit: 'ml' },
+      { name: "sumac", qty: 3, unit: 'g' },
+      { name: "menthe fraîche", qty: 10, unit: 'g' },
+      { name: "citron", qty: 15, unit: 'ml' },
+    ],
+    steps: [
+      "Griller le pain pita sous le grill ou à la poêle jusqu'à ce qu'il soit croustillant. Laisser refroidir et casser en morceaux.",
+      "Mélanger la laitue déchirée, la tomate en dés, les radis en rondelles et la menthe ciselée dans un saladier.",
+      "Assaisonner avec huile d'olive, jus de citron et sumac. Ajouter la feta émiettée et les croutons de pita au moment de servir.",
+    ]
+  },
+
+  {
+    id: 'L387',
+    name: "Tabboulé Quinoa Moderne",
+    emoji: "🌿",
+    origin: "🌿",
+    mealTypes: ["lunch","dinner"],
+    tags: ["mediterraneen","liban","quinoa","vegetarien","viral","meal-prep","sans-gluten"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 439, proteinGrams: 16, carbsGrams: 60, fatGrams: 15 },
+    ingredients: [
+      { name: "Quinoa cuit", qty: 150, unit: 'g' },
+      { name: "persil frais", qty: 40, unit: 'g' },
+      { name: "tomate", qty: 100, unit: 'g' },
+      { name: "concombre", qty: 80, unit: 'g' },
+      { name: "pois chiches cuits", qty: 80, unit: 'g' },
+      { name: "huile olive", qty: 10, unit: 'ml' },
+      { name: "citron", qty: 20, unit: 'ml' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Ciseler finement le persil, couper la tomate et le concombre en très petits dés. Rincertles pois chiches.",
+      "Mélanger le quinoa refroidi avec tous les légumes et les pois chiches dans un grand saladier.",
+      "Assaisonner généreusement avec le jus de citron, l'huile d'olive, le sel et le poivre. Réfrigérer 30 minutes avant de servir pour amplifier les saveurs.",
+    ]
+  },
+
+  {
+    id: 'L388',
+    name: "Poisson Blanc Méditerranéen au Four",
+    emoji: "🐟",
+    origin: "🐟",
+    mealTypes: ["lunch","dinner"],
+    tags: ["mediterraneen","poisson","four","sans-gluten","viral","healthy","omega3"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 328, proteinGrams: 31, carbsGrams: 6, fatGrams: 20 },
+    ingredients: [
+      { name: "Poisson blanc 150g (cabillaud ou bar)", qty: 0, unit: 'g' },
+      { name: "tomates cerises", qty: 150, unit: 'g' },
+      { name: "olives vertes", qty: 20, unit: 'g' },
+      { name: "câpres", qty: 10, unit: 'g' },
+      { name: "huile olive", qty: 15, unit: 'ml' },
+      { name: "ail", qty: 10, unit: 'g' },
+      { name: "thym", qty: 3, unit: 'g' },
+      { name: "citron", qty: 20, unit: 'ml' },
+    ],
+    steps: [
+      "Préchauffer le four à 200°C. Déposer le filet de poisson dans un plat. Émincer l'ail et le déposer sur le poisson.",
+      "Entourer avec les tomates cerises, les olives et les câpres. Arroser d'huile d'olive et du jus de citron. Parsemer de thym.",
+      "Enfourner 18-20 minutes jusqu'à ce que le poisson soit nacré et se détache facilement. Servir avec le jus de cuisson.",
+    ]
+  },
+
+  {
+    id: 'L389',
+    name: "Dolmades Agneau & Riz",
+    emoji: "🇬🇷",
+    origin: "🇬🇷",
+    mealTypes: ["lunch","dinner"],
+    tags: ["mediterraneen","grece","farcis","agneau","viral","traditionnel"],
+    difficulty: 3,
+    servings: 1,
+    baseNutrition: { calories: 370, proteinGrams: 20, carbsGrams: 32, fatGrams: 18 },
+    ingredients: [
+      { name: "Feuilles de vigne en saumure 60g (10 feuilles)", qty: 0, unit: 'g' },
+      { name: "riz à grains ronds cuit", qty: 100, unit: 'g' },
+      { name: "agneau haché", qty: 80, unit: 'g' },
+      { name: "oignon", qty: 30, unit: 'g' },
+      { name: "menthe séchée", qty: 3, unit: 'g' },
+      { name: "aneth", qty: 3, unit: 'g' },
+      { name: "huile olive", qty: 10, unit: 'ml' },
+      { name: "citron", qty: 20, unit: 'ml' },
+    ],
+    steps: [
+      "Rincer les feuilles de vigne. Faire revenir l'oignon émincé dans l'huile, ajouter l'agneau haché, le riz, la menthe et l'aneth. Assaisonner.",
+      "Déposer une cuillère de farce au centre de chaque feuille, replier les côtés puis rouler serré. Ranger les dolmades dans une casserole tapissée de feuilles.",
+      "Ajouter le jus de citron et de l'eau à hauteur. Poser une assiette dessus pour maintenir. Cuire à couvert 40 minutes à feu doux.",
+    ]
+  },
+
+  {
+    id: 'L390',
+    name: "Stracciatella & Tomates Burrata Style",
+    emoji: "🇮🇹",
+    origin: "🇮🇹",
+    mealTypes: ["lunch","dinner"],
+    tags: ["mediterraneen","italie","fromage","vegetarien","viral","frais","ete"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 466, proteinGrams: 13, carbsGrams: 36, fatGrams: 30 },
+    ingredients: [
+      { name: "Stracciatella", qty: 80, unit: 'g' },
+      { name: "tomates cerises multicolores", qty: 200, unit: 'g' },
+      { name: "basilic frais", qty: 10, unit: 'g' },
+      { name: "huile olive", qty: 15, unit: 'ml' },
+      { name: "pain ciabatta", qty: 50, unit: 'g' },
+      { name: "fleur de sel", qty: 0, unit: 'g' },
+      { name: "poivre noir", qty: 0, unit: 'g' },
+      { name: "vinaigre balsamique", qty: 10, unit: 'ml' },
+    ],
+    steps: [
+      "Couper les tomates cerises en deux, assaisonner avec la fleur de sel, le poivre et le vinaigre balsamique. Laisser mariner 5 minutes.",
+      "Griller les tranches de ciabatta à la poêle ou au grille-pain jusqu'à dorure.",
+      "Déposer la stracciatella au centre de l'assiette, disposer les tomates marinées autour, parsemer de feuilles de basilic et finir avec un généreux filet d'huile d'olive.",
+    ]
+  },
+
+  {
+    id: 'L391',
+    name: "Tofu Scramble Viral TikTok",
+    emoji: "🌱",
+    origin: "🌱",
+    mealTypes: ["lunch","dinner"],
+    tags: ["vegan","plant-based","tofu","petit-dejeuner","viral-tiktok","sans-gluten-option","high-protein"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 382, proteinGrams: 22, carbsGrams: 33, fatGrams: 18 },
+    ingredients: [
+      { name: "Tofu ferme", qty: 150, unit: 'g' },
+      { name: "pain complet", qty: 80, unit: 'g' },
+      { name: "levure nutritionnelle", qty: 10, unit: 'g' },
+      { name: "poivron rouge", qty: 60, unit: 'g' },
+      { name: "épinards frais", qty: 40, unit: 'g' },
+      { name: "huile d'olive", qty: 10, unit: 'g' },
+      { name: "curcuma", qty: 2, unit: 'g' },
+      { name: "sel noir kala namak", qty: 1, unit: 'g' },
+    ],
+    steps: [
+      "Émietter le tofu ferme à la fourchette, assaisonner de curcuma, sel noir et poivre pour imiter les œufs brouillés.",
+      "Faire revenir le poivron et les épinards dans l'huile d'olive 3 min, ajouter le tofu émietté et la levure nutritionnelle, cuire 5 min à feu vif.",
+      "Toaster le pain complet et servir le scramble de tofu par-dessus. Garnir de graines de sésame.",
+    ]
+  },
+
+  {
+    id: 'L392',
+    name: "Salade Pois Chiches Style Thon",
+    emoji: "🌱",
+    origin: "🌱",
+    mealTypes: ["lunch","dinner"],
+    tags: ["vegan","plant-based","pois-chiches","dejeuner","viral-instagram","sans-cuisson","high-protein"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 379, proteinGrams: 16, carbsGrams: 45, fatGrams: 15 },
+    ingredients: [
+      { name: "Pois chiches cuits", qty: 150, unit: 'g' },
+      { name: "tahini", qty: 20, unit: 'g' },
+      { name: "céleri", qty: 60, unit: 'g' },
+      { name: "cornichons", qty: 40, unit: 'g' },
+      { name: "jus de citron", qty: 15, unit: 'ml' },
+      { name: "moutarde de Dijon", qty: 10, unit: 'g' },
+      { name: "câpres", qty: 10, unit: 'g' },
+      { name: "persil frais", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Écraser grossièrement les pois chiches à la fourchette pour obtenir une texture feuilletée rappelant le thon.",
+      "Mélanger le tahini, le jus de citron, la moutarde et les câpres pour former la sauce, incorporer au mélange de pois chiches.",
+      "Ajouter le céleri émincé, les cornichons hachés et le persil. Servir en sandwich, wrap ou sur crackers.",
+    ]
+  },
+
+  {
+    id: 'L393',
+    name: "Bolognaise de Lentilles Maison",
+    emoji: "🌱",
+    origin: "🌱",
+    mealTypes: ["lunch","dinner"],
+    category: "italian",
+    tags: ["vegan","plant-based","lentilles","pasta","viral-tiktok","comfort-food","high-protein"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 471, proteinGrams: 25, carbsGrams: 77, fatGrams: 7 },
+    ingredients: [
+      { name: "Lentilles vertes cuites", qty: 200, unit: 'g' },
+      { name: "pâtes complètes cuites", qty: 100, unit: 'g' },
+      { name: "sauce tomate", qty: 100, unit: 'g' },
+      { name: "oignon", qty: 60, unit: 'g' },
+      { name: "ail", qty: 10, unit: 'g' },
+      { name: "carotte", qty: 60, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'g' },
+      { name: "herbes de Provence", qty: 3, unit: 'g' },
+    ],
+    steps: [
+      "Faire revenir l'oignon, l'ail et la carotte dans l'huile d'olive 5 min. Ajouter les lentilles cuites et la sauce tomate.",
+      "Laisser mijoter 15 min à feu doux en écrasant légèrement les lentilles pour une texture bolognaise. Assaisonner avec les herbes.",
+      "Servir sur les pâtes complètes cuites al dente. Parsemer de levure nutritionnelle en option.",
+    ]
+  },
+
+  {
+    id: 'L394',
+    name: "Tacos Jackfruit Pulled Pork Vegan",
+    emoji: "🌱",
+    origin: "🌱",
+    mealTypes: ["lunch","dinner"],
+    category: "mexican",
+    tags: ["vegan","plant-based","jackfruit","tacos","viral-tiktok","mexique","street-food"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 466, proteinGrams: 16, carbsGrams: 78, fatGrams: 10 },
+    ingredients: [
+      { name: "Jackfruit en conserve", qty: 150, unit: 'g' },
+      { name: "haricots noirs cuits", qty: 100, unit: 'g' },
+      { name: "tortillas de maïs 2x30g", qty: 0, unit: 'g' },
+      { name: "avocat", qty: 50, unit: 'g' },
+      { name: "sauce BBQ smoky", qty: 30, unit: 'g' },
+      { name: "chou rouge émincé", qty: 50, unit: 'g' },
+      { name: "coriandre fraîche", qty: 10, unit: 'g' },
+      { name: "citron vert", qty: 15, unit: 'ml' },
+    ],
+    steps: [
+      "Égoutter et émietter le jackfruit, le faire revenir à feu vif avec la sauce BBQ 8 min jusqu'à caramélisation et texture effilochée.",
+      "Chauffer les tortillas, garnir de jackfruit effiloché, haricots noirs, chou rouge et avocat écrasé.",
+      "Finaliser avec la coriandre fraîche et le jus de citron vert. Servir immédiatement.",
+    ]
+  },
+
+  {
+    id: 'L395',
+    name: "Burger Haricots Noirs Maison",
+    emoji: "🌱",
+    origin: "🌱",
+    mealTypes: ["lunch","dinner"],
+    tags: ["vegan","plant-based","haricots-noirs","burger","viral-instagram","meal-prep","high-protein"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 568, proteinGrams: 25, carbsGrams: 90, fatGrams: 12 },
+    ingredients: [
+      { name: "Haricots noirs cuits", qty: 150, unit: 'g' },
+      { name: "flocons d'avoine", qty: 40, unit: 'g' },
+      { name: "pain burger complet 1x65g", qty: 0, unit: 'g' },
+      { name: "avocat", qty: 30, unit: 'g' },
+      { name: "tomate", qty: 50, unit: 'g' },
+      { name: "laitue", qty: 20, unit: 'g' },
+      { name: "oignon rouge", qty: 30, unit: 'g' },
+      { name: "sauce tahini-citron", qty: 20, unit: 'g' },
+      { name: "paprika fumé", qty: 3, unit: 'g' },
+    ],
+    steps: [
+      "Mixer les haricots noirs avec les flocons d'avoine, le paprika fumé, sel et poivre. Former un steak, laisser reposer 10 min au frais.",
+      "Cuire le steak 4 min de chaque côté à la poêle anti-adhésive huilée jusqu'à coloration.",
+      "Toaster le pain burger, garnir de laitue, tomate, oignon rouge, steak de haricots, avocat écrasé et sauce tahini-citron.",
+    ]
+  },
+
+  {
+    id: 'L396',
+    name: "Stir-Fry Tempeh Sauce Soja Sésame",
+    emoji: "🌱",
+    origin: "🌱",
+    mealTypes: ["lunch","dinner"],
+    tags: ["vegan","plant-based","tempeh","stir-fry","viral-tiktok","asiatique","high-protein"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 477, proteinGrams: 26, carbsGrams: 55, fatGrams: 17 },
+    ingredients: [
+      { name: "Tempeh", qty: 100, unit: 'g' },
+      { name: "riz basmati cuit", qty: 150, unit: 'g' },
+      { name: "brocoli", qty: 80, unit: 'g' },
+      { name: "carottes", qty: 50, unit: 'g' },
+      { name: "courgette", qty: 50, unit: 'g' },
+      { name: "sauce soja", qty: 15, unit: 'ml' },
+      { name: "huile de sésame", qty: 10, unit: 'g' },
+      { name: "gingembre frais", qty: 5, unit: 'g' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "graines de sésame", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Couper le tempeh en cubes, le faire revenir dans la moitié de l'huile de sésame 4 min jusqu'à dorure. Réserver.",
+      "Faire sauter les légumes avec le gingembre et l'ail 5 min à feu vif. Remettre le tempeh, ajouter la sauce soja et le reste d'huile de sésame.",
+      "Servir sur le riz basmati chaud, parsemer de graines de sésame.",
+    ]
+  },
+
+  {
+    id: 'L397',
+    name: "Pasta Crémeuse Sauce Cajou",
+    emoji: "🌱",
+    origin: "🌱",
+    mealTypes: ["lunch","dinner"],
+    category: "italian",
+    tags: ["vegan","plant-based","pasta","cajou","viral-instagram","comfort-food","cremeux"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 447, proteinGrams: 20, carbsGrams: 58, fatGrams: 15 },
+    ingredients: [
+      { name: "Pâtes complètes cuites", qty: 150, unit: 'g' },
+      { name: "noix de cajou trempées", qty: 30, unit: 'g' },
+      { name: "levure nutritionnelle", qty: 15, unit: 'g' },
+      { name: "ail rôti", qty: 10, unit: 'g' },
+      { name: "épinards frais", qty: 50, unit: 'g' },
+      { name: "jus de citron", qty: 15, unit: 'ml' },
+      { name: "eau de cuisson pâtes", qty: 60, unit: 'ml' },
+      { name: "muscade", qty: 1, unit: 'g' },
+    ],
+    steps: [
+      "Mixer les noix de cajou (trempées 2h) avec la levure nutritionnelle, l'ail rôti, le jus de citron et l'eau de cuisson jusqu'à obtenir une crème lisse.",
+      "Faire tomber les épinards à la poêle 2 min. Verser la sauce cajou et les pâtes cuites, mélanger à feu doux 3 min.",
+      "Assaisonner de muscade, sel et poivre. Servir immédiatement avec un filet d'huile d'olive.",
+    ]
+  },
+
+  {
+    id: 'L398',
+    name: "Poivrons Farcis Quinoa & Pois Chiches",
+    emoji: "🌱",
+    origin: "🌱",
+    mealTypes: ["lunch","dinner"],
+    tags: ["vegan","plant-based","quinoa","poivrons-farcis","viral-instagram","meal-prep","four"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 462, proteinGrams: 17, carbsGrams: 67, fatGrams: 14 },
+    ingredients: [
+      { name: "Quinoa cuit", qty: 150, unit: 'g' },
+      { name: "pois chiches cuits", qty: 100, unit: 'g' },
+      { name: "poivrons rouges 2x80g", qty: 0, unit: 'g' },
+      { name: "tomates pelées", qty: 100, unit: 'g' },
+      { name: "oignon", qty: 50, unit: 'g' },
+      { name: "huile d'olive", qty: 8, unit: 'g' },
+      { name: "paprika", qty: 3, unit: 'g' },
+      { name: "cumin", qty: 2, unit: 'g' },
+      { name: "persil frais", qty: 15, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 200°C. Couper les poivrons en deux, évider et huiler légèrement.",
+      "Mélanger le quinoa, les pois chiches, les tomates écrasées, l'oignon sauté, le paprika et le cumin. Farcir les demi-poivrons.",
+      "Enfourner 25 min jusqu'à ce que les poivrons soient tendres et dorés. Parsemer de persil frais avant de servir.",
+    ]
+  },
+
+  {
+    id: 'L399',
+    name: "Soupe de Lentilles Virale Hiver",
+    emoji: "🌱",
+    origin: "🌱",
+    mealTypes: ["lunch","dinner"],
+    tags: ["vegan","plant-based","lentilles","soupe","viral-tiktok","hiver","comfort-food","high-protein"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 431, proteinGrams: 20, carbsGrams: 54, fatGrams: 15 },
+    ingredients: [
+      { name: "Lentilles corail cuites", qty: 200, unit: 'g' },
+      { name: "carottes", qty: 80, unit: 'g' },
+      { name: "céleri", qty: 40, unit: 'g' },
+      { name: "oignon", qty: 50, unit: 'g' },
+      { name: "lait de coco", qty: 50, unit: 'ml' },
+      { name: "huile d'olive", qty: 8, unit: 'g' },
+      { name: "cumin", qty: 3, unit: 'g' },
+      { name: "curcuma", qty: 2, unit: 'g' },
+      { name: "paprika fumé", qty: 2, unit: 'g' },
+      { name: "jus de citron", qty: 15, unit: 'ml' },
+    ],
+    steps: [
+      "Faire revenir l'oignon, les carottes et le céleri dans l'huile avec les épices 5 min. Ajouter les lentilles et couvrir d'eau (600ml).",
+      "Mijoter 20 min puis mixer partiellement pour un rendu crémeux mais texturé. Incorporer le lait de coco.",
+      "Ajuster l'assaisonnement, finir avec le jus de citron. Servir avec du pain complet et un filet d'huile d'olive.",
+    ]
+  },
+
+  {
+    id: 'L400',
+    name: "Ailes de Chou-fleur Buffalo Vegan",
+    emoji: "🌱",
+    origin: "🌱",
+    mealTypes: ["lunch","dinner"],
+    tags: ["vegan","plant-based","chou-fleur","buffalo","viral-tiktok","aperitif","finger-food","piquant"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 361, proteinGrams: 13, carbsGrams: 48, fatGrams: 13 },
+    ingredients: [
+      { name: "Chou-fleur", qty: 200, unit: 'g' },
+      { name: "sauce buffalo piquante", qty: 30, unit: 'ml' },
+      { name: "pâte de noix de cajou", qty: 25, unit: 'g' },
+      { name: "pain pita complet", qty: 60, unit: 'g' },
+      { name: "lait végétal", qty: 40, unit: 'ml' },
+      { name: "farine de pois chiche", qty: 30, unit: 'g' },
+      { name: "ail en poudre", qty: 3, unit: 'g' },
+      { name: "sauce ranch vegan", qty: 20, unit: 'g' },
+    ],
+    steps: [
+      "Mélanger la farine de pois chiche avec le lait végétal et l'ail en poudre. Tremper les fleurettes de chou-fleur dans la pâte et enfourner 20 min à 220°C.",
+      "Badigeonner généreusement de sauce buffalo, remettre au four 10 min jusqu'à caramélisation et légère croustillance.",
+      "Mélanger la pâte de cajou avec de l'eau pour la sauce dip. Servir les ailes de chou-fleur avec le pain pita et la sauce ranch vegan.",
+    ]
+  },
+
+  {
+    id: 'L401',
+    name: "Protein Balls Chocolat-Amande",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["snack"],
+    tags: ["snack","high-protein","no-cook","meal-prep","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 340, proteinGrams: 24, carbsGrams: 30, fatGrams: 14 },
+    ingredients: [
+      { name: "Flocons d'avoine", qty: 25, unit: 'g' },
+      { name: "whey protéine chocolat", qty: 20, unit: 'g' },
+      { name: "amandes concassées", qty: 20, unit: 'g' },
+      { name: "miel", qty: 8, unit: 'g' },
+      { name: "cacao en poudre", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Mélanger les flocons d'avoine, la whey, le cacao et les amandes concassées dans un bol.",
+      "Ajouter le miel et malaxer jusqu'à obtenir une pâte homogène pouvant se former en boules.",
+      "Former 4 boules égales, réfrigérer 30 min avant dégustation.",
+    ]
+  },
+
+  {
+    id: 'L402',
+    name: "Edamame Épicé Croustillant",
+    emoji: "🇯🇵",
+    origin: "🇯🇵",
+    mealTypes: ["snack"],
+    tags: ["snack","high-protein","vegan","épicé","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 230, proteinGrams: 16, carbsGrams: 15, fatGrams: 12 },
+    ingredients: [
+      { name: "Edamame décortiqué surgelé", qty: 150, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'g' },
+      { name: "piment de Cayenne", qty: 1, unit: 'g' },
+      { name: "ail en poudre", qty: 1, unit: 'g' },
+      { name: "sel de mer", qty: 1, unit: 'g' },
+    ],
+    steps: [
+      "Décongeler et sécher parfaitement l'edamame avec du papier absorbant.",
+      "Mélanger avec l'huile d'olive, le piment, l'ail en poudre et le sel.",
+      "Cuire au four à 200°C pendant 20 min en remuant à mi-cuisson, jusqu'à ce que les fèves soient dorées et croustillantes.",
+    ]
+  },
+
+  {
+    id: 'L403',
+    name: "Dip Cottage Cheese Crudités",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["snack"],
+    tags: ["snack","high-protein","low-calorie","gluten-free","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 165, proteinGrams: 17, carbsGrams: 11, fatGrams: 6 },
+    ingredients: [
+      { name: "Cottage cheese", qty: 150, unit: 'g' },
+      { name: "carottes bâtonnets", qty: 60, unit: 'g' },
+      { name: "concombre tranches", qty: 40, unit: 'g' },
+      { name: "ciboulette fraîche", qty: 5, unit: 'g' },
+      { name: "poivre noir", qty: 0, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Mixer le cottage cheese avec la ciboulette, sel et poivre jusqu'à texture lisse et crémeuse.",
+      "Disposer les bâtonnets de carottes et les tranches de concombre autour du dip dans une assiette.",
+      "Servir immédiatement ou réfrigérer jusqu'à 24h.",
+    ]
+  },
+
+  {
+    id: 'L404',
+    name: "Egg Bites Épinards-Féta",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["snack"],
+    tags: ["snack","high-protein","low-carb","keto","meal-prep"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 225, proteinGrams: 18, carbsGrams: 3, fatGrams: 16 },
+    ingredients: [
+      { name: "Œufs entiers", qty: 120, unit: 'g', note: "2 unité(s)" },
+      { name: "épinards frais", qty: 30, unit: 'g' },
+      { name: "féta émiettée", qty: 20, unit: 'g' },
+      { name: "huile d'olive spray", qty: 0, unit: 'g' },
+      { name: "poivre noir", qty: 0, unit: 'g' },
+      { name: "noix de muscade", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 175°C. Huiler légèrement 4 empreintes d'un moule à muffins.",
+      "Battre les œufs avec les épinards hachés, la féta, le poivre et la muscade.",
+      "Verser dans les moules et cuire 18-20 min jusqu'à ce que les bites soient fermes au centre.",
+    ]
+  },
+
+  {
+    id: 'L405',
+    name: "Rice Cakes Beurre de Cacahuète Banane",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["snack"],
+    tags: ["snack","high-protein","energy","pre-workout","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 320, proteinGrams: 16, carbsGrams: 43, fatGrams: 9 },
+    ingredients: [
+      { name: "Galettes de riz soufflé", qty: 36, unit: 'g', note: "2 unité(s)" },
+      { name: "beurre de cacahuète naturel", qty: 15, unit: 'g' },
+      { name: "banane", qty: 40, unit: 'g' },
+      { name: "whey protéine vanille", qty: 10, unit: 'g' },
+      { name: "cannelle", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Mélanger le beurre de cacahuète avec la whey vanille et une pincée de cannelle.",
+      "Tartiner généreusement ce mélange sur les deux galettes de riz.",
+      "Disposer les rondelles de banane sur le dessus et servir immédiatement.",
+    ]
+  },
+
+  {
+    id: 'L406',
+    name: "Bark Protéiné Chocolat Noir Amandes",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["snack"],
+    tags: ["snack","high-protein","chocolat","meal-prep","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 290, proteinGrams: 17, carbsGrams: 19, fatGrams: 16 },
+    ingredients: [
+      { name: "Chocolat noir 70%", qty: 20, unit: 'g' },
+      { name: "amandes effilées", qty: 15, unit: 'g' },
+      { name: "whey protéine chocolat", qty: 15, unit: 'g' },
+      { name: "cranberries séchées", qty: 10, unit: 'g' },
+      { name: "fleur de sel", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Faire fondre le chocolat noir au bain-marie, puis incorporer hors du feu la whey en mélangeant vigoureusement.",
+      "Étaler finement sur une plaque recouverte de papier cuisson, parsemer d'amandes, cranberries et fleur de sel.",
+      "Réfrigérer 1h, casser en morceaux irréguliers et conserver au frais.",
+    ]
+  },
+
+  {
+    id: 'L407',
+    name: "Rouleaux Concombre Saumon-Cream Cheese",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["snack"],
+    tags: ["snack","high-protein","low-carb","gluten-free","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 170, proteinGrams: 16, carbsGrams: 8, fatGrams: 8 },
+    ingredients: [
+      { name: "Concombre", qty: 200, unit: 'g' },
+      { name: "saumon fumé", qty: 50, unit: 'g' },
+      { name: "fromage frais light", qty: 50, unit: 'g' },
+      { name: "aneth frais", qty: 3, unit: 'g' },
+      { name: "jus de citron", qty: 5, unit: 'ml' },
+      { name: "poivre noir", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Mélanger le fromage frais avec l'aneth haché, le jus de citron et le poivre.",
+      "Trancher le concombre en fines lamelles à la mandoline (ou économe), étaler une couche de cream cheese sur chaque lamelle.",
+      "Déposer une lanière de saumon fumé, rouler fermement et maintenir avec un cure-dent.",
+    ]
+  },
+
+  {
+    id: 'L408',
+    name: "Wraps Laitue Thon Avocat",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["snack"],
+    tags: ["snack","high-protein","low-carb","gluten-free","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 180, proteinGrams: 22, carbsGrams: 7, fatGrams: 7 },
+    ingredients: [
+      { name: "Thon en conserve au naturel", qty: 80, unit: 'g' },
+      { name: "feuilles de laitue iceberg", qty: 40, unit: 'g', note: "4 unité(s)" },
+      { name: "avocat", qty: 40, unit: 'g' },
+      { name: "maïs doux", qty: 30, unit: 'g' },
+      { name: "jus de citron vert", qty: 0, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Égoutter soigneusement le thon, mélanger avec l'avocat écrasé, le maïs, le jus de citron vert, sel et poivre.",
+      "Déposer une cuillère généreuse de garniture au centre de chaque feuille de laitue.",
+      "Refermer les feuilles en wrap et maintenir avec un cure-dent, servir frais.",
+    ]
+  },
+
+  {
+    id: 'L409',
+    name: "Pois Chiches Croustillants Air Fryer",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["snack"],
+    tags: ["snack","high-protein","vegan-option","crunchy","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 270, proteinGrams: 15, carbsGrams: 34, fatGrams: 8 },
+    ingredients: [
+      { name: "Pois chiches cuits égouttés", qty: 150, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'g' },
+      { name: "parmesan râpé", qty: 10, unit: 'g' },
+      { name: "paprika fumé", qty: 2, unit: 'g' },
+      { name: "ail en poudre", qty: 1, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Sécher les pois chiches avec du papier absorbant, mélanger avec l'huile, le paprika, l'ail, sel et poivre.",
+      "Cuire à l'air fryer à 200°C pendant 15-18 min en secouant le panier toutes les 5 min jusqu'à texture croquante.",
+      "Saupoudrer de parmesan en sortant du fryer, laisser tiédir 5 min avant dégustation.",
+    ]
+  },
+
+  {
+    id: 'L410',
+    name: "Pudding Chia Protéiné Vanille-Framboise",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["snack"],
+    tags: ["snack","high-protein","meal-prep","no-cook","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 275, proteinGrams: 21, carbsGrams: 30, fatGrams: 8 },
+    ingredients: [
+      { name: "Graines de chia", qty: 20, unit: 'g' },
+      { name: "lait végétal d'avoine", qty: 150, unit: 'ml' },
+      { name: "whey protéine vanille", qty: 20, unit: 'g' },
+      { name: "framboises fraîches ou surgelées", qty: 60, unit: 'g' },
+      { name: "miel", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Fouetter vigoureusement le lait d'avoine avec la whey vanille pour éviter les grumeaux.",
+      "Incorporer les graines de chia et le miel, mélanger à nouveau, réfrigérer minimum 4h (idéalement une nuit).",
+      "Au moment de servir, remuer le pudding et disposer les framboises sur le dessus.",
+    ]
+  },
+
+  {
+    id: 'L411',
+    name: "Feta Pasta Baked TikTok",
+    emoji: "🇮🇹",
+    origin: "🇮🇹",
+    mealTypes: ["lunch","dinner"],
+    category: "italian",
+    tags: ["pates","pasta","feta","viral","tiktok","vegetarien","four"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 489, proteinGrams: 20, carbsGrams: 64, fatGrams: 17 },
+    ingredients: [
+      { name: "Pâtes sèches", qty: 80, unit: 'g' },
+      { name: "feta", qty: 50, unit: 'g' },
+      { name: "tomates cerises", qty: 200, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'ml' },
+      { name: "ail 2 gousses", qty: 0, unit: 'g' },
+      { name: "basilic frais", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 200°C. Disposer les tomates cerises dans un plat, déposer le bloc de feta au centre, arroser d'huile d'olive et ajouter l'ail écrasé.",
+      "Enfourner 25-30 min jusqu'à ce que la feta soit dorée et les tomates confites et éclatées.",
+      "Cuire les pâtes al dente, égoutter en réservant 50ml d'eau de cuisson. Écraser la feta avec les tomates, ajouter l'eau de cuisson et mélanger aux pâtes. Parsemer de basilic.",
+    ]
+  },
+
+  {
+    id: 'L412',
+    name: "One-Pot Pasta Protéinée Poulet",
+    emoji: "🍝",
+    origin: "🍝",
+    mealTypes: ["lunch","dinner"],
+    category: "italian",
+    tags: ["pates","pasta","poulet","one-pot","proteine","rapide"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 562, proteinGrams: 48, carbsGrams: 61, fatGrams: 14 },
+    ingredients: [
+      { name: "Pâtes sèches", qty: 80, unit: 'g' },
+      { name: "blanc de poulet émincé", qty: 100, unit: 'g' },
+      { name: "tomates cerises", qty: 150, unit: 'g' },
+      { name: "parmesan râpé", qty: 15, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'ml' },
+      { name: "bouillon de poule", qty: 400, unit: 'ml' },
+      { name: "ail", qty: 0, unit: 'g' },
+      { name: "persil", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Dans une grande casserole, faire revenir le poulet émincé avec l'huile d'olive et l'ail 3 minutes. Ajouter les tomates cerises et faire sauter 2 minutes.",
+      "Verser les pâtes sèches et le bouillon chaud. Cuire à feu moyen en remuant régulièrement jusqu'à absorption complète du liquide (10-12 min).",
+      "Hors du feu, incorporer le parmesan et le persil ciselé. Servir immédiatement.",
+    ]
+  },
+
+  {
+    id: 'L413',
+    name: "Carbonara Légère au Poulet",
+    emoji: "🇮🇹",
+    origin: "🇮🇹",
+    mealTypes: ["lunch","dinner"],
+    category: "italian",
+    tags: ["pates","pasta","carbonara","poulet","lardons","italien","proteine"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 581, proteinGrams: 50, carbsGrams: 48, fatGrams: 21 },
+    ingredients: [
+      { name: "Spaghetti secs", qty: 70, unit: 'g' },
+      { name: "blanc de poulet", qty: 80, unit: 'g' },
+      { name: "lardons fumés", qty: 25, unit: 'g' },
+      { name: "parmesan râpé", qty: 15, unit: 'g' },
+      { name: "1 œuf entier", qty: 0, unit: 'g' },
+      { name: "poivre noir", qty: 0, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Cuire les spaghetti al dente. Pendant ce temps, griller les lardons à sec dans une poêle jusqu'à légère dorure, puis ajouter le poulet émincé et cuire 5 minutes.",
+      "Dans un bol, fouetter l'œuf avec le parmesan et une généreuse quantité de poivre noir.",
+      "Égoutter les pâtes en réservant 80ml d'eau de cuisson. Hors du feu, mélanger pâtes, viandes, puis verser le mélange œuf-parmesan en remuant vivement avec l'eau de cuisson pour créer une sauce crémeuse sans coaguler.",
+    ]
+  },
+
+  {
+    id: 'L414',
+    name: "Peanut Noodles Soba Beurre Cacahuète",
+    emoji: "🥜",
+    origin: "🥜",
+    mealTypes: ["lunch","dinner"],
+    tags: ["nouilles","soba","peanut","asiatique","viral","poulet","cacahuete"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 597, proteinGrams: 46, carbsGrams: 65, fatGrams: 17 },
+    ingredients: [
+      { name: "Nouilles soba sèches", qty: 70, unit: 'g' },
+      { name: "blanc de poulet", qty: 80, unit: 'g' },
+      { name: "beurre de cacahuète naturel", qty: 25, unit: 'g' },
+      { name: "sauce soja", qty: 10, unit: 'ml' },
+      { name: "concombre", qty: 80, unit: 'g' },
+      { name: "coriandre fraîche", qty: 0, unit: 'g' },
+      { name: "gingembre râpé", qty: 0, unit: 'g' },
+      { name: "jus de citron vert", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Cuire les soba 5 min dans l'eau bouillante, rincer à l'eau froide et réserver. Cuire le poulet à la vapeur ou grillé, laisser tiédir et effilocher.",
+      "Préparer la sauce : mélanger le beurre de cacahuète, la sauce soja, le gingembre râpé et le jus de citron vert avec 2-3 cuillères d'eau chaude jusqu'à consistance lisse.",
+      "Mélanger les soba avec la sauce, ajouter le poulet effiloché, le concombre en juliennes et la coriandre. Servir à température ambiante.",
+    ]
+  },
+
+  {
+    id: 'L415',
+    name: "Pasta e Fagioli Maison",
+    emoji: "🇮🇹",
+    origin: "🇮🇹",
+    mealTypes: ["lunch","dinner"],
+    category: "italian",
+    tags: ["pates","pasta","haricots","soupe","vegetarien","italien","fibres"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 527, proteinGrams: 25, carbsGrams: 73, fatGrams: 15 },
+    ingredients: [
+      { name: "Pâtes courtes sèches", qty: 60, unit: 'g' },
+      { name: "haricots blancs cuits", qty: 120, unit: 'g' },
+      { name: "tomates pelées", qty: 100, unit: 'g' },
+      { name: "huile d'olive", qty: 10, unit: 'ml' },
+      { name: "parmesan râpé", qty: 15, unit: 'g' },
+      { name: "ail 2 gousses", qty: 0, unit: 'g' },
+      { name: "romarin", qty: 0, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Faire revenir l'ail écrasé dans l'huile d'olive. Ajouter les tomates et laisser mijoter 5 min. Incorporer les haricots blancs et 300ml d'eau ou bouillon, porter à ébullition.",
+      "Ajouter les pâtes directement dans la soupe et cuire selon les indications du paquet en remuant régulièrement. La soupe doit être épaisse.",
+      "Hors du feu, écraser grossièrement quelques haricots à la fourchette pour épaissir davantage. Servir avec le parmesan et un tour de poivre.",
+    ]
+  },
+
+  {
+    id: 'L416',
+    name: "Spaghetti Aglio e Olio Protéiné",
+    emoji: "🇮🇹",
+    origin: "🇮🇹",
+    mealTypes: ["lunch","dinner"],
+    category: "italian",
+    tags: ["pates","pasta","aglio","poulet","simple","italien","proteine"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 580, proteinGrams: 43, carbsGrams: 57, fatGrams: 20 },
+    ingredients: [
+      { name: "Spaghetti secs", qty: 80, unit: 'g' },
+      { name: "blanc de poulet émincé", qty: 80, unit: 'g' },
+      { name: "huile d'olive", qty: 10, unit: 'ml' },
+      { name: "parmesan râpé", qty: 20, unit: 'g' },
+      { name: "ail 4 gousses", qty: 0, unit: 'g' },
+      { name: "piment rouge séché", qty: 0, unit: 'g' },
+      { name: "persil plat", qty: 0, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Cuire les spaghetti al dente. Pendant ce temps, faire dorer l'ail émincé et le piment dans l'huile d'olive à feu doux jusqu'à légère coloration.",
+      "Ajouter le poulet émincé dans la poêle et cuire 5-6 minutes à feu moyen jusqu'à dorure.",
+      "Égoutter les pâtes en réservant 100ml d'eau de cuisson. Ajouter pâtes et eau de cuisson à la poêle, mélanger vivement. Hors du feu, incorporer le parmesan et le persil ciselé.",
+    ]
+  },
+
+  {
+    id: 'L417',
+    name: "Cold Sesame Noodles Virales",
+    emoji: "🥢",
+    origin: "🥢",
+    mealTypes: ["lunch","dinner"],
+    tags: ["nouilles","soba","froid","sesame","viral","asiatique","vegetarien"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 552, proteinGrams: 26, carbsGrams: 67, fatGrams: 20 },
+    ingredients: [
+      { name: "Nouilles soba sèches", qty: 70, unit: 'g' },
+      { name: "edamame surgelés", qty: 50, unit: 'g' },
+      { name: "beurre de cacahuète", qty: 20, unit: 'g' },
+      { name: "sauce soja", qty: 15, unit: 'ml' },
+      { name: "huile de sésame", qty: 5, unit: 'ml' },
+      { name: "concombre", qty: 100, unit: 'g' },
+      { name: "carottes râpées", qty: 50, unit: 'g' },
+      { name: "vinaigre de riz", qty: 10, unit: 'ml' },
+      { name: "gingembre râpé", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Cuire les soba 5 min, rincer abondamment à l'eau froide pour stopper la cuisson et éviter qu'elles collent. Cuire les edamame selon les indications.",
+      "Préparer la sauce sésame : fouetter le beurre de cacahuète, la sauce soja, l'huile de sésame, le vinaigre de riz et le gingembre avec un peu d'eau chaude.",
+      "Mélanger les soba froides avec la sauce, puis ajouter les edamame, le concombre en rondelles fines et les carottes râpées. Servir froid.",
+    ]
+  },
+
+  {
+    id: 'L418',
+    name: "High-Protein Mac and Cheese",
+    emoji: "🧀",
+    origin: "🧀",
+    mealTypes: ["lunch","dinner"],
+    category: "italian",
+    tags: ["pates","pasta","mac-cheese","proteine","cottage","poulet","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 616, proteinGrams: 55, carbsGrams: 63, fatGrams: 16 },
+    ingredients: [
+      { name: "Pâtes courtes sèches", qty: 80, unit: 'g' },
+      { name: "cottage cheese", qty: 150, unit: 'g' },
+      { name: "blanc de poulet", qty: 60, unit: 'g' },
+      { name: "cheddar allégé râpé", qty: 30, unit: 'g' },
+      { name: "lait écrémé", qty: 50, unit: 'ml' },
+      { name: "moutarde de Dijon", qty: 5, unit: 'g' },
+      { name: "paprika fumé", qty: 0, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Cuire les pâtes al dente. Griller le poulet en dés à la poêle avec le paprika fumé.",
+      "Dans un blender, mixer le cottage cheese, le lait, la moutarde, sel et poivre jusqu'à consistance lisse et crémeuse.",
+      "Égoutter les pâtes, verser la sauce cottage cheese dans la casserole chaude, ajouter le cheddar râpé et remuer jusqu'à fonte. Incorporer les dés de poulet et servir immédiatement.",
+    ]
+  },
+
+  {
+    id: 'L419',
+    name: "Puttanesca Healthy aux Anchois",
+    emoji: "🇮🇹",
+    origin: "🇮🇹",
+    mealTypes: ["lunch","dinner"],
+    category: "italian",
+    tags: ["pates","pasta","puttanesca","anchois","mediteraneen","olives","rapide"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 553, proteinGrams: 25, carbsGrams: 66, fatGrams: 21 },
+    ingredients: [
+      { name: "Spaghetti secs", qty: 80, unit: 'g' },
+      { name: "tomates concassées", qty: 200, unit: 'g' },
+      { name: "anchois à l'huile", qty: 20, unit: 'g' },
+      { name: "olives noires", qty: 30, unit: 'g' },
+      { name: "câpres", qty: 10, unit: 'g' },
+      { name: "huile d'olive", qty: 10, unit: 'ml' },
+      { name: "parmesan râpé", qty: 15, unit: 'g' },
+      { name: "ail 2 gousses", qty: 0, unit: 'g' },
+      { name: "piment", qty: 0, unit: 'g' },
+      { name: "persil", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Faire fondre les anchois dans l'huile d'olive chaude avec l'ail et le piment pendant 2 minutes — ils se dissoudront complètement dans l'huile.",
+      "Ajouter les tomates concassées, les olives et les câpres. Laisser mijoter 12-15 minutes à feu moyen jusqu'à réduction.",
+      "Cuire les spaghetti al dente, égoutter et mélanger à la sauce. Servir avec le parmesan et le persil ciselé.",
+    ]
+  },
+
+  {
+    id: 'L420',
+    name: "Creamy Tomato Pasta Cottage Cheese",
+    emoji: "🍅",
+    origin: "🍅",
+    mealTypes: ["lunch","dinner"],
+    category: "italian",
+    tags: ["pates","pasta","cottage","tomate","complet","cremeux","vegetarien","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 525, proteinGrams: 31, carbsGrams: 62, fatGrams: 17 },
+    ingredients: [
+      { name: "Pâtes complètes sèches", qty: 80, unit: 'g' },
+      { name: "cottage cheese", qty: 100, unit: 'g' },
+      { name: "tomates cerises", qty: 150, unit: 'g' },
+      { name: "parmesan râpé", qty: 20, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'ml' },
+      { name: "ail 2 gousses", qty: 0, unit: 'g' },
+      { name: "basilic frais", qty: 0, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Cuire les pâtes complètes al dente. Pendant ce temps, faire revenir les tomates cerises avec l'ail dans l'huile d'olive jusqu'à ce qu'elles éclatent et forment une sauce.",
+      "Dans un blender, mixer le cottage cheese jusqu'à consistance lisse, puis l'ajouter hors du feu aux tomates avec la moitié du parmesan. Bien mélanger.",
+      "Égoutter les pâtes en réservant 60ml d'eau de cuisson. Incorporer les pâtes à la sauce crémeuse en ajoutant l'eau de cuisson si nécessaire. Servir avec le reste du parmesan et le basilic frais.",
+    ]
+  },
+
+  {
+    id: 'L421',
+    name: "Green Goddess Smoothie",
+    emoji: "🥤",
+    origin: "🥤",
+    mealTypes: ["lunch","dinner"],
+    tags: ["smoothie","boisson","green","tiktok","épinards","detox","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 318, proteinGrams: 14, carbsGrams: 52, fatGrams: 6 },
+    ingredients: [
+      { name: "Épinards frais", qty: 50, unit: 'g' },
+      { name: "banane", qty: 120, unit: 'g' },
+      { name: "lait amande", qty: 200, unit: 'ml' },
+      { name: "yaourt grec 0%", qty: 100, unit: 'g' },
+      { name: "graines chia", qty: 10, unit: 'g' },
+      { name: "miel", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Peler la banane et la couper en tronçons, laver les épinards.",
+      "Mixer tous les ingrédients jusqu'à obtenir une texture lisse et crémeuse.",
+      "Servir immédiatement dans un grand verre avec des glaçons.",
+    ]
+  },
+
+  {
+    id: 'L422',
+    name: "Protein Milkshake Cottage Cheese",
+    emoji: "🥛",
+    origin: "🥛",
+    mealTypes: ["lunch","dinner"],
+    tags: ["smoothie","boisson","high-protein","cottage-cheese","milkshake","post-workout","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 336, proteinGrams: 46, carbsGrams: 29, fatGrams: 4 },
+    ingredients: [
+      { name: "Cottage cheese", qty: 150, unit: 'g' },
+      { name: "lait écrémé", qty: 200, unit: 'ml' },
+      { name: "whey protéine chocolat", qty: 25, unit: 'g' },
+      { name: "cacao en poudre", qty: 10, unit: 'g' },
+      { name: "miel", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Mixer le cottage cheese avec le lait écrémé jusqu'à texture parfaitement lisse.",
+      "Ajouter la whey, le cacao et le miel, mixer 30 secondes supplémentaires.",
+      "Servir frais avec des glaçons pour un shake post-entraînement ultra-protéiné.",
+    ]
+  },
+
+  {
+    id: 'L423',
+    name: "Gut Health Power Shot",
+    emoji: "🧡",
+    origin: "🧡",
+    mealTypes: ["lunch","dinner"],
+    tags: ["boisson","shot","gingembre","curcuma","gut-health","immunité","detox","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 172, proteinGrams: 2, carbsGrams: 43, fatGrams: 0 },
+    ingredients: [
+      { name: "Gingembre frais", qty: 20, unit: 'g' },
+      { name: "curcuma frais", qty: 5, unit: 'g' },
+      { name: "jus de citron", qty: 30, unit: 'ml' },
+      { name: "jus d'orange frais", qty: 100, unit: 'ml' },
+      { name: "jus de carotte", qty: 100, unit: 'ml' },
+      { name: "miel", qty: 15, unit: 'g' },
+      { name: "poivre noir", qty: 1, unit: 'g' },
+    ],
+    steps: [
+      "Presser le citron et l'orange, éplucher et râper finement le gingembre et le curcuma.",
+      "Mixer ou passer tous les ingrédients à l'extracteur de jus avec le poivre noir.",
+      "Boire d'un trait le matin à jeun pour booster la digestion et l'immunité.",
+    ]
+  },
+
+  {
+    id: 'L424',
+    name: "Matcha Latte Protéiné",
+    emoji: "🍵",
+    origin: "🍵",
+    mealTypes: ["lunch","dinner"],
+    tags: ["boisson","smoothie","matcha","latte","protéine","antioxydant","tendance","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 217, proteinGrams: 22, carbsGrams: 21, fatGrams: 5 },
+    ingredients: [
+      { name: "Lait d'amande", qty: 250, unit: 'ml' },
+      { name: "whey vanille", qty: 25, unit: 'g' },
+      { name: "matcha en poudre", qty: 5, unit: 'g' },
+      { name: "miel", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Tiédir légèrement le lait d'amande (pas bouillant), fouetter le matcha en poudre avec 2 cuillères à soupe d'eau chaude.",
+      "Mixer tous les ingrédients avec la whey vanille et le miel jusqu'à ce que ce soit mousseux.",
+      "Servir chaud ou sur glaçons selon la saison, saupoudrer de matcha pour la présentation.",
+    ]
+  },
+
+  {
+    id: 'L425',
+    name: "Watermelon Mint Refresher",
+    emoji: "🍉",
+    origin: "🍉",
+    mealTypes: ["lunch","dinner"],
+    tags: ["boisson","smoothie","pastèque","menthe","été","hydratation","tiktok","viral","detox"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 159, proteinGrams: 3, carbsGrams: 30, fatGrams: 3 },
+    ingredients: [
+      { name: "Pastèque sans pépins", qty: 300, unit: 'g' },
+      { name: "menthe fraîche", qty: 5, unit: 'g' },
+      { name: "jus de citron vert", qty: 20, unit: 'ml' },
+      { name: "graines chia", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Couper la pastèque en cubes, effeuiller la menthe fraîche.",
+      "Mixer la pastèque avec la menthe et le jus de citron vert jusqu'à consistance liquide.",
+      "Verser sur glaçons, ajouter les graines chia et laisser gonfler 5 minutes avant de servir.",
+    ]
+  },
+
+  {
+    id: 'L426',
+    name: "Turmeric Golden Milk",
+    emoji: "✨",
+    origin: "✨",
+    mealTypes: ["lunch","dinner"],
+    tags: ["boisson","golden-milk","curcuma","anti-inflammatoire","bien-être","ayurvédique","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 157, proteinGrams: 2, carbsGrams: 26, fatGrams: 5 },
+    ingredients: [
+      { name: "Lait d'amande", qty: 300, unit: 'ml' },
+      { name: "curcuma en poudre", qty: 5, unit: 'g' },
+      { name: "gingembre frais", qty: 5, unit: 'g' },
+      { name: "cannelle moulue", qty: 2, unit: 'g' },
+      { name: "miel", qty: 15, unit: 'g' },
+      { name: "poivre noir moulu", qty: 1, unit: 'g' },
+    ],
+    steps: [
+      "Chauffer le lait d'amande à feu doux avec le curcuma, la cannelle et le gingembre râpé pendant 5 minutes.",
+      "Filtrer si besoin, ajouter le miel et une pincée de poivre noir pour activer la curcumine.",
+      "Servir chaud dans un mug ou refroidir pour une version iced golden latte.",
+    ]
+  },
+
+  {
+    id: 'L427',
+    name: "Açaï Smoothie Drink",
+    emoji: "💜",
+    origin: "💜",
+    mealTypes: ["breakfast"],
+    tags: ["smoothie","boisson","açaï","antioxydant","fruits-rouges","superfood","bowl-drink","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 318, proteinGrams: 5, carbsGrams: 52, fatGrams: 10 },
+    ingredients: [
+      { name: "Açaï poudre", qty: 20, unit: 'g' },
+      { name: "banane", qty: 100, unit: 'g' },
+      { name: "fruits rouges congelés", qty: 100, unit: 'g' },
+      { name: "lait d'amande", qty: 150, unit: 'ml' },
+      { name: "graines chia", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Laisser les fruits rouges décongeler légèrement, couper la banane en rondelles.",
+      "Mixer l'açaï, la banane, les fruits rouges et le lait d'amande jusqu'à texture crémeuse et homogène.",
+      "Verser dans un grand verre, saupoudrer les graines chia et déguster immédiatement.",
+    ]
+  },
+
+  {
+    id: 'L428',
+    name: "Pre-Workout Banana Oat Smoothie",
+    emoji: "⚡",
+    origin: "⚡",
+    mealTypes: ["lunch","dinner"],
+    tags: ["smoothie","boisson","pre-workout","avoine","banane","énergie","sport","performance"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 436, proteinGrams: 16, carbsGrams: 66, fatGrams: 12 },
+    ingredients: [
+      { name: "Banane", qty: 120, unit: 'g' },
+      { name: "flocons d'avoine", qty: 40, unit: 'g' },
+      { name: "lait écrémé", qty: 200, unit: 'ml' },
+      { name: "beurre d'amande", qty: 15, unit: 'g' },
+    ],
+    steps: [
+      "Mixer l'avoine 10 secondes seule pour la réduire en fine poudre.",
+      "Ajouter la banane, le lait écrémé et le beurre d'amande, mixer 45 secondes jusqu'à consistance crémeuse.",
+      "Consommer 30 à 45 minutes avant l'entraînement pour une énergie optimale et durable.",
+    ]
+  },
+
+  {
+    id: 'L429',
+    name: "High-Protein Chocolate Shake",
+    emoji: "🍫",
+    origin: "🍫",
+    mealTypes: ["lunch","dinner"],
+    tags: ["smoothie","boisson","high-protein","chocolat","post-workout","musculation","whey","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 411, proteinGrams: 39, carbsGrams: 39, fatGrams: 11 },
+    ingredients: [
+      { name: "Whey protéine chocolat", qty: 30, unit: 'g' },
+      { name: "lait écrémé", qty: 250, unit: 'ml' },
+      { name: "cacao en poudre non sucré", qty: 10, unit: 'g' },
+      { name: "beurre d'amande", qty: 15, unit: 'g' },
+      { name: "banane", qty: 80, unit: 'g' },
+    ],
+    steps: [
+      "Couper la banane en morceaux et la congeler idéalement 2h pour une texture plus épaisse.",
+      "Mixer tous les ingrédients ensemble pendant 1 minute jusqu'à obtenir un shake épais et onctueux.",
+      "Servir immédiatement après l'entraînement pour maximiser la récupération musculaire.",
+    ]
+  },
+
+  {
+    id: 'L430',
+    name: "Collagen Beauty Smoothie",
+    emoji: "🌸",
+    origin: "🌸",
+    mealTypes: ["lunch","dinner"],
+    tags: ["smoothie","boisson","collagène","beauté","peau","anti-âge","fruits-rouges","bien-être","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 273, proteinGrams: 25, carbsGrams: 32, fatGrams: 5 },
+    ingredients: [
+      { name: "Yaourt grec 0%", qty: 100, unit: 'g' },
+      { name: "fruits rouges congelés", qty: 80, unit: 'g' },
+      { name: "lait d'amande", qty: 150, unit: 'ml' },
+      { name: "peptides de collagène", qty: 15, unit: 'g' },
+      { name: "miel", qty: 10, unit: 'g' },
+      { name: "graines chia", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Sortir les fruits rouges du congélateur 10 minutes avant pour une texture idéale.",
+      "Mixer le yaourt grec, les fruits rouges, le lait d'amande, le collagène et le miel jusqu'à lisse.",
+      "Verser dans un verre, saupoudrer les graines chia, laisser reposer 3 minutes et déguster.",
+    ]
+  },
+
+  {
+    id: 'L431',
+    name: "Chicken Meal Prep Monday Citron Herbes",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["lunch","dinner"],
+    tags: ["meal-prep","four","poulet","riz","batch-cooking"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 516, proteinGrams: 43, carbsGrams: 59, fatGrams: 12 },
+    ingredients: [
+      { name: "Blanc de poulet", qty: 150, unit: 'g' },
+      { name: "riz basmati cuit", qty: 200, unit: 'g' },
+      { name: "brocoli", qty: 150, unit: 'g' },
+      { name: "huile d'olive", qty: 10, unit: 'g' },
+      { name: "jus de citron", qty: 20, unit: 'ml' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "origan séché", qty: 2, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 200°C. Assaisonner le blanc de poulet avec l'ail, l'origan, le jus de citron, le sel et le poivre, puis cuire 25 min au four.",
+      "Pendant ce temps, cuire le riz basmati selon les instructions et blanchir le brocoli 5 min à l'eau bouillante salée, puis sauter 3 min à l'huile d'olive.",
+      "Laisser reposer le poulet 5 min avant de le trancher. Répartir le riz, le brocoli et le poulet en parts égales dans 3 boîtes hermétiques.",
+      "Conserver au réfrigérateur jusqu'à 4 jours. Réchauffer 2 min au micro-ondes avant de servir.",
+    ]
+  },
+
+  {
+    id: 'L432',
+    name: "Sheet Pan Saumon Légumes Rôtis",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["lunch","dinner"],
+    tags: ["meal-prep","four","saumon","sheet-pan","sans-gluten"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 434, proteinGrams: 35, carbsGrams: 15, fatGrams: 26 },
+    ingredients: [
+      { name: "Filet de saumon", qty: 150, unit: 'g' },
+      { name: "asperges", qty: 150, unit: 'g' },
+      { name: "poivron rouge", qty: 150, unit: 'g' },
+      { name: "huile d'olive", qty: 8, unit: 'g' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "citron", qty: 30, unit: 'g' },
+      { name: "paprika fumé", qty: 2, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 220°C. Disposer les asperges et le poivron coupé en lanières sur une plaque recouverte de papier sulfurisé, arroser de 5g d'huile d'olive, saler et poivrer.",
+      "Placer le filet de saumon sur la même plaque, badigeonner avec le reste d'huile d'olive, saupoudrer de paprika fumé et d'ail haché.",
+      "Enfourner 18-20 min jusqu'à ce que le saumon soit cuit et les légumes légèrement caramélisés. Presser le citron en fin de cuisson.",
+      "Servir immédiatement ou préparer plusieurs portions en avance et réfrigérer jusqu'à 3 jours.",
+    ]
+  },
+
+  {
+    id: 'L433',
+    name: "Cuisses de Poulet Teriyaki au Four",
+    emoji: "🇯🇵",
+    origin: "🇯🇵",
+    mealTypes: ["lunch","dinner"],
+    category: "asian",
+    tags: ["meal-prep","four","poulet","teriyaki","japonais"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 527, proteinGrams: 48, carbsGrams: 59, fatGrams: 11 },
+    ingredients: [
+      { name: "Cuisse de poulet sans peau", qty: 200, unit: 'g' },
+      { name: "sauce soja", qty: 30, unit: 'ml' },
+      { name: "miel", qty: 20, unit: 'g' },
+      { name: "riz jasmin cuit", qty: 150, unit: 'g' },
+      { name: "gingembre frais", qty: 5, unit: 'g' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "huile de sésame", qty: 3, unit: 'ml' },
+      { name: "graines de sésame", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Préparer la marinade teriyaki en mélangeant la sauce soja, le miel, le gingembre râpé, l'ail écrasé et l'huile de sésame. Faire mariner les cuisses de poulet au moins 30 min au réfrigérateur.",
+      "Préchauffer le four à 200°C. Disposer les cuisses dans un plat allant au four, napper de marinade et enfourner 35-40 min en arrosant à mi-cuisson.",
+      "Pendant la cuisson, préparer le riz jasmin. En fin de cuisson, faire réduire le jus du plat 2 min à la casserole pour obtenir une sauce épaisse.",
+      "Napper les cuisses de sauce réduite, parsemer de graines de sésame et servir avec le riz. Répartir en boîtes pour le meal prep de la semaine.",
+    ]
+  },
+
+  {
+    id: 'L434',
+    name: "Bowl Pois Chiches Rôtis Tahini",
+    emoji: "🇮🇱",
+    origin: "🇮🇱",
+    mealTypes: ["lunch","dinner"],
+    tags: ["meal-prep","four","vegetarien","pois-chiches","bowl"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 522, proteinGrams: 19, carbsGrams: 80, fatGrams: 14 },
+    ingredients: [
+      { name: "Pois chiches rôtis", qty: 100, unit: 'g' },
+      { name: "riz cuit", qty: 150, unit: 'g' },
+      { name: "épinards frais", qty: 100, unit: 'g' },
+      { name: "tahini", qty: 20, unit: 'g' },
+      { name: "tomate", qty: 100, unit: 'g' },
+      { name: "jus de citron", qty: 20, unit: 'ml' },
+      { name: "ail", qty: 3, unit: 'g' },
+      { name: "cumin", qty: 2, unit: 'g' },
+      { name: "paprika", qty: 2, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 220°C. Égoutter et sécher les pois chiches, les enrober de cumin, paprika et huile d'olive, puis les rôtir 25-30 min sur une plaque jusqu'à ce qu'ils soient croustillants.",
+      "Préparer la sauce tahini en mélangeant le tahini, le jus de citron, l'ail écrasé et 2 cuillères à soupe d'eau froide jusqu'à obtenir une sauce lisse.",
+      "Faire revenir rapidement les épinards frais à la poêle avec un filet d'huile d'olive jusqu'à ce qu'ils soient tombés.",
+      "Assembler les bowls avec le riz en base, les épinards, la tomate coupée en dés, les pois chiches croustillants et napper de sauce tahini.",
+    ]
+  },
+
+  {
+    id: 'L435',
+    name: "Boulettes de Dinde Meal Prep Sauce Tomate",
+    emoji: "🇮🇹",
+    origin: "🇮🇹",
+    mealTypes: ["lunch","dinner"],
+    tags: ["meal-prep","four","dinde","boulettes","batch-cooking"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 447, proteinGrams: 45, carbsGrams: 33, fatGrams: 15 },
+    ingredients: [
+      { name: "Dinde hachée", qty: 150, unit: 'g' },
+      { name: "œuf", qty: 60, unit: 'g' },
+      { name: "chapelure", qty: 30, unit: 'g' },
+      { name: "sauce tomate", qty: 100, unit: 'g' },
+      { name: "courgette", qty: 100, unit: 'g' },
+      { name: "parmesan râpé", qty: 15, unit: 'g' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "persil frais", qty: 5, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Mélanger la dinde hachée, l'œuf, la chapelure, l'ail haché, le persil ciselé et le parmesan. Assaisonner généreusement et former des boulettes de 30g environ.",
+      "Préchauffer le four à 200°C. Déposer les boulettes sur une plaque huilée et enfourner 20-22 min, en les retournant à mi-cuisson.",
+      "Pendant ce temps, couper la courgette en rondelles et la faire revenir 5 min à l'huile d'olive, puis ajouter la sauce tomate et laisser mijoter 10 min.",
+      "Incorporer les boulettes dorées dans la sauce. Répartir en boîtes hermétiques, à conserver 4 jours au réfrigérateur ou 3 mois au congélateur.",
+    ]
+  },
+
+  {
+    id: 'L436',
+    name: "Egg Muffins Épinards Feta Batch Cooking",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["breakfast"],
+    tags: ["meal-prep","four","oeufs","batch-cooking","sans-gluten"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 381, proteinGrams: 29, carbsGrams: 10, fatGrams: 25 },
+    ingredients: [
+      { name: "Œufs 3×60g", qty: 0, unit: 'g' },
+      { name: "épinards frais", qty: 80, unit: 'g' },
+      { name: "poivron rouge", qty: 100, unit: 'g' },
+      { name: "feta", qty: 40, unit: 'g' },
+      { name: "lait", qty: 30, unit: 'ml' },
+      { name: "ail en poudre", qty: 2, unit: 'g' },
+      { name: "origan", qty: 2, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 180°C. Graisser un moule à 6 muffins. Faire revenir les épinards à sec 2 min pour les faire tomber, couper le poivron en petits dés.",
+      "Fouetter les œufs avec le lait, l'ail en poudre, l'origan, le sel et le poivre. Répartir les épinards et le poivron dans les moules à muffins.",
+      "Verser l'appareil à œufs sur les légumes à hauteur des 3/4. Émietter la feta sur chaque muffin et enfourner 18-20 min jusqu'à ce qu'ils soient pris et légèrement dorés.",
+      "Laisser refroidir avant de démouler. Conserver en boîte hermétique 4 jours au réfrigérateur. Réchauffer 45 secondes au micro-ondes.",
+    ]
+  },
+
+  {
+    id: 'L437',
+    name: "Patate Douce Farcie Haricots Noirs Four",
+    emoji: "🇲🇽",
+    origin: "🇲🇽",
+    mealTypes: ["lunch","dinner"],
+    category: "mexican",
+    tags: ["meal-prep","four","vegetarien","patate-douce","mexicain"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 466, proteinGrams: 20, carbsGrams: 65, fatGrams: 14 },
+    ingredients: [
+      { name: "Patate douce", qty: 200, unit: 'g' },
+      { name: "haricots noirs cuits", qty: 100, unit: 'g' },
+      { name: "fromage râpé", qty: 30, unit: 'g' },
+      { name: "crème fraîche légère", qty: 30, unit: 'g' },
+      { name: "cumin", qty: 2, unit: 'g' },
+      { name: "paprika fumé", qty: 2, unit: 'g' },
+      { name: "coriandre fraîche", qty: 5, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 200°C. Piquer la patate douce à la fourchette et l'envelopper dans du papier d'aluminium. Enfourner 45-50 min jusqu'à ce qu'elle soit tendre.",
+      "Pendant ce temps, assaisonner les haricots noirs avec le cumin, le paprika fumé, le sel et le poivre. Les réchauffer 5 min à la poêle à feu moyen.",
+      "Couper la patate douce en deux dans la longueur, l'écraser légèrement avec une fourchette. Garnir avec les haricots noirs épicés et le fromage râpé.",
+      "Remettre au four 5 min pour faire fondre le fromage. Servir avec la crème fraîche et la coriandre fraîche ciselée.",
+    ]
+  },
+
+  {
+    id: 'L438',
+    name: "One-Sheet Saumon Asperges Pommes de Terre",
+    emoji: "🇫🇷",
+    origin: "🇫🇷",
+    mealTypes: ["lunch","dinner"],
+    tags: ["meal-prep","four","saumon","one-sheet","francais"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 528, proteinGrams: 36, carbsGrams: 33, fatGrams: 28 },
+    ingredients: [
+      { name: "Filet de saumon", qty: 150, unit: 'g' },
+      { name: "asperges", qty: 150, unit: 'g' },
+      { name: "pommes de terre", qty: 150, unit: 'g' },
+      { name: "huile d'olive", qty: 10, unit: 'g' },
+      { name: "moutarde de Dijon", qty: 10, unit: 'g' },
+      { name: "citron", qty: 30, unit: 'g' },
+      { name: "thym frais", qty: 3, unit: 'g' },
+      { name: "ail", qty: 5, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Préchauffer le four à 220°C. Couper les pommes de terre en rondelles de 5mm, les déposer sur une plaque avec 5g d'huile d'olive, le thym et l'ail. Enfourner 15 min.",
+      "Ajouter les asperges parées sur la plaque, arroser du reste d'huile d'olive. Badigeonner le filet de saumon de moutarde de Dijon et le placer entre les légumes.",
+      "Poursuivre la cuisson 15-18 min jusqu'à ce que le saumon soit cuit à cœur et les légumes dorés.",
+      "Presser le citron sur l'ensemble, ajuster l'assaisonnement et servir directement sur la plaque. Préparer plusieurs plaques pour le batch du dimanche.",
+    ]
+  },
+
+  {
+    id: 'L439',
+    name: "Soupe Poulet Haricots Blancs Mijoteuse",
+    emoji: "🇺🇸",
+    origin: "🇺🇸",
+    mealTypes: ["lunch","dinner"],
+    tags: ["meal-prep","mijoteuse","poulet","soupe","batch-cooking"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 431, proteinGrams: 50, carbsGrams: 51, fatGrams: 3 },
+    ingredients: [
+      { name: "Blanc de poulet", qty: 150, unit: 'g' },
+      { name: "haricots blancs cuits", qty: 150, unit: 'g' },
+      { name: "carotte", qty: 100, unit: 'g' },
+      { name: "céleri", qty: 80, unit: 'g' },
+      { name: "bouillon de poulet", qty: 400, unit: 'ml' },
+      { name: "ail", qty: 10, unit: 'g' },
+      { name: "oignon", qty: 80, unit: 'g' },
+      { name: "thym", qty: 2, unit: 'g' },
+      { name: "laurier 1 feuille", qty: 0, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Couper la carotte, le céleri et l'oignon en dés. Placer tous les ingrédients dans la mijoteuse : poulet entier, légumes, haricots blancs, ail écrasé, bouillon, thym et laurier.",
+      "Cuire à basse température 6-8h ou à haute température 3-4h. Le poulet doit être très tendre et se défaire facilement.",
+      "Retirer le poulet, l'effilocher à l'aide de deux fourchettes, puis le remettre dans la soupe. Retirer la feuille de laurier et ajuster l'assaisonnement.",
+      "Répartir en portions de 400ml dans des boîtes hermétiques. Conserver 5 jours au réfrigérateur ou 3 mois au congélateur.",
+    ]
+  },
+
+  {
+    id: 'L440',
+    name: "Bolognese Batch Courgette Pâtes",
+    emoji: "🇮🇹",
+    origin: "🇮🇹",
+    mealTypes: ["lunch","dinner"],
+    tags: ["meal-prep","boeuf","bolognese","pates","batch-cooking"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 468, proteinGrams: 41, carbsGrams: 58, fatGrams: 8 },
+    ingredients: [
+      { name: "Bœuf haché 5%MG", qty: 150, unit: 'g' },
+      { name: "courgette", qty: 200, unit: 'g' },
+      { name: "tomate concassée", qty: 200, unit: 'g' },
+      { name: "pâtes cuites", qty: 150, unit: 'g' },
+      { name: "oignon", qty: 80, unit: 'g' },
+      { name: "ail", qty: 10, unit: 'g' },
+      { name: "carotte", qty: 80, unit: 'g' },
+      { name: "concentré de tomate", qty: 15, unit: 'g' },
+      { name: "basilic", qty: 3, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Faire revenir l'oignon et la carotte émincés dans l'huile d'olive 5 min à feu moyen. Ajouter l'ail haché et le bœuf haché, faire colorer en émiettant la viande.",
+      "Râper grossièrement la courgette et l'incorporer à la viande. Ajouter le concentré de tomate, mélanger 1 min, puis verser les tomates concassées. Assaisonner.",
+      "Laisser mijoter à feu doux 25-30 min en remuant régulièrement jusqu'à ce que la sauce soit épaisse et savoureuse. Ajouter le basilic ciselé en fin de cuisson.",
+      "Cuire les pâtes al dente. Répartir sauce bolognese et pâtes séparément dans des boîtes pour le meal prep — mélanger au moment de réchauffer. Conservation 4 jours.",
+    ]
+  },
+
+  {
+    id: 'L441',
+    name: "Birria Tacos Bœuf Confit",
+    emoji: "🇲🇽",
+    origin: "🇲🇽",
+    mealTypes: ["lunch","dinner"],
+    category: "mexican",
+    tags: ["mexicain","birria","tacos","viral","tiktok","bœuf","street-food"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 452, proteinGrams: 43, carbsGrams: 30, fatGrams: 17 },
+    ingredients: [
+      { name: "Bœuf haché 5%", qty: 150, unit: 'g' },
+      { name: "tortillas maïs 2x25g", qty: 0, unit: 'g' },
+      { name: "oignon blanc", qty: 50, unit: 'g' },
+      { name: "fromage Oaxaca râpé", qty: 20, unit: 'g' },
+      { name: "piment guajillo", qty: 5, unit: 'g' },
+      { name: "cumin", qty: 2, unit: 'g' },
+      { name: "coriandre fraîche", qty: 10, unit: 'g' },
+      { name: "consommé bœuf", qty: 100, unit: 'ml' },
+    ],
+    steps: [
+      "Faire mariner le bœuf haché avec le piment guajillo réhydraté, le cumin et l'ail écrasé 30 min, puis braiser à feu doux dans le consommé 1h jusqu'à tendreté.",
+      "Chauffer les tortillas de maïs à sec dans une poêle bien chaude, les tremper brièvement dans le gras de cuisson du birria pour les colorer et les parfumer.",
+      "Garnir chaque tortilla de bœuf effiloché, de fromage Oaxaca râpé, d'oignon émincé et de coriandre fraîche.",
+      "Servir avec un bol de consommé chaud pour tremper les tacos — le fameux 'quesabirria dip' viral TikTok.",
+    ]
+  },
+
+  {
+    id: 'L442',
+    name: "Elotes Street Corn Bowl Poulet",
+    emoji: "🇲🇽",
+    origin: "🇲🇽",
+    mealTypes: ["lunch","dinner"],
+    category: "mexican",
+    tags: ["mexicain","elotes","street-food","bowl","viral","instagram","poulet"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 529, proteinGrams: 49, carbsGrams: 43, fatGrams: 19 },
+    ingredients: [
+      { name: "Poulet grillé", qty: 120, unit: 'g' },
+      { name: "maïs en épi ou surgelé", qty: 200, unit: 'g' },
+      { name: "mayonnaise légère", qty: 20, unit: 'g' },
+      { name: "fromage cotija émietté", qty: 30, unit: 'g' },
+      { name: "piment de Cayenne", qty: 2, unit: 'g' },
+      { name: "paprika fumé", qty: 2, unit: 'g' },
+      { name: "lime jus", qty: 30, unit: 'ml' },
+      { name: "coriandre", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Griller le poulet assaisonné paprika-cumin à feu vif 6 min de chaque côté, laisser reposer 5 min puis émincer en lamelles.",
+      "Faire griller les grains de maïs à sec dans une poêle bien chaude jusqu'à obtenir des points de carbonisation caracteristiques du 'elote'.",
+      "Mélanger le maïs grillé avec la mayonnaise légère, la moitié du fromage cotija, le piment de Cayenne et le jus de lime.",
+      "Dresser en bowl avec le poulet par-dessus, parsemer du reste du cotija, de paprika fumé et de coriandre fraîche.",
+    ]
+  },
+
+  {
+    id: 'L443',
+    name: "Ceviche Crevettes Healthy Avocat",
+    emoji: "🇵🇪",
+    origin: "🇵🇪",
+    mealTypes: ["lunch","dinner"],
+    tags: ["péruvien","ceviche","crevettes","healthy","sans-gluten","light","frais"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 358, proteinGrams: 39, carbsGrams: 28, fatGrams: 10 },
+    ingredients: [
+      { name: "Crevettes crues", qty: 200, unit: 'g' },
+      { name: "avocat", qty: 60, unit: 'g' },
+      { name: "tomate", qty: 100, unit: 'g' },
+      { name: "concombre", qty: 100, unit: 'g' },
+      { name: "maïs cuit", qty: 60, unit: 'g' },
+      { name: "lime jus", qty: 60, unit: 'ml' },
+      { name: "piment ají amarillo", qty: 5, unit: 'g' },
+      { name: "coriandre fraîche", qty: 15, unit: 'g' },
+      { name: "oignon rouge", qty: 40, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "poivre", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Décortiquer les crevettes, les couper en morceaux et les 'cuire' à froid dans le jus de lime 15-20 min jusqu'à ce qu'elles deviennent opaques — la leche de tigre péruvienne.",
+      "Émincer finement l'oignon rouge, couper le concombre et la tomate en petits dés, incorporer avec le piment ají amarillo haché et la coriandre.",
+      "Ajouter l'avocat coupé en cubes au dernier moment pour éviter l'oxydation, mélanger délicatement et rectifier l'assaisonnement.",
+    ]
+  },
+
+  {
+    id: 'L444',
+    name: "Chimichurri Steak Patate Douce",
+    emoji: "🇦🇷",
+    origin: "🇦🇷",
+    mealTypes: ["lunch","dinner"],
+    tags: ["argentin","chimichurri","steak","bœuf","paléo","sans-gluten","viral"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 558, proteinGrams: 49, carbsGrams: 27, fatGrams: 27 },
+    ingredients: [
+      { name: "Bavette de bœuf", qty: 180, unit: 'g' },
+      { name: "huile d'olive", qty: 15, unit: 'ml' },
+      { name: "persil plat", qty: 20, unit: 'g' },
+      { name: "origan séché", qty: 3, unit: 'g' },
+      { name: "ail 3 gousses", qty: 0, unit: 'g' },
+      { name: "vinaigre de vin rouge", qty: 15, unit: 'ml' },
+      { name: "piment rouge séché", qty: 2, unit: 'g' },
+      { name: "poivron grillé", qty: 100, unit: 'g' },
+      { name: "patate douce", qty: 100, unit: 'g' },
+    ],
+    steps: [
+      "Préparer le chimichurri en mixant grossièrement le persil, l'ail, l'origan, le piment avec l'huile d'olive et le vinaigre — laisser reposer 30 min pour développer les arômes.",
+      "Cuire la patate douce en cubes au four 200°C 20 min avec un filet d'huile et paprika fumé.",
+      "Saisir la bavette sur plancha très chaude 3 min par face pour une cuisson saignante, laisser reposer 5 min avant de trancher en biais.",
+      "Dresser la bavette tranchée sur les légumes, napper généreusement de chimichurri verde.",
+    ]
+  },
+
+  {
+    id: 'L445',
+    name: "Arepa con Pollo y Aguacate",
+    emoji: "🇨🇴",
+    origin: "🇨🇴",
+    mealTypes: ["lunch","dinner"],
+    tags: ["colombien","arepa","poulet","avocat","street-food","sans-gluten","instagram"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 568, proteinGrams: 44, carbsGrams: 68, fatGrams: 13 },
+    ingredients: [
+      { name: "Farine de maïs pré-cuite (masarepa)", qty: 80, unit: 'g' },
+      { name: "eau tiède", qty: 120, unit: 'ml' },
+      { name: "poulet effiloché cuit", qty: 120, unit: 'g' },
+      { name: "avocat", qty: 50, unit: 'g' },
+      { name: "tomate", qty: 50, unit: 'g' },
+      { name: "coriandre", qty: 10, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "cumin", qty: 2, unit: 'g' },
+      { name: "ail en poudre", qty: 2, unit: 'g' },
+    ],
+    steps: [
+      "Mélanger la masarepa avec l'eau tiède, le sel et le cumin, pétrir jusqu'à obtenir une pâte lisse, former deux disques d'environ 1 cm d'épaisseur.",
+      "Cuire les arepas sur une plancha légèrement huilée 5 min de chaque côté jusqu'à obtenir une croûte dorée et sonner creux à la pression.",
+      "Assaisonner le poulet effiloché avec ail, cumin et coriandre, écraser l'avocat avec sel et lime en guacamole rapide.",
+      "Ouvrir les arepas en deux, garnir de poulet, guacamole et tomate fraîche — la recette colombienne la plus partagée d'Instagram.",
+    ]
+  },
+
+  {
+    id: 'L446',
+    name: "Lomo Saltado Péruvien Chifa",
+    emoji: "🇵🇪",
+    origin: "🇵🇪",
+    mealTypes: ["lunch","dinner"],
+    tags: ["péruvien","lomo-saltado","bœuf","wok","fusion","chifa","viral"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 542, proteinGrams: 43, carbsGrams: 56, fatGrams: 18 },
+    ingredients: [
+      { name: "Bœuf émincé", qty: 150, unit: 'g' },
+      { name: "riz blanc cuit", qty: 150, unit: 'g' },
+      { name: "poivron rouge", qty: 100, unit: 'g' },
+      { name: "tomate", qty: 100, unit: 'g' },
+      { name: "oignon rouge", qty: 80, unit: 'g' },
+      { name: "sauce soja", qty: 20, unit: 'ml' },
+      { name: "huile de sésame", qty: 8, unit: 'ml' },
+      { name: "vinaigre de riz", qty: 10, unit: 'ml' },
+      { name: "ají amarillo", qty: 5, unit: 'g' },
+      { name: "coriandre", qty: 10, unit: 'g' },
+    ],
+    steps: [
+      "Mariner le bœuf émincé avec sauce soja, ail et un peu de vinaigre de riz 15 min — la fusion sino-péruvienne 'chifa' typique de Lima.",
+      "Saisir le bœuf à feu très vif dans un wok avec l'huile de sésame 2 min par face, réserver, faire sauter rapidement l'oignon et le poivron 3 min pour qu'ils gardent du croquant.",
+      "Remettre le bœuf, ajouter la tomate en quartiers et l'ají amarillo, déglacer avec sauce soja et vinaigre, flamber optionnel pour la caramélisation.",
+      "Servir immédiatement sur le riz blanc, garnir de coriandre fraîche — le sauté wok péruvien le plus viral des food blogs 2024.",
+    ]
+  },
+
+  {
+    id: 'L447',
+    name: "Bandeja Paisa Légère Équilibrée",
+    emoji: "🇨🇴",
+    origin: "🇨🇴",
+    mealTypes: ["lunch","dinner"],
+    tags: ["colombien","bandeja-paisa","poulet","haricots","bowl","meal-prep","équilibré"],
+    difficulty: 3,
+    servings: 1,
+    baseNutrition: { calories: 565, proteinGrams: 51, carbsGrams: 56, fatGrams: 15 },
+    ingredients: [
+      { name: "Poulet grillé", qty: 100, unit: 'g' },
+      { name: "haricots noirs cuits", qty: 100, unit: 'g' },
+      { name: "riz blanc cuit", qty: 100, unit: 'g' },
+      { name: "œuf entier", qty: 60, unit: 'g' },
+      { name: "avocat", qty: 30, unit: 'g' },
+      { name: "tomate", qty: 50, unit: 'g' },
+      { name: "oignon vert", qty: 20, unit: 'g' },
+      { name: "cumin", qty: 2, unit: 'g' },
+      { name: "ail 2 gousses", qty: 0, unit: 'g' },
+      { name: "huile d'olive", qty: 5, unit: 'ml' },
+    ],
+    steps: [
+      "Assaisonner les haricots noirs avec ail, cumin et oignon vert, réchauffer à feu doux 5 min pour développer les saveurs du 'frijoles' colombien.",
+      "Griller le poulet assaisonné à l'adobo colombien (ail, cumin, paprika, origan) sur plancha chaude, cuire l'œuf au plat dans l'huile d'olive.",
+      "Dresser en assiette partagée — riz, haricots, poulet, œuf au plat et quartiers d'avocat — version allégée de la bandeja paisa traditionnelle.",
+    ]
+  },
+
+  {
+    id: 'L448',
+    name: "Guacamole Bowl High-Protein Crevettes",
+    emoji: "🇲🇽",
+    origin: "🇲🇽",
+    mealTypes: ["lunch","dinner"],
+    category: "mexican",
+    tags: ["mexicain","guacamole","crevettes","high-protein","hack","tiktok","viral"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 543, proteinGrams: 38, carbsGrams: 48, fatGrams: 24 },
+    ingredients: [
+      { name: "Avocat", qty: 150, unit: 'g' },
+      { name: "crevettes cuites", qty: 100, unit: 'g' },
+      { name: "fromage blanc 0%", qty: 150, unit: 'g' },
+      { name: "tortillas maïs 2x25g", qty: 0, unit: 'g' },
+      { name: "tomate", qty: 80, unit: 'g' },
+      { name: "oignon rouge", qty: 30, unit: 'g' },
+      { name: "lime jus", qty: 30, unit: 'ml' },
+      { name: "coriandre", qty: 15, unit: 'g' },
+      { name: "jalapeño", qty: 10, unit: 'g' },
+      { name: "sel", qty: 0, unit: 'g' },
+      { name: "cumin", qty: 2, unit: 'g' },
+    ],
+    steps: [
+      "Écraser l'avocat avec le fromage blanc 0% — le hack protéiné viral TikTok qui booste les protéines du guacamole x3 sans changer la texture crémeuse.",
+      "Incorporer tomate, oignon rouge et jalapeño finement émincés, coriandre et jus de lime, assaisonner de sel et cumin.",
+      "Poêler les crevettes à l'ail 2 min, disposer sur le guacamole high-protein, servir avec les tortillas chaudes pour tremper.",
+    ]
+  },
+
+  {
+    id: 'L449',
+    name: "Tacos Al Pastor Ananas Grillé",
+    emoji: "🇲🇽",
+    origin: "🇲🇽",
+    mealTypes: ["lunch","dinner"],
+    category: "mexican",
+    tags: ["mexicain","al-pastor","tacos","porc","ananas","street-food","tiktok","viral"],
+    difficulty: 2,
+    servings: 1,
+    baseNutrition: { calories: 490, proteinGrams: 36, carbsGrams: 45, fatGrams: 18 },
+    ingredients: [
+      { name: "Porc filet émincé", qty: 150, unit: 'g' },
+      { name: "tortillas maïs 3x25g", qty: 0, unit: 'g' },
+      { name: "ananas frais", qty: 50, unit: 'g' },
+      { name: "oignon blanc", qty: 50, unit: 'g' },
+      { name: "coriandre fraîche", qty: 10, unit: 'g' },
+      { name: "piment guajillo séché", qty: 5, unit: 'g' },
+      { name: "achiote", qty: 3, unit: 'g' },
+      { name: "vinaigre d'ananas", qty: 10, unit: 'ml' },
+      { name: "lime jus", qty: 20, unit: 'ml' },
+      { name: "ail 2 gousses", qty: 0, unit: 'g' },
+    ],
+    steps: [
+      "Mariner le porc émincé dans la pasta de achiote (achiote + piment guajillo + ail + vinaigre d'ananas + cumin) minimum 2h — la marinade pastor d'origine libanaise arrivée au Mexique.",
+      "Griller le porc mariné sur plancha très chaude jusqu'à caramélisation des bords, simultanément griller les tranches d'ananas pour les caraméliser.",
+      "Chauffer les tortillas de maïs, les garnir de porc al pastor, d'ananas grillé, d'oignon émincé et de coriandre fraîche — un filet de lime pour finir.",
+    ]
+  },
+
+  {
+    id: 'L450',
+    name: "Açaí Bowl Protéiné Lunch Brésilien",
+    emoji: "🇧🇷",
+    origin: "🇧🇷",
+    mealTypes: ["breakfast"],
+    tags: ["brésilien","açaí","bowl","high-protein","petit-déjeuner","viral","instagram","healthy"],
+    difficulty: 1,
+    servings: 1,
+    baseNutrition: { calories: 584, proteinGrams: 32, carbsGrams: 67, fatGrams: 22 },
+    ingredients: [
+      { name: "Purée d'açaí surgelée", qty: 100, unit: 'g' },
+      { name: "banane", qty: 100, unit: 'g' },
+      { name: "whey protéine vanille", qty: 30, unit: 'g' },
+      { name: "granola avoine", qty: 40, unit: 'g' },
+      { name: "lait de coco", qty: 50, unit: 'ml' },
+      { name: "fruits rouges mélange", qty: 50, unit: 'g' },
+      { name: "beurre de cacahuète", qty: 10, unit: 'g' },
+      { name: "miel", qty: 5, unit: 'g' },
+    ],
+    steps: [
+      "Mixer la purée d'açaí encore semi-congelée avec la banane, le lait de coco et la whey protéine jusqu'à obtenir une consistance épaisse et crémeuse — ne pas trop mixer pour garder la texture 'sorbet'.",
+      "Verser dans un bol froid, lisser la surface et dresser les toppings en rangées graphiques : granola, fruits rouges, un trait de beurre de cacahuète et un filet de miel.",
+      "Servir immédiatement pour profiter de la texture semi-glacée — le bowl brésilien version lunch high-protein le plus viral d'Instagram 2024-2025.",
+    ]
+  },
+
+
+  // ─── RECETTES VIRALES L451-L500 (Indien, Moyen-Orient, Française, Sport, Africaine) ────────────
+  {
+    // L451 — Dal Makhani : lentilles noires 200g (18P,40G,1L) + pois chiches 100g (8.6P,26.6G,2.6L)
+    //   + yaourt grec 80g (7.2P,3.2G,4L) + tomate 150g (1.5P,6.7G,0L) + ghi 10g (0P,0G,10L) + oignon/épices ~10kcal
+    //   P≈35 G≈76 L≈18 → k = 35×4 + 76×4 + 18×9 = 140+304+162 = 606 — ajusté portions
+    // Portion révisée : lentilles 150g(13.5P,30G,0.8L) + pois chiches 80g(6.9P,21.3G,2L)
+    //   + yaourt 60g(5.4P,2.4G,3L) + tomate 150g(1.5P,6.7G,0L) + ghi 8g(0P,0G,7.2L) → P≈27 G≈60 L≈13
+    //   k = 27×4 + 60×4 + 13×9 = 108+240+117 = 465 ✓
+    _id: 'L451',
+    n: "Dal Makhani Protéiné",
+    f: "🇮🇳",
+    k: 465,
+    p: 27,
+    g: 60,
+    l: 13,
+    lv: 2,
+    i: "Lentilles noires cuites 150g, pois chiches cuits 80g, tomate concassée 150g, yaourt grec entier 60g, ghi 8g, oignon 80g, ail 3 gousses, gingembre 10g, cumin 4g, garam masala 4g, piment rouge 2g, coriandre fraîche 15g",
+    st: [
+      "Faire revenir l'oignon haché dans le ghi jusqu'à dorure, ajouter ail, gingembre émincés et épices moulues, cuire 2 min à feu moyen.",
+      "Incorporer la tomate concassée, laisser réduire 8 min, ajouter les lentilles noires et pois chiches cuits, mijoter 15 min à feu doux.",
+      "Hors du feu, incorporer le yaourt grec, rectifier l'assaisonnement et garnir de coriandre fraîche avant de servir."
+    ],
+    w: false,
+    tags: ["indien", "lentilles", "protéiné", "végétarien", "dal"]
+  },
+  {
+    // L452 — Chicken Tikka Masala : poulet 150g(42P,4G,4L) + tomate 200g(2P,9G,0L)
+    //   + yaourt 100g(9P,4G,5L) + ghi 10g(0P,0G,9L) + oignon/épices ~10kcal
+    //   P≈53 G≈17 L≈18 → k = 53×4 + 17×4 + 18×9 = 212+68+162 = 442 ✓
+    _id: 'L452',
+    n: "Chicken Tikka Masala Légère",
+    f: "🇮🇳",
+    k: 442,
+    p: 53,
+    g: 17,
+    l: 18,
+    lv: 2,
+    i: "Poulet tikka grillé 150g, tomate concassée 200g, yaourt grec entier 100g, ghi 10g, oignon 80g, ail 3 gousses, gingembre 12g, curcuma 2g, paprika fumé 5g, garam masala 5g, coriandre fraîche 10g",
+    st: [
+      "Faire revenir l'oignon émincé dans le ghi jusqu'à dorure, ajouter ail, gingembre et épices moulues, cuire 2 min à feu vif.",
+      "Ajouter les tomates concassées, laisser compoter 10 min jusqu'à sauce épaisse et brillante, incorporer le poulet tikka grillé en morceaux.",
+      "Baisser le feu au minimum, ajouter le yaourt grec progressivement en remuant sans cesser, mijoter 5 min sans ébullition, garnir de coriandre."
+    ],
+    w: false,
+    tags: ["indien", "poulet", "tikka", "curry", "high-protein"]
+  },
+  {
+    // L453 — Saag Paneer : paneer 100g(18P,3G,21L) + épinards 300g(9P,12G,0L)
+    //   + yaourt 80g(7.2P,3.2G,4L) + ghi 10g(0P,0G,9L) → P≈34 G≈18 L≈34
+    //   k = 34×4 + 18×4 + 34×9 = 136+72+306 = 514 — réduire ghi
+    // ghi 8g(0P,0G,7.2L) + épinards 200g(6P,8G,0L) → P≈31 G≈14 L≈32
+    //   k = 31×4 + 14×4 + 32×9 = 124+56+288 = 468 ✓
+    _id: 'L453',
+    n: "Saag Paneer Healthy",
+    f: "🇮🇳",
+    k: 468,
+    p: 31,
+    g: 14,
+    l: 32,
+    lv: 2,
+    i: "Paneer 100g, épinards frais 200g, yaourt grec entier 80g, ghi 8g, oignon 60g, ail 3 gousses, gingembre 10g, curcuma 2g, cumin 3g, fenugrec 2g, piment vert 5g",
+    st: [
+      "Blanchir les épinards 2 min à l'eau bouillante, égoutter et mixer en purée lisse ; couper le paneer en cubes et les faire dorer dans une poêle antiadhésive.",
+      "Dans la même poêle avec le ghi, faire revenir oignon, ail, gingembre et épices jusqu'à dorure, ajouter la purée d'épinards, mijoter 5 min.",
+      "Incorporer le yaourt grec hors du feu, ajouter les cubes de paneer dorés, mélanger délicatement et servir chaud."
+    ],
+    w: false,
+    tags: ["indien", "paneer", "épinards", "végétarien", "saag"]
+  },
+  {
+    // L454 — Chana Masala : pois chiches 150g(13P,40G,4L) + tomate 200g(2P,9G,0L)
+    //   + oignon 100g(1P,9G,0L) + ghi 8g(0P,0G,7.2L) → P≈16 G≈58 L≈11
+    //   k = 16×4 + 58×4 + 11×9 = 64+232+99 = 395 ✓
+    _id: 'L454',
+    n: "Chana Masala Épicé",
+    f: "🇮🇳",
+    k: 395,
+    p: 16,
+    g: 58,
+    l: 11,
+    lv: 1,
+    i: "Pois chiches cuits 150g, tomate concassée 200g, oignon 100g, ghi 8g, ail 3 gousses, gingembre 12g, cumin 4g, coriandre moulue 4g, garam masala 3g, amchur 2g, piment 2g, coriandre fraîche 15g",
+    st: [
+      "Faire revenir l'oignon haché dans le ghi jusqu'à caramélisation, ajouter ail, gingembre et toutes les épices, cuire 2 min à feu moyen.",
+      "Incorporer les tomates concassées et 100ml d'eau, laisser réduire 10 min pour obtenir une sauce concentrée.",
+      "Ajouter les pois chiches, écraser légèrement une cuillère de pois chiches pour épaissir, mijoter 8 min et garnir de coriandre fraîche."
+    ],
+    w: false,
+    tags: ["indien", "pois-chiches", "vegan", "chana", "légumineuses"]
+  },
+  {
+    // L455 — Tandoori Chicken Bowl : poulet 150g(42P,4G,4L) + riz basmati 120g(3.2P,34.4G,0L)
+    //   + yaourt 80g(7.2P,3.2G,4L) + concombre 80g(0.5P,2G,0L) → P≈53 G≈44 L≈8
+    //   k = 53×4 + 44×4 + 8×9 = 212+176+72 = 460 ✓
+    _id: 'L455',
+    n: "Tandoori Chicken Bowl",
+    f: "🇮🇳",
+    k: 460,
+    p: 53,
+    g: 44,
+    l: 8,
+    lv: 2,
+    i: "Poulet tikka grillé 150g, riz basmati cuit 120g, yaourt grec entier 80g, concombre 80g, oignon rouge 40g, menthe fraîche 10g, citron jus 15ml, cumin moulu 2g, paprika fumé 3g",
+    st: [
+      "Préparer le raita en mélangeant le yaourt grec avec le concombre râpé essoré, la menthe ciselée et le cumin.",
+      "Disposer le riz basmati dans un bol, trancher le poulet tandoori et l'ajouter par-dessus avec l'oignon rouge émincé.",
+      "Napper de raita, saupoudrer de paprika fumé, arroser de jus de citron et servir immédiatement."
+    ],
+    w: false,
+    tags: ["indien", "poulet", "bowl", "tandoori", "meal-prep"]
+  },
+  {
+    // L456 — Raita Concombre Protéiné : yaourt grec 200g(18P,8G,10L) + concombre 150g(1P,3G,0L)
+    //   + pois chiches 60g(5.2P,16G,1.6L) → P≈24 G≈27 L≈12
+    //   k = 24×4 + 27×4 + 12×9 = 96+108+108 = 312 ✓
+    _id: 'L456',
+    n: "Raita Concombre Protéiné",
+    f: "🇮🇳",
+    k: 312,
+    p: 24,
+    g: 27,
+    l: 12,
+    lv: 1,
+    i: "Yaourt grec entier 200g, concombre 150g, pois chiches cuits 60g, menthe fraîche 15g, coriandre fraîche 10g, cumin moulu 2g, graines de moutarde 2g, huile d'olive 5g, paprika doux 1g, sel, poivre",
+    st: [
+      "Râper le concombre, saler et laisser dégorger 10 min, presser fermement pour retirer l'excès d'eau.",
+      "Mélanger le yaourt grec avec le concombre essoré, les pois chiches, la menthe et la coriandre ciselées.",
+      "Faire éclater les graines de moutarde dans l'huile chaude, verser sur le raita avec le cumin, décorer de paprika et servir frais."
+    ],
+    w: false,
+    tags: ["indien", "végétarien", "raita", "snack", "high-protein"]
+  },
+  {
+    // L457 — Dhal Lentilles Corail : lentilles corail cuites 200g(18P,40G,1L) + lait coco léger 80ml(0.8P,4G,7.2L)
+    //   + tomate 150g(1.5P,6.7G,0L) + ghi 8g(0P,0G,7.2L) → P≈20 G≈51 L≈16
+    //   k = 20×4 + 51×4 + 16×9 = 80+204+144 = 428 ✓
+    _id: 'L457',
+    n: "Dhal de Lentilles Corail",
+    f: "🇮🇳",
+    k: 428,
+    p: 20,
+    g: 51,
+    l: 16,
+    lv: 1,
+    i: "Lentilles corail cuites 200g, lait de coco léger 80ml, tomate concassée 150g, oignon 80g, ghi 8g, ail 3 gousses, gingembre 10g, curcuma 3g, cumin 3g, curry doux 4g, piment rouge 2g, coriandre fraîche 15g, citron jus 15ml",
+    st: [
+      "Faire revenir l'oignon dans le ghi, ajouter ail, gingembre et toutes les épices, cuire 3 min à feu moyen jusqu'à libération des arômes.",
+      "Incorporer la tomate concassée et le lait de coco léger, laisser mijoter 5 min pour marier les saveurs.",
+      "Ajouter les lentilles corail cuites, homogénéiser, cuire encore 5 min à feu doux, finir avec le jus de citron et la coriandre fraîche."
+    ],
+    w: false,
+    tags: ["indien", "vegan", "lentilles", "dhal", "réconfort"]
+  },
+  {
+    // L458 — Biryani Quinoa : quinoa 150g(6P,30G,3L) + poulet 100g(28P,2.7G,2.7L)
+    //   + oignon 80g(1P,7G,0L) + ghi 10g(0P,0G,9L) + yaourt 60g(5.4P,2.4G,3L)
+    //   + amandes 15g(3P,1.5G,8.5L) → P≈43 G≈43 L≈26
+    //   k = 43×4 + 43×4 + 26×9 = 172+172+234 = 578 — réduire amandes+ghi
+    // ghi 8g(7.2L) + amandes 10g(2P,1G,5.5L) → P≈41 G≈42 L≈22
+    //   k = 41×4 + 42×4 + 22×9 = 164+168+198 = 530 ✓
+    _id: 'L458',
+    n: "Biryani de Quinoa",
+    f: "🇮🇳",
+    k: 530,
+    p: 41,
+    g: 42,
+    l: 22,
+    lv: 3,
+    i: "Quinoa cuit 150g, poulet tikka grillé 100g, oignon 80g, ghi 8g, yaourt grec entier 60g, raisins secs 20g, amandes effilées 10g, safran 0.1g, garam masala 4g, cannelle 2g, cardamome 2g, menthe fraîche 10g",
+    st: [
+      "Faire dorer l'oignon en lamelles dans le ghi jusqu'à caramélisation ambrée, ajouter cannelle, cardamome, garam masala et le safran dissous dans 2 c.s. d'eau chaude.",
+      "Incorporer le quinoa cuit et le yaourt grec, mélanger délicatement, ajouter le poulet tikka en morceaux et les raisins secs.",
+      "Couvrir et laisser étuver 5 min à feu très doux pour marier les arômes, garnir d'amandes effilées toastées et de menthe fraîche."
+    ],
+    w: false,
+    tags: ["indien", "quinoa", "biryani", "sans-gluten", "festif"]
+  },
+  {
+    // L459 — Palak Paneer Allégé : paneer 80g(14.4P,2.4G,16.8L) + épinards 300g(9P,12G,0L)
+    //   + yaourt grec 0% 60g(5.4P,2.4G,0L) + huile 8g(0P,0G,7.2L) → P≈29 G≈17 L≈24
+    //   k = 29×4 + 17×4 + 24×9 = 116+68+216 = 400 ✓
+    _id: 'L459',
+    n: "Palak Paneer Allégé",
+    f: "🇮🇳",
+    k: 400,
+    p: 29,
+    g: 17,
+    l: 24,
+    lv: 2,
+    i: "Paneer 80g, épinards frais 300g, yaourt grec 0% 60g, huile d'olive 8g, oignon 70g, ail 3 gousses, gingembre 10g, noix de cajou 15g, curcuma 2g, garam masala 3g, piment doux 2g, citron jus 10ml",
+    st: [
+      "Blanchir les épinards 2 min, égoutter et mixer en purée lisse avec les noix de cajou préalablement trempées 10 min dans l'eau chaude.",
+      "Faire revenir oignon, ail, gingembre et épices dans l'huile, ajouter la purée d'épinards aux cajous, mijoter 8 min.",
+      "Ajouter le paneer doré en cubes et le yaourt grec 0%, mélanger délicatement, finir avec le jus de citron et servir chaud."
+    ],
+    w: false,
+    tags: ["indien", "épinards", "paneer", "allégé", "végétarien"]
+  },
+  {
+    // L460 — Butter Chicken Légère : poulet 150g(42P,4G,4L) + tomate 200g(2P,9G,0L)
+    //   + yaourt 100g(9P,4G,5L) + ghi 8g(0P,0G,7.2L) → P≈53 G≈17 L≈16
+    //   k = 53×4 + 17×4 + 16×9 = 212+68+144 = 424 ✓
+    _id: 'L460',
+    n: "Butter Chicken Légère",
+    f: "🇮🇳",
+    k: 424,
+    p: 53,
+    g: 17,
+    l: 16,
+    lv: 2,
+    i: "Poulet tikka grillé 150g, tomate concassée 200g, yaourt grec entier 100g, ghi 8g, oignon 80g, ail 3 gousses, gingembre 12g, paprika doux 4g, garam masala 4g, curcuma 2g, fenugrec moulu 1g, coriandre fraîche 15g",
+    st: [
+      "Faire revenir l'oignon dans le ghi, ajouter ail, gingembre et épices moulues, cuire 2 min, incorporer les tomates concassées.",
+      "Laisser réduire la sauce tomate 10 min à feu moyen jusqu'à consistance onctueuse, mixer finement pour une texture veloutée.",
+      "Ajouter le poulet tikka grillé, incorporer le yaourt grec hors du feu, réchauffer 3 min sans ébullition, garnir de coriandre fraîche."
+    ],
+    w: false,
+    tags: ["indien", "poulet", "butter-chicken", "curry-doux", "high-protein"]
+  },
+
+  {
+    // L461 — Shawarma Chicken Bowl :
+    //   Poulet tikka 150g(42P,4G,4L) + riz basmati 100g(2.7P,28.9G,0L)
+    //   + yaourt grec 80g(7.2P,3.2G,4L) + concombre 60g(0.4P,1.5G,0L)
+    //   + tomate 80g(0.8P,3.6G,0L) + tahini 10g(1.8P,0.9G,4.7L)
+    //   P≈55 G≈42 L≈13 → k = 55×4 + 42×4 + 13×9 = 220+168+117 = 505 ✓
+    _id: 'L461',
+    n: "Shawarma Chicken Bowl",
+    f: "🇱🇧",
+    k: 505,
+    p: 55,
+    g: 42,
+    l: 13,
+    lv: 2,
+    i: "Poulet tikka grillé 150g, riz basmati cuit 100g, yaourt grec entier 80g, concombre 60g, tomate 80g, oignon rouge 40g, tahini 10g, persil plat 15g, citron jus 20ml, sumac 4g, zaatar 3g, cumin 2g",
+    st: [
+      "Trancher le poulet tikka grillé en fines lamelles, le napper de sumac, zaatar et cumin.",
+      "Dresser le riz basmati dans un bol, ajouter le poulet, la tomate en dés, le concombre et l'oignon rouge émincé.",
+      "Mélanger le yaourt grec avec le tahini, jus de citron et une pincée de sel pour la sauce, napper le bowl et garnir de persil."
+    ],
+    w: false,
+    tags: ["levantin", "poulet", "bowl", "shawarma", "meal-prep"]
+  },
+  {
+    // L462 — Kibbeh au Four :
+    //   Agneau maigre 150g(34P,0G,14L) + boulgour 80g cuit≈200g(5.6P,40G,1L)
+    //   + pignons 15g(2.2P,1.1G,7.4L) + huile olive 10g(0P,0G,9L)
+    //   P≈42 G≈41 L≈31 → k = 42×4 + 41×4 + 31×9 = 168+164+279 = 611 — réduire
+    // boulgour 60g cuit(4.2P,30G,0.8L) + pignons 10g(1.5P,0.7G,4.9L) + huile 8g(0P,0G,7.2L)
+    //   P≈40 G≈31 L≈26 → k = 40×4 + 31×4 + 26×9 = 160+124+234 = 518 ✓
+    _id: 'L462',
+    n: "Kibbeh au Four",
+    f: "🇱🇧",
+    k: 518,
+    p: 40,
+    g: 31,
+    l: 26,
+    lv: 3,
+    i: "Agneau maigre haché 150g, boulgour fin 60g, oignon 100g, pignons de pin 10g, cannelle 3g, cumin 3g, allspice 3g, menthe séchée 3g, huile d'olive 8g, sel, poivre",
+    st: [
+      "Réhydrater le boulgour 20 min dans l'eau froide, égoutter et mélanger avec la moitié de l'agneau haché, cannelle, cumin et sel pour former la couche de base.",
+      "Préparer la farce en faisant revenir oignon émincé, reste d'agneau, pignons, allspice et menthe dans l'huile d'olive 8 min.",
+      "Étaler la couche boulgour-agneau dans un plat huilé, déposer la farce, couvrir du reste du mélange, inciser en losanges et cuire 30 min à 180°C."
+    ],
+    w: false,
+    tags: ["levantin", "agneau", "kibbeh", "four", "traditionnel"]
+  },
+  {
+    // L463 — Mujaddara :
+    //   Lentilles corail cuites 200g(18P,40G,1L) + riz basmati 100g(2.7P,28.9G,0L)
+    //   + oignon 100g(1P,9G,0L) + huile olive 10g(0P,0G,9L) + yaourt 80g(7.2P,3.2G,4L)
+    //   P≈29 G≈81 L≈14 → k = 29×4 + 81×4 + 14×9 = 116+324+126 = 566 — sans yaourt comme side
+    // Présenter yaourt en accompagnement, calcul plat seul :
+    //   P≈22 G≈78 L≈10 → k = 22×4 + 78×4 + 10×9 = 88+312+90 = 490 ✓
+    _id: 'L463',
+    n: "Mujaddara Lentilles Riz",
+    f: "🇱🇧",
+    k: 490,
+    p: 22,
+    g: 78,
+    l: 10,
+    lv: 1,
+    i: "Lentilles corail cuites 200g, riz basmati cuit 100g, oignon 100g, huile d'olive 10g, cumin moulu 4g, coriandre moulue 3g, cannelle 2g, sel, yaourt grec entier 80g (accompagnement)",
+    st: [
+      "Émincer finement l'oignon et le faire caraméliser dans l'huile d'olive à feu moyen-doux 20-25 min jusqu'à dorure profonde et ambrée.",
+      "Mélanger les lentilles corail cuites avec le riz basmati et les épices (cumin, coriandre, cannelle), réchauffer ensemble 3 min en remuant.",
+      "Dresser dans un bol, couvrir généreusement d'oignons caramélisés, servir avec le yaourt grec nature en accompagnement."
+    ],
+    w: false,
+    tags: ["levantin", "lentilles", "végétarien", "mujaddara", "réconfort"]
+  },
+  {
+    // L464 — Fatteh Pois Chiches :
+    //   Pois chiches 150g(13P,40G,4L) + yaourt grec 150g(13.5P,6G,7.5L)
+    //   + pita 40g(3.2P,19G,0.8L) + tahini 15g(2.7P,1.4G,7L)
+    //   + pignons 10g(1.5P,0.7G,4.9L) + huile 8g(0P,0G,7.2L)
+    //   P≈34 G≈67 L≈31 → k = 34×4 + 67×4 + 31×9 = 136+268+279 = 683 — réduire tahini+huile
+    // tahini 10g(1.8P,0.9G,4.7L), sans huile ajoutée, pignons 8g(1.2P,0.6G,3.9L)
+    //   P≈33 G≈67 L≈21 → k = 33×4 + 67×4 + 21×9 = 132+268+189 = 589 ✓
+    _id: 'L464',
+    n: "Fatteh aux Pois Chiches",
+    f: "🇱🇧",
+    k: 589,
+    p: 33,
+    g: 67,
+    l: 21,
+    lv: 2,
+    i: "Pois chiches cuits 150g, yaourt grec entier 150g, pain pita 40g, tahini 10g, ail 2 gousses, citron jus 20ml, paprika fumé 4g, persil frais 15g, pignons de pin 8g, sel",
+    st: [
+      "Couper le pita en morceaux et griller à 180°C 8 min jusqu'à croustillant doré, frotter légèrement d'ail.",
+      "Mélanger le yaourt grec avec le tahini, jus de citron, ail pressé et sel jusqu'à sauce crémeuse homogène.",
+      "Disposer le pita croustillant dans un plat, couvrir de pois chiches chauds, napper de sauce tahini-yaourt, garnir de paprika, persil et pignons grillés à sec."
+    ],
+    w: false,
+    tags: ["levantin", "pois-chiches", "fatteh", "tahini", "végétarien"]
+  },
+  {
+    // L465 — Tabboulé Libanais :
+    //   Persil 150g(5.4P,12.2G,0.6L) + boulgour cuit 80g(3.4P,15.7G,0.5L)
+    //   + tomate 200g(2P,9G,0L) + huile olive 20g(0P,0G,18L) + menthe 30g(1P,2G,0L)
+    //   P≈12 G≈39 L≈19 → k = 12×4 + 39×4 + 19×9 = 48+156+171 = 375 ✓
+    _id: 'L465',
+    n: "Tabboulé Libanais Authentique",
+    f: "🇱🇧",
+    k: 375,
+    p: 12,
+    g: 39,
+    l: 19,
+    lv: 1,
+    i: "Persil plat frais 150g, menthe fraîche 30g, tomates 200g, boulgour fin cuit 80g, oignon vert 50g, huile d'olive 20g, citron jus 40ml, sel, poivre noir",
+    st: [
+      "Réhydrater le boulgour dans le jus de citron et une égale quantité d'eau 15 min, égoutter l'excès de liquide.",
+      "Hacher très finement le persil et la menthe, couper les tomates et oignons verts en très petits dés réguliers.",
+      "Mélanger délicatement tous les ingrédients avec l'huile d'olive et citron supplémentaire, assaisonner et laisser reposer 10 min avant de servir."
+    ],
+    w: false,
+    tags: ["levantin", "salade", "tabboulé", "herbes", "vegan"]
+  },
+  {
+    // L466 — Kofta Grillée :
+    //   Agneau maigre 150g(34P,0G,14L) + boulgour 40g cuit(2.8P,10.4G,0.3L)
+    //   + huile olive 8g(0P,0G,7.2L) + yaourt 80g(7.2P,3.2G,4L)
+    //   P≈44 G≈14 L≈25 → k = 44×4 + 14×4 + 25×9 = 176+56+225 = 457 ✓
+    _id: 'L466',
+    n: "Kofta Grillée aux Herbes",
+    f: "🇱🇧",
+    k: 457,
+    p: 44,
+    g: 14,
+    l: 25,
+    lv: 2,
+    i: "Agneau maigre haché 150g, boulgour fin cuit 40g, oignon 60g, persil plat 20g, menthe fraîche 10g, cannelle 3g, allspice 3g, cumin 3g, huile d'olive 8g, yaourt grec entier 80g, citron jus 15ml",
+    st: [
+      "Mixer oignon et herbes finement, mélanger avec l'agneau haché, boulgour cuit et épices jusqu'à texture homogène collante, réfrigérer 20 min.",
+      "Former des koftas allongées autour de brochettes, badigeonner d'huile d'olive et griller 8-10 min en retournant à mi-cuisson.",
+      "Servir les koftas avec la sauce au yaourt grec citronné, garnir de menthe fraîche et de quartiers de citron."
+    ],
+    w: false,
+    tags: ["levantin", "agneau", "kofta", "grillé", "high-protein"]
+  },
+  {
+    // L467 — Manakish Zaatar Protéiné :
+    //   Pita 80g(6.4P,37G,1.6L) + zaatar 15g(1P,3G,1L) + huile 12g(0P,0G,10.8L)
+    //   + fromage blanc 0% 100g(8P,4G,0L) + oeuf 1(6P,0G,5L)
+    //   P≈21 G≈44 L≈18 → k = 21×4 + 44×4 + 18×9 = 84+176+162 = 422 ✓
+    _id: 'L467',
+    n: "Manakish Zaatar Protéiné",
+    f: "🇱🇧",
+    k: 422,
+    p: 21,
+    g: 44,
+    l: 18,
+    lv: 2,
+    i: "Pain pita 80g, zaatar mélange 15g, huile d'olive 12g, fromage blanc 0% 100g, oeuf dur 1, tomate 80g, concombre 60g, menthe fraîche 10g, sumac 2g",
+    st: [
+      "Mélanger le zaatar avec l'huile d'olive pour obtenir une pâte épaisse et parfumée, étaler uniformément sur le pain pita.",
+      "Passer le pita zaatar au four à 220°C pendant 8-10 min jusqu'à bords légèrement croustillants.",
+      "Servir avec le fromage blanc assaisonné de sumac, la salade tomate-concombre-menthe et l'oeuf dur tranché."
+    ],
+    w: false,
+    tags: ["levantin", "zaatar", "manakish", "petit-déjeuner", "protéiné"]
+  },
+  {
+    // L468 — Fatayer Épinards :
+    //   Pâte à pain 100g(8P,50G,1L) + épinards 200g(6P,8G,0L)
+    //   + feta 40g(4P,0.8G,6L) + huile 10g(0P,0G,9L) + pignons 10g(1.5P,0.7G,4.9L)
+    //   P≈20 G≈59 L≈21 → k = 20×4 + 59×4 + 21×9 = 80+236+189 = 505 ✓
+    _id: 'L468',
+    n: "Fatayer Épinards Santé",
+    f: "🇱🇧",
+    k: 505,
+    p: 20,
+    g: 59,
+    l: 21,
+    lv: 3,
+    i: "Pâte à pain 100g, épinards frais 200g, feta légère 40g, oignon 80g, pignons de pin 10g, huile d'olive 10g, sumac 5g, citron jus 15ml, noix de muscade 1g, sel, poivre",
+    st: [
+      "Hacher les épinards, saler et laisser dégorger 15 min, presser fermement ; mélanger avec l'oignon haché, feta émiettée, pignons, sumac, citron, huile et muscade.",
+      "Diviser la pâte en 6 boules, étaler chacune finement, déposer la farce épinards-feta au centre.",
+      "Replier les 3 bords pour former des triangles, sceller en pincant, badigeonner d'huile et cuire 18-20 min à 200°C jusqu'à dorure."
+    ],
+    w: false,
+    tags: ["levantin", "épinards", "fatayer", "four", "végétarien"]
+  },
+  {
+    // L469 — Labneh Bowl Healthy :
+    //   Labneh 150g(13.5P,5.5G,7.5L) + pois chiches 80g(6.9P,21.3G,2L)
+    //   + concombre 100g(0.7P,2.5G,0L) + tomates cerises 100g(1P,4G,0L)
+    //   + huile olive 12g(0P,0G,10.8L) + olives 20g(0.2P,0.6G,2.8L)
+    //   P≈22 G≈34 L≈23 → k = 22×4 + 34×4 + 23×9 = 88+136+207 = 431 ✓
+    _id: 'L469',
+    n: "Labneh Bowl Healthy",
+    f: "🇱🇧",
+    k: 431,
+    p: 22,
+    g: 34,
+    l: 23,
+    lv: 1,
+    i: "Labneh 150g, pois chiches cuits 80g, concombre 100g, tomates cerises 100g, olives noires 20g, huile d'olive 12g, zaatar 8g, menthe fraîche 15g, sumac 3g",
+    st: [
+      "Étaler le labneh généreusement dans un bol creux en formant un puits au centre avec le dos d'une cuillère.",
+      "Disposer les pois chiches, le concombre en rondelles, les tomates cerises coupées et les olives autour et sur le labneh.",
+      "Arroser d'huile d'olive en filet, saupoudrer de zaatar et sumac, parsemer de feuilles de menthe fraîche et servir."
+    ],
+    w: false,
+    tags: ["levantin", "labneh", "bowl", "végétarien", "frais"]
+  },
+  {
+    // L470 — Mansaf Agneau Allégé :
+    //   Agneau maigre 150g(34P,0G,14L) + riz basmati 130g(3.5P,37.6G,0L)
+    //   + yaourt grec 120g(10.8P,4.8G,6L) + amandes 15g(2.2P,1.1G,7.4L)
+    //   + bouillon 0 kcal → P≈51 G≈44 L≈27
+    //   k = 51×4 + 44×4 + 27×9 = 204+176+243 = 623 — réduire riz et amandes
+    // riz 100g(2.7P,28.9G,0L) + amandes 10g(1.5P,0.7G,4.9L)
+    //   P≈49 G≈34 L≈25 → k = 49×4 + 34×4 + 25×9 = 196+136+225 = 557 ✓
+    _id: 'L470',
+    n: "Mansaf Agneau Allégé",
+    f: "🇯🇴",
+    k: 557,
+    p: 49,
+    g: 34,
+    l: 25,
+    lv: 3,
+    i: "Agneau maigre 150g, riz basmati cuit 100g, yaourt grec entier 120g, bouillon de légumes 200ml, amandes effilées 10g, persil plat 15g, curcuma 3g, cannelle 2g, cardamome 2g, sel, poivre",
+    st: [
+      "Cuire l'agneau en cubes dans le bouillon assaisonné de curcuma, cannelle et cardamome 25 min à feu doux jusqu'à tendreté.",
+      "Préparer la sauce allégée : chauffer doucement le yaourt grec avec 100ml de bouillon de cuisson en fouettant sans laisser bouillir.",
+      "Dresser le riz basmati dans un grand bol, disposer l'agneau par-dessus, napper de sauce yaourt, garnir d'amandes effilées grillées à sec et de persil haché."
+    ],
+    w: false,
+    tags: ["jordanien", "agneau", "mansaf", "festif", "high-protein"]
+  },
+
+  {
+    _id: 'L471',
+    n: "Poulet Rôti Façon Healthy",
+    f: "🇫🇷",
+    k: 528,
+    p: 60,
+    g: 36,
+    l: 16,
+    lv: 2,
+    i: "Blanc et cuisse de poulet 180g, pomme de terre 200g, ail 3 gousses, herbes de Provence 5g, huile d'olive 10g, citron 1/2, sel, poivre",
+    st: [
+      "Préchauffer le four à 200°C. Frotter le poulet avec l'ail écrasé, les herbes de Provence, le jus de citron, l'huile d'olive, sel et poivre.",
+      "Couper les pommes de terre en quartiers et les disposer autour du poulet dans un plat à four.",
+      "Enfourner 45 min en arrosant toutes les 15 min avec le jus de cuisson. Laisser reposer 5 min avant de servir."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "poulet", "roti", "high-protein", "viral2024"]
+  },
+
+  {
+    _id: 'L472',
+    n: "Ratatouille Protéinée au Poulet",
+    f: "🇫🇷",
+    k: 336,
+    p: 35,
+    g: 22,
+    l: 12,
+    lv: 2,
+    i: "Blanc de poulet 150g, courgette 150g, aubergine 100g, poivron rouge 100g, tomates pelées 200g, oignon 80g, ail 2 gousses, herbes de Provence 5g, huile d'olive 10g",
+    st: [
+      "Couper le poulet en dés et faire revenir 5 min à feu vif dans l'huile d'olive avec l'ail et l'oignon émincé.",
+      "Ajouter les légumes coupés en cubes, les tomates, les herbes, sel et poivre. Couvrir et laisser mijoter 25 min à feu doux.",
+      "Rectifier l'assaisonnement et servir chaud. Idéal avec un filet d'huile d'olive à cru."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "ratatouille", "poulet", "legumes", "mediterraneen", "viral2024"]
+  },
+
+  {
+    _id: 'L473',
+    n: "Quiche Lorraine Allégée Maison",
+    f: "🇫🇷",
+    k: 376,
+    p: 30,
+    g: 28,
+    l: 16,
+    lv: 3,
+    i: "Pâte brisée légère 60g, œufs entiers 2 (120g), jambon blanc dégraissé 100g, gruyère allégé 30g, fromage blanc 0% 80g, lait écrémé 50ml, noix de muscade, sel, poivre",
+    st: [
+      "Préchauffer le four à 180°C. Foncer un moule avec la pâte brisée, piquer le fond et précuire à blanc 10 min.",
+      "Battre les œufs avec le fromage blanc, le lait écrémé, la muscade, sel et poivre. Incorporer le jambon coupé en dés.",
+      "Verser l'appareil sur le fond précuit, parsemer de gruyère allégé râpé. Cuire 30-35 min jusqu'à belle dorure et consistance ferme."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "quiche", "lorraine", "allege", "proteines", "viral2025"]
+  },
+
+  {
+    _id: 'L474',
+    n: "Soupe à l'Oignon Gratinée Légère",
+    f: "🇫🇷",
+    k: 265,
+    p: 14,
+    g: 32,
+    l: 9,
+    lv: 2,
+    i: "Oignons jaunes 300g, bouillon de bœuf dégraissé 500ml, pain complet grillé 30g, gruyère allégé 25g, beurre 5g, thym 2g, laurier 1 feuille, sel, poivre",
+    st: [
+      "Émincer finement les oignons. Les caraméliser 20 min à feu doux dans le beurre jusqu'à coloration dorée. Déglacer avec un peu de bouillon.",
+      "Ajouter le reste du bouillon, le thym et le laurier. Mijoter 15 min puis retirer le laurier. Saler et poivrer.",
+      "Verser dans des bols allant au four, poser une tranche de pain grillé, couvrir de gruyère allégé râpé. Gratiner 3-5 min sous le gril."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "soupe", "oignon", "gratin", "allege", "viral2025"]
+  },
+
+  {
+    _id: 'L475',
+    n: "Salade Niçoise High-Protein",
+    f: "🇫🇷",
+    k: 350,
+    p: 38,
+    g: 18,
+    l: 14,
+    lv: 1,
+    i: "Thon en conserve au naturel 150g, œuf dur 1 (60g), tomates cerises 120g, haricots verts cuits 100g, olives noires 20g, concombre 100g, anchois 20g, huile d'olive 8g, vinaigre de vin 5ml, moutarde 5g, basilic frais",
+    st: [
+      "Cuire les haricots verts al dente, les refroidir dans l'eau glacée. Faire durcir l'œuf 9 min et le couper en quartiers.",
+      "Préparer la vinaigrette en émulsionnant huile d'olive, vinaigre, moutarde, sel et poivre.",
+      "Composer la salade en disposant tous les ingrédients. Égoutter le thon, répartir sur la salade avec les anchois. Arroser de vinaigrette et garnir de basilic."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "nicoise", "thon", "salade", "high-protein", "viral2024"]
+  },
+
+  {
+    _id: 'L476',
+    n: "Blanquette de Veau Légère",
+    f: "🇫🇷",
+    k: 314,
+    p: 36,
+    g: 20,
+    l: 10,
+    lv: 3,
+    i: "Veau maigre 150g (épaule dégraissée), carotte 100g, poireau 80g, champignons 80g, bouillon de veau 300ml, fromage blanc 0% 60g, fécule de maïs 10g, jaune d'œuf 1, laurier, thym, sel, poivre blanc",
+    st: [
+      "Couper le veau en cubes. Porter à frémissement dans le bouillon avec laurier, thym, carottes et poireaux en tronçons. Écumer et cuire 45 min.",
+      "Retirer viande et légumes. Délayer la fécule dans un peu de bouillon froid et incorporer au bouillon chaud pour épaissir. Hors du feu, lier avec le fromage blanc mélangé au jaune d'œuf.",
+      "Remettre viande et légumes dans la sauce. Réchauffer doucement sans bouillir, rectifier l'assaisonnement, ajouter un filet de citron."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "veau", "blanquette", "allege", "mijote", "viral2025"]
+  },
+
+  {
+    _id: 'L477',
+    n: "Gratin Dauphinois Allégé",
+    f: "🇫🇷",
+    k: 272,
+    p: 12,
+    g: 38,
+    l: 8,
+    lv: 2,
+    i: "Pommes de terre 200g, lait écrémé 150ml, fromage blanc 0% 80g, ail 2 gousses, gruyère allégé 20g, noix de muscade, sel, poivre",
+    st: [
+      "Préchauffer le four à 180°C. Éplucher et trancher finement les pommes de terre (2mm). Frotter le plat à gratin avec l'ail.",
+      "Mélanger lait écrémé, fromage blanc, muscade, sel et poivre. Disposer les tranches de pommes de terre en couches en arrosant chaque couche de l'appareil.",
+      "Parsemer de gruyère allégé râpé. Cuire 50-60 min jusqu'à ce que les pommes de terre soient fondantes et le dessus bien doré."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "gratin", "dauphinois", "allege", "glucides", "viral2024"]
+  },
+
+  {
+    _id: 'L478',
+    n: "Bouillabaisse Simplifiée Healthy",
+    f: "🇫🇷",
+    k: 296,
+    p: 40,
+    g: 16,
+    l: 8,
+    lv: 3,
+    i: "Poisson blanc (cabillaud) 120g, crevettes décortiquées 80g, moules 80g, tomates 150g, fenouil 80g, oignon 60g, ail 3 gousses, bouillon de poisson 400ml, safran 0.5g, huile d'olive 8g, thym, laurier",
+    st: [
+      "Faire revenir oignon, fenouil et ail dans l'huile d'olive 5 min. Ajouter tomates concassées, safran, thym, laurier et bouillon de poisson. Cuire 20 min.",
+      "Couper le poisson en gros cubes. Ajouter les moules, puis après 2 min les crevettes et le poisson. Cuire 5-7 min à frémissement.",
+      "Retirer les moules non ouvertes, rectifier l'assaisonnement. Servir dans des bols profonds avec du pain grillé frotté à l'ail."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "bouillabaisse", "poisson", "fruits-de-mer", "proteines", "viral2025"]
+  },
+
+  {
+    _id: 'L479',
+    n: "Galettes Sarrasin Poulet-Épinards",
+    f: "🇫🇷",
+    k: 424,
+    p: 30,
+    g: 58,
+    l: 8,
+    lv: 2,
+    i: "Farine de sarrasin 80g, œuf 1 (60g), lait écrémé 200ml, blanc de poulet grillé 120g, champignons 80g, épinards frais 60g, fromage blanc 0% 40g, moutarde 5g, sel, poivre, ciboulette",
+    st: [
+      "Mélanger farine de sarrasin, œuf, lait écrémé et une pincée de sel. Laisser reposer 30 min. Cuire 4 galettes fines dans une poêle bien chaude.",
+      "Faire sauter champignons et épinards 3 min. Effilocher le poulet grillé. Mélanger fromage blanc et moutarde pour la sauce.",
+      "Garnir chaque galette de sauce, poulet effiloché, champignons et épinards. Plier en carré et servir parsemé de ciboulette ciselée."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "galette", "sarrasin", "poulet", "breton", "viral2024"]
+  },
+
+  {
+    _id: 'L480',
+    n: "Tartare de Bœuf Façon Moderne",
+    f: "🇫🇷",
+    k: 271,
+    p: 37,
+    g: 6,
+    l: 11,
+    lv: 1,
+    i: "Bœuf maigre haché 150g (rumsteck), câpres 15g, cornichons 20g, échalote 20g, jaune d'œuf 1, moutarde de Dijon 8g, sauce Worcestershire 5ml, Tabasco 2 gouttes, persil plat 10g, fleur de sel, poivre du moulin",
+    st: [
+      "Hacher finement à la main le bœuf très froid. Ciseler l'échalote, les câpres et les cornichons.",
+      "Mélanger délicatement la viande avec moutarde, jaune d'œuf, sauce Worcestershire, Tabasco, sel et poivre. Incorporer les condiments.",
+      "Former le tartare en cercle sur assiette froide. Garnir de persil haché et d'un filet d'huile d'olive. Servir immédiatement avec pain grillé complet."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "tartare", "boeuf", "cru", "high-protein", "gastronomique", "viral2025"]
+  },
+
+  {
+    _id: 'L481',
+    n: "Pre-Workout Oatmeal Power Bowl",
+    f: "⚡",
+    k: 394,
+    p: 13,
+    g: 72,
+    l: 6,
+    lv: 1,
+    i: "Flocons d'avoine 80g, banane mûre 100g, miel 15g, lait végétal 200ml, graines de chia 10g, beurre d'amande 8g, cannelle 2g, baies fraîches 50g",
+    st: [
+      "Cuire les flocons d'avoine dans le lait végétal 3-4 min à feu doux en remuant. Retirer du feu dès l'épaississement souhaité.",
+      "Incorporer le miel et la cannelle. Verser dans un bol et laisser tiédir 2 min.",
+      "Disposer la banane tranchée, les baies fraîches et les graines de chia. Ajouter le beurre d'amande en filet. Consommer 60-90 min avant la séance."
+    ],
+    w: false,
+    tags: ["sport", "pre-workout", "avoine", "energie", "glucides", "endurance", "viral2024"]
+  },
+
+  {
+    _id: 'L482',
+    n: "Post-Workout Recovery Shake Protéiné",
+    f: "💪",
+    k: 324,
+    p: 32,
+    g: 40,
+    l: 4,
+    lv: 1,
+    i: "Whey protéine vanille 30g, banane congelée 120g, lait écrémé 200ml, flocons d'avoine 20g, miel 10g, glace pilée 100g",
+    st: [
+      "Placer tous les ingrédients dans le blender: whey, banane congelée, lait écrémé, flocons d'avoine, miel et glace.",
+      "Mixer 45-60 sec à puissance maximale jusqu'à obtenir une texture lisse et crémeuse.",
+      "Verser immédiatement dans un grand verre et consommer dans les 30 min suivant la fin de l'entraînement."
+    ],
+    w: true,
+    tags: ["sport", "post-workout", "whey", "recuperation", "proteines", "shake", "viral2025"]
+  },
+
+  {
+    _id: 'L483',
+    n: "Carb Loading Pasta au Poulet",
+    f: "🍝",
+    k: 512,
+    p: 42,
+    g: 68,
+    l: 8,
+    lv: 2,
+    i: "Pâtes complètes cuites 200g, blanc de poulet 150g, sauce tomate 150g, parmesan 15g, ail 2 gousses, basilic frais, huile d'olive 8g, sel, poivre",
+    st: [
+      "Cuire les pâtes al dente selon les instructions. Griller le blanc de poulet 6 min de chaque côté, laisser reposer puis émincer.",
+      "Faire revenir l'ail dans l'huile d'olive 1 min, ajouter la sauce tomate, cuire 5 min. Incorporer les pâtes égouttées.",
+      "Dresser les pâtes en assiette creuse, disposer les tranches de poulet, parsemer de parmesan râpé et de basilic frais."
+    ],
+    w: false,
+    tags: ["sport", "carb-loading", "pates", "poulet", "endurance", "glucides", "pre-compet", "viral2024"]
+  },
+
+  {
+    _id: 'L484',
+    n: "Anti-Inflammatory Golden Bowl",
+    f: "🌿",
+    k: 342,
+    p: 18,
+    g: 45,
+    l: 10,
+    lv: 1,
+    i: "Quinoa cuit 150g, pois chiches 80g, chou-fleur 100g, épinards 60g, curcuma 3g, gingembre frais 10g, huile de coco 8g, citron 1/2, graines de tournesol 10g, poivre noir",
+    st: [
+      "Rôtir le chou-fleur en fleurettes 20 min au four à 200°C avec l'huile de coco, le curcuma et le poivre noir moulu.",
+      "Faire revenir les pois chiches et les épinards 3 min dans une poêle avec le gingembre râpé. Saler et poivrer.",
+      "Composer le bowl: quinoa en base, chou-fleur rôti, pois chiches-épinards. Arroser de jus de citron et parsemer de graines de tournesol."
+    ],
+    w: false,
+    tags: ["sport", "anti-inflammatoire", "curcuma", "recovery", "vegan", "bowl", "viral2025"]
+  },
+
+  {
+    _id: 'L485',
+    n: "Electrolyte Recovery Soup",
+    f: "🥣",
+    k: 230,
+    p: 20,
+    g: 24,
+    l: 6,
+    lv: 2,
+    i: "Bouillon de poulet maison 500ml, blanc de poulet effiloché 80g, patate douce 100g, épinards 60g, sel de mer 2g, citron vert 1/2, gingembre frais 8g, coriandre fraîche 10g, poivre",
+    st: [
+      "Porter le bouillon de poulet à frémissement avec le gingembre râpé. Ajouter la patate douce coupée en petits cubes et cuire 10 min.",
+      "Incorporer le poulet effiloché et les épinards. Cuire encore 3 min jusqu'à ce que les épinards soient fondants.",
+      "Hors du feu, ajouter le jus de citron vert, la coriandre ciselée. Rectifier en sel. Servir dans les 30 min post-effort."
+    ],
+    w: false,
+    tags: ["sport", "recuperation", "electrolytes", "bouillon", "post-workout", "hydratation", "viral2025"]
+  },
+
+  {
+    _id: 'L486',
+    n: "High-Protein Pizza Base Chou-Fleur",
+    f: "🍕",
+    k: 324,
+    p: 32,
+    g: 22,
+    l: 12,
+    lv: 3,
+    i: "Chou-fleur râpé cuit 300g, œuf 1 (60g), mozzarella allégée 40g, sauce tomate sans sucre 80g, blanc de poulet grillé 100g, poivrons 60g, origan 3g, ail en poudre 2g, sel, poivre",
+    st: [
+      "Préchauffer le four à 220°C. Râper et cuire le chou-fleur 5 min au micro-ondes. Laisser refroidir et presser dans un torchon pour enlever toute l'humidité.",
+      "Mélanger le chou-fleur avec l'œuf, l'ail en poudre, l'origan, sel et poivre. Étaler en rond sur papier cuisson et cuire 15 min jusqu'à dorure.",
+      "Garnir avec sauce tomate, poulet effiloché, poivrons et mozzarella allégée. Enfourner 8-10 min. Servir immédiatement."
+    ],
+    w: false,
+    tags: ["sport", "high-protein", "pizza", "chou-fleur", "low-carb", "poulet", "viral2024"]
+  },
+
+  {
+    _id: 'L487',
+    n: "Strength Builder Beef Bowl",
+    f: "💪",
+    k: 483,
+    p: 38,
+    g: 58,
+    l: 11,
+    lv: 2,
+    i: "Bœuf maigre 150g (steak haché façon bowl), riz blanc cuit 200g, brocoli 100g, carotte 80g, soja 20ml, ail 2 gousses, gingembre 5g, huile de sésame 5g, graines de sésame 5g",
+    st: [
+      "Cuire le riz blanc. Cuire le brocoli et la carotte à la vapeur 5 min pour qu'ils restent croquants.",
+      "Faire revenir le bœuf haché à feu vif 4 min avec l'ail, le gingembre et la sauce soja. Déglacer avec un filet d'eau si nécessaire.",
+      "Dresser le bowl: riz en base, légumes d'un côté, bœuf de l'autre. Arroser d'huile de sésame et parsemer de graines de sésame grillées."
+    ],
+    w: false,
+    tags: ["sport", "prise-de-masse", "boeuf", "riz", "bowl", "force", "proteines", "viral2024"]
+  },
+
+  {
+    _id: 'L488',
+    n: "Endurance Energy Balls Dattes-Avoine",
+    f: "⚡",
+    k: 348,
+    p: 8,
+    g: 52,
+    l: 12,
+    lv: 1,
+    i: "Dattes Medjool 60g (dénoyautées), flocons d'avoine 40g, amandes 25g, beurre de cacahuète naturel 15g, cacao en poudre 5g, noix de coco râpée 10g, sel de mer 1g",
+    st: [
+      "Mixer les dattes dénoyautées jusqu'à obtenir une pâte homogène. Ajouter le beurre de cacahuète et mixer encore 30 sec.",
+      "Incorporer à la main les flocons d'avoine, les amandes concassées, le cacao et le sel. Mélanger jusqu'à obtenir une pâte qui se tient.",
+      "Former 8-10 boules de la taille d'une noix. Rouler dans la noix de coco râpée. Réfrigérer 30 min avant consommation. Idéal 1h avant l'effort."
+    ],
+    w: false,
+    tags: ["sport", "endurance", "snack", "dattes", "pre-workout", "energie", "vegan", "viral2025"]
+  },
+
+  {
+    _id: 'L489',
+    n: "Muscle Recovery Salmon Quinoa",
+    f: "🐟",
+    k: 452,
+    p: 36,
+    g: 32,
+    l: 20,
+    lv: 2,
+    i: "Saumon 150g, quinoa cuit 150g, épinards 80g, avocat 50g, concombre 80g, citron 1, aneth frais 10g, huile d'olive 8g, sel, poivre",
+    st: [
+      "Cuire le saumon 12-15 min au four à 180°C après l'avoir assaisonné d'aneth, citron, sel et poivre.",
+      "Faire sauter les épinards 2 min dans l'huile d'olive. Cuire le quinoa selon les instructions si pas déjà prêt.",
+      "Composer le bowl: quinoa tiède, épinards sautés, concombre en rondelles, avocat tranché. Déposer le saumon feuilleté, presser le citron, ajouter l'aneth frais."
+    ],
+    w: false,
+    tags: ["sport", "recuperation", "saumon", "quinoa", "omega3", "anti-inflammatoire", "proteines", "viral2025"]
+  },
+
+  {
+    _id: 'L490',
+    n: "Glycogen Replenishment Rice Bowl",
+    f: "🍚",
+    k: 414,
+    p: 30,
+    g: 60,
+    l: 6,
+    lv: 2,
+    i: "Riz blanc cuit 200g, blanc de poulet grillé 120g, edamame 60g, maïs 50g, carotte râpée 60g, avocat 30g, sauce teriyaki légère 20ml, graines de sésame 5g, ciboulette",
+    st: [
+      "Cuire le riz blanc selon les instructions. Griller le blanc de poulet 5-6 min de chaque côté, laisser reposer et émincer finement.",
+      "Réchauffer l'edamame et le maïs. Préparer la sauce teriyaki légère en diluant avec un peu d'eau.",
+      "Dresser le bowl: riz en base, poulet émincé, edamame, maïs et carotte râpée. Ajouter l'avocat en tranches, arroser de sauce teriyaki, parsemer de sésame et ciboulette."
+    ],
+    w: false,
+    tags: ["sport", "glycogene", "post-workout", "riz", "poulet", "recuperation", "glucides", "viral2024"]
+  },
+
+  {
+    _id: 'L491',
+    n: "Jollof Rice Protéiné",
+    f: "🇳🇬",
+    k: 594,
+    p: 40,
+    g: 68,
+    l: 18,
+    lv: 2,
+    i: "Riz cuit 180g, Cuisse poulet sans peau 150g, Tomate concassée 150g, Oignon 80g, Huile de palme 10ml, Piment doux 5g, Bouillon de volaille 1 cube, Ail 2 gousses",
+    st: ["Faire revenir oignon et ail émincés dans l'huile de palme 3 min, ajouter tomates concassées et piment, cuire 5 min jusqu'à réduction.", "Incorporer le riz cuit et le bouillon émietté, mélanger et cuire 5 min à feu moyen.", "Ajouter le poulet coupé en morceaux, couvrir et cuire 10 min jusqu'à ce que tout soit bien imprégné des saveurs."],
+    w: false,
+    tags: ["africain", "nigérian", "viral", "riz", "poulet", "jollof"]
+  },
+  {
+    _id: 'L492',
+    n: "Thiéboudienne Allégée",
+    f: "🇸🇳",
+    k: 587,
+    p: 48,
+    g: 74,
+    l: 11,
+    lv: 2,
+    i: "Riz cuit 180g, Cabillaud 200g, Tomate concassée 150g, Oignon 80g, Carottes 80g, Huile de palme 8ml, Persil 10g, Ail 2 gousses",
+    st: ["Faire revenir oignon, ail et persil dans l'huile de palme, ajouter tomates et cuire 5 min jusqu'à obtenir une sauce épaisse.", "Ajouter carottes en rondelles et cabillaud en morceaux, verser un peu d'eau, couvrir et cuire 15 min.", "Incorporer le riz cuit, bien mélanger avec la sauce et servir chaud."],
+    w: false,
+    tags: ["africain", "sénégalais", "viral", "poisson", "riz", "thiéboudienne"]
+  },
+  {
+    _id: 'L493',
+    n: "Mafé Poulet Arachide",
+    f: "🇸🇳",
+    k: 558,
+    p: 43,
+    g: 47,
+    l: 22,
+    lv: 2,
+    i: "Cuisse poulet sans peau 150g, Beurre d'arachide 25g, Tomate concassée 150g, Oignon 80g, Riz cuit 100g, Ail 2 gousses, Gingembre frais 5g, Bouillon de volaille 1 cube",
+    st: ["Faire dorer le poulet coupé en morceaux dans une cocotte, retirer et faire revenir oignon, ail et gingembre 3 min.", "Ajouter tomates, beurre d'arachide et bouillon émietté avec 200ml d'eau, mélanger jusqu'à sauce homogène.", "Remettre le poulet, couvrir et mijoter 20 min à feu doux, servir sur le riz cuit."],
+    w: false,
+    tags: ["africain", "sénégalais", "viral", "arachide", "poulet", "mafé"]
+  },
+  {
+    _id: 'L494',
+    n: "Poulet Yassa Citron",
+    f: "🇸🇳",
+    k: 658,
+    p: 48,
+    g: 67,
+    l: 22,
+    lv: 2,
+    i: "Cuisse poulet sans peau 200g, Oignon 200g, Jus de citron 60ml, Riz cuit 150g, Huile d'olive 10ml, Moutarde 10g, Ail 3 gousses, Piment vert 1",
+    st: ["Mariner le poulet avec jus de citron, oignons émincés, ail, moutarde et piment au minimum 2h au réfrigérateur.", "Égoutter et faire griller le poulet à la poêle avec l'huile 8 min de chaque côté, réserver.", "Faire caraméliser les oignons de la marinade 10 min, remettre le poulet, couvrir 5 min et servir sur riz."],
+    w: false,
+    tags: ["africain", "sénégalais", "viral", "citron", "poulet", "yassa"]
+  },
+  {
+    _id: 'L495',
+    n: "Injera Lentilles Vegan",
+    f: "🇪🇹",
+    k: 536,
+    p: 29,
+    g: 87,
+    l: 8,
+    lv: 1,
+    i: "Lentilles vertes cuites 250g, Galette injera 60g, Oignon 80g, Tomate concassée 100g, Huile d'olive 5ml, Berbéré épice 5g, Ail 2 gousses, Gingembre 5g",
+    st: ["Faire revenir oignon, ail et gingembre dans l'huile, ajouter épices berbéré et cuire 2 min pour libérer les arômes.", "Incorporer tomates concassées et lentilles cuites, mélanger et mijoter 10 min à feu doux.", "Réchauffer l'injera et servir les lentilles dessus, déchirer l'injera pour ramasser la garniture comme en Éthiopie."],
+    w: false,
+    tags: ["africain", "éthiopien", "vegan", "viral", "lentilles", "injera", "tiktok"]
+  },
+  {
+    _id: 'L496',
+    n: "Bobotie Bœuf Épicé",
+    f: "🇿🇦",
+    k: 612,
+    p: 47,
+    g: 70,
+    l: 16,
+    lv: 2,
+    i: "Bœuf haché maigre 150g, Oignon 100g, Raisins secs 30g, Œuf 1, Riz cuit 120g, Curry en poudre 5g, Curcuma 2g, Amandes effilées 10g, Abricots secs 20g",
+    st: ["Faire revenir oignon émincé, ajouter le bœuf haché et cuire 8 min, incorporer curry, curcuma, raisins secs et abricots.", "Verser dans un plat allant au four, battre l'œuf avec 50ml de lait et verser sur la viande, parsemer d'amandes.", "Enfourner à 180°C pendant 25 min jusqu'à ce que le dessus soit doré, servir avec le riz."],
+    w: false,
+    tags: ["africain", "sud-africain", "viral", "bœuf", "épicé", "bobotie"]
+  },
+  {
+    _id: 'L497',
+    n: "Jerk Chicken Jamaïcain",
+    f: "🇯🇲",
+    k: 593,
+    p: 47,
+    g: 54,
+    l: 21,
+    lv: 3,
+    i: "Cuisse poulet sans peau 200g, Riz cuit 150g, Jus de citron vert 30ml, Huile de coco 8ml, Piment scotch bonnet 1, Ail 3 gousses, Thym frais 5g, Cannelle 2g, Allspice 3g",
+    st: ["Mixer piment, ail, thym, cannelle, allspice, jus de citron et huile en pâte jerk, enrober le poulet et mariner 4h minimum.", "Griller le poulet au barbecue ou au four gril à 200°C, 15 min de chaque côté jusqu'à caramélisation.", "Laisser reposer 5 min, trancher et servir sur riz blanc avec quartiers de citron vert."],
+    w: false,
+    tags: ["caribéen", "jamaïcain", "viral", "poulet", "jerk", "épicé"]
+  },
+  {
+    _id: 'L498',
+    n: "Rice & Peas Caribéens",
+    f: "🇯🇲",
+    k: 573,
+    p: 18,
+    g: 96,
+    l: 13,
+    lv: 1,
+    i: "Riz cuit 200g, Haricots rouges cuits 150g, Lait de coco 50ml, Oignon 60g, Ail 2 gousses, Thym frais 5g, Ciboulette 10g, Poivre noir",
+    st: ["Faire revenir oignon et ail dans une casserole, ajouter haricots rouges, lait de coco, thym et 100ml d'eau, porter à frémissement 5 min.", "Incorporer le riz cuit, mélanger délicatement pour que le riz s'imprègne du lait de coco et des saveurs.", "Parsemer de ciboulette ciselée et servir chaud en accompagnement ou en plat végétarien complet."],
+    w: false,
+    tags: ["caribéen", "jamaïcain", "viral", "riz", "haricots", "coco", "végétarien"]
+  },
+  {
+    _id: 'L499',
+    n: "Roti Caribéen Poulet Curry",
+    f: "🇹🇹",
+    k: 570,
+    p: 45,
+    g: 66,
+    l: 14,
+    lv: 2,
+    i: "Galette roti farine de blé 70g, Cuisse poulet sans peau 150g, Pois chiches cuits 80g, Oignon 60g, Curry madras 5g, Cumin 2g, Ail 2 gousses, Gingembre 5g, Coriandre fraîche 10g",
+    st: ["Faire revenir oignon, ail et gingembre, ajouter curry et cumin, incorporer poulet en cubes et pois chiches, cuire 15 min avec 100ml d'eau.", "Réchauffer la galette roti à sec dans une poêle chaude 1 min de chaque côté jusqu'à légère coloration.", "Garnir la galette avec la préparation poulet-pois chiches, parsemer de coriandre fraîche et plier en wrap."],
+    w: false,
+    tags: ["caribéen", "trinidadien", "viral", "poulet", "roti", "curry"]
+  },
+  {
+    _id: 'L500',
+    n: "Plantain Grillé Protein Bowl",
+    f: "🌴",
+    k: 570,
+    p: 42,
+    g: 69,
+    l: 14,
+    lv: 2,
+    i: "Plantain mûr 150g, Cuisse poulet grillée 150g, Haricots noirs cuits 80g, Avocat 40g, Jus de citron vert 30ml, Coriandre fraîche 10g, Oignon rouge 40g, Piment doux 3g",
+    st: ["Couper le plantain en rondelles et griller 3 min de chaque côté à la poêle antiadhésive sans matière grasse jusqu'à caramélisation.", "Cuire le poulet assaisonné au gril ou à la poêle 7 min de chaque côté, trancher en lamelles.", "Assembler le bowl avec plantain, poulet, haricots noirs, avocat en dés, arroser de citron vert et garnir de coriandre et oignon rouge."],
+    w: false,
+    tags: ["caribéen", "africain", "viral", "bowl", "plantain", "poulet", "healthy", "tiktok"]
+  },
+
   // ─── INSALATE & ANTIPASTI MODERNES (R460-R469) ────────────────────────────
   {
     id: 'R460',
@@ -24892,166 +28586,6 @@
     },
 
     // ═══════════════════════════════════════════════════
-    //  ESPADON  (R645–R649)
-    // ═══════════════════════════════════════════════════
-
-    {
-      id: 'R645',
-      name: 'Espadon Marinade Japonaise',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🗡️',
-      origin: '🇯🇵',
-      tags: ['high-protein', 'gluten-free', 'omega3', 'asian'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 10,
-      difficulty: 2,
-      // 82×4 + 8×4 + 10×9 = 328+32+90 = 450 ✓
-      baseNutrition: { calories: 450, proteinGrams: 82, carbsGrams: 8, fatGrams: 10 },
-      ingredients: [
-        { name: 'Espadon (darnes)', qty: 400, unit: 'g' },
-        { name: 'Sauce soja tamari', qty: 40, unit: 'ml' },
-        { name: 'Mirin', qty: 20, unit: 'ml' },
-        { name: 'Gingembre frais râpé', qty: 10, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
-        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
-        { name: 'Sésame blanc grillé', qty: 10, unit: 'g' },
-        { name: 'Ciboulette asiatique', qty: 10, unit: 'g' }
-      ],
-      steps: [
-        'Mélanger tamari, mirin, gingembre râpé, ail écrasé et huile de sésame ; mariner les darnes 30 min au frais.',
-        'Saisir les darnes dans une poêle chaude (ou griller) 3-4 min par face en nappant avec la marinade.',
-        'Saupoudrer de sésame grillé et de ciboulette ciselée ; servir avec du riz vapeur ou des nouilles soba.'
-      ]
-    },
-
-    {
-      id: 'R646',
-      name: 'Espadon Grillé Sauce Vierge',
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🗡️',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'gluten-free', 'omega3', 'light'],
-      servings: 2,
-      prepTime: 12,
-      cookTime: 10,
-      difficulty: 1,
-      // 80×4 + 6×4 + 12×9 = 320+24+108 = 452 ✓
-      baseNutrition: { calories: 452, proteinGrams: 80, carbsGrams: 6, fatGrams: 12 },
-      ingredients: [
-        { name: 'Espadon (darnes)', qty: 400, unit: 'g' },
-        { name: 'Tomates mûres', qty: 150, unit: 'g' },
-        { name: 'Olives vertes', qty: 30, unit: 'g' },
-        { name: 'Câpres', qty: 15, unit: 'g' },
-        { name: 'Basilic frais', qty: 15, unit: 'g' },
-        { name: "Huile d'olive", qty: 25, unit: 'ml' },
-        { name: 'Citron (jus)', qty: 1, unit: 'pce' },
-        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-      ],
-      steps: [
-        "Préparer la sauce vierge : concasser les tomates, hacher olives et câpres, ciseler le basilic ; mélanger avec huile d'olive et jus de citron.",
-        "Griller les darnes d'espadon sur grille très chaude 3-4 min par face ; elles doivent rester légèrement nacrées au centre.",
-        'Dresser et napper généreusement de sauce vierge ; servir avec des légumes grillés.'
-      ]
-    },
-
-    {
-      id: 'R647',
-      name: "Brochettes d'Espadon Tapenade",
-      category: 'mediterranean',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🗡️',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'gluten-free', 'omega3'],
-      servings: 2,
-      prepTime: 20,
-      cookTime: 10,
-      difficulty: 1,
-      // 78×4 + 5×4 + 14×9 = 312+20+126 = 458 ✓
-      baseNutrition: { calories: 458, proteinGrams: 78, carbsGrams: 5, fatGrams: 14 },
-      ingredients: [
-        { name: 'Espadon (cubes 3 cm)', qty: 400, unit: 'g' },
-        { name: 'Tapenade noire', qty: 40, unit: 'g' },
-        { name: 'Poivron rouge', qty: 100, unit: 'g' },
-        { name: 'Courgette', qty: 100, unit: 'g' },
-        { name: "Huile d'olive", qty: 15, unit: 'ml' },
-        { name: 'Thym, herbes de Provence', qty: 2, unit: 'pincées' },
-        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-      ],
-      steps: [
-        "Alterner sur des brochettes les cubes d'espadon, poivron rouge et courgette taillés en morceaux ; badigeonner d'huile d'olive et herbes.",
-        'Griller les brochettes au barbecue ou en grilloir 4-5 min par face.',
-        'Servir avec une cuillère de tapenade sur chaque brochette et une salade de roquette.'
-      ]
-    },
-
-    {
-      id: 'R648',
-      name: 'Espadon Court-Bouillon Ratatouille',
-      category: 'french',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🗡️',
-      origin: '🇫🇷',
-      tags: ['high-protein', 'gluten-free', 'omega3', 'balanced'],
-      servings: 2,
-      prepTime: 20,
-      cookTime: 30,
-      difficulty: 2,
-      // 76×4 + 18×4 + 10×9 = 304+72+90 = 466 ✓
-      baseNutrition: { calories: 466, proteinGrams: 76, carbsGrams: 18, fatGrams: 10 },
-      ingredients: [
-        { name: 'Espadon (darnes)', qty: 380, unit: 'g' },
-        { name: 'Courgette', qty: 150, unit: 'g' },
-        { name: 'Aubergine', qty: 120, unit: 'g' },
-        { name: 'Tomates', qty: 150, unit: 'g' },
-        { name: 'Poivron rouge', qty: 100, unit: 'g' },
-        { name: 'Oignon', qty: 60, unit: 'g' },
-        { name: 'Ail', qty: 2, unit: 'gousses' },
-        { name: "Huile d'olive", qty: 20, unit: 'ml' },
-        { name: 'Herbes de Provence', qty: 1, unit: 'c. à café' },
-        { name: 'Sel, poivre', qty: 1, unit: 'pincée' }
-      ],
-      steps: [
-        'Préparer la ratatouille : faire revenir oignon et ail, ajouter les légumes en dés, assaisonner et mijoter 20 min à couvert.',
-        'Préparer un court-bouillon (eau, laurier, thym, grains de poivre) ; pocher les darnes à frémissement 8-10 min.',
-        "Dresser le poisson sur la ratatouille, arroser d'un filet d'huile d'olive et parsemer de basilic frais."
-      ]
-    },
-
-    {
-      id: 'R649',
-      name: 'Tataki Espadon Ponzu',
-      category: 'japanese',
-      mealTypes: ['lunch', 'dinner'],
-      emoji: '🗡️',
-      origin: '🇯🇵',
-      tags: ['high-protein', 'gluten-free', 'omega3', 'asian', 'premium'],
-      servings: 2,
-      prepTime: 15,
-      cookTime: 5,
-      difficulty: 3,
-      // 72×4 + 6×4 + 8×9 = 288+24+72 = 384 ✓
-      baseNutrition: { calories: 384, proteinGrams: 72, carbsGrams: 6, fatGrams: 8 },
-      ingredients: [
-        { name: 'Espadon (bloc sashimi grade)', qty: 360, unit: 'g' },
-        { name: 'Sauce ponzu', qty: 40, unit: 'ml' },
-        { name: 'Citron vert (jus)', qty: 1, unit: 'pce' },
-        { name: 'Gingembre frais', qty: 10, unit: 'g' },
-        { name: 'Huile de sésame', qty: 10, unit: 'ml' },
-        { name: 'Daikon râpé', qty: 50, unit: 'g' },
-        { name: 'Ciboulette asiatique', qty: 10, unit: 'g' },
-        { name: 'Flocons de piment togarashi', qty: 1, unit: 'pincée' }
-      ],
-      steps: [
-        "Saisir le bloc d'espadon 30 secondes sur chaque face dans une poêle très chaude légèrement huilée ; l'intérieur doit rester cru.",
-        'Trancher finement et dresser sur assiette froide ; arroser de sauce ponzu et jus de citron vert.',
-        'Garnir de daikon râpé, gingembre julienne, ciboulette et flocons de piment ; servir immédiatement.'
-      ]
-    },
-
-    // ═══════════════════════════════════════════════════
     //  THON ROUGE  (R650–R654)
     // ═══════════════════════════════════════════════════
 
@@ -26408,7 +29942,7 @@
 
   /**
    * Retourne le pool de recettes pour un type de repas.
-   * Toutes les 527 recettes (R201-R519 + L001-L208 migrées) sont dans RECIPES_DB.
+   * Toutes les 662 recettes (R201-R669 + L001-L450 migrées) sont dans RECIPES_DB.
    * @param {'breakfast'|'lunch'|'snack'|'dinner'} mealType
    * @returns {Array} Pool de recettes au format simplifié
    */
