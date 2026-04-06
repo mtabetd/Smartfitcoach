@@ -15,58 +15,48 @@ var ALLOWED_ORIGINS = [
   'http://127.0.0.1:3000'
 ];
 
-// ── Rate Limiting (sliding window horaire + quota journalier) ────────────────
-var _hourStore = new Map(); // ip -> [{ts}]
-var _dayStore = new Map();  // ip -> {date: 'YYYY-MM-DD', count: N}
+// ── Rate Limiting (quota hebdomadaire) ───────────────────────────────────────
+var _weekStore = new Map(); // ip -> {week: 'YYYY-WXX', count: N, firstTs: N}
 
-var HOUR_WINDOW_MS = 3600000; // 1 heure
-var HOUR_MAX = 3;  // max 3 req/heure par IP (vision = très coûteux)
-var DAY_MAX = 5;   // max 5 req/jour par IP
+var WEEK_MAX = 1; // max 1 analyse/semaine par IP (Sonnet = coûteux)
 
-function getTodayUTC() {
-  return new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
+function getWeekUTC() {
+  // Retourne 'YYYY-WXX' (numéro de semaine ISO)
+  var d = new Date();
+  var jan4 = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+  var dayOfYear = Math.floor((d - new Date(Date.UTC(d.getUTCFullYear(), 0, 1))) / 86400000) + 1;
+  var weekNum = Math.ceil((dayOfYear + jan4.getUTCDay()) / 7);
+  return d.getUTCFullYear() + '-W' + String(weekNum).padStart(2, '0');
 }
 
 function checkRateLimit(ip) {
   var now = Date.now();
-  var today = getTodayUTC();
+  var week = getWeekUTC();
 
-  // ── Quota journalier ──
-  var dayEntry = _dayStore.get(ip);
-  if (!dayEntry || dayEntry.date !== today) {
-    dayEntry = { date: today, count: 0 };
+  var entry = _weekStore.get(ip);
+  if (!entry || entry.week !== week) {
+    entry = { week: week, count: 0, firstTs: now };
   }
-  if (dayEntry.count >= DAY_MAX) {
-    return { allowed: false, reason: 'quota_day' };
-  }
-
-  // ── Sliding window horaire ──
-  var hourList = _hourStore.get(ip) || [];
-  hourList = hourList.filter(function(t) { return now - t < HOUR_WINDOW_MS; });
-  if (hourList.length >= HOUR_MAX) {
-    return { allowed: false, reason: 'quota_hour' };
+  if (entry.count >= WEEK_MAX) {
+    // Calculer les secondes restantes jusqu'à lundi minuit UTC
+    var d = new Date();
+    var msUntilMonday = (7 - d.getUTCDay() || 7) * 86400000
+      - d.getUTCHours() * 3600000
+      - d.getUTCMinutes() * 60000
+      - d.getUTCSeconds() * 1000;
+    return { allowed: false, reason: 'quota_week', retryAfter: Math.ceil(msUntilMonday / 1000) };
   }
 
-  // Enregistrer la requête
-  hourList.push(now);
-  _hourStore.set(ip, hourList);
-  dayEntry.count += 1;
-  _dayStore.set(ip, dayEntry);
-
+  entry.count += 1;
+  _weekStore.set(ip, entry);
   return { allowed: true };
 }
 
 // Nettoyer périodiquement pour éviter la fuite mémoire
 function pruneRateLimitStore() {
-  var now = Date.now();
-  var today = getTodayUTC();
-  _hourStore.forEach(function(list, ip) {
-    var filtered = list.filter(function(t) { return now - t < HOUR_WINDOW_MS; });
-    if (filtered.length === 0) _hourStore.delete(ip);
-    else _hourStore.set(ip, filtered);
-  });
-  _dayStore.forEach(function(entry, ip) {
-    if (entry.date !== today) _dayStore.delete(ip);
+  var week = getWeekUTC();
+  _weekStore.forEach(function(entry, ip) {
+    if (entry.week !== week) _weekStore.delete(ip);
   });
 }
 
@@ -160,10 +150,8 @@ exports.handler = async function(event, context) {
 
   var rl = checkRateLimit(clientIp);
   if (!rl.allowed) {
-    var retryAfter = rl.reason === 'quota_hour' ? '3600' : '86400';
-    var rlMsg = rl.reason === 'quota_day'
-      ? 'Quota journalier atteint (5 analyses/jour). Revenez demain.'
-      : 'Trop de requêtes (max 3 analyses/heure). Veuillez patienter.';
+    var retryAfter = String(rl.retryAfter || 604800);
+    var rlMsg = 'Analyse corporelle disponible 1 fois par semaine. Revenez lundi pour une nouvelle analyse !';
     return {
       statusCode: 429,
       headers: Object.assign({}, headers, { 'Retry-After': retryAfter }),
