@@ -28,7 +28,7 @@
   }
 
   // SHA-256('FROUITS' + 'sfc_gate_2024') — pre-computed, not derivable without knowing the password
-  var GATE_SHA256 = 'a8c3e2b1f4d07e9562a1c3f8e2b4d09a7c3e5b2f1d4a06e8c2b5d09f1a3e7c4';
+  var GATE_SHA256 = '2ef62fa3d883f0d00c1f87000886833e0b182dfa42785c92710fcab64d84238e';
 
   // Brute-force protection: max attempts per session
   var _attempts = 0;
