@@ -29640,8 +29640,8 @@
       return true;
     }).sort(function (a, b) {
       if (!mealTarget) return 0;
-      var calA = Math.abs((a.baseNutrition.calories / a.servings) - mealTarget);
-      var calB = Math.abs((b.baseNutrition.calories / b.servings) - mealTarget);
+      var calA = a.baseNutrition && a.baseNutrition.calories ? Math.abs((a.baseNutrition.calories / (a.servings || 1)) - mealTarget) : Math.abs((a.k || 0) - mealTarget);
+      var calB = b.baseNutrition && b.baseNutrition.calories ? Math.abs((b.baseNutrition.calories / (b.servings || 1)) - mealTarget) : Math.abs((b.k || 0) - mealTarget);
       return calA - calB;
     }).map(function(r) { return normalizeRecipe(r); });
   }
@@ -29724,7 +29724,7 @@
     for (var i = 0; i < mealsPerDay; i++) {
       var recipe = candidates[i % candidates.length];
       var targetCal = Math.round(userState.caloriesTarget * mealFraction);
-      var caloriesPerServing = (recipe.servings && recipe.servings > 0) ? recipe.baseNutrition.calories / recipe.servings : 0;
+      var caloriesPerServing = (recipe.servings && recipe.servings > 0 && recipe.baseNutrition && recipe.baseNutrition.calories) ? recipe.baseNutrition.calories / recipe.servings : (recipe.k || 0);
       if (!caloriesPerServing) continue; // évite division par zéro si servings manquant
       var ratio = targetCal / caloriesPerServing;
       var cost = calcRecipeCost(recipe.id, ratio);
