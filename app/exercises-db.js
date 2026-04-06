@@ -267,6 +267,30 @@ var EXERCISES = {
         tips: ["Le vecteur oblique (45°) réduit le cisaillement sous-acromial par rapport au développé vertical — épaule-friendly", "Prise neutre (pouces vers le haut) tout au long — favorise la stabilité de la coiffe des rotateurs", "Version unilatérale : ajouter une légère rotation du tronc côté opposé pour intégrer le core", "Idéal comme alternative au développé militaire pour les pratiquants avec antécédents d'épaule"],
         lv: 2,
         tags: ["pectoraux", "epaules", "triceps", "compose", "force"]
+    },
+    {
+        n: "Hex press",
+        m: "Pectoraux internes / Triceps",
+        eq: "Deux haltères",
+        sets: "3×10-15",
+        rest: "60s",
+        video: "https://www.youtube.com/results?search_query=hex+press+dumbbell+chest+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Allongé sur le banc, tenir deux haltères pressés l'un contre l'autre (faces plates en contact). Presser vers le haut en maintenant la pression d'adduction.",
+        tips: ["Maintenir une pression isométrique constante entre les deux haltères — c'est ce qui active les fibres médianes du pectoral", "Descendre les haltères jusqu'à la poitrine tout en gardant la pression latérale", "Éviter de laisser les haltères s'écarter — la tension d'adduction doit être continue", "Excellent en finition ou pump set — 3×15 avec charge modérée"],
+        lv: 2,
+        tags: ["pectoraux", "triceps", "isolation", "finition", "hypertrophie"]
+    },
+    {
+        n: "Decline cable fly",
+        m: "Pectoraux inférieurs",
+        eq: "Câble double poulie haute + banc décliné",
+        sets: "3×12-15",
+        rest: "60s",
+        video: "https://www.youtube.com/results?search_query=decline+cable+fly+lower+chest+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Banc décliné positionné entre deux poulies hautes. Réaliser un écarté câble vers le bas, en arc descendant croisant les mains devant le bas-ventre.",
+        tips: ["Les poulies hautes créent un vecteur descendant ciblant les fibres sternales basses du pectoral", "Maintenir une légère flexion des coudes tout au long — jamais les bras complètement tendus", "Sentir l'étirement maximal en position ouverte avant de contracter en croisant", "Croiser les mains en fin de mouvement pour maximaliser la contraction des pectoraux inférieurs"],
+        lv: 2,
+        tags: ["pectoraux", "cable", "isolation", "finition", "pectoraux-inferieurs"]
     }
   ],
 
@@ -536,6 +560,43 @@ var EXERCISES = {
         tips: ["La prise large dirige les coudes vers l'extérieur — cible les rhomboïdes et le trapèze moyen vs prise serrée qui cible le grand dorsal", "Penser à « serrer un crayon entre les omoplates » en fin de mouvement pour maximiser la rétraction", "Ne pas laisser les épaules se protacter trop loin en phase excentrique — garder une légère tension scapulaire", "Idéal après les tirages verticaux — complémentarité des vecteurs pour un développement dorsal complet"],
         lv: 2,
         tags: ["dos", "cable", "isolation", "hypertrophie"]
+    },
+    {
+        n: "Kroc row",
+        m: "Grand dorsal / Rhomboïdes",
+        eq: "Haltère lourd",
+        sets: "2×15-20",
+        rest: "90s",
+        video: "https://www.youtube.com/results?search_query=kroc+row+heavy+dumbbell+row+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Rowing haltère unilatéral avec charge très lourde et légère triche de hanche, visant une surcharge maximale du grand dorsal et des rhomboïdes.",
+        tips: ["Utiliser une charge suffisamment lourde pour nécessiter une légère rotation du tronc — c'est intentionnel dans le Kroc row", "Saisir la barre de façon ferme, s'appuyer sur un banc ou un rack pour stabiliser l'épaule opposée", "Tirer le coude le plus haut possible — amplitude maximale pour recruter la totalité du grand dorsal", "Popularisé par Matt Kroczaleski — excellent pour développer la masse et la force du dos en plateau"],
+        lv: 3,
+        tags: ["dos", "haltere", "masse", "force", "unilateral"]
+    },
+    {
+        n: "Single arm cable row",
+        m: "Grand dorsal / Rhomboïde",
+        eq: "Câble poulie basse + poignée",
+        sets: "4×10-12",
+        rest: "75s",
+        video: "https://www.youtube.com/results?search_query=single+arm+cable+row+unilateral+back+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        desc: "Rowing câble unilatéral debout ou assis, permettant une rotation du tronc et une amplitude supérieure au rowing bilatéral.",
+        tips: ["Permettre une légère rotation du tronc vers l'avant en phase excentrique pour maximiser l'étirement du grand dorsal", "Tirer en ramenant l'épaule en arrière et en bas — penser à « mettre la scapula dans la poche arrière »", "Compléter toutes les reps d'un côté avant de changer — noter les déséquilibres gauche/droite", "Idéal pour corriger les asymétries dorsales fréquentes chez les pratiquants unilatéraux"],
+        lv: 2,
+        tags: ["dos", "cable", "unilateral", "hypertrophie"]
+    },
+    {
+        n: "Snatch grip deadlift",
+        m: "Grand dorsal / Trapèzes / Chaîne postérieure",
+        eq: "Barre olympique",
+        sets: "4×4-6",
+        rest: "180s",
+        video: "https://www.youtube.com/results?search_query=snatch+grip+deadlift+wide+grip+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
+        warn: "Prise très large = hyperextension des poignets possible — utiliser des sangles. Contre-indiqué si hernie discale ou épicondylite sévère.",
+        desc: "Soulevé de terre avec prise très large (snatch width), accentuant l'activation du grand dorsal comme muscle stabilisateur et développant la force de tirage en position allongée.",
+        tips: ["Prise mesurée : poignets alignés avec les hanches, bras presque tendus verticalement en position basse", "Position plus basse des hanches qu'un deadlift conventionnel — les épaules sont plus reculées derrière la barre", "Le grand dorsal travaille en isométrie intense pour maintenir la barre proche du corps malgré la prise large", "Utiliser des sangles de tirage car la prise large multiplie la charge sur les tendons fléchisseurs des doigts"],
+        lv: 3,
+        tags: ["dos", "trapèzes", "chaine-posterieure", "force", "powerlifting"]
     }
   ],
 
