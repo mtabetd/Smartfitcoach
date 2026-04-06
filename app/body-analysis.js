@@ -134,13 +134,13 @@ function compressImage(file, callback) {
     var img = new Image();
     img.onload = function() {
       var canvas = document.createElement('canvas');
-      var maxW = 1024, maxH = 1024;
+      var maxW = 1440, maxH = 1440;
       var w = img.width, h = img.height;
       if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
       if (h > maxH) { w = Math.round(w * maxH / h); h = maxH; }
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      var b64 = canvas.toDataURL('image/jpeg', 0.75);
+      var b64 = canvas.toDataURL('image/jpeg', 0.92);
       callback(b64);
     };
     img.src = e.target.result;
