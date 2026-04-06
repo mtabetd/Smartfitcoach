@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'production' && process.env.NETLIFY_DEV === 'true')
 
 // ── Rate Limiting hebdomadaire ───────────────────────────────────────────────
 var _weekStore = new Map();
-var WEEK_MAX = 1; // 1 génération/semaine par IP (Sonnet = coûteux)
+var WEEK_MAX = 3; // 3 générations/semaine par IP (Sonnet = coûteux mais 1/sem trop strict — feedback users Marc/Lucie)
 
 function getWeekUTC() {
   var d = new Date();
@@ -372,7 +372,7 @@ exports.handler = async function(event) {
     return {
       statusCode: 429,
       headers: Object.assign({}, headers, { 'Retry-After': retryAfter }),
-      body: JSON.stringify({ error: 'Programme déjà généré cette semaine. Nouveau disponible lundi !' })
+      body: JSON.stringify({ error: 'Tu as utilisé tes 3 générations cette semaine. Nouvelles disponibles lundi !' })
     };
   }
 
