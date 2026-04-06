@@ -53,6 +53,10 @@
     gateEl.style.display='flex';
     gateBtnEl.addEventListener('click', tryUnlock);
     gatePwEl.addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock();});
+    // Defense: prevent native form submission (which would navigate the page
+    // and mask wrong-password errors). CSP blocks inline onsubmit handlers.
+    var gateForm=document.getElementById('gate-form');
+    if(gateForm){gateForm.addEventListener('submit',function(e){e.preventDefault();tryUnlock();});}
   }
 
   function tryUnlock(){
