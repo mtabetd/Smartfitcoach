@@ -1,4 +1,13 @@
-// Schéma recette compact (recipes-db.js) :
+// ⚠️  FICHIER LEGACY — NE PAS CHARGER DANS index.html NI sw.js
+//
+// Ce fichier était la source de recettes compacte originale (format court : k, p, g, l, i, st…).
+// Toutes ses recettes (L001–L450) ont été migrées vers recipe-engine.js en format étendu
+// (baseNutrition, ingredients[], steps[]) et sont désormais accessibles via window.RecipeEngine.
+//
+// Ce fichier est conservé uniquement comme référence / archive.
+// Source de vérité : app/recipe-engine.js → RECIPES_DB (662 recettes)
+//
+// Schéma compact original (pour référence) :
 // _id: string — identifiant unique
 // n: string — nom de la recette
 // k: number — calories (kcal)
