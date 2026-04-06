@@ -569,8 +569,8 @@
 
   function shareMuscuProgram(programText) {
     var shareData = {
-      title: 'Mon programme musculation Smart Fit Coach',
-      text: 'Voici mon programme 100% personnalisé généré par Smart Fit Coach — 12 semaines, calculées au kilo près.',
+      title: 'Mon programme SmartFitCoach',
+      text: 'Mon programme sur 12 semaines — SmartFitCoach.',
       url: window.location.origin
     };
     if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {

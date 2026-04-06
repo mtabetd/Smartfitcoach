@@ -97,7 +97,15 @@ function getLastBadge() {
     if (!raw) return null;
     var badges = JSON.parse(raw);
     if (!Array.isArray(badges) || badges.length === 0) return null;
-    return badges[badges.length - 1];
+    var last = badges[badges.length - 1];
+    // Resolve badge ID to full definition (name + icon) from GAMIFICATION
+    var badgeId = typeof last === 'string' ? last : (last && last.id);
+    if (badgeId && window.GAMIFICATION && window.GAMIFICATION.BADGES) {
+      var def = window.GAMIFICATION.BADGES.find(function(b) { return b.id === badgeId; });
+      if (def) return { id: def.id, name: def.name, icon: def.icon, desc: def.desc };
+    }
+    if (badgeId) return { id: badgeId, name: badgeId, icon: '◆' };
+    return last;
   } catch(e) { return null; }
 }
 
@@ -238,9 +246,21 @@ function renderCardStreak() {
   }
 
   if (lastBadge) {
-    var badgeName = lastBadge.name || (lastBadge.id || 'Badge');
-    var badgeEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);' });
-    badgeEl.textContent = 'Dernier badge\u00a0: ' + badgeName;
+    var badgeIcon = lastBadge.icon || '◆';
+    var badgeName = lastBadge.name || lastBadge.id || 'Badge';
+    var badgeDesc = lastBadge.desc || '';
+    var badgeEl = h('div', { style: 'display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);background:var(--ivory);' });
+    var iconEl = h('div', { style: 'font-size:18px;flex-shrink:0;color:var(--accent);' });
+    iconEl.textContent = badgeIcon;
+    var textEl = h('div', {});
+    var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black);font-weight:500;' });
+    nameEl.textContent = badgeName;
+    var descEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px;' });
+    descEl.textContent = badgeDesc;
+    textEl.appendChild(nameEl);
+    if (badgeDesc) textEl.appendChild(descEl);
+    badgeEl.appendChild(iconEl);
+    badgeEl.appendChild(textEl);
     c.appendChild(badgeEl);
   }
 

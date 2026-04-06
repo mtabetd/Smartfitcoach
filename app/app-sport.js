@@ -4073,25 +4073,7 @@ function renderMusculationProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
 
- // ─── CARTE IA — Programme sur-mesure (visuellement distinct du programme hebdomadaire) ───
- var muscuGenWrap = h('div', {
-   style: 'margin:20px 0 24px 0;border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.04);padding:20px 18px;'
- });
- var muscuGenHeader = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:10px'});
- muscuGenHeader.appendChild(h('div', {style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);font-family:"Helvetica Neue",Arial,sans-serif;font-weight:bold;'}, 'PROGRAMME IA'));
- muscuGenHeader.appendChild(h('div', {style: 'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ivory,#FAF9F6);background:var(--accent,#1A4A1A);padding:2px 7px;font-family:"Helvetica Neue",Arial,sans-serif;'}, 'NOUVEAU'));
- muscuGenWrap.appendChild(muscuGenHeader);
- muscuGenWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;color:var(--black,#1A1A18);margin-bottom:6px;'}, 'Ton programme 12 semaines sur-mesure'));
- muscuGenWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px;'}, 'L\u2019intelligence artificielle analyse ton profil complet et g\u00e9n\u00e8re un programme unique \u2014 exercices, charges, progression et p\u00e9riodisation calibr\u00e9s sur toi seul.'));
- var muscuGenBtn = h('button', {
-   onclick: function() { if (window.openMuscuProgramGenerator) window.openMuscuProgramGenerator(); },
-   style: 'padding:14px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;width:100%;'
- }, '\u2192 Cr\u00e9er mon programme IA');
- muscuGenWrap.appendChild(muscuGenBtn);
- p.appendChild(muscuGenWrap);
-
  // ─── SECTION : PROGRAMME DE LA SEMAINE ───
- p.appendChild(h('div', {style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;margin-bottom:4px;margin-top:4px;'}, 'PROGRAMME DE LA SEMAINE'));
 
  appendWellnessBanner(p);
 
