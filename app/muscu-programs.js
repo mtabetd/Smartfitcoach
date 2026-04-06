@@ -1617,12 +1617,100 @@ var FUSION_PROGRAMS = {
   ]
 };
 
+// ─── STARTING STRENGTH (Mark Rippetoe) ───────────────────────────────────────
+var STARTING_STRENGTH_PROGRAMS = {
+  meta: {
+    name: 'Starting Strength',
+    athlete: 'Méthode Mark Rippetoe',
+    philosophy: 'Force pure pour débutants. Progression linéaire +2.5kg par séance sur les composés. 5 exercices, 3x5 partout (sauf deadlift 1x5). Full body 3j/sem.',
+    frequency: '3 jours/semaine',
+    session_duration: '60-75 min',
+    key_principles: ['Progression linéaire', '3x5 sur les composés', 'Full body', 'Focus barbell uniquement', 'Aucune isolation']
+  },
+  programs: {
+    pectoraux: {
+      beginner: {
+        name: 'Starting Strength A — Push',
+        description: 'Workout A : Squat + Bench + Deadlift',
+        warmup: '5 min vélo + mobilité épaules + sets de warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Back Squat', sets:3, reps:5, rest:'3-5min', technique:'Low bar position. Descente contrôlée jusqu\'au parallèle. Drive des hanches.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Bench Press', sets:3, reps:5, rest:'3-5min', technique:'Pieds plantés, arc lombaire, omoplates rétractées. Touch-and-go autorisé.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:3, name:'Deadlift', sets:1, reps:5, rest:'5min', technique:'Une seule série lourde. Reset chaque rep. Hip hinge, pas un squat.', muscle:'dos', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Progression: +2.5kg par séance sur Squat/Bench, +5kg sur Deadlift. Si échec 2x: deload -10%.'
+      }
+    },
+    dos: {
+      beginner: {
+        name: 'Starting Strength B — Pull',
+        description: 'Workout B : Squat + Press + Power Clean',
+        warmup: '5 min vélo + mobilité épaules + sets de warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Back Squat', sets:3, reps:5, rest:'3-5min', technique:'Identique au Workout A. Le squat est fait à CHAQUE séance.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Overhead Press', sets:3, reps:5, rest:'3-5min', technique:'Standing strict press. Pas de push press. Pieds largeur hanches, gainage total.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:3, name:'Power Clean', sets:5, reps:3, rest:'3min', technique:'Triple extension explosive. Réception en quart de squat. Reset chaque rep.', muscle:'dos', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Workout B alterne avec Workout A: A-B-A semaine 1, B-A-B semaine 2.'
+      }
+    },
+    epaules: {
+      beginner: {
+        name: 'Starting Strength — Press',
+        description: 'Overhead Press inclus dans Workout B',
+        warmup: '5 min vélo + rotations épaules + sets warm-up',
+        exercises: [
+          {order:1, name:'Overhead Press', sets:3, reps:5, rest:'3-5min', technique:'Strict press, gainage abdominal, pas de mouvement de jambes.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:2, name:'Back Squat', sets:3, reps:5, rest:'3-5min', technique:'Le squat est central — toujours présent.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:3, name:'Power Clean', sets:5, reps:3, rest:'3min', technique:'Explosivité maximale. Triple extension cheville-genou-hanche.', muscle:'dos', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Press progresse plus lentement: +1.25kg par séance après les 2 premières semaines.'
+      }
+    },
+    jambes: {
+      beginner: {
+        name: 'Starting Strength — Squat',
+        description: 'Squat à chaque séance, base du programme',
+        warmup: '5 min vélo + mobilité hanches + warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Back Squat', sets:3, reps:5, rest:'3-5min', technique:'Low bar, descente jusqu\'au parallèle, drive explosif des hanches. À chaque séance.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Deadlift', sets:1, reps:5, rest:'5min', technique:'Une seule série lourde. Setup parfait à chaque rep.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:3, name:'Bench Press ou Press', sets:3, reps:5, rest:'3-5min', technique:'Alterne A/B avec Press.', muscle:'pectoraux', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Le squat est l\'exercice CENTRAL. Présent à chaque séance. +2.5kg par séance pendant ~3 mois.'
+      }
+    },
+    bras: {
+      beginner: {
+        name: 'Starting Strength — Pas d\'isolation',
+        description: 'Starting Strength ne contient AUCUNE isolation des bras. Les bras travaillent indirectement via Bench Press, Press, Power Clean et Deadlift.',
+        warmup: 'Voir workouts A et B',
+        exercises: [
+          {order:1, name:'Bench Press', sets:3, reps:5, rest:'3-5min', technique:'Sollicitation triceps importante.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:2, name:'Overhead Press', sets:3, reps:5, rest:'3-5min', technique:'Sollicitation triceps maximale en lockout.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:3, name:'Power Clean', sets:5, reps:3, rest:'3min', technique:'Sollicitation biceps en réception.', muscle:'dos', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Rippetoe interdit explicitement curls et extensions triceps en programme novice. Les bras se développent via les composés.'
+      }
+    }
+  },
+  splits: {
+    '3': [
+      { day: 'Lundi',    type: 'workoutA', label: 'Workout A: Squat + Bench + Deadlift' },
+      { day: 'Mercredi', type: 'workoutB', label: 'Workout B: Squat + Press + Power Clean' },
+      { day: 'Vendredi', type: 'workoutA', label: 'Workout A: Squat + Bench + Deadlift' }
+    ]
+  }
+};
+window.STARTING_STRENGTH_PROGRAMS = STARTING_STRENGTH_PROGRAMS;
+
 var TRAINING_STYLES = {
   classic:   { label:'Programme Classique',   programs: NFC_PROGRAMS,              splits: WEEKLY_SPLITS },
   intensity: { label:'Intensité Maximale',    programs: YATES_PROGRAMS.programs,   splits: YATES_PROGRAMS.splits,   meta: YATES_PROGRAMS.meta,   macro: YATES_PROGRAMS.macro_cycle_12w },
   volume:    { label:'Volume Progressif',     programs: COLEMAN_PROGRAMS.programs, splits: COLEMAN_PROGRAMS.splits, meta: COLEMAN_PROGRAMS.meta, macro: COLEMAN_PROGRAMS.macro_cycle_12w },
   fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w },
-  fusion:    { label:'Programme Élite Fusion', programs: FUSION_PROGRAMS.programs,  splits: FUSION_PROGRAMS.splits,  meta: FUSION_PROGRAMS.meta,  macro: FUSION_PROGRAMS.macro_cycle_12w }
+  fusion:    { label:'Programme Élite Fusion', programs: FUSION_PROGRAMS.programs,  splits: FUSION_PROGRAMS.splits,  meta: FUSION_PROGRAMS.meta,  macro: FUSION_PROGRAMS.macro_cycle_12w },
+  starting:  { label:'Starting Strength',      programs: STARTING_STRENGTH_PROGRAMS.programs, splits: STARTING_STRENGTH_PROGRAMS.splits, meta: STARTING_STRENGTH_PROGRAMS.meta }
 };
 
 function getStyleProgram(style, muscle, level) {
