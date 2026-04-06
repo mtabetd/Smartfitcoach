@@ -48,7 +48,7 @@ var PROFILE_KEYS = [
  'calisthenicsEquipment','calisthDips','calisthCurrentWeek',
  'calisthenicsWeek','selectedCalisthDay',
  // Musculation
- 'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep',
+ 'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep','selectedSportDay',
  'bonusExercises','sessionHistory',
  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment',
  // Nutrition plan
@@ -891,11 +891,12 @@ if (AUTH.isLoggedIn()) {
  if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
  S.nStep = S.weekPlan ? 9 : (S.goal ? 8 : 1);
  }
- // Retour utilisateur : toujours commencer sur le dashboard, pas sur un step sport intermédiaire
- // Mais préserver sStep si l'utilisateur avait un programme actif (>= 20)
- // Les steps d'onboarding sport (1-19) sont réinitialisés pour éviter un affichage incohérent
- if (S.sStep > 0 && S.sStep < 20) {
- S.sStep = 20;
+ // Retour utilisateur : préserver le step programme (ne pas réinitialiser l'onboarding sport).
+ // Steps programme : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel) 14(golf) 18(triathlon) 21(yoga) 23(cycling) 25(calisthenics)
+ // Steps intermédiaires onboarding (1,2,3,5,7,9,11,13,15,16,17,19,22,24) → revenir à 0 (sélection sport)
+ var _PROGRAM_STEPS_MAIN = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
+ if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1) {
+   S.sStep = 0;
  }
  // Restaurer la langue
  if (window.I18N && S.lang) {
