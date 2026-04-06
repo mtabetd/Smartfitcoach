@@ -129,14 +129,14 @@
           }
         }
 
+        // Note: birth_date and email_optin removed from dedicated columns
+        // (not in schema) — already preserved inside the `data` JSONB field below.
         return client
           .from('profiles')
           .upsert({
             id: userId,
             email: session.user.email,
             name: data.name || session.user.user_metadata.name || '',
-            birth_date: data.birthDate || null,
-            email_optin: (data.emailOptin !== undefined) ? data.emailOptin : true,
             data: data,
             updated_at: new Date().toISOString()
           }, { onConflict: 'id' })
