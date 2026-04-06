@@ -1887,6 +1887,105 @@ var TEXAS_METHOD_PROGRAMS = {
 };
 window.TEXAS_METHOD_PROGRAMS = TEXAS_METHOD_PROGRAMS;
 
+// ─── nSuns 5/3/1 (Powerbuilding hybride) ─────────────────────────────────────
+var NSUNS_PROGRAMS = {
+  meta: {
+    name: 'nSuns 5/3/1',
+    athlete: 'Variant nSuns du Wendler 5/3/1',
+    philosophy: 'Powerbuilding intermédiaire/avancé. Lift principal en 5/3/1 + Lift secondaire 3x8-12 + Accessoires hypertrophie. 5-6j/sem. Rotation Squat/Bench/Deadlift/OHP. Beaucoup plus de volume que Wendler classique.',
+    frequency: '5-6 jours/semaine',
+    session_duration: '75-90 min',
+    key_principles: ['5/3/1 sur lift principal', 'Lift secondaire 3x8-12', 'Accessoires hypertrophie', 'AMRAP set final', 'Training Max = 90% du 1RM']
+  },
+  programs: {
+    pectoraux: {
+      intermediate: {
+        name: 'nSuns Bench Day',
+        description: 'Bench Press (T1) + OHP (T2) + Accessoires',
+        warmup: '5 min vélo + mobilité épaules + warm-up barre vide → 50% → 70% → 80%',
+        exercises: [
+          {order:1, name:'Bench Press T1 (5/3/1+)', sets:9, reps:'8/6/4/4/4/5/6/7/8+', rest:'3min', technique:'9 sets nSuns: 8@65%/6@75%/4@85%/4@85%/4@85%/5@80%/6@75%/7@70%/8+@65% (AMRAP). Training Max = 90% 1RM.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:2, name:'Overhead Press T2', sets:8, reps:'6/5/3/5/7/4/6/8', rest:'2min30', technique:'Lift secondaire 8 sets nSuns. Strict press, gainage abdominal.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:3, name:'Dips lestés', sets:3, reps:8, rest:'2min', technique:'Accessoire pectoraux + triceps. Lestés si possible.', muscle:'pectoraux', type:'compound', equipment:'barres parallèles'},
+          {order:4, name:'Élévations latérales', sets:4, reps:12, rest:'90s', technique:'Accessoire isolation épaules pour volume.', muscle:'epaules', type:'isolation', equipment:'halteres'},
+          {order:5, name:'Pushdown corde', sets:4, reps:12, rest:'90s', technique:'Accessoire triceps poulie haute.', muscle:'bras', type:'isolation', equipment:'poulie'}
+        ],
+        notes: 'Le 9e set est AMRAP — battre les reps du PR précédent. Training Max augmente quand on bat le PR.'
+      }
+    },
+    jambes: {
+      intermediate: {
+        name: 'nSuns Squat Day',
+        description: 'Back Squat (T1) + Deadlift (T2) + Accessoires jambes',
+        warmup: '5 min vélo + mobilité hanches + warm-up barre vide → 50% → 70% → 80%',
+        exercises: [
+          {order:1, name:'Back Squat T1 (5/3/1+)', sets:9, reps:'5/3/1+/3/3/3/5/5/5+', rest:'3min', technique:'9 sets: 5@75%/3@85%/1+@95%(AMRAP)/3@90%/3@85%/3@80%/5@75%/5@70%/5+@65%. Volume + intensité combinés.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Deadlift T2 (Sumo)', sets:8, reps:'5/5/3/5/7/4/6/8', rest:'2min30', technique:'Sumo deadlift en lift secondaire. Variation pour économiser le bas du dos.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:3, name:'Leg Press', sets:4, reps:12, rest:'2min', technique:'Accessoire quadriceps pour volume.', muscle:'jambes', type:'compound', equipment:'machine'},
+          {order:4, name:'Leg Curl couché', sets:4, reps:12, rest:'90s', technique:'Accessoire ischios.', muscle:'jambes', type:'isolation', equipment:'machine'},
+          {order:5, name:'Calf Raise debout', sets:4, reps:15, rest:'60s', technique:'Accessoire mollets.', muscle:'jambes', type:'isolation', equipment:'machine'}
+        ],
+        notes: 'Les jours T1 alternent: Squat → Bench → Deadlift → OHP → Squat variation. 5j/sem rotatif.'
+      }
+    },
+    dos: {
+      intermediate: {
+        name: 'nSuns Deadlift Day',
+        description: 'Deadlift (T1) + Front Squat (T2) + Accessoires dos',
+        warmup: '5 min vélo + warm-up barre vide → 50% → 70% → 80%',
+        exercises: [
+          {order:1, name:'Deadlift T1 (5/3/1+)', sets:9, reps:'5/3/1+/3/3/3/5/5/5+', rest:'4min', technique:'9 sets: 5@75%/3@85%/1+@95%(AMRAP)/3@90%/.../5+@65%. Reset chaque rep, technique parfaite.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:2, name:'Front Squat T2', sets:8, reps:'5/5/3/5/7/4/6/8', rest:'2min30', technique:'Front squat en secondaire — taille élancée + quad focus.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:3, name:'Pendlay Row', sets:4, reps:8, rest:'2min', technique:'Accessoire dos épaisseur. Tirage explosif depuis le sol.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:4, name:'Pull-Ups lestés', sets:4, reps:8, rest:'2min', technique:'Accessoire largeur dorsale. Lestés.', muscle:'dos', type:'compound', equipment:'barre fixe'},
+          {order:5, name:'Face Pull corde', sets:4, reps:15, rest:'60s', technique:'Accessoire arrière-épaules + santé scapulaire.', muscle:'epaules', type:'isolation', equipment:'poulie'}
+        ],
+        notes: 'Deadlift jour le plus exigeant — récupération critique. Privilégier sommeil + nutrition.'
+      }
+    },
+    epaules: {
+      intermediate: {
+        name: 'nSuns OHP Day',
+        description: 'Overhead Press (T1) + Bench (T2) + Accessoires épaules',
+        warmup: '5 min vélo + mobilité épaules + warm-up',
+        exercises: [
+          {order:1, name:'Overhead Press T1 (5/3/1+)', sets:9, reps:'5/3/1+/3/3/3/5/5/5+', rest:'3min', technique:'9 sets nSuns. Strict press uniquement. AMRAP set 3.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:2, name:'Bench Press T2 (Close Grip)', sets:8, reps:'6/5/3/5/7/4/6/8', rest:'2min30', technique:'Close-grip bench en secondaire — focus triceps + lockout.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:3, name:'Élévations latérales', sets:5, reps:12, rest:'90s', technique:'Accessoire isolation épaules — volume élevé.', muscle:'epaules', type:'isolation', equipment:'halteres'},
+          {order:4, name:'Face Pull', sets:4, reps:15, rest:'60s', technique:'Arrière épaules + santé scapulaire.', muscle:'epaules', type:'isolation', equipment:'poulie'},
+          {order:5, name:'Curl barre', sets:4, reps:10, rest:'90s', technique:'Accessoire biceps.', muscle:'bras', type:'isolation', equipment:'barre'}
+        ],
+        notes: 'OHP est le lift le plus dur à progresser — patience requise. AMRAP set crucial pour stimulation.'
+      }
+    },
+    bras: {
+      intermediate: {
+        name: 'nSuns Arms Accessoires',
+        description: 'Les bras travaillent en accessoires sur tous les jours principaux',
+        warmup: 'Voir cycles principaux',
+        exercises: [
+          {order:1, name:'Curl barre', sets:4, reps:10, rest:'90s', technique:'Accessoire biceps en fin de séance.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:2, name:'Curl haltères incliné', sets:4, reps:12, rest:'90s', technique:'Stretch maximum biceps, position inclinée.', muscle:'bras', type:'isolation', equipment:'halteres'},
+          {order:3, name:'Pushdown corde', sets:4, reps:12, rest:'90s', technique:'Accessoire triceps.', muscle:'bras', type:'isolation', equipment:'poulie'},
+          {order:4, name:'Skull crushers', sets:4, reps:10, rest:'90s', technique:'Extension triceps couché barre EZ.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:5, name:'Hammer curl', sets:3, reps:12, rest:'60s', technique:'Brachial + avant-bras.', muscle:'bras', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'Volume bras = 12-16 sets/semaine répartis sur tous les jours.'
+      }
+    }
+  },
+  splits: {
+    '5': [
+      { day: 'Lundi',    type: 'bench',    label: 'Bench T1 + OHP T2 + Accessoires' },
+      { day: 'Mardi',    type: 'squat',    label: 'Squat T1 + Sumo DL T2 + Quads' },
+      { day: 'Mercredi', type: 'ohp',      label: 'OHP T1 + Close Bench T2 + Épaules' },
+      { day: 'Jeudi',    type: 'deadlift', label: 'Deadlift T1 + Front Squat T2 + Dos' },
+      { day: 'Vendredi', type: 'bench2',   label: 'Bench T1 + OHP T2 (variante)' }
+    ]
+  }
+};
+window.NSUNS_PROGRAMS = NSUNS_PROGRAMS;
+
 var TRAINING_STYLES = {
   classic:   { label:'Programme Classique',   programs: NFC_PROGRAMS,              splits: WEEKLY_SPLITS },
   intensity: { label:'Intensité Maximale',    programs: YATES_PROGRAMS.programs,   splits: YATES_PROGRAMS.splits,   meta: YATES_PROGRAMS.meta,   macro: YATES_PROGRAMS.macro_cycle_12w },
@@ -1895,7 +1994,8 @@ var TRAINING_STYLES = {
   fusion:    { label:'Programme Élite Fusion', programs: FUSION_PROGRAMS.programs,  splits: FUSION_PROGRAMS.splits,  meta: FUSION_PROGRAMS.meta,  macro: FUSION_PROGRAMS.macro_cycle_12w },
   starting:  { label:'Starting Strength',      programs: STARTING_STRENGTH_PROGRAMS.programs, splits: STARTING_STRENGTH_PROGRAMS.splits, meta: STARTING_STRENGTH_PROGRAMS.meta },
   greyskull: { label:'Greyskull LP',            programs: GREYSKULL_PROGRAMS.programs,         splits: GREYSKULL_PROGRAMS.splits,         meta: GREYSKULL_PROGRAMS.meta },
-  texas:     { label:'Texas Method',            programs: TEXAS_METHOD_PROGRAMS.programs,      splits: TEXAS_METHOD_PROGRAMS.splits,      meta: TEXAS_METHOD_PROGRAMS.meta }
+  texas:     { label:'Texas Method',            programs: TEXAS_METHOD_PROGRAMS.programs,      splits: TEXAS_METHOD_PROGRAMS.splits,      meta: TEXAS_METHOD_PROGRAMS.meta },
+  nsuns:     { label:'nSuns 5/3/1',             programs: NSUNS_PROGRAMS.programs,             splits: NSUNS_PROGRAMS.splits,             meta: NSUNS_PROGRAMS.meta }
 };
 
 function getStyleProgram(style, muscle, level) {
