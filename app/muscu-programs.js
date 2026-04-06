@@ -1986,6 +1986,110 @@ var NSUNS_PROGRAMS = {
 };
 window.NSUNS_PROGRAMS = NSUNS_PROGRAMS;
 
+// ─── CBUM HYPERTROPHY (Chris Bumstead — Classic Physique) ────────────────────
+var CBUM_PROGRAMS = {
+  meta: {
+    name: 'CBum Classic Physique',
+    athlete: 'Inspiré Chris Bumstead (Mr. Olympia Classic Physique)',
+    philosophy: 'Hypertrophie esthétique moderne. PPL étendu sur 5j avec 2x jambes. Volume modéré-élevé, supersets sur isolation, FST-7 sur finisher, drop sets occasionnels. Focus shape + symétrie.',
+    frequency: '5 jours/semaine',
+    session_duration: '75-90 min',
+    key_principles: ['Volume modéré-élevé (16-20 sets/groupe)', 'Supersets isolation', 'FST-7 finisher', 'Drop sets sur ext./curls', 'Mind-muscle connection']
+  },
+  programs: {
+    pectoraux: {
+      intermediate: {
+        name: 'CBum Chest + Triceps Day',
+        description: 'Lundi: Pectoraux focus + triceps en finisher',
+        warmup: '5 min vélo + rotations épaules + 2 sets warm-up bench barre vide',
+        exercises: [
+          {order:1, name:'Bench Press incliné haltères', sets:4, reps:'10-12', rest:'2min', technique:'Composé principal CBum: incliné AVANT le bench plat pour prioriser le haut pectoral. Stretch profond, contraction au sommet.', muscle:'pectoraux', type:'compound', equipment:'halteres'},
+          {order:2, name:'Bench Press plat', sets:4, reps:'8-10', rest:'2min', technique:'Bench classique en deuxième. Touch-and-go contrôlé, focus pectoral.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:3, name:'Pec Deck (Butterfly)', sets:4, reps:'12-15', rest:'90s', technique:'Isolation pure, contraction pic 1s. Focus mind-muscle.', muscle:'pectoraux', type:'isolation', equipment:'machine'},
+          {order:4, name:'Cable crossover bas-vers-haut', sets:3, reps:'15', rest:'60s', technique:'FST-7 finisher: 7 sets de 12-15 reps, repos 30s entre sets. Pump maximal.', muscle:'pectoraux', type:'isolation', equipment:'poulie'},
+          {order:5, name:'Skull crushers + Pushdown (superset)', sets:3, reps:'10+12', rest:'90s', technique:'Superset triceps: skull crushers immédiat suivi de pushdown corde sans repos.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:6, name:'Overhead extension corde', sets:3, reps:12, rest:'60s', technique:'Stretch maximum triceps long head. Drop set sur dernière série.', muscle:'bras', type:'isolation', equipment:'poulie'}
+        ],
+        notes: 'Volume total pectoraux: 15 sets. Supersets et FST-7 = pump maximal en fin de séance.'
+      }
+    },
+    dos: {
+      intermediate: {
+        name: 'CBum Back + Biceps Day',
+        description: 'Mardi: Dos largeur + épaisseur + biceps en superset',
+        warmup: '5 min rameur + scapular pull-ups + activation lats',
+        exercises: [
+          {order:1, name:'Pull-Ups lestés', sets:4, reps:'8-10', rest:'2min', technique:'Composé principal largeur. Lestés si possible. Dead hang complet.', muscle:'dos', type:'compound', equipment:'barre fixe'},
+          {order:2, name:'Rowing T-bar', sets:4, reps:'10-12', rest:'2min', technique:'Composé épaisseur. Tirer vers le nombril, scapula contraction.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:3, name:'Tirage vertical prise neutre', sets:4, reps:'12', rest:'90s', technique:'Cible le grand dorsal, prise triangle. 2s pic contraction.', muscle:'dos', type:'compound', equipment:'poulie'},
+          {order:4, name:'Single arm cable row', sets:3, reps:'12 par bras', rest:'60s', technique:'Unilatéral pour symétrie. Stretch maximum + rotation thoracique.', muscle:'dos', type:'compound', equipment:'poulie'},
+          {order:5, name:'Straight arm pulldown (FST-7)', sets:7, reps:12, rest:'30s', technique:'FST-7 finisher dos: 7 sets, 30s repos. Pump dorsal maximum.', muscle:'dos', type:'isolation', equipment:'poulie'},
+          {order:6, name:'Curl barre + Curl haltères incliné (superset)', sets:3, reps:'10+10', rest:'90s', technique:'Superset biceps: curl barre immédiat suivi curl haltères incliné stretch.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:7, name:'Hammer curl', sets:3, reps:12, rest:'60s', technique:'Brachial + avant-bras. Drop set sur dernière série.', muscle:'bras', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'Volume dos: 18 sets. Variation des angles pour développement complet (largeur + épaisseur + détail).'
+      }
+    },
+    epaules: {
+      intermediate: {
+        name: 'CBum Shoulders Day',
+        description: 'Mercredi: Épaules complet 3 chefs (deltoïdes ant/lat/post)',
+        warmup: '5 min vélo + rotations épaules + bandes élastiques face pull',
+        exercises: [
+          {order:1, name:'Overhead Press haltères', sets:4, reps:'10-12', rest:'2min', technique:'Composé principal épaules. Haltères pour ROM maximal. Pas de balancement.', muscle:'epaules', type:'compound', equipment:'halteres'},
+          {order:2, name:'Élévations latérales debout', sets:5, reps:'15', rest:'60s', technique:'Isolation deltoïde latéral. Élever jusqu\'à parallèle au sol. Coude légèrement plié.', muscle:'epaules', type:'isolation', equipment:'halteres'},
+          {order:3, name:'Cable lateral raise', sets:4, reps:'12 par bras', rest:'60s', technique:'Tension constante, position légèrement inclinée. Stretch maximum.', muscle:'epaules', type:'isolation', equipment:'poulie'},
+          {order:4, name:'Reverse Pec Deck', sets:4, reps:'15', rest:'60s', technique:'Isolation arrière épaules. Contraction pic 1s. Volume élevé.', muscle:'epaules', type:'isolation', equipment:'machine'},
+          {order:5, name:'Face Pull corde', sets:7, reps:15, rest:'30s', technique:'FST-7 finisher arrière épaules. Santé scapulaire + esthétique.', muscle:'epaules', type:'isolation', equipment:'poulie'},
+          {order:6, name:'Front raise haltères + Élévations latérales (drop set)', sets:3, reps:'10+10', rest:'90s', technique:'Superset deltoïde antérieur + latéral. Drop set finisseur.', muscle:'epaules', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'Volume épaules: 22 sets. Focus deltoïde latéral (18 sets/sem cumulés) pour shape 3D.'
+      }
+    },
+    jambes: {
+      intermediate: {
+        name: 'CBum Legs Quad-Focus Day',
+        description: 'Jeudi: Quadriceps prioritaire + accessoires fessiers',
+        warmup: '5 min vélo + mobilité hanches + 2 sets warm-up squat barre vide',
+        exercises: [
+          {order:1, name:'Back Squat', sets:4, reps:'8-10', rest:'2min30', technique:'Composé principal quad. High bar pour cibler quad davantage. Profondeur sous parallèle.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Hack Squat machine', sets:4, reps:'10-12', rest:'2min', technique:'Quad pure isolation. Pieds bas pour quad max. Stretch profond.', muscle:'jambes', type:'compound', equipment:'machine'},
+          {order:3, name:'Leg Press', sets:4, reps:'12-15', rest:'2min', technique:'Pieds bas et serrés pour cibler quadriceps. Amplitude complète.', muscle:'jambes', type:'compound', equipment:'machine'},
+          {order:4, name:'Leg Extension (FST-7)', sets:7, reps:15, rest:'30s', technique:'FST-7 finisher quadriceps. Pic contraction 2s. Pump intense.', muscle:'jambes', type:'isolation', equipment:'machine'},
+          {order:5, name:'Bulgarian split squat', sets:3, reps:'10 par jambe', rest:'90s', technique:'Unilatéral pour symétrie + accessoire fessiers.', muscle:'jambes', type:'compound', equipment:'halteres'},
+          {order:6, name:'Calf raise debout', sets:4, reps:15, rest:'60s', technique:'Mollets debout, amplitude complète, 2s pic contraction.', muscle:'jambes', type:'isolation', equipment:'machine'}
+        ],
+        notes: 'Volume quad: 19 sets. Jeudi quad-focus, samedi posterior-focus pour volume jambes total 38 sets/sem.'
+      }
+    },
+    bras: {
+      intermediate: {
+        name: 'CBum Arms Volume',
+        description: 'Bras travaillés en supersets sur Lundi (triceps) et Mardi (biceps)',
+        warmup: 'Voir cycles Chest et Back',
+        exercises: [
+          {order:1, name:'Curl barre EZ', sets:4, reps:10, rest:'90s', technique:'Composé biceps. Strict, contrôlé.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:2, name:'Curl haltères incliné (stretch)', sets:4, reps:12, rest:'60s', technique:'Stretch maximal biceps long head. Position inclinée 45°.', muscle:'bras', type:'isolation', equipment:'halteres'},
+          {order:3, name:'Skull crushers EZ bar', sets:4, reps:10, rest:'90s', technique:'Composé triceps. Long head focus.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:4, name:'Pushdown corde + Overhead extension (superset)', sets:3, reps:'12+12', rest:'90s', technique:'Superset triceps: pushdown puis overhead sans repos. Pump maximal.', muscle:'bras', type:'isolation', equipment:'poulie'},
+          {order:5, name:'Hammer curl drop set', sets:3, reps:'12+8+6', rest:'60s', technique:'Drop set: 12 reps lourd → drop 30% → 8 reps → drop 30% → 6 reps.', muscle:'bras', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'Volume bras: 18 sets total/sem (biceps 9 + triceps 9). Drop sets et supersets pour intensité maximale.'
+      }
+    }
+  },
+  splits: {
+    '5': [
+      { day: 'Lundi',    type: 'chest_tris',     label: 'Chest + Triceps' },
+      { day: 'Mardi',    type: 'back_bis',       label: 'Back + Biceps' },
+      { day: 'Mercredi', type: 'shoulders',      label: 'Shoulders' },
+      { day: 'Jeudi',    type: 'legs_quad',      label: 'Legs Quad-Focus' },
+      { day: 'Samedi',   type: 'legs_posterior', label: 'Legs Posterior + Glutes' }
+    ]
+  }
+};
+window.CBUM_PROGRAMS = CBUM_PROGRAMS;
+
 var TRAINING_STYLES = {
   classic:   { label:'Programme Classique',   programs: NFC_PROGRAMS,              splits: WEEKLY_SPLITS },
   intensity: { label:'Intensité Maximale',    programs: YATES_PROGRAMS.programs,   splits: YATES_PROGRAMS.splits,   meta: YATES_PROGRAMS.meta,   macro: YATES_PROGRAMS.macro_cycle_12w },
@@ -1995,7 +2099,8 @@ var TRAINING_STYLES = {
   starting:  { label:'Starting Strength',      programs: STARTING_STRENGTH_PROGRAMS.programs, splits: STARTING_STRENGTH_PROGRAMS.splits, meta: STARTING_STRENGTH_PROGRAMS.meta },
   greyskull: { label:'Greyskull LP',            programs: GREYSKULL_PROGRAMS.programs,         splits: GREYSKULL_PROGRAMS.splits,         meta: GREYSKULL_PROGRAMS.meta },
   texas:     { label:'Texas Method',            programs: TEXAS_METHOD_PROGRAMS.programs,      splits: TEXAS_METHOD_PROGRAMS.splits,      meta: TEXAS_METHOD_PROGRAMS.meta },
-  nsuns:     { label:'nSuns 5/3/1',             programs: NSUNS_PROGRAMS.programs,             splits: NSUNS_PROGRAMS.splits,             meta: NSUNS_PROGRAMS.meta }
+  nsuns:     { label:'nSuns 5/3/1',             programs: NSUNS_PROGRAMS.programs,             splits: NSUNS_PROGRAMS.splits,             meta: NSUNS_PROGRAMS.meta },
+  cbum:      { label:'CBum Classic Physique',   programs: CBUM_PROGRAMS.programs,              splits: CBUM_PROGRAMS.splits,              meta: CBUM_PROGRAMS.meta }
 };
 
 function getStyleProgram(style, muscle, level) {
