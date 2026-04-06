@@ -16065,6 +16065,981 @@
     ]
   },
 
+
+  // ─── RECETTES VIRALES L451-L500 (Indien, Moyen-Orient, Française, Sport, Africaine) ────────────
+  {
+    // L451 — Dal Makhani : lentilles noires 200g (18P,40G,1L) + pois chiches 100g (8.6P,26.6G,2.6L)
+    //   + yaourt grec 80g (7.2P,3.2G,4L) + tomate 150g (1.5P,6.7G,0L) + ghi 10g (0P,0G,10L) + oignon/épices ~10kcal
+    //   P≈35 G≈76 L≈18 → k = 35×4 + 76×4 + 18×9 = 140+304+162 = 606 — ajusté portions
+    // Portion révisée : lentilles 150g(13.5P,30G,0.8L) + pois chiches 80g(6.9P,21.3G,2L)
+    //   + yaourt 60g(5.4P,2.4G,3L) + tomate 150g(1.5P,6.7G,0L) + ghi 8g(0P,0G,7.2L) → P≈27 G≈60 L≈13
+    //   k = 27×4 + 60×4 + 13×9 = 108+240+117 = 465 ✓
+    _id: 'L451',
+    n: "Dal Makhani Protéiné",
+    f: "🇮🇳",
+    k: 465,
+    p: 27,
+    g: 60,
+    l: 13,
+    lv: 2,
+    i: "Lentilles noires cuites 150g, pois chiches cuits 80g, tomate concassée 150g, yaourt grec entier 60g, ghi 8g, oignon 80g, ail 3 gousses, gingembre 10g, cumin 4g, garam masala 4g, piment rouge 2g, coriandre fraîche 15g",
+    st: [
+      "Faire revenir l'oignon haché dans le ghi jusqu'à dorure, ajouter ail, gingembre émincés et épices moulues, cuire 2 min à feu moyen.",
+      "Incorporer la tomate concassée, laisser réduire 8 min, ajouter les lentilles noires et pois chiches cuits, mijoter 15 min à feu doux.",
+      "Hors du feu, incorporer le yaourt grec, rectifier l'assaisonnement et garnir de coriandre fraîche avant de servir."
+    ],
+    w: false,
+    tags: ["indien", "lentilles", "protéiné", "végétarien", "dal"]
+  },
+  {
+    // L452 — Chicken Tikka Masala : poulet 150g(42P,4G,4L) + tomate 200g(2P,9G,0L)
+    //   + yaourt 100g(9P,4G,5L) + ghi 10g(0P,0G,9L) + oignon/épices ~10kcal
+    //   P≈53 G≈17 L≈18 → k = 53×4 + 17×4 + 18×9 = 212+68+162 = 442 ✓
+    _id: 'L452',
+    n: "Chicken Tikka Masala Légère",
+    f: "🇮🇳",
+    k: 442,
+    p: 53,
+    g: 17,
+    l: 18,
+    lv: 2,
+    i: "Poulet tikka grillé 150g, tomate concassée 200g, yaourt grec entier 100g, ghi 10g, oignon 80g, ail 3 gousses, gingembre 12g, curcuma 2g, paprika fumé 5g, garam masala 5g, coriandre fraîche 10g",
+    st: [
+      "Faire revenir l'oignon émincé dans le ghi jusqu'à dorure, ajouter ail, gingembre et épices moulues, cuire 2 min à feu vif.",
+      "Ajouter les tomates concassées, laisser compoter 10 min jusqu'à sauce épaisse et brillante, incorporer le poulet tikka grillé en morceaux.",
+      "Baisser le feu au minimum, ajouter le yaourt grec progressivement en remuant sans cesser, mijoter 5 min sans ébullition, garnir de coriandre."
+    ],
+    w: false,
+    tags: ["indien", "poulet", "tikka", "curry", "high-protein"]
+  },
+  {
+    // L453 — Saag Paneer : paneer 100g(18P,3G,21L) + épinards 300g(9P,12G,0L)
+    //   + yaourt 80g(7.2P,3.2G,4L) + ghi 10g(0P,0G,9L) → P≈34 G≈18 L≈34
+    //   k = 34×4 + 18×4 + 34×9 = 136+72+306 = 514 — réduire ghi
+    // ghi 8g(0P,0G,7.2L) + épinards 200g(6P,8G,0L) → P≈31 G≈14 L≈32
+    //   k = 31×4 + 14×4 + 32×9 = 124+56+288 = 468 ✓
+    _id: 'L453',
+    n: "Saag Paneer Healthy",
+    f: "🇮🇳",
+    k: 468,
+    p: 31,
+    g: 14,
+    l: 32,
+    lv: 2,
+    i: "Paneer 100g, épinards frais 200g, yaourt grec entier 80g, ghi 8g, oignon 60g, ail 3 gousses, gingembre 10g, curcuma 2g, cumin 3g, fenugrec 2g, piment vert 5g",
+    st: [
+      "Blanchir les épinards 2 min à l'eau bouillante, égoutter et mixer en purée lisse ; couper le paneer en cubes et les faire dorer dans une poêle antiadhésive.",
+      "Dans la même poêle avec le ghi, faire revenir oignon, ail, gingembre et épices jusqu'à dorure, ajouter la purée d'épinards, mijoter 5 min.",
+      "Incorporer le yaourt grec hors du feu, ajouter les cubes de paneer dorés, mélanger délicatement et servir chaud."
+    ],
+    w: false,
+    tags: ["indien", "paneer", "épinards", "végétarien", "saag"]
+  },
+  {
+    // L454 — Chana Masala : pois chiches 150g(13P,40G,4L) + tomate 200g(2P,9G,0L)
+    //   + oignon 100g(1P,9G,0L) + ghi 8g(0P,0G,7.2L) → P≈16 G≈58 L≈11
+    //   k = 16×4 + 58×4 + 11×9 = 64+232+99 = 395 ✓
+    _id: 'L454',
+    n: "Chana Masala Épicé",
+    f: "🇮🇳",
+    k: 395,
+    p: 16,
+    g: 58,
+    l: 11,
+    lv: 1,
+    i: "Pois chiches cuits 150g, tomate concassée 200g, oignon 100g, ghi 8g, ail 3 gousses, gingembre 12g, cumin 4g, coriandre moulue 4g, garam masala 3g, amchur 2g, piment 2g, coriandre fraîche 15g",
+    st: [
+      "Faire revenir l'oignon haché dans le ghi jusqu'à caramélisation, ajouter ail, gingembre et toutes les épices, cuire 2 min à feu moyen.",
+      "Incorporer les tomates concassées et 100ml d'eau, laisser réduire 10 min pour obtenir une sauce concentrée.",
+      "Ajouter les pois chiches, écraser légèrement une cuillère de pois chiches pour épaissir, mijoter 8 min et garnir de coriandre fraîche."
+    ],
+    w: false,
+    tags: ["indien", "pois-chiches", "vegan", "chana", "légumineuses"]
+  },
+  {
+    // L455 — Tandoori Chicken Bowl : poulet 150g(42P,4G,4L) + riz basmati 120g(3.2P,34.4G,0L)
+    //   + yaourt 80g(7.2P,3.2G,4L) + concombre 80g(0.5P,2G,0L) → P≈53 G≈44 L≈8
+    //   k = 53×4 + 44×4 + 8×9 = 212+176+72 = 460 ✓
+    _id: 'L455',
+    n: "Tandoori Chicken Bowl",
+    f: "🇮🇳",
+    k: 460,
+    p: 53,
+    g: 44,
+    l: 8,
+    lv: 2,
+    i: "Poulet tikka grillé 150g, riz basmati cuit 120g, yaourt grec entier 80g, concombre 80g, oignon rouge 40g, menthe fraîche 10g, citron jus 15ml, cumin moulu 2g, paprika fumé 3g",
+    st: [
+      "Préparer le raita en mélangeant le yaourt grec avec le concombre râpé essoré, la menthe ciselée et le cumin.",
+      "Disposer le riz basmati dans un bol, trancher le poulet tandoori et l'ajouter par-dessus avec l'oignon rouge émincé.",
+      "Napper de raita, saupoudrer de paprika fumé, arroser de jus de citron et servir immédiatement."
+    ],
+    w: false,
+    tags: ["indien", "poulet", "bowl", "tandoori", "meal-prep"]
+  },
+  {
+    // L456 — Raita Concombre Protéiné : yaourt grec 200g(18P,8G,10L) + concombre 150g(1P,3G,0L)
+    //   + pois chiches 60g(5.2P,16G,1.6L) → P≈24 G≈27 L≈12
+    //   k = 24×4 + 27×4 + 12×9 = 96+108+108 = 312 ✓
+    _id: 'L456',
+    n: "Raita Concombre Protéiné",
+    f: "🇮🇳",
+    k: 312,
+    p: 24,
+    g: 27,
+    l: 12,
+    lv: 1,
+    i: "Yaourt grec entier 200g, concombre 150g, pois chiches cuits 60g, menthe fraîche 15g, coriandre fraîche 10g, cumin moulu 2g, graines de moutarde 2g, huile d'olive 5g, paprika doux 1g, sel, poivre",
+    st: [
+      "Râper le concombre, saler et laisser dégorger 10 min, presser fermement pour retirer l'excès d'eau.",
+      "Mélanger le yaourt grec avec le concombre essoré, les pois chiches, la menthe et la coriandre ciselées.",
+      "Faire éclater les graines de moutarde dans l'huile chaude, verser sur le raita avec le cumin, décorer de paprika et servir frais."
+    ],
+    w: false,
+    tags: ["indien", "végétarien", "raita", "snack", "high-protein"]
+  },
+  {
+    // L457 — Dhal Lentilles Corail : lentilles corail cuites 200g(18P,40G,1L) + lait coco léger 80ml(0.8P,4G,7.2L)
+    //   + tomate 150g(1.5P,6.7G,0L) + ghi 8g(0P,0G,7.2L) → P≈20 G≈51 L≈16
+    //   k = 20×4 + 51×4 + 16×9 = 80+204+144 = 428 ✓
+    _id: 'L457',
+    n: "Dhal de Lentilles Corail",
+    f: "🇮🇳",
+    k: 428,
+    p: 20,
+    g: 51,
+    l: 16,
+    lv: 1,
+    i: "Lentilles corail cuites 200g, lait de coco léger 80ml, tomate concassée 150g, oignon 80g, ghi 8g, ail 3 gousses, gingembre 10g, curcuma 3g, cumin 3g, curry doux 4g, piment rouge 2g, coriandre fraîche 15g, citron jus 15ml",
+    st: [
+      "Faire revenir l'oignon dans le ghi, ajouter ail, gingembre et toutes les épices, cuire 3 min à feu moyen jusqu'à libération des arômes.",
+      "Incorporer la tomate concassée et le lait de coco léger, laisser mijoter 5 min pour marier les saveurs.",
+      "Ajouter les lentilles corail cuites, homogénéiser, cuire encore 5 min à feu doux, finir avec le jus de citron et la coriandre fraîche."
+    ],
+    w: false,
+    tags: ["indien", "vegan", "lentilles", "dhal", "réconfort"]
+  },
+  {
+    // L458 — Biryani Quinoa : quinoa 150g(6P,30G,3L) + poulet 100g(28P,2.7G,2.7L)
+    //   + oignon 80g(1P,7G,0L) + ghi 10g(0P,0G,9L) + yaourt 60g(5.4P,2.4G,3L)
+    //   + amandes 15g(3P,1.5G,8.5L) → P≈43 G≈43 L≈26
+    //   k = 43×4 + 43×4 + 26×9 = 172+172+234 = 578 — réduire amandes+ghi
+    // ghi 8g(7.2L) + amandes 10g(2P,1G,5.5L) → P≈41 G≈42 L≈22
+    //   k = 41×4 + 42×4 + 22×9 = 164+168+198 = 530 ✓
+    _id: 'L458',
+    n: "Biryani de Quinoa",
+    f: "🇮🇳",
+    k: 530,
+    p: 41,
+    g: 42,
+    l: 22,
+    lv: 3,
+    i: "Quinoa cuit 150g, poulet tikka grillé 100g, oignon 80g, ghi 8g, yaourt grec entier 60g, raisins secs 20g, amandes effilées 10g, safran 0.1g, garam masala 4g, cannelle 2g, cardamome 2g, menthe fraîche 10g",
+    st: [
+      "Faire dorer l'oignon en lamelles dans le ghi jusqu'à caramélisation ambrée, ajouter cannelle, cardamome, garam masala et le safran dissous dans 2 c.s. d'eau chaude.",
+      "Incorporer le quinoa cuit et le yaourt grec, mélanger délicatement, ajouter le poulet tikka en morceaux et les raisins secs.",
+      "Couvrir et laisser étuver 5 min à feu très doux pour marier les arômes, garnir d'amandes effilées toastées et de menthe fraîche."
+    ],
+    w: false,
+    tags: ["indien", "quinoa", "biryani", "sans-gluten", "festif"]
+  },
+  {
+    // L459 — Palak Paneer Allégé : paneer 80g(14.4P,2.4G,16.8L) + épinards 300g(9P,12G,0L)
+    //   + yaourt grec 0% 60g(5.4P,2.4G,0L) + huile 8g(0P,0G,7.2L) → P≈29 G≈17 L≈24
+    //   k = 29×4 + 17×4 + 24×9 = 116+68+216 = 400 ✓
+    _id: 'L459',
+    n: "Palak Paneer Allégé",
+    f: "🇮🇳",
+    k: 400,
+    p: 29,
+    g: 17,
+    l: 24,
+    lv: 2,
+    i: "Paneer 80g, épinards frais 300g, yaourt grec 0% 60g, huile d'olive 8g, oignon 70g, ail 3 gousses, gingembre 10g, noix de cajou 15g, curcuma 2g, garam masala 3g, piment doux 2g, citron jus 10ml",
+    st: [
+      "Blanchir les épinards 2 min, égoutter et mixer en purée lisse avec les noix de cajou préalablement trempées 10 min dans l'eau chaude.",
+      "Faire revenir oignon, ail, gingembre et épices dans l'huile, ajouter la purée d'épinards aux cajous, mijoter 8 min.",
+      "Ajouter le paneer doré en cubes et le yaourt grec 0%, mélanger délicatement, finir avec le jus de citron et servir chaud."
+    ],
+    w: false,
+    tags: ["indien", "épinards", "paneer", "allégé", "végétarien"]
+  },
+  {
+    // L460 — Butter Chicken Légère : poulet 150g(42P,4G,4L) + tomate 200g(2P,9G,0L)
+    //   + yaourt 100g(9P,4G,5L) + ghi 8g(0P,0G,7.2L) → P≈53 G≈17 L≈16
+    //   k = 53×4 + 17×4 + 16×9 = 212+68+144 = 424 ✓
+    _id: 'L460',
+    n: "Butter Chicken Légère",
+    f: "🇮🇳",
+    k: 424,
+    p: 53,
+    g: 17,
+    l: 16,
+    lv: 2,
+    i: "Poulet tikka grillé 150g, tomate concassée 200g, yaourt grec entier 100g, ghi 8g, oignon 80g, ail 3 gousses, gingembre 12g, paprika doux 4g, garam masala 4g, curcuma 2g, fenugrec moulu 1g, coriandre fraîche 15g",
+    st: [
+      "Faire revenir l'oignon dans le ghi, ajouter ail, gingembre et épices moulues, cuire 2 min, incorporer les tomates concassées.",
+      "Laisser réduire la sauce tomate 10 min à feu moyen jusqu'à consistance onctueuse, mixer finement pour une texture veloutée.",
+      "Ajouter le poulet tikka grillé, incorporer le yaourt grec hors du feu, réchauffer 3 min sans ébullition, garnir de coriandre fraîche."
+    ],
+    w: false,
+    tags: ["indien", "poulet", "butter-chicken", "curry-doux", "high-protein"]
+  },
+
+  {
+    // L461 — Shawarma Chicken Bowl :
+    //   Poulet tikka 150g(42P,4G,4L) + riz basmati 100g(2.7P,28.9G,0L)
+    //   + yaourt grec 80g(7.2P,3.2G,4L) + concombre 60g(0.4P,1.5G,0L)
+    //   + tomate 80g(0.8P,3.6G,0L) + tahini 10g(1.8P,0.9G,4.7L)
+    //   P≈55 G≈42 L≈13 → k = 55×4 + 42×4 + 13×9 = 220+168+117 = 505 ✓
+    _id: 'L461',
+    n: "Shawarma Chicken Bowl",
+    f: "🇱🇧",
+    k: 505,
+    p: 55,
+    g: 42,
+    l: 13,
+    lv: 2,
+    i: "Poulet tikka grillé 150g, riz basmati cuit 100g, yaourt grec entier 80g, concombre 60g, tomate 80g, oignon rouge 40g, tahini 10g, persil plat 15g, citron jus 20ml, sumac 4g, zaatar 3g, cumin 2g",
+    st: [
+      "Trancher le poulet tikka grillé en fines lamelles, le napper de sumac, zaatar et cumin.",
+      "Dresser le riz basmati dans un bol, ajouter le poulet, la tomate en dés, le concombre et l'oignon rouge émincé.",
+      "Mélanger le yaourt grec avec le tahini, jus de citron et une pincée de sel pour la sauce, napper le bowl et garnir de persil."
+    ],
+    w: false,
+    tags: ["levantin", "poulet", "bowl", "shawarma", "meal-prep"]
+  },
+  {
+    // L462 — Kibbeh au Four :
+    //   Agneau maigre 150g(34P,0G,14L) + boulgour 80g cuit≈200g(5.6P,40G,1L)
+    //   + pignons 15g(2.2P,1.1G,7.4L) + huile olive 10g(0P,0G,9L)
+    //   P≈42 G≈41 L≈31 → k = 42×4 + 41×4 + 31×9 = 168+164+279 = 611 — réduire
+    // boulgour 60g cuit(4.2P,30G,0.8L) + pignons 10g(1.5P,0.7G,4.9L) + huile 8g(0P,0G,7.2L)
+    //   P≈40 G≈31 L≈26 → k = 40×4 + 31×4 + 26×9 = 160+124+234 = 518 ✓
+    _id: 'L462',
+    n: "Kibbeh au Four",
+    f: "🇱🇧",
+    k: 518,
+    p: 40,
+    g: 31,
+    l: 26,
+    lv: 3,
+    i: "Agneau maigre haché 150g, boulgour fin 60g, oignon 100g, pignons de pin 10g, cannelle 3g, cumin 3g, allspice 3g, menthe séchée 3g, huile d'olive 8g, sel, poivre",
+    st: [
+      "Réhydrater le boulgour 20 min dans l'eau froide, égoutter et mélanger avec la moitié de l'agneau haché, cannelle, cumin et sel pour former la couche de base.",
+      "Préparer la farce en faisant revenir oignon émincé, reste d'agneau, pignons, allspice et menthe dans l'huile d'olive 8 min.",
+      "Étaler la couche boulgour-agneau dans un plat huilé, déposer la farce, couvrir du reste du mélange, inciser en losanges et cuire 30 min à 180°C."
+    ],
+    w: false,
+    tags: ["levantin", "agneau", "kibbeh", "four", "traditionnel"]
+  },
+  {
+    // L463 — Mujaddara :
+    //   Lentilles corail cuites 200g(18P,40G,1L) + riz basmati 100g(2.7P,28.9G,0L)
+    //   + oignon 100g(1P,9G,0L) + huile olive 10g(0P,0G,9L) + yaourt 80g(7.2P,3.2G,4L)
+    //   P≈29 G≈81 L≈14 → k = 29×4 + 81×4 + 14×9 = 116+324+126 = 566 — sans yaourt comme side
+    // Présenter yaourt en accompagnement, calcul plat seul :
+    //   P≈22 G≈78 L≈10 → k = 22×4 + 78×4 + 10×9 = 88+312+90 = 490 ✓
+    _id: 'L463',
+    n: "Mujaddara Lentilles Riz",
+    f: "🇱🇧",
+    k: 490,
+    p: 22,
+    g: 78,
+    l: 10,
+    lv: 1,
+    i: "Lentilles corail cuites 200g, riz basmati cuit 100g, oignon 100g, huile d'olive 10g, cumin moulu 4g, coriandre moulue 3g, cannelle 2g, sel, yaourt grec entier 80g (accompagnement)",
+    st: [
+      "Émincer finement l'oignon et le faire caraméliser dans l'huile d'olive à feu moyen-doux 20-25 min jusqu'à dorure profonde et ambrée.",
+      "Mélanger les lentilles corail cuites avec le riz basmati et les épices (cumin, coriandre, cannelle), réchauffer ensemble 3 min en remuant.",
+      "Dresser dans un bol, couvrir généreusement d'oignons caramélisés, servir avec le yaourt grec nature en accompagnement."
+    ],
+    w: false,
+    tags: ["levantin", "lentilles", "végétarien", "mujaddara", "réconfort"]
+  },
+  {
+    // L464 — Fatteh Pois Chiches :
+    //   Pois chiches 150g(13P,40G,4L) + yaourt grec 150g(13.5P,6G,7.5L)
+    //   + pita 40g(3.2P,19G,0.8L) + tahini 15g(2.7P,1.4G,7L)
+    //   + pignons 10g(1.5P,0.7G,4.9L) + huile 8g(0P,0G,7.2L)
+    //   P≈34 G≈67 L≈31 → k = 34×4 + 67×4 + 31×9 = 136+268+279 = 683 — réduire tahini+huile
+    // tahini 10g(1.8P,0.9G,4.7L), sans huile ajoutée, pignons 8g(1.2P,0.6G,3.9L)
+    //   P≈33 G≈67 L≈21 → k = 33×4 + 67×4 + 21×9 = 132+268+189 = 589 ✓
+    _id: 'L464',
+    n: "Fatteh aux Pois Chiches",
+    f: "🇱🇧",
+    k: 589,
+    p: 33,
+    g: 67,
+    l: 21,
+    lv: 2,
+    i: "Pois chiches cuits 150g, yaourt grec entier 150g, pain pita 40g, tahini 10g, ail 2 gousses, citron jus 20ml, paprika fumé 4g, persil frais 15g, pignons de pin 8g, sel",
+    st: [
+      "Couper le pita en morceaux et griller à 180°C 8 min jusqu'à croustillant doré, frotter légèrement d'ail.",
+      "Mélanger le yaourt grec avec le tahini, jus de citron, ail pressé et sel jusqu'à sauce crémeuse homogène.",
+      "Disposer le pita croustillant dans un plat, couvrir de pois chiches chauds, napper de sauce tahini-yaourt, garnir de paprika, persil et pignons grillés à sec."
+    ],
+    w: false,
+    tags: ["levantin", "pois-chiches", "fatteh", "tahini", "végétarien"]
+  },
+  {
+    // L465 — Tabboulé Libanais :
+    //   Persil 150g(5.4P,12.2G,0.6L) + boulgour cuit 80g(3.4P,15.7G,0.5L)
+    //   + tomate 200g(2P,9G,0L) + huile olive 20g(0P,0G,18L) + menthe 30g(1P,2G,0L)
+    //   P≈12 G≈39 L≈19 → k = 12×4 + 39×4 + 19×9 = 48+156+171 = 375 ✓
+    _id: 'L465',
+    n: "Tabboulé Libanais Authentique",
+    f: "🇱🇧",
+    k: 375,
+    p: 12,
+    g: 39,
+    l: 19,
+    lv: 1,
+    i: "Persil plat frais 150g, menthe fraîche 30g, tomates 200g, boulgour fin cuit 80g, oignon vert 50g, huile d'olive 20g, citron jus 40ml, sel, poivre noir",
+    st: [
+      "Réhydrater le boulgour dans le jus de citron et une égale quantité d'eau 15 min, égoutter l'excès de liquide.",
+      "Hacher très finement le persil et la menthe, couper les tomates et oignons verts en très petits dés réguliers.",
+      "Mélanger délicatement tous les ingrédients avec l'huile d'olive et citron supplémentaire, assaisonner et laisser reposer 10 min avant de servir."
+    ],
+    w: false,
+    tags: ["levantin", "salade", "tabboulé", "herbes", "vegan"]
+  },
+  {
+    // L466 — Kofta Grillée :
+    //   Agneau maigre 150g(34P,0G,14L) + boulgour 40g cuit(2.8P,10.4G,0.3L)
+    //   + huile olive 8g(0P,0G,7.2L) + yaourt 80g(7.2P,3.2G,4L)
+    //   P≈44 G≈14 L≈25 → k = 44×4 + 14×4 + 25×9 = 176+56+225 = 457 ✓
+    _id: 'L466',
+    n: "Kofta Grillée aux Herbes",
+    f: "🇱🇧",
+    k: 457,
+    p: 44,
+    g: 14,
+    l: 25,
+    lv: 2,
+    i: "Agneau maigre haché 150g, boulgour fin cuit 40g, oignon 60g, persil plat 20g, menthe fraîche 10g, cannelle 3g, allspice 3g, cumin 3g, huile d'olive 8g, yaourt grec entier 80g, citron jus 15ml",
+    st: [
+      "Mixer oignon et herbes finement, mélanger avec l'agneau haché, boulgour cuit et épices jusqu'à texture homogène collante, réfrigérer 20 min.",
+      "Former des koftas allongées autour de brochettes, badigeonner d'huile d'olive et griller 8-10 min en retournant à mi-cuisson.",
+      "Servir les koftas avec la sauce au yaourt grec citronné, garnir de menthe fraîche et de quartiers de citron."
+    ],
+    w: false,
+    tags: ["levantin", "agneau", "kofta", "grillé", "high-protein"]
+  },
+  {
+    // L467 — Manakish Zaatar Protéiné :
+    //   Pita 80g(6.4P,37G,1.6L) + zaatar 15g(1P,3G,1L) + huile 12g(0P,0G,10.8L)
+    //   + fromage blanc 0% 100g(8P,4G,0L) + oeuf 1(6P,0G,5L)
+    //   P≈21 G≈44 L≈18 → k = 21×4 + 44×4 + 18×9 = 84+176+162 = 422 ✓
+    _id: 'L467',
+    n: "Manakish Zaatar Protéiné",
+    f: "🇱🇧",
+    k: 422,
+    p: 21,
+    g: 44,
+    l: 18,
+    lv: 2,
+    i: "Pain pita 80g, zaatar mélange 15g, huile d'olive 12g, fromage blanc 0% 100g, oeuf dur 1, tomate 80g, concombre 60g, menthe fraîche 10g, sumac 2g",
+    st: [
+      "Mélanger le zaatar avec l'huile d'olive pour obtenir une pâte épaisse et parfumée, étaler uniformément sur le pain pita.",
+      "Passer le pita zaatar au four à 220°C pendant 8-10 min jusqu'à bords légèrement croustillants.",
+      "Servir avec le fromage blanc assaisonné de sumac, la salade tomate-concombre-menthe et l'oeuf dur tranché."
+    ],
+    w: false,
+    tags: ["levantin", "zaatar", "manakish", "petit-déjeuner", "protéiné"]
+  },
+  {
+    // L468 — Fatayer Épinards :
+    //   Pâte à pain 100g(8P,50G,1L) + épinards 200g(6P,8G,0L)
+    //   + feta 40g(4P,0.8G,6L) + huile 10g(0P,0G,9L) + pignons 10g(1.5P,0.7G,4.9L)
+    //   P≈20 G≈59 L≈21 → k = 20×4 + 59×4 + 21×9 = 80+236+189 = 505 ✓
+    _id: 'L468',
+    n: "Fatayer Épinards Santé",
+    f: "🇱🇧",
+    k: 505,
+    p: 20,
+    g: 59,
+    l: 21,
+    lv: 3,
+    i: "Pâte à pain 100g, épinards frais 200g, feta légère 40g, oignon 80g, pignons de pin 10g, huile d'olive 10g, sumac 5g, citron jus 15ml, noix de muscade 1g, sel, poivre",
+    st: [
+      "Hacher les épinards, saler et laisser dégorger 15 min, presser fermement ; mélanger avec l'oignon haché, feta émiettée, pignons, sumac, citron, huile et muscade.",
+      "Diviser la pâte en 6 boules, étaler chacune finement, déposer la farce épinards-feta au centre.",
+      "Replier les 3 bords pour former des triangles, sceller en pincant, badigeonner d'huile et cuire 18-20 min à 200°C jusqu'à dorure."
+    ],
+    w: false,
+    tags: ["levantin", "épinards", "fatayer", "four", "végétarien"]
+  },
+  {
+    // L469 — Labneh Bowl Healthy :
+    //   Labneh 150g(13.5P,5.5G,7.5L) + pois chiches 80g(6.9P,21.3G,2L)
+    //   + concombre 100g(0.7P,2.5G,0L) + tomates cerises 100g(1P,4G,0L)
+    //   + huile olive 12g(0P,0G,10.8L) + olives 20g(0.2P,0.6G,2.8L)
+    //   P≈22 G≈34 L≈23 → k = 22×4 + 34×4 + 23×9 = 88+136+207 = 431 ✓
+    _id: 'L469',
+    n: "Labneh Bowl Healthy",
+    f: "🇱🇧",
+    k: 431,
+    p: 22,
+    g: 34,
+    l: 23,
+    lv: 1,
+    i: "Labneh 150g, pois chiches cuits 80g, concombre 100g, tomates cerises 100g, olives noires 20g, huile d'olive 12g, zaatar 8g, menthe fraîche 15g, sumac 3g",
+    st: [
+      "Étaler le labneh généreusement dans un bol creux en formant un puits au centre avec le dos d'une cuillère.",
+      "Disposer les pois chiches, le concombre en rondelles, les tomates cerises coupées et les olives autour et sur le labneh.",
+      "Arroser d'huile d'olive en filet, saupoudrer de zaatar et sumac, parsemer de feuilles de menthe fraîche et servir."
+    ],
+    w: false,
+    tags: ["levantin", "labneh", "bowl", "végétarien", "frais"]
+  },
+  {
+    // L470 — Mansaf Agneau Allégé :
+    //   Agneau maigre 150g(34P,0G,14L) + riz basmati 130g(3.5P,37.6G,0L)
+    //   + yaourt grec 120g(10.8P,4.8G,6L) + amandes 15g(2.2P,1.1G,7.4L)
+    //   + bouillon 0 kcal → P≈51 G≈44 L≈27
+    //   k = 51×4 + 44×4 + 27×9 = 204+176+243 = 623 — réduire riz et amandes
+    // riz 100g(2.7P,28.9G,0L) + amandes 10g(1.5P,0.7G,4.9L)
+    //   P≈49 G≈34 L≈25 → k = 49×4 + 34×4 + 25×9 = 196+136+225 = 557 ✓
+    _id: 'L470',
+    n: "Mansaf Agneau Allégé",
+    f: "🇯🇴",
+    k: 557,
+    p: 49,
+    g: 34,
+    l: 25,
+    lv: 3,
+    i: "Agneau maigre 150g, riz basmati cuit 100g, yaourt grec entier 120g, bouillon de légumes 200ml, amandes effilées 10g, persil plat 15g, curcuma 3g, cannelle 2g, cardamome 2g, sel, poivre",
+    st: [
+      "Cuire l'agneau en cubes dans le bouillon assaisonné de curcuma, cannelle et cardamome 25 min à feu doux jusqu'à tendreté.",
+      "Préparer la sauce allégée : chauffer doucement le yaourt grec avec 100ml de bouillon de cuisson en fouettant sans laisser bouillir.",
+      "Dresser le riz basmati dans un grand bol, disposer l'agneau par-dessus, napper de sauce yaourt, garnir d'amandes effilées grillées à sec et de persil haché."
+    ],
+    w: false,
+    tags: ["jordanien", "agneau", "mansaf", "festif", "high-protein"]
+  },
+
+  {
+    _id: 'L471',
+    n: "Poulet Rôti Façon Healthy",
+    f: "🇫🇷",
+    k: 528,
+    p: 60,
+    g: 36,
+    l: 16,
+    lv: 2,
+    i: "Blanc et cuisse de poulet 180g, pomme de terre 200g, ail 3 gousses, herbes de Provence 5g, huile d'olive 10g, citron 1/2, sel, poivre",
+    st: [
+      "Préchauffer le four à 200°C. Frotter le poulet avec l'ail écrasé, les herbes de Provence, le jus de citron, l'huile d'olive, sel et poivre.",
+      "Couper les pommes de terre en quartiers et les disposer autour du poulet dans un plat à four.",
+      "Enfourner 45 min en arrosant toutes les 15 min avec le jus de cuisson. Laisser reposer 5 min avant de servir."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "poulet", "roti", "high-protein", "viral2024"]
+  },
+
+  {
+    _id: 'L472',
+    n: "Ratatouille Protéinée au Poulet",
+    f: "🇫🇷",
+    k: 336,
+    p: 35,
+    g: 22,
+    l: 12,
+    lv: 2,
+    i: "Blanc de poulet 150g, courgette 150g, aubergine 100g, poivron rouge 100g, tomates pelées 200g, oignon 80g, ail 2 gousses, herbes de Provence 5g, huile d'olive 10g",
+    st: [
+      "Couper le poulet en dés et faire revenir 5 min à feu vif dans l'huile d'olive avec l'ail et l'oignon émincé.",
+      "Ajouter les légumes coupés en cubes, les tomates, les herbes, sel et poivre. Couvrir et laisser mijoter 25 min à feu doux.",
+      "Rectifier l'assaisonnement et servir chaud. Idéal avec un filet d'huile d'olive à cru."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "ratatouille", "poulet", "legumes", "mediterraneen", "viral2024"]
+  },
+
+  {
+    _id: 'L473',
+    n: "Quiche Lorraine Allégée Maison",
+    f: "🇫🇷",
+    k: 376,
+    p: 30,
+    g: 28,
+    l: 16,
+    lv: 3,
+    i: "Pâte brisée légère 60g, œufs entiers 2 (120g), jambon blanc dégraissé 100g, gruyère allégé 30g, fromage blanc 0% 80g, lait écrémé 50ml, noix de muscade, sel, poivre",
+    st: [
+      "Préchauffer le four à 180°C. Foncer un moule avec la pâte brisée, piquer le fond et précuire à blanc 10 min.",
+      "Battre les œufs avec le fromage blanc, le lait écrémé, la muscade, sel et poivre. Incorporer le jambon coupé en dés.",
+      "Verser l'appareil sur le fond précuit, parsemer de gruyère allégé râpé. Cuire 30-35 min jusqu'à belle dorure et consistance ferme."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "quiche", "lorraine", "allege", "proteines", "viral2025"]
+  },
+
+  {
+    _id: 'L474',
+    n: "Soupe à l'Oignon Gratinée Légère",
+    f: "🇫🇷",
+    k: 265,
+    p: 14,
+    g: 32,
+    l: 9,
+    lv: 2,
+    i: "Oignons jaunes 300g, bouillon de bœuf dégraissé 500ml, pain complet grillé 30g, gruyère allégé 25g, beurre 5g, thym 2g, laurier 1 feuille, sel, poivre",
+    st: [
+      "Émincer finement les oignons. Les caraméliser 20 min à feu doux dans le beurre jusqu'à coloration dorée. Déglacer avec un peu de bouillon.",
+      "Ajouter le reste du bouillon, le thym et le laurier. Mijoter 15 min puis retirer le laurier. Saler et poivrer.",
+      "Verser dans des bols allant au four, poser une tranche de pain grillé, couvrir de gruyère allégé râpé. Gratiner 3-5 min sous le gril."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "soupe", "oignon", "gratin", "allege", "viral2025"]
+  },
+
+  {
+    _id: 'L475',
+    n: "Salade Niçoise High-Protein",
+    f: "🇫🇷",
+    k: 350,
+    p: 38,
+    g: 18,
+    l: 14,
+    lv: 1,
+    i: "Thon en conserve au naturel 150g, œuf dur 1 (60g), tomates cerises 120g, haricots verts cuits 100g, olives noires 20g, concombre 100g, anchois 20g, huile d'olive 8g, vinaigre de vin 5ml, moutarde 5g, basilic frais",
+    st: [
+      "Cuire les haricots verts al dente, les refroidir dans l'eau glacée. Faire durcir l'œuf 9 min et le couper en quartiers.",
+      "Préparer la vinaigrette en émulsionnant huile d'olive, vinaigre, moutarde, sel et poivre.",
+      "Composer la salade en disposant tous les ingrédients. Égoutter le thon, répartir sur la salade avec les anchois. Arroser de vinaigrette et garnir de basilic."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "nicoise", "thon", "salade", "high-protein", "viral2024"]
+  },
+
+  {
+    _id: 'L476',
+    n: "Blanquette de Veau Légère",
+    f: "🇫🇷",
+    k: 314,
+    p: 36,
+    g: 20,
+    l: 10,
+    lv: 3,
+    i: "Veau maigre 150g (épaule dégraissée), carotte 100g, poireau 80g, champignons 80g, bouillon de veau 300ml, fromage blanc 0% 60g, fécule de maïs 10g, jaune d'œuf 1, laurier, thym, sel, poivre blanc",
+    st: [
+      "Couper le veau en cubes. Porter à frémissement dans le bouillon avec laurier, thym, carottes et poireaux en tronçons. Écumer et cuire 45 min.",
+      "Retirer viande et légumes. Délayer la fécule dans un peu de bouillon froid et incorporer au bouillon chaud pour épaissir. Hors du feu, lier avec le fromage blanc mélangé au jaune d'œuf.",
+      "Remettre viande et légumes dans la sauce. Réchauffer doucement sans bouillir, rectifier l'assaisonnement, ajouter un filet de citron."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "veau", "blanquette", "allege", "mijote", "viral2025"]
+  },
+
+  {
+    _id: 'L477',
+    n: "Gratin Dauphinois Allégé",
+    f: "🇫🇷",
+    k: 272,
+    p: 12,
+    g: 38,
+    l: 8,
+    lv: 2,
+    i: "Pommes de terre 200g, lait écrémé 150ml, fromage blanc 0% 80g, ail 2 gousses, gruyère allégé 20g, noix de muscade, sel, poivre",
+    st: [
+      "Préchauffer le four à 180°C. Éplucher et trancher finement les pommes de terre (2mm). Frotter le plat à gratin avec l'ail.",
+      "Mélanger lait écrémé, fromage blanc, muscade, sel et poivre. Disposer les tranches de pommes de terre en couches en arrosant chaque couche de l'appareil.",
+      "Parsemer de gruyère allégé râpé. Cuire 50-60 min jusqu'à ce que les pommes de terre soient fondantes et le dessus bien doré."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "gratin", "dauphinois", "allege", "glucides", "viral2024"]
+  },
+
+  {
+    _id: 'L478',
+    n: "Bouillabaisse Simplifiée Healthy",
+    f: "🇫🇷",
+    k: 296,
+    p: 40,
+    g: 16,
+    l: 8,
+    lv: 3,
+    i: "Poisson blanc (cabillaud) 120g, crevettes décortiquées 80g, moules 80g, tomates 150g, fenouil 80g, oignon 60g, ail 3 gousses, bouillon de poisson 400ml, safran 0.5g, huile d'olive 8g, thym, laurier",
+    st: [
+      "Faire revenir oignon, fenouil et ail dans l'huile d'olive 5 min. Ajouter tomates concassées, safran, thym, laurier et bouillon de poisson. Cuire 20 min.",
+      "Couper le poisson en gros cubes. Ajouter les moules, puis après 2 min les crevettes et le poisson. Cuire 5-7 min à frémissement.",
+      "Retirer les moules non ouvertes, rectifier l'assaisonnement. Servir dans des bols profonds avec du pain grillé frotté à l'ail."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "bouillabaisse", "poisson", "fruits-de-mer", "proteines", "viral2025"]
+  },
+
+  {
+    _id: 'L479',
+    n: "Galettes Sarrasin Poulet-Épinards",
+    f: "🇫🇷",
+    k: 424,
+    p: 30,
+    g: 58,
+    l: 8,
+    lv: 2,
+    i: "Farine de sarrasin 80g, œuf 1 (60g), lait écrémé 200ml, blanc de poulet grillé 120g, champignons 80g, épinards frais 60g, fromage blanc 0% 40g, moutarde 5g, sel, poivre, ciboulette",
+    st: [
+      "Mélanger farine de sarrasin, œuf, lait écrémé et une pincée de sel. Laisser reposer 30 min. Cuire 4 galettes fines dans une poêle bien chaude.",
+      "Faire sauter champignons et épinards 3 min. Effilocher le poulet grillé. Mélanger fromage blanc et moutarde pour la sauce.",
+      "Garnir chaque galette de sauce, poulet effiloché, champignons et épinards. Plier en carré et servir parsemé de ciboulette ciselée."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "galette", "sarrasin", "poulet", "breton", "viral2024"]
+  },
+
+  {
+    _id: 'L480',
+    n: "Tartare de Bœuf Façon Moderne",
+    f: "🇫🇷",
+    k: 271,
+    p: 37,
+    g: 6,
+    l: 11,
+    lv: 1,
+    i: "Bœuf maigre haché 150g (rumsteck), câpres 15g, cornichons 20g, échalote 20g, jaune d'œuf 1, moutarde de Dijon 8g, sauce Worcestershire 5ml, Tabasco 2 gouttes, persil plat 10g, fleur de sel, poivre du moulin",
+    st: [
+      "Hacher finement à la main le bœuf très froid. Ciseler l'échalote, les câpres et les cornichons.",
+      "Mélanger délicatement la viande avec moutarde, jaune d'œuf, sauce Worcestershire, Tabasco, sel et poivre. Incorporer les condiments.",
+      "Former le tartare en cercle sur assiette froide. Garnir de persil haché et d'un filet d'huile d'olive. Servir immédiatement avec pain grillé complet."
+    ],
+    w: false,
+    tags: ["francais", "healthy", "tartare", "boeuf", "cru", "high-protein", "gastronomique", "viral2025"]
+  },
+
+  {
+    _id: 'L481',
+    n: "Pre-Workout Oatmeal Power Bowl",
+    f: "⚡",
+    k: 394,
+    p: 13,
+    g: 72,
+    l: 6,
+    lv: 1,
+    i: "Flocons d'avoine 80g, banane mûre 100g, miel 15g, lait végétal 200ml, graines de chia 10g, beurre d'amande 8g, cannelle 2g, baies fraîches 50g",
+    st: [
+      "Cuire les flocons d'avoine dans le lait végétal 3-4 min à feu doux en remuant. Retirer du feu dès l'épaississement souhaité.",
+      "Incorporer le miel et la cannelle. Verser dans un bol et laisser tiédir 2 min.",
+      "Disposer la banane tranchée, les baies fraîches et les graines de chia. Ajouter le beurre d'amande en filet. Consommer 60-90 min avant la séance."
+    ],
+    w: false,
+    tags: ["sport", "pre-workout", "avoine", "energie", "glucides", "endurance", "viral2024"]
+  },
+
+  {
+    _id: 'L482',
+    n: "Post-Workout Recovery Shake Protéiné",
+    f: "💪",
+    k: 324,
+    p: 32,
+    g: 40,
+    l: 4,
+    lv: 1,
+    i: "Whey protéine vanille 30g, banane congelée 120g, lait écrémé 200ml, flocons d'avoine 20g, miel 10g, glace pilée 100g",
+    st: [
+      "Placer tous les ingrédients dans le blender: whey, banane congelée, lait écrémé, flocons d'avoine, miel et glace.",
+      "Mixer 45-60 sec à puissance maximale jusqu'à obtenir une texture lisse et crémeuse.",
+      "Verser immédiatement dans un grand verre et consommer dans les 30 min suivant la fin de l'entraînement."
+    ],
+    w: true,
+    tags: ["sport", "post-workout", "whey", "recuperation", "proteines", "shake", "viral2025"]
+  },
+
+  {
+    _id: 'L483',
+    n: "Carb Loading Pasta au Poulet",
+    f: "🍝",
+    k: 512,
+    p: 42,
+    g: 68,
+    l: 8,
+    lv: 2,
+    i: "Pâtes complètes cuites 200g, blanc de poulet 150g, sauce tomate 150g, parmesan 15g, ail 2 gousses, basilic frais, huile d'olive 8g, sel, poivre",
+    st: [
+      "Cuire les pâtes al dente selon les instructions. Griller le blanc de poulet 6 min de chaque côté, laisser reposer puis émincer.",
+      "Faire revenir l'ail dans l'huile d'olive 1 min, ajouter la sauce tomate, cuire 5 min. Incorporer les pâtes égouttées.",
+      "Dresser les pâtes en assiette creuse, disposer les tranches de poulet, parsemer de parmesan râpé et de basilic frais."
+    ],
+    w: false,
+    tags: ["sport", "carb-loading", "pates", "poulet", "endurance", "glucides", "pre-compet", "viral2024"]
+  },
+
+  {
+    _id: 'L484',
+    n: "Anti-Inflammatory Golden Bowl",
+    f: "🌿",
+    k: 342,
+    p: 18,
+    g: 45,
+    l: 10,
+    lv: 1,
+    i: "Quinoa cuit 150g, pois chiches 80g, chou-fleur 100g, épinards 60g, curcuma 3g, gingembre frais 10g, huile de coco 8g, citron 1/2, graines de tournesol 10g, poivre noir",
+    st: [
+      "Rôtir le chou-fleur en fleurettes 20 min au four à 200°C avec l'huile de coco, le curcuma et le poivre noir moulu.",
+      "Faire revenir les pois chiches et les épinards 3 min dans une poêle avec le gingembre râpé. Saler et poivrer.",
+      "Composer le bowl: quinoa en base, chou-fleur rôti, pois chiches-épinards. Arroser de jus de citron et parsemer de graines de tournesol."
+    ],
+    w: false,
+    tags: ["sport", "anti-inflammatoire", "curcuma", "recovery", "vegan", "bowl", "viral2025"]
+  },
+
+  {
+    _id: 'L485',
+    n: "Electrolyte Recovery Soup",
+    f: "🥣",
+    k: 230,
+    p: 20,
+    g: 24,
+    l: 6,
+    lv: 2,
+    i: "Bouillon de poulet maison 500ml, blanc de poulet effiloché 80g, patate douce 100g, épinards 60g, sel de mer 2g, citron vert 1/2, gingembre frais 8g, coriandre fraîche 10g, poivre",
+    st: [
+      "Porter le bouillon de poulet à frémissement avec le gingembre râpé. Ajouter la patate douce coupée en petits cubes et cuire 10 min.",
+      "Incorporer le poulet effiloché et les épinards. Cuire encore 3 min jusqu'à ce que les épinards soient fondants.",
+      "Hors du feu, ajouter le jus de citron vert, la coriandre ciselée. Rectifier en sel. Servir dans les 30 min post-effort."
+    ],
+    w: false,
+    tags: ["sport", "recuperation", "electrolytes", "bouillon", "post-workout", "hydratation", "viral2025"]
+  },
+
+  {
+    _id: 'L486',
+    n: "High-Protein Pizza Base Chou-Fleur",
+    f: "🍕",
+    k: 324,
+    p: 32,
+    g: 22,
+    l: 12,
+    lv: 3,
+    i: "Chou-fleur râpé cuit 300g, œuf 1 (60g), mozzarella allégée 40g, sauce tomate sans sucre 80g, blanc de poulet grillé 100g, poivrons 60g, origan 3g, ail en poudre 2g, sel, poivre",
+    st: [
+      "Préchauffer le four à 220°C. Râper et cuire le chou-fleur 5 min au micro-ondes. Laisser refroidir et presser dans un torchon pour enlever toute l'humidité.",
+      "Mélanger le chou-fleur avec l'œuf, l'ail en poudre, l'origan, sel et poivre. Étaler en rond sur papier cuisson et cuire 15 min jusqu'à dorure.",
+      "Garnir avec sauce tomate, poulet effiloché, poivrons et mozzarella allégée. Enfourner 8-10 min. Servir immédiatement."
+    ],
+    w: false,
+    tags: ["sport", "high-protein", "pizza", "chou-fleur", "low-carb", "poulet", "viral2024"]
+  },
+
+  {
+    _id: 'L487',
+    n: "Strength Builder Beef Bowl",
+    f: "💪",
+    k: 483,
+    p: 38,
+    g: 58,
+    l: 11,
+    lv: 2,
+    i: "Bœuf maigre 150g (steak haché façon bowl), riz blanc cuit 200g, brocoli 100g, carotte 80g, soja 20ml, ail 2 gousses, gingembre 5g, huile de sésame 5g, graines de sésame 5g",
+    st: [
+      "Cuire le riz blanc. Cuire le brocoli et la carotte à la vapeur 5 min pour qu'ils restent croquants.",
+      "Faire revenir le bœuf haché à feu vif 4 min avec l'ail, le gingembre et la sauce soja. Déglacer avec un filet d'eau si nécessaire.",
+      "Dresser le bowl: riz en base, légumes d'un côté, bœuf de l'autre. Arroser d'huile de sésame et parsemer de graines de sésame grillées."
+    ],
+    w: false,
+    tags: ["sport", "prise-de-masse", "boeuf", "riz", "bowl", "force", "proteines", "viral2024"]
+  },
+
+  {
+    _id: 'L488',
+    n: "Endurance Energy Balls Dattes-Avoine",
+    f: "⚡",
+    k: 348,
+    p: 8,
+    g: 52,
+    l: 12,
+    lv: 1,
+    i: "Dattes Medjool 60g (dénoyautées), flocons d'avoine 40g, amandes 25g, beurre de cacahuète naturel 15g, cacao en poudre 5g, noix de coco râpée 10g, sel de mer 1g",
+    st: [
+      "Mixer les dattes dénoyautées jusqu'à obtenir une pâte homogène. Ajouter le beurre de cacahuète et mixer encore 30 sec.",
+      "Incorporer à la main les flocons d'avoine, les amandes concassées, le cacao et le sel. Mélanger jusqu'à obtenir une pâte qui se tient.",
+      "Former 8-10 boules de la taille d'une noix. Rouler dans la noix de coco râpée. Réfrigérer 30 min avant consommation. Idéal 1h avant l'effort."
+    ],
+    w: false,
+    tags: ["sport", "endurance", "snack", "dattes", "pre-workout", "energie", "vegan", "viral2025"]
+  },
+
+  {
+    _id: 'L489',
+    n: "Muscle Recovery Salmon Quinoa",
+    f: "🐟",
+    k: 452,
+    p: 36,
+    g: 32,
+    l: 20,
+    lv: 2,
+    i: "Saumon 150g, quinoa cuit 150g, épinards 80g, avocat 50g, concombre 80g, citron 1, aneth frais 10g, huile d'olive 8g, sel, poivre",
+    st: [
+      "Cuire le saumon 12-15 min au four à 180°C après l'avoir assaisonné d'aneth, citron, sel et poivre.",
+      "Faire sauter les épinards 2 min dans l'huile d'olive. Cuire le quinoa selon les instructions si pas déjà prêt.",
+      "Composer le bowl: quinoa tiède, épinards sautés, concombre en rondelles, avocat tranché. Déposer le saumon feuilleté, presser le citron, ajouter l'aneth frais."
+    ],
+    w: false,
+    tags: ["sport", "recuperation", "saumon", "quinoa", "omega3", "anti-inflammatoire", "proteines", "viral2025"]
+  },
+
+  {
+    _id: 'L490',
+    n: "Glycogen Replenishment Rice Bowl",
+    f: "🍚",
+    k: 414,
+    p: 30,
+    g: 60,
+    l: 6,
+    lv: 2,
+    i: "Riz blanc cuit 200g, blanc de poulet grillé 120g, edamame 60g, maïs 50g, carotte râpée 60g, avocat 30g, sauce teriyaki légère 20ml, graines de sésame 5g, ciboulette",
+    st: [
+      "Cuire le riz blanc selon les instructions. Griller le blanc de poulet 5-6 min de chaque côté, laisser reposer et émincer finement.",
+      "Réchauffer l'edamame et le maïs. Préparer la sauce teriyaki légère en diluant avec un peu d'eau.",
+      "Dresser le bowl: riz en base, poulet émincé, edamame, maïs et carotte râpée. Ajouter l'avocat en tranches, arroser de sauce teriyaki, parsemer de sésame et ciboulette."
+    ],
+    w: false,
+    tags: ["sport", "glycogene", "post-workout", "riz", "poulet", "recuperation", "glucides", "viral2024"]
+  },
+
+  {
+    _id: 'L491',
+    n: "Jollof Rice Protéiné",
+    f: "🇳🇬",
+    k: 594,
+    p: 40,
+    g: 68,
+    l: 18,
+    lv: 2,
+    i: "Riz cuit 180g, Cuisse poulet sans peau 150g, Tomate concassée 150g, Oignon 80g, Huile de palme 10ml, Piment doux 5g, Bouillon de volaille 1 cube, Ail 2 gousses",
+    st: ["Faire revenir oignon et ail émincés dans l'huile de palme 3 min, ajouter tomates concassées et piment, cuire 5 min jusqu'à réduction.", "Incorporer le riz cuit et le bouillon émietté, mélanger et cuire 5 min à feu moyen.", "Ajouter le poulet coupé en morceaux, couvrir et cuire 10 min jusqu'à ce que tout soit bien imprégné des saveurs."],
+    w: false,
+    tags: ["africain", "nigérian", "viral", "riz", "poulet", "jollof"]
+  },
+  {
+    _id: 'L492',
+    n: "Thiéboudienne Allégée",
+    f: "🇸🇳",
+    k: 587,
+    p: 48,
+    g: 74,
+    l: 11,
+    lv: 2,
+    i: "Riz cuit 180g, Cabillaud 200g, Tomate concassée 150g, Oignon 80g, Carottes 80g, Huile de palme 8ml, Persil 10g, Ail 2 gousses",
+    st: ["Faire revenir oignon, ail et persil dans l'huile de palme, ajouter tomates et cuire 5 min jusqu'à obtenir une sauce épaisse.", "Ajouter carottes en rondelles et cabillaud en morceaux, verser un peu d'eau, couvrir et cuire 15 min.", "Incorporer le riz cuit, bien mélanger avec la sauce et servir chaud."],
+    w: false,
+    tags: ["africain", "sénégalais", "viral", "poisson", "riz", "thiéboudienne"]
+  },
+  {
+    _id: 'L493',
+    n: "Mafé Poulet Arachide",
+    f: "🇸🇳",
+    k: 558,
+    p: 43,
+    g: 47,
+    l: 22,
+    lv: 2,
+    i: "Cuisse poulet sans peau 150g, Beurre d'arachide 25g, Tomate concassée 150g, Oignon 80g, Riz cuit 100g, Ail 2 gousses, Gingembre frais 5g, Bouillon de volaille 1 cube",
+    st: ["Faire dorer le poulet coupé en morceaux dans une cocotte, retirer et faire revenir oignon, ail et gingembre 3 min.", "Ajouter tomates, beurre d'arachide et bouillon émietté avec 200ml d'eau, mélanger jusqu'à sauce homogène.", "Remettre le poulet, couvrir et mijoter 20 min à feu doux, servir sur le riz cuit."],
+    w: false,
+    tags: ["africain", "sénégalais", "viral", "arachide", "poulet", "mafé"]
+  },
+  {
+    _id: 'L494',
+    n: "Poulet Yassa Citron",
+    f: "🇸🇳",
+    k: 658,
+    p: 48,
+    g: 67,
+    l: 22,
+    lv: 2,
+    i: "Cuisse poulet sans peau 200g, Oignon 200g, Jus de citron 60ml, Riz cuit 150g, Huile d'olive 10ml, Moutarde 10g, Ail 3 gousses, Piment vert 1",
+    st: ["Mariner le poulet avec jus de citron, oignons émincés, ail, moutarde et piment au minimum 2h au réfrigérateur.", "Égoutter et faire griller le poulet à la poêle avec l'huile 8 min de chaque côté, réserver.", "Faire caraméliser les oignons de la marinade 10 min, remettre le poulet, couvrir 5 min et servir sur riz."],
+    w: false,
+    tags: ["africain", "sénégalais", "viral", "citron", "poulet", "yassa"]
+  },
+  {
+    _id: 'L495',
+    n: "Injera Lentilles Vegan",
+    f: "🇪🇹",
+    k: 536,
+    p: 29,
+    g: 87,
+    l: 8,
+    lv: 1,
+    i: "Lentilles vertes cuites 250g, Galette injera 60g, Oignon 80g, Tomate concassée 100g, Huile d'olive 5ml, Berbéré épice 5g, Ail 2 gousses, Gingembre 5g",
+    st: ["Faire revenir oignon, ail et gingembre dans l'huile, ajouter épices berbéré et cuire 2 min pour libérer les arômes.", "Incorporer tomates concassées et lentilles cuites, mélanger et mijoter 10 min à feu doux.", "Réchauffer l'injera et servir les lentilles dessus, déchirer l'injera pour ramasser la garniture comme en Éthiopie."],
+    w: false,
+    tags: ["africain", "éthiopien", "vegan", "viral", "lentilles", "injera", "tiktok"]
+  },
+  {
+    _id: 'L496',
+    n: "Bobotie Bœuf Épicé",
+    f: "🇿🇦",
+    k: 612,
+    p: 47,
+    g: 70,
+    l: 16,
+    lv: 2,
+    i: "Bœuf haché maigre 150g, Oignon 100g, Raisins secs 30g, Œuf 1, Riz cuit 120g, Curry en poudre 5g, Curcuma 2g, Amandes effilées 10g, Abricots secs 20g",
+    st: ["Faire revenir oignon émincé, ajouter le bœuf haché et cuire 8 min, incorporer curry, curcuma, raisins secs et abricots.", "Verser dans un plat allant au four, battre l'œuf avec 50ml de lait et verser sur la viande, parsemer d'amandes.", "Enfourner à 180°C pendant 25 min jusqu'à ce que le dessus soit doré, servir avec le riz."],
+    w: false,
+    tags: ["africain", "sud-africain", "viral", "bœuf", "épicé", "bobotie"]
+  },
+  {
+    _id: 'L497',
+    n: "Jerk Chicken Jamaïcain",
+    f: "🇯🇲",
+    k: 593,
+    p: 47,
+    g: 54,
+    l: 21,
+    lv: 3,
+    i: "Cuisse poulet sans peau 200g, Riz cuit 150g, Jus de citron vert 30ml, Huile de coco 8ml, Piment scotch bonnet 1, Ail 3 gousses, Thym frais 5g, Cannelle 2g, Allspice 3g",
+    st: ["Mixer piment, ail, thym, cannelle, allspice, jus de citron et huile en pâte jerk, enrober le poulet et mariner 4h minimum.", "Griller le poulet au barbecue ou au four gril à 200°C, 15 min de chaque côté jusqu'à caramélisation.", "Laisser reposer 5 min, trancher et servir sur riz blanc avec quartiers de citron vert."],
+    w: false,
+    tags: ["caribéen", "jamaïcain", "viral", "poulet", "jerk", "épicé"]
+  },
+  {
+    _id: 'L498',
+    n: "Rice & Peas Caribéens",
+    f: "🇯🇲",
+    k: 573,
+    p: 18,
+    g: 96,
+    l: 13,
+    lv: 1,
+    i: "Riz cuit 200g, Haricots rouges cuits 150g, Lait de coco 50ml, Oignon 60g, Ail 2 gousses, Thym frais 5g, Ciboulette 10g, Poivre noir",
+    st: ["Faire revenir oignon et ail dans une casserole, ajouter haricots rouges, lait de coco, thym et 100ml d'eau, porter à frémissement 5 min.", "Incorporer le riz cuit, mélanger délicatement pour que le riz s'imprègne du lait de coco et des saveurs.", "Parsemer de ciboulette ciselée et servir chaud en accompagnement ou en plat végétarien complet."],
+    w: false,
+    tags: ["caribéen", "jamaïcain", "viral", "riz", "haricots", "coco", "végétarien"]
+  },
+  {
+    _id: 'L499',
+    n: "Roti Caribéen Poulet Curry",
+    f: "🇹🇹",
+    k: 570,
+    p: 45,
+    g: 66,
+    l: 14,
+    lv: 2,
+    i: "Galette roti farine de blé 70g, Cuisse poulet sans peau 150g, Pois chiches cuits 80g, Oignon 60g, Curry madras 5g, Cumin 2g, Ail 2 gousses, Gingembre 5g, Coriandre fraîche 10g",
+    st: ["Faire revenir oignon, ail et gingembre, ajouter curry et cumin, incorporer poulet en cubes et pois chiches, cuire 15 min avec 100ml d'eau.", "Réchauffer la galette roti à sec dans une poêle chaude 1 min de chaque côté jusqu'à légère coloration.", "Garnir la galette avec la préparation poulet-pois chiches, parsemer de coriandre fraîche et plier en wrap."],
+    w: false,
+    tags: ["caribéen", "trinidadien", "viral", "poulet", "roti", "curry"]
+  },
+  {
+    _id: 'L500',
+    n: "Plantain Grillé Protein Bowl",
+    f: "🌴",
+    k: 570,
+    p: 42,
+    g: 69,
+    l: 14,
+    lv: 2,
+    i: "Plantain mûr 150g, Cuisse poulet grillée 150g, Haricots noirs cuits 80g, Avocat 40g, Jus de citron vert 30ml, Coriandre fraîche 10g, Oignon rouge 40g, Piment doux 3g",
+    st: ["Couper le plantain en rondelles et griller 3 min de chaque côté à la poêle antiadhésive sans matière grasse jusqu'à caramélisation.", "Cuire le poulet assaisonné au gril ou à la poêle 7 min de chaque côté, trancher en lamelles.", "Assembler le bowl avec plantain, poulet, haricots noirs, avocat en dés, arroser de citron vert et garnir de coriandre et oignon rouge."],
+    w: false,
+    tags: ["caribéen", "africain", "viral", "bowl", "plantain", "poulet", "healthy", "tiktok"]
+  },
+
   // ─── INSALATE & ANTIPASTI MODERNES (R460-R469) ────────────────────────────
   {
     id: 'R460',
