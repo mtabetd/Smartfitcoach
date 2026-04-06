@@ -1704,13 +1704,105 @@ var STARTING_STRENGTH_PROGRAMS = {
 };
 window.STARTING_STRENGTH_PROGRAMS = STARTING_STRENGTH_PROGRAMS;
 
+// ─── GREYSKULL LP (John Sheaffer / Johnny Pain) ──────────────────────────────
+var GREYSKULL_PROGRAMS = {
+  meta: {
+    name: 'Greyskull LP',
+    athlete: 'Méthode John Sheaffer (Johnny Pain)',
+    philosophy: 'Force + Masse débutant/intermédiaire. 2x5 + AMRAP set final ("Reps For Reps"). Plug sets optionnels pour bras. Plus de fréquence sur le bench que Starting Strength.',
+    frequency: '3 jours/semaine',
+    session_duration: '45-60 min',
+    key_principles: ['2x5 + AMRAP set', 'Reps For Reps progression', 'Bench/Press alterné', 'Plug sets bras optionnels', 'Pas de Power Clean']
+  },
+  programs: {
+    pectoraux: {
+      beginner: {
+        name: 'Greyskull A — Bench Day',
+        description: 'Bench Press + Squat + Plug sets bras',
+        warmup: '5 min vélo + mobilité épaules + warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Bench Press', sets:3, reps:'5/5/5+', rest:'3min', technique:'2x5 normaux + 1 set AMRAP (autant de reps que possible). Si AMRAP ≥ 10 reps: +5kg séance suivante.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:2, name:'Back Squat', sets:3, reps:'5/5/5+', rest:'3min', technique:'2x5 + AMRAP. Low bar, descente parallèle. Progression linéaire +2.5kg.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:3, name:'Chin-Ups (plug)', sets:2, reps:'max', rest:'90s', technique:'Optional plug set: tractions supination pour biceps. Progression: ajouter 1 rep par séance.', muscle:'dos', type:'compound', equipment:'barre fixe'},
+          {order:4, name:'Curl barre (plug)', sets:2, reps:8, rest:'90s', technique:'Plug set bras optionnel — Greyskull autorise l\'isolation contrairement à Starting Strength.', muscle:'bras', type:'isolation', equipment:'barre'}
+        ],
+        notes: 'AMRAP set (5+) est la signature Greyskull. Si AMRAP ≥ 10: double progression (+5kg). Sinon +2.5kg classique.'
+      }
+    },
+    epaules: {
+      beginner: {
+        name: 'Greyskull B — Press Day',
+        description: 'Overhead Press + Deadlift + Plug sets',
+        warmup: '5 min vélo + mobilité épaules + warm-up',
+        exercises: [
+          {order:1, name:'Overhead Press', sets:3, reps:'5/5/5+', rest:'3min', technique:'2x5 + AMRAP. Strict press, gainage abdominal. Press progresse plus lentement (+1.25kg).', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:2, name:'Deadlift', sets:1, reps:'5+', rest:'5min', technique:'Une seule série avec AMRAP. Reset chaque rep. +5kg si AMRAP ≥ 6.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:3, name:'Dips ou Tractions (plug)', sets:2, reps:'max', rest:'90s', technique:'Plug set: dips lestés pour triceps OU tractions pour dos. Alterner.', muscle:'bras', type:'compound', equipment:'barres parallèles'},
+          {order:4, name:'Curl haltères (plug)', sets:2, reps:10, rest:'90s', technique:'Plug set isolation biceps — autorisé en Greyskull.', muscle:'bras', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'B alterne avec A et C: Bench → Press → Bench → Press en rotation. Press toujours après bench.'
+      }
+    },
+    dos: {
+      beginner: {
+        name: 'Greyskull — Deadlift focus',
+        description: 'Deadlift dans Workout B avec AMRAP set',
+        warmup: '5 min vélo + mobilité hanches + warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Deadlift', sets:1, reps:'5+', rest:'5min', technique:'Une série lourde avec AMRAP. Hip hinge, dos neutre, drive de jambes.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:2, name:'Overhead Press', sets:3, reps:'5/5/5+', rest:'3min', technique:'Strict press 2x5 + AMRAP.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:3, name:'Pendlay Row (alt)', sets:3, reps:8, rest:'2min', technique:'Alternative au deadlift les semaines de récupération. Tirage explosif depuis le sol.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:4, name:'Chin-Ups (plug)', sets:2, reps:'max', rest:'90s', technique:'Plug set tractions supination pour biceps + dos.', muscle:'dos', type:'compound', equipment:'barre fixe'}
+        ],
+        notes: 'Deadlift fait 1 fois sur 2 (alternance avec Pendlay Row). Évite le burnout lombaire de Starting Strength.'
+      }
+    },
+    jambes: {
+      beginner: {
+        name: 'Greyskull — Squat à chaque séance',
+        description: 'Le squat reste central, présent à chaque workout',
+        warmup: '5 min vélo + mobilité hanches + warm-up barre vide → 60% → 80%',
+        exercises: [
+          {order:1, name:'Back Squat', sets:3, reps:'5/5/5+', rest:'3min', technique:'2x5 + AMRAP. À chaque séance. Progression +2.5kg si AMRAP ≥ 5.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Bench ou Press', sets:3, reps:'5/5/5+', rest:'3min', technique:'Alternance bench/press selon le jour.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:3, name:'Deadlift (1x/sem)', sets:1, reps:'5+', rest:'5min', technique:'Deadlift une fois sur deux, alterné avec Pendlay Row.', muscle:'dos', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Squat à chaque séance, AMRAP final pour la double progression.'
+      }
+    },
+    bras: {
+      beginner: {
+        name: 'Greyskull — Plug Sets autorisés',
+        description: 'Contrairement à Starting Strength, Greyskull AUTORISE les plug sets bras (isolation curls + extensions)',
+        warmup: 'Voir workouts A/B',
+        exercises: [
+          {order:1, name:'Curl barre (plug)', sets:2, reps:8, rest:'90s', technique:'Plug set après les composés. Strict, contrôlé.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:2, name:'Extensions triceps couché (plug)', sets:2, reps:10, rest:'90s', technique:'Plug set triceps. Skull crushers contrôlés.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:3, name:'Chin-Ups', sets:2, reps:'max', rest:'90s', technique:'Tractions supination = compound bras (biceps + dos).', muscle:'dos', type:'compound', equipment:'barre fixe'},
+          {order:4, name:'Dips lestés', sets:2, reps:'max', rest:'90s', technique:'Compound triceps + pectoraux bas.', muscle:'bras', type:'compound', equipment:'barres parallèles'}
+        ],
+        notes: 'Plug sets en fin de séance UNIQUEMENT — jamais avant les composés.'
+      }
+    }
+  },
+  splits: {
+    '3': [
+      { day: 'Lundi',    type: 'workoutA', label: 'Workout A: Bench + Squat + Plug' },
+      { day: 'Mercredi', type: 'workoutB', label: 'Workout B: Press + Deadlift + Plug' },
+      { day: 'Vendredi', type: 'workoutA', label: 'Workout A: Bench + Squat + Plug' }
+    ]
+  }
+};
+window.GREYSKULL_PROGRAMS = GREYSKULL_PROGRAMS;
+
 var TRAINING_STYLES = {
   classic:   { label:'Programme Classique',   programs: NFC_PROGRAMS,              splits: WEEKLY_SPLITS },
   intensity: { label:'Intensité Maximale',    programs: YATES_PROGRAMS.programs,   splits: YATES_PROGRAMS.splits,   meta: YATES_PROGRAMS.meta,   macro: YATES_PROGRAMS.macro_cycle_12w },
   volume:    { label:'Volume Progressif',     programs: COLEMAN_PROGRAMS.programs, splits: COLEMAN_PROGRAMS.splits, meta: COLEMAN_PROGRAMS.meta, macro: COLEMAN_PROGRAMS.macro_cycle_12w },
   fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w },
   fusion:    { label:'Programme Élite Fusion', programs: FUSION_PROGRAMS.programs,  splits: FUSION_PROGRAMS.splits,  meta: FUSION_PROGRAMS.meta,  macro: FUSION_PROGRAMS.macro_cycle_12w },
-  starting:  { label:'Starting Strength',      programs: STARTING_STRENGTH_PROGRAMS.programs, splits: STARTING_STRENGTH_PROGRAMS.splits, meta: STARTING_STRENGTH_PROGRAMS.meta }
+  starting:  { label:'Starting Strength',      programs: STARTING_STRENGTH_PROGRAMS.programs, splits: STARTING_STRENGTH_PROGRAMS.splits, meta: STARTING_STRENGTH_PROGRAMS.meta },
+  greyskull: { label:'Greyskull LP',            programs: GREYSKULL_PROGRAMS.programs,         splits: GREYSKULL_PROGRAMS.splits,         meta: GREYSKULL_PROGRAMS.meta }
 };
 
 function getStyleProgram(style, muscle, level) {
