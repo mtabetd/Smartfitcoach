@@ -1795,6 +1795,98 @@ var GREYSKULL_PROGRAMS = {
 };
 window.GREYSKULL_PROGRAMS = GREYSKULL_PROGRAMS;
 
+// ─── TEXAS METHOD (Mark Rippetoe — Intermédiaire) ────────────────────────────
+var TEXAS_METHOD_PROGRAMS = {
+  meta: {
+    name: 'Texas Method',
+    athlete: 'Méthode Mark Rippetoe (Practical Programming)',
+    philosophy: 'Périodisation hebdomadaire pour intermédiaires. Lundi = Volume Day (5x5 @ 90% du 5RM). Mercredi = Recovery Day (charges légères, technique). Vendredi = Intensity Day (1x5 PR weekly).',
+    frequency: '3 jours/semaine',
+    session_duration: '60-90 min',
+    key_principles: ['Volume Day Lundi 5x5', 'Recovery Day Mercredi', 'Intensity Day Vendredi 1x5 PR', 'PR hebdomadaire', 'Périodisation à la semaine']
+  },
+  programs: {
+    pectoraux: {
+      intermediate: {
+        name: 'Texas Method — Bench Cycle',
+        description: 'Bench Press 3x/sem avec périodisation Volume/Recovery/Intensity',
+        warmup: '5 min vélo + mobilité épaules + warm-up barre vide → 60% → 80% → 90%',
+        exercises: [
+          {order:1, name:'Bench Press (Volume Day Lundi)', sets:5, reps:5, rest:'3-5min', technique:'5x5 @ 90% du 5RM. Volume maximum de la semaine. Touch-and-go contrôlé.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:2, name:'Bench Press (Recovery Day Mercredi)', sets:3, reps:5, rest:'2min', technique:'3x5 @ 80% du Lundi. Léger, focus technique pure. Pas d\'échec.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:3, name:'Bench Press (Intensity Day Vendredi)', sets:1, reps:5, rest:'5min', technique:'1x5 PR weekly. Tente +2.5kg vs vendredi précédent. C\'est LE moment de progression.', muscle:'pectoraux', type:'compound', equipment:'barre'},
+          {order:4, name:'Dips lestés', sets:3, reps:8, rest:'2min', technique:'Accessoire bench du Lundi pour volume triceps + pectoraux bas.', muscle:'bras', type:'compound', equipment:'barres parallèles'}
+        ],
+        notes: 'Le bench progresse de +2.5kg PAR SEMAINE (PR du vendredi). Sur 12 semaines: +30kg potentiels.'
+      }
+    },
+    jambes: {
+      intermediate: {
+        name: 'Texas Method — Squat Cycle',
+        description: 'Squat 3x/sem avec progression hebdomadaire',
+        warmup: '5 min vélo + mobilité hanches + warm-up barre vide → 60% → 75% → 90%',
+        exercises: [
+          {order:1, name:'Back Squat (Volume Day Lundi)', sets:5, reps:5, rest:'3-5min', technique:'5x5 @ 90% du 5RM. C\'est le plus dur de la semaine. Volume max.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:2, name:'Back Squat (Recovery Day Mercredi)', sets:2, reps:5, rest:'2min', technique:'2x5 @ 80% du Lundi. Récupération active. Vitesse de barre.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:3, name:'Back Squat (Intensity Day Vendredi)', sets:1, reps:5, rest:'5min', technique:'1x5 PR weekly. Tente +2.5kg vs semaine passée. Attempt unique.', muscle:'jambes', type:'compound', equipment:'barre'},
+          {order:4, name:'Front Squat (alt Mercredi)', sets:3, reps:5, rest:'2min30', technique:'Alternative au Recovery Day pour varier le stimulus quad.', muscle:'jambes', type:'compound', equipment:'barre'}
+        ],
+        notes: 'Squat = exercice central. PR weekly hardgainer-friendly. +2.5kg/sem pendant 8-12 semaines réalistes.'
+      }
+    },
+    dos: {
+      intermediate: {
+        name: 'Texas Method — Deadlift Cycle',
+        description: 'Deadlift 1x/semaine (Vendredi Intensity Day) — récupération nerveuse',
+        warmup: '5 min vélo + warm-up barre vide → 60% → 80% → 90%',
+        exercises: [
+          {order:1, name:'Deadlift (Vendredi)', sets:1, reps:5, rest:'5min', technique:'1x5 PR weekly. UNE série lourde par semaine. +2.5-5kg vs semaine passée.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:2, name:'Power Clean (Lundi Volume)', sets:5, reps:3, rest:'3min', technique:'5x3 explosif. Alternative au pull dans Volume Day.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:3, name:'Pendlay Row (Mercredi)', sets:3, reps:5, rest:'2min', technique:'Tirage explosif depuis le sol. Recovery Day, charges modérées.', muscle:'dos', type:'compound', equipment:'barre'},
+          {order:4, name:'Chin-Ups (accessoire)', sets:3, reps:'max', rest:'2min', technique:'Accessoire dos. Lestés si possible. AMRAP final.', muscle:'dos', type:'compound', equipment:'barre fixe'}
+        ],
+        notes: 'Deadlift seulement le Vendredi: la récupération nerveuse est cruciale. Alternance Power Clean (Lundi) + Pendlay Row (Mercredi).'
+      }
+    },
+    epaules: {
+      intermediate: {
+        name: 'Texas Method — Press Cycle',
+        description: 'Overhead Press alterné avec Bench (Lundi/Vendredi)',
+        warmup: '5 min vélo + mobilité épaules + warm-up',
+        exercises: [
+          {order:1, name:'Overhead Press (Volume Day Lundi)', sets:5, reps:5, rest:'3min', technique:'5x5 @ 90% du 5RM. Strict press, gainage abdominal.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:2, name:'OHP (Recovery Day Mercredi)', sets:3, reps:5, rest:'2min', technique:'3x5 @ 80%. Focus technique pure.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:3, name:'OHP (Intensity Day Vendredi)', sets:1, reps:5, rest:'5min', technique:'1x5 PR weekly. +1.25-2.5kg vs vendredi passé.', muscle:'epaules', type:'compound', equipment:'barre'},
+          {order:4, name:'Élévations latérales', sets:3, reps:12, rest:'90s', technique:'Accessoire épaules pour volume sans surcharger CNS.', muscle:'epaules', type:'isolation', equipment:'halteres'}
+        ],
+        notes: 'OHP progresse +1.25kg/sem (microplaques recommandées). Plus lent que squat/bench.'
+      }
+    },
+    bras: {
+      intermediate: {
+        name: 'Texas Method — Accessoires Bras',
+        description: 'Curls + extensions en accessoires (jamais en exercice principal)',
+        warmup: 'Voir cycles bench/press',
+        exercises: [
+          {order:1, name:'Curl barre', sets:3, reps:8, rest:'90s', technique:'Accessoire après les composés. Strict.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:2, name:'Extensions triceps couché (skull crushers)', sets:3, reps:10, rest:'90s', technique:'Accessoire triceps. Barre EZ.', muscle:'bras', type:'isolation', equipment:'barre'},
+          {order:3, name:'Curl haltères marteau', sets:3, reps:10, rest:'90s', technique:'Hammer curl pour brachial.', muscle:'bras', type:'isolation', equipment:'halteres'},
+          {order:4, name:'Pushdown corde', sets:3, reps:12, rest:'90s', technique:'Finisseur triceps poulie haute.', muscle:'bras', type:'isolation', equipment:'poulie'}
+        ],
+        notes: 'Bras = accessoire pur en Texas Method. Volume modéré, jamais à l\'échec.'
+      }
+    }
+  },
+  splits: {
+    '3': [
+      { day: 'Lundi',    type: 'volume',    label: 'Volume Day: 5x5 @ 90%' },
+      { day: 'Mercredi', type: 'recovery',  label: 'Recovery Day: 80% du Lundi' },
+      { day: 'Vendredi', type: 'intensity', label: 'Intensity Day: 1x5 PR weekly' }
+    ]
+  }
+};
+window.TEXAS_METHOD_PROGRAMS = TEXAS_METHOD_PROGRAMS;
+
 var TRAINING_STYLES = {
   classic:   { label:'Programme Classique',   programs: NFC_PROGRAMS,              splits: WEEKLY_SPLITS },
   intensity: { label:'Intensité Maximale',    programs: YATES_PROGRAMS.programs,   splits: YATES_PROGRAMS.splits,   meta: YATES_PROGRAMS.meta,   macro: YATES_PROGRAMS.macro_cycle_12w },
@@ -1802,7 +1894,8 @@ var TRAINING_STYLES = {
   fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w },
   fusion:    { label:'Programme Élite Fusion', programs: FUSION_PROGRAMS.programs,  splits: FUSION_PROGRAMS.splits,  meta: FUSION_PROGRAMS.meta,  macro: FUSION_PROGRAMS.macro_cycle_12w },
   starting:  { label:'Starting Strength',      programs: STARTING_STRENGTH_PROGRAMS.programs, splits: STARTING_STRENGTH_PROGRAMS.splits, meta: STARTING_STRENGTH_PROGRAMS.meta },
-  greyskull: { label:'Greyskull LP',            programs: GREYSKULL_PROGRAMS.programs,         splits: GREYSKULL_PROGRAMS.splits,         meta: GREYSKULL_PROGRAMS.meta }
+  greyskull: { label:'Greyskull LP',            programs: GREYSKULL_PROGRAMS.programs,         splits: GREYSKULL_PROGRAMS.splits,         meta: GREYSKULL_PROGRAMS.meta },
+  texas:     { label:'Texas Method',            programs: TEXAS_METHOD_PROGRAMS.programs,      splits: TEXAS_METHOD_PROGRAMS.splits,      meta: TEXAS_METHOD_PROGRAMS.meta }
 };
 
 function getStyleProgram(style, muscle, level) {
