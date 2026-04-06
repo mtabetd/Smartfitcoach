@@ -471,7 +471,7 @@ window.DASHBOARD = {
       // Rehydrate meal name from recipe engine if needed
       var mealName = meal.n || '';
       if (!mealName && meal._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
-        try { var rf = window.RecipeEngine.findRecipe(meal._id); if (rf) mealName = rf.n || ''; } catch(e) {}
+        try { var rf = window.RecipeEngine.findRecipe(meal._id); if (rf) mealName = rf.n || ''; } catch(e) { console.warn('[dashboard] recipe lookup fail:', meal._id, e); }
       }
       if (!mealName) return;
 
