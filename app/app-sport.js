@@ -569,18 +569,17 @@ window.SPORT = {
  render: function(p) {
  var content = h('div', {'class': 'fade-in'});
 
- // ─── CHECK BIEN-ÊTRE QUOTIDIEN ───
- // Intercepter l'accès aux programmes pour afficher le checkin une seule fois par jour,
- // dès la première connexion, avant tout autre contenu.
+ // ─── CHECK BIEN-ÊTRE QUOTIDIEN (NON-BLOQUANT) ───
+ // Si l'utilisateur n'a pas fait son checkin aujourd'hui, on stocke un flag
+ // pour afficher un bandeau en haut du contenu — sans bloquer l'accès au programme.
  var _PROGRAM_STEPS = [4, 6, 8, 10, 12, 14, 18, 21, 23, 25];
  if (_PROGRAM_STEPS.indexOf(S.sStep) !== -1) {
    var _today = new Date().toISOString().slice(0, 10);
    var _w = S.todayWellness || {};
    if (!_w.date || _w.date !== _today) {
-     renderWellnessCheckin(content, function() { window.render(); });
-     p.appendChild(content);
-     renderSportModal(p);
-     return;
+     S._wellnessReminder = true;
+   } else {
+     S._wellnessReminder = false;
    }
  }
 
@@ -629,6 +628,11 @@ window.SPORT = {
  else if (S.sStep === 23) renderCyclingProgram(content); // Cycling program
  else if (S.sStep === 24) { renderCalisthenicsOnboarding(content); } // Calisthenics onboarding
  else if (S.sStep === 25) { renderCalisthenicsProgram(content); } // Calisthenics program
+
+ // ─── BANDEAU BIEN-ÊTRE (non-bloquant) ───
+ if (S._wellnessReminder) {
+   renderWellnessBanner(content);
+ }
 
  p.appendChild(content);
  renderSportModal(p);
@@ -703,6 +707,24 @@ function renderObjectif(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Sport'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez votre type de programme sportif.'));
+
+ // ─── HERO CARTE GÉNÉRATEUR IA ───
+ var heroCard = h('div', {style: 'border:1px solid var(--accent,#2D5016);background:rgba(26,74,26,0.04);border-radius:10px;padding:20px 18px;margin-bottom:20px'});
+ heroCard.appendChild(h('div', {style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#2D5016);font-weight:700;margin-bottom:14px'}, '⚡ PROGRAMME IA 12 SEMAINES'));
+ heroCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;line-height:1.25;margin-bottom:10px'}, 'Ton programme unique, généré par IA.'));
+ heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:18px'}, 'Construit sur tes chiffres, tes blessures, ton objectif exact. Aucune ligne générique.'));
+ var heroIaBtn = h('button', {id: 'hero-ia-btn', style: 'width:100%;padding:13px;background:var(--accent,#2D5016);color:#fff;border:none;border-radius:6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif'}, '→ Créer mon programme IA');
+ heroIaBtn.addEventListener('click', function() {
+  if (typeof window.openMuscuProgramGenerator === 'function') {
+   window.openMuscuProgramGenerator();
+  }
+ });
+ heroCard.appendChild(heroIaBtn);
+ p.appendChild(heroCard);
+
+ // Divider
+ var divider = h('div', {style: 'text-align:center;color:var(--grey,#6B6B65);font-size:11px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif'}, '— ou choisir ton sport —');
+ p.appendChild(divider);
 
  p.appendChild(h('div', {'class': 'section-label'}, 'Type de programme'));
  var typeGrid = h('div', {'class': 'card-grid-2'});
@@ -1808,6 +1830,114 @@ function renderCFCalendar(p) {
 }
 
 // ─── WELLNESS CHECKIN ───
+// ─── BANDEAU BIEN-ÊTRE (variante non-bloquante) ───
+// Affiche un bandeau dismissable en haut du contenu programme.
+// L'utilisateur peut remplir rapidement ou ignorer avec des valeurs par défaut (moyenne).
+function renderWellnessBanner(p) {
+ var banner = h('div', {style: 'background:rgba(26,74,26,0.04);border:1px solid var(--accent,#2D5016);border-radius:8px;padding:14px 16px;margin-bottom:20px;position:relative'});
+
+ var titleRow = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:10px'});
+ titleRow.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent,#2D5016);font-weight:700'}, 'Bilan de forme'));
+
+ var closeBtn = h('button', {style: 'background:none;border:none;cursor:pointer;font-size:18px;color:var(--grey,#6B6B65);line-height:1;padding:0;margin:0'}, '×');
+ closeBtn.addEventListener('click', function() {
+  var today = new Date().toISOString().slice(0, 10);
+  S.todayWellness = { date: today, sleep: 3, muscles: 'courbatures', energy: 'moyen' };
+  S._wellnessReminder = false;
+  banner.style.display = 'none';
+ });
+ titleRow.appendChild(closeBtn);
+ banner.appendChild(titleRow);
+
+ banner.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-bottom:12px'}, 'Comment tu te sens aujourd\'hui ? (optionnel)'));
+
+ var wellnessState = { sleep: 0, muscles: '', energy: '' };
+
+ // Ligne sommeil
+ var sleepRow = h('div', {style: 'margin-bottom:8px'});
+ sleepRow.appendChild(h('div', {style: 'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '😴 Sommeil'));
+ var sleepBtnsRow = h('div', {style: 'display:flex;gap:4px'});
+ var sleepBtnsArr = [];
+ [1,2,3,4,5].forEach(function(val) {
+  var label = ['Mauvais','Bof','Moyen','Bon','Top'][val-1];
+  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:#fff;border-radius:4px;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
+  btn.addEventListener('click', function() {
+   wellnessState.sleep = val;
+   sleepBtnsArr.forEach(function(b) { b.style.background = '#fff'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
+   btn.style.background = 'var(--accent,#2D5016)';
+   btn.style.borderColor = 'var(--accent,#2D5016)';
+   btn.style.color = '#fff';
+   checkWellnessBannerComplete();
+  });
+  sleepBtnsArr.push(btn);
+  sleepBtnsRow.appendChild(btn);
+ });
+ sleepRow.appendChild(sleepBtnsRow);
+ banner.appendChild(sleepRow);
+
+ // Ligne muscles
+ var muscleRow = h('div', {style: 'margin-bottom:8px'});
+ muscleRow.appendChild(h('div', {style: 'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '💪 Muscles'));
+ var muscleBtnsRow = h('div', {style: 'display:flex;gap:4px'});
+ var muscleBtnsArr = [];
+ [['frais','Frais'],['courbatures','Courbatures'],['douleurs','Douleurs']].forEach(function(opt) {
+  var val = opt[0], label = opt[1];
+  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:#fff;border-radius:4px;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
+  btn.addEventListener('click', function() {
+   wellnessState.muscles = val;
+   muscleBtnsArr.forEach(function(b) { b.style.background = '#fff'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
+   btn.style.background = 'var(--accent,#2D5016)';
+   btn.style.borderColor = 'var(--accent,#2D5016)';
+   btn.style.color = '#fff';
+   checkWellnessBannerComplete();
+  });
+  muscleBtnsArr.push(btn);
+  muscleBtnsRow.appendChild(btn);
+ });
+ muscleRow.appendChild(muscleBtnsRow);
+ banner.appendChild(muscleRow);
+
+ // Ligne énergie
+ var energyRow = h('div', {style: 'margin-bottom:12px'});
+ energyRow.appendChild(h('div', {style: 'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '⚡ Énergie'));
+ var energyBtnsRow = h('div', {style: 'display:flex;gap:4px'});
+ var energyBtnsArr = [];
+ [['bas','Basse'],['moyen','Moyenne'],['haut','Haute']].forEach(function(opt) {
+  var val = opt[0], label = opt[1];
+  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:#fff;border-radius:4px;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
+  btn.addEventListener('click', function() {
+   wellnessState.energy = val;
+   energyBtnsArr.forEach(function(b) { b.style.background = '#fff'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
+   btn.style.background = 'var(--accent,#2D5016)';
+   btn.style.borderColor = 'var(--accent,#2D5016)';
+   btn.style.color = '#fff';
+   checkWellnessBannerComplete();
+  });
+  energyBtnsArr.push(btn);
+  energyBtnsRow.appendChild(btn);
+ });
+ energyRow.appendChild(energyBtnsRow);
+ banner.appendChild(energyRow);
+
+ var confirmBtn = h('button', {style: 'width:100%;padding:10px;background:var(--accent,#2D5016);color:#fff;border:none;border-radius:6px;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;opacity:0.4;pointer-events:none'}, 'Valider mon état');
+ confirmBtn.addEventListener('click', function() {
+  var today = new Date().toISOString().slice(0, 10);
+  S.todayWellness = { date: today, sleep: wellnessState.sleep, muscles: wellnessState.muscles, energy: wellnessState.energy };
+  S._wellnessReminder = false;
+  banner.style.display = 'none';
+ });
+ banner.appendChild(confirmBtn);
+
+ function checkWellnessBannerComplete() {
+  if (wellnessState.sleep && wellnessState.muscles && wellnessState.energy) {
+   confirmBtn.style.opacity = '1';
+   confirmBtn.style.pointerEvents = 'auto';
+  }
+ }
+
+ p.insertBefore(banner, p.firstChild);
+}
+
 function renderWellnessCheckin(p, onComplete) {
  var state = { sleep: 0, muscles: '', energy: '' };
 
