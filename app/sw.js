@@ -1,7 +1,10 @@
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'sfc-v26';
-const RUNTIME_CACHE = 'sfc-runtime-v25';
+const CACHE_VERSION = 'sfc-v27';
+const RUNTIME_CACHE = 'sfc-runtime-v26';
+
+// Max age for static assets in the runtime cache: 7 days (in milliseconds).
+const STATIC_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 // Local assets to pre-cache during install.
 const APP_SHELL = [
@@ -44,6 +47,12 @@ const APP_SHELL = [
   './jspdf.umd.min.js',
   './supabase-client.js',
   './supabase.min.js'
+];
+
+// Critical static assets to pre-cache during install.
+const STATIC_ASSETS = [
+  '/', '/index.html', '/app/premium-ui.css',
+  '/app/app-core.js', '/app/recipe-engine.js'
 ];
 
 // Third-party CDN scripts to pre-cache.
@@ -107,13 +116,31 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(request.url);
 
+  // API calls to Netlify Functions: network-only (never cache AI responses).
+  if (url.pathname.startsWith('/netlify/functions/')) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
   // Navigation requests & the HTML file: network-first so updates are picked up.
   if (request.mode === 'navigate' || url.pathname.endsWith('.html')) {
     event.respondWith(networkFirst(request));
     return;
   }
 
-  // Everything else (JS, CSS, CDN libs, images): cache-first for speed.
+  // Static assets (JS, CSS, images, fonts): cache-first with maxAge enforcement.
+  const ext = url.pathname.split('.').pop().toLowerCase();
+  const isStaticAsset = ['js', 'css', 'png', 'ico', 'woff', 'woff2', 'ttf', 'svg', 'webp', 'jpg', 'jpeg'].includes(ext)
+    || url.hostname.includes('cdn.jsdelivr.net')
+    || url.hostname.includes('fonts.googleapis.com')
+    || url.hostname.includes('fonts.gstatic.com');
+
+  if (isStaticAsset) {
+    event.respondWith(cacheFirstWithMaxAge(request));
+    return;
+  }
+
+  // Everything else: cache-first for speed.
   event.respondWith(cacheFirst(request));
 });
 
@@ -158,6 +185,44 @@ async function cacheFirst(request) {
     return networkResponse;
   } catch (_) {
     // If both cache and network fail, return a minimal error response.
+    return new Response('Offline — ressource non disponible.', {
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+    });
+  }
+}
+
+/**
+ * Cache-first with maxAge: serve from cache if fresh (< 7 days), otherwise
+ * fetch from network, update cache with a timestamp header for age tracking.
+ */
+async function cacheFirstWithMaxAge(request) {
+  const cache = await caches.open(RUNTIME_CACHE);
+  const cached = await cache.match(request);
+
+  if (cached) {
+    const cachedDate = cached.headers.get('x-sw-cached-at');
+    const age = cachedDate ? Date.now() - Number(cachedDate) : Infinity;
+    if (age < STATIC_MAX_AGE_MS) return cached;
+  }
+
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      // Clone and add a timestamp header before caching.
+      const headers = new Headers(networkResponse.headers);
+      headers.set('x-sw-cached-at', String(Date.now()));
+      const timestampedResponse = new Response(await networkResponse.clone().arrayBuffer(), {
+        status: networkResponse.status,
+        statusText: networkResponse.statusText,
+        headers
+      });
+      cache.put(request, timestampedResponse);
+    }
+    return networkResponse;
+  } catch (_) {
+    if (cached) return cached;
     return new Response('Offline — ressource non disponible.', {
       status: 503,
       statusText: 'Service Unavailable',
