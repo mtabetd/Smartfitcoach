@@ -569,6 +569,21 @@ window.SPORT = {
  render: function(p) {
  var content = h('div', {'class': 'fade-in'});
 
+ // ─── CHECK BIEN-ÊTRE QUOTIDIEN ───
+ // Intercepter l'accès aux programmes pour afficher le checkin une seule fois par jour,
+ // dès la première connexion, avant tout autre contenu.
+ var _PROGRAM_STEPS = [4, 6, 8, 10, 12, 14, 18, 21, 23, 25];
+ if (_PROGRAM_STEPS.indexOf(S.sStep) !== -1) {
+   var _today = new Date().toISOString().slice(0, 10);
+   var _w = S.todayWellness || {};
+   if (!_w.date || _w.date !== _today) {
+     renderWellnessCheckin(content, function() { window.render(); });
+     p.appendChild(content);
+     renderSportModal(p);
+     return;
+   }
+ }
+
  // Header with progress (only shown after step 0, not on intro pages)
  // sStep 20 = medical questionnaire (muscu pre-step), include it in progress
  if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16) {
@@ -1965,12 +1980,6 @@ function appendWellnessBanner(p) {
 
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
  if (!S.cfProgress || typeof S.cfProgress !== 'object') S.cfProgress = {};
  // Guard: cfCurrentDay bounds
@@ -3882,12 +3891,6 @@ function calcSessionKcal(exercises, durationMin) {
 }
 
 function renderMusculationProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  if (!S.sportProgram || !S.sportProgram.length) { S.sportProgram = generateSportProgram(); S.selectedSportDay = 0; }
 
  // Load saved musculation weights from localStorage
@@ -3940,22 +3943,25 @@ function renderMusculationProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
 
- // Bloc premium : eyebrow + tagline + bouton générateur de programme personnalisé via IA
+ // ─── CARTE IA — Programme sur-mesure (visuellement distinct du programme hebdomadaire) ───
  var muscuGenWrap = h('div', {
-   style: 'margin:20px 0 8px 0;text-align:center;'
+   style: 'margin:20px 0 24px 0;border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.04);padding:20px 18px;'
  });
- muscuGenWrap.appendChild(h('div', {
-   style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);font-family:Georgia,serif;margin-bottom:8px;'
- }, 'PROGRAMME PERSONNEL'));
- muscuGenWrap.appendChild(h('div', {
-   style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:14px;'
- }, 'Construit \u00e0 partir de tes chiffres, calibr\u00e9 sur ton corps.'));
+ var muscuGenHeader = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:10px'});
+ muscuGenHeader.appendChild(h('div', {style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);font-family:"Helvetica Neue",Arial,sans-serif;font-weight:bold;'}, 'PROGRAMME IA'));
+ muscuGenHeader.appendChild(h('div', {style: 'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:var(--accent,#1A4A1A);padding:2px 7px;font-family:"Helvetica Neue",Arial,sans-serif;'}, 'NOUVEAU'));
+ muscuGenWrap.appendChild(muscuGenHeader);
+ muscuGenWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;color:var(--black,#1A1A18);margin-bottom:6px;'}, 'Ton programme 12 semaines sur-mesure'));
+ muscuGenWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px;'}, 'L\u2019intelligence artificielle analyse ton profil complet et g\u00e9n\u00e8re un programme unique \u2014 exercices, charges, progression et p\u00e9riodisation calibr\u00e9s sur toi seul.'));
  var muscuGenBtn = h('button', {
    onclick: function() { if (window.openMuscuProgramGenerator) window.openMuscuProgramGenerator(); },
-   style: 'padding:14px 24px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;width:100%;'
- }, '\u26A1 G\u00e9n\u00e9rer mon programme');
+   style: 'padding:14px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;width:100%;'
+ }, '\u26A1 Cr\u00e9er mon programme IA');
  muscuGenWrap.appendChild(muscuGenBtn);
  p.appendChild(muscuGenWrap);
+
+ // ─── SECTION : PROGRAMME DE LA SEMAINE ───
+ p.appendChild(h('div', {style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;margin-bottom:4px;margin-top:4px;'}, 'PROGRAMME DE LA SEMAINE'));
 
  appendWellnessBanner(p);
 
@@ -5010,13 +5016,13 @@ function renderMusculationProgram(p) {
  });
  }
 
- // Regenerate
+ // Recalculate weekly program (distinct from AI generator above)
  p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function(){
  S.sportProgram = generateSportProgram();
  S.selectedSportDay = 0;
  window.BLACKBOX && window.BLACKBOX.log('sport_program_regenerated');
  window.render();
- }}, '↻ Régénérer le programme'));
+ }}, '\u21bb Recalculer le programme hebdomadaire'));
 
  // Export PDF
  p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); }}, '\u21e9 Exporter le programme en PDF'));
@@ -5299,12 +5305,6 @@ function renderRunningConfig(p) {
 
 // ─── STEP 8: RUNNING PROGRAM ───
 function renderRunningProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  if (!S.runningProgram || S.runningProgram.length === 0) {
  var goalObj = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
  if (typeof window.generateRunningProgram === 'function') S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
@@ -5533,12 +5533,6 @@ function renderHyroxConfig(p) {
 
 // ─── STEP 10: HYROX PROGRAM ───
 function renderHyroxProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  // Guard: si config non remplie, rediriger vers la config
  if (!S.hyroxLevel || !S.hyroxGoal) { S.sStep = 9; window.render(); return; }
  if (!S.hyroxProgram || S.hyroxProgram.length === 0) {
@@ -6092,12 +6086,6 @@ function renderTriathlonConfig(p) {
 
 // ─── STEP 18: TRIATHLON PROGRAM ───
 function renderTriathlonProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  if (!S.triathlonProgram || !S.triathlonProgram.length) {
   var triopts2 = {
    swimPace: S.triathlonSwimPace || null,
@@ -6796,12 +6784,6 @@ function renderCyclingOnboarding(p) {
 
 // ─── STEP 23: CYCLISME PROGRAMME ───
 function renderCyclingProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
  if (!S.cyclingPlan || !S.cyclingPlan.length) {
@@ -7136,12 +7118,6 @@ function renderCalisthenicsOnboarding(p) {
 
 // ─── STEP 25: CALISTHENICS PROGRAM ───
 function renderCalisthenicsProgram(content) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(content, function() { window.render(); });
-  return;
- }
  if (!S.calisthenicsLevel) { S.sStep = 24; window.render(); return; }
  var skills = Array.isArray(S.calisthenicsGoal) ? S.calisthenicsGoal : [];
  var level = S.calisthenicsLevel || 'debutant';
