@@ -1183,6 +1183,18 @@ window.DASHBOARD = {
     }
     root.appendChild(h('div', 'dash-session', sessionParts.join(' | ')));
 
+    /* ─── SIGNATURE ─── */
+    var igWrap = document.createElement('div');
+    igWrap.style.cssText = 'text-align:center;margin-top:14px;padding-bottom:8px;';
+    var igLink = document.createElement('a');
+    igLink.href = 'https://instagram.com/smart.fitcoach';
+    igLink.target = '_blank';
+    igLink.rel = 'noopener noreferrer';
+    igLink.textContent = '@smart.fitcoach';
+    igLink.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;letter-spacing:1px;';
+    igWrap.appendChild(igLink);
+    root.appendChild(igWrap);
+
 
     /* ─── MOUNT ─── */
     container.appendChild(root);

@@ -171,6 +171,9 @@
         '</div>' +
         '<div style="margin-top:20px;text-align:center;">' +
           '<p style="font-family:Georgia,serif;font-style:italic;font-size:11px;color:var(--grey3,#9A9A90);margin:0;letter-spacing:0.3px;">' + footerQuote + '</p>' +
+        '</div>' +
+        '<div style="margin-top:10px;text-align:center;">' +
+          '<a href="https://instagram.com/smart.fitcoach" target="_blank" rel="noopener noreferrer" style="font-family:Georgia,serif;font-style:italic;font-size:10px;color:var(--grey3,#9A9A90);text-decoration:none;letter-spacing:1px;">@smart.fitcoach</a>' +
         '</div>';
       // Attache le listener du bouton Partager (pas d'inline onclick pour éviter XSS)
       var shareBtn = document.getElementById('muscu-prog-share');

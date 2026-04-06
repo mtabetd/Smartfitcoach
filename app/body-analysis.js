@@ -352,6 +352,18 @@ function renderResult(container, result) {
   shareBtn.addEventListener('click', shareBodyAnalysis);
   shareWrap.appendChild(shareBtn);
   container.appendChild(shareWrap);
+
+  // Signature Instagram — discrète, en fin d'analyse
+  var igWrap = document.createElement('div');
+  igWrap.style.cssText = 'margin-top:14px;text-align:center;';
+  var igLink = document.createElement('a');
+  igLink.href = 'https://instagram.com/smart.fitcoach';
+  igLink.target = '_blank';
+  igLink.rel = 'noopener noreferrer';
+  igLink.textContent = '@smart.fitcoach';
+  igLink.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;letter-spacing:1px;';
+  igWrap.appendChild(igLink);
+  container.appendChild(igWrap);
 }
 
 function shareBodyAnalysis() {
