@@ -798,7 +798,7 @@ function renderStep2(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(3); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(1); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(1); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 3: ACTIVITE ───
@@ -849,7 +849,7 @@ function renderStep3(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.activity !== null && S.train.length > 0 && S.sleep !== null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(4); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 4: SANTE ───
@@ -906,7 +906,7 @@ function renderStep4(p) {
   p.appendChild(warn);
 
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { goStep(5); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 5: HABITUDES ALIMENTAIRES ───
@@ -1194,7 +1194,7 @@ function renderStep5(p) {
       goStep(6);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 6: OBJECTIF ───
@@ -1271,7 +1271,7 @@ function renderStep6(p) {
       bb('nutrition_goal', {goal: 'maintain_pregnancy', target: calcTarget()});
       goStep(7);
     }}, window.t('onb.next')));
-    p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
     return;
   }
 
@@ -1373,7 +1373,7 @@ function renderStep6(p) {
       goStep(7);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 7: PREFERENCES ───
@@ -1630,7 +1630,7 @@ function renderStep7(p) {
       goStep(8);
     }
   }}, window.t('onb.finish')));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 8: RESULTATS ───
@@ -2572,7 +2572,7 @@ function renderStep9(p) {
 function renderModal(app) {
   // Attach to #app root (not the fade-in container) — position:fixed breaks when parent has CSS transform
   var root = document.getElementById('app') || app;
-  var ov = h('div', {'class': 'modal-overlay' + (S.modalRecipe ? ' open' : ''), onclick: function(e) {
+  var ov = h('div', {'class': 'modal-overlay' + (S.modalRecipe ? ' open' : ''), role: 'dialog', 'aria-modal': 'true', onclick: function(e) {
     if (e.target === ov) { S.modalRecipe = null; window.render(); }
   }});
   var sheet = h('div', {'class': 'modal-sheet'});

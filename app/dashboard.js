@@ -1194,6 +1194,8 @@ window.DASHBOARD = {
 
 function openWeightPrompt() {
   var overlay = h('div', 'dash-modal-overlay');
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
   var box = h('div', 'dash-modal-box');
 
   var closeBtn = document.createElement('button');
@@ -1276,6 +1278,8 @@ function openWeightPrompt() {
 
 function openMeasurementsModal() {
   var overlay = h('div', 'dash-modal-overlay');
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
   var box = h('div', 'dash-modal-box');
 
   var closeBtn = document.createElement('button');
@@ -1306,6 +1310,8 @@ function openMeasurementsModal() {
 
 function openBadgesModal() {
   var overlay = h('div', 'dash-modal-overlay');
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
   var box = h('div', 'dash-modal-box');
 
   var closeBtn = document.createElement('button');
@@ -1335,6 +1341,8 @@ function openKitchenTimer() {
   // Clear any previous kitchen timer interval
   if (window._kitchenTimerInterval) { clearInterval(window._kitchenTimerInterval); window._kitchenTimerInterval = null; }
   var overlay = h('div', 'dash-modal-overlay');
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
   var box = h('div', 'dash-modal-box');
   box.style.textAlign = 'center';
 

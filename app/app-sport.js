@@ -4953,7 +4953,7 @@ function renderWeightChartSport(container) {
 
 // ─── SPORT MODAL (exercise detail) ───
 function renderSportModal(app) {
- var ov = h('div', {'class': 'modal-overlay' + (S.sportModalExercise ? ' open' : ''), onclick: function(e){ if (e.target === ov) { S.sportModalExercise = null; window.render(); } }});
+ var ov = h('div', {'class': 'modal-overlay' + (S.sportModalExercise ? ' open' : ''), role: 'dialog', 'aria-modal': 'true', onclick: function(e){ if (e.target === ov) { S.sportModalExercise = null; window.render(); } }});
  var sheet = h('div', {'class': 'modal-sheet'});
 
  if (S.sportModalExercise) {
@@ -4966,7 +4966,7 @@ function renderSportModal(app) {
 
  var hdr = h('div', {'class': 'modal-header'});
  hdr.appendChild(h('div', {'class': 'modal-title'}, ex.n));
- hdr.appendChild(h('button', {'class': 'modal-close', onclick: function(){ S.sportModalExercise = null; window.render(); }}, ''));
+ hdr.appendChild(h('button', {'class': 'modal-close', 'aria-label': 'Retour', onclick: function(){ S.sportModalExercise = null; window.render(); }}, ''));
  sheet.appendChild(hdr);
 
  var body = h('div', {'class': 'modal-body'});

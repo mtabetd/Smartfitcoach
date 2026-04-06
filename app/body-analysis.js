@@ -445,6 +445,7 @@ function buildPanel() {
   // Bouton analyser
   var btn = document.createElement('button');
   btn.id = 'ba-btn';
+  btn.setAttribute('aria-label', 'Analyser ma composition corporelle');
   btn.textContent = 'Lancer l\'analyse';
   btn.disabled = true;
   btn.addEventListener('click', runAnalysis);
@@ -629,6 +630,7 @@ function injectTrigger() {
   if (suggestions && !document.getElementById('ba-trigger')) {
     var trigger = document.createElement('button');
     trigger.id = 'ba-trigger';
+    trigger.setAttribute('aria-label', 'Analyser ma composition corporelle');
     trigger.textContent = '◆ Analyse corporelle IA';
     trigger.addEventListener('click', openPanel);
     suggestions.parentNode.insertBefore(trigger, suggestions);
