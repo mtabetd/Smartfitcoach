@@ -4,6 +4,7 @@
   var _modalEl = null;
   var _generating = false;
   var _loadingInterval = null;
+  var _previousFocus = null;
 
   var LOADING_PHRASES = [
     'Lecture de tes 1RM. Calcul de tes ratios squat, bench, deadlift, overhead.',
@@ -68,16 +69,40 @@
     document.body.appendChild(_modalEl);
     document.getElementById('muscu-prog-close').addEventListener('click', closeModal);
     _modalEl.addEventListener('click', function(e) { if (e.target === _modalEl) closeModal(); });
+    // Focus trap : empêche le tab de sortir de la modal
+    _modalEl.addEventListener('keydown', function(e) {
+      if (_modalEl.style.display === 'none') return;
+      if (e.key === 'Escape') {
+        closeModal();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      var focusables = _modalEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusables.length === 0) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
     return _modalEl;
   }
 
   function closeModal() {
     if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
     if (_modalEl) _modalEl.style.display = 'none';
+    if (_previousFocus && _previousFocus.focus) {
+      try { _previousFocus.focus(); } catch(e) {}
+    }
   }
 
   function openMuscuProgramGenerator() {
     ensureModal();
+    _previousFocus = document.activeElement;
     if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
     var content = document.getElementById('muscu-prog-content');
     content.innerHTML = '<div style="text-align:center;padding:40px 24px;">' +
@@ -89,6 +114,10 @@
     '</div>';
     _modalEl.style.display = 'block';
     document.getElementById('muscu-prog-generate').addEventListener('click', generateMuscuProgram);
+    setTimeout(function() {
+      var firstBtn = _modalEl.querySelector('button');
+      if (firstBtn) firstBtn.focus();
+    }, 50);
   }
 
   function generateMuscuProgram() {
@@ -136,12 +165,18 @@
           '<p style="font-family:Georgia,serif;font-style:italic;font-size:16px;line-height:1.6;color:var(--accent,#1A4A1A);margin:0 auto;max-width:520px;">Voici douze semaines. Elles n\u2019appartiennent qu\u2019à toi.</p>' +
         '</div>' +
         '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;">' + html + '</div>' +
-        '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--border,#E5E5E0);padding-top:16px;">' +
+        '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--border,#E5E5E0);padding-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
           '<button onclick="window.print()" style="background:transparent;border:1px solid var(--accent,#1A4A1A);color:var(--accent,#1A4A1A);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;">Imprimer / PDF</button>' +
+          '<button id="muscu-prog-share" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;">⤴ Partager</button>' +
         '</div>' +
         '<div style="margin-top:20px;text-align:center;">' +
           '<p style="font-family:Georgia,serif;font-style:italic;font-size:11px;color:var(--grey3,#9A9A90);margin:0;letter-spacing:0.3px;">' + footerQuote + '</p>' +
         '</div>';
+      // Attache le listener du bouton Partager (pas d'inline onclick pour éviter XSS)
+      var shareBtn = document.getElementById('muscu-prog-share');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', function() { shareMuscuProgram(data.program); });
+      }
       // Sauvegarder localement
       try { localStorage.setItem('mtd_muscu_program', JSON.stringify({ program: data.program, generatedAt: data.generatedAt })); } catch(e) { console.error('[muscu-prog] save fail:', e); }
     })
@@ -156,6 +191,32 @@
     });
   }
 
+  function shareMuscuProgram(programText) {
+    var shareData = {
+      title: 'Mon programme musculation Smart Fit Coach',
+      text: 'Voici mon programme 100% personnalisé généré par Smart Fit Coach — 12 semaines, calculées au kilo près.',
+      url: window.location.origin
+    };
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      navigator.share(shareData).catch(function(e) {
+        if (e.name !== 'AbortError') console.error('[muscu-prog] share error:', e);
+      });
+    } else {
+      // Fallback : copier dans le presse-papier
+      var fallbackText = shareData.title + '\n\n' + shareData.text + '\n\n' + shareData.url;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(fallbackText).then(function() {
+          alert('Lien copié dans le presse-papier !');
+        }).catch(function() {
+          alert('Partage non disponible sur ce navigateur.');
+        });
+      } else {
+        alert('Partage non disponible sur ce navigateur.');
+      }
+    }
+  }
+
   window.openMuscuProgramGenerator = openMuscuProgramGenerator;
   window.generateMuscuProgram = generateMuscuProgram;
+  window.shareMuscuProgram = shareMuscuProgram;
 })();

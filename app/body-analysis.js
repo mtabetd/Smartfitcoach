@@ -341,7 +341,38 @@ function renderResult(container, result) {
       container.appendChild(coachMsg);
     }
   }
+
+  // Bouton Partager (Web Share API)
+  var shareWrap = document.createElement('div');
+  shareWrap.style.cssText = 'margin-top:24px;text-align:center;';
+  var shareBtn = document.createElement('button');
+  shareBtn.id = 'ba-share-btn';
+  shareBtn.textContent = '⤴ Partager mon analyse';
+  shareBtn.style.cssText = 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;padding:14px 28px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all 0.2s ease;';
+  shareBtn.addEventListener('click', shareBodyAnalysis);
+  shareWrap.appendChild(shareBtn);
+  container.appendChild(shareWrap);
 }
+
+function shareBodyAnalysis() {
+  var shareData = {
+    title: 'Mon analyse corporelle Smart Fit Coach',
+    text: 'Je viens de faire analyser ma composition corporelle par l\'IA Smart Fit Coach. Programme personnalisé généré en 60 secondes.',
+    url: window.location.origin
+  };
+  if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+    navigator.share(shareData).catch(function(e) {
+      if (e.name !== 'AbortError') console.error('[body-analysis] share error:', e);
+    });
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareData.title + '\n' + shareData.text + '\n' + shareData.url)
+      .then(function() { alert('Lien copié dans le presse-papier !'); })
+      .catch(function() { alert('Partage non disponible.'); });
+  } else {
+    alert('Partage non disponible sur ce navigateur.');
+  }
+}
+window.shareBodyAnalysis = shareBodyAnalysis;
 
 // ─── PANEL UI ─────────────────────────────────────────────────────────────────
 function buildPanel() {
