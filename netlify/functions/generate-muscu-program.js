@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'production' && process.env.NETLIFY_DEV === 'true')
 
 // ── Rate Limiting hebdomadaire ───────────────────────────────────────────────
 var _weekStore = new Map();
-var WEEK_MAX = 3; // 3 générations/semaine par IP (Sonnet = coûteux mais 1/sem trop strict — feedback users Marc/Lucie)
+var WEEK_MAX = 1; // 1 génération/semaine par IP (Sonnet = coûteux)
 
 function getWeekUTC() {
   var d = new Date();
@@ -69,7 +69,9 @@ var PROMPT_INJECTION_PATTERNS = [
   /\u202e|\u200b|\u200c|\u200d/g,
   /DAN\s*(mode|prompt)/gi,
   /jailbreak/gi,
-  /do\s+anything\s+now/gi
+  /grandma\s*(trick|exploit)/gi,
+  /do\s+anything\s+now/gi,
+  /[A-Za-z0-9+\/]{100,}={0,2}/g
 ];
 
 function sanitizeString(str, maxLen) {
@@ -372,7 +374,7 @@ exports.handler = async function(event) {
     return {
       statusCode: 429,
       headers: Object.assign({}, headers, { 'Retry-After': retryAfter }),
-      body: JSON.stringify({ error: 'Tu as utilisé tes 3 générations cette semaine. Nouvelles disponibles lundi !' })
+      body: JSON.stringify({ error: 'Programme déjà généré cette semaine. Nouveau disponible lundi !' })
     };
   }
 
