@@ -308,8 +308,9 @@ function render() {
  ub.appendChild(ubRight);
  wrap.appendChild(ub);
 
- // Main navigation (3 tabs: Dashboard, Nutrition, Sport)
+ // Main navigation (4 tabs: Aujourd'hui, Dashboard, Nutrition, Sport)
  var nav = h('div', {'class': 'main-nav'});
+ nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'today' ? ' active' : ''), onclick: function(){ S.view = 'today'; if(window.BLACKBOX)window.BLACKBOX.log('nav_today'); render(); }}, '◆ Aujourd\'hui'));
  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'dashboard' ? ' active' : ''), onclick: function(){ S.view = 'dashboard'; if(window.BLACKBOX)window.BLACKBOX.log('nav_dashboard'); render(); }}, '◆ ' + window.t('nav.dashboard')));
  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, '◆ ' + window.t('nav.nutrition')));
  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, '◆ ' + window.t('nav.sport')));
@@ -317,13 +318,13 @@ function render() {
 
  var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
 
- if (S.view === 'sport' && window.SPORT) {
+ if (S.view === 'today' && window.TODAY) {
+ TODAY.render(content);
+ } else if (S.view === 'sport' && window.SPORT) {
  SPORT.render(content);
  } else if (S.view === 'nutrition' && window.NUTRITION) {
  NUTRITION.render(content);
- } else {
- // Default: dashboard
- S.view = 'dashboard';
+ } else if (S.view === 'dashboard') {
  if (window.DASHBOARD) DASHBOARD.render(content);
  else {
  // Fallback if dashboard not loaded
@@ -340,6 +341,10 @@ function render() {
  welcomeDiv.insertBefore(welcomeH1, welcomeDiv.firstChild);
  content.appendChild(welcomeDiv);
  }
+ } else {
+ // Default: vue Aujourd'hui
+ S.view = 'today';
+ if (window.TODAY) TODAY.render(content);
  }
 
  wrap.appendChild(content);
@@ -347,6 +352,11 @@ function render() {
  // Footer
  wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'Smart Fit Coach')]));
  app.appendChild(wrap);
+
+ // Auth banner (P1) — bannière sauvegarde cloud si pas de compte réel
+ try { if (window.AuthBanner) window.AuthBanner.render(document.body); } catch(e) {}
+ // Onboarding screen (P10) — écran de bienvenue personnalisé (1 seule fois)
+ try { if (window.OnboardingComplete) window.OnboardingComplete.check(); } catch(e) {}
 
  // Post-render scroll: reset .app container and window after content is in DOM
  if (_didNavigate) {
@@ -412,7 +422,7 @@ function renderLogin(app) {
  AUTH.login(email, pw).then(function(result) {
  if (result.ok) {
  S.authError = '';
- S.view = 'dashboard';
+ S.view = 'today';
  // Migrate anon profile data to this user's key (data entered before login)
  try {
  var _loginUser = AUTH.getUser();
@@ -872,7 +882,7 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
 // ─── INIT ───
 function _doAutoLogin() {
 if (AUTH.isLoggedIn()) {
- S.view = 'dashboard';
+ S.view = 'today';
  if (window.GAMIFICATION) GAMIFICATION.updateStreak();
  // Restore full profile from localStorage (E-01)
  loadProfile();

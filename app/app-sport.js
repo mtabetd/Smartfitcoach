@@ -569,6 +569,20 @@ window.SPORT = {
  render: function(p) {
  var content = h('div', {'class': 'fade-in'});
 
+ // ─── CHECK BIEN-ÊTRE QUOTIDIEN (NON-BLOQUANT) ───
+ // Si l'utilisateur n'a pas fait son checkin aujourd'hui, on stocke un flag
+ // pour afficher un bandeau en haut du contenu — sans bloquer l'accès au programme.
+ var _PROGRAM_STEPS = [4, 6, 8, 10, 12, 14, 18, 21, 23, 25];
+ if (_PROGRAM_STEPS.indexOf(S.sStep) !== -1) {
+   var _today = new Date().toISOString().slice(0, 10);
+   var _w = S.todayWellness || {};
+   if (!_w.date || _w.date !== _today) {
+     S._wellnessReminder = true;
+   } else {
+     S._wellnessReminder = false;
+   }
+ }
+
  // Header with progress (only shown after step 0, not on intro pages)
  // sStep 20 = medical questionnaire (muscu pre-step), include it in progress
  if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16) {
@@ -614,6 +628,11 @@ window.SPORT = {
  else if (S.sStep === 23) renderCyclingProgram(content); // Cycling program
  else if (S.sStep === 24) { renderCalisthenicsOnboarding(content); } // Calisthenics onboarding
  else if (S.sStep === 25) { renderCalisthenicsProgram(content); } // Calisthenics program
+
+ // ─── BANDEAU BIEN-ÊTRE (non-bloquant) ───
+ if (S._wellnessReminder) {
+   renderWellnessBanner(content);
+ }
 
  p.appendChild(content);
  renderSportModal(p);
@@ -688,6 +707,24 @@ function renderObjectif(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Sport'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez votre type de programme sportif.'));
+
+ // ─── HERO CARTE GÉNÉRATEUR IA ───
+ var heroCard = h('div', {style: 'border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.04);border-radius:2px;padding:20px 16px;margin-bottom:20px'});
+ heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);font-weight:700;margin-bottom:14px'}, 'PROGRAMME IA 12 SEMAINES'));
+ heroCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;line-height:1.25;margin-bottom:10px'}, 'Ton programme unique, généré par IA.'));
+ heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Construit sur tes chiffres, tes blessures, ton objectif exact. Aucune ligne générique.'));
+ var heroIaBtn = h('button', {id: 'hero-ia-btn', style: 'width:100%;padding:14px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2192 Créer mon programme IA');
+ heroIaBtn.addEventListener('click', function() {
+  if (typeof window.openMuscuProgramGenerator === 'function') {
+   window.openMuscuProgramGenerator();
+  }
+ });
+ heroCard.appendChild(heroIaBtn);
+ p.appendChild(heroCard);
+
+ // Divider
+ var divider = h('div', {style: 'text-align:center;color:var(--grey,#6B6B65);font-size:11px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif'}, '— ou choisir ton sport —');
+ p.appendChild(divider);
 
  p.appendChild(h('div', {'class': 'section-label'}, 'Type de programme'));
  var typeGrid = h('div', {'class': 'card-grid-2'});
@@ -1793,6 +1830,114 @@ function renderCFCalendar(p) {
 }
 
 // ─── WELLNESS CHECKIN ───
+// ─── BANDEAU BIEN-ÊTRE (variante non-bloquante) ───
+// Affiche un bandeau dismissable en haut du contenu programme.
+// L'utilisateur peut remplir rapidement ou ignorer avec des valeurs par défaut (moyenne).
+function renderWellnessBanner(p) {
+ var banner = h('div', {style: 'background:rgba(26,74,26,0.04);border:1px solid var(--accent,#1A4A1A);border-radius:2px;padding:14px 16px;margin-bottom:20px;position:relative'});
+
+ var titleRow = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:10px'});
+ titleRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);font-weight:700'}, 'Bilan de forme'));
+
+ var closeBtn = h('button', {style: 'background:none;border:none;cursor:pointer;font-size:18px;color:var(--grey,#6B6B65);line-height:1;padding:0;margin:0'}, '×');
+ closeBtn.addEventListener('click', function() {
+  var today = new Date().toISOString().slice(0, 10);
+  S.todayWellness = { date: today, sleep: 3, muscles: 'courbatures', energy: 'moyen' };
+  S._wellnessReminder = false;
+  banner.style.display = 'none';
+ });
+ titleRow.appendChild(closeBtn);
+ banner.appendChild(titleRow);
+
+ banner.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-bottom:12px'}, 'Comment tu te sens aujourd\'hui ? (optionnel)'));
+
+ var wellnessState = { sleep: 0, muscles: '', energy: '' };
+
+ // Ligne sommeil
+ var sleepRow = h('div', {style: 'margin-bottom:8px'});
+ sleepRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '\uD83D\uDE34 Sommeil'));
+ var sleepBtnsRow = h('div', {style: 'display:flex;gap:4px'});
+ var sleepBtnsArr = [];
+ [1,2,3,4,5].forEach(function(val) {
+  var label = ['Mauvais','Bof','Moyen','Bon','Top'][val-1];
+  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
+  btn.addEventListener('click', function() {
+   wellnessState.sleep = val;
+   sleepBtnsArr.forEach(function(b) { b.style.background = 'var(--ivory,#FAF9F6)'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
+   btn.style.background = 'var(--accent,#1A4A1A)';
+   btn.style.borderColor = 'var(--accent,#1A4A1A)';
+   btn.style.color = 'var(--ivory,#FAF9F6)';
+   checkWellnessBannerComplete();
+  });
+  sleepBtnsArr.push(btn);
+  sleepBtnsRow.appendChild(btn);
+ });
+ sleepRow.appendChild(sleepBtnsRow);
+ banner.appendChild(sleepRow);
+
+ // Ligne muscles
+ var muscleRow = h('div', {style: 'margin-bottom:8px'});
+ muscleRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '\uD83D\uDCAA Muscles'));
+ var muscleBtnsRow = h('div', {style: 'display:flex;gap:4px'});
+ var muscleBtnsArr = [];
+ [['frais','Frais'],['courbatures','Courbatures'],['douleurs','Douleurs']].forEach(function(opt) {
+  var val = opt[0], label = opt[1];
+  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
+  btn.addEventListener('click', function() {
+   wellnessState.muscles = val;
+   muscleBtnsArr.forEach(function(b) { b.style.background = 'var(--ivory,#FAF9F6)'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
+   btn.style.background = 'var(--accent,#1A4A1A)';
+   btn.style.borderColor = 'var(--accent,#1A4A1A)';
+   btn.style.color = 'var(--ivory,#FAF9F6)';
+   checkWellnessBannerComplete();
+  });
+  muscleBtnsArr.push(btn);
+  muscleBtnsRow.appendChild(btn);
+ });
+ muscleRow.appendChild(muscleBtnsRow);
+ banner.appendChild(muscleRow);
+
+ // Ligne énergie
+ var energyRow = h('div', {style: 'margin-bottom:12px'});
+ energyRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '\u26A1 \u00c9nergie'));
+ var energyBtnsRow = h('div', {style: 'display:flex;gap:4px'});
+ var energyBtnsArr = [];
+ [['bas','Basse'],['moyen','Moyenne'],['haut','Haute']].forEach(function(opt) {
+  var val = opt[0], label = opt[1];
+  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
+  btn.addEventListener('click', function() {
+   wellnessState.energy = val;
+   energyBtnsArr.forEach(function(b) { b.style.background = 'var(--ivory,#FAF9F6)'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
+   btn.style.background = 'var(--accent,#1A4A1A)';
+   btn.style.borderColor = 'var(--accent,#1A4A1A)';
+   btn.style.color = 'var(--ivory,#FAF9F6)';
+   checkWellnessBannerComplete();
+  });
+  energyBtnsArr.push(btn);
+  energyBtnsRow.appendChild(btn);
+ });
+ energyRow.appendChild(energyBtnsRow);
+ banner.appendChild(energyRow);
+
+ var confirmBtn = h('button', {style: 'width:100%;padding:14px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;opacity:0.4;pointer-events:none'}, 'Valider mon état');
+ confirmBtn.addEventListener('click', function() {
+  var today = new Date().toISOString().slice(0, 10);
+  S.todayWellness = { date: today, sleep: wellnessState.sleep, muscles: wellnessState.muscles, energy: wellnessState.energy };
+  S._wellnessReminder = false;
+  banner.style.display = 'none';
+ });
+ banner.appendChild(confirmBtn);
+
+ function checkWellnessBannerComplete() {
+  if (wellnessState.sleep && wellnessState.muscles && wellnessState.energy) {
+   confirmBtn.style.opacity = '1';
+   confirmBtn.style.pointerEvents = 'auto';
+  }
+ }
+
+ p.insertBefore(banner, p.firstChild);
+}
+
 function renderWellnessCheckin(p, onComplete) {
  var state = { sleep: 0, muscles: '', energy: '' };
 
@@ -1965,12 +2110,6 @@ function appendWellnessBanner(p) {
 
 // ─── STEP 6 (CrossFit): PROGRAMME CF ───
 function renderCrossfitProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  // Guard: ensure cfProgress is always an object (safe for null/undefined from storage)
  if (!S.cfProgress || typeof S.cfProgress !== 'object') S.cfProgress = {};
  // Guard: cfCurrentDay bounds
@@ -3882,12 +4021,6 @@ function calcSessionKcal(exercises, durationMin) {
 }
 
 function renderMusculationProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  if (!S.sportProgram || !S.sportProgram.length) { S.sportProgram = generateSportProgram(); S.selectedSportDay = 0; }
 
  // Load saved musculation weights from localStorage
@@ -3940,22 +4073,25 @@ function renderMusculationProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
 
- // Bloc premium : eyebrow + tagline + bouton générateur de programme personnalisé via IA
+ // ─── CARTE IA — Programme sur-mesure (visuellement distinct du programme hebdomadaire) ───
  var muscuGenWrap = h('div', {
-   style: 'margin:20px 0 8px 0;text-align:center;'
+   style: 'margin:20px 0 24px 0;border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.04);padding:20px 18px;'
  });
- muscuGenWrap.appendChild(h('div', {
-   style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);font-family:Georgia,serif;margin-bottom:8px;'
- }, 'PROGRAMME PERSONNEL'));
- muscuGenWrap.appendChild(h('div', {
-   style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:14px;'
- }, 'Construit \u00e0 partir de tes chiffres, calibr\u00e9 sur ton corps.'));
+ var muscuGenHeader = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:10px'});
+ muscuGenHeader.appendChild(h('div', {style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);font-family:"Helvetica Neue",Arial,sans-serif;font-weight:bold;'}, 'PROGRAMME IA'));
+ muscuGenHeader.appendChild(h('div', {style: 'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ivory,#FAF9F6);background:var(--accent,#1A4A1A);padding:2px 7px;font-family:"Helvetica Neue",Arial,sans-serif;'}, 'NOUVEAU'));
+ muscuGenWrap.appendChild(muscuGenHeader);
+ muscuGenWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;color:var(--black,#1A1A18);margin-bottom:6px;'}, 'Ton programme 12 semaines sur-mesure'));
+ muscuGenWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px;'}, 'L\u2019intelligence artificielle analyse ton profil complet et g\u00e9n\u00e8re un programme unique \u2014 exercices, charges, progression et p\u00e9riodisation calibr\u00e9s sur toi seul.'));
  var muscuGenBtn = h('button', {
    onclick: function() { if (window.openMuscuProgramGenerator) window.openMuscuProgramGenerator(); },
-   style: 'padding:14px 24px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;width:100%;'
- }, '\u26A1 G\u00e9n\u00e9rer mon programme');
+   style: 'padding:14px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;width:100%;'
+ }, '\u2192 Cr\u00e9er mon programme IA');
  muscuGenWrap.appendChild(muscuGenBtn);
  p.appendChild(muscuGenWrap);
+
+ // ─── SECTION : PROGRAMME DE LA SEMAINE ───
+ p.appendChild(h('div', {style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;margin-bottom:4px;margin-top:4px;'}, 'PROGRAMME DE LA SEMAINE'));
 
  appendWellnessBanner(p);
 
@@ -5010,13 +5146,13 @@ function renderMusculationProgram(p) {
  });
  }
 
- // Regenerate
+ // Recalculate weekly program (distinct from AI generator above)
  p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function(){
  S.sportProgram = generateSportProgram();
  S.selectedSportDay = 0;
  window.BLACKBOX && window.BLACKBOX.log('sport_program_regenerated');
  window.render();
- }}, '↻ Régénérer le programme'));
+ }}, '\u21bb Recalculer le programme hebdomadaire'));
 
  // Export PDF
  p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); }}, '\u21e9 Exporter le programme en PDF'));
@@ -5299,12 +5435,6 @@ function renderRunningConfig(p) {
 
 // ─── STEP 8: RUNNING PROGRAM ───
 function renderRunningProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  if (!S.runningProgram || S.runningProgram.length === 0) {
  var goalObj = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
  if (typeof window.generateRunningProgram === 'function') S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
@@ -5533,12 +5663,6 @@ function renderHyroxConfig(p) {
 
 // ─── STEP 10: HYROX PROGRAM ───
 function renderHyroxProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  // Guard: si config non remplie, rediriger vers la config
  if (!S.hyroxLevel || !S.hyroxGoal) { S.sStep = 9; window.render(); return; }
  if (!S.hyroxProgram || S.hyroxProgram.length === 0) {
@@ -6092,12 +6216,6 @@ function renderTriathlonConfig(p) {
 
 // ─── STEP 18: TRIATHLON PROGRAM ───
 function renderTriathlonProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  if (!S.triathlonProgram || !S.triathlonProgram.length) {
   var triopts2 = {
    swimPace: S.triathlonSwimPace || null,
@@ -6796,12 +6914,6 @@ function renderCyclingOnboarding(p) {
 
 // ─── STEP 23: CYCLISME PROGRAMME ───
 function renderCyclingProgram(p) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(p, function() { window.render(); });
-  return;
- }
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
  if (!S.cyclingPlan || !S.cyclingPlan.length) {
@@ -7136,12 +7248,6 @@ function renderCalisthenicsOnboarding(p) {
 
 // ─── STEP 25: CALISTHENICS PROGRAM ───
 function renderCalisthenicsProgram(content) {
- var today = new Date().toISOString().slice(0, 10);
- var _w = S.todayWellness || {};
- if (!_w.date || _w.date !== today) {
-  renderWellnessCheckin(content, function() { window.render(); });
-  return;
- }
  if (!S.calisthenicsLevel) { S.sStep = 24; window.render(); return; }
  var skills = Array.isArray(S.calisthenicsGoal) ? S.calisthenicsGoal : [];
  var level = S.calisthenicsLevel || 'debutant';

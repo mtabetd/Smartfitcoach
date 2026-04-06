@@ -1,7 +1,7 @@
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'sfc-v27';
-const RUNTIME_CACHE = 'sfc-runtime-v26';
+const CACHE_VERSION = 'sfc-v28';
+const RUNTIME_CACHE = 'sfc-runtime-v28';
 
 // Max age for static assets in the runtime cache: 7 days (in milliseconds).
 const STATIC_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
@@ -37,6 +37,11 @@ const APP_SHELL = [
   './motivation.js',
   './body-analysis.js',
   './dashboard.js',
+  './today-dashboard.js',
+  './push-manager.js',
+  './auth-banner.js',
+  './onboarding-complete.js',
+  './muscu-program-generator.js',
   './prices-db.js',
   './nutrition-master.js',
   './perf-history.js',
@@ -230,6 +235,40 @@ async function cacheFirstWithMaxAge(request) {
     });
   }
 }
+
+// ---------------------------------------------------------------------------
+// Push Notifications
+// ---------------------------------------------------------------------------
+
+self.addEventListener('push', function(event) {
+  var data = {};
+  try { data = event.data ? event.data.json() : {}; } catch(e) {}
+  var title = data.title || 'SmartFitCoach';
+  var options = {
+    body: data.body || 'Votre programme vous attend.',
+    icon: data.icon || '/icons/icon-192.png',
+    badge: data.badge || '/icons/icon-72.png',
+    tag: data.tag || 'sfc-notif',
+    requireInteraction: false,
+    data: { url: data.url || '/' }
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  var url = (event.notification.data && event.notification.data.url) || '/';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(list) {
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].url.indexOf(url) !== -1 && 'focus' in list[i]) return list[i].focus();
+      }
+      if (clients.openWindow) return clients.openWindow(url);
+    })
+  );
+});
+
+// ---------------------------------------------------------------------------
 
 /**
  * Minimal offline fallback page when even the cached HTML is unavailable.

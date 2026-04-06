@@ -3981,6 +3981,33 @@ function renderRecipePicker(p) {
   var slotLabels = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
   var slotLabel = slotLabels[slotKey] || slotKey;
 
+  // ── Restore / init macro filter state from sessionStorage ──
+  var SFC_FILTER_KEY = 'sfc_recipe_filters';
+  var savedFilters = (function() {
+    try { return JSON.parse(sessionStorage.getItem(SFC_FILTER_KEY) || 'null'); } catch(e) { return null; }
+  })();
+  if (!picker._filtersInit) {
+    picker.minKcal    = savedFilters ? savedFilters.minKcal    : 0;
+    picker.maxKcal    = savedFilters ? savedFilters.maxKcal    : 1200;
+    picker.minProt    = savedFilters ? savedFilters.minProt    : 0;
+    picker.activeTags = savedFilters ? (savedFilters.activeTags || []) : [];
+    picker.sortBy     = savedFilters ? (savedFilters.sortBy || 'default') : 'default';
+    picker._filtersInit = true;
+  }
+
+  // ── Helper: save filters to sessionStorage ──
+  function saveFilters() {
+    try {
+      sessionStorage.setItem(SFC_FILTER_KEY, JSON.stringify({
+        minKcal:    picker.minKcal,
+        maxKcal:    picker.maxKcal,
+        minProt:    picker.minProt,
+        activeTags: picker.activeTags,
+        sortBy:     picker.sortBy
+      }));
+    } catch(e) {}
+  }
+
   var overlay = h('div', {
     style: 'position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg,#F4F3EE);z-index:9200;display:flex;flex-direction:column;overflow:hidden'
   });
@@ -3991,7 +4018,7 @@ function renderRecipePicker(p) {
     style: 'background:none;border:none;font-size:18px;cursor:pointer;padding:4px 8px',
     onclick: function() { S._recipePicker = null; window.render(); }
   }, '\u2190'));
-  hdr.appendChild(h('div', { style: 'font-size:16px;font-weight:700;color:var(--black,#0A0A09);flex:1' }, '\uD83C\uDF7D Choisir une recette — ' + slotLabel));
+  hdr.appendChild(h('div', { style: 'font-size:16px;font-weight:700;color:var(--black,#0A0A09);flex:1' }, '\uD83C\uDF7D Choisir une recette \u2014 ' + slotLabel));
   overlay.appendChild(hdr);
 
   // Search box
@@ -4000,45 +4027,211 @@ function renderRecipePicker(p) {
     type: 'text',
     placeholder: 'Rechercher une recette...',
     value: query,
-    style: 'width:100%;padding:12px 16px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-size:16px;background:var(--bg,#FAF9F6);box-sizing:border-box',
-    oninput: function(e) { S._recipePicker.query = e.target.value; window.render(); }
+    style: 'width:100%;padding:12px 16px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-size:16px;background:var(--bg,#FAF9F6);box-sizing:border-box'
   });
+  searchInput.addEventListener('input', function(e) { S._recipePicker.query = e.target.value; window.render(); });
   searchWrap.appendChild(searchInput);
   overlay.appendChild(searchWrap);
+
+  // ── Macro filter zone ──
+  var filterZone = h('div', { style: 'padding:12px 16px 8px;background:var(--ivory,#FAF9F6);border-top:1px solid var(--border,#E5E4DE);flex-shrink:0' });
+
+  // Row 1: kcal range + protein min
+  var row1 = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:8px' });
+
+  // Min kcal
+  var minKcalWrap = h('div');
+  var minKcalLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px' }, 'Kcal min');
+  var minKcalInput = h('input', {
+    type: 'range',
+    min: '0', max: '1200', step: '50',
+    value: String(picker.minKcal),
+    style: 'width:100%;accent-color:var(--accent,#1A4A1A)'
+  });
+  var minKcalVal = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09);text-align:center;margin-top:2px' }, picker.minKcal + ' kcal');
+  minKcalInput.addEventListener('input', function(e) {
+    picker.minKcal = parseInt(e.target.value, 10);
+    if (picker.minKcal > picker.maxKcal) picker.maxKcal = picker.minKcal;
+    saveFilters();
+    window.render();
+  });
+  minKcalWrap.appendChild(minKcalLabel);
+  minKcalWrap.appendChild(minKcalInput);
+  minKcalWrap.appendChild(minKcalVal);
+  row1.appendChild(minKcalWrap);
+
+  // Max kcal
+  var maxKcalWrap = h('div');
+  var maxKcalLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px' }, 'Kcal max');
+  var maxKcalInput = h('input', {
+    type: 'range',
+    min: '0', max: '1200', step: '50',
+    value: String(picker.maxKcal),
+    style: 'width:100%;accent-color:var(--accent,#1A4A1A)'
+  });
+  var maxKcalVal = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09);text-align:center;margin-top:2px' }, picker.maxKcal + ' kcal');
+  maxKcalInput.addEventListener('input', function(e) {
+    picker.maxKcal = parseInt(e.target.value, 10);
+    if (picker.maxKcal < picker.minKcal) picker.minKcal = picker.maxKcal;
+    saveFilters();
+    window.render();
+  });
+  maxKcalWrap.appendChild(maxKcalLabel);
+  maxKcalWrap.appendChild(maxKcalInput);
+  maxKcalWrap.appendChild(maxKcalVal);
+  row1.appendChild(maxKcalWrap);
+
+  // Protein min
+  var minProtWrap = h('div');
+  var minProtLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px' }, 'Prot\u00e9ines min.');
+  var minProtInput = h('input', {
+    type: 'range',
+    min: '0', max: '60', step: '5',
+    value: String(picker.minProt),
+    style: 'width:100%;accent-color:var(--accent,#1A4A1A)'
+  });
+  var minProtVal = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09);text-align:center;margin-top:2px' }, picker.minProt + 'g');
+  minProtInput.addEventListener('input', function(e) {
+    picker.minProt = parseInt(e.target.value, 10);
+    saveFilters();
+    window.render();
+  });
+  minProtWrap.appendChild(minProtLabel);
+  minProtWrap.appendChild(minProtInput);
+  minProtWrap.appendChild(minProtVal);
+  row1.appendChild(minProtWrap);
+
+  filterZone.appendChild(row1);
+
+  // Row 2: tag chips
+  var TAG_DEFS = [
+    { key: 'high-protein', label: 'Prot\u00e9in\u00e9' },
+    { key: 'vegetarian',   label: 'V\u00e9g\u00e9tarien' },
+    { key: 'vegan',        label: 'Vegan' },
+    { key: 'low-carb',     label: 'Low-carb' },
+    { key: 'gluten-free',  label: 'Sans gluten' },
+    { key: 'quick',        label: 'Rapide' },
+    { key: 'meal-prep',    label: 'Meal prep' }
+  ];
+  var tagRow = h('div', { style: 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px' });
+  TAG_DEFS.forEach(function(td) {
+    var isActive = picker.activeTags.indexOf(td.key) >= 0;
+    var chip = h('button', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;padding:4px 10px;border-radius:2px;cursor:pointer;border:1px solid ' + (isActive ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';background:' + (isActive ? 'var(--accent,#1A4A1A)' : 'var(--ivory,#FAF9F6)') + ';color:' + (isActive ? 'var(--ivory,#FAF9F6)' : 'var(--grey,#6B6B65)')
+    }, td.label);
+    chip.addEventListener('click', function() {
+      var idx = picker.activeTags.indexOf(td.key);
+      if (idx >= 0) { picker.activeTags.splice(idx, 1); } else { picker.activeTags.push(td.key); }
+      saveFilters();
+      window.render();
+    });
+    tagRow.appendChild(chip);
+  });
+  filterZone.appendChild(tagRow);
+
+  // Row 3: sort select + reset button
+  var row3 = h('div', { style: 'display:flex;align-items:center;gap:10px' });
+  var sortLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:1px;text-transform:uppercase;white-space:nowrap' }, 'Trier par');
+  var sortSelect = h('select', { style: 'flex:1;padding:6px 10px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09)' });
+  var sortOptions = [
+    { value: 'default',   label: 'Par d\u00e9faut' },
+    { value: 'prot-desc', label: 'Prot\u00e9ines \u2193' },
+    { value: 'kcal-asc',  label: 'Calories \u2191' },
+    { value: 'kcal-desc', label: 'Calories \u2193' }
+  ];
+  sortOptions.forEach(function(opt) {
+    var option = document.createElement('option');
+    option.value = opt.value;
+    option.textContent = opt.label;
+    if (picker.sortBy === opt.value) option.selected = true;
+    sortSelect.appendChild(option);
+  });
+  sortSelect.addEventListener('change', function(e) {
+    picker.sortBy = e.target.value;
+    saveFilters();
+    window.render();
+  });
+  row3.appendChild(sortLabel);
+  row3.appendChild(sortSelect);
+
+  // Reset button
+  var resetBtn = h('button', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;padding:6px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:transparent;color:var(--grey,#6B6B65);cursor:pointer;white-space:nowrap;letter-spacing:1px;text-transform:uppercase'
+  }, 'R\u00e9init.');
+  resetBtn.addEventListener('click', function() {
+    picker.minKcal = 0; picker.maxKcal = 1200; picker.minProt = 0;
+    picker.activeTags = []; picker.sortBy = 'default';
+    try { sessionStorage.removeItem(SFC_FILTER_KEY); } catch(e) {}
+    window.render();
+  });
+  row3.appendChild(resetBtn);
+  filterZone.appendChild(row3);
+
+  overlay.appendChild(filterZone);
 
   // Recipe list
   var listWrap = h('div', { style: 'flex:1;overflow-y:auto;padding:12px 16px' });
 
   var pool = ((typeof getPool === 'function') ? getPool(slotKey) : (window.RecipeEngine ? window.RecipeEngine.getPool(slotKey) : [])) || [];
   var q = query.toLowerCase().trim();
-  var filtered = q ? pool.filter(function(r) { return r.n.toLowerCase().indexOf(q) >= 0; }) : pool;
+
+  // Apply all filters
+  var filtered = pool.filter(function(r) {
+    if (q && r.n.toLowerCase().indexOf(q) < 0) return false;
+    if ((r.k || 0) < picker.minKcal) return false;
+    if (picker.maxKcal < 1200 && (r.k || 0) > picker.maxKcal) return false;
+    if (picker.minProt > 0 && (r.p || 0) < picker.minProt) return false;
+    if (picker.activeTags.length > 0) {
+      var rTags = r.tags || [];
+      for (var ti = 0; ti < picker.activeTags.length; ti++) {
+        if (rTags.indexOf(picker.activeTags[ti]) < 0) return false;
+      }
+    }
+    return true;
+  });
+
+  // Apply sort
+  if (picker.sortBy === 'prot-desc') {
+    filtered = filtered.slice().sort(function(a, b) {
+      var ratioA = (a.k > 0) ? (a.p / a.k) : 0;
+      var ratioB = (b.k > 0) ? (b.p / b.k) : 0;
+      return ratioB - ratioA;
+    });
+  } else if (picker.sortBy === 'kcal-asc') {
+    filtered = filtered.slice().sort(function(a, b) { return (a.k || 0) - (b.k || 0); });
+  } else if (picker.sortBy === 'kcal-desc') {
+    filtered = filtered.slice().sort(function(a, b) { return (b.k || 0) - (a.k || 0); });
+  }
+
+  // Result count indicator
+  listWrap.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px' }, filtered.length + ' recette' + (filtered.length !== 1 ? 's' : '') + ' trouv\u00e9e' + (filtered.length !== 1 ? 's' : '')));
 
   if (!filtered.length) {
-    listWrap.appendChild(h('div', { style: 'text-align:center;color:#888;padding:40px 16px;font-size:13px' }, 'Aucune recette trouvée.'));
+    listWrap.appendChild(h('div', { style: 'text-align:center;color:var(--grey,#888);padding:40px 16px;font-size:13px' }, 'Aucune recette trouv\u00e9e.'));
   } else {
     filtered.forEach(function(recipe) {
       var card = h('div', {
-        style: 'background:var(--card,#FFFFFF);border-radius:2px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,0.08)',
-        onclick: function() {
-          if (!S.weekPlan || !S.weekPlan[S.selectedDay]) { S._recipePicker = null; window.render(); return; }
-          var c = typeof calcTarget === 'function' ? calcTarget() : 0;
-          var split = window.getMealSplit ? window.getMealSplit() : null;
-          var tgt = 0;
-          if (c && split) {
-            tgt = slotKey === 'breakfast' ? Math.round(c * split.pctBreak) :
-                  slotKey === 'lunch'     ? Math.round(c * split.pctLunch) :
-                  slotKey === 'snack'     ? Math.round(c * split.pctSnack) :
-                                            Math.round(c * split.pctDinner);
-          }
-          var nr = tgt > 0 && typeof window.enrichWithScaling === 'function' ? window.enrichWithScaling(recipe, tgt) : recipe;
-          S.weekPlan[S.selectedDay][slotKey] = nr;
-          S._recipePicker = null;
-          window.render();
+        style: 'background:var(--card,#FFFFFF);border-radius:2px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,0.08)'
+      });
+      card.addEventListener('click', function() {
+        if (!S.weekPlan || !S.weekPlan[S.selectedDay]) { S._recipePicker = null; window.render(); return; }
+        var c = typeof calcTarget === 'function' ? calcTarget() : 0;
+        var split = window.getMealSplit ? window.getMealSplit() : null;
+        var tgt = 0;
+        if (c && split) {
+          tgt = slotKey === 'breakfast' ? Math.round(c * split.pctBreak) :
+                slotKey === 'lunch'     ? Math.round(c * split.pctLunch) :
+                slotKey === 'snack'     ? Math.round(c * split.pctSnack) :
+                                          Math.round(c * split.pctDinner);
         }
+        var nr = tgt > 0 && typeof window.enrichWithScaling === 'function' ? window.enrichWithScaling(recipe, tgt) : recipe;
+        S.weekPlan[S.selectedDay][slotKey] = nr;
+        S._recipePicker = null;
+        window.render();
       });
       var left = h('div', { style: 'flex:1;min-width:0' });
       left.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);white-space:nowrap;overflow:hidden;text-overflow:ellipsis' }, (recipe.f || '') + ' ' + recipe.n));
-      left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px' }, recipe.k + ' kcal · ' + recipe.p + 'g prot · ' + recipe.g + 'g glu · ' + recipe.l + 'g lip'));
+      left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px' }, recipe.k + ' kcal \u00b7 ' + recipe.p + 'g prot \u00b7 ' + recipe.g + 'g glu \u00b7 ' + recipe.l + 'g lip'));
       card.appendChild(left);
       card.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;color:var(--grey2,#7A7A74);font-size:13px;margin-left:10px' }, '\u276F'));
       listWrap.appendChild(card);
