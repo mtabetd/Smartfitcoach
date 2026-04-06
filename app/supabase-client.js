@@ -122,7 +122,9 @@
         var userId = session.user.id;
         // Copier S sans les propriétés transitoires ni les clés dangereuses
         var data = {};
-        var skip = ['authError', 'view', 'sessionCompleting', 'swapPanel', 'nStep', 'sStep', '__proto__', 'constructor', 'prototype'];
+        // Note: nStep and sStep are intentionally included so cloud backup tracks
+        // the user's onboarding progress and program step.
+        var skip = ['authError', 'view', 'sessionCompleting', 'swapPanel', '__proto__', 'constructor', 'prototype'];
         for (var k in window.S) {
           if (window.S.hasOwnProperty(k) && skip.indexOf(k) === -1) {
             data[k] = window.S[k];
@@ -360,7 +362,7 @@
       }, 5000); // 5s debounce
     },
 
-    // Sync initial au login : charger depuis Supabase si localStorage vide
+    // Sync initial au login : charger depuis Supabase si localStorage vide ou moins avancé
     syncOnLogin: function() {
       var self = this;
       self._syncPending = true;
@@ -371,6 +373,7 @@
         // Check localStorage directly for this user's actual persisted data
         // (don't rely on window.S which may have stale values from a previous session)
         var hasValidLocalData = false;
+        var localData = null;
         try {
           var user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null;
           // Fallback: try to get uid from Supabase session directly (avoids async timing issue)
@@ -388,7 +391,6 @@
           uid = uid || 'anon';
           var raw = localStorage.getItem('mtd_profile_' + uid);
           if (raw) {
-            var localData = null;
             if (window._storageDecode) { localData = window._storageDecode(raw); }
             if (!localData) { try { localData = JSON.parse(raw); } catch(e2) {} }
             // Local data is valid only if the user completed onboarding (goal is set)
@@ -396,9 +398,8 @@
           }
         } catch(e) {}
 
-        if (!hasValidLocalData && cloudData.goal != null) {
-          console.log('[SupaSync] Loading profile from cloud (no valid local data for user)');
-          // Prototype pollution guard: skip __proto__, constructor, prototype keys
+        // Helper to apply cloud data to S and save locally
+        function _applyCloudData() {
           var _PROTO_BLOCKED = ['__proto__', 'constructor', 'prototype', '_legacy_storage'];
           for (var k in cloudData) {
             if (cloudData.hasOwnProperty(k) && _PROTO_BLOCKED.indexOf(k) === -1) {
@@ -426,8 +427,32 @@
             window.UNITS.weight = window.S.weightUnit || 'kg';
             window.UNITS.height = window.S.heightUnit || 'cm';
           }
+        }
+
+        if (!hasValidLocalData && cloudData.goal != null) {
+          console.log('[SupaSync] Loading profile from cloud (no valid local data for user)');
+          _applyCloudData();
           if (window.render) window.render();
           return 'loaded_from_cloud';
+        }
+
+        // ── Cloud data exists AND local data exists ──
+        // If cloud data is more advanced (higher nStep/sStep), prefer cloud.
+        // This handles the case where localStorage was cleared or the user is on a new device.
+        if (hasValidLocalData && cloudData.goal != null) {
+          var cloudNStep = cloudData.nStep || 0;
+          var localNStep = (localData && localData.nStep) ? localData.nStep : (window.S.nStep || 0);
+          var cloudSStep = cloudData.sStep || 0;
+          var localSStep = (localData && localData.sStep) ? localData.sStep : (window.S.sStep || 0);
+          // Also check if cloud has a weekPlan that local is missing
+          var cloudHasPlan = cloudData.weekPlan != null;
+          var localHasPlan = (localData && localData.weekPlan != null) || window.S.weekPlan != null;
+          if (cloudNStep > localNStep || cloudSStep > localSStep || (cloudHasPlan && !localHasPlan)) {
+            console.log('[SupaSync] Cloud data is more advanced — loading from cloud (cloudNStep=' + cloudNStep + ' localNStep=' + localNStep + ')');
+            _applyCloudData();
+            if (window.render) window.render();
+            return 'loaded_from_cloud';
+          }
         }
         // ── Even if local data exists, merge missing history keys from cloud ──
         // (e.g. user has a partial profile locally but the cloud has fresher history)

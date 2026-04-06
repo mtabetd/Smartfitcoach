@@ -471,11 +471,30 @@ window.AUTH = {
       }, 12000);
     });
     // When _authReady resolves AFTER the timeout (late Supabase response),
-    // trigger a re-render so the user sees their dashboard instead of login.
+    // trigger a full profile restore + re-render so the user sees their dashboard.
     _authReady.then(function() {
       if (_currentSession && window.S && window.S.view === 'auth') {
-        console.log('[AUTH] Late session restore — re-rendering dashboard');
-        window.S.view = 'dashboard';
+        console.log('[AUTH] Late session restore — loading profile and re-rendering dashboard');
+        window.S.view = 'today';
+        // Restore profile from localStorage (same as _doAutoLogin does)
+        if (window.loadProfile) window.loadProfile();
+        if (window.S.nStep === 0 && (window.S.sex || window.S.goal || window.S.weekPlan)) {
+          window.S.nStep = window.S.weekPlan ? 9 : (window.S.goal ? 8 : 1);
+        }
+        var _PROG_STEPS_AUTH = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
+        if (window.S.sStep > 0 && _PROG_STEPS_AUTH.indexOf(window.S.sStep) === -1) {
+          window.S.sStep = 0;
+        }
+        if (window.I18N && window.S.lang) window.I18N.current = window.S.lang;
+        if (window.UNITS) {
+          window.UNITS.weight = window.S.weightUnit || 'kg';
+          window.UNITS.height = window.S.heightUnit || 'cm';
+        }
+        // Sync from cloud too
+        if (window.SupaSync) {
+          window.SupaSync.syncOnLogin();
+          window.SupaSync.startAutoSync();
+        }
         if (window.render) window.render();
       }
     }).catch(function() {});
