@@ -353,6 +353,11 @@ function render() {
  wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'Smart Fit Coach')]));
  app.appendChild(wrap);
 
+ // Auth banner (P1) — bannière sauvegarde cloud si pas de compte réel
+ try { if (window.AuthBanner) window.AuthBanner.render(document.body); } catch(e) {}
+ // Onboarding screen (P10) — écran de bienvenue personnalisé (1 seule fois)
+ try { if (window.OnboardingComplete) window.OnboardingComplete.check(); } catch(e) {}
+
  // Post-render scroll: reset .app container and window after content is in DOM
  if (_didNavigate) {
  window.scrollTo({ top: 0, behavior: 'instant' });
