@@ -6,6 +6,11 @@
   var _loadingInterval = null;
   var _previousFocus = null;
 
+  var MAX_GENERATIONS_PER_WEEK = 3;
+  var LS_KEY_PROGRAM = 'mtd_muscu_program';
+  var LS_KEY_PROGRESS = 'mtd_muscu_ia_progress';
+  var LS_KEY_GENERATIONS = 'mtd_muscu_generations';
+
   var LOADING_PHRASES = [
     'Lecture de tes 1RM. Calcul de tes ratios squat, bench, deadlift, overhead.',
     'Sélection du split adapté à tes jours, ton équipement, tes blessures.',
