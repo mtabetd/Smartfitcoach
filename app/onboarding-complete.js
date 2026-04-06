@@ -182,10 +182,10 @@
     cta.style.cssText = [
       'display:block', 'width:100%', 'max-width:320px',
       'margin:32px auto 0',
-      'background:var(--black,#0A0A09)', 'color:var(--ivory,#FAF9F6)',
-      'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:9px',
-      'letter-spacing:6px', 'text-transform:uppercase',
-      'padding:18px', 'border:1px solid var(--black,#0A0A09)',
+      'background:var(--accent,#1A4A1A)', 'color:var(--ivory,#FAF9F6)',
+      'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:11px',
+      'letter-spacing:2px', 'text-transform:uppercase',
+      'padding:14px', 'border:none',
       'border-radius:2px', 'cursor:pointer'
     ].join(';');
     cta.textContent = 'Commencer maintenant →';
@@ -221,7 +221,7 @@
     var ey = document.createElement('div');
     ey.style.cssText = [
       'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:9px',
-      'letter-spacing:6px', 'text-transform:uppercase',
+      'letter-spacing:4px', 'text-transform:uppercase',
       'color:var(--grey,#6B6B65)', 'margin-bottom:8px'
     ].join(';');
     ey.textContent = eyebrow;

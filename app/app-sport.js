@@ -709,11 +709,11 @@ function renderObjectif(p) {
  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez votre type de programme sportif.'));
 
  // ─── HERO CARTE GÉNÉRATEUR IA ───
- var heroCard = h('div', {style: 'border:1px solid var(--accent,#2D5016);background:rgba(26,74,26,0.04);border-radius:10px;padding:20px 18px;margin-bottom:20px'});
- heroCard.appendChild(h('div', {style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#2D5016);font-weight:700;margin-bottom:14px'}, '⚡ PROGRAMME IA 12 SEMAINES'));
+ var heroCard = h('div', {style: 'border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.04);border-radius:2px;padding:20px 16px;margin-bottom:20px'});
+ heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);font-weight:700;margin-bottom:14px'}, 'PROGRAMME IA 12 SEMAINES'));
  heroCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;line-height:1.25;margin-bottom:10px'}, 'Ton programme unique, généré par IA.'));
- heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:18px'}, 'Construit sur tes chiffres, tes blessures, ton objectif exact. Aucune ligne générique.'));
- var heroIaBtn = h('button', {id: 'hero-ia-btn', style: 'width:100%;padding:13px;background:var(--accent,#2D5016);color:#fff;border:none;border-radius:6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif'}, '→ Créer mon programme IA');
+ heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Construit sur tes chiffres, tes blessures, ton objectif exact. Aucune ligne générique.'));
+ var heroIaBtn = h('button', {id: 'hero-ia-btn', style: 'width:100%;padding:14px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2192 Créer mon programme IA');
  heroIaBtn.addEventListener('click', function() {
   if (typeof window.openMuscuProgramGenerator === 'function') {
    window.openMuscuProgramGenerator();
@@ -1834,10 +1834,10 @@ function renderCFCalendar(p) {
 // Affiche un bandeau dismissable en haut du contenu programme.
 // L'utilisateur peut remplir rapidement ou ignorer avec des valeurs par défaut (moyenne).
 function renderWellnessBanner(p) {
- var banner = h('div', {style: 'background:rgba(26,74,26,0.04);border:1px solid var(--accent,#2D5016);border-radius:8px;padding:14px 16px;margin-bottom:20px;position:relative'});
+ var banner = h('div', {style: 'background:rgba(26,74,26,0.04);border:1px solid var(--accent,#1A4A1A);border-radius:2px;padding:14px 16px;margin-bottom:20px;position:relative'});
 
  var titleRow = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:10px'});
- titleRow.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent,#2D5016);font-weight:700'}, 'Bilan de forme'));
+ titleRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);font-weight:700'}, 'Bilan de forme'));
 
  var closeBtn = h('button', {style: 'background:none;border:none;cursor:pointer;font-size:18px;color:var(--grey,#6B6B65);line-height:1;padding:0;margin:0'}, '×');
  closeBtn.addEventListener('click', function() {
@@ -1855,18 +1855,18 @@ function renderWellnessBanner(p) {
 
  // Ligne sommeil
  var sleepRow = h('div', {style: 'margin-bottom:8px'});
- sleepRow.appendChild(h('div', {style: 'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '😴 Sommeil'));
+ sleepRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '\uD83D\uDE34 Sommeil'));
  var sleepBtnsRow = h('div', {style: 'display:flex;gap:4px'});
  var sleepBtnsArr = [];
  [1,2,3,4,5].forEach(function(val) {
   var label = ['Mauvais','Bof','Moyen','Bon','Top'][val-1];
-  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:#fff;border-radius:4px;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
+  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
   btn.addEventListener('click', function() {
    wellnessState.sleep = val;
-   sleepBtnsArr.forEach(function(b) { b.style.background = '#fff'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
-   btn.style.background = 'var(--accent,#2D5016)';
-   btn.style.borderColor = 'var(--accent,#2D5016)';
-   btn.style.color = '#fff';
+   sleepBtnsArr.forEach(function(b) { b.style.background = 'var(--ivory,#FAF9F6)'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
+   btn.style.background = 'var(--accent,#1A4A1A)';
+   btn.style.borderColor = 'var(--accent,#1A4A1A)';
+   btn.style.color = 'var(--ivory,#FAF9F6)';
    checkWellnessBannerComplete();
   });
   sleepBtnsArr.push(btn);
@@ -1877,18 +1877,18 @@ function renderWellnessBanner(p) {
 
  // Ligne muscles
  var muscleRow = h('div', {style: 'margin-bottom:8px'});
- muscleRow.appendChild(h('div', {style: 'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '💪 Muscles'));
+ muscleRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '\uD83D\uDCAA Muscles'));
  var muscleBtnsRow = h('div', {style: 'display:flex;gap:4px'});
  var muscleBtnsArr = [];
  [['frais','Frais'],['courbatures','Courbatures'],['douleurs','Douleurs']].forEach(function(opt) {
   var val = opt[0], label = opt[1];
-  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:#fff;border-radius:4px;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
+  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
   btn.addEventListener('click', function() {
    wellnessState.muscles = val;
-   muscleBtnsArr.forEach(function(b) { b.style.background = '#fff'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
-   btn.style.background = 'var(--accent,#2D5016)';
-   btn.style.borderColor = 'var(--accent,#2D5016)';
-   btn.style.color = '#fff';
+   muscleBtnsArr.forEach(function(b) { b.style.background = 'var(--ivory,#FAF9F6)'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
+   btn.style.background = 'var(--accent,#1A4A1A)';
+   btn.style.borderColor = 'var(--accent,#1A4A1A)';
+   btn.style.color = 'var(--ivory,#FAF9F6)';
    checkWellnessBannerComplete();
   });
   muscleBtnsArr.push(btn);
@@ -1899,18 +1899,18 @@ function renderWellnessBanner(p) {
 
  // Ligne énergie
  var energyRow = h('div', {style: 'margin-bottom:12px'});
- energyRow.appendChild(h('div', {style: 'font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '⚡ Énergie'));
+ energyRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, '\u26A1 \u00c9nergie'));
  var energyBtnsRow = h('div', {style: 'display:flex;gap:4px'});
  var energyBtnsArr = [];
  [['bas','Basse'],['moyen','Moyenne'],['haut','Haute']].forEach(function(opt) {
   var val = opt[0], label = opt[1];
-  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:#fff;border-radius:4px;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
+  var btn = h('button', {style: 'flex:1;padding:6px 2px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px'}, label);
   btn.addEventListener('click', function() {
    wellnessState.energy = val;
-   energyBtnsArr.forEach(function(b) { b.style.background = '#fff'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
-   btn.style.background = 'var(--accent,#2D5016)';
-   btn.style.borderColor = 'var(--accent,#2D5016)';
-   btn.style.color = '#fff';
+   energyBtnsArr.forEach(function(b) { b.style.background = 'var(--ivory,#FAF9F6)'; b.style.borderColor = 'var(--border,#D8D8D0)'; b.style.color = 'inherit'; });
+   btn.style.background = 'var(--accent,#1A4A1A)';
+   btn.style.borderColor = 'var(--accent,#1A4A1A)';
+   btn.style.color = 'var(--ivory,#FAF9F6)';
    checkWellnessBannerComplete();
   });
   energyBtnsArr.push(btn);
@@ -1919,7 +1919,7 @@ function renderWellnessBanner(p) {
  energyRow.appendChild(energyBtnsRow);
  banner.appendChild(energyRow);
 
- var confirmBtn = h('button', {style: 'width:100%;padding:10px;background:var(--accent,#2D5016);color:#fff;border:none;border-radius:6px;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;opacity:0.4;pointer-events:none'}, 'Valider mon état');
+ var confirmBtn = h('button', {style: 'width:100%;padding:14px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;opacity:0.4;pointer-events:none'}, 'Valider mon état');
  confirmBtn.addEventListener('click', function() {
   var today = new Date().toISOString().slice(0, 10);
   S.todayWellness = { date: today, sleep: wellnessState.sleep, muscles: wellnessState.muscles, energy: wellnessState.energy };

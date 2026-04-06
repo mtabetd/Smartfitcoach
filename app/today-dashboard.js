@@ -52,7 +52,7 @@ function eyebrow(text) {
 
 function cardTitle(text) {
   return h('div', {
-    style: 'font-family:Georgia,serif;font-size:18px;font-weight:normal;margin-bottom:4px;'
+    style: 'font-family:Georgia,serif;font-size:20px;font-weight:normal;margin-bottom:4px;'
   }, text);
 }
 
@@ -69,7 +69,7 @@ function macroRow(label, val, max) {
   row.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);width:68px;flex-shrink:0;' }, label));
   row.appendChild(progressBar(val, max));
   row.appendChild(h('span', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey2);white-space:nowrap;'
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);white-space:nowrap;'
   }, val + ' / ' + max + 'g'));
   return row;
 }
@@ -175,7 +175,7 @@ function renderCardBonjour(S) {
   c.appendChild(eyebrow_el);
 
   var title = h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;margin-bottom:12px;' });
-  title.textContent = 'Bonjour' + (firstName ? ' ' + firstName : '') + ' \uD83D\uDC4B';
+  title.textContent = 'Bonjour' + (firstName ? ', ' + firstName : '') + '.';
   c.appendChild(title);
 
   if (quoteText) {
@@ -233,14 +233,14 @@ function renderCardStreak() {
 
   if (streak > 0) {
     var streakEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;margin-bottom:8px;' });
-    streakEl.textContent = '\uD83D\uDD25 Streak\u00a0: ' + streak + ' jour' + (streak > 1 ? 's' : '');
+    streakEl.textContent = 'Streak\u00a0: ' + streak + ' jour' + (streak > 1 ? 's' : '');
     c.appendChild(streakEl);
   }
 
   if (lastBadge) {
     var badgeName = lastBadge.name || (lastBadge.id || 'Badge');
     var badgeEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);' });
-    badgeEl.textContent = '\uD83C\uDFC6 Dernier badge\u00a0: ' + badgeName;
+    badgeEl.textContent = 'Dernier badge\u00a0: ' + badgeName;
     c.appendChild(badgeEl);
   }
 
@@ -289,8 +289,8 @@ function renderCardWellness(S) {
   c.appendChild(eyebrow('BIEN-ÊTRE'));
   c.appendChild(cardTitle('Comment tu te sens ?'));
 
-  var desc = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;' });
-  desc.textContent = '\uD83D\uDE34 Sommeil  \uD83D\uDCAA Muscles  \u26A1 Énergie';
+  var desc = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;' });
+  desc.textContent = 'Sommeil \u00b7 Muscles \u00b7 \u00c9nergie';
   c.appendChild(desc);
 
   var btn = h('button', {
@@ -315,7 +315,7 @@ function renderCardShortcuts() {
   var row = h('div', { style: 'display:flex;gap:8px;margin-top:4px;' });
 
   var btnMeal = h('button', {
-    style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
+    style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
     onclick: function() {
       var S = window.S;
       S.view = 'nutrition';
@@ -324,7 +324,7 @@ function renderCardShortcuts() {
   }, '+ Ajouter un repas');
 
   var btnSport = h('button', {
-    style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
+    style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
     onclick: function() {
       var S = window.S;
       S.view = 'sport';

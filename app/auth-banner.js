@@ -158,10 +158,10 @@
     var submitBtn = document.createElement('button');
     submitBtn.type = 'submit';
     submitBtn.style.cssText = [
-      'width:100%', 'margin-top:8px', 'background:var(--black,#0A0A09)',
+      'width:100%', 'margin-top:8px', 'background:var(--accent,#1A4A1A)',
       'color:var(--ivory,#FAF9F6)', 'font-family:"Helvetica Neue",Arial,sans-serif',
-      'font-size:9px', 'letter-spacing:6px', 'text-transform:uppercase',
-      'padding:18px', 'border:1px solid var(--black,#0A0A09)', 'border-radius:2px',
+      'font-size:11px', 'letter-spacing:2px', 'text-transform:uppercase',
+      'padding:14px', 'border:none', 'border-radius:2px',
       'cursor:pointer'
     ].join(';');
     submitBtn.textContent = 'Créer mon compte';
@@ -177,7 +177,7 @@
       errEl.style.display = 'none';
 
       if (!name || !email || !pw) {
-        errEl.textContent = 'Veuillez remplir tous les champs.';
+        errEl.textContent = 'Tous les champs sont obligatoires.';
         errEl.style.display = 'block';
         return;
       }
@@ -263,7 +263,7 @@
     var lbl = document.createElement('label');
     lbl.style.cssText = [
       'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:9px',
-      'letter-spacing:6px', 'text-transform:uppercase',
+      'letter-spacing:4px', 'text-transform:uppercase',
       'color:var(--grey,#6B6B65)', 'display:block', 'margin-bottom:8px'
     ].join(';');
     lbl.textContent = label;
@@ -325,8 +325,8 @@
     var ctaBtn = document.createElement('button');
     ctaBtn.type = 'button';
     ctaBtn.style.cssText = [
-      'background:#fff', 'color:var(--accent,var(--green,#1A4A1A))',
-      'border:1px solid #fff', 'border-radius:2px',
+      'background:var(--ivory,#FAF9F6)', 'color:var(--accent,#1A4A1A)',
+      'border:1px solid var(--ivory,#FAF9F6)', 'border-radius:2px',
       'font-family:"Helvetica Neue",Arial,sans-serif',
       'font-size:9px', 'letter-spacing:4px', 'text-transform:uppercase',
       'padding:8px 14px', 'cursor:pointer', 'white-space:nowrap',
