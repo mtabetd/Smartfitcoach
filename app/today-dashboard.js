@@ -149,14 +149,9 @@ function getNextSportDay() {
   var program = S.sportProgram;
   if (!program || !program.length) return null;
 
-  // Find next uncompleted day starting from selectedSportDay
+  // Find next uncompleted day — simplified: just return current selected day + its name
   var idx = typeof S.selectedSportDay === 'number' ? S.selectedSportDay : 0;
-  // Look for a day that hasn't been completed today
-  var today = new Date().toISOString().split('T')[0];
-  var logs = S.muscuSessionLog || {};
-  var logsArr = S.sessionHistory || [];
 
-  // Find first day not done today — simplified: just return current selected day + its name
   if (idx < program.length) {
     return { index: idx, day: program[idx] };
   }
@@ -176,7 +171,7 @@ function renderCardBonjour(S) {
   var quoteText = typeof quote === 'string' ? quote : (quote && quote.text ? quote.text : '');
   var quoteAuthor = (quote && quote.author) ? quote.author : '';
 
-  eyebrow_el = eyebrow('AUJOURD\'HUI');
+  var eyebrow_el = eyebrow('AUJOURD\'HUI');
   c.appendChild(eyebrow_el);
 
   var title = h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;margin-bottom:12px;' });
