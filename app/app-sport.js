@@ -3413,8 +3413,9 @@ function renderPlateCalculator(targetKg, barKg) {
     html += '<div style="font-size:12px;color:var(--grey)">Barre seule (' + barKg + 'kg)</div>';
   } else {
     result.forEach(function(r) {
-      var color = r.plate >= 20 ? '#c0392b' : r.plate >= 10 ? '#27ae60' : r.plate >= 5 ? '#2980b9' : '#7f8c8d';
-      html += '<span style="display:inline-block;margin:2px 4px;padding:4px 10px;background:' + color + ';color:#fff;font-size:11px;font-weight:700;border-radius:2px">' + r.plate + 'kg × ' + r.count + '</span>';
+      // Couleurs cohérentes design system (palette --green/--blue/--orange/--grey)
+      var color = r.plate >= 20 ? 'var(--green,#1A4A1A)' : r.plate >= 10 ? 'var(--blue,#1A3A6A)' : r.plate >= 5 ? 'var(--orange,#6A4A1A)' : 'var(--grey,#6B6B65)';
+      html += '<span style="display:inline-block;margin:2px 4px;padding:4px 10px;background:' + color + ';color:var(--ivory,#FAF9F6);font-size:11px;font-weight:700;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:0.5px">' + r.plate + 'kg × ' + r.count + '</span>';
     });
     if (remaining > 0.1) {
       html += '<div style="font-size:10px;color:var(--grey);margin-top:4px">⚠ Différence : ' + remaining.toFixed(2) + 'kg (microplaques)</div>';

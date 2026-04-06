@@ -38,7 +38,14 @@
     _modalEl.setAttribute('role', 'dialog');
     _modalEl.setAttribute('aria-modal', 'true');
     _modalEl.style.cssText = 'display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9998;overflow-y:auto;padding:20px;';
-    _modalEl.innerHTML = '<div style="max-width:780px;margin:20px auto;background:var(--ivory,#FAF9F6);border-radius:2px;padding:24px;font-family:Georgia,serif;">' +
+    // Inject responsive styles for mobile (<480px)
+    if (!document.getElementById('muscu-modal-styles')) {
+      var styleEl = document.createElement('style');
+      styleEl.id = 'muscu-modal-styles';
+      styleEl.textContent = '@media(max-width:480px){#muscu-program-modal{padding:8px!important;}#muscu-program-modal .muscu-modal-inner{max-width:100%!important;padding:16px!important;margin:8px auto!important;}#muscu-program-modal h2{font-size:14px!important;}}';
+      document.head.appendChild(styleEl);
+    }
+    _modalEl.innerHTML = '<div class="muscu-modal-inner" style="max-width:780px;margin:20px auto;background:var(--ivory,#FAF9F6);border-radius:2px;padding:24px;font-family:Georgia,serif;">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid var(--border,#E5E5E0);padding-bottom:12px;">' +
         '<h2 style="margin:0;font-size:18px;letter-spacing:2px;text-transform:uppercase;">Programme Musculation</h2>' +
         '<button id="muscu-prog-close" aria-label="Fermer" style="background:transparent;border:none;font-size:24px;cursor:pointer;color:var(--grey,#6B6B65);">×</button>' +
@@ -62,7 +69,7 @@
       '<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;">Programme 100% personnalisé</div>' +
       '<p style="font-size:13px;color:var(--grey3,#9B9B95);margin-bottom:24px;">Notre IA va analyser ton profil complet (1RM, objectif, équipement, contraintes, sommeil, stress) et générer un programme dérivé à 100% de tes données. Aucune ligne ne sera générique.</p>' +
       '<p style="font-size:11px;color:var(--grey3,#9B9B95);margin-bottom:24px;">⚠ Génération limitée à 1 par semaine (Sonnet IA = coûteux). Sois patient, ça prend 30-60 secondes.</p>' +
-      '<button id="muscu-prog-generate" style="background:var(--accent,#1A4A1A);color:#fff;border:none;padding:14px 32px;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;">Lancer la génération</button>' +
+      '<button id="muscu-prog-generate" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;">Construire mon programme</button>' +
     '</div>';
     _modalEl.style.display = 'block';
     document.getElementById('muscu-prog-generate').addEventListener('click', generateMuscuProgram);
