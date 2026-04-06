@@ -572,7 +572,7 @@ window.SPORT = {
  // ─── CHECK BIEN-ÊTRE QUOTIDIEN (NON-BLOQUANT) ───
  // Si l'utilisateur n'a pas fait son checkin aujourd'hui, on stocke un flag
  // pour afficher un bandeau en haut du contenu — sans bloquer l'accès au programme.
- var _PROGRAM_STEPS = [4, 6, 8, 10, 12, 14, 18, 21, 23, 25];
+ var _PROGRAM_STEPS = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
  if (_PROGRAM_STEPS.indexOf(S.sStep) !== -1) {
    var _today = new Date().toISOString().slice(0, 10);
    var _w = S.todayWellness || {};

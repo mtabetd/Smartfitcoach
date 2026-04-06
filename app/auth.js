@@ -481,8 +481,11 @@ window.AUTH = {
         if (window.S.nStep === 0 && (window.S.sex || window.S.goal || window.S.weekPlan)) {
           window.S.nStep = window.S.weekPlan ? 9 : (window.S.goal ? 8 : 1);
         }
-        if (window.S.sStep > 0 && window.S.sStep < 20) {
-          window.S.sStep = 20;
+        // Préserver les steps programme (final steps après onboarding)
+        // Réinitialiser uniquement les steps intermédiaires d'onboarding [1,2,3,5,7,9,11,13,17,19,22,24]
+        var _PROG_STEPS_AUTH = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
+        if (window.S.sStep > 0 && _PROG_STEPS_AUTH.indexOf(window.S.sStep) === -1) {
+          window.S.sStep = 0;
         }
         if (window.I18N && window.S.lang) window.I18N.current = window.S.lang;
         if (window.UNITS) {

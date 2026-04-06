@@ -100,8 +100,8 @@ function getLastBadge() {
     var last = badges[badges.length - 1];
     // Resolve badge ID to full definition (name + icon) from GAMIFICATION
     var badgeId = typeof last === 'string' ? last : (last && last.id);
-    if (badgeId && window.GAMIFICATION && window.GAMIFICATION.BADGES) {
-      var def = window.GAMIFICATION.BADGES.find(function(b) { return b.id === badgeId; });
+    if (badgeId && window.GAMIFICATION && Array.isArray(window.GAMIFICATION.BADGES)) {
+      var def = window.GAMIFICATION.BADGES.find(function(b) { return b && b.id === badgeId; });
       if (def) return { id: def.id, name: def.name, icon: def.icon, desc: def.desc };
     }
     if (badgeId) return { id: badgeId, name: badgeId, icon: '◆' };

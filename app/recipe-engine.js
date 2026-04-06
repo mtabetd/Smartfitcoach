@@ -29359,6 +29359,7 @@
     var targetCalories = options.targetCalories || Math.round(userState.caloriesTarget * mealFraction);
 
     // scalingRatio : rapport calories cibles / calories de la recette entière
+    if (!recipe.baseNutrition || !recipe.baseNutrition.calories) return null; // recette format compact sans baseNutrition
     var caloriesPerServing = recipe.servings > 0 ? recipe.baseNutrition.calories / recipe.servings : 0;
     if (!caloriesPerServing) return null; // évite division par zéro
     var scalingRatio       = targetCalories / caloriesPerServing;
@@ -29392,10 +29393,11 @@
     });
 
     // Macros scalées proportionnellement (1 portion × ratio)
+    var _bn = recipe.baseNutrition;
     var basePerServing = {
-      proteinGrams: recipe.baseNutrition.proteinGrams / recipe.servings,
-      carbsGrams:   recipe.baseNutrition.carbsGrams   / recipe.servings,
-      fatGrams:     recipe.baseNutrition.fatGrams      / recipe.servings
+      proteinGrams: (_bn.proteinGrams || 0) / recipe.servings,
+      carbsGrams:   (_bn.carbsGrams   || 0) / recipe.servings,
+      fatGrams:     (_bn.fatGrams      || 0) / recipe.servings
     };
 
     var adaptedNutrition = {
@@ -29915,13 +29917,14 @@
       var disp = convertToDisplay(ing.qty, ing.unit, ing.name);
       return disp.qty + (disp.unit === 'pce' ? ' pce ' : ' ' + disp.unit + ' ') + ing.name;
     }).join(', ');
+    var _rbn = recipe.baseNutrition || {};
     return {
       n:           recipe.name,
       f:           recipe.origin || recipe.emoji || flagMap[recipe.category] || '🌍',
-      k:           Math.round(recipe.baseNutrition.calories    / perServing),
-      p:           Math.round(recipe.baseNutrition.proteinGrams / perServing),
-      g:           Math.round(recipe.baseNutrition.carbsGrams   / perServing),
-      l:           Math.round(recipe.baseNutrition.fatGrams     / perServing),
+      k:           Math.round((_rbn.calories     || 0) / perServing),
+      p:           Math.round((_rbn.proteinGrams  || 0) / perServing),
+      g:           Math.round((_rbn.carbsGrams    || 0) / perServing),
+      l:           Math.round((_rbn.fatGrams      || 0) / perServing),
       i:           ingrStr,
       ingredients: perServIngr,  // array structuré pour affichage modal fiable
       st:          recipe.steps || [],
