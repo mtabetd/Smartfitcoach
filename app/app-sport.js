@@ -3916,6 +3916,13 @@ function renderMusculationProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
 
+ // Bouton générateur de programme personnalisé via IA
+ var muscuGenBtn = h('button', {
+   onclick: function() { if (window.openMuscuProgramGenerator) window.openMuscuProgramGenerator(); },
+   style: 'margin:16px 0;padding:14px 24px;background:var(--accent,#1A4A1A);color:#fff;border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;width:100%;'
+ }, '\u26A1 G\u00e9n\u00e9rer mon programme 100% personnalis\u00e9');
+ p.appendChild(muscuGenBtn);
+
  appendWellnessBanner(p);
 
  // CS-01: Bannière charges estimées si profil de force non renseigné
