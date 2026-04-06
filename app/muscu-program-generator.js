@@ -92,11 +92,11 @@
     var remaining = getGenerationsRemaining();
     if (remaining >= 2) {
       return '<p id="muscu-prog-counter" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;text-align:center;color:var(--accent,#1A4A1A);margin:0 auto 16px auto;">' +
-        '\u26a1 ' + remaining + ' g\u00e9n\u00e9ration' + (remaining > 1 ? 's' : '') + ' restante' + (remaining > 1 ? 's' : '') + ' cette semaine' +
+        remaining + ' g\u00e9n\u00e9ration' + (remaining > 1 ? 's' : '') + ' restante' + (remaining > 1 ? 's' : '') + ' cette semaine' +
       '</p>';
     } else if (remaining === 1) {
-      return '<p id="muscu-prog-counter" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;text-align:center;color:#B85C00;margin:0 auto 16px auto;">' +
-        '\u26a1 1 g\u00e9n\u00e9ration restante cette semaine' +
+      return '<p id="muscu-prog-counter" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;text-align:center;color:var(--orange,#B85C00);margin:0 auto 16px auto;">' +
+        '1 g\u00e9n\u00e9ration restante cette semaine' +
       '</p>';
     } else {
       var nextDate = getNextMondayMidnight();
@@ -396,7 +396,7 @@
     }
     _modalEl.innerHTML = '<div class="muscu-modal-inner" style="max-width:780px;margin:20px auto;background:var(--ivory,#FAF9F6);border-radius:2px;padding:24px;font-family:Georgia,serif;">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid var(--border,#E5E5E0);padding-bottom:12px;">' +
-        '<h2 style="margin:0;font-size:18px;letter-spacing:2px;text-transform:uppercase;">Programme Musculation</h2>' +
+        '<h2 style="margin:0;font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:2px;text-transform:uppercase;">Programme Musculation</h2>' +
         '<button id="muscu-prog-close" aria-label="Fermer" style="background:transparent;border:none;font-size:24px;cursor:pointer;color:var(--grey,#6B6B65);">×</button>' +
       '</div>' +
       '<div id="muscu-prog-content" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--black,#0A0A09);"></div>' +
@@ -444,10 +444,10 @@
     var counterHTML = buildGenerationCounterHTML();
     var btnDisabled = remaining === 0;
     var btnStyle = btnDisabled
-      ? 'background:var(--grey3,#9A9A90);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:not-allowed;border-radius:2px;font-family:Georgia,serif;opacity:0.6;'
-      : 'background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;';
+      ? 'background:var(--grey,#7A7A72);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:not-allowed;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;opacity:0.6;'
+      : 'background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;';
     content.innerHTML = '<div style="text-align:center;padding:40px 24px;">' +
-      '<div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:Georgia,serif;">UN PROGRAMME. LE TIEN. PERSONNE D\u2019AUTRE.</div>' +
+      '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">UN PROGRAMME. LE TIEN. PERSONNE D\u2019AUTRE.</div>' +
       '<h3 style="font-family:Georgia,serif;font-size:24px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 20px 0;">Ton programme t\u2019attend.</h3>' +
       '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--grey,#6B6B65);margin:0 auto 24px auto;max-width:520px;">Nous allons croiser tes 1RM, tes disponibilités, ton équipement et ton historique pour construire douze semaines qui n\u2019existent que pour toi. Aucune ligne ne sera générique. Aucune charge ne sera approximative.</p>' +
       '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-bottom:20px;">Génération limitée à 3 fois par semaine. Compte 30 à 60 secondes.</p>' +
@@ -469,7 +469,7 @@
     _generating = true;
     var content = document.getElementById('muscu-prog-content');
     content.innerHTML = '<div style="text-align:center;padding:48px 24px;">' +
-      '<div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:Georgia,serif;">GÉNÉRATION EN COURS</div>' +
+      '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">G\u00c9N\u00c9RATION EN COURS</div>' +
       '<div style="display:inline-block;width:40px;height:40px;border:2px solid var(--border,#E5E5E0);border-top-color:var(--accent,#1A4A1A);border-radius:50%;animation:spin 1s linear infinite;"></div>' +
       '<p id="muscu-prog-loading-text" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;line-height:1.7;color:var(--grey,#6B6B65);margin:24px auto 0 auto;max-width:480px;min-height:34px;transition:opacity 0.4s ease;">' + LOADING_PHRASES[0] + '</p>' +
       '<style>@keyframes spin{to{transform:rotate(360deg)}}</style>' +
@@ -526,14 +526,14 @@
         '</div>' +
         programBodyHTML +
         '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--border,#E5E5E0);padding-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
-          '<button id="muscu-prog-print" style="background:transparent;border:1px solid var(--accent,#1A4A1A);color:var(--accent,#1A4A1A);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;">Imprimer / PDF</button>' +
-          '<button id="muscu-prog-share" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:Georgia,serif;">\u2934 Partager</button>' +
+          '<button id="muscu-prog-print" style="background:transparent;border:1px solid var(--accent,#1A4A1A);color:var(--accent,#1A4A1A);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Imprimer / PDF</button>' +
+          '<button id="muscu-prog-share" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:14px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">\u2934 Partager</button>' +
         '</div>' +
         '<div style="margin-top:20px;text-align:center;">' +
-          '<p style="font-family:Georgia,serif;font-style:italic;font-size:11px;color:var(--grey3,#9A9A90);margin:0;letter-spacing:0.3px;">' + escapeHTML(footerQuote) + '</p>' +
+          '<p style="font-family:Georgia,serif;font-style:italic;font-size:11px;color:var(--grey,#7A7A72);margin:0;letter-spacing:0.3px;">' + escapeHTML(footerQuote) + '</p>' +
         '</div>' +
         '<div style="margin-top:10px;text-align:center;">' +
-          '<a href="https://instagram.com/smart.fitcoach" target="_blank" rel="noopener noreferrer" style="font-family:Georgia,serif;font-style:italic;font-size:10px;color:var(--grey3,#9A9A90);text-decoration:none;letter-spacing:1px;">@smart.fitcoach</a>' +
+          '<a href="https://instagram.com/smart.fitcoach" target="_blank" rel="noopener noreferrer" style="font-family:Georgia,serif;font-style:italic;font-size:10px;color:var(--grey,#7A7A72);text-decoration:none;letter-spacing:1px;">@smart.fitcoach</a>' +
         '</div>';
 
       // Attache le listener du bouton Imprimer (pas d'inline onclick pour CSP)
@@ -560,7 +560,7 @@
       console.error('[muscu-prog] generation error:', err);
       content.innerHTML = '<div style="text-align:center;padding:40px;">' +
         '<div style="font-size:14px;color:var(--red,#5A1010);margin-bottom:16px;">\u26a0 ' + escapeHTML(err.message || 'Erreur de génération') + '</div>' +
-        '<button id="muscu-prog-retry" style="background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;">Réessayer</button>' +
+        '<button id="muscu-prog-retry" style="background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Réessayer</button>' +
       '</div>';
       var retryBtn = document.getElementById('muscu-prog-retry');
       if (retryBtn) { retryBtn.addEventListener('click', function() { window.openMuscuProgramGenerator(); }); }
