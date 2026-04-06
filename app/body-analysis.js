@@ -717,4 +717,13 @@ if (document.readyState === 'loading') {
 
 window.BODY_ANALYSIS = { open: openPanel, close: closePanel };
 
+// WCAG 2.1 — Escape key closes the body-analysis modal
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Escape') return;
+  var panel = document.getElementById('ba-panel');
+  if (panel && panel.classList.contains('open')) {
+    closePanel();
+  }
+});
+
 })();

@@ -1238,7 +1238,21 @@ body {
 .dash-action:focus,
 .dash-nav:focus,
 .modal-close:focus {
-  outline: 2px solid var(--black);
+  outline: 2px solid var(--accent, #1A4A1A);
+  outline-offset: 2px;
+}
+
+/* WCAG 2.1 AA — Visible focus indicator (focus-visible) */
+*:focus-visible {
+  outline: 2px solid var(--accent, #1A4A1A);
+  outline-offset: 2px;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent, #1A4A1A);
   outline-offset: 2px;
 }
 
