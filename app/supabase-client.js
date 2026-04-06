@@ -129,14 +129,39 @@
           }
         }
 
+        // ── Sync ALL localStorage history keys for this user ──
+        // perf-history, badges, streaks, food journal, CF 1RM are stored in
+        // dedicated localStorage keys (NOT in window.S) → must be backed up
+        // separately to avoid losing user history on a new device.
+        try {
+          var legacy = {};
+          var uidSuffix = '_' + userId;
+          var SYNC_PREFIXES = ['mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_', 'mtd_food_journal_', 'mtd_cf_1rm_'];
+          for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            if (!key) continue;
+            var matches = false;
+            for (var p = 0; p < SYNC_PREFIXES.length; p++) {
+              if (key.indexOf(SYNC_PREFIXES[p]) === 0 && key.indexOf(uidSuffix) !== -1) {
+                matches = true;
+                break;
+              }
+            }
+            if (matches) {
+              try { legacy[key] = localStorage.getItem(key); } catch(e) {}
+            }
+          }
+          if (Object.keys(legacy).length > 0) data._legacy_storage = legacy;
+        } catch(e) { console.warn('[SupaSync] legacy storage scan failed:', e); }
+
+        // Note: birth_date and email_optin removed from dedicated columns
+        // (not in schema) — already preserved inside the `data` JSONB field below.
         return client
           .from('profiles')
           .upsert({
             id: userId,
             email: session.user.email,
             name: data.name || session.user.user_metadata.name || '',
-            birth_date: data.birthDate || null,
-            email_optin: (data.emailOptin !== undefined) ? data.emailOptin : true,
             data: data,
             updated_at: new Date().toISOString()
           }, { onConflict: 'id' })
@@ -374,11 +399,26 @@
         if (!hasValidLocalData && cloudData.goal != null) {
           console.log('[SupaSync] Loading profile from cloud (no valid local data for user)');
           // Prototype pollution guard: skip __proto__, constructor, prototype keys
-          var _PROTO_BLOCKED = ['__proto__', 'constructor', 'prototype'];
+          var _PROTO_BLOCKED = ['__proto__', 'constructor', 'prototype', '_legacy_storage'];
           for (var k in cloudData) {
             if (cloudData.hasOwnProperty(k) && _PROTO_BLOCKED.indexOf(k) === -1) {
               window.S[k] = cloudData[k];
             }
+          }
+          // ── Restore localStorage history keys (perf-history, badges, streaks, food journal) ──
+          if (cloudData._legacy_storage && typeof cloudData._legacy_storage === 'object') {
+            try {
+              var restored = 0;
+              for (var lk in cloudData._legacy_storage) {
+                if (!cloudData._legacy_storage.hasOwnProperty(lk)) continue;
+                if (lk.indexOf('mtd_') !== 0) continue; // safety: only restore mtd_ keys
+                try {
+                  localStorage.setItem(lk, cloudData._legacy_storage[lk]);
+                  restored++;
+                } catch(e) {}
+              }
+              console.log('[SupaSync] Restored ' + restored + ' history keys from cloud');
+            } catch(e) { console.warn('[SupaSync] legacy storage restore failed:', e); }
           }
           // Restore language & units before render so UI shows correct locale
           if (window.I18N && window.S.lang) window.I18N.current = window.S.lang;
@@ -388,6 +428,20 @@
           }
           if (window.render) window.render();
           return 'loaded_from_cloud';
+        }
+        // ── Even if local data exists, merge missing history keys from cloud ──
+        // (e.g. user has a partial profile locally but the cloud has fresher history)
+        if (cloudData._legacy_storage && typeof cloudData._legacy_storage === 'object') {
+          try {
+            for (var lk2 in cloudData._legacy_storage) {
+              if (!cloudData._legacy_storage.hasOwnProperty(lk2)) continue;
+              if (lk2.indexOf('mtd_') !== 0) continue;
+              // Only restore if local key doesn't exist (don't overwrite local history)
+              if (localStorage.getItem(lk2) == null) {
+                try { localStorage.setItem(lk2, cloudData._legacy_storage[lk2]); } catch(e) {}
+              }
+            }
+          } catch(e) {}
         }
         return 'local_data_exists';
       }).catch(function(e) {

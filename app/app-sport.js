@@ -3476,6 +3476,29 @@ function stopRestTimer() {
 window.startRestTimer = startRestTimer;
 window.stopRestTimer = stopRestTimer;
 
+// Attach rest timer button listeners (CSP-compliant : pas d'inline onclick)
+function _attachRestTimerButtons() {
+  var preset = document.querySelectorAll('[data-rest-seconds]');
+  preset.forEach(function(btn) {
+    if (btn._rtBound) return;
+    btn._rtBound = true;
+    btn.addEventListener('click', function() {
+      var s = parseInt(btn.getAttribute('data-rest-seconds'), 10);
+      if (s > 0) startRestTimer(s);
+    });
+  });
+  var stopBtn = document.getElementById('rest-timer-stop');
+  if (stopBtn && !stopBtn._rtBound) {
+    stopBtn._rtBound = true;
+    stopBtn.addEventListener('click', stopRestTimer);
+  }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', _attachRestTimerButtons);
+} else {
+  _attachRestTimerButtons();
+}
+
 // Utilitaire : parse rest time string ("2min", "1min30", "90s", "45s") → secondes
 function parseRestTime(restStr) {
  if (!restStr) return 90; // défaut 90s
