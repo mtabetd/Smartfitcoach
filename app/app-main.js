@@ -273,14 +273,6 @@ function render() {
    }, _curLang === 'fr' ? 'FR·EN' : 'EN·FR'));
    ubRight.appendChild(_langWrap);
  })();
- // Coach IA button
- (function() {
-   var _coachBtn = h('button', {
-     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;cursor:pointer;color:var(--green);background:none;border:1px solid var(--green);border-radius:2px;padding:4px 8px',
-     onclick: function() { if (window.AI_COACH) window.AI_COACH.toggle(); }
-   }, '◆ SMART FIT COACH');
-   ubRight.appendChild(_coachBtn);
- })();
  // Avatar (clickable → profil step 1)
  (function() {
    var _avatarBtn = h('button', {
