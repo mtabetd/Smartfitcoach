@@ -642,7 +642,20 @@ function renderSportQuickProfile(p) {
     wrap.appendChild(sexRow);
 
   } else {
-    // ── Étape B : âge + poids ──
+    // ── Étape B : prénom + âge + poids ──
+    // Prénom (optionnel)
+    var prenomWrap = h('div', {style: 'margin-bottom:16px'});
+    prenomWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, 'Votre prénom (optionnel)'));
+    var prenomInput = h('input', {
+      type: 'text',
+      value: S.prenom || '',
+      placeholder: 'Sophie',
+      style: 'width:100%;height:48px;border:1px solid var(--border,#E8E6DF);background:var(--ivory,#FAF9F6);font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);padding:0 16px;box-sizing:border-box;border-radius:2px;outline:none;-webkit-appearance:none;',
+      oninput: function(e) { S.prenom = e.target.value.trim(); }
+    });
+    prenomWrap.appendChild(prenomInput);
+    wrap.appendChild(prenomWrap);
+
     wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, 'Votre \u00e2ge'));
     var ageInput = h('input', {
       type: 'number', min: '13', max: '99', inputmode: 'numeric',
