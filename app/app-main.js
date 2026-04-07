@@ -223,34 +223,24 @@ window.renderModuleChoice = function renderModuleChoice(content) {
  var c = h('div', {style: 'max-width:420px;margin:0 auto;padding:48px 20px 32px'});
 
  // Header — staggered entrance animation
- var eyebrowEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;text-align:center;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease'}, 'SMARTFITCOACH');
- var dividerEl = h('div', {style: 'width:36px;height:1px;background:var(--black,#1A1A18);margin:0 auto 24px;opacity:0;transition:opacity .4s ease .08s'});
- var titleEl = h('div', {style: 'font-family:Georgia,serif;font-style:italic;font-size:24px;font-weight:normal;line-height:1.35;margin-bottom:10px;color:var(--black,#1A1A18);opacity:0;transform:translateY(8px);transition:opacity .4s ease .08s,transform .4s ease .08s'}, 'Quel est votre\nobjectif\u00a0?');
- titleEl.style.whiteSpace = 'pre-line';
- var subtitleEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:32px;opacity:0;transform:translateY(6px);transition:opacity .35s ease .14s,transform .35s ease .14s'}, 'Personnalisez votre exp\u00e9rience selon vos besoins.');
+ var eyebrowEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:20px;text-align:center;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease'}, 'VOTRE PROGRAMME');
+ var titleEl = h('div', {style: 'font-family:Georgia,serif;font-size:clamp(26px,7vw,34px);font-weight:normal;line-height:1.15;letter-spacing:-.01em;margin:0 0 12px;color:var(--black,#1A1A18);text-align:center;opacity:0;transform:translateY(8px);transition:opacity .4s ease .08s,transform .4s ease .08s'}, 'Par o\u00f9 commencer\u00a0?');
+ var subtitleEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--grey,#6B6B65);line-height:1.6;letter-spacing:.01em;margin:0 auto 36px;max-width:300px;text-align:center;opacity:0;transform:translateY(6px);transition:opacity .35s ease .14s,transform .35s ease .14s'}, 'Choisissez votre axe de travail.\u00a0Vous pourrez ajuster \u00e0 tout moment.');
  c.appendChild(eyebrowEl);
- c.appendChild(dividerEl);
  c.appendChild(titleEl);
  c.appendChild(subtitleEl);
 
- // Cards data — "both" shown first as recommended
+ // SVG icons per card
+ var _svgNutrition = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A18" stroke-width="1.5" stroke-linecap="round"><path d="M12 21C12 21 4 14 4 8.5C4 5.46 6.69 3 10 3C11.12 3 12 3.45 12 3.45C12 3.45 12.88 3 14 3C17.31 3 20 5.46 20 8.5C20 14 12 21 12 21Z"/><line x1="12" y1="8" x2="12" y2="14"/></svg>';
+ var _svgSport = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A18" stroke-width="1.5" stroke-linecap="round"><line x1="6" y1="12" x2="18" y2="12"/><rect x="2" y="10" width="4" height="4" rx="1"/><rect x="18" y="10" width="4" height="4" rx="1"/></svg>';
+ var _svgBoth = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A18" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>';
+
+ // Cards data — nutrition first, sport second, both third (recommended)
  var cardsData = [
    {
-     title: 'Nutrition & Sport',
-     desc: 'Programme alimentaire + entra\u00eenement complets',
-     badge: 'Recommand\u00e9',
-     delay: '.2s',
-     onclick: function() {
-       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 0;
-       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
-       window.render();
-     }
-   },
-   {
      title: 'Nutrition',
-     desc: 'Programme alimentaire personnalis\u00e9',
-     badge: null,
-     delay: '.26s',
+     desc: 'Suivi alimentaire, objectifs caloriques et qualit\u00e9 nutritionnelle.',
+     badge: null, svg: _svgNutrition, delay: '.2s',
      onclick: function() {
        S.appMode = 'nutrition'; S.view = 'nutrition'; S.nStep = 0;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
@@ -258,56 +248,72 @@ window.renderModuleChoice = function renderModuleChoice(content) {
      }
    },
    {
-     title: 'Sport',
-     desc: "Programme d'entra\u00eenement personnalis\u00e9",
-     badge: null,
-     delay: '.32s',
+     title: 'Entra\u00eenement',
+     desc: 'Programmes adapt\u00e9s, charge hebdomadaire et progression.',
+     badge: null, svg: _svgSport, delay: '.26s',
      onclick: function() {
        S.appMode = 'sport'; S.view = 'sport'; S.sStep = 0;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       window.render();
+     }
+   },
+   {
+     title: 'Nutrition & Entra\u00eenement',
+     desc: 'L\u2019approche compl\u00e8te pour des r\u00e9sultats durables.',
+     badge: 'RECOMMAND\u00c9', svg: _svgBoth, delay: '.32s',
+     onclick: function() {
+       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 0;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
      }
    }
  ];
 
+ var cardsWrap = h('div', {style: 'display:flex;flex-direction:column;gap:10px;width:100%'});
+
  cardsData.forEach(function(card) {
    var el = h('div', {
-     style: 'border:1px solid var(--border,#E8E6DF);padding:20px;margin-bottom:10px;cursor:pointer;background:var(--ivory2,#F5F4EF);border-radius:2px;transition:border-color .18s ease,background .18s ease;min-height:72px;display:flex;align-items:center;justify-content:space-between;opacity:0;transform:translateY(10px);',
+     style: 'position:relative;display:flex;align-items:flex-start;gap:16px;padding:20px;cursor:pointer;background:var(--ivory2,#F5F4EF);border:1px solid var(--border,#E8E6DF);border-radius:2px;min-height:44px;user-select:none;-webkit-tap-highlight-color:transparent;opacity:0;transform:translateY(10px);',
      onclick: card.onclick
    });
-   el.style.transition = 'border-color .18s ease,background .18s ease,opacity .35s ease ' + card.delay + ',transform .35s ease ' + card.delay;
-   el.addEventListener('mouseenter', function() { el.style.borderColor = 'var(--black,#1A1A18)'; el.style.background = 'var(--ivory,#FAF9F6)'; });
-   el.addEventListener('mouseleave', function() { el.style.borderColor = 'var(--border,#E8E6DF)'; el.style.background = 'var(--ivory2,#F5F4EF)'; });
-   el.addEventListener('touchstart', function() { el.style.background = 'var(--ivory,#FAF9F6)'; }, {passive: true});
+   el.style.transition = 'border-color .18s ease,background-color .18s ease,opacity .35s ease ' + card.delay + ',transform .35s ease ' + card.delay;
+   el.addEventListener('mouseenter', function() { el.style.borderColor = 'var(--black,#1A1A18)'; el.style.backgroundColor = 'var(--ivory,#FAF9F6)'; });
+   el.addEventListener('mouseleave', function() { el.style.borderColor = 'var(--border,#E8E6DF)'; el.style.backgroundColor = 'var(--ivory2,#F5F4EF)'; });
+   el.addEventListener('touchstart', function() { el.style.backgroundColor = '#F5F4EF'; }, {passive: true});
 
-   var left = h('div', {});
-   left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;color:var(--black,#1A1A18);margin-bottom:4px'}, card.title));
-   left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, card.desc));
+   // SVG icon
+   var iconWrap = h('div', {style: 'flex-shrink:0;margin-top:2px'});
+   iconWrap.innerHTML = card.svg;
+   el.appendChild(iconWrap);
+
+   // Text
+   var left = h('div', {style: 'display:flex;flex-direction:column;gap:4px;flex:1'});
+   left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);letter-spacing:.01em;line-height:1.2'}, card.title));
+   left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);line-height:1.55;letter-spacing:.01em'}, card.desc));
    el.appendChild(left);
 
+   // Badge RECOMMANDÉ — absolute top-right
    if (card.badge) {
-     var badge = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--black,#1A1A18);border:1px solid var(--black,#1A1A18);padding:3px 7px;white-space:nowrap;margin-left:12px;flex-shrink:0'}, card.badge);
-     el.appendChild(badge);
-   } else {
-     el.appendChild(h('div', {style: 'color:var(--grey,#6B6B65);font-size:16px;margin-left:12px;flex-shrink:0'}, '\u203a'));
+     el.appendChild(h('div', {style: 'position:absolute;top:-1px;right:-1px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:#FAF9F6;background:var(--black,#1A1A18);padding:4px 8px;border-radius:0 2px 0 2px'}, card.badge));
    }
 
-   c.appendChild(el);
+   cardsWrap.appendChild(el);
  });
+ c.appendChild(cardsWrap);
 
  // Footer note
- c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-align:center;margin-top:20px;opacity:.7'}, 'Vous pourrez modifier ce choix plus tard.'));
+ c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-align:center;margin-top:24px;letter-spacing:.04em;opacity:.7'}, 'Vos donn\u00e9es restent sur votre appareil.'));
 
  content.appendChild(c);
 
  // Trigger entrance animations after paint
  requestAnimationFrame(function() {
    requestAnimationFrame(function() {
-     [eyebrowEl, dividerEl, titleEl, subtitleEl].forEach(function(el) {
+     [eyebrowEl, titleEl, subtitleEl].forEach(function(el) {
        el.style.opacity = '1';
        el.style.transform = 'translateY(0)';
      });
-     c.querySelectorAll('[style*="opacity:0"]').forEach(function(el) {
+     cardsWrap.querySelectorAll('[style*="opacity:0"]').forEach(function(el) {
        el.style.opacity = '1';
        el.style.transform = 'translateY(0)';
      });
