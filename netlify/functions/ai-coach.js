@@ -6,7 +6,7 @@ const MODEL = 'claude-haiku-4-5-20251001';
 const MAX_TOKENS = 400; // Réduit : réponses courtes suffisent pour un coach
 
 // Domaines autorisés pour CORS
-var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr')
+var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
   .split(',').map(function(o){ return o.trim(); });
 // Ajouter localhost UNIQUEMENT en dev
 if (process.env.NODE_ENV !== 'production' && process.env.NETLIFY_DEV === 'true') {
@@ -318,7 +318,11 @@ exports.handler = async function(event, context) {
       return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Erreur du service IA. Veuillez réessayer.' }) };
     }
 
-    var replyText = response.body.content && response.body.content[0] && response.body.content[0].text || '';
+    var replyText = (response.body.content && response.body.content[0] && response.body.content[0].text) || '';
+    if (!replyText || replyText.trim().length === 0) {
+      console.error('[ai-coach] Réponse IA vide reçue');
+      return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Réponse IA vide. Veuillez réessayer.' }) };
+    }
     return { statusCode: 200, headers: headers, body: JSON.stringify({ reply: replyText }) };
 
   } catch(err) {

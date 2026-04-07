@@ -87,6 +87,63 @@ function getStreakValue() {
   } catch(e) { return 0; }
 }
 
+// ─── BADGE ICON MAP (emoji overrides for richer display) ───
+var BADGE_EMOJI = {
+  // Onboarding
+  'first_login':      { emoji: '⭐', label: 'Premier Pas',        desc: 'Première connexion' },
+  'profile_complete': { emoji: '✅', label: 'Profil Complet',     desc: 'Toutes les infos renseignées' },
+  'first_plan':       { emoji: '📋', label: 'Planificateur',      desc: 'Premier planning généré' },
+  // Streak
+  'streak_3':         { emoji: '🔥', label: '3 jours d\'affilée', desc: 'Connecté 3 jours de suite' },
+  'streak_7':         { emoji: '🔥', label: 'Semaine Parfaite',   desc: '7 jours consécutifs' },
+  'streak_14':        { emoji: '🔥', label: 'Deux Semaines',      desc: '14 jours consécutifs' },
+  'streak_30':        { emoji: '🏆', label: 'Mois Complet',       desc: '30 jours consécutifs' },
+  'streak_90':        { emoji: '🏆', label: 'Transformation',     desc: '90 jours consécutifs' },
+  // Weight tracking
+  'first_weigh':      { emoji: '⚖️', label: 'Suivi Lancé',        desc: 'Premier poids enregistré' },
+  'weight_10':        { emoji: '⚖️', label: 'Régulier',           desc: '10 pesées enregistrées' },
+  'weight_goal':      { emoji: '🎯', label: 'Objectif Atteint',   desc: 'Poids objectif atteint !' },
+  'first_kg_lost':    { emoji: '📉', label: 'Premier Kilo',       desc: 'Premier kg perdu' },
+  'five_kg':          { emoji: '📉', label: '-5 kg',              desc: '5 kg perdus' },
+  // Exploration
+  'recipes_10':       { emoji: '🍽️', label: 'Curieux',            desc: '10 recettes consultées' },
+  'recipes_50':       { emoji: '🍽️', label: 'Gastronome',         desc: '50 recettes consultées' },
+  'swap_master':      { emoji: '🔄', label: 'Swap Master',        desc: '20 repas échangés' },
+  'all_cuisines':     { emoji: '🌍', label: 'Tour du Monde',      desc: 'Toutes les cuisines goûtées' },
+  // Sport
+  'first_workout':    { emoji: '💪', label: 'Sportif',            desc: 'Premier programme sport' },
+  'exercises_20':     { emoji: '💪', label: 'Athlète',            desc: '20 exercices consultés' },
+  // Calisthenics
+  'calisth_first_session': { emoji: '🤸', label: 'Callisthéniste',      desc: 'Premier programme callisthénie' },
+  'calisth_week_4':        { emoji: '🤸', label: 'Mois Callisthénie',   desc: '4 semaines complétées' },
+  'calisth_week_12':       { emoji: '🤸', label: 'Trimestriel Calisth.', desc: '12 semaines complétées' },
+  'calisth_first_pullup':  { emoji: '🏅', label: 'Première Traction',   desc: 'Première traction stricte' },
+  'calisth_muscle_up':     { emoji: '🏅', label: 'Muscle-Up',           desc: 'Muscle-up strict maîtrisé' },
+  // Muscu
+  'bench_100':    { emoji: '🏋️', label: 'Centenaire',     desc: 'Développé couché : 100 kg' },
+  'bench_120':    { emoji: '🏋️', label: 'Power Chest',    desc: 'Développé couché : 120 kg' },
+  'squat_100':    { emoji: '🏋️', label: 'Squatteur',      desc: 'Squat : 100 kg' },
+  'squat_140':    { emoji: '🏋️', label: 'Jambes de Fer',  desc: 'Squat : 140 kg' },
+  'deadlift_100': { emoji: '🏋️', label: 'Terrasseur',     desc: 'Soulevé de terre : 100 kg' },
+  'deadlift_160': { emoji: '🏋️', label: 'Force Brute',    desc: 'Soulevé de terre : 160 kg' },
+  'overhead_70':  { emoji: '🏋️', label: 'Bras au Ciel',   desc: 'Développé militaire : 70 kg' },
+  'total_300':    { emoji: '🥇', label: 'Powerlifter',    desc: 'Total bench+squat+dl ≥ 300 kg' },
+  'total_400':    { emoji: '🥇', label: 'Elite Force',    desc: 'Total bench+squat+dl ≥ 400 kg' },
+  'muscu_sessions_10': { emoji: '💪', label: 'Régularité Fer', desc: '10 séances muscu' },
+  'muscu_sessions_50': { emoji: '💪', label: 'Dédicace',       desc: '50 séances muscu' },
+  'first_pr':          { emoji: '🎖️', label: 'Premier PR',     desc: 'Premier record personnel' },
+  // Photos
+  'first_photo':  { emoji: '📸', label: 'Selfie',           desc: 'Première photo de progression' },
+  'both_photos':  { emoji: '📸', label: 'Analyse Complète', desc: 'Photos face + dos' },
+  // Hyrox
+  'hyrox_first_program': { emoji: '🏃', label: 'Hyrox Starter',  desc: 'Premier programme Hyrox' },
+  'hyrox_week_4':        { emoji: '🏃', label: 'Mois Hyrox',     desc: '4 semaines de préparation' },
+  'hyrox_week_12':       { emoji: '🏃', label: 'Prépa Complète', desc: '12 semaines terminées' },
+  'hyrox_sub90':         { emoji: '⏱️', label: 'Sub 1h30',       desc: 'Objectif sub 1h30 atteint' },
+  'hyrox_sub60':         { emoji: '⏱️', label: 'Sub 1h00',       desc: 'Objectif sub 1h00 atteint' },
+  'hyrox_pro':           { emoji: '⭐', label: 'Élite Hyrox',    desc: 'Programme niveau Pro/Élite' }
+};
+
 // ─── GET LAST BADGE ───
 function getLastBadge() {
   try {
@@ -98,14 +155,32 @@ function getLastBadge() {
     var badges = JSON.parse(raw);
     if (!Array.isArray(badges) || badges.length === 0) return null;
     var last = badges[badges.length - 1];
-    // Resolve badge ID to full definition (name + icon) from GAMIFICATION
-    var badgeId = typeof last === 'string' ? last : (last && last.id);
-    if (badgeId && window.GAMIFICATION && Array.isArray(window.GAMIFICATION.BADGES)) {
-      var def = window.GAMIFICATION.BADGES.find(function(b) { return b && b.id === badgeId; });
-      if (def) return { id: def.id, name: def.name, icon: def.icon, desc: def.desc };
+
+    // Resolve badge ID — stored entries can be plain strings OR objects {id, unlockedAt}
+    var badgeId = typeof last === 'string' ? last : (last && last.id ? last.id : null);
+    if (!badgeId) return null;
+
+    // 1. Try local BADGE_EMOJI map (always available, most reliable)
+    if (BADGE_EMOJI[badgeId]) {
+      var em = BADGE_EMOJI[badgeId];
+      return { id: badgeId, name: em.label, icon: em.emoji, desc: em.desc };
     }
-    if (badgeId) return { id: badgeId, name: badgeId, icon: '◆' };
-    return last;
+
+    // 2. Try window.GAMIFICATION.BADGE_DEFS (array keyed by .id)
+    if (window.GAMIFICATION) {
+      var defs = window.GAMIFICATION.BADGE_DEFS || window.GAMIFICATION.BADGES;
+      if (Array.isArray(defs)) {
+        var def = defs.find(function(b) { return b && b.id === badgeId; });
+        if (def) return { id: def.id, name: def.name, icon: def.icon, desc: def.desc };
+      } else if (defs && typeof defs === 'object') {
+        // Object keyed by id
+        var defObj = defs[badgeId];
+        if (defObj) return { id: badgeId, name: defObj.name, icon: defObj.icon, desc: defObj.desc };
+      }
+    }
+
+    // 3. Fallback: return readable id
+    return { id: badgeId, name: badgeId, icon: '◆', desc: '' };
   } catch(e) { return null; }
 }
 
@@ -237,30 +312,119 @@ function renderCardStreak() {
 
   var c = card();
   c.appendChild(eyebrow('PROGRESSION'));
-  c.appendChild(cardTitle('Motivation'));
 
+  // ── Streak block ──
   if (streak > 0) {
-    var streakEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;margin-bottom:8px;' });
-    streakEl.textContent = 'Streak\u00a0: ' + streak + ' jour' + (streak > 1 ? 's' : '');
-    c.appendChild(streakEl);
+    var streakWrap = h('div', {
+      style: 'display:flex;align-items:center;gap:12px;margin-bottom:' + (lastBadge ? '16px' : '0') + ';'
+    });
+
+    // Flame emoji
+    var flameEl = h('div', {
+      style: 'font-size:28px;line-height:1;flex-shrink:0;'
+    });
+    flameEl.textContent = streak >= 7 ? '🏆' : '🔥';
+
+    // Streak info
+    var streakInfo = h('div', { style: 'flex:1;' });
+
+    var streakNum = h('div', {
+      style: 'font-family:Georgia,serif;font-size:26px;font-weight:normal;line-height:1;letter-spacing:-0.5px;color:var(--black);'
+    });
+    streakNum.textContent = streak + ' jour' + (streak > 1 ? 's' : '');
+
+    var streakLabel = h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:2px;'
+    });
+    streakLabel.textContent = 'consécutif' + (streak > 1 ? 's' : '');
+
+    streakInfo.appendChild(streakNum);
+    streakInfo.appendChild(streakLabel);
+
+    streakWrap.appendChild(flameEl);
+    streakWrap.appendChild(streakInfo);
+    c.appendChild(streakWrap);
   }
 
+  // ── Last badge block ──
   if (lastBadge) {
-    var badgeIcon = lastBadge.icon || '◆';
+    var badgeIcon = lastBadge.icon || '⭐';
     var badgeName = lastBadge.name || lastBadge.id || 'Badge';
     var badgeDesc = lastBadge.desc || '';
-    var badgeEl = h('div', { style: 'display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);background:var(--ivory);' });
-    var iconEl = h('div', { style: 'font-size:18px;flex-shrink:0;color:var(--accent);' });
-    iconEl.textContent = badgeIcon;
-    var textEl = h('div', {});
-    var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black);font-weight:500;' });
+
+    // Section label
+    var badgeEyebrow = h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'
+    });
+    badgeEyebrow.textContent = 'DERNIER BADGE';
+    c.appendChild(badgeEyebrow);
+
+    // Badge card — accent-tinted background, left accent border
+    var badgeEl = h('div', {
+      style: [
+        'display:flex;',
+        'align-items:center;',
+        'gap:14px;',
+        'padding:12px 14px;',
+        'border:1px solid rgba(26,74,26,0.18);',
+        'border-left:3px solid var(--accent);',
+        'background:rgba(26,74,26,0.04);',
+        'border-radius:2px;'
+      ].join('')
+    });
+
+    // Emoji icon in a small circle
+    var iconWrap = h('div', {
+      style: [
+        'width:38px;height:38px;',
+        'flex-shrink:0;',
+        'display:flex;align-items:center;justify-content:center;',
+        'background:rgba(26,74,26,0.09);',
+        'border-radius:2px;',
+        'font-size:20px;',
+        'line-height:1;'
+      ].join('')
+    });
+    iconWrap.textContent = badgeIcon;
+
+    // Text block
+    var textEl = h('div', { style: 'flex:1;min-width:0;' });
+
+    var nameEl = h('div', {
+      style: 'font-family:Georgia,serif;font-size:15px;font-weight:normal;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'
+    });
     nameEl.textContent = badgeName;
-    var descEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px;' });
-    descEl.textContent = badgeDesc;
+
     textEl.appendChild(nameEl);
-    if (badgeDesc) textEl.appendChild(descEl);
-    badgeEl.appendChild(iconEl);
+
+    if (badgeDesc) {
+      var descEl = h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:3px;'
+      });
+      descEl.textContent = badgeDesc;
+      textEl.appendChild(descEl);
+    }
+
+    // Small "débloqué" pill tag
+    var tagEl = h('div', {
+      style: [
+        'flex-shrink:0;',
+        'font-family:"Helvetica Neue",Arial,sans-serif;',
+        'font-size:8px;',
+        'letter-spacing:2px;',
+        'text-transform:uppercase;',
+        'color:var(--accent);',
+        'border:1px solid rgba(26,74,26,0.3);',
+        'padding:3px 6px;',
+        'border-radius:2px;',
+        'white-space:nowrap;'
+      ].join('')
+    });
+    tagEl.textContent = 'Débloqué';
+
+    badgeEl.appendChild(iconWrap);
     badgeEl.appendChild(textEl);
+    badgeEl.appendChild(tagEl);
     c.appendChild(badgeEl);
   }
 

@@ -309,11 +309,15 @@ function _loadLegacySession() {
 function _extractUser(supaUser) {
   if (!supaUser) return null;
   var email = supaUser.email || '';
-  return {
+  var meta = supaUser.user_metadata || {};
+  var u = {
     id: supaUser.id,
-    name: (supaUser.user_metadata && supaUser.user_metadata.name) || email.split('@')[0] || 'Utilisateur',
+    name: meta.name || email.split('@')[0] || 'Utilisateur',
     email: email
   };
+  if (meta.nom)   u.nom   = meta.nom;
+  if (meta.phone) u.phone = meta.phone;
+  return u;
 }
 
 // ─── INIT : charger la session Supabase au boot ───
@@ -343,6 +347,11 @@ function _initAuth() {
     }
     if (session && session.user) {
       _currentSession = _extractUser(session.user);
+      // Restore nom/phone from user_metadata into window.S if not already set
+      if (window.S && _currentSession) {
+        if (_currentSession.nom   && !window.S.nom)   window.S.nom   = _currentSession.nom;
+        if (_currentSession.phone && !window.S.phone) window.S.phone = _currentSession.phone;
+      }
     } else {
       _currentSession = null;
     }
@@ -370,7 +379,10 @@ function _initAuth() {
 }
 
 // ─── FALLBACK REGISTER (localStorage) ───
-function _fallbackRegister(name, email, password, startTime) {
+function _fallbackRegister(name, email, password, extra, startTime) {
+  // Support old call signature without extra
+  if (typeof extra === 'number') { startTime = extra; extra = {}; }
+  extra = extra || {};
   var users = getUsers();
   for (var i = 0; i < users.length; i++) {
     if (users[i].email === email) {
@@ -386,6 +398,8 @@ function _fallbackRegister(name, email, password, startTime) {
       pwHash: pwHash,
       createdAt: Date.now()
     };
+    if (extra.nom)   user.nom   = sanitize(extra.nom);
+    if (extra.phone) user.phone = sanitize(extra.phone);
     var currentUsers = getUsers();
     for (var j = 0; j < currentUsers.length; j++) {
       if (currentUsers[j].email === email) {
@@ -395,7 +409,7 @@ function _fallbackRegister(name, email, password, startTime) {
     currentUsers.push(user);
     saveUsers(currentUsers);
     setLegacySession(user);
-    _currentSession = { id: user.id, name: user.name, email: user.email };
+    _currentSession = { id: user.id, name: user.name, email: user.email, nom: user.nom || '', phone: user.phone || '' };
     BLACKBOX.log('register', { email: email });
     return { ok: true, user: { id: user.id, name: user.name, email: user.email } };
   });
@@ -508,12 +522,14 @@ window.AUTH = {
    * @param {string} name
    * @param {string} email
    * @param {string} password
+   * @param {object} [extra] - optional: { nom, phone }
    * @returns {Promise<{ok:boolean, user?:object, error?:string}>}
    */
-  register: function(name, email, password) {
+  register: function(name, email, password, extra) {
     var startTime = Date.now();
     name = sanitize((name || '').trim());
     email = (email || '').trim().toLowerCase();
+    extra = extra || {};
 
     // Validation locale
     if (!validateName(name)) {
@@ -526,16 +542,20 @@ window.AUTH = {
       return withTimingDelay(Promise.resolve({ ok: false, error: 'Mot de passe min 6 caract\u00e8res' }), startTime);
     }
 
+    var metaData = { name: name };
+    if (extra.nom)   metaData.nom   = sanitize(extra.nom.trim());
+    if (extra.phone) metaData.phone = sanitize(extra.phone.trim());
+
     // Tenter Supabase
     var client = _getClient();
     if (!client) {
-      return _fallbackRegister(name, email, password, startTime);
+      return _fallbackRegister(name, email, password, extra, startTime);
     }
 
     var promise = client.auth.signUp({
       email: email,
       password: password,
-      options: { data: { name: name } }
+      options: { data: metaData }
     }).then(function(result) {
       if (result.error) {
         console.error('[AUTH] Supabase register error:', result.error.message || result.error);
@@ -558,7 +578,7 @@ window.AUTH = {
       console.error('[AUTH] Supabase register exception:', err);
       // Fallback localStorage en cas d'erreur reseau
       try {
-        return _fallbackRegister(name, email, password, Date.now()).then(function(r) { return r; });
+        return _fallbackRegister(name, email, password, extra, Date.now()).then(function(r) { return r; });
       } catch (e2) {
         return { ok: false, error: mapSupabaseError(err) };
       }
