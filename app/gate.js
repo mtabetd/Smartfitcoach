@@ -4,7 +4,7 @@
   var GATE_KEY='mtd_gate_access';
   // Hash stored as sessionStorage token — not the raw password, and cleared on tab close.
   // Use Web Crypto subtle hash so the password cannot be extracted from source trivially.
-  var GATE_HASH='21rn9y'; // FNV-based hash — validated via crypto below
+  var GATE_HASH='1gs8uk7'; // FNV-based hash — validated via crypto below
   var GATE_HASH_LEGACY='b7e2g90d3f';
 
   // Use Web Crypto subtle to derive a session token from the entered password.
@@ -27,8 +27,8 @@
     return Promise.resolve(simpleHash(pw) === GATE_HASH);
   }
 
-  // SHA-256('FROUITS' + 'sfc_gate_2024') — pre-computed, not derivable without knowing the password
-  var GATE_SHA256 = '2ef62fa3d883f0d00c1f87000886833e0b182dfa42785c92710fcab64d84238e';
+  // SHA-256('Bet@user2026' + 'sfc_gate_2024') — pre-computed, not derivable without knowing the password
+  var GATE_SHA256 = '910a9f0191b598ef2056c288cf9bcb3ae67ec1d94c30349a48ec9025e0743c3b';
 
   // Brute-force protection: max attempts per session
   var _attempts = 0;
