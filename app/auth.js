@@ -212,6 +212,8 @@ function setLegacySession(user) {
       id: user.id,
       name: user.name,
       email: user.email,
+      nom: user.nom || '',
+      phone: user.phone || '',
       token: token,
       fingerprint: fingerprint,
       tokenIssuedAt: Date.now()
@@ -300,7 +302,7 @@ function _loadLegacySession() {
   if (isLegacySessionValid()) {
     var s = getLegacySession();
     if (s) {
-      _currentSession = { id: s.id, name: s.name, email: s.email };
+      _currentSession = { id: s.id, name: s.name, email: s.email, nom: s.nom || '', phone: s.phone || '' };
       console.log('[AUTH] Legacy session restored for:', s.email);
     }
   }
