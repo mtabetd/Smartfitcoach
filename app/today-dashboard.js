@@ -333,7 +333,93 @@ function renderCardMacros() {
   return c;
 }
 
-// ─── RENDER CARD 3 — Streak & badges ───
+// ─── RENDER CARD 3 — Repas du jour ───
+function renderCardRepas() {
+  var S = window.S;
+  if (!S) return null;
+
+  var c = card();
+  c.appendChild(eyebrow('REPAS DU JOUR'));
+
+  if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) {
+    // No plan — CTA
+    c.appendChild(cardTitle('Aucun programme nutritionnel'));
+    var cta = h('button', {
+      style: 'margin-top:8px;padding:10px 16px;background:var(--black,#1A1A18);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;width:100%;',
+      onclick: function() {
+        S.view = 'nutrition';
+        S.nStep = 0;
+        if (window.render) window.render();
+      }
+    }, 'Créer mon programme');
+    c.appendChild(cta);
+    return c;
+  }
+
+  var todayIdx = (new Date().getDay() + 6) % 7;
+  var dayData = S.weekPlan[todayIdx];
+  if (!dayData) return null;
+
+  var SLOTS = [
+    { key: 'breakfast', label: 'Petit-déjeuner' },
+    { key: 'lunch', label: 'Déjeuner' },
+    { key: 'snack', label: 'Collation' },
+    { key: 'dinner', label: 'Dîner' }
+  ];
+
+  var hasAny = false;
+  SLOTS.forEach(function(slot) {
+    var meal = dayData[slot.key];
+    if (!meal || !meal.n) return;
+    hasAny = true;
+
+    var row = h('div', {
+      style: 'display:flex;align-items:baseline;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border,#E8E6DF);cursor:pointer;',
+      onclick: function() {
+        S.view = 'nutrition';
+        S.nStep = 9;
+        S.selectedDay = todayIdx;
+        if (window.render) window.render();
+      }
+    });
+
+    var left = h('div', {});
+    var slotLabel = h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:2px;'
+    }, slot.label);
+    var mealName = h('div', {
+      style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#1A1A18);'
+    }, meal.n);
+    left.appendChild(slotLabel);
+    left.appendChild(mealName);
+
+    var kcalEl = h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);white-space:nowrap;margin-left:8px;'
+    }, (meal.k ? Math.round(meal.k) + ' kcal' : ''));
+
+    row.appendChild(left);
+    row.appendChild(kcalEl);
+    c.appendChild(row);
+  });
+
+  if (!hasAny) return null;
+
+  // Footer link
+  var link = h('div', {
+    style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:right;cursor:pointer;',
+    onclick: function() {
+      S.view = 'nutrition';
+      S.nStep = 9;
+      S.selectedDay = todayIdx;
+      if (window.render) window.render();
+    }
+  }, 'Voir mon programme →');
+  c.appendChild(link);
+
+  return c;
+}
+
+// ─── RENDER CARD 4 — Streak & badges ───
 function renderCardStreak() {
   var streak = getStreakValue();
   var lastBadge = getLastBadge();
@@ -482,6 +568,7 @@ function renderCardSport() {
     style: 'margin-top:4px;',
     onclick: function() {
       var S = window.S;
+      if (!S) return;
       S.view = 'sport';
       S.selectedSportDay = idx;
       if (window.render) window.render();
@@ -531,6 +618,7 @@ function renderCardShortcuts() {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
     onclick: function() {
       var S = window.S;
+      if (!S) return;
       S.view = 'nutrition';
       if (window.render) window.render();
     }
@@ -540,6 +628,7 @@ function renderCardShortcuts() {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
     onclick: function() {
       var S = window.S;
+      if (!S) return;
       S.view = 'sport';
       if (window.render) window.render();
     }
@@ -550,6 +639,503 @@ function renderCardShortcuts() {
   c.appendChild(row);
 
   return c;
+}
+
+// ─── SECTION LABEL ───
+function sectionLabel(text) {
+  return h('div', {
+    style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border);padding-bottom:6px;margin:28px 0 14px;font-family:"Helvetica Neue",Arial,sans-serif;'
+  }, text);
+}
+
+// ─── MODAL OVERLAY HELPERS ───
+function todayModal(title, buildFn) {
+  var overlay = h('div', {
+    style: 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(24,24,24,.45);z-index:9000;display:flex;align-items:center;justify-content:center;'
+  });
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  var box = h('div', {
+    style: 'background:var(--ivory,#FAF9F6);max-width:480px;width:90%;max-height:80vh;overflow-y:auto;padding:28px 24px;position:relative;'
+  });
+  var closeBtn = h('button', {
+    style: 'position:absolute;top:12px;right:16px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--grey);',
+    onclick: function() { document.body.removeChild(overlay); }
+  }, '\u00D7');
+  box.appendChild(closeBtn);
+  box.appendChild(h('div', {
+    style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;'
+  }, title));
+  buildFn(box, overlay);
+  overlay.appendChild(box);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) document.body.removeChild(overlay); });
+  document.body.appendChild(overlay);
+}
+
+// ─── WEIGHT PROMPT ───
+function openTodayWeightPrompt() {
+  todayModal('Enregistrer mon poids', function(box, overlay) {
+    var input = h('input', {
+      type: 'number', step: '0.1',
+      style: 'width:100%;padding:12px;font-family:Georgia,serif;font-size:18px;font-style:italic;border:1px solid var(--border);background:var(--ivory,#FAF9F6);color:var(--black);box-sizing:border-box;outline:none;margin-bottom:12px;',
+      placeholder: 'Ex : 72.5'
+    });
+    box.appendChild(input);
+    var unitLabel = h('p', { style: 'font-size:11px;color:var(--grey);margin:0 0 16px;' }, window.UNITS ? window.UNITS.weightLabel() : 'kg');
+    box.appendChild(unitLabel);
+    var saveBtn = h('button', {
+      style: 'width:100%;padding:12px;background:var(--black,#181818);color:var(--ivory,#FAF9F6);border:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+      onclick: function() {
+        var val = parseFloat(input.value);
+        if (isNaN(val) || val <= 0) { input.style.borderColor = '#c44'; return; }
+        var valKg = window.UNITS ? window.UNITS.toKg(val) : val;
+        if (window.S) window.S.weight = valKg;
+        try { if (window.BLACKBOX) window.BLACKBOX.log('weight_logged', { weight: valKg }); } catch(e) {}
+        var user = window.AUTH ? window.AUTH.getUser() : null;
+        var userId = user ? user.id : 'anon';
+        var whKey = 'mtd_weight_history_' + userId;
+        var wh = [];
+        try { wh = JSON.parse(localStorage.getItem(whKey) || '[]'); } catch(e) { wh = []; }
+        wh.push({ date: new Date().toISOString().split('T')[0], weight: valKg });
+        try { localStorage.setItem(whKey, JSON.stringify(wh)); } catch(e) {}
+        if (window.SupaSync) SupaSync.saveWeight(new Date().toISOString().split('T')[0], valKg);
+        if (window.S && Array.isArray(window.S.weightHistory)) {
+          window.S.weightHistory.push({ date: new Date().toISOString().split('T')[0], weight: valKg });
+        }
+        if (window.GAMIFICATION) {
+          try {
+            window.GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg'));
+            window.GAMIFICATION.unlockBadge('first_weigh');
+            if (wh.length >= 10) window.GAMIFICATION.unlockBadge('weight_10');
+          } catch(e) {}
+        }
+        document.body.removeChild(overlay);
+        if (window.APP_RENDER) window.APP_RENDER();
+      }
+    }, 'Enregistrer');
+    box.appendChild(saveBtn);
+    setTimeout(function() { input.focus(); }, 100);
+  });
+}
+
+// ─── MEASUREMENTS MODAL ───
+function openTodayMeasurementsModal() {
+  todayModal('Mes mensurations', function(box) {
+    var formContainer = h('div', { style: 'margin-top:8px;' });
+    if (window.MEASUREMENTS && window.MEASUREMENTS.renderForm) {
+      try { window.MEASUREMENTS.renderForm(formContainer); } catch(e) {
+        formContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Module mensurations indisponible.'));
+      }
+    } else {
+      formContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Module mensurations non chargé.'));
+    }
+    box.appendChild(formContainer);
+  });
+}
+
+// ─── BADGES MODAL ───
+function openTodayBadgesModal() {
+  todayModal('Tous les badges', function(box) {
+    var panel = h('div', { style: 'margin-top:8px;' });
+    if (window.GAMIFICATION && window.GAMIFICATION.renderBadgesPanel) {
+      try { window.GAMIFICATION.renderBadgesPanel(panel); } catch(e) {
+        panel.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Panneau badges indisponible.'));
+      }
+    }
+    box.appendChild(panel);
+  });
+}
+
+// ─── KITCHEN TIMER MODAL ───
+function openTodayKitchenTimer() {
+  if (window._kitchenTimerInterval) { clearInterval(window._kitchenTimerInterval); window._kitchenTimerInterval = null; }
+  todayModal('Timer cuisine', function(box, overlay) {
+    box.style.textAlign = 'center';
+    var display = h('div', {
+      style: 'font-family:Georgia,serif;font-style:italic;font-size:48px;margin:24px 0 8px;line-height:1.1;color:var(--black);'
+    }, '00:00');
+    box.appendChild(display);
+
+    var presets = h('div', { style: 'margin:12px 0 20px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;' });
+    var presetValues = [
+      { label:'1 min', sec:60 }, { label:'3 min', sec:180 }, { label:'5 min', sec:300 },
+      { label:'10 min', sec:600 }, { label:'15 min', sec:900 }
+    ];
+    var totalSeconds = 0;
+    var running = false;
+    var interval = null;
+
+    function formatTime(s) {
+      var m = Math.floor(s / 60);
+      var sec = s % 60;
+      return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    presetValues.forEach(function(pv) {
+      var btn = h('button', {
+        style: 'padding:6px 12px;background:var(--ivory2);border:1px solid var(--border);font-size:11px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+        onclick: function() {
+          if (running) { clearInterval(interval); running = false; }
+          totalSeconds = pv.sec;
+          display.textContent = formatTime(totalSeconds);
+        }
+      }, pv.label);
+      presets.appendChild(btn);
+    });
+    box.appendChild(presets);
+
+    var controls = h('div', { style: 'display:flex;gap:8px;justify-content:center;' });
+    var startBtn = h('button', {
+      style: 'padding:10px 24px;background:var(--black,#181818);color:var(--ivory,#FAF9F6);border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+      onclick: function() {
+        if (running || totalSeconds <= 0) return;
+        running = true;
+        startBtn.textContent = 'En cours...';
+        interval = window._kitchenTimerInterval = setInterval(function() {
+          totalSeconds--;
+          display.textContent = formatTime(totalSeconds);
+          if (totalSeconds <= 0) {
+            clearInterval(interval); running = false;
+            startBtn.textContent = window.t ? window.t('extras.start') : 'Démarrer';
+            display.textContent = 'Terminé !';
+            try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate([200,100,200]); } catch(e) {}
+          }
+        }, 1000);
+      }
+    }, window.t ? window.t('extras.start') : 'Démarrer');
+    controls.appendChild(startBtn);
+
+    var resetBtn = h('button', {
+      style: 'padding:10px 24px;background:var(--ivory2);border:1px solid var(--border);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+      onclick: function() {
+        clearInterval(interval); running = false; totalSeconds = 0;
+        startBtn.textContent = window.t ? window.t('extras.start') : 'Démarrer';
+        display.textContent = '00:00';
+      }
+    }, window.t ? window.t('extras.reset') : 'Réinitialiser');
+    controls.appendChild(resetBtn);
+    box.appendChild(controls);
+
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) clearInterval(interval); });
+  });
+}
+
+// ─── DATA FUNCTIONS ───
+function todayExportAllData() {
+  var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+  user = user || {};
+  var backup = { version: '1.0', date: new Date().toISOString(), user: { name: user.name, email: user.email }, data: {} };
+  for (var i = 0; i < localStorage.length; i++) {
+    var key = localStorage.key(i);
+    if (key.indexOf('mtd_') === 0) {
+      try { backup.data[key] = JSON.parse(localStorage.getItem(key)); } catch(e) { backup.data[key] = localStorage.getItem(key); }
+    }
+  }
+  var blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'mtd-backup-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  if (window.GAMIFICATION) window.GAMIFICATION.showToast('Données exportées !');
+}
+
+function todayImportData() {
+  var input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var backup = JSON.parse(ev.target.result);
+        if (!backup.data || !backup.version) { alert('Fichier invalide'); return; }
+        if (!confirm('Cela remplacera vos données actuelles. Continuer ?')) return;
+        Object.keys(backup.data).forEach(function(key) {
+          localStorage.setItem(key, typeof backup.data[key] === 'string' ? backup.data[key] : JSON.stringify(backup.data[key]));
+        });
+        if (window.GAMIFICATION) window.GAMIFICATION.showToast('Données restaurées !');
+        setTimeout(function() { location.reload(); }, 1000);
+      } catch(err) { alert('Erreur de lecture : ' + err.message); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function todayDeleteAllData() {
+  if (!confirm('Êtes-vous sûr ? Toutes vos données seront supprimées définitivement.')) return;
+  if (!confirm('Dernière confirmation : cette action est irréversible. Continuer ?')) return;
+  var keysToRemove = [];
+  for (var i = 0; i < localStorage.length; i++) {
+    var key = localStorage.key(i);
+    if (key.indexOf('mtd_') === 0) keysToRemove.push(key);
+  }
+  keysToRemove.forEach(function(key) { localStorage.removeItem(key); });
+  if (window.AUTH && window.AUTH.logout) { try { window.AUTH.logout(); } catch(e) {} }
+  if (window.GAMIFICATION) window.GAMIFICATION.showToast('Données supprimées.');
+  setTimeout(function() { location.reload(); }, 1000);
+}
+
+// ─── RENDER EXTENDED SECTIONS (ex-Dashboard) ───
+function renderExtendedSections(wrapper, S) {
+  // Actions rapides
+  wrapper.appendChild(sectionLabel('Actions rapides'));
+  var actCard = card();
+  var navRow = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;' });
+
+  var nutNavBtn = h('div', {
+    style: 'background:var(--black,#181818);color:var(--ivory,#FAF9F6);padding:20px 16px;cursor:pointer;transition:all .2s ease;',
+    onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition'); else { S.view = 'nutrition'; if (window.render) window.render(); } }
+  });
+  nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin:0 0 4px;' }, 'Nutrition'));
+  nutNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Planifiez vos repas'));
+  navRow.appendChild(nutNavBtn);
+
+  var sportNavBtn = h('div', {
+    style: 'background:var(--black,#181818);color:var(--ivory,#FAF9F6);padding:20px 16px;cursor:pointer;transition:all .2s ease;',
+    onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport'); else { S.view = 'sport'; if (window.render) window.render(); } }
+  });
+  sportNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin:0 0 4px;' }, 'Sport'));
+  sportNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Votre programme'));
+  navRow.appendChild(sportNavBtn);
+  actCard.appendChild(navRow);
+
+  var btnRow = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;' });
+  var weightActBtn = h('div', {
+    style: 'background:var(--ivory2);border:1px solid var(--border);padding:16px;cursor:pointer;text-align:center;transition:all .2s ease;',
+    onclick: function() { openTodayWeightPrompt(); }
+  });
+  weightActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, 'Poids'));
+  weightActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Enregistrer'));
+  btnRow.appendChild(weightActBtn);
+
+  var measActBtn = h('div', {
+    style: 'background:var(--ivory2);border:1px solid var(--border);padding:16px;cursor:pointer;text-align:center;transition:all .2s ease;',
+    onclick: function() { openTodayMeasurementsModal(); }
+  });
+  measActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, 'Mensur.'));
+  measActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Mes mesures'));
+  btnRow.appendChild(measActBtn);
+
+  var timerActBtn = h('div', {
+    style: 'background:var(--ivory2);border:1px solid var(--border);padding:16px;cursor:pointer;text-align:center;transition:all .2s ease;',
+    onclick: function() { openTodayKitchenTimer(); }
+  });
+  timerActBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;margin:0 0 4px;' }, 'Timer'));
+  timerActBtn.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Cuisine'));
+  btnRow.appendChild(timerActBtn);
+  actCard.appendChild(btnRow);
+  wrapper.appendChild(actCard);
+
+  // Water Tracker
+  wrapper.appendChild(sectionLabel('Suivi hydratation'));
+  var waterBox = card();
+  if (window.WATER_TRACKER && window.WATER_TRACKER.renderWidget) {
+    try { window.WATER_TRACKER.renderWidget(waterBox); } catch(e) {
+      waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module hydratation indisponible'));
+    }
+  } else {
+    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module hydratation non chargé'));
+  }
+  wrapper.appendChild(waterBox);
+
+  // Sleep Tracker
+  wrapper.appendChild(sectionLabel('Suivi sommeil'));
+  var sleepBox = card();
+  if (window.SLEEP_TRACKER && window.SLEEP_TRACKER.renderWidget) {
+    try { window.SLEEP_TRACKER.renderWidget(sleepBox); } catch(e) {
+      sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module sommeil indisponible'));
+    }
+  } else {
+    sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module sommeil non chargé'));
+  }
+  wrapper.appendChild(sleepBox);
+
+  // Weekly Summary
+  wrapper.appendChild(sectionLabel('Résumé hebdomadaire'));
+  var weeklyBox = card();
+  if (window.WEEKLY_SUMMARY && window.WEEKLY_SUMMARY.renderWidget) {
+    try { window.WEEKLY_SUMMARY.renderWidget(weeklyBox); } catch(e) {
+      weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Résumé indisponible'));
+    }
+  } else {
+    weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module résumé non chargé'));
+  }
+  wrapper.appendChild(weeklyBox);
+
+  // Progression
+  wrapper.appendChild(sectionLabel('Ma progression'));
+  var perfBox = card();
+  if (window.PERF_HISTORY && window.PERF_HISTORY.renderProgressionWidget) {
+    try { window.PERF_HISTORY.renderProgressionWidget(perfBox); } catch(e) {
+      perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Progression indisponible'));
+    }
+  } else {
+    perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module progression non chargé'));
+  }
+  wrapper.appendChild(perfBox);
+
+  // Weight chart (Chart.js)
+  wrapper.appendChild(sectionLabel('Courbe de poids'));
+  var rawHistCheck = (S.weightHistory || []).filter(function(e) {
+    if (!e) return false;
+    var w = parseFloat(e.weight || e.w || e);
+    return !isNaN(w) && w > 0;
+  });
+  var chartWrap = card();
+  if (rawHistCheck.length < 2) {
+    chartWrap.appendChild(h('div', {
+      style: 'font-size:11px;color:var(--grey);text-align:center;padding:16px 0;'
+    }, 'Ajoutez votre premier poids pour voir la courbe de progression.'));
+  } else {
+    var canvas = document.createElement('canvas');
+    canvas.id = 'today-weight-chart';
+    canvas.style.cssText = 'width:100%;height:180px;max-height:180px;';
+    chartWrap.appendChild(canvas);
+    requestAnimationFrame(function() {
+      if (!window.Chart) return;
+      var ctx = document.getElementById('today-weight-chart');
+      if (!ctx || !ctx.getContext) return;
+      var rawHist = (S.weightHistory || []).slice(-12);
+      var labels = [], data = [];
+      rawHist.forEach(function(e) {
+        if (!e) return;
+        var w = parseFloat(e.weight || e.w || e);
+        if (isNaN(w) || w <= 0) return;
+        labels.push(e.date ? e.date.substring(5) : '?');
+        data.push(w);
+      });
+      if (data.length < 2) return;
+      if (window._todayWeightChart) { try { window._todayWeightChart.destroy(); } catch(e2) {} window._todayWeightChart = null; }
+      window._todayWeightChart = window.createChart ? window.createChart(ctx, {
+        type: 'line',
+        data: { labels: labels, datasets: [{ data: data, borderColor: '#1A4A1A', backgroundColor: 'rgba(26,74,26,0.08)', pointRadius: 4, pointBackgroundColor: '#1A4A1A', tension: 0.3, fill: true }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { size: 10 }, callback: function(v) { return window.UNITS ? window.UNITS.displayWeightVal(v) + ' ' + window.UNITS.weightLabel() : v + ' kg'; } } }, x: { grid: { display: false }, ticks: { font: { size: 9 } } } } }
+      }) : null;
+    });
+  }
+  wrapper.appendChild(chartWrap);
+
+  // Kcal chart (Chart.js)
+  if (S.weekPlan && S.weekPlan.length === 7) {
+    wrapper.appendChild(sectionLabel('Calories par jour — plan semaine'));
+    var kcalWrap = card();
+    var kcalCanvas = document.createElement('canvas');
+    kcalCanvas.id = 'today-kcal-chart';
+    kcalCanvas.style.cssText = 'width:100%;height:140px;max-height:140px;';
+    kcalWrap.appendChild(kcalCanvas);
+    wrapper.appendChild(kcalWrap);
+    requestAnimationFrame(function() {
+      if (!window.Chart) return;
+      var ctx2 = document.getElementById('today-kcal-chart');
+      if (!ctx2 || !ctx2.getContext) return;
+      if (!Array.isArray(S.weekPlan) || S.weekPlan.length !== 7) return;
+      var JOURS_CH = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+      var target = (window.calcTarget ? window.calcTarget() : 0) || (S.calories && S.calories > 0 ? S.calories : 2000);
+      var dayKcals = S.weekPlan.map(function(day) {
+        if (!day) return 0;
+        function getK(meal) { return (meal && (meal.k || (meal.baseNutrition && meal.baseNutrition.calories) || meal.kcal)) || 0; }
+        return getK(day.breakfast) + getK(day.lunch) + getK(day.snack) + getK(day.dinner);
+      });
+      if (window._todayKcalChart) { try { window._todayKcalChart.destroy(); } catch(e2) {} window._todayKcalChart = null; }
+      window._todayKcalChart = window.createChart ? window.createChart(ctx2, {
+        type: 'bar',
+        data: { labels: JOURS_CH, datasets: [
+          { label: 'Kcal plan', data: dayKcals, backgroundColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(26,74,26,0.7)' : r > 1.08 ? 'rgba(180,40,40,0.7)' : 'rgba(26,74,26,0.9)'; }), borderRadius: 4 },
+          { label: 'Cible', data: Array(7).fill(target), type: 'line', borderColor: '#5A1010', borderDash: [4,3], pointRadius: 0, borderWidth: 1.5, fill: false }
+        ] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { size: 9 }, callback: function(v) { return v + ' kcal'; } } }, x: { grid: { display: false }, ticks: { font: { size: 9 } } } } }
+      }) : null;
+    });
+  }
+
+  // Food Journal
+  wrapper.appendChild(sectionLabel('Journal alimentaire'));
+  var foodBox = card();
+  if (window.FOOD_JOURNAL) {
+    try { window.FOOD_JOURNAL.renderWidget(foodBox); } catch(e) {}
+  } else {
+    foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Journal alimentaire non disponible'));
+  }
+  wrapper.appendChild(foodBox);
+
+  // Progress Photos
+  if (window.PHOTO_PROGRESS && window.PHOTO_PROGRESS.renderWidget) {
+    var photoBox = h('div', {});
+    try { window.PHOTO_PROGRESS.renderWidget(photoBox); } catch(e) {}
+    if (photoBox.children.length > 0) wrapper.appendChild(photoBox);
+  }
+
+  // Badges preview
+  wrapper.appendChild(sectionLabel('Badges'));
+  var badgesCard = card();
+  var badgesRow = h('div', { style: 'display:flex;gap:10px;align-items:center;flex-wrap:wrap;' });
+  var badgesData = (function() {
+    try {
+      var _bu = window.AUTH ? window.AUTH.getUser() : null;
+      if (_bu) {
+        var _bKey = 'mtd_badges_' + _bu.id;
+        var _bArr = JSON.parse(localStorage.getItem(_bKey) || '[]');
+        if (Array.isArray(_bArr)) return _bArr.slice(-3);
+      }
+    } catch(e) {}
+    return [];
+  })();
+  if (badgesData.length > 0) {
+    badgesData.forEach(function(b) {
+      var badgeId = typeof b === 'string' ? b : (b && b.id ? b.id : null);
+      if (!badgeId) return;
+      var def = (window.GAMIFICATION && window.GAMIFICATION.BADGE_DEFS) ? window.GAMIFICATION.BADGE_DEFS.find(function(d){ return d.id === badgeId; }) : null;
+      var mini = h('div', {
+        style: 'width:36px;height:36px;border-radius:2px;background:var(--ivory2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;',
+        title: (def && def.name) || (typeof b === 'object' && b.name) || ''
+      }, (def && def.icon) || (typeof b === 'object' && (b.icon || b.emoji)) || '\u2605');
+      badgesRow.appendChild(mini);
+    });
+  } else {
+    ['\u2605','\uD83D\uDD25','\uD83C\uDFC6'].forEach(function(icon) {
+      var mini = h('div', { style: 'width:36px;height:36px;border-radius:2px;background:var(--ivory2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;opacity:.35;' }, icon);
+      badgesRow.appendChild(mini);
+    });
+    badgesCard.appendChild(h('p', { style: 'font-size:11px;color:var(--grey);margin:8px 0 0;font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.5;' }, 'Continuez \u2014 vos premiers badges vous attendent !'));
+  }
+  var badgeLink = h('span', {
+    style: 'font-size:11px;color:var(--grey);cursor:pointer;margin-left:auto;',
+    onclick: function() { if (window.GAMIFICATION && window.GAMIFICATION.renderBadgesPanel) openTodayBadgesModal(); }
+  }, 'Voir tous les badges \u2192');
+  badgesRow.appendChild(badgeLink);
+  badgesCard.insertBefore(badgesRow, badgesCard.firstChild);
+  wrapper.appendChild(badgesCard);
+
+  // Mes données
+  wrapper.appendChild(sectionLabel('Mes données'));
+  var dataCard = card();
+  var dataBtns = h('div', { style: 'display:flex;flex-direction:column;gap:10px;' });
+
+  var exportBtn = h('button', {
+    style: 'width:100%;padding:18px 28px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;font-size:9px;letter-spacing:6px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    onclick: function() { todayExportAllData(); }
+  }, '\u2B07 Exporter mes données');
+  dataBtns.appendChild(exportBtn);
+
+  var importBtn = h('button', {
+    style: 'width:100%;padding:12px 24px;background:transparent;color:var(--grey);border:1px solid var(--border);border-radius:2px;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    onclick: function() { todayImportData(); }
+  }, '\u2B06 Importer une sauvegarde');
+  dataBtns.appendChild(importBtn);
+
+  var deleteBtn = h('button', {
+    style: 'width:100%;padding:12px 24px;background:transparent;color:var(--red,#5A1010);border:1px solid var(--red,#5A1010);border-radius:2px;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    onclick: function() { todayDeleteAllData(); }
+  }, 'Supprimer toutes mes données');
+  dataBtns.appendChild(deleteBtn);
+
+  dataCard.appendChild(dataBtns);
+  wrapper.appendChild(dataCard);
 }
 
 // ─── MAIN RENDER ───
@@ -566,7 +1152,7 @@ function renderTodayDashboard(p) {
   if (S.justLoggedIn) {
     wrapper.appendChild(renderWelcomeBanner(S));
     S.justLoggedIn = false;
-    if (window.saveProfile) { try { saveProfile(); } catch(e) { console.warn('[saveProfile] failed:', e); } }
+    if (window.saveProfile) { try { window.saveProfile(); } catch(e) { console.warn('[saveProfile] failed:', e); } }
   }
 
   // Card 1 — Bonjour
@@ -576,20 +1162,39 @@ function renderTodayDashboard(p) {
   var cardMacros = renderCardMacros();
   if (cardMacros) wrapper.appendChild(cardMacros);
 
-  // Card 3 — Streak & badges
+  // Card 3 — Repas du jour
+  var cardRepas = renderCardRepas();
+  if (cardRepas) wrapper.appendChild(cardRepas);
+
+  // Card 4 — Streak & badges
   var cardStreak = renderCardStreak();
   if (cardStreak) wrapper.appendChild(cardStreak);
 
-  // Card 4 — Prochaine séance
+  // Card 5 — Prochaine séance
   var cardSport = renderCardSport();
   if (cardSport) wrapper.appendChild(cardSport);
 
-  // Card 5 — Checkin bien-être
+  // Card 6 — Checkin bien-être
   var cardWellness = renderCardWellness(S);
   if (cardWellness) wrapper.appendChild(cardWellness);
 
-  // Card 6 — Raccourcis rapides
+  // Card 7 — Raccourcis rapides
   wrapper.appendChild(renderCardShortcuts());
+
+  // Sections étendues (ex-Dashboard) — masquées par défaut, dépliables
+  var _extOpen = S._dashExtOpen || false;
+  var extToggle = h('button', {
+    style: 'display:block;width:100%;margin:16px 0 4px;padding:12px;background:transparent;border:1px solid var(--border,#E8E6DF);color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+    onclick: function() {
+      S._dashExtOpen = !S._dashExtOpen;
+      if (window.render) window.render();
+    }
+  }, _extOpen ? '▲ Réduire' : '▼ Suivi · Progression · Données');
+  wrapper.appendChild(extToggle);
+
+  if (_extOpen) {
+    renderExtendedSections(wrapper, S);
+  }
 
   p.appendChild(wrapper);
 }

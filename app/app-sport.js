@@ -976,6 +976,7 @@ function buildKcalCard(kcal, durationMins) {
 
 // ─── STEP 20: QUESTIONNAIRE MÉDICAL MUSCU ───
 function renderMuscuMedicalQ(p) {
+ if (!S.muscuMedical || typeof S.muscuMedical !== 'object' || Array.isArray(S.muscuMedical)) S.muscuMedical = {};
  var med = S.muscuMedical;
 
  // Header with back button
@@ -4078,7 +4079,10 @@ function calcSessionKcal(exercises, durationMin) {
 }
 
 function renderMusculationProgram(p) {
- if (!S.sportProgram || !S.sportProgram.length) { S.sportProgram = generateSportProgram(); S.selectedSportDay = 0; }
+ if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) {
+   S.sportProgram = generateSportProgram(); S.selectedSportDay = 0;
+   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+ }
 
  // Load saved musculation weights from localStorage
  if (Object.keys(S.musculationWeights || {}).length === 0) {
@@ -4118,14 +4122,14 @@ function renderMusculationProgram(p) {
  });
  }
 
- // Load session log and progression history
- if (Object.keys(S.muscuSessionLog || {}).length === 0) {
+ // Load session log and progression history — toujours depuis la clé dédiée
+ // (plus fréquemment mise à jour que PROFILE_KEYS, qui peut être en retard)
  var userId3 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var savedLog = localStorage.getItem('mtd_muscu_session_' + userId3);
- if (savedLog) { try { S.muscuSessionLog = JSON.parse(savedLog); } catch(e) {} }
+ if (savedLog) { try { S.muscuSessionLog = JSON.parse(savedLog); } catch(e) { S.muscuSessionLog = {}; } }
+ if (!S.muscuSessionLog || typeof S.muscuSessionLog !== 'object' || Array.isArray(S.muscuSessionLog)) S.muscuSessionLog = {};
  var savedProg = localStorage.getItem('mtd_muscu_progression_' + userId3);
  if (savedProg) { try { S.muscuProgressionHistory = JSON.parse(savedProg); } catch(e) {} }
- }
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
@@ -4418,7 +4422,8 @@ function renderMusculationProgram(p) {
  });
  p.appendChild(tabs);
 
- // Current day
+ // Current day — bounds check
+ if (typeof S.selectedSportDay !== 'number' || S.selectedSportDay < 0 || S.selectedSportDay >= S.sportProgram.length) S.selectedSportDay = 0;
  var day = S.sportProgram[S.selectedSportDay];
  if (day) {
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus));
@@ -4673,23 +4678,37 @@ function renderMusculationProgram(p) {
  inputZone.appendChild(weightInput);
  inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, (window.UNITS ? window.UNITS.weightLabel() : 'kg')));
  } else {
- // Exercice poids du corps : champ lest optionnel (gilet lesté, élastique...)
- var pcLabel = h('input', {
+ // Exercice poids du corps : reps uniquement par défaut, poids optionnel via toggle "Lestés"
+ var _isLeste = !!setRow.weighted;
+ var lesteBtn = h('button', {
+ style: 'font-size:9px;padding:2px 6px;background:' + (_isLeste ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (_isLeste ? '#fff' : 'var(--grey)') + ';border:1px solid ' + (_isLeste ? 'var(--black,#0A0A09)' : 'var(--border)') + ';border-radius:2px;cursor:pointer;white-space:nowrap;margin-right:4px',
+ onclick: (function(sr) { return function(e) {
+ e.stopPropagation();
+ sr.weighted = !sr.weighted;
+ if (!sr.weighted) sr.actualWeight = null;
+ saveMuscuSessionLog();
+ window.render();
+ }; })(setRow)
+ }, _isLeste ? 'Lest\u00e9s \u2713' : '+ Lest\u00e9s');
+ inputZone.appendChild(lesteBtn);
+ var pcLabel;
+ if (_isLeste) {
+ pcLabel = h('input', {
  type: 'number', min: '0', max: '200', step: '0.5',
- placeholder: 'Lest',
+ placeholder: 'kg',
  value: setRow.actualWeight !== null && setRow.actualWeight > 0 ? String(setRow.actualWeight) : '',
- style: 'width:44px;padding:4px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory));color:var(--grey)',
+ style: 'width:44px;padding:4px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
  oninput: (function(sr){ return function(e) {
  var v = parseFloat(e.target.value);
- sr.actualWeight = isNaN(v) ? 0 : v;
+ sr.actualWeight = isNaN(v) ? null : v;
  saveMuscuSessionLog();
- // Pour PDC, le bouton ne dépend PAS du poids — seulement des reps
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
- if (_btn) { var _ok = sr.actualReps !== null; _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ if (_btn) { var _ok = sr.actualReps !== null && sr.actualWeight !== null; _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
  }; })(setRow)
  });
  inputZone.appendChild(pcLabel);
- inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey3,#8A8A84)'}, 'kg\u00b1'));
+ inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey3,#8A8A84)'}, 'kg'));
+ }
  }
 
  var repsInput = h('input', {
@@ -4703,7 +4722,7 @@ function renderMusculationProgram(p) {
  saveMuscuSessionLog();
  // Réactiver le bouton validation en temps réel
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
- if (_btn) { var _ok = sr.actualReps !== null && (sr.actualWeight !== null || _isBw); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ if (_btn) { var _ok = sr.actualReps !== null && (sr.actualWeight !== null || (_isBw && !sr.weighted)); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
  }; })(setRow, isBodyweight)
  });
  inputZone.appendChild(repsInput);
@@ -4719,11 +4738,12 @@ function renderMusculationProgram(p) {
  // Bouton validation série + déclenchement timer repos
  (function(_sr, _si, _exRef, _numSets, _isBody, _exI, _allEx) {
  var isValidated = _sr.validated === true;
- var hasData = _sr.actualReps !== null && (_sr.actualWeight !== null || _isBody);
+ var _bwNoWeight = _isBody && !_sr.weighted;
+ var hasData = _sr.actualReps !== null && (_sr.actualWeight !== null || _bwNoWeight);
 
  if (isValidated) {
  // Série déjà validée : afficher le checkmark
- var ok = _sr.actualReps >= _sr.targetReps && (_isBody || _sr.actualWeight >= _sr.targetWeight);
+ var ok = _sr.actualReps >= _sr.targetReps && (_bwNoWeight || _sr.actualWeight >= _sr.targetWeight);
  inputZone.appendChild(h('span', {'class': ok ? 'set-success' : 'set-fail', style: 'font-size:13px'}, ok ? '\u2713' : '\u2717'));
  row.classList.add('set-row-validated');
  } else {
@@ -4877,15 +4897,17 @@ function renderMusculationProgram(p) {
  e.stopPropagation();
  var newEx = { n: alt.n, m: alt.m, eq: alt.eq, sets: alt.sets || exRef.sets, rest: alt.rest || exRef.rest };
  newEx.video = alt.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(alt.n) : null);
+ if (!Array.isArray(S.sportProgram) || !S.sportProgram[dayI] || !Array.isArray(S.sportProgram[dayI].exercises)) { S.swapPanel = null; window.render(); return; }
  S.sportProgram[dayI].exercises[exI] = newEx;
  // Migrer les données de session pour le nouvel exercice
  var _today = new Date().toISOString().slice(0, 10);
- if (S.muscuSessionLog[_today] && S.muscuSessionLog[_today][exRef.n]) {
+ if (S.muscuSessionLog && S.muscuSessionLog[_today] && S.muscuSessionLog[_today][exRef.n]) {
  S.muscuSessionLog[_today][newEx.n] = S.muscuSessionLog[_today][exRef.n];
  delete S.muscuSessionLog[_today][exRef.n];
  saveMuscuSessionLog();
  }
  S.swapPanel = null;
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  window.render();
  },
  onmouseover: function() { this.style.background = 'var(--ivory,#FAF9F6)'; },
@@ -4921,7 +4943,7 @@ function renderMusculationProgram(p) {
  var bc = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #1A4A1A'});
  var bnRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center'});
  bnRow.appendChild(h('div', {'class': 'exercise-muscle'}, bex.m));
- bnRow.appendChild(h('span', {style: 'font-size:18px;color:#5A1010;cursor:pointer;line-height:1;padding:0 4px', onclick: (function(idx) { return function(e) { e.stopPropagation(); var arr = S.bonusExercises[S.selectedSportDay] || []; arr.splice(idx, 1); S.bonusExercises[S.selectedSportDay] = arr; window.render(); }; })(bi)}, '\u00d7'));
+ bnRow.appendChild(h('span', {style: 'font-size:18px;color:#5A1010;cursor:pointer;line-height:1;padding:0 4px', onclick: (function(idx) { return function(e) { e.stopPropagation(); if (!S.bonusExercises) S.bonusExercises = {}; var arr = S.bonusExercises[S.selectedSportDay] || []; arr.splice(idx, 1); S.bonusExercises[S.selectedSportDay] = arr; window.render(); }; })(bi)}, '\u00d7'));
  bc.appendChild(bnRow);
  bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n));
  bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 Repos ' + bex.rest));
@@ -5153,13 +5175,14 @@ function renderMusculationProgram(p) {
  right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:normal'}, ex.sets + '\u00d7' + ex.reps));
  right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, ex.rest));
  // Bouton + / Ajouté — ajoute l'exercice en bonus à la séance courante
- var bonusArr = S.bonusExercises[S.selectedSportDay] || [];
+ var bonusArr = (S.bonusExercises || {})[S.selectedSportDay] || [];
  var isAddedBonus = false;
  for (var bci = 0; bci < bonusArr.length; bci++) { if (bonusArr[bci].n === exBase.name) { isAddedBonus = true; break; } }
  var addBtn = h('div', {
  style: 'margin-top:6px;padding:4px 8px;cursor:pointer;font-family:"Helvetica Neue",sans-serif;font-size:11px;text-align:center;border:1px solid ' + (isAddedBonus ? '#1A4A1A' : 'var(--border)') + ';color:' + (isAddedBonus ? '#1A4A1A' : 'var(--grey)') + ';background:' + (isAddedBonus ? 'rgba(39,174,96,0.08)' : 'transparent'),
  onclick: (function(exBCapture) { return function(e) {
  e.stopPropagation();
+ if (!S.bonusExercises) S.bonusExercises = {};
  var arr = S.bonusExercises[S.selectedSportDay] || [];
  var existIdx = -1;
  for (var ii = 0; ii < arr.length; ii++) { if (arr[ii].n === exBCapture.name) { existIdx = ii; break; } }
@@ -6666,7 +6689,7 @@ function renderYogaProgram(p) {
 
  var objNames = { flexibilite: 'Flexibilit\u00e9', stress: 'Stress & Sommeil', force: 'Force & \u00c9quilibre', recuperation: 'R\u00e9cup\u00e9ration active' };
  var styleNames = { hatha: 'Hatha', vinyasa: 'Vinyasa', yin: 'Yin', ashtanga: 'Ashtanga' };
- p.appendChild(h('p', {'class': 'subtitle'}, S.yogaDays + ' jours/semaine \u00b7 ' + S.yogaDuration + ' \u00b7 ' + (styleNames[S.yogaStyle] || S.yogaStyle) + ' \u00b7 ' + (objNames[S.yogaObjectif] || '')));
+ p.appendChild(h('p', {'class': 'subtitle'}, (S.yogaDays || '') + ' jours/semaine \u00b7 ' + (S.yogaDuration || '') + ' \u00b7 ' + (styleNames[S.yogaStyle] || S.yogaStyle || '') + ' \u00b7 ' + (objNames[S.yogaObjectif] || '')));
 
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});

@@ -108,6 +108,39 @@ function renderNutritionChoice(app) {
   wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:300;font-style:italic;line-height:1.45;margin-bottom:16px'},
     prenom ? 'Votre programme de la semaine\nest prêt, ' + prenom + '.' : 'Votre programme de la semaine\nest déjà établi.'
   ));
+
+  // Show kcal/day and objective
+  var _goals = window.GOALS || [];
+  var _goalObj = (S.goal !== null && S.goal !== undefined && _goals[S.goal]) ? _goals[S.goal] : null;
+  var _kcalDay = 0;
+  if (Array.isArray(S.weekPlan) && S.weekPlan.length > 0) {
+    var _todayIdx = (new Date().getDay() + 6) % 7;
+    var _todayData = S.weekPlan[_todayIdx];
+    if (_todayData) {
+      ['breakfast','lunch','snack','dinner'].forEach(function(slot) {
+        var m = _todayData[slot];
+        if (m && m.k) _kcalDay += (m.k || 0);
+      });
+    }
+  }
+  if (_kcalDay > 0 || _goalObj) {
+    var _badge = h('div', {style: 'display:inline-flex;align-items:center;gap:12px;padding:10px 20px;border:1px solid var(--border,#E8E6DF);margin:0 auto 28px;'});
+    if (_kcalDay > 0) {
+      var _kcalSpan = h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:500;color:var(--black,#0A0A09);letter-spacing:0.5px;'});
+      _kcalSpan.textContent = Math.round(_kcalDay) + '\u00a0kcal/j';
+      _badge.appendChild(_kcalSpan);
+    }
+    if (_kcalDay > 0 && _goalObj) {
+      _badge.appendChild(h('span', {style: 'color:var(--border,#E8E6DF);'}, '·'));
+    }
+    if (_goalObj) {
+      var _goalSpan = h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);letter-spacing:0.5px;'});
+      _goalSpan.textContent = _goalObj.name;
+      _badge.appendChild(_goalSpan);
+    }
+    wrap.appendChild(_badge);
+  }
+
   wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;letter-spacing:0.5px;line-height:1.7;color:#555;max-width:300px;margin:0 auto 40px'},
     'Souhaitez-vous consulter votre programme en cours,\nou en établir un nouveau pour la semaine à venir\u00a0?'
   ));
@@ -892,6 +925,7 @@ function renderStep3(p) {
 
 // ─── STEP 4: SANTE ───
 function renderStep4(p) {
+  if (!Array.isArray(S.medical)) S.medical = [];
   renderProgressBar(p, 4, 9);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
@@ -1663,9 +1697,11 @@ function renderStep7(p) {
     if (ok) {
       // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
       if (window.computeNutritionState) { window.computeNutritionState(false); }
-      S.weekPlan = generateWeek();
+      var _wk1 = generateWeek();
+      if (Array.isArray(_wk1) && _wk1.length > 0) S.weekPlan = _wk1;
+      S._weekPlanGeneratedAt = new Date().toISOString();
       // Sync plan nutrition vers Supabase
-      if (window.SupaSync) {
+      if (window.SupaSync && S.weekPlan) {
         var _monday = new Date();
         _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
         SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
@@ -1717,8 +1753,7 @@ function renderStep8(p) {
   if(S.activity!==null&&S.activity!==undefined&&ACTIVITIES[S.activity])_profItems.push(ACTIVITIES[S.activity].name);
   if(S.goal!==null&&S.goal!==undefined&&GOALS[S.goal])_profItems.push(GOALS[S.goal].name);
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));
-  var _m=calcMacros();
-  if(_m.proteinPerKg){rh.appendChild(h('div',{style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey2);letter-spacing:1px'},'Prot\u00e9ines: '+_m.proteinPerKg+'g/kg \u00B7 Lipides: '+_m.fatPerKg+'g/kg \u00B7 Glucides: '+(_m.carbsPerKg||'-')+'g/kg'));}
+  // g/kg ratios intentionally hidden — grammes totaux affichés dans les rings (plus clair pour les non-experts)
   p.appendChild(rh);
   if (window.TIPS) {
     TIPS.renderTip(p, 'results');
@@ -1742,6 +1777,7 @@ function renderStep8(p) {
   var c1 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c1.appendChild(h('div', {'class': 'bn-val'}, String(tdee)));
   c1.appendChild(h('div', {'class': 'bn-label'}, window.t('onb.s8.tdee')));
+  c1.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px'}, 'Calories d\u00e9pens\u00e9es en une journ\u00e9e normale'));
   sr.appendChild(c1);
   var c2 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c2.appendChild(h('div', {'class': 'bn-val'}, String(tgt)));
@@ -1795,6 +1831,7 @@ function renderStep8(p) {
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, '#1A4A1A', window.t('onb.s8.proteins'), m.p));
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', window.t('onb.s8.fats'), m.l));
   p.appendChild(rr);
+  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Prot\u00e9ines \u00b7 Glucides \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
 
   p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas (' + (S.mealsPerDay||3) + ' repas/j)'));
   var ms = h('div', {'class': 'meal-split'});
@@ -1822,13 +1859,28 @@ function renderStep8(p) {
   // Stats
   var stats = h('div', {'class': 'stats-row'});
   stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, water), h('div', {'class': 'stat-label'}, 'L eau/jour')]));
-  stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, ppk), h('div', {'class': 'stat-label'}, 'g prot/kg')]));
+  stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, String(m.p)), h('div', {'class': 'stat-label'}, 'g prot\u00e9ines/j')]));
   if (bmi !== null) {
     var bi = bmiInfo(bmi);
     var imcClass = bmi < 18.5 ? 'stat-warn' : bmi < 25 ? 'stat-good' : bmi < 30 ? 'stat-warn' : 'stat-alert';
     stats.appendChild(h('div', {'class': 'stat-cell ' + imcClass}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, window.t('onb.s2.bmi'))]));
   }
   p.appendChild(stats);
+
+  // Protein food equivalents hint — concrete daily anchors
+  if (m.p > 0) {
+    // 1 escalope de poulet grillé (160g) ≈ 50g protein
+    // 1 boîte de thon en conserve (185g net) ≈ 44g protein
+    var _chickenN = Math.ceil(m.p / 50);
+    var _tunaN = Math.ceil(m.p / 44);
+    var _eqParts = [];
+    if (_chickenN > 0) _eqParts.push(_chickenN + ' escalope' + (_chickenN > 1 ? 's' : '') + ' de poulet');
+    if (_tunaN > 0) _eqParts.push(_tunaN + ' bo\u00eete' + (_tunaN > 1 ? 's' : '') + ' de thon');
+    if (_eqParts.length > 0) {
+      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin:-4px 0 16px;text-align:center;'},
+        '\u2248 ' + _eqParts.join(' \u00b7 ')));
+    }
+  }
 
   // ─── OBÉSITÉ : avertissement auto si IMC >= 30 et 'obesity' absent de S.medical ───
   // HAS 2022 : IMC >= 30 = obésité grade 1+ → prise en charge spécifique recommandée
@@ -1842,6 +1894,7 @@ function renderStep8(p) {
   }
 
   // Medical warnings
+  if (!Array.isArray(S.medical)) S.medical = [];
   if (S.medical.length > 0) {
     var mw = h('div', {style: 'border-left:2px solid var(--orange);padding:12px 16px;background:var(--orangebg);margin:16px 0'});
     mw.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:8px'}, 'Recommandations m\u00e9dicales'));
@@ -2033,10 +2086,10 @@ function renderStep8(p) {
       window.GAMIFICATION.unlockBadge('first_weigh');
       if (S.weightHistory.length >= 10) window.GAMIFICATION.unlockBadge('weight_10');
       if (S.targetWeight && v <= S.targetWeight && GOALS[S.goal] && (GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred')) window.GAMIFICATION.unlockBadge('weight_goal');
-      if (S.weightHistory.length >= 2) {
+      if (S.weightHistory.length >= 2 && S.weightHistory[0]) {
         var first = S.weightHistory[0].weight;
-        if (first - v >= 1) window.GAMIFICATION.unlockBadge('first_kg_lost');
-        if (first - v >= 5) window.GAMIFICATION.unlockBadge('five_kg');
+        if (first != null && first - v >= 1) window.GAMIFICATION.unlockBadge('first_kg_lost');
+        if (first != null && first - v >= 5) window.GAMIFICATION.unlockBadge('five_kg');
       }
     }
     window.render();
@@ -2222,7 +2275,7 @@ function renderStep9(p) {
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
   if (!S._nm && window.computeNutritionState) window.computeNutritionState(false);
-  if (!S.weekPlan) S.weekPlan = generateWeek();
+  if (!S.weekPlan) { var _wk9 = generateWeek(); if (Array.isArray(_wk9) && _wk9.length > 0) S.weekPlan = _wk9; }
   // Bounds check: selectedDay must be in [0, 6]
   if (typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) S.selectedDay = 0;
 
@@ -2600,9 +2653,11 @@ function renderStep9(p) {
   p.appendChild(h('div', {style: 'height:8px'}));
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
     if (window.computeNutritionState) window.computeNutritionState(false);
-    S.weekPlan = generateWeek();
+    var _wkR = generateWeek();
+    if (Array.isArray(_wkR) && _wkR.length > 0) S.weekPlan = _wkR;
+    S._weekPlanGeneratedAt = new Date().toISOString();
     // Sync plan nutrition vers Supabase
-    if (window.SupaSync) {
+    if (window.SupaSync && S.weekPlan) {
       var _monday = new Date();
       _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
       SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);

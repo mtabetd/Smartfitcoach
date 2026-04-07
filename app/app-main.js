@@ -49,14 +49,17 @@ var PROFILE_KEYS = [
  'calisthenicsWeek','selectedCalisthDay',
  // Musculation
  'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep','selectedSportDay',
+ 'sportProgram',
  'bonusExercises','sessionHistory',
  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment','installations',
  // Nutrition plan
- 'shopChecked','weekPlan','selectedDay',
+ 'shopChecked','weekPlan','selectedDay','_weekPlanGeneratedAt',
  // System
  'lang','weightUnit','heightUnit',
  'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
- 'heartRateRest','yogaLevel','yogaGoal','yogaDays','yogaWeek','yogaDay',
+ 'heartRateRest','yogaLevel','yogaGoal','yogaObjectif','yogaDuration','yogaStyle','yogaDays','yogaWeek','yogaDay',
+ 'crossfitBenchmarks',
+ 'weightHistory',
  'wantsDessert',
  'wheyFlavors','saladBuilder',
  'emailOptin',
@@ -188,12 +191,12 @@ function loadProfile() {
  // Defensive rehydration: ensure object/array fields are never null after load
  var _objFields = ['sportFocus','bonusExercises','sessionHistory','muscuSessionLog',
  'muscuProgressionHistory','musculationWeights','muscuStrengthProfile','crossfit1RM',
- 'hyroxBenchmarks','shopChecked','bodyZones'];
+ 'hyroxBenchmarks','shopChecked','bodyZones','crossfitBenchmarks'];
  _objFields.forEach(function(f) { if (!S[f] || typeof S[f] !== 'object' || Array.isArray(S[f])) S[f] = {}; });
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','strongZones','weakZones',
  'train','supplements','wheyFlavors','alcoholTypes',
- 'calisthenicsEquipment','calisthenicsGoal'];
+ 'calisthenicsEquipment','calisthenicsGoal','weightHistory'];
  _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
  // weekPlan is null or array — reject anything else
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
@@ -260,6 +263,27 @@ function render() {
  var ub = h('div', {'class': 'user-bar'});
  ub.appendChild(h('span', {'class': 'user-name'}, '◆ SMARTFITCOACH'));
  var ubRight = h('div', {style: 'display:flex;align-items:center;gap:16px'});
+ // Streak indicator — affiché si streak >= 2
+ (function() {
+   try {
+     var _sUser = AUTH.getUser();
+     var _sUid = _sUser ? _sUser.id : 'anon';
+     var _sRaw = localStorage.getItem('mtd_streak_' + _sUid);
+     var _sVal = 0;
+     if (_sRaw) { var _sData = JSON.parse(_sRaw); _sVal = (_sData && _sData.current) ? _sData.current : 0; }
+     if (_sVal >= 2) {
+       var _streakEl = h('div', {
+         style: 'display:flex;align-items:center;gap:3px;min-height:44px;cursor:default;',
+         title: _sVal + ' jour' + (_sVal > 1 ? 's' : '') + ' cons\u00e9cutif' + (_sVal > 1 ? 's' : '')
+       });
+       _streakEl.appendChild(h('span', {style: 'font-size:12px;line-height:1;'}, _sVal >= 7 ? '\uD83C\uDFC6' : '\uD83D\uDD25'));
+       _streakEl.appendChild(h('span', {
+         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:0.5px;'
+       }, String(_sVal)));
+       ubRight.appendChild(_streakEl);
+     }
+   } catch(e) {}
+ })();
  // Language toggle FR·EN — touch target sur le wrapper, texte épuré
  (function() {
    var _curLang = (window.I18N ? window.I18N.current : (S.lang || 'fr'));
@@ -302,41 +326,21 @@ function render() {
  ub.appendChild(ubRight);
  wrap.appendChild(ub);
 
- // Main navigation (4 tabs: Aujourd'hui, Dashboard, Nutrition, Sport)
+ // Main navigation (3 tabs: Aujourd'hui, Nutrition, Sport)
  var nav = h('div', {'class': 'main-nav'});
- nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'today' ? ' active' : ''), onclick: function(){ S.view = 'today'; if(window.BLACKBOX)window.BLACKBOX.log('nav_today'); render(); }}, 'Aujourd\'hui'));
- nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'dashboard' ? ' active' : ''), onclick: function(){ S.view = 'dashboard'; if(window.BLACKBOX)window.BLACKBOX.log('nav_dashboard'); render(); }}, window.t('nav.dashboard')));
+ nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'today' || S.view === 'dashboard' || !S.view ? ' active' : ''), onclick: function(){ S.view = 'today'; if(window.BLACKBOX)window.BLACKBOX.log('nav_today'); render(); }}, 'Aujourd\'hui'));
  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, window.t('nav.nutrition')));
  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, window.t('nav.sport')));
  wrap.appendChild(nav);
 
  var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
 
- if (S.view === 'today' && window.TODAY) {
- TODAY.render(content);
- } else if (S.view === 'sport' && window.SPORT) {
+ if (S.view === 'sport' && window.SPORT) {
  SPORT.render(content);
  } else if (S.view === 'nutrition' && window.NUTRITION) {
  NUTRITION.render(content);
- } else if (S.view === 'dashboard') {
- if (window.DASHBOARD) DASHBOARD.render(content);
- else {
- // Fallback if dashboard not loaded
- // XSS fix: build h1 with user.name via DOM, not via innerHTML
- var welcomeH1 = document.createElement('h1');
- welcomeH1.appendChild(document.createTextNode('Bienvenue'));
- welcomeH1.appendChild(document.createElement('br'));
- var nameEm = document.createElement('em');
- nameEm.textContent = user ? user.name : '';
- welcomeH1.appendChild(nameEm);
- var welcomeDiv = h('div', {style: 'text-align:center;padding:40px'}, [
- h('p', {'class': 'subtitle'}, 'Choisissez Nutrition ou Sport dans la navigation.')
- ]);
- welcomeDiv.insertBefore(welcomeH1, welcomeDiv.firstChild);
- content.appendChild(welcomeDiv);
- }
  } else {
- // Default: vue Aujourd'hui
+ // Default + 'today' + 'dashboard' → vue Aujourd'hui
  S.view = 'today';
  if (window.TODAY) TODAY.render(content);
  }
@@ -435,8 +439,8 @@ function renderLogin(app) {
  // Restore profile from localStorage for this user
  loadProfile();
  // Fix nStep for returning users who completed onboarding
- if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
- S.nStep = S.weekPlan ? 9 : (S.goal ? 8 : 1);
+ if (S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
+ S.nStep = S.weekPlan ? 9 : (S.goal !== null ? 8 : 1);
  }
  // Restore language preference
  if (window.I18N && S.lang) window.I18N.current = S.lang;
@@ -1040,6 +1044,53 @@ if (AUTH.isLoggedIn()) {
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1) {
    S.sStep = 0;
  }
+ // ─── AUTO-REGENERATION PLAN NUTRITION (semaine expirée) ───
+ // Si un plan existe, que l'utilisateur n'est PAS en train de le consulter (nStep ≠ 9),
+ // et que la date de génération a plus de 7 jours → regénérer silencieusement.
+ (function() {
+   try {
+     if (S.weekPlan && S.nStep !== 9 && S.goal !== null && window.generateWeek && window.computeNutritionState) {
+       var needsRegen = false;
+       if (!S._weekPlanGeneratedAt) {
+         // Plan sans date de génération : considéré comme ancien → regénérer
+         needsRegen = true;
+       } else {
+         var generatedAt = new Date(S._weekPlanGeneratedAt);
+         var now = new Date();
+         var diffMs = now - generatedAt;
+         var diffDays = diffMs / (1000 * 60 * 60 * 24);
+         // Regénérer si le plan a plus de 7 jours
+         if (diffDays >= 7) {
+           needsRegen = true;
+         } else {
+           // Regénérer aussi si on est lundi et le plan date d'avant ce lundi
+           var dayOfWeek = now.getDay(); // 0=dim, 1=lun
+           if (dayOfWeek === 1) {
+             // Trouver le début de ce lundi (minuit)
+             var thisMonday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+             if (generatedAt < thisMonday) {
+               needsRegen = true;
+             }
+           }
+         }
+       }
+       if (needsRegen) {
+         window.computeNutritionState(false);
+         var _wkAuto = window.generateWeek();
+         if (Array.isArray(_wkAuto) && _wkAuto.length > 0) S.weekPlan = _wkAuto;
+         S._weekPlanGeneratedAt = new Date().toISOString();
+         if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
+         if (window.SupaSync && S.weekPlan) {
+           try {
+             var _mon = new Date();
+             _mon.setDate(_mon.getDate() - _mon.getDay() + 1);
+             window.SupaSync.saveMealPlan(_mon.toISOString().slice(0, 10), S.weekPlan);
+           } catch(e2) {}
+         }
+       }
+     }
+   } catch(e) {}
+ })();
  // Restaurer la langue
  if (window.I18N && S.lang) {
  window.I18N.current = S.lang;
