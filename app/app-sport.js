@@ -1322,6 +1322,25 @@ function renderDedicatedPrograms(p) {
  // ─── SUIVI 7 SEMAINES ───
  renderWeekTracker(p);
 
+ // ─── BANNIÈRE : GÉNÉRER MON PROGRAMME DE MUSCULATION ───
+ p.appendChild(h('div', {'class': 'section-label'}, 'Programme de musculation'));
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'Créez votre programme sur mesure selon vos objectifs, niveau et zones cibles.'));
+ p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
+ // CRITIQUE-1 : pré-sélection ici (une seule fois, hors render)
+ if (S.goal !== null && S.sportGoals.length === 0) {
+ var nutKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
+ var preselect = nutKey ? NUTRITION_TO_SPORT_GOAL[nutKey] : null;
+ if (preselect) S.sportGoals = [preselect];
+ }
+ S.sStep = 1;
+ window.render();
+ }}, 'G\u00e9n\u00e9rer mon programme'));
+ p.appendChild(h('div', {style: 'height:20px'}));
+
+ // ─── PROGRAMMES DÉDIÉS ───
+ p.appendChild(h('div', {'class': 'section-label'}, 'Programmes ciblés'));
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'S\u00e9ances bonus cibl\u00e9es, vari\u00e9es (A/B), pr\u00eates \u00e0 l\u2019emploi.'));
+
  var allDedicated = [
  {key: 'fessiers_dedied', icon: '\uD83C\uDF51'},
  {key: 'abdos_dedied', icon: '\u26A1'},
@@ -1395,16 +1414,6 @@ function renderDedicatedPrograms(p) {
  });
 
  p.appendChild(h('div', {style: 'height:16px'}));
- p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
- // CRITIQUE-1 : pré-sélection ici (une seule fois, hors render)
- if (S.goal !== null && S.sportGoals.length === 0) {
- var nutKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
- var preselect = nutKey ? NUTRITION_TO_SPORT_GOAL[nutKey] : null;
- if (preselect) S.sportGoals = [preselect];
- }
- S.sStep = 1;
- window.render();
- }}, 'Cr\u00e9er mon programme personnalis\u00e9 \u2192'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
@@ -1547,25 +1556,22 @@ function renderCrossfitLevel(p) {
  if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:18px'}, 'Quels jours vous entraînez-vous\u00a0?'));
  var dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
- var dayBtnsWrap = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0'});
+ var dayBtnsWrap = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:10px 0'});
+ var _selTarget = S.sportDays || 3;
  dayLabels.forEach(function(label, idx) {
    var selected = S.trainingDaysSelected.indexOf(idx) !== -1;
+   var overTarget = selected && S.trainingDaysSelected.length > _selTarget;
+   var btnStyle = 'width:44px;height:44px;border-radius:3px;font-family:Georgia,serif;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;letter-spacing:0;transition:background .15s,color .15s,border-color .15s;';
+   if (overTarget) btnStyle += 'background:#5A1010;color:#FAF9F6;border:1.5px solid #5A1010;';
+   else if (selected) btnStyle += 'background:#1A1A18;color:#FAF9F6;border:1.5px solid #1A1A18;';
+   else btnStyle += 'background:transparent;color:#1A1A18;border:1.5px solid #E8E6DF;';
    var btn = h('button', {
-     type: 'button',
-     style: 'width:40px;height:40px;border-radius:4px;font-family:Georgia,serif;font-size:14px;font-weight:bold;cursor:pointer;transition:background .15s,color .15s;'
-       + (selected
-         ? 'background:#1A1A18;color:#fff;border:2px solid #1A1A18;'
-         : 'background:transparent;color:#1A1A18;border:2px solid var(--border,#ccc);'),
+     type: 'button', style: btnStyle,
      onclick: function() {
        if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
        var pos = S.trainingDaysSelected.indexOf(idx);
-       if (pos !== -1) {
-         S.trainingDaysSelected.splice(pos, 1);
-       } else {
-         S.trainingDaysSelected.push(idx);
-         S.trainingDaysSelected.sort(function(a, b) { return a - b; });
-       }
-       // Sync sportDays with actual selected count
+       if (pos !== -1) { S.trainingDaysSelected.splice(pos, 1); }
+       else { S.trainingDaysSelected.push(idx); S.trainingDaysSelected.sort(function(a, b) { return a - b; }); }
        var cnt = S.trainingDaysSelected.length;
        if (cnt > 0) S.sportDays = Math.max(3, Math.min(6, cnt));
        try { window.saveProfile(); } catch(e) {}
@@ -1576,13 +1582,14 @@ function renderCrossfitLevel(p) {
  });
  p.appendChild(dayBtnsWrap);
  var selCount = S.trainingDaysSelected.length;
- if (selCount > 0) {
-   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:4px'},
-     selCount + ' jour' + (selCount > 1 ? 's' : '') + ' s\u00e9lectionn\u00e9' + (selCount > 1 ? 's' : '')));
- } else {
-   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:4px'},
-     'Aucun jour s\u00e9lectionn\u00e9 — la r\u00e9partition sera automatique'));
- }
+ var diff = selCount - _selTarget;
+ var hintColor = diff === 0 ? '#6B6B65' : (diff > 0 ? '#5A1010' : '#6A4A1A');
+ var hintText = selCount === 0
+   ? 'Aucun jour sélectionné — répartition automatique'
+   : diff === 0 ? selCount + ' / ' + _selTarget + ' jour' + (selCount > 1 ? 's' : '') + ' — parfait'
+   : diff > 0 ? selCount + ' / ' + _selTarget + ' — retirez ' + diff + ' jour' + (diff > 1 ? 's' : '')
+   : selCount + ' / ' + _selTarget + ' — sélectionnez encore ' + Math.abs(diff) + ' jour' + (Math.abs(diff) > 1 ? 's' : '');
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + hintColor + ';text-align:center;margin-bottom:4px;letter-spacing:.5px;transition:color .2s'}, hintText));
 
  // Recommendation based on level
  if (S.crossfitLevel) {
@@ -2266,6 +2273,8 @@ function getWellnessAdaptation() {
 window.getWellnessAdaptation = getWellnessAdaptation;
 
 function appendWellnessBanner(p) {
+  // Dismissed via "Reporter" / "Compris" button — skip until next render cycle resets it
+  if (window.S && window.S._wellnessBannerDismissed) { window.S._wellnessBannerDismissed = false; return; }
   // ─── Priorité : score numérique 1-5 si disponible ───
   var score = getWellnessScore();
   if (score !== null) {
@@ -2333,21 +2342,45 @@ function appendWellnessBanner(p) {
   };
   var cm = colorMap[adapt.level] || colorMap['normal'];
 
-  var fallbackBanner = h('div', {style: 'border-left:2px solid ' + cm.borderColor + ';padding:14px 20px;background:' + cm.bg + ';margin-bottom:20px;border-radius:0 2px 2px 0'});
+  var isPeak = adapt.level === 'peak';
+  var fallbackBanner = h('div', {style:
+    'border-left:3px solid ' + cm.borderColor + ';' +
+    'padding:' + (isPeak ? '8px 12px' : '10px 14px') + ';' +
+    'background:' + cm.bg + ';' +
+    'margin-bottom:16px;border-radius:0 2px 2px 0;' +
+    'display:flex;align-items:' + (isPeak ? 'center' : 'flex-start') + ';' +
+    'gap:10px;overflow:hidden;max-height:' + (isPeak ? '52px' : '88px')
+  });
 
-  var labelEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:' + cm.textColor + ';margin-bottom:6px'}, adapt.label);
-  fallbackBanner.appendChild(labelEl);
+  // SVG icons per level
+  var svgIcons = {
+    recovery: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#5A1010" stroke-width="1.5"/><path d="M8 4v5" stroke="#5A1010" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.5" r=".75" fill="#5A1010"/></svg>',
+    reduced:  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2C4.69 2 2 4.69 2 8s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6Z" stroke="#6A4A1A" stroke-width="1.5"/><path d="M5.5 9.5C6 10.5 7 11 8 11s2-.5 2.5-1.5" stroke="#6A4A1A" stroke-width="1.5" stroke-linecap="round"/><path d="M5.5 6.5h.01M10.5 6.5h.01" stroke="#6A4A1A" stroke-width="1.5" stroke-linecap="round"/></svg>',
+    peak:     '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#1A4A1A" stroke-width="1.4"/><path d="M4 7l2 2 4-4" stroke="#1A4A1A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    normal:   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#1A3A6A" stroke-width="1.5"/><path d="M8 5v4" stroke="#1A3A6A" stroke-width="1.5" stroke-linecap="round"/></svg>'
+  };
+  var iconWrap = h('div', {style: 'flex-shrink:0;margin-top:' + (isPeak ? '0' : '1px')});
+  iconWrap.innerHTML = svgIcons[adapt.level] || svgIcons.normal;
+  fallbackBanner.appendChild(iconWrap);
 
-  var adviceEl = h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:10px'}, adapt.advice);
-  fallbackBanner.appendChild(adviceEl);
-
-  var rebtn = h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey3,#9A9A90);cursor:pointer;transition:color 0.2s ease',
-    onclick: function() { S.todayWellness = null; window.render(); }
-  }, '\u21ba Refaire le bilan');
-  rebtn.onmouseenter = function() { this.style.color = 'var(--black,#0A0A09)'; };
-  rebtn.onmouseleave = function() { this.style.color = 'var(--grey3,#9A9A90)'; };
-  fallbackBanner.appendChild(rebtn);
+  if (isPeak) {
+    // Compact badge — label only, no button
+    fallbackBanner.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A4A1A'}, 'Forme optimale — poussez sur les charges'));
+  } else {
+    var textWrap = h('div', {style: 'flex:1;min-width:0'});
+    textWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cm.textColor + ';margin-bottom:3px;font-weight:700'}, adapt.label));
+    textWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;font-style:italic;color:var(--black,#1A1A18);line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'}, adapt.advice));
+    var actionBtn = h('button', {
+      style: 'margin-top:5px;background:none;border:none;border-bottom:1px solid ' + cm.borderColor + ';padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:' + cm.textColor + ';cursor:pointer;line-height:1.6',
+      onclick: function() {
+        if (adapt.level === 'recovery') { S._sessionPostponed = true; }
+        S._wellnessBannerDismissed = true;
+        window.render();
+      }
+    }, adapt.level === 'recovery' ? 'Reporter' : 'Compris');
+    textWrap.appendChild(actionBtn);
+    fallbackBanner.appendChild(textWrap);
+  }
 
   p.appendChild(fallbackBanner);
 
