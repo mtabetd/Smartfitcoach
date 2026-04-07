@@ -568,6 +568,7 @@ function renderCardSport() {
     style: 'margin-top:4px;',
     onclick: function() {
       var S = window.S;
+      if (!S) return;
       S.view = 'sport';
       S.selectedSportDay = idx;
       if (window.render) window.render();
@@ -617,6 +618,7 @@ function renderCardShortcuts() {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
     onclick: function() {
       var S = window.S;
+      if (!S) return;
       S.view = 'nutrition';
       if (window.render) window.render();
     }
@@ -626,6 +628,7 @@ function renderCardShortcuts() {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
     onclick: function() {
       var S = window.S;
+      if (!S) return;
       S.view = 'sport';
       if (window.render) window.render();
     }
@@ -701,9 +704,9 @@ function openTodayWeightPrompt() {
         }
         if (window.GAMIFICATION) {
           try {
-            GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg'));
-            GAMIFICATION.unlockBadge('first_weigh');
-            if (wh.length >= 10) GAMIFICATION.unlockBadge('weight_10');
+            window.GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg'));
+            window.GAMIFICATION.unlockBadge('first_weigh');
+            if (wh.length >= 10) window.GAMIFICATION.unlockBadge('weight_10');
           } catch(e) {}
         }
         document.body.removeChild(overlay);
@@ -835,7 +838,7 @@ function todayExportAllData() {
   a.download = 'mtd-backup-' + new Date().toISOString().split('T')[0] + '.json';
   a.click();
   URL.revokeObjectURL(url);
-  if (window.GAMIFICATION) GAMIFICATION.showToast('Données exportées !');
+  if (window.GAMIFICATION) window.GAMIFICATION.showToast('Données exportées !');
 }
 
 function todayImportData() {
@@ -854,7 +857,7 @@ function todayImportData() {
         Object.keys(backup.data).forEach(function(key) {
           localStorage.setItem(key, typeof backup.data[key] === 'string' ? backup.data[key] : JSON.stringify(backup.data[key]));
         });
-        if (window.GAMIFICATION) GAMIFICATION.showToast('Données restaurées !');
+        if (window.GAMIFICATION) window.GAMIFICATION.showToast('Données restaurées !');
         setTimeout(function() { location.reload(); }, 1000);
       } catch(err) { alert('Erreur de lecture : ' + err.message); }
     };
@@ -873,7 +876,7 @@ function todayDeleteAllData() {
   }
   keysToRemove.forEach(function(key) { localStorage.removeItem(key); });
   if (window.AUTH && window.AUTH.logout) { try { window.AUTH.logout(); } catch(e) {} }
-  if (window.GAMIFICATION) GAMIFICATION.showToast('Données supprimées.');
+  if (window.GAMIFICATION) window.GAMIFICATION.showToast('Données supprimées.');
   setTimeout(function() { location.reload(); }, 1000);
 }
 

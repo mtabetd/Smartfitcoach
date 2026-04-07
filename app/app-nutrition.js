@@ -925,6 +925,7 @@ function renderStep3(p) {
 
 // ─── STEP 4: SANTE ───
 function renderStep4(p) {
+  if (!Array.isArray(S.medical)) S.medical = [];
   renderProgressBar(p, 4, 9);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
@@ -1696,10 +1697,11 @@ function renderStep7(p) {
     if (ok) {
       // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
       if (window.computeNutritionState) { window.computeNutritionState(false); }
-      S.weekPlan = generateWeek();
+      var _wk1 = generateWeek();
+      if (Array.isArray(_wk1) && _wk1.length > 0) S.weekPlan = _wk1;
       S._weekPlanGeneratedAt = new Date().toISOString();
       // Sync plan nutrition vers Supabase
-      if (window.SupaSync) {
+      if (window.SupaSync && S.weekPlan) {
         var _monday = new Date();
         _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
         SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
@@ -1892,6 +1894,7 @@ function renderStep8(p) {
   }
 
   // Medical warnings
+  if (!Array.isArray(S.medical)) S.medical = [];
   if (S.medical.length > 0) {
     var mw = h('div', {style: 'border-left:2px solid var(--orange);padding:12px 16px;background:var(--orangebg);margin:16px 0'});
     mw.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:8px'}, 'Recommandations m\u00e9dicales'));
@@ -2272,7 +2275,7 @@ function renderStep9(p) {
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
   if (!S._nm && window.computeNutritionState) window.computeNutritionState(false);
-  if (!S.weekPlan) S.weekPlan = generateWeek();
+  if (!S.weekPlan) { var _wk9 = generateWeek(); if (Array.isArray(_wk9) && _wk9.length > 0) S.weekPlan = _wk9; }
   // Bounds check: selectedDay must be in [0, 6]
   if (typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) S.selectedDay = 0;
 
@@ -2650,10 +2653,11 @@ function renderStep9(p) {
   p.appendChild(h('div', {style: 'height:8px'}));
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
     if (window.computeNutritionState) window.computeNutritionState(false);
-    S.weekPlan = generateWeek();
+    var _wkR = generateWeek();
+    if (Array.isArray(_wkR) && _wkR.length > 0) S.weekPlan = _wkR;
     S._weekPlanGeneratedAt = new Date().toISOString();
     // Sync plan nutrition vers Supabase
-    if (window.SupaSync) {
+    if (window.SupaSync && S.weekPlan) {
       var _monday = new Date();
       _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
       SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);

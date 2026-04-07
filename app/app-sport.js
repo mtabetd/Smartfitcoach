@@ -976,6 +976,7 @@ function buildKcalCard(kcal, durationMins) {
 
 // ─── STEP 20: QUESTIONNAIRE MÉDICAL MUSCU ───
 function renderMuscuMedicalQ(p) {
+ if (!S.muscuMedical || typeof S.muscuMedical !== 'object' || Array.isArray(S.muscuMedical)) S.muscuMedical = {};
  var med = S.muscuMedical;
 
  // Header with back button
@@ -4894,10 +4895,11 @@ function renderMusculationProgram(p) {
  e.stopPropagation();
  var newEx = { n: alt.n, m: alt.m, eq: alt.eq, sets: alt.sets || exRef.sets, rest: alt.rest || exRef.rest };
  newEx.video = alt.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(alt.n) : null);
+ if (!Array.isArray(S.sportProgram) || !S.sportProgram[dayI] || !Array.isArray(S.sportProgram[dayI].exercises)) { S.swapPanel = null; window.render(); return; }
  S.sportProgram[dayI].exercises[exI] = newEx;
  // Migrer les données de session pour le nouvel exercice
  var _today = new Date().toISOString().slice(0, 10);
- if (S.muscuSessionLog[_today] && S.muscuSessionLog[_today][exRef.n]) {
+ if (S.muscuSessionLog && S.muscuSessionLog[_today] && S.muscuSessionLog[_today][exRef.n]) {
  S.muscuSessionLog[_today][newEx.n] = S.muscuSessionLog[_today][exRef.n];
  delete S.muscuSessionLog[_today][exRef.n];
  saveMuscuSessionLog();
@@ -4939,7 +4941,7 @@ function renderMusculationProgram(p) {
  var bc = h('div', {'class': 'exercise-card', style: 'border-left:3px solid #1A4A1A'});
  var bnRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center'});
  bnRow.appendChild(h('div', {'class': 'exercise-muscle'}, bex.m));
- bnRow.appendChild(h('span', {style: 'font-size:18px;color:#5A1010;cursor:pointer;line-height:1;padding:0 4px', onclick: (function(idx) { return function(e) { e.stopPropagation(); var arr = S.bonusExercises[S.selectedSportDay] || []; arr.splice(idx, 1); S.bonusExercises[S.selectedSportDay] = arr; window.render(); }; })(bi)}, '\u00d7'));
+ bnRow.appendChild(h('span', {style: 'font-size:18px;color:#5A1010;cursor:pointer;line-height:1;padding:0 4px', onclick: (function(idx) { return function(e) { e.stopPropagation(); if (!S.bonusExercises) S.bonusExercises = {}; var arr = S.bonusExercises[S.selectedSportDay] || []; arr.splice(idx, 1); S.bonusExercises[S.selectedSportDay] = arr; window.render(); }; })(bi)}, '\u00d7'));
  bc.appendChild(bnRow);
  bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n));
  bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 Repos ' + bex.rest));
@@ -5171,13 +5173,14 @@ function renderMusculationProgram(p) {
  right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:normal'}, ex.sets + '\u00d7' + ex.reps));
  right.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, ex.rest));
  // Bouton + / Ajouté — ajoute l'exercice en bonus à la séance courante
- var bonusArr = S.bonusExercises[S.selectedSportDay] || [];
+ var bonusArr = (S.bonusExercises || {})[S.selectedSportDay] || [];
  var isAddedBonus = false;
  for (var bci = 0; bci < bonusArr.length; bci++) { if (bonusArr[bci].n === exBase.name) { isAddedBonus = true; break; } }
  var addBtn = h('div', {
  style: 'margin-top:6px;padding:4px 8px;cursor:pointer;font-family:"Helvetica Neue",sans-serif;font-size:11px;text-align:center;border:1px solid ' + (isAddedBonus ? '#1A4A1A' : 'var(--border)') + ';color:' + (isAddedBonus ? '#1A4A1A' : 'var(--grey)') + ';background:' + (isAddedBonus ? 'rgba(39,174,96,0.08)' : 'transparent'),
  onclick: (function(exBCapture) { return function(e) {
  e.stopPropagation();
+ if (!S.bonusExercises) S.bonusExercises = {};
  var arr = S.bonusExercises[S.selectedSportDay] || [];
  var existIdx = -1;
  for (var ii = 0; ii < arr.length; ii++) { if (arr[ii].n === exBCapture.name) { existIdx = ii; break; } }

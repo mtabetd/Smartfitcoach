@@ -439,8 +439,8 @@ function renderLogin(app) {
  // Restore profile from localStorage for this user
  loadProfile();
  // Fix nStep for returning users who completed onboarding
- if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
- S.nStep = S.weekPlan ? 9 : (S.goal ? 8 : 1);
+ if (S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
+ S.nStep = S.weekPlan ? 9 : (S.goal !== null ? 8 : 1);
  }
  // Restore language preference
  if (window.I18N && S.lang) window.I18N.current = S.lang;
@@ -1076,10 +1076,11 @@ if (AUTH.isLoggedIn()) {
        }
        if (needsRegen) {
          window.computeNutritionState(false);
-         S.weekPlan = window.generateWeek();
+         var _wkAuto = window.generateWeek();
+         if (Array.isArray(_wkAuto) && _wkAuto.length > 0) S.weekPlan = _wkAuto;
          S._weekPlanGeneratedAt = new Date().toISOString();
          if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
-         if (window.SupaSync) {
+         if (window.SupaSync && S.weekPlan) {
            try {
              var _mon = new Date();
              _mon.setDate(_mon.getDate() - _mon.getDay() + 1);
