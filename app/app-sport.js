@@ -569,6 +569,17 @@ window.SPORT = {
  render: function(p) {
  var content = h('div', {'class': 'fade-in'});
 
+ // ─── GUARD: si l'utilisateur a déjà un programme, aller directement à l'étape programme ───
+ // Évite de relancer le questionnaire "choix de sport" quand l'utilisateur clique sur "SPORT"
+ // et qu'il a déjà un programme configuré (sportType + programme final généré).
+ var _SPORT_PROGRAM_STEP = {
+   musculation: 4, crossfit: 6, running: 8, hyrox: 10,
+   padel: 12, golf: 14, triathlon: 18, yoga: 21, cycling: 23, calisthenics: 25
+ };
+ if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
+   S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
+ }
+
  // ─── CHECK BIEN-ÊTRE QUOTIDIEN (NON-BLOQUANT) ───
  // Si l'utilisateur n'a pas fait son checkin aujourd'hui, on stocke un flag
  // pour afficher un bandeau en haut du contenu — sans bloquer l'accès au programme.

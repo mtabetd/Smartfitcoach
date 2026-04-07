@@ -1168,10 +1168,8 @@ body, p, .subtitle {
 }
 
 /* App container — iOS smooth scroll */
-.app {
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
+/* .app scrolls via body — overflow-y:auto removed to prevent position:fixed children
+   (nutrition splash #splash) from being clipped or mis-positioned on iOS Safari */
 
 /* Button minimum touch target */
 .btn-primary,
@@ -1627,9 +1625,13 @@ body, p, .subtitle {
 .card-tag,
 .label-caps,
 .level-badge,
-.main-nav-tab,
 .day-tab {
   letter-spacing: 6px;
+}
+
+/* Navigation tabs: reduced letter-spacing to prevent overflow on 4-tab layout */
+.main-nav-tab {
+  letter-spacing: 2px;
 }
 
 
@@ -1731,6 +1733,19 @@ body, p, .subtitle {
   font-size: 9px;
   letter-spacing: 2px;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 14px 6px;
+}
+
+/* Extra-narrow screens: even tighter padding */
+@media (max-width: 420px) {
+  .main-nav-tab {
+    font-size: 8px;
+    letter-spacing: 1px;
+    padding: 12px 4px;
+  }
 }
 
 

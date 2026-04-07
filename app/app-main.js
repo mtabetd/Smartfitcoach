@@ -304,10 +304,10 @@ function render() {
 
  // Main navigation (4 tabs: Aujourd'hui, Dashboard, Nutrition, Sport)
  var nav = h('div', {'class': 'main-nav'});
- nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'today' ? ' active' : ''), onclick: function(){ S.view = 'today'; if(window.BLACKBOX)window.BLACKBOX.log('nav_today'); render(); }}, '◆ Aujourd\'hui'));
- nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'dashboard' ? ' active' : ''), onclick: function(){ S.view = 'dashboard'; if(window.BLACKBOX)window.BLACKBOX.log('nav_dashboard'); render(); }}, '◆ ' + window.t('nav.dashboard')));
- nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, '◆ ' + window.t('nav.nutrition')));
- nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, '◆ ' + window.t('nav.sport')));
+ nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'today' ? ' active' : ''), onclick: function(){ S.view = 'today'; if(window.BLACKBOX)window.BLACKBOX.log('nav_today'); render(); }}, 'Aujourd\'hui'));
+ nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'dashboard' ? ' active' : ''), onclick: function(){ S.view = 'dashboard'; if(window.BLACKBOX)window.BLACKBOX.log('nav_dashboard'); render(); }}, window.t('nav.dashboard')));
+ nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, window.t('nav.nutrition')));
+ nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, window.t('nav.sport')));
  wrap.appendChild(nav);
 
  var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
@@ -416,6 +416,7 @@ function renderLogin(app) {
  AUTH.login(email, pw).then(function(result) {
  if (result.ok) {
  S.authError = '';
+ S.justLoggedIn = true;
  S.view = 'today';
  // Migrate anon profile data to this user's key (data entered before login)
  try {
@@ -1023,6 +1024,7 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
 function _doAutoLogin() {
 if (AUTH.isLoggedIn()) {
  S.view = 'today';
+ S.justLoggedIn = true;
  if (window.GAMIFICATION) GAMIFICATION.updateStreak();
  // Restore full profile from localStorage (E-01)
  loadProfile();

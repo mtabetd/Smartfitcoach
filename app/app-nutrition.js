@@ -100,10 +100,13 @@ function renderProgressBar(p, current, total) {
 
 // ─── STEP 0: SPLASH ───
 function renderSplash(app) {
-  var sp = h('div', {id: 'splash'});
-  sp.appendChild(h('div', {'class': 'splash-logo'}, 'SMARTFITCOACH'));
-  sp.appendChild(h('div', {'class': 'splash-sub'}, 'Nutrition & Sport personnalis\u00e9s'));
-  sp.appendChild(h('div', {'class': 'splash-line'}));
+  // Use class-based selector (NOT id="splash") to avoid triggering the
+  // global #splash { position:fixed; z-index:9999 } CSS rule which would
+  // overlay the entire viewport including the navigation bar.
+  var sp = h('div', {'class': 'nutrition-intro', style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px 40px;text-align:center;min-height:60vh'});
+  sp.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;letter-spacing:8px;text-transform:uppercase;font-weight:300;margin-bottom:6px;opacity:0;animation:splashFadeUp .8s ease .2s forwards'}, 'SMARTFITCOACH'));
+  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);opacity:0;animation:splashFadeUp .8s ease .5s forwards;margin-bottom:32px'}, 'Nutrition & Sport personnalis\u00e9s'));
+  sp.appendChild(h('div', {style: 'width:48px;height:1px;background:var(--black);margin:0 auto 28px'}));
   var quotes = [
     "Que ton aliment soit ta seule m\u00e9decine.",
     "La nourriture que vous mangez peut \u00eatre la forme de m\u00e9decine la plus s\u00fbre ou la plus lente forme de poison.",
@@ -120,8 +123,8 @@ function renderSplash(app) {
     "Le corps accomplit ce que l\u2019esprit choisit de nourrir.",
     "La sant\u00e9 n\u2019est pas tout, mais sans la sant\u00e9 tout n\u2019est rien."
   ];
-  sp.appendChild(h('div', {'class': 'splash-quote'}, quotes[Math.floor(Math.random() * quotes.length)]));
-  sp.appendChild(h('button', {'class': 'splash-btn', onclick: function() { goStep(1); }}, window.t('onb.start')));
+  sp.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;color:var(--black);line-height:1.7;max-width:320px;opacity:0;animation:splashFadeUp .8s ease .7s forwards;margin-bottom:36px'}, quotes[Math.floor(Math.random() * quotes.length)]));
+  sp.appendChild(h('button', {style: 'display:block;width:100%;max-width:320px;background:var(--black);color:var(--ivory);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;padding:18px;border:none;cursor:pointer;opacity:0;animation:splashFadeUp .8s ease 1.1s forwards', onclick: function() { goStep(1); }}, window.t('onb.start')));
   app.appendChild(sp);
 }
 
@@ -2566,6 +2569,21 @@ function renderStep9(p) {
   }}, '\u21bb ' + window.t('onb.s9.generate')));
   p.appendChild(h('div', {style: 'height:12px'}));
   p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(8); }}, '\u2190 Retour aux r\u00e9sultats'));
+
+  // ─── BOUTON "MODIFIER MES PRÉFÉRENCES" ───
+  // Permet à l'utilisateur de refaire le questionnaire s'il le souhaite explicitement.
+  p.appendChild(h('div', {style: 'height:12px'}));
+  var btnReset = h('button', {
+    'class': 'btn-secondary',
+    style: 'width:100%;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);border-color:var(--border,#D8D8D0)',
+    onclick: function() {
+      if (!confirm('Refaire le questionnaire nutrition ? Votre plan actuel sera supprimé.')) return;
+      S.weekPlan = null;
+      goStep(1);
+    }
+  }, '\u2699 Modifier mes pr\u00e9f\u00e9rences nutritionnelles');
+  p.appendChild(btnReset);
+  p.appendChild(h('div', {style: 'height:24px'}));
 }
 
 // ─── MODAL ───
@@ -5045,6 +5063,13 @@ window.WHEY_SMOOTHIES = WHEY_SMOOTHIES;
 
 window.NUTRITION = {
   render: function(p) {
+    // ─── GUARD: si le plan existe déjà, sauter directement à l'étape 9 ───
+    // Évite de relancer le questionnaire quand l'utilisateur clique sur "NUTRITION"
+    // alors qu'il a déjà un plan de repas généré.
+    if (S.weekPlan && S.nStep !== 9) {
+      S.nStep = 9;
+    }
+
     // Header with step indicator and progress bar
     if (S.nStep >= 1 && S.nStep <= 9) {
       var hdr = h('header', {'class': 'header'});

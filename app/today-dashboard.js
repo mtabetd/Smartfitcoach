@@ -241,6 +241,35 @@ function getNextSportDay() {
   return { index: 0, day: program[0] };
 }
 
+// ─── WELCOME BANNER — Bon retour parmi nous ───
+function renderWelcomeBanner(S) {
+  var user = window.AUTH ? window.AUTH.getUser() : null;
+  var firstName = S.prenom || (user && user.name ? user.name.split(' ')[0] : '') || '';
+
+  var days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  var months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  var now = new Date();
+  var dateStr = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()];
+
+  var banner = h('div', {
+    style: 'padding:20px 0;border-bottom:1px solid var(--border);margin-bottom:0;'
+  });
+
+  var greeting = h('div', {
+    style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--grey);line-height:1.5;'
+  });
+  greeting.textContent = 'Bon retour parmi nous' + (firstName ? ', ' + firstName : '') + ' \u2726';
+
+  var sub = h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin-top:4px;opacity:0.75;'
+  });
+  sub.textContent = dateStr + ' \u00B7 Votre programme vous attend';
+
+  banner.appendChild(greeting);
+  banner.appendChild(sub);
+  return banner;
+}
+
 // ─── RENDER CARD 1 — Bonjour ───
 function renderCardBonjour(S) {
   var c = card();
@@ -531,6 +560,9 @@ function renderTodayDashboard(p) {
   p.innerHTML = '';
 
   var wrapper = h('div', { style: 'padding-bottom:16px;' });
+
+  // Welcome banner — Bon retour parmi nous
+  wrapper.appendChild(renderWelcomeBanner(S));
 
   // Card 1 — Bonjour
   wrapper.appendChild(renderCardBonjour(S));
