@@ -554,6 +554,7 @@ function renderCardShortcuts() {
 
 // ─── MAIN RENDER ───
 function renderTodayDashboard(p) {
+  if (!p || !p.nodeType) return;
   var S = window.S;
   if (!S) return;
 
@@ -565,7 +566,7 @@ function renderTodayDashboard(p) {
   if (S.justLoggedIn) {
     wrapper.appendChild(renderWelcomeBanner(S));
     S.justLoggedIn = false;
-    if (window.saveProfile) saveProfile();
+    if (window.saveProfile) { try { saveProfile(); } catch(e) { console.warn('[saveProfile] failed:', e); } }
   }
 
   // Card 1 — Bonjour
