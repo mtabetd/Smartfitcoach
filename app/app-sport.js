@@ -1128,7 +1128,7 @@ function renderMuscuMedicalQ(p) {
   }, 'Oui, j\'ai quelque chose à signaler'));
   filterBtns.appendChild(h('button', {
    style: 'flex:1;padding:14px;background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer',
-   onclick: function() { S.muscuMedical = { done: true }; S.sStep = !S.sportLevel ? 2 : 16; if (window.saveProfile) window.saveProfile(); window.render(); }
+   onclick: function() { S.muscuMedical = { done: true }; S.sStep = !S.sportLevel ? 1 : 16; if (window.saveProfile) window.saveProfile(); window.render(); }
   }, 'Non, je suis en bonne santé'));
   filterCard.appendChild(filterBtns);
   p.appendChild(filterCard);
@@ -1465,7 +1465,19 @@ function renderDedicatedPrograms(p) {
  var variation = prog.variations[varIdx] || prog.variations[0];
  if (!variation) return;
  var currentPhase = getMuscuPhase(S.muscuWeek || 1);
- (variation.exercises || []).forEach(function(exBase) {
+ var exercises = (variation.exercises || []).slice();
+ // Medical filter for dedicated programs
+ if (S.muscuMedical && exercises.length > 0) {
+   var _medFiltered = exercises.filter(function(exo) {
+     var _n = (exo.name || exo.n || '').toLowerCase();
+     if (S.muscuMedical.shoulders && /militaire|overhead|élévation|elevation|arnold|upright|tirage menton|hspu/.test(_n)) return false;
+     if (S.muscuMedical.knees && /leg extension|jump|pistol|sissy/.test(_n)) return false;
+     if (S.muscuMedical.lowerBack && /good morning|deadlift maximum/.test(_n)) return false;
+     return true;
+   });
+   if (_medFiltered.length > 0) exercises = _medFiltered;
+ }
+ exercises.forEach(function(exBase) {
  var ex = applyPhaseToExercise(exBase, currentPhase);
  var row = h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start'});
  var left = h('div', {});

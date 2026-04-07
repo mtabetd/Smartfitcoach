@@ -386,7 +386,7 @@ var SFC_PROGRAMS_FORCE = {
 
 // ─── VOLUME LANDMARKS (Schoenfeld, RP Hypertrophy — sets/semaine par muscle) ───
 var VOLUME_LANDMARKS = {
-  chest:     {mev:6,  mav:16, mrv:22, label:'Poitrine'},
+  chest:     {mev:10, mav:16, mrv:22, label:'Poitrine'},
   back:      {mev:8,  mav:16, mrv:25, label:'Dos'},
   shoulders: {mev:6,  mav:14, mrv:20, label:'\u00c9paules'},
   legs:      {mev:8,  mav:18, mrv:28, label:'Jambes'},
