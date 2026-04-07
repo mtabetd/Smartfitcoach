@@ -4479,6 +4479,39 @@ function renderMusculationProgram(p) {
  var g = (window.SPORT_GOALS || []).find(function(x){ return x.id === gid; });
  return g ? g.name : '';
  }).join(' + ');
+ // RPE Guide for beginners
+ if (S.sportLevel === 'beginner' || !S.sportLevel) {
+  var rpeWrap = h('div', {style: 'border:1px solid var(--border,#E8E6DF);margin-bottom:16px;border-radius:2px'});
+  var rpeHeader = h('div', {
+   style: 'display:flex;justify-content:space-between;align-items:center;padding:10px 14px;cursor:pointer;background:var(--ivory2,#F5F4F0)',
+   onclick: function() { S._rpeGuideExpanded = !S._rpeGuideExpanded; window.render(); }
+  });
+  rpeHeader.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;color:var(--black,#1A1A18)'}, '📊 C\'est quoi le RPE ? (taux d\'effort)'));
+  rpeHeader.appendChild(h('div', {style: 'font-size:12px;color:var(--grey)'}, S._rpeGuideExpanded ? '▲' : '▼'));
+  rpeWrap.appendChild(rpeHeader);
+
+  if (S._rpeGuideExpanded) {
+   var rpeBody = h('div', {style: 'padding:12px 14px'});
+   rpeBody.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:10px;line-height:1.6'}, 'Le RPE mesure votre effort sur 10. Simple : combien de reps auriez-vous pu faire en plus ?'));
+   var rpeRows = [
+    ['RPE 5-6', '#1A4A1A', 'Facile — vous pourriez faire encore 4-5 reps. Échauffement.'],
+    ['RPE 7', '#6A4A1A', 'Modéré — vous pourriez faire encore 3 reps. Zone de progression.'],
+    ['RPE 8', '#6A4A1A', 'Dur — encore 2 reps possibles. Zone de hypertrophie.'],
+    ['RPE 9', '#5A1010', 'Très dur — encore 1 rep. Réservé aux avancés.'],
+    ['RPE 10', '#5A1010', 'Échec total — plus une seule rep possible. Déconseillé aux débutants.']
+   ];
+   rpeRows.forEach(function(row) {
+    var rpeRow = h('div', {style: 'display:flex;align-items:flex-start;gap:10px;margin-bottom:7px'});
+    rpeRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;color:' + row[1] + ';min-width:52px;flex-shrink:0;padding-top:1px'}, row[0]));
+    rpeRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5'}, row[2]));
+    rpeBody.appendChild(rpeRow);
+   });
+   rpeBody.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-top:8px;border-top:1px solid var(--border);padding-top:8px'}, '💡 En tant que débutant, visez RPE 7-8. Arrêtez si ça fait mal (≠ brûlure musculaire normale).'));
+   rpeWrap.appendChild(rpeBody);
+  }
+  p.appendChild(rpeWrap);
+ }
+
  p.appendChild(h('p', {'class': 'subtitle'}, S.sportDays + ' jours/semaine — ' + goalNames));
  if (window.TIPS) TIPS.renderTip(p, 'sportProgram');
 
@@ -4662,6 +4695,43 @@ function renderMusculationProgram(p) {
  if (day) {
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus));
 
+ // ─── SESSION BRIEF CARD (beginners only) ───
+ if (S.sportLevel === 'beginner') {
+  var MUSCLE_BRIEFS = {
+   'poitrine':    { why: 'les pectoraux = push de base, force des bras et épaules', tip: 'Sentez la contraction à chaque rep — qualité > quantité' },
+   'pectoral':    { why: 'les pectoraux = push de base, force des bras et épaules', tip: 'Sentez la contraction à chaque rep — qualité > quantité' },
+   'dos':         { why: 'le dos soutient votre colonne et améliore votre posture', tip: 'Tirez avec les coudes, pas avec les mains' },
+   'dorsaux':     { why: 'le dos soutient votre colonne et améliore votre posture', tip: 'Tirez avec les coudes, pas avec les mains' },
+   'épaule':      { why: 'les épaules stabilisent tous vos mouvements du haut du corps', tip: 'Commencez léger — les épaules sont fragiles' },
+   'jambe':       { why: 'les jambes = plus gros muscles du corps, brûlent le plus de calories', tip: 'Genou dans l\'axe du pied à chaque rep' },
+   'quadri':      { why: 'les quadriceps propulsent chaque pas, saut et accélération', tip: 'Descendez lentement (3s) pour plus d\'efficacité' },
+   'fessier':     { why: 'les fessiers sont le moteur de la puissance et protègent le dos', tip: 'Contractez fort en haut de chaque mouvement' },
+   'bras':        { why: 'biceps + triceps = force de traction et de poussée', tip: 'Contrôlez la descente — c\'est là que le muscle pousse le plus' },
+   'biceps':      { why: 'les biceps tirent et fléchissent — essentiels pour le dos et les tractions', tip: 'Contrôlez la descente — c\'est là que le muscle pousse le plus' },
+   'triceps':     { why: 'les triceps représentent 2/3 du volume du bras', tip: 'Extension complète à chaque rep' },
+   'abdo':        { why: 'les abdominaux stabilisent chaque mouvement et protègent votre dos', tip: 'Gainage > crunches — tenez la position' },
+   'abdominaux':  { why: 'les abdominaux stabilisent chaque mouvement et protègent votre dos', tip: 'Gainage > crunches — tenez la position' },
+   'corps entier':{ why: 'séance complète = maximum de calories brûlées et de progrès', tip: 'Récupérez bien — vous avez sollicité tous les muscles' }
+  };
+  var focusLower = (day.focus || '').toLowerCase();
+  var matchedBrief = null;
+  var briefKeys = Object.keys(MUSCLE_BRIEFS);
+  for (var bk = 0; bk < briefKeys.length; bk++) {
+   if (focusLower.indexOf(briefKeys[bk]) !== -1) { matchedBrief = MUSCLE_BRIEFS[briefKeys[bk]]; break; }
+  }
+  var briefCard = h('div', {style: 'background:rgba(26,74,26,0.04);border-left:3px solid #1A4A1A;padding:14px 16px;margin-bottom:16px;border-radius:0 2px 2px 0'});
+  briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#1A4A1A;margin-bottom:6px'}, 'SÉANCE DU JOUR'));
+  briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, day.focus));
+  if (matchedBrief) {
+   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:8px'}, '💪 ' + matchedBrief.why));
+   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, '💡 ' + matchedBrief.tip));
+  } else {
+   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:8px'}, '💪 Aujourd\'hui vous travaillez votre ' + day.focus));
+   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, '💡 Chaque rep compte — concentrez-vous sur la technique, pas sur le poids'));
+  }
+  p.appendChild(briefCard);
+ }
+
  var _totalExercises = (day.exercises || []).length;
  (day.exercises || []).forEach(function(ex, exIdx) {
  var card = h('div', {'class': 'exercise-card', onclick: function(){ S.sportModalExercise = ex; window.render(); }});
@@ -4684,6 +4754,11 @@ function renderMusculationProgram(p) {
  card.appendChild(_exNameEl);
  card.appendChild(h('div', {'class': 'exercise-sets'}, (ex.sets || '4x10') + ' \u2014 Repos ' + (ex.rest || '90s')));
  card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
+
+ // ─── EXERCISE DESCRIPTION FOR BEGINNERS ───
+ if ((S.sportLevel === 'beginner' || !S.sportLevel) && ex.desc) {
+  card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;margin-top:4px;font-style:italic'}, ex.desc));
+ }
 
  // ─── BOUTON TIMER DE REPOS ───
  (function(_ex) {
