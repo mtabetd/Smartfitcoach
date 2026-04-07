@@ -733,7 +733,7 @@ function openTodayKitchenTimer() {
 
 // ─── DATA FUNCTIONS ───
 function todayExportAllData() {
-  var user = (window.AUTH && AUTH.getUser) ? AUTH.getUser() : null;
+  var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
   user = user || {};
   var backup = { version: '1.0', date: new Date().toISOString(), user: { name: user.name, email: user.email }, data: {} };
   for (var i = 0; i < localStorage.length; i++) {
@@ -998,11 +998,13 @@ function renderExtendedSections(wrapper, S) {
   })();
   if (badgesData.length > 0) {
     badgesData.forEach(function(b) {
-      var def = (window.GAMIFICATION && window.GAMIFICATION.BADGE_DEFS) ? window.GAMIFICATION.BADGE_DEFS.find(function(d){ return d.id === b.id; }) : null;
+      var badgeId = typeof b === 'string' ? b : (b && b.id ? b.id : null);
+      if (!badgeId) return;
+      var def = (window.GAMIFICATION && window.GAMIFICATION.BADGE_DEFS) ? window.GAMIFICATION.BADGE_DEFS.find(function(d){ return d.id === badgeId; }) : null;
       var mini = h('div', {
         style: 'width:36px;height:36px;border-radius:2px;background:var(--ivory2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;',
-        title: (def && def.name) || b.name || ''
-      }, (def && def.icon) || b.icon || b.emoji || '\u2605');
+        title: (def && def.name) || (typeof b === 'object' && b.name) || ''
+      }, (def && def.icon) || (typeof b === 'object' && (b.icon || b.emoji)) || '\u2605');
       badgesRow.appendChild(mini);
     });
   } else {
