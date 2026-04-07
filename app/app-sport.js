@@ -561,6 +561,12 @@ function generateSportProgram() {
  return program;
 }
 
+// ─── MODULE CONSTANT: sport → step de programme ───
+var _SPORT_PROGRAM_STEP = {
+  musculation: 4, crossfit: 6, running: 8, hyrox: 10,
+  padel: 12, golf: 14, triathlon: 18, yoga: 21, cycling: 23, calisthenics: 25
+};
+
 // ─── INTERSTITIEL SPORT: programme existant ───
 function renderSportChoice(p) {
   var prenom = S.prenom || S.nom || '';
@@ -581,10 +587,6 @@ function renderSportChoice(p) {
     'Souhaitez-vous poursuivre votre programme en cours,\nou en définir un entièrement nouveau\u00a0?'
   ));
 
-  var _SPORT_PROGRAM_STEP = {
-    musculation: 4, crossfit: 6, running: 8, hyrox: 10,
-    padel: 12, golf: 14, triathlon: 18, yoga: 21, cycling: 23, calisthenics: 25
-  };
   var targetStep = _SPORT_PROGRAM_STEP[S.sportType] || 4;
 
   var btnContinue = h('button', {
@@ -597,7 +599,7 @@ function renderSportChoice(p) {
     onclick: function() {
       S.sportType = null;
       S.sStep = 0;
-      if (window.saveProfile) { try { saveProfile(); } catch(e) {} }
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }
   }, 'Définir un nouveau protocole');
@@ -616,10 +618,6 @@ window.SPORT = {
  var content = h('div', {'class': 'fade-in'});
 
  // ─── INTERSTITIEL: si un programme existe et qu'on revient à l'étape 0 ───
- var _SPORT_PROGRAM_STEP = {
-   musculation: 4, crossfit: 6, running: 8, hyrox: 10,
-   padel: 12, golf: 14, triathlon: 18, yoga: 21, cycling: 23, calisthenics: 25
- };
  if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
    renderSportChoice(content);
    p.appendChild(content);

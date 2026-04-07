@@ -122,7 +122,7 @@ function renderNutritionChoice(app) {
     onclick: function() {
       S.weekPlan = null;
       S.nStep = 0;
-      if (window.saveProfile) { try { saveProfile(); } catch(e) {} }
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       goStep(1);
     }
   }, 'Établir un nouveau programme');
