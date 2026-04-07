@@ -401,9 +401,10 @@ function render() {
  // Module choice — si l'utilisateur est connecté mais n'a pas encore choisi son mode
  var _authUser = window.AUTH ? window.AUTH.getUser() : null;
  if (_authUser && !S.appMode && S.nStep === 0 && S.sStep === 0) {
-   wrap.appendChild(content);
-   app.appendChild(wrap);
    window.renderModuleChoice(content);
+   wrap.appendChild(content);
+   wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'Smart Fit Coach')]));
+   app.appendChild(wrap);
    return;
  }
 
