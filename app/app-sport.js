@@ -1316,6 +1316,7 @@ function renderChargesQuestionnaire(p) {
  var saved = localStorage.getItem('mtd_muscu_strength_' + userId);
  if (saved) { try { S.muscuStrengthProfile = JSON.parse(saved); } catch(e) {} }
  }
+ if (!S.muscuStrengthProfile || typeof S.muscuStrengthProfile !== 'object' || Array.isArray(S.muscuStrengthProfile)) S.muscuStrengthProfile = {};
 
  var bodyWeight = S.weight || 75;
  var strengthThresholds = {
@@ -4441,6 +4442,7 @@ function renderMusculationProgram(p) {
  var saved = localStorage.getItem('mtd_muscu_weights_' + userId);
  if (saved) { try { S.musculationWeights = JSON.parse(saved); } catch(e) {} }
  }
+ if (!S.musculationWeights || typeof S.musculationWeights !== 'object' || Array.isArray(S.musculationWeights)) S.musculationWeights = {};
 
  // Load saved strength profile
  if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
