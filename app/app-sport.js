@@ -4937,10 +4937,94 @@ function renderMusculationProgram(p) {
   }
  }
 
- // Day tabs
+ // ─── I4+I5: SPLIT SELECTOR (intermediate+ only) ───
+ var _isIntermediate = S.sportLevel === 'intermediate' || S.sportLevel === 'advanced' || S.sportLevel === 'pro';
+ var _numDays = S.sportDays || S.sportProgram.length;
+
+ // Define split options per number of training days
+ var _SPLIT_OPTIONS = {
+  2: [
+   {id:'fullbody_ab', label:'Full Body A/B', dayLabels:['Full Body A','Full Body B']}
+  ],
+  3: [
+   {id:'fullbody_3', label:'Full Body', dayLabels:['Full Body A','Full Body B','Full Body C']},
+   {id:'ppl_3', label:'Push-Pull-Legs', dayLabels:['Push','Pull','Legs']}
+  ],
+  4: [
+   {id:'upper_lower', label:'Upper/Lower', dayLabels:['Upper A','Lower A','Upper B','Lower B']},
+   {id:'ppl_plus1', label:'PPL+1', dayLabels:['Push','Pull','Legs','Upper']},
+   {id:'bro_4', label:'Bro Split 4j', dayLabels:['Pecs/Triceps','Dos/Biceps','Épaules','Jambes']}
+  ],
+  5: [
+   {id:'ppl_5', label:'PPL 5j', dayLabels:['Push A','Pull A','Legs','Push B','Pull B']},
+   {id:'bro_5', label:'Bro Split 5j', dayLabels:['Pecs','Dos','Épaules','Bras','Jambes']}
+  ],
+  6: [
+   {id:'ppl_6', label:'PPL×2', dayLabels:['Push A','Pull A','Legs A','Push B','Pull B','Legs B']}
+  ]
+ };
+
+ var _splitOpts = _SPLIT_OPTIONS[_numDays] || null;
+
+ if (_isIntermediate && _splitOpts && _splitOpts.length > 0) {
+  // Initialize split choice to first option if not set or not valid for current day count
+  var _validIds = _splitOpts.map(function(o){ return o.id; });
+  if (!S._splitChoice || _validIds.indexOf(S._splitChoice) === -1) {
+   S._splitChoice = _splitOpts[0].id;
+  }
+
+  var _splitSection = h('div', {style: 'margin-bottom:12px'});
+  _splitSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Split d\'entraînement'));
+  var _splitBtns = h('div', {style: 'display:flex;flex-wrap:wrap;gap:6px'});
+  _splitOpts.forEach(function(opt) {
+   var _isActive = S._splitChoice === opt.id;
+   var _btn = h('button', {
+    style: 'height:36px;padding:0 12px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;border:1px solid ' + (_isActive ? 'var(--accent,#1A4A1A)' : 'var(--border,#E8E6DF)') + ';background:' + (_isActive ? 'rgba(26,74,26,0.08)' : 'transparent') + ';color:' + (_isActive ? 'var(--accent,#1A4A1A)' : 'var(--black,#1A1A18)') + ';font-weight:' + (_isActive ? '600' : '400'),
+    onclick: (function(_id) { return function() { S._splitChoice = _id; window.render(); }; })(opt.id)
+   }, opt.label);
+   _splitBtns.appendChild(_btn);
+  });
+  _splitSection.appendChild(_splitBtns);
+  p.appendChild(_splitSection);
+ } else if (!_isIntermediate) {
+  // Beginners: no split selector, clear any previous split choice
+  S._splitChoice = null;
+ }
+
+ // ─── I6: PROGRAMME HEADER BANNER ───
+ var _goalNames2 = (S.sportGoals || []).map(function(gid){
+  var g = (window.SPORT_GOALS || []).find(function(x){ return x.id === gid; });
+  return g ? g.name : '';
+ }).filter(function(n){ return n; }).join(' + ');
+
+ var _splitLabel = '';
+ if (S._splitChoice && _splitOpts) {
+  var _chosenSplit = _splitOpts.filter(function(o){ return o.id === S._splitChoice; })[0];
+  if (_chosenSplit) _splitLabel = _chosenSplit.label;
+ } else if (_numDays && window.WEEKLY_SPLITS && window.WEEKLY_SPLITS[_numDays]) {
+  _splitLabel = window.WEEKLY_SPLITS[_numDays].name || '';
+ }
+
+ var _bannerText = _splitLabel
+  ? 'Programme\u00a0: ' + _splitLabel + (_goalNames2 ? ' \u2014 ' + _goalNames2 : '')
+  : (_goalNames2 ? 'Programme\u00a0: ' + _goalNames2 : '');
+
+ if (_bannerText) {
+  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;font-family:"Helvetica Neue",Arial,sans-serif'}, _bannerText));
+ }
+
+ // Day tabs — rename according to split choice if available
+ var _currentSplitOpt = null;
+ if (S._splitChoice && _splitOpts) {
+  _currentSplitOpt = _splitOpts.filter(function(o){ return o.id === S._splitChoice; })[0] || null;
+ }
+
  var tabs = h('div', {'class': 'day-tabs'});
  S.sportProgram.forEach(function(day, i) {
- tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedSportDay === i ? ' active' : ''), onclick: function(){ S.selectedSportDay = i; window.render(); }}, day.name));
+  var _tabLabel = (_currentSplitOpt && _currentSplitOpt.dayLabels && _currentSplitOpt.dayLabels[i])
+   ? _currentSplitOpt.dayLabels[i]
+   : day.name;
+  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedSportDay === i ? ' active' : ''), onclick: function(){ S.selectedSportDay = i; window.render(); }}, _tabLabel));
  });
  p.appendChild(tabs);
 
