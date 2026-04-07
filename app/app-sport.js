@@ -561,6 +561,54 @@ function generateSportProgram() {
  return program;
 }
 
+// ─── MODULE CONSTANT: sport → step de programme ───
+var _SPORT_PROGRAM_STEP = {
+  musculation: 4, crossfit: 6, running: 8, hyrox: 10,
+  padel: 12, golf: 14, triathlon: 18, yoga: 21, cycling: 23, calisthenics: 25
+};
+
+// ─── INTERSTITIEL SPORT: programme existant ───
+function renderSportChoice(p) {
+  var prenom = S.prenom || S.nom || '';
+  var sportLabels = {
+    musculation: 'Musculation', crossfit: 'Cross Training', running: 'Running',
+    hyrox: 'Hyrox', padel: 'Padel', golf: 'Golf', triathlon: 'Triathlon / IRONMAN',
+    yoga: 'Yoga & Mobilité', cycling: 'Cyclisme', calisthenics: 'Callisthénie'
+  };
+  var sportLabel = S.sportType ? (sportLabels[S.sportType] || S.sportType) : 'Sport';
+  var wrap = h('div', {style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 28px 56px;text-align:center;min-height:65vh'});
+
+  wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:10px;letter-spacing:7px;text-transform:uppercase;font-weight:300;margin-bottom:8px;color:var(--grey)'}, 'SMARTFITCOACH'));
+  wrap.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black);margin:0 auto 28px'}));
+  wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:300;font-style:italic;line-height:1.45;margin-bottom:16px'},
+    prenom ? 'Votre protocole ' + sportLabel + '\nest actif, ' + prenom + '.' : 'Votre protocole ' + sportLabel + '\nest déjà établi.'
+  ));
+  wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;letter-spacing:0.5px;line-height:1.7;color:#555;max-width:300px;margin:0 auto 40px'},
+    'Souhaitez-vous poursuivre votre programme en cours,\nou en définir un entièrement nouveau\u00a0?'
+  ));
+
+  var targetStep = _SPORT_PROGRAM_STEP[S.sportType] || 4;
+
+  var btnContinue = h('button', {
+    style: 'display:block;width:100%;max-width:300px;padding:16px 24px;background:var(--black,#0A0A09);color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin:0 auto 14px',
+    onclick: function() { S.sStep = targetStep; window.render(); }
+  }, 'Poursuivre mon protocole');
+
+  var btnNew = h('button', {
+    style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto',
+    onclick: function() {
+      S.sportType = null;
+      S.sStep = 0;
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+      window.render();
+    }
+  }, 'Définir un nouveau protocole');
+
+  wrap.appendChild(btnContinue);
+  wrap.appendChild(btnNew);
+  p.appendChild(wrap);
+}
+
 // ─── EXPORTS ───
 window.getPregnancySportWarning = getPregnancySportWarning;
 
@@ -569,15 +617,11 @@ window.SPORT = {
  render: function(p) {
  var content = h('div', {'class': 'fade-in'});
 
- // ─── GUARD: si l'utilisateur a déjà un programme, aller directement à l'étape programme ───
- // Évite de relancer le questionnaire "choix de sport" quand l'utilisateur clique sur "SPORT"
- // et qu'il a déjà un programme configuré (sportType + programme final généré).
- var _SPORT_PROGRAM_STEP = {
-   musculation: 4, crossfit: 6, running: 8, hyrox: 10,
-   padel: 12, golf: 14, triathlon: 18, yoga: 21, cycling: 23, calisthenics: 25
- };
+ // ─── INTERSTITIEL: si un programme existe et qu'on revient à l'étape 0 ───
  if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
-   S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
+   renderSportChoice(content);
+   p.appendChild(content);
+   return;
  }
 
  // ─── CHECK BIEN-ÊTRE QUOTIDIEN (NON-BLOQUANT) ───
@@ -3774,10 +3818,12 @@ function saveMuscuSessionLog() {
 
  // Mettre à jour l'historique de progression — SEULEMENT pour la date du jour
  var _today2 = new Date().toISOString().slice(0, 10);
- var _todayLog = S.muscuSessionLog[_today2];
+ var _todayLog = S.muscuSessionLog ? S.muscuSessionLog[_today2] : null;
+ if (!S.muscuProgressionHistory) S.muscuProgressionHistory = {};
  if (_todayLog) {
  Object.keys(_todayLog).forEach(function(exName) {
  var sets = _todayLog[exName];
+ if (!Array.isArray(sets)) return;
  var completed = sets.filter(function(s) { return s.actualWeight !== null || s.actualReps !== null; });
  if (completed.length === 0) return;
  var avgWeight = completed.reduce(function(sum, s) { return sum + (s.actualWeight || 0); }, 0) / completed.length;
@@ -4868,7 +4914,7 @@ function renderMusculationProgram(p) {
  });
 
  // ─── EXERCICES BONUS (depuis programmes dédiés) ───
- var bonusDayList = S.bonusExercises[S.selectedSportDay] || [];
+ var bonusDayList = (S.bonusExercises || {})[S.selectedSportDay] || [];
  if (bonusDayList.length > 0) {
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 8px'}, 'Exercices bonus'));
  bonusDayList.forEach(function(bex, bi) {
@@ -4889,7 +4935,7 @@ function renderMusculationProgram(p) {
  }
 
  // Day summary
- var allEx = day.exercises.concat(bonusDayList);
+ var allEx = (day.exercises || []).concat(bonusDayList);
  var estDuration = calcSessionDuration(allEx);
  var summary = h('div', {'class': 'day-total'});
  summary.appendChild(h('div', {'class': 'dt-label'}, allEx.length + ' exercice' + (allEx.length > 1 ? 's' : '') + (bonusDayList.length > 0 ? ' (dont ' + bonusDayList.length + ' bonus)' : '')));

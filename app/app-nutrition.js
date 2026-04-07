@@ -98,6 +98,40 @@ function renderProgressBar(p, current, total) {
   p.appendChild(bar);
 }
 
+// ─── INTERSTITIEL: programme existant ───
+function renderNutritionChoice(app) {
+  var prenom = S.prenom || S.nom || '';
+  var wrap = h('div', {style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 28px 56px;text-align:center;min-height:65vh'});
+
+  wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:10px;letter-spacing:7px;text-transform:uppercase;font-weight:300;margin-bottom:8px;color:var(--grey)'},'SMARTFITCOACH'));
+  wrap.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black);margin:0 auto 28px'}));
+  wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:300;font-style:italic;line-height:1.45;margin-bottom:16px'},
+    prenom ? 'Votre programme de la semaine\nest prêt, ' + prenom + '.' : 'Votre programme de la semaine\nest déjà établi.'
+  ));
+  wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;letter-spacing:0.5px;line-height:1.7;color:#555;max-width:300px;margin:0 auto 40px'},
+    'Souhaitez-vous consulter votre programme en cours,\nou en établir un nouveau pour la semaine à venir\u00a0?'
+  ));
+
+  var btnConsult = h('button', {
+    style: 'display:block;width:100%;max-width:300px;padding:16px 24px;background:var(--black,#0A0A09);color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin:0 auto 14px',
+    onclick: function() { goStep(9); }
+  }, 'Consulter mon programme');
+
+  var btnNew = h('button', {
+    style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto',
+    onclick: function() {
+      S.weekPlan = null;
+      S.nStep = 0;
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+      goStep(1);
+    }
+  }, 'Établir un nouveau programme');
+
+  wrap.appendChild(btnConsult);
+  wrap.appendChild(btnNew);
+  app.appendChild(wrap);
+}
+
 // ─── STEP 0: SPLASH ───
 function renderSplash(app) {
   // Use class-based selector (NOT id="splash") to avoid triggering the
@@ -806,6 +840,7 @@ function renderStep2(p) {
 
 // ─── STEP 3: ACTIVITE ───
 function renderStep3(p) {
+  if (!Array.isArray(S.train)) S.train = [];
   renderProgressBar(p, 3, 9);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' III'));
   p.appendChild(h('h1', {html: 'Votre<br><em>activit\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
@@ -914,6 +949,8 @@ function renderStep4(p) {
 
 // ─── STEP 5: HABITUDES ALIMENTAIRES ───
 function renderStep5(p) {
+  if (!Array.isArray(S.allergies)) S.allergies = [];
+  if (!Array.isArray(S.intolerances)) S.intolerances = [];
   renderProgressBar(p, 5, 9);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V'));
   p.appendChild(h('h1', {html: 'Vos<br><em>habitudes alimentaires</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
@@ -1202,6 +1239,11 @@ function renderStep5(p) {
 
 // ─── STEP 6: OBJECTIF ───
 function renderStep6(p) {
+  if (!Array.isArray(S.supplements)) S.supplements = [];
+  if (!Array.isArray(S.wheyFlavors)) S.wheyFlavors = [];
+  if (!Array.isArray(S.cuisines)) S.cuisines = [];
+  if (!Array.isArray(S.shopStores)) S.shopStores = [];
+  if (!Array.isArray(S.shopPrefs)) S.shopPrefs = [];
   renderProgressBar(p, 6, 9);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VI'));
   p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
@@ -2339,6 +2381,7 @@ function renderStep9(p) {
             if (window.WHEY_SMOOTHIES[_wsi].id === r._id) {
               var _sm = window.WHEY_SMOOTHIES[_wsi];
               var _sc = 0;
+              if (!Array.isArray(_sm.ingredients)) break;
               _sm.ingredients.forEach(function(ing) {
                 var _p = window.getPricePer(ing.name, ing.unit);
                 if (_p !== null && _p > 0) _sc += _p * (ing.qty || 0);
@@ -5063,11 +5106,13 @@ window.WHEY_SMOOTHIES = WHEY_SMOOTHIES;
 
 window.NUTRITION = {
   render: function(p) {
-    // ─── GUARD: si le plan existe déjà, sauter directement à l'étape 9 ───
-    // Évite de relancer le questionnaire quand l'utilisateur clique sur "NUTRITION"
-    // alors qu'il a déjà un plan de repas généré.
-    if (S.weekPlan && S.nStep !== 9) {
-      S.nStep = 9;
+    // ─── INTERSTITIEL: si un programme existe et qu'on revient à l'étape 0 ───
+    // Propose à l'utilisateur de consulter son programme ou d'en créer un nouveau.
+    if (S.weekPlan && S.nStep === 0) {
+      var content = h('div', {'class': 'fade-in'});
+      renderNutritionChoice(content);
+      p.appendChild(content);
+      return;
     }
 
     // Header with step indicator and progress bar

@@ -29674,6 +29674,7 @@
     var missing   = [];
     var totalMAD  = 0;
 
+    if (!Array.isArray(recipe.ingredients)) return null;
     recipe.ingredients.forEach(function (ing) {
       var unitPrice = window.getPricePer(ing.name, ing.unit);
       if (unitPrice === null || unitPrice === undefined) {
@@ -30039,7 +30040,7 @@
           _id:        recipe._id || null
         };
 
-        if (recipe._id && recipe._id.indexOf('SALAD_') === 0 && recipe._scaledIngredients) {
+        if (recipe._id && recipe._id.indexOf('SALAD_') === 0 && Array.isArray(recipe._scaledIngredients)) {
           // Salade custom — ingrédients déjà dans recipe._scaledIngredients
           var saladCost = 0;
           recipe._scaledIngredients.forEach(function(ing) {
@@ -30062,7 +30063,7 @@
               if (window.WHEY_SMOOTHIES[wsi].id === recipe._id) { smoothieData = window.WHEY_SMOOTHIES[wsi]; break; }
             }
           }
-          if (smoothieData && smoothieData.ingredients) {
+          if (smoothieData && Array.isArray(smoothieData.ingredients)) {
             var smoothieCost = 0;
             smoothieData.ingredients.forEach(function(ing) {
               var price = window.getPricePer ? window.getPricePer(ing.name, ing.unit) : null;
@@ -30086,7 +30087,7 @@
             mealEntry.scaled  = true;
             dayMAD += mealEntry.costMAD;
             pricedMeals++;
-          } else if (!cost && recipe.ingredients && recipe.ingredients.length && window.getPricePer) {
+          } else if (!cost && Array.isArray(recipe.ingredients) && recipe.ingredients.length && window.getPricePer) {
             // Recette non trouvée dans RECIPES_DB mais ingrédients disponibles dans l'objet
             var fallbackCost = 0;
             recipe.ingredients.forEach(function(ing) {
@@ -30477,7 +30478,7 @@
         } else if (recipe._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
           // Recette R201+ sans ingrédients scalés : utilise findRecipe + scalingRatio
           var fullRecipe = window.RecipeEngine.findRecipe(recipe._id);
-          if (fullRecipe && fullRecipe.ingredients) {
+          if (fullRecipe && Array.isArray(fullRecipe.ingredients)) {
             fullRecipe.ingredients.forEach(function(ing) {
               var scaledQty = Math.round((ing.qty / fullRecipe.servings) * scalingRatio * 10) / 10;
               _addIng(ing.name, scaledQty, ing.unit);
@@ -30502,7 +30503,7 @@
             for (var si = 0; si < window.WHEY_SMOOTHIES.length; si++) {
               if (window.WHEY_SMOOTHIES[si].id === recipe._id) { sm = window.WHEY_SMOOTHIES[si]; break; }
             }
-            if (sm && sm.ingredients) {
+            if (sm && Array.isArray(sm.ingredients)) {
               sm.ingredients.forEach(function(ing) { _addIng(ing.name, ing.qty || 0, ing.unit); });
             }
           }
