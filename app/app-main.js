@@ -709,6 +709,7 @@ function renderRegister(app) {
  AUTH.register(name, email, pw, { nom: nom, phone: phone }).then(function(result) {
  if (result.ok) {
  S.authError = '';
+ if (name) { S.prenom = name; }
  if (nom) { S.nom = nom; }
  if (phone) { S.phone = phone; }
  S.view = 'authVerify';
@@ -1024,7 +1025,6 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
 function _doAutoLogin() {
 if (AUTH.isLoggedIn()) {
  S.view = 'today';
- S.justLoggedIn = true;
  if (window.GAMIFICATION) GAMIFICATION.updateStreak();
  // Restore full profile from localStorage (E-01)
  loadProfile();
