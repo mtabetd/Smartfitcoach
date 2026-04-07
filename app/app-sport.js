@@ -612,10 +612,83 @@ function renderSportChoice(p) {
 // ─── EXPORTS ───
 window.getPregnancySportWarning = getPregnancySportWarning;
 
+// ─── QUICK PROFILE (mode sport-seulement) ───
+function renderSportQuickProfile(p) {
+  var wrap = h('div', {style: 'display:flex;flex-direction:column;padding:40px 24px 32px'});
+
+  // Eyebrow
+  wrap.appendChild(h('div', {'class': 'eyebrow'}, 'VOTRE PROFIL'));
+
+  // Georgia title
+  var titleEl = h('div', {style: 'font-family:Georgia,serif;font-size:24px;font-weight:300;font-style:italic;line-height:1.45;margin-bottom:32px'}, 'Quelques informations\npour personnaliser\nvotre programme.');
+  titleEl.style.whiteSpace = 'pre-line';
+  wrap.appendChild(titleEl);
+
+  if (!S.sex) {
+    // ── Étape A : choix du sexe ──
+    wrap.appendChild(h('div', {'class': 'section-label'}, 'Votre sexe'));
+    var sexGrid = h('div', {'class': 'card-grid-2'});
+    [{label: 'Homme', val: 'homme'}, {label: 'Femme', val: 'femme'}].forEach(function(o) {
+      sexGrid.appendChild(h('div', {'class': 'sel-card' + (S.sex === o.val ? ' on' : ''), style: 'cursor:pointer;text-align:center', onclick: function() {
+        S.sex = o.val;
+        window.render();
+      }}, [
+        h('div', {'class': 'card-name'}, o.label)
+      ]));
+    });
+    wrap.appendChild(sexGrid);
+
+  } else {
+    // ── Étape B : âge + poids ──
+    wrap.appendChild(h('div', {'class': 'section-label'}, 'Votre âge'));
+    var ageWrap = h('div', {'class': 'num-input-wrap'});
+    ageWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '13', max: '90', inputmode: 'numeric',
+      value: S.age ? String(S.age) : '',
+      placeholder: '25',
+      onchange: function() {
+        var v = parseInt(this.value);
+        if (!isNaN(v) && v >= 13 && v <= 90) { S.age = v; } else { this.value = S.age ? String(S.age) : ''; }
+      }
+    }));
+    wrap.appendChild(ageWrap);
+
+    wrap.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, 'Votre poids (kg)'));
+    var weightWrap = h('div', {'class': 'num-input-wrap'});
+    weightWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '30', max: '300', step: '0.5', inputmode: 'decimal',
+      value: S.weight ? String(S.weight) : '',
+      placeholder: '70',
+      onchange: function() {
+        var v = parseFloat(this.value);
+        if (!isNaN(v) && v >= 30 && v <= 300) { S.weight = v; } else { this.value = S.weight ? String(S.weight) : ''; }
+      }
+    }));
+    wrap.appendChild(weightWrap);
+
+    var canContinue = !!(S.age && S.weight);
+    var btnContinue = h('button', {'class': 'btn-primary', style: 'margin-top:32px', disabled: !canContinue,
+      onclick: function() {
+        if (!S.age || !S.weight) return;
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+        window.render();
+      }
+    }, 'Continuer →');
+    wrap.appendChild(btnContinue);
+  }
+
+  p.appendChild(wrap);
+}
+
 // ─── RENDER ───
 window.SPORT = {
  render: function(p) {
  var content = h('div', {'class': 'fade-in'});
+
+ // ─── Mode sport-seulement : collecter identité si manquante ───
+ if (S.appMode === 'sport' && (!S.sex || !S.age || !S.weight)) {
+   renderSportQuickProfile(content);
+   p.appendChild(content);
+   return;
+ }
 
  // ─── INTERSTITIEL: si un programme existe et qu'on revient à l'étape 0 ───
  if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
