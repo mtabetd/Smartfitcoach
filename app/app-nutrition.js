@@ -2428,7 +2428,7 @@ function renderStep9(p) {
           if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
           S.weekPlan[S.selectedDay][slotKey2] = { n: res.name || 'Plat scanné', k: res.kcal || 0, kcal: res.kcal || 0, p: res.p || 0, g: res.g || 0, l: res.l || 0, f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true };
           S._plateScanSlot = null; S._plateScanResult = null; S._plateScanError = null; S._plateScanLoading = false;
-          if (window.save) window.save();
+          if (window.saveProfile) window.saveProfile();
           window.render();
         }
       }, 'Ajouter ce repas');
@@ -2610,7 +2610,7 @@ function renderStep9(p) {
                   if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
                   S.weekPlan[S.selectedDay][slotKey3] = { n: food.name, k: food.kcal, kcal: food.kcal, p: food.p, g: food.g, l: food.l, f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true };
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
-                  if (window.save) window.save();
+                  if (window.saveProfile) window.saveProfile();
                   window.render();
                 }
               });
@@ -2664,7 +2664,7 @@ function renderStep9(p) {
             f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true
           };
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
-          if (window.save) window.save();
+          if (window.saveProfile) window.saveProfile();
           window.render();
         }
       }, 'Confirmer');
