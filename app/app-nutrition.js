@@ -1833,6 +1833,12 @@ function renderStep8(p) {
   p.appendChild(rr);
   p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Prot\u00e9ines \u00b7 Glucides \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
 
+  // g/kg ratio for power users — shown in small grey below the gram total
+  var _protRatio = (S.weight && S._nm && S._nm.p) ? (S._nm.p / S.weight).toFixed(1) : null;
+  if (_protRatio) {
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);text-align:center;margin-top:2px'}, _protRatio + ' g/kg · méthode ISSN 2017'));
+  }
+
   p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas (' + (S.mealsPerDay||3) + ' repas/j)'));
   var ms = h('div', {'class': 'meal-split'});
   var _globalSplit = window.getMealSplit ? window.getMealSplit() : null;
@@ -3005,6 +3011,26 @@ function renderStep9(p) {
     }
   }, '\u2699 Modifier mes pr\u00e9f\u00e9rences nutritionnelles');
   p.appendChild(btnReset);
+
+  // ─── CTA TRANSITION → SPORT (mode "les deux" uniquement) ───
+  if (S.appMode === 'both' && (!S.sportProgram || S.sportProgram.length === 0)) {
+    var transCard = h('div', {style: 'border:1px solid #1A4A1A;background:rgba(26,74,26,0.04);padding:20px 16px;margin-top:20px;border-radius:2px'});
+    transCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#1A4A1A;margin-bottom:8px'}, 'ÉTAPE 2 / 2'));
+    transCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, 'Votre nutrition est prête.'));
+    transCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Configurez maintenant votre programme sportif pour que vos macros s\'adaptent automatiquement à chaque séance.'));
+    var sportCTA = h('button', {
+      style: 'width:100%;padding:16px;background:#1A4A1A;color:#FAF9F6;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
+      onclick: function() {
+        window.S.view = 'sport';
+        window.S.sStep = 0;
+        if (window.saveProfile) window.saveProfile();
+        if (window.render) window.render();
+      }
+    }, 'Configurer mon programme sportif →');
+    transCard.appendChild(sportCTA);
+    p.appendChild(transCard);
+  }
+
   p.appendChild(h('div', {style: 'height:24px'}));
 }
 

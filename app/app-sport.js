@@ -896,7 +896,7 @@ function renderObjectif(p) {
  p.appendChild(heroCard);
 
  // Divider
- var divider = h('div', {style: 'text-align:center;color:var(--grey,#6B6B65);font-size:11px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif'}, '— ou choisir ton sport —');
+ var divider = h('div', {style: 'text-align:center;color:var(--grey,#6B6B65);font-size:11px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif'}, '— ou choisir votre sport —');
  p.appendChild(divider);
 
  p.appendChild(h('div', {'class': 'section-label'}, 'Type de programme'));
@@ -2109,7 +2109,7 @@ function renderWellnessBanner(p) {
  titleRow.appendChild(closeBtn);
  banner.appendChild(titleRow);
 
- banner.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-bottom:12px'}, 'Comment tu te sens aujourd\'hui ? (optionnel)'));
+ banner.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-bottom:12px'}, 'Comment vous sentez-vous aujourd\'hui ? (optionnel)'));
 
  var wellnessState = { sleep: 0, muscles: '', energy: '' };
 
@@ -3343,8 +3343,8 @@ function renderMusculationZones(p) {
  }
 
  // ─── DURÉE DE SÉANCE ───
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:24px'}, 'Durée de tes séances'));
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'Quelle est la durée de tes séances ?'));
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:24px'}, 'Durée de vos séances'));
+ p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'Quelle est la durée de vos séances ?'));
  var durationOptions = [
  {id: '45min', label: '45 min', desc: '4-5 exercices · 3 séries'},
  {id: '1h', label: '1h', desc: '5-6 exercices · 3-4 séries'},
