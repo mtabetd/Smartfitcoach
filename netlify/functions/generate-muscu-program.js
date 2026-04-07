@@ -32,7 +32,7 @@ function checkRateLimit(ip) {
   }
   if (entry.count >= WEEK_MAX) {
     var d = new Date();
-    var msUntilMonday = (7 - d.getUTCDay() || 7) * 86400000
+    var msUntilMonday = ((8 - d.getUTCDay()) % 7 || 7) * 86400000
       - d.getUTCHours() * 3600000
       - d.getUTCMinutes() * 60000
       - d.getUTCSeconds() * 1000;
