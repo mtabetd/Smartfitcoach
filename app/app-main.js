@@ -600,7 +600,7 @@ function renderRegister(app) {
  // Dial selector button
  var dialBtn = h('button', {
    type: 'button',
-   style: 'display:flex;align-items:center;gap:6px;padding:0 12px;border:1px solid var(--border);border-radius:8px;background:var(--card-bg,#fff);cursor:pointer;font-size:15px;white-space:nowrap;min-width:90px;height:44px;',
+   style: 'display:flex;align-items:center;gap:6px;padding:0 12px;border:1px solid var(--border);border-radius:2px;background:var(--ivory,#FAF9F6);cursor:pointer;font-size:15px;white-space:nowrap;min-width:90px;height:44px;',
  });
  var dialFlagSpan = h('span', {style: 'font-size:20px'}, DIAL_CODES[_selDialIdx].flag);
  var dialCodeSpan = h('span', {style: 'font-size:13px;color:var(--grey);font-weight:600'}, DIAL_CODES[_selDialIdx].code);
@@ -611,7 +611,7 @@ function renderRegister(app) {
 
  // Dropdown overlay
  var dialDropdown = h('div', {
-   style: 'display:none;position:absolute;z-index:999;background:var(--card-bg,#fff);border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.18);max-height:260px;overflow-y:auto;min-width:220px;'
+   style: 'display:none;position:absolute;z-index:999;background:var(--ivory,#FAF9F6);border:1px solid var(--border);border-radius:2px;box-shadow:0 8px 32px rgba(0,0,0,0.18);max-height:260px;overflow-y:auto;min-width:220px;'
  });
  DIAL_CODES.forEach(function(dc, idx) {
    var opt = h('div', {
