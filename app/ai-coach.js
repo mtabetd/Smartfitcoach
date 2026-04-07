@@ -13,13 +13,17 @@ var _sending = false;
 // ─── CSS ─────────────────────────────────────────────────────────────────────
 var style = document.createElement('style');
 style.textContent = [
-  // Bouton flottant
-  '#ai-coach-btn{position:fixed;bottom:28px;right:24px;z-index:9000;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;padding:14px 22px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(10,10,9,0.12);transition:all 0.2s ease;}',
+  // Bouton flottant — desktop
+  '#ai-coach-btn{position:fixed;bottom:calc(72px + env(safe-area-inset-bottom,0px));right:24px;z-index:9000;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;padding:14px 22px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(10,10,9,0.12);transition:all 0.2s ease;min-width:52px;min-height:52px;}',
   '#ai-coach-btn:hover{background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);box-shadow:0 8px 32px rgba(10,10,9,0.18);}',
+  // Bouton flottant — mobile
+  '@media(max-width:479px){#ai-coach-btn{bottom:80px;right:16px;}}',
 
-  // Panel
-  '#ai-coach-panel{position:fixed;bottom:0;right:0;z-index:8999;width:min(440px,100vw);height:min(680px,92vh);background:var(--ivory,#FAF9F6);border-top:1px solid var(--black,#0A0A09);border-left:1px solid var(--border,#D8D8D0);border-radius:2px 0 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);box-shadow:-8px 0 40px rgba(10,10,9,0.1);}',
+  // Panel — desktop
+  '#ai-coach-panel{position:fixed;bottom:80px;right:24px;z-index:8999;width:min(440px,100vw);height:min(680px,92vh);max-height:calc(100dvh - 80px);background:var(--ivory,#FAF9F6);border-top:1px solid var(--black,#0A0A09);border-left:1px solid var(--border,#D8D8D0);border-radius:2px 0 0 0;display:flex;flex-direction:column;transform:translateY(calc(100% + 80px));transition:transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);box-shadow:-8px 0 40px rgba(10,10,9,0.1);}',
   '#ai-coach-panel.open{transform:translateY(0);}',
+  // Panel — mobile
+  '@media(max-width:479px){#ai-coach-panel{bottom:0;left:0;right:0;width:100%;border-radius:12px 12px 0 0;border-left:none;max-height:calc(100dvh - 80px);transform:translateY(100%);}#ai-coach-panel.open{transform:translateY(0);}}',
 
   // Header
   '#ai-coach-header{padding:20px 24px;border-bottom:1px solid var(--border,#D8D8D0);display:flex;align-items:center;justify-content:space-between;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);flex-shrink:0;}',
@@ -351,6 +355,37 @@ function loadHistory(container) {
   container.scrollTop = container.scrollHeight;
 }
 
+// ─── LAYOUT ADAPTATIF ────────────────────────────────────────────────────────
+function applyPanelLayout() {
+  var panel = document.getElementById('ai-coach-panel');
+  var btn   = document.getElementById('ai-coach-btn');
+  if (!panel || !btn) return;
+  var isMobile = window.innerWidth < 480;
+  if (isMobile) {
+    panel.style.bottom      = '0';
+    panel.style.left        = '0';
+    panel.style.right       = '0';
+    panel.style.width       = '100%';
+    panel.style.borderRadius = '12px 12px 0 0';
+    panel.style.borderLeft  = 'none';
+    panel.style.maxHeight   = 'calc(100dvh - 80px)';
+    btn.style.bottom = '80px';
+    btn.style.right  = '16px';
+  } else {
+    panel.style.bottom      = '80px';
+    panel.style.left        = '';
+    panel.style.right       = '24px';
+    panel.style.width       = 'min(440px,100vw)';
+    panel.style.borderRadius = '2px 0 0 0';
+    panel.style.borderLeft  = '1px solid var(--border,#D8D8D0)';
+    panel.style.maxHeight   = 'calc(100dvh - 80px)';
+    btn.style.bottom = '';
+    btn.style.right  = '24px';
+  }
+}
+
+var _resizeHandler = null;
+
 // ─── TOGGLE ──────────────────────────────────────────────────────────────────
 function togglePanel() {
   _panelOpen ? closePanel() : openPanel();
@@ -359,6 +394,11 @@ function togglePanel() {
 function openPanel() {
   var panel = document.getElementById('ai-coach-panel');
   if (panel) { panel.classList.add('open'); _panelOpen = true; }
+  applyPanelLayout();
+  if (!_resizeHandler) {
+    _resizeHandler = function() { if (_panelOpen) applyPanelLayout(); };
+    window.addEventListener('resize', _resizeHandler);
+  }
   var msgs = document.getElementById('ai-coach-messages');
   if (msgs) { setTimeout(function() { msgs.scrollTop = msgs.scrollHeight; }, 100); }
   var suggs = document.getElementById('ai-suggestions');
