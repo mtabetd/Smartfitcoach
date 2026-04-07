@@ -688,6 +688,23 @@ function renderSportQuickProfile(p) {
   p.appendChild(wrap);
 }
 
+// ─── WELLNESS SCORE (données du jour, numériques 1-5) ───
+function getWellnessScore() {
+  var S = window.S;
+  if (!S || !S.todayWellness) return null;
+  var today = new Date().toISOString().split('T')[0];
+  if (S.todayWellness.date !== today) return null; // données d'hier
+  var w = S.todayWellness;
+  // Score composite 1-5 (uniquement les valeurs numériques)
+  var scores = [];
+  if (typeof w.sleep === 'number' && w.sleep >= 1 && w.sleep <= 5) scores.push(w.sleep);
+  if (typeof w.muscles === 'number' && w.muscles >= 1 && w.muscles <= 5) scores.push(w.muscles);
+  if (typeof w.energy === 'number' && w.energy >= 1 && w.energy <= 5) scores.push(w.energy);
+  if (scores.length === 0) return null;
+  return scores.reduce(function(a, b) { return a + b; }, 0) / scores.length;
+}
+window.getWellnessScore = getWellnessScore;
+
 // ─── RENDER ───
 window.SPORT = {
  render: function(p) {
@@ -2249,8 +2266,65 @@ function getWellnessAdaptation() {
 window.getWellnessAdaptation = getWellnessAdaptation;
 
 function appendWellnessBanner(p) {
+  // ─── Priorité : score numérique 1-5 si disponible ───
+  var score = getWellnessScore();
+  if (score !== null) {
+    if (score < 2) {
+      // ─── KO : Séance déconseillée ───
+      var banner = h('div', {style: 'border-left:3px solid #8B2020;background:rgba(139,32,32,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px'});
+      var titleRow = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:6px'});
+      titleRow.appendChild(h('span', {style: 'font-size:16px'}, '\u26A0\uFE0F'));
+      titleRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B2020;font-weight:700'}, 'S\u00e9ance d\u00e9conseill\u00e9e aujourd\'hui'));
+      banner.appendChild(titleRow);
+      banner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:12px'}, 'Votre \u00e9tat de forme est bas. Le repos favorise la r\u00e9cup\u00e9ration et la progression.'));
+      var btnRow = h('div', {style: 'display:flex;gap:8px;flex-wrap:wrap'});
+      var postponeBtn = h('button', {
+        style: 'padding:8px 14px;background:#8B2020;color:#fff;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer',
+        onclick: function() {
+          S.sessionPostponed = true;
+          banner.innerHTML = '';
+          var confirmMsg = h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;padding:8px 0'}, '\u2714 S\u00e9ance report\u00e9e. Reposez-vous bien !');
+          banner.appendChild(confirmMsg);
+          if (window.render) window.render();
+        }
+      }, 'Reporter au lendemain');
+      var continueBtn = h('button', {
+        style: 'padding:8px 14px;background:transparent;color:#8B2020;border:1px solid #8B2020;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer',
+        onclick: function() {
+          if (S.sessionPostponed) S.sessionPostponed = false;
+          banner.style.display = 'none';
+          if (window.render) window.render();
+        }
+      }, 'Continuer quand m\u00eame');
+      btnRow.appendChild(postponeBtn);
+      btnRow.appendChild(continueBtn);
+      banner.appendChild(btnRow);
+      p.appendChild(banner);
+    } else if (score <= 3) {
+      // ─── Fatigué : séance adaptée ───
+      var banner2 = h('div', {style: 'border-left:3px solid #B8860B;background:rgba(184,134,11,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px'});
+      banner2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#B8860B;font-weight:700;margin-bottom:6px'}, 'S\u00e9ance adapt\u00e9e recommand\u00e9e'));
+      banner2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:12px'}, 'Consid\u00e9rez r\u00e9duire l\'intensit\u00e9\u00a0: -1 s\u00e9rie par exercice, charges all\u00e9g\u00e9es de 10-15\u00a0%.'));
+      var comprisBtn = h('button', {
+        style: 'padding:8px 14px;background:#B8860B;color:#fff;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer',
+        onclick: function() { banner2.style.display = 'none'; }
+      }, 'Compris');
+      banner2.appendChild(comprisBtn);
+      p.appendChild(banner2);
+    } else if (score > 3.5) {
+      // ─── En forme : badge discret ───
+      var badge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(26,74,26,0.3);background:rgba(26,74,26,0.04);padding:6px 12px;border-radius:2px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A)'});
+      badge.appendChild(h('span', {}, 'Vous \u00eates en forme aujourd\'hui \uD83D\uDCAA'));
+      p.appendChild(badge);
+    }
+    return;
+  }
+
+  // ─── Fallback : score composite basé sur les valeurs textuelles (rétrocompatibilité) ───
   var adapt = getWellnessAdaptation();
-  // Map level to CSS variables
+  // Ne rien afficher si pas de données wellness
+  if (!S.todayWellness) return;
+
   var colorMap = {
     'peak':     { borderColor: 'var(--green,#1A4A1A)',   textColor: 'var(--green,#1A4A1A)',   bg: 'var(--greenbg,rgba(26,74,26,.06))' },
     'normal':   { borderColor: 'var(--blue,#1A3A6A)',    textColor: 'var(--blue,#1A3A6A)',    bg: 'var(--bluebg,rgba(26,58,106,.06))' },
@@ -2259,23 +2333,23 @@ function appendWellnessBanner(p) {
   };
   var cm = colorMap[adapt.level] || colorMap['normal'];
 
-  var banner = h('div', {style: 'border-left:2px solid ' + cm.borderColor + ';padding:14px 20px;background:' + cm.bg + ';margin-bottom:20px;border-radius:0 2px 2px 0'});
+  var fallbackBanner = h('div', {style: 'border-left:2px solid ' + cm.borderColor + ';padding:14px 20px;background:' + cm.bg + ';margin-bottom:20px;border-radius:0 2px 2px 0'});
 
   var labelEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:' + cm.textColor + ';margin-bottom:6px'}, adapt.label);
-  banner.appendChild(labelEl);
+  fallbackBanner.appendChild(labelEl);
 
   var adviceEl = h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:10px'}, adapt.advice);
-  banner.appendChild(adviceEl);
+  fallbackBanner.appendChild(adviceEl);
 
   var rebtn = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey3,#9A9A90);cursor:pointer;transition:color 0.2s ease',
     onclick: function() { S.todayWellness = null; window.render(); }
-  }, '↺ Refaire le bilan');
+  }, '\u21ba Refaire le bilan');
   rebtn.onmouseenter = function() { this.style.color = 'var(--black,#0A0A09)'; };
   rebtn.onmouseleave = function() { this.style.color = 'var(--grey3,#9A9A90)'; };
-  banner.appendChild(rebtn);
+  fallbackBanner.appendChild(rebtn);
 
-  p.appendChild(banner);
+  p.appendChild(fallbackBanner);
 
   // Message de soutien selon le niveau de forme
   if (window.MOTIVATION) {
