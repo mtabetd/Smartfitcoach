@@ -309,11 +309,15 @@ function _loadLegacySession() {
 function _extractUser(supaUser) {
   if (!supaUser) return null;
   var email = supaUser.email || '';
-  return {
+  var meta = supaUser.user_metadata || {};
+  var u = {
     id: supaUser.id,
-    name: (supaUser.user_metadata && supaUser.user_metadata.name) || email.split('@')[0] || 'Utilisateur',
+    name: meta.name || email.split('@')[0] || 'Utilisateur',
     email: email
   };
+  if (meta.nom)   u.nom   = meta.nom;
+  if (meta.phone) u.phone = meta.phone;
+  return u;
 }
 
 // ─── INIT : charger la session Supabase au boot ───
@@ -343,6 +347,11 @@ function _initAuth() {
     }
     if (session && session.user) {
       _currentSession = _extractUser(session.user);
+      // Restore nom/phone from user_metadata into window.S if not already set
+      if (window.S && _currentSession) {
+        if (_currentSession.nom   && !window.S.nom)   window.S.nom   = _currentSession.nom;
+        if (_currentSession.phone && !window.S.phone) window.S.phone = _currentSession.phone;
+      }
     } else {
       _currentSession = null;
     }

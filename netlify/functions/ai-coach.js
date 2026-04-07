@@ -318,7 +318,11 @@ exports.handler = async function(event, context) {
       return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Erreur du service IA. Veuillez réessayer.' }) };
     }
 
-    var replyText = response.body.content && response.body.content[0] && response.body.content[0].text || '';
+    var replyText = (response.body.content && response.body.content[0] && response.body.content[0].text) || '';
+    if (!replyText || replyText.trim().length === 0) {
+      console.error('[ai-coach] Réponse IA vide reçue');
+      return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Réponse IA vide. Veuillez réessayer.' }) };
+    }
     return { statusCode: 200, headers: headers, body: JSON.stringify({ reply: replyText }) };
 
   } catch(err) {
