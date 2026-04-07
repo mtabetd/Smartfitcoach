@@ -1664,6 +1664,7 @@ function renderStep7(p) {
       // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
       if (window.computeNutritionState) { window.computeNutritionState(false); }
       S.weekPlan = generateWeek();
+      S._weekPlanGeneratedAt = new Date().toISOString();
       // Sync plan nutrition vers Supabase
       if (window.SupaSync) {
         var _monday = new Date();
@@ -1742,6 +1743,7 @@ function renderStep8(p) {
   var c1 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c1.appendChild(h('div', {'class': 'bn-val'}, String(tdee)));
   c1.appendChild(h('div', {'class': 'bn-label'}, window.t('onb.s8.tdee')));
+  c1.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px'}, 'Calories d\u00e9pens\u00e9es en une journ\u00e9e normale'));
   sr.appendChild(c1);
   var c2 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
   c2.appendChild(h('div', {'class': 'bn-val'}, String(tgt)));
@@ -1795,6 +1797,7 @@ function renderStep8(p) {
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, '#1A4A1A', window.t('onb.s8.proteins'), m.p));
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', window.t('onb.s8.fats'), m.l));
   p.appendChild(rr);
+  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Prot\u00e9ines \u00b7 Glucides \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
 
   p.appendChild(h('div', {'class': 'section-label'}, 'R\u00e9partition par repas (' + (S.mealsPerDay||3) + ' repas/j)'));
   var ms = h('div', {'class': 'meal-split'});
@@ -1822,7 +1825,7 @@ function renderStep8(p) {
   // Stats
   var stats = h('div', {'class': 'stats-row'});
   stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, water), h('div', {'class': 'stat-label'}, 'L eau/jour')]));
-  stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, ppk), h('div', {'class': 'stat-label'}, 'g prot/kg')]));
+  stats.appendChild(h('div', {'class': 'stat-cell'}, [h('div', {'class': 'stat-val'}, String(m.p)), h('div', {'class': 'stat-label'}, 'g prot\u00e9ines/j')]));
   if (bmi !== null) {
     var bi = bmiInfo(bmi);
     var imcClass = bmi < 18.5 ? 'stat-warn' : bmi < 25 ? 'stat-good' : bmi < 30 ? 'stat-warn' : 'stat-alert';
@@ -2601,6 +2604,7 @@ function renderStep9(p) {
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
     if (window.computeNutritionState) window.computeNutritionState(false);
     S.weekPlan = generateWeek();
+    S._weekPlanGeneratedAt = new Date().toISOString();
     // Sync plan nutrition vers Supabase
     if (window.SupaSync) {
       var _monday = new Date();
