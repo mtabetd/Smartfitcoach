@@ -4121,14 +4121,13 @@ function renderMusculationProgram(p) {
  });
  }
 
- // Load session log and progression history
- if (Object.keys(S.muscuSessionLog || {}).length === 0) {
+ // Load session log and progression history — toujours depuis la clé dédiée
+ // (plus fréquemment mise à jour que PROFILE_KEYS, qui peut être en retard)
  var userId3 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var savedLog = localStorage.getItem('mtd_muscu_session_' + userId3);
  if (savedLog) { try { S.muscuSessionLog = JSON.parse(savedLog); } catch(e) {} }
  var savedProg = localStorage.getItem('mtd_muscu_progression_' + userId3);
  if (savedProg) { try { S.muscuProgressionHistory = JSON.parse(savedProg); } catch(e) {} }
- }
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));

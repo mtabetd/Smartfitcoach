@@ -57,7 +57,9 @@ var PROFILE_KEYS = [
  // System
  'lang','weightUnit','heightUnit',
  'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
- 'heartRateRest','yogaLevel','yogaGoal','yogaDays','yogaWeek','yogaDay',
+ 'heartRateRest','yogaLevel','yogaGoal','yogaObjectif','yogaDuration','yogaStyle','yogaDays','yogaWeek','yogaDay',
+ 'crossfitBenchmarks',
+ 'weightHistory',
  'wantsDessert',
  'wheyFlavors','saladBuilder',
  'emailOptin',
