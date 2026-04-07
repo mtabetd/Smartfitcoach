@@ -366,17 +366,157 @@
     }
   }
 
+  // ── Calcul 1RM (Epley) depuis poids × reps enregistrés ──────────────────────
+  function epley1RM(weight, reps) {
+    if (!weight || !reps || reps <= 0) return null;
+    if (reps === 1) return weight;
+    return Math.round((weight * (1 + reps / 30)) / 2.5) * 2.5;
+  }
+
+  // ── Sérialisation du bilan médical S.muscuMedical → texte lisible par l'IA ──
+  function serializeMuscuMedical(med) {
+    if (!med || typeof med !== 'object' || !med.done) return 'aucune donnée médicale renseignée';
+    var lines = [];
+
+    // Zones douloureuses
+    var zoneLabels = {
+      shoulders: 'Épaules', elbows: 'Coudes', wrists: 'Poignets',
+      neck: 'Nuque/Cervicales', upperBack: 'Haut du dos', lowerBack: 'Bas du dos',
+      hips: 'Hanches', knees: 'Genoux', ankles: 'Chevilles', feet: 'Pieds (fasciite)'
+    };
+    var activeZones = [];
+    Object.keys(zoneLabels).forEach(function(k) {
+      if (med[k]) activeZones.push(zoneLabels[k]);
+    });
+    if (activeZones.length) lines.push('Zones douloureuses/fragiles : ' + activeZones.join(', '));
+
+    // Diagnostics confirmés
+    var diagLabels = {
+      herniaDisc: 'Hernie discale', herniaInguinal: 'Hernie inguinale',
+      rotatorCuff: 'Déchirure coiffe des rotateurs', acl: 'LCA opéré/fragilisé',
+      osteoporosis: 'Ostéoporose', hypertension: 'HTA sévère (≥180/110)',
+      rheumatoidArthritis: 'Polyarthrite rhumatoïde', fibromyalgia: 'Fibromyalgie',
+      meniscus: 'Ménisque lésé/opéré', spondylarthritis: 'Spondylarthrite ankylosante',
+      kneeOsteoarthritis: 'Gonarthrose (arthrose du genou)',
+      epicondylitis: 'Épicondylite latérale (tennis elbow)'
+    };
+    var activeDiag = [];
+    Object.keys(diagLabels).forEach(function(k) {
+      if (med[k]) activeDiag.push(diagLabels[k]);
+    });
+    if (activeDiag.length) lines.push('Diagnostics confirmés : ' + activeDiag.join(', '));
+
+    // Niveau de douleur
+    var painMap = { 0: 'Aucune', 1: 'Légère', 2: 'Modérée', 3: 'Sévère' };
+    if (med.painLevel !== undefined && med.painLevel !== null) {
+      lines.push('Intensité de la douleur : ' + (painMap[med.painLevel] || med.painLevel) + '/3');
+    }
+
+    // Notes libres
+    if (med.notes && typeof med.notes === 'string' && med.notes.trim()) {
+      lines.push('Notes du patient : ' + med.notes.trim().slice(0, 300));
+    }
+
+    return lines.length ? lines.join(' | ') : 'bilan complété, aucune restriction signalée';
+  }
+
+  // ── Calcul 1RM depuis muscuStrengthProfile (poids entraînement × reps) ──────
+  function resolveStrength1RM(profile) {
+    var sp = profile || {};
+    var result = {};
+    // bench_press → bench1RM
+    if (sp.bench_press) {
+      var bReps = sp.bench_press_reps || 8;
+      result.bench1RM = epley1RM(sp.bench_press, bReps);
+    }
+    // squat → squat1RM
+    if (sp.squat) {
+      var sReps = sp.squat_reps || 8;
+      result.squat1RM = epley1RM(sp.squat, sReps);
+    }
+    // deadlift → deadlift1RM
+    if (sp.deadlift) {
+      var dReps = sp.deadlift_reps || 8;
+      result.deadlift1RM = epley1RM(sp.deadlift, dReps);
+    }
+    // overhead_press → ohp1RM
+    if (sp.overhead_press) {
+      var oReps = sp.overhead_press_reps || 8;
+      result.ohp1RM = epley1RM(sp.overhead_press, oReps);
+    }
+    // barbell_row → row1RM
+    if (sp.barbell_row) {
+      var rReps = sp.barbell_row_reps || 8;
+      result.row1RM = epley1RM(sp.barbell_row, rReps);
+    }
+    // hip_thrust → hipThrust1RM
+    if (sp.hip_thrust) {
+      var hReps = sp.hip_thrust_reps || 10;
+      result.hipThrust1RM = epley1RM(sp.hip_thrust, hReps);
+    }
+    // leg_press → legPress1RM
+    if (sp.leg_press) {
+      var lpReps = sp.leg_press_reps || 10;
+      result.legPress1RM = epley1RM(sp.leg_press, lpReps);
+    }
+    return result;
+  }
+
   function buildProfileFromState() {
     var S = window.S || {};
+
+    // ── Résolution des 1RM : priorité à muscuStrengthProfile (données réelles
+    //    entrées par l'utilisateur), avec fallback sur crossfit1RM si disponible.
+    var strengthProfile = S.muscuStrengthProfile || {};
+    // Fallback crossfit1RM → muscuStrengthProfile mapping (mirror de app-core)
+    var cfMap = { 'bench_press': 'bench_press', 'back_squat': 'squat',
+                  'deadlift': 'deadlift', 'overhead_press': 'overhead_press' };
+    var cf1rm = S.crossfit1RM || {};
+    Object.keys(cfMap).forEach(function(cfKey) {
+      var muscuKey = cfMap[cfKey];
+      if (cf1rm[cfKey] && !strengthProfile[muscuKey]) {
+        strengthProfile[muscuKey] = Math.round(cf1rm[cfKey] / (1 + 1 / 30));
+        strengthProfile[muscuKey + '_reps'] = 1;
+      }
+    });
+    var computed1RM = resolveStrength1RM(strengthProfile);
+
+    // ── Résolution du niveau ──────────────────────────────────────────────────
+    var niveauMap = { beginner: 'débutant', intermediate: 'intermédiaire',
+                      advanced: 'avancé', pro: 'élite' };
+    var niveauRaw = S.sportLevel || '';
+    var niveauLabel = niveauMap[niveauRaw] ||
+      (S.activity >= 3 ? 'avancé' : S.activity >= 2 ? 'intermédiaire' : 'débutant');
+
+    // ── Résolution de l'objectif ──────────────────────────────────────────────
+    var objectifLabel = 'hypertrophie';
+    if (window.GOALS && S.goal != null && window.GOALS[S.goal]) {
+      objectifLabel = window.GOALS[S.goal].label || window.GOALS[S.goal].key || 'hypertrophie';
+    }
+
+    // ── Sommeil : S.sleep est un index (0='<6h',1='6-7h',2='7-8h',3='8h+') ──
+    var sleepMap = { 0: 5.5, 1: 6.5, 2: 7.5, 3: 8.5 };
+    var sommeilVal = (S.sleep !== null && S.sleep !== undefined && sleepMap[S.sleep] !== undefined)
+      ? sleepMap[S.sleep] : (S.sleep || 7);
+
+    // ── Sérialisation du bilan médical ───────────────────────────────────────
+    var medicalText = serializeMuscuMedical(S.muscuMedical);
+
+    // ── Semaine et cycle courants ─────────────────────────────────────────────
+    var semaineActuelle = S.muscuWeek || 1;
+    var cycleActuel = S.muscuCycle || 1;
+
     return {
       prenom: S.prenom || S.name || 'Athlète',
       age: S.age || null,
-      sexe: S.sex === 'femme' ? 'femme' : 'homme',
+      sexe: S.sex === 'femme' ? 'femme' : (S.sex === 'female' ? 'femme' : 'homme'),
       poids: S.weight || null,
       taille: S.height || null,
-      objectif: window.GOALS && S.goal != null ? (window.GOALS[S.goal] && window.GOALS[S.goal].label) : 'hypertrophie',
-      niveau: S.sportLevel || (S.activity >= 3 ? 'avancé' : S.activity >= 2 ? 'intermédiaire' : 'débutant'),
-      joursDispo: S.muscuFreq || S.sportFreq || 4,
+      objectif: objectifLabel,
+      niveau: niveauLabel,
+      niveauRaw: niveauRaw,
+      joursDispo: S.muscuWeek ? Math.min(6, Math.max(2, S.sportDays || 4))
+                              : (S.muscuFreq || S.sportFreq || S.sportDays || 4),
       dureeMaxSeance: S.muscuDuration || 60,
       equipement: S.equipement || S.gymType || 'salle complète',
       installations: Array.isArray(S.installations) && S.installations.length
@@ -385,13 +525,37 @@
             return found ? found.label + ' (' + found.desc + ')' : id;
           }).join(' | ')
         : null,
-      sommeil: S.sleep || 7,
+      sommeil: sommeilVal,
       stress: S.stress || 5,
-      blessures: Array.isArray(S.blessures) ? S.blessures : [],
-      bench1RM: (S.muscu1RM && S.muscu1RM.bench) || null,
-      squat1RM: (S.muscu1RM && S.muscu1RM.squat) || null,
-      deadlift1RM: (S.muscu1RM && S.muscu1RM.deadlift) || null,
-      ohp1RM: (S.muscu1RM && S.muscu1RM.ohp) || null,
+      // Bilan médical complet (zones + diagnostics + intensité + notes)
+      medical: medicalText,
+      // Champs 1RM calculés par Epley depuis les poids d'entraînement réels
+      bench1RM: computed1RM.bench1RM || null,
+      squat1RM: computed1RM.squat1RM || null,
+      deadlift1RM: computed1RM.deadlift1RM || null,
+      ohp1RM: computed1RM.ohp1RM || null,
+      row1RM: computed1RM.row1RM || null,
+      hipThrust1RM: computed1RM.hipThrust1RM || null,
+      legPress1RM: computed1RM.legPress1RM || null,
+      // Données brutes du profil de force (poids × reps)
+      strengthProfile: (function() {
+        var keys = ['bench_press','squat','deadlift','overhead_press',
+                    'barbell_row','barbell_curl','hip_thrust','leg_press'];
+        var out = [];
+        keys.forEach(function(k) {
+          if (strengthProfile[k]) {
+            var reps = strengthProfile[k + '_reps'] || 8;
+            out.push(k.replace(/_/g,' ') + ' : ' + strengthProfile[k] + 'kg × ' + reps + 'reps');
+          }
+        });
+        return out.length ? out.join(' | ') : 'non renseigné';
+      })(),
+      // Contexte de progression dans le plan 12 semaines
+      semaineActuelle: semaineActuelle,
+      cycleActuel: cycleActuel,
+      // Données démographiques supplémentaires
+      pregnant: !!(S.pregnant && (S.sex === 'femme' || S.sex === 'female')),
+      // Points forts/faibles et préférences (champs libres si renseignés)
       pointsForts: S.pointsForts || '',
       pointsFaibles: S.pointsFaibles || '',
       preferences: S.preferences || '',

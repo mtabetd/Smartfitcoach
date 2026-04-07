@@ -4765,32 +4765,94 @@ function renderMusculationProgram(p) {
    // If a program is selected, show its exercises for the current phase
    if (S._activeSfcProgram && window.SFC_PROGRAMS[S._activeSfcProgram]) {
     var _selProg = window.SFC_PROGRAMS[S._activeSfcProgram];
+    // Human-readable program name: use .name if available, otherwise capitalize the key
+    var _progDisplayName = _selProg.name || (S._activeSfcProgram.charAt(0).toUpperCase() + S._activeSfcProgram.slice(1).replace(/_/g, ' '));
     // SFC_PROGRAMS uses French phase keys: masse / seche / force
     var _phaseKey = 'masse'; // default
     if (S.sportGoals && (S.sportGoals.indexOf('shred') !== -1 || S.sportGoals.indexOf('weightloss') !== -1)) _phaseKey = 'seche';
     else if (S.sportGoals && (S.sportGoals.indexOf('force') !== -1 || S.sportGoals.indexOf('strength') !== -1)) _phaseKey = 'force';
-    // Find exercises: try chosen phase, then masse fallback, then first key that has .exercises
-    var _phaseObj = _selProg[_phaseKey] || _selProg.masse || null;
+
+    // For force phase: consult SFC_PROGRAMS_FORCE first (separate object), then fall back
+    var _phaseObj = null;
+    if (_phaseKey === 'force' && window.SFC_PROGRAMS_FORCE && window.SFC_PROGRAMS_FORCE[S._activeSfcProgram]) {
+     var _forceEntry = window.SFC_PROGRAMS_FORCE[S._activeSfcProgram];
+     _phaseObj = _forceEntry.force || null;
+    }
+    // Fallback: standard phase in SFC_PROGRAMS, then masse, then first key with .exercises
+    if (!_phaseObj) _phaseObj = _selProg[_phaseKey] || _selProg.masse || null;
     if (!_phaseObj) {
      var _firstKey = Object.keys(_selProg).find(function(k) { return _selProg[k] && typeof _selProg[k] === 'object' && _selProg[k].exercises; });
      _phaseObj = _firstKey ? _selProg[_firstKey] : null;
     }
     var _phaseExos = (_phaseObj && _phaseObj.exercises) ? _phaseObj.exercises : (Array.isArray(_phaseObj) ? _phaseObj : []);
 
+    // Equipment filter for SFC exercises (respect S.sportEquipment profile)
+    if (Array.isArray(_phaseExos) && _phaseExos.length > 0 && S.sportEquipment && S.sportEquipment !== 'gym') {
+     var _sfcFiltered = _phaseExos.filter(function(exo) {
+      var _eq = (exo.equipment || '').toLowerCase();
+      if (S.sportEquipment === 'home') {
+       return /poids du corps|poids de corps|sans mat|sol|élastique|elastique/.test(_eq) || _eq === '';
+      }
+      if (S.sportEquipment === 'dumbbells') {
+       if (/câble|poulie|machine|t-bar|landmine|convergente|pec deck|barre fixe|chaise romaine|rouleau/.test(_eq)) return false;
+       if (/^barre\b/.test(_eq) && !/ou halt|halt[eè]res ou barre/.test(_eq)) return false;
+      }
+      return true;
+     });
+     // Only apply filter if it leaves at least 2 exercises (avoid empty program)
+     if (_sfcFiltered.length >= 2) _phaseExos = _sfcFiltered;
+    }
+
     if (Array.isArray(_phaseExos) && _phaseExos.length > 0) {
-     _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, _selProg.name + ' — ' + _phaseKey));
-     if (_selProg.notes) {
-      _sfcSection.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-bottom:12px;line-height:1.6;border-left:2px solid var(--border);padding-left:10px'}, _selProg.notes));
+     // Phase label header
+     _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, _progDisplayName + ' — ' + _phaseKey));
+
+     // Warmup banner
+     if (_phaseObj && _phaseObj.warmup) {
+      var _warmupEl = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;background:rgba(26,74,26,0.04);border-left:3px solid #1A4A1A;padding:10px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
+      _warmupEl.appendChild(h('span', {style: 'font-size:14px;flex-shrink:0'}, '\uD83D\uDD25'));
+      var _warmupRight = h('div', {});
+      _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1A4A1A;margin-bottom:3px'}, '\u00c9chauffement'));
+      _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);line-height:1.5'}, _phaseObj.warmup));
+      _warmupEl.appendChild(_warmupRight);
+      _sfcSection.appendChild(_warmupEl);
      }
+
+     // Program notes (from phase object, not top-level)
+     var _phaseNotes = (_phaseObj && _phaseObj.notes) ? _phaseObj.notes : null;
+     if (_phaseNotes) {
+      _sfcSection.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-bottom:12px;line-height:1.6;border-left:2px solid var(--border);padding-left:10px'}, _phaseNotes));
+     }
+
+     // Exercise cards
      _phaseExos.forEach(function(exo) {
       var _exCard = h('div', {style: 'border:1px solid var(--border);padding:12px 14px;margin-bottom:8px;border-radius:2px'});
-      _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;margin-bottom:4px'}, exo.name || exo.n || ''));
-      _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'}, (exo.sets || '') + ' séries × ' + (exo.reps || '') + ' reps · Repos ' + (exo.rest || '90s')));
-      if (exo.technique) {
-       _exCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-top:6px;line-height:1.5'}, exo.technique));
+      // Exercise type badge (compound vs isolation)
+      var _exTop = h('div', {style: 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px'});
+      _exTop.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;line-height:1.3'}, (exo.order ? exo.order + '. ' : '') + (exo.name || exo.n || '')));
+      if (exo.type) {
+       var _typeBg = exo.type === 'compound' ? 'rgba(26,74,26,0.08)' : exo.type === 'superset' ? 'rgba(90,16,16,0.08)' : 'rgba(26,58,106,0.08)';
+       var _typeCol = exo.type === 'compound' ? '#1A4A1A' : exo.type === 'superset' ? '#5A1010' : '#1A3A6A';
+       _exTop.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;background:' + _typeBg + ';color:' + _typeCol + ';border-radius:2px;flex-shrink:0;margin-left:6px'}, exo.type));
       }
+      _exCard.appendChild(_exTop);
+      // Sets × reps · rest — muscle target
+      var _exMeta = (exo.sets || '') + ' s\u00e9ries \u00d7 ' + (exo.reps || '') + ' reps \u00b7 Repos ' + (exo.rest || '90s');
+      if (exo.muscle) _exMeta += ' \u2014 ' + exo.muscle;
+      _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, _exMeta));
+      // Equipment tag
+      if (exo.equipment) {
+       _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-bottom:6px'}, '\uD83C\uDFCB ' + exo.equipment));
+      }
+      // Technique (full text, not truncated)
+      if (exo.technique) {
+       _exCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-top:2px;line-height:1.6;border-top:1px solid var(--border);padding-top:8px'}, exo.technique));
+      }
+      // RIR target badge
       if (exo.rirTarget !== undefined) {
-       _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6A4A1A;margin-top:4px'}, 'RIR cible : ' + exo.rirTarget + ' reps en réserve'));
+       var _rirColors = {0:'#5A1010', 1:'#5A1010', 2:'#6A4A1A', 3:'#6A4A1A', 4:'#1A4A1A'};
+       var _rirC = _rirColors[exo.rirTarget] || '#6A4A1A';
+       _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + _rirC + ';margin-top:6px;padding:3px 8px;background:rgba(106,74,26,0.06);display:inline-block;border-radius:2px'}, 'RIR cible\u00a0: ' + exo.rirTarget + (exo.rirTarget === 0 ? ' \u2014 \u00e9chec' : exo.rirTarget === 1 ? ' \u2014 quasi-\u00e9chec' : exo.rirTarget === 2 ? ' \u2014 effort intense' : exo.rirTarget === 3 ? ' \u2014 mod\u00e9r\u00e9' : ' \u2014 l\u00e9ger')));
       }
       _sfcSection.appendChild(_exCard);
      });
