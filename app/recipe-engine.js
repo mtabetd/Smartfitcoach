@@ -29674,6 +29674,7 @@
     var missing   = [];
     var totalMAD  = 0;
 
+    if (!Array.isArray(recipe.ingredients)) return null;
     recipe.ingredients.forEach(function (ing) {
       var unitPrice = window.getPricePer(ing.name, ing.unit);
       if (unitPrice === null || unitPrice === undefined) {
@@ -30039,7 +30040,7 @@
           _id:        recipe._id || null
         };
 
-        if (recipe._id && recipe._id.indexOf('SALAD_') === 0 && recipe._scaledIngredients) {
+        if (recipe._id && recipe._id.indexOf('SALAD_') === 0 && Array.isArray(recipe._scaledIngredients)) {
           // Salade custom — ingrédients déjà dans recipe._scaledIngredients
           var saladCost = 0;
           recipe._scaledIngredients.forEach(function(ing) {
@@ -30502,7 +30503,7 @@
             for (var si = 0; si < window.WHEY_SMOOTHIES.length; si++) {
               if (window.WHEY_SMOOTHIES[si].id === recipe._id) { sm = window.WHEY_SMOOTHIES[si]; break; }
             }
-            if (sm && sm.ingredients) {
+            if (sm && Array.isArray(sm.ingredients)) {
               sm.ingredients.forEach(function(ing) { _addIng(ing.name, ing.qty || 0, ing.unit); });
             }
           }

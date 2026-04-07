@@ -840,6 +840,7 @@ function renderStep2(p) {
 
 // ─── STEP 3: ACTIVITE ───
 function renderStep3(p) {
+  if (!Array.isArray(S.train)) S.train = [];
   renderProgressBar(p, 3, 9);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' III'));
   p.appendChild(h('h1', {html: 'Votre<br><em>activit\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
@@ -948,6 +949,8 @@ function renderStep4(p) {
 
 // ─── STEP 5: HABITUDES ALIMENTAIRES ───
 function renderStep5(p) {
+  if (!Array.isArray(S.allergies)) S.allergies = [];
+  if (!Array.isArray(S.intolerances)) S.intolerances = [];
   renderProgressBar(p, 5, 9);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V'));
   p.appendChild(h('h1', {html: 'Vos<br><em>habitudes alimentaires</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
@@ -1236,6 +1239,11 @@ function renderStep5(p) {
 
 // ─── STEP 6: OBJECTIF ───
 function renderStep6(p) {
+  if (!Array.isArray(S.supplements)) S.supplements = [];
+  if (!Array.isArray(S.wheyFlavors)) S.wheyFlavors = [];
+  if (!Array.isArray(S.cuisines)) S.cuisines = [];
+  if (!Array.isArray(S.shopStores)) S.shopStores = [];
+  if (!Array.isArray(S.shopPrefs)) S.shopPrefs = [];
   renderProgressBar(p, 6, 9);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VI'));
   p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));

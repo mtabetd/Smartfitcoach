@@ -3818,10 +3818,12 @@ function saveMuscuSessionLog() {
 
  // Mettre à jour l'historique de progression — SEULEMENT pour la date du jour
  var _today2 = new Date().toISOString().slice(0, 10);
- var _todayLog = S.muscuSessionLog[_today2];
+ var _todayLog = S.muscuSessionLog ? S.muscuSessionLog[_today2] : null;
+ if (!S.muscuProgressionHistory) S.muscuProgressionHistory = {};
  if (_todayLog) {
  Object.keys(_todayLog).forEach(function(exName) {
  var sets = _todayLog[exName];
+ if (!Array.isArray(sets)) return;
  var completed = sets.filter(function(s) { return s.actualWeight !== null || s.actualReps !== null; });
  if (completed.length === 0) return;
  var avgWeight = completed.reduce(function(sum, s) { return sum + (s.actualWeight || 0); }, 0) / completed.length;
@@ -4912,7 +4914,7 @@ function renderMusculationProgram(p) {
  });
 
  // ─── EXERCICES BONUS (depuis programmes dédiés) ───
- var bonusDayList = S.bonusExercises[S.selectedSportDay] || [];
+ var bonusDayList = (S.bonusExercises || {})[S.selectedSportDay] || [];
  if (bonusDayList.length > 0) {
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 8px'}, 'Exercices bonus'));
  bonusDayList.forEach(function(bex, bi) {
@@ -4933,7 +4935,7 @@ function renderMusculationProgram(p) {
  }
 
  // Day summary
- var allEx = day.exercises.concat(bonusDayList);
+ var allEx = (day.exercises || []).concat(bonusDayList);
  var estDuration = calcSessionDuration(allEx);
  var summary = h('div', {'class': 'day-total'});
  summary.appendChild(h('div', {'class': 'dt-label'}, allEx.length + ' exercice' + (allEx.length > 1 ? 's' : '') + (bonusDayList.length > 0 ? ' (dont ' + bonusDayList.length + ' bonus)' : '')));
