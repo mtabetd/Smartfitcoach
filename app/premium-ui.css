@@ -2574,3 +2574,188 @@ select {
   transform: scale(0.98);
   opacity: 0.92;
 }
+
+
+/* ============================================================
+   LUXURY DESIGN SYSTEM — Typographie · Palette · Composants
+   Direction artistique : Hermès Digital · LVMH · Porsche Design
+   Chaque pixel respire le premium.
+   ============================================================ */
+
+
+/* === TYPOGRAPHIC SCALE — Luxury Premium === */
+:root {
+  /* Type scale — Major Third (1.25) */
+  --text-xs: 0.64rem;    /* 10.24px — labels, badges */
+  --text-sm: 0.8rem;     /* 12.8px — captions, meta */
+  --text-base: 1rem;     /* 16px — corps */
+  --text-lg: 1.25rem;    /* 20px — sous-titres */
+  --text-xl: 1.563rem;   /* 25px — titres section */
+  --text-2xl: 1.953rem;  /* 31px — titres page */
+  --text-3xl: 2.441rem;  /* 39px — hero */
+
+  /* Letter spacing — luxe */
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.1em;
+  --tracking-widest: 0.2em;  /* pour les eyebrows uppercase */
+
+  /* Line heights */
+  --leading-tight: 1.15;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+  --leading-loose: 2;
+}
+
+
+/* === COLOUR SYSTEM — Ivoires, Noirs & Verts Raffinés === */
+:root {
+  /* Ivoires — gradient chaud */
+  --ivory-0: #FFFFFF;
+  --ivory-1: #FDFCFA;    /* quasi-blanc chaud */
+  --ivory-2: #FAF9F6;    /* ivoire principal */
+  --ivory-3: #F5F4F0;    /* ivoire secondaire */
+  --ivory-4: #EDEBE5;    /* ivoire sombre */
+
+  /* Noirs — gradient profond */
+  --black-0: #0A0A09;    /* noir absolu */
+  --black-1: #1A1A18;    /* noir principal */
+  --black-2: #2A2A28;    /* noir moyen */
+  --black-3: #3A3A38;    /* noir clair */
+
+  /* Gris — neutres chauds */
+  --grey-1: #4A4A48;
+  --grey-2: #6B6B65;     /* gris principal */
+  --grey-3: #8A8A83;
+  --grey-4: #AEAEA7;
+  --grey-5: #C8C8C0;
+
+  /* Vert SmartFitCoach — profond, élégant */
+  --green-dark: #0F2E0F;
+  --green-main: #1A4A1A;
+  --green-light: #2E6B2E;
+  --green-pale: #E8F0E8;
+  --green-bg: rgba(26, 74, 26, 0.06);
+
+  /* Bordures subtiles */
+  --border-light: rgba(26, 26, 24, 0.06);
+  --border-main: #E8E6DF;
+  --border-dark: #D0CEC7;
+
+  /* Shadows — luxe subtil */
+  --shadow-xs: 0 1px 2px rgba(10, 10, 9, 0.04);
+  --shadow-sm: 0 2px 8px rgba(10, 10, 9, 0.06);
+  --shadow-md: 0 4px 16px rgba(10, 10, 9, 0.08);
+  --shadow-lg: 0 8px 32px rgba(10, 10, 9, 0.10);
+  --shadow-xl: 0 16px 48px rgba(10, 10, 9, 0.12);
+}
+
+
+/* === COMPOSANTS TYPOGRAPHIQUES PREMIUM === */
+
+/* Eyebrows — trait distinctif du luxe */
+.eyebrow-lux {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--grey-2);
+  font-weight: 400;
+}
+
+/* Titres hero Georgia */
+.title-hero {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: normal;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--black-1);
+}
+
+/* Titres section */
+.title-section {
+  font-family: Georgia, serif;
+  font-size: var(--text-xl);
+  font-weight: normal;
+  letter-spacing: -0.01em;
+  line-height: var(--leading-tight);
+}
+
+/* Sous-titres corpo */
+.subtitle-lux {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--grey-2);
+  letter-spacing: 0.01em;
+}
+
+/* Citations / Blockquotes */
+.quote-text {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--black-2);
+  border-left: 2px solid var(--green-main);
+  padding-left: 20px;
+}
+
+
+/* === DIVIDERS & SÉPARATEURS — la différence du luxe === */
+
+/* Divider horizontal élégant */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-main);
+  margin: 24px 0;
+}
+
+/* Divider avec espacement généreux */
+.divider-lg {
+  border: none;
+  border-top: 1px solid var(--border-light);
+  margin: 40px 0;
+}
+
+/* Ornement central — pour les sections importantes */
+.divider-ornament {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 32px 0;
+  color: var(--grey-4);
+  font-family: Georgia, serif;
+  font-size: 18px;
+}
+.divider-ornament::before,
+.divider-ornament::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--border-main);
+}
+
+
+/* === SCROLLBAR — ultra-raffinée === */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--grey-4); }
+
+
+/* === FOCUS STATES — accessibilité premium === */
+*:focus-visible {
+  outline: 2px solid var(--green-main);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+*:focus:not(:focus-visible) { outline: none; }
+
+
+/* === SÉLECTION TEXTE — personnalisée === */
+::selection {
+  background: rgba(26, 74, 26, 0.15);
+  color: var(--black-1);
+}
