@@ -6776,9 +6776,9 @@ function renderPadelProgram(p) {
 
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});
- wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', disabled: S.padelWeek <= 1, onclick: function(){ S.padelWeek--; S.selectedPadelDay = 0; window.render(); }}, '←'));
+ wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': 'Semaine précédente', disabled: S.padelWeek <= 1, onclick: function(){ S.padelWeek--; S.selectedPadelDay = 0; window.render(); }}, '←'));
  wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.padelWeek + ' / 8'));
- wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', disabled: S.padelWeek >= 8, onclick: function(){ S.padelWeek++; S.selectedPadelDay = 0; window.render(); }}, '→'));
+ wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': 'Semaine suivante', disabled: S.padelWeek >= 8, onclick: function(){ S.padelWeek++; S.selectedPadelDay = 0; window.render(); }}, '→'));
  p.appendChild(wn);
 
  // Day tabs
@@ -6896,9 +6896,9 @@ function renderGolfProgram(p) {
 
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});
- wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', disabled: S.golfWeek <= 1, onclick: function(){ S.golfWeek--; S.selectedGolfDay = 0; window.render(); }}, '←'));
+ wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': 'Semaine précédente', disabled: S.golfWeek <= 1, onclick: function(){ S.golfWeek--; S.selectedGolfDay = 0; window.render(); }}, '←'));
  wn.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.golfWeek + ' / 8'));
- wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', disabled: S.golfWeek >= 8, onclick: function(){ S.golfWeek++; S.selectedGolfDay = 0; window.render(); }}, '→'));
+ wn.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;margin:0', 'aria-label': 'Semaine suivante', disabled: S.golfWeek >= 8, onclick: function(){ S.golfWeek++; S.selectedGolfDay = 0; window.render(); }}, '→'));
  p.appendChild(wn);
 
  // Day tabs
@@ -7182,11 +7182,11 @@ function renderTriathlonProgram(p) {
 
  // ── Navigation semaines ──
  var weekNav = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0'});
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine précédente', onclick: function() {
  if (S.triathlonWeek > 1) { S.triathlonWeek--; S.selectedTriDay = 0; window.render(); }
  }}, '←'));
  weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.triathlonWeek + ' / ' + totalWeeks));
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
  if (S.triathlonWeek < totalWeeks) { S.triathlonWeek++; S.selectedTriDay = 0; window.render(); }
  }}, '→'));
  p.appendChild(weekNav);
