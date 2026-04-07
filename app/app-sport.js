@@ -1405,7 +1405,7 @@ function renderDedicatedPrograms(p) {
  ];
 
  allDedicated.forEach(function(item) {
- var prog = window.NFC_PROGRAMS && window.NFC_PROGRAMS[item.key];
+ var prog = window.SFC_PROGRAMS && window.SFC_PROGRAMS[item.key];
  if (!prog || !prog.variations) return;
 
  var openKey = 'dedicatedOpen_' + item.key;
@@ -4739,22 +4739,22 @@ function renderMusculationProgram(p) {
  }());
 
  // ─── PRO PROGRAMS ACCESS (advanced/pro only) ───
- if ((S.sportLevel === 'advanced' || S.sportLevel === 'pro') && window.NFC_PROGRAMS) {
-  var _nfcKeys = Object.keys(window.NFC_PROGRAMS);
-  if (_nfcKeys.length > 0) {
+ if ((S.sportLevel === 'advanced' || S.sportLevel === 'pro') && window.SFC_PROGRAMS) {
+  var _sfcKeys = Object.keys(window.SFC_PROGRAMS);
+  if (_sfcKeys.length > 0) {
    var _nfcSection = h('div', {style: 'margin-bottom:20px'});
    _nfcSection.appendChild(h('div', {'class':'section-label'}, 'Programmes scientifiques (niveau avancé)'));
    _nfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;line-height:1.5'}, 'Programmes périodisés basés sur la recherche (Schoenfeld, RP Hypertrophy). Sélectionnez un groupe musculaire pour une séance dédiée.'));
 
    var _nfcGrid = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px'});
-   _nfcKeys.forEach(function(key) {
-    var prog = window.NFC_PROGRAMS[key];
+   _sfcKeys.forEach(function(key) {
+    var prog = window.SFC_PROGRAMS[key];
     if (!prog) return;
-    var _isActive = S._activeNfcProgram === key;
+    var _isActive = S._activeSfcProgram === key;
     var _nfcBtn = h('button', {
      style: 'padding:10px 8px;border:1px solid ' + (_isActive ? 'var(--accent,#1A4A1A)' : 'var(--border,#E8E6DF)') + ';background:' + (_isActive ? 'rgba(26,74,26,0.06)' : 'transparent') + ';border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--black,#1A1A18);text-align:center',
      onclick: (function(_key, _active) { return function() {
-      S._activeNfcProgram = _active ? null : _key;
+      S._activeSfcProgram = _active ? null : _key;
       window.render();
      }; })(key, _isActive)
     }, prog.name || key);
@@ -4763,8 +4763,8 @@ function renderMusculationProgram(p) {
    _nfcSection.appendChild(_nfcGrid);
 
    // If a program is selected, show its exercises for the current phase
-   if (S._activeNfcProgram && window.NFC_PROGRAMS[S._activeNfcProgram]) {
-    var _selProg = window.NFC_PROGRAMS[S._activeNfcProgram];
+   if (S._activeSfcProgram && window.SFC_PROGRAMS[S._activeSfcProgram]) {
+    var _selProg = window.SFC_PROGRAMS[S._activeSfcProgram];
     // Get current phase exercises (try: mass, force, shred based on S.sportGoals)
     var _phaseKey = 'mass'; // default
     if (S.sportGoals && S.sportGoals.indexOf('shred') !== -1) _phaseKey = 'shred';
@@ -5585,12 +5585,12 @@ function renderMusculationProgram(p) {
  }
  });
 
- if (dedicatedToShow.length > 0 && window.NFC_PROGRAMS) {
+ if (dedicatedToShow.length > 0 && window.SFC_PROGRAMS) {
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:28px'}, 'Programmes ciblés'));
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'Séances bonus à intégrer selon vos priorités.'));
 
  dedicatedToShow.forEach(function(key) {
- var prog = window.NFC_PROGRAMS[key];
+ var prog = window.SFC_PROGRAMS[key];
  if (!prog) return;
 
  var isOpen = S['dedicatedOpen_' + key] || false;

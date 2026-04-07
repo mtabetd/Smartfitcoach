@@ -1,8 +1,8 @@
-// muscu-programs.js — Professional Bodybuilding Programs (NFC-inspired)
+// muscu-programs.js — Professional Bodybuilding Programs (SmartFitCoach)
 (function(){
 'use strict';
 
-var NFC_PROGRAMS = {
+var SFC_PROGRAMS = {
   pectoraux: {
     masse: {
       warmup: '5 min rameur + rotations \u00e9paules dynamiques',
@@ -241,7 +241,7 @@ var NFC_PROGRAMS = {
 // ─── PHASES FORCE par groupe musculaire (Mr. Olympia prep — 3-5 reps, 85-93% 1RM) ───
 // Phillips & Van Loon 2011: Force maximale sur composés = base de tout gain d'hypertrophie durable
 // La phase FORCE est manquante dans 90% des programmes de salle. ERREUR CRITIQUE.
-var NFC_PROGRAMS_FORCE = {
+var SFC_PROGRAMS_FORCE = {
   pectoraux: {
     force: {
       warmup: 'Activation: 3\u00d715 Face pull \u00e9lastique + 3\u00d710 Band pull-apart + 2 sets \u00e9chauffement bench progressif @50%, @70%, @85%',
@@ -406,7 +406,7 @@ var ADVANCED_TECHNIQUES_DB = {
   }
 };
 window.ADVANCED_TECHNIQUES_DB = ADVANCED_TECHNIQUES_DB;
-window.NFC_PROGRAMS_FORCE = NFC_PROGRAMS_FORCE;
+window.SFC_PROGRAMS_FORCE = SFC_PROGRAMS_FORCE;
 
 var WEEKLY_SPLITS = {
   3: {name:'Push-Pull-Legs 3j', days:[{day:'Lundi',muscles:['pectoraux','epaules'],label:'Push \u2014 Pecs + \u00c9paules'},{day:'Mercredi',muscles:['dos','bras'],label:'Pull \u2014 Dos + Bras'},{day:'Vendredi',muscles:['jambes','fessiers_dedied'],label:'Legs \u2014 Jambes + Fessiers'}], notes:'Split PPL simplifi\u00e9 3j. Chaque groupe musculaire 1x/semaine avec volume concentr\u00e9. R\u00e9cup\u00e9ration optimale (72h min entre s\u00e9ances m\u00eames groupes). Id\u00e9al d\u00e9butants ou emploi du temps serr\u00e9.'},
@@ -423,9 +423,9 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
     if (S.sportGoals.indexOf('strength') !== -1 || S.sportGoals.indexOf('force') !== -1) goalKey = 'force';
   }
 
-  // Phase FORCE → utilise NFC_PROGRAMS_FORCE dédié
+  // Phase FORCE → utilise SFC_PROGRAMS_FORCE dédié
   if (goalKey === 'force') {
-    var forceEntry = NFC_PROGRAMS_FORCE[muscleGroup];
+    var forceEntry = SFC_PROGRAMS_FORCE[muscleGroup];
     if (forceEntry && forceEntry.force) {
       var forceResult; try { forceResult = JSON.parse(JSON.stringify(forceEntry.force)); } catch(e) { return null; }
       if (!forceResult.exercises) forceResult.exercises = [];
@@ -439,7 +439,7 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
     goalKey = 'masse'; // fallback si pas de phase force pour ce groupe
   }
 
-  var program = NFC_PROGRAMS[muscleGroup];
+  var program = SFC_PROGRAMS[muscleGroup];
   if (!program) return null;
   if (program.exercises) { try { return JSON.parse(JSON.stringify(program)); } catch(e) { return program; } }
   // Programmes dédiés (fessiers, abdos, biceps, triceps) utilisent des variations au lieu de masse/sèche
@@ -2091,7 +2091,7 @@ var CBUM_PROGRAMS = {
 window.CBUM_PROGRAMS = CBUM_PROGRAMS;
 
 var TRAINING_STYLES = {
-  classic:   { label:'Programme Classique',   programs: NFC_PROGRAMS,              splits: WEEKLY_SPLITS },
+  classic:   { label:'Programme Classique',   programs: SFC_PROGRAMS,              splits: WEEKLY_SPLITS },
   intensity: { label:'Intensité Maximale',    programs: YATES_PROGRAMS.programs,   splits: YATES_PROGRAMS.splits,   meta: YATES_PROGRAMS.meta,   macro: YATES_PROGRAMS.macro_cycle_12w },
   volume:    { label:'Volume Progressif',     programs: COLEMAN_PROGRAMS.programs, splits: COLEMAN_PROGRAMS.splits, meta: COLEMAN_PROGRAMS.meta, macro: COLEMAN_PROGRAMS.macro_cycle_12w },
   fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w },
@@ -2733,7 +2733,7 @@ window.FUSION_PROGRAMS = FUSION_PROGRAMS;
 window.TRAINING_STYLES = TRAINING_STYLES;
 window.TRAINING_STYLE_KEYS = ['classic', 'intensity', 'volume', 'fst7', 'fusion', 'starting', 'greyskull', 'texas', 'nsuns', 'cbum'];
 window.getStyleProgram = getStyleProgram;
-window.NFC_PROGRAMS = NFC_PROGRAMS;
+window.SFC_PROGRAMS = SFC_PROGRAMS;
 window.WEEKLY_SPLITS = WEEKLY_SPLITS;
 window.getPersonalizedProgram = getPersonalizedProgram;
 window.getProgressiveProgram = getProgressiveProgram;

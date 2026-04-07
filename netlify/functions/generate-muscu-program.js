@@ -156,7 +156,7 @@ Justification écrite : "[Prénom], avec [X] jours, [Y]h sommeil, niveau [Z],
 objectif [OBJ], je choisis [SPLIT] parce que [raison chiffrée]."
 
 Choisir le STYLE parmi les 10 et justifier par les données :
-Classique (NFC), Heavy Duty (Yates), Volume Progressif (Coleman),
+Classique SmartFitCoach, Heavy Duty (Yates), Volume Progressif (Coleman),
 FST-7 Fascial (Rambod), Élite Fusion, Starting Strength (Rippetoe),
 Greyskull LP, Texas Method, nSuns 5/3/1, CBum Classic Physique.
 
