@@ -4499,46 +4499,49 @@ function renderMusculationProgram(p) {
  p.appendChild(h('div', {style: 'font-family:Georgia;font-size:13px;color:var(--grey);margin-top:4px;text-align:center'}, focusText));
  }
 
- // ─── VOLUME HEBDOMADAIRE MEV/MAV ───
- if (window.VOLUME_LANDMARKS && S.sportProgram && S.sportProgram.length > 0) {
- var muscleSetCount = {};
- var muscleKeywords = {chest:['poitrine','pectoral','chest'],back:['dos','back','dorsaux','traction','rowing'],shoulders:['\u00e9paule','shoulder','deltoid','trap\u00e8ze','trapeze','militaire','overhead'],legs:['jambe','quadri','ischio','mollet','leg','squat'],glutes:['fessier','glute','hip thrust'],biceps:['biceps'],triceps:['triceps'],abs:['abdo','abdominaux','gainage','transverse','oblique','grand droit']};
- S.sportProgram.forEach(function(day) {
- (day.exercises || []).forEach(function(ex) {
+ // ─── MUSCLES DE LA SÉANCE ───
+ var _selDay = S.sportProgram[S.selectedSportDay || 0];
+ if (_selDay && Array.isArray(_selDay.exercises) && _selDay.exercises.length > 0 && window.VOLUME_LANDMARKS) {
+ var _sessionMuscleKeywords = {
+ chest: ['pectoral', 'poitrine', 'chest', 'pectoraux'],
+ back: ['dos', 'back', 'dorsaux', 'grand dorsal', 'traction', 'rowing'],
+ shoulders: ['\u00e9paule', 'epaule', 'shoulder', 'deltoid', 'deltoi\u0308de', 'deltoide', 'trap\u00e8ze', 'trapeze', 'militaire', 'overhead'],
+ legs: ['jambe', 'quadri', 'ischio', 'mollet', 'leg', 'squat'],
+ glutes: ['fessier', 'fessiers', 'glute', 'hip thrust'],
+ biceps: ['biceps'],
+ triceps: ['triceps'],
+ abs: ['abdo', 'abdominaux', 'gainage', 'transverse', 'oblique', 'grand droit']
+ };
+ var _sessionSetCount = {};
+ _selDay.exercises.forEach(function(ex) {
  var m = (ex.m || '').toLowerCase();
- Object.keys(muscleKeywords).forEach(function(cat) {
- if ((muscleKeywords[cat]||[]).some(function(kw){ return m.indexOf(kw) !== -1; })) {
- muscleSetCount[cat] = (muscleSetCount[cat] || 0) + (typeof ex.sets === 'string' ? (parseInt(ex.sets) || 3) : (ex.sets || 3));
+ Object.keys(_sessionMuscleKeywords).forEach(function(cat) {
+ if (_sessionMuscleKeywords[cat].some(function(kw) { return m.indexOf(kw) !== -1; })) {
+ var sets = typeof ex.sets === 'string' ? (parseInt(ex.sets) || 3) : (ex.sets || 3);
+ _sessionSetCount[cat] = (_sessionSetCount[cat] || 0) + sets;
  }
  });
  });
- });
- var volKeys = Object.keys(muscleSetCount);
- if (volKeys.length > 0) {
- var volSection = h('div', {style: 'margin-bottom:16px'});
- volSection.appendChild(h('div', {'class':'section-label'}, 'Volume hebdomadaire'));
- volKeys.forEach(function(cat) {
+ var _sessionCats = Object.keys(_sessionSetCount).filter(function(c) { return _sessionSetCount[c] > 0; });
+ if (_sessionCats.length > 0) {
+ var _maxSets = Math.max.apply(null, _sessionCats.map(function(c) { return _sessionSetCount[c]; }));
+ var _muscleSection = h('div', {style: 'margin-bottom:20px'});
+ _muscleSection.appendChild(h('div', {'class': 'section-label'}, 'Muscles de la s\u00e9ance'));
+ _sessionCats.sort(function(a, b) { return _sessionSetCount[b] - _sessionSetCount[a]; });
+ _sessionCats.forEach(function(cat) {
  var lm = window.VOLUME_LANDMARKS[cat];
- if (!lm) return;
- var sets = muscleSetCount[cat];
- var pct = Math.min(sets / lm.mrv, 1);
- var status, color;
- if (sets < lm.mev) { color = '#5A1010'; status = sets + ' s. — Sous MEV (min. ' + lm.mev + ')'; }
- else if (sets <= lm.mav) { color = '#1A4A1A'; status = sets + ' s. — Zone optimale'; }
- else if (sets <= lm.mrv) { color = '#6A4A1A'; status = sets + ' s. — Volume \u00e9lev\u00e9'; }
- else { color = '#5A1010'; status = sets + ' s. — D\u00e9passe MRV !'; }
+ var label = lm ? lm.label : cat;
+ var sets = _sessionSetCount[cat];
+ var pct = _maxSets > 0 ? Math.round(sets / _maxSets * 100) : 0;
  var row = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:5px'});
- row.appendChild(h('div', {style: 'width:75px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex-shrink:0'}, lm.label));
- var barWrap = h('div', {style: 'flex:1;height:6px;background:var(--border);position:relative'});
- barWrap.appendChild(h('div', {style: 'height:6px;width:' + Math.round(pct*100) + '%;background:' + color}));
- barWrap.appendChild(h('div', {style: 'position:absolute;top:-2px;left:' + (lm.mrv > 0 ? Math.round((lm.mev||0)/lm.mrv*100) : 0) + '%;width:1px;height:10px;background:#999', title:'MEV'}));
- barWrap.appendChild(h('div', {style: 'position:absolute;top:-2px;left:' + (lm.mrv > 0 ? Math.round((lm.mav||0)/lm.mrv*100) : 0) + '%;width:1px;height:10px;background:#555', title:'MAV'}));
+ row.appendChild(h('div', {style: 'width:75px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);flex-shrink:0'}, label));
+ var barWrap = h('div', {style: 'flex:1;height:6px;background:var(--border,#E8E6DF);border-radius:2px;overflow:hidden'});
+ barWrap.appendChild(h('div', {style: 'height:6px;width:' + pct + '%;background:#1A4A1A;border-radius:2px;transition:width 0.4s ease'}));
  row.appendChild(barWrap);
- row.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:' + color + ';flex-shrink:0;min-width:110px'}, status));
- volSection.appendChild(row);
+ row.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);flex-shrink:0;min-width:40px;text-align:right'}, sets + ' s.'));
+ _muscleSection.appendChild(row);
  });
- volSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);margin-top:2px'}, 'Repères : | MEV (minimum) · | MAV (optimal) · MRV = barre compl\u00e8te'));
- p.appendChild(volSection);
+ p.appendChild(_muscleSection);
  }
  }
 
