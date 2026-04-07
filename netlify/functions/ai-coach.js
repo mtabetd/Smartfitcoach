@@ -116,7 +116,7 @@ function sanitizeContext(ctx) {
     'regime', 'allergies', 'excluded', 'muscuWeights',
     'hyroxLevel', 'hyroxGoal', 'hyroxWeek',
     'runningLevel', 'runningGoal', 'runningWeek',
-    'cyclingLevel', 'cyclingGoal'
+    'cyclingLevel', 'cyclingGoal', 'appMode'
   ];
 
   var safe = {};

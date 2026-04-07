@@ -81,7 +81,8 @@ function buildContext() {
     sportDays: S.sportDays || '',
     regime: S.regime || '',
     allergies: Array.isArray(S.allergies) ? S.allergies : [],
-    excluded: S.excluded || ''
+    excluded: S.excluded || '',
+    appMode: S.appMode || 'both'
   };
 
   // Sport spécifique
