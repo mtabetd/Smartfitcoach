@@ -4757,7 +4757,7 @@ function renderMusculationProgram(p) {
       S._activeSfcProgram = _active ? null : _key;
       window.render();
      }; })(key, _isActive)
-    }, prog.name || key);
+    }, prog.name || (key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')));
     _sfcGrid.appendChild(_sfcBtn);
    });
    _sfcSection.appendChild(_sfcGrid);
