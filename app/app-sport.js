@@ -2927,7 +2927,7 @@ function renderCrossfitProgram(p) {
   var elitePoints = [
    'INTENT: Chaque WOD a un objectif precis dans la programmation. Lis les notes du WOD AVANT de commencer.',
    'PACING: Un champion ne commence jamais a 100% avant le round 3. Reserve 15% de capacite pour la fin.',
-   'JOURNAL: Note ton score, ton RPE, et tes observations. La progression vient de l\'analyse, pas juste du travail.',
+   'JOURNAL: Notez votre score, votre RPE, et vos observations. La progression vient de l\'analyse, pas juste du travail.',
    'RECOVERY: Le muscle grandit pendant le repos, pas pendant l\'entrainement. Dors 8h minimum ce soir.',
    'MENTAL: "Les jours difficiles sont les jours qui nous construisent. Les jours faciles sont des jours de maintenance."'
   ];
