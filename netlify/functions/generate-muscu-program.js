@@ -172,6 +172,86 @@ FILTRE 5 — VARIATION ANTI-MONOTONIE : variantes d'angle si déjà 2x dans la s
 FILTRE 6 — POINTS FAIBLES : +30% volume hebdo sur les 3 points faibles
 
 ═══════════════════════════════════════════════════════════════════════════════
+SECTION 3B — PROTOCOLES MÉDICAUX D'ÉVITEMENT (OBLIGATOIRE)
+═══════════════════════════════════════════════════════════════════════════════
+
+Si le BILAN MÉDICAL du profil signale une restriction, applique STRICTEMENT
+les règles ci-dessous. Chaque exercice prescrit doit respecter ces contraintes.
+
+ÉPAULES fragiles / Coiffe des rotateurs / Déchirure coiffe :
+  ✗ EXCLURE : Développé couché prise large (> 1.5× largeur épaules)
+  ✗ EXCLURE : Tirage nuque (derrière la tête)
+  ✗ EXCLURE : Élévations frontales avec haltères lourds
+  ✗ EXCLURE : Rowing menton (upright row prise serrée)
+  ✗ EXCLURE : Dips lestés si douleur antérieure
+  ✓ PRIVILÉGIER : Développé couché prise neutre ou légèrement serrée
+  ✓ PRIVILÉGIER : Rowing unilatéral, câble basse poulie
+  ✓ PRIVILÉGIER : OHP avec haltères (rotation naturelle)
+  ✓ PRIVILÉGIER : Élévations latérales charge légère, coude fléchi 30°
+
+GENOUX fragiles / Ménisque / Gonarthrose / LCA :
+  ✗ EXCLURE : Leg Press amplitude complète (>90° flexion)
+  ✗ EXCLURE : Hack squat profond
+  ✗ EXCLURE : Fentes sautées / jump lunge
+  ✗ EXCLURE : Squat profond (ass-to-grass) avec charge lourde
+  ✓ PRIVILÉGIER : Squat amplitude partielle (0→60°), tempo lent
+  ✓ PRIVILÉGIER : Leg Press amplitude réduite (0→70°)
+  ✓ PRIVILÉGIER : Hip Thrust, Deadlift roumain, Step-up
+  ✓ PRIVILÉGIER : Leg Curl ischio pour soulager les quadriceps
+
+DOS (bas du dos) / Hernie discale / Lombalgie :
+  ✗ EXCLURE : Good Morning avec charge (flexion lombaire chargée)
+  ✗ EXCLURE : Jefferson Curl
+  ✗ EXCLURE : Hyperextension lourde sur banc romain
+  ✓ PRIVILÉGIER : Deadlift roumain (dos plat strict) charge réduite
+  ✓ PRIVILÉGIER : Rowing sur banc incliné (supprime le cisaillement lombaire)
+  ✓ PRIVILÉGIER : Tirage poulie basse assis, Lat pulldown
+  ✓ PRIVILÉGIER : Core : planche, bird-dog, dead-bug (pas de crunch)
+
+NUQUE / Cervicales :
+  ✗ EXCLURE : Tirage nuque, Shrugs lourds derrière le dos
+  ✗ EXCLURE : Decline press avec amplitude cervicale forcée
+  ✓ PRIVILÉGIER : Tirage poitrine, rowing assis
+
+COUDES / Épicondylite (tennis elbow) :
+  ✗ EXCLURE : Curl barre pronation, extensions triceps avec EZ-bar
+  ✓ PRIVILÉGIER : Curl haltères prise neutre, triceps poulie corde
+
+POIGNETS :
+  ✗ EXCLURE : Développé couché avec haltères en pronation forcée
+  ✓ PRIVILÉGIER : Prise neutre (haltères, barre EZ, câble)
+
+HERNIE DISCALE diagnostiquée (IRM) :
+  ✗ EXCLURE : Squat barre dos (charge axiale sur colonne)
+  ✗ EXCLURE : Deadlift conventionnel avec charge max
+  ✗ EXCLURE : Good Morning, Jefferson Curl
+  ✓ PRIVILÉGIER : Leg Press, Hack Squat (décharge lombaire)
+  ✓ PRIVILÉGIER : Deadlift roumain léger, Soulevé de terre sumo
+
+HERNIE INGUINALE :
+  ✗ EXCLURE : Squat lourd, Deadlift lourd, tout effort de Valsalva intense
+  ✓ PRIVILÉGIER : Machines (isolation), exercices sans pression intra-abdominale
+
+HTA SÉVÈRE (≥180/110) :
+  ✗ EXCLURE : Lifts isométriques max, effort de Valsalva prolongé
+  ✓ PRIVILÉGIER : RIR minimum 3, séries courtes, récupération longue (3')
+
+OSTÉOPOROSE :
+  ✗ EXCLURE : Mouvements à fort impact (sauts, plyométrie lourde)
+  ✓ PRIVILÉGIER : Exercices avec mise en charge progressive, bonne technique
+
+POLYARTHRITE RHUMATOÏDE / SPONDYLARTHRITE :
+  ✗ EXCLURE : Charges max (>85% 1RM), intensité ≥ RPE 9
+  ✓ PRIVILÉGIER : Charges modérées, amplitude complète non douloureuse
+
+FIBROMYALGIE :
+  ✓ Intensité ≤ 65% 1RM, volume réduit (-30%), RIR ≥ 3 en permanence
+  ✓ Tempo lent (4-1-2-0) pour éviter le DOMS sévère
+
+Règle de formatage médical obligatoire par exercice si restriction active :
+  ↳ [MÉDICAL] : adapté pour [zone] — [raison technique brève]
+
+═══════════════════════════════════════════════════════════════════════════════
 SECTION 4 — PRESCRIPTION SÉRIES / REPS / CHARGES / RIR
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -180,7 +260,14 @@ SECTION 4 — PRESCRIPTION SÉRIES / REPS / CHARGES / RIR
   Hypertrophie : 67.5-80%, reps 6-12, RIR 1-3
   Endurance : 50-67.5%, reps 12-20, RIR 0-2
 
-charge (kg) = round((%1RM × 1RM_user) / 2.5) × 2.5
+Formule Epley (calcul 1RM depuis poids × reps) :
+  1RM_Epley = poids × (1 + reps/30)
+  Exemple : 80 kg × 8 reps → 1RM = 80 × 1.267 = 101.3 → arrondi à 100 kg
+
+Formule de charge de travail :
+  charge (kg) = round((%1RM × 1RM_user) / 2.5) × 2.5
+  Exemple Force : 85% × 100 kg = 85 → 85 kg (déjà multiple de 2.5)
+  Exemple Hypertrophie : 72.5% × 100 kg = 72.5 → 72.5 kg
 
 RIR ajusté selon :
   sommeil <6h → +1 RIR
@@ -188,28 +275,49 @@ RIR ajusté selon :
   deload → RIR 4+
   intensification → RIR 0-1
 
-Format OBLIGATOIRE par exercice :
-  • [Exercice] — 4 × 6 @ 82.5 kg (RIR 2, tempo 3-0-1-0, repos 2'30")
-    ↳ Pour toi [Prénom] : calculé à 82.5% de ton Bench 1RM (100 kg).
-      Choisi car [donnée du profil — point faible/blessure/objectif].
-    ↳ Alternative si [équipement absent] : [substitution avec charge].
+Format OBLIGATOIRE par exercice (numéro + point REQUIS pour le parser) :
+1. [Exercice] — 4 × 6 @ 82.5 kg (RIR 2, tempo 3-0-1-0, repos 2'30")
+   Pour toi [Prénom] : calculé à 82.5% de ton Bench 1RM (100 kg).
+   Choisi car [donnée du profil — point faible/blessure/objectif].
+   Alternative si [équipement absent] : [substitution avec charge].
 
-AUCUNE ligne sans : charge en kg, justification "pour toi", alternative.
+RÈGLE CRITIQUE DE FORMAT : chaque exercice DOIT commencer par un numéro
+suivi d'un point (ex : "1. ", "2. ", "3. "). Ne JAMAIS utiliser de tirets,
+puces "•", astérisques ou autre marqueur. La numérotation repart à 1 à
+chaque nouvelle séance.
+
+AUCUNE ligne d'exercice sans : charge en kg, justification "pour toi", alternative.
 
 ═══════════════════════════════════════════════════════════════════════════════
 SECTION 5 — PROGRESSION 12 SEMAINES AVEC DATES RÉELLES
 ═══════════════════════════════════════════════════════════════════════════════
 
+Cadence de progression standard (à ajuster selon récupération) :
+  Membres supérieurs (Bench, OHP, Row) : +2.5 kg/semaine en accumulation
+  Membres inférieurs (Squat, Deadlift) : +5 kg/semaine en accumulation
+  Débutant : peut doubler ces cadences les 4 premières semaines
+  Intermédiaire : maintenir si RIR cible tenu, sinon stagnation = signal
+  Avancé : progression mensuelle (+2.5 kg/mois upper, +5 kg/mois lower)
+  Deload (sem 4 ou 8) : -40% volume, charges stables, RIR +2
+
+Structure mésocycle 12 semaines :
+  Sem 1-3 : Accumulation (volume↑, intensité modérée)
+  Sem 4 : Deload (volume -40%, récupération active)
+  Sem 5-8 : Intensification (charges↑, volume modéré)
+  Sem 9-11 : Réalisation (charges max, volume réduit, RIR 0-1)
+  Sem 12 : Test de force + planification cycle suivant
+
 Format obligatoire :
   Semaine 1 (du [date] au [date]) — Accumulation
-    Bench : 4×8 @ 72.5 kg (RIR 2)
-  Semaine 4 — Intensification
-    Bench : 5×5 @ 80 kg
-  Semaine 8 — Palier 1 : Bench 105 kg pour [Prénom]
-  Semaine 12 — Palier 2 : Bench 110 kg (+10% en 3 mois)
+1. Bench Press : 4×8 @ 72.5 kg (RIR 2)
+  Semaine 4 — Deload
+1. Bench Press : 3×8 @ 72.5 kg (RIR 4 — volume réduit)
+  Semaine 8 — Intensification
+1. Bench Press : 5×5 @ 80 kg (RIR 1)
+  Semaine 12 — Palier test : Bench cible [X] kg pour [Prénom]
 
 Pas de "tu progresseras" : "tu passeras de [X] à [Y] kg d'ici le [date]".
-Deload toutes les 4-6 semaines selon récupération déclarée.
+Deload toutes les 4 semaines, ajusté si sommeil <6h ou stress >7/10.
 
 ═══════════════════════════════════════════════════════════════════════════════
 SECTION 6 — AUTORÉGULATION PERSONNALISÉE (règles si/alors)
@@ -271,17 +379,22 @@ SECTION 9 — CHECKLIST DE VALIDATION INTERNE
 
 Avant d'envoyer, vérifier silencieusement :
 [ ] Le prénom apparaît ≥ 5 fois
-[ ] Chaque exercice a une charge en kg réels
+[ ] Chaque exercice commence par un numéro suivi d'un point (1. 2. 3.)
+[ ] Chaque exercice a une charge en kg réels (calculée depuis les 1RM Epley)
 [ ] Chaque exercice a une justification "pour toi"
 [ ] Chaque exercice a une alternative
 [ ] Aucune phrase de la Section 7 n'apparaît
 [ ] Les 3 points faibles sont traités dans le programme
 [ ] Les dates sont calculées à partir d'aujourd'hui
-[ ] Les charges sont arrondies aux paliers de son équipement
+[ ] Les charges sont arrondies aux paliers de 2.5 kg
 [ ] Le split est justifié par schedule × récup × objectif
 [ ] Aucune séance identique à une autre
 [ ] Nutrition en grammes calculés sur son poids
 [ ] Règles d'autorégulation citent ses marqueurs personnels
+[ ] TOUTES les restrictions du BILAN MÉDICAL sont respectées
+[ ] Aucun exercice contre-indiqué selon Section 3B n'est prescrit
+[ ] La progression suit les cadences de la Section 5 (2.5/5 kg par semaine)
+[ ] Le deload est planifié à semaine 4 et semaine 8
 
 Si UNE seule case non cochée → réécrire la section concernée.
 
@@ -310,12 +423,12 @@ Aucune prescription avant la fin du diagnostic chiffré.
 // ── Construction du prompt utilisateur ───────────────────────────────────────
 function buildUserPrompt(profile) {
   var dateNow = new Date().toISOString().split('T')[0];
-  var blessures = Array.isArray(profile.blessures) ? profile.blessures.join(', ') : 'aucune';
   return 'Date du jour : ' + dateNow + '\n\n' +
     'PROFIL UTILISATEUR :\n' +
     '- Prénom : ' + sanitizeString(profile.prenom || 'Athlete', 50) + '\n' +
     '- Âge : ' + (sanitizeNumber(profile.age, 10, 100) || '?') + ' ans\n' +
     '- Sexe : ' + sanitizeString(profile.sexe || '?', 20) + '\n' +
+    (profile.pregnant ? '- Grossesse en cours : OUI — adapter le programme aux contraintes obstétricales\n' : '') +
     '- Poids : ' + (sanitizeNumber(profile.poids, 30, 300) || '?') + ' kg\n' +
     '- Taille : ' + (sanitizeNumber(profile.taille, 100, 250) || '?') + ' cm\n' +
     '- Objectif : ' + sanitizeString(profile.objectif || '?', 100) + '\n' +
@@ -333,17 +446,26 @@ function buildUserPrompt(profile) {
     'mais ne peut JAMAIS prescrire un exercice nécessitant une installation non listée.\n' : '') +
     '- Sommeil : ' + (sanitizeNumber(profile.sommeil, 3, 12) || '?') + ' h/nuit\n' +
     '- Stress : ' + (sanitizeNumber(profile.stress, 1, 10) || '?') + '/10\n' +
-    '- Blessures : ' + sanitizeString(blessures, 300) + '\n' +
-    '- Bench 1RM : ' + (sanitizeNumber(profile.bench1RM, 20, 400) || '?') + ' kg\n' +
-    '- Squat 1RM : ' + (sanitizeNumber(profile.squat1RM, 20, 500) || '?') + ' kg\n' +
-    '- Deadlift 1RM : ' + (sanitizeNumber(profile.deadlift1RM, 20, 500) || '?') + ' kg\n' +
-    '- OHP 1RM : ' + (sanitizeNumber(profile.ohp1RM, 10, 250) || '?') + ' kg\n' +
+    '- BILAN MÉDICAL : ' + sanitizeString(profile.medical || 'aucune donnée médicale renseignée', 600) + '\n' +
+    '- FORCE — 1RM calculés (Epley depuis poids×reps réels) :\n' +
+    '  Bench : ' + (sanitizeNumber(profile.bench1RM, 20, 400) || '?') + ' kg' +
+    ' | Squat : ' + (sanitizeNumber(profile.squat1RM, 20, 500) || '?') + ' kg' +
+    ' | Deadlift : ' + (sanitizeNumber(profile.deadlift1RM, 20, 500) || '?') + ' kg' +
+    ' | OHP : ' + (sanitizeNumber(profile.ohp1RM, 10, 250) || '?') + ' kg' +
+    (sanitizeNumber(profile.row1RM, 10, 400) ? ' | Row : ' + sanitizeNumber(profile.row1RM, 10, 400) + ' kg' : '') +
+    (sanitizeNumber(profile.hipThrust1RM, 20, 500) ? ' | Hip Thrust : ' + sanitizeNumber(profile.hipThrust1RM, 20, 500) + ' kg' : '') +
+    (sanitizeNumber(profile.legPress1RM, 20, 600) ? ' | Leg Press : ' + sanitizeNumber(profile.legPress1RM, 20, 600) + ' kg' : '') +
+    '\n' +
+    '- Données brutes force (poids entraînement × reps) : ' + sanitizeString(profile.strengthProfile || 'non renseigné', 400) + '\n' +
+    '- Semaine actuelle dans le cycle 12 sem. : ' + (sanitizeNumber(profile.semaineActuelle, 1, 12) || 1) + '\n' +
+    '- Numéro de mésocycle : ' + (sanitizeNumber(profile.cycleActuel, 1, 10) || 1) + '\n' +
     '- Points forts : ' + sanitizeString(profile.pointsForts || 'non renseignés', 300) + '\n' +
     '- Points faibles : ' + sanitizeString(profile.pointsFaibles || 'non renseignés', 300) + '\n' +
     '- Préférences : ' + sanitizeString(profile.preferences || 'non renseignées', 300) + '\n' +
     '- Historique : ' + sanitizeString(profile.historique || 'non renseigné', 500) + '\n\n' +
     'Génère le programme complet selon le format strict du system prompt. ' +
-    'Diagnostic personnalisé OBLIGATOIRE en premier.';
+    'Diagnostic personnalisé OBLIGATOIRE en premier. ' +
+    'Respecte IMPÉRATIVEMENT les restrictions médicales du BILAN MÉDICAL pour chaque exercice prescrit.';
 }
 
 // ── Handler principal ────────────────────────────────────────────────────────
