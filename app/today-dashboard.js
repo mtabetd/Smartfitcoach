@@ -1086,8 +1086,20 @@ function renderTodayDashboard(p) {
   // Card 6 — Raccourcis rapides
   wrapper.appendChild(renderCardShortcuts());
 
-  // Sections étendues (ex-Dashboard) : widgets, graphiques, données
-  renderExtendedSections(wrapper, S);
+  // Sections étendues (ex-Dashboard) — masquées par défaut, dépliables
+  var _extOpen = S._dashExtOpen || false;
+  var extToggle = h('button', {
+    style: 'display:block;width:100%;margin:16px 0 4px;padding:12px;background:transparent;border:1px solid var(--border,#E8E6DF);color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+    onclick: function() {
+      S._dashExtOpen = !S._dashExtOpen;
+      if (window.render) window.render();
+    }
+  }, _extOpen ? '▲ Réduire' : '▼ Suivi · Progression · Données');
+  wrapper.appendChild(extToggle);
+
+  if (_extOpen) {
+    renderExtendedSections(wrapper, S);
+  }
 
   p.appendChild(wrapper);
 }
