@@ -1464,7 +1464,7 @@ function renderDedicatedPrograms(p) {
  row.appendChild(right);
  card.appendChild(row);
  });
- card.appendChild(h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic'}, prog.notes));
+ if (prog.notes) card.appendChild(h('div', {style: 'padding:10px 16px;border-top:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic'}, prog.notes));
  }
  p.appendChild(card);
  });
@@ -4742,40 +4742,45 @@ function renderMusculationProgram(p) {
  if ((S.sportLevel === 'advanced' || S.sportLevel === 'pro') && window.SFC_PROGRAMS) {
   var _sfcKeys = Object.keys(window.SFC_PROGRAMS);
   if (_sfcKeys.length > 0) {
-   var _nfcSection = h('div', {style: 'margin-bottom:20px'});
-   _nfcSection.appendChild(h('div', {'class':'section-label'}, 'Programmes scientifiques (niveau avancé)'));
-   _nfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;line-height:1.5'}, 'Programmes périodisés basés sur la recherche (Schoenfeld, RP Hypertrophy). Sélectionnez un groupe musculaire pour une séance dédiée.'));
+   var _sfcSection = h('div', {style: 'margin-bottom:20px'});
+   _sfcSection.appendChild(h('div', {'class':'section-label'}, 'Programmes scientifiques (niveau avancé)'));
+   _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;line-height:1.5'}, 'Programmes périodisés basés sur la recherche (Schoenfeld, RP Hypertrophy). Sélectionnez un groupe musculaire pour une séance dédiée.'));
 
-   var _nfcGrid = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px'});
+   var _sfcGrid = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px'});
    _sfcKeys.forEach(function(key) {
     var prog = window.SFC_PROGRAMS[key];
     if (!prog) return;
     var _isActive = S._activeSfcProgram === key;
-    var _nfcBtn = h('button', {
+    var _sfcBtn = h('button', {
      style: 'padding:10px 8px;border:1px solid ' + (_isActive ? 'var(--accent,#1A4A1A)' : 'var(--border,#E8E6DF)') + ';background:' + (_isActive ? 'rgba(26,74,26,0.06)' : 'transparent') + ';border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--black,#1A1A18);text-align:center',
      onclick: (function(_key, _active) { return function() {
       S._activeSfcProgram = _active ? null : _key;
       window.render();
      }; })(key, _isActive)
     }, prog.name || key);
-    _nfcGrid.appendChild(_nfcBtn);
+    _sfcGrid.appendChild(_sfcBtn);
    });
-   _nfcSection.appendChild(_nfcGrid);
+   _sfcSection.appendChild(_sfcGrid);
 
    // If a program is selected, show its exercises for the current phase
    if (S._activeSfcProgram && window.SFC_PROGRAMS[S._activeSfcProgram]) {
     var _selProg = window.SFC_PROGRAMS[S._activeSfcProgram];
-    // Get current phase exercises (try: mass, force, shred based on S.sportGoals)
-    var _phaseKey = 'mass'; // default
-    if (S.sportGoals && S.sportGoals.indexOf('shred') !== -1) _phaseKey = 'shred';
-    else if (S.sportGoals && S.sportGoals.indexOf('force') !== -1) _phaseKey = 'force';
-    var _phaseExos = _selProg[_phaseKey] || _selProg[Object.keys(_selProg)[0]] || [];
+    // SFC_PROGRAMS uses French phase keys: masse / seche / force
+    var _phaseKey = 'masse'; // default
+    if (S.sportGoals && (S.sportGoals.indexOf('shred') !== -1 || S.sportGoals.indexOf('weightloss') !== -1)) _phaseKey = 'seche';
+    else if (S.sportGoals && (S.sportGoals.indexOf('force') !== -1 || S.sportGoals.indexOf('strength') !== -1)) _phaseKey = 'force';
+    // Find exercises: try chosen phase, then masse fallback, then first key that has .exercises
+    var _phaseObj = _selProg[_phaseKey] || _selProg.masse || null;
+    if (!_phaseObj) {
+     var _firstKey = Object.keys(_selProg).find(function(k) { return _selProg[k] && typeof _selProg[k] === 'object' && _selProg[k].exercises; });
+     _phaseObj = _firstKey ? _selProg[_firstKey] : null;
+    }
+    var _phaseExos = (_phaseObj && _phaseObj.exercises) ? _phaseObj.exercises : (Array.isArray(_phaseObj) ? _phaseObj : []);
 
-    if (_phaseExos && _phaseExos.exercises) _phaseExos = _phaseExos.exercises;
     if (Array.isArray(_phaseExos) && _phaseExos.length > 0) {
-     _nfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, _selProg.name + ' — ' + _phaseKey));
+     _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, _selProg.name + ' — ' + _phaseKey));
      if (_selProg.notes) {
-      _nfcSection.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-bottom:12px;line-height:1.6;border-left:2px solid var(--border);padding-left:10px'}, _selProg.notes));
+      _sfcSection.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-bottom:12px;line-height:1.6;border-left:2px solid var(--border);padding-left:10px'}, _selProg.notes));
      }
      _phaseExos.forEach(function(exo) {
       var _exCard = h('div', {style: 'border:1px solid var(--border);padding:12px 14px;margin-bottom:8px;border-radius:2px'});
@@ -4787,12 +4792,12 @@ function renderMusculationProgram(p) {
       if (exo.rirTarget !== undefined) {
        _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6A4A1A;margin-top:4px'}, 'RIR cible : ' + exo.rirTarget + ' reps en réserve'));
       }
-      _nfcSection.appendChild(_exCard);
+      _sfcSection.appendChild(_exCard);
      });
     }
    }
 
-   p.appendChild(_nfcSection);
+   p.appendChild(_sfcSection);
   }
  }
 
@@ -5043,9 +5048,15 @@ function renderMusculationProgram(p) {
  var gridCols = isAdvancedRIR ? '40px 1fr 50px 1fr 44px' : '40px 1fr 60px 1fr';
 
  // RIR target display for advanced users
- if (isAdvancedRIR && exPhase) {
+ // MUSCU_PHASES doesn't carry rirTarget — use MESOCYCLE_WEEKS (4-week cycle) instead
+ if (isAdvancedRIR) {
+  var _mesoWeeks = window.MESOCYCLE_WEEKS;
+  var _mesoIdx = _mesoWeeks ? ((( S.muscuWeek || 1) - 1) % _mesoWeeks.length) : -1;
+  var _mesoEntry = (_mesoWeeks && _mesoIdx >= 0) ? _mesoWeeks[_mesoIdx] : null;
+  var _rirTarget = _mesoEntry ? _mesoEntry.rirTarget : 2;
+  var _rirLabel = _rirTarget <= 1 ? 'quasi-échec' : _rirTarget === 2 ? 'effort intense' : _rirTarget === 3 ? 'modéré' : 'léger';
   var _rirTargetDisplay = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6A4A1A;margin-bottom:6px;padding:4px 8px;background:rgba(106,74,26,0.06);border-radius:2px'},
-   'RIR cible cette semaine : ' + (exPhase.rirTarget || 2) + ' — ' + (exPhase.rirTarget === 1 ? 'quasi-échec' : exPhase.rirTarget === 2 ? 'effort intense' : exPhase.rirTarget === 3 ? 'modéré' : 'léger'));
+   'RIR cible cette semaine : ' + _rirTarget + ' — ' + _rirLabel + (_mesoEntry ? ' (' + _mesoEntry.name + ')' : ''));
   card.appendChild(_rirTargetDisplay);
  }
 
@@ -5240,11 +5251,13 @@ function renderMusculationProgram(p) {
      var v = parseInt(e.target.value);
      if (!isNaN(v) && v >= 0 && v <= 5) {
       _setRow.rirActual = v;
-      // Auto-adjust: if RIR > rirTarget + 1 → note "Augmentez la charge"
-      var _exPhase2 = getMuscuPhase(S.muscuWeek || 1);
-      var _rirTarget = _exPhase2 ? (_exPhase2.rirTarget || 2) : 2;
-      if (v > _rirTarget + 1) _setRow.rirNote = 'Augmentez la charge la prochaine fois';
-      else if (v < _rirTarget - 1) _setRow.rirNote = 'Réduisez la charge ou le volume';
+      // Use MESOCYCLE_WEEKS for correct per-week rirTarget (MUSCU_PHASES lacks rirTarget)
+      var _mesoW = window.MESOCYCLE_WEEKS;
+      var _mesoI = _mesoW ? ((( S.muscuWeek || 1) - 1) % _mesoW.length) : -1;
+      var _mesoE = (_mesoW && _mesoI >= 0) ? _mesoW[_mesoI] : null;
+      var _rirTarget2 = _mesoE ? _mesoE.rirTarget : 2;
+      if (v > _rirTarget2 + 1) _setRow.rirNote = 'Augmentez la charge la prochaine fois';
+      else if (v < _rirTarget2 - 1) _setRow.rirNote = 'Réduisez la charge ou le volume';
       else _setRow.rirNote = null;
       try { localStorage.setItem('mtd_muscu_session_' + ((window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon'), JSON.stringify(S.muscuSessionLog)); } catch(e2) {}
       window.render();
@@ -5256,6 +5269,10 @@ function renderMusculationProgram(p) {
  }
 
  setTable.appendChild(row);
+ // Display rirNote feedback as a full-width row beneath the set row (after render cycle)
+ if (isAdvancedRIR && setRow.rirNote) {
+  setTable.appendChild(h('div', {style: 'padding:3px 8px;background:rgba(106,74,26,0.06);border-top:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:#6A4A1A;letter-spacing:0.5px'}, '\u26a0 S' + setRow.set + ' : ' + setRow.rirNote));
+ }
  });
 
  // Note progression semaine prochaine
