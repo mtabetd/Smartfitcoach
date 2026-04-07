@@ -2242,7 +2242,7 @@ function renderWellnessBanner(p) {
  energyRow.appendChild(energyBtnsRow);
  banner.appendChild(energyRow);
 
- var confirmBtn = h('button', {style: 'width:100%;padding:14px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;opacity:0.4;pointer-events:none'}, 'Valider mon état');
+ var confirmBtn = h('button', {style: 'width:100%;padding:14px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;opacity:0.4;pointer-events:none'}, 'Confirmer mon bilan');
  confirmBtn.addEventListener('click', function() {
   var today = new Date().toISOString().slice(0, 10);
   S.todayWellness = { date: today, sleep: wellnessState.sleep, muscles: wellnessState.muscles, energy: wellnessState.energy };
@@ -2631,11 +2631,11 @@ function renderCrossfitProgram(p) {
 
  // ─── WEEK NAVIGATION ───
  var weekNav = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0'});
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine précédente', onclick: function() {
  if (S.crossfitWeek > 1) { S.crossfitWeek--; S.selectedCrossfitDay = 0; window.render(); }
  }}, '\u2190'));
  weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.crossfitWeek));
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
  var maxWeek = Math.ceil((window.CF_WODS || []).length / Math.max(1, daysPerWeek));
  if (S.crossfitWeek < maxWeek) { S.crossfitWeek++; S.selectedCrossfitDay = 0; window.render(); }
  }}, '\u2192'));
@@ -5801,7 +5801,7 @@ function renderMusculationProgram(p) {
  var doneSess = S.sessionHistory && S.sessionHistory[todayKey];
  if (doneSess) {
  var doneBadge = h('div', {style: 'border:1px solid #1A4A1A;background:var(--greenbg,rgba(26,74,26,.06));padding:12px 16px;margin-top:8px'});
- doneBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold;color:#1A4A1A'}, '\u2713 S\u00e9ance valid\u00e9e'));
+ doneBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold;color:#1A4A1A'}, '\u2714 Objectif accompli \u2014 S\u00e9ance valid\u00e9e'));
  doneBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1A4A1A;margin-top:4px'}, doneSess.duration + '\u00a0min \u2014 ' + doneSess.kcalTotal + '\u00a0kcal brul\u00e9es (dont +' + doneSess.kcalEpoc + '\u00a0kcal EPOC)'));
  doneBadge.appendChild(h('button', {style: 'margin-top:8px;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);background:none;border:none;cursor:pointer;padding:0', onclick: function() { delete S.sessionHistory[todayKey]; window.render(); }}, 'Annuler'));
  p.appendChild(doneBadge);
@@ -6311,7 +6311,7 @@ function renderRunningConfig(p) {
  p.appendChild(h('div', {style: 'height:16px'}));
  var ok = S.runningGoal !== null && S.runningLevel !== null;
  if (!ok) {
- p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez un objectif et un niveau'));
+ p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez votre objectif et votre niveau pour continuer.'));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) {
@@ -6357,11 +6357,11 @@ function renderRunningProgram(p) {
 
  // Week navigation
  var weekNav = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0'});
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine précédente', onclick: function() {
  if (S.runningWeek > 1) { S.runningWeek--; S.selectedRunDay = 0; window.render(); }
  }}, '\u2190'));
  weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.runningWeek + ' / ' + totalWeeks));
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
  if (S.runningWeek < totalWeeks) { S.runningWeek++; S.selectedRunDay = 0; window.render(); }
  }}, '\u2192'));
  p.appendChild(weekNav);
@@ -6531,7 +6531,7 @@ function renderHyroxConfig(p) {
  p.appendChild(h('div', {style: 'height:16px'}));
  var ok = S.hyroxGoal !== null && S.hyroxLevel !== null;
  if (!ok) {
- p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez un objectif et un niveau'));
+ p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez votre objectif et votre niveau pour continuer.'));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) {
@@ -7081,7 +7081,7 @@ function renderTriathlonConfig(p) {
  p.appendChild(h('div', {style: 'height:20px'}));
  var ok = S.triathlonGoal !== null && S.triathlonLevel !== null;
  if (!ok) {
- p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez un objectif et un niveau'));
+ p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez votre objectif et votre niveau pour continuer.'));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
  if (!ok) return;
@@ -7793,7 +7793,7 @@ function renderCyclingOnboarding(p) {
  p.appendChild(reliefRow);
 
  var ok = S.cyclingLevel && S.cyclingGoal;
- if (!ok) p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez un niveau et un objectif'));
+ if (!ok) p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez votre niveau et votre objectif pour continuer.'));
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (!ok) return;
  S.cyclingPlan = generateCyclingPlan(S.cyclingLevel, S.cyclingDays || 3);
@@ -7869,11 +7869,11 @@ function renderCyclingProgram(p) {
  }
 
  var weekNav = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0'});
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine précédente', onclick: function() {
  if (S.cyclingWeek > 1) { S.cyclingWeek--; S.selectedCyclingDay = 0; window.render(); }
  }}, '←'));
  weekNav.appendChild(h('div', {style: 'font-family:Georgia;font-size:18px;font-style:italic'}, 'Semaine ' + S.cyclingWeek + ' / ' + totalWeeks));
- weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', onclick: function() {
+ weekNav.appendChild(h('button', {'class': 'btn-back', style: 'padding:8px;width:auto;margin:0', 'aria-label': 'Semaine suivante', onclick: function() {
  if (S.cyclingWeek < totalWeeks) { S.cyclingWeek++; S.selectedCyclingDay = 0; window.render(); }
  }}, '→'));
  p.appendChild(weekNav);
@@ -8122,7 +8122,7 @@ function renderCalisthenicsOnboarding(p) {
  p.appendChild(h('div', {style: 'height:20px'}));
  var ok = S.calisthenicsLevel && Array.isArray(S.calisthenicsGoal) && S.calisthenicsGoal.length > 0;
  if (!ok) {
-  p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Selectionnez un niveau et au moins un objectif'));
+  p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez un niveau et au moins un objectif pour continuer.'));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
   if (ok) {
