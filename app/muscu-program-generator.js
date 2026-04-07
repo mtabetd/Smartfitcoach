@@ -11,6 +11,19 @@
   var LS_KEY_PROGRESS = 'mtd_muscu_ia_progress';
   var LS_KEY_GENERATIONS = 'mtd_muscu_generations';
 
+  // Installations/facilities options
+  var INSTALLATIONS = [
+    { id: 'muscu',       label: 'Salle de musculation',  desc: 'Barres, haltères, machines, câbles',         icon: '🏋️' },
+    { id: 'home_gym',    label: 'Home gym',               desc: 'Haltères + banc à domicile',                 icon: '🏠' },
+    { id: 'poids_corps', label: 'Maison / PDC',           desc: 'Sans matériel, poids du corps uniquement',   icon: '🤸' },
+    { id: 'crossfit',    label: 'Box CrossFit',           desc: 'WODs, rower, anneaux, barbell olympique',    icon: '🔥' },
+    { id: 'piscine',     label: 'Piscine',                desc: 'Natation, aquagym',                          icon: '🏊' },
+    { id: 'course',      label: 'Course à pied',          desc: 'Piste, route, tapis de course',              icon: '🏃' },
+    { id: 'velo',        label: 'Vélo / cardio',          desc: 'Vélo, home trainer, elliptique',             icon: '🚴' },
+    { id: 'terrain',     label: 'Terrain de sport',       desc: 'Padel, tennis, foot, sports collectifs',     icon: '🎾' },
+    { id: 'gymnase',     label: 'Gymnase / yoga',         desc: 'Studio yoga, danse, arts martiaux',          icon: '🧘' }
+  ];
+
   var LOADING_PHRASES = [
     'Lecture de tes 1RM. Calcul de tes ratios squat, bench, deadlift, overhead.',
     'Sélection du split adapté à tes jours, ton équipement, tes blessures.',
@@ -366,6 +379,12 @@
       joursDispo: S.muscuFreq || S.sportFreq || 4,
       dureeMaxSeance: S.muscuDuration || 60,
       equipement: S.equipement || S.gymType || 'salle complète',
+      installations: Array.isArray(S.installations) && S.installations.length
+        ? S.installations.map(function(id) {
+            var found = INSTALLATIONS.filter(function(x) { return x.id === id; })[0];
+            return found ? found.label + ' (' + found.desc + ')' : id;
+          }).join(' | ')
+        : null,
       sommeil: S.sleep || 7,
       stress: S.stress || 5,
       blessures: Array.isArray(S.blessures) ? S.blessures : [],
@@ -435,10 +454,70 @@
     }
   }
 
-  function openMuscuProgramGenerator() {
-    ensureModal();
-    _previousFocus = document.activeElement;
-    if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+  function showInstallationsStep() {
+    var content = document.getElementById('muscu-prog-content');
+    var current = Array.isArray(window.S && window.S.installations) ? window.S.installations : [];
+    var cardStyle = 'display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border,#E5E5E0);border-radius:2px;cursor:pointer;transition:border-color 0.15s,background 0.15s;margin-bottom:8px;font-family:"Helvetica Neue",Arial,sans-serif;';
+    var cardsHTML = INSTALLATIONS.map(function(inst) {
+      var sel = current.indexOf(inst.id) !== -1;
+      return '<div class="install-card" data-id="' + inst.id + '" style="' + cardStyle + (sel ? 'border-color:var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);' : '') + '">' +
+        '<span style="font-size:20px;flex-shrink:0;line-height:1;">' + inst.icon + '</span>' +
+        '<div style="flex:1;">' +
+          '<div style="font-size:13px;font-weight:600;color:var(--black,#0A0A09);margin-bottom:2px;">' + inst.label + '</div>' +
+          '<div style="font-size:11px;color:var(--grey,#6B6B65);">' + inst.desc + '</div>' +
+        '</div>' +
+        '<div class="install-check" style="width:18px;height:18px;border:1.5px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#E5E5E0)') + ';border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:' + (sel ? 'var(--accent,#1A4A1A)' : 'transparent') + ';">' +
+          (sel ? '<svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 4L4 7L10 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+    content.innerHTML =
+      '<div style="padding:8px 4px 24px 4px;">' +
+        '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;font-family:\'Helvetica Neue\',Arial,sans-serif;">ÉTAPE PRÉALABLE</div>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 8px 0;">À quoi as-tu accès ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 20px 0;line-height:1.6;">Coche toutes tes installations disponibles. Le programme ne prescrira que ce que tu peux réellement faire. <strong>Sélection multiple.</strong></p>' +
+        '<div id="install-cards-wrap">' + cardsHTML + '</div>' +
+        '<div id="install-error" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#B02020;margin:8px 0 0 0;display:none;">Sélectionne au moins une installation.</div>' +
+        '<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">' +
+          '<button id="install-confirm" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Continuer →</button>' +
+        '</div>' +
+      '</div>';
+
+    // Toggle card selection
+    var wrap = document.getElementById('install-cards-wrap');
+    wrap.addEventListener('click', function(e) {
+      var card = e.target.closest('.install-card');
+      if (!card) return;
+      var id = card.getAttribute('data-id');
+      var sel = Array.isArray(window.S.installations) ? window.S.installations.slice() : [];
+      var idx = sel.indexOf(id);
+      if (idx === -1) { sel.push(id); } else { sel.splice(idx, 1); }
+      window.S.installations = sel;
+      if (window.saveProfile) window.saveProfile();
+      // Update visual state
+      var isSel = sel.indexOf(id) !== -1;
+      card.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#E5E5E0)';
+      card.style.background = isSel ? 'rgba(26,74,26,0.06)' : '';
+      var chk = card.querySelector('.install-check');
+      if (chk) {
+        chk.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#E5E5E0)';
+        chk.style.background = isSel ? 'var(--accent,#1A4A1A)' : 'transparent';
+        chk.innerHTML = isSel ? '<svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 4L4 7L10 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '';
+      }
+    });
+
+    document.getElementById('install-confirm').addEventListener('click', function() {
+      var sel = Array.isArray(window.S.installations) ? window.S.installations : [];
+      if (sel.length === 0) {
+        var err = document.getElementById('install-error');
+        if (err) err.style.display = 'block';
+        return;
+      }
+      showGenerationStep();
+    });
+  }
+
+  function showGenerationStep() {
     var content = document.getElementById('muscu-prog-content');
     var remaining = getGenerationsRemaining();
     var counterHTML = buildGenerationCounterHTML();
@@ -446,17 +525,43 @@
     var btnStyle = btnDisabled
       ? 'background:var(--grey,#7A7A72);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:not-allowed;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;opacity:0.6;'
       : 'background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;';
-    content.innerHTML = '<div style="text-align:center;padding:40px 24px;">' +
+    // Summary of selected installations
+    var sel = Array.isArray(window.S && window.S.installations) ? window.S.installations : [];
+    var instSummary = sel.length
+      ? sel.map(function(id) {
+          var found = INSTALLATIONS.filter(function(x) { return x.id === id; })[0];
+          return found ? found.icon + ' ' + found.label : id;
+        }).join('  ·  ')
+      : '';
+    content.innerHTML = '<div style="text-align:center;padding:32px 24px;">' +
       '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">UN PROGRAMME. LE TIEN. PERSONNE D\u2019AUTRE.</div>' +
       '<h3 style="font-family:Georgia,serif;font-size:24px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 20px 0;">Ton programme t\u2019attend.</h3>' +
       '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--grey,#6B6B65);margin:0 auto 24px auto;max-width:520px;">Nous allons croiser tes 1RM, tes disponibilités, ton équipement et ton historique pour construire douze semaines qui n\u2019existent que pour toi. Aucune ligne ne sera générique. Aucune charge ne sera approximative.</p>' +
+      (instSummary ? '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;line-height:1.8;">' + instSummary + '</div>' +
+        '<button id="install-change" style="background:transparent;border:none;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;margin-bottom:20px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;">Modifier mes accès</button>' : '') +
       '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-bottom:20px;">Génération limitée à 3 fois par semaine. Compte 30 à 60 secondes.</p>' +
       counterHTML +
       '<button id="muscu-prog-generate"' + (btnDisabled ? ' disabled' : '') + ' style="' + btnStyle + '">Construire mon programme</button>' +
     '</div>';
-    _modalEl.style.display = 'block';
+    if (instSummary) {
+      document.getElementById('install-change').addEventListener('click', showInstallationsStep);
+    }
     if (!btnDisabled) {
       document.getElementById('muscu-prog-generate').addEventListener('click', generateMuscuProgram);
+    }
+  }
+
+  function openMuscuProgramGenerator() {
+    ensureModal();
+    _previousFocus = document.activeElement;
+    if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+    _modalEl.style.display = 'block';
+    // Show installations step if not yet configured, otherwise go straight to generation
+    var hasInstallations = Array.isArray(window.S && window.S.installations) && window.S.installations.length > 0;
+    if (!hasInstallations) {
+      showInstallationsStep();
+    } else {
+      showGenerationStep();
     }
     setTimeout(function() {
       var firstBtn = _modalEl.querySelector('button');

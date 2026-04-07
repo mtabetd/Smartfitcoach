@@ -50,7 +50,7 @@ var PROFILE_KEYS = [
  // Musculation
  'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep','selectedSportDay',
  'bonusExercises','sessionHistory',
- 'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment',
+ 'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment','installations',
  // Nutrition plan
  'shopChecked','weekPlan','selectedDay',
  // System

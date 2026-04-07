@@ -322,7 +322,15 @@ function buildUserPrompt(profile) {
     '- Niveau : ' + sanitizeString(profile.niveau || '?', 50) + '\n' +
     '- Jours dispo/sem : ' + (sanitizeNumber(profile.joursDispo, 1, 7) || '?') + '\n' +
     '- Durée max séance : ' + (sanitizeNumber(profile.dureeMaxSeance, 15, 180) || '?') + ' min\n' +
-    '- Équipement : ' + sanitizeString(profile.equipement || '?', 200) + '\n' +
+    '- Équipement salle : ' + sanitizeString(profile.equipement || '?', 200) + '\n' +
+    (profile.installations ? '- Installations accessibles : ' + sanitizeString(profile.installations, 500) + '\n' +
+    '⚠️ CONTRAINTE ABSOLUE : le programme doit utiliser UNIQUEMENT les installations listées ci-dessus. ' +
+    'Si "Piscine" n\'est pas dans la liste → zéro exercice de natation. ' +
+    'Si "Box CrossFit" n\'est pas dans la liste → zéro WOD CrossFit ni exercice spécifique box. ' +
+    'Si "Course à pied" n\'est pas dans la liste → zéro séance de running. ' +
+    'Si "Vélo / cardio" n\'est pas dans la liste → zéro programme cyclisme ni home trainer. ' +
+    'Le programme peut mixer les installations disponibles pour un résultat optimal, ' +
+    'mais ne peut JAMAIS prescrire un exercice nécessitant une installation non listée.\n' : '') +
     '- Sommeil : ' + (sanitizeNumber(profile.sommeil, 3, 12) || '?') + ' h/nuit\n' +
     '- Stress : ' + (sanitizeNumber(profile.stress, 1, 10) || '?') + '/10\n' +
     '- Blessures : ' + sanitizeString(blessures, 300) + '\n' +
