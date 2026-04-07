@@ -271,7 +271,7 @@
           }
         }
 
-        html += '<div class="program-week" id="week-' + weekIdx + '" style="border:1px solid var(--border,#E5E5E0);margin-bottom:8px;">';
+        html += '<div class="program-week" id="week-' + weekIdx + '" style="border:1px solid var(--border,#D8D8D0);margin-bottom:8px;">';
         html += '<div class="week-header" data-week="' + weekIdx + '" style="padding:14px 16px;cursor:pointer;font-family:Georgia,serif;font-size:14px;display:flex;justify-content:space-between;align-items:center;background:var(--ivory2,#F5F4F1);">';
         html += '<span>' + escapeHTML(week.title) + '</span>';
         html += '<span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);">';
@@ -414,7 +414,7 @@
       document.head.appendChild(styleEl);
     }
     _modalEl.innerHTML = '<div class="muscu-modal-inner" style="max-width:780px;margin:20px auto;background:var(--ivory,#FAF9F6);border-radius:2px;padding:24px;font-family:Georgia,serif;">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid var(--border,#E5E5E0);padding-bottom:12px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid var(--border,#D8D8D0);padding-bottom:12px;">' +
         '<h2 style="margin:0;font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:2px;text-transform:uppercase;">Programme Musculation</h2>' +
         '<button id="muscu-prog-close" aria-label="Fermer" style="background:transparent;border:none;font-size:24px;cursor:pointer;color:var(--grey,#6B6B65);">×</button>' +
       '</div>' +
@@ -457,7 +457,7 @@
   function showInstallationsStep() {
     var content = document.getElementById('muscu-prog-content');
     var current = Array.isArray(window.S && window.S.installations) ? window.S.installations : [];
-    var cardStyle = 'display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border,#E5E5E0);border-radius:2px;cursor:pointer;transition:border-color 0.15s,background 0.15s;margin-bottom:8px;font-family:"Helvetica Neue",Arial,sans-serif;';
+    var cardStyle = 'display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border,#D8D8D0);border-radius:2px;cursor:pointer;transition:border-color 0.15s,background 0.15s;margin-bottom:8px;font-family:"Helvetica Neue",Arial,sans-serif;';
     var cardsHTML = INSTALLATIONS.map(function(inst) {
       var sel = current.indexOf(inst.id) !== -1;
       return '<div class="install-card" data-id="' + inst.id + '" style="' + cardStyle + (sel ? 'border-color:var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);' : '') + '">' +
@@ -466,7 +466,7 @@
           '<div style="font-size:13px;font-weight:600;color:var(--black,#0A0A09);margin-bottom:2px;">' + inst.label + '</div>' +
           '<div style="font-size:11px;color:var(--grey,#6B6B65);">' + inst.desc + '</div>' +
         '</div>' +
-        '<div class="install-check" style="width:18px;height:18px;border:1.5px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#E5E5E0)') + ';border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:' + (sel ? 'var(--accent,#1A4A1A)' : 'transparent') + ';">' +
+        '<div class="install-check" style="width:18px;height:18px;border:1.5px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:' + (sel ? 'var(--accent,#1A4A1A)' : 'transparent') + ';">' +
           (sel ? '<svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 4L4 7L10 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '') +
         '</div>' +
       '</div>';
@@ -496,11 +496,11 @@
       if (window.saveProfile) window.saveProfile();
       // Update visual state
       var isSel = sel.indexOf(id) !== -1;
-      card.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#E5E5E0)';
+      card.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)';
       card.style.background = isSel ? 'rgba(26,74,26,0.06)' : '';
       var chk = card.querySelector('.install-check');
       if (chk) {
-        chk.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#E5E5E0)';
+        chk.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)';
         chk.style.background = isSel ? 'var(--accent,#1A4A1A)' : 'transparent';
         chk.innerHTML = isSel ? '<svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 4L4 7L10 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '';
       }
@@ -575,7 +575,7 @@
     var content = document.getElementById('muscu-prog-content');
     content.innerHTML = '<div style="text-align:center;padding:48px 24px;">' +
       '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">G\u00c9N\u00c9RATION EN COURS</div>' +
-      '<div style="display:inline-block;width:40px;height:40px;border:2px solid var(--border,#E5E5E0);border-top-color:var(--accent,#1A4A1A);border-radius:50%;animation:spin 1s linear infinite;"></div>' +
+      '<div style="display:inline-block;width:40px;height:40px;border:2px solid var(--border,#D8D8D0);border-top-color:var(--accent,#1A4A1A);border-radius:50%;animation:spin 1s linear infinite;"></div>' +
       '<p id="muscu-prog-loading-text" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;line-height:1.7;color:var(--grey,#6B6B65);margin:24px auto 0 auto;max-width:480px;min-height:34px;transition:opacity 0.4s ease;">' + LOADING_PHRASES[0] + '</p>' +
       '<style>@keyframes spin{to{transform:rotate(360deg)}}</style>' +
     '</div>';
@@ -626,11 +626,11 @@
         programBodyHTML = '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;">' + escaped + '</div>';
       }
 
-      content.innerHTML = '<div style="text-align:center;padding:8px 0 24px 0;border-bottom:1px solid var(--border,#E5E5E0);margin-bottom:24px;">' +
+      content.innerHTML = '<div style="text-align:center;padding:8px 0 24px 0;border-bottom:1px solid var(--border,#D8D8D0);margin-bottom:24px;">' +
           '<p style="font-family:Georgia,serif;font-style:italic;font-size:16px;line-height:1.6;color:var(--accent,#1A4A1A);margin:0 auto;max-width:520px;">Voici douze semaines. Elles n\u2019appartiennent qu\u2019à toi.</p>' +
         '</div>' +
         programBodyHTML +
-        '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--border,#E5E5E0);padding-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
+        '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--border,#D8D8D0);padding-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
           '<button id="muscu-prog-print" style="background:transparent;border:1px solid var(--accent,#1A4A1A);color:var(--accent,#1A4A1A);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Imprimer / PDF</button>' +
           '<button id="muscu-prog-share" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:14px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">\u2934 Partager</button>' +
         '</div>' +

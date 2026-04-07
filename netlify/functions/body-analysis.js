@@ -5,7 +5,7 @@ const MODEL = 'claude-sonnet-4-6';
 const MAX_TOKENS = 600; // Réduit : analyse structurée courte
 
 // Domaines autorisés pour CORS
-var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr')
+var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
   .split(',').map(function(o){ return o.trim(); });
 // Ajouter localhost UNIQUEMENT en dev
 if (process.env.NODE_ENV !== 'production' && process.env.NETLIFY_DEV === 'true') {

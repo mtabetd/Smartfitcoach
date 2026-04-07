@@ -6,7 +6,7 @@ const MODEL = 'claude-haiku-4-5-20251001';
 const MAX_TOKENS = 400; // Réduit : réponses courtes suffisent pour un coach
 
 // Domaines autorisés pour CORS
-var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr')
+var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
   .split(',').map(function(o){ return o.trim(); });
 // Ajouter localhost UNIQUEMENT en dev
 if (process.env.NODE_ENV !== 'production' && process.env.NETLIFY_DEV === 'true') {
