@@ -1367,7 +1367,11 @@ function renderChargesQuestionnaire(p) {
  var est1rm = Math.round(currentVal * (1 + usedReps / 30) / 2.5) * 2.5;
  var rightCol = h('div', {style: 'text-align:right;flex-shrink:0'});
  rightCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + col}, lbl));
- rightCol.appendChild(h('div', {style: 'font-family:Georgia;font-size:11px;color:var(--grey);margin-top:2px'}, '~1RM : ' + (window.UNITS ? window.UNITS.displayWeight(est1rm) : est1rm + ' kg')));
+ var _1rmDiv = h('div', {style: 'font-family:Georgia;font-size:11px;color:var(--grey);margin-top:2px'});
+ _1rmDiv.appendChild(h('span', {}, '~'));
+ _1rmDiv.appendChild(termTooltip('1RM', 'Répétition Maximale — la charge max que vous pouvez soulever une seule fois'));
+ _1rmDiv.appendChild(h('span', {}, ' : ' + (window.UNITS ? window.UNITS.displayWeight(est1rm) : est1rm + ' kg')));
+ rightCol.appendChild(_1rmDiv);
  row.appendChild(rightCol);
  }
  grid.appendChild(row);
