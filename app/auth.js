@@ -196,7 +196,6 @@ function getLegacySession() {
 function buildFingerprint() {
   try {
     return [
-      navigator.userAgent || '',
       String(screen.width || 0),
       String(screen.colorDepth || 0),
       navigator.language || ''
