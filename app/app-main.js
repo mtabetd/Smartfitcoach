@@ -67,7 +67,9 @@ var PROFILE_KEYS = [
  'todayWellness',
  'aiCoachHistory',
  'appMode',
- 'stress'
+ 'stress',
+ 'cfDeloadRecommended',
+ 'sessionPostponed'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -193,7 +195,7 @@ function loadProfile() {
  // Defensive rehydration: ensure object/array fields are never null after load
  var _objFields = ['sportFocus','bonusExercises','sessionHistory','muscuSessionLog',
  'muscuProgressionHistory','musculationWeights','muscuStrengthProfile','crossfit1RM',
- 'hyroxBenchmarks','shopChecked','bodyZones','crossfitBenchmarks'];
+ 'hyroxBenchmarks','shopChecked','bodyZones','crossfitBenchmarks','muscuMedical'];
  _objFields.forEach(function(f) { if (!S[f] || typeof S[f] !== 'object' || Array.isArray(S[f])) S[f] = {}; });
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','strongZones','weakZones',
