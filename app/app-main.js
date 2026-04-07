@@ -49,6 +49,7 @@ var PROFILE_KEYS = [
  'calisthenicsWeek','selectedCalisthDay',
  // Musculation
  'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep','selectedSportDay',
+ 'sportProgram',
  'bonusExercises','sessionHistory',
  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment','installations',
  // Nutrition plan

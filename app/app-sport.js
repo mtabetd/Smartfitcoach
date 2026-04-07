@@ -4078,7 +4078,10 @@ function calcSessionKcal(exercises, durationMin) {
 }
 
 function renderMusculationProgram(p) {
- if (!S.sportProgram || !S.sportProgram.length) { S.sportProgram = generateSportProgram(); S.selectedSportDay = 0; }
+ if (!S.sportProgram || !S.sportProgram.length) {
+   S.sportProgram = generateSportProgram(); S.selectedSportDay = 0;
+   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+ }
 
  // Load saved musculation weights from localStorage
  if (Object.keys(S.musculationWeights || {}).length === 0) {
@@ -4673,23 +4676,37 @@ function renderMusculationProgram(p) {
  inputZone.appendChild(weightInput);
  inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey)'}, (window.UNITS ? window.UNITS.weightLabel() : 'kg')));
  } else {
- // Exercice poids du corps : champ lest optionnel (gilet lesté, élastique...)
- var pcLabel = h('input', {
+ // Exercice poids du corps : reps uniquement par défaut, poids optionnel via toggle "Lestés"
+ var _isLeste = !!setRow.weighted;
+ var lesteBtn = h('button', {
+ style: 'font-size:9px;padding:2px 6px;background:' + (_isLeste ? 'var(--black,#0A0A09)' : 'transparent') + ';color:' + (_isLeste ? '#fff' : 'var(--grey)') + ';border:1px solid ' + (_isLeste ? 'var(--black,#0A0A09)' : 'var(--border)') + ';border-radius:2px;cursor:pointer;white-space:nowrap;margin-right:4px',
+ onclick: (function(sr) { return function(e) {
+ e.stopPropagation();
+ sr.weighted = !sr.weighted;
+ if (!sr.weighted) sr.actualWeight = null;
+ saveMuscuSessionLog();
+ window.render();
+ }; })(setRow)
+ }, _isLeste ? 'Lest\u00e9s \u2713' : '+ Lest\u00e9s');
+ inputZone.appendChild(lesteBtn);
+ var pcLabel;
+ if (_isLeste) {
+ pcLabel = h('input', {
  type: 'number', min: '0', max: '200', step: '0.5',
- placeholder: 'Lest',
+ placeholder: 'kg',
  value: setRow.actualWeight !== null && setRow.actualWeight > 0 ? String(setRow.actualWeight) : '',
- style: 'width:44px;padding:4px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory));color:var(--grey)',
+ style: 'width:44px;padding:4px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
  oninput: (function(sr){ return function(e) {
  var v = parseFloat(e.target.value);
- sr.actualWeight = isNaN(v) ? 0 : v;
+ sr.actualWeight = isNaN(v) ? null : v;
  saveMuscuSessionLog();
- // Pour PDC, le bouton ne dépend PAS du poids — seulement des reps
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
- if (_btn) { var _ok = sr.actualReps !== null; _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ if (_btn) { var _ok = sr.actualReps !== null && sr.actualWeight !== null; _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
  }; })(setRow)
  });
  inputZone.appendChild(pcLabel);
- inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey3,#8A8A84)'}, 'kg\u00b1'));
+ inputZone.appendChild(h('span', {style: 'font-size:9px;color:var(--grey3,#8A8A84)'}, 'kg'));
+ }
  }
 
  var repsInput = h('input', {
@@ -4703,7 +4720,7 @@ function renderMusculationProgram(p) {
  saveMuscuSessionLog();
  // Réactiver le bouton validation en temps réel
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
- if (_btn) { var _ok = sr.actualReps !== null && (sr.actualWeight !== null || _isBw); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ if (_btn) { var _ok = sr.actualReps !== null && (sr.actualWeight !== null || (_isBw && !sr.weighted)); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
  }; })(setRow, isBodyweight)
  });
  inputZone.appendChild(repsInput);
@@ -4719,11 +4736,12 @@ function renderMusculationProgram(p) {
  // Bouton validation série + déclenchement timer repos
  (function(_sr, _si, _exRef, _numSets, _isBody, _exI, _allEx) {
  var isValidated = _sr.validated === true;
- var hasData = _sr.actualReps !== null && (_sr.actualWeight !== null || _isBody);
+ var _bwNoWeight = _isBody && !_sr.weighted;
+ var hasData = _sr.actualReps !== null && (_sr.actualWeight !== null || _bwNoWeight);
 
  if (isValidated) {
  // Série déjà validée : afficher le checkmark
- var ok = _sr.actualReps >= _sr.targetReps && (_isBody || _sr.actualWeight >= _sr.targetWeight);
+ var ok = _sr.actualReps >= _sr.targetReps && (_bwNoWeight || _sr.actualWeight >= _sr.targetWeight);
  inputZone.appendChild(h('span', {'class': ok ? 'set-success' : 'set-fail', style: 'font-size:13px'}, ok ? '\u2713' : '\u2717'));
  row.classList.add('set-row-validated');
  } else {
@@ -4886,6 +4904,7 @@ function renderMusculationProgram(p) {
  saveMuscuSessionLog();
  }
  S.swapPanel = null;
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  window.render();
  },
  onmouseover: function() { this.style.background = 'var(--ivory,#FAF9F6)'; },
