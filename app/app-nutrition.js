@@ -108,6 +108,39 @@ function renderNutritionChoice(app) {
   wrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:300;font-style:italic;line-height:1.45;margin-bottom:16px'},
     prenom ? 'Votre programme de la semaine\nest prêt, ' + prenom + '.' : 'Votre programme de la semaine\nest déjà établi.'
   ));
+
+  // Show kcal/day and objective
+  var _goals = window.GOALS || [];
+  var _goalObj = (S.goal !== null && S.goal !== undefined && _goals[S.goal]) ? _goals[S.goal] : null;
+  var _kcalDay = 0;
+  if (Array.isArray(S.weekPlan) && S.weekPlan.length > 0) {
+    var _todayIdx = (new Date().getDay() + 6) % 7;
+    var _todayData = S.weekPlan[_todayIdx];
+    if (_todayData) {
+      ['breakfast','lunch','snack','dinner'].forEach(function(slot) {
+        var m = _todayData[slot];
+        if (m && m.k) _kcalDay += (m.k || 0);
+      });
+    }
+  }
+  if (_kcalDay > 0 || _goalObj) {
+    var _badge = h('div', {style: 'display:inline-flex;align-items:center;gap:12px;padding:10px 20px;border:1px solid var(--border,#E8E6DF);margin:0 auto 28px;'});
+    if (_kcalDay > 0) {
+      var _kcalSpan = h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:500;color:var(--black,#0A0A09);letter-spacing:0.5px;'});
+      _kcalSpan.textContent = Math.round(_kcalDay) + '\u00a0kcal/j';
+      _badge.appendChild(_kcalSpan);
+    }
+    if (_kcalDay > 0 && _goalObj) {
+      _badge.appendChild(h('span', {style: 'color:var(--border,#E8E6DF);'}, '·'));
+    }
+    if (_goalObj) {
+      var _goalSpan = h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);letter-spacing:0.5px;'});
+      _goalSpan.textContent = _goalObj.name;
+      _badge.appendChild(_goalSpan);
+    }
+    wrap.appendChild(_badge);
+  }
+
   wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;letter-spacing:0.5px;line-height:1.7;color:#555;max-width:300px;margin:0 auto 40px'},
     'Souhaitez-vous consulter votre programme en cours,\nou en établir un nouveau pour la semaine à venir\u00a0?'
   ));
@@ -1831,6 +1864,21 @@ function renderStep8(p) {
     stats.appendChild(h('div', {'class': 'stat-cell ' + imcClass}, [h('div', {'class': 'stat-val', style: 'color:' + bi.color}, bmi.toFixed(1)), h('div', {'class': 'stat-label'}, window.t('onb.s2.bmi'))]));
   }
   p.appendChild(stats);
+
+  // Protein food equivalents hint — concrete daily anchors
+  if (m.p > 0) {
+    // 1 escalope de poulet grillé (160g) ≈ 50g protein
+    // 1 boîte de thon en conserve (185g net) ≈ 44g protein
+    var _chickenN = Math.ceil(m.p / 50);
+    var _tunaN = Math.ceil(m.p / 44);
+    var _eqParts = [];
+    if (_chickenN > 0) _eqParts.push(_chickenN + ' escalope' + (_chickenN > 1 ? 's' : '') + ' de poulet');
+    if (_tunaN > 0) _eqParts.push(_tunaN + ' bo\u00eete' + (_tunaN > 1 ? 's' : '') + ' de thon');
+    if (_eqParts.length > 0) {
+      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin:-4px 0 16px;text-align:center;'},
+        '\u2248 ' + _eqParts.join(' \u00b7 ')));
+    }
+  }
 
   // ─── OBÉSITÉ : avertissement auto si IMC >= 30 et 'obesity' absent de S.medical ───
   // HAS 2022 : IMC >= 30 = obésité grade 1+ → prise en charge spécifique recommandée

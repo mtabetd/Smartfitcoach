@@ -333,7 +333,93 @@ function renderCardMacros() {
   return c;
 }
 
-// ─── RENDER CARD 3 — Streak & badges ───
+// ─── RENDER CARD 3 — Repas du jour ───
+function renderCardRepas() {
+  var S = window.S;
+  if (!S) return null;
+
+  var c = card();
+  c.appendChild(eyebrow('REPAS DU JOUR'));
+
+  if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) {
+    // No plan — CTA
+    c.appendChild(cardTitle('Aucun programme nutritionnel'));
+    var cta = h('button', {
+      style: 'margin-top:8px;padding:10px 16px;background:var(--black,#1A1A18);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;width:100%;',
+      onclick: function() {
+        S.view = 'nutrition';
+        S.nStep = 0;
+        if (window.render) window.render();
+      }
+    }, 'Créer mon programme');
+    c.appendChild(cta);
+    return c;
+  }
+
+  var todayIdx = (new Date().getDay() + 6) % 7;
+  var dayData = S.weekPlan[todayIdx];
+  if (!dayData) return null;
+
+  var SLOTS = [
+    { key: 'breakfast', label: 'Petit-déjeuner' },
+    { key: 'lunch', label: 'Déjeuner' },
+    { key: 'snack', label: 'Collation' },
+    { key: 'dinner', label: 'Dîner' }
+  ];
+
+  var hasAny = false;
+  SLOTS.forEach(function(slot) {
+    var meal = dayData[slot.key];
+    if (!meal || !meal.n) return;
+    hasAny = true;
+
+    var row = h('div', {
+      style: 'display:flex;align-items:baseline;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border,#E8E6DF);cursor:pointer;',
+      onclick: function() {
+        S.view = 'nutrition';
+        S.nStep = 9;
+        S.selectedDay = todayIdx;
+        if (window.render) window.render();
+      }
+    });
+
+    var left = h('div', {});
+    var slotLabel = h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:2px;'
+    }, slot.label);
+    var mealName = h('div', {
+      style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#1A1A18);'
+    }, meal.n);
+    left.appendChild(slotLabel);
+    left.appendChild(mealName);
+
+    var kcalEl = h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);white-space:nowrap;margin-left:8px;'
+    }, (meal.k ? Math.round(meal.k) + ' kcal' : ''));
+
+    row.appendChild(left);
+    row.appendChild(kcalEl);
+    c.appendChild(row);
+  });
+
+  if (!hasAny) return null;
+
+  // Footer link
+  var link = h('div', {
+    style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:right;cursor:pointer;',
+    onclick: function() {
+      S.view = 'nutrition';
+      S.nStep = 9;
+      S.selectedDay = todayIdx;
+      if (window.render) window.render();
+    }
+  }, 'Voir mon programme →');
+  c.appendChild(link);
+
+  return c;
+}
+
+// ─── RENDER CARD 4 — Streak & badges ───
 function renderCardStreak() {
   var streak = getStreakValue();
   var lastBadge = getLastBadge();
@@ -1063,7 +1149,7 @@ function renderTodayDashboard(p) {
   if (S.justLoggedIn) {
     wrapper.appendChild(renderWelcomeBanner(S));
     S.justLoggedIn = false;
-    if (window.saveProfile) { try { saveProfile(); } catch(e) { console.warn('[saveProfile] failed:', e); } }
+    if (window.saveProfile) { try { window.saveProfile(); } catch(e) { console.warn('[saveProfile] failed:', e); } }
   }
 
   // Card 1 — Bonjour
@@ -1073,19 +1159,23 @@ function renderTodayDashboard(p) {
   var cardMacros = renderCardMacros();
   if (cardMacros) wrapper.appendChild(cardMacros);
 
-  // Card 3 — Streak & badges
+  // Card 3 — Repas du jour
+  var cardRepas = renderCardRepas();
+  if (cardRepas) wrapper.appendChild(cardRepas);
+
+  // Card 4 — Streak & badges
   var cardStreak = renderCardStreak();
   if (cardStreak) wrapper.appendChild(cardStreak);
 
-  // Card 4 — Prochaine séance
+  // Card 5 — Prochaine séance
   var cardSport = renderCardSport();
   if (cardSport) wrapper.appendChild(cardSport);
 
-  // Card 5 — Checkin bien-être
+  // Card 6 — Checkin bien-être
   var cardWellness = renderCardWellness(S);
   if (cardWellness) wrapper.appendChild(cardWellness);
 
-  // Card 6 — Raccourcis rapides
+  // Card 7 — Raccourcis rapides
   wrapper.appendChild(renderCardShortcuts());
 
   // Sections étendues (ex-Dashboard) — masquées par défaut, dépliables
