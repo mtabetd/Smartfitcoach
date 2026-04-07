@@ -634,7 +634,7 @@ function renderRegister(app) {
    dialDropdown.appendChild(opt);
  });
 
- var dialWrapper = h('div', {style: 'position:relative'});
+ var dialWrapper = h('div', {style: 'position:relative;flex-shrink:0'});
  dialWrapper.appendChild(dialBtn);
  dialWrapper.appendChild(dialDropdown);
 
@@ -659,7 +659,7 @@ function renderRegister(app) {
    type: 'tel',
    placeholder: '6 12 34 56 78',
    autocomplete: 'tel-national',
-   style: 'flex:1;height:44px'
+   style: 'flex:1;height:44px;min-width:0'
  });
 
  phoneRow.appendChild(dialWrapper);

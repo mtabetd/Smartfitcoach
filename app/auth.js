@@ -379,7 +379,10 @@ function _initAuth() {
 }
 
 // ─── FALLBACK REGISTER (localStorage) ───
-function _fallbackRegister(name, email, password, startTime) {
+function _fallbackRegister(name, email, password, extra, startTime) {
+  // Support old call signature without extra
+  if (typeof extra === 'number') { startTime = extra; extra = {}; }
+  extra = extra || {};
   var users = getUsers();
   for (var i = 0; i < users.length; i++) {
     if (users[i].email === email) {
@@ -395,6 +398,8 @@ function _fallbackRegister(name, email, password, startTime) {
       pwHash: pwHash,
       createdAt: Date.now()
     };
+    if (extra.nom)   user.nom   = sanitize(extra.nom);
+    if (extra.phone) user.phone = sanitize(extra.phone);
     var currentUsers = getUsers();
     for (var j = 0; j < currentUsers.length; j++) {
       if (currentUsers[j].email === email) {
@@ -404,7 +409,7 @@ function _fallbackRegister(name, email, password, startTime) {
     currentUsers.push(user);
     saveUsers(currentUsers);
     setLegacySession(user);
-    _currentSession = { id: user.id, name: user.name, email: user.email };
+    _currentSession = { id: user.id, name: user.name, email: user.email, nom: user.nom || '', phone: user.phone || '' };
     BLACKBOX.log('register', { email: email });
     return { ok: true, user: { id: user.id, name: user.name, email: user.email } };
   });
@@ -544,7 +549,7 @@ window.AUTH = {
     // Tenter Supabase
     var client = _getClient();
     if (!client) {
-      return _fallbackRegister(name, email, password, startTime);
+      return _fallbackRegister(name, email, password, extra, startTime);
     }
 
     var promise = client.auth.signUp({
@@ -573,7 +578,7 @@ window.AUTH = {
       console.error('[AUTH] Supabase register exception:', err);
       // Fallback localStorage en cas d'erreur reseau
       try {
-        return _fallbackRegister(name, email, password, Date.now()).then(function(r) { return r; });
+        return _fallbackRegister(name, email, password, extra, Date.now()).then(function(r) { return r; });
       } catch (e2) {
         return { ok: false, error: mapSupabaseError(err) };
       }
