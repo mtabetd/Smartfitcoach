@@ -1526,6 +1526,47 @@ function renderCrossfitLevel(p) {
  p.appendChild(cfDaysWrap);
  p.appendChild(h('div', {'class': 'num-hint'}, '3 jours minimum recommand\u00E9 pour le CrossFit'));
 
+ // ─── SÉLECTEUR DE JOURS SPÉCIFIQUES ───
+ if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:18px'}, 'Quels jours vous entraînez-vous\u00a0?'));
+ var dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+ var dayBtnsWrap = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0'});
+ dayLabels.forEach(function(label, idx) {
+   var selected = S.trainingDaysSelected.indexOf(idx) !== -1;
+   var btn = h('button', {
+     type: 'button',
+     style: 'width:40px;height:40px;border-radius:4px;font-family:Georgia,serif;font-size:14px;font-weight:bold;cursor:pointer;transition:background .15s,color .15s;'
+       + (selected
+         ? 'background:#1A1A18;color:#fff;border:2px solid #1A1A18;'
+         : 'background:transparent;color:#1A1A18;border:2px solid var(--border,#ccc);'),
+     onclick: function() {
+       if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
+       var pos = S.trainingDaysSelected.indexOf(idx);
+       if (pos !== -1) {
+         S.trainingDaysSelected.splice(pos, 1);
+       } else {
+         S.trainingDaysSelected.push(idx);
+         S.trainingDaysSelected.sort(function(a, b) { return a - b; });
+       }
+       // Sync sportDays with actual selected count
+       var cnt = S.trainingDaysSelected.length;
+       if (cnt > 0) S.sportDays = Math.max(3, Math.min(6, cnt));
+       try { window.saveProfile(); } catch(e) {}
+       window.render();
+     }
+   }, label);
+   dayBtnsWrap.appendChild(btn);
+ });
+ p.appendChild(dayBtnsWrap);
+ var selCount = S.trainingDaysSelected.length;
+ if (selCount > 0) {
+   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:4px'},
+     selCount + ' jour' + (selCount > 1 ? 's' : '') + ' s\u00e9lectionn\u00e9' + (selCount > 1 ? 's' : '')));
+ } else {
+   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:4px'},
+     'Aucun jour s\u00e9lectionn\u00e9 — la r\u00e9partition sera automatique'));
+ }
+
  // Recommendation based on level
  if (S.crossfitLevel) {
  var cfDayReco = '';

@@ -23,7 +23,7 @@ var PROFILE_KEYS = [
  'pregnant','pregnancyWeek','prePregnancyWeight','dueDate',
  'cycleLength','lastPeriodDate','cycleTracking',
  'creatine','creatineDose','supplements',
- 'sportGoals','sportLevel','sportDays','sportSessionDuration','sportFocus',
+ 'sportGoals','sportLevel','sportDays','trainingDaysSelected','sportSessionDuration','sportFocus',
  'sportType','crossfitLevel','crossfitCompGoal','crossfitOpenDate',
  'trainTime',
  // CrossFit progress (calendar, current day, weekly cycle)
@@ -197,7 +197,7 @@ function loadProfile() {
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','strongZones','weakZones',
  'train','supplements','wheyFlavors','alcoholTypes',
- 'calisthenicsEquipment','calisthenicsGoal','weightHistory'];
+ 'calisthenicsEquipment','calisthenicsGoal','weightHistory','trainingDaysSelected'];
  _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
  // weekPlan is null or array — reject anything else
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
