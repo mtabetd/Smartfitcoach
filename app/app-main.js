@@ -48,7 +48,7 @@ var PROFILE_KEYS = [
  'calisthenicsEquipment','calisthDips','calisthCurrentWeek',
  'calisthenicsWeek','selectedCalisthDay',
  // Musculation
- 'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep','selectedSportDay',
+ 'muscuWeek','muscuCycle','muscuProgramCount','sportSplashDone','nStep','sStep','selectedSportDay',
  'sportProgram',
  'bonusExercises','sessionHistory',
  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment','installations',
