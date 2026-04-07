@@ -337,7 +337,8 @@ window.DASHBOARD = {
     }
 
     /* ═══ SPORT DU JOUR ═══ */
-    (function() {
+    /* Guard: ne pas afficher le widget sport aux utilisateurs appMode==='nutrition' */
+    if (S.appMode !== 'nutrition') (function() {
       var todayIdx = now.getDay(); // 0=dim, 1=lun, ..., 6=sam
       // weekPlan[0]=lundi ... weekPlan[6]=dimanche
       var planIdx = todayIdx === 0 ? 6 : todayIdx - 1;
@@ -453,7 +454,8 @@ window.DASHBOARD = {
     })();
 
     /* ═══ NUTRITION CONTEXTUELLE ═══ */
-    (function() {
+    /* Guard: ne pas afficher le widget nutrition aux utilisateurs appMode==='sport' */
+    if (S.appMode !== 'sport') (function() {
       var hour = now.getHours();
       var mealSlot, mealLabel;
       if (hour >= 6 && hour < 10) { mealSlot = 'breakfast'; mealLabel = 'Petit-dejeuner'; }

@@ -1489,6 +1489,23 @@ function renderDedicatedPrograms(p) {
 
  p.appendChild(h('div', {style: 'height:16px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+
+ // ─── CTA RETOUR → NUTRITION (mode "les deux" uniquement) ───
+ if (S.appMode === 'both' && S.weekPlan && S.weekPlan.length > 0) {
+   var nutReturnCard = h('div', {style: 'border:1px solid #1A4A1A;background:rgba(26,74,26,0.04);padding:20px 16px;margin-top:20px;border-radius:2px'});
+   nutReturnCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#1A4A1A;margin-bottom:8px'}, 'PROGRAMME COMPLET'));
+   nutReturnCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, 'Votre programme sportif est prêt.'));
+   nutReturnCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Vos macros sont automatiquement adaptées à chaque séance d\'entraînement.'));
+   nutReturnCard.appendChild(h('button', {
+     style: 'width:100%;padding:16px;background:#1A4A1A;color:#FAF9F6;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
+     onclick: function() {
+       window.S.view = 'nutrition';
+       if (window.saveProfile) window.saveProfile();
+       if (window.render) window.render();
+     }
+   }, 'Voir mon plan nutrition →'));
+   p.appendChild(nutReturnCard);
+ }
 }
 
 // ─── STEP 1: MUSCULATION OBJECTIVES ───

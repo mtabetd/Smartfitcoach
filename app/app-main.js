@@ -66,7 +66,8 @@ var PROFILE_KEYS = [
  'profilePhoto',
  'todayWellness',
  'aiCoachHistory',
- 'appMode'
+ 'appMode',
+ 'stress'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
