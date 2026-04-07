@@ -508,12 +508,14 @@ window.AUTH = {
    * @param {string} name
    * @param {string} email
    * @param {string} password
+   * @param {object} [extra] - optional: { nom, phone }
    * @returns {Promise<{ok:boolean, user?:object, error?:string}>}
    */
-  register: function(name, email, password) {
+  register: function(name, email, password, extra) {
     var startTime = Date.now();
     name = sanitize((name || '').trim());
     email = (email || '').trim().toLowerCase();
+    extra = extra || {};
 
     // Validation locale
     if (!validateName(name)) {
@@ -526,6 +528,10 @@ window.AUTH = {
       return withTimingDelay(Promise.resolve({ ok: false, error: 'Mot de passe min 6 caract\u00e8res' }), startTime);
     }
 
+    var metaData = { name: name };
+    if (extra.nom)   metaData.nom   = sanitize(extra.nom.trim());
+    if (extra.phone) metaData.phone = sanitize(extra.phone.trim());
+
     // Tenter Supabase
     var client = _getClient();
     if (!client) {
@@ -535,7 +541,7 @@ window.AUTH = {
     var promise = client.auth.signUp({
       email: email,
       password: password,
-      options: { data: { name: name } }
+      options: { data: metaData }
     }).then(function(result) {
       if (result.error) {
         console.error('[AUTH] Supabase register error:', result.error.message || result.error);
