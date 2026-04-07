@@ -2339,6 +2339,7 @@ function renderStep9(p) {
             if (window.WHEY_SMOOTHIES[_wsi].id === r._id) {
               var _sm = window.WHEY_SMOOTHIES[_wsi];
               var _sc = 0;
+              if (!Array.isArray(_sm.ingredients)) break;
               _sm.ingredients.forEach(function(ing) {
                 var _p = window.getPricePer(ing.name, ing.unit);
                 if (_p !== null && _p > 0) _sc += _p * (ing.qty || 0);
