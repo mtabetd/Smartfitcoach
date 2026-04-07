@@ -559,7 +559,8 @@
       pointsForts: S.pointsForts || '',
       pointsFaibles: S.pointsFaibles || '',
       preferences: S.preferences || '',
-      historique: S.historique || ''
+      historique: S.historique || '',
+      heureEntrainement: S.trainTime || null
     };
   }
 
@@ -579,7 +580,7 @@
     }
     _modalEl.innerHTML = '<div class="muscu-modal-inner" style="max-width:780px;margin:20px auto;background:var(--ivory,#FAF9F6);border-radius:2px;padding:24px;font-family:Georgia,serif;">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid var(--border,#D8D8D0);padding-bottom:12px;">' +
-        '<h2 style="margin:0;font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:2px;text-transform:uppercase;">Programme Musculation</h2>' +
+        '<h2 style="margin:0;font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:2px;text-transform:uppercase;">SMART FIT COACH — Programme</h2>' +
         '<button id="muscu-prog-close" aria-label="Fermer" style="background:transparent;border:none;font-size:24px;cursor:pointer;color:var(--grey,#6B6B65);">×</button>' +
       '</div>' +
       '<div id="muscu-prog-content" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--black,#0A0A09);"></div>' +
@@ -703,7 +704,7 @@
       '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--grey,#6B6B65);margin:0 auto 24px auto;max-width:520px;">Nous allons croiser tes 1RM, tes disponibilités, ton équipement et ton historique pour construire douze semaines qui n\u2019existent que pour toi. Aucune ligne ne sera générique. Aucune charge ne sera approximative.</p>' +
       (instSummary ? '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;line-height:1.8;">' + instSummary + '</div>' +
         '<button id="install-change" style="background:transparent;border:none;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;margin-bottom:20px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;">Modifier mes accès</button>' : '') +
-      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-bottom:20px;">Génération limitée à 3 fois par semaine. Compte 30 à 60 secondes.</p>' +
+      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-bottom:20px;">Génération limitée à 3 fois par semaine. Patientez 30 à 60 secondes.</p>' +
       counterHTML +
       '<button id="muscu-prog-generate"' + (btnDisabled ? ' disabled' : '') + ' style="' + btnStyle + '">Construire mon programme</button>' +
     '</div>';
