@@ -4,6 +4,16 @@
 var S = window.S;
 var h = window.h, txt = window.txt;
 
+// ─── I3: TERM TOOLTIP HELPER ───
+// Returns a span with a native tooltip (title attr) styled with dotted underline
+function termTooltip(term, definition) {
+ var span = document.createElement('span');
+ span.textContent = term;
+ span.title = definition;
+ span.style.cssText = 'border-bottom:1px dotted var(--grey,#6B6B65);cursor:help;';
+ return span;
+}
+
 // ─── MEDICAL EXERCISE FILTER ───
 function filterExerciseByMedical(ex, med) {
  if (!med || !med.done) return true; // pas de filtre
@@ -4806,26 +4816,51 @@ function renderMusculationProgram(p) {
     }
     var _phaseExos = (_phaseObj && _phaseObj.exercises) ? _phaseObj.exercises : (Array.isArray(_phaseObj) ? _phaseObj : []);
 
-    // Equipment filter for SFC exercises (respect S.sportEquipment profile)
+    // C3: Medical filter — exclude exercises contraindicated by user's bilan médical
+    var _sfcEqLimitedBadge = false;
+    if (Array.isArray(_phaseExos) && _phaseExos.length > 0 && S.muscuMedical) {
+     var _medFiltered = _phaseExos.filter(function(exo) {
+      var _n = (exo.name || exo.n || '').toLowerCase();
+      if (S.muscuMedical.shoulders && /militaire|overhead|élévation|elevation|arnold|upright|tirage menton|hspu/.test(_n)) return false;
+      if (S.muscuMedical.knees && /leg extension|jump|pistol|sissy/.test(_n)) return false;
+      if (S.muscuMedical.lowerBack && /good morning lourd|deadlift maximum/.test(_n)) return false;
+      return true;
+     });
+     // Safety fallback: if all exercises filtered out, keep first 2 unfiltered
+     _phaseExos = (_medFiltered.length > 0) ? _medFiltered : _phaseExos.slice(0, 2);
+    }
+
+    // C5: Equipment filter for SFC exercises (strict — respect S.sportEquipment profile)
     if (Array.isArray(_phaseExos) && _phaseExos.length > 0 && S.sportEquipment && S.sportEquipment !== 'gym') {
      var _sfcFiltered = _phaseExos.filter(function(exo) {
       var _eq = (exo.equipment || '').toLowerCase();
       if (S.sportEquipment === 'home') {
-       return /poids du corps|poids de corps|sans mat|sol|élastique|elastique/.test(_eq) || _eq === '';
+       return /poids du corps|poids de corps|sans mat|sol|\u00e9lastique|elastique/.test(_eq) || _eq === '';
       }
       if (S.sportEquipment === 'dumbbells') {
-       if (/câble|poulie|machine|t-bar|landmine|convergente|pec deck|barre fixe|chaise romaine|rouleau/.test(_eq)) return false;
-       if (/^barre\b/.test(_eq) && !/ou halt|halt[eè]res ou barre/.test(_eq)) return false;
+       if (/c\u00e2ble|poulie|machine|t-bar|landmine|convergente|pec deck|barre fixe|chaise romaine|rouleau/.test(_eq)) return false;
+       if (/^barre\b/.test(_eq) && !/ou halt|halt[e\u00e8]res ou barre/.test(_eq)) return false;
       }
       return true;
      });
-     // Only apply filter if it leaves at least 2 exercises (avoid empty program)
-     if (_sfcFiltered.length >= 2) _phaseExos = _sfcFiltered;
+     // C5 fix: if at least 1 exercise passes, use filtered list (even if only 1)
+     // Only fall back to full pool if 0 pass, and mark badge
+     if (_sfcFiltered.length > 0) {
+      _phaseExos = _sfcFiltered;
+     } else {
+      _phaseExos = _phaseExos.slice(0, 3);
+      _sfcEqLimitedBadge = true;
+     }
     }
 
     if (Array.isArray(_phaseExos) && _phaseExos.length > 0) {
      // Phase label header
-     _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, _progDisplayName + ' — ' + _phaseKey));
+     _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, _progDisplayName + ' \u2014 ' + _phaseKey));
+
+     // C5: Equipment limited badge
+     if (_sfcEqLimitedBadge) {
+      _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;background:rgba(106,74,26,0.08);border:1px solid rgba(106,74,26,0.2);padding:6px 10px;border-radius:2px;margin-bottom:10px'}, '\u26a0\ufe0f \u00c9quipement limit\u00e9 \u2014 ces exercices peuvent ne pas correspondre \u00e0 votre mat\u00e9riel'));
+     }
 
      // Warmup banner
      if (_phaseObj && _phaseObj.warmup) {
@@ -5126,7 +5161,7 @@ function renderMusculationProgram(p) {
  // Tableau des séries
  var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:2px;overflow-x:auto;-webkit-overflow-scrolling:touch'});
 
- var isAdvancedRIR = (S.sportLevel === 'advanced' || S.sportLevel === 'pro');
+ var isAdvancedRIR = (S.sportLevel === 'advanced' || S.sportLevel === 'pro' || S.sportLevel === 'intermediate');
  var gridCols = isAdvancedRIR ? '40px 1fr 50px 1fr 44px' : '40px 1fr 60px 1fr';
 
  // RIR target display for advanced users
