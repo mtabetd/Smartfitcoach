@@ -551,9 +551,14 @@ function generateSportProgram() {
  });
  var focusLabel = focusParts.join(' · ');
 
+ // PPL split naming for 5 days when user has muscle goal (advanced/pro)
+ var isPPL5 = (days === 5 && hasMuscle && (S.sportLevel === 'advanced' || S.sportLevel === 'pro'));
+ var PPL5_NAMES = ['Push A', 'Pull A', 'Legs', 'Push B', 'Pull B'];
+ var PPL5_FOCUS = ['Poitrine · Épaules · Triceps', 'Dos · Biceps · Trapèzes', 'Quadriceps · Ischio-jambiers · Fessiers', 'Épaules · Poitrine · Triceps', 'Ischio-jambiers · Fessiers · Dos'];
+
  program.push({
- name: 'Jour ' + (d + 1),
- focus: focusLabel,
+ name: isPPL5 ? PPL5_NAMES[d] : 'Jour ' + (d + 1),
+ focus: isPPL5 ? PPL5_FOCUS[d] : focusLabel,
  exercises: dayExercises
  });
  }
@@ -4983,14 +4988,25 @@ function renderMusculationProgram(p) {
  // Tableau des séries
  var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:2px;overflow-x:auto;-webkit-overflow-scrolling:touch'});
 
+ var isAdvancedRIR = (S.sportLevel === 'advanced' || S.sportLevel === 'pro');
+ var gridCols = isAdvancedRIR ? '40px 1fr 50px 1fr 44px' : '40px 1fr 60px 1fr';
+
+ // RIR target display for advanced users
+ if (isAdvancedRIR && exPhase) {
+  var _rirTargetDisplay = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6A4A1A;margin-bottom:6px;padding:4px 8px;background:rgba(106,74,26,0.06);border-radius:2px'},
+   'RIR cible cette semaine : ' + (exPhase.rirTarget || 2) + ' — ' + (exPhase.rirTarget === 1 ? 'quasi-échec' : exPhase.rirTarget === 2 ? 'effort intense' : exPhase.rirTarget === 3 ? 'modéré' : 'léger'));
+  card.appendChild(_rirTargetDisplay);
+ }
+
  // Header with set progress counter
  var _doneCount = setData.filter(function(s){ return s.validated === true; }).length;
  var setHeaderWrap = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;background:var(--surface,var(--ivory2));padding:6px 8px;border-bottom:1px solid var(--border)'});
- var setHeader = h('div', {style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;flex:1;font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
+ var setHeader = h('div', {style: 'display:grid;grid-template-columns:' + gridCols + ';flex:1;font-size:11px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px'});
  setHeader.appendChild(h('div', {}, '#'));
  setHeader.appendChild(h('div', {}, 'Conseill\u00e9'));
  setHeader.appendChild(h('div', {style:'text-align:center'}, '\u0394'));
  setHeader.appendChild(h('div', {}, 'R\u00e9alis\u00e9'));
+ if (isAdvancedRIR) setHeader.appendChild(h('div', {style:'text-align:center'}, 'RIR'));
  setHeaderWrap.appendChild(setHeader);
  var _serieProgressEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px;padding:2px 6px;border-radius:2px;' + (_doneCount === numSets ? 'background:#1A4A1A;color:#fff' : 'background:var(--border);color:var(--grey)')}, _doneCount + '\u00a0/\u00a0' + numSets + ' s\u00e9ries');
  setHeaderWrap.appendChild(_serieProgressEl);
@@ -4998,7 +5014,7 @@ function renderMusculationProgram(p) {
 
  // Rows
  setData.forEach(function(setRow, si3) {
- var row = h('div', {'class': 'set-row', style: 'display:grid;grid-template-columns:40px 1fr 60px 1fr;padding:6px 8px;border-top:1px solid var(--border);align-items:center'});
+ var row = h('div', {'class': 'set-row', style: 'display:grid;grid-template-columns:' + gridCols + ';padding:6px 8px;border-top:1px solid var(--border);align-items:center'});
 
  row.appendChild(h('div', {style: 'font-size:13px;font-weight:700;color:var(--text)'}, String(setRow.set)));
 
@@ -5157,6 +5173,37 @@ function renderMusculationProgram(p) {
  })(setRow, si3, exRef, numSets, isBodyweight, _exIdx, _dayExercises);
 
  row.appendChild(inputZone);
+
+ // RIR input for advanced/pro users
+ if (isAdvancedRIR) {
+  var _rirVal = setRow.rirActual !== null && setRow.rirActual !== undefined ? String(setRow.rirActual) : '';
+  var _rirInput = h('input', {
+   type: 'number', min: '0', max: '5', step: '1',
+   value: _rirVal,
+   placeholder: '-',
+   style: 'width:36px;padding:4px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory)',
+   onclick: function(e) { e.stopPropagation(); },
+   onchange: (function(_setRow) {
+    return function(e) {
+     e.stopPropagation();
+     var v = parseInt(e.target.value);
+     if (!isNaN(v) && v >= 0 && v <= 5) {
+      _setRow.rirActual = v;
+      // Auto-adjust: if RIR > rirTarget + 1 → note "Augmentez la charge"
+      var _exPhase2 = getMuscuPhase(S.muscuWeek || 1);
+      var _rirTarget = _exPhase2 ? (_exPhase2.rirTarget || 2) : 2;
+      if (v > _rirTarget + 1) _setRow.rirNote = 'Augmentez la charge la prochaine fois';
+      else if (v < _rirTarget - 1) _setRow.rirNote = 'Réduisez la charge ou le volume';
+      else _setRow.rirNote = null;
+      try { localStorage.setItem('mtd_muscu_session_' + ((window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon'), JSON.stringify(S.muscuSessionLog)); } catch(e2) {}
+      window.render();
+     }
+    };
+   })(setRow)
+  });
+  row.appendChild(_rirInput);
+ }
+
  setTable.appendChild(row);
  });
 
