@@ -6684,7 +6684,7 @@ function renderYogaProgram(p) {
 
  var objNames = { flexibilite: 'Flexibilit\u00e9', stress: 'Stress & Sommeil', force: 'Force & \u00c9quilibre', recuperation: 'R\u00e9cup\u00e9ration active' };
  var styleNames = { hatha: 'Hatha', vinyasa: 'Vinyasa', yin: 'Yin', ashtanga: 'Ashtanga' };
- p.appendChild(h('p', {'class': 'subtitle'}, S.yogaDays + ' jours/semaine \u00b7 ' + S.yogaDuration + ' \u00b7 ' + (styleNames[S.yogaStyle] || S.yogaStyle) + ' \u00b7 ' + (objNames[S.yogaObjectif] || '')));
+ p.appendChild(h('p', {'class': 'subtitle'}, (S.yogaDays || '') + ' jours/semaine \u00b7 ' + (S.yogaDuration || '') + ' \u00b7 ' + (styleNames[S.yogaStyle] || S.yogaStyle || '') + ' \u00b7 ' + (objNames[S.yogaObjectif] || '')));
 
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});

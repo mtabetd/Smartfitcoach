@@ -2033,10 +2033,10 @@ function renderStep8(p) {
       window.GAMIFICATION.unlockBadge('first_weigh');
       if (S.weightHistory.length >= 10) window.GAMIFICATION.unlockBadge('weight_10');
       if (S.targetWeight && v <= S.targetWeight && GOALS[S.goal] && (GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred')) window.GAMIFICATION.unlockBadge('weight_goal');
-      if (S.weightHistory.length >= 2) {
+      if (S.weightHistory.length >= 2 && S.weightHistory[0]) {
         var first = S.weightHistory[0].weight;
-        if (first - v >= 1) window.GAMIFICATION.unlockBadge('first_kg_lost');
-        if (first - v >= 5) window.GAMIFICATION.unlockBadge('five_kg');
+        if (first != null && first - v >= 1) window.GAMIFICATION.unlockBadge('first_kg_lost');
+        if (first != null && first - v >= 5) window.GAMIFICATION.unlockBadge('five_kg');
       }
     }
     window.render();
