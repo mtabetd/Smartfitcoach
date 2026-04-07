@@ -561,8 +561,12 @@ function renderTodayDashboard(p) {
 
   var wrapper = h('div', { style: 'padding-bottom:16px;' });
 
-  // Welcome banner — Bon retour parmi nous
-  wrapper.appendChild(renderWelcomeBanner(S));
+  // Welcome banner — Bon retour parmi nous (shown only after login, then cleared)
+  if (S.justLoggedIn) {
+    wrapper.appendChild(renderWelcomeBanner(S));
+    S.justLoggedIn = false;
+    if (window.saveProfile) saveProfile();
+  }
 
   // Card 1 — Bonjour
   wrapper.appendChild(renderCardBonjour(S));
