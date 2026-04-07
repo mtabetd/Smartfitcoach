@@ -4740,7 +4740,11 @@ function renderMusculationProgram(p) {
 
  // ─── PRO PROGRAMS ACCESS (advanced/pro only) ───
  if ((S.sportLevel === 'advanced' || S.sportLevel === 'pro') && window.SFC_PROGRAMS) {
-  var _sfcKeys = Object.keys(window.SFC_PROGRAMS);
+  // Filter out _dedied groups (use .variations structure, shown in renderDedicatedPrograms separately)
+  var _sfcKeys = Object.keys(window.SFC_PROGRAMS).filter(function(k) {
+   var _p = window.SFC_PROGRAMS[k];
+   return _p && !_p.variations;
+  });
   if (_sfcKeys.length > 0) {
    var _sfcSection = h('div', {style: 'margin-bottom:20px'});
    _sfcSection.appendChild(h('div', {'class':'section-label'}, 'Programmes scientifiques (niveau avancé)'));
