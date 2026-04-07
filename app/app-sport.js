@@ -1261,7 +1261,7 @@ function renderChargesQuestionnaire(p) {
   var reassureCard = h('div', {style: 'background:rgba(26,74,26,0.04);border-left:3px solid #1A4A1A;padding:16px;margin-bottom:24px;border-radius:0 2px 2px 0'});
   reassureCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, 'Vous débutez ? C\'est parfait.'));
   reassureCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, 'Pas besoin de connaître vos charges. Nous utilisons votre poids de corps comme référence de départ et adaptons progressivement.'));
-  reassureCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey)'}, '💡 Vous pourrez entrer vos charges après vos 2 premières séances.'));
+  reassureCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey)'}, 'Vous pourrez entrer vos charges après vos 2 premières séances.'));
   p.appendChild(reassureCard);
   var contBtn = h('button', {
    style: 'width:100%;padding:16px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
