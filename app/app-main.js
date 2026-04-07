@@ -53,7 +53,7 @@ var PROFILE_KEYS = [
  'bonusExercises','sessionHistory',
  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment','installations',
  // Nutrition plan
- 'shopChecked','weekPlan','selectedDay','_weekPlanGeneratedAt',
+ 'shopChecked','weekPlan','selectedDay','_weekPlanGeneratedAt','nutritionLog',
  // System
  'lang','weightUnit','heightUnit',
  'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
@@ -1258,6 +1258,7 @@ if (window._verifyCriticalFunctions) {
 // Save on tab/browser close to avoid losing last unsaved state
 window.addEventListener('beforeunload', function() {
  try { if (AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
+ try { if (AUTH.isLoggedIn() && window.SupaSync) SupaSync.saveProfile(); } catch(e) {}
 });
 // Periodic autosave every 30s as safety net (render() already saves on interaction)
 setInterval(function() {
