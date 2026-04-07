@@ -2282,6 +2282,12 @@ function renderStep9(p) {
 
   if (!S._nm && window.computeNutritionState) window.computeNutritionState(false);
   if (!S.weekPlan) { var _wk9 = generateWeek(); if (Array.isArray(_wk9) && _wk9.length > 0) S.weekPlan = _wk9; }
+  // Guard: si weekPlan est toujours null après génération, afficher un message d'erreur
+  if (!S.weekPlan) {
+    p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Génération du plan en cours… Veuillez compléter les étapes précédentes.'));
+    p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(8); }}, '\u2190 Retour aux résultats'));
+    return;
+  }
   // Bounds check: selectedDay must be in [0, 6]
   if (typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) S.selectedDay = 0;
 
@@ -2419,24 +2425,49 @@ function renderStep9(p) {
         S._plateScanError = null;
         window.render();
         var reader = new FileReader();
+        reader.onerror = function() {
+          S._plateScanLoading = false;
+          S._plateScanError = 'Impossible de lire le fichier image. Réessayez.';
+          window.render();
+        };
         reader.onload = function(ev) {
-          var b64 = ev.target.result.split(',')[1];
+          var dataUrl = ev.target && ev.target.result;
+          if (!dataUrl || typeof dataUrl !== 'string' || dataUrl.indexOf(',') === -1) {
+            S._plateScanLoading = false;
+            S._plateScanError = 'Lecture de l\'image échouée. Réessayez.';
+            window.render();
+            return;
+          }
+          var b64 = dataUrl.split(',')[1];
+          if (!b64) {
+            S._plateScanLoading = false;
+            S._plateScanError = 'Format d\'image invalide. Réessayez.';
+            window.render();
+            return;
+          }
           var mType = file.type || 'image/jpeg';
+          var _ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          var _timer = _ctrl ? setTimeout(function() { _ctrl.abort(); }, 30000) : null;
           window.fetch('/.netlify/functions/plate-scan', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: b64, mediaType: mType })
+            body: JSON.stringify({ image: b64, mediaType: mType }),
+            signal: _ctrl ? _ctrl.signal : undefined
           })
-          .then(function(r2) { return r2.json(); })
+          .then(function(r2) {
+            if (_timer) clearTimeout(_timer);
+            return r2.json();
+          })
           .then(function(data) {
             S._plateScanLoading = false;
             if (data.error) { S._plateScanError = data.error; }
             else { S._plateScanResult = data; }
             window.render();
           })
-          .catch(function() {
+          .catch(function(err) {
+            if (_timer) clearTimeout(_timer);
             S._plateScanLoading = false;
-            S._plateScanError = 'Erreur réseau. Réessayez.';
+            S._plateScanError = (err && err.name === 'AbortError') ? 'Délai dépassé. Réessayez.' : 'Erreur réseau. Réessayez.';
             window.render();
           });
         };
@@ -2490,8 +2521,15 @@ function renderStep9(p) {
           if (!q || q.trim().length < 2) return;
           S._foodSearchResults = 'loading';
           window.render();
-          window.fetch('https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(q) + '&search_simple=1&action=process&json=1&page_size=5&fields=product_name,nutriments')
-          .then(function(r3) { return r3.json(); })
+          var _offCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          var _offTimer = _offCtrl ? setTimeout(function() { _offCtrl.abort(); }, 10000) : null;
+          window.fetch('https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(q) + '&search_simple=1&action=process&json=1&page_size=5&fields=product_name,nutriments', {
+            signal: _offCtrl ? _offCtrl.signal : undefined
+          })
+          .then(function(r3) {
+            if (_offTimer) clearTimeout(_offTimer);
+            return r3.json();
+          })
           .then(function(data) {
             S._foodSearchResults = (data.products || []).filter(function(pr) { return pr.product_name; }).map(function(pr) {
               var n2 = pr.nutriments || {};
@@ -2505,7 +2543,11 @@ function renderStep9(p) {
             });
             window.render();
           })
-          .catch(function() { S._foodSearchResults = []; window.render(); });
+          .catch(function(err) {
+            if (_offTimer) clearTimeout(_offTimer);
+            S._foodSearchResults = [];
+            window.render();
+          });
         }
       }, 'Rechercher');
       foodCard.appendChild(searchGoBtn);
