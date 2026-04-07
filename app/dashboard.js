@@ -84,7 +84,13 @@ styleEl.textContent = [
 
   /* Responsive */
   '@media(max-width:480px){ .dash-card-grid,.dash-card-grid-3{grid-template-columns:1fr;} .dash-greeting{font-size:24px;} }',
-  '@media(min-width:481px) and (max-width:640px){ .dash-card-grid-3{grid-template-columns:1fr 1fr;} }'
+  '@media(min-width:481px) and (max-width:640px){ .dash-card-grid-3{grid-template-columns:1fr 1fr;} }',
+
+  /* Micro-animations */
+  '.dash-btn-primary { transition: opacity 0.2s, transform 0.1s; }',
+  '.dash-btn-primary:active { transform: scale(0.98); opacity: 0.92; }',
+  '.dash-btn-secondary { transition: all 0.15s ease; }',
+  '.dash-minibar-fill { transition: width 0.5s ease; }'
 ].join('\n');
 document.head.appendChild(styleEl);
 
@@ -118,6 +124,75 @@ function greetingWord() {
   if (hr < 12) return window.t('dash.greeting_morning');
   if (hr < 18) return window.t('dash.greeting_afternoon');
   return window.t('dash.greeting_evening');
+}
+
+/* ─── MESSAGE CONTEXTUEL SELON L'HEURE ─── */
+function contextualGreetingMessage(name) {
+  var hr = new Date().getHours();
+  var first = name ? name.split(' ')[0] : '';
+  if (hr >= 6 && hr < 10) {
+    return 'Bonne matin\u00e9e' + (first ? ', ' + first : '') + '. La s\u00e9ance du jour vous attend.';
+  } else if (hr >= 10 && hr < 14) {
+    return 'Bonjour' + (first ? ' ' + first : '') + '. Comment vous sentez-vous aujourd\u2019hui\u00a0?';
+  } else if (hr >= 14 && hr < 18) {
+    return 'Bel apr\u00e8s-midi. Pr\u00eat\u00b7e pour votre s\u00e9ance\u00a0?';
+  } else if (hr >= 18 && hr < 22) {
+    return 'Belle soir\u00e9e' + (first ? ' ' + first : '') + '. Avez-vous pens\u00e9 \u00e0 votre r\u00e9cup\u00e9ration\u00a0?';
+  } else {
+    return 'Reposez-vous bien. La r\u00e9cup\u00e9ration, c\u2019est l\u00e0 que les muscles poussent.';
+  }
+}
+
+/* ─── CALCUL STREAK ─── */
+function computeStreak() {
+  var S = window.S || {};
+  var activeDays = {};
+  // Collect from muscuSessionLog
+  var msl = S.muscuSessionLog || {};
+  Object.keys(msl).forEach(function(d) {
+    var dayData = msl[d];
+    if (dayData && typeof dayData === 'object') {
+      var exNames = Object.keys(dayData);
+      var hasValidated = exNames.some(function(ex) {
+        var sets = dayData[ex];
+        return Array.isArray(sets) && sets.some(function(s) { return s.validated === true || s.actualReps !== null; });
+      });
+      if (hasValidated) activeDays[d] = true;
+    }
+  });
+  // Collect from nutritionLog
+  var nl = S.nutritionLog || {};
+  Object.keys(nl).forEach(function(d) { if (nl[d]) activeDays[d] = true; });
+  // Collect from _foodLog (array-keyed by day index — skip, not date-keyed)
+  // Collect from sessionHistory
+  var sh = S.sessionHistory || {};
+  Object.keys(sh).forEach(function(k) {
+    var se = sh[k];
+    if (se && se.date) activeDays[se.date.slice(0, 10)] = true;
+    // key format: dayIdx_YYYY-MM-DD
+    var m = k.match(/(\d{4}-\d{2}-\d{2})$/);
+    if (m) activeDays[m[1]] = true;
+  });
+
+  var today = new Date();
+  var streak = 0;
+  var d = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  // Check today first; if today has no activity, start checking from yesterday
+  var dateStr = d.toISOString().slice(0, 10);
+  if (!activeDays[dateStr]) {
+    d.setDate(d.getDate() - 1);
+  }
+  // Count backwards
+  for (var i = 0; i < 365; i++) {
+    var ds = d.toISOString().slice(0, 10);
+    if (activeDays[ds]) {
+      streak++;
+      d.setDate(d.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+  return streak;
 }
 
 function firstName(name) {
@@ -215,66 +290,69 @@ function renderWelcomeScreen(container) {
   var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
   root.appendChild(h('p', 'dash-date', dateStr));
 
-  // Message motivation du jour
-  if (window.MOTIVATION) {
-    var motivMsg = document.createElement('p');
-    motivMsg.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey,#6B6B65);margin:0 0 20px;line-height:1.6;border-left:2px solid var(--border,#D8D8D0);padding-left:14px;';
-    motivMsg.textContent = window.MOTIVATION.getDailySportMessage();
-    root.appendChild(motivMsg);
-  }
-
   /* Tips toggle */
   if (window.TIPS) TIPS.renderToggle(root);
 
-  /* Welcome card */
-  root.appendChild(h('div', 'dash-label', 'Bienvenue sur SmartFitCoach'));
-
-  var welcomeCard = document.createElement('div');
-  welcomeCard.className = 'dash-card';
-  welcomeCard.style.cssText = 'text-align:center;padding:32px 20px;';
-
-  var icon = document.createElement('div');
-  icon.style.cssText = 'font-size:36px;margin-bottom:16px;';
-  icon.textContent = '\u25C6';
-  welcomeCard.appendChild(icon);
-
-  var title = document.createElement('p');
-  title.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:18px;margin:0 0 10px;color:var(--black,#181818);';
-  title.textContent = 'Votre programme personnalisé vous attend';
-  welcomeCard.appendChild(title);
-
-  var sub = document.createElement('p');
-  sub.style.cssText = 'font-size:13px;color:var(--grey,#6B6B65);margin:0 0 24px;line-height:1.6;font-family:"Helvetica Neue",Arial,sans-serif;';
-  /* Determine message based on onboarding step */
+  /* ─── Hero empty state card ─── */
   var nStep = S.nStep || 0;
-  if (nStep === 0) {
-    sub.textContent = 'Complétez le questionnaire Nutrition pour générer votre plan alimentaire et sportif personnalisé.';
-  } else if (nStep > 0 && nStep < 10) {
-    sub.textContent = 'Votre questionnaire est en cours (étape ' + nStep + '/9). Terminez-le pour accéder à votre tableau de bord complet.';
+  var sStep = S.sStep || 0;
+  var hasSportProgress = !!(S.sportType || sStep > 0);
+  var hasNutritionProgress = !!(S.sex || nStep > 0);
+
+  var heroCard = document.createElement('div');
+  heroCard.style.cssText = 'background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);padding:32px 24px;margin-bottom:16px;text-align:center;border-radius:2px;';
+
+  var heroIcon = document.createElement('div');
+  heroIcon.style.cssText = 'font-size:28px;margin-bottom:16px;opacity:.8;';
+  heroIcon.textContent = '\u25C6';
+  heroCard.appendChild(heroIcon);
+
+  var heroTitle = document.createElement('p');
+  heroTitle.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:22px;line-height:1.2;margin:0 0 12px;';
+  if (_greetName && !hasNutritionProgress && !hasSportProgress) {
+    heroTitle.textContent = _greetName + ', votre programme\nvous attend.';
+  } else if (hasNutritionProgress && nStep < 9) {
+    heroTitle.textContent = 'Questionnaire en cours\u00a0\u2014 \u00e9tape ' + nStep + '/9';
+  } else if (hasSportProgress) {
+    heroTitle.textContent = 'Votre programme sport\nest pr\u00eat.';
   } else {
-    sub.textContent = 'Générez votre plan semaine dans Nutrition pour commencer le suivi de vos calories et performances.';
+    heroTitle.textContent = 'Votre programme\npersonalis\u00e9 vous attend.';
   }
-  welcomeCard.appendChild(sub);
+  heroTitle.style.whiteSpace = 'pre-line';
+  heroCard.appendChild(heroTitle);
 
-  var ctaBtn = document.createElement('button');
-  ctaBtn.className = 'dash-btn-primary';
-  ctaBtn.style.cssText = 'max-width:320px;margin:0 auto;display:block;';
-  ctaBtn.textContent = nStep === 0 ? 'Commencer le questionnaire \u2192' : 'Reprendre le questionnaire \u2192';
-  ctaBtn.addEventListener('click', function() {
-    if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
+  var heroSub = document.createElement('p');
+  heroSub.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;opacity:.75;margin:0 0 24px;line-height:1.6;max-width:280px;margin-left:auto;margin-right:auto;';
+  if (nStep > 0 && nStep < 9) {
+    heroSub.textContent = 'Encore ' + (9 - nStep) + ' \u00e9tape' + ((9 - nStep) > 1 ? 's' : '') + ' pour acc\u00e9der \u00e0 votre tableau de bord complet.';
+  } else if (hasSportProgress) {
+    heroSub.textContent = 'Continuez votre programme et suivez votre progression.';
+  } else {
+    heroSub.textContent = '2 minutes pour un programme calibr\u00e9 sur votre corps, vos objectifs et votre quotidien.';
+  }
+  heroCard.appendChild(heroSub);
+
+  var heroCta = document.createElement('button');
+  heroCta.style.cssText = 'background:var(--ivory,#FAF9F6);color:var(--black,#1A1A18);border:none;padding:0 24px;min-height:52px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;max-width:280px;width:100%;';
+  heroCta.textContent = (nStep > 0 && nStep < 9) ? 'Reprendre mon questionnaire \u2192' : (hasSportProgress ? 'Voir mon programme sport \u2192' : 'Je commence \u2192');
+  heroCta.addEventListener('click', function() {
+    if (hasSportProgress && !(nStep > 0 && nStep < 9)) {
+      if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport');
+    } else {
+      if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
+    }
   });
-  welcomeCard.appendChild(ctaBtn);
-
-  root.appendChild(welcomeCard);
+  heroCard.appendChild(heroCta);
+  root.appendChild(heroCard);
 
   /* Quick nav cards — always accessible */
-  root.appendChild(h('div', 'dash-label', 'Accès rapide'));
+  root.appendChild(h('div', 'dash-label', 'Explorer'));
   var navGrid = h('div', 'dash-card-grid');
 
   var nutCard = h('div', 'dash-nav');
   nutCard.appendChild(h('span', 'dash-nav-icon', '\u25C6'));
   nutCard.appendChild(h('p', 'dash-nav-name', 'Nutrition'));
-  nutCard.appendChild(h('p', 'dash-nav-sub', nStep === 0 ? 'Démarrer le questionnaire' : 'Continuer l\'onboarding'));
+  nutCard.appendChild(h('p', 'dash-nav-sub', nStep === 0 ? 'D\u00e9marrer le questionnaire' : (nStep < 9 ? '\u00c9tape ' + nStep + '/9 \u2014 continuer' : 'G\u00e9n\u00e9rer mon plan semaine')));
   nutCard.style.cursor = 'pointer';
   nutCard.addEventListener('click', function() {
     if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
@@ -284,7 +362,7 @@ function renderWelcomeScreen(container) {
   var sportCard = h('div', 'dash-nav');
   sportCard.appendChild(h('span', 'dash-nav-icon', '\u25C6'));
   sportCard.appendChild(h('p', 'dash-nav-name', 'Sport'));
-  sportCard.appendChild(h('p', 'dash-nav-sub', 'Explorer les programmes'));
+  sportCard.appendChild(h('p', 'dash-nav-sub', hasSportProgress ? 'Voir mon programme' : 'Explorer les programmes'));
   sportCard.style.cursor = 'pointer';
   sportCard.addEventListener('click', function() {
     if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport');
@@ -292,6 +370,14 @@ function renderWelcomeScreen(container) {
   navGrid.appendChild(sportCard);
 
   root.appendChild(navGrid);
+
+  // Motivation quote
+  if (window.MOTIVATION) {
+    var motivMsg = document.createElement('p');
+    motivMsg.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey,#6B6B65);margin:16px 0 0;line-height:1.6;border-left:2px solid var(--border,#D8D8D0);padding-left:14px;';
+    motivMsg.textContent = window.MOTIVATION.getDailySportMessage();
+    root.appendChild(motivMsg);
+  }
 
   container.appendChild(root);
 }
@@ -327,6 +413,33 @@ window.DASHBOARD = {
     root.appendChild(h('h1', 'dash-greeting', greeting));
     var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
     root.appendChild(h('p', 'dash-date', dateStr));
+
+    // Message contextuel selon l'heure (remplace/enrichit le greeting)
+    var _ctxMsg2 = document.createElement('p');
+    _ctxMsg2.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin:0 0 16px;line-height:1.6;letter-spacing:0.3px;';
+    _ctxMsg2.textContent = contextualGreetingMessage(_greetName2);
+    root.appendChild(_ctxMsg2);
+
+    // Streak badge (si streak >= 2)
+    var _streak = computeStreak();
+    S.streak = _streak;
+    if (_streak >= 2) {
+      var _streakBadge = document.createElement('div');
+      _streakBadge.style.cssText = 'display:inline-flex;align-items:center;gap:6px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-left:3px solid #C85A00;padding:8px 14px;margin-bottom:20px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black,#181818);letter-spacing:0.3px;';
+      var _streakIcon = document.createElement('span');
+      _streakIcon.textContent = '\uD83D\uDD25';
+      _streakIcon.style.fontSize = '14px';
+      var _streakText = document.createElement('span');
+      _streakText.style.fontWeight = '600';
+      _streakText.textContent = _streak + ' jour' + (_streak > 1 ? 's' : '') + ' d\u2019affil\u00e9e';
+      var _streakSub = document.createElement('span');
+      _streakSub.style.cssText = 'color:var(--grey,#6B6B65);font-size:11px;margin-left:2px;';
+      _streakSub.textContent = '— continuez ainsi';
+      _streakBadge.appendChild(_streakIcon);
+      _streakBadge.appendChild(_streakText);
+      _streakBadge.appendChild(_streakSub);
+      root.appendChild(_streakBadge);
+    }
 
     // Message motivation du jour
     if (window.MOTIVATION) {

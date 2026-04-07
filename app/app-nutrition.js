@@ -171,42 +171,55 @@ function renderSplash(app) {
   // global #splash { position:fixed; z-index:9999 } CSS rule which would
   // overlay the entire viewport including the navigation bar.
   var sp = h('div', {'class': 'nutrition-intro', style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px 40px;text-align:center;min-height:60vh'});
-  sp.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;letter-spacing:8px;text-transform:uppercase;font-weight:300;margin-bottom:6px;opacity:0;animation:splashFadeUp .8s ease .2s forwards'}, 'SMARTFITCOACH'));
-  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);opacity:0;animation:splashFadeUp .8s ease .5s forwards;margin-bottom:32px'}, 'Nutrition & Sport personnalis\u00e9s'));
-  sp.appendChild(h('div', {style: 'width:48px;height:1px;background:var(--black);margin:0 auto 28px'}));
-  var quotes = [
-    "Que ton aliment soit ta seule m\u00e9decine.",
-    "La nourriture que vous mangez peut \u00eatre la forme de m\u00e9decine la plus s\u00fbre ou la plus lente forme de poison.",
-    "Manger est un besoin. Savoir choisir ce que l\u2019on mange est une sagesse.",
-    "La nutrition est l\u2019architecture invisible de votre performance.",
-    "Prends soin de ton corps, c\u2019est le seul endroit o\u00f9 tu es oblig\u00e9 de vivre.",
-    "La sant\u00e9 est la plus grande des richesses.",
-    "Mange pour vivre, ne vis pas pour manger.",
-    "Chaque repas est une opportunit\u00e9 de nourrir votre corps avec excellence.",
-    "L\u2019alimentation est la pharmacologie la plus ancienne.",
-    "Manger sainement est une forme de respect envers soi-m\u00eame.",
-    "Tout exc\u00e8s est un ennemi de l\u2019\u00e9quilibre.",
-    "Un gramme de pr\u00e9vention vaut mieux qu\u2019un kilogramme de rem\u00e8de.",
-    "Le corps accomplit ce que l\u2019esprit choisit de nourrir.",
-    "La sant\u00e9 n\u2019est pas tout, mais sans la sant\u00e9 tout n\u2019est rien."
-  ];
-  sp.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;color:var(--black);line-height:1.7;max-width:320px;opacity:0;animation:splashFadeUp .8s ease .7s forwards;margin-bottom:36px'}, quotes[Math.floor(Math.random() * quotes.length)]));
-  sp.appendChild(h('button', {style: 'display:block;width:100%;max-width:320px;background:var(--black);color:var(--ivory);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;padding:18px;border:none;cursor:pointer;opacity:0;animation:splashFadeUp .8s ease 1.1s forwards', onclick: function() { goStep(1); }}, window.t('onb.start')));
+  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);opacity:0;animation:splashFadeUp .5s ease .1s forwards;margin-bottom:10px'}, 'SMARTFITCOACH · NUTRITION'));
+  sp.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black);margin:0 auto 24px;opacity:0;animation:splashFadeUp .5s ease .25s forwards'}));
+
+  // Strong headline
+  var headlineEl = h('div', {style: 'font-family:Georgia,serif;font-size:clamp(28px,8vw,40px);font-weight:normal;line-height:1.1;letter-spacing:-.02em;color:var(--black);opacity:0;animation:splashFadeUp .6s ease .35s forwards;margin-bottom:16px;max-width:340px'});
+  headlineEl.innerHTML = 'Mangez mieux.<br><em>Progressez plus.</em>';
+  sp.appendChild(headlineEl);
+
+  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--grey);line-height:1.65;max-width:290px;opacity:0;animation:splashFadeUp .6s ease .5s forwards;margin-bottom:36px'}, 'Votre plan nutritionnel sur mesure \u2014 calibr\u00e9 sur votre corps, vos objectifs et votre quotidien.'));
+
+  // 3 benefit pills
+  var pillsRow = h('div', {style: 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;opacity:0;animation:splashFadeUp .6s ease .65s forwards'});
+  ['Calories adapt\u00e9es', 'Recettes personnalis\u00e9es', 'Objectif atteignable'].forEach(function(label) {
+    var pill = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:.04em;padding:6px 12px;border:1px solid var(--border,#D8D8D0);color:var(--grey,#6B6B65);border-radius:20px'}, label);
+    pillsRow.appendChild(pill);
+  });
+  sp.appendChild(pillsRow);
+
+  var ctaBtn = h('button', {style: 'display:block;width:100%;max-width:320px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:56px;padding:0 24px;border:none;cursor:pointer;opacity:0;animation:splashFadeUp .6s ease .8s forwards;border-radius:2px', onclick: function() { goStep(1); }}, 'Je commence \u2192');
+  sp.appendChild(ctaBtn);
+
+  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:16px;opacity:0;animation:splashFadeUp .5s ease 1s forwards'}, '2 minutes suffisent \u00b7 Gratuit \u00b7 Vos donn\u00e9es restent sur votre appareil'));
   app.appendChild(sp);
 }
 
 // ─── STEP 1: IDENTITE ───
 function renderStep1(p) {
-  // Greeting
-  var user = authUser();
-  if (user && user.name) {
-    p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-style:italic;margin-bottom:20px'}, 'Bonjour, ' + user.name));
-  }
   renderProgressBar(p, 1, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' I'));
-  p.appendChild(h('h1', {html: 'Votre<br><em>identit\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Les bases pour un programme calibr\u00e9 sur mesure.'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' I \u00b7 Identit\u00e9'));
+  p.appendChild(h('h1', {html: 'Votre<br><em>profil de base</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Ces informations servent \u00e0 calibrer vos besoins caloriques et nutritionnels avec pr\u00e9cision.'));
   if (window.TIPS) TIPS.renderTip(p, 'identity');
+
+  // Prénom (optionnel — collecté tôt pour personnaliser les messages)
+  (function() {
+    var _prenomWrap = h('div', {style: 'margin-bottom:20px'});
+    _prenomWrap.appendChild(h('div', {'class': 'section-label'}, 'Votre pr\u00e9nom (optionnel)'));
+    var _prenomInput = h('input', {
+      type: 'text',
+      value: S.prenom || '',
+      placeholder: 'Sophie',
+      style: 'width:100%;height:48px;border:1px solid var(--border,#E8E6DF);background:var(--ivory,#FAF9F6);font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);padding:0 16px;box-sizing:border-box;border-radius:2px;outline:none;-webkit-appearance:none;',
+      oninput: function(e) { S.prenom = e.target.value.trim(); }
+    });
+    _prenomInput.addEventListener('focus', function() { setTimeout(function() { _prenomInput.scrollIntoView({behavior:'smooth', block:'center'}); }, 300); });
+    _prenomWrap.appendChild(_prenomInput);
+    _prenomWrap.appendChild(h('div', {'class': 'num-hint'}, 'Utilis\u00e9 pour personnaliser votre programme'));
+    p.appendChild(_prenomWrap);
+  })();
 
   // Sex (MANDATORY)
   var sexLabel = h('div', {'class': 'section-label'});
@@ -985,10 +998,11 @@ function renderStep4(p) {
 function renderStep5(p) {
   if (!Array.isArray(S.allergies)) S.allergies = [];
   if (!Array.isArray(S.intolerances)) S.intolerances = [];
+  var _prenomS5 = S.prenom || '';
   renderProgressBar(p, 5, 9);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V'));
-  p.appendChild(h('h1', {html: 'Vos<br><em>habitudes alimentaires</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Vos habitudes au quotidien pour un plan r\u00e9aliste.'));
+  p.appendChild(h('h1', {html: (_prenomS5 ? _prenomS5 + ', quelles sont<br>' : 'Quelles sont<br>') + '<em>vos habitudes alimentaires\u00a0?</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Vos habitudes au quotidien pour un plan r\u00e9aliste et tenable.'));
   if (window.TIPS) TIPS.renderTip(p, 'habits');
 
   // Nombre de repas par jour (MANDATORY)
@@ -2376,6 +2390,18 @@ function renderStep9(p) {
       row.appendChild(track);
       progressCard.appendChild(row);
     });
+    // ── Célébration macro : message si objectif atteint à 90%+ ──
+    if (kcalPct >= 100) {
+      var _macroCelCard = document.createElement('div');
+      _macroCelCard.style.cssText = 'margin-top:10px;padding:10px 12px;background:rgba(26,74,26,0.07);border-left:3px solid #1A4A1A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;letter-spacing:0.3px;line-height:1.6;';
+      _macroCelCard.textContent = 'Parfait \u2014 objectifs nutritionnels atteints aujourd\u2019hui.';
+      progressCard.appendChild(_macroCelCard);
+    } else if (kcalPct >= 90) {
+      var _macroNearCard = document.createElement('div');
+      _macroNearCard.style.cssText = 'margin-top:10px;padding:10px 12px;background:rgba(26,74,26,0.05);border-left:3px solid #5A8A5A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;letter-spacing:0.3px;line-height:1.6;';
+      _macroNearCard.textContent = 'Objectif presque atteint\u00a0! Plus que quelques grammes.';
+      progressCard.appendChild(_macroNearCard);
+    }
     p.appendChild(progressCard);
   })();
 
@@ -2412,10 +2438,16 @@ function renderStep9(p) {
         onclick: function() { S._plateScanResult = null; S._plateScanError = null; window.render(); }
       }, 'Réessayer'));
     } else if (S._plateScanLoading) {
-      scanCard.appendChild(h('div', {style: 'text-align:center;padding:20px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65)'}, 'Analyse en cours\u2026'));
+      var loadingDiv = h('div', {style: 'text-align:center;padding:20px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65)', role: 'status', 'aria-live': 'polite'});
+      var spinnerEl = document.createElement('span');
+      spinnerEl.className = 'loading-spinner';
+      spinnerEl.setAttribute('aria-hidden', 'true');
+      loadingDiv.appendChild(spinnerEl);
+      loadingDiv.appendChild(document.createTextNode('Analyse en cours\u2026'));
+      scanCard.appendChild(loadingDiv);
     } else {
       if (S._plateScanError) {
-        scanCard.appendChild(h('div', {style: 'color:#8B2020;font-size:11px;margin-bottom:10px;font-family:"Helvetica Neue",Arial,sans-serif'}, S._plateScanError));
+        scanCard.appendChild(h('div', {style: 'color:#8B2020;font-size:11px;margin-bottom:10px;font-family:"Helvetica Neue",Arial,sans-serif', role: 'alert'}, S._plateScanError));
       }
       var fileInput = h('input', { type: 'file', accept: 'image/*', capture: 'environment', style: 'display:none' });
       fileInput.onchange = function(e) {
@@ -2475,7 +2507,8 @@ function renderStep9(p) {
       };
       scanCard.appendChild(fileInput);
       var triggerBtn = h('button', {
-        style: 'width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer',
+        style: 'width:100%;padding:14px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer',
+        'aria-label': 'Prendre une photo du plat pour analyse',
         onclick: function() { fileInput.click(); }
       }, '\uD83D\uDCF8 Prendre une photo');
       scanCard.appendChild(triggerBtn);
@@ -2507,15 +2540,19 @@ function renderStep9(p) {
     if (!S._foodManualEntry) {
       // OpenFoodFacts search
       var searchInput = h('input', {
-        type: 'text',
+        type: 'search',
         placeholder: 'Rechercher un aliment\u2026',
+        autocomplete: 'off',
+        'aria-label': 'Rechercher un aliment',
         value: S._foodSearchQuery || '',
-        style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory,#FAF9F6);margin-bottom:8px'
+        style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;background:var(--ivory,#FAF9F6);margin-bottom:8px'
       });
       searchInput.oninput = function(e) { S._foodSearchQuery = e.target.value; };
       foodCard.appendChild(searchInput);
       var searchGoBtn = h('button', {
-        style: 'width:100%;padding:10px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:10px',
+        style: 'width:100%;padding:10px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:10px',
+        disabled: S._foodSearchResults === 'loading',
+        'aria-label': 'Lancer la recherche',
         onclick: function() {
           var q = S._foodSearchQuery;
           if (!q || q.trim().length < 2) return;
@@ -2552,7 +2589,13 @@ function renderStep9(p) {
       }, 'Rechercher');
       foodCard.appendChild(searchGoBtn);
       if (S._foodSearchResults === 'loading') {
-        foodCard.appendChild(h('div', {style: 'text-align:center;padding:12px;font-size:12px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif'}, 'Recherche en cours\u2026'));
+        var searchLoadDiv = h('div', {style: 'text-align:center;padding:12px;font-size:12px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif', role: 'status', 'aria-live': 'polite'});
+        var searchSpinner = document.createElement('span');
+        searchSpinner.className = 'loading-spinner';
+        searchSpinner.setAttribute('aria-hidden', 'true');
+        searchLoadDiv.appendChild(searchSpinner);
+        searchLoadDiv.appendChild(document.createTextNode('Recherche en cours\u2026'));
+        foodCard.appendChild(searchLoadDiv);
       } else if (Array.isArray(S._foodSearchResults)) {
         if (S._foodSearchResults.length === 0) {
           foodCard.appendChild(h('div', {style: 'font-size:12px;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;margin-bottom:8px'}, 'Aucun résultat. Essayez en manuel.'));
@@ -2595,9 +2638,12 @@ function renderStep9(p) {
         var lbl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-bottom:3px;letter-spacing:1px;text-transform:uppercase'}, field.label);
         var inp = h('input', {
           type: field.type,
+          inputmode: field.type === 'number' ? 'decimal' : 'text',
+          autocomplete: 'off',
+          'aria-label': field.label,
           placeholder: field.placeholder,
           value: S._foodManualData[field.key] || '',
-          style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory,#FAF9F6);margin-bottom:8px'
+          style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;background:var(--ivory,#FAF9F6);margin-bottom:8px'
         });
         (function(fk) {
           inp.oninput = function(e) { if (!S._foodManualData) S._foodManualData = {}; S._foodManualData[fk] = e.target.value; };

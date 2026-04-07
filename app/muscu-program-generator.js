@@ -25,10 +25,10 @@
   ];
 
   var LOADING_PHRASES = [
-    'Lecture de tes 1RM. Calcul de tes ratios squat, bench, deadlift, overhead.',
-    'Sélection du split adapté à tes jours, ton équipement, tes blessures.',
+    'Analyse de vos 1RM. Calcul des ratios squat, bench, deadlift, overhead.',
+    'Sélection du split adapté à vos jours, votre équipement, vos antécédents.',
     'Calibrage des charges cibles, semaine par semaine, kilo par kilo.',
-    'Écriture de ton diagnostic. Encore quelques secondes.'
+    'Rédaction de votre diagnostic personnalisé. Encore quelques secondes…'
   ];
 
   var FOOTER_QUOTES = [
@@ -639,12 +639,12 @@
     content.innerHTML =
       '<div style="padding:8px 4px 24px 4px;">' +
         '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;font-family:\'Helvetica Neue\',Arial,sans-serif;">ÉTAPE PRÉALABLE</div>' +
-        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 8px 0;">À quoi as-tu accès ?</h3>' +
-        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 20px 0;line-height:1.6;">Coche toutes tes installations disponibles. Le programme ne prescrira que ce que tu peux réellement faire. <strong>Sélection multiple.</strong></p>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 8px 0;">Quels équipements avez-vous à disposition ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 20px 0;line-height:1.6;">Sélectionnez toutes vos installations disponibles. Le programme ne prescrira que ce que vous pouvez réellement faire. <strong>Sélection multiple.</strong></p>' +
         '<div id="install-cards-wrap">' + cardsHTML + '</div>' +
-        '<div id="install-error" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#B02020;margin:8px 0 0 0;display:none;">Sélectionne au moins une installation.</div>' +
+        '<div id="install-error" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#B02020;margin:8px 0 0 0;display:none;">Sélectionnez au moins une installation pour continuer.</div>' +
         '<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">' +
-          '<button id="install-confirm" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Continuer →</button>' +
+          '<button id="install-confirm" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Voir mon programme →</button>' +
         '</div>' +
       '</div>';
 
@@ -699,11 +699,11 @@
         }).join('  ·  ')
       : '';
     content.innerHTML = '<div style="text-align:center;padding:32px 24px;">' +
-      '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">UN PROGRAMME. LE TIEN. PERSONNE D\u2019AUTRE.</div>' +
-      '<h3 style="font-family:Georgia,serif;font-size:24px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 20px 0;">Ton programme t\u2019attend.</h3>' +
-      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--grey,#6B6B65);margin:0 auto 24px auto;max-width:520px;">Nous allons croiser tes 1RM, tes disponibilités, ton équipement et ton historique pour construire douze semaines qui n\u2019existent que pour toi. Aucune ligne ne sera générique. Aucune charge ne sera approximative.</p>' +
+      '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">UN PROGRAMME. LE VÔTRE. PERSONNE D\u2019AUTRE.</div>' +
+      '<h3 style="font-family:Georgia,serif;font-size:24px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 20px 0;">Votre programme vous attend.</h3>' +
+      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--grey,#6B6B65);margin:0 auto 24px auto;max-width:520px;">Nous allons croiser vos 1RM, vos disponibilités, votre équipement et votre historique pour construire douze semaines qui n\u2019existent que pour vous. Aucune ligne ne sera générique. Aucune charge ne sera approximative.</p>' +
       (instSummary ? '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;line-height:1.8;">' + instSummary + '</div>' +
-        '<button id="install-change" style="background:transparent;border:none;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;margin-bottom:20px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;">Modifier mes accès</button>' : '') +
+        '<button id="install-change" style="background:transparent;border:none;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;margin-bottom:20px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;">Modifier mes équipements</button>' : '') +
       '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-bottom:20px;">Génération limitée à 3 fois par semaine. Patientez 30 à 60 secondes.</p>' +
       counterHTML +
       '<button id="muscu-prog-generate"' + (btnDisabled ? ' disabled' : '') + ' style="' + btnStyle + '">Construire mon programme</button>' +
@@ -737,6 +737,9 @@
   function generateMuscuProgram() {
     if (_generating) return;
     _generating = true;
+    // Détecter si c'est la première génération
+    var _S = window.S || {};
+    var _isFirstProgram = (!_S.muscuProgramCount || _S.muscuProgramCount === 0);
     var content = document.getElementById('muscu-prog-content');
     content.innerHTML = '<div style="text-align:center;padding:48px 24px;">' +
       '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">G\u00c9N\u00c9RATION EN COURS</div>' +
@@ -777,6 +780,11 @@
       // Record this generation for the weekly counter
       recordGeneration();
 
+      // Incrémenter le compteur de programmes générés
+      var _Snow = window.S || {};
+      _Snow.muscuProgramCount = (_Snow.muscuProgramCount || 0) + 1;
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
+
       var programText = data.program || '';
       var footerQuote = FOOTER_QUOTES[Math.floor(Math.random() * FOOTER_QUOTES.length)];
 
@@ -791,8 +799,15 @@
         programBodyHTML = '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;">' + escaped + '</div>';
       }
 
-      content.innerHTML = '<div style="text-align:center;padding:8px 0 24px 0;border-bottom:1px solid var(--border,#D8D8D0);margin-bottom:24px;">' +
-          '<p style="font-family:Georgia,serif;font-style:italic;font-size:16px;line-height:1.6;color:var(--accent,#1A4A1A);margin:0 auto;max-width:520px;">Voici douze semaines. Elles n\u2019appartiennent qu\u2019à toi.</p>' +
+      var _firstProgramBanner = _isFirstProgram
+        ? '<div style="border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.05);padding:16px 20px;margin-bottom:20px;border-left:4px solid var(--accent,#1A4A1A);">' +
+            '<p style="font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.6;color:var(--accent,#1A4A1A);margin:0;">C\u2019est votre premier programme SmartFitCoach. Chaque semaine sera plus forte que la pr\u00e9c\u00e9dente.</p>' +
+          '</div>'
+        : '';
+
+      content.innerHTML = _firstProgramBanner +
+        '<div style="text-align:center;padding:8px 0 24px 0;border-bottom:1px solid var(--border,#D8D8D0);margin-bottom:24px;">' +
+          '<p style="font-family:Georgia,serif;font-style:italic;font-size:16px;line-height:1.6;color:var(--accent,#1A4A1A);margin:0 auto;max-width:520px;">Voici douze semaines. Elles n\u2019appartiennent qu\u2019\u00e0 vous.</p>' +
         '</div>' +
         programBodyHTML +
         '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--border,#D8D8D0);padding-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
@@ -829,7 +844,7 @@
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
       console.error('[muscu-prog] generation error:', err);
       content.innerHTML = '<div style="text-align:center;padding:40px;">' +
-        '<div style="font-size:14px;color:var(--red,#5A1010);margin-bottom:16px;">\u26a0 ' + escapeHTML(err.message || 'Erreur de génération') + '</div>' +
+        '<div style="font-size:14px;color:var(--red,#5A1010);margin-bottom:16px;">\u26a0 ' + escapeHTML(err.message || 'La génération a échoué — vérifiez votre connexion et réessayez.') + '</div>' +
         '<button id="muscu-prog-retry" style="background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Réessayer</button>' +
       '</div>';
       var retryBtn = document.getElementById('muscu-prog-retry');

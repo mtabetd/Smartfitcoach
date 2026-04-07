@@ -673,7 +673,7 @@ function renderSportQuickProfile(p) {
       value: S.age ? String(S.age) : '',
       placeholder: '25'
     });
-    var ageErr = h('div', {style: 'font-size:11px;color:#8B2020;margin-top:4px;display:none'}, '');
+    var ageErr = h('div', {style: 'font-size:11px;color:#8B2020;margin-top:4px;display:none', role: 'alert'}, '');
     ageInput.addEventListener('change', function() {
       var v = parseInt(this.value);
       if (!isNaN(v) && v >= 13 && v <= 99) { S.age = v; ageErr.style.display = 'none'; }
@@ -690,7 +690,7 @@ function renderSportQuickProfile(p) {
       value: S.weight ? String(S.weight) : '',
       placeholder: '70'
     });
-    var weightErr = h('div', {style: 'font-size:11px;color:#8B2020;margin-top:4px;display:none'}, '');
+    var weightErr = h('div', {style: 'font-size:11px;color:#8B2020;margin-top:4px;display:none', role: 'alert'}, '');
     weightInput.addEventListener('change', function() {
       var v = parseFloat(this.value);
       if (!isNaN(v) && v >= 30 && v <= 300) { S.weight = v; weightErr.style.display = 'none'; }
@@ -869,20 +869,33 @@ var SPORT_QUOTES = [
 
 // ─── STEP 0: TYPE SELECTION ONLY ───
 function renderObjectif(p) {
- // Sport splash with random quote
+ // Sport splash with strong headline and random quote
  if (!S.sportSplashDone) {
  var q = SPORT_QUOTES[Math.floor(Math.random() * SPORT_QUOTES.length)];
- var splash = h('div', {style: 'text-align:center;padding:60px 24px 40px'});
- splash.appendChild(h('div', {'class': 'splash-logo'}, 'SMARTFITCOACH'));
- splash.appendChild(h('div', {'class': 'splash-sub'}, 'Sport'));
- splash.appendChild(h('div', {'class': 'splash-line'}));
- var quoteDiv = h('div', {'class': 'splash-quote'});
- quoteDiv.appendChild(h('em', {}, '\u201C' + q.t + '\u201D'));
+ var _prenomSplash = S.prenom || '';
+ var splash = h('div', {style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px 40px;min-height:60vh'});
+ splash.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:10px;opacity:0;animation:splashFadeUp .5s ease .1s forwards'}, 'SMARTFITCOACH \u00b7 SPORT'));
+ splash.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black);margin:0 auto 24px;opacity:0;animation:splashFadeUp .5s ease .25s forwards'}));
+
+ // Strong personalized headline
+ var _splashHeadline = h('div', {style: 'font-family:Georgia,serif;font-size:clamp(28px,8vw,40px);font-weight:normal;line-height:1.1;letter-spacing:-.02em;color:var(--black);opacity:0;animation:splashFadeUp .6s ease .35s forwards;margin-bottom:16px;max-width:340px'});
+ var _headlineText = _prenomSplash ? (_prenomSplash + ', votre\u00a0programme\u00a0sport\u00a0vous\u00a0attend.') : 'Entra\u00eenez-vous mieux.\n<em>Progressez plus vite.</em>';
+ _splashHeadline.innerHTML = _headlineText;
+ _splashHeadline.style.whiteSpace = 'pre-line';
+ splash.appendChild(_splashHeadline);
+
+ splash.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--grey);line-height:1.65;max-width:290px;opacity:0;animation:splashFadeUp .6s ease .5s forwards;margin-bottom:28px'}, 'Un protocole sport con\u00e7u sur vos objectifs, votre niveau et votre agenda.'));
+
+ // Quote
+ var quoteDiv = h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--black);line-height:1.6;max-width:300px;opacity:0;animation:splashFadeUp .6s ease .6s forwards;margin-bottom:32px;padding:16px 20px;border-left:2px solid var(--border,#D8D8D0);text-align:left'});
+ quoteDiv.appendChild(h('span', {}, '\u201C' + q.t + '\u201D'));
  if (q.a) {
-   quoteDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:12px'}, '\u2014 ' + q.a));
+   quoteDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:10px'}, '\u2014 ' + q.a));
  }
  splash.appendChild(quoteDiv);
- splash.appendChild(h('button', {'class': 'splash-btn btn-primary', style: 'margin-top:32px', onclick: function(){ S.sportSplashDone = true; if(window.BLACKBOX)BLACKBOX.log('sport_splash_done'); window.render(); }}, 'Commencer'));
+
+ var _splashBtn = h('button', {style: 'display:block;width:100%;max-width:320px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:56px;padding:0 24px;border:none;cursor:pointer;opacity:0;animation:splashFadeUp .6s ease .8s forwards;border-radius:2px', onclick: function(){ S.sportSplashDone = true; if(window.BLACKBOX)BLACKBOX.log('sport_splash_done'); window.render(); }}, 'Je commence \u2192');
+ splash.appendChild(_splashBtn);
  p.appendChild(splash);
  return;
  }
@@ -1323,6 +1336,7 @@ function renderChargesQuestionnaire(p) {
  var inputWrap = h('div', {style: 'display:flex;align-items:center;gap:4px;flex-shrink:0'});
  var inp = h('input', {
  type: 'number', step: '2.5', min: '0', max: '500',
+ inputmode: 'decimal', autocomplete: 'off',
  value: currentVal ? String(currentVal) : '',
  placeholder: '\u2014',
  style: 'width:60px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory)',
@@ -1347,7 +1361,8 @@ function renderChargesQuestionnaire(p) {
  var currentReps = S.muscuStrengthProfile[repKey] || 8;
  var repInp = h('input', {
  type: 'number', min: '1', max: '30', value: String(currentReps),
- style: 'width:38px;padding:6px 4px;border:1px solid var(--border);font-family:Georgia;font-size:13px;text-align:center;background:var(--ivory);margin-left:4px',
+ inputmode: 'numeric', autocomplete: 'off', 'aria-label': 'Nombre de répétitions',
+ style: 'width:38px;padding:6px 4px;border:1px solid var(--border);font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);margin-left:4px',
  onchange: (function(rkey, wkey) { return function(e) {
  var rv = parseInt(e.target.value);
  if (!isNaN(rv) && rv >= 1 && rv <= 30) S.muscuStrengthProfile[rkey] = rv;
@@ -1562,9 +1577,10 @@ function syncSportGoalsToNutrition() {
 }
 
 function renderMusculationGoals(p) {
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
- p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez vos objectifs (1 \u00e0 3).'));
+ var _prenom1 = S.prenom || '';
+ p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation \u00b7 \u00c9tape 1/3'));
+ p.appendChild(h('h1', {html: (_prenom1 ? _prenom1 + ', quel est<br>' : 'Quel est<br>') + '<em>votre objectif\u00a0?</em>'}));
+ p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez vos objectifs (1 \u00e0 3). Votre programme s\u2019adaptera en cons\u00e9quence.'));
  if (window.TIPS) TIPS.renderTip(p, 'sportGoal');
 
  // ── INTERDÉPENDANCE NUTRITION ──────────────────────────────────────────
@@ -2256,7 +2272,7 @@ function renderWellnessCheckin(p, onComplete) {
   if (window.MOTIVATION) {
     var checkinMotiv = document.createElement('p');
     checkinMotiv.style.cssText = 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey,#6B6B65);margin:0 0 24px;line-height:1.6;border-left:2px solid var(--border,#D8D8D0);padding-left:14px;';
-    checkinMotiv.textContent = 'Prendre une minute pour évaluer ton état, c\'est déjà un acte de performance.';
+    checkinMotiv.textContent = 'Prendre une minute pour évaluer votre état, c\'est déjà un acte de performance.';
     p.appendChild(checkinMotiv);
   }
 
@@ -3249,9 +3265,9 @@ function renderCrossfitProgram(p) {
 
 // ─── STEP 2 (Muscu): NIVEAU & FRÉQUENCE ───
 function renderMusculationLevel(p) {
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Configuration'));
- p.appendChild(h('h1', {html: 'Votre<br><em>niveau</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Niveau d\'expérience et fréquence d\'entraînement.'));
+ p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation \u00b7 \u00c9tape 2/3'));
+ p.appendChild(h('h1', {html: 'Votre niveau<br><em>& organisation</em>'}));
+ p.appendChild(h('p', {'class': 'subtitle'}, 'Niveau d\'exp\u00e9rience, fr\u00e9quence et mat\u00e9riel disponible.'));
  if (window.TIPS) TIPS.renderTip(p, 'sportLevel');
 
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
@@ -3318,9 +3334,10 @@ function renderMusculationLevel(p) {
 
 // ─── STEP 3 (Muscu): ZONES CIBLES ───
 function renderMusculationZones(p) {
- p.appendChild(h('div', {'class': 'eyebrow'}, 'Zones'));
- p.appendChild(h('h1', {html: 'Zones à<br><em>travailler</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Sélectionnez au moins 2 zones à cibler dans votre programme.'));
+ var _prenom3 = S.prenom || '';
+ p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation \u00b7 \u00c9tape 3/3'));
+ p.appendChild(h('h1', {html: (_prenom3 ? _prenom3 + ', quelles zones<br>' : 'Quelles zones<br>') + '<em>voulez-vous travailler\u00a0?</em>'}));
+ p.appendChild(h('p', {'class': 'subtitle'}, 'Attribuez une priorit\u00e9 \u00e0 chaque groupe musculaire. Votre programme s\u2019adaptera.'));
  if (window.TIPS) TIPS.renderTip(p, 'sportZones');
 
  // Show body photos if uploaded
@@ -3415,9 +3432,9 @@ function renderMusculationZones(p) {
  var selectedZones = Object.keys(S.sportFocus || {}).filter(function(z){ return S.sportFocus[z] > 0; });
  var ok = selectedZones.length >= 2 && S.sportSessionDuration !== null;
  if (selectedZones.length < 2) {
- p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez au moins 2 zones'));
+ p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez au moins 2 zones à travailler pour continuer.'));
  } else if (!S.sportSessionDuration) {
- p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Sélectionnez une durée de séance'));
+ p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Indiquez la durée de vos séances pour continuer.'));
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) {
@@ -5358,6 +5375,7 @@ function renderMusculationProgram(p) {
  var weightPlaceholder = progressiveWeight > 0 ? String(progressiveWeight) : 'kg';
  var weightInput = h('input', {
  type: 'number', min: '0', max: '500', step: '2.5',
+ inputmode: 'decimal', autocomplete: 'off', 'aria-label': 'Charge (kg)',
  placeholder: weightPlaceholder,
  value: setRow.actualWeight !== null ? String(setRow.actualWeight) : '',
  style: 'width:52px;padding:4px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
@@ -5390,6 +5408,7 @@ function renderMusculationProgram(p) {
  if (_isLeste) {
  pcLabel = h('input', {
  type: 'number', min: '0', max: '200', step: '0.5',
+ inputmode: 'decimal', autocomplete: 'off', 'aria-label': 'Lest (kg)',
  placeholder: 'kg',
  value: setRow.actualWeight !== null && setRow.actualWeight > 0 ? String(setRow.actualWeight) : '',
  style: 'width:44px;padding:4px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
@@ -5408,6 +5427,7 @@ function renderMusculationProgram(p) {
 
  var repsInput = h('input', {
  type: 'number', min: '0', max: '50', step: '1',
+ inputmode: 'numeric', autocomplete: 'off', 'aria-label': 'Répétitions',
  placeholder: String(setRow.targetReps),
  value: setRow.actualReps !== null ? String(setRow.actualReps) : '',
  style: 'width:40px;padding:4px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
@@ -5575,6 +5595,47 @@ function renderMusculationProgram(p) {
  setTable.appendChild(progGraph);
  }
 
+ // ─── PERSONAL RECORD DETECTION ───
+ (function(_exRef2, _isBodyweight2, _setData2) {
+  var _prToday = new Date().toISOString().slice(0, 10);
+  // Trouver le meilleur volume (poids × reps) parmi les sessions précédentes
+  var _prevBestVolume = 0;
+  var _sortedDates2 = Object.keys(S.muscuSessionLog || {}).sort();
+  _sortedDates2.forEach(function(d) {
+   if (d >= _prToday) return; // Ignorer aujourd'hui
+   var _prevSets = (S.muscuSessionLog[d] && S.muscuSessionLog[d][_exRef2.n]) ? S.muscuSessionLog[d][_exRef2.n] : [];
+   _prevSets.forEach(function(s) {
+    if (s.actualReps && s.actualWeight) {
+     var vol = s.actualWeight * s.actualReps;
+     if (vol > _prevBestVolume) _prevBestVolume = vol;
+    }
+   });
+  });
+  if (_prevBestVolume === 0) return; // Pas d'historique, pas de PR
+  // Comparer avec les séries validées aujourd'hui
+  var _todaySets2 = _setData2 || [];
+  var _todayBestVolume = 0;
+  _todaySets2.forEach(function(s) {
+   if (s.validated && s.actualReps && s.actualWeight) {
+    var vol = s.actualWeight * s.actualReps;
+    if (vol > _todayBestVolume) _todayBestVolume = vol;
+   }
+  });
+  if (_todayBestVolume > _prevBestVolume) {
+   // Nouveau PR !
+   var _prBanner = document.createElement('div');
+   _prBanner.style.cssText = 'padding:6px 10px;background:rgba(26,74,26,0.07);border-top:1px solid #1A4A1A;display:flex;align-items:center;gap:8px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;letter-spacing:0.3px;';
+   var _prArrow = document.createElement('span');
+   _prArrow.style.cssText = 'font-size:13px;font-weight:700;flex-shrink:0;';
+   _prArrow.textContent = '\u2191 PR';
+   var _prMsg = document.createElement('span');
+   _prMsg.textContent = 'Nouveau record personnel sur ' + _exRef2.n + '\u00a0!';
+   _prBanner.appendChild(_prArrow);
+   _prBanner.appendChild(_prMsg);
+   setTable.appendChild(_prBanner);
+  }
+ })(exRef, isBodyweight, setData);
+
  card.appendChild(setTable);
 
  // ── NEXT EXERCISE NUDGE : shown when all sets are validated ──
@@ -5592,7 +5653,7 @@ function renderMusculationProgram(p) {
  _nudgeRight.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:#fff;max-width:140px;text-align:right'}, _nextEx2.n));
  _nudge.appendChild(_nudgeRight);
  } else {
- _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8)'}, '\uD83C\uDFC6 Derni\u00e8r exercice'));
+ _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8)'}, '\uD83C\uDFC6 Derni\u00e8r exercice \u2014 Belle s\u00e9ance\u00a0!'));
  }
  card.appendChild(_nudge);
  }
@@ -5695,6 +5756,45 @@ function renderMusculationProgram(p) {
  summary.appendChild(h('div', {'class': 'dt-label'}, allEx.length + ' exercice' + (allEx.length > 1 ? 's' : '') + (bonusDayList.length > 0 ? ' (dont ' + bonusDayList.length + ' bonus)' : '')));
  summary.appendChild(h('div', {'class': 'dt-val'}, '~' + estDuration + ' min'));
  p.appendChild(summary);
+
+ // ─── CÉLÉBRATION FIN DE SÉANCE ───
+ (function() {
+  var _celToday = new Date().toISOString().slice(0, 10);
+  var _celLog = (S.muscuSessionLog && S.muscuSessionLog[_celToday]) ? S.muscuSessionLog[_celToday] : {};
+  var _dayExNames = (day.exercises || []).map(function(e) { return e.n; });
+  if (_dayExNames.length === 0) return;
+  var _allDone = _dayExNames.every(function(exName) {
+   var sets = _celLog[exName];
+   return Array.isArray(sets) && sets.length > 0 && sets.every(function(s) { return s.validated === true; });
+  });
+  if (!_allDone) return;
+  var _totalSets = 0, _totalVolume = 0, _hasVolume = false;
+  _dayExNames.forEach(function(exName) {
+   var sets = _celLog[exName] || [];
+   sets.forEach(function(s) {
+    if (s.validated) {
+     _totalSets++;
+     if (s.actualWeight && s.actualReps) { _totalVolume += s.actualWeight * s.actualReps; _hasVolume = true; }
+    }
+   });
+  });
+  var _celCard = document.createElement('div');
+  _celCard.style.cssText = 'border:1px solid #1A4A1A;background:rgba(26,74,26,0.05);padding:20px 20px 16px;margin-top:16px;border-left:4px solid #1A4A1A;';
+  var _celTitle = document.createElement('div');
+  _celTitle.style.cssText = 'font-family:Georgia,serif;font-size:16px;font-style:italic;color:#1A4A1A;margin-bottom:6px;';
+  _celTitle.textContent = 'S\u00e9ance termin\u00e9e. Excellent travail.';
+  _celCard.appendChild(_celTitle);
+  var _celSub = document.createElement('div');
+  _celSub.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.7;letter-spacing:0.3px;';
+  var _celSubText = _totalSets + ' s\u00e9rie' + (_totalSets > 1 ? 's' : '') + ' r\u00e9alis\u00e9e' + (_totalSets > 1 ? 's' : '');
+  if (_hasVolume) {
+   var _vDisplay = window.UNITS ? window.UNITS.displayWeight(Math.round(_totalVolume)) : Math.round(_totalVolume) + '\u00a0kg';
+   _celSubText += ' \u00b7 ' + _vDisplay + ' de volume total';
+  }
+  _celSub.textContent = _celSubText;
+  _celCard.appendChild(_celSub);
+  p.appendChild(_celCard);
+ })();
 
  // ─── SÉANCE TERMINÉE + BILAN CALORIQUE ───
  var todayKey = S.selectedSportDay + '_' + new Date().toISOString().slice(0, 10);
@@ -8065,7 +8165,7 @@ function renderCalisthenicsProgram(content) {
  try {
   planData = window.generateCalisthenicsPlan(level, skills, pullups, pushups, days, equipment, dips);
  } catch(e) {
-  content.appendChild(h('div', {'class': 'card'}, h('div', {style: 'color:red;font-size:13px'}, 'Erreur generation programme: ' + e.message)));
+  content.appendChild(h('div', {'class': 'card'}, h('div', {style: 'color:red;font-size:13px'}, 'Impossible d\'afficher le programme — réessayez ou rechargez la page. (' + e.message + ')')));
   return;
  }
 

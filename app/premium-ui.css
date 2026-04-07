@@ -2306,3 +2306,248 @@ body.dark-mode .auth-container {
   border-radius: 2px;
   letter-spacing: 0.5px;
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE UX POLISH — Touch targets, inputs, scroll, a11y
+   iOS HIG 44×44px / Android 48×48dp minimum touch targets
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. TAP HIGHLIGHT — suppress default blue/grey flash on iOS/Android ── */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Re-enable visible focus for keyboard users */
+*:focus-visible {
+  -webkit-tap-highlight-color: rgba(26, 74, 26, 0.15);
+}
+
+/* ── 2. TOUCH-ACTION — smoother interactions, prevent 300ms delay ── */
+button,
+a,
+.btn-primary,
+.btn-secondary,
+.btn-back,
+.regen-btn,
+.swap-btn,
+.sel-card,
+.level-item,
+.check-item,
+.chip,
+.muscle-tag,
+.day-tab,
+.main-nav-tab,
+.dash-action,
+.dash-nav,
+.meal-card,
+.exercise-card,
+.set-validate-btn,
+.modal-close,
+[onclick],
+[role="button"] {
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+/* ── 3. TOUCH TARGETS — 48×48dp (Android) minimum, 44×44px (iOS) ── */
+.set-validate-btn {
+  min-height: 48px;
+  min-width: 48px;
+  padding: 10px 14px;
+}
+
+/* Set table inputs — bigger tap zones */
+.set-load-input,
+.set-reps-input {
+  min-height: 44px;
+  font-size: 16px; /* prevents iOS zoom-on-focus */
+  padding: 8px 6px;
+  width: 60px;
+}
+
+/* ── 4. INPUTS — font-size 16px minimum to prevent iOS auto-zoom ── */
+input[type="number"],
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="date"],
+input[type="search"],
+textarea,
+select {
+  font-size: 16px !important; /* iOS: zoom triggered at < 16px */
+}
+
+/* Exception: keep design for .num-input styled standalone (already 24px) */
+.num-input {
+  font-size: 24px !important;
+}
+
+/* ── 5. INPUTS — autocomplete & mobile attributes (set-table) ── */
+.set-load-input,
+.set-reps-input {
+  /* Handled via inputmode="numeric" in JS; reinforce via CSS appearance */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ── 6. SCROLL — horizontal tab bars scrollable on mobile ── */
+.day-tabs {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none; /* Firefox */
+}
+.day-tabs::-webkit-scrollbar {
+  display: none;
+}
+.day-tab {
+  scroll-snap-align: start;
+}
+
+/* ── 7. OVERFLOW — exercise grids, SFC grids, horizontal lists ── */
+.card-grid-2,
+.card-grid-3,
+.card-grid-4 {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.set-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── 8. LOADING STATES — spinner animation for async actions ── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* Button disabled during loading */
+button[disabled],
+.btn-primary[disabled],
+.btn-secondary[disabled] {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+/* ── 9. FEEDBACK — active press state for touch ── */
+.btn-primary:active,
+.btn-secondary:active {
+  transform: scale(0.98);
+  transition: transform 0.08s ease;
+}
+
+.sel-card:active,
+.level-item:active,
+.check-item:active,
+.chip:active,
+.muscle-tag:active,
+.dash-action:active,
+.dash-nav:active,
+.meal-card:active,
+.exercise-card:active {
+  transform: scale(0.99);
+  transition: transform 0.08s ease;
+}
+
+.set-validate-btn:active:not([disabled]) {
+  transform: scale(0.95);
+  transition: transform 0.08s ease;
+}
+
+/* ── 10. CARDS — minimum padding 16px on mobile ── */
+@media (max-width: 480px) {
+  .meal-card,
+  .exercise-card,
+  .dash-card,
+  .dash-action,
+  .dash-nav {
+    padding: 16px;
+  }
+
+  .modal-body {
+    padding: 16px 16px 24px;
+  }
+
+  .modal-header {
+    padding: 20px 16px 14px;
+  }
+
+  /* Stack 3-col grids on small phones */
+  .dash-card-grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── 11. ACCESSIBILITY — role=alert for error messages ── */
+.field-error,
+.auth-error,
+[data-error] {
+  /* role="alert" is set in JS; reinforce with live region styling */
+  color: var(--red, #5A1010);
+}
+
+/* ── 12. LINE-HEIGHT — readability for multi-line text ── */
+.exercise-detail,
+.card-sub,
+.level-desc,
+.check-label,
+.dash-action-sub,
+.dash-nav-sub,
+.whey-tip span {
+  line-height: 1.5;
+}
+
+/* ── 13. BTN-BACK — ensure 44px touch target (was padding:10px 0 only) ── */
+.btn-back {
+  min-height: 44px;
+  padding: 10px 12px 10px 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── 14. DASH-MODAL-CLOSE — bigger close button ── */
+.dash-modal-close {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 15. PREVENT ZOOM on select on iOS ── */
+select {
+  font-size: 16px;
+  -webkit-appearance: none;
+}
+
+/* ── 16. SAFE AREA — iOS home bar / notch ── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .main-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .app {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+
+  #rest-timer-display {
+    bottom: calc(80px + env(safe-area-inset-bottom) + 8px);
+  }
+}
