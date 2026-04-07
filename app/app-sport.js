@@ -1094,6 +1094,25 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(h('h1', {html: 'Bilan<br><em>médical muscu</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de générer votre programme, aidez-nous à adapter les exercices à votre situation physique.'));
 
+ // For beginners: show a simple YES/NO filter first
+ if ((S.sportLevel === 'beginner' || !S.sportLevel) && !S._muscuMedicalExpanded) {
+  var filterCard = h('div', {style: 'margin-bottom:20px'});
+  filterCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#1A1A18);margin-bottom:16px;line-height:1.5'}, 'Avez-vous une douleur chronique, une blessure récente ou un diagnostic médical ?'));
+  var filterBtns = h('div', {style: 'display:flex;gap:12px'});
+  filterBtns.appendChild(h('button', {
+   style: 'flex:1;padding:14px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#1A1A18);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer',
+   onclick: function() { S._muscuMedicalExpanded = true; window.render(); }
+  }, 'Oui, j\'ai quelque chose à signaler'));
+  filterBtns.appendChild(h('button', {
+   style: 'flex:1;padding:14px;background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer',
+   onclick: function() { S.muscuMedical = { done: true }; S.sStep = 16; if (window.saveProfile) window.saveProfile(); window.render(); }
+  }, 'Non, je suis en bonne santé'));
+  filterCard.appendChild(filterBtns);
+  p.appendChild(filterCard);
+  return; // Don't show the full medical form
+ }
+ // S._muscuMedicalExpanded = true → show full form (existing code runs normally)
+
  // ─── Section 1 : Zones douloureuses ───
  p.appendChild(h('div', {'class': 'section-label'}, 'Avez-vous des douleurs ou fragilités ?'));
 
@@ -1212,6 +1231,25 @@ function renderMuscuMedicalQ(p) {
 
 // ─── STEP 16: QUESTIONNAIRE CHARGES ───
 function renderChargesQuestionnaire(p) {
+ // For beginners who have never trained: replace with reassurance card
+ if (S.sportLevel === 'beginner' || !S.sportLevel) {
+  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
+  p.appendChild(h('h1', {html: 'Prêt\u00b7e à<br><em>commencer ?</em>'}));
+  var reassureCard = h('div', {style: 'background:rgba(26,74,26,0.04);border-left:3px solid #1A4A1A;padding:16px;margin-bottom:24px;border-radius:0 2px 2px 0'});
+  reassureCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, 'Vous débutez ? C\'est parfait.'));
+  reassureCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, 'Pas besoin de connaître vos charges. Nous utilisons votre poids de corps comme référence de départ et adaptons progressivement.'));
+  reassureCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey)'}, '💡 Vous pourrez entrer vos charges après vos 2 premières séances.'));
+  p.appendChild(reassureCard);
+  var contBtn = h('button', {
+   style: 'width:100%;padding:16px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
+   onclick: function() { S.sStep = 15; if (window.saveProfile) window.saveProfile(); window.render(); }
+  }, 'Continuer →');
+  p.appendChild(contBtn);
+  var backLink = h('div', {style: 'text-align:center;margin-top:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);cursor:pointer;text-decoration:underline', onclick: function(){ S.sStep = 20; window.render(); }}, '← Retour');
+  p.appendChild(backLink);
+  return;
+ }
+
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
  p.appendChild(h('h1', {html: '\u00c9valuation<br><em>des charges</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Renseignez vos charges actuelles pour adapter vos programmes. Indiquez la charge max pour 8-10 reps propres.'));
