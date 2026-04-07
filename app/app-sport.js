@@ -4923,7 +4923,10 @@ function renderMusculationProgram(p) {
       if (exo.rirTarget !== undefined) {
        var _rirColors = {0:'#5A1010', 1:'#5A1010', 2:'#6A4A1A', 3:'#6A4A1A', 4:'#1A4A1A'};
        var _rirC = _rirColors[exo.rirTarget] || '#6A4A1A';
-       _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + _rirC + ';margin-top:6px;padding:3px 8px;background:rgba(106,74,26,0.06);display:inline-block;border-radius:2px'}, 'RIR cible\u00a0: ' + exo.rirTarget + (exo.rirTarget === 0 ? ' \u2014 \u00e9chec' : exo.rirTarget === 1 ? ' \u2014 quasi-\u00e9chec' : exo.rirTarget === 2 ? ' \u2014 effort intense' : exo.rirTarget === 3 ? ' \u2014 mod\u00e9r\u00e9' : ' \u2014 l\u00e9ger')));
+       var _rirBadge = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + _rirC + ';margin-top:6px;padding:3px 8px;background:rgba(106,74,26,0.06);display:inline-block;border-radius:2px'});
+       _rirBadge.appendChild(termTooltip('RIR', 'Reps In Reserve — nombre de reps que vous pourriez encore faire avant l\'échec musculaire'));
+       _rirBadge.appendChild(h('span', {}, '\u00a0cible\u00a0: ' + exo.rirTarget + (exo.rirTarget === 0 ? ' \u2014 \u00e9chec' : exo.rirTarget === 1 ? ' \u2014 quasi-\u00e9chec' : exo.rirTarget === 2 ? ' \u2014 effort intense' : exo.rirTarget === 3 ? ' \u2014 mod\u00e9r\u00e9' : ' \u2014 l\u00e9ger')));
+       _exCard.appendChild(_rirBadge);
       }
       _sfcSection.appendChild(_exCard);
      });
