@@ -614,64 +614,74 @@ window.getPregnancySportWarning = getPregnancySportWarning;
 
 // ─── QUICK PROFILE (mode sport-seulement) ───
 function renderSportQuickProfile(p) {
-  var wrap = h('div', {style: 'display:flex;flex-direction:column;padding:40px 24px 32px'});
+  var wrap = h('div', {style: 'max-width:420px;margin:0 auto;padding:48px 20px 40px'});
 
-  // Eyebrow
-  wrap.appendChild(h('div', {'class': 'eyebrow'}, 'VOTRE PROFIL'));
-
-  // Georgia title
-  var titleEl = h('div', {style: 'font-family:Georgia,serif;font-size:24px;font-weight:300;font-style:italic;line-height:1.45;margin-bottom:32px'}, 'Quelques informations\npour personnaliser\nvotre programme.');
+  wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, 'VOTRE PROFIL'));
+  wrap.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black,#1A1A18);margin-bottom:20px'}));
+  var titleEl = h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;font-style:italic;line-height:1.45;margin-bottom:28px;color:var(--black,#1A1A18)'}, 'Quelques informations\npour personnaliser\nvotre programme.');
   titleEl.style.whiteSpace = 'pre-line';
   wrap.appendChild(titleEl);
 
   if (!S.sex) {
-    // ── Étape A : choix du sexe ──
-    wrap.appendChild(h('div', {'class': 'section-label'}, 'Votre sexe'));
-    var sexGrid = h('div', {'class': 'card-grid-2'});
+    // ── Étape A : choix du sexe — toggle buttons ──
+    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'Votre sexe'));
+    var sexRow = h('div', {style: 'display:flex;gap:8px'});
     [{label: 'Homme', val: 'homme'}, {label: 'Femme', val: 'femme'}].forEach(function(o) {
-      sexGrid.appendChild(h('div', {'class': 'sel-card' + (S.sex === o.val ? ' on' : ''), style: 'cursor:pointer;text-align:center', onclick: function() {
-        S.sex = o.val;
-        window.render();
-      }}, [
-        h('div', {'class': 'card-name'}, o.label)
-      ]));
+      var active = S.sex === o.val;
+      var btn = h('button', {
+        style: 'flex:1;height:48px;border:1px solid ' + (active ? 'var(--black,#1A1A18)' : 'var(--border,#E8E6DF)') + ';border-radius:2px;background:' + (active ? 'var(--black,#1A1A18)' : 'var(--ivory,#FAF9F6)') + ';color:' + (active ? '#FAF9F6' : 'var(--grey,#6B6B65)') + ';font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .15s ease;-webkit-tap-highlight-color:transparent',
+        onclick: function() { S.sex = o.val; window.render(); }
+      }, o.label);
+      sexRow.appendChild(btn);
     });
-    wrap.appendChild(sexGrid);
+    wrap.appendChild(sexRow);
 
   } else {
     // ── Étape B : âge + poids ──
-    wrap.appendChild(h('div', {'class': 'section-label'}, 'Votre âge'));
-    var ageWrap = h('div', {'class': 'num-input-wrap'});
-    ageWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '13', max: '90', inputmode: 'numeric',
+    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, 'Votre \u00e2ge'));
+    var ageInput = h('input', {
+      type: 'number', min: '13', max: '99', inputmode: 'numeric',
+      style: 'width:100%;height:48px;border:1px solid var(--border,#E8E6DF);background:var(--ivory,#FAF9F6);font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);padding:0 16px;box-sizing:border-box;border-radius:2px;outline:none;-webkit-appearance:none;',
       value: S.age ? String(S.age) : '',
-      placeholder: '25',
-      onchange: function() {
-        var v = parseInt(this.value);
-        if (!isNaN(v) && v >= 13 && v <= 90) { S.age = v; } else { this.value = S.age ? String(S.age) : ''; }
-      }
-    }));
-    wrap.appendChild(ageWrap);
+      placeholder: '25'
+    });
+    var ageErr = h('div', {style: 'font-size:11px;color:#8B2020;margin-top:4px;display:none'}, '');
+    ageInput.addEventListener('change', function() {
+      var v = parseInt(this.value);
+      if (!isNaN(v) && v >= 13 && v <= 99) { S.age = v; ageErr.style.display = 'none'; }
+      else { this.value = S.age ? String(S.age) : ''; ageErr.textContent = v < 13 ? '\u00c2ge entre 13 et 99 ans.' : 'Veuillez indiquer votre \u00e2ge.'; ageErr.style.display = 'block'; }
+    });
+    ageInput.addEventListener('focus', function() { setTimeout(function() { ageInput.scrollIntoView({behavior:'smooth', block:'center'}); }, 300); });
+    wrap.appendChild(ageInput);
+    wrap.appendChild(ageErr);
 
-    wrap.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, 'Votre poids (kg)'));
-    var weightWrap = h('div', {'class': 'num-input-wrap'});
-    weightWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '30', max: '300', step: '0.5', inputmode: 'decimal',
+    wrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:16px 0 8px'}, 'Votre poids (kg)'));
+    var weightInput = h('input', {
+      type: 'number', min: '30', max: '300', step: '0.5', inputmode: 'decimal',
+      style: 'width:100%;height:48px;border:1px solid var(--border,#E8E6DF);background:var(--ivory,#FAF9F6);font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);padding:0 16px;box-sizing:border-box;border-radius:2px;outline:none;-webkit-appearance:none;',
       value: S.weight ? String(S.weight) : '',
-      placeholder: '70',
-      onchange: function() {
-        var v = parseFloat(this.value);
-        if (!isNaN(v) && v >= 30 && v <= 300) { S.weight = v; } else { this.value = S.weight ? String(S.weight) : ''; }
-      }
-    }));
-    wrap.appendChild(weightWrap);
+      placeholder: '70'
+    });
+    var weightErr = h('div', {style: 'font-size:11px;color:#8B2020;margin-top:4px;display:none'}, '');
+    weightInput.addEventListener('change', function() {
+      var v = parseFloat(this.value);
+      if (!isNaN(v) && v >= 30 && v <= 300) { S.weight = v; weightErr.style.display = 'none'; }
+      else { this.value = S.weight ? String(S.weight) : ''; weightErr.textContent = 'Entre 30 et 300 kg.'; weightErr.style.display = 'block'; }
+    });
+    weightInput.addEventListener('focus', function() { setTimeout(function() { weightInput.scrollIntoView({behavior:'smooth', block:'center'}); }, 300); });
+    wrap.appendChild(weightInput);
+    wrap.appendChild(weightErr);
 
     var canContinue = !!(S.age && S.weight);
-    var btnContinue = h('button', {'class': 'btn-primary', style: 'margin-top:32px', disabled: !canContinue,
+    var btnContinue = h('button', {
+      style: 'width:100%;height:52px;margin-top:28px;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;transition:background .2s ease,color .2s ease;cursor:' + (canContinue ? 'pointer' : 'not-allowed') + ';background:' + (canContinue ? 'var(--black,#1A1A18)' : 'var(--border,#E8E6DF)') + ';color:' + (canContinue ? '#FAF9F6' : 'var(--grey,#6B6B65)') + ';',
+      disabled: !canContinue,
       onclick: function() {
         if (!S.age || !S.weight) return;
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         window.render();
       }
-    }, 'Continuer →');
+    }, 'Commencer');
     wrap.appendChild(btnContinue);
   }
 

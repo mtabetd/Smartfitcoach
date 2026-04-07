@@ -220,21 +220,26 @@ window.loadProfile = loadProfile;
 
 // ─── MODULE CHOICE SCREEN ───
 window.renderModuleChoice = function renderModuleChoice(content) {
- var c = h('div', {style: 'max-width:480px;margin:0 auto;padding:32px 16px'});
+ var c = h('div', {style: 'max-width:420px;margin:0 auto;padding:48px 20px 32px'});
 
- // Header
- var header = h('div', {style: 'text-align:center;margin-bottom:32px'});
- header.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;color:var(--grey,#9E9B93);margin-bottom:12px'}, 'SMARTFITCOACH'));
- header.appendChild(h('div', {style: 'border-top:1px solid var(--border,#E8E6DF);margin-bottom:24px'}));
- header.appendChild(h('h2', {style: 'font-family:Georgia,serif;font-style:italic;font-size:22px;font-weight:normal;margin:0 0 10px 0;color:var(--ink,#2C2A24)'}, 'Quel est votre objectif\u00a0?'));
- header.appendChild(h('p', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#9E9B93);margin:0'}, 'Personnalisez votre exp\u00e9rience selon vos besoins.'));
- c.appendChild(header);
+ // Header — staggered entrance animation
+ var eyebrowEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;text-align:center;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease'}, 'SMARTFITCOACH');
+ var dividerEl = h('div', {style: 'width:36px;height:1px;background:var(--black,#1A1A18);margin:0 auto 24px;opacity:0;transition:opacity .4s ease .08s'});
+ var titleEl = h('div', {style: 'font-family:Georgia,serif;font-style:italic;font-size:24px;font-weight:normal;line-height:1.35;margin-bottom:10px;color:var(--black,#1A1A18);opacity:0;transform:translateY(8px);transition:opacity .4s ease .08s,transform .4s ease .08s'}, 'Quel est votre\nobjectif\u00a0?');
+ titleEl.style.whiteSpace = 'pre-line';
+ var subtitleEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:32px;opacity:0;transform:translateY(6px);transition:opacity .35s ease .14s,transform .35s ease .14s'}, 'Personnalisez votre exp\u00e9rience selon vos besoins.');
+ c.appendChild(eyebrowEl);
+ c.appendChild(dividerEl);
+ c.appendChild(titleEl);
+ c.appendChild(subtitleEl);
 
- // Cards
- var cards = [
+ // Cards data — "both" shown first as recommended
+ var cardsData = [
    {
      title: 'Nutrition & Sport',
      desc: 'Programme alimentaire + entra\u00eenement complets',
+     badge: 'Recommand\u00e9',
+     delay: '.2s',
      onclick: function() {
        S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 0;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
@@ -244,6 +249,8 @@ window.renderModuleChoice = function renderModuleChoice(content) {
    {
      title: 'Nutrition',
      desc: 'Programme alimentaire personnalis\u00e9',
+     badge: null,
+     delay: '.26s',
      onclick: function() {
        S.appMode = 'nutrition'; S.view = 'nutrition'; S.nStep = 0;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
@@ -253,6 +260,8 @@ window.renderModuleChoice = function renderModuleChoice(content) {
    {
      title: 'Sport',
      desc: "Programme d'entra\u00eenement personnalis\u00e9",
+     badge: null,
+     delay: '.32s',
      onclick: function() {
        S.appMode = 'sport'; S.view = 'sport'; S.sStep = 0;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
@@ -261,19 +270,49 @@ window.renderModuleChoice = function renderModuleChoice(content) {
    }
  ];
 
- cards.forEach(function(card) {
+ cardsData.forEach(function(card) {
    var el = h('div', {
-     style: 'border:1px solid var(--border,#E8E6DF);padding:20px;margin-bottom:12px;cursor:pointer;background:var(--ivory2,#F5F4EF);',
+     style: 'border:1px solid var(--border,#E8E6DF);padding:20px;margin-bottom:10px;cursor:pointer;background:var(--ivory2,#F5F4EF);border-radius:2px;transition:border-color .18s ease,background .18s ease;min-height:72px;display:flex;align-items:center;justify-content:space-between;opacity:0;transform:translateY(10px);',
      onclick: card.onclick
    });
-   el.addEventListener('mouseenter', function() { el.style.background = 'var(--ivory,#FAF9F6)'; });
-   el.addEventListener('mouseleave', function() { el.style.background = 'var(--ivory2,#F5F4EF)'; });
-   el.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;color:var(--ink,#2C2A24);margin-bottom:6px'}, card.title));
-   el.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#9E9B93)'}, card.desc));
+   el.style.transition = 'border-color .18s ease,background .18s ease,opacity .35s ease ' + card.delay + ',transform .35s ease ' + card.delay;
+   el.addEventListener('mouseenter', function() { el.style.borderColor = 'var(--black,#1A1A18)'; el.style.background = 'var(--ivory,#FAF9F6)'; });
+   el.addEventListener('mouseleave', function() { el.style.borderColor = 'var(--border,#E8E6DF)'; el.style.background = 'var(--ivory2,#F5F4EF)'; });
+   el.addEventListener('touchstart', function() { el.style.background = 'var(--ivory,#FAF9F6)'; }, {passive: true});
+
+   var left = h('div', {});
+   left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;color:var(--black,#1A1A18);margin-bottom:4px'}, card.title));
+   left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, card.desc));
+   el.appendChild(left);
+
+   if (card.badge) {
+     var badge = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--black,#1A1A18);border:1px solid var(--black,#1A1A18);padding:3px 7px;white-space:nowrap;margin-left:12px;flex-shrink:0'}, card.badge);
+     el.appendChild(badge);
+   } else {
+     el.appendChild(h('div', {style: 'color:var(--grey,#6B6B65);font-size:16px;margin-left:12px;flex-shrink:0'}, '\u203a'));
+   }
+
    c.appendChild(el);
  });
 
+ // Footer note
+ c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-align:center;margin-top:20px;opacity:.7'}, 'Vous pourrez modifier ce choix plus tard.'));
+
  content.appendChild(c);
+
+ // Trigger entrance animations after paint
+ requestAnimationFrame(function() {
+   requestAnimationFrame(function() {
+     [eyebrowEl, dividerEl, titleEl, subtitleEl].forEach(function(el) {
+       el.style.opacity = '1';
+       el.style.transform = 'translateY(0)';
+     });
+     c.querySelectorAll('[style*="opacity:0"]').forEach(function(el) {
+       el.style.opacity = '1';
+       el.style.transform = 'translateY(0)';
+     });
+   });
+ });
 };
 
 // ─── MAIN RENDER ───
