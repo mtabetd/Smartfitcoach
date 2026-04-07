@@ -4448,6 +4448,7 @@ function renderMusculationProgram(p) {
  var savedStr = localStorage.getItem('mtd_muscu_strength_' + userId2);
  if (savedStr) { try { S.muscuStrengthProfile = JSON.parse(savedStr); } catch(e) {} }
  }
+ if (!S.muscuStrengthProfile || typeof S.muscuStrengthProfile !== 'object' || Array.isArray(S.muscuStrengthProfile)) S.muscuStrengthProfile = {};
 
  // Bridge crossfit1RM → muscuStrengthProfile for powerlifters/strength athletes
  // If muscuStrengthProfile is empty but crossfit1RM has lifts, pre-populate from 1RM values.
@@ -4481,6 +4482,7 @@ function renderMusculationProgram(p) {
  if (!S.muscuSessionLog || typeof S.muscuSessionLog !== 'object' || Array.isArray(S.muscuSessionLog)) S.muscuSessionLog = {};
  var savedProg = localStorage.getItem('mtd_muscu_progression_' + userId3);
  if (savedProg) { try { S.muscuProgressionHistory = JSON.parse(savedProg); } catch(e) {} }
+ if (!S.muscuProgressionHistory || typeof S.muscuProgressionHistory !== 'object' || Array.isArray(S.muscuProgressionHistory)) S.muscuProgressionHistory = {};
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));

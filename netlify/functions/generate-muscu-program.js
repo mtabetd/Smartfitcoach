@@ -533,6 +533,10 @@ exports.handler = async function(event) {
   var userPrompt = buildUserPrompt(body.profile);
 
   try {
+    // Timeout 55s via AbortController (Netlify Functions timeout à 26s par défaut, Sonnet peut être lent)
+    var _genCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 55000) : null;
+
     var response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -545,8 +549,10 @@ exports.handler = async function(event) {
         max_tokens: MAX_TOKENS,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: userPrompt }]
-      })
+      }),
+      signal: _genCtrl ? _genCtrl.signal : undefined
     });
+    if (_genTimer) clearTimeout(_genTimer);
 
     if (!response.ok) {
       var errText = await response.text();
@@ -574,7 +580,11 @@ exports.handler = async function(event) {
       })
     };
   } catch (e) {
+    if (_genTimer) clearTimeout(_genTimer);
     console.error('[generate-muscu-program] fetch error:', e);
-    return { statusCode: 500, headers: headers, body: JSON.stringify({ error: 'Erreur interne serveur' }) };
+    var _errMsg = (e && e.name === 'AbortError')
+      ? 'La génération a pris trop de temps. Veuillez réessayer.'
+      : 'Erreur interne serveur';
+    return { statusCode: 500, headers: headers, body: JSON.stringify({ error: _errMsg }) };
   }
 };
