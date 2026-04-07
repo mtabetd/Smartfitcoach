@@ -4682,6 +4682,64 @@ function renderMusculationProgram(p) {
   p.appendChild(buildKcalCard(muscuKcal, muscuDur));
  }());
 
+ // ─── PRO PROGRAMS ACCESS (advanced/pro only) ───
+ if ((S.sportLevel === 'advanced' || S.sportLevel === 'pro') && window.NFC_PROGRAMS) {
+  var _nfcKeys = Object.keys(window.NFC_PROGRAMS);
+  if (_nfcKeys.length > 0) {
+   var _nfcSection = h('div', {style: 'margin-bottom:20px'});
+   _nfcSection.appendChild(h('div', {'class':'section-label'}, 'Programmes scientifiques (niveau avancé)'));
+   _nfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;line-height:1.5'}, 'Programmes périodisés basés sur la recherche (Schoenfeld, RP Hypertrophy). Sélectionnez un groupe musculaire pour une séance dédiée.'));
+
+   var _nfcGrid = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px'});
+   _nfcKeys.forEach(function(key) {
+    var prog = window.NFC_PROGRAMS[key];
+    if (!prog) return;
+    var _isActive = S._activeNfcProgram === key;
+    var _nfcBtn = h('button', {
+     style: 'padding:10px 8px;border:1px solid ' + (_isActive ? 'var(--accent,#1A4A1A)' : 'var(--border,#E8E6DF)') + ';background:' + (_isActive ? 'rgba(26,74,26,0.06)' : 'transparent') + ';border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--black,#1A1A18);text-align:center',
+     onclick: (function(_key, _active) { return function() {
+      S._activeNfcProgram = _active ? null : _key;
+      window.render();
+     }; })(key, _isActive)
+    }, prog.name || key);
+    _nfcGrid.appendChild(_nfcBtn);
+   });
+   _nfcSection.appendChild(_nfcGrid);
+
+   // If a program is selected, show its exercises for the current phase
+   if (S._activeNfcProgram && window.NFC_PROGRAMS[S._activeNfcProgram]) {
+    var _selProg = window.NFC_PROGRAMS[S._activeNfcProgram];
+    // Get current phase exercises (try: mass, force, shred based on S.sportGoals)
+    var _phaseKey = 'mass'; // default
+    if (S.sportGoals && S.sportGoals.indexOf('shred') !== -1) _phaseKey = 'shred';
+    else if (S.sportGoals && S.sportGoals.indexOf('force') !== -1) _phaseKey = 'force';
+    var _phaseExos = _selProg[_phaseKey] || _selProg[Object.keys(_selProg)[0]] || [];
+
+    if (_phaseExos && _phaseExos.exercises) _phaseExos = _phaseExos.exercises;
+    if (Array.isArray(_phaseExos) && _phaseExos.length > 0) {
+     _nfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, _selProg.name + ' — ' + _phaseKey));
+     if (_selProg.notes) {
+      _nfcSection.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-bottom:12px;line-height:1.6;border-left:2px solid var(--border);padding-left:10px'}, _selProg.notes));
+     }
+     _phaseExos.forEach(function(exo) {
+      var _exCard = h('div', {style: 'border:1px solid var(--border);padding:12px 14px;margin-bottom:8px;border-radius:2px'});
+      _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;margin-bottom:4px'}, exo.name || exo.n || ''));
+      _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'}, (exo.sets || '') + ' séries × ' + (exo.reps || '') + ' reps · Repos ' + (exo.rest || '90s')));
+      if (exo.technique) {
+       _exCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-top:6px;line-height:1.5'}, exo.technique));
+      }
+      if (exo.rirTarget !== undefined) {
+       _exCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6A4A1A;margin-top:4px'}, 'RIR cible : ' + exo.rirTarget + ' reps en réserve'));
+      }
+      _nfcSection.appendChild(_exCard);
+     });
+    }
+   }
+
+   p.appendChild(_nfcSection);
+  }
+ }
+
  // Day tabs
  var tabs = h('div', {'class': 'day-tabs'});
  S.sportProgram.forEach(function(day, i) {

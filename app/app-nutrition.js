@@ -2366,6 +2366,32 @@ function renderStep9(p) {
               if (window.openSaladComposer) window.openSaladComposer(slotKey);
             }
           }, 'Salade'));
+          var scanBtn = h('button', {
+            style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
+            onclick: function(e) {
+              e.stopPropagation();
+              S._addMealModalSlot = null;
+              S._plateScanSlot = slotKey;
+              S._plateScanResult = null;
+              S._plateScanError = null;
+              S._plateScanLoading = false;
+              window.render();
+            }
+          }, '\uD83D\uDCF8 Scanner');
+          choiceRow.appendChild(scanBtn);
+          var alimentBtn = h('button', {
+            style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
+            onclick: function(e) {
+              e.stopPropagation();
+              S._addMealModalSlot = null;
+              S._foodSearchSlot = slotKey;
+              S._foodSearchQuery = '';
+              S._foodSearchResults = null;
+              S._foodManualEntry = false;
+              window.render();
+            }
+          }, '\u270F\uFE0F Aliment');
+          choiceRow.appendChild(alimentBtn);
           sheet.appendChild(choiceRow);
           overlay.appendChild(sheet);
           var root = document.getElementById('app') || p;
@@ -2521,8 +2547,34 @@ function renderStep9(p) {
             if (window.openSaladComposer) window.openSaladComposer(slotKey);
           }
         }, 'Salade');
+        var btnScan = h('button', {
+          style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
+          onclick: function(e) {
+            e.stopPropagation();
+            S._addMealModalSlot = null;
+            S._plateScanSlot = slotKey;
+            S._plateScanResult = null;
+            S._plateScanError = null;
+            S._plateScanLoading = false;
+            window.render();
+          }
+        }, '\uD83D\uDCF8 Scanner');
+        var btnAliment = h('button', {
+          style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
+          onclick: function(e) {
+            e.stopPropagation();
+            S._addMealModalSlot = null;
+            S._foodSearchSlot = slotKey;
+            S._foodSearchQuery = '';
+            S._foodSearchResults = null;
+            S._foodManualEntry = false;
+            window.render();
+          }
+        }, '\u270F\uFE0F Aliment');
         choiceRow.appendChild(btnRecipe);
         choiceRow.appendChild(btnSalad);
+        choiceRow.appendChild(btnScan);
+        choiceRow.appendChild(btnAliment);
         sheet.appendChild(choiceRow);
         overlay.appendChild(sheet);
         var root = document.getElementById('app') || p;
