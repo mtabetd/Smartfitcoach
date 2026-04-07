@@ -2759,3 +2759,262 @@ select {
   background: rgba(26, 74, 26, 0.15);
   color: var(--black-1);
 }
+
+
+/* ============================================================
+   PREMIUM COMPONENT SYSTEM
+   Boutons · Cartes · Inputs · Badges · Progress · Tabs · Tooltips
+   Direction artistique : Figma · Linear · Stripe
+   ============================================================ */
+
+
+/* === BUTTONS PREMIUM === */
+
+.btn-primary {
+  letter-spacing: 0.15em;
+  font-size: 11px;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(10,10,9,0.12);
+  min-height: 52px;
+}
+.btn-primary:hover {
+  background: #0F2E0F;
+  box-shadow: 0 4px 16px rgba(10,10,9,0.18);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0) scale(0.99);
+  box-shadow: 0 1px 4px rgba(10,10,9,0.10);
+}
+.btn-primary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Bouton secondaire élégant */
+.btn-secondary {
+  background: transparent;
+  border: 1.5px solid var(--black-1, #1A1A18);
+  color: var(--black-1, #1A1A18);
+  min-height: 48px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 2px;
+  padding: 0 24px;
+}
+.btn-secondary:hover {
+  background: var(--black-1, #1A1A18);
+  color: var(--ivory-2, #FAF9F6);
+}
+
+/* Bouton ghost — texte seul */
+.btn-ghost {
+  background: transparent;
+  border: none;
+  color: var(--grey-2, #6B6B65);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  padding: 12px;
+  transition: color 0.15s ease;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.btn-ghost:hover { color: var(--black-1, #1A1A18); }
+
+
+/* === CARDS PREMIUM === */
+
+.card-premium {
+  background: var(--ivory-2, #FAF9F6);
+  border: 1px solid var(--border-main, #E8E6DF);
+  border-radius: 3px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(10,10,9,0.04);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card-premium:hover {
+  box-shadow: 0 4px 16px rgba(10,10,9,0.08);
+  transform: translateY(-1px);
+}
+
+/* Carte hero — pleine largeur avec accent */
+.card-hero {
+  background: var(--black-1, #1A1A18);
+  color: var(--ivory-2, #FAF9F6);
+  border-radius: 3px;
+  padding: 32px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.card-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--green-main, #1A4A1A), transparent);
+}
+
+/* Carte accent vert */
+.card-accent {
+  background: rgba(26,74,26,0.04);
+  border: 1px solid rgba(26,74,26,0.15);
+  border-left: 3px solid var(--green-main, #1A4A1A);
+  border-radius: 0 3px 3px 0;
+  padding: 16px 20px;
+}
+
+/* Carte warning */
+.card-warning {
+  background: rgba(106,74,26,0.04);
+  border: 1px solid rgba(106,74,26,0.15);
+  border-left: 3px solid #6A4A1A;
+  border-radius: 0 3px 3px 0;
+  padding: 16px 20px;
+}
+
+
+/* === INPUTS PREMIUM === */
+
+.input-premium {
+  width: 100%;
+  height: 52px;
+  border: 1px solid var(--border-main, #E8E6DF);
+  border-bottom: 2px solid var(--border-dark, #D0CEC7);
+  background: var(--ivory-1, #FDFCFA);
+  font-family: Georgia, serif;
+  font-size: 16px;
+  color: var(--black-1, #1A1A18);
+  padding: 0 16px;
+  box-sizing: border-box;
+  border-radius: 2px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  -webkit-appearance: none;
+}
+.input-premium:focus {
+  border-color: var(--green-main, #1A4A1A);
+  border-bottom-color: var(--green-main, #1A4A1A);
+  box-shadow: 0 2px 8px rgba(26,74,26,0.08);
+  background: #FFFFFF;
+}
+.input-premium::placeholder {
+  color: var(--grey-4, #AEAEA7);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+}
+
+
+/* === BADGES PREMIUM === */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 1px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.badge-green {
+  background: rgba(26,74,26,0.10);
+  color: var(--green-main, #1A4A1A);
+}
+.badge-dark {
+  background: var(--black-1, #1A1A18);
+  color: var(--ivory-2, #FAF9F6);
+}
+.badge-warm {
+  background: rgba(106,74,26,0.10);
+  color: #6A4A1A;
+}
+.badge-new {
+  background: var(--green-main, #1A4A1A);
+  color: white;
+  font-size: 8px;
+}
+
+
+/* === PROGRESS BARS LUXE === */
+
+.progress-bar-luxury {
+  height: 3px;
+  background: var(--border-main, #E8E6DF);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-bar-luxury .fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--black-1, #1A1A18);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.progress-bar-luxury.green .fill {
+  background: linear-gradient(90deg, var(--green-main, #1A4A1A), #2E6B2E);
+}
+
+/* Macro rings — amélioration de l'animation */
+.macro-ring-text {
+  font-family: Georgia, serif;
+  font-size: 11px;
+  font-style: italic;
+}
+
+
+/* === TABS LUXE === */
+
+.tabs-luxury {
+  display: flex;
+  border-bottom: 1px solid var(--border-main, #E8E6DF);
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 0;
+}
+.tabs-luxury::-webkit-scrollbar { display: none; }
+
+.tab-luxury {
+  flex-shrink: 0;
+  padding: 12px 20px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--grey-2, #6B6B65);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+  min-height: 44px;
+}
+.tab-luxury:hover { color: var(--black-1, #1A1A18); }
+.tab-luxury.active {
+  color: var(--black-1, #1A1A18);
+  border-bottom-color: var(--black-1, #1A1A18);
+}
+
+
+/* === TOOLTIPS PREMIUM === */
+
+[title] {
+  position: relative;
+  cursor: help;
+}
+.term-tooltip {
+  border-bottom: 1px dotted var(--grey-3, #8A8A83);
+  cursor: help;
+  transition: border-color 0.15s ease;
+}
+.term-tooltip:hover { border-bottom-color: var(--black-1, #1A1A18); }
