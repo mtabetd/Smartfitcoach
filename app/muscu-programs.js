@@ -2559,9 +2559,11 @@ function getAlternativeExercises(muscle, excludeName, maxCount) {
     ['quadriceps', 'quadriceps'], ['quad', 'quadriceps'], ['jambes', 'quadriceps'], ['cuisse', 'quadriceps'],
     ['ischio-jambiers', 'ischios'], ['ischios', 'ischios'], ['ischio', 'ischios'], ['hamstring', 'ischios'],
     ['fessier', 'fessiers'], ['glute', 'fessiers'], ['fesses', 'fessiers'],
-    ['soléaire', 'mollets'], ['solaire', 'mollets'], ['mollet', 'mollets'], ['calf', 'mollets'], ['calves', 'mollets'],
+    ['sol\u00e9aire', 'mollets'], ['solaire', 'mollets'], ['mollet', 'mollets'], ['calf', 'mollets'], ['calves', 'mollets'],
     ['grand droit', 'abdos'], ['oblique', 'abdos'], ['transverse', 'abdos'],
     ['abdo', 'abdos'], ['abdominaux', 'abdos'], ['core', 'abdos'],
+    ['trap\u00e8ze', 'trapezes'], ['trapeze', 'trapezes'], ['rhombo', 'trapezes'], ['shrug', 'trapezes'],
+    ['lombaire', 'lombaires'], ['\u00e9recteur', 'lombaires'], ['erecteur', 'lombaires'], ['bas du dos', 'lombaires'], ['lower back', 'lombaires'],
     ['bras', 'biceps']
   ];
   for (var ki = 0; ki < keyMap.length; ki++) {
