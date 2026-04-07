@@ -4079,7 +4079,7 @@ function calcSessionKcal(exercises, durationMin) {
 }
 
 function renderMusculationProgram(p) {
- if (!S.sportProgram || !S.sportProgram.length) {
+ if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) {
    S.sportProgram = generateSportProgram(); S.selectedSportDay = 0;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  }
@@ -4126,7 +4126,8 @@ function renderMusculationProgram(p) {
  // (plus fréquemment mise à jour que PROFILE_KEYS, qui peut être en retard)
  var userId3 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  var savedLog = localStorage.getItem('mtd_muscu_session_' + userId3);
- if (savedLog) { try { S.muscuSessionLog = JSON.parse(savedLog); } catch(e) {} }
+ if (savedLog) { try { S.muscuSessionLog = JSON.parse(savedLog); } catch(e) { S.muscuSessionLog = {}; } }
+ if (!S.muscuSessionLog || typeof S.muscuSessionLog !== 'object' || Array.isArray(S.muscuSessionLog)) S.muscuSessionLog = {};
  var savedProg = localStorage.getItem('mtd_muscu_progression_' + userId3);
  if (savedProg) { try { S.muscuProgressionHistory = JSON.parse(savedProg); } catch(e) {} }
 
@@ -4421,7 +4422,8 @@ function renderMusculationProgram(p) {
  });
  p.appendChild(tabs);
 
- // Current day
+ // Current day — bounds check
+ if (typeof S.selectedSportDay !== 'number' || S.selectedSportDay < 0 || S.selectedSportDay >= S.sportProgram.length) S.selectedSportDay = 0;
  var day = S.sportProgram[S.selectedSportDay];
  if (day) {
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus));
