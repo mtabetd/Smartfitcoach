@@ -1217,9 +1217,9 @@ function renderMuscuMedicalQ(p) {
  window.render();
  }}, 'Continuer \u2192'));
 
- // ─── Lien Passer ───
- var skipLink = h('div', {
- style: 'text-align:center;margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-decoration:underline;cursor:pointer',
+ // ─── Bouton Passer ───
+ var skipLink = h('button', {
+ style: 'width:100%;padding:14px;margin-top:12px;background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;min-height:48px',
  onclick: function(){
  S.muscuMedical.done = true;
  S.sStep = 16;
