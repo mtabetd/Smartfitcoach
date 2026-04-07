@@ -518,7 +518,7 @@
       joursDispo: S.muscuWeek ? Math.min(6, Math.max(2, S.sportDays || 4))
                               : (S.muscuFreq || S.sportFreq || S.sportDays || 4),
       dureeMaxSeance: S.muscuDuration || 60,
-      equipement: S.equipement || S.gymType || 'salle complète',
+      equipement: S.sportEquipment || S.equipement || S.gymType || 'salle complète',
       installations: Array.isArray(S.installations) && S.installations.length
         ? S.installations.map(function(id) {
             var found = INSTALLATIONS.filter(function(x) { return x.id === id; })[0];
