@@ -2298,7 +2298,7 @@ function renderStep9(p) {
   if (!S.weekPlan) { var _wk9 = generateWeek(); if (Array.isArray(_wk9) && _wk9.length > 0) S.weekPlan = _wk9; }
   // Guard: si weekPlan est toujours null après génération, afficher un message d'erreur
   if (!S.weekPlan) {
-    p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Génération du plan en cours… Veuillez compléter les étapes précédentes.'));
+    p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
     p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(8); }}, '\u2190 Retour aux résultats'));
     return;
   }
@@ -2459,21 +2459,21 @@ function renderStep9(p) {
         var reader = new FileReader();
         reader.onerror = function() {
           S._plateScanLoading = false;
-          S._plateScanError = 'Impossible de lire le fichier image. Réessayez.';
+          S._plateScanError = 'Impossible de lire ce fichier image. Vérifiez le format et réessayez.';
           window.render();
         };
         reader.onload = function(ev) {
           var dataUrl = ev.target && ev.target.result;
           if (!dataUrl || typeof dataUrl !== 'string' || dataUrl.indexOf(',') === -1) {
             S._plateScanLoading = false;
-            S._plateScanError = 'Lecture de l\'image échouée. Réessayez.';
+            S._plateScanError = 'La lecture de l\'image a échoué. Réessayez avec une autre photo.';
             window.render();
             return;
           }
           var b64 = dataUrl.split(',')[1];
           if (!b64) {
             S._plateScanLoading = false;
-            S._plateScanError = 'Format d\'image invalide. Réessayez.';
+            S._plateScanError = 'Format d\'image non pris en charge. Utilisez JPG ou PNG.';
             window.render();
             return;
           }
@@ -2499,7 +2499,7 @@ function renderStep9(p) {
           .catch(function(err) {
             if (_timer) clearTimeout(_timer);
             S._plateScanLoading = false;
-            S._plateScanError = (err && err.name === 'AbortError') ? 'Délai dépassé. Réessayez.' : 'Erreur réseau. Réessayez.';
+            S._plateScanError = (err && err.name === 'AbortError') ? 'L\u2019analyse a pris trop de temps. V\u00e9rifiez votre connexion et r\u00e9essayez.' : 'Connexion interrompue. V\u00e9rifiez votre r\u00e9seau et r\u00e9essayez.';
             window.render();
           });
         };
