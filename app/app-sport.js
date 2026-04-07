@@ -758,18 +758,18 @@ window.SPORT = {
 
  // Header with progress (only shown after step 0, not on intro pages)
  // sStep 20 = medical questionnaire (muscu pre-step), include it in progress
- if (S.sStep > 0 && S.sStep !== 15 && S.sStep !== 16) {
+ if (S.sStep > 0) {
  var hdr = h('header', {'class': 'header'});
  var sportLabel = S.sportType === 'crossfit' ? 'Cross Training' : S.sportType === 'running' ? 'Running' : S.sportType === 'hyrox' ? 'Hyrox' : S.sportType === 'padel' ? 'Padel' : S.sportType === 'golf' ? 'Golf' : S.sportType === 'triathlon' ? 'Triathlon / IRONMAN' : S.sportType === 'yoga' ? 'Yoga & Mobilit\u00e9' : S.sportType === 'cycling' ? 'Cyclisme' : S.sportType === 'calisthenics' ? 'Callisth\u00e9nie' : 'Musculation';
  hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>' + sportLabel + '</span>'}));
  var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
  // sStep 20 (medical) maps to display step 0 for musculation (shown as "Éval. médicale")
  var currentDisplay = S.sStep === 20 ? 0 : S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sportType === 'calisthenics' ? S.sStep - 23 : S.sStep;
- var stepLabel = S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : ('\u00c9tape ' + currentDisplay + ' / ' + totalSteps);
+ var stepLabel = S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? 'Éval. des charges' : S.sStep === 15 ? 'Programmes dédiés' : ('\u00c9tape ' + currentDisplay + ' / ' + totalSteps);
  hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
  p.appendChild(hdr);
  var pb = h('div', {'class': 'progress-bar'});
- var _pbPct = S.sStep === 20 ? 5 : (currentDisplay / totalSteps * 100);
+ var _pbPct = S.sStep === 20 ? 5 : S.sStep === 16 ? 15 : S.sStep === 15 ? 100 : (currentDisplay / totalSteps * 100);
  pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + _pbPct + '%'}));
  p.appendChild(pb);
  }
@@ -1118,7 +1118,7 @@ function renderMuscuMedicalQ(p) {
   }, 'Oui, j\'ai quelque chose à signaler'));
   filterBtns.appendChild(h('button', {
    style: 'flex:1;padding:14px;background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer',
-   onclick: function() { S.muscuMedical = { done: true }; S.sStep = 16; if (window.saveProfile) window.saveProfile(); window.render(); }
+   onclick: function() { S.muscuMedical = { done: true }; S.sStep = !S.sportLevel ? 2 : 16; if (window.saveProfile) window.saveProfile(); window.render(); }
   }, 'Non, je suis en bonne santé'));
   filterCard.appendChild(filterBtns);
   p.appendChild(filterCard);
@@ -1255,7 +1255,7 @@ function renderChargesQuestionnaire(p) {
   p.appendChild(reassureCard);
   var contBtn = h('button', {
    style: 'width:100%;padding:16px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
-   onclick: function() { S.sStep = 15; if (window.saveProfile) window.saveProfile(); window.render(); }
+   onclick: function() { S.sStep = 1; if (window.saveProfile) window.saveProfile(); window.render(); }
   }, 'Continuer →');
   p.appendChild(contBtn);
   var backLink = h('div', {style: 'text-align:center;margin-top:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);cursor:pointer;text-decoration:underline', onclick: function(){ S.sStep = 20; window.render(); }}, '← Retour');
@@ -4537,6 +4537,7 @@ function renderMusculationProgram(p) {
  }).join(' + ');
  // RPE Guide for beginners
  if (S.sportLevel === 'beginner' || !S.sportLevel) {
+  if (S.sportLevel === 'beginner' && S._rpeGuideExpanded === undefined) S._rpeGuideExpanded = true;
   var rpeWrap = h('div', {style: 'border:1px solid var(--border,#E8E6DF);margin-bottom:16px;border-radius:2px'});
   var rpeHeader = h('div', {
    style: 'display:flex;justify-content:space-between;align-items:center;padding:10px 14px;cursor:pointer;background:var(--ivory2,#F5F4F0)',
@@ -4766,15 +4767,30 @@ function renderMusculationProgram(p) {
    });
    _sfcSection.appendChild(_sfcGrid);
 
+   // C4: Phase selector buttons — Masse | Sèche | Force
+   var _phaseSelector = h('div', {style: 'display:flex;flex-direction:row;gap:8px;margin-bottom:16px'});
+   ['masse', 'seche', 'force'].forEach(function(ph) {
+    var _phLabels = {masse: 'Masse', seche: 'S\u00e8che', force: 'Force'};
+    var _phActive = (S._sfcPhase || 'masse') === ph;
+    var _phBtn = h('button', {
+     style: 'flex:1;min-height:44px;padding:8px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;' + (_phActive ? 'background:var(--accent,#1A4A1A);color:white;border:1px solid var(--accent,#1A4A1A)' : 'background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF)'),
+     onclick: (function(_ph) { return function() { S._sfcPhase = _ph; window.render(); }; })(ph)
+    }, _phLabels[ph]);
+    _phaseSelector.appendChild(_phBtn);
+   });
+   _sfcSection.appendChild(_phaseSelector);
+
    // If a program is selected, show its exercises for the current phase
    if (S._activeSfcProgram && window.SFC_PROGRAMS[S._activeSfcProgram]) {
     var _selProg = window.SFC_PROGRAMS[S._activeSfcProgram];
     // Human-readable program name: use .name if available, otherwise capitalize the key
     var _progDisplayName = _selProg.name || (S._activeSfcProgram.charAt(0).toUpperCase() + S._activeSfcProgram.slice(1).replace(/_/g, ' '));
-    // SFC_PROGRAMS uses French phase keys: masse / seche / force
-    var _phaseKey = 'masse'; // default
-    if (S.sportGoals && (S.sportGoals.indexOf('shred') !== -1 || S.sportGoals.indexOf('weightloss') !== -1)) _phaseKey = 'seche';
-    else if (S.sportGoals && (S.sportGoals.indexOf('force') !== -1 || S.sportGoals.indexOf('strength') !== -1)) _phaseKey = 'force';
+    // C4: use explicit _sfcPhase if set, otherwise derive from sportGoals
+    var _phaseKey = S._sfcPhase || 'masse';
+    if (!S._sfcPhase) {
+     if (S.sportGoals && (S.sportGoals.indexOf('shred') !== -1 || S.sportGoals.indexOf('weightloss') !== -1)) _phaseKey = 'seche';
+     else if (S.sportGoals && (S.sportGoals.indexOf('force') !== -1 || S.sportGoals.indexOf('strength') !== -1)) _phaseKey = 'force';
+    }
 
     // For force phase: consult SFC_PROGRAMS_FORCE first (separate object), then fall back
     var _phaseObj = null;
