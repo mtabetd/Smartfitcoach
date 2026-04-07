@@ -114,13 +114,31 @@ exports.handler = async function(event, context) {
     return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Champ image manquant ou invalide.' }) };
   }
 
-  // Vérifier la taille de l'image base64 (> 1MB avant décodage)
-  if (imageBase64.length > 1024 * 1024) {
+  // Extraire le type MIME et les données pures si format data URI (data:image/jpeg;base64,...)
+  var ALLOWED_MEDIA_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+  if (imageBase64.startsWith('data:')) {
+    var dataUriParts = imageBase64.split(',');
+    if (dataUriParts.length < 2) {
+      return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Format data URI invalide.' }) };
+    }
+    var mimeHeader = dataUriParts[0]; // "data:image/jpeg;base64"
+    var mimeMatch = mimeHeader.match(/^data:([^;]+);base64$/);
+    if (!mimeMatch) {
+      return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Format data URI invalide.' }) };
+    }
+    var extractedMime = mimeMatch[1];
+    if (ALLOWED_MEDIA_TYPES.indexOf(extractedMime) !== -1) {
+      mediaType = extractedMime;
+    }
+    imageBase64 = dataUriParts[1];
+  }
+
+  // Vérifier la taille de l'image base64 (> 1MB = 1048576 chars avant décodage)
+  if (imageBase64.length > 1048576) {
     return { statusCode: 413, headers: headers, body: JSON.stringify({ error: 'Image trop volumineuse. Max 1MB.' }) };
   }
 
   // Valider le type MIME
-  var ALLOWED_MEDIA_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
   if (ALLOWED_MEDIA_TYPES.indexOf(mediaType) === -1) {
     mediaType = 'image/jpeg';
   }
