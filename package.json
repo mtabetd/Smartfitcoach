@@ -6,7 +6,9 @@
     "start": "live-server app --port=3000 --host=0.0.0.0 --no-browser --entry-file=index.html"
   },
   "devDependencies": {
-    "live-server": "^1.2.2"
+    "@playwright/test": "^1.59.1",
+    "live-server": "^1.2.2",
+    "playwright": "^1.59.1"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.101.1",
