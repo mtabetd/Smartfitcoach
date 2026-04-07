@@ -721,10 +721,10 @@ function renderObjectif(p) {
 
  // ─── HERO CARTE GÉNÉRATEUR IA ───
  var heroCard = h('div', {style: 'border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.04);border-radius:2px;padding:20px 16px;margin-bottom:20px'});
- heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);font-weight:700;margin-bottom:14px'}, 'PROGRAMME IA 12 SEMAINES'));
- heroCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;line-height:1.25;margin-bottom:10px'}, 'Ton programme unique, généré par IA.'));
- heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Construit sur tes chiffres, tes blessures, ton objectif exact. Aucune ligne générique.'));
- var heroIaBtn = h('button', {id: 'hero-ia-btn', style: 'width:100%;padding:14px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2192 Créer mon programme IA');
+ heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent,#1A4A1A);font-weight:700;margin-bottom:14px'}, 'PROGRAMME SUR MESURE · 12 SEMAINES'));
+ heroCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;line-height:1.25;margin-bottom:10px'}, 'Ton programme unique, con\u00e7u pour toi.'));
+ heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Construit sur tes chiffres, tes blessures, ton objectif exact. Aucune ligne g\u00e9n\u00e9rique.'));
+ var heroIaBtn = h('button', {id: 'hero-ia-btn', style: 'width:100%;padding:14px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif'}, '\u2192 Cr\u00e9er mon programme');
  heroIaBtn.addEventListener('click', function() {
   if (typeof window.openMuscuProgramGenerator === 'function') {
    window.openMuscuProgramGenerator();
