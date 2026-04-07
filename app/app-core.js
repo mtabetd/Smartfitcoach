@@ -822,7 +822,7 @@ window.I18N = {
   dict: {
     fr: {
       // Navigation
-      'nav.dashboard': 'Tableau de bord',
+      'nav.dashboard': 'Bilan',
       'nav.nutrition': 'Nutrition',
       'nav.sport': 'Sport',
       'nav.scanner': 'Scanner',

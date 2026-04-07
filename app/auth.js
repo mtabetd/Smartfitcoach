@@ -212,6 +212,8 @@ function setLegacySession(user) {
       id: user.id,
       name: user.name,
       email: user.email,
+      nom: user.nom || '',
+      phone: user.phone || '',
       token: token,
       fingerprint: fingerprint,
       tokenIssuedAt: Date.now()
@@ -300,7 +302,7 @@ function _loadLegacySession() {
   if (isLegacySessionValid()) {
     var s = getLegacySession();
     if (s) {
-      _currentSession = { id: s.id, name: s.name, email: s.email };
+      _currentSession = { id: s.id, name: s.name, email: s.email, nom: s.nom || '', phone: s.phone || '' };
       console.log('[AUTH] Legacy session restored for:', s.email);
     }
   }
@@ -370,6 +372,10 @@ function _initAuth() {
     if (result.data && result.data.session && result.data.session.user) {
       _currentSession = _extractUser(result.data.session.user);
       console.log('[AUTH] Session restored for:', _currentSession.email);
+      if (window.S && _currentSession) {
+        if (_currentSession.nom   && !window.S.nom)   window.S.nom   = _currentSession.nom;
+        if (_currentSession.phone && !window.S.phone) window.S.phone = _currentSession.phone;
+      }
     }
   }).catch(function(err) {
     console.error('[AUTH] Supabase connection failed:', err);
@@ -461,9 +467,9 @@ function _fallbackLogin(email, password, startTime) {
 
     clearRateLimit(email);
     setLegacySession(user);
-    _currentSession = { id: user.id, name: user.name, email: user.email };
+    _currentSession = { id: user.id, name: user.name, email: user.email, nom: user.nom || '', phone: user.phone || '' };
     BLACKBOX.log('login', { email: email });
-    return { ok: true, user: { id: user.id, name: user.name, email: user.email } };
+    return { ok: true, user: { id: user.id, name: user.name, email: user.email, nom: user.nom || '', phone: user.phone || '' } };
   });
 
   return withTimingDelay(loginPromise, startTime);
