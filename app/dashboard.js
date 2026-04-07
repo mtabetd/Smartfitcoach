@@ -209,7 +209,8 @@ function renderWelcomeScreen(container) {
 
   /* Greeting */
   var now = new Date();
-  var greeting = greetingWord() + (user && user.name ? ', ' + firstName(user.name) : '');
+  var _greetName = (user && user.name ? firstName(user.name) : '') || (S.prenom || '');
+  var greeting = greetingWord() + (_greetName ? ', ' + _greetName : '');
   root.appendChild(h('h1', 'dash-greeting', greeting));
   var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
   root.appendChild(h('p', 'dash-date', dateStr));
@@ -321,7 +322,8 @@ window.DASHBOARD = {
     var now = new Date();
 
     /* ═══ GREETING ═══ */
-    var greeting = greetingWord() + (user && user.name ? ', ' + firstName(user.name) : '');
+    var _greetName2 = (user && user.name ? firstName(user.name) : '') || (S.prenom || '');
+    var greeting = greetingWord() + (_greetName2 ? ', ' + _greetName2 : '');
     root.appendChild(h('h1', 'dash-greeting', greeting));
     var dateStr = frenchDate(now).charAt(0).toUpperCase() + frenchDate(now).slice(1);
     root.appendChild(h('p', 'dash-date', dateStr));
