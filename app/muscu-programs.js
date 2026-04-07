@@ -2552,7 +2552,7 @@ function getAlternativeExercises(muscle, excludeName, maxCount) {
   var dbKey = null;
   var keyMap = [
     ['pectoraux', 'pectoraux'], ['poitrine', 'pectoraux'], ['chest', 'pectoraux'],
-    ['dos', 'dos'], ['dorsal', 'dos'], ['dorsaux', 'dos'], ['back', 'dos'], ['trapèze', 'dos'], ['trapeze', 'dos'],
+    ['dos', 'dos'], ['dorsal', 'dos'], ['dorsaux', 'dos'], ['back', 'dos'],
     ['épaule', 'epaules'], ['epaule', 'epaules'], ['deltoïde', 'epaules'], ['deltoid', 'epaules'], ['shoulder', 'epaules'],
     ['biceps', 'biceps'], ['brachial', 'biceps'],
     ['triceps', 'triceps'],
