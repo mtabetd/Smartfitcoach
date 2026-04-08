@@ -745,11 +745,9 @@ window.SPORT = {
    return;
  }
 
- // ─── INTERSTITIEL: si un programme existe et qu'on revient à l'étape 0 ───
+ // ─── Si programme existant → afficher directement la prog (plus d'interstitiel) ───
  if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
-   renderSportChoice(content);
-   p.appendChild(content);
-   return;
+   S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
  }
 
  // ─── CHECK BIEN-ÊTRE QUOTIDIEN (NON-BLOQUANT) ───
@@ -775,8 +773,22 @@ window.SPORT = {
  var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
  // sStep 20 (medical) maps to display step 0 for musculation (shown as "Éval. médicale")
  var currentDisplay = S.sStep === 20 ? 0 : S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sportType === 'calisthenics' ? S.sStep - 23 : S.sStep;
- var stepLabel = S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? 'Éval. des charges' : S.sStep === 15 ? 'Programmes dédiés' : ('\u00c9tape ' + currentDisplay + ' / ' + totalSteps);
- hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
+ var _progStep = _SPORT_PROGRAM_STEP[S.sportType] || 4;
+ var _isOnProgram = (S.sStep === _progStep || (S.sStep === 6 && S.cfCalendarOpen));
+ if (_isOnProgram) {
+   var _changeLink = h('button', {
+     style: 'background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);cursor:pointer;padding:0;',
+     onclick: function() {
+       S.sportType = null; S.sStep = 0;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       if (window.render) window.render();
+     }
+   }, 'Changer de sport');
+   hdr.appendChild(_changeLink);
+ } else {
+   var stepLabel = S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? '\u00c9val. des charges' : S.sStep === 15 ? 'Programmes d\u00e9di\u00e9s' : ('\u00c9tape ' + currentDisplay + ' / ' + totalSteps);
+   hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
+ }
  p.appendChild(hdr);
  var pb = h('div', {'class': 'progress-bar'});
  var _pbPct = S.sStep === 20 ? 5 : S.sStep === 16 ? 15 : S.sStep === 15 ? 100 : (currentDisplay / totalSteps * 100);
