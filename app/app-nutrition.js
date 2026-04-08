@@ -2304,7 +2304,7 @@ function renderStep9(p) {
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
   if (!S._nm && window.computeNutritionState) window.computeNutritionState(false);
-  if (!S.weekPlan) { var _wk9 = generateWeek(); if (Array.isArray(_wk9) && _wk9.length > 0) S.weekPlan = _wk9; }
+  if (!S.weekPlan || S.weekPlan.length < 7) { var _wk9 = generateWeek(); if (Array.isArray(_wk9) && _wk9.length === 7) S.weekPlan = _wk9; }
   // Guard: si weekPlan est toujours null après génération, afficher un message d'erreur
   if (!S.weekPlan) {
     p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
@@ -3229,10 +3229,12 @@ function renderModal(app) {
     }
     body.appendChild(sl);
     // Vérification cohérence macros : P×4 + G×4 + L×9 ≈ kcal affiché
-    var chk = prot * 4 + carbs * 4 + fats * 9;
+    var chk = (prot || 0) * 4 + (carbs || 0) * 4 + (fats || 0) * 9;
+    if (!isNaN(chk) && chk > 0) {
     var diffPctChk = kcal > 0 ? Math.abs((chk - kcal) / kcal * 100) : 0;
     var chkColor = diffPctChk <= 5 ? 'var(--green,#1A4A1A)' : 'var(--orange,#6A4A1A)';
     body.appendChild(h('div', {'class': 'macro-check', style: 'color:' + chkColor}, '\u2139\ufe0f \u00c9quivalent calorique macros : ' + chk + ' kcal' + (diffPctChk > 5 ? ' (\u00e9cart ' + Math.round(diffPctChk) + '% vs ' + kcal + ' kcal affich\u00e9)' : ' \u2713')));
+    }
     var expBtn = h('button', {'class': 'btn-primary', style: 'margin-top:12px;font-size:9px', onclick: function(e) { e.stopPropagation(); window.exportRecipePDF(r); }}, '\u21e9 Exporter cette recette en PDF');
     body.appendChild(expBtn);
     sheet.appendChild(body);
