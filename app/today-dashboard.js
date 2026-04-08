@@ -1714,7 +1714,7 @@ function renderCardSundayReview(S) {
   else if (seancesDone >= 1) motivMsg = 'Un début. La semaine prochaine, visez 3 séances.';
   else motivMsg = 'Pas de séance cette semaine. Recommencez dès demain !';
 
-  c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin:12px 0 0;font-style:italic;' }, motivMsg));
+  c.appendChild(h('p', { style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey);margin:12px 0 0;line-height:1.6;' }, motivMsg));
 
   // Bouton dismiss
   var dismissBtn = h('button', {

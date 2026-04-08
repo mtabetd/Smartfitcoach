@@ -740,7 +740,7 @@ function renderMiniChart(exerciseName, container) {
 
   // Wrapper
   var wrap = document.createElement('div');
-  wrap.style.cssText = 'padding:4px 8px;border-top:1px solid var(--border,#E8E6DF);background:var(--ivory2,#F5F3EE);';
+  wrap.style.cssText = 'padding:4px 8px;border-top:1px solid var(--border,#E8E6DF);background:var(--ivory2,#F4F4F0);';
 
   // Labels
   var labelsRow = document.createElement('div');
