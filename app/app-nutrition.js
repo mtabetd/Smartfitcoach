@@ -2567,6 +2567,11 @@ function renderNutritionCompletion(p) {
 
 // ─── STEP 9: PLANNING ───
 function renderStep9(p) {
+  // Show completion screen on first visit from results
+  if (S._showCompletionFirst) {
+    renderNutritionCompletion(p);
+    return;
+  }
   renderProgressBar(p, 12, 12);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, 'Planning'));
   p.appendChild(h('h1', {html: 'Votre<br><em>semaine</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
