@@ -378,7 +378,7 @@ function renderWelcomeBanner(S) {
   var sub = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin-top:4px;opacity:0.75;'
   });
-  sub.textContent = dateStr + ' \u00B7 Votre programme vous attend';
+  sub.textContent = dateStr + ' \u00B7 Ton programme t\'attend';
 
   banner.appendChild(greeting);
   banner.appendChild(sub);
@@ -401,8 +401,11 @@ function renderCardBonjour(S) {
   var eyebrow_el = eyebrow('AUJOURD\'HUI');
   c.appendChild(eyebrow_el);
 
+  // Salutation selon l'heure de la journée
+  var _hour = new Date().getHours();
+  var _greetWord = _hour >= 18 ? 'Bonsoir' : (_hour >= 12 ? 'Bon après-midi' : 'Bonjour');
   var title = h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;margin-bottom:4px;' });
-  title.textContent = 'Bonjour' + (firstName ? ', ' + firstName : '') + '.';
+  title.textContent = _greetWord + (firstName ? ', ' + firstName : '') + '.';
   c.appendChild(title);
 
   // Date permanente sous le titre
@@ -448,6 +451,14 @@ function renderCardMacros() {
   var totals = getTodayTotals();
   var macroTargets = getMacroTargets();
 
+  // ── Sport burn du jour ──
+  var _todayKey = new Date().toISOString().slice(0, 10);
+  var _S = window.S || {};
+  var _sportBurn = 0;
+  if (_S.sessionHistory && _S.sessionHistory[_todayKey] && _S.sessionHistory[_todayKey].kcalTotal > 0) {
+    _sportBurn = Math.round(_S.sessionHistory[_todayKey].kcalTotal);
+  }
+
   var c = card();
   c.appendChild(eyebrow('NUTRITION'));
   c.appendChild(cardTitle('Macros du jour'));
@@ -460,19 +471,33 @@ function renderCardMacros() {
   }, Math.round(totals.kcal) + ' / ' + Math.round(calorieTarget) + ' kcal'));
   c.appendChild(kcalRow);
 
-  // Calories restantes
-  var _remaining = Math.round(calorieTarget - totals.kcal);
+  // Sport burn badge (si séance validée aujourd'hui)
+  if (_sportBurn > 0) {
+    var _burnEl = document.createElement('div');
+    _burnEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:6px;font-weight:500;color:var(--green,#1A4A1A);';
+    _burnEl.textContent = '🏃 +' + _sportBurn + ' kcal brûlées (sport)';
+    c.appendChild(_burnEl);
+  }
+
+  // Calories restantes (nettes : target - mangé + brûlé)
+  var _netRemaining = Math.round(calorieTarget - totals.kcal + _sportBurn);
   var _remEl = document.createElement('div');
   _remEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:10px;font-weight:500;';
-  if (_remaining > 0) {
+  if (_sportBurn > 0) {
+    // Afficher la formule nette
+    _remEl.style.color = _netRemaining >= 0 ? 'var(--green,#1A4A1A)' : 'var(--orange,#6A4A1A)';
+    _remEl.textContent = _netRemaining >= 0
+      ? '⚡ ' + _netRemaining + ' kcal nettes restantes'
+      : '⚠ ' + Math.abs(_netRemaining) + ' kcal au-dessus (net sport)';
+  } else if (_netRemaining > 0) {
     _remEl.style.color = 'var(--green,#1A4A1A)';
-    _remEl.textContent = '⚡ ' + _remaining + ' kcal restantes';
-  } else if (_remaining === 0) {
+    _remEl.textContent = '⚡ ' + _netRemaining + ' kcal restantes';
+  } else if (_netRemaining === 0) {
     _remEl.style.color = 'var(--grey,#6B6B65)';
     _remEl.textContent = '✓ Objectif calorique atteint';
   } else {
     _remEl.style.color = 'var(--orange,#6A4A1A)';
-    _remEl.textContent = '⚠ ' + Math.abs(_remaining) + ' kcal au-dessus de l\'objectif';
+    _remEl.textContent = '⚠ ' + Math.abs(_netRemaining) + ' kcal au-dessus de l\'objectif';
   }
   c.appendChild(_remEl);
 
@@ -669,6 +694,15 @@ function renderCardStreak() {
     streakWrap.appendChild(flameEl);
     streakWrap.appendChild(streakInfo);
     c.appendChild(streakWrap);
+
+    // Message perte d'aversion — si streak ≥ 3 jours, rappelle l'enjeu
+    if (streak >= 3) {
+      var _lossMsg = h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange,#6A4A1A);margin-top:6px;margin-bottom:4px;font-weight:500;'
+      });
+      _lossMsg.textContent = 'Ne casse pas ta série de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' !';
+      c.appendChild(_lossMsg);
+    }
 
     // Streak freeze badge
     var _sfS = window.S || {};

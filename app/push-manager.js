@@ -51,7 +51,7 @@
         if (now < reminderTime) {
           var delay = reminderTime - now;
           setTimeout(function() {
-            window.SFCPushManager.showLocal('SmartFitCoach', 'Bonjour ! Comment vous sentez-vous aujourd\'hui ? Faites votre bilan en 30 secondes.', 'checkin');
+            window.SFCPushManager.showLocal('SmartFitCoach', 'Bonjour ! Comment tu te sens aujourd\'hui ? Fais ton bilan en 30 secondes.', 'checkin');
           }, delay);
         }
       }
@@ -62,12 +62,15 @@
       if (new Date() < eveningTime) {
         var eveningDelay = eveningTime - new Date();
         setTimeout(function() {
-          window.SFCPushManager.showLocal('SmartFitCoach', 'N\'oubliez pas de clôturer votre journal alimentaire pour aujourd\'hui.', 'journal');
+          window.SFCPushManager.showLocal('SmartFitCoach', 'N\'oublie pas de clôturer ton journal alimentaire pour aujourd\'hui.', 'journal');
         }, eveningDelay);
       }
 
       // Rappels repas
       this.scheduleMealReminders();
+
+      // Rappel comeback si inactif 3+ jours
+      this.scheduleInactivityCheck();
     },
 
     showLocal: function(title, body, tag) {
@@ -95,7 +98,7 @@
       if (now < lunch) {
         var lunchDelay = lunch - now;
         setTimeout(function() {
-          window.SFCPushManager.showLocal('SmartFitCoach', 'C\'est l\'heure du déjeuner — consultez votre plan repas.', 'meal-lunch');
+          window.SFCPushManager.showLocal('SmartFitCoach', 'C\'est l\'heure du déjeuner — consulte ton plan repas.', 'meal-lunch');
         }, lunchDelay);
       }
 
@@ -105,7 +108,7 @@
       if (now < dinner) {
         var dinnerDelay = dinner - now;
         setTimeout(function() {
-          window.SFCPushManager.showLocal('SmartFitCoach', 'Préparez votre dîner — votre recette vous attend.', 'meal-dinner');
+          window.SFCPushManager.showLocal('SmartFitCoach', 'Prépare ton dîner — ta recette t\'attend.', 'meal-dinner');
         }, dinnerDelay);
       }
     },
@@ -121,12 +124,47 @@
       if (now >= target) return; // Passé pour aujourd'hui
       var delay = target - now;
       setTimeout(function() {
-        window.SFCPushManager.showLocal('SmartFitCoach', 'C\'est l\'heure de votre séance ! Prêt à vous dépasser ?', 'workout-reminder');
+        window.SFCPushManager.showLocal('SmartFitCoach', 'C\'est l\'heure de ta séance ! Prêt à te dépasser ?', 'workout-reminder');
       }, delay);
     },
 
     notifyRestOver: function(exerciseName, setNum) {
       this.showLocal('Repos terminé !', (exerciseName ? exerciseName + ' — ' : '') + 'c\'est parti pour la série ' + (setNum || '') + ' !', 'rest-timer');
+    },
+
+    // Rappel comeback : si le streak a été mis à jour il y a 3+ jours, envoie une notification d'encouragement
+    scheduleInactivityCheck: function() {
+      var prefs = this.getPrefs();
+      if (!prefs.granted) return;
+      try {
+        var user = window.AUTH ? window.AUTH.getUser() : null;
+        if (!user) return;
+        var streakData = {};
+        try { streakData = JSON.parse(localStorage.getItem('mtd_streak_' + user.id) || '{}'); } catch(e) {}
+        var lastDate = streakData.lastDate;
+        if (!lastDate) return;
+        var today = new Date().toISOString().slice(0, 10);
+        var last = new Date(lastDate);
+        var diff = Math.floor((new Date(today) - last) / 86400000);
+        if (diff >= 3) {
+          // Inactif depuis 3+ jours — envoyer la notification maintenant (ou à 11h si avant 11h)
+          var now = new Date();
+          var notifTime = new Date(now);
+          notifTime.setHours(11, 0, 0, 0);
+          var streak = streakData.current || 0;
+          var msg = streak > 0
+            ? 'Tu n\'as pas encore agi aujourd\'hui. Ton streak de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' t\'attend — ne le laisse pas tomber !'
+            : 'Ça fait ' + diff + ' jours qu\'on ne t\'a pas vu. Reprends là où tu t\'es arrêté(e) — chaque action compte !';
+          if (now < notifTime) {
+            var notifDelay = notifTime - now;
+            setTimeout(function() {
+              window.SFCPushManager.showLocal('SmartFitCoach', msg, 'comeback');
+            }, notifDelay);
+          } else {
+            window.SFCPushManager.showLocal('SmartFitCoach', msg, 'comeback');
+          }
+        }
+      } catch(e) {}
     },
 
     // Notifications opt-in (configurables par l'utilisateur)

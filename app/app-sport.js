@@ -3196,7 +3196,12 @@ function renderCrossfitProgram(p) {
  return;
  }
  try {
- var ctx = new (window.AudioContext || window.webkitAudioContext)();
+ // Singleton AudioContext pour éviter de dépasser la limite navigateur (~6 instances)
+ if (!window._sfcWodAudioCtx) {
+   try { window._sfcWodAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { window._sfcWodAudioCtx = null; }
+ }
+ var ctx = window._sfcWodAudioCtx;
+ if (!ctx) return;
  if (ctx.state === 'suspended') ctx.resume();
  var now = ctx.currentTime;
  if (type === 'tick') {
@@ -6348,6 +6353,8 @@ function renderMusculationProgram(p) {
  kcalTotal: kcalRes.total
  });
  S.sessionCompleting = false; S._sessionDuration = null;
+ // Mise à jour du streak sur action réelle (séance validée)
+ if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
  window.BLACKBOX && window.BLACKBOX.log('session_done', {day: S.selectedSportDay, kcal: kcalRes.total, duration: realDur});
  window.render();
  }}, '\u2713 Valider la s\u00e9ance');
