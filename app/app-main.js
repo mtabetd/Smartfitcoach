@@ -368,9 +368,23 @@ function renderProfilePage(container) {
    if (!file) return;
    var reader = new FileReader();
    reader.onload = function(e) {
-     S.profilePhoto = e.target.result;
-     if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
-     if (window.render) window.render();
+     // Compresser via canvas (max 400px, qualité 0.75) pour éviter dépassement localStorage
+     var img = new Image();
+     img.onload = function() {
+       var maxSize = 400;
+       var w = img.width, _h = img.height;
+       if (w > maxSize || _h > maxSize) {
+         if (w > _h) { _h = Math.round(_h * maxSize / w); w = maxSize; }
+         else { w = Math.round(w * maxSize / _h); _h = maxSize; }
+       }
+       var canvas = document.createElement('canvas');
+       canvas.width = w; canvas.height = _h;
+       canvas.getContext('2d').drawImage(img, 0, 0, w, _h);
+       S.profilePhoto = canvas.toDataURL('image/jpeg', 0.75);
+       if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
+       if (window.render) window.render();
+     };
+     img.src = e.target.result;
    };
    reader.readAsDataURL(file);
  });
@@ -585,8 +599,9 @@ function render() {
  var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
 
  // Module choice — si l'utilisateur est connecté mais n'a pas encore choisi son mode
+ // Exception : la page profil reste accessible même sans appMode (pour choisir le mode)
  var _authUser = window.AUTH ? window.AUTH.getUser() : null;
- if (_authUser && !S.appMode && S.nStep === 0 && S.sStep === 0) {
+ if (_authUser && !S.appMode && S.nStep === 0 && S.sStep === 0 && S.view !== 'profil') {
    window.renderModuleChoice(content);
    wrap.appendChild(content);
    wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'Smart Fit Coach')]));

@@ -748,6 +748,7 @@ window.SPORT = {
  // ─── Si programme existant → afficher directement la prog (plus d'interstitiel) ───
  if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
    S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
+   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  }
 
  // ─── CHECK BIEN-ÊTRE QUOTIDIEN (NON-BLOQUANT) ───
