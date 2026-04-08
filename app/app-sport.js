@@ -2169,6 +2169,7 @@ function renderWellnessBanner(p) {
   S.todayWellness = { date: today, sleep: 3, muscles: 'courbatures', energy: 'moyen' };
   S._wellnessReminder = false;
   banner.style.display = 'none';
+  if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  });
  titleRow.appendChild(closeBtn);
  banner.appendChild(titleRow);
@@ -2249,6 +2250,8 @@ function renderWellnessBanner(p) {
   S.todayWellness = { date: today, sleep: wellnessState.sleep, muscles: wellnessState.muscles, energy: wellnessState.energy };
   S._wellnessReminder = false;
   banner.style.display = 'none';
+  if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+  if (window.render) { try { window.render(); } catch(e) {} }
  });
  banner.appendChild(confirmBtn);
 
