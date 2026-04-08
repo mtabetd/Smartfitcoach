@@ -1027,20 +1027,26 @@ function renderStep4(p) {
   warn.textContent = '\u26a0 Ces informations ne remplacent pas un avis m\u00e9dical. Consultez votre m\u00e9decin.';
   p.appendChild(warn);
 
-  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { goStep(5); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { window._s5page = 0; goStep(5); }}, window.t('onb.next')));
   p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
-// ─── STEP 5: HABITUDES ALIMENTAIRES ───
+// ─── STEP 5: HABITUDES ALIMENTAIRES (5a) + SUPPLÉMENTATION & ALCOOL (5b) ───
 function renderStep5(p) {
   if (!Array.isArray(S.allergies)) S.allergies = [];
   if (!Array.isArray(S.intolerances)) S.intolerances = [];
+  // Sub-page: 0 = habitudes, 1 = supplémentation + alcool
+  if (typeof window._s5page === 'undefined') window._s5page = 0;
+  var _page = window._s5page;
   var _prenomS5 = S.prenom || '';
   renderProgressBar(p, 5, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V'));
-  p.appendChild(h('h1', {html: (_prenomS5 ? _prenomS5 + ', quelles sont<br>' : 'Quelles sont<br>') + '<em>vos habitudes alimentaires\u00a0?</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Vos habitudes au quotidien pour un plan r\u00e9aliste et tenable.'));
-  if (window.TIPS) TIPS.renderTip(p, 'habits');
+
+  if (_page === 0) {
+    // ── 5a: Habitudes ──
+    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V · a \u00b7 Habitudes'));
+    p.appendChild(h('h1', {html: (_prenomS5 ? _prenomS5 + ', quelles sont<br>' : 'Quelles sont<br>') + '<em>vos habitudes alimentaires\u00a0?</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+    p.appendChild(h('p', {'class': 'subtitle'}, 'Vos habitudes au quotidien pour un plan r\u00e9aliste et tenable.'));
+    if (window.TIPS) TIPS.renderTip(p, 'habits');
 
   // Nombre de repas par jour (MANDATORY)
   var mealsLabel = h('div', {'class': 'section-label'});
@@ -1125,8 +1131,22 @@ function renderStep5(p) {
   });
   p.appendChild(hydWrap);
 
+  // ── Page 0 buttons: continue to page 5b, back to step 4 ──
+  var _canContinue5a = S.mealsPerDay !== null && S.eatingLocation !== null && S.mealPrepTime !== null;
+  p.appendChild(h('div', {style: 'height:24px'}));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_canContinue5a, onclick: function() {
+    if (_canContinue5a) { window._s5page = 1; window.render(); }
+  }}, 'Continuer \u2192 Suppl\u00e9ments & Alcool'));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
+
+  } else {
+    // ── 5b: Supplémentation + Alcool ──
+    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V · b \u00b7 Suppl\u00e9ments'));
+    p.appendChild(h('h1', {html: 'Suppl\u00e9mentation<br><em>& consommation d\u2019alcool</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+    p.appendChild(h('p', {'class': 'subtitle'}, 'Ces informations ajustent votre bilan calorique total.'));
+
   // Divider: Supplémentation
-  var suppDiv = h('div', {'class': 'divider', style: 'margin:28px 0 18px'});
+  var suppDiv = h('div', {'class': 'divider', style: 'margin:0 0 18px'});
   suppDiv.appendChild(h('div', {'class': 'divider-line'}));
   suppDiv.appendChild(h('div', {'class': 'divider-text'}, 'Suppl\u00e9mentation'));
   suppDiv.appendChild(h('div', {'class': 'divider-line'}));
@@ -1309,17 +1329,17 @@ function renderStep5(p) {
   }
   } // end else (non-pregnant alcohol section)
 
-  // Devise fixée en MAD
-
   p.appendChild(h('div', {style: 'height:24px'}));
-  var canContinue = S.mealsPerDay !== null && S.eatingLocation !== null && S.mealPrepTime !== null && S.alcoholFreq !== null;
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !canContinue, onclick: function() {
-    if (canContinue) {
+  var canContinue5b = S.alcoholFreq !== null;
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !canContinue5b, onclick: function() {
+    if (canContinue5b) {
       bb('nutrition_habits', {meals: S.mealsPerDay, location: S.eatingLocation, prepTime: S.mealPrepTime, alcoholFreq: S.alcoholFreq});
+      window._s5page = 0;
       goStep(6);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+  } // end _page === 1
 }
 
 // ─── STEP 6: OBJECTIF ───

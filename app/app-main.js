@@ -539,6 +539,38 @@ function renderProfilePage(container) {
    });
    _sheet.appendChild(_ggWrap);
 
+   // Macro diff: before → after (only when a different goal is selected)
+   if (S._modalGoal !== null && S._modalGoal !== S.goal && window.calcTarget && window.calcMacros) {
+     try {
+       var _beforeCal = window.calcTarget();
+       var _beforeMacros = window.calcMacros();
+       var _origGoalDiff = S.goal;
+       S.goal = S._modalGoal;
+       var _afterCal = window.calcTarget();
+       var _afterMacros = window.calcMacros();
+       S.goal = _origGoalDiff;
+       if (_beforeCal > 0 && _afterCal > 0) {
+         var _diffCal = _afterCal - _beforeCal;
+         var _diffProt = Math.round(_afterMacros.p - _beforeMacros.p);
+         var _diffBox = h('div', {style: 'border:1px solid var(--border);padding:12px 14px;margin-bottom:16px;background:var(--ivory2,#F5F3EC);'});
+         _diffBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px;'}, 'Impact sur vos plans'));
+         var _diffRow = h('div', {style: 'display:flex;justify-content:space-between;gap:12px;'});
+         // Calories col
+         var _calCol = h('div', {style: 'flex:1;text-align:center;'});
+         _calCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;'}, _afterCal + ' kcal'));
+         _calCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + (_diffCal > 0 ? '#2A6E2A' : _diffCal < 0 ? '#8B1A1A' : 'var(--grey)') + ';margin-top:2px;'}, (_diffCal > 0 ? '+' : '') + _diffCal + ' kcal'));
+         // Protein col
+         var _protCol = h('div', {style: 'flex:1;text-align:center;border-left:1px solid var(--border);padding-left:12px;'});
+         _protCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;'}, Math.round(_afterMacros.p) + 'g prot.'));
+         _protCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + (_diffProt > 0 ? '#2A6E2A' : _diffProt < 0 ? '#8B1A1A' : 'var(--grey)') + ';margin-top:2px;'}, (_diffProt > 0 ? '+' : '') + _diffProt + 'g'));
+         _diffRow.appendChild(_calCol);
+         _diffRow.appendChild(_protCol);
+         _diffBox.appendChild(_diffRow);
+         _sheet.appendChild(_diffBox);
+       }
+     } catch(e) {}
+   }
+
    // Target weight (conditional)
    var _selGoalObj = (_GOALS && S._modalGoal !== null && S._modalGoal !== undefined) ? _GOALS[S._modalGoal] : null;
    var _selGoalKey = _selGoalObj ? _selGoalObj.key : null;
@@ -610,13 +642,34 @@ function renderProfilePage(container) {
        delete S._modalTargetWeight;
        S._goalModal = false;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
-       // Toast
+       // Toast actionnable : régénérer les plans directement
        try {
          var _toast = document.createElement('div');
-         _toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;padding:10px 20px;z-index:10000;white-space:nowrap;border-radius:2px;';
-         _toast.textContent = '\u2713 Objectif mis \u00e0 jour \u00b7 Plans \u00e0 reg\u00e9n\u00e9rer';
+         _toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;padding:12px 16px;z-index:10000;border-radius:2px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+         var _toastTxt = document.createElement('span');
+         _toastTxt.textContent = '\u2713 Objectif mis \u00e0 jour';
+         _toast.appendChild(_toastTxt);
+         var _regenBtn = document.createElement('button');
+         _regenBtn.style.cssText = 'background:var(--ivory,#FAF9F6);color:#0A0A09;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;cursor:pointer;border-radius:1px;white-space:nowrap;';
+         _regenBtn.textContent = 'Reg\u00e9n\u00e9rer \u2192';
+         _regenBtn.onclick = function() {
+           try {
+             if (window.computeNutritionState) window.computeNutritionState(false);
+             if (window.generateWeek) {
+               var _wk = window.generateWeek();
+               if (Array.isArray(_wk) && _wk.length > 0) {
+                 window.S.weekPlan = _wk;
+                 window.S._weekPlanGeneratedAt = new Date().toISOString();
+               }
+             }
+             if (window.saveProfile) window.saveProfile();
+           } catch(e2) {}
+           if (_toast.parentNode) _toast.parentNode.removeChild(_toast);
+           if (window.render) window.render();
+         };
+         _toast.appendChild(_regenBtn);
          document.body.appendChild(_toast);
-         setTimeout(function() { if (_toast.parentNode) _toast.parentNode.removeChild(_toast); }, 2800);
+         setTimeout(function() { if (_toast.parentNode) _toast.parentNode.removeChild(_toast); }, 6000);
        } catch(e) {}
        if (window.render) window.render();
      }

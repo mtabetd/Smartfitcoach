@@ -724,19 +724,54 @@ function renderCardSport() {
   var dayName = day.name || ('Séance ' + (idx + 1));
   var exCount = Array.isArray(day.exercises) ? day.exercises.length : 0;
 
+  // Estimated duration heuristic
+  var _estMins = exCount <= 0 ? null : (exCount <= 4 ? 30 : exCount <= 6 ? 45 : 60);
+
+  // Week progress: count logged sessions this week vs weekly target
+  var _weekDone = 0;
+  try {
+    var _log = S.muscuSessionLog || {};
+    var _now = new Date();
+    var _dow = (_now.getDay() + 6) % 7;
+    var _mon = new Date(_now); _mon.setDate(_now.getDate() - _dow);
+    for (var _di = 0; _di <= _dow; _di++) {
+      var _d = new Date(_mon); _d.setDate(_mon.getDate() + _di);
+      var _ds = _d.toISOString().slice(0, 10);
+      if (_log[_ds] && Object.keys(_log[_ds]).length > 0) _weekDone++;
+    }
+  } catch(e) {}
+  var _weekTarget = (S.trainingDaysSelected && S.trainingDaysSelected.length > 0) ? S.trainingDaysSelected.length : (S.sportDays || 3);
+
   var c = card();
   c.appendChild(eyebrow('SÉANCE DU JOUR'));
   c.appendChild(cardTitle('Entraînement'));
 
-  var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:' + (exCount > 0 ? '6px' : '12px') + ';' });
+  var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:6px;' });
   nameEl.textContent = 'Jour\u00a0' + (idx + 1) + '\u00a0\u2014\u00a0' + dayName;
   c.appendChild(nameEl);
 
+  // Stats row: exercices · durée · semaine
+  var _statsRow = h('div', { style: 'display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap;' });
   if (exCount > 0) {
-    var countEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey2,#9A9A90);margin-bottom:12px;letter-spacing:0.5px;' });
-    countEl.textContent = exCount + ' exercice' + (exCount > 1 ? 's' : '');
-    c.appendChild(countEl);
+    var _exEl = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey2,#9A9A90);letter-spacing:0.5px;' });
+    _exEl.textContent = exCount + ' ex.';
+    _statsRow.appendChild(_exEl);
   }
+  if (_estMins) {
+    var _sep1 = h('span', { style: 'font-size:9px;color:var(--border);' }, '\u00b7');
+    var _durEl = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey2,#9A9A90);' });
+    _durEl.textContent = '~' + _estMins + ' min';
+    _statsRow.appendChild(_sep1);
+    _statsRow.appendChild(_durEl);
+  }
+  if (_weekTarget > 0) {
+    var _sep2 = h('span', { style: 'font-size:9px;color:var(--border);' }, '\u00b7');
+    var _wkEl = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey2,#9A9A90);' });
+    _wkEl.textContent = _weekDone + '/' + _weekTarget + ' cette semaine';
+    _statsRow.appendChild(_sep2);
+    _statsRow.appendChild(_wkEl);
+  }
+  if (_statsRow.children.length > 0) c.appendChild(_statsRow);
 
   var btn = h('button', {
     style: 'padding:12px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
@@ -758,6 +793,37 @@ function renderCardRestDay(S) {
   var today = new Date().toISOString().slice(0, 10);
   var mood = (S.restDayMood && S.restDayMood.date === today) ? S.restDayMood.emoji : null;
 
+  // Adapt content by sport level
+  var _lvl = S.sportLevel || 'beginner';
+  if (_lvl !== 'intermediate' && _lvl !== 'advanced') _lvl = 'beginner';
+
+  var _restMsg = {
+    beginner:     'Les muscles se construisent au repos. Aujourd\u2019hui fait partie du plan.',
+    intermediate: 'La r\u00e9cup\u00e9ration est un entra\u00eenement. Vos fibres se reconstruisent plus fortes.',
+    advanced:     'La surcompensation se joue dans les 24\u201348h post-s\u00e9ance. Optimisez ce repos.'
+  }[_lvl];
+
+  var weightKg = (S && S.weight) ? parseFloat(S.weight) : 70;
+  var waterGoal = Math.round(weightKg * 0.033 * 10) / 10;
+
+  var _restTips = {
+    beginner: [
+      '\u2014 Marche l\u00e9g\u00e8re ou \u00e9tirements doux',
+      '\u2014 Hydratation\u00a0: objectif\u00a0' + waterGoal + '\u00a0L',
+      '\u2014 Sommeil\u00a07\u20139h cette nuit'
+    ],
+    intermediate: [
+      '\u2014 Foam roller \u00b7 10\u202fmin sur les groupes travaill\u00e9s',
+      '\u2014 Hydratation\u00a0: ' + waterGoal + '\u00a0L + \u00e9lectrolytes',
+      '\u2014 Sommeil\u00a08h \u00b7 optimisez les phases profondes'
+    ],
+    advanced: [
+      '\u2014 Contraste chaud\u2009/\u2009froid \u00b7 3 cycles de 2\u202fmin',
+      '\u2014 Hydratation\u00a0: ' + waterGoal + '\u00a0L + sodium post-effort',
+      '\u2014 Sommeil\u00a08\u20139h \u00b7 \u00e9vitez les \u00e9crans 1h avant'
+    ]
+  }[_lvl];
+
   var c = card('background:var(--ivory,#FAF9F6);border-color:var(--border);');
 
   // Header
@@ -766,19 +832,12 @@ function renderCardRestDay(S) {
 
   // Subtitle message
   var msgEl = h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--grey);margin-bottom:16px;line-height:1.6;' });
-  msgEl.textContent = 'Les muscles se construisent au repos. Aujourd\'hui fait partie du plan.';
+  msgEl.textContent = _restMsg;
   c.appendChild(msgEl);
 
   // Recovery tips
   var tipsWrap = h('div', { style: 'margin-bottom:16px;' });
-  var weightKg = (S && S.weight) ? parseFloat(S.weight) : 70;
-  var waterGoal = Math.round(weightKg * 0.033 * 10) / 10;
-  var tips = [
-    '\u2014 Marche légère ou étirements doux',
-    '\u2014 Hydratation\u00a0: objectif\u00a0' + waterGoal + '\u00a0L',
-    '\u2014 Sommeil\u00a07–9h cette nuit'
-  ];
-  tips.forEach(function(tip) {
+  _restTips.forEach(function(tip) {
     var tipEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);padding:4px 0;letter-spacing:0.3px;' });
     tipEl.textContent = tip;
     tipsWrap.appendChild(tipEl);
