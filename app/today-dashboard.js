@@ -636,6 +636,15 @@ function renderCardStreak() {
     streakWrap.appendChild(flameEl);
     streakWrap.appendChild(streakInfo);
     c.appendChild(streakWrap);
+
+    // Streak freeze badge
+    var _sfS = window.S || {};
+    if (_sfS.streakFreezeAvailable !== false) {
+      var _freezeTag = h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4A7A8A;border:1px solid #B0D4E0;background:rgba(176,212,224,0.15);padding:4px 10px;display:inline-block;margin-top:-4px;margin-bottom:8px;'
+      }, '\u2744 1 joker disponible');
+      c.appendChild(_freezeTag);
+    }
   }
 
   // ── Last badge block ──
