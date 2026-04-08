@@ -6019,11 +6019,11 @@ function renderMusculationProgram(p) {
  card.appendChild(setTable);
 
  // Mini sparkline historique — affiche les 8 dernières charges pour cet exercice
- if (window.PerfHistory && window.PerfHistory.renderMiniChart) {
+ if (window.PERF_HISTORY && window.PERF_HISTORY.renderMiniChart) {
    try {
      var _sparkContainer = document.createElement('div');
      _sparkContainer.style.cssText = 'margin-top:4px;';
-     window.PerfHistory.renderMiniChart(exRef.n, _sparkContainer);
+     window.PERF_HISTORY.renderMiniChart(exRef.n, _sparkContainer);
      if (_sparkContainer.children.length > 0) card.appendChild(_sparkContainer);
    } catch(e) {}
  }

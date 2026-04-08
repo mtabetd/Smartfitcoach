@@ -1665,7 +1665,7 @@ function renderCardSundayReview(S) {
     }
     // Calories depuis l'historique nutrition
     try {
-      var _ph = (window.PerfHistory && window.PerfHistory.loadNutritionHistory) ? window.PerfHistory.loadNutritionHistory() : [];
+      var _ph = (window.PERF_HISTORY && window.PERF_HISTORY.loadNutritionHistory) ? window.PERF_HISTORY.loadNutritionHistory() : [];
       var _dayNut = _ph.find(function(e){ return e.date === dateStr; });
       if (_dayNut && _dayNut.kcal > 0) weekKcalArr.push(_dayNut.kcal);
     } catch(e) {}
