@@ -70,7 +70,15 @@ var PROFILE_KEYS = [
  'appMode',
  'stress',
  'cfDeloadRecommended',
- 'sessionPostponed'
+ 'sessionPostponed',
+ // New keys
+ 'waist',
+ 'mealsLogged',
+ 'parqDone',
+ 'parqResult',
+ 'streakFreezeUsedMonth',
+ 'streakFreezeAvailable',
+ 'swapCount'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -208,6 +216,14 @@ function loadProfile() {
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
  // excluded is a string (comma-separated), not an array — guard separately
  if (typeof S.excluded !== 'string') S.excluded = '';
+ // New fields: safe defaults if not present
+ if (S.waist === undefined) S.waist = null;
+ if (S.mealsLogged === undefined) S.mealsLogged = {};
+ if (S.parqDone === undefined) S.parqDone = false;
+ if (S.parqResult === undefined) S.parqResult = null;
+ if (S.streakFreezeUsedMonth === undefined) S.streakFreezeUsedMonth = null;
+ if (S.streakFreezeAvailable === undefined) S.streakFreezeAvailable = 0;
+ if (S.swapCount === undefined) S.swapCount = 0;
  // Reset ephemeral UI state that should not persist across sessions
  S.shopListOpen = false;
  S.smoothieBarOpen = false;
@@ -456,15 +472,127 @@ function renderProfilePage(container) {
  });
  c.appendChild(modeSection);
 
- // ─── Modifier le profil ───
- var editBtn = h('button', {
-   style: 'display:block;width:100%;padding:14px;border:1px solid var(--black);background:var(--black);color:var(--ivory,#F8F6EF);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;',
-   onclick: function() {
-     S.view = 'nutrition'; S.nStep = 1;
-     if (window.render) window.render();
-   }
- }, 'Modifier mon profil');
- c.appendChild(editBtn);
+ // ─── Modifier le profil (in-place editor) ───
+ if (S._profileEdit) {
+   // In-place edit form
+   var editForm = h('div', {style: 'margin-bottom:28px;padding:20px;border:1px solid var(--border);background:var(--ivory2,#F5F3EC);'});
+   editForm.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'MODIFIER LE PROFIL'));
+
+   // Prénom
+   var _efPrenomLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, 'Prénom');
+   editForm.appendChild(_efPrenomLabel);
+   var _efPrenom = h('input', {
+     type: 'text', value: S.prenom || '',
+     placeholder: 'Votre prénom',
+     style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;margin-bottom:14px;',
+     oninput: function(e) { S.prenom = e.target.value; }
+   });
+   editForm.appendChild(_efPrenom);
+
+   // Poids
+   var _efPoidsLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, 'Poids (kg)');
+   editForm.appendChild(_efPoidsLabel);
+   var _efPoidsWrap = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:14px;'});
+   var _efPoids = h('input', {
+     type: 'number', min: '30', max: '300', step: '0.1',
+     value: S.weight ? String(S.weight) : '',
+     placeholder: '75',
+     style: 'flex:1;padding:10px 12px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;',
+     oninput: function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) S.weight = v; }
+   });
+   _efPoidsWrap.appendChild(_efPoids);
+   _efPoidsWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);'}, 'kg'));
+   editForm.appendChild(_efPoidsWrap);
+
+   // Taille
+   var _efTailleLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, 'Taille (cm)');
+   editForm.appendChild(_efTailleLabel);
+   var _efTailleWrap = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:14px;'});
+   var _efTaille = h('input', {
+     type: 'number', min: '120', max: '250', step: '1',
+     value: S.height ? String(S.height) : '',
+     placeholder: '175',
+     style: 'flex:1;padding:10px 12px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;',
+     oninput: function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) S.height = v; }
+   });
+   _efTailleWrap.appendChild(_efTaille);
+   _efTailleWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);'}, 'cm'));
+   editForm.appendChild(_efTailleWrap);
+
+   // Niveau d'activité
+   var _efActLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;'}, 'Niveau d\'activité');
+   editForm.appendChild(_efActLabel);
+   var _efActWrap = h('div', {style: 'display:flex;flex-direction:column;gap:6px;margin-bottom:14px;'});
+   var _allActivities = window.ACTIVITIES || [];
+   _allActivities.forEach(function(a, i) {
+     var _isAct = S.activity === i;
+     var _actItem = h('div', {
+       style: 'padding:10px 12px;border:1px solid ' + (_isAct ? 'var(--black)' : 'var(--border)') + ';background:' + (_isAct ? 'var(--black)' : 'transparent') + ';cursor:pointer;',
+       onclick: function() { S.activity = i; if (window.render) window.render(); }
+     });
+     _actItem.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:' + (_isAct ? 'var(--ivory,#FAF9F6)' : 'var(--black)') + ';'}, a.name + ' — ' + a.desc));
+     _efActWrap.appendChild(_actItem);
+   });
+   editForm.appendChild(_efActWrap);
+
+   // Régime alimentaire
+   var _efRegLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;'}, 'Régime alimentaire');
+   editForm.appendChild(_efRegLabel);
+   var _efRegWrap = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;'});
+   var _allRegimes = window.REGIMES || [];
+   _allRegimes.forEach(function(r, i) {
+     var _isReg = S.regime === i;
+     var _regChip = h('div', {
+       style: 'padding:8px 14px;border:1px solid ' + (_isReg ? 'var(--black)' : 'var(--border)') + ';background:' + (_isReg ? 'var(--black)' : 'transparent') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:' + (_isReg ? 'var(--ivory,#FAF9F6)' : 'var(--black)') + ';',
+       onclick: function() { S.regime = i; if (window.render) window.render(); }
+     }, r.name);
+     _efRegWrap.appendChild(_regChip);
+   });
+   editForm.appendChild(_efRegWrap);
+
+   // Halal checkbox
+   var _halalRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:18px;cursor:pointer;', onclick: function() { S.halal = !S.halal; if (window.render) window.render(); }});
+   var _halalBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.halal ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0;'});
+   if (S.halal) _halalBox.appendChild(h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;'}, '\u2713'));
+   _halalRow.appendChild(_halalBox);
+   _halalRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, 'Halal \u2014 exclure porc & alcool'));
+   editForm.appendChild(_halalRow);
+
+   // Save button
+   var _efSave = h('button', {
+     style: 'display:block;width:100%;padding:12px;border:none;background:var(--black);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:8px;',
+     onclick: function() {
+       // Invalidate weekPlan if nutrition-critical fields changed
+       S.weekPlan = null;
+       S._profileEdit = false;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
+       // Toast
+       try {
+         var _t = document.createElement('div');
+         _t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;padding:12px 20px;z-index:10000;border-radius:2px;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+         _t.textContent = '\u2713 Profil mis \u00e0 jour';
+         document.body.appendChild(_t);
+         setTimeout(function() { if (_t.parentNode) _t.parentNode.removeChild(_t); }, 2500);
+       } catch(ex) {}
+       if (window.render) window.render();
+     }
+   }, 'Enregistrer');
+   editForm.appendChild(_efSave);
+
+   // Cancel button
+   var _efCancel = h('button', {
+     style: 'display:block;width:100%;padding:12px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+     onclick: function() { S._profileEdit = false; if (window.render) window.render(); }
+   }, 'Annuler');
+   editForm.appendChild(_efCancel);
+   c.appendChild(editForm);
+ } else {
+   var editBtn = h('button', {
+     style: 'display:block;width:100%;padding:14px;border:1px solid var(--black);background:var(--black);color:var(--ivory,#F8F6EF);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;',
+     onclick: function() { S._profileEdit = true; if (window.render) window.render(); }
+   }, 'Modifier mon profil');
+   c.appendChild(editBtn);
+ }
 
  // ─── Changer l'objectif ───
  var changeGoalBtn = h('button', {
@@ -482,6 +610,54 @@ function renderProfilePage(container) {
    }
  }, 'Se déconnecter');
  c.appendChild(logoutBtn);
+
+ // ─── Zone de danger (RGPD) ───
+ c.appendChild(h('div', {style: 'margin-top:32px;padding-top:20px;border-top:1px solid var(--border);'}));
+ c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:14px;'}, 'DONNÉES PERSONNELLES'));
+
+ // Télécharger mes données
+ var downloadDataBtn = h('button', {
+   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);cursor:pointer;text-decoration:underline;display:block;margin-bottom:12px;',
+   onclick: function() {
+     try {
+       var data = {};
+       var exportKeys = ['prenom', 'sex', 'weight', 'height', 'age', 'goal', 'activity', 'medical', 'allergies', 'supplements', 'weekPlan', 'sportType', 'sportProgram', 'muscuSessionLog', 'weightHistory'];
+       exportKeys.forEach(function(k) { if (S[k] !== undefined) data[k] = S[k]; });
+       var blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+       var url = URL.createObjectURL(blob);
+       var a = document.createElement('a');
+       a.href = url; a.download = 'smartfitcoach-data.json';
+       document.body.appendChild(a); a.click();
+       document.body.removeChild(a);
+       URL.revokeObjectURL(url);
+     } catch(ex) { console.warn('[RGPD] download error', ex); }
+   }
+ }, 'Télécharger mes données');
+ c.appendChild(downloadDataBtn);
+
+ // Supprimer mon compte
+ var deleteAccountBtn = h('button', {
+   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#8B1A1A;cursor:pointer;display:block;',
+   onclick: function() {
+     var confirmed = window.confirm('Supprimer définitivement votre compte et toutes vos données ? Cette action est irréversible.');
+     if (!confirmed) return;
+     // 1. Vider localStorage
+     try {
+       Object.keys(localStorage).filter(function(k) { return k.startsWith('mtd_'); }).forEach(function(k) { localStorage.removeItem(k); });
+     } catch(ex) {}
+     // 2. Supprimer le compte Supabase si connecté
+     if (window.AUTH && window.AUTH.deleteAccount) {
+       window.AUTH.deleteAccount().then(function() { if (window.render) window.render(); });
+     } else if (window.AUTH && window.AUTH.logout) {
+       console.warn('[RGPD] AUTH.deleteAccount not available — logging out only');
+       window.AUTH.logout();
+     } else {
+       S.view = 'authLogin';
+       if (window.render) window.render();
+     }
+   }
+ }, 'Supprimer mon compte');
+ c.appendChild(deleteAccountBtn);
 
  container.appendChild(c);
 
