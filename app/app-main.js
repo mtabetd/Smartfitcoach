@@ -482,7 +482,7 @@ function render() {
  render._lock = true;
  try {
  if (window.destroyAllCharts) window.destroyAllCharts();
- if (AUTH.isLoggedIn()) saveProfile();
+ if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile();
  var app = document.getElementById('app');
  if (!app) { console.error('[render] #app not found'); return; }
 
@@ -1417,12 +1417,12 @@ if (window._verifyCriticalFunctions) {
 // ─── AUTOSAVE & BEFOREUNLOAD ───
 // Save on tab/browser close to avoid losing last unsaved state
 window.addEventListener('beforeunload', function() {
- try { if (AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
+ try { if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
  try { if (AUTH.isLoggedIn() && window.SupaSync) SupaSync.saveProfile(); } catch(e) {}
 });
 // Periodic autosave every 30s as safety net (render() already saves on interaction)
 setInterval(function() {
- try { if (AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
+ try { if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
 }, 30000);
 
 })();

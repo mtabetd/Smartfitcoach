@@ -213,7 +213,7 @@ function renderStep1(p) {
       value: S.prenom || '',
       placeholder: 'Sophie',
       style: 'width:100%;height:48px;border:1px solid var(--border,#E8E6DF);background:var(--ivory,#FAF9F6);font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);padding:0 16px;box-sizing:border-box;border-radius:2px;outline:none;-webkit-appearance:none;',
-      oninput: function(e) { S.prenom = e.target.value.trim(); }
+      oninput: function(e) { S.prenom = e.target.value.trim(); if (window._prenomSaveTimer) clearTimeout(window._prenomSaveTimer); window._prenomSaveTimer = setTimeout(function() { if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} } }, 500); }
     });
     _prenomInput.addEventListener('focus', function() { setTimeout(function() { _prenomInput.scrollIntoView({behavior:'smooth', block:'center'}); }, 300); });
     _prenomWrap.appendChild(_prenomInput);
