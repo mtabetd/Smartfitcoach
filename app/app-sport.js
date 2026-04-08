@@ -3919,13 +3919,15 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  _timerId = null;
  playBeep();
  // Notification locale si l'onglet est en arrière-plan
- if (document.hidden && ('Notification' in window) && Notification.permission === 'granted') {
+ if (document.hidden) {
    try {
+     if ('Notification' in window && Notification.permission === 'granted') {
      var _notifTitle = _state.isTransition ? 'Exercice suivant !' : 'Repos terminé !';
      var _notifBody = _state.isTransition
        ? ('Prêt pour\u00a0: ' + (_state.nextExercise || 'l\'exercice suivant'))
        : ('Série ' + _state.setNum + ' — c\'est parti !');
      new Notification(_notifTitle, { body: _notifBody, icon: '/icons/icon-192.png', tag: 'rest-timer', requireInteraction: false });
+     }
    } catch(e) {}
  }
  // Inter-série : auto-dismiss après le bip (pas d'interaction requise)
@@ -3988,13 +3990,15 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  _timerId = null;
  playBeep();
  // Notification locale si l'onglet est en arrière-plan
- if (document.hidden && ('Notification' in window) && Notification.permission === 'granted') {
+ if (document.hidden) {
    try {
+     if ('Notification' in window && Notification.permission === 'granted') {
      var _notifTitle = _state.isTransition ? 'Exercice suivant !' : 'Repos terminé !';
      var _notifBody = _state.isTransition
        ? ('Prêt pour\u00a0: ' + (_state.nextExercise || 'l\'exercice suivant'))
        : ('Série ' + _state.setNum + ' — c\'est parti !');
      new Notification(_notifTitle, { body: _notifBody, icon: '/icons/icon-192.png', tag: 'rest-timer', requireInteraction: false });
+     }
    } catch(e) {}
  }
  // Transition : afficher "Commencer" et attendre le clic

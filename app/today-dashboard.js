@@ -1654,6 +1654,7 @@ function renderCardSundayReview(S) {
   // Calculer les 7 derniers jours
   var seancesDone = 0;
   var weekKcalArr = [];
+  var _nutritionHistory = (window.PERF_HISTORY && window.PERF_HISTORY.loadNutritionHistory) ? window.PERF_HISTORY.loadNutritionHistory() : [];
   for (var d = 6; d >= 0; d--) {
     var dd = new Date(now); dd.setDate(dd.getDate() - d);
     var dateStr = dd.toISOString().slice(0, 10);
@@ -1667,7 +1668,7 @@ function renderCardSundayReview(S) {
     }
     // Calories depuis l'historique nutrition
     try {
-      var _ph = (window.PERF_HISTORY && window.PERF_HISTORY.loadNutritionHistory) ? window.PERF_HISTORY.loadNutritionHistory() : [];
+      var _ph = _nutritionHistory;
       var _dayNut = _ph.find(function(e){ return e.date === dateStr; });
       if (_dayNut && _dayNut.kcal > 0) weekKcalArr.push(_dayNut.kcal);
     } catch(e) {}
