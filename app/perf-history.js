@@ -686,6 +686,91 @@ function createRowTime(name, sub, delta, invertColors, periodLabel) {
   return row;
 }
 
+/* ─── MINI CHART (SVG Sparkline) ─── */
+function renderMiniChart(exerciseName, container) {
+  if (!exerciseName || !container) return;
+  var history = loadHistory('muscu_weights');
+  // Filter by exercise name (case-insensitive)
+  var exHistory = history.filter(function(e) {
+    return e.exercise && e.exercise.toLowerCase() === exerciseName.toLowerCase();
+  });
+  if (exHistory.length < 2) return; // Pas assez de données
+
+  // Prendre les 8 dernières entrées
+  exHistory = exHistory.slice(-8);
+
+  var weights = exHistory.map(function(e) { return e.weight || 0; });
+  var minW = Math.min.apply(null, weights);
+  var maxW = Math.max.apply(null, weights);
+  var rangeW = maxW - minW;
+
+  // Si toutes les charges sont identiques, afficher quand même
+  var svgW = 120, svgH = 28;
+  var pts = weights.map(function(w, i) {
+    var x = exHistory.length > 1 ? Math.round((i / (exHistory.length - 1)) * (svgW - 8)) + 4 : svgW / 2;
+    var y = rangeW > 0 ? Math.round(((maxW - w) / rangeW) * (svgH - 8)) + 4 : svgH / 2;
+    return x + ',' + y;
+  });
+
+  var ns = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 ' + svgW + ' ' + svgH);
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('height', '28');
+  svg.style.cssText = 'display:block;overflow:visible;';
+
+  // Ligne principale
+  var polyline = document.createElementNS(ns, 'polyline');
+  polyline.setAttribute('points', pts.join(' '));
+  polyline.setAttribute('fill', 'none');
+  polyline.setAttribute('stroke', 'var(--green,#1A4A1A)');
+  polyline.setAttribute('stroke-width', '1.5');
+  polyline.setAttribute('stroke-linecap', 'round');
+  polyline.setAttribute('stroke-linejoin', 'round');
+  svg.appendChild(polyline);
+
+  // Point final (le plus récent)
+  var lastPt = pts[pts.length - 1].split(',');
+  var dot = document.createElementNS(ns, 'circle');
+  dot.setAttribute('cx', lastPt[0]);
+  dot.setAttribute('cy', lastPt[1]);
+  dot.setAttribute('r', '3');
+  dot.setAttribute('fill', 'var(--green,#1A4A1A)');
+  svg.appendChild(dot);
+
+  // Wrapper
+  var wrap = document.createElement('div');
+  wrap.style.cssText = 'padding:4px 8px;border-top:1px solid var(--border,#E8E6DF);background:var(--ivory2,#F5F3EE);';
+
+  // Labels
+  var labelsRow = document.createElement('div');
+  labelsRow.style.cssText = 'display:flex;justify-content:space-between;align-items:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);margin-bottom:2px;letter-spacing:0.5px;';
+
+  var leftLabel = document.createElement('span');
+  var _dU = (window.UNITS && window.UNITS.displayWeight) ? window.UNITS.displayWeight : function(v) { return v + ' kg'; };
+  leftLabel.textContent = _dU(weights[0]);
+  labelsRow.appendChild(leftLabel);
+
+  var centerLabel = document.createElement('span');
+  centerLabel.style.textTransform = 'uppercase';
+  centerLabel.style.letterSpacing = '1px';
+  centerLabel.textContent = exHistory.length + ' séances';
+  labelsRow.appendChild(centerLabel);
+
+  var rightLabel = document.createElement('span');
+  var lastW = weights[weights.length - 1];
+  var prevW = weights.length > 1 ? weights[weights.length - 2] : lastW;
+  var delta = Math.round((lastW - prevW) * 10) / 10;
+  var deltaStr = delta > 0 ? '+' + delta + 'kg' : delta < 0 ? delta + 'kg' : '=' + lastW + 'kg';
+  rightLabel.style.color = delta > 0 ? 'var(--green,#1A4A1A)' : delta < 0 ? 'var(--orange,#6A4A1A)' : 'var(--grey,#6B6B65)';
+  rightLabel.textContent = _dU(lastW) + (delta !== 0 ? ' (' + deltaStr + ')' : '');
+  labelsRow.appendChild(rightLabel);
+
+  wrap.appendChild(labelsRow);
+  wrap.appendChild(svg);
+  container.appendChild(wrap);
+}
+
 /* ═══════════════════════════════════════════════════════════════
    PUBLIC API
    ═══════════════════════════════════════════════════════════════ */
@@ -708,7 +793,10 @@ window.PERF_HISTORY = {
   getHyroxDelta: getHyroxDelta,
   getNutritionDelta: getNutritionDelta,
   // Widget
-  renderProgressionWidget: renderProgressionWidget
+  renderProgressionWidget: renderProgressionWidget,
+  renderMiniChart: renderMiniChart,
+  // Nutrition history
+  loadNutritionHistory: function() { return loadHistory('nutrition'); }
 };
 
 })();

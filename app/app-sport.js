@@ -3918,6 +3918,16 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  clearInterval(_timerId);
  _timerId = null;
  playBeep();
+ // Notification locale si l'onglet est en arrière-plan
+ if (document.hidden && Notification && Notification.permission === 'granted') {
+   try {
+     var _notifTitle = _state.isTransition ? 'Exercice suivant !' : 'Repos terminé !';
+     var _notifBody = _state.isTransition
+       ? ('Prêt pour\u00a0: ' + (_state.nextExercise || 'l\'exercice suivant'))
+       : ('Série ' + _state.setNum + ' — c\'est parti !');
+     new Notification(_notifTitle, { body: _notifBody, icon: '/icons/icon-192.png', tag: 'rest-timer', requireInteraction: false });
+   } catch(e) {}
+ }
  // Inter-série : auto-dismiss après le bip (pas d'interaction requise)
  var _cb = _state.onComplete;
  _state.onComplete = null; // évite double-callback via stop()
@@ -3977,6 +3987,16 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  clearInterval(_timerId);
  _timerId = null;
  playBeep();
+ // Notification locale si l'onglet est en arrière-plan
+ if (document.hidden && Notification && Notification.permission === 'granted') {
+   try {
+     var _notifTitle = _state.isTransition ? 'Exercice suivant !' : 'Repos terminé !';
+     var _notifBody = _state.isTransition
+       ? ('Prêt pour\u00a0: ' + (_state.nextExercise || 'l\'exercice suivant'))
+       : ('Série ' + _state.setNum + ' — c\'est parti !');
+     new Notification(_notifTitle, { body: _notifBody, icon: '/icons/icon-192.png', tag: 'rest-timer', requireInteraction: false });
+   } catch(e) {}
+ }
  // Transition : afficher "Commencer" et attendre le clic
  // onComplete sera appelé par stop() quand l'utilisateur clique
  _updateUI();
@@ -5997,6 +6017,16 @@ function renderMusculationProgram(p) {
  })(exRef, isBodyweight, setData);
 
  card.appendChild(setTable);
+
+ // Mini sparkline historique — affiche les 8 dernières charges pour cet exercice
+ if (window.PerfHistory && window.PerfHistory.renderMiniChart) {
+   try {
+     var _sparkContainer = document.createElement('div');
+     _sparkContainer.style.cssText = 'margin-top:4px;';
+     window.PerfHistory.renderMiniChart(exRef.n, _sparkContainer);
+     if (_sparkContainer.children.length > 0) card.appendChild(_sparkContainer);
+   } catch(e) {}
+ }
 
  // ── NEXT EXERCISE NUDGE : shown when all sets are validated ──
  (function(_exRef, _exIdx2, _dayExercises2) {
