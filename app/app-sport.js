@@ -1722,7 +1722,7 @@ function renderCrossfitLevel(p) {
  // ─── SÉLECTEUR DE JOURS SPÉCIFIQUES ───
  if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:18px'}, 'Quels jours vous entraînez-vous\u00a0?'));
- var dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+ var dayLabels = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
  var dayBtnsWrap = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:10px 0'});
  var _selTarget = S.sportDays || 3;
  dayLabels.forEach(function(label, idx) {
@@ -3334,7 +3334,7 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; S.trainingDaysSelected = []; } },
+ oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) e.target.value = S.sportDays = 2; else if (v > 6) e.target.value = S.sportDays = 6; }
  }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
@@ -3345,7 +3345,7 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, 'Quels jours vous entra\u00eenez-vous\u00a0? (optionnel)'));
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, 'S\u00e9lectionnez vos jours pour adapter vos macros nutrition (entra\u00eenement vs repos).'));
  if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
- var _musDay = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+ var _musDay = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
  var _musDayWrap = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:0 0 6px'});
  var _musTarget = S.sportDays || 3;
  _musDay.forEach(function(label, idx) {

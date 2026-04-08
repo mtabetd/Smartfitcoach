@@ -613,7 +613,7 @@ function renderProfilePage(container) {
        try {
          var _toast = document.createElement('div');
          _toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;padding:10px 20px;z-index:10000;white-space:nowrap;border-radius:2px;';
-         _toast.textContent = '\u2713 Objectif mis \u00e0 jour \u00b7 Plans r\u00e9g\u00e9n\u00e9rer';
+         _toast.textContent = '\u2713 Objectif mis \u00e0 jour \u00b7 Plans \u00e0 reg\u00e9n\u00e9rer';
          document.body.appendChild(_toast);
          setTimeout(function() { if (_toast.parentNode) _toast.parentNode.removeChild(_toast); }, 2800);
        } catch(e) {}

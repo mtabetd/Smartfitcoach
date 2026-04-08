@@ -278,7 +278,27 @@ function renderCardNextMeal() {
   var S = window.S;
   if (!S || !Array.isArray(S.weekPlan) || S.weekPlan.length < 7) return null;
   var info = getNextMeal();
-  if (!info) return null; // rien à afficher (tous repas passés)
+
+  // Fallback soirée : tous les repas sont passés → afficher le premier repas de demain
+  if (!info) {
+    var mt2 = (S.mealTimes && typeof S.mealTimes === 'object') ? S.mealTimes : {};
+    var firstTime = mt2.breakfast || '08:00';
+    var tomorrowIdx = ((new Date().getDay() + 6 + 1) % 7);
+    var tomorrowData = S.weekPlan[tomorrowIdx] || {};
+    var tomorrowMeal = tomorrowData.breakfast;
+    if (!tomorrowMeal || !tomorrowMeal.n) return null;
+
+    var c2 = card('background:var(--ivory,#FAF9F6);opacity:0.85;');
+    c2.appendChild(eyebrow('DEMAIN'));
+    var t2Row = h('div', { style: 'display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;' });
+    t2Row.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:18px;' }, 'Petit-déjeuner'));
+    t2Row.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);' }, firstTime));
+    c2.appendChild(t2Row);
+    var n2 = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);' });
+    n2.textContent = tomorrowMeal.n + (tomorrowMeal.k ? '\u00a0\u00b7\u00a0' + Math.round(tomorrowMeal.k) + '\u00a0kcal' : '');
+    c2.appendChild(n2);
+    return c2;
+  }
 
   var meal = info.meal;
   var slot = info.slot;
@@ -764,7 +784,6 @@ function renderCardRestDay(S) {
     var moodBtn = h('button', {
       style: 'width:44px;height:44px;font-size:22px;border:1px solid ' + (isSelected ? 'var(--black)' : 'var(--border)') + ';background:' + (isSelected ? 'var(--black)' : 'transparent') + ';border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,background .15s;',
       onclick: function() {
-        if (!S.mealTimes || typeof S.mealTimes !== 'object') S.mealTimes = { breakfast: '08:00', lunch: '12:30', snack: '16:00', dinner: '19:30' };
         S.restDayMood = { date: today, emoji: emoji };
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         if (window.render) window.render();

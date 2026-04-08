@@ -935,7 +935,7 @@ function renderStep3(p) {
   p.appendChild(h('div', {'class': 'section-label'}, 'Vos jours d\u2019entra\u00eenement (optionnel)'));
   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, 'Pr\u00e9cisez quels jours vous vous entra\u00eenez pour adapter vos macros (jours\u00a0entra\u00eenement vs repos).'));
   if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
-  var _dayLabels3 = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+  var _dayLabels3 = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
   var _dayBtns3 = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:0 0 8px'});
   var _sportDayCount3 = S.sportDays || 3;
   _dayLabels3.forEach(function(label, idx) {
