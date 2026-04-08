@@ -606,20 +606,49 @@ function renderCardRepas() {
     }, (meal.k ? Math.round(meal.k) + ' kcal' : ''));
 
     var slotKey = slot.key;
+    var slotLabel2 = slot.label;
+    var mealRef = meal;
     var prisBtn = h('button', {
       style: isLogged
         ? 'background:var(--green,#1A4A1A);border:1px solid var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;'
         : 'background:transparent;border:1px solid var(--border);color:var(--grey);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;',
+      title: isLogged ? 'Cliquer pour d\u00e9cocher' : 'Marquer comme pris',
       onclick: function(e) {
         e.stopPropagation();
         S.mealsLogged = S.mealsLogged || {};
         var tk = new Date().toISOString().slice(0, 10);
         S.mealsLogged[tk] = S.mealsLogged[tk] || {};
-        S.mealsLogged[tk][slotKey] = true;
+        var wasLogged = S.mealsLogged[tk][slotKey] === true;
+        if (wasLogged) {
+          S.mealsLogged[tk][slotKey] = false;
+          if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.getToday) {
+            var entries = window.FOOD_JOURNAL.getToday();
+            for (var i = entries.length - 1; i >= 0; i--) {
+              if (entries[i].meal === slotKey && entries[i].source === 'plan') {
+                window.FOOD_JOURNAL.removeEntry(tk, i);
+                break;
+              }
+            }
+          }
+        } else {
+          S.mealsLogged[tk][slotKey] = true;
+          if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry && mealRef) {
+            window.FOOD_JOURNAL.addEntry(
+              slotKey,
+              mealRef.n || slotLabel2,
+              mealRef.k || 0,
+              mealRef.p || 0,
+              mealRef.g || 0,
+              mealRef.l || 0,
+              '1 portion',
+              'plan'
+            );
+          }
+        }
         if (window.saveProfile) window.saveProfile();
         if (window.render) window.render();
       }
-    }, '\u2713 Pris');
+    }, isLogged ? '\u2713 Pris' : 'Marquer pris');
 
     row.appendChild(left);
     row.appendChild(kcalEl);

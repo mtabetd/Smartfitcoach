@@ -30134,12 +30134,81 @@
    */
   // Normalise un nom d'ingrédient pour la clé d'agrégation liste de courses :
   // accents → ascii, singulier/pluriel → forme de base, minuscules.
+
+  // Synonymes → clé canonique (appliqués APRÈS normalisation accents/minuscules).
+  // Permet de fusionner les variantes d'un même ingrédient achetable.
+  var CANONICAL_ING = {
+    // Thon (conserves)
+    'thon naturel':            'thon',
+    'thon egrene':             'thon',
+    'thon en boite':           'thon',
+    'thon a l huile':          'thon',
+    'filet de thon':           'thon',
+    'thon en conserve':        'thon',
+    // Poulet
+    'blancs de poulet':        'blanc de poulet',
+    'filet de poulet':         'blanc de poulet',
+    'escalope de poulet':      'blanc de poulet',
+    'emince de poulet':        'blanc de poulet',
+    'poulet hache':            'blanc de poulet',
+    // Œufs
+    'oeuf entier':             'oeuf',
+    'gros oeuf':               'oeuf',
+    'oeuf moyen':              'oeuf',
+    // Huile d'olive
+    'huile olive':             'huile d olive',
+    'huile d olive vierge':    'huile d olive',
+    'huile d olive extra vierge': 'huile d olive',
+    // Miel
+    'miel liquide':            'miel',
+    'miel d acacia':           'miel',
+    'miel toutes fleurs':      'miel',
+    // Citron
+    'citron jaune':            'citron',
+    // Tomate
+    'tomate fraiche':          'tomate',
+    'tomates fraiches':        'tomate',
+    // Ail
+    'gousse d ail':            'ail',
+    'gousses d ail':           'ail',
+    'ail emince':              'ail',
+    // Oignon
+    'oignon blanc':            'oignon',
+    'oignon jaune':            'oignon',
+    // Gingembre
+    'gingembre frais':         'gingembre',
+    'gingembre rape':          'gingembre',
+    // Fromage / parmesan
+    'parmesan rape':           'parmesan',
+    'parmesan ripe':           'parmesan',
+    // Protéine en poudre
+    'whey proteine':           'whey',
+    'proteine whey':           'whey',
+    'proteine en poudre':      'whey',
+    // Sauce soja
+    'sauce soja salee':        'sauce soja',
+    'sauce soja sucree':       'sauce soja',
+  };
+
   function _normIngKey(name) {
-    return (name || '').trim().toLowerCase()
+    var n = (name || '').trim().toLowerCase()
       .replace(/[éèêë]/g,'e').replace(/[àâä]/g,'a').replace(/[îï]/g,'i')
       .replace(/[ùûü]/g,'u').replace(/[ôö]/g,'o').replace(/ç/g,'c')
       .replace(/œ/g,'oe').replace(/æ/g,'ae')
-      .replace(/s\s*$/, '');   // retirer le 's' final (pluriel → singulier)
+      .replace(/[''']/g,' ')   // normaliser les apostrophes en espace
+      .replace(/\s+/g,' ')     // normaliser les espaces multiples
+      .trim();
+
+    // Appliquer le mapping canonique en priorité
+    if (CANONICAL_ING[n]) return CANONICAL_ING[n];
+
+    // Supprimer le 's' final pour singulariser, SAUF :
+    // - mots courts (≤ 4 lettres) : "pois", "ras", etc.
+    // - mots se terminant par une voyelle + s : couscous, ananas, brocolis, tamaris...
+    if (n.length > 4 && !/[aeiou]s$/.test(n)) {
+      n = n.replace(/s$/, '');
+    }
+    return n;
   }
 
   // Normalise les unités d'affichage françaises vers les codes standards.
@@ -30330,10 +30399,18 @@
         : { qty: starG, unit: 'g' };
     }
 
-    // Conserves & bocaux → arrondir à la boîte de 400 g
+    // Conserves & bocaux → arrondir à la boîte selon le format standard
     if (cat === '🥫 Conserves & Bocaux') {
-      var cans = Math.max(1, Math.ceil(inG / 400));
-      return { qty: cans, unit: cans === 1 ? 'boîte' : 'boîtes' };
+      var canSize = 400; // défaut : tomates concassées, pois chiches, haricots...
+      var lname2 = (name || '').toLowerCase();
+      if (/thon|tuna/i.test(lname2))                                          canSize = 160; // boîte thon standard (Maroc/Europe)
+      else if (/sardine/i.test(lname2))                                       canSize = 125; // boîte sardines standard
+      else if (/maquereau|anchois/i.test(lname2))                             canSize = 125;
+      else if (/tomate.*concass|pulpe.*tomate|coulis/i.test(lname2))          canSize = 400;
+      else if (/pois chiche|haricots?\s+(rouge|blanc|noir|mungo)/i.test(lname2)) canSize = 400;
+      else if (/lentilles/i.test(lname2))                                     canSize = 400;
+      var cans2 = Math.max(1, Math.ceil(inG / canSize));
+      return { qty: cans2, unit: cans2 === 1 ? 'boîte' : 'boîtes' };
     }
 
     // Produits laitiers solides (hors lait géré côté liquide)
@@ -30428,12 +30505,12 @@
     var freqRatio = freqDays / 7; // ratio pour scaler les quantités
 
     var SHOP_SECTIONS = {
-      '🥩 Boucherie & Poissonnerie': /poulet|dinde|boeuf|bœuf|saumon|thon|crevette|cabillaud|maquereau|sardine|filet|blanc de|hachis|steak|viande|kefta|merguez|agneau|veau|moule/i,
+      '🥩 Boucherie & Poissonnerie': /poulet|dinde|boeuf|bœuf|saumon|crevette|cabillaud|filet|blanc de|hachis|steak|viande|kefta|merguez|agneau|veau|moule/i,
       '🥚 Œufs & Produits laitiers': /oeuf|œuf|yaourt|fromage|lait|beurre|crème fraîche|ricotta|parmesan|mozzarella|feta|skyr|mascarpone|cottage|kéfir/i,
       '🥦 Fruits & Légumes':         /courgette|tomate|épinard|carotte|oignon|ail|brocoli|poivron|chou|concombre|champignon|aubergine|céleri|salade|laitue|pousses|patate|avocat|citron|banane|mangue|fraise|myrtille|pomme|kiwi|ananas|raisin|pêche|poire|melon|pastèque|betterave|navet|poireau|fenouil|asperge|haricot vert|petit pois|maïs|roquette|mâche|cresson|bok choy|brocoli/i,
       '🌾 Féculents & Céréales':     /riz|pâtes|quinoa|flocons|avoine|soba|ramen|nouilles|couscous|semoule|lentilles|pois chiches|haricots|fèves|farine|pain|tortilla|pita|ciabatta|orge|épeautre|millet|sarrasin|boulgour|polenta/i,
       '🧊 Surgelés':                 /surgelé|congelé|frozen|açaï|edamame/i,
-      '🥫 Conserves & Bocaux':       /boîte|tomates concassées|conserve|bocal|naturel en boîte|thon.*boîte|sardine.*boîte|pois chiches.*boîte|haricots.*boîte/i,
+      '🥫 Conserves & Bocaux':       /boît|boite|tomates concass|conserve|bocal|(thon|sardine|maquereau|anchois)(?!\s+frais)|(pois chiches|haricots\s+(rouge|blanc|noir|mungo)|lentilles\s+beluga)(\s+(en|cuit|boite))?/i,
       '🫙 Épicerie sèche':           /huile|vinaigre|sauce soja|tahini|moutarde|pesto|miel|confiture|sirop|ketchup|mayonnaise|nuoc|miso|tamari|kecap|teriyaki|sriracha|fish sauce|worcestershire|bouillon|levure|chocolat|whey|prot[eé]ine.*poudre|caséine|collagène/i,
       '🌿 Épices & Herbes':          /cumin|paprika|cannelle|gingembre|curry|curcuma|coriandre|persil|basilic|origan|thym|ras el hanout|garam masala|chili|piment|safran|menthe|aneth|estragon|laurier|muscade|cardamome|clou|poivre|sel|sumac|zaatar|harissa|matcha|cacao/i,
       '🌰 Graines, Noix & Fruits secs': /sésame|amande|noix|cajou|chia|lin|cacahuète|pistache|noisette|graine de tournesol|graine de courge|raisin sec|abricot sec|datte|figue sèche|cranberry/i,

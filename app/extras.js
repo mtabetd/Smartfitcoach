@@ -1544,7 +1544,7 @@ window.FOOD_JOURNAL = {
 
     var nameInput = document.createElement('input');
     nameInput.type = 'text';
-    nameInput.placeholder = 'Aliment ou code-barres...';
+    nameInput.placeholder = 'Aliment...';
     nameInput.style.cssText = 'width:100%;padding:8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",sans-serif;font-size:16px;background:transparent;box-sizing:border-box;';
     nameInput.setAttribute('autocomplete', 'off');
 

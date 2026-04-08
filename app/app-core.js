@@ -838,7 +838,6 @@ window.I18N = {
       'nav.dashboard': 'Bilan',
       'nav.nutrition': 'Nutrition',
       'nav.sport': 'Sport',
-      'nav.scanner': 'Scanner',
       'nav.extras': 'Extras',
 
       // Auth
@@ -1116,7 +1115,6 @@ window.I18N = {
       'nav.dashboard': 'Dashboard',
       'nav.nutrition': 'Nutrition',
       'nav.sport': 'Workout',
-      'nav.scanner': 'Scanner',
       'nav.extras': 'Extras',
 
       // Auth
