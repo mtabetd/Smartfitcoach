@@ -5504,6 +5504,9 @@ function renderShoppingList(p) {
     ));
 
     cat.items.forEach(function(item) {
+      // Ignorer les items sans quantité valide
+      if (!item.qty || isNaN(item.qty) || item.qty <= 0) return;
+
       var isChecked = !!s.shopChecked[item.name];
       var rowStyle = 'display:flex;align-items:center;padding:10px 14px;border-top:1px solid var(--border);cursor:pointer;' +
         (isChecked ? 'opacity:0.45;' : '') +
@@ -5529,6 +5532,10 @@ function renderShoppingList(p) {
       var label = h('div', {style: labelStyle, 'class':'shop-item-label'});
 
       var displayName = arIngredient(item.name);
+      // Majuscule initiale pour les noms en mode français
+      if (!arMode && displayName && displayName.length > 0) {
+        displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+      }
       var nameStyle = 'font-size:13px;color:var(--text);' +
         (arMode ? 'font-family:"Segoe UI",Arial,Tahoma,sans-serif;' : 'font-family:Georgia,serif;') +
         (isChecked ? 'text-decoration:line-through;opacity:0.6;' : '');
