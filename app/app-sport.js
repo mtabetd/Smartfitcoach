@@ -569,7 +569,21 @@ function generateSportProgram() {
  program.push({
  name: isPPL5 ? PPL5_NAMES[d] : 'Jour ' + (d + 1),
  focus: isPPL5 ? PPL5_FOCUS[d] : focusLabel,
- exercises: dayExercises
+ exercises: dayExercises,
+ warmup: {
+  duration: 8,
+  exercises: [
+   { name: 'Cardio léger (vélo/tapis)', duration: '5 min', intensity: 'Faible' },
+   { name: 'Mobilité articulaire', duration: '3 min', notes: 'Cercles épaules, hanches, chevilles' }
+  ]
+ },
+ cooldown: {
+  duration: 5,
+  exercises: [
+   { name: 'Marche ou vélo léger', duration: '3 min', intensity: 'Très faible' },
+   { name: 'Étirements statiques', duration: '2 min', notes: 'Groupes musculaires travaillés' }
+  ]
+ }
  });
  }
 
@@ -745,22 +759,21 @@ window.SPORT = {
    return;
  }
 
- // ─── INTERSTITIEL: si un programme existe et qu'on revient à l'étape 0 ───
+ // ─── Si programme existant → afficher directement la prog (plus d'interstitiel) ───
  if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
-   renderSportChoice(content);
-   p.appendChild(content);
-   return;
+   S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
+   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  }
 
  // ─── CHECK BIEN-ÊTRE QUOTIDIEN (NON-BLOQUANT) ───
- // Si l'utilisateur n'a pas fait son checkin aujourd'hui, on stocke un flag
- // pour afficher un bandeau en haut du contenu — sans bloquer l'accès au programme.
+ // Le bilan de forme est désormais capturé en plein écran à l'arrivée sur le dashboard.
+ // Le bandeau sport n'est plus nécessaire — _wellnessReminder toujours false.
  var _PROGRAM_STEPS = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
  if (_PROGRAM_STEPS.indexOf(S.sStep) !== -1) {
    var _today = new Date().toISOString().slice(0, 10);
    var _w = S.todayWellness || {};
    if (!_w.date || _w.date !== _today) {
-     S._wellnessReminder = true;
+     S._wellnessReminder = false; // plus de bandeau — le checkin se fait au dashboard
    } else {
      S._wellnessReminder = false;
    }
@@ -775,8 +788,22 @@ window.SPORT = {
  var totalSteps = S.sportType === 'crossfit' ? 2 : S.sportType === 'running' ? 2 : S.sportType === 'hyrox' ? 2 : S.sportType === 'padel' ? 2 : S.sportType === 'golf' ? 2 : S.sportType === 'triathlon' ? 2 : S.sportType === 'yoga' ? 2 : S.sportType === 'cycling' ? 2 : S.sportType === 'calisthenics' ? 2 : 4;
  // sStep 20 (medical) maps to display step 0 for musculation (shown as "Éval. médicale")
  var currentDisplay = S.sStep === 20 ? 0 : S.sportType === 'crossfit' ? S.sStep - 4 : S.sportType === 'running' ? S.sStep - 6 : S.sportType === 'hyrox' ? S.sStep - 8 : S.sportType === 'padel' ? S.sStep - 10 : S.sportType === 'golf' ? S.sStep - 12 : S.sportType === 'triathlon' ? S.sStep - 16 : S.sportType === 'yoga' ? S.sStep - 18 : S.sportType === 'cycling' ? S.sStep - 21 : S.sportType === 'calisthenics' ? S.sStep - 23 : S.sStep;
- var stepLabel = S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? 'Éval. des charges' : S.sStep === 15 ? 'Programmes dédiés' : ('\u00c9tape ' + currentDisplay + ' / ' + totalSteps);
- hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
+ var _progStep = _SPORT_PROGRAM_STEP[S.sportType] || 4;
+ var _isOnProgram = (S.sStep === _progStep || (S.sStep === 6 && S.cfCalendarOpen));
+ if (_isOnProgram) {
+   var _changeLink = h('button', {
+     style: 'background:none;border:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;padding:5px 10px;border-radius:2px;',
+     onclick: function() {
+       S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       if (window.render) window.render();
+     }
+   }, 'Changer de sport');
+   hdr.appendChild(_changeLink);
+ } else {
+   var stepLabel = S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? '\u00c9val. des charges' : S.sStep === 15 ? 'Programmes d\u00e9di\u00e9s' : ('\u00c9tape ' + currentDisplay + ' / ' + totalSteps);
+   hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
+ }
  p.appendChild(hdr);
  var pb = h('div', {'class': 'progress-bar'});
  var _pbPct = S.sStep === 20 ? 5 : S.sStep === 16 ? 15 : S.sStep === 15 ? 100 : (currentDisplay / totalSteps * 100);
@@ -784,7 +811,11 @@ window.SPORT = {
  p.appendChild(pb);
  }
 
+ var _validSSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+ if (_validSSteps.indexOf(S.sStep) === -1) { S.sStep = 0; }
+
  if (S.sStep === 0) renderObjectif(content); // Type selection
+ else if (S.sStep === 26) renderPARQ(content); // PAR-Q screening (ACSM 2018)
  else if (S.sStep === 20) renderMuscuMedicalQ(content); // Medical questionnaire muscu
  else if (S.sStep === 16) renderChargesQuestionnaire(content); // Charges questionnaire
  else if (S.sStep === 15) renderDedicatedPrograms(content); // Dedicated programs
@@ -925,10 +956,10 @@ function renderObjectif(p) {
  p.appendChild(h('div', {'class': 'section-label'}, 'Type de programme'));
  var typeGrid = h('div', {'class': 'card-grid-2'});
 
- // Musculation - clicking goes to medical questionnaire first (step 20)
+ // Musculation - clicking goes to PAR-Q first (if not already done), then medical questionnaire (step 20)
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'musculation';
- S.sStep = 20;
+ if (!S.parqDone) { S._parqNextStep = 20; S.sStep = 26; } else { S.sStep = 20; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'musculation'});
  window.render();
  }}, [
@@ -937,10 +968,10 @@ function renderObjectif(p) {
  h('div', {'class': 'card-tag'}, 'S\u00e8che \u00b7 Masse \u00b7 Force \u00b7 Endurance')
  ]));
 
- // Cross Training - clicking goes directly to CF level (step 5)
+ // Cross Training - clicking goes through PAR-Q (if not done), then CF level (step 5)
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'crossfit';
- S.sStep = 5;
+ if (!S.parqDone) { S._parqNextStep = 5; S.sStep = 26; } else { S.sStep = 5; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'crossfit'});
  window.render();
  }}, [
@@ -952,7 +983,7 @@ function renderObjectif(p) {
  // Running card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'running';
- S.sStep = 7;
+ if (!S.parqDone) { S._parqNextStep = 7; S.sStep = 26; } else { S.sStep = 7; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'running'});
  window.render();
  }}, [
@@ -964,7 +995,7 @@ function renderObjectif(p) {
  // Hyrox card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'hyrox';
- S.sStep = 9;
+ if (!S.parqDone) { S._parqNextStep = 9; S.sStep = 26; } else { S.sStep = 9; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'hyrox'});
  window.render();
  }}, [
@@ -976,7 +1007,7 @@ function renderObjectif(p) {
  // Padel card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'padel';
- S.sStep = 11;
+ if (!S.parqDone) { S._parqNextStep = 11; S.sStep = 26; } else { S.sStep = 11; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'padel'});
  window.render();
  }}, [
@@ -988,7 +1019,7 @@ function renderObjectif(p) {
  // Golf card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'golf';
- S.sStep = 13;
+ if (!S.parqDone) { S._parqNextStep = 13; S.sStep = 26; } else { S.sStep = 13; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'golf'});
  window.render();
  }}, [
@@ -1000,7 +1031,7 @@ function renderObjectif(p) {
  // Triathlon / IRONMAN card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'triathlon';
- S.sStep = 17;
+ if (!S.parqDone) { S._parqNextStep = 17; S.sStep = 26; } else { S.sStep = 17; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'triathlon'});
  window.render();
  }}, [
@@ -1012,7 +1043,7 @@ function renderObjectif(p) {
  // Yoga & Mobilité card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'yoga';
- S.sStep = 19;
+ if (!S.parqDone) { S._parqNextStep = 19; S.sStep = 26; } else { S.sStep = 19; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'yoga'});
  window.render();
  }}, [
@@ -1024,7 +1055,7 @@ function renderObjectif(p) {
  // Cyclisme card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'cycling';
- S.sStep = 22;
+ if (!S.parqDone) { S._parqNextStep = 22; S.sStep = 26; } else { S.sStep = 22; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'cycling'});
  window.render();
  }}, [
@@ -1036,8 +1067,8 @@ function renderObjectif(p) {
  // Callisthénie card
  typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
  S.sportType = 'calisthenics';
- S.sStep = 24;
  S.calisthenicsOnboardingStep = 'A';
+ if (!S.parqDone) { S._parqNextStep = 24; S.sStep = 26; } else { S.sStep = 24; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'calisthenics'});
  window.render();
  }}, [
@@ -1115,6 +1146,124 @@ function buildKcalCard(kcal, durationMins) {
   return kcalCard;
 }
 
+// ─── STEP 26: PAR-Q — QUESTIONNAIRE DE PRÉ-QUALIFICATION MÉDICALE (ACSM 2018) ───
+function renderPARQ(p) {
+ // Si déjà complété, passer directement au step suivant
+ if (S.parqDone) {
+  var _next = S._parqNextStep || 0;
+  S.sStep = _next;
+  if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+  if (window.render) window.render();
+  return;
+ }
+
+ // Initialiser les réponses PAR-Q si nécessaire
+ if (!S._parqAnswers || typeof S._parqAnswers !== 'object') S._parqAnswers = {};
+
+ // Header avec retour
+ var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
+ hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; S._parqAnswers = {}; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
+ p.appendChild(hdr);
+
+ p.appendChild(h('div', {'class': 'eyebrow'}, 'Sécurité'));
+ p.appendChild(h('h1', {html: 'Questionnaire<br><em>PAR-Q</em>'}));
+ p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de démarrer votre programme, répondez à ces 7 questions recommandées par l\'ACSM (2018). Vos réponses sont confidentielles.'));
+
+ // 7 questions PAR-Q
+ var PARQ_QUESTIONS = [
+  { id: 'cardiac',       text: 'Votre médecin vous a-t-il déjà dit que vous aviez un problème cardiaque ?' },
+  { id: 'chestPain',    text: 'Ressentez-vous des douleurs thoraciques lors d\'une activité physique ?' },
+  { id: 'dizziness',    text: 'Avez-vous des étourdissements ou pertes de connaissance lors de l\'effort ?' },
+  { id: 'medication',   text: 'Prenez-vous des médicaments pour la tension artérielle ou le cœur ?' },
+  { id: 'jointIssue',   text: 'Avez-vous un problème osseux ou articulaire aggravé par l\'exercice ?' },
+  { id: 'pregnant',     text: 'Êtes-vous enceinte ou avez-vous accouché il y a moins de 6 semaines ?' },
+  { id: 'otherReason',  text: 'Avez-vous une autre raison médicale de ne pas faire d\'activité physique ?' }
+ ];
+
+ var _hasYes = PARQ_QUESTIONS.some(function(q) { return S._parqAnswers[q.id] === true; });
+ var _allAnswered = PARQ_QUESTIONS.every(function(q) { return S._parqAnswers[q.id] === true || S._parqAnswers[q.id] === false; });
+
+ var qList = h('div', {style: 'margin-bottom:20px'});
+ PARQ_QUESTIONS.forEach(function(q) {
+  var answered = S._parqAnswers[q.id] === true || S._parqAnswers[q.id] === false;
+  var isYes = S._parqAnswers[q.id] === true;
+
+  var qRow = h('div', {style: 'border:1px solid var(--border,#E8E6DF);border-radius:2px;padding:14px 16px;margin-bottom:8px;background:' + (isYes ? 'rgba(90,16,16,0.04)' : answered ? 'rgba(26,74,26,0.04)' : 'transparent')});
+  qRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#1A1A18);line-height:1.5;margin-bottom:10px'}, q.text));
+
+  var btnRow = h('div', {style: 'display:flex;gap:10px'});
+  // OUI
+  var yesBtn = h('button', {
+   style: 'flex:1;padding:10px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;border:1px solid ' + (isYes ? '#5A1010' : 'var(--border,#E8E6DF)') + ';background:' + (isYes ? 'rgba(90,16,16,0.12)' : 'transparent') + ';color:' + (isYes ? '#5A1010' : 'var(--black,#1A1A18)') + ';font-weight:' + (isYes ? '700' : '400'),
+   onclick: (function(_qid) { return function() { S._parqAnswers[_qid] = true; window.render(); }; })(q.id)
+  }, 'Oui');
+  btnRow.appendChild(yesBtn);
+  // NON
+  var noBtn = h('button', {
+   style: 'flex:1;padding:10px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;border:1px solid ' + (!isYes && answered ? '#1A4A1A' : 'var(--border,#E8E6DF)') + ';background:' + (!isYes && answered ? 'rgba(26,74,26,0.08)' : 'transparent') + ';color:' + (!isYes && answered ? '#1A4A1A' : 'var(--black,#1A1A18)') + ';font-weight:' + (!isYes && answered ? '700' : '400'),
+   onclick: (function(_qid) { return function() { S._parqAnswers[_qid] = false; window.render(); }; })(q.id)
+  }, 'Non');
+  btnRow.appendChild(noBtn);
+  qRow.appendChild(btnRow);
+  qList.appendChild(qRow);
+ });
+ p.appendChild(qList);
+
+ if (!_allAnswered) {
+  // Pas encore toutes les réponses : bouton grisé
+  var continueBtn = h('button', {'class': 'btn-primary', style: 'opacity:0.5;cursor:not-allowed'}, 'Répondre à toutes les questions');
+  p.appendChild(continueBtn);
+  return;
+ }
+
+ if (!_hasYes) {
+  // Toutes les réponses sont NON → clear, continuer directement
+  var okBtn = h('button', {'class': 'btn-primary', onclick: function() {
+   S.parqDone = true;
+   S.parqResult = 'clear';
+   S._parqAnswers = {};
+   var nextStep = S._parqNextStep || 0;
+   S.sStep = nextStep;
+   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+   window.render();
+  }}, 'Continuer →');
+  p.appendChild(okBtn);
+  p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);text-align:center;margin-top:12px'}, 'Toutes vos réponses sont "Non" — vous pouvez démarrer en toute sécurité.'));
+ } else {
+  // Au moins une réponse OUI → avertissement médical
+  var warnDiv = h('div', {style: 'border-left:4px solid #5A1010;background:rgba(90,16,16,0.06);padding:14px 16px;margin-bottom:20px;border-radius:0 2px 2px 0'});
+  warnDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;color:#5A1010;margin-bottom:8px;letter-spacing:0.5px'}, '\u26A0 Consultez votre médecin avant de démarrer ce programme.'));
+  warnDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A1010;line-height:1.6'}, 'Montrez-lui ce questionnaire et obtenez son accord écrit. Une ou plusieurs de vos réponses indiquent qu\'une évaluation médicale préalable est recommandée (ACSM 2018).'));
+  p.appendChild(warnDiv);
+
+  var docBtn = h('button', {'class': 'btn-primary', onclick: function() {
+   S.parqDone = true;
+   S.parqResult = 'medical_cleared';
+   S._parqAnswers = {};
+   var nextStep = S._parqNextStep || 0;
+   S.sStep = nextStep;
+   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+   window.render();
+  }}, 'J\'ai consulté mon médecin et j\'ai son accord');
+  p.appendChild(docBtn);
+
+  var overrideBtn = h('button', {
+   style: 'display:block;width:100%;margin-top:10px;padding:12px;border:1px solid var(--border,#E8E6DF);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px;text-align:center',
+   onclick: function() {
+    S.parqDone = true;
+    S.parqResult = 'user_override';
+    S._parqAnswers = {};
+    var nextStep = S._parqNextStep || 0;
+    S.sStep = nextStep;
+    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+    window.render();
+   }
+  }, 'Je comprends les risques et je continue');
+  p.appendChild(overrideBtn);
+ }
+}
+
 // ─── STEP 20: QUESTIONNAIRE MÉDICAL MUSCU ───
 function renderMuscuMedicalQ(p) {
  if (!S.muscuMedical || typeof S.muscuMedical !== 'object' || Array.isArray(S.muscuMedical)) S.muscuMedical = {};
@@ -1128,7 +1277,43 @@ function renderMuscuMedicalQ(p) {
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
  p.appendChild(h('h1', {html: 'Bilan<br><em>médical muscu</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de générer votre programme, aidez-nous à adapter les exercices à votre situation physique.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de g\u00e9n\u00e9rer votre programme, aidez-nous \u00e0 adapter les exercices \u00e0 votre situation physique.'));
+
+ // Phrase de contexte si bilan nutrition déjà fait — évite le sentiment de répétition
+ if (Array.isArray(window.S && window.S.medical)) {
+   var _contextNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);background:var(--ivory2,#F5F3EC);border-left:2px solid var(--border);padding:10px 12px;margin-bottom:16px;line-height:1.6;'});
+   _contextNote.textContent = 'Ces questions compl\u00e8tent votre profil nutrition. Elles portent sp\u00e9cifiquement sur vos articulations et ant\u00e9c\u00e9dents orthop\u00e9diques — diff\u00e9rentes de vos conditions m\u00e9dicales g\u00e9n\u00e9rales.';
+   p.appendChild(_contextNote);
+ }
+
+ // ── SKIP si déjà rempli ──────────────────────────────────────────────────
+ if (S.muscuMedical && S.muscuMedical.done === true && !S._muscuMedicalEdit) {
+  // Résumé compact
+  var _painZones = ['shoulders','elbows','wrists','neck','upperBack','lowerBack','hips','knees','ankles','feet'];
+  var _diagKeys = ['herniaDisc','herniaInguinal','rotatorCuff','acl','osteoporosis','hypertension','rheumatoidArthritis','fibromyalgia','meniscus','spondylitis','gonarthrosis','epicondylitis'];
+  var _anyPain = _painZones.some(function(z) { return !!S.muscuMedical[z]; });
+  var _anyDiag = _diagKeys.some(function(z) { return !!S.muscuMedical[z]; });
+  var _summaryCard = h('div', {style: 'border:1px solid var(--border);padding:16px;background:var(--ivory2,#F5F3EC);margin-bottom:20px;'});
+  _summaryCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'}, 'Profil médical enregistré'));
+  var _summaryText = _anyPain || _anyDiag
+    ? 'Des zones sensibles ont été notées — le programme les prend en compte.'
+    : 'Aucune contrainte physique signalée. Programme standard.';
+  _summaryCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black);margin-bottom:12px;line-height:1.5;'}, _summaryText));
+  var _editBtn = h('button', {
+    style: 'padding:8px 14px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--grey);',
+    onclick: function() { S._muscuMedicalEdit = true; window.render(); }
+  }, 'Modifier');
+  _summaryCard.appendChild(_editBtn);
+  p.appendChild(_summaryCard);
+
+  // Continuer directement
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
+    S.sStep = !S.sportLevel ? 1 : 16;
+    if (window.saveProfile) window.saveProfile();
+    window.render();
+  }}, 'Continuer'));
+  return;
+ }
 
  // For beginners: show a simple YES/NO filter first
  if ((S.sportLevel === 'beginner' || !S.sportLevel) && !S._muscuMedicalExpanded) {
@@ -1249,6 +1434,7 @@ function renderMuscuMedicalQ(p) {
  // ─── Bouton Continuer ───
  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
  S.muscuMedical.done = true;
+ delete S._muscuMedicalEdit;
  S.sStep = 16;
  window.render();
  }}, 'Continuer \u2192'));
@@ -1258,6 +1444,7 @@ function renderMuscuMedicalQ(p) {
  style: 'width:100%;padding:14px;margin-top:12px;background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;min-height:48px',
  onclick: function(){
  S.muscuMedical.done = true;
+ delete S._muscuMedicalEdit;
  S.sStep = 16;
  window.render();
  }
@@ -1675,7 +1862,7 @@ function renderCrossfitLevel(p) {
  // ─── SÉLECTEUR DE JOURS SPÉCIFIQUES ───
  if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:18px'}, 'Quels jours vous entraînez-vous\u00a0?'));
- var dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+ var dayLabels = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
  var dayBtnsWrap = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:10px 0'});
  var _selTarget = S.sportDays || 3;
  dayLabels.forEach(function(label, idx) {
@@ -2403,7 +2590,7 @@ function appendWellnessBanner(p) {
   if (score !== null) {
     if (score < 2) {
       // ─── KO : Séance déconseillée ───
-      var banner = h('div', {style: 'border-left:3px solid #8B2020;background:rgba(139,32,32,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px'});
+      var banner = h('div', {style: 'border-left:3px solid #8B2020;background:rgba(139,32,32,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
       var titleRow = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:6px'});
       titleRow.appendChild(h('span', {style: 'font-size:16px'}, '\u26A0\uFE0F'));
       titleRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B2020;font-weight:700'}, 'S\u00e9ance d\u00e9conseill\u00e9e aujourd\'hui'));
@@ -2434,7 +2621,7 @@ function appendWellnessBanner(p) {
       p.appendChild(banner);
     } else if (score <= 3) {
       // ─── Fatigué : séance adaptée ───
-      var banner2 = h('div', {style: 'border-left:3px solid #B8860B;background:rgba(184,134,11,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px'});
+      var banner2 = h('div', {style: 'border-left:3px solid #B8860B;background:rgba(184,134,11,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
       banner2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#B8860B;font-weight:700;margin-bottom:6px'}, 'S\u00e9ance adapt\u00e9e recommand\u00e9e'));
       banner2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:12px'}, 'Consid\u00e9rez r\u00e9duire l\'intensit\u00e9\u00a0: -1 s\u00e9rie par exercice, charges all\u00e9g\u00e9es de 10-15\u00a0%.'));
       var comprisBtn = h('button', {
@@ -2445,7 +2632,7 @@ function appendWellnessBanner(p) {
       p.appendChild(banner2);
     } else if (score > 3.5) {
       // ─── En forme : badge discret ───
-      var badge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(26,74,26,0.3);background:rgba(26,74,26,0.04);padding:6px 12px;border-radius:2px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A)'});
+      var badge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(26,74,26,0.3);background:rgba(26,74,26,0.04);padding:6px 12px;border-radius:2px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A)', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
       badge.appendChild(h('span', {}, 'Vous \u00eates en forme aujourd\'hui \uD83D\uDCAA'));
       p.appendChild(badge);
     }
@@ -2488,7 +2675,7 @@ function appendWellnessBanner(p) {
 
   if (isPeak) {
     // Compact badge — label only, no button
-    fallbackBanner.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A4A1A'}, 'Forme optimale — poussez sur les charges'));
+    fallbackBanner.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A4A1A', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'}, 'Forme optimale — poussez sur les charges'));
   } else {
     var textWrap = h('div', {style: 'flex:1;min-width:0'});
     textWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cm.textColor + ';margin-bottom:3px;font-weight:700'}, adapt.label));
@@ -3287,12 +3474,51 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) S.sportDays = v; },
+ oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) e.target.value = S.sportDays = 2; else if (v > 6) e.target.value = S.sportDays = 6; }
  }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
  p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 2 et 6 jours'));
+
+ // ─── JOURS SPÉCIFIQUES ───
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, 'Quels jours vous entra\u00eenez-vous\u00a0? (optionnel)'));
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, 'S\u00e9lectionnez vos jours pour adapter vos macros nutrition (entra\u00eenement vs repos).'));
+ if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
+ var _musDay = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
+ var _musDayWrap = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:0 0 6px'});
+ var _musTarget = S.sportDays || 3;
+ _musDay.forEach(function(label, idx) {
+   var _mSel = S.trainingDaysSelected.indexOf(idx) !== -1;
+   var _mOver = _mSel && S.trainingDaysSelected.length > _musTarget;
+   var _mStyle = 'width:44px;height:44px;border-radius:3px;font-family:Georgia,serif;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;transition:background .15s,color .15s,border-color .15s;';
+   if (_mOver) _mStyle += 'background:#5A1010;color:#FAF9F6;border:1.5px solid #5A1010;';
+   else if (_mSel) _mStyle += 'background:#1A1A18;color:#FAF9F6;border:1.5px solid #1A1A18;';
+   else _mStyle += 'background:transparent;color:#1A1A18;border:1.5px solid #E8E6DF;';
+   _musDayWrap.appendChild(h('button', {
+     type: 'button', style: _mStyle,
+     onclick: function() {
+       if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
+       var _mp = S.trainingDaysSelected.indexOf(idx);
+       if (_mp !== -1) { S.trainingDaysSelected.splice(_mp, 1); }
+       else { S.trainingDaysSelected.push(idx); S.trainingDaysSelected.sort(function(a, b) { return a - b; }); }
+       if (S.trainingDaysSelected.length > 0) S.sportDays = S.trainingDaysSelected.length;
+       S.weekPlan = null;
+       try { window.saveProfile(); } catch(e) {}
+       window.render();
+     }
+   }, label));
+ });
+ p.appendChild(_musDayWrap);
+ var _mCount = S.trainingDaysSelected.length;
+ var _mDiff = _mCount - _musTarget;
+ var _mColor = _mDiff === 0 && _mCount > 0 ? '#6B6B65' : (_mDiff > 0 ? '#5A1010' : '#6B6B65');
+ var _mHint = _mCount === 0
+   ? 'Optionnel \u2014 laissez vide pour r\u00e9partition automatique'
+   : _mDiff === 0 ? _mCount + '\u00a0/' + '\u00a0' + _musTarget + '\u00a0jour' + (_mCount > 1 ? 's' : '') + '\u00a0\u2014 parfait'
+   : _mDiff > 0 ? _mCount + '\u00a0/\u00a0' + _musTarget + '\u00a0\u2014 retirez\u00a0' + _mDiff + '\u00a0jour' + (_mDiff > 1 ? 's' : '')
+   : _mCount + '\u00a0/\u00a0' + _musTarget + '\u00a0\u2014 s\u00e9lectionnez encore\u00a0' + Math.abs(_mDiff) + '\u00a0jour' + (Math.abs(_mDiff) > 1 ? 's' : '');
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + _mColor + ';text-align:center;margin-bottom:4px;transition:color .2s;'}, _mHint));
 
  // Equipment selection
  p.appendChild(h('div', {'class': 'section-label'}, '\uD83C\uDFCB\uFE0F\u200D\u2642\uFE0F Mat\u00e9riel disponible'));
@@ -4184,6 +4410,7 @@ function saveMuscuSessionLog() {
  if (completed.length === 0) return;
  var avgWeight = completed.reduce(function(sum, s) { return sum + (s.actualWeight || 0); }, 0) / completed.length;
  var avgReps = completed.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / completed.length;
+ if (completed.length === 0 || isNaN(avgWeight)) return;
 
  if (!S.muscuProgressionHistory[exName]) S.muscuProgressionHistory[exName] = [];
  var existing = S.muscuProgressionHistory[exName].find(function(entry) { return entry.date === _today2; });
@@ -4435,8 +4662,36 @@ function calcSessionKcal(exercises, durationMin) {
 
 function renderMusculationProgram(p) {
  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) {
-   S.sportProgram = generateSportProgram(); S.selectedSportDay = 0;
-   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+   // Afficher un message de génération si pas de programme
+   if (!S._generatingProgram) {
+     S._generatingProgram = true;
+     p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'},[
+       h('div', {style: 'font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
+       h('div', {style: 'width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;'})
+     ]));
+     setTimeout(function() {
+       try {
+         S._generatingProgram = false;
+         S.sportProgram = generateSportProgram();
+         if (!S.sportProgram || S.sportProgram.length === 0) {
+           console.error('[sport] generateSportProgram returned empty program, aborting render to avoid white screen');
+           return;
+         }
+         S.selectedSportDay = 0;
+         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+         if (window.render) window.render();
+       } catch(e) {
+         console.error('[sport] generateSportProgram error:', e);
+         S._generatingProgram = false;
+       }
+     }, 50);
+     return;
+   } else {
+     S._generatingProgram = false;
+     S.sportProgram = generateSportProgram();
+     S.selectedSportDay = 0;
+     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+   }
  }
 
  // Load saved musculation weights from localStorage
@@ -4925,10 +5180,10 @@ function renderMusculationProgram(p) {
 
      // Warmup banner
      if (_phaseObj && _phaseObj.warmup) {
-      var _warmupEl = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;background:rgba(26,74,26,0.04);border-left:3px solid #1A4A1A;padding:10px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
+      var _warmupEl = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;background:var(--greenbg,rgba(26,74,26,.06));border-left:3px solid var(--green,#1A4A1A);padding:10px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
       _warmupEl.appendChild(h('span', {style: 'font-size:14px;flex-shrink:0'}, '\uD83D\uDD25'));
       var _warmupRight = h('div', {});
-      _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1A4A1A;margin-bottom:3px'}, '\u00c9chauffement'));
+      _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:3px'}, '\u00c9chauffement'));
       _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);line-height:1.5'}, _phaseObj.warmup));
       _warmupEl.appendChild(_warmupRight);
       _sfcSection.appendChild(_warmupEl);
@@ -5124,6 +5379,66 @@ function renderMusculationProgram(p) {
   p.appendChild(briefCard);
  }
 
+ // ─── CTA SÉANCE — visible en haut, avant de scroller les exercices ───
+ var _ctaToday = new Date().toISOString().slice(0, 10);
+ var _ctaTodayKey = S.selectedSportDay + '_' + _ctaToday;
+ var _ctaDone = S.sessionHistory && S.sessionHistory[_ctaTodayKey];
+ var _ctaCompleting = (S.sessionCompleting === S.selectedSportDay);
+ if (_ctaDone) {
+   var _ctaDoneBadge = h('div', {style: 'border:1px solid #1A4A1A;background:rgba(26,74,26,0.06);padding:10px 14px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;display:flex;align-items:center;gap:8px;'});
+   _ctaDoneBadge.appendChild(h('span', {}, '\u2714'));
+   _ctaDoneBadge.appendChild(h('span', {}, 'S\u00e9ance valid\u00e9e \u2014 ' + _ctaDone.duration + '\u00a0min \u00b7 ' + _ctaDone.kcalTotal + '\u00a0kcal'));
+   p.appendChild(_ctaDoneBadge);
+ } else if (!_ctaCompleting) {
+   var _ctaBtn = h('button', {
+     style: 'display:block;width:100%;padding:14px;background:var(--black,#0A0A09);color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin-bottom:16px;',
+     onclick: function() {
+       S.sessionCompleting = S.selectedSportDay;
+       S._sessionDuration = null;
+       window.render();
+       // Scroll vers le bas pour afficher le panneau de complétion
+       setTimeout(function() { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }, 80);
+     }
+   }, '\u2713 S\u00e9ance termin\u00e9e');
+   p.appendChild(_ctaBtn);
+ }
+
+ // ─── INDICATEUR SURCHARGE PROGRESSIVE ───
+ (function() {
+  var weekNum = S.muscuWeek || 1;
+  var progressRate = S.sportLevel === 'beginner' ? 0.025 : 0.05;
+  var progressPct = Math.round(progressRate * Math.min(weekNum - 1, 12) * 100);
+  if (weekNum > 1) {
+   var _progInd = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px'});
+   _progInd.appendChild(h('span', {style: 'font-weight:600;color:var(--black,#1A1A18)'}, 'Semaine ' + weekNum));
+   if (progressPct > 0) {
+    _progInd.appendChild(h('span', {style: 'color:#1A4A1A;font-weight:600'}, '· Objectif progression +' + progressPct + '%'));
+   }
+   p.appendChild(_progInd);
+  }
+ })();
+
+ // ─── ÉCHAUFFEMENT ───
+ (function() {
+  var wu = day.warmup || {
+   duration: 8,
+   exercises: [
+    { name: 'Cardio léger (vélo/tapis)', duration: '5 min', intensity: 'Faible' },
+    { name: 'Mobilité articulaire', duration: '3 min', notes: 'Cercles épaules, hanches, chevilles' }
+   ]
+  };
+  var wuCard = h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.2);border-left:3px solid var(--green,#1A4A1A);padding:12px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
+  wuCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#1A4A1A);font-weight:600;margin-bottom:8px'}, 'ÉCHAUFFEMENT · ' + wu.duration + ' min'));
+  (wu.exercises || []).forEach(function(ex) {
+   var row = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;margin-bottom:4px'});
+   row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);font-weight:500;flex-shrink:0;min-width:180px'}, ex.name + ' — ' + ex.duration));
+   var detail = (ex.intensity || '') + (ex.notes ? (ex.intensity ? ' · ' : '') + ex.notes : '');
+   if (detail) row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.4'}, detail));
+   wuCard.appendChild(row);
+  });
+  p.appendChild(wuCard);
+ })();
+
  var _totalExercises = (day.exercises || []).length;
  (day.exercises || []).forEach(function(ex, exIdx) {
  var card = h('div', {'class': 'exercise-card', onclick: function(){ S.sportModalExercise = ex; window.render(); }});
@@ -5142,6 +5457,19 @@ function renderMusculationProgram(p) {
  }, 'FST-7');
  _exNameEl.appendChild(fst7Badge);
  card.style.borderLeft = '3px solid #5A1010';
+ }
+ // ─── DELTA PROGRESSION ───
+ var _progHistory = S.muscuProgressionHistory && S.muscuProgressionHistory[ex.n];
+ if (_progHistory && _progHistory.length >= 2) {
+   var _last = _progHistory[_progHistory.length - 1];
+   var _prev = _progHistory[_progHistory.length - 2];
+   var _deltaW = Math.round((_last.weight - _prev.weight) * 2) / 2;
+   if (_deltaW !== 0) {
+     var _deltaEl = h('span', {
+       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:600;margin-left:6px;' + (_deltaW > 0 ? 'color:#1A4A1A;' : 'color:#5A1010;')
+     }, (_deltaW > 0 ? '↑' : '↓') + ' ' + Math.abs(_deltaW) + ' kg');
+     _exNameEl.appendChild(_deltaEl);
+   }
  }
  card.appendChild(_exNameEl);
  card.appendChild(h('div', {'class': 'exercise-sets'}, (ex.sets || '4x10') + ' \u2014 Repos ' + (ex.rest || '90s')));
@@ -5214,14 +5542,39 @@ function renderMusculationProgram(p) {
  var _setParts = ex.sets ? ex.sets.split('\u00d7') : [];
  var suggestedReps = _setParts.length > 1 ? parseInt(_setParts[1]) : null;
  var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
- if (suggested && suggested > 0) {
- var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(26,74,26,0.08);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
- var _sugLeft = h('div', {});
- _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#1A4A1A;margin-bottom:2px'}, 'Charge recommand\u00e9e'));
- _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A4A1A;line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
- _sugBanner.appendChild(_sugLeft);
- _sugBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
- card.appendChild(_sugBanner);
+ // Surcharge progressive : appliquer le multiplicateur si charge de base connue
+ var _savedW = S.musculationWeights[ex.n];
+ var _baseW = (_savedW && _savedW.weight) ? _savedW.weight : suggested;
+ if (_baseW && _baseW > 0) {
+  var _weekNumPO = S.muscuWeek || 1;
+  var _progressRatePO = S.sportLevel === 'beginner' ? 0.025 : 0.05;
+  var _loadMultiplier = 1 + (_progressRatePO * Math.min(_weekNumPO - 1, 12));
+  var _progressiveW = Math.round(_baseW * _loadMultiplier * 2) / 2;
+  if (_weekNumPO > 1 && _progressiveW !== _baseW) {
+   var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+   var _sugLeft = h('div', {});
+   _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge progressive (sem. ' + _weekNumPO + ')'));
+   _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(_progressiveW) : _progressiveW + '\u00a0kg'));
+   _sugBanner.appendChild(_sugLeft);
+   _sugBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCC8'));
+   card.appendChild(_sugBanner);
+  } else if (suggested && suggested > 0) {
+   var _sugBanner2 = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+   var _sugLeft2 = h('div', {});
+   _sugLeft2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+   _sugLeft2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
+   _sugBanner2.appendChild(_sugLeft2);
+   _sugBanner2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
+   card.appendChild(_sugBanner2);
+  }
+ } else if (suggested && suggested > 0) {
+  var _sugBannerBasic = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+  var _sugLeftBasic = h('div', {});
+  _sugLeftBasic.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+  _sugLeftBasic.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
+  _sugBannerBasic.appendChild(_sugLeftBasic);
+  _sugBannerBasic.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
+  card.appendChild(_sugBannerBasic);
  }
  }
 
@@ -5734,6 +6087,27 @@ function renderMusculationProgram(p) {
 
  p.appendChild(card);
  });
+
+ // ─── RETOUR AU CALME ───
+ (function() {
+  var cd = day.cooldown || {
+   duration: 5,
+   exercises: [
+    { name: 'Marche ou vélo léger', duration: '3 min', intensity: 'Très faible' },
+    { name: 'Étirements statiques', duration: '2 min', notes: 'Groupes musculaires travaillés' }
+   ]
+  };
+  var cdCard = h('div', {style: 'background:rgba(26,58,106,0.04);border:1px solid rgba(26,58,106,0.18);border-left:3px solid #1A3A6A;padding:12px 14px;margin-top:8px;margin-bottom:12px;border-radius:0 2px 2px 0'});
+  cdCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#1A3A6A;font-weight:600;margin-bottom:8px'}, 'RÉCUPÉRATION · ' + cd.duration + ' min'));
+  (cd.exercises || []).forEach(function(ex) {
+   var row = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;margin-bottom:4px'});
+   row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);font-weight:500;flex-shrink:0;min-width:180px'}, ex.name + ' — ' + ex.duration));
+   var detail = (ex.intensity || '') + (ex.notes ? (ex.intensity ? ' · ' : '') + ex.notes : '');
+   if (detail) row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.4'}, detail));
+   cdCard.appendChild(row);
+  });
+  p.appendChild(cdCard);
+ })();
 
  // ─── EXERCICES BONUS (depuis programmes dédiés) ───
  var bonusDayList = (S.bonusExercises || {})[S.selectedSportDay] || [];
@@ -8374,5 +8748,8 @@ function renderCalisthenicsProgram(content) {
  // ── BACK BUTTON ──
  content.appendChild(h('button', {'class': 'btn-back', style: 'margin-top:16px', onclick: function(){ S.sStep = 24; window.render(); }}, '< Modifier les objectifs'));
 }
+
+// ─── EXPOSE GLOBALEMENT ───
+window.renderWellnessCheckin = renderWellnessCheckin;
 
 })();

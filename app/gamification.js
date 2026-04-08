@@ -160,6 +160,25 @@ function updateStreak() {
 
   if (data.lastDate === yesterdayStr) {
     data.current++;
+  } else if (data.lastDate && data.lastDate !== today) {
+    // Un ou plusieurs jours manqués — vérifier le streak freeze
+    var thisMonth = today.slice(0, 7); // 'YYYY-MM'
+    var S = window.S || {};
+    var freezeAvailable = S.streakFreezeAvailable !== false; // true par défaut
+    var freezeUsedMonth = S.streakFreezeUsedMonth || '';
+    if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3) {
+      // Activer le freeze : protéger le streak
+      if (window.S) {
+        window.S.streakFreezeUsedMonth = thisMonth;
+        window.S.streakFreezeAvailable = false;
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
+      }
+      showToast('\u2744 Streak Freeze activ\u00e9 \u2014 ton streak de ' + data.current + ' jour' + (data.current > 1 ? 's' : '') + ' est prot\u00e9g\u00e9\u00a0!');
+      // On reprend le streak normalement sans reset
+      data.current++;
+    } else {
+      data.current = 1;
+    }
   } else {
     data.current = 1;
   }
@@ -169,6 +188,15 @@ function updateStreak() {
   if (!data.dates) data.dates = [];
   data.dates.push(today);
   if (data.dates.length > 400) data.dates = data.dates.slice(-400);
+
+  // Reset mensuel du streak freeze (1er du mois suivant)
+  var S2 = window.S || {};
+  var thisMonth2 = today.slice(0, 7);
+  if (window.S && S2.streakFreezeAvailable === false && (S2.streakFreezeUsedMonth || '') !== thisMonth2) {
+    // Nouveau mois — remettre le freeze à disposition
+    window.S.streakFreezeAvailable = true;
+    if (window.saveProfile) { try { window.saveProfile(); } catch(e3) {} }
+  }
 
   try { localStorage.setItem(STREAK_KEY + user.id, JSON.stringify(data)); } catch(e) {}
   // Sync streak vers Supabase
@@ -344,6 +372,15 @@ function renderStreakWidget(container) {
   }
 
   container.appendChild(widget);
+
+  // Streak freeze badge
+  var S = window.S || {};
+  if (S.streakFreezeAvailable !== false) {
+    var freezeBadge = _h('div', '');
+    freezeBadge.style.cssText = 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4A7A8A;border:1px solid #B0D4E0;background:rgba(176,212,224,0.15);padding:4px 10px;display:inline-block;margin-top:6px;';
+    freezeBadge.textContent = '\u2744 1 joker disponible';
+    container.appendChild(freezeBadge);
+  }
 }
 
 function renderDailyQuoteWidget(container) {

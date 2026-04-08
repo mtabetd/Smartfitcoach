@@ -7,10 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#FAF9F6">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org https://*.supabase.co https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self'; manifest-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-iN7wpJdxHlpujRppkOA8N0+Mzp0ZqZr3lCtxM00Y63c='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://world.openfoodfacts.org https://images.openfoodfacts.org https:; connect-src 'self' https://world.openfoodfacts.org https://*.supabase.co wss://localhost:* ws://localhost:*; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self'; manifest-src 'self';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta name="robots" content="noindex, nofollow">
+<!-- meta robots noindex supprimé — indexation activée -->
 <meta name="description" content="Smart Fit Coach — Nutrition personnalisée et programmes sportifs sur mesure">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -356,7 +356,7 @@ canvas.weight-chart{width:100%;height:200px}
 <div id="app" style="display:none"></div>
 <script src="./gate.js"></script>
 <script src="./error-boundary.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous" integrity="sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4"></script>
+<script defer src="./chart.umd.min.js"></script>
 <script defer src="./jspdf.umd.min.js"></script>
 <script defer src="./prices-db.js"></script>
 <script defer src="./recipe-engine.js"></script>

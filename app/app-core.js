@@ -143,6 +143,7 @@ var MEDICAL=[
   ]},
   {cat:'CARDIOVASCULAIRES',items:[
     {id:'hta',name:'Hypertension artérielle',desc:'Régime hyposodé, DASH',icon:'◇'},
+    {id:'hta_severe',name:'HTA sévère (≥180/110 mmHg)',desc:'Contre-indique HIIT/CrossFit — avis cardiologue obligatoire',icon:'◇'},
     {id:'cardio',name:'Maladie cardiovasculaire',desc:'Réduction sodium et graisses saturées',icon:'◇'},
     {id:'insuffisance_card',name:'Insuffisance cardiaque',desc:'Restriction sodique stricte',icon:'◇'}
   ]},
@@ -194,6 +195,7 @@ var MEDICAL_ADVICE={
   triglycerides:{warn:'Réduisez les glucides rapides et l\'alcool — premier levier. Oméga-3 (EPA+DHA 2-4g/j) réduisent les TG de 20-50% (ESC 2016). Évitez jus de fruits, sodas, miel, sirop d\'agave.',macroAdj:{g:-.10,p:.03,l:0}},
   goutte:{warn:'Évitez les abats, sardines, anchois. Buvez 2L+ d\'eau/jour.',macroAdj:null},
   hta:{warn:'Régime hyposodé (< 5g sel/jour). Augmentez potassium (banane, épinard).',macroAdj:null},
+  hta_severe:{warn:'HTA sévère : régime hyposodé strict (< 3g sel/jour). Évitez tout effort intense. Avis cardiologue obligatoire.',macroAdj:null},
   cardio:{warn:'Réduisez sodium et graisses saturées. Plus d\'oméga-3.',macroAdj:{g:.03,p:.02,l:-.05}},
   insuffisance_card:{warn:'Restriction sodique stricte. Consultez votre cardiologue pour les apports hydriques.',macroAdj:null},
   irc:{warn:'Contrôlez les protéines (0.55-0.60g/kg — KDOQI 2020). Limitez potassium et phosphore. Glucides complexes pour compenser l\'énergie.',macroAdj:{g:.08,p:0,l:.02}},
@@ -2305,6 +2307,8 @@ window.S = {
   snacking: null,
   wantsDessert: false,        // inclure des desserts healthy 2-3x/semaine dans le plan
   emailOptin: true,            // opt-in emails (anniversaire, rappels, etc.)
+  mealTimes: { breakfast: '08:00', lunch: '12:30', snack: '16:00', dinner: '19:30' },
+  restDayMood: null,           // { date: 'YYYY-MM-DD', emoji: string } — mood check-in jour de repos
   profilePhoto: null,          // base64 data URL (compressed JPEG)
   // Alcohol
   alcoholFreq: null, alcoholTypes: [],
@@ -2982,7 +2986,11 @@ else if(s.pregnant&&!s.prePregnancyWeight&&s.pregnancyWeek){
   var _estGain=s.pregnancyWeek>12?Math.round((s.pregnancyWeek-12)*0.5):0;
   bw=Math.max(40,s.weight-_estGain);
 }
-if(s.sex==='homme')return Math.round((10*bw)+(6.25*s.height)-(5*_age)+5);return Math.round((10*bw)+(6.25*s.height)-(5*_age)-161)} // Mifflin-St Jeor 1990 (Frankenfield 2005: best accuracy general population)
+var bmrRaw;if(s.sex==='homme')bmrRaw=(10*bw)+(6.25*s.height)-(5*_age)+5;else bmrRaw=(10*bw)+(6.25*s.height)-(5*_age)-161;
+// Correction seniors 65+ : Mifflin-St Jeor surestime le BMR de ~5% après 65 ans (Amirkalali 2008)
+// Appliquer facteur de correction -5% pour éviter une surestimation des besoins caloriques chez les seniors
+if(_age>=65)bmrRaw=bmrRaw*0.95;
+return Math.round(bmrRaw)} // Mifflin-St Jeor 1990 (Frankenfield 2005) + correction seniors 65+ (Amirkalali 2008)
 function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
@@ -3008,12 +3016,11 @@ var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.inde
 if(s.sex==='femme'&&s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1400,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes) — femme uniquement
 if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
 if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}
-// Plancher calorique sexe-spécifique (ACSM / IOC 2018 RED-S prevention)
-// Femme active (PAL ≥ 1.375) : plancher 1400 kcal/j — prévention RED-S (IOC 2018)
-// Femme sédentaire : plancher 1200 kcal/j (ACSM)
+// Plancher calorique sexe-spécifique (ISSN 2017, ACSM 2016, IOC 2018 RED-S prevention)
+// Femme : plancher 1400 kcal/j — ISSN 2017 / ACSM 2016 (l'ancien plancher 1200 est obsolète et dangereux)
 // Homme : plancher 1500 kcal/j (ACSM — plancher physiologique masculin)
 var effectivePAL=s.activity!==null&&ACTIVITIES[s.activity]?ACTIVITIES[s.activity].factor:1.2;
-var kcalFloor=s.sex==='femme'?(effectivePAL>=1.375?1400:1200):1500;
+var kcalFloor=s.sex==='femme'?1400:1500;
 base=Math.max(base,kcalFloor);
 // Plancher BMR : le déficit ne doit JAMAIS descendre sous le métabolisme de base (sécurité métabolique)
 var bmrFloor=calcBMR();if(bmrFloor>0)base=Math.max(base,bmrFloor);
@@ -3024,7 +3031,7 @@ if(s.alcoholFreq&&s.alcoholFreq!=='never'&&typeof alcoholWeeklyKcal==='function'
   var alcDaily=Math.round(alcoholWeeklyKcal()/7);
   if(alcDaily>0){base=Math.max(kcalFloor,base-alcDaily);} // soustraire mais respecter le plancher
 }
-return base} // ACSM: plancher universel ≥1200 kcal/j (femme) / ≥1400 kcal/j (homme)
+return base} // ISSN 2017 / ACSM 2016: plancher universel ≥1400 kcal/j (femme et homme)
 function calcMacros(){
   var s=window.S;var c=calcTarget();
   if(!c||s.goal===null||s.goal===undefined||!GOALS[s.goal])return{g:0,p:0,l:0};
@@ -3181,6 +3188,12 @@ var femaleOnly=['menopause','sopk','grossesse','allaitement'];if(femaleOnly.inde
   // Master athlete 60+ : résistance anabolique → leucine seuil 40g/meal (Churchward-Venne 2016, Moore 2015)
   // Augmenter protéines de 10% pour compenser la résistance anabolique (recommandation ESPEN 2019)
   if(getAge()>=60&&(!s.medical||s.medical.indexOf('irc')===-1)){pGrams=Math.max(pGrams,Math.round(bw*1.2));} // ESPEN 2014: plancher 1.2g/kg pour 60+ (résistance anabolique)
+  // Seniors 65+ : plancher protéique renforcé pour lutter contre la sarcopénie (Bauer 2013 — PROT-AGE Study Group)
+  // Bauer 2013 (JAMDA) : ≥1.6g/kg/j minimum si objectif maintenance ou prise de masse douce chez 65+
+  // Sans IRC (le cap IRC 0.6g/kg reste prioritaire)
+  if(getAge()>=65&&(!s.medical||s.medical.indexOf('irc')===-1)&&(goalKey==='maintain'||goalKey==='lean_bulk')){
+    pGrams=Math.max(pGrams,Math.round(bw*1.6)); // Bauer 2013 PROT-AGE: ≥1.6g/kg anti-sarcopénie 65+
+  }
   // Apply cycle-phase macro adjustments (only for non-pregnant women with cycle tracking)
   if(!s.pregnant&&s.sex==='femme'&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
 gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0)));// Never reduce protein during cycle — keep stable
@@ -3822,9 +3835,11 @@ function detectMedicalConflicts() {
       conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : TCA + objectif sèche/coupe — Objectif automatiquement remplacé par maintenance. Un suivi médical et psychologique est OBLIGATOIRE avant tout déficit calorique.'});
     }
   }
-  // Conflit 3 : IRC + créatine → déjà géré dans SUPPLEMENTS_DB (info seulement)
-  if(med.indexOf('irc')!==-1&&s.sportGoals&&s.sportGoals.indexOf('muscle')!==-1){
-    conflicts.push({level:'INFO',message:'ℹ IRC + Objectif musculaire — La créatine est contre-indiquée (charge rénale). Protéines plafonnées à 0.60g/kg/j (KDOQI 2020, CKD 3-5 non-dialyse). Consulter un néphrologue avant tout programme de musculation intensif.'});
+  // Conflit 3 : IRC + créatine — bloqué dans SUPPLEMENTS_DB + avertissement explicite ici
+  // KDOQI 2020 : la créatine augmente la créatininémie et aggrave la progression de l'IRC
+  // Pas de seuil de sécurité établi pour la supplémentation en créatine en IRC (British Journal of Pharmacology 2012)
+  if(med.indexOf('irc')!==-1){
+    conflicts.push({level:'INFO',message:'ℹ IRC : Créatine contre-indiquée en cas d\'insuffisance rénale chronique (augmente la créatininémie, aggrave la progression — KDOQI 2020). La créatine est automatiquement exclue des suppléments recommandés. Protéines plafonnées à 0.60g/kg/j (CKD 3-5 non-dialyse). Consulter un néphrologue avant tout programme sportif intensif.'});
   }
   // Conflit 4 : Cardiopathie + intensité haute
   if(med.indexOf('cardio')!==-1){
@@ -3832,6 +3847,22 @@ function detectMedicalConflicts() {
     if(actFactor>=1.7){
       conflicts.push({level:'ÉLEVÉ',message:'⚠ CONFLIT : Cardiopathie + activité très intense — Niveau d\'activité incompatible sans clearance cardiologique. Test d\'effort (VO2max) obligatoire. Zones FC via formule de Karvonen recommandées.'});
     }
+  }
+  // Conflit 4b : HTA sévère + programme HIIT/CrossFit intensif — BLOQUANT (risque cardiovasculaire élevé)
+  // ESC/ESH 2018 : HTA sévère (≥180/110 mmHg) contre-indique tout exercice isométrique ou HIIT
+  // American College of Cardiology 2019 : effort intense = pic tensionnel pouvant atteindre 300/150 mmHg
+  if(med.indexOf('hta_severe')!==-1){
+    var htaActivityFactor=(s.activity!==null&&s.activity!==undefined&&ACTIVITIES[s.activity])?ACTIVITIES[s.activity].factor:0;
+    var htaHighIntensity=s.sportType==='crossfit'||(ACTIVITIES[3]&&htaActivityFactor>=ACTIVITIES[3].factor);
+    if(htaHighIntensity){
+      conflicts.push({level:'danger',message:'⚠ HTA sévère incompatible avec les entraînements HIIT/CrossFit intensifs. Consultez impérativement votre cardiologue avant de démarrer ce programme. Risque cardiovasculaire élevé.'});
+    }
+  }
+  // Conflit 4c : Diabète de type 1 + programme sportif — avertissement obligatoire (non bloquant)
+  // ADA 2023 / Colberg 2016 (Diabetes Care) : DT1 + exercice = gestion glycémique à l'effort indispensable
+  // Objectif glycémie avant effort : 1.3-1.8 g/L (Riddell 2017, Lancet Diabetes & Endocrinology)
+  if((med.indexOf('diabete_t1')!==-1)&&s.sportType!==null&&s.sStep!==undefined&&s.sStep>0){
+    conflicts.push({level:'warning',message:'⚠ Diabète de type 1 : consultez votre diabétologue avant de démarrer un programme sportif. Gérez votre glycémie à l\'effort : vérifiez votre glycémie avant/pendant/après les séances, ayez toujours des glucides rapides à portée de main. Objectif glycémie avant effort : 1.3–1.8 g/L.'});
   }
   // Conflit 5 : Goutte + fructose — le fructose élève l'acide urique autant que les purines (Choi 2010, NEJM)
   if(med.indexOf('goutte')!==-1){

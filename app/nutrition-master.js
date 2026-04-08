@@ -62,7 +62,7 @@
   }
 
   var KCAL_FLOOR_MALE          = 1500; // ACSM — plancher physiologique masculin (cohérent avec app-core.js calcTarget)
-  var KCAL_FLOOR_FEMALE        = 1200; // ACSM — plancher absolu femme sédentaire
+  var KCAL_FLOOR_FEMALE        = 1400; // ISSN 2017 / ACSM 2016 — plancher universel femme (l'ancien 1200 est obsolète)
   var KCAL_FLOOR_FEMALE_ACTIVE = 1400; // ACSM / IOC 2018 — plancher femme sportive (RED-S prevention)
   // Seuil d'activité : PAL ≥ 1.375 (légèrement actif, ≥1x/semaine) → plancher 1400 kcal
   var ACTIVITY_THRESHOLD_ACTIVE = 1.375;
@@ -80,7 +80,7 @@
    */
   function calcCaloriesTarget(tdee, goal, bmr, gender, activityLevel) {
     var adjusted  = Math.round(tdee * (1 + (GOAL_ADJUSTMENTS[goal] || 0)));
-    // Plancher féminin : 1400 si active (PAL ≥ 1.375), 1200 si sédentaire (ACSM / IOC RED-S)
+    // Plancher féminin : 1400 kcal/j (ISSN 2017 / ACSM 2016 — plancher universel, l'ancien 1200 est obsolète)
     var kcalFloor;
     if (gender === 'male') {
       kcalFloor = KCAL_FLOOR_MALE;

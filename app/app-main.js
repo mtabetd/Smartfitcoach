@@ -63,13 +63,22 @@ var PROFILE_KEYS = [
  'wantsDessert',
  'wheyFlavors','saladBuilder',
  'emailOptin',
- 'profilePhoto',
+ 'profilePhoto','photoFront','photoBack',
+ 'mealTimes','restDayMood',
  'todayWellness',
  'aiCoachHistory',
  'appMode',
  'stress',
  'cfDeloadRecommended',
- 'sessionPostponed'
+ 'sessionPostponed',
+ // New keys
+ 'waist',
+ 'mealsLogged',
+ 'parqDone',
+ 'parqResult',
+ 'streakFreezeUsedMonth',
+ 'streakFreezeAvailable',
+ 'swapCount'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -97,7 +106,8 @@ function slimMeal(meal) {
 var NUTRITION_PLAN_KEYS = [
  'goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height',
  'regime', 'halal', 'excluded', 'cookLevel', 'wantsDessert',
- 'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical'
+ 'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical',
+ 'trainingDaysSelected'
 ];
 
 function saveProfile() {
@@ -206,6 +216,14 @@ function loadProfile() {
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
  // excluded is a string (comma-separated), not an array — guard separately
  if (typeof S.excluded !== 'string') S.excluded = '';
+ // New fields: safe defaults if not present
+ if (S.waist === undefined) S.waist = null;
+ if (S.mealsLogged === undefined) S.mealsLogged = {};
+ if (S.parqDone === undefined) S.parqDone = false;
+ if (S.parqResult === undefined) S.parqResult = null;
+ if (S.streakFreezeUsedMonth === undefined) S.streakFreezeUsedMonth = null;
+ if (S.streakFreezeAvailable === undefined) S.streakFreezeAvailable = true;
+ if (S.swapCount === undefined) S.swapCount = 0;
  // Reset ephemeral UI state that should not persist across sessions
  S.shopListOpen = false;
  S.smoothieBarOpen = false;
@@ -325,14 +343,541 @@ window.renderModuleChoice = function renderModuleChoice(content) {
  });
 };
 
+// ─── PROFILE PAGE ───
+function renderProfilePage(container) {
+ var S = window.S;
+ var user = window.AUTH ? window.AUTH.getUser() : null;
+ var c = h('div', {style: 'max-width:480px;margin:0 auto;padding:24px 20px 48px'});
+
+ // Back button
+ var backBtn = h('button', {
+   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);cursor:pointer;margin-bottom:24px;display:flex;align-items:center;gap:6px;',
+   onclick: function() { S.view = 'today'; if (window.render) window.render(); }
+ }, '← Retour');
+ c.appendChild(backBtn);
+
+ // Title
+ c.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;font-weight:normal;margin-bottom:4px;'}, 'Mon profil'));
+ c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);letter-spacing:1px;margin-bottom:28px;'}, user ? (user.email || '') : ''));
+
+ // ─── Photo + nom ───
+ var photoSection = h('div', {style: 'display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
+ var photoWrap = h('div', {style: 'width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--border);'});
+ if (S.profilePhoto) {
+   photoWrap.appendChild(h('img', {src: S.profilePhoto, alt: 'Photo de profil', style: 'width:100%;height:100%;object-fit:cover;'}));
+ } else {
+   var initials = (function() {
+     var _un = user ? (user.name || user.email || '') : (S.prenom || '');
+     if (S.prenom && S.nom) return (S.prenom[0] + S.nom[0]).toUpperCase();
+     if (!_un) return 'S';
+     var parts = _un.trim().split(/\s+/);
+     if (parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+     return _un[0].toUpperCase();
+   })();
+   photoWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;color:var(--grey);'}, initials));
+ }
+ // Photo upload input
+ var photoInput = document.createElement('input');
+ photoInput.type = 'file';
+ photoInput.accept = 'image/*';
+ photoInput.style.display = 'none';
+ photoInput.addEventListener('change', function() {
+   var file = photoInput.files[0];
+   if (!file) return;
+   var reader = new FileReader();
+   reader.onload = function(e) {
+     // Compresser via canvas (max 400px, qualité 0.75) pour éviter dépassement localStorage
+     var img = new Image();
+     img.onload = function() {
+       var maxSize = 400;
+       var w = img.width, _h = img.height;
+       if (w > maxSize || _h > maxSize) {
+         if (w > _h) { _h = Math.round(_h * maxSize / w); w = maxSize; }
+         else { w = Math.round(w * maxSize / _h); _h = maxSize; }
+       }
+       var canvas = document.createElement('canvas');
+       canvas.width = w; canvas.height = _h;
+       canvas.getContext('2d').drawImage(img, 0, 0, w, _h);
+       S.profilePhoto = canvas.toDataURL('image/jpeg', 0.75);
+       if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
+       if (window.render) window.render();
+     };
+     img.src = e.target.result;
+   };
+   reader.readAsDataURL(file);
+ });
+ photoWrap.appendChild(photoInput);
+ photoWrap.addEventListener('click', function() { photoInput.click(); });
+ photoSection.appendChild(photoWrap);
+ var nameBlock = h('div', {style: 'flex:1;'});
+ var displayName = [S.prenom, S.nom].filter(Boolean).join(' ') || (user && (user.name || user.email)) || 'Utilisateur';
+ nameBlock.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px;'}, displayName));
+ nameBlock.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:1px;cursor:pointer;text-transform:uppercase;'}, 'Changer la photo'));
+ photoSection.appendChild(nameBlock);
+ c.appendChild(photoSection);
+
+ // ─── Infos clés ───
+ var infoSection = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
+ infoSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:12px;'}, 'INFORMATIONS'));
+ var infoRows = [
+   ['Âge', S.age ? S.age + ' ans' : '—'],
+   ['Poids', S.weight ? S.weight + ' kg' : '—'],
+   ['Taille', S.height ? S.height + ' cm' : '—'],
+   ['Objectif', (function() {
+     var _g = window.GOALS;
+     if (_g && Array.isArray(_g) && S.goal !== null && S.goal !== undefined && _g[S.goal]) return _g[S.goal].name;
+     return S.goal !== null && S.goal !== undefined ? ('Objectif ' + (S.goal + 1)) : '—';
+   })()]
+ ];
+ infoRows.forEach(function(row) {
+   var r = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);'});
+   r.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);'}, row[0]));
+   r.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black);'}, row[1]));
+   infoSection.appendChild(r);
+ });
+ c.appendChild(infoSection);
+
+ // ─── Mode application ───
+ var modeSection = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
+ modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:4px;'}, 'MODE D\'UTILISATION'));
+ modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Choisissez les modules que vous souhaitez utiliser.'));
+ var modes = [
+   { value: 'nutrition', label: 'Nutrition uniquement', desc: 'Suivi alimentaire et objectifs caloriques.' },
+   { value: 'sport', label: 'Sport uniquement', desc: 'Programmes d\'entraînement et progression.' },
+   { value: 'both', label: 'Nutrition & Sport', desc: 'L\'approche complète. Recommandé.' }
+ ];
+ modes.forEach(function(m) {
+   var isActive = S.appMode === m.value;
+   var modeCard = h('div', {
+     style: 'padding:14px 16px;border:1px solid ' + (isActive ? 'var(--black)' : 'var(--border)') + ';margin-bottom:8px;cursor:pointer;background:' + (isActive ? 'var(--ivory2)' : 'transparent') + ';transition:border-color .2s,background .2s;',
+     onclick: function() {
+       S.appMode = m.value;
+       // Reset view to match new mode
+       if (m.value === 'sport') { S.view = 'today'; }
+       else if (m.value === 'nutrition') { S.view = 'today'; }
+       else { S.view = 'today'; }
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       if (window.render) window.render();
+     }
+   });
+   var modeRow = h('div', {style: 'display:flex;align-items:center;gap:12px;'});
+   var dot = h('div', {style: 'width:14px;height:14px;border-radius:50%;border:1px solid ' + (isActive ? 'var(--black)' : 'var(--grey3,#C8C8C0)') + ';background:' + (isActive ? 'var(--black)' : 'transparent') + ';flex-shrink:0;'});
+   modeRow.appendChild(dot);
+   var modeText = h('div', {});
+   modeText.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:500;color:var(--black);margin-bottom:2px;'}, m.label));
+   modeText.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);'}, m.desc));
+   modeRow.appendChild(modeText);
+   modeCard.appendChild(modeRow);
+   modeSection.appendChild(modeCard);
+ });
+ c.appendChild(modeSection);
+
+ // ─── Modifier le profil (in-place editor) ───
+ if (S._profileEdit) {
+   // In-place edit form
+   var editForm = h('div', {style: 'margin-bottom:28px;padding:20px;border:1px solid var(--border);background:var(--ivory2,#F5F3EC);'});
+   editForm.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'MODIFIER LE PROFIL'));
+
+   // Prénom
+   var _efPrenomLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, 'Prénom');
+   editForm.appendChild(_efPrenomLabel);
+   var _efPrenom = h('input', {
+     type: 'text', value: S.prenom || '',
+     placeholder: 'Votre prénom',
+     style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;margin-bottom:14px;outline:none;border-radius:2px;',
+     oninput: function(e) { S.prenom = e.target.value; }
+   });
+   editForm.appendChild(_efPrenom);
+
+   // Poids
+   var _efPoidsLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, 'Poids (kg)');
+   editForm.appendChild(_efPoidsLabel);
+   var _efPoidsWrap = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:14px;'});
+   var _efPoids = h('input', {
+     type: 'number', min: '30', max: '300', step: '0.1',
+     value: S.weight ? String(S.weight) : '',
+     placeholder: '75',
+     style: 'flex:1;min-width:0;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;outline:none;border-radius:2px;',
+     oninput: function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) S.weight = v; }
+   });
+   _efPoidsWrap.appendChild(_efPoids);
+   _efPoidsWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);'}, 'kg'));
+   editForm.appendChild(_efPoidsWrap);
+
+   // Taille
+   var _efTailleLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px;'}, 'Taille (cm)');
+   editForm.appendChild(_efTailleLabel);
+   var _efTailleWrap = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:14px;'});
+   var _efTaille = h('input', {
+     type: 'number', min: '120', max: '250', step: '1',
+     value: S.height ? String(S.height) : '',
+     placeholder: '175',
+     style: 'flex:1;min-width:0;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;outline:none;border-radius:2px;',
+     oninput: function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) S.height = v; }
+   });
+   _efTailleWrap.appendChild(_efTaille);
+   _efTailleWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);'}, 'cm'));
+   editForm.appendChild(_efTailleWrap);
+
+   // Niveau d'activité
+   var _efActLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;'}, 'Niveau d\'activité');
+   editForm.appendChild(_efActLabel);
+   var _efActWrap = h('div', {style: 'display:flex;flex-direction:column;gap:6px;margin-bottom:14px;'});
+   var _allActivities = window.ACTIVITIES || [];
+   _allActivities.forEach(function(a, i) {
+     var _isAct = S.activity === i;
+     var _actItem = h('div', {
+       style: 'padding:10px 12px;border:1px solid ' + (_isAct ? 'var(--black)' : 'var(--border)') + ';background:' + (_isAct ? 'var(--black)' : 'transparent') + ';cursor:pointer;',
+       onclick: function() { S.activity = i; if (window.render) window.render(); }
+     });
+     _actItem.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:' + (_isAct ? 'var(--ivory,#FAF9F6)' : 'var(--black)') + ';'}, a.name + ' — ' + a.desc));
+     _efActWrap.appendChild(_actItem);
+   });
+   editForm.appendChild(_efActWrap);
+
+   // Régime alimentaire
+   var _efRegLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;'}, 'Régime alimentaire');
+   editForm.appendChild(_efRegLabel);
+   var _efRegWrap = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;'});
+   var _allRegimes = window.REGIMES || [];
+   _allRegimes.forEach(function(r, i) {
+     var _isReg = S.regime === i;
+     var _regChip = h('div', {
+       style: 'padding:8px 14px;border:1px solid ' + (_isReg ? 'var(--black)' : 'var(--border)') + ';background:' + (_isReg ? 'var(--black)' : 'transparent') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:' + (_isReg ? 'var(--ivory,#FAF9F6)' : 'var(--black)') + ';',
+       onclick: function() { S.regime = i; if (window.render) window.render(); }
+     }, r.name);
+     _efRegWrap.appendChild(_regChip);
+   });
+   editForm.appendChild(_efRegWrap);
+
+   // Halal checkbox
+   var _halalRow = h('div', {style: 'display:flex;align-items:center;gap:10px;margin-bottom:18px;cursor:pointer;', onclick: function() { S.halal = !S.halal; if (window.render) window.render(); }});
+   var _halalBox = h('div', {style: 'width:18px;height:18px;border-radius:2px;border:1px solid var(--black,#0A0A09);display:flex;align-items:center;justify-content:center;background:' + (S.halal ? 'var(--black,#0A0A09)' : 'transparent') + ';flex-shrink:0;'});
+   if (S.halal) _halalBox.appendChild(h('span', {style: 'color:var(--ivory,#FAF9F6);font-size:10px;'}, '\u2713'));
+   _halalRow.appendChild(_halalBox);
+   _halalRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black);'}, 'Halal \u2014 exclure porc & alcool'));
+   editForm.appendChild(_halalRow);
+
+   // Save button
+   var _efSave = h('button', {
+     style: 'display:block;width:100%;padding:18px 28px;min-height:44px;border:1px solid var(--black);background:var(--black);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;cursor:pointer;margin-bottom:8px;border-radius:2px;',
+     onclick: function() {
+       // Invalidate weekPlan if nutrition-critical fields changed
+       S.weekPlan = null;
+       S._profileEdit = false;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
+       // Toast
+       try {
+         var _t = document.createElement('div');
+         _t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;padding:12px 20px;z-index:10000;border-radius:2px;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+         _t.textContent = '\u2713 Profil mis \u00e0 jour';
+         document.body.appendChild(_t);
+         setTimeout(function() { if (_t.parentNode) _t.parentNode.removeChild(_t); }, 2500);
+       } catch(ex) {}
+       if (window.render) window.render();
+     }
+   }, 'Enregistrer');
+   editForm.appendChild(_efSave);
+
+   // Cancel button
+   var _efCancel = h('button', {
+     style: 'display:block;width:100%;padding:12px 24px;min-height:44px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;border-radius:2px;',
+     onclick: function() { S._profileEdit = false; if (window.render) window.render(); }
+   }, 'Annuler');
+   editForm.appendChild(_efCancel);
+   c.appendChild(editForm);
+ } else {
+   var editBtn = h('button', {
+     style: 'display:block;width:100%;padding:14px;border:1px solid var(--black);background:var(--black);color:var(--ivory,#F8F6EF);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;',
+     onclick: function() { S._profileEdit = true; if (window.render) window.render(); }
+   }, 'Modifier mon profil');
+   c.appendChild(editBtn);
+ }
+
+ // ─── Changer l'objectif ───
+ var changeGoalBtn = h('button', {
+   style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;',
+   onclick: function() { S._goalModal = true; if (window.render) window.render(); }
+ }, '\uD83C\uDFAF Changer mon objectif');
+ c.appendChild(changeGoalBtn);
+
+ // ─── Déconnexion ───
+ var logoutBtn = h('button', {
+   style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+   onclick: function() {
+     if (window.AUTH && window.AUTH.logout) { window.AUTH.logout(); }
+     else { S.view = 'authLogin'; if (window.render) window.render(); }
+   }
+ }, 'Se déconnecter');
+ c.appendChild(logoutBtn);
+
+ // ─── Zone de danger (RGPD) ───
+ c.appendChild(h('div', {style: 'margin-top:32px;padding-top:20px;border-top:1px solid var(--border);'}));
+ c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:14px;'}, 'DONNÉES PERSONNELLES'));
+
+ // Télécharger mes données
+ var downloadDataBtn = h('button', {
+   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);cursor:pointer;text-decoration:underline;display:block;margin-bottom:12px;',
+   onclick: function() {
+     try {
+       var data = {};
+       var exportKeys = ['prenom', 'sex', 'weight', 'height', 'age', 'goal', 'activity', 'medical', 'allergies', 'supplements', 'weekPlan', 'sportType', 'sportProgram', 'muscuSessionLog', 'weightHistory'];
+       exportKeys.forEach(function(k) { if (S[k] !== undefined) data[k] = S[k]; });
+       var blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+       var url = URL.createObjectURL(blob);
+       var a = document.createElement('a');
+       a.href = url; a.download = 'smartfitcoach-data.json';
+       document.body.appendChild(a); a.click();
+       document.body.removeChild(a);
+       URL.revokeObjectURL(url);
+     } catch(ex) { console.warn('[RGPD] download error', ex); }
+   }
+ }, 'Télécharger mes données');
+ c.appendChild(downloadDataBtn);
+
+ // Supprimer mon compte
+ var deleteAccountBtn = h('button', {
+   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--red,#5A1010);cursor:pointer;display:block;min-height:44px;',
+   onclick: function() {
+     var confirmed = window.confirm('Supprimer définitivement votre compte et toutes vos données ? Cette action est irréversible.');
+     if (!confirmed) return;
+     // 1. Vider localStorage
+     try {
+       Object.keys(localStorage).filter(function(k) { return k.startsWith('mtd_'); }).forEach(function(k) { localStorage.removeItem(k); });
+     } catch(ex) {}
+     // 2. Supprimer le compte Supabase si connecté
+     if (window.AUTH && window.AUTH.deleteAccount) {
+       window.AUTH.deleteAccount().then(function() { if (window.render) window.render(); });
+     } else if (window.AUTH && window.AUTH.logout) {
+       console.warn('[RGPD] AUTH.deleteAccount not available — logging out only');
+       window.AUTH.logout();
+     } else {
+       S.view = 'authLogin';
+       if (window.render) window.render();
+     }
+   }
+ }, 'Supprimer mon compte');
+ c.appendChild(deleteAccountBtn);
+
+ container.appendChild(c);
+
+ // ─── Modal: Changer mon objectif ───
+ // Cleanup any leftover modal from previous renders
+ (function() { var _old = document.getElementById('_sfc_goal_modal'); if (_old && _old.parentNode) _old.parentNode.removeChild(_old); })();
+ if (S._goalModal) {
+   var _GOALS = window.GOALS || [];
+   var _modal = h('div', {
+     id: '_sfc_goal_modal',
+     style: 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,9,0.55);z-index:9999;display:flex;align-items:flex-end;justify-content:center;',
+     onclick: function(e) { if (e.target === _modal) { S._goalModal = false; if (window.render) window.render(); } }
+   });
+   var _sheet = h('div', {
+     style: 'width:100%;max-width:520px;background:var(--ivory,#FAF9F6);padding:28px 24px 40px;border-radius:4px 4px 0 0;max-height:90vh;overflow-y:auto;'
+   });
+
+   // Header
+   var _mHeader = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;'});
+   _mHeader.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;'}, 'Mon objectif'));
+   var _closeBtn = h('button', {
+     style: 'background:none;border:none;font-size:20px;cursor:pointer;color:var(--grey);padding:4px 8px;min-height:44px;min-width:44px;',
+     onclick: function() { S._goalModal = false; if (window.render) window.render(); }
+   }, '\u00D7');
+   _mHeader.appendChild(_closeBtn);
+   _sheet.appendChild(_mHeader);
+
+   // Current TDEE info
+   var _tdee = window.calcTarget ? window.calcTarget() : 0;
+   if (_tdee > 0) {
+     var _tdeeInfo = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;text-align:center;border:1px solid var(--border);padding:10px;'});
+     _tdeeInfo.textContent = 'Vos besoins\u00a0: ' + _tdee + '\u00a0kcal/jour';
+     _sheet.appendChild(_tdeeInfo);
+   }
+
+   // Goal state for modal (temp)
+   if (typeof S._modalGoal === 'undefined' || S._modalGoal === null) S._modalGoal = S.goal;
+   if (typeof S._modalTargetWeight === 'undefined') S._modalTargetWeight = S.targetWeight;
+
+   // Goal chips
+   _sheet.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:12px;'}, 'Objectif'));
+   var _ggWrap = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;'});
+   _GOALS.forEach(function(gl, i) {
+     var _isOn = S._modalGoal === i;
+     var _chip = h('div', {
+       style: 'padding:12px 10px;border:1px solid ' + (_isOn ? 'var(--black)' : 'var(--border)') + ';background:' + (_isOn ? 'var(--black)' : 'transparent') + ';cursor:pointer;transition:background .15s,border-color .15s;',
+       onclick: function() {
+         S._modalGoal = i;
+         if (window.render) window.render();
+       }
+     });
+     _chip.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:500;color:' + (_isOn ? 'var(--ivory,#FAF9F6)' : 'var(--black)') + ';margin-bottom:2px;'}, gl.name));
+     _chip.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + (_isOn ? 'rgba(250,249,246,0.7)' : 'var(--grey)') + ';line-height:1.3;'}, gl.desc));
+     _ggWrap.appendChild(_chip);
+   });
+   _sheet.appendChild(_ggWrap);
+
+   // Macro diff: before → after (only when a different goal is selected)
+   if (S._modalGoal !== null && S._modalGoal !== S.goal && window.calcTarget && window.calcMacros) {
+     try {
+       var _beforeCal = window.calcTarget();
+       var _beforeMacros = window.calcMacros();
+       var _origGoalDiff = S.goal;
+       S.goal = S._modalGoal;
+       var _afterCal = window.calcTarget();
+       var _afterMacros = window.calcMacros();
+       S.goal = _origGoalDiff;
+       if (_beforeCal > 0 && _afterCal > 0) {
+         var _diffCal = _afterCal - _beforeCal;
+         var _diffProt = Math.round(_afterMacros.p - _beforeMacros.p);
+         var _diffBox = h('div', {style: 'border:1px solid var(--border);padding:12px 14px;margin-bottom:16px;background:var(--ivory2,#F5F3EC);'});
+         _diffBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:10px;'}, 'Impact sur vos plans'));
+         var _diffRow = h('div', {style: 'display:flex;justify-content:space-between;gap:12px;'});
+         // Calories col
+         var _calCol = h('div', {style: 'flex:1;text-align:center;'});
+         _calCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;'}, _afterCal + ' kcal'));
+         _calCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + (_diffCal > 0 ? '#2A6E2A' : _diffCal < 0 ? '#8B1A1A' : 'var(--grey)') + ';margin-top:2px;'}, (_diffCal > 0 ? '+' : '') + _diffCal + ' kcal'));
+         // Protein col
+         var _protCol = h('div', {style: 'flex:1;text-align:center;border-left:1px solid var(--border);padding-left:12px;'});
+         _protCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;'}, Math.round(_afterMacros.p) + 'g prot.'));
+         _protCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + (_diffProt > 0 ? '#2A6E2A' : _diffProt < 0 ? '#8B1A1A' : 'var(--grey)') + ';margin-top:2px;'}, (_diffProt > 0 ? '+' : '') + _diffProt + 'g'));
+         _diffRow.appendChild(_calCol);
+         _diffRow.appendChild(_protCol);
+         _diffBox.appendChild(_diffRow);
+         _sheet.appendChild(_diffBox);
+       }
+     } catch(e) {}
+   }
+
+   // Target weight (conditional)
+   var _selGoalObj = (_GOALS && S._modalGoal !== null && S._modalGoal !== undefined) ? _GOALS[S._modalGoal] : null;
+   var _selGoalKey = _selGoalObj ? _selGoalObj.key : null;
+   var _needsTarget = _selGoalKey === 'cut' || _selGoalKey === 'shred' || _selGoalKey === 'bulk' || _selGoalKey === 'lean_bulk';
+   if (_needsTarget) {
+     _sheet.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'}, 'Poids objectif'));
+     var _twWrap = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:16px;'});
+     var _twInput = h('input', {
+       type: 'number', min: '40', max: '160', step: '0.5',
+       value: S._modalTargetWeight ? String(S._modalTargetWeight) : '',
+       inputmode: 'decimal',
+       style: 'flex:1;padding:12px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;text-align:center;',
+       oninput: function(e) {
+         var v = parseFloat(e.target.value);
+         S._modalTargetWeight = (!isNaN(v) && v >= 40 && v <= 160) ? v : null;
+       }
+     });
+     _twWrap.appendChild(_twInput);
+     _twWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);'}, 'kg'));
+     _sheet.appendChild(_twWrap);
+
+     // Projection
+     if (S._modalTargetWeight && window.calcWeightProjection) {
+       var _origGoal = S.goal, _origTW = S.targetWeight;
+       S.goal = S._modalGoal; S.targetWeight = S._modalTargetWeight;
+       try {
+         var _proj = window.calcWeightProjection();
+         if (_proj && _proj.weeks) {
+           var _projBox = h('div', {style: 'text-align:center;padding:12px;border:1px solid var(--border);background:var(--ivory2,#F5F3EC);margin-bottom:16px;'});
+           _projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:6px;'}, 'Projection'));
+           _projBox.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-style:italic;'}, '~' + _proj.weeks + ' semaines'));
+           _projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:4px;'}, _proj.months + ' mois'));
+           _sheet.appendChild(_projBox);
+         }
+       } catch(e) {}
+       S.goal = _origGoal; S.targetWeight = _origTW;
+     }
+   }
+
+   // TCA conflict warning
+   var _tcaConflict = (_selGoalKey === 'cut' || _selGoalKey === 'shred') && Array.isArray(S.medical) && S.medical.indexOf('tca') !== -1;
+   if (_tcaConflict) {
+     _sheet.appendChild(h('div', {style: 'background:rgba(90,16,16,.06);border:1px solid #5A1010;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A1010;line-height:1.6;'}, 'Objectif s\u00e8che incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
+   }
+
+   // Save button
+   var _canSave = S._modalGoal !== null && !_tcaConflict && (!_needsTarget || (S._modalTargetWeight && S._modalTargetWeight >= 40));
+   var _saveBtn = h('button', {
+     style: 'display:block;width:100%;padding:14px;border:none;background:' + (_canSave ? 'var(--black)' : 'var(--border)') + ';color:' + (_canSave ? 'var(--ivory,#FAF9F6)' : 'var(--grey)') + ';font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:' + (_canSave ? 'pointer' : 'not-allowed') + ';margin-bottom:10px;',
+     onclick: function() {
+       if (!_canSave) return;
+       // Apply changes
+       S.goal = S._modalGoal;
+       if (_needsTarget) S.targetWeight = S._modalTargetWeight;
+       // Sync sport goals
+       if (_selGoalObj && window.NUTRITION_TO_SPORT_GOAL) {
+         var _newSportId = window.NUTRITION_TO_SPORT_GOAL[_selGoalObj.key];
+         if (_newSportId) {
+           var _primaryIds = ['muscle', 'weightloss', 'shred', 'general', 'endurance', 'flexibility'];
+           var _secondaryKept = Array.isArray(S.sportGoals) ? S.sportGoals.filter(function(x) { return _primaryIds.indexOf(x) === -1; }) : [];
+           S.sportGoals = [_newSportId].concat(_secondaryKept).slice(0, 3);
+         }
+       }
+       // Invalidate plans
+       S.weekPlan = null;
+       S.sportProgram = null;
+       // Cleanup temp state
+       delete S._modalGoal;
+       delete S._modalTargetWeight;
+       S._goalModal = false;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       // Toast actionnable : régénérer les plans directement
+       try {
+         var _toast = document.createElement('div');
+         _toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;padding:12px 16px;z-index:10000;border-radius:2px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+         var _toastTxt = document.createElement('span');
+         _toastTxt.textContent = '\u2713 Objectif mis \u00e0 jour';
+         _toast.appendChild(_toastTxt);
+         var _regenBtn = document.createElement('button');
+         _regenBtn.style.cssText = 'background:var(--ivory,#FAF9F6);color:#0A0A09;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;cursor:pointer;border-radius:1px;white-space:nowrap;';
+         _regenBtn.textContent = 'Reg\u00e9n\u00e9rer \u2192';
+         _regenBtn.onclick = function() {
+           try {
+             if (window.computeNutritionState) window.computeNutritionState(false);
+             if (window.generateWeek) {
+               var _wk = window.generateWeek();
+               if (Array.isArray(_wk) && _wk.length > 0) {
+                 window.S.weekPlan = _wk;
+                 window.S._weekPlanGeneratedAt = new Date().toISOString();
+               }
+             }
+             if (window.saveProfile) window.saveProfile();
+           } catch(e2) {}
+           if (_toast.parentNode) _toast.parentNode.removeChild(_toast);
+           if (window.render) window.render();
+         };
+         _toast.appendChild(_regenBtn);
+         document.body.appendChild(_toast);
+         setTimeout(function() { if (_toast.parentNode) _toast.parentNode.removeChild(_toast); }, 6000);
+       } catch(e) {}
+       if (window.render) window.render();
+     }
+   }, 'Enregistrer');
+   _sheet.appendChild(_saveBtn);
+
+   // Cancel button
+   var _cancelBtn = h('button', {
+     style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+     onclick: function() {
+       delete S._modalGoal;
+       delete S._modalTargetWeight;
+       S._goalModal = false;
+       if (window.render) window.render();
+     }
+   }, 'Annuler');
+   _sheet.appendChild(_cancelBtn);
+
+   _modal.appendChild(_sheet);
+   document.body.appendChild(_modal);
+ }
+}
+
 // ─── MAIN RENDER ───
 function render() {
  if (render._lock) return;
  render._lock = true;
  try {
  if (window.destroyAllCharts) window.destroyAllCharts();
- if (AUTH.isLoggedIn()) saveProfile();
+ if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile();
  var app = document.getElementById('app');
+ if (!app) { console.error('[render] #app not found'); return; }
 
  // Scroll to top only when navigating to a different page/step
  var _didNavigate = (render._lastView !== S.view) ||
@@ -343,6 +888,7 @@ function render() {
  render._lastSStep = S.sStep;
 
  app.innerHTML = '';
+ try {
 
  if (_didNavigate) {
  // Scroll immediately (before new content is painted)
@@ -355,7 +901,7 @@ function render() {
 
  // Not logged in → auth screens
  if (S.view === 'authNewPassword') { renderNewPassword(app); return; }
- if (!AUTH.isLoggedIn()) {
+ if (!window.AUTH || !window.AUTH.isLoggedIn()) {
  if (S.view === 'authRegister') renderRegister(app);
  else if (S.view === 'authVerify') renderVerifyEmail(app);
  else if (S.view === 'authForgot') renderForgotPassword(app);
@@ -411,12 +957,13 @@ function render() {
  (function() {
    var _avatarBtn = h('button', {
      'class': 'user-bar-avatar-btn',
-     onclick: function() { S.view = 'nutrition'; S.nStep = 1; window.render(); },
-     title: 'Voir le profil'
+     onclick: function() { S.view = 'profil'; window.render(); },
+     title: 'Mon profil'
    });
    if (S.profilePhoto) {
      _avatarBtn.appendChild(h('img', {
        src: S.profilePhoto,
+       alt: 'Photo de profil',
        'class': 'user-bar-avatar-photo'
      }));
    } else {
@@ -448,8 +995,9 @@ function render() {
  var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
 
  // Module choice — si l'utilisateur est connecté mais n'a pas encore choisi son mode
+ // Exception : la page profil reste accessible même sans appMode (pour choisir le mode)
  var _authUser = window.AUTH ? window.AUTH.getUser() : null;
- if (_authUser && !S.appMode && S.nStep === 0 && S.sStep === 0) {
+ if (_authUser && !S.appMode && S.nStep === 0 && S.sStep === 0 && S.view !== 'profil') {
    window.renderModuleChoice(content);
    wrap.appendChild(content);
    wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'Smart Fit Coach')]));
@@ -457,7 +1005,9 @@ function render() {
    return;
  }
 
- if (S.view === 'sport' && window.SPORT) {
+ if (S.view === 'profil') {
+ renderProfilePage(content);
+ } else if (S.view === 'sport' && window.SPORT) {
  SPORT.render(content);
  } else if (S.view === 'nutrition' && window.NUTRITION) {
  NUTRITION.render(content);
@@ -499,6 +1049,7 @@ function render() {
  if (window.I18N && window.I18N.current === 'en' && window.I18N.translateDOM) {
    try { window.I18N.translateDOM(); } catch(e) {}
  }
+ } catch (_renderErr) { console.error('[render] crash:', _renderErr); try { app.innerHTML = ''; var _errDiv = document.createElement('div'); _errDiv.style.cssText = 'padding:40px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;'; _errDiv.innerHTML = '<div style="font-size:13px;color:#5A1010;margin-bottom:16px;">Une erreur est survenue. Vos donn\u00e9es sont sauvegard\u00e9es.</div><button onclick="window.location.reload()" style="padding:12px 24px;background:#0A0A09;color:#fff;border:none;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">Recharger</button>'; app.appendChild(_errDiv); } catch(e2) {} }
  } finally { render._lock = false; }
 }
 
@@ -1149,7 +1700,7 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
 
 // ─── INIT ───
 function _doAutoLogin() {
-if (AUTH.isLoggedIn()) {
+if (window.AUTH && window.AUTH.isLoggedIn()) {
  S.view = 'today';
  if (window.GAMIFICATION) GAMIFICATION.updateStreak();
  // Restore full profile from localStorage (E-01)
@@ -1259,12 +1810,12 @@ if (window._verifyCriticalFunctions) {
 // ─── AUTOSAVE & BEFOREUNLOAD ───
 // Save on tab/browser close to avoid losing last unsaved state
 window.addEventListener('beforeunload', function() {
- try { if (AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
- try { if (AUTH.isLoggedIn() && window.SupaSync) SupaSync.saveProfile(); } catch(e) {}
+ try { if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
+ try { if (window.AUTH && window.AUTH.isLoggedIn() && window.SupaSync) SupaSync.saveProfile(); } catch(e) {}
 });
 // Periodic autosave every 30s as safety net (render() already saves on interaction)
 setInterval(function() {
- try { if (AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
+ try { if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
 }, 30000);
 
 })();
