@@ -83,6 +83,15 @@ function backArrowHtml() {
 }
 
 function goStep(n) {
+  // Auto-skip profile steps 1-3 when data already exists (cross-module symbiosis)
+  if (n === 1) {
+    var _step1ok = S.sex && (S.birthDate || S.age) && S.prenom !== undefined;
+    var _step2ok = S.weight && S.height;
+    var _step3ok = S.activity !== null && S.activity !== undefined && Array.isArray(S.train) && S.train.length > 0 && S.sleep !== null && S.sleep !== undefined;
+    if (_step1ok && _step2ok && _step3ok) { n = 4; }
+    else if (_step1ok && _step2ok) { n = 3; }
+    else if (_step1ok) { n = 2; }
+  }
   S.nStep = n;
   bb('nutrition_step', {step: n});
   window.render();
@@ -1012,6 +1021,31 @@ function renderStep4(p) {
     window.S._switchedFromSport = false; // Afficher une seule fois
     p.appendChild(_contextBanner);
   }
+  // Carte résumé profil repris (affiché quand les étapes 1-3 ont été sautées)
+  (function() {
+    var _s1ok = S.sex && (S.birthDate || S.age) && S.prenom !== undefined;
+    var _s2ok = S.weight && S.height;
+    var _s3ok = S.activity !== null && S.activity !== undefined && Array.isArray(S.train) && S.train.length > 0 && S.sleep !== null && S.sleep !== undefined;
+    if (_s1ok && _s2ok && _s3ok) {
+      var _ageSummary = typeof getAge === 'function' ? getAge() : (S.age || '');
+      var _weightSummary = window.UNITS ? window.UNITS.displayWeight(S.weight) : (S.weight + ' kg');
+      var _heightSummary = window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height + ' cm');
+      var _actSummary = (window.ACTIVITIES && window.ACTIVITIES[S.activity]) ? window.ACTIVITIES[S.activity].name : '';
+      var _parts = [];
+      if (S.prenom) _parts.push(S.prenom);
+      if (_ageSummary) _parts.push(_ageSummary + ' ans');
+      if (_weightSummary) _parts.push(_weightSummary);
+      if (_heightSummary) _parts.push(_heightSummary);
+      if (_actSummary) _parts.push(_actSummary);
+      var _summaryCard = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid #D8D8D0;background:var(--ivory2,#F4F4F0);border-radius:2px;margin-bottom:16px;'});
+      var _summaryText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;'});
+      _summaryText.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:3px'}, 'Profil repris'));
+      _summaryText.appendChild(document.createTextNode(_parts.join(' \u00b7 ')));
+      _summaryCard.appendChild(_summaryText);
+      _summaryCard.appendChild(h('a', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-decoration:underline;cursor:pointer;white-space:nowrap;margin-left:12px;', onclick: function(e) { e.preventDefault(); S.nStep = 1; window.render(); }}, 'Modifier'));
+      p.appendChild(_summaryCard);
+    }
+  })();
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Vos conditions de sant\u00e9 pour des recommandations s\u00fbres.'));
@@ -2346,6 +2380,14 @@ function renderStep8(p) {
     goStep(9);
   }}, 'Voir mon planning semaine'));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(7); }, html: backArrowHtml() + 'Modifier mes pr\u00e9f\u00e9rences'}));
+
+  // CTA sport — affiché en mode "les deux" quand le programme sportif n'est pas encore configuré
+  if (S.appMode === 'both' && !S.sportType) {
+    p.appendChild(h('div', {style: 'height:1px;background:var(--border,#E8E6DF);margin:24px 0 20px'}));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;text-align:center'}, '\u00c9TAPE SUIVANTE'));
+    p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#1A1A18);line-height:1.55;margin-bottom:16px;text-align:center'}, 'Ton plan nutrition est pr\u00eat. Configure maintenant ton programme sportif pour une exp\u00e9rience compl\u00e8te.'));
+    p.appendChild(h('button', {style: 'display:block;width:100%;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:52px;padding:0 24px;border:none;cursor:pointer;border-radius:2px', onclick: function() { S.view = 'sport'; window.render(); }}, 'CONFIGURER MON PROGRAMME SPORTIF'));
+  }
 }
 
 // ─── WEIGHT CHART HELPER ───
