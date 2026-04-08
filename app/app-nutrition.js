@@ -2358,13 +2358,6 @@ function renderStep8(p) {
     }
   }
 
-  // Scanner section
-  if (window.SCANNER) {
-    var scanSection = h('div', {style: 'margin:24px 0'});
-    SCANNER.renderWidget(scanSection);
-    p.appendChild(scanSection);
-  }
-
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
     // Badge profil complet : déclenché quand l'utilisateur voit ses résultats et passe au planning
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('profile_complete');
@@ -2695,121 +2688,6 @@ function renderStep9(p) {
   }
   p.appendChild(quickActions);
 
-  // ── Plate scan UI ─────────────────────────────────────────────────────────
-  if (S._plateScanSlot) {
-    var scanCard = h('div', {style: 'border:1px solid var(--border,#D8D8D0);padding:16px;margin-bottom:16px;border-radius:2px'});
-    scanCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px'}, '\uD83D\uDCF8 SCANNER MON ASSIETTE'));
-    if (S._plateScanResult) {
-      var res = S._plateScanResult;
-      var resCard = h('div', {style: 'background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:12px;margin-bottom:12px'});
-      resCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:6px'}, res.name || 'Plat détecté'));
-      if (res.portion) resCard.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-bottom:6px'}, 'Portion : ' + res.portion));
-      var macroRow = h('div', {style: 'display:flex;gap:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'});
-      macroRow.appendChild(h('span', {style: 'color:var(--black,#0A0A09);font-weight:600'}, (res.kcal || 0) + ' kcal'));
-      macroRow.appendChild(h('span', {}, 'P ' + (res.p || 0) + 'g'));
-      macroRow.appendChild(h('span', {}, 'G ' + (res.g || 0) + 'g'));
-      macroRow.appendChild(h('span', {}, 'L ' + (res.l || 0) + 'g'));
-      resCard.appendChild(macroRow);
-      scanCard.appendChild(resCard);
-      var addBtn2 = h('button', {
-        style: 'width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:8px',
-        onclick: function() {
-          var slotKey2 = S._plateScanSlot;
-          if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
-          S.weekPlan[S.selectedDay][slotKey2] = { n: res.name || 'Plat scanné', k: res.kcal || 0, kcal: res.kcal || 0, p: res.p || 0, g: res.g || 0, l: res.l || 0, f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true };
-          S._plateScanSlot = null; S._plateScanResult = null; S._plateScanError = null; S._plateScanLoading = false;
-          if (window.saveProfile) window.saveProfile();
-          window.render();
-        }
-      }, 'Ajouter ce repas');
-      scanCard.appendChild(addBtn2);
-      scanCard.appendChild(h('button', {
-        style: 'width:100%;padding:10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer',
-        onclick: function() { S._plateScanResult = null; S._plateScanError = null; window.render(); }
-      }, 'Réessayer'));
-    } else if (S._plateScanLoading) {
-      var loadingDiv = h('div', {style: 'text-align:center;padding:20px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65)', role: 'status', 'aria-live': 'polite'});
-      var spinnerEl = document.createElement('span');
-      spinnerEl.className = 'loading-spinner';
-      spinnerEl.setAttribute('aria-hidden', 'true');
-      loadingDiv.appendChild(spinnerEl);
-      loadingDiv.appendChild(document.createTextNode('Analyse en cours\u2026'));
-      scanCard.appendChild(loadingDiv);
-    } else {
-      if (S._plateScanError) {
-        scanCard.appendChild(h('div', {style: 'color:#8B2020;font-size:11px;margin-bottom:10px;font-family:"Helvetica Neue",Arial,sans-serif', role: 'alert'}, S._plateScanError));
-      }
-      var fileInput = h('input', { type: 'file', accept: 'image/*', capture: 'environment', style: 'display:none' });
-      fileInput.onchange = function(e) {
-        var file = e.target.files[0];
-        if (!file) return;
-        S._plateScanLoading = true;
-        S._plateScanError = null;
-        window.render();
-        var reader = new FileReader();
-        reader.onerror = function() {
-          S._plateScanLoading = false;
-          S._plateScanError = 'Impossible de lire ce fichier image. Vérifiez le format et réessayez.';
-          window.render();
-        };
-        reader.onload = function(ev) {
-          var dataUrl = ev.target && ev.target.result;
-          if (!dataUrl || typeof dataUrl !== 'string' || dataUrl.indexOf(',') === -1) {
-            S._plateScanLoading = false;
-            S._plateScanError = 'La lecture de l\'image a échoué. Réessayez avec une autre photo.';
-            window.render();
-            return;
-          }
-          var b64 = dataUrl.split(',')[1];
-          if (!b64) {
-            S._plateScanLoading = false;
-            S._plateScanError = 'Format d\'image non pris en charge. Utilisez JPG ou PNG.';
-            window.render();
-            return;
-          }
-          var mType = file.type || 'image/jpeg';
-          var _ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-          var _timer = _ctrl ? setTimeout(function() { _ctrl.abort(); }, 30000) : null;
-          window.fetch('/.netlify/functions/plate-scan', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: b64, mediaType: mType }),
-            signal: _ctrl ? _ctrl.signal : undefined
-          })
-          .then(function(r2) {
-            if (_timer) clearTimeout(_timer);
-            return r2.json();
-          })
-          .then(function(data) {
-            S._plateScanLoading = false;
-            if (data.error) { S._plateScanError = data.error; }
-            else { S._plateScanResult = data; }
-            window.render();
-          })
-          .catch(function(err) {
-            if (_timer) clearTimeout(_timer);
-            S._plateScanLoading = false;
-            S._plateScanError = (err && err.name === 'AbortError') ? 'L\u2019analyse a pris trop de temps. V\u00e9rifiez votre connexion et r\u00e9essayez.' : 'Connexion interrompue. V\u00e9rifiez votre r\u00e9seau et r\u00e9essayez.';
-            window.render();
-          });
-        };
-        reader.readAsDataURL(file);
-      };
-      scanCard.appendChild(fileInput);
-      var triggerBtn = h('button', {
-        style: 'width:100%;padding:14px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer',
-        'aria-label': 'Prendre une photo du plat pour analyse',
-        onclick: function() { fileInput.click(); }
-      }, '\uD83D\uDCF8 Prendre une photo');
-      scanCard.appendChild(triggerBtn);
-      scanCard.appendChild(h('button', {
-        style: 'width:100%;padding:10px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-top:8px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer',
-        onclick: function() { S._plateScanSlot = null; S._plateScanResult = null; S._plateScanError = null; window.render(); }
-      }, 'Annuler'));
-    }
-    p.appendChild(scanCard);
-  }
-
   // ── Food search / manual entry UI ─────────────────────────────────────────
   if (S._foodSearchSlot) {
     var foodCard = h('div', {style: 'border:1px solid var(--border,#D8D8D0);padding:16px;margin-bottom:16px;border-radius:2px'});
@@ -3029,19 +2907,6 @@ function renderStep9(p) {
               if (window.openSaladComposer) window.openSaladComposer(slotKey);
             }
           }, 'Salade'));
-          var scanBtn = h('button', {
-            style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
-            onclick: function(e) {
-              e.stopPropagation();
-              S._addMealModalSlot = null;
-              S._plateScanSlot = slotKey;
-              S._plateScanResult = null;
-              S._plateScanError = null;
-              S._plateScanLoading = false;
-              window.render();
-            }
-          }, '\uD83D\uDCF8 Scanner');
-          choiceRow.appendChild(scanBtn);
           var alimentBtn = h('button', {
             style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px',
             onclick: function(e) {
@@ -3180,18 +3045,6 @@ function renderStep9(p) {
             if (window.openSaladComposer) window.openSaladComposer(slotKey);
           }
         }, 'Salade');
-        var btnScan = h('button', {
-          style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
-          onclick: function(e) {
-            e.stopPropagation();
-            S._addMealModalSlot = null;
-            S._plateScanSlot = slotKey;
-            S._plateScanResult = null;
-            S._plateScanError = null;
-            S._plateScanLoading = false;
-            window.render();
-          }
-        }, '\uD83D\uDCF8 Scanner');
         var btnAliment = h('button', {
           style: 'flex:1;padding:14px 8px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer',
           onclick: function(e) {
@@ -3206,7 +3059,6 @@ function renderStep9(p) {
         }, '\u270F\uFE0F Aliment');
         choiceRow.appendChild(btnRecipe);
         choiceRow.appendChild(btnSalad);
-        choiceRow.appendChild(btnScan);
         choiceRow.appendChild(btnAliment);
         sheet.appendChild(choiceRow);
         overlay.appendChild(sheet);

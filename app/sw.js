@@ -24,7 +24,6 @@ const APP_SHELL = [
   './gamification.js',
   './extras.js',
   './tips-assistant.js',
-  './scanner.js',
   './crossfit-haltero-cycles.js',
   './crossfit-wods.js',
   './crossfit-wods-cycle2.js',
