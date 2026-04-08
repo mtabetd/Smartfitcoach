@@ -758,6 +758,33 @@ function renderStep2(p) {
     p.appendChild(badge);
   }
 
+  // ─── Tour de taille (optionnel) ───
+  p.appendChild(h('div', {style: 'height:20px'}));
+  var _waistLabelWrap = h('div', {'class': 'section-label', style: 'display:flex;align-items:center;gap:8px;'});
+  _waistLabelWrap.appendChild(txt('Tour de taille'));
+  _waistLabelWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--grey);border:1px solid var(--border);padding:2px 6px;'}, 'Optionnel'));
+  p.appendChild(_waistLabelWrap);
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;line-height:1.5;'}, 'Permet un suivi de composition corporelle plus pr\u00e9cis que l\u2019IMC seul'));
+  var _waistWrap = h('div', {'class': 'num-input-wrap'});
+  _waistWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '50', max: '200', step: '1', value: S.waist ? String(S.waist) : '', inputmode: 'numeric', placeholder: 'ex: 85', oninput: function(e) {
+    var v = parseFloat(e.target.value);
+    S.waist = (!isNaN(v) && v >= 50 && v <= 200) ? v : null;
+    window.render();
+  }, onblur: function(e) {
+    var v = parseFloat(e.target.value);
+    if (e.target.value !== '' && (isNaN(v) || v < 50 || v > 200)) { e.target.value = ''; S.waist = null; }
+    window.render();
+  }}));
+  _waistWrap.appendChild(h('span', {'class': 'num-unit'}, 'cm'));
+  p.appendChild(_waistWrap);
+  // WHtR indicator
+  if (S.waist && S.height) {
+    var _whtr = S.waist / S.height;
+    if (_whtr > 0.5) {
+      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#7D4E00;background:#FFF3CD;border:1px solid #F0AD4E;padding:8px 12px;margin-top:6px;line-height:1.5;'}, '\u26a0 Risque cardiom\u00e9tabolique accru (tour de taille > 50% de la taille)'));
+    }
+  }
+
   // Photo upload section
   p.appendChild(h('div', {style: 'height:24px'}));
   p.appendChild(h('div', {'class': 'section-label'}, 'Photo de progression (optionnel)'));
@@ -1426,6 +1453,30 @@ function renderStep6(p) {
   }
 
   p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez l\u2019objectif qui guide votre programme.'));
+
+  // ─── RED-S warning banner ───
+  // Show BEFORE goal chips if conditions match
+  (function() {
+    var _goalKey = (S.goal !== null && S.goal !== undefined && GOALS[S.goal]) ? GOALS[S.goal].key : null;
+    var _isCutOrShred = _goalKey === 'cut' || _goalKey === 'shred';
+    var _isFemme = S.sex === 'femme';
+    var _lowSleep = S.sleep !== null && S.sleep !== undefined && S.sleep <= 1; // index 0 = <6h, 1 = 6-7h
+    var _highActivity = S.activity !== null && S.activity !== undefined && S.activity >= 2;
+    // Try window.detectREDS first (covers both sexes, uses EA threshold)
+    var _redsResult = null;
+    if (_isCutOrShred && window.detectREDS) {
+      try { _redsResult = window.detectREDS(); } catch(e) {}
+    }
+    // Show banner if detectREDS triggered OR if simple heuristic matches
+    var _showReds = _redsResult || (_isCutOrShred && _isFemme && _lowSleep && _highActivity);
+    if (_showReds) {
+      var _redsMsg = _redsResult
+        ? _redsResult.message
+        : '\u26a0 Risque RED-S d\u00e9tect\u00e9 \u2014 La combinaison activit\u00e9 \u00e9lev\u00e9e + sommeil insuffisant + objectif s\u00e8che peut mener au syndrome de d\u00e9ficit \u00e9nerg\u00e9tique relatif (RED-S). Consultez un professionnel de sant\u00e9 avant de d\u00e9marrer cet objectif.';
+      var _redsBanner = h('div', {style: 'background:#FFF3CD;border:1px solid #F0AD4E;padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#7D4E00;line-height:1.6;border-radius:2px;'}, _redsMsg);
+      p.appendChild(_redsBanner);
+    }
+  })();
 
   // Goal selection (MANDATORY)
   var goalLabel = h('div', {'class': 'section-label'});
