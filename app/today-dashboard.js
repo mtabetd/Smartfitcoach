@@ -507,23 +507,27 @@ function renderCardRepas() {
     { key: 'dinner', label: 'Dîner' }
   ];
 
+  var todayKey = new Date().toISOString().slice(0, 10);
+  var mealsLoggedToday = (S.mealsLogged && S.mealsLogged[todayKey]) ? S.mealsLogged[todayKey] : {};
+
   var hasAny = false;
   SLOTS.forEach(function(slot) {
     var meal = dayData[slot.key];
     if (!meal || !meal.n) return;
     hasAny = true;
 
+    var isLogged = mealsLoggedToday[slot.key] === true;
+
     var row = h('div', {
-      style: 'display:flex;align-items:baseline;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border,#E8E6DF);cursor:pointer;',
-      onclick: function() {
-        S.view = 'nutrition';
-        S.nStep = 9;
-        S.selectedDay = todayIdx;
-        if (window.render) window.render();
-      }
+      style: 'display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border,#E8E6DF);'
     });
 
-    var left = h('div', {});
+    var left = h('div', { style: 'flex:1;cursor:pointer;', onclick: function() {
+      S.view = 'nutrition';
+      S.nStep = 9;
+      S.selectedDay = todayIdx;
+      if (window.render) window.render();
+    }});
     var slotLabel = h('div', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:2px;'
     }, slot.label);
@@ -534,15 +538,48 @@ function renderCardRepas() {
     left.appendChild(mealName);
 
     var kcalEl = h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);white-space:nowrap;margin-left:8px;'
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);white-space:nowrap;margin-left:8px;cursor:pointer;',
+      onclick: function() {
+        S.view = 'nutrition';
+        S.nStep = 9;
+        S.selectedDay = todayIdx;
+        if (window.render) window.render();
+      }
     }, (meal.k ? Math.round(meal.k) + ' kcal' : ''));
+
+    var slotKey = slot.key;
+    var prisBtn = h('button', {
+      style: isLogged
+        ? 'background:#2A6E2A;border:1px solid #2A6E2A;color:white;font-size:10px;padding:4px 8px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;'
+        : 'background:transparent;border:1px solid var(--border);color:var(--grey);font-size:10px;padding:4px 8px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;',
+      onclick: function(e) {
+        e.stopPropagation();
+        S.mealsLogged = S.mealsLogged || {};
+        var tk = new Date().toISOString().slice(0, 10);
+        S.mealsLogged[tk] = S.mealsLogged[tk] || {};
+        S.mealsLogged[tk][slotKey] = true;
+        if (window.saveProfile) window.saveProfile();
+        if (window.render) window.render();
+      }
+    }, '\u2713 Pris');
 
     row.appendChild(left);
     row.appendChild(kcalEl);
+    row.appendChild(prisBtn);
     c.appendChild(row);
   });
 
   if (!hasAny) return null;
+
+  // Compteur repas pris aujourd'hui
+  var loggedCount = SLOTS.filter(function(slot) {
+    return dayData[slot.key] && dayData[slot.key].n && mealsLoggedToday[slot.key] === true;
+  }).length;
+  var totalSlots = SLOTS.filter(function(slot) { return dayData[slot.key] && dayData[slot.key].n; }).length;
+  var counterEl = h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:8px;'
+  }, loggedCount + '/' + totalSlots + ' repas aujourd\u2019hui');
+  c.appendChild(counterEl);
 
   // Footer link
   var link = h('div', {
@@ -719,6 +756,33 @@ function renderCardSport() {
     return _sportEmptyCard;
   }
 
+  // ── Bandeau récupération insuffisante (basé sur todayWellness) ──
+  var _recoveryBanner = null;
+  try {
+    var _todayStr = new Date().toISOString().slice(0, 10);
+    var _wData = S.todayWellness;
+    if (_wData && _wData.date === _todayStr) {
+      var _energy = typeof _wData.energy === 'number' ? _wData.energy : 5;
+      var _muscle = typeof _wData.muscle === 'number' ? _wData.muscle : 5;
+      if (_energy <= 2 || _muscle <= 2) {
+        _recoveryBanner = h('div', {
+          style: [
+            'padding:10px 14px;',
+            'margin-bottom:12px;',
+            'background:#FFF8E1;',
+            'border:1px solid #F9A825;',
+            'border-left:3px solid #F9A825;',
+            'border-radius:2px;',
+            'font-family:"Helvetica Neue",Arial,sans-serif;',
+            'font-size:11px;',
+            'color:#7B5800;',
+            'line-height:1.5;'
+          ].join('')
+        }, 'R\u00e9cup\u00e9ration insuffisante d\u00e9tect\u00e9e \u00b7 S\u00e9ance all\u00e9g\u00e9e recommand\u00e9e');
+      }
+    }
+  } catch(e) {}
+
   var day = next.day;
   var idx = next.index;
   var dayName = day.name || ('Séance ' + (idx + 1));
@@ -743,6 +807,7 @@ function renderCardSport() {
   var _weekTarget = (S.trainingDaysSelected && S.trainingDaysSelected.length > 0) ? S.trainingDaysSelected.length : (S.sportDays || 3);
 
   var c = card();
+  if (_recoveryBanner) c.appendChild(_recoveryBanner);
   c.appendChild(eyebrow('SÉANCE DU JOUR'));
   c.appendChild(cardTitle('Entraînement'));
 
@@ -888,7 +953,7 @@ function renderCardWellness(S) {
     style: 'margin-top:4px;',
     onclick: function() {
       S.view = 'sport';
-      // Navigate to sport wellness step
+      S.sStep = 20; // étape bilan de forme
       if (window.render) window.render();
     }
   }, 'Faire le checkin rapide');
@@ -1229,10 +1294,10 @@ function renderExtendedSections(wrapper, S) {
   var waterBox = card();
   if (window.WATER_TRACKER && window.WATER_TRACKER.renderWidget) {
     try { window.WATER_TRACKER.renderWidget(waterBox); } catch(e) {
-      waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module hydratation indisponible'));
+      waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi hydratation non disponible pour le moment.'));
     }
   } else {
-    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module hydratation non chargé'));
+    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistrez votre consommation d\u2019eau via le suivi hydratation.'));
   }
   wrapper.appendChild(waterBox);
 
@@ -1241,10 +1306,10 @@ function renderExtendedSections(wrapper, S) {
   var sleepBox = card();
   if (window.SLEEP_TRACKER && window.SLEEP_TRACKER.renderWidget) {
     try { window.SLEEP_TRACKER.renderWidget(sleepBox); } catch(e) {
-      sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module sommeil indisponible'));
+      sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi sommeil non disponible pour le moment.'));
     }
   } else {
-    sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module sommeil non chargé'));
+    sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistrez vos nuits pour suivre la qualit\u00e9 de votre sommeil.'));
   }
   wrapper.appendChild(sleepBox);
 
@@ -1253,10 +1318,10 @@ function renderExtendedSections(wrapper, S) {
   var weeklyBox = card();
   if (window.WEEKLY_SUMMARY && window.WEEKLY_SUMMARY.renderWidget) {
     try { window.WEEKLY_SUMMARY.renderWidget(weeklyBox); } catch(e) {
-      weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Résumé indisponible'));
+      weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'R\u00e9sum\u00e9 hebdomadaire non disponible pour le moment.'));
     }
   } else {
-    weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module résumé non chargé'));
+    weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Le r\u00e9sum\u00e9 hebdomadaire apparaîtra après votre premi\u00e8re semaine compl\u00e8te.'));
   }
   wrapper.appendChild(weeklyBox);
 
@@ -1265,10 +1330,10 @@ function renderExtendedSections(wrapper, S) {
   var perfBox = card();
   if (window.PERF_HISTORY && window.PERF_HISTORY.renderProgressionWidget) {
     try { window.PERF_HISTORY.renderProgressionWidget(perfBox); } catch(e) {
-      perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Progression indisponible'));
+      perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Graphique de progression non disponible pour le moment.'));
     }
   } else {
-    perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Module progression non chargé'));
+    perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Votre progression s\u2019affichera ici au fil de vos s\u00e9ances.'));
   }
   wrapper.appendChild(perfBox);
 
@@ -1350,9 +1415,11 @@ function renderExtendedSections(wrapper, S) {
   wrapper.appendChild(sectionLabel('Journal alimentaire'));
   var foodBox = card();
   if (window.FOOD_JOURNAL) {
-    try { window.FOOD_JOURNAL.renderWidget(foodBox); } catch(e) {}
+    try { window.FOOD_JOURNAL.renderWidget(foodBox); } catch(e) {
+      foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Journal alimentaire non disponible pour le moment.'));
+    }
   } else {
-    foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);' }, 'Journal alimentaire non disponible'));
+    foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Notez vos repas pour suivre vos apports nutritionnels au quotidien.'));
   }
   wrapper.appendChild(foodBox);
 
