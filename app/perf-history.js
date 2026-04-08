@@ -688,7 +688,7 @@ function createRowTime(name, sub, delta, invertColors, periodLabel) {
 
 /* ─── MINI CHART (SVG Sparkline) ─── */
 function renderMiniChart(exerciseName, container) {
-  if (!exerciseName || !container) return;
+  if (typeof exerciseName !== 'string' || !container) return;
   var history = loadHistory('muscu_weights');
   // Filter by exercise name (case-insensitive)
   var exHistory = history.filter(function(e) {

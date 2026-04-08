@@ -3919,7 +3919,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  _timerId = null;
  playBeep();
  // Notification locale si l'onglet est en arrière-plan
- if (document.hidden && Notification && Notification.permission === 'granted') {
+ if (document.hidden && ('Notification' in window) && Notification.permission === 'granted') {
    try {
      var _notifTitle = _state.isTransition ? 'Exercice suivant !' : 'Repos terminé !';
      var _notifBody = _state.isTransition
@@ -3988,7 +3988,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  _timerId = null;
  playBeep();
  // Notification locale si l'onglet est en arrière-plan
- if (document.hidden && Notification && Notification.permission === 'granted') {
+ if (document.hidden && ('Notification' in window) && Notification.permission === 'granted') {
    try {
      var _notifTitle = _state.isTransition ? 'Exercice suivant !' : 'Repos terminé !';
      var _notifBody = _state.isTransition

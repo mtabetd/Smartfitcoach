@@ -18,6 +18,7 @@
     },
 
     askPermission: function() {
+      if (!('Notification' in window)) return;
       if (Notification.permission === 'granted') {
         window.SFCPushManager.scheduleLocalNotifs();
         return;
@@ -70,7 +71,7 @@
     },
 
     showLocal: function(title, body, tag) {
-      if (Notification.permission !== 'granted') return;
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
       try {
         new Notification(title, {
           body: body,
