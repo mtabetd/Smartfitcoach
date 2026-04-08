@@ -8,15 +8,15 @@ var TODAY_QUOTES = [
   { text: "Chaque séance est un pas vers la meilleure version de toi.", author: "" },
   { text: "Le corps sait des choses que l'esprit refuse d'admettre.", author: "Paul Valéry" },
   { text: "La discipline, c'est se souvenir de ce que l'on veut vraiment.", author: "David Campbell" },
-  { text: "Chaque journée est une nouvelle chance de changer votre vie.", author: "" },
+  { text: "Chaque journée est une nouvelle chance de changer ta vie.", author: "" },
   { text: "La force ne vient pas de la capacité physique. Elle vient d'une volonté indomptable.", author: "Gandhi" },
   { text: "Le succès, c'est la somme de petits efforts répétés jour après jour.", author: "Robert Collier" },
-  { text: "N'abandonnez pas. Souffrez maintenant et vivez le reste de votre vie comme un champion.", author: "Muhammad Ali" },
-  { text: "Votre corps peut résister à presque tout. C'est votre esprit qu'il faut convaincre.", author: "" },
+  { text: "N'abandonne pas. Souffre maintenant et vis le reste de ta vie comme un champion.", author: "Muhammad Ali" },
+  { text: "Ton corps peut résister à presque tout. C'est ton esprit qu'il faut convaincre.", author: "" },
   { text: "La fatigue est temporaire. La fierté de l'effort dure toujours.", author: "" },
   { text: "Respecter son corps, c'est respecter la vie.", author: "" },
-  { text: "Chaque repas est une opportunité de nourrir votre corps avec excellence.", author: "" },
-  { text: "La nutrition est l'architecture invisible de votre performance.", author: "" },
+  { text: "Chaque repas est une opportunité de nourrir ton corps avec excellence.", author: "" },
+  { text: "La nutrition est l'architecture invisible de ta performance.", author: "" },
   { text: "Le mouvement est la vie. La vie est le mouvement.", author: "Moshe Feldenkrais" },
   { text: "Ce n'est pas la montagne que nous conquérons, mais nous-mêmes.", author: "Edmund Hillary" }
 ];
@@ -440,7 +440,7 @@ function renderCardMacros() {
     var emptyMacro = card();
     emptyMacro.appendChild(eyebrow('NUTRITION'));
     emptyMacro.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:normal;margin-bottom:8px;color:var(--grey);'}, 'Aucun objectif défini'));
-    emptyMacro.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:14px;'}, 'Définissez vos objectifs nutritionnels pour suivre vos macros quotidiens.'));
+    emptyMacro.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:14px;'}, 'Définis tes objectifs nutritionnels pour suivre tes macros quotidiens.'));
     emptyMacro.appendChild(h('button', {
       style: 'padding:10px 16px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { window.S.view = 'nutrition'; window.S.nStep = 1; if (window.render) window.render(); }
@@ -540,7 +540,7 @@ function renderCardRepas() {
     var _emptyCard = h('div', {style: 'text-align:center;padding:24px 16px;'});
     _emptyCard.appendChild(h('div', {style: 'font-size:28px;margin-bottom:8px;'}, '🍽'));
     _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:6px;'}, 'Aucun plan nutritionnel'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Créez votre programme personnalisé\nen 5 minutes'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Crée ton programme personnalisé\nen 5 minutes'));
     _emptyCard.appendChild(h('button', {
       style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { var S = window.S; S.view = 'nutrition'; if (window.render) window.render(); }
@@ -823,7 +823,7 @@ function renderCardSport() {
     var _sportEmpty = h('div', {style: 'text-align:center;padding:8px 0 4px;'});
     _sportEmpty.appendChild(h('div', {style: 'font-size:24px;margin-bottom:8px;'}, '\uD83C\uDFCB'));
     _sportEmpty.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:6px;'}, 'Aucun programme sportif'));
-    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:14px;line-height:1.5;'}, 'Choisissez votre sport et obtenez\nun programme sur mesure'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:14px;line-height:1.5;'}, 'Choisis ton sport et obtiens\nun programme sur mesure'));
     _sportEmpty.appendChild(h('button', {
       style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { var S2 = window.S; S2.view = 'sport'; if (window.render) window.render(); }
@@ -940,8 +940,8 @@ function renderCardRestDay(S) {
 
   var _restMsg = {
     beginner:     'Les muscles se construisent au repos. Aujourd\u2019hui fait partie du plan.',
-    intermediate: 'La r\u00e9cup\u00e9ration est un entra\u00eenement. Vos fibres se reconstruisent plus fortes.',
-    advanced:     'La surcompensation se joue dans les 24\u201348h post-s\u00e9ance. Optimisez ce repos.'
+    intermediate: 'La r\u00e9cup\u00e9ration est un entra\u00eenement. Tes fibres se reconstruisent plus fortes.',
+    advanced:     'La surcompensation se joue dans les 24\u201348h post-s\u00e9ance. Optimise ce repos.'
   }[_lvl];
 
   var weightKg = (S && S.weight) ? parseFloat(S.weight) : 70;
@@ -987,7 +987,7 @@ function renderCardRestDay(S) {
 
   // Mood check-in
   var moodLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;' });
-  moodLabel.textContent = mood ? 'Votre ressenti aujourd\'hui' : 'Comment vous sentez-vous ?';
+  moodLabel.textContent = mood ? 'Ton ressenti aujourd\'hui' : 'Comment tu te sens ?';
   c.appendChild(moodLabel);
 
   var moods = ['\uD83D\uDE34', '\uD83D\uDE0A', '\uD83D\uDCAA']; // 😴 😊 💪
@@ -1287,7 +1287,7 @@ function todayImportData() {
       try {
         var backup = JSON.parse(ev.target.result);
         if (!backup.data || !backup.version) { alert('Fichier invalide'); return; }
-        if (!confirm('Cela remplacera vos données actuelles. Continuer ?')) return;
+        if (!confirm('Cela remplacera tes données actuelles. Continuer ?')) return;
         Object.keys(backup.data).forEach(function(key) {
           localStorage.setItem(key, typeof backup.data[key] === 'string' ? backup.data[key] : JSON.stringify(backup.data[key]));
         });
@@ -1301,7 +1301,7 @@ function todayImportData() {
 }
 
 function todayDeleteAllData() {
-  if (!confirm('Êtes-vous sûr ? Toutes vos données seront supprimées définitivement.')) return;
+  if (!confirm('Es-tu sûr(e) ? Toutes tes données seront supprimées définitivement.')) return;
   if (!confirm('Dernière confirmation : cette action est irréversible. Continuer ?')) return;
   var keysToRemove = [];
   for (var i = 0; i < localStorage.length; i++) {
@@ -1326,7 +1326,7 @@ function renderExtendedSections(wrapper, S) {
     onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition'); else { S.view = 'nutrition'; if (window.render) window.render(); } }
   });
   nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin:0 0 4px;' }, 'Nutrition'));
-  nutNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Planifiez vos repas'));
+  nutNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Planifie tes repas'));
   navRow.appendChild(nutNavBtn);
 
   var sportNavBtn = h('div', {
@@ -1334,7 +1334,7 @@ function renderExtendedSections(wrapper, S) {
     onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport'); else { S.view = 'sport'; if (window.render) window.render(); } }
   });
   sportNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin:0 0 4px;' }, 'Sport'));
-  sportNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Votre programme'));
+  sportNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Ton programme'));
   navRow.appendChild(sportNavBtn);
   actCard.appendChild(navRow);
 
@@ -1373,7 +1373,7 @@ function renderExtendedSections(wrapper, S) {
       waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi hydratation non disponible pour le moment.'));
     }
   } else {
-    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistrez votre consommation d\u2019eau via le suivi hydratation.'));
+    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistre ta consommation d\u2019eau via le suivi hydratation.'));
   }
   wrapper.appendChild(waterBox);
 
@@ -1385,7 +1385,7 @@ function renderExtendedSections(wrapper, S) {
       sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi sommeil non disponible pour le moment.'));
     }
   } else {
-    sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistrez vos nuits pour suivre la qualit\u00e9 de votre sommeil.'));
+    sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistre tes nuits pour suivre la qualit\u00e9 de ton sommeil.'));
   }
   wrapper.appendChild(sleepBox);
 
@@ -1397,7 +1397,7 @@ function renderExtendedSections(wrapper, S) {
       weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'R\u00e9sum\u00e9 hebdomadaire non disponible pour le moment.'));
     }
   } else {
-    weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Le r\u00e9sum\u00e9 hebdomadaire apparaîtra après votre premi\u00e8re semaine compl\u00e8te.'));
+    weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Le r\u00e9sum\u00e9 hebdomadaire apparaîtra après ta premi\u00e8re semaine compl\u00e8te.'));
   }
   wrapper.appendChild(weeklyBox);
 
@@ -1409,7 +1409,7 @@ function renderExtendedSections(wrapper, S) {
       perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Graphique de progression non disponible pour le moment.'));
     }
   } else {
-    perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Votre progression s\u2019affichera ici au fil de vos s\u00e9ances.'));
+    perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Ta progression s\u2019affichera ici au fil de tes s\u00e9ances.'));
   }
   wrapper.appendChild(perfBox);
 
@@ -1424,7 +1424,7 @@ function renderExtendedSections(wrapper, S) {
   if (rawHistCheck.length < 2) {
     chartWrap.appendChild(h('div', {
       style: 'font-size:11px;color:var(--grey);text-align:center;padding:16px 0;'
-    }, 'Ajoutez votre premier poids pour voir la courbe de progression.'));
+    }, 'Ajoute ton premier poids pour voir la courbe de progression.'));
   } else {
     var canvas = document.createElement('canvas');
     canvas.id = 'today-weight-chart';
@@ -1495,7 +1495,7 @@ function renderExtendedSections(wrapper, S) {
       foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Journal alimentaire non disponible pour le moment.'));
     }
   } else {
-    foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Notez vos repas pour suivre vos apports nutritionnels au quotidien.'));
+    foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Note tes repas pour suivre tes apports nutritionnels au quotidien.'));
   }
   wrapper.appendChild(foodBox);
 
@@ -1537,7 +1537,7 @@ function renderExtendedSections(wrapper, S) {
       var mini = h('div', { style: 'width:36px;height:36px;border-radius:2px;background:var(--ivory2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;opacity:.35;' }, icon);
       badgesRow.appendChild(mini);
     });
-    badgesCard.appendChild(h('p', { style: 'font-size:11px;color:var(--grey);margin:8px 0 0;font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.5;' }, 'Continuez \u2014 vos premiers badges vous attendent !'));
+    badgesCard.appendChild(h('p', { style: 'font-size:11px;color:var(--grey);margin:8px 0 0;font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.5;' }, 'Continue \u2014 tes premiers badges t\u2019attendent !'));
   }
   var badgeLink = h('span', {
     style: 'font-size:11px;color:var(--grey);cursor:pointer;margin-left:auto;',
@@ -1638,7 +1638,7 @@ function renderCardTDEEAdaptatif(S) {
   c.appendChild(eyebrow('Ajustement recommandé'));
 
   var title = delta > 0
-    ? 'Votre corps répond moins bien au déficit'
+    ? 'Ton corps répond moins bien au déficit'
     : 'Perte plus rapide que prévu';
   c.appendChild(cardTitle(title));
 
@@ -1646,12 +1646,12 @@ function renderCardTDEEAdaptatif(S) {
   var expectedStr = (expectedChange >= 0 ? '+' : '') + expectedChange.toFixed(1) + ' kg';
 
   c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin:8px 0;line-height:1.5;' },
-    'Sur ' + daysDiff + ' jours\u00a0: vous avez perdu/pris ' + actualStr + ' (attendu\u00a0: ' + expectedStr + ').'
+    'Sur ' + daysDiff + ' jours\u00a0: tu as perdu/pris ' + actualStr + ' (attendu\u00a0: ' + expectedStr + ').'
   ));
 
   var adjustMsg = delta > 0
-    ? 'Réduisez vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)'
-    : 'Vous pouvez augmenter vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)';
+    ? 'Réduis tes apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)'
+    : 'Tu peux augmenter tes apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)';
 
   c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:700;color:var(--orange,#6A4A1A);margin:8px 0 0;line-height:1.5;' }, adjustMsg));
 
@@ -1715,7 +1715,7 @@ function renderCardSundayReview(S) {
 
   var c = card();
   c.appendChild(eyebrow('Bilan de la semaine'));
-  c.appendChild(cardTitle('Votre semaine'));
+  c.appendChild(cardTitle('Ta semaine'));
 
   // Stats row
   var statsRow = h('div', { style: 'display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;' });

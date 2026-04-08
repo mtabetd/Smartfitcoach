@@ -829,7 +829,7 @@ window.I18N = {
     if (window.S) window.S.lang = lang;
     // Persister via saveProfile (uid-versioned) plutôt que la clé générique
     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
-    if (window.render) render();
+    if (window.render) window.render();
   },
 
   dict: {
@@ -2540,7 +2540,7 @@ window.UNITS = {
     if (window.S) window.S.weightUnit = unit;
     // Persister via saveProfile (uid-versioned) plutôt que la clé générique
     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
-    if (window.render) render();
+    if (window.render) window.render();
   },
 
   // Changer d'unité taille
@@ -2549,7 +2549,7 @@ window.UNITS = {
     if (window.S) window.S.heightUnit = unit;
     // Persister via saveProfile (uid-versioned) plutôt que la clé générique
     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
-    if (window.render) render();
+    if (window.render) window.render();
   }
 };
 
