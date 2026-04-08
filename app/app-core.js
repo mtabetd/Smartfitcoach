@@ -2305,6 +2305,8 @@ window.S = {
   snacking: null,
   wantsDessert: false,        // inclure des desserts healthy 2-3x/semaine dans le plan
   emailOptin: true,            // opt-in emails (anniversaire, rappels, etc.)
+  mealTimes: { breakfast: '08:00', lunch: '12:30', snack: '16:00', dinner: '19:30' },
+  restDayMood: null,           // { date: 'YYYY-MM-DD', emoji: string } — mood check-in jour de repos
   profilePhoto: null,          // base64 data URL (compressed JPEG)
   // Alcohol
   alcoholFreq: null, alcoholTypes: [],

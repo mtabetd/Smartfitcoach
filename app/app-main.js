@@ -64,6 +64,7 @@ var PROFILE_KEYS = [
  'wheyFlavors','saladBuilder',
  'emailOptin',
  'profilePhoto','photoFront','photoBack',
+ 'mealTimes','restDayMood',
  'todayWellness',
  'aiCoachHistory',
  'appMode',

@@ -241,6 +241,99 @@ function getNextSportDay() {
   return { index: 0, day: program[0] };
 }
 
+// ─── GET NEXT MEAL (time-aware) ───
+function getNextMeal() {
+  var S = window.S;
+  if (!S || !Array.isArray(S.weekPlan) || S.weekPlan.length < 7) return null;
+  var todayIdx = (new Date().getDay() + 6) % 7;
+  if (todayIdx >= S.weekPlan.length) return null;
+  var dayData = S.weekPlan[todayIdx];
+  if (!dayData) return null;
+
+  var now = new Date();
+  var nowMin = now.getHours() * 60 + now.getMinutes();
+  var mt = (S.mealTimes && typeof S.mealTimes === 'object') ? S.mealTimes : {};
+  var SLOTS = [
+    { key: 'breakfast', label: 'Petit-déjeuner', time: mt.breakfast || '08:00' },
+    { key: 'lunch',     label: 'Déjeuner',       time: mt.lunch     || '12:30' },
+    { key: 'snack',     label: 'Collation',      time: mt.snack     || '16:00' },
+    { key: 'dinner',    label: 'Dîner',          time: mt.dinner    || '19:30' }
+  ];
+
+  for (var i = 0; i < SLOTS.length; i++) {
+    var slot = SLOTS[i];
+    var meal = dayData[slot.key];
+    if (!meal || !meal.n) continue;
+    var parts = slot.time.split(':');
+    var slotMin = (parseInt(parts[0], 10) || 0) * 60 + (parseInt(parts[1], 10) || 0);
+    if (slotMin >= nowMin) {
+      return { meal: meal, slot: slot, slotMin: slotMin, minutesUntil: slotMin - nowMin };
+    }
+  }
+  return null; // tous les repas de la journée sont passés
+}
+
+// ─── RENDER CARD — Prochain repas (hero) ───
+function renderCardNextMeal() {
+  var S = window.S;
+  if (!S || !Array.isArray(S.weekPlan) || S.weekPlan.length < 7) return null;
+  var info = getNextMeal();
+  if (!info) return null; // rien à afficher (tous repas passés)
+
+  var meal = info.meal;
+  var slot = info.slot;
+  var minutesUntil = info.minutesUntil;
+
+  // Formater le temps restant
+  var timeLabel;
+  if (minutesUntil <= 0) {
+    timeLabel = "maintenant";
+  } else if (minutesUntil < 60) {
+    timeLabel = "dans " + minutesUntil + "\u00a0min";
+  } else {
+    var h2 = Math.floor(minutesUntil / 60);
+    var m2 = minutesUntil % 60;
+    timeLabel = "dans " + h2 + "h" + (m2 > 0 ? String(m2).padStart(2, '0') : '');
+  }
+
+  var c = card('border-left:3px solid var(--black,#0A0A09);background:var(--ivory,#FAF9F6);');
+  c.appendChild(eyebrow('PROCHAIN REPAS'));
+
+  var titleRow = h('div', { style: 'display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;' });
+  var titleEl = h('div', { style: 'font-family:Georgia,serif;font-size:20px;font-weight:normal;' });
+  titleEl.textContent = slot.label;
+  var timeEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:0.5px;white-space:nowrap;margin-left:8px;' });
+  timeEl.textContent = timeLabel + ' \u00b7 ' + slot.time;
+  titleRow.appendChild(titleEl);
+  titleRow.appendChild(timeEl);
+  c.appendChild(titleRow);
+
+  var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:12px;line-height:1.4;' });
+  nameEl.textContent = meal.n;
+  c.appendChild(nameEl);
+
+  if (meal.k) {
+    var kcalEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey2,#9A9A90);margin-bottom:12px;' });
+    kcalEl.textContent = Math.round(meal.k) + '\u00a0kcal' +
+      (meal.p ? '\u00a0\u00b7\u00a0' + Math.round(meal.p) + 'g prot.' : '') +
+      (meal.g ? '\u00a0\u00b7\u00a0' + Math.round(meal.g) + 'g glucides' : '');
+    c.appendChild(kcalEl);
+  }
+
+  var todayIdx = (new Date().getDay() + 6) % 7;
+  var btn = h('button', {
+    style: 'padding:10px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+    onclick: function() {
+      var S2 = window.S;
+      S2.view = 'nutrition'; S2.nStep = 9; S2.selectedDay = todayIdx;
+      if (window.render) window.render();
+    }
+  }, 'Voir le repas \u2192');
+  c.appendChild(btn);
+
+  return c;
+}
+
 // ─── WELCOME BANNER — Bon retour parmi nous ───
 function renderWelcomeBanner(S) {
   var user = window.AUTH ? window.AUTH.getUser() : null;
@@ -560,19 +653,34 @@ function renderCardStreak() {
   return c;
 }
 
-// ─── RENDER CARD 4 — Prochaine séance ───
+// ─── RENDER CARD 4 — Séance du jour / Repos ───
 function renderCardSport() {
+  var S = window.S;
+  var todayIdx = (new Date().getDay() + 6) % 7;
   var next = getNextSportDay();
-  if (!next || !next.day) {
+  var hasSportProgram = next && next.day;
+
+  // ── Jour de repos premium (si programme sport actif) ──
+  if (hasSportProgram && window.getDayType) {
+    var _dayInfo = null;
+    try { _dayInfo = window.getDayType(todayIdx); } catch(e) {}
+    if (_dayInfo && !_dayInfo.isTraining) {
+      return renderCardRestDay(S);
+    }
+  }
+
+  if (!hasSportProgram) {
+    // No sport program — empty state
+    if (S && (S.appMode === 'nutrition')) return null; // nutrition-only mode: ne pas afficher
     var _sportEmptyCard = card();
     _sportEmptyCard.appendChild(eyebrow('SPORT'));
     var _sportEmpty = h('div', {style: 'text-align:center;padding:8px 0 4px;'});
-    _sportEmpty.appendChild(h('div', {style: 'font-size:24px;margin-bottom:8px;'}, '🏋'));
+    _sportEmpty.appendChild(h('div', {style: 'font-size:24px;margin-bottom:8px;'}, '\uD83C\uDFCB'));
     _sportEmpty.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:6px;'}, 'Aucun programme sportif'));
     _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:14px;line-height:1.5;'}, 'Choisissez votre sport et obtenez\nun programme sur mesure'));
     _sportEmpty.appendChild(h('button', {
       style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
-      onclick: function() { var S = window.S; S.view = 'sport'; if (window.render) window.render(); }
+      onclick: function() { var S2 = window.S; S2.view = 'sport'; if (window.render) window.render(); }
     }, 'Créer mon programme'));
     _sportEmptyCard.appendChild(_sportEmpty);
     return _sportEmptyCard;
@@ -581,27 +689,91 @@ function renderCardSport() {
   var day = next.day;
   var idx = next.index;
   var dayName = day.name || ('Séance ' + (idx + 1));
+  var exCount = Array.isArray(day.exercises) ? day.exercises.length : 0;
 
   var c = card();
-  c.appendChild(eyebrow('SPORT'));
-  c.appendChild(cardTitle('Prochaine séance'));
+  c.appendChild(eyebrow('SÉANCE DU JOUR'));
+  c.appendChild(cardTitle('Entraînement'));
 
-  var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:12px;' });
-  nameEl.textContent = 'Jour ' + (idx + 1) + ' \u2014 ' + dayName;
+  var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:' + (exCount > 0 ? '6px' : '12px') + ';' });
+  nameEl.textContent = 'Jour\u00a0' + (idx + 1) + '\u00a0\u2014\u00a0' + dayName;
   c.appendChild(nameEl);
 
+  if (exCount > 0) {
+    var countEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey2,#9A9A90);margin-bottom:12px;letter-spacing:0.5px;' });
+    countEl.textContent = exCount + ' exercice' + (exCount > 1 ? 's' : '');
+    c.appendChild(countEl);
+  }
+
   var btn = h('button', {
-    class: 'btn-primary',
-    style: 'margin-top:4px;',
+    style: 'padding:12px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
     onclick: function() {
-      var S = window.S;
-      if (!S) return;
-      S.view = 'sport';
-      S.selectedSportDay = idx;
+      var S2 = window.S;
+      if (!S2) return;
+      S2.view = 'sport';
+      S2.selectedSportDay = idx;
       if (window.render) window.render();
     }
   }, '\u2192 Commencer la séance');
   c.appendChild(btn);
+
+  return c;
+}
+
+// ─── RENDER CARD — Jour de repos (premium) ───
+function renderCardRestDay(S) {
+  var today = new Date().toISOString().slice(0, 10);
+  var mood = (S.restDayMood && S.restDayMood.date === today) ? S.restDayMood.emoji : null;
+
+  var c = card('background:var(--ivory,#FAF9F6);border-color:var(--border);');
+
+  // Header
+  c.appendChild(eyebrow('RÉCUPÉRATION'));
+  c.appendChild(cardTitle('Jour de repos'));
+
+  // Subtitle message
+  var msgEl = h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--grey);margin-bottom:16px;line-height:1.6;' });
+  msgEl.textContent = 'Les muscles se construisent au repos. Aujourd\'hui fait partie du plan.';
+  c.appendChild(msgEl);
+
+  // Recovery tips
+  var tipsWrap = h('div', { style: 'margin-bottom:16px;' });
+  var weightKg = (S && S.weight) ? parseFloat(S.weight) : 70;
+  var waterGoal = Math.round(weightKg * 0.033 * 10) / 10;
+  var tips = [
+    '\u2014 Marche légère ou étirements doux',
+    '\u2014 Hydratation\u00a0: objectif\u00a0' + waterGoal + '\u00a0L',
+    '\u2014 Sommeil\u00a07–9h cette nuit'
+  ];
+  tips.forEach(function(tip) {
+    var tipEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);padding:4px 0;letter-spacing:0.3px;' });
+    tipEl.textContent = tip;
+    tipsWrap.appendChild(tipEl);
+  });
+  c.appendChild(tipsWrap);
+
+  // Mood check-in
+  var moodLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;' });
+  moodLabel.textContent = mood ? 'Votre ressenti aujourd\'hui' : 'Comment vous sentez-vous ?';
+  c.appendChild(moodLabel);
+
+  var moods = ['\uD83D\uDE34', '\uD83D\uDE0A', '\uD83D\uDCAA']; // 😴 😊 💪
+  var moodRow = h('div', { style: 'display:flex;gap:12px;' });
+  moods.forEach(function(emoji) {
+    var isSelected = mood === emoji;
+    var moodBtn = h('button', {
+      style: 'width:44px;height:44px;font-size:22px;border:1px solid ' + (isSelected ? 'var(--black)' : 'var(--border)') + ';background:' + (isSelected ? 'var(--black)' : 'transparent') + ';border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,background .15s;',
+      onclick: function() {
+        if (!S.mealTimes || typeof S.mealTimes !== 'object') S.mealTimes = { breakfast: '08:00', lunch: '12:30', snack: '16:00', dinner: '19:30' };
+        S.restDayMood = { date: today, emoji: emoji };
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+        if (window.render) window.render();
+      }
+    });
+    moodBtn.textContent = emoji;
+    moodRow.appendChild(moodBtn);
+  });
+  c.appendChild(moodRow);
 
   return c;
 }
@@ -1212,19 +1384,24 @@ function renderTodayDashboard(p) {
   // Card 1 — Bonjour
   wrapper.appendChild(renderCardBonjour(S));
 
-  // Card 2 — Macros du jour
+  // Card 1b — Prochain repas (hero, time-aware)
+  var cardNextMeal = renderCardNextMeal();
+  if (cardNextMeal) wrapper.appendChild(cardNextMeal);
+
+  // Card 2 — Séance du jour / Jour de repos
+  var cardSport = renderCardSport();
+  if (cardSport) wrapper.appendChild(cardSport);
+
+  // Card 3 — Macros du jour
   wrapper.appendChild(renderCardMacros());
 
-  // Card 3 — Repas du jour
+  // Card 4 — Repas du jour (plan complet)
   var cardRepas = renderCardRepas();
   if (cardRepas) wrapper.appendChild(cardRepas);
 
-  // Card 4 — Streak & badges
+  // Card 5 — Streak & badges
   var cardStreak = renderCardStreak();
   if (cardStreak) wrapper.appendChild(cardStreak);
-
-  // Card 5 — Prochaine séance
-  wrapper.appendChild(renderCardSport());
 
   // Card 6 — Checkin bien-être supprimée : fait en plein écran à l'arrivée
 

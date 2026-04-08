@@ -1146,6 +1146,35 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(h('h1', {html: 'Bilan<br><em>médical muscu</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de générer votre programme, aidez-nous à adapter les exercices à votre situation physique.'));
 
+ // ── SKIP si déjà rempli ──────────────────────────────────────────────────
+ if (S.muscuMedical && S.muscuMedical.done === true && !S._muscuMedicalEdit) {
+  // Résumé compact
+  var _painZones = ['shoulders','elbows','wrists','neck','upperBack','lowerBack','hips','knees','ankles','feet'];
+  var _diagKeys = ['herniaDisc','herniaInguinal','rotatorCuff','acl','osteoporosis','hypertension','rheumatoidArthritis','fibromyalgia','meniscus','spondylitis','gonarthrosis','epicondylitis'];
+  var _anyPain = _painZones.some(function(z) { return !!S.muscuMedical[z]; });
+  var _anyDiag = _diagKeys.some(function(z) { return !!S.muscuMedical[z]; });
+  var _summaryCard = h('div', {style: 'border:1px solid var(--border);padding:16px;background:var(--ivory2,#F5F3EC);margin-bottom:20px;'});
+  _summaryCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'}, 'Profil médical enregistré'));
+  var _summaryText = _anyPain || _anyDiag
+    ? 'Des zones sensibles ont été notées — le programme les prend en compte.'
+    : 'Aucune contrainte physique signalée. Programme standard.';
+  _summaryCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black);margin-bottom:12px;line-height:1.5;'}, _summaryText));
+  var _editBtn = h('button', {
+    style: 'padding:8px 14px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--grey);',
+    onclick: function() { S._muscuMedicalEdit = true; window.render(); }
+  }, 'Modifier');
+  _summaryCard.appendChild(_editBtn);
+  p.appendChild(_summaryCard);
+
+  // Continuer directement
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
+    S.sStep = !S.sportLevel ? 1 : 16;
+    if (window.saveProfile) window.saveProfile();
+    window.render();
+  }}, 'Continuer'));
+  return;
+ }
+
  // For beginners: show a simple YES/NO filter first
  if ((S.sportLevel === 'beginner' || !S.sportLevel) && !S._muscuMedicalExpanded) {
   var filterCard = h('div', {style: 'margin-bottom:20px'});
@@ -1265,6 +1294,7 @@ function renderMuscuMedicalQ(p) {
  // ─── Bouton Continuer ───
  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
  S.muscuMedical.done = true;
+ delete S._muscuMedicalEdit;
  S.sStep = 16;
  window.render();
  }}, 'Continuer \u2192'));
@@ -1274,6 +1304,7 @@ function renderMuscuMedicalQ(p) {
  style: 'width:100%;padding:14px;margin-top:12px;background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;min-height:48px',
  onclick: function(){
  S.muscuMedical.done = true;
+ delete S._muscuMedicalEdit;
  S.sStep = 16;
  window.render();
  }
