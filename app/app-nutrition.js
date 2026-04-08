@@ -1707,8 +1707,13 @@ function renderStep7(p) {
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.whey !== null;
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
-    if (ok) {
+  var _genBtn = h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
+    if (!ok) return;
+    // Feedback visuel immédiat — désactiver le bouton et afficher "Génération..."
+    _genBtn.disabled = true;
+    _genBtn.textContent = 'Génération en cours...';
+    // Laisser le navigateur repeindre avant d'appeler generateWeek() (synchrone)
+    setTimeout(function() {
       // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
       if (window.computeNutritionState) { window.computeNutritionState(false); }
       var _wk1 = generateWeek();
@@ -1723,8 +1728,9 @@ function renderStep7(p) {
       bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
       if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
       goStep(8);
-    }
-  }}, window.t('onb.finish')));
+    }, 50);
+  }}, window.t('onb.finish'));
+  p.appendChild(_genBtn);
   p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 

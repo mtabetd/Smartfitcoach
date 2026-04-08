@@ -778,7 +778,7 @@ window.SPORT = {
  var _isOnProgram = (S.sStep === _progStep || (S.sStep === 6 && S.cfCalendarOpen));
  if (_isOnProgram) {
    var _changeLink = h('button', {
-     style: 'background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);cursor:pointer;padding:0;',
+     style: 'background:none;border:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;padding:5px 10px;border-radius:2px;',
      onclick: function() {
        S.sportType = null; S.sStep = 0;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
@@ -5135,6 +5135,30 @@ function renderMusculationProgram(p) {
    briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, '💡 Chaque rep compte — concentrez-vous sur la technique, pas sur le poids'));
   }
   p.appendChild(briefCard);
+ }
+
+ // ─── CTA SÉANCE — visible en haut, avant de scroller les exercices ───
+ var _ctaToday = new Date().toISOString().slice(0, 10);
+ var _ctaTodayKey = S.selectedSportDay + '_' + _ctaToday;
+ var _ctaDone = S.sessionHistory && S.sessionHistory[_ctaTodayKey];
+ var _ctaCompleting = (S.sessionCompleting === S.selectedSportDay);
+ if (_ctaDone) {
+   var _ctaDoneBadge = h('div', {style: 'border:1px solid #1A4A1A;background:rgba(26,74,26,0.06);padding:10px 14px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;display:flex;align-items:center;gap:8px;'});
+   _ctaDoneBadge.appendChild(h('span', {}, '\u2714'));
+   _ctaDoneBadge.appendChild(h('span', {}, 'S\u00e9ance valid\u00e9e \u2014 ' + _ctaDone.duration + '\u00a0min \u00b7 ' + _ctaDone.kcalTotal + '\u00a0kcal'));
+   p.appendChild(_ctaDoneBadge);
+ } else if (!_ctaCompleting) {
+   var _ctaBtn = h('button', {
+     style: 'display:block;width:100%;padding:14px;background:var(--black,#0A0A09);color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin-bottom:16px;',
+     onclick: function() {
+       S.sessionCompleting = S.selectedSportDay;
+       S._sessionDuration = null;
+       window.render();
+       // Scroll vers le bas pour afficher le panneau de complétion
+       setTimeout(function() { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }, 80);
+     }
+   }, '\u2713 S\u00e9ance termin\u00e9e');
+   p.appendChild(_ctaBtn);
  }
 
  var _totalExercises = (day.exercises || []).length;
