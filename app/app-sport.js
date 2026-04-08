@@ -5131,10 +5131,18 @@ function renderMusculationProgram(p) {
    _sfcSection.appendChild(_sfcGrid);
 
    // C4: Phase selector buttons — Masse | Sèche | Force
+   // Calcul de la phase effective (utilisée pour l'affichage bouton ET label) :
+   // priorité 1 — clic explicite (S._sfcPhase), priorité 2 — objectif sportif, défaut — masse
+   var _effectivePhase = S._sfcPhase;
+   if (!_effectivePhase) {
+    if (S.sportGoals && (S.sportGoals.indexOf('shred') !== -1 || S.sportGoals.indexOf('weightloss') !== -1)) _effectivePhase = 'seche';
+    else if (S.sportGoals && (S.sportGoals.indexOf('force') !== -1 || S.sportGoals.indexOf('strength') !== -1)) _effectivePhase = 'force';
+    else _effectivePhase = 'masse';
+   }
    var _phaseSelector = h('div', {style: 'display:flex;flex-direction:row;gap:8px;margin-bottom:16px'});
    ['masse', 'seche', 'force'].forEach(function(ph) {
     var _phLabels = {masse: 'Masse', seche: 'S\u00e8che', force: 'Force'};
-    var _phActive = (S._sfcPhase || 'masse') === ph;
+    var _phActive = _effectivePhase === ph;
     var _phBtn = h('button', {
      style: 'flex:1;min-height:44px;padding:8px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;' + (_phActive ? 'background:var(--accent,#1A4A1A);color:white;border:1px solid var(--accent,#1A4A1A)' : 'background:transparent;color:var(--black,#1A1A18);border:1px solid var(--border,#E8E6DF)'),
      onclick: (function(_ph) { return function() { S._sfcPhase = _ph; window.render(); }; })(ph)
@@ -5148,12 +5156,8 @@ function renderMusculationProgram(p) {
     var _selProg = window.SFC_PROGRAMS[S._activeSfcProgram];
     // Human-readable program name: use .name if available, otherwise capitalize the key
     var _progDisplayName = _selProg.name || (S._activeSfcProgram.charAt(0).toUpperCase() + S._activeSfcProgram.slice(1).replace(/_/g, ' '));
-    // C4: use explicit _sfcPhase if set, otherwise derive from sportGoals
-    var _phaseKey = S._sfcPhase || 'masse';
-    if (!S._sfcPhase) {
-     if (S.sportGoals && (S.sportGoals.indexOf('shred') !== -1 || S.sportGoals.indexOf('weightloss') !== -1)) _phaseKey = 'seche';
-     else if (S.sportGoals && (S.sportGoals.indexOf('force') !== -1 || S.sportGoals.indexOf('strength') !== -1)) _phaseKey = 'force';
-    }
+    // Phase à utiliser : _effectivePhase déjà calculé ci-dessus (cohérent avec le bouton sélectionné)
+    var _phaseKey = _effectivePhase;
 
     // For force phase: consult SFC_PROGRAMS_FORCE first (separate object), then fall back
     var _phaseObj = null;
@@ -5350,9 +5354,12 @@ function renderMusculationProgram(p) {
   _splitLabel = window.WEEKLY_SPLITS[_numDays].name || '';
  }
 
+ // Si l'utilisateur a explicitement cliqué une phase SFC, la priorité va à cette phase (pas à l'objectif sportif)
+ var _phaseLabelsB = {masse: 'Masse', seche: 'S\u00e8che', force: 'Force'};
+ var _goalDisplay = S._sfcPhase ? _phaseLabelsB[S._sfcPhase] : _goalNames2;
  var _bannerText = _splitLabel
-  ? 'Programme\u00a0: ' + _splitLabel + (_goalNames2 ? ' \u2014 ' + _goalNames2 : '')
-  : (_goalNames2 ? 'Programme\u00a0: ' + _goalNames2 : '');
+  ? 'Programme\u00a0: ' + _splitLabel + (_goalDisplay ? ' \u2014 ' + _goalDisplay : '')
+  : (_goalDisplay ? 'Programme\u00a0: ' + _goalDisplay : '');
 
  if (_bannerText) {
   p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;font-family:"Helvetica Neue",Arial,sans-serif'}, _bannerText));

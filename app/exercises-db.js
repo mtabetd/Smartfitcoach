@@ -58,7 +58,7 @@ var EXERCISES = {
     {
       n: "Dips",
       m: "Pectoraux / Triceps",
-      eq: "Barres parallèles",
+      eq: "Poids du corps",
       sets: "4\u00d78-12",
       rest: "90s",
       video: "https://www.youtube.com/results?search_query=dips+chest+dips+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
@@ -1064,7 +1064,7 @@ var EXERCISES = {
     {
       n: "Dips banc",
       m: "Triceps",
-      eq: "Banc ou chaise",
+      eq: "Poids du corps",
       sets: "3\u00d712-15",
       rest: "60s",
       video: "https://www.youtube.com/results?search_query=dips+banc+bench+dips+triceps+exercise+animation+tutorial&sp=EgIYAQ%253D%253D",
