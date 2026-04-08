@@ -1009,6 +1009,7 @@ function renderStep4(p) {
     var _contextBanner = document.createElement('div');
     _contextBanner.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(26,74,26,0.06);border:1px solid rgba(26,74,26,0.15);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--green,#1A4A1A);line-height:1.5;';
     _contextBanner.textContent = 'Votre profil (sexe, poids, activité) a été importé depuis votre parcours sport. Complétez simplement vos préférences nutritionnelles ci-dessous.';
+    window.S._switchedFromSport = false; // Afficher une seule fois
     p.appendChild(_contextBanner);
   }
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV'));

@@ -1771,6 +1771,7 @@ function renderMusculationGoals(p) {
    var _ctxBanner = document.createElement('div');
    _ctxBanner.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(26,74,26,0.06);border:1px solid rgba(26,74,26,0.15);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--green,#1A4A1A);line-height:1.5;';
    _ctxBanner.textContent = 'Votre profil de base est déjà configuré. Complétez simplement vos informations sportives ci-dessous.';
+   window.S._switchedFromNutrition = false; // Afficher une seule fois
    p.appendChild(_ctxBanner);
  }
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation \u00b7 \u00c9tape 1/3'));
