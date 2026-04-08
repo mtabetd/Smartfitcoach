@@ -2396,6 +2396,12 @@ function renderStep9(p) {
       row.appendChild(track);
       progressCard.appendChild(row);
     });
+    // ── Restant kcal ──
+    var _remaining = Math.round((_tgt || 0) - (_preTotal || 0));
+    var _remainEl = h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-top:6px;text-align:right;color:' + (_remaining >= 0 ? 'var(--grey)' : '#5A1010') + ';'
+    }, _remaining >= 0 ? _remaining + ' kcal restantes' : Math.abs(_remaining) + ' kcal au-dessus');
+    progressCard.appendChild(_remainEl);
     // ── Célébration macro : message si objectif atteint à 90%+ ──
     if (kcalPct >= 100) {
       var _macroCelCard = document.createElement('div');
@@ -2553,7 +2559,14 @@ function renderStep9(p) {
         value: S._foodSearchQuery || '',
         style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;background:var(--ivory,#FAF9F6);margin-bottom:8px'
       });
-      searchInput.oninput = function(e) { S._foodSearchQuery = e.target.value; };
+      searchInput.oninput = function(e) {
+        var _val = e.target.value;
+        if (window._foodSearchTimer) clearTimeout(window._foodSearchTimer);
+        window._foodSearchTimer = setTimeout(function() {
+          S._foodSearchQuery = _val;
+          if (window.render) window.render();
+        }, 300);
+      };
       foodCard.appendChild(searchInput);
       var searchGoBtn = h('button', {
         style: 'width:100%;padding:10px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:10px',
@@ -2714,7 +2727,7 @@ function renderStep9(p) {
             }
           });
           var sheet = h('div', {
-            style: 'background:var(--card,#FFFFFF);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 1px 3px rgba(0,0,0,0.08)'
+            style: 'background:var(--card,#FFFFFF);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 1px 3px rgba(0,0,0,0.08);max-height:80vh;overflow-y:auto;'
           });
           sheet.appendChild(h('div', {
             style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center'
@@ -2895,7 +2908,7 @@ function renderStep9(p) {
           }
         });
         var sheet = h('div', {
-          style: 'background:var(--ivory,#FAF9F6);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;border-top:1px solid var(--border,#D8D8D0)'
+          style: 'background:var(--ivory,#FAF9F6);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;border-top:1px solid var(--border,#D8D8D0);max-height:80vh;overflow-y:auto;'
         });
         sheet.appendChild(h('div', {
           style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center'

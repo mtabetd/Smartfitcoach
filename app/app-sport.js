@@ -2416,7 +2416,7 @@ function appendWellnessBanner(p) {
   if (score !== null) {
     if (score < 2) {
       // ─── KO : Séance déconseillée ───
-      var banner = h('div', {style: 'border-left:3px solid #8B2020;background:rgba(139,32,32,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px'});
+      var banner = h('div', {style: 'border-left:3px solid #8B2020;background:rgba(139,32,32,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
       var titleRow = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:6px'});
       titleRow.appendChild(h('span', {style: 'font-size:16px'}, '\u26A0\uFE0F'));
       titleRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8B2020;font-weight:700'}, 'S\u00e9ance d\u00e9conseill\u00e9e aujourd\'hui'));
@@ -2447,7 +2447,7 @@ function appendWellnessBanner(p) {
       p.appendChild(banner);
     } else if (score <= 3) {
       // ─── Fatigué : séance adaptée ───
-      var banner2 = h('div', {style: 'border-left:3px solid #B8860B;background:rgba(184,134,11,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px'});
+      var banner2 = h('div', {style: 'border-left:3px solid #B8860B;background:rgba(184,134,11,0.06);padding:14px 16px;margin-bottom:16px;border-radius:2px', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
       banner2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#B8860B;font-weight:700;margin-bottom:6px'}, 'S\u00e9ance adapt\u00e9e recommand\u00e9e'));
       banner2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#0A0A09);line-height:1.6;margin-bottom:12px'}, 'Consid\u00e9rez r\u00e9duire l\'intensit\u00e9\u00a0: -1 s\u00e9rie par exercice, charges all\u00e9g\u00e9es de 10-15\u00a0%.'));
       var comprisBtn = h('button', {
@@ -2458,7 +2458,7 @@ function appendWellnessBanner(p) {
       p.appendChild(banner2);
     } else if (score > 3.5) {
       // ─── En forme : badge discret ───
-      var badge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(26,74,26,0.3);background:rgba(26,74,26,0.04);padding:6px 12px;border-radius:2px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A)'});
+      var badge = h('div', {style: 'display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(26,74,26,0.3);background:rgba(26,74,26,0.04);padding:6px 12px;border-radius:2px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A)', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'});
       badge.appendChild(h('span', {}, 'Vous \u00eates en forme aujourd\'hui \uD83D\uDCAA'));
       p.appendChild(badge);
     }
@@ -2501,7 +2501,7 @@ function appendWellnessBanner(p) {
 
   if (isPeak) {
     // Compact badge — label only, no button
-    fallbackBanner.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A4A1A'}, 'Forme optimale — poussez sur les charges'));
+    fallbackBanner.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A4A1A', title: 'Score basé sur votre sommeil, état musculaire et énergie du jour. Renseignez votre bilan quotidien pour personnaliser votre séance.'}, 'Forme optimale — poussez sur les charges'));
   } else {
     var textWrap = h('div', {style: 'flex:1;min-width:0'});
     textWrap.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + cm.textColor + ';margin-bottom:3px;font-weight:700'}, adapt.label));
@@ -4448,8 +4448,27 @@ function calcSessionKcal(exercises, durationMin) {
 
 function renderMusculationProgram(p) {
  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) {
-   S.sportProgram = generateSportProgram(); S.selectedSportDay = 0;
-   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+   // Afficher un message de génération si pas de programme
+   if (!S._generatingProgram) {
+     S._generatingProgram = true;
+     p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'},[
+       h('div', {style: 'font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
+       h('div', {style: 'width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;'})
+     ]));
+     setTimeout(function() {
+       S._generatingProgram = false;
+       S.sportProgram = generateSportProgram();
+       S.selectedSportDay = 0;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       if (window.render) window.render();
+     }, 50);
+     return;
+   } else {
+     S._generatingProgram = false;
+     S.sportProgram = generateSportProgram();
+     S.selectedSportDay = 0;
+     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+   }
  }
 
  // Load saved musculation weights from localStorage
@@ -5179,6 +5198,19 @@ function renderMusculationProgram(p) {
  }, 'FST-7');
  _exNameEl.appendChild(fst7Badge);
  card.style.borderLeft = '3px solid #5A1010';
+ }
+ // ─── DELTA PROGRESSION ───
+ var _progHistory = S.muscuProgressionHistory && S.muscuProgressionHistory[ex.n];
+ if (_progHistory && _progHistory.length >= 2) {
+   var _last = _progHistory[_progHistory.length - 1];
+   var _prev = _progHistory[_progHistory.length - 2];
+   var _deltaW = Math.round((_last.weight - _prev.weight) * 2) / 2;
+   if (_deltaW !== 0) {
+     var _deltaEl = h('span', {
+       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:600;margin-left:6px;' + (_deltaW > 0 ? 'color:#1A4A1A;' : 'color:#5A1010;')
+     }, (_deltaW > 0 ? '↑' : '↓') + ' ' + Math.abs(_deltaW) + ' kg');
+     _exNameEl.appendChild(_deltaEl);
+   }
  }
  card.appendChild(_exNameEl);
  card.appendChild(h('div', {'class': 'exercise-sets'}, (ex.sets || '4x10') + ' \u2014 Repos ' + (ex.rest || '90s')));

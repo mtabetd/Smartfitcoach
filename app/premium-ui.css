@@ -3017,4 +3017,64 @@ select {
   cursor: help;
   transition: border-color 0.15s ease;
 }
+
+/* ─── ACCESSIBILITÉ : FOCUS VISIBLE ─────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--black, #0A0A09);
+  outline-offset: 2px;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--black, #0A0A09);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+/* Supprimer outline sur clic souris (garde focus clavier uniquement) */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ─── TOUCH TARGETS MINIMUM 44PX (iOS/Android) ──────────────────────────── */
+.day-tab {
+  min-height: 44px;
+  min-width: 44px;
+}
+.chip {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.modal-close {
+  min-height: 44px;
+  min-width: 44px;
+}
+.btn-back {
+  min-height: 44px;
+}
+.swap-btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+.set-validate-btn {
+  min-height: 44px;
+}
+
+/* ─── CONTRASTE DARK MODE : --grey minimum #B0B0A0 ──────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --grey: #B0B0A0;
+  }
+}
+body.dark-mode {
+  --grey: #B0B0A0;
+}
+
+/* ─── DEBOUNCE VISUEL LOADER ─────────────────────────────────────────────── */
+.loading-spinner {
+  animation-duration: 0.7s;
+  animation-timing-function: linear;
+}
 .term-tooltip:hover { border-bottom-color: var(--black-1, #1A1A18); }

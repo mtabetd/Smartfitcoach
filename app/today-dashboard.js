@@ -307,7 +307,17 @@ function renderCardBonjour(S) {
 // ─── RENDER CARD 2 — Macros du jour ───
 function renderCardMacros() {
   var calorieTarget = getCalorieTarget();
-  if (calorieTarget <= 0) return null;
+  if (calorieTarget <= 0) {
+    var emptyMacro = card();
+    emptyMacro.appendChild(eyebrow('NUTRITION'));
+    emptyMacro.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:normal;margin-bottom:8px;color:var(--grey);'}, 'Aucun objectif défini'));
+    emptyMacro.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:14px;'}, 'Définissez vos objectifs nutritionnels pour suivre vos macros quotidiens.'));
+    emptyMacro.appendChild(h('button', {
+      style: 'padding:10px 16px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+      onclick: function() { window.S.view = 'nutrition'; window.S.nStep = 1; if (window.render) window.render(); }
+    }, 'Configurer mon profil →'));
+    return emptyMacro;
+  }
 
   var totals = getTodayTotals();
   var macroTargets = getMacroTargets();
@@ -342,17 +352,16 @@ function renderCardRepas() {
   c.appendChild(eyebrow('REPAS DU JOUR'));
 
   if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) {
-    // No plan — CTA
-    c.appendChild(cardTitle('Aucun programme nutritionnel'));
-    var cta = h('button', {
-      style: 'margin-top:8px;padding:10px 16px;background:var(--black,#1A1A18);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;width:100%;',
-      onclick: function() {
-        S.view = 'nutrition';
-        S.nStep = 0;
-        if (window.render) window.render();
-      }
-    }, 'Créer mon programme');
-    c.appendChild(cta);
+    // No plan — empty state engageant
+    var _emptyCard = h('div', {style: 'text-align:center;padding:24px 16px;'});
+    _emptyCard.appendChild(h('div', {style: 'font-size:28px;margin-bottom:8px;'}, '🍽'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:6px;'}, 'Aucun plan nutritionnel'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Créez votre programme personnalisé\nen 5 minutes'));
+    _emptyCard.appendChild(h('button', {
+      style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+      onclick: function() { var S = window.S; S.view = 'nutrition'; if (window.render) window.render(); }
+    }, 'Créer mon plan'));
+    c.appendChild(_emptyCard);
     return c;
   }
 
@@ -549,7 +558,20 @@ function renderCardStreak() {
 // ─── RENDER CARD 4 — Prochaine séance ───
 function renderCardSport() {
   var next = getNextSportDay();
-  if (!next || !next.day) return null;
+  if (!next || !next.day) {
+    var _sportEmptyCard = card();
+    _sportEmptyCard.appendChild(eyebrow('SPORT'));
+    var _sportEmpty = h('div', {style: 'text-align:center;padding:8px 0 4px;'});
+    _sportEmpty.appendChild(h('div', {style: 'font-size:24px;margin-bottom:8px;'}, '🏋'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:6px;'}, 'Aucun programme sportif'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:14px;line-height:1.5;'}, 'Choisissez votre sport et obtenez\nun programme sur mesure'));
+    _sportEmpty.appendChild(h('button', {
+      style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+      onclick: function() { var S = window.S; S.view = 'sport'; if (window.render) window.render(); }
+    }, 'Créer mon programme'));
+    _sportEmptyCard.appendChild(_sportEmpty);
+    return _sportEmptyCard;
+  }
 
   var day = next.day;
   var idx = next.index;
@@ -616,6 +638,7 @@ function renderCardShortcuts() {
 
   var btnMeal = h('button', {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
+    'aria-label': 'Ajouter un repas',
     onclick: function() {
       var S = window.S;
       if (!S) return;
@@ -626,6 +649,7 @@ function renderCardShortcuts() {
 
   var btnSport = h('button', {
     style: 'flex:1;background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all .2s;',
+    'aria-label': 'Voir mon programme sportif',
     onclick: function() {
       var S = window.S;
       if (!S) return;
@@ -660,6 +684,7 @@ function todayModal(title, buildFn) {
   });
   var closeBtn = h('button', {
     style: 'position:absolute;top:12px;right:16px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--grey);',
+    'aria-label': 'Fermer',
     onclick: function() { document.body.removeChild(overlay); }
   }, '\u00D7');
   box.appendChild(closeBtn);
@@ -1178,8 +1203,7 @@ function renderTodayDashboard(p) {
   wrapper.appendChild(renderCardBonjour(S));
 
   // Card 2 — Macros du jour
-  var cardMacros = renderCardMacros();
-  if (cardMacros) wrapper.appendChild(cardMacros);
+  wrapper.appendChild(renderCardMacros());
 
   // Card 3 — Repas du jour
   var cardRepas = renderCardRepas();
@@ -1190,8 +1214,7 @@ function renderTodayDashboard(p) {
   if (cardStreak) wrapper.appendChild(cardStreak);
 
   // Card 5 — Prochaine séance
-  var cardSport = renderCardSport();
-  if (cardSport) wrapper.appendChild(cardSport);
+  wrapper.appendChild(renderCardSport());
 
   // Card 6 — Checkin bien-être supprimée : fait en plein écran à l'arrivée
 

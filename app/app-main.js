@@ -494,6 +494,7 @@ function render() {
  render._lastSStep = S.sStep;
 
  app.innerHTML = '';
+ try {
 
  if (_didNavigate) {
  // Scroll immediately (before new content is painted)
@@ -653,6 +654,7 @@ function render() {
  if (window.I18N && window.I18N.current === 'en' && window.I18N.translateDOM) {
    try { window.I18N.translateDOM(); } catch(e) {}
  }
+ } catch (_renderErr) { console.error('[render] crash:', _renderErr); try { app.innerHTML = ''; var _errDiv = document.createElement('div'); _errDiv.style.cssText = 'padding:40px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;'; _errDiv.innerHTML = '<div style="font-size:13px;color:#5A1010;margin-bottom:16px;">Une erreur est survenue. Vos donn\u00e9es sont sauvegard\u00e9es.</div><button onclick="window.location.reload()" style="padding:12px 24px;background:#0A0A09;color:#fff;border:none;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">Recharger</button>'; app.appendChild(_errDiv); } catch(e2) {} }
  } finally { render._lock = false; }
 }
 
