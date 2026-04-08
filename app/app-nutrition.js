@@ -4965,7 +4965,10 @@ function renderRecipePicker(p) {
     });
   }
   overlay.appendChild(listWrap);
-  p.appendChild(overlay);
+  // Append to #app (not p) — p has .fade-in class whose transform:translateY animation
+  // breaks position:fixed children (CSS spec: fixed elements are positioned relative to
+  // the nearest transformed ancestor, not the viewport → overlay collapses to 0 height)
+  (document.getElementById('app') || p).appendChild(overlay);
 }
 
 // ─── RENDER SMOOTHIE BAR ───
