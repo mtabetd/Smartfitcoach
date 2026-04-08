@@ -313,7 +313,7 @@ function _extractUser(supaUser) {
   var meta = supaUser.user_metadata || {};
   var u = {
     id: supaUser.id,
-    name: meta.name || email.split('@')[0] || 'Utilisateur',
+    name: meta.full_name || meta.name || email.split('@')[0] || 'Utilisateur',
     email: email
   };
   if (meta.nom)   u.nom   = meta.nom;

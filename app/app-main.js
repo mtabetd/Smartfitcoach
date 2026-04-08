@@ -78,7 +78,9 @@ var PROFILE_KEYS = [
  'parqResult',
  'streakFreezeUsedMonth',
  'streakFreezeAvailable',
- 'swapCount'
+ 'swapCount',
+ 'welcomeShown',
+ 'firstLoginDate'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -238,6 +240,73 @@ function loadProfile() {
 // Expose persistence functions globally so other modules can call them
 window.saveProfile = saveProfile;
 window.loadProfile = loadProfile;
+
+// ─── WELCOME SCREEN (first connection) ───
+window.renderWelcomeScreen = function renderWelcomeScreen(app) {
+ var wrap = h('div', {
+   style: 'position:fixed;inset:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px;overflow-y:auto;'
+ });
+
+ var inner = h('div', {
+   style: 'width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;text-align:center;opacity:0;transform:translateY(20px);transition:opacity .6s ease-out,transform .6s ease-out;'
+ });
+
+ // Logo mark
+ inner.appendChild(h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:40px;'
+ }, '\u25C6 SMARTFITCOACH'));
+
+ // Main headline
+ inner.appendChild(h('div', {
+   style: 'font-family:Georgia,serif;font-size:clamp(26px,7vw,32px);font-weight:normal;line-height:1.2;letter-spacing:-.01em;color:var(--black,#0A0A09);margin-bottom:16px;'
+ }, 'Bienvenue dans votre espace.'));
+
+ // Subtitle
+ inner.appendChild(h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:36px;'
+ }, 'CON\u00c7U POUR VOUS. UNIQUEMENT POUR VOUS.'));
+
+ // Editorial paragraph
+ var para1 = h('div', {
+   style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.8;color:var(--black,#0A0A09);max-width:320px;margin-bottom:32px;'
+ });
+ para1.appendChild(document.createTextNode('Vous rejoignez une communaut\u00e9 de personnes qui refusent le compromis. Votre nutrition, votre programme sportif \u2014 chaque d\u00e9tail sera calibr\u00e9 sur votre singularit\u00e9.'));
+ inner.appendChild(para1);
+
+ // Divider
+ inner.appendChild(h('div', {
+   style: 'width:100%;max-width:300px;height:1px;background:var(--border,#E8E7E2);margin-bottom:32px;'
+ }));
+
+ // Second paragraph
+ var para2 = h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.7;color:var(--grey,#6B6B65);max-width:300px;margin-bottom:48px;'
+ });
+ para2.appendChild(document.createTextNode('Dans quelques instants, nous allons personnaliser votre exp\u00e9rience. Cela prendra moins de 3 minutes.'));
+ inner.appendChild(para2);
+
+ // CTA button
+ var cta = h('button', {
+   style: 'width:100%;max-width:360px;padding:16px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;',
+   onclick: function() {
+     S.welcomeShown = true;
+     saveProfile();
+     window.render();
+   }
+ }, 'COMMENCER MON PARCOURS');
+ inner.appendChild(cta);
+
+ wrap.appendChild(inner);
+ app.appendChild(wrap);
+
+ // Entrance animation
+ requestAnimationFrame(function() {
+   requestAnimationFrame(function() {
+     inner.style.opacity = '1';
+     inner.style.transform = 'translateY(0)';
+   });
+ });
+};
 
 // ─── MODULE CHOICE SCREEN ───
 window.renderModuleChoice = function renderModuleChoice(content) {
@@ -1020,10 +1089,16 @@ function render() {
 
  var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
 
+ // Welcome screen — first connection only (shown before module choice)
+ var _authUser = window.AUTH ? window.AUTH.getUser() : null;
+ if (_authUser && !S.welcomeShown && !S.appMode && !S.nStep && !S.sStep) {
+   window.renderWelcomeScreen(app);
+   return;
+ }
+
  // Module choice — si l'utilisateur est connecté mais n'a pas encore choisi son mode
  // Exception : la page profil reste accessible même sans appMode (pour choisir le mode)
- var _authUser = window.AUTH ? window.AUTH.getUser() : null;
- if (_authUser && !S.appMode && S.nStep === 0 && S.sStep === 0 && S.view !== 'profil') {
+ if (_authUser && !S.appMode && !S.nStep && !S.sStep && S.view !== 'profil') {
    window.renderModuleChoice(content);
    wrap.appendChild(content);
    wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'Smart Fit Coach')]));
@@ -1742,6 +1817,18 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  if (window.GAMIFICATION) GAMIFICATION.updateStreak();
  // Restore full profile from localStorage (E-01)
  loadProfile();
+ // Store first login date (needed for J+1 wellness guard)
+ if (!S.firstLoginDate) {
+   S.firstLoginDate = new Date().toISOString().slice(0, 10);
+   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+ }
+ // Auto-populate prenom from auth metadata if missing (new users, OAuth, etc.)
+ if (!S.prenom) {
+   var _autoUser = window.AUTH ? window.AUTH.getUser() : null;
+   if (_autoUser && _autoUser.name && _autoUser.name !== _autoUser.email) {
+     S.prenom = _autoUser.name.split(' ')[0];
+   }
+ }
  // Si l'utilisateur existant a un profil mais nStep=0 (ex: profil corrompu ou rechargement)
  // → sauter le splash pour ne pas le forcer à refaire tout l'onboarding
  if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
