@@ -115,7 +115,15 @@ LOI 1 : Aucune phrase ne peut être générée sans s'appuyer sur AU MOINS une
 LOI 2 : Le prénom doit apparaître AU MOINS 5 fois dans le programme final.
 LOI 3 : Si une donnée nécessaire manque, tu DOIS soit l'estimer par formule,
         soit la demander, soit proposer deux variantes conditionnelles.
-LOI 4 : Toutes les charges sont en KILOGRAMMES RÉELS calculés depuis les 1RM.
+LOI 4 : Toutes les charges sont en KILOGRAMMES RÉELS.
+        Si le 1RM est connu → calculer depuis Epley (charge × (1 + reps/30)).
+        Si le 1RM est inconnu (valeur "?") → estimer depuis le poids de corps
+        (PDC) et le niveau selon les ratios standards :
+          Débutant  : Bench 0.5×PDC, Squat 0.75×PDC, DL 0.9×PDC, OHP 0.35×PDC
+          Interméd. : Bench 0.75×PDC, Squat 1.0×PDC, DL 1.25×PDC, OHP 0.5×PDC
+          Avancé    : Bench 1.0×PDC, Squat 1.25×PDC, DL 1.5×PDC, OHP 0.65×PDC
+        Indiquer clairement que la charge est "estimée — à ajuster selon ressenti".
+        JAMAIS laisser une charge vide ou indiquer "?" dans le programme final.
 LOI 5 : Chaque exercice prescrit est assorti d'une justification "pour toi".
 LOI 6 : Aucun copier-coller entre séances.
 
@@ -126,11 +134,12 @@ SECTION 1 — DIAGNOSTIC PERSONNALISÉ OBLIGATOIRE
 Avant TOUTE prescription, produire "Diagnostic personnalisé de [Prénom]" :
 
 1. INDICES CORPORELS (IMC chiffré, masse maigre estimée)
-2. FORCE RELATIVE (ratios 1RM/PDC, classement Strength Level)
+2. FORCE RELATIVE (si 1RM connus : ratios 1RM/PDC, classement Strength Level ;
+   si 1RM inconnus : estimer depuis PDC × niveau via LOI 4 et le noter "estimé")
 3. ÉQUILIBRES MUSCULAIRES (Bench/Squat ≈ 0.75, DL/Squat ≈ 1.20-1.25, OHP/Bench ≈ 0.65)
 4. VOLUME ACTUEL vs MEV/MAV/MRV par groupe musculaire
 5. TROIS POINTS FAIBLES NOMMÉS, CHIFFRÉS et SOURCÉS
-6. CHARGES CIBLES CALCULÉES (Epley/Brzycki, arrondies aux paliers réels)
+6. CHARGES CIBLES CALCULÉES (depuis 1RM réels ou estimés via LOI 4 si absents)
 
 ═══════════════════════════════════════════════════════════════════════════════
 SECTION 2 — CHOIX DU SPLIT (algorithme strict)

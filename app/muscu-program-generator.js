@@ -25,7 +25,7 @@
   ];
 
   var LOADING_PHRASES = [
-    'Analyse de vos 1RM. Calcul des ratios squat, bench, deadlift, overhead.',
+    'Analyse de votre profil. Calcul des charges adaptées à votre niveau et morphologie.',
     'Sélection du split adapté à vos jours, votre équipement, vos antécédents.',
     'Calibrage des charges cibles, semaine par semaine, kilo par kilo.',
     'Rédaction de votre diagnostic personnalisé. Encore quelques secondes…'
@@ -701,7 +701,7 @@
     content.innerHTML = '<div style="text-align:center;padding:32px 24px;">' +
       '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">UN PROGRAMME. LE VÔTRE. PERSONNE D\u2019AUTRE.</div>' +
       '<h3 style="font-family:Georgia,serif;font-size:24px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 20px 0;">Votre programme vous attend.</h3>' +
-      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--grey,#6B6B65);margin:0 auto 24px auto;max-width:520px;">Nous allons croiser vos 1RM, vos disponibilités, votre équipement et votre historique pour construire douze semaines qui n\u2019existent que pour vous. Aucune ligne ne sera générique. Aucune charge ne sera approximative.</p>' +
+      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--grey,#6B6B65);margin:0 auto 24px auto;max-width:520px;">Nous allons croiser votre profil complet — niveau, disponibilités, équipement, objectifs et données de force — pour construire douze semaines qui n\u2019existent que pour vous. Aucune ligne ne sera générique. Chaque charge sera calculée sur votre profil réel.</p>' +
       (instSummary ? '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;line-height:1.8;">' + instSummary + '</div>' +
         '<button id="install-change" style="background:transparent;border:none;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;margin-bottom:20px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;">Modifier mes équipements</button>' : '') +
       '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-bottom:20px;">Génération limitée à 3 fois par semaine. Patientez 30 à 60 secondes.</p>' +

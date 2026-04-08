@@ -1465,17 +1465,21 @@ function renderChargesQuestionnaire(p) {
   p.appendChild(reassureCard);
   var contBtn = h('button', {
    style: 'width:100%;padding:16px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
-   onclick: function() { S.sStep = 1; if (window.saveProfile) window.saveProfile(); window.render(); }
+   onclick: function() { var _nxt = S._chargesFromLevel ? 3 : 1; S._chargesFromLevel = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }
   }, 'Continuer →');
   p.appendChild(contBtn);
-  var backLink = h('div', {style: 'text-align:center;margin-top:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);cursor:pointer;text-decoration:underline', onclick: function(){ S.sStep = 20; window.render(); }}, '← Retour');
+  var backLink = h('div', {style: 'text-align:center;margin-top:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);cursor:pointer;text-decoration:underline', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 20; S._chargesFromLevel = false; S.sStep = _bk; window.render(); }}, '← Retour');
   p.appendChild(backLink);
   return;
  }
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
  p.appendChild(h('h1', {html: '\u00c9valuation<br><em>des charges</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Renseignez vos charges actuelles pour adapter vos programmes. Indiquez la charge max pour 8-10 reps propres.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, 'Optionnel mais précieux. Indiquez la charge avec laquelle vous faites 8-10 reps propres. Laissez vide si vous ne pratiquez pas l\'exercice.'));
+ var _chargesInfoCard = h('div', {style: 'background:rgba(26,74,26,0.04);border-left:3px solid #1A4A1A;padding:12px 16px;margin-bottom:16px;border-radius:0 2px 2px 0'});
+ _chargesInfoCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);line-height:1.6;margin-bottom:4px'}, 'Ces données permettent à l\'IA de calculer des charges au kilo près pour chaque exercice.'));
+ _chargesInfoCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey)'}, 'Si vous ne connaissez pas vos charges : laissez tout vide. L\'IA utilisera votre poids de corps comme référence.'));
+ p.appendChild(_chargesInfoCard);
 
  // Medical/age safety warnings
  var hasDiabetes = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
@@ -1586,8 +1590,8 @@ function renderChargesQuestionnaire(p) {
  _chargesFooter.appendChild(h('span', {}, ' (formule d\'Epley : charge × (1 + N/30)).'));
  p.appendChild(_chargesFooter);
 
- p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ S.sStep = 15; window.render(); }}, 'Continuer'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 20; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ var _nxt = S._chargesFromLevel ? 3 : 15; S._chargesFromLevel = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }}, 'Continuer'));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 20; S.sStep = _bk; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 15: PROGRAMMES DÉDIÉS ───
@@ -3585,7 +3589,7 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.sportLevel !== null;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { S.sStep = 3; window.BLACKBOX && window.BLACKBOX.log('sport_step', {step: 3}); window.render(); }
+ if (ok) { S._chargesFromLevel = true; S.sStep = 16; window.BLACKBOX && window.BLACKBOX.log('sport_step', {step: 16}); window.render(); }
  }}, 'Continuer'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 1; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
