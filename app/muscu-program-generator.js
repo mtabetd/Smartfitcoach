@@ -25,10 +25,10 @@
   ];
 
   var LOADING_PHRASES = [
-    'Lecture de tes 1RM. Calcul de tes ratios squat, bench, deadlift, overhead.',
-    'Sélection du split adapté à tes jours, ton équipement, tes blessures.',
+    'Analyse de vos 1RM. Calcul des ratios squat, bench, deadlift, overhead.',
+    'Sélection du split adapté à vos jours, votre équipement, vos antécédents.',
     'Calibrage des charges cibles, semaine par semaine, kilo par kilo.',
-    'Écriture de ton diagnostic. Encore quelques secondes.'
+    'Rédaction de votre diagnostic personnalisé. Encore quelques secondes…'
   ];
 
   var FOOTER_QUOTES = [
@@ -366,36 +366,201 @@
     }
   }
 
+  // ── Calcul 1RM (Epley) depuis poids × reps enregistrés ──────────────────────
+  function epley1RM(weight, reps) {
+    if (!weight || !reps || reps <= 0) return null;
+    if (reps === 1) return weight;
+    return Math.round((weight * (1 + reps / 30)) / 2.5) * 2.5;
+  }
+
+  // ── Sérialisation du bilan médical S.muscuMedical → texte lisible par l'IA ──
+  function serializeMuscuMedical(med) {
+    if (!med || typeof med !== 'object' || !med.done) return 'aucune donnée médicale renseignée';
+    var lines = [];
+
+    // Zones douloureuses
+    var zoneLabels = {
+      shoulders: 'Épaules', elbows: 'Coudes', wrists: 'Poignets',
+      neck: 'Nuque/Cervicales', upperBack: 'Haut du dos', lowerBack: 'Bas du dos',
+      hips: 'Hanches', knees: 'Genoux', ankles: 'Chevilles', feet: 'Pieds (fasciite)'
+    };
+    var activeZones = [];
+    Object.keys(zoneLabels).forEach(function(k) {
+      if (med[k]) activeZones.push(zoneLabels[k]);
+    });
+    if (activeZones.length) lines.push('Zones douloureuses/fragiles : ' + activeZones.join(', '));
+
+    // Diagnostics confirmés
+    var diagLabels = {
+      herniaDisc: 'Hernie discale', herniaInguinal: 'Hernie inguinale',
+      rotatorCuff: 'Déchirure coiffe des rotateurs', acl: 'LCA opéré/fragilisé',
+      osteoporosis: 'Ostéoporose', hypertension: 'HTA sévère (≥180/110)',
+      rheumatoidArthritis: 'Polyarthrite rhumatoïde', fibromyalgia: 'Fibromyalgie',
+      meniscus: 'Ménisque lésé/opéré', spondylarthritis: 'Spondylarthrite ankylosante',
+      kneeOsteoarthritis: 'Gonarthrose (arthrose du genou)',
+      epicondylitis: 'Épicondylite latérale (tennis elbow)'
+    };
+    var activeDiag = [];
+    Object.keys(diagLabels).forEach(function(k) {
+      if (med[k]) activeDiag.push(diagLabels[k]);
+    });
+    if (activeDiag.length) lines.push('Diagnostics confirmés : ' + activeDiag.join(', '));
+
+    // Niveau de douleur
+    var painMap = { 0: 'Aucune', 1: 'Légère', 2: 'Modérée', 3: 'Sévère' };
+    if (med.painLevel !== undefined && med.painLevel !== null) {
+      lines.push('Intensité de la douleur : ' + (painMap[med.painLevel] || med.painLevel) + '/3');
+    }
+
+    // Notes libres
+    if (med.notes && typeof med.notes === 'string' && med.notes.trim()) {
+      lines.push('Notes du patient : ' + med.notes.trim().slice(0, 300));
+    }
+
+    return lines.length ? lines.join(' | ') : 'bilan complété, aucune restriction signalée';
+  }
+
+  // ── Calcul 1RM depuis muscuStrengthProfile (poids entraînement × reps) ──────
+  function resolveStrength1RM(profile) {
+    var sp = profile || {};
+    var result = {};
+    // bench_press → bench1RM
+    if (sp.bench_press) {
+      var bReps = sp.bench_press_reps || 8;
+      result.bench1RM = epley1RM(sp.bench_press, bReps);
+    }
+    // squat → squat1RM
+    if (sp.squat) {
+      var sReps = sp.squat_reps || 8;
+      result.squat1RM = epley1RM(sp.squat, sReps);
+    }
+    // deadlift → deadlift1RM
+    if (sp.deadlift) {
+      var dReps = sp.deadlift_reps || 8;
+      result.deadlift1RM = epley1RM(sp.deadlift, dReps);
+    }
+    // overhead_press → ohp1RM
+    if (sp.overhead_press) {
+      var oReps = sp.overhead_press_reps || 8;
+      result.ohp1RM = epley1RM(sp.overhead_press, oReps);
+    }
+    // barbell_row → row1RM
+    if (sp.barbell_row) {
+      var rReps = sp.barbell_row_reps || 8;
+      result.row1RM = epley1RM(sp.barbell_row, rReps);
+    }
+    // hip_thrust → hipThrust1RM
+    if (sp.hip_thrust) {
+      var hReps = sp.hip_thrust_reps || 10;
+      result.hipThrust1RM = epley1RM(sp.hip_thrust, hReps);
+    }
+    // leg_press → legPress1RM
+    if (sp.leg_press) {
+      var lpReps = sp.leg_press_reps || 10;
+      result.legPress1RM = epley1RM(sp.leg_press, lpReps);
+    }
+    return result;
+  }
+
   function buildProfileFromState() {
     var S = window.S || {};
+
+    // ── Résolution des 1RM : priorité à muscuStrengthProfile (données réelles
+    //    entrées par l'utilisateur), avec fallback sur crossfit1RM si disponible.
+    var strengthProfile = S.muscuStrengthProfile || {};
+    // Fallback crossfit1RM → muscuStrengthProfile mapping (mirror de app-core)
+    var cfMap = { 'bench_press': 'bench_press', 'back_squat': 'squat',
+                  'deadlift': 'deadlift', 'overhead_press': 'overhead_press' };
+    var cf1rm = S.crossfit1RM || {};
+    Object.keys(cfMap).forEach(function(cfKey) {
+      var muscuKey = cfMap[cfKey];
+      if (cf1rm[cfKey] && !strengthProfile[muscuKey]) {
+        strengthProfile[muscuKey] = Math.round(cf1rm[cfKey] / (1 + 1 / 30));
+        strengthProfile[muscuKey + '_reps'] = 1;
+      }
+    });
+    var computed1RM = resolveStrength1RM(strengthProfile);
+
+    // ── Résolution du niveau ──────────────────────────────────────────────────
+    var niveauMap = { beginner: 'débutant', intermediate: 'intermédiaire',
+                      advanced: 'avancé', pro: 'élite' };
+    var niveauRaw = S.sportLevel || '';
+    var niveauLabel = niveauMap[niveauRaw] ||
+      (S.activity >= 3 ? 'avancé' : S.activity >= 2 ? 'intermédiaire' : 'débutant');
+
+    // ── Résolution de l'objectif ──────────────────────────────────────────────
+    var objectifLabel = 'hypertrophie';
+    if (window.GOALS && S.goal != null && window.GOALS[S.goal]) {
+      objectifLabel = window.GOALS[S.goal].label || window.GOALS[S.goal].key || 'hypertrophie';
+    }
+
+    // ── Sommeil : S.sleep est un index (0='<6h',1='6-7h',2='7-8h',3='8h+') ──
+    var sleepMap = { 0: 5.5, 1: 6.5, 2: 7.5, 3: 8.5 };
+    var sommeilVal = (S.sleep !== null && S.sleep !== undefined && sleepMap[S.sleep] !== undefined)
+      ? sleepMap[S.sleep] : (S.sleep || 7);
+
+    // ── Sérialisation du bilan médical ───────────────────────────────────────
+    var medicalText = serializeMuscuMedical(S.muscuMedical);
+
+    // ── Semaine et cycle courants ─────────────────────────────────────────────
+    var semaineActuelle = S.muscuWeek || 1;
+    var cycleActuel = S.muscuCycle || 1;
+
     return {
       prenom: S.prenom || S.name || 'Athlète',
       age: S.age || null,
-      sexe: S.sex === 'femme' ? 'femme' : 'homme',
+      sexe: S.sex === 'femme' ? 'femme' : (S.sex === 'female' ? 'femme' : 'homme'),
       poids: S.weight || null,
       taille: S.height || null,
-      objectif: window.GOALS && S.goal != null ? (window.GOALS[S.goal] && window.GOALS[S.goal].label) : 'hypertrophie',
-      niveau: S.sportLevel || (S.activity >= 3 ? 'avancé' : S.activity >= 2 ? 'intermédiaire' : 'débutant'),
-      joursDispo: S.muscuFreq || S.sportFreq || 4,
+      objectif: objectifLabel,
+      niveau: niveauLabel,
+      niveauRaw: niveauRaw,
+      joursDispo: S.muscuWeek ? Math.min(6, Math.max(2, S.sportDays || 4))
+                              : (S.muscuFreq || S.sportFreq || S.sportDays || 4),
       dureeMaxSeance: S.muscuDuration || 60,
-      equipement: S.equipement || S.gymType || 'salle complète',
+      equipement: S.sportEquipment || S.equipement || S.gymType || 'salle complète',
       installations: Array.isArray(S.installations) && S.installations.length
         ? S.installations.map(function(id) {
             var found = INSTALLATIONS.filter(function(x) { return x.id === id; })[0];
             return found ? found.label + ' (' + found.desc + ')' : id;
           }).join(' | ')
         : null,
-      sommeil: S.sleep || 7,
+      sommeil: sommeilVal,
       stress: S.stress || 5,
-      blessures: Array.isArray(S.blessures) ? S.blessures : [],
-      bench1RM: (S.muscu1RM && S.muscu1RM.bench) || null,
-      squat1RM: (S.muscu1RM && S.muscu1RM.squat) || null,
-      deadlift1RM: (S.muscu1RM && S.muscu1RM.deadlift) || null,
-      ohp1RM: (S.muscu1RM && S.muscu1RM.ohp) || null,
+      // Bilan médical complet (zones + diagnostics + intensité + notes)
+      medical: medicalText,
+      // Champs 1RM calculés par Epley depuis les poids d'entraînement réels
+      bench1RM: computed1RM.bench1RM || null,
+      squat1RM: computed1RM.squat1RM || null,
+      deadlift1RM: computed1RM.deadlift1RM || null,
+      ohp1RM: computed1RM.ohp1RM || null,
+      row1RM: computed1RM.row1RM || null,
+      hipThrust1RM: computed1RM.hipThrust1RM || null,
+      legPress1RM: computed1RM.legPress1RM || null,
+      // Données brutes du profil de force (poids × reps)
+      strengthProfile: (function() {
+        var keys = ['bench_press','squat','deadlift','overhead_press',
+                    'barbell_row','barbell_curl','hip_thrust','leg_press'];
+        var out = [];
+        keys.forEach(function(k) {
+          if (strengthProfile[k]) {
+            var reps = strengthProfile[k + '_reps'] || 8;
+            out.push(k.replace(/_/g,' ') + ' : ' + strengthProfile[k] + 'kg × ' + reps + 'reps');
+          }
+        });
+        return out.length ? out.join(' | ') : 'non renseigné';
+      })(),
+      // Contexte de progression dans le plan 12 semaines
+      semaineActuelle: semaineActuelle,
+      cycleActuel: cycleActuel,
+      // Données démographiques supplémentaires
+      pregnant: !!(S.pregnant && (S.sex === 'femme' || S.sex === 'female')),
+      // Points forts/faibles et préférences (champs libres si renseignés)
       pointsForts: S.pointsForts || '',
       pointsFaibles: S.pointsFaibles || '',
       preferences: S.preferences || '',
-      historique: S.historique || ''
+      historique: S.historique || '',
+      heureEntrainement: S.trainTime || null
     };
   }
 
@@ -415,7 +580,7 @@
     }
     _modalEl.innerHTML = '<div class="muscu-modal-inner" style="max-width:780px;margin:20px auto;background:var(--ivory,#FAF9F6);border-radius:2px;padding:24px;font-family:Georgia,serif;">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid var(--border,#D8D8D0);padding-bottom:12px;">' +
-        '<h2 style="margin:0;font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:2px;text-transform:uppercase;">Programme Musculation</h2>' +
+        '<h2 style="margin:0;font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:2px;text-transform:uppercase;">SMART FIT COACH — Programme</h2>' +
         '<button id="muscu-prog-close" aria-label="Fermer" style="background:transparent;border:none;font-size:24px;cursor:pointer;color:var(--grey,#6B6B65);">×</button>' +
       '</div>' +
       '<div id="muscu-prog-content" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--black,#0A0A09);"></div>' +
@@ -474,12 +639,12 @@
     content.innerHTML =
       '<div style="padding:8px 4px 24px 4px;">' +
         '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;font-family:\'Helvetica Neue\',Arial,sans-serif;">ÉTAPE PRÉALABLE</div>' +
-        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 8px 0;">À quoi as-tu accès ?</h3>' +
-        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 20px 0;line-height:1.6;">Coche toutes tes installations disponibles. Le programme ne prescrira que ce que tu peux réellement faire. <strong>Sélection multiple.</strong></p>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 8px 0;">Quels équipements avez-vous à disposition ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 20px 0;line-height:1.6;">Sélectionnez toutes vos installations disponibles. Le programme ne prescrira que ce que vous pouvez réellement faire. <strong>Sélection multiple.</strong></p>' +
         '<div id="install-cards-wrap">' + cardsHTML + '</div>' +
-        '<div id="install-error" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#B02020;margin:8px 0 0 0;display:none;">Sélectionne au moins une installation.</div>' +
+        '<div id="install-error" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#B02020;margin:8px 0 0 0;display:none;">Sélectionnez au moins une installation pour continuer.</div>' +
         '<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">' +
-          '<button id="install-confirm" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Continuer →</button>' +
+          '<button id="install-confirm" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Voir mon programme →</button>' +
         '</div>' +
       '</div>';
 
@@ -534,12 +699,12 @@
         }).join('  ·  ')
       : '';
     content.innerHTML = '<div style="text-align:center;padding:32px 24px;">' +
-      '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">UN PROGRAMME. LE TIEN. PERSONNE D\u2019AUTRE.</div>' +
-      '<h3 style="font-family:Georgia,serif;font-size:24px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 20px 0;">Ton programme t\u2019attend.</h3>' +
-      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--grey,#6B6B65);margin:0 auto 24px auto;max-width:520px;">Nous allons croiser tes 1RM, tes disponibilités, ton équipement et ton historique pour construire douze semaines qui n\u2019existent que pour toi. Aucune ligne ne sera générique. Aucune charge ne sera approximative.</p>' +
+      '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">UN PROGRAMME. LE VÔTRE. PERSONNE D\u2019AUTRE.</div>' +
+      '<h3 style="font-family:Georgia,serif;font-size:24px;font-weight:normal;letter-spacing:1px;color:var(--black,#0A0A09);margin:0 0 20px 0;">Votre programme vous attend.</h3>' +
+      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--grey,#6B6B65);margin:0 auto 24px auto;max-width:520px;">Nous allons croiser vos 1RM, vos disponibilités, votre équipement et votre historique pour construire douze semaines qui n\u2019existent que pour vous. Aucune ligne ne sera générique. Aucune charge ne sera approximative.</p>' +
       (instSummary ? '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;line-height:1.8;">' + instSummary + '</div>' +
-        '<button id="install-change" style="background:transparent;border:none;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;margin-bottom:20px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;">Modifier mes accès</button>' : '') +
-      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-bottom:20px;">Génération limitée à 3 fois par semaine. Compte 30 à 60 secondes.</p>' +
+        '<button id="install-change" style="background:transparent;border:none;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;margin-bottom:20px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;">Modifier mes équipements</button>' : '') +
+      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-bottom:20px;">Génération limitée à 3 fois par semaine. Patientez 30 à 60 secondes.</p>' +
       counterHTML +
       '<button id="muscu-prog-generate"' + (btnDisabled ? ' disabled' : '') + ' style="' + btnStyle + '">Construire mon programme</button>' +
     '</div>';
@@ -572,6 +737,9 @@
   function generateMuscuProgram() {
     if (_generating) return;
     _generating = true;
+    // Détecter si c'est la première génération
+    var _S = window.S || {};
+    var _isFirstProgram = (!_S.muscuProgramCount || _S.muscuProgramCount === 0);
     var content = document.getElementById('muscu-prog-content');
     content.innerHTML = '<div style="text-align:center;padding:48px 24px;">' +
       '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:24px;font-family:\'Helvetica Neue\',Arial,sans-serif;">G\u00c9N\u00c9RATION EN COURS</div>' +
@@ -612,6 +780,11 @@
       // Record this generation for the weekly counter
       recordGeneration();
 
+      // Incrémenter le compteur de programmes générés
+      var _Snow = window.S || {};
+      _Snow.muscuProgramCount = (_Snow.muscuProgramCount || 0) + 1;
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
+
       var programText = data.program || '';
       var footerQuote = FOOTER_QUOTES[Math.floor(Math.random() * FOOTER_QUOTES.length)];
 
@@ -626,8 +799,15 @@
         programBodyHTML = '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;">' + escaped + '</div>';
       }
 
-      content.innerHTML = '<div style="text-align:center;padding:8px 0 24px 0;border-bottom:1px solid var(--border,#D8D8D0);margin-bottom:24px;">' +
-          '<p style="font-family:Georgia,serif;font-style:italic;font-size:16px;line-height:1.6;color:var(--accent,#1A4A1A);margin:0 auto;max-width:520px;">Voici douze semaines. Elles n\u2019appartiennent qu\u2019à toi.</p>' +
+      var _firstProgramBanner = _isFirstProgram
+        ? '<div style="border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.05);padding:16px 20px;margin-bottom:20px;border-left:4px solid var(--accent,#1A4A1A);">' +
+            '<p style="font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.6;color:var(--accent,#1A4A1A);margin:0;">C\u2019est votre premier programme SmartFitCoach. Chaque semaine sera plus forte que la pr\u00e9c\u00e9dente.</p>' +
+          '</div>'
+        : '';
+
+      content.innerHTML = _firstProgramBanner +
+        '<div style="text-align:center;padding:8px 0 24px 0;border-bottom:1px solid var(--border,#D8D8D0);margin-bottom:24px;">' +
+          '<p style="font-family:Georgia,serif;font-style:italic;font-size:16px;line-height:1.6;color:var(--accent,#1A4A1A);margin:0 auto;max-width:520px;">Voici douze semaines. Elles n\u2019appartiennent qu\u2019\u00e0 vous.</p>' +
         '</div>' +
         programBodyHTML +
         '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--border,#D8D8D0);padding-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
@@ -664,7 +844,7 @@
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
       console.error('[muscu-prog] generation error:', err);
       content.innerHTML = '<div style="text-align:center;padding:40px;">' +
-        '<div style="font-size:14px;color:var(--red,#5A1010);margin-bottom:16px;">\u26a0 ' + escapeHTML(err.message || 'Erreur de génération') + '</div>' +
+        '<div style="font-size:14px;color:var(--red,#5A1010);margin-bottom:16px;">\u26a0 ' + escapeHTML(err.message || 'La génération a échoué — vérifiez votre connexion et réessayez.') + '</div>' +
         '<button id="muscu-prog-retry" style="background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Réessayer</button>' +
       '</div>';
       var retryBtn = document.getElementById('muscu-prog-retry');

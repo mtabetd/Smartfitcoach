@@ -1,8 +1,8 @@
-// muscu-programs.js — Professional Bodybuilding Programs (NFC-inspired)
+// muscu-programs.js — Professional Bodybuilding Programs (SmartFitCoach)
 (function(){
 'use strict';
 
-var NFC_PROGRAMS = {
+var SFC_PROGRAMS = {
   pectoraux: {
     masse: {
       warmup: '5 min rameur + rotations \u00e9paules dynamiques',
@@ -27,16 +27,16 @@ var NFC_PROGRAMS = {
         {order:5, name:'\u00c9cart\u00e9 halt\u00e8res', sets:3, reps:15, rest:'60s', technique:'3s pic contraction — stretch profond en bas (coudes 160\u00b0 max), contraction forte en haut.', muscle:'pectoraux', type:'isolation', equipment:'halteres'},
         {order:6, name:'Crunch banc d\u00e9clin\u00e9', sets:3, reps:20, rest:'60s', technique:'3s excentrique — mains \u00e0 la tempe. Expirer en montant, contr\u00f4ler la descente.', muscle:'abdominaux', type:'isolation', equipment:'banc'}
       ],
-      notes: 'Composés d\'abord, repos courts, tempo rapide.'
+      notes: 'PECTORAUX S\u00c8CHE: Compos\u00e9s d\'abord (CNS frais), repos courts 60-90s pour densit\u00e9 maximale et cardio int\u00e9gr\u00e9. DC barre (65-70% 1RM, TUT prioritaire) \u2192 Inclin\u00e9 barre (haut pectoral) \u2192 Inclin\u00e9 halt\u00e8res (amplitude max) \u2192 C\u00e2ble crossover bas (isolation inf\u00e9rieur) \u2192 Ecart\u00e9 halt\u00e8res (stretch). En d\u00e9ficit : maintenir la force relative (charge/poids de corps). Le volume et la densit\u00e9 > la charge absolue en s\u00e8che.'
     }
   },
   dos: {
     masse: {
       warmup: '5 min rameur + mobilit\u00e9 \u00e9paules',
       exercises: [
-        {order:1, name:'Tractions pronation', sets:4, reps:10, rest:'1min30', technique:'Compos\u00e9 principal \u2014 largeur dorsale. Dead hang complet. Scapulae d\u00e9prim\u00e9es \u00e0 l\'initiation. Prise l\u00e9g\u00e8rement plus large que les \u00e9paules. Lest\u00e9 si 10 reps trop faciles \u2014 progressive overload.', muscle:'dos', type:'compound', equipment:'barre fixe'},
-        {order:2, name:'Rowing T-bar', sets:4, reps:8, rest:'2min', technique:'Compos\u00e9 \u00e9paisseur. Dos \u00e0 45\u00b0, gainage permanent. Tirer les coudes vers l\'arri\u00e8re, serrer les omoplates en haut 1s. Ne pas balancer.', muscle:'dos', type:'compound', equipment:'barre'},
-        {order:3, name:'Tirage vertical prise large', sets:4, reps:10, rest:'2min', technique:'2s excentrique', muscle:'dos', type:'compound', equipment:'poulie'},
+        {order:1, name:'Tractions pronation', sets:4, reps:10, rest:'2min30', technique:'Compos\u00e9 principal \u2014 largeur dorsale. Dead hang complet. Scapulae d\u00e9prim\u00e9es \u00e0 l\'initiation. Prise l\u00e9g\u00e8rement plus large que les \u00e9paules. Initier le mouvement par la d\u00e9pression scapulaire (pas par la flexion du coude). Lest\u00e9 si 10 reps trop faciles \u2014 progressive overload.', muscle:'dos', type:'compound', equipment:'barre fixe'},
+        {order:2, name:'Rowing T-bar', sets:4, reps:8, rest:'2min30', technique:'Compos\u00e9 \u00e9paisseur prioritaire. Dos \u00e0 45\u00b0, gainage permanent. Tirer les coudes vers l\'arri\u00e8re jusqu\'\u00e0 la r\u00e9traction scapulaire compl\u00e8te, tenir 1s. Ne pas balancer le buste. Prise neutre ou pronate selon confort.', muscle:'dos', type:'compound', equipment:'barre'},
+        {order:3, name:'Tirage vertical prise large', sets:4, reps:10, rest:'2min', technique:'2s excentrique contr\u00f4l\u00e9. Prise pronate l\u00e9g\u00e8rement plus large que les \u00e9paules. Tirer TOUJOURS vers le sternum (jamais derri\u00e8re la nuque). Scapulae en rotation et d\u00e9pression \u00e0 la contraction. Isoler le grand dorsal.', muscle:'dos', type:'compound', equipment:'poulie'},
         {order:4, name:'Rowing halt\u00e8re unilat\u00e9ral', sets:5, reps:12, rest:'1min30', technique:'12 reps chaque bras. Genou et main appuy\u00e9s sur banc. Tirer le coude vers le plafond en serrant l\'omoplate. Contr\u00f4ler la descente 2s.', muscle:'dos', type:'compound', equipment:'halteres'},
         {order:5, name:'Pulldown prise serr\u00e9e', sets:4, reps:10, rest:'1min30', technique:'5s pic contraction x3 — Prise neutre triangle, coudes le long du corps. Tirer vers la poitrine. Isoler le grand dorsal.', muscle:'dos', type:'isolation', equipment:'poulie'},
         {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:'Suspendre aux barres parall\u00e8les ou barre fixe. Jambes tendues si possible, sinon fl\u00e9chies. Contr\u00f4ler la descente 3s. Initier le mouvement par le bassin, pas par les jambes.', muscle:'abdominaux', type:'isolation', equipment:'barre fixe'}
@@ -68,7 +68,7 @@ var NFC_PROGRAMS = {
         {order:6, name:'Relev\u00e9 de jambes', sets:4, reps:'max', rest:'1min', technique:'Barre fixe ou chaise romaine. Jambes tendues si possible. Contr\u00f4ler la descente. Initier par la flexion lombaire.', muscle:'abdominaux', type:'isolation', equipment:'barre fixe'},
         {order:7, name:'Obliques chaise romaine', sets:4, reps:12, rest:'1min', technique:'12 reps chaque c\u00f4t\u00e9', muscle:'abdominaux', type:'isolation', equipment:'chaise romaine'}
       ],
-      notes: 'Supersets biceps/triceps = pump maximal. Agoniste/antagoniste.'
+      notes: 'BRAS MASSE PRO LEVEL: Supersets agoniste/antagoniste (biceps+triceps) = recrutement maximal et pump intense. Curl barre + skull crushers \u2192 pupitre + DC serr\u00e9 \u2192 spider + dips \u2192 concentr\u00e9 (finisseur pic). Les triceps = 2/3 du volume du bras. Ne JAMAIS n\u00e9gliger le chef long des triceps (skull crushers arri\u00e8re de la t\u00eate ou overhead extension). Curl concentr\u00e9 = exercice signature du pic biceps. La supination maximale en haut = recrutement biceps maximal.'
     },
     seche: {
       warmup: '5 min rameur + rotations poignets',
@@ -81,7 +81,7 @@ var NFC_PROGRAMS = {
         {order:6, name:'Relev\u00e9 de jambes suspendu', sets:4, reps:'max', rest:'30s', technique:'Contr\u00f4ler la descente. Jambes tendues si possible. Monter \u00e0 90\u00b0 minimum. Ne pas balancer.', muscle:'abdominaux', type:'isolation', equipment:'barre fixe'},
         {order:7, name:'Obliques chaise romaine', sets:4, reps:15, rest:'30s', technique:'12-15 reps chaque c\u00f4t\u00e9. Rotation lat\u00e9rale contr\u00f4l\u00e9e. Pas de rotation inertiellement. Contr\u00f4ler la mont\u00e9e et la descente.', muscle:'abdominaux', type:'isolation', equipment:'chaise romaine'}
       ],
-      notes: 'Supersets + repos courts = cardio int\u00e9gr\u00e9.'
+      notes: 'BRAS S\u00c8CHE: Supersets biceps/triceps + repos courts (45-60s) = cardio int\u00e9gr\u00e9 et densit\u00e9 maximale. Charges r\u00e9duites 15-20% vs masse. Priorit\u00e9 au TUT (time under tension) et \u00e0 la contraction contr\u00f4l\u00e9e. Curl marteau = indispensable pour le brachial (muscle sous le biceps qui pousse le biceps vers le haut = volume 3D). En d\u00e9ficit calorique: maintenir volume, r\u00e9duire charges.'
     }
   },
   jambes: {
@@ -109,14 +109,14 @@ var NFC_PROGRAMS = {
         {order:6, name:'Leg curl (ischios)', sets:3, reps:15, rest:'60s', technique:'3s excentrique \u2014 orteils en flexion dorsale = plus d\'activation ischios. Ne pas soul\u00e9ver les hanches. ROM complet.', muscle:'ischio-jambiers', type:'isolation', equipment:'machine'},
         {order:7, name:'Mollets debout', sets:3, reps:15, rest:'60s', technique:'ROM COMPLET obligatoire: stretch total en bas (talon sous la plateforme), mont\u00e9e maximale sur orteils. Pause 1s en haut.', muscle:'mollets', type:'isolation', equipment:'machine'}
       ],
-      notes: 'Les jambes br\u00fblent le plus de calories. Profitez-en en s\u00e8che.'
+      notes: 'JAMBES S\u00c8CHE: Les jambes br\u00fblent le plus de calories (groupe le plus volumineux). Squat (charges r\u00e9duites, technique maintenue) \u2192 RDL (ischios = CRUCIAL, pr\u00e9serve la masse ischio-jambi\u00e8re en d\u00e9ficit) \u2192 Bulgare (unilat\u00e9ral + correction d\u00e9s\u00e9quilibre) \u2192 Presse (volume quad) \u2192 Leg extension (finisseur) \u2192 Leg curl (ischios isolation) \u2192 Mollets. EN S\u00c8CHE: maintenir les charges \u00e0 70-75% 1RM max. L\'objectif = pr\u00e9server la masse musculaire, pas battre des PRs. Les ischios sont LE point faible qui d\u00e9truit l\'esth\u00e9tique des cuisses en s\u00e8che.'
     }
   },
   epaules: {
     masse: {
       warmup: '5 min rameur + rotations \u00e9paules + bande \u00e9lastique',
       exercises: [
-        {order:1, name:'D\u00e9velopp\u00e9 militaire barre (debout)', sets:4, reps:6, rest:'3min', technique:'Compos\u00e9 principal CNS frais. Debout = gainage total engag\u00e9. Prise l\u00e9g\u00e8rement plus large que les \u00e9paules. Pas d\'arc excessif.', muscle:'\u00e9paules (faisceau ant)', type:'compound', equipment:'barre'},
+        {order:1, name:'D\u00e9velopp\u00e9 militaire barre (debout)', sets:4, reps:6, rest:'3min', technique:'Compos\u00e9 principal CNS frais. Debout = gainage total engag\u00e9. Prise l\u00e9g\u00e8rement plus large que les \u00e9paules. Rentrer le menton au passage de la barre. Pas d\'arc excessif lombaire. Drive explosif en poussant la t\u00eate \u00e0 travers les bras en haut.', muscle:'\u00e9paules (faisceau ant)', type:'compound', equipment:'barre'},
         {order:2, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res assis', sets:4, reps:8, rest:'2min', technique:'Plus safe que le d\u00e9velopp\u00e9 halt\u00e8res rotatif pour les rotateurs — ROM complet (halt\u00e8res \u00e0 l\'oreille). Coudes l\u00e9g\u00e8rement devant le plan frontal. Prise neutre possible.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
         {order:3, name:'\u00c9l\u00e9vation lat\u00e9rale c\u00e2ble (unilat\u00e9ral)', sets:4, reps:12, rest:'1min30', technique:'C\u00e2ble = tension CONSTANTE tout le ROM contrairement aux halt\u00e8res. Poignet l\u00e9g\u00e8rement en avant du coude. Coude \u00e0 90\u00b0 max.', muscle:'\u00e9paules (faisceau lat\u00e9ral)', type:'isolation', equipment:'poulie'},
         {order:4, name:'\u00c9l\u00e9vation post\u00e9rieure (oiseau) halt\u00e8res', sets:4, reps:15, rest:'1min', technique:'3s excentrique — Buste pench\u00e9 \u00e0 90\u00b0, coudes l\u00e9g\u00e8rement fl\u00e9chis. CRUCIAL pour look 3D \u00e9paules. Faisceau post = cl\u00e9 de vote de l\u00e9\u00e9quilibre articulaire.', muscle:'\u00e9paules (faisceau post)', type:'isolation', equipment:'halteres'},
@@ -129,8 +129,8 @@ var NFC_PROGRAMS = {
     seche: {
       warmup: '5 min rameur + rotations \u00e9paules',
       exercises: [
-        {order:1, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res', sets:4, reps:10, rest:'1min30', technique:'Compos\u00e9 principal. Coudes l\u00e9g\u00e8rement devant le plan frontal. Descente 3s, push contr\u00f4l\u00e9. En s\u00e8che : charges \u00e0 ~70% 1RM, priorit\u00e9 au TUT.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
-        {order:2, name:'Arnold press', sets:4, reps:12, rest:'1min', technique:'Rotation des poignets du bas vers le haut \u2014 active les 3 faisceaux. Partir paumes vers soi, finir paumes vers l\'avant. Mouvement lent = contr\u00f4le maximum.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
+        {order:1, name:'D\u00e9velopp\u00e9 militaire halt\u00e8res', sets:4, reps:10, rest:'2min', technique:'Compos\u00e9 principal. Coudes l\u00e9g\u00e8rement devant le plan frontal (pr\u00e9serve la coiffe des rotateurs). Descente 3s contr\u00f4l\u00e9e, push contr\u00f4l\u00e9. En s\u00e8che : charges \u00e0 ~70% 1RM, priorit\u00e9 au TUT. Halt\u00e8res \u00e0 hauteur des oreilles en bas.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
+        {order:2, name:'Arnold press', sets:4, reps:12, rest:'1min30', technique:'Rotation des poignets du bas vers le haut \u2014 active les 3 faisceaux. Partir paumes vers soi (halt\u00e8res \u00e0 hauteur des \u00e9paules), finir paumes vers l\'avant en haut. Descente 2s contr\u00f4l\u00e9e. Mouvement lent = contr\u00f4le maximum. Excellent exercice multi-faisceaux.', muscle:'\u00e9paules', type:'compound', equipment:'halteres'},
         {order:3, name:'\u00c9l\u00e9vation frontale + Face pull', sets:4, reps:'12+12', rest:'1min', technique:'Superset', muscle:'\u00e9paules', type:'superset', equipment:'halteres+poulie'},
         {order:4, name:'\u00c9l\u00e9vation lat\u00e9rale', sets:4, reps:15, rest:'60s', technique:'1 moiti\u00e9 + 1 compl\u00e8te', muscle:'\u00e9paules', type:'isolation', equipment:'halteres'},
         {order:5, name:'Shrug barre', sets:4, reps:12, rest:'1min', technique:'Monter les \u00e9paules vers les oreilles, tenir 1s en haut, descendre contr\u00f4l\u00e9. Ne pas rouler les \u00e9paules vers l\'arri\u00e8re. Prise pronation, barre devant.', muscle:'trap\u00e8zes', type:'isolation', equipment:'barre'},
@@ -213,6 +213,55 @@ var NFC_PROGRAMS = {
     ],
     notes: 'Variez les angles pour recruter tous les chefs du biceps.'
   },
+  trapezes: {
+    masse: {
+      warmup: '5 min rameur + rotations \u00e9paules + flexions lat\u00e9rales nuque douces',
+      exercises: [
+        {order:1, name:'Soulev\u00e9 de terre conventionnel (accent trap\u00e8zes)', sets:4, reps:5, rest:'3min30', technique:'Compos\u00e9 roi des trap\u00e8zes. Barre au-dessus du milieu du pied, dos neutre, hanches basses. \u00c0 la mont\u00e9e : shrug actif en fin de mouvement = recrutement maximal des trap\u00e8zes sup\u00e9rieurs. CNS frais obligatoire.', muscle:'trap\u00e8zes+dos complet', type:'compound', equipment:'barre'},
+        {order:2, name:'Shrug barre (pronation)', sets:5, reps:8, rest:'2min30', technique:'EXERCICE CL\u00c9 trap\u00e8zes. Prise pronation, barre devant. Monter les \u00e9paules VERTICALEMENT vers les oreilles (pas rouler en arri\u00e8re). Tenir 2s au sommet. Descendre lentement 3s. Charge: 80-90% du max shrug.', muscle:'trap\u00e8zes sup\u00e9rieurs', type:'isolation', equipment:'barre'},
+        {order:3, name:'Shrug halt\u00e8res', sets:4, reps:10, rest:'2min', technique:'Amplitude l\u00e9g\u00e8rement sup\u00e9rieure \u00e0 la barre. Monter les \u00e9paules, pic contraction 1s. Halt\u00e8res de chaque c\u00f4t\u00e9 du corps. Contr\u00f4ler la descente 2s. Excellent pour \u00e9paisseur des trap\u00e8zes.', muscle:'trap\u00e8zes sup\u00e9rieurs', type:'isolation', equipment:'halteres'},
+        {order:4, name:'Tirage menton barre (upright row)', sets:4, reps:10, rest:'2min', technique:'Prise pronate l\u00e9g\u00e8rement plus large que les \u00e9paules (prise \u00e9troite = impingement). Tirer vers le menton, coudes \u00e9lev\u00e9s. Cible le faisceau sup\u00e9rieur + d\u00e9lto\u00efde lat\u00e9ral. Stop \u00e0 hauteur du menton MAX.', muscle:'trap\u00e8zes + \u00e9paules', type:'compound', equipment:'barre'},
+        {order:5, name:'Face pull corde (trap\u00e8zes moyens)', sets:4, reps:15, rest:'1min30', technique:'Poulie haute, tirer la corde vers le visage (coudes hauts). Rotation externe maximale = trap\u00e8zes moyens + rhombo\u00efdes + coiffe des rotateurs. JAMAIS n\u00e9glig\u00e9 \u2014 \u00e9quilibre articulaire crucial.', muscle:'trap\u00e8zes moyens + rotateurs', type:'isolation', equipment:'poulie'},
+        {order:6, name:'Row \u00e0 faible tirage (low row prise large)', sets:3, reps:12, rest:'1min30', technique:'Prise large pronate. Tirer vers le bas de la poitrine. Retraction scapulaire maximale = activation trap\u00e8zes inf\u00e9rieurs. Penser \u00e0 "rentrer les omoplates dans les poches arri\u00e8re".', muscle:'trap\u00e8zes inf\u00e9rieurs + rhombo\u00efdes', type:'compound', equipment:'poulie'}
+      ],
+      notes: 'TRAP\u00c8ZES MASSE PRO LEVEL: Les trap\u00e8zes ont 3 parties (sup\u00e9rieurs = mont\u00e9e \u00e9paules, moyens = retraction scapulaire, inf\u00e9rieurs = d\u00e9pression scapulaire). 90% des pratiquants ne travaillent que les sup\u00e9rieurs. ERREUR CRITIQUE. Soulev\u00e9 de terre (recrutement total) \u2192 Shrug barre (sup\u00e9rieurs) \u2192 Shrug halt\u00e8res (amplitude) \u2192 Tirage menton (sup+lat\u00e9raux) \u2192 Face pull (moyens+rotateurs) \u2192 Row bas (inf\u00e9rieurs). Les trap\u00e8zes donnent le look "armure" des champions.'
+    },
+    seche: {
+      warmup: '5 min rameur + rotations \u00e9paules',
+      exercises: [
+        {order:1, name:'Shrug barre', sets:4, reps:12, rest:'1min30', technique:'Monter les \u00e9paules vers les oreilles, tenir 1s en haut. Descendre contr\u00f4l\u00e9 2s. Charges \u00e0 70-75% du max en s\u00e8che. Prise pronation. Ne pas rouler les \u00e9paules.', muscle:'trap\u00e8zes sup\u00e9rieurs', type:'isolation', equipment:'barre'},
+        {order:2, name:'Shrug halt\u00e8res', sets:4, reps:15, rest:'1min', technique:'Amplitude compl\u00e8te. Pic contraction 1s. Contr\u00f4ler la descente. En s\u00e8che : volume maintenu, charges r\u00e9duites.', muscle:'trap\u00e8zes sup\u00e9rieurs', type:'isolation', equipment:'halteres'},
+        {order:3, name:'Face pull corde', sets:4, reps:15, rest:'1min', technique:'Poulie haute, rotation externe maximale. Coudes hauts. Protection de la coiffe + trap\u00e8zes moyens. Essentiel en s\u00e8che pour maintenir l\'\u00e9quilibre articulaire.', muscle:'trap\u00e8zes moyens + rotateurs', type:'isolation', equipment:'poulie'},
+        {order:4, name:'Tirage menton halt\u00e8res', sets:3, reps:15, rest:'60s', technique:'Prise plus large = moins de stress sur les rotateurs. Tirer jusqu\'au menton, coudes \u00e9lev\u00e9s. Contr\u00f4ler la descente 2s.', muscle:'trap\u00e8zes + \u00e9paules', type:'compound', equipment:'halteres'},
+        {order:5, name:'Row buste pench\u00e9 prise large', sets:3, reps:15, rest:'60s', technique:'Dos \u00e0 60\u00b0 (plus vertical qu\'un rowing classique). Retraction scapulaire = trap\u00e8zes moyens et inf\u00e9rieurs. Charges mod\u00e9r\u00e9es, contr\u00f4le parfait.', muscle:'trap\u00e8zes moyens+inf\u00e9rieurs', type:'compound', equipment:'barre'}
+      ],
+      notes: 'TRAP\u00c8ZES S\u00c8CHE: Maintenir le volume des 3 faisceaux en d\u00e9ficit. Le face pull est OBLIGATOIRE en s\u00e8che (pr\u00e9serve la coiffe des rotateurs quand les charges diminuent). Repos courts 60-90s. Les trap\u00e8zes r\u00e9pondent au volume + TUT (time under tension).'
+    }
+  },
+  lombaires: {
+    masse: {
+      warmup: '5 min v\u00e9lo + mobilit\u00e9 hanche + McKenzie extensions x10 + cat-cow x10',
+      exercises: [
+        {order:1, name:'Soulev\u00e9 de terre conventionnel', sets:4, reps:5, rest:'4min', technique:'LA r\u00e9f\u00e9rence lombaires. Barre au-dessus du milieu du pied, scapulae r\u00e9tract\u00e9es, gainage 360\u00b0 (Valsalva). Dos NEUTRE tout le mouvement. Ne jamais arrondir le bas du dos. Le plus grand constructeur de force lombaire existant.', muscle:'lombaires+dos complet+jambes', type:'compound', equipment:'barre'},
+        {order:2, name:'Good Morning barre', sets:4, reps:8, rest:'2min30', technique:'Barre haute sur les \u00e9paules. Hanches EN ARRI\u00c8RE (hip hinge), dos neutre, l\u00e9ger fl\u00e9chissement des genoux. Descendre jusqu\'\u00e0 ce que le buste soit parall\u00e8le au sol (ou limite de la mobilit\u00e9). Remonter en contractant les lombaires et les fessiers. Charge: 40-50% du squat max.', muscle:'lombaires+ischios+fessiers', type:'compound', equipment:'barre'},
+        {order:3, name:'Hyperextension au banc \u00e0 lombaires', sets:4, reps:12, rest:'2min', technique:'Amplitude compl\u00e8te: descente contr\u00f4l\u00e9e (t\u00eate vers le sol) puis remont\u00e9e jusqu\'\u00e0 alignement parfait corps. Mains crois\u00e9es sur la poitrine (poids sur poitrine si trop facile). NE PAS hyperextendre au-del\u00e0 du neutre = risque lombaire.', muscle:'lombaires+fessiers+ischios', type:'isolation', equipment:'banc \u00e0 lombaires'},
+        {order:4, name:'Soulev\u00e9 de terre roumain (RDL)', sets:3, reps:10, rest:'2min', technique:'Accent lombaires/ischios. Hanches en arri\u00e8re, barre glisse le long des jambes, dos neutre STRICT. Le stretch des ischios = signal de bonne position. Excellent compl\u00e9ment au DL conventionnel.', muscle:'lombaires+ischios+fessiers', type:'compound', equipment:'barre'},
+        {order:5, name:'Planche ventrale (prone plank)', sets:4, reps:'45s', rest:'1min', technique:'Position pompe sur avant-bras. Corps align\u00e9 t\u00eate-talons. Gainage lombaire statique. Rentrer le nombril sans bloquer la respiration. Les lombaires stabilisent la colonne = travail issom\u00e9trique intense.', muscle:'lombaires+core', type:'isolation', equipment:'sol'}
+      ],
+      notes: 'LOMBAIRES MASSE PRO LEVEL: Les lombaires (carr\u00e9 des lombes + multifides + \u00e9recteurs du rachis) = le groupe le plus n\u00e9glig\u00e9 ET le plus important pour la s\u00e9curit\u00e9 et la performance. Soulev\u00e9 de terre (force maximale) \u2192 Good morning (hip hinge + charge) \u2192 Hyperextension (isolation) \u2192 RDL (ischios + lombaires) \u2192 Planche (gainage statique). Des lombaires forts = des performances plus s\u00fbres sur TOUS les autres exercices. Sans lombaires forts, pas de squat lourd, pas de deadlift, pas de row lourd. C\'est le fondement invisible de toute performance.'
+    },
+    seche: {
+      warmup: '5 min v\u00e9lo + mobilit\u00e9 hanche + cat-cow x10',
+      exercises: [
+        {order:1, name:'Good Morning barre (l\u00e9ger)', sets:4, reps:12, rest:'1min30', technique:'Charges r\u00e9duites en s\u00e8che (30-40% du squat). Hip hinge pur, dos neutre. Maintain la technique irr\u00e9prochable. Excellent pour TUT lombaire sans fatigue excessive du CNS.', muscle:'lombaires+ischios', type:'compound', equipment:'barre'},
+        {order:2, name:'Hyperextension lest\u00e9e', sets:4, reps:15, rest:'1min', technique:'Amplitude compl\u00e8te contr\u00f4l\u00e9e. En s\u00e8che : maintenir le volume, r\u00e9duire la charge si n\u00e9cessaire. Descente 3s pour TUT. Contraction lombaire forte en haut 1s.', muscle:'lombaires+fessiers', type:'isolation', equipment:'banc \u00e0 lombaires'},
+        {order:3, name:'Superman (d\u00e9coll\u00e9 ventral)', sets:4, reps:15, rest:'60s', technique:'All long\u00e9 sur le ventre, bras tendus. Soul\u00e9ver simultan\u00e9ment bras et jambes. Tenir 2s en haut. Exercice de gainage dynamique lombaire. Id\u00e9al en s\u00e8che (charge = poids de corps).', muscle:'lombaires+\u00e9recteurs+fessiers', type:'isolation', equipment:'sol'},
+        {order:4, name:'Planche ventrale', sets:3, reps:'60s', rest:'60s', technique:'Gainage isom\u00e9trique. Corps align\u00e9, nombril rent\u00e9. Respiration abdominale. Progresser via le temps (30s \u2192 45s \u2192 60s \u2192 90s). En s\u00e8che : simple et efficace sans \u00e9quipement sp\u00e9cial.', muscle:'lombaires+core', type:'isolation', equipment:'sol'},
+        {order:5, name:'Bird dog', sets:3, reps:12, rest:'60s', technique:'A quatre pattes: \u00e9tendre simultan\u00e9ment le bras droit et la jambe gauche. Tenir 2s. Alterner. Stabilisation lombaire anti-rotation. Parfait en s\u00e8che pour maintenir la sant\u00e9 lombaire en d\u00e9ficit calorique.', muscle:'lombaires+core (anti-rotation)', type:'isolation', equipment:'sol'}
+      ],
+      notes: 'LOMBAIRES S\u00c8CHE: En d\u00e9ficit calorique, les risques de blessure lombaire augmentent (fatigue musculaire + charges). Maintenir le volume mais r\u00e9duire l\'intensit\u00e9. Good morning (hip hinge) \u2192 Hyperextension (isolation) \u2192 Superman (dynamique) \u2192 Planche (isom\u00e9trique) \u2192 Bird dog (stabilisation). Priorit\u00e9: maint maintien de la sant\u00e9 articulaire. Des lombaires sains = programme long terme possible.'
+    }
+  },
   triceps_dedied: {
     name: 'Programme Triceps',
     duration: '~55 min',
@@ -241,7 +290,7 @@ var NFC_PROGRAMS = {
 // ─── PHASES FORCE par groupe musculaire (Mr. Olympia prep — 3-5 reps, 85-93% 1RM) ───
 // Phillips & Van Loon 2011: Force maximale sur composés = base de tout gain d'hypertrophie durable
 // La phase FORCE est manquante dans 90% des programmes de salle. ERREUR CRITIQUE.
-var NFC_PROGRAMS_FORCE = {
+var SFC_PROGRAMS_FORCE = {
   pectoraux: {
     force: {
       warmup: 'Activation: 3\u00d715 Face pull \u00e9lastique + 3\u00d710 Band pull-apart + 2 sets \u00e9chauffement bench progressif @50%, @70%, @85%',
@@ -294,6 +343,32 @@ var NFC_PROGRAMS_FORCE = {
       notes: '\u26a1 PHASE FORCE \u00c9PAULES: Militaire debout = test de force totale du corps. Les grands champions = tous basaient leurs \u00e9paules sur le militaire lourd. Le 3D shoulder = faisceau lat\u00e9ral + POST\u00c9RIEUR bien développés. Ne jamais blesser les rotateurs = carri\u00e8re courte.'
     }
   },
+  trapezes: {
+    force: {
+      warmup: 'Activation: 3\u00d710 Face pull \u00e9lastique + 3\u00d710 Band pull-apart + 2 sets soulev\u00e9 progressif @50%, @70%',
+      exercises: [
+        {order:1, name:'Soulev\u00e9 de terre conventionnel (lurd)', sets:4, reps:4, rest:'4min30', technique:'@85-90% 1RM \u2014 Recrutement trap\u00e8zes MAXIMAL en phase terminale de tirage. Le shrug actif en fin de mouvement recrute les trap\u00e8zes sup\u00e9rieurs. CNS frais = indispensable en premi\u00e8re position.', muscle:'trap\u00e8zes+dos complet', type:'compound', equipment:'barre', rirTarget:1},
+        {order:2, name:'Shrug barre (lourd)', sets:5, reps:5, rest:'3min', technique:'@85-90% du max shrug \u2014 Charges maximales. Monter les \u00e9paules verticalement. Tenir 2s au sommet. JAMAIS rouler les \u00e9paules (risque rotateurs). Descente 3s excentrique. Progressive overload session par session.', muscle:'trap\u00e8zes sup\u00e9rieurs', type:'isolation', equipment:'barre', rirTarget:1},
+        {order:3, name:'Rack pull (tirage partiel depuis mid-shin)', sets:4, reps:5, rest:'3min30', technique:'@90-95% du DL max \u2014 ROM r\u00e9duit = charges massives possibles. Overload m\u00e9canique sur trap\u00e8zes sup\u00e9rieurs et rhombo\u00efdes. Technique identique au DL. Shrug actif en fin.', muscle:'trap\u00e8zes + dos (surcharge)', type:'compound', equipment:'barre', rirTarget:2},
+        {order:4, name:'Tirage menton barre (prise large)', sets:4, reps:6, rest:'2min30', technique:'@70% du DL \u2014 Prise pronate, 1.5\u00d7 largeur \u00e9paules. Tirer vers le menton, coudes \u00e9lev\u00e9s. Trap\u00e8zes sup + d\u00e9lto\u00efde lat\u00e9ral. Stop \u00e0 hauteur du menton STRICT.', muscle:'trap\u00e8zes + \u00e9paules', type:'compound', equipment:'barre', rirTarget:2},
+        {order:5, name:'Face pull corde (lourd)', sets:4, reps:10, rest:'1min30', technique:'Charge \u00e9lev\u00e9e, rotation externe maximale. Trap\u00e8zes moyens + coiffe des rotateurs. Prot\u00e8ge l\'articulaire en phase force. Jamais saut\u00e9.', muscle:'trap\u00e8zes moyens + rotateurs', type:'isolation', equipment:'poulie', rirTarget:3}
+      ],
+      notes: '\u26a1 PHASE FORCE TRAP\u00c8ZES: Le soulev\u00e9 de terre construit les trap\u00e8zes plus que TOUT autre exercice. Le shrug lourd = surcharge isom\u00e9canique. Le rack pull = overload impossible \u00e0 atteindre avec DL complet. Les trap\u00e8zes des champions (Ronnie Coleman, Phil Heath) = construits sur le soulev\u00e9 de terre lourd + shrug lourds. Tracking charges OBLIGATOIRE.'
+    }
+  },
+  lombaires: {
+    force: {
+      warmup: 'Activation: McKenzie extensions 3\u00d710 + cat-cow 3\u00d710 + hip hinge barre vide x15 + 2 sets DL @50%, @70%',
+      exercises: [
+        {order:1, name:'Soulev\u00e9 de terre conventionnel', sets:5, reps:3, rest:'5min', technique:'@87-93% 1RM \u2014 Le roi absolu des lombaires. Gainage 360\u00b0 (Valsalva maneuver). Dos NEUTRE STRICT. Drive des jambes. Les \u00e9recteurs du rachis et les multifides = sollicit\u00e9s \u00e0 intensit\u00e9 maximale. La plus grande charge de la s\u00e9ance, CNS frais.', muscle:'lombaires+dos complet+jambes', type:'compound', equipment:'barre', rirTarget:1},
+        {order:2, name:'Good Morning barre (lourd)', sets:4, reps:5, rest:'3min30', technique:'@50-60% du squat max \u2014 Hip hinge strict. Dos neutre. Charg\u00e9 mais pas au maximum (risque lombaire si forme bris\u00e9e). Excellent pour la force des \u00e9recteurs en position de flexion = pattern DL.', muscle:'lombaires+ischios+fessiers', type:'compound', equipment:'barre', rirTarget:2},
+        {order:3, name:'Hyperextension lest\u00e9e', sets:4, reps:8, rest:'2min30', technique:'Poids sur la poitrine ou halt\u00e8re serr\u00e9. Amplitude compl\u00e8te. Contraction lombaire 2s en haut (position neutre, pas hyperextension). Progression de charge \u00e0 chaque s\u00e9ance.', muscle:'lombaires+fessiers', type:'isolation', equipment:'banc \u00e0 lombaires', rirTarget:2},
+        {order:4, name:'Deadlift en d\u00e9ficit (5cm)', sets:3, reps:5, rest:'3min', technique:'@75% 1RM \u2014 Debout sur des plaques de 5cm. ROM augment\u00e9 = recrutement lombaire plus profond et plus long. Technique parfaite obligatoire.', muscle:'lombaires+dos+jambes', type:'compound', equipment:'barre', rirTarget:2},
+        {order:5, name:'Planche avant lest\u00e9e', sets:3, reps:'30s', rest:'2min', technique:'Lest sur le dos (partenaire ou gilet lest\u00e9). Gainage isom\u00e9trique lourd. Progression de charge ou de temps.', muscle:'lombaires+core (force isom\u00e9trique)', type:'isolation', equipment:'sol', rirTarget:3}
+      ],
+      notes: '\u26a1 PHASE FORCE LOMBAIRES: Des lombaires faibles = plafond sur TOUS les exercices compos\u00e9s. Soulev\u00e9 de terre (force absolue) \u2192 Good morning (hip hinge charg\u00e9) \u2192 Hyperextension lest\u00e9e (isolation) \u2192 DL d\u00e9ficit (ROM+) \u2192 Planche lest\u00e9e (isom\u00e9trique). ATTENTION: les lombaires r\u00e9cup\u00e8rent plus lentement que les autres muscles. 72h minimum entre les s\u00e9ances lombaires intenses. Ne jamais n\u00e9gliger l\'\u00e9chauffement.'
+    }
+  },
   bras: {
     force: {
       warmup: 'Activation: 3\u00d710 Band curl + 3\u00d710 Band tricep pushdown + mobilit\u00e9 coudes 3min',
@@ -311,14 +386,17 @@ var NFC_PROGRAMS_FORCE = {
 
 // ─── VOLUME LANDMARKS (Schoenfeld, RP Hypertrophy — sets/semaine par muscle) ───
 var VOLUME_LANDMARKS = {
-  chest:     {mev:6,  mav:16, mrv:22, label:'Poitrine'},
+  chest:     {mev:10, mav:16, mrv:22, label:'Poitrine'},
   back:      {mev:8,  mav:16, mrv:25, label:'Dos'},
-  shoulders: {mev:6,  mav:14, mrv:20, label:'Épaules'},
+  shoulders: {mev:6,  mav:14, mrv:20, label:'\u00c9paules'},
   legs:      {mev:8,  mav:18, mrv:28, label:'Jambes'},
   glutes:    {mev:4,  mav:12, mrv:20, label:'Fessiers'},
   biceps:    {mev:6,  mav:12, mrv:20, label:'Biceps'},
   triceps:   {mev:6,  mav:14, mrv:20, label:'Triceps'},
-  abs:       {mev:4,  mav:10, mrv:16, label:'Abdominaux'}
+  abs:       {mev:4,  mav:10, mrv:16, label:'Abdominaux'},
+  traps:     {mev:4,  mav:12, mrv:18, label:'Trap\u00e8zes'},
+  lower_back:{mev:4,  mav:9,  mrv:14, label:'Lombaires'},
+  calves:    {mev:6,  mav:14, mrv:20, label:'Mollets'}
 };
 window.VOLUME_LANDMARKS = VOLUME_LANDMARKS;
 
@@ -406,7 +484,7 @@ var ADVANCED_TECHNIQUES_DB = {
   }
 };
 window.ADVANCED_TECHNIQUES_DB = ADVANCED_TECHNIQUES_DB;
-window.NFC_PROGRAMS_FORCE = NFC_PROGRAMS_FORCE;
+window.SFC_PROGRAMS_FORCE = SFC_PROGRAMS_FORCE;
 
 var WEEKLY_SPLITS = {
   3: {name:'Push-Pull-Legs 3j', days:[{day:'Lundi',muscles:['pectoraux','epaules'],label:'Push \u2014 Pecs + \u00c9paules'},{day:'Mercredi',muscles:['dos','bras'],label:'Pull \u2014 Dos + Bras'},{day:'Vendredi',muscles:['jambes','fessiers_dedied'],label:'Legs \u2014 Jambes + Fessiers'}], notes:'Split PPL simplifi\u00e9 3j. Chaque groupe musculaire 1x/semaine avec volume concentr\u00e9. R\u00e9cup\u00e9ration optimale (72h min entre s\u00e9ances m\u00eames groupes). Id\u00e9al d\u00e9butants ou emploi du temps serr\u00e9.'},
@@ -423,9 +501,9 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
     if (S.sportGoals.indexOf('strength') !== -1 || S.sportGoals.indexOf('force') !== -1) goalKey = 'force';
   }
 
-  // Phase FORCE → utilise NFC_PROGRAMS_FORCE dédié
+  // Phase FORCE → utilise SFC_PROGRAMS_FORCE dédié
   if (goalKey === 'force') {
-    var forceEntry = NFC_PROGRAMS_FORCE[muscleGroup];
+    var forceEntry = SFC_PROGRAMS_FORCE[muscleGroup];
     if (forceEntry && forceEntry.force) {
       var forceResult; try { forceResult = JSON.parse(JSON.stringify(forceEntry.force)); } catch(e) { return null; }
       if (!forceResult.exercises) forceResult.exercises = [];
@@ -439,7 +517,7 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
     goalKey = 'masse'; // fallback si pas de phase force pour ce groupe
   }
 
-  var program = NFC_PROGRAMS[muscleGroup];
+  var program = SFC_PROGRAMS[muscleGroup];
   if (!program) return null;
   if (program.exercises) { try { return JSON.parse(JSON.stringify(program)); } catch(e) { return program; } }
   // Programmes dédiés (fessiers, abdos, biceps, triceps) utilisent des variations au lieu de masse/sèche
@@ -461,7 +539,7 @@ function getPersonalizedProgram(muscleGroup, userProfile) {
   }
   if (S.sportFocus && typeof S.sportFocus === 'object') {
     var key = muscleGroup.replace('_dedied','');
-    var pMap = {'pectoraux':'Poitrine','dos':'Dos','epaules':'\u00c9paules','bras':'Bras','jambes':'Jambes','fessiers':'Fessiers','abdos':'Abdominaux'};
+    var pMap = {'pectoraux':'Poitrine','dos':'Dos','epaules':'\u00c9paules','bras':'Bras','jambes':'Jambes','fessiers':'Fessiers','abdos':'Abdominaux','trapezes':'Trap\u00e8zes','lombaires':'Lombaires'};
     var zoneName = pMap[key] || key;
     var priority = S.sportFocus[zoneName] || 0;
     if (priority >= 4) {
@@ -2091,7 +2169,7 @@ var CBUM_PROGRAMS = {
 window.CBUM_PROGRAMS = CBUM_PROGRAMS;
 
 var TRAINING_STYLES = {
-  classic:   { label:'Programme Classique',   programs: NFC_PROGRAMS,              splits: WEEKLY_SPLITS },
+  classic:   { label:'Programme Classique',   programs: SFC_PROGRAMS,              splits: WEEKLY_SPLITS },
   intensity: { label:'Intensité Maximale',    programs: YATES_PROGRAMS.programs,   splits: YATES_PROGRAMS.splits,   meta: YATES_PROGRAMS.meta,   macro: YATES_PROGRAMS.macro_cycle_12w },
   volume:    { label:'Volume Progressif',     programs: COLEMAN_PROGRAMS.programs, splits: COLEMAN_PROGRAMS.splits, meta: COLEMAN_PROGRAMS.meta, macro: COLEMAN_PROGRAMS.macro_cycle_12w },
   fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w },
@@ -2430,6 +2508,28 @@ var EXERCISE_ALTERNATIVES = {
     { n: 'Donkey calf raise', m: 'Mollets', eq: 'Machine donkey ou lest', sets: '4×15-20', rest: '60s' },
     { n: 'Sauts à la corde', m: 'Mollets', eq: 'Corde à sauter', sets: '4×60s', rest: '60s' }
   ],
+  trapezes: [
+    { n: 'Shrug barre', m: 'Trap\u00e8zes sup\u00e9rieurs', eq: 'Barre', sets: '5×8-12', rest: '90s' },
+    { n: 'Shrug halt\u00e8res', m: 'Trap\u00e8zes sup\u00e9rieurs', eq: 'Halt\u00e8res', sets: '4×10-15', rest: '60s' },
+    { n: 'Shrug machine', m: 'Trap\u00e8zes sup\u00e9rieurs', eq: 'Machine', sets: '4×12-15', rest: '60s' },
+    { n: 'Face pull c\u00e2ble', m: 'Trap\u00e8zes moyens + rotateurs', eq: 'C\u00e2ble + corde', sets: '4×15', rest: '60s' },
+    { n: 'Tirage menton barre', m: 'Trap\u00e8zes + \u00e9paules', eq: 'Barre', sets: '4×10-12', rest: '60s' },
+    { n: 'Rack pull', m: 'Trap\u00e8zes sup\u00e9rieurs', eq: 'Barre + rack', sets: '4×5-6', rest: '180s' },
+    { n: 'Rowing buste pench\u00e9 prise large', m: 'Trap\u00e8zes moyens + rhobo\u00efdes', eq: 'Barre', sets: '4×10', rest: '90s' },
+    { n: 'Shrug halt\u00e8re unilat\u00e9ral', m: 'Trap\u00e8zes', eq: 'Halt\u00e8re', sets: '4×12', rest: '60s' },
+    { n: 'Tirage menton c\u00e2ble', m: 'Trap\u00e8zes + \u00e9paules', eq: 'C\u00e2ble', sets: '4×12', rest: '60s' }
+  ],
+  lombaires: [
+    { n: 'Soulev\u00e9 de terre conventionnel', m: 'Lombaires + dos complet', eq: 'Barre', sets: '4×5', rest: '240s' },
+    { n: 'Good morning barre', m: 'Lombaires + ischios', eq: 'Barre', sets: '4×8-10', rest: '120s' },
+    { n: 'Hyperextension banc lombaires', m: 'Lombaires + fessiers', eq: 'Banc \u00e0 lombaires', sets: '4×12-15', rest: '90s' },
+    { n: 'Soulev\u00e9 de terre roumain', m: 'Lombaires + ischios + fessiers', eq: 'Barre', sets: '4×8-10', rest: '120s' },
+    { n: 'Planche ventrale (prone plank)', m: 'Lombaires + core', eq: 'Sol', sets: '4×45s', rest: '60s' },
+    { n: 'Superman', m: 'Lombaires + \u00e9recteurs', eq: 'Sol', sets: '4×15', rest: '45s' },
+    { n: 'Bird dog', m: 'Lombaires + core stabilisation', eq: 'Sol', sets: '3×12', rest: '45s' },
+    { n: 'Hyperextension reverse', m: 'Lombaires + fessiers', eq: 'Banc plat', sets: '3×15', rest: '60s' },
+    { n: 'Good morning halt\u00e8res', m: 'Lombaires + ischios', eq: 'Halt\u00e8res', sets: '4×12', rest: '90s' }
+  ],
   abdos: [
     { n: 'Crunch classique', m: 'Abdominaux', eq: 'Poids du corps', sets: '4×20', rest: '45s' },
     { n: 'Relevé de jambes suspendu', m: 'Abdominaux bas', eq: 'Barre de traction', sets: '4×10-15', rest: '60s' },
@@ -2452,16 +2552,18 @@ function getAlternativeExercises(muscle, excludeName, maxCount) {
   var dbKey = null;
   var keyMap = [
     ['pectoraux', 'pectoraux'], ['poitrine', 'pectoraux'], ['chest', 'pectoraux'],
-    ['dos', 'dos'], ['dorsal', 'dos'], ['dorsaux', 'dos'], ['back', 'dos'], ['trapèze', 'dos'], ['trapeze', 'dos'],
+    ['dos', 'dos'], ['dorsal', 'dos'], ['dorsaux', 'dos'], ['back', 'dos'],
     ['épaule', 'epaules'], ['epaule', 'epaules'], ['deltoïde', 'epaules'], ['deltoid', 'epaules'], ['shoulder', 'epaules'],
     ['biceps', 'biceps'], ['brachial', 'biceps'],
     ['triceps', 'triceps'],
     ['quadriceps', 'quadriceps'], ['quad', 'quadriceps'], ['jambes', 'quadriceps'], ['cuisse', 'quadriceps'],
     ['ischio-jambiers', 'ischios'], ['ischios', 'ischios'], ['ischio', 'ischios'], ['hamstring', 'ischios'],
     ['fessier', 'fessiers'], ['glute', 'fessiers'], ['fesses', 'fessiers'],
-    ['soléaire', 'mollets'], ['solaire', 'mollets'], ['mollet', 'mollets'], ['calf', 'mollets'], ['calves', 'mollets'],
+    ['sol\u00e9aire', 'mollets'], ['solaire', 'mollets'], ['mollet', 'mollets'], ['calf', 'mollets'], ['calves', 'mollets'],
     ['grand droit', 'abdos'], ['oblique', 'abdos'], ['transverse', 'abdos'],
     ['abdo', 'abdos'], ['abdominaux', 'abdos'], ['core', 'abdos'],
+    ['trap\u00e8ze', 'trapezes'], ['trapeze', 'trapezes'], ['rhombo', 'trapezes'], ['shrug', 'trapezes'],
+    ['lombaire', 'lombaires'], ['\u00e9recteur', 'lombaires'], ['erecteur', 'lombaires'], ['bas du dos', 'lombaires'], ['lower back', 'lombaires'],
     ['bras', 'biceps']
   ];
   for (var ki = 0; ki < keyMap.length; ki++) {
@@ -2733,7 +2835,7 @@ window.FUSION_PROGRAMS = FUSION_PROGRAMS;
 window.TRAINING_STYLES = TRAINING_STYLES;
 window.TRAINING_STYLE_KEYS = ['classic', 'intensity', 'volume', 'fst7', 'fusion', 'starting', 'greyskull', 'texas', 'nsuns', 'cbum'];
 window.getStyleProgram = getStyleProgram;
-window.NFC_PROGRAMS = NFC_PROGRAMS;
+window.SFC_PROGRAMS = SFC_PROGRAMS;
 window.WEEKLY_SPLITS = WEEKLY_SPLITS;
 window.getPersonalizedProgram = getPersonalizedProgram;
 window.getProgressiveProgram = getProgressiveProgram;

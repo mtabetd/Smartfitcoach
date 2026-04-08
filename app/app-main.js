@@ -23,7 +23,7 @@ var PROFILE_KEYS = [
  'pregnant','pregnancyWeek','prePregnancyWeight','dueDate',
  'cycleLength','lastPeriodDate','cycleTracking',
  'creatine','creatineDose','supplements',
- 'sportGoals','sportLevel','sportDays','sportSessionDuration','sportFocus',
+ 'sportGoals','sportLevel','sportDays','trainingDaysSelected','sportSessionDuration','sportFocus',
  'sportType','crossfitLevel','crossfitCompGoal','crossfitOpenDate',
  'trainTime',
  // CrossFit progress (calendar, current day, weekly cycle)
@@ -48,12 +48,12 @@ var PROFILE_KEYS = [
  'calisthenicsEquipment','calisthDips','calisthCurrentWeek',
  'calisthenicsWeek','selectedCalisthDay',
  // Musculation
- 'muscuWeek','muscuCycle','sportSplashDone','nStep','sStep','selectedSportDay',
+ 'muscuWeek','muscuCycle','muscuProgramCount','sportSplashDone','nStep','sStep','selectedSportDay',
  'sportProgram',
  'bonusExercises','sessionHistory',
  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment','installations',
  // Nutrition plan
- 'shopChecked','weekPlan','selectedDay','_weekPlanGeneratedAt',
+ 'shopChecked','weekPlan','selectedDay','_weekPlanGeneratedAt','nutritionLog',
  // System
  'lang','weightUnit','heightUnit',
  'muscuMedical','crossfit1RM','muscuStrengthProfile','muscuProgramStart',
@@ -65,7 +65,11 @@ var PROFILE_KEYS = [
  'emailOptin',
  'profilePhoto',
  'todayWellness',
- 'aiCoachHistory'
+ 'aiCoachHistory',
+ 'appMode',
+ 'stress',
+ 'cfDeloadRecommended',
+ 'sessionPostponed'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -191,12 +195,12 @@ function loadProfile() {
  // Defensive rehydration: ensure object/array fields are never null after load
  var _objFields = ['sportFocus','bonusExercises','sessionHistory','muscuSessionLog',
  'muscuProgressionHistory','musculationWeights','muscuStrengthProfile','crossfit1RM',
- 'hyroxBenchmarks','shopChecked','bodyZones','crossfitBenchmarks'];
+ 'hyroxBenchmarks','shopChecked','bodyZones','crossfitBenchmarks','muscuMedical'];
  _objFields.forEach(function(f) { if (!S[f] || typeof S[f] !== 'object' || Array.isArray(S[f])) S[f] = {}; });
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','strongZones','weakZones',
  'train','supplements','wheyFlavors','alcoholTypes',
- 'calisthenicsEquipment','calisthenicsGoal','weightHistory'];
+ 'calisthenicsEquipment','calisthenicsGoal','weightHistory','trainingDaysSelected'];
  _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
  // weekPlan is null or array — reject anything else
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
@@ -216,6 +220,110 @@ function loadProfile() {
 // Expose persistence functions globally so other modules can call them
 window.saveProfile = saveProfile;
 window.loadProfile = loadProfile;
+
+// ─── MODULE CHOICE SCREEN ───
+window.renderModuleChoice = function renderModuleChoice(content) {
+ var c = h('div', {style: 'max-width:420px;margin:0 auto;padding:48px 20px 32px'});
+
+ // Header — staggered entrance animation
+ var eyebrowEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease'}, 'SMARTFITCOACH');
+ var titleEl = h('div', {style: 'font-family:Georgia,serif;font-size:clamp(28px,7vw,38px);font-weight:normal;line-height:1.1;letter-spacing:-.02em;margin:0 0 14px;color:var(--black,#1A1A18);text-align:center;opacity:0;transform:translateY(8px);transition:opacity .4s ease .08s,transform .4s ease .08s'}, 'Votre corps.\u00a0Votre programme.\nRien d\u2019autre.');
+ titleEl.style.whiteSpace = 'pre-line';
+ var subtitleEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--grey,#6B6B65);line-height:1.6;letter-spacing:.01em;margin:0 auto 36px;max-width:300px;text-align:center;opacity:0;transform:translateY(6px);transition:opacity .35s ease .14s,transform .35s ease .14s'}, 'Un programme 100\u00a0% calibr\u00e9 sur vos objectifs, votre morphologie, votre rythme de vie.');
+ c.appendChild(eyebrowEl);
+ c.appendChild(titleEl);
+ c.appendChild(subtitleEl);
+
+ // SVG icons per card
+ var _svgNutrition = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A18" stroke-width="1.5" stroke-linecap="round"><path d="M12 21C12 21 4 14 4 8.5C4 5.46 6.69 3 10 3C11.12 3 12 3.45 12 3.45C12 3.45 12.88 3 14 3C17.31 3 20 5.46 20 8.5C20 14 12 21 12 21Z"/><line x1="12" y1="8" x2="12" y2="14"/></svg>';
+ var _svgSport = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A18" stroke-width="1.5" stroke-linecap="round"><line x1="6" y1="12" x2="18" y2="12"/><rect x="2" y="10" width="4" height="4" rx="1"/><rect x="18" y="10" width="4" height="4" rx="1"/></svg>';
+ var _svgBoth = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A18" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>';
+
+ // Cards data — nutrition first, sport second, both third (recommended)
+ var cardsData = [
+   {
+     title: 'Nutrition',
+     desc: 'Suivi alimentaire, objectifs caloriques et qualit\u00e9 nutritionnelle.',
+     badge: null, svg: _svgNutrition, delay: '.2s',
+     onclick: function() {
+       S.appMode = 'nutrition'; S.view = 'nutrition'; S.nStep = 0;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       window.render();
+     }
+   },
+   {
+     title: 'Entra\u00eenement',
+     desc: 'Programmes adapt\u00e9s, charge hebdomadaire et progression.',
+     badge: null, svg: _svgSport, delay: '.26s',
+     onclick: function() {
+       S.appMode = 'sport'; S.view = 'sport'; S.sStep = 0;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       window.render();
+     }
+   },
+   {
+     title: 'Nutrition & Entra\u00eenement',
+     desc: 'L\u2019approche compl\u00e8te pour des r\u00e9sultats durables.',
+     badge: 'RECOMMAND\u00c9', svg: _svgBoth, delay: '.32s',
+     onclick: function() {
+       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 0;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       window.render();
+     }
+   }
+ ];
+
+ var cardsWrap = h('div', {style: 'display:flex;flex-direction:column;gap:10px;width:100%'});
+
+ cardsData.forEach(function(card) {
+   var el = h('div', {
+     style: 'position:relative;display:flex;align-items:flex-start;gap:16px;padding:20px;cursor:pointer;background:var(--ivory2,#F5F4EF);border:1px solid var(--border,#E8E6DF);border-radius:2px;min-height:44px;user-select:none;-webkit-tap-highlight-color:transparent;opacity:0;transform:translateY(10px);',
+     onclick: card.onclick
+   });
+   el.style.transition = 'border-color .18s ease,background-color .18s ease,opacity .35s ease ' + card.delay + ',transform .35s ease ' + card.delay;
+   el.addEventListener('mouseenter', function() { el.style.borderColor = 'var(--black,#1A1A18)'; el.style.backgroundColor = 'var(--ivory,#FAF9F6)'; });
+   el.addEventListener('mouseleave', function() { el.style.borderColor = 'var(--border,#E8E6DF)'; el.style.backgroundColor = 'var(--ivory2,#F5F4EF)'; });
+   el.addEventListener('touchstart', function() { el.style.backgroundColor = '#F5F4EF'; }, {passive: true});
+
+   // SVG icon
+   var iconWrap = h('div', {style: 'flex-shrink:0;margin-top:2px'});
+   iconWrap.innerHTML = card.svg;
+   el.appendChild(iconWrap);
+
+   // Text
+   var left = h('div', {style: 'display:flex;flex-direction:column;gap:4px;flex:1'});
+   left.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;color:var(--black,#1A1A18);letter-spacing:.01em;line-height:1.2'}, card.title));
+   left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);line-height:1.55;letter-spacing:.01em'}, card.desc));
+   el.appendChild(left);
+
+   // Badge RECOMMANDÉ — absolute top-right
+   if (card.badge) {
+     el.appendChild(h('div', {style: 'position:absolute;top:-1px;right:-1px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:#FAF9F6;background:var(--black,#1A1A18);padding:4px 8px;border-radius:0 2px 0 2px'}, card.badge));
+   }
+
+   cardsWrap.appendChild(el);
+ });
+ c.appendChild(cardsWrap);
+
+ // Footer note
+ c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-align:center;margin-top:24px;letter-spacing:.04em;opacity:.7'}, 'Vos donn\u00e9es restent sur votre appareil.'));
+
+ content.appendChild(c);
+
+ // Trigger entrance animations after paint
+ requestAnimationFrame(function() {
+   requestAnimationFrame(function() {
+     [eyebrowEl, titleEl, subtitleEl].forEach(function(el) {
+       el.style.opacity = '1';
+       el.style.transform = 'translateY(0)';
+     });
+     cardsWrap.querySelectorAll('[style*="opacity:0"]').forEach(function(el) {
+       el.style.opacity = '1';
+       el.style.transform = 'translateY(0)';
+     });
+   });
+ });
+};
 
 // ─── MAIN RENDER ───
 function render() {
@@ -326,14 +434,28 @@ function render() {
  ub.appendChild(ubRight);
  wrap.appendChild(ub);
 
- // Main navigation (3 tabs: Aujourd'hui, Nutrition, Sport)
+ // Main navigation (tabs adaptés selon S.appMode)
  var nav = h('div', {'class': 'main-nav'});
  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'today' || S.view === 'dashboard' || !S.view ? ' active' : ''), onclick: function(){ S.view = 'today'; if(window.BLACKBOX)window.BLACKBOX.log('nav_today'); render(); }}, 'Aujourd\'hui'));
- nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, window.t('nav.nutrition')));
- nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, window.t('nav.sport')));
+ if (S.appMode !== 'sport') {
+   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, window.t('nav.nutrition')));
+ }
+ if (S.appMode !== 'nutrition') {
+   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, window.t('nav.sport')));
+ }
  wrap.appendChild(nav);
 
  var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
+
+ // Module choice — si l'utilisateur est connecté mais n'a pas encore choisi son mode
+ var _authUser = window.AUTH ? window.AUTH.getUser() : null;
+ if (_authUser && !S.appMode && S.nStep === 0 && S.sStep === 0) {
+   window.renderModuleChoice(content);
+   wrap.appendChild(content);
+   wrap.appendChild(h('div', {'class': 'footer'}, [h('a', {href: '#'}, 'Smart Fit Coach')]));
+   app.appendChild(wrap);
+   return;
+ }
 
  if (S.view === 'sport' && window.SPORT) {
  SPORT.render(content);
@@ -1138,6 +1260,7 @@ if (window._verifyCriticalFunctions) {
 // Save on tab/browser close to avoid losing last unsaved state
 window.addEventListener('beforeunload', function() {
  try { if (AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
+ try { if (AUTH.isLoggedIn() && window.SupaSync) SupaSync.saveProfile(); } catch(e) {}
 });
 // Periodic autosave every 30s as safety net (render() already saves on interaction)
 setInterval(function() {

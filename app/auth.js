@@ -196,7 +196,6 @@ function getLegacySession() {
 function buildFingerprint() {
   try {
     return [
-      navigator.userAgent || '',
       String(screen.width || 0),
       String(screen.colorDepth || 0),
       navigator.language || ''
@@ -423,6 +422,32 @@ function _fallbackRegister(name, email, password, extra, startTime) {
   return withTimingDelay(promise, startTime);
 }
 
+// ─── MIGRATION ANON → UID (localStorage keys) ───
+function _migrateAnonKeys(uid) {
+  try {
+    var _anonRaw = localStorage.getItem('mtd_profile_anon');
+    var _userRaw = localStorage.getItem('mtd_profile_' + uid);
+    if (_anonRaw && !_userRaw) {
+      localStorage.setItem('mtd_profile_' + uid, _anonRaw);
+      localStorage.removeItem('mtd_profile_anon');
+    }
+
+    // Migrer les clés legacy anon → uid (historique, badges, streaks, logs)
+    var _LEGACY_PREFIXES = ['mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_', 'mtd_food_journal_', 'mtd_water_', 'mtd_muscu_session_', 'mtd_weight_history_'];
+    _LEGACY_PREFIXES.forEach(function(prefix) {
+      var anonKey = prefix + 'anon';
+      var uidKey = prefix + uid;
+      try {
+        var anonVal = localStorage.getItem(anonKey);
+        if (anonVal && !localStorage.getItem(uidKey)) {
+          localStorage.setItem(uidKey, anonVal);
+          localStorage.removeItem(anonKey);
+        }
+      } catch(e) {}
+    });
+  } catch(e) {}
+}
+
 // ─── FALLBACK LOGIN (localStorage) ───
 function _fallbackLogin(email, password, startTime) {
   var users = getUsers();
@@ -466,6 +491,7 @@ function _fallbackLogin(email, password, startTime) {
     }
 
     clearRateLimit(email);
+    _migrateAnonKeys(user.id);
     setLegacySession(user);
     _currentSession = { id: user.id, name: user.name, email: user.email, nom: user.nom || '', phone: user.phone || '' };
     BLACKBOX.log('login', { email: email });
@@ -657,6 +683,7 @@ window.AUTH = {
         var data = result.data;
         if (data && data.user) {
           var u = _extractUser(data.user);
+          _migrateAnonKeys(u.id);
           _currentSession = u;
           _useSupabase = true;
           clearRateLimit(email);

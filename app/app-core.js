@@ -310,20 +310,32 @@ window.getMealSplit=getMealSplit;
 // Retourne {isTraining, trainSlot, preSlot, postSlot}
 function getDayType(dayIndex) {
   var s = window.S;
-  var nDays = s.sportDays || 0;
-  if (nDays <= 0) return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
+  if (!s) return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
 
-  // Distribution standard des jours d'entraînement sur 7 jours
-  var LAYOUTS = {
-    1: [0],              // Lun
-    2: [0, 3],           // Lun, Jeu
-    3: [0, 2, 4],        // Lun, Mer, Ven
-    4: [0, 1, 3, 4],     // Lun, Mar, Jeu, Ven
-    5: [0, 1, 2, 3, 4],  // Lun-Ven
-    6: [0, 1, 2, 3, 4, 5] // Lun-Sam
-  };
-  var trainingDays = LAYOUTS[Math.min(nDays, 6)] || LAYOUTS[3];
-  var isTraining = trainingDays.indexOf(dayIndex) >= 0;
+  // Si l'utilisateur a sélectionné des jours spécifiques → utiliser ces jours en priorité
+  if (Array.isArray(s.trainingDaysSelected) && s.trainingDaysSelected.length > 0) {
+    var isTrainingSelected = s.trainingDaysSelected.indexOf(dayIndex) !== -1;
+    if (!isTrainingSelected) {
+      return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
+    }
+    // Continuer pour calculer trainSlot/preSlot/postSlot ci-dessous
+    var isTraining = true;
+  } else {
+    var nDays = s.sportDays || 0;
+    if (nDays <= 0) return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
+
+    // Distribution standard des jours d'entraînement sur 7 jours (fallback)
+    var LAYOUTS = {
+      1: [0],              // Lun
+      2: [0, 3],           // Lun, Jeu
+      3: [0, 2, 4],        // Lun, Mer, Ven
+      4: [0, 1, 3, 4],     // Lun, Mar, Jeu, Ven
+      5: [0, 1, 2, 3, 4],  // Lun-Ven
+      6: [0, 1, 2, 3, 4, 5] // Lun-Sam
+    };
+    var trainingDays = LAYOUTS[Math.min(nDays, 6)] || LAYOUTS[3];
+    var isTraining = trainingDays.indexOf(dayIndex) >= 0;
+  }
 
   if (!isTraining) {
     return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };

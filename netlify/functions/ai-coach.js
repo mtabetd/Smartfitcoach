@@ -116,7 +116,7 @@ function sanitizeContext(ctx) {
     'regime', 'allergies', 'excluded', 'muscuWeights',
     'hyroxLevel', 'hyroxGoal', 'hyroxWeek',
     'runningLevel', 'runningGoal', 'runningWeek',
-    'cyclingLevel', 'cyclingGoal'
+    'cyclingLevel', 'cyclingGoal', 'appMode'
   ];
 
   var safe = {};
@@ -307,6 +307,9 @@ exports.handler = async function(event, context) {
           try { resolve({ status: res.statusCode, body: JSON.parse(data) }); }
           catch(e) { reject(new Error('Réponse API invalide')); }
         });
+      });
+      req.setTimeout(25000, function() {
+        req.destroy(new Error('Timeout API Anthropic'));
       });
       req.on('error', reject);
       req.write(requestBody);
