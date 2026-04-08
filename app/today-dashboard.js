@@ -347,7 +347,7 @@ function renderCardNextMeal() {
     style: 'padding:10px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
     onclick: function() {
       var S2 = window.S;
-      S2.view = 'nutrition'; S2.nStep = 9; S2.selectedDay = todayIdx;
+      S2.view = 'nutrition'; S2.nStep = 12; S2.selectedDay = todayIdx;
       if (window.render) window.render();
     }
   }, 'Voir le repas \u2192');
@@ -582,7 +582,7 @@ function renderCardRepas() {
 
     var left = h('div', { style: 'flex:1;cursor:pointer;', onclick: function() {
       S.view = 'nutrition';
-      S.nStep = 9;
+      S.nStep = 12;
       S.selectedDay = todayIdx;
       if (window.render) window.render();
     }});
@@ -599,7 +599,7 @@ function renderCardRepas() {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);white-space:nowrap;margin-left:8px;cursor:pointer;',
       onclick: function() {
         S.view = 'nutrition';
-        S.nStep = 9;
+        S.nStep = 12;
         S.selectedDay = todayIdx;
         if (window.render) window.render();
       }
@@ -644,7 +644,7 @@ function renderCardRepas() {
     style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:right;cursor:pointer;',
     onclick: function() {
       S.view = 'nutrition';
-      S.nStep = 9;
+      S.nStep = 12;
       S.selectedDay = todayIdx;
       if (window.render) window.render();
     }

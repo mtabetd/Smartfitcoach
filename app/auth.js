@@ -313,7 +313,7 @@ function _extractUser(supaUser) {
   var meta = supaUser.user_metadata || {};
   var u = {
     id: supaUser.id,
-    name: meta.name || email.split('@')[0] || 'Utilisateur',
+    name: meta.full_name || meta.name || email.split('@')[0] || 'Utilisateur',
     email: email
   };
   if (meta.nom)   u.nom   = meta.nom;
@@ -525,7 +525,7 @@ window.AUTH = {
         // Restore profile from localStorage (same as _doAutoLogin does)
         if (window.loadProfile) window.loadProfile();
         if (window.S.nStep === 0 && (window.S.sex || window.S.goal || window.S.weekPlan)) {
-          window.S.nStep = window.S.weekPlan ? 9 : (window.S.goal ? 8 : 1);
+          window.S.nStep = window.S.weekPlan ? 12 : (window.S.goal ? 11 : 1);
         }
         // Préserver les steps programme (final steps après onboarding)
         // Réinitialiser uniquement les steps intermédiaires d'onboarding [1,2,3,5,7,9,11,13,17,19,22,24]

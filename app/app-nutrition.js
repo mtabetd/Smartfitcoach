@@ -82,7 +82,48 @@ function backArrowHtml() {
   return '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 }
 
+// ─── NEW STEP ROUTING TABLE ───
+// nStep 0  = Splash
+// nStep 1  = N3: Prénom + Sexe                            → renderStep1
+// nStep 2  = N4: Date de naissance + N4b Cycle/Grossesse  → renderStep2 / renderStep2b
+// nStep 3  = N5: Poids + Taille (BMR live)                → renderStep3
+// nStep 4  = N1+N2: Objectif + Poids cible                → renderStep6
+// nStep 5  = N6+N7: Activité + Sommeil                    → renderActiviteSommeil
+// nStep 6  = Body Scan optionnel (silhouette selector)    → renderBodyScan
+// nStep 7  = Provisional Preview                          → renderProvisionalPreview
+// nStep 8  = Médical — PRESERVED (diabetes, HTA, TCA, IRC)→ renderStep4
+// nStep 9  = Habitudes alimentaires + Suppléments/Alcool  → renderStep5
+// nStep 10 = Préférences (régime, allergies, cuisine, repas/j) → renderStep7
+// nStep 11 = Résultats / Macros                           → renderStep8
+// nStep 12 = Planning semaine                             → renderStep9
+
 function goStep(n) {
+  // Auto-skip identity/body steps when data already exists (cross-module symbiosis)
+  // New flow: 1=N3 2=N4 3=N5 4=N1+N2(objectif) 5=N6+N7(activité+sommeil)
+  //           6=BodyScan 7=Preview 8=Medical 9=Habitudes 10=Préférences 11=Résultats 12=Planning
+  if (n === 1) {
+    var _step1ok = S.sex && S.prenom !== undefined;
+    var _step2ok = !!(S.birthDate || S.age);
+    var _step3ok = !!(S.weight && S.height);
+    var _step4ok = S.goal !== null && S.goal !== undefined;
+    var _step5ok = true; // target weight is optional for maintain goal
+    if (S.goal !== null && S.goal !== undefined && GOALS[S.goal]) {
+      var _gk = GOALS[S.goal].key;
+      if (_gk === 'cut' || _gk === 'shred' || _gk === 'bulk' || _gk === 'lean_bulk') {
+        _step5ok = !!(S.targetWeight);
+      }
+    }
+    var _step6ok = S.activity !== null && S.activity !== undefined && Array.isArray(S.train) && S.train.length > 0;
+    var _step7ok = S.sleep !== null && S.sleep !== undefined;
+    // All body+goal+activity+sleep data complete → skip to medical (nStep 8), allow confirmation
+    if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok && _step7ok) { n = 8; }
+    else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok) { n = 5; } // missing sleep
+    else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok) { n = 5; } // missing activity
+    else if (_step1ok && _step2ok && _step3ok && _step4ok) { n = 5; } // missing activity/sleep
+    else if (_step1ok && _step2ok && _step3ok) { n = 4; } // missing objectif
+    else if (_step1ok && _step2ok) { n = 3; } // missing poids/taille
+    else if (_step1ok) { n = 2; } // missing date naissance
+  }
   S.nStep = n;
   bb('nutrition_step', {step: n});
   window.render();
@@ -147,7 +188,7 @@ function renderNutritionChoice(app) {
 
   var btnConsult = h('button', {
     style: 'display:block;width:100%;max-width:300px;padding:16px 24px;background:var(--black,#0A0A09);color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin:0 auto 14px',
-    onclick: function() { goStep(9); }
+    onclick: function() { goStep(12); }
   }, 'Consulter mon programme');
 
   var btnNew = h('button', {
@@ -196,15 +237,15 @@ function renderSplash(app) {
   app.appendChild(sp);
 }
 
-// ─── STEP 1: IDENTITE ───
+// ─── STEP 1 (N3): PRÉNOM + SEXE ───
 function renderStep1(p) {
-  renderProgressBar(p, 1, 9);
+  renderProgressBar(p, 1, 12);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' I \u00b7 Identit\u00e9'));
-  p.appendChild(h('h1', {html: 'Votre<br><em>profil de base</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Ces informations servent \u00e0 calibrer vos besoins caloriques et nutritionnels avec pr\u00e9cision.'));
+  p.appendChild(h('h1', {html: 'Bienvenue.<br><em>Parlons de vous.</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Ces informations calibrent vos besoins caloriques avec pr\u00e9cision.'));
   if (window.TIPS) TIPS.renderTip(p, 'identity');
 
-  // Prénom (optionnel — collecté tôt pour personnaliser les messages)
+  // Prénom (optionnel)
   (function() {
     var _prenomWrap = h('div', {style: 'margin-bottom:20px'});
     _prenomWrap.appendChild(h('div', {'class': 'section-label'}, 'Votre pr\u00e9nom (optionnel)'));
@@ -233,10 +274,153 @@ function renderStep1(p) {
     ]));
   });
   p.appendChild(g);
+  p.appendChild(h('div', {style: 'height:16px'}));
 
-  // Cycle menstruel (femmes uniquement)
-  if (S.sex === 'femme') {
-    var cycleDivider = h('div', {'class': 'divider', style: 'margin:20px 0 12px'});
+  // ── N3: Next → étape 2 (date de naissance) ──
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex, onclick: function() {
+    if (S.sex) {
+      bb('nutrition_identity_name_sex', {sex: S.sex});
+      goStep(2);
+    }
+  }}, window.t('onb.next')));
+  // Logout link
+  p.appendChild(h('button', {
+    style: 'display:block;margin:16px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);cursor:pointer;padding:8px;min-height:44px;text-decoration:underline;text-underline-offset:3px;',
+    onclick: function() {
+      if (window.AUTH) { AUTH.logout(); }
+      window.S.view = 'auth';
+      window.S.authError = '';
+      window.S._resetSent = false;
+      window.S._resetEmail = '';
+      window.S._passwordUpdated = false;
+      window.S.authVerifyEmail = '';
+      window.render();
+    }
+  }, window.t ? window.t('auth.logout') : 'Se d\u00e9connecter'));
+}
+
+// ─── STEP 2 (N4): DATE DE NAISSANCE + N4b CYCLE/GROSSESSE (femmes) ───
+// sub-page: window._s2page = 0 → date de naissance, 1 → cycle/grossesse (femmes only)
+function renderStep2(p) {
+  if (typeof window._s2page === 'undefined') window._s2page = 0;
+  // N4b: cycle/grossesse — femmes seulement après avoir saisi la date
+  if (window._s2page === 1 && S.sex === 'femme') {
+    renderStep2b(p);
+    return;
+  }
+  renderProgressBar(p, 2, 12);
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' II \u00b7 Naissance'));
+  p.appendChild(h('h1', {html: 'Votre<br><em>date de naissance</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Pour calculer votre \u00e2ge exact et adapter vos besoins tout au long de votre vie.'));
+
+  // Date de naissance (MANDATORY)
+  var dobLabel = h('div', {'class': 'section-label'});
+  dobLabel.appendChild(txt('Date de naissance'));
+  dobLabel.appendChild(reqDot());
+  p.appendChild(dobLabel);
+
+  var _bd = S.birthDate ? new Date(S.birthDate) : null;
+  var _bdValid = _bd && !isNaN(_bd.getTime());
+  var _curDay = _bdValid ? _bd.getDate() : 0;
+  var _curMonth = _bdValid ? (_bd.getMonth() + 1) : 0;
+  var _curYear = _bdValid ? _bd.getFullYear() : 0;
+
+  var _dobWrap = h('div', {style: 'display:flex;gap:8px;align-items:center'});
+
+  var _daySelect = h('select', {'class': 'num-input', style: 'flex:1;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
+  _daySelect.appendChild(h('option', {value: '0', selected: !_curDay}, 'Jour'));
+  for (var _d = 1; _d <= 31; _d++) {
+    var _dOpt = h('option', {value: String(_d)}, String(_d));
+    if (_d === _curDay) _dOpt.selected = true;
+    _daySelect.appendChild(_dOpt);
+  }
+
+  var _mNames = ['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
+  var _monthSelect = h('select', {'class': 'num-input', style: 'flex:1.5;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
+  _monthSelect.appendChild(h('option', {value: '0', selected: !_curMonth}, 'Mois'));
+  for (var _m = 0; _m < 12; _m++) {
+    var _mOpt = h('option', {value: String(_m + 1)}, _mNames[_m]);
+    if ((_m + 1) === _curMonth) _mOpt.selected = true;
+    _monthSelect.appendChild(_mOpt);
+  }
+
+  var _thisYear = new Date().getFullYear();
+  var _yearSelect = h('select', {'class': 'num-input', style: 'flex:1.2;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
+  _yearSelect.appendChild(h('option', {value: '0', selected: !_curYear}, 'Ann\u00e9e'));
+  for (var _y = _thisYear - 14; _y >= _thisYear - 80; _y--) {
+    var _yOpt = h('option', {value: String(_y)}, String(_y));
+    if (_y === _curYear) _yOpt.selected = true;
+    _yearSelect.appendChild(_yOpt);
+  }
+
+  function _updateBirthDate2() {
+    var dy = parseInt(_daySelect.value) || 0;
+    var mo = parseInt(_monthSelect.value) || 0;
+    var yr = parseInt(_yearSelect.value) || 0;
+    if (dy && mo && yr) {
+      var maxDay = new Date(yr, mo, 0).getDate();
+      if (dy > maxDay) dy = maxDay;
+      var pad = function(n) { return n < 10 ? '0' + n : String(n); };
+      S.birthDate = yr + '-' + pad(mo) + '-' + pad(dy);
+      S.age = getAge();
+      window.render();
+    }
+  }
+  _daySelect.onchange = _updateBirthDate2;
+  _monthSelect.onchange = _updateBirthDate2;
+  _yearSelect.onchange = _updateBirthDate2;
+
+  _dobWrap.appendChild(_daySelect);
+  _dobWrap.appendChild(_monthSelect);
+  _dobWrap.appendChild(_yearSelect);
+  p.appendChild(_dobWrap);
+
+  var _computedAge2 = S.birthDate ? getAge() : (S.age || null);
+  if (_computedAge2) {
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-top:6px'}, 'Vous avez ' + _computedAge2 + ' ans'));
+  } else {
+    p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 14 et 80 ans'));
+  }
+
+  if (_computedAge2 && _computedAge2 < 16) {
+    p.appendChild(h('div', {style: 'background:rgba(180,60,0,0.1);border:1px solid #8A2A0A;border-radius:2px;padding:10px 12px;font-size:11px;color:#8A2A0A;margin-top:8px;line-height:1.5'},
+      'Les programmes sport sont adapt\u00e9s aux +16 ans. Pour les moins de 16 ans, consultez un m\u00e9decin ou un entra\u00eenement sp\u00e9cialis\u00e9 jeunesse avant de commencer.'));
+  } else if (_computedAge2 && _computedAge2 < 18) {
+    p.appendChild(h('div', {style: 'background:rgba(180,120,0,0.1);border:1px solid #6A4A1A;border-radius:2px;padding:10px 12px;font-size:11px;color:#6A4A1A;margin-top:8px;line-height:1.5'},
+      'Pour les moins de 18 ans, ce programme doit \u00eatre suivi avec l\'accompagnement d\'un professionnel de sant\u00e9.'));
+  }
+
+  if (!S.birthDate && S.age) {
+    p.appendChild(h('div', {style: 'background:var(--ivory3,#EEEDE8);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:8px 12px;font-size:11px;color:var(--grey,#6B6B65);margin-top:8px;line-height:1.5'},
+      'Renseignez votre date de naissance pour un suivi plus pr\u00e9cis.'));
+  }
+
+  var _dobValid2 = !!(S.birthDate || S.age);
+  p.appendChild(h('div', {style: 'height:16px'}));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_dobValid2, onclick: function() {
+    if (!_dobValid2) return;
+    bb('nutrition_birthdate', {age: getAge(), birthDate: S.birthDate});
+    // Femmes → étape cycle/grossesse (N4b)
+    if (S.sex === 'femme') {
+      window._s2page = 1;
+      window.render();
+    } else {
+      window._s2page = 0;
+      goStep(3);
+    }
+  }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(1); }, html: backArrowHtml() + window.t('onb.back')}));
+}
+
+// ─── STEP 2b (N4b): CYCLE MENSTRUEL + GROSSESSE (femmes seulement) ───
+function renderStep2b(p) {
+  renderProgressBar(p, 2, 12);
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IIb \u00b7 Sant\u00e9 f\u00e9minine'));
+  p.appendChild(h('h1', {html: 'Cycle &<br><em>grossesse</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Ces informations adaptent vos recommandations nutritionnelles et sportives. Optionnel.'));
+
+  // ─── CYCLE MENSTRUEL ───
+  var cycleDivider = h('div', {'class': 'divider', style: 'margin:20px 0 12px'});
     cycleDivider.appendChild(h('div', {'class': 'divider-line'}));
     cycleDivider.appendChild(h('div', {'class': 'divider-text'}, 'Suivi du cycle menstruel (optionnel)'));
     cycleDivider.appendChild(h('div', {'class': 'divider-line'}));
@@ -428,241 +612,23 @@ function renderStep1(p) {
     }
 
     p.appendChild(h('div', {style: 'height:8px'}));
-  }
 
-  // Date de naissance (MANDATORY — calcule l'âge dynamiquement)
-  var dobLabel = h('div', {'class': 'section-label'});
-  dobLabel.appendChild(txt('Date de naissance'));
-  dobLabel.appendChild(reqDot());
-  p.appendChild(dobLabel);
-
-  // Parse existing birthDate or fallback
-  var _bd = S.birthDate ? new Date(S.birthDate) : null;
-  var _bdValid = _bd && !isNaN(_bd.getTime());
-  var _curDay = _bdValid ? _bd.getDate() : 0;
-  var _curMonth = _bdValid ? (_bd.getMonth() + 1) : 0;
-  var _curYear = _bdValid ? _bd.getFullYear() : 0;
-
-  var _dobWrap = h('div', {style: 'display:flex;gap:8px;align-items:center'});
-
-  // Day select
-  var _daySelect = h('select', {'class': 'num-input', style: 'flex:1;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
-  _daySelect.appendChild(h('option', {value: '0', selected: !_curDay}, 'Jour'));
-  for (var _d = 1; _d <= 31; _d++) {
-    var _dOpt = h('option', {value: String(_d)}, String(_d));
-    if (_d === _curDay) _dOpt.selected = true;
-    _daySelect.appendChild(_dOpt);
-  }
-
-  // Month select
-  var _mNames = ['Janvier','F\u00e9vrier','Mars','Avril','Mai','Juin','Juillet','Ao\u00fbt','Septembre','Octobre','Novembre','D\u00e9cembre'];
-  var _monthSelect = h('select', {'class': 'num-input', style: 'flex:1.5;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
-  _monthSelect.appendChild(h('option', {value: '0', selected: !_curMonth}, 'Mois'));
-  for (var _m = 0; _m < 12; _m++) {
-    var _mOpt = h('option', {value: String(_m + 1)}, _mNames[_m]);
-    if ((_m + 1) === _curMonth) _mOpt.selected = true;
-    _monthSelect.appendChild(_mOpt);
-  }
-
-  // Year select (current year - 80 to current year - 14)
-  var _thisYear = new Date().getFullYear();
-  var _yearSelect = h('select', {'class': 'num-input', style: 'flex:1.2;padding:10px 6px;font-size:14px;text-align:center;appearance:auto;-webkit-appearance:auto'});
-  _yearSelect.appendChild(h('option', {value: '0', selected: !_curYear}, 'Ann\u00e9e'));
-  for (var _y = _thisYear - 14; _y >= _thisYear - 80; _y--) {
-    var _yOpt = h('option', {value: String(_y)}, String(_y));
-    if (_y === _curYear) _yOpt.selected = true;
-    _yearSelect.appendChild(_yOpt);
-  }
-
-  function _updateBirthDate() {
-    var dy = parseInt(_daySelect.value) || 0;
-    var mo = parseInt(_monthSelect.value) || 0;
-    var yr = parseInt(_yearSelect.value) || 0;
-    if (dy && mo && yr) {
-      // Clamp day to valid range for the month
-      var maxDay = new Date(yr, mo, 0).getDate();
-      if (dy > maxDay) dy = maxDay;
-      var pad = function(n) { return n < 10 ? '0' + n : String(n); };
-      S.birthDate = yr + '-' + pad(mo) + '-' + pad(dy);
-      S.age = getAge();
-      // Only re-render when all 3 fields are complete — avoids resetting partial selections
-      window.render();
-    }
-    // If partial (only 1-2 fields filled), do NOT re-render — keeps select values intact
-  }
-
-  _daySelect.onchange = _updateBirthDate;
-  _monthSelect.onchange = _updateBirthDate;
-  _yearSelect.onchange = _updateBirthDate;
-
-  _dobWrap.appendChild(_daySelect);
-  _dobWrap.appendChild(_monthSelect);
-  _dobWrap.appendChild(_yearSelect);
-  p.appendChild(_dobWrap);
-
-  // Display computed age
-  var _computedAge = S.birthDate ? getAge() : (S.age || null);
-  if (_computedAge) {
-    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-top:6px'}, 'Vous avez ' + _computedAge + ' ans'));
-  } else {
-    p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 14 et 80 ans'));
-  }
-
-  if (_computedAge && _computedAge < 16) {
-    var under16Warn = h('div', {style: 'background:rgba(180,60,0,0.1);border:1px solid #8A2A0A;border-radius:2px;padding:10px 12px;font-size:11px;color:#8A2A0A;margin-top:8px;line-height:1.5'},
-      'Les programmes sport sont adaptés aux +16 ans. Pour les moins de 16 ans, consultez un médecin ou un entraîneur spécialisé jeunesse avant de commencer.');
-    p.appendChild(under16Warn);
-  } else if (_computedAge && _computedAge < 18) {
-    var minorWarn = h('div', {style: 'background:rgba(180,120,0,0.1);border:1px solid #6A4A1A;border-radius:2px;padding:10px 12px;font-size:11px;color:#6A4A1A;margin-top:8px;line-height:1.5'},
-      'Pour les moins de 18 ans, ce programme doit \u00eatre suivi avec l\'accompagnement d\'un professionnel de sant\u00e9 ou d\'un m\u00e9decin.');
-    p.appendChild(minorWarn);
-  }
-
-  // Migration banner for users with age but no birthDate
-  if (!S.birthDate && S.age) {
-    p.appendChild(h('div', {style: 'background:var(--ivory3,#EEEDE8);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:8px 12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:8px;line-height:1.5'},
-      'Renseignez votre date de naissance pour un suivi plus pr\u00e9cis. Votre \u00e2ge sera calcul\u00e9 automatiquement.'));
-  }
-
-  var _dobValid = !!S.birthDate || !!S.age;
-
-  // ── Photo de profil (optionnelle) ──
-  var photoWrap = h('div', {'class': 'profile-photo-section'});
-
-  // Label editorial uppercase
-  photoWrap.appendChild(h('div', {'class': 'profile-photo-label'}, 'PHOTO DE PROFIL'));
-
-  // fileInput hidden — triggered by click on the zone
-  var fileInput = h('input', {type: 'file', accept: 'image/*', style: 'display:none', onchange: function(e) {
-    var file = e.target.files && e.target.files[0];
-    if (!file) return;
-    if (file.size > 10 * 1024 * 1024) { alert('Image trop volumineuse (max 10\u00a0Mo)'); return; }
-    var reader = new FileReader();
-    reader.onload = function(ev) {
-      var _loadImg = new Image();
-      _loadImg.onload = function() {
-        var canvas = document.createElement('canvas');
-        var size = 256;
-        canvas.width = size; canvas.height = size;
-        var ctx = canvas.getContext('2d');
-        // Crop to center square
-        var sw = Math.min(_loadImg.width, _loadImg.height);
-        var sx = (_loadImg.width - sw) / 2;
-        var sy = (_loadImg.height - sw) / 2;
-        ctx.drawImage(_loadImg, sx, sy, sw, sw, 0, 0, size, size);
-        S.profilePhoto = canvas.toDataURL('image/jpeg', 0.7);
-        window.render();
-      };
-      _loadImg.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
-  }});
-  photoWrap.appendChild(fileInput);
-
-  if (S.profilePhoto) {
-    // ── État photo chargée : carré épuré, photo plein cadre ──
-    var _photoFrame = h('div', {
-      'class': 'profile-photo-frame has-photo',
-      onclick: function() { fileInput.click(); },
-      title: 'Changer la photo'
-    });
-    _photoFrame.appendChild(h('img', {src: S.profilePhoto, 'class': 'profile-photo-img'}));
-    photoWrap.appendChild(_photoFrame);
-    // Actions discrètes en dessous
-    var _photoActions = h('div', {'class': 'profile-photo-actions'});
-    _photoActions.appendChild(h('button', {
-      'class': 'profile-photo-btn',
-      onclick: function() { fileInput.click(); }
-    }, 'MODIFIER'));
-    _photoActions.appendChild(h('span', {'class': 'profile-photo-sep'}, '·'));
-    _photoActions.appendChild(h('button', {
-      'class': 'profile-photo-btn profile-photo-btn--muted',
-      onclick: function() { S.profilePhoto = null; window.render(); }
-    }, 'SUPPRIMER'));
-    photoWrap.appendChild(_photoActions);
-  } else {
-    // ── Placeholder : carré minimaliste, silhouette SVG inline ──
-    var _photoPlaceholder = h('div', {
-      'class': 'profile-photo-frame',
-      onclick: function() { fileInput.click(); },
-      title: 'Ajouter une photo de profil'
-    });
-    // SVG silhouette monogramme — sobre, éditorial
-    var _svgNS = 'http://www.w3.org/2000/svg';
-    var _svg = document.createElementNS(_svgNS, 'svg');
-    _svg.setAttribute('width', '48');
-    _svg.setAttribute('height', '48');
-    _svg.setAttribute('viewBox', '0 0 48 48');
-    _svg.setAttribute('fill', 'none');
-    _svg.setAttribute('class', 'profile-photo-silhouette');
-    // Head circle
-    var _head = document.createElementNS(_svgNS, 'circle');
-    _head.setAttribute('cx', '24');
-    _head.setAttribute('cy', '18');
-    _head.setAttribute('r', '8');
-    _head.setAttribute('stroke', 'currentColor');
-    _head.setAttribute('stroke-width', '1');
-    _svg.appendChild(_head);
-    // Shoulders arc
-    var _shoulders = document.createElementNS(_svgNS, 'path');
-    _shoulders.setAttribute('d', 'M8 44c0-8.837 7.163-16 16-16s16 7.163 16 16');
-    _shoulders.setAttribute('stroke', 'currentColor');
-    _shoulders.setAttribute('stroke-width', '1');
-    _svg.appendChild(_shoulders);
-    _photoPlaceholder.appendChild(_svg);
-    photoWrap.appendChild(_photoPlaceholder);
-    // CTA discret
-    var _photoCta = h('div', {'class': 'profile-photo-cta'}, 'Ajouter');
-    photoWrap.appendChild(_photoCta);
-  }
-
-  p.appendChild(photoWrap);
-
+  // ── N4b: Next → étape 3 (poids+taille) ──
   p.appendChild(h('div', {style: 'height:16px'}));
-
-  // ── Dark mode toggle ──
-  (function() {
-    var _dmRow = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:16px'});
-    _dmRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:var(--grey)'}, 'Mode sombre'));
-    var _dmActive = document.body.classList.contains('dark-mode');
-    var _dmToggle = h('div', {
-      style: 'display:flex;align-items:center;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)',
-      onclick: function() {
-        document.body.classList.toggle('dark-mode');
-        try { localStorage.setItem('mtd_dark_mode', document.body.classList.contains('dark-mode') ? 'true' : 'false'); } catch(e) {}
-        window.render();
-      }
-    });
-    _dmToggle.appendChild(h('span', {}, _dmActive ? '●' : '○'));
-    _dmRow.appendChild(_dmToggle);
-    p.appendChild(_dmRow);
-  })();
-
-  p.appendChild(h('div', {style: 'height:16px'}));
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex || !_dobValid, onclick: function() { if (S.sex && _dobValid) { bb('nutrition_identity', {sex: S.sex, age: getAge(), birthDate: S.birthDate}); goStep(2); } }}, window.t('onb.next')));
-
-  // ── Déconnexion — lien discret en bas ──
-  p.appendChild(h('button', {
-    style: 'display:block;margin:16px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);cursor:pointer;padding:8px;min-height:44px;text-decoration:underline;text-underline-offset:3px;',
-    onclick: function() {
-      if (window.AUTH) { AUTH.logout(); }
-      window.S.view = 'auth';
-      window.S.authError = '';
-      window.S._resetSent = false;
-      window.S._resetEmail = '';
-      window.S._passwordUpdated = false;
-      window.S.authVerifyEmail = '';
-      window.render();
-    }
-  }, window.t ? window.t('auth.logout') : 'Se d\u00e9connecter'));
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
+    window._s2page = 0;
+    goStep(3);
+  }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
-// ─── STEP 2: MORPHOLOGIE ───
-function renderStep2(p) {
-  renderProgressBar(p, 2, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' II'));
+
+// ─── STEP 3 (N5): POIDS + TAILLE + ESTIMATION BMR ───
+function renderStep3(p) {
+  renderProgressBar(p, 3, 12);
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' III \u00b7 Corps'));
   p.appendChild(h('h1', {html: 'Votre<br><em>morphologie</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Poids et taille pour un calibrage pr\u00e9cis de vos besoins.'));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Poids et taille pour calculer votre m\u00e9tabolisme de base en temps r\u00e9el.'));
   if (window.TIPS) TIPS.renderTip(p, 'morphology');
 
   // Weight (MANDATORY)
@@ -758,7 +724,25 @@ function renderStep2(p) {
     p.appendChild(badge);
   }
 
-  // ─── Tour de taille (optionnel) ───
+  // ─── Estimation BMR live (calcul au fur et à mesure de la saisie) ───
+  if (S.weight && S.height && S.sex) {
+    var _bmrLive = typeof calcBMR === 'function' ? calcBMR() : 0;
+    if (_bmrLive > 0) {
+      var _bmrCard = h('div', {style: 'margin-top:16px;padding:14px 16px;background:var(--ivory2,#F5F4EF);border:1px solid var(--border,#E8E6DF);border-radius:2px'});
+      _bmrCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px'}, 'M\u00c9TABOLISME DE BASE'));
+      var _bmrRow = h('div', {style: 'display:flex;align-items:baseline;gap:8px'});
+      _bmrRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:28px;color:var(--black,#0A0A09)'}, String(Math.round(_bmrLive))));
+      _bmrRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65)'}, 'kcal/jour au repos'));
+      _bmrCard.appendChild(_bmrRow);
+      _bmrCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:4px;font-style:italic'}, 'Ce chiffre augmente avec votre niveau d\u2019activit\u00e9 (vous le d\u00e9finirez \u00e0 l\u2019\u00e9tape suivante).'));
+      p.appendChild(_bmrCard);
+    }
+  }
+
+  // ─── Note : waist + photos déférés ───
+  p.appendChild(h('div', {style: 'margin-top:16px;padding:10px 14px;background:var(--ivory3,#EEEDE8);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5'},'Tour de taille, photos de progression \u2014 vous pourrez affiner votre profil une fois votre programme g\u00e9n\u00e9r\u00e9.'));
+
+  // ─── Tour de taille (optionnel — gardé mais discret) ───
   p.appendChild(h('div', {style: 'height:20px'}));
   var _waistLabelWrap = h('div', {'class': 'section-label', style: 'display:flex;align-items:center;gap:8px;'});
   _waistLabelWrap.appendChild(txt('Tour de taille'));
@@ -785,7 +769,9 @@ function renderStep2(p) {
     }
   }
 
-  // Photo upload section
+  // ─── Photos de progression déférées au post-plan (non affichées ici) ───
+  // Photo upload section removed from onboarding — available in post-plan settings
+  if (false) { // photos déférées au post-plan
   p.appendChild(h('div', {style: 'height:24px'}));
   p.appendChild(h('div', {'class': 'section-label'}, 'Photo de progression (optionnel)'));
   var photoGrid = h('div', {'class': 'photo-grid'});
@@ -904,18 +890,19 @@ function renderStep2(p) {
     p.appendChild(bzWrap);
     p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey3);margin-top:6px'}, 'Cliquez : vert = point fort, rouge = \u00e0 renforcer, neutre = r\u00e9initialiser'));
   }
+  } // end if(false) photos block
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(3); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(1); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(4); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
-// ─── STEP 3: ACTIVITE ───
-function renderStep3(p) {
+// ─── STEP 5 (N6+N7): ACTIVITE + SOMMEIL ───
+function renderActiviteSommeil(p) {
   if (!Array.isArray(S.train)) S.train = [];
-  renderProgressBar(p, 3, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' III'));
+  renderProgressBar(p, 5, 12);
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V \u00b7 Activit\u00e9 & Sommeil'));
   p.appendChild(h('h1', {html: 'Votre<br><em>activit\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'D\u00e9crivez votre rythme pour adapter votre programme.'));
   if (window.TIPS) TIPS.renderTip(p, 'activity');
@@ -996,14 +983,17 @@ function renderStep3(p) {
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.activity !== null && S.train.length > 0 && S.sleep !== null;
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(4); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(6); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
-// ─── STEP 4: SANTE ───
+// ─── STEP 8 (MEDICAL): SANTE — CONDITIONS MÉDICALES ───
+// PRESERVED: medical questionnaire is scientifically required for accurate nutrition recommendations.
+// Position in new flow: after provisional preview (nStep 7), before habitudes (nStep 9).
+// Conditions like diabetes, hypertension, TCA, IRC directly affect calorie targets and macro splits.
 function renderStep4(p) {
   if (!Array.isArray(S.medical)) S.medical = [];
-  renderProgressBar(p, 4, 9);
+  renderProgressBar(p, 8, 12);
   // Banner contextuel pour les utilisateurs sport → nutrition
   if (window.S && window.S._switchedFromSport) {
     var _contextBanner = document.createElement('div');
@@ -1012,6 +1002,31 @@ function renderStep4(p) {
     window.S._switchedFromSport = false; // Afficher une seule fois
     p.appendChild(_contextBanner);
   }
+  // Carte résumé profil repris (affiché quand les étapes 1-3 ont été sautées)
+  (function() {
+    var _s1ok = S.sex && (S.birthDate || S.age) && S.prenom !== undefined;
+    var _s2ok = S.weight && S.height;
+    var _s3ok = S.activity !== null && S.activity !== undefined && Array.isArray(S.train) && S.train.length > 0 && S.sleep !== null && S.sleep !== undefined;
+    if (_s1ok && _s2ok && _s3ok) {
+      var _ageSummary = typeof getAge === 'function' ? getAge() : (S.age || '');
+      var _weightSummary = window.UNITS ? window.UNITS.displayWeight(S.weight) : (S.weight + ' kg');
+      var _heightSummary = window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height + ' cm');
+      var _actSummary = (window.ACTIVITIES && window.ACTIVITIES[S.activity]) ? window.ACTIVITIES[S.activity].name : '';
+      var _parts = [];
+      if (S.prenom) _parts.push(S.prenom);
+      if (_ageSummary) _parts.push(_ageSummary + ' ans');
+      if (_weightSummary) _parts.push(_weightSummary);
+      if (_heightSummary) _parts.push(_heightSummary);
+      if (_actSummary) _parts.push(_actSummary);
+      var _summaryCard = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid #D8D8D0;background:var(--ivory2,#F4F4F0);border-radius:2px;margin-bottom:16px;'});
+      var _summaryText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;'});
+      _summaryText.appendChild(h('div', {style: 'font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:3px'}, 'Profil repris'));
+      _summaryText.appendChild(document.createTextNode(_parts.join(' \u00b7 ')));
+      _summaryCard.appendChild(_summaryText);
+      _summaryCard.appendChild(h('a', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-decoration:underline;cursor:pointer;white-space:nowrap;margin-left:12px;', onclick: function(e) { e.preventDefault(); S.nStep = 1; window.render(); }}, 'Modifier'));
+      p.appendChild(_summaryCard);
+    }
+  })();
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Vos conditions de sant\u00e9 pour des recommandations s\u00fbres.'));
@@ -1062,11 +1077,11 @@ function renderStep4(p) {
   warn.textContent = '\u26a0 Ces informations ne remplacent pas un avis m\u00e9dical. Consultez votre m\u00e9decin.';
   p.appendChild(warn);
 
-  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { window._s5page = 0; goStep(5); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() { window._s5page = 0; goStep(9); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(7); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
-// ─── STEP 5: HABITUDES ALIMENTAIRES (5a) + SUPPLÉMENTATION & ALCOOL (5b) ───
+// ─── STEP 9 (HABITUDES): HABITUDES ALIMENTAIRES (9a) + SUPPLÉMENTATION & ALCOOL (9b) ───
 function renderStep5(p) {
   if (!Array.isArray(S.allergies)) S.allergies = [];
   if (!Array.isArray(S.intolerances)) S.intolerances = [];
@@ -1074,7 +1089,7 @@ function renderStep5(p) {
   if (typeof window._s5page === 'undefined') window._s5page = 0;
   var _page = window._s5page;
   var _prenomS5 = S.prenom || '';
-  renderProgressBar(p, 5, 9);
+  renderProgressBar(p, 9, 12);
 
   if (_page === 0) {
     // ── 5a: Habitudes ──
@@ -1172,7 +1187,7 @@ function renderStep5(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_canContinue5a, onclick: function() {
     if (_canContinue5a) { window._s5page = 1; window.render(); }
   }}, 'Continuer \u2192 Suppl\u00e9ments & Alcool'));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; goStep(8); }, html: backArrowHtml() + window.t('onb.back')}));
 
   } else {
     // ── 5b: Supplémentation + Alcool ──
@@ -1370,22 +1385,22 @@ function renderStep5(p) {
     if (canContinue5b) {
       bb('nutrition_habits', {meals: S.mealsPerDay, location: S.eatingLocation, prepTime: S.mealPrepTime, alcoholFreq: S.alcoholFreq});
       window._s5page = 0;
-      goStep(6);
+      goStep(10);
     }
   }}, window.t('onb.next')));
   p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
   } // end _page === 1
 }
 
-// ─── STEP 6: OBJECTIF ───
+// ─── STEP 4 (N1+N2): OBJECTIF + POIDS CIBLE ───
 function renderStep6(p) {
   if (!Array.isArray(S.supplements)) S.supplements = [];
   if (!Array.isArray(S.wheyFlavors)) S.wheyFlavors = [];
   if (!Array.isArray(S.cuisines)) S.cuisines = [];
   if (!Array.isArray(S.shopStores)) S.shopStores = [];
   if (!Array.isArray(S.shopPrefs)) S.shopPrefs = [];
-  renderProgressBar(p, 6, 9);
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VI'));
+  renderProgressBar(p, 4, 12);
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV \u00b7 Objectif'));
   p.appendChild(h('h1', {html: 'Votre<br><em>objectif</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   if (window.TIPS) TIPS.renderTip(p, 'goal');
 
@@ -1454,9 +1469,9 @@ function renderStep6(p) {
     p.appendChild(h('div', {style: 'height:16px'}));
     p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
       bb('nutrition_goal', {goal: 'maintain_pregnancy', target: calcTarget()});
-      goStep(7);
+      goStep(5);
     }}, window.t('onb.next')));
-    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
     return;
   }
 
@@ -1579,15 +1594,15 @@ function renderStep6(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !goalOk, onclick: function() {
     if (goalOk) {
       bb('nutrition_goal', {goal: (GOALS[S.goal]||{}).key, target: calcTarget(), targetWeight: S.targetWeight});
-      goStep(7);
+      goStep(5);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(3); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
-// ─── STEP 7: PREFERENCES ───
+// ─── STEP 10 (PRÉFÉRENCES): RÉGIME + ALLERGIES + NIVEAU CUISINE + REPAS/J ───
 function renderStep7(p) {
-  renderProgressBar(p, 7, 9);
+  renderProgressBar(p, 10, 12);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VII'));
   p.appendChild(h('h1', {html: 'Vos<br><em>pr\u00e9f\u00e9rences</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Allergies et pr\u00e9f\u00e9rences pour des recettes \u00e0 votre image.'));
@@ -1845,18 +1860,18 @@ function renderStep7(p) {
       }
       bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
       if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
-      goStep(8);
+      goStep(11);
       window._nutritionGenerating = false;
     }, 50);
   }}, window.t('onb.finish'));
   p.appendChild(_genBtn);
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(9); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
-// ─── STEP 8: RESULTATS ───
+// ─── STEP 11 (RÉSULTATS / MACROS) ───
 function renderStep8(p) {
   // CRITIQUE-3: garde S.goal null — ne peut pas calculer les macros sans objectif
-  if (S.goal === null) { goStep(6); return; }
+  if (S.goal === null) { goStep(4); return; }
   var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI();
     // Synchronise NutritionMaster (source de vérité pour RecipeEngine + Sport)
     if (window.computeNutritionState) { window.computeNutritionState(false); }
@@ -1869,7 +1884,7 @@ function renderStep8(p) {
   }
 
   // Header
-  renderProgressBar(p, 8, 9);
+  renderProgressBar(p, 11, 12);
   var rh = h('div', {'class': 'result-header'});
   rh.appendChild(h('div', {'class': 'result-eyebrow'}, 'R\u00e9sultats personnalis\u00e9s'));
   var _uName = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().name : '';
@@ -1894,6 +1909,16 @@ function renderStep8(p) {
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));
   // g/kg ratios intentionally hidden — grammes totaux affichés dans les rings (plus clair pour les non-experts)
   p.appendChild(rh);
+  // ─── KATCH-MCARDLE BADGE: affiché si composition corporelle estimée via body scan ───
+  if (S._bodyFatEstimate !== null && S._bodyFatEstimate !== undefined && S._bodyFatEstimate >= 4) {
+    var _lbmVal = Math.round(S.weight * (1 - S._bodyFatEstimate / 100));
+    var _kmBadge = h('div', {style: 'display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--green,#1A4A1A);background:var(--greenbg,rgba(26,74,26,.06));margin-bottom:12px;border-radius:2px'});
+    _kmBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A);white-space:nowrap'}, 'Katch-McArdle'));
+    var _kmText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.4'});
+    _kmText.textContent = 'Calcul affin\u00e9 par composition corporelle \u2014 ' + S._bodyFatEstimate + '% MG \u00b7 ' + _lbmVal + '\u00a0kg de masse maigre';
+    _kmBadge.appendChild(_kmText);
+    p.appendChild(_kmBadge);
+  }
   if (window.TIPS) {
     TIPS.renderTip(p, 'results');
     if (S.pregnant && S.sex === 'femme') TIPS.renderTip(p, 'pregnancy');
@@ -2343,9 +2368,17 @@ function renderStep8(p) {
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
     // Badge profil complet : déclenché quand l'utilisateur voit ses résultats et passe au planning
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('profile_complete');
-    goStep(9);
+    goStep(12);
   }}, 'Voir mon planning semaine'));
-  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(7); }, html: backArrowHtml() + 'Modifier mes pr\u00e9f\u00e9rences'}));
+  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(10); }, html: backArrowHtml() + 'Modifier mes pr\u00e9f\u00e9rences'}));
+
+  // CTA sport — affiché en mode "les deux" quand le programme sportif n'est pas encore configuré
+  if (S.appMode === 'both' && !S.sportType) {
+    p.appendChild(h('div', {style: 'height:1px;background:var(--border,#E8E6DF);margin:24px 0 20px'}));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;text-align:center'}, '\u00c9TAPE SUIVANTE'));
+    p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#1A1A18);line-height:1.55;margin-bottom:16px;text-align:center'}, 'Ton plan nutrition est pr\u00eat. Configure maintenant ton programme sportif pour une exp\u00e9rience compl\u00e8te.'));
+    p.appendChild(h('button', {style: 'display:block;width:100%;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:52px;padding:0 24px;border:none;cursor:pointer;border-radius:2px', onclick: function() { S.view = 'sport'; window.render(); }}, 'CONFIGURER MON PROGRAMME SPORTIF'));
+  }
 }
 
 // ─── WEIGHT CHART HELPER ───
@@ -2413,7 +2446,7 @@ function renderWeightChart(p) {
 
 // ─── STEP 9: PLANNING ───
 function renderStep9(p) {
-  renderProgressBar(p, 9, 9);
+  renderProgressBar(p, 12, 12);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, 'Planning'));
   p.appendChild(h('h1', {html: 'Votre<br><em>semaine</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 527 recettes'));
@@ -2424,7 +2457,7 @@ function renderStep9(p) {
   // Guard: si weekPlan est toujours null après génération, afficher un message d'erreur
   if (!S.weekPlan) {
     p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
-    p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(8); }}, '\u2190 Retour aux résultats'));
+    p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux résultats'));
     return;
   }
   // Bounds check: selectedDay must be in [0, 6]
@@ -3222,7 +3255,7 @@ function renderStep9(p) {
     window.render();
   }}, '\u21bb ' + window.t('onb.s9.generate')));
   p.appendChild(h('div', {style: 'height:12px'}));
-  p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(8); }}, '\u2190 Retour aux r\u00e9sultats'));
+  p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux r\u00e9sultats'));
 
   // ─── BOUTON "MODIFIER MES PRÉFÉRENCES" ───
   // Permet à l'utilisateur de refaire le questionnaire s'il le souhaite explicitement.
@@ -5230,7 +5263,7 @@ function showSmoothieModal(sm) {
       var el = document.getElementById('_smoothie_modal_ov');
       if (el && el.parentNode) el.parentNode.removeChild(el);
       S.smoothieBarOpen = false;
-      S.nStep = 9;
+      S.nStep = 12;
       showToast('✅ Smoothie ajouté en collation — Plan recalculé', 2500);
       if (typeof window.render === 'function') window.render();
     }
@@ -5734,6 +5767,158 @@ window.openSaladComposer = function openSaladComposer(slotKey) {
   root.appendChild(overlay);
 };
 
+// ─── STEP 6: BODY SCAN — ANALYSE DE COMPOSITION CORPORELLE (OPTIONNEL) ───
+// Optionnel · sans friction · si passé, goStep(7) directement.
+// Si utilisé, S._bodyFatEstimate est défini et calcBMR() utilisera Katch-McArdle automatiquement.
+function renderBodyScan(p) {
+  renderProgressBar(p, 6, 12);
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, 'OPTIONNEL \u00b7 30 SECONDES'));
+  p.appendChild(h('h1', {html: 'Ton corps,<br><em>analys\u00e9.</em>', style: 'font-family:Georgia,serif;font-size:28px;font-weight:normal;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--grey,#6B6B65);line-height:1.65;margin-bottom:28px'}, 'Notre IA peut estimer ta composition corporelle \u00e0 partir d\u2019une photo. Cela permet un calcul pr\u00e9cis de ta masse maigre et affine tes besoins prot\u00e9iques.'));
+
+  // If already scanned, show result and allow rescan
+  if (S._bodyFatEstimate !== null && S._bodyFatEstimate !== undefined) {
+    var _lbmDisp = Math.round(S.weight * (1 - S._bodyFatEstimate / 100));
+    var _scanResult = h('div', {style: 'padding:14px 16px;border:1px solid var(--green,#1A4A1A);background:var(--greenbg,rgba(26,74,26,.06));margin-bottom:20px;border-radius:2px'});
+    _scanResult.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:6px'}, 'Estimation enregistr\u00e9e'));
+    _scanResult.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, S._bodyFatEstimate + '% de masse graisseuse'));
+    _scanResult.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, 'Masse maigre estim\u00e9e\u00a0: ' + _lbmDisp + '\u00a0kg \u2014 Formule Katch-McArdle activ\u00e9e'));
+    p.appendChild(_scanResult);
+    p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
+      S.bodyScanDone = true;
+      goStep(7);
+    }}, 'Continuer avec cette estimation \u2192'));
+    p.appendChild(h('button', {style: 'display:block;margin:12px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:8px', onclick: function() {
+      S._bodyFatEstimate = null;
+      window.render();
+    }}, 'R\u00e9initialiser'));
+    p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
+    return;
+  }
+
+  // ── Silhouette selector (simplified body type selector as primary method) ──
+  var _bodyTypes = [
+    {id: 'very_lean',     label: 'Tr\u00e8s sec',      range: [5, 10],   desc: '5-10% MG',  sub: 'Veines apparentes, muscle \u00e0 nu'},
+    {id: 'lean',          label: 'Sec',              range: [11, 17],  desc: '11-17% MG', sub: 'D\u00e9finition musculaire visible'},
+    {id: 'average',       label: 'Normal',           range: [18, 24],  desc: '18-24% MG', sub: 'Silhouette standard'},
+    {id: 'above_average', label: 'Envelopp\u00e9',   range: [25, 32],  desc: '25-32% MG', sub: 'Tour de taille visible'},
+    {id: 'heavy',         label: 'Fort',             range: [33, 45],  desc: '33-45% MG', sub: 'Surpoids notable'}
+  ];
+  // Adjust ranges for women (women carry ~5-8% more essential fat)
+  if (S.sex === 'femme') {
+    _bodyTypes = [
+      {id: 'very_lean',     label: 'Tr\u00e8s sec',     range: [14, 18], desc: '14-18% MG', sub: 'Ath\u00e8te de comp\u00e9tition'},
+      {id: 'lean',          label: 'Sec',             range: [19, 24], desc: '19-24% MG', sub: 'D\u00e9finition visible'},
+      {id: 'average',       label: 'Normal',          range: [25, 31], desc: '25-31% MG', sub: 'Silhouette standard'},
+      {id: 'above_average', label: 'Envelopp\u00e9e', range: [32, 39], desc: '32-39% MG', sub: 'Tour de taille visible'},
+      {id: 'heavy',         label: 'Fort',            range: [40, 50], desc: '40-50% MG', sub: 'Surpoids notable'}
+    ];
+  }
+  p.appendChild(h('div', {'class': 'section-label'}, 'S\u00e9lectionnez votre silhouette approximative'));
+  var _silGrid = h('div', {style: 'display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:24px'});
+  _bodyTypes.forEach(function(bt) {
+    var _midBf = Math.round((bt.range[0] + bt.range[1]) / 2);
+    var _selected = (S._bodyFatEstimate !== null && S._bodyFatEstimate !== undefined &&
+      S._bodyFatEstimate >= bt.range[0] && S._bodyFatEstimate <= bt.range[1]);
+    var _card = h('div', {
+      style: 'display:flex;flex-direction:column;align-items:center;padding:10px 6px;border:1.5px solid ' +
+        (_selected ? 'var(--black,#1A1A18)' : 'var(--border,#E8E6DF)') +
+        ';background:' + (_selected ? 'var(--ivory2,#F4F4F0)' : 'transparent') +
+        ';cursor:pointer;border-radius:2px;text-align:center;transition:border-color .15s',
+      onclick: (function(midBf, range) {
+        return function() {
+          S._bodyFatEstimate = midBf;
+          window.render();
+        };
+      })(_midBf, bt.range)
+    });
+    // Simple ASCII silhouette indicator using unicode
+    var _icon = bt.id === 'very_lean' ? '\uD83C\uDFC3' : bt.id === 'lean' ? '\uD83E\uDDD8' : bt.id === 'average' ? '\uD83D\uDE4B' : bt.id === 'above_average' ? '\uD83D\uDEB6' : '\uD83E\uDDD4';
+    _card.appendChild(h('div', {style: 'font-size:20px;margin-bottom:4px'}, _icon));
+    _card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-weight:600;margin-bottom:2px'}, bt.label));
+    _card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65)'}, bt.desc));
+    _silGrid.appendChild(_card);
+  });
+  p.appendChild(_silGrid);
+
+  if (S._bodyFatEstimate !== null && S._bodyFatEstimate !== undefined) {
+    var _midSel = S._bodyFatEstimate;
+    var _lbmSel = Math.round(S.weight * (1 - _midSel / 100));
+    var _previewBox = h('div', {style: 'padding:10px 14px;border:1px solid var(--border,#E8E6DF);background:var(--ivory2,#F4F4F0);margin-bottom:16px;border-radius:2px'});
+    _previewBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6'}, '\u2713 Masse graisseuse\u00a0: ' + _midSel + '% \u00b7 Masse maigre\u00a0: ' + _lbmSel + '\u00a0kg'));
+    _previewBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);font-style:italic'}, 'Formule Katch-McArdle sera utilis\u00e9e pour vos besoins caloriques'));
+    p.appendChild(_previewBox);
+    p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
+      S.bodyScanDone = true;
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+      goStep(7);
+    }}, 'Confirmer et continuer \u2192'));
+  }
+
+  // Skip link
+  p.appendChild(h('button', {style: 'display:block;margin:16px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);cursor:pointer;padding:10px;min-height:44px', onclick: function() {
+    goStep(7);
+  }}, 'Passer cette \u00e9tape \u2192'));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
+}
+
+// ─── STEP 7: PROVISIONAL PREVIEW — APERÇU DE L'ESTIMATION PERSONNALISÉE ───
+// Montre les estimations BMR/TDEE/objectif AVANT les questions médicales.
+// Si S._bodyFatEstimate est défini, utilise Katch-McArdle (déjà géré dans calcBMR()).
+function renderProvisionalPreview(p) {
+  if (!S.sex || !S.weight || !S.height || S.goal === null || S.goal === undefined) {
+    goStep(4); return;
+  }
+  renderProgressBar(p, 7, 12);
+  var _bmr = typeof calcBMR === 'function' ? calcBMR() : 0;
+  var _tdee = typeof calcTDEE === 'function' ? Math.round(calcTDEE()) : 0;
+  var _tgt  = typeof calcTarget === 'function' ? calcTarget() : 0;
+  var _goalObj = (S.goal !== null && S.goal !== undefined && window.GOALS && window.GOALS[S.goal]) ? window.GOALS[S.goal] : null;
+  var _useKM = (S._bodyFatEstimate !== null && S._bodyFatEstimate !== undefined && S._bodyFatEstimate >= 4);
+
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px'}, 'APERCU · PROVISOIRE'));
+  p.appendChild(h('h1', {html: 'Ton programme<br><em>estimatif.</em>', style: 'font-family:Georgia,serif;font-size:28px;font-weight:normal;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:24px'}, 'Voici une premi\u00e8re estimation bas\u00e9e sur tes donn\u00e9es. Nous affinerons apr\u00e8s quelques questions de sant\u00e9.'));
+
+  if (_useKM) {
+    var _lbmPrev = Math.round(S.weight * (1 - S._bodyFatEstimate / 100));
+    p.appendChild(h('div', {style: 'display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--green,#1A4A1A);background:var(--greenbg,rgba(26,74,26,.06));margin-bottom:16px;border-radius:2px'}, [
+      h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A)'}, 'Katch-McArdle'),
+      h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65)'}, 'Calcul affin\u00e9 par composition corporelle \u00b7 ' + _lbmPrev + '\u00a0kg LBM')
+    ]));
+  }
+
+  // Big numbers grid
+  var _grid = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px'});
+  var _c1 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
+  _c1.appendChild(h('div', {'class': 'bn-val'}, String(_tdee)));
+  _c1.appendChild(h('div', {'class': 'bn-label'}, 'TDEE'));
+  _c1.appendChild(h('div', {style: 'font-size:10px;color:var(--grey);font-style:italic;margin-top:2px'}, 'D\u00e9pense journali\u00e8re'));
+  _grid.appendChild(_c1);
+  if (_tgt > 0) {
+    var _c2 = h('div', {'class': 'big-number', style: 'margin-bottom:0'});
+    _c2.appendChild(h('div', {'class': 'bn-val'}, String(_tgt)));
+    _c2.appendChild(h('div', {'class': 'bn-label'}, _goalObj ? _goalObj.name : 'Cible'));
+    _c2.appendChild(h('div', {style: 'font-size:10px;color:var(--grey);font-style:italic;margin-top:2px'}, 'Calories cibles/jour'));
+    _grid.appendChild(_c2);
+  }
+  p.appendChild(_grid);
+
+  if (_bmr > 0) {
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-align:center;margin-bottom:20px'}, 'M\u00e9tabolisme de base (BMR)\u00a0: ' + _bmr + '\u00a0kcal/j'));
+  }
+
+  p.appendChild(h('div', {style: 'padding:12px 14px;border:1px solid var(--border,#E8E6DF);background:var(--ivory2,#F4F4F0);margin-bottom:24px;border-radius:2px'},[
+    h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px'}, 'PROCHAINE \u00c9TAPE'),
+    h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#1A1A18);line-height:1.5'}, 'Quelques questions m\u00e9dicales pour affiner les calculs et garantir des recommandations s\u00fbres.')
+  ]));
+
+  p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
+    goStep(8);
+  }}, 'Affiner avec mes donn\u00e9es de sant\u00e9 \u2192'));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(6); }, html: backArrowHtml() + window.t('onb.back')}));
+}
+
 // ─── PUBLIC API ───
 window.WHEY_SMOOTHIES = WHEY_SMOOTHIES;
 
@@ -5748,15 +5933,12 @@ window.NUTRITION = {
       return;
     }
 
-    // Header with step indicator and progress bar
-    if (S.nStep >= 1 && S.nStep <= 9) {
+    // Header with step indicator (nStep 1-12)
+    // nStep 11 (résultats) and 12 (planning) are post-generation — no header needed
+    if (S.nStep >= 1 && S.nStep <= 10) {
       var hdr = h('header', {'class': 'header'});
       hdr.appendChild(h('div', {'class': 'logo', html: 'SMARTFITCOACH<span>Nutrition & Sport</span>'}));
-      hdr.appendChild(h('div', {'class': 'step-indicator'}, window.t('onb.step') + ' ' + S.nStep + ' ' + window.t('onb.of') + ' 9'));
       p.appendChild(hdr);
-      var pb = h('div', {'class': 'progress-bar'});
-      pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + ((S.nStep - 1) / 8 * 100) + '%'}));
-      p.appendChild(pb);
     }
     var content = h('div', {'class': 'fade-in'});
     if (S.shopListOpen) { renderShoppingList(content); p.appendChild(content); return; }
@@ -5773,17 +5955,25 @@ window.NUTRITION = {
       p.appendChild(content);
       return;
     }
-    if (typeof S.nStep !== 'number' || S.nStep < 0 || S.nStep > 9) { S.nStep = 0; }
+    // ─── NEW FLOW ROUTING TABLE (nStep 0-12) ───
+    // 0=Splash  1=N3(Prénom+Sexe)  2=N4(Naissance)  3=N5(Poids+Taille)
+    // 4=N1+N2(Objectif+Poids cible)  5=N6+N7(Activité+Sommeil)
+    // 6=BodyScan(optionnel)  7=ProvisionalPreview  8=Medical(PRESERVED)
+    // 9=Habitudes  10=Préférences  11=Résultats/Macros  12=Planning semaine
+    if (typeof S.nStep !== 'number' || S.nStep < 0 || S.nStep > 12) { S.nStep = 0; }
     if (S.nStep === 0) renderSplash(content);
-    else if (S.nStep === 1) renderStep1(content);
-    else if (S.nStep === 2) renderStep2(content);
-    else if (S.nStep === 3) renderStep3(content);
-    else if (S.nStep === 4) renderStep4(content);
-    else if (S.nStep === 5) renderStep5(content);
-    else if (S.nStep === 6) renderStep6(content);
-    else if (S.nStep === 7) renderStep7(content);
-    else if (S.nStep === 8) renderStep8(content);
-    else if (S.nStep === 9) renderStep9(content);
+    else if (S.nStep === 1) renderStep1(content);           // N3: Prénom + Sexe
+    else if (S.nStep === 2) renderStep2(content);           // N4: Date naissance + cycle/grossesse
+    else if (S.nStep === 3) renderStep3(content);           // N5: Poids + Taille
+    else if (S.nStep === 4) renderStep6(content);           // N1+N2: Objectif + poids cible
+    else if (S.nStep === 5) renderActiviteSommeil(content); // N6+N7: Activité + Sommeil
+    else if (S.nStep === 6) renderBodyScan(content);        // Body Scan (optionnel)
+    else if (S.nStep === 7) renderProvisionalPreview(content); // Provisional preview
+    else if (S.nStep === 8) renderStep4(content);           // MEDICAL (PRESERVED — nStep 8)
+    else if (S.nStep === 9) renderStep5(content);           // Habitudes alimentaires
+    else if (S.nStep === 10) renderStep7(content);          // Préférences / régime / allergies
+    else if (S.nStep === 11) renderStep8(content);          // Résultats / macros
+    else if (S.nStep === 12) renderStep9(content);          // Planning semaine
     p.appendChild(content);
     renderModal(p);
   }

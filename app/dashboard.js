@@ -311,8 +311,8 @@ function renderWelcomeScreen(container) {
   heroTitle.style.cssText = 'font-family:Georgia,serif;font-style:italic;font-size:22px;line-height:1.2;margin:0 0 12px;';
   if (_greetName && !hasNutritionProgress && !hasSportProgress) {
     heroTitle.textContent = _greetName + ', votre programme\nvous attend.';
-  } else if (hasNutritionProgress && nStep < 9) {
-    heroTitle.textContent = 'Questionnaire en cours\u00a0\u2014 \u00e9tape ' + nStep + '/9';
+  } else if (hasNutritionProgress && nStep < 11) {
+    heroTitle.textContent = 'Questionnaire en cours\u00a0\u2014 \u00e9tape ' + nStep + '/12';
   } else if (hasSportProgress) {
     heroTitle.textContent = 'Votre programme sport\nest pr\u00eat.';
   } else {
@@ -323,8 +323,8 @@ function renderWelcomeScreen(container) {
 
   var heroSub = document.createElement('p');
   heroSub.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;opacity:.75;margin:0 0 24px;line-height:1.6;max-width:280px;margin-left:auto;margin-right:auto;';
-  if (nStep > 0 && nStep < 9) {
-    heroSub.textContent = 'Encore ' + (9 - nStep) + ' \u00e9tape' + ((9 - nStep) > 1 ? 's' : '') + ' pour acc\u00e9der \u00e0 votre tableau de bord complet.';
+  if (nStep > 0 && nStep < 11) {
+    heroSub.textContent = 'Encore ' + (11 - nStep) + ' \u00e9tape' + ((11 - nStep) > 1 ? 's' : '') + ' pour acc\u00e9der \u00e0 votre tableau de bord complet.';
   } else if (hasSportProgress) {
     heroSub.textContent = 'Continuez votre programme et suivez votre progression.';
   } else {
@@ -334,9 +334,9 @@ function renderWelcomeScreen(container) {
 
   var heroCta = document.createElement('button');
   heroCta.style.cssText = 'background:var(--ivory,#FAF9F6);color:var(--black,#1A1A18);border:none;padding:0 24px;min-height:52px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;max-width:280px;width:100%;';
-  heroCta.textContent = (nStep > 0 && nStep < 9) ? 'Reprendre mon questionnaire \u2192' : (hasSportProgress ? 'Voir mon programme sport \u2192' : 'Je commence \u2192');
+  heroCta.textContent = (nStep > 0 && nStep < 11) ? 'Reprendre mon questionnaire \u2192' : (hasSportProgress ? 'Voir mon programme sport \u2192' : 'Je commence \u2192');
   heroCta.addEventListener('click', function() {
-    if (hasSportProgress && !(nStep > 0 && nStep < 9)) {
+    if (hasSportProgress && !(nStep > 0 && nStep < 11)) {
       if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport');
     } else {
       if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');
@@ -352,7 +352,7 @@ function renderWelcomeScreen(container) {
   var nutCard = h('div', 'dash-nav');
   nutCard.appendChild(h('span', 'dash-nav-icon', '\u25C6'));
   nutCard.appendChild(h('p', 'dash-nav-name', 'Nutrition'));
-  nutCard.appendChild(h('p', 'dash-nav-sub', nStep === 0 ? 'D\u00e9marrer le questionnaire' : (nStep < 9 ? '\u00c9tape ' + nStep + '/9 \u2014 continuer' : 'G\u00e9n\u00e9rer mon plan semaine')));
+  nutCard.appendChild(h('p', 'dash-nav-sub', nStep === 0 ? 'D\u00e9marrer le questionnaire' : (nStep < 11 ? '\u00c9tape ' + nStep + '/12 \u2014 continuer' : 'G\u00e9n\u00e9rer mon plan semaine')));
   nutCard.style.cursor = 'pointer';
   nutCard.addEventListener('click', function() {
     if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition');

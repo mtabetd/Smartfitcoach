@@ -1790,6 +1790,12 @@ function renderMusculationGoals(p) {
  }
  // ──────────────────────────────────────────────────────────────────────
 
+ // Pré-sélection depuis l'objectif nutrition si sportGoals est vide
+ if ((!S.sportGoals || S.sportGoals.length === 0) && S.goal !== null && S.goal !== undefined) {
+   var _nutToSport = {0: 'muscle', 1: 'muscle', 2: 'general', 3: 'weightloss', 4: 'shred'};
+   var _preId = _nutToSport[S.goal];
+   if (_preId) { if (!Array.isArray(S.sportGoals)) S.sportGoals = []; S.sportGoals = [_preId]; }
+ }
  p.appendChild(h('div', {'class': 'section-label'}, 'Objectifs'));
  var g = h('div', {'class': 'card-grid-2'});
  (window.SPORT_GOALS || []).forEach(function(gl) {
@@ -3495,9 +3501,18 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 2 et 6 jours'));
 
  // ─── JOURS SPÉCIFIQUES ───
- p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, 'Quels jours vous entra\u00eenez-vous\u00a0? (optionnel)'));
- p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, 'S\u00e9lectionnez vos jours pour adapter vos macros nutrition (entra\u00eenement vs repos).'));
+ // Pré-remplissage depuis le profil nutrition si déjà sélectionnés
  if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
+ var _daysImported = false;
+ if (S.trainingDaysSelected.length > 0) {
+   if (!S.sportDays) S.sportDays = S.trainingDaysSelected.length;
+   _daysImported = true;
+ }
+ var _sectionLabelDays = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-top:16px;margin-bottom:0'});
+ _sectionLabelDays.appendChild(h('div', {'class': 'section-label', style: 'margin-top:0;margin-bottom:0'}, 'Quels jours vous entra\u00eenez-vous\u00a0? (optionnel)'));
+ if (_daysImported) { _sectionLabelDays.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-style:italic'}, '(import\u00e9s depuis ton profil)')); }
+ p.appendChild(_sectionLabelDays);
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, 'S\u00e9lectionnez vos jours pour adapter vos macros nutrition (entra\u00eenement vs repos).'));
  var _musDay = ['L', 'Ma', 'Me', 'J', 'V', 'S', 'D'];
  var _musDayWrap = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:0 0 6px'});
  var _musTarget = S.sportDays || 3;
