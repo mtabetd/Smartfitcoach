@@ -1766,6 +1766,13 @@ function syncSportGoalsToNutrition() {
 
 function renderMusculationGoals(p) {
  var _prenom1 = S.prenom || '';
+ // Banner contextuel pour les utilisateurs nutrition → sport
+ if (window.S && window.S._switchedFromNutrition) {
+   var _ctxBanner = document.createElement('div');
+   _ctxBanner.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(26,74,26,0.06);border:1px solid rgba(26,74,26,0.15);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--green,#1A4A1A);line-height:1.5;';
+   _ctxBanner.textContent = 'Votre profil de base est déjà configuré. Complétez simplement vos informations sportives ci-dessous.';
+   p.appendChild(_ctxBanner);
+ }
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation \u00b7 \u00c9tape 1/3'));
  p.appendChild(h('h1', {html: (_prenom1 ? _prenom1 + ', quel est<br>' : 'Quel est<br>') + '<em>votre objectif\u00a0?</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez vos objectifs (1 \u00e0 3). Votre programme s\u2019adaptera en cons\u00e9quence.'));
