@@ -1146,6 +1146,23 @@ function renderTodayDashboard(p) {
 
   p.innerHTML = '';
 
+  // ─── BILAN DE FORME — plein écran à la connexion ───
+  // Si pas encore fait aujourd'hui → afficher le checkin AVANT le dashboard
+  var _todayDate = new Date().toISOString().slice(0, 10);
+  var _w = S.todayWellness;
+  if (!_w || _w.date !== _todayDate) {
+    var wellnessWrap = h('div', { style: 'padding:32px 20px;max-width:480px;margin:0 auto;' });
+    if (window.renderWellnessCheckin) {
+      window.renderWellnessCheckin(wellnessWrap, function() {
+        // onComplete : sauvegarder puis afficher le dashboard
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+        renderTodayDashboard(p);
+      });
+    }
+    p.appendChild(wellnessWrap);
+    return;
+  }
+
   var wrapper = h('div', { style: 'padding-bottom:16px;' });
 
   // Welcome banner — Bon retour parmi nous (shown only after login, then cleared)
@@ -1174,9 +1191,7 @@ function renderTodayDashboard(p) {
   var cardSport = renderCardSport();
   if (cardSport) wrapper.appendChild(cardSport);
 
-  // Card 6 — Checkin bien-être
-  var cardWellness = renderCardWellness(S);
-  if (cardWellness) wrapper.appendChild(cardWellness);
+  // Card 6 — Checkin bien-être supprimée : fait en plein écran à l'arrivée
 
   // Card 7 — Raccourcis rapides
   wrapper.appendChild(renderCardShortcuts());
