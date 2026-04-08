@@ -64,6 +64,9 @@
           window.SFCPushManager.showLocal('SmartFitCoach', 'N\'oubliez pas de clôturer votre journal alimentaire pour aujourd\'hui.', 'journal');
         }, eveningDelay);
       }
+
+      // Rappels repas
+      this.scheduleMealReminders();
     },
 
     showLocal: function(title, body, tag) {
@@ -78,6 +81,51 @@
       } catch(e) {
         console.warn('[SFCPushManager] Notification error:', e);
       }
+    },
+
+    scheduleMealReminders: function() {
+      var prefs = this.getPrefs();
+      if (!prefs.granted) return;
+      var now = new Date();
+
+      // Déjeuner 12h00
+      var lunch = new Date(now);
+      lunch.setHours(12, 0, 0, 0);
+      if (now < lunch) {
+        var lunchDelay = lunch - now;
+        setTimeout(function() {
+          window.SFCPushManager.showLocal('SmartFitCoach', 'C\'est l\'heure du déjeuner — consultez votre plan repas.', 'meal-lunch');
+        }, lunchDelay);
+      }
+
+      // Dîner 19h00
+      var dinner = new Date(now);
+      dinner.setHours(19, 0, 0, 0);
+      if (now < dinner) {
+        var dinnerDelay = dinner - now;
+        setTimeout(function() {
+          window.SFCPushManager.showLocal('SmartFitCoach', 'Préparez votre dîner — votre recette vous attend.', 'meal-dinner');
+        }, dinnerDelay);
+      }
+    },
+
+    scheduleWorkoutReminder: function(hour, minute) {
+      var prefs = this.getPrefs();
+      if (!prefs.granted) return;
+      hour = hour !== undefined ? hour : 17;
+      minute = minute !== undefined ? minute : 30;
+      var now = new Date();
+      var target = new Date(now);
+      target.setHours(hour, minute, 0, 0);
+      if (now >= target) return; // Passé pour aujourd'hui
+      var delay = target - now;
+      setTimeout(function() {
+        window.SFCPushManager.showLocal('SmartFitCoach', 'C\'est l\'heure de votre séance ! Prêt à vous dépasser ?', 'workout-reminder');
+      }, delay);
+    },
+
+    notifyRestOver: function(exerciseName, setNum) {
+      this.showLocal('Repos terminé !', (exerciseName ? exerciseName + ' — ' : '') + 'c\'est parti pour la série ' + (setNum || '') + ' !', 'rest-timer');
     },
 
     // Notifications opt-in (configurables par l'utilisateur)

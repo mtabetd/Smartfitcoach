@@ -1540,6 +1540,202 @@ function renderExtendedSections(wrapper, S) {
   wrapper.appendChild(dataCard);
 }
 
+// ─── TDEE ADAPTATIF ───
+function renderCardTDEEAdaptatif(S) {
+  // Requis : weight history + nutrition history
+  if (!S || !S.weight) return null;
+
+  var uid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+
+  // Charger l'historique du poids (mtd_weight_history_{uid})
+  var weightHistory = [];
+  try { weightHistory = JSON.parse(localStorage.getItem('mtd_weight_history_' + uid) || '[]'); } catch(e) {}
+
+  // Besoin d'au moins 2 entrées avec 7 jours d'écart
+  if (!Array.isArray(weightHistory) || weightHistory.length < 2) return null;
+
+  // Trier par date
+  weightHistory.sort(function(a, b) { return (a.date || '').localeCompare(b.date || ''); });
+
+  var latest = weightHistory[weightHistory.length - 1];
+  var oldest = weightHistory[0];
+  if (!latest || !oldest || latest.date === oldest.date) return null;
+
+  // Calculer le nombre de jours entre les deux entrées
+  var msPerDay = 86400000;
+  var daysDiff = Math.round((new Date(latest.date) - new Date(oldest.date)) / msPerDay);
+  if (daysDiff < 7) return null; // Pas assez de données
+
+  var actualChange = (parseFloat(latest.weight) || 0) - (parseFloat(oldest.weight) || 0);
+
+  // Calculer le TDEE actuel via calcTarget
+  var tdee = 0;
+  try {
+    if (window.calcTarget) {
+      var targets = window.calcTarget(S);
+      tdee = targets ? (targets.kcal || targets.calories || 0) : 0;
+    }
+  } catch(e) {}
+  if (tdee <= 0) return null;
+
+  // Calculer le déficit/surplus moyen sur la période
+  // Pour simplifier : si objectif perte de poids, le déficit cible est ~500 kcal/j → -0.5kg/semaine
+  // Variation attendue : (déficit * jours) / 7700 kcal/kg
+  var goalType = S.goal || S.objectif || 'maintien';
+  var isLoss = /perte|secher|seche|lose|cut/i.test(goalType);
+  var isGain = /prise|masse|gain|bulk/i.test(goalType);
+
+  var expectedChangePerWeek = isLoss ? -0.5 : isGain ? 0.25 : 0;
+  var expectedChange = (expectedChangePerWeek / 7) * daysDiff;
+
+  var delta = actualChange - expectedChange; // positif = prend plus que prévu
+
+  // Seuil de tolérance : ±0.3 kg → pas de recommandation
+  if (Math.abs(delta) < 0.3) return null;
+
+  // Calculer la recommandation TDEE ajustée
+  // 7700 kcal = 1 kg de graisse corporelle (approx)
+  var kcalAdjust = Math.round((delta / daysDiff) * 7700);
+  var newTDEE = Math.max(1200, tdee - kcalAdjust);
+  var diffKcal = Math.abs(tdee - newTDEE);
+  if (diffKcal < 50) return null; // Ajustement trop faible, ignorer
+
+  var c = card('border-left:3px solid var(--orange,#6A4A1A);');
+  c.appendChild(eyebrow('Ajustement recommandé'));
+
+  var title = delta > 0
+    ? 'Votre corps répond moins bien au déficit'
+    : 'Perte plus rapide que prévu';
+  c.appendChild(cardTitle(title));
+
+  var actualStr = (actualChange >= 0 ? '+' : '') + actualChange.toFixed(1) + ' kg';
+  var expectedStr = (expectedChange >= 0 ? '+' : '') + expectedChange.toFixed(1) + ' kg';
+
+  c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin:8px 0;line-height:1.5;' },
+    'Sur ' + daysDiff + ' jours\u00a0: vous avez perdu/pris ' + actualStr + ' (attendu\u00a0: ' + expectedStr + ').'
+  ));
+
+  var adjustMsg = delta > 0
+    ? 'Réduisez vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)'
+    : 'Vous pouvez augmenter vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)';
+
+  c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:700;color:var(--orange,#6A4A1A);margin:8px 0 0;' }, adjustMsg));
+
+  // Bouton dismiss
+  var dismissKey = 'mtd_tdee_adapt_dismissed_' + new Date().toISOString().slice(0, 7); // 1 fois par mois
+  try { if (localStorage.getItem(dismissKey) === '1') return null; } catch(e) {}
+
+  var dismissBtn = h('button', {
+    style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:transparent;border:none;cursor:pointer;padding:0;',
+    onclick: function() {
+      try { localStorage.setItem(dismissKey, '1'); } catch(e) {}
+      if (window.render) window.render();
+    }
+  }, 'OK, j\'ai compris');
+  c.appendChild(dismissBtn);
+
+  return c;
+}
+
+// ─── BILAN HEBDOMADAIRE (dimanche) ───
+function renderCardSundayReview(S) {
+  var now = new Date();
+  var isSunday = now.getDay() === 0;
+  if (!isSunday && !S._forceWeeklyReview) return null;
+
+  var uid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+
+  // Charger le log séances de la semaine
+  var muscuLog = {};
+  try { muscuLog = JSON.parse(localStorage.getItem('mtd_muscu_session_' + uid) || '{}'); } catch(e) {}
+
+  // Calculer les 7 derniers jours
+  var seancesDone = 0;
+  var weekKcalArr = [];
+  for (var d = 6; d >= 0; d--) {
+    var dd = new Date(now); dd.setDate(dd.getDate() - d);
+    var dateStr = dd.toISOString().slice(0, 10);
+    // Séances muscu
+    if (muscuLog[dateStr] && Object.keys(muscuLog[dateStr]).length > 0) {
+      var _hasValidated = false;
+      Object.values(muscuLog[dateStr]).forEach(function(sets) {
+        if (Array.isArray(sets) && sets.some(function(s){ return s.validated; })) _hasValidated = true;
+      });
+      if (_hasValidated) seancesDone++;
+    }
+    // Calories depuis l'historique nutrition
+    try {
+      var _ph = (window.PerfHistory && window.PerfHistory.loadNutritionHistory) ? window.PerfHistory.loadNutritionHistory() : [];
+      var _dayNut = _ph.find(function(e){ return e.date === dateStr; });
+      if (_dayNut && _dayNut.kcal > 0) weekKcalArr.push(_dayNut.kcal);
+    } catch(e) {}
+  }
+
+  var avgKcal = weekKcalArr.length > 0 ? Math.round(weekKcalArr.reduce(function(a,b){ return a+b; }, 0) / weekKcalArr.length) : 0;
+
+  // Poids actuel
+  var currentWeight = S.currentWeight || S.weight || 0;
+
+  var c = card();
+  c.appendChild(eyebrow('Bilan de la semaine'));
+  c.appendChild(cardTitle('Votre semaine'));
+
+  // Stats row
+  var statsRow = h('div', { style: 'display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;' });
+
+  // Séances
+  var seancesBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
+  seancesBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--green,#1A4A1A);' }, String(seancesDone)));
+  seancesBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Séances'));
+  statsRow.appendChild(seancesBox);
+
+  // Calories moyennes
+  if (avgKcal > 0) {
+    var kcalBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
+    kcalBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--blue,#1A3A6A);' }, String(avgKcal)));
+    kcalBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Kcal moy.'));
+    statsRow.appendChild(kcalBox);
+  }
+
+  // Poids
+  if (currentWeight > 0) {
+    var weightBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
+    weightBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--orange,#6A4A1A);' }, currentWeight + ' kg'));
+    weightBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Poids'));
+    statsRow.appendChild(weightBox);
+  }
+
+  c.appendChild(statsRow);
+
+  // Message de motivation
+  var motivMsg;
+  if (seancesDone >= 4) motivMsg = 'Excellente semaine ! La régularité, c\'est la clé.';
+  else if (seancesDone >= 2) motivMsg = 'Bonne semaine. Continuez sur cette lancée !';
+  else if (seancesDone >= 1) motivMsg = 'Un début. La semaine prochaine, visez 3 séances.';
+  else motivMsg = 'Pas de séance cette semaine. Recommencez dès demain !';
+
+  c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin:12px 0 0;font-style:italic;' }, motivMsg));
+
+  // Bouton dismiss
+  var dismissBtn = h('button', {
+    style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:transparent;border:none;cursor:pointer;padding:0;',
+    onclick: function() {
+      S._forceWeeklyReview = false;
+      // Stocker le dismiss dans localStorage pour ne pas réafficher aujourd'hui
+      try { localStorage.setItem('mtd_weekly_review_dismissed_' + new Date().toISOString().slice(0, 10), '1'); } catch(e) {}
+      if (window.render) window.render();
+    }
+  }, 'Fermer le bilan');
+  c.appendChild(dismissBtn);
+
+  // Ne pas réafficher si déjà fermé aujourd'hui
+  try {
+    if (localStorage.getItem('mtd_weekly_review_dismissed_' + now.toISOString().slice(0, 10)) === '1') return null;
+  } catch(e) {}
+
+  return c;
+}
+
 // ─── MAIN RENDER ───
 function renderTodayDashboard(p) {
   if (!p || !p.nodeType) return;
@@ -1588,12 +1784,20 @@ function renderTodayDashboard(p) {
   var cardNextMeal = renderCardNextMeal();
   if (cardNextMeal) wrapper.appendChild(cardNextMeal);
 
+  // Card 1c — Bilan hebdo (dimanche uniquement)
+  var cardWeekly = renderCardSundayReview(S);
+  if (cardWeekly) wrapper.appendChild(cardWeekly);
+
   // Card 2 — Séance du jour / Jour de repos
   var cardSport = renderCardSport();
   if (cardSport) wrapper.appendChild(cardSport);
 
   // Card 3 — Macros du jour
   wrapper.appendChild(renderCardMacros());
+
+  // Card 3b — TDEE adaptatif
+  var cardTDEE = renderCardTDEEAdaptatif(S);
+  if (cardTDEE) wrapper.appendChild(cardTDEE);
 
   // Card 4 — Repas du jour (plan complet)
   var cardRepas = renderCardRepas();
