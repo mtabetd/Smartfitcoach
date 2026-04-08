@@ -3113,36 +3113,6 @@ function renderStep9(p) {
     mc.appendChild(h('span', {}, 'P ' + r.p + 'g'));
     mc.appendChild(h('span', {}, 'L ' + r.l + 'g'));
     card.appendChild(mc);
-    // Prix estimé par repas (si disponible)
-    (function() {
-      var mealPrice = null;
-      if (r._id && window.RecipeEngine && window.RecipeEngine.calcRecipeCost && window.getPricePer) {
-        if (r._id.indexOf('sm_') === 0 && window.WHEY_SMOOTHIES) {
-          // Smoothie : calculer depuis WHEY_SMOOTHIES
-          for (var _wsi = 0; _wsi < window.WHEY_SMOOTHIES.length; _wsi++) {
-            if (window.WHEY_SMOOTHIES[_wsi].id === r._id) {
-              var _sm = window.WHEY_SMOOTHIES[_wsi];
-              var _sc = 0;
-              if (!Array.isArray(_sm.ingredients)) break;
-              _sm.ingredients.forEach(function(ing) {
-                var _p = window.getPricePer(ing.name, ing.unit);
-                if (_p !== null && _p > 0) _sc += _p * (ing.qty || 0);
-              });
-              if (_sc > 0) mealPrice = '~' + Math.round(_sc) + ' DH';
-              break;
-            }
-          }
-        } else {
-          var _cost = window.RecipeEngine.calcRecipeCost(r._id, r._scalingRatio || 1);
-          if (_cost && _cost.totalMAD > 0) {
-            mealPrice = '~' + Math.round(_cost.totalMAD) + ' DH';
-          }
-        }
-      }
-      if (mealPrice) {
-        card.appendChild(h('div', {style:'font-size:11px;color:var(--text-secondary);margin-top:2px;font-family:"Helvetica Neue",Arial,sans-serif'}, '💰 ' + mealPrice));
-      }
-    })();
     var lv = r.lv || 0;
     var stars = '';
     for (var s = 0; s < lv; s++) stars += '\u2605';
@@ -3448,16 +3418,6 @@ function renderModal(app) {
     pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, carbs + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.carbs'))]));
     pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, fats + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.fats'))]));
     body.appendChild(pills);
-    // Affichage prix par portion
-    if (r._id && window.RecipeEngine && window.RecipeEngine.calcRecipeCost && window.getPricePer) {
-      var costInfo = window.RecipeEngine.calcRecipeCost(r._id, 1);
-      if (costInfo && costInfo.totalMAD > 0) {
-        var priceDiv = h('div', {style:'margin:8px 0;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,0.06));border:1px solid var(--green,#1A4A1A);border-radius:2px'});
-        priceDiv.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#1A4A1A)'}, '~' + Math.round(costInfo.totalMAD) + ' DH' + (costInfo.missing && costInfo.missing.length ? ' — ' + costInfo.coveragePct + '% des ingr\u00e9dients' : '')));
-        priceDiv.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;color:var(--grey,#6B6B65);margin-top:2px'}, '~' + Math.round(costInfo.pricePerServing) + ' DH / portion'));
-        body.appendChild(priceDiv);
-      }
-    }
     body.appendChild(h('div', {'class': 'section-label'}, 'Ingr\u00e9dients'));
     var ingredList = h('ul', {'class': 'ingredient-list'});
     // Helper: display one ingredient {name, qty, unit} as a readable line
@@ -5266,24 +5226,10 @@ function showSmoothieModal(sm) {
   });
   header.appendChild(macrosRow);
 
-  // Prep time + coût estimé
+  // Prep time
   var prepRow = h('div', {style:'display:flex;align-items:center;justify-content:space-between;margin-top:8px'});
   if (sm.prep) {
     prepRow.appendChild(h('div', {style:'font-size:11px;color:rgba(255,255,255,0.65)'}, '⏱ Préparation : '+sm.prep));
-  }
-  // Calcul coût estimé via getPricePer
-  if (sm.ingredients && sm.ingredients.length && window.getPricePer) {
-    var totalCost = 0;
-    var allPriced = true;
-    sm.ingredients.forEach(function(ing) {
-      var price = window.getPricePer(ing.name, ing.unit);
-      if (price !== null && price >= 0) { totalCost += price * (ing.qty || 0); }
-      else { allPriced = false; }
-    });
-    var costLabel = allPriced
-      ? '~' + Math.round(totalCost) + ' DH'
-      : '~' + Math.round(totalCost) + ' DH*';
-    prepRow.appendChild(h('div', {style:'font-size:11px;color:rgba(255,255,255,0.8);font-weight:700;background:rgba(255,255,255,0.12);border-radius:2px;padding:2px 8px'}, '💰 ' + costLabel));
   }
   header.appendChild(prepRow);
   box.appendChild(header);
