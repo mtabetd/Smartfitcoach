@@ -2368,6 +2368,7 @@ function renderStep8(p) {
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
     // Badge profil complet : déclenché quand l'utilisateur voit ses résultats et passe au planning
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('profile_complete');
+    S._showCompletionFirst = true;
     goStep(12);
   }}, 'Voir mon planning semaine'));
   p.appendChild(h('button', {'class': 'btn-back', onclick: function() { goStep(10); }, html: backArrowHtml() + 'Modifier mes pr\u00e9f\u00e9rences'}));
@@ -2376,7 +2377,7 @@ function renderStep8(p) {
   if (S.appMode === 'both' && !S.sportType) {
     p.appendChild(h('div', {style: 'height:1px;background:var(--border,#E8E6DF);margin:24px 0 20px'}));
     p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;text-align:center'}, '\u00c9TAPE SUIVANTE'));
-    p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#1A1A18);line-height:1.55;margin-bottom:16px;text-align:center'}, 'Ton plan nutrition est pr\u00eat. Configure maintenant ton programme sportif pour une exp\u00e9rience compl\u00e8te.'));
+    p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#1A1A18);line-height:1.55;margin-bottom:16px;text-align:center'}, 'Votre socle nutritionnel est en place. Complétez l\u2019alliance gagnante avec une programmation sportive sur-mesure.'));
     p.appendChild(h('button', {style: 'display:block;width:100%;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:52px;padding:0 24px;border:none;cursor:pointer;border-radius:2px', onclick: function() { S.view = 'sport'; window.render(); }}, 'CONFIGURER MON PROGRAMME SPORTIF'));
   }
 }
@@ -2442,6 +2443,126 @@ function renderWeightChart(p) {
       }
     }); } catch(e){}
   }, 100);
+}
+
+// ─── NUTRITION COMPLETION SCREEN ───
+function renderNutritionCompletion(p) {
+  renderProgressBar(p, 12, 12);
+
+  // Eyebrow label
+  p.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:20px'
+  }, '\u25c6 PROGRAMME NUTRITIONNEL'));
+
+  // Thin divider
+  p.appendChild(h('div', {style: 'height:1px;background:var(--border,#E8E6DF);margin-bottom:28px'}));
+
+  // Main headline
+  var headline = h('div', {style: 'font-family:Georgia,serif;font-size:28px;font-style:italic;line-height:1.25;color:var(--black,#1A1A18);text-align:center;margin-bottom:8px'});
+  headline.textContent = 'Votre nutrition';
+  p.appendChild(headline);
+  var headline2 = h('div', {style: 'font-family:Georgia,serif;font-size:28px;font-style:italic;line-height:1.25;color:var(--black,#1A1A18);text-align:center;margin-bottom:32px'});
+  headline2.textContent = 'est pr\u00eate.';
+  p.appendChild(headline2);
+
+  // Macro summary stats
+  (function() {
+    var bmr = Math.round(typeof calcBMR === 'function' ? calcBMR() : 0);
+    var tdee = Math.round(typeof calcTDEE === 'function' ? calcTDEE() : 0);
+    var tgt = Math.round(typeof calcTarget === 'function' ? calcTarget() : 0);
+    if (bmr > 0 || tdee > 0 || tgt > 0) {
+      var statsRow = h('div', {
+        style: 'display:flex;justify-content:center;flex-wrap:wrap;gap:0;margin-bottom:32px'
+      });
+      var statItems = [
+        {label: 'MB', value: bmr + '\u00a0kcal/j'},
+        {label: 'TDEE', value: tdee + '\u00a0kcal/j'},
+        {label: 'Cible', value: tgt + '\u00a0kcal/j'}
+      ];
+      statItems.forEach(function(item, idx) {
+        var cell = h('div', {style: 'display:flex;align-items:center;gap:6px'});
+        var labelEl = h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65)'});
+        labelEl.textContent = item.label;
+        var valEl = h('span', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#1A1A18)'});
+        valEl.textContent = item.value;
+        cell.appendChild(labelEl);
+        cell.appendChild(valEl);
+        statsRow.appendChild(cell);
+        if (idx < statItems.length - 1) {
+          var sep = h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);padding:0 10px'});
+          sep.textContent = '\u00b7';
+          statsRow.appendChild(sep);
+        }
+      });
+      p.appendChild(statsRow);
+    }
+  })();
+
+  // Thick divider
+  p.appendChild(h('div', {style: 'height:1px;background:var(--border,#E8E6DF);margin-bottom:28px'}));
+
+  // CTA block
+  if (S.appMode === 'both' && !S.sportType) {
+    // Sport CTA as primary action
+    var ctaLabel = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:12px;text-align:center'});
+    ctaLabel.textContent = '\u00c9TAPE SUIVANTE';
+    p.appendChild(ctaLabel);
+
+    var ctaText = h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--black,#1A1A18);line-height:1.6;margin-bottom:24px;text-align:center;max-width:340px;margin-left:auto;margin-right:auto'});
+    ctaText.textContent = 'Votre programme nutritionnel est en place. Il est temps de construire votre programmation sportive \u2014 l\u2019alliance parfaite pour atteindre vos objectifs.';
+    p.appendChild(ctaText);
+
+    // Primary: sport CTA
+    p.appendChild(h('button', {
+      style: 'display:block;width:100%;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:52px;padding:0 24px;border:none;cursor:pointer;border-radius:2px;margin-bottom:16px',
+      onclick: function() {
+        S._showCompletionFirst = false;
+        S.view = 'sport';
+        window.render();
+      }
+    }, 'CONFIGURER MA PROGRAMMATION SPORTIVE \u2192'));
+
+    // Secondary: see the plan
+    var planLink = h('div', {
+      style: 'text-align:center;margin-bottom:8px'
+    });
+    var planBtn = h('button', {
+      style: 'background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:8px 0',
+      onclick: function() {
+        S._showCompletionFirst = false;
+        window.render();
+      }
+    });
+    planBtn.textContent = 'Voir mon plan nutrition \u2192';
+    planLink.appendChild(planBtn);
+    p.appendChild(planLink);
+  } else {
+    // Nutrition-only mode: plan is primary
+    p.appendChild(h('button', {
+      style: 'display:block;width:100%;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:52px;padding:0 24px;border:none;cursor:pointer;border-radius:2px;margin-bottom:16px',
+      onclick: function() {
+        S._showCompletionFirst = false;
+        window.render();
+      }
+    }, 'VOIR MON PLAN NUTRITION \u2192'));
+
+    // Secondary: back to macros
+    var macrosLink = h('div', {style: 'text-align:center;margin-bottom:8px'});
+    var macrosBtn = h('button', {
+      style: 'background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:8px 0',
+      onclick: function() { S._showCompletionFirst = false; goStep(11); }
+    });
+    macrosBtn.textContent = 'Acc\u00e9der \u00e0 mes macros';
+    macrosLink.appendChild(macrosBtn);
+    p.appendChild(macrosLink);
+  }
+
+  // Back button
+  p.appendChild(h('button', {
+    'class': 'btn-back',
+    onclick: function() { S._showCompletionFirst = false; goStep(11); },
+    html: backArrowHtml() + 'Retour aux r\u00e9sultats'
+  }));
 }
 
 // ─── STEP 9: PLANNING ───
