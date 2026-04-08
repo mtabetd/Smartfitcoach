@@ -247,7 +247,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
  var eyebrowEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center;opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease'}, 'SMARTFITCOACH');
  var titleEl = h('div', {style: 'font-family:Georgia,serif;font-size:clamp(28px,7vw,38px);font-weight:normal;line-height:1.1;letter-spacing:-.02em;margin:0 0 14px;color:var(--black,#1A1A18);text-align:center;opacity:0;transform:translateY(8px);transition:opacity .4s ease .08s,transform .4s ease .08s'}, 'Votre corps.\u00a0Votre programme.\nRien d\u2019autre.');
  titleEl.style.whiteSpace = 'pre-line';
- var subtitleEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--grey,#6B6B65);line-height:1.6;letter-spacing:.01em;margin:0 auto 36px;max-width:300px;text-align:center;opacity:0;transform:translateY(6px);transition:opacity .35s ease .14s,transform .35s ease .14s'}, 'Un programme 100\u00a0% calibr\u00e9 sur vos objectifs, votre morphologie, votre rythme de vie.');
+ var subtitleEl = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--grey,#6B6B65);line-height:1.6;letter-spacing:.01em;margin:0 auto 36px;max-width:300px;text-align:center;opacity:0;transform:translateY(6px);transition:opacity .35s ease .14s,transform .35s ease .14s'}, 'Un programme 100\u00a0% calibr\u00e9 sur tes objectifs, ta morphologie, ton rythme de vie.');
  c.appendChild(eyebrowEl);
  c.appendChild(titleEl);
  c.appendChild(subtitleEl);
@@ -264,7 +264,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
      desc: 'Suivi alimentaire, objectifs caloriques et qualit\u00e9 nutritionnelle.',
      badge: null, svg: _svgNutrition, delay: '.2s',
      onclick: function() {
-       S.appMode = 'nutrition'; S.view = 'nutrition'; S.nStep = 0;
+       S.appMode = 'nutrition'; S.view = 'nutrition'; S.nStep = 1; // saute le splash (nStep=0)
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
      }
@@ -274,7 +274,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
      desc: 'Programmes adapt\u00e9s, charge hebdomadaire et progression.',
      badge: null, svg: _svgSport, delay: '.26s',
      onclick: function() {
-       S.appMode = 'sport'; S.view = 'sport'; S.sStep = 0;
+       S.appMode = 'sport'; S.view = 'sport'; S.sStep = 0; S.sportSplashDone = true; // saute le splash sport
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
      }
@@ -284,7 +284,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
      desc: 'L\u2019approche compl\u00e8te pour des r\u00e9sultats durables.',
      badge: 'RECOMMAND\u00c9', svg: _svgBoth, delay: '.32s',
      onclick: function() {
-       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 0;
+       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 1; // saute le splash (nStep=0)
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
      }
@@ -335,7 +335,9 @@ window.renderModuleChoice = function renderModuleChoice(content) {
        el.style.opacity = '1';
        el.style.transform = 'translateY(0)';
      });
-     cardsWrap.querySelectorAll('[style*="opacity:0"]').forEach(function(el) {
+     // Utiliser Array.from(children) — plus fiable que querySelectorAll('[style*="opacity:0"]')
+     // qui peut échouer si le navigateur normalise le style (ex: "opacity:0" → "opacity: 0")
+     Array.from(cardsWrap.children).forEach(function(el) {
        el.style.opacity = '1';
        el.style.transform = 'translateY(0)';
      });
@@ -1174,6 +1176,11 @@ function renderLogin(app) {
  SupaSync.startAutoSync();
  }
  if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
+ // Enregistre la date du premier login (pour bloquer le bilan de forme au J+1)
+ if (!window.S.firstLoginDate) {
+   window.S.firstLoginDate = new Date().toISOString().slice(0, 10);
+   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+ }
  render();
  } else {
  S.authError = result.error;
@@ -1311,10 +1318,11 @@ function renderRegister(app) {
  dialBtn.appendChild(dialCodeSpan);
  dialBtn.appendChild(dialArrow);
 
- // Dropdown overlay
- var dialDropdown = h('div', {
-   style: 'display:none;position:absolute;z-index:999;background:var(--ivory,#FAF9F6);border:1px solid var(--border);border-radius:2px;box-shadow:0 8px 32px rgba(0,0,0,0.18);max-height:260px;overflow-y:auto;min-width:220px;'
- });
+ // Dropdown overlay — appended to document.body (position:fixed) pour éviter tout problème de z-index/stacking context
+ var dialDropdown = document.createElement('div');
+ dialDropdown.style.cssText = 'display:none;position:fixed;z-index:9999;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#E8E6DF);border-radius:2px;box-shadow:0 8px 32px rgba(0,0,0,0.18);max-height:260px;overflow-y:auto;min-width:220px;';
+ document.body.appendChild(dialDropdown);
+
  DIAL_CODES.forEach(function(dc, idx) {
    var opt = h('div', {
      style: 'display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;font-size:14px;' + (idx === _selDialIdx ? 'background:var(--accent-subtle,#f0f0e8);font-weight:700;' : ''),
@@ -1338,7 +1346,7 @@ function renderRegister(app) {
 
  var dialWrapper = h('div', {style: 'position:relative;flex-shrink:0'});
  dialWrapper.appendChild(dialBtn);
- dialWrapper.appendChild(dialDropdown);
+ // dialDropdown est sur document.body, pas dans dialWrapper
 
  dialBtn.addEventListener('click', function(e) {
    e.stopPropagation();
@@ -1346,8 +1354,13 @@ function renderRegister(app) {
    if (isOpen) {
      dialDropdown.style.display = 'none';
    } else {
+     // Positionner sous le bouton via getBoundingClientRect (indépendant du stacking context)
+     var rect = dialBtn.getBoundingClientRect();
+     dialDropdown.style.top = (rect.bottom + 4) + 'px';
+     dialDropdown.style.left = rect.left + 'px';
+     dialDropdown.style.minWidth = rect.width + 'px';
      dialDropdown.style.display = 'block';
-     // Close on next click anywhere outside — {once:true} so no leak
+     // Fermer au prochain clic externe
      setTimeout(function() {
        document.addEventListener('click', function _closeDialDrop() {
          dialDropdown.style.display = 'none';

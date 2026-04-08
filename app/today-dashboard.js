@@ -1792,7 +1792,9 @@ function renderTodayDashboard(p) {
   }
   var _needCheckin = (!_w || _w.date !== _todayDate);
   var _hasSport = (S.appMode === 'sport' || S.appMode === 'both');
-  if (_needCheckin && _hasSport) {
+  // Bilan de forme uniquement à partir de J+1 (pas le jour même de l'inscription)
+  var _isFirstDay = !S.firstLoginDate || S.firstLoginDate === _todayDate;
+  if (_needCheckin && _hasSport && !_isFirstDay) {
     if (window.renderWellnessCheckin) {
       var wellnessWrap = h('div', { style: 'padding:32px 20px;max-width:480px;margin:0 auto;' });
       window.renderWellnessCheckin(wellnessWrap, function() {
