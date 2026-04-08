@@ -508,7 +508,7 @@ function render() {
 
  // Not logged in → auth screens
  if (S.view === 'authNewPassword') { renderNewPassword(app); return; }
- if (!AUTH.isLoggedIn()) {
+ if (!window.AUTH || !window.AUTH.isLoggedIn()) {
  if (S.view === 'authRegister') renderRegister(app);
  else if (S.view === 'authVerify') renderVerifyEmail(app);
  else if (S.view === 'authForgot') renderForgotPassword(app);
@@ -1307,7 +1307,7 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
 
 // ─── INIT ───
 function _doAutoLogin() {
-if (AUTH.isLoggedIn()) {
+if (window.AUTH && window.AUTH.isLoggedIn()) {
  S.view = 'today';
  if (window.GAMIFICATION) GAMIFICATION.updateStreak();
  // Restore full profile from localStorage (E-01)
@@ -1418,7 +1418,7 @@ if (window._verifyCriticalFunctions) {
 // Save on tab/browser close to avoid losing last unsaved state
 window.addEventListener('beforeunload', function() {
  try { if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile(); } catch(e) {}
- try { if (AUTH.isLoggedIn() && window.SupaSync) SupaSync.saveProfile(); } catch(e) {}
+ try { if (window.AUTH && window.AUTH.isLoggedIn() && window.SupaSync) SupaSync.saveProfile(); } catch(e) {}
 });
 // Periodic autosave every 30s as safety net (render() already saves on interaction)
 setInterval(function() {
