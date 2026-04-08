@@ -1958,9 +1958,9 @@ function renderStep8(p) {
   // SVG Rings
   var tot = m.g + m.p + m.l;
   var rr = h('div', {'class': 'rings-row'});
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.g / tot * 100 : 0, '#1A3A6A', window.t('onb.s8.carbs'), m.g));
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, '#1A4A1A', window.t('onb.s8.proteins'), m.p));
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', window.t('onb.s8.fats'), m.l));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.g / tot * 100 : 0, 'var(--blue,#1A3A6A)', window.t('onb.s8.carbs'), m.g));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, 'var(--green,#1A4A1A)', window.t('onb.s8.proteins'), m.p));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, 'var(--orange,#6A4A1A)', window.t('onb.s8.fats'), m.l));
   p.appendChild(rr);
   p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Prot\u00e9ines \u00b7 Glucides \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
 

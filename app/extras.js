@@ -1543,7 +1543,7 @@ window.FOOD_JOURNAL = {
     var nameInput = document.createElement('input');
     nameInput.type = 'text';
     nameInput.placeholder = 'Aliment ou code-barres...';
-    nameInput.style.cssText = 'width:100%;padding:8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",sans-serif;font-size:16px;background:var(--ivory,#FAF9F6);box-sizing:border-box;';
+    nameInput.style.cssText = 'width:100%;padding:8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",sans-serif;font-size:16px;background:transparent;box-sizing:border-box;';
     nameInput.setAttribute('autocomplete', 'off');
 
     var _acWrap = document.createElement('div');
@@ -1592,8 +1592,8 @@ window.FOOD_JOURNAL = {
                 + ' \xB7 L:' + (Math.round((n['fat_100g'] || 0) * 10) / 10) + 'g'
                 + ' /100g';
               item.appendChild(meta);
-              item.addEventListener('mouseover', function() { item.style.background = 'var(--ivory2,#F4F4F0)'; });
-              item.addEventListener('mouseout', function() { item.style.background = ''; });
+              item.addEventListener('mouseover', function() { item.style.background = 'var(--ivory3,#EEEDE8)'; });
+              item.addEventListener('mouseout', function() { item.style.background = 'transparent'; });
               item.addEventListener('mousedown', function(ev) {
                 ev.preventDefault();
                 nameInput.value = prod.product_name || '';

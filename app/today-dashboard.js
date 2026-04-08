@@ -482,23 +482,21 @@ function renderCardMacros() {
     c.appendChild(macroRow('Lipides', Math.round(totals.l), Math.round(macroTargets.l)));
 
     // Anneaux SVG — progression macros
-    if (macroTargets && (macroTargets.p > 0 || macroTargets.g > 0 || macroTargets.l > 0)) {
-      var ringsRow = document.createElement('div');
-      ringsRow.style.cssText = 'display:flex;justify-content:space-around;align-items:flex-start;margin-top:16px;padding-top:12px;border-top:1px solid var(--border,#E8E6DF);';
-      if (macroTargets.p > 0 && window.svgRing) {
-        var pPct = Math.min(100, totals.p > 0 ? Math.round(totals.p / macroTargets.p * 100) : 0);
-        ringsRow.appendChild(window.svgRing(78, 7, pPct, 'var(--green,#1A4A1A)', 'Protéines', Math.round(totals.p)));
-      }
-      if (macroTargets.g > 0 && window.svgRing) {
-        var gPct = Math.min(100, totals.g > 0 ? Math.round(totals.g / macroTargets.g * 100) : 0);
-        ringsRow.appendChild(window.svgRing(78, 7, gPct, '#1A3A6A', 'Glucides', Math.round(totals.g)));
-      }
-      if (macroTargets.l > 0 && window.svgRing) {
-        var lPct = Math.min(100, totals.l > 0 ? Math.round(totals.l / macroTargets.l * 100) : 0);
-        ringsRow.appendChild(window.svgRing(78, 7, lPct, '#6A4A1A', 'Lipides', Math.round(totals.l)));
-      }
-      if (ringsRow.children.length > 0) c.appendChild(ringsRow);
+    var ringsRow = document.createElement('div');
+    ringsRow.style.cssText = 'display:flex;justify-content:space-around;align-items:flex-start;margin-top:16px;padding-top:12px;border-top:1px solid var(--border,#E8E6DF);flex-wrap:wrap;gap:8px;';
+    if (macroTargets.p > 0 && window.svgRing) {
+      var pPct = Math.min(100, totals.p > 0 ? Math.round(totals.p / macroTargets.p * 100) : 0);
+      ringsRow.appendChild(window.svgRing(72, 7, pPct, 'var(--green,#1A4A1A)', 'Protéines', Math.round(totals.p)));
     }
+    if (macroTargets.g > 0 && window.svgRing) {
+      var gPct = Math.min(100, totals.g > 0 ? Math.round(totals.g / macroTargets.g * 100) : 0);
+      ringsRow.appendChild(window.svgRing(72, 7, gPct, 'var(--blue,#1A3A6A)', 'Glucides', Math.round(totals.g)));
+    }
+    if (macroTargets.l > 0 && window.svgRing) {
+      var lPct = Math.min(100, totals.l > 0 ? Math.round(totals.l / macroTargets.l * 100) : 0);
+      ringsRow.appendChild(window.svgRing(72, 7, lPct, 'var(--orange,#6A4A1A)', 'Lipides', Math.round(totals.l)));
+    }
+    if (ringsRow.children.length > 0) c.appendChild(ringsRow);
   }
 
   return c;
