@@ -550,8 +550,8 @@ function renderCardRepas() {
     var slotKey = slot.key;
     var prisBtn = h('button', {
       style: isLogged
-        ? 'background:#2A6E2A;border:1px solid #2A6E2A;color:white;font-size:10px;padding:4px 8px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;'
-        : 'background:transparent;border:1px solid var(--border);color:var(--grey);font-size:10px;padding:4px 8px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;',
+        ? 'background:var(--green,#1A4A1A);border:1px solid var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;'
+        : 'background:transparent;border:1px solid var(--border);color:var(--grey);font-size:10px;padding:6px 10px;min-height:44px;cursor:pointer;margin-left:8px;flex-shrink:0;font-family:"Helvetica Neue",Arial,sans-serif;border-radius:2px;',
       onclick: function(e) {
         e.stopPropagation();
         S.mealsLogged = S.mealsLogged || {};
@@ -778,13 +778,13 @@ function renderCardSport() {
           style: [
             'padding:10px 14px;',
             'margin-bottom:12px;',
-            'background:#FFF8E1;',
-            'border:1px solid #F9A825;',
-            'border-left:3px solid #F9A825;',
+            'background:var(--orangebg,rgba(106,74,26,.06));',
+            'border:1px solid var(--orange,#6A4A1A);',
+            'border-left:3px solid var(--orange,#6A4A1A);',
             'border-radius:2px;',
             'font-family:"Helvetica Neue",Arial,sans-serif;',
             'font-size:11px;',
-            'color:#7B5800;',
+            'color:var(--orange,#6A4A1A);',
             'line-height:1.5;'
           ].join('')
         }, 'R\u00e9cup\u00e9ration insuffisante d\u00e9tect\u00e9e \u00b7 S\u00e9ance all\u00e9g\u00e9e recommand\u00e9e');

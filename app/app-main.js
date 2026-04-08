@@ -222,7 +222,7 @@ function loadProfile() {
  if (S.parqDone === undefined) S.parqDone = false;
  if (S.parqResult === undefined) S.parqResult = null;
  if (S.streakFreezeUsedMonth === undefined) S.streakFreezeUsedMonth = null;
- if (S.streakFreezeAvailable === undefined) S.streakFreezeAvailable = 0;
+ if (S.streakFreezeAvailable === undefined) S.streakFreezeAvailable = true;
  if (S.swapCount === undefined) S.swapCount = 0;
  // Reset ephemeral UI state that should not persist across sessions
  S.shopListOpen = false;
@@ -484,7 +484,7 @@ function renderProfilePage(container) {
    var _efPrenom = h('input', {
      type: 'text', value: S.prenom || '',
      placeholder: 'Votre prénom',
-     style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;margin-bottom:14px;',
+     style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;margin-bottom:14px;outline:none;border-radius:2px;',
      oninput: function(e) { S.prenom = e.target.value; }
    });
    editForm.appendChild(_efPrenom);
@@ -497,7 +497,7 @@ function renderProfilePage(container) {
      type: 'number', min: '30', max: '300', step: '0.1',
      value: S.weight ? String(S.weight) : '',
      placeholder: '75',
-     style: 'flex:1;padding:10px 12px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;',
+     style: 'flex:1;min-width:0;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;outline:none;border-radius:2px;',
      oninput: function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) S.weight = v; }
    });
    _efPoidsWrap.appendChild(_efPoids);
@@ -512,7 +512,7 @@ function renderProfilePage(container) {
      type: 'number', min: '120', max: '250', step: '1',
      value: S.height ? String(S.height) : '',
      placeholder: '175',
-     style: 'flex:1;padding:10px 12px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;',
+     style: 'flex:1;min-width:0;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;outline:none;border-radius:2px;',
      oninput: function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) S.height = v; }
    });
    _efTailleWrap.appendChild(_efTaille);
@@ -560,7 +560,7 @@ function renderProfilePage(container) {
 
    // Save button
    var _efSave = h('button', {
-     style: 'display:block;width:100%;padding:12px;border:none;background:var(--black);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:8px;',
+     style: 'display:block;width:100%;padding:18px 28px;min-height:44px;border:1px solid var(--black);background:var(--black);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;cursor:pointer;margin-bottom:8px;border-radius:2px;',
      onclick: function() {
        // Invalidate weekPlan if nutrition-critical fields changed
        S.weekPlan = null;
@@ -581,7 +581,7 @@ function renderProfilePage(container) {
 
    // Cancel button
    var _efCancel = h('button', {
-     style: 'display:block;width:100%;padding:12px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+     style: 'display:block;width:100%;padding:12px 24px;min-height:44px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;border-radius:2px;',
      onclick: function() { S._profileEdit = false; if (window.render) window.render(); }
    }, 'Annuler');
    editForm.appendChild(_efCancel);
@@ -637,7 +637,7 @@ function renderProfilePage(container) {
 
  // Supprimer mon compte
  var deleteAccountBtn = h('button', {
-   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#8B1A1A;cursor:pointer;display:block;',
+   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--red,#5A1010);cursor:pointer;display:block;min-height:44px;',
    onclick: function() {
      var confirmed = window.confirm('Supprimer définitivement votre compte et toutes vos données ? Cette action est irréversible.');
      if (!confirmed) return;

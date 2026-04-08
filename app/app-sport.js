@@ -5180,10 +5180,10 @@ function renderMusculationProgram(p) {
 
      // Warmup banner
      if (_phaseObj && _phaseObj.warmup) {
-      var _warmupEl = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;background:rgba(26,74,26,0.04);border-left:3px solid #1A4A1A;padding:10px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
+      var _warmupEl = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;background:var(--greenbg,rgba(26,74,26,.06));border-left:3px solid var(--green,#1A4A1A);padding:10px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
       _warmupEl.appendChild(h('span', {style: 'font-size:14px;flex-shrink:0'}, '\uD83D\uDD25'));
       var _warmupRight = h('div', {});
-      _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1A4A1A;margin-bottom:3px'}, '\u00c9chauffement'));
+      _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:3px'}, '\u00c9chauffement'));
       _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);line-height:1.5'}, _phaseObj.warmup));
       _warmupEl.appendChild(_warmupRight);
       _sfcSection.appendChild(_warmupEl);
@@ -5427,8 +5427,8 @@ function renderMusculationProgram(p) {
     { name: 'Mobilité articulaire', duration: '3 min', notes: 'Cercles épaules, hanches, chevilles' }
    ]
   };
-  var wuCard = h('div', {style: 'background:rgba(26,74,26,0.04);border:1px solid rgba(26,74,26,0.2);border-left:3px solid #1A4A1A;padding:12px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
-  wuCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#1A4A1A;font-weight:600;margin-bottom:8px'}, 'ÉCHAUFFEMENT · ' + wu.duration + ' min'));
+  var wuCard = h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.2);border-left:3px solid var(--green,#1A4A1A);padding:12px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
+  wuCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#1A4A1A);font-weight:600;margin-bottom:8px'}, 'ÉCHAUFFEMENT · ' + wu.duration + ' min'));
   (wu.exercises || []).forEach(function(ex) {
    var row = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;margin-bottom:4px'});
    row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);font-weight:500;flex-shrink:0;min-width:180px'}, ex.name + ' — ' + ex.duration));
@@ -5551,27 +5551,27 @@ function renderMusculationProgram(p) {
   var _loadMultiplier = 1 + (_progressRatePO * Math.min(_weekNumPO - 1, 12));
   var _progressiveW = Math.round(_baseW * _loadMultiplier * 2) / 2;
   if (_weekNumPO > 1 && _progressiveW !== _baseW) {
-   var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(26,74,26,0.08);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+   var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
    var _sugLeft = h('div', {});
-   _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#1A4A1A;margin-bottom:2px'}, 'Charge progressive (sem. ' + _weekNumPO + ')'));
-   _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A4A1A;line-height:1'}, window.UNITS ? window.UNITS.displayWeight(_progressiveW) : _progressiveW + '\u00a0kg'));
+   _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge progressive (sem. ' + _weekNumPO + ')'));
+   _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(_progressiveW) : _progressiveW + '\u00a0kg'));
    _sugBanner.appendChild(_sugLeft);
    _sugBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCC8'));
    card.appendChild(_sugBanner);
   } else if (suggested && suggested > 0) {
-   var _sugBanner2 = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(26,74,26,0.08);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+   var _sugBanner2 = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
    var _sugLeft2 = h('div', {});
-   _sugLeft2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#1A4A1A;margin-bottom:2px'}, 'Charge recommand\u00e9e'));
-   _sugLeft2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A4A1A;line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
+   _sugLeft2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+   _sugLeft2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
    _sugBanner2.appendChild(_sugLeft2);
    _sugBanner2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
    card.appendChild(_sugBanner2);
   }
  } else if (suggested && suggested > 0) {
-  var _sugBannerBasic = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(26,74,26,0.08);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+  var _sugBannerBasic = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
   var _sugLeftBasic = h('div', {});
-  _sugLeftBasic.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#1A4A1A;margin-bottom:2px'}, 'Charge recommand\u00e9e'));
-  _sugLeftBasic.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A4A1A;line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
+  _sugLeftBasic.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+  _sugLeftBasic.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
   _sugBannerBasic.appendChild(_sugLeftBasic);
   _sugBannerBasic.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
   card.appendChild(_sugBannerBasic);

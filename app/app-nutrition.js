@@ -778,10 +778,10 @@ function renderStep2(p) {
   _waistWrap.appendChild(h('span', {'class': 'num-unit'}, 'cm'));
   p.appendChild(_waistWrap);
   // WHtR indicator
-  if (S.waist && S.height) {
+  if (S.waist && S.height && S.height > 0) {
     var _whtr = S.waist / S.height;
     if (_whtr > 0.5) {
-      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#7D4E00;background:#FFF3CD;border:1px solid #F0AD4E;padding:8px 12px;margin-top:6px;line-height:1.5;'}, '\u26a0 Risque cardiom\u00e9tabolique accru (tour de taille > 50% de la taille)'));
+      p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange,#6A4A1A);background:var(--orangebg,rgba(106,74,26,.06));border:1px solid var(--orange,#6A4A1A);padding:8px 12px;margin-top:6px;line-height:1.5;border-radius:2px;'}, '\u26a0 Risque cardiom\u00e9tabolique accru (tour de taille > 50% de la taille)'));
     }
   }
 
@@ -1470,10 +1470,10 @@ function renderStep6(p) {
     // Show banner if detectREDS triggered OR if simple heuristic matches
     var _showReds = _redsResult || (_isCutOrShred && _isFemme && _lowSleep && _highActivity);
     if (_showReds) {
-      var _redsMsg = _redsResult
+      var _redsMsg = (_redsResult && _redsResult.message)
         ? _redsResult.message
         : '\u26a0 Risque RED-S d\u00e9tect\u00e9 \u2014 La combinaison activit\u00e9 \u00e9lev\u00e9e + sommeil insuffisant + objectif s\u00e8che peut mener au syndrome de d\u00e9ficit \u00e9nerg\u00e9tique relatif (RED-S). Consultez un professionnel de sant\u00e9 avant de d\u00e9marrer cet objectif.';
-      var _redsBanner = h('div', {style: 'background:#FFF3CD;border:1px solid #F0AD4E;padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#7D4E00;line-height:1.6;border-radius:2px;'}, _redsMsg);
+      var _redsBanner = h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border:1px solid var(--orange,#6A4A1A);padding:12px 14px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange,#6A4A1A);line-height:1.6;border-radius:2px;'}, _redsMsg);
       p.appendChild(_redsBanner);
     }
   })();

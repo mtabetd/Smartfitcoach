@@ -3853,7 +3853,7 @@ function detectMedicalConflicts() {
   // American College of Cardiology 2019 : effort intense = pic tensionnel pouvant atteindre 300/150 mmHg
   if(med.indexOf('hta_severe')!==-1){
     var htaActivityFactor=(s.activity!==null&&s.activity!==undefined&&ACTIVITIES[s.activity])?ACTIVITIES[s.activity].factor:0;
-    var htaHighIntensity=s.sportType==='crossfit'||htaActivityFactor>=ACTIVITIES[3].factor;
+    var htaHighIntensity=s.sportType==='crossfit'||(ACTIVITIES[3]&&htaActivityFactor>=ACTIVITIES[3].factor);
     if(htaHighIntensity){
       conflicts.push({level:'danger',message:'⚠ HTA sévère incompatible avec les entraînements HIIT/CrossFit intensifs. Consultez impérativement votre cardiologue avant de démarrer ce programme. Risque cardiovasculaire élevé.'});
     }
@@ -3861,7 +3861,7 @@ function detectMedicalConflicts() {
   // Conflit 4c : Diabète de type 1 + programme sportif — avertissement obligatoire (non bloquant)
   // ADA 2023 / Colberg 2016 (Diabetes Care) : DT1 + exercice = gestion glycémique à l'effort indispensable
   // Objectif glycémie avant effort : 1.3-1.8 g/L (Riddell 2017, Lancet Diabetes & Endocrinology)
-  if((med.indexOf('diabete_t1')!==-1)&&s.sportType!==null&&s.sStep>0){
+  if((med.indexOf('diabete_t1')!==-1)&&s.sportType!==null&&s.sStep!==undefined&&s.sStep>0){
     conflicts.push({level:'warning',message:'⚠ Diabète de type 1 : consultez votre diabétologue avant de démarrer un programme sportif. Gérez votre glycémie à l\'effort : vérifiez votre glycémie avant/pendant/après les séances, ayez toujours des glucides rapides à portée de main. Objectif glycémie avant effort : 1.3–1.8 g/L.'});
   }
   // Conflit 5 : Goutte + fructose — le fructose élève l'acide urique autant que les purines (Choi 2010, NEJM)
