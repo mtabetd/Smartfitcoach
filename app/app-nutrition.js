@@ -638,9 +638,12 @@ function renderStep1(p) {
     p.appendChild(_dmRow);
   })();
 
-  // ── Déconnexion ──
+  p.appendChild(h('div', {style: 'height:16px'}));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex || !_dobValid, onclick: function() { if (S.sex && _dobValid) { bb('nutrition_identity', {sex: S.sex, age: getAge(), birthDate: S.birthDate}); goStep(2); } }}, window.t('onb.next')));
+
+  // ── Déconnexion — lien discret en bas ──
   p.appendChild(h('button', {
-    'class': 'btn-back',
+    style: 'display:block;margin:16px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);cursor:pointer;padding:8px;min-height:44px;text-decoration:underline;text-underline-offset:3px;',
     onclick: function() {
       if (window.AUTH) { AUTH.logout(); }
       window.S.view = 'auth';
@@ -651,10 +654,7 @@ function renderStep1(p) {
       window.S.authVerifyEmail = '';
       window.render();
     }
-  }, window.t ? window.t('auth.logout') : 'Déconnexion'));
-
-  p.appendChild(h('div', {style: 'height:16px'}));
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !S.sex || !_dobValid, onclick: function() { if (S.sex && _dobValid) { bb('nutrition_identity', {sex: S.sex, age: getAge(), birthDate: S.birthDate}); goStep(2); } }}, window.t('onb.next')));
+  }, window.t ? window.t('auth.logout') : 'Se d\u00e9connecter'));
 }
 
 // ─── STEP 2: MORPHOLOGIE ───

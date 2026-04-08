@@ -408,8 +408,9 @@ function renderProfilePage(container) {
    ['Poids', S.weight ? S.weight + ' kg' : '—'],
    ['Taille', S.height ? S.height + ' cm' : '—'],
    ['Objectif', (function() {
-     var goals = {0:'Perte de poids',1:'Maintien',2:'Prise de masse',3:'Rééquilibrage'};
-     return S.goal !== null && S.goal !== undefined ? (goals[S.goal] || '—') : '—';
+     var _g = window.GOALS;
+     if (_g && Array.isArray(_g) && S.goal !== null && S.goal !== undefined && _g[S.goal]) return _g[S.goal].name;
+     return S.goal !== null && S.goal !== undefined ? ('Objectif ' + (S.goal + 1)) : '—';
    })()]
  ];
  infoRows.forEach(function(row) {

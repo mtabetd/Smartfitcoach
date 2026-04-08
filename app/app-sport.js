@@ -1144,7 +1144,14 @@ function renderMuscuMedicalQ(p) {
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
  p.appendChild(h('h1', {html: 'Bilan<br><em>médical muscu</em>'}));
- p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de générer votre programme, aidez-nous à adapter les exercices à votre situation physique.'));
+ p.appendChild(h('p', {'class': 'subtitle'}, 'Avant de g\u00e9n\u00e9rer votre programme, aidez-nous \u00e0 adapter les exercices \u00e0 votre situation physique.'));
+
+ // Phrase de contexte si bilan nutrition déjà fait — évite le sentiment de répétition
+ if (Array.isArray(window.S && window.S.medical)) {
+   var _contextNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);background:var(--ivory2,#F5F3EC);border-left:2px solid var(--border);padding:10px 12px;margin-bottom:16px;line-height:1.6;'});
+   _contextNote.textContent = 'Ces questions compl\u00e8tent votre profil nutrition. Elles portent sp\u00e9cifiquement sur vos articulations et ant\u00e9c\u00e9dents orthop\u00e9diques — diff\u00e9rentes de vos conditions m\u00e9dicales g\u00e9n\u00e9rales.';
+   p.appendChild(_contextNote);
+ }
 
  // ── SKIP si déjà rempli ──────────────────────────────────────────────────
  if (S.muscuMedical && S.muscuMedical.done === true && !S._muscuMedicalEdit) {

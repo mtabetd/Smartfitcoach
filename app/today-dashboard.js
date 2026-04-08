@@ -260,14 +260,16 @@ function getNextMeal() {
     { key: 'dinner',    label: 'Dîner',          time: mt.dinner    || '19:30' }
   ];
 
+  var TOLERANCE = 45; // minutes de tolérance après l'heure prévue (ex: petit-déj à 8h visible jusqu'à 8h45)
   for (var i = 0; i < SLOTS.length; i++) {
     var slot = SLOTS[i];
     var meal = dayData[slot.key];
     if (!meal || !meal.n) continue;
     var parts = slot.time.split(':');
     var slotMin = (parseInt(parts[0], 10) || 0) * 60 + (parseInt(parts[1], 10) || 0);
-    if (slotMin >= nowMin) {
-      return { meal: meal, slot: slot, slotMin: slotMin, minutesUntil: slotMin - nowMin };
+    if (slotMin + TOLERANCE >= nowMin) {
+      var minutesUntil = slotMin - nowMin;
+      return { meal: meal, slot: slot, slotMin: slotMin, minutesUntil: minutesUntil };
     }
   }
   return null; // tous les repas de la journée sont passés
@@ -399,9 +401,20 @@ function renderCardBonjour(S) {
   var eyebrow_el = eyebrow('AUJOURD\'HUI');
   c.appendChild(eyebrow_el);
 
-  var title = h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;margin-bottom:12px;' });
+  var title = h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;margin-bottom:4px;' });
   title.textContent = 'Bonjour' + (firstName ? ', ' + firstName : '') + '.';
   c.appendChild(title);
+
+  // Date permanente sous le titre
+  (function() {
+    var _days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    var _months = ['janvier','f\u00e9vrier','mars','avril','mai','juin','juillet','ao\u00fbt','septembre','octobre','novembre','d\u00e9cembre'];
+    var _now2 = new Date();
+    var _dateStr = _days[_now2.getDay()] + ' ' + _now2.getDate() + ' ' + _months[_now2.getMonth()];
+    var _dateEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:0.5px;margin-bottom:12px;' });
+    _dateEl.textContent = _dateStr;
+    c.appendChild(_dateEl);
+  })();
 
   if (quoteText) {
     var qEl = h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--grey);line-height:1.6;border-left:2px solid var(--border);padding-left:12px;margin-top:8px;' });
