@@ -82,13 +82,44 @@ function backArrowHtml() {
   return '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 }
 
+// ─── NEW STEP ROUTING TABLE ───
+// nStep 0  = Splash
+// nStep 1  = N3: Prénom + Sexe
+// nStep 2  = N4: Date de naissance
+// nStep 2b = N4b: Cycle/Grossesse (femmes seulement — flag S._showCycleStep)
+// nStep 3  = N5: Poids + Taille (avec estimation BMR live)
+// nStep 4  = N1: Objectif principal
+// nStep 5  = N2: Poids cible + projection
+// nStep 6  = N6: Activité + Jours d'entraînement
+// nStep 7  = N7: Sommeil
+// nStep 10 = Provisional Preview (nouveau — "Construire mon programme")
+// nStep 8  = Médical (conditions de santé) — inchangé
+// nStep 11 = Habitudes alimentaires + Suppléments/Alcool (ex-étapes 5a+5b)
+// nStep 12 = Préférences (régime, allergies, niveau cuisine, repas/j) — ex-étape 7 allégée
+// nStep 13 = Résultats (ex-étape 8)
+// nStep 9  = Planning semaine (inchangé)
+
 function goStep(n) {
-  // Auto-skip profile steps 1-3 when data already exists (cross-module symbiosis)
+  // Auto-skip identity/body steps when data already exists (cross-module symbiosis)
   if (n === 1) {
-    var _step1ok = S.sex && (S.birthDate || S.age) && S.prenom !== undefined;
-    var _step2ok = S.weight && S.height;
-    var _step3ok = S.activity !== null && S.activity !== undefined && Array.isArray(S.train) && S.train.length > 0 && S.sleep !== null && S.sleep !== undefined;
-    if (_step1ok && _step2ok && _step3ok) { n = 4; }
+    var _step1ok = S.sex && S.prenom !== undefined;
+    var _step2ok = !!(S.birthDate || S.age);
+    var _step3ok = !!(S.weight && S.height);
+    var _step4ok = S.goal !== null && S.goal !== undefined;
+    var _step5ok = true; // target weight is optional for maintain goal
+    if (S.goal !== null && S.goal !== undefined && GOALS[S.goal]) {
+      var _gk = GOALS[S.goal].key;
+      if (_gk === 'cut' || _gk === 'shred' || _gk === 'bulk' || _gk === 'lean_bulk') {
+        _step5ok = !!(S.targetWeight);
+      }
+    }
+    var _step6ok = S.activity !== null && S.activity !== undefined && Array.isArray(S.train) && S.train.length > 0;
+    var _step7ok = S.sleep !== null && S.sleep !== undefined;
+    if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok && _step7ok) { n = 8; }
+    else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok) { n = 7; }
+    else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok) { n = 6; }
+    else if (_step1ok && _step2ok && _step3ok && _step4ok) { n = 5; }
+    else if (_step1ok && _step2ok && _step3ok) { n = 4; }
     else if (_step1ok && _step2ok) { n = 3; }
     else if (_step1ok) { n = 2; }
   }
@@ -205,15 +236,15 @@ function renderSplash(app) {
   app.appendChild(sp);
 }
 
-// ─── STEP 1: IDENTITE ───
+// ─── STEP 1 (N3): PRÉNOM + SEXE ───
 function renderStep1(p) {
-  renderProgressBar(p, 1, 9);
+  renderProgressBar(p, 1, 12);
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' I \u00b7 Identit\u00e9'));
-  p.appendChild(h('h1', {html: 'Votre<br><em>profil de base</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
-  p.appendChild(h('p', {'class': 'subtitle'}, 'Ces informations servent \u00e0 calibrer vos besoins caloriques et nutritionnels avec pr\u00e9cision.'));
+  p.appendChild(h('h1', {html: 'Bienvenue.<br><em>Parlons de vous.</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
+  p.appendChild(h('p', {'class': 'subtitle'}, 'Ces informations calibrent vos besoins caloriques avec pr\u00e9cision.'));
   if (window.TIPS) TIPS.renderTip(p, 'identity');
 
-  // Prénom (optionnel — collecté tôt pour personnaliser les messages)
+  // Prénom (optionnel)
   (function() {
     var _prenomWrap = h('div', {style: 'margin-bottom:20px'});
     _prenomWrap.appendChild(h('div', {'class': 'section-label'}, 'Votre pr\u00e9nom (optionnel)'));
@@ -242,6 +273,7 @@ function renderStep1(p) {
     ]));
   });
   p.appendChild(g);
+  p.appendChild(h('div', {style: 'height:16px'}));
 
   // Cycle menstruel (femmes uniquement)
   if (S.sex === 'femme') {
