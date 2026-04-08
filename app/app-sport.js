@@ -5542,14 +5542,39 @@ function renderMusculationProgram(p) {
  var _setParts = ex.sets ? ex.sets.split('\u00d7') : [];
  var suggestedReps = _setParts.length > 1 ? parseInt(_setParts[1]) : null;
  var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
- if (suggested && suggested > 0) {
- var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(26,74,26,0.08);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
- var _sugLeft = h('div', {});
- _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#1A4A1A;margin-bottom:2px'}, 'Charge recommand\u00e9e'));
- _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A4A1A;line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
- _sugBanner.appendChild(_sugLeft);
- _sugBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
- card.appendChild(_sugBanner);
+ // Surcharge progressive : appliquer le multiplicateur si charge de base connue
+ var _savedW = S.musculationWeights[ex.n];
+ var _baseW = (_savedW && _savedW.weight) ? _savedW.weight : suggested;
+ if (_baseW && _baseW > 0) {
+  var _weekNumPO = S.muscuWeek || 1;
+  var _progressRatePO = S.sportLevel === 'beginner' ? 0.025 : 0.05;
+  var _loadMultiplier = 1 + (_progressRatePO * Math.min(_weekNumPO - 1, 12));
+  var _progressiveW = Math.round(_baseW * _loadMultiplier * 2) / 2;
+  if (_weekNumPO > 1 && _progressiveW !== _baseW) {
+   var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(26,74,26,0.08);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+   var _sugLeft = h('div', {});
+   _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#1A4A1A;margin-bottom:2px'}, 'Charge progressive (sem. ' + _weekNumPO + ')'));
+   _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A4A1A;line-height:1'}, window.UNITS ? window.UNITS.displayWeight(_progressiveW) : _progressiveW + '\u00a0kg'));
+   _sugBanner.appendChild(_sugLeft);
+   _sugBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCC8'));
+   card.appendChild(_sugBanner);
+  } else if (suggested && suggested > 0) {
+   var _sugBanner2 = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(26,74,26,0.08);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+   var _sugLeft2 = h('div', {});
+   _sugLeft2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#1A4A1A;margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+   _sugLeft2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A4A1A;line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
+   _sugBanner2.appendChild(_sugLeft2);
+   _sugBanner2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
+   card.appendChild(_sugBanner2);
+  }
+ } else if (suggested && suggested > 0) {
+  var _sugBannerBasic = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:rgba(26,74,26,0.08);border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
+  var _sugLeftBasic = h('div', {});
+  _sugLeftBasic.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#1A4A1A;margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+  _sugLeftBasic.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#1A4A1A;line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
+  _sugBannerBasic.appendChild(_sugLeftBasic);
+  _sugBannerBasic.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
+  card.appendChild(_sugBannerBasic);
  }
  }
 
