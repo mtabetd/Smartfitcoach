@@ -63,7 +63,7 @@ var PROFILE_KEYS = [
  'wantsDessert',
  'wheyFlavors','saladBuilder',
  'emailOptin',
- 'profilePhoto',
+ 'profilePhoto','photoFront','photoBack',
  'todayWellness',
  'aiCoachHistory',
  'appMode',
@@ -346,7 +346,7 @@ function renderProfilePage(container) {
  var photoSection = h('div', {style: 'display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
  var photoWrap = h('div', {style: 'width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--border);'});
  if (S.profilePhoto) {
-   photoWrap.appendChild(h('img', {src: S.profilePhoto, style: 'width:100%;height:100%;object-fit:cover;'}));
+   photoWrap.appendChild(h('img', {src: S.profilePhoto, alt: 'Photo de profil', style: 'width:100%;height:100%;object-fit:cover;'}));
  } else {
    var initials = (function() {
      var _un = user ? (user.name || user.email || '') : (S.prenom || '');
@@ -484,6 +484,7 @@ function render() {
  if (window.destroyAllCharts) window.destroyAllCharts();
  if (AUTH.isLoggedIn()) saveProfile();
  var app = document.getElementById('app');
+ if (!app) { console.error('[render] #app not found'); return; }
 
  // Scroll to top only when navigating to a different page/step
  var _didNavigate = (render._lastView !== S.view) ||
@@ -569,6 +570,7 @@ function render() {
    if (S.profilePhoto) {
      _avatarBtn.appendChild(h('img', {
        src: S.profilePhoto,
+       alt: 'Photo de profil',
        'class': 'user-bar-avatar-photo'
      }));
    } else {

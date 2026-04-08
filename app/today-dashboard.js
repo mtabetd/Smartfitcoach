@@ -366,6 +366,11 @@ function renderCardRepas() {
   }
 
   var todayIdx = (new Date().getDay() + 6) % 7;
+  if (!Array.isArray(S.weekPlan) || S.weekPlan.length === 0) {
+    // le dashboard gérera l'état vide
+    return;
+  }
+  if (todayIdx >= S.weekPlan.length) { todayIdx = 0; }
   var dayData = S.weekPlan[todayIdx];
   if (!dayData) return null;
 
@@ -1175,6 +1180,11 @@ function renderTodayDashboard(p) {
   // Seulement pour les utilisateurs ayant le sport (sport ou both)
   var _todayDate = new Date().toISOString().slice(0, 10);
   var _w = S.todayWellness;
+  // Valider structure todayWellness
+  if (_w && (typeof _w.date !== 'string' || typeof _w.sleep !== 'number')) {
+    _w = null; // réinitialiser si corrompu
+    S.todayWellness = null;
+  }
   var _needCheckin = (!_w || _w.date !== _todayDate);
   var _hasSport = (S.appMode === 'sport' || S.appMode === 'both');
   if (_needCheckin && _hasSport) {

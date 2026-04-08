@@ -1713,6 +1713,8 @@ function renderStep7(p) {
     _genBtn.disabled = true;
     _genBtn.textContent = 'Génération en cours...';
     // Laisser le navigateur repeindre avant d'appeler generateWeek() (synchrone)
+    if (window._nutritionGenerating) return;
+    window._nutritionGenerating = true;
     setTimeout(function() {
       // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
       if (window.computeNutritionState) { window.computeNutritionState(false); }
@@ -1728,6 +1730,7 @@ function renderStep7(p) {
       bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
       if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
       goStep(8);
+      window._nutritionGenerating = false;
     }, 50);
   }}, window.t('onb.finish'));
   p.appendChild(_genBtn);
@@ -5652,6 +5655,7 @@ window.NUTRITION = {
       p.appendChild(content);
       return;
     }
+    if (typeof S.nStep !== 'number' || S.nStep < 0 || S.nStep > 9) { S.nStep = 0; }
     if (S.nStep === 0) renderSplash(content);
     else if (S.nStep === 1) renderStep1(content);
     else if (S.nStep === 2) renderStep2(content);

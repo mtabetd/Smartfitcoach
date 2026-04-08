@@ -1642,7 +1642,7 @@ body, p, .subtitle {
 
 .btn-primary {
   letter-spacing: 6px;
-  font-size: 9px;
+  font-size: 11px;
   padding: 18px 28px;
   border: 1px solid var(--black);
   transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1730,7 +1730,7 @@ body, p, .subtitle {
 }
 
 .main-nav-tab {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1742,7 +1742,7 @@ body, p, .subtitle {
 /* Extra-narrow screens: even tighter padding */
 @media (max-width: 420px) {
   .main-nav-tab {
-    font-size: 8px;
+    font-size: 11px;
     letter-spacing: 1px;
     padding: 12px 4px;
   }
@@ -2095,6 +2095,8 @@ body.dark-mode .auth-container {
   cursor: pointer;
   white-space: nowrap;
   transition: transform 0.1s, box-shadow 0.1s;
+  min-height: 44px;
+  min-width: 44px;
 }
 .set-validate-btn:active {
   transform: scale(0.95);
@@ -2517,6 +2519,7 @@ button[disabled],
 /* ── 13. BTN-BACK — ensure 44px touch target (was padding:10px 0 only) ── */
 .btn-back {
   min-height: 44px;
+  min-width: 44px;
   padding: 10px 12px 10px 0;
   display: inline-flex;
   align-items: center;
@@ -3060,6 +3063,7 @@ a:focus-visible {
 }
 .set-validate-btn {
   min-height: 44px;
+  min-width: 44px;
 }
 
 /* ─── CONTRASTE DARK MODE : --grey minimum #B0B0A0 ──────────────────────── */

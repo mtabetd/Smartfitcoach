@@ -780,7 +780,7 @@ window.SPORT = {
    var _changeLink = h('button', {
      style: 'background:none;border:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;padding:5px 10px;border-radius:2px;',
      onclick: function() {
-       S.sportType = null; S.sStep = 0;
+       S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }
@@ -796,6 +796,9 @@ window.SPORT = {
  pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + _pbPct + '%'}));
  p.appendChild(pb);
  }
+
+ var _validSSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+ if (_validSSteps.indexOf(S.sStep) === -1) { S.sStep = 0; }
 
  if (S.sStep === 0) renderObjectif(content); // Type selection
  else if (S.sStep === 20) renderMuscuMedicalQ(content); // Medical questionnaire muscu
@@ -4197,6 +4200,7 @@ function saveMuscuSessionLog() {
  if (completed.length === 0) return;
  var avgWeight = completed.reduce(function(sum, s) { return sum + (s.actualWeight || 0); }, 0) / completed.length;
  var avgReps = completed.reduce(function(sum, s) { return sum + (s.actualReps || 0); }, 0) / completed.length;
+ if (completed.length === 0 || isNaN(avgWeight)) return;
 
  if (!S.muscuProgressionHistory[exName]) S.muscuProgressionHistory[exName] = [];
  var existing = S.muscuProgressionHistory[exName].find(function(entry) { return entry.date === _today2; });
@@ -4456,11 +4460,20 @@ function renderMusculationProgram(p) {
        h('div', {style: 'width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;'})
      ]));
      setTimeout(function() {
-       S._generatingProgram = false;
-       S.sportProgram = generateSportProgram();
-       S.selectedSportDay = 0;
-       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
-       if (window.render) window.render();
+       try {
+         S._generatingProgram = false;
+         S.sportProgram = generateSportProgram();
+         if (!S.sportProgram || S.sportProgram.length === 0) {
+           console.error('[sport] generateSportProgram returned empty program, aborting render to avoid white screen');
+           return;
+         }
+         S.selectedSportDay = 0;
+         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+         if (window.render) window.render();
+       } catch(e) {
+         console.error('[sport] generateSportProgram error:', e);
+         S._generatingProgram = false;
+       }
      }, 50);
      return;
    } else {
