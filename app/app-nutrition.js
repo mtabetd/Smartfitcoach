@@ -2608,20 +2608,6 @@ function renderStep9(p) {
     }
   }
 
-  // Quick action buttons — Salad bar & Smoothie bar
-  var quickActions = h('div', {style: 'display:flex;gap:8px;margin:12px 0 4px'});
-  quickActions.appendChild(h('button', {
-    style: 'flex:1;padding:12px 8px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
-    onclick: function() { if (!window.S.saladBar) window.S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' }; window.S.saladBar.open = true; if(window.render) window.render(); }
-  }, 'Salade'));
-  if (S.whey === true || S.whey === 1) {
-    quickActions.appendChild(h('button', {
-      style: 'flex:1;padding:12px 8px;min-height:44px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
-      onclick: function() { window.S.smoothieBarOpen = true; if(window.render) window.render(); }
-    }, 'Smoothie'));
-  }
-  p.appendChild(quickActions);
-
   // ── Pre-compute daily totals for macro progress display ──────────────────
   var _preDay = S.weekPlan[S.selectedDay] || {};
   var _preTotal = 0, _preTotalP = 0, _preTotalG = 0, _preTotalL = 0;
@@ -2694,6 +2680,20 @@ function renderStep9(p) {
     }
     p.appendChild(progressCard);
   })();
+
+  // Quick action buttons — Salad bar & Smoothie bar
+  var quickActions = h('div', {style: 'display:flex;gap:8px;margin:12px 0 4px'});
+  quickActions.appendChild(h('button', {
+    style: 'flex:1;padding:12px 8px;min-height:44px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px',
+    onclick: function() { if (!window.S.saladBar) window.S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' }; window.S.saladBar.open = true; if(window.render) window.render(); }
+  }, 'Salade'));
+  if (S.whey === true || S.whey === 1) {
+    quickActions.appendChild(h('button', {
+      style: 'flex:1;padding:12px 8px;min-height:44px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px',
+      onclick: function() { window.S.smoothieBarOpen = true; if(window.render) window.render(); }
+    }, 'Smoothie'));
+  }
+  p.appendChild(quickActions);
 
   // ── Plate scan UI ─────────────────────────────────────────────────────────
   if (S._plateScanSlot) {
