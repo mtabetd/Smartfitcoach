@@ -451,11 +451,35 @@ function renderProfilePage(container) {
    var modeCard = h('div', {
      style: 'padding:14px 16px;border:1px solid ' + (isActive ? 'var(--black)' : 'var(--border)') + ';margin-bottom:8px;cursor:pointer;background:' + (isActive ? 'var(--ivory2)' : 'transparent') + ';transition:border-color .2s,background .2s;',
      onclick: function() {
+       var _prevMode = S.appMode;
        S.appMode = m.value;
-       // Reset view to match new mode
-       if (m.value === 'sport') { S.view = 'today'; }
-       else if (m.value === 'nutrition') { S.view = 'today'; }
-       else { S.view = 'today'; }
+
+       // Détecter si on ajoute un module qui n'a pas encore été configuré
+       var _addingNutrition = (m.value === 'nutrition' || m.value === 'both') &&
+         _prevMode === 'sport' &&
+         (S.goal === null || S.goal === undefined) && !S.weekPlan;
+
+       var _addingSport = (m.value === 'sport' || m.value === 'both') &&
+         _prevMode === 'nutrition' &&
+         (!S.sportProgram || !S.sportProgram.length);
+
+       if (_addingNutrition) {
+         // Le profil de base (sexe, poids, taille) est déjà rempli via l'onboarding sport
+         // → on démarre directement au questionnaire médical nutrition (étape 4)
+         // Si les données de base manquent malgré tout, démarrer depuis le début
+         var _hasBasicProfile = S.sex && (S.weight > 0 || S.height > 0);
+         S.nStep = _hasBasicProfile ? 4 : 0;
+         S.view = 'nutrition';
+         // Marquer pour afficher un message d'explication dans l'onboarding
+         S._switchedFromSport = true;
+       } else if (_addingSport) {
+         S.sStep = 0;
+         S.view = 'sport';
+         S._switchedFromNutrition = true;
+       } else {
+         S.view = 'today';
+       }
+
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }
