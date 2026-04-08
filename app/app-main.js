@@ -80,7 +80,11 @@ var PROFILE_KEYS = [
  'streakFreezeAvailable',
  'swapCount',
  'welcomeShown',
- 'firstLoginDate'
+ 'firstLoginDate',
+ '_bodyFatEstimate',
+ '_bodyCompositionProfile',
+ '_bodyCompositionWeight',
+ 'bodyScanDone'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -226,6 +230,8 @@ function loadProfile() {
  if (S.streakFreezeUsedMonth === undefined) S.streakFreezeUsedMonth = null;
  if (S.streakFreezeAvailable === undefined) S.streakFreezeAvailable = true;
  if (S.swapCount === undefined) S.swapCount = 0;
+ if (S.bodyScanDone === undefined) S.bodyScanDone = false;
+ if (S._bodyFatEstimate === undefined) S._bodyFatEstimate = null;
  // Reset ephemeral UI state that should not persist across sessions
  S.shopListOpen = false;
  S.smoothieBarOpen = false;
@@ -536,10 +542,10 @@ function renderProfilePage(container) {
 
        if (_addingNutrition) {
          // Le profil de base (sexe, poids, taille) est déjà rempli via l'onboarding sport
-         // → on démarre directement au questionnaire médical nutrition (étape 4)
-         // Si les données de base manquent malgré tout, démarrer depuis le début
+         // → on démarre directement au questionnaire médical nutrition (nStep 8 dans le nouveau flow)
+         // Si les données de base manquent malgré tout, démarrer depuis le début (nStep 1)
          var _hasBasicProfile = S.sex && (S.weight > 0 || S.height > 0);
-         S.nStep = _hasBasicProfile ? 4 : 0;
+         S.nStep = _hasBasicProfile ? 8 : 1;
          S.view = 'nutrition';
          // Marquer pour afficher un message d'explication dans l'onboarding
          S._switchedFromSport = true;
@@ -1212,9 +1218,22 @@ function renderLogin(app) {
  } catch(e) {}
  // Restore profile from localStorage for this user
  loadProfile();
+ // Migrate old nStep values → new routing (restructuring Apr 2026)
+ // OLD: 1=Obj 2=PoidsCible 3=Prénom 4=Naissance 5=Corps 6=Activité 7=Sommeil 8=Results 9=Planning
+ // NEW: 1=Prénom 2=Naissance 3=Corps 4=Obj 5=Activité 6=BodyScan 7=Preview 8=Medical 9=Habitudes 10=Prefs 11=Results 12=Planning
+ if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 9) {
+   if (S.weekPlan) {
+     S.nStep = 12; // Has plan → show planning
+   } else if (S.nStep === 8) {
+     S.nStep = 11; // Was results → new results
+   } else if (S.nStep >= 1 && S.nStep <= 7 && (S.sex && S.goal !== null)) {
+     S.nStep = 8; // Was mid-onboarding with profile → jump to medical
+   }
+ }
  // Fix nStep for returning users who completed onboarding
+ // New flow: nStep 12 = planning (was 9), nStep 11 = results (was 8)
  if (S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
- S.nStep = S.weekPlan ? 9 : (S.goal !== null ? 8 : 1);
+ S.nStep = S.weekPlan ? 12 : (S.goal !== null ? 11 : 1);
  }
  // Restore language preference
  if (window.I18N && S.lang) window.I18N.current = S.lang;
@@ -1238,8 +1257,13 @@ function renderLogin(app) {
  if (window.SupaSync) {
  SupaSync.syncOnLogin().then(function(syncResult) {
  if (syncResult === 'loaded_from_cloud') {
+ if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 9) {
+   if (S.weekPlan) { S.nStep = 12; }
+   else if (S.nStep === 8) { S.nStep = 11; }
+   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
+ }
  if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
- S.nStep = S.weekPlan ? 9 : (S.goal ? 8 : 1);
+ S.nStep = S.weekPlan ? 12 : (S.goal ? 11 : 1);
  }
  if (window.I18N && S.lang) window.I18N.current = S.lang;
  if (window.UNITS) {
@@ -1817,6 +1841,12 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  if (window.GAMIFICATION) GAMIFICATION.updateStreak();
  // Restore full profile from localStorage (E-01)
  loadProfile();
+ // Migrate old nStep values → new routing (restructuring Apr 2026)
+ if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 9) {
+   if (S.weekPlan) { S.nStep = 12; }
+   else if (S.nStep === 8) { S.nStep = 11; }
+   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
+ }
  // Store first login date (needed for J+1 wellness guard)
  if (!S.firstLoginDate) {
    S.firstLoginDate = new Date().toISOString().slice(0, 10);
@@ -1832,7 +1862,7 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Si l'utilisateur existant a un profil mais nStep=0 (ex: profil corrompu ou rechargement)
  // → sauter le splash pour ne pas le forcer à refaire tout l'onboarding
  if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
- S.nStep = S.weekPlan ? 9 : (S.goal ? 8 : 1);
+ S.nStep = S.weekPlan ? 12 : (S.goal ? 11 : 1);
  }
  // Retour utilisateur : préserver le step programme (ne pas réinitialiser l'onboarding sport).
  // Steps à PRÉSERVER : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel) 14(golf) 15(prog dédié) 16(charges) 18(triathlon) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
@@ -1842,11 +1872,11 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
    S.sStep = 0;
  }
  // ─── AUTO-REGENERATION PLAN NUTRITION (semaine expirée) ───
- // Si un plan existe, que l'utilisateur n'est PAS en train de le consulter (nStep ≠ 9),
+ // Si un plan existe, que l'utilisateur n'est PAS en train de le consulter (nStep ≠ 12),
  // et que la date de génération a plus de 7 jours → regénérer silencieusement.
  (function() {
    try {
-     if (S.weekPlan && S.nStep !== 9 && S.goal !== null && window.generateWeek && window.computeNutritionState) {
+     if (S.weekPlan && S.nStep !== 12 && S.goal !== null && window.generateWeek && window.computeNutritionState) {
        var needsRegen = false;
        if (!S._weekPlanGeneratedAt) {
          // Plan sans date de génération : considéré comme ancien → regénérer

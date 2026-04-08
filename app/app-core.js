@@ -2983,9 +2983,17 @@ else if(s.pregnant&&!s.prePregnancyWeight&&s.pregnancyWeek){
   var _estGain=s.pregnancyWeek>12?Math.round((s.pregnancyWeek-12)*0.5):0;
   bw=Math.max(40,s.weight-_estGain);
 }
+// Katch-McArdle (masse maigre) — utilisé si % masse graisseuse estimé via body scan
+// Plus précis que Mifflin-St Jeor pour les personnes musclées ou avec composition connue
+var _bf=s._bodyFatEstimate;
+if(_bf!==undefined&&_bf!==null&&_bf>=4&&_bf<=60){
+  var _lbm=bw*(1-_bf/100);
+  var bmrKM=370+(21.6*_lbm); // Katch-McArdle 1975 (McArdle, Katch & Katch, 2001)
+  if(_age>=65)bmrKM=bmrKM*0.95;
+  return Math.round(bmrKM); // Katch-McArdle — basé sur masse maigre mesurée
+}
 var bmrRaw;if(s.sex==='homme')bmrRaw=(10*bw)+(6.25*s.height)-(5*_age)+5;else bmrRaw=(10*bw)+(6.25*s.height)-(5*_age)-161;
 // Correction seniors 65+ : Mifflin-St Jeor surestime le BMR de ~5% après 65 ans (Amirkalali 2008)
-// Appliquer facteur de correction -5% pour éviter une surestimation des besoins caloriques chez les seniors
 if(_age>=65)bmrRaw=bmrRaw*0.95;
 return Math.round(bmrRaw)} // Mifflin-St Jeor 1990 (Frankenfield 2005) + correction seniors 65+ (Amirkalali 2008)
 function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
