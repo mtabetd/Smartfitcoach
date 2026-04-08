@@ -325,6 +325,143 @@ window.renderModuleChoice = function renderModuleChoice(content) {
  });
 };
 
+// ─── PROFILE PAGE ───
+function renderProfilePage(container) {
+ var S = window.S;
+ var user = window.AUTH ? window.AUTH.getUser() : null;
+ var c = h('div', {style: 'max-width:480px;margin:0 auto;padding:24px 20px 48px'});
+
+ // Back button
+ var backBtn = h('button', {
+   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);cursor:pointer;margin-bottom:24px;display:flex;align-items:center;gap:6px;',
+   onclick: function() { S.view = 'today'; if (window.render) window.render(); }
+ }, '← Retour');
+ c.appendChild(backBtn);
+
+ // Title
+ c.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;font-weight:normal;margin-bottom:4px;'}, 'Mon profil'));
+ c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);letter-spacing:1px;margin-bottom:28px;'}, user ? (user.email || '') : ''));
+
+ // ─── Photo + nom ───
+ var photoSection = h('div', {style: 'display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
+ var photoWrap = h('div', {style: 'width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--border);'});
+ if (S.profilePhoto) {
+   photoWrap.appendChild(h('img', {src: S.profilePhoto, style: 'width:100%;height:100%;object-fit:cover;'}));
+ } else {
+   var initials = (function() {
+     var _un = user ? (user.name || user.email || '') : (S.prenom || '');
+     if (S.prenom && S.nom) return (S.prenom[0] + S.nom[0]).toUpperCase();
+     if (!_un) return 'S';
+     var parts = _un.trim().split(/\s+/);
+     if (parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+     return _un[0].toUpperCase();
+   })();
+   photoWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;color:var(--grey);'}, initials));
+ }
+ // Photo upload input
+ var photoInput = document.createElement('input');
+ photoInput.type = 'file';
+ photoInput.accept = 'image/*';
+ photoInput.style.display = 'none';
+ photoInput.addEventListener('change', function() {
+   var file = photoInput.files[0];
+   if (!file) return;
+   var reader = new FileReader();
+   reader.onload = function(e) {
+     S.profilePhoto = e.target.result;
+     if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
+     if (window.render) window.render();
+   };
+   reader.readAsDataURL(file);
+ });
+ photoWrap.appendChild(photoInput);
+ photoWrap.addEventListener('click', function() { photoInput.click(); });
+ photoSection.appendChild(photoWrap);
+ var nameBlock = h('div', {style: 'flex:1;'});
+ var displayName = [S.prenom, S.nom].filter(Boolean).join(' ') || (user && (user.name || user.email)) || 'Utilisateur';
+ nameBlock.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px;'}, displayName));
+ nameBlock.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:1px;cursor:pointer;text-transform:uppercase;'}, 'Changer la photo'));
+ photoSection.appendChild(nameBlock);
+ c.appendChild(photoSection);
+
+ // ─── Infos clés ───
+ var infoSection = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
+ infoSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:12px;'}, 'INFORMATIONS'));
+ var infoRows = [
+   ['Âge', S.age ? S.age + ' ans' : '—'],
+   ['Poids', S.weight ? S.weight + ' kg' : '—'],
+   ['Taille', S.height ? S.height + ' cm' : '—'],
+   ['Objectif', (function() {
+     var goals = {0:'Perte de poids',1:'Maintien',2:'Prise de masse',3:'Rééquilibrage'};
+     return S.goal !== null && S.goal !== undefined ? (goals[S.goal] || '—') : '—';
+   })()]
+ ];
+ infoRows.forEach(function(row) {
+   var r = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);'});
+   r.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);'}, row[0]));
+   r.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black);'}, row[1]));
+   infoSection.appendChild(r);
+ });
+ c.appendChild(infoSection);
+
+ // ─── Mode application ───
+ var modeSection = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
+ modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:4px;'}, 'MODE D\'UTILISATION'));
+ modeSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Choisissez les modules que vous souhaitez utiliser.'));
+ var modes = [
+   { value: 'nutrition', label: 'Nutrition uniquement', desc: 'Suivi alimentaire et objectifs caloriques.' },
+   { value: 'sport', label: 'Sport uniquement', desc: 'Programmes d\'entraînement et progression.' },
+   { value: 'both', label: 'Nutrition & Sport', desc: 'L\'approche complète. Recommandé.' }
+ ];
+ modes.forEach(function(m) {
+   var isActive = S.appMode === m.value;
+   var modeCard = h('div', {
+     style: 'padding:14px 16px;border:1px solid ' + (isActive ? 'var(--black)' : 'var(--border)') + ';margin-bottom:8px;cursor:pointer;background:' + (isActive ? 'var(--ivory2)' : 'transparent') + ';transition:border-color .2s,background .2s;',
+     onclick: function() {
+       S.appMode = m.value;
+       // Reset view to match new mode
+       if (m.value === 'sport') { S.view = 'today'; }
+       else if (m.value === 'nutrition') { S.view = 'today'; }
+       else { S.view = 'today'; }
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       if (window.render) window.render();
+     }
+   });
+   var modeRow = h('div', {style: 'display:flex;align-items:center;gap:12px;'});
+   var dot = h('div', {style: 'width:14px;height:14px;border-radius:50%;border:1px solid ' + (isActive ? 'var(--black)' : 'var(--grey3,#C8C8C0)') + ';background:' + (isActive ? 'var(--black)' : 'transparent') + ';flex-shrink:0;'});
+   modeRow.appendChild(dot);
+   var modeText = h('div', {});
+   modeText.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:500;color:var(--black);margin-bottom:2px;'}, m.label));
+   modeText.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);'}, m.desc));
+   modeRow.appendChild(modeText);
+   modeCard.appendChild(modeRow);
+   modeSection.appendChild(modeCard);
+ });
+ c.appendChild(modeSection);
+
+ // ─── Modifier le profil ───
+ var editBtn = h('button', {
+   style: 'display:block;width:100%;padding:14px;border:1px solid var(--black);background:var(--black);color:var(--ivory,#F8F6EF);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;',
+   onclick: function() {
+     S.view = 'nutrition'; S.nStep = 1;
+     if (window.render) window.render();
+   }
+ }, 'Modifier mon profil');
+ c.appendChild(editBtn);
+
+ // ─── Déconnexion ───
+ var logoutBtn = h('button', {
+   style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+   onclick: function() {
+     if (window.AUTH && window.AUTH.logout) { window.AUTH.logout(); }
+     else { S.view = 'authLogin'; if (window.render) window.render(); }
+   }
+ }, 'Se déconnecter');
+ c.appendChild(logoutBtn);
+
+ container.appendChild(c);
+}
+
 // ─── MAIN RENDER ───
 function render() {
  if (render._lock) return;
@@ -411,8 +548,8 @@ function render() {
  (function() {
    var _avatarBtn = h('button', {
      'class': 'user-bar-avatar-btn',
-     onclick: function() { S.view = 'nutrition'; S.nStep = 1; window.render(); },
-     title: 'Voir le profil'
+     onclick: function() { S.view = 'profil'; window.render(); },
+     title: 'Mon profil'
    });
    if (S.profilePhoto) {
      _avatarBtn.appendChild(h('img', {
@@ -457,7 +594,9 @@ function render() {
    return;
  }
 
- if (S.view === 'sport' && window.SPORT) {
+ if (S.view === 'profil') {
+ renderProfilePage(content);
+ } else if (S.view === 'sport' && window.SPORT) {
  SPORT.render(content);
  } else if (S.view === 'nutrition' && window.NUTRITION) {
  NUTRITION.render(content);
