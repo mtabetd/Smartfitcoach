@@ -1766,6 +1766,14 @@ function syncSportGoalsToNutrition() {
 
 function renderMusculationGoals(p) {
  var _prenom1 = S.prenom || '';
+ // Banner contextuel pour les utilisateurs nutrition → sport
+ if (window.S && window.S._switchedFromNutrition) {
+   var _ctxBanner = document.createElement('div');
+   _ctxBanner.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(26,74,26,0.06);border:1px solid rgba(26,74,26,0.15);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--green,#1A4A1A);line-height:1.5;';
+   _ctxBanner.textContent = 'Votre profil de base est déjà configuré. Complétez simplement vos informations sportives ci-dessous.';
+   window.S._switchedFromNutrition = false; // Afficher une seule fois
+   p.appendChild(_ctxBanner);
+ }
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation \u00b7 \u00c9tape 1/3'));
  p.appendChild(h('h1', {html: (_prenom1 ? _prenom1 + ', quel est<br>' : 'Quel est<br>') + '<em>votre objectif\u00a0?</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez vos objectifs (1 \u00e0 3). Votre programme s\u2019adaptera en cons\u00e9quence.'));
@@ -3188,7 +3196,12 @@ function renderCrossfitProgram(p) {
  return;
  }
  try {
- var ctx = new (window.AudioContext || window.webkitAudioContext)();
+ // Singleton AudioContext pour éviter de dépasser la limite navigateur (~6 instances)
+ if (!window._sfcWodAudioCtx) {
+   try { window._sfcWodAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { window._sfcWodAudioCtx = null; }
+ }
+ var ctx = window._sfcWodAudioCtx;
+ if (!ctx) return;
  if (ctx.state === 'suspended') ctx.resume();
  var now = ctx.currentTime;
  if (type === 'tick') {
@@ -3918,6 +3931,18 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  clearInterval(_timerId);
  _timerId = null;
  playBeep();
+ // Notification locale si l'onglet est en arrière-plan
+ if (document.hidden) {
+   try {
+     if ('Notification' in window && Notification.permission === 'granted') {
+     var _notifTitle = _state.isTransition ? 'Exercice suivant !' : 'Repos terminé !';
+     var _notifBody = _state.isTransition
+       ? ('Prêt pour\u00a0: ' + (_state.nextExercise || 'l\'exercice suivant'))
+       : ('Série ' + _state.setNum + ' — c\'est parti !');
+     new Notification(_notifTitle, { body: _notifBody, icon: '/icons/icon-192.png', tag: 'rest-timer', requireInteraction: false });
+     }
+   } catch(e) {}
+ }
  // Inter-série : auto-dismiss après le bip (pas d'interaction requise)
  var _cb = _state.onComplete;
  _state.onComplete = null; // évite double-callback via stop()
@@ -3977,6 +4002,18 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  clearInterval(_timerId);
  _timerId = null;
  playBeep();
+ // Notification locale si l'onglet est en arrière-plan
+ if (document.hidden) {
+   try {
+     if ('Notification' in window && Notification.permission === 'granted') {
+     var _notifTitle = _state.isTransition ? 'Exercice suivant !' : 'Repos terminé !';
+     var _notifBody = _state.isTransition
+       ? ('Prêt pour\u00a0: ' + (_state.nextExercise || 'l\'exercice suivant'))
+       : ('Série ' + _state.setNum + ' — c\'est parti !');
+     new Notification(_notifTitle, { body: _notifBody, icon: '/icons/icon-192.png', tag: 'rest-timer', requireInteraction: false });
+     }
+   } catch(e) {}
+ }
  // Transition : afficher "Commencer" et attendre le clic
  // onComplete sera appelé par stop() quand l'utilisateur clique
  _updateUI();
@@ -5998,6 +6035,16 @@ function renderMusculationProgram(p) {
 
  card.appendChild(setTable);
 
+ // Mini sparkline historique — affiche les 8 dernières charges pour cet exercice
+ if (window.PERF_HISTORY && window.PERF_HISTORY.renderMiniChart) {
+   try {
+     var _sparkContainer = document.createElement('div');
+     _sparkContainer.style.cssText = 'margin-top:4px;';
+     window.PERF_HISTORY.renderMiniChart(exRef.n, _sparkContainer);
+     if (_sparkContainer.children.length > 0) card.appendChild(_sparkContainer);
+   } catch(e) {}
+ }
+
  // ── NEXT EXERCISE NUDGE : shown when all sets are validated ──
  (function(_exRef, _exIdx2, _dayExercises2) {
  var _today2 = new Date().toISOString().slice(0, 10);
@@ -6306,6 +6353,8 @@ function renderMusculationProgram(p) {
  kcalTotal: kcalRes.total
  });
  S.sessionCompleting = false; S._sessionDuration = null;
+ // Mise à jour du streak sur action réelle (séance validée)
+ if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
  window.BLACKBOX && window.BLACKBOX.log('session_done', {day: S.selectedSportDay, kcal: kcalRes.total, duration: realDur});
  window.render();
  }}, '\u2713 Valider la s\u00e9ance');

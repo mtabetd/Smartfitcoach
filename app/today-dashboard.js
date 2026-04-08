@@ -8,15 +8,15 @@ var TODAY_QUOTES = [
   { text: "Chaque séance est un pas vers la meilleure version de toi.", author: "" },
   { text: "Le corps sait des choses que l'esprit refuse d'admettre.", author: "Paul Valéry" },
   { text: "La discipline, c'est se souvenir de ce que l'on veut vraiment.", author: "David Campbell" },
-  { text: "Chaque journée est une nouvelle chance de changer votre vie.", author: "" },
+  { text: "Chaque journée est une nouvelle chance de changer ta vie.", author: "" },
   { text: "La force ne vient pas de la capacité physique. Elle vient d'une volonté indomptable.", author: "Gandhi" },
   { text: "Le succès, c'est la somme de petits efforts répétés jour après jour.", author: "Robert Collier" },
-  { text: "N'abandonnez pas. Souffrez maintenant et vivez le reste de votre vie comme un champion.", author: "Muhammad Ali" },
-  { text: "Votre corps peut résister à presque tout. C'est votre esprit qu'il faut convaincre.", author: "" },
+  { text: "N'abandonne pas. Souffre maintenant et vis le reste de ta vie comme un champion.", author: "Muhammad Ali" },
+  { text: "Ton corps peut résister à presque tout. C'est ton esprit qu'il faut convaincre.", author: "" },
   { text: "La fatigue est temporaire. La fierté de l'effort dure toujours.", author: "" },
   { text: "Respecter son corps, c'est respecter la vie.", author: "" },
-  { text: "Chaque repas est une opportunité de nourrir votre corps avec excellence.", author: "" },
-  { text: "La nutrition est l'architecture invisible de votre performance.", author: "" },
+  { text: "Chaque repas est une opportunité de nourrir ton corps avec excellence.", author: "" },
+  { text: "La nutrition est l'architecture invisible de ta performance.", author: "" },
   { text: "Le mouvement est la vie. La vie est le mouvement.", author: "Moshe Feldenkrais" },
   { text: "Ce n'est pas la montagne que nous conquérons, mais nous-mêmes.", author: "Edmund Hillary" }
 ];
@@ -378,7 +378,7 @@ function renderWelcomeBanner(S) {
   var sub = h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin-top:4px;opacity:0.75;'
   });
-  sub.textContent = dateStr + ' \u00B7 Votre programme vous attend';
+  sub.textContent = dateStr + ' \u00B7 Ton programme t\'attend';
 
   banner.appendChild(greeting);
   banner.appendChild(sub);
@@ -401,8 +401,11 @@ function renderCardBonjour(S) {
   var eyebrow_el = eyebrow('AUJOURD\'HUI');
   c.appendChild(eyebrow_el);
 
+  // Salutation selon l'heure de la journée
+  var _hour = new Date().getHours();
+  var _greetWord = _hour >= 18 ? 'Bonsoir' : (_hour >= 12 ? 'Bon après-midi' : 'Bonjour');
   var title = h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;margin-bottom:4px;' });
-  title.textContent = 'Bonjour' + (firstName ? ', ' + firstName : '') + '.';
+  title.textContent = _greetWord + (firstName ? ', ' + firstName : '') + '.';
   c.appendChild(title);
 
   // Date permanente sous le titre
@@ -437,7 +440,7 @@ function renderCardMacros() {
     var emptyMacro = card();
     emptyMacro.appendChild(eyebrow('NUTRITION'));
     emptyMacro.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:normal;margin-bottom:8px;color:var(--grey);'}, 'Aucun objectif défini'));
-    emptyMacro.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:14px;'}, 'Définissez vos objectifs nutritionnels pour suivre vos macros quotidiens.'));
+    emptyMacro.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:14px;'}, 'Définis tes objectifs nutritionnels pour suivre tes macros quotidiens.'));
     emptyMacro.appendChild(h('button', {
       style: 'padding:10px 16px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { window.S.view = 'nutrition'; window.S.nStep = 1; if (window.render) window.render(); }
@@ -447,6 +450,14 @@ function renderCardMacros() {
 
   var totals = getTodayTotals();
   var macroTargets = getMacroTargets();
+
+  // ── Sport burn du jour ──
+  var _todayKey = new Date().toISOString().slice(0, 10);
+  var _S = window.S || {};
+  var _sportBurn = 0;
+  if (_S.sessionHistory && _S.sessionHistory[_todayKey] && _S.sessionHistory[_todayKey].kcalTotal > 0) {
+    _sportBurn = Math.round(_S.sessionHistory[_todayKey].kcalTotal);
+  }
 
   var c = card();
   c.appendChild(eyebrow('NUTRITION'));
@@ -460,10 +471,57 @@ function renderCardMacros() {
   }, Math.round(totals.kcal) + ' / ' + Math.round(calorieTarget) + ' kcal'));
   c.appendChild(kcalRow);
 
+  // Sport burn badge (si séance validée aujourd'hui)
+  if (_sportBurn > 0) {
+    var _burnEl = document.createElement('div');
+    _burnEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:6px;font-weight:500;color:var(--green,#1A4A1A);';
+    _burnEl.textContent = '🏃 +' + _sportBurn + ' kcal brûlées (sport)';
+    c.appendChild(_burnEl);
+  }
+
+  // Calories restantes (nettes : target - mangé + brûlé)
+  var _netRemaining = Math.round(calorieTarget - totals.kcal + _sportBurn);
+  var _remEl = document.createElement('div');
+  _remEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:10px;font-weight:500;';
+  if (_sportBurn > 0) {
+    // Afficher la formule nette
+    _remEl.style.color = _netRemaining >= 0 ? 'var(--green,#1A4A1A)' : 'var(--orange,#6A4A1A)';
+    _remEl.textContent = _netRemaining >= 0
+      ? '⚡ ' + _netRemaining + ' kcal nettes restantes'
+      : '⚠ ' + Math.abs(_netRemaining) + ' kcal au-dessus (net sport)';
+  } else if (_netRemaining > 0) {
+    _remEl.style.color = 'var(--green,#1A4A1A)';
+    _remEl.textContent = '⚡ ' + _netRemaining + ' kcal restantes';
+  } else if (_netRemaining === 0) {
+    _remEl.style.color = 'var(--grey,#6B6B65)';
+    _remEl.textContent = '✓ Objectif calorique atteint';
+  } else {
+    _remEl.style.color = 'var(--orange,#6A4A1A)';
+    _remEl.textContent = '⚠ ' + Math.abs(_netRemaining) + ' kcal au-dessus de l\'objectif';
+  }
+  c.appendChild(_remEl);
+
   if (macroTargets && (macroTargets.p > 0 || macroTargets.g > 0 || macroTargets.l > 0)) {
     c.appendChild(macroRow('Protéines', Math.round(totals.p), Math.round(macroTargets.p)));
     c.appendChild(macroRow('Glucides', Math.round(totals.g), Math.round(macroTargets.g)));
     c.appendChild(macroRow('Lipides', Math.round(totals.l), Math.round(macroTargets.l)));
+
+    // Anneaux SVG — progression macros
+    var ringsRow = document.createElement('div');
+    ringsRow.style.cssText = 'display:flex;justify-content:space-around;align-items:flex-start;margin-top:16px;padding-top:12px;border-top:1px solid var(--border,#E8E6DF);flex-wrap:wrap;gap:8px;';
+    if (macroTargets.p > 0 && window.svgRing) {
+      var pPct = Math.min(100, totals.p > 0 ? Math.round(totals.p / macroTargets.p * 100) : 0);
+      ringsRow.appendChild(window.svgRing(72, 7, pPct, 'var(--green,#1A4A1A)', 'Protéines', Math.round(totals.p)));
+    }
+    if (macroTargets.g > 0 && window.svgRing) {
+      var gPct = Math.min(100, totals.g > 0 ? Math.round(totals.g / macroTargets.g * 100) : 0);
+      ringsRow.appendChild(window.svgRing(72, 7, gPct, 'var(--blue,#1A3A6A)', 'Glucides', Math.round(totals.g)));
+    }
+    if (macroTargets.l > 0 && window.svgRing) {
+      var lPct = Math.min(100, totals.l > 0 ? Math.round(totals.l / macroTargets.l * 100) : 0);
+      ringsRow.appendChild(window.svgRing(72, 7, lPct, 'var(--orange,#6A4A1A)', 'Lipides', Math.round(totals.l)));
+    }
+    if (ringsRow.children.length > 0) c.appendChild(ringsRow);
   }
 
   return c;
@@ -482,7 +540,7 @@ function renderCardRepas() {
     var _emptyCard = h('div', {style: 'text-align:center;padding:24px 16px;'});
     _emptyCard.appendChild(h('div', {style: 'font-size:28px;margin-bottom:8px;'}, '🍽'));
     _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:6px;'}, 'Aucun plan nutritionnel'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Créez votre programme personnalisé\nen 5 minutes'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Crée ton programme personnalisé\nen 5 minutes'));
     _emptyCard.appendChild(h('button', {
       style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { var S = window.S; S.view = 'nutrition'; if (window.render) window.render(); }
@@ -637,6 +695,15 @@ function renderCardStreak() {
     streakWrap.appendChild(streakInfo);
     c.appendChild(streakWrap);
 
+    // Message perte d'aversion — si streak ≥ 3 jours, rappelle l'enjeu
+    if (streak >= 3) {
+      var _lossMsg = h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--orange,#6A4A1A);margin-top:6px;margin-bottom:4px;font-weight:500;'
+      });
+      _lossMsg.textContent = 'Ne casse pas ta série de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' !';
+      c.appendChild(_lossMsg);
+    }
+
     // Streak freeze badge
     var _sfS = window.S || {};
     if (_sfS.streakFreezeAvailable !== false) {
@@ -756,7 +823,7 @@ function renderCardSport() {
     var _sportEmpty = h('div', {style: 'text-align:center;padding:8px 0 4px;'});
     _sportEmpty.appendChild(h('div', {style: 'font-size:24px;margin-bottom:8px;'}, '\uD83C\uDFCB'));
     _sportEmpty.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:6px;'}, 'Aucun programme sportif'));
-    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:14px;line-height:1.5;'}, 'Choisissez votre sport et obtenez\nun programme sur mesure'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:14px;line-height:1.5;'}, 'Choisis ton sport et obtiens\nun programme sur mesure'));
     _sportEmpty.appendChild(h('button', {
       style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { var S2 = window.S; S2.view = 'sport'; if (window.render) window.render(); }
@@ -873,8 +940,8 @@ function renderCardRestDay(S) {
 
   var _restMsg = {
     beginner:     'Les muscles se construisent au repos. Aujourd\u2019hui fait partie du plan.',
-    intermediate: 'La r\u00e9cup\u00e9ration est un entra\u00eenement. Vos fibres se reconstruisent plus fortes.',
-    advanced:     'La surcompensation se joue dans les 24\u201348h post-s\u00e9ance. Optimisez ce repos.'
+    intermediate: 'La r\u00e9cup\u00e9ration est un entra\u00eenement. Tes fibres se reconstruisent plus fortes.',
+    advanced:     'La surcompensation se joue dans les 24\u201348h post-s\u00e9ance. Optimise ce repos.'
   }[_lvl];
 
   var weightKg = (S && S.weight) ? parseFloat(S.weight) : 70;
@@ -920,7 +987,7 @@ function renderCardRestDay(S) {
 
   // Mood check-in
   var moodLabel = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;' });
-  moodLabel.textContent = mood ? 'Votre ressenti aujourd\'hui' : 'Comment vous sentez-vous ?';
+  moodLabel.textContent = mood ? 'Ton ressenti aujourd\'hui' : 'Comment tu te sens ?';
   c.appendChild(moodLabel);
 
   var moods = ['\uD83D\uDE34', '\uD83D\uDE0A', '\uD83D\uDCAA']; // 😴 😊 💪
@@ -1220,7 +1287,7 @@ function todayImportData() {
       try {
         var backup = JSON.parse(ev.target.result);
         if (!backup.data || !backup.version) { alert('Fichier invalide'); return; }
-        if (!confirm('Cela remplacera vos données actuelles. Continuer ?')) return;
+        if (!confirm('Cela remplacera tes données actuelles. Continuer ?')) return;
         Object.keys(backup.data).forEach(function(key) {
           localStorage.setItem(key, typeof backup.data[key] === 'string' ? backup.data[key] : JSON.stringify(backup.data[key]));
         });
@@ -1234,7 +1301,7 @@ function todayImportData() {
 }
 
 function todayDeleteAllData() {
-  if (!confirm('Êtes-vous sûr ? Toutes vos données seront supprimées définitivement.')) return;
+  if (!confirm('Es-tu sûr(e) ? Toutes tes données seront supprimées définitivement.')) return;
   if (!confirm('Dernière confirmation : cette action est irréversible. Continuer ?')) return;
   var keysToRemove = [];
   for (var i = 0; i < localStorage.length; i++) {
@@ -1259,7 +1326,7 @@ function renderExtendedSections(wrapper, S) {
     onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition'); else { S.view = 'nutrition'; if (window.render) window.render(); } }
   });
   nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin:0 0 4px;' }, 'Nutrition'));
-  nutNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Planifiez vos repas'));
+  nutNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Planifie tes repas'));
   navRow.appendChild(nutNavBtn);
 
   var sportNavBtn = h('div', {
@@ -1267,7 +1334,7 @@ function renderExtendedSections(wrapper, S) {
     onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport'); else { S.view = 'sport'; if (window.render) window.render(); } }
   });
   sportNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin:0 0 4px;' }, 'Sport'));
-  sportNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Votre programme'));
+  sportNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Ton programme'));
   navRow.appendChild(sportNavBtn);
   actCard.appendChild(navRow);
 
@@ -1306,7 +1373,7 @@ function renderExtendedSections(wrapper, S) {
       waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi hydratation non disponible pour le moment.'));
     }
   } else {
-    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistrez votre consommation d\u2019eau via le suivi hydratation.'));
+    waterBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistre ta consommation d\u2019eau via le suivi hydratation.'));
   }
   wrapper.appendChild(waterBox);
 
@@ -1318,7 +1385,7 @@ function renderExtendedSections(wrapper, S) {
       sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Suivi sommeil non disponible pour le moment.'));
     }
   } else {
-    sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistrez vos nuits pour suivre la qualit\u00e9 de votre sommeil.'));
+    sleepBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Enregistre tes nuits pour suivre la qualit\u00e9 de ton sommeil.'));
   }
   wrapper.appendChild(sleepBox);
 
@@ -1330,7 +1397,7 @@ function renderExtendedSections(wrapper, S) {
       weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'R\u00e9sum\u00e9 hebdomadaire non disponible pour le moment.'));
     }
   } else {
-    weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Le r\u00e9sum\u00e9 hebdomadaire apparaîtra après votre premi\u00e8re semaine compl\u00e8te.'));
+    weeklyBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Le r\u00e9sum\u00e9 hebdomadaire apparaîtra après ta premi\u00e8re semaine compl\u00e8te.'));
   }
   wrapper.appendChild(weeklyBox);
 
@@ -1342,7 +1409,7 @@ function renderExtendedSections(wrapper, S) {
       perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Graphique de progression non disponible pour le moment.'));
     }
   } else {
-    perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Votre progression s\u2019affichera ici au fil de vos s\u00e9ances.'));
+    perfBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Ta progression s\u2019affichera ici au fil de tes s\u00e9ances.'));
   }
   wrapper.appendChild(perfBox);
 
@@ -1357,7 +1424,7 @@ function renderExtendedSections(wrapper, S) {
   if (rawHistCheck.length < 2) {
     chartWrap.appendChild(h('div', {
       style: 'font-size:11px;color:var(--grey);text-align:center;padding:16px 0;'
-    }, 'Ajoutez votre premier poids pour voir la courbe de progression.'));
+    }, 'Ajoute ton premier poids pour voir la courbe de progression.'));
   } else {
     var canvas = document.createElement('canvas');
     canvas.id = 'today-weight-chart';
@@ -1428,7 +1495,7 @@ function renderExtendedSections(wrapper, S) {
       foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Journal alimentaire non disponible pour le moment.'));
     }
   } else {
-    foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Notez vos repas pour suivre vos apports nutritionnels au quotidien.'));
+    foodBox.appendChild(h('div', { style: 'font-size:11px;color:var(--grey);text-align:center;padding:12px 0;' }, 'Note tes repas pour suivre tes apports nutritionnels au quotidien.'));
   }
   wrapper.appendChild(foodBox);
 
@@ -1470,7 +1537,7 @@ function renderExtendedSections(wrapper, S) {
       var mini = h('div', { style: 'width:36px;height:36px;border-radius:2px;background:var(--ivory2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;opacity:.35;' }, icon);
       badgesRow.appendChild(mini);
     });
-    badgesCard.appendChild(h('p', { style: 'font-size:11px;color:var(--grey);margin:8px 0 0;font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.5;' }, 'Continuez \u2014 vos premiers badges vous attendent !'));
+    badgesCard.appendChild(h('p', { style: 'font-size:11px;color:var(--grey);margin:8px 0 0;font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.5;' }, 'Continue \u2014 tes premiers badges t\u2019attendent !'));
   }
   var badgeLink = h('span', {
     style: 'font-size:11px;color:var(--grey);cursor:pointer;margin-left:auto;',
@@ -1505,6 +1572,205 @@ function renderExtendedSections(wrapper, S) {
 
   dataCard.appendChild(dataBtns);
   wrapper.appendChild(dataCard);
+}
+
+// ─── TDEE ADAPTATIF ───
+function renderCardTDEEAdaptatif(S) {
+  // Requis : weight history + nutrition history
+  if (!S || !S.weight) return null;
+
+  var uid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+
+  // Charger l'historique du poids (mtd_weight_history_{uid})
+  var weightHistory = [];
+  try { weightHistory = JSON.parse(localStorage.getItem('mtd_weight_history_' + uid) || '[]'); } catch(e) {}
+
+  // Besoin d'au moins 2 entrées avec 7 jours d'écart
+  if (!Array.isArray(weightHistory) || weightHistory.length < 2) return null;
+
+  // Trier par date
+  weightHistory.sort(function(a, b) { return (a.date || '').localeCompare(b.date || ''); });
+
+  var latest = weightHistory[weightHistory.length - 1];
+  var oldest = weightHistory[0];
+  if (!latest || !oldest || latest.date === oldest.date) return null;
+
+  // Calculer le nombre de jours entre les deux entrées
+  var msPerDay = 86400000;
+  var daysDiff = Math.round((new Date(latest.date) - new Date(oldest.date)) / msPerDay);
+  if (daysDiff < 7) return null; // Pas assez de données
+
+  var actualChange = (parseFloat(latest.weight) || 0) - (parseFloat(oldest.weight) || 0);
+
+  // Calculer le TDEE actuel via calcTarget
+  var tdee = 0;
+  try {
+    if (window.calcTarget) {
+      var targets = window.calcTarget();
+      tdee = (typeof targets === 'number' && targets > 0) ? targets : 0;
+    }
+  } catch(e) {}
+  if (tdee <= 0) return null;
+
+  // Calculer le déficit/surplus moyen sur la période
+  // Pour simplifier : si objectif perte de poids, le déficit cible est ~500 kcal/j → -0.5kg/semaine
+  // Variation attendue : (déficit * jours) / 7700 kcal/kg
+  var _goalKey = (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) ? window.GOALS[S.goal].key : 'maintain';
+  var isLoss = _goalKey === 'cut' || _goalKey === 'shred';
+  var isGain = _goalKey === 'bulk' || _goalKey === 'lean_bulk';
+
+  var expectedChangePerWeek = isLoss ? -0.5 : isGain ? 0.25 : 0;
+  var expectedChange = (expectedChangePerWeek / 7) * daysDiff;
+
+  var delta = actualChange - expectedChange; // positif = prend plus que prévu
+
+  // Seuil de tolérance : ±0.3 kg → pas de recommandation
+  if (Math.abs(delta) < 0.3) return null;
+
+  // Calculer la recommandation TDEE ajustée
+  // 7700 kcal = 1 kg de graisse corporelle (approx)
+  var kcalAdjust = Math.round((delta / daysDiff) * 7700);
+  var newTDEE = Math.max(1200, tdee - kcalAdjust);
+  var diffKcal = Math.abs(tdee - newTDEE);
+  if (diffKcal < 50) return null; // Ajustement trop faible, ignorer
+
+  var c = card('border-left:3px solid var(--orange,#6A4A1A);');
+  c.appendChild(eyebrow('Ajustement recommandé'));
+
+  var title = delta > 0
+    ? 'Ton corps répond moins bien au déficit'
+    : 'Perte plus rapide que prévu';
+  c.appendChild(cardTitle(title));
+
+  var actualStr = (actualChange >= 0 ? '+' : '') + actualChange.toFixed(1) + ' kg';
+  var expectedStr = (expectedChange >= 0 ? '+' : '') + expectedChange.toFixed(1) + ' kg';
+
+  c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin:8px 0;line-height:1.5;' },
+    'Sur ' + daysDiff + ' jours\u00a0: tu as perdu/pris ' + actualStr + ' (attendu\u00a0: ' + expectedStr + ').'
+  ));
+
+  var adjustMsg = delta > 0
+    ? 'Réduis tes apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)'
+    : 'Tu peux augmenter tes apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)';
+
+  c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:700;color:var(--orange,#6A4A1A);margin:8px 0 0;line-height:1.5;' }, adjustMsg));
+
+  // Bouton dismiss
+  var dismissKey = 'mtd_tdee_adapt_dismissed_' + new Date().toISOString().slice(0, 7); // 1 fois par mois
+  try { if (localStorage.getItem(dismissKey) === '1') return null; } catch(e) {}
+
+  var dismissBtn = h('button', {
+    style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:transparent;border:none;cursor:pointer;padding:12px 0;min-height:44px;display:block;width:100%;text-align:left;',
+    onclick: function() {
+      try { localStorage.setItem(dismissKey, '1'); } catch(e) {}
+      if (window.render) window.render();
+    }
+  }, 'OK, j\'ai compris');
+  c.appendChild(dismissBtn);
+
+  return c;
+}
+
+// ─── BILAN HEBDOMADAIRE (dimanche) ───
+function renderCardSundayReview(S) {
+  var now = new Date();
+  var isSunday = now.getDay() === 0;
+  if (!isSunday && !S._forceWeeklyReview) return null;
+
+  // Ne pas construire le DOM si déjà dismissé aujourd'hui (optimisation)
+  try { if (localStorage.getItem('mtd_weekly_review_dismissed_' + now.toISOString().slice(0, 10)) === '1') return null; } catch(e) {}
+  var uid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+
+  // Charger le log séances de la semaine
+  var muscuLog = {};
+  try { muscuLog = JSON.parse(localStorage.getItem('mtd_muscu_session_' + uid) || '{}'); } catch(e) {}
+
+  // Calculer les 7 derniers jours
+  var seancesDone = 0;
+  var weekKcalArr = [];
+  var _nutritionHistory = (window.PERF_HISTORY && window.PERF_HISTORY.loadNutritionHistory) ? window.PERF_HISTORY.loadNutritionHistory() : [];
+  for (var d = 6; d >= 0; d--) {
+    var dd = new Date(now); dd.setDate(dd.getDate() - d);
+    var dateStr = dd.toISOString().slice(0, 10);
+    // Séances muscu
+    if (muscuLog[dateStr] && Object.keys(muscuLog[dateStr]).length > 0) {
+      var _hasValidated = false;
+      Object.values(muscuLog[dateStr]).forEach(function(sets) {
+        if (Array.isArray(sets) && sets.some(function(s){ return s.validated; })) _hasValidated = true;
+      });
+      if (_hasValidated) seancesDone++;
+    }
+    // Calories depuis l'historique nutrition
+    try {
+      var _ph = _nutritionHistory;
+      var _dayNut = _ph.find(function(e){ return e.date === dateStr; });
+      if (_dayNut && _dayNut.kcal > 0) weekKcalArr.push(_dayNut.kcal);
+    } catch(e) {}
+  }
+
+  var avgKcal = weekKcalArr.length > 0 ? Math.round(weekKcalArr.reduce(function(a,b){ return a+b; }, 0) / weekKcalArr.length) : 0;
+
+  // Poids actuel
+  var currentWeight = S.currentWeight || S.weight || 0;
+
+  var c = card();
+  c.appendChild(eyebrow('Bilan de la semaine'));
+  c.appendChild(cardTitle('Ta semaine'));
+
+  // Stats row
+  var statsRow = h('div', { style: 'display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;' });
+
+  // Séances
+  var seancesBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
+  seancesBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--green,#1A4A1A);' }, String(seancesDone)));
+  seancesBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Séances'));
+  statsRow.appendChild(seancesBox);
+
+  // Calories moyennes
+  if (avgKcal > 0) {
+    var kcalBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
+    kcalBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--blue,#1A3A6A);' }, String(avgKcal)));
+    kcalBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Kcal moy.'));
+    statsRow.appendChild(kcalBox);
+  }
+
+  // Poids
+  if (currentWeight > 0) {
+    var weightBox = h('div', { style: 'flex:1;min-width:80px;padding:12px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;text-align:center;' });
+    weightBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;color:var(--orange,#6A4A1A);' }, currentWeight + ' kg'));
+    weightBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px;' }, 'Poids'));
+    statsRow.appendChild(weightBox);
+  }
+
+  c.appendChild(statsRow);
+
+  // Message de motivation
+  var motivMsg;
+  if (seancesDone >= 4) motivMsg = 'Excellente semaine ! La régularité, c\'est la clé.';
+  else if (seancesDone >= 2) motivMsg = 'Bonne semaine. Continuez sur cette lancée !';
+  else if (seancesDone >= 1) motivMsg = 'Un début. La semaine prochaine, visez 3 séances.';
+  else motivMsg = 'Pas de séance cette semaine. Recommencez dès demain !';
+
+  c.appendChild(h('p', { style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey);margin:12px 0 0;line-height:1.6;' }, motivMsg));
+
+  // Bouton dismiss
+  var dismissBtn = h('button', {
+    style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:transparent;border:none;cursor:pointer;padding:12px 0;min-height:44px;display:block;width:100%;text-align:left;',
+    onclick: function() {
+      S._forceWeeklyReview = false;
+      // Stocker le dismiss dans localStorage pour ne pas réafficher aujourd'hui
+      try { localStorage.setItem('mtd_weekly_review_dismissed_' + new Date().toISOString().slice(0, 10), '1'); } catch(e) {}
+      if (window.render) window.render();
+    }
+  }, 'Fermer le bilan');
+  c.appendChild(dismissBtn);
+
+  // Ne pas réafficher si déjà fermé aujourd'hui
+  try {
+    if (localStorage.getItem('mtd_weekly_review_dismissed_' + now.toISOString().slice(0, 10)) === '1') return null;
+  } catch(e) {}
+
+  return c;
 }
 
 // ─── MAIN RENDER ───
@@ -1555,12 +1821,20 @@ function renderTodayDashboard(p) {
   var cardNextMeal = renderCardNextMeal();
   if (cardNextMeal) wrapper.appendChild(cardNextMeal);
 
+  // Card 1c — Bilan hebdo (dimanche uniquement)
+  var cardWeekly = renderCardSundayReview(S);
+  if (cardWeekly) wrapper.appendChild(cardWeekly);
+
   // Card 2 — Séance du jour / Jour de repos
   var cardSport = renderCardSport();
   if (cardSport) wrapper.appendChild(cardSport);
 
   // Card 3 — Macros du jour
   wrapper.appendChild(renderCardMacros());
+
+  // Card 3b — TDEE adaptatif
+  var cardTDEE = renderCardTDEEAdaptatif(S);
+  if (cardTDEE) wrapper.appendChild(cardTDEE);
 
   // Card 4 — Repas du jour (plan complet)
   var cardRepas = renderCardRepas();

@@ -1004,6 +1004,14 @@ function renderStep3(p) {
 function renderStep4(p) {
   if (!Array.isArray(S.medical)) S.medical = [];
   renderProgressBar(p, 4, 9);
+  // Banner contextuel pour les utilisateurs sport → nutrition
+  if (window.S && window.S._switchedFromSport) {
+    var _contextBanner = document.createElement('div');
+    _contextBanner.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(26,74,26,0.06);border:1px solid rgba(26,74,26,0.15);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--green,#1A4A1A);line-height:1.5;';
+    _contextBanner.textContent = 'Votre profil (sexe, poids, activité) a été importé depuis votre parcours sport. Complétez simplement vos préférences nutritionnelles ci-dessous.';
+    window.S._switchedFromSport = false; // Afficher une seule fois
+    p.appendChild(_contextBanner);
+  }
   p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Vos conditions de sant\u00e9 pour des recommandations s\u00fbres.'));
@@ -1958,9 +1966,9 @@ function renderStep8(p) {
   // SVG Rings
   var tot = m.g + m.p + m.l;
   var rr = h('div', {'class': 'rings-row'});
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.g / tot * 100 : 0, '#1A3A6A', window.t('onb.s8.carbs'), m.g));
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, '#1A4A1A', window.t('onb.s8.proteins'), m.p));
-  rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, '#6A4A1A', window.t('onb.s8.fats'), m.l));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.g / tot * 100 : 0, 'var(--blue,#1A3A6A)', window.t('onb.s8.carbs'), m.g));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, 'var(--green,#1A4A1A)', window.t('onb.s8.proteins'), m.p));
+  rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, 'var(--orange,#6A4A1A)', window.t('onb.s8.fats'), m.l));
   p.appendChild(rr);
   p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Prot\u00e9ines \u00b7 Glucides \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
 

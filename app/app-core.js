@@ -827,10 +827,9 @@ window.I18N = {
   setLang: function(lang) {
     window.I18N.current = lang;
     if (window.S) window.S.lang = lang;
-    var saved = window.lsGet ? window.lsGet('mtd_profile', {}) : {};
-    saved.lang = lang;
-    if (window.lsSet) { window.lsSet('mtd_profile', saved); } else { try { localStorage.setItem('mtd_profile', JSON.stringify(saved)); } catch(e){} }
-    if (window.render) render();
+    // Persister via saveProfile (uid-versioned) plutôt que la clé générique
+    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+    if (window.render) window.render();
   },
 
   dict: {
@@ -2539,20 +2538,18 @@ window.UNITS = {
   setWeightUnit: function(unit) {
     window.UNITS.weight = unit;
     if (window.S) window.S.weightUnit = unit;
-    var saved = window.lsGet ? window.lsGet('mtd_profile', {}) : {};
-    saved.weightUnit = unit;
-    if (window.lsSet) { window.lsSet('mtd_profile', saved); } else { try { localStorage.setItem('mtd_profile', JSON.stringify(saved)); } catch(e) { console.error('[app-core] erreur:', e); } }
-    if (window.render) render();
+    // Persister via saveProfile (uid-versioned) plutôt que la clé générique
+    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+    if (window.render) window.render();
   },
 
   // Changer d'unité taille
   setHeightUnit: function(unit) {
     window.UNITS.height = unit;
     if (window.S) window.S.heightUnit = unit;
-    var saved = window.lsGet ? window.lsGet('mtd_profile', {}) : {};
-    saved.heightUnit = unit;
-    if (window.lsSet) { window.lsSet('mtd_profile', saved); } else { try { localStorage.setItem('mtd_profile', JSON.stringify(saved)); } catch(e) { console.error('[app-core] erreur:', e); } }
-    if (window.render) render();
+    // Persister via saveProfile (uid-versioned) plutôt que la clé générique
+    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+    if (window.render) window.render();
   }
 };
 

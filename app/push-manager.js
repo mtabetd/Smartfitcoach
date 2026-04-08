@@ -18,6 +18,7 @@
     },
 
     askPermission: function() {
+      if (!('Notification' in window)) return;
       if (Notification.permission === 'granted') {
         window.SFCPushManager.scheduleLocalNotifs();
         return;
@@ -50,7 +51,7 @@
         if (now < reminderTime) {
           var delay = reminderTime - now;
           setTimeout(function() {
-            window.SFCPushManager.showLocal('SmartFitCoach', 'Bonjour ! Comment vous sentez-vous aujourd\'hui ? Faites votre bilan en 30 secondes.', 'checkin');
+            window.SFCPushManager.showLocal('SmartFitCoach', 'Bonjour ! Comment tu te sens aujourd\'hui ? Fais ton bilan en 30 secondes.', 'checkin');
           }, delay);
         }
       }
@@ -61,13 +62,19 @@
       if (new Date() < eveningTime) {
         var eveningDelay = eveningTime - new Date();
         setTimeout(function() {
-          window.SFCPushManager.showLocal('SmartFitCoach', 'N\'oubliez pas de clôturer votre journal alimentaire pour aujourd\'hui.', 'journal');
+          window.SFCPushManager.showLocal('SmartFitCoach', 'N\'oublie pas de clôturer ton journal alimentaire pour aujourd\'hui.', 'journal');
         }, eveningDelay);
       }
+
+      // Rappels repas
+      this.scheduleMealReminders();
+
+      // Rappel comeback si inactif 3+ jours
+      this.scheduleInactivityCheck();
     },
 
     showLocal: function(title, body, tag) {
-      if (Notification.permission !== 'granted') return;
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
       try {
         new Notification(title, {
           body: body,
@@ -78,6 +85,86 @@
       } catch(e) {
         console.warn('[SFCPushManager] Notification error:', e);
       }
+    },
+
+    scheduleMealReminders: function() {
+      var prefs = this.getPrefs();
+      if (!prefs.granted) return;
+      var now = new Date();
+
+      // Déjeuner 12h00
+      var lunch = new Date(now);
+      lunch.setHours(12, 0, 0, 0);
+      if (now < lunch) {
+        var lunchDelay = lunch - now;
+        setTimeout(function() {
+          window.SFCPushManager.showLocal('SmartFitCoach', 'C\'est l\'heure du déjeuner — consulte ton plan repas.', 'meal-lunch');
+        }, lunchDelay);
+      }
+
+      // Dîner 19h00
+      var dinner = new Date(now);
+      dinner.setHours(19, 0, 0, 0);
+      if (now < dinner) {
+        var dinnerDelay = dinner - now;
+        setTimeout(function() {
+          window.SFCPushManager.showLocal('SmartFitCoach', 'Prépare ton dîner — ta recette t\'attend.', 'meal-dinner');
+        }, dinnerDelay);
+      }
+    },
+
+    scheduleWorkoutReminder: function(hour, minute) {
+      var prefs = this.getPrefs();
+      if (!prefs.granted) return;
+      hour = hour !== undefined ? hour : 17;
+      minute = minute !== undefined ? minute : 30;
+      var now = new Date();
+      var target = new Date(now);
+      target.setHours(hour, minute, 0, 0);
+      if (now >= target) return; // Passé pour aujourd'hui
+      var delay = target - now;
+      setTimeout(function() {
+        window.SFCPushManager.showLocal('SmartFitCoach', 'C\'est l\'heure de ta séance ! Prêt à te dépasser ?', 'workout-reminder');
+      }, delay);
+    },
+
+    notifyRestOver: function(exerciseName, setNum) {
+      this.showLocal('Repos terminé !', (exerciseName ? exerciseName + ' — ' : '') + 'c\'est parti pour la série ' + (setNum || '') + ' !', 'rest-timer');
+    },
+
+    // Rappel comeback : si le streak a été mis à jour il y a 3+ jours, envoie une notification d'encouragement
+    scheduleInactivityCheck: function() {
+      var prefs = this.getPrefs();
+      if (!prefs.granted) return;
+      try {
+        var user = window.AUTH ? window.AUTH.getUser() : null;
+        if (!user) return;
+        var streakData = {};
+        try { streakData = JSON.parse(localStorage.getItem('mtd_streak_' + user.id) || '{}'); } catch(e) {}
+        var lastDate = streakData.lastDate;
+        if (!lastDate) return;
+        var today = new Date().toISOString().slice(0, 10);
+        var last = new Date(lastDate);
+        var diff = Math.floor((new Date(today) - last) / 86400000);
+        if (diff >= 3) {
+          // Inactif depuis 3+ jours — envoyer la notification maintenant (ou à 11h si avant 11h)
+          var now = new Date();
+          var notifTime = new Date(now);
+          notifTime.setHours(11, 0, 0, 0);
+          var streak = streakData.current || 0;
+          var msg = streak > 0
+            ? 'Tu n\'as pas encore agi aujourd\'hui. Ton streak de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' t\'attend — ne le laisse pas tomber !'
+            : 'Ça fait ' + diff + ' jours qu\'on ne t\'a pas vu. Reprends là où tu t\'es arrêté(e) — chaque action compte !';
+          if (now < notifTime) {
+            var notifDelay = notifTime - now;
+            setTimeout(function() {
+              window.SFCPushManager.showLocal('SmartFitCoach', msg, 'comeback');
+            }, notifDelay);
+          } else {
+            window.SFCPushManager.showLocal('SmartFitCoach', msg, 'comeback');
+          }
+        }
+      } catch(e) {}
     },
 
     // Notifications opt-in (configurables par l'utilisateur)

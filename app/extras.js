@@ -1425,6 +1425,8 @@ window.FOOD_JOURNAL = {
       source: arguments[7] || 'manual'
     });
     localStorage.setItem(key, JSON.stringify(journal));
+    // Mise à jour du streak sur action réelle (pas seulement à la connexion)
+    if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
     // Sync vers Supabase
     if (window.SupaSync) SupaSync.saveFoodEntry({
       date: today,
@@ -1541,8 +1543,88 @@ window.FOOD_JOURNAL = {
     addRow.appendChild(mealSelect);
 
     var nameInput = document.createElement('input');
-    nameInput.type = 'text'; nameInput.placeholder = 'Aliment...'; nameInput.style.flex = '1'; nameInput.style.minWidth = '120px';
-    addRow.appendChild(nameInput);
+    nameInput.type = 'text';
+    nameInput.placeholder = 'Aliment ou code-barres...';
+    nameInput.style.cssText = 'width:100%;padding:8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",sans-serif;font-size:16px;background:transparent;box-sizing:border-box;';
+    nameInput.setAttribute('autocomplete', 'off');
+
+    var _acWrap = document.createElement('div');
+    _acWrap.style.cssText = 'position:relative;flex:1;min-width:120px;';
+    _acWrap.appendChild(nameInput);
+
+    var _acDrop = document.createElement('div');
+    _acDrop.style.cssText = 'display:none;position:absolute;top:100%;left:0;right:0;z-index:9999;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-top:none;max-height:220px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.12);border-radius:0 0 2px 2px;';
+    _acWrap.appendChild(_acDrop);
+
+    var _acTimer = null;
+    var _acAbort = null;
+
+    nameInput.addEventListener('input', function() {
+      clearTimeout(_acTimer);
+      var q = nameInput.value.trim();
+      if (q.length < 2) { _acDrop.style.display = 'none'; return; }
+      _acTimer = setTimeout(function() {
+        if (_acAbort) { try { _acAbort.abort(); } catch(e2) {} }
+        var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        _acAbort = controller;
+        var url = 'https://world.openfoodfacts.org/cgi/search.pl?action=process&search_terms='
+          + encodeURIComponent(q)
+          + '&json=true&page_size=6&lc=fr&cc=fr&fields=product_name,nutriments,quantity';
+        fetch(url, controller ? { signal: controller.signal } : {})
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            while (_acDrop.firstChild) _acDrop.removeChild(_acDrop.firstChild);
+            var products = (data.products || []).filter(function(prod) {
+              return prod.product_name && prod.nutriments && (prod.nutriments['energy-kcal_100g'] || 0) > 0;
+            });
+            if (products.length === 0) { _acDrop.style.display = 'none'; return; }
+            products.forEach(function(prod) {
+              var item = document.createElement('div');
+              item.style.cssText = 'padding:9px 12px;cursor:pointer;border-bottom:1px solid var(--ivory3,#EEEDE8);';
+              var nm = document.createElement('div');
+              nm.style.cssText = 'font-family:"Helvetica Neue",sans-serif;font-size:12px;font-weight:500;color:var(--black,#0A0A09);';
+              nm.textContent = prod.product_name || '';
+              item.appendChild(nm);
+              var meta = document.createElement('div');
+              meta.style.cssText = 'font-family:"Helvetica Neue",sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;';
+              var n = prod.nutriments;
+              meta.textContent = Math.round(n['energy-kcal_100g'] || 0) + ' kcal'
+                + ' \xB7 P:' + (Math.round((n['proteins_100g'] || 0) * 10) / 10) + 'g'
+                + ' \xB7 G:' + (Math.round((n['carbohydrates_100g'] || 0) * 10) / 10) + 'g'
+                + ' \xB7 L:' + (Math.round((n['fat_100g'] || 0) * 10) / 10) + 'g'
+                + ' /100g';
+              item.appendChild(meta);
+              item.addEventListener('mouseover', function() { item.style.background = 'var(--ivory3,#EEEDE8)'; });
+              item.addEventListener('mouseout', function() { item.style.background = 'transparent'; });
+              item.addEventListener('mousedown', function(ev) {
+                ev.preventDefault();
+                nameInput.value = prod.product_name || '';
+                kcalInput.value = Math.round(n['energy-kcal_100g'] || 0);
+                pInput.value = Math.round((n['proteins_100g'] || 0) * 10) / 10;
+                gInput.value = Math.round((n['carbohydrates_100g'] || 0) * 10) / 10;
+                lInput.value = Math.round((n['fat_100g'] || 0) * 10) / 10;
+                _acDrop.style.display = 'none';
+              });
+              _acDrop.appendChild(item);
+            });
+            _acDrop.style.display = 'block';
+          })
+          .catch(function(err) {
+            if (err && err.name === 'AbortError') return;
+            _acDrop.style.display = 'none';
+          });
+      }, 350);
+    });
+
+    nameInput.addEventListener('blur', function() {
+      setTimeout(function() { _acDrop.style.display = 'none'; }, 200);
+    });
+
+    nameInput.addEventListener('keydown', function(ev) {
+      if (ev.key === 'Escape') { _acDrop.style.display = 'none'; }
+    });
+
+    addRow.appendChild(_acWrap);
 
     var kcalInput = document.createElement('input');
     kcalInput.type = 'number'; kcalInput.placeholder = 'kcal'; kcalInput.style.width = '60px';
