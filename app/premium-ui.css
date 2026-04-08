@@ -3082,3 +3082,136 @@ body.dark-mode {
   animation-timing-function: linear;
 }
 .term-tooltip:hover { border-bottom-color: var(--black-1, #1A1A18); }
+
+
+/* -------------------------------------------------------
+   CSS AUDIT FIXES — 2026-04-08
+   Cohérence des vars, mobile, touch targets, contraste
+   ------------------------------------------------------- */
+
+/* Profile edit form — mobile full-width inputs */
+@media (max-width: 480px) {
+  /* Tous les inputs du formulaire d'édition profil passent full-width */
+  /* Les inputs avec flex:1 sont déjà inside un flex-row, on force box-sizing */
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="password"] {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+}
+
+/* Card-grid-2 — 1 colonne sur mobile très étroit */
+@media (max-width: 480px) {
+  .card-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Modal bottom-sheet — ne dépasse pas la hauteur écran */
+.modal-sheet {
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Bouton "✓ Pris" — déjà corrigé inline, règle CSS de support */
+/* S'assure que les boutons inline dans les meal rows ont le bon touch target */
+.meal-row-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 6px 10px;
+  border-radius: 2px;
+}
+
+/* Bandeau récupération — utilise les vars CSS, règle de support */
+.recovery-banner {
+  background: var(--orangebg);
+  border: 1px solid var(--orange);
+  border-left: 3px solid var(--orange);
+  color: var(--orange);
+  padding: 10px 14px;
+  border-radius: 2px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Banner warning générique — cohérence --orange */
+.banner-warning {
+  background: var(--orangebg);
+  border: 1px solid var(--orange);
+  color: var(--orange);
+  padding: 10px 14px;
+  border-radius: 2px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Section échauffement sport — cohérence --green */
+.warmup-banner {
+  background: var(--greenbg);
+  border-left: 3px solid var(--green);
+  color: var(--green);
+  padding: 10px 14px;
+  border-radius: 0 2px 2px 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Surcharge progressive — cohérence --green */
+.progressive-overload-banner {
+  background: var(--greenbg);
+  border: 1px solid rgba(26, 74, 26, 0.25);
+  border-radius: 2px;
+  padding: 8px 12px;
+}
+.progressive-overload-banner .overload-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.progressive-overload-banner .overload-value {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--green);
+  line-height: 1;
+}
+
+/* Zone de danger RGPD — bouton supprimer */
+.btn-danger {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 12px;
+  color: var(--red);
+  cursor: pointer;
+  display: block;
+  min-height: 44px;
+}
+.btn-danger:hover {
+  text-decoration: underline;
+}
+
+/* Séparateur zone de danger profil */
+.danger-zone-separator {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* dark-mode: profile edit inputs */
+body.dark-mode input[type="text"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="email"] {
+  background: transparent;
+  color: var(--black);
+  border-color: var(--border);
+}
