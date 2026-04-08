@@ -1,7 +1,7 @@
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'sfc-v31';
-const RUNTIME_CACHE = 'sfc-runtime-v30';
+const CACHE_VERSION = 'sfc-v32';
+const RUNTIME_CACHE = 'sfc-runtime-v31';
 
 // Max age for static assets in the runtime cache: 7 days (in milliseconds).
 const STATIC_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
@@ -50,6 +50,7 @@ const APP_SHELL = [
   './icon-192.png',
   './icon-512.png',
   './jspdf.umd.min.js',
+  './chart.umd.min.js',
   './supabase-client.js',
   './supabase.min.js'
 ];
@@ -60,10 +61,8 @@ const STATIC_ASSETS = [
   '/app/app-core.js', '/app/recipe-engine.js'
 ];
 
-// Third-party CDN scripts to pre-cache.
-const CDN_ASSETS = [
-  'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js'
-];
+// Third-party CDN scripts to pre-cache (currently none — chart.js is bundled locally).
+const CDN_ASSETS = [];
 
 // ---------------------------------------------------------------------------
 // Install — cache the app shell and CDN dependencies
