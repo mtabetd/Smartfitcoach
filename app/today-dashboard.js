@@ -1572,8 +1572,8 @@ function renderCardTDEEAdaptatif(S) {
   var tdee = 0;
   try {
     if (window.calcTarget) {
-      var targets = window.calcTarget(S);
-      tdee = targets ? (targets.kcal || targets.calories || 0) : 0;
+      var targets = window.calcTarget();
+      tdee = (typeof targets === 'number' && targets > 0) ? targets : 0;
     }
   } catch(e) {}
   if (tdee <= 0) return null;
@@ -1581,9 +1581,9 @@ function renderCardTDEEAdaptatif(S) {
   // Calculer le déficit/surplus moyen sur la période
   // Pour simplifier : si objectif perte de poids, le déficit cible est ~500 kcal/j → -0.5kg/semaine
   // Variation attendue : (déficit * jours) / 7700 kcal/kg
-  var goalType = S.goal || S.objectif || 'maintien';
-  var isLoss = /perte|secher|seche|lose|cut/i.test(goalType);
-  var isGain = /prise|masse|gain|bulk/i.test(goalType);
+  var _goalKey = (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) ? window.GOALS[S.goal].key : 'maintain';
+  var isLoss = _goalKey === 'cut' || _goalKey === 'shred';
+  var isGain = _goalKey === 'bulk' || _goalKey === 'lean_bulk';
 
   var expectedChangePerWeek = isLoss ? -0.5 : isGain ? 0.25 : 0;
   var expectedChange = (expectedChangePerWeek / 7) * daysDiff;
@@ -1619,14 +1619,14 @@ function renderCardTDEEAdaptatif(S) {
     ? 'Réduisez vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)'
     : 'Vous pouvez augmenter vos apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)';
 
-  c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:700;color:var(--orange,#6A4A1A);margin:8px 0 0;' }, adjustMsg));
+  c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:700;color:var(--orange,#6A4A1A);margin:8px 0 0;line-height:1.5;' }, adjustMsg));
 
   // Bouton dismiss
   var dismissKey = 'mtd_tdee_adapt_dismissed_' + new Date().toISOString().slice(0, 7); // 1 fois par mois
   try { if (localStorage.getItem(dismissKey) === '1') return null; } catch(e) {}
 
   var dismissBtn = h('button', {
-    style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:transparent;border:none;cursor:pointer;padding:0;',
+    style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:transparent;border:none;cursor:pointer;padding:12px 0;min-height:44px;display:block;width:100%;text-align:left;',
     onclick: function() {
       try { localStorage.setItem(dismissKey, '1'); } catch(e) {}
       if (window.render) window.render();
@@ -1643,6 +1643,8 @@ function renderCardSundayReview(S) {
   var isSunday = now.getDay() === 0;
   if (!isSunday && !S._forceWeeklyReview) return null;
 
+  // Ne pas construire le DOM si déjà dismissé aujourd'hui (optimisation)
+  try { if (localStorage.getItem('mtd_weekly_review_dismissed_' + now.toISOString().slice(0, 10)) === '1') return null; } catch(e) {}
   var uid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
 
   // Charger le log séances de la semaine
@@ -1718,7 +1720,7 @@ function renderCardSundayReview(S) {
 
   // Bouton dismiss
   var dismissBtn = h('button', {
-    style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:transparent;border:none;cursor:pointer;padding:0;',
+    style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:transparent;border:none;cursor:pointer;padding:12px 0;min-height:44px;display:block;width:100%;text-align:left;',
     onclick: function() {
       S._forceWeeklyReview = false;
       // Stocker le dismiss dans localStorage pour ne pas réafficher aujourd'hui

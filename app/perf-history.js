@@ -740,7 +740,7 @@ function renderMiniChart(exerciseName, container) {
 
   // Wrapper
   var wrap = document.createElement('div');
-  wrap.style.cssText = 'padding:4px 8px;border-top:1px solid var(--border,#E8E6DF);background:var(--ivory2,#F4F4F0);';
+  wrap.style.cssText = 'padding:8px 12px;border-top:1px solid var(--border,#E8E6DF);background:var(--ivory2,#F4F4F0);';
 
   // Labels
   var labelsRow = document.createElement('div');
@@ -763,6 +763,7 @@ function renderMiniChart(exerciseName, container) {
   var delta = Math.round((lastW - prevW) * 10) / 10;
   var deltaStr = delta > 0 ? '+' + delta + 'kg' : delta < 0 ? delta + 'kg' : '=' + lastW + 'kg';
   rightLabel.style.color = delta > 0 ? 'var(--green,#1A4A1A)' : delta < 0 ? 'var(--orange,#6A4A1A)' : 'var(--grey,#6B6B65)';
+  rightLabel.style.cssText += ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0;max-width:50%;';
   rightLabel.textContent = _dU(lastW) + (delta !== 0 ? ' (' + deltaStr + ')' : '');
   labelsRow.appendChild(rightLabel);
 
