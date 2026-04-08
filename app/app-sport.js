@@ -3303,12 +3303,51 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) S.sportDays = v; },
+ oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; S.trainingDaysSelected = []; } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) e.target.value = S.sportDays = 2; else if (v > 6) e.target.value = S.sportDays = 6; }
  }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
  p.appendChild(h('div', {'class': 'num-hint'}, 'Entre 2 et 6 jours'));
+
+ // ─── JOURS SPÉCIFIQUES ───
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:16px'}, 'Quels jours vous entra\u00eenez-vous\u00a0? (optionnel)'));
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, 'S\u00e9lectionnez vos jours pour adapter vos macros nutrition (entra\u00eenement vs repos).'));
+ if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
+ var _musDay = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+ var _musDayWrap = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:0 0 6px'});
+ var _musTarget = S.sportDays || 3;
+ _musDay.forEach(function(label, idx) {
+   var _mSel = S.trainingDaysSelected.indexOf(idx) !== -1;
+   var _mOver = _mSel && S.trainingDaysSelected.length > _musTarget;
+   var _mStyle = 'width:44px;height:44px;border-radius:3px;font-family:Georgia,serif;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;transition:background .15s,color .15s,border-color .15s;';
+   if (_mOver) _mStyle += 'background:#5A1010;color:#FAF9F6;border:1.5px solid #5A1010;';
+   else if (_mSel) _mStyle += 'background:#1A1A18;color:#FAF9F6;border:1.5px solid #1A1A18;';
+   else _mStyle += 'background:transparent;color:#1A1A18;border:1.5px solid #E8E6DF;';
+   _musDayWrap.appendChild(h('button', {
+     type: 'button', style: _mStyle,
+     onclick: function() {
+       if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
+       var _mp = S.trainingDaysSelected.indexOf(idx);
+       if (_mp !== -1) { S.trainingDaysSelected.splice(_mp, 1); }
+       else { S.trainingDaysSelected.push(idx); S.trainingDaysSelected.sort(function(a, b) { return a - b; }); }
+       if (S.trainingDaysSelected.length > 0) S.sportDays = S.trainingDaysSelected.length;
+       S.weekPlan = null;
+       try { window.saveProfile(); } catch(e) {}
+       window.render();
+     }
+   }, label));
+ });
+ p.appendChild(_musDayWrap);
+ var _mCount = S.trainingDaysSelected.length;
+ var _mDiff = _mCount - _musTarget;
+ var _mColor = _mDiff === 0 && _mCount > 0 ? '#6B6B65' : (_mDiff > 0 ? '#5A1010' : '#6B6B65');
+ var _mHint = _mCount === 0
+   ? 'Optionnel \u2014 laissez vide pour r\u00e9partition automatique'
+   : _mDiff === 0 ? _mCount + '\u00a0/' + '\u00a0' + _musTarget + '\u00a0jour' + (_mCount > 1 ? 's' : '') + '\u00a0\u2014 parfait'
+   : _mDiff > 0 ? _mCount + '\u00a0/\u00a0' + _musTarget + '\u00a0\u2014 retirez\u00a0' + _mDiff + '\u00a0jour' + (_mDiff > 1 ? 's' : '')
+   : _mCount + '\u00a0/\u00a0' + _musTarget + '\u00a0\u2014 s\u00e9lectionnez encore\u00a0' + Math.abs(_mDiff) + '\u00a0jour' + (Math.abs(_mDiff) > 1 ? 's' : '');
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + _mColor + ';text-align:center;margin-bottom:4px;transition:color .2s;'}, _mHint));
 
  // Equipment selection
  p.appendChild(h('div', {'class': 'section-label'}, '\uD83C\uDFCB\uFE0F\u200D\u2642\uFE0F Mat\u00e9riel disponible'));

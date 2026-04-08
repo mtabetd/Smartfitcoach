@@ -930,6 +930,43 @@ function renderStep3(p) {
   });
   p.appendChild(sw);
 
+  // ─── JOURS D'ENTRAÎNEMENT ───
+  p.appendChild(h('div', {style: 'height:20px'}));
+  p.appendChild(h('div', {'class': 'section-label'}, 'Vos jours d\u2019entra\u00eenement (optionnel)'));
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:10px;line-height:1.5;'}, 'Pr\u00e9cisez quels jours vous vous entra\u00eenez pour adapter vos macros (jours\u00a0entra\u00eenement vs repos).'));
+  if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
+  var _dayLabels3 = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+  var _dayBtns3 = h('div', {style: 'display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;margin:0 0 8px'});
+  var _sportDayCount3 = S.sportDays || 3;
+  _dayLabels3.forEach(function(label, idx) {
+    var _sel3 = S.trainingDaysSelected.indexOf(idx) !== -1;
+    var _over3 = _sel3 && S.trainingDaysSelected.length > _sportDayCount3;
+    var _btnStyle3 = 'width:44px;height:44px;border-radius:3px;font-family:Georgia,serif;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;transition:background .15s,color .15s,border-color .15s;';
+    if (_over3) _btnStyle3 += 'background:#5A1010;color:#FAF9F6;border:1.5px solid #5A1010;';
+    else if (_sel3) _btnStyle3 += 'background:#1A1A18;color:#FAF9F6;border:1.5px solid #1A1A18;';
+    else _btnStyle3 += 'background:transparent;color:#1A1A18;border:1.5px solid #E8E6DF;';
+    _dayBtns3.appendChild(h('button', {
+      type: 'button', style: _btnStyle3,
+      onclick: function() {
+        if (!Array.isArray(S.trainingDaysSelected)) S.trainingDaysSelected = [];
+        var _pos3 = S.trainingDaysSelected.indexOf(idx);
+        if (_pos3 !== -1) { S.trainingDaysSelected.splice(_pos3, 1); }
+        else { S.trainingDaysSelected.push(idx); S.trainingDaysSelected.sort(function(a, b) { return a - b; }); }
+        if (S.trainingDaysSelected.length > 0) S.sportDays = S.trainingDaysSelected.length;
+        // Invalidate plan since training days changed
+        S.weekPlan = null;
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+        window.render();
+      }
+    }, label));
+  });
+  p.appendChild(_dayBtns3);
+  var _selCount3 = S.trainingDaysSelected.length;
+  var _hint3 = _selCount3 === 0
+    ? 'Optionnel \u2014 laissez vide pour r\u00e9partition automatique'
+    : _selCount3 + '\u00a0jour' + (_selCount3 > 1 ? 's' : '') + ' s\u00e9lectionn\u00e9' + (_selCount3 > 1 ? 's' : '');
+  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:4px;'}, _hint3));
+
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.activity !== null && S.train.length > 0 && S.sleep !== null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(4); }}, window.t('onb.next')));

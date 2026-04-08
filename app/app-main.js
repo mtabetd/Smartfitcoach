@@ -97,7 +97,8 @@ function slimMeal(meal) {
 var NUTRITION_PLAN_KEYS = [
  'goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height',
  'regime', 'halal', 'excluded', 'cookLevel', 'wantsDessert',
- 'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical'
+ 'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical',
+ 'trainingDaysSelected'
 ];
 
 function saveProfile() {
@@ -463,6 +464,13 @@ function renderProfilePage(container) {
  }, 'Modifier mon profil');
  c.appendChild(editBtn);
 
+ // ─── Changer l'objectif ───
+ var changeGoalBtn = h('button', {
+   style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;',
+   onclick: function() { S._goalModal = true; if (window.render) window.render(); }
+ }, '\uD83C\uDFAF Changer mon objectif');
+ c.appendChild(changeGoalBtn);
+
  // ─── Déconnexion ───
  var logoutBtn = h('button', {
    style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
@@ -474,6 +482,160 @@ function renderProfilePage(container) {
  c.appendChild(logoutBtn);
 
  container.appendChild(c);
+
+ // ─── Modal: Changer mon objectif ───
+ // Cleanup any leftover modal from previous renders
+ (function() { var _old = document.getElementById('_sfc_goal_modal'); if (_old && _old.parentNode) _old.parentNode.removeChild(_old); })();
+ if (S._goalModal) {
+   var _GOALS = window.GOALS || [];
+   var _modal = h('div', {
+     id: '_sfc_goal_modal',
+     style: 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,9,0.55);z-index:9999;display:flex;align-items:flex-end;justify-content:center;',
+     onclick: function(e) { if (e.target === _modal) { S._goalModal = false; if (window.render) window.render(); } }
+   });
+   var _sheet = h('div', {
+     style: 'width:100%;max-width:520px;background:var(--ivory,#FAF9F6);padding:28px 24px 40px;border-radius:4px 4px 0 0;max-height:90vh;overflow-y:auto;'
+   });
+
+   // Header
+   var _mHeader = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;'});
+   _mHeader.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;'}, 'Mon objectif'));
+   var _closeBtn = h('button', {
+     style: 'background:none;border:none;font-size:20px;cursor:pointer;color:var(--grey);padding:4px 8px;min-height:44px;min-width:44px;',
+     onclick: function() { S._goalModal = false; if (window.render) window.render(); }
+   }, '\u00D7');
+   _mHeader.appendChild(_closeBtn);
+   _sheet.appendChild(_mHeader);
+
+   // Current TDEE info
+   var _tdee = window.calcTarget ? window.calcTarget() : 0;
+   if (_tdee > 0) {
+     var _tdeeInfo = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:16px;text-align:center;border:1px solid var(--border);padding:10px;'});
+     _tdeeInfo.textContent = 'Vos besoins\u00a0: ' + _tdee + '\u00a0kcal/jour';
+     _sheet.appendChild(_tdeeInfo);
+   }
+
+   // Goal state for modal (temp)
+   if (typeof S._modalGoal === 'undefined' || S._modalGoal === null) S._modalGoal = S.goal;
+   if (typeof S._modalTargetWeight === 'undefined') S._modalTargetWeight = S.targetWeight;
+
+   // Goal chips
+   _sheet.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:12px;'}, 'Objectif'));
+   var _ggWrap = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;'});
+   _GOALS.forEach(function(gl, i) {
+     var _isOn = S._modalGoal === i;
+     var _chip = h('div', {
+       style: 'padding:12px 10px;border:1px solid ' + (_isOn ? 'var(--black)' : 'var(--border)') + ';background:' + (_isOn ? 'var(--black)' : 'transparent') + ';cursor:pointer;transition:background .15s,border-color .15s;',
+       onclick: function() {
+         S._modalGoal = i;
+         if (window.render) window.render();
+       }
+     });
+     _chip.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:500;color:' + (_isOn ? 'var(--ivory,#FAF9F6)' : 'var(--black)') + ';margin-bottom:2px;'}, gl.name));
+     _chip.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + (_isOn ? 'rgba(250,249,246,0.7)' : 'var(--grey)') + ';line-height:1.3;'}, gl.desc));
+     _ggWrap.appendChild(_chip);
+   });
+   _sheet.appendChild(_ggWrap);
+
+   // Target weight (conditional)
+   var _selGoalObj = (_GOALS && S._modalGoal !== null && S._modalGoal !== undefined) ? _GOALS[S._modalGoal] : null;
+   var _selGoalKey = _selGoalObj ? _selGoalObj.key : null;
+   var _needsTarget = _selGoalKey === 'cut' || _selGoalKey === 'shred' || _selGoalKey === 'bulk' || _selGoalKey === 'lean_bulk';
+   if (_needsTarget) {
+     _sheet.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'}, 'Poids objectif'));
+     var _twWrap = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:16px;'});
+     var _twInput = h('input', {
+       type: 'number', min: '40', max: '160', step: '0.5',
+       value: S._modalTargetWeight ? String(S._modalTargetWeight) : '',
+       inputmode: 'decimal',
+       style: 'flex:1;padding:12px;border:1px solid var(--border);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;text-align:center;',
+       oninput: function(e) {
+         var v = parseFloat(e.target.value);
+         S._modalTargetWeight = (!isNaN(v) && v >= 40 && v <= 160) ? v : null;
+       }
+     });
+     _twWrap.appendChild(_twInput);
+     _twWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);'}, 'kg'));
+     _sheet.appendChild(_twWrap);
+
+     // Projection
+     if (S._modalTargetWeight && window.calcWeightProjection) {
+       var _origGoal = S.goal, _origTW = S.targetWeight;
+       S.goal = S._modalGoal; S.targetWeight = S._modalTargetWeight;
+       try {
+         var _proj = window.calcWeightProjection();
+         if (_proj && _proj.weeks) {
+           var _projBox = h('div', {style: 'text-align:center;padding:12px;border:1px solid var(--border);background:var(--ivory2,#F5F3EC);margin-bottom:16px;'});
+           _projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:6px;'}, 'Projection'));
+           _projBox.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;font-style:italic;'}, '~' + _proj.weeks + ' semaines'));
+           _projBox.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:4px;'}, _proj.months + ' mois'));
+           _sheet.appendChild(_projBox);
+         }
+       } catch(e) {}
+       S.goal = _origGoal; S.targetWeight = _origTW;
+     }
+   }
+
+   // TCA conflict warning
+   var _tcaConflict = (_selGoalKey === 'cut' || _selGoalKey === 'shred') && Array.isArray(S.medical) && S.medical.indexOf('tca') !== -1;
+   if (_tcaConflict) {
+     _sheet.appendChild(h('div', {style: 'background:rgba(90,16,16,.06);border:1px solid #5A1010;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A1010;line-height:1.6;'}, 'Objectif s\u00e8che incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
+   }
+
+   // Save button
+   var _canSave = S._modalGoal !== null && !_tcaConflict && (!_needsTarget || (S._modalTargetWeight && S._modalTargetWeight >= 40));
+   var _saveBtn = h('button', {
+     style: 'display:block;width:100%;padding:14px;border:none;background:' + (_canSave ? 'var(--black)' : 'var(--border)') + ';color:' + (_canSave ? 'var(--ivory,#FAF9F6)' : 'var(--grey)') + ';font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:' + (_canSave ? 'pointer' : 'not-allowed') + ';margin-bottom:10px;',
+     onclick: function() {
+       if (!_canSave) return;
+       // Apply changes
+       S.goal = S._modalGoal;
+       if (_needsTarget) S.targetWeight = S._modalTargetWeight;
+       // Sync sport goals
+       if (_selGoalObj && window.NUTRITION_TO_SPORT_GOAL) {
+         var _newSportId = window.NUTRITION_TO_SPORT_GOAL[_selGoalObj.key];
+         if (_newSportId) {
+           var _primaryIds = ['muscle', 'weightloss', 'shred', 'general', 'endurance', 'flexibility'];
+           var _secondaryKept = Array.isArray(S.sportGoals) ? S.sportGoals.filter(function(x) { return _primaryIds.indexOf(x) === -1; }) : [];
+           S.sportGoals = [_newSportId].concat(_secondaryKept).slice(0, 3);
+         }
+       }
+       // Invalidate plans
+       S.weekPlan = null;
+       S.sportProgram = null;
+       // Cleanup temp state
+       delete S._modalGoal;
+       delete S._modalTargetWeight;
+       S._goalModal = false;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       // Toast
+       try {
+         var _toast = document.createElement('div');
+         _toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;padding:10px 20px;z-index:10000;white-space:nowrap;border-radius:2px;';
+         _toast.textContent = '\u2713 Objectif mis \u00e0 jour \u00b7 Plans r\u00e9g\u00e9n\u00e9rer';
+         document.body.appendChild(_toast);
+         setTimeout(function() { if (_toast.parentNode) _toast.parentNode.removeChild(_toast); }, 2800);
+       } catch(e) {}
+       if (window.render) window.render();
+     }
+   }, 'Enregistrer');
+   _sheet.appendChild(_saveBtn);
+
+   // Cancel button
+   var _cancelBtn = h('button', {
+     style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+     onclick: function() {
+       delete S._modalGoal;
+       delete S._modalTargetWeight;
+       S._goalModal = false;
+       if (window.render) window.render();
+     }
+   }, 'Annuler');
+   _sheet.appendChild(_cancelBtn);
+
+   _modal.appendChild(_sheet);
+   document.body.appendChild(_modal);
+ }
 }
 
 // ─── MAIN RENDER ───
