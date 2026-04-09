@@ -6934,6 +6934,7 @@ function renderRunningProgram(p) {
 
 // ─── STEP 9: HYROX CONFIG ───
 function renderHyroxConfig(p) {
+ if (!S.hyroxBenchmarks || typeof S.hyroxBenchmarks !== 'object' || Array.isArray(S.hyroxBenchmarks)) S.hyroxBenchmarks = {};
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Hyrox'));
  p.appendChild(h('h1', {html: 'Préparation<br><em>Hyrox</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, '12 semaines pour être prêt le jour J'));
@@ -7205,6 +7206,7 @@ function renderHyroxProgram(p) {
 // ═══════════════════════════════════════
 
 function renderPadelConfig(p) {
+ if (!S.padelProfile || typeof S.padelProfile !== 'object' || Array.isArray(S.padelProfile)) S.padelProfile = {};
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Padel'));
  p.appendChild(h('h1', {html: 'Votre programme<br><em>padel</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Technique, tactique et préparation physique.'));
@@ -7314,6 +7316,7 @@ function renderPadelProgram(p) {
 // ═══════════════════════════════════════
 
 function renderGolfConfig(p) {
+ if (!S.golfProfile || typeof S.golfProfile !== 'object' || Array.isArray(S.golfProfile)) S.golfProfile = {};
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Golf'));
  p.appendChild(h('h1', {html: 'Votre programme<br><em>golf</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Basé sur les méthodes Dave Pelz & Butch Harmon.'));
