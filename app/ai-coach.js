@@ -444,7 +444,7 @@ function sendMessage() {
 
   // Préparer les messages pour l'API — limiter à 5 derniers échanges, tronquer à 500 chars
   var apiMessages = S.aiCoachHistory.slice(-MAX_API_MESSAGES).map(function(m) {
-    return { role: m.role, content: m.content.slice(0, MAX_MSG_CHARS) };
+    return { role: m.role, content: String(m.content || '').slice(0, MAX_MSG_CHARS) };
   });
 
   // Contexte utilisateur
