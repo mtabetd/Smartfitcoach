@@ -621,7 +621,7 @@
 
   function showInstallationsStep() {
     var content = document.getElementById('muscu-prog-content');
-    var current = Array.isArray(window.S && window.S.installations) ? window.S.installations : [];
+    var current = (window.S && Array.isArray(window.S.installations)) ? window.S.installations : [];
     var cardStyle = 'display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border,#D8D8D0);border-radius:2px;cursor:pointer;transition:border-color 0.15s,background 0.15s;margin-bottom:8px;font-family:"Helvetica Neue",Arial,sans-serif;';
     var cardsHTML = INSTALLATIONS.map(function(inst) {
       var sel = current.indexOf(inst.id) !== -1;
@@ -654,10 +654,10 @@
       var card = e.target.closest('.install-card');
       if (!card) return;
       var id = card.getAttribute('data-id');
-      var sel = Array.isArray(window.S.installations) ? window.S.installations.slice() : [];
+      var sel = window.S && Array.isArray(window.S.installations) ? window.S.installations.slice() : [];
       var idx = sel.indexOf(id);
       if (idx === -1) { sel.push(id); } else { sel.splice(idx, 1); }
-      window.S.installations = sel;
+      if (window.S) window.S.installations = sel;
       if (window.saveProfile) window.saveProfile();
       // Update visual state
       var isSel = sel.indexOf(id) !== -1;
@@ -672,7 +672,7 @@
     });
 
     document.getElementById('install-confirm').addEventListener('click', function() {
-      var sel = Array.isArray(window.S.installations) ? window.S.installations : [];
+      var sel = window.S && Array.isArray(window.S.installations) ? window.S.installations : [];
       if (sel.length === 0) {
         var err = document.getElementById('install-error');
         if (err) err.style.display = 'block';
@@ -691,7 +691,7 @@
       ? 'background:var(--grey,#7A7A72);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:not-allowed;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;opacity:0.6;'
       : 'background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;';
     // Summary of selected installations
-    var sel = Array.isArray(window.S && window.S.installations) ? window.S.installations : [];
+    var sel = (window.S && Array.isArray(window.S.installations)) ? window.S.installations : [];
     var instSummary = sel.length
       ? sel.map(function(id) {
           var found = INSTALLATIONS.filter(function(x) { return x.id === id; })[0];
@@ -722,7 +722,7 @@
     if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
     _modalEl.style.display = 'block';
     // Show installations step if not yet configured, otherwise go straight to generation
-    var hasInstallations = Array.isArray(window.S && window.S.installations) && window.S.installations.length > 0;
+    var hasInstallations = (window.S && Array.isArray(window.S.installations)) && window.S.installations.length > 0;
     if (!hasInstallations) {
       showInstallationsStep();
     } else {

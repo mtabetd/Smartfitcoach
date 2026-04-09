@@ -2926,6 +2926,7 @@ function getPregnancyWeightGuideline() {
   var s = window.S;
   if (!s.pregnant) return null;
   var bmi = (s.prePregnancyWeight && s.height && s.height >= 100) ? s.prePregnancyWeight / Math.pow(s.height / 100, 2) : calcBMI();
+  if (!bmi) return null; // cannot compute guideline without BMI
   var guideline = null;
   for (var i = 0; i < PREGNANCY_WEIGHT_GAIN.length; i++) {
     var pg = PREGNANCY_WEIGHT_GAIN[i];
@@ -3372,7 +3373,7 @@ window.calcWeightProjection=calcWeightProjection; window.alcoholWeeklyKcal=alcoh
 
 // ─── RECIPE FILTERING ───
 function getPool(t){
-  return window.RecipeEngine ? window.RecipeEngine.getPool(t) : [];
+  return (window.RecipeEngine && typeof window.RecipeEngine.getPool === 'function') ? window.RecipeEngine.getPool(t) : [];
 }
 function filterRecipes(pool,type){
   var s=window.S;
@@ -3452,6 +3453,7 @@ return{recipe:r,score:calScore+macroScore+diversityPenalty};});scored.sort(funct
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
+  recipe = Object.assign({}, recipe); // clone to avoid mutating shared pool objects
 
   // Recettes R201+ (format riche) — scaling via RecipeEngine
   if (recipe._id && /^R\d+$/.test(recipe._id) && window.RecipeEngine && window.RecipeEngine.getAdaptedRecipe) {

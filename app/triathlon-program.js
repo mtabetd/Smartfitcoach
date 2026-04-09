@@ -235,6 +235,7 @@ function generateTriathlonProgram(goal, level, weakDiscipline, opts) {
   function mins(base) { return Math.round(base * vf) + 'min'; }
 
   function fmtDur(totalMin) {
+    if (!totalMin || totalMin <= 0) return '0min';
     if (totalMin < 90) return Math.round(totalMin) + 'min';
     var h = totalMin / 60;
     return h.toFixed(1) + 'h';

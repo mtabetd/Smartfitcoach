@@ -450,7 +450,7 @@ function renderStep2b(p) {
       // Dur\u00e9e du cycle
       p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:12px'}, 'Dur\u00e9e du cycle'));
       var clWrap = h('div', {'class': 'num-input-wrap'});
-      clWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '21', max: '35', step: '1', value: String(S.cycleLength), inputmode: 'numeric', oninput: function(e) {
+      clWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '21', max: '35', step: '1', value: String(S.cycleLength || 28), inputmode: 'numeric', oninput: function(e) {
         var v = parseInt(e.target.value);
         if (!isNaN(v) && v >= 21 && v <= 35) S.cycleLength = v;
       }, onblur: function(e) {
@@ -1087,6 +1087,7 @@ function renderStep4(p) {
 function renderStep5(p) {
   if (!Array.isArray(S.allergies)) S.allergies = [];
   if (!Array.isArray(S.intolerances)) S.intolerances = [];
+  if (!Array.isArray(S.supplements)) S.supplements = [];
   // Sub-page: 0 = habitudes, 1 = supplémentation + alcool
   if (typeof window._s5page === 'undefined') window._s5page = 0;
   var _page = window._s5page;
@@ -1184,7 +1185,7 @@ function renderStep5(p) {
   p.appendChild(hydWrap);
 
   // ── Page 0 buttons: continue to page 5b, back to step 4 ──
-  var _canContinue5a = S.mealsPerDay !== null && S.eatingLocation !== null && S.mealPrepTime !== null;
+  var _canContinue5a = S.mealsPerDay != null && S.eatingLocation != null && S.mealPrepTime != null;
   p.appendChild(h('div', {style: 'height:24px'}));
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_canContinue5a, onclick: function() {
     if (_canContinue5a) { window._s5page = 1; window.render(); }
@@ -1382,7 +1383,7 @@ function renderStep5(p) {
   } // end else (non-pregnant alcohol section)
 
   p.appendChild(h('div', {style: 'height:24px'}));
-  var canContinue5b = S.alcoholFreq !== null;
+  var canContinue5b = S.alcoholFreq != null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !canContinue5b, onclick: function() {
     if (canContinue5b) {
       bb('nutrition_habits', {meals: S.mealsPerDay, location: S.eatingLocation, prepTime: S.mealPrepTime, alcoholFreq: S.alcoholFreq});
@@ -1849,23 +1850,47 @@ function renderStep7(p) {
     if (window._nutritionGenerating) return;
     window._nutritionGenerating = true;
     setTimeout(function() {
-      // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
-      if (window.computeNutritionState) { window.computeNutritionState(false); }
-      var _wk1 = generateWeek();
-      if (Array.isArray(_wk1) && _wk1.length > 0) S.weekPlan = _wk1;
-      S._weekPlanGeneratedAt = new Date().toISOString();
-      // Sync plan nutrition vers Supabase (try/catch : une erreur réseau ne bloque pas la navigation)
-      if (window.SupaSync && S.weekPlan) {
-        try {
-          var _monday = new Date();
-          _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
-          SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
-        } catch(e) { console.warn('[nutrition] saveMealPlan error (non-bloquant):', e); }
+      try {
+        // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
+        if (window.computeNutritionState) { window.computeNutritionState(false); }
+        var _wk1 = generateWeek();
+        if (Array.isArray(_wk1) && _wk1.length > 0) {
+          S.weekPlan = _wk1;
+        } else {
+          // generateWeek() a retourné un plan vide — informer l'utilisateur sans naviguer
+          console.warn('[nutrition] generateWeek() returned empty plan');
+          _genBtn.disabled = false;
+          _genBtn.textContent = window.t('onb.finish');
+          var _errDiv = document.getElementById('_gen_error');
+          if (!_errDiv) {
+            _errDiv = document.createElement('div');
+            _errDiv.id = '_gen_error';
+            _errDiv.style.cssText = 'color:#8B2020;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-top:8px;text-align:center';
+            _genBtn.parentNode && _genBtn.parentNode.insertBefore(_errDiv, _genBtn.nextSibling);
+          }
+          _errDiv.textContent = 'Impossible de générer le plan. Vérifiez vos préférences et réessayez.';
+          window._nutritionGenerating = false;
+          return;
+        }
+        S._weekPlanGeneratedAt = new Date().toISOString();
+        // Sync plan nutrition vers Supabase (try/catch : une erreur réseau ne bloque pas la navigation)
+        if (window.SupaSync && S.weekPlan) {
+          try {
+            var _monday = new Date();
+            _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+            SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+          } catch(e) { console.warn('[nutrition] saveMealPlan error (non-bloquant):', e); }
+        }
+        bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
+        if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
+        goStep(11);
+      } catch(e) {
+        console.error('[nutrition] generateWeek exception:', e);
+        _genBtn.disabled = false;
+        _genBtn.textContent = window.t('onb.finish');
+      } finally {
+        window._nutritionGenerating = false;
       }
-      bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
-      if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
-      goStep(11);
-      window._nutritionGenerating = false;
     }, 50);
   }}, window.t('onb.finish'));
   p.appendChild(_genBtn);
@@ -2254,7 +2279,7 @@ function renderStep8(p) {
       localStorage.setItem('mtd_weight_history_' + uid, JSON.stringify(S.weightHistory));
     } catch(e) {}
     // Sync poids vers Supabase
-    if (window.SupaSync) SupaSync.saveWeight(today, v);
+    if (window.SupaSync) { try { SupaSync.saveWeight(today, v); } catch(e) { console.warn('[nutrition] saveWeight error:', e); } }
     bb('weight_logged', {weight: v});
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) {
       window.GAMIFICATION.unlockBadge('first_weigh');
@@ -2789,7 +2814,7 @@ function renderStep9(p) {
                   if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
                   S.weekPlan[S.selectedDay][slotKey3] = { n: food.name, k: food.kcal, kcal: food.kcal, p: food.p, g: food.g, l: food.l, f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true };
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
-                  if (window.saveProfile) window.saveProfile();
+                  try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
                   window.render();
                 }
               });
@@ -2843,7 +2868,7 @@ function renderStep9(p) {
             f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true
           };
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
-          if (window.saveProfile) window.saveProfile();
+          try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
           window.render();
         }
       }, 'Confirmer');
@@ -3199,9 +3224,11 @@ function renderStep9(p) {
     S._weekPlanGeneratedAt = new Date().toISOString();
     // Sync plan nutrition vers Supabase
     if (window.SupaSync && S.weekPlan) {
-      var _monday = new Date();
-      _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
-      SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+      try {
+        var _monday = new Date();
+        _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+        SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+      } catch(e) { console.warn('[nutrition] regen saveMealPlan error:', e); }
     }
     bb('week_regenerated', {});
     window.render();
@@ -4109,6 +4136,7 @@ function renderSaladBar(p) {
       if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
       S.weekPlan[S.selectedDay][slot] = saladRecipe;
       S.saladBar.open = false;
+      try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saladBar saveProfile error:', e); }
       window.render();
     }
   }, 'Valider ma composition — ' + (sb.mealTarget === 'breakfast' ? window.t('onb.s9.breakfast') : sb.mealTarget === 'snack' ? window.t('onb.s9.snack') : sb.mealTarget === 'dinner' ? window.t('onb.s9.dinner') : window.t('onb.s9.lunch')));
@@ -5191,12 +5219,12 @@ function showSmoothieModal(sm) {
           });
         }
       }
+      try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] smoothie saveProfile error:', e); }
       var el = document.getElementById('_smoothie_modal_ov');
       if (el && el.parentNode) el.parentNode.removeChild(el);
       S.smoothieBarOpen = false;
-      S.nStep = 12;
+      goStep(12);
       showToast('✅ Smoothie ajouté en collation — Plan recalculé', 2500);
-      if (typeof window.render === 'function') window.render();
     }
   }, '🥛 Ajouter à mon plan — Collation '+dayLabel);
   footer.appendChild(addBtn);

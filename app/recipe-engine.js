@@ -29368,6 +29368,7 @@
     // Scaling ingrédients
     var eggCorrectionP = 0, eggCorrectionF = 0, eggCorrectionG = 0, eggCorrectionKcal = 0;
 
+    if (!Array.isArray(recipe.ingredients)) return null;
     var adaptedIngredients = recipe.ingredients.map(function (ing) {
       if (ing.unit === 'pce') {
         // RÈGLE ŒUF : arrondi à l'entier le plus proche
@@ -29676,6 +29677,7 @@
     var totalMAD  = 0;
 
     if (!Array.isArray(recipe.ingredients)) return null;
+    if (!recipe.servings || recipe.servings <= 0) return null;
     recipe.ingredients.forEach(function (ing) {
       var unitPrice = window.getPricePer(ing.name, ing.unit);
       if (unitPrice === null || unitPrice === undefined) {
@@ -29869,7 +29871,7 @@
       if (q <= 1)              return { qty: '¼',  unit: 'c.à.café' };
       if (q <= 2)              return { qty: '½',  unit: 'c.à.café' };
       if (q >= 3 && q <= 4)   return { qty: 1,    unit: 'c.à.café' };
-      if (q >= 5 && q <= 6)   return { qty: '1½', unit: 'c.à.café' };
+      if (q >= 5 && q < 6)    return { qty: '1½', unit: 'c.à.café' };
       if (q >= 6 && q <= 8)   return { qty: 1,    unit: 'c.à.soupe' };
       if (q >= 9 && q <= 10)  return { qty: '1½', unit: 'c.à.soupe' };
     }
@@ -30556,7 +30558,7 @@
         } else if (recipe._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
           // Recette R201+ sans ingrédients scalés : utilise findRecipe + scalingRatio
           var fullRecipe = window.RecipeEngine.findRecipe(recipe._id);
-          if (fullRecipe && Array.isArray(fullRecipe.ingredients)) {
+          if (fullRecipe && Array.isArray(fullRecipe.ingredients) && fullRecipe.servings > 0) {
             fullRecipe.ingredients.forEach(function(ing) {
               var scaledQty = Math.round((ing.qty / fullRecipe.servings) * scalingRatio * 10) / 10;
               _addIng(ing.name, scaledQty, ing.unit);

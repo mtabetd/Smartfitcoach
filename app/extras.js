@@ -1194,7 +1194,7 @@ window.WEEKLY_SUMMARY = {
     var days = [false, false, false, false, false, false, false];
     try {
       var userId = uid();
-      var logs = window.BLACKBOX.getUserLogs(userId);
+      var logs = (window.BLACKBOX && window.BLACKBOX.getUserLogs) ? window.BLACKBOX.getUserLogs(userId) : [];
       for (var i = 0; i < logs.length; i++) {
         var ts = logs[i].timestamp;
         if (ts >= ws.getTime()) {
@@ -1226,7 +1226,7 @@ window.WEEKLY_SUMMARY = {
     var all = {};
     try {
       var userId = uid();
-      var logs = window.BLACKBOX.getUserLogs(userId);
+      var logs = (window.BLACKBOX && window.BLACKBOX.getUserLogs) ? window.BLACKBOX.getUserLogs(userId) : [];
       for (var i = 0; i < logs.length; i++) {
         var d = new Date(logs[i].timestamp);
         var key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
@@ -1466,7 +1466,7 @@ window.FOOD_JOURNAL = {
     var journal = {}; try { journal = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) { journal = {}; }
     var entries = journal[date || new Date().toISOString().split('T')[0]] || [];
     return entries.reduce(function(acc, e) {
-      acc.kcal += e.kcal; acc.p += e.p; acc.g += e.g; acc.l += e.l;
+      acc.kcal += (Number(e.kcal) || 0); acc.p += (Number(e.p) || 0); acc.g += (Number(e.g) || 0); acc.l += (Number(e.l) || 0);
       return acc;
     }, {kcal: 0, p: 0, g: 0, l: 0, count: entries.length});
   },

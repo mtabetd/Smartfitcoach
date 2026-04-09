@@ -133,9 +133,8 @@ function setRateLimit(email, attempts, lockedUntil) {
     data[email] = { attempts: attempts, lockedUntil: lockedUntil || 0 };
     var now = Date.now();
     Object.keys(data).forEach(function(k) {
-      // Clean up expired lockouts AND old entries (>24h)
+      // Supprimer uniquement les lockouts expirés — conserver les tentatives partielles
       if (data[k].lockedUntil && data[k].lockedUntil < now) delete data[k];
-      else if (!data[k].lockedUntil && data[k].attempts < MAX_ATTEMPTS) delete data[k];
     });
     localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
   } catch (e) {
@@ -298,6 +297,7 @@ var _useSupabase = false;
 var _authReady = Promise.resolve(); // resolved when Supabase session is loaded
 var _visibilityListener = null;   // ref for cleanup on logout
 var _beforeUnloadListener = null; // ref for cleanup on logout
+var _authStateSubscription = null; // ref for Supabase onAuthStateChange unsubscribe
 
 function _loadLegacySession() {
   if (isLegacySessionValid()) {
@@ -328,6 +328,21 @@ function _initAuth() {
   if (window._authInitialized) return;
   window._authInitialized = true;
 
+  // Re-register session tracking listeners if they were cleaned up during logout
+  if (!_visibilityListener) {
+    _visibilityListener = function() {
+      if (document.hidden) { BLACKBOX.log('page_hidden', {}); }
+      else { BLACKBOX.log('page_visible', {}); }
+    };
+    document.addEventListener('visibilitychange', _visibilityListener);
+  }
+  if (!_beforeUnloadListener) {
+    _beforeUnloadListener = function() {
+      if (AUTH.isLoggedIn()) BLACKBOX.log('page_unload', { sessionMinutes: BLACKBOX.getSessionMinutes() });
+    };
+    window.addEventListener('beforeunload', _beforeUnloadListener);
+  }
+
   var client = _getRawClient();
   if (!client) {
     console.warn('[AUTH] Supabase SDK not loaded, using localStorage fallback');
@@ -337,8 +352,12 @@ function _initAuth() {
 
   _useSupabase = true;
 
-  // Ecouter les changements d'auth
-  client.auth.onAuthStateChange(function(event, session) {
+  // Ecouter les changements d'auth — désabonner toute subscription précédente d'abord
+  if (_authStateSubscription) {
+    try { _authStateSubscription.unsubscribe(); } catch(e) {}
+    _authStateSubscription = null;
+  }
+  var _authStateSub = client.auth.onAuthStateChange(function(event, session) {
     console.log('[AUTH] onAuthStateChange:', event);
     if (event === 'PASSWORD_RECOVERY') {
       if (session && session.user) {
@@ -369,6 +388,10 @@ function _initAuth() {
       _currentSession = null;
     }
   });
+  // Stocker la subscription pour pouvoir la libérer au logout
+  if (_authStateSub && _authStateSub.data && _authStateSub.data.subscription) {
+    _authStateSubscription = _authStateSub.data.subscription;
+  }
 
   // Charger la session existante (async)
   // Store the promise so app-main.js can await it before first render
@@ -840,6 +863,12 @@ window.AUTH = {
     clearLegacySession();
     window._authInitialized = false;
 
+    // Désabonner la subscription Supabase onAuthStateChange
+    if (_authStateSubscription) {
+      try { _authStateSubscription.unsubscribe(); } catch(e) {}
+      _authStateSubscription = null;
+    }
+
     // Supprimer les event listeners pour éviter les fuites mémoire
     if (_visibilityListener) {
       try { document.removeEventListener('visibilitychange', _visibilityListener); } catch(e) {}
@@ -1231,6 +1260,14 @@ _visibilityListener = function() {
 };
 document.addEventListener('visibilitychange', _visibilityListener);
 
+// Track unload for session duration — must be set BEFORE _initAuth() to prevent double-registration
+_beforeUnloadListener = function() {
+  if (AUTH.isLoggedIn()) {
+    BLACKBOX.log('page_unload', { sessionMinutes: BLACKBOX.getSessionMinutes() });
+  }
+};
+window.addEventListener('beforeunload', _beforeUnloadListener);
+
 // ─── INIT BOOT ───
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', _initAuth);
@@ -1247,13 +1284,5 @@ setTimeout(function() {
     BLACKBOX.log('session_resume', {});
   }
 }, 0);
-
-// Track unload for session duration
-_beforeUnloadListener = function() {
-  if (AUTH.isLoggedIn()) {
-    BLACKBOX.log('page_unload', { sessionMinutes: BLACKBOX.getSessionMinutes() });
-  }
-};
-window.addEventListener('beforeunload', _beforeUnloadListener);
 
 })();

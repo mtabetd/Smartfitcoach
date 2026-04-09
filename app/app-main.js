@@ -188,13 +188,18 @@ function saveProfile() {
 // Migration centralisée des anciens numéros de step vers le nouveau routing (Apr 2026)
 // Appelée après loadProfile() à chaque login ou sync cloud — une seule source de vérité
 function _migrateSteps() {
- if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 9) {
+ // Appliquer seulement en mode nutrition/both (ou appMode non encore défini = premier login nutrition)
+ if ((!S.appMode || S.appMode === 'nutrition' || S.appMode === 'both') && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 11) {
    if (S.weekPlan) { S.nStep = 12; }
-   else if (S.nStep === 8) { S.nStep = 11; }
-   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
+   // nStep=8 sans profil de base → retour au début de l'onboarding
+   else if (S.nStep === 8 && S.sex && S.goal !== null) { S.nStep = 11; }
+   else if (S.nStep === 8) { S.nStep = 1; }
+   // Couvre nStep 1-10 (anciens steps intermédiaires y compris 9 et 10)
+   else if (S.nStep >= 1 && S.nStep <= 10 && S.sex && S.goal !== null) { S.nStep = 8; }
  }
- if (S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
-   S.nStep = S.weekPlan ? 12 : (S.goal !== null ? 11 : 1);
+ // Cas nStep=0 uniquement pour les modes nutrition (pas sport-only, qui gère son propre routing)
+ if ((!S.appMode || S.appMode === 'nutrition' || S.appMode === 'both') && S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
+   S.nStep = S.weekPlan ? 12 : (S.goal !== null && S.weight && S.height ? 11 : (S.sex ? 2 : 1));
  }
 }
 
@@ -557,7 +562,7 @@ function renderProfilePage(container) {
          // Le profil de base (sexe, poids, taille) est déjà rempli via l'onboarding sport
          // → on démarre directement au questionnaire médical nutrition (nStep 8 dans le nouveau flow)
          // Si les données de base manquent malgré tout, démarrer depuis le début (nStep 1)
-         var _hasBasicProfile = S.sex && (S.weight > 0 || S.height > 0);
+         var _hasBasicProfile = S.sex && S.weight > 0 && S.height > 0;
          S.nStep = _hasBasicProfile ? 8 : 1;
          S.view = 'nutrition';
          // Marquer pour afficher un message d'explication dans l'onboarding
@@ -720,7 +725,7 @@ function renderProfilePage(container) {
    style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
    onclick: function() {
      if (window.AUTH && window.AUTH.logout) { window.AUTH.logout(); }
-     else { S.view = 'authLogin'; if (window.render) window.render(); }
+     else { S.view = 'auth'; if (window.render) window.render(); }
    }
  }, 'Se déconnecter');
  c.appendChild(logoutBtn);
@@ -766,7 +771,7 @@ function renderProfilePage(container) {
        console.warn('[RGPD] AUTH.deleteAccount not available — logging out only');
        window.AUTH.logout();
      } else {
-       S.view = 'authLogin';
+       S.view = 'auth';
        if (window.render) window.render();
      }
    }
@@ -1125,7 +1130,7 @@ function render() {
    return;
  }
 
- if (S.view === 'profil') {
+ if (S.view === 'profil' || S.view === 'profile') {
  renderProfilePage(content);
  } else if (S.view === 'sport' && window.SPORT) {
  SPORT.render(content);
@@ -1250,6 +1255,12 @@ function renderLogin(app) {
  // Restore profile from localStorage for this user
  loadProfile();
  _migrateSteps();
+ // Restaurer le contexte de vue selon l'état du profil chargé
+ var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
+ if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+ else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
+ else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
+ // else: stay on 'today' (default set above)
  // Restore language preference
  if (window.I18N && S.lang) window.I18N.current = S.lang;
  // Restore unit preferences
@@ -1278,9 +1289,10 @@ function renderLogin(app) {
  window.UNITS.weight = S.weightUnit || 'kg';
  window.UNITS.height = S.heightUnit || 'cm';
  }
+ render(); // Re-render après sync cloud : nStep migré, unités à jour
  }
- });
- SupaSync.startAutoSync();
+ SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
+ }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); });
  }
  if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
  // Enregistre la date du premier login (pour bloquer le bilan de forme au J+1)
@@ -1426,7 +1438,11 @@ function renderRegister(app) {
  dialBtn.appendChild(dialArrow);
 
  // Dropdown overlay — appended to document.body (position:fixed) pour éviter tout problème de z-index/stacking context
+ // Nettoyer tout dropdown résiduel (fuite DOM si re-render sans fermeture préalable)
+ var _oldDialDrop = document.getElementById('_sfc_dial_dropdown');
+ if (_oldDialDrop && _oldDialDrop.parentNode) _oldDialDrop.parentNode.removeChild(_oldDialDrop);
  var dialDropdown = document.createElement('div');
+ dialDropdown.id = '_sfc_dial_dropdown';
  dialDropdown.style.cssText = 'display:none;position:fixed;z-index:9999;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#E8E6DF);border-radius:2px;box-shadow:0 8px 32px rgba(0,0,0,0.18);max-height:260px;overflow-y:auto;min-width:220px;';
  document.body.appendChild(dialDropdown);
 
@@ -1467,12 +1483,11 @@ function renderRegister(app) {
      dialDropdown.style.left = rect.left + 'px';
      dialDropdown.style.minWidth = rect.width + 'px';
      dialDropdown.style.display = 'block';
-     // Fermer au prochain clic externe
+     // Fermer au prochain clic externe (once:true évite l'accumulation de listeners)
      setTimeout(function() {
-       document.addEventListener('click', function _closeDialDrop() {
+       document.addEventListener('click', function() {
          dialDropdown.style.display = 'none';
-         document.removeEventListener('click', _closeDialDrop);
-       });
+       }, { once: true });
      }, 0);
    }
  });
@@ -1862,11 +1877,8 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      S.prenom = _autoUser.name.split(' ')[0];
    }
  }
- // Si l'utilisateur existant a un profil mais nStep=0 (ex: profil corrompu ou rechargement)
- // → sauter le splash pour ne pas le forcer à refaire tout l'onboarding
- if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
- S.nStep = S.weekPlan ? 12 : (S.goal ? 11 : 1);
- }
+ // Note : la migration nStep=0 est gérée par _migrateSteps() (appelé ligne 1867)
+ // pour éviter la double-migration (régression pour les users sport-only avec weekPlan)
  // Retour utilisateur : préserver le step programme (ne pas réinitialiser l'onboarding sport).
  // Steps à PRÉSERVER : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel) 14(golf) 15(prog dédié) 16(charges) 18(triathlon) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
  // Steps intermédiaires onboarding (1,2,3,5,7,9,11,13,17,19,22,24) → revenir à 0 (sélection sport)
@@ -1874,6 +1886,10 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1) {
    S.sStep = 0;
  }
+ // Restaurer le contexte de vue (sport mid-onboarding vs nutrition vs today)
+ if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+ else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
+ else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
  // ─── AUTO-REGENERATION PLAN NUTRITION (semaine expirée) ───
  // Si un plan existe, que l'utilisateur n'est PAS en train de le consulter (nStep ≠ 12),
  // et que la date de génération a plus de 7 jours → regénérer silencieusement.
@@ -1943,8 +1959,15 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  }
  // Demarrer la sync Supabase si disponible
  if (window.SupaSync) {
- SupaSync.syncOnLogin();
- SupaSync.startAutoSync();
+ SupaSync.syncOnLogin().then(function(syncResult) {
+   if (syncResult === 'loaded_from_cloud') {
+     _migrateSteps();
+     if (window.I18N && S.lang) window.I18N.current = S.lang;
+     if (window.UNITS) { window.UNITS.weight = S.weightUnit || 'kg'; window.UNITS.height = S.heightUnit || 'cm'; }
+     if (window.render) window.render();
+   }
+   SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
+ }).catch(function() { SupaSync.startAutoSync(); });
  }
 } else {
  S.view = 'auth';

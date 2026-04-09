@@ -272,7 +272,7 @@ function renderResult(container, result) {
 
             var dayEl = document.createElement('div');
             dayEl.className = 'ba-seance-day';
-            dayEl.textContent = seance.jour + (seance.discipline ? ' · ' + seance.discipline.toUpperCase() : '');
+            dayEl.textContent = (seance.jour || '') + (seance.discipline ? ' · ' + seance.discipline.toUpperCase() : '');
             seanceEl.appendChild(dayEl);
 
             if (seance.titre) {
@@ -632,6 +632,10 @@ async function runAnalysis() {
       body: JSON.stringify({ images: images, context: ctx, exercisesDb: exercisesDb })
     });
 
+    if (!resp.ok) {
+      var errBody = await resp.json().catch(function() { return {}; });
+      throw new Error(errBody.error || 'Erreur serveur HTTP ' + resp.status);
+    }
     var data = await resp.json();
 
     if (loader) loader.style.display = 'none';

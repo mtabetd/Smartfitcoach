@@ -197,7 +197,7 @@ function getTodayTotals() {
     var journal = JSON.parse(localStorage.getItem(key) || '{}');
     var today = new Date().toISOString().split('T')[0];
     var entries = journal[today] || [];
-    return entries.reduce(function(acc, e) {
+    return entries.filter(function(e) { return e && typeof e === 'object'; }).reduce(function(acc, e) {
       acc.kcal += (e.kcal || 0);
       acc.p += (e.p || 0);
       acc.g += (e.g || 0);
@@ -347,6 +347,7 @@ function renderCardNextMeal() {
     style: 'padding:10px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
     onclick: function() {
       var S2 = window.S;
+      if (!S2) return;
       S2.view = 'nutrition'; S2.nStep = 12; S2.selectedDay = todayIdx;
       if (window.render) window.render();
     }
@@ -436,6 +437,20 @@ function renderCardBonjour(S) {
 // ─── RENDER CARD 2 — Macros du jour ───
 function renderCardMacros() {
   var calorieTarget = getCalorieTarget();
+  var macroTargetsOverride = null;
+  // Priorité aux macros du plan du jour si weekPlan disponible
+  var _S2 = window.S || {};
+  if (Array.isArray(_S2.weekPlan) && _S2.weekPlan.length >= 7) {
+    var _todayIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim
+    var _dayPlan = _S2.weekPlan[_todayIdx];
+    if (_dayPlan && typeof _dayPlan.kcal === 'number' && _dayPlan.kcal > 0) {
+      calorieTarget = _dayPlan.kcal;
+      // N'utiliser l'override que si au moins une macro est définie — évite d'écraser getMacroTargets() avec des zéros
+      if ((_dayPlan.p || 0) > 0 || (_dayPlan.g || 0) > 0 || (_dayPlan.l || 0) > 0) {
+        macroTargetsOverride = { p: _dayPlan.p || 0, g: _dayPlan.g || 0, l: _dayPlan.l || 0 };
+      }
+    }
+  }
   if (calorieTarget <= 0) {
     var emptyMacro = card();
     emptyMacro.appendChild(eyebrow('NUTRITION'));
@@ -443,13 +458,13 @@ function renderCardMacros() {
     emptyMacro.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:14px;'}, 'Définis tes objectifs nutritionnels pour suivre tes macros quotidiens.'));
     emptyMacro.appendChild(h('button', {
       style: 'padding:10px 16px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
-      onclick: function() { window.S.view = 'nutrition'; window.S.nStep = 1; if (window.render) window.render(); }
+      onclick: function() { if (!window.S) return; window.S.view = 'nutrition'; window.S.nStep = 1; if (window.render) window.render(); }
     }, 'Configurer mon profil →'));
     return emptyMacro;
   }
 
   var totals = getTodayTotals();
-  var macroTargets = getMacroTargets();
+  var macroTargets = macroTargetsOverride || getMacroTargets();
 
   // ── Sport burn du jour ──
   var _todayKey = new Date().toISOString().slice(0, 10);
@@ -550,10 +565,6 @@ function renderCardRepas() {
   }
 
   var todayIdx = (new Date().getDay() + 6) % 7;
-  if (!Array.isArray(S.weekPlan) || S.weekPlan.length === 0) {
-    // le dashboard gérera l'état vide
-    return;
-  }
   if (todayIdx >= S.weekPlan.length) { todayIdx = 0; }
   var dayData = S.weekPlan[todayIdx];
   if (!dayData) return null;
@@ -1279,7 +1290,13 @@ function openTodayKitchenTimer() {
     controls.appendChild(resetBtn);
     box.appendChild(controls);
 
-    overlay.addEventListener('click', function(e) { if (e.target === overlay) clearInterval(interval); });
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) { clearInterval(interval); window._kitchenTimerInterval = null; } });
+    // Étendre le bouton ✕ du modal générique pour nettoyer l'interval
+    var _closeEl = box.querySelector('[aria-label="Fermer"]');
+    if (_closeEl) {
+      var _origClose = _closeEl.onclick;
+      _closeEl.onclick = function() { clearInterval(interval); window._kitchenTimerInterval = null; if (_origClose) _origClose(); };
+    }
   });
 }
 
@@ -1484,7 +1501,7 @@ function renderExtendedSections(wrapper, S) {
   wrapper.appendChild(chartWrap);
 
   // Kcal chart (Chart.js)
-  if (S.weekPlan && S.weekPlan.length === 7) {
+  if (Array.isArray(S.weekPlan) && S.weekPlan.length === 7) {
     wrapper.appendChild(sectionLabel('Calories par jour — plan semaine'));
     var kcalWrap = card();
     var kcalCanvas = document.createElement('canvas');
@@ -1861,7 +1878,7 @@ function renderTodayDashboard(p) {
   if (cardSport) wrapper.appendChild(cardSport);
 
   // Card 3 — Macros du jour
-  wrapper.appendChild(renderCardMacros());
+  var cardMacros = renderCardMacros(); if (cardMacros) wrapper.appendChild(cardMacros);
 
   // Card 3b — TDEE adaptatif
   var cardTDEE = renderCardTDEEAdaptatif(S);
@@ -1878,7 +1895,7 @@ function renderTodayDashboard(p) {
   // Card 6 — Checkin bien-être supprimée : fait en plein écran à l'arrivée
 
   // Card 7 — Raccourcis rapides
-  wrapper.appendChild(renderCardShortcuts());
+  var cardShortcuts = renderCardShortcuts(); if (cardShortcuts) wrapper.appendChild(cardShortcuts);
 
   // Sections étendues (ex-Dashboard) — masquées par défaut, dépliables
   var _extOpen = S._dashExtOpen || false;
