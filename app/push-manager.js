@@ -40,8 +40,8 @@
       if (!prefs.granted) return;
 
       // Vérifier si le checkin du jour a été fait
-      var _d0 = new Date();
-      var today = _d0.getFullYear() + '-' + String(_d0.getMonth() + 1).padStart(2, '0') + '-' + String(_d0.getDate()).padStart(2, '0');
+      // wellness.date est stocké en UTC (cohérent avec app-sport.js) → utiliser UTC ici aussi
+      var today = new Date().toISOString().slice(0, 10);
       var wellness = null;
       try { wellness = JSON.parse(localStorage.getItem('S') || '{}').todayWellness; } catch(e) {}
       if (!wellness || wellness.date !== today) {
