@@ -1900,7 +1900,9 @@ function renderStep7(p) {
 // ─── STEP 11 (RÉSULTATS / MACROS) ───
 function renderStep8(p) {
   // CRITIQUE-3: garde S.goal null — ne peut pas calculer les macros sans objectif
-  if (S.goal === null) { goStep(4); return; }
+  if (S.goal === null || S.goal === undefined) { goStep(4); return; }
+  // CRITIQUE-4: garde sex/weight/height manquants — évite 1500 kcal fantôme
+  if (!S.sex || !S.weight || !S.height) { goStep(1); return; }
   var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI();
     // Synchronise NutritionMaster (source de vérité pour RecipeEngine + Sport)
     if (window.computeNutritionState) { window.computeNutritionState(false); }
@@ -3000,12 +3002,12 @@ function renderStep9(p) {
     mealTypeEl.appendChild(document.createTextNode(sl.label));
     if (timingBadge) mealTypeEl.appendChild(timingBadge);
     card.appendChild(mealTypeEl);
-    card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f), txt(r.n)]));
-    card.appendChild(h('div', {'class': 'meal-kcal'}, r.k + ' kcal'));
+    card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f || ''), txt(r.n || 'Repas')]));
+    card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal'));
     var mc = h('div', {'class': 'meal-macros'});
-    mc.appendChild(h('span', {}, 'G ' + r.g + 'g'));
-    mc.appendChild(h('span', {}, 'P ' + r.p + 'g'));
-    mc.appendChild(h('span', {}, 'L ' + r.l + 'g'));
+    mc.appendChild(h('span', {}, 'G ' + (r.g || 0) + 'g'));
+    mc.appendChild(h('span', {}, 'P ' + (r.p || 0) + 'g'));
+    mc.appendChild(h('span', {}, 'L ' + (r.l || 0) + 'g'));
     card.appendChild(mc);
     var lv = r.lv || 0;
     var stars = '';
@@ -3205,7 +3207,7 @@ function renderStep9(p) {
 
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
   var _shopList = ((window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan, {shopFreq: S.shopFreq}) : []) || [];
-  var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
+  var _shopTotal = _shopList.reduce(function(n, cat) { return n + (cat && cat.items ? cat.items.length : 0); }, 0);
   var _shopLabel = window.t('shop.title') + (_shopTotal > 0 ? ' — ' + _shopTotal + ' articles' : '');
   var btnShop = h('button', {
     'class': 'btn-secondary',
@@ -3245,6 +3247,10 @@ function renderStep9(p) {
     onclick: function() {
       if (!confirm('Refaire le questionnaire nutrition ? Votre plan actuel sera supprimé.')) return;
       S.weekPlan = null;
+      S._nm = null;
+      S._weekPlanGeneratedAt = null;
+      S.mealsLogged = {};
+      if (window.saveProfile) saveProfile();
       goStep(1);
     }
   }, '\u2699 Modifier mes pr\u00e9f\u00e9rences nutritionnelles');
@@ -3379,15 +3385,18 @@ function exportDayPDF(dayIdx) {
   doc.setTextColor(ivory[0], ivory[1], ivory[2]);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
   doc.text('SMART FIT COACH', M, 14);
+  // CRITIQUE-1: garde validité dayIdx avant tout accès à DAY_NAMES/weekPlan
+  if (typeof dayIdx !== 'number' || dayIdx < 0 || dayIdx > 6 || !S.weekPlan || !S.weekPlan[dayIdx]) {
+    alert('Aucun plan disponible pour ce jour.'); return;
+  }
   doc.setFontSize(16); doc.setFont('times', 'italic');
-  doc.text(DAY_NAMES[dayIdx] + ' \u2014 Plan du jour', M, 26);
+  doc.text((DAY_NAMES[dayIdx] || 'Jour') + ' \u2014 Plan du jour', M, 26);
   doc.setFontSize(7); doc.setFont('helvetica', 'normal');
   var tgt = calcTarget(), mc = calcMacros();
   doc.text(tgt + ' kcal  |  G ' + mc.g + 'g  |  P ' + mc.p + 'g  |  L ' + mc.l + 'g', M, 33);
   y = 46;
 
-  // Meals
-  if (!S.weekPlan || !S.weekPlan[dayIdx]) { alert('Aucun plan disponible pour ce jour.'); return; }
+  // Meals (guard already done above)
   var dayPlan = S.weekPlan[dayIdx];
   var slots = [{key: 'breakfast', label: 'PETIT-D\u00c9JEUNER'}, {key: 'lunch', label: 'D\u00c9JEUNER'}, {key: 'snack', label: 'COLLATION'}, {key: 'dinner', label: 'D\u00ceNER'}];
   var dayTotal = 0;
