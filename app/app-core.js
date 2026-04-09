@@ -3821,6 +3821,12 @@ function detectMedicalConflicts() {
   var conflicts = [];
   if(!s||!s.medical)return conflicts;
   var med=s.medical;
+  // C-04: IMC < 18.5 + objectif déficitaire — risque médical réel (insuffisance pondérale)
+  var _bmiCheck = calcBMI();
+  var _goalKey = s.goal !== null && GOALS[s.goal] ? GOALS[s.goal].key : null;
+  if(_bmiCheck!==null&&_bmiCheck<18.5&&(_goalKey==='cut'||_goalKey==='shred')){
+    conflicts.push({level:'CRITIQUE',message:'⚠ ALERTE MÉDICALE : IMC '+_bmiCheck.toFixed(1)+' (insuffisance pondérale) incompatible avec un objectif déficitaire. Un déficit calorique sur ce profil peut aggraver la dénutrition et présente des risques cardiaques, osseux et hormonaux graves. Votre objectif a été remplacé par maintenance. Consultez un médecin avant tout programme nutritionnel.'});
+  }
   // Conflit 0 : Grossesse + IRC → protéines plafonnées à 0.6g/kg = insuffisant pour le fœtus (C1)
   // OMS 2016 : grossesse T3 = +25g protéines/j | KDOQI 2020 : IRC CKD 3-5 = 0.6g/kg/j max
   // Conflit irrésoluble : les deux contraintes sont incompatibles → OBLIGATOIREMENT suivi médical spécialisé
@@ -4711,9 +4717,12 @@ function buildNMInputs(trainingDay) {
 function computeNutritionState(trainingDay) {
   if (!window.NutritionMaster) return null;
   if (window.S.goal === null || window.S.sex === null) return null;
+  // I-02: si getAge() retourne null/0, on ne calcule pas avec age=25 fantôme
+  if (!getAge()) { window.S._nm = null; return null; }
   var inputs = buildNMInputs(trainingDay);
   var result = window.NutritionMaster.compute(inputs);
-  if (result.errors && result.errors.length > 0) return null;
+  // I-01: invalider le cache stale si NutritionMaster remonte des erreurs
+  if (result.errors && result.errors.length > 0) { window.S._nm = null; return null; }
 
   // Applique les sur-couches médicales de app-core (calcTarget / calcMacros)
   // pour que les valeurs médicalement ajustées soient reflétées dans _nm

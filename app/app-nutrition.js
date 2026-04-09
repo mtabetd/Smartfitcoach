@@ -2392,6 +2392,12 @@ function renderStep8(p) {
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
     // Badge profil complet : déclenché quand l'utilisateur voit ses résultats et passe au planning
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('profile_complete');
+    // I-04: générer weekPlan si absent (ex: rechargement page, navigation directe vers step 11)
+    if (!S.weekPlan || S.weekPlan.length < 7) {
+      if (window.computeNutritionState) window.computeNutritionState(false);
+      var _wkPre = generateWeek();
+      if (Array.isArray(_wkPre) && _wkPre.length > 0) { S.weekPlan = _wkPre; S._weekPlanGeneratedAt = new Date().toISOString(); }
+    }
     S._showCompletionFirst = true;
     goStep(12);
   }}, 'Voir mon planning semaine'));
@@ -3225,6 +3231,8 @@ function renderStep9(p) {
     window._nutritionGenerating = true;
     try {
       if (window.computeNutritionState) window.computeNutritionState(false);
+      // C-02: vider le plan existant avant regen — évite que l'échec reste invisible
+      S.weekPlan = null;
       var _wkR = generateWeek();
       if (Array.isArray(_wkR) && _wkR.length > 0) {
         S.weekPlan = _wkR;
