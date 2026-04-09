@@ -169,11 +169,13 @@ function updateStreak() {
     data.current++;
   } else if (data.lastDate && data.lastDate !== today) {
     // Un ou plusieurs jours manqués — vérifier le streak freeze
+    var _missedDays = Math.round((new Date(today) - new Date(data.lastDate)) / 86400000);
     var thisMonth = today.slice(0, 7); // 'YYYY-MM'
     var S = window.S || {};
     var freezeAvailable = S.streakFreezeAvailable !== false; // true par défaut
     var freezeUsedMonth = S.streakFreezeUsedMonth || '';
-    if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3) {
+    // Freeze uniquement pour 1 jour manqué (pas 2+ jours) — diff = 2 signifie 1 jour sauté
+    if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3 && _missedDays <= 2) {
       // Activer le freeze : protéger le streak
       if (window.S) {
         window.S.streakFreezeUsedMonth = thisMonth;

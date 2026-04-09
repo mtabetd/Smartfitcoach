@@ -1676,14 +1676,10 @@ function renderDedicatedPrograms(p) {
  if (!variation) return;
  var currentPhase = getMuscuPhase(S.muscuWeek || 1);
  var exercises = (variation.exercises || []).slice();
- // Medical filter for dedicated programs
- if (S.muscuMedical && exercises.length > 0) {
+ // Medical filter for dedicated programs — uses the full filterExerciseByMedical function
+ if (S.muscuMedical && S.muscuMedical.done && exercises.length > 0) {
    var _medFiltered = exercises.filter(function(exo) {
-     var _n = (exo.name || exo.n || '').toLowerCase();
-     if (S.muscuMedical.shoulders && /militaire|overhead|élévation|elevation|arnold|upright|tirage menton|hspu/.test(_n)) return false;
-     if (S.muscuMedical.knees && /leg extension|jump|pistol|sissy/.test(_n)) return false;
-     if (S.muscuMedical.lowerBack && /good morning|deadlift maximum/.test(_n)) return false;
-     return true;
+     return filterExerciseByMedical(exo, S.muscuMedical);
    });
    if (_medFiltered.length > 0) exercises = _medFiltered;
  }
@@ -3702,7 +3698,15 @@ function renderMusculationZones(p) {
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) {
- S.sportProgram = generateSportProgram();
+ var _prog;
+ try { _prog = generateSportProgram(); } catch(e) { console.error('[sport] generateSportProgram error:', e); }
+ if (!_prog || _prog.length === 0) {
+   S._programGenerationError = 'Aucun exercice disponible avec vos contraintes. Essayez d\'assouplir vos restrictions médicales ou d\'ajouter de l\'équipement.';
+   S.sStep = 4;
+   if (window.render) window.render();
+   return;
+ }
+ S.sportProgram = _prog;
  S.selectedSportDay = 0;
  S.sStep = 4;
  window.BLACKBOX && window.BLACKBOX.log('sport_program_generated', {days: S.sportDays, focus: S.sportFocus, duration: S.sportSessionDuration});
@@ -4766,7 +4770,15 @@ function renderMusculationProgram(p) {
      return;
    } else {
      S._generatingProgram = false;
-     var _syncProg = generateSportProgram();
+     var _syncProg;
+     try {
+       _syncProg = generateSportProgram();
+     } catch(e) {
+       console.error('[sport] generateSportProgram error:', e);
+       S._programGenerationError = 'Une erreur est survenue lors de la génération du programme. Veuillez réessayer.';
+       if (window.render) window.render();
+       return;
+     }
      if (!_syncProg || _syncProg.length === 0) {
        S._programGenerationError = 'Aucun exercice disponible avec vos contraintes. Essayez d\'assouplir vos restrictions médicales ou d\'ajouter de l\'équipement.';
        if (window.render) window.render();

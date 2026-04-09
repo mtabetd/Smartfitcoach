@@ -164,14 +164,21 @@
     scheduleAndPersist: function(tag, title, body, targetTime) {
       var self = this;
       var prefs = self.getPrefs();
-      if (!prefs.scheduledNotifs) prefs.scheduledNotifs = [];
+      // Garantir que scheduledNotifs est un Array (localStorage potentiellement corrompu)
+      if (!Array.isArray(prefs.scheduledNotifs)) prefs.scheduledNotifs = [];
       // Dédupliquer par tag — on ne garde que le plus récent pour chaque tag
-      prefs.scheduledNotifs = prefs.scheduledNotifs.filter(function(n) { return n.tag !== tag; });
+      prefs.scheduledNotifs = prefs.scheduledNotifs.filter(function(n) { return n && n.tag !== tag; });
       prefs.scheduledNotifs.push({ tag: tag, title: title, body: body, targetTime: targetTime });
       self.savePrefs(prefs);
+      // Annuler le timer précédent pour ce tag (évite les double-notifications)
+      if (!window._SFCTimers) window._SFCTimers = {};
+      if (window._SFCTimers[tag]) clearTimeout(window._SFCTimers[tag]);
       var delay = Math.max(0, targetTime - Date.now());
       if (delay < 2147483647) {
-        setTimeout(function() { self.showLocal(title, body, tag); }, delay);
+        window._SFCTimers[tag] = setTimeout(function() {
+          self.showLocal(title, body, tag);
+          if (window._SFCTimers) delete window._SFCTimers[tag];
+        }, delay);
       }
     },
 
@@ -179,10 +186,11 @@
     checkPersistentReminders: function() {
       var self = this;
       var prefs = self.getPrefs();
-      if (!prefs.granted || !prefs.scheduledNotifs) return;
+      if (!prefs.granted || !Array.isArray(prefs.scheduledNotifs)) return;
       var now = Date.now();
       var remaining = [];
       prefs.scheduledNotifs.forEach(function(notif) {
+        if (!notif || !notif.targetTime) return; // ignorer les entrées corrompues
         if (notif.targetTime <= now) {
           // Rappel manqué — le déclencher immédiatement
           self.showLocal(notif.title, notif.body, notif.tag);
