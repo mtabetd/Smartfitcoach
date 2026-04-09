@@ -1294,7 +1294,7 @@ function renderMuscuMedicalQ(p) {
  if (S.muscuMedical && S.muscuMedical.done === true && !S._muscuMedicalEdit) {
   // Résumé compact
   var _painZones = ['shoulders','elbows','wrists','neck','upperBack','lowerBack','hips','knees','ankles','feet'];
-  var _diagKeys = ['herniaDisc','herniaInguinal','rotatorCuff','acl','osteoporosis','hypertension','rheumatoidArthritis','fibromyalgia','meniscus','spondylitis','gonarthrosis','epicondylitis'];
+  var _diagKeys = ['herniaDisc','herniaInguinal','rotatorCuff','acl','osteoporosis','hypertension','rheumatoidArthritis','fibromyalgia','meniscus','spondylarthritis','kneeOsteoarthritis','epicondylitis'];
   var _anyPain = _painZones.some(function(z) { return !!S.muscuMedical[z]; });
   var _anyDiag = _diagKeys.some(function(z) { return !!S.muscuMedical[z]; });
   var _summaryCard = h('div', {style: 'border:1px solid var(--border);padding:16px;background:var(--ivory2,#F5F3EC);margin-bottom:20px;'});
@@ -1312,7 +1312,8 @@ function renderMuscuMedicalQ(p) {
 
   // Continuer directement
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
-    S.sStep = !S.sportLevel ? 1 : 16;
+    if (S._medicalReturnToDashboard) { S._medicalReturnToDashboard = false; S.sStep = 4; }
+    else { S.sStep = !S.sportLevel ? 1 : 16; }
     if (window.saveProfile) window.saveProfile();
     window.render();
   }}, 'Continuer'));
@@ -1439,7 +1440,8 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
  S.muscuMedical.done = true;
  delete S._muscuMedicalEdit;
- S.sStep = !S.sportLevel ? 1 : 16; // si niveau pas encore défini → objectifs, sinon charges
+ if (S._medicalReturnToDashboard) { S._medicalReturnToDashboard = false; S.sStep = 4; }
+ else { S.sStep = !S.sportLevel ? 1 : 16; }
  window.render();
  }}, 'Continuer \u2192'));
 
@@ -1449,7 +1451,8 @@ function renderMuscuMedicalQ(p) {
  onclick: function(){
  S.muscuMedical.done = true;
  delete S._muscuMedicalEdit;
- S.sStep = !S.sportLevel ? 1 : 16; // si niveau pas encore défini → objectifs, sinon charges
+ if (S._medicalReturnToDashboard) { S._medicalReturnToDashboard = false; S.sStep = 4; }
+ else { S.sStep = !S.sportLevel ? 1 : 16; }
  window.render();
  }
  }, 'Passer (aucune douleur)');
@@ -1469,7 +1472,7 @@ function renderChargesQuestionnaire(p) {
   p.appendChild(reassureCard);
   var contBtn = h('button', {
    style: 'width:100%;padding:16px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
-   onclick: function() { var _nxt = S._chargesFromLevel ? 3 : 1; S._chargesFromLevel = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }
+   onclick: function() { var _nxt = S._chargesFromLevel ? 3 : (S._chargesReturnToDashboard ? 4 : 1); S._chargesFromLevel = false; S._chargesReturnToDashboard = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }
   }, 'Continuer →');
   p.appendChild(contBtn);
   var backLink = h('div', {style: 'text-align:center;margin-top:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);cursor:pointer;text-decoration:underline', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 15; S._chargesFromLevel = false; S.sStep = _bk; window.render(); }}, '← Retour');
@@ -1594,7 +1597,7 @@ function renderChargesQuestionnaire(p) {
  _chargesFooter.appendChild(h('span', {}, ' (formule d\'Epley : charge × (1 + N/30)).'));
  p.appendChild(_chargesFooter);
 
- p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ var _nxt = S._chargesFromLevel ? 3 : 15; S._chargesFromLevel = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }}, 'Continuer'));
+ p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){ var _nxt = S._chargesFromLevel ? 3 : (S._chargesReturnToDashboard ? 4 : 15); S._chargesFromLevel = false; S._chargesReturnToDashboard = false; S.sStep = _nxt; if (window.saveProfile) window.saveProfile(); window.render(); }}, 'Continuer'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 15; S._chargesFromLevel = false; S.sStep = _bk; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
@@ -4848,7 +4851,7 @@ function renderMusculationProgram(p) {
  var estBanner = h('div', {style: 'border-left:3px solid #6A4A1A;padding:10px 14px;background:var(--orangebg,rgba(106,74,26,.06));margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A'});
  estBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:3px'}, 'Charges estimées'));
  estBanner.appendChild(h('div', {}, 'Les poids affichés sont calculés d\'après votre poids de corps et niveau. Pour des charges personnalisées,\u00a0'));
- var goBack16 = h('span', {style: 'text-decoration:underline;cursor:pointer', onclick: function(){ S.sStep = 16; window.render(); }}, 'saisissez vos charges de référence');
+ var goBack16 = h('span', {style: 'text-decoration:underline;cursor:pointer', onclick: function(){ S._chargesReturnToDashboard = true; S.sStep = 16; window.render(); }}, 'saisissez vos charges de référence');
  estBanner.appendChild(goBack16);
  estBanner.appendChild(h('span', {}, '.'));
  p.appendChild(estBanner);
@@ -4878,7 +4881,7 @@ function renderMusculationProgram(p) {
  medBanner.appendChild(h('div', {style: 'margin-bottom:3px'}, r));
  });
  var editMed = h('div', {style: 'margin-top:8px;font-size:11px;text-decoration:underline;cursor:pointer;color:#6A4A1A',
- onclick: function(){ S.sStep = 20; window.render(); }}, 'Modifier mon bilan m\u00e9dical');
+ onclick: function(){ S._medicalReturnToDashboard = true; S.sStep = 20; window.render(); }}, 'Modifier mon bilan m\u00e9dical');
  medBanner.appendChild(editMed);
  p.appendChild(medBanner);
  }
@@ -5150,9 +5153,10 @@ function renderMusculationProgram(p) {
 
  // ─── ESTIMATION CALORIQUE MUSCU ───
  (function() {
-  var muscuLevel = S.sportLevel || 'intermediaire';
+  var _lvlNorm = {beginner:'debutant', intermediate:'intermediaire', advanced:'avance', elite:'elite'}[S.sportLevel] || 'intermediaire';
   var SESSION_DUR_MUSCU = { debutant: 50, intermediaire: 60, avance: 75, elite: 90 };
-  var muscuDur = SESSION_DUR_MUSCU[muscuLevel] || 60;
+  var muscuDur = SESSION_DUR_MUSCU[_lvlNorm] || 60;
+  var muscuLevel = S.sportLevel || 'intermediate';
   var muscuKcal = estimateKcal('muscu', muscuLevel, muscuDur);
   p.appendChild(buildKcalCard(muscuKcal, muscuDur));
  }());
