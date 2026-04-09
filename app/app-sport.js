@@ -6032,7 +6032,7 @@ function renderMusculationProgram(p) {
  var _sessLog = [];
  var _sortedDates = Object.keys(S.muscuSessionLog || {}).sort();
  _sortedDates.forEach(function(d) {
- if (S.muscuSessionLog[d] && S.muscuSessionLog[d][exRef.n]) {
+ if (S.muscuSessionLog[d] && Array.isArray(S.muscuSessionLog[d][exRef.n]) && S.muscuSessionLog[d][exRef.n].length > 0) {
  var _sSets = S.muscuSessionLog[d][exRef.n].filter(function(s) { return s.actualReps !== null; });
  if (_sSets.length > 0) {
  _sessLog.push({ week: d, sets: _sSets.map(function(s) { return { reps: s.actualReps, load: s.actualWeight || 0, targetReps: s.targetReps }; }) });
@@ -6070,7 +6070,7 @@ function renderMusculationProgram(p) {
   var _sortedDates2 = Object.keys(S.muscuSessionLog || {}).sort();
   _sortedDates2.forEach(function(d) {
    if (d >= _prToday) return; // Ignorer aujourd'hui
-   var _prevSets = (S.muscuSessionLog[d] && S.muscuSessionLog[d][_exRef2.n]) ? S.muscuSessionLog[d][_exRef2.n] : [];
+   var _prevSets = (S.muscuSessionLog[d] && Array.isArray(S.muscuSessionLog[d][_exRef2.n])) ? S.muscuSessionLog[d][_exRef2.n] : [];
    _prevSets.forEach(function(s) {
     if (s.actualReps && s.actualWeight) {
      var vol = s.actualWeight * s.actualReps;
