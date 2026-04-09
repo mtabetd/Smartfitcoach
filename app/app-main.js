@@ -329,7 +329,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
    onmousedown:  function(e){ e.currentTarget.style.transform='scale(0.98)'; },
    onmouseup:    function(e){ e.currentTarget.style.transform='scale(1)'; },
    onclick: function() {
-     S.welcomeShown = true;
+     if (window.S) S.welcomeShown = true;
      saveProfile();
      window.render();
    }
@@ -1798,10 +1798,14 @@ function renderForgotPassword(app) {
  render();
  } else {
  S.authError = result.error;
+ sendBtn.disabled = false;
+ sendBtn.textContent = 'Envoyer le lien';
  render();
  }
  }).catch(function() {
  S.authError = 'Erreur r\u00e9seau. R\u00e9essayez.';
+ sendBtn.disabled = false;
+ sendBtn.textContent = 'Envoyer le lien';
  render();
  });
  }}, 'Envoyer le lien');
@@ -1888,6 +1892,11 @@ function renderNewPassword(app) {
  }
  }}, 'Enregistrer');
  form.appendChild(saveBtn);
+
+ // Lien de secours si le token Supabase expire en cours de saisie
+ var cancelLink = h('div', {'class': 'auth-switch'});
+ cancelLink.appendChild(h('a', {onclick: function() { S.authError = ''; S.view = 'auth'; render(); }}, 'Retour \u00e0 la connexion'));
+ c.appendChild(cancelLink);
 
  c.appendChild(form);
  app.appendChild(c);
