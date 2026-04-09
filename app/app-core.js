@@ -2281,7 +2281,7 @@ window.S = {
   view: 'auth', // 'auth','authRegister','dashboard','nutrition','sport'
   authError: '',
   // Nutrition wizard
-  nStep: 0, sex: null, age: 28, birthDate: null, weight: 75, height: 175,
+  nStep: 0, sex: null, prenom: '', age: null, birthDate: null, weight: 75, height: 175,
   lang: 'fr', weightUnit: 'kg', heightUnit: 'cm',
   activity: null, train: [], sleep: null, medical: [], goal: null,
   cookLevel: 2, whey: null, wheyFlavors: [], allergies: [], intolerances: [],

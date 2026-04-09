@@ -102,8 +102,8 @@ function goStep(n) {
   // New flow: 1=N3 2=N4 3=N5 4=N1+N2(objectif) 5=N6+N7(activité+sommeil)
   //           6=BodyScan 7=Preview 8=Medical 9=Habitudes 10=Préférences 11=Résultats 12=Planning
   if (n === 1) {
-    var _step1ok = S.sex && S.prenom !== undefined;
-    var _step2ok = !!(S.birthDate || S.age);
+    var _step1ok = !!S.sex; // prénom optionnel
+    var _step2ok = !!(S.birthDate || (S.age !== null && S.age !== undefined));
     var _step3ok = !!(S.weight && S.height);
     var _step4ok = S.goal !== null && S.goal !== undefined;
     var _step5ok = true; // target weight is optional for maintain goal
@@ -117,9 +117,8 @@ function goStep(n) {
     var _step7ok = S.sleep !== null && S.sleep !== undefined;
     // All body+goal+activity+sleep data complete → skip to medical (nStep 8), allow confirmation
     if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok && _step7ok) { n = 8; }
-    else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok) { n = 5; } // missing sleep
-    else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok) { n = 5; } // missing activity
-    else if (_step1ok && _step2ok && _step3ok && _step4ok) { n = 5; } // missing activity/sleep
+    else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok) { n = 5; } // targetWeight ok, manque activité/sommeil
+    else if (_step1ok && _step2ok && _step3ok && _step4ok) { n = 4; } // targetWeight manquant → retour objectif
     else if (_step1ok && _step2ok && _step3ok) { n = 4; } // missing objectif
     else if (_step1ok && _step2ok) { n = 3; } // missing poids/taille
     else if (_step1ok) { n = 2; } // missing date naissance
@@ -655,7 +654,7 @@ function renderStep3(p) {
   });
   p.appendChild(weightUnitDiv);
   var wRange = window.UNITS ? window.UNITS.weightRange() : {min: 30, max: 300, step: 0.1};
-  var wVal = window.UNITS ? window.UNITS.displayWeightVal(S.weight) : S.weight;
+  var wVal = window.UNITS ? (window.UNITS.displayWeightVal(S.weight) || '') : (S.weight || '');
   var ww = h('div', {'class': 'num-input-wrap'});
   ww.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(wRange.min), max: String(wRange.max), step: String(wRange.step), value: String(wVal), inputmode: 'decimal', placeholder: window.UNITS && window.UNITS.weight === 'lbs' ? '165' : '75', oninput: function(e) {
     var v = parseFloat(e.target.value);
@@ -696,7 +695,7 @@ function renderStep3(p) {
   });
   p.appendChild(heightUnitDiv);
   var hRange = window.UNITS ? window.UNITS.heightRange() : {min: 120, max: 250, step: 1};
-  var hVal = window.UNITS ? window.UNITS.displayHeightVal(S.height) : S.height;
+  var hVal = window.UNITS ? (window.UNITS.displayHeightVal(S.height) || '') : (S.height || '');
   var hw = h('div', {'class': 'num-input-wrap'});
   hw.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(hRange.min), max: String(hRange.max), step: String(hRange.step), value: String(hVal), inputmode: window.UNITS && window.UNITS.height === 'ft' ? 'decimal' : 'numeric', placeholder: window.UNITS && window.UNITS.height === 'ft' ? 'pouces (ex: 70.9)' : '175', oninput: function(e) {
     var v = parseFloat(e.target.value);
@@ -896,7 +895,7 @@ function renderStep3(p) {
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(4); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (S.weight && S.height) goStep(4); }}, window.t('onb.next')));
   p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
@@ -1932,7 +1931,8 @@ function renderStep8(p) {
     rh.appendChild(titleDiv);
   })();
   rh.appendChild(h('div', {'class': 'result-rule'}));
-  var _profItems = [S.sex==='homme'?'Homme':'Femme', getAge()+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
+  var _ageDisplay = (typeof getAge === 'function' ? getAge() : (S.age || '?'));
+  var _profItems = [S.sex==='homme'?'Homme':'Femme', _ageDisplay+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
   if(S.activity!==null&&S.activity!==undefined&&ACTIVITIES[S.activity])_profItems.push(ACTIVITIES[S.activity].name);
   if(S.goal!==null&&S.goal!==undefined&&GOALS[S.goal])_profItems.push(GOALS[S.goal].name);
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));
