@@ -94,7 +94,7 @@
     // Écouter les changements d'auth
     onAuthStateChange: function(callback) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
       client.auth.onAuthStateChange(function(event, session) {
         callback(event, session);
       });
@@ -114,7 +114,7 @@
     // Sauvegarder le profil complet vers Supabase
     saveProfile: function() {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return; // pas connecté
@@ -190,12 +190,15 @@
 
         return client
           .from('profiles')
-          .select('data')
+          .select('data, updated_at')
           .eq('id', session.user.id)
           .single()
           .then(function(result) {
             if (result.error || !result.data) return null;
-            return result.data.data;
+            var payload = result.data.data || {};
+            // Attacher le timestamp cloud pour comparaison multidevice dans syncOnLogin
+            if (result.data.updated_at) payload._cloudUpdatedAt = result.data.updated_at;
+            return payload;
           });
       });
     },
@@ -203,7 +206,7 @@
     // Sauvegarder une entrée de poids
     saveWeight: function(date, weight) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -220,7 +223,7 @@
     // Sauvegarder une séance sport
     saveSession: function(sessionData) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -244,7 +247,7 @@
     // Sauvegarder les logs muscu du jour
     saveMuscuLog: function(date, exerciseName, sets) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -262,7 +265,7 @@
     // Sauvegarder le journal alimentaire
     saveFoodEntry: function(entry) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -287,7 +290,7 @@
     // Sauvegarder l'eau
     saveWater: function(date, glasses) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -304,7 +307,7 @@
     // Sauvegarder un badge
     saveBadge: function(badgeId) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -320,7 +323,7 @@
     // Sauvegarder le streak
     saveStreak: function(streakData) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -339,7 +342,7 @@
     // Sauvegarder le plan nutrition
     saveMealPlan: function(weekStart, plan) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -450,8 +453,12 @@
           // Also check if cloud has a weekPlan that local is missing
           var cloudHasPlan = cloudData.weekPlan != null;
           var localHasPlan = (localData && localData.weekPlan != null) || window.S.weekPlan != null;
-          if (cloudNStep > localNStep || cloudSStep > localSStep || (cloudHasPlan && !localHasPlan)) {
-            console.log('[SupaSync] Cloud data is more advanced — loading from cloud (cloudNStep=' + cloudNStep + ' localNStep=' + localNStep + ')');
+          // Priorité au profil le plus récent (timestamp) plutôt que le plus avancé (nStep)
+          var cloudTime = cloudData._cloudUpdatedAt ? new Date(cloudData._cloudUpdatedAt).getTime() : 0;
+          var localTime = (localData && localData._cloudUpdatedAt) ? new Date(localData._cloudUpdatedAt).getTime() : 0;
+          var cloudIsNewer = cloudTime > 0 && cloudTime > localTime + 5000; // 5s de tolérance
+          if (cloudIsNewer || cloudNStep > localNStep || cloudSStep > localSStep || (cloudHasPlan && !localHasPlan)) {
+            console.log('[SupaSync] Cloud preferred — cloudTime=' + new Date(cloudTime).toISOString() + ' localTime=' + (localTime ? new Date(localTime).toISOString() : 'none') + ' nStep cloud/local=' + cloudNStep + '/' + localNStep);
             _applyCloudData();
             if (window.render) window.render();
             return 'loaded_from_cloud';
@@ -475,6 +482,7 @@
       }).catch(function(e) {
         self._syncPending = false;
         console.warn('[SupaSync] syncOnLogin failed:', e);
+        return null;
       });
     },
 

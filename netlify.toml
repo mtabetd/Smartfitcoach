@@ -8,6 +8,15 @@
 [functions."body-analysis"]
   timeout = 30
 
+[functions."ai-coach"]
+  timeout = 26
+
+[functions."plate-scan"]
+  timeout = 26
+
+[functions."generate-muscu-program"]
+  timeout = 90
+
 # ── Security Headers ────────────────────────────────────────────────────────
 [[headers]]
   for = "/*"

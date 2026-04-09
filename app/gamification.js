@@ -150,13 +150,20 @@ function updateStreak() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   if (!user) return;
   var data = getStreak();
-  var today = new Date().toISOString().split('T')[0];
+  // Helper timezone-safe : évite le décalage UTC/local (ex. UTC+2 à 23h → jour UTC suivant)
+  function _localDateStr(d) {
+    var dt = d || new Date();
+    return dt.getFullYear() + '-' +
+      String(dt.getMonth() + 1).padStart(2, '0') + '-' +
+      String(dt.getDate()).padStart(2, '0');
+  }
+  var today = _localDateStr();
 
   if (data.lastDate === today) return; // Already logged today
 
-  var yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  var yesterdayStr = yesterday.toISOString().split('T')[0];
+  var _yd = new Date();
+  _yd.setDate(_yd.getDate() - 1);
+  var yesterdayStr = _localDateStr(_yd);
 
   if (data.lastDate === yesterdayStr) {
     data.current++;
@@ -186,7 +193,7 @@ function updateStreak() {
   if (data.current > data.best) data.best = data.current;
   data.lastDate = today;
   if (!data.dates) data.dates = [];
-  data.dates.push(today);
+  if (data.dates.indexOf(today) === -1) data.dates.push(today);
   if (data.dates.length > 400) data.dates = data.dates.slice(-400);
 
   // Reset mensuel du streak freeze (1er du mois suivant)

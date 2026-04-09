@@ -185,6 +185,19 @@ function saveProfile() {
  // Sync vers Supabase (debounced)
  if (window.SupaSync) SupaSync.scheduleSave();
 }
+// Migration centralisée des anciens numéros de step vers le nouveau routing (Apr 2026)
+// Appelée après loadProfile() à chaque login ou sync cloud — une seule source de vérité
+function _migrateSteps() {
+ if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 9) {
+   if (S.weekPlan) { S.nStep = 12; }
+   else if (S.nStep === 8) { S.nStep = 11; }
+   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
+ }
+ if (S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
+   S.nStep = S.weekPlan ? 12 : (S.goal !== null ? 11 : 1);
+ }
+}
+
 function loadProfile() {
  try {
  var user = AUTH.getUser();
@@ -1207,34 +1220,36 @@ function renderLogin(app) {
  var _loginUser = AUTH.getUser();
  var _loginUid = _loginUser ? _loginUser.id : null;
  if (_loginUid && _loginUid !== 'anon') {
+ // Profil principal
  var _anonRaw = localStorage.getItem('mtd_profile_anon');
  var _userRaw = localStorage.getItem('mtd_profile_' + _loginUid);
  if (_anonRaw && !_userRaw) {
- // User filled onboarding anonymously — migrate to their account key
  localStorage.setItem('mtd_profile_' + _loginUid, _anonRaw);
  localStorage.removeItem('mtd_profile_anon');
+ }
+ // Streak
+ var _anonStreak = localStorage.getItem('mtd_streak_anon');
+ if (_anonStreak && !localStorage.getItem('mtd_streak_' + _loginUid)) {
+ localStorage.setItem('mtd_streak_' + _loginUid, _anonStreak);
+ localStorage.removeItem('mtd_streak_anon');
+ }
+ // Badges
+ var _anonBadges = localStorage.getItem('mtd_badges_anon');
+ if (_anonBadges && !localStorage.getItem('mtd_badges_' + _loginUid)) {
+ localStorage.setItem('mtd_badges_' + _loginUid, _anonBadges);
+ localStorage.removeItem('mtd_badges_anon');
+ }
+ // Historique poids
+ var _anonWh = localStorage.getItem('mtd_weight_history_anon');
+ if (_anonWh && !localStorage.getItem('mtd_weight_history_' + _loginUid)) {
+ localStorage.setItem('mtd_weight_history_' + _loginUid, _anonWh);
+ localStorage.removeItem('mtd_weight_history_anon');
  }
  }
  } catch(e) {}
  // Restore profile from localStorage for this user
  loadProfile();
- // Migrate old nStep values → new routing (restructuring Apr 2026)
- // OLD: 1=Obj 2=PoidsCible 3=Prénom 4=Naissance 5=Corps 6=Activité 7=Sommeil 8=Results 9=Planning
- // NEW: 1=Prénom 2=Naissance 3=Corps 4=Obj 5=Activité 6=BodyScan 7=Preview 8=Medical 9=Habitudes 10=Prefs 11=Results 12=Planning
- if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 9) {
-   if (S.weekPlan) {
-     S.nStep = 12; // Has plan → show planning
-   } else if (S.nStep === 8) {
-     S.nStep = 11; // Was results → new results
-   } else if (S.nStep >= 1 && S.nStep <= 7 && (S.sex && S.goal !== null)) {
-     S.nStep = 8; // Was mid-onboarding with profile → jump to medical
-   }
- }
- // Fix nStep for returning users who completed onboarding
- // New flow: nStep 12 = planning (was 9), nStep 11 = results (was 8)
- if (S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
- S.nStep = S.weekPlan ? 12 : (S.goal !== null ? 11 : 1);
- }
+ _migrateSteps();
  // Restore language preference
  if (window.I18N && S.lang) window.I18N.current = S.lang;
  // Restore unit preferences
@@ -1257,14 +1272,7 @@ function renderLogin(app) {
  if (window.SupaSync) {
  SupaSync.syncOnLogin().then(function(syncResult) {
  if (syncResult === 'loaded_from_cloud') {
- if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 9) {
-   if (S.weekPlan) { S.nStep = 12; }
-   else if (S.nStep === 8) { S.nStep = 11; }
-   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
- }
- if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
- S.nStep = S.weekPlan ? 12 : (S.goal ? 11 : 1);
- }
+ _migrateSteps();
  if (window.I18N && S.lang) window.I18N.current = S.lang;
  if (window.UNITS) {
  window.UNITS.weight = S.weightUnit || 'kg';
@@ -1841,12 +1849,7 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  if (window.GAMIFICATION) GAMIFICATION.updateStreak();
  // Restore full profile from localStorage (E-01)
  loadProfile();
- // Migrate old nStep values → new routing (restructuring Apr 2026)
- if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 9) {
-   if (S.weekPlan) { S.nStep = 12; }
-   else if (S.nStep === 8) { S.nStep = 11; }
-   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
- }
+ _migrateSteps();
  // Store first login date (needed for J+1 wellness guard)
  if (!S.firstLoginDate) {
    S.firstLoginDate = new Date().toISOString().slice(0, 10);
