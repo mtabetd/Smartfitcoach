@@ -449,7 +449,7 @@ function _renderProgressionWidget(container) {
     var sec3 = document.createElement('div');
     sec3.className = 'ph-section';
     sec3.appendChild(createLabel('Poids corporel'));
-    var wHistSorted = weightHist.slice().sort(function(a,b){ return a.date < b.date ? -1 : 1; });
+    var wHistSorted = weightHist.slice().sort(function(a,b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
     var wLast = wHistSorted[wHistSorted.length - 1];
     var wPrev = null;
     var cutoff30 = new Date(Date.now() - 30*86400000).toISOString().split('T')[0];
