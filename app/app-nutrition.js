@@ -98,6 +98,7 @@ function backArrowHtml() {
 // nStep 12 = Planning semaine                             → renderStep9
 
 function goStep(n) {
+  if (typeof n !== 'number' || n < 0 || n > 12) { console.warn('[goStep] valeur invalide:', n); return; }
   // Auto-skip identity/body steps when data already exists (cross-module symbiosis)
   // New flow: 1=N3 2=N4 3=N5 4=N1+N2(objectif) 5=N6+N7(activité+sommeil)
   //           6=BodyScan 7=Preview 8=Medical 9=Habitudes 10=Préférences 11=Résultats 12=Planning
@@ -896,7 +897,7 @@ function renderStep3(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (S.weight && S.height) goStep(4); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = (S.sex === 'femme') ? 1 : 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 5 (N6+N7): ACTIVITE + SOMMEIL ───
@@ -1386,6 +1387,7 @@ function renderStep5(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !canContinue5b, onclick: function() {
     if (canContinue5b) {
       bb('nutrition_habits', {meals: S.mealsPerDay, location: S.eatingLocation, prepTime: S.mealPrepTime, alcoholFreq: S.alcoholFreq});
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window._s5page = 0;
       goStep(10);
     }
@@ -1763,7 +1765,7 @@ function renderStep7(p) {
   // Excluded
   p.appendChild(h('div', {'class': 'section-label'}, 'Aliments exclus'));
   var fi = h('div', {'class': 'field'});
-  fi.appendChild(h('input', {type: 'text', placeholder: 'Ex: avocat, bœuf, saumon...', value: S.excluded, oninput: function(e) { S.excluded = e.target.value; }}));
+  fi.appendChild(h('input', {type: 'text', placeholder: 'Ex: avocat, bœuf, saumon...', value: S.excluded, oninput: function(e) { S.excluded = e.target.value; if (window.saveProfile) try { window.saveProfile(); } catch(e2) {} }}));
   p.appendChild(fi);
 
   // Cuisines
