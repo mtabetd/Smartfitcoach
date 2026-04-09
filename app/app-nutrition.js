@@ -620,7 +620,7 @@ function renderStep2b(p) {
     window._s2page = 0;
     goStep(3);
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 
@@ -2027,7 +2027,7 @@ function renderStep8(p) {
   p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Prot\u00e9ines \u00b7 Glucides \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
 
   // g/kg ratio for power users — shown in small grey below the gram total
-  var _protRatio = (S.weight && S._nm && S._nm.p) ? (S._nm.p / S.weight).toFixed(1) : null;
+  var _protRatio = (S.weight && S._nm) ? (((S._nm.proteinGrams || S._nm.p || 0)) / S.weight).toFixed(1) : null;
   if (_protRatio) {
     p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);text-align:center;margin-top:2px'}, _protRatio + ' g/kg · méthode ISSN 2017'));
   }
@@ -2656,7 +2656,7 @@ function renderStep9(p) {
 
   // ── Daily macro progress bars ─────────────────────────────────────────────
   (function() {
-    var tgtP = (_nm.p || 0), tgtG = (_nm.g || 0), tgtL = (_nm.l || 0);
+    var tgtP = (_nm.proteinGrams || _nm.p || 0), tgtG = (_nm.carbsGrams || _nm.g || 0), tgtL = (_nm.fatGrams || _nm.l || 0);
     var kcalPct = _tgt > 0 ? Math.min(100, Math.round(_preTotal / _tgt * 100)) : 0;
     var pPct = tgtP > 0 ? Math.min(100, Math.round(_preTotalP / tgtP * 100)) : 0;
     var gPct = tgtG > 0 ? Math.min(100, Math.round(_preTotalG / tgtG * 100)) : 0;
@@ -3221,8 +3221,7 @@ function renderStep9(p) {
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
     if (window.computeNutritionState) window.computeNutritionState(false);
     var _wkR = generateWeek();
-    if (Array.isArray(_wkR) && _wkR.length > 0) { S.weekPlan = _wkR; S.selectedDay = 0; }
-    S._weekPlanGeneratedAt = new Date().toISOString();
+    if (Array.isArray(_wkR) && _wkR.length > 0) { S.weekPlan = _wkR; S.selectedDay = 0; S._weekPlanGeneratedAt = new Date().toISOString(); }
     // Sync plan nutrition vers Supabase
     if (window.SupaSync && S.weekPlan) {
       try {
@@ -3440,6 +3439,7 @@ function exportDayPDF(dayIdx) {
   doc.text(dayTotal + ' kcal', W - M - 4, y + 4, {align: 'right'}); y += 14;
 
   // Medical warnings
+  if (!Array.isArray(S.medical)) S.medical = [];
   if (S.medical.length > 0) {
     doc.setFontSize(7); doc.setTextColor(106, 74, 26);
     doc.text('RECOMMANDATIONS M\u00c9DICALES', M, y); y += 4;
