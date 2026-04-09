@@ -1438,7 +1438,7 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
  S.muscuMedical.done = true;
  delete S._muscuMedicalEdit;
- S.sStep = 16;
+ S.sStep = !S.sportLevel ? 1 : 16; // si niveau pas encore défini → objectifs, sinon charges
  window.render();
  }}, 'Continuer \u2192'));
 
@@ -1448,7 +1448,7 @@ function renderMuscuMedicalQ(p) {
  onclick: function(){
  S.muscuMedical.done = true;
  delete S._muscuMedicalEdit;
- S.sStep = 16;
+ S.sStep = !S.sportLevel ? 1 : 16; // si niveau pas encore défini → objectifs, sinon charges
  window.render();
  }
  }, 'Passer (aucune douleur)');
@@ -1823,7 +1823,7 @@ function renderMusculationGoals(p) {
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) { S.sStep = 2; window.render(); }
  }}, 'Continuer'));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 15; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = !S.sportLevel ? 20 : 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 // ─── STEP 5 (CrossFit): NIVEAU CF ───
@@ -3696,7 +3696,8 @@ function renderMusculationZones(p) {
 
  p.appendChild(h('div', {style: 'height:16px'}));
  var selectedZones = Object.keys(S.sportFocus || {}).filter(function(z){ return S.sportFocus[z] > 0; });
- var ok = selectedZones.length >= 2 && S.sportSessionDuration !== null;
+ if (!S.sportSessionDuration) S.sportSessionDuration = '1h'; // pré-sélection par défaut
+ var ok = selectedZones.length >= 2 && !!S.sportSessionDuration;
  if (selectedZones.length < 2) {
  p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez au moins 2 zones à travailler pour continuer.'));
  } else if (!S.sportSessionDuration) {
@@ -3706,7 +3707,7 @@ function renderMusculationZones(p) {
  if (ok) {
  var _prog;
  try { _prog = generateSportProgram(); } catch(e) { console.error('[sport] generateSportProgram error:', e); }
- if (!_prog || _prog.length === 0) {
+ if (!_prog || _prog.length === 0 || _prog.every(function(d){ return !d.exercises || d.exercises.length === 0; })) {
    S._programGenerationError = 'Aucun exercice disponible avec vos contraintes. Essayez d\'assouplir vos restrictions médicales ou d\'ajouter de l\'équipement.';
    S.sStep = 4;
    if (window.render) window.render();
@@ -4755,7 +4756,7 @@ function renderMusculationProgram(p) {
        try {
          S._generatingProgram = false;
          S.sportProgram = generateSportProgram();
-         if (!S.sportProgram || S.sportProgram.length === 0) {
+         if (!S.sportProgram || S.sportProgram.length === 0 || S.sportProgram.every(function(d){ return !d.exercises || d.exercises.length === 0; })) {
            console.error('[sport] generateSportProgram returned empty program');
            S._generatingProgram = false;
            S._programGenerationError = 'Aucun exercice disponible avec vos contraintes actuelles. Essayez d\'assouplir vos restrictions médicales ou d\'ajouter davantage d\'équipement.';
@@ -4775,25 +4776,12 @@ function renderMusculationProgram(p) {
      }, 50);
      return;
    } else {
-     S._generatingProgram = false;
-     var _syncProg;
-     try {
-       _syncProg = generateSportProgram();
-     } catch(e) {
-       console.error('[sport] generateSportProgram error:', e);
-       S._programGenerationError = 'Une erreur est survenue lors de la génération du programme. Veuillez réessayer.';
-       if (window.render) window.render();
-       return;
-     }
-     if (!_syncProg || _syncProg.length === 0) {
-       S._programGenerationError = 'Aucun exercice disponible avec vos contraintes. Essayez d\'assouplir vos restrictions médicales ou d\'ajouter de l\'équipement.';
-       if (window.render) window.render();
-       return;
-     }
-     S.sportProgram = _syncProg;
-     S._programGenerationError = null;
-     S.selectedSportDay = 0;
-     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+     // setTimeout en attente — afficher le spinner et attendre, ne pas générer en doublon
+     p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'},[
+       h('div', {style: 'font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
+       h('div', {style: 'width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;'})
+     ]));
+     return;
    }
  }
 
