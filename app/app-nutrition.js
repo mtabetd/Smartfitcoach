@@ -896,7 +896,7 @@ function renderStep3(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (S.weight && S.height) goStep(4); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = (S.sex === 'femme') ? 1 : 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 5 (N6+N7): ACTIVITE + SOMMEIL ───
@@ -1893,7 +1893,7 @@ function renderStep7(p) {
     }, 50);
   }}, window.t('onb.finish'));
   p.appendChild(_genBtn);
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(9); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; goStep(9); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 11 (RÉSULTATS / MACROS) ───
@@ -3261,6 +3261,7 @@ function renderStep9(p) {
       onclick: function() {
         window.S.view = 'sport';
         window.S.sStep = 0;
+        window.S.sportType = null; // permettre le re-choix de sport
         if (window.saveProfile) window.saveProfile();
         if (window.render) window.render();
       }
@@ -5833,7 +5834,7 @@ function renderBodyScan(p) {
 // Si S._bodyFatEstimate est défini, utilise Katch-McArdle (déjà géré dans calcBMR()).
 function renderProvisionalPreview(p) {
   if (!S.sex || !S.weight || !S.height || S.goal === null || S.goal === undefined) {
-    goStep(4); return;
+    goStep(1); return; // goStep(1) contient la logique d'auto-skip vers le bon step manquant
   }
   renderProgressBar(p, 7, 12);
   var _bmr = typeof calcBMR === 'function' ? calcBMR() : 0;

@@ -84,7 +84,9 @@ var PROFILE_KEYS = [
  '_bodyFatEstimate',
  '_bodyCompositionProfile',
  '_bodyCompositionWeight',
- 'bodyScanDone'
+ 'bodyScanDone',
+ '_parqNextStep',
+ '_sportProfileDone'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -121,14 +123,8 @@ function saveProfile() {
  var user = AUTH.getUser();
  var uid = user ? user.id : 'anon';
 
- // Validate profile data before saving
- if (window.validateProfile) {
-   var _valErrors = window.validateProfile({ age: S.age, weight: S.weight, height: S.height });
-   if (_valErrors.length > 0) {
-     alert(_valErrors.join('\n'));
-     return;
-   }
- }
+ // Validation silencieuse — ne jamais bloquer le rendu avec alert()
+ // Les valeurs invalides sont corrigées par les onblur des inputs de renderStep3
 
  // Check if nutrition-relevant values changed vs what is currently persisted.
  // If so, weekPlan is stale and must be invalidated before saving.
@@ -194,8 +190,9 @@ function _migrateSteps() {
    // nStep=8 sans profil de base → retour au début de l'onboarding
    else if (S.nStep === 8 && S.sex && S.goal !== null) { S.nStep = 11; }
    else if (S.nStep === 8) { S.nStep = 1; }
-   // Couvre nStep 1-7 uniquement (anciens steps intermédiaires) — 9 et 10 sont des steps valides du nouveau routing
-   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
+   // Migrer vers step 8 UNIQUEMENT si activité et sommeil déjà renseignés (utilisateur pré-migration)
+   // — évite de sauter les steps 5-7 pour les nouveaux utilisateurs en cours d'onboarding
+   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null && S.activity !== null && S.sleep !== null) { S.nStep = 8; }
  }
  // Cas nStep=0 uniquement pour les modes nutrition (pas sport-only ni nouvel utilisateur sans appMode)
  if ((S.appMode === 'nutrition' || S.appMode === 'both') && S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
@@ -377,7 +374,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
      desc: 'L\u2019approche compl\u00e8te pour des r\u00e9sultats durables.',
      badge: 'RECOMMAND\u00c9', svg: _svgBoth, delay: '.32s',
      onclick: function() {
-       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 1; // saute le splash (nStep=0)
+       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 1; S.sportSplashDone = true; // saute les deux splashs
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
      }
@@ -1309,7 +1306,7 @@ function renderLogin(app) {
  render();
  }
  }).catch(function() {
- if (S.view !== 'auth') return;
+ S.view = 'auth'; // forcer le retour à l'écran login en cas d'erreur réseau
  S.authError = 'Erreur de connexion. Réessayez.';
  render();
  });
@@ -1648,8 +1645,13 @@ function renderVerifyEmail(app) {
  var user = res.data && (res.data.user || (res.data.session && res.data.session.user));
  if (user && user.email_confirmed_at) {
  S.authError = '';
- S.view = 'nutrition';
- S.nStep = 0;
+ // Rediriger selon appMode (si déjà configuré, ne pas écraser l'onboarding en cours)
+ if (S.appMode === 'sport') {
+   S.view = 'sport';
+ } else {
+   S.view = 'nutrition';
+   S.nStep = 0;
+ }
  if (window.GAMIFICATION) { GAMIFICATION.unlockBadge('first_login'); }
  render();
  } else {
