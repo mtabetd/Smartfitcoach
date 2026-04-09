@@ -194,8 +194,8 @@ function _migrateSteps() {
    // nStep=8 sans profil de base → retour au début de l'onboarding
    else if (S.nStep === 8 && S.sex && S.goal !== null) { S.nStep = 11; }
    else if (S.nStep === 8) { S.nStep = 1; }
-   // Couvre nStep 1-10 (anciens steps intermédiaires y compris 9 et 10)
-   else if (S.nStep >= 1 && S.nStep <= 10 && S.sex && S.goal !== null) { S.nStep = 8; }
+   // Couvre nStep 1-7 uniquement (anciens steps intermédiaires) — 9 et 10 sont des steps valides du nouveau routing
+   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
  }
  // Cas nStep=0 uniquement pour les modes nutrition (pas sport-only ni nouvel utilisateur sans appMode)
  if ((S.appMode === 'nutrition' || S.appMode === 'both') && S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
@@ -1258,6 +1258,9 @@ function renderLogin(app) {
  // Restaurer le contexte de vue selon l'état du profil chargé
  var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
  if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+ // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
+ else if (S.appMode === 'sport' && S.sStep === 0 && (!S.sportProgram || !S.sportProgram.length)) { S.view = 'sport'; }
+ else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!S.sportProgram || !S.sportProgram.length)) { S.view = 'sport'; }
  else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
  else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
  // else: stay on 'today' (default set above)
@@ -1888,6 +1891,9 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  }
  // Restaurer le contexte de vue (sport mid-onboarding vs nutrition vs today)
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+ // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
+ else if (S.appMode === 'sport' && S.sStep === 0 && (!S.sportProgram || !S.sportProgram.length)) { S.view = 'sport'; }
+ else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!S.sportProgram || !S.sportProgram.length)) { S.view = 'sport'; }
  else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
  else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
  // ─── AUTO-REGENERATION PLAN NUTRITION (semaine expirée) ───

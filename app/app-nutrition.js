@@ -2601,7 +2601,7 @@ function renderStep9(p) {
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
   if (!S._nm && window.computeNutritionState) window.computeNutritionState(false);
-  if (!S.weekPlan || S.weekPlan.length < 7) { var _wk9 = generateWeek(); if (Array.isArray(_wk9) && _wk9.length === 7) S.weekPlan = _wk9; }
+  if (!S.weekPlan || S.weekPlan.length < 7) { try { var _wk9 = generateWeek(); if (Array.isArray(_wk9) && _wk9.length === 7) S.weekPlan = _wk9; } catch(e) { console.error('[renderStep9] generateWeek failed', e); } }
   // Guard: si weekPlan est toujours null après génération, afficher un message d'erreur
   if (!S.weekPlan) {
     p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));

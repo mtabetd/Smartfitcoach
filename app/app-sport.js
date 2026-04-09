@@ -1611,7 +1611,7 @@ function renderDedicatedPrograms(p) {
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'Créez votre programme sur mesure selon vos objectifs, niveau et zones cibles.'));
  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
  // CRITIQUE-1 : pré-sélection ici (une seule fois, hors render)
- if (S.goal !== null && S.sportGoals.length === 0) {
+ if (S.goal !== null && (!S.sportGoals || S.sportGoals.length === 0)) {
  var nutKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
  var preselect = nutKey ? NUTRITION_TO_SPORT_GOAL[nutKey] : null;
  if (preselect) S.sportGoals = [preselect];
@@ -1754,16 +1754,17 @@ function syncSportGoalsToNutrition() {
  if (S.goal === null) return; // only sync if nutrition was filled first
  if (S.pregnant && S.sex === 'femme') return; // ÉLEVÉ-4: grossesse → ne pas écraser le maintien forcé
  // GOALS: [0=bulk, 1=lean_bulk, 2=maintain, 3=cut, 4=shred, 5=recomposition]
- if (S.sportGoals.length === 0) { S.goal = 2; return; } // désélection totale → reset maintien
+ var _sgls = S.sportGoals || [];
+ if (_sgls.length === 0) { S.goal = 2; return; } // désélection totale → reset maintien
  // Priority: shred > muscle > weightloss > others (→ maintain)
  // For 'muscle': preserve lean_bulk (index 1) if already set — both are mass-building goals.
  var newIdx = 2; // maintain par défaut
- if (S.sportGoals.indexOf('shred') !== -1) newIdx = 4; // shred
- else if (S.sportGoals.indexOf('muscle') !== -1) {
+ if (_sgls.indexOf('shred') !== -1) newIdx = 4; // shred
+ else if (_sgls.indexOf('muscle') !== -1) {
  var currentKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
  newIdx = (currentKey === 'lean_bulk') ? 1 : 0; // preserve lean_bulk, otherwise default to bulk
  }
- else if (S.sportGoals.indexOf('weightloss') !== -1) newIdx = 3; // cut
+ else if (_sgls.indexOf('weightloss') !== -1) newIdx = 3; // cut
  S.goal = newIdx;
 }
 
@@ -1799,6 +1800,7 @@ function renderMusculationGoals(p) {
    var _preId = _nutToSport[S.goal];
    if (_preId) { if (!Array.isArray(S.sportGoals)) S.sportGoals = []; S.sportGoals = [_preId]; }
  }
+ if (!Array.isArray(S.sportGoals)) S.sportGoals = [];
  p.appendChild(h('div', {'class': 'section-label'}, 'Objectifs'));
  var g = h('div', {'class': 'card-grid-2'});
  (window.SPORT_GOALS || []).forEach(function(gl) {
@@ -1934,6 +1936,7 @@ function renderCrossfitLevel(p) {
  var saved1rm = localStorage.getItem('mtd_cf_1rm_' + userId);
  if (saved1rm) { try { S.crossfit1RM = JSON.parse(saved1rm); } catch(e) {} }
  }
+ if (!S.crossfit1RM || typeof S.crossfit1RM !== 'object') S.crossfit1RM = {};
 
  p.appendChild(h('div', {style: 'height:24px'}));
  p.appendChild(h('div', {style: 'border-top:1px solid var(--border);margin:0 0 16px;padding-top:16px'}));
@@ -2110,14 +2113,14 @@ function formatCFMovement(mov) {
  parts.push(mov.name);
  }
  } else if (mov.gymnastics) {
- var gstd = window.CF_STANDARDS[mov.gymnastics];
+ var gstd = window.CF_STANDARDS ? window.CF_STANDARDS[mov.gymnastics] : undefined;
  if (gstd && gstd[level]) {
  parts.push(gstd[level]);
  } else {
  parts.push(mov.name);
  }
  } else if (mov.special) {
- var sstd = window.CF_STANDARDS[mov.special];
+ var sstd = window.CF_STANDARDS ? window.CF_STANDARDS[mov.special] : undefined;
  if (sstd && sstd.cal) {
  parts.push(mov.name + ' (' + sstd.cal[levelIdx] + ' cal)');
  } else {
@@ -2146,6 +2149,7 @@ function getCFWeight(key) {
  return result;
  }
  }
+ if (!window.CF_STANDARDS) return '';
  var std = window.CF_STANDARDS[key];
  if (!std) return '';
  var sexKey = getCFSexKey();
@@ -3623,6 +3627,8 @@ function renderMusculationZones(p) {
  // Priority star rating for each body zone
  p.appendChild(h('div', {'class': 'section-label'}, 'Groupes musculaires — Priorité'));
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px'}, 'Attribuez 1 à 5 étoiles pour définir la priorité. Cliquez à nouveau pour retirer.'));
+ if (!S.sportFocus || typeof S.sportFocus !== 'object') S.sportFocus = {};
+ if (!Array.isArray(S.weakZones)) S.weakZones = [];
  var grid = h('div', {style: 'margin-bottom:24px'});
  (window.BODY_ZONES || []).forEach(function(zone) {
  var priority = S.sportFocus[zone] || 0;
@@ -4625,7 +4631,7 @@ function renderWeekTracker(p) {
  var uid2 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  try { localStorage.setItem('mtd_muscu_start_' + uid2, S.muscuProgramStart); } catch(e) { console.warn('[muscu_cycle] localStorage error:', e); }
  try { localStorage.setItem('mtd_muscu_cycle_' + uid2, String(S.muscuCycle)); } catch(e) { console.warn('[muscu_cycle] localStorage error:', e); }
- S.sportProgram = generateSportProgram();
+ try { var _newProg = generateSportProgram(); if (_newProg && _newProg.length) S.sportProgram = _newProg; } catch(e) { console.error('[nouveau_cycle] generateSportProgram failed', e); }
  S.selectedSportDay = 0;
  saveMuscuWeek(1);
  window.render();
@@ -5106,7 +5112,7 @@ function renderMusculationProgram(p) {
  cycSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, 'Intensit\u00e9 recommand\u00e9e : ' + intensity + '%'));
 
  // Sport tips
- cycleInfo.phase.sportTips.forEach(function(tip) {
+ (cycleInfo.phase.sportTips || []).forEach(function(tip) {
  cycSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
  });
 
