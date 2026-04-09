@@ -1028,7 +1028,7 @@ window.DASHBOARD = {
     root.appendChild(h('div', 'dash-label', 'Ma progression'));
     var perfWidget = h('div', 'dash-widget-box');
     if (window.PERF_HISTORY && window.PERF_HISTORY.renderProgressionWidget) {
-      try { PERF_HISTORY.renderProgressionWidget(perfWidget); } catch(e) {
+      try { window.PERF_HISTORY.renderProgressionWidget(perfWidget); } catch(e) {
         perfWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Progression indisponible')));
       }
     } else {
