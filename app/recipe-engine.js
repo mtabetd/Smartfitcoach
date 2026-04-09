@@ -29360,7 +29360,7 @@
 
     // scalingRatio : rapport calories cibles / calories de la recette entière
     if (!recipe.baseNutrition || !recipe.baseNutrition.calories) return null; // recette format compact sans baseNutrition
-    if (!recipe.servings || recipe.servings < 1) return null; // servings invalide ou nul — évite division par zéro
+    if (!recipe.servings || recipe.servings <= 0) return null; // servings invalide ou nul — évite division par zéro
     var caloriesPerServing = recipe.baseNutrition.calories / recipe.servings;
     if (!caloriesPerServing) return null; // calories nulles
     var scalingRatio       = targetCalories / caloriesPerServing;
