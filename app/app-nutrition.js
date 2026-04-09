@@ -755,7 +755,7 @@ function renderStep3(p) {
   _waistWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '50', max: '200', step: '1', value: S.waist ? String(S.waist) : '', inputmode: 'numeric', placeholder: 'ex: 85', oninput: function(e) {
     var v = parseFloat(e.target.value);
     S.waist = (!isNaN(v) && v >= 50 && v <= 200) ? v : null;
-    window.render();
+    // Pas de render() ici — évite de détruire l'input pendant la saisie
   }, onblur: function(e) {
     var v = parseFloat(e.target.value);
     if (e.target.value !== '' && (isNaN(v) || v < 50 || v > 200)) { e.target.value = ''; S.waist = null; }
