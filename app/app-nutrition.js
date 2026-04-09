@@ -2819,6 +2819,7 @@ function renderStep9(p) {
                 style: 'padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:6px;cursor:pointer;background:var(--ivory,#FAF9F6)',
                 onclick: function() {
                   var slotKey3 = S._foodSearchSlot;
+                  if (!S.weekPlan) return;
                   if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
                   S.weekPlan[S.selectedDay][slotKey3] = { n: food.name, k: food.kcal, kcal: food.kcal, p: food.p, g: food.g, l: food.l, f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true };
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
@@ -2869,6 +2870,7 @@ function renderStep9(p) {
           var fd = S._foodManualData || {};
           if (!fd.name || fd.name.trim().length === 0) return;
           var slotKey4 = S._foodSearchSlot;
+          if (!S.weekPlan) return;
           if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
           S.weekPlan[S.selectedDay][slotKey4] = {
             n: fd.name.trim(), k: parseFloat(fd.kcal) || 0, kcal: parseFloat(fd.kcal) || 0,
@@ -3468,7 +3470,7 @@ function exportDayPDF(dayIdx) {
   doc.text(dayTotal + ' kcal', W - M - 4, y + 4, {align: 'right'}); y += 14;
 
   // Medical warnings
-  if (S.medical.length > 0) {
+  if (Array.isArray(S.medical) && S.medical.length > 0) {
     doc.setFontSize(7); doc.setTextColor(106, 74, 26);
     doc.text('RECOMMANDATIONS M\u00c9DICALES', M, y); y += 4;
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
