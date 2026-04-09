@@ -1707,7 +1707,7 @@ function renderDedicatedPrograms(p) {
  });
 
  p.appendChild(h('div', {style: 'height:16px'}));
- p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 16; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 4; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 
  // ─── CTA RETOUR → NUTRITION (mode "les deux" uniquement) ───
  if (S.appMode === 'both' && S.weekPlan && S.weekPlan.length > 0) {
@@ -6904,7 +6904,7 @@ function renderRunningProgram(p) {
 
  var sessCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid ' + sessColor});
  sessCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + sessColor + ';margin-bottom:6px'}, sess.zone));
- sessCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, sess.icon + ' ' + sess.name));
+ sessCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, (sess.icon || '') + ' ' + sess.name));
  sessCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:8px'}, sess.desc));
  if (sess.distance) {
  sessCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;color:' + sessColor + ';margin-bottom:8px'}, ' ' + sess.distance));
@@ -7257,6 +7257,7 @@ function renderPadelProgram(p) {
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  return;
  }
+ if (!S.padelWeek || S.padelWeek < 1) S.padelWeek = 1;
  var week = S.padelProgram[S.padelWeek - 1];
  if (!week) return;
 
@@ -7275,7 +7276,7 @@ function renderPadelProgram(p) {
 
  // Day tabs
  var _padelSessions = week.sessions || [];
- if (S.selectedPadelDay >= _padelSessions.length) S.selectedPadelDay = 0;
+ if (S.selectedPadelDay === undefined || S.selectedPadelDay === null || S.selectedPadelDay >= _padelSessions.length) S.selectedPadelDay = 0;
  var tabs = h('div', {'class': 'day-tabs'});
  _padelSessions.forEach(function(s, i) {
  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedPadelDay === i ? ' active' : ''), onclick: function(){ S.selectedPadelDay = i; window.render(); }}, 'Jour ' + (i + 1)));
@@ -7376,6 +7377,7 @@ function renderGolfProgram(p) {
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  return;
  }
+ if (!S.golfWeek || S.golfWeek < 1) S.golfWeek = 1;
  var week = S.golfProgram[S.golfWeek - 1];
  if (!week) return;
 
@@ -7397,7 +7399,7 @@ function renderGolfProgram(p) {
 
  // Day tabs
  var _golfSessions = week.sessions || [];
- if (S.selectedGolfDay >= _golfSessions.length) S.selectedGolfDay = 0;
+ if (S.selectedGolfDay === undefined || S.selectedGolfDay === null || S.selectedGolfDay >= _golfSessions.length) S.selectedGolfDay = 0;
  var tabs = h('div', {'class': 'day-tabs'});
  _golfSessions.forEach(function(s, i) {
  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedGolfDay === i ? ' active' : ''), onclick: function(){ S.selectedGolfDay = i; window.render(); }}, 'Jour ' + (i + 1)));
@@ -7719,7 +7721,7 @@ function renderTriathlonProgram(p) {
 
  // ── Tabs jours ──
  var sessions = weekData.sessions || [];
- if (S.selectedTriDay >= sessions.length) S.selectedTriDay = 0;
+ if (S.selectedTriDay === undefined || S.selectedTriDay === null || S.selectedTriDay >= sessions.length) S.selectedTriDay = 0;
  var tabs = h('div', {'class': 'day-tabs', style: 'flex-wrap:wrap'});
  sessions.forEach(function(sess, i) {
  var icon = sess.discipline === 'swim' ? '' : sess.discipline === 'bike' ? '' : sess.discipline === 'run' ? '' : sess.discipline === 'brick' ? '' : '';
@@ -7741,7 +7743,7 @@ function renderTriathlonProgram(p) {
 
  var sessCard = h('div', {'class': 'exercise-card', style: 'border-left:3px solid ' + discColor});
  sessCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + discColor + ';margin-bottom:6px'}, sess.type || ''));
- sessCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, sess.icon + ' ' + sess.name));
+ sessCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:4px'}, (sess.icon || '') + ' ' + sess.name));
  sessCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:8px'}, sess.desc || ''));
 
  if (sess.duration && sess.duration !== '—') {
