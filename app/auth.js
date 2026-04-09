@@ -878,6 +878,9 @@ window.AUTH = {
       try { window.removeEventListener('beforeunload', _beforeUnloadListener); } catch(e) {}
       _beforeUnloadListener = null;
     }
+
+    // Rediriger vers l'écran de connexion
+    if (window.render) window.render();
   },
 
   /**
