@@ -30030,6 +30030,7 @@
       var dayMAD = 0;
       var dayMeals = [];
 
+      if (!dayPlan) { days.push({ dayIndex: d, totalMAD: 0, meals: [], hasPrices: false }); continue; }
       slots.forEach(function(slot) {
         var recipe = dayPlan[slot];
         if (!recipe) return;
@@ -30527,6 +30528,7 @@
     var slots = ['breakfast', 'lunch', 'snack', 'dinner'];
 
     weekPlan.forEach(function(day) {
+      if (!day) return;
       slots.forEach(function(slot) {
         var recipe = day[slot];
         if (!recipe) return;
