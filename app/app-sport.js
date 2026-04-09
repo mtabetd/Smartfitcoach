@@ -3839,7 +3839,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  var lastLog = null;
  var sortedDates = Object.keys(S.muscuSessionLog || {}).filter(function(d) { return d !== today; }).sort();
  sortedDates.forEach(function(date) {
- if (S.muscuSessionLog[date][exerciseName]) {
+ if (S.muscuSessionLog[date] && S.muscuSessionLog[date][exerciseName]) {
  lastLog = { date: date, sets: S.muscuSessionLog[date][exerciseName] };
  }
  });
@@ -4447,7 +4447,8 @@ function saveMuscuSessionLog() {
  // ── Pruning : garder les 90 derniers jours de session log (évite quota localStorage) ──
  var _cutoff = new Date(); _cutoff.setDate(_cutoff.getDate() - 90);
  var _cutStr = _cutoff.toISOString().slice(0, 10);
- Object.keys(S.muscuSessionLog || {}).forEach(function(d) { if (d < _cutStr) delete S.muscuSessionLog[d]; });
+ if (!S.muscuSessionLog || typeof S.muscuSessionLog !== 'object' || Array.isArray(S.muscuSessionLog)) S.muscuSessionLog = {};
+ Object.keys(S.muscuSessionLog).forEach(function(d) { if (d < _cutStr) delete S.muscuSessionLog[d]; });
  localStorage.setItem('mtd_muscu_session_' + uid, JSON.stringify(S.muscuSessionLog));
  // Sync vers Supabase
  if (window.SupaSync) {
@@ -4837,6 +4838,8 @@ function renderMusculationProgram(p) {
  var savedLog = localStorage.getItem('mtd_muscu_session_' + userId3);
  if (savedLog) { try { S.muscuSessionLog = JSON.parse(savedLog); } catch(e) { S.muscuSessionLog = {}; } }
  if (!S.muscuSessionLog || typeof S.muscuSessionLog !== 'object' || Array.isArray(S.muscuSessionLog)) S.muscuSessionLog = {};
+ // Sanitise les entrées corrompues (date keys avec valeur null/non-objet)
+ Object.keys(S.muscuSessionLog).forEach(function(d) { if (!S.muscuSessionLog[d] || typeof S.muscuSessionLog[d] !== 'object') delete S.muscuSessionLog[d]; });
  var savedProg = localStorage.getItem('mtd_muscu_progression_' + userId3);
  if (savedProg) { try { S.muscuProgressionHistory = JSON.parse(savedProg); } catch(e) {} }
  if (!S.muscuProgressionHistory || typeof S.muscuProgressionHistory !== 'object' || Array.isArray(S.muscuProgressionHistory)) S.muscuProgressionHistory = {};
