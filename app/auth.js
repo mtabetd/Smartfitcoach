@@ -373,7 +373,7 @@ function _initAuth() {
     if (event === 'TOKEN_REFRESHED') {
       if (session && session.user) {
         _currentSession = _extractUser(session.user);
-        console.log('[AUTH] Token refreshed — session maintenue pour:', _currentSession.email);
+        if (_currentSession) console.log('[AUTH] Token refreshed — session maintenue pour:', _currentSession.email);
       }
       return;
     }
