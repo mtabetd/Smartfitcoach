@@ -3220,20 +3220,33 @@ function renderStep9(p) {
   p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:16px;background:var(--black2)', onclick: function() { window.exportDayPDF(S.selectedDay); }}, '\u21e9 Exporter le jour en PDF'));
   p.appendChild(h('div', {style: 'height:8px'}));
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
-    if (window.computeNutritionState) window.computeNutritionState(false);
-    var _wkR = generateWeek();
-    if (Array.isArray(_wkR) && _wkR.length > 0) S.weekPlan = _wkR;
-    S._weekPlanGeneratedAt = new Date().toISOString();
-    // Sync plan nutrition vers Supabase
-    if (window.SupaSync && S.weekPlan) {
-      try {
-        var _monday = new Date();
-        _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
-        SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
-      } catch(e) { console.warn('[nutrition] regen saveMealPlan error:', e); }
+    // CRITIQUE-G1: anti race-condition (même pattern que génération initiale)
+    if (window._nutritionGenerating) return;
+    window._nutritionGenerating = true;
+    try {
+      if (window.computeNutritionState) window.computeNutritionState(false);
+      var _wkR = generateWeek();
+      if (Array.isArray(_wkR) && _wkR.length > 0) {
+        S.weekPlan = _wkR;
+        S._weekPlanGeneratedAt = new Date().toISOString();
+        // Sync plan nutrition vers Supabase
+        if (window.SupaSync) {
+          try {
+            var _monday = new Date();
+            _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+            SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+          } catch(e) { console.warn('[nutrition] regen saveMealPlan error:', e); }
+        }
+        bb('week_regenerated', {});
+      } else {
+        // IMPORTANT-G2: feedback si pool vide
+        console.warn('[nutrition] regen: generateWeek() a retourné un plan vide');
+        alert('Impossible de générer un nouveau plan. Vérifiez vos préférences alimentaires.');
+      }
+      window.render();
+    } finally {
+      window._nutritionGenerating = false;
     }
-    bb('week_regenerated', {});
-    window.render();
   }}, '\u21bb ' + window.t('onb.s9.generate')));
   p.appendChild(h('div', {style: 'height:12px'}));
   p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux r\u00e9sultats'));
@@ -3791,18 +3804,23 @@ function resolveSignatureBowl(sig) {
 }
 
 function calcSaladMacros(sb) {
+  // CRITIQUE-E1: guard sb null
+  if (!sb) return { k: 0, p: 0, g: 0, l: 0 };
   var total = { k: 0, p: 0, g: 0, l: 0 };
-  if (sb.base) { total.k += sb.base.k; total.p += sb.base.p; total.g += sb.base.g; total.l += sb.base.l; }
-  (sb.proteins || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  (sb.veggies || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  (sb.fats || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  if (sb.sauce) { total.k += sb.sauce.k; total.p += sb.sauce.p; total.g += sb.sauce.g; total.l += sb.sauce.l; }
+  // IMPORTANT-E2: fallbacks || 0 pour éviter NaN si ingrédient incomplet
+  if (sb.base) { total.k += (sb.base.k||0); total.p += (sb.base.p||0); total.g += (sb.base.g||0); total.l += (sb.base.l||0); }
+  (sb.proteins || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  (sb.veggies || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  (sb.fats || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  if (sb.sauce) { total.k += (sb.sauce.k||0); total.p += (sb.sauce.p||0); total.g += (sb.sauce.g||0); total.l += (sb.sauce.l||0); }
   return { k: Math.round(total.k), p: Math.round(total.p), g: Math.round(total.g), l: Math.round(total.l) };
 }
 
 function renderSaladBar(p) {
   var S = window.S;
   var sb = S.saladBar;
+  // CRITIQUE-E1: guard sb null — évite crash si saladBar non initialisé
+  if (!sb) { p.innerHTML = ''; return; }
   p.innerHTML = '';
 
   // Macro targets — calculés selon le slot via getMealSplit()
