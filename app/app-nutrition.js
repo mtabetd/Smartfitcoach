@@ -3221,7 +3221,7 @@ function renderStep9(p) {
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
     if (window.computeNutritionState) window.computeNutritionState(false);
     var _wkR = generateWeek();
-    if (Array.isArray(_wkR) && _wkR.length > 0) S.weekPlan = _wkR;
+    if (Array.isArray(_wkR) && _wkR.length > 0) { S.weekPlan = _wkR; S.selectedDay = 0; }
     S._weekPlanGeneratedAt = new Date().toISOString();
     // Sync plan nutrition vers Supabase
     if (window.SupaSync && S.weekPlan) {

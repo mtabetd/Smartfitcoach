@@ -3579,7 +3579,7 @@ function swapMeal(di,slot){
   var s=window.S;
   if(!s.weekPlan||!s.weekPlan[di])return;
   if(!s._nm&&window.computeNutritionState)window.computeNutritionState(false);
-  var cBase=calcTarget(),split=getAdaptedMealSplit(di);var c=Math.round(cBase*(split.calMultiplier||1));
+  var cBase=calcTarget(),split=getAdaptedMealSplit(di);if(!split)return;var c=Math.round(cBase*(split.calMultiplier||1));
   var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);
   // Snack + whey → swapper vers un autre smoothie (pas une collation normale)
   if(slot==='snack'&&s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length){
@@ -3587,6 +3587,7 @@ function swapMeal(di,slot){
     var usedSm=new Set([curId]);
     var nrSm=pickSmoothieForPlan(tgt,usedSm);
     if(nrSm){s.weekPlan[di][slot]=nrSm;if(typeof window.render==='function')window.render();return;}
+    else return;
   }
   // Autres slots — swap recette normale
   var pool=filterRecipes(getPool(slot),slot);
