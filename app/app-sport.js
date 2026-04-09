@@ -762,6 +762,9 @@ window.SPORT = {
    return;
  }
 
+ // ─── Guard : sStep > 0 sans sportType → page blanche possible, réinitialiser ───
+ if (S.sStep > 0 && !S.sportType) { S.sStep = 0; }
+
  // ─── Si programme existant → afficher directement la prog (plus d'interstitiel) ───
  if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
    S.sStep = _SPORT_PROGRAM_STEP[S.sportType];

@@ -570,6 +570,19 @@ function renderProfilePage(container) {
          S.view = 'nutrition';
          // Marquer pour afficher un message d'explication dans l'onboarding
          S._switchedFromSport = true;
+         // Pré-remplir activité + type entraînement + sommeil depuis les données sport
+         // (évite que l'utilisateur resaisisse des données déjà connues)
+         if (S.activity === null || S.activity === undefined) {
+           var _sd = S.sportDays || 3;
+           S.activity = _sd >= 5 ? 3 : _sd >= 3 ? 2 : 1; // ACTIVITIES index : 3=Très actif, 2=Modérément, 1=Légèrement
+         }
+         if (!Array.isArray(S.train) || S.train.length === 0) {
+           var _trainMap = { musculation: [0], crossfit: [0, 1], running: [4], hyrox: [0, 1], yoga: [2], cycling: [1], triathlon: [1, 4], calisthenics: [0], padel: [3], golf: [3] };
+           S.train = (S.sportType && _trainMap[S.sportType]) ? _trainMap[S.sportType] : [2];
+         }
+         if (S.sleep === null || S.sleep === undefined) {
+           S.sleep = 2; // SLEEPS[2] = '7-8h' — valeur de référence, modifiable dans l'onboarding nutrition
+         }
        } else if (_addingSport) {
          S.sStep = 0;
          S.view = 'sport';
