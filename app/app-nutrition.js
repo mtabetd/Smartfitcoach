@@ -983,7 +983,7 @@ function renderActiviteSommeil(p) {
   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:4px;'}, _hint3));
 
   p.appendChild(h('div', {style: 'height:24px'}));
-  var ok = S.activity !== null && S.train.length > 0 && S.sleep !== null;
+  var ok = S.activity !== null && Array.isArray(S.train) && S.sleep !== null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(6); }}, window.t('onb.next')));
   p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
 }

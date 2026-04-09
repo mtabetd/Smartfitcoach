@@ -192,7 +192,7 @@ function _migrateSteps() {
    else if (S.nStep === 8) { S.nStep = 1; }
    // Migrer vers step 8 UNIQUEMENT si activité et sommeil déjà renseignés (utilisateur pré-migration)
    // — évite de sauter les steps 5-7 pour les nouveaux utilisateurs en cours d'onboarding
-   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null && S.activity !== null && S.sleep !== null) { S.nStep = 8; }
+   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null && S.weight && S.height && S.activity !== null && S.sleep !== null) { S.nStep = 8; }
  }
  // Cas nStep=0 uniquement pour les modes nutrition (pas sport-only ni nouvel utilisateur sans appMode)
  if ((S.appMode === 'nutrition' || S.appMode === 'both') && S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {

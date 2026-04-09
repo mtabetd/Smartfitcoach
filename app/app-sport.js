@@ -1601,6 +1601,25 @@ function renderChargesQuestionnaire(p) {
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ var _bk = S._chargesFromLevel ? 2 : 15; S._chargesFromLevel = false; S.sStep = _bk; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
+/// ─── HELPER: CTA "Voir mon plan nutrition" (mode both uniquement) ───
+function appendNutritionModeCTA(p) {
+ if (!p || S.appMode !== 'both') return;
+ if (!S.weekPlan || !S.weekPlan.length) return;
+ var card = h('div', {style: 'border:1px solid #1A4A1A;background:rgba(26,74,26,0.04);padding:20px 16px;margin-top:20px;border-radius:2px'});
+ card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#1A4A1A;margin-bottom:8px'}, 'PROGRAMME COMPLET'));
+ card.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, 'Votre programme sportif est prêt.'));
+ card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Vos macros sont automatiquement adaptées à chaque séance d\'entraînement.'));
+ card.appendChild(h('button', {
+   style: 'width:100%;padding:16px;background:#1A4A1A;color:#FAF9F6;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
+   onclick: function() {
+     window.S.view = 'nutrition';
+     if (window.saveProfile) window.saveProfile();
+     if (window.render) window.render();
+   }
+ }, 'Voir mon plan nutrition →'));
+ p.appendChild(card);
+}
+
 // ─── STEP 15: PROGRAMMES DÉDIÉS ───
 function renderDedicatedPrograms(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation'));
@@ -1712,22 +1731,7 @@ function renderDedicatedPrograms(p) {
  p.appendChild(h('div', {style: 'height:16px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 4; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 
- // ─── CTA RETOUR → NUTRITION (mode "les deux" uniquement) ───
- if (S.appMode === 'both' && S.weekPlan && S.weekPlan.length > 0) {
-   var nutReturnCard = h('div', {style: 'border:1px solid #1A4A1A;background:rgba(26,74,26,0.04);padding:20px 16px;margin-top:20px;border-radius:2px'});
-   nutReturnCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#1A4A1A;margin-bottom:8px'}, 'PROGRAMME COMPLET'));
-   nutReturnCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, 'Votre programme sportif est prêt.'));
-   nutReturnCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Vos macros sont automatiquement adaptées à chaque séance d\'entraînement.'));
-   nutReturnCard.appendChild(h('button', {
-     style: 'width:100%;padding:16px;background:#1A4A1A;color:#FAF9F6;border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer',
-     onclick: function() {
-       window.S.view = 'nutrition';
-       if (window.saveProfile) window.saveProfile();
-       if (window.render) window.render();
-     }
-   }, 'Voir mon plan nutrition →'));
-   p.appendChild(nutReturnCard);
- }
+ appendNutritionModeCTA(p);
 }
 
 // ─── STEP 1: MUSCULATION OBJECTIVES ───
@@ -3480,6 +3484,7 @@ function renderCrossfitProgram(p) {
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 5; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier le niveau'}));
+ appendNutritionModeCTA(p);
 }
 
 // (renderSportStep0 removed — replaced by renderObjectif above)
@@ -6552,6 +6557,7 @@ function renderMusculationProgram(p) {
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 3; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier les zones'}));
+ appendNutritionModeCTA(p);
 }
 
 // ─── WEIGHT CHART (for sport) ───
@@ -6928,6 +6934,7 @@ function renderRunningProgram(p) {
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 7; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+ appendNutritionModeCTA(p);
 }
 
 // ─── STEP 9: HYROX CONFIG ───
@@ -7197,6 +7204,7 @@ function renderHyroxProgram(p) {
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 9; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+ appendNutritionModeCTA(p);
 }
 
 // ═══════════════════════════════════════
@@ -7309,6 +7317,7 @@ function renderPadelProgram(p) {
  if (window.renderStrengthGrade) renderStrengthGrade(p);
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+ appendNutritionModeCTA(p);
 }
 
 // ═══════════════════════════════════════
@@ -7431,6 +7440,7 @@ function renderGolfProgram(p) {
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+ appendNutritionModeCTA(p);
 }
 
 // ─── STEP 17: TRIATHLON CONFIG ───
@@ -7521,7 +7531,7 @@ function renderTriathlonConfig(p) {
  var ftpWrap = h('div', {style: 'display:flex;flex-direction:column;gap:4px'});
  ftpWrap.appendChild(h('div', {style: 'font-size:11px;color:var(--grey)'}, ' FTP (watts)'));
  ftpWrap.appendChild(h('input', {'class': 'num-input', type: 'number', placeholder: '200', value: S.triathlonFTP || '', style: 'width:100%;text-align:center',
- oninput: function(e) { S.triathlonFTP = e.target.value; }
+ oninput: function(e) { var _v = parseInt(e.target.value, 10); S.triathlonFTP = (!isNaN(_v) && _v > 0) ? _v : null; }
  }));
  paceGrid.appendChild(ftpWrap);
 
@@ -7634,8 +7644,8 @@ function renderTriathlonProgram(p) {
  return;
  }
  var totalWeeks = program.length;
+ if (!S.triathlonWeek || S.triathlonWeek < 1) S.triathlonWeek = 1;
  if (S.triathlonWeek > totalWeeks) S.triathlonWeek = totalWeeks;
- if (S.triathlonWeek < 1) S.triathlonWeek = 1;
 
  var weekData = program[S.triathlonWeek - 1];
  if (!weekData) return;
@@ -7796,6 +7806,7 @@ function renderTriathlonProgram(p) {
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 17; window.render(); }, html: backArrow + 'Modifier la configuration'}));
+ appendNutritionModeCTA(p);
 }
 
 
@@ -8098,6 +8109,7 @@ function renderYogaProgram(p) {
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 19; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration'}));
+ appendNutritionModeCTA(p);
 }
 
 // ═══════════════════════════════════════
@@ -8473,6 +8485,7 @@ function renderCyclingProgram(p) {
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 22; window.render(); }, html: backArrow + 'Modifier la configuration'}));
+ appendNutritionModeCTA(p);
 }
 
 // ═══════════════════════════════════════
@@ -8872,6 +8885,7 @@ function renderCalisthenicsProgram(content) {
 
  // ── BACK BUTTON ──
  content.appendChild(h('button', {'class': 'btn-back', style: 'margin-top:16px', onclick: function(){ S.sStep = 24; window.render(); }}, '< Modifier les objectifs'));
+ appendNutritionModeCTA(content);
 }
 
 // ─── EXPOSE GLOBALEMENT ───
