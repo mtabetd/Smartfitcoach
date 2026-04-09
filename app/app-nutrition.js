@@ -1850,40 +1850,47 @@ function renderStep7(p) {
     if (window._nutritionGenerating) return;
     window._nutritionGenerating = true;
     setTimeout(function() {
-      // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
-      if (window.computeNutritionState) { window.computeNutritionState(false); }
-      var _wk1 = generateWeek();
-      if (Array.isArray(_wk1) && _wk1.length > 0) {
-        S.weekPlan = _wk1;
-      } else {
-        // generateWeek() a retourné un plan vide — informer l'utilisateur sans naviguer
-        console.warn('[nutrition] generateWeek() returned empty plan');
+      try {
+        // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
+        if (window.computeNutritionState) { window.computeNutritionState(false); }
+        var _wk1 = generateWeek();
+        if (Array.isArray(_wk1) && _wk1.length > 0) {
+          S.weekPlan = _wk1;
+        } else {
+          // generateWeek() a retourné un plan vide — informer l'utilisateur sans naviguer
+          console.warn('[nutrition] generateWeek() returned empty plan');
+          _genBtn.disabled = false;
+          _genBtn.textContent = window.t('onb.finish');
+          var _errDiv = document.getElementById('_gen_error');
+          if (!_errDiv) {
+            _errDiv = document.createElement('div');
+            _errDiv.id = '_gen_error';
+            _errDiv.style.cssText = 'color:#8B2020;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-top:8px;text-align:center';
+            _genBtn.parentNode && _genBtn.parentNode.insertBefore(_errDiv, _genBtn.nextSibling);
+          }
+          _errDiv.textContent = 'Impossible de générer le plan. Vérifiez vos préférences et réessayez.';
+          window._nutritionGenerating = false;
+          return;
+        }
+        S._weekPlanGeneratedAt = new Date().toISOString();
+        // Sync plan nutrition vers Supabase (try/catch : une erreur réseau ne bloque pas la navigation)
+        if (window.SupaSync && S.weekPlan) {
+          try {
+            var _monday = new Date();
+            _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+            SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+          } catch(e) { console.warn('[nutrition] saveMealPlan error (non-bloquant):', e); }
+        }
+        bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
+        if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
+        goStep(11);
+      } catch(e) {
+        console.error('[nutrition] generateWeek exception:', e);
         _genBtn.disabled = false;
         _genBtn.textContent = window.t('onb.finish');
-        var _errDiv = document.getElementById('_gen_error');
-        if (!_errDiv) {
-          _errDiv = document.createElement('div');
-          _errDiv.id = '_gen_error';
-          _errDiv.style.cssText = 'color:#8B2020;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-top:8px;text-align:center';
-          _genBtn.parentNode && _genBtn.parentNode.insertBefore(_errDiv, _genBtn.nextSibling);
-        }
-        _errDiv.textContent = 'Impossible de générer le plan. Vérifiez vos préférences et réessayez.';
+      } finally {
         window._nutritionGenerating = false;
-        return;
       }
-      S._weekPlanGeneratedAt = new Date().toISOString();
-      // Sync plan nutrition vers Supabase (try/catch : une erreur réseau ne bloque pas la navigation)
-      if (window.SupaSync && S.weekPlan) {
-        try {
-          var _monday = new Date();
-          _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
-          SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
-        } catch(e) { console.warn('[nutrition] saveMealPlan error (non-bloquant):', e); }
-      }
-      bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
-      if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
-      goStep(11);
-      window._nutritionGenerating = false;
     }, 50);
   }}, window.t('onb.finish'));
   p.appendChild(_genBtn);

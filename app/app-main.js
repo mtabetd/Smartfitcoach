@@ -1877,11 +1877,8 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      S.prenom = _autoUser.name.split(' ')[0];
    }
  }
- // Si l'utilisateur existant a un profil mais nStep=0 (ex: profil corrompu ou rechargement)
- // → sauter le splash pour ne pas le forcer à refaire tout l'onboarding
- if (S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
- S.nStep = S.weekPlan ? 12 : (S.goal !== null ? 11 : 1);
- }
+ // Note : la migration nStep=0 est gérée par _migrateSteps() (appelé ligne 1867)
+ // pour éviter la double-migration (régression pour les users sport-only avec weekPlan)
  // Retour utilisateur : préserver le step programme (ne pas réinitialiser l'onboarding sport).
  // Steps à PRÉSERVER : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel) 14(golf) 15(prog dédié) 16(charges) 18(triathlon) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
  // Steps intermédiaires onboarding (1,2,3,5,7,9,11,13,17,19,22,24) → revenir à 0 (sélection sport)
