@@ -16,8 +16,9 @@
     var s = window.S;
     if (!s) return false;
     var hasName    = !!(s.prenom || (window.AUTH && window.AUTH.getUser && window.AUTH.getUser() && window.AUTH.getUser().name));
-    var hasGoal    = s.goal !== null && s.goal !== undefined;
-    var hasPlan    = !!(s.weekPlan || s.sportType);
+    // Mode sport-only : pas de S.goal (concept nutrition) — accepter si sportType + sportProgram
+    var hasGoal    = (s.goal !== null && s.goal !== undefined) || (s.appMode === 'sport' && !!s.sportType);
+    var hasPlan    = !!(s.weekPlan || (s.sportProgram && s.sportProgram.length > 0));
     return hasName && hasGoal && hasPlan;
   }
 

@@ -185,7 +185,7 @@ function getPregnancySportWarning() {
 
 // ─── PROGRAM GENERATION ───
 function generateSportProgram() {
- var days = S.sportDays;
+ var days = S.sportDays || 3;
  var level = (window.SPORT_LEVELS || []).find(function(l){ return l.id === S.sportLevel; });
  var program = [];
 
@@ -766,7 +766,9 @@ window.SPORT = {
  if (S.sStep > 0 && !S.sportType) { S.sStep = 0; }
 
  // ─── Si programme existant → afficher directement la prog (plus d'interstitiel) ───
- if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
+ // Guard: ne rediriger que si un programme complet existe — évite de sauter l'onboarding
+ // après un rechargement partiel (ex: sStep=26 PAR-Q réinitialisé à 0 par _doAutoLogin)
+ if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType] && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) {
    S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  }
@@ -1871,7 +1873,7 @@ function renderCrossfitLevel(p) {
  // ─── JOURS D'ENTRAÎNEMENT PAR SEMAINE ───
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
  var cfDaysWrap = h('div', {'class': 'num-input-wrap'});
- cfDaysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.sportDays), inputmode: 'numeric',
+ cfDaysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.sportDays = v; window.render(); } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 3) { e.target.value = S.sportDays = 3; window.render(); } else if (v > 6) { e.target.value = S.sportDays = 6; window.render(); } }
  }));
@@ -3497,7 +3499,7 @@ function renderMusculationLevel(p) {
 
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
- nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays), inputmode: 'numeric',
+ nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) e.target.value = S.sportDays = 2; else if (v > 6) e.target.value = S.sportDays = 6; }
  }));
@@ -7598,6 +7600,7 @@ function renderTriathlonConfig(p) {
   raceDate: S.triathlonRaceDate || null,
   ftp: S.triathlonFTP || null
  };
+ if (typeof window.generateTriathlonProgram !== 'function') { p.appendChild(h('p', {style:'text-align:center;padding:24px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px'}, 'Module triathlon non chargé. Rechargez la page.')); return; }
  S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts);
  S.triathlonWeek = 1;
  S.selectedTriDay = 0;
@@ -7624,7 +7627,9 @@ function renderTriathlonProgram(p) {
    raceDate: S.triathlonRaceDate || null,
    ftp: S.triathlonFTP || null
   };
-  S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts2);
+  if (typeof window.generateTriathlonProgram === 'function') {
+   S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts2);
+  }
  }
 
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
