@@ -1836,7 +1836,7 @@ function renderNewPassword(app) {
  h('button', {'class': 'btn-primary', onclick: function() {
  S._passwordUpdated = false;
  S.authError = '';
- // La session de r\u00e9cup\u00e9ration est toujours active — render() redirige directement vers 'today'
+ S.view = 'today';
  render();
  }}, 'Acc\u00e9der \u00e0 mon programme')
  ]));
