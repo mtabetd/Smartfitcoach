@@ -1250,7 +1250,12 @@ function renderLogin(app) {
  // Restore profile from localStorage for this user
  loadProfile();
  _migrateSteps();
- if (S.weekPlan && S.appMode === 'nutrition') S.view = 'today';
+ // Restaurer le contexte de vue selon l'état du profil chargé
+ var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
+ if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+ else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
+ else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
+ // else: stay on 'today' (default set above)
  // Restore language preference
  if (window.I18N && S.lang) window.I18N.current = S.lang;
  // Restore unit preferences
@@ -1279,8 +1284,9 @@ function renderLogin(app) {
  window.UNITS.weight = S.weightUnit || 'kg';
  window.UNITS.height = S.heightUnit || 'cm';
  }
+ render(); // Re-render après sync cloud : nStep migré, unités à jour
  }
- });
+ }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); });
  SupaSync.startAutoSync();
  }
  if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
@@ -1875,6 +1881,10 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1) {
    S.sStep = 0;
  }
+ // Restaurer le contexte de vue (sport mid-onboarding vs nutrition vs today)
+ if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+ else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
+ else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
  // ─── AUTO-REGENERATION PLAN NUTRITION (semaine expirée) ───
  // Si un plan existe, que l'utilisateur n'est PAS en train de le consulter (nStep ≠ 12),
  // et que la date de génération a plus de 7 jours → regénérer silencieusement.
