@@ -281,81 +281,88 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
    : 'Nous allons apprendre \u00e0 vous conna\u00eetre.';
 
  var wrap = h('div', {
-   style: 'position:fixed;inset:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px;overflow-y:auto;'
+   style: 'position:fixed;inset:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;overflow-y:auto;'
  });
 
  var inner = h('div', {
-   style: 'width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;text-align:center;opacity:0;transform:translateY(20px);transition:opacity .7s ease-out,transform .7s ease-out;'
+   style: 'width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;text-align:center;'
  });
 
- // Logo mark
- inner.appendChild(h('div', {
-   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:52px;'
- }, '\u25C6 SMARTFITCOACH'));
+ // Éléments — animation stagger individuelle (plus premium qu'un seul bloc)
+ var logo = h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:48px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
+ }, '\u25C6 SMARTFITCOACH');
 
- // Titre — [Prénom], nous allons apprendre à vous connaître.
- inner.appendChild(h('div', {
-   style: 'font-family:Georgia,serif;font-size:clamp(22px,6vw,28px);font-weight:normal;line-height:1.25;letter-spacing:-.01em;color:var(--black,#0A0A09);margin-bottom:20px;'
- }, _titleText));
+ var titre = h('div', {
+   style: 'font-family:Georgia,serif;font-size:clamp(28px,8vw,36px);font-weight:normal;line-height:1.15;letter-spacing:-.02em;color:var(--black,#0A0A09);margin-bottom:20px;opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease;'
+ }, _titleText);
 
- // Sous-titre — uppercase, spaced
- inner.appendChild(h('div', {
-   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:44px;'
- }, 'Votre corps a une logique. Nous allons la lire.'));
+ var sousTitre = h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:.35em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:40px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
+ }, 'Votre corps a une logique. Nous allons la lire.');
 
- // Corps — rythme court / long / court
- var bodyWrap = h('div', {
-   style: 'width:100%;max-width:320px;text-align:center;margin-bottom:44px;'
+ // Corps phrase 1 — courte, italique, noire
+ var corps1 = h('div', {
+   style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.75;color:var(--black,#0A0A09);max-width:300px;margin-bottom:24px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
+ }, 'Avant de vous proposer quoi que ce soit, nous vous \u00e9coutons.');
+
+ // Corps phrase 2 — longue, analytique, grise (Helvetica Neue light)
+ var corps2 = h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.85;color:var(--grey,#6B6B65);max-width:320px;margin-bottom:24px;opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s ease;'
+ });
+ corps2.appendChild(document.createTextNode('Votre m\u00e9tabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la fa\u00e7on dont vous bougez et dont vous mangez \u2014 chaque donn\u00e9e que vous nous confierez sera le mat\u00e9riau d\u2019un programme qui ne ressemblera \u00e0 aucun autre.'));
+
+ // Corps phrase 3 — courte, forte, uppercase (déclaration finale)
+ var corps3 = h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--black,#0A0A09);margin-bottom:40px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
+ }, 'Ce que vous \u00eates construit ce que vous recevrez.');
+
+ var divider = h('div', {
+   style: 'width:100%;max-width:260px;height:1px;background:var(--border,#D8D8D0);margin-bottom:36px;opacity:0;transition:opacity .5s ease;'
  });
 
- // Phrase 1 — courte, italique, grise
- bodyWrap.appendChild(h('div', {
-   style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;line-height:1.75;color:var(--grey,#6B6B65);margin-bottom:18px;'
- }, 'Avant de vous proposer quoi que ce soit, nous vous \u00e9coutons.'));
-
- // Phrase 2 — longue, corps principal
- var p2 = h('div', {
-   style: 'font-family:Georgia,serif;font-size:14px;line-height:1.85;color:var(--black,#0A0A09);margin-bottom:18px;'
- });
- p2.appendChild(document.createTextNode('Votre m\u00e9tabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la fa\u00e7on dont vous bougez et dont vous mangez \u2014 chaque donn\u00e9e que vous nous confierez sera le mat\u00e9riau d\u2019un programme qui ne ressemblera \u00e0 aucun autre.'));
- bodyWrap.appendChild(p2);
-
- // Phrase 3 — courte, forte
- bodyWrap.appendChild(h('div', {
-   style: 'font-family:Georgia,serif;font-size:14px;line-height:1.5;color:var(--black,#0A0A09);letter-spacing:.01em;'
- }, 'Ce que vous \u00eates construit ce que vous recevrez.'));
-
- inner.appendChild(bodyWrap);
-
- // Divider
- inner.appendChild(h('div', {
-   style: 'width:100%;max-width:300px;height:1px;background:var(--border,#E8E7E2);margin-bottom:36px;'
- }));
-
- // CTA button
+ // CTA — conforme .btn-primary (9px, border, border-radius:2px, hover/active)
  var cta = h('button', {
-   style: 'width:100%;max-width:360px;padding:16px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;margin-bottom:28px;',
+   style: 'width:100%;max-width:360px;padding:18px 28px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:.4em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s ease,transform .15s ease;margin-bottom:24px;opacity:0;transform:translateY(16px);',
+   onmouseenter: function(e){ e.currentTarget.style.background='var(--black2,#181818)'; },
+   onmouseleave: function(e){ e.currentTarget.style.background='var(--black,#0A0A09)'; },
+   onmousedown:  function(e){ e.currentTarget.style.transform='scale(0.98)'; },
+   onmouseup:    function(e){ e.currentTarget.style.transform='scale(1)'; },
    onclick: function() {
      S.welcomeShown = true;
      saveProfile();
      window.render();
    }
  }, 'JE ME FAIS CONNA\u00ceTRE');
- inner.appendChild(cta);
 
- // Signature
- inner.appendChild(h('div', {
-   style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;line-height:1.65;color:var(--grey,#6B6B65);max-width:280px;text-align:center;'
- }, 'Un programme qui vous ressemble n\u2019existe pas encore. Il va na\u00eetre ici.'));
+ var signature = h('div', {
+   style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;line-height:1.7;color:var(--grey,#6B6B65);max-width:280px;text-align:center;opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease;'
+ }, 'Un programme qui vous ressemble n\u2019existe pas encore. Il va na\u00eetre ici.');
+
+ inner.appendChild(logo);
+ inner.appendChild(titre);
+ inner.appendChild(sousTitre);
+ inner.appendChild(corps1);
+ inner.appendChild(corps2);
+ inner.appendChild(corps3);
+ inner.appendChild(divider);
+ inner.appendChild(cta);
+ inner.appendChild(signature);
 
  wrap.appendChild(inner);
  app.appendChild(wrap);
 
- // Entrance animation
+ // Staggered entrance — chaque élément apparaît individuellement
+ var _animEls = [logo, titre, sousTitre, corps1, corps2, corps3, divider, cta, signature];
+ var _delays  = [0, 80, 160, 240, 320, 400, 460, 520, 600];
  requestAnimationFrame(function() {
    requestAnimationFrame(function() {
-     inner.style.opacity = '1';
-     inner.style.transform = 'translateY(0)';
+     _animEls.forEach(function(el, i) {
+       setTimeout(function() {
+         el.style.opacity = '1';
+         if (el !== divider) el.style.transform = 'translateY(0)';
+       }, _delays[i]);
+     });
    });
  });
 };
