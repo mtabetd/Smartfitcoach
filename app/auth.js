@@ -999,11 +999,6 @@ window.AUTH = {
         if (msg.indexOf('rate') !== -1 || msg.indexOf('limit') !== -1) {
           return { ok: false, error: 'Trop de tentatives. R\u00e9essayez dans quelques minutes.' };
         }
-        if (msg.indexOf('not found') !== -1 || msg.indexOf('not registered') !== -1) {
-          // Don't reveal if email exists — always show success for security
-          BLACKBOX.log('password_reset_requested', { email: email });
-          return { ok: true };
-        }
         return { ok: false, error: 'Erreur lors de l\u2019envoi. R\u00e9essayez.' };
       }
       BLACKBOX.log('password_reset_requested', { email: email });

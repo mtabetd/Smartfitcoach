@@ -1756,9 +1756,9 @@ function renderForgotPassword(app) {
  if (S._resetSent) {
  // Confirmation screen
  c.appendChild(h('div', {style: 'text-align:center;padding:24px 0'}, [
- h('div', {style: 'font-family:Georgia,serif;font-size:24px;margin-bottom:16px'}, 'Email envoy\u00e9'),
+ h('div', {style: 'font-family:Georgia,serif;font-size:24px;margin-bottom:16px'}, 'V\u00e9rifiez votre bo\u00eete mail'),
  h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px'},
- 'Un lien de r\u00e9initialisation a \u00e9t\u00e9 envoy\u00e9 \u00e0 ' + (S._resetEmail || '') + '. V\u00e9rifiez votre bo\u00eete de r\u00e9ception et votre dossier spam.'),
+ 'Si un compte est associ\u00e9 \u00e0 ' + (S._resetEmail || 'cette adresse') + ', vous allez recevoir un lien de r\u00e9initialisation. V\u00e9rifiez \u00e9galement votre dossier spam.'),
  h('button', {'class': 'btn-secondary', onclick: function() {
  S._resetSent = false;
  S._resetEmail = '';
@@ -1832,13 +1832,13 @@ function renderNewPassword(app) {
  c.appendChild(h('div', {style: 'text-align:center;padding:24px 0'}, [
  h('div', {style: 'font-family:Georgia,serif;font-size:24px;margin-bottom:16px'}, 'Mot de passe modifi\u00e9'),
  h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px'},
- 'Votre mot de passe a \u00e9t\u00e9 mis \u00e0 jour. Vous pouvez maintenant vous connecter.'),
+ 'Votre mot de passe a \u00e9t\u00e9 mis \u00e0 jour. Vous \u00eates connect\u00e9 et votre programme vous attend.'),
  h('button', {'class': 'btn-primary', onclick: function() {
  S._passwordUpdated = false;
  S.authError = '';
- S.view = 'auth';
+ // La session de r\u00e9cup\u00e9ration est toujours active — render() redirige directement vers 'today'
  render();
- }}, 'Se connecter')
+ }}, 'Acc\u00e9der \u00e0 mon programme')
  ]));
  app.appendChild(c);
  return;
@@ -1928,6 +1928,8 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
 
 // ─── INIT ───
 function _doAutoLogin() {
+ // Guard: user arriving from a password reset link — do not overwrite the authNewPassword view
+ if (window.S && window.S.view === 'authNewPassword') { render(); return; }
 if (window.AUTH && window.AUTH.isLoggedIn()) {
  S.view = 'today';
  if (window.GAMIFICATION) GAMIFICATION.updateStreak();
