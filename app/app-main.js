@@ -586,6 +586,12 @@ function renderProfilePage(container) {
          if (S.sleep === null || S.sleep === undefined) {
            S.sleep = 2; // SLEEPS[2] = '7-8h' — valeur de référence, modifiable dans l'onboarding nutrition
          }
+         // Pré-remplir l'objectif nutrition depuis les objectifs sport (évite une sélection manuelle obligatoire)
+         if ((S.goal === null || S.goal === undefined) && Array.isArray(S.sportGoals) && S.sportGoals.length > 0) {
+           var _sgToGoal = {muscle: 0, weightloss: 3, shred: 4, endurance: 2, flexibility: 2, general: 2};
+           var _sg = S.sportGoals[0];
+           if (_sgToGoal[_sg] !== undefined) S.goal = _sgToGoal[_sg];
+         }
        } else if (_addingSport) {
          S.sStep = 0;
          S.view = 'sport';
