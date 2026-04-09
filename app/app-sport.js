@@ -2752,6 +2752,7 @@ function renderCrossfitProgram(p) {
 
  var daysPerWeek = S.sportDays || 4;
  var template = CF_DAY_TEMPLATES[daysPerWeek] || CF_DAY_TEMPLATES[4];
+ S.crossfitWeek = S.crossfitWeek || 1;
  var weekProgram = generateCrossfitWeek(S.crossfitWeek, daysPerWeek);
 
  // Guard: if no WODs available, show a message instead of a blank page
@@ -2767,7 +2768,7 @@ function renderCrossfitProgram(p) {
  }
 
  // Clamp selectedCrossfitDay — guard null/undefined and out-of-bounds
- if (!S.selectedCrossfitDay || S.selectedCrossfitDay < 0 || S.selectedCrossfitDay >= template.length) S.selectedCrossfitDay = 0;
+ if (S.selectedCrossfitDay === undefined || S.selectedCrossfitDay === null || S.selectedCrossfitDay < 0 || S.selectedCrossfitDay >= template.length) S.selectedCrossfitDay = 0;
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
@@ -2989,7 +2990,7 @@ function renderCrossfitProgram(p) {
  var currentDay = weekProgram[S.selectedCrossfitDay];
  if (!currentDay) return;
  var wod = currentDay.wod;
- if (!wod) return;
+ if (!wod) { p.appendChild(h('div', {style:'padding:16px;color:var(--grey);font-size:13px'}, 'Séance non disponible. Rechargez la page.')); p.appendChild(h('button', {'class':'btn-back', onclick: function(){ S.sStep = 5; window.render(); }}, '← Modifier le niveau')); return; }
 
  // Day header
  p.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:24px;text-align:center;margin:16px 0 4px'}, currentDay.dayLabel + ' \u2014 ' + wod.name));
@@ -6837,10 +6838,11 @@ function renderRunningProgram(p) {
  return;
  }
  var totalWeeks = program.length;
+ S.runningWeek = S.runningWeek || 1;
  if (S.runningWeek > totalWeeks) S.runningWeek = totalWeeks;
  if (S.runningWeek < 1) S.runningWeek = 1;
  var currentWeekData = program[S.runningWeek - 1];
- if (!currentWeekData) return;
+ if (!currentWeekData) { p.appendChild(h('div', {style:'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Semaine introuvable.')); p.appendChild(h('button', {'class':'btn-back', onclick: function(){ S.sStep = 7; window.render(); }}, '← Retour')); return; }
 
  var goalObj2 = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
  var levelObj = (window.RUNNING_LEVELS || []).find(function(l){ return l.id === S.runningLevel; });
@@ -7066,10 +7068,11 @@ function renderHyroxProgram(p) {
  return;
  }
  var totalWeeks = program.length;
+ S.hyroxWeek = S.hyroxWeek || 1;
  if (S.hyroxWeek > totalWeeks) S.hyroxWeek = totalWeeks;
  if (S.hyroxWeek < 1) S.hyroxWeek = 1;
  var currentWeekData = program[S.hyroxWeek - 1];
- if (!currentWeekData) return;
+ if (!currentWeekData) { p.appendChild(h('div', {style:'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Semaine introuvable.')); p.appendChild(h('button', {'class':'btn-back', onclick: function(){ S.sStep = 9; window.render(); }}, '← Retour')); return; }
 
  var goalObj = (window.HYROX_GOALS || []).find(function(g){ return g.id === S.hyroxGoal; });
  var levelObj = (window.HYROX_LEVELS || []).find(function(l){ return l.id === S.hyroxLevel; });
