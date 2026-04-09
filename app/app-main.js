@@ -188,8 +188,8 @@ function saveProfile() {
 // Migration centralisée des anciens numéros de step vers le nouveau routing (Apr 2026)
 // Appelée après loadProfile() à chaque login ou sync cloud — une seule source de vérité
 function _migrateSteps() {
- // Appliquer seulement en mode nutrition/both (ou appMode non encore défini = premier login nutrition)
- if ((!S.appMode || S.appMode === 'nutrition' || S.appMode === 'both') && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 11) {
+ // Appliquer seulement en mode nutrition/both (jamais si appMode absent = nouvel utilisateur sans choix de mode)
+ if ((S.appMode === 'nutrition' || S.appMode === 'both') && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 11) {
    if (S.weekPlan) { S.nStep = 12; }
    // nStep=8 sans profil de base → retour au début de l'onboarding
    else if (S.nStep === 8 && S.sex && S.goal !== null) { S.nStep = 11; }
@@ -197,8 +197,8 @@ function _migrateSteps() {
    // Couvre nStep 1-10 (anciens steps intermédiaires y compris 9 et 10)
    else if (S.nStep >= 1 && S.nStep <= 10 && S.sex && S.goal !== null) { S.nStep = 8; }
  }
- // Cas nStep=0 uniquement pour les modes nutrition (pas sport-only, qui gère son propre routing)
- if ((!S.appMode || S.appMode === 'nutrition' || S.appMode === 'both') && S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
+ // Cas nStep=0 uniquement pour les modes nutrition (pas sport-only ni nouvel utilisateur sans appMode)
+ if ((S.appMode === 'nutrition' || S.appMode === 'both') && S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
    S.nStep = S.weekPlan ? 12 : (S.goal !== null && S.weight && S.height ? 11 : (S.sex ? 2 : 1));
  }
 }
