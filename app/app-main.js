@@ -84,7 +84,9 @@ var PROFILE_KEYS = [
  '_bodyFatEstimate',
  '_bodyCompositionProfile',
  '_bodyCompositionWeight',
- 'bodyScanDone'
+ 'bodyScanDone',
+ '_switchedFromSport',
+ '_switchedFromNutrition'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -196,9 +198,10 @@ function _migrateSteps() {
    if (S.weekPlan) { S.nStep = 12; }
    // nStep=8 sans profil de base → retour au début de l'onboarding
    else if (S.nStep === 8 && S.sex && S.goal !== null) { S.nStep = 11; }
-   else if (S.nStep === 8) { S.nStep = 1; }
-   // Couvre nStep 1-10 (anciens steps intermédiaires y compris 9 et 10)
-   else if (S.nStep >= 1 && S.nStep <= 10 && S.sex && S.goal !== null) { S.nStep = 8; }
+   // nStep=8 en mode 'both' avec sexe renseigné = transition sport→nutrition en cours — NE PAS réinitialiser
+   else if (S.nStep === 8 && !(S.appMode === 'both' && S.sex)) { S.nStep = 1; }
+   // Couvre nStep 1-8 (anciens steps intermédiaires) — nStep 9 et 10 sont des steps courants à préserver
+   else if (S.nStep >= 1 && S.nStep <= 8 && S.sex && S.goal !== null) { S.nStep = 8; }
  }
  // Cas nStep=0 uniquement pour les modes nutrition (pas sport-only ni nouvel utilisateur sans appMode)
  if ((S.appMode === 'nutrition' || S.appMode === 'both') && S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {

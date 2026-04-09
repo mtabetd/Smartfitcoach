@@ -1925,6 +1925,8 @@ function renderStep8(p) {
   if (S.goal === null || S.goal === undefined) { goStep(4); return; }
   // CRITIQUE-4: garde sex/weight/height manquants — évite 1500 kcal fantôme
   if (!S.sex || !S.weight || !S.height) { goStep(1); return; }
+  // CRITIQUE-5: garde S.activity null — calcTDEE retourne 0 sans niveau d'activité
+  if (S.activity === null || S.activity === undefined) { goStep(5); return; }
   var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI();
     // Synchronise NutritionMaster (source de vérité pour RecipeEngine + Sport)
     if (window.computeNutritionState) { window.computeNutritionState(false); }
