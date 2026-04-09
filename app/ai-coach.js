@@ -456,6 +456,7 @@ function sendMessage() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ messages: apiMessages, context: ctx })
   }).then(function(res) {
+    if (!res.ok) return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
     return res.json();
   }).then(function(data) {
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
