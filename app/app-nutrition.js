@@ -234,6 +234,8 @@ function renderSplash(app) {
   sp.appendChild(ctaBtn);
 
   sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:16px;opacity:0;animation:splashFadeUp .5s ease 1s forwards'}, '2 minutes suffisent \u00b7 Gratuit \u00b7 Vos donn\u00e9es restent sur votre appareil'));
+  // Bouton retour — évite que l'utilisateur soit piégé sur ce splash
+  sp.appendChild(h('button', {style: 'display:block;margin:20px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);cursor:pointer;padding:8px 16px;min-height:44px;opacity:0;animation:splashFadeUp .5s ease 1.1s forwards', onclick: function() { S.view = 'today'; if (window.render) window.render(); }}, '\u2190 Retour'));
   app.appendChild(sp);
 }
 

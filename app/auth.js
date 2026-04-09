@@ -697,6 +697,7 @@ window.AUTH = {
           var u = _extractUser(data.user);
           _migrateAnonKeys(u.id);
           _currentSession = u;
+          setLegacySession(_currentSession); // sync localStorage pour survivre à un refresh immédiat
           _useSupabase = true;
           clearRateLimit(email);
           BLACKBOX.log('login', { email: email });
