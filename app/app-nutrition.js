@@ -3199,9 +3199,11 @@ function renderStep9(p) {
     S._weekPlanGeneratedAt = new Date().toISOString();
     // Sync plan nutrition vers Supabase
     if (window.SupaSync && S.weekPlan) {
-      var _monday = new Date();
-      _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
-      SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+      try {
+        var _monday = new Date();
+        _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+        SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+      } catch(e) { console.warn('[nutrition] regen saveMealPlan error:', e); }
     }
     bb('week_regenerated', {});
     window.render();

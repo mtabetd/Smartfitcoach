@@ -188,13 +188,13 @@ function saveProfile() {
 // Migration centralisée des anciens numéros de step vers le nouveau routing (Apr 2026)
 // Appelée après loadProfile() à chaque login ou sync cloud — une seule source de vérité
 function _migrateSteps() {
- if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 9) {
+ if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 11) {
    if (S.weekPlan) { S.nStep = 12; }
    else if (S.nStep === 8) { S.nStep = 11; }
    else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
  }
  if (S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
-   S.nStep = S.weekPlan ? 12 : (S.goal !== null ? 11 : 1);
+   S.nStep = S.weekPlan ? 12 : (S.goal !== null && S.weight && S.height ? 11 : (S.sex ? 2 : 1));
  }
 }
 
@@ -1250,6 +1250,7 @@ function renderLogin(app) {
  // Restore profile from localStorage for this user
  loadProfile();
  _migrateSteps();
+ if (S.weekPlan && S.appMode === 'nutrition') S.view = 'today';
  // Restore language preference
  if (window.I18N && S.lang) window.I18N.current = S.lang;
  // Restore unit preferences
