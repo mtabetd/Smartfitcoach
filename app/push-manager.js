@@ -49,10 +49,7 @@
         var reminderTime = new Date(now);
         reminderTime.setHours(10, 0, 0, 0);
         if (now < reminderTime) {
-          var delay = reminderTime - now;
-          setTimeout(function() {
-            window.SFCPushManager.showLocal('SmartFitCoach', 'Bonjour ! Comment tu te sens aujourd\'hui ? Fais ton bilan en 30 secondes.', 'checkin');
-          }, delay);
+          this.scheduleAndPersist('checkin', 'SmartFitCoach', 'Bonjour\u00a0! Comment tu te sens aujourd\'hui\u00a0? Fais ton bilan en 30 secondes.', reminderTime.getTime());
         }
       }
 
@@ -60,10 +57,7 @@
       var eveningTime = new Date();
       eveningTime.setHours(20, 0, 0, 0);
       if (new Date() < eveningTime) {
-        var eveningDelay = eveningTime - new Date();
-        setTimeout(function() {
-          window.SFCPushManager.showLocal('SmartFitCoach', 'N\'oublie pas de clôturer ton journal alimentaire pour aujourd\'hui.', 'journal');
-        }, eveningDelay);
+        this.scheduleAndPersist('journal', 'SmartFitCoach', 'N\'oublie pas de cl\u00f4turer ton journal alimentaire pour aujourd\'hui.', eveningTime.getTime());
       }
 
       // Rappels repas
@@ -96,20 +90,14 @@
       var lunch = new Date(now);
       lunch.setHours(12, 0, 0, 0);
       if (now < lunch) {
-        var lunchDelay = lunch - now;
-        setTimeout(function() {
-          window.SFCPushManager.showLocal('SmartFitCoach', 'C\'est l\'heure du déjeuner — consulte ton plan repas.', 'meal-lunch');
-        }, lunchDelay);
+        this.scheduleAndPersist('meal-lunch', 'SmartFitCoach', 'C\'est l\'heure du d\u00e9jeuner \u2014 consulte ton plan repas.', lunch.getTime());
       }
 
       // Dîner 19h00
       var dinner = new Date(now);
       dinner.setHours(19, 0, 0, 0);
       if (now < dinner) {
-        var dinnerDelay = dinner - now;
-        setTimeout(function() {
-          window.SFCPushManager.showLocal('SmartFitCoach', 'Prépare ton dîner — ta recette t\'attend.', 'meal-dinner');
-        }, dinnerDelay);
+        this.scheduleAndPersist('meal-dinner', 'SmartFitCoach', 'Pr\u00e9pare ton d\u00eener \u2014 ta recette t\'attend.', dinner.getTime());
       }
     },
 
@@ -122,10 +110,7 @@
       var target = new Date(now);
       target.setHours(hour, minute, 0, 0);
       if (now >= target) return; // Passé pour aujourd'hui
-      var delay = target - now;
-      setTimeout(function() {
-        window.SFCPushManager.showLocal('SmartFitCoach', 'C\'est l\'heure de ta séance ! Prêt à te dépasser ?', 'workout-reminder');
-      }, delay);
+      this.scheduleAndPersist('workout-reminder', 'SmartFitCoach', 'C\'est l\'heure de ta s\u00e9ance\u00a0! Pr\u00eat \u00e0 te d\u00e9passer\u00a0?', target.getTime());
     },
 
     notifyRestOver: function(exerciseName, setNum) {
@@ -156,10 +141,7 @@
             ? 'Tu n\'as pas encore agi aujourd\'hui. Ton streak de ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' t\'attend — ne le laisse pas tomber !'
             : 'Ça fait ' + diff + ' jours qu\'on ne t\'a pas vu. Reprends là où tu t\'es arrêté(e) — chaque action compte !';
           if (now < notifTime) {
-            var notifDelay = notifTime - now;
-            setTimeout(function() {
-              window.SFCPushManager.showLocal('SmartFitCoach', msg, 'comeback');
-            }, notifDelay);
+            this.scheduleAndPersist('comeback', 'SmartFitCoach', msg, notifTime.getTime());
           } else {
             window.SFCPushManager.showLocal('SmartFitCoach', msg, 'comeback');
           }
@@ -174,13 +156,56 @@
 
     savePrefs: function(prefs) {
       try { localStorage.setItem(PUSH_KEY, JSON.stringify(prefs)); } catch(e) {}
+    },
+
+    // Planifie un rappel ET le persiste en localStorage pour survie entre sessions
+    scheduleAndPersist: function(tag, title, body, targetTime) {
+      var self = this;
+      var prefs = self.getPrefs();
+      if (!prefs.scheduledNotifs) prefs.scheduledNotifs = [];
+      // Dédupliquer par tag — on ne garde que le plus récent pour chaque tag
+      prefs.scheduledNotifs = prefs.scheduledNotifs.filter(function(n) { return n.tag !== tag; });
+      prefs.scheduledNotifs.push({ tag: tag, title: title, body: body, targetTime: targetTime });
+      self.savePrefs(prefs);
+      var delay = Math.max(0, targetTime - Date.now());
+      if (delay < 2147483647) {
+        setTimeout(function() { self.showLocal(title, body, tag); }, delay);
+      }
+    },
+
+    // Vérifie au démarrage les rappels persistés et les déclenche/reprogramme
+    checkPersistentReminders: function() {
+      var self = this;
+      var prefs = self.getPrefs();
+      if (!prefs.granted || !prefs.scheduledNotifs) return;
+      var now = Date.now();
+      var remaining = [];
+      prefs.scheduledNotifs.forEach(function(notif) {
+        if (notif.targetTime <= now) {
+          // Rappel manqué — le déclencher immédiatement
+          self.showLocal(notif.title, notif.body, notif.tag);
+        } else {
+          // Futur — reprogrammer
+          var delay = notif.targetTime - now;
+          if (delay < 2147483647) {
+            setTimeout(function() { self.showLocal(notif.title, notif.body, notif.tag); }, delay);
+          }
+          remaining.push(notif);
+        }
+      });
+      prefs.scheduledNotifs = remaining;
+      self.savePrefs(prefs);
     }
   };
 
   // Init automatique au chargement
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() { window.SFCPushManager.init(); });
+    document.addEventListener('DOMContentLoaded', function() {
+      window.SFCPushManager.init();
+      window.SFCPushManager.checkPersistentReminders();
+    });
   } else {
     window.SFCPushManager.init();
+    window.SFCPushManager.checkPersistentReminders();
   }
 })();
