@@ -457,15 +457,16 @@ function _renderProgressionWidget(container) {
       if (wHistSorted[i].date <= cutoff30) { wPrev = wHistSorted[i]; break; }
     }
     if (!wPrev) wPrev = wHistSorted[0];
-    var wDelta = {
+    if (typeof wLast.weight !== 'number' || typeof wPrev.weight !== 'number') { wPrev = null; }
+    var wDelta = wPrev ? {
       current: wLast.weight,
       previous: wPrev.weight,
       deltaKg: +(wLast.weight - wPrev.weight).toFixed(2),
       deltaPct: wPrev.weight > 0 ? +(((wLast.weight - wPrev.weight) / wPrev.weight) * 100).toFixed(1) : null,
       trend: wLast.weight > wPrev.weight ? 'up' : wLast.weight < wPrev.weight ? 'down' : 'stable',
       currentDate: wLast.date
-    };
-    sec3.appendChild(createRow('Poids', '', wDelta, 'kg', '30 jours'));
+    } : null;
+    if (wDelta) sec3.appendChild(createRow('Poids', '', wDelta, 'kg', '30 jours'));
     container.appendChild(sec3);
   }
 

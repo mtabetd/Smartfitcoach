@@ -654,10 +654,10 @@
       var card = e.target.closest('.install-card');
       if (!card) return;
       var id = card.getAttribute('data-id');
-      var sel = Array.isArray(window.S.installations) ? window.S.installations.slice() : [];
+      var sel = window.S && Array.isArray(window.S.installations) ? window.S.installations.slice() : [];
       var idx = sel.indexOf(id);
       if (idx === -1) { sel.push(id); } else { sel.splice(idx, 1); }
-      window.S.installations = sel;
+      if (window.S) window.S.installations = sel;
       if (window.saveProfile) window.saveProfile();
       // Update visual state
       var isSel = sel.indexOf(id) !== -1;
@@ -672,7 +672,7 @@
     });
 
     document.getElementById('install-confirm').addEventListener('click', function() {
-      var sel = Array.isArray(window.S.installations) ? window.S.installations : [];
+      var sel = window.S && Array.isArray(window.S.installations) ? window.S.installations : [];
       if (sel.length === 0) {
         var err = document.getElementById('install-error');
         if (err) err.style.display = 'block';
