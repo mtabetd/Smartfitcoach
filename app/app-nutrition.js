@@ -897,7 +897,7 @@ function renderStep3(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(4); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 5 (N6+N7): ACTIVITE + SOMMEIL ───
@@ -1840,7 +1840,7 @@ function renderStep7(p) {
   p.appendChild(pg);
 
   p.appendChild(h('div', {style: 'height:24px'}));
-  var ok = S.whey !== null;
+  var ok = S.whey !== null && S.whey !== undefined;
   var _genBtn = h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
     if (!ok) return;
     // Feedback visuel immédiat — désactiver le bouton et afficher "Génération..."
@@ -1900,7 +1900,7 @@ function renderStep7(p) {
 // ─── STEP 11 (RÉSULTATS / MACROS) ───
 function renderStep8(p) {
   // CRITIQUE-3: garde S.goal null — ne peut pas calculer les macros sans objectif
-  if (S.goal === null) { goStep(4); return; }
+  if (S.goal === null || S.goal === undefined) { goStep(4); return; }
   var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI();
     // Synchronise NutritionMaster (source de vérité pour RecipeEngine + Sport)
     if (window.computeNutritionState) { window.computeNutritionState(false); }
