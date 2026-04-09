@@ -6885,7 +6885,7 @@ function renderRunningProgram(p) {
  }());
 
  // Day tabs
- var sessions = currentWeekData.sessions;
+ var sessions = currentWeekData.sessions || [];
  if (S.selectedRunDay >= sessions.length) S.selectedRunDay = 0;
  var tabs = h('div', {'class': 'day-tabs'});
  sessions.forEach(function(sess, i) {
@@ -7116,7 +7116,7 @@ function renderHyroxProgram(p) {
  }());
 
  // Day tabs
- var sessions = currentWeekData.sessions;
+ var sessions = currentWeekData.sessions || [];
  if (S.selectedHyroxDay >= sessions.length) S.selectedHyroxDay = 0;
  var tabs = h('div', {'class': 'day-tabs'});
  sessions.forEach(function(sess, i) {
@@ -7274,13 +7274,15 @@ function renderPadelProgram(p) {
  p.appendChild(wn);
 
  // Day tabs
+ var _padelSessions = week.sessions || [];
+ if (S.selectedPadelDay >= _padelSessions.length) S.selectedPadelDay = 0;
  var tabs = h('div', {'class': 'day-tabs'});
- week.sessions.forEach(function(s, i) {
+ _padelSessions.forEach(function(s, i) {
  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedPadelDay === i ? ' active' : ''), onclick: function(){ S.selectedPadelDay = i; window.render(); }}, 'Jour ' + (i + 1)));
  });
  p.appendChild(tabs);
 
- var session = week.sessions[S.selectedPadelDay];
+ var session = _padelSessions[S.selectedPadelDay];
  if (session) {
  var colors = {technique: 'var(--blue,#1A3A6A)', physical: 'var(--green,#1A4A1A)', match: 'var(--red,#5A1010)', tactics: 'var(--orange,#6A4A1A)', recovery: 'var(--grey,#6B6B65)'};
  var card = h('div', {style: 'border-left:3px solid ' + (colors[session.type] || 'var(--black)') + ';padding:16px;margin:12px 0;background:var(--ivory2,#F4F4F0)'});
@@ -7394,13 +7396,15 @@ function renderGolfProgram(p) {
  p.appendChild(wn);
 
  // Day tabs
+ var _golfSessions = week.sessions || [];
+ if (S.selectedGolfDay >= _golfSessions.length) S.selectedGolfDay = 0;
  var tabs = h('div', {'class': 'day-tabs'});
- week.sessions.forEach(function(s, i) {
+ _golfSessions.forEach(function(s, i) {
  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedGolfDay === i ? ' active' : ''), onclick: function(){ S.selectedGolfDay = i; window.render(); }}, 'Jour ' + (i + 1)));
  });
  p.appendChild(tabs);
 
- var session = week.sessions[S.selectedGolfDay];
+ var session = _golfSessions[S.selectedGolfDay];
  if (session) {
  var colors = {short_game: 'var(--green,#1A4A1A)', long_game: 'var(--blue,#1A3A6A)', course_play: 'var(--orange,#6A4A1A)', physical: 'var(--red,#5A1010)', mental: 'var(--grey,#6B6B65)'};
  var card = h('div', {style: 'border-left:3px solid ' + (colors[session.type] || 'var(--black)') + ';padding:16px;margin:12px 0;background:var(--ivory2,#F4F4F0)'});
@@ -8422,8 +8426,9 @@ function renderCyclingProgram(p) {
 
  var sess = sessions[S.selectedCyclingDay];
  if (sess) {
+ if (!sess.zone) sess.zone = 2; // Défaut Z2 si manquant
  var zoneNum = Array.isArray(sess.zone) ? sess.zone[sess.zone.length - 1] : sess.zone;
- var zoneData = CYCLING_ZONES[Math.min(zoneNum - 1, 4)];
+ var zoneData = CYCLING_ZONES[Math.max(0, Math.min(zoneNum - 1, 4))] || CYCLING_ZONES[1];
  var zoneColor = zoneData ? zoneData.color : '#1A3A6A';
  var kcal = cyclingKcal(sess.duration, zoneNum, weightKg);
 

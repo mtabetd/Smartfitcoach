@@ -1256,8 +1256,8 @@ function renderLogin(app) {
  var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
  if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
  // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
- else if (S.appMode === 'sport' && S.sStep === 0 && (!S.sportProgram || !S.sportProgram.length)) { S.view = 'sport'; }
- else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!S.sportProgram || !S.sportProgram.length)) { S.view = 'sport'; }
+ else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
+ else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
  else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
  else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
  // else: stay on 'today' (default set above)
@@ -1894,8 +1894,8 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Restaurer le contexte de vue (sport mid-onboarding vs nutrition vs today)
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
  // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
- else if (S.appMode === 'sport' && S.sStep === 0 && (!S.sportProgram || !S.sportProgram.length)) { S.view = 'sport'; }
- else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!S.sportProgram || !S.sportProgram.length)) { S.view = 'sport'; }
+ else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
+ else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
  else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
  else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
  // ─── AUTO-REGENERATION PLAN NUTRITION (semaine expirée) ───

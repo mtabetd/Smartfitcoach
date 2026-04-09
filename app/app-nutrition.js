@@ -2602,8 +2602,8 @@ function renderStep9(p) {
 
   if (!S._nm && window.computeNutritionState) window.computeNutritionState(false);
   if (!S.weekPlan || S.weekPlan.length < 7) { try { var _wk9 = generateWeek(); if (Array.isArray(_wk9) && _wk9.length === 7) S.weekPlan = _wk9; } catch(e) { console.error('[renderStep9] generateWeek failed', e); } }
-  // Guard: si weekPlan est toujours null après génération, afficher un message d'erreur
-  if (!S.weekPlan) {
+  // Guard: si weekPlan est toujours null/vide après génération, afficher un message d'erreur
+  if (!S.weekPlan || !S.weekPlan.length) {
     p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
     p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux résultats'));
     return;
@@ -2644,10 +2644,11 @@ function renderStep9(p) {
   });
   if (S._foodLog && Array.isArray(S._foodLog[S.selectedDay])) {
     S._foodLog[S.selectedDay].forEach(function(item) {
-      _preTotal += item.kcal || 0;
-      _preTotalP += item.p || 0;
-      _preTotalG += item.g || 0;
-      _preTotalL += item.l || 0;
+      if (!item) return;
+      _preTotal += (item.kcal || 0);
+      _preTotalP += (item.p || 0);
+      _preTotalG += (item.g || 0);
+      _preTotalL += (item.l || 0);
     });
   }
   var _tgt = calcTarget();
@@ -5196,6 +5197,7 @@ function showSmoothieModal(sm) {
       var snackTargetBefore = split ? Math.round(totalTarget * split.pctSnack) : Math.round(totalTarget * 0.15);
       var delta = sm.cal - snackTargetBefore;
       var dayPlan = S.weekPlan[S.selectedDay];
+      if (!dayPlan) return; // guard: weekPlan can be shorter than expected
       dayPlan.snack = smoothieAsRecipe;
       if (split && Math.abs(delta) > 30) {
         var otherSum = split.pctBreak + split.pctLunch + split.pctDinner;
