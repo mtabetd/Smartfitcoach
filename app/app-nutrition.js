@@ -3048,6 +3048,7 @@ function renderStep9(p) {
     card.appendChild(h('div', {'class': 'meal-level'}, stars));
     card.appendChild(h('div', {'class': 'swap-btn', onclick: function(e) {
       e.stopPropagation();
+      if (S.modalRecipe) return; // guard: no swap while recipe modal is open
       swapMeal(S.selectedDay, sl.key);
       bb('meal_swap', {day: S.selectedDay, slot: sl.key});
       if (window.GAMIFICATION) {
@@ -5647,151 +5648,26 @@ function exportShoppingListPDF(list, shopChecked) {
   doc.save('liste-courses-smartfitcoach.pdf');
 }
 
-// ─── SALADE COMPOSER (modal fullscreen) ───
+// ─── SALADE COMPOSER ───
+// State-based approach: sets S.saladBar.open = true and calls render().
+// Avoids DOM overlay that was destroyed by any window.render() call.
 window.openSaladComposer = function openSaladComposer(slotKey) {
   var S = window.S;
   if (!S) return;
-
-  // Ensure saladBar state is initialised
   if (!S.saladBar) {
     S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' };
   }
-  // Align mealTarget with the requested slot
+  // Reset ingredients for a fresh composition
+  S.saladBar.base = null;
+  S.saladBar.proteins = [];
+  S.saladBar.veggies = [];
+  S.saladBar.fats = [];
+  S.saladBar.sauce = null;
+  S.saladBar.open = true;
   if (slotKey === 'breakfast' || slotKey === 'lunch' || slotKey === 'snack' || slotKey === 'dinner') {
     S.saladBar.mealTarget = slotKey;
   }
-
-  // ── Compute calorie target for this slot ──
-  function getSlotTargetCals(slot) {
-    var totalCals = window.calcTarget ? window.calcTarget() : 0;
-    if (!totalCals) totalCals = (S._nm && S._nm.calories) ? S._nm.calories : 2000;
-    var split = window.getMealSplit ? window.getMealSplit() : null;
-    var pct;
-    if (split) {
-      if (slot === 'breakfast')    pct = split.pctBreak;
-      else if (slot === 'lunch')   pct = split.pctLunch;
-      else if (slot === 'snack')   pct = split.pctSnack || 0.10;
-      else                         pct = split.pctDinner;
-    } else {
-      var defaults = { breakfast: 0.25, lunch: 0.40, snack: 0.10, dinner: 0.30 };
-      pct = defaults[slot] || 0.30;
-    }
-    return Math.round(totalCals * pct);
-  }
-
-  var targetCals = getSlotTargetCals(slotKey);
-
-  // ── Build fullscreen overlay ──
-  var root = document.getElementById('app') || document.body;
-
-  // Remove any existing composer overlay to avoid duplicates
-  var existing = document.getElementById('salad-composer-overlay');
-  if (existing) existing.parentNode.removeChild(existing);
-
-  var overlay = document.createElement('div');
-  overlay.id = 'salad-composer-overlay';
-  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9000;background:var(--bg,#FAF9F6);display:flex;flex-direction:column;overflow:hidden';
-
-  // Scrollable content zone — renderSaladBar will populate this
-  var contentZone = document.createElement('div');
-  contentZone.style.cssText = 'flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;';
-
-  // Render the saladBar composer into the content zone
-  renderSaladBar(contentZone);
-
-  // Patch the "← Retour" button inserted by renderSaladBar to close our overlay instead
-  var backBtn = contentZone.querySelector('button');
-  if (backBtn) {
-    backBtn.onclick = function() {
-      overlay.parentNode && overlay.parentNode.removeChild(overlay);
-    };
-  }
-
-  // ── Slot label ──
-  var slotLabels = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
-  var slotLabel = slotLabels[slotKey] || slotKey;
-
-  // ── Sticky "Insérer" button bar ──
-  var insertBar = document.createElement('div');
-  insertBar.style.cssText = 'flex-shrink:0;padding:12px 16px 24px;background:var(--bg,#FAF9F6);border-top:1px solid var(--border,#D8D8D0);';
-
-  var insertBtn = document.createElement('button');
-  insertBtn.style.cssText = 'width:100%;padding:15px;border:none;border-radius:2px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;';
-  insertBtn.textContent = '\u2705 Insérer dans mon repas — ' + slotLabel;
-
-  insertBtn.onclick = function() {
-    var sb = S.saladBar;
-
-    // a. Collect selected ingredients
-    var allItems = [];
-    if (sb.base) allItems.push(sb.base);
-    (sb.proteins || []).forEach(function(x) { allItems.push(x); });
-    (sb.veggies  || []).forEach(function(x) { allItems.push(x); });
-    (sb.fats     || []).forEach(function(x) { allItems.push(x); });
-    if (sb.sauce) allItems.push(sb.sauce);
-
-    if (allItems.length === 0) {
-      alert('Veuillez sélectionner au moins un ingrédient.');
-      return;
-    }
-
-    // b. Calculate current macros
-    var macros = calcSaladMacros(sb);
-    var saladCals = macros.k || 1; // avoid division by zero
-
-    // c. Scale to target calories
-    var ratio = targetCals > 0 ? targetCals / saladCals : 1;
-    var scaledCals    = Math.round(macros.k * ratio);
-    var scaledProtein = Math.round(macros.p * ratio);
-    var scaledCarbs   = Math.round(macros.g * ratio);
-    var scaledFat     = Math.round(macros.l * ratio);
-
-    // Scale each ingredient qty
-    var scaledItems = allItems.map(function(x) {
-      return { name: x.name, qty: Math.round((x.qty || 0) * ratio), unit: x.unit || 'g' };
-    });
-
-    // d. Ingredients string
-    var ingredientsList = scaledItems.map(function(x) {
-      return x.name + ' ' + x.qty + (x.unit || 'g');
-    }).join(', ');
-
-    // e. Build virtual recipe object
-    var saladRecipe = {
-      _id: 'SALAD_' + Date.now(),
-      n: 'Ma Salade Personnalisée',
-      type: slotKey,
-      cal: scaledCals,
-      k: scaledCals,
-      p: scaledProtein,
-      g: scaledCarbs,
-      f: scaledFat,
-      l: scaledFat,
-      i: ingredientsList,
-      _scaledIngredients: scaledItems,
-      _scalingRatio: ratio,
-      st: [
-        'Composer votre salade selon les ingrédients sélectionnés',
-        'Mélanger tous les ingrédients',
-        'Assaisonner selon vos goûts'
-      ],
-      tags: ['salade', 'custom', 'composer'],
-      custom: true
-    };
-
-    // f. Insert into weekPlan and close
-    if (!S.weekPlan) S.weekPlan = [];
-    if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
-    S.weekPlan[S.selectedDay][slotKey] = saladRecipe;
-
-    overlay.parentNode && overlay.parentNode.removeChild(overlay);
-    if (window.render) window.render();
-  };
-
-  insertBar.appendChild(insertBtn);
-  overlay.appendChild(contentZone);
-  overlay.appendChild(insertBar);
-  root.appendChild(overlay);
+  if (window.render) window.render();
 };
 
 // ─── STEP 6: BODY SCAN — ANALYSE DE COMPOSITION CORPORELLE (OPTIONNEL) ───

@@ -769,7 +769,9 @@
     })
     .then(function(r) {
       if (!r.ok) {
-        return r.json().then(function(err) { throw new Error(err.error || 'Erreur HTTP ' + r.status); });
+        return r.json()
+          .then(function(err) { throw new Error(err.error || 'Erreur HTTP ' + r.status); })
+          .catch(function() { throw new Error('Le serveur a mis trop de temps à répondre. Réessayez dans quelques instants.'); });
       }
       return r.json();
     })
