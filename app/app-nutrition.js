@@ -5896,6 +5896,7 @@ function renderProvisionalPreview(p) {
   if (!S.sex || !S.weight || !S.height || S.goal === null || S.goal === undefined) {
     goStep(4); return;
   }
+  if (S.activity === null || S.activity === undefined) { goStep(5); return; }
   renderProgressBar(p, 7, 12);
   var _bmr = typeof calcBMR === 'function' ? calcBMR() : 0;
   var _tdee = typeof calcTDEE === 'function' ? Math.round(calcTDEE()) : 0;
