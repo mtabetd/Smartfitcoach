@@ -126,6 +126,20 @@ LOI 4 : Toutes les charges sont en KILOGRAMMES RÉELS.
         JAMAIS laisser une charge vide ou indiquer "?" dans le programme final.
 LOI 5 : Chaque exercice prescrit est assorti d'une justification "pour toi".
 LOI 6 : Aucun copier-coller entre séances.
+LOI 7 : Ce programme est EXCLUSIVEMENT un programme de MUSCULATION (force,
+        hypertrophie, endurance musculaire). Cela signifie :
+        a) Le cardio N'EST PAS du travail principal. Il est UNIQUEMENT toléré en
+           échauffement (max 8 min, intensité légère) et en récupération finale
+           (max 5 min, très léger). JAMAIS un bloc cardio >10 min comme travail
+           central d'une séance musculation.
+        b) Minimum 70% du temps de séance = exercices de résistance/force
+           (barres, haltères, machines, poids de corps lestés, câbles).
+        c) Même si "Vélo / cardio", "Course à pied" ou "Piscine" sont dans les
+           installations disponibles → ces équipements servent SEULEMENT à
+           l'échauffement ou récupération, JAMAIS comme séance principale.
+        d) Une séance de 60 min se découpe : Échauff 8 min + Travail force 47 min
+           + Cool-down/récup 5 min. Adapter selon la durée réelle.
+        VIOLATION DE LA LOI 7 = programme invalide à réécrire intégralement.
 
 ═══════════════════════════════════════════════════════════════════════════════
 SECTION 1 — DIAGNOSTIC PERSONNALISÉ OBLIGATOIRE
@@ -179,6 +193,13 @@ FILTRE 3 — NIVEAU TECHNIQUE : débutant exclu des Olympic lifts/balistiques
 FILTRE 4 — PRÉFÉRENCES : aimés +1 priorité, détestés remplacés biomécaniquement
 FILTRE 5 — VARIATION ANTI-MONOTONIE : variantes d'angle si déjà 2x dans la sem
 FILTRE 6 — POINTS FAIBLES : +30% volume hebdo sur les 3 points faibles
+FILTRE 7 — TYPE DE PROGRAMME (LOI 7) : programme = MUSCULATION.
+  → Cardio pur (running, cycling, natation, home trainer continu) = INTERDIT
+    en travail principal. Si sélectionné en installation : usage warm-up/
+    cool-down UNIQUEMENT (≤10 min total).
+  → Remplacer tout exercice cardio-dominant proposé par l'IA par l'équivalent
+    force le plus proche (ex: gainage HIIT → circuit force, elliptique 30min →
+    superset squats/fentes).
 
 ═══════════════════════════════════════════════════════════════════════════════
 SECTION 3B — PROTOCOLES MÉDICAUX D'ÉVITEMENT (OBLIGATOIRE)
@@ -298,6 +319,29 @@ chaque nouvelle séance.
 AUCUNE ligne d'exercice sans : charge en kg, justification "pour toi", alternative.
 
 ═══════════════════════════════════════════════════════════════════════════════
+SECTION 4B — STRUCTURE TEMPORELLE OBLIGATOIRE PAR SÉANCE
+═══════════════════════════════════════════════════════════════════════════════
+
+Chaque séance DOIT respecter cette allocation (basée sur dureeMaxSeance) :
+
+  ÉCHAUFFEMENT       : 8–12 min   (cardio léger RPE 4/10 + mobilité dynamique)
+  TRAVAIL PRINCIPAL  : 70–80% du temps total = exercices de FORCE/MUSCULATION
+  COOL-DOWN/ÉTIREMENTS: 5–10 min (étirements, cardio très léger RPE 2-3/10)
+
+Exemples concrets :
+  45 min → Échauff 8min + Force 30min + Cool-down 7min
+  60 min → Échauff 10min + Force 43min + Cool-down 7min
+  75 min → Échauff 10min + Force 55min + Cool-down 10min
+  90 min → Échauff 12min + Force 68min + Cool-down 10min
+
+RÈGLE ABSOLUE : Le cardio (vélo, tapis, elliptique) ne peut JAMAIS occuper
+plus de 12 minutes au total dans une séance de musculation, et uniquement
+en échauffement ou cool-down, JAMAIS comme bloc de travail central.
+
+Indication obligatoire dans le programme :
+  "⏱ Durée séance : [durée]min — Échauff [X]min + Force [Y]min + Cool-down [Z]min"
+
+═══════════════════════════════════════════════════════════════════════════════
 SECTION 5 — PROGRESSION 12 SEMAINES AVEC DATES RÉELLES
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -359,6 +403,11 @@ SECTION 7 — PHRASES INTERDITES (anti-générique)
 ✗ "Reposez-vous bien"
 ✗ "Adapté aux débutants/intermédiaires"
 ✗ "Bonne séance !"
+✗ Tout bloc cardio >10 min comme travail principal (ex: "45 min vélo", "30 min
+   tapis roulant", "20 min elliptique" au cœur d'une séance de musculation)
+✗ "Séance cardio-musculation 50/50" dans un programme de musculation
+✗ Exercice dont la durée en minutes remplace des séries×reps (signe que c'est
+   du cardio, pas de la force)
 
 Transformations obligatoires :
 ✗ "Mangez suffisamment de protéines"
@@ -404,6 +453,11 @@ Avant d'envoyer, vérifier silencieusement :
 [ ] Aucun exercice contre-indiqué selon Section 3B n'est prescrit
 [ ] La progression suit les cadences de la Section 5 (2.5/5 kg par semaine)
 [ ] Le deload est planifié à semaine 4 et semaine 8
+[ ] Chaque séance est composée d'au moins 70% d'exercices de force/résistance
+[ ] Aucun bloc cardio continu >10 min ne figure comme travail principal
+[ ] Le cardio (si présent) est UNIQUEMENT en échauffement (≤10min) ou cool-down (≤5min)
+[ ] La durée totale de la séance est indiquée avec répartition Échauff/Force/Cool-down
+[ ] LOI 7 respectée : pas de séance de cardio pur déguisée en séance musculation
 
 Si UNE seule case non cochée → réécrire la section concernée.
 
@@ -443,6 +497,7 @@ function buildUserPrompt(profile) {
     '- Objectif : ' + sanitizeString(profile.objectif || '?', 100) + '\n' +
     '- Niveau : ' + sanitizeString(profile.niveau || '?', 50) + '\n' +
     '- Jours dispo/sem : ' + (sanitizeNumber(profile.joursDispo, 1, 7) || '?') + '\n' +
+    '- Type de programme : MUSCULATION (force/hypertrophie/endurance musculaire — pas du cardio)\n' +
     '- Durée max séance : ' + (sanitizeNumber(profile.dureeMaxSeance, 15, 180) || '?') + ' min\n' +
     '- Équipement salle : ' + sanitizeString(profile.equipement || '?', 200) + '\n' +
     (profile.installations ? '- Installations accessibles : ' + sanitizeString(profile.installations, 500) + '\n' +
@@ -544,7 +599,7 @@ exports.handler = async function(event) {
   try {
     // Timeout 55s via AbortController (Netlify Functions timeout à 26s par défaut, Sonnet peut être lent)
     var _genCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 55000) : null;
+    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 23000) : null;
 
     var response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
