@@ -1276,7 +1276,7 @@ function applyDeloadToSessions(sessions, volumeMult) {
       cooldown: sess.cooldown ? sess.cooldown.slice() : [],
       exercises: []
     };
-    var exCount = sess.exercises ? Math.max(2, Math.ceil(sess.exercises.length * volumeMult)) : 0;
+    var exCount = sess.exercises ? Math.min(sess.exercises.length, Math.max(2, Math.ceil(sess.exercises.length * volumeMult))) : 0;
     for (var e = 0; e < exCount; e++) {
       var origEx = sess.exercises[e];
       deloaded.exercises.push({
