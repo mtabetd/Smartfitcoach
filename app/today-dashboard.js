@@ -436,6 +436,17 @@ function renderCardBonjour(S) {
 // ─── RENDER CARD 2 — Macros du jour ───
 function renderCardMacros() {
   var calorieTarget = getCalorieTarget();
+  var macroTargetsOverride = null;
+  // Priorité aux macros du plan du jour si weekPlan disponible
+  var _S2 = window.S || {};
+  if (Array.isArray(_S2.weekPlan) && _S2.weekPlan.length >= 7) {
+    var _todayIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim
+    var _dayPlan = _S2.weekPlan[_todayIdx];
+    if (_dayPlan && typeof _dayPlan.kcal === 'number' && _dayPlan.kcal > 0) {
+      calorieTarget = _dayPlan.kcal;
+      macroTargetsOverride = { p: _dayPlan.p || 0, g: _dayPlan.g || 0, l: _dayPlan.l || 0 };
+    }
+  }
   if (calorieTarget <= 0) {
     var emptyMacro = card();
     emptyMacro.appendChild(eyebrow('NUTRITION'));
@@ -449,7 +460,7 @@ function renderCardMacros() {
   }
 
   var totals = getTodayTotals();
-  var macroTargets = getMacroTargets();
+  var macroTargets = macroTargetsOverride || getMacroTargets();
 
   // ── Sport burn du jour ──
   var _todayKey = new Date().toISOString().slice(0, 10);

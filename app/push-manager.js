@@ -40,7 +40,8 @@
       if (!prefs.granted) return;
 
       // Vérifier si le checkin du jour a été fait
-      var today = new Date().toISOString().slice(0, 10);
+      var _d0 = new Date();
+      var today = _d0.getFullYear() + '-' + String(_d0.getMonth() + 1).padStart(2, '0') + '-' + String(_d0.getDate()).padStart(2, '0');
       var wellness = null;
       try { wellness = JSON.parse(localStorage.getItem('S') || '{}').todayWellness; } catch(e) {}
       if (!wellness || wellness.date !== today) {
@@ -128,7 +129,8 @@
         try { streakData = JSON.parse(localStorage.getItem('mtd_streak_' + user.id) || '{}'); } catch(e) {}
         var lastDate = streakData.lastDate;
         if (!lastDate) return;
-        var today = new Date().toISOString().slice(0, 10);
+        var _d1 = new Date();
+        var today = _d1.getFullYear() + '-' + String(_d1.getMonth() + 1).padStart(2, '0') + '-' + String(_d1.getDate()).padStart(2, '0');
         var last = new Date(lastDate);
         var diff = Math.floor((new Date(today) - last) / 86400000);
         if (diff >= 3) {
