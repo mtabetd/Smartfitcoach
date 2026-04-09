@@ -2234,11 +2234,18 @@ function buildPersonalizedMuscuPlan(S) {
   // Trouve le split disponible le plus proche
   if (!availSplits[splitDays]) {
     var keys = Object.keys(availSplits).map(Number).sort(function(a,b){return a-b;});
-    splitDays = keys.reduce(function(prev, cur) {
-      return Math.abs(cur - days) < Math.abs(prev - days) ? cur : prev;
-    }, keys[0]);
+    if (keys.length > 0) {
+      splitDays = keys.reduce(function(prev, cur) {
+        return Math.abs(cur - days) < Math.abs(prev - days) ? cur : prev;
+      }, keys[0]);
+    }
   }
-  var split = availSplits[splitDays] || availSplits[Object.keys(availSplits)[0]];
+  var split = availSplits[splitDays] || availSplits[Object.keys(availSplits)[0]] || null;
+  // Normalise les splits array (ex: starting/greyskull/texas/nsuns) → {days:[]}
+  if (Array.isArray(split)) {
+    split = { days: split.map(function(d) { return { day: d.day, label: d.label, muscles: d.muscles || [] }; }) };
+  }
+  if (!split) return { weekProgram: [], tips: [], style: style };
 
   // 4. PHASE MACRO : selon semaine du cycle (muscuCycle 1-12)
   var cycleWeek = Math.max(1, Math.min(12, S.muscuCycle || 1));
@@ -2347,7 +2354,7 @@ function buildPersonalizedMuscuPlan(S) {
 
   // 8. CONSEILS PERSONNALISÉS
   var tips = [];
-  if (getAge() >= 50) tips.push('Récupération allongée recommandée : 48-72h entre les séances par groupe musculaire.');
+  if (typeof getAge === 'function' && getAge() >= 50) tips.push('Récupération allongée recommandée : 48-72h entre les séances par groupe musculaire.');
   if (isFemale) tips.push('Priorité fessiers et jambes : 2× par semaine recommandé pour résultats optimaux.');
   // S.sleep est un index : 0='<6h', 1='6-7h', 2='7-8h', 3='8h+'
   if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) tips.push('Sommeil insuffisant d\u00e9tect\u00e9 : la r\u00e9cup\u00e9ration musculaire est compromise, dormez plus.');
