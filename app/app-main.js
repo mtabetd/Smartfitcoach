@@ -997,6 +997,8 @@ function render() {
  render._lock = true;
  try {
  if (window.destroyAllCharts) window.destroyAllCharts();
+ // Stopper le timer CrossFit si on navigue ailleurs (évite le bip en background)
+ if (window._wodTimerInterval) { clearInterval(window._wodTimerInterval); window._wodTimerInterval = null; }
  if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile();
  var app = document.getElementById('app');
  if (!app) { console.error('[render] #app not found'); return; }
