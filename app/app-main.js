@@ -141,8 +141,11 @@ function saveProfile() {
  if (!prev) { try { prev = JSON.parse(raw2); } catch(e2) {} }
  if (!prev) return;
  var planImpacted = NUTRITION_PLAN_KEYS.some(function(k) {
- // For arrays/objects use JSON serialization; for primitives use strict equality
  var pv = prev[k], sv = S[k];
+ // Si la clé était absente du profil sauvegardé, impossible qu'elle ait "changé"
+ // (évite faux positif quand un nouveau champ est ajouté à NUTRITION_PLAN_KEYS)
+ if (pv === undefined) return false;
+ // For arrays/objects use JSON serialization; for primitives use strict equality
  if (typeof pv === 'object' || typeof sv === 'object') {
  return JSON.stringify(pv) !== JSON.stringify(sv);
  }
