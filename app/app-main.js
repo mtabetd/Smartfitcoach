@@ -1125,7 +1125,7 @@ function render() {
    return;
  }
 
- if (S.view === 'profil') {
+ if (S.view === 'profil' || S.view === 'profile') {
  renderProfilePage(content);
  } else if (S.view === 'sport' && window.SPORT) {
  SPORT.render(content);
@@ -1943,7 +1943,14 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  }
  // Demarrer la sync Supabase si disponible
  if (window.SupaSync) {
- SupaSync.syncOnLogin();
+ SupaSync.syncOnLogin().then(function(syncResult) {
+   if (syncResult === 'loaded_from_cloud') {
+     _migrateSteps();
+     if (window.I18N && S.lang) window.I18N.current = S.lang;
+     if (window.UNITS) { window.UNITS.weight = S.weightUnit || 'kg'; window.UNITS.height = S.heightUnit || 'cm'; }
+     if (window.render) window.render();
+   }
+ }).catch(function() {});
  SupaSync.startAutoSync();
  }
 } else {

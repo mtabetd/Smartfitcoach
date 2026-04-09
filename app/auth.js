@@ -328,6 +328,21 @@ function _initAuth() {
   if (window._authInitialized) return;
   window._authInitialized = true;
 
+  // Re-register session tracking listeners if they were cleaned up during logout
+  if (!_visibilityListener) {
+    _visibilityListener = function() {
+      if (document.hidden) { BLACKBOX.log('page_hidden', {}); }
+      else { BLACKBOX.log('page_visible', {}); }
+    };
+    document.addEventListener('visibilitychange', _visibilityListener);
+  }
+  if (!_beforeUnloadListener) {
+    _beforeUnloadListener = function() {
+      if (AUTH.isLoggedIn()) BLACKBOX.log('page_unload', { sessionMinutes: BLACKBOX.getSessionMinutes() });
+    };
+    window.addEventListener('beforeunload', _beforeUnloadListener);
+  }
+
   var client = _getRawClient();
   if (!client) {
     console.warn('[AUTH] Supabase SDK not loaded, using localStorage fallback');

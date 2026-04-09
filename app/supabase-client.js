@@ -370,6 +370,7 @@
 
     // Sync initial au login : charger depuis Supabase si localStorage vide ou moins avancé
     syncOnLogin: function() {
+      if (!getClient()) return Promise.resolve('no_client');
       var self = this;
       self._syncPending = true;
       return self.loadProfile().then(function(cloudData) {

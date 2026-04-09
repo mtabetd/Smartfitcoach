@@ -4766,7 +4766,14 @@ function renderMusculationProgram(p) {
      return;
    } else {
      S._generatingProgram = false;
-     S.sportProgram = generateSportProgram();
+     var _syncProg = generateSportProgram();
+     if (!_syncProg || _syncProg.length === 0) {
+       S._programGenerationError = 'Aucun exercice disponible avec vos contraintes. Essayez d\'assouplir vos restrictions médicales ou d\'ajouter de l\'équipement.';
+       if (window.render) window.render();
+       return;
+     }
+     S.sportProgram = _syncProg;
+     S._programGenerationError = null;
      S.selectedSportDay = 0;
      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    }
