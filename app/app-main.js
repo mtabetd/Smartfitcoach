@@ -33,13 +33,13 @@ var PROFILE_KEYS = [
  // Hyrox
  'hyroxLevel','hyroxGoal','hyroxDays','hyroxBenchmarks','hyroxWeek','selectedHyroxDay',
  // Padel
- 'padelLevel','padelGoal','padelDays','padelProfile','padelWeek','selectedPadelDay',
+ 'padelLevel','padelGoal','padelDays','padelProfile','padelWeek','selectedPadelDay','padelProgram',
  // Golf
- 'golfLevel','golfGoal','golfDays','golfHandicap','golfProfile','golfWeek','selectedGolfDay',
+ 'golfLevel','golfGoal','golfDays','golfHandicap','golfProfile','golfWeek','selectedGolfDay','golfProgram',
  // Triathlon
  'triathlonGoal','triathlonLevel','triathlonWeak',
  'triathlonSwimPace','triathlonBikePace','triathlonRunPace','triathlonWeek','selectedTriDay',
- 'triathlonFTP','triathlonRaceDate',
+ 'triathlonFTP','triathlonRaceDate','triathlonProgram',
  // Cycling
  'cyclingLevel','cyclingGoal','cyclingDays','cyclingType','cyclingFTP','cyclingSpeed','cyclingRelief',
  'cyclingWeek','selectedCyclingDay','cyclingProgram',
@@ -188,7 +188,7 @@ function _migrateSteps() {
  if ((S.appMode === 'nutrition' || S.appMode === 'both') && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 11) {
    if (S.weekPlan) { S.nStep = 12; }
    // nStep=8 sans profil de base → retour au début de l'onboarding
-   else if (S.nStep === 8 && S.sex && S.goal !== null) { S.nStep = 11; }
+   else if (S.nStep === 8 && S.sex && S.goal !== null && S.goal !== undefined) { S.nStep = 11; }
    else if (S.nStep === 8) { S.nStep = 1; }
    // Migrer vers step 8 UNIQUEMENT si activité et sommeil déjà renseignés (utilisateur pré-migration)
    // — évite de sauter les steps 5-7 pour les nouveaux utilisateurs en cours d'onboarding
@@ -250,6 +250,7 @@ function loadProfile() {
  // Reset ephemeral UI state that should not persist across sessions
  S.shopListOpen = false;
  S.smoothieBarOpen = false;
+ S._showCompletionFirst = false;
  S._addMealModalSlot = null;
  S.modalRecipe = null;
  S.modalSmoothie = null;
@@ -1892,7 +1893,7 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Retour utilisateur : préserver le step programme (ne pas réinitialiser l'onboarding sport).
  // Steps à PRÉSERVER : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel) 14(golf) 15(prog dédié) 16(charges) 18(triathlon) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
  // Steps intermédiaires onboarding (1,2,3,5,7,9,11,13,17,19,22,24) → revenir à 0 (sélection sport)
- var _PROGRAM_STEPS_MAIN = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
+ var _PROGRAM_STEPS_MAIN = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1) {
    S.sStep = 0;
  }

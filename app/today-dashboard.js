@@ -1068,8 +1068,9 @@ function renderCardWellness(S) {
     class: 'btn-primary',
     style: 'margin-top:4px;',
     onclick: function() {
+      if (!S.sportType && S.appMode === 'nutrition') return;
       S.view = 'sport';
-      S.sStep = 20; // étape bilan de forme
+      // Ne pas forcer sStep=20 (musculation-only) — laisser le dispatcher sport gérer le bon step
       if (window.render) window.render();
     }
   }, 'Faire le checkin rapide');

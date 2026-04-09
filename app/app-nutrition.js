@@ -113,7 +113,7 @@ function goStep(n) {
         _step5ok = !!(S.targetWeight);
       }
     }
-    var _step6ok = S.activity !== null && S.activity !== undefined && Array.isArray(S.train) && S.train.length > 0;
+    var _step6ok = S.activity !== null && S.activity !== undefined;
     var _step7ok = S.sleep !== null && S.sleep !== undefined;
     // All body+goal+activity+sleep data complete → skip to medical (nStep 8), allow confirmation
     if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok && _step7ok) { n = 8; }
@@ -1982,7 +1982,7 @@ function renderStep8(p) {
     if (window.S._nm && window.S._nm.errors && window.S._nm.errors.length === 0) {
       var nmDiv = document.createElement('div');
       nmDiv.style.cssText = 'margin:8px 0;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border-left:3px solid var(--green,#1A4A1A);font-size:13px;color:var(--text-secondary,#6B6B65)';
-      nmDiv.textContent = '\u2713 Calculs valid\u00e9s par NutritionMaster \u2014 P\u00d74 + G\u00d74 + L\u00d79 = ' + Number(window.S._nm.caloriesCheck) + ' kcal';
+      nmDiv.textContent = '\u2713 Calculs valid\u00e9s par NutritionMaster \u2014 P\u00d74 + G\u00d74 + L\u00d79 = ' + (window.S._nm.caloriesCheck !== undefined ? Number(window.S._nm.caloriesCheck) : '?') + ' kcal';
       p.appendChild(nmDiv);
     }
 
