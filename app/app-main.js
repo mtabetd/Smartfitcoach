@@ -188,7 +188,7 @@ function saveProfile() {
 // Migration centralisée des anciens numéros de step vers le nouveau routing (Apr 2026)
 // Appelée après loadProfile() à chaque login ou sync cloud — une seule source de vérité
 function _migrateSteps() {
- if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 11) {
+ if ((S.appMode === 'nutrition' || S.appMode === 'both') && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 11) {
    if (S.weekPlan) { S.nStep = 12; }
    else if (S.nStep === 8) { S.nStep = 11; }
    else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
