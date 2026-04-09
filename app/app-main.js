@@ -271,58 +271,82 @@ window.loadProfile = loadProfile;
 
 // ─── WELCOME SCREEN (first connection) ───
 window.renderWelcomeScreen = function renderWelcomeScreen(app) {
+ // Safe first name retrieval — S.prenom preferred, fallback to auth name, no crash
+ var _u = window.AUTH ? window.AUTH.getUser() : null;
+ var _name = (window.S && window.S.prenom && window.S.prenom.trim())
+   || (_u && _u.name && _u.name.split(' ')[0].trim()) || '';
+ var _cap = _name ? _name.charAt(0).toUpperCase() + _name.slice(1) : '';
+ var _titleText = _cap
+   ? (_cap + ', nous allons apprendre \u00e0 vous conna\u00eetre.')
+   : 'Nous allons apprendre \u00e0 vous conna\u00eetre.';
+
  var wrap = h('div', {
    style: 'position:fixed;inset:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px;overflow-y:auto;'
  });
 
  var inner = h('div', {
-   style: 'width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;text-align:center;opacity:0;transform:translateY(20px);transition:opacity .6s ease-out,transform .6s ease-out;'
+   style: 'width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;text-align:center;opacity:0;transform:translateY(20px);transition:opacity .7s ease-out,transform .7s ease-out;'
  });
 
  // Logo mark
  inner.appendChild(h('div', {
-   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:40px;'
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:52px;'
  }, '\u25C6 SMARTFITCOACH'));
 
- // Main headline
+ // Titre — [Prénom], nous allons apprendre à vous connaître.
  inner.appendChild(h('div', {
-   style: 'font-family:Georgia,serif;font-size:clamp(26px,7vw,32px);font-weight:normal;line-height:1.2;letter-spacing:-.01em;color:var(--black,#0A0A09);margin-bottom:16px;'
- }, 'Bienvenue dans votre espace.'));
+   style: 'font-family:Georgia,serif;font-size:clamp(22px,6vw,28px);font-weight:normal;line-height:1.25;letter-spacing:-.01em;color:var(--black,#0A0A09);margin-bottom:20px;'
+ }, _titleText));
 
- // Subtitle
+ // Sous-titre — uppercase, spaced
  inner.appendChild(h('div', {
-   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:36px;'
- }, 'CON\u00c7U POUR VOUS. UNIQUEMENT POUR VOUS.'));
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:44px;'
+ }, 'Votre corps a une logique. Nous allons la lire.'));
 
- // Editorial paragraph
- var para1 = h('div', {
-   style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.8;color:var(--black,#0A0A09);max-width:320px;margin-bottom:32px;'
+ // Corps — rythme court / long / court
+ var bodyWrap = h('div', {
+   style: 'width:100%;max-width:320px;text-align:center;margin-bottom:44px;'
  });
- para1.appendChild(document.createTextNode('Vous rejoignez une communaut\u00e9 de personnes qui refusent le compromis. Votre nutrition, votre programme sportif \u2014 chaque d\u00e9tail sera calibr\u00e9 sur votre singularit\u00e9.'));
- inner.appendChild(para1);
+
+ // Phrase 1 — courte, italique, grise
+ bodyWrap.appendChild(h('div', {
+   style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;line-height:1.75;color:var(--grey,#6B6B65);margin-bottom:18px;'
+ }, 'Avant de vous proposer quoi que ce soit, nous vous \u00e9coutons.'));
+
+ // Phrase 2 — longue, corps principal
+ var p2 = h('div', {
+   style: 'font-family:Georgia,serif;font-size:14px;line-height:1.85;color:var(--black,#0A0A09);margin-bottom:18px;'
+ });
+ p2.appendChild(document.createTextNode('Votre m\u00e9tabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la fa\u00e7on dont vous bougez et dont vous mangez \u2014 chaque donn\u00e9e que vous nous confierez sera le mat\u00e9riau d\u2019un programme qui ne ressemblera \u00e0 aucun autre.'));
+ bodyWrap.appendChild(p2);
+
+ // Phrase 3 — courte, forte
+ bodyWrap.appendChild(h('div', {
+   style: 'font-family:Georgia,serif;font-size:14px;line-height:1.5;color:var(--black,#0A0A09);letter-spacing:.01em;'
+ }, 'Ce que vous \u00eates construit ce que vous recevrez.'));
+
+ inner.appendChild(bodyWrap);
 
  // Divider
  inner.appendChild(h('div', {
-   style: 'width:100%;max-width:300px;height:1px;background:var(--border,#E8E7E2);margin-bottom:32px;'
+   style: 'width:100%;max-width:300px;height:1px;background:var(--border,#E8E7E2);margin-bottom:36px;'
  }));
-
- // Second paragraph
- var para2 = h('div', {
-   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.7;color:var(--grey,#6B6B65);max-width:300px;margin-bottom:48px;'
- });
- para2.appendChild(document.createTextNode('Dans quelques instants, nous allons personnaliser votre exp\u00e9rience. Cela prendra moins de 3 minutes.'));
- inner.appendChild(para2);
 
  // CTA button
  var cta = h('button', {
-   style: 'width:100%;max-width:360px;padding:16px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;',
+   style: 'width:100%;max-width:360px;padding:16px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;margin-bottom:28px;',
    onclick: function() {
      S.welcomeShown = true;
      saveProfile();
      window.render();
    }
- }, 'COMMENCER MON PARCOURS');
+ }, 'JE ME FAIS CONNA\u00ceTRE');
  inner.appendChild(cta);
+
+ // Signature
+ inner.appendChild(h('div', {
+   style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;line-height:1.65;color:var(--grey,#6B6B65);max-width:280px;text-align:center;'
+ }, 'Un programme qui vous ressemble n\u2019existe pas encore. Il va na\u00eetre ici.'));
 
  wrap.appendChild(inner);
  app.appendChild(wrap);
