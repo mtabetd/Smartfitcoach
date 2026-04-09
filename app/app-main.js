@@ -29,9 +29,9 @@ var PROFILE_KEYS = [
  // CrossFit progress (calendar, current day, weekly cycle)
  'cfProgress','cfCurrentDay','crossfitWeek','crossfitCycleWeek','selectedCrossfitDay',
  // Running
- 'runningLevel','runningGoal','runningDays','runningPace','runningVO2max','runningWeek','selectedRunDay',
+ 'runningLevel','runningGoal','runningDays','runningPace','runningVO2max','runningWeek','selectedRunDay','runningProgram',
  // Hyrox
- 'hyroxLevel','hyroxGoal','hyroxDays','hyroxBenchmarks','hyroxWeek','selectedHyroxDay',
+ 'hyroxLevel','hyroxGoal','hyroxDays','hyroxBenchmarks','hyroxWeek','selectedHyroxDay','hyroxProgram',
  // Padel
  'padelLevel','padelGoal','padelDays','padelProfile','padelWeek','selectedPadelDay','padelProgram',
  // Golf

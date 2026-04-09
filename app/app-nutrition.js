@@ -117,7 +117,7 @@ function goStep(n) {
     var _step6ok = S.activity !== null && S.activity !== undefined;
     var _step7ok = S.sleep !== null && S.sleep !== undefined;
     // All body+goal+activity+sleep data complete → skip to medical (nStep 8), allow confirmation
-    if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok && _step7ok) { n = 8; }
+    if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok && _step7ok) { n = S.bodyScanDone ? 8 : 6; }
     else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok) { n = 5; } // targetWeight ok, manque activité/sommeil
     else if (_step1ok && _step2ok && _step3ok && _step4ok) { n = 4; } // targetWeight manquant → retour objectif
     else if (_step1ok && _step2ok && _step3ok) { n = 4; } // missing objectif
@@ -1029,7 +1029,7 @@ function renderStep4(p) {
       p.appendChild(_summaryCard);
     }
   })();
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VIII'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Vos conditions de sant\u00e9 pour des recommandations s\u00fbres.'));
   if (window.TIPS) TIPS.renderTip(p, 'health');
@@ -1096,7 +1096,7 @@ function renderStep5(p) {
 
   if (_page === 0) {
     // ── 5a: Habitudes ──
-    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V · a \u00b7 Habitudes'));
+    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IX · a \u00b7 Habitudes'));
     p.appendChild(h('h1', {html: (_prenomS5 ? _prenomS5 + ', quelles sont<br>' : 'Quelles sont<br>') + '<em>vos habitudes alimentaires\u00a0?</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
     p.appendChild(h('p', {'class': 'subtitle'}, 'Vos habitudes au quotidien pour un plan r\u00e9aliste et tenable.'));
     if (window.TIPS) TIPS.renderTip(p, 'habits');
@@ -1194,7 +1194,7 @@ function renderStep5(p) {
 
   } else {
     // ── 5b: Supplémentation + Alcool ──
-    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V · b \u00b7 Suppl\u00e9ments'));
+    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IX · b \u00b7 Suppl\u00e9ments'));
     p.appendChild(h('h1', {html: 'Suppl\u00e9mentation<br><em>& consommation d\u2019alcool</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
     p.appendChild(h('p', {'class': 'subtitle'}, 'Ces informations ajustent votre bilan calorique total.'));
 

@@ -1541,7 +1541,7 @@ function renderChargesQuestionnaire(p) {
  style: 'width:60px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory)',
  onchange: (function(key) { return function(e) {
  var v = parseFloat(e.target.value);
- if (!isNaN(v) && v >= 0) S.muscuStrengthProfile[key] = v;
+ if (!isNaN(v) && v > 0) S.muscuStrengthProfile[key] = v;
  else delete S.muscuStrengthProfile[key];
  var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  try { localStorage.setItem('mtd_muscu_strength_' + uid, JSON.stringify(S.muscuStrengthProfile)); } catch(e2) { console.warn('[muscu_strength] localStorage error:', e2); }
