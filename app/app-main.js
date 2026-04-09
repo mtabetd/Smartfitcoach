@@ -42,7 +42,7 @@ var PROFILE_KEYS = [
  'triathlonFTP','triathlonRaceDate',
  // Cycling
  'cyclingLevel','cyclingGoal','cyclingDays','cyclingType','cyclingFTP','cyclingSpeed','cyclingRelief',
- 'cyclingWeek','selectedCyclingDay',
+ 'cyclingWeek','selectedCyclingDay','cyclingProgram',
  // Calisthenics
  'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
  'calisthenicsEquipment','calisthDips','calisthCurrentWeek',
@@ -1258,7 +1258,7 @@ function renderLogin(app) {
  loadProfile();
  _migrateSteps();
  // Restaurer le contexte de vue selon l'état du profil chargé
- var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
+ var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
  if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
  // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
  else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }

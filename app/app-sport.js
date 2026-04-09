@@ -1157,7 +1157,7 @@ function renderPARQ(p) {
   var _next = S._parqNextStep || 0;
   S.sStep = _next;
   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
-  if (window.render) window.render();
+  setTimeout(function() { if (window.render) window.render(); }, 0);
   return;
  }
 
@@ -7050,7 +7050,7 @@ function renderHyroxConfig(p) {
 // ─── STEP 10: HYROX PROGRAM ───
 function renderHyroxProgram(p) {
  // Guard: si config non remplie, rediriger vers la config
- if (!S.hyroxLevel || !S.hyroxGoal) { S.sStep = 9; window.render(); return; }
+ if (!S.hyroxLevel || !S.hyroxGoal) { S.sStep = 9; setTimeout(function() { if (window.render) window.render(); }, 0); return; }
  if (!S.hyroxProgram || S.hyroxProgram.length === 0) {
  S.hyroxProgram = window.generateHyroxProgram(S.hyroxDays, S.hyroxLevel, S.hyroxGoal);
  }
@@ -7961,7 +7961,7 @@ function renderYogaOnboarding(p) {
 
 // ─── STEP 21: YOGA PROGRAM ───
 function renderYogaProgram(p) {
- if (!S.yogaLevel) { S.sStep = 19; window.render(); return; }
+ if (!S.yogaLevel) { S.sStep = 19; setTimeout(function() { if (window.render) window.render(); }, 0); return; }
  if (!S.yogaDays) S.yogaDays = 3;
  if (!S.yogaDuration) S.yogaDuration = '30min';
  if (!S.yogaStyle) S.yogaStyle = 'hatha';
@@ -8294,7 +8294,7 @@ function renderCyclingOnboarding(p) {
  if (!ok) p.appendChild(h('div', {'class': 'field-error', style: 'text-align:center;margin-bottom:8px'}, 'Choisissez votre niveau et votre objectif pour continuer.'));
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (!ok) return;
- S.cyclingPlan = generateCyclingPlan(S.cyclingLevel, S.cyclingDays || 3);
+ S.cyclingProgram = generateCyclingPlan(S.cyclingLevel, S.cyclingDays || 3);
  S.cyclingWeek = 1;
  S.selectedCyclingDay = 0;
  S.sStep = 23;
@@ -8308,11 +8308,11 @@ function renderCyclingOnboarding(p) {
 function renderCyclingProgram(p) {
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
- if (!S.cyclingPlan || !S.cyclingPlan.length) {
- S.cyclingPlan = generateCyclingPlan(S.cyclingLevel || 'debutant', S.cyclingDays || 3);
+ if (!S.cyclingProgram || !S.cyclingProgram.length) {
+ S.cyclingProgram = generateCyclingPlan(S.cyclingLevel || 'debutant', S.cyclingDays || 3);
  }
 
- var plan = S.cyclingPlan;
+ var plan = S.cyclingProgram;
  if (!plan || !plan.length) {
  var backArrowCyc = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
  p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
@@ -8641,7 +8641,7 @@ function renderCalisthenicsOnboarding(p) {
 
 // ─── STEP 25: CALISTHENICS PROGRAM ───
 function renderCalisthenicsProgram(content) {
- if (!S.calisthenicsLevel) { S.sStep = 24; window.render(); return; }
+ if (!S.calisthenicsLevel) { S.sStep = 24; setTimeout(function() { if (window.render) window.render(); }, 0); return; }
  var skills = Array.isArray(S.calisthenicsGoal) ? S.calisthenicsGoal : [];
  var level = S.calisthenicsLevel || 'debutant';
  var pullups = parseInt(S.calisthPullups) || 0;
