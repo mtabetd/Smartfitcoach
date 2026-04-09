@@ -1260,6 +1260,14 @@ _visibilityListener = function() {
 };
 document.addEventListener('visibilitychange', _visibilityListener);
 
+// Track unload for session duration — must be set BEFORE _initAuth() to prevent double-registration
+_beforeUnloadListener = function() {
+  if (AUTH.isLoggedIn()) {
+    BLACKBOX.log('page_unload', { sessionMinutes: BLACKBOX.getSessionMinutes() });
+  }
+};
+window.addEventListener('beforeunload', _beforeUnloadListener);
+
 // ─── INIT BOOT ───
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', _initAuth);
@@ -1276,13 +1284,5 @@ setTimeout(function() {
     BLACKBOX.log('session_resume', {});
   }
 }, 0);
-
-// Track unload for session duration
-_beforeUnloadListener = function() {
-  if (AUTH.isLoggedIn()) {
-    BLACKBOX.log('page_unload', { sessionMinutes: BLACKBOX.getSessionMinutes() });
-  }
-};
-window.addEventListener('beforeunload', _beforeUnloadListener);
 
 })();

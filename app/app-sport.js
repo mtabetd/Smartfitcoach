@@ -5348,7 +5348,7 @@ function renderMusculationProgram(p) {
 
  // ─── I4+I5: SPLIT SELECTOR (intermediate+ only) ───
  var _isIntermediate = S.sportLevel === 'intermediate' || S.sportLevel === 'advanced' || S.sportLevel === 'pro';
- var _numDays = S.sportDays || S.sportProgram.length;
+ var _numDays = S.sportDays || (S.sportProgram && S.sportProgram.length) || 0;
 
  // Define split options per number of training days
  var _SPLIT_OPTIONS = {
