@@ -399,10 +399,13 @@ function generateSportProgram() {
 
  // Medical restrictions: filter exercises based on muscuMedical profile
  if (S.muscuMedical && S.muscuMedical.done) {
- var beforeFilter = available.length;
  available = available.filter(function(ex){ return filterExerciseByMedical(ex, S.muscuMedical); });
- // If filter removed everything, restore original pool to avoid empty day
- if (available.length === 0) available = pool.filter(function(ex){ return ex.lv <= maxLv; }).slice();
+ // Si le filtre médical a tout supprimé, on élargit le niveau MAIS on garde le filtre médical
+ // (ne jamais proposer d'exercices contre-indiqués médicalement)
+ if (available.length === 0) {
+   available = pool.filter(function(ex){ return filterExerciseByMedical(ex, S.muscuMedical); });
+ }
+ // Si toujours vide après élargissement : laisser vide — renderMusculationProgram affichera l'erreur
  }
 
  var pri = categoryPriority[group] || 1;
@@ -2881,8 +2884,7 @@ function renderCrossfitProgram(p) {
   var doneDays = 0;
   if (S.cfProgress) { for (var dkk in S.cfProgress) { if (S.cfProgress[dkk] && S.cfProgress[dkk].done) doneDays++; } }
   var pctDone = Math.min(100, Math.round(doneDays / totalDays * 100));
-  var nextTestWeek = 5;
-  while (nextTestWeek < cfWkN) nextTestWeek += 5;
+  var nextTestWeek = Math.ceil(Math.max(cfWkN, 1) / 5) * 5;
   var daysToTest = Math.max(0, (nextTestWeek - cfWkN) * (S.sportDays || 4));
 
   var tracker = h('div', {style: 'border:1px solid var(--border);padding:12px 16px;margin-bottom:12px;background:var(--ivory2)'});
@@ -4717,6 +4719,20 @@ function calcSessionKcal(exercises, durationMin) {
 }
 
 function renderMusculationProgram(p) {
+ // Afficher le message d'erreur si la génération a échoué (évite l'écran blanc)
+ if (S._programGenerationError) {
+   p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'}, [
+     h('div', {style: 'font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Programme indisponible'),
+     h('p', {style: 'font-size:14px;color:var(--text-secondary,#6B6B65);max-width:300px;margin:0 auto 24px;line-height:1.5;'}, S._programGenerationError),
+     h('button', {'class': 'btn-primary', style: 'margin:0 auto;display:block;', onclick: function() {
+       S._programGenerationError = null;
+       S.sportProgram = [];
+       S._generatingProgram = false;
+       if (window.render) window.render();
+     }}, 'Réessayer')
+   ]));
+   return;
+ }
  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) {
    // Afficher un message de génération si pas de programme
    if (!S._generatingProgram) {
@@ -4730,15 +4746,21 @@ function renderMusculationProgram(p) {
          S._generatingProgram = false;
          S.sportProgram = generateSportProgram();
          if (!S.sportProgram || S.sportProgram.length === 0) {
-           console.error('[sport] generateSportProgram returned empty program, aborting render to avoid white screen');
+           console.error('[sport] generateSportProgram returned empty program');
+           S._generatingProgram = false;
+           S._programGenerationError = 'Aucun exercice disponible avec vos contraintes actuelles. Essayez d\'assouplir vos restrictions médicales ou d\'ajouter davantage d\'équipement.';
+           if (window.render) window.render();
            return;
          }
+         S._programGenerationError = null;
          S.selectedSportDay = 0;
          if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
          if (window.render) window.render();
        } catch(e) {
          console.error('[sport] generateSportProgram error:', e);
          S._generatingProgram = false;
+         S._programGenerationError = 'Une erreur est survenue lors de la génération du programme. Veuillez réessayer.';
+         if (window.render) window.render();
        }
      }, 50);
      return;

@@ -1852,11 +1852,13 @@ function renderStep7(p) {
       var _wk1 = generateWeek();
       if (Array.isArray(_wk1) && _wk1.length > 0) S.weekPlan = _wk1;
       S._weekPlanGeneratedAt = new Date().toISOString();
-      // Sync plan nutrition vers Supabase
+      // Sync plan nutrition vers Supabase (try/catch : une erreur réseau ne bloque pas la navigation)
       if (window.SupaSync && S.weekPlan) {
-        var _monday = new Date();
-        _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
-        SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+        try {
+          var _monday = new Date();
+          _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+          SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+        } catch(e) { console.warn('[nutrition] saveMealPlan error (non-bloquant):', e); }
       }
       bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
       if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
