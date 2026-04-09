@@ -86,7 +86,9 @@ var PROFILE_KEYS = [
  '_bodyCompositionWeight',
  'bodyScanDone',
  '_parqNextStep',
- '_sportProfileDone'
+ '_sportProfileDone',
+ '_switchedFromSport',
+ '_switchedFromNutrition'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -137,8 +139,11 @@ function saveProfile() {
  if (!prev) { try { prev = JSON.parse(raw2); } catch(e2) {} }
  if (!prev) return;
  var planImpacted = NUTRITION_PLAN_KEYS.some(function(k) {
- // For arrays/objects use JSON serialization; for primitives use strict equality
  var pv = prev[k], sv = S[k];
+ // Si la clé était absente du profil sauvegardé, impossible qu'elle ait "changé"
+ // (évite faux positif quand un nouveau champ est ajouté à NUTRITION_PLAN_KEYS)
+ if (pv === undefined) return false;
+ // For arrays/objects use JSON serialization; for primitives use strict equality
  if (typeof pv === 'object' || typeof sv === 'object') {
  return JSON.stringify(pv) !== JSON.stringify(sv);
  }
@@ -189,9 +194,10 @@ function _migrateSteps() {
    if (S.weekPlan) { S.nStep = 12; }
    // nStep=8 sans profil de base → retour au début de l'onboarding
    else if (S.nStep === 8 && S.sex && S.goal !== null && S.goal !== undefined) { S.nStep = 11; }
-   else if (S.nStep === 8) { S.nStep = 1; }
-   // Migrer vers step 8 UNIQUEMENT si activité et sommeil déjà renseignés (utilisateur pré-migration)
-   // — évite de sauter les steps 5-7 pour les nouveaux utilisateurs en cours d'onboarding
+   // nStep=8 en mode 'both' avec sexe renseigné = transition sport→nutrition en cours — NE PAS réinitialiser
+   else if (S.nStep === 8 && !(S.appMode === 'both' && S.sex)) { S.nStep = 1; }
+   // Migrer vers step 8 UNIQUEMENT si toutes les données de base sont renseignées (utilisateur pré-migration)
+   // — nStep 9 et 10 sont des steps courants à préserver — évite de sauter steps 5-7 pour nouveaux utilisateurs
    else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null && S.weight && S.height && S.activity !== null && S.sleep !== null) { S.nStep = 8; }
  }
  // Cas nStep=0 uniquement pour les modes nutrition (pas sport-only ni nouvel utilisateur sans appMode)
@@ -565,6 +571,25 @@ function renderProfilePage(container) {
          S.view = 'nutrition';
          // Marquer pour afficher un message d'explication dans l'onboarding
          S._switchedFromSport = true;
+         // Pré-remplir activité + type entraînement + sommeil depuis les données sport
+         // (évite que l'utilisateur resaisisse des données déjà connues)
+         if (S.activity === null || S.activity === undefined) {
+           var _sd = S.sportDays || 3;
+           S.activity = _sd >= 5 ? 3 : _sd >= 3 ? 2 : 1; // ACTIVITIES index : 3=Très actif, 2=Modérément, 1=Légèrement
+         }
+         if (!Array.isArray(S.train) || S.train.length === 0) {
+           var _trainMap = { musculation: [0], crossfit: [0, 1], running: [4], hyrox: [0, 1], yoga: [2], cycling: [1], triathlon: [1, 4], calisthenics: [0], padel: [3], golf: [3] };
+           S.train = (S.sportType && _trainMap[S.sportType]) ? _trainMap[S.sportType] : [2];
+         }
+         if (S.sleep === null || S.sleep === undefined) {
+           S.sleep = 2; // SLEEPS[2] = '7-8h' — valeur de référence, modifiable dans l'onboarding nutrition
+         }
+         // Pré-remplir l'objectif nutrition depuis les objectifs sport (évite une sélection manuelle obligatoire)
+         if ((S.goal === null || S.goal === undefined) && Array.isArray(S.sportGoals) && S.sportGoals.length > 0) {
+           var _sgToGoal = {muscle: 0, weightloss: 3, shred: 4, endurance: 2, flexibility: 2, general: 2};
+           var _sg = S.sportGoals[0];
+           if (_sgToGoal[_sg] !== undefined) S.goal = _sgToGoal[_sg];
+         }
        } else if (_addingSport) {
          S.sStep = 0;
          S.view = 'sport';
@@ -992,6 +1017,8 @@ function render() {
  render._lock = true;
  try {
  if (window.destroyAllCharts) window.destroyAllCharts();
+ // Stopper le timer CrossFit si on navigue ailleurs (évite le bip en background)
+ if (window._wodTimerInterval) { clearInterval(window._wodTimerInterval); window._wodTimerInterval = null; }
  if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile();
  var app = document.getElementById('app');
  if (!app) { console.error('[render] #app not found'); return; }

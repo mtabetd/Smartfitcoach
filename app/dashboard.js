@@ -906,7 +906,7 @@ window.DASHBOARD = {
 
 
     /* ═══ ALERTES MÉDICALES ═══ */
-    if (S.medical && S.medical.length > 0) {
+    if (Array.isArray(S.medical) && S.medical.length > 0) {
       var hasDiabDash = S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1 || S.medical.indexOf('prediabete') !== -1;
       if (hasDiabDash) {
         root.appendChild(h('div', 'dash-label', 'Suivi médical'));
@@ -1588,7 +1588,7 @@ function exportAllData() {
   // Collect all mtd_ prefixed localStorage keys
   for (var i = 0; i < localStorage.length; i++) {
     var key = localStorage.key(i);
-    if (key.indexOf('mtd_') === 0) {
+    if (key && key.indexOf('mtd_') === 0) {
       try { backup.data[key] = JSON.parse(localStorage.getItem(key)); }
       catch(e) { backup.data[key] = localStorage.getItem(key); }
     }
@@ -1642,7 +1642,7 @@ function deleteAllData() {
   var keysToRemove = [];
   for (var i = 0; i < localStorage.length; i++) {
     var key = localStorage.key(i);
-    if (key.indexOf('mtd_') === 0) {
+    if (key && key.indexOf('mtd_') === 0) {
       keysToRemove.push(key);
     }
   }

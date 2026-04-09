@@ -436,10 +436,13 @@ function renderCardBonjour(S) {
 
 // ─── RENDER CARD 2 — Macros du jour ───
 function renderCardMacros() {
+  // Sport-only : pas de données nutrition, masquer la carte entièrement
+  var _S2 = window.S || {};
+  if (_S2.appMode === 'sport') return null;
+
   var calorieTarget = getCalorieTarget();
   var macroTargetsOverride = null;
   // Priorité aux macros du plan du jour si weekPlan disponible
-  var _S2 = window.S || {};
   if (Array.isArray(_S2.weekPlan) && _S2.weekPlan.length >= 7) {
     var _todayIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim
     var _dayPlan = _S2.weekPlan[_todayIdx];
@@ -546,6 +549,8 @@ function renderCardMacros() {
 function renderCardRepas() {
   var S = window.S;
   if (!S) return null;
+  // Sport-only : pas de plan nutritionnel, masquer la carte
+  if (S.appMode === 'sport') return null;
 
   var c = card();
   c.appendChild(eyebrow('REPAS DU JOUR'));

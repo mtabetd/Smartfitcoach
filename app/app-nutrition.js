@@ -983,6 +983,28 @@ function renderActiviteSommeil(p) {
     : _selCount3 + '\u00a0jour' + (_selCount3 > 1 ? 's' : '') + ' s\u00e9lectionn\u00e9' + (_selCount3 > 1 ? 's' : '');
   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:4px;'}, _hint3));
 
+  // ─── HEURE D'ENTRAÎNEMENT (mode 'both' uniquement — l'utilisateur s'entraîne activement, le timing affecte la répartition des macros) ───
+  if (S.appMode === 'both') {
+    p.appendChild(h('div', {style: 'height:20px'}));
+    p.appendChild(h('div', {'class': 'section-label'}, '\u23F0 Heure d\u2019entra\u00eenement habituelle'));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin:-4px 0 10px;line-height:1.5;'}, 'Permet d\u2019adapter la r\u00e9partition des repas (glucides + prot\u00e9ines au bon moment).\u00a0Optionnel.'));
+    var _ttOpts = [
+      {id: 'morning', label: '\uD83C\uDF05 Matin', desc: 'Avant 12h — petit-d\u00e9j post-s\u00e9ance'},
+      {id: 'noon',    label: '\u2600\uFE0F Midi',  desc: '12h–15h — d\u00e9jeuner post-s\u00e9ance'},
+      {id: 'evening', label: '\uD83C\uDF19 Soir',  desc: 'Apr\u00e8s 17h — d\u00eener post-s\u00e9ance'}
+    ];
+    var _ttGrid = h('div', {'class': 'level-list'});
+    _ttOpts.forEach(function(opt) {
+      _ttGrid.appendChild(h('div', {'class': 'level-item' + (S.trainTime === opt.id ? ' on' : ''), onclick: function() {
+        S.trainTime = (S.trainTime === opt.id) ? null : opt.id; // toggle
+        if (S.weekPlan) { S.weekPlan = null; }
+        window.render();
+      }}, [h('div', {}, [h('div', {'class': 'level-name'}, opt.label), h('div', {'class': 'level-desc'}, opt.desc)])]));
+    });
+    p.appendChild(_ttGrid);
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:4px;'}, 'Laissez vide si variable — le plan utilisera une r\u00e9partition standard.'));
+  }
+
   p.appendChild(h('div', {style: 'height:24px'}));
   var ok = S.activity !== null && Array.isArray(S.train) && S.sleep !== null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(6); }}, window.t('onb.next')));
@@ -1902,6 +1924,10 @@ function renderStep7(p) {
 function renderStep8(p) {
   // CRITIQUE-3: garde S.goal null — ne peut pas calculer les macros sans objectif
   if (S.goal === null || S.goal === undefined) { goStep(4); return; }
+  // CRITIQUE-4: garde sex/weight/height manquants — évite 1500 kcal fantôme
+  if (!S.sex || !S.weight || !S.height) { goStep(1); return; }
+  // CRITIQUE-5: garde S.activity null — calcTDEE retourne 0 sans niveau d'activité
+  if (S.activity === null || S.activity === undefined) { goStep(5); return; }
   var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI();
     // Synchronise NutritionMaster (source de vérité pour RecipeEngine + Sport)
     if (window.computeNutritionState) { window.computeNutritionState(false); }
@@ -2392,6 +2418,12 @@ function renderStep8(p) {
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
     // Badge profil complet : déclenché quand l'utilisateur voit ses résultats et passe au planning
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('profile_complete');
+    // I-04: générer weekPlan si absent (ex: rechargement page, navigation directe vers step 11)
+    if (!S.weekPlan || S.weekPlan.length < 7) {
+      if (window.computeNutritionState) window.computeNutritionState(false);
+      var _wkPre = generateWeek();
+      if (Array.isArray(_wkPre) && _wkPre.length > 0) { S.weekPlan = _wkPre; S._weekPlanGeneratedAt = new Date().toISOString(); }
+    }
     S._showCompletionFirst = true;
     goStep(12);
   }}, 'Voir mon planning semaine'));
@@ -2814,6 +2846,7 @@ function renderStep9(p) {
                 style: 'padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:6px;cursor:pointer;background:var(--ivory,#FAF9F6)',
                 onclick: function() {
                   var slotKey3 = S._foodSearchSlot;
+                  if (!S.weekPlan) return;
                   if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
                   S.weekPlan[S.selectedDay][slotKey3] = { n: food.name, k: food.kcal, kcal: food.kcal, p: food.p, g: food.g, l: food.l, f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true };
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
@@ -2864,6 +2897,7 @@ function renderStep9(p) {
           var fd = S._foodManualData || {};
           if (!fd.name || fd.name.trim().length === 0) return;
           var slotKey4 = S._foodSearchSlot;
+          if (!S.weekPlan) return;
           if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
           S.weekPlan[S.selectedDay][slotKey4] = {
             n: fd.name.trim(), k: parseFloat(fd.kcal) || 0, kcal: parseFloat(fd.kcal) || 0,
@@ -3003,12 +3037,12 @@ function renderStep9(p) {
     mealTypeEl.appendChild(document.createTextNode(sl.label));
     if (timingBadge) mealTypeEl.appendChild(timingBadge);
     card.appendChild(mealTypeEl);
-    card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f), txt(r.n)]));
-    card.appendChild(h('div', {'class': 'meal-kcal'}, r.k + ' kcal'));
+    card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f || ''), txt(r.n || 'Repas')]));
+    card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal'));
     var mc = h('div', {'class': 'meal-macros'});
-    mc.appendChild(h('span', {}, 'G ' + r.g + 'g'));
-    mc.appendChild(h('span', {}, 'P ' + r.p + 'g'));
-    mc.appendChild(h('span', {}, 'L ' + r.l + 'g'));
+    mc.appendChild(h('span', {}, 'G ' + (r.g || 0) + 'g'));
+    mc.appendChild(h('span', {}, 'P ' + (r.p || 0) + 'g'));
+    mc.appendChild(h('span', {}, 'L ' + (r.l || 0) + 'g'));
     card.appendChild(mc);
     var lv = r.lv || 0;
     var stars = '';
@@ -3208,7 +3242,7 @@ function renderStep9(p) {
 
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
   var _shopList = ((window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan, {shopFreq: S.shopFreq}) : []) || [];
-  var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
+  var _shopTotal = _shopList.reduce(function(n, cat) { return n + (cat && cat.items ? cat.items.length : 0); }, 0);
   var _shopLabel = window.t('shop.title') + (_shopTotal > 0 ? ' — ' + _shopTotal + ' articles' : '');
   var btnShop = h('button', {
     'class': 'btn-secondary',
@@ -3221,19 +3255,35 @@ function renderStep9(p) {
   p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:16px;background:var(--black2)', onclick: function() { window.exportDayPDF(S.selectedDay); }}, '\u21e9 Exporter le jour en PDF'));
   p.appendChild(h('div', {style: 'height:8px'}));
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
-    if (window.computeNutritionState) window.computeNutritionState(false);
-    var _wkR = generateWeek();
-    if (Array.isArray(_wkR) && _wkR.length > 0) { S.weekPlan = _wkR; S.selectedDay = 0; S._weekPlanGeneratedAt = new Date().toISOString(); }
-    // Sync plan nutrition vers Supabase
-    if (window.SupaSync && S.weekPlan) {
-      try {
-        var _monday = new Date();
-        _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
-        SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
-      } catch(e) { console.warn('[nutrition] regen saveMealPlan error:', e); }
+    // CRITIQUE-G1: anti race-condition (même pattern que génération initiale)
+    if (window._nutritionGenerating) return;
+    window._nutritionGenerating = true;
+    try {
+      if (window.computeNutritionState) window.computeNutritionState(false);
+      // C-02: vider le plan existant avant regen — évite que l'échec reste invisible
+      S.weekPlan = null;
+      var _wkR = generateWeek();
+      if (Array.isArray(_wkR) && _wkR.length > 0) {
+        S.weekPlan = _wkR;
+        S._weekPlanGeneratedAt = new Date().toISOString();
+        // Sync plan nutrition vers Supabase
+        if (window.SupaSync) {
+          try {
+            var _monday = new Date();
+            _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+            SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+          } catch(e) { console.warn('[nutrition] regen saveMealPlan error:', e); }
+        }
+        bb('week_regenerated', {});
+      } else {
+        // IMPORTANT-G2: feedback si pool vide
+        console.warn('[nutrition] regen: generateWeek() a retourné un plan vide');
+        alert('Impossible de générer un nouveau plan. Vérifiez vos préférences alimentaires.');
+      }
+      window.render();
+    } finally {
+      window._nutritionGenerating = false;
     }
-    bb('week_regenerated', {});
-    window.render();
   }}, '\u21bb ' + window.t('onb.s9.generate')));
   p.appendChild(h('div', {style: 'height:12px'}));
   p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux r\u00e9sultats'));
@@ -3247,6 +3297,10 @@ function renderStep9(p) {
     onclick: function() {
       if (!confirm('Refaire le questionnaire nutrition ? Votre plan actuel sera supprimé.')) return;
       S.weekPlan = null;
+      S._nm = null;
+      S._weekPlanGeneratedAt = null;
+      S.mealsLogged = {};
+      if (window.saveProfile) saveProfile();
       goStep(1);
     }
   }, '\u2699 Modifier mes pr\u00e9f\u00e9rences nutritionnelles');
@@ -3382,15 +3436,18 @@ function exportDayPDF(dayIdx) {
   doc.setTextColor(ivory[0], ivory[1], ivory[2]);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
   doc.text('SMART FIT COACH', M, 14);
+  // CRITIQUE-1: garde validité dayIdx avant tout accès à DAY_NAMES/weekPlan
+  if (typeof dayIdx !== 'number' || dayIdx < 0 || dayIdx > 6 || !S.weekPlan || !S.weekPlan[dayIdx]) {
+    alert('Aucun plan disponible pour ce jour.'); return;
+  }
   doc.setFontSize(16); doc.setFont('times', 'italic');
-  doc.text(DAY_NAMES[dayIdx] + ' \u2014 Plan du jour', M, 26);
+  doc.text((DAY_NAMES[dayIdx] || 'Jour') + ' \u2014 Plan du jour', M, 26);
   doc.setFontSize(7); doc.setFont('helvetica', 'normal');
   var tgt = calcTarget(), mc = calcMacros();
   doc.text(tgt + ' kcal  |  G ' + mc.g + 'g  |  P ' + mc.p + 'g  |  L ' + mc.l + 'g', M, 33);
   y = 46;
 
-  // Meals
-  if (!S.weekPlan || !S.weekPlan[dayIdx]) { alert('Aucun plan disponible pour ce jour.'); return; }
+  // Meals (guard already done above)
   var dayPlan = S.weekPlan[dayIdx];
   var slots = [{key: 'breakfast', label: 'PETIT-D\u00c9JEUNER'}, {key: 'lunch', label: 'D\u00c9JEUNER'}, {key: 'snack', label: 'COLLATION'}, {key: 'dinner', label: 'D\u00ceNER'}];
   var dayTotal = 0;
@@ -3441,8 +3498,7 @@ function exportDayPDF(dayIdx) {
   doc.text(dayTotal + ' kcal', W - M - 4, y + 4, {align: 'right'}); y += 14;
 
   // Medical warnings
-  if (!Array.isArray(S.medical)) S.medical = [];
-  if (S.medical.length > 0) {
+  if (Array.isArray(S.medical) && S.medical.length > 0) {
     doc.setFontSize(7); doc.setTextColor(106, 74, 26);
     doc.text('RECOMMANDATIONS M\u00c9DICALES', M, y); y += 4;
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
@@ -3786,18 +3842,23 @@ function resolveSignatureBowl(sig) {
 }
 
 function calcSaladMacros(sb) {
+  // CRITIQUE-E1: guard sb null
+  if (!sb) return { k: 0, p: 0, g: 0, l: 0 };
   var total = { k: 0, p: 0, g: 0, l: 0 };
-  if (sb.base) { total.k += sb.base.k; total.p += sb.base.p; total.g += sb.base.g; total.l += sb.base.l; }
-  (sb.proteins || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  (sb.veggies || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  (sb.fats || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  if (sb.sauce) { total.k += sb.sauce.k; total.p += sb.sauce.p; total.g += sb.sauce.g; total.l += sb.sauce.l; }
+  // IMPORTANT-E2: fallbacks || 0 pour éviter NaN si ingrédient incomplet
+  if (sb.base) { total.k += (sb.base.k||0); total.p += (sb.base.p||0); total.g += (sb.base.g||0); total.l += (sb.base.l||0); }
+  (sb.proteins || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  (sb.veggies || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  (sb.fats || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  if (sb.sauce) { total.k += (sb.sauce.k||0); total.p += (sb.sauce.p||0); total.g += (sb.sauce.g||0); total.l += (sb.sauce.l||0); }
   return { k: Math.round(total.k), p: Math.round(total.p), g: Math.round(total.g), l: Math.round(total.l) };
 }
 
 function renderSaladBar(p) {
   var S = window.S;
   var sb = S.saladBar;
+  // CRITIQUE-E1: guard sb null — évite crash si saladBar non initialisé
+  if (!sb) { p.innerHTML = ''; return; }
   p.innerHTML = '';
 
   // Macro targets — calculés selon le slot via getMealSplit()
@@ -5840,6 +5901,7 @@ function renderProvisionalPreview(p) {
   if (!S.sex || !S.weight || !S.height || S.goal === null || S.goal === undefined) {
     goStep(1); return; // goStep(1) contient la logique d'auto-skip vers le bon step manquant
   }
+  if (S.activity === null || S.activity === undefined) { goStep(5); return; }
   renderProgressBar(p, 7, 12);
   var _bmr = typeof calcBMR === 'function' ? calcBMR() : 0;
   var _tdee = typeof calcTDEE === 'function' ? Math.round(calcTDEE()) : 0;

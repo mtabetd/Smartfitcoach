@@ -3559,8 +3559,8 @@ function pickSmoothieForPlan(targetKcal, usedIds) {
 window.pickSmoothieForPlan = pickSmoothieForPlan;
 
 function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var weekProtBudget={};var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
-// useSmoothing : whey activé + WHEY_SMOOTHIES disponible
-var _useSmoothing=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length);
+// useSmoothing : whey activé + WHEY_SMOOTHIES disponible + regime non-vegan (whey = protéine animale)
+var _useSmoothing=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s.regime!==3);
 for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget),lR=pickRecipe(pL,lT,uL,dayProteins,weekProtBudget),sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
 // Si whey activé → smoothie remplace la collation
@@ -3578,15 +3578,19 @@ plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
 function swapMeal(di,slot){
   var s=window.S;
   if(!s.weekPlan||!s.weekPlan[di])return;
+  // MINEUR: valider slot avant de continuer
+  var VALID_SLOTS=['breakfast','lunch','snack','dinner'];
+  if(VALID_SLOTS.indexOf(slot)===-1)return;
   if(!s._nm&&window.computeNutritionState)window.computeNutritionState(false);
   var cBase=calcTarget(),split=getAdaptedMealSplit(di);if(!split)return;var c=Math.round(cBase*(split.calMultiplier||1));
   var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);
   // Snack + whey → swapper vers un autre smoothie (pas une collation normale)
-  if(slot==='snack'&&s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length){
+  // regime===3 (vegan) : whey est une protéine animale, ne pas servir de smoothie whey
+  if(slot==='snack'&&s.whey&&s.regime!==3&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length){
     var curId=(s.weekPlan[di][slot]&&s.weekPlan[di][slot]._id)||'';
     var usedSm=new Set([curId]);
     var nrSm=pickSmoothieForPlan(tgt,usedSm);
-    if(nrSm){s.weekPlan[di][slot]=nrSm;if(typeof window.render==='function')window.render();return;}
+    if(nrSm){s.weekPlan[di][slot]=nrSm;if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}if(typeof window.render==='function')window.render();return;}
     else return;
   }
   // Autres slots — swap recette normale
@@ -3600,6 +3604,8 @@ function swapMeal(di,slot){
   var nr=top[Math.floor(Math.random()*top.length)];
   nr=enrichWithScaling(nr,tgt);
   s.weekPlan[di][slot]=nr;
+  // IMPORTANT: persister le swap immédiatement
+  if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}
   if(typeof window.render==='function')window.render();
 }
 
@@ -3816,6 +3822,12 @@ function detectMedicalConflicts() {
   var conflicts = [];
   if(!s||!s.medical)return conflicts;
   var med=s.medical;
+  // C-04: IMC < 18.5 + objectif déficitaire — risque médical réel (insuffisance pondérale)
+  var _bmiCheck = calcBMI();
+  var _goalKey = s.goal !== null && GOALS[s.goal] ? GOALS[s.goal].key : null;
+  if(_bmiCheck!==null&&_bmiCheck<18.5&&(_goalKey==='cut'||_goalKey==='shred')){
+    conflicts.push({level:'CRITIQUE',message:'⚠ ALERTE MÉDICALE : IMC '+_bmiCheck.toFixed(1)+' (insuffisance pondérale) incompatible avec un objectif déficitaire. Un déficit calorique sur ce profil peut aggraver la dénutrition et présente des risques cardiaques, osseux et hormonaux graves. Votre objectif a été remplacé par maintenance. Consultez un médecin avant tout programme nutritionnel.'});
+  }
   // Conflit 0 : Grossesse + IRC → protéines plafonnées à 0.6g/kg = insuffisant pour le fœtus (C1)
   // OMS 2016 : grossesse T3 = +25g protéines/j | KDOQI 2020 : IRC CKD 3-5 = 0.6g/kg/j max
   // Conflit irrésoluble : les deux contraintes sont incompatibles → OBLIGATOIREMENT suivi médical spécialisé
@@ -4706,9 +4718,12 @@ function buildNMInputs(trainingDay) {
 function computeNutritionState(trainingDay) {
   if (!window.NutritionMaster) return null;
   if (window.S.goal === null || window.S.sex === null) return null;
+  // I-02: si getAge() retourne null/0, on ne calcule pas avec age=25 fantôme
+  if (!getAge()) { window.S._nm = null; return null; }
   var inputs = buildNMInputs(trainingDay);
   var result = window.NutritionMaster.compute(inputs);
-  if (result.errors && result.errors.length > 0) return null;
+  // I-01: invalider le cache stale si NutritionMaster remonte des erreurs
+  if (result.errors && result.errors.length > 0) { window.S._nm = null; return null; }
 
   // Applique les sur-couches médicales de app-core (calcTarget / calcMacros)
   // pour que les valeurs médicalement ajustées soient reflétées dans _nm

@@ -185,7 +185,7 @@ function getPregnancySportWarning() {
 
 // ─── PROGRAM GENERATION ───
 function generateSportProgram() {
- var days = S.sportDays;
+ var days = S.sportDays || 3;
  var level = (window.SPORT_LEVELS || []).find(function(l){ return l.id === S.sportLevel; });
  var program = [];
 
@@ -763,8 +763,13 @@ window.SPORT = {
    return;
  }
 
+ // ─── Guard : sStep > 0 sans sportType → page blanche possible, réinitialiser ───
+ if (S.sStep > 0 && !S.sportType) { S.sStep = 0; }
+
  // ─── Si programme existant → afficher directement la prog (plus d'interstitiel) ───
- if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType]) {
+ // Guard: ne rediriger que si un programme complet existe — évite de sauter l'onboarding
+ // après un rechargement partiel (ex: sStep=26 PAR-Q réinitialisé à 0 par _doAutoLogin)
+ if (S.sStep === 0 && S.sportType && _SPORT_PROGRAM_STEP[S.sportType] && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) {
    S.sStep = _SPORT_PROGRAM_STEP[S.sportType];
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  }
@@ -938,6 +943,15 @@ function renderObjectif(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Sport'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez votre type de programme sportif.'));
+
+ // Banner contextuel pour les utilisateurs nutrition → sport (tous sports, pas musculation seule)
+ if (window.S && window.S._switchedFromNutrition) {
+   var _ctxBannerObj = document.createElement('div');
+   _ctxBannerObj.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(26,74,26,0.06);border:1px solid rgba(26,74,26,0.15);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--green,#1A4A1A);line-height:1.5;';
+   _ctxBannerObj.textContent = 'Votre profil de base est déjà configuré. Complétez simplement vos informations sportives ci-dessous.';
+   window.S._switchedFromNutrition = false; // Afficher une seule fois
+   p.appendChild(_ctxBannerObj);
+ }
 
  // ─── HERO CARTE GÉNÉRATEUR IA ───
  var heroCard = h('div', {style: 'border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.04);border-radius:2px;padding:20px 16px;margin-bottom:20px'});
@@ -1778,14 +1792,6 @@ function syncSportGoalsToNutrition() {
 
 function renderMusculationGoals(p) {
  var _prenom1 = S.prenom || '';
- // Banner contextuel pour les utilisateurs nutrition → sport
- if (window.S && window.S._switchedFromNutrition) {
-   var _ctxBanner = document.createElement('div');
-   _ctxBanner.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(26,74,26,0.06);border:1px solid rgba(26,74,26,0.15);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--green,#1A4A1A);line-height:1.5;';
-   _ctxBanner.textContent = 'Votre profil de base est déjà configuré. Complétez simplement vos informations sportives ci-dessous.';
-   window.S._switchedFromNutrition = false; // Afficher une seule fois
-   p.appendChild(_ctxBanner);
- }
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Musculation \u00b7 \u00c9tape 1/3'));
  p.appendChild(h('h1', {html: (_prenom1 ? _prenom1 + ', quel est<br>' : 'Quel est<br>') + '<em>votre objectif\u00a0?</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Choisissez vos objectifs (1 \u00e0 3). Votre programme s\u2019adaptera en cons\u00e9quence.'));
@@ -1878,7 +1884,7 @@ function renderCrossfitLevel(p) {
  // ─── JOURS D'ENTRAÎNEMENT PAR SEMAINE ───
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
  var cfDaysWrap = h('div', {'class': 'num-input-wrap'});
- cfDaysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.sportDays), inputmode: 'numeric',
+ cfDaysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.sportDays = v; window.render(); } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 3) { e.target.value = S.sportDays = 3; window.render(); } else if (v > 6) { e.target.value = S.sportDays = 6; window.render(); } }
  }));
@@ -3508,7 +3514,7 @@ function renderMusculationLevel(p) {
 
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
- nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays), inputmode: 'numeric',
+ nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) e.target.value = S.sportDays = 2; else if (v > 6) e.target.value = S.sportDays = 6; }
  }));
@@ -3856,7 +3862,7 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
  var lastLog = null;
  var sortedDates = Object.keys(S.muscuSessionLog || {}).filter(function(d) { return d !== today; }).sort();
  sortedDates.forEach(function(date) {
- if (S.muscuSessionLog[date][exerciseName]) {
+ if (S.muscuSessionLog[date] && S.muscuSessionLog[date][exerciseName]) {
  lastLog = { date: date, sets: S.muscuSessionLog[date][exerciseName] };
  }
  });
@@ -4464,7 +4470,8 @@ function saveMuscuSessionLog() {
  // ── Pruning : garder les 90 derniers jours de session log (évite quota localStorage) ──
  var _cutoff = new Date(); _cutoff.setDate(_cutoff.getDate() - 90);
  var _cutStr = _cutoff.toISOString().slice(0, 10);
- Object.keys(S.muscuSessionLog || {}).forEach(function(d) { if (d < _cutStr) delete S.muscuSessionLog[d]; });
+ if (!S.muscuSessionLog || typeof S.muscuSessionLog !== 'object' || Array.isArray(S.muscuSessionLog)) S.muscuSessionLog = {};
+ Object.keys(S.muscuSessionLog).forEach(function(d) { if (d < _cutStr) delete S.muscuSessionLog[d]; });
  localStorage.setItem('mtd_muscu_session_' + uid, JSON.stringify(S.muscuSessionLog));
  // Sync vers Supabase
  if (window.SupaSync) {
@@ -4841,6 +4848,8 @@ function renderMusculationProgram(p) {
  var savedLog = localStorage.getItem('mtd_muscu_session_' + userId3);
  if (savedLog) { try { S.muscuSessionLog = JSON.parse(savedLog); } catch(e) { S.muscuSessionLog = {}; } }
  if (!S.muscuSessionLog || typeof S.muscuSessionLog !== 'object' || Array.isArray(S.muscuSessionLog)) S.muscuSessionLog = {};
+ // Sanitise les entrées corrompues (date keys avec valeur null/non-objet)
+ Object.keys(S.muscuSessionLog).forEach(function(d) { if (!S.muscuSessionLog[d] || typeof S.muscuSessionLog[d] !== 'object') delete S.muscuSessionLog[d]; });
  var savedProg = localStorage.getItem('mtd_muscu_progression_' + userId3);
  if (savedProg) { try { S.muscuProgressionHistory = JSON.parse(savedProg); } catch(e) {} }
  if (!S.muscuProgressionHistory || typeof S.muscuProgressionHistory !== 'object' || Array.isArray(S.muscuProgressionHistory)) S.muscuProgressionHistory = {};
@@ -6034,7 +6043,7 @@ function renderMusculationProgram(p) {
  var _sessLog = [];
  var _sortedDates = Object.keys(S.muscuSessionLog || {}).sort();
  _sortedDates.forEach(function(d) {
- if (S.muscuSessionLog[d] && S.muscuSessionLog[d][exRef.n]) {
+ if (S.muscuSessionLog[d] && Array.isArray(S.muscuSessionLog[d][exRef.n]) && S.muscuSessionLog[d][exRef.n].length > 0) {
  var _sSets = S.muscuSessionLog[d][exRef.n].filter(function(s) { return s.actualReps !== null; });
  if (_sSets.length > 0) {
  _sessLog.push({ week: d, sets: _sSets.map(function(s) { return { reps: s.actualReps, load: s.actualWeight || 0, targetReps: s.targetReps }; }) });
@@ -6072,7 +6081,7 @@ function renderMusculationProgram(p) {
   var _sortedDates2 = Object.keys(S.muscuSessionLog || {}).sort();
   _sortedDates2.forEach(function(d) {
    if (d >= _prToday) return; // Ignorer aujourd'hui
-   var _prevSets = (S.muscuSessionLog[d] && S.muscuSessionLog[d][_exRef2.n]) ? S.muscuSessionLog[d][_exRef2.n] : [];
+   var _prevSets = (S.muscuSessionLog[d] && Array.isArray(S.muscuSessionLog[d][_exRef2.n])) ? S.muscuSessionLog[d][_exRef2.n] : [];
    _prevSets.forEach(function(s) {
     if (s.actualReps && s.actualWeight) {
      var vol = s.actualWeight * s.actualReps;
@@ -6939,6 +6948,7 @@ function renderRunningProgram(p) {
 
 // ─── STEP 9: HYROX CONFIG ───
 function renderHyroxConfig(p) {
+ if (!S.hyroxBenchmarks || typeof S.hyroxBenchmarks !== 'object' || Array.isArray(S.hyroxBenchmarks)) S.hyroxBenchmarks = {};
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Hyrox'));
  p.appendChild(h('h1', {html: 'Préparation<br><em>Hyrox</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, '12 semaines pour être prêt le jour J'));
@@ -7212,6 +7222,7 @@ function renderHyroxProgram(p) {
 // ═══════════════════════════════════════
 
 function renderPadelConfig(p) {
+ if (!S.padelProfile || typeof S.padelProfile !== 'object' || Array.isArray(S.padelProfile)) S.padelProfile = {};
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Padel'));
  p.appendChild(h('h1', {html: 'Votre programme<br><em>padel</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Technique, tactique et préparation physique.'));
@@ -7325,6 +7336,7 @@ function renderPadelProgram(p) {
 // ═══════════════════════════════════════
 
 function renderGolfConfig(p) {
+ if (!S.golfProfile || typeof S.golfProfile !== 'object' || Array.isArray(S.golfProfile)) S.golfProfile = {};
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Golf'));
  p.appendChild(h('h1', {html: 'Votre programme<br><em>golf</em>'}));
  p.appendChild(h('p', {'class': 'subtitle'}, 'Basé sur les méthodes Dave Pelz & Butch Harmon.'));
@@ -7607,6 +7619,7 @@ function renderTriathlonConfig(p) {
   raceDate: S.triathlonRaceDate || null,
   ftp: S.triathlonFTP || null
  };
+ if (typeof window.generateTriathlonProgram !== 'function') { p.appendChild(h('p', {style:'text-align:center;padding:24px;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px'}, 'Module triathlon non chargé. Rechargez la page.')); return; }
  S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts);
  S.triathlonWeek = 1;
  S.selectedTriDay = 0;
@@ -7633,7 +7646,9 @@ function renderTriathlonProgram(p) {
    raceDate: S.triathlonRaceDate || null,
    ftp: S.triathlonFTP || null
   };
-  S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts2);
+  if (typeof window.generateTriathlonProgram === 'function') {
+   S.triathlonProgram = window.generateTriathlonProgram(S.triathlonGoal, S.triathlonLevel, S.triathlonWeak || null, triopts2);
+  }
  }
 
  var backArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
