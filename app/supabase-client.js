@@ -94,7 +94,7 @@
     // Écouter les changements d'auth
     onAuthStateChange: function(callback) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
       client.auth.onAuthStateChange(function(event, session) {
         callback(event, session);
       });
@@ -114,7 +114,7 @@
     // Sauvegarder le profil complet vers Supabase
     saveProfile: function() {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return; // pas connecté
@@ -203,7 +203,7 @@
     // Sauvegarder une entrée de poids
     saveWeight: function(date, weight) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -220,7 +220,7 @@
     // Sauvegarder une séance sport
     saveSession: function(sessionData) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -244,7 +244,7 @@
     // Sauvegarder les logs muscu du jour
     saveMuscuLog: function(date, exerciseName, sets) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -262,7 +262,7 @@
     // Sauvegarder le journal alimentaire
     saveFoodEntry: function(entry) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -287,7 +287,7 @@
     // Sauvegarder l'eau
     saveWater: function(date, glasses) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -304,7 +304,7 @@
     // Sauvegarder un badge
     saveBadge: function(badgeId) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -320,7 +320,7 @@
     // Sauvegarder le streak
     saveStreak: function(streakData) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -339,7 +339,7 @@
     // Sauvegarder le plan nutrition
     saveMealPlan: function(weekStart, plan) {
       var client = getClient();
-      if (!client) return;
+      if (!client) return Promise.resolve();
 
       return SupaAuth.getSession().then(function(session) {
         if (!session || !session.user) return;
@@ -475,6 +475,7 @@
       }).catch(function(e) {
         self._syncPending = false;
         console.warn('[SupaSync] syncOnLogin failed:', e);
+        return null;
       });
     },
 

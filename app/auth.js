@@ -296,6 +296,8 @@ function _getRawClient() {
 var _currentSession = null; // {id, name, email}
 var _useSupabase = false;
 var _authReady = Promise.resolve(); // resolved when Supabase session is loaded
+var _visibilityListener = null;   // ref for cleanup on logout
+var _beforeUnloadListener = null; // ref for cleanup on logout
 
 function _loadLegacySession() {
   if (isLegacySessionValid()) {
@@ -323,6 +325,9 @@ function _extractUser(supaUser) {
 
 // ─── INIT : charger la session Supabase au boot ───
 function _initAuth() {
+  if (window._authInitialized) return;
+  window._authInitialized = true;
+
   var client = _getRawClient();
   if (!client) {
     console.warn('[AUTH] Supabase SDK not loaded, using localStorage fallback');
@@ -344,6 +349,13 @@ function _initAuth() {
         window.S.authError = '';
       }
       if (window.render) window.render();
+      return;
+    }
+    if (event === 'TOKEN_REFRESHED') {
+      if (session && session.user) {
+        _currentSession = _extractUser(session.user);
+        console.log('[AUTH] Token refreshed — session maintenue pour:', _currentSession.email);
+      }
       return;
     }
     if (session && session.user) {
@@ -825,6 +837,17 @@ window.AUTH = {
     // Nettoyer la session locale + legacy
     _currentSession = null;
     clearLegacySession();
+    window._authInitialized = false;
+
+    // Supprimer les event listeners pour éviter les fuites mémoire
+    if (_visibilityListener) {
+      try { document.removeEventListener('visibilitychange', _visibilityListener); } catch(e) {}
+      _visibilityListener = null;
+    }
+    if (_beforeUnloadListener) {
+      try { window.removeEventListener('beforeunload', _beforeUnloadListener); } catch(e) {}
+      _beforeUnloadListener = null;
+    }
   },
 
   /**
@@ -1198,13 +1221,14 @@ window.BLACKBOX = {
 
 // ─── AUTOMATIC SESSION TRACKING ───
 
-document.addEventListener('visibilitychange', function() {
+_visibilityListener = function() {
   if (document.hidden) {
     BLACKBOX.log('page_hidden', {});
   } else {
     BLACKBOX.log('page_visible', {});
   }
-});
+};
+document.addEventListener('visibilitychange', _visibilityListener);
 
 // ─── INIT BOOT ───
 if (document.readyState === 'loading') {
@@ -1224,10 +1248,11 @@ setTimeout(function() {
 }, 0);
 
 // Track unload for session duration
-window.addEventListener('beforeunload', function() {
+_beforeUnloadListener = function() {
   if (AUTH.isLoggedIn()) {
     BLACKBOX.log('page_unload', { sessionMinutes: BLACKBOX.getSessionMinutes() });
   }
-});
+};
+window.addEventListener('beforeunload', _beforeUnloadListener);
 
 })();

@@ -1207,12 +1207,30 @@ function renderLogin(app) {
  var _loginUser = AUTH.getUser();
  var _loginUid = _loginUser ? _loginUser.id : null;
  if (_loginUid && _loginUid !== 'anon') {
+ // Profil principal
  var _anonRaw = localStorage.getItem('mtd_profile_anon');
  var _userRaw = localStorage.getItem('mtd_profile_' + _loginUid);
  if (_anonRaw && !_userRaw) {
- // User filled onboarding anonymously — migrate to their account key
  localStorage.setItem('mtd_profile_' + _loginUid, _anonRaw);
  localStorage.removeItem('mtd_profile_anon');
+ }
+ // Streak
+ var _anonStreak = localStorage.getItem('mtd_streak_anon');
+ if (_anonStreak && !localStorage.getItem('mtd_streak_' + _loginUid)) {
+ localStorage.setItem('mtd_streak_' + _loginUid, _anonStreak);
+ localStorage.removeItem('mtd_streak_anon');
+ }
+ // Badges
+ var _anonBadges = localStorage.getItem('mtd_badges_anon');
+ if (_anonBadges && !localStorage.getItem('mtd_badges_' + _loginUid)) {
+ localStorage.setItem('mtd_badges_' + _loginUid, _anonBadges);
+ localStorage.removeItem('mtd_badges_anon');
+ }
+ // Historique poids
+ var _anonWh = localStorage.getItem('mtd_weight_history_anon');
+ if (_anonWh && !localStorage.getItem('mtd_weight_history_' + _loginUid)) {
+ localStorage.setItem('mtd_weight_history_' + _loginUid, _anonWh);
+ localStorage.removeItem('mtd_weight_history_anon');
  }
  }
  } catch(e) {}
