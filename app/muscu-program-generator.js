@@ -613,6 +613,7 @@
 
   function closeModal() {
     if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+    _generating = false; // toujours réinitialiser pour éviter le blocage si fermé pendant génération
     if (_modalEl) _modalEl.style.display = 'none';
     if (_previousFocus && _previousFocus.focus) {
       try { _previousFocus.focus(); } catch(e) {}
