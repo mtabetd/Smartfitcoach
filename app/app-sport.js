@@ -809,7 +809,7 @@ window.SPORT = {
        S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
        S.sportGoals = []; S.sportLevel = null; S.sportFocus = {};
        S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null;
-       S.bonusExercises = []; S._splitChoice = null; S.cfCalendarOpen = false;
+       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }
