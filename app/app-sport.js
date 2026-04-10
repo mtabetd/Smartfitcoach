@@ -629,8 +629,13 @@ function renderSportChoice(p) {
   var btnNew = h('button', {
     style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto',
     onclick: function() {
-      S.sportType = null;
-      S.sStep = 0;
+      if (window._wodTimerInterval) { clearInterval(window._wodTimerInterval); window._wodTimerInterval = null; }
+      if (_restTimerInterval) { clearInterval(_restTimerInterval); _restTimerInterval = null; }
+      S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
+      S.sportGoals = []; S.sportLevel = null; S.sportFocus = {};
+      S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null;
+      S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
+      S.trainingDaysSelected = [];
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }
