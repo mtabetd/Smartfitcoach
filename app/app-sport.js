@@ -4743,6 +4743,13 @@ function calcSessionKcal(exercises, durationMin) {
 }
 
 function renderMusculationProgram(p) {
+ // Guard : si sportFocus est vide (état corrompu ou onboarding incomplet), renvoyer à l'étape 3
+ var _focusKeys = Object.keys(S.sportFocus || {}).filter(function(z) { return (S.sportFocus || {})[z] > 0; });
+ if (_focusKeys.length === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) {
+   S.sStep = 3;
+   if (window.render) window.render();
+   return;
+ }
  // Afficher le message d'erreur si la génération a échoué (évite l'écran blanc)
  if (S._programGenerationError) {
    p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'}, [
