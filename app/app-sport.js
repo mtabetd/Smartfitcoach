@@ -802,7 +802,14 @@ window.SPORT = {
    var _changeLink = h('button', {
      style: 'background:none;border:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;padding:5px 10px;border-radius:2px;',
      onclick: function() {
+       // Nettoyer les timers actifs avant de changer de sport
+       if (window._wodTimerInterval) { clearInterval(window._wodTimerInterval); window._wodTimerInterval = null; }
+       if (_restTimerInterval) { clearInterval(_restTimerInterval); _restTimerInterval = null; }
+       // Réinitialiser tous les champs liés au sport actif
        S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
+       S.sportGoals = []; S.sportLevel = null; S.sportFocus = {};
+       S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null;
+       S.bonusExercises = []; S._splitChoice = null; S.cfCalendarOpen = false;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }
