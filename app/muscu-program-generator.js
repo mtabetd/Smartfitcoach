@@ -613,6 +613,7 @@
 
   function closeModal() {
     if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+    _generating = false; // toujours réinitialiser pour éviter le blocage si fermé pendant génération
     if (_modalEl) _modalEl.style.display = 'none';
     if (_previousFocus && _previousFocus.focus) {
       try { _previousFocus.focus(); } catch(e) {}
@@ -678,6 +679,76 @@
         if (err) err.style.display = 'block';
         return;
       }
+      showStressStep();
+    });
+  }
+
+  function showStressStep() {
+    var content = document.getElementById('muscu-prog-content');
+    if (!content) return;
+    var currentStress = (window.S && typeof window.S.stress === 'number') ? window.S.stress : 5;
+    var stressLabels = [
+      '', // index 0 unused
+      'Très faible — Complètement zen',
+      'Faible — Peu de stress',
+      'Modéré-bas — Gérable',
+      'Modéré — Stressé mais équilibré',
+      'Modéré-haut — Stressé régulièrement',
+      'Élevé — Très stressé',
+      'Très élevé — Sous pression constante',
+      'Extrême — Surcharge chronique',
+      'Critique — Épuisé',
+      'Maximum — Au bout du rouleau'
+    ];
+    var optionsHTML = '';
+    for (var i = 1; i <= 10; i++) {
+      var isSel = (i === currentStress);
+      optionsHTML +=
+        '<div class="stress-opt" data-v="' + i + '" style="display:flex;align-items:center;gap:10px;padding:9px 8px;margin-bottom:3px;cursor:pointer;border-radius:2px;background:' + (isSel ? 'rgba(26,74,26,0.08)' : 'transparent') + ';transition:background 0.15s;">' +
+          '<span style="min-width:20px;font-size:12px;font-weight:' + (isSel ? '700' : '400') + ';color:var(--grey,#6B6B65);font-family:\'Helvetica Neue\',Arial,sans-serif;">' + i + '</span>' +
+          '<div style="flex:1;height:3px;background:var(--border,#D8D8D0);border-radius:2px;overflow:hidden;">' +
+            '<div style="height:100%;width:' + (i * 10) + '%;background:' + (isSel ? 'var(--accent,#1A4A1A)' : 'var(--grey,#6B6B65)') + ';border-radius:2px;"></div>' +
+          '</div>' +
+          '<span style="font-size:11px;color:var(--grey,#6B6B65);font-family:\'Helvetica Neue\',Arial,sans-serif;min-width:200px;">' + stressLabels[i] + '</span>' +
+        '</div>';
+    }
+    content.innerHTML =
+      '<div style="padding:8px 4px 24px 4px;">' +
+        '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;font-family:\'Helvetica Neue\',Arial,sans-serif;">PROFIL DE RÉCUPÉRATION</div>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--black,#0A0A09);margin:0 0 6px 0;">Niveau de stress actuel ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Votre programme s\'adaptera : volume, repos inter-séries et intensité s\'ajustent selon votre capacité de récupération.</p>' +
+        '<div id="stress-opts">' + optionsHTML + '</div>' +
+        '<div style="font-size:11px;color:var(--accent,#1A4A1A);font-family:\'Helvetica Neue\',Arial,sans-serif;font-weight:600;margin:12px 0 20px;text-align:center;">Niveau sélectionné : <span id="stress-val">' + currentStress + '</span>/10</div>' +
+        '<button id="stress-next" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:44px;">Continuer \u2192</button>' +
+      '</div>';
+
+    var opts = document.getElementById('stress-opts');
+    opts.addEventListener('click', function(e) {
+      var opt = e.target.closest('.stress-opt');
+      if (!opt) return;
+      var val = parseInt(opt.getAttribute('data-v'), 10);
+      if (!window.S) window.S = {};
+      window.S.stress = val;
+      try { if (window.saveProfile) window.saveProfile(); } catch(e2) {}
+      var allOpts = opts.querySelectorAll('.stress-opt');
+      allOpts.forEach(function(o) {
+        var v = parseInt(o.getAttribute('data-v'), 10);
+        var isSel2 = (v === val);
+        o.style.background = isSel2 ? 'rgba(26,74,26,0.08)' : 'transparent';
+        var num = o.querySelector('span:first-child');
+        if (num) num.style.fontWeight = isSel2 ? '700' : '400';
+        var bar = o.querySelector('div > div');
+        if (bar) bar.style.background = isSel2 ? 'var(--accent,#1A4A1A)' : 'var(--grey,#6B6B65)';
+      });
+      var valEl = document.getElementById('stress-val');
+      if (valEl) valEl.textContent = val;
+    });
+
+    document.getElementById('stress-next').addEventListener('click', function() {
+      if (!window.S || typeof window.S.stress !== 'number') {
+        if (!window.S) window.S = {};
+        window.S.stress = 5; // safe default
+      }
       showGenerationStep();
     });
   }
@@ -721,10 +792,13 @@
     _previousFocus = document.activeElement;
     if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
     _modalEl.style.display = 'block';
-    // Show installations step if not yet configured, otherwise go straight to generation
+    // Show installations step if not yet configured, stress step if stress not collected, otherwise generate
     var hasInstallations = (window.S && Array.isArray(window.S.installations)) && window.S.installations.length > 0;
+    var hasStress = (window.S && typeof window.S.stress === 'number');
     if (!hasInstallations) {
       showInstallationsStep();
+    } else if (!hasStress) {
+      showStressStep();
     } else {
       showGenerationStep();
     }

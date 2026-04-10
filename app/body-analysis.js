@@ -626,11 +626,15 @@ async function runAnalysis() {
     // Limiter à 30 exercices max pour réduire les tokens en entrée
     var exercisesDb = getExercisesList().slice(0, 30);
 
+    var _baCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var _baTimer = _baCtrl ? setTimeout(function() { _baCtrl.abort(); }, 30000) : null;
     var resp = await fetch(FUNCTION_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ images: images, context: ctx, exercisesDb: exercisesDb })
+      body: JSON.stringify({ images: images, context: ctx, exercisesDb: exercisesDb }),
+      signal: _baCtrl ? _baCtrl.signal : undefined
     });
+    if (_baTimer) clearTimeout(_baTimer);
 
     if (!resp.ok) {
       var errBody = await resp.json().catch(function() { return {}; });
@@ -656,12 +660,15 @@ async function runAnalysis() {
       resultZone.appendChild(rawEl);
     }
   } catch(err) {
+    if (_baTimer) clearTimeout(_baTimer);
     if (loader) loader.style.display = 'none';
     if (resultZone) {
       resultZone.style.display = 'block';
       var errEl2 = document.createElement('div');
       errEl2.className = 'ba-error';
-      errEl2.textContent = 'Erreur de connexion. Vérifiez votre réseau et réessayez.';
+      errEl2.textContent = (err && err.name === 'AbortError')
+        ? 'L\'analyse prend trop de temps. Réessaie dans quelques instants.'
+        : 'Erreur de connexion. Vérifiez votre réseau et réessayez.';
       resultZone.appendChild(errEl2);
     }
     if (reset) reset.style.display = 'block';

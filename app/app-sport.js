@@ -629,8 +629,13 @@ function renderSportChoice(p) {
   var btnNew = h('button', {
     style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto',
     onclick: function() {
-      S.sportType = null;
-      S.sStep = 0;
+      if (window._wodTimerInterval) { clearInterval(window._wodTimerInterval); window._wodTimerInterval = null; }
+      if (_restTimerInterval) { clearInterval(_restTimerInterval); _restTimerInterval = null; }
+      S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
+      S.sportGoals = []; S.sportLevel = null; S.sportFocus = {};
+      S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null;
+      S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
+      S.trainingDaysSelected = [];
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }
@@ -803,7 +808,15 @@ window.SPORT = {
    var _changeLink = h('button', {
      style: 'background:none;border:1px solid var(--border,#D8D8D0);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;padding:5px 10px;border-radius:2px;',
      onclick: function() {
+       // Nettoyer les timers actifs avant de changer de sport
+       if (window._wodTimerInterval) { clearInterval(window._wodTimerInterval); window._wodTimerInterval = null; }
+       if (_restTimerInterval) { clearInterval(_restTimerInterval); _restTimerInterval = null; }
+       // Réinitialiser tous les champs liés au sport actif
        S.sportType = null; S.sStep = 0; S.selectedSportDay = 0;
+       S.sportGoals = []; S.sportLevel = null; S.sportFocus = {};
+       S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null;
+       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
+       S.trainingDaysSelected = [];
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }
@@ -4747,6 +4760,13 @@ function calcSessionKcal(exercises, durationMin) {
 }
 
 function renderMusculationProgram(p) {
+ // Guard : si sportFocus est vide (état corrompu ou onboarding incomplet), renvoyer à l'étape 3
+ var _focusKeys = Object.keys(S.sportFocus || {}).filter(function(z) { return (S.sportFocus || {})[z] > 0; });
+ if (_focusKeys.length === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) {
+   S.sStep = 3;
+   if (window.render) window.render();
+   return;
+ }
  // Afficher le message d'erreur si la génération a échoué (évite l'écran blanc)
  if (S._programGenerationError) {
    p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'}, [

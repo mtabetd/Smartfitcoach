@@ -323,6 +323,7 @@ function addToScanHistory(product, score) {
 var cameraStream = null;
 var scanning = false;
 var scanInterval = null;
+var _cameraInactivityTimer = null;
 
 function startCamera(videoElement, onDetected, onError) {
   // Check if camera API is available
@@ -355,6 +356,10 @@ function startCamera(videoElement, onDetected, onError) {
         videoElement.play();
         scanning = true;
 
+        // Arrêt automatique après 60s d'inactivité (pas de scan détecté)
+        if (_cameraInactivityTimer) clearTimeout(_cameraInactivityTimer);
+        _cameraInactivityTimer = setTimeout(function() { stopCamera(); }, 60000);
+
         if (barcodeDetector) {
           scanInterval = setInterval(function() {
             if (!scanning) return;
@@ -385,6 +390,8 @@ function startCamera(videoElement, onDetected, onError) {
               videoElement.srcObject = stream;
               videoElement.play();
               scanning = true;
+              if (_cameraInactivityTimer) clearTimeout(_cameraInactivityTimer);
+              _cameraInactivityTimer = setTimeout(function() { stopCamera(); }, 60000);
               if (barcodeDetector) {
                 scanInterval = setInterval(function() {
                   if (!scanning) return;
@@ -404,6 +411,7 @@ function startCamera(videoElement, onDetected, onError) {
 
 function stopCamera() {
   scanning = false;
+  if (_cameraInactivityTimer) { clearTimeout(_cameraInactivityTimer); _cameraInactivityTimer = null; }
   if (scanInterval) { clearInterval(scanInterval); scanInterval = null; }
   if (cameraStream) {
     cameraStream.getTracks().forEach(function(t) { t.stop(); });
@@ -760,5 +768,9 @@ window.SCANNER = {
     }
   }
 };
+
+// Libérer la caméra si l'utilisateur ferme ou quitte la page
+window.addEventListener('pagehide', function() { stopCamera(); });
+window.addEventListener('beforeunload', function() { stopCamera(); });
 
 })();

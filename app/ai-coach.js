@@ -409,6 +409,7 @@ function openPanel() {
 function closePanel() {
   var panel = document.getElementById('ai-coach-panel');
   if (panel) { panel.classList.remove('open'); _panelOpen = false; }
+  if (_resizeHandler) { window.removeEventListener('resize', _resizeHandler); _resizeHandler = null; }
 }
 
 // ─── ENVOI MESSAGE ───────────────────────────────────────────────────────────
@@ -450,12 +451,16 @@ function sendMessage() {
   // Contexte utilisateur
   var ctx = buildContext();
 
-  // Appel API
+  // Appel API avec timeout client 28s (le serveur se coupe à 25s)
+  var _coachCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 28000) : null;
   fetch(FUNCTION_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: apiMessages, context: ctx })
+    body: JSON.stringify({ messages: apiMessages, context: ctx }),
+    signal: _coachCtrl ? _coachCtrl.signal : undefined
   }).then(function(res) {
+    if (_coachTimer) clearTimeout(_coachTimer);
     if (!res.ok) return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
     return res.json();
   }).then(function(data) {
@@ -478,8 +483,12 @@ function sendMessage() {
     }
     messages.scrollTop = messages.scrollHeight;
   }).catch(function(err) {
+    if (_coachTimer) clearTimeout(_coachTimer);
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
-    appendError(messages, 'Impossible de joindre le coach. Vérifiez votre connexion.');
+    var errMsg = (err && err.name === 'AbortError')
+      ? 'Le coach met trop de temps à répondre. Réessaie dans quelques instants.'
+      : 'Impossible de joindre le coach. Vérifiez votre connexion.';
+    appendError(messages, errMsg);
     messages.scrollTop = messages.scrollHeight;
   }).finally(function() {
     _sending = false;

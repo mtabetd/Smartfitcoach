@@ -1189,14 +1189,14 @@ function render() {
  if (S.view === 'profil' || S.view === 'profile') {
  renderProfilePage(content);
  } else if (S.view === 'sport' && window.SPORT) {
- SPORT.render(content);
+ window.SPORT.render(content);
  } else if (S.view === 'nutrition' && window.NUTRITION) {
- NUTRITION.render(content);
+ window.NUTRITION.render(content);
  } else {
  // Default + 'today' + 'dashboard' → vue Aujourd'hui
  S.view = 'today';
  if (window.TODAY) {
-   TODAY.render(content);
+   window.TODAY.render(content);
  } else {
    // Fallback si le module TODAY n'est pas encore chargé
    content.appendChild(h('div', {style: 'padding:48px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Chargement en cours… Rechargez la page si ce message persiste.'));
