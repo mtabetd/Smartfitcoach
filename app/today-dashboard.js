@@ -699,6 +699,150 @@ function renderCardRepas() {
   return c;
 }
 
+// ─── SHARE — Carte de progression (Canvas API) ───
+function buildShareCanvas() {
+  var SIZE = 1080;
+  var canvas = document.createElement('canvas');
+  canvas.width = SIZE;
+  canvas.height = SIZE;
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return canvas;
+
+  var S = window.S || {};
+  var streak = getStreakValue();
+
+  // Fond noir
+  ctx.fillStyle = '#0A0A09';
+  ctx.fillRect(0, 0, SIZE, SIZE);
+
+  // Bande verte signature en haut
+  ctx.fillStyle = '#1A4A1A';
+  ctx.fillRect(0, 0, SIZE, 6);
+
+  var PAD = 80;
+  var CX = SIZE / 2;
+
+  // ── Logo wordmark ──
+  ctx.fillStyle = '#6B6B65';
+  ctx.font = '14px "Helvetica Neue", Helvetica, Arial, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('SMARTFITCOACH', PAD, 64);
+
+  // ── Date (droite) ──
+  var _dn = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  var _mn = ['jan.','fév.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+  var _nd = new Date();
+  ctx.textAlign = 'right';
+  ctx.fillText(_dn[_nd.getDay()] + ' ' + _nd.getDate() + ' ' + _mn[_nd.getMonth()], SIZE - PAD, 64);
+
+  // Filet séparateur haut
+  ctx.strokeStyle = '#242422';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD, 100);
+  ctx.lineTo(SIZE - PAD, 100);
+  ctx.stroke();
+
+  // ── Emoji flamme / trophée (grand) ──
+  ctx.font = '72px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(streak >= 7 ? '🏆' : '🔥', CX, 365);
+
+  // ── Nombre de jours (héro) ──
+  ctx.fillStyle = '#F5F4F1';
+  ctx.font = '400 148px Georgia, "Times New Roman", serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(String(streak), CX, 548);
+
+  // ── "JOURS CONSÉCUTIFS" ──
+  ctx.fillStyle = '#6B6B65';
+  ctx.font = '14px "Helvetica Neue", Helvetica, Arial, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('JOURS  CONSÉCUTIFS', CX, 598);
+
+  // Filet séparateur bas
+  ctx.strokeStyle = '#242422';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD, 680);
+  ctx.lineTo(SIZE - PAD, 680);
+  ctx.stroke();
+
+  // ── Objectif ──
+  var goalLabel = '';
+  if (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) {
+    goalLabel = window.GOALS[S.goal].name;
+  } else if (S.appMode === 'sport') {
+    goalLabel = 'Programme sportif';
+  } else if (S.appMode === 'nutrition') {
+    goalLabel = 'Nutrition personnalisée';
+  }
+  if (goalLabel) {
+    ctx.fillStyle = '#9A9A94';
+    ctx.font = 'italic 24px Georgia, "Times New Roman", serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Objectif \u00b7 ' + goalLabel, CX, 740);
+  }
+
+  // ── Delta poids (si disponible) ──
+  try {
+    var _user = window.AUTH ? window.AUTH.getUser() : null;
+    var _uid = _user ? _user.id : 'anon';
+    var _wh = [];
+    try { _wh = JSON.parse(localStorage.getItem('mtd_weight_history_' + _uid) || '[]'); } catch(e2) {}
+    if (!_wh.length && Array.isArray(S.weightHistory)) _wh = S.weightHistory;
+    if (Array.isArray(_wh) && _wh.length >= 2) {
+      _wh.sort(function(a, b) { return (a.date || '').localeCompare(b.date || ''); });
+      var _fw = parseFloat(_wh[0].weight);
+      var _lw = parseFloat(_wh[_wh.length - 1].weight);
+      if (!isNaN(_fw) && !isNaN(_lw) && _fw !== _lw) {
+        var _d = _lw - _fw;
+        ctx.fillStyle = _d < 0 ? '#4A8A5A' : '#C47A3A';
+        ctx.font = '22px "Helvetica Neue", Helvetica, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText((_d > 0 ? '+' : '') + _d.toFixed(1) + ' kg depuis le départ', CX, 790);
+      }
+    }
+  } catch(e3) {}
+
+  // ── Pied de page ──
+  ctx.fillStyle = '#3A3A38';
+  ctx.font = '14px "Helvetica Neue", Helvetica, Arial, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('smartfitcoach.app', CX, SIZE - 56);
+
+  return canvas;
+}
+
+function shareProgression() {
+  var canvas;
+  try { canvas = buildShareCanvas(); } catch(e) { return; }
+  if (!canvas) return;
+  canvas.toBlob(function(blob) {
+    if (!blob) return;
+    var filename = 'smartfitcoach-' + new Date().toISOString().slice(0, 10) + '.png';
+    var file = new File([blob], filename, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        files: [file],
+        title: 'Ma progression SmartFitCoach',
+        text: 'Ma progression sur SmartFitCoach \uD83D\uDCAA'
+      }).catch(function() {});
+    } else {
+      // Fallback : téléchargement direct
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function() { URL.revokeObjectURL(url); }, 2000);
+    }
+  }, 'image/png');
+}
+
 // ─── RENDER CARD 4 — Streak & badges ───
 function renderCardStreak() {
   var streak = getStreakValue();
@@ -839,6 +983,15 @@ function renderCardStreak() {
     badgeEl.appendChild(textEl);
     badgeEl.appendChild(tagEl);
     c.appendChild(badgeEl);
+  }
+
+  // ── Bouton "Partager ma progression" ──
+  if (streak > 0) {
+    var shareBtn = h('button', {
+      style: 'margin-top:16px;width:100%;padding:12px;border:1px solid var(--border,#E8E6DF);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;',
+      onclick: function() { shareProgression(); }
+    }, '\u2197\u2003Partager ma progression');
+    c.appendChild(shareBtn);
   }
 
   return c;
