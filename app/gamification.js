@@ -169,7 +169,9 @@ function updateStreak() {
     data.current++;
   } else if (data.lastDate && data.lastDate !== today) {
     // Un ou plusieurs jours manqués — vérifier le streak freeze
-    var _missedDays = Math.round((new Date(today) - new Date(data.lastDate)) / 86400000);
+    var _lastDateObj = new Date(data.lastDate);
+    if (isNaN(_lastDateObj.getTime())) { data.current = 1; data.lastDate = today; } // date corrompue → reset
+    var _missedDays = isNaN(_lastDateObj.getTime()) ? 999 : Math.round((new Date(today) - _lastDateObj) / 86400000);
     var thisMonth = today.slice(0, 7); // 'YYYY-MM'
     var S = window.S || {};
     var freezeAvailable = S.streakFreezeAvailable !== false; // true par défaut

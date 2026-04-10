@@ -1367,6 +1367,7 @@ function todayDeleteAllData() {
 
 // ─── RENDER EXTENDED SECTIONS (ex-Dashboard) ───
 function renderExtendedSections(wrapper, S) {
+  if (!S || typeof S !== 'object') return;
   // Actions rapides
   wrapper.appendChild(sectionLabel('Actions rapides'));
   var actCard = card();
@@ -1830,6 +1831,11 @@ function renderTodayDashboard(p) {
   var S = window.S;
   if (!S) return;
 
+  // Mettre à jour le streak à chaque affichage du tableau de bord
+  if (window.GAMIFICATION && window.GAMIFICATION.updateStreak) {
+    try { window.GAMIFICATION.updateStreak(); } catch(e) {}
+  }
+
   p.innerHTML = '';
 
   // ─── BILAN DE FORME — plein écran à la connexion ───
@@ -1924,5 +1930,17 @@ function renderTodayDashboard(p) {
 window.TODAY = {
   render: renderTodayDashboard
 };
+
+// ─── DÉTECTION CHANGEMENT DE JOUR ───
+// Re-render quand l'app redevient visible (ex: lendemain matin, app gardée ouverte)
+var _todayLastRenderDate = new Date().toISOString().slice(0, 10);
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) return;
+  var _currentDate = new Date().toISOString().slice(0, 10);
+  if (_currentDate !== _todayLastRenderDate) {
+    _todayLastRenderDate = _currentDate;
+    if (window.render) { try { window.render(); } catch(e) {} }
+  }
+});
 
 })();
