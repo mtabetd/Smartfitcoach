@@ -826,8 +826,7 @@ function shareProgression() {
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       navigator.share({
         files: [file],
-        title: 'Ma progression SmartFitCoach',
-        text: 'Ma progression sur SmartFitCoach \uD83D\uDCAA'
+        title: 'Ma progression SmartFitCoach'
       }).catch(function() {});
     } else {
       // Fallback : téléchargement direct
