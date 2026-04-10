@@ -810,7 +810,7 @@ function buildShareCanvas() {
   ctx.fillStyle = '#3A3A38';
   ctx.font = '14px "Helvetica Neue", Helvetica, Arial, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('smartfitcoach.app', CX, SIZE - 56);
+  ctx.fillText('smartfitcoach.app', CX, SIZE - 80);
 
   return canvas;
 }
@@ -834,10 +834,12 @@ function shareProgression() {
       var a = document.createElement('a');
       a.href = url;
       a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(function() { URL.revokeObjectURL(url); }, 2000);
+      if (document.body) {
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+      setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
     }
   }, 'image/png');
 }
