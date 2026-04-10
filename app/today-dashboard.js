@@ -722,17 +722,21 @@ function buildShareCanvas() {
   var PAD = 80;
   var CX = SIZE / 2;
 
-  // ── Logo wordmark ──
-  ctx.fillStyle = '#6B6B65';
-  ctx.font = '14px "Helvetica Neue", Helvetica, Arial, sans-serif';
+  // ── Logo wordmark — ivory + letter-spacing 10px (signature charte) ──
+  ctx.fillStyle = '#FAF9F6';
+  ctx.font = '13px "Helvetica Neue", Helvetica, Arial, sans-serif';
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '10px';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
   ctx.fillText('SMARTFITCOACH', PAD, 64);
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
 
-  // ── Date (droite) ──
+  // ── Date (droite) — gris clair lisible sur fond noir ──
   var _dn = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
   var _mn = ['jan.','fév.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
   var _nd = new Date();
+  ctx.fillStyle = '#9A9A94';
+  ctx.font = '13px "Helvetica Neue", Helvetica, Arial, sans-serif';
   ctx.textAlign = 'right';
   ctx.fillText(_dn[_nd.getDay()] + ' ' + _nd.getDate() + ' ' + _mn[_nd.getMonth()], SIZE - PAD, 64);
 
@@ -755,11 +759,13 @@ function buildShareCanvas() {
   ctx.textAlign = 'center';
   ctx.fillText(String(streak), CX, 548);
 
-  // ── "JOURS CONSÉCUTIFS" ──
-  ctx.fillStyle = '#6B6B65';
-  ctx.font = '14px "Helvetica Neue", Helvetica, Arial, sans-serif';
+  // ── "JOURS CONSÉCUTIFS" — eyebrow charte : letter-spacing 6px ──
+  ctx.fillStyle = '#9A9A94';
+  ctx.font = '11px "Helvetica Neue", Helvetica, Arial, sans-serif';
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '6px';
   ctx.textAlign = 'center';
   ctx.fillText('JOURS  CONSÉCUTIFS', CX, 598);
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
 
   // Filet séparateur bas
   ctx.strokeStyle = '#242422';
@@ -806,11 +812,13 @@ function buildShareCanvas() {
     }
   } catch(e3) {}
 
-  // ── Pied de page ──
-  ctx.fillStyle = '#3A3A38';
-  ctx.font = '14px "Helvetica Neue", Helvetica, Arial, sans-serif';
+  // ── Pied de page — contraste suffisant + letter-spacing éditorial ──
+  ctx.fillStyle = '#6B6B65';
+  ctx.font = '11px "Helvetica Neue", Helvetica, Arial, sans-serif';
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '2px';
   ctx.textAlign = 'center';
   ctx.fillText('smartfitcoach.app', CX, SIZE - 80);
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
 
   return canvas;
 }
