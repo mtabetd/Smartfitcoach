@@ -94,7 +94,9 @@ var PROFILE_KEYS = [
  // Smart Calendar
  'weeklyCalendar',
  'smartCalendarEnabled',
- 'smartCalendarDismissed'
+ 'smartCalendarDismissed',
+ // Plan hash — détecte changement de paramètres nutritionnels depuis dernière génération
+ '_planHash'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.

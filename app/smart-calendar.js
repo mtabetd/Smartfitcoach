@@ -343,6 +343,10 @@
           S.weeklyCalendar[String(si)] = selects[si].value;
         }
       }
+      // Invalider le plan nutritionnel — les jours d'entraînement ont peut-être changé
+      // → il sera régénéré avec les nouvelles données à la prochaine visite du planning
+      S.weekPlan = null;
+      S._planHash = null;
       btnSave.textContent = 'Sauvegarde...';
       btnSave.style.background = '#27AE60';
       btnSave.disabled = true;

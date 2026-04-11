@@ -307,26 +307,31 @@ window.getMealSplit=getMealSplit;
 
 // ─── TRAINING DAY DETECTION ────────────────────────────────────────────────
 // getDayType(dayIndex) — détermine si un jour de la semaine (0=Lun..6=Dim)
-// est un jour d'entraînement ou de repos. Distribue N jours d'entraînement
-// sur la semaine de manière optimale (repos répartis uniformément).
+// est un jour d'entraînement ou de repos.
+// Source de vérité #1 : weeklyCalendar (Calendrier Intelligent — choix explicite utilisateur)
+// Source de vérité #2 : trainingDaysSelected (jours sélectionnés en onboarding)
+// Source de vérité #3 : sportDays (distribution standard N jours/semaine, fallback)
 // Retourne {isTraining, trainSlot, preSlot, postSlot}
 function getDayType(dayIndex) {
   var s = window.S;
   if (!s) return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
 
-  // Si l'utilisateur a sélectionné des jours spécifiques → utiliser ces jours en priorité
-  if (Array.isArray(s.trainingDaysSelected) && s.trainingDaysSelected.length > 0) {
-    var isTrainingSelected = s.trainingDaysSelected.indexOf(dayIndex) !== -1;
-    if (!isTrainingSelected) {
-      return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
-    }
-    // Continuer pour calculer trainSlot/preSlot/postSlot ci-dessous
-    var isTraining = true;
-  } else {
+  var isTraining;
+
+  // Source de vérité #1 — Calendrier intelligent (weeklyCalendar)
+  // L'utilisateur a explicitement planifié ses sports → priorité maximale
+  if (s.weeklyCalendar && typeof s.weeklyCalendar === 'object' &&
+      s.weeklyCalendar[String(dayIndex)] !== undefined) {
+    isTraining = (s.weeklyCalendar[String(dayIndex)] !== 'repos');
+  }
+  // Source de vérité #2 — Jours spécifiques sélectionnés en onboarding
+  else if (Array.isArray(s.trainingDaysSelected) && s.trainingDaysSelected.length > 0) {
+    isTraining = s.trainingDaysSelected.indexOf(dayIndex) !== -1;
+  }
+  // Source de vérité #3 — Distribution standard N jours/semaine (fallback)
+  else {
     var nDays = s.sportDays || 0;
     if (nDays <= 0) return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
-
-    // Distribution standard des jours d'entraînement sur 7 jours (fallback)
     var LAYOUTS = {
       1: [0],              // Lun
       2: [0, 3],           // Lun, Jeu
@@ -336,13 +341,14 @@ function getDayType(dayIndex) {
       6: [0, 1, 2, 3, 4, 5] // Lun-Sam
     };
     var trainingDays = LAYOUTS[Math.min(nDays, 6)] || LAYOUTS[3];
-    var isTraining = trainingDays.indexOf(dayIndex) >= 0;
+    isTraining = trainingDays.indexOf(dayIndex) >= 0;
   }
 
   if (!isTraining) {
     return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
   }
 
+  // Calculer trainSlot/preSlot/postSlot selon nombre de repas et horaire d'entraînement
   var meals = s.mealsPerDay || 3;
   var trainTime = s.trainTime || 'afternoon';
   var trainSlot, preSlot, postSlot;
@@ -3641,6 +3647,28 @@ window.pickRecipe = pickRecipe;
 window.enrichWithScaling = enrichWithScaling;
 window.generateWeek = generateWeek;
 window.swapMeal = swapMeal;
+
+// ─── PLAN HASH — détecte changement paramètres nutritionnels critiques ────
+// Si l'un de ces paramètres change depuis la dernière génération du plan,
+// weekPlan doit être régénéré pour rester cohérent avec le profil.
+window.getPlanHash = function() {
+  var s = window.S;
+  if (!s) return '';
+  return [
+    s.goal !== undefined && s.goal !== null ? String(s.goal) : '',
+    s.mealsPerDay || 3,
+    s.regime || 0,
+    s.whey ? '1' : '0',
+    Array.isArray(s.allergies) ? s.allergies.slice().sort().join(',') : '',
+    Array.isArray(s.intolerances) ? s.intolerances.slice().sort().join(',') : '',
+    s.wantsDessert ? '1' : '0',
+    s.weight || 0,
+    s.height || 0,
+    s.age || 0,
+    s.sex || '',
+    s.activity !== undefined && s.activity !== null ? String(s.activity) : ''
+  ].join('|');
+};
 
 // ─── SUPPLEMENTS DATABASE (Grade A evidence ONLY) ───
 // Only supplements with overwhelming scientific evidence + personalized to user needs
