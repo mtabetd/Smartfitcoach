@@ -830,7 +830,7 @@ window.SPORT = {
  }
  p.appendChild(hdr);
  var pb = h('div', {'class': 'progress-bar'});
- var _pbPct = S.sStep === 26 ? 5 : S.sStep === 20 ? 5 : S.sStep === 16 ? 15 : S.sStep === 15 ? 100 : (currentDisplay / totalSteps * 100);
+ var _pbPct = S.sStep === 26 ? 5 : S.sStep === 20 ? 5 : S.sStep === 16 ? 15 : S.sStep === 15 ? 100 : Math.min(100, Math.max(0, (currentDisplay / totalSteps * 100)));
  pb.appendChild(h('div', {'class': 'progress-fill', style: 'width:' + _pbPct + '%'}));
  p.appendChild(pb);
  }
