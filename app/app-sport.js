@@ -2007,7 +2007,7 @@ function renderCrossfitLevel(p) {
  if (!isNaN(v) && v > 0 && window.PERF_HISTORY) PERF_HISTORY.recordCF1RM(lift.key, v);
  // Re-render to update estimated weights
  clearTimeout(window._cf1rmTimer);
- window._cf1rmTimer = setTimeout(function(){ window.render(); }, 600);
+ window._cf1rmTimer = setTimeout(function(){ if (window.render) window.render(); }, 600);
  }
  });
  rightDiv.appendChild(inp);
@@ -7035,7 +7035,7 @@ function renderRunningConfig(p) {
  oninput: function(e){
  S.runningPace = e.target.value;
  clearTimeout(window._runPaceTimer);
- window._runPaceTimer = setTimeout(function(){ window.render(); }, 800);
+ window._runPaceTimer = setTimeout(function(){ if (window.render) window.render(); }, 800);
  }
  }));
  paceWrap.appendChild(h('span', {'class': 'num-unit'}, 'min/km'));
@@ -7294,6 +7294,7 @@ function renderHyroxConfig(p) {
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) {
+ if (typeof window.generateHyroxProgram !== 'function') { console.error('[hyrox] generateHyroxProgram module not loaded'); return; }
  S.hyroxProgram = window.generateHyroxProgram(S.hyroxDays, S.hyroxLevel, S.hyroxGoal);
  S.hyroxWeek = 1;
  S.selectedHyroxDay = 0;
@@ -7513,13 +7514,13 @@ function renderPadelConfig(p) {
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.padelGoal && S.padelLevel;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; window.render(); }
+ if (ok) { if (typeof window.generatePadelProgram !== 'function') { console.error('[padel] generatePadelProgram module not loaded'); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; window.render(); }
  }}, 'Générer mon programme'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 function renderPadelProgram(p) {
- if (!S.padelProgram) { S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); }
+ if (!S.padelProgram) { if (typeof window.generatePadelProgram !== 'function') { p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Module Padel non disponible. Rechargez la page.')); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); }
  if (!S.padelProgram || !S.padelProgram.length) {
  p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
@@ -7631,13 +7632,13 @@ function renderGolfConfig(p) {
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.golfGoal && S.golfLevel;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; window.render(); }
+ if (ok) { if (typeof window.generateGolfProgram !== 'function') { console.error('[golf] generateGolfProgram module not loaded'); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; window.render(); }
  }}, 'Générer mon programme'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 function renderGolfProgram(p) {
- if (!S.golfProgram) { S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); }
+ if (!S.golfProgram) { if (typeof window.generateGolfProgram !== 'function') { p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Module Golf non disponible. Rechargez la page.')); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); }
  if (!S.golfProgram || !S.golfProgram.length) {
  p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));

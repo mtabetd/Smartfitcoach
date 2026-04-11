@@ -2569,6 +2569,7 @@ function getMusculationWeight(exerciseName, sets, reps) {
   var s = window.S;
   var profile = s.muscuStrengthProfile || {};
 
+  if (!exerciseName || typeof exerciseName !== 'string') return null;
   var exerciseLower = exerciseName.toLowerCase();
   var baseWeight = null;
   var ratio = 1.0;
