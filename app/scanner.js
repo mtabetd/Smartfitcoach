@@ -299,13 +299,13 @@ function findAlternatives(product, callback) {
 // ─── SCAN HISTORY ───
 function getScanHistory() {
   var user = window.AUTH ? window.AUTH.getUser() : null;
-  var key = 'mtd_scan_history_' + (user ? user.id : 'anon');
+  var key = 'mtd_scan_history_' + (user && user.id ? user.id : 'anon');
   try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { return []; }
 }
 
 function addToScanHistory(product, score) {
   var user = window.AUTH ? window.AUTH.getUser() : null;
-  var key = 'mtd_scan_history_' + (user ? user.id : 'anon');
+  var key = 'mtd_scan_history_' + (user && user.id ? user.id : 'anon');
   var history = getScanHistory();
   history.unshift({
     name: product.name,

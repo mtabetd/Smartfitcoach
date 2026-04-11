@@ -329,6 +329,7 @@ function appendError(container, text) {
 }
 
 function refreshSuggestions(container) {
+  if (!container) return;
   container.innerHTML = '';
   var suggs = getSuggestions();
   suggs.forEach(function(s) {
