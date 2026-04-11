@@ -560,7 +560,11 @@
       pointsFaibles: S.pointsFaibles || '',
       preferences: S.preferences || '',
       historique: S.historique || '',
-      heureEntrainement: S.trainTime || null
+      heureEntrainement: S.trainTime || null,
+      competitionGoal: !!S.competitionGoal,
+      competitionDate: S.competitionDate || '',
+      competitionType: S.competitionType || '',
+      sportHobbies: Array.isArray(S.sportHobbies) && S.sportHobbies.length ? S.sportHobbies.join(', ') : ''
     };
   }
 

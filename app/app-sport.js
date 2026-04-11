@@ -3617,6 +3617,54 @@ function renderMusculationLevel(p) {
  p.appendChild(ttGrid);
  p.appendChild(h('div', {style: 'font-size:11px;color:var(--text-secondary);margin-top:4px'}, 'Optionnel — laissez vide si variable'));
 
+ // ─── COMPÉTITION CIBLE (optionnel) ───
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:24px;'}, 'Comp\u00e9tition \u00e0 pr\u00e9parer\u00a0?'));
+ p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin:-4px 0 10px;line-height:1.5;'}, 'Hyrox, powerlifting, marathon\u2026 l\u2019IA p\u00e9riodisera vers ta date cible. Optionnel.'));
+ var _cGrid = h('div', {'class': 'level-list'});
+ [{id: false, label: 'Non', desc: 'Programme standard 12 semaines'}, {id: true, label: 'Oui \u2014 j\u2019ai une date', desc: 'P\u00e9riodisation cibl\u00e9e'}].forEach(function(copt) {
+   var _cSel = copt.id ? !!S.competitionGoal : !S.competitionGoal;
+   _cGrid.appendChild(h('div', {'class': 'level-item' + (_cSel ? ' on' : ''), onclick: function() {
+     S.competitionGoal = !!copt.id;
+     if (!copt.id) { S.competitionDate = ''; S.competitionType = ''; }
+     window.render();
+   }}, [h('div', {}, [h('div', {'class': 'level-name'}, copt.label), h('div', {'class': 'level-desc'}, copt.desc)])]));
+ });
+ p.appendChild(_cGrid);
+ if (S.competitionGoal) {
+   p.appendChild(h('div', {'class': 'field-label', style: 'margin-top:14px;'}, 'Date de l\u2019\u00e9v\u00e9nement'));
+   var _dInp = document.createElement('input');
+   _dInp.type = 'date';
+   _dInp.style.cssText = 'width:100%;box-sizing:border-box;background:transparent;border:none;border-bottom:1px solid var(--border,#D8D8D0);color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;font-weight:300;padding:10px 0;outline:none;margin-bottom:14px;display:block;';
+   _dInp.value = S.competitionDate || '';
+   _dInp.addEventListener('input', function(e) { S.competitionDate = e.target.value; });
+   p.appendChild(_dInp);
+   p.appendChild(h('div', {'class': 'field-label'}, 'Type d\u2019\u00e9preuve (optionnel)'));
+   var _tInp = document.createElement('input');
+   _tInp.type = 'text';
+   _tInp.placeholder = 'ex\u00a0: Hyrox, Powerlifting, 10 km\u2026';
+   _tInp.style.cssText = 'width:100%;box-sizing:border-box;background:transparent;border:none;border-bottom:1px solid var(--border,#D8D8D0);color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:16px;font-weight:300;padding:10px 0;outline:none;display:block;';
+   _tInp.value = S.competitionType || '';
+   _tInp.addEventListener('input', function(e) { S.competitionType = e.target.value; });
+   p.appendChild(_tInp);
+ }
+
+ // ─── SPORTS COMPLÉMENTAIRES (optionnel) ───
+ p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:24px;'}, 'Sports pratiqu\u00e9s en parall\u00e8le\u00a0?'));
+ p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin:-4px 0 10px;line-height:1.5;'}, 'Pour adapter la r\u00e9cup\u00e9ration et \u00e9viter les conflits de charge. Optionnel.'));
+ if (!Array.isArray(S.sportHobbies)) S.sportHobbies = [];
+ var _hbWrap = h('div', {style: 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;'});
+ [{id:'running',lb:'Running'},{id:'cycling',lb:'V\u00e9lo'},{id:'swimming',lb:'Natation'},{id:'tennis',lb:'Tennis / Padel'},{id:'martialarts',lb:'Arts martiaux'},{id:'ski',lb:'Ski / Snow'},{id:'yoga',lb:'Yoga / Mob'},{id:'other',lb:'Autre'}].forEach(function(hobj) {
+   var _hSel = S.sportHobbies.indexOf(hobj.id) !== -1;
+   _hbWrap.appendChild(h('button', {type: 'button', 'class': 'chip' + (_hSel ? ' on' : ''), onclick: function() {
+     if (!Array.isArray(S.sportHobbies)) S.sportHobbies = [];
+     var _hi = S.sportHobbies.indexOf(hobj.id);
+     if (_hi !== -1) { S.sportHobbies.splice(_hi, 1); } else { S.sportHobbies.push(hobj.id); }
+     window.render();
+   }}, hobj.lb));
+ });
+ p.appendChild(_hbWrap);
+ p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-top:4px;'}, 'Aucune s\u00e9lection = programme muscu pur'));
+
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.sportLevel !== null;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){

@@ -628,7 +628,9 @@ function buildUserPrompt(profile) {
     '- Points forts : ' + sanitizeString(profile.pointsForts || 'non renseignés', 300) + '\n' +
     '- Points faibles : ' + sanitizeString(profile.pointsFaibles || 'non renseignés', 300) + '\n' +
     '- Préférences : ' + sanitizeString(profile.preferences || 'non renseignées', 300) + '\n' +
-    '- Historique : ' + sanitizeString(profile.historique || 'non renseigné', 500) + '\n\n' +
+    '- Historique : ' + sanitizeString(profile.historique || 'non renseigné', 500) + '\n' +
+    '- Comp\u00e9tition : ' + (profile.competitionGoal && profile.competitionDate ? 'OUI \u2014 ' + profile.competitionDate + (profile.competitionType ? ' (' + sanitizeString(profile.competitionType, 80) + ')' : '') : 'non d\u00e9clar\u00e9e') + '\n' +
+    '- Sports compl\u00e9mentaires : ' + sanitizeString(profile.sportHobbies || 'aucun', 200) + '\n\n' +
     'Génère le programme complet selon le format strict du system prompt. ' +
     'Diagnostic personnalisé OBLIGATOIRE en premier. ' +
     'Respecte IMPÉRATIVEMENT les restrictions médicales du BILAN MÉDICAL pour chaque exercice prescrit.';
