@@ -2126,7 +2126,7 @@ body.dark-mode .auth-container {
   opacity: 0.6;
 }
 .set-row-validated {
-  background: rgba(39, 174, 96, 0.08) !important;
+  background: var(--greenbg, rgba(26,74,26,.06)) !important;
 }
 
 /* -------------------------------------------------------

@@ -196,11 +196,11 @@
         style: 'margin-bottom:12px;'
       }, btnBack),
       window.h('h1', {
-        style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;color:#1a1a2e;margin:0 0 6px 0;'
+        style: 'font-family:Georgia,serif;font-size:24px;font-weight:normal;color:var(--black,#0A0A09);margin:0 0 6px 0;letter-spacing:-0.5px;'
       }, 'Calendrier Intelligent'),
       window.h('p', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#6B6B65;margin:0;line-height:1.5;'
-      }, 'Planifiez vos entrainements & detectez les conflits musculaires')
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin:0;line-height:1.7;font-weight:300;'
+      }, 'Planifiez vos entraînements & détectez les conflits musculaires')
     ]);
 
     // ── Grille 7 jours ──

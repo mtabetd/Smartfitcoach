@@ -5318,7 +5318,7 @@ function renderMusculationProgram(p) {
     rpeRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5'}, row[2]));
     rpeBody.appendChild(rpeRow);
    });
-   rpeBody.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-top:8px;border-top:1px solid var(--border);padding-top:8px'}, '💡 En tant que débutant, visez RPE 7-8. Arrêtez si ça fait mal (≠ brûlure musculaire normale).'));
+   rpeBody.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey);margin-top:8px;border-top:1px solid var(--border);padding-top:8px'}, 'En tant que débutant, visez RPE 7-8. Arrêtez si ça fait mal (≠ brûlure musculaire normale).'));
    rpeWrap.appendChild(rpeBody);
   }
   p.appendChild(rpeWrap);
@@ -5807,11 +5807,11 @@ function renderMusculationProgram(p) {
   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#1A4A1A;margin-bottom:6px'}, 'SÉANCE DU JOUR'));
   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, day.focus));
   if (matchedBrief) {
-   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:8px'}, '💪 ' + matchedBrief.why));
-   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, '💡 ' + matchedBrief.tip));
+   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, matchedBrief.why));
+   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, matchedBrief.tip));
   } else {
-   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:8px'}, '💪 Aujourd\'hui vous travaillez votre ' + day.focus));
-   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, '💡 Chaque rep compte — concentrez-vous sur la technique, pas sur le poids'));
+   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, 'Aujourd\'hui vous travaillez votre ' + day.focus));
+   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, 'Chaque rep compte — concentrez-vous sur la technique, pas sur le poids'));
   }
   p.appendChild(briefCard);
  }

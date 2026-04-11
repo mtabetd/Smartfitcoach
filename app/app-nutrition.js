@@ -5247,7 +5247,7 @@ function showSmoothieModal(sm) {
 
   // Tips
   if (sm.tips) {
-    var tipDiv = h('div', {style:'margin:12px 20px 0;background:rgba(26,74,26,0.06);border-left:3px solid var(--green,#1A4A1A);padding:10px 12px;border-radius:0 8px 8px 0;font-size:13px;color:var(--text,#0A0A09);line-height:1.5'}, '💡 ' + sm.tips);
+    var tipDiv = h('div', {style:'margin:12px 20px 0;background:var(--greenbg,rgba(26,74,26,0.06));border-left:3px solid var(--green,#1A4A1A);padding:10px 12px;border-radius:0 2px 2px 0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6'}, sm.tips);
     body.appendChild(tipDiv);
   }
   body.appendChild(h('div', {style:'height:12px'}));

@@ -1174,7 +1174,7 @@ function render() {
    nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, window.t('nav.sport')));
  }
  if (S.appMode && S.appMode !== 'nutrition') {
-   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'calendar' ? ' active' : ''), style: 'font-size:11px', onclick: function(){ S.view = 'calendar'; if(window.BLACKBOX)window.BLACKBOX.log('nav_calendar'); render(); }}, '📅 Calendrier'));
+   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'calendar' ? ' active' : ''), style: 'font-size:11px', onclick: function(){ S.view = 'calendar'; if(window.BLACKBOX)window.BLACKBOX.log('nav_calendar'); render(); }}, 'Calendrier'));
  }
  wrap.appendChild(nav);
 
