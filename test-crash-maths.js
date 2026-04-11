@@ -83,7 +83,12 @@ async function runTests() {
           });
         } catch(e) {}
 
-        // 3. Session auth (fingerprint null = pas de vérification)
+        // 3. Bloquer le dev-wipe localhost (app-main.js l.1940-1948):
+        // sur 127.0.0.1, si 'mtd_dev_wiped_v1' absent, l'app efface TOUS les mtd_profile_*
+        // On le marque avant que le script de l'app ne s'exécute
+        try { localStorage.setItem('mtd_dev_wiped_v1', '1'); } catch(e) {}
+
+        // 4. Session auth (fingerprint null = pas de vérification)
         var session = {
           id: args.uid, name: 'QA MathTest', email: 'qa-math@test.com',
           nom: '', phone: '',
@@ -96,7 +101,7 @@ async function runTests() {
           localStorage.setItem('mtd_session_start', String(Date.now()));
         } catch(e) {}
 
-        // 4. Profil complet dans la clé uid
+        // 5. Profil complet dans la clé uid
         try {
           localStorage.setItem('mtd_profile_' + args.uid, JSON.stringify(args.profile));
         } catch(e) {}
@@ -215,7 +220,7 @@ async function runTests() {
   await runTest(
     'T1: weight=0 → calcBMR=0, plancher calcTarget → pas de NaN DOM',
     { weight: 0 },
-    { view: 'nutrition', nStep: 11, weight: 0 },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 0, height: 175, age: 30, activity: 2, goal: 2, birthDate: null },
     async function(page, mathResult) {
       // calcBMR doit retourner 0 (guard weight<30)
       if (mathResult.bmr !== 0) {
@@ -233,7 +238,7 @@ async function runTests() {
   await runTest(
     'T2: height=0 → calcBMR=0, BMI=null (div-par-zéro protégé) → pas de NaN',
     { height: 0 },
-    { view: 'nutrition', nStep: 11, height: 0 },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 0, age: 30, activity: 2, goal: 2, birthDate: null },
     async function(page, mathResult) {
       if (mathResult.bmr !== 0) {
         return { passed: false, reason: 'calcBMR(height=0) devrait retourner 0, got ' + mathResult.bmr };
@@ -252,7 +257,7 @@ async function runTests() {
   await runTest(
     'T3: age=0 → calcBMR=0 (guard age<13) → pas de NaN',
     { age: 0, birthDate: null },
-    { view: 'nutrition', nStep: 11, age: 0, birthDate: null },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 175, age: 0, activity: 2, goal: 2, birthDate: null },
     async function(page, mathResult) {
       if (mathResult.bmr !== 0) {
         return { passed: false, reason: 'calcBMR(age=0) devrait retourner 0, got ' + mathResult.bmr };
@@ -268,7 +273,7 @@ async function runTests() {
   await runTest(
     'T4: age=10 (< 13 minimum) → calcBMR=0 → pas de crash',
     { age: 10, birthDate: null },
-    { view: 'nutrition', nStep: 11, age: 10, birthDate: null },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 175, age: 10, activity: 2, goal: 2, birthDate: null },
     async function(page, mathResult) {
       if (mathResult.bmr !== 0) {
         return { passed: false, reason: 'calcBMR(age=10) devrait retourner 0, got ' + mathResult.bmr };
@@ -284,7 +289,7 @@ async function runTests() {
   await runTest(
     'T5: age=100 (maximum) → calcBMR valide et fini → pas de NaN',
     { age: 100, birthDate: null },
-    { view: 'nutrition', nStep: 11, age: 100, birthDate: null },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 175, age: 100, activity: 2, goal: 2, birthDate: null },
     async function(page, mathResult) {
       if (!mathResult.bmr || mathResult.bmr <= 0) {
         return { passed: false, reason: 'calcBMR(age=100) devrait retourner une valeur > 0, got ' + mathResult.bmr };
@@ -304,7 +309,7 @@ async function runTests() {
   await runTest(
     'T6: weight=300 (maximum) → calcBMR valide, poids ajusté obèse → pas de crash',
     { weight: 300 },
-    { view: 'nutrition', nStep: 11, weight: 300 },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 300, height: 175, age: 30, activity: 2, goal: 2, birthDate: null },
     async function(page, mathResult) {
       if (!mathResult.bmr || mathResult.bmr <= 0) {
         return { passed: false, reason: 'calcBMR(weight=300) devrait retourner une valeur > 0, got ' + mathResult.bmr };
@@ -329,7 +334,7 @@ async function runTests() {
   await runTest(
     'T7: height=100 (minimum valide) → calcBMR retourne valeur positive → pas de NaN',
     { height: 100 },
-    { view: 'nutrition', nStep: 11, height: 100 },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 100, age: 30, activity: 2, goal: 2, birthDate: null },
     async function(page, mathResult) {
       if (!mathResult.bmr || mathResult.bmr <= 0) {
         return { passed: false, reason: 'calcBMR(height=100) devrait retourner une valeur > 0, got ' + mathResult.bmr };
@@ -345,7 +350,7 @@ async function runTests() {
   await runTest(
     'T8: activity=0 (Sédentaire) → ACTIVITIES[0] défini → calcTDEE valide',
     { activity: 0 },
-    { view: 'nutrition', nStep: 11, activity: 0 },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 175, age: 30, activity: 0, goal: 2, birthDate: null },
     async function(page, mathResult) {
       if (mathResult.tdee === null || mathResult.tdee <= 0) {
         return { passed: false, reason: 'calcTDEE(activity=0) devrait retourner > 0, got ' + mathResult.tdee };
@@ -364,7 +369,7 @@ async function runTests() {
   await runTest(
     'T9: weight=NaN → calcBMR=0 (guard !NaN) → pas de NaN dans DOM',
     { weight: NaN },
-    { view: 'nutrition', nStep: 11, weight: NaN },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: NaN, height: 175, age: 30, activity: 2, goal: 2, birthDate: null },
     async function(page, mathResult) {
       if (mathResult.bmr !== 0) {
         return { passed: false, reason: 'calcBMR(weight=NaN) devrait retourner 0, got ' + mathResult.bmr };
@@ -381,7 +386,7 @@ async function runTests() {
   await runTest(
     'T10: goal=99 (hors range GOALS) → calcTarget=0, pas de crash',
     { goal: 99 },
-    { view: 'nutrition', nStep: 11, goal: 99 },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 175, age: 30, activity: 2, goal: 99, birthDate: null },
     async function(page, mathResult) {
       if (mathResult.target !== 0) {
         return { passed: false, reason: 'calcTarget(goal=99) devrait retourner 0, got ' + mathResult.target };
@@ -397,7 +402,7 @@ async function runTests() {
   await runTest(
     'T11: targetWeight=0 → modulation targetWeight skippée → pas de NaN',
     { targetWeight: 0, goal: 3 }, // goal=3 (cut) pour activer la branche modulation
-    { view: 'nutrition', nStep: 11, targetWeight: 0, goal: 3 },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 175, age: 30, activity: 2, goal: 3, targetWeight: 0, birthDate: null },
     async function(page, mathResult) {
       if (isNaN(mathResult.target) || !isFinite(mathResult.target)) {
         return { passed: false, reason: 'calcTarget(targetWeight=0) retourne NaN/Infinity: ' + mathResult.target };
@@ -416,7 +421,7 @@ async function runTests() {
   await runTest(
     'T12: mealsPerDay=1 → meal split valide (pas de div/0) → pas de NaN',
     { mealsPerDay: 1 },
-    { view: 'nutrition', nStep: 11, mealsPerDay: 1 },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 175, age: 30, activity: 2, goal: 2, mealsPerDay: 1, birthDate: null },
     async function(page, mathResult) {
       // Vérifier que getMealSplit retourne des valeurs finies
       const splitResult = await page.evaluate(function() {
@@ -445,7 +450,7 @@ async function runTests() {
   await runTest(
     'T13: sportDays=7 → calcTDEE PAL=1.725 (≥5j threshold) → pas de NaN',
     { sportDays: 7, trainingDaysSelected: [] },
-    { view: 'nutrition', nStep: 11, sportDays: 7, trainingDaysSelected: [] },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 175, age: 30, activity: 2, goal: 2, sportDays: 7, trainingDaysSelected: [], birthDate: null },
     async function(page, mathResult) {
       if (!mathResult.tdee || mathResult.tdee <= 0) {
         return { passed: false, reason: 'calcTDEE(sportDays=7) devrait retourner > 0, got ' + mathResult.tdee };
@@ -472,7 +477,7 @@ async function runTests() {
       view: 'nutrition', nStep: 11,
       sex: 'femme', weight: 75, height: 165, age: 30,
       pregnant: true, pregnancyWeek: 30, prePregnancyWeight: 68,
-      goal: 2, activity: 2
+      goal: 2, activity: 2, birthDate: null
     },
     async function(page, mathResult) {
       // calcTarget devrait inclure +450 kcal du T3
@@ -502,7 +507,7 @@ async function runTests() {
   await runTest(
     'T15: Goals 0-5 itérés → calcTarget et calcMacros valides pour chacun → pas de NaN',
     { goal: 2 }, // profil valide de base
-    { view: 'nutrition', nStep: 11, goal: 2 },
+    { view: 'nutrition', nStep: 11, sex: 'homme', weight: 75, height: 175, age: 30, activity: 2, goal: 2, birthDate: null },
     async function(page) {
       const goalsResult = await page.evaluate(function() {
         if (!window.calcTarget || !window.calcMacros || !window.GOALS) {

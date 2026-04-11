@@ -12,245 +12,24 @@
     "mathResult": {
       "bmr": 0,
       "tdee": 0,
-      "target": 0,
+      "target": 1500,
       "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
+        "g": 130,
+        "p": 120,
+        "l": 56,
+        "proteinPerKg": 1.6,
+        "fatPerKg": 1,
+        "carbsPerKg": 1.7,
+        "cyclePhase": null
       },
       "bmi": null,
       "errors": []
     },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+    "htmlLen": 677,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA"
   },
   {
     "name": "T2: height=0 → calcBMR=0, BMI=null (div-par-zéro protégé) → pas de NaN",
-    "passed": true,
-    "critErrors": [],
-    "domHasNaN": false,
-    "domHasInfinity": false,
-    "mathHasNaN": false,
-    "mathHasInfinity": false,
-    "isBlank": false,
-    "extraReason": null,
-    "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
-      "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
-      },
-      "bmi": null,
-      "errors": []
-    },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
-  },
-  {
-    "name": "T3: age=0 → calcBMR=0 (guard age<13) → pas de NaN",
-    "passed": true,
-    "critErrors": [],
-    "domHasNaN": false,
-    "domHasInfinity": false,
-    "mathHasNaN": false,
-    "mathHasInfinity": false,
-    "isBlank": false,
-    "extraReason": null,
-    "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
-      "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
-      },
-      "bmi": null,
-      "errors": []
-    },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
-  },
-  {
-    "name": "T4: age=10 (< 13 minimum) → calcBMR=0 → pas de crash",
-    "passed": true,
-    "critErrors": [],
-    "domHasNaN": false,
-    "domHasInfinity": false,
-    "mathHasNaN": false,
-    "mathHasInfinity": false,
-    "isBlank": false,
-    "extraReason": null,
-    "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
-      "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
-      },
-      "bmi": null,
-      "errors": []
-    },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
-  },
-  {
-    "name": "T5: age=100 (maximum) → calcBMR valide et fini → pas de NaN",
-    "passed": false,
-    "critErrors": [],
-    "domHasNaN": false,
-    "domHasInfinity": false,
-    "mathHasNaN": false,
-    "mathHasInfinity": false,
-    "isBlank": false,
-    "extraReason": "calcBMR(age=100) devrait retourner une valeur > 0, got 0",
-    "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
-      "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
-      },
-      "bmi": null,
-      "errors": []
-    },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
-  },
-  {
-    "name": "T6: weight=300 (maximum) → calcBMR valide, poids ajusté obèse → pas de crash",
-    "passed": false,
-    "critErrors": [],
-    "domHasNaN": false,
-    "domHasInfinity": false,
-    "mathHasNaN": false,
-    "mathHasInfinity": false,
-    "isBlank": false,
-    "extraReason": "calcBMR(weight=300) devrait retourner une valeur > 0, got 0",
-    "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
-      "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
-      },
-      "bmi": null,
-      "errors": []
-    },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
-  },
-  {
-    "name": "T7: height=100 (minimum valide) → calcBMR retourne valeur positive → pas de NaN",
-    "passed": false,
-    "critErrors": [],
-    "domHasNaN": false,
-    "domHasInfinity": false,
-    "mathHasNaN": false,
-    "mathHasInfinity": false,
-    "isBlank": false,
-    "extraReason": "calcBMR(height=100) devrait retourner une valeur > 0, got 0",
-    "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
-      "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
-      },
-      "bmi": null,
-      "errors": []
-    },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
-  },
-  {
-    "name": "T8: activity=0 (Sédentaire) → ACTIVITIES[0] défini → calcTDEE valide",
-    "passed": false,
-    "critErrors": [],
-    "domHasNaN": false,
-    "domHasInfinity": false,
-    "mathHasNaN": false,
-    "mathHasInfinity": false,
-    "isBlank": false,
-    "extraReason": "calcTDEE(activity=0) devrait retourner > 0, got 0",
-    "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
-      "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
-      },
-      "bmi": null,
-      "errors": []
-    },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
-  },
-  {
-    "name": "T9: weight=NaN → calcBMR=0 (guard !NaN) → pas de NaN dans DOM",
-    "passed": true,
-    "critErrors": [],
-    "domHasNaN": false,
-    "domHasInfinity": false,
-    "mathHasNaN": false,
-    "mathHasInfinity": false,
-    "isBlank": false,
-    "extraReason": null,
-    "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
-      "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
-      },
-      "bmi": null,
-      "errors": []
-    },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
-  },
-  {
-    "name": "T10: goal=99 (hors range GOALS) → calcTarget=0, pas de crash",
-    "passed": true,
-    "critErrors": [],
-    "domHasNaN": false,
-    "domHasInfinity": false,
-    "mathHasNaN": false,
-    "mathHasInfinity": false,
-    "isBlank": false,
-    "extraReason": null,
-    "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
-      "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
-      },
-      "bmi": null,
-      "errors": []
-    },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
-  },
-  {
-    "name": "T11: targetWeight=0 → modulation targetWeight skippée → pas de NaN",
     "passed": true,
     "critErrors": [],
     "domHasNaN": false,
@@ -268,15 +47,272 @@
         "p": 120,
         "l": 56,
         "proteinPerKg": 1.6,
-        "fatPerKg": 0.85,
+        "fatPerKg": 1,
         "carbsPerKg": 1.7,
         "cyclePhase": null
       },
       "bmi": null,
       "errors": []
     },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+    "htmlLen": 677,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA"
+  },
+  {
+    "name": "T3: age=0 → calcBMR=0 (guard age<13) → pas de NaN",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 1500,
+      "macros": {
+        "g": 130,
+        "p": 120,
+        "l": 56,
+        "proteinPerKg": 1.6,
+        "fatPerKg": 1,
+        "carbsPerKg": 1.7,
+        "cyclePhase": null
+      },
+      "bmi": 24.5,
+      "errors": []
+    },
+    "htmlLen": 2601,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · null ans · 75 kg · 175 cm · Modérément actif · Maintien / 0 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1500 / MAINTIEN / 130 / GLUCIDES / 130g / 120 / PROTÉINES "
+  },
+  {
+    "name": "T4: age=10 (< 13 minimum) → calcBMR=0 → pas de crash",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 1500,
+      "macros": {
+        "g": 130,
+        "p": 120,
+        "l": 56,
+        "proteinPerKg": 1.6,
+        "fatPerKg": 1,
+        "carbsPerKg": 1.7,
+        "cyclePhase": null
+      },
+      "bmi": 24.5,
+      "errors": []
+    },
+    "htmlLen": 2696,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 10 ans · 75 kg · 175 cm · Modérément actif · Maintien / 0 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1500 / MAINTIEN / ✓ Calculs validés par NutritionMaster — P×"
+  },
+  {
+    "name": "T5: age=100 (maximum) → calcBMR valide et fini → pas de NaN",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 1281,
+      "tdee": 1985.55,
+      "target": 1986,
+      "macros": {
+        "g": 208,
+        "p": 120,
+        "l": 75,
+        "proteinPerKg": 1.6,
+        "fatPerKg": 1,
+        "carbsPerKg": 2.8,
+        "cyclePhase": null
+      },
+      "bmi": 24.5,
+      "errors": []
+    },
+    "htmlLen": 3222,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 100 ans · 75 kg · 175 cm · Modérément actif · Maintien / 1986 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1986 / MAINTIEN / ✓ Calculs validés par NutritionMaster "
+  },
+  {
+    "name": "T6: weight=300 (maximum) → calcBMR valide, poids ajusté obèse → pas de crash",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 3949,
+      "tdee": 6120.95,
+      "target": 6121,
+      "macros": {
+        "g": 812,
+        "p": 260,
+        "l": 203,
+        "proteinPerKg": 1.6,
+        "fatPerKg": 1,
+        "carbsPerKg": 5,
+        "cyclePhase": null
+      },
+      "bmi": 98,
+      "errors": []
+    },
+    "htmlLen": 3100,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 300 kg · 175 cm · Modérément actif · Maintien / 6121 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 6121 / MAINTIEN / ✓ Calculs validés par NutritionMaster "
+  },
+  {
+    "name": "T7: height=100 (minimum valide) → calcBMR retourne valeur positive → pas de NaN",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 1230,
+      "tdee": 1906.5,
+      "target": 1907,
+      "macros": {
+        "g": 269,
+        "p": 86,
+        "l": 54,
+        "proteinPerKg": 1.6,
+        "fatPerKg": 1,
+        "carbsPerKg": 5,
+        "cyclePhase": null
+      },
+      "bmi": 75,
+      "errors": []
+    },
+    "htmlLen": 3087,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 100 cm · Modérément actif · Maintien / 1907 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1907 / MAINTIEN / ✓ Calculs validés par NutritionMaster —"
+  },
+  {
+    "name": "T8: activity=0 (Sédentaire) → ACTIVITIES[0] défini → calcTDEE valide",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 1699,
+      "tdee": 2633.4500000000003,
+      "target": 2633,
+      "macros": {
+        "g": 375,
+        "p": 90,
+        "l": 86,
+        "proteinPerKg": 1.2,
+        "fatPerKg": 1,
+        "carbsPerKg": 5,
+        "cyclePhase": null
+      },
+      "bmi": 24.5,
+      "errors": []
+    },
+    "htmlLen": 2380,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Sédentaire · Maintien / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2633 / MAINTIEN / ✓ Calculs validés par NutritionMaster — P×4 +"
+  },
+  {
+    "name": "T9: weight=NaN → calcBMR=0 (guard !NaN) → pas de NaN dans DOM",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 1500,
+      "macros": {
+        "g": 130,
+        "p": 120,
+        "l": 56,
+        "proteinPerKg": 1.6,
+        "fatPerKg": 1,
+        "carbsPerKg": 1.7,
+        "cyclePhase": null
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 677,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA"
+  },
+  {
+    "name": "T10: goal=99 (hors range GOALS) → calcTarget=0, pas de crash",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 1699,
+      "tdee": 2633.4500000000003,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": 24.5,
+      "errors": []
+    },
+    "htmlLen": 2611,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 0 / ✓ Calculs validés par NutritionMaster — P×4 + G×4 + L×9 = 0 kcal"
+  },
+  {
+    "name": "T11: targetWeight=0 → modulation targetWeight skippée → pas de NaN",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 1699,
+      "tdee": 2633.4500000000003,
+      "target": 2238,
+      "macros": {
+        "g": 273,
+        "p": 143,
+        "l": 64,
+        "proteinPerKg": 1.9,
+        "fatPerKg": 0.85,
+        "carbsPerKg": 3.6,
+        "cyclePhase": null
+      },
+      "bmi": 24.5,
+      "errors": []
+    },
+    "htmlLen": 2713,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Perte de poids / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2238 / PERTE DE POIDS / ✓ Calculs validés par Nutri"
   },
   {
     "name": "T12: mealsPerDay=1 → meal split valide (pas de div/0) → pas de NaN",
@@ -289,44 +325,52 @@
     "isBlank": false,
     "extraReason": null,
     "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
+      "bmr": 1699,
+      "tdee": 2633.4500000000003,
+      "target": 2633,
       "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
+        "g": 370,
+        "p": 120,
+        "l": 75,
+        "proteinPerKg": 1.6,
+        "fatPerKg": 1,
+        "carbsPerKg": 4.9,
+        "cyclePhase": null
       },
-      "bmi": null,
+      "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+    "htmlLen": 2702,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Maintien / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2633 / MAINTIEN / ✓ Calculs validés par NutritionMaster —"
   },
   {
     "name": "T13: sportDays=7 → calcTDEE PAL=1.725 (≥5j threshold) → pas de NaN",
-    "passed": false,
+    "passed": true,
     "critErrors": [],
     "domHasNaN": false,
     "domHasInfinity": false,
     "mathHasNaN": false,
     "mathHasInfinity": false,
     "isBlank": false,
-    "extraReason": "calcTDEE(sportDays=7) devrait retourner > 0, got 0",
+    "extraReason": null,
     "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 0,
+      "bmr": 1699,
+      "tdee": 2930.775,
+      "target": 2931,
       "macros": {
-        "g": 0,
-        "p": 0,
-        "l": 0
+        "g": 375,
+        "p": 120,
+        "l": 105,
+        "proteinPerKg": 1.6,
+        "fatPerKg": 1,
+        "carbsPerKg": 5,
+        "cyclePhase": null
       },
-      "bmi": null,
+      "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+    "htmlLen": 2703,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Maintien / 2931 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2931 / MAINTIEN / ✓ Calculs validés par NutritionMaster —"
   },
   {
     "name": "T14: femme 75kg enceinte T3 (sem.30) → calcTarget +450 kcal → pas de NaN",
@@ -354,8 +398,8 @@
       "bmi": 27.5,
       "errors": []
     },
-    "htmlLen": 3654,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Femme · 30 ans · 75 kg · 165 cm · Modérément actif · Maintien / 2170 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2620 / MAINTIEN / ✓ Calculs validés par Nutrition"
+    "htmlLen": 3648,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Femme · 30 ans · 75 kg · 165 cm · Modérément actif · Maintien / 2170 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2620 / MAINTIEN / ✓ Calculs validés par NutritionMaster —"
   },
   {
     "name": "T15: Goals 0-5 itérés → calcTarget et calcMacros valides pour chacun → pas de NaN",
@@ -368,22 +412,22 @@
     "isBlank": false,
     "extraReason": null,
     "mathResult": {
-      "bmr": 0,
-      "tdee": 0,
-      "target": 1500,
+      "bmr": 1699,
+      "tdee": 2633.4500000000003,
+      "target": 2633,
       "macros": {
-        "g": 130,
-        "p": 90,
-        "l": 69,
-        "proteinPerKg": 1.2,
+        "g": 370,
+        "p": 120,
+        "l": 75,
+        "proteinPerKg": 1.6,
         "fatPerKg": 1,
-        "carbsPerKg": 1.7,
+        "carbsPerKg": 4.9,
         "cyclePhase": null
       },
-      "bmi": null,
+      "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+    "htmlLen": 2701,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Maintien / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2633 / MAINTIEN / ✓ Calculs validés par NutritionMaster —"
   }
 ]
