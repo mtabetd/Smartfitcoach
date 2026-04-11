@@ -23,7 +23,9 @@ const PROFILE_BULK = {
   whey: true, wantsDessert: false,
   sportType: 'musculation', sportLevel: 'intermediate',
   trainingDaysSelected: [0,1,3,4],
-  appMode: 'both', firstName: 'Alex'
+  appMode: 'both', firstName: 'Alex',
+  sleep: 7, birthYear: 1996, birthMonth: 6, birthDay: 15,
+  weightUnit: 'kg', heightUnit: 'cm', lang: 'fr'
 };
 
 async function shot(page, filePath, opts = {}) {
@@ -33,16 +35,79 @@ async function shot(page, filePath, opts = {}) {
   console.log('SHOT:', filePath);
 }
 
-async function grantGateAccess(page) {
+async function setupPage(browser) {
+  const context = await browser.newContext({ viewport: VIEWPORT });
+  const page = await context.newPage();
+
+  // Intercept console errors for debugging
+  page.on('console', msg => {
+    if (msg.type() === 'error') console.log('  [PAGE ERROR]', msg.text().substring(0, 100));
+  });
+
+  // Navigate and bypass gate + auth
+  await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+
+  // 1) Set gate bypass in sessionStorage
   await page.evaluate(() => {
     sessionStorage.setItem('mtd_gate_access', '1gs8uk7');
   });
-}
 
-async function waitForApp(page) {
+  // 2) Mock AUTH before reload so it's ready when gate.js runs
+  await page.addInitScript(() => {
+    // Fake user session
+    var _fakeUser = { id: 'qa-test-user', name: 'Alex', email: 'alex@test.com', nom: '', phone: '' };
+
+    // Override AUTH after it loads (use polling)
+    function mockAuth() {
+      if (window.AUTH) {
+        window.AUTH.isLoggedIn = function() { return true; };
+        window.AUTH.getUser = function() { return _fakeUser; };
+        window.AUTH.ready = function() { return Promise.resolve(); };
+        window.AUTH.signOut = function() { return Promise.resolve(); };
+        console.log('[QA] AUTH mocked');
+        return true;
+      }
+      return false;
+    }
+
+    // Also mock SupaSync to avoid cloud calls
+    function mockSupaSync() {
+      if (window.SupaSync) {
+        window.SupaSync.saveProfile = function() { return Promise.resolve(); };
+        window.SupaSync.syncOnLogin = function() { return Promise.resolve(); };
+        window.SupaSync.startAutoSync = function() {};
+        window.SupaSync.loadProfile = function() { return Promise.resolve(null); };
+        console.log('[QA] SupaSync mocked');
+        return true;
+      }
+      return false;
+    }
+
+    // Poll until objects are available
+    var _authMocked = false;
+    var _syncMocked = false;
+    var _pollInterval = setInterval(function() {
+      if (!_authMocked) _authMocked = mockAuth();
+      if (!_syncMocked) _syncMocked = mockSupaSync();
+      if (_authMocked && _syncMocked) clearInterval(_pollInterval);
+    }, 50);
+
+    // Also set sessionStorage gate immediately
+    try { sessionStorage.setItem('mtd_gate_access', '1gs8uk7'); } catch(e) {}
+  });
+
+  await page.reload({ waitUntil: 'networkidle' });
+
+  // Wait for app to be ready
   await page.waitForFunction(() => {
-    return typeof window.render === 'function' && typeof window.S === 'object';
-  }, { timeout: 10000 });
+    return typeof window.render === 'function' &&
+           typeof window.S === 'object' &&
+           typeof window.AUTH === 'object' &&
+           window.AUTH.isLoggedIn();
+  }, { timeout: 15000 });
+
+  console.log('  App ready with auth mocked');
+  return { context, page };
 }
 
 async function setState(page, stateObj) {
@@ -53,158 +118,130 @@ async function setState(page, stateObj) {
   await page.waitForTimeout(600);
 }
 
+// Helper: find best matching element and get its bounding box for cropping
+async function findCard(page, selectors) {
+  for (const sel of selectors) {
+    try {
+      const el = await page.$(sel);
+      if (el) {
+        const bb = await el.boundingBox();
+        if (bb) return bb;
+      }
+    } catch(e) {}
+  }
+  return null;
+}
+
 // ─── FLOW 1: Onboarding Nutrition nStep 1→12 ───────────────────────────────
 async function flow1_nutrition(browser) {
   console.log('\n=== FLOW 1: Onboarding Nutrition ===');
-  const context = await browser.newContext({ viewport: VIEWPORT });
-  const page = await context.newPage();
+  const { context, page } = await setupPage(browser);
   const DIR = '/home/user/Smartfitcoach/visual-screenshots/flows/nutrition';
 
   try {
-    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
-    await grantGateAccess(page);
-    await page.reload({ waitUntil: 'networkidle' });
-    await waitForApp(page);
+    const base = { appMode: 'nutrition', view: 'nutrition', firstName: 'Alex' };
 
-    // Set appMode + nStep = 1
-    await setState(page, { appMode: 'nutrition', view: 'nutrition', nStep: 1, firstName: 'Alex', sex: null, goal: null });
+    // nStep=1: Prénom + Sexe
+    await setState(page, { ...base, nStep: 1, sex: null, goal: null, weight: null, height: null });
     await shot(page, `${DIR}/step1-objectif.png`);
 
-    // nStep=2 (Prénom+Sexe)
-    await setState(page, { nStep: 2, firstName: 'Alex', sex: 'homme' });
+    // nStep=2: Date de naissance / cycle
+    await setState(page, { ...base, nStep: 2, sex: 'homme' });
     await shot(page, `${DIR}/step2-sexe.png`);
 
-    // nStep=3 (Date naissance / âge)
-    await setState(page, { nStep: 3, sex: 'homme', birthYear: 1996, birthMonth: 6, birthDay: 15 });
+    // nStep=3: Poids + Taille
+    await setState(page, { ...base, nStep: 3, sex: 'homme', birthYear: 1996, birthMonth: 6, birthDay: 15 });
     await shot(page, `${DIR}/step3-age.png`);
 
-    // nStep=4 (Poids + Taille)
-    await setState(page, { nStep: 4, weight: 80, height: 178, goal: 0, targetWeight: 85 });
+    // nStep=4: Objectif + Poids cible
+    await setState(page, { ...base, nStep: 4, weight: 80, height: 178 });
     await shot(page, `${DIR}/step4-poids.png`);
 
-    // nStep=5 (Activité + Sommeil)
-    await setState(page, { nStep: 5, activity: 3, sleep: 7 });
+    // nStep=5: Activité + Sommeil
+    await setState(page, { ...base, nStep: 5, goal: 0, targetWeight: 85 });
     await shot(page, `${DIR}/step5-activite.png`);
 
-    // nStep=6 (Body Scan)
-    await setState(page, { nStep: 6 });
+    // nStep=6: Body Scan
+    await setState(page, { ...base, nStep: 6, activity: 3, sleep: 7 });
     await shot(page, `${DIR}/step6-regime.png`);
 
-    // nStep=7 (Provisional Preview)
-    await setState(page, { nStep: 7 });
+    // nStep=7: Provisional Preview
+    await setState(page, { ...base, nStep: 7 });
     await shot(page, `${DIR}/step7-allergies.png`);
 
-    // nStep=10 (Préférences régime / allergies)
-    await setState(page, { nStep: 10, regime: 0, allergies: [], mealsPerDay: 3 });
+    // nStep=10: Préférences régime/allergies
+    await setState(page, { ...base, nStep: 10, regime: 0, allergies: [], mealsPerDay: 3 });
     await shot(page, `${DIR}/step7b-preferences.png`);
 
-    // nStep=11 (Résultats macros)
-    // Need to pre-compute nutrition state
+    // nStep=11: Résultats macros
     await page.evaluate((profile) => {
       Object.assign(window.S, profile, {
-        nStep: 11,
-        view: 'nutrition',
-        appMode: 'nutrition',
-        sex: 'homme',
-        age: 28,
-        weight: 80,
-        height: 178,
-        goal: 0,
-        activity: 3,
-        sleep: 7,
-        regime: 0,
-        allergies: [],
-        mealsPerDay: 3,
-        birthYear: 1996,
-        birthMonth: 6,
-        birthDay: 15
+        nStep: 11, view: 'nutrition', appMode: 'nutrition',
+        sex: 'homme', age: 28, weight: 80, height: 178,
+        goal: 0, activity: 3, sleep: 7, regime: 0, allergies: [],
+        mealsPerDay: 3, birthYear: 1996, birthMonth: 6, birthDay: 15
       });
-      // Try to compute nutrition state
       if (window.computeNutritionState) {
-        try { window.computeNutritionState(); } catch(e) { console.error('computeNutritionState err:', e); }
+        try { window.computeNutritionState(); } catch(e) { console.warn('computeNutritionState:', e.message); }
       }
       window.render();
     }, PROFILE_BULK);
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1200);
     await shot(page, `${DIR}/step8-macros.png`);
 
-    // nStep=12 (Plan semaine)
+    // nStep=12: Planning semaine
     await page.evaluate((profile) => {
       Object.assign(window.S, profile, {
-        nStep: 12,
-        view: 'nutrition',
-        appMode: 'nutrition',
+        nStep: 12, view: 'nutrition', appMode: 'both', weekPlan: null
       });
-      // Try to generate week plan if not present
+      if (window.computeNutritionState) {
+        try { window.computeNutritionState(); } catch(e) {}
+      }
       if (!window.S.weekPlan && window.generateWeek) {
-        try { window.generateWeek(); } catch(e) { console.error('generateWeek err:', e); }
+        try { window.generateWeek(); } catch(e) { console.warn('generateWeek:', e.message); }
       }
       window.render();
     }, PROFILE_BULK);
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(2000);
     await shot(page, `${DIR}/step9-plan.png`);
 
+    console.log('  Flow 1 OK');
   } catch(e) {
     console.error('FLOW 1 ERROR:', e.message);
-    await shot(page, `${DIR}/error-flow1.png`);
+    try { await shot(page, `${DIR}/error-flow1.png`); } catch(_) {}
   }
 
   await context.close();
-  console.log('Flow 1 done.');
 }
 
 // ─── FLOW 2: Dashboard avec données réelles ────────────────────────────────
 async function flow2_dashboard(browser) {
   console.log('\n=== FLOW 2: Dashboard ===');
-  const context = await browser.newContext({ viewport: VIEWPORT });
-  const page = await context.newPage();
+  const { context, page } = await setupPage(browser);
   const DIR = '/home/user/Smartfitcoach/visual-screenshots/flows/dashboard';
 
   try {
-    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
-    await grantGateAccess(page);
-    await page.reload({ waitUntil: 'networkidle' });
-    await waitForApp(page);
-
-    // Inject full profile + weekPlan + sport program
+    // Inject full profile + generate all data
     await page.evaluate((profile) => {
       Object.assign(window.S, profile, {
-        view: 'today',
-        nStep: 12,
-        sStep: 4, // muscu program step
-        sex: 'homme',
-        age: 28,
-        weight: 80,
-        height: 178,
-        goal: 0,
-        activity: 3,
-        sleep: 7,
-        regime: 0,
-        allergies: [],
-        mealsPerDay: 3,
-        birthYear: 1996,
-        birthMonth: 6,
-        birthDay: 15,
-        kcal: 3000,
+        view: 'today', nStep: 12, sStep: 4,
+        sex: 'homme', age: 28, weight: 80, height: 178,
+        goal: 0, activity: 3, sleep: 7, regime: 0, allergies: [],
+        mealsPerDay: 3, birthYear: 1996, birthMonth: 6, birthDay: 15,
+        firstName: 'Alex', kcal: 3000,
         macros: { proteins: 200, carbs: 350, fats: 83 },
-        weekPlan: null,
-        sportProgram: null,
-        selectedDay: 0,
-        whey: true,
-        firstName: 'Alex'
+        weekPlan: null, sportProgram: null, selectedDay: 0, whey: true,
+        sportType: 'musculation', sportLevel: 'intermediate',
+        trainingDaysSelected: [0,1,3,4], appMode: 'both'
       });
-
-      // Try to compute nutrition
       if (window.computeNutritionState) {
         try { window.computeNutritionState(); } catch(e) {}
       }
-      // Try to generate week plan
       if (!window.S.weekPlan && window.generateWeek) {
-        try { window.generateWeek(); } catch(e) {}
+        try { window.generateWeek(); } catch(e) { console.warn('generateWeek:', e.message); }
       }
-      // Try to generate sport program
       if (!window.S.sportProgram && window.generateMusculationProgram) {
-        try { window.generateMusculationProgram(); } catch(e) {}
+        try { window.generateMusculationProgram(); } catch(e) { console.warn('genMuscu:', e.message); }
       }
       window.render();
     }, PROFILE_BULK);
@@ -212,67 +249,65 @@ async function flow2_dashboard(browser) {
     await page.waitForTimeout(2000);
     await shot(page, `${DIR}/dashboard-full.png`, { fullPage: true });
 
-    // Crop: card macros
-    const cardMacros = await page.$('[class*="macro"], [id*="macro"], .macros-card, .card-macros').catch(() => null)
-      || await page.$('[class*="card"]').catch(() => null);
-    if (cardMacros) {
-      const bb = await cardMacros.boundingBox();
-      if (bb) {
-        await shot(page, `${DIR}/card-macros.png`, { clip: { x: bb.x, y: bb.y, width: bb.width, height: Math.min(bb.height, 300) } });
-      }
+    // Re-render for crops (scroll back to top)
+    await page.evaluate(() => { window.scrollTo(0, 0); window.render(); });
+    await page.waitForTimeout(600);
+
+    // Crop: card macros — look for first card area
+    let bb = await findCard(page, [
+      '[class*="macro"]', '[id*="macro"]',
+      '.today-macros', '[class*="today"]',
+      '.card', '[class*="card"]'
+    ]);
+    if (bb) {
+      await shot(page, `${DIR}/card-macros.png`, { clip: { x: Math.max(0, bb.x), y: Math.max(0, bb.y), width: Math.min(390, bb.width), height: Math.min(300, bb.height) } });
     } else {
-      // Full screenshot cropped to top portion
-      await shot(page, `${DIR}/card-macros.png`, { clip: { x: 0, y: 80, width: 390, height: 280 } });
+      await shot(page, `${DIR}/card-macros.png`, { clip: { x: 0, y: 60, width: 390, height: 280 } });
     }
 
     // Crop: card sport
-    const cardSport = await page.$('[class*="sport"], [id*="sport"]').catch(() => null);
-    if (cardSport) {
-      const bb = await cardSport.boundingBox();
-      if (bb) {
-        await shot(page, `${DIR}/card-sport.png`, { clip: { x: bb.x, y: bb.y, width: bb.width, height: Math.min(bb.height, 300) } });
-      }
+    bb = await findCard(page, [
+      '[class*="sport-card"]', '[class*="session-card"]',
+      '[class*="today-sport"]', '[id*="sport"]'
+    ]);
+    if (bb) {
+      await shot(page, `${DIR}/card-sport.png`, { clip: { x: Math.max(0, bb.x), y: Math.max(0, bb.y), width: Math.min(390, bb.width), height: Math.min(300, bb.height) } });
     } else {
-      await shot(page, `${DIR}/card-sport.png`, { clip: { x: 0, y: 360, width: 390, height: 280 } });
+      await shot(page, `${DIR}/card-sport.png`, { clip: { x: 0, y: 350, width: 390, height: 280 } });
     }
 
     // Crop: card repas
-    const cardRepas = await page.$('[class*="repas"], [class*="meal"], [id*="repas"]').catch(() => null);
-    if (cardRepas) {
-      const bb = await cardRepas.boundingBox();
-      if (bb) {
-        await shot(page, `${DIR}/card-repas.png`, { clip: { x: bb.x, y: bb.y, width: bb.width, height: Math.min(bb.height, 300) } });
-      }
+    bb = await findCard(page, [
+      '[class*="repas"]', '[class*="meal"]', '[class*="recipe"]',
+      '[class*="prochaine"]', '[id*="repas"]'
+    ]);
+    if (bb) {
+      await shot(page, `${DIR}/card-repas.png`, { clip: { x: Math.max(0, bb.x), y: Math.max(0, bb.y), width: Math.min(390, bb.width), height: Math.min(300, bb.height) } });
     } else {
-      await shot(page, `${DIR}/card-repas.png`, { clip: { x: 0, y: 640, width: 390, height: 280 } });
+      await shot(page, `${DIR}/card-repas.png`, { clip: { x: 0, y: 630, width: 390, height: 280 } });
     }
 
+    console.log('  Flow 2 OK');
   } catch(e) {
     console.error('FLOW 2 ERROR:', e.message);
-    await shot(page, `${DIR}/error-flow2.png`).catch(() => {});
+    try { await shot(page, `${DIR}/error-flow2.png`); } catch(_) {}
   }
 
   await context.close();
-  console.log('Flow 2 done.');
 }
 
 // ─── FLOW 3: Programme musculation ────────────────────────────────────────
 async function flow3_sport(browser) {
   console.log('\n=== FLOW 3: Programme Sport ===');
-  const context = await browser.newContext({ viewport: VIEWPORT });
-  const page = await context.newPage();
+  const { context, page } = await setupPage(browser);
   const DIR = '/home/user/Smartfitcoach/visual-screenshots/flows/sport';
 
   try {
-    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
-    await grantGateAccess(page);
-    await page.reload({ waitUntil: 'networkidle' });
-    await waitForApp(page);
-
-    // sStep=0: Sport type selection (objectif)
+    // sStep=0: Sport type selection
     await setState(page, {
       appMode: 'sport', view: 'sport',
-      sStep: 0, sportType: null, sportLevel: null, sportProgram: null, weekPlan: null
+      sStep: 0, sportType: null, sportLevel: null, sportProgram: null,
+      weekPlan: null, nStep: 0
     });
     await shot(page, `${DIR}/sport-select-level.png`);
 
@@ -288,39 +323,46 @@ async function flow3_sport(browser) {
     await setState(page, { sStep: 3, sportType: 'musculation', sportLevel: 'intermediate', sportGoals: ['bulk'] });
     await shot(page, `${DIR}/sport-muscu-zones.png`);
 
-    // sStep=4: muscu program (overview) — need a generated program
+    // sStep=4: muscu program overview — generate program first
     await page.evaluate((profile) => {
       Object.assign(window.S, profile, {
-        view: 'sport',
-        appMode: 'sport',
-        sStep: 4,
-        sportType: 'musculation',
-        sportLevel: 'intermediate',
+        view: 'sport', appMode: 'both', sStep: 4,
+        sportType: 'musculation', sportLevel: 'intermediate',
         sportGoals: ['bulk'],
         sportFocus: { chest: true, back: true, legs: true, shoulders: true },
         trainingDaysSelected: [0, 1, 3, 4],
         selectedSportDay: 0,
-        sportProgram: null
+        sportProgram: null, weekPlan: null
       });
       if (window.generateMusculationProgram) {
-        try { window.generateMusculationProgram(); } catch(e) { console.error('genMuscu err', e); }
+        try { window.generateMusculationProgram(); } catch(e) { console.warn('genMuscu:', e.message); }
       }
       window.render();
     }, PROFILE_BULK);
     await page.waitForTimeout(1500);
     await shot(page, `${DIR}/sport-program-overview.png`);
 
-    // sStep=4 day detail — click on first day to expand
-    const firstDayBtn = await page.$('[onclick*="selectedSportDay"], [class*="day-card"], [class*="session"]').catch(() => null);
-    if (firstDayBtn) {
-      await firstDayBtn.click();
-      await page.waitForTimeout(800);
-    } else {
-      // Try clicking by coordinate
-      await page.click('body', { position: { x: 195, y: 300 } }).catch(() => {});
-      await page.waitForTimeout(600);
-    }
+    // Session detail — click on first session card
+    const clicked = await page.evaluate(() => {
+      // Try to set selectedSportDay and re-render
+      var dayCards = document.querySelectorAll('[onclick*="selectedSportDay"], .session-card, .day-card, [class*="session"]');
+      if (dayCards.length > 0) {
+        dayCards[0].click();
+        return 'clicked:' + dayCards[0].className;
+      }
+      return 'no-card-found';
+    });
+    console.log('  Session card click:', clicked);
+    await page.waitForTimeout(800);
     await shot(page, `${DIR}/sport-session-detail.png`);
+
+    // Try to expand detail if not already shown
+    const expanded = await page.evaluate(() => {
+      // Look for expandable sections
+      var details = document.querySelectorAll('[class*="exercise"], [class*="exercice"], [class*="seance"]');
+      return details.length;
+    });
+    console.log('  Exercise elements found:', expanded);
 
     // sStep=16: Charges questionnaire
     await setState(page, { sStep: 16, sportType: 'musculation', sportLevel: 'intermediate' });
@@ -330,139 +372,114 @@ async function flow3_sport(browser) {
     await setState(page, { sStep: 15, sportType: 'musculation' });
     await shot(page, `${DIR}/sport-dedicated-programs.png`);
 
-    // Zoom on exercise card — go back to program
+    // Go back to program for exercise card zoom
     await page.evaluate((profile) => {
       Object.assign(window.S, profile, {
-        view: 'sport',
-        appMode: 'sport',
-        sStep: 4,
-        sportType: 'musculation',
-        sportLevel: 'intermediate',
-        selectedSportDay: 0,
+        view: 'sport', appMode: 'both', sStep: 4,
+        sportType: 'musculation', sportLevel: 'intermediate',
+        selectedSportDay: 0
       });
       window.render();
     }, PROFILE_BULK);
     await page.waitForTimeout(1000);
 
-    // Try to find an exercise card element
-    const exerciseCard = await page.$('[class*="exercise"], [class*="exercice"], [class*="exo"]').catch(() => null);
-    if (exerciseCard) {
-      const bb = await exerciseCard.boundingBox();
-      if (bb) {
-        await shot(page, `${DIR}/sport-exercise-card.png`, { clip: { x: Math.max(0, bb.x - 5), y: Math.max(0, bb.y - 5), width: Math.min(390, bb.width + 10), height: Math.min(844, bb.height + 10) } });
-      } else {
-        await shot(page, `${DIR}/sport-exercise-card.png`, { clip: { x: 0, y: 200, width: 390, height: 250 } });
-      }
+    // Find and crop exercise card
+    let bb = await findCard(page, [
+      '[class*="exercise-card"]', '[class*="exercice-card"]',
+      '[class*="exercise"]', '[class*="exercice"]',
+      '[class*="exo"]', '[class*="set-row"]'
+    ]);
+    if (bb) {
+      await shot(page, `${DIR}/sport-exercise-card.png`, {
+        clip: { x: Math.max(0, bb.x - 5), y: Math.max(0, bb.y - 5),
+                width: Math.min(390, bb.width + 10), height: Math.min(300, bb.height + 10) }
+      });
     } else {
       await shot(page, `${DIR}/sport-exercise-card.png`, { clip: { x: 0, y: 200, width: 390, height: 250 } });
     }
 
+    console.log('  Flow 3 OK');
   } catch(e) {
     console.error('FLOW 3 ERROR:', e.message);
-    await shot(page, `${DIR}/error-flow3.png`).catch(() => {});
+    try { await shot(page, `${DIR}/error-flow3.png`); } catch(_) {}
   }
 
   await context.close();
-  console.log('Flow 3 done.');
 }
 
 // ─── FLOW 4: Plan nutritionnel semaine ────────────────────────────────────
 async function flow4_nutrition_plan(browser) {
   console.log('\n=== FLOW 4: Plan Nutritionnel Semaine ===');
-  const context = await browser.newContext({ viewport: VIEWPORT });
-  const page = await context.newPage();
+  const { context, page } = await setupPage(browser);
   const DIR = '/home/user/Smartfitcoach/visual-screenshots/flows/nutrition-plan';
 
   try {
-    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
-    await grantGateAccess(page);
-    await page.reload({ waitUntil: 'networkidle' });
-    await waitForApp(page);
-
     // Inject full profile + generate week plan
     await page.evaluate((profile) => {
       Object.assign(window.S, profile, {
-        view: 'today',
-        nStep: 12,
-        sex: 'homme',
-        age: 28,
-        weight: 80,
-        height: 178,
-        goal: 0,
-        activity: 3,
-        sleep: 7,
-        regime: 0,
-        allergies: [],
-        mealsPerDay: 3,
-        birthYear: 1996,
-        firstName: 'Alex',
-        selectedDay: 0,
-        kcal: 3000,
-        macros: { proteins: 200, carbs: 350, fats: 83 },
+        view: 'nutrition', nStep: 12, appMode: 'both',
+        sex: 'homme', age: 28, weight: 80, height: 178,
+        goal: 0, activity: 3, sleep: 7, regime: 0, allergies: [],
+        mealsPerDay: 3, birthYear: 1996, birthMonth: 6, birthDay: 15,
+        firstName: 'Alex', selectedDay: 0,
+        kcal: 3000, macros: { proteins: 200, carbs: 350, fats: 83 },
         weekPlan: null
       });
       if (window.computeNutritionState) {
         try { window.computeNutritionState(); } catch(e) {}
       }
       if (!window.S.weekPlan && window.generateWeek) {
-        try { window.generateWeek(); } catch(e) { console.error('genWeek err', e); }
+        try { window.generateWeek(); } catch(e) { console.warn('generateWeek:', e.message); }
       }
       window.render();
     }, PROFILE_BULK);
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(2500);
 
-    // Navigate to nutrition view / plan
-    await page.evaluate(() => {
-      window.S.view = 'nutrition';
-      window.S.nStep = 12;
-      window.S.selectedDay = 0;
-      window.render();
-    });
+    // selectedDay=0 (Lundi)
+    await page.evaluate(() => { window.S.selectedDay = 0; window.render(); });
     await page.waitForTimeout(800);
     await shot(page, `${DIR}/plan-lundi.png`);
 
     // selectedDay=2 (Mercredi)
-    await page.evaluate(() => {
-      window.S.selectedDay = 2;
-      window.render();
-    });
+    await page.evaluate(() => { window.S.selectedDay = 2; window.render(); });
     await page.waitForTimeout(800);
     await shot(page, `${DIR}/plan-mercredi.png`);
 
     // selectedDay=6 (Dimanche)
-    await page.evaluate(() => {
-      window.S.selectedDay = 6;
-      window.render();
-    });
+    await page.evaluate(() => { window.S.selectedDay = 6; window.render(); });
     await page.waitForTimeout(800);
     await shot(page, `${DIR}/plan-dimanche.png`);
 
-    // Open a meal detail modal — click on first meal card
-    await page.evaluate(() => {
-      window.S.selectedDay = 0;
-      window.render();
-    });
+    // Meal detail modal — click on first recipe
+    await page.evaluate(() => { window.S.selectedDay = 0; window.render(); });
     await page.waitForTimeout(800);
 
-    // Try to click a recipe/meal card to open detail modal
-    const mealCard = await page.$('[onclick*="recipe"], [onclick*="recette"], [onclick*="meal"], [onclick*="repas"], [class*="recipe-card"], [class*="meal-card"], [class*="repas"]').catch(() => null);
-    if (mealCard) {
-      await mealCard.click();
-      await page.waitForTimeout(1000);
-    } else {
-      // Try clicking by position in the middle of the content area
-      await page.click('body', { position: { x: 195, y: 400 } }).catch(() => {});
-      await page.waitForTimeout(600);
-    }
+    const mealClicked = await page.evaluate(() => {
+      var targets = document.querySelectorAll(
+        '[onclick*="recipe"], [onclick*="recette"], [onclick*="modal"], ' +
+        '[onclick*="detail"], [class*="recipe-card"], [class*="meal-card"], ' +
+        '[class*="repas-card"], .recipe, .meal-item, [class*="meal-name"]'
+      );
+      if (targets.length > 0) {
+        targets[0].click();
+        return 'clicked: ' + targets.length + ' targets, first: ' + targets[0].className;
+      }
+      // Try clicking first section that has meal content
+      var any = document.querySelector('[class*="meal"], [class*="repas"]');
+      if (any) { any.click(); return 'clicked-any: ' + any.className; }
+      return 'nothing-to-click';
+    });
+    console.log('  Meal click result:', mealClicked);
+    await page.waitForTimeout(1200);
     await shot(page, `${DIR}/plan-meal-detail.png`);
 
+    console.log('  Flow 4 OK');
   } catch(e) {
     console.error('FLOW 4 ERROR:', e.message);
-    await shot(page, `${DIR}/error-flow4.png`).catch(() => {});
+    try { await shot(page, `${DIR}/error-flow4.png`); } catch(_) {}
   }
 
   await context.close();
-  console.log('Flow 4 done.');
 }
 
 // ─── MAIN ──────────────────────────────────────────────────────────────────
