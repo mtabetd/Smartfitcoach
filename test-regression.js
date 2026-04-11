@@ -128,8 +128,12 @@ async function runTests() {
   log('\n=== TEST 1 — Dashboard / today-dashboard ===');
   try {
     const profile = {
+      // Spec keys
       step: 10, sex: 'femme', age: 28, poids: 62, taille: 168,
       streak: 5, prenom: 'Sophie',
+      // Required to bypass welcome screen and reach today-dashboard
+      // app-main.js L1145: shows welcome if !appMode && !nStep && !sStep && !welcomeShown
+      appMode: 'both', nStep: 12, welcomeShown: true,
       _view: 'today'
     };
     const { page, context, consoleErrors } = await createPageWithProfile(profile);
