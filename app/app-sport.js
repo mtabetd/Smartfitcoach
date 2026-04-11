@@ -1890,8 +1890,8 @@ function renderCrossfitLevel(p) {
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
  var cfDaysWrap = h('div', {'class': 'num-input-wrap'});
  cfDaysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.sportDays = v; window.render(); } },
- onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 3) { e.target.value = S.sportDays = 3; window.render(); } else if (v > 6) { e.target.value = S.sportDays = 6; window.render(); } }
+ oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.sportDays = v; if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 3); } window.render(); } },
+ onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 3) { e.target.value = S.sportDays = 3; if (S.sportMixSecondary && S.sportMixSecondary.days >= 3) { S.sportMixSecondary.days = 1; } window.render(); } else if (v > 6) { e.target.value = S.sportDays = 6; window.render(); } }
  }));
  cfDaysWrap.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(cfDaysWrap);
@@ -2949,7 +2949,7 @@ function renderCrossfitProgram(p) {
 
  // ─── SPORT MIX: ajuster les jours CF si un 2ème sport est configuré ───
  var _mixSec = (S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.days >= 1) ? S.sportMixSecondary : null;
- var _mixSecDays = _mixSec ? Math.max(1, Math.min(S.sportMixSecondary.days, (S.sportDays || 4) - 1)) : 0;
+ var _mixSecDays = _mixSec ? Math.max(1, Math.min(_mixSec.days, (S.sportDays || 4) - 1)) : 0;
  var daysPerWeek = Math.max(3, (S.sportDays || 4) - _mixSecDays); // CF days (min 3)
  var template = CF_DAY_TEMPLATES[daysPerWeek] || CF_DAY_TEMPLATES[4];
  var weekProgram = generateCrossfitWeek(S.crossfitWeek, daysPerWeek);
@@ -3744,7 +3744,7 @@ function renderMusculationLevel(p) {
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); } },
- onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) e.target.value = S.sportDays = 2; else if (v > 6) e.target.value = S.sportDays = 6; }
+ onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { v = 2; e.target.value = S.sportDays = 2; } else if (v > 6) { v = 6; e.target.value = S.sportDays = 6; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); }
  }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
