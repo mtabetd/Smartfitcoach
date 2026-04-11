@@ -176,9 +176,10 @@
 
     // ── Header ──
     var btnBack = window.h('button', {
-      style: 'background:none;border:none;cursor:pointer;color:#1a1a2e;' +
-             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;font-weight:600;' +
-             'padding:0;display:flex;align-items:center;gap:6px;'
+      style: 'background:none;border:none;cursor:pointer;color:var(--grey,#6B6B65);' +
+             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;' +
+             'letter-spacing:3px;text-transform:uppercase;' +
+             'padding:10px 0;display:inline-flex;align-items:center;gap:8px;min-height:44px;'
     }, [
       window.h('span', {}, '\u2190'),
       window.h('span', {}, 'Retour')
@@ -319,18 +320,15 @@
 
     // ── Section nutrition intelligente ──
     var nutritionInfo = window.h('div', {
-      style: 'background:#F8F9FA;border:1px solid #E0E0E0;border-radius:12px;padding:14px;' +
-             'margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;'
+      style: 'background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:14px;' +
+             'margin-bottom:16px;border-left:2px solid var(--black,#0A0A09);'
     }, [
-      window.h('span', { style: 'font-size:20px;flex-shrink:0;' }, '\uD83D\uDCCA'),
       window.h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#1a1a2e;line-height:1.6;'
-      }, [
-        window.h('strong', {}, 'Nutrition adaptee : '),
-        window.h('span', {
-          style: 'color:#6B6B65;'
-        }, 'les jours d\'entrainement, vos glucides sont automatiquement +20% pour optimiser les performances et la recuperation.')
-      ])
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;'
+      }, 'Nutrition adaptée'),
+      window.h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;'
+      }, 'Les jours d\'entraînement, vos glucides sont automatiquement +20% pour optimiser les performances et la récupération.')
     ]);
 
     // ── Bouton sauvegarder ──
