@@ -636,6 +636,7 @@ function renderSportChoice(p) {
       S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null;
       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
       S.trainingDaysSelected = [];
+      S.sportMixEnabled = false; S.sportMixSecondary = null;
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }
@@ -817,6 +818,7 @@ window.SPORT = {
        S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null;
        S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
        S.trainingDaysSelected = [];
+       S.sportMixEnabled = false; S.sportMixSecondary = null;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }
@@ -1193,7 +1195,7 @@ function renderPARQ(p) {
 
  // Header avec retour
  var hdr = h('div', {style: 'display:flex;align-items:center;gap:12px;margin-bottom:20px'});
- hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; S._parqAnswers = {}; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
+ hdr.appendChild(h('button', {'class': 'btn-back', style: 'margin:0', onclick: function(){ S.sStep = 0; S.sportType = null; S._parqAnswers = {}; S.sportMixEnabled = false; S.sportMixSecondary = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
  hdr.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;color:var(--grey)'}, 'Évaluation médicale'));
  p.appendChild(hdr);
 
@@ -1898,8 +1900,8 @@ function renderCrossfitLevel(p) {
  p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:20px'}, window.t('sport.days')));
  var cfDaysWrap = h('div', {'class': 'num-input-wrap'});
  cfDaysWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '3', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.sportDays = v; window.render(); } },
- onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 3) { e.target.value = S.sportDays = 3; window.render(); } else if (v > 6) { e.target.value = S.sportDays = 6; window.render(); } }
+ oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 3 && v <= 6) { S.sportDays = v; if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 3); } window.render(); } },
+ onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 3) { e.target.value = S.sportDays = 3; if (S.sportMixSecondary && S.sportMixSecondary.days >= 3) { S.sportMixSecondary.days = 1; } window.render(); } else if (v > 6) { e.target.value = S.sportDays = 6; window.render(); } }
  }));
  cfDaysWrap.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(cfDaysWrap);
@@ -1955,6 +1957,9 @@ function renderCrossfitLevel(p) {
  p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-top:6px;font-style:italic'}, cfDayReco));
  }
  }
+
+ // ─── SPORT MIX (CF + autre sport) ───
+ renderSportMixSection(p, 'crossfit');
 
  // ─── 1RM QUESTIONNAIRE (OPTIONAL) ───
  // Load saved 1RM data
@@ -2013,7 +2018,7 @@ function renderCrossfitLevel(p) {
  if (!isNaN(v) && v > 0 && window.PERF_HISTORY) PERF_HISTORY.recordCF1RM(lift.key, v);
  // Re-render to update estimated weights
  clearTimeout(window._cf1rmTimer);
- window._cf1rmTimer = setTimeout(function(){ window.render(); }, 600);
+ window._cf1rmTimer = setTimeout(function(){ if (window.render) window.render(); }, 600);
  }
  });
  rightDiv.appendChild(inp);
@@ -2214,6 +2219,187 @@ var CF_DAY_TEMPLATES = {
  {label: 'Samedi', focus: 'WOD Comp\u00E9tition + Test', hasHaltero: false}
  ]
 };
+
+// ─── SPORT MIX: SÉANCES MUSCULATION COMPLÉMENTAIRES ───
+// Programmes pré-définis pour les jours musculation quand sportMixSecondary est configuré
+var MUSCU_MIX_SESSIONS = [
+ {
+  name: 'Full Body A',
+  focus: 'Compound — Bas du corps + Poussée + Tirage',
+  exercises: [
+   { name: 'Back Squat', sets: '4 × 8-10', rest: '90s', note: 'Descente 3s — profondeur complète — dos neutre' },
+   { name: 'Développé couché barre', sets: '4 × 8-10', rest: '90s', note: 'Prise légèrement + large que les épaules' },
+   { name: 'Tirage barre pronation', sets: '4 × 10-12', rest: '75s', note: 'Omoplate serrée — coudes vers le bas' },
+   { name: 'Développé militaire haltères', sets: '3 × 10-12', rest: '60s', note: 'Core gainé — pas d\'hyperextension lombaire' },
+   { name: 'Romanian Deadlift', sets: '3 × 10-12', rest: '60s', note: 'Barre proche du corps — hanches en arrière' },
+   { name: 'Gainage + Crunch bicycle', sets: '3 × 45s / 20 reps', rest: '45s', note: 'Core — respiration contrôlée' }
+  ]
+ },
+ {
+  name: 'Full Body B',
+  focus: 'Compound — Force + Traction + Fessiers',
+  exercises: [
+   { name: 'Soulevé de terre (Deadlift)', sets: '4 × 6-8', rest: '120s', note: 'Barre au-dessus mi-pied — dos neutre tout du long' },
+   { name: 'Tractions / Lat Pulldown', sets: '4 × 8-10', rest: '90s', note: 'Amplitude complète — omoplates rétractées en bas' },
+   { name: 'Développé incliné haltères', sets: '3 × 10-12', rest: '75s', note: 'Angle 30° — faisceaux supérieurs pectoraux' },
+   { name: 'Leg Press', sets: '3 × 12-15', rest: '75s', note: 'Pieds hauts = ischio-jambiers — pieds bas = quadriceps' },
+   { name: 'Hip Thrust fessiers', sets: '4 × 12-15', rest: '60s', note: 'Peak contraction 2s — fessiers sous tension maximale' },
+   { name: 'Curl biceps + Extension triceps', sets: '3 × 12-15', rest: '45s', note: 'Superset — finition bras complets' }
+  ]
+ },
+ {
+  name: 'Haut du Corps',
+  focus: 'Push + Pull — Pectoraux, Dorsaux, Épaules, Bras',
+  exercises: [
+   { name: 'Développé couché barre', sets: '4 × 6-8', rest: '90s', note: 'Charge lourde — force pectoraux' },
+   { name: 'Développé incliné haltères', sets: '3 × 10-12', rest: '75s', note: 'Angle 30-45° — faisceau claviculaire' },
+   { name: 'Tractions (ou Lat Pulldown)', sets: '4 × 8-10', rest: '90s', note: 'Pronation large — largeur dorsaux' },
+   { name: 'Tirage horizontal rowing', sets: '3 × 10-12', rest: '60s', note: 'Coudes près du corps — milieu dorsaux' },
+   { name: 'Développé militaire haltères', sets: '3 × 10-12', rest: '60s', note: 'Rotation externe — coiffe des rotateurs' },
+   { name: 'Curl biceps + Extension triceps', sets: '3 × 12-15', rest: '45s', note: 'Superset — finition bras complets' }
+  ]
+ },
+ {
+  name: 'Bas du Corps',
+  focus: 'Jambes + Fessiers + Core',
+  exercises: [
+   { name: 'Back Squat', sets: '4 × 6-8', rest: '120s', note: 'Profondeur complète — objectif force' },
+   { name: 'Romanian Deadlift', sets: '4 × 8-10', rest: '90s', note: 'Étirement ischio-jambiers — contrôle excentrique' },
+   { name: 'Leg Press', sets: '3 × 12-15', rest: '75s', note: 'Pieds hauts pour ischio-jambiers dominants' },
+   { name: 'Hip Thrust (barre ou machine)', sets: '4 × 10-12', rest: '75s', note: 'Peak contraction 2s — activation fessiers max' },
+   { name: 'Leg Curl allongé', sets: '3 × 12-15', rest: '60s', note: 'Excentrique lent — prévention tendinopathie' },
+   { name: 'Mollets debout + Planche latérale', sets: '3 × 15-20 / 45s', rest: '45s', note: 'Calf raises + gainage latéral alterné' }
+  ]
+ }
+];
+
+// ─── SESSION MUSCU MIX: sélection des sessions selon nombre de jours ───
+function getMuscuMixSessionsForDays(days) {
+ var d = Math.min(Math.max(days, 1), 4);
+ if (d === 1) return [MUSCU_MIX_SESSIONS[0]];
+ if (d === 2) return [MUSCU_MIX_SESSIONS[0], MUSCU_MIX_SESSIONS[1]];
+ if (d === 3) return [MUSCU_MIX_SESSIONS[2], MUSCU_MIX_SESSIONS[3], MUSCU_MIX_SESSIONS[0]];
+ return [MUSCU_MIX_SESSIONS[2], MUSCU_MIX_SESSIONS[3], MUSCU_MIX_SESSIONS[0], MUSCU_MIX_SESSIONS[1]];
+}
+
+// ─── SECTION SPORT MIX : injectée dans les étapes de configuration de chaque sport ───
+function renderSportMixSection(p, primarySport) {
+ var totalDays = S.sportDays || 3;
+ // Jours minimum requis pour chaque sport principal
+ var _minPrimaryDays = { crossfit: 3, musculation: 2, running: 2 };
+ var _primMinDays = _minPrimaryDays[primarySport] || 2;
+ // Maximum de jours secondaires = totalDays - minimum du sport principal
+ var _maxSecDays = totalDays - _primMinDays;
+ if (_maxSecDays < 1) return; // Pas assez de jours pour un 2ème sport
+
+ // Sports secondaires compatibles par sport principal
+ var compatMap = {
+  crossfit:    [{ type: 'musculation', label: 'Musculation', desc: 'Hypertrophie + force — séances de renforcement isolées' }],
+  musculation: [{ type: 'crossfit',    label: 'Cross Training', desc: 'Conditioning + WOD fonctionnel' }, { type: 'running', label: 'Running', desc: 'Cardio aérobic — endurance' }],
+  running:     [{ type: 'musculation', label: 'Musculation', desc: 'Renforcement — prévention des blessures course' }]
+ };
+ var secondaryOptions = compatMap[primarySport] || [];
+ if (!secondaryOptions.length) return;
+
+ // ─── HEADER SECTION ───
+ p.appendChild(h('div', { style: 'height:24px' }));
+ p.appendChild(h('div', { style: 'border-top:1px solid var(--border,#E8E6DF);margin:0 0 20px' }));
+ p.appendChild(h('div', { 'class': 'section-label' }, 'Combiner plusieurs sports\u00a0? (optionnel)'));
+ p.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:14px;line-height:1.6' }, 'Ajoutez un 2\u00e8me sport sur vos jours restants. La somme doit \u00e9galer votre total hebdomadaire.'));
+
+ // ─── OUI / NON ───
+ var _primDesc = primarySport === 'crossfit' ? 'Cross Training' : primarySport === 'musculation' ? 'Musculation' : 'Running';
+ var _mixOnOff = h('div', { 'class': 'level-list' });
+ [
+  { id: false, label: 'Non \u2014 programme unique', desc: 'Tous mes jours en ' + _primDesc },
+  { id: true,  label: 'Oui \u2014 combiner avec un 2\u00e8me sport', desc: 'R\u00e9partir mes jours entre 2 sports' }
+ ].forEach(function(opt) {
+  var _isSel = opt.id ? !!S.sportMixEnabled : !S.sportMixEnabled;
+  _mixOnOff.appendChild(h('div', { 'class': 'level-item' + (_isSel ? ' on' : ''), onclick: function() {
+   S.sportMixEnabled = !!opt.id;
+   if (!opt.id) S.sportMixSecondary = null;
+   window.render();
+  }}, [h('div', {}, [h('div', { 'class': 'level-name' }, opt.label), h('div', { 'class': 'level-desc' }, opt.desc)])]));
+ });
+ p.appendChild(_mixOnOff);
+
+ if (!S.sportMixEnabled) return;
+
+ // ─── CHOIX DU SPORT SECONDAIRE ───
+ p.appendChild(h('div', { 'class': 'section-label', style: 'margin-top:16px' }, '2\u00e8me sport'));
+ var _secList = h('div', { 'class': 'level-list' });
+ secondaryOptions.forEach(function(sopt) {
+  var _isSel = S.sportMixSecondary && S.sportMixSecondary.type === sopt.type;
+  _secList.appendChild(h('div', { 'class': 'level-item' + (_isSel ? ' on' : ''), onclick: function() {
+   if (!S.sportMixSecondary || S.sportMixSecondary.type !== sopt.type) {
+    var _defDays = Math.max(1, Math.min(2, _maxSecDays));
+    S.sportMixSecondary = { type: sopt.type, days: _defDays };
+   }
+   window.render();
+  }}, [h('div', {}, [h('div', { 'class': 'level-name' }, sopt.label), h('div', { 'class': 'level-desc' }, sopt.desc)])]));
+ });
+ p.appendChild(_secList);
+
+ if (!S.sportMixSecondary) return;
+
+ // Clamp secondary days si état corrompu / SportDays modifié après coup
+ if (!S.sportMixSecondary.days || S.sportMixSecondary.days < 1) S.sportMixSecondary.days = 1;
+ if (S.sportMixSecondary.days > _maxSecDays) S.sportMixSecondary.days = _maxSecDays;
+
+ var _secDays  = S.sportMixSecondary.days;
+ var _primDays = totalDays - _secDays;
+ var _primLabel = primarySport === 'crossfit' ? 'Cross Training' : primarySport === 'musculation' ? 'Musculation' : 'Running';
+ var _secLabel = { musculation: 'Musculation', crossfit: 'Cross Training', running: 'Running', yoga: 'Yoga' }[S.sportMixSecondary.type] || S.sportMixSecondary.type;
+
+ // ─── RÉPARTITION DES JOURS ───
+ p.appendChild(h('div', { 'class': 'section-label', style: 'margin-top:16px' }, 'R\u00e9partition des jours'));
+
+ var _allocBox = h('div', { style: 'border:1px solid var(--border,#E8E6DF);padding:16px 12px;background:var(--ivory2,#F5F5F0);margin-bottom:8px' });
+
+ // Affichage A + B = Total
+ var _allocRow = h('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:16px' });
+ var _primBox = h('div', { style: 'text-align:center;flex:1' });
+ _primBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:30px;line-height:1;color:var(--black,#0A0A09)' }, String(_primDays)));
+ _primBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px' }, _primLabel));
+ _allocRow.appendChild(_primBox);
+ _allocRow.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:20px;color:var(--grey);padding:0 4px' }, '+'));
+ var _secBox = h('div', { style: 'text-align:center;flex:1' });
+ _secBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:30px;line-height:1;color:var(--accent,#1A4A1A)' }, String(_secDays)));
+ _secBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent,#1A4A1A);margin-top:4px' }, _secLabel));
+ _allocRow.appendChild(_secBox);
+ _allocRow.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:20px;color:var(--grey);padding:0 4px' }, '='));
+ var _totBox = h('div', { style: 'text-align:center;flex:1' });
+ _totBox.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:30px;line-height:1;color:var(--black,#0A0A09)' }, String(totalDays)));
+ _totBox.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:4px' }, 'Total'));
+ _allocRow.appendChild(_totBox);
+ _allocBox.appendChild(_allocRow);
+
+ // Boutons +/- pour ajuster les jours secondaires
+ var _stepRow = h('div', { style: 'display:flex;align-items:center;justify-content:center;gap:16px' });
+ var _canMinus = _secDays > 1;
+ var _canPlus  = _secDays < _maxSecDays;
+ _stepRow.appendChild(h('button', {
+  type: 'button',
+  style: 'width:44px;height:44px;border:1.5px solid var(--border,#E8E6DF);background:transparent;font-family:Georgia,serif;font-size:22px;cursor:pointer;border-radius:2px;transition:opacity .15s;' + (_canMinus ? '' : 'opacity:0.3;pointer-events:none'),
+  onclick: function() { if (S.sportMixSecondary && S.sportMixSecondary.days > 1) { S.sportMixSecondary.days--; window.render(); } }
+ }, '\u2212'));
+ _stepRow.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;min-width:110px' }, 'Jours ' + _secLabel));
+ _stepRow.appendChild(h('button', {
+  type: 'button',
+  style: 'width:44px;height:44px;border:1.5px solid var(--border,#E8E6DF);background:transparent;font-family:Georgia,serif;font-size:22px;cursor:pointer;border-radius:2px;transition:opacity .15s;' + (_canPlus ? '' : 'opacity:0.3;pointer-events:none'),
+  onclick: function() { if (S.sportMixSecondary && S.sportMixSecondary.days < _maxSecDays) { S.sportMixSecondary.days++; window.render(); } }
+ }, '+'));
+ _allocBox.appendChild(_stepRow);
+ p.appendChild(_allocBox);
+
+ // Validation
+ var _vs = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;text-align:center;padding:8px 12px;border:1px solid;';
+ if (_primDays < 1) {
+  p.appendChild(h('div', { style: _vs + 'color:#5A1010;background:rgba(90,16,16,0.06);border-color:rgba(90,16,16,0.2)' }, '\u26a0 Il faut au moins 1 jour pour votre sport principal'));
+ } else {
+  p.appendChild(h('div', { style: _vs + 'color:var(--accent,#1A4A1A);background:rgba(26,74,26,0.05);border-color:rgba(26,74,26,0.15)' }, '\u2713\u00a0' + _primDays + ' j ' + _primLabel + '\u00a0+\u00a0' + _secDays + ' j ' + _secLabel + '\u00a0=\u00a0' + totalDays + ' jours / semaine'));
+ }
+}
 
 function generateCrossfitWeek(weekNumber, daysPerWeek) {
  var allWods = window.CF_WODS || [];
@@ -2773,7 +2959,10 @@ function renderCrossfitProgram(p) {
  if (saved1rm) { try { S.crossfit1RM = JSON.parse(saved1rm); } catch(e) {} }
  }
 
- var daysPerWeek = S.sportDays || 4;
+ // ─── SPORT MIX: ajuster les jours CF si un 2ème sport est configuré ───
+ var _mixSec = (S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.days >= 1) ? S.sportMixSecondary : null;
+ var _mixSecDays = _mixSec ? Math.max(1, Math.min(_mixSec.days, (S.sportDays || 4) - 1)) : 0;
+ var daysPerWeek = Math.max(3, (S.sportDays || 4) - _mixSecDays); // CF days (min 3)
  var template = CF_DAY_TEMPLATES[daysPerWeek] || CF_DAY_TEMPLATES[4];
  S.crossfitWeek = S.crossfitWeek || 1;
  var weekProgram = generateCrossfitWeek(S.crossfitWeek, daysPerWeek);
@@ -2790,13 +2979,15 @@ function renderCrossfitProgram(p) {
  return;
  }
 
- // Clamp selectedCrossfitDay — guard null/undefined and out-of-bounds
- if (S.selectedCrossfitDay === undefined || S.selectedCrossfitDay === null || S.selectedCrossfitDay < 0 || S.selectedCrossfitDay >= template.length) S.selectedCrossfitDay = 0;
+ // Clamp selectedCrossfitDay — guard for mix mode (total tabs = CF + muscu)
+ var _totalTabCount = template.length + _mixSecDays;
+ if (S.selectedCrossfitDay === null || S.selectedCrossfitDay === undefined || S.selectedCrossfitDay < 0 || S.selectedCrossfitDay >= _totalTabCount) S.selectedCrossfitDay = 0;
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
  var levelObj = (window.CROSSFIT_LEVELS || []).find(function(l) { return l.id === S.crossfitLevel; });
- p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' jours/semaine \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '') + ' \u2014 Inspir\u00E9 Games Athletes Athletes'));
+ var _subtitleMix = _mixSec ? (' + ' + _mixSecDays + ' j Musculation') : '';
+ p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' j CrossFit' + _subtitleMix + ' \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '')));
 
  appendWellnessBanner(p);
 
@@ -2999,17 +3190,55 @@ function renderCrossfitProgram(p) {
  p.appendChild(haltWeekNav);
  }
 
- // ─── DAY TABS ───
+ // ─── DAY TABS (CF + Muscu mix si configuré) ───
  var tabs = h('div', {'class': 'day-tabs'});
  template.forEach(function(day, i) {
- tabs.appendChild(h('button', {
- 'class': 'day-tab' + (S.selectedCrossfitDay === i ? ' active' : ''),
- onclick: function() { S.selectedCrossfitDay = i; window.render(); }
- }, day.label));
+  tabs.appendChild(h('button', {
+   'class': 'day-tab' + (S.selectedCrossfitDay === i ? ' active' : ''),
+   onclick: function() { S.selectedCrossfitDay = i; window.render(); }
+  }, day.label));
  });
+ // Onglets supplémentaires pour les jours de musculation (sport mix)
+ if (_mixSec && _mixSecDays > 0) {
+  for (var _mi = 0; _mi < _mixSecDays; _mi++) {
+   (function(_midx) {
+    var _tabIdx = template.length + _midx;
+    tabs.appendChild(h('button', {
+     'class': 'day-tab' + (S.selectedCrossfitDay === _tabIdx ? ' active' : ''),
+     style: 'color:var(--accent,#1A4A1A);' + (S.selectedCrossfitDay === _tabIdx ? 'border-color:var(--accent,#1A4A1A);' : ''),
+     onclick: function() { S.selectedCrossfitDay = _tabIdx; window.render(); }
+    }, 'Muscu ' + (_midx + 1)));
+   })(_mi);
+  }
+ }
  p.appendChild(tabs);
 
- // Current day data
+ // ─── CONTENU JOUR MUSCULATION (si onglet Muscu sélectionné) ───
+ if (_mixSec && S.selectedCrossfitDay >= template.length) {
+  var _mMixIdx = S.selectedCrossfitDay - template.length;
+  var _mMixSessions = getMuscuMixSessionsForDays(_mixSecDays);
+  var _mMixSession = _mMixSessions[Math.min(_mMixIdx, _mMixSessions.length - 1)];
+  if (_mMixSession) {
+   p.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;text-align:center;margin:16px 0 4px' }, 'Musculation \u2014 ' + _mMixSession.name));
+   p.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent,#1A4A1A);text-align:center;margin-bottom:20px' }, _mMixSession.focus));
+   var _mCard = h('div', { 'class': 'exercise-card', style: 'border-left:3px solid var(--accent,#1A4A1A)' });
+   _mCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent,#1A4A1A);margin-bottom:12px' }, 'S\u00c9ANCE MUSCULATION'));
+   _mMixSession.exercises.forEach(function(ex, _ei) {
+    var _exRow = h('div', { style: 'padding:10px 0;border-bottom:1px solid var(--border,#E8E6DF)' });
+    _exRow.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:3px' }, (_ei + 1) + '. ' + ex.name));
+    _exRow.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black);margin-bottom:2px' }, ex.sets + ' \u2014 Repos\u00a0: ' + ex.rest));
+    _exRow.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-style:italic' }, ex.note));
+    _mCard.appendChild(_exRow);
+   });
+   p.appendChild(_mCard);
+   // Bouton retour
+   p.appendChild(h('div', { style: 'height:16px' }));
+   p.appendChild(h('button', { 'class': 'btn-back', onclick: function() { S.sStep = 5; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration' }));
+  }
+  return; // Ne pas afficher le contenu CF pour ce jour
+ }
+
+ // Current day data (CF)
  var currentDay = weekProgram[S.selectedCrossfitDay];
  if (!currentDay) return;
  var wod = currentDay.wod;
@@ -3528,8 +3757,8 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; } },
- onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) e.target.value = S.sportDays = 2; else if (v > 6) e.target.value = S.sportDays = 6; }
+ oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); } },
+ onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { v = 2; e.target.value = S.sportDays = 2; } else if (v > 6) { v = 6; e.target.value = S.sportDays = 6; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); }
  }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
@@ -3664,6 +3893,9 @@ function renderMusculationLevel(p) {
  });
  p.appendChild(_hbWrap);
  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey,#6B6B65);margin-top:4px;'}, 'Aucune s\u00e9lection = programme muscu pur'));
+
+ // ─── SPORT MIX (Muscu + autre sport) ───
+ renderSportMixSection(p, 'musculation');
 
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.sportLevel !== null;
@@ -5725,7 +5957,7 @@ function renderMusculationProgram(p) {
 
  // ─── AI-suggested weight from strength profile (skip for bodyweight) ───
  if (eqType !== 'bodyweight') {
- var _setParts = ex.sets ? ex.sets.split('\u00d7') : [];
+ var _setParts = ex.sets ? String(ex.sets).split('\u00d7') : [];
  var suggestedReps = _setParts.length > 1 ? parseInt(_setParts[1]) : null;
  var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
  // Surcharge progressive : appliquer le multiplicateur si charge de base connue
@@ -6857,7 +7089,7 @@ function renderRunningConfig(p) {
  oninput: function(e){
  S.runningPace = e.target.value;
  clearTimeout(window._runPaceTimer);
- window._runPaceTimer = setTimeout(function(){ window.render(); }, 800);
+ window._runPaceTimer = setTimeout(function(){ if (window.render) window.render(); }, 800);
  }
  }));
  paceWrap.appendChild(h('span', {'class': 'num-unit'}, 'min/km'));
@@ -7118,6 +7350,7 @@ function renderHyroxConfig(p) {
  }
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
  if (ok) {
+ if (typeof window.generateHyroxProgram !== 'function') { console.error('[hyrox] generateHyroxProgram module not loaded'); return; }
  S.hyroxProgram = window.generateHyroxProgram(S.hyroxDays, S.hyroxLevel, S.hyroxGoal);
  S.hyroxWeek = 1;
  S.selectedHyroxDay = 0;
@@ -7339,13 +7572,13 @@ function renderPadelConfig(p) {
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.padelGoal && S.padelLevel;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; window.render(); }
+ if (ok) { if (typeof window.generatePadelProgram !== 'function') { console.error('[padel] generatePadelProgram module not loaded'); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; window.render(); }
  }}, 'Générer mon programme'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 function renderPadelProgram(p) {
- if (!S.padelProgram) { S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); }
+ if (!S.padelProgram) { if (typeof window.generatePadelProgram !== 'function') { p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Module Padel non disponible. Rechargez la page.')); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); }
  if (!S.padelProgram || !S.padelProgram.length) {
  p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 11; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
@@ -7461,13 +7694,13 @@ function renderGolfConfig(p) {
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.golfGoal && S.golfLevel;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; window.render(); }
+ if (ok) { if (typeof window.generateGolfProgram !== 'function') { console.error('[golf] generateGolfProgram module not loaded'); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; window.render(); }
  }}, 'Générer mon programme'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
 function renderGolfProgram(p) {
- if (!S.golfProgram) { S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); }
+ if (!S.golfProgram) { if (typeof window.generateGolfProgram !== 'function') { p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Module Golf non disponible. Rechargez la page.')); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); }
  if (!S.golfProgram || !S.golfProgram.length) {
  p.appendChild(h('div', {style: 'text-align:center;padding:32px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey)'}, 'Programme non disponible. Rechargez la page ou reconfigurez votre plan.'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 13; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));

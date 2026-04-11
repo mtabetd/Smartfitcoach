@@ -39,14 +39,15 @@
   // --- P6 : Compteur de générations restantes ---
 
   function getWeekKey(date) {
-    // Returns "YYYY-Www" for the ISO week containing `date`
+    // Returns "YYYY-Www" for the ISO week containing `date` — uses UTC to match server
     var d = new Date(date);
-    // Set to nearest Thursday (ISO week starts Monday)
-    d.setHours(0, 0, 0, 0);
-    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
-    var yearStart = new Date(d.getFullYear(), 0, 1);
-    var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-    return d.getFullYear() + '-W' + (weekNo < 10 ? '0' : '') + weekNo;
+    // Set to nearest Thursday in UTC (ISO week starts Monday)
+    var dayUTC = d.getUTCDay() || 7; // Sunday=0 → 7
+    var thursdayUTC = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + (4 - dayUTC)));
+    var jan4UTC = new Date(Date.UTC(thursdayUTC.getUTCFullYear(), 0, 4));
+    var jan4Day = jan4UTC.getUTCDay() || 7;
+    var weekNo = Math.round((thursdayUTC - new Date(Date.UTC(jan4UTC.getUTCFullYear(), 0, jan4Day - 3))) / 604800000) + 1;
+    return thursdayUTC.getUTCFullYear() + '-W' + (weekNo < 10 ? '0' : '') + weekNo;
   }
 
   function getGenerationsData() {

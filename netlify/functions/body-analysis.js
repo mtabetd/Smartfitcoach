@@ -305,7 +305,7 @@ exports.handler = async function(event, context) {
           catch(e) { reject(new Error('Réponse API invalide')); }
         });
       });
-      req.setTimeout(25000, function() { req.destroy(new Error('Timeout API Anthropic')); });
+      req.setTimeout(23000, function() { req.destroy(new Error('Timeout API Anthropic')); });
       req.on('error', reject);
       req.write(requestBody);
       req.end();
