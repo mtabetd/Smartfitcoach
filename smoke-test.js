@@ -16,6 +16,10 @@ async function runTests() {
   async function createPage(browser) {
     const context = await browser.newContext();
     const page = await context.newPage();
+    // Pre-inject gate access token so the gate overlay doesn't block the app
+    await page.addInitScript(() => {
+      sessionStorage.setItem('mtd_gate_access', '1gs8uk7');
+    });
     const consoleErrors = [];
     page.on('console', msg => {
       if (msg.type() === 'error') consoleErrors.push(msg.text());
