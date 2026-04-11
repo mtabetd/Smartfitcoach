@@ -833,7 +833,7 @@ window.SPORT = {
  p.appendChild(pb);
  }
 
- var _validSSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27];
+ var _validSSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
  if (_validSSteps.indexOf(S.sStep) === -1) { S.sStep = 0; }
 
  if (S.sStep === 0) renderObjectif(content); // Type selection
@@ -2272,7 +2272,12 @@ function getMuscuMixSessionsForDays(days) {
 // ─── SECTION SPORT MIX : injectée dans les étapes de configuration de chaque sport ───
 function renderSportMixSection(p, primarySport) {
  var totalDays = S.sportDays || 3;
- if (totalDays < 2) return; // Impossible de répartir avec moins de 2 jours
+ // Jours minimum requis pour chaque sport principal
+ var _minPrimaryDays = { crossfit: 3, musculation: 2, running: 2 };
+ var _primMinDays = _minPrimaryDays[primarySport] || 2;
+ // Maximum de jours secondaires = totalDays - minimum du sport principal
+ var _maxSecDays = totalDays - _primMinDays;
+ if (_maxSecDays < 1) return; // Pas assez de jours pour un 2ème sport
 
  // Sports secondaires compatibles par sport principal
  var compatMap = {
@@ -2314,7 +2319,7 @@ function renderSportMixSection(p, primarySport) {
   var _isSel = S.sportMixSecondary && S.sportMixSecondary.type === sopt.type;
   _secList.appendChild(h('div', { 'class': 'level-item' + (_isSel ? ' on' : ''), onclick: function() {
    if (!S.sportMixSecondary || S.sportMixSecondary.type !== sopt.type) {
-    var _defDays = Math.max(1, Math.min(2, totalDays - 1));
+    var _defDays = Math.max(1, Math.min(2, _maxSecDays));
     S.sportMixSecondary = { type: sopt.type, days: _defDays };
    }
    window.render();
@@ -2355,7 +2360,7 @@ function renderSportMixSection(p, primarySport) {
  // Boutons +/- pour ajuster les jours secondaires
  var _stepRow = h('div', { style: 'display:flex;align-items:center;justify-content:center;gap:16px' });
  var _canMinus = _secDays > 1;
- var _canPlus  = _secDays < totalDays - 1;
+ var _canPlus  = _secDays < _maxSecDays;
  _stepRow.appendChild(h('button', {
   type: 'button',
   style: 'width:44px;height:44px;border:1.5px solid var(--border,#E8E6DF);background:transparent;font-family:Georgia,serif;font-size:22px;cursor:pointer;border-radius:2px;transition:opacity .15s;' + (_canMinus ? '' : 'opacity:0.3;pointer-events:none'),
@@ -2365,7 +2370,7 @@ function renderSportMixSection(p, primarySport) {
  _stepRow.appendChild(h('button', {
   type: 'button',
   style: 'width:44px;height:44px;border:1.5px solid var(--border,#E8E6DF);background:transparent;font-family:Georgia,serif;font-size:22px;cursor:pointer;border-radius:2px;transition:opacity .15s;' + (_canPlus ? '' : 'opacity:0.3;pointer-events:none'),
-  onclick: function() { if (S.sportMixSecondary && S.sportMixSecondary.days < totalDays - 1) { S.sportMixSecondary.days++; window.render(); } }
+  onclick: function() { if (S.sportMixSecondary && S.sportMixSecondary.days < _maxSecDays) { S.sportMixSecondary.days++; window.render(); } }
  }, '+'));
  _allocBox.appendChild(_stepRow);
  p.appendChild(_allocBox);
