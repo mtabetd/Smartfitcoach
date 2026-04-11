@@ -636,6 +636,7 @@ function renderSportChoice(p) {
       S.sportProgram = null; S.sportDays = 3; S.sportSessionDuration = null;
       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
       S.trainingDaysSelected = [];
+      S.sportMixEnabled = false; S.sportMixSecondary = null;
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }
@@ -2329,6 +2330,10 @@ function renderSportMixSection(p, primarySport) {
 
  if (!S.sportMixSecondary) return;
 
+ // Clamp secondary days si état corrompu / SportDays modifié après coup
+ if (!S.sportMixSecondary.days || S.sportMixSecondary.days < 1) S.sportMixSecondary.days = 1;
+ if (S.sportMixSecondary.days > _maxSecDays) S.sportMixSecondary.days = _maxSecDays;
+
  var _secDays  = S.sportMixSecondary.days;
  var _primDays = totalDays - _secDays;
  var _primLabel = primarySport === 'crossfit' ? 'Cross Training' : primarySport === 'musculation' ? 'Musculation' : 'Running';
@@ -2946,7 +2951,7 @@ function renderCrossfitProgram(p) {
  var _mixSec = (S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.days >= 1) ? S.sportMixSecondary : null;
  var _mixSecDays = _mixSec ? Math.max(1, Math.min(S.sportMixSecondary.days, (S.sportDays || 4) - 1)) : 0;
  var daysPerWeek = Math.max(3, (S.sportDays || 4) - _mixSecDays); // CF days (min 3)
- var template = CF_DAY_TEMPLATES[daysPerWeek] || CF_DAY_TEMPLATES[3];
+ var template = CF_DAY_TEMPLATES[daysPerWeek] || CF_DAY_TEMPLATES[4];
  var weekProgram = generateCrossfitWeek(S.crossfitWeek, daysPerWeek);
 
  // Guard: if no WODs available, show a message instead of a blank page
@@ -3215,7 +3220,7 @@ function renderCrossfitProgram(p) {
    p.appendChild(_mCard);
    // Bouton retour
    p.appendChild(h('div', { style: 'height:16px' }));
-   p.appendChild(h('button', { 'class': 'btn-back', onclick: function() { S.sStep = 5; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier le programme' }));
+   p.appendChild(h('button', { 'class': 'btn-back', onclick: function() { S.sStep = 5; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier la configuration' }));
   }
   return; // Ne pas afficher le contenu CF pour ce jour
  }
@@ -3738,7 +3743,7 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; } },
+ oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) e.target.value = S.sportDays = 2; else if (v > 6) e.target.value = S.sportDays = 6; }
  }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
