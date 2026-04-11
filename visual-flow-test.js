@@ -406,16 +406,27 @@ async function flow3_sport(browser) {
 
     // Exercise card zoom: back to sStep=4 and crop an exercise card
     await page.evaluate((profile) => {
+      try { localStorage.setItem('mtd_onboarding_done', 'true'); } catch(e) {}
       Object.assign(window.S, profile, {
-        view: 'sport', appMode: 'both', sStep: 4,
+        view: 'sport', appMode: 'both', sStep: 4, nStep: 12,
         sportType: 'musculation', sportLevel: 'intermediate',
-        selectedSportDay: 0, _sportProfileDone: true
+        sportGoals: ['muscle'],
+        sportFocus: { 'Poitrine': 4, 'Dos': 5, 'Épaules': 3, 'Jambes': 4, 'Bras': 3 },
+        trainingDaysSelected: [0, 1, 3, 4], sportDays: 4,
+        selectedSportDay: 0, _sportProfileDone: true,
+        sex: 'homme', age: 28, weight: 80, height: 178
       });
+      if (!window.S.sportProgram && window.generateMusculationProgram) {
+        try { window.generateMusculationProgram(); } catch(e) {}
+      }
+      if (!window.S.sportProgram && window.generateSportProgram) {
+        try { var p2 = window.generateSportProgram(); if (p2 && p2.length) window.S.sportProgram = p2; } catch(e) {}
+      }
       window.render();
     }, PROFILE_BULK);
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1200);
 
-    // Try to find first exercise card element
+    // Try to find first exercise card element — full page screenshot as safe fallback
     const exBb = await findCard(page, [
       '[class*="exercise-card"]', '[class*="exercice-card"]',
       '[class*="exercise-row"]', '[class*="exo-row"]',
@@ -431,11 +442,11 @@ async function flow3_sport(browser) {
           clip: { x: clipX, y: clipY, width: clipW, height: clipH }
         });
       } else {
-        await shot(page, `${DIR}/sport-exercise-card.png`, { clip: { x: 0, y: 200, width: 390, height: 280 } });
+        await shot(page, `${DIR}/sport-exercise-card.png`);
       }
     } else {
-      // Crop mid-section of the page as fallback
-      await shot(page, `${DIR}/sport-exercise-card.png`, { clip: { x: 0, y: 200, width: 390, height: 280 } });
+      // No exercise card found — full viewport fallback
+      await shot(page, `${DIR}/sport-exercise-card.png`);
     }
 
     console.log('  Flow 3 OK');
