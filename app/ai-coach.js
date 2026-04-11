@@ -527,6 +527,15 @@ function _patchRender() {
         if (btn) btn.remove();
         if (panel) panel.remove();
       }
+      // Masquer le bouton coach pendant l'onboarding actif (nStep 1-10 ou sStep 1-3)
+      // pour éviter de bloquer les champs de saisie et les options de formulaire
+      var _s = window.S;
+      var _btn = document.getElementById('ai-coach-btn');
+      if (_btn && _s) {
+        var _inNutrOnboarding = _s.view === 'nutrition' && typeof _s.nStep === 'number' && _s.nStep >= 1 && _s.nStep <= 10;
+        var _inSportOnboarding = _s.view === 'sport' && typeof _s.sStep === 'number' && _s.sStep >= 1 && _s.sStep <= 3;
+        _btn.style.display = (_inNutrOnboarding || _inSportOnboarding) ? 'none' : '';
+      }
     } catch(e) {
       console.error('[ai-coach] erreur:', e);
     }

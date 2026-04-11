@@ -2739,8 +2739,9 @@ function renderStep9(p) {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-top:6px;text-align:right;color:' + (_remaining >= 0 ? 'var(--grey)' : '#5A1010') + ';'
     }, _remaining >= 0 ? _remaining + ' kcal restantes' : Math.abs(_remaining) + ' kcal au-dessus');
     progressCard.appendChild(_remainEl);
-    // ── Célébration macro : message si objectif atteint à 90%+ ──
-    if (kcalPct >= 100) {
+    // ── Célébration macro : message si objectif atteint à 90%+ sur calories ET macros ──
+    var _allMacrosOk = pPct >= 85 && gPct >= 85 && lPct >= 85;
+    if (kcalPct >= 100 && _allMacrosOk) {
       var _macroCelCard = document.createElement('div');
       _macroCelCard.style.cssText = 'margin-top:10px;padding:10px 12px;background:rgba(26,74,26,0.07);border-left:3px solid #1A4A1A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;letter-spacing:0.3px;line-height:1.6;';
       _macroCelCard.textContent = 'Parfait \u2014 objectifs nutritionnels atteints aujourd\u2019hui.';

@@ -35,8 +35,18 @@ const PROFILE_BULK = {
 async function shot(page, filePath, opts = {}) {
   await page.waitForTimeout(800);
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  await page.screenshot({ path: filePath, ...opts });
-  console.log('SHOT:', filePath);
+  try {
+    await page.screenshot({ path: filePath, ...opts });
+    console.log('SHOT:', filePath);
+  } catch(e) {
+    // If clip fails, take full viewport screenshot
+    console.warn('  SHOT FALLBACK (clip err):', filePath, '-', e.message.substring(0, 60));
+    const fallbackPath = filePath.replace('.png', '-fallback.png');
+    await page.screenshot({ path: fallbackPath });
+    // Also write the intended path as a copy
+    await page.screenshot({ path: filePath });
+    console.log('SHOT (fallback):', filePath);
+  }
 }
 
 async function setupPage(browser) {

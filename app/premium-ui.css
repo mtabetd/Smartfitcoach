@@ -587,7 +587,7 @@ html {
   transform: translateX(-50%);
   width: 20px;
   height: 2px;
-  background: #0A0A09;
+  background: var(--black, #0A0A09);
   animation: tabActivate 0.2s ease;
 }
 
@@ -613,7 +613,7 @@ html {
   position: absolute;
   bottom: 0;
   height: 2px;
-  background: #0A0A09;
+  background: var(--black, #0A0A09);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -700,7 +700,7 @@ html {
 
   .meal-card {
     break-inside: avoid;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border, #D8D8D0);
   }
 }
 
@@ -769,7 +769,7 @@ body.dark-mode .chip.on{background:var(--black);color:var(--ivory);border-color:
 body.dark-mode .day-tab{color:var(--grey)}
 body.dark-mode .day-tab.active{color:var(--black);border-bottom-color:var(--black)}
 body.dark-mode .progress-fill{background:var(--black)}
-body.dark-mode .toast{background:var(--ivory);color:#181818}
+body.dark-mode .toast{background:var(--ivory);color:var(--black)}
 
 /* E-07: règles dark mode manquantes */
 body.dark-mode .main-nav-tab:hover{background:rgba(250,250,247,0.06)}
@@ -929,18 +929,18 @@ body.dark-mode .user-bar-avatar-btn:hover .user-bar-avatar-photo{border-color:va
 .trend-down { color: var(--red); }
 .trend-flat { color: var(--grey); }
 
-/* Score badge — weekly compliance */
+/* Score badge — weekly compliance (carré éditorial, pas rond) */
 .score-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 2px;
   font-family: 'Georgia', serif;
   font-size: 13px;
   font-weight: normal;
-  border: 2px solid;
+  border: 1px solid;
 }
 .score-badge.excellent { color: var(--green);  border-color: var(--green);  background: var(--greenbg); }
 .score-badge.good      { color: var(--blue, #6A9ADA); border-color: var(--blue, #6A9ADA); background: var(--bluebg, rgba(106,154,218,.08)); }
@@ -1958,38 +1958,48 @@ body.dark-mode .auth-container {
   letter-spacing: 0.3px;
 }
 .badge-pre {
-  background: linear-gradient(135deg, #E07B00, #F39C12);
-  color: #fff;
+  /* Pré-entraînement : teinte orange charte, fond discret */
+  background: var(--orangebg, rgba(106,74,26,.06));
+  color: var(--orange, #6A4A1A);
+  border: 1px solid var(--orange, #6A4A1A);
 }
 .badge-post {
-  background: linear-gradient(135deg, #1A8C1A, #27AE60);
-  color: #fff;
+  /* Post-entraînement : teinte verte charte */
+  background: var(--greenbg, rgba(26,74,26,.06));
+  color: var(--green, #1A4A1A);
+  border: 1px solid var(--green, #1A4A1A);
 }
 .badge-rest {
-  background: linear-gradient(135deg, #6C3483, #8E44AD);
-  color: #fff;
+  /* Repos : gris neutre charte */
+  background: transparent;
+  color: var(--grey, #6B6B65);
+  border: 1px solid var(--border, #D8D8D0);
 }
 .day-training-indicator {
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 13px;
-  color: #C0392B;
-  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--green, #1A4A1A);
+  font-weight: 400;
   margin: 8px 0 4px;
   padding: 6px 10px;
-  background: rgba(192, 57, 43, 0.06);
+  background: var(--greenbg, rgba(26,74,26,.06));
   border-radius: 2px;
-  border-left: 3px solid #C0392B;
+  border-left: 3px solid var(--green, #1A4A1A);
 }
 .day-rest-indicator {
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 13px;
-  color: #7F8C8D;
-  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey, #6B6B65);
+  font-weight: 400;
   margin: 8px 0 4px;
   padding: 6px 10px;
-  background: rgba(127, 140, 141, 0.06);
+  background: transparent;
   border-radius: 2px;
-  border-left: 3px solid #8E44AD;
+  border-left: 3px solid var(--border, #D8D8D0);
 }
 
 /* -------------------------------------------------------
@@ -2006,14 +2016,14 @@ body.dark-mode .auth-container {
   font-size: 13px;
 }
 .set-table th {
-  background: var(--black2, #2C3E50);
+  background: var(--black, #0A0A09);
   color: var(--ivory, #FAF9F6);
   padding: 6px 10px;
   text-align: center;
-  font-weight: 600;
-  font-size: 11px;
+  font-weight: 400;
+  font-size: 9px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 3px;
 }
 .set-table td {
   padding: 6px 8px;
@@ -2041,9 +2051,9 @@ body.dark-mode .auth-container {
   background: var(--ivory, #FAF9F6);
 }
 .set-load-input:focus, .set-reps-input:focus {
-  border-color: var(--blue, #3498DB);
+  border-color: var(--black, #0A0A09);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+  box-shadow: 0 0 0 2px rgba(10, 10, 9, 0.08);
 }
 .set-delta {
   font-family: "Helvetica Neue", Arial, sans-serif;
@@ -2054,25 +2064,27 @@ body.dark-mode .auth-container {
   display: inline-block;
 }
 .delta-up {
-  color: #27AE60;
-  background: rgba(39, 174, 96, 0.1);
+  color: var(--green, #1A4A1A);
+  background: var(--greenbg, rgba(26,74,26,.06));
 }
 .delta-down {
-  color: #E74C3C;
-  background: rgba(231, 76, 60, 0.1);
+  color: var(--red, #5A1010);
+  background: var(--redbg, rgba(90,16,16,.06));
 }
 .delta-flat {
-  color: #7F8C8D;
-  background: rgba(127, 140, 141, 0.08);
+  color: var(--grey, #6B6B65);
+  background: transparent;
 }
 .set-progress-badge {
   padding: 8px 12px;
-  background: linear-gradient(135deg, #27AE60, #2ECC71);
-  color: #fff;
+  background: var(--black, #0A0A09);
+  color: var(--ivory, #FAF9F6);
   border-radius: 2px;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
   text-align: center;
 }
 .set-num {
@@ -2085,18 +2097,24 @@ body.dark-mode .auth-container {
    ------------------------------------------------------- */
 .set-validate-btn {
   padding: 4px 10px;
-  border: none;
+  border: 1px solid var(--green, #1A4A1A);
   border-radius: 2px;
-  background: linear-gradient(135deg, #27AE60, #2ECC71);
-  color: #fff;
+  background: var(--greenbg, rgba(26,74,26,.06));
+  color: var(--green, #1A4A1A);
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   cursor: pointer;
   white-space: nowrap;
-  transition: transform 0.1s, box-shadow 0.1s;
+  transition: background 0.2s ease, transform 0.1s ease;
   min-height: 44px;
   min-width: 44px;
+}
+.set-validate-btn:hover {
+  background: var(--green, #1A4A1A);
+  color: var(--ivory, #FAF9F6);
 }
 .set-validate-btn:active {
   transform: scale(0.95);
@@ -2138,7 +2156,8 @@ body.dark-mode .auth-container {
   font-family: Georgia, serif;
   font-size: 15px;
   color: #FAF9F6;
-  font-weight: 700;
+  font-weight: normal;
+  font-style: italic;
   margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
@@ -2169,20 +2188,20 @@ body.dark-mode .auth-container {
 }
 .rest-timer-progress {
   fill: none;
-  stroke: #27AE60;
+  stroke: var(--green, #1A4A1A);
   stroke-width: 6;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.9s linear, stroke 0.3s;
 }
 .rest-timer-urgent .rest-timer-progress {
-  stroke: #E74C3C;
+  stroke: var(--red, #5A1010);
 }
 .rest-timer-urgent .rest-timer-time {
-  color: #E74C3C !important;
+  color: var(--red, #5A1010) !important;
   animation: timerPulse 0.5s ease-in-out infinite alternate;
 }
 .rest-timer-done .rest-timer-progress {
-  stroke: #27AE60;
+  stroke: var(--green, #1A4A1A);
   stroke-dashoffset: 0 !important;
 }
 .rest-timer-time {
@@ -2196,7 +2215,7 @@ body.dark-mode .auth-container {
   justify-content: center;
   font-family: Georgia, serif;
   font-size: 42px;
-  font-weight: 700;
+  font-weight: 300;
   color: #FAF9F6;
   letter-spacing: -1px;
 }
@@ -2206,10 +2225,10 @@ body.dark-mode .auth-container {
   left: 0;
   right: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 18px;
-  font-weight: 800;
-  color: #27AE60;
-  letter-spacing: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ivory, #FAF9F6);
+  letter-spacing: 6px;
   text-transform: uppercase;
   animation: timerPulse 0.6s ease-in-out infinite alternate;
 }
@@ -2242,9 +2261,9 @@ body.dark-mode .auth-container {
   border: 1px solid rgba(250, 250, 247, 0.2);
 }
 .rest-timer-btn-skip {
-  background: rgba(231, 76, 60, 0.15);
-  color: #E74C3C;
-  border: 1px solid rgba(231, 76, 60, 0.3);
+  background: var(--redbg, rgba(90,16,16,.06));
+  color: var(--red, #5A1010);
+  border: 1px solid var(--red, #5A1010);
 }
 .rest-timer-btn-mute {
   background: rgba(250, 250, 247, 0.08);
@@ -2261,23 +2280,24 @@ body.dark-mode .auth-container {
   text-decoration: line-through;
 }
 .rest-timer-btn-go {
-  background: linear-gradient(135deg, #27AE60, #2ECC71);
-  color: #fff;
+  background: var(--green, #1A4A1A);
+  color: var(--ivory, #FAF9F6);
   padding: 14px 32px;
-  font-size: 15px;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
   border-radius: 2px;
-  letter-spacing: 0.5px;
 }
 
 /* -------------------------------------------------------
-   TRANSITION TIMER — Between exercises (blue/purple theme)
+   TRANSITION TIMER — Between exercises (neutral theme)
    ------------------------------------------------------- */
 .rest-timer-transition .rest-timer-label {
-  color: #A8DAFF;
+  color: var(--ivory, #FAF9F6);
 }
 .rest-timer-transition .rest-timer-sublabel {
-  color: rgba(168, 218, 255, 0.6);
-  font-size: 13px;
+  color: rgba(250, 250, 247, 0.6);
+  font-size: 11px;
 }
 .rest-timer-reason {
   font-family: "Helvetica Neue", Arial, sans-serif;
@@ -2287,26 +2307,27 @@ body.dark-mode .auth-container {
   margin-bottom: 16px;
 }
 .rest-timer-progress-transition {
-  stroke: #5B8DEF !important;
+  stroke: var(--grey, #6B6B65) !important;
 }
 .rest-timer-transition.rest-timer-urgent .rest-timer-progress-transition {
-  stroke: #E74C3C !important;
+  stroke: var(--red, #5A1010) !important;
 }
 .rest-timer-transition.rest-timer-done .rest-timer-progress-transition {
-  stroke: #5B8DEF !important;
+  stroke: var(--ivory, #FAF9F6) !important;
 }
 .rest-timer-transition .rest-timer-go {
-  color: #5B8DEF;
-  font-size: 13px;
-  letter-spacing: 1px;
+  color: var(--ivory, #FAF9F6);
+  font-size: 11px;
+  letter-spacing: 6px;
 }
 .rest-timer-btn-go-transition {
-  background: linear-gradient(135deg, #5B8DEF, #7C4DFF);
-  color: #fff;
+  background: var(--black, #0A0A09);
+  color: var(--ivory, #FAF9F6);
   padding: 14px 32px;
-  font-size: 15px;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
   border-radius: 2px;
-  letter-spacing: 0.5px;
 }
 
 
@@ -2839,7 +2860,7 @@ select {
 .card-premium {
   background: var(--ivory-2, #FAF9F6);
   border: 1px solid var(--border-main, #E8E6DF);
-  border-radius: 3px;
+  border-radius: 2px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(10,10,9,0.04);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
@@ -2853,7 +2874,7 @@ select {
 .card-hero {
   background: var(--black-1, #1A1A18);
   color: var(--ivory-2, #FAF9F6);
-  border-radius: 3px;
+  border-radius: 2px;
   padding: 32px 24px;
   position: relative;
   overflow: hidden;
@@ -2871,7 +2892,7 @@ select {
   background: rgba(26,74,26,0.04);
   border: 1px solid rgba(26,74,26,0.15);
   border-left: 3px solid var(--green-main, #1A4A1A);
-  border-radius: 0 3px 3px 0;
+  border-radius: 0 2px 2px 0;
   padding: 16px 20px;
 }
 

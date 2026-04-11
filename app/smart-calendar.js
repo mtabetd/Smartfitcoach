@@ -288,8 +288,8 @@
         }
 
         var card = window.h('div', {
-          style: 'background:#fff;border:1px solid #E0E0E0;border-radius:12px;padding:12px;' +
-                 'margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,0.06);'
+          style: 'background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:16px;' +
+                 'margin-bottom:8px;'
         }, [
           window.h('div', {
             style: 'display:flex;align-items:center;margin-bottom:8px;'
@@ -332,9 +332,11 @@
 
     // ── Bouton sauvegarder ──
     var btnSave = window.h('button', {
-      style: 'width:100%;padding:14px;background:#2ECC71;color:#fff;border:none;border-radius:12px;' +
-             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:15px;font-weight:700;' +
-             'cursor:pointer;box-shadow:0 2px 8px rgba(46,204,113,0.3);'
+      style: 'width:100%;padding:18px 28px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);' +
+             'border:1px solid var(--black,#0A0A09);border-radius:2px;' +
+             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;' +
+             'letter-spacing:6px;text-transform:uppercase;cursor:pointer;min-height:44px;' +
+             'transition:background 0.2s ease;'
     }, 'Sauvegarder le calendrier');
     btnSave.addEventListener('click', function() {
       if (!S.weeklyCalendar) S.weeklyCalendar = {};
@@ -348,13 +350,13 @@
       S.weekPlan = null;
       S._planHash = null;
       btnSave.textContent = 'Sauvegarde...';
-      btnSave.style.background = '#27AE60';
+      btnSave.style.opacity = '0.6';
       btnSave.disabled = true;
       if (window.saveProfile) window.saveProfile();
-      showToast('\u2705 Calendrier sauvegarde !');
+      showToast('Calendrier sauvegarde');
       setTimeout(function() {
         btnSave.textContent = 'Sauvegarder le calendrier';
-        btnSave.style.background = '#2ECC71';
+        btnSave.style.opacity = '1';
         btnSave.disabled = false;
       }, 1500);
     });
