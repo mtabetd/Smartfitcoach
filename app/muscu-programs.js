@@ -2704,7 +2704,7 @@ function checkProgressionSuggestion(exerciceName, muscuWeek, sessionLog) {
 
   var recent = sessionLog[sessionLog.length - 1];
   var prev = sessionLog[sessionLog.length - 2];
-  if (!recent || !recent.sets || !prev || !prev.sets) return null;
+  if (!recent || !recent.sets || !recent.sets.length || !prev || !prev.sets || !prev.sets.length) return null;
 
   // Toutes les reps réalisées au target ?
   var allCompleted = recent.sets.every(function(s) { return s.targetReps > 0 ? s.reps >= s.targetReps : true; });

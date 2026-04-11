@@ -4968,13 +4968,13 @@ function calcSessionDuration(exercises) {
  var totalSec = 480; // 8 min échauffement
  (exercises || []).forEach(function(ex) {
  var sets = 3, reps = 10;
- var sm = (ex.sets || '').match(/^(\d+)[x\u00d7](\d+)/);
+ var sm = String(ex.sets || '').match(/^(\d+)[x\u00d7](\d+)/);
  if (sm) { sets = parseInt(sm[1]); reps = parseInt(sm[2]); }
  var isCompound = /(squat|soulevé|développé|rowing|presse|hip thrust|fente|deadlift|tirage|pull)/i.test(ex.n || '');
  var tSet = reps * (isCompound ? 3.5 : 2.5);
  var rest = 90;
- var rm = (ex.rest || '').match(/(\d+)\s*min/i);
- var rs = (ex.rest || '').match(/^(\d+)\s*s/i);
+ var rm = String(ex.rest || '').match(/(\d+)\s*min/i);
+ var rs = String(ex.rest || '').match(/^(\d+)\s*s/i);
  if (rm) rest = parseInt(rm[1]) * 60;
  else if (rs) rest = parseInt(rs[1]);
  totalSec += sets * tSet + (sets - 1) * rest;
@@ -5033,7 +5033,7 @@ function calcSessionKcal(exercises, durationMin) {
  var epocPct = rpe <= 5 ? 0.06 : rpe <= 6 ? 0.10 : rpe <= 8 ? 0.15 : 0.20;
  // Bonus volume élevé (> 25 séries totales)
  var totalSets = 0;
- (exercises || []).forEach(function(ex) { var m = (ex.sets || '').match(/^(\d+)/); if (m) totalSets += parseInt(m[1]); });
+ (exercises || []).forEach(function(ex) { var m = String(ex.sets || '').match(/^(\d+)/); if (m) totalSets += parseInt(m[1]); });
  if (totalSets > 25) epocPct = Math.min(epocPct + 0.05, 0.25);
  var epoc = Math.round(base * epocPct);
  return { base: base, epoc: epoc, total: base + epoc, hr: hr, rpe: rpe };
@@ -5941,7 +5941,7 @@ function renderMusculationProgram(p) {
      src: _gifUrl, alt: ex.n,
      loading: 'lazy',
      style: 'width:100%;max-width:300px;border-radius:8px;margin:8px 0 4px;display:block',
-     onerror: 'this.style.display="none"'
+     onerror: function(e) { e.currentTarget.style.display = 'none'; }
    }));
  }
 
@@ -6058,7 +6058,7 @@ function renderMusculationProgram(p) {
 
  // ─── TRACKER SÉRIES : recommandations + saisie réelle ───
  (function(exRef, isBodyweight, _exIdx, _dayExercises) {
- var setsMatch = (exRef.sets || '').match(/^(\d+)\s*[x\u00d7]\s*(\d+)(?:-(\d+))?/);
+ var setsMatch = String(exRef.sets || '').match(/^(\d+)\s*[x\u00d7]\s*(\d+)(?:-(\d+))?/);
  var numSets = setsMatch ? parseInt(setsMatch[1]) : 3;
  var minReps = setsMatch ? parseInt(setsMatch[2]) : 10;
  var maxReps = setsMatch && setsMatch[3] ? parseInt(setsMatch[3]) : minReps;
@@ -6561,7 +6561,7 @@ function renderMusculationProgram(p) {
  bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n));
  bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 Repos ' + bex.rest));
  if (bex.eq) bc.appendChild(h('div', {'class': 'exercise-detail'}, bex.eq));
- var _bexParts = (bex.sets || '').split('\u00d7');
+ var _bexParts = String(bex.sets || '').split('\u00d7');
  var _bexReps = _bexParts.length > 1 ? _bexParts[1] : null;
  var bsugg = window.getMusculationWeight ? window.getMusculationWeight(bex.n, bex.sets, _bexReps) : null;
  if (bsugg && bsugg > 0) bc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:6px;padding:4px 8px;background:rgba(39,174,96,0.06);border-left:2px solid #1A4A1A'}, '\uD83D\uDCA1 Charge sugg\u00e9r\u00e9e\u00a0: ' + (window.UNITS ? window.UNITS.displayWeight(bsugg) : bsugg + '\u00a0kg')));
@@ -7033,7 +7033,7 @@ function renderSportModal(app) {
      src: _detailGif, alt: ex.n,
      loading: 'lazy',
      style: 'width:100%;border-radius:12px;margin:12px 0 8px;display:block',
-     onerror: 'this.style.display="none"'
+     onerror: function(e) { e.currentTarget.style.display = 'none'; }
    }));
  }
 
