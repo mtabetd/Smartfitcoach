@@ -5904,7 +5904,7 @@ function renderMusculationProgram(p) {
 
  // ─── AI-suggested weight from strength profile (skip for bodyweight) ───
  if (eqType !== 'bodyweight') {
- var _setParts = ex.sets ? ex.sets.split('\u00d7') : [];
+ var _setParts = ex.sets ? String(ex.sets).split('\u00d7') : [];
  var suggestedReps = _setParts.length > 1 ? parseInt(_setParts[1]) : null;
  var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
  // Surcharge progressive : appliquer le multiplicateur si charge de base connue
