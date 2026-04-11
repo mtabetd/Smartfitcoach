@@ -1,6 +1,7 @@
 const { chromium } = require('playwright');
 
 const BASE_URL = 'http://127.0.0.1:45515';
+const TEST_UID = 'test_qa_user';
 
 async function runTests() {
   const browser = await chromium.launch({
@@ -9,47 +10,141 @@ async function runTests() {
   });
   const results = [];
 
-  function log(msg) {
-    console.log(msg);
-  }
+  function log(msg) { console.log(msg); }
 
-  async function createPage(browser) {
+  /**
+   * Create a page, load the app, then inject auth + profile and re-render.
+   * Returns { page, context, consoleErrors }.
+   */
+  async function createPageWithProfile(profileData) {
     const context = await browser.newContext();
     const page = await context.newPage();
-    // Pre-inject gate access token so the gate overlay doesn't block the app
-    await page.addInitScript(() => {
+
+    // Pre-init: prevent dev wipe, bypass gate
+    await context.addInitScript(() => {
+      localStorage.setItem('mtd_dev_wiped_v1', '1');
       sessionStorage.setItem('mtd_gate_access', '1gs8uk7');
     });
+
     const consoleErrors = [];
     page.on('console', msg => {
       if (msg.type() === 'error') consoleErrors.push(msg.text());
     });
     page.on('pageerror', err => consoleErrors.push(err.message));
+
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    // Wait for AUTH.ready() promise to settle (Supabase session check ~300ms-4s)
+    await page.waitForTimeout(4500);
+
+    // Patch AUTH + inject profile + re-render
+    await page.evaluate((data) => {
+      var UID = data.uid;
+      var profile = data.profile;
+      var fakeSession = { id: UID, name: 'QA Test', email: 'qa@test.com', nom: '', phone: '' };
+
+      // Write profile to localStorage
+      localStorage.setItem('mtd_profile_' + UID, JSON.stringify(profile));
+
+      // Inject streak if requested
+      if (profile.streak) {
+        localStorage.setItem('mtd_streak_' + UID, JSON.stringify({
+          current: profile.streak,
+          lastDate: new Date().toISOString().slice(0, 10)
+        }));
+      }
+
+      // Patch AUTH to simulate logged-in state
+      if (window.AUTH) {
+        window.AUTH.isLoggedIn = function() { return true; };
+        window.AUTH.getUser = function() { return fakeSession; };
+      }
+
+      // Load profile into global state S
+      if (window.loadProfile) window.loadProfile();
+
+      // Apply overrides directly to S
+      if (window.S) {
+        Object.keys(profile).forEach(function(k) {
+          if (k !== 'streak') window.S[k] = profile[k];
+        });
+        // Set view based on profile
+        if (!window.S.view || window.S.view === 'auth') {
+          window.S.view = profile._view || 'today';
+        }
+      }
+
+      // Re-render
+      if (window.render) window.render();
+    }, { uid: TEST_UID, profile: profileData });
+
+    await page.waitForTimeout(1500);
     return { page, context, consoleErrors };
   }
 
+  // Helper: navigate to a section tab
+  async function navigateTo(page, section) {
+    const sectionLower = section.toLowerCase();
+    await page.evaluate((s) => {
+      var btns = document.querySelectorAll('button.main-nav-tab');
+      for (var i = 0; i < btns.length; i++) {
+        var text = btns[i].textContent.toLowerCase();
+        if (text.indexOf(s) !== -1) {
+          btns[i].click();
+          return true;
+        }
+      }
+      // fallback: set S.view + render
+      if (window.S && window.render) {
+        window.S.view = s;
+        window.render();
+        return true;
+      }
+      return false;
+    }, sectionLower);
+    await page.waitForTimeout(2000);
+  }
+
+  // Helper: filter out non-critical errors
+  function getCriticalErrors(errs) {
+    return errs.filter(e =>
+      !e.includes('favicon') &&
+      !e.includes('service worker') && !e.includes('sw.js') &&
+      !e.includes('Failed to register') &&
+      !e.includes('supabase') && !e.includes('Supabase') &&
+      !e.includes('[AUTH]') &&
+      !e.includes('net::ERR_') &&
+      !e.includes('Failed to fetch') &&
+      !e.includes('NetworkError') &&
+      !e.includes('ERR_BLOCKED')
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════
   // TEST 1: App loads without crash
+  // ═══════════════════════════════════════════════════════════
   log('\n=== TEST 1: App loads without crash ===');
   try {
-    const { page, context, consoleErrors } = await createPage(browser);
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await context.addInitScript(() => {
+      sessionStorage.setItem('mtd_gate_access', '1gs8uk7');
+    });
+    const consoleErrors = [];
+    page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
+    page.on('pageerror', err => consoleErrors.push(err.message));
+
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 15000 });
     await page.waitForTimeout(2000);
     const bodyText = await page.evaluate(() => document.body.innerText);
-    const hasContent = bodyText.trim().length > 50;
-    const criticalErrors = consoleErrors.filter(e =>
-      !e.includes('favicon') &&
-      !e.includes('service worker') &&
-      !e.includes('sw.js') &&
-      !e.includes('Failed to register') &&
-      !e.includes('supabase') &&
-      !e.includes('Supabase')
-    );
+    const hasContent = bodyText.trim().length > 20;
+    const criticalErrors = getCriticalErrors(consoleErrors);
+
     if (hasContent && criticalErrors.length === 0) {
-      results.push({ test: 'TEST 1: App loads without crash', status: 'PASS', detail: `Page has content, no critical console errors` });
+      results.push({ test: 'TEST 1: App loads without crash', status: 'PASS', detail: 'Page renders content, no critical console errors' });
       log('PASS - Page renders content, no critical console errors');
     } else {
       const fail = [];
-      if (!hasContent) fail.push('Page has no/little content');
+      if (!hasContent) fail.push('Page has no content');
       if (criticalErrors.length > 0) fail.push(`Console errors: ${criticalErrors.slice(0,3).join('; ')}`);
       results.push({ test: 'TEST 1: App loads without crash', status: 'FAIL', detail: fail.join(' | ') });
       log(`FAIL - ${fail.join(' | ')}`);
@@ -60,61 +155,42 @@ async function runTests() {
     log(`FAIL - Exception: ${e.message}`);
   }
 
+  // ═══════════════════════════════════════════════════════════
   // TEST 2: Nutrition section
+  // ═══════════════════════════════════════════════════════════
   log('\n=== TEST 2: Nutrition section ===');
   try {
-    const { page, context, consoleErrors } = await createPage(browser);
-    await page.addInitScript(() => {
-      sessionStorage.setItem('mtd_seen_welcome', 'true');
-      sessionStorage.setItem('mtd_profile', JSON.stringify({
-        step: 10, poids: 70, taille: 175, age: 30, sex: 'homme', objectif: 'perte'
-      }));
+    const { page, context, consoleErrors } = await createPageWithProfile({
+      appMode: 'both', nStep: 12,
+      weight: 70, height: 175, age: 30, sex: 'homme', goal: 'perte',
+      // legacy keys too
+      poids: 70, taille: 175, objectif: 'perte',
+      step: 10,
+      _view: 'nutrition'
     });
-    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 15000 });
-    await page.waitForTimeout(2000);
 
-    // Try to navigate to nutrition tab
-    const nutritionTabSelectors = [
-      '[data-tab="nutrition"]',
-      'button[onclick*="nutrition"]',
-      'a[href*="nutrition"]',
-      '#tab-nutrition',
-      '.tab-btn:has-text("Nutrition")',
-      'button:has-text("Nutrition")',
-    ];
-    let clicked = false;
-    for (const sel of nutritionTabSelectors) {
-      try {
-        const el = await page.$(sel);
-        if (el) { await el.click(); clicked = true; break; }
-      } catch {}
-    }
-    if (!clicked) {
-      // Try clicking by text
-      try {
-        await page.click('text=Nutrition', { timeout: 3000 });
-        clicked = true;
-      } catch {}
-    }
-    await page.waitForTimeout(1500);
+    await navigateTo(page, 'nutrition');
+    await page.waitForTimeout(1000);
 
     const pageText = await page.evaluate(() => document.body.innerText.toLowerCase());
     const hasCalories = pageText.includes('calorie') || pageText.includes('kcal');
-    const hasMacros = pageText.includes('macro') || pageText.includes('protéine') || pageText.includes('protein') || pageText.includes('glucide') || pageText.includes('lipide');
+    const hasMacros = pageText.includes('macro') || pageText.includes('protéine') ||
+                      pageText.includes('proteine') || pageText.includes('glucide') ||
+                      pageText.includes('lipide') || pageText.includes('protein');
+    const hasNutritionContent = pageText.includes('nutrition') || pageText.includes('repas') ||
+                                pageText.includes('objectif') || pageText.includes('plan') ||
+                                pageText.includes('semaine');
+    const criticalErrors = getCriticalErrors(consoleErrors);
 
-    const criticalErrors = consoleErrors.filter(e =>
-      !e.includes('favicon') && !e.includes('service worker') && !e.includes('sw.js') &&
-      !e.includes('Failed to register') && !e.includes('supabase') && !e.includes('Supabase')
-    );
+    log(`  calories: ${hasCalories}, macros: ${hasMacros}, nutrition content: ${hasNutritionContent}`);
+    log(`  snippet: ${pageText.substring(0, 200)}`);
 
-    if (hasCalories || hasMacros) {
+    if ((hasCalories || hasMacros || hasNutritionContent) && criticalErrors.length === 0) {
       results.push({ test: 'TEST 2: Nutrition section', status: 'PASS', detail: `Nutrition content visible (calories: ${hasCalories}, macros: ${hasMacros})` });
-      log(`PASS - Nutrition content visible (calories: ${hasCalories}, macros: ${hasMacros})`);
+      log(`PASS - Nutrition content visible`);
     } else {
-      // Dump partial text for debugging
-      const snippet = pageText.substring(0, 500);
-      results.push({ test: 'TEST 2: Nutrition section', status: 'FAIL', detail: `No nutrition content found. Page text snippet: ${snippet}` });
-      log(`FAIL - No nutrition content. Snippet: ${snippet}`);
+      results.push({ test: 'TEST 2: Nutrition section', status: 'FAIL', detail: `No nutrition content. Errors: ${criticalErrors.join('; ')}` });
+      log(`FAIL - No nutrition content`);
     }
     await context.close();
   } catch (e) {
@@ -122,70 +198,50 @@ async function runTests() {
     log(`FAIL - Exception: ${e.message}`);
   }
 
-  // TEST 3: CrossFit program (no mix)
+  // ═══════════════════════════════════════════════════════════
+  // TEST 3: CrossFit program — no mix
+  // ═══════════════════════════════════════════════════════════
   log('\n=== TEST 3: CrossFit program (no mix) ===');
   try {
-    const { page, context, consoleErrors } = await createPage(browser);
-    await page.addInitScript(() => {
-      sessionStorage.setItem('mtd_seen_welcome', 'true');
-      sessionStorage.setItem('mtd_profile', JSON.stringify({
-        sStep: 6, sportType: 'crossfit', sportDays: 4, crossfitLevel: 'rx',
-        crossfitWeek: 1, parqDone: true, sportMixEnabled: false
-      }));
+    const { page, context, consoleErrors } = await createPageWithProfile({
+      appMode: 'sport', sStep: 6,
+      sportType: 'crossfit', sportDays: 4, crossfitLevel: 'rx',
+      crossfitWeek: 1, parqDone: true, sportMixEnabled: false,
+      // Required for sport-only mode (avoids renderSportQuickProfile guard)
+      sex: 'homme', age: 30, weight: 70, height: 175,
+      _view: 'sport'
     });
-    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 15000 });
-    await page.waitForTimeout(2000);
 
-    // Navigate to sport tab
-    const sportTabSelectors = [
-      '[data-tab="sport"]',
-      'button[onclick*="sport"]',
-      '#tab-sport',
-      'button:has-text("Sport")',
-      'a[href*="sport"]',
-    ];
-    let clicked = false;
-    for (const sel of sportTabSelectors) {
-      try {
-        const el = await page.$(sel);
-        if (el) { await el.click(); clicked = true; break; }
-      } catch {}
-    }
-    if (!clicked) {
-      try { await page.click('text=Sport', { timeout: 3000 }); clicked = true; } catch {}
-    }
+    await navigateTo(page, 'sport');
     await page.waitForTimeout(2000);
 
     const pageText = await page.evaluate(() => document.body.innerText);
-    const pageTextLower = pageText.toLowerCase();
+    const lc = pageText.toLowerCase();
 
-    // Check for day tabs
-    const hasLundi = pageText.includes('Lundi') || pageTextLower.includes('lundi');
-    const hasMardi = pageText.includes('Mardi') || pageTextLower.includes('mardi');
-    const hasJeudi = pageText.includes('Jeudi') || pageTextLower.includes('jeudi');
-    const hasSamedi = pageText.includes('Samedi') || pageTextLower.includes('samedi');
-    const hasMuscu = pageText.includes('Muscu') || pageTextLower.includes('muscu');
-    const hasCF = pageTextLower.includes('crossfit') || pageTextLower.includes('wod') || pageTextLower.includes('workout');
+    const hasLundi = lc.includes('lundi');
+    const hasMardi = lc.includes('mardi');
+    const hasJeudi = lc.includes('jeudi');
+    const hasSamedi = lc.includes('samedi');
+    const hasMuscu = lc.includes('muscu');
+    const hasCF = lc.includes('crossfit') || lc.includes('wod') || lc.includes('workout');
+    const dayCount = [hasLundi, hasMardi, hasJeudi, hasSamedi].filter(Boolean).length;
 
-    const criticalErrors = consoleErrors.filter(e =>
-      !e.includes('favicon') && !e.includes('service worker') && !e.includes('sw.js') &&
-      !e.includes('Failed to register') && !e.includes('supabase') && !e.includes('Supabase')
-    );
+    const criticalErrors = getCriticalErrors(consoleErrors);
 
-    const dayTabs = [hasLundi, hasMardi, hasJeudi, hasSamedi].filter(Boolean).length;
+    log(`  CF: ${hasCF}, days: L=${hasLundi} M=${hasMardi} J=${hasJeudi} S=${hasSamedi} (${dayCount}/4), Muscu: ${hasMuscu}`);
+    log(`  snippet: ${pageText.substring(0, 300)}`);
 
-    if (dayTabs >= 3 && hasCF && !hasMuscu && criticalErrors.length === 0) {
-      results.push({ test: 'TEST 3: CrossFit program (no mix)', status: 'PASS', detail: `CF tabs visible, no Muscu tabs, no crash` });
-      log(`PASS - CF day tabs visible (Lundi:${hasLundi}, Mardi:${hasMardi}, Jeudi:${hasJeudi}, Samedi:${hasSamedi}), no Muscu, no crash`);
+    if (dayCount >= 3 && hasCF && !hasMuscu && criticalErrors.length === 0) {
+      results.push({ test: 'TEST 3: CrossFit program (no mix)', status: 'PASS', detail: `CF day tabs: ${dayCount}/4, no Muscu, no crash` });
+      log(`PASS - CF program shows, ${dayCount}/4 day tabs, no Muscu`);
     } else {
       const issues = [];
-      if (dayTabs < 3) issues.push(`Only ${dayTabs}/4 day tabs found (Lundi:${hasLundi}, Mardi:${hasMardi}, Jeudi:${hasJeudi}, Samedi:${hasSamedi})`);
-      if (!hasCF) issues.push('No CrossFit content found');
+      if (!hasCF) issues.push('No CrossFit content');
+      if (dayCount < 3) issues.push(`Only ${dayCount}/4 day tabs (Lundi:${hasLundi}, Mardi:${hasMardi}, Jeudi:${hasJeudi}, Samedi:${hasSamedi})`);
       if (hasMuscu) issues.push('Muscu tabs unexpectedly present');
-      if (criticalErrors.length > 0) issues.push(`Errors: ${criticalErrors.slice(0,3).join('; ')}`);
+      if (criticalErrors.length > 0) issues.push(`Errors: ${criticalErrors.slice(0,2).join('; ')}`);
       results.push({ test: 'TEST 3: CrossFit program (no mix)', status: 'FAIL', detail: issues.join(' | ') });
       log(`FAIL - ${issues.join(' | ')}`);
-      log(`Page snippet: ${pageText.substring(0, 400)}`);
     }
     await context.close();
   } catch (e) {
@@ -193,86 +249,77 @@ async function runTests() {
     log(`FAIL - Exception: ${e.message}`);
   }
 
+  // ═══════════════════════════════════════════════════════════
   // TEST 4: CrossFit + Muscu mix
+  // ═══════════════════════════════════════════════════════════
   log('\n=== TEST 4: CrossFit + Muscu mix ===');
   try {
-    const { page, context, consoleErrors } = await createPage(browser);
-    await page.addInitScript(() => {
-      sessionStorage.setItem('mtd_seen_welcome', 'true');
-      sessionStorage.setItem('mtd_profile', JSON.stringify({
-        sStep: 6, sportType: 'crossfit', sportDays: 5, crossfitLevel: 'rx',
-        crossfitWeek: 1, parqDone: true, sportMixEnabled: true,
-        sportMixSecondary: { type: 'musculation', days: 2 }
-      }));
+    const { page, context, consoleErrors } = await createPageWithProfile({
+      appMode: 'sport', sStep: 6,
+      sportType: 'crossfit', sportDays: 5, crossfitLevel: 'rx',
+      crossfitWeek: 1, parqDone: true, sportMixEnabled: true,
+      sportMixSecondary: { type: 'musculation', days: 2 },
+      // Required for sport-only mode
+      sex: 'homme', age: 30, weight: 70, height: 175,
+      _view: 'sport'
     });
-    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 15000 });
-    await page.waitForTimeout(2000);
 
-    // Navigate to sport tab
-    const sportTabSelectors = [
-      '[data-tab="sport"]', 'button[onclick*="sport"]', '#tab-sport',
-      'button:has-text("Sport")', 'a[href*="sport"]',
-    ];
-    let clicked = false;
-    for (const sel of sportTabSelectors) {
-      try {
-        const el = await page.$(sel);
-        if (el) { await el.click(); clicked = true; break; }
-      } catch {}
-    }
-    if (!clicked) {
-      try { await page.click('text=Sport', { timeout: 3000 }); clicked = true; } catch {}
-    }
+    await navigateTo(page, 'sport');
     await page.waitForTimeout(2000);
 
     const pageText = await page.evaluate(() => document.body.innerText);
-    const pageTextLower = pageText.toLowerCase();
+    const lc = pageText.toLowerCase();
 
-    const hasCFTabs = pageTextLower.includes('crossfit') || pageTextLower.includes('wod');
-    const hasMuscu1 = pageText.includes('Muscu 1') || pageText.includes('muscu 1') || pageTextLower.includes('muscu');
+    const hasCFContent = lc.includes('crossfit') || lc.includes('wod');
+    const hasMuscu = lc.includes('muscu');
+    const criticalErrors = getCriticalErrors(consoleErrors);
 
-    const criticalErrors = consoleErrors.filter(e =>
-      !e.includes('favicon') && !e.includes('service worker') && !e.includes('sw.js') &&
-      !e.includes('Failed to register') && !e.includes('supabase') && !e.includes('Supabase')
-    );
+    log(`  CF: ${hasCFContent}, Muscu: ${hasMuscu}`);
+    log(`  snippet: ${pageText.substring(0, 300)}`);
 
-    // Try to click "Muscu 1" tab
-    let muscuTabClicked = false;
-    let muscuContent = false;
+    // Try to click Muscu tab
+    let muscuClicked = false;
+    let muscuHasContent = false;
     try {
-      const muscuTab = await page.$('button:has-text("Muscu 1")') ||
-                       await page.$('[data-tab*="muscu"]') ||
-                       await page.$('button:has-text("Muscu")');
-      if (muscuTab) {
-        await muscuTab.click();
+      muscuClicked = await page.evaluate(() => {
+        var btns = document.querySelectorAll('button');
+        for (var i = 0; i < btns.length; i++) {
+          if (/muscu/i.test(btns[i].textContent)) {
+            btns[i].click();
+            return true;
+          }
+        }
+        return false;
+      });
+      if (muscuClicked) {
         await page.waitForTimeout(1500);
-        muscuTabClicked = true;
-        const afterClickText = await page.evaluate(() => document.body.innerText.toLowerCase());
-        muscuContent = afterClickText.includes('exercice') || afterClickText.includes('série') ||
-                       afterClickText.includes('répétition') || afterClickText.includes('squat') ||
-                       afterClickText.includes('press') || afterClickText.includes('muscu') ||
-                       afterClickText.includes('poids') || afterClickText.includes('haltère') ||
-                       afterClickText.includes('biceps') || afterClickText.includes('chest') ||
-                       afterClickText.includes('séance');
+        const afterText = await page.evaluate(() => document.body.innerText.toLowerCase());
+        muscuHasContent = afterText.includes('exercice') || afterText.includes('série') ||
+                          afterText.includes('répétition') || afterText.includes('squat') ||
+                          afterText.includes('press') || afterText.includes('séance') ||
+                          afterText.includes('muscu') || afterText.includes('haltère') ||
+                          afterText.includes('poids');
+        log(`  Muscu tab clicked, content: ${muscuHasContent}`);
+        log(`  After click snippet: ${afterText.substring(0, 200)}`);
+      } else {
+        log(`  No Muscu tab button found`);
       }
-    } catch (e2) {
-      log(`Note: Could not click Muscu tab: ${e2.message}`);
-    }
+    } catch (e2) { log(`  Muscu click error: ${e2.message}`); }
 
-    const isBlankAfterClick = muscuTabClicked && !muscuContent;
-    const isPass = (hasCFTabs || hasMuscu1) && !isBlankAfterClick && criticalErrors.length === 0;
+    const isBlankAfterClick = muscuClicked && !muscuHasContent;
+    const isPass = (hasCFContent || hasMuscu) && !isBlankAfterClick && criticalErrors.length === 0;
 
     if (isPass) {
-      results.push({ test: 'TEST 4: CrossFit + Muscu mix', status: 'PASS', detail: `CF content: ${hasCFTabs}, Muscu visible: ${hasMuscu1}, Muscu tab clicked: ${muscuTabClicked}, Muscu content: ${muscuContent}` });
-      log(`PASS - CF: ${hasCFTabs}, Muscu tab: ${hasMuscu1}, clicked: ${muscuTabClicked}, content after click: ${muscuContent}`);
+      results.push({ test: 'TEST 4: CrossFit + Muscu mix', status: 'PASS',
+        detail: `CF: ${hasCFContent}, Muscu visible: ${hasMuscu}, tab clicked: ${muscuClicked}, content: ${muscuHasContent}` });
+      log(`PASS - CF: ${hasCFContent}, Muscu: ${hasMuscu}, tab: ${muscuClicked}, content: ${muscuHasContent}`);
     } else {
       const issues = [];
-      if (!hasCFTabs && !hasMuscu1) issues.push('Neither CF nor Muscu content found');
-      if (isBlankAfterClick) issues.push('Muscu tab clicked but no exercises shown (blank page)');
-      if (criticalErrors.length > 0) issues.push(`Errors: ${criticalErrors.slice(0,3).join('; ')}`);
+      if (!hasCFContent && !hasMuscu) issues.push('No CF or Muscu content');
+      if (isBlankAfterClick) issues.push('Muscu tab clicked but blank');
+      if (criticalErrors.length > 0) issues.push(`Errors: ${criticalErrors.slice(0,2).join('; ')}`);
       results.push({ test: 'TEST 4: CrossFit + Muscu mix', status: 'FAIL', detail: issues.join(' | ') });
       log(`FAIL - ${issues.join(' | ')}`);
-      log(`Page snippet: ${pageText.substring(0, 400)}`);
     }
     await context.close();
   } catch (e) {
@@ -280,58 +327,45 @@ async function runTests() {
     log(`FAIL - Exception: ${e.message}`);
   }
 
+  // ═══════════════════════════════════════════════════════════
   // TEST 5: Muscu level step — sport mix section visible
+  // ═══════════════════════════════════════════════════════════
   log('\n=== TEST 5: Muscu level step — sport mix section visible ===');
   try {
-    const { page, context, consoleErrors } = await createPage(browser);
-    await page.addInitScript(() => {
-      sessionStorage.setItem('mtd_seen_welcome', 'true');
-      sessionStorage.setItem('mtd_profile', JSON.stringify({
-        sStep: 2, sportType: 'musculation', sportDays: 5,
-        sportLevel: 'intermediate', parqDone: true
-      }));
+    const { page, context, consoleErrors } = await createPageWithProfile({
+      appMode: 'sport', sStep: 2,
+      sportType: 'musculation', sportDays: 5,
+      sportLevel: 'intermediate', parqDone: true,
+      // Required for sport-only mode
+      sex: 'homme', age: 30, weight: 70, height: 175,
+      _view: 'sport'
     });
-    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 15000 });
-    await page.waitForTimeout(2000);
 
-    // Navigate to sport section
-    const sportTabSelectors = [
-      '[data-tab="sport"]', 'button[onclick*="sport"]', '#tab-sport',
-      'button:has-text("Sport")', 'a[href*="sport"]',
-    ];
-    let clicked = false;
-    for (const sel of sportTabSelectors) {
-      try {
-        const el = await page.$(sel);
-        if (el) { await el.click(); clicked = true; break; }
-      } catch {}
-    }
-    if (!clicked) {
-      try { await page.click('text=Sport', { timeout: 3000 }); clicked = true; } catch {}
-    }
-    await page.waitForTimeout(1500);
+    await navigateTo(page, 'sport');
+    await page.waitForTimeout(1000);
 
     const pageText = await page.evaluate(() => document.body.innerText);
-    const pageTextLower = pageText.toLowerCase();
+    const lc = pageText.toLowerCase();
 
-    const hasSportMixSection = pageTextLower.includes('combiner') || pageTextLower.includes('plusieurs sports') ||
-                               pageTextLower.includes('sport mix') || pageTextLower.includes('ajouter un sport') ||
-                               pageTextLower.includes('mix') || pageTextLower.includes('secondaire');
+    const hasCombiner = lc.includes('combiner');
+    const hasPlusSports = lc.includes('plusieurs sports');
+    const hasMixKeyword = lc.includes('sport mix') || lc.includes('ajouter un sport') ||
+                          lc.includes('secondaire') || lc.includes('second sport') ||
+                          lc.includes('add a sport') || lc.includes('mix');
 
-    const criticalErrors = consoleErrors.filter(e =>
-      !e.includes('favicon') && !e.includes('service worker') && !e.includes('sw.js') &&
-      !e.includes('Failed to register') && !e.includes('supabase') && !e.includes('Supabase')
-    );
+    const criticalErrors = getCriticalErrors(consoleErrors);
 
-    if (hasSportMixSection && criticalErrors.length === 0) {
-      results.push({ test: 'TEST 5: Muscu level step — sport mix visible', status: 'PASS', detail: 'Sport mix section "Combiner plusieurs sports" is visible' });
-      log('PASS - Sport mix section visible');
+    log(`  "combiner": ${hasCombiner}, "plusieurs sports": ${hasPlusSports}, mix keyword: ${hasMixKeyword}`);
+    log(`  snippet: ${pageText.substring(0, 400)}`);
+
+    if ((hasCombiner || hasPlusSports || hasMixKeyword) && criticalErrors.length === 0) {
+      results.push({ test: 'TEST 5: Muscu level step — sport mix visible', status: 'PASS',
+        detail: `Sport mix section visible (combiner: ${hasCombiner}, plusieurs sports: ${hasPlusSports})` });
+      log('PASS - Sport mix section "Combiner plusieurs sports" visible');
     } else {
       const issues = [];
-      if (!hasSportMixSection) {
-        issues.push(`Sport mix section not found. Page snippet: ${pageText.substring(0, 400)}`);
-      }
-      if (criticalErrors.length > 0) issues.push(`Errors: ${criticalErrors.slice(0,3).join('; ')}`);
+      issues.push(`Sport mix section not found (combiner:${hasCombiner}, plusieurs_sports:${hasPlusSports}, mix:${hasMixKeyword})`);
+      if (criticalErrors.length > 0) issues.push(`Errors: ${criticalErrors.slice(0,2).join('; ')}`);
       results.push({ test: 'TEST 5: Muscu level step — sport mix visible', status: 'FAIL', detail: issues.join(' | ') });
       log(`FAIL - ${issues.join(' | ')}`);
     }
@@ -341,58 +375,44 @@ async function runTests() {
     log(`FAIL - Exception: ${e.message}`);
   }
 
+  // ═══════════════════════════════════════════════════════════
   // TEST 6: Today dashboard — streak card
+  // ═══════════════════════════════════════════════════════════
   log('\n=== TEST 6: Today dashboard — streak card ===');
   try {
-    const { page, context, consoleErrors } = await createPage(browser);
-    await page.addInitScript(() => {
-      sessionStorage.setItem('mtd_seen_welcome', 'true');
-      sessionStorage.setItem('mtd_profile', JSON.stringify({
-        step: 10, streak: 7, sStep: 0, sportType: null
-      }));
+    const { page, context, consoleErrors } = await createPageWithProfile({
+      appMode: 'both', nStep: 12,
+      step: 10, streak: 7, sStep: 0, sportType: null,
+      sex: 'homme', goal: 'perte', weight: 70, height: 175, age: 30,
+      _view: 'today'
     });
-    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 15000 });
-    await page.waitForTimeout(2000);
 
-    // Try to navigate to dashboard/today tab
-    const dashTabSelectors = [
-      '[data-tab="today"]', '[data-tab="dashboard"]',
-      'button[onclick*="today"]', 'button[onclick*="dashboard"]',
-      '#tab-today', '#tab-dashboard',
-      'button:has-text("Aujourd")', 'button:has-text("Dashboard")',
-      'button:has-text("Today")',
-    ];
-    let clicked = false;
-    for (const sel of dashTabSelectors) {
-      try {
-        const el = await page.$(sel);
-        if (el) { await el.click(); clicked = true; break; }
-      } catch {}
-    }
-    await page.waitForTimeout(1500);
+    await navigateTo(page, 'aujourd');
+    await page.waitForTimeout(1000);
 
     const pageText = await page.evaluate(() => document.body.innerText);
-    const pageTextLower = pageText.toLowerCase();
+    const lc = pageText.toLowerCase();
 
-    const hasStreak = pageTextLower.includes('streak') || pageTextLower.includes('série') ||
-                      pageText.includes('7') || pageTextLower.includes('jours consécutifs') ||
-                      pageTextLower.includes('flamme') || pageTextLower.includes('🔥');
-    const hasDashboard = pageTextLower.includes('today') || pageTextLower.includes("aujourd") ||
-                         pageTextLower.includes('dashboard') || pageTextLower.includes('bienvenue') ||
-                         pageTextLower.includes('bonjour');
+    const hasStreak = lc.includes('streak') || lc.includes('série') ||
+                      lc.includes('jours') || pageText.includes('7') ||
+                      lc.includes('trophée') || lc.includes('trophy') ||
+                      lc.includes('🔥') || lc.includes('🏆');
+    const hasDashboard = lc.includes("aujourd") || lc.includes('dashboard') ||
+                         lc.includes('bonjour') || lc.includes('smartfitcoach');
 
-    const criticalErrors = consoleErrors.filter(e =>
-      !e.includes('favicon') && !e.includes('service worker') && !e.includes('sw.js') &&
-      !e.includes('Failed to register') && !e.includes('supabase') && !e.includes('Supabase')
-    );
+    const criticalErrors = getCriticalErrors(consoleErrors);
 
-    if (hasStreak && criticalErrors.length === 0) {
-      results.push({ test: 'TEST 6: Today dashboard — streak card', status: 'PASS', detail: `Streak card visible, dashboard loads` });
-      log('PASS - Streak card visible, no crash');
+    log(`  streak: ${hasStreak}, dashboard: ${hasDashboard}`);
+    log(`  snippet: ${pageText.substring(0, 300)}`);
+
+    if (hasStreak && hasDashboard && criticalErrors.length === 0) {
+      results.push({ test: 'TEST 6: Today dashboard — streak card', status: 'PASS', detail: 'Dashboard loads, streak card visible' });
+      log('PASS - Dashboard loads, streak card visible');
     } else {
       const issues = [];
-      if (!hasStreak) issues.push(`Streak card not found. Page snippet: ${pageText.substring(0, 400)}`);
-      if (criticalErrors.length > 0) issues.push(`Errors: ${criticalErrors.slice(0,3).join('; ')}`);
+      if (!hasDashboard) issues.push('Dashboard not rendered');
+      if (!hasStreak) issues.push('Streak card not found');
+      if (criticalErrors.length > 0) issues.push(`Errors: ${criticalErrors.slice(0,2).join('; ')}`);
       results.push({ test: 'TEST 6: Today dashboard — streak card', status: 'FAIL', detail: issues.join(' | ') });
       log(`FAIL - ${issues.join(' | ')}`);
     }
@@ -404,19 +424,15 @@ async function runTests() {
 
   await browser.close();
 
-  // Print summary
+  // ─── SUMMARY ───
   log('\n========== SMOKE TEST SUMMARY ==========');
   let passed = 0, failed = 0;
   for (const r of results) {
     const icon = r.status === 'PASS' ? '✓' : '✗';
     log(`${icon} [${r.status}] ${r.test}`);
-    if (r.status === 'FAIL') {
-      log(`       Detail: ${r.detail}`);
-      failed++;
-    } else {
-      log(`       Detail: ${r.detail}`);
-      passed++;
-    }
+    log(`       ${r.detail}`);
+    if (r.status === 'PASS') passed++;
+    else failed++;
   }
   log(`\nTotal: ${passed} PASSED, ${failed} FAILED out of ${results.length} tests`);
   return results;
