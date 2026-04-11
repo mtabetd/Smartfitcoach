@@ -840,10 +840,13 @@
     }, 8000);
 
     var profile = buildProfileFromState();
+    var _mcCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var _mcTimer = _mcCtrl ? setTimeout(function() { _mcCtrl.abort(); }, 28000) : null;
     fetch('/.netlify/functions/generate-muscu-program', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ profile: profile })
+      body: JSON.stringify({ profile: profile }),
+      signal: _mcCtrl ? _mcCtrl.signal : undefined
     })
     .then(function(r) {
       if (!r.ok) {
@@ -854,6 +857,7 @@
       return r.json();
     })
     .then(function(data) {
+      if (_mcTimer) clearTimeout(_mcTimer);
       _generating = false;
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
 
@@ -865,7 +869,7 @@
       _Snow.muscuProgramCount = (_Snow.muscuProgramCount || 0) + 1;
       if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
 
-      var programText = data.program || '';
+      var programText = typeof data.program === 'string' ? data.program : '';
       var footerQuote = FOOTER_QUOTES[Math.floor(Math.random() * FOOTER_QUOTES.length)];
 
       // Try to parse into interactive cards; fall back to plain text if it fails
@@ -920,11 +924,15 @@
       try { localStorage.setItem(LS_KEY_PROGRAM, JSON.stringify({ program: programText, generatedAt: data.generatedAt })); } catch(e) { console.error('[muscu-prog] save fail:', e); }
     })
     .catch(function(err) {
+      if (_mcTimer) clearTimeout(_mcTimer);
       _generating = false;
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
       console.error('[muscu-prog] generation error:', err);
+      var _mcErrMsg = (err && err.name === 'AbortError')
+        ? 'La g\u00e9n\u00e9ration prend trop de temps. R\u00e9essaie dans quelques instants.'
+        : escapeHTML(err.message || 'La g\u00e9n\u00e9ration a \u00e9chou\u00e9 \u2014 v\u00e9rifiez votre connexion et r\u00e9essayez.');
       content.innerHTML = '<div style="text-align:center;padding:40px;">' +
-        '<div style="font-size:14px;color:var(--red,#5A1010);margin-bottom:16px;">\u26a0 ' + escapeHTML(err.message || 'La génération a échoué — vérifiez votre connexion et réessayez.') + '</div>' +
+        '<div style="font-size:14px;color:var(--red,#5A1010);margin-bottom:16px;">\u26a0 ' + _mcErrMsg + '</div>' +
         '<button id="muscu-prog-retry" style="background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Réessayer</button>' +
       '</div>';
       var retryBtn = document.getElementById('muscu-prog-retry');
