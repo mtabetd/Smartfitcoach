@@ -2036,6 +2036,15 @@ function renderTodayDashboard(p) {
     if (window.saveProfile) { try { window.saveProfile(); } catch(e) { console.warn('[saveProfile] failed:', e); } }
   }
 
+  // Smart Calendar banner — utilisateurs existants avant 11/04/2026
+  try {
+    var _calBannerDate = S.firstLoginDate || '';
+    if (_calBannerDate && _calBannerDate < '2026-04-11' && !S.smartCalendarDismissed && S.appMode && S.appMode !== 'nutrition' && window.SMART_CALENDAR && window.SMART_CALENDAR.renderBanner) {
+      var _calBanner = window.SMART_CALENDAR.renderBanner();
+      if (_calBanner) wrapper.appendChild(_calBanner);
+    }
+  } catch(e) { console.warn('[SmartCalendar banner]', e); }
+
   // Card 1 — Bonjour
   wrapper.appendChild(renderCardBonjour(S));
 

@@ -5934,6 +5934,17 @@ function renderMusculationProgram(p) {
  card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:' + intColor + ';margin-top:4px'}, 'Intensit\u00e9 cycle : ' + intPct + '%'));
  }
 
+ // GIF demo image — show if available from exercise-gifs-map.js
+ var _gifUrl = (window.EXERCISE_GIFS && ex.n && window.EXERCISE_GIFS[ex.n]) ? window.EXERCISE_GIFS[ex.n] : null;
+ if (_gifUrl) {
+   card.appendChild(h('img', {
+     src: _gifUrl, alt: ex.n,
+     loading: 'lazy',
+     style: 'width:100%;max-width:300px;border-radius:8px;margin:8px 0 4px;display:block',
+     onerror: 'this.style.display="none"'
+   }));
+ }
+
  // Video link — auto-generate URL if not preset in exercise data
  var _videoUrl = ex.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(ex.n) : null);
  if (_videoUrl) {
@@ -7013,6 +7024,17 @@ function renderSportModal(app) {
  var tl = h('ul', {'class': 'ingredient-list'});
  ex.tips.forEach(function(tip){ tl.appendChild(h('li', {}, tip)); });
  body.appendChild(tl);
+ }
+
+ // GIF demo in detail sheet — show if available
+ var _detailGif = (window.EXERCISE_GIFS && ex.n && window.EXERCISE_GIFS[ex.n]) ? window.EXERCISE_GIFS[ex.n] : null;
+ if (_detailGif) {
+   body.appendChild(h('img', {
+     src: _detailGif, alt: ex.n,
+     loading: 'lazy',
+     style: 'width:100%;border-radius:12px;margin:12px 0 8px;display:block',
+     onerror: 'this.style.display="none"'
+   }));
  }
 
  // Video button (only render if URL exists)

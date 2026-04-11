@@ -90,7 +90,11 @@ var PROFILE_KEYS = [
  '_parqNextStep',
  '_sportProfileDone',
  '_switchedFromSport',
- '_switchedFromNutrition'
+ '_switchedFromNutrition',
+ // Smart Calendar
+ 'weeklyCalendar',
+ 'smartCalendarEnabled',
+ 'smartCalendarDismissed'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -1167,6 +1171,9 @@ function render() {
  if (S.appMode !== 'nutrition') {
    nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, window.t('nav.sport')));
  }
+ if (S.appMode && S.appMode !== 'nutrition') {
+   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'calendar' ? ' active' : ''), style: 'font-size:11px', onclick: function(){ S.view = 'calendar'; if(window.BLACKBOX)window.BLACKBOX.log('nav_calendar'); render(); }}, '📅 Calendrier'));
+ }
  wrap.appendChild(nav);
 
  var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
@@ -1190,6 +1197,8 @@ function render() {
 
  if (S.view === 'profil' || S.view === 'profile') {
  renderProfilePage(content);
+ } else if (S.view === 'calendar' && window.SMART_CALENDAR) {
+ window.SMART_CALENDAR.render(content);
  } else if (S.view === 'sport' && window.SPORT) {
  window.SPORT.render(content);
  } else if (S.view === 'nutrition' && window.NUTRITION) {
