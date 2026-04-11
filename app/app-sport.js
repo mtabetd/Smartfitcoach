@@ -1793,15 +1793,21 @@ function syncSportGoalsToNutrition() {
  // GOALS: [0=bulk, 1=lean_bulk, 2=maintain, 3=cut, 4=shred, 5=recomposition]
  var _sgls = S.sportGoals || [];
  if (_sgls.length === 0) { S.goal = 2; return; } // désélection totale → reset maintien
- // Priority: shred > muscle > weightloss > others (→ maintain)
+ // Priority: shred > muscle > weightloss > others (→ maintain/recomposition)
  // For 'muscle': preserve lean_bulk (index 1) if already set — both are mass-building goals.
+ // BUG C fix : préserver recomposition (index 5) si aucun objectif sport ne force un changement
  var newIdx = 2; // maintain par défaut
+ var currentKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
  if (_sgls.indexOf('shred') !== -1) newIdx = 4; // shred
  else if (_sgls.indexOf('muscle') !== -1) {
- var currentKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
- newIdx = (currentKey === 'lean_bulk') ? 1 : 0; // preserve lean_bulk, otherwise default to bulk
+   newIdx = (currentKey === 'lean_bulk') ? 1 : 0; // preserve lean_bulk, otherwise default to bulk
  }
  else if (_sgls.indexOf('weightloss') !== -1) newIdx = 3; // cut
+ else if (_sgls.indexOf('general') !== -1 || _sgls.indexOf('endurance') !== -1 || _sgls.indexOf('flexibility') !== -1) {
+   // Pour 'general'/'endurance'/'flexibility' : préserver recomposition si déjà en recomposition
+   // (recomposition = maintien calorique + optimisation macros — compatible avec sport général)
+   newIdx = (currentKey === 'recomposition') ? 5 : 2;
+ }
  S.goal = newIdx;
 }
 
@@ -1824,8 +1830,9 @@ function renderMusculationGoals(p) {
  // ──────────────────────────────────────────────────────────────────────
 
  // Pré-sélection depuis l'objectif nutrition si sportGoals est vide
+ // BUG C fix : index 5 (recomposition) doit mapper vers 'general' (maintien calorique + optimisation macros)
  if ((!S.sportGoals || S.sportGoals.length === 0) && S.goal !== null && S.goal !== undefined) {
-   var _nutToSport = {0: 'muscle', 1: 'muscle', 2: 'general', 3: 'weightloss', 4: 'shred'};
+   var _nutToSport = {0: 'muscle', 1: 'muscle', 2: 'general', 3: 'weightloss', 4: 'shred', 5: 'general'};
    var _preId = _nutToSport[S.goal];
    if (_preId) { if (!Array.isArray(S.sportGoals)) S.sportGoals = []; S.sportGoals = [_preId]; }
  }
@@ -5256,6 +5263,18 @@ function renderMusculationProgram(p) {
  karvonenDiv.appendChild(zonesRow);
  karvonenDiv.appendChild(h('div', {style: 'margin-top:4px;font-style:italic;color:var(--grey)'}, ' Beta-bloquants : si prescrit, votre FC max réelle est plus basse (~10-20%). Consulter votre cardiologue pour ajuster les zones. Test d\'effort (VO2max) recommandé avant programme intensif.'));
  p.appendChild(karvonenDiv);
+ }
+
+ // HTA sévère : avertissement intensité sport (ESC/ESH 2018, AHA/ACSM 2007)
+ // hta_severe dans S.medical (onboarding nutrition) → bloquer HIIT/CrossFit + zones FC adaptées
+ if (S.medical && S.medical.indexOf('hta_severe') !== -1) {
+ var htaDiv = h('div', {style: 'background:rgba(90,16,16,0.06);border-left:4px solid #5A1010;padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#5A1010'});
+ htaDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#5A1010;margin-bottom:6px'}, 'HTA Sévère — Restrictions sport obligatoires'));
+ htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u26A0 HTA sévère (≥180/110 mmHg) : HIIT, CrossFit et efforts isométriques lourds sont contre-indiqués (ESC/ESH 2018). Risque de pic tensionnel >300/150 mmHg (ACC 2019).'));
+ htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Intensité maximale : RPE 6/10 — cardio Z1-Z2 uniquement (<65% FCmax)'));
+ htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (squat lourd, soulevé de terre, arraché) — Lamotte et al., Arch Cardiovasc Dis 2015'));
+ htaDiv.appendChild(h('div', {}, '\u2022 Consultation cardiologique obligatoire avant tout programme. Test d\'effort recommandé.'));
+ p.appendChild(htaDiv);
  }
 
  // Sommeil insuffisant : avertissement récupération (S.sleep 0=<6h, 1=6-7h) — ACSM 2020, IOC 2018
