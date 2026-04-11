@@ -3004,7 +3004,8 @@ if(_age>=65)bmrRaw=bmrRaw*0.95;
 return Math.round(bmrRaw)} // Mifflin-St Jeor 1990 (Frankenfield 2005) + correction seniors 65+ (Amirkalali 2008)
 function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
-var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
+// BUG A fix : utiliser trainingDaysSelected.length si disponible (plus précis que sportDays)
+var sportDays=Array.isArray(s.trainingDaysSelected)&&s.trainingDaysSelected.length>0?s.trainingDaysSelected.length:(s.sportDays||0);var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
 function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}// Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
 base=Math.max(base,1800);return base}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)
@@ -3041,6 +3042,21 @@ var bmrFloor=calcBMR();if(bmrFloor>0)base=Math.max(base,bmrFloor);
 if(s.alcoholFreq&&s.alcoholFreq!=='never'&&typeof alcoholWeeklyKcal==='function'){
   var alcDaily=Math.round(alcoholWeeklyKcal()/7);
   if(alcDaily>0){base=Math.max(kcalFloor,base-alcDaily);} // soustraire mais respecter le plancher
+}
+// targetWeight : réduction progressive du déficit/surplus quand l'objectif est proche
+// Quand |poids_actuel - poids_cible| <= 2 kg → réduire déficit/surplus de 50% pour éviter l'oscillation
+// Quand |poids_actuel - poids_cible| <= 1 kg → passer en quasi-maintien (déficit/surplus réduit à 25%)
+// Évite l'effet yoyo en fin de coupe/masse (recommandation ACSM 2016, Trexler 2014 — métabolic adaptation)
+if(s.targetWeight&&s.weight&&s.weight!==s.targetWeight&&tdeeVal>0){
+  var _twDiff=Math.abs(s.targetWeight-s.weight);
+  var _isLosing=(goalKey==='cut'||goalKey==='shred')&&s.targetWeight<s.weight;
+  var _isGaining=(goalKey==='bulk'||goalKey==='lean_bulk')&&s.targetWeight>s.weight;
+  if((_isLosing||_isGaining)&&_twDiff<=2){
+    var _twFactor=_twDiff<=1?0.25:0.50; // 25% si < 1kg, 50% si 1-2kg
+    var _twBase=Math.round(tdeeVal); // référence = TDEE (maintien)
+    base=Math.round(_twBase+(_twFactor*(base-_twBase))); // interpolation vers maintien
+    base=Math.max(base,kcalFloor);
+  }
 }
 return base} // ISSN 2017 / ACSM 2016: plancher universel ≥1400 kcal/j (femme et homme)
 function calcMacros(){
@@ -3567,10 +3583,14 @@ window.pickSmoothieForPlan = pickSmoothieForPlan;
 
 function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var weekProtBudget={};var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
 // useSmoothing : whey activé + WHEY_SMOOTHIES disponible + regime non-vegan (whey = protéine animale)
-var _useSmoothing=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s.regime!==3);
+// _canSmooth : base condition (whey activé, DB disponible, pas vegan)
+var _canSmooth=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s.regime!==3);
 for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget),lR=pickRecipe(pL,lT,uL,dayProteins,weekProtBudget),sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
-// Si whey activé → smoothie remplace la collation
+// Si whey activé → smoothie whey uniquement les jours d'entraînement (ISSN 2017 : timing post-workout)
+// Jours de repos : collation normale (le smoothie whey cible la fenêtre anabolique post-séance)
+var _dayInfoSmooth=getDayType(d);
+var _useSmoothing=_canSmooth&&_dayInfoSmooth.isTraining;
 if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS,dayProteins,weekProtBudget);else if(_useSmoothing)sR=pickSmoothieForPlan(sT,uSM);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS,dayProteins,weekProtBudget);else sR=pickRecipe(pS,sT,uS,dayProteins,weekProtBudget);}
 // Dîner : généré seulement si mealsPerDay >= 3 (pas pour jeûne intermittent 2 repas)
 if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD,dayProteins,weekProtBudget);
@@ -3581,7 +3601,11 @@ bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR&&!sR._smoothie)sR=
 // Quand smoothie dans le snack → slot fixe (choix utilisateur), ajustement sur B/L/D uniquement
 var isDessertDayPool=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;var sPool=meals>=4&&sT>0&&!_useSmoothing?(isDessertDayPool?pSD:(pSN.length>0?pSN:pS)):null;
 for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used,dayProteins,weekProtBudget);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
-plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
+// Agréger les macros du jour pour le dashboard (today-dashboard lit _dayPlan.kcal/.p/.g/.l)
+var _dP=Math.round((bR?bR.p||0:0)+(lR?lR.p||0:0)+(sR?sR.p||0:0)+(dR?dR.p||0:0));
+var _dG=Math.round((bR?bR.g||0:0)+(lR?lR.g||0:0)+(sR?sR.g||0:0)+(dR?dR.g||0:0));
+var _dL=Math.round((bR?bR.l||0:0)+(lR?lR.l||0:0)+(sR?sR.l||0:0)+(dR?dR.l||0:0));
+plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:c,p:_dP,g:_dG,l:_dL})}return plan}
 function swapMeal(di,slot){
   var s=window.S;
   if(!s.weekPlan||!s.weekPlan[di])return;
@@ -3592,8 +3616,9 @@ function swapMeal(di,slot){
   var cBase=calcTarget(),split=getAdaptedMealSplit(di);if(!split)return;var c=Math.round(cBase*(split.calMultiplier||1));
   var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);
   // Snack + whey → swapper vers un autre smoothie (pas une collation normale)
-  // regime===3 (vegan) : whey est une protéine animale, ne pas servir de smoothie whey
-  if(slot==='snack'&&s.whey&&s.regime!==3&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length){
+  // Condition : whey activé + jour d'entraînement + non-vegan (cohérent avec generateWeek)
+  var _swapDayInfo=getDayType(di);
+  if(slot==='snack'&&s.whey&&s.regime!==3&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&_swapDayInfo.isTraining){
     var curId=(s.weekPlan[di][slot]&&s.weekPlan[di][slot]._id)||'';
     var usedSm=new Set([curId]);
     var nrSm=pickSmoothieForPlan(tgt,usedSm);
@@ -3651,6 +3676,9 @@ window.swapMeal = swapMeal;
 // ─── PLAN HASH — détecte changement paramètres nutritionnels critiques ────
 // Si l'un de ces paramètres change depuis la dernière génération du plan,
 // weekPlan doit être régénéré pour rester cohérent avec le profil.
+// BUG A fix : sportDays et trainingDaysSelected influencent le calMultiplier via
+// getAdaptedMealSplit() → getDayType(). Un changement de planning sport doit
+// invalider le weekPlan pour que les macros soient recalculées correctement.
 window.getPlanHash = function() {
   var s = window.S;
   if (!s) return '';
@@ -3666,7 +3694,11 @@ window.getPlanHash = function() {
     s.height || 0,
     s.age || 0,
     s.sex || '',
-    s.activity !== undefined && s.activity !== null ? String(s.activity) : ''
+    s.activity !== undefined && s.activity !== null ? String(s.activity) : '',
+    // BUG A : jours d'entraînement influencent le calMultiplier via getAdaptedMealSplit
+    s.sportDays || 0,
+    Array.isArray(s.trainingDaysSelected) ? s.trainingDaysSelected.slice().sort().join(',') : '',
+    s.weeklyCalendar ? JSON.stringify(s.weeklyCalendar) : ''
   ].join('|');
 };
 

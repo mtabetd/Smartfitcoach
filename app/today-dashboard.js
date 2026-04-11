@@ -208,19 +208,51 @@ function getTodayTotals() {
 }
 
 // ─── GET CALORIE TARGET ───
+// Utilise getAdaptedMealSplit() pour appliquer le calMultiplier correct selon objectif et type de jour.
+// Cohérence avec generateWeek() qui utilise la même fonction — BUG B symbiose sport/nutrition.
 function getCalorieTarget() {
   if (window.calcTarget) {
     var t = window.calcTarget();
-    if (t > 0) return t;
+    if (t > 0) {
+      if (window.getAdaptedMealSplit) {
+        var _todayIdxCal = (new Date().getDay() + 6) % 7;
+        try {
+          var _splitCal = window.getAdaptedMealSplit(_todayIdxCal);
+          if (_splitCal && typeof _splitCal.calMultiplier === 'number') {
+            return Math.round(t * _splitCal.calMultiplier);
+          }
+        } catch(e) {}
+      }
+      return t;
+    }
   }
   return 0;
 }
 
 // ─── GET MACRO TARGETS ───
+// Applique le calMultiplier sur les glucides (carb cycling) quand weekPlan absent.
+// Les protéines et lipides restent stables — seuls les glucides absorbent la variation
+// (ISSN 2017, Helms 2014 — carb cycling : protéines stables, glucides cyclés).
 function getMacroTargets() {
   if (window.calcMacros) {
     var m = window.calcMacros();
-    if (m && (m.p > 0 || m.g > 0 || m.l > 0)) return m;
+    if (m && (m.p > 0 || m.g > 0 || m.l > 0)) {
+      if (window.getAdaptedMealSplit) {
+        var _todayIdxMacro = (new Date().getDay() + 6) % 7;
+        try {
+          var _splitMacro = window.getAdaptedMealSplit(_todayIdxMacro);
+          if (_splitMacro && typeof _splitMacro.calMultiplier === 'number' && _splitMacro.calMultiplier !== 1.0) {
+            var _mult = _splitMacro.calMultiplier;
+            var _pCal = m.p * 4;
+            var _lCal = m.l * 9;
+            var _totalTarget = Math.round((m.p * 4 + m.g * 4 + m.l * 9) * _mult);
+            var _gCal = Math.max(520, _totalTarget - _pCal - _lCal); // plancher 130g glucides × 4
+            return { p: m.p, g: Math.round(_gCal / 4), l: m.l };
+          }
+        } catch(e) {}
+      }
+      return m;
+    }
   }
   return null;
 }
@@ -443,14 +475,20 @@ function renderCardMacros() {
   var calorieTarget = getCalorieTarget();
   var macroTargetsOverride = null;
   // Priorité aux macros du plan du jour si weekPlan disponible
+  // Les macros sont aggrégées à la volée depuis les recettes (robuste aux swaps)
   if (Array.isArray(_S2.weekPlan) && _S2.weekPlan.length >= 7) {
     var _todayIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim
     var _dayPlan = _S2.weekPlan[_todayIdx];
     if (_dayPlan && typeof _dayPlan.kcal === 'number' && _dayPlan.kcal > 0) {
       calorieTarget = _dayPlan.kcal;
-      // N'utiliser l'override que si au moins une macro est définie — évite d'écraser getMacroTargets() avec des zéros
-      if ((_dayPlan.p || 0) > 0 || (_dayPlan.g || 0) > 0 || (_dayPlan.l || 0) > 0) {
-        macroTargetsOverride = { p: _dayPlan.p || 0, g: _dayPlan.g || 0, l: _dayPlan.l || 0 };
+      // Recalculer macros depuis les recettes actuelles (évite les agrégats périmés après swap)
+      var _planP = 0, _planG = 0, _planL = 0;
+      ['breakfast','lunch','snack','dinner'].forEach(function(sl) {
+        var r = _dayPlan[sl];
+        if (r) { _planP += (r.p || 0); _planG += (r.g || 0); _planL += (r.l || 0); }
+      });
+      if (_planP > 0 || _planG > 0 || _planL > 0) {
+        macroTargetsOverride = { p: Math.round(_planP), g: Math.round(_planG), l: Math.round(_planL) };
       }
     }
   }
@@ -489,25 +527,22 @@ function renderCardMacros() {
   }, Math.round(totals.kcal) + ' / ' + Math.round(calorieTarget) + ' kcal'));
   c.appendChild(kcalRow);
 
-  // Sport burn badge (si séance validée aujourd'hui)
+  // Sport burn badge (informatif uniquement — déjà inclus dans le TDEE via PAL)
+  // BUG D : Ne PAS ajouter _sportBurn à _netRemaining — le TDEE inclut déjà la dépense sportive
+  // via le facteur d'activité PAL (Mifflin-St Jeor × PAL). L'ajouter créerait un double-comptage.
+  // Le badge est conservé à titre informatif (confirmation de la dépense réelle de séance).
   if (_sportBurn > 0) {
     var _burnEl = document.createElement('div');
     _burnEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:6px;font-weight:500;color:var(--green,#1A4A1A);';
-    _burnEl.textContent = '🏃 +' + _sportBurn + ' kcal brûlées (sport)';
+    _burnEl.textContent = '🏃 ' + _sportBurn + ' kcal dépensées (incluses dans votre TDEE)';
     c.appendChild(_burnEl);
   }
 
-  // Calories restantes (nettes : target - mangé + brûlé)
-  var _netRemaining = Math.round(calorieTarget - totals.kcal + _sportBurn);
+  // Calories restantes = target - mangé (sans ajouter _sportBurn — BUG D fix)
+  var _netRemaining = Math.round(calorieTarget - totals.kcal);
   var _remEl = document.createElement('div');
   _remEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:10px;font-weight:500;';
-  if (_sportBurn > 0) {
-    // Afficher la formule nette
-    _remEl.style.color = _netRemaining >= 0 ? 'var(--green,#1A4A1A)' : 'var(--orange,#6A4A1A)';
-    _remEl.textContent = _netRemaining >= 0
-      ? '⚡ ' + _netRemaining + ' kcal nettes restantes'
-      : '⚠ ' + Math.abs(_netRemaining) + ' kcal au-dessus (net sport)';
-  } else if (_netRemaining > 0) {
+  if (_netRemaining > 0) {
     _remEl.style.color = 'var(--green,#1A4A1A)';
     _remEl.textContent = '⚡ ' + _netRemaining + ' kcal restantes';
   } else if (_netRemaining === 0) {
