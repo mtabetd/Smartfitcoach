@@ -1,0 +1,389 @@
+[
+  {
+    "name": "T1: weight=0 → calcBMR=0, plancher calcTarget → pas de NaN DOM",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T2: height=0 → calcBMR=0, BMI=null (div-par-zéro protégé) → pas de NaN",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T3: age=0 → calcBMR=0 (guard age<13) → pas de NaN",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T4: age=10 (< 13 minimum) → calcBMR=0 → pas de crash",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T5: age=100 (maximum) → calcBMR valide et fini → pas de NaN",
+    "passed": false,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": "calcBMR(age=100) devrait retourner une valeur > 0, got 0",
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T6: weight=300 (maximum) → calcBMR valide, poids ajusté obèse → pas de crash",
+    "passed": false,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": "calcBMR(weight=300) devrait retourner une valeur > 0, got 0",
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T7: height=100 (minimum valide) → calcBMR retourne valeur positive → pas de NaN",
+    "passed": false,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": "calcBMR(height=100) devrait retourner une valeur > 0, got 0",
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T8: activity=0 (Sédentaire) → ACTIVITIES[0] défini → calcTDEE valide",
+    "passed": false,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": "calcTDEE(activity=0) devrait retourner > 0, got 0",
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T9: weight=NaN → calcBMR=0 (guard !NaN) → pas de NaN dans DOM",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T10: goal=99 (hors range GOALS) → calcTarget=0, pas de crash",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T11: targetWeight=0 → modulation targetWeight skippée → pas de NaN",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 1500,
+      "macros": {
+        "g": 130,
+        "p": 120,
+        "l": 56,
+        "proteinPerKg": 1.6,
+        "fatPerKg": 0.85,
+        "carbsPerKg": 1.7,
+        "cyclePhase": null
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T12: mealsPerDay=1 → meal split valide (pas de div/0) → pas de NaN",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T13: sportDays=7 → calcTDEE PAL=1.725 (≥5j threshold) → pas de NaN",
+    "passed": false,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": "calcTDEE(sportDays=7) devrait retourner > 0, got 0",
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 0,
+      "macros": {
+        "g": 0,
+        "p": 0,
+        "l": 0
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  },
+  {
+    "name": "T14: femme 75kg enceinte T3 (sem.30) → calcTarget +450 kcal → pas de NaN",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 1400,
+      "tdee": 2170,
+      "target": 2620,
+      "macros": {
+        "g": 338,
+        "p": 130,
+        "l": 83,
+        "proteinPerKg": 1.4,
+        "fatPerKg": 1.1,
+        "carbsPerKg": 4.5,
+        "cyclePhase": null
+      },
+      "bmi": 27.5,
+      "errors": []
+    },
+    "htmlLen": 3654,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Femme · 30 ans · 75 kg · 165 cm · Modérément actif · Maintien / 2170 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2620 / MAINTIEN / ✓ Calculs validés par Nutrition"
+  },
+  {
+    "name": "T15: Goals 0-5 itérés → calcTarget et calcMacros valides pour chacun → pas de NaN",
+    "passed": true,
+    "critErrors": [],
+    "domHasNaN": false,
+    "domHasInfinity": false,
+    "mathHasNaN": false,
+    "mathHasInfinity": false,
+    "isBlank": false,
+    "extraReason": null,
+    "mathResult": {
+      "bmr": 0,
+      "tdee": 0,
+      "target": 1500,
+      "macros": {
+        "g": 130,
+        "p": 90,
+        "l": 69,
+        "proteinPerKg": 1.2,
+        "fatPerKg": 1,
+        "carbsPerKg": 1.7,
+        "cyclePhase": null
+      },
+      "bmi": null,
+      "errors": []
+    },
+    "htmlLen": 683,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+  }
+]
