@@ -105,10 +105,10 @@
   function showToast(message) {
     var toast = window.h('div', {
       style: 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);' +
-             'background:#2ECC71;color:#fff;padding:12px 24px;border-radius:24px;' +
-             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;font-weight:600;' +
-             'box-shadow:0 4px 16px rgba(46,204,113,0.4);z-index:9999;' +
-             'white-space:nowrap;'
+             'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:12px 24px;border-radius:2px;' +
+             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;' +
+             'letter-spacing:4px;text-transform:uppercase;' +
+             'z-index:9999;white-space:nowrap;'
     }, message);
     document.body.appendChild(toast);
     setTimeout(function() {
@@ -124,35 +124,35 @@
       var c = conflicts[i];
       var isCritique = c.severity === 'critique';
       var icon = isCritique ? 'Critique' : 'Attention';
-      var color = isCritique ? '#E74C3C' : '#F39C12';
-      var bgColor = isCritique ? '#FEF5F5' : '#FFFBF0';
+      var color = isCritique ? 'var(--red,#5A1010)' : 'var(--orange,#6A4A1A)';
+      var bgColor = isCritique ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--orangebg,rgba(106,74,26,.06))';
       var muscleList = c.muscles.join(', ');
       var msg = 'Vos muscles (' + muscleList + ') seront encore en récupération le ' +
                 c.nextDayName + '. ' + c.recoveryNeeded + 'h nécessaires, ' +
                 c.recoveryAvailable + 'h disponibles.';
       var row = window.h('div', {
         style: 'display:flex;align-items:flex-start;gap:10px;padding:12px;' +
-               'background:' + bgColor + ';border-radius:8px;margin-bottom:8px;' +
+               'background:' + bgColor + ';border-radius:2px;margin-bottom:8px;' +
                'border-left:3px solid ' + color + ';'
       }, [
         window.h('div', {
-          style: 'flex-shrink:0;background:' + color + ';color:#fff;' +
-                 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:700;' +
-                 'padding:2px 8px;border-radius:12px;margin-top:1px;text-transform:uppercase;letter-spacing:1px;'
+          style: 'flex-shrink:0;color:' + color + ';' +
+                 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;' +
+                 'padding:2px 6px;border:1px solid ' + color + ';border-radius:2px;margin-top:1px;text-transform:uppercase;letter-spacing:2px;'
         }, icon),
         window.h('div', {
-          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:#1a1a2e;line-height:1.5;'
+          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#0A0A09);line-height:1.6;'
         }, msg)
       ]);
       items.push(row);
     }
     var zone = window.h('div', {
-      style: 'background:#fff;border:1px solid #E0E0E0;border-radius:12px;padding:16px;margin-bottom:12px;'
+      style: 'background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:16px;margin-bottom:12px;'
     }, [
       window.h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;font-weight:700;' +
-               'color:#1a1a2e;margin-bottom:12px;display:flex;align-items:center;gap:8px;'
-      }, 'Conflits detectes')
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:4px;text-transform:uppercase;' +
+               'color:var(--grey,#6B6B65);margin-bottom:12px;'
+      }, 'Conflits détectés')
     ]);
     for (var j = 0; j < items.length; j++) {
       zone.appendChild(items[j]);
@@ -237,9 +237,10 @@
         }
 
         var selectEl = window.h('select', {
-          style: 'width:100%;padding:8px 10px;border:1px solid #E0E0E0;border-radius:8px;' +
-                 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:#1a1a2e;' +
-                 'background:#F8F9FA;cursor:pointer;-webkit-appearance:none;appearance:none;'
+          style: 'width:100%;padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;' +
+                 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);' +
+                 'background:var(--ivory,#FAF9F6);cursor:pointer;-webkit-appearance:none;appearance:none;' +
+                 'min-height:44px;'
         }, optionEls);
         selects[dayIdx] = selectEl;
 
@@ -260,8 +261,9 @@
               var isCrit = conf.severity === 'critique';
               badge.textContent = isCrit ? 'Critique' : 'Attention';
               badge.style.display = 'inline-block';
-              badge.style.background = isCrit ? '#E74C3C' : '#F39C12';
-              badge.style.color = '#fff';
+              badge.style.background = isCrit ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--orangebg,rgba(106,74,26,.06))';
+              badge.style.color = isCrit ? 'var(--red,#5A1010)' : 'var(--orange,#6A4A1A)';
+              badge.style.border = isCrit ? '1px solid var(--red,#5A1010)' : '1px solid var(--orange,#6A4A1A)';
             } else {
               badge.textContent = '';
               badge.style.display = 'none';
@@ -283,8 +285,9 @@
           var isCrit0 = conf0.severity === 'critique';
           badgeEl.textContent = isCrit0 ? 'Critique' : 'Attention';
           badgeEl.style.display = 'inline-block';
-          badgeEl.style.background = isCrit0 ? '#E74C3C' : '#F39C12';
-          badgeEl.style.color = '#fff';
+          badgeEl.style.background = isCrit0 ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--orangebg,rgba(106,74,26,.06))';
+          badgeEl.style.color = isCrit0 ? 'var(--red,#5A1010)' : 'var(--orange,#6A4A1A)';
+          badgeEl.style.border = isCrit0 ? '1px solid var(--red,#5A1010)' : '1px solid var(--orange,#6A4A1A)';
         }
 
         var card = window.h('div', {
@@ -295,7 +298,7 @@
             style: 'display:flex;align-items:center;margin-bottom:8px;'
           }, [
             window.h('span', {
-              style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:700;color:#1a1a2e;'
+              style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);'
             }, DAY_NAMES[dayIdx]),
             badgeEl
           ]),
@@ -382,16 +385,17 @@
   // ─── RENDER BANNER ───
   function renderBanner() {
     var banner = window.h('div', {
-      style: 'background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);' +
-             'color:#fff;border-radius:16px;margin:0 0 16px 0;padding:20px;' +
+      style: 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);' +
+             'border-radius:2px;margin:0 0 16px 0;padding:20px;' +
              'position:relative;box-sizing:border-box;'
     });
 
     var btnClose = window.h('button', {
-      style: 'position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.15);' +
-             'border:none;color:#fff;width:24px;height:24px;border-radius:50%;cursor:pointer;' +
-             'font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;' +
-             'line-height:1;padding:0;'
+      style: 'position:absolute;top:12px;right:12px;background:transparent;' +
+             'border:1px solid rgba(250,250,247,0.3);color:var(--ivory,#FAF9F6);' +
+             'width:28px;height:28px;border-radius:2px;cursor:pointer;' +
+             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:400;' +
+             'display:flex;align-items:center;justify-content:center;line-height:1;padding:0;'
     }, '\u00D7');
     btnClose.addEventListener('click', function() {
       var S = window.S;
@@ -401,20 +405,21 @@
     });
 
     var title = window.h('div', {
-      style: 'font-family:Georgia,serif;font-size:17px;font-weight:normal;margin-bottom:6px;' +
-             'padding-right:32px;'
-    }, '\u2728 Mise a jour \u2014 Calendrier Intelligent');
+      style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;font-weight:normal;margin-bottom:6px;' +
+             'padding-right:40px;'
+    }, 'Mise à jour — Calendrier Intelligent');
 
     var subtitle = window.h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.80);' +
-             'margin-bottom:16px;line-height:1.5;padding-right:32px;'
-    }, 'Planifiez vos sports sur 7 jours et evitez les conflits musculaires');
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:rgba(250,250,247,0.65);' +
+             'margin-bottom:16px;line-height:1.6;padding-right:40px;letter-spacing:0.3px;'
+    }, 'Planifiez vos sports sur 7 jours et évitez les conflits musculaires');
 
     var btnCta = window.h('button', {
-      style: 'background:transparent;color:#fff;border:1.5px solid #fff;border-radius:24px;' +
-             'padding:8px 20px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:600;' +
-             'cursor:pointer;'
-    }, 'Decouvrir \u2192');
+      style: 'background:transparent;color:var(--ivory,#FAF9F6);border:1px solid rgba(250,250,247,0.4);' +
+             'border-radius:2px;padding:10px 20px;min-height:44px;' +
+             'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;' +
+             'letter-spacing:4px;text-transform:uppercase;cursor:pointer;'
+    }, 'Découvrir');
     btnCta.addEventListener('click', function() {
       var S = window.S;
       if (S) S.view = 'calendar';
