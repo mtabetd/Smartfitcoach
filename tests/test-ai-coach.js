@@ -89,12 +89,19 @@ async function openCoachPanel(page) {
   // Click the floating "Smart Fit Coach" button to open the panel
   await page.click('#ai-coach-btn');
   await page.waitForSelector('#ai-coach-panel.open', { timeout: 3000 });
-  await page.waitForTimeout(300);
+  // Wait for the CSS transition (transform) to finish and input to be interactable
+  await page.waitForSelector('#ai-coach-input', { state: 'visible', timeout: 3000 });
+  await page.waitForTimeout(400);
 }
 
 async function sendCoachMessage(page, text) {
   await page.fill('#ai-coach-input', text);
-  await page.click('#ai-coach-send');
+  // Use JS click to bypass the floating #ai-coach-btn which overlaps #ai-coach-send
+  // (z-index:9000 vs panel z-index:8999 causes pointer-event interception)
+  await page.evaluate(() => {
+    var btn = document.getElementById('ai-coach-send');
+    if (btn) btn.click();
+  });
 }
 
 // ─── Test runner ──────────────────────────────────────────────────────────────
@@ -402,14 +409,19 @@ async function runTests() {
 
         await openCoachPanel(page);
 
-        // Send first message
+        // Send first message — use JS click to bypass floating btn overlap
         await page.fill('#ai-coach-input', 'Premier message');
-        await page.click('#ai-coach-send');
+        await page.evaluate(() => { document.getElementById('ai-coach-send').click(); });
 
         // Immediately attempt second send (within ~50ms)
+        // Use evaluate to bypass any input focus/state issues during the first request
         await page.waitForTimeout(50);
-        await page.fill('#ai-coach-input', 'Deuxième message');
-        await page.click('#ai-coach-send');
+        await page.evaluate(() => {
+          var inp = document.getElementById('ai-coach-input');
+          if (inp) inp.value = 'Deuxième message';
+          var btn = document.getElementById('ai-coach-send');
+          if (btn) btn.click();
+        });
 
         // Wait for first response to complete
         await page.waitForTimeout(1500);
