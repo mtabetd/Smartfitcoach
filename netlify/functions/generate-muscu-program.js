@@ -701,7 +701,7 @@ exports.handler = async function(event) {
   try {
     // Timeout 55s via AbortController (Netlify Functions timeout à 26s par défaut, Sonnet peut être lent)
     var _genCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 23000) : null;
+    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 20000) : null;
 
     var response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

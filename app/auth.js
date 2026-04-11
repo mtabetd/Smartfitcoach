@@ -851,6 +851,8 @@ window.AUTH = {
       window.S.calisthPullups = null; window.S.calisthPushups = null;
       window.S.calisthenicsdays = 3; window.S.calisthenicsOnboardingStep = null;
       window.S.calisthenicsProgram = null; window.S.calisthenicsWeek = 1; window.S.selectedCalisthDay = 0;
+      window.S.calisthCurrentWeek = 1; window.S.calisthDips = null;
+      window.S.crossfitBenchmarks = {};
       // Lang/Units (reset to defaults)
       window.S.lang = 'fr'; window.S.weightUnit = 'kg'; window.S.heightUnit = 'cm';
       window.S.emailOptin = true; window.S.profilePhoto = null;

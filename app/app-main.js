@@ -81,6 +81,8 @@ var PROFILE_KEYS = [
  'swapCount',
  'welcomeShown',
  'firstLoginDate',
+ 'sportMixEnabled',
+ 'sportMixSecondary',
  '_bodyFatEstimate',
  '_bodyCompositionProfile',
  '_bodyCompositionWeight',

@@ -210,18 +210,26 @@ exports.handler = async function(event, context) {
       return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Réponse IA vide. Veuillez réessayer.' }) };
     }
 
-    // Extraire le JSON de la réponse (au cas où il y aurait du texte extra)
-    var jsonMatch = replyText.match(/\{.*\}/s);
-    if (!jsonMatch) {
+    // Extraire le JSON de la réponse via comptage de profondeur (robuste aux objets imbriqués)
+    var jsonStr = null;
+    (function() {
+      var depth = 0, start = -1;
+      for (var i = 0; i < replyText.length; i++) {
+        var ch = replyText[i];
+        if (ch === '{') { if (start === -1) start = i; depth++; }
+        else if (ch === '}') { depth--; if (depth === 0 && start !== -1) { jsonStr = replyText.substring(start, i + 1); return; } }
+      }
+    })();
+    if (!jsonStr) {
       console.error('[plate-scan] Pas de JSON dans la réponse:', replyText);
       return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Réponse IA invalide. Veuillez réessayer.' }) };
     }
 
     var result;
     try {
-      result = JSON.parse(jsonMatch[0]);
+      result = JSON.parse(jsonStr);
     } catch(e) {
-      console.error('[plate-scan] JSON invalide dans la réponse:', jsonMatch[0]);
+      console.error('[plate-scan] JSON invalide dans la réponse:', jsonStr);
       return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Réponse IA invalide. Veuillez réessayer.' }) };
     }
 
