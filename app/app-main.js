@@ -158,7 +158,9 @@ function saveProfile() {
  // (évite faux positif quand un nouveau champ est ajouté à NUTRITION_PLAN_KEYS)
  if (pv === undefined) return false;
  // For arrays/objects use JSON serialization; for primitives use strict equality
- if (typeof pv === 'object' || typeof sv === 'object') {
+ // Note: typeof null === 'object' en JS — exclure null pour éviter les faux positifs
+ // (ex: pv=null vs sv=[] → "null" !== "[]" → invaliderait le plan à tort)
+ if ((typeof pv === 'object' && pv !== null) || (typeof sv === 'object' && sv !== null)) {
  return JSON.stringify(pv) !== JSON.stringify(sv);
  }
  return pv !== sv;
@@ -2082,6 +2084,9 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
          var _wkAuto = window.generateWeek();
          if (Array.isArray(_wkAuto) && _wkAuto.length > 0) S.weekPlan = _wkAuto;
          S._weekPlanGeneratedAt = new Date().toISOString();
+         // Figer le hash après auto-regen — évite une re-regen au prochain login
+         var _hAuto = window.getPlanHash ? window.getPlanHash() : '';
+         if (_hAuto) S._planHash = _hAuto;
          if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
          if (window.SupaSync && S.weekPlan) {
            try {
