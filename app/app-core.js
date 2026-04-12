@@ -3657,7 +3657,10 @@ var sR=null,dR=null;
 // Jours de repos : collation normale (le smoothie whey cible la fenêtre anabolique post-séance)
 var _dayInfoSmooth=getDayType(d);
 var _useSmoothing=_canSmooth&&_dayInfoSmooth.isTraining;
-if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS,dayProteins,weekProtBudget);else if(_useSmoothing)sR=pickSmoothieForPlan(sT,uSM);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS,dayProteins,weekProtBudget);else sR=pickRecipe(pS,sT,uS,dayProteins,weekProtBudget);}
+if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS,dayProteins,weekProtBudget);else if(_useSmoothing){sR=pickSmoothieForPlan(sT,uSM);// Fallback si pickSmoothieForPlan retourne null (DB vide ou tous utilisés)
+if(!sR&&pSN.length>0)sR=pickRecipe(pSN,sT,uS,dayProteins,weekProtBudget);else if(!sR)sR=pickRecipe(pS,sT,uS,dayProteins,weekProtBudget);}else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS,dayProteins,weekProtBudget);else sR=pickRecipe(pS,sT,uS,dayProteins,weekProtBudget);
+// Bloquer le nom du snack dans les Sets des autres slots — déduplication intra-journée complète
+if(sR&&sR.n){uB.add(sR.n);uL.add(sR.n);uD.add(sR.n);}}
 // Dîner : généré seulement si mealsPerDay >= 3 (pas pour jeûne intermittent 2 repas)
 if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD,dayProteins,weekProtBudget);
 // Scaling sur mesure : enrichit les recettes R201+ avec macros/ingrédients scalés
@@ -3666,7 +3669,8 @@ bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR&&!sR._smoothie)sR=
 // Ajustement itératif ±5% : corriger le slot le plus déviant jusqu'à convergence (max 8 passes)
 // Quand smoothie dans le snack → slot fixe (choix utilisateur), ajustement sur B/L/D uniquement
 var isDessertDayPool=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;var sPool=meals>=4&&sT>0&&!_useSmoothing?(isDessertDayPool?pSD:(pSN.length>0?pSN:pS)):null;
-for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used,dayProteins,weekProtBudget);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
+for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used,dayProteins,weekProtBudget);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b'){bR=nr;// Sync nom dans les autres Sets pour éviter les doublons inter-slots
+if(nr&&nr.n){uL.add(nr.n);uS.add(nr.n);uD.add(nr.n);}}else if(w.key==='l'){lR=nr;if(nr&&nr.n){uS.add(nr.n);uD.add(nr.n);}}else if(w.key==='s'){sR=nr;if(nr&&nr.n){uB.add(nr.n);uL.add(nr.n);uD.add(nr.n);}}else{dR=nr;if(nr&&nr.n){uL.add(nr.n);uS.add(nr.n);}}}
 // Agréger les macros du jour pour le dashboard (today-dashboard lit _dayPlan.kcal/.p/.g/.l)
 var _dP=Math.round((bR?bR.p||0:0)+(lR?lR.p||0:0)+(sR?sR.p||0:0)+(dR?dR.p||0:0));
 var _dG=Math.round((bR?bR.g||0:0)+(lR?lR.g||0:0)+(sR?sR.g||0:0)+(dR?dR.g||0:0));
@@ -3702,9 +3706,11 @@ function swapMeal(di,slot){
   _daySlots.forEach(function(sl){if(sl!==slot&&s.weekPlan[di][sl]&&s.weekPlan[di][sl].n)_dayUsedNames.add(s.weekPlan[di][sl].n);});
   var av=pool.filter(function(r){return r.n!==cur.n&&!_dayUsedNames.has(r.n)});
   if(!av.length)av=pool.filter(function(r){return r.n!==cur.n;}); // fallback si tous exclus
+  if(!av.length)return; // pool contient uniquement la recette actuelle — rien à swapper
   av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});
   var top=av.slice(0,Math.min(5,av.length));
   var nr=top[Math.floor(Math.random()*top.length)];
+  if(!nr)return; // sécurité — ne devrait pas arriver après le guard ci-dessus
   nr=enrichWithScaling(nr,tgt);
   s.weekPlan[di][slot]=nr;
   // IMPORTANT: persister le swap immédiatement
