@@ -29620,14 +29620,16 @@
       if (filters.difficulty && r.difficulty !== filters.difficulty) return false;
       if (filters.maxPrepTime && (r.prepTime + r.cookTime) > filters.maxPrepTime) return false;
       if (filters.tags && filters.tags.length) {
-        var hasAll = filters.tags.every(function (t) { return r.tags.indexOf(t) !== -1; });
+        var rTags = Array.isArray(r.tags) ? r.tags : [];
+        var hasAll = filters.tags.every(function (t) { return rTags.indexOf(t) !== -1; });
         if (!hasAll) return false;
       }
 
       // ── Filtre régime : végan doit avoir tag 'vegan' ──
-      if (regimeIdx === 3 && r.tags.indexOf('vegan') === -1) return false;
+      var _rTags = Array.isArray(r.tags) ? r.tags : [];
+      if (regimeIdx === 3 && _rTags.indexOf('vegan') === -1) return false;
       // Végétarien : tag 'vegetarian' ou 'vegan' requis
-      if (regimeIdx === 2 && r.tags.indexOf('vegetarian') === -1 && r.tags.indexOf('vegan') === -1) return false;
+      if (regimeIdx === 2 && _rTags.indexOf('vegetarian') === -1 && _rTags.indexOf('vegan') === -1) return false;
 
       // ── Filtre ingrédients exclus (allergies + intolérances + régime ingrédient) ──
       if (allExclusions.length && !recipeHasNoExcludedIngredients(r, allExclusions)) return false;

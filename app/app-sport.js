@@ -7211,7 +7211,7 @@ function renderRunningConfig(p) {
 function renderRunningProgram(p) {
  if (!S.runningProgram || S.runningProgram.length === 0) {
  var goalObj = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
- if (typeof window.generateRunningProgram === 'function') S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays, S.runningLevel, S.runningGoal);
+ if (typeof window.generateRunningProgram === 'function') { try { S.runningProgram = window.generateRunningProgram(goalObj ? goalObj.weeks : 8, S.runningDays || 3, S.runningLevel, S.runningGoal); } catch(e) { console.error('[running] generateRunningProgram error:', e); } }
  }
 
  var program = S.runningProgram;
@@ -7444,7 +7444,7 @@ function renderHyroxProgram(p) {
  // Guard: si config non remplie, rediriger vers la config
  if (!S.hyroxLevel || !S.hyroxGoal) { S.sStep = 9; setTimeout(function() { if (window.render) window.render(); }, 0); return; }
  if (!S.hyroxProgram || S.hyroxProgram.length === 0) {
- S.hyroxProgram = window.generateHyroxProgram(S.hyroxDays, S.hyroxLevel, S.hyroxGoal);
+  try { S.hyroxProgram = window.generateHyroxProgram(S.hyroxDays || 3, S.hyroxLevel, S.hyroxGoal); } catch(e) { console.error('[hyrox] generateHyroxProgram error:', e); }
  }
 
  var program = S.hyroxProgram;
@@ -7493,7 +7493,7 @@ function renderHyroxProgram(p) {
  var phaseColor = phaseColors[currentWeekData.phase] || '#0A0A09';
  var infoCard = h('div', {style: 'border-left:3px solid ' + phaseColor + ';padding:12px 16px;background:var(--ivory2);margin-bottom:16px'});
  infoCard.appendChild(h('div', {style: 'font-family:Georgia;font-size:16px;color:' + phaseColor + ';margin-bottom:4px'}, 'Phase : ' + currentWeekData.phase));
- infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic'}, currentWeekData.notes));
+ infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);font-style:italic'}, currentWeekData.notes || ''));
  if (currentWeekData.isDeload) {
  infoCard.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#6A4A1A;margin-top:6px;font-weight:bold'}, ' Semaine de décharge'));
  }
@@ -7653,6 +7653,7 @@ function renderPadelProgram(p) {
  return;
  }
  if (!S.padelWeek || S.padelWeek < 1) S.padelWeek = 1;
+ if (S.padelWeek > S.padelProgram.length) S.padelWeek = S.padelProgram.length;
  var week = S.padelProgram[S.padelWeek - 1];
  if (!week) return;
 
@@ -7690,7 +7691,7 @@ function renderPadelProgram(p) {
  if (ex.duration) exDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey2,#9A9A90);margin-top:2px'}, '⏱ ' + ex.duration));
  card.appendChild(exDiv);
  });
- card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:12px;padding-top:8px;border-top:1px solid var(--ivory3)'}, session.notes));
+ if (session.notes) card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:12px;padding-top:8px;border-top:1px solid var(--ivory3)'}, session.notes));
  p.appendChild(card);
  }
 
@@ -7775,6 +7776,7 @@ function renderGolfProgram(p) {
  return;
  }
  if (!S.golfWeek || S.golfWeek < 1) S.golfWeek = 1;
+ if (S.golfWeek > S.golfProgram.length) S.golfWeek = S.golfProgram.length;
  var week = S.golfProgram[S.golfWeek - 1];
  if (!week) return;
 
@@ -7815,7 +7817,7 @@ function renderGolfProgram(p) {
  if (ex.duration) exDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey2,#9A9A90);margin-top:2px'}, '⏱ ' + ex.duration));
  card.appendChild(exDiv);
  });
- card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:12px;padding-top:8px;border-top:1px solid var(--ivory3)'}, session.notes));
+ if (session.notes) card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);font-style:italic;margin-top:12px;padding-top:8px;border-top:1px solid var(--ivory3)'}, session.notes));
  p.appendChild(card);
  }
 

@@ -2949,13 +2949,13 @@ function getPregnancyWeightGuideline() {
   var t2t3Weeks = Math.max(0, week - 13);
   var expectedGainMin = t1Gain + t2t3Weeks * guideline.weeklyGainT2T3[0];
   var expectedGainMax = t1Gain + t2t3Weeks * guideline.weeklyGainT2T3[1];
-  var baseWeight = s.prePregnancyWeight || s.weight;
+  var baseWeight = s.prePregnancyWeight || s.weight || 0;
   return {
     category: guideline.category,
     totalGainMin: guideline.totalGainMin,
     totalGainMax: guideline.totalGainMax,
-    expectedWeightMin: Math.round((baseWeight + expectedGainMin) * 10) / 10,
-    expectedWeightMax: Math.round((baseWeight + expectedGainMax) * 10) / 10,
+    expectedWeightMin: baseWeight > 0 ? Math.round((baseWeight + expectedGainMin) * 10) / 10 : null,
+    expectedWeightMax: baseWeight > 0 ? Math.round((baseWeight + expectedGainMax) * 10) / 10 : null,
     currentExpectedGainMin: Math.round(expectedGainMin * 10) / 10,
     currentExpectedGainMax: Math.round(expectedGainMax * 10) / 10,
     weeklyGainRange: guideline.weeklyGainT2T3
