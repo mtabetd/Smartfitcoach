@@ -862,6 +862,20 @@ window.AUTH = {
       // App state — must be reset to avoid stale values polluting next login
       window.S.appMode = null; window.S.prenom = ''; window.S.welcomeShown = false;
       window.S.todayWellness = null; window.S.firstLoginDate = null;
+      // Additional PROFILE_KEYS missing from reset — prevent stale data leaking to next user on shared device
+      window.S.crossfitWeek = 1; window.S.selectedCrossfitDay = 0;
+      window.S.mealsLogged = {}; window.S._weekPlanGeneratedAt = null; window.S._planHash = '';
+      window.S.aiCoachHistory = []; window.S.nutritionLog = {};
+      window.S.weeklyCalendar = null; window.S.smartCalendarEnabled = false; window.S.smartCalendarDismissed = false;
+      window.S.bodyScanDone = false; window.S._bodyFatEstimate = null;
+      window.S._bodyCompositionProfile = null; window.S._bodyCompositionWeight = null;
+      window.S.waist = null; window.S.parqDone = false; window.S.parqResult = null;
+      window.S._parqNextStep = null; window.S._sportProfileDone = false;
+      window.S._switchedFromSport = null; window.S._switchedFromNutrition = null;
+      window.S.streakFreezeUsedMonth = null; window.S.streakFreezeAvailable = 0; window.S.swapCount = 0;
+      window.S.cfDeloadRecommended = false; window.S.sessionPostponed = false; window.S.stress = null;
+      window.S.trainingDaysSelected = []; window.S.muscuObjectifSpecifique = null;
+      window.S.muscuZonesCibles = []; window.S.muscuRenforcementNote = '';
     }
 
     // Nettoyer la session locale + legacy
