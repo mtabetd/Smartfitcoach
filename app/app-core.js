@@ -3178,8 +3178,10 @@ function calcMacros(){
   if(s.regime===3)ppk=Math.round(ppk*1.10*10)/10; // Végan: +10% (DIAAS correction — FAO 2013, PMC 2020)
   else if(s.regime===2)ppk=Math.round(ppk*1.10*10)/10; // Végétarien lacto-ovo: +10% (DIAAS correction — FAO 2013, PMC 2020)
   // IRC : ne pas appliquer le plancher universel 0.8g/kg — le cap KDOQI 0.6g/kg est plus restrictif
-  // Le plancher 0.8 écrasait le cap IRC réglé ligne ci-dessus (sauf re-enforce tardif ligne 3218+)
+  // Correction arrondi DIAAS : round(0.6×1.10×10)/10 = round(6.6)/10 = 7/10 = 0.70 > cap 0.66
+  // → re-enforce ppk au cap IRC dès ici pour que pGrams et proteinPerKg retourné soient cohérents
   var _isIrc=s.medical&&s.medical.indexOf('irc')!==-1;
+  if(_isIrc){var _ircPpkCap=(s.regime===3||s.regime===2)?0.66:0.60;if(ppk>_ircPpkCap)ppk=_ircPpkCap;}
   ppk=_isIrc?Math.max(0.1,Math.min(3.5,ppk)):Math.max(0.8,Math.min(3.5,ppk));
   var pGrams=Math.round(bw*ppk);
   // Pregnancy protein bonus: +25g/day T2+T3 (ACOG 2018, WHO)
@@ -3251,7 +3253,15 @@ gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0
     if(newG>=130){
       gGrams=newG;
       // Re-enforce GD carb cap post-normalisation (ADA 2023: max 175-200g/j)
-      if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){gGrams=Math.min(200,gGrams);}
+      // Si le cap réduit les glucides, redistribuer les calories libérées sur lipides puis protéines
+      // (sans redistribution → écart calorique ~528 kcal sur profil DG+végan)
+      if(s.medical&&s.medical.indexOf('diabete_gest')!==-1&&gGrams>200){
+        var _dgFreedKcal=(gGrams-200)*4;gGrams=200;
+        var _lipAbsCap=Math.round(bw*1.5);
+        var _addLip=Math.min(Math.floor(_dgFreedKcal/9),Math.max(0,_lipAbsCap-lGrams));
+        if(_addLip>0){lGrams+=_addLip;var _dgStillFree=_dgFreedKcal-_addLip*9;if(_dgStillFree>36)pGrams+=Math.floor(_dgStillFree/4);}
+        else{pGrams+=Math.floor(_dgFreedKcal/4);}
+      } else if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){gGrams=Math.min(200,gGrams);}
     }else{
       gGrams=130;
       var remainGap=c-(gGrams*4+pGrams*4+lGrams*9);
@@ -3260,6 +3270,10 @@ gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0
       if(s.sex==='femme')lGrams=Math.max(Math.round(bw*0.7),lGrams);
     }
   }
+  // FINAL IRC re-enforce — après planchers absolus Math.max(40,...) et redistribution DG
+  // Ces opérations peuvent repousser pGrams au-dessus du cap KDOQI (ex: 60kg → floor 40 > cap 36)
+  // C'est le dernier garde-fou garantissant que le plan servi respecte KDOQI 2020 sans exception
+  if(_isIrc){var _finalIrcCap=(s.regime===3||s.regime===2)?0.66:0.60;var _finalMaxP=Math.round(bw*_finalIrcCap);if(pGrams>_finalMaxP){pGrams=_finalMaxP;ppk=Math.round(pGrams/bw*100)/100;}}
   return{g:gGrams,p:pGrams,l:lGrams,proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
 }
 function calcBMI(){var s=window.S;if(!s.height||!s.weight||s.height<100)return null;var ht=s.height/100;return Math.round((s.weight/Math.pow(ht,2))*10)/10}
