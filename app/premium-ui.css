@@ -494,7 +494,7 @@ body.dark-mode .profile-photo-frame.has-photo {
 .exercise-muscle {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 9px;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   text-transform: uppercase;
   color: var(--grey);
 }

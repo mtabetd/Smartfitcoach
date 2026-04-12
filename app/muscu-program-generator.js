@@ -25,13 +25,13 @@
   ];
 
   var LOADING_PHRASES = [
-    'Analyse de votre profil. Calcul des charges adaptées à votre niveau et morphologie.',
-    'Sélection du split adapté à vos jours, votre équipement, vos antécédents.',
-    'Calibrage des charges cibles, semaine par semaine, kilo par kilo.',
-    'Construction de votre périodisation sur 12 semaines…',
-    'Rédaction des consignes techniques pour chaque exercice.',
-    'Intégration de vos contraintes médicales et de récupération.',
-    'Finalisation de votre programme. Presque terminé…'
+    'On analyse ton profil et on calcule tes charges adaptées.',
+    'On choisit le split qui colle à tes jours dispo et ton matos.',
+    'On calibre chaque charge, semaine par semaine.',
+    'On construit ta progression sur 12 semaines…',
+    'On rédige les conseils techniques pour chaque exo.',
+    'On intègre tes restrictions médicales et ta récupération.',
+    'Dernier ajustement sur ton programme. C\'est bientôt prêt…'
   ];
 
   var FOOTER_QUOTES = [
