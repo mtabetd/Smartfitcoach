@@ -195,9 +195,13 @@ function renderNutritionChoice(app) {
     style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto',
     onclick: function() {
       S.weekPlan = null;
-      S.nStep = 0;
+      S._nm = null;
+      S._weekPlanGeneratedAt = null;
+      S.mealsLogged = {};
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
-      goStep(1);
+      // Bypass goStep(1) auto-skip — force step 1 (sex selection) so returning users can change sex
+      S.nStep = 1;
+      window.render();
     }
   }, 'Établir un nouveau programme');
 
@@ -425,7 +429,7 @@ function renderStep2(p) {
       goStep(3);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(1); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; S.nStep = 1; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 2b (N4b): CYCLE MENSTRUEL + GROSSESSE (femmes seulement) ───
@@ -3417,7 +3421,9 @@ function renderStep9(p) {
       S._weekPlanGeneratedAt = null;
       S.mealsLogged = {};
       if (window.saveProfile) saveProfile();
-      goStep(1);
+      // Bypass goStep(1) auto-skip — force step 1 so users can change sex and all preferences
+      S.nStep = 1;
+      window.render();
     }
   }, '\u2699 Modifier mes pr\u00e9f\u00e9rences nutritionnelles');
   p.appendChild(btnReset);
