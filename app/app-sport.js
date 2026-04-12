@@ -6781,6 +6781,8 @@ function renderMusculationProgram(p) {
  // Pruning : garder les 365 dernières sessions max
  var _shKeys = Object.keys(S.sessionHistory || {}).sort();
  if (_shKeys.length > 365) { _shKeys.slice(0, _shKeys.length - 365).forEach(function(k) { delete S.sessionHistory[k]; }); }
+ // Persister immédiatement — évite la perte de données en cas de crash/refresh
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  // Sync session vers Supabase
  if (window.SupaSync) SupaSync.saveSession({
  date: todayKey,
@@ -6887,13 +6889,33 @@ function renderMusculationProgram(p) {
  var existIdx = -1;
  for (var ii = 0; ii < arr.length; ii++) { if (arr[ii].n === exBCapture.name) { existIdx = ii; break; } }
  if (existIdx === -1) {
+ // Vérifier filtres médicaux AVANT d'ajouter (jamais proposer un exercice contre-indiqué)
+ if (S.muscuMedical && S.muscuMedical.done && !filterExerciseByMedical(exBCapture, S.muscuMedical)) {
+   return; // Exercice contre-indiqué médicalement → ignorer silencieusement
+ }
+ // Vérifier interdictions grossesse
+ if (S.pregnant && window.PREGNANCY_TRIMESTERS) {
+   var _wkB = S.pregnancyWeek || 0;
+   for (var _tiB = 0; _tiB < window.PREGNANCY_TRIMESTERS.length; _tiB++) {
+     var _tB = window.PREGNANCY_TRIMESTERS[_tiB];
+     if (_wkB >= _tB.weeks[0] && _wkB <= _tB.weeks[1] && Array.isArray(_tB.forbiddenExercises)) {
+       var _bNm = (exBCapture.n || exBCapture.name || '').toLowerCase();
+       for (var _fB = 0; _fB < _tB.forbiddenExercises.length; _fB++) {
+         if (_bNm.indexOf(_tB.forbiddenExercises[_fB].toLowerCase()) !== -1) { return; }
+       }
+       break;
+     }
+   }
+ }
  var ph = getMuscuPhase(S.muscuWeek || 1);
  var appl = applyPhaseToExercise(exBCapture, ph);
  arr.push({n: appl.name, m: appl.muscle || '', eq: appl.equipment || '', sets: appl.sets + '\u00d7' + appl.reps, rest: appl.rest || '60s', lv: 1, tags: [], _bonus: true});
  S.bonusExercises[S.selectedSportDay] = arr;
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  } else {
  arr.splice(existIdx, 1);
  S.bonusExercises[S.selectedSportDay] = arr;
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  }
  window.render();
  }; })(exBase)

@@ -139,8 +139,9 @@
           var legacy = {};
           var uidSuffix = '_' + userId;
           var SYNC_PREFIXES = ['mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_', 'mtd_food_journal_', 'mtd_cf_1rm_', 'mtd_water_', 'mtd_muscu_session_', 'mtd_weight_history_'];
-          // Clés exactes sans UID (programme IA, progression, générations)
-          var SYNC_EXACT = ['mtd_muscu_program', 'mtd_muscu_ia_progress', 'mtd_muscu_generations'];
+          // Clés namespaced par UID (programme IA, progression, générations) — préfixe seulement
+          var SYNC_EXACT = [];
+          var SYNC_IA_PREFIXES = ['mtd_muscu_program_', 'mtd_muscu_ia_progress_', 'mtd_muscu_generations_'];
           for (var i = 0; i < localStorage.length; i++) {
             var key = localStorage.key(i);
             if (!key) continue;
@@ -152,6 +153,11 @@
               }
             }
             if (!matches && SYNC_EXACT.indexOf(key) !== -1) matches = true;
+            if (!matches) {
+              for (var ia = 0; ia < SYNC_IA_PREFIXES.length; ia++) {
+                if (key.indexOf(SYNC_IA_PREFIXES[ia]) === 0) { matches = true; break; }
+              }
+            }
             if (matches) {
               try { legacy[key] = localStorage.getItem(key); } catch(e) {}
             }

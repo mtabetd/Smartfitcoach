@@ -7,9 +7,11 @@
   var _previousFocus = null;
 
   var MAX_GENERATIONS_PER_WEEK = 3;
-  var LS_KEY_PROGRAM = 'mtd_muscu_program';
-  var LS_KEY_PROGRESS = 'mtd_muscu_ia_progress';
-  var LS_KEY_GENERATIONS = 'mtd_muscu_generations';
+  // Clés namespaced par userId — évite les fuites de données inter-utilisateurs sur appareil partagé
+  function _lsUid() { return (window.AUTH && window.AUTH.getUser && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon'; }
+  function LS_KEY_PROGRAM()     { return 'mtd_muscu_program_'      + _lsUid(); }
+  function LS_KEY_PROGRESS()    { return 'mtd_muscu_ia_progress_'  + _lsUid(); }
+  function LS_KEY_GENERATIONS() { return 'mtd_muscu_generations_'  + _lsUid(); }
 
   // Installations/facilities options
   var INSTALLATIONS = [
@@ -55,14 +57,14 @@
 
   function getGenerationsData() {
     try {
-      var raw = localStorage.getItem(LS_KEY_GENERATIONS);
+      var raw = localStorage.getItem(LS_KEY_GENERATIONS());
       if (raw) return JSON.parse(raw);
     } catch(e) {}
     return { week: '', count: 0 };
   }
 
   function saveGenerationsData(data) {
-    try { localStorage.setItem(LS_KEY_GENERATIONS, JSON.stringify(data)); } catch(e) {}
+    try { localStorage.setItem(LS_KEY_GENERATIONS(), JSON.stringify(data)); } catch(e) {}
   }
 
   function getGenerationsRemaining() {
@@ -137,13 +139,13 @@
 
   function loadProgress() {
     try {
-      var raw = localStorage.getItem(LS_KEY_PROGRESS);
+      var raw = localStorage.getItem(LS_KEY_PROGRESS());
       return raw ? JSON.parse(raw) : [];
     } catch(e) { return []; }
   }
 
   function saveProgress(progressArray) {
-    try { localStorage.setItem(LS_KEY_PROGRESS, JSON.stringify(progressArray)); } catch(e) {}
+    try { localStorage.setItem(LS_KEY_PROGRESS(), JSON.stringify(progressArray)); } catch(e) {}
   }
 
   function getProgressKey(weekIdx, dayName, exerciseIdx) {
@@ -1097,7 +1099,7 @@
         if (cardsContainer) attachProgramInteractivity(cardsContainer);
       }
       // Sauvegarder localement
-      try { localStorage.setItem(LS_KEY_PROGRAM, JSON.stringify({ program: programText, generatedAt: data.generatedAt })); } catch(e) { console.error('[muscu-prog] save fail:', e); }
+      try { localStorage.setItem(LS_KEY_PROGRAM(), JSON.stringify({ program: programText, generatedAt: data.generatedAt })); } catch(e) { console.error('[muscu-prog] save fail:', e); }
     })
     .catch(function(err) {
       if (_mcTimer) clearTimeout(_mcTimer);

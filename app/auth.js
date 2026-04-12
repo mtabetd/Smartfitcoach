@@ -878,6 +878,16 @@ window.AUTH = {
       window.S.muscuZonesCibles = []; window.S.muscuRenforcementNote = '';
     }
 
+    // Nettoyer les clés localStorage namespaced par userId (programme IA partagé sinon)
+    try {
+      var _logoutUid = _currentSession ? _currentSession.userId : null;
+      if (_logoutUid) {
+        ['mtd_muscu_program_', 'mtd_muscu_ia_progress_', 'mtd_muscu_generations_'].forEach(function(pfx) {
+          try { localStorage.removeItem(pfx + _logoutUid); } catch(e) {}
+        });
+      }
+    } catch(e) {}
+
     // Nettoyer la session locale + legacy
     _currentSession = null;
     clearLegacySession();

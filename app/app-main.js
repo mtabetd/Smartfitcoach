@@ -48,7 +48,7 @@ var PROFILE_KEYS = [
  // Calisthenics
  'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
  'calisthenicsEquipment','calisthDips','calisthCurrentWeek',
- 'calisthenicsWeek','selectedCalisthDay',
+ 'calisthenicsWeek','selectedCalisthDay','calisthenicsOnboardingStep','calisthenicsProgram',
  // Musculation
  'muscuWeek','muscuCycle','muscuProgramCount','sportSplashDone','nStep','sStep','selectedSportDay',
  'sportProgram',
@@ -637,6 +637,9 @@ function renderProfilePage(container) {
            var _sg = S.sportGoals[0];
            if (_sgToGoal[_sg] !== undefined) S.goal = _sgToGoal[_sg];
          }
+         // Fallback : si goal toujours null (pas de sportGoals), forcer maintenance/équilibre
+         // → évite calcTDEE/calcMacros de retourner 0 kcal
+         if (S.goal === null || S.goal === undefined) S.goal = 2; // GOALS[2] = maintenance/équilibre
        } else if (_addingSport) {
          S.sStep = 0;
          S.view = 'sport';

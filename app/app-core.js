@@ -2840,7 +2840,7 @@ var PREGNANCY_TRIMESTERS = [
       '150 min/semaine d\'activit\u00e9 mod\u00e9r\u00e9e (OMS)'
     ],
     intensityFactor: 0.6,
-    forbiddenExercises: ['burpees', 'jumping jacks', 'box jumps', 'abdominaux classiques', 'soulev\u00e9 de terre lourd']
+    forbiddenExercises: ['crunch', 'burpees', 'jumping jacks', 'box jumps', 'abdominaux classiques', 'soulev\u00e9 de terre lourd']
   },
   {
     id: 'trimester2',
