@@ -3379,6 +3379,9 @@ function renderStep9(p) {
       if (Array.isArray(_wkR) && _wkR.length > 0) {
         S.weekPlan = _wkR;
         S._weekPlanGeneratedAt = new Date().toISOString();
+        // Figer le hash pour éviter une régénération silencieuse au prochain renderStep9
+        var _hR = window.getPlanHash ? window.getPlanHash() : '';
+        if (_hR) S._planHash = _hR;
         // Sync plan nutrition vers Supabase
         if (window.SupaSync) {
           try {
