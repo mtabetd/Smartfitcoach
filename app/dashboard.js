@@ -875,7 +875,8 @@ window.DASHBOARD = {
         if (pregWeightGuide) {
           var pregWeight = document.createElement('div');
           pregWeight.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px;';
-          pregWeight.textContent = 'Poids attendu à SA' + pregTri.week + ' : ' + pregWeightGuide.expectedWeightMin + '\u2013' + pregWeightGuide.expectedWeightMax + ' kg (gain cible : +' + pregWeightGuide.currentExpectedGainMin + '\u2013+' + pregWeightGuide.currentExpectedGainMax + ' kg)';
+          var _pwMin = pregWeightGuide.expectedWeightMin, _pwMax = pregWeightGuide.expectedWeightMax;
+          pregWeight.textContent = (_pwMin !== null && _pwMax !== null ? 'Poids attendu à SA' + pregTri.week + ' : ' + _pwMin + '\u2013' + _pwMax + ' kg — ' : '') + 'Gain cible : +' + pregWeightGuide.currentExpectedGainMin + '\u2013+' + pregWeightGuide.currentExpectedGainMax + ' kg';
           pregCard.appendChild(pregWeight);
         }
 
