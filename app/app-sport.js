@@ -354,11 +354,18 @@ function generateSportProgram() {
        var _filtered = allCategories.filter(function(cat) { return !!_allowed[cat]; });
        // Fallback: if user hasn't set sportFocus for those muscles, use defaults
        if (_filtered.length === 0) {
-         if (_dtype === 'upper') _filtered = ['chest','back','shoulders'];
-         else if (_dtype === 'push') _filtered = ['chest','shoulders','triceps'];
-         else if (_dtype === 'pull') _filtered = ['back','biceps'];
+         if (_dtype === 'upper')          _filtered = ['chest','back','shoulders'];
+         else if (_dtype === 'push')      _filtered = ['chest','shoulders','triceps'];
+         else if (_dtype === 'pull')      _filtered = ['back','biceps'];
          else if (_dtype === 'lower' || _dtype === 'legs') _filtered = ['legs','glutes'];
-         else if (_dtype === 'full') _filtered = ['chest','back','legs'];
+         else if (_dtype === 'full')      _filtered = ['chest','back','legs'];
+         else if (_dtype === 'chest_tri') _filtered = ['chest','triceps'];
+         else if (_dtype === 'back_bi')   _filtered = ['back','biceps'];
+         else if (_dtype === 'shoulders_only') _filtered = ['shoulders'];
+         else if (_dtype === 'chest_only') _filtered = ['chest'];
+         else if (_dtype === 'back_only') _filtered = ['back'];
+         else if (_dtype === 'arms')      _filtered = ['biceps','triceps'];
+         else _filtered = ['chest','back','legs']; // last resort
        }
        // Re-sort by priority
        _filtered.sort(function(a, b) { return (categoryPriority[b] || 0) - (categoryPriority[a] || 0); });
