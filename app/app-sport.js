@@ -9071,6 +9071,10 @@ function renderCalisthenicsProgram(content) {
  }
 
  // State for current week display
+ if (!planData || !Array.isArray(planData.plan) || planData.plan.length === 0) {
+  content.appendChild(h('div', {'class': 'card'}, h('div', {style: 'color:var(--grey);font-size:13px;text-align:center;padding:24px'}, 'Programme non disponible. Rechargez la page.')));
+  return;
+ }
  if (!S.calisthCurrentWeek || S.calisthCurrentWeek < 1) { S.calisthCurrentWeek = 1; }
  if (S.calisthCurrentWeek > planData.totalWeeks) { S.calisthCurrentWeek = planData.totalWeeks; }
 

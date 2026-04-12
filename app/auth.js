@@ -860,7 +860,7 @@ window.AUTH = {
       window.S.view = 'auth'; window.S.authError = '';
       window.S.cfCalendarOpen = false;
       // App state — must be reset to avoid stale values polluting next login
-      window.S.appMode = null; window.S.prenom = ''; window.S.welcomeShown = false;
+      window.S.appMode = null; window.S.prenom = ''; window.S.nom = null; window.S.phone = null; window.S.welcomeShown = false;
       window.S.todayWellness = null; window.S.firstLoginDate = null;
       // Additional PROFILE_KEYS missing from reset — prevent stale data leaking to next user on shared device
       window.S.crossfitWeek = 1; window.S.selectedCrossfitDay = 0;
