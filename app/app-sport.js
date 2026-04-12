@@ -5980,7 +5980,7 @@ function renderMusculationProgram(p) {
  _exProgressRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:0.5px;white-space:nowrap'}, 'Ex. ' + (exIdx + 1) + '\u00a0/\u00a0' + _totalExercises));
  card.appendChild(_exProgressRow);
 
- var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n);
+ var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n || 'Exercice');
  // FST-7 badge: highlight exercises that use the Fascial Stretch Training 7-set technique
  if (ex.is_fst7) {
  var fst7Badge = h('span', {
@@ -6004,7 +6004,7 @@ function renderMusculationProgram(p) {
  }
  card.appendChild(_exNameEl);
  card.appendChild(h('div', {'class': 'exercise-sets'}, (ex.sets || '4x10') + ' \u2014 Repos ' + (ex.rest || '90s')));
- card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
+ if (ex.eq) card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
 
  // ─── EXERCISE DESCRIPTION FOR BEGINNERS ───
  if ((S.sportLevel === 'beginner' || !S.sportLevel) && ex.desc) {
@@ -6671,7 +6671,7 @@ function renderMusculationProgram(p) {
  bnRow.appendChild(h('div', {'class': 'exercise-muscle'}, bex.m));
  bnRow.appendChild(h('span', {style: 'font-size:18px;color:#5A1010;cursor:pointer;line-height:1;padding:0 4px', onclick: (function(idx) { return function(e) { e.stopPropagation(); if (!S.bonusExercises) S.bonusExercises = {}; var arr = S.bonusExercises[S.selectedSportDay] || []; arr.splice(idx, 1); S.bonusExercises[S.selectedSportDay] = arr; window.render(); }; })(bi)}, '\u00d7'));
  bc.appendChild(bnRow);
- bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n));
+ bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n || 'Exercice'));
  bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 Repos ' + bex.rest));
  if (bex.eq) bc.appendChild(h('div', {'class': 'exercise-detail'}, bex.eq));
  var _bexParts = String(bex.sets || '').split('\u00d7');

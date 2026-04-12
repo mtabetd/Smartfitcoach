@@ -4875,7 +4875,7 @@ function renderRecipePicker(p) {
   })();
   if (!picker._filtersInit) {
     picker.minKcal    = savedFilters ? savedFilters.minKcal    : 0;
-    picker.maxKcal    = savedFilters ? savedFilters.maxKcal    : 1200;
+    picker.maxKcal    = savedFilters ? savedFilters.maxKcal    : Math.max(800, Math.round((typeof calcTarget === 'function' ? (calcTarget() || 2000) : 2000) * 0.45));
     picker.minProt    = savedFilters ? savedFilters.minProt    : 0;
     picker.activeTags = savedFilters ? (savedFilters.activeTags || []) : [];
     picker.sortBy     = savedFilters ? (savedFilters.sortBy || 'default') : 'default';
@@ -5381,7 +5381,7 @@ function showSmoothieModal(sm) {
         lv: 1, _id: sm.id, _smoothie: true
       };
       var split = window.getMealSplit ? window.getMealSplit() : null;
-      var totalTarget = typeof calcTarget === 'function' ? calcTarget() : (window.S.caloriesTarget || 2000);
+      var totalTarget = (typeof calcTarget === 'function' ? calcTarget() : 0) || window.S.caloriesTarget || (window.S.sex === 'femme' ? 1500 : 1800);
       var snackTargetBefore = split ? Math.round(totalTarget * split.pctSnack) : Math.round(totalTarget * 0.15);
       var delta = sm.cal - snackTargetBefore;
       var dayPlan = S.weekPlan[S.selectedDay];
