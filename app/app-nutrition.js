@@ -508,7 +508,14 @@ function renderStep2b(p) {
 
     var pregToggle = h('div', {'class': 'sel-card' + (S.pregnant ? ' on' : ''), style: 'margin-bottom:12px;text-align:center;cursor:pointer;border-left:3px solid #E8A87C', onclick: function() {
       S.pregnant = !S.pregnant;
-      if (S.pregnant) { S.cycleTracking = false; }
+      if (S.pregnant) {
+        S.cycleTracking = false;
+      } else {
+        // Nettoyer les données grossesse pour éviter données fantômes en localStorage
+        S.pregnancyWeek = null;
+        S.prePregnancyWeight = null;
+        S.dueDate = null;
+      }
       window.render();
     }});
     pregToggle.appendChild(h('div', {'class': 'card-name'}, '\u00cates-vous enceinte ?'));
@@ -1074,8 +1081,15 @@ function renderStep4(p) {
     cat.items.forEach(function(item) {
       var on = S.medical.indexOf(item.id) !== -1;
       catList.appendChild(h('div', {'class': 'level-item' + (on ? ' on' : ''), onclick: function() {
-        if (on) S.medical = S.medical.filter(function(x) { return x !== item.id; });
-        else S.medical.push(item.id);
+        if (on) {
+          S.medical = S.medical.filter(function(x) { return x !== item.id; });
+          // Sync: désactiver grossesse médicale → désactiver S.pregnant (double chemin)
+          if (item.id === 'grossesse') S.pregnant = false;
+        } else {
+          S.medical.push(item.id);
+          // Sync: activer grossesse médicale → activer S.pregnant pour déclencher les protections
+          if (item.id === 'grossesse') { S.pregnant = true; S.cycleTracking = false; }
+        }
         window.render();
       }}, [
         h('div', {}, [h('div', {'class': 'level-name'}, item.icon + ' ' + item.name), h('div', {'class': 'level-desc'}, item.desc)]),
@@ -1434,8 +1448,11 @@ function renderStep6(p) {
   if (S.pregnant && S.sex === 'femme') {
     p.appendChild(h('p', {'class': 'subtitle'}, 'Nutrition adapt\u00e9e \u00e0 chaque trimestre de votre grossesse.'));
 
-    // Auto-select maintain
-    S.goal = 2; // index of "Maintien" in GOALS (0=bulk, 1=lean_bulk, 2=maintain)
+    // Auto-select maintain uniquement si objectif actuel est coupe/sèche (incompatible)
+    // Ne pas écraser bulk/recompo à chaque render — préserver le choix si compatible
+    if (S.goal === null || !GOALS[S.goal] || GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred') {
+      S.goal = 2; // index of "Maintien" in GOALS (0=bulk, 1=lean_bulk, 2=maintain)
+    }
 
     var pregObjCard = h('div', {style: 'border-left:3px solid #E8A87C;padding:16px;background:var(--ivory2);margin-bottom:16px'});
     pregObjCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px'}, '\uD83E\uDD30 ' + window.t('onb.s6.maintain') + ' + besoins grossesse'));
@@ -1532,26 +1549,60 @@ function renderStep6(p) {
   goalLabel.appendChild(txt('Objectif principal'));
   goalLabel.appendChild(reqDot());
   p.appendChild(goalLabel);
+  // === GROSSESSE / ALLAITEMENT : bloquer sèche/coupe, auto-reset si incompatible, afficher bannière ===
+  var _isAllait = Array.isArray(S.medical) && S.medical.indexOf('allaitement') !== -1;
+  var _isPreg = !!S.pregnant;
+  if (_isPreg || _isAllait) {
+    // Forcer maintien si objectif actuel est coupe ou sèche (OMS 2016, ACOG 2020 — restriction calorique contre-indiquée)
+    if (S.goal !== null && GOALS[S.goal] && (GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred')) {
+      S.goal = 2; // index 2 = maintien
+    }
+    if (_isPreg) {
+      var _pregGoalBanner = h('div', {style: 'background:rgba(232,168,124,0.10);border:2px solid #E8A87C;padding:14px 16px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#6A4A1A;line-height:1.7;border-radius:2px;'});
+      _pregGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, 'Grossesse \u2014 objectifs restreints'));
+      _pregGoalBanner.appendChild(h('div', {}, 'La s\u00e8che et la perte de poids sont contre-indiqu\u00e9es pendant la grossesse\u00a0(OMS\u00a02016, ACOG\u00a02020). Votre plan nutritionnel est automatiquement adapt\u00e9 \u00e0 vos besoins.'));
+      p.appendChild(_pregGoalBanner);
+    }
+    if (_isAllait) {
+      var _allaitGoalBanner = h('div', {style: 'background:rgba(232,168,124,0.10);border:2px solid #E8A87C;padding:14px 16px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#6A4A1A;line-height:1.7;border-radius:2px;'});
+      _allaitGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, 'Allaitement \u2014 objectifs restreints'));
+      _allaitGoalBanner.appendChild(h('div', {}, 'La s\u00e8che et la perte de poids sont contre-indiqu\u00e9es pendant l\u2019allaitement\u00a0(ACOG\u00a02022). Un surplus de +500\u00a0kcal/j est n\u00e9cessaire pour maintenir la production lactiqu\u00e9e et prot\u00e9ger votre sant\u00e9.'));
+      p.appendChild(_allaitGoalBanner);
+    }
+  }
+  // === ADOLESCENT (13–17 ans) : caps sur déficit/surplus, informer l'utilisateur ===
+  var _userAgeGoal = typeof window.getAge === 'function' ? window.getAge() : null;
+  if (_userAgeGoal !== null && _userAgeGoal >= 13 && _userAgeGoal < 18) {
+    var _teenGoalBanner = h('div', {style: 'background:rgba(106,74,26,0.06);border:1px solid var(--orange,#6A4A1A);padding:14px 16px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--orange,#6A4A1A);line-height:1.7;border-radius:2px;'});
+    _teenGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, 'Objectifs adapt\u00e9s pour les 13\u201317 ans'));
+    _teenGoalBanner.appendChild(h('div', {}, 'D\u00e9ficit max -300\u00a0kcal/j, surplus max +300\u00a0kcal/j (ACSM\u00a02007, IOC\u00a02018) pour pr\u00e9server la croissance et le pic de masse osseuse. Votre plan est automatiquement encadr\u00e9.'));
+    p.appendChild(_teenGoalBanner);
+  }
   var gg = h('div', {'class': 'card-grid-2'});
   GOALS.forEach(function(gl, i) {
-    gg.appendChild(h('div', {'class': 'sel-card' + (S.goal === i ? ' on' : ''), onclick: function() {
-      S.goal = i;
-      // ── SYNC SPORT GOALS ─────────────────────────────────────────────────
-      // If sport goals already selected, replace the "primary" one to stay coherent
-      if (S.sportGoals && S.sportGoals.length > 0 && window.NUTRITION_TO_SPORT_GOAL) {
-        var newSportId = window.NUTRITION_TO_SPORT_GOAL[gl.key];
-        if (newSportId) {
-          // ÉLEVÉ-1: retirer TOUS les goals pilotés par nutrition (primaires + secondaires fonctionnels)
-          var primaryIds = ['muscle', 'weightloss', 'shred', 'general', 'endurance', 'flexibility'];
-          var secondaryKept = S.sportGoals.filter(function(x) { return primaryIds.indexOf(x) === -1; });
-          S.sportGoals = [newSportId].concat(secondaryKept).slice(0, 3);
+    var _pregBlock = (_isPreg || _isAllait) && (gl.key === 'cut' || gl.key === 'shred');
+    gg.appendChild(h('div', {
+      'class': 'sel-card' + (S.goal === i ? ' on' : '') + (_pregBlock ? ' disabled' : ''),
+      style: _pregBlock ? 'opacity:0.35;cursor:not-allowed;pointer-events:none;' : '',
+      onclick: _pregBlock ? null : function() {
+        S.goal = i;
+        // ── SYNC SPORT GOALS ─────────────────────────────────────────────────
+        // If sport goals already selected, replace the "primary" one to stay coherent
+        if (S.sportGoals && S.sportGoals.length > 0 && window.NUTRITION_TO_SPORT_GOAL) {
+          var newSportId = window.NUTRITION_TO_SPORT_GOAL[gl.key];
+          if (newSportId) {
+            // ÉLEVÉ-1: retirer TOUS les goals pilotés par nutrition (primaires + secondaires fonctionnels)
+            var primaryIds = ['muscle', 'weightloss', 'shred', 'general', 'endurance', 'flexibility'];
+            var secondaryKept = S.sportGoals.filter(function(x) { return primaryIds.indexOf(x) === -1; });
+            S.sportGoals = [newSportId].concat(secondaryKept).slice(0, 3);
+          }
         }
+        // ─────────────────────────────────────────────────────────────────────
+        window.render();
       }
-      // ─────────────────────────────────────────────────────────────────────
-      window.render();
-    }}, [
-      h('div', {'class': 'card-name'}, gl.name),
-      h('div', {'class': 'card-sub'}, gl.desc)
+    }, [
+      h('div', {'class': 'card-name'}, _pregBlock ? gl.name + ' \u2014 non disponible' : gl.name),
+      h('div', {'class': 'card-sub'}, _pregBlock ? 'Contre-indiqu\u00e9 pendant la grossesse' : gl.desc)
     ]));
   });
   p.appendChild(gg);
@@ -1609,13 +1660,15 @@ function renderStep6(p) {
   if (goalOk && S.goal !== null && GOALS[S.goal]) {
     var gk = GOALS[S.goal].key;
     if ((gk === 'cut' || gk === 'shred' || gk === 'bulk' || gk === 'lean_bulk') && !S.targetWeight) goalOk = false;
-    if ((gk === 'cut' || gk === 'shred') && S.medical && S.medical.indexOf('tca') !== -1) {
+    // TCA : seuls maintien (2) et recomposition (5) sont compatibles — calcTarget() force le maintien pour TOUS les autres
+    // Helms 2014 / ANAD / IOC 2018 : restriction ET surplus intentionnel contre-indiqués en contexte TCA
+    if ((gk === 'cut' || gk === 'shred' || gk === 'bulk' || gk === 'lean_bulk') && S.medical && S.medical.indexOf('tca') !== -1) {
       goalOk = false;
       _tcaConflict = true;
     }
   }
   if (_tcaConflict) {
-    p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border:1px solid var(--red,#5A1010);padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);line-height:1.6'}, 'Objectif sèche/coupe incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
+    p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border:1px solid var(--red,#5A1010);padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);line-height:1.6'}, 'Historique de TCA d\u00e9tect\u00e9 \u2014 seuls le Maintien et la Recomposition sont compatibles. Les objectifs de s\u00e8che, coupe, prise de masse sont m\u00e9dicalement contre-indiqu\u00e9s (ANAD, IOC\u00a02018).'));
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !goalOk, onclick: function() {
     if (goalOk) {

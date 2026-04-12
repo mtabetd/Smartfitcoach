@@ -981,7 +981,11 @@ function renderProfilePage(container) {
        if (!_canSave) return;
        // Apply changes
        S.goal = S._modalGoal;
-       if (_needsTarget) S.targetWeight = S._modalTargetWeight;
+       if (_needsTarget) {
+         S.targetWeight = S._modalTargetWeight;
+       } else {
+         S.targetWeight = null; // Nettoyer le poids cible si objectif n'en a pas besoin (évite projection fantôme)
+       }
        // Sync sport goals
        if (_selGoalObj && window.NUTRITION_TO_SPORT_GOAL) {
          var _newSportId = window.NUTRITION_TO_SPORT_GOAL[_selGoalObj.key];
@@ -1055,6 +1059,24 @@ function render() {
  if (render._lock) return;
  render._lock = true;
  try {
+ // === SAFETY: conditions incompatibles avec certains objectifs (OMS 2016, ACOG 2020/2022, ANAD, IOC 2018) ===
+ // Correction silencieuse — attrape les données persistées en localStorage avant le fix
+ if (window.S && window.GOALS && typeof window.S.goal === 'number' && window.GOALS[window.S.goal]) {
+   var _safetyGoalKey = window.GOALS[window.S.goal].key;
+   var _isUnsafeGoal = _safetyGoalKey === 'cut' || _safetyGoalKey === 'shred';
+   var _isUnsafeGoalTca = _safetyGoalKey === 'cut' || _safetyGoalKey === 'shred' || _safetyGoalKey === 'bulk' || _safetyGoalKey === 'lean_bulk';
+   var _isPregnant = window.S.pregnant && window.S.sex === 'femme';
+   var _isAllait = Array.isArray(window.S.medical) && window.S.medical.indexOf('allaitement') !== -1;
+   var _isTca = Array.isArray(window.S.medical) && window.S.medical.indexOf('tca') !== -1;
+   if (_isUnsafeGoal && (_isPregnant || _isAllait)) {
+     window.S.goal = 2; // Forcer maintien — index 2 = maintain
+     if (window.saveProfile) window.saveProfile();
+   } else if (_isUnsafeGoalTca && _isTca) {
+     window.S.goal = 2; // TCA : forcer maintien (ANAD, IOC 2018)
+     if (window.saveProfile) window.saveProfile();
+   }
+ }
+ // ================================================================================
  if (window.destroyAllCharts) window.destroyAllCharts();
  // Stopper le timer CrossFit si on navigue ailleurs (évite le bip en background)
  if (window._wodTimerInterval) { clearInterval(window._wodTimerInterval); window._wodTimerInterval = null; }
