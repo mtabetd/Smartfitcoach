@@ -3009,7 +3009,12 @@ return Math.round(bmrRaw)} // Mifflin-St Jeor 1990 (Frankenfield 2005) + correct
 function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
 // BUG A fix : utiliser trainingDaysSelected.length si disponible (plus précis que sportDays)
-var sportDays=Array.isArray(s.trainingDaysSelected)&&s.trainingDaysSelected.length>0?s.trainingDaysSelected.length:(s.sportDays||0);var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
+var sportDays=Array.isArray(s.trainingDaysSelected)&&s.trainingDaysSelected.length>0?s.trainingDaysSelected.length:(s.sportDays||0);var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);
+// Hypothyroïdie : réduction métabolique ~15% (Mullur 2014 Physiol Rev — ralentissement métabolique clinique documenté)
+if(s.medical&&s.medical.indexOf('hypothyroidie')!==-1)effectiveFactor*=0.85;
+// Hyperthyroïdie : augmentation métabolique ~25% (Mullur 2014 Physiol Rev — accélération catabolique documentée)
+if(s.medical&&s.medical.indexOf('hyperthyroidie')!==-1)effectiveFactor*=1.25;
+return calcBMR()*effectiveFactor}
 function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra;}else{base=Math.round(tdeeVal)+300;}// Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
 // Fallback +300 kcal = T2 par défaut (OMS 2016) si semaine non saisie — évite tout déficit silencieux
 base=Math.max(base,1800);return base;}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
@@ -3128,6 +3133,8 @@ function calcMacros(){
     } else {
       ppk=isFemale?1.6:1.8;  // Standard bulk : H=1.8, F=1.6 (ISSN 2017)
     }
+    // Ado 13-17 ans : plafonner ppk bulk à 1.8g/kg max (ACSM 2007 adolescent — excès protéines inutile avant maturité hormonale)
+    var _ageBulk=getAge();if(_ageBulk>=13&&_ageBulk<18&&ppk>1.8)ppk=1.8;
 
   } else {
     // ─── SÈCHE / COUPE — table complète par niveau d'activité (comme maintain) ───

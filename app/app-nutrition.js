@@ -289,6 +289,7 @@ function renderStep1(p) {
         S.dueDate = null;
         window._s2page = 0; // Forcer page date naissance, pas la page cycle/grossesse
       }
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }}, [
       h('div', {'class': 'card-name'}, o.name)
@@ -535,6 +536,7 @@ function renderStep2b(p) {
         S.prePregnancyWeight = null;
         S.dueDate = null;
       }
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }});
     pregToggle.appendChild(h('div', {'class': 'card-name'}, '\u00cates-vous enceinte ?'));
@@ -1087,7 +1089,7 @@ function renderStep4(p) {
   if (window.TIPS) TIPS.renderTip(p, 'health');
 
   var none = S.medical.length === 0;
-  var nb = h('div', {'class': 'sel-card' + (none ? ' on' : ''), style: 'margin-bottom:16px;text-align:center', onclick: function() { S.medical = []; window.render(); }});
+  var nb = h('div', {'class': 'sel-card' + (none ? ' on' : ''), style: 'margin-bottom:16px;text-align:center', onclick: function() { S.medical = []; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } window.render(); }});
   nb.appendChild(h('div', {'class': 'card-name'}, window.t('onb.s4.none')));
   nb.appendChild(h('div', {'class': 'card-sub'}, 'Je suis en bonne sant\u00e9'));
   p.appendChild(nb);
@@ -1113,6 +1115,7 @@ function renderStep4(p) {
           // Sync: activer grossesse médicale → activer S.pregnant pour déclencher les protections
           if (item.id === 'grossesse') { S.pregnant = true; S.cycleTracking = false; }
         }
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         window.render();
       }}, [
         h('div', {}, [h('div', {'class': 'level-name'}, item.icon + ' ' + item.name), h('div', {'class': 'level-desc'}, item.desc)]),
@@ -1979,6 +1982,7 @@ function renderStep7(p) {
           return;
         }
         S._weekPlanGeneratedAt = new Date().toISOString();
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         // Sync plan nutrition vers Supabase (try/catch : une erreur réseau ne bloque pas la navigation)
         if (window.SupaSync && S.weekPlan) {
           try {
@@ -2378,11 +2382,11 @@ function renderStep8(p) {
   weightInputWrap.appendChild(h('button', {'class': 'btn-primary', style: 'width:auto;padding:10px 20px;margin-top:0', onclick: function() {
     var v = parseFloat(weightIn.value);
     if (isNaN(v) || v < 30 || v > 200) return;
-    if (!S.weightHistory) S.weightHistory = [];
+    if (!Array.isArray(S.weightHistory)) S.weightHistory = [];
     var today = new Date().toISOString().split('T')[0];
     S.weightHistory.push({date: today, weight: v});
     // Cap to 52 entries (1 year of weekly weigh-ins) to limit localStorage size
-    if (S.weightHistory.length > 52) S.weightHistory = S.weightHistory.slice(-52);
+    if (S.weightHistory && S.weightHistory.length > 52) S.weightHistory = S.weightHistory.slice(-52);
     S.weight = v;
     // Persist to localStorage
     try {
@@ -2402,6 +2406,7 @@ function renderStep8(p) {
         if (first != null && first - v >= 5) window.GAMIFICATION.unlockBadge('five_kg');
       }
     }
+    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
     window.render();
   }}, 'Enregistrer'));
   p.appendChild(weightInputWrap);
@@ -2510,6 +2515,7 @@ function renderStep8(p) {
         S.weekPlan = _wkPre; S._weekPlanGeneratedAt = new Date().toISOString();
         var _hPre = window.getPlanHash ? window.getPlanHash() : '';
         if (_hPre) S._planHash = _hPre;
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       }
     }
     S._showCompletionFirst = true;
@@ -2736,7 +2742,7 @@ function renderStep9(p) {
     try {
       if (_planHashNow) { S._planHash = _planHashNow; }
       var _wk9 = generateWeek();
-      if (Array.isArray(_wk9) && _wk9.length === 7) S.weekPlan = _wk9;
+      if (Array.isArray(_wk9) && _wk9.length === 7) { S.weekPlan = _wk9; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } }
     } catch(e) { console.error('[renderStep9] generateWeek failed', e); }
   } else if (_planHashNow && !S._planHash) {
     // Plan existant mais hash absent (migration pré-fix) — figer le hash SANS régénérer
@@ -2747,7 +2753,7 @@ function renderStep9(p) {
     try {
       S._planHash = _planHashNow;
       var _wk9r = generateWeek();
-      if (Array.isArray(_wk9r) && _wk9r.length === 7) S.weekPlan = _wk9r;
+      if (Array.isArray(_wk9r) && _wk9r.length === 7) { S.weekPlan = _wk9r; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } }
     } catch(e) { console.error('[renderStep9] generateWeek failed', e); }
   }
   // Guard: si weekPlan est toujours null/vide après génération, afficher un message d'erreur
@@ -2780,7 +2786,7 @@ function renderStep9(p) {
   }
 
   // ── Pre-compute daily totals for macro progress display ──────────────────
-  var _preDay = S.weekPlan[S.selectedDay] || {};
+  var _preDay = (S.weekPlan && S.weekPlan[S.selectedDay]) || {};
   var _preTotal = 0, _preTotalP = 0, _preTotalG = 0, _preTotalL = 0;
   ['breakfast','lunch','snack','dinner'].forEach(function(slot) {
     var r = _preDay[slot];
@@ -3388,6 +3394,7 @@ function renderStep9(p) {
         // Figer le hash pour éviter une régénération silencieuse au prochain renderStep9
         var _hR = window.getPlanHash ? window.getPlanHash() : '';
         if (_hR) S._planHash = _hR;
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         // Sync plan nutrition vers Supabase
         if (window.SupaSync) {
           try {

@@ -1260,7 +1260,8 @@ function renderPARQ(p) {
    S.parqDone = true;
    S.parqResult = 'clear';
    S._parqAnswers = {};
-   var nextStep = S._parqNextStep || 0;
+   // Guard: si _parqNextStep absent (corruption/bookmark), défaut musculation (step 1)
+   var nextStep = (S._parqNextStep && S._parqNextStep > 0) ? S._parqNextStep : 1;
    S.sStep = nextStep;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
@@ -1279,7 +1280,7 @@ function renderPARQ(p) {
    S.parqDone = true;
    S.parqResult = 'medical_cleared';
    S._parqAnswers = {};
-   var nextStep = S._parqNextStep || 0;
+   var nextStep = (S._parqNextStep && S._parqNextStep > 0) ? S._parqNextStep : 1;
    S.sStep = nextStep;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
@@ -1293,7 +1294,7 @@ function renderPARQ(p) {
     S.parqDone = true;
     S.parqResult = 'user_override';
     S._parqAnswers = {};
-    var nextStep = S._parqNextStep || 0;
+    var nextStep = (S._parqNextStep && S._parqNextStep > 0) ? S._parqNextStep : 1;
     S.sStep = nextStep;
     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
     window.render();
@@ -1395,7 +1396,7 @@ function renderMuscuMedicalQ(p) {
  var active = med[z.key];
  var chip = h('div', {
  style: 'padding:8px 14px;border-radius:2px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
- onclick: (function(key){ return function(){ S.muscuMedical[key] = !S.muscuMedical[key]; window.render(); }; })(z.key)
+ onclick: (function(key){ return function(){ S.muscuMedical = S.muscuMedical || {}; S.muscuMedical[key] = !S.muscuMedical[key]; window.render(); }; })(z.key)
  }, z.icon + ' ' + z.label);
  zonesGrid.appendChild(chip);
  });
@@ -1445,7 +1446,7 @@ function renderMuscuMedicalQ(p) {
  var active = med.painLevel === pl.val;
  var btn = h('div', {
  style: 'padding:8px 16px;border-radius:2px;border:1.5px solid ' + (active ? '#5A1010' : 'var(--border)') + ';background:' + (active ? 'var(--redbg,rgba(90,16,16,.06))' : 'var(--ivory2)') + ';cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:' + (active ? '#5A1010' : 'var(--text)') + ';font-weight:' + (active ? '600' : '400') + ';user-select:none',
- onclick: (function(v){ return function(){ S.muscuMedical.painLevel = v; window.render(); }; })(pl.val)
+ onclick: (function(v){ return function(){ S.muscuMedical = S.muscuMedical || {}; S.muscuMedical.painLevel = v; window.render(); }; })(pl.val)
  }, pl.label);
  painRow.appendChild(btn);
  });
@@ -1457,7 +1458,7 @@ function renderMuscuMedicalQ(p) {
  var textarea = h('textarea', {
  placeholder: 'Précisez si besoin (ex: opération genou 2022, hernie L4-L5...)',
  style: 'width:100%;min-height:72px;padding:10px;border:1px solid var(--border);background:var(--ivory);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;resize:vertical;box-sizing:border-box;margin-bottom:16px',
- oninput: function(e){ S.muscuMedical.notes = e.target.value; }
+ oninput: function(e){ S.muscuMedical = S.muscuMedical || {}; S.muscuMedical.notes = e.target.value; }
  });
  if (med.notes) textarea.value = med.notes;
  p.appendChild(textarea);
@@ -1582,7 +1583,7 @@ function renderChargesQuestionnaire(p) {
  try { localStorage.setItem('mtd_muscu_strength_' + uid, JSON.stringify(S.muscuStrengthProfile)); } catch(e2) { console.warn('[muscu_strength] localStorage error:', e2); }
  if (!isNaN(v) && v > 0 && window.PERF_HISTORY) {
  var repsVal = S.muscuStrengthProfile[key + '_reps'] || 8;
- PERF_HISTORY.recordMuscuStrength(key, v, repsVal);
+ try { if (typeof PERF_HISTORY.recordMuscuStrength === 'function') PERF_HISTORY.recordMuscuStrength(key, v, repsVal); } catch(eP) { console.warn('[muscu_strength] PERF_HISTORY error:', eP); }
  }
  if (window.GAMIFICATION) GAMIFICATION.checkMuscuBadges(S.muscuStrengthProfile);
  }; })(exDef.key)
@@ -4967,6 +4968,7 @@ function renderWeekTracker(p) {
  try { var _newProg = generateSportProgram(); if (_newProg && _newProg.length) S.sportProgram = _newProg; } catch(e) { console.error('[nouveau_cycle] generateSportProgram failed', e); }
  S.selectedSportDay = 0;
  saveMuscuWeek(1);
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  window.render();
  }
  }, '\u21BB Nouveau cycle (Semaine 1)'));
@@ -7223,6 +7225,7 @@ function renderRunningConfig(p) {
  S.selectedRunDay = 0;
  S.sStep = 8;
  window.BLACKBOX && window.BLACKBOX.log('running_config', {goal: S.runningGoal, level: S.runningLevel, days: S.runningDays});
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  window.render();
  }
  }}, 'Générer mon plan'));
@@ -7448,13 +7451,16 @@ function renderHyroxConfig(p) {
  window.BLACKBOX && window.BLACKBOX.log('hyrox_config', {goal: S.hyroxGoal, level: S.hyroxLevel, days: S.hyroxDays});
  // Enregistrer les benchmarks dans l'historique
  if (window.PERF_HISTORY && S.hyroxBenchmarks) {
+ try {
  var hyroxSt = window.HYROX_STATIONS || [];
  hyroxSt.forEach(function(st) {
- if (st.id !== 'run' && S.hyroxBenchmarks[st.id]) {
+ if (st.id !== 'run' && S.hyroxBenchmarks[st.id] && typeof PERF_HISTORY.recordHyroxBenchmark === 'function') {
  PERF_HISTORY.recordHyroxBenchmark(st.id, st.name, S.hyroxBenchmarks[st.id]);
  }
  });
+ } catch(e) { console.warn('[hyrox] PERF_HISTORY error:', e); }
  }
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  window.render();
  }
  }}, 'Générer mon plan'));
@@ -7662,7 +7668,7 @@ function renderPadelConfig(p) {
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.padelGoal && S.padelLevel;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { if (typeof window.generatePadelProgram !== 'function') { console.error('[padel] generatePadelProgram module not loaded'); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; window.render(); }
+ if (ok) { if (typeof window.generatePadelProgram !== 'function') { console.error('[padel] generatePadelProgram module not loaded'); return; } S.padelProgram = window.generatePadelProgram(S.padelDays, S.padelLevel, S.padelGoal); S.padelWeek = 1; S.selectedPadelDay = 0; S.sStep = 12; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } window.render(); }
  }}, 'Générer mon programme'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
@@ -7785,7 +7791,7 @@ function renderGolfConfig(p) {
  p.appendChild(h('div', {style: 'height:24px'}));
  var ok = S.golfGoal && S.golfLevel;
  p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function(){
- if (ok) { if (typeof window.generateGolfProgram !== 'function') { console.error('[golf] generateGolfProgram module not loaded'); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; window.render(); }
+ if (ok) { if (typeof window.generateGolfProgram !== 'function') { console.error('[golf] generateGolfProgram module not loaded'); return; } S.golfProgram = window.generateGolfProgram(S.golfDays, S.golfLevel, S.golfGoal); S.golfWeek = 1; S.selectedGolfDay = 0; S.sStep = 14; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } window.render(); }
  }}, 'Générer mon programme'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
@@ -8020,10 +8026,13 @@ function renderTriathlonConfig(p) {
  if (window.BLACKBOX) window.BLACKBOX.log('triathlon_config', {goal: S.triathlonGoal, level: S.triathlonLevel, weak: S.triathlonWeak, raceDate: S.triathlonRaceDate || null, ftp: S.triathlonFTP || null});
  // Enregistrer les allures triathlon dans l'historique
  if (window.PERF_HISTORY) {
- if (S.triathlonSwimPace) PERF_HISTORY.recordTriathlonPace('swim', S.triathlonSwimPace, 'min/100m');
- if (S.triathlonBikePace) PERF_HISTORY.recordTriathlonPace('bike', S.triathlonBikePace, 'km/h');
- if (S.triathlonRunPace) PERF_HISTORY.recordTriathlonPace('run', S.triathlonRunPace, 'min/km');
+ try {
+ if (S.triathlonSwimPace && typeof PERF_HISTORY.recordTriathlonPace === 'function') PERF_HISTORY.recordTriathlonPace('swim', S.triathlonSwimPace, 'min/100m');
+ if (S.triathlonBikePace && typeof PERF_HISTORY.recordTriathlonPace === 'function') PERF_HISTORY.recordTriathlonPace('bike', S.triathlonBikePace, 'km/h');
+ if (S.triathlonRunPace && typeof PERF_HISTORY.recordTriathlonPace === 'function') PERF_HISTORY.recordTriathlonPace('run', S.triathlonRunPace, 'min/km');
+ } catch(e) { console.warn('[triathlon] PERF_HISTORY error:', e); }
  }
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  window.render();
  }}, 'Générer mon programme →'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function() { S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
@@ -8379,6 +8388,7 @@ function renderYogaOnboarding(p) {
  S.yogaDay = 0;
  S.sStep = 21;
  window.BLACKBOX && window.BLACKBOX.log('yoga_config', { level: S.yogaLevel, objectif: S.yogaObjectif, days: S.yogaDays, duration: S.yogaDuration, style: S.yogaStyle });
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  window.render();
  }
  }}, 'G\u00e9n\u00e9rer mon programme'));
@@ -8726,6 +8736,7 @@ function renderCyclingOnboarding(p) {
  S.selectedCyclingDay = 0;
  S.sStep = 23;
  if (window.BLACKBOX) BLACKBOX.log('cycling_config', {level: S.cyclingLevel, goal: S.cyclingGoal, days: S.cyclingDays, ftp: S.cyclingFTP});
+ if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  window.render();
  }}, 'Générer mon plan'));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: backArrow + 'Retour'}));
@@ -9060,6 +9071,7 @@ function renderCalisthenicsOnboarding(p) {
    if (!Array.isArray(S.calisthenicsEquipment) || S.calisthenicsEquipment.length === 0) { S.calisthenicsEquipment = ['bar']; }
    S.sStep = 25;
    window.BLACKBOX && window.BLACKBOX.log('calisthenics_config', { level: S.calisthenicsLevel, goal: S.calisthenicsGoal, days: S.calisthenicsdays });
+   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
   }
  }}, 'Generer mon programme'));
