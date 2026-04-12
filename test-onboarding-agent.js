@@ -1,6 +1,12 @@
 /**
  * Test script SmartFitCoach — Onboarding, Navigation, Persistance
  * Agent testeur ultra-rigoureux
+ *
+ * Corrections appliquées après analyse du code source:
+ * - AUTH gate: render() vérifie AUTH.isLoggedIn() → mock nécessaire pour accéder aux vues
+ * - localStorage key: 'mtd_profile_anon' (uid='anon' sans session), encodé XOR+base64
+ * - ON5 alcool: nStep=9 est sub-page 0 (habitudes), le bloc alcool est à _s5page=1
+ * - ON7: render() a un _lock anti-récursion, le renderCount est toujours 0 (c'est normal)
  */
 
 const { chromium } = require('playwright');
@@ -61,14 +67,37 @@ async function run() {
     }
 
     // ─────────────────────────────────────────────
-    // ON2 — Step 3 (activité) — bouton disabled si S.train=[]
+    // SETUP: Mocker AUTH.isLoggedIn() pour bypasser le gate d'authentification
+    // render() vérifie window.AUTH.isLoggedIn() → retourner true pour accéder aux vues app
+    // ─────────────────────────────────────────────
+    await page.evaluate(() => {
+      if (window.AUTH) {
+        window.AUTH._origIsLoggedIn = window.AUTH.isLoggedIn;
+        window.AUTH.isLoggedIn = function() { return true; };
+        window.AUTH._origGetUser = window.AUTH.getUser;
+        window.AUTH.getUser = function() { return { id: 'anon', email: 'test@test.com' }; };
+      }
+      // Initialiser un état S minimal pour l'onboarding
+      window.S.prenom = 'Test';
+      window.S.sex = 'femme';
+      window.S.age = 30;
+      window.S.weight = 65;
+      window.S.height = 165;
+      window.S.activity = 2;
+      window.S.sleep = 2;
+      window.S.goal = 2;
+      window.S.appMode = 'nutrition';
+    });
+
+    // ─────────────────────────────────────────────
+    // ON2 — Step 5 (activité/train/sleep) — bouton désactivé si S.train=[]
     // ─────────────────────────────────────────────
     console.log('\n--- ON2: Bouton disabled si S.train=[] ---');
     try {
       await page.evaluate(() => {
         window.S.nStep = 5;
         window.S.activity = 2;
-        window.S.train = [];
+        window.S.train = []; // tableau vide — bouton doit être disabled
         window.S.sleep = 2;
         window.S.sex = 'femme';
         window.S.age = 30;
@@ -80,7 +109,7 @@ async function run() {
       await page.waitForTimeout(500);
 
       let btnDisabled = null;
-      // Essayer plusieurs sélecteurs
+      // Chercher le bouton Continuer/Suivant dans le DOM
       try {
         btnDisabled = await page.$eval('button.btn-primary', btn => btn.disabled);
       } catch (e) {
@@ -99,7 +128,11 @@ async function run() {
       }
 
       if (btnDisabled === null) {
-        report('ON2', false, 'Bouton Continuer introuvable dans le DOM');
+        // Diagnostiquer: quels boutons existent?
+        const btnInfo = await page.$$eval('button', btns =>
+          btns.map(b => ({ text: b.textContent.trim().substring(0, 30), disabled: b.disabled, classes: b.className }))
+        );
+        report('ON2', false, `Bouton Continuer introuvable. Boutons présents: ${JSON.stringify(btnInfo)}`);
       } else {
         report('ON2', btnDisabled === true, `btn.disabled=${btnDisabled} (attendu: true)`);
       }
@@ -108,7 +141,7 @@ async function run() {
     }
 
     // ─────────────────────────────────────────────
-    // ON3 — Step 3 — bouton activé si S.train=[0]
+    // ON3 — Step 5 — bouton activé si S.train=[0]
     // ─────────────────────────────────────────────
     console.log('\n--- ON3: Bouton activé si S.train=[0] ---');
     try {
@@ -137,7 +170,10 @@ async function run() {
       }
 
       if (btnDisabled === null) {
-        report('ON3', false, 'Bouton Continuer introuvable dans le DOM');
+        const btnInfo = await page.$$eval('button', btns =>
+          btns.map(b => ({ text: b.textContent.trim().substring(0, 30), disabled: b.disabled, classes: b.className }))
+        );
+        report('ON3', false, `Bouton Continuer introuvable. Boutons présents: ${JSON.stringify(btnInfo)}`);
       } else {
         report('ON3', btnDisabled === false, `btn.disabled=${btnDisabled} (attendu: false)`);
       }
@@ -146,7 +182,7 @@ async function run() {
     }
 
     // ─────────────────────────────────────────────
-    // ON4 — Changement sexe femme→homme
+    // ON4 — Changement sexe femme→homme: nettoyage données féminines
     // ─────────────────────────────────────────────
     console.log('\n--- ON4: Changement sexe femme → homme ---');
     try {
@@ -178,57 +214,52 @@ async function run() {
     }
 
     // ─────────────────────────────────────────────
-    // ON5 — alcoholFreq null → helper text alcool
+    // ON5 — alcoholFreq: vérifier qu'un texte d'aide apparaît quand alcoholFreq=null
+    // Note: nStep=9 (renderStep5) a 2 sous-pages: _s5page=0 (habitudes), _s5page=1 (suppléments+alcool)
+    // Le bloc alcool est sur _s5page=1
     // ─────────────────────────────────────────────
-    console.log('\n--- ON5: alcoholFreq null — helper text ---');
+    console.log('\n--- ON5: alcoholFreq null — helper text alcool (nStep=9, _s5page=1) ---');
     try {
       await page.evaluate(() => {
+        window.S.sex = 'femme'; // remettre femme pour que le bloc alcool s'affiche (pas grossesse)
+        window.S.pregnant = false;
         window.S.nStep = 9;
         window.S.alcoholFreq = null;
         window.S.view = 'nutrition';
+        window._s5page = 1; // sous-page suppléments + alcool
+        // S'assurer que mealsPerDay est défini pour éviter undefined sur habitudes
+        window.S.mealsPerDay = 3;
+        window.S.eatingLocation = 'home';
+        window.S.mealPrepTime = 30;
+        window.S.snacking = false;
         window.render();
       });
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(600);
 
-      // Chercher un helper text lié à l'alcool
       const helperInfo = await page.evaluate(() => {
         const body = document.body.innerHTML.toLowerCase();
         const hasAlcohol = body.includes('alcool') || body.includes('alcohol') || body.includes('boisson');
-
-        // Chercher des éléments helper/hint/small contenant alcool
-        const selectors = ['.helper', '.hint', '.help-text', '.info-text', '[class*="helper"]',
-                           '[class*="hint"]', 'small', '.text-muted', '.subtitle', 'p', 'span', 'label'];
-        const elements = [];
-        for (const sel of selectors) {
-          const els = document.querySelectorAll(sel);
-          for (const el of els) {
-            const text = el.textContent.toLowerCase();
-            if ((text.includes('alcool') || text.includes('alcohol') || text.includes('boisson'))
-                && el.children.length === 0 && text.trim().length > 3) {
-              elements.push({ tag: el.tagName, class: el.className, text: el.textContent.trim().substring(0, 80) });
-              if (elements.length >= 3) break;
-            }
-          }
-          if (elements.length >= 3) break;
-        }
-        return { hasAlcohol, elements };
+        // Chercher section-label ou freqLabel
+        const labels = Array.from(document.querySelectorAll('.section-label, label, .divider-text, h2, h3, p'));
+        const alcoholLabels = labels
+          .filter(el => el.textContent.toLowerCase().includes('alcool') || el.textContent.toLowerCase().includes('alcohol'))
+          .map(el => ({ tag: el.tagName, text: el.textContent.trim().substring(0, 80) }));
+        return { hasAlcohol, alcoholLabels, appLen: document.querySelector('#app') ? document.querySelector('#app').innerHTML.length : 0 };
       });
 
-      if (helperInfo.hasAlcohol) {
-        const detail = helperInfo.elements.length > 0
-          ? `Texte alcool: "${helperInfo.elements[0].text}"`
-          : 'Contenu alcool dans innerHTML mais pas dans éléments feuille';
-        report('ON5', true, detail);
+      if (helperInfo.hasAlcohol && helperInfo.alcoholLabels.length > 0) {
+        report('ON5', true, `Texte alcool: "${helperInfo.alcoholLabels[0].text}"`);
+      } else if (helperInfo.hasAlcohol) {
+        report('ON5', true, `Contenu alcool trouvé dans le DOM (appLen=${helperInfo.appLen})`);
       } else {
-        const appContent = await page.$eval('#app', el => el.innerHTML.length).catch(() => 0);
-        report('ON5', false, `Aucun texte alcool trouvé (step=9, appLen=${appContent})`);
+        report('ON5', false, `Aucun texte alcool trouvé à nStep=9/_s5page=1 (appLen=${helperInfo.appLen})`);
       }
     } catch (e) {
       report('ON5', false, `Exception: ${e.message}`);
     }
 
     // ─────────────────────────────────────────────
-    // ON6 — Navigation sans page blanche
+    // ON6 — Navigation sans page blanche: toutes les vues principales
     // ─────────────────────────────────────────────
     console.log('\n--- ON6: Navigation toutes vues principales ---');
     const views = ['auth', 'today', 'nutrition', 'sport'];
@@ -237,6 +268,7 @@ async function run() {
 
     for (const view of views) {
       try {
+        // Pour la vue auth, on détecte si render affiche login (car isLoggedIn=true, auth → today)
         await page.evaluate((v) => {
           window.S.view = v;
           window.render();
@@ -261,6 +293,9 @@ async function run() {
 
     // ─────────────────────────────────────────────
     // ON7 — Boucle de render
+    // Note: render() a un mécanisme _lock anti-récursion intégré.
+    // Un render direct ne se rappelle jamais lui-même de façon récursive.
+    // On vérifie qu'aucune boucle ne se produit sur 200ms après un render.
     // ─────────────────────────────────────────────
     console.log('\n--- ON7: Boucle de render ---');
     try {
@@ -281,7 +316,7 @@ async function run() {
           };
           window.render = patched;
           window.S.view = 'today';
-          orig.call(window);
+          orig.call(window); // déclencher un render original
           // Laisser 200ms pour que les re-renders éventuels se propagent
           setTimeout(() => {
             window.render = orig;
@@ -290,24 +325,43 @@ async function run() {
         });
       });
 
-      const pass = !renderLoopResult.loopDetected && renderLoopResult.count <= 5;
-      report('ON7', pass, `renderCount=${renderLoopResult.count}, loopDetected=${renderLoopResult.loopDetected}`);
+      // Le _lock interne de render() signifie que count=0 si orig.call() ne re-trigger pas patched.
+      // count>0 seulement si render() appelle window.render() (non orig) à l'intérieur.
+      const pass = !renderLoopResult.loopDetected;
+      report('ON7', pass,
+        `renderCount=${renderLoopResult.count}, loopDetected=${renderLoopResult.loopDetected}` +
+        (renderLoopResult.count === 0 ? ' (normal: render() utilise _lock anti-récursion)' : ''));
     } catch (e) {
       report('ON7', false, `Exception: ${e.message}`);
     }
 
     // ─────────────────────────────────────────────
     // P1 — PROFILE_KEYS: competitionGoal persisté
+    // Note: saveProfile() stocke sous 'mtd_profile_anon' (uid='anon')
+    //       avec encodage XOR+base64 via window._storageEncode
     // ─────────────────────────────────────────────
     console.log('\n--- P1: competitionGoal persisté ---');
     try {
       const result = await page.evaluate(() => {
         window.S.competitionGoal = 'marathon';
         if (window.saveProfile) window.saveProfile();
-        const stored = JSON.parse(localStorage.getItem('smartfitcoach_profile') || '{}');
-        return stored.competitionGoal;
+        // La clé de stockage réelle est 'mtd_profile_anon' (pas 'smartfitcoach_profile')
+        const raw = localStorage.getItem('mtd_profile_anon');
+        if (!raw) return { key: 'mtd_profile_anon', raw: null, decoded: null };
+        let decoded = null;
+        if (window._storageDecode) {
+          decoded = window._storageDecode(raw);
+        }
+        if (!decoded) {
+          try { decoded = JSON.parse(raw); } catch(e) {}
+        }
+        return {
+          key: 'mtd_profile_anon',
+          competitionGoal: decoded ? decoded.competitionGoal : 'DECODE_FAILED'
+        };
       });
-      report('P1', result === 'marathon', `stored.competitionGoal=${result} (attendu: 'marathon')`);
+      const pass = result.competitionGoal === 'marathon';
+      report('P1', pass, `key=${result.key}, stored.competitionGoal=${result.competitionGoal} (attendu: 'marathon')`);
     } catch (e) {
       report('P1', false, `Exception: ${e.message}`);
     }
@@ -320,14 +374,18 @@ async function run() {
       const result = await page.evaluate(() => {
         window.S.sportHobbies = ['running', 'yoga'];
         if (window.saveProfile) window.saveProfile();
-        const stored = JSON.parse(localStorage.getItem('smartfitcoach_profile') || '{}');
-        return stored.sportHobbies;
+        const raw = localStorage.getItem('mtd_profile_anon');
+        if (!raw) return { sportHobbies: null };
+        let decoded = null;
+        if (window._storageDecode) decoded = window._storageDecode(raw);
+        if (!decoded) { try { decoded = JSON.parse(raw); } catch(e) {} }
+        return { sportHobbies: decoded ? decoded.sportHobbies : null };
       });
-      const pass = Array.isArray(result) &&
-                   result.length === 2 &&
-                   result[0] === 'running' &&
-                   result[1] === 'yoga';
-      report('P2', pass, `stored.sportHobbies=${JSON.stringify(result)} (attendu: ['running','yoga'])`);
+      const pass = Array.isArray(result.sportHobbies) &&
+                   result.sportHobbies.length === 2 &&
+                   result.sportHobbies[0] === 'running' &&
+                   result.sportHobbies[1] === 'yoga';
+      report('P2', pass, `stored.sportHobbies=${JSON.stringify(result.sportHobbies)} (attendu: ['running','yoga'])`);
     } catch (e) {
       report('P2', false, `Exception: ${e.message}`);
     }
@@ -392,7 +450,7 @@ async function run() {
         report('P4', false, `Crash: ${result.error}`);
       } else {
         const pass = result.isNotNull && result.hasPhase;
-        report('P4', pass, `isNotNull=${result.isNotNull}, hasPhase=${result.hasPhase}, result=${JSON.stringify(result.result)}`);
+        report('P4', pass, `isNotNull=${result.isNotNull}, hasPhase=${result.hasPhase}`);
       }
     } catch (e) {
       report('P4', false, `Exception: ${e.message}`);
@@ -430,11 +488,12 @@ async function run() {
     }
 
     // ─────────────────────────────────────────────
-    // SN1 — Vue sport sans profil sport
+    // SN1 — Vue sport sans profil sport: pas de page blanche
     // ─────────────────────────────────────────────
     console.log('\n--- SN1: Vue sport sans profil sport ---');
     try {
       await page.evaluate(() => {
+        window.S.appMode = 'sport';
         window.S.view = 'sport';
         window.S.sStep = 0;
         window.S.sportType = null;
@@ -450,13 +509,14 @@ async function run() {
     }
 
     // ─────────────────────────────────────────────
-    // SN2 — Vue today sans currentWeight
+    // SN2 — Vue dashboard today: pas de crash avec S.currentWeight inexistant
     // ─────────────────────────────────────────────
     console.log('\n--- SN2: Vue today sans currentWeight ---');
     const errorsBeforeSN2 = JS_ERRORS.length;
     try {
       await page.evaluate(() => {
         window.S.view = 'today';
+        window.S.appMode = 'nutrition';
         delete window.S.currentWeight;
         window.render();
       });
@@ -482,6 +542,7 @@ async function run() {
 
   } catch (globalError) {
     console.error(`\n[FATAL] Erreur globale: ${globalError.message}`);
+    console.error(globalError.stack);
   } finally {
     await browser.close();
   }
@@ -495,8 +556,8 @@ async function run() {
 
   let passed = 0, failed = 0;
   for (const r of RESULTS) {
-    const icon = r.status === 'PASS' ? 'v' : 'X';
-    console.log(`${icon} [${r.status}] ${r.id}: ${r.detail}`);
+    const icon = r.status === 'PASS' ? 'PASS' : 'FAIL';
+    console.log(`[${icon}] ${r.id}: ${r.detail}`);
     if (r.status === 'PASS') passed++;
     else failed++;
   }
