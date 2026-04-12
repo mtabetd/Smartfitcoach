@@ -134,6 +134,13 @@ var TIPS = {
     { text: "Le sport pendant la grossesse RÉDUIT les risques de complications : 150 min/semaine recommandées.", source: "OMS, 2020", icon: "\uD83D\uDCA1" }
   ],
 
+  // TRIATHLON / IRONMAN
+  triathlon: [
+    { text: "En triathlon, la transition (T1/T2) est souvent négligée à l'entraînement : 30s gagnées en transition = 30s gagnées sans effort physique.", source: "Triathlon Coach Magazine, 2019", icon: "\uD83D\uDCA1" },
+    { text: "La brique (vélo → course) est l'entraînement clé du triathlon : les jambes passent d'un mouvement rotatif à linéaire en quelques minutes.", source: "IRONMAN Coaching, 2021", icon: "\uD83D\uDCA1" },
+    { text: "En IRONMAN, 70% des abandons sont dus à une mauvaise stratégie nutritionnelle, pas au manque de forme physique.", source: "Journal of Science and Medicine in Sport, 2017", icon: "\u26A0" }
+  ],
+
   // GÉNÉRAL
   general: [
     { text: "Dormir moins de 7h augmente la faim de 24% le lendemain via la ghréline.", source: "PLoS Medicine, 2004", icon: "\u26A0" },

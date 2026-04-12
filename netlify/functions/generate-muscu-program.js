@@ -191,6 +191,47 @@ FST-7 Fascial (Rambod), Élite Fusion, Starting Strength (Rippetoe),
 Greyskull LP, Texas Method, nSuns 5/3/1, CBum Classic Physique.
 
 ═══════════════════════════════════════════════════════════════════════════════
+SECTION 2B — SÉPARATION STRICTE UPPER / LOWER BODY (LOI ABSOLUE)
+═══════════════════════════════════════════════════════════════════════════════
+
+RÈGLE NON NÉGOCIABLE dans tout split avec séances UPPER BODY ou LOWER BODY :
+
+SÉANCE UPPER BODY — EXERCICES AUTORISÉS UNIQUEMENT :
+  ✓ Pectoraux : développé couché (plat/incliné/décliné), dips lestés, fly
+  ✓ Dos       : tractions, lat pulldown, rowing (toutes variantes), tirage poulie
+  ✓ Épaules   : développé militaire, arnold press, élévations latérales/frontales
+  ✓ Biceps    : curl barre/haltères/câble/marteau
+  ✓ Triceps   : extension triceps/câble/haltères, close grip bench, skull crusher
+  ✓ Core      : planche/dead-bug UNIQUEMENT en fin de séance (max 2 exos accessoires)
+
+SÉANCE UPPER BODY — EXERCICES INTERDITS (ZÉRO EXCEPTION) :
+  ✗ Squats, Hack Squat, Leg Press, Fentes, Bulgarian Split Squat, Leg Extension
+  ✗ Romanian Deadlift / Leg Curl / Hip Thrust / Glute Bridge / Step-up
+  ✗ Mollets (Calf Raises), Adducteurs, Abducteurs
+
+SÉANCE LOWER BODY — EXERCICES AUTORISÉS UNIQUEMENT :
+  ✓ Quadriceps : squat (toutes variantes), leg press, hack squat, fentes, leg extension
+  ✓ Ischio     : romanian deadlift, leg curl (allongé/assis/nordique)
+  ✓ Fessiers   : hip thrust, sumo deadlift, glute bridge, step-up, kickback câble
+  ✓ Mollets    : calf raises debout/assis, donkey calf
+  ✓ Core       : planche, bird-dog, dead-bug UNIQUEMENT en fin (max 2 exos)
+
+SÉANCE LOWER BODY — EXERCICES INTERDITS (ZÉRO EXCEPTION) :
+  ✗ Développé couché (plat/incliné/décliné), dips
+  ✗ Développé militaire / Arnold Press / élévations latérales ou frontales
+  ✗ Tractions / Lat Pulldown / Rowing (TOUTES variantes)
+  ✗ Curl biceps, extension triceps, skull crusher, close grip bench
+
+SÉANCE FULL BODY → peut mélanger, avec équilibre minimum :
+  Au moins 2 exercices lower ET 2 exercices upper par séance.
+
+CHECKLIST SUPPLÉMENTAIRE :
+[ ] Chaque séance UPPER ne contient AUCUN exercice de la liste LOWER INTERDITS
+[ ] Chaque séance LOWER ne contient AUCUN exercice de la liste UPPER INTERDITS
+[ ] Chaque séance porte un titre clair : "UPPER BODY — Jour X" ou "LOWER BODY — Jour Y"
+VIOLATION = réécrire intégralement la séance concernée.
+
+═══════════════════════════════════════════════════════════════════════════════
 SECTION 3 — MATRICE DE SÉLECTION DES EXERCICES (6 filtres)
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -198,7 +239,9 @@ FILTRE 1 — ÉQUIPEMENT : si dispo OK, sinon alternative exacte
 FILTRE 2 — CONTRAINTES MÉDICALES : exclure ou marquer précaution spécifique
 FILTRE 3 — NIVEAU TECHNIQUE : débutant exclu des Olympic lifts/balistiques
 FILTRE 4 — PRÉFÉRENCES : aimés +1 priorité, détestés remplacés biomécaniquement
-FILTRE 5 — VARIATION ANTI-MONOTONIE : variantes d'angle si déjà 2x dans la sem
+FILTRE 5 — VARIATION ANTI-MONOTONIE : variantes d'angle/équipement/prise OBLIGATOIRES
+           si le même groupe musculaire apparaît 2x dans la semaine.
+           Ex : Jour 1 Bench Press plat → Jour 3 OBLIGATOIREMENT incliné ou décliné ou dips
 FILTRE 6 — POINTS FAIBLES : +30% volume hebdo sur les 3 points faibles
 FILTRE 7 — TYPE DE PROGRAMME (LOI 7) : programme = MUSCULATION.
   → Cardio pur (running, cycling, natation, home trainer continu) = INTERDIT
@@ -541,6 +584,8 @@ Avant d'envoyer, vérifier silencieusement :
 [ ] Les charges sont arrondies aux paliers de 2.5 kg
 [ ] Le split est justifié par schedule × récup × objectif
 [ ] Aucune séance identique à une autre
+[ ] Aucun exercice LOWER BODY (squat/fentes/hip thrust/leg curl/mollets) dans une séance UPPER BODY
+[ ] Aucun exercice UPPER BODY (développé/rowing/curl/triceps/military press) dans une séance LOWER BODY
 [ ] Nutrition en grammes calculés sur son poids
 [ ] Règles d'autorégulation citent ses marqueurs personnels
 [ ] TOUTES les restrictions du BILAN MÉDICAL sont respectées
@@ -628,6 +673,13 @@ function buildUserPrompt(profile) {
     '- Données brutes force (poids entraînement × reps) : ' + sanitizeString(profile.strengthProfile || 'non renseigné', 400) + '\n' +
     '- Semaine actuelle dans le cycle 12 sem. : ' + (sanitizeNumber(profile.semaineActuelle, 1, 12) || 1) + '\n' +
     '- Numéro de mésocycle : ' + (sanitizeNumber(profile.cycleActuel, 1, 10) || 1) + '\n' +
+    (sanitizeNumber(profile.muscuProgramCount, 0, 200) > 0
+      ? '- GÉNÉRATION N°' + sanitizeNumber(profile.muscuProgramCount, 0, 200) + ' — VARIATION OBLIGATOIRE\n' +
+        '  Tu as déjà généré des programmes pour ce profil. Tu DOIS choisir des exercices différents :\n' +
+        '  · Utilise des variantes d\'angle ou d\'équipement pour chaque groupe musculaire\n' +
+        '  · Au minimum 50% d\'exercices principaux différents d\'un programme "standard" pour ce niveau\n' +
+        '  · Ex : si "développé couché" est le choix évident pour pectoraux → utiliser "développé incliné haltères" ou "dips lestés"\n'
+      : '') +
     '- Points forts : ' + sanitizeString(profile.pointsForts || 'non renseignés', 300) + '\n' +
     '- Points faibles : ' + sanitizeString(profile.pointsFaibles || 'non renseignés', 300) + '\n' +
     '- Préférences : ' + sanitizeString(profile.preferences || 'non renseignées', 300) + '\n' +

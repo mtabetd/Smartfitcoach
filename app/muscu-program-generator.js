@@ -572,7 +572,8 @@
       // Nouvelles données collectées par le questionnaire enrichi
       muscuObjectifSpecifique: S.muscuObjectifSpecifique || '',
       muscuZonesCibles: Array.isArray(S.muscuZonesCibles) && S.muscuZonesCibles.length ? S.muscuZonesCibles.join(', ') : '',
-      muscuRenforcementNote: S.muscuRenforcementNote || ''
+      muscuRenforcementNote: S.muscuRenforcementNote || '',
+      muscuProgramCount: S.muscuProgramCount || 0
     };
   }
 

@@ -18,7 +18,7 @@
     var hasName    = true; // Prénom optionnel — ne bloque pas l'overlay de fin d'onboarding
     // Mode sport-only : pas de S.goal (concept nutrition) — accepter si sportType + sportProgram
     var hasGoal    = (s.goal !== null && s.goal !== undefined) || (s.appMode === 'sport' && !!s.sportType);
-    var hasPlan    = !!(s.weekPlan || (s.sportProgram && s.sportProgram.length > 0));
+    var hasPlan    = !!(s.weekPlan || (Array.isArray(s.sportProgram) && s.sportProgram.length > 0));
     return hasName && hasGoal && hasPlan;
   }
 

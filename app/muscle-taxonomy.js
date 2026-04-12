@@ -258,6 +258,7 @@
     'legs': ['quadriceps', 'ischio-jambiers', 'fessiers', 'mollets', 'lombaires'],
     'full': ['pectoraux', 'dos', 'epaules', 'quadriceps', 'fessiers'],
     'upper': ['pectoraux', 'dos', 'epaules', 'biceps', 'triceps'],
+    'lower': ['quadriceps', 'ischio-jambiers', 'fessiers', 'mollets', 'lombaires'],
     'hypertrophie': ['pectoraux', 'dos', 'epaules', 'quadriceps'],
     'force': ['quadriceps', 'pectoraux', 'lombaires', 'dos'],
     'pectoraux-dos': ['pectoraux', 'dos', 'triceps', 'biceps'],
