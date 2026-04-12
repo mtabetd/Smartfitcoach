@@ -4120,21 +4120,21 @@ function renderMusculationZones(p) {
 // ─── SYSTÈME DE PHASES 7 SEMAINES ───
 var MUSCU_PHASES = [
  {weeks:[1,2], id:'adaptation', label:'Adaptation', color:'#2980B9',
- rpe:6, rpeNote:'RPE 6 — vous pourriez faire 4 reps de plus. Priorité à la technique.',
- pct1rm:0.60, advice:'Maîtrisez la technique avant d\'augmenter les charges. Si vous réussissez toutes les reps → +2.5 kg la semaine suivante.',
+ rpe:6, rpeNote:'RPE 6 — tu pourrais faire 4 reps de plus. Priorité à la technique.',
+ pct1rm:0.60, advice:'Maîtrise la technique avant d\'augmenter les charges. Si tu réussis toutes les reps → +2.5 kg la semaine prochaine.',
  setsOffset:-1, repsOffset:+2, restNote:'Repos libres — récupération complète entre chaque série.'},
  {weeks:[3,4], id:'progression', label:'Progression', color:'#1A4A1A',
- rpe:8, rpeNote:'RPE 8 — vous pourriez faire 2 reps de plus. Zone optimale hypertrophie.',
- pct1rm:0.72, advice:'Progression double : augmentez d\'abord les reps (ex. 8→10→12), puis montez la charge de 2.5 kg et retombez à 8 reps.',
- setsOffset:0, repsOffset:0, restNote:'Respectez les temps de repos indiqués.'},
+ rpe:8, rpeNote:'RPE 8 — tu pourrais faire 2 reps de plus. Zone optimale hypertrophie.',
+ pct1rm:0.72, advice:'Progression double : augmente d\'abord les reps (ex. 8→10→12), puis monte la charge de 2.5 kg et retombe à 8 reps.',
+ setsOffset:0, repsOffset:0, restNote:'Respecte les temps de repos indiqués.'},
  {weeks:[5,6], id:'intensification',label:'Intensification',color:'#6A4A1A',
  rpe:9, rpeNote:'RPE 9 — 1 rep en réserve. Dernier set seulement jusqu\'à l\'échec technique (jamais sur squat/soulevé).',
  pct1rm:0.82, advice:'Charges maximales. +1 série par exercice composé. Dernier set à l\'échec sur les isolations uniquement.',
  setsOffset:+1, repsOffset:-2, restNote:'+30s de repos vs semaines précédentes. CNS sous pression maximale.'},
  {weeks:[7], id:'decharge', label:'Décharge', color:'#0A0A09',
  rpe:5, rpeNote:'RPE 5 — très facile, 5+ reps en réserve. Récupération musculaire et articulaire.',
- pct1rm:0.50, advice:'Réduisez le volume de 50% (2 séries au lieu de 4) et les charges de 40-50%. Gardez les mêmes exercices. Indispensable pour la progression long terme.',
- setsOffset:-2, repsOffset:0, restNote:'Repos complets. Votre prochain cycle sera plus fort grâce à cette semaine.'}
+ pct1rm:0.50, advice:'Réduis le volume de 50% (2 séries au lieu de 4) et les charges de 40-50%. Garde les mêmes exercices. Indispensable pour la progression long terme.',
+ setsOffset:-2, repsOffset:0, restNote:'Repos complets. Ton prochain cycle sera plus fort grâce à cette semaine.'}
 ];
 
 // Calcule le poids recommandé pour un exercice selon la phase courante
@@ -5138,7 +5138,7 @@ function renderMusculationProgram(p) {
  // Afficher le message d'erreur si la génération a échoué (évite l'écran blanc)
  if (S._programGenerationError) {
    p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'}, [
-     h('div', {style: 'font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Programme indisponible'),
+     h('div', {style: 'font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Programme indisponible'),
      h('p', {style: 'font-size:14px;color:var(--text-secondary,#6B6B65);max-width:300px;margin:0 auto 24px;line-height:1.5;'}, S._programGenerationError),
      h('button', {'class': 'btn-primary', style: 'margin:0 auto;display:block;', onclick: function() {
        S._programGenerationError = null;
@@ -5154,7 +5154,7 @@ function renderMusculationProgram(p) {
    if (!S._generatingProgram) {
      S._generatingProgram = true;
      p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'},[
-       h('div', {style: 'font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
+       h('div', {style: 'font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
        h('div', {style: 'width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;'})
      ]));
      setTimeout(function() {
@@ -5183,7 +5183,7 @@ function renderMusculationProgram(p) {
    } else {
      // setTimeout en attente — afficher le spinner et attendre, ne pas générer en doublon
      p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'},[
-       h('div', {style: 'font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
+       h('div', {style: 'font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
        h('div', {style: 'width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;'})
      ]));
      return;
@@ -5335,7 +5335,7 @@ function renderMusculationProgram(p) {
  var z3lo = Math.round((hrMax - hrRest) * 0.70 + hrRest);
  var z3hi = Math.round((hrMax - hrRest) * 0.80 + hrRest);
  var karvonenDiv = h('div', {style: 'border-left:2px solid var(--red);padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;background:var(--redbg)'});
- karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:8px'}, 'Cardiopathie — Zones FC Karvonen'));
+ karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:8px'}, 'Cardiopathie — Zones FC Karvonen'));
  karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, 'FC repos ' + hrRest + ' bpm · HRmax estimé ' + hrMax + ' bpm'));
  var zonesRow = h('div', {style: 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px'});
  zonesRow.appendChild(h('span', {'class': 'val-good'}, 'Z1 Récup ' + z1lo + '–' + z1hi + ' bpm'));
@@ -5350,7 +5350,7 @@ function renderMusculationProgram(p) {
  // HTA légère (140-159/90-99 mmHg) — effort modéré autorisé mais avec précautions
  if (S.medical && S.medical.indexOf('hta') !== -1 && S.medical.indexOf('hta_severe') === -1) {
  var htaLightDiv = h('div', {style: 'background:rgba(106,74,26,0.06);border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'});
- htaLightDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#6A4A1A;margin-bottom:6px'}, 'HTA — Précautions sport'));
+ htaLightDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#6A4A1A;margin-bottom:6px'}, 'HTA — Précautions sport'));
  htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u26A0 HTA légère (140-159/90-99 mmHg) : l\'exercice régulier est bénéfique mais doit rester contrôlé (ESC/ESH 2018).'));
  htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Intensité maximale recommandée : RPE 8/10 — évitez les efforts maximaux'));
  htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (apnée en poussée lourde) — favorisez une respiration continue'));
@@ -5362,7 +5362,7 @@ function renderMusculationProgram(p) {
  // hta_severe dans S.medical (onboarding nutrition) → bloquer HIIT/CrossFit + zones FC adaptées
  if (S.medical && S.medical.indexOf('hta_severe') !== -1) {
  var htaDiv = h('div', {style: 'background:rgba(90,16,16,0.06);border-left:4px solid #5A1010;padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#5A1010'});
- htaDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#5A1010;margin-bottom:6px'}, 'HTA Sévère — Restrictions sport obligatoires'));
+ htaDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#5A1010;margin-bottom:6px'}, 'HTA Sévère — Restrictions sport obligatoires'));
  htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u26A0 HTA sévère (≥180/110 mmHg) : HIIT, CrossFit et efforts isométriques lourds sont contre-indiqués (ESC/ESH 2018). Risque de pic tensionnel >300/150 mmHg (ACC 2019).'));
  htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Intensité maximale : RPE 6/10 — cardio Z1-Z2 uniquement (<65% FCmax)'));
  htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (squat lourd, soulevé de terre, arraché) — Lamotte et al., Arch Cardiovasc Dis 2015'));
@@ -5503,7 +5503,7 @@ function renderMusculationProgram(p) {
  });
 
  // Forbidden exercises
- pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + triSportColor + ';margin:10px 0 6px'}, 'Exercices interdits ce trimestre'));
+ pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:' + triSportColor + ';margin:10px 0 6px'}, 'Exercices interdits ce trimestre'));
  if (triSport.trimester.forbiddenExercises) triSport.trimester.forbiddenExercises.forEach(function(ex) {
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + triSportColor + ';margin-bottom:2px;padding-left:8px'}, '\u2716 ' + ex));
  });
@@ -5698,7 +5698,7 @@ function renderMusculationProgram(p) {
 
     if (Array.isArray(_phaseExos) && _phaseExos.length > 0) {
      // Phase label header
-     _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, _progDisplayName + ' \u2014 ' + _phaseKey));
+     _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:8px'}, _progDisplayName + ' \u2014 ' + _phaseKey));
 
      // C5: Equipment limited badge
      if (_sfcEqLimitedBadge) {
@@ -5710,7 +5710,7 @@ function renderMusculationProgram(p) {
       var _warmupEl = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;background:var(--greenbg,rgba(26,74,26,.06));border-left:3px solid var(--green,#1A4A1A);padding:10px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
       _warmupEl.appendChild(h('span', {style: 'font-size:14px;flex-shrink:0'}, '\uD83D\uDD25'));
       var _warmupRight = h('div', {});
-      _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:3px'}, '\u00c9chauffement'));
+      _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:3px'}, '\u00c9chauffement'));
       _warmupRight.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);line-height:1.5'}, _phaseObj.warmup));
       _warmupEl.appendChild(_warmupRight);
       _sfcSection.appendChild(_warmupEl);
@@ -5809,7 +5809,7 @@ function renderMusculationProgram(p) {
   }
 
   var _splitSection = h('div', {style: 'margin-bottom:12px'});
-  _splitSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Split d\'entraînement'));
+  _splitSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:6px'}, 'Split d\'entraînement'));
   var _splitBtns = h('div', {style: 'display:flex;flex-wrap:wrap;gap:6px'});
   _splitOpts.forEach(function(opt) {
    var _isActive = S._splitChoice === opt.id;
@@ -5848,7 +5848,7 @@ function renderMusculationProgram(p) {
   : (_goalDisplay ? 'Programme\u00a0: ' + _goalDisplay : '');
 
  if (_bannerText) {
-  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;font-family:"Helvetica Neue",Arial,sans-serif'}, _bannerText));
+  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;font-family:"Helvetica Neue",Arial,sans-serif'}, _bannerText));
  }
 
  // Day tabs — rename according to split choice if available
@@ -5871,25 +5871,25 @@ function renderMusculationProgram(p) {
  if (typeof S.selectedSportDay !== 'number' || S.selectedSportDay < 0 || S.selectedSportDay >= S.sportProgram.length) S.selectedSportDay = 0;
  var day = S.sportProgram[S.selectedSportDay];
  if (day) {
- p.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus));
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus || ''));
 
  // ─── SESSION BRIEF CARD (beginners only) ───
  if (S.sportLevel === 'beginner') {
   var MUSCLE_BRIEFS = {
-   'poitrine':    { why: 'les pectoraux = push de base, force des bras et épaules', tip: 'Sentez la contraction à chaque rep — qualité > quantité' },
-   'pectoral':    { why: 'les pectoraux = push de base, force des bras et épaules', tip: 'Sentez la contraction à chaque rep — qualité > quantité' },
-   'dos':         { why: 'le dos soutient votre colonne et améliore votre posture', tip: 'Tirez avec les coudes, pas avec les mains' },
-   'dorsaux':     { why: 'le dos soutient votre colonne et améliore votre posture', tip: 'Tirez avec les coudes, pas avec les mains' },
-   'épaule':      { why: 'les épaules stabilisent tous vos mouvements du haut du corps', tip: 'Commencez léger — les épaules sont fragiles' },
-   'jambe':       { why: 'les jambes = plus gros muscles du corps, brûlent le plus de calories', tip: 'Genou dans l\'axe du pied à chaque rep' },
-   'quadri':      { why: 'les quadriceps propulsent chaque pas, saut et accélération', tip: 'Descendez lentement (3s) pour plus d\'efficacité' },
-   'fessier':     { why: 'les fessiers sont le moteur de la puissance et protègent le dos', tip: 'Contractez fort en haut de chaque mouvement' },
-   'bras':        { why: 'biceps + triceps = force de traction et de poussée', tip: 'Contrôlez la descente — c\'est là que le muscle pousse le plus' },
-   'biceps':      { why: 'les biceps tirent et fléchissent — essentiels pour le dos et les tractions', tip: 'Contrôlez la descente — c\'est là que le muscle pousse le plus' },
-   'triceps':     { why: 'les triceps représentent 2/3 du volume du bras', tip: 'Extension complète à chaque rep' },
-   'abdo':        { why: 'les abdominaux stabilisent chaque mouvement et protègent votre dos', tip: 'Gainage > crunches — tenez la position' },
-   'abdominaux':  { why: 'les abdominaux stabilisent chaque mouvement et protègent votre dos', tip: 'Gainage > crunches — tenez la position' },
-   'corps entier':{ why: 'séance complète = maximum de calories brûlées et de progrès', tip: 'Récupérez bien — vous avez sollicité tous les muscles' }
+   'poitrine':    { why: 'les pectoraux, c\'est la base du push — ça renforce tes bras et tes épaules en même temps', tip: 'Sens bien la contraction à chaque rep — la qualité prime sur le poids' },
+   'pectoral':    { why: 'les pectoraux, c\'est la base du push — ça renforce tes bras et tes épaules en même temps', tip: 'Sens bien la contraction à chaque rep — la qualité prime sur le poids' },
+   'dos':         { why: 'un dos fort = meilleure posture et moins de douleurs au quotidien', tip: 'Tire avec les coudes, pas avec les mains — c\'est là que le dos bosse vraiment' },
+   'dorsaux':     { why: 'un dos fort = meilleure posture et moins de douleurs au quotidien', tip: 'Tire avec les coudes, pas avec les mains — c\'est là que le dos bosse vraiment' },
+   'épaule':      { why: 'des épaules solides stabilisent tout ton upper body — indispensables pour pousser et tirer fort', tip: 'Commence léger — les épaules, ça se blesse vite' },
+   'jambe':       { why: 'tes jambes sont tes plus gros muscles — elles brûlent un max de calories et boostent toute ta force', tip: 'Garde le genou dans l\'axe du pied à chaque rep' },
+   'quadri':      { why: 'les quadriceps te propulsent à chaque pas, saut ou accélération — bosser les jambes, c\'est tout gagner', tip: 'Descends lentement (3s) — c\'est là que l\'essentiel se passe' },
+   'fessier':     { why: 'les fessiers = ton moteur de puissance et la meilleure protection de ton dos', tip: 'Serre bien en haut de chaque mouvement — c\'est là que ça travaille vraiment' },
+   'bras':        { why: 'biceps et triceps ensemble : tout pour tirer fort et pousser fort', tip: 'Contrôle la descente — c\'est la phase où le muscle grandit le plus' },
+   'biceps':      { why: 'les biceps te permettent de tirer — indispensables pour les tractions et un dos puissant', tip: 'Contrôle la descente — c\'est la phase où le muscle grandit le plus' },
+   'triceps':     { why: 'les triceps représentent 2/3 du volume du bras — si tu veux des bras, travaille-les !', tip: 'Extension complète à chaque rep — ne raccourcis pas le mouvement' },
+   'abdo':        { why: 'un core solide, c\'est chaque mouvement plus puissant et ton dos protégé', tip: 'Gainage plutôt que crunches — tiens la position, c\'est bien plus efficace' },
+   'abdominaux':  { why: 'un core solide, c\'est chaque mouvement plus puissant et ton dos protégé', tip: 'Gainage plutôt que crunches — tiens la position, c\'est bien plus efficace' },
+   'corps entier':{ why: 'séance complète = tu stimules tous les muscles et brûles un maximum de calories', tip: 'Récupère bien — t\'as beaucoup bossé aujourd\'hui !' }
   };
   var focusLower = (day.focus || '').toLowerCase();
   var matchedBrief = null;
@@ -5898,14 +5898,14 @@ function renderMusculationProgram(p) {
    if (focusLower.indexOf(briefKeys[bk]) !== -1) { matchedBrief = MUSCLE_BRIEFS[briefKeys[bk]]; break; }
   }
   var briefCard = h('div', {style: 'background:rgba(26,74,26,0.04);border-left:3px solid #1A4A1A;padding:14px 16px;margin-bottom:16px;border-radius:0 2px 2px 0'});
-  briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#1A4A1A;margin-bottom:6px'}, 'SÉANCE DU JOUR'));
-  briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, day.focus));
+  briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:#1A4A1A;margin-bottom:6px'}, 'SÉANCE DU JOUR'));
+  briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, day.focus || ''));
   if (matchedBrief) {
    briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, matchedBrief.why));
    briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, matchedBrief.tip));
   } else {
-   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, 'Aujourd\'hui vous travaillez votre ' + day.focus));
-   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, 'Chaque rep compte — concentrez-vous sur la technique, pas sur le poids'));
+   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, 'Aujourd\'hui tu travailles ' + day.focus));
+   briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, 'Chaque rep compte — concentre-toi sur la technique, pas sur le poids'));
   }
   p.appendChild(briefCard);
  }
@@ -5959,7 +5959,7 @@ function renderMusculationProgram(p) {
    ]
   };
   var wuCard = h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.2);border-left:3px solid var(--green,#1A4A1A);padding:12px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
-  wuCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#1A4A1A);font-weight:600;margin-bottom:8px'}, 'ÉCHAUFFEMENT · ' + wu.duration + ' min'));
+  wuCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--green,#1A4A1A);font-weight:600;margin-bottom:8px'}, 'ÉCHAUFFEMENT · ' + wu.duration + ' min'));
   (wu.exercises || []).forEach(function(ex) {
    var row = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;margin-bottom:4px'});
    row.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--black,#1A1A18);font-weight:500;flex-shrink:0;min-width:180px'}, ex.name + ' — ' + ex.duration));
@@ -5980,7 +5980,7 @@ function renderMusculationProgram(p) {
  _exProgressRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:0.5px;white-space:nowrap'}, 'Ex. ' + (exIdx + 1) + '\u00a0/\u00a0' + _totalExercises));
  card.appendChild(_exProgressRow);
 
- var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n);
+ var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n || 'Exercice');
  // FST-7 badge: highlight exercises that use the Fascial Stretch Training 7-set technique
  if (ex.is_fst7) {
  var fst7Badge = h('span', {
@@ -6004,7 +6004,7 @@ function renderMusculationProgram(p) {
  }
  card.appendChild(_exNameEl);
  card.appendChild(h('div', {'class': 'exercise-sets'}, (ex.sets || '4x10') + ' \u2014 Repos ' + (ex.rest || '90s')));
- card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
+ if (ex.eq) card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
 
  // ─── EXERCISE DESCRIPTION FOR BEGINNERS ───
  if ((S.sportLevel === 'beginner' || !S.sportLevel) && ex.desc) {
@@ -6095,7 +6095,7 @@ function renderMusculationProgram(p) {
   if (_weekNumPO > 1 && _progressiveW !== _baseW) {
    var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
    var _sugLeft = h('div', {});
-   _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge progressive (sem. ' + _weekNumPO + ')'));
+   _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge progressive (sem. ' + _weekNumPO + ')'));
    _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(_progressiveW) : _progressiveW + '\u00a0kg'));
    _sugBanner.appendChild(_sugLeft);
    _sugBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCC8'));
@@ -6103,7 +6103,7 @@ function renderMusculationProgram(p) {
   } else if (suggested && suggested > 0) {
    var _sugBanner2 = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
    var _sugLeft2 = h('div', {});
-   _sugLeft2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+   _sugLeft2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge recommand\u00e9e'));
    _sugLeft2.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
    _sugBanner2.appendChild(_sugLeft2);
    _sugBanner2.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
@@ -6112,7 +6112,7 @@ function renderMusculationProgram(p) {
  } else if (suggested && suggested > 0) {
   var _sugBannerBasic = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
   var _sugLeftBasic = h('div', {});
-  _sugLeftBasic.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge recommand\u00e9e'));
+  _sugLeftBasic.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge recommand\u00e9e'));
   _sugLeftBasic.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(suggested) : suggested + '\u00a0kg'));
   _sugBannerBasic.appendChild(_sugLeftBasic);
   _sugBannerBasic.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCA1'));
@@ -6126,7 +6126,7 @@ function renderMusculationProgram(p) {
  if (eqType !== 'bodyweight') {
  var weightRow = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--ivory3,#EEEDE8)'});
  var typeLabel = eqType === 'barre' ? '\uD83C\uDFCB\uFE0F Barre' : eqType === 'haltere' ? '\uD83D\uDCAA Halt\u00e8re (\u00d71)' : eqType === 'machine' ? '\u2699\uFE0F Machine' : '\uD83D\uDD14 KB';
- weightRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);min-width:80px'}, typeLabel));
+ weightRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);min-width:80px'}, typeLabel));
 
  var wInput = h('input', {
  type: 'number', step: '0.5', min: '0', max: '500',
@@ -6671,7 +6671,7 @@ function renderMusculationProgram(p) {
  bnRow.appendChild(h('div', {'class': 'exercise-muscle'}, bex.m));
  bnRow.appendChild(h('span', {style: 'font-size:18px;color:#5A1010;cursor:pointer;line-height:1;padding:0 4px', onclick: (function(idx) { return function(e) { e.stopPropagation(); if (!S.bonusExercises) S.bonusExercises = {}; var arr = S.bonusExercises[S.selectedSportDay] || []; arr.splice(idx, 1); S.bonusExercises[S.selectedSportDay] = arr; window.render(); }; })(bi)}, '\u00d7'));
  bc.appendChild(bnRow);
- bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n));
+ bc.appendChild(h('div', {'class': 'exercise-name'}, bex.n || 'Exercice'));
  bc.appendChild(h('div', {'class': 'exercise-sets'}, bex.sets + ' \u2014 Repos ' + bex.rest));
  if (bex.eq) bc.appendChild(h('div', {'class': 'exercise-detail'}, bex.eq));
  var _bexParts = String(bex.sets || '').split('\u00d7');
@@ -6977,9 +6977,18 @@ function renderMusculationProgram(p) {
 
  // Recalculate weekly program (distinct from AI generator above)
  p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function(){
- S.sportProgram = generateSportProgram();
- S.selectedSportDay = 0;
- window.BLACKBOX && window.BLACKBOX.log('sport_program_regenerated');
+ try {
+   var _regen = generateSportProgram();
+   if (_regen && _regen.length > 0) {
+     S.sportProgram = _regen;
+     S.selectedSportDay = 0;
+     window.BLACKBOX && window.BLACKBOX.log('sport_program_regenerated');
+   } else {
+     console.warn('[sport] Recalculer: generateSportProgram returned empty — keeping existing program');
+   }
+ } catch(e) {
+   console.error('[sport] Recalculer: generateSportProgram failed', e);
+ }
  window.render();
  }}, '\u21bb Recalculer le programme hebdomadaire'));
 

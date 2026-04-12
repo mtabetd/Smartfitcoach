@@ -3366,7 +3366,9 @@ function calcHydration(){
   var pregnancyBonus=s.pregnant?300:0;
   // Ajustement allaitement : +700ml/j (EFSA 2010, ANSES 2021)
   var allaitBonus=(s.medical&&s.medical.indexOf('allaitement')!==-1)?700:0;
-  var total=base+actBonus+pregnancyBonus+allaitBonus;
+  // Créatine : +500ml/j minimum (ISSN 2017 — créatine augmente rétention intramusculaire, risque microlithiase si sous-hydratation)
+  var creatineBonus=s.creatine?500:0;
+  var total=base+actBonus+pregnancyBonus+allaitBonus+creatineBonus;
   total=Math.ceil(total/100)*100; // arrondir à 100ml
   var minFloor=s.sex==='femme'?2000:2500; // minimums EFSA
   total=Math.max(total,minFloor);
@@ -3375,6 +3377,7 @@ function calcHydration(){
     liters:Math.round(total/100)/10,
     base:base,
     actBonus:actBonus,
+    creatineBonus:creatineBonus,
     perSportHour:600, // 500-750ml/heure d'effort (ACSM 2007)
     electrolytes: actBonus >= 750, // Électrolytes recommandés si effort > ~60 min (Maughan & Shirreffs, BJSM 2010)
     tips:[
@@ -3383,7 +3386,8 @@ function calcHydration(){
       // Électrolytes pour efforts > 1h (Maughan & Shirreffs, BJSM 2010 — sodium 500-1000mg/h, potassium 200-400mg/h)
       actBonus>=750?'Effort > 60 min : ajoutez des électrolytes (sodium 500-1000 mg/h, potassium 200-400 mg/h) pour prévenir hyponatrémie et crampes (Maughan & Shirreffs, BJSM 2010).':null,
       s.pregnant?'+300ml/j recommandé en grossesse (OMS)':null,
-      (s.medical&&s.medical.indexOf('allaitement')!==-1)?'+700ml/j supplémentaires pendant l\'allaitement (ANSES 2021)':null
+      (s.medical&&s.medical.indexOf('allaitement')!==-1)?'+700ml/j supplémentaires pendant l\'allaitement (ANSES 2021)':null,
+      s.creatine?'+500ml/j obligatoires avec la créatine (ISSN 2017 — prévient la microlithiase rénale)':null
     ].filter(Boolean)
   };
 }
@@ -4867,7 +4871,7 @@ function buildNMInputs(trainingDay) {
   var genderMap = { homme: 'male', femme: 'female' };
   return {
     gender:        genderMap[s.sex] || 'male',
-    age:           getAge() || 25,
+    age:           getAge() || 30, // Défaut 30 si âge non renseigné (plus représentatif que 25)
     weightKg:      s.weight || 75,
     heightCm:      s.height || 175,
     activityLevel: s.activity !== null && ACTIVITIES[s.activity]

@@ -780,7 +780,7 @@ window.AUTH = {
       window.S.sportDays = 3; window.S.sportEquipment = 'gym';
       window.S.weightHistory = [];
       window.S.bodyZones = {}; window.S.strongZones = []; window.S.weakZones = [];
-      window.S.muscuWeek = 1; window.S.muscuCycle = 1; window.S.sportSplashDone = false;
+      window.S.muscuWeek = 1; window.S.muscuCycle = 1; window.S.muscuProgramCount = 0; window.S.sportSplashDone = false;
       window.S.sportMixEnabled = false; window.S.sportMixSecondary = null;
       window.S.bonusExercises = {}; window.S.sessionHistory = {};
       window.S.muscuSessionLog = {}; window.S.muscuProgressionHistory = {};
@@ -876,6 +876,13 @@ window.AUTH = {
       window.S.cfDeloadRecommended = false; window.S.sessionPostponed = false; window.S.stress = null;
       window.S.trainingDaysSelected = []; window.S.muscuObjectifSpecifique = null;
       window.S.muscuZonesCibles = []; window.S.muscuRenforcementNote = '';
+      // PROFILE_KEYS non réinitialisées précédemment — fuite inter-utilisateurs sur appareil partagé
+      window.S.mealTimes = {breakfast:'08:00',lunch:'12:30',snack:'16:00',dinner:'19:30'};
+      window.S.restDayMood = null;
+      window.S.competitionGoal = null; window.S.competitionDate = null; window.S.competitionType = null;
+      window.S.sportHobbies = []; window.S.installations = []; window.S.calisthenicsEquipment = [];
+      window.S.crossfitCompGoal = null; window.S.crossfitOpenDate = null;
+      window.S.runningVO2max = null; window.S.triathlonFTP = null; window.S.triathlonRaceDate = null;
     }
 
     // Nettoyer la session locale + legacy

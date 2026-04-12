@@ -253,10 +253,14 @@ function loadProfile() {
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','strongZones','weakZones',
  'train','supplements','wheyFlavors','alcoholTypes',
- 'calisthenicsEquipment','calisthenicsGoal','weightHistory','trainingDaysSelected','sportHobbies'];
+ 'calisthenicsEquipment','calisthenicsGoal','weightHistory','trainingDaysSelected','sportHobbies',
+ 'aiCoachHistory','muscuZonesCibles','installations'];
  _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
- // weekPlan is null or array — reject anything else
+ // weekPlan / weeklyCalendar are null or array — reject anything else
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
+ if (S.weeklyCalendar !== null && !Array.isArray(S.weeklyCalendar)) S.weeklyCalendar = null;
+ // mealTimes is an object {breakfast,lunch,snack,dinner} — reject malformed values
+ if (S.mealTimes !== null && S.mealTimes !== undefined && (typeof S.mealTimes !== 'object' || Array.isArray(S.mealTimes))) S.mealTimes = null;
  // excluded is a string (comma-separated), not an array — guard separately
  if (typeof S.excluded !== 'string') S.excluded = '';
  // New fields: safe defaults if not present
