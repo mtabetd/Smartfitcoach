@@ -701,21 +701,22 @@ exports.handler = async function(event) {
   var userPrompt = buildUserPrompt(body.profile);
 
   try {
-    // Timeout 55s via AbortController (Netlify Functions timeout à 26s par défaut, Sonnet peut être lent)
+    // Timeout 80s — netlify.toml configure ce handler à 90s, Sonnet+4000 tokens prend 25-40s
     var _genCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 20000) : null;
+    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 80000) : null;
 
     var response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
+        'anthropic-beta': 'prompt-caching-2024-07-31'
       },
       body: JSON.stringify({
         model: MODEL,
         max_tokens: MAX_TOKENS,
-        system: SYSTEM_PROMPT,
+        system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
         messages: [{ role: 'user', content: userPrompt }]
       }),
       signal: _genCtrl ? _genCtrl.signal : undefined

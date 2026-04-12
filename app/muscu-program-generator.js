@@ -28,7 +28,10 @@
     'Analyse de votre profil. Calcul des charges adaptées à votre niveau et morphologie.',
     'Sélection du split adapté à vos jours, votre équipement, vos antécédents.',
     'Calibrage des charges cibles, semaine par semaine, kilo par kilo.',
-    'Rédaction de votre diagnostic personnalisé. Encore quelques secondes…'
+    'Construction de votre périodisation sur 12 semaines…',
+    'Rédaction des consignes techniques pour chaque exercice.',
+    'Intégration de vos contraintes médicales et de récupération.',
+    'Finalisation de votre programme. Presque terminé…'
   ];
 
   var FOOTER_QUOTES = [
@@ -842,7 +845,7 @@
 
     var profile = buildProfileFromState();
     var _mcCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _mcTimer = _mcCtrl ? setTimeout(function() { _mcCtrl.abort(); }, 28000) : null;
+    var _mcTimer = _mcCtrl ? setTimeout(function() { _mcCtrl.abort(); }, 87000) : null;
     fetch('/.netlify/functions/generate-muscu-program', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
