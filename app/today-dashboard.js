@@ -1968,7 +1968,7 @@ function renderCardSundayReview(S) {
   var avgKcal = weekKcalArr.length > 0 ? Math.round(weekKcalArr.reduce(function(a,b){ return a+b; }, 0) / weekKcalArr.length) : 0;
 
   // Poids actuel
-  var currentWeight = S.currentWeight || S.weight || 0;
+  var currentWeight = S.weight || 0;
 
   var c = card();
   c.appendChild(eyebrow('Bilan de la semaine'));
