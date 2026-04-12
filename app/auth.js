@@ -859,6 +859,9 @@ window.AUTH = {
       // UI state
       window.S.view = 'auth'; window.S.authError = '';
       window.S.cfCalendarOpen = false;
+      // App state — must be reset to avoid stale values polluting next login
+      window.S.appMode = null; window.S.prenom = ''; window.S.welcomeShown = false;
+      window.S.todayWellness = null; window.S.firstLoginDate = null;
     }
 
     // Nettoyer la session locale + legacy

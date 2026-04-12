@@ -2787,6 +2787,7 @@ function getCurrentCyclePhase() {
   if (!s.cycleTracking || !s.lastPeriodDate || s.sex !== 'femme') return null;
 
   var start = new Date(s.lastPeriodDate);
+  if(isNaN(start.getTime())) return null; // Date invalide → ne pas propager NaN
   var now = new Date();
   var diffDays = Math.floor((now - start) / 86400000);
   var cycleLen = s.cycleLength || 28;
@@ -3071,6 +3072,10 @@ function calcMacros(){
   // Pour les macros g/kg : utiliser le poids ajusté si obèse (ASPEN 2016, ESPEN 2015)
   // Les calories (calcTarget/TDEE) restent basées sur le poids réel
   var bw=calcAdjustedWeight()||75;var goalKey=GOALS[s.goal].key;
+  // TCA : forcer macros maintien même si l'objectif persisté est sèche/coupe/masse
+  // calcTarget() redirige déjà vers maintenance — les macros doivent suivre (évite ppk sèche 3.19g/kg sur profil TCA)
+  // ANAD, IOC 2018 — RED-S prevention
+  if(s.medical&&s.medical.indexOf('tca')!==-1)goalKey='maintain';
   // ─── PROTÉINES (g/kg) — Table complète par sexe, activité et objectif ───
   // Sources : Phillips & Van Loon 2011 (BJSM) | Morton 2018 (BJSM meta-analysis)
   //           Tarnopolsky 2000 (MSSE) : femmes nécessitent ~13% de moins (oestrogène anti-catabolique,
@@ -3172,7 +3177,10 @@ function calcMacros(){
   // Vegan/vegetarian: adjust protein for lower DIAAS bioavailability of plant proteins (Messina 2019, ISSN 2017)
   if(s.regime===3)ppk=Math.round(ppk*1.10*10)/10; // Végan: +10% (DIAAS correction — FAO 2013, PMC 2020)
   else if(s.regime===2)ppk=Math.round(ppk*1.10*10)/10; // Végétarien lacto-ovo: +10% (DIAAS correction — FAO 2013, PMC 2020)
-  ppk=Math.max(0.8,Math.min(3.5,ppk));
+  // IRC : ne pas appliquer le plancher universel 0.8g/kg — le cap KDOQI 0.6g/kg est plus restrictif
+  // Le plancher 0.8 écrasait le cap IRC réglé ligne ci-dessus (sauf re-enforce tardif ligne 3218+)
+  var _isIrc=s.medical&&s.medical.indexOf('irc')!==-1;
+  ppk=_isIrc?Math.max(0.1,Math.min(3.5,ppk)):Math.max(0.8,Math.min(3.5,ppk));
   var pGrams=Math.round(bw*ppk);
   // Pregnancy protein bonus: +25g/day T2+T3 (ACOG 2018, WHO)
   if(s.pregnant){var triP=getPregnancyTrimester();if(triP&&triP.trimester.proteinExtra)pGrams=Math.round(pGrams+triP.trimester.proteinExtra);}
@@ -3215,7 +3223,8 @@ function calcMacros(){
   if(s.medical){for(var i=0;i<s.medical.length;i++){var mId=s.medical[i];var a=MEDICAL_ADVICE[mId];if(a&&a.macroAdj){// ménopause, sopk, grossesse, allaitement : ajustements féminins uniquement
 var femaleOnly=['menopause','sopk','grossesse','allaitement'];if(femaleOnly.indexOf(mId)!==-1&&s.sex!=='femme')continue;gGrams=Math.round(gGrams*(1+(a.macroAdj.g||0)));pGrams=Math.round(pGrams*(1+(a.macroAdj.p||0)));lGrams=Math.round(lGrams*(1+(a.macroAdj.l||0)))}}}
   // Re-enforce IRC protein cap after all medical adjustments (KDOQI 2020: 0.6g/kg CKD 3-5 non-dialysis)
-  if(s.medical&&s.medical.indexOf('irc')!==-1){var maxIrcP=Math.round(bw*0.6);if(pGrams>maxIrcP)pGrams=maxIrcP;}
+  // Vegan/végétarien IRC : +10% DIAAS correction → cap 0.66g/kg (FAO 2013, Messina 2019)
+  if(s.medical&&s.medical.indexOf('irc')!==-1){var _ircCapGpkg=(s.regime===3||s.regime===2)?0.66:0.60;var maxIrcP=Math.round(bw*_ircCapGpkg);if(pGrams>maxIrcP)pGrams=maxIrcP;}
   // Diabète gestationnel : plafond glucides 175-200g/j (ADA 2023, ACOG 2018)
   if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){var gdCarbMax=Math.min(200,Math.max(175,gGrams));if(gGrams>gdCarbMax)gGrams=gdCarbMax;}
   // Master athlete 60+ : résistance anabolique → leucine seuil 40g/meal (Churchward-Venne 2016, Moore 2015)
@@ -3247,6 +3256,8 @@ gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0
       gGrams=130;
       var remainGap=c-(gGrams*4+pGrams*4+lGrams*9);
       lGrams=Math.max(20,lGrams+Math.round(remainGap/9));
+      // Re-enforce lipid floor for women (ISSN 2021: ≥0.7g/kg — santé hormonale, production oestrogènes)
+      if(s.sex==='femme')lGrams=Math.max(Math.round(bw*0.7),lGrams);
     }
   }
   return{g:gGrams,p:pGrams,l:lGrams,proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
@@ -3465,7 +3476,7 @@ function filterRecipes(pool,type){
   // Halal : exclut porc, charcuterie porcine et alcool
   if(s.halal)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/).test(i)});
   if(typeof s.excluded==='string'&&s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
-  var _cuisines=s.cuisines||[];if(_cuisines.indexOf(0)===-1&&_cuisines.length>0){var flags=[];for(var c=0;c<_cuisines.length;c++){var co=CUISINES[_cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0)r=r.filter(function(x){return flags.indexOf(x.f)!==-1})}
+  var _cuisines=s.cuisines||[];if(_cuisines.indexOf(0)===-1&&_cuisines.length>0){var flags=[];for(var c=0;c<_cuisines.length;c++){var co=CUISINES[_cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0){var _preCuisinePool=r.slice();r=r.filter(function(x){return flags.indexOf(x.f)!==-1});if(r.length===0)r=_preCuisinePool;}} // fallback : si aucune recette ne correspond aux cuisines choisies, on garde le pool complet
   return r;
 }
 // ─── PROTEIN SOURCE DETECTION ───
@@ -3573,6 +3584,14 @@ function pickSmoothieForPlan(targetKcal, usedIds) {
   // Pool de départ — exclure déjà utilisés cette semaine
   var pool = smDB.filter(function(sm) { return !usedIds || !usedIds.has(sm.id); });
   if (!pool.length) pool = smDB.slice(); // reset si tous utilisés
+  // Filtre parfum (soft — garder au moins 2 pour éviter la répétition)
+  // Respecte les préférences de parfum whey déclarées dans l'onboarding (S.wheyFlavors)
+  if (s.wheyFlavors && s.wheyFlavors.length > 0) {
+    var fPool = pool.filter(function(sm) {
+      return sm.flavors && sm.flavors.some(function(fl) { return s.wheyFlavors.indexOf(fl) !== -1; });
+    });
+    if (fPool.length >= 2) pool = fPool;
+  }
   // Filtre objectif (soft — garder au moins 3)
   var gPool = pool.filter(function(sm) {
     return sm.goal && sm.goal.some(function(g) { return wantedGoals.indexOf(g) !== -1; });
@@ -3743,7 +3762,7 @@ var SUPPLEMENTS_DB = [
     unnecessary_if:'Inutile si vous atteignez vos prot\u00e9ines via l\'alimentation seule',
     dosageCalc:function(s){var d=s.weight>80?35:25;return{dose:d,unit:'g/prise',timing:'Post-entra\u00eenement ou petit-d\u00e9jeuner',note:'Objectif total : '+Math.round(s.weight*1.8)+'g prot/jour (alimentation + whey)'};}},
   {id:'creatine',name:'Cr\u00e9atine Monohydrate',icon:'\uD83D\uDC8A',desc:'Force, masse musculaire, r\u00e9cup\u00e9ration',evidence:'ISSN 2017 \u2014 Niveau A (500+ \u00e9tudes, le suppl\u00e9ment le plus \u00e9tudi\u00e9)',grade:'A',
-    condition:function(s){if(s.pregnant||getAge()<18)return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
+    condition:function(s){if(s.pregnant||(getAge()!==null&&getAge()<18))return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
     unnecessary_if:'Non n\u00e9cessaire si objectif uniquement endurance/cardio sans musculation',
     dosageCalc:function(s){return{dose:'3-5',unit:'g/jour',timing:'Apr\u00e8s l\'entra\u00eenement avec glucides',note:'Tous les jours y compris repos. Pas de phase de charge n\u00e9cessaire'};}},
   {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'Carence fr\u00e9quente m\u00eame en climat ensoleill\u00e9 (travail en int\u00e9rieur, cr\u00e8me solaire)',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
@@ -3956,6 +3975,12 @@ function detectMedicalConflicts() {
     if(goalKey==='shred'||goalKey==='cut'){
       conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : TCA + objectif sèche/coupe — Objectif automatiquement remplacé par maintenance. Un suivi médical et psychologique est OBLIGATOIRE avant tout déficit calorique.'});
     }
+  }
+  // Conflit 2b : IRC + Végane/Végétarien + Allergie Soja — apport protéique quasi impossible
+  // IRC plafonne les protéines à 0.60-0.66g/kg. Régime plant-based = légumineuses (soja = base).
+  // Allergie soja + végane/végétarien = tofu, edamame, tempeh, protéines soja exclus → sources protéiques < plancher sécurisé
+  if(med.indexOf('irc')!==-1&&(s.regime===2||s.regime===3)&&Array.isArray(s.allergies)&&s.allergies.indexOf('Soja')!==-1){
+    conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT CRITIQUE : IRC + Végane/Végétarien + Allergie Soja — Le soja (tofu, edamame, tempeh) étant exclu, les sources protéiques d\'un régime végane/végétarien sont drastiquement réduites. Avec le plafond IRC (0.60g/kg, KDOQI 2020), il est quasiment impossible de couvrir les besoins protéiques minimaux sans risque carentiel. Consultation IMPÉRATIVE : néphrologue + diététicienne spécialisée nutrition végétale.'});
   }
   // Conflit 3 : IRC + créatine — bloqué dans SUPPLEMENTS_DB + avertissement explicite ici
   // KDOQI 2020 : la créatine augmente la créatininémie et aggrave la progression de l'IRC

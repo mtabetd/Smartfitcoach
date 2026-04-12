@@ -1804,7 +1804,12 @@ function syncSportGoalsToNutrition() {
  var currentKey = window.GOALS && window.GOALS[S.goal] ? window.GOALS[S.goal].key : null;
  if (_sgls.indexOf('shred') !== -1) newIdx = 4; // shred
  else if (_sgls.indexOf('muscle') !== -1) {
-   newIdx = (currentKey === 'lean_bulk') ? 1 : 0; // preserve lean_bulk, otherwise default to bulk
+   // Si l'utilisateur est en déficit (cut/shred) + objectif musculaire :
+   // NE PAS écraser silencieusement vers bulk (+913 kcal/j) — proposer recomposition (maintenance + optimisation macros)
+   // La recomposition est la seule option compatible avec un profil déficitaire souhaitant progresser en musculaire
+   // Barakat 2020 (NSCA) : recomposition validée ≥1.6g/kg en maintenance calorique
+   if (currentKey === 'cut' || currentKey === 'shred') newIdx = 5; // → recomposition
+   else newIdx = (currentKey === 'lean_bulk') ? 1 : 0; // preserve lean_bulk, otherwise bulk
  }
  else if (_sgls.indexOf('weightloss') !== -1) newIdx = 3; // cut
  else if (_sgls.indexOf('general') !== -1 || _sgls.indexOf('endurance') !== -1 || _sgls.indexOf('flexibility') !== -1) {
@@ -4592,7 +4597,9 @@ function renderPlateCalculator(targetKg, barKg) {
 window.renderPlateCalculator = renderPlateCalculator;
 
 // ─── TIMER DE REPOS SIMPLE (overlay fixe bas-droite) ─────────────────────────
+// Exposé sur window pour permettre le nettoyage (clearInterval) lors de la navigation (render)
 var _restTimerInterval = null;
+window._restTimerInterval = null; // référence publique — synchronisée dans startRestTimer/stopRestTimer
 var _restTimerSeconds = 0;
 
 function startRestTimer(seconds) {
@@ -4616,7 +4623,7 @@ function startRestTimer(seconds) {
     var s = _restTimerSeconds % 60;
     var display = m + ':' + (s < 10 ? '0' : '') + s;
     var timerEl = document.getElementById('rest-timer-display');
-    if (!timerEl) { clearInterval(_restTimerInterval); return; }
+    if (!timerEl) { clearInterval(_restTimerInterval); window._restTimerInterval = null; return; }
     var tc = timerEl.querySelector('.timer-count');
     if (tc) {
       tc.textContent = display;
@@ -4626,14 +4633,16 @@ function startRestTimer(seconds) {
     }
     if (_restTimerSeconds <= 0) {
       clearInterval(_restTimerInterval);
+      _restTimerInterval = null; window._restTimerInterval = null;
       if (tc) tc.textContent = 'GO!';
       if (navigator.vibrate) { try { navigator.vibrate([200, 100, 200]); } catch(e) {} }
     }
   }, 1000);
+  window._restTimerInterval = _restTimerInterval; // sync référence publique
 }
 
 function stopRestTimer() {
-  if (_restTimerInterval) clearInterval(_restTimerInterval);
+  if (_restTimerInterval) { clearInterval(_restTimerInterval); _restTimerInterval = null; window._restTimerInterval = null; }
   var el = document.getElementById('rest-timer-display');
   if (el) el.style.display = 'none';
 }
@@ -5224,7 +5233,7 @@ function renderMusculationProgram(p) {
  var progConflicts = window.detectMedicalConflicts();
  // Filtrer : uniquement les conflits liés aux objectifs sport/nutrition (conflit 9 & 10) + médicaux sport
  var sportConflicts = progConflicts.filter(function(c) {
- return c.message.indexOf('CONFLIT objectif') !== -1 || c.message.indexOf('contradictoires') !== -1 || c.message.indexOf('IRC + Objectif') !== -1 || c.message.indexOf('Cardiopathie') !== -1 || c.message.indexOf('Diab\u00e8te') !== -1;
+ return c.message.indexOf('CONFLIT objectif') !== -1 || c.message.indexOf('contradictoires') !== -1 || c.message.indexOf('IRC') !== -1 || c.message.indexOf('Cardiopathie') !== -1 || c.message.indexOf('Diab\u00e8te') !== -1;
  });
  sportConflicts.forEach(function(c) {
  var bg = c.level === 'CRITIQUE' ? 'var(--redbg,rgba(90,16,16,.06))' : c.level === '\u00c9LEV\u00c9' ? 'var(--orangebg,rgba(106,74,26,.06))' : 'var(--bluebg,rgba(26,58,106,.06))';
@@ -5267,6 +5276,18 @@ function renderMusculationProgram(p) {
  karvonenDiv.appendChild(zonesRow);
  karvonenDiv.appendChild(h('div', {style: 'margin-top:4px;font-style:italic;color:var(--grey)'}, ' Beta-bloquants : si prescrit, votre FC max réelle est plus basse (~10-20%). Consulter votre cardiologue pour ajuster les zones. Test d\'effort (VO2max) recommandé avant programme intensif.'));
  p.appendChild(karvonenDiv);
+ }
+
+ // HTA légère : avertissement intensité sport (ESC/ESH 2018, AHA/ACSM 2019)
+ // HTA légère (140-159/90-99 mmHg) — effort modéré autorisé mais avec précautions
+ if (S.medical && S.medical.indexOf('hta') !== -1 && S.medical.indexOf('hta_severe') === -1) {
+ var htaLightDiv = h('div', {style: 'background:rgba(106,74,26,0.06);border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'});
+ htaLightDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#6A4A1A;margin-bottom:6px'}, 'HTA — Précautions sport'));
+ htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u26A0 HTA légère (140-159/90-99 mmHg) : l\'exercice régulier est bénéfique mais doit rester contrôlé (ESC/ESH 2018).'));
+ htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Intensité maximale recommandée : RPE 8/10 — évitez les efforts maximaux'));
+ htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (apnée en poussée lourde) — favorisez une respiration continue'));
+ htaLightDiv.appendChild(h('div', {}, '\u2022 Contrôle tensionnel mensuel recommandé. Consultez votre médecin si PA > 160/100 mmHg à l\'effort.'));
+ p.appendChild(htaLightDiv);
  }
 
  // HTA sévère : avertissement intensité sport (ESC/ESH 2018, AHA/ACSM 2007)

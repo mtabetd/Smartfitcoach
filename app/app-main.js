@@ -50,6 +50,7 @@ var PROFILE_KEYS = [
  // Musculation
  'muscuWeek','muscuCycle','muscuProgramCount','sportSplashDone','nStep','sStep','selectedSportDay',
  'sportProgram',
+ 'competitionGoal','competitionDate','competitionType','sportHobbies',
  'bonusExercises','sessionHistory',
  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment','installations',
  // Nutrition plan
@@ -246,7 +247,7 @@ function loadProfile() {
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','strongZones','weakZones',
  'train','supplements','wheyFlavors','alcoholTypes',
- 'calisthenicsEquipment','calisthenicsGoal','weightHistory','trainingDaysSelected'];
+ 'calisthenicsEquipment','calisthenicsGoal','weightHistory','trainingDaysSelected','sportHobbies'];
  _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
  // weekPlan is null or array — reject anything else
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
@@ -1062,6 +1063,7 @@ function render() {
  try {
  // === SAFETY: conditions incompatibles avec certains objectifs (OMS 2016, ACOG 2020/2022, ANAD, IOC 2018) ===
  // Correction silencieuse — attrape les données persistées en localStorage avant le fix
+ var _goalCorrected = false;
  if (window.S && window.GOALS && typeof window.S.goal === 'number' && window.GOALS[window.S.goal]) {
    var _safetyGoalKey = window.GOALS[window.S.goal].key;
    var _isUnsafeGoal = _safetyGoalKey === 'cut' || _safetyGoalKey === 'shred';
@@ -1072,16 +1074,19 @@ function render() {
    if (_isUnsafeGoal && (_isPregnant || _isAllait)) {
      window.S.goal = 2; // Forcer maintien — index 2 = maintain
      if (window.saveProfile) window.saveProfile();
+     _goalCorrected = true;
    } else if (_isUnsafeGoalTca && _isTca) {
      window.S.goal = 2; // TCA : forcer maintien (ANAD, IOC 2018)
      if (window.saveProfile) window.saveProfile();
+     _goalCorrected = true;
    }
  }
  // ================================================================================
  if (window.destroyAllCharts) window.destroyAllCharts();
  // Stopper le timer CrossFit si on navigue ailleurs (évite le bip en background)
  if (window._wodTimerInterval) { clearInterval(window._wodTimerInterval); window._wodTimerInterval = null; }
- if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile();
+ // Éviter le double saveProfile() si une correction de sécurité a déjà persisté
+ if (!_goalCorrected && window.AUTH && window.AUTH.isLoggedIn()) saveProfile();
  var app = document.getElementById('app');
  if (!app) { console.error('[render] #app not found'); return; }
 
