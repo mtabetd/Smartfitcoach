@@ -596,7 +596,10 @@ function buildUserPrompt(profile) {
     (profile.pregnant ? '- Grossesse en cours : OUI — adapter le programme aux contraintes obstétricales\n' : '') +
     '- Poids : ' + (sanitizeNumber(profile.poids, 30, 300) || '?') + ' kg\n' +
     '- Taille : ' + (sanitizeNumber(profile.taille, 100, 250) || '?') + ' cm\n' +
-    '- Objectif : ' + sanitizeString(profile.objectif || '?', 100) + '\n' +
+    '- Objectif nutritionnel : ' + sanitizeString(profile.objectif || '?', 100) + '\n' +
+    (profile.muscuObjectifSpecifique ? '- Objectif musculation (choisi par l\'utilisateur) : ' + sanitizeString(profile.muscuObjectifSpecifique, 100) + ' ← PRIORITÉ ABSOLUE\n' : '') +
+    (profile.muscuZonesCibles ? '- Zones musculaires prioritaires : ' + sanitizeString(profile.muscuZonesCibles, 200) + ' — surreprésenter ces groupes dans le programme\n' : '') +
+    (profile.muscuRenforcementNote ? '- Demande spécifique utilisateur : ' + sanitizeString(profile.muscuRenforcementNote, 400) + '\n' : '') +
     '- Niveau : ' + sanitizeString(profile.niveau || '?', 50) + '\n' +
     '- Jours dispo/sem : ' + (sanitizeNumber(profile.joursDispo, 1, 7) || '?') + '\n' +
     '- Type de programme : MUSCULATION (force/hypertrophie/endurance musculaire — pas du cardio)\n' +

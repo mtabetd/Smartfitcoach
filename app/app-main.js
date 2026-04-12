@@ -97,7 +97,9 @@ var PROFILE_KEYS = [
  'smartCalendarEnabled',
  'smartCalendarDismissed',
  // Plan hash — détecte changement de paramètres nutritionnels depuis dernière génération
- '_planHash'
+ '_planHash',
+ // Questionnaire programme musculation enrichi
+ 'muscuObjectifSpecifique','muscuZonesCibles','muscuRenforcementNote'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.

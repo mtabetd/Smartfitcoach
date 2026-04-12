@@ -568,7 +568,11 @@
       competitionGoal: !!S.competitionGoal,
       competitionDate: S.competitionDate || '',
       competitionType: S.competitionType || '',
-      sportHobbies: Array.isArray(S.sportHobbies) && S.sportHobbies.length ? S.sportHobbies.join(', ') : ''
+      sportHobbies: Array.isArray(S.sportHobbies) && S.sportHobbies.length ? S.sportHobbies.join(', ') : '',
+      // Nouvelles données collectées par le questionnaire enrichi
+      muscuObjectifSpecifique: S.muscuObjectifSpecifique || '',
+      muscuZonesCibles: Array.isArray(S.muscuZonesCibles) && S.muscuZonesCibles.length ? S.muscuZonesCibles.join(', ') : '',
+      muscuRenforcementNote: S.muscuRenforcementNote || ''
     };
   }
 
@@ -687,8 +691,170 @@
         if (err) err.style.display = 'block';
         return;
       }
+      showObjectifStep();
+    });
+  }
+
+  function showObjectifStep() {
+    var content = document.getElementById('muscu-prog-content');
+    if (!content) return;
+    var OBJECTIFS = [
+      { id: 'hypertrophie',   label: 'Hypertrophie',          desc: 'Prise de masse musculaire — volume et définition' },
+      { id: 'force',          label: 'Force maximale',         desc: 'Progression sur les charges — maximiser les 1RM' },
+      { id: 'esthétique',     label: 'Esthétique / définition',desc: 'Sèche et proportions — corps sculpté et défini' },
+      { id: 'endurance',      label: 'Endurance musculaire',   desc: 'Résistance à l\'effort — haute répétition, circuit' },
+      { id: 'recomposition',  label: 'Recomposition',          desc: 'Réduire la masse grasse et gagner du muscle simultanément' },
+      { id: 'competition',    label: 'Prépa compétition',      desc: 'Périodisation haute intensité — podium et performance' }
+    ];
+    var current = (window.S && window.S.muscuObjectifSpecifique) ? window.S.muscuObjectifSpecifique : '';
+    // Pré-remplir depuis l'objectif nutritionnel si pas encore choisi
+    if (!current && window.S && window.S.goal != null) {
+      var _gMap = { 0:'hypertrophie', 1:'recomposition', 2:'endurance', 3:'esthétique', 4:'recomposition', 5:'recomposition' };
+      current = _gMap[window.S.goal] || '';
+    }
+    var cardBase = 'display:flex;align-items:center;gap:12px;padding:13px 16px;border:1px solid var(--border,#D8D8D0);border-radius:2px;cursor:pointer;margin-bottom:8px;transition:border-color 0.15s,background 0.15s;font-family:"Helvetica Neue",Arial,sans-serif;';
+    var cardsHTML = OBJECTIFS.map(function(obj) {
+      var sel = (current === obj.id);
+      return '<div class="obj-card" data-id="' + obj.id + '" style="' + cardBase + (sel ? 'border-color:var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);' : '') + '">' +
+        '<div style="flex:1;">' +
+          '<div style="font-size:13px;font-weight:600;color:var(--black,#0A0A09);margin-bottom:2px;">' + obj.label + '</div>' +
+          '<div style="font-size:11px;color:var(--grey,#6B6B65);">' + obj.desc + '</div>' +
+        '</div>' +
+        '<div class="obj-dot" style="width:18px;height:18px;border:1.5px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:' + (sel ? 'var(--accent,#1A4A1A)' : 'transparent') + ';">' +
+          (sel ? '<div style="width:7px;height:7px;border-radius:50%;background:white;"></div>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+    content.innerHTML =
+      '<div style="padding:8px 4px 24px 4px;">' +
+        '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;font-family:\'Helvetica Neue\',Arial,sans-serif;">VOTRE OBJECTIF</div>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--black,#0A0A09);margin:0 0 8px 0;">Quel résultat voulez-vous obtenir en priorité ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Votre programme sera entièrement construit autour de cet objectif — split, charges et périodisation s\'adapteront en conséquence.</p>' +
+        '<div id="obj-cards-wrap">' + cardsHTML + '</div>' +
+        '<div id="obj-error" style="font-size:11px;color:#B02020;margin:6px 0 0 0;display:none;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sélectionnez un objectif pour continuer.</div>' +
+        '<div style="margin-top:20px;">' +
+          '<button id="obj-confirm" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:44px;">Continuer \u2192</button>' +
+        '</div>' +
+      '</div>';
+    var wrap = document.getElementById('obj-cards-wrap');
+    wrap.addEventListener('click', function(e) {
+      var card = e.target.closest('.obj-card');
+      if (!card) return;
+      var id = card.getAttribute('data-id');
+      if (!window.S) window.S = {};
+      window.S.muscuObjectifSpecifique = id;
+      try { if (window.saveProfile) window.saveProfile(); } catch(e2) {}
+      wrap.querySelectorAll('.obj-card').forEach(function(c) {
+        var isSel = (c.getAttribute('data-id') === id);
+        c.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)';
+        c.style.background  = isSel ? 'rgba(26,74,26,0.06)' : '';
+        var dot = c.querySelector('.obj-dot');
+        if (dot) {
+          dot.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)';
+          dot.style.background  = isSel ? 'var(--accent,#1A4A1A)' : 'transparent';
+          dot.innerHTML = isSel ? '<div style="width:7px;height:7px;border-radius:50%;background:white;"></div>' : '';
+        }
+      });
+      var errEl = document.getElementById('obj-error');
+      if (errEl) errEl.style.display = 'none';
+    });
+    document.getElementById('obj-confirm').addEventListener('click', function() {
+      if (!window.S || !window.S.muscuObjectifSpecifique) {
+        var errEl = document.getElementById('obj-error');
+        if (errEl) errEl.style.display = 'block';
+        return;
+      }
+      showZonesCibleesStep();
+    });
+  }
+
+  function showZonesCibleesStep() {
+    var content = document.getElementById('muscu-prog-content');
+    if (!content) return;
+    var ZONES = [
+      { id: 'pectoraux',  label: 'Pectoraux',  desc: 'Poitrine — grand et petit pectoral' },
+      { id: 'dos',        label: 'Dos',         desc: 'Dorsaux, trapèzes, rhomboïdes' },
+      { id: 'jambes',     label: 'Jambes',      desc: 'Quadriceps, ischios, mollets' },
+      { id: 'epaules',    label: '\u00c9paules',desc: 'Deltoïdes — 3 faisceaux' },
+      { id: 'bras',       label: 'Bras',        desc: 'Biceps et triceps' },
+      { id: 'fessiers',   label: 'Fessiers',    desc: 'Glutes — volume et galbe' },
+      { id: 'abdominaux', label: 'Abdominaux',  desc: 'Core — gainages et sangle abdominale' }
+    ];
+    var current = (window.S && Array.isArray(window.S.muscuZonesCibles)) ? window.S.muscuZonesCibles.slice() : [];
+    // Pré-remplir depuis sportFocus si disponible
+    if (!current.length && window.S && window.S.sportFocus) {
+      var _fMap = { chest:'pectoraux', back:'dos', legs:'jambes', shoulders:'epaules', arms:'bras', glutes:'fessiers', abs:'abdominaux' };
+      Object.keys(window.S.sportFocus).forEach(function(k) {
+        if ((window.S.sportFocus[k] || 0) > 0 && _fMap[k]) current.push(_fMap[k]);
+      });
+    }
+    var currentNote = (window.S && window.S.muscuRenforcementNote) ? window.S.muscuRenforcementNote : '';
+    var cardBase = 'display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid var(--border,#D8D8D0);border-radius:2px;cursor:pointer;transition:border-color 0.15s,background 0.15s;font-family:"Helvetica Neue",Arial,sans-serif;';
+    var svgCheck = '<svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 4L4 7L10 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var cardsHTML = ZONES.map(function(zone) {
+      var sel = current.indexOf(zone.id) !== -1;
+      return '<div class="zone-card" data-id="' + zone.id + '" style="' + cardBase + (sel ? 'border-color:var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);' : '') + '">' +
+        '<div style="flex:1;">' +
+          '<div style="font-size:12px;font-weight:600;color:var(--black,#0A0A09);">' + zone.label + '</div>' +
+          '<div style="font-size:10px;color:var(--grey,#6B6B65);">' + zone.desc + '</div>' +
+        '</div>' +
+        '<div class="zone-chk" style="width:18px;height:18px;border:1.5px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:' + (sel ? 'var(--accent,#1A4A1A)' : 'transparent') + ';">' +
+          (sel ? svgCheck : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+    content.innerHTML =
+      '<div style="padding:8px 4px 24px 4px;">' +
+        '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;font-family:\'Helvetica Neue\',Arial,sans-serif;">ZONES CIBL\u00c9ES</div>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--black,#0A0A09);margin:0 0 8px 0;">Quels groupes musculaires voulez-vous développer ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 16px 0;line-height:1.6;">Sélection multiple. Laissez vide pour un programme équilibré sur tout le corps.</p>' +
+        '<div id="zone-cards-wrap" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;">' + cardsHTML + '</div>' +
+        '<div style="margin-bottom:20px;">' +
+          '<label style="display:block;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;">Ce que vous voulez renforcer / améliorer (optionnel)</label>' +
+          '<textarea id="zone-note" placeholder="Ex\u00a0: renforcer le bas du dos, rattraper mon retard sur les \u00e9paules, am\u00e9liorer ma posture, d\u00e9velopper les fessiers\u2026" rows="3" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--black,#0A0A09);background:var(--ivory,#FAF9F6);resize:vertical;outline:none;line-height:1.5;">' + escapeHTML(currentNote) + '</textarea>' +
+        '</div>' +
+        '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+          '<button id="zone-skip" style="background:transparent;border:1px solid var(--border,#D8D8D0);color:var(--grey,#6B6B65);padding:12px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:44px;">Programme \u00e9quilibr\u00e9</button>' +
+          '<button id="zone-confirm" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:44px;">Continuer \u2192</button>' +
+        '</div>' +
+      '</div>';
+    var svgCheckInner = '<svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 4L4 7L10 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var wrap = document.getElementById('zone-cards-wrap');
+    wrap.addEventListener('click', function(e) {
+      var card = e.target.closest('.zone-card');
+      if (!card) return;
+      var id = card.getAttribute('data-id');
+      if (!window.S) window.S = {};
+      var sel = Array.isArray(window.S.muscuZonesCibles) ? window.S.muscuZonesCibles.slice() : [];
+      var idx = sel.indexOf(id);
+      if (idx === -1) { sel.push(id); } else { sel.splice(idx, 1); }
+      window.S.muscuZonesCibles = sel;
+      var isSel = sel.indexOf(id) !== -1;
+      card.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)';
+      card.style.background  = isSel ? 'rgba(26,74,26,0.06)' : '';
+      var chk = card.querySelector('.zone-chk');
+      if (chk) {
+        chk.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)';
+        chk.style.background  = isSel ? 'var(--accent,#1A4A1A)' : 'transparent';
+        chk.innerHTML = isSel ? svgCheckInner : '';
+      }
+    });
+    function _saveAndContinue() {
+      if (!window.S) window.S = {};
+      var noteEl = document.getElementById('zone-note');
+      window.S.muscuRenforcementNote = noteEl ? noteEl.value.trim().slice(0, 500) : '';
+      if (!Array.isArray(window.S.muscuZonesCibles)) window.S.muscuZonesCibles = [];
+      try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
+      showStressStep();
+    }
+    document.getElementById('zone-skip').addEventListener('click', function() {
+      if (!window.S) window.S = {};
+      window.S.muscuZonesCibles = [];
+      window.S.muscuRenforcementNote = '';
+      try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
       showStressStep();
     });
+    document.getElementById('zone-confirm').addEventListener('click', _saveAndContinue);
   }
 
   function showStressStep() {
@@ -802,9 +968,15 @@
     _modalEl.style.display = 'block';
     // Show installations step if not yet configured, stress step if stress not collected, otherwise generate
     var hasInstallations = (window.S && Array.isArray(window.S.installations)) && window.S.installations.length > 0;
-    var hasStress = (window.S && typeof window.S.stress === 'number');
+    var hasObjectif = !!(window.S && window.S.muscuObjectifSpecifique);
+    var hasZones    = (window.S && Array.isArray(window.S.muscuZonesCibles)); // null/undefined = pas encore répondu
+    var hasStress   = (window.S && typeof window.S.stress === 'number');
     if (!hasInstallations) {
       showInstallationsStep();
+    } else if (!hasObjectif) {
+      showObjectifStep();
+    } else if (!hasZones) {
+      showZonesCibleesStep();
     } else if (!hasStress) {
       showStressStep();
     } else {
