@@ -2366,6 +2366,8 @@ window.S = {
   crossfit1RM: {},  // { 'clean': 80, 'snatch': 60, 'deadlift': 140, ... } in kg
   // Strength assessment profile
   muscuStrengthProfile: {},  // { 'bench_press': 60, 'squat': 80, 'deadlift': 100, ... }
+  muscuZonesCibles: [],
+  nutritionLog: {},
   muscuSessionLog: {},
   // Structure : {
   //   'YYYY-MM-DD': {           // date de la séance

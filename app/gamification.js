@@ -170,25 +170,28 @@ function updateStreak() {
   } else if (data.lastDate && data.lastDate !== today) {
     // Un ou plusieurs jours manqués — vérifier le streak freeze
     var _lastDateObj = new Date(data.lastDate);
-    if (isNaN(_lastDateObj.getTime())) { data.current = 1; data.lastDate = today; } // date corrompue → reset
-    var _missedDays = isNaN(_lastDateObj.getTime()) ? 999 : Math.round((new Date(today) - _lastDateObj) / 86400000);
-    var thisMonth = today.slice(0, 7); // 'YYYY-MM'
-    var S = window.S || {};
-    var freezeAvailable = S.streakFreezeAvailable !== false; // true par défaut
-    var freezeUsedMonth = S.streakFreezeUsedMonth || '';
-    // Freeze uniquement pour 1 jour manqué (pas 2+ jours) — diff = 2 signifie 1 jour sauté
-    if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3 && _missedDays <= 2) {
-      // Activer le freeze : protéger le streak
-      if (window.S) {
-        window.S.streakFreezeUsedMonth = thisMonth;
-        window.S.streakFreezeAvailable = false;
-        if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
-      }
-      showToast('\u2744 Streak Freeze activ\u00e9 \u2014 ton streak de ' + data.current + ' jour' + (data.current > 1 ? 's' : '') + ' est prot\u00e9g\u00e9\u00a0!');
-      // On reprend le streak normalement sans reset
-      data.current++;
+    if (isNaN(_lastDateObj.getTime())) {
+      data.current = 1; // date corrompue → reset, pas de freeze
     } else {
-      data.current = 1;
+      var _missedDays = Math.round((new Date(today) - _lastDateObj) / 86400000);
+      var thisMonth = today.slice(0, 7); // 'YYYY-MM'
+      var _freezeS = window.S || {};
+      var freezeAvailable = _freezeS.streakFreezeAvailable !== false; // true par défaut
+      var freezeUsedMonth = _freezeS.streakFreezeUsedMonth || '';
+      // Freeze uniquement pour 1 jour manqué (pas 2+ jours) — diff = 2 signifie 1 jour sauté
+      if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3 && _missedDays <= 2) {
+        // Activer le freeze : protéger le streak
+        if (window.S) {
+          window.S.streakFreezeUsedMonth = thisMonth;
+          window.S.streakFreezeAvailable = false;
+          if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
+        }
+        showToast('\u2744 Streak Freeze activ\u00e9 \u2014 ton streak de ' + data.current + ' jour' + (data.current > 1 ? 's' : '') + ' est prot\u00e9g\u00e9\u00a0!');
+        // On reprend le streak normalement sans reset
+        data.current++;
+      } else {
+        data.current = 1;
+      }
     }
   } else {
     data.current = 1;

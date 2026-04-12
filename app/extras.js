@@ -1571,7 +1571,7 @@ window.FOOD_JOURNAL = {
           + encodeURIComponent(q)
           + '&json=true&page_size=6&lc=fr&cc=fr&fields=product_name,nutriments,quantity';
         fetch(url, controller ? { signal: controller.signal } : {})
-          .then(function(r) { return r.json(); })
+          .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
           .then(function(data) {
             while (_acDrop.firstChild) _acDrop.removeChild(_acDrop.firstChild);
             var products = (data.products || []).filter(function(prod) {

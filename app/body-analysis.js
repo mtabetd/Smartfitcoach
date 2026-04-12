@@ -627,7 +627,7 @@ async function runAnalysis() {
     var exercisesDb = getExercisesList().slice(0, 30);
 
     var _baCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _baTimer = _baCtrl ? setTimeout(function() { _baCtrl.abort(); }, 30000) : null;
+    var _baTimer = _baCtrl ? setTimeout(function() { _baCtrl.abort(); }, 60000) : null;
     var resp = await fetch(FUNCTION_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -68,7 +68,9 @@
       if (err) { err.style.display='block'; err.textContent='Trop de tentatives. Attendez quelques secondes.'; }
       return;
     }
-    var pw=document.getElementById('gate-pw').value;
+    var _pwEl = document.getElementById('gate-pw');
+    if (!_pwEl) return;
+    var pw=_pwEl.value;
     if (!pw) return;
     verifyPasswordAsync(pw).then(function(ok) {
       if(ok){
@@ -82,8 +84,8 @@
         }
         var err=document.getElementById('gate-error');
         if (err) { err.style.display='block'; err.textContent='Mot de passe incorrect'; }
-        document.getElementById('gate-pw').value='';
-        document.getElementById('gate-pw').focus();
+        var _pwEl2 = document.getElementById('gate-pw');
+        if (_pwEl2) { _pwEl2.value=''; _pwEl2.focus(); }
       }
     });
   }
