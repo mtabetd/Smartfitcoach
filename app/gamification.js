@@ -169,11 +169,15 @@ function updateStreak() {
     data.current++;
   } else if (data.lastDate && data.lastDate !== today) {
     // Un ou plusieurs jours manqués — vérifier le streak freeze
+    var _lastDateObj = new Date(data.lastDate);
+    if (isNaN(_lastDateObj.getTime())) { data.current = 1; data.lastDate = today; } // date corrompue → reset
+    var _missedDays = isNaN(_lastDateObj.getTime()) ? 999 : Math.round((new Date(today) - _lastDateObj) / 86400000);
     var thisMonth = today.slice(0, 7); // 'YYYY-MM'
     var S = window.S || {};
     var freezeAvailable = S.streakFreezeAvailable !== false; // true par défaut
     var freezeUsedMonth = S.streakFreezeUsedMonth || '';
-    if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3) {
+    // Freeze uniquement pour 1 jour manqué (pas 2+ jours) — diff = 2 signifie 1 jour sauté
+    if (freezeAvailable && freezeUsedMonth !== thisMonth && (data.current || 0) >= 3 && _missedDays <= 2) {
       // Activer le freeze : protéger le streak
       if (window.S) {
         window.S.streakFreezeUsedMonth = thisMonth;
@@ -279,7 +283,7 @@ function incrementCounter(counterName) {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   if (!user) return 0;
   var key = 'mtd_counter_' + counterName + '_' + user.id;
-  var count = parseInt(localStorage.getItem(key) || '0') + 1;
+  var count = parseInt(localStorage.getItem(key) || '0', 10) + 1;
   try { localStorage.setItem(key, String(count)); } catch(e) {}
   return count;
 }
@@ -287,7 +291,7 @@ function incrementCounter(counterName) {
 function getCounter(counterName) {
   var user = window.AUTH ? window.AUTH.getUser() : null;
   if (!user) return 0;
-  return parseInt(localStorage.getItem('mtd_counter_' + counterName + '_' + user.id) || '0');
+  return parseInt(localStorage.getItem('mtd_counter_' + counterName + '_' + user.id) || '0', 10);
 }
 
 // ─── RENDER HELPERS ───

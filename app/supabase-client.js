@@ -139,8 +139,9 @@
           var legacy = {};
           var uidSuffix = '_' + userId;
           var SYNC_PREFIXES = ['mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_', 'mtd_food_journal_', 'mtd_cf_1rm_', 'mtd_water_', 'mtd_muscu_session_', 'mtd_weight_history_'];
-          // Clés exactes sans UID (programme IA, progression, générations)
-          var SYNC_EXACT = ['mtd_muscu_program', 'mtd_muscu_ia_progress', 'mtd_muscu_generations'];
+          // Clés namespaced par UID (programme IA, progression, générations) — préfixe seulement
+          var SYNC_EXACT = [];
+          var SYNC_IA_PREFIXES = ['mtd_muscu_program_', 'mtd_muscu_ia_progress_', 'mtd_muscu_generations_'];
           for (var i = 0; i < localStorage.length; i++) {
             var key = localStorage.key(i);
             if (!key) continue;
@@ -152,6 +153,11 @@
               }
             }
             if (!matches && SYNC_EXACT.indexOf(key) !== -1) matches = true;
+            if (!matches) {
+              for (var ia = 0; ia < SYNC_IA_PREFIXES.length; ia++) {
+                if (key.indexOf(SYNC_IA_PREFIXES[ia]) === 0) { matches = true; break; }
+              }
+            }
             if (matches) {
               try { legacy[key] = localStorage.getItem(key); } catch(e) {}
             }
@@ -370,10 +376,14 @@
 
     // Sync initial au login : charger depuis Supabase si localStorage vide ou moins avancé
     syncOnLogin: function() {
+      if (!getClient()) return Promise.resolve('no_client');
+      if (this._syncLoginInProgress) return Promise.resolve('already_syncing');
       var self = this;
+      self._syncLoginInProgress = true;
       self._syncPending = true;
       return self.loadProfile().then(function(cloudData) {
         self._syncPending = false;
+        self._syncLoginInProgress = false;
         if (!cloudData) return 'no_cloud_data';
 
         // Check localStorage directly for this user's actual persisted data
@@ -384,16 +394,8 @@
           var user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null;
           // Fallback: try to get uid from Supabase session directly (avoids async timing issue)
           var uid = (user && user.id) ? user.id : null;
-          if (!uid) {
-            try {
-              var _sbClient = window.getSupabaseClient ? window.getSupabaseClient() : null;
-              if (_sbClient) {
-                // Synchronous session cache in supabase-js v2
-                var _cachedSession = _sbClient.auth.session ? _sbClient.auth.session() : null;
-                if (_cachedSession && _cachedSession.user) uid = _cachedSession.user.id;
-              }
-            } catch(e2) {}
-          }
+          // Note: auth.session() est API v1 Supabase — non disponible en v2
+          // uid reste null si AUTH n'est pas encore initialisé, on utilise 'anon'
           uid = uid || 'anon';
           var raw = localStorage.getItem('mtd_profile_' + uid);
           if (raw) {
@@ -481,6 +483,7 @@
         return 'local_data_exists';
       }).catch(function(e) {
         self._syncPending = false;
+        self._syncLoginInProgress = false;
         console.warn('[SupaSync] syncOnLogin failed:', e);
         return null;
       });

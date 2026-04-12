@@ -98,12 +98,13 @@ function backArrowHtml() {
 // nStep 12 = Planning semaine                             → renderStep9
 
 function goStep(n) {
+  if (typeof n !== 'number' || n < 0 || n > 12) { console.warn('[goStep] valeur invalide:', n); return; }
   // Auto-skip identity/body steps when data already exists (cross-module symbiosis)
   // New flow: 1=N3 2=N4 3=N5 4=N1+N2(objectif) 5=N6+N7(activité+sommeil)
   //           6=BodyScan 7=Preview 8=Medical 9=Habitudes 10=Préférences 11=Résultats 12=Planning
   if (n === 1) {
-    var _step1ok = S.sex && S.prenom !== undefined;
-    var _step2ok = !!(S.birthDate || S.age);
+    var _step1ok = !!S.sex; // prénom optionnel
+    var _step2ok = !!(S.birthDate || (S.age !== null && S.age !== undefined));
     var _step3ok = !!(S.weight && S.height);
     var _step4ok = S.goal !== null && S.goal !== undefined;
     var _step5ok = true; // target weight is optional for maintain goal
@@ -113,13 +114,12 @@ function goStep(n) {
         _step5ok = !!(S.targetWeight);
       }
     }
-    var _step6ok = S.activity !== null && S.activity !== undefined && Array.isArray(S.train) && S.train.length > 0;
+    var _step6ok = S.activity !== null && S.activity !== undefined;
     var _step7ok = S.sleep !== null && S.sleep !== undefined;
     // All body+goal+activity+sleep data complete → skip to medical (nStep 8), allow confirmation
-    if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok && _step7ok) { n = 8; }
-    else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok) { n = 5; } // missing sleep
-    else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok) { n = 5; } // missing activity
-    else if (_step1ok && _step2ok && _step3ok && _step4ok) { n = 5; } // missing activity/sleep
+    if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok && _step6ok && _step7ok) { n = S.bodyScanDone ? 8 : 6; }
+    else if (_step1ok && _step2ok && _step3ok && _step4ok && _step5ok) { n = 5; } // targetWeight ok, manque activité/sommeil
+    else if (_step1ok && _step2ok && _step3ok && _step4ok) { n = 4; } // targetWeight manquant → retour objectif
     else if (_step1ok && _step2ok && _step3ok) { n = 4; } // missing objectif
     else if (_step1ok && _step2ok) { n = 3; } // missing poids/taille
     else if (_step1ok) { n = 2; } // missing date naissance
@@ -195,9 +195,14 @@ function renderNutritionChoice(app) {
     style: 'display:block;width:100%;max-width:300px;padding:15px 24px;background:transparent;color:var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--black,#0A0A09);cursor:pointer;margin:0 auto',
     onclick: function() {
       S.weekPlan = null;
-      S.nStep = 0;
+      S._nm = null;
+      S._weekPlanGeneratedAt = null;
+      S._planHash = '';
+      S.mealsLogged = {};
+      // Bypass goStep(1) auto-skip — force step 1 (sex selection) so returning users can change sex
+      S.nStep = 1;
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
-      goStep(1);
+      window.render();
     }
   }, 'Établir un nouveau programme');
 
@@ -271,7 +276,22 @@ function renderStep1(p) {
   p.appendChild(sexLabel);
   var g = h('div', {'class': 'card-grid-2'});
   [{name: window.t('onb.s1.male'), val: 'homme'}, {name: window.t('onb.s1.female'), val: 'femme'}].forEach(function(o) {
-    g.appendChild(h('div', {'class': 'sel-card' + (S.sex === o.val ? ' on' : ''), onclick: function() { S.sex = o.val; window.render(); }}, [
+    g.appendChild(h('div', {'class': 'sel-card' + (S.sex === o.val ? ' on' : ''), onclick: function() {
+      var _prevSex = S.sex;
+      S.sex = o.val;
+      // Nettoyer les données féminines si passage femme → homme (évite données fantômes persistées)
+      if (_prevSex === 'femme' && o.val === 'homme') {
+        S.cycleTracking = false;
+        S.pregnant = false;
+        S.lastPeriodDate = null;
+        S.pregnancyWeek = null;
+        S.prePregnancyWeight = null;
+        S.dueDate = null;
+        window._s2page = 0; // Forcer page date naissance, pas la page cycle/grossesse
+      }
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+      window.render();
+    }}, [
       h('div', {'class': 'card-name'}, o.name)
     ]));
   });
@@ -411,7 +431,7 @@ function renderStep2(p) {
       goStep(3);
     }
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(1); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; S.nStep = 1; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 2b (N4b): CYCLE MENSTRUEL + GROSSESSE (femmes seulement) ───
@@ -450,7 +470,7 @@ function renderStep2b(p) {
       // Dur\u00e9e du cycle
       p.appendChild(h('div', {'class': 'section-label', style: 'margin-top:12px'}, 'Dur\u00e9e du cycle'));
       var clWrap = h('div', {'class': 'num-input-wrap'});
-      clWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '21', max: '35', step: '1', value: String(S.cycleLength), inputmode: 'numeric', oninput: function(e) {
+      clWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '21', max: '35', step: '1', value: String(S.cycleLength || 28), inputmode: 'numeric', oninput: function(e) {
         var v = parseInt(e.target.value);
         if (!isNaN(v) && v >= 21 && v <= 35) S.cycleLength = v;
       }, onblur: function(e) {
@@ -480,9 +500,9 @@ function renderStep2b(p) {
           var barColors = {menstruation: '#5A1010', follicular: '#6A4A1A', ovulation: '#1A4A1A', luteal: '#6A4A1A'};
           for (var ci = 0; ci < CYCLE_PHASES.length; ci++) {
             var cp = CYCLE_PHASES[ci];
-            var segStart = Math.round(cp.days[0] * S.cycleLength / 28);
-            var segEnd = Math.round(cp.days[1] * S.cycleLength / 28);
-            var segWidth = ((segEnd - segStart + 1) / S.cycleLength * 100);
+            var segStart = Math.round(cp.days[0] * (S.cycleLength || 28) / 28);
+            var segEnd = Math.round(cp.days[1] * (S.cycleLength || 28) / 28);
+            var segWidth = ((segEnd - segStart + 1) / (S.cycleLength || 28) * 100);
             var segColor = barColors[cp.id] || '#ccc';
             var isCurrentSeg = cycleInfo.phase.id === cp.id;
             barWrap.appendChild(h('div', {style: 'width:' + segWidth + '%;background:' + segColor + ';opacity:' + (isCurrentSeg ? '1' : '0.3') + ';height:100%'}));
@@ -490,7 +510,7 @@ function renderStep2b(p) {
           phaseCard.appendChild(barWrap);
 
           // Position marker
-          var markerPct = ((cycleInfo.dayInCycle - 1) / S.cycleLength * 100);
+          var markerPct = ((cycleInfo.dayInCycle - 1) / (S.cycleLength || 28) * 100);
           var markerWrap = h('div', {style: 'position:relative;height:10px;margin-top:2px'});
           markerWrap.appendChild(h('div', {style: 'position:absolute;left:' + markerPct + '%;transform:translateX(-50%);font-size:9px;color:var(--noir)'}, '\u25B2'));
           phaseCard.appendChild(markerWrap);
@@ -508,7 +528,15 @@ function renderStep2b(p) {
 
     var pregToggle = h('div', {'class': 'sel-card' + (S.pregnant ? ' on' : ''), style: 'margin-bottom:12px;text-align:center;cursor:pointer;border-left:3px solid #E8A87C', onclick: function() {
       S.pregnant = !S.pregnant;
-      if (S.pregnant) { S.cycleTracking = false; }
+      if (S.pregnant) {
+        S.cycleTracking = false;
+      } else {
+        // Nettoyer les données grossesse pour éviter données fantômes en localStorage
+        S.pregnancyWeek = null;
+        S.prePregnancyWeight = null;
+        S.dueDate = null;
+      }
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }});
     pregToggle.appendChild(h('div', {'class': 'card-name'}, '\u00cates-vous enceinte ?'));
@@ -597,7 +625,7 @@ function renderStep2b(p) {
             wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'IMC pr\u00e9-grossesse : ' + (preBmi || 0).toFixed(1) + ' (' + wgPreg.category + ')'));
             wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, 'Gain total recommand\u00e9 : ' + wgPreg.totalGainMin + ' \u2014 ' + wgPreg.totalGainMax + ' kg'));
             wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:4px'}, '\u00c0 la semaine ' + S.pregnancyWeek + ' : +' + wgPreg.currentExpectedGainMin + ' \u00e0 +' + wgPreg.currentExpectedGainMax + ' kg attendus'));
-            wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'}, 'Poids attendu : ' + wgPreg.expectedWeightMin + ' kg \u2014 ' + wgPreg.expectedWeightMax + ' kg'));
+            if (wgPreg.expectedWeightMin !== null && wgPreg.expectedWeightMax !== null) { wgCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'}, 'Poids attendu : ' + wgPreg.expectedWeightMin + ' kg \u2014 ' + wgPreg.expectedWeightMax + ' kg')); }
 
             if (S.weight && S.prePregnancyWeight) {
               var actualGain = S.weight - S.prePregnancyWeight;
@@ -621,7 +649,7 @@ function renderStep2b(p) {
     window._s2page = 0;
     goStep(3);
   }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; window.render(); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 
@@ -655,7 +683,7 @@ function renderStep3(p) {
   });
   p.appendChild(weightUnitDiv);
   var wRange = window.UNITS ? window.UNITS.weightRange() : {min: 30, max: 300, step: 0.1};
-  var wVal = window.UNITS ? window.UNITS.displayWeightVal(S.weight) : S.weight;
+  var wVal = window.UNITS ? (window.UNITS.displayWeightVal(S.weight) || '') : (S.weight || '');
   var ww = h('div', {'class': 'num-input-wrap'});
   ww.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(wRange.min), max: String(wRange.max), step: String(wRange.step), value: String(wVal), inputmode: 'decimal', placeholder: window.UNITS && window.UNITS.weight === 'lbs' ? '165' : '75', oninput: function(e) {
     var v = parseFloat(e.target.value);
@@ -696,7 +724,7 @@ function renderStep3(p) {
   });
   p.appendChild(heightUnitDiv);
   var hRange = window.UNITS ? window.UNITS.heightRange() : {min: 120, max: 250, step: 1};
-  var hVal = window.UNITS ? window.UNITS.displayHeightVal(S.height) : S.height;
+  var hVal = window.UNITS ? (window.UNITS.displayHeightVal(S.height) || '') : (S.height || '');
   var hw = h('div', {'class': 'num-input-wrap'});
   hw.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(hRange.min), max: String(hRange.max), step: String(hRange.step), value: String(hVal), inputmode: window.UNITS && window.UNITS.height === 'ft' ? 'decimal' : 'numeric', placeholder: window.UNITS && window.UNITS.height === 'ft' ? 'pouces (ex: 70.9)' : '175', oninput: function(e) {
     var v = parseFloat(e.target.value);
@@ -755,7 +783,7 @@ function renderStep3(p) {
   _waistWrap.appendChild(h('input', {'class': 'num-input', type: 'number', min: '50', max: '200', step: '1', value: S.waist ? String(S.waist) : '', inputmode: 'numeric', placeholder: 'ex: 85', oninput: function(e) {
     var v = parseFloat(e.target.value);
     S.waist = (!isNaN(v) && v >= 50 && v <= 200) ? v : null;
-    window.render();
+    // Pas de render() ici — évite de détruire l'input pendant la saisie
   }, onblur: function(e) {
     var v = parseFloat(e.target.value);
     if (e.target.value !== '' && (isNaN(v) || v < 50 || v > 200)) { e.target.value = ''; S.waist = null; }
@@ -896,8 +924,12 @@ function renderStep3(p) {
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
-  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (_step2ok) goStep(4); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (S.weight && S.height) goStep(4); }}, window.t('onb.next')));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() {
+    // Femmes : revenir à N4b (cycle/grossesse), pas à N4a (date de naissance)
+    window._s2page = (S.sex === 'femme') ? 1 : 0;
+    goStep(2);
+  }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 5 (N6+N7): ACTIVITE + SOMMEIL ───
@@ -983,8 +1015,30 @@ function renderActiviteSommeil(p) {
     : _selCount3 + '\u00a0jour' + (_selCount3 > 1 ? 's' : '') + ' s\u00e9lectionn\u00e9' + (_selCount3 > 1 ? 's' : '');
   p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:4px;'}, _hint3));
 
+  // ─── HEURE D'ENTRAÎNEMENT (mode 'both' uniquement — l'utilisateur s'entraîne activement, le timing affecte la répartition des macros) ───
+  if (S.appMode === 'both') {
+    p.appendChild(h('div', {style: 'height:20px'}));
+    p.appendChild(h('div', {'class': 'section-label'}, '\u23F0 Heure d\u2019entra\u00eenement habituelle'));
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin:-4px 0 10px;line-height:1.5;'}, 'Permet d\u2019adapter la r\u00e9partition des repas (glucides + prot\u00e9ines au bon moment).\u00a0Optionnel.'));
+    var _ttOpts = [
+      {id: 'morning', label: '\uD83C\uDF05 Matin', desc: 'Avant 12h — petit-d\u00e9j post-s\u00e9ance'},
+      {id: 'noon',    label: '\u2600\uFE0F Midi',  desc: '12h–15h — d\u00e9jeuner post-s\u00e9ance'},
+      {id: 'evening', label: '\uD83C\uDF19 Soir',  desc: 'Apr\u00e8s 17h — d\u00eener post-s\u00e9ance'}
+    ];
+    var _ttGrid = h('div', {'class': 'level-list'});
+    _ttOpts.forEach(function(opt) {
+      _ttGrid.appendChild(h('div', {'class': 'level-item' + (S.trainTime === opt.id ? ' on' : ''), onclick: function() {
+        S.trainTime = (S.trainTime === opt.id) ? null : opt.id; // toggle
+        if (S.weekPlan) { S.weekPlan = null; }
+        window.render();
+      }}, [h('div', {}, [h('div', {'class': 'level-name'}, opt.label), h('div', {'class': 'level-desc'}, opt.desc)])]));
+    });
+    p.appendChild(_ttGrid);
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:4px;'}, 'Laissez vide si variable — le plan utilisera une r\u00e9partition standard.'));
+  }
+
   p.appendChild(h('div', {style: 'height:24px'}));
-  var ok = S.activity !== null && S.train.length > 0 && S.sleep !== null;
+  var ok = S.activity !== null && Array.isArray(S.train) && S.train.length > 0 && S.sleep !== null;
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() { if (ok) goStep(6); }}, window.t('onb.next')));
   p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(4); }, html: backArrowHtml() + window.t('onb.back')}));
 }
@@ -1029,13 +1083,13 @@ function renderStep4(p) {
       p.appendChild(_summaryCard);
     }
   })();
-  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IV'));
+  p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' VIII'));
   p.appendChild(h('h1', {html: 'Votre<br><em>sant\u00e9</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
   p.appendChild(h('p', {'class': 'subtitle'}, 'Vos conditions de sant\u00e9 pour des recommandations s\u00fbres.'));
   if (window.TIPS) TIPS.renderTip(p, 'health');
 
   var none = S.medical.length === 0;
-  var nb = h('div', {'class': 'sel-card' + (none ? ' on' : ''), style: 'margin-bottom:16px;text-align:center', onclick: function() { S.medical = []; window.render(); }});
+  var nb = h('div', {'class': 'sel-card' + (none ? ' on' : ''), style: 'margin-bottom:16px;text-align:center', onclick: function() { S.medical = []; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } window.render(); }});
   nb.appendChild(h('div', {'class': 'card-name'}, window.t('onb.s4.none')));
   nb.appendChild(h('div', {'class': 'card-sub'}, 'Je suis en bonne sant\u00e9'));
   p.appendChild(nb);
@@ -1052,8 +1106,16 @@ function renderStep4(p) {
     cat.items.forEach(function(item) {
       var on = S.medical.indexOf(item.id) !== -1;
       catList.appendChild(h('div', {'class': 'level-item' + (on ? ' on' : ''), onclick: function() {
-        if (on) S.medical = S.medical.filter(function(x) { return x !== item.id; });
-        else S.medical.push(item.id);
+        if (on) {
+          S.medical = S.medical.filter(function(x) { return x !== item.id; });
+          // Sync: désactiver grossesse médicale → désactiver S.pregnant (double chemin)
+          if (item.id === 'grossesse') S.pregnant = false;
+        } else {
+          S.medical.push(item.id);
+          // Sync: activer grossesse médicale → activer S.pregnant pour déclencher les protections
+          if (item.id === 'grossesse') { S.pregnant = true; S.cycleTracking = false; }
+        }
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         window.render();
       }}, [
         h('div', {}, [h('div', {'class': 'level-name'}, item.icon + ' ' + item.name), h('div', {'class': 'level-desc'}, item.desc)]),
@@ -1087,6 +1149,7 @@ function renderStep4(p) {
 function renderStep5(p) {
   if (!Array.isArray(S.allergies)) S.allergies = [];
   if (!Array.isArray(S.intolerances)) S.intolerances = [];
+  if (!Array.isArray(S.supplements)) S.supplements = [];
   // Sub-page: 0 = habitudes, 1 = supplémentation + alcool
   if (typeof window._s5page === 'undefined') window._s5page = 0;
   var _page = window._s5page;
@@ -1095,7 +1158,7 @@ function renderStep5(p) {
 
   if (_page === 0) {
     // ── 5a: Habitudes ──
-    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V · a \u00b7 Habitudes'));
+    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IX · a \u00b7 Habitudes'));
     p.appendChild(h('h1', {html: (_prenomS5 ? _prenomS5 + ', quelles sont<br>' : 'Quelles sont<br>') + '<em>vos habitudes alimentaires\u00a0?</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
     p.appendChild(h('p', {'class': 'subtitle'}, 'Vos habitudes au quotidien pour un plan r\u00e9aliste et tenable.'));
     if (window.TIPS) TIPS.renderTip(p, 'habits');
@@ -1184,7 +1247,7 @@ function renderStep5(p) {
   p.appendChild(hydWrap);
 
   // ── Page 0 buttons: continue to page 5b, back to step 4 ──
-  var _canContinue5a = S.mealsPerDay !== null && S.eatingLocation !== null && S.mealPrepTime !== null;
+  var _canContinue5a = S.mealsPerDay != null && S.eatingLocation != null && S.mealPrepTime != null;
   p.appendChild(h('div', {style: 'height:24px'}));
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_canContinue5a, onclick: function() {
     if (_canContinue5a) { window._s5page = 1; window.render(); }
@@ -1193,7 +1256,7 @@ function renderStep5(p) {
 
   } else {
     // ── 5b: Supplémentation + Alcool ──
-    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' V · b \u00b7 Suppl\u00e9ments'));
+    p.appendChild(h('div', {'class': 'eyebrow', style: 'font-size:9px;letter-spacing:6px;color:var(--grey,#6B6B65)'}, window.t('onb.step') + ' IX · b \u00b7 Suppl\u00e9ments'));
     p.appendChild(h('h1', {html: 'Suppl\u00e9mentation<br><em>& consommation d\u2019alcool</em>', style: 'font-size:28px;line-height:1.2;margin-bottom:12px'}));
     p.appendChild(h('p', {'class': 'subtitle'}, 'Ces informations ajustent votre bilan calorique total.'));
 
@@ -1382,10 +1445,15 @@ function renderStep5(p) {
   } // end else (non-pregnant alcohol section)
 
   p.appendChild(h('div', {style: 'height:24px'}));
-  var canContinue5b = S.alcoholFreq !== null;
+  var canContinue5b = S.alcoholFreq != null;
+  // Helper text quand fréquence non sélectionnée (évite impasse silencieuse)
+  if (!canContinue5b) {
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:8px'}, '← Sélectionnez votre fréquence de consommation ci-dessus pour continuer'));
+  }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !canContinue5b, onclick: function() {
     if (canContinue5b) {
       bb('nutrition_habits', {meals: S.mealsPerDay, location: S.eatingLocation, prepTime: S.mealPrepTime, alcoholFreq: S.alcoholFreq});
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window._s5page = 0;
       goStep(10);
     }
@@ -1410,8 +1478,11 @@ function renderStep6(p) {
   if (S.pregnant && S.sex === 'femme') {
     p.appendChild(h('p', {'class': 'subtitle'}, 'Nutrition adapt\u00e9e \u00e0 chaque trimestre de votre grossesse.'));
 
-    // Auto-select maintain
-    S.goal = 2; // index of "Maintien" in GOALS (0=bulk, 1=lean_bulk, 2=maintain)
+    // Auto-select maintain uniquement si objectif actuel est coupe/sèche (incompatible)
+    // Ne pas écraser bulk/recompo à chaque render — préserver le choix si compatible
+    if (S.goal === null || !GOALS[S.goal] || GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred') {
+      S.goal = 2; // index of "Maintien" in GOALS (0=bulk, 1=lean_bulk, 2=maintain)
+    }
 
     var pregObjCard = h('div', {style: 'border-left:3px solid #E8A87C;padding:16px;background:var(--ivory2);margin-bottom:16px'});
     pregObjCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px'}, '\uD83E\uDD30 ' + window.t('onb.s6.maintain') + ' + besoins grossesse'));
@@ -1508,26 +1579,60 @@ function renderStep6(p) {
   goalLabel.appendChild(txt('Objectif principal'));
   goalLabel.appendChild(reqDot());
   p.appendChild(goalLabel);
+  // === GROSSESSE / ALLAITEMENT : bloquer sèche/coupe, auto-reset si incompatible, afficher bannière ===
+  var _isAllait = Array.isArray(S.medical) && S.medical.indexOf('allaitement') !== -1;
+  var _isPreg = !!S.pregnant;
+  if (_isPreg || _isAllait) {
+    // Forcer maintien si objectif actuel est coupe ou sèche (OMS 2016, ACOG 2020 — restriction calorique contre-indiquée)
+    if (S.goal !== null && GOALS[S.goal] && (GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred')) {
+      S.goal = 2; // index 2 = maintien
+    }
+    if (_isPreg) {
+      var _pregGoalBanner = h('div', {style: 'background:rgba(232,168,124,0.10);border:2px solid #E8A87C;padding:14px 16px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#6A4A1A;line-height:1.7;border-radius:2px;'});
+      _pregGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, 'Grossesse \u2014 objectifs restreints'));
+      _pregGoalBanner.appendChild(h('div', {}, 'La s\u00e8che et la perte de poids sont contre-indiqu\u00e9es pendant la grossesse\u00a0(OMS\u00a02016, ACOG\u00a02020). Votre plan nutritionnel est automatiquement adapt\u00e9 \u00e0 vos besoins.'));
+      p.appendChild(_pregGoalBanner);
+    }
+    if (_isAllait) {
+      var _allaitGoalBanner = h('div', {style: 'background:rgba(232,168,124,0.10);border:2px solid #E8A87C;padding:14px 16px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#6A4A1A;line-height:1.7;border-radius:2px;'});
+      _allaitGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, 'Allaitement \u2014 objectifs restreints'));
+      _allaitGoalBanner.appendChild(h('div', {}, 'La s\u00e8che et la perte de poids sont contre-indiqu\u00e9es pendant l\u2019allaitement\u00a0(ACOG\u00a02022). Un surplus de +500\u00a0kcal/j est n\u00e9cessaire pour maintenir la production lactiqu\u00e9e et prot\u00e9ger votre sant\u00e9.'));
+      p.appendChild(_allaitGoalBanner);
+    }
+  }
+  // === ADOLESCENT (13–17 ans) : caps sur déficit/surplus, informer l'utilisateur ===
+  var _userAgeGoal = typeof window.getAge === 'function' ? window.getAge() : null;
+  if (_userAgeGoal !== null && _userAgeGoal >= 13 && _userAgeGoal < 18) {
+    var _teenGoalBanner = h('div', {style: 'background:rgba(106,74,26,0.06);border:1px solid var(--orange,#6A4A1A);padding:14px 16px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--orange,#6A4A1A);line-height:1.7;border-radius:2px;'});
+    _teenGoalBanner.appendChild(h('div', {style: 'font-size:13px;font-weight:600;letter-spacing:0.03em;margin-bottom:5px;'}, 'Objectifs adapt\u00e9s pour les 13\u201317 ans'));
+    _teenGoalBanner.appendChild(h('div', {}, 'D\u00e9ficit max -300\u00a0kcal/j, surplus max +300\u00a0kcal/j (ACSM\u00a02007, IOC\u00a02018) pour pr\u00e9server la croissance et le pic de masse osseuse. Votre plan est automatiquement encadr\u00e9.'));
+    p.appendChild(_teenGoalBanner);
+  }
   var gg = h('div', {'class': 'card-grid-2'});
   GOALS.forEach(function(gl, i) {
-    gg.appendChild(h('div', {'class': 'sel-card' + (S.goal === i ? ' on' : ''), onclick: function() {
-      S.goal = i;
-      // ── SYNC SPORT GOALS ─────────────────────────────────────────────────
-      // If sport goals already selected, replace the "primary" one to stay coherent
-      if (S.sportGoals && S.sportGoals.length > 0 && window.NUTRITION_TO_SPORT_GOAL) {
-        var newSportId = window.NUTRITION_TO_SPORT_GOAL[gl.key];
-        if (newSportId) {
-          // ÉLEVÉ-1: retirer TOUS les goals pilotés par nutrition (primaires + secondaires fonctionnels)
-          var primaryIds = ['muscle', 'weightloss', 'shred', 'general', 'endurance', 'flexibility'];
-          var secondaryKept = S.sportGoals.filter(function(x) { return primaryIds.indexOf(x) === -1; });
-          S.sportGoals = [newSportId].concat(secondaryKept).slice(0, 3);
+    var _pregBlock = (_isPreg || _isAllait) && (gl.key === 'cut' || gl.key === 'shred');
+    gg.appendChild(h('div', {
+      'class': 'sel-card' + (S.goal === i ? ' on' : '') + (_pregBlock ? ' disabled' : ''),
+      style: _pregBlock ? 'opacity:0.35;cursor:not-allowed;pointer-events:none;' : '',
+      onclick: _pregBlock ? null : function() {
+        S.goal = i;
+        // ── SYNC SPORT GOALS ─────────────────────────────────────────────────
+        // If sport goals already selected, replace the "primary" one to stay coherent
+        if (S.sportGoals && S.sportGoals.length > 0 && window.NUTRITION_TO_SPORT_GOAL) {
+          var newSportId = window.NUTRITION_TO_SPORT_GOAL[gl.key];
+          if (newSportId) {
+            // ÉLEVÉ-1: retirer TOUS les goals pilotés par nutrition (primaires + secondaires fonctionnels)
+            var primaryIds = ['muscle', 'weightloss', 'shred', 'general', 'endurance', 'flexibility'];
+            var secondaryKept = S.sportGoals.filter(function(x) { return primaryIds.indexOf(x) === -1; });
+            S.sportGoals = [newSportId].concat(secondaryKept).slice(0, 3);
+          }
         }
+        // ─────────────────────────────────────────────────────────────────────
+        window.render();
       }
-      // ─────────────────────────────────────────────────────────────────────
-      window.render();
-    }}, [
-      h('div', {'class': 'card-name'}, gl.name),
-      h('div', {'class': 'card-sub'}, gl.desc)
+    }, [
+      h('div', {'class': 'card-name'}, _pregBlock ? gl.name + ' \u2014 non disponible' : gl.name),
+      h('div', {'class': 'card-sub'}, _pregBlock ? 'Contre-indiqu\u00e9 pendant la grossesse' : gl.desc)
     ]));
   });
   p.appendChild(gg);
@@ -1585,13 +1690,15 @@ function renderStep6(p) {
   if (goalOk && S.goal !== null && GOALS[S.goal]) {
     var gk = GOALS[S.goal].key;
     if ((gk === 'cut' || gk === 'shred' || gk === 'bulk' || gk === 'lean_bulk') && !S.targetWeight) goalOk = false;
-    if ((gk === 'cut' || gk === 'shred') && S.medical && S.medical.indexOf('tca') !== -1) {
+    // TCA : seuls maintien (2) et recomposition (5) sont compatibles — calcTarget() force le maintien pour TOUS les autres
+    // Helms 2014 / ANAD / IOC 2018 : restriction ET surplus intentionnel contre-indiqués en contexte TCA
+    if ((gk === 'cut' || gk === 'shred' || gk === 'bulk' || gk === 'lean_bulk') && S.medical && S.medical.indexOf('tca') !== -1) {
       goalOk = false;
       _tcaConflict = true;
     }
   }
   if (_tcaConflict) {
-    p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border:1px solid var(--red,#5A1010);padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);line-height:1.6'}, 'Objectif sèche/coupe incompatible avec un historique de TCA. Choisissez Maintien ou Prise de masse.'));
+    p.appendChild(h('div', {style: 'background:var(--redbg,rgba(90,16,16,.06));border:1px solid var(--red,#5A1010);padding:10px 14px;border-radius:2px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);line-height:1.6'}, 'Historique de TCA d\u00e9tect\u00e9 \u2014 seuls le Maintien et la Recomposition sont compatibles. Les objectifs de s\u00e8che, coupe, prise de masse sont m\u00e9dicalement contre-indiqu\u00e9s (ANAD, IOC\u00a02018).'));
   }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !goalOk, onclick: function() {
     if (goalOk) {
@@ -1763,7 +1870,7 @@ function renderStep7(p) {
   // Excluded
   p.appendChild(h('div', {'class': 'section-label'}, 'Aliments exclus'));
   var fi = h('div', {'class': 'field'});
-  fi.appendChild(h('input', {type: 'text', placeholder: 'Ex: avocat, bœuf, saumon...', value: S.excluded, oninput: function(e) { S.excluded = e.target.value; }}));
+  fi.appendChild(h('input', {type: 'text', placeholder: 'Ex: avocat, bœuf, saumon...', value: S.excluded, oninput: function(e) { S.excluded = e.target.value; if (window.saveProfile) try { window.saveProfile(); } catch(e2) {} }}));
   p.appendChild(fi);
 
   // Cuisines
@@ -1839,7 +1946,7 @@ function renderStep7(p) {
   p.appendChild(pg);
 
   p.appendChild(h('div', {style: 'height:24px'}));
-  var ok = S.whey !== null;
+  var ok = S.whey !== null && S.whey !== undefined;
   var _genBtn = h('button', {'class': 'btn-primary', disabled: !ok, onclick: function() {
     if (!ok) return;
     // Feedback visuel immédiat — désactiver le bouton et afficher "Génération..."
@@ -1849,33 +1956,65 @@ function renderStep7(p) {
     if (window._nutritionGenerating) return;
     window._nutritionGenerating = true;
     setTimeout(function() {
-      // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
-      if (window.computeNutritionState) { window.computeNutritionState(false); }
-      var _wk1 = generateWeek();
-      if (Array.isArray(_wk1) && _wk1.length > 0) S.weekPlan = _wk1;
-      S._weekPlanGeneratedAt = new Date().toISOString();
-      // Sync plan nutrition vers Supabase (try/catch : une erreur réseau ne bloque pas la navigation)
-      if (window.SupaSync && S.weekPlan) {
-        try {
-          var _monday = new Date();
-          _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
-          SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
-        } catch(e) { console.warn('[nutrition] saveMealPlan error (non-bloquant):', e); }
+      try {
+        // Synchroniser _nm avant generateWeek() pour que les recettes R-format soient correctement scalées
+        if (window.computeNutritionState) { window.computeNutritionState(false); }
+        var _wk1 = generateWeek();
+        if (Array.isArray(_wk1) && _wk1.length > 0) {
+          S.weekPlan = _wk1;
+          // Figer le hash au moment de la génération — évite la régénération silencieuse dans renderStep9
+          var _h1 = window.getPlanHash ? window.getPlanHash() : '';
+          if (_h1) S._planHash = _h1;
+        } else {
+          // generateWeek() a retourné un plan vide — informer l'utilisateur sans naviguer
+          console.warn('[nutrition] generateWeek() returned empty plan');
+          _genBtn.disabled = false;
+          _genBtn.textContent = window.t('onb.finish');
+          var _errDiv = document.getElementById('_gen_error');
+          if (!_errDiv) {
+            _errDiv = document.createElement('div');
+            _errDiv.id = '_gen_error';
+            _errDiv.style.cssText = 'color:#8B2020;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-top:8px;text-align:center';
+            _genBtn.parentNode && _genBtn.parentNode.insertBefore(_errDiv, _genBtn.nextSibling);
+          }
+          _errDiv.textContent = 'Impossible de générer le plan. Vérifiez vos préférences et réessayez.';
+          window._nutritionGenerating = false;
+          return;
+        }
+        S._weekPlanGeneratedAt = new Date().toISOString();
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+        // Sync plan nutrition vers Supabase (try/catch : une erreur réseau ne bloque pas la navigation)
+        if (window.SupaSync && S.weekPlan) {
+          try {
+            var _monday = new Date();
+            _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+            SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+          } catch(e) { console.warn('[nutrition] saveMealPlan error (non-bloquant):', e); }
+        }
+        bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
+        if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
+        goStep(11);
+      } catch(e) {
+        console.error('[nutrition] generateWeek exception:', e);
+        _genBtn.disabled = false;
+        _genBtn.textContent = window.t('onb.finish');
+      } finally {
+        window._nutritionGenerating = false;
       }
-      bb('nutrition_preferences', {cookLevel: S.cookLevel, whey: S.whey, regime: S.regime});
-      if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('first_plan');
-      goStep(11);
-      window._nutritionGenerating = false;
     }, 50);
   }}, window.t('onb.finish'));
   p.appendChild(_genBtn);
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(9); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s5page = 0; goStep(9); }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 11 (RÉSULTATS / MACROS) ───
 function renderStep8(p) {
   // CRITIQUE-3: garde S.goal null — ne peut pas calculer les macros sans objectif
-  if (S.goal === null) { goStep(4); return; }
+  if (S.goal === null || S.goal === undefined) { goStep(4); return; }
+  // CRITIQUE-4: garde sex/weight/height manquants — évite 1500 kcal fantôme
+  if (!S.sex || !S.weight || !S.height) { goStep(1); return; }
+  // CRITIQUE-5: garde S.activity null — calcTDEE retourne 0 sans niveau d'activité
+  if (S.activity === null || S.activity === undefined) { goStep(5); return; }
   var tdee = Math.round(calcTDEE()), tgt = calcTarget(), m = calcMacros(), bmi = calcBMI();
     // Synchronise NutritionMaster (source de vérité pour RecipeEngine + Sport)
     if (window.computeNutritionState) { window.computeNutritionState(false); }
@@ -1907,7 +2046,8 @@ function renderStep8(p) {
     rh.appendChild(titleDiv);
   })();
   rh.appendChild(h('div', {'class': 'result-rule'}));
-  var _profItems = [S.sex==='homme'?'Homme':'Femme', getAge()+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
+  var _ageDisplay = (typeof getAge === 'function' ? getAge() : (S.age || '?'));
+  var _profItems = [S.sex==='homme'?'Homme':'Femme', _ageDisplay+' ans', (window.UNITS ? window.UNITS.displayWeight(S.weight) : S.weight+'kg'), (window.UNITS ? window.UNITS.displayHeight(S.height) : (S.height/100).toFixed(2)+'m')];
   if(S.activity!==null&&S.activity!==undefined&&ACTIVITIES[S.activity])_profItems.push(ACTIVITIES[S.activity].name);
   if(S.goal!==null&&S.goal!==undefined&&GOALS[S.goal])_profItems.push(GOALS[S.goal].name);
   rh.appendChild(h('div', {style:'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;margin:8px 0'}, _profItems.join(' \u00B7 ')));
@@ -1957,7 +2097,7 @@ function renderStep8(p) {
     if (window.S._nm && window.S._nm.errors && window.S._nm.errors.length === 0) {
       var nmDiv = document.createElement('div');
       nmDiv.style.cssText = 'margin:8px 0;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border-left:3px solid var(--green,#1A4A1A);font-size:13px;color:var(--text-secondary,#6B6B65)';
-      nmDiv.textContent = '\u2713 Calculs valid\u00e9s par NutritionMaster \u2014 P\u00d74 + G\u00d74 + L\u00d79 = ' + Number(window.S._nm.caloriesCheck) + ' kcal';
+      nmDiv.textContent = '\u2713 Calculs valid\u00e9s par NutritionMaster \u2014 P\u00d74 + G\u00d74 + L\u00d79 = ' + (window.S._nm.caloriesCheck !== undefined ? Number(window.S._nm.caloriesCheck) : '?') + ' kcal';
       p.appendChild(nmDiv);
     }
 
@@ -1999,10 +2139,10 @@ function renderStep8(p) {
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, 'var(--green,#1A4A1A)', window.t('onb.s8.proteins'), m.p));
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, 'var(--orange,#6A4A1A)', window.t('onb.s8.fats'), m.l));
   p.appendChild(rr);
-  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Prot\u00e9ines \u00b7 Glucides \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
+  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Glucides \u00b7 Prot\u00e9ines \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
 
   // g/kg ratio for power users — shown in small grey below the gram total
-  var _protRatio = (S.weight && S._nm && S._nm.p) ? (S._nm.p / S.weight).toFixed(1) : null;
+  var _protRatio = (S.weight && S._nm) ? (((S._nm.proteinGrams || S._nm.p || 0)) / S.weight).toFixed(1) : null;
   if (_protRatio) {
     p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);text-align:center;margin-top:2px'}, _protRatio + ' g/kg · méthode ISSN 2017'));
   }
@@ -2242,11 +2382,11 @@ function renderStep8(p) {
   weightInputWrap.appendChild(h('button', {'class': 'btn-primary', style: 'width:auto;padding:10px 20px;margin-top:0', onclick: function() {
     var v = parseFloat(weightIn.value);
     if (isNaN(v) || v < 30 || v > 200) return;
-    if (!S.weightHistory) S.weightHistory = [];
+    if (!Array.isArray(S.weightHistory)) S.weightHistory = [];
     var today = new Date().toISOString().split('T')[0];
     S.weightHistory.push({date: today, weight: v});
     // Cap to 52 entries (1 year of weekly weigh-ins) to limit localStorage size
-    if (S.weightHistory.length > 52) S.weightHistory = S.weightHistory.slice(-52);
+    if (S.weightHistory && S.weightHistory.length > 52) S.weightHistory = S.weightHistory.slice(-52);
     S.weight = v;
     // Persist to localStorage
     try {
@@ -2254,7 +2394,7 @@ function renderStep8(p) {
       localStorage.setItem('mtd_weight_history_' + uid, JSON.stringify(S.weightHistory));
     } catch(e) {}
     // Sync poids vers Supabase
-    if (window.SupaSync) SupaSync.saveWeight(today, v);
+    if (window.SupaSync) { try { SupaSync.saveWeight(today, v); } catch(e) { console.warn('[nutrition] saveWeight error:', e); } }
     bb('weight_logged', {weight: v});
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) {
       window.GAMIFICATION.unlockBadge('first_weigh');
@@ -2266,6 +2406,7 @@ function renderStep8(p) {
         if (first != null && first - v >= 5) window.GAMIFICATION.unlockBadge('five_kg');
       }
     }
+    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
     window.render();
   }}, 'Enregistrer'));
   p.appendChild(weightInputWrap);
@@ -2297,6 +2438,7 @@ function renderStep8(p) {
   if (getSupplementRecommendations) {
     var suppRecs = getSupplementRecommendations() || [];
     if (suppRecs.length > 0) {
+      if (!Array.isArray(S.supplements)) S.supplements = [];
       p.appendChild(h('div', {'class': 'section-label'}, 'Suppl\u00e9mentation recommand\u00e9e'));
 
       // If user takes creatine, show special card first
@@ -2365,6 +2507,17 @@ function renderStep8(p) {
   p.appendChild(h('button', {'class': 'btn-primary', onclick: function() {
     // Badge profil complet : déclenché quand l'utilisateur voit ses résultats et passe au planning
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('profile_complete');
+    // I-04: générer weekPlan si absent (ex: rechargement page, navigation directe vers step 11)
+    if (!S.weekPlan || S.weekPlan.length < 7) {
+      if (window.computeNutritionState) window.computeNutritionState(false);
+      var _wkPre = generateWeek();
+      if (Array.isArray(_wkPre) && _wkPre.length > 0) {
+        S.weekPlan = _wkPre; S._weekPlanGeneratedAt = new Date().toISOString();
+        var _hPre = window.getPlanHash ? window.getPlanHash() : '';
+        if (_hPre) S._planHash = _hPre;
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+      }
+    }
     S._showCompletionFirst = true;
     goStep(12);
   }}, 'Voir mon planning semaine'));
@@ -2575,16 +2728,43 @@ function renderStep9(p) {
   p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 527 recettes'));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
-  if (!S._nm && window.computeNutritionState) window.computeNutritionState(false);
-  if (!S.weekPlan || S.weekPlan.length < 7) { var _wk9 = generateWeek(); if (Array.isArray(_wk9) && _wk9.length === 7) S.weekPlan = _wk9; }
-  // Guard: si weekPlan est toujours null après génération, afficher un message d'erreur
-  if (!S.weekPlan) {
+  // Recompute _nm adapté au type de jour sélectionné (carb cycling +20% si entraînement)
+  if (window.computeNutritionState && window.getDayType) {
+    var _dayInfoForNm = window.getDayType(S.selectedDay || 0);
+    window.computeNutritionState(_dayInfoForNm ? _dayInfoForNm.isTraining : false);
+  } else if (!S._nm && window.computeNutritionState) {
+    window.computeNutritionState(false);
+  }
+  // Régénérer le plan si paramètres nutritionnels critiques ont changé (hash) ou si absent/incomplet
+  var _planHashNow = window.getPlanHash ? window.getPlanHash() : '';
+  if (!S.weekPlan || S.weekPlan.length < 7) {
+    // Pas de plan du tout — générer
+    try {
+      if (_planHashNow) { S._planHash = _planHashNow; }
+      var _wk9 = generateWeek();
+      if (Array.isArray(_wk9) && _wk9.length === 7) { S.weekPlan = _wk9; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } }
+    } catch(e) { console.error('[renderStep9] generateWeek failed', e); }
+  } else if (_planHashNow && !S._planHash) {
+    // Plan existant mais hash absent (migration pré-fix) — figer le hash SANS régénérer
+    // Évite que les utilisateurs anciens perdent leur plan à chaque visite
+    S._planHash = _planHashNow;
+  } else if (_planHashNow && S._planHash !== _planHashNow) {
+    // Vrai changement de paramètres nutritionnels — régénérer
+    try {
+      S._planHash = _planHashNow;
+      var _wk9r = generateWeek();
+      if (Array.isArray(_wk9r) && _wk9r.length === 7) { S.weekPlan = _wk9r; if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} } }
+    } catch(e) { console.error('[renderStep9] generateWeek failed', e); }
+  }
+  // Guard: si weekPlan est toujours null/vide après génération, afficher un message d'erreur
+  if (!S.weekPlan || !S.weekPlan.length) {
     p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
     p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux résultats'));
     return;
   }
-  // Bounds check: selectedDay must be in [0, 6]
-  if (typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) S.selectedDay = 0;
+  // Défaut : afficher AUJOURD'HUI (même jour que le dashboard) plutôt que toujours Lundi
+  var _todayPlanIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim, cohérent avec today-dashboard.js
+  if (typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) S.selectedDay = _todayPlanIdx;
 
   // Day tabs
   var tabs = h('div', {'class': 'day-tabs'});
@@ -2606,7 +2786,7 @@ function renderStep9(p) {
   }
 
   // ── Pre-compute daily totals for macro progress display ──────────────────
-  var _preDay = S.weekPlan[S.selectedDay] || {};
+  var _preDay = (S.weekPlan && S.weekPlan[S.selectedDay]) || {};
   var _preTotal = 0, _preTotalP = 0, _preTotalG = 0, _preTotalL = 0;
   ['breakfast','lunch','snack','dinner'].forEach(function(slot) {
     var r = _preDay[slot];
@@ -2619,18 +2799,21 @@ function renderStep9(p) {
   });
   if (S._foodLog && Array.isArray(S._foodLog[S.selectedDay])) {
     S._foodLog[S.selectedDay].forEach(function(item) {
-      _preTotal += item.kcal || 0;
-      _preTotalP += item.p || 0;
-      _preTotalG += item.g || 0;
-      _preTotalL += item.l || 0;
+      if (!item) return;
+      _preTotal += (item.kcal || 0);
+      _preTotalP += (item.p || 0);
+      _preTotalG += (item.g || 0);
+      _preTotalL += (item.l || 0);
     });
   }
+  // Cible calorique adaptée au type de jour (repos = calMultiplier 0.90, entraînement = 1.0)
   var _tgt = calcTarget();
+  if (_dayAdapt && _dayAdapt.calMultiplier) { _tgt = Math.round(_tgt * _dayAdapt.calMultiplier); }
   var _nm = S._nm || {};
 
   // ── Daily macro progress bars ─────────────────────────────────────────────
   (function() {
-    var tgtP = (_nm.p || 0), tgtG = (_nm.g || 0), tgtL = (_nm.l || 0);
+    var tgtP = (_nm.proteinGrams || _nm.p || 0), tgtG = (_nm.carbsGrams || _nm.g || 0), tgtL = (_nm.fatGrams || _nm.l || 0);
     var kcalPct = _tgt > 0 ? Math.min(100, Math.round(_preTotal / _tgt * 100)) : 0;
     var pPct = tgtP > 0 ? Math.min(100, Math.round(_preTotalP / tgtP * 100)) : 0;
     var gPct = tgtG > 0 ? Math.min(100, Math.round(_preTotalG / tgtG * 100)) : 0;
@@ -2663,8 +2846,9 @@ function renderStep9(p) {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-top:6px;text-align:right;color:' + (_remaining >= 0 ? 'var(--grey)' : '#5A1010') + ';'
     }, _remaining >= 0 ? _remaining + ' kcal restantes' : Math.abs(_remaining) + ' kcal au-dessus');
     progressCard.appendChild(_remainEl);
-    // ── Célébration macro : message si objectif atteint à 90%+ ──
-    if (kcalPct >= 100) {
+    // ── Célébration macro : message si objectif atteint à 90%+ sur calories ET macros ──
+    var _allMacrosOk = pPct >= 85 && gPct >= 85 && lPct >= 85;
+    if (kcalPct >= 100 && _allMacrosOk) {
       var _macroCelCard = document.createElement('div');
       _macroCelCard.style.cssText = 'margin-top:10px;padding:10px 12px;background:rgba(26,74,26,0.07);border-left:3px solid #1A4A1A;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;letter-spacing:0.3px;line-height:1.6;';
       _macroCelCard.textContent = 'Parfait \u2014 objectifs nutritionnels atteints aujourd\u2019hui.';
@@ -2786,10 +2970,11 @@ function renderStep9(p) {
                 style: 'padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:6px;cursor:pointer;background:var(--ivory,#FAF9F6)',
                 onclick: function() {
                   var slotKey3 = S._foodSearchSlot;
+                  if (!S.weekPlan) return;
                   if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
                   S.weekPlan[S.selectedDay][slotKey3] = { n: food.name, k: food.kcal, kcal: food.kcal, p: food.p, g: food.g, l: food.l, f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true };
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
-                  if (window.saveProfile) window.saveProfile();
+                  try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
                   window.render();
                 }
               });
@@ -2836,6 +3021,7 @@ function renderStep9(p) {
           var fd = S._foodManualData || {};
           if (!fd.name || fd.name.trim().length === 0) return;
           var slotKey4 = S._foodSearchSlot;
+          if (!S.weekPlan) return;
           if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
           S.weekPlan[S.selectedDay][slotKey4] = {
             n: fd.name.trim(), k: parseFloat(fd.kcal) || 0, kcal: parseFloat(fd.kcal) || 0,
@@ -2843,7 +3029,7 @@ function renderStep9(p) {
             f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true
           };
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
-          if (window.saveProfile) window.saveProfile();
+          try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
           window.render();
         }
       }, 'Confirmer');
@@ -2975,12 +3161,12 @@ function renderStep9(p) {
     mealTypeEl.appendChild(document.createTextNode(sl.label));
     if (timingBadge) mealTypeEl.appendChild(timingBadge);
     card.appendChild(mealTypeEl);
-    card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f), txt(r.n)]));
-    card.appendChild(h('div', {'class': 'meal-kcal'}, r.k + ' kcal'));
+    card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f || ''), txt(r.n || 'Repas')]));
+    card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal'));
     var mc = h('div', {'class': 'meal-macros'});
-    mc.appendChild(h('span', {}, 'G ' + r.g + 'g'));
-    mc.appendChild(h('span', {}, 'P ' + r.p + 'g'));
-    mc.appendChild(h('span', {}, 'L ' + r.l + 'g'));
+    mc.appendChild(h('span', {}, 'G ' + (r.g || 0) + 'g'));
+    mc.appendChild(h('span', {}, 'P ' + (r.p || 0) + 'g'));
+    mc.appendChild(h('span', {}, 'L ' + (r.l || 0) + 'g'));
     card.appendChild(mc);
     var lv = r.lv || 0;
     var stars = '';
@@ -2989,6 +3175,7 @@ function renderStep9(p) {
     card.appendChild(h('div', {'class': 'meal-level'}, stars));
     card.appendChild(h('div', {'class': 'swap-btn', onclick: function(e) {
       e.stopPropagation();
+      if (S.modalRecipe) return; // guard: no swap while recipe modal is open
       swapMeal(S.selectedDay, sl.key);
       bb('meal_swap', {day: S.selectedDay, slot: sl.key});
       if (window.GAMIFICATION) {
@@ -3180,7 +3367,7 @@ function renderStep9(p) {
 
   // Bouton liste de courses améliorée — affiche le nombre d'articles en temps réel
   var _shopList = ((window.RecipeEngine && S.weekPlan) ? window.RecipeEngine.generateShoppingList(S.weekPlan, {shopFreq: S.shopFreq}) : []) || [];
-  var _shopTotal = _shopList.reduce(function(n, cat) { return n + cat.items.length; }, 0);
+  var _shopTotal = _shopList.reduce(function(n, cat) { return n + (cat && cat.items ? cat.items.length : 0); }, 0);
   var _shopLabel = window.t('shop.title') + (_shopTotal > 0 ? ' — ' + _shopTotal + ' articles' : '');
   var btnShop = h('button', {
     'class': 'btn-secondary',
@@ -3193,18 +3380,39 @@ function renderStep9(p) {
   p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:16px;background:var(--black2)', onclick: function() { window.exportDayPDF(S.selectedDay); }}, '\u21e9 Exporter le jour en PDF'));
   p.appendChild(h('div', {style: 'height:8px'}));
   p.appendChild(h('button', {'class': 'regen-btn', onclick: function() {
-    if (window.computeNutritionState) window.computeNutritionState(false);
-    var _wkR = generateWeek();
-    if (Array.isArray(_wkR) && _wkR.length > 0) S.weekPlan = _wkR;
-    S._weekPlanGeneratedAt = new Date().toISOString();
-    // Sync plan nutrition vers Supabase
-    if (window.SupaSync && S.weekPlan) {
-      var _monday = new Date();
-      _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
-      SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+    // CRITIQUE-G1: anti race-condition (même pattern que génération initiale)
+    if (window._nutritionGenerating) return;
+    window._nutritionGenerating = true;
+    try {
+      if (window.computeNutritionState) window.computeNutritionState(false);
+      // C-02: vider le plan existant avant regen — évite que l'échec reste invisible
+      S.weekPlan = null;
+      var _wkR = generateWeek();
+      if (Array.isArray(_wkR) && _wkR.length > 0) {
+        S.weekPlan = _wkR;
+        S._weekPlanGeneratedAt = new Date().toISOString();
+        // Figer le hash pour éviter une régénération silencieuse au prochain renderStep9
+        var _hR = window.getPlanHash ? window.getPlanHash() : '';
+        if (_hR) S._planHash = _hR;
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+        // Sync plan nutrition vers Supabase
+        if (window.SupaSync) {
+          try {
+            var _monday = new Date();
+            _monday.setDate(_monday.getDate() - _monday.getDay() + 1);
+            SupaSync.saveMealPlan(_monday.toISOString().slice(0, 10), S.weekPlan);
+          } catch(e) { console.warn('[nutrition] regen saveMealPlan error:', e); }
+        }
+        bb('week_regenerated', {});
+      } else {
+        // IMPORTANT-G2: feedback si pool vide
+        console.warn('[nutrition] regen: generateWeek() a retourné un plan vide');
+        alert('Impossible de générer un nouveau plan. Vérifiez vos préférences alimentaires.');
+      }
+      window.render();
+    } finally {
+      window._nutritionGenerating = false;
     }
-    bb('week_regenerated', {});
-    window.render();
   }}, '\u21bb ' + window.t('onb.s9.generate')));
   p.appendChild(h('div', {style: 'height:12px'}));
   p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux r\u00e9sultats'));
@@ -3218,7 +3426,14 @@ function renderStep9(p) {
     onclick: function() {
       if (!confirm('Refaire le questionnaire nutrition ? Votre plan actuel sera supprimé.')) return;
       S.weekPlan = null;
-      goStep(1);
+      S._nm = null;
+      S._weekPlanGeneratedAt = null;
+      S._planHash = '';
+      S.mealsLogged = {};
+      // Bypass goStep(1) auto-skip — force step 1 so users can change sex and all preferences
+      S.nStep = 1;
+      if (window.saveProfile) saveProfile();
+      window.render();
     }
   }, '\u2699 Modifier mes pr\u00e9f\u00e9rences nutritionnelles');
   p.appendChild(btnReset);
@@ -3234,6 +3449,7 @@ function renderStep9(p) {
       onclick: function() {
         window.S.view = 'sport';
         window.S.sStep = 0;
+        window.S.sportType = null; // permettre le re-choix de sport
         if (window.saveProfile) window.saveProfile();
         if (window.render) window.render();
       }
@@ -3352,15 +3568,18 @@ function exportDayPDF(dayIdx) {
   doc.setTextColor(ivory[0], ivory[1], ivory[2]);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
   doc.text('SMART FIT COACH', M, 14);
+  // CRITIQUE-1: garde validité dayIdx avant tout accès à DAY_NAMES/weekPlan
+  if (typeof dayIdx !== 'number' || dayIdx < 0 || dayIdx > 6 || !S.weekPlan || !S.weekPlan[dayIdx]) {
+    alert('Aucun plan disponible pour ce jour.'); return;
+  }
   doc.setFontSize(16); doc.setFont('times', 'italic');
-  doc.text(DAY_NAMES[dayIdx] + ' \u2014 Plan du jour', M, 26);
+  doc.text((DAY_NAMES[dayIdx] || 'Jour') + ' \u2014 Plan du jour', M, 26);
   doc.setFontSize(7); doc.setFont('helvetica', 'normal');
   var tgt = calcTarget(), mc = calcMacros();
   doc.text(tgt + ' kcal  |  G ' + mc.g + 'g  |  P ' + mc.p + 'g  |  L ' + mc.l + 'g', M, 33);
   y = 46;
 
-  // Meals
-  if (!S.weekPlan || !S.weekPlan[dayIdx]) { alert('Aucun plan disponible pour ce jour.'); return; }
+  // Meals (guard already done above)
   var dayPlan = S.weekPlan[dayIdx];
   var slots = [{key: 'breakfast', label: 'PETIT-D\u00c9JEUNER'}, {key: 'lunch', label: 'D\u00c9JEUNER'}, {key: 'snack', label: 'COLLATION'}, {key: 'dinner', label: 'D\u00ceNER'}];
   var dayTotal = 0;
@@ -3411,7 +3630,7 @@ function exportDayPDF(dayIdx) {
   doc.text(dayTotal + ' kcal', W - M - 4, y + 4, {align: 'right'}); y += 14;
 
   // Medical warnings
-  if (S.medical.length > 0) {
+  if (Array.isArray(S.medical) && S.medical.length > 0) {
     doc.setFontSize(7); doc.setTextColor(106, 74, 26);
     doc.text('RECOMMANDATIONS M\u00c9DICALES', M, y); y += 4;
     doc.setFontSize(7); doc.setTextColor(grey[0], grey[1], grey[2]);
@@ -3755,18 +3974,23 @@ function resolveSignatureBowl(sig) {
 }
 
 function calcSaladMacros(sb) {
+  // CRITIQUE-E1: guard sb null
+  if (!sb) return { k: 0, p: 0, g: 0, l: 0 };
   var total = { k: 0, p: 0, g: 0, l: 0 };
-  if (sb.base) { total.k += sb.base.k; total.p += sb.base.p; total.g += sb.base.g; total.l += sb.base.l; }
-  (sb.proteins || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  (sb.veggies || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  (sb.fats || []).forEach(function(x) { total.k += x.k; total.p += x.p; total.g += x.g; total.l += x.l; });
-  if (sb.sauce) { total.k += sb.sauce.k; total.p += sb.sauce.p; total.g += sb.sauce.g; total.l += sb.sauce.l; }
+  // IMPORTANT-E2: fallbacks || 0 pour éviter NaN si ingrédient incomplet
+  if (sb.base) { total.k += (sb.base.k||0); total.p += (sb.base.p||0); total.g += (sb.base.g||0); total.l += (sb.base.l||0); }
+  (sb.proteins || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  (sb.veggies || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  (sb.fats || []).forEach(function(x) { total.k += (x.k||0); total.p += (x.p||0); total.g += (x.g||0); total.l += (x.l||0); });
+  if (sb.sauce) { total.k += (sb.sauce.k||0); total.p += (sb.sauce.p||0); total.g += (sb.sauce.g||0); total.l += (sb.sauce.l||0); }
   return { k: Math.round(total.k), p: Math.round(total.p), g: Math.round(total.g), l: Math.round(total.l) };
 }
 
 function renderSaladBar(p) {
   var S = window.S;
   var sb = S.saladBar;
+  // CRITIQUE-E1: guard sb null — évite crash si saladBar non initialisé
+  if (!sb) { p.innerHTML = ''; return; }
   p.innerHTML = '';
 
   // Macro targets — calculés selon le slot via getMealSplit()
@@ -4109,6 +4333,7 @@ function renderSaladBar(p) {
       if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
       S.weekPlan[S.selectedDay][slot] = saladRecipe;
       S.saladBar.open = false;
+      try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saladBar saveProfile error:', e); }
       window.render();
     }
   }, 'Valider ma composition — ' + (sb.mealTarget === 'breakfast' ? window.t('onb.s9.breakfast') : sb.mealTarget === 'snack' ? window.t('onb.s9.snack') : sb.mealTarget === 'dinner' ? window.t('onb.s9.dinner') : window.t('onb.s9.lunch')));
@@ -5136,7 +5361,7 @@ function showSmoothieModal(sm) {
 
   // Tips
   if (sm.tips) {
-    var tipDiv = h('div', {style:'margin:12px 20px 0;background:rgba(26,74,26,0.06);border-left:3px solid var(--green,#1A4A1A);padding:10px 12px;border-radius:0 8px 8px 0;font-size:13px;color:var(--text,#0A0A09);line-height:1.5'}, '💡 ' + sm.tips);
+    var tipDiv = h('div', {style:'margin:12px 20px 0;background:var(--greenbg,rgba(26,74,26,0.06));border-left:3px solid var(--green,#1A4A1A);padding:10px 12px;border-radius:0 2px 2px 0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6'}, sm.tips);
     body.appendChild(tipDiv);
   }
   body.appendChild(h('div', {style:'height:12px'}));
@@ -5167,6 +5392,7 @@ function showSmoothieModal(sm) {
       var snackTargetBefore = split ? Math.round(totalTarget * split.pctSnack) : Math.round(totalTarget * 0.15);
       var delta = sm.cal - snackTargetBefore;
       var dayPlan = S.weekPlan[S.selectedDay];
+      if (!dayPlan) return; // guard: weekPlan can be shorter than expected
       dayPlan.snack = smoothieAsRecipe;
       if (split && Math.abs(delta) > 30) {
         var otherSum = split.pctBreak + split.pctLunch + split.pctDinner;
@@ -5191,12 +5417,12 @@ function showSmoothieModal(sm) {
           });
         }
       }
+      try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] smoothie saveProfile error:', e); }
       var el = document.getElementById('_smoothie_modal_ov');
       if (el && el.parentNode) el.parentNode.removeChild(el);
       S.smoothieBarOpen = false;
-      S.nStep = 12;
+      goStep(12);
       showToast('✅ Smoothie ajouté en collation — Plan recalculé', 2500);
-      if (typeof window.render === 'function') window.render();
     }
   }, '🥛 Ajouter à mon plan — Collation '+dayLabel);
   footer.appendChild(addBtn);
@@ -5558,151 +5784,26 @@ function exportShoppingListPDF(list, shopChecked) {
   doc.save('liste-courses-smartfitcoach.pdf');
 }
 
-// ─── SALADE COMPOSER (modal fullscreen) ───
+// ─── SALADE COMPOSER ───
+// State-based approach: sets S.saladBar.open = true and calls render().
+// Avoids DOM overlay that was destroyed by any window.render() call.
 window.openSaladComposer = function openSaladComposer(slotKey) {
   var S = window.S;
   if (!S) return;
-
-  // Ensure saladBar state is initialised
   if (!S.saladBar) {
     S.saladBar = { open: false, base: null, proteins: [], veggies: [], fats: [], sauce: null, mealTarget: 'lunch' };
   }
-  // Align mealTarget with the requested slot
+  // Reset ingredients for a fresh composition
+  S.saladBar.base = null;
+  S.saladBar.proteins = [];
+  S.saladBar.veggies = [];
+  S.saladBar.fats = [];
+  S.saladBar.sauce = null;
+  S.saladBar.open = true;
   if (slotKey === 'breakfast' || slotKey === 'lunch' || slotKey === 'snack' || slotKey === 'dinner') {
     S.saladBar.mealTarget = slotKey;
   }
-
-  // ── Compute calorie target for this slot ──
-  function getSlotTargetCals(slot) {
-    var totalCals = window.calcTarget ? window.calcTarget() : 0;
-    if (!totalCals) totalCals = (S._nm && S._nm.calories) ? S._nm.calories : 2000;
-    var split = window.getMealSplit ? window.getMealSplit() : null;
-    var pct;
-    if (split) {
-      if (slot === 'breakfast')    pct = split.pctBreak;
-      else if (slot === 'lunch')   pct = split.pctLunch;
-      else if (slot === 'snack')   pct = split.pctSnack || 0.10;
-      else                         pct = split.pctDinner;
-    } else {
-      var defaults = { breakfast: 0.25, lunch: 0.40, snack: 0.10, dinner: 0.30 };
-      pct = defaults[slot] || 0.30;
-    }
-    return Math.round(totalCals * pct);
-  }
-
-  var targetCals = getSlotTargetCals(slotKey);
-
-  // ── Build fullscreen overlay ──
-  var root = document.getElementById('app') || document.body;
-
-  // Remove any existing composer overlay to avoid duplicates
-  var existing = document.getElementById('salad-composer-overlay');
-  if (existing) existing.parentNode.removeChild(existing);
-
-  var overlay = document.createElement('div');
-  overlay.id = 'salad-composer-overlay';
-  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9000;background:var(--bg,#FAF9F6);display:flex;flex-direction:column;overflow:hidden';
-
-  // Scrollable content zone — renderSaladBar will populate this
-  var contentZone = document.createElement('div');
-  contentZone.style.cssText = 'flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;';
-
-  // Render the saladBar composer into the content zone
-  renderSaladBar(contentZone);
-
-  // Patch the "← Retour" button inserted by renderSaladBar to close our overlay instead
-  var backBtn = contentZone.querySelector('button');
-  if (backBtn) {
-    backBtn.onclick = function() {
-      overlay.parentNode && overlay.parentNode.removeChild(overlay);
-    };
-  }
-
-  // ── Slot label ──
-  var slotLabels = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
-  var slotLabel = slotLabels[slotKey] || slotKey;
-
-  // ── Sticky "Insérer" button bar ──
-  var insertBar = document.createElement('div');
-  insertBar.style.cssText = 'flex-shrink:0;padding:12px 16px 24px;background:var(--bg,#FAF9F6);border-top:1px solid var(--border,#D8D8D0);';
-
-  var insertBtn = document.createElement('button');
-  insertBtn.style.cssText = 'width:100%;padding:15px;border:none;border-radius:2px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;';
-  insertBtn.textContent = '\u2705 Insérer dans mon repas — ' + slotLabel;
-
-  insertBtn.onclick = function() {
-    var sb = S.saladBar;
-
-    // a. Collect selected ingredients
-    var allItems = [];
-    if (sb.base) allItems.push(sb.base);
-    (sb.proteins || []).forEach(function(x) { allItems.push(x); });
-    (sb.veggies  || []).forEach(function(x) { allItems.push(x); });
-    (sb.fats     || []).forEach(function(x) { allItems.push(x); });
-    if (sb.sauce) allItems.push(sb.sauce);
-
-    if (allItems.length === 0) {
-      alert('Veuillez sélectionner au moins un ingrédient.');
-      return;
-    }
-
-    // b. Calculate current macros
-    var macros = calcSaladMacros(sb);
-    var saladCals = macros.k || 1; // avoid division by zero
-
-    // c. Scale to target calories
-    var ratio = targetCals > 0 ? targetCals / saladCals : 1;
-    var scaledCals    = Math.round(macros.k * ratio);
-    var scaledProtein = Math.round(macros.p * ratio);
-    var scaledCarbs   = Math.round(macros.g * ratio);
-    var scaledFat     = Math.round(macros.l * ratio);
-
-    // Scale each ingredient qty
-    var scaledItems = allItems.map(function(x) {
-      return { name: x.name, qty: Math.round((x.qty || 0) * ratio), unit: x.unit || 'g' };
-    });
-
-    // d. Ingredients string
-    var ingredientsList = scaledItems.map(function(x) {
-      return x.name + ' ' + x.qty + (x.unit || 'g');
-    }).join(', ');
-
-    // e. Build virtual recipe object
-    var saladRecipe = {
-      _id: 'SALAD_' + Date.now(),
-      n: 'Ma Salade Personnalisée',
-      type: slotKey,
-      cal: scaledCals,
-      k: scaledCals,
-      p: scaledProtein,
-      g: scaledCarbs,
-      f: scaledFat,
-      l: scaledFat,
-      i: ingredientsList,
-      _scaledIngredients: scaledItems,
-      _scalingRatio: ratio,
-      st: [
-        'Composer votre salade selon les ingrédients sélectionnés',
-        'Mélanger tous les ingrédients',
-        'Assaisonner selon vos goûts'
-      ],
-      tags: ['salade', 'custom', 'composer'],
-      custom: true
-    };
-
-    // f. Insert into weekPlan and close
-    if (!S.weekPlan) S.weekPlan = [];
-    if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
-    S.weekPlan[S.selectedDay][slotKey] = saladRecipe;
-
-    overlay.parentNode && overlay.parentNode.removeChild(overlay);
-    if (window.render) window.render();
-  };
-
-  insertBar.appendChild(insertBtn);
-  overlay.appendChild(contentZone);
-  overlay.appendChild(insertBar);
-  root.appendChild(overlay);
+  if (window.render) window.render();
 };
 
 // ─── STEP 6: BODY SCAN — ANALYSE DE COMPOSITION CORPORELLE (OPTIONNEL) ───
@@ -5795,6 +5896,7 @@ function renderBodyScan(p) {
 
   // Skip link
   p.appendChild(h('button', {style: 'display:block;margin:16px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);cursor:pointer;padding:10px;min-height:44px', onclick: function() {
+    S.bodyScanDone = true;
     goStep(7);
   }}, 'Passer cette \u00e9tape \u2192'));
   p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));
@@ -5805,8 +5907,9 @@ function renderBodyScan(p) {
 // Si S._bodyFatEstimate est défini, utilise Katch-McArdle (déjà géré dans calcBMR()).
 function renderProvisionalPreview(p) {
   if (!S.sex || !S.weight || !S.height || S.goal === null || S.goal === undefined) {
-    goStep(4); return;
+    goStep(1); return; // goStep(1) contient la logique d'auto-skip vers le bon step manquant
   }
+  if (S.activity === null || S.activity === undefined) { goStep(5); return; }
   renderProgressBar(p, 7, 12);
   var _bmr = typeof calcBMR === 'function' ? calcBMR() : 0;
   var _tdee = typeof calcTDEE === 'function' ? Math.round(calcTDEE()) : 0;

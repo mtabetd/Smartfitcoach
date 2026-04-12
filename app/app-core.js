@@ -196,7 +196,8 @@ var MEDICAL_ADVICE={
   goutte:{warn:'Évitez les abats, sardines, anchois. Buvez 2L+ d\'eau/jour.',macroAdj:null},
   hta:{warn:'Régime hyposodé (< 5g sel/jour). Augmentez potassium (banane, épinard).',macroAdj:null},
   hta_severe:{warn:'HTA sévère : régime hyposodé strict (< 3g sel/jour). Évitez tout effort intense. Avis cardiologue obligatoire.',macroAdj:null},
-  cardio:{warn:'Réduisez sodium et graisses saturées. Plus d\'oméga-3.',macroAdj:{g:.03,p:.02,l:-.05}},
+  // ESC 2021 : cardiopathie → ne PAS réduire lipides totaux (MUFA/PUFA cardioprotecteurs) — qualité graisses, pas quantité
+  cardio:{warn:'Réduisez sodium et graisses saturées. Plus d\'oméga-3.',macroAdj:{g:.03,p:.02,l:0}},
   insuffisance_card:{warn:'Restriction sodique stricte. Consultez votre cardiologue pour les apports hydriques.',macroAdj:null},
   irc:{warn:'Contrôlez les protéines (0.55-0.60g/kg — KDOQI 2020). Limitez potassium et phosphore. Glucides complexes pour compenser l\'énergie.',macroAdj:{g:.08,p:0,l:.02}},
   calculs:{warn:'Buvez 2.5L+ d\'eau/jour. Limitez les oxalates (épinards, chocolat).',macroAdj:null},
@@ -205,7 +206,8 @@ var MEDICAL_ADVICE={
   crohn:{warn:'Fibres solubles préférées. Évitez les aliments irritants en poussée.',macroAdj:null},
   rch:{warn:'Alimentation anti-inflammatoire. Oméga-3, curcuma.',macroAdj:null},
   coeliaque:{warn:'Exclusion totale du gluten (blé, orge, seigle, avoine contaminée).',macroAdj:null},
-  nash:{warn:'Réduction des sucres ajoutés et graisses saturées. Perte de poids progressive.',macroAdj:{g:-.08,p:.03,l:.05}},
+  // ESPEN 2016 / NAFLD : NASH → réduire sucres et glucides à IG élevé, lipides neutres (ne pas augmenter)
+  nash:{warn:'Réduction des sucres ajoutés et graisses saturées. Perte de poids progressive.',macroAdj:{g:-.08,p:.03,l:0}},
   hypothyroidie:{warn:'Assurez iode et sélénium. Évitez excès de soja et crucifères crus.',macroAdj:null},
   hyperthyroidie:{warn:'Apport calorique augmenté. Calcium et vitamine D importants.',macroAdj:null},
   sopk:{warn:'Index glycémique bas, anti-inflammatoire. Oméga-3 et magnésium.',macroAdj:{g:-.08,p:.04,l:.04}},
@@ -216,7 +218,8 @@ var MEDICAL_ADVICE={
   hashimoto:{warn:'Anti-inflammatoire. Certains patients bénéficient du sans gluten.',macroAdj:null},
   // Ostéoporose : calcium 1200mg/j + vitamine D 800-2000 UI/j + protéines ≥1.2g/kg (NOF 2022, ESCEO 2019)
   // Exercice en charge (marche, muscu légère ≤70% 1RM) réduit le risque fracturaire (Kohrt et al. MSSE 2004)
-  osteoporose:{warn:'Calcium 1200 mg/j + Vitamine D 800-2000 UI/j (NOF 2022). Protéines ≥ 1.2 g/kg pour maintien osseux (ESCEO 2019). Exercice en charge recommandé (marche, muscu légère ≤70% 1RM). Évitez alcool et tabac.',macroAdj:{g:-.03,p:.05,l:-.02}},
+  // NOF 2022 / ESCEO 2019 : ostéoporose → pas de restriction lipidique (vit D liposoluble, nécessite graisses)
+  osteoporose:{warn:'Calcium 1200 mg/j + Vitamine D 800-2000 UI/j (NOF 2022). Protéines ≥ 1.2 g/kg pour maintien osseux (ESCEO 2019). Exercice en charge recommandé (marche, muscu légère ≤70% 1RM). Évitez alcool et tabac.',macroAdj:{g:-.03,p:.05,l:0}},
   // Polyarthrite rhumatoïde : oméga-3 3-5g/j EPA+DHA (Calder, AJCN 2015), réduction TNF-alpha
   polyarthrite:{warn:'Oméga-3 EPA+DHA 3-5g/j — réduction inflammation (Calder, AJCN 2015). Réduisez oméga-6 (huiles végétales raffinées) et aliments ultra-transformés (pro-inflammatoires). Alimentation méditerranéenne recommandée (Sköldstam et al. Scand J Rheumatol 2003). Curcuma (curcumine) : anti-inflammatoire adjuvant.',macroAdj:null},
   // Spondylarthrite ankylosante : Sieper & Poddubnyy, Lancet 2017
@@ -307,26 +310,31 @@ window.getMealSplit=getMealSplit;
 
 // ─── TRAINING DAY DETECTION ────────────────────────────────────────────────
 // getDayType(dayIndex) — détermine si un jour de la semaine (0=Lun..6=Dim)
-// est un jour d'entraînement ou de repos. Distribue N jours d'entraînement
-// sur la semaine de manière optimale (repos répartis uniformément).
+// est un jour d'entraînement ou de repos.
+// Source de vérité #1 : weeklyCalendar (Calendrier Intelligent — choix explicite utilisateur)
+// Source de vérité #2 : trainingDaysSelected (jours sélectionnés en onboarding)
+// Source de vérité #3 : sportDays (distribution standard N jours/semaine, fallback)
 // Retourne {isTraining, trainSlot, preSlot, postSlot}
 function getDayType(dayIndex) {
   var s = window.S;
   if (!s) return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
 
-  // Si l'utilisateur a sélectionné des jours spécifiques → utiliser ces jours en priorité
-  if (Array.isArray(s.trainingDaysSelected) && s.trainingDaysSelected.length > 0) {
-    var isTrainingSelected = s.trainingDaysSelected.indexOf(dayIndex) !== -1;
-    if (!isTrainingSelected) {
-      return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
-    }
-    // Continuer pour calculer trainSlot/preSlot/postSlot ci-dessous
-    var isTraining = true;
-  } else {
+  var isTraining;
+
+  // Source de vérité #1 — Calendrier intelligent (weeklyCalendar)
+  // L'utilisateur a explicitement planifié ses sports → priorité maximale
+  if (s.weeklyCalendar && typeof s.weeklyCalendar === 'object' &&
+      s.weeklyCalendar[String(dayIndex)] !== undefined) {
+    isTraining = (s.weeklyCalendar[String(dayIndex)] !== 'repos');
+  }
+  // Source de vérité #2 — Jours spécifiques sélectionnés en onboarding
+  else if (Array.isArray(s.trainingDaysSelected) && s.trainingDaysSelected.length > 0) {
+    isTraining = s.trainingDaysSelected.indexOf(dayIndex) !== -1;
+  }
+  // Source de vérité #3 — Distribution standard N jours/semaine (fallback)
+  else {
     var nDays = s.sportDays || 0;
     if (nDays <= 0) return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
-
-    // Distribution standard des jours d'entraînement sur 7 jours (fallback)
     var LAYOUTS = {
       1: [0],              // Lun
       2: [0, 3],           // Lun, Jeu
@@ -336,13 +344,14 @@ function getDayType(dayIndex) {
       6: [0, 1, 2, 3, 4, 5] // Lun-Sam
     };
     var trainingDays = LAYOUTS[Math.min(nDays, 6)] || LAYOUTS[3];
-    var isTraining = trainingDays.indexOf(dayIndex) >= 0;
+    isTraining = trainingDays.indexOf(dayIndex) >= 0;
   }
 
   if (!isTraining) {
     return { isTraining: false, trainSlot: null, preSlot: null, postSlot: null };
   }
 
+  // Calculer trainSlot/preSlot/postSlot selon nombre de repas et horaire d'entraînement
   var meals = s.mealsPerDay || 3;
   var trainTime = s.trainTime || 'afternoon';
   var trainSlot, preSlot, postSlot;
@@ -2281,7 +2290,7 @@ window.S = {
   view: 'auth', // 'auth','authRegister','dashboard','nutrition','sport'
   authError: '',
   // Nutrition wizard
-  nStep: 0, sex: null, age: 28, birthDate: null, weight: 75, height: 175,
+  nStep: 0, sex: null, prenom: '', age: null, birthDate: null, weight: null, height: null,
   lang: 'fr', weightUnit: 'kg', heightUnit: 'cm',
   activity: null, train: [], sleep: null, medical: [], goal: null,
   cookLevel: 2, whey: null, wheyFlavors: [], allergies: [], intolerances: [],
@@ -2569,6 +2578,7 @@ function getMusculationWeight(exerciseName, sets, reps) {
   var s = window.S;
   var profile = s.muscuStrengthProfile || {};
 
+  if (!exerciseName || typeof exerciseName !== 'string') return null;
   var exerciseLower = exerciseName.toLowerCase();
   var baseWeight = null;
   var ratio = 1.0;
@@ -2777,6 +2787,7 @@ function getCurrentCyclePhase() {
   if (!s.cycleTracking || !s.lastPeriodDate || s.sex !== 'femme') return null;
 
   var start = new Date(s.lastPeriodDate);
+  if(isNaN(start.getTime())) return null; // Date invalide → ne pas propager NaN
   var now = new Date();
   var diffDays = Math.floor((now - start) / 86400000);
   var cycleLen = s.cycleLength || 28;
@@ -2829,7 +2840,7 @@ var PREGNANCY_TRIMESTERS = [
       '150 min/semaine d\'activit\u00e9 mod\u00e9r\u00e9e (OMS)'
     ],
     intensityFactor: 0.6,
-    forbiddenExercises: ['burpees', 'jumping jacks', 'box jumps', 'abdominaux classiques', 'soulev\u00e9 de terre lourd']
+    forbiddenExercises: ['crunch', 'burpees', 'jumping jacks', 'box jumps', 'abdominaux classiques', 'soulev\u00e9 de terre lourd']
   },
   {
     id: 'trimester2',
@@ -2926,6 +2937,7 @@ function getPregnancyWeightGuideline() {
   var s = window.S;
   if (!s.pregnant) return null;
   var bmi = (s.prePregnancyWeight && s.height && s.height >= 100) ? s.prePregnancyWeight / Math.pow(s.height / 100, 2) : calcBMI();
+  if (!bmi) return null; // cannot compute guideline without BMI
   var guideline = null;
   for (var i = 0; i < PREGNANCY_WEIGHT_GAIN.length; i++) {
     var pg = PREGNANCY_WEIGHT_GAIN[i];
@@ -2937,13 +2949,13 @@ function getPregnancyWeightGuideline() {
   var t2t3Weeks = Math.max(0, week - 13);
   var expectedGainMin = t1Gain + t2t3Weeks * guideline.weeklyGainT2T3[0];
   var expectedGainMax = t1Gain + t2t3Weeks * guideline.weeklyGainT2T3[1];
-  var baseWeight = s.prePregnancyWeight || s.weight;
+  var baseWeight = s.prePregnancyWeight || s.weight || 0;
   return {
     category: guideline.category,
     totalGainMin: guideline.totalGainMin,
     totalGainMax: guideline.totalGainMax,
-    expectedWeightMin: Math.round((baseWeight + expectedGainMin) * 10) / 10,
-    expectedWeightMax: Math.round((baseWeight + expectedGainMax) * 10) / 10,
+    expectedWeightMin: baseWeight > 0 ? Math.round((baseWeight + expectedGainMin) * 10) / 10 : null,
+    expectedWeightMax: baseWeight > 0 ? Math.round((baseWeight + expectedGainMax) * 10) / 10 : null,
     currentExpectedGainMin: Math.round(expectedGainMin * 10) / 10,
     currentExpectedGainMax: Math.round(expectedGainMax * 10) / 10,
     weeklyGainRange: guideline.weeklyGainT2T3
@@ -2969,7 +2981,7 @@ function calcAdjustedWeight(){
 }
 window.calcAdjustedWeight=calcAdjustedWeight;
 
-function calcBMR(){var s=window.S;if(!s.sex)return 0;var _age=getAge();if(!_age||_age<13||_age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>230)return 0;
+function calcBMR(){var s=window.S;if(!s.sex)return 0;var _age=getAge();if(!_age||_age<13||_age>100)return 0;if(!s.weight||s.weight<30||s.weight>300)return 0;if(!s.height||s.height<100||s.height>300)return 0;
 // GROSSESSE : utiliser le poids pré-grossesse pour le BMR de base (ACOG 2018, OMS 2016)
 // Les calories supplémentaires (+340 T2 / +450 T3) s'ajoutent à ce TDEE de référence via calcTarget()
 // Utiliser s.weight actuel (gonflé par la grossesse) surestimerait le TDEE de base et additionnerait
@@ -2996,9 +3008,16 @@ if(_age>=65)bmrRaw=bmrRaw*0.95;
 return Math.round(bmrRaw)} // Mifflin-St Jeor 1990 (Frankenfield 2005) + correction seniors 65+ (Amirkalali 2008)
 function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined||!ACTIVITIES[s.activity])return 0;var selectedFactor=ACTIVITIES[s.activity].factor;// Auto-correct activity factor based on sport days (user may have selected wrong level)
 // Uses the MAXIMUM of user's selected factor and sport-based estimate
-var sportDays=s.sportDays||0;var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
-function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra}// Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
-base=Math.max(base,1800);return base}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
+// BUG A fix : utiliser trainingDaysSelected.length si disponible (plus précis que sportDays)
+var sportDays=Array.isArray(s.trainingDaysSelected)&&s.trainingDaysSelected.length>0?s.trainingDaysSelected.length:(s.sportDays||0);var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);
+// Hypothyroïdie : réduction métabolique ~15% (Mullur 2014 Physiol Rev — ralentissement métabolique clinique documenté)
+if(s.medical&&s.medical.indexOf('hypothyroidie')!==-1)effectiveFactor*=0.85;
+// Hyperthyroïdie : augmentation métabolique ~25% (Mullur 2014 Physiol Rev — accélération catabolique documentée)
+if(s.medical&&s.medical.indexOf('hyperthyroidie')!==-1)effectiveFactor*=1.25;
+return calcBMR()*effectiveFactor}
+function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();if(tri){base=Math.round(tdeeVal)+tri.trimester.calorieExtra;}else{base=Math.round(tdeeVal)+300;}// Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
+// Fallback +300 kcal = T2 par défaut (OMS 2016) si semaine non saisie — évite tout déficit silencieux
+base=Math.max(base,1800);return base;}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)
 // IMPORTANT : sans ce cap, un athlète élite (TDEE 3500+) en "cut -15%" pouvait avoir un déficit de 525-700 kcal/j
 if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}// Cap surplus à +500 kcal/j pour bulk/lean_bulk (ISSN 2017, ACSM — au-delà : accumulation graisseuse excessive)
@@ -3006,7 +3025,8 @@ if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.roun
 if((goalKey==='bulk'||goalKey==='lean_bulk')&&tdeeVal>0){base=Math.min(base,Math.round(tdeeVal+500));}// Allaitement : +500 kcal/j (ACOG 2022) — priorité sur l'objectif coupe/sèche
 if(s.medical&&s.medical.indexOf('allaitement')!==-1){return Math.max(Math.round(tdeeVal)+500,1800);}
 // TCA/anorexie : forcer maintenance, bloquer cut/shred (ANAD, IOC 2018 — RED-S prevention)
-if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
+// Profil incomplet (tdeeVal=0) : retourner plancher sécurisé pour éviter 0 kcal sur profil vulnérable
+if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.max(Math.round(tdeeVal),s.sex==='femme'?1800:1900);}
 // Adolescent (13-17 ans) : déficit max -300kcal/j (ACSM 2007, IOC 2018 — préservation croissance + pic de masse osseuse)
 // Surplus max +300kcal/j en bulk (ACSM adolescent — éviter accumulation graisseuse pendant croissance hormonale)
 var _ageT=getAge();if(_ageT>=13&&_ageT<18&&tdeeVal>0){
@@ -3016,7 +3036,8 @@ var _ageT=getAge();if(_ageT>=13&&_ageT<18&&tdeeVal>0){
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
 // Ménopause : réduction métabolique ~150 kcal/j (NAMS 2022, Poehlman 1995)
 // Plancher 1400 kcal/j maintenu — les femmes ménopausées doivent être encouragées à rester actives (NAMS 2022)
-if(s.sex==='femme'&&s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1400,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes) — femme uniquement
+if(s.sex==='femme'&&s.medical&&s.medical.indexOf('menopause')!==-1){base=base-150;// Re-enforce déficit cap -500 kcal : la réduction ménopause ne doit pas créer un déficit > 500 kcal/j (Helms 2014)
+if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}base=Math.max(1400,base);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes) — femme uniquement
 if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
 if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}
 // Plancher calorique sexe-spécifique (ISSN 2017, ACSM 2016, IOC 2018 RED-S prevention)
@@ -3034,6 +3055,21 @@ if(s.alcoholFreq&&s.alcoholFreq!=='never'&&typeof alcoholWeeklyKcal==='function'
   var alcDaily=Math.round(alcoholWeeklyKcal()/7);
   if(alcDaily>0){base=Math.max(kcalFloor,base-alcDaily);} // soustraire mais respecter le plancher
 }
+// targetWeight : réduction progressive du déficit/surplus quand l'objectif est proche
+// Quand |poids_actuel - poids_cible| <= 2 kg → réduire déficit/surplus de 50% pour éviter l'oscillation
+// Quand |poids_actuel - poids_cible| <= 1 kg → passer en quasi-maintien (déficit/surplus réduit à 25%)
+// Évite l'effet yoyo en fin de coupe/masse (recommandation ACSM 2016, Trexler 2014 — métabolic adaptation)
+if(s.targetWeight&&s.weight&&s.weight!==s.targetWeight&&tdeeVal>0){
+  var _twDiff=Math.abs(s.targetWeight-s.weight);
+  var _isLosing=(goalKey==='cut'||goalKey==='shred')&&s.targetWeight<s.weight;
+  var _isGaining=(goalKey==='bulk'||goalKey==='lean_bulk')&&s.targetWeight>s.weight;
+  if((_isLosing||_isGaining)&&_twDiff<=2){
+    var _twFactor=_twDiff<=1?0.25:0.50; // 25% si < 1kg, 50% si 1-2kg
+    var _twBase=Math.round(tdeeVal); // référence = TDEE (maintien)
+    base=Math.round(_twBase+(_twFactor*(base-_twBase))); // interpolation vers maintien
+    base=Math.max(base,kcalFloor);
+  }
+}
 return base} // ISSN 2017 / ACSM 2016: plancher universel ≥1400 kcal/j (femme et homme)
 function calcMacros(){
   var s=window.S;var c=calcTarget();
@@ -3041,6 +3077,10 @@ function calcMacros(){
   // Pour les macros g/kg : utiliser le poids ajusté si obèse (ASPEN 2016, ESPEN 2015)
   // Les calories (calcTarget/TDEE) restent basées sur le poids réel
   var bw=calcAdjustedWeight()||75;var goalKey=GOALS[s.goal].key;
+  // TCA : forcer macros maintien même si l'objectif persisté est sèche/coupe/masse
+  // calcTarget() redirige déjà vers maintenance — les macros doivent suivre (évite ppk sèche 3.19g/kg sur profil TCA)
+  // ANAD, IOC 2018 — RED-S prevention
+  if(s.medical&&s.medical.indexOf('tca')!==-1)goalKey='maintain';
   // ─── PROTÉINES (g/kg) — Table complète par sexe, activité et objectif ───
   // Sources : Phillips & Van Loon 2011 (BJSM) | Morton 2018 (BJSM meta-analysis)
   //           Tarnopolsky 2000 (MSSE) : femmes nécessitent ~13% de moins (oestrogène anti-catabolique,
@@ -3093,6 +3133,8 @@ function calcMacros(){
     } else {
       ppk=isFemale?1.6:1.8;  // Standard bulk : H=1.8, F=1.6 (ISSN 2017)
     }
+    // Ado 13-17 ans : plafonner ppk bulk à 1.8g/kg max (ACSM 2007 adolescent — excès protéines inutile avant maturité hormonale)
+    var _ageBulk=getAge();if(_ageBulk>=13&&_ageBulk<18&&ppk>1.8)ppk=1.8;
 
   } else {
     // ─── SÈCHE / COUPE — table complète par niveau d'activité (comme maintain) ───
@@ -3142,7 +3184,12 @@ function calcMacros(){
   // Vegan/vegetarian: adjust protein for lower DIAAS bioavailability of plant proteins (Messina 2019, ISSN 2017)
   if(s.regime===3)ppk=Math.round(ppk*1.10*10)/10; // Végan: +10% (DIAAS correction — FAO 2013, PMC 2020)
   else if(s.regime===2)ppk=Math.round(ppk*1.10*10)/10; // Végétarien lacto-ovo: +10% (DIAAS correction — FAO 2013, PMC 2020)
-  ppk=Math.max(0.8,Math.min(3.5,ppk));
+  // IRC : ne pas appliquer le plancher universel 0.8g/kg — le cap KDOQI 0.6g/kg est plus restrictif
+  // Correction arrondi DIAAS : round(0.6×1.10×10)/10 = round(6.6)/10 = 7/10 = 0.70 > cap 0.66
+  // → re-enforce ppk au cap IRC dès ici pour que pGrams et proteinPerKg retourné soient cohérents
+  var _isIrc=s.medical&&s.medical.indexOf('irc')!==-1;
+  if(_isIrc){var _ircPpkCap=(s.regime===3||s.regime===2)?0.66:0.60;if(ppk>_ircPpkCap)ppk=_ircPpkCap;}
+  ppk=_isIrc?Math.max(0.1,Math.min(3.5,ppk)):Math.max(0.8,Math.min(3.5,ppk));
   var pGrams=Math.round(bw*ppk);
   // Pregnancy protein bonus: +25g/day T2+T3 (ACOG 2018, WHO)
   if(s.pregnant){var triP=getPregnancyTrimester();if(triP&&triP.trimester.proteinExtra)pGrams=Math.round(pGrams+triP.trimester.proteinExtra);}
@@ -3185,7 +3232,8 @@ function calcMacros(){
   if(s.medical){for(var i=0;i<s.medical.length;i++){var mId=s.medical[i];var a=MEDICAL_ADVICE[mId];if(a&&a.macroAdj){// ménopause, sopk, grossesse, allaitement : ajustements féminins uniquement
 var femaleOnly=['menopause','sopk','grossesse','allaitement'];if(femaleOnly.indexOf(mId)!==-1&&s.sex!=='femme')continue;gGrams=Math.round(gGrams*(1+(a.macroAdj.g||0)));pGrams=Math.round(pGrams*(1+(a.macroAdj.p||0)));lGrams=Math.round(lGrams*(1+(a.macroAdj.l||0)))}}}
   // Re-enforce IRC protein cap after all medical adjustments (KDOQI 2020: 0.6g/kg CKD 3-5 non-dialysis)
-  if(s.medical&&s.medical.indexOf('irc')!==-1){var maxIrcP=Math.round(bw*0.6);if(pGrams>maxIrcP)pGrams=maxIrcP;}
+  // Vegan/végétarien IRC : +10% DIAAS correction → cap 0.66g/kg (FAO 2013, Messina 2019)
+  if(s.medical&&s.medical.indexOf('irc')!==-1){var _ircCapGpkg=(s.regime===3||s.regime===2)?0.66:0.60;var maxIrcP=Math.round(bw*_ircCapGpkg);if(pGrams>maxIrcP)pGrams=maxIrcP;}
   // Diabète gestationnel : plafond glucides 175-200g/j (ADA 2023, ACOG 2018)
   if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){var gdCarbMax=Math.min(200,Math.max(175,gGrams));if(gGrams>gdCarbMax)gGrams=gdCarbMax;}
   // Master athlete 60+ : résistance anabolique → leucine seuil 40g/meal (Churchward-Venne 2016, Moore 2015)
@@ -3212,13 +3260,27 @@ gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0
     if(newG>=130){
       gGrams=newG;
       // Re-enforce GD carb cap post-normalisation (ADA 2023: max 175-200g/j)
-      if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){gGrams=Math.min(200,gGrams);}
+      // Si le cap réduit les glucides, redistribuer les calories libérées sur lipides puis protéines
+      // (sans redistribution → écart calorique ~528 kcal sur profil DG+végan)
+      if(s.medical&&s.medical.indexOf('diabete_gest')!==-1&&gGrams>200){
+        var _dgFreedKcal=(gGrams-200)*4;gGrams=200;
+        var _lipAbsCap=Math.round(bw*1.5);
+        var _addLip=Math.min(Math.floor(_dgFreedKcal/9),Math.max(0,_lipAbsCap-lGrams));
+        if(_addLip>0){lGrams+=_addLip;var _dgStillFree=_dgFreedKcal-_addLip*9;if(_dgStillFree>36)pGrams+=Math.floor(_dgStillFree/4);}
+        else{pGrams+=Math.floor(_dgFreedKcal/4);}
+      } else if(s.medical&&s.medical.indexOf('diabete_gest')!==-1){gGrams=Math.min(200,gGrams);}
     }else{
       gGrams=130;
       var remainGap=c-(gGrams*4+pGrams*4+lGrams*9);
       lGrams=Math.max(20,lGrams+Math.round(remainGap/9));
+      // Re-enforce lipid floor for women (ISSN 2021: ≥0.7g/kg — santé hormonale, production oestrogènes)
+      if(s.sex==='femme')lGrams=Math.max(Math.round(bw*0.7),lGrams);
     }
   }
+  // FINAL IRC re-enforce — après planchers absolus Math.max(40,...) et redistribution DG
+  // Ces opérations peuvent repousser pGrams au-dessus du cap KDOQI (ex: 60kg → floor 40 > cap 36)
+  // C'est le dernier garde-fou garantissant que le plan servi respecte KDOQI 2020 sans exception
+  if(_isIrc){var _finalIrcCap=(s.regime===3||s.regime===2)?0.66:0.60;var _finalMaxP=Math.round(bw*_finalIrcCap);if(pGrams>_finalMaxP){pGrams=_finalMaxP;ppk=Math.round(pGrams/bw*100)/100;}}
   return{g:gGrams,p:pGrams,l:lGrams,proteinPerKg:ppk,fatPerKg:fpk,carbsPerKg:Math.round(gGrams/bw*10)/10,cyclePhase:(!s.pregnant&&s.sex==='femme'&&s.cycleTracking)?getCurrentCyclePhase():null}
 }
 function calcBMI(){var s=window.S;if(!s.height||!s.weight||s.height<100)return null;var ht=s.height/100;return Math.round((s.weight/Math.pow(ht,2))*10)/10}
@@ -3362,7 +3424,7 @@ function calcFiberTarget(){
 }
 window.calcFiberTarget=calcFiberTarget;
 
-function getAge(){var s=window.S;if(s.birthDate){var today=new Date();var b=new Date(s.birthDate);if(!isNaN(b.getTime())){var a=today.getFullYear()-b.getFullYear();var m=today.getMonth()-b.getMonth();if(m<0||(m===0&&today.getDate()<b.getDate()))a--;return a;}}return s.age||28;}
+function getAge(){var s=window.S;if(s.birthDate){var today=new Date();var b=new Date(s.birthDate);if(!isNaN(b.getTime())){var a=today.getFullYear()-b.getFullYear();var m=today.getMonth()-b.getMonth();if(m<0||(m===0&&today.getDate()<b.getDate()))a--;return a;}}return s.age||null;}
 function isBirthday(){var s=window.S;if(!s.birthDate)return false;var today=new Date();var b=new Date(s.birthDate);if(isNaN(b.getTime()))return false;return today.getMonth()===b.getMonth()&&today.getDate()===b.getDate();}
 window.getAge=getAge;window.isBirthday=isBirthday;
 
@@ -3372,7 +3434,7 @@ window.calcWeightProjection=calcWeightProjection; window.alcoholWeeklyKcal=alcoh
 
 // ─── RECIPE FILTERING ───
 function getPool(t){
-  return window.RecipeEngine ? window.RecipeEngine.getPool(t) : [];
+  return (window.RecipeEngine && typeof window.RecipeEngine.getPool === 'function') ? window.RecipeEngine.getPool(t) : [];
 }
 function filterRecipes(pool,type){
   var s=window.S;
@@ -3392,7 +3454,8 @@ function filterRecipes(pool,type){
         if(al==='soja'&&(/soja|tofu|edamame|tempeh|tamari|miso|natto/).test(ing))return false;
         if(al==='lait/produits laitiers'||al==='lactose'){var dl=ing.replace(/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz|beurre de cacahu/g,'');if((/lait|fromage|yaourt|beurre|cr\u00e8me|ricotta|mozzarella|parmesan|emmental|feta|cottage|skyr|labneh|k\u00e9fir|whey/).test(dl))return false;}
         if(al==='gluten/bl\u00e9'||al==='gluten'){var gl=ing.replace(/galette de riz|farine de riz|farine de sarrasin|p\u00e2te miso/g,'');if((/pain|bl\u00e9|farine|p\u00e2te|seigle|couscous|semoule|tortilla|wrap|naan|galette|cr\u00eape|pancake|muffin|avoine|orge|\u00e9peautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari/).test(gl))return false;} // BUG FIX : avoine (contamination croisée fréquente — AFDIAG), orge, épeautre, boulgour, seitan, kamut, sauce soja/tamari (gluten caché) manquaient; also accept 'gluten' alias
-        if(al==='sésame'&&(/sésame/).test(ing))return false;
+        // Sésame + tahini (pâte sésame pure) + houmous (contient tahini) — risque anaphylactique
+        if((al==='sésame'||al==='sesame')&&(/(sésame|sesame|tahini|tahin\b|houmous|hummus)/).test(ing))return false;
         if(al==='moutarde'&&(/moutarde/).test(ing))return false;
       }return true;
     });
@@ -3413,12 +3476,28 @@ function filterRecipes(pool,type){
   var hasDiab=Array.isArray(s.medical)&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);
   if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioch[eé]|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|sucre\s+\d|sucre vanill|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
   if(s.regime===1)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon|merguez|canard|lapin|foie/).test(i)});
-  if(s.regime===2)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|merguez|gambas|lotte|morue|foie|anchois|truite|colin/).test(i)});
+  // Végétarien : ban poissons/viandes complet (inclut les 14 espèces absentes du ban vegan — cohérence nécessaire)
+  if(s.regime===2)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|daurade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|merguez|gambas|lotte|morue|foie|anchois|truite|colin|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse/).test(i)});
   if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|daurade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|miel|whey|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|truite|anchois|colin|branzino|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|lapin|foie de|jambon|charcuterie/;r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;if(/beurre/.test(i)&&!/beurre de cacahu|beurre d.amande|beurre de noisette|beurre de noix|beurre de coco/.test(i))return false;return true});} // beurre végétal (cacahuète, amande, noisette) autorisé en vegan
+  // Grossesse : exclure les aliments contre-indiqués pendant la grossesse (OMS / ANSES 2022)
+  // Risques : listériose (charcuterie crue, fromage au lait cru), parasites (poisson cru, sushi)
+  // L'alcool traverse le placenta — aucune dose sûre (OMS 2014, ACOG 2021)
+  if(s.pregnant){r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();
+    // Poisson cru / sushi / carpaccio / ceviche / gravlax / tartare de poisson
+    if((/sushi|sashimi|tartare de (?:saumon|thon|poisson)|gravlax|carpaccio de (?:saumon|poisson)|ceviche|poisson cru|truite fumée|saumon fumé/).test(i))return false;
+    // Alcool (même en cuisine — l'alcool ne s'évapore jamais totalement)
+    if((/alcool|vin blanc|vin rouge|bière|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)|sake/).test(i))return false;
+    // Fromage au lait cru (listériose — ANSES 2022)
+    if((/camembert au lait cru|brie au lait cru|roquefort|fromage de chèvre frais|fromage au lait cru|munster|époisses|livarot|pont.l.évêque/).test(i))return false;
+    // Charcuterie crue / rillettes / pâté (listériose)
+    if((/rillettes|p[âa]t[ée] de (?:foie|campagne)|jambon cru|jambon sec|charcuterie crue|saucisson cru|chorizo cru/).test(i))return false;
+    return true;});}
+  // Allaitement : exclure alcool en cuisine (passe dans le lait maternel — AAP 2012)
+  if(!s.pregnant&&Array.isArray(s.medical)&&s.medical.indexOf('allaitement')!==-1){r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/alcool|vin blanc|vin rouge|bière|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)|sake/).test(i)});}
   // Halal : exclut porc, charcuterie porcine et alcool
   if(s.halal)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/).test(i)});
   if(typeof s.excluded==='string'&&s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
-  var _cuisines=s.cuisines||[];if(_cuisines.indexOf(0)===-1&&_cuisines.length>0){var flags=[];for(var c=0;c<_cuisines.length;c++){var co=CUISINES[_cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0)r=r.filter(function(x){return flags.indexOf(x.f)!==-1})}
+  var _cuisines=s.cuisines||[];if(_cuisines.indexOf(0)===-1&&_cuisines.length>0){var flags=[];for(var c=0;c<_cuisines.length;c++){var co=CUISINES[_cuisines[c]];if(co&&CUISINE_FLAGS[co.name])flags.push(CUISINE_FLAGS[co.name])}if(flags.length>0){var _preCuisinePool=r.slice();r=r.filter(function(x){return flags.indexOf(x.f)!==-1});if(r.length===0)r=_preCuisinePool;}} // fallback : si aucune recette ne correspond aux cuisines choisies, on garde le pool complet
   return r;
 }
 // ─── PROTEIN SOURCE DETECTION ───
@@ -3452,6 +3531,7 @@ return{recipe:r,score:calScore+macroScore+diversityPenalty};});scored.sort(funct
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;
+  recipe = Object.assign({}, recipe); // clone to avoid mutating shared pool objects
 
   // Recettes R201+ (format riche) — scaling via RecipeEngine
   if (recipe._id && /^R\d+$/.test(recipe._id) && window.RecipeEngine && window.RecipeEngine.getAdaptedRecipe) {
@@ -3525,6 +3605,14 @@ function pickSmoothieForPlan(targetKcal, usedIds) {
   // Pool de départ — exclure déjà utilisés cette semaine
   var pool = smDB.filter(function(sm) { return !usedIds || !usedIds.has(sm.id); });
   if (!pool.length) pool = smDB.slice(); // reset si tous utilisés
+  // Filtre parfum (soft — garder au moins 2 pour éviter la répétition)
+  // Respecte les préférences de parfum whey déclarées dans l'onboarding (S.wheyFlavors)
+  if (s.wheyFlavors && s.wheyFlavors.length > 0) {
+    var fPool = pool.filter(function(sm) {
+      return sm.flavors && sm.flavors.some(function(fl) { return s.wheyFlavors.indexOf(fl) !== -1; });
+    });
+    if (fPool.length >= 2) pool = fPool;
+  }
   // Filtre objectif (soft — garder au moins 3)
   var gPool = pool.filter(function(sm) {
     return sm.goal && sm.goal.some(function(g) { return wantedGoals.indexOf(g) !== -1; });
@@ -3557,12 +3645,29 @@ function pickSmoothieForPlan(targetKcal, usedIds) {
 window.pickSmoothieForPlan = pickSmoothieForPlan;
 
 function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var weekProtBudget={};var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
-// useSmoothing : whey activé + WHEY_SMOOTHIES disponible
-var _useSmoothing=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length);
-for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget),lR=pickRecipe(pL,lT,uL,dayProteins,weekProtBudget),sR=null,dR=null;
+// useSmoothing : whey activé + WHEY_SMOOTHIES disponible + regime non-vegan (whey = protéine animale)
+// _canSmooth : base condition (whey activé, DB disponible, pas vegan)
+// Allergie lait/produits laitiers : whey = protéine lactée → bloquer les smoothies whey (sécurité allergène)
+var _hasLaitAllergy=Array.isArray(s.allergies)&&(s.allergies.indexOf('Lait/Produits laitiers')!==-1||s.allergies.indexOf('Lactose')!==-1);
+var _canSmooth=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s.regime!==3&&!_hasLaitAllergy);
+for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);
+// Déduplication intra-journée : éviter le même plat en déjeuner ET dîner (même recette dans les 2 pools)
+var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget);
+// Bloquer le petit-déj dans les pools déjeuner/dîner du même jour
+if(bR&&bR.n){uL.add(bR.n);uD.add(bR.n);}
+var lR=pickRecipe(pL,lT,uL,dayProteins,weekProtBudget);
+// Bloquer le déjeuner dans le pool dîner du même jour — fix principal du doublon
+if(lR&&lR.n)uD.add(lR.n);
+var sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
-// Si whey activé → smoothie remplace la collation
-if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS,dayProteins,weekProtBudget);else if(_useSmoothing)sR=pickSmoothieForPlan(sT,uSM);else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS,dayProteins,weekProtBudget);else sR=pickRecipe(pS,sT,uS,dayProteins,weekProtBudget);}
+// Si whey activé → smoothie whey uniquement les jours d'entraînement (ISSN 2017 : timing post-workout)
+// Jours de repos : collation normale (le smoothie whey cible la fenêtre anabolique post-séance)
+var _dayInfoSmooth=getDayType(d);
+var _useSmoothing=_canSmooth&&_dayInfoSmooth.isTraining;
+if(meals>=4&&sT>0){var isDessertDay=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;if(isDessertDay)sR=pickRecipe(pSD,sT,uS,dayProteins,weekProtBudget);else if(_useSmoothing){sR=pickSmoothieForPlan(sT,uSM);// Fallback si pickSmoothieForPlan retourne null (DB vide ou tous utilisés)
+if(!sR&&pSN.length>0)sR=pickRecipe(pSN,sT,uS,dayProteins,weekProtBudget);else if(!sR)sR=pickRecipe(pS,sT,uS,dayProteins,weekProtBudget);}else if(pSN.length>0)sR=pickRecipe(pSN,sT,uS,dayProteins,weekProtBudget);else sR=pickRecipe(pS,sT,uS,dayProteins,weekProtBudget);
+// Bloquer le nom du snack dans les Sets des autres slots — déduplication intra-journée complète
+if(sR&&sR.n){uB.add(sR.n);uL.add(sR.n);uD.add(sR.n);}}
 // Dîner : généré seulement si mealsPerDay >= 3 (pas pour jeûne intermittent 2 repas)
 if(meals>=3&&dT>0)dR=pickRecipe(pD,dT,uD,dayProteins,weekProtBudget);
 // Scaling sur mesure : enrichit les recettes R201+ avec macros/ingrédients scalés
@@ -3571,32 +3676,52 @@ bR=enrichWithScaling(bR,bT);lR=enrichWithScaling(lR,lT);if(sR&&!sR._smoothie)sR=
 // Ajustement itératif ±5% : corriger le slot le plus déviant jusqu'à convergence (max 8 passes)
 // Quand smoothie dans le snack → slot fixe (choix utilisateur), ajustement sur B/L/D uniquement
 var isDessertDayPool=s.wantsDessert&&pSD.length>0&&DESSERT_DAYS.indexOf(d)!==-1;var sPool=meals>=4&&sT>0&&!_useSmoothing?(isDessertDayPool?pSD:(pSN.length>0?pSN:pS)):null;
-for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used,dayProteins,weekProtBudget);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b')bR=nr;else if(w.key==='l')lR=nr;else if(w.key==='s')sR=nr;else dR=nr;}
-plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR})}return plan}
+for(var attempt=0;attempt<8;attempt++){var dayTot=(bR?bR.k:0)+(lR?lR.k:0)+(sR?sR.k:0)+(dR?dR.k:0);if(!c||Math.abs(dayTot-c)/c*100<=5)break;var sc=[bR?{key:'b',r:bR,pool:pB,used:uB,t:bT}:null,lR?{key:'l',r:lR,pool:pL,used:uL,t:lT}:null,(sR&&sPool)?{key:'s',r:sR,pool:sPool,used:uS,t:sT}:null,dR?{key:'d',r:dR,pool:pD,used:uD,t:dT}:null].filter(Boolean);if(!sc.length)break;sc.sort(function(a,b){return Math.abs(b.r.k-b.t)-Math.abs(a.r.k-a.t)});var w=sc[0];var otherTot=dayTot-w.r.k;var compT=c-otherTot;var nr=pickRecipe(w.pool,compT,w.used,dayProteins,weekProtBudget);if(!nr||nr.n===w.r.n)break;nr=enrichWithScaling(nr,compT);if(w.key==='b'){bR=nr;// Sync nom dans les autres Sets pour éviter les doublons inter-slots
+if(nr&&nr.n){uL.add(nr.n);uS.add(nr.n);uD.add(nr.n);}}else if(w.key==='l'){lR=nr;if(nr&&nr.n){uS.add(nr.n);uD.add(nr.n);}}else if(w.key==='s'){sR=nr;if(nr&&nr.n){uB.add(nr.n);uL.add(nr.n);uD.add(nr.n);}}else{dR=nr;if(nr&&nr.n){uL.add(nr.n);uS.add(nr.n);}}}
+// Agréger les macros du jour pour le dashboard (today-dashboard lit _dayPlan.kcal/.p/.g/.l)
+var _dP=Math.round((bR?bR.p||0:0)+(lR?lR.p||0:0)+(sR?sR.p||0:0)+(dR?dR.p||0:0));
+var _dG=Math.round((bR?bR.g||0:0)+(lR?lR.g||0:0)+(sR?sR.g||0:0)+(dR?dR.g||0:0));
+var _dL=Math.round((bR?bR.l||0:0)+(lR?lR.l||0:0)+(sR?sR.l||0:0)+(dR?dR.l||0:0));
+plan.push({breakfast:bR,lunch:lR,snack:sR,dinner:dR,kcal:c,p:_dP,g:_dG,l:_dL})}return plan}
 function swapMeal(di,slot){
   var s=window.S;
   if(!s.weekPlan||!s.weekPlan[di])return;
+  // MINEUR: valider slot avant de continuer
+  var VALID_SLOTS=['breakfast','lunch','snack','dinner'];
+  if(VALID_SLOTS.indexOf(slot)===-1)return;
   if(!s._nm&&window.computeNutritionState)window.computeNutritionState(false);
-  var cBase=calcTarget(),split=getAdaptedMealSplit(di);var c=Math.round(cBase*(split.calMultiplier||1));
+  var cBase=calcTarget(),split=getAdaptedMealSplit(di);if(!split)return;var c=Math.round(cBase*(split.calMultiplier||1));
   var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);
   // Snack + whey → swapper vers un autre smoothie (pas une collation normale)
-  if(slot==='snack'&&s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length){
+  // Condition : whey activé + jour d'entraînement + non-vegan (cohérent avec generateWeek)
+  var _swapDayInfo=getDayType(di);
+  var _swapLaitAllergy=Array.isArray(s.allergies)&&(s.allergies.indexOf('Lait/Produits laitiers')!==-1||s.allergies.indexOf('Lactose')!==-1);
+  if(slot==='snack'&&s.whey&&s.regime!==3&&!_swapLaitAllergy&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&_swapDayInfo.isTraining){
     var curId=(s.weekPlan[di][slot]&&s.weekPlan[di][slot]._id)||'';
     var usedSm=new Set([curId]);
     var nrSm=pickSmoothieForPlan(tgt,usedSm);
-    if(nrSm){s.weekPlan[di][slot]=nrSm;if(typeof window.render==='function')window.render();return;}
+    if(nrSm){s.weekPlan[di][slot]=nrSm;if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}if(typeof window.render==='function')window.render();return;}
+    else return;
   }
   // Autres slots — swap recette normale
   var pool=filterRecipes(getPool(slot),slot);
   var cur=s.weekPlan[di][slot];
   if(!cur)return; // slot vide (plan IF 2-3 repas) → rien à swapper
-  var av=pool.filter(function(r){return r.n!==cur.n});
-  if(!av.length)return;
+  // Noms déjà utilisés dans les autres slots du même jour → exclure du swap
+  var _daySlots=['breakfast','lunch','snack','dinner'];
+  var _dayUsedNames=new Set();
+  _daySlots.forEach(function(sl){if(sl!==slot&&s.weekPlan[di][sl]&&s.weekPlan[di][sl].n)_dayUsedNames.add(s.weekPlan[di][sl].n);});
+  var av=pool.filter(function(r){return r.n!==cur.n&&!_dayUsedNames.has(r.n)});
+  if(!av.length)av=pool.filter(function(r){return r.n!==cur.n;}); // fallback si tous exclus
+  if(!av.length)return; // pool contient uniquement la recette actuelle — rien à swapper
   av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});
   var top=av.slice(0,Math.min(5,av.length));
   var nr=top[Math.floor(Math.random()*top.length)];
+  if(!nr)return; // sécurité — ne devrait pas arriver après le guard ci-dessus
   nr=enrichWithScaling(nr,tgt);
   s.weekPlan[di][slot]=nr;
+  // IMPORTANT: persister le swap immédiatement
+  if(typeof window.saveProfile==='function'){try{window.saveProfile();}catch(e){}}
   if(typeof window.render==='function')window.render();
 }
 
@@ -3632,6 +3757,42 @@ window.enrichWithScaling = enrichWithScaling;
 window.generateWeek = generateWeek;
 window.swapMeal = swapMeal;
 
+// ─── PLAN HASH — détecte changement paramètres nutritionnels critiques ────
+// Si l'un de ces paramètres change depuis la dernière génération du plan,
+// weekPlan doit être régénéré pour rester cohérent avec le profil.
+// BUG A fix : sportDays et trainingDaysSelected influencent le calMultiplier via
+// getAdaptedMealSplit() → getDayType(). Un changement de planning sport doit
+// invalider le weekPlan pour que les macros soient recalculées correctement.
+window.getPlanHash = function() {
+  var s = window.S;
+  if (!s) return '';
+  return [
+    s.goal !== undefined && s.goal !== null ? String(s.goal) : '',
+    s.mealsPerDay || 3,
+    s.regime || 0,
+    s.whey ? '1' : '0',
+    Array.isArray(s.allergies) ? s.allergies.slice().sort().join(',') : '',
+    Array.isArray(s.intolerances) ? s.intolerances.slice().sort().join(',') : '',
+    s.wantsDessert ? '1' : '0',
+    s.weight || 0,
+    s.height || 0,
+    s.age || 0,
+    s.sex || '',
+    s.activity !== undefined && s.activity !== null ? String(s.activity) : '',
+    s.sportDays || 0,
+    Array.isArray(s.trainingDaysSelected) ? s.trainingDaysSelected.slice().sort().join(',') : '',
+    s.weeklyCalendar ? JSON.stringify(s.weeklyCalendar) : '',
+    // Paramètres manquants identifiés par audit : grossesse + filtres recettes
+    s.pregnant ? '1' : '0',
+    s.halal ? '1' : '0',
+    typeof s.excluded === 'string' ? s.excluded : '',
+    s.cookLevel !== undefined && s.cookLevel !== null ? String(s.cookLevel) : '',
+    Array.isArray(s.cuisines) ? s.cuisines.slice().sort().join(',') : '',
+    s.trainTime || '',
+    Array.isArray(s.medical) ? s.medical.slice().sort().join(',') : ''
+  ].join('|');
+};
+
 // ─── SUPPLEMENTS DATABASE (Grade A evidence ONLY) ───
 // Only supplements with overwhelming scientific evidence + personalized to user needs
 var SUPPLEMENTS_DB = [
@@ -3640,7 +3801,7 @@ var SUPPLEMENTS_DB = [
     unnecessary_if:'Inutile si vous atteignez vos prot\u00e9ines via l\'alimentation seule',
     dosageCalc:function(s){var d=s.weight>80?35:25;return{dose:d,unit:'g/prise',timing:'Post-entra\u00eenement ou petit-d\u00e9jeuner',note:'Objectif total : '+Math.round(s.weight*1.8)+'g prot/jour (alimentation + whey)'};}},
   {id:'creatine',name:'Cr\u00e9atine Monohydrate',icon:'\uD83D\uDC8A',desc:'Force, masse musculaire, r\u00e9cup\u00e9ration',evidence:'ISSN 2017 \u2014 Niveau A (500+ \u00e9tudes, le suppl\u00e9ment le plus \u00e9tudi\u00e9)',grade:'A',
-    condition:function(s){if(s.pregnant||getAge()<18)return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
+    condition:function(s){if(s.pregnant||(getAge()!==null&&getAge()<18))return false;if(s.medical&&s.medical.indexOf('irc')!==-1)return false;var goals=s.sportGoals||[];return s.activity!==null&&s.activity>=2&&(goals.indexOf('muscle')!==-1||goals.indexOf('shred')!==-1);},
     unnecessary_if:'Non n\u00e9cessaire si objectif uniquement endurance/cardio sans musculation',
     dosageCalc:function(s){return{dose:'3-5',unit:'g/jour',timing:'Apr\u00e8s l\'entra\u00eenement avec glucides',note:'Tous les jours y compris repos. Pas de phase de charge n\u00e9cessaire'};}},
   {id:'vitamine_d',name:'Vitamine D3',icon:'\u2600\uFE0F',desc:'Carence fr\u00e9quente m\u00eame en climat ensoleill\u00e9 (travail en int\u00e9rieur, cr\u00e8me solaire)',evidence:'Endocrine Society 2011 \u2014 Recommandation forte',grade:'A',
@@ -3813,6 +3974,22 @@ function detectMedicalConflicts() {
   var conflicts = [];
   if(!s||!s.medical)return conflicts;
   var med=s.medical;
+  // C-04: IMC < 18.5 + objectif déficitaire — risque médical réel (insuffisance pondérale)
+  var _bmiCheck = calcBMI();
+  var _goalKey = s.goal !== null && GOALS[s.goal] ? GOALS[s.goal].key : null;
+  if(_bmiCheck!==null&&_bmiCheck<18.5&&(_goalKey==='cut'||_goalKey==='shred')){
+    conflicts.push({level:'CRITIQUE',message:'⚠ ALERTE MÉDICALE : IMC '+_bmiCheck.toFixed(1)+' (insuffisance pondérale) incompatible avec un objectif déficitaire. Un déficit calorique sur ce profil peut aggraver la dénutrition et présente des risques cardiaques, osseux et hormonaux graves. Votre objectif a été remplacé par maintenance. Consultez un médecin avant tout programme nutritionnel.'});
+  }
+  // Conflit -1 : IRC + Allaitement → contraintes protéiques incompatibles
+  // Allaitement : +500 kcal + besoins protéiques élevés | IRC : plafond 0.6g/kg non dialyse
+  if(!s.pregnant&&med.indexOf('irc')!==-1&&med.indexOf('allaitement')!==-1){
+    conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT MÉDICAL CRITIQUE : Insuffisance Rénale Chronique + Allaitement — L\'allaitement nécessite un apport protéique augmenté (1.1-1.3g/kg) incompatible avec le plafond IRC (0.6g/kg, KDOQI 2020). Ce profil NÉCESSITE un suivi conjoint néphrologue + diététicienne spécialisée. Ne pas modifier l\'alimentation sans avis médical.'});
+  }
+  // Conflit -2 : TCA + Grossesse → deux pathologies qui nécessitent une surveillance médicale spécialisée conjointe
+  // IOC 2018 + ACOG 2022 : la restriction alimentaire en TCA est incompatible avec les besoins fœtaux
+  if(s.pregnant&&med.indexOf('tca')!==-1){
+    conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT MÉDICAL CRITIQUE : TCA + Grossesse — Les troubles du comportement alimentaire pendant la grossesse sont associés à un risque élevé de complications (retard de croissance intra-utérin, prématurité, fausses couches — ACOG 2022). Un suivi psychiatrique ou psychologique ET obstétrical est OBLIGATOIRE. Ne suivez pas un programme diététique sans supervision médicale spécialisée.'});
+  }
   // Conflit 0 : Grossesse + IRC → protéines plafonnées à 0.6g/kg = insuffisant pour le fœtus (C1)
   // OMS 2016 : grossesse T3 = +25g protéines/j | KDOQI 2020 : IRC CKD 3-5 = 0.6g/kg/j max
   // Conflit irrésoluble : les deux contraintes sont incompatibles → OBLIGATOIREMENT suivi médical spécialisé
@@ -3837,6 +4014,12 @@ function detectMedicalConflicts() {
     if(goalKey==='shred'||goalKey==='cut'){
       conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : TCA + objectif sèche/coupe — Objectif automatiquement remplacé par maintenance. Un suivi médical et psychologique est OBLIGATOIRE avant tout déficit calorique.'});
     }
+  }
+  // Conflit 2b : IRC + Végane/Végétarien + Allergie Soja — apport protéique quasi impossible
+  // IRC plafonne les protéines à 0.60-0.66g/kg. Régime plant-based = légumineuses (soja = base).
+  // Allergie soja + végane/végétarien = tofu, edamame, tempeh, protéines soja exclus → sources protéiques < plancher sécurisé
+  if(med.indexOf('irc')!==-1&&(s.regime===2||s.regime===3)&&Array.isArray(s.allergies)&&s.allergies.indexOf('Soja')!==-1){
+    conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT CRITIQUE : IRC + Végane/Végétarien + Allergie Soja — Le soja (tofu, edamame, tempeh) étant exclu, les sources protéiques d\'un régime végane/végétarien sont drastiquement réduites. Avec le plafond IRC (0.60g/kg, KDOQI 2020), il est quasiment impossible de couvrir les besoins protéiques minimaux sans risque carentiel. Consultation IMPÉRATIVE : néphrologue + diététicienne spécialisée nutrition végétale.'});
   }
   // Conflit 3 : IRC + créatine — bloqué dans SUPPLEMENTS_DB + avertissement explicite ici
   // KDOQI 2020 : la créatine augmente la créatininémie et aggrave la progression de l'IRC
@@ -4703,9 +4886,12 @@ function buildNMInputs(trainingDay) {
 function computeNutritionState(trainingDay) {
   if (!window.NutritionMaster) return null;
   if (window.S.goal === null || window.S.sex === null) return null;
+  // I-02: si getAge() retourne null/0, on ne calcule pas avec age=25 fantôme
+  if (!getAge()) { window.S._nm = null; return null; }
   var inputs = buildNMInputs(trainingDay);
   var result = window.NutritionMaster.compute(inputs);
-  if (result.errors && result.errors.length > 0) return null;
+  // I-01: invalider le cache stale si NutritionMaster remonte des erreurs
+  if (result.errors && result.errors.length > 0) { window.S._nm = null; return null; }
 
   // Applique les sur-couches médicales de app-core (calcTarget / calcMacros)
   // pour que les valeurs médicalement ajustées soient reflétées dans _nm

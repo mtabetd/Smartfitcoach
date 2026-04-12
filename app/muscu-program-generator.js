@@ -7,9 +7,11 @@
   var _previousFocus = null;
 
   var MAX_GENERATIONS_PER_WEEK = 3;
-  var LS_KEY_PROGRAM = 'mtd_muscu_program';
-  var LS_KEY_PROGRESS = 'mtd_muscu_ia_progress';
-  var LS_KEY_GENERATIONS = 'mtd_muscu_generations';
+  // Clés namespaced par userId — évite les fuites de données inter-utilisateurs sur appareil partagé
+  function _lsUid() { return (window.AUTH && window.AUTH.getUser && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon'; }
+  function LS_KEY_PROGRAM()     { return 'mtd_muscu_program_'      + _lsUid(); }
+  function LS_KEY_PROGRESS()    { return 'mtd_muscu_ia_progress_'  + _lsUid(); }
+  function LS_KEY_GENERATIONS() { return 'mtd_muscu_generations_'  + _lsUid(); }
 
   // Installations/facilities options
   var INSTALLATIONS = [
@@ -28,7 +30,10 @@
     'Analyse de votre profil. Calcul des charges adaptées à votre niveau et morphologie.',
     'Sélection du split adapté à vos jours, votre équipement, vos antécédents.',
     'Calibrage des charges cibles, semaine par semaine, kilo par kilo.',
-    'Rédaction de votre diagnostic personnalisé. Encore quelques secondes…'
+    'Construction de votre périodisation sur 12 semaines…',
+    'Rédaction des consignes techniques pour chaque exercice.',
+    'Intégration de vos contraintes médicales et de récupération.',
+    'Finalisation de votre programme. Presque terminé…'
   ];
 
   var FOOTER_QUOTES = [
@@ -39,26 +44,27 @@
   // --- P6 : Compteur de générations restantes ---
 
   function getWeekKey(date) {
-    // Returns "YYYY-Www" for the ISO week containing `date`
+    // Returns "YYYY-Www" for the ISO week containing `date` — uses UTC to match server
     var d = new Date(date);
-    // Set to nearest Thursday (ISO week starts Monday)
-    d.setHours(0, 0, 0, 0);
-    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
-    var yearStart = new Date(d.getFullYear(), 0, 1);
-    var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-    return d.getFullYear() + '-W' + (weekNo < 10 ? '0' : '') + weekNo;
+    // Set to nearest Thursday in UTC (ISO week starts Monday)
+    var dayUTC = d.getUTCDay() || 7; // Sunday=0 → 7
+    var thursdayUTC = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + (4 - dayUTC)));
+    var jan4UTC = new Date(Date.UTC(thursdayUTC.getUTCFullYear(), 0, 4));
+    var jan4Day = jan4UTC.getUTCDay() || 7;
+    var weekNo = Math.round((thursdayUTC - new Date(Date.UTC(jan4UTC.getUTCFullYear(), 0, jan4Day - 3))) / 604800000) + 1;
+    return thursdayUTC.getUTCFullYear() + '-W' + (weekNo < 10 ? '0' : '') + weekNo;
   }
 
   function getGenerationsData() {
     try {
-      var raw = localStorage.getItem(LS_KEY_GENERATIONS);
+      var raw = localStorage.getItem(LS_KEY_GENERATIONS());
       if (raw) return JSON.parse(raw);
     } catch(e) {}
     return { week: '', count: 0 };
   }
 
   function saveGenerationsData(data) {
-    try { localStorage.setItem(LS_KEY_GENERATIONS, JSON.stringify(data)); } catch(e) {}
+    try { localStorage.setItem(LS_KEY_GENERATIONS(), JSON.stringify(data)); } catch(e) {}
   }
 
   function getGenerationsRemaining() {
@@ -133,13 +139,13 @@
 
   function loadProgress() {
     try {
-      var raw = localStorage.getItem(LS_KEY_PROGRESS);
+      var raw = localStorage.getItem(LS_KEY_PROGRESS());
       return raw ? JSON.parse(raw) : [];
     } catch(e) { return []; }
   }
 
   function saveProgress(progressArray) {
-    try { localStorage.setItem(LS_KEY_PROGRESS, JSON.stringify(progressArray)); } catch(e) {}
+    try { localStorage.setItem(LS_KEY_PROGRESS(), JSON.stringify(progressArray)); } catch(e) {}
   }
 
   function getProgressKey(weekIdx, dayName, exerciseIdx) {
@@ -560,7 +566,15 @@
       pointsFaibles: S.pointsFaibles || '',
       preferences: S.preferences || '',
       historique: S.historique || '',
-      heureEntrainement: S.trainTime || null
+      heureEntrainement: S.trainTime || null,
+      competitionGoal: !!S.competitionGoal,
+      competitionDate: S.competitionDate || '',
+      competitionType: S.competitionType || '',
+      sportHobbies: Array.isArray(S.sportHobbies) && S.sportHobbies.length ? S.sportHobbies.join(', ') : '',
+      // Nouvelles données collectées par le questionnaire enrichi
+      muscuObjectifSpecifique: S.muscuObjectifSpecifique || '',
+      muscuZonesCibles: Array.isArray(S.muscuZonesCibles) && S.muscuZonesCibles.length ? S.muscuZonesCibles.join(', ') : '',
+      muscuRenforcementNote: S.muscuRenforcementNote || ''
     };
   }
 
@@ -613,6 +627,7 @@
 
   function closeModal() {
     if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+    _generating = false; // toujours réinitialiser pour éviter le blocage si fermé pendant génération
     if (_modalEl) _modalEl.style.display = 'none';
     if (_previousFocus && _previousFocus.focus) {
       try { _previousFocus.focus(); } catch(e) {}
@@ -621,7 +636,7 @@
 
   function showInstallationsStep() {
     var content = document.getElementById('muscu-prog-content');
-    var current = Array.isArray(window.S && window.S.installations) ? window.S.installations : [];
+    var current = (window.S && Array.isArray(window.S.installations)) ? window.S.installations : [];
     var cardStyle = 'display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border,#D8D8D0);border-radius:2px;cursor:pointer;transition:border-color 0.15s,background 0.15s;margin-bottom:8px;font-family:"Helvetica Neue",Arial,sans-serif;';
     var cardsHTML = INSTALLATIONS.map(function(inst) {
       var sel = current.indexOf(inst.id) !== -1;
@@ -654,10 +669,10 @@
       var card = e.target.closest('.install-card');
       if (!card) return;
       var id = card.getAttribute('data-id');
-      var sel = Array.isArray(window.S.installations) ? window.S.installations.slice() : [];
+      var sel = window.S && Array.isArray(window.S.installations) ? window.S.installations.slice() : [];
       var idx = sel.indexOf(id);
       if (idx === -1) { sel.push(id); } else { sel.splice(idx, 1); }
-      window.S.installations = sel;
+      if (window.S) window.S.installations = sel;
       if (window.saveProfile) window.saveProfile();
       // Update visual state
       var isSel = sel.indexOf(id) !== -1;
@@ -672,11 +687,243 @@
     });
 
     document.getElementById('install-confirm').addEventListener('click', function() {
-      var sel = Array.isArray(window.S.installations) ? window.S.installations : [];
+      var sel = window.S && Array.isArray(window.S.installations) ? window.S.installations : [];
       if (sel.length === 0) {
         var err = document.getElementById('install-error');
         if (err) err.style.display = 'block';
         return;
+      }
+      showObjectifStep();
+    });
+  }
+
+  function showObjectifStep() {
+    var content = document.getElementById('muscu-prog-content');
+    if (!content) return;
+    var OBJECTIFS = [
+      { id: 'hypertrophie',   label: 'Hypertrophie',          desc: 'Prise de masse musculaire — volume et définition' },
+      { id: 'force',          label: 'Force maximale',         desc: 'Progression sur les charges — maximiser les 1RM' },
+      { id: 'esthétique',     label: 'Esthétique / définition',desc: 'Sèche et proportions — corps sculpté et défini' },
+      { id: 'endurance',      label: 'Endurance musculaire',   desc: 'Résistance à l\'effort — haute répétition, circuit' },
+      { id: 'recomposition',  label: 'Recomposition',          desc: 'Réduire la masse grasse et gagner du muscle simultanément' },
+      { id: 'competition',    label: 'Prépa compétition',      desc: 'Périodisation haute intensité — podium et performance' }
+    ];
+    var current = (window.S && window.S.muscuObjectifSpecifique) ? window.S.muscuObjectifSpecifique : '';
+    // Pré-remplir depuis l'objectif nutritionnel si pas encore choisi
+    if (!current && window.S && window.S.goal != null) {
+      var _gMap = { 0:'hypertrophie', 1:'recomposition', 2:'endurance', 3:'esthétique', 4:'recomposition', 5:'recomposition' };
+      current = _gMap[window.S.goal] || '';
+    }
+    var cardBase = 'display:flex;align-items:center;gap:12px;padding:13px 16px;border:1px solid var(--border,#D8D8D0);border-radius:2px;cursor:pointer;margin-bottom:8px;transition:border-color 0.15s,background 0.15s;font-family:"Helvetica Neue",Arial,sans-serif;';
+    var cardsHTML = OBJECTIFS.map(function(obj) {
+      var sel = (current === obj.id);
+      return '<div class="obj-card" data-id="' + obj.id + '" style="' + cardBase + (sel ? 'border-color:var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);' : '') + '">' +
+        '<div style="flex:1;">' +
+          '<div style="font-size:13px;font-weight:600;color:var(--black,#0A0A09);margin-bottom:2px;">' + obj.label + '</div>' +
+          '<div style="font-size:11px;color:var(--grey,#6B6B65);">' + obj.desc + '</div>' +
+        '</div>' +
+        '<div class="obj-dot" style="width:18px;height:18px;border:1.5px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:' + (sel ? 'var(--accent,#1A4A1A)' : 'transparent') + ';">' +
+          (sel ? '<div style="width:7px;height:7px;border-radius:50%;background:white;"></div>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+    content.innerHTML =
+      '<div style="padding:8px 4px 24px 4px;">' +
+        '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;font-family:\'Helvetica Neue\',Arial,sans-serif;">VOTRE OBJECTIF</div>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--black,#0A0A09);margin:0 0 8px 0;">Quel résultat voulez-vous obtenir en priorité ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Votre programme sera entièrement construit autour de cet objectif — split, charges et périodisation s\'adapteront en conséquence.</p>' +
+        '<div id="obj-cards-wrap">' + cardsHTML + '</div>' +
+        '<div id="obj-error" style="font-size:11px;color:#B02020;margin:6px 0 0 0;display:none;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sélectionnez un objectif pour continuer.</div>' +
+        '<div style="margin-top:20px;">' +
+          '<button id="obj-confirm" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:44px;">Continuer \u2192</button>' +
+        '</div>' +
+      '</div>';
+    var wrap = document.getElementById('obj-cards-wrap');
+    wrap.addEventListener('click', function(e) {
+      var card = e.target.closest('.obj-card');
+      if (!card) return;
+      var id = card.getAttribute('data-id');
+      if (!window.S) window.S = {};
+      window.S.muscuObjectifSpecifique = id;
+      try { if (window.saveProfile) window.saveProfile(); } catch(e2) {}
+      wrap.querySelectorAll('.obj-card').forEach(function(c) {
+        var isSel = (c.getAttribute('data-id') === id);
+        c.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)';
+        c.style.background  = isSel ? 'rgba(26,74,26,0.06)' : '';
+        var dot = c.querySelector('.obj-dot');
+        if (dot) {
+          dot.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)';
+          dot.style.background  = isSel ? 'var(--accent,#1A4A1A)' : 'transparent';
+          dot.innerHTML = isSel ? '<div style="width:7px;height:7px;border-radius:50%;background:white;"></div>' : '';
+        }
+      });
+      var errEl = document.getElementById('obj-error');
+      if (errEl) errEl.style.display = 'none';
+    });
+    document.getElementById('obj-confirm').addEventListener('click', function() {
+      if (!window.S || !window.S.muscuObjectifSpecifique) {
+        var errEl = document.getElementById('obj-error');
+        if (errEl) errEl.style.display = 'block';
+        return;
+      }
+      showZonesCibleesStep();
+    });
+  }
+
+  function showZonesCibleesStep() {
+    var content = document.getElementById('muscu-prog-content');
+    if (!content) return;
+    var ZONES = [
+      { id: 'pectoraux',  label: 'Pectoraux',  desc: 'Poitrine — grand et petit pectoral' },
+      { id: 'dos',        label: 'Dos',         desc: 'Dorsaux, trapèzes, rhomboïdes' },
+      { id: 'jambes',     label: 'Jambes',      desc: 'Quadriceps, ischios, mollets' },
+      { id: 'epaules',    label: '\u00c9paules',desc: 'Deltoïdes — 3 faisceaux' },
+      { id: 'bras',       label: 'Bras',        desc: 'Biceps et triceps' },
+      { id: 'fessiers',   label: 'Fessiers',    desc: 'Glutes — volume et galbe' },
+      { id: 'abdominaux', label: 'Abdominaux',  desc: 'Core — gainages et sangle abdominale' }
+    ];
+    var current = (window.S && Array.isArray(window.S.muscuZonesCibles)) ? window.S.muscuZonesCibles.slice() : [];
+    // Pré-remplir depuis sportFocus si disponible
+    if (!current.length && window.S && window.S.sportFocus) {
+      var _fMap = { chest:'pectoraux', back:'dos', legs:'jambes', shoulders:'epaules', arms:'bras', glutes:'fessiers', abs:'abdominaux' };
+      Object.keys(window.S.sportFocus).forEach(function(k) {
+        if ((window.S.sportFocus[k] || 0) > 0 && _fMap[k]) current.push(_fMap[k]);
+      });
+    }
+    var currentNote = (window.S && window.S.muscuRenforcementNote) ? window.S.muscuRenforcementNote : '';
+    var cardBase = 'display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid var(--border,#D8D8D0);border-radius:2px;cursor:pointer;transition:border-color 0.15s,background 0.15s;font-family:"Helvetica Neue",Arial,sans-serif;';
+    var svgCheck = '<svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 4L4 7L10 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var cardsHTML = ZONES.map(function(zone) {
+      var sel = current.indexOf(zone.id) !== -1;
+      return '<div class="zone-card" data-id="' + zone.id + '" style="' + cardBase + (sel ? 'border-color:var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);' : '') + '">' +
+        '<div style="flex:1;">' +
+          '<div style="font-size:12px;font-weight:600;color:var(--black,#0A0A09);">' + zone.label + '</div>' +
+          '<div style="font-size:10px;color:var(--grey,#6B6B65);">' + zone.desc + '</div>' +
+        '</div>' +
+        '<div class="zone-chk" style="width:18px;height:18px;border:1.5px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:' + (sel ? 'var(--accent,#1A4A1A)' : 'transparent') + ';">' +
+          (sel ? svgCheck : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+    content.innerHTML =
+      '<div style="padding:8px 4px 24px 4px;">' +
+        '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;font-family:\'Helvetica Neue\',Arial,sans-serif;">ZONES CIBL\u00c9ES</div>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--black,#0A0A09);margin:0 0 8px 0;">Quels groupes musculaires voulez-vous développer ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 16px 0;line-height:1.6;">Sélection multiple. Laissez vide pour un programme équilibré sur tout le corps.</p>' +
+        '<div id="zone-cards-wrap" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;">' + cardsHTML + '</div>' +
+        '<div style="margin-bottom:20px;">' +
+          '<label style="display:block;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;">Ce que vous voulez renforcer / améliorer (optionnel)</label>' +
+          '<textarea id="zone-note" placeholder="Ex\u00a0: renforcer le bas du dos, rattraper mon retard sur les \u00e9paules, am\u00e9liorer ma posture, d\u00e9velopper les fessiers\u2026" rows="3" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--black,#0A0A09);background:var(--ivory,#FAF9F6);resize:vertical;outline:none;line-height:1.5;">' + escapeHTML(currentNote) + '</textarea>' +
+        '</div>' +
+        '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+          '<button id="zone-skip" style="background:transparent;border:1px solid var(--border,#D8D8D0);color:var(--grey,#6B6B65);padding:12px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:44px;">Programme \u00e9quilibr\u00e9</button>' +
+          '<button id="zone-confirm" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:44px;">Continuer \u2192</button>' +
+        '</div>' +
+      '</div>';
+    var svgCheckInner = '<svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 4L4 7L10 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var wrap = document.getElementById('zone-cards-wrap');
+    wrap.addEventListener('click', function(e) {
+      var card = e.target.closest('.zone-card');
+      if (!card) return;
+      var id = card.getAttribute('data-id');
+      if (!window.S) window.S = {};
+      var sel = Array.isArray(window.S.muscuZonesCibles) ? window.S.muscuZonesCibles.slice() : [];
+      var idx = sel.indexOf(id);
+      if (idx === -1) { sel.push(id); } else { sel.splice(idx, 1); }
+      window.S.muscuZonesCibles = sel;
+      var isSel = sel.indexOf(id) !== -1;
+      card.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)';
+      card.style.background  = isSel ? 'rgba(26,74,26,0.06)' : '';
+      var chk = card.querySelector('.zone-chk');
+      if (chk) {
+        chk.style.borderColor = isSel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)';
+        chk.style.background  = isSel ? 'var(--accent,#1A4A1A)' : 'transparent';
+        chk.innerHTML = isSel ? svgCheckInner : '';
+      }
+    });
+    function _saveAndContinue() {
+      if (!window.S) window.S = {};
+      var noteEl = document.getElementById('zone-note');
+      window.S.muscuRenforcementNote = noteEl ? noteEl.value.trim().slice(0, 500) : '';
+      if (!Array.isArray(window.S.muscuZonesCibles)) window.S.muscuZonesCibles = [];
+      try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
+      showStressStep();
+    }
+    document.getElementById('zone-skip').addEventListener('click', function() {
+      if (!window.S) window.S = {};
+      window.S.muscuZonesCibles = [];
+      window.S.muscuRenforcementNote = '';
+      try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
+      showStressStep();
+    });
+    document.getElementById('zone-confirm').addEventListener('click', _saveAndContinue);
+  }
+
+  function showStressStep() {
+    var content = document.getElementById('muscu-prog-content');
+    if (!content) return;
+    var currentStress = (window.S && typeof window.S.stress === 'number') ? window.S.stress : 5;
+    var stressLabels = [
+      '', // index 0 unused
+      'Très faible — Complètement zen',
+      'Faible — Peu de stress',
+      'Modéré-bas — Gérable',
+      'Modéré — Stressé mais équilibré',
+      'Modéré-haut — Stressé régulièrement',
+      'Élevé — Très stressé',
+      'Très élevé — Sous pression constante',
+      'Extrême — Surcharge chronique',
+      'Critique — Épuisé',
+      'Maximum — Au bout du rouleau'
+    ];
+    var optionsHTML = '';
+    for (var i = 1; i <= 10; i++) {
+      var isSel = (i === currentStress);
+      optionsHTML +=
+        '<div class="stress-opt" data-v="' + i + '" style="display:flex;align-items:center;gap:10px;padding:9px 8px;margin-bottom:3px;cursor:pointer;border-radius:2px;background:' + (isSel ? 'rgba(26,74,26,0.08)' : 'transparent') + ';transition:background 0.15s;">' +
+          '<span style="min-width:20px;font-size:12px;font-weight:' + (isSel ? '700' : '400') + ';color:var(--grey,#6B6B65);font-family:\'Helvetica Neue\',Arial,sans-serif;">' + i + '</span>' +
+          '<div style="flex:1;height:3px;background:var(--border,#D8D8D0);border-radius:2px;overflow:hidden;">' +
+            '<div style="height:100%;width:' + (i * 10) + '%;background:' + (isSel ? 'var(--accent,#1A4A1A)' : 'var(--grey,#6B6B65)') + ';border-radius:2px;"></div>' +
+          '</div>' +
+          '<span style="font-size:11px;color:var(--grey,#6B6B65);font-family:\'Helvetica Neue\',Arial,sans-serif;min-width:200px;">' + stressLabels[i] + '</span>' +
+        '</div>';
+    }
+    content.innerHTML =
+      '<div style="padding:8px 4px 24px 4px;">' +
+        '<div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;font-family:\'Helvetica Neue\',Arial,sans-serif;">PROFIL DE RÉCUPÉRATION</div>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--black,#0A0A09);margin:0 0 6px 0;">Niveau de stress actuel ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Votre programme s\'adaptera : volume, repos inter-séries et intensité s\'ajustent selon votre capacité de récupération.</p>' +
+        '<div id="stress-opts">' + optionsHTML + '</div>' +
+        '<div style="font-size:11px;color:var(--accent,#1A4A1A);font-family:\'Helvetica Neue\',Arial,sans-serif;font-weight:600;margin:12px 0 20px;text-align:center;">Niveau sélectionné : <span id="stress-val">' + currentStress + '</span>/10</div>' +
+        '<button id="stress-next" style="background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:12px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:44px;">Continuer \u2192</button>' +
+      '</div>';
+
+    var opts = document.getElementById('stress-opts');
+    opts.addEventListener('click', function(e) {
+      var opt = e.target.closest('.stress-opt');
+      if (!opt) return;
+      var val = parseInt(opt.getAttribute('data-v'), 10);
+      if (!window.S) window.S = {};
+      window.S.stress = val;
+      try { if (window.saveProfile) window.saveProfile(); } catch(e2) {}
+      var allOpts = opts.querySelectorAll('.stress-opt');
+      allOpts.forEach(function(o) {
+        var v = parseInt(o.getAttribute('data-v'), 10);
+        var isSel2 = (v === val);
+        o.style.background = isSel2 ? 'rgba(26,74,26,0.08)' : 'transparent';
+        var num = o.querySelector('span:first-child');
+        if (num) num.style.fontWeight = isSel2 ? '700' : '400';
+        var bar = o.querySelector('div > div');
+        if (bar) bar.style.background = isSel2 ? 'var(--accent,#1A4A1A)' : 'var(--grey,#6B6B65)';
+      });
+      var valEl = document.getElementById('stress-val');
+      if (valEl) valEl.textContent = val;
+    });
+
+    document.getElementById('stress-next').addEventListener('click', function() {
+      if (!window.S || typeof window.S.stress !== 'number') {
+        if (!window.S) window.S = {};
+        window.S.stress = 5; // safe default
       }
       showGenerationStep();
     });
@@ -691,7 +938,7 @@
       ? 'background:var(--grey,#7A7A72);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:not-allowed;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;opacity:0.6;'
       : 'background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;padding:14px 32px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;';
     // Summary of selected installations
-    var sel = Array.isArray(window.S && window.S.installations) ? window.S.installations : [];
+    var sel = (window.S && Array.isArray(window.S.installations)) ? window.S.installations : [];
     var instSummary = sel.length
       ? sel.map(function(id) {
           var found = INSTALLATIONS.filter(function(x) { return x.id === id; })[0];
@@ -721,10 +968,19 @@
     _previousFocus = document.activeElement;
     if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
     _modalEl.style.display = 'block';
-    // Show installations step if not yet configured, otherwise go straight to generation
-    var hasInstallations = Array.isArray(window.S && window.S.installations) && window.S.installations.length > 0;
+    // Show installations step if not yet configured, stress step if stress not collected, otherwise generate
+    var hasInstallations = (window.S && Array.isArray(window.S.installations)) && window.S.installations.length > 0;
+    var hasObjectif = !!(window.S && window.S.muscuObjectifSpecifique);
+    var hasZones    = (window.S && Array.isArray(window.S.muscuZonesCibles)); // null/undefined = pas encore répondu
+    var hasStress   = (window.S && typeof window.S.stress === 'number');
     if (!hasInstallations) {
       showInstallationsStep();
+    } else if (!hasObjectif) {
+      showObjectifStep();
+    } else if (!hasZones) {
+      showZonesCibleesStep();
+    } else if (!hasStress) {
+      showStressStep();
     } else {
       showGenerationStep();
     }
@@ -762,18 +1018,24 @@
     }, 8000);
 
     var profile = buildProfileFromState();
+    var _mcCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var _mcTimer = _mcCtrl ? setTimeout(function() { _mcCtrl.abort(); }, 87000) : null;
     fetch('/.netlify/functions/generate-muscu-program', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ profile: profile })
+      body: JSON.stringify({ profile: profile }),
+      signal: _mcCtrl ? _mcCtrl.signal : undefined
     })
     .then(function(r) {
       if (!r.ok) {
-        return r.json().then(function(err) { throw new Error(err.error || 'Erreur HTTP ' + r.status); });
+        return r.json()
+          .then(function(err) { throw new Error(err.error || 'Erreur HTTP ' + r.status); })
+          .catch(function() { throw new Error('Le serveur a mis trop de temps à répondre. Réessayez dans quelques instants.'); });
       }
       return r.json();
     })
     .then(function(data) {
+      if (_mcTimer) clearTimeout(_mcTimer);
       _generating = false;
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
 
@@ -785,7 +1047,7 @@
       _Snow.muscuProgramCount = (_Snow.muscuProgramCount || 0) + 1;
       if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
 
-      var programText = data.program || '';
+      var programText = typeof data.program === 'string' ? data.program : '';
       var footerQuote = FOOTER_QUOTES[Math.floor(Math.random() * FOOTER_QUOTES.length)];
 
       // Try to parse into interactive cards; fall back to plain text if it fails
@@ -837,14 +1099,18 @@
         if (cardsContainer) attachProgramInteractivity(cardsContainer);
       }
       // Sauvegarder localement
-      try { localStorage.setItem(LS_KEY_PROGRAM, JSON.stringify({ program: programText, generatedAt: data.generatedAt })); } catch(e) { console.error('[muscu-prog] save fail:', e); }
+      try { localStorage.setItem(LS_KEY_PROGRAM(), JSON.stringify({ program: programText, generatedAt: data.generatedAt })); } catch(e) { console.error('[muscu-prog] save fail:', e); }
     })
     .catch(function(err) {
+      if (_mcTimer) clearTimeout(_mcTimer);
       _generating = false;
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
       console.error('[muscu-prog] generation error:', err);
+      var _mcErrMsg = (err && err.name === 'AbortError')
+        ? 'La g\u00e9n\u00e9ration prend trop de temps. R\u00e9essaie dans quelques instants.'
+        : escapeHTML(err.message || 'La g\u00e9n\u00e9ration a \u00e9chou\u00e9 \u2014 v\u00e9rifiez votre connexion et r\u00e9essayez.');
       content.innerHTML = '<div style="text-align:center;padding:40px;">' +
-        '<div style="font-size:14px;color:var(--red,#5A1010);margin-bottom:16px;">\u26a0 ' + escapeHTML(err.message || 'La génération a échoué — vérifiez votre connexion et réessayez.') + '</div>' +
+        '<div style="font-size:14px;color:var(--red,#5A1010);margin-bottom:16px;">\u26a0 ' + _mcErrMsg + '</div>' +
         '<button id="muscu-prog-retry" style="background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Réessayer</button>' +
       '</div>';
       var retryBtn = document.getElementById('muscu-prog-retry');

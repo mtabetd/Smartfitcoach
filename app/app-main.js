@@ -1,6 +1,8 @@
 // app-main.js — Smart Fit Coach: Router, Auth Screens, Init
 (function(){
 'use strict';
+// Prevent browser from auto-restoring scroll position on back/forward navigation
+if (window.history && window.history.scrollRestoration) { window.history.scrollRestoration = 'manual'; }
 var S = window.S;
 var h = window.h, txt = window.txt;
 
@@ -29,27 +31,28 @@ var PROFILE_KEYS = [
  // CrossFit progress (calendar, current day, weekly cycle)
  'cfProgress','cfCurrentDay','crossfitWeek','crossfitCycleWeek','selectedCrossfitDay',
  // Running
- 'runningLevel','runningGoal','runningDays','runningPace','runningVO2max','runningWeek','selectedRunDay',
+ 'runningLevel','runningGoal','runningDays','runningPace','runningVO2max','runningWeek','selectedRunDay','runningProgram',
  // Hyrox
- 'hyroxLevel','hyroxGoal','hyroxDays','hyroxBenchmarks','hyroxWeek','selectedHyroxDay',
+ 'hyroxLevel','hyroxGoal','hyroxDays','hyroxBenchmarks','hyroxWeek','selectedHyroxDay','hyroxProgram',
  // Padel
- 'padelLevel','padelGoal','padelDays','padelProfile','padelWeek','selectedPadelDay',
+ 'padelLevel','padelGoal','padelDays','padelProfile','padelWeek','selectedPadelDay','padelProgram',
  // Golf
- 'golfLevel','golfGoal','golfDays','golfHandicap','golfProfile','golfWeek','selectedGolfDay',
+ 'golfLevel','golfGoal','golfDays','golfHandicap','golfProfile','golfWeek','selectedGolfDay','golfProgram',
  // Triathlon
  'triathlonGoal','triathlonLevel','triathlonWeak',
  'triathlonSwimPace','triathlonBikePace','triathlonRunPace','triathlonWeek','selectedTriDay',
- 'triathlonFTP','triathlonRaceDate',
+ 'triathlonFTP','triathlonRaceDate','triathlonProgram',
  // Cycling
  'cyclingLevel','cyclingGoal','cyclingDays','cyclingType','cyclingFTP','cyclingSpeed','cyclingRelief',
- 'cyclingWeek','selectedCyclingDay',
+ 'cyclingWeek','selectedCyclingDay','cyclingProgram',
  // Calisthenics
  'calisthenicsLevel','calisthenicsGoal','calisthenicsdays','calisthPullups','calisthPushups',
  'calisthenicsEquipment','calisthDips','calisthCurrentWeek',
- 'calisthenicsWeek','selectedCalisthDay',
+ 'calisthenicsWeek','selectedCalisthDay','calisthenicsOnboardingStep','calisthenicsProgram',
  // Musculation
  'muscuWeek','muscuCycle','muscuProgramCount','sportSplashDone','nStep','sStep','selectedSportDay',
  'sportProgram',
+ 'competitionGoal','competitionDate','competitionType','sportHobbies',
  'bonusExercises','sessionHistory',
  'muscuSessionLog','muscuProgressionHistory','musculationWeights','sportEquipment','installations',
  // Nutrition plan
@@ -81,10 +84,24 @@ var PROFILE_KEYS = [
  'swapCount',
  'welcomeShown',
  'firstLoginDate',
+ 'sportMixEnabled',
+ 'sportMixSecondary',
  '_bodyFatEstimate',
  '_bodyCompositionProfile',
  '_bodyCompositionWeight',
- 'bodyScanDone'
+ 'bodyScanDone',
+ '_parqNextStep',
+ '_sportProfileDone',
+ '_switchedFromSport',
+ '_switchedFromNutrition',
+ // Smart Calendar
+ 'weeklyCalendar',
+ 'smartCalendarEnabled',
+ 'smartCalendarDismissed',
+ // Plan hash — détecte changement de paramètres nutritionnels depuis dernière génération
+ '_planHash',
+ // Questionnaire programme musculation enrichi
+ 'muscuObjectifSpecifique','muscuZonesCibles','muscuRenforcementNote'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
@@ -113,7 +130,8 @@ var NUTRITION_PLAN_KEYS = [
  'goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height',
  'regime', 'halal', 'excluded', 'cookLevel', 'wantsDessert',
  'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical',
- 'trainingDaysSelected'
+ 'trainingDaysSelected',
+ 'pregnant' // grossesse modifie calcTarget() et filterRecipes() — plan doit être régénéré
 ];
 
 function saveProfile() {
@@ -121,14 +139,8 @@ function saveProfile() {
  var user = AUTH.getUser();
  var uid = user ? user.id : 'anon';
 
- // Validate profile data before saving
- if (window.validateProfile) {
-   var _valErrors = window.validateProfile({ age: S.age, weight: S.weight, height: S.height });
-   if (_valErrors.length > 0) {
-     alert(_valErrors.join('\n'));
-     return;
-   }
- }
+ // Validation silencieuse — ne jamais bloquer le rendu avec alert()
+ // Les valeurs invalides sont corrigées par les onblur des inputs de renderStep3
 
  // Check if nutrition-relevant values changed vs what is currently persisted.
  // If so, weekPlan is stale and must be invalidated before saving.
@@ -141,9 +153,14 @@ function saveProfile() {
  if (!prev) { try { prev = JSON.parse(raw2); } catch(e2) {} }
  if (!prev) return;
  var planImpacted = NUTRITION_PLAN_KEYS.some(function(k) {
- // For arrays/objects use JSON serialization; for primitives use strict equality
  var pv = prev[k], sv = S[k];
- if (typeof pv === 'object' || typeof sv === 'object') {
+ // Si la clé était absente du profil sauvegardé, impossible qu'elle ait "changé"
+ // (évite faux positif quand un nouveau champ est ajouté à NUTRITION_PLAN_KEYS)
+ if (pv === undefined) return false;
+ // For arrays/objects use JSON serialization; for primitives use strict equality
+ // Note: typeof null === 'object' en JS — exclure null pour éviter les faux positifs
+ // (ex: pv=null vs sv=[] → "null" !== "[]" → invaliderait le plan à tort)
+ if ((typeof pv === 'object' && pv !== null) || (typeof sv === 'object' && sv !== null)) {
  return JSON.stringify(pv) !== JSON.stringify(sv);
  }
  return pv !== sv;
@@ -188,13 +205,20 @@ function saveProfile() {
 // Migration centralisée des anciens numéros de step vers le nouveau routing (Apr 2026)
 // Appelée après loadProfile() à chaque login ou sync cloud — une seule source de vérité
 function _migrateSteps() {
- if (S.appMode === 'nutrition' && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 9) {
+ // Appliquer seulement en mode nutrition/both (jamais si appMode absent = nouvel utilisateur sans choix de mode)
+ if ((S.appMode === 'nutrition' || S.appMode === 'both') && typeof S.nStep === 'number' && S.nStep >= 1 && S.nStep <= 11) {
    if (S.weekPlan) { S.nStep = 12; }
-   else if (S.nStep === 8) { S.nStep = 11; }
-   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null) { S.nStep = 8; }
+   // nStep=8 sans profil de base → retour au début de l'onboarding
+   else if (S.nStep === 8 && S.sex && S.goal !== null && S.goal !== undefined) { S.nStep = 11; }
+   // nStep=8 en mode 'both' avec sexe renseigné = transition sport→nutrition en cours — NE PAS réinitialiser
+   else if (S.nStep === 8 && !(S.appMode === 'both' && S.sex)) { S.nStep = 1; }
+   // Migrer vers step 8 UNIQUEMENT si toutes les données de base sont renseignées (utilisateur pré-migration)
+   // — nStep 9 et 10 sont des steps courants à préserver — évite de sauter steps 5-7 pour nouveaux utilisateurs
+   else if (S.nStep >= 1 && S.nStep <= 7 && S.sex && S.goal !== null && S.weight && S.height && S.activity !== null && S.sleep !== null) { S.nStep = 8; }
  }
- if (S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
-   S.nStep = S.weekPlan ? 12 : (S.goal !== null ? 11 : 1);
+ // Cas nStep=0 uniquement pour les modes nutrition (pas sport-only ni nouvel utilisateur sans appMode)
+ if ((S.appMode === 'nutrition' || S.appMode === 'both') && S.nStep === 0 && (S.sex || S.goal !== null || S.weekPlan)) {
+   S.nStep = S.weekPlan ? 12 : (S.goal !== null && S.weight && S.height ? 11 : (S.sex ? 2 : 1));
  }
 }
 
@@ -229,7 +253,7 @@ function loadProfile() {
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','strongZones','weakZones',
  'train','supplements','wheyFlavors','alcoholTypes',
- 'calisthenicsEquipment','calisthenicsGoal','weightHistory','trainingDaysSelected'];
+ 'calisthenicsEquipment','calisthenicsGoal','weightHistory','trainingDaysSelected','sportHobbies'];
  _arrFields.forEach(function(f) { if (!Array.isArray(S[f])) S[f] = []; });
  // weekPlan is null or array — reject anything else
  if (S.weekPlan !== null && !Array.isArray(S.weekPlan)) S.weekPlan = null;
@@ -248,6 +272,7 @@ function loadProfile() {
  // Reset ephemeral UI state that should not persist across sessions
  S.shopListOpen = false;
  S.smoothieBarOpen = false;
+ S._showCompletionFirst = false;
  S._addMealModalSlot = null;
  S.modalRecipe = null;
  S.modalSmoothie = null;
@@ -262,67 +287,98 @@ window.loadProfile = loadProfile;
 
 // ─── WELCOME SCREEN (first connection) ───
 window.renderWelcomeScreen = function renderWelcomeScreen(app) {
+ // Safe first name retrieval — S.prenom preferred, fallback to auth name, no crash
+ var _u = window.AUTH ? window.AUTH.getUser() : null;
+ var _name = (window.S && window.S.prenom && window.S.prenom.trim())
+   || (_u && _u.name && _u.name.split(' ')[0].trim()) || '';
+ var _cap = _name ? _name.charAt(0).toUpperCase() + _name.slice(1) : '';
+ var _titleText = _cap
+   ? (_cap + ', nous allons apprendre \u00e0 vous conna\u00eetre.')
+   : 'Nous allons apprendre \u00e0 vous conna\u00eetre.';
+
  var wrap = h('div', {
-   style: 'position:fixed;inset:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px;overflow-y:auto;'
+   style: 'position:fixed;inset:0;background:var(--ivory,#FAF9F6);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;overflow-y:auto;'
  });
 
  var inner = h('div', {
-   style: 'width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;text-align:center;opacity:0;transform:translateY(20px);transition:opacity .6s ease-out,transform .6s ease-out;'
+   style: 'width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;text-align:center;'
  });
 
- // Logo mark
- inner.appendChild(h('div', {
-   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:40px;'
- }, '\u25C6 SMARTFITCOACH'));
+ // Éléments — animation stagger individuelle (plus premium qu'un seul bloc)
+ var logo = h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:48px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
+ }, '\u25C6 SMARTFITCOACH');
 
- // Main headline
- inner.appendChild(h('div', {
-   style: 'font-family:Georgia,serif;font-size:clamp(26px,7vw,32px);font-weight:normal;line-height:1.2;letter-spacing:-.01em;color:var(--black,#0A0A09);margin-bottom:16px;'
- }, 'Bienvenue dans votre espace.'));
+ var titre = h('div', {
+   style: 'font-family:Georgia,serif;font-size:clamp(28px,8vw,36px);font-weight:normal;line-height:1.15;letter-spacing:-.02em;color:var(--black,#0A0A09);margin-bottom:20px;opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease;'
+ }, _titleText);
 
- // Subtitle
- inner.appendChild(h('div', {
-   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:36px;'
- }, 'CON\u00c7U POUR VOUS. UNIQUEMENT POUR VOUS.'));
+ var sousTitre = h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:.35em;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:40px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
+ }, 'Votre corps a une logique. Nous allons la lire.');
 
- // Editorial paragraph
- var para1 = h('div', {
-   style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.8;color:var(--black,#0A0A09);max-width:320px;margin-bottom:32px;'
+ // Corps phrase 1 — courte, italique, noire
+ var corps1 = h('div', {
+   style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.75;color:var(--black,#0A0A09);max-width:300px;margin-bottom:24px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
+ }, 'Avant de vous proposer quoi que ce soit, nous vous \u00e9coutons.');
+
+ // Corps phrase 2 — longue, analytique, grise (Helvetica Neue light)
+ var corps2 = h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.85;color:var(--grey,#6B6B65);max-width:320px;margin-bottom:24px;opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s ease;'
  });
- para1.appendChild(document.createTextNode('Vous rejoignez une communaut\u00e9 de personnes qui refusent le compromis. Votre nutrition, votre programme sportif \u2014 chaque d\u00e9tail sera calibr\u00e9 sur votre singularit\u00e9.'));
- inner.appendChild(para1);
+ corps2.appendChild(document.createTextNode('Votre m\u00e9tabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la fa\u00e7on dont vous bougez et dont vous mangez \u2014 chaque donn\u00e9e que vous nous confierez sera le mat\u00e9riau d\u2019un programme qui ne ressemblera \u00e0 aucun autre.'));
 
- // Divider
- inner.appendChild(h('div', {
-   style: 'width:100%;max-width:300px;height:1px;background:var(--border,#E8E7E2);margin-bottom:32px;'
- }));
+ // Corps phrase 3 — courte, forte, uppercase (déclaration finale)
+ var corps3 = h('div', {
+   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--black,#0A0A09);margin-bottom:40px;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;'
+ }, 'Ce que vous \u00eates construit ce que vous recevrez.');
 
- // Second paragraph
- var para2 = h('div', {
-   style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.7;color:var(--grey,#6B6B65);max-width:300px;margin-bottom:48px;'
+ var divider = h('div', {
+   style: 'width:100%;max-width:260px;height:1px;background:var(--border,#D8D8D0);margin-bottom:36px;opacity:0;transition:opacity .5s ease;'
  });
- para2.appendChild(document.createTextNode('Dans quelques instants, nous allons personnaliser votre exp\u00e9rience. Cela prendra moins de 3 minutes.'));
- inner.appendChild(para2);
 
- // CTA button
+ // CTA — conforme .btn-primary (9px, border, border-radius:2px, hover/active)
  var cta = h('button', {
-   style: 'width:100%;max-width:360px;padding:16px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;',
+   style: 'width:100%;max-width:360px;padding:18px 28px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:400;letter-spacing:.4em;text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s ease,transform .15s ease;margin-bottom:24px;opacity:0;transform:translateY(16px);',
+   onmouseenter: function(e){ e.currentTarget.style.background='var(--black2,#181818)'; },
+   onmouseleave: function(e){ e.currentTarget.style.background='var(--black,#0A0A09)'; },
+   onmousedown:  function(e){ e.currentTarget.style.transform='scale(0.98)'; },
+   onmouseup:    function(e){ e.currentTarget.style.transform='scale(1)'; },
    onclick: function() {
-     S.welcomeShown = true;
+     if (window.S) S.welcomeShown = true;
      saveProfile();
      window.render();
    }
- }, 'COMMENCER MON PARCOURS');
+ }, 'JE ME FAIS CONNA\u00ceTRE');
+
+ var signature = h('div', {
+   style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;line-height:1.7;color:var(--grey,#6B6B65);max-width:280px;text-align:center;opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease;'
+ }, 'Un programme qui vous ressemble n\u2019existe pas encore. Il va na\u00eetre ici.');
+
+ inner.appendChild(logo);
+ inner.appendChild(titre);
+ inner.appendChild(sousTitre);
+ inner.appendChild(corps1);
+ inner.appendChild(corps2);
+ inner.appendChild(corps3);
+ inner.appendChild(divider);
  inner.appendChild(cta);
+ inner.appendChild(signature);
 
  wrap.appendChild(inner);
  app.appendChild(wrap);
 
- // Entrance animation
+ // Staggered entrance — chaque élément apparaît individuellement
+ var _animEls = [logo, titre, sousTitre, corps1, corps2, corps3, divider, cta, signature];
+ var _delays  = [0, 80, 160, 240, 320, 400, 460, 520, 600];
  requestAnimationFrame(function() {
    requestAnimationFrame(function() {
-     inner.style.opacity = '1';
-     inner.style.transform = 'translateY(0)';
+     _animEls.forEach(function(el, i) {
+       setTimeout(function() {
+         el.style.opacity = '1';
+         if (el !== divider) el.style.transform = 'translateY(0)';
+       }, _delays[i]);
+     });
    });
  });
 };
@@ -372,7 +428,7 @@ window.renderModuleChoice = function renderModuleChoice(content) {
      desc: 'L\u2019approche compl\u00e8te pour des r\u00e9sultats durables.',
      badge: 'RECOMMAND\u00c9', svg: _svgBoth, delay: '.32s',
      onclick: function() {
-       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 1; // saute le splash (nStep=0)
+       S.appMode = 'both'; S.view = 'nutrition'; S.nStep = 1; S.sportSplashDone = true; // saute les deux splashs
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        window.render();
      }
@@ -557,11 +613,33 @@ function renderProfilePage(container) {
          // Le profil de base (sexe, poids, taille) est déjà rempli via l'onboarding sport
          // → on démarre directement au questionnaire médical nutrition (nStep 8 dans le nouveau flow)
          // Si les données de base manquent malgré tout, démarrer depuis le début (nStep 1)
-         var _hasBasicProfile = S.sex && (S.weight > 0 || S.height > 0);
+         var _hasBasicProfile = S.sex && S.weight > 0 && S.height > 0;
          S.nStep = _hasBasicProfile ? 8 : 1;
          S.view = 'nutrition';
          // Marquer pour afficher un message d'explication dans l'onboarding
          S._switchedFromSport = true;
+         // Pré-remplir activité + type entraînement + sommeil depuis les données sport
+         // (évite que l'utilisateur resaisisse des données déjà connues)
+         if (S.activity === null || S.activity === undefined) {
+           var _sd = S.sportDays || 3;
+           S.activity = _sd >= 5 ? 3 : _sd >= 3 ? 2 : 1; // ACTIVITIES index : 3=Très actif, 2=Modérément, 1=Légèrement
+         }
+         if (!Array.isArray(S.train) || S.train.length === 0) {
+           var _trainMap = { musculation: [0], crossfit: [0, 1], running: [4], hyrox: [0, 1], yoga: [2], cycling: [1], triathlon: [1, 4], calisthenics: [0], padel: [3], golf: [3] };
+           S.train = (S.sportType && _trainMap[S.sportType]) ? _trainMap[S.sportType] : [2];
+         }
+         if (S.sleep === null || S.sleep === undefined) {
+           S.sleep = 2; // SLEEPS[2] = '7-8h' — valeur de référence, modifiable dans l'onboarding nutrition
+         }
+         // Pré-remplir l'objectif nutrition depuis les objectifs sport (évite une sélection manuelle obligatoire)
+         if ((S.goal === null || S.goal === undefined) && Array.isArray(S.sportGoals) && S.sportGoals.length > 0) {
+           var _sgToGoal = {muscle: 0, weightloss: 3, shred: 4, endurance: 2, flexibility: 2, general: 2};
+           var _sg = S.sportGoals[0];
+           if (_sgToGoal[_sg] !== undefined) S.goal = _sgToGoal[_sg];
+         }
+         // Fallback : si goal toujours null (pas de sportGoals), forcer maintenance/équilibre
+         // → évite calcTDEE/calcMacros de retourner 0 kcal
+         if (S.goal === null || S.goal === undefined) S.goal = 2; // GOALS[2] = maintenance/équilibre
        } else if (_addingSport) {
          S.sStep = 0;
          S.view = 'sport';
@@ -720,7 +798,7 @@ function renderProfilePage(container) {
    style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
    onclick: function() {
      if (window.AUTH && window.AUTH.logout) { window.AUTH.logout(); }
-     else { S.view = 'authLogin'; if (window.render) window.render(); }
+     else { S.view = 'auth'; if (window.render) window.render(); }
    }
  }, 'Se déconnecter');
  c.appendChild(logoutBtn);
@@ -766,7 +844,7 @@ function renderProfilePage(container) {
        console.warn('[RGPD] AUTH.deleteAccount not available — logging out only');
        window.AUTH.logout();
      } else {
-       S.view = 'authLogin';
+       S.view = 'auth';
        if (window.render) window.render();
      }
    }
@@ -914,7 +992,11 @@ function renderProfilePage(container) {
        if (!_canSave) return;
        // Apply changes
        S.goal = S._modalGoal;
-       if (_needsTarget) S.targetWeight = S._modalTargetWeight;
+       if (_needsTarget) {
+         S.targetWeight = S._modalTargetWeight;
+       } else {
+         S.targetWeight = null; // Nettoyer le poids cible si objectif n'en a pas besoin (évite projection fantôme)
+       }
        // Sync sport goals
        if (_selGoalObj && window.NUTRITION_TO_SPORT_GOAL) {
          var _newSportId = window.NUTRITION_TO_SPORT_GOAL[_selGoalObj.key];
@@ -988,25 +1070,68 @@ function render() {
  if (render._lock) return;
  render._lock = true;
  try {
+ // === SAFETY: conditions incompatibles avec certains objectifs (OMS 2016, ACOG 2020/2022, ANAD, IOC 2018) ===
+ // Correction silencieuse — attrape les données persistées en localStorage avant le fix
+ var _goalCorrected = false;
+ if (window.S && window.GOALS && typeof window.S.goal === 'number' && window.GOALS[window.S.goal]) {
+   var _safetyGoalKey = window.GOALS[window.S.goal].key;
+   var _isUnsafeGoal = _safetyGoalKey === 'cut' || _safetyGoalKey === 'shred';
+   var _isUnsafeGoalTca = _safetyGoalKey === 'cut' || _safetyGoalKey === 'shred' || _safetyGoalKey === 'bulk' || _safetyGoalKey === 'lean_bulk';
+   var _isPregnant = window.S.pregnant && window.S.sex === 'femme';
+   var _isAllait = Array.isArray(window.S.medical) && window.S.medical.indexOf('allaitement') !== -1;
+   var _isTca = Array.isArray(window.S.medical) && window.S.medical.indexOf('tca') !== -1;
+   if (_isUnsafeGoal && (_isPregnant || _isAllait)) {
+     window.S.goal = 2; // Forcer maintien — index 2 = maintain
+     if (window.saveProfile) window.saveProfile();
+     _goalCorrected = true;
+   } else if (_isUnsafeGoalTca && _isTca) {
+     window.S.goal = 2; // TCA : forcer maintien (ANAD, IOC 2018)
+     if (window.saveProfile) window.saveProfile();
+     _goalCorrected = true;
+   }
+ }
+ // ================================================================================
  if (window.destroyAllCharts) window.destroyAllCharts();
- if (window.AUTH && window.AUTH.isLoggedIn()) saveProfile();
+ // Stopper le timer CrossFit si on navigue ailleurs (évite le bip en background)
+ if (window._wodTimerInterval) { clearInterval(window._wodTimerInterval); window._wodTimerInterval = null; }
+ // Éviter le double saveProfile() si une correction de sécurité a déjà persisté
+ if (!_goalCorrected && window.AUTH && window.AUTH.isLoggedIn()) saveProfile();
  var app = document.getElementById('app');
  if (!app) { console.error('[render] #app not found'); return; }
 
- // Scroll to top only when navigating to a different page/step
+ // Scroll to top on any page/step/sub-page change
+ var _s2p = window._s2page || 0;
+ var _s5p = window._s5page || 0;
+ var _cfCal = !!S.cfCalendarOpen;
+ // Track sport day selections — switching days changes page content significantly
+ var _selDayKey = (S.selectedCrossfitDay || 0) + '|' + (S.selectedRunDay || 0) + '|' +
+   (S.selectedHyroxDay || 0) + '|' + (S.selectedSportDay || 0) + '|' +
+   (S.selectedPadelDay || 0) + '|' + (S.selectedGolfDay || 0) + '|' +
+   (S.selectedTriDay || 0) + '|' + (S.selectedCyclingDay || 0) + '|' +
+   (S.selectedCalisthDay || 0) + '|' + (S.yogaDay || 0);
  var _didNavigate = (render._lastView !== S.view) ||
  (render._lastNStep !== S.nStep) ||
- (render._lastSStep !== S.sStep);
+ (render._lastSStep !== S.sStep) ||
+ (render._lastS2page !== _s2p) ||
+ (render._lastS5page !== _s5p) ||
+ (render._lastCfCal !== _cfCal) ||
+ (render._lastSelDayKey !== _selDayKey);
  render._lastView = S.view;
  render._lastNStep = S.nStep;
  render._lastSStep = S.sStep;
+ render._lastS2page = _s2p;
+ render._lastS5page = _s5p;
+ render._lastCfCal = _cfCal;
+ render._lastSelDayKey = _selDayKey;
 
  app.innerHTML = '';
  try {
 
  if (_didNavigate) {
- // Scroll immediately (before new content is painted)
- window.scrollTo({ top: 0, behavior: 'instant' });
+ // Disable CSS scroll-behavior:smooth — it overrides behavior:'instant' on iOS Safari/some Android
+ document.documentElement.style.scrollBehavior = 'auto';
+ document.body.style.scrollBehavior = 'auto';
+ window.scrollTo(0, 0);
  document.documentElement.scrollTop = 0;
  document.body.scrollTop = 0;
  var _appEl = document.getElementById('app');
@@ -1104,6 +1229,10 @@ function render() {
  if (S.appMode !== 'nutrition') {
    nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, window.t('nav.sport')));
  }
+ if (S.appMode) {
+   // Calendrier accessible en mode sport ET nutrition (le calendrier pilote les jours training/repos = données nutritionnelles)
+   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'calendar' ? ' active' : ''), style: 'font-size:11px', onclick: function(){ S.view = 'calendar'; if(window.BLACKBOX)window.BLACKBOX.log('nav_calendar'); render(); }}, 'Calendrier'));
+ }
  wrap.appendChild(nav);
 
  var content = h('div', {'class': 'fade-in', style: 'margin-top:24px'});
@@ -1125,16 +1254,23 @@ function render() {
    return;
  }
 
- if (S.view === 'profil') {
+ if (S.view === 'profil' || S.view === 'profile') {
  renderProfilePage(content);
+ } else if (S.view === 'calendar' && window.SMART_CALENDAR) {
+ window.SMART_CALENDAR.render(content);
  } else if (S.view === 'sport' && window.SPORT) {
- SPORT.render(content);
+ window.SPORT.render(content);
  } else if (S.view === 'nutrition' && window.NUTRITION) {
- NUTRITION.render(content);
+ window.NUTRITION.render(content);
  } else {
  // Default + 'today' + 'dashboard' → vue Aujourd'hui
  S.view = 'today';
- if (window.TODAY) TODAY.render(content);
+ if (window.TODAY) {
+   window.TODAY.render(content);
+ } else {
+   // Fallback si le module TODAY n'est pas encore chargé
+   content.appendChild(h('div', {style: 'padding:48px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Chargement en cours… Rechargez la page si ce message persiste.'));
+ }
  }
 
  wrap.appendChild(content);
@@ -1148,21 +1284,30 @@ function render() {
  // Onboarding screen (P10) — écran de bienvenue personnalisé (1 seule fois)
  try { if (window.OnboardingComplete) window.OnboardingComplete.check(); } catch(e) {}
 
- // Post-render scroll: reset .app container and window after content is in DOM
+ // Post-render scroll: reset scroll position after content is in DOM
  if (_didNavigate) {
- window.scrollTo({ top: 0, behavior: 'instant' });
+ window.scrollTo(0, 0);
  document.documentElement.scrollTop = 0;
  document.body.scrollTop = 0;
  if (app) app.scrollTop = 0;
  var _wrap = app.querySelector('.app');
  if (_wrap) _wrap.scrollTop = 0;
+ // Double-rAF: first frame ensures layout is complete, second ensures paint is done
  requestAnimationFrame(function() {
- window.scrollTo({ top: 0, behavior: 'instant' });
+ window.scrollTo(0, 0);
  document.documentElement.scrollTop = 0;
  document.body.scrollTop = 0;
  if (app) app.scrollTop = 0;
  var _w2 = app.querySelector('.app');
  if (_w2) _w2.scrollTop = 0;
+ requestAnimationFrame(function() {
+ window.scrollTo(0, 0);
+ document.documentElement.scrollTop = 0;
+ document.body.scrollTop = 0;
+ // Restore CSS smooth scrolling after navigation is fully settled
+ document.documentElement.style.scrollBehavior = '';
+ document.body.style.scrollBehavior = '';
+ });
  });
  }
  // Translate DOM if EN
@@ -1250,6 +1395,15 @@ function renderLogin(app) {
  // Restore profile from localStorage for this user
  loadProfile();
  _migrateSteps();
+ // Restaurer le contexte de vue selon l'état du profil chargé
+ var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
+ if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+ // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
+ else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
+ else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
+ else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
+ else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
+ // else: stay on 'today' (default set above)
  // Restore language preference
  if (window.I18N && S.lang) window.I18N.current = S.lang;
  // Restore unit preferences
@@ -1278,9 +1432,10 @@ function renderLogin(app) {
  window.UNITS.weight = S.weightUnit || 'kg';
  window.UNITS.height = S.heightUnit || 'cm';
  }
+ render(); // Re-render après sync cloud : nStep migré, unités à jour
  }
- });
- SupaSync.startAutoSync();
+ SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
+ }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); });
  }
  if (window.GAMIFICATION) { GAMIFICATION.updateStreak(); GAMIFICATION.unlockBadge('first_login'); }
  // Enregistre la date du premier login (pour bloquer le bilan de forme au J+1)
@@ -1294,7 +1449,7 @@ function renderLogin(app) {
  render();
  }
  }).catch(function() {
- if (S.view !== 'auth') return;
+ S.view = 'auth'; // forcer le retour à l'écran login en cas d'erreur réseau
  S.authError = 'Erreur de connexion. Réessayez.';
  render();
  });
@@ -1426,7 +1581,11 @@ function renderRegister(app) {
  dialBtn.appendChild(dialArrow);
 
  // Dropdown overlay — appended to document.body (position:fixed) pour éviter tout problème de z-index/stacking context
+ // Nettoyer tout dropdown résiduel (fuite DOM si re-render sans fermeture préalable)
+ var _oldDialDrop = document.getElementById('_sfc_dial_dropdown');
+ if (_oldDialDrop && _oldDialDrop.parentNode) _oldDialDrop.parentNode.removeChild(_oldDialDrop);
  var dialDropdown = document.createElement('div');
+ dialDropdown.id = '_sfc_dial_dropdown';
  dialDropdown.style.cssText = 'display:none;position:fixed;z-index:9999;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#E8E6DF);border-radius:2px;box-shadow:0 8px 32px rgba(0,0,0,0.18);max-height:260px;overflow-y:auto;min-width:220px;';
  document.body.appendChild(dialDropdown);
 
@@ -1467,12 +1626,11 @@ function renderRegister(app) {
      dialDropdown.style.left = rect.left + 'px';
      dialDropdown.style.minWidth = rect.width + 'px';
      dialDropdown.style.display = 'block';
-     // Fermer au prochain clic externe
+     // Fermer au prochain clic externe (once:true évite l'accumulation de listeners)
      setTimeout(function() {
-       document.addEventListener('click', function _closeDialDrop() {
+       document.addEventListener('click', function() {
          dialDropdown.style.display = 'none';
-         document.removeEventListener('click', _closeDialDrop);
-       });
+       }, { once: true });
      }, 0);
    }
  });
@@ -1630,8 +1788,13 @@ function renderVerifyEmail(app) {
  var user = res.data && (res.data.user || (res.data.session && res.data.session.user));
  if (user && user.email_confirmed_at) {
  S.authError = '';
- S.view = 'nutrition';
- S.nStep = 0;
+ // Rediriger selon appMode (si déjà configuré, ne pas écraser l'onboarding en cours)
+ if (S.appMode === 'sport') {
+   S.view = 'sport';
+ } else {
+   S.view = 'nutrition';
+   S.nStep = 0;
+ }
  if (window.GAMIFICATION) { GAMIFICATION.unlockBadge('first_login'); }
  render();
  } else {
@@ -1672,9 +1835,9 @@ function renderForgotPassword(app) {
  if (S._resetSent) {
  // Confirmation screen
  c.appendChild(h('div', {style: 'text-align:center;padding:24px 0'}, [
- h('div', {style: 'font-family:Georgia,serif;font-size:24px;margin-bottom:16px'}, 'Email envoy\u00e9'),
+ h('div', {style: 'font-family:Georgia,serif;font-size:24px;margin-bottom:16px'}, 'V\u00e9rifiez votre bo\u00eete mail'),
  h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px'},
- 'Un lien de r\u00e9initialisation a \u00e9t\u00e9 envoy\u00e9 \u00e0 ' + (S._resetEmail || '') + '. V\u00e9rifiez votre bo\u00eete de r\u00e9ception et votre dossier spam.'),
+ 'Si un compte est associ\u00e9 \u00e0 ' + (S._resetEmail || 'cette adresse') + ', vous allez recevoir un lien de r\u00e9initialisation. V\u00e9rifiez \u00e9galement votre dossier spam.'),
  h('button', {'class': 'btn-secondary', onclick: function() {
  S._resetSent = false;
  S._resetEmail = '';
@@ -1714,10 +1877,14 @@ function renderForgotPassword(app) {
  render();
  } else {
  S.authError = result.error;
+ sendBtn.disabled = false;
+ sendBtn.textContent = 'Envoyer le lien';
  render();
  }
  }).catch(function() {
  S.authError = 'Erreur r\u00e9seau. R\u00e9essayez.';
+ sendBtn.disabled = false;
+ sendBtn.textContent = 'Envoyer le lien';
  render();
  });
  }}, 'Envoyer le lien');
@@ -1748,13 +1915,13 @@ function renderNewPassword(app) {
  c.appendChild(h('div', {style: 'text-align:center;padding:24px 0'}, [
  h('div', {style: 'font-family:Georgia,serif;font-size:24px;margin-bottom:16px'}, 'Mot de passe modifi\u00e9'),
  h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px'},
- 'Votre mot de passe a \u00e9t\u00e9 mis \u00e0 jour. Vous pouvez maintenant vous connecter.'),
+ 'Votre mot de passe a \u00e9t\u00e9 mis \u00e0 jour. Vous \u00eates connect\u00e9 et votre programme vous attend.'),
  h('button', {'class': 'btn-primary', onclick: function() {
  S._passwordUpdated = false;
  S.authError = '';
- S.view = 'auth';
+ S.view = 'today';
  render();
- }}, 'Se connecter')
+ }}, 'Acc\u00e9der \u00e0 mon programme')
  ]));
  app.appendChild(c);
  return;
@@ -1805,6 +1972,11 @@ function renderNewPassword(app) {
  }}, 'Enregistrer');
  form.appendChild(saveBtn);
 
+ // Lien de secours si le token Supabase expire en cours de saisie
+ var cancelLink = h('div', {'class': 'auth-switch'});
+ cancelLink.appendChild(h('a', {onclick: function() { S.authError = ''; S.view = 'auth'; render(); }}, 'Retour \u00e0 la connexion'));
+ c.appendChild(cancelLink);
+
  c.appendChild(form);
  app.appendChild(c);
 }
@@ -1844,6 +2016,8 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
 
 // ─── INIT ───
 function _doAutoLogin() {
+ // Guard: user arriving from a password reset link — do not overwrite the authNewPassword view
+ if (window.S && window.S.view === 'authNewPassword') { render(); return; }
 if (window.AUTH && window.AUTH.isLoggedIn()) {
  S.view = 'today';
  if (window.GAMIFICATION) GAMIFICATION.updateStreak();
@@ -1862,18 +2036,22 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      S.prenom = _autoUser.name.split(' ')[0];
    }
  }
- // Si l'utilisateur existant a un profil mais nStep=0 (ex: profil corrompu ou rechargement)
- // → sauter le splash pour ne pas le forcer à refaire tout l'onboarding
- if (S.nStep === 0 && (S.sex || S.goal || S.weekPlan)) {
- S.nStep = S.weekPlan ? 12 : (S.goal ? 11 : 1);
- }
+ // Note : la migration nStep=0 est gérée par _migrateSteps() (appelé ligne 1867)
+ // pour éviter la double-migration (régression pour les users sport-only avec weekPlan)
  // Retour utilisateur : préserver le step programme (ne pas réinitialiser l'onboarding sport).
- // Steps à PRÉSERVER : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel) 14(golf) 15(prog dédié) 16(charges) 18(triathlon) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
- // Steps intermédiaires onboarding (1,2,3,5,7,9,11,13,17,19,22,24) → revenir à 0 (sélection sport)
- var _PROGRAM_STEPS_MAIN = [4, 6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 23, 25];
+ // Steps à PRÉSERVER : 4(muscu) 6(CF) 8(running) 10(hyrox) 12(padel) 14(golf) 15(prog dédié) 16(charges) 17(triathlon cfg) 18(triathlon prog) 20(médical) 21(yoga) 23(cycling) 25(calisthenics)
+ // Steps intermédiaires onboarding (1,2,3,5,7,9,11,13,19,22,24) → revenir à 0 (sélection sport)
+ var _PROGRAM_STEPS_MAIN = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1) {
    S.sStep = 0;
  }
+ // Restaurer le contexte de vue (sport mid-onboarding vs nutrition vs today)
+ if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+ // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
+ else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
+ else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
+ else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
+ else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
  // ─── AUTO-REGENERATION PLAN NUTRITION (semaine expirée) ───
  // Si un plan existe, que l'utilisateur n'est PAS en train de le consulter (nStep ≠ 12),
  // et que la date de génération a plus de 7 jours → regénérer silencieusement.
@@ -1909,6 +2087,9 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
          var _wkAuto = window.generateWeek();
          if (Array.isArray(_wkAuto) && _wkAuto.length > 0) S.weekPlan = _wkAuto;
          S._weekPlanGeneratedAt = new Date().toISOString();
+         // Figer le hash après auto-regen — évite une re-regen au prochain login
+         var _hAuto = window.getPlanHash ? window.getPlanHash() : '';
+         if (_hAuto) S._planHash = _hAuto;
          if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
          if (window.SupaSync && S.weekPlan) {
            try {
@@ -1943,8 +2124,15 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  }
  // Demarrer la sync Supabase si disponible
  if (window.SupaSync) {
- SupaSync.syncOnLogin();
- SupaSync.startAutoSync();
+ SupaSync.syncOnLogin().then(function(syncResult) {
+   if (syncResult === 'loaded_from_cloud') {
+     _migrateSteps();
+     if (window.I18N && S.lang) window.I18N.current = S.lang;
+     if (window.UNITS) { window.UNITS.weight = S.weightUnit || 'kg'; window.UNITS.height = S.heightUnit || 'cm'; }
+     if (window.render) window.render();
+   }
+   SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
+ }).catch(function() { SupaSync.startAutoSync(); });
  }
 } else {
  S.view = 'auth';

@@ -2234,11 +2234,18 @@ function buildPersonalizedMuscuPlan(S) {
   // Trouve le split disponible le plus proche
   if (!availSplits[splitDays]) {
     var keys = Object.keys(availSplits).map(Number).sort(function(a,b){return a-b;});
-    splitDays = keys.reduce(function(prev, cur) {
-      return Math.abs(cur - days) < Math.abs(prev - days) ? cur : prev;
-    }, keys[0]);
+    if (keys.length > 0) {
+      splitDays = keys.reduce(function(prev, cur) {
+        return Math.abs(cur - days) < Math.abs(prev - days) ? cur : prev;
+      }, keys[0]);
+    }
   }
-  var split = availSplits[splitDays] || availSplits[Object.keys(availSplits)[0]];
+  var split = availSplits[splitDays] || availSplits[Object.keys(availSplits)[0]] || null;
+  // Normalise les splits array (ex: starting/greyskull/texas/nsuns) → {days:[]}
+  if (Array.isArray(split)) {
+    split = { days: split.map(function(d) { return { day: d.day, label: d.label, muscles: d.muscles || [] }; }) };
+  }
+  if (!split) return { weekProgram: [], tips: [], style: style };
 
   // 4. PHASE MACRO : selon semaine du cycle (muscuCycle 1-12)
   var cycleWeek = Math.max(1, Math.min(12, S.muscuCycle || 1));
@@ -2347,7 +2354,7 @@ function buildPersonalizedMuscuPlan(S) {
 
   // 8. CONSEILS PERSONNALISÉS
   var tips = [];
-  if (getAge() >= 50) tips.push('Récupération allongée recommandée : 48-72h entre les séances par groupe musculaire.');
+  if (typeof getAge === 'function' && getAge() >= 50) tips.push('Récupération allongée recommandée : 48-72h entre les séances par groupe musculaire.');
   if (isFemale) tips.push('Priorité fessiers et jambes : 2× par semaine recommandé pour résultats optimaux.');
   // S.sleep est un index : 0='<6h', 1='6-7h', 2='7-8h', 3='8h+'
   if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) tips.push('Sommeil insuffisant d\u00e9tect\u00e9 : la r\u00e9cup\u00e9ration musculaire est compromise, dormez plus.');
@@ -2697,7 +2704,7 @@ function checkProgressionSuggestion(exerciceName, muscuWeek, sessionLog) {
 
   var recent = sessionLog[sessionLog.length - 1];
   var prev = sessionLog[sessionLog.length - 2];
-  if (!recent || !recent.sets || !prev || !prev.sets) return null;
+  if (!recent || !recent.sets || !recent.sets.length || !prev || !prev.sets || !prev.sets.length) return null;
 
   // Toutes les reps réalisées au target ?
   var allCompleted = recent.sets.every(function(s) { return s.targetReps > 0 ? s.reps >= s.targetReps : true; });
@@ -2710,11 +2717,22 @@ function checkProgressionSuggestion(exerciceName, muscuWeek, sessionLog) {
     && prev.sets.every(function(s) { return !s.load || s.load === 0; });
 
   if (allCompleted && sameLoadAsPrev) {
+    // BUG E — Symbiose progression/nutrition : estimer le besoin protéique adapté à la progression
+    // La synthèse protéique musculaire (MPS) augmente ~24-48h après un effort progressif (Moore 2015)
+    // Rappel nutrition si calcMacros disponible et objectif masse (ISSN 2017)
+    var _protNote = '';
+    if (window.calcMacros && window.S) {
+      var _m = window.calcMacros();
+      var _goalKey = window.GOALS && window.S.goal !== null && window.GOALS[window.S.goal] ? window.GOALS[window.S.goal].key : '';
+      if (_m && _m.p > 0 && (_goalKey === 'bulk' || _goalKey === 'lean_bulk' || _goalKey === 'recomposition')) {
+        _protNote = ' \u2014 Cible prot\u00e9ines\u00a0: ' + _m.p + '\u00a0g/j pour soutenir cette progression (ISSN\u00a02017).';
+      }
+    }
     if (_allLoadsZero) {
       // Bodyweight: suggest more reps instead of more weight
       return {
         type: 'increase_reps',
-        message: '\uD83C\uDFAF Tu as fait toutes tes reps \u2014 essaie +1-2 reps par s\u00e9rie la semaine prochaine\u00a0!',
+        message: '\uD83C\uDFAF Tu as fait toutes tes reps \u2014 essaie +1-2 reps par s\u00e9rie la semaine prochaine\u00a0!' + _protNote,
         newLoad: null
       };
     }
@@ -2723,7 +2741,7 @@ function checkProgressionSuggestion(exerciceName, muscuWeek, sessionLog) {
     var increment = isLower ? 5 : 2.5;
     return {
       type: 'increase_load',
-      message: '\uD83C\uDFAF Progression sugg\u00e9r\u00e9e : +' + increment + ' kg la semaine prochaine !',
+      message: '\uD83C\uDFAF Progression sugg\u00e9r\u00e9e\u00a0: +' + increment + '\u00a0kg la semaine prochaine\u00a0!' + _protNote,
       newLoad: currentLoad + increment
     };
   }

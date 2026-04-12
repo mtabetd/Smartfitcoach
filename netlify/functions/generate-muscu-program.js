@@ -126,6 +126,20 @@ LOI 4 : Toutes les charges sont en KILOGRAMMES RÉELS.
         JAMAIS laisser une charge vide ou indiquer "?" dans le programme final.
 LOI 5 : Chaque exercice prescrit est assorti d'une justification "pour toi".
 LOI 6 : Aucun copier-coller entre séances.
+LOI 7 : Ce programme est EXCLUSIVEMENT un programme de MUSCULATION (force,
+        hypertrophie, endurance musculaire). Cela signifie :
+        a) Le cardio N'EST PAS du travail principal. Il est UNIQUEMENT toléré en
+           échauffement (max 8 min, intensité légère) et en récupération finale
+           (max 5 min, très léger). JAMAIS un bloc cardio >10 min comme travail
+           central d'une séance musculation.
+        b) Minimum 70% du temps de séance = exercices de résistance/force
+           (barres, haltères, machines, poids de corps lestés, câbles).
+        c) Même si "Vélo / cardio", "Course à pied" ou "Piscine" sont dans les
+           installations disponibles → ces équipements servent SEULEMENT à
+           l'échauffement ou récupération, JAMAIS comme séance principale.
+        d) Une séance de 60 min se découpe : Échauff 8 min + Travail force 47 min
+           + Cool-down/récup 5 min. Adapter selon la durée réelle.
+        VIOLATION DE LA LOI 7 = programme invalide à réécrire intégralement.
 
 ═══════════════════════════════════════════════════════════════════════════════
 SECTION 1 — DIAGNOSTIC PERSONNALISÉ OBLIGATOIRE
@@ -136,10 +150,17 @@ Avant TOUTE prescription, produire "Diagnostic personnalisé de [Prénom]" :
 1. INDICES CORPORELS (IMC chiffré, masse maigre estimée)
 2. FORCE RELATIVE (si 1RM connus : ratios 1RM/PDC, classement Strength Level ;
    si 1RM inconnus : estimer depuis PDC × niveau via LOI 4 et le noter "estimé")
-3. ÉQUILIBRES MUSCULAIRES (Bench/Squat ≈ 0.75, DL/Squat ≈ 1.20-1.25, OHP/Bench ≈ 0.65)
+3. ÉQUILIBRES MUSCULAIRES :
+   — Bench/Squat : homme ≈ 0.75, femme ≈ 0.55–0.65
+   — DL/Squat ≈ 1.20–1.25
+   — OHP/Bench ≈ 0.65
+   — SI femme + Hip Thrust 1RM fourni → évaluer hip thrust/squat ratio + volume glutes
 4. VOLUME ACTUEL vs MEV/MAV/MRV par groupe musculaire
+   (référence : tableau SECTION 4C ci-après, ajusté pour le niveau de [Prénom])
 5. TROIS POINTS FAIBLES NOMMÉS, CHIFFRÉS et SOURCÉS
 6. CHARGES CIBLES CALCULÉES (depuis 1RM réels ou estimés via LOI 4 si absents)
+7. SI SEXE FEMME : évaluation volume glutes, ratio Bench/Squat écart, % lower body
+8. SI GROSSESSE : noter trimestre, confirmer respect BLACKLIST Section 3D
 
 ═══════════════════════════════════════════════════════════════════════════════
 SECTION 2 — CHOIX DU SPLIT (algorithme strict)
@@ -179,6 +200,13 @@ FILTRE 3 — NIVEAU TECHNIQUE : débutant exclu des Olympic lifts/balistiques
 FILTRE 4 — PRÉFÉRENCES : aimés +1 priorité, détestés remplacés biomécaniquement
 FILTRE 5 — VARIATION ANTI-MONOTONIE : variantes d'angle si déjà 2x dans la sem
 FILTRE 6 — POINTS FAIBLES : +30% volume hebdo sur les 3 points faibles
+FILTRE 7 — TYPE DE PROGRAMME (LOI 7) : programme = MUSCULATION.
+  → Cardio pur (running, cycling, natation, home trainer continu) = INTERDIT
+    en travail principal. Si sélectionné en installation : usage warm-up/
+    cool-down UNIQUEMENT (≤10 min total).
+  → Remplacer tout exercice cardio-dominant proposé par l'IA par l'équivalent
+    force le plus proche (ex: gainage HIIT → circuit force, elliptique 30min →
+    superset squats/fentes).
 
 ═══════════════════════════════════════════════════════════════════════════════
 SECTION 3B — PROTOCOLES MÉDICAUX D'ÉVITEMENT (OBLIGATOIRE)
@@ -261,6 +289,64 @@ Règle de formatage médical obligatoire par exercice si restriction active :
   ↳ [MÉDICAL] : adapté pour [zone] — [raison technique brève]
 
 ═══════════════════════════════════════════════════════════════════════════════
+SECTION 3C — ADAPTATIONS FEMMES-SPÉCIFIQUES (OBLIGATOIRE si sexe = femme)
+═══════════════════════════════════════════════════════════════════════════════
+
+Si profil indique sexe = Femme → APPLIQUER INTÉGRALEMENT :
+
+PRIORITÉS EXERCICES FEMMES (hypertrophie) :
+  ✓ Hip Thrust lourd 3–8 reps, Romanian Deadlift, Bulgarian Split Squat,
+    Leg Press (0→70°), Glute Bridge, Leg Curl, Hack Squat
+  ✓ Volume bas du corps = 60% du total hebdo, haut du corps = 40%
+  ✓ Si Hip Thrust 1RM fourni → prescrire hip thrust 2x/semaine (priorité glutes)
+  ✓ Volume glutes : MEV 4 sets/sem, MAV 10–14 sets/sem (Débutante : MEV 2, MAV 8)
+
+RATIOS D'ÉQUILIBRE SPÉCIFIQUES FEMMES :
+  Bench/Squat cible : 0.55–0.65 (ex : Squat 80kg → Bench 44–52kg)
+  Homme : 0.75–0.85 (DIFFÉRENT — ne pas appliquer aux femmes)
+  Si écart > 10% → prescrire +2 séries Bench ou travail haut du corps compensatoire
+
+EXERCICES DÉPRIORISÉS FEMMES (sauf demande explicite) :
+  — Bench Press prise très large (peu d'efficacité relative)
+  — OHP debout très lourd (instabilité proportionnelle plus élevée)
+  → Remplacer par : incliné haltères, fly câble, arnold press léger
+
+FORMAT FEMMES obligatoire si applicable :
+  [FEMME] : priorité glutes/posterior chain — hip thrust 2×/sem, volume lower 60%
+
+═══════════════════════════════════════════════════════════════════════════════
+SECTION 3D — GROSSESSE — BLACKLIST EXERCICES (OBLIGATOIRE si pregnant = OUI)
+═══════════════════════════════════════════════════════════════════════════════
+
+Si pregnant = TRUE → APPLIQUER STRICTEMENT (violation = programme invalide) :
+
+EXERCICES ABSOLUMENT INTERDITS :
+  ✗ Valsalva maximal (apnée sous charge maximale)
+  ✗ Couché sur le dos (décubitus dorsal) après T1 — compression veine cave
+  ✗ Sauts, plyométrie, sprints, impacts élevés
+  ✗ Abdominaux directs : crunch, relevé de buste, V-up, Ab Wheel, sit-up
+  ✗ Exercices comprimant l'abdomen (prone position lourde)
+  ✗ Box jumps, burpees, jump squat, jump lunge
+
+EXERCICES TOLÉRÉS ET ADAPTÉS :
+  ✓ Squat partiel (0→60°), technique stricte, charge ≤60% 1RM pré-grossesse
+  ✓ Romanian Deadlift très léger, dos plat strict
+  ✓ Hip Thrust position assise ou modifiée (sécurisée)
+  ✓ Leg Press amplitude réduite
+  ✓ Tirage poitrine, rowing assis
+  ✓ Leg Curl, machines guidées légères
+  ✓ Core sécurisé : planche (20–30s), bird-dog (4 appuis)
+
+INTENSITÉ MAXIMALE GROSSESSE :
+  T1 : RPE 6/10 max (RIR 3 minimum) | Volume : -30% vs pré-grossesse
+  T2-T3 : RPE 5/10 max (RIR 4 minimum) | Volume : -50% | Fréquence max 3j/sem
+  Repos inter-séries : +1 minute | Monitoring douleur abdominale à chaque série
+
+FORMAT GROSSESSE obligatoire par exercice :
+  [GROSSESSE T2] : Hip Thrust modifié — 3×6 @ 50kg (RPE 5/10, RIR 4, repos 2')
+  Respiration naturelle — pas d'apnée. Stoppe si douleur abdominale >1/10.
+
+═══════════════════════════════════════════════════════════════════════════════
 SECTION 4 — PRESCRIPTION SÉRIES / REPS / CHARGES / RIR
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -296,6 +382,58 @@ puces "•", astérisques ou autre marqueur. La numérotation repart à 1 à
 chaque nouvelle séance.
 
 AUCUNE ligne d'exercice sans : charge en kg, justification "pour toi", alternative.
+
+═══════════════════════════════════════════════════════════════════════════════
+SECTION 4B — STRUCTURE TEMPORELLE OBLIGATOIRE PAR SÉANCE
+═══════════════════════════════════════════════════════════════════════════════
+
+Chaque séance DOIT respecter cette allocation (basée sur dureeMaxSeance) :
+
+  ÉCHAUFFEMENT       : 8–12 min   (cardio léger RPE 4/10 + mobilité dynamique)
+  TRAVAIL PRINCIPAL  : 70–80% du temps total = exercices de FORCE/MUSCULATION
+  COOL-DOWN/ÉTIREMENTS: 5–10 min (étirements, cardio très léger RPE 2-3/10)
+
+Exemples concrets :
+  45 min → Échauff 8min + Force 30min + Cool-down 7min
+  60 min → Échauff 10min + Force 43min + Cool-down 7min
+  75 min → Échauff 10min + Force 55min + Cool-down 10min
+  90 min → Échauff 12min + Force 68min + Cool-down 10min
+
+RÈGLE ABSOLUE : Le cardio (vélo, tapis, elliptique) ne peut JAMAIS occuper
+plus de 12 minutes au total dans une séance de musculation, et uniquement
+en échauffement ou cool-down, JAMAIS comme bloc de travail central.
+
+Indication obligatoire dans le programme :
+  "⏱ Durée séance : [durée]min — Échauff [X]min + Force [Y]min + Cool-down [Z]min"
+
+═══════════════════════════════════════════════════════════════════════════════
+SECTION 4C — RÉFÉRENCE MEV/MAV/MRV (Israetel, Renaissance Periodization)
+═══════════════════════════════════════════════════════════════════════════════
+
+Volumes hebdomadaires (sets directs/semaine) par niveau :
+
+MUSCLE            | DÉBUTANT              | INTERMÉDIAIRE         | AVANCÉ
+──────────────────┼───────────────────────┼───────────────────────┼──────────────────────
+Pectoraux         | MEV 4–6 MAV 9–12      | MEV 8–10 MAV 14–20    | MEV 12–14 MAV 20–28
+Dos largeur       | MEV 6–8 MAV 10–15     | MEV 10–12 MAV 14–22   | MEV 14–17 MAV 22–30
+Dos épaisseur     | MEV 6–8 MAV 10–15     | MEV 10–12 MAV 14–22   | MEV 14–17 MAV 22–30
+Épaules           | MEV 4–5 MAV 10–15     | MEV 6–8 MAV 14–20     | MEV 8–11 MAV 20–28
+Biceps            | MEV 4–5 MAV 10–13     | MEV 6–8 MAV 14–18     | MEV 8–11 MAV 18–25
+Triceps           | MEV 4–5 MAV 10–13     | MEV 6–8 MAV 14–18     | MEV 8–11 MAV 20–25
+Quadriceps        | MEV 5–6 MAV 10–15     | MEV 8–10 MAV 14–20    | MEV 12–14 MAV 20–28
+Ischio-jambiers   | MEV 4–5 MAV 7–12      | MEV 6–8 MAV 10–16     | MEV 8–11 MAV 16–22
+Fessiers          | MEV 0–3 MAV 3–9       | MEV 0–4 MAV 4–12      | MEV 4–6 MAV 12–17
+Mollets           | MEV 6–8 MAV 9–12      | MEV 8–10 MAV 12–16    | MEV 12–14 MAV 16–22
+Abdominaux        | MEV 0 MAV 3–5         | MEV 0 MAV 4–6         | MEV 0 MAV 6–8
+
+MRV ≈ MAV + 20–30% (seuil au-delà duquel la récupération échoue).
+Si sommeil <6h OU stress élevé → appliquer MAV - 15% avant prescription.
+
+RÈGLE D'USAGE DANS LE PROGRAMME :
+« [Prénom], je prescris [X] sets/sem pour [muscle] (MEV [Y], MAV [Z] pour niveau [N]).
+  C'est dans la zone optimale de progression. »
+Si volume actuel < MEV → augmenter de +2 sets/sem.
+Si volume actuel > MAV → vérifier récupération ou planifier déload anticipé.
 
 ═══════════════════════════════════════════════════════════════════════════════
 SECTION 5 — PROGRESSION 12 SEMAINES AVEC DATES RÉELLES
@@ -359,6 +497,11 @@ SECTION 7 — PHRASES INTERDITES (anti-générique)
 ✗ "Reposez-vous bien"
 ✗ "Adapté aux débutants/intermédiaires"
 ✗ "Bonne séance !"
+✗ Tout bloc cardio >10 min comme travail principal (ex: "45 min vélo", "30 min
+   tapis roulant", "20 min elliptique" au cœur d'une séance de musculation)
+✗ "Séance cardio-musculation 50/50" dans un programme de musculation
+✗ Exercice dont la durée en minutes remplace des séries×reps (signe que c'est
+   du cardio, pas de la force)
 
 Transformations obligatoires :
 ✗ "Mangez suffisamment de protéines"
@@ -404,6 +547,19 @@ Avant d'envoyer, vérifier silencieusement :
 [ ] Aucun exercice contre-indiqué selon Section 3B n'est prescrit
 [ ] La progression suit les cadences de la Section 5 (2.5/5 kg par semaine)
 [ ] Le deload est planifié à semaine 4 et semaine 8
+[ ] Chaque séance est composée d'au moins 70% d'exercices de force/résistance
+[ ] Aucun bloc cardio continu >10 min ne figure comme travail principal
+[ ] Le cardio (si présent) est UNIQUEMENT en échauffement (≤10min) ou cool-down (≤5min)
+[ ] La durée totale de la séance est indiquée avec répartition Échauff/Force/Cool-down
+[ ] LOI 7 respectée : pas de séance de cardio pur déguisée en séance musculation
+[ ] VOLUME MEV/MAV/MRV : chaque groupe musculaire est dans la plage MEV–MAV (Section 4C)
+[ ] Aucun muscle prescrit sous MEV (sous-stimulation) ni au-dessus de MAV (surentraînement)
+[ ] Le volume prescrit est justifié par niveau + récupération (sommeil/stress) de [Prénom]
+[ ] SI FEMME : hip thrust prescrit ≥2×/semaine, volume lower body ≥60% du total
+[ ] SI FEMME : ratio Bench/Squat évalué dans le diagnostic (cible 0.55–0.65)
+[ ] SI FEMME + HIP THRUST 1RM FOURNI : utilisé dans calcul glutes
+[ ] SI GROSSESSE : ZÉRO exercice de la BLACKLIST Section 3D (valsalva max, crunch, sauts, supine T2+)
+[ ] SI GROSSESSE : intensité T1 ≤ RPE 6/10, T2-T3 ≤ RPE 5/10, volume -30% à -50%
 
 Si UNE seule case non cochée → réécrire la section concernée.
 
@@ -440,9 +596,13 @@ function buildUserPrompt(profile) {
     (profile.pregnant ? '- Grossesse en cours : OUI — adapter le programme aux contraintes obstétricales\n' : '') +
     '- Poids : ' + (sanitizeNumber(profile.poids, 30, 300) || '?') + ' kg\n' +
     '- Taille : ' + (sanitizeNumber(profile.taille, 100, 250) || '?') + ' cm\n' +
-    '- Objectif : ' + sanitizeString(profile.objectif || '?', 100) + '\n' +
+    '- Objectif nutritionnel : ' + sanitizeString(profile.objectif || '?', 100) + '\n' +
+    (profile.muscuObjectifSpecifique ? '- Objectif musculation (choisi par l\'utilisateur) : ' + sanitizeString(profile.muscuObjectifSpecifique, 100) + ' ← PRIORITÉ ABSOLUE\n' : '') +
+    (profile.muscuZonesCibles ? '- Zones musculaires prioritaires : ' + sanitizeString(profile.muscuZonesCibles, 200) + ' — surreprésenter ces groupes dans le programme\n' : '') +
+    (profile.muscuRenforcementNote ? '- Demande spécifique utilisateur : ' + sanitizeString(profile.muscuRenforcementNote, 400) + '\n' : '') +
     '- Niveau : ' + sanitizeString(profile.niveau || '?', 50) + '\n' +
     '- Jours dispo/sem : ' + (sanitizeNumber(profile.joursDispo, 1, 7) || '?') + '\n' +
+    '- Type de programme : MUSCULATION (force/hypertrophie/endurance musculaire — pas du cardio)\n' +
     '- Durée max séance : ' + (sanitizeNumber(profile.dureeMaxSeance, 15, 180) || '?') + ' min\n' +
     '- Équipement salle : ' + sanitizeString(profile.equipement || '?', 200) + '\n' +
     (profile.installations ? '- Installations accessibles : ' + sanitizeString(profile.installations, 500) + '\n' +
@@ -471,7 +631,9 @@ function buildUserPrompt(profile) {
     '- Points forts : ' + sanitizeString(profile.pointsForts || 'non renseignés', 300) + '\n' +
     '- Points faibles : ' + sanitizeString(profile.pointsFaibles || 'non renseignés', 300) + '\n' +
     '- Préférences : ' + sanitizeString(profile.preferences || 'non renseignées', 300) + '\n' +
-    '- Historique : ' + sanitizeString(profile.historique || 'non renseigné', 500) + '\n\n' +
+    '- Historique : ' + sanitizeString(profile.historique || 'non renseigné', 500) + '\n' +
+    '- Comp\u00e9tition : ' + (profile.competitionGoal && profile.competitionDate ? 'OUI \u2014 ' + profile.competitionDate + (profile.competitionType ? ' (' + sanitizeString(profile.competitionType, 80) + ')' : '') : 'non d\u00e9clar\u00e9e') + '\n' +
+    '- Sports compl\u00e9mentaires : ' + sanitizeString(profile.sportHobbies || 'aucun', 200) + '\n\n' +
     'Génère le programme complet selon le format strict du system prompt. ' +
     'Diagnostic personnalisé OBLIGATOIRE en premier. ' +
     'Respecte IMPÉRATIVEMENT les restrictions médicales du BILAN MÉDICAL pour chaque exercice prescrit.';
@@ -542,21 +704,22 @@ exports.handler = async function(event) {
   var userPrompt = buildUserPrompt(body.profile);
 
   try {
-    // Timeout 55s via AbortController (Netlify Functions timeout à 26s par défaut, Sonnet peut être lent)
+    // Timeout 80s — netlify.toml configure ce handler à 90s, Sonnet+4000 tokens prend 25-40s
     var _genCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 55000) : null;
+    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 80000) : null;
 
     var response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
+        'anthropic-beta': 'prompt-caching-2024-07-31'
       },
       body: JSON.stringify({
         model: MODEL,
         max_tokens: MAX_TOKENS,
-        system: SYSTEM_PROMPT,
+        system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
         messages: [{ role: 'user', content: userPrompt }]
       }),
       signal: _genCtrl ? _genCtrl.signal : undefined

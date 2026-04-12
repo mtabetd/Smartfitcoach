@@ -133,9 +133,8 @@ function setRateLimit(email, attempts, lockedUntil) {
     data[email] = { attempts: attempts, lockedUntil: lockedUntil || 0 };
     var now = Date.now();
     Object.keys(data).forEach(function(k) {
-      // Clean up expired lockouts AND old entries (>24h)
+      // Supprimer uniquement les lockouts expirés — conserver les tentatives partielles
       if (data[k].lockedUntil && data[k].lockedUntil < now) delete data[k];
-      else if (!data[k].lockedUntil && data[k].attempts < MAX_ATTEMPTS) delete data[k];
     });
     localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
   } catch (e) {
@@ -298,6 +297,7 @@ var _useSupabase = false;
 var _authReady = Promise.resolve(); // resolved when Supabase session is loaded
 var _visibilityListener = null;   // ref for cleanup on logout
 var _beforeUnloadListener = null; // ref for cleanup on logout
+var _authStateSubscription = null; // ref for Supabase onAuthStateChange unsubscribe
 
 function _loadLegacySession() {
   if (isLegacySessionValid()) {
@@ -328,6 +328,21 @@ function _initAuth() {
   if (window._authInitialized) return;
   window._authInitialized = true;
 
+  // Re-register session tracking listeners if they were cleaned up during logout
+  if (!_visibilityListener) {
+    _visibilityListener = function() {
+      if (document.hidden) { BLACKBOX.log('page_hidden', {}); }
+      else { BLACKBOX.log('page_visible', {}); }
+    };
+    document.addEventListener('visibilitychange', _visibilityListener);
+  }
+  if (!_beforeUnloadListener) {
+    _beforeUnloadListener = function() {
+      if (AUTH.isLoggedIn()) BLACKBOX.log('page_unload', { sessionMinutes: BLACKBOX.getSessionMinutes() });
+    };
+    window.addEventListener('beforeunload', _beforeUnloadListener);
+  }
+
   var client = _getRawClient();
   if (!client) {
     console.warn('[AUTH] Supabase SDK not loaded, using localStorage fallback');
@@ -337,8 +352,12 @@ function _initAuth() {
 
   _useSupabase = true;
 
-  // Ecouter les changements d'auth
-  client.auth.onAuthStateChange(function(event, session) {
+  // Ecouter les changements d'auth — désabonner toute subscription précédente d'abord
+  if (_authStateSubscription) {
+    try { _authStateSubscription.unsubscribe(); } catch(e) {}
+    _authStateSubscription = null;
+  }
+  var _authStateSub = client.auth.onAuthStateChange(function(event, session) {
     console.log('[AUTH] onAuthStateChange:', event);
     if (event === 'PASSWORD_RECOVERY') {
       if (session && session.user) {
@@ -354,7 +373,7 @@ function _initAuth() {
     if (event === 'TOKEN_REFRESHED') {
       if (session && session.user) {
         _currentSession = _extractUser(session.user);
-        console.log('[AUTH] Token refreshed — session maintenue pour:', _currentSession.email);
+        if (_currentSession) console.log('[AUTH] Token refreshed — session maintenue pour:', _currentSession.email);
       }
       return;
     }
@@ -369,6 +388,10 @@ function _initAuth() {
       _currentSession = null;
     }
   });
+  // Stocker la subscription pour pouvoir la libérer au logout
+  if (_authStateSub && _authStateSub.data && _authStateSub.data.subscription) {
+    _authStateSubscription = _authStateSub.data.subscription;
+  }
 
   // Charger la session existante (async)
   // Store the promise so app-main.js can await it before first render
@@ -758,6 +781,7 @@ window.AUTH = {
       window.S.weightHistory = [];
       window.S.bodyZones = {}; window.S.strongZones = []; window.S.weakZones = [];
       window.S.muscuWeek = 1; window.S.muscuCycle = 1; window.S.sportSplashDone = false;
+      window.S.sportMixEnabled = false; window.S.sportMixSecondary = null;
       window.S.bonusExercises = {}; window.S.sessionHistory = {};
       window.S.muscuSessionLog = {}; window.S.muscuProgressionHistory = {};
       window.S.musculationWeights = {};
@@ -796,7 +820,7 @@ window.AUTH = {
       window.S.cyclingLevel = null; window.S.cyclingType = null;
       window.S.cyclingSpeed = null; window.S.cyclingFTP = null;
       window.S.cyclingRelief = null; window.S.cyclingWeek = 1;
-      window.S.cyclingPlan = null; window.S.selectedCyclingDay = 0;
+      window.S.cyclingProgram = null; window.S.selectedCyclingDay = 0;
       // Triathlon
       window.S.triathlonGoal = null; window.S.triathlonLevel = null;
       window.S.triathlonWeek = 1; window.S.triathlonProgram = null;
@@ -827,18 +851,53 @@ window.AUTH = {
       window.S.calisthPullups = null; window.S.calisthPushups = null;
       window.S.calisthenicsdays = 3; window.S.calisthenicsOnboardingStep = null;
       window.S.calisthenicsProgram = null; window.S.calisthenicsWeek = 1; window.S.selectedCalisthDay = 0;
+      window.S.calisthCurrentWeek = 1; window.S.calisthDips = null;
+      window.S.crossfitBenchmarks = {};
       // Lang/Units (reset to defaults)
       window.S.lang = 'fr'; window.S.weightUnit = 'kg'; window.S.heightUnit = 'cm';
       window.S.emailOptin = true; window.S.profilePhoto = null;
       // UI state
       window.S.view = 'auth'; window.S.authError = '';
       window.S.cfCalendarOpen = false;
+      // App state — must be reset to avoid stale values polluting next login
+      window.S.appMode = null; window.S.prenom = ''; window.S.nom = null; window.S.phone = null; window.S.welcomeShown = false;
+      window.S.todayWellness = null; window.S.firstLoginDate = null;
+      // Additional PROFILE_KEYS missing from reset — prevent stale data leaking to next user on shared device
+      window.S.crossfitWeek = 1; window.S.selectedCrossfitDay = 0;
+      window.S.mealsLogged = {}; window.S._weekPlanGeneratedAt = null; window.S._planHash = '';
+      window.S.aiCoachHistory = []; window.S.nutritionLog = {};
+      window.S.weeklyCalendar = null; window.S.smartCalendarEnabled = false; window.S.smartCalendarDismissed = false;
+      window.S.bodyScanDone = false; window.S._bodyFatEstimate = null;
+      window.S._bodyCompositionProfile = null; window.S._bodyCompositionWeight = null;
+      window.S.waist = null; window.S.parqDone = false; window.S.parqResult = null;
+      window.S._parqNextStep = null; window.S._sportProfileDone = false;
+      window.S._switchedFromSport = null; window.S._switchedFromNutrition = null;
+      window.S.streakFreezeUsedMonth = null; window.S.streakFreezeAvailable = true; window.S.swapCount = 0;
+      window.S.cfDeloadRecommended = false; window.S.sessionPostponed = false; window.S.stress = null;
+      window.S.trainingDaysSelected = []; window.S.muscuObjectifSpecifique = null;
+      window.S.muscuZonesCibles = []; window.S.muscuRenforcementNote = '';
     }
+
+    // Nettoyer les clés localStorage namespaced par userId (programme IA partagé sinon)
+    try {
+      var _logoutUid = _currentSession ? _currentSession.userId : null;
+      if (_logoutUid) {
+        ['mtd_muscu_program_', 'mtd_muscu_ia_progress_', 'mtd_muscu_generations_'].forEach(function(pfx) {
+          try { localStorage.removeItem(pfx + _logoutUid); } catch(e) {}
+        });
+      }
+    } catch(e) {}
 
     // Nettoyer la session locale + legacy
     _currentSession = null;
     clearLegacySession();
     window._authInitialized = false;
+
+    // Désabonner la subscription Supabase onAuthStateChange
+    if (_authStateSubscription) {
+      try { _authStateSubscription.unsubscribe(); } catch(e) {}
+      _authStateSubscription = null;
+    }
 
     // Supprimer les event listeners pour éviter les fuites mémoire
     if (_visibilityListener) {
@@ -849,6 +908,9 @@ window.AUTH = {
       try { window.removeEventListener('beforeunload', _beforeUnloadListener); } catch(e) {}
       _beforeUnloadListener = null;
     }
+
+    // Rediriger vers l'écran de connexion
+    if (window.render) window.render();
   },
 
   /**
@@ -969,11 +1031,6 @@ window.AUTH = {
         }
         if (msg.indexOf('rate') !== -1 || msg.indexOf('limit') !== -1) {
           return { ok: false, error: 'Trop de tentatives. R\u00e9essayez dans quelques minutes.' };
-        }
-        if (msg.indexOf('not found') !== -1 || msg.indexOf('not registered') !== -1) {
-          // Don't reveal if email exists — always show success for security
-          BLACKBOX.log('password_reset_requested', { email: email });
-          return { ok: true };
         }
         return { ok: false, error: 'Erreur lors de l\u2019envoi. R\u00e9essayez.' };
       }
@@ -1231,6 +1288,14 @@ _visibilityListener = function() {
 };
 document.addEventListener('visibilitychange', _visibilityListener);
 
+// Track unload for session duration — must be set BEFORE _initAuth() to prevent double-registration
+_beforeUnloadListener = function() {
+  if (AUTH.isLoggedIn()) {
+    BLACKBOX.log('page_unload', { sessionMinutes: BLACKBOX.getSessionMinutes() });
+  }
+};
+window.addEventListener('beforeunload', _beforeUnloadListener);
+
 // ─── INIT BOOT ───
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', _initAuth);
@@ -1247,13 +1312,5 @@ setTimeout(function() {
     BLACKBOX.log('session_resume', {});
   }
 }, 0);
-
-// Track unload for session duration
-_beforeUnloadListener = function() {
-  if (AUTH.isLoggedIn()) {
-    BLACKBOX.log('page_unload', { sessionMinutes: BLACKBOX.getSessionMinutes() });
-  }
-};
-window.addEventListener('beforeunload', _beforeUnloadListener);
 
 })();

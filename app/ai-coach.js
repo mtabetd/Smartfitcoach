@@ -329,6 +329,7 @@ function appendError(container, text) {
 }
 
 function refreshSuggestions(container) {
+  if (!container) return;
   container.innerHTML = '';
   var suggs = getSuggestions();
   suggs.forEach(function(s) {
@@ -409,6 +410,7 @@ function openPanel() {
 function closePanel() {
   var panel = document.getElementById('ai-coach-panel');
   if (panel) { panel.classList.remove('open'); _panelOpen = false; }
+  if (_resizeHandler) { window.removeEventListener('resize', _resizeHandler); _resizeHandler = null; }
 }
 
 // ─── ENVOI MESSAGE ───────────────────────────────────────────────────────────
@@ -444,18 +446,23 @@ function sendMessage() {
 
   // Préparer les messages pour l'API — limiter à 5 derniers échanges, tronquer à 500 chars
   var apiMessages = S.aiCoachHistory.slice(-MAX_API_MESSAGES).map(function(m) {
-    return { role: m.role, content: m.content.slice(0, MAX_MSG_CHARS) };
+    return { role: m.role, content: String(m.content || '').slice(0, MAX_MSG_CHARS) };
   });
 
   // Contexte utilisateur
   var ctx = buildContext();
 
-  // Appel API
+  // Appel API avec timeout client 28s (le serveur se coupe à 25s)
+  var _coachCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 28000) : null;
   fetch(FUNCTION_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: apiMessages, context: ctx })
+    body: JSON.stringify({ messages: apiMessages, context: ctx }),
+    signal: _coachCtrl ? _coachCtrl.signal : undefined
   }).then(function(res) {
+    if (_coachTimer) clearTimeout(_coachTimer);
+    if (!res.ok) return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
     return res.json();
   }).then(function(data) {
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
@@ -477,8 +484,12 @@ function sendMessage() {
     }
     messages.scrollTop = messages.scrollHeight;
   }).catch(function(err) {
+    if (_coachTimer) clearTimeout(_coachTimer);
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
-    appendError(messages, 'Impossible de joindre le coach. Vérifiez votre connexion.');
+    var errMsg = (err && err.name === 'AbortError')
+      ? 'Le coach met trop de temps à répondre. Réessaie dans quelques instants.'
+      : 'Impossible de joindre le coach. Vérifiez votre connexion.';
+    appendError(messages, errMsg);
     messages.scrollTop = messages.scrollHeight;
   }).finally(function() {
     _sending = false;
@@ -515,6 +526,15 @@ function _patchRender() {
         var panel = document.getElementById('ai-coach-panel');
         if (btn) btn.remove();
         if (panel) panel.remove();
+      }
+      // Masquer le bouton coach pendant l'onboarding actif (nStep 1-10 ou sStep 1-3)
+      // pour éviter de bloquer les champs de saisie et les options de formulaire
+      var _s = window.S;
+      var _btn = document.getElementById('ai-coach-btn');
+      if (_btn && _s) {
+        var _inNutrOnboarding = _s.view === 'nutrition' && typeof _s.nStep === 'number' && _s.nStep >= 1 && _s.nStep <= 10;
+        var _inSportOnboarding = _s.view === 'sport' && typeof _s.sStep === 'number' && _s.sStep >= 1 && _s.sStep <= 3;
+        _btn.style.display = (_inNutrOnboarding || _inSportOnboarding) ? 'none' : '';
       }
     } catch(e) {
       console.error('[ai-coach] erreur:', e);

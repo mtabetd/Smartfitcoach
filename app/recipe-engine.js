@@ -29368,6 +29368,7 @@
     // Scaling ingrédients
     var eggCorrectionP = 0, eggCorrectionF = 0, eggCorrectionG = 0, eggCorrectionKcal = 0;
 
+    if (!Array.isArray(recipe.ingredients)) return null;
     var adaptedIngredients = recipe.ingredients.map(function (ing) {
       if (ing.unit === 'pce') {
         // RÈGLE ŒUF : arrondi à l'entier le plus proche
@@ -29619,14 +29620,16 @@
       if (filters.difficulty && r.difficulty !== filters.difficulty) return false;
       if (filters.maxPrepTime && (r.prepTime + r.cookTime) > filters.maxPrepTime) return false;
       if (filters.tags && filters.tags.length) {
-        var hasAll = filters.tags.every(function (t) { return r.tags.indexOf(t) !== -1; });
+        var rTags = Array.isArray(r.tags) ? r.tags : [];
+        var hasAll = filters.tags.every(function (t) { return rTags.indexOf(t) !== -1; });
         if (!hasAll) return false;
       }
 
       // ── Filtre régime : végan doit avoir tag 'vegan' ──
-      if (regimeIdx === 3 && r.tags.indexOf('vegan') === -1) return false;
+      var _rTags = Array.isArray(r.tags) ? r.tags : [];
+      if (regimeIdx === 3 && _rTags.indexOf('vegan') === -1) return false;
       // Végétarien : tag 'vegetarian' ou 'vegan' requis
-      if (regimeIdx === 2 && r.tags.indexOf('vegetarian') === -1 && r.tags.indexOf('vegan') === -1) return false;
+      if (regimeIdx === 2 && _rTags.indexOf('vegetarian') === -1 && _rTags.indexOf('vegan') === -1) return false;
 
       // ── Filtre ingrédients exclus (allergies + intolérances + régime ingrédient) ──
       if (allExclusions.length && !recipeHasNoExcludedIngredients(r, allExclusions)) return false;
@@ -29676,6 +29679,7 @@
     var totalMAD  = 0;
 
     if (!Array.isArray(recipe.ingredients)) return null;
+    if (!recipe.servings || recipe.servings <= 0) return null;
     recipe.ingredients.forEach(function (ing) {
       var unitPrice = window.getPricePer(ing.name, ing.unit);
       if (unitPrice === null || unitPrice === undefined) {
@@ -29869,7 +29873,7 @@
       if (q <= 1)              return { qty: '¼',  unit: 'c.à.café' };
       if (q <= 2)              return { qty: '½',  unit: 'c.à.café' };
       if (q >= 3 && q <= 4)   return { qty: 1,    unit: 'c.à.café' };
-      if (q >= 5 && q <= 6)   return { qty: '1½', unit: 'c.à.café' };
+      if (q >= 5 && q < 6)    return { qty: '1½', unit: 'c.à.café' };
       if (q >= 6 && q <= 8)   return { qty: 1,    unit: 'c.à.soupe' };
       if (q >= 9 && q <= 10)  return { qty: '1½', unit: 'c.à.soupe' };
     }
@@ -30028,6 +30032,7 @@
       var dayMAD = 0;
       var dayMeals = [];
 
+      if (!dayPlan) { days.push({ dayIndex: d, totalMAD: 0, meals: [], hasPrices: false }); continue; }
       slots.forEach(function(slot) {
         var recipe = dayPlan[slot];
         if (!recipe) return;
@@ -30525,6 +30530,7 @@
     var slots = ['breakfast', 'lunch', 'snack', 'dinner'];
 
     weekPlan.forEach(function(day) {
+      if (!day) return;
       slots.forEach(function(slot) {
         var recipe = day[slot];
         if (!recipe) return;
@@ -30556,7 +30562,7 @@
         } else if (recipe._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
           // Recette R201+ sans ingrédients scalés : utilise findRecipe + scalingRatio
           var fullRecipe = window.RecipeEngine.findRecipe(recipe._id);
-          if (fullRecipe && Array.isArray(fullRecipe.ingredients)) {
+          if (fullRecipe && Array.isArray(fullRecipe.ingredients) && fullRecipe.servings > 0) {
             fullRecipe.ingredients.forEach(function(ing) {
               var scaledQty = Math.round((ing.qty / fullRecipe.servings) * scalingRatio * 10) / 10;
               _addIng(ing.name, scaledQty, ing.unit);

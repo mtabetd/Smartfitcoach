@@ -50,6 +50,8 @@
     var gateBtnEl=document.getElementById('gate-btn');
     var gatePwEl=document.getElementById('gate-pw');
     if(!gateEl||!gateBtnEl||!gatePwEl){unlock();return;}
+    // Bypass gate for Supabase password recovery links — the reset token is the auth proof
+    if (window.location.hash && window.location.hash.indexOf('type=recovery') !== -1) { unlock(); return; }
     gateEl.style.display='flex';
     gateBtnEl.addEventListener('click', tryUnlock);
     gatePwEl.addEventListener('keydown',function(e){if(e.key==='Enter')tryUnlock();});

@@ -875,7 +875,8 @@ window.DASHBOARD = {
         if (pregWeightGuide) {
           var pregWeight = document.createElement('div');
           pregWeight.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:10px;';
-          pregWeight.textContent = 'Poids attendu à SA' + pregTri.week + ' : ' + pregWeightGuide.expectedWeightMin + '\u2013' + pregWeightGuide.expectedWeightMax + ' kg (gain cible : +' + pregWeightGuide.currentExpectedGainMin + '\u2013+' + pregWeightGuide.currentExpectedGainMax + ' kg)';
+          var _pwMin = pregWeightGuide.expectedWeightMin, _pwMax = pregWeightGuide.expectedWeightMax;
+          pregWeight.textContent = (_pwMin !== null && _pwMax !== null ? 'Poids attendu à SA' + pregTri.week + ' : ' + _pwMin + '\u2013' + _pwMax + ' kg — ' : '') + 'Gain cible : +' + pregWeightGuide.currentExpectedGainMin + '\u2013+' + pregWeightGuide.currentExpectedGainMax + ' kg';
           pregCard.appendChild(pregWeight);
         }
 
@@ -906,7 +907,7 @@ window.DASHBOARD = {
 
 
     /* ═══ ALERTES MÉDICALES ═══ */
-    if (S.medical && S.medical.length > 0) {
+    if (Array.isArray(S.medical) && S.medical.length > 0) {
       var hasDiabDash = S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1 || S.medical.indexOf('prediabete') !== -1;
       if (hasDiabDash) {
         root.appendChild(h('div', 'dash-label', 'Suivi médical'));
@@ -1028,7 +1029,7 @@ window.DASHBOARD = {
     root.appendChild(h('div', 'dash-label', 'Ma progression'));
     var perfWidget = h('div', 'dash-widget-box');
     if (window.PERF_HISTORY && window.PERF_HISTORY.renderProgressionWidget) {
-      try { PERF_HISTORY.renderProgressionWidget(perfWidget); } catch(e) {
+      try { window.PERF_HISTORY.renderProgressionWidget(perfWidget); } catch(e) {
         perfWidget.appendChild(h('div', 'dash-card', h('p', 'dash-card-title', 'Progression indisponible')));
       }
     } else {
@@ -1588,7 +1589,7 @@ function exportAllData() {
   // Collect all mtd_ prefixed localStorage keys
   for (var i = 0; i < localStorage.length; i++) {
     var key = localStorage.key(i);
-    if (key.indexOf('mtd_') === 0) {
+    if (key && key.indexOf('mtd_') === 0) {
       try { backup.data[key] = JSON.parse(localStorage.getItem(key)); }
       catch(e) { backup.data[key] = localStorage.getItem(key); }
     }
@@ -1642,7 +1643,7 @@ function deleteAllData() {
   var keysToRemove = [];
   for (var i = 0; i < localStorage.length; i++) {
     var key = localStorage.key(i);
-    if (key.indexOf('mtd_') === 0) {
+    if (key && key.indexOf('mtd_') === 0) {
       keysToRemove.push(key);
     }
   }
