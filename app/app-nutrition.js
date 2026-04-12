@@ -2725,11 +2725,23 @@ function renderStep9(p) {
   }
   // Régénérer le plan si paramètres nutritionnels critiques ont changé (hash) ou si absent/incomplet
   var _planHashNow = window.getPlanHash ? window.getPlanHash() : '';
-  if (!S.weekPlan || S.weekPlan.length < 7 || (_planHashNow && S._planHash !== _planHashNow)) {
+  if (!S.weekPlan || S.weekPlan.length < 7) {
+    // Pas de plan du tout — générer
     try {
       if (_planHashNow) { S._planHash = _planHashNow; }
       var _wk9 = generateWeek();
       if (Array.isArray(_wk9) && _wk9.length === 7) S.weekPlan = _wk9;
+    } catch(e) { console.error('[renderStep9] generateWeek failed', e); }
+  } else if (_planHashNow && !S._planHash) {
+    // Plan existant mais hash absent (migration pré-fix) — figer le hash SANS régénérer
+    // Évite que les utilisateurs anciens perdent leur plan à chaque visite
+    S._planHash = _planHashNow;
+  } else if (_planHashNow && S._planHash !== _planHashNow) {
+    // Vrai changement de paramètres nutritionnels — régénérer
+    try {
+      S._planHash = _planHashNow;
+      var _wk9r = generateWeek();
+      if (Array.isArray(_wk9r) && _wk9r.length === 7) S.weekPlan = _wk9r;
     } catch(e) { console.error('[renderStep9] generateWeek failed', e); }
   }
   // Guard: si weekPlan est toujours null/vide après génération, afficher un message d'erreur
@@ -2738,8 +2750,9 @@ function renderStep9(p) {
     p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux résultats'));
     return;
   }
-  // Bounds check: selectedDay must be in [0, 6]
-  if (typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) S.selectedDay = 0;
+  // Défaut : afficher AUJOURD'HUI (même jour que le dashboard) plutôt que toujours Lundi
+  var _todayPlanIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim, cohérent avec today-dashboard.js
+  if (typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) S.selectedDay = _todayPlanIdx;
 
   // Day tabs
   var tabs = h('div', {'class': 'day-tabs'});
