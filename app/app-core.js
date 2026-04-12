@@ -3643,7 +3643,15 @@ function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=
 // Allergie lait/produits laitiers : whey = protéine lactée → bloquer les smoothies whey (sécurité allergène)
 var _hasLaitAllergy=Array.isArray(s.allergies)&&(s.allergies.indexOf('Lait/Produits laitiers')!==-1||s.allergies.indexOf('Lactose')!==-1);
 var _canSmooth=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s.regime!==3&&!_hasLaitAllergy);
-for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget),lR=pickRecipe(pL,lT,uL,dayProteins,weekProtBudget),sR=null,dR=null;
+for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);
+// Déduplication intra-journée : éviter le même plat en déjeuner ET dîner (même recette dans les 2 pools)
+var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget);
+// Bloquer le petit-déj dans les pools déjeuner/dîner du même jour
+if(bR&&bR.n){uL.add(bR.n);uD.add(bR.n);}
+var lR=pickRecipe(pL,lT,uL,dayProteins,weekProtBudget);
+// Bloquer le déjeuner dans le pool dîner du même jour — fix principal du doublon
+if(lR&&lR.n)uD.add(lR.n);
+var sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
 // Si whey activé → smoothie whey uniquement les jours d'entraînement (ISSN 2017 : timing post-workout)
 // Jours de repos : collation normale (le smoothie whey cible la fenêtre anabolique post-séance)
@@ -3688,8 +3696,12 @@ function swapMeal(di,slot){
   var pool=filterRecipes(getPool(slot),slot);
   var cur=s.weekPlan[di][slot];
   if(!cur)return; // slot vide (plan IF 2-3 repas) → rien à swapper
-  var av=pool.filter(function(r){return r.n!==cur.n});
-  if(!av.length)return;
+  // Noms déjà utilisés dans les autres slots du même jour → exclure du swap
+  var _daySlots=['breakfast','lunch','snack','dinner'];
+  var _dayUsedNames=new Set();
+  _daySlots.forEach(function(sl){if(sl!==slot&&s.weekPlan[di][sl]&&s.weekPlan[di][sl].n)_dayUsedNames.add(s.weekPlan[di][sl].n);});
+  var av=pool.filter(function(r){return r.n!==cur.n&&!_dayUsedNames.has(r.n)});
+  if(!av.length)av=pool.filter(function(r){return r.n!==cur.n;}); // fallback si tous exclus
   av.sort(function(a,b){return Math.abs(a.k-tgt)-Math.abs(b.k-tgt)});
   var top=av.slice(0,Math.min(5,av.length));
   var nr=top[Math.floor(Math.random()*top.length)];

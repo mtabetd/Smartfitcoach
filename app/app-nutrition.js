@@ -1954,6 +1954,9 @@ function renderStep7(p) {
         var _wk1 = generateWeek();
         if (Array.isArray(_wk1) && _wk1.length > 0) {
           S.weekPlan = _wk1;
+          // Figer le hash au moment de la génération — évite la régénération silencieuse dans renderStep9
+          var _h1 = window.getPlanHash ? window.getPlanHash() : '';
+          if (_h1) S._planHash = _h1;
         } else {
           // generateWeek() a retourné un plan vide — informer l'utilisateur sans naviguer
           console.warn('[nutrition] generateWeek() returned empty plan');
@@ -2497,7 +2500,11 @@ function renderStep8(p) {
     if (!S.weekPlan || S.weekPlan.length < 7) {
       if (window.computeNutritionState) window.computeNutritionState(false);
       var _wkPre = generateWeek();
-      if (Array.isArray(_wkPre) && _wkPre.length > 0) { S.weekPlan = _wkPre; S._weekPlanGeneratedAt = new Date().toISOString(); }
+      if (Array.isArray(_wkPre) && _wkPre.length > 0) {
+        S.weekPlan = _wkPre; S._weekPlanGeneratedAt = new Date().toISOString();
+        var _hPre = window.getPlanHash ? window.getPlanHash() : '';
+        if (_hPre) S._planHash = _hPre;
+      }
     }
     S._showCompletionFirst = true;
     goStep(12);
