@@ -780,7 +780,7 @@ window.AUTH = {
       window.S.sportDays = 3; window.S.sportEquipment = 'gym';
       window.S.weightHistory = [];
       window.S.bodyZones = {}; window.S.strongZones = []; window.S.weakZones = [];
-      window.S.muscuWeek = 1; window.S.muscuCycle = 1; window.S.sportSplashDone = false;
+      window.S.muscuWeek = 1; window.S.muscuCycle = 1; window.S.muscuProgramCount = 0; window.S.sportSplashDone = false;
       window.S.sportMixEnabled = false; window.S.sportMixSecondary = null;
       window.S.bonusExercises = {}; window.S.sessionHistory = {};
       window.S.muscuSessionLog = {}; window.S.muscuProgressionHistory = {};

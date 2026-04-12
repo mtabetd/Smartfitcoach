@@ -4120,21 +4120,21 @@ function renderMusculationZones(p) {
 // ─── SYSTÈME DE PHASES 7 SEMAINES ───
 var MUSCU_PHASES = [
  {weeks:[1,2], id:'adaptation', label:'Adaptation', color:'#2980B9',
- rpe:6, rpeNote:'RPE 6 — vous pourriez faire 4 reps de plus. Priorité à la technique.',
- pct1rm:0.60, advice:'Maîtrisez la technique avant d\'augmenter les charges. Si vous réussissez toutes les reps → +2.5 kg la semaine suivante.',
+ rpe:6, rpeNote:'RPE 6 — tu pourrais faire 4 reps de plus. Priorité à la technique.',
+ pct1rm:0.60, advice:'Maîtrise la technique avant d\'augmenter les charges. Si tu réussis toutes les reps → +2.5 kg la semaine prochaine.',
  setsOffset:-1, repsOffset:+2, restNote:'Repos libres — récupération complète entre chaque série.'},
  {weeks:[3,4], id:'progression', label:'Progression', color:'#1A4A1A',
- rpe:8, rpeNote:'RPE 8 — vous pourriez faire 2 reps de plus. Zone optimale hypertrophie.',
- pct1rm:0.72, advice:'Progression double : augmentez d\'abord les reps (ex. 8→10→12), puis montez la charge de 2.5 kg et retombez à 8 reps.',
- setsOffset:0, repsOffset:0, restNote:'Respectez les temps de repos indiqués.'},
+ rpe:8, rpeNote:'RPE 8 — tu pourrais faire 2 reps de plus. Zone optimale hypertrophie.',
+ pct1rm:0.72, advice:'Progression double : augmente d\'abord les reps (ex. 8→10→12), puis monte la charge de 2.5 kg et retombe à 8 reps.',
+ setsOffset:0, repsOffset:0, restNote:'Respecte les temps de repos indiqués.'},
  {weeks:[5,6], id:'intensification',label:'Intensification',color:'#6A4A1A',
  rpe:9, rpeNote:'RPE 9 — 1 rep en réserve. Dernier set seulement jusqu\'à l\'échec technique (jamais sur squat/soulevé).',
  pct1rm:0.82, advice:'Charges maximales. +1 série par exercice composé. Dernier set à l\'échec sur les isolations uniquement.',
  setsOffset:+1, repsOffset:-2, restNote:'+30s de repos vs semaines précédentes. CNS sous pression maximale.'},
  {weeks:[7], id:'decharge', label:'Décharge', color:'#0A0A09',
  rpe:5, rpeNote:'RPE 5 — très facile, 5+ reps en réserve. Récupération musculaire et articulaire.',
- pct1rm:0.50, advice:'Réduisez le volume de 50% (2 séries au lieu de 4) et les charges de 40-50%. Gardez les mêmes exercices. Indispensable pour la progression long terme.',
- setsOffset:-2, repsOffset:0, restNote:'Repos complets. Votre prochain cycle sera plus fort grâce à cette semaine.'}
+ pct1rm:0.50, advice:'Réduis le volume de 50% (2 séries au lieu de 4) et les charges de 40-50%. Garde les mêmes exercices. Indispensable pour la progression long terme.',
+ setsOffset:-2, repsOffset:0, restNote:'Repos complets. Ton prochain cycle sera plus fort grâce à cette semaine.'}
 ];
 
 // Calcule le poids recommandé pour un exercice selon la phase courante
@@ -5138,7 +5138,7 @@ function renderMusculationProgram(p) {
  // Afficher le message d'erreur si la génération a échoué (évite l'écran blanc)
  if (S._programGenerationError) {
    p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'}, [
-     h('div', {style: 'font-size:11px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Programme indisponible'),
+     h('div', {style: 'font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Programme indisponible'),
      h('p', {style: 'font-size:14px;color:var(--text-secondary,#6B6B65);max-width:300px;margin:0 auto 24px;line-height:1.5;'}, S._programGenerationError),
      h('button', {'class': 'btn-primary', style: 'margin:0 auto;display:block;', onclick: function() {
        S._programGenerationError = null;
@@ -5154,7 +5154,7 @@ function renderMusculationProgram(p) {
    if (!S._generatingProgram) {
      S._generatingProgram = true;
      p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'},[
-       h('div', {style: 'font-size:12px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
+       h('div', {style: 'font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
        h('div', {style: 'width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;'})
      ]));
      setTimeout(function() {
@@ -5183,7 +5183,7 @@ function renderMusculationProgram(p) {
    } else {
      // setTimeout en attente — afficher le spinner et attendre, ne pas générer en doublon
      p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'},[
-       h('div', {style: 'font-size:12px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
+       h('div', {style: 'font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;'}, 'Génération de votre programme...'),
        h('div', {style: 'width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;'})
      ]));
      return;
@@ -5335,7 +5335,7 @@ function renderMusculationProgram(p) {
  var z3lo = Math.round((hrMax - hrRest) * 0.70 + hrRest);
  var z3hi = Math.round((hrMax - hrRest) * 0.80 + hrRest);
  var karvonenDiv = h('div', {style: 'border-left:2px solid var(--red);padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;background:var(--redbg)'});
- karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--red);margin-bottom:8px'}, 'Cardiopathie — Zones FC Karvonen'));
+ karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:8px'}, 'Cardiopathie — Zones FC Karvonen'));
  karvonenDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, 'FC repos ' + hrRest + ' bpm · HRmax estimé ' + hrMax + ' bpm'));
  var zonesRow = h('div', {style: 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px'});
  zonesRow.appendChild(h('span', {'class': 'val-good'}, 'Z1 Récup ' + z1lo + '–' + z1hi + ' bpm'));
@@ -5350,7 +5350,7 @@ function renderMusculationProgram(p) {
  // HTA légère (140-159/90-99 mmHg) — effort modéré autorisé mais avec précautions
  if (S.medical && S.medical.indexOf('hta') !== -1 && S.medical.indexOf('hta_severe') === -1) {
  var htaLightDiv = h('div', {style: 'background:rgba(106,74,26,0.06);border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'});
- htaLightDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:#6A4A1A;margin-bottom:6px'}, 'HTA — Précautions sport'));
+ htaLightDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#6A4A1A;margin-bottom:6px'}, 'HTA — Précautions sport'));
  htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u26A0 HTA légère (140-159/90-99 mmHg) : l\'exercice régulier est bénéfique mais doit rester contrôlé (ESC/ESH 2018).'));
  htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Intensité maximale recommandée : RPE 8/10 — évitez les efforts maximaux'));
  htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (apnée en poussée lourde) — favorisez une respiration continue'));
@@ -5362,7 +5362,7 @@ function renderMusculationProgram(p) {
  // hta_severe dans S.medical (onboarding nutrition) → bloquer HIIT/CrossFit + zones FC adaptées
  if (S.medical && S.medical.indexOf('hta_severe') !== -1) {
  var htaDiv = h('div', {style: 'background:rgba(90,16,16,0.06);border-left:4px solid #5A1010;padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#5A1010'});
- htaDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:#5A1010;margin-bottom:6px'}, 'HTA Sévère — Restrictions sport obligatoires'));
+ htaDiv.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#5A1010;margin-bottom:6px'}, 'HTA Sévère — Restrictions sport obligatoires'));
  htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u26A0 HTA sévère (≥180/110 mmHg) : HIIT, CrossFit et efforts isométriques lourds sont contre-indiqués (ESC/ESH 2018). Risque de pic tensionnel >300/150 mmHg (ACC 2019).'));
  htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Intensité maximale : RPE 6/10 — cardio Z1-Z2 uniquement (<65% FCmax)'));
  htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (squat lourd, soulevé de terre, arraché) — Lamotte et al., Arch Cardiovasc Dis 2015'));
@@ -5503,7 +5503,7 @@ function renderMusculationProgram(p) {
  });
 
  // Forbidden exercises
- pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:' + triSportColor + ';margin:10px 0 6px'}, 'Exercices interdits ce trimestre'));
+ pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:' + triSportColor + ';margin:10px 0 6px'}, 'Exercices interdits ce trimestre'));
  if (triSport.trimester.forbiddenExercises) triSport.trimester.forbiddenExercises.forEach(function(ex) {
  pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + triSportColor + ';margin-bottom:2px;padding-left:8px'}, '\u2716 ' + ex));
  });
@@ -5871,7 +5871,7 @@ function renderMusculationProgram(p) {
  if (typeof S.selectedSportDay !== 'number' || S.selectedSportDay < 0 || S.selectedSportDay >= S.sportProgram.length) S.selectedSportDay = 0;
  var day = S.sportProgram[S.selectedSportDay];
  if (day) {
- p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus));
+ p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus || ''));
 
  // ─── SESSION BRIEF CARD (beginners only) ───
  if (S.sportLevel === 'beginner') {
@@ -5899,7 +5899,7 @@ function renderMusculationProgram(p) {
   }
   var briefCard = h('div', {style: 'background:rgba(26,74,26,0.04);border-left:3px solid #1A4A1A;padding:14px 16px;margin-bottom:16px;border-radius:0 2px 2px 0'});
   briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:#1A4A1A;margin-bottom:6px'}, 'SÉANCE DU JOUR'));
-  briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, day.focus));
+  briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin-bottom:8px;color:var(--black,#1A1A18)'}, day.focus || ''));
   if (matchedBrief) {
    briefCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:8px'}, matchedBrief.why));
    briefCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:11px;font-style:italic;color:var(--grey,#6B6B65)'}, matchedBrief.tip));
@@ -6977,9 +6977,18 @@ function renderMusculationProgram(p) {
 
  // Recalculate weekly program (distinct from AI generator above)
  p.appendChild(h('button', {'class': 'regen-btn', style: 'margin-top:16px', onclick: function(){
- S.sportProgram = generateSportProgram();
- S.selectedSportDay = 0;
- window.BLACKBOX && window.BLACKBOX.log('sport_program_regenerated');
+ try {
+   var _regen = generateSportProgram();
+   if (_regen && _regen.length > 0) {
+     S.sportProgram = _regen;
+     S.selectedSportDay = 0;
+     window.BLACKBOX && window.BLACKBOX.log('sport_program_regenerated');
+   } else {
+     console.warn('[sport] Recalculer: generateSportProgram returned empty — keeping existing program');
+   }
+ } catch(e) {
+   console.error('[sport] Recalculer: generateSportProgram failed', e);
+ }
  window.render();
  }}, '\u21bb Recalculer le programme hebdomadaire'));
 
