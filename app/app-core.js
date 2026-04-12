@@ -2325,7 +2325,7 @@ window.S = {
   // Photos
   photoFront: null, photoBack: null, strongZones: [], weakZones: [],
   // Sport
-  sStep: 0, sportGoals: [], sportLevel: null, sportDays: 3,
+  sStep: 0, sportGoals: [], sportLevel: null, sportDays: 3, trainingDaysSelected: [],
   sportEquipment: 'gym', // 'gym' (salle complète), 'dumbbells' (haltères+banc), 'home' (poids du corps)
   trainTime: null, // 'morning' | 'noon' | 'evening' — heure d'entraînement pour nutrient timing
   sportSessionDuration: null, // '45min','1h','1h15','1h30'
@@ -2353,7 +2353,7 @@ window.S = {
   supplements: [],
   // Musculation weight tracking
   musculationWeights: {},  // { exerciseName: { weight: Number, type: 'barre'|'haltere'|'machine'|'kb'|'bodyweight' } },
-  muscuWeek: 1, muscuCycle: 1, muscuProgramStart: null, swapPanel: null, sportSplashDone: false,
+  muscuWeek: 1, muscuCycle: 1, muscuProgramStart: null, muscuProgramCount: 0, swapPanel: null, sportSplashDone: false,
   bonusExercises: {},  // { dayIndex: [{n,m,eq,sets,rest,_bonus:true}] }
   sessionHistory: {},  // { 'dayIndex_YYYY-MM-DD': { duration, kcalBase, kcalEpoc, kcalTotal } }
   sessionCompleting: false,  // dayIndex en cours de bilan, ou false
@@ -2368,6 +2368,7 @@ window.S = {
   muscuStrengthProfile: {},  // { 'bench_press': 60, 'squat': 80, 'deadlift': 100, ... }
   muscuZonesCibles: [],
   nutritionLog: {},
+  aiCoachHistory: [],
   muscuSessionLog: {},
   // Structure : {
   //   'YYYY-MM-DD': {           // date de la séance

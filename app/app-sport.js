@@ -5857,6 +5857,7 @@ function renderMusculationProgram(p) {
   _currentSplitOpt = _splitOpts.filter(function(o){ return o.id === S._splitChoice; })[0] || null;
  }
 
+ if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) return;
  var tabs = h('div', {'class': 'day-tabs'});
  S.sportProgram.forEach(function(day, i) {
   var _tabLabel = (_currentSplitOpt && _currentSplitOpt.dayLabels && _currentSplitOpt.dayLabels[i])
