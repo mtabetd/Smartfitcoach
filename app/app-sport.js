@@ -637,6 +637,8 @@ function renderSportChoice(p) {
       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
       S.trainingDaysSelected = [];
       S.sportMixEnabled = false; S.sportMixSecondary = null;
+      // Invalider le plan nutritionnel — les jours training/repos changent avec le nouveau sport
+      S.weekPlan = null; S._planHash = null;
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }
@@ -819,6 +821,8 @@ window.SPORT = {
        S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
        S.trainingDaysSelected = [];
        S.sportMixEnabled = false; S.sportMixSecondary = null;
+       // Invalider le plan nutritionnel — les jours training/repos changent avec le nouveau sport
+       S.weekPlan = null; S._planHash = null;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }

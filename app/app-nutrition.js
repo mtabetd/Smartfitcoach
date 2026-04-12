@@ -271,7 +271,21 @@ function renderStep1(p) {
   p.appendChild(sexLabel);
   var g = h('div', {'class': 'card-grid-2'});
   [{name: window.t('onb.s1.male'), val: 'homme'}, {name: window.t('onb.s1.female'), val: 'femme'}].forEach(function(o) {
-    g.appendChild(h('div', {'class': 'sel-card' + (S.sex === o.val ? ' on' : ''), onclick: function() { S.sex = o.val; window.render(); }}, [
+    g.appendChild(h('div', {'class': 'sel-card' + (S.sex === o.val ? ' on' : ''), onclick: function() {
+      var _prevSex = S.sex;
+      S.sex = o.val;
+      // Nettoyer les données féminines si passage femme → homme (évite données fantômes persistées)
+      if (_prevSex === 'femme' && o.val === 'homme') {
+        S.cycleTracking = false;
+        S.pregnant = false;
+        S.lastPeriodDate = null;
+        S.pregnancyWeek = null;
+        S.prePregnancyWeight = null;
+        S.dueDate = null;
+        window._s2page = 0; // Forcer page date naissance, pas la page cycle/grossesse
+      }
+      window.render();
+    }}, [
       h('div', {'class': 'card-name'}, o.name)
     ]));
   });
@@ -904,7 +918,11 @@ function renderStep3(p) {
   p.appendChild(h('div', {style: 'height:24px'}));
   var _step2ok = !!(S.weight && S.height);
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (S.weight && S.height) goStep(4); }}, window.t('onb.next')));
-  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { window._s2page = 0; goStep(2); }, html: backArrowHtml() + window.t('onb.back')}));
+  p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() {
+    // Femmes : revenir à N4b (cycle/grossesse), pas à N4a (date de naissance)
+    window._s2page = (S.sex === 'femme') ? 1 : 0;
+    goStep(2);
+  }, html: backArrowHtml() + window.t('onb.back')}));
 }
 
 // ─── STEP 5 (N6+N7): ACTIVITE + SOMMEIL ───
@@ -1420,6 +1438,10 @@ function renderStep5(p) {
 
   p.appendChild(h('div', {style: 'height:24px'}));
   var canContinue5b = S.alcoholFreq != null;
+  // Helper text quand fréquence non sélectionnée (évite impasse silencieuse)
+  if (!canContinue5b) {
+    p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);text-align:center;margin-bottom:8px'}, '← Sélectionnez votre fréquence de consommation ci-dessus pour continuer'));
+  }
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !canContinue5b, onclick: function() {
     if (canContinue5b) {
       bb('nutrition_habits', {meals: S.mealsPerDay, location: S.eatingLocation, prepTime: S.mealPrepTime, alcoholFreq: S.alcoholFreq});

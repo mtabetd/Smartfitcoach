@@ -196,7 +196,8 @@ var MEDICAL_ADVICE={
   goutte:{warn:'Évitez les abats, sardines, anchois. Buvez 2L+ d\'eau/jour.',macroAdj:null},
   hta:{warn:'Régime hyposodé (< 5g sel/jour). Augmentez potassium (banane, épinard).',macroAdj:null},
   hta_severe:{warn:'HTA sévère : régime hyposodé strict (< 3g sel/jour). Évitez tout effort intense. Avis cardiologue obligatoire.',macroAdj:null},
-  cardio:{warn:'Réduisez sodium et graisses saturées. Plus d\'oméga-3.',macroAdj:{g:.03,p:.02,l:-.05}},
+  // ESC 2021 : cardiopathie → ne PAS réduire lipides totaux (MUFA/PUFA cardioprotecteurs) — qualité graisses, pas quantité
+  cardio:{warn:'Réduisez sodium et graisses saturées. Plus d\'oméga-3.',macroAdj:{g:.03,p:.02,l:0}},
   insuffisance_card:{warn:'Restriction sodique stricte. Consultez votre cardiologue pour les apports hydriques.',macroAdj:null},
   irc:{warn:'Contrôlez les protéines (0.55-0.60g/kg — KDOQI 2020). Limitez potassium et phosphore. Glucides complexes pour compenser l\'énergie.',macroAdj:{g:.08,p:0,l:.02}},
   calculs:{warn:'Buvez 2.5L+ d\'eau/jour. Limitez les oxalates (épinards, chocolat).',macroAdj:null},
@@ -205,7 +206,8 @@ var MEDICAL_ADVICE={
   crohn:{warn:'Fibres solubles préférées. Évitez les aliments irritants en poussée.',macroAdj:null},
   rch:{warn:'Alimentation anti-inflammatoire. Oméga-3, curcuma.',macroAdj:null},
   coeliaque:{warn:'Exclusion totale du gluten (blé, orge, seigle, avoine contaminée).',macroAdj:null},
-  nash:{warn:'Réduction des sucres ajoutés et graisses saturées. Perte de poids progressive.',macroAdj:{g:-.08,p:.03,l:.05}},
+  // ESPEN 2016 / NAFLD : NASH → réduire sucres et glucides à IG élevé, lipides neutres (ne pas augmenter)
+  nash:{warn:'Réduction des sucres ajoutés et graisses saturées. Perte de poids progressive.',macroAdj:{g:-.08,p:.03,l:0}},
   hypothyroidie:{warn:'Assurez iode et sélénium. Évitez excès de soja et crucifères crus.',macroAdj:null},
   hyperthyroidie:{warn:'Apport calorique augmenté. Calcium et vitamine D importants.',macroAdj:null},
   sopk:{warn:'Index glycémique bas, anti-inflammatoire. Oméga-3 et magnésium.',macroAdj:{g:-.08,p:.04,l:.04}},
@@ -216,7 +218,8 @@ var MEDICAL_ADVICE={
   hashimoto:{warn:'Anti-inflammatoire. Certains patients bénéficient du sans gluten.',macroAdj:null},
   // Ostéoporose : calcium 1200mg/j + vitamine D 800-2000 UI/j + protéines ≥1.2g/kg (NOF 2022, ESCEO 2019)
   // Exercice en charge (marche, muscu légère ≤70% 1RM) réduit le risque fracturaire (Kohrt et al. MSSE 2004)
-  osteoporose:{warn:'Calcium 1200 mg/j + Vitamine D 800-2000 UI/j (NOF 2022). Protéines ≥ 1.2 g/kg pour maintien osseux (ESCEO 2019). Exercice en charge recommandé (marche, muscu légère ≤70% 1RM). Évitez alcool et tabac.',macroAdj:{g:-.03,p:.05,l:-.02}},
+  // NOF 2022 / ESCEO 2019 : ostéoporose → pas de restriction lipidique (vit D liposoluble, nécessite graisses)
+  osteoporose:{warn:'Calcium 1200 mg/j + Vitamine D 800-2000 UI/j (NOF 2022). Protéines ≥ 1.2 g/kg pour maintien osseux (ESCEO 2019). Exercice en charge recommandé (marche, muscu légère ≤70% 1RM). Évitez alcool et tabac.',macroAdj:{g:-.03,p:.05,l:0}},
   // Polyarthrite rhumatoïde : oméga-3 3-5g/j EPA+DHA (Calder, AJCN 2015), réduction TNF-alpha
   polyarthrite:{warn:'Oméga-3 EPA+DHA 3-5g/j — réduction inflammation (Calder, AJCN 2015). Réduisez oméga-6 (huiles végétales raffinées) et aliments ultra-transformés (pro-inflammatoires). Alimentation méditerranéenne recommandée (Sköldstam et al. Scand J Rheumatol 2003). Curcuma (curcumine) : anti-inflammatoire adjuvant.',macroAdj:null},
   // Spondylarthrite ankylosante : Sieper & Poddubnyy, Lancet 2017
@@ -3016,7 +3019,8 @@ if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.roun
 if((goalKey==='bulk'||goalKey==='lean_bulk')&&tdeeVal>0){base=Math.min(base,Math.round(tdeeVal+500));}// Allaitement : +500 kcal/j (ACOG 2022) — priorité sur l'objectif coupe/sèche
 if(s.medical&&s.medical.indexOf('allaitement')!==-1){return Math.max(Math.round(tdeeVal)+500,1800);}
 // TCA/anorexie : forcer maintenance, bloquer cut/shred (ANAD, IOC 2018 — RED-S prevention)
-if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.round(tdeeVal);}
+// Profil incomplet (tdeeVal=0) : retourner plancher sécurisé pour éviter 0 kcal sur profil vulnérable
+if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.max(Math.round(tdeeVal),s.sex==='femme'?1800:1900);}
 // Adolescent (13-17 ans) : déficit max -300kcal/j (ACSM 2007, IOC 2018 — préservation croissance + pic de masse osseuse)
 // Surplus max +300kcal/j en bulk (ACSM adolescent — éviter accumulation graisseuse pendant croissance hormonale)
 var _ageT=getAge();if(_ageT>=13&&_ageT<18&&tdeeVal>0){
@@ -3026,7 +3030,8 @@ var _ageT=getAge();if(_ageT>=13&&_ageT<18&&tdeeVal>0){
 var hasDiabetes=s.medical&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);if(hasDiabetes&&tdeeVal>0){var minCal=Math.round(tdeeVal-500);if(base<minCal)base=minCal;}// Ménopause : réduction métabolique ~100 kcal/j (NAMS 2022, Poehlman 1995)
 // Ménopause : réduction métabolique ~150 kcal/j (NAMS 2022, Poehlman 1995)
 // Plancher 1400 kcal/j maintenu — les femmes ménopausées doivent être encouragées à rester actives (NAMS 2022)
-if(s.sex==='femme'&&s.medical&&s.medical.indexOf('menopause')!==-1){base=Math.max(1400,base-150);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes) — femme uniquement
+if(s.sex==='femme'&&s.medical&&s.medical.indexOf('menopause')!==-1){base=base-150;// Re-enforce déficit cap -500 kcal : la réduction ménopause ne doit pas créer un déficit > 500 kcal/j (Helms 2014)
+if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}base=Math.max(1400,base);} // PMC Menopause 2024: -150-200 kcal/j (perte masse maigre + chute estrogènes) — femme uniquement
 if(s.sex==='femme'){var cycleInfo=getCurrentCyclePhase();if(cycleInfo&&cycleInfo.phase.calorieAdjust){var adj=cycleInfo.phase.calorieAdjust;// Pendant une sèche/coupe, plafonner l'ajout du cycle à +5% max (préserver le déficit)
 if((goalKey==='cut'||goalKey==='shred')&&adj>0.05)adj=0.05;base=Math.round(base*(1+adj));}}
 // Plancher calorique sexe-spécifique (ISSN 2017, ACSM 2016, IOC 2018 RED-S prevention)
@@ -3417,7 +3422,8 @@ function filterRecipes(pool,type){
         if(al==='soja'&&(/soja|tofu|edamame|tempeh|tamari|miso|natto/).test(ing))return false;
         if(al==='lait/produits laitiers'||al==='lactose'){var dl=ing.replace(/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz|beurre de cacahu/g,'');if((/lait|fromage|yaourt|beurre|cr\u00e8me|ricotta|mozzarella|parmesan|emmental|feta|cottage|skyr|labneh|k\u00e9fir|whey/).test(dl))return false;}
         if(al==='gluten/bl\u00e9'||al==='gluten'){var gl=ing.replace(/galette de riz|farine de riz|farine de sarrasin|p\u00e2te miso/g,'');if((/pain|bl\u00e9|farine|p\u00e2te|seigle|couscous|semoule|tortilla|wrap|naan|galette|cr\u00eape|pancake|muffin|avoine|orge|\u00e9peautre|epeautre|boulgour|seitan|kamut|sauce soja|tamari/).test(gl))return false;} // BUG FIX : avoine (contamination croisée fréquente — AFDIAG), orge, épeautre, boulgour, seitan, kamut, sauce soja/tamari (gluten caché) manquaient; also accept 'gluten' alias
-        if(al==='sésame'&&(/sésame/).test(ing))return false;
+        // Sésame + tahini (pâte sésame pure) + houmous (contient tahini) — risque anaphylactique
+        if((al==='sésame'||al==='sesame')&&(/(sésame|sesame|tahini|tahin\b|houmous|hummus)/).test(ing))return false;
         if(al==='moutarde'&&(/moutarde/).test(ing))return false;
       }return true;
     });
@@ -3438,8 +3444,24 @@ function filterRecipes(pool,type){
   var hasDiab=Array.isArray(s.medical)&&(s.medical.indexOf('diabete_t2')!==-1||s.medical.indexOf('diabete_t1')!==-1||s.medical.indexOf('prediabete')!==-1);
   if(hasDiab){var highGIban=/pain blanc|baguette|croissant|brioch[eé]|corn flakes|rice krispies|galette de mais|sirop de glucose|sucre blanc|sucre\s+\d|sucre vanill|bonbon|soda|jus de fruit|dattes|confiture|miel|riz blanc gluant/;var lowGIpool=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!highGIban.test(i)});if(lowGIpool.length>=3)r=lowGIpool;} // only filter if enough recipes remain
   if(s.regime===1)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|entrecôte|filet mignon|merguez|canard|lapin|foie/).test(i)});
-  if(s.regime===2)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|merguez|gambas|lotte|morue|foie|anchois|truite|colin/).test(i)});
+  // Végétarien : ban poissons/viandes complet (inclut les 14 espèces absentes du ban vegan — cohérence nécessaire)
+  if(s.regime===2)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/poulet|boeuf|bœuf|veau|dinde|agneau|kefta|steak|saumon|thon|crevette|cabillaud|dorade|daurade|sardine|maquereau|poisson|sole|filet de bar|branzino|moules|poulpe|canard|lapin|merguez|gambas|lotte|morue|foie|anchois|truite|colin|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse/).test(i)});
   if(s.regime===3){var veganBan=/poulet|boeuf|bœuf|veau|dinde|agneau|canard|kefta|steak|saumon|thon|crevette|cabillaud|sardine|maquereau|dorade|daurade|sole|lotte|morue|gambas|poisson|poulpe|oeuf|œuf|fromage|ricotta|feta|parmesan|mozzarella|cottage|emmental|skyr|labneh|yaourt|miel|whey|\bbar\b|lieu noir|mahi.?mahi|merlu|tilapia|hareng|truite|anchois|colin|branzino|mulet|pageot|vivaneau|saint-pierre|lingue|grondin|rascasse|lapin|foie de|jambon|charcuterie/;r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();if(veganBan.test(i))return false;if(/lait/.test(i)&&!/lait de coco|lait d.amande|lait d.avoine|lait de soja|lait de riz/.test(i))return false;if(/beurre/.test(i)&&!/beurre de cacahu|beurre d.amande|beurre de noisette|beurre de noix|beurre de coco/.test(i))return false;return true});} // beurre végétal (cacahuète, amande, noisette) autorisé en vegan
+  // Grossesse : exclure les aliments contre-indiqués pendant la grossesse (OMS / ANSES 2022)
+  // Risques : listériose (charcuterie crue, fromage au lait cru), parasites (poisson cru, sushi)
+  // L'alcool traverse le placenta — aucune dose sûre (OMS 2014, ACOG 2021)
+  if(s.pregnant){r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();
+    // Poisson cru / sushi / carpaccio / ceviche / gravlax / tartare de poisson
+    if((/sushi|sashimi|tartare de (?:saumon|thon|poisson)|gravlax|carpaccio de (?:saumon|poisson)|ceviche|poisson cru|truite fumée|saumon fumé/).test(i))return false;
+    // Alcool (même en cuisine — l'alcool ne s'évapore jamais totalement)
+    if((/alcool|vin blanc|vin rouge|bière|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)|sake/).test(i))return false;
+    // Fromage au lait cru (listériose — ANSES 2022)
+    if((/camembert au lait cru|brie au lait cru|roquefort|fromage de chèvre frais|fromage au lait cru|munster|époisses|livarot|pont.l.évêque/).test(i))return false;
+    // Charcuterie crue / rillettes / pâté (listériose)
+    if((/rillettes|p[âa]t[ée] de (?:foie|campagne)|jambon cru|jambon sec|charcuterie crue|saucisson cru|chorizo cru/).test(i))return false;
+    return true;});}
+  // Allaitement : exclure alcool en cuisine (passe dans le lait maternel — AAP 2012)
+  if(!s.pregnant&&Array.isArray(s.medical)&&s.medical.indexOf('allaitement')!==-1){r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/alcool|vin blanc|vin rouge|bière|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)|sake/).test(i)});}
   // Halal : exclut porc, charcuterie porcine et alcool
   if(s.halal)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/).test(i)});
   if(typeof s.excluded==='string'&&s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}
@@ -3585,7 +3607,9 @@ window.pickSmoothieForPlan = pickSmoothieForPlan;
 function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var weekProtBudget={};var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
 // useSmoothing : whey activé + WHEY_SMOOTHIES disponible + regime non-vegan (whey = protéine animale)
 // _canSmooth : base condition (whey activé, DB disponible, pas vegan)
-var _canSmooth=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s.regime!==3);
+// Allergie lait/produits laitiers : whey = protéine lactée → bloquer les smoothies whey (sécurité allergène)
+var _hasLaitAllergy=Array.isArray(s.allergies)&&(s.allergies.indexOf('Lait/Produits laitiers')!==-1||s.allergies.indexOf('Lactose')!==-1);
+var _canSmooth=!!(s.whey&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&s.regime!==3&&!_hasLaitAllergy);
 for(var d=0;d<7;d++){var dayProteins=[];var split=getAdaptedMealSplit(d);var c=Math.round(cBase*(split.calMultiplier||1));var bT=Math.round(c*split.pctBreak),lT=Math.round(c*split.pctLunch),sT=Math.round(c*split.pctSnack),dT=Math.round(c*split.pctDinner);var bR=pickRecipe(pB,bT,uB,dayProteins,weekProtBudget),lR=pickRecipe(pL,lT,uL,dayProteins,weekProtBudget),sR=null,dR=null;
 // Snack : généré seulement si mealsPerDay >= 4 et split > 0
 // Si whey activé → smoothie whey uniquement les jours d'entraînement (ISSN 2017 : timing post-workout)
@@ -3619,7 +3643,8 @@ function swapMeal(di,slot){
   // Snack + whey → swapper vers un autre smoothie (pas une collation normale)
   // Condition : whey activé + jour d'entraînement + non-vegan (cohérent avec generateWeek)
   var _swapDayInfo=getDayType(di);
-  if(slot==='snack'&&s.whey&&s.regime!==3&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&_swapDayInfo.isTraining){
+  var _swapLaitAllergy=Array.isArray(s.allergies)&&(s.allergies.indexOf('Lait/Produits laitiers')!==-1||s.allergies.indexOf('Lactose')!==-1);
+  if(slot==='snack'&&s.whey&&s.regime!==3&&!_swapLaitAllergy&&window.WHEY_SMOOTHIES&&window.WHEY_SMOOTHIES.length&&_swapDayInfo.isTraining){
     var curId=(s.weekPlan[di][slot]&&s.weekPlan[di][slot]._id)||'';
     var usedSm=new Set([curId]);
     var nrSm=pickSmoothieForPlan(tgt,usedSm);
@@ -3696,10 +3721,17 @@ window.getPlanHash = function() {
     s.age || 0,
     s.sex || '',
     s.activity !== undefined && s.activity !== null ? String(s.activity) : '',
-    // BUG A : jours d'entraînement influencent le calMultiplier via getAdaptedMealSplit
     s.sportDays || 0,
     Array.isArray(s.trainingDaysSelected) ? s.trainingDaysSelected.slice().sort().join(',') : '',
-    s.weeklyCalendar ? JSON.stringify(s.weeklyCalendar) : ''
+    s.weeklyCalendar ? JSON.stringify(s.weeklyCalendar) : '',
+    // Paramètres manquants identifiés par audit : grossesse + filtres recettes
+    s.pregnant ? '1' : '0',
+    s.halal ? '1' : '0',
+    typeof s.excluded === 'string' ? s.excluded : '',
+    s.cookLevel !== undefined && s.cookLevel !== null ? String(s.cookLevel) : '',
+    Array.isArray(s.cuisines) ? s.cuisines.slice().sort().join(',') : '',
+    s.trainTime || '',
+    Array.isArray(s.medical) ? s.medical.slice().sort().join(',') : ''
   ].join('|');
 };
 
@@ -3889,6 +3921,16 @@ function detectMedicalConflicts() {
   var _goalKey = s.goal !== null && GOALS[s.goal] ? GOALS[s.goal].key : null;
   if(_bmiCheck!==null&&_bmiCheck<18.5&&(_goalKey==='cut'||_goalKey==='shred')){
     conflicts.push({level:'CRITIQUE',message:'⚠ ALERTE MÉDICALE : IMC '+_bmiCheck.toFixed(1)+' (insuffisance pondérale) incompatible avec un objectif déficitaire. Un déficit calorique sur ce profil peut aggraver la dénutrition et présente des risques cardiaques, osseux et hormonaux graves. Votre objectif a été remplacé par maintenance. Consultez un médecin avant tout programme nutritionnel.'});
+  }
+  // Conflit -1 : IRC + Allaitement → contraintes protéiques incompatibles
+  // Allaitement : +500 kcal + besoins protéiques élevés | IRC : plafond 0.6g/kg non dialyse
+  if(!s.pregnant&&med.indexOf('irc')!==-1&&med.indexOf('allaitement')!==-1){
+    conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT MÉDICAL CRITIQUE : Insuffisance Rénale Chronique + Allaitement — L\'allaitement nécessite un apport protéique augmenté (1.1-1.3g/kg) incompatible avec le plafond IRC (0.6g/kg, KDOQI 2020). Ce profil NÉCESSITE un suivi conjoint néphrologue + diététicienne spécialisée. Ne pas modifier l\'alimentation sans avis médical.'});
+  }
+  // Conflit -2 : TCA + Grossesse → deux pathologies qui nécessitent une surveillance médicale spécialisée conjointe
+  // IOC 2018 + ACOG 2022 : la restriction alimentaire en TCA est incompatible avec les besoins fœtaux
+  if(s.pregnant&&med.indexOf('tca')!==-1){
+    conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT MÉDICAL CRITIQUE : TCA + Grossesse — Les troubles du comportement alimentaire pendant la grossesse sont associés à un risque élevé de complications (retard de croissance intra-utérin, prématurité, fausses couches — ACOG 2022). Un suivi psychiatrique ou psychologique ET obstétrical est OBLIGATOIRE. Ne suivez pas un programme diététique sans supervision médicale spécialisée.'});
   }
   // Conflit 0 : Grossesse + IRC → protéines plafonnées à 0.6g/kg = insuffisant pour le fœtus (C1)
   // OMS 2016 : grossesse T3 = +25g protéines/j | KDOQI 2020 : IRC CKD 3-5 = 0.6g/kg/j max

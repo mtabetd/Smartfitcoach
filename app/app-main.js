@@ -125,7 +125,8 @@ var NUTRITION_PLAN_KEYS = [
  'goal', 'weight', 'activity', 'mealsPerDay', 'sex', 'age', 'height',
  'regime', 'halal', 'excluded', 'cookLevel', 'wantsDessert',
  'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical',
- 'trainingDaysSelected'
+ 'trainingDaysSelected',
+ 'pregnant' // grossesse modifie calcTarget() et filterRecipes() — plan doit être régénéré
 ];
 
 function saveProfile() {
@@ -1084,13 +1085,22 @@ function render() {
  var app = document.getElementById('app');
  if (!app) { console.error('[render] #app not found'); return; }
 
- // Scroll to top only when navigating to a different page/step
+ // Scroll to top on any page/step/sub-page change
+ var _s2p = window._s2page || 0;
+ var _s5p = window._s5page || 0;
+ var _cfCal = !!S.cfCalendarOpen;
  var _didNavigate = (render._lastView !== S.view) ||
  (render._lastNStep !== S.nStep) ||
- (render._lastSStep !== S.sStep);
+ (render._lastSStep !== S.sStep) ||
+ (render._lastS2page !== _s2p) ||
+ (render._lastS5page !== _s5p) ||
+ (render._lastCfCal !== _cfCal);
  render._lastView = S.view;
  render._lastNStep = S.nStep;
  render._lastSStep = S.sStep;
+ render._lastS2page = _s2p;
+ render._lastS5page = _s5p;
+ render._lastCfCal = _cfCal;
 
  app.innerHTML = '';
  try {
@@ -1195,7 +1205,8 @@ function render() {
  if (S.appMode !== 'nutrition') {
    nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, window.t('nav.sport')));
  }
- if (S.appMode && S.appMode !== 'nutrition') {
+ if (S.appMode) {
+   // Calendrier accessible en mode sport ET nutrition (le calendrier pilote les jours training/repos = données nutritionnelles)
    nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'calendar' ? ' active' : ''), style: 'font-size:11px', onclick: function(){ S.view = 'calendar'; if(window.BLACKBOX)window.BLACKBOX.log('nav_calendar'); render(); }}, 'Calendrier'));
  }
  wrap.appendChild(nav);

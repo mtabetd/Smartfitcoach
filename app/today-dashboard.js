@@ -812,7 +812,10 @@ function buildShareCanvas() {
 
   // ── Objectif ──
   var goalLabel = '';
-  if (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) {
+  if (S.pregnant && S.sex === 'femme') {
+    // Femme enceinte : afficher "Grossesse" même si S.goal est cut/shred (calcTarget() corrige les calories)
+    goalLabel = 'Grossesse';
+  } else if (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) {
     goalLabel = window.GOALS[S.goal].name;
   } else if (S.appMode === 'sport') {
     goalLabel = 'Programme sportif';
@@ -1187,7 +1190,9 @@ function renderCardRestDay(S) {
   }[_lvl];
 
   var weightKg = (S && S.weight) ? parseFloat(S.weight) : 70;
-  var waterGoal = Math.round(weightKg * 0.033 * 10) / 10;
+  // 35 ml/kg (EFSA 2010 / ANSES) + plancher EFSA : 2.0 L femme, 2.5 L homme (cohérent avec calcHydration())
+  var _efsa_floor = (S && S.sex === 'homme') ? 2.5 : 2.0;
+  var waterGoal = Math.max(_efsa_floor, Math.round(weightKg * 0.035 * 10) / 10);
 
   var _restTips = {
     beginner: [
@@ -1379,6 +1384,8 @@ function openTodayWeightPrompt() {
         if (window.S && Array.isArray(window.S.weightHistory)) {
           window.S.weightHistory.push({ date: new Date().toISOString().split('T')[0], weight: valKg });
         }
+        // Persister le nouveau poids dans le profil (évite la perte de données si l'utilisateur ferme l'app)
+        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         if (window.GAMIFICATION) {
           try {
             window.GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg'));
