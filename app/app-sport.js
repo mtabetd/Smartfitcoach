@@ -311,6 +311,63 @@ function generateSportProgram() {
  });
  });
 
+ // ── Split-aware daySplits override ──────────────────────────────────────────
+ // When a structured split is chosen (Upper/Lower, PPL, etc.), override daySplits
+ // to enforce strict upper/lower/push/pull/legs boundaries.
+ // Without this, the frequency-based algorithm can put "shoulders" on a "Lower A" day.
+ if (S._splitChoice && days >= 2) {
+   var _UPPER_C = {chest:1, back:1, shoulders:1, biceps:1, triceps:1, abs:1};
+   var _LOWER_C = {legs:1, glutes:1};
+   var _PUSH_C  = {chest:1, shoulders:1, triceps:1};
+   var _PULL_C  = {back:1, biceps:1};
+   var _FULL_C  = {chest:1, back:1, shoulders:1, legs:1, glutes:1};
+   var _SPLIT_TMPL = {
+     'upper_lower': ['upper','lower','upper','lower'],
+     'ppl_3':       ['push','pull','legs'],
+     'ppl_plus1':   ['push','pull','legs','upper'],
+     'ppl_5':       ['push','pull','legs','push','pull'],
+     'ppl_6':       ['push','pull','legs','push','pull','legs'],
+     'fullbody_ab': ['full','full'],
+     'fullbody_3':  ['full','full','full'],
+     'bro_4':       ['chest_tri','back_bi','shoulders_only','legs'],
+     'bro_5':       ['chest_only','back_only','shoulders_only','arms','legs']
+   };
+   var _CAT_FOR_TYPE = {
+     'upper':          _UPPER_C,
+     'lower':          _LOWER_C,
+     'push':           _PUSH_C,
+     'pull':           _PULL_C,
+     'legs':           _LOWER_C,
+     'full':           _FULL_C,
+     'chest_tri':      {chest:1, triceps:1},
+     'back_bi':        {back:1, biceps:1},
+     'shoulders_only': {shoulders:1},
+     'chest_only':     {chest:1},
+     'back_only':      {back:1},
+     'arms':           {biceps:1, triceps:1}
+   };
+   var _dayTypes = _SPLIT_TMPL[S._splitChoice];
+   if (_dayTypes) {
+     for (var _sd = 0; _sd < Math.min(days, _dayTypes.length); _sd++) {
+       var _dtype = _dayTypes[_sd];
+       var _allowed = _CAT_FOR_TYPE[_dtype] || {};
+       var _filtered = allCategories.filter(function(cat) { return !!_allowed[cat]; });
+       // Fallback: if user hasn't set sportFocus for those muscles, use defaults
+       if (_filtered.length === 0) {
+         if (_dtype === 'upper') _filtered = ['chest','back','shoulders'];
+         else if (_dtype === 'push') _filtered = ['chest','shoulders','triceps'];
+         else if (_dtype === 'pull') _filtered = ['back','biceps'];
+         else if (_dtype === 'lower' || _dtype === 'legs') _filtered = ['legs','glutes'];
+         else if (_dtype === 'full') _filtered = ['chest','back','legs'];
+       }
+       // Re-sort by priority
+       _filtered.sort(function(a, b) { return (categoryPriority[b] || 0) - (categoryPriority[a] || 0); });
+       daySplits[_sd] = _filtered;
+     }
+   }
+ }
+ // ────────────────────────────────────────────────────────────────────────────
+
  // Determine rest and rep adjustments based on goals
  var restOverride = null;
  var repSuffix = '';
@@ -435,9 +492,11 @@ function generateSportProgram() {
  var groupOcc = groupWeekOccurrence[group] || 0;
  groupWeekOccurrence[group] = groupOcc + 1;
 
- // Cycle-based offset: rotate exercise selection each cycle (guard against NaN)
+ // Rotation offset: combine intra-week occurrence (groupOcc) and cycle number
+ // so Upper A ≠ Upper B within a week, and exercises rotate across cycles.
  var poolRemainder = available.length - count;
- var cycleOffset = poolRemainder > 0 ? ((S.muscuCycle || 1) - 1) % poolRemainder : 0;
+ var _rotBase = groupOcc * count + ((S.muscuCycle || 1) - 1) * count;
+ var cycleOffset = (poolRemainder > 0 && available.length > count) ? (_rotBase % available.length) : 0;
  var groupStartIdx = dayExercises.length; // track where this group's exercises start
  for (var i = 0; i < count; i++) {
  var ex = Object.assign({}, available[(i + cycleOffset) % available.length]);
