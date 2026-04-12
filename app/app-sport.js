@@ -1214,9 +1214,9 @@ function renderPARQ(p) {
   { id: 'dizziness',    text: 'Avez-vous des étourdissements ou pertes de connaissance lors de l\'effort ?' },
   { id: 'medication',   text: 'Prenez-vous des médicaments pour la tension artérielle ou le cœur ?' },
   { id: 'jointIssue',   text: 'Avez-vous un problème osseux ou articulaire aggravé par l\'exercice ?' },
-  { id: 'pregnant',     text: 'Êtes-vous enceinte ou avez-vous accouché il y a moins de 6 semaines ?' },
+  { id: 'pregnant',     text: 'Êtes-vous enceinte ou avez-vous accouché il y a moins de 6 semaines ?', femmeOnly: true },
   { id: 'otherReason',  text: 'Avez-vous une autre raison médicale de ne pas faire d\'activité physique ?' }
- ];
+ ].filter(function(q) { return !q.femmeOnly || S.sex === 'femme'; });
 
  var _hasYes = PARQ_QUESTIONS.some(function(q) { return S._parqAnswers[q.id] === true; });
  var _allAnswered = PARQ_QUESTIONS.every(function(q) { return S._parqAnswers[q.id] === true || S._parqAnswers[q.id] === false; });
@@ -1275,6 +1275,7 @@ function renderPARQ(p) {
   p.appendChild(warnDiv);
 
   var docBtn = h('button', {'class': 'btn-primary', onclick: function() {
+   if (S._parqAnswers.pregnant === true && S.sex === 'femme') S.pregnant = true;
    S.parqDone = true;
    S.parqResult = 'medical_cleared';
    S._parqAnswers = {};
@@ -1288,6 +1289,7 @@ function renderPARQ(p) {
   var overrideBtn = h('button', {
    style: 'display:block;width:100%;margin-top:10px;padding:12px;border:1px solid var(--border,#E8E6DF);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;border-radius:2px;text-align:center',
    onclick: function() {
+    if (S._parqAnswers.pregnant === true && S.sex === 'femme') S.pregnant = true;
     S.parqDone = true;
     S.parqResult = 'user_override';
     S._parqAnswers = {};

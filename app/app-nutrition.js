@@ -197,10 +197,11 @@ function renderNutritionChoice(app) {
       S.weekPlan = null;
       S._nm = null;
       S._weekPlanGeneratedAt = null;
+      S._planHash = '';
       S.mealsLogged = {};
-      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       // Bypass goStep(1) auto-skip — force step 1 (sex selection) so returning users can change sex
       S.nStep = 1;
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }
   }, 'Établir un nouveau programme');
@@ -498,9 +499,9 @@ function renderStep2b(p) {
           var barColors = {menstruation: '#5A1010', follicular: '#6A4A1A', ovulation: '#1A4A1A', luteal: '#6A4A1A'};
           for (var ci = 0; ci < CYCLE_PHASES.length; ci++) {
             var cp = CYCLE_PHASES[ci];
-            var segStart = Math.round(cp.days[0] * S.cycleLength / 28);
-            var segEnd = Math.round(cp.days[1] * S.cycleLength / 28);
-            var segWidth = ((segEnd - segStart + 1) / S.cycleLength * 100);
+            var segStart = Math.round(cp.days[0] * (S.cycleLength || 28) / 28);
+            var segEnd = Math.round(cp.days[1] * (S.cycleLength || 28) / 28);
+            var segWidth = ((segEnd - segStart + 1) / (S.cycleLength || 28) * 100);
             var segColor = barColors[cp.id] || '#ccc';
             var isCurrentSeg = cycleInfo.phase.id === cp.id;
             barWrap.appendChild(h('div', {style: 'width:' + segWidth + '%;background:' + segColor + ';opacity:' + (isCurrentSeg ? '1' : '0.3') + ';height:100%'}));
@@ -508,7 +509,7 @@ function renderStep2b(p) {
           phaseCard.appendChild(barWrap);
 
           // Position marker
-          var markerPct = ((cycleInfo.dayInCycle - 1) / S.cycleLength * 100);
+          var markerPct = ((cycleInfo.dayInCycle - 1) / (S.cycleLength || 28) * 100);
           var markerWrap = h('div', {style: 'position:relative;height:10px;margin-top:2px'});
           markerWrap.appendChild(h('div', {style: 'position:absolute;left:' + markerPct + '%;transform:translateX(-50%);font-size:9px;color:var(--noir)'}, '\u25B2'));
           phaseCard.appendChild(markerWrap);
@@ -2134,7 +2135,7 @@ function renderStep8(p) {
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.p / tot * 100 : 0, 'var(--green,#1A4A1A)', window.t('onb.s8.proteins'), m.p));
   rr.appendChild(svgRing(90, 5, tot > 0 ? m.l / tot * 100 : 0, 'var(--orange,#6A4A1A)', window.t('onb.s8.fats'), m.l));
   p.appendChild(rr);
-  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Prot\u00e9ines \u00b7 Glucides \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
+  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);font-style:italic;margin-top:2px;text-align:center'}, 'Glucides \u00b7 Prot\u00e9ines \u00b7 Lipides \u2014 les 3 piliers de votre alimentation'));
 
   // g/kg ratio for power users — shown in small grey below the gram total
   var _protRatio = (S.weight && S._nm) ? (((S._nm.proteinGrams || S._nm.p || 0)) / S.weight).toFixed(1) : null;
@@ -2432,6 +2433,7 @@ function renderStep8(p) {
   if (getSupplementRecommendations) {
     var suppRecs = getSupplementRecommendations() || [];
     if (suppRecs.length > 0) {
+      if (!Array.isArray(S.supplements)) S.supplements = [];
       p.appendChild(h('div', {'class': 'section-label'}, 'Suppl\u00e9mentation recommand\u00e9e'));
 
       // If user takes creatine, show special card first
@@ -3419,10 +3421,11 @@ function renderStep9(p) {
       S.weekPlan = null;
       S._nm = null;
       S._weekPlanGeneratedAt = null;
+      S._planHash = '';
       S.mealsLogged = {};
-      if (window.saveProfile) saveProfile();
       // Bypass goStep(1) auto-skip — force step 1 so users can change sex and all preferences
       S.nStep = 1;
+      if (window.saveProfile) saveProfile();
       window.render();
     }
   }, '\u2699 Modifier mes pr\u00e9f\u00e9rences nutritionnelles');
@@ -5886,6 +5889,7 @@ function renderBodyScan(p) {
 
   // Skip link
   p.appendChild(h('button', {style: 'display:block;margin:16px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);cursor:pointer;padding:10px;min-height:44px', onclick: function() {
+    S.bodyScanDone = true;
     goStep(7);
   }}, 'Passer cette \u00e9tape \u2192'));
   p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() { goStep(5); }, html: backArrowHtml() + window.t('onb.back')}));

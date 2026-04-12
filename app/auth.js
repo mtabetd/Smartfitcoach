@@ -820,7 +820,7 @@ window.AUTH = {
       window.S.cyclingLevel = null; window.S.cyclingType = null;
       window.S.cyclingSpeed = null; window.S.cyclingFTP = null;
       window.S.cyclingRelief = null; window.S.cyclingWeek = 1;
-      window.S.cyclingPlan = null; window.S.selectedCyclingDay = 0;
+      window.S.cyclingProgram = null; window.S.selectedCyclingDay = 0;
       // Triathlon
       window.S.triathlonGoal = null; window.S.triathlonLevel = null;
       window.S.triathlonWeek = 1; window.S.triathlonProgram = null;
@@ -872,7 +872,7 @@ window.AUTH = {
       window.S.waist = null; window.S.parqDone = false; window.S.parqResult = null;
       window.S._parqNextStep = null; window.S._sportProfileDone = false;
       window.S._switchedFromSport = null; window.S._switchedFromNutrition = null;
-      window.S.streakFreezeUsedMonth = null; window.S.streakFreezeAvailable = 0; window.S.swapCount = 0;
+      window.S.streakFreezeUsedMonth = null; window.S.streakFreezeAvailable = true; window.S.swapCount = 0;
       window.S.cfDeloadRecommended = false; window.S.sessionPostponed = false; window.S.stress = null;
       window.S.trainingDaysSelected = []; window.S.muscuObjectifSpecifique = null;
       window.S.muscuZonesCibles = []; window.S.muscuRenforcementNote = '';
