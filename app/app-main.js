@@ -1,6 +1,8 @@
 // app-main.js — Smart Fit Coach: Router, Auth Screens, Init
 (function(){
 'use strict';
+// Prevent browser from auto-restoring scroll position on back/forward navigation
+if (window.history && window.history.scrollRestoration) { window.history.scrollRestoration = 'manual'; }
 var S = window.S;
 var h = window.h, txt = window.txt;
 
@@ -1096,25 +1098,35 @@ function render() {
  var _s2p = window._s2page || 0;
  var _s5p = window._s5page || 0;
  var _cfCal = !!S.cfCalendarOpen;
+ // Track sport day selections — switching days changes page content significantly
+ var _selDayKey = (S.selectedCrossfitDay || 0) + '|' + (S.selectedRunDay || 0) + '|' +
+   (S.selectedHyroxDay || 0) + '|' + (S.selectedSportDay || 0) + '|' +
+   (S.selectedPadelDay || 0) + '|' + (S.selectedGolfDay || 0) + '|' +
+   (S.selectedTriDay || 0) + '|' + (S.selectedCyclingDay || 0) + '|' +
+   (S.selectedCalisthDay || 0) + '|' + (S.yogaDay || 0);
  var _didNavigate = (render._lastView !== S.view) ||
  (render._lastNStep !== S.nStep) ||
  (render._lastSStep !== S.sStep) ||
  (render._lastS2page !== _s2p) ||
  (render._lastS5page !== _s5p) ||
- (render._lastCfCal !== _cfCal);
+ (render._lastCfCal !== _cfCal) ||
+ (render._lastSelDayKey !== _selDayKey);
  render._lastView = S.view;
  render._lastNStep = S.nStep;
  render._lastSStep = S.sStep;
  render._lastS2page = _s2p;
  render._lastS5page = _s5p;
  render._lastCfCal = _cfCal;
+ render._lastSelDayKey = _selDayKey;
 
  app.innerHTML = '';
  try {
 
  if (_didNavigate) {
- // Scroll immediately (before new content is painted)
- window.scrollTo({ top: 0, behavior: 'instant' });
+ // Disable CSS scroll-behavior:smooth — it overrides behavior:'instant' on iOS Safari/some Android
+ document.documentElement.style.scrollBehavior = 'auto';
+ document.body.style.scrollBehavior = 'auto';
+ window.scrollTo(0, 0);
  document.documentElement.scrollTop = 0;
  document.body.scrollTop = 0;
  var _appEl = document.getElementById('app');
@@ -1267,21 +1279,30 @@ function render() {
  // Onboarding screen (P10) — écran de bienvenue personnalisé (1 seule fois)
  try { if (window.OnboardingComplete) window.OnboardingComplete.check(); } catch(e) {}
 
- // Post-render scroll: reset .app container and window after content is in DOM
+ // Post-render scroll: reset scroll position after content is in DOM
  if (_didNavigate) {
- window.scrollTo({ top: 0, behavior: 'instant' });
+ window.scrollTo(0, 0);
  document.documentElement.scrollTop = 0;
  document.body.scrollTop = 0;
  if (app) app.scrollTop = 0;
  var _wrap = app.querySelector('.app');
  if (_wrap) _wrap.scrollTop = 0;
+ // Double-rAF: first frame ensures layout is complete, second ensures paint is done
  requestAnimationFrame(function() {
- window.scrollTo({ top: 0, behavior: 'instant' });
+ window.scrollTo(0, 0);
  document.documentElement.scrollTop = 0;
  document.body.scrollTop = 0;
  if (app) app.scrollTop = 0;
  var _w2 = app.querySelector('.app');
  if (_w2) _w2.scrollTop = 0;
+ requestAnimationFrame(function() {
+ window.scrollTo(0, 0);
+ document.documentElement.scrollTop = 0;
+ document.body.scrollTop = 0;
+ // Restore CSS smooth scrolling after navigation is fully settled
+ document.documentElement.style.scrollBehavior = '';
+ document.body.style.scrollBehavior = '';
+ });
  });
  }
  // Translate DOM if EN
