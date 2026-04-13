@@ -5168,7 +5168,7 @@ function renderMusculationProgram(p) {
  // ── PROGRAMME IA PERSONNALISÉ (priorité sur le programme local) ──
  if (S.muscuIAProgram && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100) {
    p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
-   p.appendChild(h('h1', {html: 'Votre programme<br><em>personnalis\u00e9 par IA</em>'}));
+   p.appendChild(h('h1', {html: 'Votre programme<br><em>sur mesure</em>'}));
    var _iaDateStr = S.muscuIAProgramDate ? new Date(S.muscuIAProgramDate).toLocaleDateString('fr-FR') : '';
    if (_iaDateStr) p.appendChild(h('p', {'class': 'subtitle'}, 'G\u00e9n\u00e9r\u00e9 le ' + _iaDateStr));
 
@@ -5198,7 +5198,7 @@ function renderMusculationProgram(p) {
    if (window.MUSCU_PROGRAM && typeof window.MUSCU_PROGRAM.open === 'function') {
      p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:8px', onclick: function() {
        window.MUSCU_PROGRAM.open();
-     }}, 'G\u00e9n\u00e9rer un nouveau programme IA'));
+     }}, 'G\u00e9n\u00e9rer un nouveau programme'));
    }
    return;
  }
