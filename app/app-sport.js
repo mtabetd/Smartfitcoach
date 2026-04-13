@@ -5946,7 +5946,7 @@ function renderMusculationProgram(p) {
    p.appendChild(_ctaDoneBadge);
  } else if (!_ctaCompleting) {
    var _ctaBtn = h('button', {
-     style: 'display:block;width:100%;padding:14px;background:var(--black,#0A0A09);color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;margin-bottom:16px;',
+     style: 'display:block;width:100%;padding:16px 24px;background:var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:600;border:none;border-radius:2px;cursor:pointer;margin-bottom:16px;transition:all 0.25s cubic-bezier(0.25,0.46,0.45,0.94);box-shadow:0 4px 12px rgba(26,74,26,0.2);',
      onclick: function() {
        S.sessionCompleting = S.selectedSportDay;
        S._sessionDuration = null;
@@ -5982,7 +5982,7 @@ function renderMusculationProgram(p) {
     { name: 'Mobilité articulaire', duration: '3 min', notes: 'Cercles épaules, hanches, chevilles' }
    ]
   };
-  var wuCard = h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.2);border-left:3px solid var(--green,#1A4A1A);padding:12px 14px;margin-bottom:12px;border-radius:0 2px 2px 0'});
+  var wuCard = h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.08));border:1px solid rgba(26,74,26,0.15);border-left:4px solid var(--green,#1A4A1A);padding:16px;margin-bottom:16px;border-radius:2px;box-shadow:0 2px 6px rgba(26,74,26,0.06)'});
   wuCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--green,#1A4A1A);font-weight:600;margin-bottom:8px'}, 'ÉCHAUFFEMENT · ' + wu.duration + ' min'));
   (wu.exercises || []).forEach(function(ex) {
    var row = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;margin-bottom:4px'});
@@ -6001,7 +6001,7 @@ function renderMusculationProgram(p) {
  // ── PROGRESS INDICATOR: "Exercice X/N" ──
  var _exProgressRow = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:2px'});
  _exProgressRow.appendChild(h('div', {'class': 'exercise-muscle'}, ex.m));
- _exProgressRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);letter-spacing:0.5px;white-space:nowrap'}, 'Ex. ' + (exIdx + 1) + '\u00a0/\u00a0' + _totalExercises));
+ _exProgressRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);font-weight:600;white-space:nowrap;padding:3px 8px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px'}, 'Ex. ' + (exIdx + 1) + '\u00a0/\u00a0' + _totalExercises));
  card.appendChild(_exProgressRow);
 
  var _exNameEl = h('div', {'class': 'exercise-name'}, ex.n || 'Exercice');
@@ -6077,7 +6077,7 @@ function renderMusculationProgram(p) {
    card.appendChild(h('img', {
      src: _gifUrl, alt: ex.n,
      loading: 'lazy',
-     style: 'width:100%;max-width:300px;border-radius:8px;margin:8px 0 4px;display:block',
+     style: 'width:100%;max-width:100%;height:auto;border-radius:2px;margin:12px 0 8px;display:block;border:1px solid var(--border,#D8D8D0);box-shadow:0 2px 6px rgba(10,10,9,0.06)',
      onerror: function(e) { e.currentTarget.style.display = 'none'; }
    }));
  }
@@ -6673,7 +6673,7 @@ function renderMusculationProgram(p) {
     { name: 'Étirements statiques', duration: '2 min', notes: 'Groupes musculaires travaillés' }
    ]
   };
-  var cdCard = h('div', {style: 'background:rgba(26,58,106,0.04);border:1px solid rgba(26,58,106,0.18);border-left:3px solid #1A3A6A;padding:12px 14px;margin-top:8px;margin-bottom:12px;border-radius:0 2px 2px 0'});
+  var cdCard = h('div', {style: 'background:rgba(26,58,106,0.06);border:1px solid rgba(26,58,106,0.12);border-left:4px solid #1A3A6A;padding:16px;margin-top:12px;margin-bottom:16px;border-radius:2px;box-shadow:0 2px 6px rgba(26,58,106,0.06)'});
   cdCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#1A3A6A;font-weight:600;margin-bottom:8px'}, 'RÉCUPÉRATION · ' + cd.duration + ' min'));
   (cd.exercises || []).forEach(function(ex) {
    var row = h('div', {style: 'display:flex;align-items:flex-start;gap:8px;margin-bottom:4px'});
@@ -7178,15 +7178,16 @@ function renderSportModal(app) {
    body.appendChild(h('img', {
      src: _detailGif, alt: ex.n,
      loading: 'lazy',
-     style: 'width:100%;border-radius:12px;margin:12px 0 8px;display:block',
+     style: 'width:100%;border-radius:2px;margin:16px 0 12px;display:block;border:1px solid var(--border,#D8D8D0);box-shadow:0 2px 8px rgba(10,10,9,0.06)',
      onerror: function(e) { e.currentTarget.style.display = 'none'; }
    }));
  }
 
- // Video button (only render if URL exists)
- if (ex.video) {
+ // Video button (with fallback URL generator)
+ var _detailVideoUrl = ex.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(ex.n) : null);
+ if (_detailVideoUrl) {
  body.appendChild(h('a', {
- 'class': 'btn-primary', href: ex.video, target: '_blank', rel: 'noopener',
+ 'class': 'btn-primary', href: _detailVideoUrl, target: '_blank', rel: 'noopener',
  style: 'display:block;text-align:center;text-decoration:none;margin-top:16px',
  onclick: function(){ window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n}); }
  }, '▶ Voir la vidéo technique'));

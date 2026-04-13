@@ -454,16 +454,22 @@ body.dark-mode .profile-photo-frame.has-photo {
 
 .exercise-card {
   border-radius: 2px;
-  padding: 16px;
+  padding: 20px;
   border: 1px solid var(--border);
+  border-left: 4px solid var(--black);
   background: var(--ivory2);
-  transition: border-color 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
   overflow: hidden;
+  box-shadow: 0 2px 4px rgba(10, 10, 9, 0.04);
+  position: relative;
 }
 
 .exercise-card:hover {
   border-color: var(--black, #0A0A09);
+  border-left-color: var(--black, #0A0A09);
+  box-shadow: 0 4px 12px rgba(10, 10, 9, 0.08);
+  transform: translateY(-1px);
 }
 
 .exercise-video {
@@ -473,44 +479,60 @@ body.dark-mode .profile-photo-frame.has-photo {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 11px;
   color: var(--blue, #1A3A6A);
-  margin-top: 8px;
+  margin-top: 10px;
   text-decoration: none;
-  border: 1px solid var(--blue, #1A3A6A);
-  padding: 4px 10px;
+  border: 1.5px solid var(--blue, #1A3A6A);
+  padding: 6px 12px;
+  border-radius: 2px;
   transition: all 0.2s ease;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 .exercise-video:hover {
-  background: var(--bluebg, rgba(26,58,106,.06));
+  background: var(--blue, #1A3A6A);
+  color: var(--ivory, #FAF9F6);
   transform: translateX(2px);
 }
 
 .exercise-name {
   font-family: Georgia, serif;
-  font-size: 16px;
-  margin-bottom: 4px;
+  font-size: 18px;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+  color: var(--black);
+  line-height: 1.3;
 }
 
 .exercise-muscle {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 9px;
-  letter-spacing: 4px;
+  font-size: 10px;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--grey);
+  color: var(--green, #1A4A1A);
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: inline-block;
+  padding: 3px 8px;
+  background: var(--greenbg, rgba(26, 74, 26, 0.08));
+  border-radius: 2px;
 }
 
 .exercise-sets {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--black);
-  margin-top: 6px;
+  margin-top: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .exercise-detail {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--grey);
-  margin-top: 6px;
+  margin-top: 8px;
+  line-height: 1.5;
 }
 
 
@@ -2033,47 +2055,66 @@ body.dark-mode .auth-container {
 .set-row {
   display: grid;
   align-items: center;
-  padding: 6px 8px;
+  padding: 10px 8px;
   border-top: 1px solid var(--border);
-  transition: background 0.15s ease;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+  position: relative;
 }
 .set-row:nth-child(even) {
-  background: var(--ivory2, #F8F9FA);
+  background: var(--ivory2, #F4F4F0);
+}
+.set-row:hover {
+  background: var(--ivory3, #EEEDE8);
+  border-left-color: var(--green, #1A4A1A);
+}
+.set-row-validated {
+  background: var(--greenbg, rgba(26, 74, 26, 0.10)) !important;
+  border-left-color: var(--green, #1A4A1A) !important;
 }
 .set-load-input, .set-reps-input {
-  width: 54px;
-  padding: 4px;
-  border: 1px solid var(--border, #BDC3C7);
+  width: 60px;
+  padding: 8px 6px;
+  border: 1px solid var(--border, #D8D8D0);
   border-radius: 2px;
   text-align: center;
   font-family: Georgia, serif;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   background: var(--ivory, #FAF9F6);
+  color: var(--black);
+  transition: all 0.2s ease;
 }
 .set-load-input:focus, .set-reps-input:focus {
   border-color: var(--black, #0A0A09);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(10, 10, 9, 0.08);
+  box-shadow: 0 0 0 3px rgba(26, 74, 26, 0.10);
+  background: var(--ivory);
 }
 .set-delta {
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 1px 5px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 8px;
   border-radius: 2px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  letter-spacing: 0.3px;
 }
 .delta-up {
   color: var(--green, #1A4A1A);
-  background: var(--greenbg, rgba(26,74,26,.06));
+  background: var(--greenbg, rgba(26,74,26,.10));
 }
 .delta-down {
   color: var(--red, #5A1010);
-  background: var(--redbg, rgba(90,16,16,.06));
+  background: var(--redbg, rgba(90,16,16,.10));
 }
 .delta-flat {
   color: var(--grey, #6B6B65);
   background: transparent;
+  font-weight: 400;
 }
 .set-progress-badge {
   padding: 8px 12px;
@@ -2090,31 +2131,35 @@ body.dark-mode .auth-container {
 .set-num {
   font-weight: 700;
   color: var(--black, #0A0A09);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  min-width: 28px;
 }
 
 /* -------------------------------------------------------
    SET VALIDATE BUTTON
    ------------------------------------------------------- */
 .set-validate-btn {
-  padding: 4px 10px;
-  border: 1px solid var(--green, #1A4A1A);
+  padding: 8px 12px;
+  border: 1.5px solid var(--green, #1A4A1A);
   border-radius: 2px;
-  background: var(--greenbg, rgba(26,74,26,.06));
+  background: transparent;
   color: var(--green, #1A4A1A);
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 400;
+  font-size: 10px;
+  font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   min-height: 44px;
   min-width: 44px;
 }
 .set-validate-btn:hover {
   background: var(--green, #1A4A1A);
   color: var(--ivory, #FAF9F6);
+  box-shadow: 0 4px 8px rgba(26, 74, 26, 0.2);
 }
 .set-validate-btn:active {
   transform: scale(0.95);
