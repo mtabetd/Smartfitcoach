@@ -1063,6 +1063,11 @@
       var programText = typeof data.program === 'string' ? data.program : '';
       var footerQuote = FOOTER_QUOTES[Math.floor(Math.random() * FOOTER_QUOTES.length)];
 
+      // Sauvegarder le programme IA pour l'afficher dans la vue Sport + Dashboard
+      _Snow.muscuIAProgram = programText;
+      _Snow.muscuIAProgramDate = new Date().toISOString();
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e3) {} }
+
       // Try to parse into interactive cards; fall back to plain text if it fails
       var parsedHTML = parseProgramToHTML(programText);
       var programBodyHTML;
@@ -1159,4 +1164,8 @@
   window.openMuscuProgramGenerator = openMuscuProgramGenerator;
   window.generateMuscuProgram = generateMuscuProgram;
   window.shareMuscuProgram = shareMuscuProgram;
+  window.MUSCU_PROGRAM = {
+    open: openMuscuProgramGenerator,
+    parseToHTML: parseProgramToHTML
+  };
 })();

@@ -1097,6 +1097,17 @@ function renderCardSport() {
     }
   }
 
+  // Programme IA personnalisé actif → afficher un lien vers Sport
+  if (S.muscuIAProgram && S.sportType === 'muscu') {
+    var _iaCard = card('border-left:4px solid var(--green,#1A4A1A);');
+    _iaCard.appendChild(eyebrow('PROGRAMME IA'));
+    _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;'}, 'Programme personnalis\u00e9 actif'));
+    var _iaDate = S.muscuIAProgramDate ? 'G\u00e9n\u00e9r\u00e9 le ' + new Date(S.muscuIAProgramDate).toLocaleDateString('fr-FR') : '';
+    if (_iaDate) _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;'}, _iaDate));
+    _iaCard.appendChild(h('button', {style: 'padding:10px 16px;background:var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;', onclick: function() { S.view = 'sport'; S.sStep = 4; if (window.render) window.render(); }}, 'Voir mon programme \u2192'));
+    return _iaCard;
+  }
+
   if (!hasSportProgram) {
     // No sport program — empty state
     if (S && (S.appMode === 'nutrition')) return null; // nutrition-only mode: ne pas afficher

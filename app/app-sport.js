@@ -5165,6 +5165,44 @@ function renderMusculationProgram(p) {
    if (window.render) window.render();
    return;
  }
+ // ── PROGRAMME IA PERSONNALISÉ (priorité sur le programme local) ──
+ if (S.muscuIAProgram && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100) {
+   p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
+   p.appendChild(h('h1', {html: 'Votre programme<br><em>personnalis\u00e9 par IA</em>'}));
+   var _iaDateStr = S.muscuIAProgramDate ? new Date(S.muscuIAProgramDate).toLocaleDateString('fr-FR') : '';
+   if (_iaDateStr) p.appendChild(h('p', {'class': 'subtitle'}, 'G\u00e9n\u00e9r\u00e9 le ' + _iaDateStr));
+
+   // Conteneur du programme IA parsé
+   var _iaContainer = h('div', {id: 'muscu-ia-program-container'});
+   try {
+     if (window.MUSCU_PROGRAM && typeof window.MUSCU_PROGRAM.parseToHTML === 'function') {
+       _iaContainer.innerHTML = window.MUSCU_PROGRAM.parseToHTML(S.muscuIAProgram) || '';
+     }
+     if (!_iaContainer.innerHTML) {
+       var _escaped = S.muscuIAProgram.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+       _iaContainer.innerHTML = '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;padding:16px;border:1px solid var(--border);border-radius:2px;background:var(--ivory2);">' + _escaped + '</div>';
+     }
+   } catch(e) {
+     var _escaped2 = S.muscuIAProgram.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+     _iaContainer.innerHTML = '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;padding:16px;">' + _escaped2 + '</div>';
+   }
+   p.appendChild(_iaContainer);
+
+   // Boutons
+   p.appendChild(h('button', {'class': 'btn-secondary', style: 'margin-top:16px', onclick: function() {
+     S.muscuIAProgram = null; S.muscuIAProgramDate = null;
+     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+     if (window.render) window.render();
+   }}, 'Revenir au programme local'));
+
+   if (window.MUSCU_PROGRAM && typeof window.MUSCU_PROGRAM.open === 'function') {
+     p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:8px', onclick: function() {
+       window.MUSCU_PROGRAM.open();
+     }}, 'G\u00e9n\u00e9rer un nouveau programme IA'));
+   }
+   return;
+ }
+
  // Afficher le message d'erreur si la génération a échoué (évite l'écran blanc)
  if (S._programGenerationError) {
    p.appendChild(h('div', {style: 'text-align:center;padding:48px 24px;font-family:"Helvetica Neue",Arial,sans-serif;'}, [

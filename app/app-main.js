@@ -108,7 +108,11 @@ var PROFILE_KEYS = [
  // Plan hash — détecte changement de paramètres nutritionnels depuis dernière génération
  '_planHash',
  // Questionnaire programme musculation enrichi
- 'muscuObjectifSpecifique','muscuZonesCibles','muscuRenforcementNote'
+ 'muscuObjectifSpecifique','muscuZonesCibles','muscuRenforcementNote',
+ // Programme IA personnalisé
+ 'muscuIAProgram','muscuIAProgramDate',
+ // Subscription
+ 'subscriptionPlan','subscriptionEnd','_prePregnancyGoal'
 ];
 /**
  * Slim a single meal object down to essential nutritional fields only.
