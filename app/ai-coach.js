@@ -459,9 +459,9 @@ function sendMessage() {
   // Contexte utilisateur
   var ctx = buildContext();
 
-  // Appel API avec timeout client 28s (le serveur se coupe à 25s)
+  // Appel API avec timeout client 24s (marge 2s avant le timeout serveur Netlify 26s)
   var _coachCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-  var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 28000) : null;
+  var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 24000) : null;
   fetch(FUNCTION_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -494,8 +494,10 @@ function sendMessage() {
     if (_coachTimer) clearTimeout(_coachTimer);
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
     var errMsg = (err && err.name === 'AbortError')
-      ? 'Le coach met trop de temps à répondre. Réessaie dans quelques instants.'
-      : 'Impossible de joindre le coach. Vérifiez votre connexion.';
+      ? 'Le coach met trop de temps \u00e0 r\u00e9pondre (24s). R\u00e9essaie dans quelques instants.'
+      : (err && err.message && err.message.indexOf('429') !== -1)
+      ? 'Trop de messages envoy\u00e9s. Attends quelques minutes avant de r\u00e9essayer.'
+      : 'Impossible de joindre le coach. V\u00e9rifiez votre connexion.';
     appendError(messages, errMsg);
     messages.scrollTop = messages.scrollHeight;
   }).finally(function() {

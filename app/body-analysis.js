@@ -633,8 +633,9 @@ async function runAnalysis() {
     // Limiter à 30 exercices max pour réduire les tokens en entrée
     var exercisesDb = getExercisesList().slice(0, 30);
 
+    // Timeout client 28s (marge 2s avant le timeout serveur Netlify 30s)
     var _baCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _baTimer = _baCtrl ? setTimeout(function() { _baCtrl.abort(); }, 60000) : null;
+    var _baTimer = _baCtrl ? setTimeout(function() { _baCtrl.abort(); }, 28000) : null;
     var resp = await fetch(FUNCTION_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
