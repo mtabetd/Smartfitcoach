@@ -17,7 +17,7 @@ window.addEventListener('beforeinstallprompt', function(e) {
   // Attendre 30 secondes avant d'afficher (pas agressif)
   setTimeout(function() {
     if (!_dismissed && _deferredPrompt) showBanner();
-  }, 10000);
+  }, 5000);
 });
 
 function showBanner() {
@@ -81,7 +81,7 @@ function isInStandaloneMode() {
 }
 
 if (detectiOS() && !isInStandaloneMode()) {
-  // Attendre 10 secondes
+  // Attendre 5 secondes
   setTimeout(function() {
     if (_dismissed) return;
     if (document.getElementById('pwa-install-banner')) return;
