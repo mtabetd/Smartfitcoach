@@ -1490,6 +1490,13 @@ function renderLogin(app) {
  sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'authRegister'; render(); }}, window.t('auth.register')));
  c.appendChild(sw);
 
+ // Liens légaux footer login
+ var legalFooter = h('div', {style: 'text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border,#D8D8D0)'});
+ legalFooter.appendChild(h('a', {href: '/privacy-policy.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Confidentialit\u00e9'));
+ legalFooter.appendChild(h('a', {href: '/cgu.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'CGU'));
+ legalFooter.appendChild(h('a', {href: '/mentions-legales.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Mentions l\u00e9gales'));
+ c.appendChild(legalFooter);
+
  app.appendChild(c);
 }
 
@@ -1686,6 +1693,15 @@ function renderRegister(app) {
  f3.appendChild(pw2Input);
  form.appendChild(f3);
 
+ // ── Consentement RGPD (obligatoire — Art. 9 données de santé) ─────
+ var consentWrap = h('div', {style: 'display:flex;align-items:flex-start;gap:10px;margin:16px 0 8px;padding:12px;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px'});
+ var consentCheck = h('input', {type: 'checkbox', id: 'rgpd-consent', style: 'margin-top:3px;min-width:18px;min-height:18px;cursor:pointer'});
+ consentWrap.appendChild(consentCheck);
+ var consentLabel = h('label', {'for': 'rgpd-consent', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;cursor:pointer'});
+ consentLabel.innerHTML = 'J\u2019accepte la <a href="/privacy-policy.html" target="_blank" rel="noopener" style="color:var(--green,#1A4A1A);text-decoration:underline">politique de confidentialit\u00e9</a> et les <a href="/cgu.html" target="_blank" rel="noopener" style="color:var(--green,#1A4A1A);text-decoration:underline">conditions g\u00e9n\u00e9rales d\u2019utilisation</a>. Je consens au traitement de mes donn\u00e9es de sant\u00e9 (poids, conditions m\u00e9dicales, grossesse) pour la personnalisation de mon programme.';
+ consentWrap.appendChild(consentLabel);
+ form.appendChild(consentWrap);
+
  // ── Register button ───────────────────────────────────────────────
  var regBtn = h('button', {'class': 'btn-primary', onclick: function(){
  if (regBtn.disabled) return;
@@ -1700,6 +1716,7 @@ function renderRegister(app) {
  if (!name || !nom || !email || !pw || !pw2) { S.authError = 'Prénom, nom, email et mot de passe sont obligatoires'; render(); return; }
  if (pw !== pw2) { S.authError = window.t('auth.error_password_match'); render(); return; }
  if (pw.length < 6) { S.authError = window.t('auth.error_password_length'); render(); return; }
+ if (!consentCheck.checked) { S.authError = 'Veuillez accepter la politique de confidentialit\u00e9 et les CGU pour cr\u00e9er votre compte.'; render(); return; }
 
  regBtn.disabled = true;
  regBtn.textContent = 'Création...';
@@ -1730,6 +1747,13 @@ function renderRegister(app) {
  sw.appendChild(txt(window.t('auth.has_account') + ' '));
  sw.appendChild(h('a', {onclick: function(){ S.authError = ''; S.view = 'auth'; render(); }}, window.t('auth.login')));
  c.appendChild(sw);
+
+ // Liens légaux footer register
+ var legalFooter2 = h('div', {style: 'text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border,#D8D8D0)'});
+ legalFooter2.appendChild(h('a', {href: '/privacy-policy.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Confidentialit\u00e9'));
+ legalFooter2.appendChild(h('a', {href: '/cgu.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'CGU'));
+ legalFooter2.appendChild(h('a', {href: '/mentions-legales.html', target: '_blank', rel: 'noopener', style: 'font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 8px'}, 'Mentions l\u00e9gales'));
+ c.appendChild(legalFooter2);
 
  app.appendChild(c);
 }
