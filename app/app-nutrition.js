@@ -242,10 +242,16 @@ function renderSplash(app) {
   });
   sp.appendChild(pillsRow);
 
-  var ctaBtn = h('button', {style: 'display:block;width:100%;max-width:320px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:56px;padding:0 24px;border:none;cursor:pointer;opacity:0;animation:splashFadeUp .6s ease .8s forwards;border-radius:2px', onclick: function() { goStep(1); }}, 'Je commence \u2192');
+  // Message d'accueil personnalisation — réassurance avant onboarding
+  var welcomeBlock = h('div', {style: 'max-width:320px;margin-bottom:32px;opacity:0;animation:splashFadeUp .6s ease .7s forwards'});
+  welcomeBlock.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:17px;font-style:italic;color:var(--black);line-height:1.4;margin-bottom:10px'}, 'Votre programme commence par une conversation.'));
+  welcomeBlock.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.65'}, 'Accordez-nous quelques minutes pour apprendre \u00e0 vous conna\u00eetre. Vos habitudes, vos objectifs, votre corps \u2014 chaque r\u00e9ponse nous permet de composer un programme nutritionnel et sportif qui ne ressemblera \u00e0 aucun autre. Le v\u00f4tre.'));
+  sp.appendChild(welcomeBlock);
+
+  var ctaBtn = h('button', {style: 'display:block;width:100%;max-width:320px;background:var(--black,#1A1A18);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;min-height:56px;padding:0 24px;border:none;cursor:pointer;opacity:0;animation:splashFadeUp .6s ease .9s forwards;border-radius:2px', onclick: function() { goStep(1); }}, 'Je commence \u2192');
   sp.appendChild(ctaBtn);
 
-  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:16px;opacity:0;animation:splashFadeUp .5s ease 1s forwards'}, '2 minutes suffisent \u00b7 Gratuit \u00b7 Vos donn\u00e9es restent sur votre appareil'));
+  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:16px;opacity:0;animation:splashFadeUp .5s ease 1.1s forwards'}, '5 minutes \u00b7 Gratuit \u00b7 Vos donn\u00e9es restent sur votre appareil'));
   // Bouton retour — évite que l'utilisateur soit piégé sur ce splash
   sp.appendChild(h('button', {style: 'display:block;margin:20px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey);cursor:pointer;padding:8px 16px;min-height:44px;opacity:0;animation:splashFadeUp .5s ease 1.1s forwards', onclick: function() { S.view = 'today'; if (window.render) window.render(); }}, '\u2190 Retour'));
   app.appendChild(sp);
