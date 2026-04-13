@@ -17,7 +17,7 @@ window.addEventListener('beforeinstallprompt', function(e) {
   // Attendre 30 secondes avant d'afficher (pas agressif)
   setTimeout(function() {
     if (!_dismissed && _deferredPrompt) showBanner();
-  }, 30000);
+  }, 10000);
 });
 
 function showBanner() {
@@ -81,7 +81,7 @@ function isInStandaloneMode() {
 }
 
 if (detectiOS() && !isInStandaloneMode()) {
-  // Attendre 30 secondes (cohérent avec le prompt Android)
+  // Attendre 10 secondes
   setTimeout(function() {
     if (_dismissed) return;
     if (document.getElementById('pwa-install-banner')) return;
@@ -92,7 +92,7 @@ if (detectiOS() && !isInStandaloneMode()) {
 
     var text = document.createElement('div');
     text.style.cssText = 'font-size:13px;line-height:1.6;margin-bottom:12px;';
-    text.innerHTML = 'Pour installer SmartFitCoach sur votre iPhone\u00a0:<br><strong>1.</strong> Appuyez sur <span style="font-size:16px;">\u2B06\uFE0F</span> (bouton partage en bas)<br><strong>2.</strong> Puis <strong>\u00ab\u00a0Ajouter \u00e0 l\u2019\u00e9cran d\u2019accueil\u00a0\u00bb</strong>';
+    text.innerHTML = 'Pour installer SmartFitCoach sur votre iPhone\u00a0:<br><strong>1.</strong> Appuyez sur <span style="font-size:16px;">\u2B06\uFE0F</span> (bouton partage de Safari)<br><strong>2.</strong> Puis <strong>\u00ab\u00a0Sur l\u2019\u00e9cran d\u2019accueil\u00a0\u00bb</strong>';
     banner.appendChild(text);
 
     var dismissBtn = document.createElement('button');
