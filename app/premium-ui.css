@@ -77,6 +77,7 @@
 
 .num-input:focus {
   border-color: var(--black, #0A0A09);
+  box-shadow: 0 0 0 2px rgba(26, 74, 26, 0.12);
 }
 
 
@@ -518,6 +519,14 @@ body.dark-mode .profile-photo-frame.has-photo {
   border-radius: 2px;
 }
 
+/* ── Sport-specific accent colors (border-left) ── */
+.exercise-card[data-sport="crossfit"] { border-left-color: var(--orange, #6A4A1A); }
+.exercise-card[data-sport="running"] { border-left-color: var(--blue, #1A3A6A); }
+.exercise-card[data-sport="triathlon"] { border-left-color: var(--blue, #1A3A6A); }
+.exercise-card[data-sport="yoga"] { border-left-color: #5A6A5A; }
+.exercise-card[data-sport="cycling"] { border-left-color: var(--orange, #6A4A1A); }
+.exercise-card[data-sport="calisthenics"] { border-left-color: #4A3A2A; }
+
 .exercise-sets {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 12px;
@@ -766,7 +775,7 @@ html {
 
 /* ── DARK MODE — Manual toggle ── */
 body.dark-mode {
-  --ivory:#181818;--ivory2:#222220;--ivory3:#2A2A28;--ivory4:#333330;
+  --ivory:#1A1916;--ivory2:#232220;--ivory3:#2C2B28;--ivory4:#353330;
   --black:#FAF9F6;--black2:#F0F0ED;--grey:#9A9A90;--grey2:#7A7A74;--grey3:#6B6B65;
   --border:#3A3A38;--green:#4ABA4A;--greenbg:rgba(74,186,74,.08);
   --blue:#6A9ADA;--bluebg:rgba(106,154,218,.08);--orange:#DAA06A;--orangebg:rgba(218,160,106,.08);
