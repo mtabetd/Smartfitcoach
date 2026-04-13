@@ -72,4 +72,41 @@ function removeBanner() {
   }
 }
 
+// ── Guide iOS Safari (beforeinstallprompt n'existe pas sur Safari) ──────────
+function detectiOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+function isInStandaloneMode() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+if (detectiOS() && !isInStandaloneMode()) {
+  // Attendre 30 secondes (cohérent avec le prompt Android)
+  setTimeout(function() {
+    if (_dismissed) return;
+    if (document.getElementById('pwa-install-banner')) return;
+
+    var banner = document.createElement('div');
+    banner.id = 'pwa-install-banner';
+    banner.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);max-width:360px;width:90%;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border-radius:2px;padding:16px 20px;box-shadow:0 8px 24px rgba(10,10,9,0.2);z-index:9200;opacity:0;transition:opacity 0.3s ease;font-family:"Helvetica Neue",Arial,sans-serif;';
+
+    var text = document.createElement('div');
+    text.style.cssText = 'font-size:13px;line-height:1.6;margin-bottom:12px;';
+    text.innerHTML = 'Pour installer SmartFitCoach sur votre iPhone\u00a0:<br><strong>1.</strong> Appuyez sur <span style="font-size:16px;">\u2B06\uFE0F</span> (bouton partage en bas)<br><strong>2.</strong> Puis <strong>\u00ab\u00a0Ajouter \u00e0 l\u2019\u00e9cran d\u2019accueil\u00a0\u00bb</strong>';
+    banner.appendChild(text);
+
+    var dismissBtn = document.createElement('button');
+    dismissBtn.style.cssText = 'width:100%;padding:10px;background:transparent;color:var(--ivory,#FAF9F6);border:1px solid rgba(250,249,246,0.3);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;cursor:pointer;min-height:44px;';
+    dismissBtn.textContent = 'Compris';
+    dismissBtn.onclick = function() {
+      _dismissed = true;
+      removeBanner();
+    };
+    banner.appendChild(dismissBtn);
+
+    document.body.appendChild(banner);
+    requestAnimationFrame(function() { banner.style.opacity = '1'; });
+  }, 30000);
+}
+
 })();
