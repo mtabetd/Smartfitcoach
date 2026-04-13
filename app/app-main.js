@@ -131,7 +131,8 @@ var NUTRITION_PLAN_KEYS = [
  'regime', 'halal', 'excluded', 'cookLevel', 'wantsDessert',
  'allergies', 'intolerances', 'cuisines', 'whey', 'sportDays', 'trainTime', 'medical',
  'trainingDaysSelected',
- 'pregnant' // grossesse modifie calcTarget() et filterRecipes() — plan doit être régénéré
+ 'pregnant', // grossesse modifie calcTarget() et filterRecipes() — plan doit être régénéré
+ 'cycleTracking', 'lastPeriodDate', 'cycleLength' // cycle menstruel affecte calcTarget() via calorieAdjust
 ];
 
 function saveProfile() {
@@ -1396,6 +1397,8 @@ function renderLogin(app) {
  // Restore profile from localStorage for this user
  loadProfile();
  _migrateSteps();
+ // Invariant grossesse : empêcher pregnant=true sur un profil non-féminin (données corrompues/stale)
+ if (window.validatePregnancyState) window.validatePregnancyState();
  // Restaurer le contexte de vue selon l'état du profil chargé
  var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
  if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }

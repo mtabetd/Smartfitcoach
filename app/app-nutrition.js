@@ -287,8 +287,11 @@ function renderStep1(p) {
         S.pregnancyWeek = null;
         S.prePregnancyWeight = null;
         S.dueDate = null;
+        S._prePregnancyGoal = null;
+        S._nm = null; S.weekPlan = null;
         window._s2page = 0; // Forcer page date naissance, pas la page cycle/grossesse
       }
+      if (window.validatePregnancyState) validatePregnancyState();
       window.render();
     }}, [
       h('div', {'class': 'card-name'}, o.name)
@@ -535,7 +538,16 @@ function renderStep2b(p) {
         S.pregnancyWeek = null;
         S.prePregnancyWeight = null;
         S.dueDate = null;
+        // Restaurer le goal pré-grossesse s'il avait été écrasé
+        if (S._prePregnancyGoal !== null && S._prePregnancyGoal !== undefined) {
+          S.goal = S._prePregnancyGoal;
+          S._prePregnancyGoal = null;
+        }
       }
+      // Invalider cache nutrition + plan (calories/macros/recettes changent)
+      S._nm = null;
+      S.weekPlan = null;
+      if (window.validatePregnancyState) validatePregnancyState();
       window.render();
     }});
     pregToggle.appendChild(h('div', {'class': 'card-name'}, '\u00cates-vous enceinte ?'));
@@ -554,6 +566,7 @@ function renderStep2b(p) {
         var v = parseInt(e.target.value);
         if (e.target.value !== '' && (isNaN(v) || v < 1)) { e.target.value = ''; S.pregnancyWeek = null; }
         else if (v > 42) { e.target.value = S.pregnancyWeek = 42; }
+        S._nm = null; // trimestre change → recalcul calories/macros
         window.render();
       }}));
       pwWrap.appendChild(h('span', {'class': 'num-unit'}, 'SA'));
@@ -1110,12 +1123,20 @@ function renderStep4(p) {
         if (on) {
           S.medical = S.medical.filter(function(x) { return x !== item.id; });
           // Sync: désactiver grossesse médicale → désactiver S.pregnant (double chemin)
-          if (item.id === 'grossesse') S.pregnant = false;
+          if (item.id === 'grossesse') {
+            S.pregnant = false; S.pregnancyWeek = null; S.prePregnancyWeight = null; S.dueDate = null;
+            S._nm = null; S.weekPlan = null;
+            if (S._prePregnancyGoal !== null && S._prePregnancyGoal !== undefined) { S.goal = S._prePregnancyGoal; S._prePregnancyGoal = null; }
+          }
+          // Sync: désactiver allaitement → invalider cache nutrition
+          if (item.id === 'allaitement') { S._nm = null; S.weekPlan = null; }
         } else {
           S.medical.push(item.id);
           // Sync: activer grossesse médicale → activer S.pregnant pour déclencher les protections
-          if (item.id === 'grossesse') { S.pregnant = true; S.cycleTracking = false; }
+          if (item.id === 'grossesse' && S.sex === 'femme') { S.pregnant = true; S.cycleTracking = false; S._nm = null; S.weekPlan = null; }
+          if (item.id === 'allaitement') { S._nm = null; S.weekPlan = null; }
         }
+        if (window.validatePregnancyState) validatePregnancyState();
         window.render();
       }}, [
         h('div', {}, [h('div', {'class': 'level-name'}, item.icon + ' ' + item.name), h('div', {'class': 'level-desc'}, item.desc)]),
@@ -1482,7 +1503,11 @@ function renderStep6(p) {
     // Ne pas écraser bulk/recompo à chaque render — préserver le choix si compatible
     if (S.goal === null || !GOALS[S.goal] || GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred') {
       var _maintIdx = GOALS.findIndex(function(g){ return g.key === 'maintain'; });
-      S.goal = _maintIdx !== -1 ? _maintIdx : 2; // lookup "maintain" par clé (robuste si GOALS change)
+      // Sauvegarder le goal original pour le restaurer si l'utilisatrice décoche "enceinte"
+      if (S._prePregnancyGoal === null || S._prePregnancyGoal === undefined) {
+        S._prePregnancyGoal = S.goal;
+      }
+      S.goal = _maintIdx !== -1 ? _maintIdx : 2;
     }
 
     var pregObjCard = h('div', {style: 'border-left:3px solid #E8A87C;padding:16px;background:var(--ivory2);margin-bottom:16px'});
