@@ -56,7 +56,7 @@ function openScan(mealSlot) {
   // Build modal overlay
   var overlay = document.createElement('div');
   overlay.id = 'plate-scan-modal';
-  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.55);z-index:9500;display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity 0.2s ease;';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.55);z-index:9500;display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity 0.25s cubic-bezier(0.25,0.46,0.45,0.94);';
 
   var sheet = document.createElement('div');
   sheet.style.cssText = 'width:100%;max-width:520px;background:var(--ivory,#FAF9F6);padding:24px;border-radius:2px 2px 0 0;max-height:90vh;overflow-y:auto;transform:translateY(100%);transition:transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94);';
@@ -65,10 +65,12 @@ function openScan(mealSlot) {
   var header = document.createElement('div');
   header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;';
   var title = document.createElement('div');
-  title.style.cssText = 'font-family:Georgia,serif;font-size:18px;color:var(--black,#0A0A09);';
+  title.style.cssText = 'font-family:Georgia,serif;font-size:20px;color:var(--black,#0A0A09);';
   title.textContent = 'Scanner mon repas';
   var closeBtn = document.createElement('button');
-  closeBtn.style.cssText = 'background:none;border:none;font-size:20px;color:var(--grey,#6B6B65);cursor:pointer;padding:4px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;';
+  closeBtn.style.cssText = 'background:none;border:none;font-size:20px;color:var(--grey,#6B6B65);cursor:pointer;padding:8px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;transition:color 0.2s ease;';
+  closeBtn.onmouseover = function() { closeBtn.style.color = 'var(--black,#0A0A09)'; };
+  closeBtn.onmouseout = function() { closeBtn.style.color = 'var(--grey,#6B6B65)'; };
   closeBtn.textContent = '\u00d7';
   closeBtn.onclick = function() { closeModal(); };
   header.appendChild(title);
@@ -77,13 +79,15 @@ function openScan(mealSlot) {
 
   // Subtitle
   var sub = document.createElement('div');
-  sub.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:20px;';
+  sub.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:20px;letter-spacing:0.3px;';
   sub.textContent = 'Prenez une photo de votre ' + slotLabel.toLowerCase() + '. Notre IA estimera les calories et macronutriments en quelques secondes.';
   sheet.appendChild(sub);
 
   // Photo zone
   var photoZone = document.createElement('div');
-  photoZone.style.cssText = 'border:1.5px dashed var(--border,#D8D8D0);border-radius:2px;padding:32px 16px;text-align:center;cursor:pointer;transition:all 0.2s ease;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:20px;';
+  photoZone.style.cssText = 'border:1px dashed var(--border,#D8D8D0);border-radius:2px;padding:24px 16px;text-align:center;cursor:pointer;transition:all 0.2s ease;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:20px;';
+  photoZone.onmouseover = function() { if (!_scanning) { photoZone.style.background = 'var(--ivory2,#F4F4F0)'; photoZone.style.borderColor = 'var(--black,#0A0A09)'; } };
+  photoZone.onmouseout = function() { if (!_scanning) { photoZone.style.background = 'transparent'; photoZone.style.borderColor = 'var(--border,#D8D8D0)'; } };
 
   var photoLabel = document.createElement('div');
   photoLabel.style.cssText = 'font-size:28px;margin-bottom:8px;';
@@ -112,7 +116,7 @@ function openScan(mealSlot) {
   // Loader (hidden initially)
   var loader = document.createElement('div');
   loader.style.cssText = 'display:none;text-align:center;padding:24px 0;';
-  loader.innerHTML = '<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:12px;">ANALYSE EN COURS</div><div style="font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--grey);">Notre IA identifie votre repas\u2026</div>';
+  loader.innerHTML = '<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-bottom:16px;animation:platePulse 2s ease-in-out infinite;">ANALYSE EN COURS</div><div style="display:flex;justify-content:center;gap:6px;margin-bottom:16px;"><span style="width:6px;height:6px;background:var(--black,#0A0A09);border-radius:50%;animation:platePulse 1.2s ease infinite;"></span><span style="width:6px;height:6px;background:var(--black,#0A0A09);border-radius:50%;animation:platePulse 1.2s ease 0.2s infinite;"></span><span style="width:6px;height:6px;background:var(--black,#0A0A09);border-radius:50%;animation:platePulse 1.2s ease 0.4s infinite;"></span></div><div style="font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--grey);">Notre IA identifie votre repas\u2026</div><style>@keyframes platePulse{0%,100%{opacity:0.3}50%{opacity:1}}</style>';
   sheet.appendChild(loader);
 
   // File input handler
@@ -188,7 +192,7 @@ function openScan(mealSlot) {
     resultZone.innerHTML = '';
 
     var card = document.createElement('div');
-    card.style.cssText = 'border:1px solid var(--border,#D8D8D0);border-left:4px solid var(--green,#1A4A1A);border-radius:2px;padding:16px;margin-bottom:16px;background:var(--ivory2,#F4F4F0);';
+    card.style.cssText = 'border:1px solid var(--border,#D8D8D0);border-left:4px solid var(--green,#1A4A1A);border-radius:2px;padding:16px;margin-bottom:16px;background:var(--ivory2,#F4F4F0);box-shadow:0 1px 3px rgba(10,10,9,0.05);';
 
     var name = document.createElement('div');
     name.style.cssText = 'font-family:Georgia,serif;font-size:18px;color:var(--black,#0A0A09);margin-bottom:8px;';
@@ -213,12 +217,12 @@ function openScan(mealSlot) {
     ];
     macros.forEach(function(m) {
       var cell = document.createElement('div');
-      cell.style.cssText = 'padding:8px 4px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);';
+      cell.style.cssText = 'padding:12px 8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);';
       var val = document.createElement('div');
       val.style.cssText = 'font-family:Georgia,serif;font-size:16px;color:' + m.color + ';font-weight:500;';
       val.textContent = m.val;
       var lbl = document.createElement('div');
-      lbl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:2px;color:var(--grey,#6B6B65);margin-top:2px;';
+      lbl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;color:var(--grey,#6B6B65);margin-top:4px;';
       lbl.textContent = m.label;
       cell.appendChild(val);
       cell.appendChild(lbl);
@@ -229,13 +233,15 @@ function openScan(mealSlot) {
 
     // Disclaimer
     var disc = document.createElement('div');
-    disc.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey3,#9A9A90);font-style:italic;margin-bottom:16px;text-align:center;';
+    disc.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);font-style:italic;margin-bottom:16px;text-align:center;';
     disc.textContent = 'Estimation par IA \u2014 les valeurs peuvent varier de \u00b120%';
     resultZone.appendChild(disc);
 
     // Add button
     var addBtn = document.createElement('button');
-    addBtn.style.cssText = 'display:block;width:100%;padding:16px;background:var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.2s ease;min-height:48px;box-shadow:0 4px 12px rgba(26,74,26,0.2);margin-bottom:8px;';
+    addBtn.style.cssText = 'display:block;width:100%;padding:14px;background:var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.25s cubic-bezier(0.25,0.46,0.45,0.94);min-height:48px;box-shadow:0 2px 8px rgba(26,74,26,0.15);margin-bottom:8px;';
+    addBtn.onmouseover = function() { addBtn.style.boxShadow = '0 6px 16px rgba(26,74,26,0.25)'; addBtn.style.transform = 'translateY(-1px)'; };
+    addBtn.onmouseout = function() { addBtn.style.boxShadow = '0 2px 8px rgba(26,74,26,0.15)'; addBtn.style.transform = 'translateY(0)'; };
     addBtn.textContent = '\u2713 Ajouter \u00e0 ma journ\u00e9e';
     addBtn.onclick = function() {
       // Replace meal in weekPlan
@@ -255,7 +261,9 @@ function openScan(mealSlot) {
 
     // Cancel
     var cancelBtn = document.createElement('button');
-    cancelBtn.style.cssText = 'display:block;width:100%;padding:12px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;min-height:44px;';
+    cancelBtn.style.cssText = 'display:block;width:100%;padding:14px;background:transparent;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);cursor:pointer;min-height:44px;transition:all 0.2s ease;';
+    cancelBtn.onmouseover = function() { cancelBtn.style.borderColor = 'var(--black,#0A0A09)'; cancelBtn.style.color = 'var(--black,#0A0A09)'; };
+    cancelBtn.onmouseout = function() { cancelBtn.style.borderColor = 'var(--border,#D8D8D0)'; cancelBtn.style.color = 'var(--grey,#6B6B65)'; };
     cancelBtn.textContent = 'Annuler';
     cancelBtn.onclick = function() { closeModal(); };
     resultZone.appendChild(cancelBtn);
