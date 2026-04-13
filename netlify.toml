@@ -6,10 +6,10 @@
   node_bundler = "esbuild"
 
 [functions."body-analysis"]
-  timeout = 30
+  timeout = 45
 
 [functions."ai-coach"]
-  timeout = 26
+  timeout = 30
 
 [functions."plate-scan"]
   timeout = 26
