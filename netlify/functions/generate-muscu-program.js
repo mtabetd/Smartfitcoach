@@ -2,7 +2,7 @@
 // Génération de programme musculation hyper-personnalisé — Sonnet IA
 
 const MODEL = 'claude-haiku-4-5-20251001';
-const MAX_TOKENS = 3000;
+const MAX_TOKENS = 2000;
 
 // CORS — Domaines autorisés
 var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
