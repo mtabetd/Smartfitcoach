@@ -862,6 +862,13 @@ function renderProfilePage(container) {
 
  container.appendChild(c);
 
+ // ─── Liens légaux ───
+ var legalLinks = h('div', {style: 'text-align:center;margin-top:24px;padding:16px 0;border-top:1px solid var(--border,#D8D8D0)'});
+ legalLinks.appendChild(h('a', {href: '/privacy-policy.html', target: '_blank', rel: 'noopener', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 12px'}, 'Politique de confidentialit\u00e9'));
+ legalLinks.appendChild(h('a', {href: '/cgu.html', target: '_blank', rel: 'noopener', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 12px'}, 'CGU'));
+ legalLinks.appendChild(h('a', {href: '/mentions-legales.html', target: '_blank', rel: 'noopener', style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-decoration:none;margin:0 12px'}, 'Mentions l\u00e9gales'));
+ container.appendChild(legalLinks);
+
  // ─── Modal: Changer mon objectif ───
  // Cleanup any leftover modal from previous renders
  (function() { var _old = document.getElementById('_sfc_goal_modal'); if (_old && _old.parentNode) _old.parentNode.removeChild(_old); })();
