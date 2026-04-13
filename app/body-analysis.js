@@ -492,13 +492,32 @@ function buildPanel() {
   });
   content.appendChild(uploadGrid);
 
+  // Consentement RGPD — photos envoyées à Anthropic
+  var consentWrap = document.createElement('div');
+  consentWrap.style.cssText = 'display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;margin-bottom:16px;background:var(--ivory2,#F4F4F0);';
+  var consentCb = document.createElement('input');
+  consentCb.type = 'checkbox';
+  consentCb.id = 'ba-consent';
+  consentCb.style.cssText = 'margin-top:3px;min-width:18px;min-height:18px;cursor:pointer;';
+  consentWrap.appendChild(consentCb);
+  var consentLabel = document.createElement('label');
+  consentLabel.htmlFor = 'ba-consent';
+  consentLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;cursor:pointer;';
+  consentLabel.textContent = 'J\u2019accepte que mes photos soient analys\u00e9es par intelligence artificielle (Anthropic Claude). Les photos sont transmises de mani\u00e8re s\u00e9curis\u00e9e et ne sont pas conserv\u00e9es apr\u00e8s l\u2019analyse.';
+  consentWrap.appendChild(consentLabel);
+  content.appendChild(consentWrap);
+
   // Bouton analyser
   var btn = document.createElement('button');
   btn.id = 'ba-btn';
   btn.setAttribute('aria-label', 'Analyser ma composition corporelle');
   btn.textContent = 'Lancer l\'analyse';
   btn.disabled = true;
-  btn.addEventListener('click', runAnalysis);
+  btn.addEventListener('click', function() {
+    if (!consentCb.checked) { alert('Veuillez accepter le consentement avant de lancer l\u2019analyse.'); return; }
+    runAnalysis();
+  });
+  consentCb.addEventListener('change', function() { updateBtn(); });
   content.appendChild(btn);
 
   // Loader

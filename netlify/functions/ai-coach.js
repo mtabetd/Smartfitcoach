@@ -175,7 +175,11 @@ function sanitizeContext(ctx) {
 exports.handler = async function(event, context) {
   // ── CORS dynamique ─────────────────────────────────────────────────────────
   var origin = event.headers['origin'] || event.headers['Origin'] || '';
-  var allowedOrigin = ALLOWED_ORIGINS.indexOf(origin) !== -1 ? origin : ALLOWED_ORIGINS[0];
+  var allowedOrigin = ALLOWED_ORIGINS.indexOf(origin) !== -1 ? origin : null;
+  if (!allowedOrigin && event.httpMethod !== 'OPTIONS') {
+    return { statusCode: 403, body: JSON.stringify({ error: 'Origin non autorisé' }) };
+  }
+  if (!allowedOrigin) allowedOrigin = ALLOWED_ORIGINS[0]; // OPTIONS preflight only
 
   var headers = {
     'Access-Control-Allow-Origin': allowedOrigin,

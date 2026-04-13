@@ -119,8 +119,16 @@ var _editingUserId = null;
 // ── GATE — SHA-256 hashed (mot de passe jamais en clair dans le code) ──
 var ADMIN_SHA256 = '64a4d5b88b2e9885cb77945a2cf37d528c9d415d2642922051e21e653a0395a7';
 var ADMIN_SALT = 'sfc_admin_2026';
+var _adminAttempts = 0;
+var _adminLocked = 0;
 
 async function tryLogin() {
+  // Rate limiting — 5 tentatives puis lockout 5 minutes
+  if (_adminLocked > Date.now()) {
+    var mins = Math.ceil((_adminLocked - Date.now()) / 60000);
+    document.getElementById('gate-error').textContent = 'Trop de tentatives. R\u00e9essayez dans ' + mins + ' minute(s).';
+    return;
+  }
   var pw = document.getElementById('admin-pw').value;
   if (!pw || pw.length < 4) {
     document.getElementById('gate-error').textContent = 'Mot de passe requis';
@@ -131,15 +139,22 @@ async function tryLogin() {
     var buf = await crypto.subtle.digest('SHA-256', enc.encode(pw + ADMIN_SALT));
     var hex = Array.from(new Uint8Array(buf)).map(function(b) { return ('00' + b.toString(16)).slice(-2); }).join('');
     if (hex === ADMIN_SHA256) {
+      _adminAttempts = 0;
       document.getElementById('admin-gate').style.display = 'none';
       document.getElementById('app').style.display = 'block';
       client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       loadUsers();
     } else {
-      document.getElementById('gate-error').textContent = 'Mot de passe incorrect';
+      _adminAttempts++;
+      if (_adminAttempts >= 5) {
+        _adminLocked = Date.now() + 5 * 60 * 1000;
+        document.getElementById('gate-error').textContent = 'Trop de tentatives. Bloqu\u00e9 5 minutes.';
+      } else {
+        document.getElementById('gate-error').textContent = 'Mot de passe incorrect (' + (5 - _adminAttempts) + ' tentatives restantes)';
+      }
     }
   } catch(e) {
-    document.getElementById('gate-error').textContent = 'Erreur de vérification';
+    document.getElementById('gate-error').textContent = 'Erreur de v\u00e9rification';
   }
 }
 
@@ -191,13 +206,19 @@ async function loadUsers() {
       }
 
       var tr = document.createElement('tr');
-      tr.innerHTML =
-        '<td><strong>' + (profile.prenom || user.name || '—') + '</strong></td>' +
-        '<td>' + (user.email || '—') + '</td>' +
-        '<td>' + (firstLogin || '—') + '</td>' +
-        '<td>' + badge + '</td>' +
-        '<td>' + (subPlan === 'unlimited' ? '∞' : subEnd || '—') + '</td>' +
-        '<td><button class="btn-sm" onclick="openModal(\'' + user.id + '\',\'' + (profile.prenom || user.name || '') + '\',\'' + (subPlan || '') + '\',\'' + (subEnd || '') + '\')">Gérer</button></td>';
+      function _td(text) { var td = document.createElement('td'); td.textContent = text || '\u2014'; return td; }
+      tr.appendChild(_td(profile.prenom || user.name));
+      tr.appendChild(_td(user.email));
+      tr.appendChild(_td(firstLogin));
+      var badgeTd = document.createElement('td'); badgeTd.innerHTML = badge; tr.appendChild(badgeTd);
+      tr.appendChild(_td(subPlan === 'unlimited' ? '\u221e' : subEnd));
+      var actionTd = document.createElement('td');
+      var actionBtn = document.createElement('button');
+      actionBtn.className = 'btn-sm';
+      actionBtn.textContent = 'G\u00e9rer';
+      actionBtn.onclick = (function(uid, uname, uplan, uend) { return function() { openModal(uid, uname, uplan, uend); }; })(user.id, profile.prenom || user.name || '', subPlan || '', subEnd || '');
+      actionTd.appendChild(actionBtn);
+      tr.appendChild(actionTd);
       tbody.appendChild(tr);
     });
 
