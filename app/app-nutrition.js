@@ -530,13 +530,13 @@ function renderStep2b(p) {
     p.appendChild(pregDivider);
 
     var pregToggle = h('div', {'class': 'sel-card' + (S.pregnant ? ' on' : ''), style: 'margin-bottom:12px;text-align:center;cursor:pointer;border-left:3px solid #E8A87C', onclick: function() {
+      // Sauvegarder le goal AVANT le toggle (si on passe de false→true)
+      if (!S.pregnant && (S._prePregnancyGoal === null || S._prePregnancyGoal === undefined)) {
+        S._prePregnancyGoal = S.goal;
+      }
       S.pregnant = !S.pregnant;
       if (S.pregnant) {
         S.cycleTracking = false;
-        // Sauvegarder le goal actuel AVANT que Step 4 ne le force à "maintain"
-        if (S._prePregnancyGoal === null || S._prePregnancyGoal === undefined) {
-          S._prePregnancyGoal = S.goal;
-        }
       } else {
         // Nettoyer les données grossesse pour éviter données fantômes en localStorage
         S.pregnancyWeek = null;

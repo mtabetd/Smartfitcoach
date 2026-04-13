@@ -295,7 +295,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
  // Safe first name retrieval — S.prenom preferred, fallback to auth name, no crash
  var _u = window.AUTH ? window.AUTH.getUser() : null;
  var _name = (window.S && window.S.prenom && window.S.prenom.trim())
-   || (_u && _u.name && (_u.name.split(' ')[0] || '').trim()) || '';
+   || (_u && _u.name && (_u.name.trim().split(/\s+/).filter(Boolean)[0] || '').trim()) || '';
  var _cap = _name ? _name.charAt(0).toUpperCase() + _name.slice(1) : '';
  var _titleText = _cap
    ? (_cap + ', nous allons apprendre \u00e0 vous conna\u00eetre.')

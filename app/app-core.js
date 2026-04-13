@@ -4016,17 +4016,17 @@ function detectMedicalConflicts() {
   }
   // Conflit -2 : TCA + Grossesse → deux pathologies qui nécessitent une surveillance médicale spécialisée conjointe
   // IOC 2018 + ACOG 2022 : la restriction alimentaire en TCA est incompatible avec les besoins fœtaux
-  if(s.pregnant&&med.indexOf('tca')!==-1){
+  if(s.pregnant&&s.sex==='femme'&&med.indexOf('tca')!==-1){
     conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT MÉDICAL CRITIQUE : TCA + Grossesse — Les troubles du comportement alimentaire pendant la grossesse sont associés à un risque élevé de complications (retard de croissance intra-utérin, prématurité, fausses couches — ACOG 2022). Un suivi psychiatrique ou psychologique ET obstétrical est OBLIGATOIRE. Ne suivez pas un programme diététique sans supervision médicale spécialisée.'});
   }
   // Conflit 0 : Grossesse + IRC → protéines plafonnées à 0.6g/kg = insuffisant pour le fœtus (C1)
   // OMS 2016 : grossesse T3 = +25g protéines/j | KDOQI 2020 : IRC CKD 3-5 = 0.6g/kg/j max
   // Conflit irrésoluble : les deux contraintes sont incompatibles → OBLIGATOIREMENT suivi médical spécialisé
-  if(s.pregnant&&med.indexOf('irc')!==-1){
+  if(s.pregnant&&s.sex==='femme'&&med.indexOf('irc')!==-1){
     conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT MÉDICAL CRITIQUE : Grossesse + Insuffisance Rénale Chronique — Les besoins protéiques de la grossesse (75-100g/j) sont incompatibles avec le plafond IRC (0.6g/kg/j = ~36-45g/j). Ce profil NÉCESSITE un suivi conjoint néphrologue + diététicienne spécialisée grossesse. Ne pas modifier l\'alimentation sans avis médical.'});
   }
   // Conflit 1 : Grossesse + Diabète gestationnel + Végan → impossible de couvrir 2600kcal avec glucides ≤200g/j
-  if(s.pregnant&&med.indexOf('diabete_gest')!==-1&&s.regime===3){
+  if(s.pregnant&&s.sex==='femme'&&med.indexOf('diabete_gest')!==-1&&s.regime===3){
     conflicts.push({level:'CRITIQUE',message:'⚠ CONFLIT : Grossesse + Diabète gestationnel + Végan — Contraintes caloriques incompatibles. Il peut être impossible de couvrir vos besoins ('+calcTarget()+' kcal) avec glucides ≤200g/j sans consommer d\'œufs ou produits laitiers. Consultation diététicienne spécialisée OBLIGATOIRE.'});
   }
   // Alerte B12 automatique régime végane (EFSA 2023, Messina 2019)
