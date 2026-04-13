@@ -393,6 +393,20 @@ function renderCardNextMeal() {
   }, 'Voir le repas \u2192');
   c.appendChild(btn);
 
+  // Bouton scanner repas par IA
+  if (window.PLATE_SCAN) {
+    var scanBtn = h('button', {
+      style: 'display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:8px;padding:10px 16px;background:transparent;border:1.5px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;transition:all 0.2s ease;min-height:44px;',
+      onclick: function() {
+        var slotKey = slot.key || 'lunch';
+        window.PLATE_SCAN.open(slotKey);
+      }
+    });
+    scanBtn.appendChild(h('span', {style: 'font-size:14px'}, '\uD83D\uDCF7'));
+    scanBtn.appendChild(h('span', {}, 'Scanner mon repas'));
+    c.appendChild(scanBtn);
+  }
+
   return c;
 }
 
