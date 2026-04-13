@@ -812,6 +812,73 @@ body.dark-mode .user-bar-avatar-btn:hover .user-bar-avatar-initials{border-color
 body.dark-mode .user-bar-avatar-photo{border-color:var(--border)}
 body.dark-mode .user-bar-avatar-btn:hover .user-bar-avatar-photo{border-color:var(--black)}
 
+/* ── DARK MODE: Status badges ── */
+body.dark-mode .val-good{color:var(--green);background:var(--greenbg)}
+body.dark-mode .val-warn{color:var(--orange);background:var(--orangebg)}
+body.dark-mode .val-alert{color:var(--red);background:var(--redbg)}
+
+/* ── DARK MODE: Set table ── */
+body.dark-mode .set-row{border-color:var(--border)}
+body.dark-mode .set-row:hover{background:var(--ivory3);border-left-color:var(--green)}
+body.dark-mode .set-row:nth-child(even){background:var(--ivory2)}
+body.dark-mode .set-row-validated{background:var(--greenbg) !important;border-left-color:var(--green) !important}
+body.dark-mode .set-load-input,body.dark-mode .set-reps-input{background:var(--ivory3);color:var(--black);border-color:var(--border)}
+body.dark-mode .set-load-input:focus,body.dark-mode .set-reps-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,186,74,0.15)}
+body.dark-mode .set-validate-btn{border-color:var(--green);color:var(--green)}
+body.dark-mode .set-validate-btn:hover{background:var(--green);color:var(--ivory)}
+body.dark-mode .set-num{color:var(--black)}
+body.dark-mode .set-delta.delta-up{color:var(--green);background:var(--greenbg)}
+body.dark-mode .set-delta.delta-down{color:var(--red);background:var(--redbg)}
+
+/* ── DARK MODE: Dashboard ── */
+body.dark-mode .dash-card{background:var(--ivory2);border-color:var(--border);color:var(--black)}
+body.dark-mode .dash-modal-overlay{background:rgba(0,0,0,0.75)}
+body.dark-mode .dash-modal-box{background:var(--ivory);border-color:var(--border);color:var(--black)}
+body.dark-mode .dash-btn-primary{background:var(--black);color:var(--ivory)}
+
+/* ── DARK MODE: Exercise card & video ── */
+body.dark-mode .exercise-name{color:var(--black)}
+body.dark-mode .exercise-muscle{color:var(--green);background:var(--greenbg)}
+body.dark-mode .exercise-video{color:var(--blue);border-color:var(--blue)}
+body.dark-mode .exercise-video:hover{background:var(--blue);color:var(--ivory)}
+body.dark-mode .swap-btn{border-color:var(--black);color:var(--black)}
+body.dark-mode .swap-btn:hover{background:var(--black);color:var(--ivory)}
+
+/* ── DARK MODE: Body analysis panel ── */
+body.dark-mode #ba-panel{background:var(--ivory)}
+body.dark-mode #ba-content{color:var(--black)}
+body.dark-mode .ba-upload-zone{border-color:var(--border);color:var(--black)}
+body.dark-mode .ba-upload-zone.filled{border-color:var(--green);background:var(--greenbg)}
+body.dark-mode #ba-btn{background:var(--black);color:var(--ivory);border-color:var(--black)}
+body.dark-mode #ba-btn:hover:not(:disabled){background:var(--ivory);color:var(--black)}
+body.dark-mode .ba-morpho{background:var(--ivory2);border-color:var(--border);color:var(--black)}
+body.dark-mode .ba-list-item{border-color:var(--border);color:var(--black)}
+body.dark-mode .ba-list-item.green{border-left-color:var(--green);background:var(--greenbg)}
+body.dark-mode .ba-list-item.blue{border-left-color:var(--blue);background:var(--bluebg)}
+
+/* ── DARK MODE: Gamification badges ── */
+body.dark-mode .badge-card{background:var(--ivory2);border-color:var(--border);color:var(--black)}
+body.dark-mode .badge-locked{opacity:0.4}
+
+/* ── DARK MODE: Auth banner ── */
+body.dark-mode #auth-save-banner{background:var(--green);color:var(--ivory)}
+
+/* ── DARK MODE: Dividers & borders ── */
+body.dark-mode .divider-line{background:var(--border)}
+body.dark-mode .section-label{color:var(--grey);border-color:var(--border)}
+body.dark-mode .auth-line{background:var(--border)}
+
+/* ── DARK MODE: Macro progress bars ── */
+body.dark-mode .macro-bar{background:var(--ivory3)}
+
+/* ── DARK MODE: Meal swap panel ── */
+body.dark-mode .meal-swap-alt{background:var(--ivory2);border-color:var(--border)}
+body.dark-mode .meal-swap-alt:hover{background:var(--ivory3)}
+
+/* ── DARK MODE: Scrollbar ── */
+body.dark-mode ::-webkit-scrollbar-thumb{background:var(--border)}
+body.dark-mode ::-webkit-scrollbar-track{background:var(--ivory)}
+
 
 /* -------------------------------------------------------
    26. USER-BAR AVATAR
