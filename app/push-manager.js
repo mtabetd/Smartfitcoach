@@ -43,7 +43,7 @@
       // wellness.date est stocké en UTC (cohérent avec app-sport.js) → utiliser UTC ici aussi
       var today = new Date().toISOString().slice(0, 10);
       var wellness = null;
-      try { wellness = JSON.parse(localStorage.getItem('S') || '{}').todayWellness; } catch(e) {}
+      try { wellness = (window.S && window.S.todayWellness) ? window.S.todayWellness : null; } catch(e) {}
       if (!wellness || wellness.date !== today) {
         // Rappel checkin si pas fait avant 10h
         var now = new Date();

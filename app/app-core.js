@@ -3030,17 +3030,19 @@ function calcTDEE(){var s=window.S;if(s.activity===null||s.activity===undefined|
 // BUG A fix : utiliser trainingDaysSelected.length si disponible (plus précis que sportDays)
 var sportDays=Array.isArray(s.trainingDaysSelected)&&s.trainingDaysSelected.length>0?s.trainingDaysSelected.length:(s.sportDays||0);var sportFactor=1.2;if(sportDays>=5)sportFactor=1.725;else if(sportDays>=3)sportFactor=1.55;else if(sportDays>=2)sportFactor=1.375;var effectiveFactor=Math.max(selectedFactor,sportFactor);return calcBMR()*effectiveFactor}
 function calcTarget(){var s=window.S;if(s.goal===null||s.goal===undefined||!GOALS[s.goal])return 0;var tdeeVal=calcTDEE();var base=Math.round(tdeeVal*GOALS[s.goal].mult);if(s.pregnant&&s.sex==='femme'){var tri=getPregnancyTrimester();var pregExtra=tri?tri.trimester.calorieExtra:300;
-// Si allaitement ET enceinte (fin de grossesse + allaitement aîné) → utiliser le MAX des deux bonus
+// Si allaitement ET enceinte (fin de grossesse + allaitement aîné) → ADDITIF (ACOG 2018 + 2022)
 var allaitExtra=(s.medical&&s.medical.indexOf('allaitement')!==-1)?500:0;
-base=Math.round(tdeeVal)+Math.max(pregExtra,allaitExtra);
+base=Math.round(tdeeVal)+pregExtra+allaitExtra;
 // Plancher grossesse : 1800 kcal/j minimum (OMS 2016 — jamais de restriction chez femme enceinte sauf prescription médicale)
 base=Math.max(base,1800);return base;}var goalKey=GOALS[s.goal].key;// Cap shred deficit to 500 kcal/day (Helms 2014, ACSM — RED-S + muscle loss risk above 500kcal deficit)
 // Cap déficit à -500 kcal/j pour shred ET cut (ACSM 2009, Helms 2014 — au-delà : perte musculaire + fatigue chronique)
 // IMPORTANT : sans ce cap, un athlète élite (TDEE 3500+) en "cut -15%" pouvait avoir un déficit de 525-700 kcal/j
 if((goalKey==='shred'||goalKey==='cut')&&tdeeVal>0){base=Math.max(base,Math.round(tdeeVal-500));}// Cap surplus à +500 kcal/j pour bulk/lean_bulk (ISSN 2017, ACSM — au-delà : accumulation graisseuse excessive)
 // IMPORTANT : sans ce cap, un athlète élite (TDEE 4000) en bulk recevait +600 kcal/j
-if((goalKey==='bulk'||goalKey==='lean_bulk')&&tdeeVal>0){base=Math.min(base,Math.round(tdeeVal+500));}// Allaitement : +500 kcal/j (ACOG 2022) — priorité sur l'objectif coupe/sèche
-if(s.medical&&s.medical.indexOf('allaitement')!==-1){return Math.max(Math.round(tdeeVal)+500,1800);}
+if((goalKey==='bulk'||goalKey==='lean_bulk')&&tdeeVal>0){base=Math.min(base,Math.round(tdeeVal+500));}
+// Allaitement (non-enceinte) : +500 kcal/j (ACOG 2022) — appliqué dans le flow normal (pas de early return)
+// pour que les protections ado/diabète/ménopause/cycle/alcool soient respectées
+if(s.medical&&s.medical.indexOf('allaitement')!==-1&&s.sex==='femme'){base=Math.max(Math.round(tdeeVal)+500,base);base=Math.max(base,1800);}
 // TCA/anorexie : forcer maintenance, bloquer cut/shred (ANAD, IOC 2018 — RED-S prevention)
 // Profil incomplet (tdeeVal=0) : retourner plancher sécurisé pour éviter 0 kcal sur profil vulnérable
 if(s.medical&&s.medical.indexOf('tca')!==-1){return Math.max(Math.round(tdeeVal),s.sex==='femme'?1800:1900);}
@@ -3264,7 +3266,10 @@ var femaleOnly=['menopause','sopk','grossesse','allaitement'];if(femaleOnly.inde
   if(!s.pregnant&&s.sex==='femme'&&s.cycleTracking){var cycleM=getCurrentCyclePhase();if(cycleM&&cycleM.phase.macroAdjust){var mAdj=cycleM.phase.macroAdjust;// Small modulations per cycle phase — carb/fat shift, protein stable
 gGrams=Math.round(gGrams*(1+(mAdj.g||0)));lGrams=Math.round(lGrams*(1+(mAdj.l||0)));// Never reduce protein during cycle — keep stable
 }}
-  gGrams=Math.max(130,gGrams);pGrams=Math.max(40,pGrams);lGrams=Math.max(20,lGrams);
+  gGrams=Math.max(130,gGrams);
+  // IRC : plancher protéine ajusté au poids (0.55g/kg) pour ne pas violer le cap KDOQI 0.60g/kg
+  var _ircFloorP=(_isIrc&&bw>0)?Math.round(bw*0.55):40;
+  pGrams=Math.max(_ircFloorP,pGrams);lGrams=Math.max(20,lGrams);
   // C-01: Normalisation calorique — les ajustements médicaux peuvent créer un écart avec calcTarget()
   // On redistribue l'écart sur les glucides en priorité (macro la plus flexible), puis sur les lipides
   var actualCal=gGrams*4+pGrams*4+lGrams*9;
@@ -3808,7 +3813,12 @@ window.getPlanHash = function() {
     s.cookLevel !== undefined && s.cookLevel !== null ? String(s.cookLevel) : '',
     Array.isArray(s.cuisines) ? s.cuisines.slice().sort().join(',') : '',
     s.trainTime || '',
-    Array.isArray(s.medical) ? s.medical.slice().sort().join(',') : ''
+    Array.isArray(s.medical) ? s.medical.slice().sort().join(',') : '',
+    // Cycle menstruel : affecte calcTarget() via calorieAdjust phase-dépendant
+    s.cycleTracking ? '1' : '0',
+    s.lastPeriodDate || '',
+    s.cycleLength || 28,
+    s.sleep !== null && s.sleep !== undefined ? String(s.sleep) : ''
   ].join('|');
 };
 

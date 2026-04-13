@@ -533,6 +533,10 @@ function renderStep2b(p) {
       S.pregnant = !S.pregnant;
       if (S.pregnant) {
         S.cycleTracking = false;
+        // Sauvegarder le goal actuel AVANT que Step 4 ne le force à "maintain"
+        if (S._prePregnancyGoal === null || S._prePregnancyGoal === undefined) {
+          S._prePregnancyGoal = S.goal;
+        }
       } else {
         // Nettoyer les données grossesse pour éviter données fantômes en localStorage
         S.pregnancyWeek = null;

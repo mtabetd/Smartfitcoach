@@ -295,7 +295,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
  // Safe first name retrieval — S.prenom preferred, fallback to auth name, no crash
  var _u = window.AUTH ? window.AUTH.getUser() : null;
  var _name = (window.S && window.S.prenom && window.S.prenom.trim())
-   || (_u && _u.name && _u.name.split(' ')[0].trim()) || '';
+   || (_u && _u.name && (_u.name.split(' ')[0] || '').trim()) || '';
  var _cap = _name ? _name.charAt(0).toUpperCase() + _name.slice(1) : '';
  var _titleText = _cap
    ? (_cap + ', nous allons apprendre \u00e0 vous conna\u00eetre.')
@@ -521,9 +521,9 @@ function renderProfilePage(container) {
      var _un = user ? (user.name || user.email || '') : (S.prenom || '');
      if (S.prenom && S.nom) return (S.prenom[0] + S.nom[0]).toUpperCase();
      if (!_un) return 'S';
-     var parts = _un.trim().split(/\s+/);
-     if (parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
-     return _un[0].toUpperCase();
+     var parts = _un.trim().split(/\s+/).filter(Boolean);
+     if (parts.length >= 2 && parts[0] && parts[parts.length-1]) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+     return (_un[0] || 'S').toUpperCase();
    })();
    photoWrap.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:22px;color:var(--grey);'}, initials));
  }
@@ -1211,9 +1211,9 @@ function render() {
      var _uInitials = (function() {
        var _un = user ? (user.name || user.email || '') : '';
        if (!_un) return 'S';
-       var _parts = _un.trim().split(/\s+/);
-       if (_parts.length >= 2) return (_parts[0][0] + _parts[_parts.length - 1][0]).toUpperCase();
-       return _un[0].toUpperCase();
+       var _parts = _un.trim().split(/\s+/).filter(Boolean);
+       if (_parts.length >= 2 && _parts[0] && _parts[_parts.length-1]) return (_parts[0][0] + _parts[_parts.length-1][0]).toUpperCase();
+       return (_un[0] || 'S').toUpperCase();
      })();
      _avatarBtn.appendChild(h('div', {'class': 'user-bar-avatar-initials'}, _uInitials));
    }

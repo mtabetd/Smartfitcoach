@@ -3076,6 +3076,15 @@ function renderCrossfitProgram(p) {
 
  appendWellnessBanner(p);
 
+ // ─── AVERTISSEMENT GROSSESSE (CrossFit) ───
+ if (S.pregnant && S.sex === 'femme') {
+   var _pregWarn = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
+   var _pwCard = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:12px 16px;margin-bottom:16px'});
+   _pwCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, 'Grossesse \u2014 Adaptations obligatoires'));
+   _pwCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;line-height:1.6'}, _pregWarn ? _pregWarn.warning : '\u00c9vitez les mouvements olympiques lourds, Valsalva, sauts et d\u00e9cubitus dorsal. Privil\u00e9giez les versions Scaled. Consultez votre m\u00e9decin.'));
+   p.appendChild(_pwCard);
+ }
+
  // ─── BIENVENUE SCALED / DÉBUTANT ───
  // Afficher un message d'accueil et un CTA 1RM uniquement pour les nouveaux utilisateurs scaled sans 1RM définis
  if (S.crossfitLevel === 'scaled') {
@@ -5452,7 +5461,8 @@ function renderMusculationProgram(p) {
  }
 
  // ─── MUSCLES DE LA SÉANCE ───
- var _selDay = S.sportProgram[S.selectedSportDay || 0];
+ var _selDayIdx = S.selectedSportDay || 0;
+ var _selDay = (Array.isArray(S.sportProgram) && _selDayIdx >= 0 && _selDayIdx < S.sportProgram.length) ? S.sportProgram[_selDayIdx] : null;
  if (_selDay && Array.isArray(_selDay.exercises) && _selDay.exercises.length > 0 && window.VOLUME_LANDMARKS) {
  var _sessionMuscleKeywords = {
  chest: ['pectoral', 'poitrine', 'chest', 'pectoraux'],
@@ -7317,6 +7327,14 @@ function renderRunningProgram(p) {
  var currentWeekData = program[S.runningWeek - 1];
  if (!currentWeekData) { p.appendChild(h('div', {style:'text-align:center;padding:32px;font-size:13px;color:var(--grey)'}, 'Semaine introuvable.')); p.appendChild(h('button', {'class':'btn-back', onclick: function(){ S.sStep = 7; window.render(); }}, '← Retour')); return; }
 
+ // ─── AVERTISSEMENT GROSSESSE (Running) ───
+ if (S.pregnant && S.sex === 'femme') {
+   var _rpw = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
+   var _rpwC = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:12px 16px;margin-bottom:16px'});
+   _rpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, 'Grossesse \u2014 Adaptations obligatoires'));
+   _rpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;line-height:1.6'}, _rpw ? _rpw.warning : 'R\u00e9duisez l\u2019intensit\u00e9. Pas de sprints ni d\u2019intervalles courts. Privil\u00e9giez la marche rapide et le jogging l\u00e9ger en Zone 1-2. Consultez votre m\u00e9decin.'));
+   p.appendChild(_rpwC);
+ }
  var goalObj2 = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
  var levelObj = (window.RUNNING_LEVELS || []).find(function(l){ return l.id === S.runningLevel; });
 
@@ -8125,6 +8143,15 @@ function renderTriathlonProgram(p) {
 
  var weekData = program[S.triathlonWeek - 1];
  if (!weekData) return;
+
+ // ─── AVERTISSEMENT GROSSESSE (Triathlon) ───
+ if (S.pregnant && S.sex === 'femme') {
+   var _tpw = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
+   var _tpwC = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:12px 16px;margin-bottom:16px'});
+   _tpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, 'Grossesse \u2014 Adaptations obligatoires'));
+   _tpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;line-height:1.6'}, _tpw ? _tpw.warning : 'R\u00e9duisez le volume et l\u2019intensit\u00e9. Natation recommand\u00e9e, v\u00e9lo station\u00e9 autoris\u00e9, course l\u00e9g\u00e8re Zone 1-2 uniquement. Consultez votre m\u00e9decin.'));
+   p.appendChild(_tpwC);
+ }
 
  var goalObj = null;
  (window.TRIATHLON_GOALS || []).forEach(function(g) { if (g.id === S.triathlonGoal) goalObj = g; });
