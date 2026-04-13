@@ -6,16 +6,16 @@
   node_bundler = "esbuild"
 
 [functions."body-analysis"]
-  timeout = 45
+  timeout = 26
 
 [functions."ai-coach"]
-  timeout = 90
+  timeout = 26
 
 [functions."plate-scan"]
   timeout = 26
 
 [functions."generate-muscu-program"]
-  timeout = 90
+  timeout = 26
 
 # ── Security Headers ────────────────────────────────────────────────────────
 [[headers]]

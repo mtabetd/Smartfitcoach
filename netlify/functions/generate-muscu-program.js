@@ -1,8 +1,8 @@
 // netlify/functions/generate-muscu-program.js
 // Génération de programme musculation hyper-personnalisé — Sonnet IA
 
-const MODEL = 'claude-sonnet-4-6';
-const MAX_TOKENS = 4000;
+const MODEL = 'claude-haiku-4-5-20251001';
+const MAX_TOKENS = 3000;
 
 // CORS — Domaines autorisés
 var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
@@ -768,7 +768,7 @@ exports.handler = async function(event) {
   try {
     // Timeout 80s — netlify.toml configure ce handler à 90s, Sonnet+4000 tokens prend 25-40s
     var _genCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 80000) : null;
+    var _genTimer = _genCtrl ? setTimeout(function() { _genCtrl.abort(); }, 23000) : null;
 
     var response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

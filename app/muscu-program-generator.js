@@ -1032,7 +1032,7 @@
       return;
     }
     var _mcCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _mcTimer = _mcCtrl ? setTimeout(function() { _mcCtrl.abort(); }, 87000) : null;
+    var _mcTimer = _mcCtrl ? setTimeout(function() { _mcCtrl.abort(); }, 25000) : null;
     fetch('/.netlify/functions/generate-muscu-program', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

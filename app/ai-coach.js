@@ -485,7 +485,7 @@ function sendMessage() {
 
   // Appel API avec timeout client 28s (marge 2s avant le timeout serveur Netlify 30s)
   var _coachCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-  var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 80000) : null;
+  var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 25000) : null;
   fetch(FUNCTION_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

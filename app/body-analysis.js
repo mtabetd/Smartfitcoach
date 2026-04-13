@@ -660,7 +660,7 @@ async function runAnalysis() {
 
     // Timeout client 43s (marge 2s avant le timeout serveur Netlify 45s)
     var _baCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _baTimer = _baCtrl ? setTimeout(function() { _baCtrl.abort(); }, 43000) : null;
+    var _baTimer = _baCtrl ? setTimeout(function() { _baCtrl.abort(); }, 25000) : null;
     var resp = await fetch(FUNCTION_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
