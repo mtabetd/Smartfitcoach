@@ -5937,6 +5937,29 @@ function renderBodyScan(p) {
     }}, 'Confirmer et continuer \u2192'));
   }
 
+  // ── Analyse IA par photo (optionnel avancé) ──────────────────────────────
+  var _aiScanSection = h('div', {style: 'margin-top:28px;padding-top:20px;border-top:1px solid var(--border,#D8D8D0)'});
+  _aiScanSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'ANALYSE AVANC\u00c9E \u00b7 IA'));
+  _aiScanSection.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:8px'}, 'Scan corporel par intelligence artificielle'));
+  _aiScanSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:16px'}, 'Uploadez deux photos (face + dos) pour obtenir une estimation pr\u00e9cise de votre composition corporelle et un bilan personnalis\u00e9 bienveillant par notre IA. Vos photos ne sont jamais stock\u00e9es sur nos serveurs.'));
+
+  var _aiScanBtn = h('button', {
+    style: 'display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px 20px;background:transparent;border:1.5px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;transition:all 0.25s cubic-bezier(0.25,0.46,0.45,0.94);min-height:48px',
+    onclick: function() {
+      if (window.BODY_ANALYSIS && typeof window.BODY_ANALYSIS.open === 'function') {
+        window.BODY_ANALYSIS.open();
+      } else {
+        alert('Module d\u2019analyse corporelle non disponible. Rechargez la page.');
+      }
+    }
+  });
+  _aiScanBtn.appendChild(h('span', {style: 'font-size:16px'}, '\uD83D\uDCF7'));
+  _aiScanBtn.appendChild(h('span', {}, 'Lancer l\u2019analyse IA par photo'));
+  _aiScanSection.appendChild(_aiScanBtn);
+
+  _aiScanSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey3,#9A9A90);margin-top:8px;font-style:italic;text-align:center'}, 'Optionnel \u2014 1 analyse par semaine \u2014 r\u00e9sultats en ~30 secondes'));
+  p.appendChild(_aiScanSection);
+
   // Skip link
   p.appendChild(h('button', {style: 'display:block;margin:16px auto 0;background:none;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);cursor:pointer;padding:10px;min-height:44px', onclick: function() {
     S.bodyScanDone = true;

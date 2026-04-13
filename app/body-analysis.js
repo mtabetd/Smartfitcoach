@@ -542,6 +542,7 @@ function updateBtn() {
 
 function openPanel() {
   var panel = document.getElementById('ba-panel');
+  if (!panel) { try { buildPanel(); panel = document.getElementById('ba-panel'); } catch(e) {} }
   if (panel) { panel.classList.add('open'); _panelOpen = true; }
 }
 
