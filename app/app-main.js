@@ -1386,7 +1386,7 @@ function render() {
 // ─── AUTH: LOGIN SCREEN ───
 function renderLogin(app) {
  var c = h('div', {'class': 'auth-container'});
- c.appendChild(h('img', {src: './logo.svg', alt: 'SmartFitCoach', style: 'width:140px;height:auto;display:block;margin:0 auto 8px'}));
+ c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
  c.appendChild(h('div', {'class': 'auth-sub'}, 'Nutrition & Sport'));
  c.appendChild(h('div', {'class': 'auth-line'}));
 
@@ -1552,7 +1552,7 @@ function renderLogin(app) {
 // ─── AUTH: REGISTER SCREEN ───
 function renderRegister(app) {
  var c = h('div', {'class': 'auth-container'});
- c.appendChild(h('img', {src: './logo.svg', alt: 'SmartFitCoach', style: 'width:140px;height:auto;display:block;margin:0 auto 8px'}));
+ c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
  c.appendChild(h('div', {'class': 'auth-sub'}, window.t('auth.register')));
  c.appendChild(h('div', {'class': 'auth-line'}));
 
@@ -1810,7 +1810,7 @@ function renderRegister(app) {
 // ─── AUTH: VERIFY EMAIL SCREEN ───
 function renderVerifyEmail(app) {
  var c = h('div', {'class': 'auth-container'});
- c.appendChild(h('img', {src: './logo.svg', alt: 'SmartFitCoach', style: 'width:140px;height:auto;display:block;margin:0 auto 8px'}));
+ c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
  c.appendChild(h('div', {'class': 'auth-sub'}, 'V\u00e9rifie ton email'));
  c.appendChild(h('div', {'class': 'auth-line'}));
 
@@ -1915,7 +1915,7 @@ function renderVerifyEmail(app) {
 // ─── AUTH: FORGOT PASSWORD SCREEN ───
 function renderForgotPassword(app) {
  var c = h('div', {'class': 'auth-container'});
- c.appendChild(h('img', {src: './logo.svg', alt: 'SmartFitCoach', style: 'width:140px;height:auto;display:block;margin:0 auto 8px'}));
+ c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
  c.appendChild(h('div', {'class': 'auth-sub'}, 'R\u00e9initialisation'));
  c.appendChild(h('div', {'class': 'auth-line'}));
 
@@ -1994,7 +1994,7 @@ function renderForgotPassword(app) {
 // ─── AUTH: SET NEW PASSWORD (after reset link clicked) ───
 function renderNewPassword(app) {
  var c = h('div', {'class': 'auth-container'});
- c.appendChild(h('img', {src: './logo.svg', alt: 'SmartFitCoach', style: 'width:140px;height:auto;display:block;margin:0 auto 8px'}));
+ c.appendChild(h('div', {'class': 'auth-logo'}, 'SMARTFITCOACH'));
  c.appendChild(h('div', {'class': 'auth-sub'}, 'Nouveau mot de passe'));
  c.appendChild(h('div', {'class': 'auth-line'}));
 

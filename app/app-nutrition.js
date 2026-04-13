@@ -224,9 +224,8 @@ function renderSplash(app) {
   // global #splash { position:fixed; z-index:9999 } CSS rule which would
   // overlay the entire viewport including the navigation bar.
   var sp = h('div', {'class': 'nutrition-intro', style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px 40px;text-align:center;min-height:60vh'});
-  var _logoImg = h('img', {src: './logo.svg', alt: 'SmartFitCoach', style: 'width:120px;height:auto;opacity:0;animation:splashFadeUp .5s ease .1s forwards;margin-bottom:16px'});
-  sp.appendChild(_logoImg);
-  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);opacity:0;animation:splashFadeUp .5s ease .25s forwards;margin-bottom:10px'}, 'NUTRITION'));
+  sp.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);opacity:0;animation:splashFadeUp .5s ease .1s forwards;margin-bottom:10px'}, 'SMARTFITCOACH \u00b7 NUTRITION'));
+  sp.appendChild(h('div', {style: 'width:36px;height:1px;background:var(--black);margin:0 auto 24px;opacity:0;animation:splashFadeUp .5s ease .25s forwards'}));
 
   // Strong headline
   var headlineEl = h('div', {style: 'font-family:Georgia,serif;font-size:clamp(28px,8vw,40px);font-weight:normal;line-height:1.1;letter-spacing:-.02em;color:var(--black);opacity:0;animation:splashFadeUp .6s ease .35s forwards;margin-bottom:16px;max-width:340px'});
