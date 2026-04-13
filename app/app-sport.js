@@ -7017,7 +7017,7 @@ function renderMusculationProgram(p) {
  }}, '\u21bb Recalculer le programme hebdomadaire'));
 
  // Export PDF
- p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); }}, '\u21e9 Exporter le programme en PDF'));
+ p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); else alert('Export PDF non disponible.'); }}, '\u21e9 Exporter le programme en PDF'));
 
  // Weight chart removed (was crashing)
 
@@ -9398,5 +9398,63 @@ function renderCalisthenicsProgram(content) {
 
 // ─── EXPOSE GLOBALEMENT ───
 window.renderWellnessCheckin = renderWellnessCheckin;
+
+// ─── EXPORT SPORT PROGRAM PDF ─────────────────────────────────────────────
+window.exportSportPDF = function() {
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible. Rechargez la page.'); return; }
+  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) { alert('Aucun programme sport \u00e0 exporter. G\u00e9n\u00e9rez d\u2019abord votre programme.'); return; }
+  try {
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF({unit: 'mm', format: 'a4'});
+    var W = 210, M = 15, CW = W - 2 * M, y = 0;
+    var ivory = [250, 250, 247], black = [10, 10, 9], grey = [107, 107, 101], green = [26, 74, 26];
+
+    // Header
+    doc.setFillColor(black[0], black[1], black[2]);
+    doc.rect(0, 0, W, 34, 'F');
+    doc.setTextColor(ivory[0], ivory[1], ivory[2]);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
+    doc.text('SMART FIT COACH', M, 12);
+    doc.setFont('times', 'italic'); doc.setFontSize(18);
+    doc.text('Programme Musculation \u2014 Semaine ' + (S.muscuWeek || 1), M, 24);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+    var levelText = S.sportLevel === 'beginner' ? 'D\u00e9butant' : S.sportLevel === 'intermediate' ? 'Interm\u00e9diaire' : 'Avanc\u00e9';
+    doc.text(levelText + '  |  ' + S.sportProgram.length + ' jours/semaine', M, 31);
+    y = 42;
+
+    // Each day
+    S.sportProgram.forEach(function(day, di) {
+      if (y > 260) { doc.addPage(); y = 20; }
+      // Day header
+      doc.setFillColor(green[0], green[1], green[2]);
+      doc.rect(M, y, CW, 8, 'F');
+      doc.setTextColor(ivory[0], ivory[1], ivory[2]);
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+      doc.text('JOUR ' + (di + 1) + (day.name ? ' \u2014 ' + day.name : '') + (day.focus ? '  (' + day.focus + ')' : ''), M + 3, y + 5.5);
+      y += 12;
+
+      // Exercises
+      doc.setTextColor(black[0], black[1], black[2]);
+      (day.exercises || []).forEach(function(ex, ei) {
+        if (y > 275) { doc.addPage(); y = 20; }
+        doc.setFont('times', 'normal'); doc.setFontSize(11);
+        doc.text((ei + 1) + '. ' + (ex.n || 'Exercice'), M + 2, y);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+        doc.setTextColor(grey[0], grey[1], grey[2]);
+        var detail = (ex.sets || 3) + '\u00d7' + (ex.reps || 10) + '  |  Repos ' + (ex.rest || 90) + 's';
+        if (ex.eq) detail += '  |  ' + ex.eq;
+        doc.text(detail, M + 2, y + 4.5);
+        doc.setTextColor(black[0], black[1], black[2]);
+        y += 10;
+      });
+      y += 6;
+    });
+
+    // Footer
+    doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
+    doc.text('Smart Fit Coach \u2014 ' + new Date().toLocaleDateString('fr-FR'), M, 290);
+    doc.save('programme-musculation-sem' + (S.muscuWeek || 1) + '.pdf');
+  } catch(e) { console.error('[exportSportPDF] Erreur:', e); alert('Erreur lors de la g\u00e9n\u00e9ration du PDF programme.'); }
+};
 
 })();

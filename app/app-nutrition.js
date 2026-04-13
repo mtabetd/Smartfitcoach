@@ -3583,7 +3583,9 @@ function renderModal(app) {
 
 // ─── PDF EXPORT ───
 function exportDayPDF(dayIdx) {
-  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e). Rechargez la page.'); return; }
+  if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { alert('Aucun plan disponible pour ce jour. G\u00e9n\u00e9rez d\u2019abord votre plan nutritionnel.'); return; }
+  try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
   var W = 210, M = 20, CW = W - 2 * M, y = 0;
@@ -3680,11 +3682,14 @@ function exportDayPDF(dayIdx) {
     .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   doc.save('plan-' + (safeDayName || 'jour') + '.pdf');
+  } catch(e) { console.error('[exportDayPDF] Erreur:', e); alert('Erreur lors de la g\u00e9n\u00e9ration du PDF. V\u00e9rifiez que vos donn\u00e9es sont compl\u00e8tes.'); }
 }
 window.exportDayPDF = exportDayPDF;
 
 function exportRecipePDF(r) {
-  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e)'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e). Rechargez la page.'); return; }
+  if (!r || !r.n) { alert('Recette non disponible pour l\u2019export.'); return; }
+  try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
   var W = 210, M = 20, CW = W - 2 * M, y = 0;
@@ -3751,6 +3756,7 @@ function exportRecipePDF(r) {
     .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   doc.save((safeName || 'recette') + '.pdf');
+  } catch(e) { console.error('[exportRecipePDF] Erreur:', e); alert('Erreur lors de la g\u00e9n\u00e9ration du PDF recette.'); }
 }
 window.exportRecipePDF = exportRecipePDF;
 
@@ -5739,7 +5745,9 @@ function printShoppingListAR(list) {
 }
 
 function exportShoppingListPDF(list, shopChecked) {
-  if (!window.jspdf || !window.jspdf.jsPDF) { alert('Export PDF non disponible'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { alert('Export PDF non disponible. Rechargez la page.'); return; }
+  if (!Array.isArray(list) || list.length === 0) { alert('Liste de courses vide \u2014 g\u00e9n\u00e9rez d\u2019abord votre plan nutritionnel.'); return; }
+  try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit: 'mm', format: 'a4' });
   var y = 20;
@@ -5809,6 +5817,7 @@ function exportShoppingListPDF(list, shopChecked) {
   doc.text('Généré par SmartFitCoach — ' + new Date().toLocaleDateString('fr-FR'), margin, 290);
 
   doc.save('liste-courses-smartfitcoach.pdf');
+  } catch(e) { console.error('[exportShoppingListPDF] Erreur:', e); alert('Erreur lors de la g\u00e9n\u00e9ration du PDF liste de courses.'); }
 }
 
 // ─── SALADE COMPOSER ───
