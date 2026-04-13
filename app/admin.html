@@ -116,23 +116,30 @@ var ADMIN_HASH = 'a1b2c3d4e5f6'; // placeholder — will be set properly
 var client = null;
 var _editingUserId = null;
 
-// ── GATE ──
-function tryLogin() {
+// ── GATE — SHA-256 hashed (mot de passe jamais en clair dans le code) ──
+var ADMIN_SHA256 = '64a4d5b88b2e9885cb77945a2cf37d528c9d415d2642922051e21e653a0395a7';
+var ADMIN_SALT = 'sfc_admin_2026';
+
+async function tryLogin() {
   var pw = document.getElementById('admin-pw').value;
-  // Simple hash check — in production use proper auth
   if (!pw || pw.length < 4) {
     document.getElementById('gate-error').textContent = 'Mot de passe requis';
     return;
   }
-  // For now, accept a hardcoded admin password
-  // TODO: Replace with SHA-256 hash comparison
-  if (pw === 'J@m@lTabet19482025') {
-    document.getElementById('admin-gate').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    loadUsers();
-  } else {
-    document.getElementById('gate-error').textContent = 'Mot de passe incorrect';
+  try {
+    var enc = new TextEncoder();
+    var buf = await crypto.subtle.digest('SHA-256', enc.encode(pw + ADMIN_SALT));
+    var hex = Array.from(new Uint8Array(buf)).map(function(b) { return ('00' + b.toString(16)).slice(-2); }).join('');
+    if (hex === ADMIN_SHA256) {
+      document.getElementById('admin-gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      loadUsers();
+    } else {
+      document.getElementById('gate-error').textContent = 'Mot de passe incorrect';
+    }
+  } catch(e) {
+    document.getElementById('gate-error').textContent = 'Erreur de vérification';
   }
 }
 
