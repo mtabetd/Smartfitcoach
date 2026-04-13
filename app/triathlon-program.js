@@ -1,3 +1,10 @@
+/**
+ * SmartFitCoach — Proprietary Software
+ * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
+ * Unauthorized copying, modification, distribution, or use of this software
+ * is strictly prohibited without explicit written permission.
+ * Contact: contact@smartfitcoach.com
+ */
 // --- TRIATHLON / IRONMAN PROGRAM ---
 // Methodes basees sur :
 //   - Jan Frodeno   - 3x champion du monde IRONMAN (polarise, brick hebdo)

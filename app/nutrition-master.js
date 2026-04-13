@@ -1,3 +1,10 @@
+/**
+ * SmartFitCoach — Proprietary Software
+ * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
+ * Unauthorized copying, modification, distribution, or use of this software
+ * is strictly prohibited without explicit written permission.
+ * Contact: contact@smartfitcoach.com
+ */
 // nutrition-master.js — NutritionMaster : source de vérité nutritionnelle unique
 // Fonctions pures, sans effet de bord, aucune valeur hardcodée hors constantes nommées.
 // Produit un USER_STATE strict, typé, cohérent et exploitable par les modules recettes/budget.

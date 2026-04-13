@@ -1,3 +1,10 @@
+/**
+ * SmartFitCoach — Proprietary Software
+ * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
+ * Unauthorized copying, modification, distribution, or use of this software
+ * is strictly prohibited without explicit written permission.
+ * Contact: contact@smartfitcoach.com
+ */
 // Global error boundary — catch unhandled JS errors and show user-friendly message
 window.onerror = function(msg, url, line, col, err) {
   var app = document.getElementById('app');

@@ -1,3 +1,10 @@
+/**
+ * SmartFitCoach — Proprietary Software
+ * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
+ * Unauthorized copying, modification, distribution, or use of this software
+ * is strictly prohibited without explicit written permission.
+ * Contact: contact@smartfitcoach.com
+ */
 // crossfit-wods.js — 100 WODs CrossFit Programming Elite
 // 100 WODs Games-Level — Phase 1-20 complète avec scaling et RX+
 // Elite-Level update: Benchmark WODs, aerobic track, recovery, 1RM test weeks, coaching notes

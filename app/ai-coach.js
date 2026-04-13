@@ -1,3 +1,10 @@
+/**
+ * SmartFitCoach — Proprietary Software
+ * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
+ * Unauthorized copying, modification, distribution, or use of this software
+ * is strictly prohibited without explicit written permission.
+ * Contact: contact@smartfitcoach.com
+ */
 // ai-coach.js — Coach IA SmartFitCoach
 // Interface chat + contexte utilisateur + appel Netlify Function
 (function() {

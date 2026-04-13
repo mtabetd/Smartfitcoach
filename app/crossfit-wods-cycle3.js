@@ -1,3 +1,10 @@
+/**
+ * SmartFitCoach — Proprietary Software
+ * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
+ * Unauthorized copying, modification, distribution, or use of this software
+ * is strictly prohibited without explicit written permission.
+ * Contact: contact@smartfitcoach.com
+ */
 // crossfit-wods-cycle3.js — Cycle 3: PEAK + OPEN Phase (semaines 41-52, 60 WODs)
 // Phase Peak: Open Prep (S41-44) / Benchmark Retest (S45-46) / Peak (S47-48) / Taper (S49-51) / Bilan (S52)
 (function(){

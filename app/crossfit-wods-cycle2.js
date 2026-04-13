@@ -1,3 +1,10 @@
+/**
+ * SmartFitCoach — Proprietary Software
+ * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
+ * Unauthorized copying, modification, distribution, or use of this software
+ * is strictly prohibited without explicit written permission.
+ * Contact: contact@smartfitcoach.com
+ */
 // crossfit-wods-cycle2.js — Cycle 2: BUILD Phase (semaines 21-40, 100 WODs)
 // Phase Build: charges plus lourdes, gymnastic complexe, benchmarks officiels
 // Periodes: Test 1RM (S21) / Heavy (S22-24) / Gymnastic (S25-28) / Benchmarks (S29) / Endurance (S30-32) / Peak (S33-39) / Deload (S40)

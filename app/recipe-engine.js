@@ -1,3 +1,10 @@
+/**
+ * SmartFitCoach — Proprietary Software
+ * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
+ * Unauthorized copying, modification, distribution, or use of this software
+ * is strictly prohibited without explicit written permission.
+ * Contact: contact@smartfitcoach.com
+ */
 // recipe-engine.js — RecipeEngine : moteur de recettes adaptatif
 // Intègre avec window.NutritionMaster (USER_STATE)
 // 662 recettes : R201-R669 (354 recettes R) + L001-L450 (308 recettes L, format étendu)

@@ -1,3 +1,10 @@
+/**
+ * SmartFitCoach — Proprietary Software
+ * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
+ * Unauthorized copying, modification, distribution, or use of this software
+ * is strictly prohibited without explicit written permission.
+ * Contact: contact@smartfitcoach.com
+ */
 // ⚠️  FICHIER LEGACY — NE PAS CHARGER DANS index.html NI sw.js
 //
 // Ce fichier était la source de recettes compacte originale (format court : k, p, g, l, i, st…).
