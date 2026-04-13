@@ -282,22 +282,22 @@
           }
         }
 
-        html += '<div class="program-week" id="week-' + weekIdx + '" style="border:1px solid var(--border,#D8D8D0);border-left:4px solid var(--black,#0A0A09);margin-bottom:12px;border-radius:2px;overflow:hidden;box-shadow:0 1px 3px rgba(10,10,9,0.04);">';
-        html += '<div class="week-header" data-week="' + weekIdx + '" style="padding:16px 20px;cursor:pointer;font-family:Georgia,serif;font-size:15px;display:flex;justify-content:space-between;align-items:center;background:var(--ivory2,#F5F4F1);transition:background 0.2s ease;">';
+        html += '<div class="program-week" id="week-' + weekIdx + '" style="border:1px solid var(--border,#D8D8D0);border-left:4px solid var(--black,#0A0A09);margin-bottom:16px;border-radius:2px;overflow:hidden;box-shadow:0 2px 4px rgba(10,10,9,0.04);background:var(--ivory2,#F4F4F0);">';
+        html += '<div class="week-header" data-week="' + weekIdx + '" style="padding:20px;cursor:pointer;font-family:Georgia,serif;font-size:16px;display:flex;justify-content:space-between;align-items:center;background:var(--ivory2,#F4F4F0);border-bottom:1px solid var(--border,#D8D8D0);transition:all 0.2s ease;letter-spacing:-0.3px;">';
         html += '<span>' + escapeHTML(week.title) + '</span>';
-        html += '<span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;letter-spacing:1px;color:var(--grey,#6B6B65);padding:4px 8px;border:1px solid var(--border,#D8D8D0);border-radius:2px;">';
+        html += '<span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:6px 10px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);flex-shrink:0;">';
         if (totalExercises > 0) {
           html += '\u2713 ' + completedExercises + '/' + totalExercises + ' exercices';
         }
         html += '</span>';
         html += '</div>';
 
-        html += '<div class="week-body" style="padding:8px 20px 16px;' + (isFirstWeek ? '' : 'display:none;') + '">';
+        html += '<div class="week-body" style="padding:16px 20px;background:var(--ivory2,#F4F4F0);' + (isFirstWeek ? '' : 'display:none;') + '">';
 
         for (var dd3 = 0; dd3 < week.days.length; dd3++) {
           var day = week.days[dd3];
           if (day.title) {
-            html += '<div class="day-title" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#1A4A1A);font-weight:600;margin:16px 0 10px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,0.06));border-left:3px solid var(--green,#1A4A1A);border-radius:2px;">' + escapeHTML(day.title) + '</div>';
+            html += '<div class="day-title" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#1A4A1A);font-weight:600;margin:16px 0 12px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,0.06));border-left:4px solid var(--green,#1A4A1A);border-radius:2px;">' + escapeHTML(day.title) + '</div>';
           }
 
           var exerciseIdx = 0;
@@ -307,16 +307,16 @@
             if (isCheckable) {
               var pKey2 = getProgressKey(weekIdx, day.title, exerciseIdx);
               var isChecked = progressMap[pKey2] ? true : false;
-              html += '<div class="exercise-row" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;margin-bottom:4px;display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);transition:all 0.15s ease;">';
+              html += '<div class="exercise-row" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);transition:all 0.2s ease;cursor:pointer;">';
               html += '<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;width:100%;">';
-              html += '<input type="checkbox"' + (isChecked ? ' checked' : '') + ' data-week="' + weekIdx + '" data-day="' + escapeHTML(day.title) + '" data-exercise="' + exerciseIdx + '" style="margin-top:3px;flex-shrink:0;min-width:18px;min-height:18px;">';
-              html += '<span style="line-height:1.5;' + (isChecked ? 'text-decoration:line-through;color:var(--grey,#6B6B65);' : '') + '">' + escapeHTML(exerciseLine) + '</span>';
+              html += '<input type="checkbox"' + (isChecked ? ' checked' : '') + ' data-week="' + weekIdx + '" data-day="' + escapeHTML(day.title) + '" data-exercise="' + exerciseIdx + '" style="margin-top:2px;flex-shrink:0;width:18px;height:18px;cursor:pointer;accent-color:var(--green,#1A4A1A);">';
+              html += '<span style="line-height:1.6;flex:1;letter-spacing:0.3px;' + (isChecked ? 'text-decoration:line-through;color:var(--grey,#6B6B65);opacity:0.65;' : '') + '">' + escapeHTML(exerciseLine) + '</span>';
               html += '</label>';
               html += '</div>';
               exerciseIdx++;
             } else {
               // Non-exercise line (note, rest info, etc.) — display as small note
-              html += '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:4px;padding:4px 12px;line-height:1.6;font-style:italic;">' + escapeHTML(exerciseLine) + '</div>';
+              html += '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:8px;padding:6px 14px;line-height:1.6;font-style:italic;border-left:2px solid var(--border,#D8D8D0);margin-left:14px;">' + escapeHTML(exerciseLine) + '</div>';
             }
           }
         }
