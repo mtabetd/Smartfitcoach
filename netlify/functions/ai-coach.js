@@ -8,9 +8,16 @@ const MAX_TOKENS = 400; // Réduit : réponses courtes suffisent pour un coach
 // Domaines autorisés pour CORS
 var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
   .split(',').map(function(o){ return o.trim(); });
-// Ajouter localhost UNIQUEMENT en dev
-if (process.env.NODE_ENV !== 'production' && process.env.NETLIFY_DEV === 'true') {
-  ALLOWED_ORIGINS.push('http://localhost:8888', 'http://127.0.0.1:3000', 'http://localhost:3000');
+// Localhost pour dev
+ALLOWED_ORIGINS.push('http://localhost:8888', 'http://127.0.0.1:3000', 'http://localhost:3000');
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true; // same-origin requests (pas de header Origin)
+  if (ALLOWED_ORIGINS.indexOf(origin) !== -1) return true;
+  // Accepter tout sous-domaine Netlify (deploy previews)
+  if (/^https:\/\/[a-z0-9-]+--smartfitcoach\.netlify\.app$/.test(origin)) return true;
+  if (/^https:\/\/[a-z0-9-]+\.netlify\.app$/.test(origin)) return true;
+  return false;
 }
 
 // ── Rate Limiting (sliding window horaire + quota journalier) ────────────────
@@ -179,11 +186,11 @@ function sanitizeContext(ctx) {
 exports.handler = async function(event, context) {
   // ── CORS dynamique ─────────────────────────────────────────────────────────
   var origin = event.headers['origin'] || event.headers['Origin'] || '';
-  var allowedOrigin = ALLOWED_ORIGINS.indexOf(origin) !== -1 ? origin : null;
+  var allowedOrigin = isAllowedOrigin(origin) ? (origin || ALLOWED_ORIGINS[0]) : null;
   if (!allowedOrigin && event.httpMethod !== 'OPTIONS') {
     return { statusCode: 403, body: JSON.stringify({ error: 'Origin non autorisé' }) };
   }
-  if (!allowedOrigin) allowedOrigin = ALLOWED_ORIGINS[0]; // OPTIONS preflight only
+  if (!allowedOrigin) allowedOrigin = ALLOWED_ORIGINS[0];
 
   var headers = {
     'Access-Control-Allow-Origin': allowedOrigin,
