@@ -518,7 +518,8 @@ function renderStep2b(p) {
         }
       }
     }
-    // ─── GROSSESSE ───
+    // ─── GROSSESSE (femmes uniquement) ───
+    if (S.sex === 'femme') {
     var pregDivider = h('div', {'class': 'divider', style: 'margin:20px 0 12px'});
     pregDivider.appendChild(h('div', {'class': 'divider-line'}));
     pregDivider.appendChild(h('div', {'class': 'divider-text'}, 'Grossesse'));
@@ -638,6 +639,7 @@ function renderStep2b(p) {
         }
       }
     }
+    } // fin if (S.sex === 'femme') — gate grossesse
 
     p.appendChild(h('div', {style: 'height:8px'}));
 
@@ -999,8 +1001,9 @@ function renderActiviteSommeil(p) {
         if (_pos3 !== -1) { S.trainingDaysSelected.splice(_pos3, 1); }
         else { S.trainingDaysSelected.push(idx); S.trainingDaysSelected.sort(function(a, b) { return a - b; }); }
         if (S.trainingDaysSelected.length > 0) S.sportDays = S.trainingDaysSelected.length;
-        // Invalidate plan since training days changed
+        // Invalidate plan + nutrition state since training days changed
         S.weekPlan = null;
+        S._nm = null; // forcer recalcul des macros/calories pour le nouveau split
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         window.render();
       }
@@ -1027,7 +1030,7 @@ function renderActiviteSommeil(p) {
     _ttOpts.forEach(function(opt) {
       _ttGrid.appendChild(h('div', {'class': 'level-item' + (S.trainTime === opt.id ? ' on' : ''), onclick: function() {
         S.trainTime = (S.trainTime === opt.id) ? null : opt.id; // toggle
-        if (S.weekPlan) { S.weekPlan = null; }
+        if (S.weekPlan) { S.weekPlan = null; S._nm = null; }
         window.render();
       }}, [h('div', {}, [h('div', {'class': 'level-name'}, opt.label), h('div', {'class': 'level-desc'}, opt.desc)])]));
     });
@@ -1478,7 +1481,8 @@ function renderStep6(p) {
     // Auto-select maintain uniquement si objectif actuel est coupe/sèche (incompatible)
     // Ne pas écraser bulk/recompo à chaque render — préserver le choix si compatible
     if (S.goal === null || !GOALS[S.goal] || GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred') {
-      S.goal = 2; // index of "Maintien" in GOALS (0=bulk, 1=lean_bulk, 2=maintain)
+      var _maintIdx = GOALS.findIndex(function(g){ return g.key === 'maintain'; });
+      S.goal = _maintIdx !== -1 ? _maintIdx : 2; // lookup "maintain" par clé (robuste si GOALS change)
     }
 
     var pregObjCard = h('div', {style: 'border-left:3px solid #E8A87C;padding:16px;background:var(--ivory2);margin-bottom:16px'});
@@ -1582,7 +1586,8 @@ function renderStep6(p) {
   if (_isPreg || _isAllait) {
     // Forcer maintien si objectif actuel est coupe ou sèche (OMS 2016, ACOG 2020 — restriction calorique contre-indiquée)
     if (S.goal !== null && GOALS[S.goal] && (GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred')) {
-      S.goal = 2; // index 2 = maintien
+      var _maintIdx2 = GOALS.findIndex(function(g){ return g.key === 'maintain'; });
+      S.goal = _maintIdx2 !== -1 ? _maintIdx2 : 2; // lookup "maintain" par clé (robuste si GOALS change)
     }
     if (_isPreg) {
       var _pregGoalBanner = h('div', {style: 'background:rgba(232,168,124,0.10);border:2px solid #E8A87C;padding:14px 16px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:#6A4A1A;line-height:1.7;border-radius:2px;'});
@@ -2503,7 +2508,7 @@ function renderStep8(p) {
     // Badge profil complet : déclenché quand l'utilisateur voit ses résultats et passe au planning
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) window.GAMIFICATION.unlockBadge('profile_complete');
     // I-04: générer weekPlan si absent (ex: rechargement page, navigation directe vers step 11)
-    if (!S.weekPlan || S.weekPlan.length < 7) {
+    if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) {
       if (window.computeNutritionState) window.computeNutritionState(false);
       var _wkPre = generateWeek();
       if (Array.isArray(_wkPre) && _wkPre.length > 0) {
@@ -2731,7 +2736,7 @@ function renderStep9(p) {
   }
   // Régénérer le plan si paramètres nutritionnels critiques ont changé (hash) ou si absent/incomplet
   var _planHashNow = window.getPlanHash ? window.getPlanHash() : '';
-  if (!S.weekPlan || S.weekPlan.length < 7) {
+  if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) {
     // Pas de plan du tout — générer
     try {
       if (_planHashNow) { S._planHash = _planHashNow; }
@@ -2801,7 +2806,7 @@ function renderStep9(p) {
     });
   }
   // Cible calorique adaptée au type de jour (repos = calMultiplier 0.90, entraînement = 1.0)
-  var _tgt = calcTarget();
+  var _tgt = calcTarget() || (S.sex === 'femme' ? 1800 : 2000); // fallback sécurisé si profil incomplet
   if (_dayAdapt && _dayAdapt.calMultiplier) { _tgt = Math.round(_tgt * _dayAdapt.calMultiplier); }
   var _nm = S._nm || {};
 
@@ -5245,7 +5250,7 @@ function renderSmoothieBar(p) {
 // Modal smoothie détail
 function showToast(msg, ms) {
   var toast = document.createElement('div');
-  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#fff;padding:12px 20px;border-radius:2px;font-size:13px;font-weight:600;z-index:99999;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.08)';
+  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#fff;padding:12px 20px;border-radius:2px;font-size:13px;font-weight:600;z-index:10000;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.08)';
   toast.textContent = msg;
   document.body.appendChild(toast);
   setTimeout(function(){ toast.style.opacity='0'; toast.style.transition='opacity 0.4s'; setTimeout(function(){ if(toast.parentNode) toast.parentNode.removeChild(toast); }, 400); }, ms || 2500);
@@ -5258,7 +5263,7 @@ function showSmoothieModal(sm) {
   if (old && old.parentNode) old.parentNode.removeChild(old);
 
   // Overlay impératif
-  var ov = h('div', {id:'_smoothie_modal_ov', style:'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.55);z-index:99999;display:flex;align-items:flex-end;justify-content:center;padding:0',
+  var ov = h('div', {id:'_smoothie_modal_ov', style:'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.55);z-index:9500;display:flex;align-items:flex-end;justify-content:center;padding:0',
     onclick:function(e){ if(e.target===ov){ var el=document.getElementById('_smoothie_modal_ov'); if(el&&el.parentNode) el.parentNode.removeChild(el); } }});
 
   // Sheet bottom-up (style bottom sheet mobile)

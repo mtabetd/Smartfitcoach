@@ -1017,6 +1017,13 @@
     }, 8000);
 
     var profile = buildProfileFromState();
+    // Validation profil avant envoi serveur — évite requête vide et erreur cryptique
+    if (!profile || !window.S || !window.S.sex || !window.S.weight || !window.S.height) {
+      _generating = false;
+      if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+      alert('Profil incomplet — complétez d\u2019abord votre onboarding (sexe, poids, taille).');
+      return;
+    }
     var _mcCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var _mcTimer = _mcCtrl ? setTimeout(function() { _mcCtrl.abort(); }, 87000) : null;
     fetch('/.netlify/functions/generate-muscu-program', {

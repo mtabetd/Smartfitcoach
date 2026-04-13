@@ -885,6 +885,26 @@ window.AUTH = {
       window.S.runningVO2max = null; window.S.triathlonFTP = null; window.S.triathlonRaceDate = null;
     }
 
+    // Nettoyer toutes les données localStorage spécifiques à l'utilisateur (sécurité appareil partagé)
+    try {
+      var _uid = null;
+      try { var _sess = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); if (_sess && _sess.id) _uid = _sess.id; } catch(e2) {}
+      var _keysToRemove = [];
+      for (var _ki = 0; _ki < localStorage.length; _ki++) {
+        var _k = localStorage.key(_ki);
+        if (_k && _k.indexOf('mtd_') === 0 && (_uid ? _k.indexOf(_uid) !== -1 : true)) {
+          _keysToRemove.push(_k);
+        }
+        // Nettoyer aussi les tokens Supabase pour éviter session fantôme
+        if (_k && _k.indexOf('sb-') === 0) {
+          _keysToRemove.push(_k);
+        }
+      }
+      for (var _ri = 0; _ri < _keysToRemove.length; _ri++) {
+        localStorage.removeItem(_keysToRemove[_ri]);
+      }
+    } catch(e) { console.warn('localStorage cleanup error:', e); }
+
     // Nettoyer la session locale + legacy
     _currentSession = null;
     clearLegacySession();
@@ -1146,6 +1166,17 @@ function _cleanupLocalData(userId) {
         users.splice(j, 1);
         saveUsers(users);
         break;
+      }
+    }
+    // Supprimer TOUTES les clés localStorage spécifiques à cet utilisateur
+    if (userId) {
+      var _keysToRemove = [];
+      for (var _ki = 0; _ki < localStorage.length; _ki++) {
+        var _k = localStorage.key(_ki);
+        if (_k && _k.indexOf(userId) !== -1) _keysToRemove.push(_k);
+      }
+      for (var _ri = 0; _ri < _keysToRemove.length; _ri++) {
+        localStorage.removeItem(_keysToRemove[_ri]);
       }
     }
   } catch (e) {}

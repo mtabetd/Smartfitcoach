@@ -54,7 +54,7 @@
       'background:var(--black,#0A0A09)', 'color:var(--ivory,#FAF9F6)',
       'font-family:"Helvetica Neue",Arial,sans-serif', 'font-size:11px',
       'letter-spacing:1px', 'padding:12px 24px', 'border-radius:2px',
-      'z-index:99999', 'box-shadow:0 4px 16px rgba(0,0,0,.2)',
+      'z-index:10100', 'box-shadow:0 4px 16px rgba(0,0,0,.2)',
       'max-width:90vw', 'text-align:center', 'opacity:0',
       'transition:opacity .3s ease'
     ].join(';');
@@ -79,7 +79,7 @@
     overlay.setAttribute('aria-label', 'Créer un compte');
     overlay.style.cssText = [
       'position:fixed', 'top:0', 'left:0', 'right:0', 'bottom:0',
-      'background:rgba(10,10,9,.55)', 'z-index:19000',
+      'background:rgba(10,10,9,.55)', 'z-index:10050',
       'display:flex', 'align-items:flex-end', 'justify-content:center',
       'opacity:0', 'transition:opacity .2s ease'
     ].join(';');
@@ -302,7 +302,7 @@
     bar.id = 'auth-save-banner';
     bar.setAttribute('role', 'banner');
     bar.style.cssText = [
-      'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:18000',
+      'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:10010',
       'background:var(--accent,var(--green,#1A4A1A))',
       'color:#fff', 'display:flex', 'align-items:center',
       'justify-content:space-between', 'gap:12px',

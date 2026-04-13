@@ -936,6 +936,7 @@ window.SPORT = {
  else if (S.sStep === 23) renderCyclingProgram(content); // Cycling program
  else if (S.sStep === 24) { renderCalisthenicsOnboarding(content); } // Calisthenics onboarding
  else if (S.sStep === 25) { renderCalisthenicsProgram(content); } // Calisthenics program
+ else { S.sStep = 0; renderObjectif(content); } // Fallback sécurité — évite page blanche si sStep invalide
 
  // ─── BANDEAU BIEN-ÊTRE (non-bloquant) ───
  if (S._wellnessReminder) {
@@ -3365,6 +3366,19 @@ function renderCrossfitProgram(p) {
  var gymVideoQTop = encodeURIComponent((_gym.name || '').replace('Skill: ', '') + ' crossfit tutorial');
  gymSkillCard.appendChild(h('a', {'class': 'exercise-video', href: 'https://www.youtube.com/results?search_query=' + gymVideoQTop, target: '_blank', rel: 'noopener', style: 'margin-top:8px'}, '\u25B6 Voir la technique'));
  p.appendChild(gymSkillCard);
+ }
+
+ // ─── WOD SAFETY CHECK (combinaisons dangereuses — flag mouvements olympiques sous fatigue) ───
+ var _wodMovs = (wod.wod && wod.wod.movements) ? wod.wod.movements.map(function(m){ return (m.name || '').toLowerCase(); }) : [];
+ var _wodType = (wod.wod && wod.wod.type) ? wod.wod.type.toLowerCase() : '';
+ var _hasOlyLift = _wodMovs.some(function(n){ return n.indexOf('snatch') !== -1 || n.indexOf('clean') !== -1 || n.indexOf('jerk') !== -1; });
+ var _hasFatiguePre = _wodMovs.some(function(n){ return n.indexOf('assault') !== -1 || n.indexOf('cal') !== -1 || n.indexOf('row') !== -1 || n.indexOf('rope climb') !== -1 || n.indexOf('burpee') !== -1; });
+ var _isTimePressure = _wodType.indexOf('amrap') !== -1 || _wodType.indexOf('for time') !== -1;
+ if (_hasOlyLift && _hasFatiguePre && _isTimePressure) {
+   var safetyWarn = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:10px 14px;margin-bottom:10px'});
+   safetyWarn.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:#C00;margin-bottom:4px'}, 'Attention — Mouvement olympique sous fatigue'));
+   safetyWarn.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:#6A4A1A'}, 'Ce WOD combine un mouvement olympique avec des exercices fatigants. Priorisez la technique : posez la barre si la position se d\u00e9grade. R\u00e9duisez la charge de 10-15% si n\u00e9cessaire.'));
+   p.appendChild(safetyWarn);
  }
 
  // ─── WOD SECTION (always shown) ───
