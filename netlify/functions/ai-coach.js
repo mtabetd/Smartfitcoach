@@ -110,10 +110,14 @@ function sanitizeContext(ctx) {
 
   var ALLOWED_FIELDS = [
     'prenom', 'sex', 'age', 'weight', 'height', 'goal', 'activity',
-    'sportType', 'sportLevel', 'sportDays', 'crossfitWeek',
+    'sportType', 'sportLevel', 'sportDays', 'sportGoals', 'sportEquipment',
+    'crossfitWeek', 'crossfit1RM',
     'triathlonGoal', 'triathlonLevel', 'triathlonFTP',
-    'calisthenicsLevel', 'wellness', 'todayNutrition',
-    'regime', 'allergies', 'excluded', 'muscuWeights',
+    'triathlonSwimPace', 'triathlonRunPace', 'triathlonWeek',
+    'calisthenicsLevel', 'calisthPullups', 'calisthPushups',
+    'wellness', 'todayNutrition',
+    'regime', 'allergies', 'excluded',
+    'muscuWeights', 'strengthProfile',
     'hyroxLevel', 'hyroxGoal', 'hyroxWeek',
     'runningLevel', 'runningGoal', 'runningWeek',
     'cyclingLevel', 'cyclingGoal', 'appMode'
@@ -312,7 +316,7 @@ exports.handler = async function(event, context) {
           catch(e) { reject(new Error('Réponse API invalide')); }
         });
       });
-      req.setTimeout(24000, function() {
+      req.setTimeout(85000, function() {
         req.destroy(new Error('Timeout API Anthropic'));
       });
       req.on('error', reject);

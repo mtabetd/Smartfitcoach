@@ -9,7 +9,7 @@
   timeout = 45
 
 [functions."ai-coach"]
-  timeout = 30
+  timeout = 90
 
 [functions."plate-scan"]
   timeout = 26

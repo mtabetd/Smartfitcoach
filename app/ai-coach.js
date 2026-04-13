@@ -128,6 +128,20 @@ function buildContext() {
   if (S.musculationWeights && Object.keys(S.musculationWeights).length) {
     ctx.muscuWeights = S.musculationWeights;
   }
+  // Profil de force (1RM) — pour que le coach adapte ses conseils aux charges
+  if (S.muscuStrengthProfile && Object.keys(S.muscuStrengthProfile).length) {
+    ctx.strengthProfile = S.muscuStrengthProfile;
+  }
+  if (S.crossfit1RM && Object.keys(S.crossfit1RM).length) {
+    ctx.crossfit1RM = S.crossfit1RM;
+  }
+  // Objectifs sport et équipement
+  if (Array.isArray(S.sportGoals) && S.sportGoals.length) {
+    ctx.sportGoals = S.sportGoals;
+  }
+  if (S.sportEquipment) {
+    ctx.sportEquipment = S.sportEquipment;
+  }
 
   // Bilan de forme du jour
   if (S.todayWellness && S.todayWellness.date) {
@@ -471,7 +485,7 @@ function sendMessage() {
 
   // Appel API avec timeout client 28s (marge 2s avant le timeout serveur Netlify 30s)
   var _coachCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-  var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 28000) : null;
+  var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 80000) : null;
   fetch(FUNCTION_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
