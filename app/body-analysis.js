@@ -541,6 +541,11 @@ function updateBtn() {
 }
 
 function openPanel() {
+  // Premium gate — analyse corporelle IA = feature premium
+  if (window.isPremium && !window.isPremium()) {
+    if (window.showPaywall) window.showPaywall('body');
+    return;
+  }
   var panel = document.getElementById('ba-panel');
   if (!panel) { try { buildPanel(); panel = document.getElementById('ba-panel'); } catch(e) {} }
   if (panel) { panel.classList.add('open'); _panelOpen = true; }

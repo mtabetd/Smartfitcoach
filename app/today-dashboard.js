@@ -473,6 +473,22 @@ function renderCardBonjour(S) {
     c.appendChild(_dateEl);
   })();
 
+  // ── Bandeau Trial ──
+  if (window.isTrialUser && window.isTrialUser()) {
+    var _trialDays = window.getTrialDaysLeft ? window.getTrialDaysLeft() : 0;
+    var _trialBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:12px;border:1px solid var(--orange,#6A4A1A);background:var(--orangebg,rgba(106,74,26,0.06));border-radius:2px;'});
+    var _trialLeft = h('div', {});
+    _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#6A4A1A);font-weight:600;margin-bottom:2px;'}, 'VERSION D\u2019ESSAI'));
+    if (_trialDays > 0) {
+      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'}, _trialDays + ' jour' + (_trialDays > 1 ? 's' : '') + ' restant' + (_trialDays > 1 ? 's' : '') + ' \u2014 Profitez de toutes les fonctionnalit\u00e9s'));
+    } else {
+      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);'}, 'P\u00e9riode d\u2019essai termin\u00e9e'));
+    }
+    _trialBanner.appendChild(_trialLeft);
+    _trialBanner.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:var(--orange,#6A4A1A);'}, _trialDays > 0 ? _trialDays + 'j' : '!'));
+    c.appendChild(_trialBanner);
+  }
+
   if (quoteText) {
     var qEl = h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--grey);line-height:1.6;border-left:2px solid var(--border);padding-left:12px;margin-top:8px;' });
     qEl.textContent = '\u201C' + quoteText + '\u201D';

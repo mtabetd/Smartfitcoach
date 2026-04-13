@@ -9408,6 +9408,7 @@ window.renderWellnessCheckin = renderWellnessCheckin;
 
 // ─── EXPORT SPORT PROGRAM PDF ─────────────────────────────────────────────
 window.exportSportPDF = function() {
+  if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible. Rechargez la page.'); return; }
   if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) { alert('Aucun programme sport \u00e0 exporter. G\u00e9n\u00e9rez d\u2019abord votre programme.'); return; }
   try {

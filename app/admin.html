@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartFitCoach — Console Admin</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:#FAF9F6;color:#0A0A09;padding:24px;max-width:960px;margin:0 auto}
+h1{font-family:Georgia,serif;font-size:24px;font-weight:normal;margin-bottom:4px}
+.sub{font-size:11px;color:#6B6B65;letter-spacing:3px;text-transform:uppercase;margin-bottom:24px}
+.gate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px}
+.gate input{padding:12px 16px;border:1px solid #D8D8D0;border-radius:2px;font-size:14px;width:280px;text-align:center}
+.gate button{padding:12px 24px;background:#0A0A09;color:#FAF9F6;border:none;border-radius:2px;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px}
+.stat-card{border:1px solid #D8D8D0;border-radius:2px;padding:16px;text-align:center;background:#F4F4F0}
+.stat-val{font-family:Georgia,serif;font-size:24px;margin-bottom:4px}
+.stat-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#6B6B65}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#0A0A09;color:#FAF9F6;padding:10px 12px;text-align:left;font-weight:400;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+td{padding:10px 12px;border-bottom:1px solid #D8D8D0}
+tr:nth-child(even){background:#F4F4F0}
+.badge{display:inline-block;padding:3px 8px;border-radius:2px;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:600}
+.badge-trial{background:rgba(106,74,26,0.1);color:#6A4A1A}
+.badge-active{background:rgba(26,74,26,0.1);color:#1A4A1A}
+.badge-expired{background:rgba(90,16,16,0.1);color:#5A1010}
+.badge-unlimited{background:rgba(26,58,106,0.1);color:#1A3A6A}
+select,button{font-family:'Helvetica Neue',Arial,sans-serif}
+.btn-sm{padding:6px 12px;border:1px solid #D8D8D0;background:transparent;border-radius:2px;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s}
+.btn-sm:hover{background:#0A0A09;color:#FAF9F6;border-color:#0A0A09}
+.btn-save{padding:6px 12px;border:none;background:#1A4A1A;color:#FAF9F6;border-radius:2px;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.5);display:none;align-items:center;justify-content:center;z-index:100}
+.modal-overlay.open{display:flex}
+.modal-box{background:#FAF9F6;padding:24px;border-radius:2px;max-width:400px;width:90%}
+.modal-title{font-family:Georgia,serif;font-size:18px;margin-bottom:16px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6B6B65;margin-bottom:6px}
+.field select,.field input{width:100%;padding:10px 12px;border:1px solid #D8D8D0;border-radius:2px;font-size:14px;background:#FAF9F6}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0A0A09;color:#FAF9F6;padding:12px 20px;border-radius:2px;font-size:12px;display:none;z-index:200}
+#app{display:none}
+</style>
+</head>
+<body>
+
+<!-- GATE -->
+<div class="gate" id="admin-gate">
+  <div style="font-family:Georgia,serif;font-size:20px">Console Admin</div>
+  <div style="font-size:11px;color:#6B6B65">SmartFitCoach</div>
+  <input type="password" id="admin-pw" placeholder="Mot de passe admin">
+  <button onclick="tryLogin()">Accéder</button>
+  <div id="gate-error" style="color:#5A1010;font-size:12px"></div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <h1>Console Admin</h1>
+  <p class="sub">SmartFitCoach · Gestion des utilisateurs</p>
+
+  <div class="stats" id="stats"></div>
+
+  <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+    <div style="font-size:11px;color:#6B6B65" id="user-count"></div>
+    <button class="btn-sm" onclick="loadUsers()">↻ Rafraîchir</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Utilisateur</th>
+        <th>Email</th>
+        <th>Inscription</th>
+        <th>Statut</th>
+        <th>Échéance</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="users-body"></tbody>
+  </table>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Gérer l'abonnement</div>
+    <div class="field">
+      <label>Formule</label>
+      <select id="modal-plan">
+        <option value="trial">Trial 7 jours</option>
+        <option value="1m">1 mois</option>
+        <option value="3m">3 mois</option>
+        <option value="6m">6 mois</option>
+        <option value="12m">12 mois</option>
+        <option value="unlimited">Illimité</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Date d'échéance</label>
+      <input type="date" id="modal-date">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn-save" onclick="saveSubscription()">Enregistrer</button>
+      <button class="btn-sm" onclick="closeModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="./supabase.min.js"></script>
+<script>
+// ── CONFIG ──
+var SUPABASE_URL = 'https://uwaoxkgsgbzohakzgyvq.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3YW94a2dzZ2J6b2hha3pneXZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4ODUxMjUsImV4cCI6MjA5MDQ2MTEyNX0.N2ohXmi6ctG322205S0yE2UaE4fS43QCc8xBhO9iVyo';
+// SHA-256 hash of admin password (change this!)
+var ADMIN_HASH = 'a1b2c3d4e5f6'; // placeholder — will be set properly
+var client = null;
+var _editingUserId = null;
+
+// ── GATE ──
+function tryLogin() {
+  var pw = document.getElementById('admin-pw').value;
+  // Simple hash check — in production use proper auth
+  if (!pw || pw.length < 4) {
+    document.getElementById('gate-error').textContent = 'Mot de passe requis';
+    return;
+  }
+  // For now, accept a hardcoded admin password
+  // TODO: Replace with SHA-256 hash comparison
+  if (pw === 'SmartFitAdmin2026!') {
+    document.getElementById('admin-gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    loadUsers();
+  } else {
+    document.getElementById('gate-error').textContent = 'Mot de passe incorrect';
+  }
+}
+
+document.getElementById('admin-pw').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') tryLogin();
+});
+
+// ── LOAD USERS ──
+async function loadUsers() {
+  if (!client) return;
+  try {
+    var { data, error } = await client.from('profiles').select('id, email, name, data, updated_at').order('updated_at', { ascending: false });
+    if (error) { console.error(error); return; }
+
+    var tbody = document.getElementById('users-body');
+    tbody.innerHTML = '';
+
+    var now = new Date();
+    var statsTrials = 0, statsActive = 0, statsExpired = 0, statsUnlimited = 0;
+
+    (data || []).forEach(function(user) {
+      var profile = user.data || {};
+      var subEnd = profile.subscriptionEnd || null;
+      var subPlan = profile.subscriptionPlan || null;
+      var firstLogin = profile.firstLoginDate || null;
+
+      // Determine status
+      var status, badge;
+      if (subPlan === 'unlimited') {
+        status = 'unlimited'; badge = '<span class="badge badge-unlimited">Illimité</span>';
+        statsUnlimited++;
+      } else if (subEnd && new Date(subEnd) > now) {
+        status = 'active'; badge = '<span class="badge badge-active">Actif · ' + (subPlan || '') + '</span>';
+        statsActive++;
+      } else if (firstLogin) {
+        var trialEnd = new Date(firstLogin);
+        trialEnd.setDate(trialEnd.getDate() + 7);
+        if (trialEnd > now) {
+          var daysLeft = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
+          status = 'trial'; badge = '<span class="badge badge-trial">Trial · ' + daysLeft + 'j restants</span>';
+          statsTrials++;
+        } else {
+          status = 'expired'; badge = '<span class="badge badge-expired">Expiré</span>';
+          statsExpired++;
+        }
+      } else {
+        status = 'trial'; badge = '<span class="badge badge-trial">Nouveau</span>';
+        statsTrials++;
+      }
+
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><strong>' + (profile.prenom || user.name || '—') + '</strong></td>' +
+        '<td>' + (user.email || '—') + '</td>' +
+        '<td>' + (firstLogin || '—') + '</td>' +
+        '<td>' + badge + '</td>' +
+        '<td>' + (subPlan === 'unlimited' ? '∞' : subEnd || '—') + '</td>' +
+        '<td><button class="btn-sm" onclick="openModal(\'' + user.id + '\',\'' + (profile.prenom || user.name || '') + '\',\'' + (subPlan || '') + '\',\'' + (subEnd || '') + '\')">Gérer</button></td>';
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('user-count').textContent = (data || []).length + ' utilisateur' + ((data || []).length > 1 ? 's' : '');
+
+    // Stats
+    document.getElementById('stats').innerHTML =
+      '<div class="stat-card"><div class="stat-val">' + (data || []).length + '</div><div class="stat-label">Total</div></div>' +
+      '<div class="stat-card"><div class="stat-val">' + statsTrials + '</div><div class="stat-label">Trials</div></div>' +
+      '<div class="stat-card"><div class="stat-val">' + statsActive + '</div><div class="stat-label">Actifs</div></div>' +
+      '<div class="stat-card"><div class="stat-val">' + statsUnlimited + '</div><div class="stat-label">Illimités</div></div>' +
+      '<div class="stat-card"><div class="stat-val">' + statsExpired + '</div><div class="stat-label">Expirés</div></div>';
+
+  } catch(e) { console.error('loadUsers error:', e); }
+}
+
+// ── MODAL ──
+function openModal(userId, name, currentPlan, currentEnd) {
+  _editingUserId = userId;
+  document.getElementById('modal-title').textContent = 'Abonnement · ' + (name || userId);
+  document.getElementById('modal-plan').value = currentPlan || 'trial';
+  document.getElementById('modal-date').value = currentEnd || '';
+  document.getElementById('modal').classList.add('open');
+
+  // Auto-calculate date when plan changes
+  document.getElementById('modal-plan').onchange = function() {
+    var plan = this.value;
+    var d = new Date();
+    if (plan === '1m') d.setMonth(d.getMonth() + 1);
+    else if (plan === '3m') d.setMonth(d.getMonth() + 3);
+    else if (plan === '6m') d.setMonth(d.getMonth() + 6);
+    else if (plan === '12m') d.setFullYear(d.getFullYear() + 1);
+    else if (plan === 'unlimited') { document.getElementById('modal-date').value = '2099-12-31'; return; }
+    else if (plan === 'trial') { var t = new Date(); t.setDate(t.getDate() + 7); document.getElementById('modal-date').value = t.toISOString().slice(0,10); return; }
+    document.getElementById('modal-date').value = d.toISOString().slice(0, 10);
+  };
+  // Trigger auto-calc
+  document.getElementById('modal-plan').onchange();
+}
+
+function closeModal() {
+  _editingUserId = null;
+  document.getElementById('modal').classList.remove('open');
+}
+
+async function saveSubscription() {
+  if (!_editingUserId || !client) return;
+
+  var plan = document.getElementById('modal-plan').value;
+  var endDate = document.getElementById('modal-date').value;
+
+  try {
+    // Read current profile data
+    var { data: existing, error: readErr } = await client.from('profiles').select('data').eq('id', _editingUserId).single();
+    if (readErr) { showToast('Erreur lecture: ' + readErr.message); return; }
+
+    var profileData = existing.data || {};
+    profileData.subscriptionPlan = plan;
+    profileData.subscriptionEnd = (plan === 'unlimited') ? '2099-12-31' : endDate;
+
+    // Write back
+    var { error: writeErr } = await client.from('profiles').update({ data: profileData, updated_at: new Date().toISOString() }).eq('id', _editingUserId);
+    if (writeErr) { showToast('Erreur écriture: ' + writeErr.message); return; }
+
+    showToast('Abonnement mis à jour');
+    closeModal();
+    loadUsers();
+  } catch(e) { showToast('Erreur: ' + e.message); }
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(function() { t.style.display = 'none'; }, 3000);
+}
+</script>
+
+</body>
+</html>

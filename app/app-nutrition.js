@@ -3596,6 +3596,7 @@ function renderModal(app) {
 
 // ─── PDF EXPORT ───
 function exportDayPDF(dayIdx) {
+  if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e). Rechargez la page.'); return; }
   if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { alert('Aucun plan disponible pour ce jour. G\u00e9n\u00e9rez d\u2019abord votre plan nutritionnel.'); return; }
   try {
@@ -3700,6 +3701,7 @@ function exportDayPDF(dayIdx) {
 window.exportDayPDF = exportDayPDF;
 
 function exportRecipePDF(r) {
+  if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e). Rechargez la page.'); return; }
   if (!r || !r.n) { alert('Recette non disponible pour l\u2019export.'); return; }
   try {
@@ -5758,6 +5760,7 @@ function printShoppingListAR(list) {
 }
 
 function exportShoppingListPDF(list, shopChecked) {
+  if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
   if (!window.jspdf || !window.jspdf.jsPDF) { alert('Export PDF non disponible. Rechargez la page.'); return; }
   if (!Array.isArray(list) || list.length === 0) { alert('Liste de courses vide \u2014 g\u00e9n\u00e9rez d\u2019abord votre plan nutritionnel.'); return; }
   try {

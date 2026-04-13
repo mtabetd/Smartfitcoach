@@ -43,6 +43,12 @@ function openScan(mealSlot) {
   if (_scanning) return;
   var S = window.S;
   if (!S) return;
+  // Premium gate — scanner repas = feature premium
+  if (window.isPremium && !window.isPremium()) {
+    if (window.showPaywall) window.showPaywall('scanner');
+    else alert('Fonctionnalit\u00e9 r\u00e9serv\u00e9e aux abonn\u00e9s. Souscrivez un abonnement pour scanner vos repas.');
+    return;
+  }
 
   // Determine today index
   var todayIdx = (new Date().getDay() + 6) % 7;

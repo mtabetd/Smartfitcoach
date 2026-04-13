@@ -431,6 +431,16 @@ function sendMessage() {
   var text = input.value.trim();
   if (!text) return;
 
+  // Premium gate — coach IA illimité = premium (trial = 3 messages/jour)
+  if (window.isTrialUser && window.isTrialUser()) {
+    var _coachCount = parseInt(sessionStorage.getItem('sfc_coach_count') || '0');
+    if (_coachCount >= 3) {
+      appendError(messages, 'Limite atteinte (3 messages/jour en version d\u2019essai). Abonnez-vous pour un acc\u00e8s illimit\u00e9.');
+      return;
+    }
+    sessionStorage.setItem('sfc_coach_count', String(_coachCount + 1));
+  }
+
   input.value = '';
   input.style.height = '40px';
   _sending = true;

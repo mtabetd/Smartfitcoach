@@ -2937,6 +2937,92 @@ function validatePregnancyState() {
 }
 window.validatePregnancyState = validatePregnancyState;
 
+// ── PREMIUM / TRIAL SYSTEM ──────────────────────────────────────────────────
+// isPremium() retourne true si :
+//   - L'utilisateur a un abonnement actif (subscriptionEnd > today)
+//   - OU l'utilisateur est en période trial (firstLoginDate + 7 jours > today)
+//   - Fallback = true (en cas de bug, l'utilisateur a accès — jamais de blocage par erreur)
+function isPremium() {
+  try {
+    var s = window.S;
+    if (!s) return true; // fallback safe
+    // Abonnement payant actif
+    if (s.subscriptionEnd) {
+      if (s.subscriptionPlan === 'unlimited') return true;
+      if (new Date(s.subscriptionEnd) > new Date()) return true;
+    }
+    // Trial 7 jours
+    if (s.firstLoginDate) {
+      var trialEnd = new Date(s.firstLoginDate);
+      trialEnd.setDate(trialEnd.getDate() + 7);
+      if (trialEnd > new Date()) return true;
+    }
+    // Pas de firstLoginDate = nouvel utilisateur = accès trial
+    if (!s.firstLoginDate) return true;
+    // Trial expiré et pas d'abonnement
+    return false;
+  } catch(e) { return true; } // fallback safe
+}
+// Jours restants de trial (0 si expiré ou si abonné)
+function getTrialDaysLeft() {
+  try {
+    var s = window.S;
+    if (!s || !s.firstLoginDate) return 7;
+    if (s.subscriptionEnd && (s.subscriptionPlan === 'unlimited' || new Date(s.subscriptionEnd) > new Date())) return 0; // abonné
+    var trialEnd = new Date(s.firstLoginDate);
+    trialEnd.setDate(trialEnd.getDate() + 7);
+    var diff = Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24));
+    return Math.max(0, diff);
+  } catch(e) { return 7; }
+}
+function isTrialUser() {
+  try {
+    var s = window.S;
+    if (!s) return false;
+    if (s.subscriptionEnd && (s.subscriptionPlan === 'unlimited' || new Date(s.subscriptionEnd) > new Date())) return false;
+    return true; // pas d'abonnement = trial (actif ou expiré)
+  } catch(e) { return false; }
+}
+// Paywall modal — affiche un message d'upgrade pour les features premium
+function showPaywall(feature) {
+  var featureNames = {
+    scanner: 'Scanner de repas IA',
+    pdf: 'Export PDF',
+    coach: 'Coach IA illimité',
+    history: 'Historique de progression',
+    body: 'Analyse corporelle IA'
+  };
+  var name = featureNames[feature] || 'Cette fonctionnalité';
+  var old = document.getElementById('sfc-paywall-modal');
+  if (old && old.parentNode) old.parentNode.removeChild(old);
+  var h = window.h;
+  if (!h) { alert(name + ' est réservée aux abonnés.'); return; }
+  var ov = document.createElement('div');
+  ov.id = 'sfc-paywall-modal';
+  ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.55);z-index:9500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s ease;';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:380px;width:90%;padding:28px 24px;border-radius:2px;text-align:center;';
+  box.innerHTML = '<div style="font-size:28px;margin-bottom:12px;">\u2B50</div>' +
+    '<div style="font-family:Georgia,serif;font-size:20px;margin-bottom:8px;">Passez \u00e0 Premium</div>' +
+    '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:#6B6B65;line-height:1.6;margin-bottom:20px;">' +
+    '<strong>' + name + '</strong> est r\u00e9serv\u00e9(e) aux abonn\u00e9s SmartFitCoach Premium. D\u00e9bloquez toutes les fonctionnalit\u00e9s avanc\u00e9es pour atteindre vos objectifs.</div>' +
+    '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#6B6B65;margin-bottom:20px;">' +
+    'Scanner repas IA \u00b7 Coach IA illimit\u00e9 \u00b7 Export PDF \u00b7 Historique \u00b7 Analyse corporelle</div>';
+  var closeBtn = document.createElement('button');
+  closeBtn.style.cssText = 'width:100%;padding:14px;background:transparent;border:1px solid #D8D8D0;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6B6B65;cursor:pointer;min-height:44px;';
+  closeBtn.textContent = 'Fermer';
+  closeBtn.onclick = function() { ov.style.opacity = '0'; setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 250); };
+  box.appendChild(closeBtn);
+  ov.appendChild(box);
+  ov.onclick = function(e) { if (e.target === ov) closeBtn.onclick(); };
+  document.body.appendChild(ov);
+  requestAnimationFrame(function() { ov.style.opacity = '1'; });
+}
+window.isPremium = isPremium;
+window.getTrialDaysLeft = getTrialDaysLeft;
+window.isTrialUser = isTrialUser;
+window.showPaywall = showPaywall;
+
 function getPregnancyTrimester() {
   var s = window.S;
   if (!s.pregnant || s.sex !== 'femme') return null;
