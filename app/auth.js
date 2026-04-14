@@ -302,6 +302,10 @@ function _getRawClient() {
 var _currentSession = null; // {id, name, email}
 var _useSupabase = false;
 var _authReady = Promise.resolve(); // resolved when Supabase session is loaded
+// FIX V4 2026-04 : flag pour distinguer "session pas encore chargée" vs "vraiment anon"
+// (sinon getUser() retournait null pendant 12s au démarrage → saveProfile écrivait
+// dans mtd_profile_anon au lieu de mtd_profile_<vrai_uid>)
+var _authReadyResolved = false;
 var _visibilityListener = null;   // ref for cleanup on logout
 var _beforeUnloadListener = null; // ref for cleanup on logout
 var _authStateSubscription = null; // ref for Supabase onAuthStateChange unsubscribe
@@ -407,6 +411,7 @@ function _initAuth() {
       console.error('[AUTH] Supabase getSession error:', result.error.message || result.error);
       _useSupabase = false;
       _loadLegacySession();
+      _authReadyResolved = true; // FIX V4 : restore terminé même en erreur
       return;
     }
     console.log('[AUTH] Supabase connected OK');
@@ -418,10 +423,12 @@ function _initAuth() {
         if (_currentSession.phone && !window.S.phone) window.S.phone = _currentSession.phone;
       }
     }
+    _authReadyResolved = true; // FIX V4 : restore terminé (avec ou sans session)
   }).catch(function(err) {
     console.error('[AUTH] Supabase connection failed:', err);
     _useSupabase = false;
     _loadLegacySession();
+    _authReadyResolved = true; // FIX V4 : restore terminé même en exception
   });
 }
 
@@ -754,15 +761,48 @@ window.AUTH = {
   /**
    * Logout the current user
    */
+  /**
+   * FIX V6 2026-04 : logout devient asynchrone — flush BLOQUANT avant cleanup.
+   * Avant : saveProfile fire-and-forget → signOut invalide token → upsert échoue
+   *         → reset S écrit les valeurs par défaut dans le cloud à la 2e itération.
+   * Maintenant : on attend la fin du save (timeout 5s pour ne pas bloquer l'UX si
+   *              Supabase est lent) AVANT signOut + reset. Données utilisateur préservées.
+   */
   logout: function() {
-    BLACKBOX.log('logout', { duration: BLACKBOX.getSessionMinutes() });
+    var self = this;
+    var _started = Date.now();
+    var _done = false;
+    var _runCleanup = function() {
+      if (_done) return; // anti-double-trigger (timeout vs then)
+      _done = true;
+      try { self._performLogoutCleanup(); }
+      catch (e) { console.warn('[AUTH] logout cleanup error:', e); }
+    };
 
-    // ── FLUSH IMMÉDIAT vers le cloud avant toute dé-initialisation ──
-    // Garantit que les dernières données (debounce 5s pas flushé) soient dans le cloud.
-    // Fire-and-forget : on n'attend pas, mais l'opération part avant le stop de la sync.
     if (window.SupaSync && typeof window.SupaSync.saveProfile === 'function') {
-      try { window.SupaSync.saveProfile(); } catch (e) { console.warn('[AUTH] logout flush error:', e); }
+      try {
+        var _p = window.SupaSync.saveProfile();
+        if (_p && typeof _p.then === 'function') {
+          _p.then(_runCleanup, _runCleanup);
+          // Timeout 5s : si Supabase trop lent, on continue le logout sans bloquer l'UX
+          setTimeout(_runCleanup, 5000);
+        } else {
+          _runCleanup();
+        }
+      } catch (e) {
+        console.warn('[AUTH] logout flush error:', e);
+        _runCleanup();
+      }
+    } else {
+      _runCleanup();
     }
+  },
+
+  /**
+   * Cleanup proprement dit (ex-corps de logout). Appelé par logout() après flush.
+   */
+  _performLogoutCleanup: function() {
+    BLACKBOX.log('logout', { duration: BLACKBOX.getSessionMinutes() });
 
     // Arreter la sync
     if (window.SupaSync) {
@@ -924,6 +964,13 @@ window.AUTH = {
     _currentSession = null;
     clearLegacySession();
     window._authInitialized = false;
+    // FIX F1 (contre-audit V4 2026-04) : reset _authReadyResolved sinon au re-login
+    // sans reload, isAuthRestoring() retourne false (car flag stale=true) →
+    // saveProfile écrit dans mtd_profile_anon pendant que la nouvelle session se charge.
+    // Reproduction du bug V4 d'origine.
+    // NOTE : on garde _useSupabase=true sinon isAuthRestoring() retourne false.
+    //        Le flag sera de toute façon re-positionné par _initAuth au re-login.
+    _authReadyResolved = false;
 
     // Désabonner la subscription Supabase onAuthStateChange
     if (_authStateSubscription) {
@@ -959,6 +1006,24 @@ window.AUTH = {
    */
   getUser: function() {
     return _currentSession;
+  },
+
+  /**
+   * FIX V4 2026-04 : indique si on est en train de restorer la session Supabase au démarrage.
+   * Pendant cette fenêtre (~12s max), getUser() peut retourner null à tort. Les
+   * appelants critiques (saveProfile) doivent éviter de sauvegarder pour ne pas
+   * écrire dans `mtd_profile_anon` à la place du vrai uid.
+   * @returns {boolean} true si Supabase est disponible mais que la session n'est pas encore chargée
+   */
+  isAuthRestoring: function() {
+    return _useSupabase && !_authReadyResolved && _currentSession === null;
+  },
+
+  /**
+   * Logout cleanup helper — reset le flag de restore (utilisé par tests)
+   */
+  _resetAuthReadyFlag: function() {
+    _authReadyResolved = false;
   },
 
   /**

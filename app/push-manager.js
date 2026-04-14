@@ -236,17 +236,31 @@
     },
 
     // Vérifie au démarrage les rappels persistés et les déclenche/reprogramme
+    // FIX PWA #2 2026-04 : anti-spam après absence prolongée.
+    //   Avant : si user fermait l'app 3 jours, ALL les notifs en retard se déclenchaient
+    //           d'un coup au retour (4-5 notifs en 50ms) → spam → désinstall.
+    //   Maintenant :
+    //     - On DROP les notifs en retard de plus de 6 heures (trop vieilles, hors contexte)
+    //     - On CAP à 2 notifs déclenchées immédiatement maximum (les plus récentes)
+    //     - On dédup par tag (1 seule notif par catégorie)
     checkPersistentReminders: function() {
       var self = this;
       var prefs = self.getPrefs();
       if (!prefs.granted || !Array.isArray(prefs.scheduledNotifs)) return;
       var now = Date.now();
+      var MAX_LATE_MS = 6 * 60 * 60 * 1000;     // 6h : au-delà, on drop (hors contexte)
+      var MAX_IMMEDIATE_FIRES = 2;              // pas plus de 2 notifs en rafale
       var remaining = [];
+      var late = [];                            // candidates à déclencher immédiatement
       prefs.scheduledNotifs.forEach(function(notif) {
         if (!notif || !notif.targetTime) return; // ignorer les entrées corrompues
         if (notif.targetTime <= now) {
-          // Rappel manqué — le déclencher immédiatement
-          self.showLocal(notif.title, notif.body, notif.tag);
+          var lateBy = now - notif.targetTime;
+          if (lateBy <= MAX_LATE_MS) {
+            // Rappel récent (< 6h) → candidat à déclencher
+            late.push(notif);
+          }
+          // Sinon (> 6h) : drop silencieux, hors contexte
         } else {
           // Futur — reprogrammer
           var delay = notif.targetTime - now;
@@ -255,6 +269,20 @@
           }
           remaining.push(notif);
         }
+      });
+      // Dédupliquer les notifs en retard par tag (garder la plus récente targetTime par tag)
+      var byTag = {};
+      late.forEach(function(n) {
+        if (!byTag[n.tag] || n.targetTime > byTag[n.tag].targetTime) byTag[n.tag] = n;
+      });
+      // Trier les notifs par targetTime DÉCROISSANT (plus récent d'abord) et cap à 2
+      var dedupedLate = Object.keys(byTag).map(function(t) { return byTag[t]; });
+      dedupedLate.sort(function(a, b) { return b.targetTime - a.targetTime; });
+      var firedCount = 0;
+      dedupedLate.forEach(function(n) {
+        if (firedCount >= MAX_IMMEDIATE_FIRES) return;
+        self.showLocal(n.title, n.body, n.tag);
+        firedCount++;
       });
       prefs.scheduledNotifs = remaining;
       self.savePrefs(prefs);

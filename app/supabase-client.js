@@ -145,7 +145,24 @@
         try {
           var legacy = {};
           var uidSuffix = '_' + userId;
-          var SYNC_PREFIXES = ['mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_', 'mtd_food_journal_', 'mtd_cf_1rm_', 'mtd_water_', 'mtd_muscu_session_', 'mtd_weight_history_'];
+          // FIX V2 2026-04 : étendu pour inclure les charges/progression/cycle muscu
+          // qui étaient PERDUES au changement de device (jamais sync cloud).
+          var SYNC_PREFIXES = [
+            // Historiques génériques
+            'mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_',
+            'mtd_food_journal_', 'mtd_water_', 'mtd_weight_history_',
+            // Sport — séances loggées
+            'mtd_muscu_session_',
+            // Sport — charges & progression (étaient absents)
+            'mtd_muscu_weights_',       // charges de travail par exercice
+            'mtd_muscu_progression_',   // historique de progression
+            'mtd_muscu_strength_',      // profil de force (1RM estimés)
+            'mtd_muscu_week_',          // semaine actuelle dans le cycle
+            'mtd_muscu_cycle_',         // numéro de cycle
+            'mtd_muscu_start_',         // date de début du programme
+            // CrossFit
+            'mtd_cf_1rm_'
+          ];
           // Clés exactes sans UID (programme IA, progression, générations)
           var SYNC_EXACT = ['mtd_muscu_program', 'mtd_muscu_ia_progress', 'mtd_muscu_generations'];
           for (var i = 0; i < localStorage.length; i++) {
@@ -375,8 +392,13 @@
     // Sync le profil toutes les 30 secondes (debounced)
     scheduleSave: function() {
       var self = this;
-      // Don't save while initial cloud sync is pending (prevents overwriting cloud data with defaults)
-      if (self._syncPending) return;
+      // FIX V3 2026-04 : ne pas SKIP les saves pendant syncOnLogin — au lieu de ça,
+      // on flag qu'il y a une save en attente. À la fin de syncOnLogin, on déclenche
+      // le save différé pour ne PAS perdre les modifs user pendant la fenêtre de sync.
+      if (self._syncPending) {
+        self._savePendingDuringSync = true;
+        return;
+      }
       if (self._debounceTimer) clearTimeout(self._debounceTimer);
       self._debounceTimer = setTimeout(function() {
         self.saveProfile();
@@ -476,7 +498,28 @@
                 if (!cloudData._legacy_storage.hasOwnProperty(lk)) continue;
                 if (lk.indexOf('mtd_') !== 0) continue; // safety: only restore mtd_ keys
                 try {
-                  localStorage.setItem(lk, cloudData._legacy_storage[lk]);
+                  // FIX V1 2026-04 : ne pas écraser un local plus riche par un cloud plus pauvre.
+                  // Avant : 6 mois d'historique muscu local pouvaient être écrasés par 1 séance
+                  //         du device B (cloud stale). Bug silencieux.
+                  // Maintenant : on compare les tailles JSON. On garde le plus riche.
+                  // Pour les histories (sessions, weights, perf-history, food journal etc.) qui
+                  // sont des objets/arrays accumulant des entrées, "plus de bytes = plus de données".
+                  // Hypothèse confirmée par audit (10 vulnérabilités diagnostiquées 2026-04).
+                  var existing = null;
+                  try { existing = localStorage.getItem(lk); } catch(eg) {}
+                  var cloudVal = cloudData._legacy_storage[lk];
+                  // Tester la richesse seulement si les deux sont des strings non triviales
+                  if (typeof existing === 'string' && existing.length > 0 &&
+                      typeof cloudVal === 'string' && cloudVal.length > 0) {
+                    // Heuristique : si local est plus volumineux ET pas trivialement égal,
+                    // on garde local (probablement plus d'entrées historiques).
+                    if (existing.length > cloudVal.length && existing !== cloudVal) {
+                      console.log('[SupaSync] Skip restore "' + lk + '" — local plus riche (' +
+                                  existing.length + ' vs cloud ' + cloudVal.length + ')');
+                      continue;
+                    }
+                  }
+                  localStorage.setItem(lk, cloudVal);
                   restored++;
                 } catch(e) {}
               }
@@ -552,6 +595,18 @@
         self._syncLoginInProgress = false;
         console.warn('[SupaSync] syncOnLogin failed:', e);
         return null;
+      }).then(function(result) {
+        // FIX V3 2026-04 : si l'utilisateur a tenté un saveProfile pendant le sync
+        // (qui a été skippé par scheduleSave car _syncPending=true), on le rejoue
+        // maintenant pour ne pas perdre ses modifs.
+        if (self._savePendingDuringSync) {
+          self._savePendingDuringSync = false;
+          console.log('[SupaSync] Re-flushing saveProfile (modifs user pendant sync)');
+          try {
+            self.saveProfile(); // fire-and-forget — la promise prochaine devient idempotente
+          } catch(eFlush) { console.warn('[SupaSync] re-flush failed:', eFlush); }
+        }
+        return result;
       });
     },
 

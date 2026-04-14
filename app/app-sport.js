@@ -2678,11 +2678,17 @@ function renderWellnessBanner(p) {
 
  var closeBtn = h('button', {style: 'background:none;border:none;cursor:pointer;font-size:18px;color:var(--grey,#6B6B65);line-height:1;padding:0;margin:0'}, '×');
  closeBtn.addEventListener('click', function() {
+  // FIX UI #3 2026-04 : le close × ne doit RIEN enregistrer comme données wellness.
+  // Avant : il inventait sleep:3, muscles:'courbatures', energy:'moyen' → adaptations
+  //         programme erronées basées sur des valeurs jamais saisies par l'user.
+  // Maintenant : on stocke un marqueur "dismissed" daté pour ne pas re-afficher le
+  //              banner aujourd'hui, mais SANS valeurs wellness inventées.
   var today = new Date().toISOString().slice(0, 10);
-  S.todayWellness = { date: today, sleep: 3, muscles: 'courbatures', energy: 'moyen' };
+  S.todayWellness = { date: today, dismissed: true };
   S._wellnessReminder = false;
   banner.style.display = 'none';
   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+  if (window.render) window.render();
  });
  titleRow.appendChild(closeBtn);
  banner.appendChild(titleRow);

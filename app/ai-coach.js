@@ -144,7 +144,10 @@ function buildContext() {
   }
 
   // Bilan de forme du jour
-  if (S.todayWellness && S.todayWellness.date) {
+  // FIX F8 (contre-audit UI #3 2026-04) : ignorer les wellness "dismissed" (close ×)
+  // qui n'ont pas de vraies données saisies par l'utilisateur — sinon on enverrait
+  // sleep/muscles/energy = undefined dans le prompt IA (pollution silencieuse).
+  if (S.todayWellness && S.todayWellness.date && !S.todayWellness.dismissed) {
     var adapt = null;
     try { if (window.getWellnessAdaptation) adapt = window.getWellnessAdaptation(); } catch(e) {}
     ctx.wellness = {

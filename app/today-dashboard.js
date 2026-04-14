@@ -1310,6 +1310,11 @@ function renderCardWellness(S) {
   var today = new Date().toISOString().split('T')[0];
   var w = S.todayWellness;
   if (w && w.date === today) return null; // déjà fait aujourd'hui
+  // FIX UI #2 2026-04 : en mode nutrition pure (pas de sportType), le checkin
+  // wellness n'a pas de sens (la donnée n'est utilisée que par le moteur sport
+  // pour adapter le programme). On masque la card complètement au lieu d'afficher
+  // un bouton mort qui faisait early-return silencieux.
+  if (!S.sportType && S.appMode === 'nutrition') return null;
 
   var c = card();
   c.appendChild(eyebrow('BIEN-ÊTRE'));
@@ -1323,7 +1328,7 @@ function renderCardWellness(S) {
     class: 'btn-primary',
     style: 'margin-top:4px;',
     onclick: function() {
-      if (!S.sportType && S.appMode === 'nutrition') return;
+      // Mode 'sport' ou 'both' : on bascule sur la vue sport pour le checkin
       S.view = 'sport';
       // Ne pas forcer sStep=20 (musculation-only) — laisser le dispatcher sport gérer le bon step
       if (window.render) window.render();

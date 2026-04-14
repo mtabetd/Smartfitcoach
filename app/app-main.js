@@ -152,6 +152,20 @@ var NUTRITION_PLAN_KEYS = [
 
 function saveProfile() {
  try {
+ // FIX V7 2026-04 : si loadProfile a détecté un decode corrompu, on REFUSE de sauver
+ // pour ne pas écraser le backup avec les valeurs par défaut de S.
+ // L'utilisateur doit reload la page pour clear ce flag (et idéalement contacter support).
+ if (S._loadCorrupted) {
+   console.warn('[saveProfile] BLOQUÉ — données corrompues détectées au load. Reload nécessaire.');
+   return;
+ }
+ // FIX V4 2026-04 : si Supabase est en train de restorer la session (~12s au démarrage),
+ // getUser() retourne null à tort → on écrirait dans mtd_profile_anon au lieu du vrai uid.
+ // On bloque pour éviter la perte de données. saveProfile sera re-déclenché après restore.
+ if (window.AUTH && typeof window.AUTH.isAuthRestoring === 'function' && window.AUTH.isAuthRestoring()) {
+   console.log('[saveProfile] DIFFÉRÉ — session Supabase en cours de restauration');
+   return;
+ }
  var user = AUTH.getUser();
  var uid = user ? user.id : 'anon';
 
@@ -250,9 +264,33 @@ function loadProfile() {
  data = window._storageDecode(raw);
  }
  if (!data) {
- try { data = JSON.parse(raw); } catch(e2) { return; }
+ try { data = JSON.parse(raw); } catch(e2) {
+   // FIX V7 2026-04 : silent decode failure → backup + flag pour bloquer saveProfile
+   // Avant : return silencieux → S restait aux defaults → prochain saveProfile écrasait
+   //          le profil corrompu (mais peut-être récupérable) avec les valeurs par défaut.
+   // Maintenant : on backup le raw corrompu pour récupération manuelle, et on flag S
+   //              pour empêcher saveProfile d'écraser tant que l'user n'a pas reload.
+   try {
+     var _ts = new Date().toISOString().replace(/[:.]/g, '-');
+     var _bkKey = 'mtd_profile_BACKUP_' + uid + '_' + _ts;
+     localStorage.setItem(_bkKey, raw);
+     console.error('[loadProfile] DATA CORRUPTED — backed up to ' + _bkKey + ' — saveProfile désactivé jusqu\'au prochain reload');
+   } catch(eb) { console.error('[loadProfile] backup also failed:', eb); }
+   S._loadCorrupted = true;
+   return;
  }
- if (!data) return;
+ }
+ if (!data) {
+   // raw existait mais decode a retourné null sans throw → corruption silencieuse
+   try {
+     var _ts2 = new Date().toISOString().replace(/[:.]/g, '-');
+     var _bkKey2 = 'mtd_profile_BACKUP_' + uid + '_' + _ts2;
+     localStorage.setItem(_bkKey2, raw);
+     console.error('[loadProfile] DECODE retourné null — backup ' + _bkKey2 + ' — saveProfile désactivé');
+   } catch(eb2) { console.error('[loadProfile] backup also failed:', eb2); }
+   S._loadCorrupted = true;
+   return;
+ }
  // Prototype pollution guard: reject any parsed object that carries dangerous keys
  if (Object.prototype.hasOwnProperty.call(data, '__proto__') ||
      Object.prototype.hasOwnProperty.call(data, 'constructor') ||

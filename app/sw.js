@@ -75,26 +75,46 @@ const CDN_ASSETS = [];
 // Install — cache the app shell and CDN dependencies
 // ---------------------------------------------------------------------------
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_VERSION).then(async (cache) => {
-      // Cache local assets — these must all succeed.
-      await cache.addAll(APP_SHELL).catch((err) => {
-        console.warn('[SW] Some app-shell assets failed to cache:', err);
-      });
+  // FIX PWA #1 2026-04 : robust install — pas de skipWaiting si addAll a partiellement échoué.
+  // Avant : un seul fichier 404 dans APP_SHELL → cache.addAll reject → .catch swallow
+  //         → install "réussit" avec cache vide → skipWaiting + activate purge l'ancien
+  //         → PWA briquée hors-ligne (501/écran blanc).
+  // Maintenant : on cache les fichiers UN PAR UN avec Promise.allSettled, on compte les
+  //              succès. Si moins de 90% des fichiers sont cachés, on N'APPELLE PAS
+  //              skipWaiting → l'ancien SW reste actif, l'app continue de fonctionner
+  //              avec la version précédente jusqu'au prochain essai d'install.
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_VERSION);
+    // Cache fichier par fichier : une erreur sur un fichier ne plante pas les autres
+    const results = await Promise.allSettled(
+      APP_SHELL.map((url) =>
+        cache.add(url).catch((err) => {
+          console.warn(`[SW] App-shell cache miss: ${url}`, err);
+          throw err; // re-throw pour que allSettled status='rejected'
+        })
+      )
+    );
+    const cached = results.filter((r) => r.status === 'fulfilled').length;
+    const total = APP_SHELL.length;
+    const ratio = cached / total;
 
-      // Cache CDN assets individually so one failure doesn't block the rest.
-      await Promise.allSettled(
-        CDN_ASSETS.map((url) =>
-          cache.add(url).catch((err) =>
-            console.warn(`[SW] CDN cache miss: ${url}`, err)
-          )
-        )
-      );
-    })
-  );
+    // Cache CDN assets (best-effort, ne bloque pas l'install)
+    await Promise.allSettled(
+      CDN_ASSETS.map((url) =>
+        cache.add(url).catch((err) => console.warn(`[SW] CDN cache miss: ${url}`, err))
+      )
+    );
 
-  // Activate immediately instead of waiting for existing tabs to close.
-  self.skipWaiting();
+    // Seuil 90% : si install partielle, on évite le skipWaiting destructeur
+    if (ratio >= 0.9) {
+      console.log(`[SW] Install OK: ${cached}/${total} app-shell cached (${Math.round(ratio*100)}%)`);
+      self.skipWaiting();
+    } else {
+      console.error(`[SW] Install INCOMPLET: ${cached}/${total} (${Math.round(ratio*100)}%) — skipWaiting bloqué pour ne pas briquer la PWA. Le SW précédent reste actif.`);
+      // Throw pour que installEvent soit rejected → browser réessaiera plus tard
+      throw new Error(`SW install incomplete: ${cached}/${total} files cached`);
+    }
+  })());
 });
 
 // ---------------------------------------------------------------------------

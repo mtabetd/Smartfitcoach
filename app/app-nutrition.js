@@ -1218,7 +1218,16 @@ function renderStep5(p) {
   var mg = h('div', {'class': 'card-grid-4'});
   if (FOOD_HABITS_MEALS && FOOD_HABITS_MEALS.length) {
     FOOD_HABITS_MEALS.forEach(function(item) {
-      mg.appendChild(h('div', {'class': 'sel-card' + (S.mealsPerDay === item.val ? ' on' : ''), onclick: function() { S.mealsPerDay = item.val; window.render(); }}, [
+      mg.appendChild(h('div', {'class': 'sel-card' + (S.mealsPerDay === item.val ? ' on' : ''), onclick: function() {
+        // FIX UI #4 2026-04 : invalider weekPlan + cache nutrition (_nm) si valeur change.
+        // Avant : weekPlan obsolète (recettes calibrées sur l'ancien nb de repas).
+        if (S.mealsPerDay !== item.val) {
+          if (S.weekPlan) S.weekPlan = null;
+          S._nm = null;
+        }
+        S.mealsPerDay = item.val;
+        window.render();
+      }}, [
         h('div', {'class': 'card-name'}, item.name),
         item.desc ? h('div', {'class': 'card-sub'}, item.desc) : null
       ].filter(Boolean)));
@@ -1897,7 +1906,16 @@ function renderStep7(p) {
   p.appendChild(h('div', {'class': 'section-label'}, window.t('onb.s5.diet')));
   var rg = h('div', {'class': 'card-grid-4'});
   REGIMES.forEach(function(r, i) {
-    rg.appendChild(h('div', {'class': 'sel-card' + (S.regime === i ? ' on' : ''), onclick: function() { S.regime = i; window.render(); }}, [
+    rg.appendChild(h('div', {'class': 'sel-card' + (S.regime === i ? ' on' : ''), onclick: function() {
+      // FIX UI #4 2026-04 : invalider weekPlan si régime change (vegan, végé, etc.).
+      // Avant : recettes carnées restaient dans plan vegan → contradiction nutritionnelle.
+      if (S.regime !== i) {
+        if (S.weekPlan) S.weekPlan = null;
+        S._nm = null;
+      }
+      S.regime = i;
+      window.render();
+    }}, [
       h('div', {'class': 'card-name', style: 'font-size:13px'}, r.name)
     ]));
   });
