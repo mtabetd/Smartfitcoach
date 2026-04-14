@@ -39,33 +39,67 @@
       var prefs = this.getPrefs();
       if (!prefs.granted) return;
 
-      // Vérifier si le checkin du jour a été fait
-      // wellness.date est stocké en UTC (cohérent avec app-sport.js) → utiliser UTC ici aussi
-      var today = new Date().toISOString().slice(0, 10);
-      var wellness = null;
-      try { wellness = (window.S && window.S.todayWellness) ? window.S.todayWellness : null; } catch(e) {}
-      if (!wellness || wellness.date !== today) {
-        // Rappel checkin si pas fait avant 10h
-        var now = new Date();
-        var reminderTime = new Date(now);
-        reminderTime.setHours(10, 0, 0, 0);
-        if (now < reminderTime) {
-          this.scheduleAndPersist('checkin', 'SmartFitCoach', 'Bonjour\u00a0! Comment tu te sens aujourd\'hui\u00a0? Fais ton bilan en 30 secondes.', reminderTime.getTime());
-        }
-      }
+      // ─── Motivation quotidienne ─── (Lun-Ven 8h30, Sam-Dim 10h)
+      this.scheduleDailyMotivation();
 
-      // Rappel du soir pour clôturer le journal alimentaire (20h)
-      var eveningTime = new Date();
-      eveningTime.setHours(20, 0, 0, 0);
-      if (new Date() < eveningTime) {
-        this.scheduleAndPersist('journal', 'SmartFitCoach', 'N\'oublie pas de cl\u00f4turer ton journal alimentaire pour aujourd\'hui.', eveningTime.getTime());
-      }
-
-      // Rappels repas
+      // Rappels repas basés sur S.mealTimes
       this.scheduleMealReminders();
 
       // Rappel comeback si inactif 3+ jours
       this.scheduleInactivityCheck();
+    },
+
+    // ── Motivation quotidienne — Lun-Ven 8h30 / Sam-Dim 10h ─────────────────
+    // Utilise MOTIVATION_LIBRARY (si disponible) pour une phrase personnalisée.
+    // Fallback élégant si la biblio n'est pas chargée.
+    scheduleDailyMotivation: function() {
+      var prefs = this.getPrefs();
+      if (!prefs.granted) return;
+      if (!window.MOTIVATION_LIBRARY || typeof window.MOTIVATION_LIBRARY.getNextMotivationTime !== 'function') {
+        return; // biblio pas chargée — on skip proprement
+      }
+      var nextTime = window.MOTIVATION_LIBRARY.getNextMotivationTime();
+      if (!nextTime) return;
+      // Construire le profil pour personnaliser la phrase
+      var profile = this._buildMotivationProfile(nextTime);
+      var msg = window.MOTIVATION_LIBRARY.getDailyMotivation(profile);
+      if (!msg || !msg.body) return;
+      this.scheduleAndPersist('daily-motivation', msg.title, msg.body, nextTime.getTime());
+    },
+
+    // Construit le profil transmis à MOTIVATION_LIBRARY pour personnalisation
+    _buildMotivationProfile: function(targetDate) {
+      var S = window.S || {};
+      // Streak (depuis localStorage dédié)
+      var streak = 0;
+      try {
+        var user = window.AUTH ? window.AUTH.getUser() : null;
+        if (user) {
+          var sd = JSON.parse(localStorage.getItem('mtd_streak_' + user.id) || '{}');
+          streak = (typeof sd.current === 'number') ? sd.current : 0;
+        }
+      } catch(e) {}
+      // Jour d'entraînement ?
+      var isTrainingDay = null;
+      try {
+        if (window.getDayType) {
+          var dayIdx = ((targetDate || new Date()).getDay() + 6) % 7; // 0=Lun
+          var info = window.getDayType(dayIdx);
+          if (info && typeof info.isTraining === 'boolean') isTrainingDay = info.isTraining;
+        }
+      } catch(e) {}
+      // Nom de l'objectif (optionnel)
+      var goalName = '';
+      try {
+        if (window.GOALS && S.goal != null && window.GOALS[S.goal]) goalName = window.GOALS[S.goal].name || '';
+      } catch(e) {}
+      return {
+        prenom: S.prenom || '',
+        streak: streak,
+        isTrainingDay: isTrainingDay,
+        goalName: goalName,
+        date: targetDate || new Date()
+      };
     },
 
     showLocal: function(title, body, tag) {
@@ -86,20 +120,32 @@
       var prefs = this.getPrefs();
       if (!prefs.granted) return;
       var now = new Date();
+      var mt = (window.S && window.S.mealTimes && typeof window.S.mealTimes === 'object') ? window.S.mealTimes : {};
 
-      // Déjeuner 12h00
+      // Utilise S.mealTimes (format "HH:MM") si disponible, fallback sur 12h00 / 19h00
+      var lunchTime = this._parseHHMM(mt.lunch) || { h: 12, m: 0 };
+      var dinnerTime = this._parseHHMM(mt.dinner) || { h: 19, m: 0 };
+
       var lunch = new Date(now);
-      lunch.setHours(12, 0, 0, 0);
+      lunch.setHours(lunchTime.h, lunchTime.m, 0, 0);
       if (now < lunch) {
-        this.scheduleAndPersist('meal-lunch', 'SmartFitCoach', 'C\'est l\'heure du d\u00e9jeuner \u2014 consulte ton plan repas.', lunch.getTime());
+        this.scheduleAndPersist('meal-lunch', 'SmartFitCoach', 'L\'heure du d\u00e9jeuner approche. Consultez votre plan repas.', lunch.getTime());
       }
 
-      // Dîner 19h00
       var dinner = new Date(now);
-      dinner.setHours(19, 0, 0, 0);
+      dinner.setHours(dinnerTime.h, dinnerTime.m, 0, 0);
       if (now < dinner) {
-        this.scheduleAndPersist('meal-dinner', 'SmartFitCoach', 'Pr\u00e9pare ton d\u00eener \u2014 ta recette t\'attend.', dinner.getTime());
+        this.scheduleAndPersist('meal-dinner', 'SmartFitCoach', 'Pr\u00e9parez votre d\u00eener. Votre recette vous attend.', dinner.getTime());
       }
+    },
+
+    _parseHHMM: function(str) {
+      if (!str || typeof str !== 'string') return null;
+      var m = str.match(/^(\d{1,2}):(\d{2})$/);
+      if (!m) return null;
+      var h = parseInt(m[1], 10), min = parseInt(m[2], 10);
+      if (isNaN(h) || isNaN(min) || h < 0 || h > 23 || min < 0 || min > 59) return null;
+      return { h: h, m: min };
     },
 
     scheduleWorkoutReminder: function(hour, minute) {
