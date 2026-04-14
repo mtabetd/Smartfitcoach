@@ -178,8 +178,16 @@
             updated_at: new Date().toISOString()
           }, { onConflict: 'id' })
           .then(function(result) {
-            if (result.error) console.warn('[SupaSync] saveProfile error:', result.error.message);
-            else console.log('[SupaSync] Profile saved to cloud');
+            if (result.error) {
+              console.warn('[SupaSync] saveProfile error:', result.error.message);
+            } else {
+              console.log('[SupaSync] Profile saved to cloud');
+              // Marquer le local comme "à jour avec le cloud" pour que la comparaison
+              // syncOnLogin() fonctionne correctement (fix bug persistance 2026-04).
+              try {
+                window.S._cloudUpdatedAt = new Date().toISOString();
+              } catch(e) {}
+            }
             return result;
           });
       }).catch(function(e) {
@@ -410,9 +418,54 @@
         // Helper to apply cloud data to S and save locally
         function _applyCloudData() {
           var _PROTO_BLOCKED = ['__proto__', 'constructor', 'prototype', '_legacy_storage'];
+          // Clés "précieuses" — on refuse qu'un cloud null/vide écrase des données locales valides.
+          // Cas typique : sync partielle (debounce pas flushé) → cloud manque sportProgram/weekPlan alors
+          // que le local les a. Voir diagnostic bug persistance 2026-04.
+          var _PROTECTED_KEYS = {
+            // Programmes sport (tous)
+            sportProgram: 1, runningProgram: 1, cyclingProgram: 1,
+            triathlonProgram: 1, hyroxProgram: 1, padelProgram: 1,
+            golfProgram: 1, yogaWeek: 1, calisthenicsWeek: 1,
+            // Nutrition
+            weekPlan: 1, favoriteRecipes: 1, nutritionLog: 1,
+            mealTimes: 1, mealsLogged: 1, shopChecked: 1,
+            // Historiques & progression sport
+            muscuSessionLog: 1, musculationWeights: 1,
+            muscuProgressionHistory: 1, sessionHistory: 1,
+            bonusExercises: 1, sportFocus: 1,
+            weightHistory: 1,
+            // Benchmarks & profils de force
+            crossfit1RM: 1, muscuStrengthProfile: 1,
+            hyroxBenchmarks: 1, crossfitBenchmarks: 1,
+            // CrossFit calendrier
+            cfProgress: 1,
+            // Smart Calendar
+            weeklyCalendar: 1,
+            // IA coach + jours d'entraînement
+            aiCoachHistory: 1, trainingDaysSelected: 1,
+            installations: 1, sportHobbies: 1
+          };
+          function _isEmptyValue(v) {
+            if (v === null || v === undefined) return true;
+            if (Array.isArray(v) && v.length === 0) return true;
+            if (typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 0) return true;
+            return false;
+          }
+          function _isMeaningful(v) {
+            if (v === null || v === undefined) return false;
+            if (Array.isArray(v)) return v.length > 0;
+            if (typeof v === 'object') return Object.keys(v).length > 0;
+            return true;
+          }
           for (var k in cloudData) {
             if (cloudData.hasOwnProperty(k) && _PROTO_BLOCKED.indexOf(k) === -1) {
-              window.S[k] = cloudData[k];
+              var cv = cloudData[k];
+              // Protection : si la clé est "précieuse" et que le cloud est vide mais le local non → on garde le local
+              if (_PROTECTED_KEYS[k] && _isEmptyValue(cv) && _isMeaningful(window.S[k])) {
+                console.log('[SupaSync] Skip overwrite of protected key "' + k + '" (cloud empty, local has data)');
+                continue;
+              }
+              window.S[k] = cv;
             }
           }
           // ── Restore localStorage history keys (perf-history, badges, streaks, food journal) ──
@@ -460,7 +513,19 @@
           var cloudTime = cloudData._cloudUpdatedAt ? new Date(cloudData._cloudUpdatedAt).getTime() : 0;
           var localTime = (localData && localData._cloudUpdatedAt) ? new Date(localData._cloudUpdatedAt).getTime() : 0;
           var cloudIsNewer = cloudTime > 0 && cloudTime > localTime + 5000; // 5s de tolérance
-          if (cloudIsNewer || cloudNStep > localNStep || cloudSStep > localSStep || (cloudHasPlan && !localHasPlan)) {
+          // ── DURCISSEMENT bug persistance 2026-04 ────────────────────────────
+          // Même si le cloud est "plus récent", on ne préfère PAS le cloud s'il a PERDU
+          // des données précieuses que le local détient (sportProgram/weekPlan).
+          // Typiquement : sync partielle non flushée → cloud stale sans ces données.
+          var localHasSportProg = Array.isArray(window.S.sportProgram) && window.S.sportProgram.length > 0;
+          var cloudHasSportProg = Array.isArray(cloudData.sportProgram) && cloudData.sportProgram.length > 0;
+          var cloudWouldLoseSport = localHasSportProg && !cloudHasSportProg;
+          var cloudWouldLosePlan  = localHasPlan && !cloudHasPlan;
+          if (cloudWouldLoseSport || cloudWouldLosePlan) {
+            console.log('[SupaSync] Cloud stale — missing local data (sport=' + cloudWouldLoseSport + ', plan=' + cloudWouldLosePlan + '). Keeping local, forcing cloud resave.');
+            // Forcer une re-sync pour repousser les données locales vers le cloud
+            try { if (window.SupaSync && window.SupaSync.saveProfile) window.SupaSync.saveProfile(); } catch(e) {}
+          } else if (cloudIsNewer || cloudNStep > localNStep || cloudSStep > localSStep || (cloudHasPlan && !localHasPlan)) {
             console.log('[SupaSync] Cloud preferred — cloudTime=' + new Date(cloudTime).toISOString() + ' localTime=' + (localTime ? new Date(localTime).toISOString() : 'none') + ' nStep cloud/local=' + cloudNStep + '/' + localNStep);
             _applyCloudData();
             if (window.render) window.render();

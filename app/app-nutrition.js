@@ -1120,9 +1120,18 @@ function renderStep4(p) {
   if (window.TIPS) TIPS.renderTip(p, 'health');
 
   var none = S.medical.length === 0;
-  var nb = h('div', {'class': 'sel-card' + (none ? ' on' : ''), style: 'margin-bottom:16px;text-align:center', onclick: function() { S.medical = []; window.render(); }});
+  // Fix UX 2026-04 : banner "bonne santé" = raccourci direct vers step suivant
+  // (avant, il fallait scroller jusqu'en bas. Maintenant un clic = valider + avancer)
+  var nb = h('div', {'class': 'sel-card' + (none ? ' on' : ''), style: 'margin-bottom:16px;text-align:center;cursor:pointer', onclick: function() {
+    S.medical = [];
+    // Si l'utilisateur clique sur "bonne santé", on avance directement au step suivant (habitudes)
+    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+    if (typeof goStep === 'function') goStep(9);
+    else window.render();
+  }});
   nb.appendChild(h('div', {'class': 'card-name'}, window.t('onb.s4.none')));
-  nb.appendChild(h('div', {'class': 'card-sub'}, 'Je suis en bonne sant\u00e9'));
+  nb.appendChild(h('div', {'class': 'card-sub'}, 'Je suis en bonne sant\u00e9 \u2014 passer \u00e0 l\'\u00e9tape suivante'));
+  nb.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:6px'}, 'Cliquer pour continuer \u2192'));
   p.appendChild(nb);
 
   var dvd = h('div', {'class': 'divider'});
@@ -3214,6 +3223,34 @@ function renderStep9(p) {
     for (var s = 0; s < lv; s++) stars += '\u2605';
     for (var s2 = lv; s2 < 4; s2++) stars += '\u2606';
     card.appendChild(h('div', {'class': 'meal-level'}, stars));
+    // ─── Rating favori (étoiles 1-3) : clic = set/unset → recette récurrente ───
+    if (r && r._id) {
+      var _fav = (S.favoriteRecipes && typeof S.favoriteRecipes === 'object') ? S.favoriteRecipes : {};
+      var _curRating = (_fav[r._id]|0) || 0;
+      var _favRow = h('div', {'class': 'meal-fav-row', style: 'display:flex;align-items:center;gap:6px;margin-top:6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'});
+      _favRow.appendChild(h('span', {style: 'margin-right:4px'}, _curRating ? 'Favori' : 'Noter'));
+      [1, 2, 3].forEach(function(n) {
+        var isFilled = _curRating >= n;
+        var starBtn = h('span', {
+          'aria-label': 'Favori ' + n + ' étoile' + (n>1?'s':''),
+          role: 'button',
+          tabindex: '0',
+          style: 'cursor:pointer;font-size:18px;line-height:1;padding:2px 3px;transition:all 0.2s ease;' + (isFilled ? 'opacity:1' : 'opacity:0.2'),
+          onclick: function(e) {
+            e.stopPropagation();
+            if (!S.favoriteRecipes || typeof S.favoriteRecipes !== 'object') S.favoriteRecipes = {};
+            // Clic sur la note actuelle = retrait du favori ; sinon = nouvelle note
+            if ((S.favoriteRecipes[r._id]|0) === n) { delete S.favoriteRecipes[r._id]; }
+            else { S.favoriteRecipes[r._id] = n; }
+            if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
+            if (window.bb) bb('recipe_favorite', {id: r._id, stars: S.favoriteRecipes[r._id] || 0});
+            if (window.render) window.render();
+          }
+        }, '\u2605');
+        _favRow.appendChild(starBtn);
+      });
+      card.appendChild(_favRow);
+    }
     card.appendChild(h('div', {'class': 'swap-btn', onclick: function(e) {
       e.stopPropagation();
       if (S.modalRecipe) return; // guard: no swap while recipe modal is open

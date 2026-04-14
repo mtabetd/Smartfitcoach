@@ -101,6 +101,10 @@ var PROFILE_KEYS = [
  '_sportProfileDone',
  '_switchedFromSport',
  '_switchedFromNutrition',
+ // Recettes favorites (id → étoiles 1-3)
+ 'favoriteRecipes',
+ // Timestamp dernière sync cloud — comparaison anti-écrasement dans SupaSync.syncOnLogin
+ '_cloudUpdatedAt',
  // Smart Calendar
  'weeklyCalendar',
  'smartCalendarEnabled',
@@ -260,7 +264,8 @@ function loadProfile() {
  // Defensive rehydration: ensure object/array fields are never null after load
  var _objFields = ['sportFocus','bonusExercises','sessionHistory','muscuSessionLog',
  'muscuProgressionHistory','musculationWeights','muscuStrengthProfile','crossfit1RM',
- 'hyroxBenchmarks','shopChecked','bodyZones','crossfitBenchmarks','muscuMedical'];
+ 'hyroxBenchmarks','shopChecked','bodyZones','crossfitBenchmarks','muscuMedical',
+ 'favoriteRecipes'];
  _objFields.forEach(function(f) { if (!S[f] || typeof S[f] !== 'object' || Array.isArray(S[f])) S[f] = {}; });
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','strongZones','weakZones',
@@ -725,6 +730,64 @@ function renderProfilePage(container) {
    modeSection.appendChild(modeCard);
  });
  c.appendChild(modeSection);
+
+ // ─── Recettes favorites ───
+ (function() {
+   var favMap = (S.favoriteRecipes && typeof S.favoriteRecipes === 'object') ? S.favoriteRecipes : {};
+   var favIds = Object.keys(favMap).filter(function(id) { return (favMap[id]|0) > 0; });
+   var favSection = h('div', {style: 'margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--border);'});
+   var favHeader = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;'});
+   favHeader.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);'}, 'MES RECETTES FAVORITES'));
+   favHeader.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:var(--grey);'}, favIds.length + ' ' + (favIds.length > 1 ? 'recettes' : 'recette')));
+   favSection.appendChild(favHeader);
+   if (!favIds.length) {
+     favSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);line-height:1.6;font-style:italic;'}, 'Notez une recette avec ★ dans votre planning pour qu\u2019elle revienne régulièrement dans vos semaines.'));
+   } else {
+     // Tri : étoiles décroissantes, puis nom alphabétique
+     favIds.sort(function(a, b) {
+       var sa = favMap[a]|0, sb = favMap[b]|0;
+       if (sa !== sb) return sb - sa;
+       return a.localeCompare(b);
+     });
+     favIds.forEach(function(rid) {
+       var stars = Math.max(1, Math.min(3, favMap[rid]|0));
+       var rec = null;
+       try {
+         if (window.RecipeEngine && window.RecipeEngine.findRecipe) rec = window.RecipeEngine.findRecipe(rid);
+       } catch(ex) { rec = null; }
+       // Fallback : smoothie ou nom inconnu
+       var name = (rec && (rec.n || rec.name)) || '';
+       if (!name && rid && rid.indexOf('sm_') === 0 && window.WHEY_SMOOTHIES) {
+         for (var i = 0; i < window.WHEY_SMOOTHIES.length; i++) {
+           if (window.WHEY_SMOOTHIES[i].id === rid) { name = window.WHEY_SMOOTHIES[i].name; break; }
+         }
+       }
+       if (!name) name = rid; // dernière sécurité : montrer l'id pour que l'user puisse retirer
+       var row = h('div', {style: 'display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);'});
+       var nameCol = h('div', {style: 'flex:1;min-width:0;'});
+       nameCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--black);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'}, name));
+       var starsRow = h('div', {style: 'display:flex;gap:4px;margin-top:2px;'});
+       for (var sj = 1; sj <= 3; sj++) {
+         starsRow.appendChild(h('span', {style: 'font-size:18px;line-height:1;transition:all 0.2s ease;' + (sj <= stars ? 'opacity:1' : 'opacity:0.2')}, '\u2605'));
+       }
+       nameCol.appendChild(starsRow);
+       row.appendChild(nameCol);
+       var removeBtn = h('button', {
+         'aria-label': 'Retirer des favoris',
+         style: 'background:none;border:1px solid var(--border);color:var(--grey);padding:6px 10px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;',
+         onclick: function() {
+           if (!S.favoriteRecipes) S.favoriteRecipes = {};
+           delete S.favoriteRecipes[rid];
+           if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
+           if (window.render) window.render();
+         }
+       }, 'Retirer');
+       row.appendChild(removeBtn);
+       favSection.appendChild(row);
+     });
+   }
+   c.appendChild(favSection);
+ })();
 
  // ─── Modifier le profil (in-place editor) ───
  if (S._profileEdit) {
