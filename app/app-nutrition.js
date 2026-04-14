@@ -138,12 +138,36 @@ function goStep(n) {
   if (app) app.scrollTop = 0;
 }
 
+// ─── BARRE DE PROGRESSION ONBOARDING (COSMÉTIQUE 2026-04) ─────────────
+// Premium : segments pleins + label "ÉTAPE N / TOTAL" + animation sur le segment actif
 function renderProgressBar(p, current, total) {
-  var bar = h('div', {style: 'display:flex;gap:3px;margin-bottom:20px;padding:0 4px'});
+  // Container avec label + barre segments (classe .onboarding-progress → fade-in CSS)
+  var container = h('div', {'class': 'onboarding-progress', style: 'margin-bottom:24px;'});
+
+  // Label "ÉTAPE N / TOTAL" en uppercase letter-spacing
+  var label = h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;'
+  });
+  label.appendChild(h('span', {}, 'Étape ' + current + ' sur ' + total));
+  // Pourcentage discret à droite en Georgia
+  var pct = Math.round((current / total) * 100);
+  label.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:11px;letter-spacing:0;text-transform:none;color:var(--black,#0A0A09);'}, pct + '%'));
+  container.appendChild(label);
+
+  // Barre segments (4px de hauteur au lieu de 3px pour plus de présence)
+  var bar = h('div', {style: 'display:flex;gap:3px;padding:0;'});
   for (var i = 1; i <= total; i++) {
-    bar.appendChild(h('div', {style: 'flex:1;height:3px;border-radius:2px;background:' + (i <= current ? '#0A0A09' : '#D8D8D0') + ';transition:background .3s'}));
+    var isDone = i < current;
+    var isActive = i === current;
+    var segColor = isDone ? '#0A0A09' : (isActive ? '#0A0A09' : '#D8D8D0');
+    var segStyle = 'flex:1;height:4px;border-radius:1px;background:' + segColor + ';transition:background .35s ease;';
+    // Segment actif : classe seg-active pour animation CSS pulsation
+    var segClass = isActive ? 'seg-active' : '';
+    bar.appendChild(h('div', {'class': segClass, style: segStyle}));
   }
-  p.appendChild(bar);
+  container.appendChild(bar);
+
+  p.appendChild(container);
 }
 
 // ─── INTERSTITIEL: programme existant ───
@@ -2667,13 +2691,29 @@ function renderWeightChart(p) {
 function renderNutritionCompletion(p) {
   renderProgressBar(p, 12, 12);
 
-  // Eyebrow label
+  // COSMÉTIQUE 2026-04 : Chiffre achievement XXL Georgia — marque la fin du parcours
+  var achievement = h('div', {
+    style: 'text-align:center;margin:28px 0 8px;'
+  });
+  // Grand "12" Georgia 64px
+  achievement.appendChild(h('div', {
+    style: 'font-family:Georgia,serif;font-size:64px;font-weight:normal;line-height:0.95;letter-spacing:-2px;color:var(--black,#0A0A09);'
+  }, '12'));
+  // Subtitle discret "sur 12 étapes"
+  achievement.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px;'
+  }, 'sur 12 étapes'));
+  p.appendChild(achievement);
+
+  // Trait noir 40px centré — signature éditoriale
+  p.appendChild(h('div', {
+    style: 'width:40px;height:1px;background:var(--black,#0A0A09);margin:20px auto 24px;'
+  }));
+
+  // Eyebrow label (existant)
   p.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:center;margin-bottom:20px'
   }, '\u25c6 PROGRAMME NUTRITIONNEL'));
-
-  // Thin divider
-  p.appendChild(h('div', {style: 'height:1px;background:var(--border,#E8E6DF);margin-bottom:28px'}));
 
   // Main headline
   var headline = h('div', {style: 'font-family:Georgia,serif;font-size:28px;font-style:italic;line-height:1.25;color:var(--black,#1A1A18);text-align:center;margin-bottom:8px'});
