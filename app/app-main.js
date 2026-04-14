@@ -148,6 +148,13 @@ function saveProfile() {
    console.warn('[saveProfile] BLOQUÉ — données corrompues détectées au load. Reload nécessaire.');
    return;
  }
+ // FIX V4 2026-04 : si Supabase est en train de restorer la session (~12s au démarrage),
+ // getUser() retourne null à tort → on écrirait dans mtd_profile_anon au lieu du vrai uid.
+ // On bloque pour éviter la perte de données. saveProfile sera re-déclenché après restore.
+ if (window.AUTH && typeof window.AUTH.isAuthRestoring === 'function' && window.AUTH.isAuthRestoring()) {
+   console.log('[saveProfile] DIFFÉRÉ — session Supabase en cours de restauration');
+   return;
+ }
  var user = AUTH.getUser();
  var uid = user ? user.id : 'anon';
 

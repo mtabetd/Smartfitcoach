@@ -295,6 +295,10 @@ function _getRawClient() {
 var _currentSession = null; // {id, name, email}
 var _useSupabase = false;
 var _authReady = Promise.resolve(); // resolved when Supabase session is loaded
+// FIX V4 2026-04 : flag pour distinguer "session pas encore chargée" vs "vraiment anon"
+// (sinon getUser() retournait null pendant 12s au démarrage → saveProfile écrivait
+// dans mtd_profile_anon au lieu de mtd_profile_<vrai_uid>)
+var _authReadyResolved = false;
 var _visibilityListener = null;   // ref for cleanup on logout
 var _beforeUnloadListener = null; // ref for cleanup on logout
 var _authStateSubscription = null; // ref for Supabase onAuthStateChange unsubscribe
@@ -400,6 +404,7 @@ function _initAuth() {
       console.error('[AUTH] Supabase getSession error:', result.error.message || result.error);
       _useSupabase = false;
       _loadLegacySession();
+      _authReadyResolved = true; // FIX V4 : restore terminé même en erreur
       return;
     }
     console.log('[AUTH] Supabase connected OK');
@@ -411,10 +416,12 @@ function _initAuth() {
         if (_currentSession.phone && !window.S.phone) window.S.phone = _currentSession.phone;
       }
     }
+    _authReadyResolved = true; // FIX V4 : restore terminé (avec ou sans session)
   }).catch(function(err) {
     console.error('[AUTH] Supabase connection failed:', err);
     _useSupabase = false;
     _loadLegacySession();
+    _authReadyResolved = true; // FIX V4 : restore terminé même en exception
   });
 }
 
@@ -985,6 +992,24 @@ window.AUTH = {
    */
   getUser: function() {
     return _currentSession;
+  },
+
+  /**
+   * FIX V4 2026-04 : indique si on est en train de restorer la session Supabase au démarrage.
+   * Pendant cette fenêtre (~12s max), getUser() peut retourner null à tort. Les
+   * appelants critiques (saveProfile) doivent éviter de sauvegarder pour ne pas
+   * écrire dans `mtd_profile_anon` à la place du vrai uid.
+   * @returns {boolean} true si Supabase est disponible mais que la session n'est pas encore chargée
+   */
+  isAuthRestoring: function() {
+    return _useSupabase && !_authReadyResolved && _currentSession === null;
+  },
+
+  /**
+   * Logout cleanup helper — reset le flag de restore (utilisé par tests)
+   */
+  _resetAuthReadyFlag: function() {
+    _authReadyResolved = false;
   },
 
   /**
