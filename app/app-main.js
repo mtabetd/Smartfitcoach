@@ -103,6 +103,8 @@ var PROFILE_KEYS = [
  '_switchedFromNutrition',
  // Recettes favorites (id → étoiles 1-3)
  'favoriteRecipes',
+ // FIX VALIDATION WEEKPLAN 2026-04 : flags de validation utilisateur
+ 'weekPlanValidated', 'weekPlanValidatedISOWeek',
  // Timestamp dernière sync cloud — comparaison anti-écrasement dans SupaSync.syncOnLogin
  '_cloudUpdatedAt',
  // Smart Calendar
@@ -196,7 +198,12 @@ function saveProfile() {
  return pv !== sv;
  });
  if (planImpacted) {
- S.weekPlan = null;
+ // FIX VALIDATION WEEKPLAN 2026-04 : dévalidation (pas de nullification)
+ // Avant : le plan était détruit si un paramètre changeait → régénération automatique
+ //         au prochain renderStep9, user perdait son plan sans savoir pourquoi.
+ // Maintenant : plan préservé, flag dévalidé, bandeau "Revalider" apparaît.
+ if (window.devalidateWeekPlan) window.devalidateWeekPlan('planImpacted saveProfile');
+ else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
  }
  } catch(e2) {}
  })();
@@ -924,8 +931,9 @@ function renderProfilePage(container) {
    var _efSave = h('button', {
      style: 'display:block;width:100%;padding:18px 28px;min-height:44px;border:1px solid var(--black);background:var(--black);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;cursor:pointer;margin-bottom:8px;border-radius:2px;',
      onclick: function() {
-       // Invalidate weekPlan if nutrition-critical fields changed
-       S.weekPlan = null;
+       // FIX VALIDATION WEEKPLAN 2026-04 : dévalider au lieu de supprimer
+       if (window.devalidateWeekPlan) window.devalidateWeekPlan('profile edit save');
+       else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
        S._profileEdit = false;
        if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
        // Toast
@@ -1183,8 +1191,10 @@ function renderProfilePage(container) {
            S.sportGoals = [_newSportId].concat(_secondaryKept).slice(0, 3);
          }
        }
-       // Invalidate plans
-       S.weekPlan = null;
+       // FIX VALIDATION WEEKPLAN 2026-04 : dévalider au lieu de supprimer (plan reste visible)
+       if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement objectif');
+       else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
+       // sportProgram reste invalidé (pas encore de flag de validation sport)
        S.sportProgram = null;
        // Cleanup temp state
        delete S._modalGoal;
@@ -2255,53 +2265,21 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
  else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
  else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
- // ─── AUTO-REGENERATION PLAN NUTRITION (semaine expirée) ───
- // Si un plan existe, que l'utilisateur n'est PAS en train de le consulter (nStep ≠ 12),
- // et que la date de génération a plus de 7 jours → regénérer silencieusement.
+ // ─── AUTO-REGENERATION PLAN NUTRITION — DÉSACTIVÉE (FIX VALIDATION 2026-04) ───
+ // AVANT : le plan se régénérait tout seul à chaque boot si >7j ou lundi matin
+ //         → user voyait son plan changer mystérieusement.
+ // MAINTENANT : le plan est figé jusqu'à revalidation EXPLICITE par l'utilisateur.
+ //              Si la semaine ISO a changé vs validation, on n'auto-regen PAS :
+ //              on laisse le plan visible + bannière "Valider la nouvelle semaine".
+ //              L'user clique "Valider mon programme" pour regénérer proprement.
  (function() {
    try {
-     if (S.weekPlan && S.nStep !== 12 && S.goal !== null && window.generateWeek && window.computeNutritionState) {
-       var needsRegen = false;
-       if (!S._weekPlanGeneratedAt) {
-         // Plan sans date de génération : considéré comme ancien → regénérer
-         needsRegen = true;
-       } else {
-         var generatedAt = new Date(S._weekPlanGeneratedAt);
-         var now = new Date();
-         var diffMs = now - generatedAt;
-         var diffDays = diffMs / (1000 * 60 * 60 * 24);
-         // Regénérer si le plan a plus de 7 jours
-         if (diffDays >= 7) {
-           needsRegen = true;
-         } else {
-           // Regénérer aussi si on est lundi et le plan date d'avant ce lundi
-           var dayOfWeek = now.getDay(); // 0=dim, 1=lun
-           if (dayOfWeek === 1) {
-             // Trouver le début de ce lundi (minuit)
-             var thisMonday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-             if (generatedAt < thisMonday) {
-               needsRegen = true;
-             }
-           }
-         }
-       }
-       if (needsRegen) {
-         window.computeNutritionState(false);
-         var _wkAuto = window.generateWeek();
-         if (Array.isArray(_wkAuto) && _wkAuto.length > 0) S.weekPlan = _wkAuto;
-         S._weekPlanGeneratedAt = new Date().toISOString();
-         // Figer le hash après auto-regen — évite une re-regen au prochain login
-         var _hAuto = window.getPlanHash ? window.getPlanHash() : '';
-         if (_hAuto) S._planHash = _hAuto;
-         if (window.saveProfile) { try { window.saveProfile(); } catch(e2) {} }
-         if (window.SupaSync && S.weekPlan) {
-           try {
-             var _mon = new Date();
-             _mon.setDate(_mon.getDate() - _mon.getDay() + 1);
-             window.SupaSync.saveMealPlan(_mon.toISOString().slice(0, 10), S.weekPlan);
-           } catch(e2) {}
-         }
-       }
+     if (!S.weekPlan) return;
+     // Migration users legacy : si pas de flag, on considère le plan comme validé
+     // pour la semaine courante (évite de dévalider tout le monde à la mise à jour).
+     if (typeof S.weekPlanValidated === 'undefined' || S.weekPlanValidated === null) {
+       S.weekPlanValidated = true;
+       if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
      }
    } catch(e) {}
  })();

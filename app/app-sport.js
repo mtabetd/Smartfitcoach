@@ -710,8 +710,9 @@ function renderSportChoice(p) {
       S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
       S.trainingDaysSelected = [];
       S.sportMixEnabled = false; S.sportMixSecondary = null;
-      // Invalider le plan nutritionnel — les jours training/repos changent avec le nouveau sport
-      S.weekPlan = null; S._planHash = null;
+      // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible + bandeau Revalider)
+      if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement sport');
+      else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }
@@ -894,8 +895,9 @@ window.SPORT = {
        S.bonusExercises = {}; S._splitChoice = null; S.cfCalendarOpen = false;
        S.trainingDaysSelected = [];
        S.sportMixEnabled = false; S.sportMixSecondary = null;
-       // Invalider le plan nutritionnel — les jours training/repos changent avec le nouveau sport
-       S.weekPlan = null; S._planHash = null;
+       // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible)
+       if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement sport');
+       else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
        if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
        if (window.render) window.render();
      }
@@ -3921,7 +3923,9 @@ function renderMusculationLevel(p) {
        if (_mp !== -1) { S.trainingDaysSelected.splice(_mp, 1); }
        else { S.trainingDaysSelected.push(idx); S.trainingDaysSelected.sort(function(a, b) { return a - b; }); }
        if (S.trainingDaysSelected.length > 0) S.sportDays = S.trainingDaysSelected.length;
-       S.weekPlan = null;
+       // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (jours training changés)
+       if (window.devalidateWeekPlan) window.devalidateWeekPlan('trainingDaysSelected changed');
+       else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
        try { window.saveProfile(); } catch(e) {}
        window.render();
      }
@@ -3965,7 +3969,9 @@ function renderMusculationLevel(p) {
  trainOptions.forEach(function(opt) {
  ttGrid.appendChild(h('div', {'class': 'level-item' + (S.trainTime === opt.id ? ' on' : ''), onclick: function() {
  S.trainTime = (S.trainTime === opt.id) ? null : opt.id; // toggle
- if (S.weekPlan) { S.weekPlan = null; } // invalider le plan pour régénérer avec nouveau timing
+ // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (timing training changé)
+ if (window.devalidateWeekPlan) window.devalidateWeekPlan('trainTime toggle');
+ else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
  window.render();
  }}, [h('div', {}, [h('div', {'class': 'level-name'}, opt.label), h('div', {'class': 'level-desc'}, opt.desc)])]));
  });

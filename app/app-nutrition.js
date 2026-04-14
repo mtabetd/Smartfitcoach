@@ -325,7 +325,10 @@ function renderStep1(p) {
         S.prePregnancyWeight = null;
         S.dueDate = null;
         S._prePregnancyGoal = null;
-        S._nm = null; S.weekPlan = null;
+        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (grossesse/allaitement reset)
+        S._nm = null;
+        if (window.devalidateWeekPlan) window.devalidateWeekPlan('pregnancy reset');
+        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
         window._s2page = 0; // Forcer page date naissance, pas la page cycle/grossesse
       }
       if (window.validatePregnancyState) validatePregnancyState();
@@ -585,9 +588,10 @@ function renderStep2b(p) {
           S._prePregnancyGoal = null;
         }
       }
-      // Invalider cache nutrition + plan (calories/macros/recettes changent)
+      // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (cycle/grossesse changé)
       S._nm = null;
-      S.weekPlan = null;
+      if (window.devalidateWeekPlan) window.devalidateWeekPlan('cycle/grossesse change');
+      else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
       if (window.validatePregnancyState) validatePregnancyState();
       window.render();
     }});
@@ -1055,9 +1059,10 @@ function renderActiviteSommeil(p) {
         if (_pos3 !== -1) { S.trainingDaysSelected.splice(_pos3, 1); }
         else { S.trainingDaysSelected.push(idx); S.trainingDaysSelected.sort(function(a, b) { return a - b; }); }
         if (S.trainingDaysSelected.length > 0) S.sportDays = S.trainingDaysSelected.length;
-        // Invalidate plan + nutrition state since training days changed
-        S.weekPlan = null;
-        S._nm = null; // forcer recalcul des macros/calories pour le nouveau split
+        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (jours training changés)
+        S._nm = null;
+        if (window.devalidateWeekPlan) window.devalidateWeekPlan('trainingDaysSelected nutrition');
+        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         window.render();
       }
@@ -1084,7 +1089,10 @@ function renderActiviteSommeil(p) {
     _ttOpts.forEach(function(opt) {
       _ttGrid.appendChild(h('div', {'class': 'level-item' + (S.trainTime === opt.id ? ' on' : ''), onclick: function() {
         S.trainTime = (S.trainTime === opt.id) ? null : opt.id; // toggle
-        if (S.weekPlan) { S.weekPlan = null; S._nm = null; }
+        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (trainTime change nutrition split)
+        S._nm = null;
+        if (window.devalidateWeekPlan) window.devalidateWeekPlan('trainTime nutrition');
+        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
         window.render();
       }}, [h('div', {}, [h('div', {'class': 'level-name'}, opt.label), h('div', {'class': 'level-desc'}, opt.desc)])]));
     });
@@ -1175,16 +1183,32 @@ function renderStep4(p) {
           // Sync: désactiver grossesse médicale → désactiver S.pregnant (double chemin)
           if (item.id === 'grossesse') {
             S.pregnant = false; S.pregnancyWeek = null; S.prePregnancyWeight = null; S.dueDate = null;
-            S._nm = null; S.weekPlan = null;
+            // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (grossesse off, calTarget change)
+            S._nm = null;
+            if (window.devalidateWeekPlan) window.devalidateWeekPlan('grossesse off');
+            else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
             if (S._prePregnancyGoal !== null && S._prePregnancyGoal !== undefined) { S.goal = S._prePregnancyGoal; S._prePregnancyGoal = null; }
           }
-          // Sync: désactiver allaitement → invalider cache nutrition
-          if (item.id === 'allaitement') { S._nm = null; S.weekPlan = null; }
+          // Sync: désactiver allaitement → dévalider cache nutrition
+          if (item.id === 'allaitement') {
+            S._nm = null;
+            if (window.devalidateWeekPlan) window.devalidateWeekPlan('allaitement off');
+            else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
+          }
         } else {
           S.medical.push(item.id);
           // Sync: activer grossesse médicale → activer S.pregnant pour déclencher les protections
-          if (item.id === 'grossesse' && S.sex === 'femme') { S.pregnant = true; S.cycleTracking = false; S._nm = null; S.weekPlan = null; }
-          if (item.id === 'allaitement') { S._nm = null; S.weekPlan = null; }
+          if (item.id === 'grossesse' && S.sex === 'femme') {
+            S.pregnant = true; S.cycleTracking = false;
+            S._nm = null;
+            if (window.devalidateWeekPlan) window.devalidateWeekPlan('grossesse on');
+            else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
+          }
+          if (item.id === 'allaitement') {
+            S._nm = null;
+            if (window.devalidateWeekPlan) window.devalidateWeekPlan('allaitement on');
+            else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
+          }
         }
         if (window.validatePregnancyState) validatePregnancyState();
         window.render();
@@ -1243,11 +1267,11 @@ function renderStep5(p) {
   if (FOOD_HABITS_MEALS && FOOD_HABITS_MEALS.length) {
     FOOD_HABITS_MEALS.forEach(function(item) {
       mg.appendChild(h('div', {'class': 'sel-card' + (S.mealsPerDay === item.val ? ' on' : ''), onclick: function() {
-        // FIX UI #4 2026-04 : invalider weekPlan + cache nutrition (_nm) si valeur change.
-        // Avant : weekPlan obsolète (recettes calibrées sur l'ancien nb de repas).
+        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible, bandeau Revalider)
         if (S.mealsPerDay !== item.val) {
-          if (S.weekPlan) S.weekPlan = null;
           S._nm = null;
+          if (window.devalidateWeekPlan) window.devalidateWeekPlan('mealsPerDay changed');
+          else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
         }
         S.mealsPerDay = item.val;
         window.render();
@@ -1931,11 +1955,11 @@ function renderStep7(p) {
   var rg = h('div', {'class': 'card-grid-4'});
   REGIMES.forEach(function(r, i) {
     rg.appendChild(h('div', {'class': 'sel-card' + (S.regime === i ? ' on' : ''), onclick: function() {
-      // FIX UI #4 2026-04 : invalider weekPlan si régime change (vegan, végé, etc.).
-      // Avant : recettes carnées restaient dans plan vegan → contradiction nutritionnelle.
+      // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (plan reste visible + warning important si allergies)
       if (S.regime !== i) {
-        if (S.weekPlan) S.weekPlan = null;
         S._nm = null;
+        if (window.devalidateWeekPlan) window.devalidateWeekPlan('regime changed');
+        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
       }
       S.regime = i;
       window.render();
@@ -2857,27 +2881,34 @@ function renderStep9(p) {
   } else if (!S._nm && window.computeNutritionState) {
     window.computeNutritionState(false);
   }
-  // Régénérer le plan si paramètres nutritionnels critiques ont changé (hash) ou si absent/incomplet
+  // FIX VALIDATION WEEKPLAN 2026-04 : ne plus régénérer automatiquement sur hash change.
+  // Avant : renderStep9 régénérait le plan silencieusement quand `_planHash` différait
+  //         (ce qui arrivait à chaque changement mineur : ordre tri, weeklyCalendar, cycle).
+  //         Résultat : l'user voyait son plan changer tout seul en revenant sur la page.
+  // Maintenant : régénération UNIQUEMENT si weekPlan absent. Si hash différent →
+  //              on affiche une bannière "Vos paramètres ont changé, [Revalider]".
+  //              L'user décide explicitement quand regénérer.
   var _planHashNow = window.getPlanHash ? window.getPlanHash() : '';
   if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) {
-    // Pas de plan du tout — générer
+    // Pas de plan du tout — génération initiale (onboarding)
     try {
       if (_planHashNow) { S._planHash = _planHashNow; }
       var _wk9 = generateWeek();
-      if (Array.isArray(_wk9) && _wk9.length === 7) S.weekPlan = _wk9;
+      if (Array.isArray(_wk9) && _wk9.length === 7) {
+        S.weekPlan = _wk9;
+        S._weekPlanGeneratedAt = new Date().toISOString();
+        // Migration legacy : si flag validation absent, considérer validé
+        if (typeof S.weekPlanValidated === 'undefined' || S.weekPlanValidated === null) {
+          S.weekPlanValidated = true;
+          if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
+        }
+      }
     } catch(e) { console.error('[renderStep9] generateWeek failed', e); }
   } else if (_planHashNow && !S._planHash) {
-    // Plan existant mais hash absent (migration pré-fix) — figer le hash SANS régénérer
-    // Évite que les utilisateurs anciens perdent leur plan à chaque visite
+    // Plan existant mais hash absent (users legacy) — figer le hash sans régénérer
     S._planHash = _planHashNow;
-  } else if (_planHashNow && S._planHash !== _planHashNow) {
-    // Vrai changement de paramètres nutritionnels — régénérer
-    try {
-      S._planHash = _planHashNow;
-      var _wk9r = generateWeek();
-      if (Array.isArray(_wk9r) && _wk9r.length === 7) S.weekPlan = _wk9r;
-    } catch(e) { console.error('[renderStep9] generateWeek failed', e); }
   }
+  // NOTE : on ne touche plus au plan si hash change. La bannière ci-dessous informe l'user.
   // Guard: si weekPlan est toujours null/vide après génération, afficher un message d'erreur
   if (!S.weekPlan || !S.weekPlan.length) {
     p.appendChild(h('div', {style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes.'));
@@ -2887,6 +2918,91 @@ function renderStep9(p) {
   // Défaut : afficher AUJOURD'HUI (même jour que le dashboard) plutôt que toujours Lundi
   var _todayPlanIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim, cohérent avec today-dashboard.js
   if (typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) S.selectedDay = _todayPlanIdx;
+
+  // FIX VALIDATION WEEKPLAN 2026-04 : bandeau de validation / revalidation.
+  // 3 états possibles :
+  //   a) weekPlanValidated=true + même semaine ISO → petit texte "Programme validé"
+  //   b) weekPlanValidated=false OU hash changé → gros bouton "Valider mon programme"
+  //   c) Semaine ISO différente → bouton "Valider la nouvelle semaine"
+  (function() {
+    var currentISO = window.currentISOWeek ? window.currentISOWeek() : null;
+    var hashChanged = _planHashNow && S._planHash && _planHashNow !== S._planHash;
+    var weekChanged = currentISO && S.weekPlanValidatedISOWeek && currentISO !== S.weekPlanValidatedISOWeek;
+    var neverValidated = !S.weekPlanValidated;
+    var needsAction = neverValidated || hashChanged || weekChanged;
+
+    if (needsAction) {
+      // Gros bouton "Valider mon programme"
+      var validateBox = h('div', {
+        style: 'margin-bottom:16px;padding:14px 16px;border:1px solid var(--black,#0A0A09);border-radius:2px;background:var(--ivory,#FAF9F6);'
+      });
+      var validateLabel = h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:6px;'
+      });
+      validateLabel.textContent = hashChanged ? 'Paramètres modifiés'
+        : weekChanged ? 'Nouvelle semaine'
+        : 'Nouveau programme';
+      validateBox.appendChild(validateLabel);
+
+      var validateText = h('div', {
+        style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.5;'
+      });
+      validateText.textContent = hashChanged
+        ? 'Vos informations ont changé. Régénérez votre plan pour les intégrer.'
+        : weekChanged
+        ? 'Une nouvelle semaine commence. Validez votre programme pour qu\'il démarre.'
+        : 'Validez votre programme nutritionnel pour le figer sur la semaine.';
+      validateBox.appendChild(validateText);
+
+      var validateBtn = h('button', {
+        style: 'display:block;width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;min-height:48px;font-weight:500;',
+        onclick: function() {
+          try {
+            // Régénérer si hash a changé ou nouvelle semaine, sinon juste valider le plan existant
+            if (hashChanged || weekChanged) {
+              var _wkV = generateWeek();
+              if (Array.isArray(_wkV) && _wkV.length === 7) {
+                S.weekPlan = _wkV;
+                S._weekPlanGeneratedAt = new Date().toISOString();
+              }
+            }
+            S.weekPlanValidated = true;
+            S.weekPlanValidatedISOWeek = currentISO;
+            if (_planHashNow) S._planHash = _planHashNow;
+            if (window.saveProfile) { try { window.saveProfile(); } catch(eS) {} }
+            if (window.render) window.render();
+          } catch(e) { console.error('[renderStep9] validate failed', e); }
+        }
+      }, hashChanged ? 'Régénérer et valider' : weekChanged ? 'Valider la nouvelle semaine' : 'Valider mon programme');
+      validateBox.appendChild(validateBtn);
+      p.appendChild(validateBox);
+    } else {
+      // Plan validé cette semaine — petit indicateur discret
+      var validated = h('div', {
+        style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:8px 12px;border:1px solid var(--border,#D8D8D0);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+      });
+      validated.appendChild(h('span', {}, '✓ Programme validé'));
+      validated.appendChild(h('button', {
+        style: 'background:none;border:none;padding:2px 6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;',
+        onclick: function() {
+          if (!confirm('Régénérer un nouveau plan ? Votre plan actuel sera remplacé.')) return;
+          try {
+            var _wkR = generateWeek();
+            if (Array.isArray(_wkR) && _wkR.length === 7) {
+              S.weekPlan = _wkR;
+              S._weekPlanGeneratedAt = new Date().toISOString();
+              S.weekPlanValidated = true;
+              if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
+              if (_planHashNow) S._planHash = _planHashNow;
+              if (window.saveProfile) { try { window.saveProfile(); } catch(eS) {} }
+              if (window.render) window.render();
+            }
+          } catch(e) { console.error('[renderStep9] regen failed', e); }
+        }
+      }, 'Régénérer'));
+      p.appendChild(validated);
+    }
+  })();
 
   // Day tabs
   var tabs = h('div', {'class': 'day-tabs'});
@@ -3587,6 +3703,9 @@ function renderStep9(p) {
         // Figer le hash pour éviter une régénération silencieuse au prochain renderStep9
         var _hR = window.getPlanHash ? window.getPlanHash() : '';
         if (_hR) S._planHash = _hR;
+        // FIX VALIDATION WEEKPLAN 2026-04 : valider après régénération explicite
+        S.weekPlanValidated = true;
+        if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
         // Sync plan nutrition vers Supabase
         if (window.SupaSync) {
           try {
