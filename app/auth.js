@@ -957,6 +957,13 @@ window.AUTH = {
     _currentSession = null;
     clearLegacySession();
     window._authInitialized = false;
+    // FIX F1 (contre-audit V4 2026-04) : reset _authReadyResolved sinon au re-login
+    // sans reload, isAuthRestoring() retourne false (car flag stale=true) →
+    // saveProfile écrit dans mtd_profile_anon pendant que la nouvelle session se charge.
+    // Reproduction du bug V4 d'origine.
+    // NOTE : on garde _useSupabase=true sinon isAuthRestoring() retourne false.
+    //        Le flag sera de toute façon re-positionné par _initAuth au re-login.
+    _authReadyResolved = false;
 
     // Désabonner la subscription Supabase onAuthStateChange
     if (_authStateSubscription) {
