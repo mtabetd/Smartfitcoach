@@ -282,22 +282,62 @@
           }
         }
 
-        html += '<div class="program-week" id="week-' + weekIdx + '" style="border:1px solid var(--border,#D8D8D0);border-left:4px solid var(--black,#0A0A09);margin-bottom:16px;border-radius:2px;overflow:hidden;box-shadow:0 2px 4px rgba(10,10,9,0.04);background:var(--ivory2,#F4F4F0);">';
-        html += '<div class="week-header" data-week="' + weekIdx + '" style="padding:20px;cursor:pointer;font-family:Georgia,serif;font-size:16px;display:flex;justify-content:space-between;align-items:center;background:var(--ivory2,#F4F4F0);border-bottom:1px solid var(--border,#D8D8D0);transition:all 0.2s ease;letter-spacing:-0.3px;">';
-        html += '<span>' + escapeHTML(week.title) + '</span>';
-        html += '<span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:6px 10px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);flex-shrink:0;">';
-        if (totalExercises > 0) {
-          html += '\u2713 ' + completedExercises + '/' + totalExercises + ' exercices';
-        }
-        html += '</span>';
+        // Split "Semaine 1 — Fondations" into number + subtitle for editorial typography
+        var weekNumStr = ('0' + weekIdx).slice(-2);
+        var weekSubtitle = week.title.replace(/^(SEMAINE|Semaine)\s+\d+\s*[—\-–:]?\s*/i, '').trim();
+        if (!weekSubtitle) weekSubtitle = 'Semaine ' + weekIdx;
+
+        // ───────── SEMAINE CONTAINER (un seul trait, pas de double border) ─────────
+        html += '<div class="program-week" id="week-' + weekIdx + '" style="background:var(--ivory,#FAF9F6);border-top:1px solid var(--black,#0A0A09);margin-bottom:32px;border-radius:2px;overflow:hidden;">';
+
+        // ───────── WEEK HEADER (grand numéro Georgia XXL + subtitle italique) ─────────
+        html += '<div class="week-header" data-week="' + weekIdx + '" style="padding:28px 22px 24px;cursor:pointer;background:var(--ivory,#FAF9F6);display:grid;grid-template-columns:auto 1fr auto;column-gap:20px;align-items:center;position:relative;">';
+
+        // Large numeral "01"
+        html += '<div aria-hidden="true" style="font-family:Georgia,serif;font-size:54px;line-height:0.9;font-weight:400;color:var(--black,#0A0A09);letter-spacing:-2px;">' + weekNumStr + '</div>';
+
+        // Label + subtitle stack
+        html += '<div style="display:flex;flex-direction:column;gap:6px;min-width:0;">';
+        html += '<span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:500;">Semaine</span>';
+        html += '<span style="font-family:Georgia,serif;font-style:italic;font-size:18px;line-height:1.2;color:var(--black,#0A0A09);letter-spacing:-0.2px;overflow:hidden;text-overflow:ellipsis;">' + escapeHTML(weekSubtitle) + '</span>';
         html += '</div>';
 
-        html += '<div class="week-body" style="padding:16px 20px;background:var(--ivory2,#F4F4F0);' + (isFirstWeek ? '' : 'display:none;') + '">';
+        // Counter chip (no border, no chip-box — just a numeric signature)
+        html += '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">';
+        if (totalExercises > 0) {
+          html += '<span style="font-family:Georgia,serif;font-size:20px;line-height:1;color:var(--black,#0A0A09);letter-spacing:-0.5px;"><span style="color:' + (completedExercises === totalExercises ? 'var(--green,#1A4A1A)' : 'var(--black,#0A0A09)') + ';">' + completedExercises + '</span><span style="color:var(--grey,#6B6B65);"> / ' + totalExercises + '</span></span>';
+          html += '<span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);">Exercices</span>';
+        }
+        html += '</div>';
+
+        html += '</div>'; // .week-header
+
+        // ───────── WEEK BODY ─────────
+        html += '<div class="week-body" style="padding:0 22px 28px;background:var(--ivory,#FAF9F6);' + (isFirstWeek ? '' : 'display:none;') + '">';
+
+        // Bocuse signature: 40px thin black rule under the header
+        html += '<div aria-hidden="true" style="width:40px;height:1px;background:var(--black,#0A0A09);margin:0 0 22px;"></div>';
 
         for (var dd3 = 0; dd3 < week.days.length; dd3++) {
           var day = week.days[dd3];
+
+          // Spacer between days (editorial breathing)
+          if (dd3 > 0) {
+            html += '<div aria-hidden="true" style="height:1px;background:var(--border,#D8D8D0);margin:28px 0 0;"></div>';
+          }
+
           if (day.title) {
-            html += '<div class="day-title" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green,#1A4A1A);font-weight:600;margin:16px 0 12px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,0.06));border-left:4px solid var(--green,#1A4A1A);border-radius:2px;">' + escapeHTML(day.title) + '</div>';
+            // Split day name from muscle groups if dash present
+            var dayParts = day.title.split(/\s*[—\-–:]\s*/);
+            var dayName = dayParts[0] || day.title;
+            var dayFocus = dayParts.slice(1).join(' — ').trim();
+
+            html += '<div class="day-title" style="margin:' + (dd3 === 0 ? '4px' : '22px') + ' 0 18px;display:flex;flex-direction:column;gap:4px;">';
+            html += '<span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:500;">' + escapeHTML(dayName) + '</span>';
+            if (dayFocus) {
+              html += '<span style="font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.3;color:var(--black,#0A0A09);letter-spacing:-0.1px;">' + escapeHTML(dayFocus) + '</span>';
+            }
+            html += '</div>';
           }
 
           var exerciseIdx = 0;
@@ -307,16 +347,41 @@
             if (isCheckable) {
               var pKey2 = getProgressKey(weekIdx, day.title, exerciseIdx);
               var isChecked = progressMap[pKey2] ? true : false;
-              html += '<div class="exercise-row" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border,#D8D8D0);border-radius:2px;background:var(--ivory,#FAF9F6);transition:all 0.2s ease;cursor:pointer;">';
-              html += '<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;width:100%;">';
-              html += '<input type="checkbox"' + (isChecked ? ' checked' : '') + ' data-week="' + weekIdx + '" data-day="' + escapeHTML(day.title) + '" data-exercise="' + exerciseIdx + '" style="margin-top:2px;flex-shrink:0;width:18px;height:18px;cursor:pointer;accent-color:var(--green,#1A4A1A);">';
-              html += '<span style="line-height:1.6;flex:1;letter-spacing:0.3px;' + (isChecked ? 'text-decoration:line-through;color:var(--grey,#6B6B65);opacity:0.65;' : '') + '">' + escapeHTML(exerciseLine) + '</span>';
+
+              // Parse "1. Développé couché — 4 × 8-10" into name + scheme
+              var cleanLine = exerciseLine.replace(/^\d+[\.\)]\s*/, '');
+              var exParts = cleanLine.split(/\s*[—\-–]\s*/);
+              var exName = exParts[0] || cleanLine;
+              var exScheme = exParts.slice(1).join(' — ').trim();
+              var exNumStr = ('0' + (exerciseIdx + 1)).slice(-2);
+
+              // ───── EXERCISE ROW (no box, just a fine left rule — livre gastronomique) ─────
+              html += '<label class="exercise-row" style="display:grid;grid-template-columns:18px auto 1fr;column-gap:12px;align-items:center;padding:12px 0 12px 14px;border-left:1px solid ' + (isChecked ? 'var(--black,#0A0A09)' : 'var(--border,#D8D8D0)') + ';cursor:pointer;transition:border-color 0.2s ease;margin-bottom:2px;">';
+
+              // Minimal square checkbox
+              html += '<span style="position:relative;display:inline-block;width:18px;height:18px;flex-shrink:0;">';
+              html += '<input type="checkbox"' + (isChecked ? ' checked' : '') + ' data-week="' + weekIdx + '" data-day="' + escapeHTML(day.title) + '" data-exercise="' + exerciseIdx + '" style="appearance:none;-webkit-appearance:none;width:18px;height:18px;margin:0;border:1px solid var(--black,#0A0A09);border-radius:2px;background:' + (isChecked ? 'var(--black,#0A0A09)' : 'var(--ivory,#FAF9F6)') + ';cursor:pointer;display:block;position:relative;transition:background 0.15s ease;">';
+              if (isChecked) {
+                html += '<span aria-hidden="true" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-55%) rotate(45deg);width:5px;height:9px;border-right:1.5px solid var(--ivory,#FAF9F6);border-bottom:1.5px solid var(--ivory,#FAF9F6);pointer-events:none;"></span>';
+              }
+              html += '</span>';
+
+              // Small numeral
+              html += '<span style="font-family:Georgia,serif;font-size:11px;color:var(--grey,#6B6B65);letter-spacing:1px;min-width:18px;">' + exNumStr + '</span>';
+
+              // Name + scheme
+              html += '<span style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.5;color:var(--black,#0A0A09);letter-spacing:0.1px;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 10px;' + (isChecked ? 'text-decoration:line-through;text-decoration-color:var(--grey,#6B6B65);color:var(--grey,#6B6B65);' : '') + '">';
+              html += '<span style="font-weight:500;">' + escapeHTML(exName) + '</span>';
+              if (exScheme) {
+                html += '<span style="font-family:Georgia,serif;font-style:italic;font-size:12px;color:var(--grey,#6B6B65);letter-spacing:0;">' + escapeHTML(exScheme) + '</span>';
+              }
+              html += '</span>';
+
               html += '</label>';
-              html += '</div>';
               exerciseIdx++;
             } else {
-              // Non-exercise line (note, rest info, etc.) — display as small note
-              html += '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:8px;padding:6px 14px;line-height:1.6;font-style:italic;border-left:2px solid var(--border,#D8D8D0);margin-left:14px;">' + escapeHTML(exerciseLine) + '</div>';
+              // Non-exercise line (note) — discreet italic, aligned to exercises grid
+              html += '<div style="font-family:Georgia,serif;font-style:italic;font-size:12px;color:var(--grey,#6B6B65);margin:6px 0 6px 14px;padding:4px 0;line-height:1.6;letter-spacing:0.1px;">' + escapeHTML(exerciseLine) + '</div>';
             }
           }
         }
@@ -345,7 +410,7 @@
       });
     }
 
-    // Checkbox progress save + strikethrough
+    // Checkbox progress save + strikethrough (editorial Bocuse styling)
     var checkboxes = container.querySelectorAll('.exercise-row input[type="checkbox"]');
     for (var j = 0; j < checkboxes.length; j++) {
       checkboxes[j].addEventListener('change', function(e) {
@@ -355,22 +420,51 @@
         var exerciseIdx = parseInt(cb.getAttribute('data-exercise'), 10);
         var checked = cb.checked;
         updateProgress(weekIdx, dayName, exerciseIdx, checked);
-        // Toggle strikethrough on sibling span
-        var span = cb.parentElement.querySelector('span');
-        if (span) {
-          span.style.textDecoration = checked ? 'line-through' : '';
-          span.style.color = checked ? 'var(--grey,#6B6B65)' : '';
+
+        // Visual state on the custom checkbox (fill + check mark)
+        var cbWrap = cb.parentElement;
+        cb.style.background = checked ? 'var(--black,#0A0A09)' : 'var(--ivory,#FAF9F6)';
+        var existingCheck = cbWrap.querySelector('span[aria-hidden="true"]');
+        if (checked && !existingCheck) {
+          var checkMark = document.createElement('span');
+          checkMark.setAttribute('aria-hidden', 'true');
+          checkMark.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-55%) rotate(45deg);width:5px;height:9px;border-right:1.5px solid var(--ivory,#FAF9F6);border-bottom:1.5px solid var(--ivory,#FAF9F6);pointer-events:none;';
+          cbWrap.appendChild(checkMark);
+        } else if (!checked && existingCheck) {
+          existingCheck.parentNode.removeChild(existingCheck);
         }
-        // Update counter in week header
+
+        // Row: left-rule turns black when checked, text strikethrough
+        var row = cb.closest('.exercise-row');
+        if (row) {
+          row.style.borderLeftColor = checked ? 'var(--black,#0A0A09)' : 'var(--border,#D8D8D0)';
+          // The text span is the last grid child of the row
+          var textSpan = row.children[row.children.length - 1];
+          if (textSpan) {
+            textSpan.style.textDecoration = checked ? 'line-through' : '';
+            textSpan.style.textDecorationColor = checked ? 'var(--grey,#6B6B65)' : '';
+            textSpan.style.color = checked ? 'var(--grey,#6B6B65)' : 'var(--black,#0A0A09)';
+          }
+        }
+
+        // Update counter in week header (new structure: two spans inside first .week-header child)
         var weekEl = cb.closest('.program-week');
         if (weekEl) {
           var allCbs = weekEl.querySelectorAll('input[type="checkbox"]');
           var total = allCbs.length;
           var done = 0;
           for (var k = 0; k < allCbs.length; k++) { if (allCbs[k].checked) done++; }
-          var counterSpan = weekEl.querySelector('.week-header span:last-child');
-          if (counterSpan && total > 0) {
-            counterSpan.textContent = '\u2713 ' + done + '/' + total + ' exercices';
+          var header = weekEl.querySelector('.week-header');
+          if (header && total > 0) {
+            // counter block is last child of the header grid
+            var counterBlock = header.children[header.children.length - 1];
+            if (counterBlock) {
+              var spans = counterBlock.querySelectorAll('span');
+              if (spans.length >= 1) {
+                var doneColor = (done === total) ? 'var(--green,#1A4A1A)' : 'var(--black,#0A0A09)';
+                spans[0].innerHTML = '<span style="color:' + doneColor + ';">' + done + '</span><span style="color:var(--grey,#6B6B65);"> / ' + total + '</span>';
+              }
+            }
           }
         }
       });
