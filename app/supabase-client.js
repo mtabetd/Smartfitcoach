@@ -138,7 +138,24 @@
         try {
           var legacy = {};
           var uidSuffix = '_' + userId;
-          var SYNC_PREFIXES = ['mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_', 'mtd_food_journal_', 'mtd_cf_1rm_', 'mtd_water_', 'mtd_muscu_session_', 'mtd_weight_history_'];
+          // FIX V2 2026-04 : étendu pour inclure les charges/progression/cycle muscu
+          // qui étaient PERDUES au changement de device (jamais sync cloud).
+          var SYNC_PREFIXES = [
+            // Historiques génériques
+            'mtd_perf_hist_', 'mtd_badges_', 'mtd_streak_',
+            'mtd_food_journal_', 'mtd_water_', 'mtd_weight_history_',
+            // Sport — séances loggées
+            'mtd_muscu_session_',
+            // Sport — charges & progression (étaient absents)
+            'mtd_muscu_weights_',       // charges de travail par exercice
+            'mtd_muscu_progression_',   // historique de progression
+            'mtd_muscu_strength_',      // profil de force (1RM estimés)
+            'mtd_muscu_week_',          // semaine actuelle dans le cycle
+            'mtd_muscu_cycle_',         // numéro de cycle
+            'mtd_muscu_start_',         // date de début du programme
+            // CrossFit
+            'mtd_cf_1rm_'
+          ];
           // Clés exactes sans UID (programme IA, progression, générations)
           var SYNC_EXACT = ['mtd_muscu_program', 'mtd_muscu_ia_progress', 'mtd_muscu_generations'];
           for (var i = 0; i < localStorage.length; i++) {

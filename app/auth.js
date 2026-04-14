@@ -747,15 +747,48 @@ window.AUTH = {
   /**
    * Logout the current user
    */
+  /**
+   * FIX V6 2026-04 : logout devient asynchrone — flush BLOQUANT avant cleanup.
+   * Avant : saveProfile fire-and-forget → signOut invalide token → upsert échoue
+   *         → reset S écrit les valeurs par défaut dans le cloud à la 2e itération.
+   * Maintenant : on attend la fin du save (timeout 5s pour ne pas bloquer l'UX si
+   *              Supabase est lent) AVANT signOut + reset. Données utilisateur préservées.
+   */
   logout: function() {
-    BLACKBOX.log('logout', { duration: BLACKBOX.getSessionMinutes() });
+    var self = this;
+    var _started = Date.now();
+    var _done = false;
+    var _runCleanup = function() {
+      if (_done) return; // anti-double-trigger (timeout vs then)
+      _done = true;
+      try { self._performLogoutCleanup(); }
+      catch (e) { console.warn('[AUTH] logout cleanup error:', e); }
+    };
 
-    // ── FLUSH IMMÉDIAT vers le cloud avant toute dé-initialisation ──
-    // Garantit que les dernières données (debounce 5s pas flushé) soient dans le cloud.
-    // Fire-and-forget : on n'attend pas, mais l'opération part avant le stop de la sync.
     if (window.SupaSync && typeof window.SupaSync.saveProfile === 'function') {
-      try { window.SupaSync.saveProfile(); } catch (e) { console.warn('[AUTH] logout flush error:', e); }
+      try {
+        var _p = window.SupaSync.saveProfile();
+        if (_p && typeof _p.then === 'function') {
+          _p.then(_runCleanup, _runCleanup);
+          // Timeout 5s : si Supabase trop lent, on continue le logout sans bloquer l'UX
+          setTimeout(_runCleanup, 5000);
+        } else {
+          _runCleanup();
+        }
+      } catch (e) {
+        console.warn('[AUTH] logout flush error:', e);
+        _runCleanup();
+      }
+    } else {
+      _runCleanup();
     }
+  },
+
+  /**
+   * Cleanup proprement dit (ex-corps de logout). Appelé par logout() après flush.
+   */
+  _performLogoutCleanup: function() {
+    BLACKBOX.log('logout', { duration: BLACKBOX.getSessionMinutes() });
 
     // Arreter la sync
     if (window.SupaSync) {

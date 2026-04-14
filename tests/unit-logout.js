@@ -36,9 +36,15 @@ test('auth.js ne supprime que les tokens sb-*', function() {
   assert.ok(sbOnly > 0, 'Clean-up sb-* absent');
 });
 
-test('auth.js appelle SupaSync.saveProfile() avant stopAutoSync (flush)', function() {
-  var flush = /FLUSH IMMÉDIAT|SupaSync\.saveProfile\(\)[\s\S]{0,300}stopAutoSync/;
-  assert.ok(flush.test(src), 'Flush pré-stopAutoSync absent');
+test('auth.js appelle SupaSync.saveProfile() avec attente avant cleanup (FIX V6)', function() {
+  // Depuis le FIX V6 2026-04 : logout() est devenu async — saveProfile retourne une
+  // promesse qu'on attend (ou timeout 5s) AVANT _performLogoutCleanup.
+  var flushPattern = /FLUSH BLOQUANT|FIX V6 2026-04/;
+  assert.ok(flushPattern.test(src), 'FIX V6 absent — flush non-bloquant détecté');
+  // Vérifier la présence du helper _performLogoutCleanup (split du body)
+  assert.ok(src.indexOf('_performLogoutCleanup') > 0, 'Helper _performLogoutCleanup absent');
+  // Vérifier la présence du timeout 5s
+  assert.ok(src.indexOf('setTimeout(_runCleanup, 5000)') > 0, 'Timeout 5s absent');
 });
 
 test('Commentaire "FIX BUG PERSISTANCE 2026-04" présent', function() {
