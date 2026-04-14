@@ -706,10 +706,11 @@ function renderProfilePage(container) {
        var row = h('div', {style: 'display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);'});
        var nameCol = h('div', {style: 'flex:1;min-width:0;'});
        nameCol.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;color:var(--black);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'}, name));
-       var starsStr = '';
-       for (var sj = 0; sj < stars; sj++) starsStr += '\u2605';
-       for (var sk = stars; sk < 3; sk++) starsStr += '\u2606';
-       nameCol.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#C9A227;letter-spacing:2px;margin-top:2px;'}, starsStr));
+       var starsRow = h('div', {style: 'display:flex;gap:4px;margin-top:2px;'});
+       for (var sj = 1; sj <= 3; sj++) {
+         starsRow.appendChild(h('span', {style: 'font-size:18px;line-height:1;transition:all 0.2s ease;' + (sj <= stars ? 'opacity:1' : 'opacity:0.2')}, '\u2605'));
+       }
+       nameCol.appendChild(starsRow);
        row.appendChild(nameCol);
        var removeBtn = h('button', {
          'aria-label': 'Retirer des favoris',

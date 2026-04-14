@@ -750,6 +750,13 @@ window.AUTH = {
   logout: function() {
     BLACKBOX.log('logout', { duration: BLACKBOX.getSessionMinutes() });
 
+    // ── FLUSH IMMÉDIAT vers le cloud avant toute dé-initialisation ──
+    // Garantit que les dernières données (debounce 5s pas flushé) soient dans le cloud.
+    // Fire-and-forget : on n'attend pas, mais l'opération part avant le stop de la sync.
+    if (window.SupaSync && typeof window.SupaSync.saveProfile === 'function') {
+      try { window.SupaSync.saveProfile(); } catch (e) { console.warn('[AUTH] logout flush error:', e); }
+    }
+
     // Arreter la sync
     if (window.SupaSync) {
       try { SupaSync.stopAutoSync(); } catch (e) {}
@@ -885,17 +892,18 @@ window.AUTH = {
       window.S.runningVO2max = null; window.S.triathlonFTP = null; window.S.triathlonRaceDate = null;
     }
 
-    // Nettoyer toutes les données localStorage spécifiques à l'utilisateur (sécurité appareil partagé)
+    // ── Nettoyer UNIQUEMENT les tokens Supabase (session fantôme) ──
+    // FIX BUG PERSISTANCE 2026-04 : on NE SUPPRIME PLUS les clés mtd_* car :
+    //   1. Elles sont keyées par uid → user2 qui log in sur le même device
+    //      ne verra pas les données de user1 (loadProfile lit mtd_profile_<uid2>)
+    //   2. Supprimer annulait la reconnexion rapide : à la re-connexion, le cloud
+    //      stale (debounce pas flushé) redevenait la seule source → perte de données
+    //   3. La RGPD "suppression compte" reste dispo via la fiche perso
     try {
-      var _uid = null;
-      try { var _sess = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); if (_sess && _sess.id) _uid = _sess.id; } catch(e2) {}
       var _keysToRemove = [];
       for (var _ki = 0; _ki < localStorage.length; _ki++) {
         var _k = localStorage.key(_ki);
-        if (_k && _k.indexOf('mtd_') === 0 && (_uid ? _k.indexOf(_uid) !== -1 : true)) {
-          _keysToRemove.push(_k);
-        }
-        // Nettoyer aussi les tokens Supabase pour éviter session fantôme
+        // Tokens Supabase uniquement (sb-*) → évite session fantôme entre comptes
         if (_k && _k.indexOf('sb-') === 0) {
           _keysToRemove.push(_k);
         }

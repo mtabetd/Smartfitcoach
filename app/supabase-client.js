@@ -415,11 +415,28 @@
           // Cas typique : sync partielle (debounce pas flushé) → cloud manque sportProgram/weekPlan alors
           // que le local les a. Voir diagnostic bug persistance 2026-04.
           var _PROTECTED_KEYS = {
-            sportProgram: 1, weekPlan: 1, muscuIAProgram: 1, runningProgram: 1,
-            cyclingProgram: 1, triathlonProgram: 1, hyroxProgram: 1, padelProgram: 1,
-            golfProgram: 1, yogaWeek: 1, muscuSessionLog: 1, musculationWeights: 1,
-            muscuProgressionHistory: 1, sessionHistory: 1, bonusExercises: 1,
-            weightHistory: 1, favoriteRecipes: 1, nutritionLog: 1
+            // Programmes sport (tous)
+            sportProgram: 1, runningProgram: 1, cyclingProgram: 1,
+            triathlonProgram: 1, hyroxProgram: 1, padelProgram: 1,
+            golfProgram: 1, yogaWeek: 1, calisthenicsWeek: 1,
+            // Nutrition
+            weekPlan: 1, favoriteRecipes: 1, nutritionLog: 1,
+            mealTimes: 1, mealsLogged: 1, shopChecked: 1,
+            // Historiques & progression sport
+            muscuSessionLog: 1, musculationWeights: 1,
+            muscuProgressionHistory: 1, sessionHistory: 1,
+            bonusExercises: 1, sportFocus: 1,
+            weightHistory: 1,
+            // Benchmarks & profils de force
+            crossfit1RM: 1, muscuStrengthProfile: 1,
+            hyroxBenchmarks: 1, crossfitBenchmarks: 1,
+            // CrossFit calendrier
+            cfProgress: 1,
+            // Smart Calendar
+            weeklyCalendar: 1,
+            // IA coach + jours d'entraînement
+            aiCoachHistory: 1, trainingDaysSelected: 1,
+            installations: 1, sportHobbies: 1
           };
           function _isEmptyValue(v) {
             if (v === null || v === undefined) return true;
