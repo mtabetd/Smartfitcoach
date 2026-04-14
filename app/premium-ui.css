@@ -3357,3 +3357,25 @@ body.dark-mode input[type="email"] {
   color: var(--black);
   border-color: var(--border);
 }
+
+/* === ONBOARDING — animations subtiles (COSMÉTIQUE 2026-04) === */
+
+/* Fade-in discret de la barre de progression quand on change d'étape */
+.onboarding-progress {
+  animation: onboardingFadeIn 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes onboardingFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Segment actif de la barre : pulsation subtile pour indiquer "tu es là" */
+.onboarding-progress .seg-active {
+  animation: segPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes segPulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(10,10,9,0.15); }
+  50%       { box-shadow: 0 0 0 2px rgba(10,10,9,0.25); }
+}
