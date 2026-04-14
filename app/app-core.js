@@ -2308,6 +2308,8 @@ window.S = {
   },
   weekPlan: null, selectedDay: 0, modalRecipe: null, showList: false, shopListOpen: false,
   smoothieBarOpen: false, modalSmoothie: null, _addMealModalSlot: null, _recipePicker: null,
+  // Recettes favorites : map { _id: 1|2|3 } — étoiles = priorité dans generateWeek
+  favoriteRecipes: {},
   // Food habits
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,
@@ -3545,13 +3547,19 @@ var txt=(r.i||'').toLowerCase();var parts=txt.split(',');return parts.length?par
 
 function pickRecipe(pool,targetK,used,dayProteins,weekProtBudget){if(!pool||!pool.length)return{n:'Repas libre',k:targetK,p:Math.round(targetK*0.3/4),g:Math.round(targetK*0.4/4),l:Math.round(targetK*0.3/9),f:0,lv:1,i:'Adaptez selon vos pr\u00e9f\u00e9rences',st:[],w:0,tags:[]};var av=pool.filter(function(r){return!used.has(r.n)});if(!av.length)av=pool.slice();
 // Score composite : proximité calorique + adéquation macros + diversité protéines
-var s=window.S||{};var goalKey=(s.goal!==null&&s.goal!==undefined&&GOALS[s.goal])?GOALS[s.goal].key:'maintain';var scored=av.map(function(r){var calScore=Math.abs((r.k||0)-targetK);var macroScore=0;var totalMacroKcal=(r.p||0)*4+(r.g||0)*4+(r.l||0)*9;if(totalMacroKcal>0){var protPct=(r.p||0)*4/totalMacroKcal;if((goalKey==='cut'||goalKey==='shred'||goalKey==='recomposition')&&protPct<0.25){macroScore=100;}else if((goalKey==='bulk'||goalKey==='lean_bulk')&&protPct>0.45){macroScore=50;}}
+var s=window.S||{};var goalKey=(s.goal!==null&&s.goal!==undefined&&GOALS[s.goal])?GOALS[s.goal].key:'maintain';
+// Bonus négatif pour les recettes favorites (étoiles 1-3) → remonte en tête du classement
+var _favMap=(s.favoriteRecipes&&typeof s.favoriteRecipes==='object')?s.favoriteRecipes:{};
+var scored=av.map(function(r){var calScore=Math.abs((r.k||0)-targetK);var macroScore=0;var totalMacroKcal=(r.p||0)*4+(r.g||0)*4+(r.l||0)*9;if(totalMacroKcal>0){var protPct=(r.p||0)*4/totalMacroKcal;if((goalKey==='cut'||goalKey==='shred'||goalKey==='recomposition')&&protPct<0.25){macroScore=100;}else if((goalKey==='bulk'||goalKey==='lean_bulk')&&protPct>0.45){macroScore=50;}}
 // Pénaliser si même source protéique déjà dans la journée
 var protCat=getRecipeProtein(r);var diversityPenalty=0;
 if(protCat&&dayProteins&&dayProteins.indexOf(protCat)!==-1)diversityPenalty=80;
 // Pénaliser si catégorie protéique sur-représentée dans la semaine
 if(protCat&&weekProtBudget){var cnt=weekProtBudget[protCat]||0;var maxW={volaille:3,poisson:3,viande_rouge:2,oeufs:3,legumineuses:3,tofu_seitan:2};if(cnt>=(maxW[protCat]||3))diversityPenalty+=60;else if(cnt>=2)diversityPenalty+=20;}
-return{recipe:r,score:calScore+macroScore+diversityPenalty};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
+// Bonus favori : 1⭐=-200, 2⭐=-400, 3⭐=-600 — domine calScore/macroScore/diversity
+var favStars=(r._id&&_favMap[r._id])?Math.max(1,Math.min(3,_favMap[r._id]|0)):0;
+var favBonus=favStars?-(favStars*200):0;
+return{recipe:r,score:calScore+macroScore+diversityPenalty+favBonus};});scored.sort(function(a,b){return a.score-b.score});var top=scored.slice(0,Math.min(5,scored.length));var picked=top[Math.floor(Math.random()*top.length)].recipe;if(picked){used.add(picked.n);var pc=getRecipeProtein(picked);if(pc){if(dayProteins)dayProteins.push(pc);if(weekProtBudget)weekProtBudget[pc]=(weekProtBudget[pc]||0)+1;}}return picked||{n:'Repas libre',k:targetK,p:0,g:0,l:0,f:0,lv:1,i:'',st:[],w:0,tags:[]}}
 // Applique le scaling sur mesure pour les recettes R201+ (format riche) et L0XX-L3XX (format legacy)
 function enrichWithScaling(recipe, targetKcal) {
   if (!recipe) return recipe;

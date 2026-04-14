@@ -3201,6 +3201,34 @@ function renderStep9(p) {
     for (var s = 0; s < lv; s++) stars += '\u2605';
     for (var s2 = lv; s2 < 4; s2++) stars += '\u2606';
     card.appendChild(h('div', {'class': 'meal-level'}, stars));
+    // ─── Rating favori (étoiles 1-3) : clic = set/unset → recette récurrente ───
+    if (r && r._id) {
+      var _fav = (S.favoriteRecipes && typeof S.favoriteRecipes === 'object') ? S.favoriteRecipes : {};
+      var _curRating = (_fav[r._id]|0) || 0;
+      var _favRow = h('div', {'class': 'meal-fav-row', style: 'display:flex;align-items:center;gap:6px;margin-top:6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65)'});
+      _favRow.appendChild(h('span', {style: 'margin-right:4px'}, _curRating ? 'Favori' : 'Noter'));
+      [1, 2, 3].forEach(function(n) {
+        var isFilled = _curRating >= n;
+        var starBtn = h('span', {
+          'aria-label': 'Favori ' + n + ' étoile' + (n>1?'s':''),
+          role: 'button',
+          tabindex: '0',
+          style: 'cursor:pointer;font-size:16px;line-height:1;padding:2px 3px;color:' + (isFilled ? '#C9A227' : 'var(--grey3,#C8C8C0)') + ';transition:color .15s',
+          onclick: function(e) {
+            e.stopPropagation();
+            if (!S.favoriteRecipes || typeof S.favoriteRecipes !== 'object') S.favoriteRecipes = {};
+            // Clic sur la note actuelle = retrait du favori ; sinon = nouvelle note
+            if ((S.favoriteRecipes[r._id]|0) === n) { delete S.favoriteRecipes[r._id]; }
+            else { S.favoriteRecipes[r._id] = n; }
+            if (window.saveProfile) { try { window.saveProfile(); } catch(ex) {} }
+            if (window.bb) bb('recipe_favorite', {id: r._id, stars: S.favoriteRecipes[r._id] || 0});
+            if (window.render) window.render();
+          }
+        }, isFilled ? '\u2605' : '\u2606');
+        _favRow.appendChild(starBtn);
+      });
+      card.appendChild(_favRow);
+    }
     card.appendChild(h('div', {'class': 'swap-btn', onclick: function(e) {
       e.stopPropagation();
       if (S.modalRecipe) return; // guard: no swap while recipe modal is open
