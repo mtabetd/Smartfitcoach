@@ -381,7 +381,9 @@ canvas.weight-chart{width:100%;height:200px}
 <script defer src="./app-core.js"></script>
 <script defer src="./triathlon-program.js"></script>
 <script defer src="./perf-history.js"></script>
-<script defer src="./dashboard.js"></script>
+<!-- FIX D12 2026-04 : dashboard.js legacy retiré (code mort).
+     window.TODAY (today-dashboard.js) remplace window.DASHBOARD depuis longtemps.
+     dashboard.js polluait le scope global avec computeStreak/firstName/h etc. -->
 <script defer src="./app-nutrition.js"></script>
 <script defer src="./calisthenics-program.js"></script>
 <script defer src="./app-sport.js"></script>

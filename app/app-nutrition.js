@@ -2469,35 +2469,49 @@ function renderStep8(p) {
   // Weight tracking (text only, no chart)
 
   // Weight input
+  // FIX D2 COHÉRENCE UNITÉS 2026-04 : aligner sur app-sport.js (utilise UNITS.toKg + range dynamique).
+  // Avant : input forcé en kg (min 40 max 160), stockage valeur brute → en weightUnit='lbs', l'user
+  //         saisissait 170 (= 77kg réel) et on stockait 170 kg → cible kcal corrompue x1.8.
+  // Maintenant : unité affichée = S.weightUnit, conversion vers kg avant stockage via UNITS.toKg.
+  var _wUnit = (window.UNITS && window.UNITS.weight) ? window.UNITS.weight : 'kg';
+  var _wRange = (window.UNITS && window.UNITS.weightRange) ? window.UNITS.weightRange() : { min: 30, max: 200, stepW: 0.1 };
+  var _wDisplay = (window.UNITS && window.UNITS.fromKg) ? window.UNITS.fromKg(S.weight || 0) : (S.weight || 0);
   var weightInputWrap = h('div', {style: 'display:flex;gap:8px;align-items:center;margin:12px 0'});
-  var weightIn = h('input', {'class': 'num-input', type: 'number', min: '40', max: '160', step: '0.1', placeholder: String(S.weight), style: 'font-size:18px;padding:10px;flex:1', inputmode: 'decimal'});
+  var weightIn = h('input', {'class': 'num-input', type: 'number', min: String(_wRange.min), max: String(_wRange.max), step: String(_wRange.stepW || 0.1), placeholder: String(Math.round(_wDisplay * 10) / 10), style: 'font-size:18px;padding:10px;flex:1', inputmode: 'decimal'});
   weightInputWrap.appendChild(weightIn);
-  weightInputWrap.appendChild(h('span', {'class': 'num-unit'}, 'kg'));
+  weightInputWrap.appendChild(h('span', {'class': 'num-unit'}, _wUnit));
   weightInputWrap.appendChild(h('button', {'class': 'btn-primary', style: 'width:auto;padding:10px 20px;margin-top:0', onclick: function() {
     var v = parseFloat(weightIn.value);
-    if (isNaN(v) || v < 30 || v > 200) return;
-    if (!S.weightHistory) S.weightHistory = [];
+    if (isNaN(v) || v < _wRange.min || v > _wRange.max) return;
+    // Convertir vers kg pour stockage interne (aligné app-sport.js:7098-7114)
+    var vKg = (window.UNITS && window.UNITS.toKg) ? window.UNITS.toKg(v) : v;
+    // FIX D3 COHÉRENCE WEIGHT HISTORY 2026-04 : localStorage = source unique.
+    // Avant : push dans S.weightHistory puis écriture localStorage — mais si sport
+    //         avait écrit entre-temps, S.weightHistory était stale → entries perdues.
+    // Maintenant : recharger depuis localStorage → append → cap 52 → écrire →
+    //              synchroniser S.weightHistory avec la même référence.
     var today = new Date().toISOString().split('T')[0];
-    S.weightHistory.push({date: today, weight: v});
-    // Cap to 52 entries (1 year of weekly weigh-ins) to limit localStorage size
-    if (S.weightHistory.length > 52) S.weightHistory = S.weightHistory.slice(-52);
-    S.weight = v;
-    // Persist to localStorage
-    try {
-      var uid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
-      localStorage.setItem('mtd_weight_history_' + uid, JSON.stringify(S.weightHistory));
-    } catch(e) {}
-    // Sync poids vers Supabase
-    if (window.SupaSync) { try { SupaSync.saveWeight(today, v); } catch(e) { console.warn('[nutrition] saveWeight error:', e); } }
-    bb('weight_logged', {weight: v});
+    var _uidN = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+    var _keyN = 'mtd_weight_history_' + _uidN;
+    var _histN = []; try { _histN = JSON.parse(localStorage.getItem(_keyN) || '[]'); } catch(eh) { _histN = []; }
+    _histN.push({date: today, weight: vKg});
+    if (_histN.length > 52) _histN = _histN.slice(-52);
+    try { localStorage.setItem(_keyN, JSON.stringify(_histN)); } catch(e) {}
+    // Sync S.weightHistory avec localStorage (source de vérité unique)
+    S.weightHistory = _histN.slice();
+    S.weight = vKg;
+    // Sync poids vers Supabase (toujours en kg — cohérence cross-device)
+    if (window.SupaSync) { try { SupaSync.saveWeight(today, vKg); } catch(e) { console.warn('[nutrition] saveWeight error:', e); } }
+    bb('weight_logged', {weight: vKg});
     if (window.GAMIFICATION && window.GAMIFICATION.unlockBadge) {
       window.GAMIFICATION.unlockBadge('first_weigh');
       if (S.weightHistory.length >= 10) window.GAMIFICATION.unlockBadge('weight_10');
       if (S.targetWeight && v <= S.targetWeight && GOALS[S.goal] && (GOALS[S.goal].key === 'cut' || GOALS[S.goal].key === 'shred')) window.GAMIFICATION.unlockBadge('weight_goal');
       if (S.weightHistory.length >= 2 && S.weightHistory[0]) {
         var first = S.weightHistory[0].weight;
-        if (first != null && first - v >= 1) window.GAMIFICATION.unlockBadge('first_kg_lost');
-        if (first != null && first - v >= 5) window.GAMIFICATION.unlockBadge('five_kg');
+        // Comparaison en kg (cohérence avec stockage interne kg)
+        if (first != null && first - vKg >= 1) window.GAMIFICATION.unlockBadge('first_kg_lost');
+        if (first != null && first - vKg >= 5) window.GAMIFICATION.unlockBadge('five_kg');
       }
     }
     window.render();

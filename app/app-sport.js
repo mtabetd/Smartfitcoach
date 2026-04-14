@@ -7104,17 +7104,22 @@ function renderWeightChartSport(container) {
  var wRange = window.UNITS ? window.UNITS.weightRange() : {min: 30, max: 300};
  if (!isNaN(v) && v >= wRange.min && v <= wRange.max) {
  v = vKg; // always store in kg
+ // FIX D3 COHÉRENCE WEIGHT HISTORY 2026-04 : localStorage = source unique.
+ // Avant : sport pushait dans `hist` LOCAL + dupliquait dans S.weightHistory
+ //         (qui n'avait pas été rechargé) → désync avec nutrition et dashboard.
+ // Maintenant : recharger depuis localStorage → append → cap 52 → écrire →
+ //              synchroniser S.weightHistory avec la même référence.
  var key = 'mtd_weight_history_' + userId;
  var hist = []; try { hist = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { hist = []; }
  var today = new Date().toISOString().split('T')[0];
  hist.push({date: today, weight: v});
+ if (hist.length > 52) hist = hist.slice(-52); // cap 1 an
  try { localStorage.setItem(key, JSON.stringify(hist)); } catch(e) { console.warn('[weight_history] localStorage error:', e); }
+ // Sync S.weightHistory avec localStorage (seul source de vérité)
+ S.weightHistory = hist.slice();
  // Sync poids vers Supabase
  if (window.SupaSync) SupaSync.saveWeight(today, v);
  S.weight = v;
- // Sync with S.weightHistory
- if (!S.weightHistory) S.weightHistory = [];
- S.weightHistory.push({date: today, weight: v});
  window.BLACKBOX && window.BLACKBOX.log('weight_logged', {weight: v, from: 'sport'});
  if (window.GAMIFICATION) {
  GAMIFICATION.unlockBadge('first_weigh');

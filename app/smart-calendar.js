@@ -39,6 +39,22 @@
       if (S.sportType === 'yoga') {
         sports.push({ value: 'yoga', label: 'Yoga' });
       }
+      // FIX D7 COHÉRENCE SMART-CALENDAR 2026-04 : ajout des 4 sports manquants
+      // Avant : hyrox, triathlon, calisthenics, cycling absents → users sur ces disciplines
+      //         voyaient leur jour forcé à 'repos' → getDayType() isTraining=false
+      //         → split calorique faux (pas de bonus +200 kcal post-séance).
+      if (S.sportType === 'hyrox') {
+        sports.push({ value: 'hyrox', label: 'Hyrox' });
+      }
+      if (S.sportType === 'triathlon') {
+        sports.push({ value: 'triathlon', label: 'Triathlon' });
+      }
+      if (S.sportType === 'calisthenics') {
+        sports.push({ value: 'calisthenics', label: 'Calisthénie' });
+      }
+      if (S.sportType === 'cycling') {
+        sports.push({ value: 'cycling', label: 'Cyclisme' });
+      }
     }
     sports.push({ value: 'autre', label: 'Autre' });
     return sports;

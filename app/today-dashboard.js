@@ -314,16 +314,40 @@ function getNextSportDay() {
     return { index: 0, day: { name: 'Programme sur mesure', exercises: [] }, kind: 'ia' };
   }
 
+  // FIX D1 COHÉRENCE MULTI-SPORTS 2026-04 : dispatcher par sportType
+  // Avant : le dashboard ne lisait QUE S.sportProgram (= muscu/crossfit statique).
+  //         Pour running/hyrox/triathlon/cycling/calisthenics → affichait "Aucun programme"
+  //         alors que la vue sport dédiée avait bien un programme.
+  // Maintenant : si sportType a un programme dédié → on retourne un placeholder
+  //             { kind: <sport> } pour que la carte affiche "Voir mon programme →"
+  var todayIdx = (new Date().getDay() + 6) % 7;
+  var sportsWithOwnProgram = {
+    running:       { key: 'runningProgram',      label: 'running' },
+    hyrox:         { key: 'hyroxProgram',        label: 'Hyrox' },
+    triathlon:     { key: 'triathlonProgram',    label: 'triathlon' },
+    cycling:       { key: 'cyclingProgram',      label: 'cycling' },
+    calisthenics:  { key: 'calisthenicsProgram', label: 'calisthenics' },
+    padel:         { key: 'padelProgram',        label: 'padel' },
+    golf:          { key: 'golfProgram',         label: 'golf' },
+    yoga:          { key: 'yogaWeek',            label: 'yoga' }
+  };
+  var sportInfo = sportsWithOwnProgram[S.sportType];
+  if (sportInfo) {
+    var prog = S[sportInfo.key];
+    var hasProg = Array.isArray(prog) ? prog.length > 0 : !!prog;
+    if (hasProg) {
+      return {
+        index: todayIdx,
+        day: { name: 'Programme ' + sportInfo.label, exercises: [] },
+        kind: S.sportType
+      };
+    }
+  }
+
   var program = S.sportProgram;
   if (!program || !program.length) return null;
 
   // FIX COHÉRENCE SPORT 2026-04 : bug #1 — calcul du jour COURANT (pas selectedSportDay).
-  // Avant : si user cliquait "Jour 3" dans la vue sport puis revenait au dashboard,
-  //         le dashboard affichait "Jour 3" même si aujourd'hui c'est "Jour 1".
-  // Maintenant :
-  //   - Si trainingDaysSelected défini, on mappe todayIdx → position dans le programme
-  //   - Sinon, fallback sur todayIdx direct (clamped à program.length)
-  var todayIdx = (new Date().getDay() + 6) % 7;
   var idx = 0;
   if (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > 0) {
     var pos = S.trainingDaysSelected.indexOf(todayIdx);
@@ -1340,17 +1364,23 @@ function renderCardSport() {
   // Estimated duration heuristic
   var _estMins = exCount <= 0 ? null : (exCount <= 4 ? 30 : exCount <= 6 ? 45 : 60);
 
-  // Week progress: count logged sessions this week vs weekly target
+  // FIX D11 COHÉRENCE SESSION COUNT 2026-04 : scanner muscuSessionLog + sessionHistory
+  // Avant : comptait UNIQUEMENT S.muscuSessionLog → runner/triathlète/crossfit voyait 0/3
+  //         car leurs sessions vont dans S.sessionHistory (voir app-sport.js:6929+).
+  // Maintenant : union des deux → le dashboard compte TOUTES les sessions loggées.
   var _weekDone = 0;
   try {
     var _log = S.muscuSessionLog || {};
+    var _history = S.sessionHistory || {};
     var _now = new Date();
     var _dow = (_now.getDay() + 6) % 7;
     var _mon = new Date(_now); _mon.setDate(_now.getDate() - _dow);
     for (var _di = 0; _di <= _dow; _di++) {
       var _d = new Date(_mon); _d.setDate(_mon.getDate() + _di);
       var _ds = _d.toISOString().slice(0, 10);
-      if (_log[_ds] && Object.keys(_log[_ds]).length > 0) _weekDone++;
+      var hasMuscu = _log[_ds] && Object.keys(_log[_ds]).length > 0;
+      var hasSession = _history[_ds] && _history[_ds].date === _ds;
+      if (hasMuscu || hasSession) _weekDone++;
     }
   } catch(e) {}
   var _weekTarget = (S.trainingDaysSelected && S.trainingDaysSelected.length > 0) ? S.trainingDaysSelected.length : (S.sportDays || 3);
