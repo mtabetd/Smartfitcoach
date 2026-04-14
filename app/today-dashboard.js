@@ -51,6 +51,45 @@ function card(extraStyle) {
   });
 }
 
+// ─── EMPTY STATE ILLUSTRATIONS (COSMÉTIQUE 2026-04) ────────────────
+// SVG monochrome trait 1px noir — remplace les emojis qui cassent la charte Hermès.
+function emptyIllu(type) {
+  var ns = 'http://www.w3.org/2000/svg';
+  var wrap = h('div', {style: 'display:flex;justify-content:center;margin-bottom:12px;'});
+  var svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('width', '72'); svg.setAttribute('height', '72');
+  svg.setAttribute('viewBox', '0 0 72 72');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', '#0A0A09');
+  svg.setAttribute('stroke-width', '1.2');
+  svg.setAttribute('stroke-linecap', 'round');
+
+  if (type === 'nutrition') {
+    // Assiette vide : cercle extérieur + cercle intérieur grisé + 4 repères
+    var paths = [
+      '<circle cx="36" cy="36" r="26"/>',
+      '<circle cx="36" cy="36" r="18" stroke="#D8D8D0"/>',
+      '<line x1="36" y1="10" x2="36" y2="16"/>',
+      '<line x1="36" y1="56" x2="36" y2="62"/>',
+      '<line x1="10" y1="36" x2="16" y2="36"/>',
+      '<line x1="56" y1="36" x2="62" y2="36"/>'
+    ];
+    svg.innerHTML = paths.join('');
+  } else if (type === 'sport') {
+    // Haltère : barre centrale + 4 blocs (poids)
+    var paths2 = [
+      '<line x1="8" y1="36" x2="64" y2="36" stroke-width="1.4"/>',
+      '<rect x="13" y="28" width="5" height="16" rx="1"/>',
+      '<rect x="54" y="28" width="5" height="16" rx="1"/>',
+      '<rect x="22" y="24" width="4" height="24" rx="1"/>',
+      '<rect x="46" y="24" width="4" height="24" rx="1"/>'
+    ];
+    svg.innerHTML = paths2.join('');
+  }
+  wrap.appendChild(svg);
+  return wrap;
+}
+
 function eyebrow(text) {
   return h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'
@@ -357,28 +396,36 @@ function renderCardNextMeal() {
     timeLabel = "dans " + h2 + "h" + (m2 > 0 ? String(m2).padStart(2, '0') : '');
   }
 
-  var c = card('border-left:3px solid var(--black,#0A0A09);background:var(--ivory,#FAF9F6);');
+  // COSMÉTIQUE 2026-04 : carte Prochain repas avec chip "dans Xh" premium
+  var c = card('border-left:3px solid var(--black,#0A0A09);background:var(--ivory,#FAF9F6);position:relative;');
   c.appendChild(eyebrow('PROCHAIN REPAS'));
 
-  var titleRow = h('div', { style: 'display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;' });
-  var titleEl = h('div', { style: 'font-family:Georgia,serif;font-size:20px;font-weight:normal;' });
-  titleEl.textContent = slot.label;
-  var timeEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:0.5px;white-space:nowrap;margin-left:8px;' });
-  timeEl.textContent = timeLabel + ' \u00b7 ' + slot.time;
-  titleRow.appendChild(titleEl);
-  titleRow.appendChild(timeEl);
-  c.appendChild(titleRow);
+  // Chip "DANS Xh" en position absolue top-right (signature Hermès)
+  var chipEl = h('div', {
+    style: 'position:absolute;top:14px;right:14px;padding:4px 10px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;border-radius:2px;'
+  });
+  chipEl.textContent = timeLabel;
+  c.appendChild(chipEl);
 
-  var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:12px;line-height:1.4;' });
+  // Titre du slot en Georgia 22px (premium)
+  var titleEl = h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;margin-bottom:2px;padding-right:80px;' });
+  titleEl.textContent = slot.label;
+  c.appendChild(titleEl);
+
+  // Nom du plat en Georgia italique 14px (ton menu Bocuse)
+  var nameEl = h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--grey,#6B6B65);margin-bottom:10px;line-height:1.4;' });
   nameEl.textContent = meal.n;
   c.appendChild(nameEl);
 
-  if (meal.k) {
-    var kcalEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey2,#9A9A90);margin-bottom:12px;' });
-    kcalEl.textContent = Math.round(meal.k) + '\u00a0kcal' +
-      (meal.p ? '\u00a0\u00b7\u00a0' + Math.round(meal.p) + 'g prot.' : '') +
-      (meal.g ? '\u00a0\u00b7\u00a0' + Math.round(meal.g) + 'g glucides' : '');
-    c.appendChild(kcalEl);
+  // Heure prévue + kcal/macros sur une ligne discrète
+  if (meal.k || slot.time) {
+    var detailsEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey2,#9A9A90);margin-bottom:14px;' });
+    var parts = [];
+    if (slot.time) parts.push(slot.time);
+    if (meal.k) parts.push(Math.round(meal.k) + ' kcal');
+    if (meal.p) parts.push(Math.round(meal.p) + 'g prot.');
+    detailsEl.textContent = parts.join('  ·  ');
+    c.appendChild(detailsEl);
   }
 
   var todayIdx = (new Date().getDay() + 6) % 7;
@@ -504,6 +551,125 @@ function renderCardBonjour(S) {
 }
 
 // ─── RENDER CARD 2 — Macros du jour ───
+// ─── CARTE HERO KCAL — ring XXL Georgia (FIX COSMÉTIQUE 2026-04) ──────────
+// Affiche un ring 120px avec le nombre de kcal consommées du jour en Georgia 28px
+// au centre, et les 3 anneaux macros (P/G/L) 48px en dessous.
+// Signature éditoriale en pleine largeur — pas de carte bordée.
+function renderCardHeroKcal() {
+  var _S3 = window.S || {};
+  // Hide si mode sport pur (pas de donnée nutrition à afficher)
+  if (_S3.appMode === 'sport') return null;
+
+  var calorieTarget = getCalorieTarget();
+  if (calorieTarget <= 0) return null; // pas encore onboarded
+
+  // Calculer totals + macros (logique alignée avec renderCardMacros)
+  var totals = getTodayTotals();
+  var macroTargets = getMacroTargets();
+  // Si un weekPlan du jour existe, préférer ses macros (plan nutrition)
+  if (Array.isArray(_S3.weekPlan) && _S3.weekPlan.length >= 7) {
+    var _ti = (new Date().getDay() + 6) % 7;
+    var _dp = _S3.weekPlan[_ti];
+    if (_dp && typeof _dp.kcal === 'number' && _dp.kcal > 0) {
+      calorieTarget = _dp.kcal;
+      var _p=0,_g=0,_l=0;
+      ['breakfast','lunch','snack','dinner'].forEach(function(sl) {
+        var r = _dp[sl]; if (r) { _p += (r.p||0); _g += (r.g||0); _l += (r.l||0); }
+      });
+      if (_p>0 || _g>0 || _l>0) macroTargets = { p: Math.round(_p), g: Math.round(_g), l: Math.round(_l) };
+    }
+  }
+
+  var kcalConsumed = Math.round(totals.kcal);
+  var pct = calorieTarget > 0 ? Math.min(100, Math.round((kcalConsumed / calorieTarget) * 100)) : 0;
+
+  // Container pleine largeur, signature éditoriale (pas de carte bordée)
+  var hero = h('div', {style: 'padding:24px 0 16px;margin-bottom:16px;text-align:center;border-bottom:1px solid var(--border,#D8D8D0);'});
+
+  // Label top
+  hero.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:14px;'}, "Aujourd'hui"));
+
+  // Ring SVG XXL (120px)
+  var ns = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('width', '132'); svg.setAttribute('height', '132');
+  svg.setAttribute('viewBox', '0 0 132 132');
+  svg.setAttribute('style', 'display:block;margin:0 auto;');
+
+  var r = 58, c = 2 * Math.PI * r, off = c - (pct/100)*c;
+  var bg = document.createElementNS(ns, 'circle');
+  bg.setAttribute('cx','66'); bg.setAttribute('cy','66'); bg.setAttribute('r', r);
+  bg.setAttribute('fill','none'); bg.setAttribute('stroke','#E5E4DE'); bg.setAttribute('stroke-width','3');
+  svg.appendChild(bg);
+
+  var fg = document.createElementNS(ns, 'circle');
+  fg.setAttribute('cx','66'); fg.setAttribute('cy','66'); fg.setAttribute('r', r);
+  fg.setAttribute('fill','none'); fg.setAttribute('stroke','#0A0A09'); fg.setAttribute('stroke-width','3');
+  fg.setAttribute('stroke-linecap','butt');
+  fg.setAttribute('stroke-dasharray', c); fg.setAttribute('stroke-dashoffset', c);
+  fg.setAttribute('transform','rotate(-90 66 66)');
+  fg.style.transition = 'stroke-dashoffset 0.8s ease';
+  svg.appendChild(fg);
+
+  // Chiffre central Georgia 28px
+  var tNum = document.createElementNS(ns, 'text');
+  tNum.setAttribute('x','66'); tNum.setAttribute('y','64');
+  tNum.setAttribute('text-anchor','middle'); tNum.setAttribute('dominant-baseline','middle');
+  tNum.setAttribute('fill','#0A0A09'); tNum.setAttribute('font-family','Georgia,serif');
+  tNum.setAttribute('font-size','32'); tNum.setAttribute('font-weight','normal');
+  tNum.textContent = String(kcalConsumed);
+  svg.appendChild(tNum);
+
+  // Subtitle "/ 2200 kcal"
+  var tSub = document.createElementNS(ns, 'text');
+  tSub.setAttribute('x','66'); tSub.setAttribute('y','84');
+  tSub.setAttribute('text-anchor','middle'); tSub.setAttribute('dominant-baseline','middle');
+  tSub.setAttribute('fill','#6B6B65'); tSub.setAttribute('font-family','Helvetica Neue,Arial,sans-serif');
+  tSub.setAttribute('font-size','9'); tSub.setAttribute('letter-spacing','2');
+  tSub.textContent = '/ ' + Math.round(calorieTarget) + ' KCAL';
+  svg.appendChild(tSub);
+
+  hero.appendChild(svg);
+  // Animer l'anneau après render (50ms) — même pattern que svgRing existant
+  setTimeout(function() { fg.setAttribute('stroke-dashoffset', off); }, 50);
+
+  // Delta ligne — calories restantes (accent vert si positif, orange si dépassement)
+  var netRem = Math.round(calorieTarget - kcalConsumed);
+  var deltaStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:12px;font-weight:500;';
+  var deltaText, deltaColor;
+  if (netRem > 0) {
+    deltaColor = 'var(--accent,#1A4A1A)';
+    deltaText = netRem + ' kcal restantes';
+  } else if (netRem === 0) {
+    deltaColor = 'var(--grey,#6B6B65)';
+    deltaText = 'Objectif atteint';
+  } else {
+    deltaColor = 'var(--orange,#6A4A1A)';
+    deltaText = Math.abs(netRem) + ' kcal au-dessus';
+  }
+  hero.appendChild(h('div', {style: deltaStyle + 'color:' + deltaColor + ';'}, deltaText));
+
+  // Mini-rings macros (P / G / L) en ligne, 48px chacun
+  if (macroTargets && (macroTargets.p > 0 || macroTargets.g > 0 || macroTargets.l > 0) && window.svgRing) {
+    var rings = h('div', {style: 'display:flex;justify-content:center;gap:20px;margin-top:18px;'});
+    if (macroTargets.p > 0) {
+      var pPct = Math.min(100, totals.p > 0 ? Math.round(totals.p / macroTargets.p * 100) : 0);
+      rings.appendChild(window.svgRing(52, 5, pPct, '#0A0A09', 'Protéines', Math.round(totals.p)));
+    }
+    if (macroTargets.g > 0) {
+      var gPct = Math.min(100, totals.g > 0 ? Math.round(totals.g / macroTargets.g * 100) : 0);
+      rings.appendChild(window.svgRing(52, 5, gPct, '#6B6B65', 'Glucides', Math.round(totals.g)));
+    }
+    if (macroTargets.l > 0) {
+      var lPct = Math.min(100, totals.l > 0 ? Math.round(totals.l / macroTargets.l * 100) : 0);
+      rings.appendChild(window.svgRing(52, 5, lPct, '#6A4A1A', 'Lipides', Math.round(totals.l)));
+    }
+    hero.appendChild(rings);
+  }
+
+  return hero;
+}
+
 function renderCardMacros() {
   // Sport-only : pas de données nutrition, masquer la carte entièrement
   var _S2 = window.S || {};
@@ -629,9 +795,9 @@ function renderCardRepas() {
 
   if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) {
     // No plan — empty state engageant
-    var _emptyCard = h('div', {style: 'text-align:center;padding:24px 16px;'});
-    _emptyCard.appendChild(h('div', {style: 'font-size:28px;margin-bottom:8px;'}, '🍽'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:6px;'}, 'Aucun plan nutritionnel'));
+    var _emptyCard = h('div', {style: 'text-align:center;padding:32px 16px;'});
+    _emptyCard.appendChild(emptyIllu('nutrition'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;font-weight:normal;'}, 'Aucun plan nutritionnel'));
     _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Crée ton programme personnalisé\nen 5 minutes'));
     _emptyCard.appendChild(h('button', {
       style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
@@ -938,34 +1104,25 @@ function renderCardStreak() {
 
   // ── Streak block ──
   if (streak > 0) {
+    // COSMÉTIQUE 2026-04 : streak chiffre XXL Georgia centré (hero typo)
     var streakWrap = h('div', {
-      style: 'display:flex;align-items:center;gap:12px;margin-bottom:' + (lastBadge ? '16px' : '0') + ';'
+      style: 'text-align:center;margin-bottom:' + (lastBadge ? '18px' : '8px') + ';padding:8px 0;'
     });
 
-    // Flame emoji
-    var flameEl = h('div', {
-      style: 'font-size:28px;line-height:1;flex-shrink:0;'
-    });
-    flameEl.textContent = streak >= 7 ? '🏆' : '🔥';
-
-    // Streak info
-    var streakInfo = h('div', { style: 'flex:1;' });
-
+    // Chiffre XXL Georgia 64px — le hero
     var streakNum = h('div', {
-      style: 'font-family:Georgia,serif;font-size:26px;font-weight:normal;line-height:1;letter-spacing:-0.5px;color:var(--black);'
+      style: 'font-family:Georgia,serif;font-size:64px;font-weight:normal;line-height:0.95;letter-spacing:-2px;color:var(--black);margin-bottom:4px;'
     });
-    streakNum.textContent = streak + ' jour' + (streak > 1 ? 's' : '');
+    streakNum.textContent = String(streak);
 
+    // Label discret sous le chiffre
     var streakLabel = h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-top:2px;'
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey);'
     });
-    streakLabel.textContent = 'consécutif' + (streak > 1 ? 's' : '');
+    streakLabel.textContent = streak > 1 ? 'Jours consécutifs' : 'Premier jour';
 
-    streakInfo.appendChild(streakNum);
-    streakInfo.appendChild(streakLabel);
-
-    streakWrap.appendChild(flameEl);
-    streakWrap.appendChild(streakInfo);
+    streakWrap.appendChild(streakNum);
+    streakWrap.appendChild(streakLabel);
     c.appendChild(streakWrap);
 
     // Message perte d'aversion — si streak ≥ 3 jours, rappelle l'enjeu
@@ -981,7 +1138,7 @@ function renderCardStreak() {
     var _sfS = window.S || {};
     if (_sfS.streakFreezeAvailable !== false) {
       var _freezeTag = h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4A7A8A;border:1px solid #B0D4E0;background:rgba(176,212,224,0.15);padding:4px 10px;display:inline-block;margin-top:-4px;margin-bottom:8px;'
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);border:1px solid var(--border,#D8D8D0);background:transparent;padding:4px 10px;display:inline-block;margin-top:-4px;margin-bottom:8px;border-radius:2px;'
       }, '\u2744 1 joker disponible');
       c.appendChild(_freezeTag);
     }
@@ -1113,9 +1270,9 @@ function renderCardSport() {
     if (S && (S.appMode === 'nutrition')) return null; // nutrition-only mode: ne pas afficher
     var _sportEmptyCard = card();
     _sportEmptyCard.appendChild(eyebrow('SPORT'));
-    var _sportEmpty = h('div', {style: 'text-align:center;padding:8px 0 4px;'});
-    _sportEmpty.appendChild(h('div', {style: 'font-size:24px;margin-bottom:8px;'}, '\uD83C\uDFCB'));
-    _sportEmpty.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:6px;'}, 'Aucun programme sportif'));
+    var _sportEmpty = h('div', {style: 'text-align:center;padding:24px 0 12px;'});
+    _sportEmpty.appendChild(emptyIllu('sport'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;font-weight:normal;'}, 'Aucun programme sportif'));
     _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:14px;line-height:1.5;'}, 'Choisis ton sport et obtiens\nun programme sur mesure'));
     _sportEmpty.appendChild(h('button', {
       style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
@@ -1184,28 +1341,28 @@ function renderCardSport() {
   nameEl.textContent = 'Jour\u00a0' + (idx + 1) + '\u00a0\u2014\u00a0' + dayName;
   c.appendChild(nameEl);
 
-  // Stats row: exercices · durée · semaine
-  var _statsRow = h('div', { style: 'display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap;' });
-  if (exCount > 0) {
-    var _exEl = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey2,#9A9A90);letter-spacing:0.5px;' });
-    _exEl.textContent = exCount + ' ex.';
-    _statsRow.appendChild(_exEl);
+  // COSMÉTIQUE 2026-04 : Grid 3-stats Georgia (ex / durée / semaine) — signature premium
+  if (exCount > 0 || _estMins || _weekTarget > 0) {
+    var _statsRow = h('div', {
+      style: 'display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--border,#D8D8D0);border-radius:2px;margin:12px 0;background:var(--ivory,#FAF9F6);'
+    });
+    function _statCell(val, label, isLast) {
+      var cell = h('div', {
+        style: 'padding:12px 8px;text-align:center;' + (isLast ? '' : 'border-right:1px solid var(--border,#D8D8D0);')
+      });
+      cell.appendChild(h('div', {
+        style: 'font-family:Georgia,serif;font-size:22px;color:var(--black,#0A0A09);line-height:1;font-weight:normal;'
+      }, String(val)));
+      cell.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:4px;'
+      }, label));
+      return cell;
+    }
+    _statsRow.appendChild(_statCell(exCount || '—', 'Exercices', false));
+    _statsRow.appendChild(_statCell(_estMins ? ('~' + _estMins + "'") : '—', 'Durée', false));
+    _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', 'Semaine', true));
+    c.appendChild(_statsRow);
   }
-  if (_estMins) {
-    var _sep1 = h('span', { style: 'font-size:9px;color:var(--border);' }, '\u00b7');
-    var _durEl = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey2,#9A9A90);' });
-    _durEl.textContent = '~' + _estMins + ' min';
-    _statsRow.appendChild(_sep1);
-    _statsRow.appendChild(_durEl);
-  }
-  if (_weekTarget > 0) {
-    var _sep2 = h('span', { style: 'font-size:9px;color:var(--border);' }, '\u00b7');
-    var _wkEl = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey2,#9A9A90);' });
-    _wkEl.textContent = _weekDone + '/' + _weekTarget + ' cette semaine';
-    _statsRow.appendChild(_sep2);
-    _statsRow.appendChild(_wkEl);
-  }
-  if (_statsRow.children.length > 0) c.appendChild(_statsRow);
 
   var btn = h('button', {
     style: 'padding:12px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
@@ -2143,6 +2300,11 @@ function renderTodayDashboard(p) {
   // Card 1 — Bonjour
   wrapper.appendChild(renderCardBonjour(S));
 
+  // Card 1.5 — HERO KCAL (ring XXL Georgia, COSMÉTIQUE 2026-04)
+  // Affiché juste après le Bonjour — info la plus importante en priorité visuelle
+  var cardHeroKcal = renderCardHeroKcal();
+  if (cardHeroKcal) wrapper.appendChild(cardHeroKcal);
+
   // Card 1b — Prochain repas (hero, time-aware)
   var cardNextMeal = renderCardNextMeal();
   if (cardNextMeal) wrapper.appendChild(cardNextMeal);
@@ -2155,8 +2317,11 @@ function renderTodayDashboard(p) {
   var cardSport = renderCardSport();
   if (cardSport) wrapper.appendChild(cardSport);
 
-  // Card 3 — Macros du jour
-  var cardMacros = renderCardMacros(); if (cardMacros) wrapper.appendChild(cardMacros);
+  // Card 3 — Macros du jour (seconde source, détail : macro bars + progress)
+  // NOTE : l'info "kcal restantes" est désormais dans le hero ci-dessus.
+  //        On garde cette carte pour le détail (macro bars) uniquement quand
+  //        le hero ne couvre pas (ex: legacy users qui n'ont pas encore vu le hero).
+  var cardMacros = renderCardMacros(); if (cardMacros && !cardHeroKcal) wrapper.appendChild(cardMacros);
 
   // Card 3b — TDEE adaptatif
   var cardTDEE = renderCardTDEEAdaptatif(S);
