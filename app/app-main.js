@@ -96,6 +96,8 @@ var PROFILE_KEYS = [
  '_switchedFromNutrition',
  // Recettes favorites (id → étoiles 1-3)
  'favoriteRecipes',
+ // Timestamp dernière sync cloud — comparaison anti-écrasement dans SupaSync.syncOnLogin
+ '_cloudUpdatedAt',
  // Smart Calendar
  'weeklyCalendar',
  'smartCalendarEnabled',
