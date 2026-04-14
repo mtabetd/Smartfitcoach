@@ -639,6 +639,13 @@ function renderProfilePage(container) {
  sec1.appendChild(_infoRow('Sexe', S.sex === 'homme' ? 'Homme' : S.sex === 'femme' ? 'Femme' : null));
  sec1.appendChild(_infoRow('\u00c2ge', S.age ? S.age + ' ans' : null));
  sec1.appendChild(_infoRow('Poids', S.weight ? S.weight + ' kg' : null));
+ // FIX D16 COHÉRENCE PRE-PREGNANCY 2026-04 : affiche le poids pré-grossesse si applicable.
+ // Avant : calcTarget utilisait prePregnancyWeight (invisible dans profil) → user voyait
+ //         son poids actuel (ex 75 kg) dans profil mais la cible kcal était basée sur
+ //         68 kg → mismatch incompréhensible pour l'user.
+ if (S.sex === 'femme' && S.pregnant && S.prePregnancyWeight && S.prePregnancyWeight !== S.weight) {
+   sec1.appendChild(_infoRow('Poids pré-grossesse', S.prePregnancyWeight + ' kg'));
+ }
  sec1.appendChild(_infoRow('Taille', S.height ? S.height + ' cm' : null));
  var _bmiVal = (typeof calcBMI === 'function') ? calcBMI() : null;
  sec1.appendChild(_infoRow('IMC', _bmiVal ? _bmiVal.toFixed(1) : null));

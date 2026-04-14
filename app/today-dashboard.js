@@ -206,17 +206,34 @@ function getLastBadge() {
     var badgeId = typeof last === 'string' ? last : (last && last.id ? last.id : null);
     if (!badgeId) return null;
 
-    // 1. Try local BADGE_EMOJI map (always available, most reliable)
+    // FIX D9 COHÉRENCE BADGES 2026-04 : GAMIFICATION.BADGE_DEFS est la source UNIQUE.
+    // Avant : on priorisait BADGE_EMOJI local → toast GAMIFICATION disait "3 Jours" (BADGE_DEFS.name)
+    //         mais dashboard affichait "3 jours d'affilée" (BADGE_EMOJI.label) pour le même badge.
+    //         L'user voyait 2 noms pour 1 badge.
+    // Maintenant : GAMIFICATION.BADGE_DEFS d'abord (source unique), BADGE_EMOJI uniquement
+    //              pour l'emoji d'affichage (fallback desc/label).
+    // 1. GAMIFICATION.BADGE_DEFS (source unique du .name)
+    if (window.GAMIFICATION) {
+      var defs = window.GAMIFICATION.BADGE_DEFS || window.GAMIFICATION.BADGES;
+      if (Array.isArray(defs)) {
+        var defU = defs.find(function(b) { return b && b.id === badgeId; });
+        if (defU) {
+          var emoji = (BADGE_EMOJI[badgeId] && BADGE_EMOJI[badgeId].emoji) || defU.emoji || '🏆';
+          return { id: badgeId, name: defU.name, icon: emoji, desc: defU.desc || (BADGE_EMOJI[badgeId] && BADGE_EMOJI[badgeId].desc) || '' };
+        }
+      }
+    }
+    // 2. Fallback BADGE_EMOJI si GAMIFICATION.BADGE_DEFS absent
     if (BADGE_EMOJI[badgeId]) {
       var em = BADGE_EMOJI[badgeId];
       return { id: badgeId, name: em.label, icon: em.emoji, desc: em.desc };
     }
 
-    // 2. Try window.GAMIFICATION.BADGE_DEFS (array keyed by .id)
+    // 3. Legacy path (array keyed by .id)
     if (window.GAMIFICATION) {
-      var defs = window.GAMIFICATION.BADGE_DEFS || window.GAMIFICATION.BADGES;
-      if (Array.isArray(defs)) {
-        var def = defs.find(function(b) { return b && b.id === badgeId; });
+      var defs2 = window.GAMIFICATION.BADGE_DEFS || window.GAMIFICATION.BADGES;
+      if (Array.isArray(defs2)) {
+        var def = defs2.find(function(b) { return b && b.id === badgeId; });
         if (def) return { id: def.id, name: def.name, icon: def.icon, desc: def.desc };
       } else if (defs && typeof defs === 'object') {
         // Object keyed by id
@@ -280,6 +297,28 @@ function getCalorieTarget() {
 // Les protéines et lipides restent stables — seuls les glucides absorbent la variation
 // (ISSN 2017, Helms 2014 — carb cycling : protéines stables, glucides cyclés).
 function getMacroTargets() {
+  // FIX D14 COHÉRENCE CAL MULTIPLIER 2026-04 : si weekPlan du jour existe avec macros > 0,
+  // on utilise directement la somme (le plan a DÉJÀ été calibré par generateWeek avec
+  // le bon calMultiplier). Sinon fallback sur calcMacros + application manuelle.
+  // Avant : getMacroTargets appliquait TOUJOURS calMultiplier, même si l'appelant
+  //         (renderCardHeroKcal) ré-override ensuite avec le plan → risque double appli.
+  try {
+    var _Sx = window.S || {};
+    if (Array.isArray(_Sx.weekPlan) && _Sx.weekPlan.length >= 7) {
+      var _tiM = (new Date().getDay() + 6) % 7;
+      var _dpM = _Sx.weekPlan[_tiM];
+      if (_dpM) {
+        var _pM = 0, _gM = 0, _lM = 0;
+        ['breakfast','lunch','snack','dinner'].forEach(function(sl) {
+          var r = _dpM[sl];
+          if (r) { _pM += (r.p || 0); _gM += (r.g || 0); _lM += (r.l || 0); }
+        });
+        if (_pM > 0 || _gM > 0 || _lM > 0) {
+          return { p: Math.round(_pM), g: Math.round(_gM), l: Math.round(_lM) };
+        }
+      }
+    }
+  } catch(eMM) {}
   if (window.calcMacros) {
     var m = window.calcMacros();
     if (m && (m.p > 0 || m.g > 0 || m.l > 0)) {
@@ -503,7 +542,7 @@ function renderCardNextMeal() {
 // ─── WELCOME BANNER — Bon retour parmi nous ───
 function renderWelcomeBanner(S) {
   var user = window.AUTH ? window.AUTH.getUser() : null;
-  var firstName = S.prenom || (user && user.name ? user.name.split(' ')[0] : '') || '';
+  var firstName = (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || (user && user.name ? user.name.split(' ')[0] : '') || ''));
 
   var days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
   var months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
@@ -533,7 +572,7 @@ function renderWelcomeBanner(S) {
 function renderCardBonjour(S) {
   var c = card();
   var user = window.AUTH ? window.AUTH.getUser() : null;
-  var firstName = S.prenom || (user && user.name ? user.name.split(' ')[0] : '') || '';
+  var firstName = (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || (user && user.name ? user.name.split(' ')[0] : '') || ''));
 
   // Random daily quote — seeded by day of year for consistency
   var allQuotes = (window.SPORT_QUOTES && window.SPORT_QUOTES.length) ? window.SPORT_QUOTES : TODAY_QUOTES;

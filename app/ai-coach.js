@@ -76,7 +76,7 @@ function buildContext() {
   try { user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null; } catch(e) {}
 
   var ctx = {
-    prenom: user && user.name ? user.name.split(' ')[0] : (S.prenom || ''),
+    prenom: (window.getDisplayFirstName ? window.getDisplayFirstName() : (user && user.name ? user.name.split(' ')[0] : (S.prenom || ''))),
     sex: S.sex || '',
     age: S.age || '',
     weight: S.weight || '',

@@ -2895,6 +2895,23 @@ function renderStep9(p) {
   });
   p.appendChild(tabs);
 
+  // FIX D15 COHÉRENCE SELECTED DAY 2026-04 : indicateur visuel si on ne regarde pas aujourd'hui.
+  // Avant : user cliquait "Vendredi" dans les tabs, les macros affichées = vendredi, pas
+  //         aujourd'hui. Le dashboard continuait d'afficher aujourd'hui. L'user ne savait
+  //         pas qu'il regardait un autre jour. Confusion garantie.
+  // Maintenant : badge discret "Aperçu : <Jour>" + lien "Retour à aujourd'hui".
+  if (S.selectedDay !== _todayPlanIdx && DAY_NAMES[S.selectedDay]) {
+    var _prevBadge = h('div', {
+      style: 'display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin-bottom:12px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+    });
+    _prevBadge.appendChild(h('span', {}, 'Aperçu · ' + DAY_NAMES[S.selectedDay]));
+    _prevBadge.appendChild(h('button', {
+      style: 'background:none;border:none;padding:2px 6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--black,#0A0A09);cursor:pointer;text-decoration:underline;',
+      onclick: function() { S.selectedDay = _todayPlanIdx; window.render(); }
+    }, 'Aujourd\'hui →'));
+    p.appendChild(_prevBadge);
+  }
+
   // Day type indicator (training vs rest)
   var _selDayInfo = window.getDayType ? window.getDayType(S.selectedDay) : null;
   if (_selDayInfo) {

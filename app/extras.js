@@ -1229,34 +1229,26 @@ window.WEEKLY_SUMMARY = {
   },
 
   _getStreak: function() {
-    // Count consecutive days with activity (ending at today or yesterday)
-    var all = {};
+    // FIX D6 COHÉRENCE STREAK 2026-04 : déléguer à GAMIFICATION (source de vérité unique)
+    // Avant : extras recalculait le streak depuis BLACKBOX.getUserLogs (logique différente
+    //         de GAMIFICATION qui lit mtd_streak_<uid>.current). Deux chiffres possibles
+    //         pour le "streak" affichés sur des widgets différents (bilan hebdo vs dashboard).
+    // Maintenant : GAMIFICATION.getStreak() est la source unique.
     try {
+      if (window.GAMIFICATION && typeof window.GAMIFICATION.getStreak === 'function') {
+        var g = window.GAMIFICATION.getStreak();
+        if (g && typeof g.current === 'number') return g.current;
+        if (typeof g === 'number') return g;
+      }
+      // Fallback localStorage direct (même store que GAMIFICATION)
       var userId = uid();
-      var logs = (window.BLACKBOX && window.BLACKBOX.getUserLogs) ? window.BLACKBOX.getUserLogs(userId) : [];
-      for (var i = 0; i < logs.length; i++) {
-        var d = new Date(logs[i].timestamp);
-        var key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-        all[key] = true;
+      var raw = localStorage.getItem('mtd_streak_' + userId);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed.current === 'number') return parsed.current;
       }
-    } catch (e) {}
-
-    var streak = 0;
-    var d = new Date();
-    // Check today first, if no activity today start from yesterday
-    var tk = todayKey();
-    if (!all[tk]) d.setDate(d.getDate() - 1);
-
-    for (var j = 0; j < 365; j++) {
-      var key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-      if (all[key]) {
-        streak++;
-        d.setDate(d.getDate() - 1);
-      } else {
-        break;
-      }
-    }
-    return streak;
+    } catch(e) {}
+    return 0;
   },
 
   _getMilestoneBadge: function(streak) {

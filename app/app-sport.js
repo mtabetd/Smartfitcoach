@@ -946,7 +946,13 @@ window.SPORT = {
  else { S.sStep = 0; renderObjectif(content); } // Fallback sécurité — évite page blanche si sStep invalide
 
  // ─── BANDEAU BIEN-ÊTRE (non-bloquant) ───
- if (S._wellnessReminder) {
+ // FIX D10 COHÉRENCE WELLNESS 2026-04 : ne pas ré-afficher si user a dismissed (×) aujourd'hui.
+ // Avant : le check _wellnessReminder n'inspectait PAS `todayWellness.dismissed`, donc le banner
+ //         pouvait ré-apparaître après un close × si _wellnessReminder avait été remis à true
+ //         par une autre logique. Maintenant on guard également sur dismissed.
+ var _todayISO = new Date().toISOString().slice(0, 10);
+ var _wAlreadyHandled = S.todayWellness && S.todayWellness.date === _todayISO;
+ if (S._wellnessReminder && !_wAlreadyHandled) {
    renderWellnessBanner(content);
  }
 

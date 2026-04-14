@@ -60,6 +60,31 @@ window.h = h;
 window.txt = txt;
 window.svgRing = svgRing;
 
+// FIX D8 COHÉRENCE DAY INDEX 2026-04 : helper unifié pour l'index du jour.
+// Convention : Lun=0, Mar=1, ..., Dim=6 (utilisée partout dans l'app).
+// Avant : mélange getDay()+6%7 duplicaté dans ~20 endroits + certains utilisaient
+//         Date.getDay() directement (Sun=0) → bugs silencieux si passage à getDayType.
+window.todayIdxMonStart = function() {
+  return (new Date().getDay() + 6) % 7;
+};
+
+// FIX D5 COHÉRENCE PRÉNOM 2026-04 : helper unifié pour afficher le prénom.
+// Avant : today-dashboard, ai-coach et push-manager utilisaient 3 priorités différentes
+//         → user pouvait voir "Tom" sur le dashboard, "Thomas" dans ai-coach, "" dans push.
+// Maintenant : priorité unique S.prenom > user.name first part > '' (défaut).
+window.getDisplayFirstName = function() {
+  try {
+    var S = window.S || {};
+    if (S.prenom && typeof S.prenom === 'string' && S.prenom.trim()) return S.prenom.trim();
+    var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+    if (user && user.name && typeof user.name === 'string') {
+      var first = user.name.trim().split(/\s+/)[0];
+      if (first) return first;
+    }
+  } catch(e) {}
+  return '';
+};
+
 // ─── SECURITY: Input Sanitization ───
 window.sanitizeHTML = function(str) {
   if (typeof str !== 'string') return '';

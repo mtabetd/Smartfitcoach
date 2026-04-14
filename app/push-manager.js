@@ -101,7 +101,7 @@
         if (window.GOALS && S.goal != null && window.GOALS[S.goal]) goalName = window.GOALS[S.goal].name || '';
       } catch(e) {}
       return {
-        prenom: S.prenom || '',
+        prenom: (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || '')),
         streak: streak,
         isTrainingDay: isTrainingDay,
         goalName: goalName,
