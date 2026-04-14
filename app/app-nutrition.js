@@ -2894,34 +2894,60 @@ function renderStep9(p) {
   }
 
   // ── Pre-compute daily totals for macro progress display ──────────────────
+  // FIX COHÉRENCE 2026-04 : aligné sur today-dashboard.js renderCardHeroKcal
+  // Avant : cible = _nm (calcul théorique) — diverge du dashboard qui utilise
+  //         la somme du plan du jour. Consommation lue depuis `_foodLog` MORT
+  //         (jamais écrit nulle part) → toujours 0.
+  // Maintenant :
+  //   - CIBLE = somme des recettes de weekPlan[selectedDay] (= plan du jour, idem dashboard)
+  //   - CONSOMMÉ = FOOD_JOURNAL si selectedDay === today, sinon = plan (jour futur = 100%)
   var _preDay = S.weekPlan[S.selectedDay] || {};
-  var _preTotal = 0, _preTotalP = 0, _preTotalG = 0, _preTotalL = 0;
+  var _planKcal = 0, _planP = 0, _planG = 0, _planL = 0;
   ['breakfast','lunch','snack','dinner'].forEach(function(slot) {
     var r = _preDay[slot];
     if (r) {
-      _preTotal += (r.k || r.kcal || 0);
-      _preTotalP += (r.p || 0);
-      _preTotalG += (r.g || 0);
-      _preTotalL += (r.l || 0);
+      _planKcal += (r.k || r.kcal || 0);
+      _planP += (r.p || 0);
+      _planG += (r.g || 0);
+      _planL += (r.l || 0);
     }
   });
-  if (S._foodLog && Array.isArray(S._foodLog[S.selectedDay])) {
-    S._foodLog[S.selectedDay].forEach(function(item) {
-      if (!item) return;
-      _preTotal += (item.kcal || 0);
-      _preTotalP += (item.p || 0);
-      _preTotalG += (item.g || 0);
-      _preTotalL += (item.l || 0);
-    });
+
+  // Cible calorique : plan du jour si présent, sinon fallback calcTarget()×multiplier
+  var _tgt = _planKcal > 0
+    ? Math.round(_planKcal)
+    : (calcTarget() || (S.sex === 'femme' ? 1800 : 2000));
+  if (_planKcal === 0 && _dayAdapt && _dayAdapt.calMultiplier) {
+    _tgt = Math.round(_tgt * _dayAdapt.calMultiplier);
   }
-  // Cible calorique adaptée au type de jour (repos = calMultiplier 0.90, entraînement = 1.0)
-  var _tgt = calcTarget() || (S.sex === 'femme' ? 1800 : 2000); // fallback sécurisé si profil incomplet
-  if (_dayAdapt && _dayAdapt.calMultiplier) { _tgt = Math.round(_tgt * _dayAdapt.calMultiplier); }
+
+  // Consommation : FOOD_JOURNAL pour aujourd'hui, sinon = plan du jour sélectionné
+  var _todayIdx9 = (new Date().getDay() + 6) % 7;
+  var _isSelToday = S.selectedDay === _todayIdx9;
+  var _preTotal, _preTotalP, _preTotalG, _preTotalL;
+  if (_isSelToday && window.FOOD_JOURNAL && window.FOOD_JOURNAL.getDayTotal) {
+    var _jt = window.FOOD_JOURNAL.getDayTotal();
+    _preTotal = Math.round(_jt.kcal || 0);
+    _preTotalP = Math.round(_jt.p || 0);
+    _preTotalG = Math.round(_jt.g || 0);
+    _preTotalL = Math.round(_jt.l || 0);
+  } else {
+    // Jour autre qu'aujourd'hui : pas de "consommation" — on affiche le plan prévu
+    _preTotal = Math.round(_planKcal);
+    _preTotalP = Math.round(_planP);
+    _preTotalG = Math.round(_planG);
+    _preTotalL = Math.round(_planL);
+  }
+
   var _nm = S._nm || {};
 
   // ── Daily macro progress bars ─────────────────────────────────────────────
   (function() {
-    var tgtP = (_nm.proteinGrams || _nm.p || 0), tgtG = (_nm.carbsGrams || _nm.g || 0), tgtL = (_nm.fatGrams || _nm.l || 0);
+    // FIX COHÉRENCE : macros cibles = somme recettes du plan du jour (idem dashboard)
+    // Fallback _nm si weekPlan pas encore calibré
+    var tgtP = _planP > 0 ? _planP : (_nm.proteinGrams || _nm.p || 0);
+    var tgtG = _planG > 0 ? _planG : (_nm.carbsGrams || _nm.g || 0);
+    var tgtL = _planL > 0 ? _planL : (_nm.fatGrams || _nm.l || 0);
     var kcalPct = _tgt > 0 ? Math.min(100, Math.round(_preTotal / _tgt * 100)) : 0;
     var pPct = tgtP > 0 ? Math.min(100, Math.round(_preTotalP / tgtP * 100)) : 0;
     var gPct = tgtG > 0 ? Math.min(100, Math.round(_preTotalG / tgtG * 100)) : 0;

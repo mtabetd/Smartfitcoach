@@ -307,11 +307,30 @@ function getMacroTargets() {
 function getNextSportDay() {
   var S = window.S;
   if (!S) return null;
+
+  // FIX COHÉRENCE SPORT 2026-04 : bug #2 — si un programme IA muscu existe, il prévaut
+  // sur le sportProgram statique (vue sport l'affiche, dashboard doit l'afficher aussi).
+  if (S.sportType === 'musculation' && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100) {
+    return { index: 0, day: { name: 'Programme sur mesure', exercises: [] }, kind: 'ia' };
+  }
+
   var program = S.sportProgram;
   if (!program || !program.length) return null;
 
-  // Find next uncompleted day — simplified: just return current selected day + its name
-  var idx = typeof S.selectedSportDay === 'number' ? S.selectedSportDay : 0;
+  // FIX COHÉRENCE SPORT 2026-04 : bug #1 — calcul du jour COURANT (pas selectedSportDay).
+  // Avant : si user cliquait "Jour 3" dans la vue sport puis revenait au dashboard,
+  //         le dashboard affichait "Jour 3" même si aujourd'hui c'est "Jour 1".
+  // Maintenant :
+  //   - Si trainingDaysSelected défini, on mappe todayIdx → position dans le programme
+  //   - Sinon, fallback sur todayIdx direct (clamped à program.length)
+  var todayIdx = (new Date().getDay() + 6) % 7;
+  var idx = 0;
+  if (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > 0) {
+    var pos = S.trainingDaysSelected.indexOf(todayIdx);
+    idx = pos >= 0 ? Math.min(pos, program.length - 1) : 0;
+  } else {
+    idx = Math.min(todayIdx, program.length - 1);
+  }
 
   if (idx < program.length) {
     return { index: idx, day: program[idx] };
@@ -1255,7 +1274,11 @@ function renderCardSport() {
   }
 
   // Programme IA personnalisé actif → afficher un lien vers Sport
-  if (S.muscuIAProgram && S.sportType === 'muscu') {
+  // FIX COHÉRENCE SPORT 2026-04 : le sportType réel est 'musculation' (pas 'muscu')
+  // Avant : cette carte ne s'affichait JAMAIS (sportType ne matchait jamais 'muscu')
+  //         → utilisateur ne voyait pas que son programme IA était actif sur le dashboard
+  // Maintenant : check contre 'musculation' (valeur réelle dans S.sportType)
+  if (S.muscuIAProgram && S.sportType === 'musculation') {
     var _iaCard = card('border-left:4px solid var(--green,#1A4A1A);');
     _iaCard.appendChild(eyebrow('VOTRE PROGRAMME'));
     _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;'}, 'Programme sur mesure actif'));
