@@ -403,8 +403,9 @@ window.detectWeekPatterns = function() {
     }
 
     // PATTERN 3 : sous-entraînement — 0 séance sur 7j glissants AVEC un programme sport actif.
-    if (sessionsSummary && sessionsSummary.sessions === 0 &&
-        S.sportType && S.sportProgram) {
+    // FIX CONTRE-AUDIT : .length > 0 car [] est truthy en JS (array vide passait ce check).
+    var _hasActiveProgram = S.sportType && Array.isArray(S.sportProgram) && S.sportProgram.length > 0;
+    if (sessionsSummary && sessionsSummary.sessions === 0 && _hasActiveProgram) {
       patterns.push({
         id: 'undertraining',
         severity: 'info',
@@ -413,15 +414,20 @@ window.detectWeekPatterns = function() {
       });
     }
 
-    // PATTERN 4 : sur-entraînement — 6+ séances DANS LA SEMAINE + douleur signalée.
-    if (sessionsSummary && sessionsSummary.sessions >= 6 &&
-        weekPerf && weekPerf.lastPain) {
-      patterns.push({
-        id: 'overtraining',
-        severity: 'alert',
-        label: sessionsSummary.sessions + ' séances cette semaine + douleur ' + weekPerf.lastPain,
-        advice: 'Dé-load -20% volume cette semaine. 1-2 jours repos complet conseillés.'
-      });
+    // PATTERN 4a : volume élevé — 7+ séances DANS LA SEMAINE (alerte info même sans douleur).
+    // FIX CONTRE-AUDIT : avant, il fallait ABSOLUMENT une douleur pour alerter → users
+    // qui minimisent les signaux passaient entre les mailles. Maintenant, volume seul suffit
+    // à lever un warning informatif (7+ séances/sem = dépassement ACSM pour 99% des user).
+    if (sessionsSummary && sessionsSummary.sessions >= 7) {
+      var overSev = (weekPerf && weekPerf.lastPain) ? 'alert' : 'warning';
+      var overId = (weekPerf && weekPerf.lastPain) ? 'overtraining' : 'high_volume';
+      var overLabel = (weekPerf && weekPerf.lastPain)
+        ? sessionsSummary.sessions + ' séances + douleur ' + weekPerf.lastPain
+        : sessionsSummary.sessions + ' séances cette semaine (volume élevé)';
+      var overAdvice = (weekPerf && weekPerf.lastPain)
+        ? 'Dé-load -20% volume cette semaine. 1-2 jours repos complet conseillés.'
+        : 'Au-delà de 6 séances/sem, le risque de blessure augmente. Pense à caser 1-2 jours repos complet.';
+      patterns.push({ id: overId, severity: overSev, label: overLabel, advice: overAdvice });
     }
 
     // PATTERN 5 : progression positive — RPE moyen 6-8 ET charges en hausse.

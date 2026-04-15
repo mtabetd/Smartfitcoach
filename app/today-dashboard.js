@@ -2003,8 +2003,10 @@ function renderExtendedSections(wrapper, S) {
       statsGrid.appendChild(insightStat(rpe, 'RPE moyen'));
       insightsBox.appendChild(statsGrid);
 
-      // Bar chart jours actifs (micro, visuel minimaliste)
-      if (Array.isArray(insights.byDay) && insights.byDay.length === 7) {
+      // Bar chart jours actifs (micro, visuel minimaliste) — affiché UNIQUEMENT si
+      // au moins une séance sur la semaine (sinon toutes les barres sont grises = bruit visuel).
+      // FIX CONTRE-AUDIT : éviter l'UX confuse quand seul wellness est loggé sans session.
+      if (Array.isArray(insights.byDay) && insights.byDay.length === 7 && (insights.sessions || 0) > 0) {
         var dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
         var max = Math.max.apply(null, insights.byDay.concat([1]));
         var barsWrap = h('div', { style: 'display:flex;gap:4px;align-items:flex-end;height:32px;margin-bottom:12px;padding:0 4px;' });
