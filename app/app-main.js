@@ -2311,6 +2311,12 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
    S.firstLoginDate = new Date().toISOString().slice(0, 10);
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  }
+ // POLISH 2026-04 : disclaimer médical au premier login (si pas encore accepté).
+ // Non-bloquant côté navigation (render continue), modal overlay indépendant.
+ // Rendu après un petit délai pour laisser le render principal s'exécuter d'abord.
+ setTimeout(function() {
+   try { if (window.showMedicalDisclaimerIfNeeded) window.showMedicalDisclaimerIfNeeded(); } catch(e) {}
+ }, 400);
  // Auto-populate prenom from auth metadata if missing (new users, OAuth, etc.)
  if (!S.prenom) {
    var _autoUser = window.AUTH ? window.AUTH.getUser() : null;

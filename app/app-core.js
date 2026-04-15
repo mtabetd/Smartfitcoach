@@ -336,6 +336,67 @@ window.recordSessionFeedback = function(data) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 (VX) : Disclaimer médical au premier login — obligatoire pour
+// protection légale (CGU promettent que user a "lu et compris"). Modal bloquant
+// non-dismissible sauf validation explicite. Flag persisté en localStorage par uid.
+window.showMedicalDisclaimerIfNeeded = function() {
+  try {
+    var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+    if (!user || !user.id) return false; // ne s'affiche qu'une fois loggé
+    var uid = user.id;
+    var storageKey = 'mtd_disclaimer_accepted_' + uid;
+    if (localStorage.getItem(storageKey) === '1') return false; // déjà accepté
+    if (document.getElementById('mtd-medical-disclaimer')) return true; // déjà affiché
+    var overlay = document.createElement('div');
+    overlay.id = 'mtd-medical-disclaimer';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'mtd-disclaimer-title');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,10,9,0.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+    var sheet = document.createElement('div');
+    sheet.style.cssText = 'background:var(--ivory,#FAF9F6);max-width:460px;width:100%;max-height:90vh;overflow-y:auto;border:1px solid var(--black,#0A0A09);border-radius:2px;padding:28px 26px;box-shadow:0 20px 60px rgba(10,10,9,0.3);';
+    var eyebrow = document.createElement('div');
+    eyebrow.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--red,#5A1010);font-weight:700;margin-bottom:10px;';
+    eyebrow.textContent = '\u26A0 Avertissement important';
+    var title = document.createElement('h2');
+    title.id = 'mtd-disclaimer-title';
+    title.style.cssText = 'font-family:Georgia,serif;font-size:22px;line-height:1.3;margin:0 0 16px;color:var(--black,#0A0A09);font-weight:normal;';
+    title.textContent = 'SmartFitCoach n\'est pas un dispositif m\u00e9dical';
+    var body = document.createElement('div');
+    body.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;line-height:1.65;color:var(--black,#0A0A09);margin-bottom:20px;';
+    body.innerHTML = [
+      '<p style="margin:0 0 12px">Les informations et recommandations fournies par SmartFitCoach (coach IA, plans nutrition et sport, analyses) sont proposées \u00e0 titre <strong>informatif et p\u00e9dagogique</strong>.</p>',
+      '<p style="margin:0 0 12px">Elles ne remplacent en aucun cas l\'avis d\'un <strong>m\u00e9decin, nutritionniste, kin\u00e9sith\u00e9rapeute ou coach sportif qualifi\u00e9</strong>.</p>',
+      '<p style="margin:0 0 12px">Avant de d\u00e9buter un programme, consulte un professionnel de sant\u00e9 si tu es enceinte, allaitantes, as une pathologie chronique (cardiaque, diab\u00e8te, TCA, etc.), prends un traitement ou as des douleurs non diagnostiqu\u00e9es.</p>',
+      '<p style="margin:0">En cas de doute, de douleur persistante ou de malaise : <strong>arr\u00eate ton entra\u00eenement et consulte un m\u00e9decin</strong>.</p>'
+    ].join('');
+    var cguLink = document.createElement('a');
+    cguLink.href = 'cgu.html';
+    cguLink.target = '_blank';
+    cguLink.rel = 'noopener';
+    cguLink.textContent = 'Lire les CGU complètes →';
+    cguLink.style.cssText = 'display:inline-block;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:var(--grey,#6B6B65);text-decoration:underline;';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.style.cssText = 'width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;';
+    btn.textContent = 'J\'ai lu et compris';
+    btn.addEventListener('click', function() {
+      try { localStorage.setItem(storageKey, '1'); } catch(e) {}
+      if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    });
+    sheet.appendChild(eyebrow);
+    sheet.appendChild(title);
+    sheet.appendChild(body);
+    sheet.appendChild(cguLink);
+    sheet.appendChild(btn);
+    overlay.appendChild(sheet);
+    document.body.appendChild(overlay);
+    // Accessibilité : focus sur le bouton de validation
+    setTimeout(function() { try { btn.focus(); } catch(e) {} }, 100);
+    return true;
+  } catch(e) { return false; }
+};
+
 // FIX D5 COHÉRENCE PRÉNOM 2026-04 : helper unifié pour afficher le prénom.
 // Avant : today-dashboard, ai-coach et push-manager utilisaient 3 priorités différentes
 //         → user pouvait voir "Tom" sur le dashboard, "Thomas" dans ai-coach, "" dans push.
