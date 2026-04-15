@@ -1639,17 +1639,34 @@ function render() {
      if (el) el.parentNode.removeChild(el);
    });
 
-   if (window.renderCoachBar) {
-     var coachBar = window.renderCoachBar();
-     if (coachBar) document.body.appendChild(coachBar);
+   // FIX BUG #2+#4 audit debug login 2026-04-15 :
+   // - Reset overlays éphémères si view ≠ today (drawer fullscreen stale masquait
+   //   tout le contenu quand user revenait de drawer puis naviguait ailleurs).
+   // - Gate overlays par view : pas de coach bar / FAB / drawer pendant
+   //   onboarding nutrition (nStep 1-11) ou sport (sStep > 0) → bruit visuel.
+   var _inOnboarding = (S.view === 'nutrition' && S.nStep > 0 && S.nStep < 12) ||
+                       (S.view === 'sport' && S.sStep > 0);
+   var _onDashboard = (S.view === 'today' || S.view === 'dashboard');
+   // Reset des flags UI éphémères si on quitte le dashboard (éviter drawer stale)
+   if (!_onDashboard) {
+     S._dashExtOpen = false;
+     S._fabOpen = false;
    }
-   if (window.renderFabLogger) {
-     var fab = window.renderFabLogger();
-     if (fab) { fab.id = 'fab-logger-container'; document.body.appendChild(fab); }
-   }
-   if (window.renderProgressionDrawer) {
-     var drawer = window.renderProgressionDrawer();
-     if (drawer) document.body.appendChild(drawer);
+
+   // Les overlays ne s'affichent QUE sur le dashboard, jamais en onboarding/auth
+   if (_onDashboard && !_inOnboarding && S.appMode) {
+     if (window.renderCoachBar) {
+       var coachBar = window.renderCoachBar();
+       if (coachBar) document.body.appendChild(coachBar);
+     }
+     if (window.renderFabLogger) {
+       var fab = window.renderFabLogger();
+       if (fab) { fab.id = 'fab-logger-container'; document.body.appendChild(fab); }
+     }
+     if (window.renderProgressionDrawer) {
+       var drawer = window.renderProgressionDrawer();
+       if (drawer) document.body.appendChild(drawer);
+     }
    }
  } catch(e) { console.warn('[CoachBar/FAB/Drawer]', e); }
 
@@ -1778,8 +1795,10 @@ function renderLogin(app) {
    var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
    if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
    // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
-   else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
-   else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
+   // FIX CRITIQUE 2026-04-15 : ignorait muscuIAProgram → user envoyé sur sport
+   // onboarding alors qu'il avait bien un programme IA généré. Report user confirmé.
+   else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) && !S.muscuIAProgram) { S.view = 'sport'; }
+   else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) && !S.muscuIAProgram) { S.view = 'sport'; }
    else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
    else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
    // Si onboarding complet (appMode défini + weekPlan ou sportProgram valides) → toujours 'today'
@@ -2467,8 +2486,10 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Restaurer le contexte de vue (sport mid-onboarding vs nutrition vs today)
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
  // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
- else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
- else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
+ // FIX CRITIQUE 2026-04-15 : ignorait muscuIAProgram → user envoyé sur sport
+ // onboarding alors qu'il avait bien un programme IA généré. Report user confirmé.
+ else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) && !S.muscuIAProgram) { S.view = 'sport'; }
+ else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) && !S.muscuIAProgram) { S.view = 'sport'; }
  else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
  else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
  // ─── AUTO-REGENERATION PLAN NUTRITION — DÉSACTIVÉE (FIX VALIDATION 2026-04) ───
