@@ -850,6 +850,21 @@ var YATES_PROGRAMS = {
         {day:6, label:'Repos'},
         {day:7, label:'Repos'}
       ]
+    },
+    // FIX P0r.5 contre-audit Sprint P0 — split 5j Yates pour avancés/pro
+    // (Pierre powerlifter performance ne devait pas tomber en classic).
+    5: {
+      name: 'Heavy Duty 5 jours (Pro)',
+      description: 'Split 5j intensité maximale. Chaque muscle 1x/sem, focus extrême.',
+      days: [
+        {day:1, label:'Pectoraux',          muscles:['pectoraux']},
+        {day:2, label:'Dos',                muscles:['dos']},
+        {day:3, label:'Jambes + Fessiers',  muscles:['jambes','fessiers']},
+        {day:4, label:'Épaules',            muscles:['epaules']},
+        {day:5, label:'Bras (biceps + triceps)', muscles:['bras']},
+        {day:6, label:'Repos'},
+        {day:7, label:'Repos'}
+      ]
     }
   },
   macro_cycle_12w: [
@@ -2271,7 +2286,13 @@ function buildPersonalizedMuscuPlan(S) {
   // On force classic (équipement-agnostique) à la place.
   var _userEquip = S.sportEquipment || 'gym';
   var userDaysRequested = S.sportDays || 3;
-  if (level === 'beginner' && userDaysRequested <= 4 && sportGoals.indexOf('performance') < 0 && _userEquip !== 'home') {
+  // FIX P0r : NE PAS forcer Starting Strength si pathologies lourdes (osteo/cardio/poly-
+  // arthrite/fibromyalgie) car SS = squat barre + DC + DL + Power Clean → tous filtrés
+  // par les regex médicales → programme vide pour Jean-Pierre senior osteo+HTA.
+  var _hasHeavyMedical = Array.isArray(S.medical) && S.medical.some(function(m) {
+    return /osteo|osteoporosis|cardio|insuffisance|fibromy|polyarthrite|rheumatoid/.test(String(m).toLowerCase());
+  });
+  if (level === 'beginner' && userDaysRequested <= 4 && sportGoals.indexOf('performance') < 0 && _userEquip !== 'home' && !_hasHeavyMedical) {
     style = 'starting'; // Full-body Starting Strength (Rippetoe) — évidence littérature
   }
 
@@ -2362,10 +2383,29 @@ function buildPersonalizedMuscuPlan(S) {
       var prog = getStyleProgram(style, muscle, level);
       if (!prog || !prog.exercises) return;
       var exos = prog.exercises.filter(equipOk);
-      // Fallback : si le filtre équipement supprime tout, injecter des alternatives bodyweight
-      if (exos.length === 0 && window.getAlternativeExercises) {
-        var altExos = window.getAlternativeExercises(muscle, null, 4);
-        exos = altExos.filter(function(a) { return !a.eq || /corps|body|aucun|sol|elastique/i.test(a.eq); });
+      // FIX P0r contre-audit : fallback enrichi (avant: kick si exos.length===0 seulement,
+      // → Thomas calisthenics home recevait 1 exo/jour). Maintenant : garantir ≥ 3 exos
+      // par groupe en tirant des alternatives bodyweight/élastique compatibles.
+      if (exos.length < 3 && window.getAlternativeExercises) {
+        var alts = window.getAlternativeExercises(muscle, null, 6) || [];
+        var compatibleAlts = alts.filter(function(a) {
+          var eq = String(a.eq || a.equipment || '').toLowerCase();
+          // Pour 'home' : strictement bodyweight + élastique + haltères
+          if (equip === 'home') return /corps|body|aucun|sol|[eé]lastique|halt|kettlebell|banc/i.test(eq);
+          // Pour 'dumbbells' : haltères + bodyweight
+          if (equip === 'dumbbells') return /halt|corps|body|banc|barre.?ez/i.test(eq);
+          return true; // gym = tout autorisé
+        });
+        // Compléter sans doublon
+        var existingNames = {};
+        exos.forEach(function(e) { existingNames[(e.n || e.name || '').toLowerCase()] = true; });
+        compatibleAlts.forEach(function(a) {
+          var n = (a.n || a.name || '').toLowerCase();
+          if (!existingNames[n] && exos.length < 4) {
+            exos.push(a);
+            existingNames[n] = true;
+          }
+        });
       }
       // FIX BIBLE MUSCU §5 audit Sophie (bug ignoré) : bodyZones a un VRAI effet.
       // Avant : le commentaire "met en premier" mentait — slice() copie sans effet.
@@ -2429,6 +2469,9 @@ function buildPersonalizedMuscuPlan(S) {
         'couch[eé]', 'allong[eé]', 'sup[ie]ne', 'dos\\s+au\\s+sol',
         '\\bplat\\b', 'incl[ie]n[eé]', 'd[eé]clin[eé]', 'decline',
         'bench\\s+press', 'pec\\s+deck', 'butterfly',
+        // FIX P0r.1 contre-audit : skull crusher / crâne / extension triceps barre EZ supine
+        'skull\\s+crusher', 'cr[âa]ne', 'extension\\s+cr[âa]ne',
+        'extension\\s+triceps\\s+(?:barre\\s+)?ez\\s+couch', 'french\\s+press\\s+couch',
         // Valsalva / charges lourdes axiales
         'valsalva', 'soulev[eé]\\s+de\\s+terre', 'deadlift', 'romanian',
         'squat\\s+barre\\s+lourd', 'squat\\s+barre\\b', 'back\\s+squat',
@@ -2469,17 +2512,20 @@ function buildPersonalizedMuscuPlan(S) {
       var medFilters = [];
       // OSTÉOPOROSE (Sinaki JAMA 1984 / NOF 2022) : éviter compression vertébrale, flexion
       // chargée, sauts, charges axiales lourdes. Privilégier mises en charge progressives.
+      // FIX P0r.2 contre-audit : ajouter Power Clean / Clean seul (triple extension explosive
+      // axiale = compression vertébrale max).
       if (medList.indexOf('osteoporose') !== -1 || medList.indexOf('osteoporosis') !== -1) {
-        medFilters.push(/squat\s+barre|back\s+squat|soulev[eé]\s+de\s+terre|deadlift|romanian|good\s+morning|crunch|sit.?up|ab\s+wheel|jefferson|hyperextension|box\s+jump|jump\s+squat|burpee|corde|jumping\s+jacks/i);
+        medFilters.push(/squat\s+barre|back\s+squat|soulev[eé]\s+de\s+terre|deadlift|romanian|good\s+morning|crunch|sit.?up|ab\s+wheel|jefferson|hyperextension|box\s+jump|jump\s+squat|burpee|corde|jumping\s+jacks|\bpower\s+clean\b|\bclean\b|\bsnatch\b|arrach[eé]|[eé]paul[eé]|hang\s+clean/i);
       }
       // HTA SÉVÈRE / HYPERTENSION (Pescatello MSSE 2004, AHA/ACSM 2007)
       // Éviter Valsalva prolongé, charges maximales, isométriques soutenus, behind-neck.
+      // FIX P0r.2 : Power Clean / Clean seul = Valsalva intense.
       if (medList.indexOf('hypertension') !== -1 || medList.indexOf('hta') !== -1 || medList.indexOf('hta_severe') !== -1) {
-        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|d[eé]velopp[eé]\s+militaire\s+barre|behind.?neck|derri[eè]re\s+nuque|snatch|arrach[eé]|clean\s*(?:&|and|et)?\s*jerk|l.?sit|dragon\s+flag|windshield/i);
+        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|d[eé]velopp[eé]\s+militaire\s+barre|behind.?neck|derri[eè]re\s+nuque|\bsnatch\b|arrach[eé]|clean|[eé]paul[eé]|jerk|thruster|l.?sit|dragon\s+flag|windshield/i);
       }
       // CARDIO / INSUFFISANCE CARDIAQUE
       if (medList.indexOf('cardio') !== -1 || medList.indexOf('insuffisance_card') !== -1) {
-        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|snatch|clean|burpee|box\s+jump|hiit/i);
+        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|\bsnatch\b|\bclean\b|burpee|box\s+jump|hiit/i);
       }
       // GOUTTE / CALCULS / IRC : pas d'exclusion exos directe (impact diététique surtout)
       // RHUMATISMES / POLYARTHRITE
@@ -2581,16 +2627,22 @@ function buildPersonalizedMuscuPlan(S) {
       }
     } catch(eBz) {}
 
-    // ═══ FIX P0 SPRINT 2026-04-15 — Dédoublonnage exos dans la même séance ═══
-    // (audit profils — Marc avait Squat ×5 dans J1 ; Sophie avait RDL barre + RDL jambes
-    // tendues = même mouvement). Conserve uniquement la première occurrence par nom normalisé.
+    // ═══ FIX P0 SPRINT + RETOUCHE P0r.4 — Dédoublonnage universel exos dans même séance ═══
+    // Normalisation enrichie : enlève suffixes barre/haltères + "ou X" + "prise X" + position.
+    // Pour styles full-body (starting/greyskull/texas), le forEach(muscles) ré-injecte les mêmes
+    // exos pour chaque muscle ciblé → on dédup pour avoir un set propre.
     (function dedupExos() {
       var seen = {};
       var dedup = [];
       allExercises.forEach(function(ex) {
         var name = String(ex.n || ex.name || '').toLowerCase().trim();
-        // Normalisation : enlever variations charge (haltères/barre) pour matcher RDL = RDL
-        var normalKey = name.replace(/\s+(barre|halt[eè]res?|kettlebell|machine|c[aâ]ble|poulie)\b.*$/i, '').trim();
+        var normalKey = name
+          .replace(/\s+(barre|halt[eè]res?|kettlebell|machine|c[aâ]ble|poulie|bumper|smith)\b.*$/i, '')
+          .replace(/\s+ou\s+.*$/i, '')      // "Bench Press ou Press" → "Bench Press"
+          .replace(/\s+prise\s+.*$/i, '')   // "Tractions prise large" → "Tractions"
+          .replace(/\s+(assis|debout|allong[eé]|inclin[eé]|d[eé]clin[eé]|plat)\s*$/i, '')
+          .replace(/\s+\(.*?\)\s*$/g, '')   // "(option)"
+          .trim();
         if (!normalKey) normalKey = name;
         if (!seen[normalKey]) {
           seen[normalKey] = true;
