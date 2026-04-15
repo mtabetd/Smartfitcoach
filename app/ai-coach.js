@@ -84,6 +84,13 @@ style.textContent = [
   '#ai-coach-send{background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;padding:10px 18px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;transition:all 0.2s ease;}',
   '#ai-coach-send:disabled{opacity:0.35;cursor:not-allowed;}',
   '#ai-coach-send:hover:not(:disabled){background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);}',
+  // POLISH 2026-04 (VOICE) : bouton micro Web Speech API. SVG inline (cohérent design luxe vs emoji).
+  '#ai-coach-mic{background:none;border:1px solid var(--border,#D8D8D0);border-radius:2px;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--grey,#6B6B65);transition:all 0.2s ease;flex-shrink:0;padding:0;}',
+  '#ai-coach-mic:hover:not(:disabled){border-color:var(--black,#0A0A09);color:var(--black,#0A0A09);background:var(--ivory2,#F4F4F0);}',
+  '#ai-coach-mic:disabled{opacity:0.35;cursor:not-allowed;}',
+  '#ai-coach-mic.recording{border-color:var(--red,#5A1010);color:var(--red,#5A1010);background:rgba(90,16,16,0.04);animation:micPulse 1.4s ease-in-out infinite;}',
+  '#ai-coach-mic svg{width:18px;height:18px;display:block;}',
+  '@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(90,16,16,0.35);}50%{box-shadow:0 0 0 6px rgba(90,16,16,0);}}',
 
   // Erreur
   '.ai-msg-error{background:var(--redbg,rgba(90,16,16,0.06));border:1px solid rgba(90,16,16,0.15);border-radius:2px;color:var(--red,#5A1010);padding:12px 16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;}'
@@ -434,11 +441,37 @@ function buildUI() {
     this.style.height = '40px';
     this.style.height = Math.min(this.scrollHeight, 100) + 'px';
   });
+  // POLISH 2026-04 (VOICE) : bouton micro pour dictée vocale (Web Speech API).
+  // Affiché UNIQUEMENT si SpeechRecognition disponible (fallback gracieux).
+  // Click → toggle (start si idle, stop si recording). Transcrit dans le textarea.
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var micBtn = null;
+  if (SR) {
+    micBtn = document.createElement('button');
+    micBtn.id = 'ai-coach-mic';
+    micBtn.type = 'button';
+    micBtn.title = 'Dictée vocale';
+    micBtn.setAttribute('aria-label', 'Dicter ma question au coach');
+    micBtn.setAttribute('data-tooltip', 'Dictée vocale');
+    // SVG inline micro (cohérent design luxe — pas d'emoji)
+    micBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+      + '<rect x="9" y="3" width="6" height="11" rx="3"/>'
+      + '<path d="M5 11a7 7 0 0 0 14 0"/>'
+      + '<line x1="12" y1="18" x2="12" y2="22"/>'
+      + '<line x1="9" y1="22" x2="15" y2="22"/>'
+      + '</svg>';
+    micBtn.addEventListener('click', function() {
+      try {
+        if (window.SpeechInput) window.SpeechInput.toggle();
+      } catch(e) { /* silencieux */ }
+    });
+  }
   var sendBtn = document.createElement('button');
   sendBtn.id = 'ai-coach-send';
   sendBtn.textContent = 'Envoyer';
   sendBtn.addEventListener('click', sendMessage);
   inputArea.appendChild(input);
+  if (micBtn) inputArea.appendChild(micBtn);
   inputArea.appendChild(sendBtn);
   panel.appendChild(inputArea);
 
@@ -630,6 +663,133 @@ function updateRateLimitHint(remaining) {
     }
   } catch(e) {}
 }
+
+// POLISH 2026-04 (VOICE) : Web Speech API wrapper pour dictée vocale.
+// Exposé sur window.SpeechInput. Fallback gracieux si API absente.
+// État : { recognition (instance), recording (bool), unsupported (bool) }
+// API publique : SpeechInput.isSupported(), SpeechInput.toggle(), SpeechInput.stop()
+window.SpeechInput = (function() {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var supported = !!SR;
+  var recognition = null;
+  var recording = false;
+  var _lastError = null;
+
+  // Helper : update UI bouton micro selon état
+  function _updateBtn() {
+    try {
+      var btn = document.getElementById('ai-coach-mic');
+      if (!btn) return;
+      if (recording) btn.classList.add('recording');
+      else btn.classList.remove('recording');
+    } catch(e) {}
+  }
+
+  // Helper : append text au textarea coach (à la position curseur OU fin)
+  function _appendToInput(text) {
+    try {
+      var input = document.getElementById('ai-coach-input');
+      if (!input || typeof text !== 'string') return;
+      var current = input.value || '';
+      var trimmed = String(text).trim();
+      if (!trimmed) return;
+      var separator = (current && !current.endsWith(' ')) ? ' ' : '';
+      input.value = current + separator + trimmed;
+      // Trigger "input" event pour auto-resize du textarea
+      try { input.dispatchEvent(new Event('input', { bubbles: true })); } catch(e) {}
+      // Focus pour permettre édition + envoi clavier
+      try { input.focus(); } catch(e) {}
+    } catch(e) {}
+  }
+
+  function _initRecognition() {
+    if (!SR) return null;
+    try {
+      var rec = new SR();
+      rec.continuous = false;       // 1 seul résultat (puis arrêt)
+      rec.interimResults = false;   // pas de mots intermédiaires (transcript final seulement)
+      rec.lang = 'fr-FR';
+      rec.maxAlternatives = 1;
+      rec.onresult = function(event) {
+        try {
+          if (!event || !event.results || !event.results.length) return;
+          var transcript = '';
+          for (var i = 0; i < event.results.length; i++) {
+            if (event.results[i].isFinal && event.results[i][0]) {
+              transcript += event.results[i][0].transcript;
+            }
+          }
+          if (transcript) _appendToInput(transcript);
+        } catch(e) {}
+      };
+      rec.onerror = function(event) {
+        try {
+          var err = event && event.error ? event.error : 'unknown';
+          _lastError = err;
+          // Erreurs courantes : 'no-speech' (silencieux OK), 'aborted' (user stop OK),
+          // 'not-allowed' (permission refusée → toast)
+          // 'audio-capture' (pas de micro) / 'network' (offline)
+          if (err === 'not-allowed' || err === 'service-not-allowed') {
+            if (typeof showToast === 'function') showToast('Permission micro refusée');
+          } else if (err === 'audio-capture') {
+            if (typeof showToast === 'function') showToast('Aucun micro détecté');
+          } else if (err === 'network') {
+            if (typeof showToast === 'function') showToast('Réseau requis pour la dictée');
+          }
+          // 'no-speech' et 'aborted' = silencieux (UX douce)
+        } catch(e) {}
+        recording = false;
+        _updateBtn();
+      };
+      rec.onend = function() {
+        recording = false;
+        _updateBtn();
+      };
+      rec.onstart = function() {
+        recording = true;
+        _lastError = null;
+        _updateBtn();
+      };
+      return rec;
+    } catch(e) { return null; }
+  }
+
+  return {
+    isSupported: function() { return supported; },
+    isRecording: function() { return recording; },
+    lastError: function() { return _lastError; },
+    toggle: function() {
+      if (!supported) {
+        try { if (typeof showToast === 'function') showToast('Dictée vocale non supportée'); } catch(e) {}
+        return;
+      }
+      if (recording) {
+        // Stop
+        try { if (recognition && recognition.stop) recognition.stop(); } catch(e) {}
+        recording = false;
+        _updateBtn();
+      } else {
+        // Start (réinit l'instance pour éviter conflits state)
+        try {
+          if (recognition && recognition.abort) { try { recognition.abort(); } catch(e) {} }
+          recognition = _initRecognition();
+          if (recognition) recognition.start();
+        } catch(e) {
+          recording = false;
+          _updateBtn();
+          try { if (typeof showToast === 'function') showToast('Erreur démarrage micro'); } catch(_e) {}
+        }
+      }
+    },
+    stop: function() {
+      if (recording && recognition) {
+        try { recognition.stop(); } catch(e) {}
+        recording = false;
+        _updateBtn();
+      }
+    }
+  };
+})();
 
 // POLISH 2026-04 (V1.2) : toast léger pour feedback actions (copier/régénérer/rating).
 function showToast(text) {
