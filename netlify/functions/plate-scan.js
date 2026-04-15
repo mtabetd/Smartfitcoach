@@ -1,8 +1,13 @@
 // netlify/functions/plate-scan.js
 // Proxy sécurisé vers l'API Anthropic — analyse d'assiette par vision IA
 
-const MODEL = 'claude-haiku-4-5-20251001';
-const MAX_TOKENS = 150; // JSON only — très court
+// UPGRADE 2026-04 : Haiku 4.5 → Sonnet 4.6 pour meilleure précision vision.
+// Bénéfice : reconnaissance plus fine des ingrédients, estimation macros
+// plus cohérente avec portion visible, meilleure gestion des plats composés.
+// Coût : ~3× (reste <0.02€/scan avec 5/h max/IP = <0.50€/utilisateur/mois).
+// Rate limit INCHANGÉ (5/h) → coût total maîtrisé.
+const MODEL = 'claude-sonnet-4-6';
+const MAX_TOKENS = 300; // Sonnet peut raisonner mieux avec + de tokens
 
 // Domaines autorisés pour CORS
 var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
@@ -157,7 +162,10 @@ exports.handler = async function(event, context) {
     var requestBody = JSON.stringify({
       model: MODEL,
       max_tokens: MAX_TOKENS,
-      system: 'JSON only. No prose.',
+      system: 'Tu es un nutritionniste expert en analyse d\'assiettes. '
+            + 'Tu retournes UNIQUEMENT du JSON valide, pas de prose ni markdown. '
+            + 'Si plusieurs plats, concatène dans "name" (ex: "Poulet riz brocoli"). '
+            + 'Estimations basées sur tables Ciqual / USDA, arrondies à l\'entier.',
       messages: [
         {
           role: 'user',
@@ -172,7 +180,11 @@ exports.handler = async function(event, context) {
             },
             {
               type: 'text',
-              text: 'Identifie ce plat et estime les macros pour la portion visible. Réponds UNIQUEMENT avec ce JSON: {"name":"...","kcal":X,"p":X,"g":X,"l":X,"portion":"Xg"}'
+              text: 'Identifie ce plat et estime les macronutriments pour la portion VISIBLE sur la photo. '
+                  + 'Réponds UNIQUEMENT avec ce JSON (aucun texte avant ou après, aucun markdown ```) : '
+                  + '{"name":"...","kcal":X,"p":X,"g":X,"l":X,"portion":"Xg"} '
+                  + 'où kcal=calories totales de la portion, p=protéines g, g=glucides g, l=lipides g, '
+                  + 'portion="poids estimé en grammes". Si incertain sur la portion, prends 300g par défaut.'
             }
           ]
         }
