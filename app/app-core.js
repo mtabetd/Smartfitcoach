@@ -336,6 +336,59 @@ window.recordSessionFeedback = function(data) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 : agrégat rollup sessions cette semaine (lundi → dimanche ISO).
+// Lit S.sessionHistory (format { 'dayIdx_YYYY-MM-DD': {duration, kcalTotal, date, ... }})
+// Retourne { sessions, kcalTotal, durationTotal, daysActive, byDay[0..6] } ou null.
+// Utilisable par dashboard, coach IA, widgets divers (source de vérité unique).
+window.getWeekSessionsSummary = function() {
+  try {
+    var S = window.S;
+    if (!S || !S.sessionHistory || typeof S.sessionHistory !== 'object') {
+      return { sessions: 0, kcalTotal: 0, durationTotal: 0, daysActive: 0, byDay: [0,0,0,0,0,0,0] };
+    }
+    // Calcul du lundi 00:00 de la semaine courante (ISO 8601)
+    var now = new Date();
+    var jsDay = now.getDay(); // 0=dim, 1=lun, ..., 6=sam
+    var daysSinceMonday = (jsDay + 6) % 7; // Lun=0, Dim=6
+    var monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysSinceMonday, 0, 0, 0, 0);
+    var sessions = 0, kcalTotal = 0, durationTotal = 0;
+    var byDay = [0, 0, 0, 0, 0, 0, 0]; // index 0 = lundi, 6 = dimanche
+    Object.keys(S.sessionHistory).forEach(function(k) {
+      var entry = S.sessionHistory[k];
+      if (!entry || typeof entry !== 'object') return;
+      // Parse la date : soit entry.date (ISO), soit via le suffixe clé 'dayIdx_YYYY-MM-DD'
+      var dateStr = null;
+      if (entry.date) {
+        dateStr = String(entry.date).slice(0, 10);
+      } else {
+        var m = k.match(/(\d{4}-\d{2}-\d{2})$/);
+        if (m) dateStr = m[1];
+      }
+      if (!dateStr) return;
+      var entryDate = new Date(dateStr + 'T00:00:00');
+      if (isNaN(entryDate.getTime())) return;
+      if (entryDate < monday) return; // plus ancien que cette semaine
+      if (entryDate > now) return; // futur (invalide)
+      sessions += 1;
+      var kcal = parseFloat(entry.kcalTotal);
+      if (!isNaN(kcal) && isFinite(kcal) && kcal > 0) kcalTotal += kcal;
+      var dur = parseFloat(entry.duration);
+      if (!isNaN(dur) && isFinite(dur) && dur > 0) durationTotal += dur;
+      // Slot jour (0=lundi)
+      var diffDays = Math.floor((entryDate.getTime() - monday.getTime()) / (24 * 3600 * 1000));
+      if (diffDays >= 0 && diffDays < 7) byDay[diffDays] += 1;
+    });
+    var daysActive = byDay.filter(function(v) { return v > 0; }).length;
+    return {
+      sessions: sessions,
+      kcalTotal: Math.round(kcalTotal),
+      durationTotal: Math.round(durationTotal),
+      daysActive: daysActive,
+      byDay: byDay
+    };
+  } catch(e) { return null; }
+};
+
 // POLISH 2026-04 : wellness history multi-jours — jusqu'ici S.todayWellness
 // stockait 1 seul jour, impossible donc de corréler sleep↓ vs RPE↑ sur la durée.
 // Maintenant : mtd_wellness_history_<uid> stocke jusqu'à 90 jours glissants.
