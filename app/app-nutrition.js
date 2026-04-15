@@ -1151,6 +1151,8 @@ function renderStep4(p) {
   p.appendChild(h('p', {'class': 'subtitle'}, 'Vos conditions de sant\u00e9 pour des recommandations s\u00fbres.'));
   if (window.TIPS) TIPS.renderTip(p, 'health');
 
+  // FIX edge audit : guard si S.medical n'est pas array (corruption ou onboarding partiel)
+  if (!Array.isArray(S.medical)) S.medical = [];
   var none = S.medical.length === 0;
   // Fix UX 2026-04 : banner "bonne santé" = raccourci direct vers step suivant
   // (avant, il fallait scroller jusqu'en bas. Maintenant un clic = valider + avancer)

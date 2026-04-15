@@ -2186,6 +2186,7 @@ function renderCrossfitLevel(p) {
  bRow.appendChild(h('div', {style: 'font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--fg,#0A0A09);flex:1'}, bf.label));
  var bInp = h('input', {
  type: bf.type || 'text',
+ inputmode: bf.type === 'number' ? 'numeric' : 'text',
  placeholder: bf.placeholder,
  style: 'width:90px;padding:5px 8px;border:1px solid var(--border);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;background:var(--ivory);color:#0A0A09;text-align:center',
  value: S.crossfitBenchmarks[bf.key] || ''
@@ -2828,6 +2829,7 @@ function renderWellnessBanner(p) {
 }
 
 function renderWellnessCheckin(p, onComplete) {
+ if (!p || !p.nodeType) return; // FIX edge audit : guard p=null
  var state = { sleep: 0, muscles: '', energy: '' };
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Bilan de forme'));

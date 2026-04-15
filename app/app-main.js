@@ -398,6 +398,7 @@ window.loadProfile = loadProfile;
 
 // ─── WELCOME SCREEN (first connection) ───
 window.renderWelcomeScreen = function renderWelcomeScreen(app) {
+ if (!app || !app.nodeType) return; // FIX edge audit : guard p=null
  // Safe first name retrieval — S.prenom preferred, fallback to auth name, no crash
  var _u = window.AUTH ? window.AUTH.getUser() : null;
  var _name = (window.S && window.S.prenom && window.S.prenom.trim())
@@ -496,6 +497,7 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
 
 // ─── MODULE CHOICE SCREEN ───
 window.renderModuleChoice = function renderModuleChoice(content) {
+ if (!content || !content.nodeType) return; // FIX edge audit : guard p=null
  var c = h('div', {style: 'max-width:420px;margin:0 auto;padding:48px 20px 32px'});
 
  // Header — staggered entrance animation
@@ -934,7 +936,7 @@ function renderProfilePage(container) {
    editForm.appendChild(_efPoidsLabel);
    var _efPoidsWrap = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:14px;'});
    var _efPoids = h('input', {
-     type: 'number', min: '30', max: '300', step: '0.1',
+     type: 'number', inputmode: 'decimal', min: '30', max: '300', step: '0.1',
      value: S.weight ? String(S.weight) : '',
      placeholder: '75',
      style: 'flex:1;min-width:0;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;outline:none;border-radius:2px;',
@@ -949,7 +951,7 @@ function renderProfilePage(container) {
    editForm.appendChild(_efTailleLabel);
    var _efTailleWrap = h('div', {style: 'display:flex;align-items:center;gap:8px;margin-bottom:14px;'});
    var _efTaille = h('input', {
-     type: 'number', min: '120', max: '250', step: '1',
+     type: 'number', inputmode: 'numeric', min: '120', max: '250', step: '1',
      value: S.height ? String(S.height) : '',
      placeholder: '175',
      style: 'flex:1;min-width:0;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;outline:none;border-radius:2px;',
@@ -2514,7 +2516,8 @@ render();
 }
 
 // Wait for Supabase session before first render
-if (AUTH.ready) {
+// FIX edge audit 2026-04-15 : guard window.AUTH (race condition si auth.js retardé).
+if (typeof AUTH !== 'undefined' && AUTH && typeof AUTH.ready === 'function') {
  AUTH.ready().then(_doAutoLogin).catch(_doAutoLogin);
 } else {
  _doAutoLogin();

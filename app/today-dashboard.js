@@ -1180,6 +1180,13 @@ function renderCardStreak() {
   var streak = getStreakValue();
   var lastBadge = getLastBadge();
   if (streak <= 0 && !lastBadge) return null;
+  // FIX WARN-1 audit dashboard 2026-04-15 : "1 / Premier jour" prématuré
+  // (s'affichait dès le 1er render avant que l'user ait fait quoi que ce soit).
+  // On n'affiche le streak qu'à partir de J+1 (firstLoginDate < today) OU si streak >= 2.
+  var _S = window.S || {};
+  var _todayStr = new Date().toISOString().slice(0, 10);
+  var _isFirstDay = !_S.firstLoginDate || _S.firstLoginDate === _todayStr;
+  if (streak === 1 && _isFirstDay && !lastBadge) return null;
 
   var c = card();
   c.appendChild(eyebrow('PROGRESSION'));
@@ -2981,7 +2988,15 @@ function renderCardTDEEAdaptatif(S) {
   // Calculer la recommandation TDEE ajustée
   // 7700 kcal = 1 kg de graisse corporelle (approx)
   var kcalAdjust = Math.round((delta / daysDiff) * 7700);
-  var newTDEE = Math.max(1200, tdee - kcalAdjust);
+  // FIX FAIL-2 audit dashboard 2026-04-15 : plancher médicalement responsable
+  // (avant : 1200 kcal pour homme 70kg = irresponsable, peut induire carences).
+  // OMS / EFSA : minimum sécuritaire 1500 kcal femme, 1800 kcal homme.
+  var _S = window.S || {};
+  var _minSafe = _S.sex === 'femme' ? 1500 : 1800;
+  // Adoucir aussi : pas plus de ±300 kcal/j d'ajustement vs TDEE actuel (anti-yoyo)
+  var _maxStep = 300;
+  if (Math.abs(kcalAdjust) > _maxStep) kcalAdjust = (kcalAdjust > 0 ? _maxStep : -_maxStep);
+  var newTDEE = Math.max(_minSafe, tdee - kcalAdjust);
   var diffKcal = Math.abs(tdee - newTDEE);
   if (diffKcal < 50) return null; // Ajustement trop faible, ignorer
 
@@ -3005,6 +3020,13 @@ function renderCardTDEEAdaptatif(S) {
     : 'Tu peux augmenter tes apports de ' + diffKcal + '\u00a0kcal/jour (cible\u00a0: ' + newTDEE + '\u00a0kcal)';
 
   c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:700;color:var(--orange,#6A4A1A);margin:8px 0 0;line-height:1.5;' }, adjustMsg));
+
+  // FIX FAIL-2 : avertissement explicite si on touche le plancher (perte trop rapide → médecin)
+  if (newTDEE === _minSafe && delta < -1.5) {
+    c.appendChild(h('p', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);margin:8px 0 0;line-height:1.5;' },
+      '⚠ Perte rapide détectée. Plancher kcal sécuritaire atteint. Consulte un médecin/diététicien avant de poursuivre.'
+    ));
+  }
 
   // Bouton dismiss
   var dismissKey = 'mtd_tdee_adapt_dismissed_' + new Date().toISOString().slice(0, 7); // 1 fois par mois
@@ -3189,9 +3211,11 @@ function renderTodayDashboard(p) {
   // Affiché UNIQUEMENT si utilisateur n'a NI plan nutrition NI plan sport.
   try {
     var _hasNutritionPlan = Array.isArray(S.weekPlan) && S.weekPlan.length >= 7;
-    var _hasSportPlan = (S.sportProgram && Array.isArray(S.sportProgram.week) && S.sportProgram.week.length > 0)
-                        || (S.muscuIAProgram && Array.isArray(S.muscuIAProgram.weekProgram))
-                        || (S.activeProgram && S.activeProgram.weekProgram);
+    // FIX audit dashboard 2026-04-15 : S.sportProgram est un Array, PAS un objet {week:[]}.
+    // Ma version précédente affichait PREMIERS PAS même quand programme sport existait.
+    var _hasSportPlan = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0)
+                        || (S.muscuIAProgram && Array.isArray(S.muscuIAProgram.weekProgram) && S.muscuIAProgram.weekProgram.length > 0)
+                        || (S.activeProgram && Array.isArray(S.activeProgram.weekProgram) && S.activeProgram.weekProgram.length > 0);
     if (!_hasNutritionPlan && !_hasSportPlan) {
       var _firstStepCard = card('border-left:3px solid var(--black,#0A0A09);background:var(--cream,#F5F1E8);');
       _firstStepCard.appendChild(eyebrow('PREMIERS PAS'));

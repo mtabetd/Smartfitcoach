@@ -652,6 +652,12 @@ html {
   flex: 1;
   text-align: center;
   transition: all 0.3s ease;
+  /* FIX P0 audit mobile 2026-04-15 : tap target ≥ 44px (Apple HIG / WCAG 2.5.5).
+     Avant : font:9px, padding:8px → ~34px → trop petit pour le doigt. */
+  min-height: 44px;
+  font-size: 11px;
+  padding: 14px 4px;
+  cursor: pointer;
 }
 
 .main-nav-tab:hover {

@@ -2802,6 +2802,8 @@ window.checkProgressionSuggestion = checkProgressionSuggestion;
 // ─── renderSetTable(exerciceName, sets, exerciceId) ──────────────────────────
 // Génère le HTML DOM pour la table interactive de séries
 function renderSetTable(exerciceName, sets, exerciceId) {
+  // FIX edge audit : guard contre sets non-array (évite forEach crash).
+  if (!Array.isArray(sets)) sets = [];
   var container = h('div', {'class': 'set-table-container', id: 'sets-' + exerciceId});
   var table = h('table', {'class': 'set-table'});
   var thead = h('thead');
