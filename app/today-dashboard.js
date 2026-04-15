@@ -3982,19 +3982,23 @@ window.renderCardCrossfit1RM = renderCardCrossfit1RM;
 // Affiché sur document.body si S._dashExtOpen=true. Animation translateY spring iOS.
 // Tabs internes : Records / Tendances / Charges / Objectifs.
 // ═══════════════════════════════════════════════════════════════════════════
-// Cleanup post-render : strip emoji du drawer (bible §13.1)
+// Cleanup post-render : strip emoji ET Unicode décoratifs (bible §13.1).
+// Couvre : emoji standard, symboles décoratifs (flèches, flocons), pictogrammes.
 function _hermesCleanupDrawerEmoji() {
   var drawer = document.getElementById('progression-drawer');
   if (!drawer) return;
-  var emojiRegex = /[\u{1F300}-\u{1FAFF}\u{1F600}-\u{1F64F}\u{2600}-\u{27BF}]/gu;
-  // Walk tous les text nodes, strip emoji
+  // Ranges : emoji classique + symboles étoiles/flèches/flocons décoratifs utilisés
+  // comme icônes (↓ ⬇ ↗ ❄ ★ ◆ — sans les supprimer ailleurs, juste dans le drawer).
+  var emojiRegex = /[\u{1F300}-\u{1FAFF}\u{1F600}-\u{1F64F}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2730}-\u{27BF}\u{2B00}-\u{2BFF}]/gu;
   var walker = document.createTreeWalker(drawer, NodeFilter.SHOW_TEXT, null, false);
   var node;
-  while (node = walker.nextNode()) {
-    if (emojiRegex.test(node.nodeValue)) {
-      node.nodeValue = node.nodeValue.replace(emojiRegex, '').replace(/\s+/g, ' ').trim();
+  var textNodes = [];
+  while (node = walker.nextNode()) textNodes.push(node);
+  textNodes.forEach(function(n) {
+    if (emojiRegex.test(n.nodeValue)) {
+      n.nodeValue = n.nodeValue.replace(emojiRegex, '').replace(/\s+/g, ' ').trim();
     }
-  }
+  });
 }
 
 function renderProgressionDrawer() {
@@ -4092,6 +4096,28 @@ if (!document.getElementById('hermes-drawer-styles')) {
     '  font-family: Georgia, serif !important;',
     '  font-style: italic !important;',
     '  font-size: 14px !important;',
+    '}',
+    /* Classes legacy avec fond noir ink-900 (non détectables via style*=) */
+    '#progression-drawer .sleep-btn,' +
+    '#progression-drawer .fj-add-btn,' +
+    '#progression-drawer .sfc-data-btn-primary,' +
+    '#progression-drawer .sfc-data-btn,' +
+    '#progression-drawer .week-dot.active,' +
+    '#progression-drawer .week-dot.today {',
+    '  background: transparent !important;',
+    '  color: var(--ink-900,#0A0A09) !important;',
+    '  border: 1px solid var(--ink-900,#0A0A09) !important;',
+    '  letter-spacing: 0 !important;',
+    '  text-transform: none !important;',
+    '  font-family: Georgia, serif !important;',
+    '  font-style: italic !important;',
+    '  font-size: 13px !important;',
+    '  font-weight: normal !important;',
+    '}',
+    /* Tous les boutons du drawer : pas de tracking uppercase */
+    '#progression-drawer button, #progression-drawer .btn {',
+    '  letter-spacing: 0 !important;',
+    '  text-transform: none !important;',
     '}'
   ].join('\n');
   document.head.appendChild(drawerStyleEl);
