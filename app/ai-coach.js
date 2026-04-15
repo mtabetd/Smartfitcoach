@@ -17,6 +17,19 @@ var MAX_MSG_CHARS = 500;   // tronquer chaque message à 500 chars avant envoi
 var _panelOpen = false;
 var _sending = false;
 
+// POLISH 2026-04 (i18n) : helper local i18n avec fallback FR (si window.I18N absent
+// ou clé inexistante). Permet refactor incrémental sans casser le hardcoded existant.
+function _t(key, fallback) {
+  try {
+    if (window.I18N && typeof window.I18N.t === 'function') {
+      var v = window.I18N.t(key);
+      // Si la clé n'est pas trouvée, I18N.t retourne la clé elle-même → fallback
+      if (v && v !== key) return v;
+    }
+  } catch(e) {}
+  return fallback;
+}
+
 // ─── CSS ─────────────────────────────────────────────────────────────────────
 var style = document.createElement('style');
 style.textContent = [
@@ -422,7 +435,7 @@ function buildUI() {
   // Message de bienvenue
   var ctx0 = buildContext();
   var prenom0 = ctx0.prenom ? (', ' + ctx0.prenom) : '';
-  appendCoachMessage(messages, 'La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd\'hui' + prenom0 + ' ?');
+  appendCoachMessage(messages, _t('coach.welcome', "La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui") + prenom0 + ' ?');
   panel.appendChild(messages);
 
   // Suggestions
@@ -435,7 +448,7 @@ function buildUI() {
   inputArea.id = 'ai-coach-input-area';
   var input = document.createElement('textarea');
   input.id = 'ai-coach-input';
-  input.placeholder = 'Pose ta question...';
+  input.placeholder = _t('coach.placeholder', 'Pose ta question...');
   // FIX P2 audit : maxLength pour éviter scroll horizontal confus (aligné MAX_MSG_CHARS backend)
   input.maxLength = MAX_MSG_CHARS;
   input.addEventListener('keydown', function(e) {
@@ -474,7 +487,7 @@ function buildUI() {
   }
   var sendBtn = document.createElement('button');
   sendBtn.id = 'ai-coach-send';
-  sendBtn.textContent = 'Envoyer';
+  sendBtn.textContent = _t('coach.send', 'Envoyer');
   sendBtn.addEventListener('click', sendMessage);
   inputArea.appendChild(input);
   if (micBtn) inputArea.appendChild(micBtn);
@@ -492,7 +505,7 @@ function buildUI() {
   var newPill = document.createElement('div');
   newPill.id = 'ai-new-pill';
   newPill.className = 'ai-new-pill';
-  newPill.textContent = '↓ Nouveaux messages';
+  newPill.textContent = _t('coach.new_messages_pill', '↓ Nouveaux messages');
   newPill.addEventListener('click', function() {
     var msgs = document.getElementById('ai-coach-messages');
     if (msgs) {
@@ -1040,7 +1053,7 @@ function appendTyping(container) {
   var msg = document.createElement('div');
   msg.className = 'ai-msg-text ai-msg-typing';
   var lbl = document.createElement('span');
-  lbl.textContent = 'Analyse en cours';
+  lbl.textContent = _t('coach.typing_label', 'Analyse en cours');
   msg.appendChild(lbl);
   // POLISH 2026-04 : 3 points animés CSS (clean, moins gadget que "réfléchit…")
   var dots = document.createElement('span');

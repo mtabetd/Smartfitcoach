@@ -2190,7 +2190,31 @@ window.I18N = {
       'sport.zone_knees': "Genoux",
       'sport.zone_ankles': "Chevilles",
       'common.minor_warning': "Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé.",
-      'Langue / Language': 'Langue / Language'
+      'Langue / Language': 'Langue / Language',
+      // POLISH 2026-04 (i18n) : coach IA panel + actions
+      'coach.placeholder': 'Pose ta question...',
+      'coach.send': 'Envoyer',
+      'coach.welcome': "La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui",
+      'coach.typing_label': 'Analyse en cours',
+      'coach.action_copy': 'Copier',
+      'coach.action_regenerate': 'Régénérer',
+      'coach.action_useful': 'Utile',
+      'coach.action_not_useful': 'Peu utile',
+      'coach.action_voice': 'Dictée vocale',
+      'coach.toast_copied': 'Copié',
+      'coach.toast_copy_fail': 'Échec copie',
+      'coach.toast_thanks': 'Merci pour ton retour',
+      'coach.toast_feedback_saved': 'Retour enregistré',
+      'coach.toast_regenerating': 'Régénération…',
+      'coach.toast_voice_unsupported': 'Dictée vocale non supportée',
+      'coach.toast_voice_denied': 'Micro refusé. Vérifie les paramètres du navigateur',
+      'coach.toast_voice_no_mic': 'Aucun micro détecté',
+      'coach.toast_voice_network': 'Réseau requis pour la dictée',
+      'coach.toast_voice_start_error': 'Erreur démarrage micro',
+      'coach.error_too_long': 'Le coach met trop de temps à répondre. Réessaie dans quelques instants.',
+      'coach.error_rate_limit': 'Trop de messages envoyés. Attends quelques minutes avant de réessayer.',
+      'coach.error_offline': 'Impossible de joindre le coach. Vérifiez votre connexion.',
+      'coach.new_messages_pill': '↓ Nouveaux messages'
     },
 
     en: {
@@ -2428,7 +2452,31 @@ window.I18N = {
       'common.g': 'g',
       'common.ml': 'ml',
       'common.minor_warning': 'For users under 18, this program should be followed under the supervision of a healthcare professional.',
-      'Langue / Language': 'Language'
+      'Langue / Language': 'Language',
+      // POLISH 2026-04 (i18n) : coach IA panel + actions (EN)
+      'coach.placeholder': 'Ask your question...',
+      'coach.send': 'Send',
+      'coach.welcome': "Performance is built in the details. What would you like to refine in your training today",
+      'coach.typing_label': 'Analyzing',
+      'coach.action_copy': 'Copy',
+      'coach.action_regenerate': 'Regenerate',
+      'coach.action_useful': 'Useful',
+      'coach.action_not_useful': 'Not useful',
+      'coach.action_voice': 'Voice input',
+      'coach.toast_copied': 'Copied',
+      'coach.toast_copy_fail': 'Copy failed',
+      'coach.toast_thanks': 'Thanks for your feedback',
+      'coach.toast_feedback_saved': 'Feedback saved',
+      'coach.toast_regenerating': 'Regenerating…',
+      'coach.toast_voice_unsupported': 'Voice input not supported',
+      'coach.toast_voice_denied': 'Microphone denied. Check your browser settings',
+      'coach.toast_voice_no_mic': 'No microphone detected',
+      'coach.toast_voice_network': 'Network required for voice input',
+      'coach.toast_voice_start_error': 'Microphone start error',
+      'coach.error_too_long': 'Coach is taking too long to reply. Please try again in a moment.',
+      'coach.error_rate_limit': 'Too many messages. Please wait a few minutes before retrying.',
+      'coach.error_offline': 'Cannot reach the coach. Check your connection.',
+      'coach.new_messages_pill': '↓ New messages'
     }
   }
 };
