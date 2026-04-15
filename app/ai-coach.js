@@ -17,6 +17,19 @@ var MAX_MSG_CHARS = 500;   // tronquer chaque message à 500 chars avant envoi
 var _panelOpen = false;
 var _sending = false;
 
+// POLISH 2026-04 (i18n) : helper local i18n avec fallback FR (si window.I18N absent
+// ou clé inexistante). Permet refactor incrémental sans casser le hardcoded existant.
+function _t(key, fallback) {
+  try {
+    if (window.I18N && typeof window.I18N.t === 'function') {
+      var v = window.I18N.t(key);
+      // Si la clé n'est pas trouvée, I18N.t retourne la clé elle-même → fallback
+      if (v && v !== key) return v;
+    }
+  } catch(e) {}
+  return fallback;
+}
+
 // ─── CSS ─────────────────────────────────────────────────────────────────────
 var style = document.createElement('style');
 style.textContent = [
@@ -84,6 +97,15 @@ style.textContent = [
   '#ai-coach-send{background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;padding:10px 18px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;transition:all 0.2s ease;}',
   '#ai-coach-send:disabled{opacity:0.35;cursor:not-allowed;}',
   '#ai-coach-send:hover:not(:disabled){background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);}',
+  // POLISH 2026-04 (VOICE) : bouton micro Web Speech API. SVG inline (cohérent design luxe vs emoji).
+  '#ai-coach-mic{background:none;border:1px solid var(--border,#D8D8D0);border-radius:2px;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--grey,#6B6B65);transition:all 0.2s ease;flex-shrink:0;padding:0;}',
+  '#ai-coach-mic:hover:not(:disabled){border-color:var(--black,#0A0A09);color:var(--black,#0A0A09);background:var(--ivory2,#F4F4F0);}',
+  '#ai-coach-mic:disabled{opacity:0.35;cursor:not-allowed;}',
+  '#ai-coach-mic.recording{border-color:var(--red,#5A1010);color:var(--red,#5A1010);background:rgba(90,16,16,0.04);animation:micPulse 1.4s ease-in-out infinite;}',
+  '#ai-coach-mic svg{width:18px;height:18px;display:block;}',
+  '@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(90,16,16,0.35);}50%{box-shadow:0 0 0 6px rgba(90,16,16,0);}}',
+  // FIX P2 audit accessibility : respecter prefers-reduced-motion (user avec migraines/vestibular)
+  '@media (prefers-reduced-motion: reduce){#ai-coach-mic.recording{animation:none;box-shadow:0 0 0 3px rgba(90,16,16,0.2);}}',
 
   // Erreur
   '.ai-msg-error{background:var(--redbg,rgba(90,16,16,0.06));border:1px solid rgba(90,16,16,0.15);border-radius:2px;color:var(--red,#5A1010);padding:12px 16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;}'
@@ -413,7 +435,7 @@ function buildUI() {
   // Message de bienvenue
   var ctx0 = buildContext();
   var prenom0 = ctx0.prenom ? (', ' + ctx0.prenom) : '';
-  appendCoachMessage(messages, 'La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd\'hui' + prenom0 + ' ?');
+  appendCoachMessage(messages, _t('coach.welcome', "La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui") + prenom0 + ' ?');
   panel.appendChild(messages);
 
   // Suggestions
@@ -426,7 +448,9 @@ function buildUI() {
   inputArea.id = 'ai-coach-input-area';
   var input = document.createElement('textarea');
   input.id = 'ai-coach-input';
-  input.placeholder = 'Pose ta question...';
+  input.placeholder = _t('coach.placeholder', 'Pose ta question...');
+  // FIX P2 audit : maxLength pour éviter scroll horizontal confus (aligné MAX_MSG_CHARS backend)
+  input.maxLength = MAX_MSG_CHARS;
   input.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   });
@@ -434,11 +458,39 @@ function buildUI() {
     this.style.height = '40px';
     this.style.height = Math.min(this.scrollHeight, 100) + 'px';
   });
+  // POLISH 2026-04 (VOICE) : bouton micro pour dictée vocale (Web Speech API).
+  // Affiché UNIQUEMENT si SpeechRecognition disponible (fallback gracieux).
+  // Click → toggle (start si idle, stop si recording). Transcrit dans le textarea.
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var micBtn = null;
+  if (SR) {
+    micBtn = document.createElement('button');
+    micBtn.id = 'ai-coach-mic';
+    micBtn.type = 'button';
+    micBtn.title = 'Dictée vocale';
+    micBtn.setAttribute('aria-label', 'Dicter ma question au coach');
+    micBtn.setAttribute('data-tooltip', 'Dictée vocale');
+    // SVG inline micro (cohérent design luxe — pas d'emoji)
+    micBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+      + '<rect x="9" y="3" width="6" height="11" rx="3"/>'
+      + '<path d="M5 11a7 7 0 0 0 14 0"/>'
+      + '<line x1="12" y1="18" x2="12" y2="22"/>'
+      + '<line x1="9" y1="22" x2="15" y2="22"/>'
+      + '</svg>';
+    // FIX P1 audit : aria-pressed initial (toggle button state pour screen readers)
+    micBtn.setAttribute('aria-pressed', 'false');
+    micBtn.addEventListener('click', function() {
+      try {
+        if (window.SpeechInput) window.SpeechInput.toggle();
+      } catch(e) { /* silencieux */ }
+    });
+  }
   var sendBtn = document.createElement('button');
   sendBtn.id = 'ai-coach-send';
-  sendBtn.textContent = 'Envoyer';
+  sendBtn.textContent = _t('coach.send', 'Envoyer');
   sendBtn.addEventListener('click', sendMessage);
   inputArea.appendChild(input);
+  if (micBtn) inputArea.appendChild(micBtn);
   inputArea.appendChild(sendBtn);
   panel.appendChild(inputArea);
 
@@ -453,7 +505,7 @@ function buildUI() {
   var newPill = document.createElement('div');
   newPill.id = 'ai-new-pill';
   newPill.className = 'ai-new-pill';
-  newPill.textContent = '↓ Nouveaux messages';
+  newPill.textContent = _t('coach.new_messages_pill', '↓ Nouveaux messages');
   newPill.addEventListener('click', function() {
     var msgs = document.getElementById('ai-coach-messages');
     if (msgs) {
@@ -577,7 +629,7 @@ function replayLastUserMessage(_unused) {
     } else {
       var reply = data.reply || 'Pas de réponse.';
       stripRegenerateButtonsFromPrevious(messages);
-      appendCoachMessage(messages, reply, { canRegenerate: true });
+      appendCoachMessage(messages, reply, { canRegenerate: true, stream: true });
       if (Array.isArray(S.aiCoachHistory)) {
         S.aiCoachHistory.push({ role: 'assistant', content: reply });
         if (S.aiCoachHistory.length > MAX_HISTORY) S.aiCoachHistory = S.aiCoachHistory.slice(-MAX_HISTORY);
@@ -631,6 +683,162 @@ function updateRateLimitHint(remaining) {
   } catch(e) {}
 }
 
+// POLISH 2026-04 (VOICE) : Web Speech API wrapper pour dictée vocale.
+// Exposé sur window.SpeechInput. Fallback gracieux si API absente.
+// État : { recognition (instance), recording (bool), unsupported (bool) }
+// API publique : SpeechInput.isSupported(), SpeechInput.toggle(), SpeechInput.stop()
+window.SpeechInput = (function() {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var supported = !!SR;
+  var recognition = null;
+  var recording = false;
+  var _lastError = null;
+  var _initializing = false; // FIX P0 audit : flag anti-race condition double-toggle
+
+  // Helper : update UI bouton micro selon état (recording + aria-pressed + disabled)
+  // FIX P1 audit : aria-pressed pour screen readers + sync disabled si _sending
+  function _updateBtn() {
+    try {
+      var btn = document.getElementById('ai-coach-mic');
+      if (!btn) return;
+      if (recording) {
+        btn.classList.add('recording');
+        btn.setAttribute('aria-pressed', 'true');
+      } else {
+        btn.classList.remove('recording');
+        btn.setAttribute('aria-pressed', 'false');
+      }
+      // Désactiver micro pendant qu'une requête API est en cours (UX cohérence)
+      btn.disabled = !!_sending;
+    } catch(e) {}
+  }
+
+  // Helper : append text au textarea coach (à la position curseur OU fin)
+  function _appendToInput(text) {
+    try {
+      var input = document.getElementById('ai-coach-input');
+      if (!input || typeof text !== 'string') return;
+      var current = input.value || '';
+      var trimmed = String(text).trim();
+      if (!trimmed) return;
+      var separator = (current && !current.endsWith(' ')) ? ' ' : '';
+      input.value = current + separator + trimmed;
+      // Trigger "input" event pour auto-resize du textarea
+      try { input.dispatchEvent(new Event('input', { bubbles: true })); } catch(e) {}
+      // Focus pour permettre édition + envoi clavier
+      try { input.focus(); } catch(e) {}
+    } catch(e) {}
+  }
+
+  function _initRecognition() {
+    if (!SR) return null;
+    try {
+      var rec = new SR();
+      rec.continuous = false;       // 1 seul résultat (puis arrêt)
+      rec.interimResults = false;   // pas de mots intermédiaires (transcript final seulement)
+      // FIX P2 audit : dériver du lang app (ou navigator.language) au lieu de fr-FR hardcodé
+      var _lang = 'fr-FR';
+      try {
+        if (window.S && typeof window.S.lang === 'string' && window.S.lang.length >= 2) {
+          // S.lang est souvent 'fr' → BCP-47 étendu à 'fr-FR' / 'en-US'
+          var shortMap = { fr: 'fr-FR', en: 'en-US', es: 'es-ES', de: 'de-DE', it: 'it-IT', pt: 'pt-PT' };
+          _lang = shortMap[window.S.lang.toLowerCase()] || window.S.lang;
+        } else if (navigator && navigator.language) {
+          _lang = navigator.language;
+        }
+      } catch(_le) {}
+      rec.lang = _lang;
+      rec.maxAlternatives = 1;
+      rec.onresult = function(event) {
+        try {
+          if (!event || !event.results || !event.results.length) return;
+          var transcript = '';
+          for (var i = 0; i < event.results.length; i++) {
+            if (event.results[i].isFinal && event.results[i][0]) {
+              transcript += event.results[i][0].transcript;
+            }
+          }
+          if (transcript) _appendToInput(transcript);
+        } catch(e) {}
+      };
+      rec.onerror = function(event) {
+        try {
+          var err = event && event.error ? event.error : 'unknown';
+          _lastError = err;
+          // Erreurs courantes : 'no-speech' (silencieux OK), 'aborted' (user stop OK),
+          // 'not-allowed' (permission refusée → toast plus explicite pour retry)
+          // 'audio-capture' (pas de micro) / 'network' (offline)
+          // FIX P1 audit : message permission plus explicite → guide user vers settings browser
+          if (err === 'not-allowed' || err === 'service-not-allowed') {
+            if (typeof showToast === 'function') showToast('Micro refusé. Vérifie les paramètres du navigateur');
+          } else if (err === 'audio-capture') {
+            if (typeof showToast === 'function') showToast('Aucun micro détecté');
+          } else if (err === 'network') {
+            if (typeof showToast === 'function') showToast('Réseau requis pour la dictée');
+          }
+          // 'no-speech' et 'aborted' = silencieux (UX douce)
+        } catch(e) {}
+        recording = false;
+        _updateBtn();
+      };
+      rec.onend = function() {
+        recording = false;
+        _updateBtn();
+      };
+      rec.onstart = function() {
+        recording = true;
+        _lastError = null;
+        _updateBtn();
+      };
+      return rec;
+    } catch(e) { return null; }
+  }
+
+  return {
+    isSupported: function() { return supported; },
+    isRecording: function() { return recording; },
+    lastError: function() { return _lastError; },
+    toggle: function() {
+      // FIX P0 audit : bloquer double-toggle pendant init (race condition double append)
+      if (_initializing) return;
+      if (!supported) {
+        try { if (typeof showToast === 'function') showToast('Dictée vocale non supportée'); } catch(e) {}
+        return;
+      }
+      _initializing = true;
+      try {
+        if (recording) {
+          // Stop
+          try { if (recognition && recognition.stop) recognition.stop(); } catch(e) {}
+          recording = false;
+          _updateBtn();
+        } else {
+          // Start (réinit l'instance pour éviter conflits state)
+          try {
+            if (recognition && recognition.abort) { try { recognition.abort(); } catch(e) {} }
+            recognition = _initRecognition();
+            if (recognition) recognition.start();
+          } catch(e) {
+            recording = false;
+            _updateBtn();
+            try { if (typeof showToast === 'function') showToast('Erreur démarrage micro'); } catch(_e) {}
+          }
+        }
+      } finally {
+        // Libérer le lock après ~50ms (délai normal pour instance init + start async)
+        setTimeout(function() { _initializing = false; }, 50);
+      }
+    },
+    stop: function() {
+      if (recording && recognition) {
+        try { recognition.stop(); } catch(e) {}
+        recording = false;
+        _updateBtn();
+      }
+    }
+  };
+})();
+
 // POLISH 2026-04 (V1.2) : toast léger pour feedback actions (copier/régénérer/rating).
 function showToast(text) {
   try {
@@ -682,6 +890,51 @@ function recordCoachFeedback(messageText, rating) {
   } catch(e) {}
 }
 
+// POLISH 2026-04 (STREAMING) : streaming visuel "fake" client-side.
+// Affiche le texte mot par mot avec un délai variable basé sur la longueur du mot.
+// Pas de vrai SSE backend (Netlify timeout 26s + SSE proxy limité), mais le user
+// PERÇOIT un effet "live typing" identique. Respecte prefers-reduced-motion.
+// Vitesse : ~28ms/mot court, +6ms/caractère supplémentaire (max 80ms par chunk).
+function _streamTextInto(msgEl, text, doneCb) {
+  try {
+    if (!msgEl || !text) { if (doneCb) doneCb(); return; }
+    // Bypass animation si prefers-reduced-motion (accessibilité)
+    var reduceMotion = false;
+    try {
+      reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch(e) {}
+    if (reduceMotion) { msgEl.textContent = text; if (doneCb) doneCb(); return; }
+    // Découper par mot (préserve espaces + ponctuation)
+    var tokens = String(text).match(/\S+\s*/g) || [text];
+    msgEl.textContent = '';
+    var i = 0;
+    function tick() {
+      if (i >= tokens.length) { if (doneCb) doneCb(); return; }
+      msgEl.textContent += tokens[i];
+      // Auto-scroll pendant le streaming
+      try {
+        var scroller = document.getElementById('ai-coach-messages');
+        if (scroller && !_autoScrollSuspended) scroller.scrollTop = scroller.scrollHeight;
+      } catch(e) {}
+      var token = tokens[i];
+      i++;
+      // Délai variable : base 28ms + 6ms par char au-delà de 4 chars (cap 80ms)
+      var extra = Math.max(0, token.length - 4) * 6;
+      // Ralentir après ponctuation (point, virgule, deux-points, point d'exclamation/interrogation)
+      var lastChar = token.replace(/\s+$/, '').slice(-1);
+      var punctBoost = (lastChar === '.' || lastChar === '!' || lastChar === '?') ? 120
+                     : (lastChar === ',' || lastChar === ':' || lastChar === ';') ? 60 : 0;
+      var delay = Math.min(80, 28 + extra) + punctBoost;
+      setTimeout(tick, delay);
+    }
+    tick();
+  } catch(e) {
+    // Fallback : pose le texte d'un coup
+    try { msgEl.textContent = text; } catch(_e) {}
+    if (doneCb) doneCb();
+  }
+}
+
 function appendCoachMessage(container, text, opts) {
   opts = opts || {};
   var wrap = document.createElement('div');
@@ -691,7 +944,14 @@ function appendCoachMessage(container, text, opts) {
   name.textContent = 'Smart Fit Coach';
   var msg = document.createElement('div');
   msg.className = 'ai-msg-text';
-  msg.textContent = text;
+  // POLISH 2026-04 (STREAMING) : si opts.stream=true → animation mot par mot.
+  // Sinon (chargement historique, regen, etc.) → texte d'un coup.
+  if (opts.stream) {
+    msg.textContent = ''; // vide initial
+    _streamTextInto(msg, text);
+  } else {
+    msg.textContent = text;
+  }
   wrap.appendChild(name);
   wrap.appendChild(msg);
 
@@ -793,7 +1053,7 @@ function appendTyping(container) {
   var msg = document.createElement('div');
   msg.className = 'ai-msg-text ai-msg-typing';
   var lbl = document.createElement('span');
-  lbl.textContent = 'Analyse en cours';
+  lbl.textContent = _t('coach.typing_label', 'Analyse en cours');
   msg.appendChild(lbl);
   // POLISH 2026-04 : 3 points animés CSS (clean, moins gadget que "réfléchit…")
   var dots = document.createElement('span');
@@ -977,7 +1237,7 @@ function sendMessage() {
       // POLISH 2026-04 (V1.2) : dernier message a le bouton "Régénérer".
       // Les précédents (via stripActions) gardent copier + feedback mais pas regen.
       stripRegenerateButtonsFromPrevious(messages);
-      appendCoachMessage(messages, reply, { canRegenerate: true });
+      appendCoachMessage(messages, reply, { canRegenerate: true, stream: true });
       // Sauvegarder réponse dans historique
       if (Array.isArray(S.aiCoachHistory)) {
         S.aiCoachHistory.push({ role: 'assistant', content: reply });
@@ -1035,12 +1295,17 @@ function _patchRender() {
     try {
       var loggedIn = window.AUTH && window.AUTH.isLoggedIn && window.AUTH.isLoggedIn();
       if (loggedIn && !document.getElementById('ai-coach-btn')) {
+        // FIX P1 audit : stop recording AVANT buildUI si panel était recréé pendant dictée
+        // (évite état fantôme : instance SpeechRecognition active mais bouton sans .recording)
+        try { if (window.SpeechInput && window.SpeechInput.isRecording && window.SpeechInput.isRecording()) window.SpeechInput.stop(); } catch(_sie) {}
         buildUI();
       } else if (!loggedIn) {
         var btn = document.getElementById('ai-coach-btn');
         var panel = document.getElementById('ai-coach-panel');
         if (btn) btn.remove();
         if (panel) panel.remove();
+        // FIX P1 audit : si logout pendant recording, stopper proprement
+        try { if (window.SpeechInput && window.SpeechInput.isRecording && window.SpeechInput.isRecording()) window.SpeechInput.stop(); } catch(_sle) {}
       }
       // Masquer le bouton coach pendant l'onboarding actif (nStep 1-10 ou sStep 1-3)
       // pour éviter de bloquer les champs de saisie et les options de formulaire

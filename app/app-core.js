@@ -493,6 +493,33 @@ window.getNutritionTrend = function(days) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 (NOTIFS) : date de la dernière séance loggée (YYYY-MM-DD) ou null.
+// Utilisé par push-manager pour détecter l'inactivité + déclencher un rappel "comeback".
+// Lit S.sessionHistory dont les clés sont du format 'dayIdx_YYYY-MM-DD'.
+window.getLastSessionDate = function() {
+  try {
+    var S = window.S;
+    if (!S || !S.sessionHistory || typeof S.sessionHistory !== 'object') return null;
+    var dates = Object.keys(S.sessionHistory)
+      .map(function(k) { var m = String(k).match(/(\d{4}-\d{2}-\d{2})$/); return m ? m[1] : null; })
+      .filter(function(x) { return !!x; })
+      .sort();
+    return dates.length > 0 ? dates[dates.length - 1] : null;
+  } catch(e) { return null; }
+};
+
+// Renvoie le nombre de jours depuis la dernière séance (ou null).
+window.getDaysSinceLastSession = function() {
+  try {
+    var last = window.getLastSessionDate();
+    if (!last) return null;
+    var lastMs = new Date(last + 'T00:00:00').getTime();
+    if (isNaN(lastMs)) return null;
+    var diff = Date.now() - lastMs;
+    return Math.floor(diff / 86400000);
+  } catch(e) { return null; }
+};
+
 // POLISH 2026-04 (RECORDS) : calcule les meilleurs résultats historiques de l'user.
 // Retourne { maxLifts:[...], weightMilestone, longestSession, maxStreak } ou null.
 // 100% défensif : tous les champs optionnels, retourne null si aucune donnée.
@@ -2163,7 +2190,31 @@ window.I18N = {
       'sport.zone_knees': "Genoux",
       'sport.zone_ankles': "Chevilles",
       'common.minor_warning': "Pour les moins de 18 ans, ce programme doit être suivi avec l'accompagnement d'un professionnel de santé.",
-      'Langue / Language': 'Langue / Language'
+      'Langue / Language': 'Langue / Language',
+      // POLISH 2026-04 (i18n) : coach IA panel + actions
+      'coach.placeholder': 'Pose ta question...',
+      'coach.send': 'Envoyer',
+      'coach.welcome': "La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui",
+      'coach.typing_label': 'Analyse en cours',
+      'coach.action_copy': 'Copier',
+      'coach.action_regenerate': 'Régénérer',
+      'coach.action_useful': 'Utile',
+      'coach.action_not_useful': 'Peu utile',
+      'coach.action_voice': 'Dictée vocale',
+      'coach.toast_copied': 'Copié',
+      'coach.toast_copy_fail': 'Échec copie',
+      'coach.toast_thanks': 'Merci pour ton retour',
+      'coach.toast_feedback_saved': 'Retour enregistré',
+      'coach.toast_regenerating': 'Régénération…',
+      'coach.toast_voice_unsupported': 'Dictée vocale non supportée',
+      'coach.toast_voice_denied': 'Micro refusé. Vérifie les paramètres du navigateur',
+      'coach.toast_voice_no_mic': 'Aucun micro détecté',
+      'coach.toast_voice_network': 'Réseau requis pour la dictée',
+      'coach.toast_voice_start_error': 'Erreur démarrage micro',
+      'coach.error_too_long': 'Le coach met trop de temps à répondre. Réessaie dans quelques instants.',
+      'coach.error_rate_limit': 'Trop de messages envoyés. Attends quelques minutes avant de réessayer.',
+      'coach.error_offline': 'Impossible de joindre le coach. Vérifiez votre connexion.',
+      'coach.new_messages_pill': '↓ Nouveaux messages'
     },
 
     en: {
@@ -2401,7 +2452,31 @@ window.I18N = {
       'common.g': 'g',
       'common.ml': 'ml',
       'common.minor_warning': 'For users under 18, this program should be followed under the supervision of a healthcare professional.',
-      'Langue / Language': 'Language'
+      'Langue / Language': 'Language',
+      // POLISH 2026-04 (i18n) : coach IA panel + actions (EN)
+      'coach.placeholder': 'Ask your question...',
+      'coach.send': 'Send',
+      'coach.welcome': "Performance is built in the details. What would you like to refine in your training today",
+      'coach.typing_label': 'Analyzing',
+      'coach.action_copy': 'Copy',
+      'coach.action_regenerate': 'Regenerate',
+      'coach.action_useful': 'Useful',
+      'coach.action_not_useful': 'Not useful',
+      'coach.action_voice': 'Voice input',
+      'coach.toast_copied': 'Copied',
+      'coach.toast_copy_fail': 'Copy failed',
+      'coach.toast_thanks': 'Thanks for your feedback',
+      'coach.toast_feedback_saved': 'Feedback saved',
+      'coach.toast_regenerating': 'Regenerating…',
+      'coach.toast_voice_unsupported': 'Voice input not supported',
+      'coach.toast_voice_denied': 'Microphone denied. Check your browser settings',
+      'coach.toast_voice_no_mic': 'No microphone detected',
+      'coach.toast_voice_network': 'Network required for voice input',
+      'coach.toast_voice_start_error': 'Microphone start error',
+      'coach.error_too_long': 'Coach is taking too long to reply. Please try again in a moment.',
+      'coach.error_rate_limit': 'Too many messages. Please wait a few minutes before retrying.',
+      'coach.error_offline': 'Cannot reach the coach. Check your connection.',
+      'coach.new_messages_pill': '↓ New messages'
     }
   }
 };
@@ -3417,6 +3492,7 @@ window.S = {
   snacking: null,
   wantsDessert: false,        // inclure des desserts healthy 2-3x/semaine dans le plan
   emailOptin: true,            // opt-in emails (anniversaire, rappels, etc.)
+  pushNotifsEnabled: true,     // POLISH 2026-04 : opt-out PWA push notifications (défaut activé)
   mealTimes: { breakfast: '08:00', lunch: '12:30', snack: '16:00', dinner: '19:30' },
   restDayMood: null,           // { date: 'YYYY-MM-DD', emoji: string } — mood check-in jour de repos
   profilePhoto: null,          // base64 data URL (compressed JPEG)
