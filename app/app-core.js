@@ -30,18 +30,29 @@ function svgRing(size,stroke,pct,color,label,value){
 }
 
 // ─── Chart instance tracking (prevent "Canvas already in use" errors) ───
+// FIX CONTRE-AUDIT 2026-04 : on détruit aussi les charts ORPHELINS (canvas
+// détaché du DOM = ancien canvas re-rendu par innerHTML=''). Évite la
+// fuite mémoire sur re-render espacés dans le temps (toggle section N×).
 window._chartInstances = [];
 window.createChart = function(canvas, config) {
   if (typeof Chart === 'undefined') return null;
-  // Destroy any existing chart on this canvas
+  // 1) Destroy any existing chart on EXACTLY this canvas ref (même objet DOM)
+  // 2) Destroy any orphan chart whose canvas is no longer in the document
+  //    OR shares the same canvas.id (re-render cas typique)
   for (var i = window._chartInstances.length - 1; i >= 0; i--) {
     try {
-      if (window._chartInstances[i].canvas === canvas) {
-        window._chartInstances[i].destroy();
+      var inst = window._chartInstances[i];
+      if (!inst || !inst.canvas) { window._chartInstances.splice(i, 1); continue; }
+      var sameRef = (inst.canvas === canvas);
+      var sameId = canvas.id && inst.canvas.id === canvas.id;
+      var orphan = !document.body.contains(inst.canvas);
+      if (sameRef || sameId || orphan) {
+        inst.destroy();
         window._chartInstances.splice(i, 1);
       }
     } catch(e) {
       console.error('[app-core] erreur:', e);
+      window._chartInstances.splice(i, 1); // supprimer l'entrée corrompue pour éviter bloc infini
     }
   }
   var chart = new Chart(canvas.getContext('2d'), config);
@@ -359,8 +370,11 @@ window.getSleepEnergyTrend = function(days) {
       var key = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
       labels.push(key);
       var h = byDate[key];
-      if (h && typeof h.sleep === 'number' && h.sleep >= 1 && h.sleep <= 5) {
-        sleep.push(h.sleep);
+      // FIX CONTRE-AUDIT : parseFloat tolérant (accepte "4" ou 4) + bornes 1-5
+      if (h && h.sleep != null) {
+        var sv = parseFloat(h.sleep);
+        if (!isNaN(sv) && isFinite(sv) && sv >= 1 && sv <= 5) sleep.push(sv);
+        else sleep.push(null);
       } else {
         sleep.push(null);
       }
