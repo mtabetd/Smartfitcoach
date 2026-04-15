@@ -18,4 +18,7 @@ for (i = 0; i < c2.length; i++) all.push(c2[i]);
 for (i = 0; i < c3.length; i++) all.push(c3[i]);
 window.CF_WODS_FULL = all;
 if (all.length > 0) window.CF_WODS = all;
+// FIX P3 contre-audit : alias universel pour consommateurs tiers (scripts de test,
+// coach IA, PDF report, API externe) — toutes les écritures via CF_WODS_FULL.
+window.CROSSFIT_WODS = all;
 })();

@@ -828,5 +828,7 @@ function generateTriathlonProgram(goal, level, weakDiscipline, opts) {
 }
 
 window.generateTriathlonProgram = generateTriathlonProgram;
+// FIX P3 contre-audit : alias TRIATHLON_PROGRAM = fonction génératrice (API normalisée).
+window.TRIATHLON_PROGRAM = generateTriathlonProgram;
 
 })();
