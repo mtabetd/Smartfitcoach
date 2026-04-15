@@ -1785,7 +1785,15 @@ var STARTING_STRENGTH_PROGRAMS = {
       { day: 'Mercredi', type: 'workoutB', label: 'Workout B: Squat + Press + Power Clean' },
       { day: 'Vendredi', type: 'workoutA', label: 'Workout A: Squat + Bench + Deadlift' }
     ]
-  }
+  },
+  // FIX P1 audit user Thomas : macro 12 semaines en langage accessible débutant
+  // (pas de FST-7, rest-pause, pré-exhaustion — ce sont des techniques avancées).
+  macro_cycle_12w: [
+    {weeks:[1,2], phase:'Apprentissage', intensity:'Légère', rirTarget:4, volume_modifier:0.8, focus:'Apprends les mouvements. Charges légères, focus sur la technique : position du dos, descente contrôlée, respiration. Pas grave si ça paraît facile.'},
+    {weeks:[3,4,5,6,7,8], phase:'Progression linéaire', intensity:'Progressive', rirTarget:3, volume_modifier:1.0, focus:'Ajoute 2,5 kg à chaque séance sur squat/bench/press et 5 kg sur deadlift. Si tu rates 2 fois → on baisse de 10% et on recommence. C\'est normal.'},
+    {weeks:[9,10,11], phase:'Consolidation', intensity:'Modérée à élevée', rirTarget:2, volume_modifier:1.0, focus:'Les charges deviennent lourdes. Prends 3-5 min de repos entre les séries. Compte tes sessions réussies.'},
+    {weeks:[12], phase:'Semaine de récupération', intensity:'Légère', rirTarget:4, volume_modifier:0.5, isDeload:true, focus:'Semaine plus légère pour laisser récupérer ton corps. Charges à 50%, moins de volume. Tu reprends encore plus fort la semaine suivante.'}
+  ]
 };
 window.STARTING_STRENGTH_PROGRAMS = STARTING_STRENGTH_PROGRAMS;
 
@@ -2181,7 +2189,7 @@ var TRAINING_STYLES = {
   volume:    { label:'Volume Progressif',     programs: COLEMAN_PROGRAMS.programs, splits: COLEMAN_PROGRAMS.splits, meta: COLEMAN_PROGRAMS.meta, macro: COLEMAN_PROGRAMS.macro_cycle_12w },
   fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w },
   fusion:    { label:'Programme Élite Fusion', programs: FUSION_PROGRAMS.programs,  splits: FUSION_PROGRAMS.splits,  meta: FUSION_PROGRAMS.meta,  macro: FUSION_PROGRAMS.macro_cycle_12w },
-  starting:  { label:'Starting Strength',      programs: STARTING_STRENGTH_PROGRAMS.programs, splits: STARTING_STRENGTH_PROGRAMS.splits, meta: STARTING_STRENGTH_PROGRAMS.meta },
+  starting:  { label:'Débuter la musculation (full-body)', programs: STARTING_STRENGTH_PROGRAMS.programs, splits: STARTING_STRENGTH_PROGRAMS.splits, meta: STARTING_STRENGTH_PROGRAMS.meta, macro: STARTING_STRENGTH_PROGRAMS.macro_cycle_12w },
   greyskull: { label:'Greyskull LP',            programs: GREYSKULL_PROGRAMS.programs,         splits: GREYSKULL_PROGRAMS.splits,         meta: GREYSKULL_PROGRAMS.meta },
   texas:     { label:'Texas Method',            programs: TEXAS_METHOD_PROGRAMS.programs,      splits: TEXAS_METHOD_PROGRAMS.splits,      meta: TEXAS_METHOD_PROGRAMS.meta },
   nsuns:     { label:'nSuns 5/3/1',             programs: NSUNS_PROGRAMS.programs,             splits: NSUNS_PROGRAMS.splits,             meta: NSUNS_PROGRAMS.meta },
@@ -2232,10 +2240,22 @@ function buildPersonalizedMuscuPlan(S) {
   var isFemale = S.sex === 'female' || S.sex === 'femme';
   if (isFemale && style === 'intensity') style = 'fusion';
 
+  // FIX P1 audit user Thomas (débutant) : forcer Starting Strength (full-body)
+  // pour tout débutant qui veut 3j/semaine. Littérature (Rippetoe, ACSM, NSCA) :
+  // un vrai débutant progresse mieux en full-body 3×/sem qu'en PPL (fréquence/muscle=1
+  // en PPL vs 3 en full-body → stimulus hebdo insuffisant).
+  // N.B. : S.muscuWeek est un n° de semaine (pas de jours) → utiliser S.sportDays.
+  var userDaysRequested = S.sportDays || 3;
+  if (level === 'beginner' && userDaysRequested <= 4 && sportGoals.indexOf('performance') < 0) {
+    style = 'starting'; // Full-body Starting Strength (Rippetoe) — évidence littérature
+  }
+
   var styleObj = TRAINING_STYLES[style] || TRAINING_STYLES.fusion;
 
   // 3. SPLIT : selon jours disponibles
-  var days = Math.min(6, Math.max(3, S.muscuWeek || S.sportDays || 3));
+  // FIX P2 : utiliser S.sportDays (nombre de jours) et non S.muscuWeek (numéro de semaine 1-12).
+  // Cap à 6 jours max (Art ACSM : 1 jour de repos minimum/semaine).
+  var days = Math.min(6, Math.max(3, S.sportDays || 3));
   var availSplits = styleObj.splits || {};
   var splitDays = days;
   // Trouve le split disponible le plus proche
@@ -2334,12 +2354,21 @@ function buildPersonalizedMuscuPlan(S) {
       allExercises = allExercises.concat(exos);
     });
 
-    // Grossesse : filtrer les exercices contre-indiqués (ACOG 2020, IOC 2018)
+    // FIX P0 sécurité fœtale (audit user Aïcha T2 sem.22) : filtre ACOG 2020 complet
+    // Avant : regex faible laissait passer « Développé couché », « Hip thrust », « Presse à jambes »
+    //         → décubitus dorsal + Valsalva → compression veine cave inférieure → hypoxie fœtale.
+    // Maintenant : regex strict identique à app-sport.js:493 (source de vérité ACOG).
     if (S.pregnant && isFemale) {
-      var pregForbid = /valsalva|soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|d[eé]clin[eé]|presse\s+jambe/i;
+      var pregWeek = (typeof S.pregnancyWeek === 'number') ? S.pregnancyWeek : 14;
+      // T2/T3 (sem ≥ 14) : exclure décubitus dorsal + Valsalva + contact
+      var pregForbid = /valsalva|soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|d[eé]velopp[eé]\s+couch[eé]|developpe\s+couche|bench\s+press|leg\s+press|presse\s+[aà]?\s*jambes?|presse[\s-]?cuisses?|crunch|sit.?up|d[eé]clin[eé]|decline|hip\s+thrust|glute\s+bridge\s+sol|snatch|clean\s*(?:&|and|et)?\s*jerk|kettlebell\s+swing|box\s+jump/i;
       allExercises = allExercises.filter(function(ex) {
-        return !pregForbid.test(ex.n || ex.name || '');
+        return !pregForbid.test(String(ex.n || ex.name || ''));
       });
+      // Warning si le filtre a tout supprimé (programme vide silencieux = bug UX dangereux)
+      if (allExercises.length === 0) {
+        try { console.warn('[buildPersonalizedMuscuPlan] Pool vide après filtre grossesse (sem ' + pregWeek + ')'); S._pregFilterEmpty = true; } catch(_e) {}
+      }
     }
 
     // Durée estimée : ~4min/série en moyenne

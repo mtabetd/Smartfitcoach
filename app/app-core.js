@@ -1307,8 +1307,11 @@ var MEDICAL_ADVICE={
   // macroAdj.l corrigé à 0 (les lipides omega-3 sont déjà recommandés via suppléments)
   triglycerides:{warn:'Réduisez les glucides rapides et l\'alcool — premier levier. Oméga-3 (EPA+DHA 2-4g/j) réduisent les TG de 20-50% (ESC 2016). Évitez jus de fruits, sodas, miel, sirop d\'agave.',macroAdj:{g:-.10,p:.03,l:0}},
   goutte:{warn:'Évitez les abats, sardines, anchois. Buvez 2L+ d\'eau/jour.',macroAdj:null},
-  hta:{warn:'Régime hyposodé (< 5g sel/jour). Augmentez potassium (banane, épinard).',macroAdj:null},
-  hta_severe:{warn:'HTA sévère : régime hyposodé strict (< 3g sel/jour). Évitez tout effort intense. Avis cardiologue obligatoire.',macroAdj:null},
+  // DASH + OMS : sodium ≤ 2.3 g/j (idéal ≤1.5 g/j) = sel ≤ 5-6 g/j.
+  // Potassium 4700mg/j (DASH), magnésium 320-420mg, calcium 1000-1300mg → -6/-10 mmHg PAS.
+  // Alcool ≤2U/j homme, ≤1U/j femme (OMS 2023). Réduction 10% poids → -5 à -20 mmHg.
+  hta:{warn:'Régime DASH : sodium ≤ 2,3 g/j (sel ≤ 5-6 g/j — OMS 2023). Augmentez potassium (banane, épinards, légumineuses : 4700 mg/j), magnésium et calcium. Alcool ≤ 2 verres/j (homme) ou ≤ 1 (femme). Activité aérobie 30 min/j réduit la PA de 5-8 mmHg.',macroAdj:null},
+  hta_severe:{warn:'HTA sévère (≥180/110) : régime hyposodé strict (sodium ≤ 1,5 g/j = sel ≤ 3 g/j — AHA 2021). Évitez Valsalva et efforts maximaux. Avis cardiologue obligatoire avant reprise.',macroAdj:null},
   // ESC 2021 : cardiopathie → ne PAS réduire lipides totaux (MUFA/PUFA cardioprotecteurs) — qualité graisses, pas quantité
   cardio:{warn:'Réduisez sodium et graisses saturées. Plus d\'oméga-3.',macroAdj:{g:.03,p:.02,l:0}},
   insuffisance_card:{warn:'Restriction sodique stricte. Consultez votre cardiologue pour les apports hydriques.',macroAdj:null},
@@ -1327,7 +1330,9 @@ var MEDICAL_ADVICE={
   // NAMS 2022 + ESPEN 2019 : ménopause → +10% protéines (résistance anabolique + perte musculaire)
   // Lipides : pas de réduction totale — oméga-3 protecteurs cardiovasculaires (ESC 2021)
   // macroAdj.p corrigé à +0.10 (cohérence avec description "+10%") | macroAdj.l corrigé à 0
-  menopause:{warn:'Ménopause : métabolisme réduit ~100-150 kcal/j (NAMS 2022). Calcium 1200mg/j + Vitamine D. Protéines +10% contre la perte musculaire (ESPEN 2019). Oméga-3 pour santé cardiovasculaire et os.',macroAdj:{g:-.05,p:.10,l:0}},
+  // FIX P2 audit user Marie : advice ménopause enrichi — bouffées de chaleur + sommeil
+  // (items majeurs du vécu ménopausique manquants, NAMS 2023 / Menopause 2022).
+  menopause:{warn:'Ménopause : métabolisme réduit ~100-150 kcal/j (NAMS 2022). Calcium 1200 mg/j + Vitamine D 800-2000 UI. Protéines +10% pour préserver le muscle (ESPEN 2019). Oméga-3 cardio/os. Bouffées de chaleur : évitez alcool, caféine, épices, repas très chauds — privilégiez phytoœstrogènes (soja, lin) et vêtements légers. Sommeil perturbé : tisanes valériane/passiflore, chambre fraîche (<18°C), pas d\'écran 1h avant coucher. Ne prenez aucune hormonothérapie sans avis gynécologue.',macroAdj:{g:-.05,p:.10,l:0}},
   hashimoto:{warn:'Anti-inflammatoire. Certains patients bénéficient du sans gluten.',macroAdj:null},
   // Ostéoporose : calcium 1200mg/j + vitamine D 800-2000 UI/j + protéines ≥1.2g/kg (NOF 2022, ESCEO 2019)
   // Exercice en charge (marche, muscu légère ≤70% 1RM) réduit le risque fracturaire (Kohrt et al. MSSE 2004)
@@ -1693,12 +1698,15 @@ var CF_STANDARDS = {
 };
 window.CF_STANDARDS = CF_STANDARDS;
 
+// FIX P0 audit user Karim : ajout bench_press (Développé couché) + squat (alias back_squat)
+// Avant : impossible de saisir DC/Squat en mode CF → perte de données pour athlètes complets.
 var CF_1RM_LIFTS = [
   {key: 'clean', name: 'Clean (Épaulé)', icon: '🏋️', placeholder: 'kg', desc: 'Votre meilleur clean à 1 rep'},
   {key: 'snatch', name: 'Snatch (Arraché)', icon: '🏋️', placeholder: 'kg', desc: 'Votre meilleur snatch à 1 rep'},
   {key: 'deadlift', name: 'Deadlift (Soulevé de terre)', icon: '🦬', placeholder: 'kg', desc: 'Votre meilleur deadlift'},
   {key: 'front_squat', name: 'Front Squat', icon: '🦵', placeholder: 'kg', desc: 'Votre meilleur front squat'},
   {key: 'back_squat', name: 'Back Squat', icon: '🦵', placeholder: 'kg', desc: 'Votre meilleur back squat'},
+  {key: 'bench_press', name: 'Développé couché (Bench Press)', icon: '💪', placeholder: 'kg', desc: 'Votre meilleur DC à 1 rep'},
   {key: 'push_press', name: 'Push Press / Shoulder to OH', icon: '💪', placeholder: 'kg', desc: 'Votre meilleur push press'},
   {key: 'overhead_squat', name: 'Overhead Squat', icon: '🏋️', placeholder: 'kg', desc: 'Votre meilleur OHS'},
   {key: 'thruster', name: 'Thruster', icon: '🔥', placeholder: 'kg', desc: 'Votre meilleur thruster'}
@@ -1726,24 +1734,58 @@ var CF_LIFT_SCALING_FACTORS = {
 };
 window.CF_LIFT_SCALING_FACTORS = CF_LIFT_SCALING_FACTORS;
 
+// FIX P0 audit user Karim : CF_LIFT_ALIASES résout les clés équivalentes côté lookup.
+// Avant : WOD avec standards_key='squat_clean' ne trouvait PAS crossfit1RM.clean (Karim avait saisi clean=110kg, ignoré 2/10 jours).
+// Maintenant : getCFWorkingWeight('squat_clean') → essaie 'squat_clean' puis alias 'clean' avant fallback.
+var CF_LIFT_ALIASES = {
+  squat_clean: ['clean'],
+  clean:       ['squat_clean', 'power_clean', 'hang_clean'],
+  power_clean: ['clean'],
+  hang_clean:  ['clean'],
+  back_squat:  ['squat'],
+  squat:       ['back_squat'],
+  bench_press: ['bench', 'dc'],
+  shoulder_to_oh: ['push_press', 'jerk'],
+  jerk:        ['shoulder_to_oh', 'push_press']
+};
+window.CF_LIFT_ALIASES = CF_LIFT_ALIASES;
+
 // Returns the working weight for a given movement
-// Priority 1: user's direct 1RM for that lift
+// Priority 1: user's direct 1RM for that lift (or alias)
 // Priority 2: derive from back_squat 1RM using scaling factors
 // Priority 3: fall back to CF_STANDARDS (level/sex tables)
 function getCFWorkingWeight(standardsKey, percentage) {
   var s = window.S;
   if (!s) return '?';
   var sexKey = s.sex === 'homme' ? 'm' : 'f';
-  // Default to 'inter' (index 1) when crossfitLevel is not set, to avoid defaulting to RX for new users
-  var lvlIdx = s.crossfitLevel === 'scaled' ? 0 : s.crossfitLevel === 'inter' ? 1 : s.crossfitLevel === 'rx' ? 2 : s.crossfitLevel === 'rx_plus' ? 3 : 1;
+  // FIX P2 audit user Karim : si crossfitLevel non set, inférer depuis sportLevel
+  // (avancé → rx, pro → rx_plus). Évite de bloquer tous les users à 65% faute de config.
+  var cfLvl = s.crossfitLevel;
+  if (!cfLvl) {
+    if (s.sportLevel === 'pro' || s.sportLevel === 'expert') cfLvl = 'rx_plus';
+    else if (s.sportLevel === 'advanced') cfLvl = 'rx';
+    else if (s.sportLevel === 'intermediate') cfLvl = 'inter';
+    else if (s.sportLevel === 'beginner') cfLvl = 'scaled';
+    else cfLvl = 'inter';
+  }
+  var lvlIdx = cfLvl === 'scaled' ? 0 : cfLvl === 'inter' ? 1 : cfLvl === 'rx' ? 2 : cfLvl === 'rx_plus' ? 3 : 1;
   // WOD working weight percentages by level (% of 1RM) — rx_plus uses 80% (Games athlete intensity — NSCA 2016)
   var wodPct = lvlIdx === 0 ? 0.55 : lvlIdx === 1 ? 0.65 : lvlIdx === 2 ? 0.75 : 0.80;
 
-  // Priority 1: user has a direct 1RM for this specific lift
-  if (s.crossfit1RM && s.crossfit1RM[standardsKey]) {
+  // Priority 1: user has a direct 1RM for this specific lift (or alias)
+  if (s.crossfit1RM) {
     var rm = s.crossfit1RM[standardsKey];
-    if (percentage) return Math.round(rm * percentage / 100);
-    return Math.round(rm * wodPct);
+    if (!rm) {
+      // FIX P0 Karim : essayer les alias (squat_clean ↔ clean, back_squat ↔ squat, etc.)
+      var aliases = CF_LIFT_ALIASES[standardsKey] || [];
+      for (var ai = 0; ai < aliases.length; ai++) {
+        if (s.crossfit1RM[aliases[ai]]) { rm = s.crossfit1RM[aliases[ai]]; break; }
+      }
+    }
+    if (rm) {
+      if (percentage) return Math.round(rm * percentage / 100);
+      return Math.round(rm * wodPct);
+    }
   }
 
   // Priority 2: derive from back_squat 1RM using scaling factors

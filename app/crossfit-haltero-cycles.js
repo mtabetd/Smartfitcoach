@@ -14,9 +14,9 @@
 // For beginners (scaled), use RPE-based guidance instead of percentages
 
 var PERIODIZATION = [
-  // Week 1: Accumulation
-  { week: 1, phase: 'Accumulation', sets_reps_pct: [
-    { sets: 5, reps: 5, pct: 70, rest: '2min', note: 'Focus technique. Chaque rep doit être parfaite.' },
+  // Week 1: Accumulation (sert aussi de déchargement après le Test du cycle précédent — FIX P2 audit Karim)
+  { week: 1, phase: 'Accumulation / Reprise', isDeloadAfterTest: true, sets_reps_pct: [
+    { sets: 5, reps: 5, pct: 70, rest: '2min', note: 'Reprise technique après le Test. Chaque rep doit être parfaite. 70% = relativement léger volontairement.' },
     { sets: 4, reps: 4, pct: 72, rest: '2min', note: 'Contrôle la descente. Position de départ identique à chaque rep.' }
   ]},
   // Week 2: Accumulation+
@@ -413,9 +413,16 @@ function getCurrentCycle(totalWeeks) {
 
 // Calculate working weight based on percentage and level
 function calcWorkingWeight(standardsKey, sex, level, percentage) {
-  // Check user's 1RM first
-  if (window.S && window.S.crossfit1RM && window.S.crossfit1RM[standardsKey]) {
-    return Math.round(window.S.crossfit1RM[standardsKey] * percentage / 100);
+  // Check user's 1RM first (with alias resolution — FIX P0 audit user Karim)
+  if (window.S && window.S.crossfit1RM) {
+    var rm = window.S.crossfit1RM[standardsKey];
+    if (!rm) {
+      var aliases = (window.CF_LIFT_ALIASES || {})[standardsKey] || [];
+      for (var ai = 0; ai < aliases.length; ai++) {
+        if (window.S.crossfit1RM[aliases[ai]]) { rm = window.S.crossfit1RM[aliases[ai]]; break; }
+      }
+    }
+    if (rm) return Math.round(rm * percentage / 100);
   }
 
   var standards = window.CF_STANDARDS;

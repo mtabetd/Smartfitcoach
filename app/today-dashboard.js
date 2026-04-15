@@ -3184,6 +3184,37 @@ function renderTodayDashboard(p) {
   // Card 1 — Bonjour
   wrapper.appendChild(renderCardBonjour(S));
 
+  // FIX P1 audit user Thomas (débutant) : carte "Premiers pas" très visible
+  // si aucun plan n'existe encore → évite l'effet "page blanche" au 1er lancement.
+  // Affiché UNIQUEMENT si utilisateur n'a NI plan nutrition NI plan sport.
+  try {
+    var _hasNutritionPlan = Array.isArray(S.weekPlan) && S.weekPlan.length >= 7;
+    var _hasSportPlan = (S.sportProgram && Array.isArray(S.sportProgram.week) && S.sportProgram.week.length > 0)
+                        || (S.muscuIAProgram && Array.isArray(S.muscuIAProgram.weekProgram))
+                        || (S.activeProgram && S.activeProgram.weekProgram);
+    if (!_hasNutritionPlan && !_hasSportPlan) {
+      var _firstStepCard = card('border-left:3px solid var(--black,#0A0A09);background:var(--cream,#F5F1E8);');
+      _firstStepCard.appendChild(eyebrow('PREMIERS PAS'));
+      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:20px;margin-bottom:6px;font-weight:normal;'}, 'Bienvenue ' + (S.prenom || 'sur SmartFitCoach') + '.'));
+      _firstStepCard.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:14px;'}, 'Pour commencer, génère ton programme personnalisé. On te guide en 2-3 minutes.'));
+      var _btnRow = h('div', {style:'display:flex;gap:8px;flex-wrap:wrap;'});
+      if (S.appMode !== 'nutrition') {
+        _btnRow.appendChild(h('button', {
+          style:'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+          onclick: function() { S.view = 'sport'; if (window.render) window.render(); }
+        }, '→ Créer mon programme sport'));
+      }
+      if (S.appMode !== 'sport') {
+        _btnRow.appendChild(h('button', {
+          style:'padding:12px 20px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+          onclick: function() { S.view = 'nutrition'; if (window.render) window.render(); }
+        }, '→ Créer mon plan nutrition'));
+      }
+      _firstStepCard.appendChild(_btnRow);
+      wrapper.appendChild(_firstStepCard);
+    }
+  } catch(e) { console.warn('[FirstStepCard]', e); }
+
   // Card 1.5 — HERO KCAL (ring XXL Georgia, COSMÉTIQUE 2026-04)
   // Affiché juste après le Bonjour — info la plus importante en priorité visuelle
   var cardHeroKcal = renderCardHeroKcal();

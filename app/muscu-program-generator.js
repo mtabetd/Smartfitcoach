@@ -573,14 +573,30 @@
     // ── Résolution des 1RM : priorité à muscuStrengthProfile (données réelles
     //    entrées par l'utilisateur), avec fallback sur crossfit1RM si disponible.
     var strengthProfile = S.muscuStrengthProfile || {};
-    // Fallback crossfit1RM → muscuStrengthProfile mapping (mirror de app-core)
-    var cfMap = { 'bench_press': 'bench_press', 'back_squat': 'squat',
-                  'deadlift': 'deadlift', 'overhead_press': 'overhead_press' };
+    // FIX P0 audit user Karim : mapping CF→muscu complet (avant : 60% des 1RM CF perdus au switch).
+    // Maintenant : tous les lifts CF (bench_press, back/front_squat, deadlift, push_press, jerk,
+    // thruster, overhead_squat) alimentent muscuStrengthProfile avec facteurs de scaling appropriés.
+    var cfMap = {
+      'bench_press':    { k: 'bench_press',    factor: 1.00 },
+      'back_squat':     { k: 'squat',          factor: 1.00 },
+      'front_squat':    { k: 'squat',          factor: 1.18 }, // FS≈85% BS → BS = FS/0.85
+      'deadlift':       { k: 'deadlift',       factor: 1.00 },
+      'overhead_press': { k: 'overhead_press', factor: 1.00 },
+      'push_press':     { k: 'overhead_press', factor: 0.85 }, // PP exploit leg drive → OHP strict ~85%
+      'shoulder_to_oh': { k: 'overhead_press', factor: 0.85 },
+      'jerk':           { k: 'overhead_press', factor: 0.80 },
+      'overhead_squat': { k: 'squat',          factor: 1.67 }, // OHS≈60% BS → BS = OHS/0.6
+      'thruster':       { k: 'squat',          factor: 1.43 }  // Thruster≈70% FS → approx squat/0.70
+    };
     var cf1rm = S.crossfit1RM || {};
     Object.keys(cfMap).forEach(function(cfKey) {
-      var muscuKey = cfMap[cfKey];
+      var entry = cfMap[cfKey];
+      var muscuKey = entry.k;
+      // On ne remplace pas si l'user a entré une valeur muscu directe (priorité données réelles).
       if (cf1rm[cfKey] && !strengthProfile[muscuKey]) {
-        strengthProfile[muscuKey] = Math.round(cf1rm[cfKey] / (1 + 1 / 30));
+        // 1RM CF supposé = 1 rep exacte (les 1RM CF sont à la rep max).
+        // Si l'user a entré "clean" sans back_squat, on n'en déduit pas le squat (mouvement différent).
+        strengthProfile[muscuKey] = Math.round(cf1rm[cfKey] * entry.factor);
         strengthProfile[muscuKey + '_reps'] = 1;
       }
     });

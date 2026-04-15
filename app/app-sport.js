@@ -60,8 +60,10 @@ function filterExerciseByMedical(ex, med) {
  // → herniation / aggravation (Nachemson 1966, McGill 2007).
  // Crunch/sit-up classique = flexion lombaire répétée → déconseillé en hernie active.
  // RDL, rowing buste penché = flexion du tronc sous charge.
+ // FIX P1 audit user Marie : ajout clean/snatch/kettlebell swing (mouvements balistiques
+ // à fort risque pour le rachis lombaire — McGill 2007, Hartmann et al., Sports Med 2013).
  if (med.lowerBack || med.herniaDisc) {
- if (/soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning|jefferson|squat barre|back squat|front squat|hack squat|presse.*cuisse|leg press|rowing barre|pendlay row|rowing t.?bar|t.?bar row|crunch|sit.?up|ab wheel|roue abdominal|hyperextension/.test(n)) return false;
+ if (/soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning|jefferson|squat barre|back squat|front squat|hack squat|presse.*cuisse|leg press|rowing barre|pendlay row|rowing t.?bar|t.?bar row|crunch|sit.?up|ab wheel|roue abdominal|hyperextension|clean\s*(?:&|and|et)?\s*jerk|\bclean\b|\bsnatch\b|arrach[eé]|[eé]paul[eé]|kettlebell\s+swing|\bswing\b/.test(n)) return false;
  }
 
  // ── HERNIE INGUINALE ──

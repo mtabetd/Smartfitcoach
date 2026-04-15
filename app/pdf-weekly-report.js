@@ -359,6 +359,33 @@ window.exportWeeklyReportPDF = function() {
       y += 5;
     }
 
+    // ═══ 5d. CROSSFIT — 1RM + CYCLES (FIX P1 audit user Karim — avant: PDF CF-blind) ═══
+    try {
+      var _S = window.S || {};
+      var isCFUser = _S.sportType === 'crossfit' || _S.sport === 'crossfit';
+      if (isCFUser && _S.crossfit1RM && Object.keys(_S.crossfit1RM).length > 0) {
+        y = checkPage(doc, y);
+        y = sectionTitle(doc, y, 'CrossFit — Records 1RM');
+        var lifts = window.CF_1RM_LIFTS || [];
+        var levelLabel = _S.crossfitLevel === 'scaled' ? 'Scaled' : _S.crossfitLevel === 'inter' ? 'Intermediate'
+                       : _S.crossfitLevel === 'rx' ? 'RX' : _S.crossfitLevel === 'rx_plus' ? 'RX+' : 'Intermediate';
+        y = kvLine(doc, y, 'Niveau', levelLabel);
+        lifts.forEach(function(lift) {
+          var v = _S.crossfit1RM[lift.key];
+          if (typeof v === 'number' && v > 0) {
+            y = checkPage(doc, y);
+            y = kvLine(doc, y, lift.name, v + ' kg');
+          }
+        });
+        // Cycle haltéro en cours si existant
+        if (_S.cfHalteroCycleWeek) {
+          y = checkPage(doc, y);
+          y = kvLine(doc, y, 'Cycle haltérophilie', 'Semaine ' + _S.cfHalteroCycleWeek + ' / 6');
+        }
+        y += 5;
+      }
+    } catch(e) { console.warn('[PDF CF section]', e); }
+
     // ═══ 6. FOOTER — DISCLAIMER + WATERMARK ═══
     y = checkPage(doc, y);
     y += 4;
