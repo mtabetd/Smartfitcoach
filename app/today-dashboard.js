@@ -3570,6 +3570,16 @@ function renderTodayDashboard(p) {
   var cardMuscu = renderCardMuscu1RM();
   if (cardMuscu) wrapper.appendChild(cardMuscu);
 
+  // ═══ CARTE VOLUME HEBDO MEV/MAV/MRV (SPRINT P3 #7 — Israetel/RP) ═══
+  try {
+    var cardVolume = renderCardVolumeTracking();
+    if (cardVolume) {
+      var _vtDiv = document.createElement('div');
+      _vtDiv.innerHTML = cardVolume;
+      if (_vtDiv.firstElementChild) wrapper.appendChild(_vtDiv.firstElementChild);
+    }
+  } catch(_eVt) { console.warn('[today] renderCardVolumeTracking error', _eVt); }
+
   // PREMIERS PAS : pour les users sans AUCUN plan (onboarding incomplet)
   try {
     var _hasNutritionPlan = Array.isArray(S.weekPlan) && S.weekPlan.length >= 7;
@@ -4203,6 +4213,146 @@ function getWeeklyTonnage(daysBack) {
   return { tonnage: Math.round(totalTonnage), sets: totalSets, days: daysWithSession };
 }
 window.getWeeklyTonnage = getWeeklyTonnage;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FIX SPRINT P3 #7 — VOLUME TRACKING MEV/MAV/MRV (Israetel / Renaissance Periodization)
+// Référence : Dr Mike Israetel, RP Strength, "Scientific Principles of Hypertrophy"
+// Comptage de sets hard (validés) par muscle × 7 derniers jours vs landmarks théoriques.
+// Zones :
+//   below-MEV : sous-volume (pas de stimulus suffisant pour hypertrophie)
+//   MEV-MAV   : volume productif (sweet spot progression)
+//   MAV-MRV   : volume limite (proche du seuil de récupération)
+//   above-MRV : surentraînement probable (signaux : stagnation, douleurs)
+// ═══════════════════════════════════════════════════════════════════════════
+var MUSCLE_VOLUME_LANDMARKS = {
+  // Sets hard par semaine (Schoenfeld + Israetel 2020)
+  pectoraux: { mev: 8,  mav: [12, 20], mrv: 22 },
+  dos:       { mev: 10, mav: [14, 22], mrv: 25 },
+  epaules:   { mev: 8,  mav: [16, 22], mrv: 26 },
+  jambes:    { mev: 8,  mav: [12, 18], mrv: 20 },
+  fessiers:  { mev: 2,  mav: [6, 14],  mrv: 16 },
+  bras:      { mev: 6,  mav: [10, 18], mrv: 22 },
+  abdos:     { mev: 0,  mav: [12, 20], mrv: 25 }
+};
+window.MUSCLE_VOLUME_LANDMARKS = MUSCLE_VOLUME_LANDMARKS;
+
+// Mapping regex nom exo → groupe musculaire principal (standard RP)
+function _classifyMuscleGroup(exName) {
+  var n = String(exName || '').toLowerCase();
+  // Ordre important : motifs spécifiques avant génériques.
+  if (/bench\s*press|d[eé]velopp[eé]\s+couch|d[eé]velopp[eé]\s+incl|pec\s+deck|écarté|ecarte|pompes?|chest|fly|cross|spoto|floor\s+press|svend|dip/.test(n)) return 'pectoraux';
+  if (/tirage|tractions?|rowing|row\b|pulldown|lat\s+pull|pull.?over|deadlift|soulev[eé]\s+de\s+terre|pendlay|meadows|rack\s+pull|face\s+pull|shrug|t.?bar|yates|bent.?over/.test(n)) return 'dos';
+  if (/press\s+(?:militaire|shoulder|overhead|z[-\s])|d[eé]velopp[eé]\s+militaire|d[eé]velopp[eé]\s+[eé]paules?|arnold|landmine\s+press|push\s+press|strict\s+press|[eé]l[eé]vations?\s+(?:lat|frontal|ant[eé]rieur|post|arrière|arriere)|élévations|elevations|rear\s+delt|oiseau|cuban|overhead\s+squat/.test(n)) return 'epaules';
+  if (/curl|biceps|preacher|spider|hammer|skull|tri[cç]eps|extension\s+triceps|pushdown|kickback|tate|bradford|chin.?up/.test(n)) return 'bras';
+  if (/squat|fente|lunge|leg\s+press|hack|belt\s+squat|pendulum|leg\s+ext|leg\s+curl|nordic|calf|mollet|tibialis|step.?up/.test(n)) return 'jambes';
+  if (/hip\s+thrust|glute\s+bridge|kickback|clamshell|fire\s+hydrant|fessier|abduction|b.?stance/.test(n)) return 'fessiers';
+  if (/crunch|plank|planche|leg\s+raise|sit.?up|ab\s+wheel|pallof|dead\s+bug|bird\s+dog|hollow|l.?sit|copenhagen|dragon|windshield|woodchopper|knee\s+raise|sclapular|obliques?/.test(n)) return 'abdos';
+  return null;
+}
+
+function getWeeklyVolumeByMuscle(daysBack) {
+  var S = window.S;
+  if (!S || !S.muscuSessionLog) return {};
+  daysBack = daysBack || 7;
+  var now = new Date();
+  var volumeByMuscle = {};
+  for (var d = 0; d < daysBack; d++) {
+    var date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - d);
+    var key = date.toISOString().slice(0, 10);
+    var dayLog = S.muscuSessionLog[key];
+    if (!dayLog) continue;
+    Object.keys(dayLog).forEach(function(exName) {
+      var muscleGroup = _classifyMuscleGroup(exName);
+      if (!muscleGroup) return;
+      var validatedSets = (dayLog[exName] || []).filter(function(set) {
+        return set.validated && typeof set.actualReps === 'number' && set.actualReps > 0;
+      }).length;
+      if (validatedSets > 0) {
+        volumeByMuscle[muscleGroup] = (volumeByMuscle[muscleGroup] || 0) + validatedSets;
+      }
+    });
+  }
+  return volumeByMuscle;
+}
+window.getWeeklyVolumeByMuscle = getWeeklyVolumeByMuscle;
+
+function getVolumeZone(muscle, sets, level) {
+  var lm = MUSCLE_VOLUME_LANDMARKS[muscle];
+  if (!lm) return { zone: 'unknown', target: '' };
+  // Scale landmarks par niveau (beginner plus bas, advanced plus haut).
+  var scale = 1.0;
+  if (level === 'beginner') scale = 0.75;
+  else if (level === 'advanced' || level === 'pro' || level === 'expert') scale = 1.1;
+  var mev = Math.round(lm.mev * scale);
+  var mavLow = Math.round(lm.mav[0] * scale);
+  var mavHigh = Math.round(lm.mav[1] * scale);
+  var mrv = Math.round(lm.mrv * scale);
+  var zone, target;
+  if (sets < mev)       { zone = 'below-mev'; target = 'Vise ' + mev + ' sets (MEV)'; }
+  else if (sets < mavLow) { zone = 'mev-mav'; target = 'Zone productive — vise ' + mavLow + '-' + mavHigh + ' sets (MAV)'; }
+  else if (sets <= mavHigh) { zone = 'mev-mav-optimal'; target = 'Sweet spot — continue à ce rythme'; }
+  else if (sets <= mrv)  { zone = 'mav-mrv'; target = 'Volume limite — surveille la récupération (MRV ' + mrv + ')'; }
+  else                   { zone = 'above-mrv'; target = 'Au-dessus du MRV (' + mrv + ') — risque surentraînement'; }
+  return { zone: zone, sets: sets, mev: mev, mavLow: mavLow, mavHigh: mavHigh, mrv: mrv, target: target };
+}
+window.getVolumeZone = getVolumeZone;
+
+function renderCardVolumeTracking() {
+  var S = window.S;
+  if (!S || !S.muscuSessionLog || S.sportType !== 'muscu') return null;
+  var volumes = getWeeklyVolumeByMuscle(7);
+  if (!volumes || Object.keys(volumes).length === 0) return null;
+  var level = S.sportLevel || 'intermediate';
+
+  var muscleOrder = ['pectoraux', 'dos', 'epaules', 'jambes', 'fessiers', 'bras', 'abdos'];
+  var muscleLabels = {
+    pectoraux: 'Pectoraux', dos: 'Dos', epaules: 'Épaules',
+    jambes: 'Jambes', fessiers: 'Fessiers', bras: 'Bras', abdos: 'Abdos'
+  };
+
+  var rows = muscleOrder.map(function(m) {
+    var sets = volumes[m] || 0;
+    if (sets === 0) return ''; // n'affiche pas les muscles sans volume
+    var z = getVolumeZone(m, sets, level);
+    // Couleur selon zone (charte sobre Hermès — pas de signaux flashy)
+    var color = '#0A0A09', bg = '#FAF9F6';
+    if (z.zone === 'below-mev')        { color = '#8B7355'; bg = '#F5EFE3'; }       // sable — sous-stim
+    else if (z.zone === 'mev-mav-optimal') { color = '#4A6B3C'; bg = '#EDF2E4'; }   // vert olive — optimal
+    else if (z.zone === 'mav-mrv')      { color = '#A65D3D'; bg = '#F5E6DB'; }      // terracotta — limite
+    else if (z.zone === 'above-mrv')    { color = '#8B3A2F'; bg = '#F0DED9'; }      // brique — surpasse
+    // Barre de progression proportionnelle (0-MRV)
+    var pctOfMrv = Math.min(100, (sets / z.mrv) * 100);
+    return (
+      '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(10,10,9,0.06);">' +
+        '<div style="flex:0 0 84px;font-size:13px;font-weight:500;color:#0A0A09;">' + muscleLabels[m] + '</div>' +
+        '<div style="flex:1;display:flex;flex-direction:column;gap:4px;">' +
+          '<div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(10,10,9,0.6);">' +
+            '<span>' + sets + ' sets</span>' +
+            '<span>MEV ' + z.mev + ' · MAV ' + z.mavLow + '-' + z.mavHigh + ' · MRV ' + z.mrv + '</span>' +
+          '</div>' +
+          '<div style="position:relative;height:4px;background:rgba(10,10,9,0.08);border-radius:2px;overflow:hidden;">' +
+            '<div style="position:absolute;left:0;top:0;height:100%;width:' + pctOfMrv + '%;background:' + color + ';"></div>' +
+          '</div>' +
+          '<div style="font-size:11px;color:' + color + ';font-weight:500;">' + z.target + '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }).filter(function(r) { return r; }).join('');
+
+  if (!rows) return null;
+
+  var html = (
+    '<div style="background:#FFFFFF;border:1px solid rgba(10,10,9,0.08);border-radius:16px;padding:20px;margin-bottom:16px;">' +
+      '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(10,10,9,0.45);margin-bottom:4px;">Volume hebdo</div>' +
+      '<div style="font-size:16px;font-weight:500;color:#0A0A09;margin-bottom:2px;">Charge par groupe musculaire</div>' +
+      '<div style="font-size:12px;color:rgba(10,10,9,0.55);margin-bottom:16px;">7 derniers jours · landmarks Renaissance Periodization (Dr Mike Israetel)</div>' +
+      rows +
+    '</div>'
+  );
+  return html;
+}
+window.renderCardVolumeTracking = renderCardVolumeTracking;
+// ═══════════════════════════════════════════════════════════════════════════
 
 // FIX SPRINT P1.8 — CARD "Mes records muscu" (audit dashboard widgets)
 // Avant : muscuStrengthProfile + 1RM Epley calculés mais cachés dans drawer.

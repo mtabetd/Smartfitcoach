@@ -1906,7 +1906,15 @@ var GREYSKULL_PROGRAMS = {
       { day: 'Mercredi', type: 'workoutB', label: 'Workout B: Press + Deadlift + Plug',  muscles: ['epaules','dos','bras'] },
       { day: 'Vendredi', type: 'workoutA', label: 'Workout A: Bench + Squat + Plug',     muscles: ['pectoraux','jambes','bras'] }
     ]
-  }
+  },
+  // FIX P3 #5 — macro_cycle_12w Greyskull LP (auparavant fallback FUSION inadéquat).
+  // Signature Greyskull : double progression (+5kg si AMRAP ≥ 10, sinon +2.5kg).
+  macro_cycle_12w: [
+    {weeks:[1,2], phase:'Apprentissage AMRAP', intensity:'Légère-Modérée', rirTarget:3, volume_modifier:0.9, focus:'Familiarise-toi avec les AMRAP sets (5+ reps maximum possible). Reste conservateur : choisis une charge où tu peux faire 8-10 reps sur l\u2019AMRAP. Focus technique.'},
+    {weeks:[3,4,5,6,7,8], phase:'Progression linéaire double', intensity:'Modérée à élevée', rirTarget:2, volume_modifier:1.0, focus:'+2.5kg par séance squat/bench/press. +5kg deadlift. Si AMRAP ≥ 10 reps : double progression +5kg la séance suivante. Si tu rates 2 fois d\u2019affilée : reset −10%, remonte.'},
+    {weeks:[9,10,11], phase:'Intensification + plugs', intensity:'Élevée', rirTarget:1, volume_modifier:1.05, focus:'Charges lourdes. Tu peux ajouter 2-4 plug sets bras (curl/extension) après les composés. Maintiens les AMRAP — c\u2019est la signature Greyskull.'},
+    {weeks:[12], phase:'Décharge', intensity:'Légère', rirTarget:4, volume_modifier:0.5, isDeload:true, focus:'Semaine légère : 50% volume, 2/3 des charges. Pas d\u2019AMRAP. Prépare le prochain cycle.'}
+  ]
 };
 window.GREYSKULL_PROGRAMS = GREYSKULL_PROGRAMS;
 
@@ -1999,7 +2007,14 @@ var TEXAS_METHOD_PROGRAMS = {
       { day: 'Mercredi', type: 'recovery',  label: 'Recovery Day: 80% du Lundi',   muscles: ['jambes','epaules'] },
       { day: 'Vendredi', type: 'intensity', label: 'Intensity Day: 1x5 PR weekly', muscles: ['jambes','pectoraux','dos','bras'] }
     ]
-  }
+  },
+  // FIX P3 #5 — macro_cycle_12w Texas Method (périodisation hebdomadaire PR vendredi).
+  macro_cycle_12w: [
+    {weeks:[1,2], phase:'Calibrage Volume Day', intensity:'Modérée', rirTarget:3, volume_modifier:0.9, focus:'Établis tes 5RM actuels. Le Volume Day = 5×5 @ 90% du 5RM. Conservateur semaines 1-2, laisse le corps s\u2019adapter à la fréquence.'},
+    {weeks:[3,4,5,6,7,8], phase:'Progression PR hebdomadaire', intensity:'Élevée progressive', rirTarget:2, volume_modifier:1.0, focus:'Vendredi = Intensity Day, 1×5 PR. +2.5kg bench/press/squat vs vendredi passé. +5kg deadlift. Si tu rates : reste sur même charge la semaine suivante.'},
+    {weeks:[9,10,11], phase:'Périodisation tardive', intensity:'Très élevée', rirTarget:1, volume_modifier:1.0, focus:'Progression ralentit. Si stall 2 semaines → passe à 3 reps PR (1×3 @ +5kg) pour continuer la progression après le plateau 5RM.'},
+    {weeks:[12], phase:'Décharge stratégique', intensity:'Légère', rirTarget:4, volume_modifier:0.6, isDeload:true, focus:'Volume Day à 70%, pas d\u2019Intensity Day. Récupère pour le prochain cycle avec nouveau 5RM retesté.'}
+  ]
 };
 window.TEXAS_METHOD_PROGRAMS = TEXAS_METHOD_PROGRAMS;
 
@@ -2115,7 +2130,14 @@ var NSUNS_PROGRAMS = {
       { day: 'Vendredi', type: 'bench2',   label: 'Bench T1 + OHP T2 (variante)',          muscles: ['pectoraux'] },
       { day: 'Samedi',   type: 'arms',     label: 'Bras + Mobilité + Conditioning',        muscles: ['bras','epaules'] }
     ]
-  }
+  },
+  // FIX P3 #5 — macro_cycle_12w nSuns (Training Max = 90% 1RM, progression hebdomadaire).
+  macro_cycle_12w: [
+    {weeks:[1,2], phase:'Calibrage Training Max', intensity:'Modérée', rirTarget:3, volume_modifier:0.9, focus:'Établis ton Training Max (TM) = 90% de ton 1RM réel. Les 9 sets nSuns se calculent à partir du TM, pas du 1RM. Évaluation AMRAP set (8+ @ 65%).'},
+    {weeks:[3,4,5,6,7,8], phase:'Linear TM progression', intensity:'Élevée', rirTarget:2, volume_modifier:1.0, focus:'+2.5kg TM bench/OHP par semaine. +5kg TM squat/deadlift. L\u2019AMRAP final doit dépasser les reps cibles pour valider la progression. Sinon reset TM −10%.'},
+    {weeks:[9,10,11], phase:'Peak AMRAP + accessoires', intensity:'Très élevée', rirTarget:1, volume_modifier:1.05, focus:'AMRAP sets peak (+2 reps par semaine). Accessoires hypertrophie volume élevé. Deadlift sumo T2 si dos sensible.'},
+    {weeks:[12], phase:'Décharge nerveuse', intensity:'Légère', rirTarget:4, volume_modifier:0.5, isDeload:true, focus:'Semaine à 50% volume. Teste nouveau 1RM après décharge pour recalibrer le TM du cycle suivant.'}
+  ]
 };
 window.NSUNS_PROGRAMS = NSUNS_PROGRAMS;
 
@@ -2212,14 +2234,22 @@ var CBUM_PROGRAMS = {
     }
   },
   splits: {
+    // FIX P0r-BIS : ajout `muscles` array. CBum PPL-étendu avec 2x legs.
     '5': [
-      { day: 'Lundi',    type: 'chest_tris',     label: 'Chest + Triceps' },
-      { day: 'Mardi',    type: 'back_bis',       label: 'Back + Biceps' },
-      { day: 'Mercredi', type: 'shoulders',      label: 'Shoulders' },
-      { day: 'Jeudi',    type: 'legs_quad',      label: 'Legs Quad-Focus' },
-      { day: 'Samedi',   type: 'legs_posterior', label: 'Legs Posterior + Glutes' }
+      { day: 'Lundi',    type: 'chest_tris',     label: 'Chest + Triceps',          muscles: ['pectoraux','bras'] },
+      { day: 'Mardi',    type: 'back_bis',       label: 'Back + Biceps',            muscles: ['dos','bras'] },
+      { day: 'Mercredi', type: 'shoulders',      label: 'Shoulders',                muscles: ['epaules'] },
+      { day: 'Jeudi',    type: 'legs_quad',      label: 'Legs Quad-Focus',          muscles: ['jambes'] },
+      { day: 'Samedi',   type: 'legs_posterior', label: 'Legs Posterior + Glutes',  muscles: ['jambes','fessiers'] }
     ]
-  }
+  },
+  // FIX P3 #5 — macro_cycle_12w CBum Classic Physique (hypertrophie esthétique).
+  macro_cycle_12w: [
+    {weeks:[1,2], phase:'Volume baseline', intensity:'Modérée', rirTarget:3, volume_modifier:0.9, focus:'Établis les charges pour 10-12 reps propres. Focus mind-muscle connection et ROM complète. 2-3 RIR.'},
+    {weeks:[3,4,5,6,7,8], phase:'Hypertrophie progressive', intensity:'Modérée-Élevée', rirTarget:2, volume_modifier:1.0, focus:'Supersets et drop sets actifs. +2.5kg par semaine sur composés. FST-7 finishers intenses. Cible 1-2 RIR sur les composés principaux.'},
+    {weeks:[9,10,11], phase:'Intensification + FST-7', intensity:'Élevée', rirTarget:1, volume_modifier:1.1, focus:'Peak volume. Drop sets obligatoires sur isolations. Supersets épaules/bras systématiques. 0-1 RIR sur isolations.'},
+    {weeks:[12], phase:'Décharge active', intensity:'Légère', rirTarget:4, volume_modifier:0.5, isDeload:true, focus:'50% volume, charges modérées. Focus pompe légère + étirements. Prépare le cycle suivant.'}
+  ]
 };
 window.CBUM_PROGRAMS = CBUM_PROGRAMS;
 
@@ -2230,10 +2260,10 @@ var TRAINING_STYLES = {
   fst7:      { label:'FST-7 Fascial',         programs: RAMBOD_PROGRAMS.programs,  splits: RAMBOD_PROGRAMS.splits,  meta: RAMBOD_PROGRAMS.meta,  macro: RAMBOD_PROGRAMS.macro_cycle_12w },
   fusion:    { label:'Programme Élite Fusion', programs: FUSION_PROGRAMS.programs,  splits: FUSION_PROGRAMS.splits,  meta: FUSION_PROGRAMS.meta,  macro: FUSION_PROGRAMS.macro_cycle_12w },
   starting:  { label:'Débuter la musculation (full-body)', programs: STARTING_STRENGTH_PROGRAMS.programs, splits: STARTING_STRENGTH_PROGRAMS.splits, meta: STARTING_STRENGTH_PROGRAMS.meta, macro: STARTING_STRENGTH_PROGRAMS.macro_cycle_12w },
-  greyskull: { label:'Greyskull LP',            programs: GREYSKULL_PROGRAMS.programs,         splits: GREYSKULL_PROGRAMS.splits,         meta: GREYSKULL_PROGRAMS.meta },
-  texas:     { label:'Texas Method',            programs: TEXAS_METHOD_PROGRAMS.programs,      splits: TEXAS_METHOD_PROGRAMS.splits,      meta: TEXAS_METHOD_PROGRAMS.meta },
-  nsuns:     { label:'nSuns 5/3/1',             programs: NSUNS_PROGRAMS.programs,             splits: NSUNS_PROGRAMS.splits,             meta: NSUNS_PROGRAMS.meta },
-  cbum:      { label:'CBum Classic Physique',   programs: CBUM_PROGRAMS.programs,              splits: CBUM_PROGRAMS.splits,              meta: CBUM_PROGRAMS.meta }
+  greyskull: { label:'Greyskull LP',            programs: GREYSKULL_PROGRAMS.programs,         splits: GREYSKULL_PROGRAMS.splits,         meta: GREYSKULL_PROGRAMS.meta,         macro: GREYSKULL_PROGRAMS.macro_cycle_12w },
+  texas:     { label:'Texas Method',            programs: TEXAS_METHOD_PROGRAMS.programs,      splits: TEXAS_METHOD_PROGRAMS.splits,      meta: TEXAS_METHOD_PROGRAMS.meta,      macro: TEXAS_METHOD_PROGRAMS.macro_cycle_12w },
+  nsuns:     { label:'nSuns 5/3/1',             programs: NSUNS_PROGRAMS.programs,             splits: NSUNS_PROGRAMS.splits,             meta: NSUNS_PROGRAMS.meta,             macro: NSUNS_PROGRAMS.macro_cycle_12w },
+  cbum:      { label:'CBum Classic Physique',   programs: CBUM_PROGRAMS.programs,              splits: CBUM_PROGRAMS.splits,              meta: CBUM_PROGRAMS.meta,              macro: CBUM_PROGRAMS.macro_cycle_12w }
 };
 
 function getStyleProgram(style, muscle, level) {
