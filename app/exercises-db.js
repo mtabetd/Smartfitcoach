@@ -14,6 +14,33 @@ var EXERCISES = {
 
   // ─── PECTORAUX ───
   chest: [
+    // ─── FIX SPRINT P1.6 — Exos manquants pectoraux ───
+    {
+      n: "Spoto press",
+      m: "Pectoraux / Triceps",
+      eq: "Barre + banc",
+      sets: "4×5-8",
+      rest: "150s",
+      video: "https://www.youtube.com/results?search_query=spoto+press+technique+powerlifting&sp=EgIYAQ%253D%253D",
+      warn: "Avancé. CONTRE-INDIQUÉ grossesse T2/T3 (supine).",
+      desc: "Développé couché avec pause 1-2cm au-dessus du torse (Eric Spoto). Cible la zone de blocage + recrutement triceps.",
+      tips: ["Pause stricte 1-2s suspendue", "Pas de touche torse", "Coudes contrôlés 60-75°", "Drive explosif"],
+      lv: 3,
+      tags: ["pectoraux", "compose", "force", "powerlifting"]
+    },
+    {
+      n: "Floor press",
+      m: "Pectoraux / Triceps",
+      eq: "Barre",
+      sets: "4×5-8",
+      rest: "150s",
+      video: "https://www.youtube.com/results?search_query=floor+press+barbell+exercise&sp=EgIYAQ%253D%253D",
+      warn: "CONTRE-INDIQUÉ grossesse T2/T3 (supine).",
+      desc: "Développé couché au sol — coudes touchent le sol = ROM réduite. Idéal lockout triceps + ménagement épaules blessées.",
+      tips: ["Pause coudes au sol 1s", "Pieds plantés", "Charges souvent +5-10% du DC classique"],
+      lv: 2,
+      tags: ["pectoraux", "compose", "force"]
+    },
     {
       n: "Développé couché",
       m: "Pectoraux",
@@ -609,6 +636,32 @@ var EXERCISES = {
 
   // ─── EPAULES ───
   shoulders: [
+    // ─── FIX SPRINT P1.6 — Exos manquants épaules ───
+    {
+      n: "Push press",
+      m: "Deltoïdes / Triceps / Quadriceps",
+      eq: "Barre",
+      sets: "5×3-5",
+      rest: "180s",
+      video: "https://www.youtube.com/results?search_query=push+press+barbell+technique&sp=EgIYAQ%253D%253D",
+      warn: "CONTRE-INDIQUÉ HTA sévère (Valsalva) et pathologies épaules.",
+      desc: "Développé militaire avec drive jambes (impulsion). Permet charges 20-30% supérieures au strict.",
+      tips: ["Dip court (~10cm)", "Drive jambes explosif", "Bras finalisent au-dessus de la tête", "Pas de back arch excessif"],
+      lv: 3,
+      tags: ["epaules", "compose", "force", "explosif"]
+    },
+    {
+      n: "Strict press",
+      m: "Deltoïdes anterieurs / Triceps",
+      eq: "Barre",
+      sets: "4×5-8",
+      rest: "150s",
+      video: "https://www.youtube.com/results?search_query=strict+overhead+press+barbell&sp=EgIYAQ%253D%253D",
+      desc: "Overhead press strict — pieds plantés, abdos gainés, pas de drive jambes. Référence force épaules absolue.",
+      tips: ["Coudes sous la barre", "Tête passe sous la barre quand elle dépasse", "Glutes serrés", "Pas d'arche lombaire"],
+      lv: 2,
+      tags: ["epaules", "compose", "force"]
+    },
     {
       n: "Développé militaire",
       m: "Deltoïdes anterieurs",
@@ -1262,6 +1315,56 @@ var EXERCISES = {
 
   // ─── JAMBES ───
   legs: [
+    // ─── FIX SPRINT P1.6 — Exos basiques manquants (référencés par programmes mais absents DB) ───
+    {
+      n: "Front squat",
+      m: "Quadriceps / Fessiers",
+      eq: "Barre + rack",
+      sets: "4×6-10",
+      rest: "150s",
+      video: "https://www.youtube.com/results?search_query=front+squat+barbell+technique&sp=EgIYAQ%253D%253D",
+      desc: "Squat barre devant — barre sur les épaules en rack position. Pression antérieure = recrutement quad max + dos plus droit.",
+      tips: ["Coudes hauts (barre stable)", "Buste vertical au max", "Descente contrôlée 2-3s", "Talon ancré", "Cible quad et tronc anti-flexion"],
+      lv: 2,
+      tags: ["jambes", "quadriceps", "compose", "force"]
+    },
+    {
+      n: "Box squat",
+      m: "Quadriceps / Fessiers / Postérieurs",
+      eq: "Barre + rack + box",
+      sets: "5×5",
+      rest: "180s",
+      video: "https://www.youtube.com/results?search_query=box+squat+powerlifting+westside&sp=EgIYAQ%253D%253D",
+      desc: "Squat sur box (Westside Barbell) — assis bref puis remontée explosive. Cible chaîne postérieure + casse cycle étirement-raccourcissement.",
+      tips: ["Box hauteur parallèle ou légèrement sous", "Pause 1s assis (pas de rebond)", "Drive hanches vers le haut", "Genoux ouverts"],
+      lv: 3,
+      tags: ["jambes", "fessiers", "compose", "force", "powerlifting"]
+    },
+    {
+      n: "Paused squat",
+      m: "Quadriceps",
+      eq: "Barre + rack",
+      sets: "4×4-6",
+      rest: "180s",
+      video: "https://www.youtube.com/results?search_query=paused+squat+technique&sp=EgIYAQ%253D%253D",
+      desc: "Squat avec pause 2-3s en bas. Casse le réflexe étirement → recrutement neuromusculaire concentrique pur.",
+      tips: ["Pause sous parallèle", "Garde le dos rigide pendant la pause", "Drive max remontée", "Idéal pour technique squat"],
+      lv: 3,
+      tags: ["jambes", "quadriceps", "compose", "force"]
+    },
+    {
+      n: "Good morning",
+      m: "Postérieurs / Lombaires / Fessiers",
+      eq: "Barre",
+      sets: "3×8-12",
+      rest: "120s",
+      video: "https://www.youtube.com/results?search_query=good+morning+exercise+barbell&sp=EgIYAQ%253D%253D",
+      warn: "CONTRE-INDIQUÉ hernie discale, lombalgie chronique, ostéoporose. Exécution stricte indispensable.",
+      desc: "Hip hinge avec barre haute trapèzes. Recrute lombaires + ischios + fessiers. Charge légère obligatoire.",
+      tips: ["Barre légère (40-60% squat)", "Hip hinge pur (genoux peu fléchis)", "Dos absolument plat", "Stop si douleur lombaire"],
+      lv: 3,
+      tags: ["dos", "fessiers", "ischios", "compose", "force"]
+    },
     {
       n: "Squat barre",
       m: "Quadriceps / Fessiers",

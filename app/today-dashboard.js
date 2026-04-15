@@ -694,6 +694,17 @@ function buildContextualHero(moment, S) {
   var isPregnant = S.pregnant && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 12;
   var hasMedical = Array.isArray(S.medical) && S.medical.length > 0;
   var isCFUser = S.sportType === 'crossfit';
+  // FIX SPRINT P1.7 — Détection user muscu pour brancher les hero contextuels
+  var isMuscuUser = S.sportType === 'muscu' || S.sportType === 'musculation' || (S.appMode === 'sport' && !isCFUser);
+  // Récup séance du jour si user a un programme sport
+  var todaySportSession = null;
+  try {
+    if (window.getNextSportDay) {
+      var nxt = window.getNextSportDay();
+      if (nxt && nxt.day) todaySportSession = { name: nxt.day.label || nxt.day.name || ('Jour ' + (nxt.index + 1)),
+        exoCount: Array.isArray(nxt.day.exercises) ? nxt.day.exercises.length : 0 };
+    }
+  } catch(eS) {}
 
   // Format kcal avec espace insécable pour les milliers (2 200 kcal)
   var fmtKcal = function(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0'); };
@@ -722,6 +733,13 @@ function buildContextualHero(moment, S) {
       ctx.stats = [
         { value: fmtKcal(500), label: 'Kcal petit-déj' },
         { value: '70\u00a0g', label: 'Glucides visés' }
+      ];
+    } else if (isMuscuUser && todaySportSession) {
+      // FIX SPRINT P1.7 — Branche muscu avec nom de la séance prévue
+      ctx.quote = 'Aujourd\'hui : ' + todaySportSession.name + '. ' + todaySportSession.exoCount + ' exos. Vise ' + petitDejTarget + ' kcal au petit-déj pour bien charger.';
+      ctx.stats = [
+        { value: fmtKcal(petitDejTarget), label: 'Kcal petit-déj' },
+        { value: todaySportSession.name.split(/[—–-]/)[0].trim().slice(0, 12), label: 'Séance prévue' }
       ];
     } else {
       ctx.quote = 'Vise un petit-déjeuner à ' + fmtKcal(petitDejTarget) + ' kcal. Journée posée.';
@@ -772,18 +790,45 @@ function buildContextualHero(moment, S) {
     var delta = totals.kcal - target;
     var overflow = delta > target * 0.10;
 
+    // FIX SPRINT P1.7 — Récap muscu si user a fait sa séance aujourd'hui
+    var muscuToday = null;
+    try {
+      if (isMuscuUser && S.muscuSessionLog && S.muscuSessionLog[(new Date()).toISOString().slice(0,10)]) {
+        var todayLog = S.muscuSessionLog[(new Date()).toISOString().slice(0,10)];
+        var totalTonnage = 0;
+        var setsValidated = 0;
+        Object.keys(todayLog).forEach(function(exName) {
+          var sets = todayLog[exName] || [];
+          sets.forEach(function(s) {
+            if (s.validated && s.actualWeight && s.actualReps) {
+              totalTonnage += s.actualWeight * s.actualReps;
+              setsValidated++;
+            }
+          });
+        });
+        if (totalTonnage > 0) muscuToday = { tonnage: Math.round(totalTonnage), sets: setsValidated };
+      }
+    } catch(eM) {}
+
     if (overflow) {
       ctx.quote = 'Dépassement de ' + fmtKcal(delta) + ' kcal. Rien de dramatique. Demain, pars sur ' + fmtKcal(target - 200) + '.';
+    } else if (muscuToday) {
+      ctx.quote = 'Tu as soulevé ' + fmtKcal(muscuToday.tonnage) + ' kg sur ' + muscuToday.sets + ' séries. ' + fmtKcal(totals.kcal) + ' kcal, ' + Math.round(totals.p) + ' g de protéines.';
     } else if (totals.kcal >= target * 0.85) {
       ctx.quote = 'Journée tenue. ' + fmtKcal(totals.kcal) + ' kcal, ' + Math.round(totals.p) + ' g de protéines.';
     } else {
       ctx.quote = 'Journée à ' + fmtKcal(totals.kcal) + ' kcal. Un verre d\'eau, un repas léger, et au lit.';
     }
 
-    ctx.stats = [
-      { value: fmtKcal(totals.kcal) + '\u00a0kcal', label: 'Kcal journée', highlight: overflow },
-      { value: Math.round(totals.p) + '\u00a0g', label: 'Protéines' }
-    ];
+    ctx.stats = muscuToday
+      ? [
+          { value: fmtKcal(muscuToday.tonnage) + '\u00a0kg', label: 'Tonnage soulevé' },
+          { value: fmtKcal(totals.kcal) + '\u00a0kcal', label: 'Kcal journée', highlight: overflow }
+        ]
+      : [
+          { value: fmtKcal(totals.kcal) + '\u00a0kcal', label: 'Kcal journée', highlight: overflow },
+          { value: Math.round(totals.p) + '\u00a0g', label: 'Protéines' }
+        ];
 
     ctx.action = {
       labelLower: 'Voir le bilan détaillé', label: 'BILAN DÉTAILLÉ',
@@ -1717,7 +1762,25 @@ function renderCardSport() {
     c.appendChild(_exosPreview);
   }
 
-  // FIX SPRINT P1.3 — bouton "Commencer la séance" plus prominent (full-width, padding)
+  // FIX SPRINT P1.9 — Détecter séance interrompue (au moins 1 set validé aujourd'hui)
+  var todayKey = new Date().toISOString().slice(0, 10);
+  var hasInProgressSession = false;
+  try {
+    if (S.muscuSessionLog && S.muscuSessionLog[todayKey]) {
+      var dayLog = S.muscuSessionLog[todayKey];
+      var anyValidated = false, anyUnvalidated = false;
+      Object.keys(dayLog).forEach(function(exName) {
+        (dayLog[exName] || []).forEach(function(set) {
+          if (set.validated) anyValidated = true;
+          else anyUnvalidated = true;
+        });
+      });
+      hasInProgressSession = anyValidated && anyUnvalidated;
+    }
+  } catch(eIp) {}
+
+  // FIX SPRINT P1.3 + P1.9 — bouton "Commencer/Continuer" prominent
+  var btnLabel = hasInProgressSession ? '→ Continuer la séance' : '→ Commencer la séance';
   var btn = h('button', {
     style: 'display:block;width:100%;padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;min-height:52px;font-weight:500;',
     onclick: function() {
@@ -1727,8 +1790,13 @@ function renderCardSport() {
       S2.selectedSportDay = idx;
       if (window.render) window.render();
     }
-  }, '→ Commencer la séance');
+  }, btnLabel);
   c.appendChild(btn);
+  if (hasInProgressSession) {
+    c.appendChild(h('div', {
+      style: 'font-family:Georgia,serif;font-style:italic;font-size:12px;color:var(--ink-500,#6B6B65);text-align:center;margin-top:8px;'
+    }, 'Tu reprends où tu en étais.'));
+  }
 
   return c;
 }
@@ -3498,6 +3566,10 @@ function renderTodayDashboard(p) {
   var cardCF = renderCardCrossfit1RM();
   if (cardCF) wrapper.appendChild(cardCF);
 
+  // ═══ CARTE MUSCU 1RM (FIX SPRINT P1.8 — symétrique CF) ═══
+  var cardMuscu = renderCardMuscu1RM();
+  if (cardMuscu) wrapper.appendChild(cardMuscu);
+
   // PREMIERS PAS : pour les users sans AUCUN plan (onboarding incomplet)
   try {
     var _hasNutritionPlan = Array.isArray(S.weekPlan) && S.weekPlan.length >= 7;
@@ -3995,6 +4067,78 @@ function renderCardCrossfit1RM() {
   return c;
 }
 window.renderCardCrossfit1RM = renderCardCrossfit1RM;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FIX SPRINT P1.8 — CARD "Mes records muscu" (audit dashboard widgets)
+// Avant : muscuStrengthProfile + 1RM Epley calculés mais cachés dans drawer.
+// Maintenant : carte en surface dashboard pour user muscu (sportType='muscu').
+// Symétrique avec renderCardCrossfit1RM (CF only).
+// ═══════════════════════════════════════════════════════════════════════════
+function renderCardMuscu1RM() {
+  var S = window.S;
+  if (!S) return null;
+  // Affichée pour user muscu (pas CF — CF a sa propre card)
+  var isMuscuPure = S.sportType === 'muscu' || S.sportType === 'musculation';
+  if (!isMuscuPure) return null;
+  var sp = S.muscuStrengthProfile || {};
+  var KEY_LIFTS = [
+    { key: 'bench_press',     name: 'Développé couché' },
+    { key: 'squat',           name: 'Squat' },
+    { key: 'deadlift',        name: 'Deadlift' },
+    { key: 'overhead_press',  name: 'Développé militaire' },
+    { key: 'barbell_row',     name: 'Rowing barre' },
+    { key: 'hip_thrust',      name: 'Hip thrust' }
+  ];
+  var liftsWithValues = KEY_LIFTS.filter(function(l) { return sp[l.key] && sp[l.key] > 0; });
+  if (liftsWithValues.length === 0) return null;
+
+  var c = h('div', {
+    style: 'margin-bottom:24px;padding:24px;background:var(--paper-2,#F4F1EA);border:1px solid var(--line,#D8D8D0);'
+  });
+
+  c.appendChild(h('div', {
+    style: 'font-family:Georgia,serif;font-size:22px;line-height:1.25;color:var(--ink-900,#0A0A09);margin-bottom:6px;'
+  }, 'Tes records'));
+  c.appendChild(h('div', {
+    style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);margin-bottom:18px;'
+  }, '1RM estimé selon Epley (charge × reps)'));
+
+  liftsWithValues.slice(0, 6).forEach(function(lift, idx) {
+    var weight = sp[lift.key];
+    var reps = sp[lift.key + '_reps'] || 8;
+    var oneRM = Math.round(weight * (1 + reps / 30));
+    var row = h('div', {
+      style: 'display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;' + (idx < liftsWithValues.length - 1 ? 'border-bottom:1px solid var(--line,#D8D8D0);' : '')
+    });
+    var leftCol = h('div', {});
+    leftCol.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--ink-900,#0A0A09);margin-bottom:2px;'
+    }, lift.name));
+    leftCol.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-500,#6B6B65);'
+    }, weight + ' kg × ' + reps + ' reps'));
+    row.appendChild(leftCol);
+    var rightCol = h('div', { style: 'text-align:right;' });
+    rightCol.appendChild(h('div', {
+      style: 'font-family:Georgia,serif;font-size:22px;color:var(--ink-900,#0A0A09);font-feature-settings:"tnum" 1;line-height:1;'
+    }, oneRM + '\u00a0kg'));
+    rightCol.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-top:4px;'
+    }, '1RM est.'));
+    row.appendChild(rightCol);
+    c.appendChild(row);
+  });
+
+  var cta = h('a', {
+    href: '#',
+    style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;margin-top:16px;',
+    onclick: function(e) { e.preventDefault(); S.view = 'sport'; if (window.render) window.render(); }
+  }, 'Mettre à jour mes charges  \u2192');
+  c.appendChild(cta);
+
+  return c;
+}
+window.renderCardMuscu1RM = renderCardMuscu1RM;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // DRAWER PROGRESSION — Bottom sheet fullscreen (Bible Hermès §10)
