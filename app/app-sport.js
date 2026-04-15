@@ -455,11 +455,20 @@ function generateSportProgram() {
  if (!available.length) available = pool.slice();
 
  // Equipment filter: exclude exercises requiring unavailable gear
+ // FIX BIBLE MUSCU §5 audit Marie : avant, regex 'home' trop restrictif (manquait
+ // "élastique"/"haltères"/"kettlebell") + fallback ligne 474 trop permissif ré-injectait
+ // machines/câbles. Marie voyait "Rowing câble MACHINE" et "Fentes haltère 20 kg".
  if (S.sportEquipment && S.sportEquipment !== 'gym') {
  var eqFiltered = available.filter(function(ex) {
  var eq = (ex.eq || '').toLowerCase();
+ var name = (ex.n || ex.name || '').toLowerCase();
+ // Exclusion hard universelle pour 'home' : machines et câbles jamais
+ if (S.sportEquipment === 'home' && /machine|c[aâ]ble|poulie|presse|smith|station|pec deck|convergente|landmine|t-bar|hack squat/.test(eq + ' ' + name)) {
+   return false;
+ }
  if (S.sportEquipment === 'home') {
- return /poids du corps|poids de corps|sans mat/.test(eq);
+   // Autorisé : poids corps, élastique, haltères, kettlebell, banc, barre de traction
+   return /poids du corps|poids de corps|sans mat|sol|\u00e9lastique|elastique|halt[eè]re|kettlebell|\bkb\b|banc|barre fixe|barre de traction|aucun/.test(eq + ' ' + name);
  }
  if (S.sportEquipment === 'dumbbells') {
  // Exclude exercises requiring cable machines, barbells, or specialized machines
@@ -470,8 +479,16 @@ function generateSportProgram() {
  }
  return true;
  });
- // Fallback: if filter removes too many exercises, use unfiltered pool
- if (eqFiltered.length >= 2) available = eqFiltered;
+ // FIX audit Marie : on respecte STRICTEMENT sportEquipment, même si <2 exos restent.
+ // Mieux vaut 1 exo bodyweight correct que 5 exos inadaptés (câble/machine pour home).
+ if (eqFiltered.length > 0) {
+   available = eqFiltered;
+ } else {
+   // Fallback ultra-strict : bodyweight pur uniquement
+   available = available.filter(function(ex) {
+     return /poids du corps|gainage|planche|burpee|pompe|squat saut|mountain climber|crunch sol/i.test(ex.n || ex.name || '');
+   });
+ }
  }
 
  // Pregnancy: filter forbidden exercises
@@ -514,12 +531,31 @@ function generateSportProgram() {
 
  var pri = categoryPriority[group] || 1;
 
- // For high priority: prefer compound exercises (sort by level desc within allowed range)
- if (pri >= 4) {
- available.sort(function(a, b) { return b.lv - a.lv || (0.5 - Math.random()); });
+ // FIX BIBLE MUSCU §6.2 audit Marc (débutant) : priorité absolue aux composés
+ // fondamentaux (squat/DC/DL/OHP/rowing/tractions) — jamais Svend press/Upright row/
+ // Hanging knee raise lesté en #1. Bible §6.2 : masquer aussi ces exos exotiques.
+ var _isBeginner = (S.sportLevel === 'beginner' || !S.sportLevel);
+ if (_isBeginner) {
+   var _exoticRegex = /svend|upright row|hanging knee|zercher|jm press|kroc row|meadows|reverse nordic|copenhagen|jefferson curl|cuban press|arnold press|pistol squat|sissy squat|nordic ham|weighted dips|muscle.?up/i;
+   // Masquer les exos exotiques pour débutant (carte Bible §6.2)
+   available = available.filter(function(ex) {
+     return !_exoticRegex.test(ex.n || ex.name || '');
+   });
+   // Si le filtre a tout supprimé, on le relâche (mieux que programme vide)
+   if (available.length === 0) available = pool.slice();
+   // Priorité aux fondamentaux en tête de liste
+   var _fundRegex = /\b(squat|d[eé]velopp[eé] couch[eé]|bench press|soulev[eé] de terre|deadlift|d[eé]velopp[eé] militaire|overhead press|rowing barre|pendlay|tractions?|dips|curl biceps halt|curl haltères|extensions? triceps|leg press|presse \u00e0 cuisses)\b/i;
+   var _fundamentals = available.filter(function(ex) { return _fundRegex.test(ex.n || ex.name || ''); });
+   var _fundSet = {}; _fundamentals.forEach(function(ex) { _fundSet[ex.n || ex.name] = true; });
+   var _others = available.filter(function(ex) { return !_fundSet[ex.n || ex.name]; });
+   _others.sort(function(a, b) { return (a.lv || 1) - (b.lv || 1); }); // lv:1 avant lv:2
+   available = _fundamentals.concat(_others);
+ } else if (pri >= 4) {
+   // Non-beginner, high priority: prefer compound exercises (sort by level desc within allowed range)
+   available.sort(function(a, b) { return b.lv - a.lv || (0.5 - Math.random()); });
  } else {
- // Shuffle for variety
- available.sort(function(){ return 0.5 - Math.random(); });
+   // Non-beginner, shuffle for variety
+   available.sort(function(){ return 0.5 - Math.random(); });
  }
 
  var count = exerciseCountForPriority(pri);
@@ -6397,8 +6433,14 @@ function renderMusculationProgram(p) {
  ? (_dispW + ' \u00d7 ' + setRow.targetReps)
  : (setRow.targetReps + ' reps');
  conseilleEl.appendChild(h('span', {}, conseilleStr));
- if (setRow.pctOf1RM) {
- conseilleEl.appendChild(h('span', {style:'font-size:9px;color:var(--blue,#1A3C5E);margin-left:4px'}, setRow.pctOf1RM + '%1RM'));
+ // FIX BIBLE MUSCU §7 audit Marc "1260%1RM" : garde-fou défensif.
+ // Cause probable : localStorage muscuSessionLog corrompu avec vieille valeur de pct.
+ // Règle : afficher UNIQUEMENT si valeur plausible (0 < pct ≤ 100) ET pas pour débutant
+ // (bible §7.3 : pas de %1RM pour beginner, source douteuse sur exos obscurs).
+ var _pctDisplay = setRow.pctOf1RM;
+ var _isBeginnerUser = (window.S && window.S.sportLevel === 'beginner');
+ if (typeof _pctDisplay === 'number' && _pctDisplay > 0 && _pctDisplay <= 100 && !_isBeginnerUser) {
+ conseilleEl.appendChild(h('span', {style:'font-size:9px;color:var(--blue,#1A3C5E);margin-left:4px'}, _pctDisplay + ' %1RM'));
  }
  row.appendChild(conseilleEl);
 

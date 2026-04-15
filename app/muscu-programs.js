@@ -2234,7 +2234,10 @@ function buildPersonalizedMuscuPlan(S) {
   } else if (goalKey === 'bulk' || goalKey === 'lean_bulk' || goalKey === 'recomposition') {
     style = level === 'beginner' ? 'volume' : 'fusion';
   } else if (goalKey === 'maintain') {
-    style = 'classic';
+    // FIX BIBLE MUSCU §5 audit Karim : avant, maintain→'classic' même pour advanced.
+    // Or 'classic' = SFC_PROGRAMS débutant-compatible, inadapté pour avancé/intermédiaire 5j.
+    // Maintenant : maintain s'aligne sur le niveau.
+    style = level === 'advanced' ? 'fusion' : (level === 'intermediate' ? 'volume' : 'classic');
   }
   // Femme : privilégier le volume (meilleur pour fessiers/jambes)
   var isFemale = S.sex === 'female' || S.sex === 'femme';
@@ -2324,12 +2327,21 @@ function buildPersonalizedMuscuPlan(S) {
         var altExos = window.getAlternativeExercises(muscle, null, 4);
         exos = altExos.filter(function(a) { return !a.eq || /corps|body|aucun|sol|elastique/i.test(a.eq); });
       }
-      // Priorité : si muscle prioritaire, met en premier
+      // FIX BIBLE MUSCU §5 audit Sophie (bug ignoré) : bodyZones a un VRAI effet.
+      // Avant : le commentaire "met en premier" mentait — slice() copie sans effet.
+      // Maintenant : surpondération/réduction effective via muscleMult + duplication d'exo
+      // en cycles intensification pour muscles priority='high'.
+      var muscleMult = 1;
+      if (bz[muscle] === 'high') muscleMult = 1.5;              // +50% sets
+      else if (bz[muscle] === 'low') muscleMult = 0.7;           // −30% sets
+      if ((S.weakZones || []).indexOf(muscle) >= 0) muscleMult = Math.max(muscleMult, 1.3);
+
+      // Priorité : si muscle prioritaire → tri (place ce muscle en tête)
       if (priorityMuscles.indexOf(muscle) >= 0 && idx > 0) {
-        exos = exos.slice(); // copie
+        exos = exos.slice(); // copie (pour ne pas muter getStyleProgram)
       }
-      // Ajuste volume selon phase macro
-      var volMod = currentPhase.volume_modifier || 1;
+      // Ajuste volume selon phase macro × multiplier bodyZones
+      var volMod = (currentPhase.volume_modifier || 1) * muscleMult;
       exos = exos.map(function(ex) {
         var adjusted = {};
         for (var k in ex) adjusted[k] = ex[k];
@@ -2383,21 +2395,25 @@ function buildPersonalizedMuscuPlan(S) {
     }
 
     // FIX BIBLE MUSCU §5 audit Sophie : cap volume par muscle selon bodyZones.
-    // Avant : "bras low" → 28 sets biceps dans la semaine (aberrant). Bible : low → max 6 sets.
-    // On limite les exos d'un muscle si bodyZones[muscle]==='low'.
+    // Avant : "bras low" → 28 sets biceps (aberrant). Bible §5 : low = max 6 sets/sem.
+    // Règle stricte : bodyZones[muscle]==='low' → max 1 exo de ce muscle par séance
+    // (combiné au muscleMult 0.7 ci-dessus → ~3 sets par exo → ~6 sets/sem sur 2 séances).
     try {
       if (bz && (dayPlan.muscles || []).length > 0) {
         (dayPlan.muscles || []).forEach(function(mname) {
           var zone = bz[mname] || bz[mname.replace(/s$/, '')];
           if (zone === 'low') {
-            // Réduire exos de ce muscle à max 2 dans cette séance
             var keptCount = 0;
+            var mnameLower = mname.toLowerCase();
+            var mnameAlt = mnameLower.replace(/s$/, '');
+            // Mapping mnames alternatifs (bras → biceps|triceps|curl)
+            var muscleMatchers = { 'bras': /bras|biceps|triceps|curl/ }[mnameLower] || new RegExp(mnameLower + '|' + mnameAlt);
             allExercises = allExercises.filter(function(ex) {
               var exMuscle = (ex.m || ex.muscle || '').toLowerCase();
-              var isThisMuscle = exMuscle.indexOf(mname.toLowerCase()) >= 0
-                              || exMuscle.indexOf(mname.toLowerCase().replace(/s$/, '')) >= 0;
+              var exName = (ex.n || ex.name || '').toLowerCase();
+              var isThisMuscle = muscleMatchers.test(exMuscle + ' ' + exName);
               if (!isThisMuscle) return true;
-              if (keptCount >= 2) return false;
+              if (keptCount >= 1) return false; // max 1 exo/séance pour bodyZones='low'
               keptCount++;
               return true;
             });
