@@ -91,6 +91,8 @@ style.textContent = [
   '#ai-coach-mic.recording{border-color:var(--red,#5A1010);color:var(--red,#5A1010);background:rgba(90,16,16,0.04);animation:micPulse 1.4s ease-in-out infinite;}',
   '#ai-coach-mic svg{width:18px;height:18px;display:block;}',
   '@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(90,16,16,0.35);}50%{box-shadow:0 0 0 6px rgba(90,16,16,0);}}',
+  // FIX P2 audit accessibility : respecter prefers-reduced-motion (user avec migraines/vestibular)
+  '@media (prefers-reduced-motion: reduce){#ai-coach-mic.recording{animation:none;box-shadow:0 0 0 3px rgba(90,16,16,0.2);}}',
 
   // Erreur
   '.ai-msg-error{background:var(--redbg,rgba(90,16,16,0.06));border:1px solid rgba(90,16,16,0.15);border-radius:2px;color:var(--red,#5A1010);padding:12px 16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;}'
@@ -434,6 +436,8 @@ function buildUI() {
   var input = document.createElement('textarea');
   input.id = 'ai-coach-input';
   input.placeholder = 'Pose ta question...';
+  // FIX P2 audit : maxLength pour éviter scroll horizontal confus (aligné MAX_MSG_CHARS backend)
+  input.maxLength = MAX_MSG_CHARS;
   input.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   });
@@ -460,6 +464,8 @@ function buildUI() {
       + '<line x1="12" y1="18" x2="12" y2="22"/>'
       + '<line x1="9" y1="22" x2="15" y2="22"/>'
       + '</svg>';
+    // FIX P1 audit : aria-pressed initial (toggle button state pour screen readers)
+    micBtn.setAttribute('aria-pressed', 'false');
     micBtn.addEventListener('click', function() {
       try {
         if (window.SpeechInput) window.SpeechInput.toggle();
@@ -674,14 +680,23 @@ window.SpeechInput = (function() {
   var recognition = null;
   var recording = false;
   var _lastError = null;
+  var _initializing = false; // FIX P0 audit : flag anti-race condition double-toggle
 
-  // Helper : update UI bouton micro selon état
+  // Helper : update UI bouton micro selon état (recording + aria-pressed + disabled)
+  // FIX P1 audit : aria-pressed pour screen readers + sync disabled si _sending
   function _updateBtn() {
     try {
       var btn = document.getElementById('ai-coach-mic');
       if (!btn) return;
-      if (recording) btn.classList.add('recording');
-      else btn.classList.remove('recording');
+      if (recording) {
+        btn.classList.add('recording');
+        btn.setAttribute('aria-pressed', 'true');
+      } else {
+        btn.classList.remove('recording');
+        btn.setAttribute('aria-pressed', 'false');
+      }
+      // Désactiver micro pendant qu'une requête API est en cours (UX cohérence)
+      btn.disabled = !!_sending;
     } catch(e) {}
   }
 
@@ -708,7 +723,18 @@ window.SpeechInput = (function() {
       var rec = new SR();
       rec.continuous = false;       // 1 seul résultat (puis arrêt)
       rec.interimResults = false;   // pas de mots intermédiaires (transcript final seulement)
-      rec.lang = 'fr-FR';
+      // FIX P2 audit : dériver du lang app (ou navigator.language) au lieu de fr-FR hardcodé
+      var _lang = 'fr-FR';
+      try {
+        if (window.S && typeof window.S.lang === 'string' && window.S.lang.length >= 2) {
+          // S.lang est souvent 'fr' → BCP-47 étendu à 'fr-FR' / 'en-US'
+          var shortMap = { fr: 'fr-FR', en: 'en-US', es: 'es-ES', de: 'de-DE', it: 'it-IT', pt: 'pt-PT' };
+          _lang = shortMap[window.S.lang.toLowerCase()] || window.S.lang;
+        } else if (navigator && navigator.language) {
+          _lang = navigator.language;
+        }
+      } catch(_le) {}
+      rec.lang = _lang;
       rec.maxAlternatives = 1;
       rec.onresult = function(event) {
         try {
@@ -727,10 +753,11 @@ window.SpeechInput = (function() {
           var err = event && event.error ? event.error : 'unknown';
           _lastError = err;
           // Erreurs courantes : 'no-speech' (silencieux OK), 'aborted' (user stop OK),
-          // 'not-allowed' (permission refusée → toast)
+          // 'not-allowed' (permission refusée → toast plus explicite pour retry)
           // 'audio-capture' (pas de micro) / 'network' (offline)
+          // FIX P1 audit : message permission plus explicite → guide user vers settings browser
           if (err === 'not-allowed' || err === 'service-not-allowed') {
-            if (typeof showToast === 'function') showToast('Permission micro refusée');
+            if (typeof showToast === 'function') showToast('Micro refusé. Vérifie les paramètres du navigateur');
           } else if (err === 'audio-capture') {
             if (typeof showToast === 'function') showToast('Aucun micro détecté');
           } else if (err === 'network') {
@@ -759,26 +786,34 @@ window.SpeechInput = (function() {
     isRecording: function() { return recording; },
     lastError: function() { return _lastError; },
     toggle: function() {
+      // FIX P0 audit : bloquer double-toggle pendant init (race condition double append)
+      if (_initializing) return;
       if (!supported) {
         try { if (typeof showToast === 'function') showToast('Dictée vocale non supportée'); } catch(e) {}
         return;
       }
-      if (recording) {
-        // Stop
-        try { if (recognition && recognition.stop) recognition.stop(); } catch(e) {}
-        recording = false;
-        _updateBtn();
-      } else {
-        // Start (réinit l'instance pour éviter conflits state)
-        try {
-          if (recognition && recognition.abort) { try { recognition.abort(); } catch(e) {} }
-          recognition = _initRecognition();
-          if (recognition) recognition.start();
-        } catch(e) {
+      _initializing = true;
+      try {
+        if (recording) {
+          // Stop
+          try { if (recognition && recognition.stop) recognition.stop(); } catch(e) {}
           recording = false;
           _updateBtn();
-          try { if (typeof showToast === 'function') showToast('Erreur démarrage micro'); } catch(_e) {}
+        } else {
+          // Start (réinit l'instance pour éviter conflits state)
+          try {
+            if (recognition && recognition.abort) { try { recognition.abort(); } catch(e) {} }
+            recognition = _initRecognition();
+            if (recognition) recognition.start();
+          } catch(e) {
+            recording = false;
+            _updateBtn();
+            try { if (typeof showToast === 'function') showToast('Erreur démarrage micro'); } catch(_e) {}
+          }
         }
+      } finally {
+        // Libérer le lock après ~50ms (délai normal pour instance init + start async)
+        setTimeout(function() { _initializing = false; }, 50);
       }
     },
     stop: function() {
@@ -1195,12 +1230,17 @@ function _patchRender() {
     try {
       var loggedIn = window.AUTH && window.AUTH.isLoggedIn && window.AUTH.isLoggedIn();
       if (loggedIn && !document.getElementById('ai-coach-btn')) {
+        // FIX P1 audit : stop recording AVANT buildUI si panel était recréé pendant dictée
+        // (évite état fantôme : instance SpeechRecognition active mais bouton sans .recording)
+        try { if (window.SpeechInput && window.SpeechInput.isRecording && window.SpeechInput.isRecording()) window.SpeechInput.stop(); } catch(_sie) {}
         buildUI();
       } else if (!loggedIn) {
         var btn = document.getElementById('ai-coach-btn');
         var panel = document.getElementById('ai-coach-panel');
         if (btn) btn.remove();
         if (panel) panel.remove();
+        // FIX P1 audit : si logout pendant recording, stopper proprement
+        try { if (window.SpeechInput && window.SpeechInput.isRecording && window.SpeechInput.isRecording()) window.SpeechInput.stop(); } catch(_sle) {}
       }
       // Masquer le bouton coach pendant l'onboarding actif (nStep 1-10 ou sStep 1-3)
       // pour éviter de bloquer les champs de saisie et les options de formulaire
