@@ -579,7 +579,8 @@ function replayLastUserMessage(_unused) {
 }
 
 // POLISH 2026-04 (V1.3) : met à jour le hint rate-limit sous la barre d'input.
-// Backend renvoie { hourRemaining, dayRemaining }. On affiche le plus contraignant.
+// FIX CONTRE-AUDIT V3 : message explicite selon quota contraignant (heure vs jour)
+// pour éviter l'ambiguïté "0 questions restantes" (user ne sait pas s'il attend 1h ou 24h).
 function updateRateLimitHint(remaining) {
   try {
     var el = document.getElementById('ai-rate-hint');
@@ -587,15 +588,25 @@ function updateRateLimitHint(remaining) {
     var hr = (remaining && typeof remaining.hourRemaining === 'number') ? remaining.hourRemaining : null;
     var dy = (remaining && typeof remaining.dayRemaining === 'number') ? remaining.dayRemaining : null;
     if (hr === null && dy === null) { el.textContent = ''; return; }
-    // On affiche celui qui se rapproche le plus du 0
-    var txt;
+    // Cas limite : quota épuisé — on précise quel reset attendre (heure vs jour)
+    if (hr === 0 && dy !== null && dy > 0) {
+      el.textContent = 'Limite horaire atteinte — réessaie dans 1h';
+      return;
+    }
+    if (dy === 0) {
+      el.textContent = 'Quota journalier atteint — retour demain';
+      return;
+    }
+    // Cas standard : on affiche le plus contraignant avec label clair
     if (hr !== null && dy !== null) {
-      txt = Math.min(hr, dy) + ' question' + (Math.min(hr, dy) > 1 ? 's' : '') + ' restante' + (Math.min(hr, dy) > 1 ? 's' : '');
+      var limiting = (hr <= dy) ? hr : dy;
+      var label = (hr <= dy) ? 'cette heure' : 'aujourd\'hui';
+      el.textContent = limiting + ' question' + (limiting > 1 ? 's' : '') + ' ' + label;
     } else {
       var v = hr !== null ? hr : dy;
-      txt = v + ' question' + (v > 1 ? 's' : '') + ' restante' + (v > 1 ? 's' : '');
+      var lbl = hr !== null ? 'cette heure' : 'aujourd\'hui';
+      el.textContent = v + ' question' + (v > 1 ? 's' : '') + ' ' + lbl;
     }
-    el.textContent = txt;
   } catch(e) {}
 }
 
@@ -619,6 +630,19 @@ function showToast(text) {
 }
 
 // Stockage feedback local (👍/👎) — pour stats futures, pas envoyé à l'API.
+// FIX CONTRE-AUDIT V3 : hash renforcé avec DJB2 32-bit pour éviter collisions
+// entre messages de même début (60 chars) ET même longueur totale.
+function _hashMessage(str) {
+  var s = String(str || '');
+  // DJB2 hash (simple, rapide, peu de collisions pour messages courts/moyens)
+  var h = 5381;
+  for (var i = 0; i < s.length; i++) {
+    h = ((h << 5) + h + s.charCodeAt(i)) | 0; // force 32-bit
+  }
+  // Combinaison : début (32) + longueur + hash 32-bit → quasi-unique
+  return s.slice(0, 32) + '|' + s.length + '|' + (h >>> 0).toString(36);
+}
+
 function recordCoachFeedback(messageText, rating) {
   try {
     var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
@@ -627,8 +651,7 @@ function recordCoachFeedback(messageText, rating) {
     var raw = localStorage.getItem(key);
     var arr = [];
     if (raw) { try { arr = JSON.parse(raw); if (!Array.isArray(arr)) arr = []; } catch(e) { arr = []; } }
-    // Hash simple pour identifier le message (first 60 chars + length)
-    var msgHash = (messageText || '').slice(0, 60) + '_' + (messageText || '').length;
+    var msgHash = _hashMessage(messageText);
     // Dédupe : si déjà noté, remplace
     arr = arr.filter(function(x) { return x.hash !== msgHash; });
     arr.push({ hash: msgHash, rating: rating, ts: Date.now() });
@@ -661,6 +684,8 @@ function appendCoachMessage(container, text, opts) {
     var copyBtn = document.createElement('button');
     copyBtn.type = 'button';
     copyBtn.title = 'Copier';
+    // POLISH 2026-04 (V3) : tooltip premium via [data-tooltip] (système global CSS)
+    copyBtn.setAttribute('data-tooltip', 'Copier');
     copyBtn.setAttribute('aria-label', 'Copier la réponse');
     copyBtn.textContent = '\u2398'; // U+2398 next page icon — visible et sobre
     copyBtn.addEventListener('click', function() {
@@ -683,6 +708,7 @@ function appendCoachMessage(container, text, opts) {
       var regenBtn = document.createElement('button');
       regenBtn.type = 'button';
       regenBtn.title = 'Régénérer';
+      regenBtn.setAttribute('data-tooltip', 'Régénérer');
       regenBtn.setAttribute('aria-label', 'Régénérer la réponse');
       regenBtn.textContent = '\u21BB'; // clockwise arrow
       regenBtn.addEventListener('click', function() { regenerateLastResponse(); });
@@ -693,6 +719,7 @@ function appendCoachMessage(container, text, opts) {
     var upBtn = document.createElement('button');
     upBtn.type = 'button';
     upBtn.title = 'Utile';
+    upBtn.setAttribute('data-tooltip', 'Utile');
     upBtn.setAttribute('aria-label', 'Marquer comme utile');
     upBtn.textContent = '\u2713'; // check mark
     upBtn.addEventListener('click', function() {
@@ -707,6 +734,7 @@ function appendCoachMessage(container, text, opts) {
     var downBtn = document.createElement('button');
     downBtn.type = 'button';
     downBtn.title = 'Peu utile';
+    downBtn.setAttribute('data-tooltip', 'Peu utile');
     downBtn.setAttribute('aria-label', 'Marquer comme peu utile');
     downBtn.textContent = '\u2717'; // cross mark
     downBtn.addEventListener('click', function() {
