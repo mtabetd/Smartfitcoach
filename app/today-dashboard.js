@@ -1988,7 +1988,7 @@ function renderExtendedSections(wrapper, S) {
       // Stats principales — grille 2x2 sobre
       var statsGrid = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;' });
       function insightStat(value, label, color) {
-        var box = h('div', { style: 'padding:10px 12px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;text-align:center;' });
+        var box = h('div', { 'class': 'sfc-stat-box', style: 'padding:10px 12px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;text-align:center;' });
         box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;color:' + (color || 'var(--black,#0A0A09)') + ';' }, String(value)));
         box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
         return box;
@@ -2032,6 +2032,7 @@ function renderExtendedSections(wrapper, S) {
           var col = colorByS[p.severity] || 'var(--grey,#6B6B65)';
           var bg = bgBySeverity[p.severity] || 'transparent';
           var pChip = h('div', {
+            'class': 'sfc-pattern-chip',
             style: 'padding:10px 12px;background:' + bg + ';border-left:3px solid ' + col + ';'
           });
           pChip.appendChild(h('div', {
@@ -2053,6 +2054,119 @@ function renderExtendedSections(wrapper, S) {
     // Widget optionnel — silencieux si helpers indispos
   }
 
+  // POLISH 2026-04 (OBJECTIFS SEMAINE) : progression vs objectifs (séances,
+  // kcal, protéines, wellness). Affiché si au moins 1 métrique disponible.
+  try {
+    if (typeof window.getWeeklyGoalsProgress === 'function') {
+      var goals = window.getWeeklyGoalsProgress();
+      if (goals) {
+        wrapper.appendChild(sectionLabel('Objectifs cette semaine'));
+        var goalsBox = card();
+
+        // Helper : row progress avec label + progress bar + valeur
+        function goalRow(label, current, target, pct, unit, colorByPct) {
+          var row = h('div', { 'class': 'sfc-goal-row', style: 'padding:10px 4px;border-bottom:1px solid var(--border,#D8D8D0);' });
+          var top = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;' });
+          top.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, label));
+          var rightTxt = current + (unit ? ' ' + unit : '') + (target !== null && target !== undefined ? ' / ' + target + (unit ? ' ' + unit : '') : '');
+          var rightEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-weight:600;' }, rightTxt);
+          top.appendChild(rightEl);
+          row.appendChild(top);
+          // Progress bar
+          var trackStyle = 'width:100%;height:6px;background:var(--border,#D8D8D0);border-radius:3px;overflow:hidden;';
+          var track = h('div', { style: trackStyle });
+          var fillColor = colorByPct || 'var(--green,#1A4A1A)';
+          var fillWidth = pct !== null ? Math.min(100, Math.max(0, pct)) : 0;
+          var fill = h('div', { style: 'width:' + fillWidth + '%;height:100%;background:' + fillColor + ';transition:width 0.4s ease;' });
+          track.appendChild(fill);
+          row.appendChild(track);
+          // Pct textuel à droite sous la barre
+          if (pct !== null) {
+            var pctLbl = h('div', { style: 'text-align:right;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);margin-top:3px;' }, pct + '%');
+            row.appendChild(pctLbl);
+          }
+          return row;
+        }
+
+        var hasGoals = false;
+
+        // 1) Séances
+        if (goals.sessions) {
+          var sCol = 'var(--green,#1A4A1A)';
+          if (goals.sessions.pct !== null && goals.sessions.pct < 50) sCol = 'var(--orange,#6A4A1A)';
+          goalsBox.appendChild(goalRow(
+            'Séances',
+            goals.sessions.done,
+            goals.sessions.planned,
+            goals.sessions.pct,
+            '',
+            sCol
+          ));
+          hasGoals = true;
+        }
+
+        // 2) Kcal
+        if (goals.kcalAvg) {
+          var kCol = 'var(--green,#1A4A1A)';
+          // Si >110% ou <90% → warning orange, >125% ou <75% → rouge
+          if (goals.kcalAvg.pct !== null) {
+            var kDiff = Math.abs(goals.kcalAvg.pct - 100);
+            if (kDiff > 25) kCol = 'var(--red,#5A1010)';
+            else if (kDiff > 10) kCol = 'var(--orange,#6A4A1A)';
+          }
+          goalsBox.appendChild(goalRow(
+            'Calories (moy. 7j)',
+            goals.kcalAvg.current,
+            goals.kcalAvg.target,
+            goals.kcalAvg.pct,
+            'kcal',
+            kCol
+          ));
+          hasGoals = true;
+        }
+
+        // 3) Protéines
+        if (goals.proteinAvg) {
+          var pCol = 'var(--green,#1A4A1A)';
+          if (goals.proteinAvg.pct !== null && goals.proteinAvg.pct < 80) pCol = 'var(--orange,#6A4A1A)';
+          goalsBox.appendChild(goalRow(
+            'Protéines (moy. 7j)',
+            goals.proteinAvg.current,
+            goals.proteinAvg.target,
+            goals.proteinAvg.pct,
+            'g',
+            pCol
+          ));
+          hasGoals = true;
+        }
+
+        // 4) Wellness loggés
+        if (goals.wellnessLogged) {
+          var wCol = 'var(--green,#1A4A1A)';
+          if (goals.wellnessLogged.pct < 50) wCol = 'var(--orange,#6A4A1A)';
+          goalsBox.appendChild(goalRow(
+            'Bilan forme',
+            goals.wellnessLogged.count,
+            goals.wellnessLogged.target,
+            goals.wellnessLogged.pct,
+            'j',
+            wCol
+          ));
+          hasGoals = true;
+        }
+
+        // Finition : dernière row sans border-bottom
+        if (hasGoals) {
+          var allGoalRows = goalsBox.querySelectorAll('div[style*="border-bottom"]');
+          if (allGoalRows.length) allGoalRows[allGoalRows.length - 1].style.borderBottom = 'none';
+          wrapper.appendChild(goalsBox);
+        }
+      }
+    }
+  } catch(_gErr) {
+    // Widget optionnel — silencieux
+  }
+
   // POLISH 2026-04 (GRAPHES) : courbes sommeil + énergie sur 30 jours.
   // Utilise Chart.js (déjà chargé) + window.getSleepEnergyTrend.
   // Affiché UNIQUEMENT si au moins 3 jours loggés (évite graphique vide).
@@ -2071,7 +2185,7 @@ function renderExtendedSections(wrapper, S) {
 
         var statsRow = h('div', { style: 'display:flex;gap:8px;margin-bottom:12px;justify-content:space-between;' });
         function trendStat(value, label) {
-          var box = h('div', { style: 'flex:1;text-align:center;padding:6px 8px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
+          var box = h('div', { 'class': 'sfc-stat-box', style: 'flex:1;text-align:center;padding:10px 12px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
           box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:18px;color:var(--black,#0A0A09);' }, value));
           box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
           return box;
@@ -2213,7 +2327,7 @@ function renderExtendedSections(wrapper, S) {
                               : (delta < 0 ? 'var(--red,#5A1010)' : 'var(--grey,#6B6B65)'));
           var signTxt = (delta === null) ? '' : (delta > 0 ? '+' : '') + delta.toFixed(1) + ' kg';
           var pctTxt = (deltaPct !== null) ? ' (' + (deltaPct > 0 ? '+' : '') + deltaPct.toFixed(1) + '%)' : '';
-          var line = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
+          var line = h('div', { 'class': 'sfc-delta-row', style: 'display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
           line.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, ds.name));
           var right = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:' + colorByDelta + ';font-weight:600;' }, signTxt + pctTxt);
           line.appendChild(right);
@@ -2329,11 +2443,11 @@ function renderExtendedSections(wrapper, S) {
 
         // Helper : ligne record (label gauche, valeur droite)
         function recordLine(label, value, detail) {
-          var row = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
+          var row = h('div', { 'class': 'sfc-record-row', style: 'display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 4px;border-bottom:1px solid var(--border,#D8D8D0);' });
           var left = h('div', { style: 'flex:1;min-width:0;' });
           left.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, label));
           if (detail) {
-            left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;letter-spacing:0.3px;' }, detail));
+            left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:4px;letter-spacing:0.3px;line-height:1.4;' }, detail));
           }
           var right = h('div', { style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);font-weight:normal;white-space:nowrap;' }, value);
           row.appendChild(left);
@@ -2424,6 +2538,160 @@ function renderExtendedSections(wrapper, S) {
       }
     }
   } catch(_rErr) {
+    // Widget optionnel — silencieux
+  }
+
+  // POLISH 2026-04 (GRAPH NUTRITION) : courbes calories + protéines 30j.
+  // Exploite mtd_food_journal_<uid> via window.getNutritionTrend.
+  // Affiché uniquement si ≥3 jours loggés (cohérence avec graphe sommeil).
+  try {
+    if (typeof window.getNutritionTrend === 'function') {
+      var nutTrend = window.getNutritionTrend(30);
+      if (nutTrend && nutTrend.loggedDays >= 3) {
+        wrapper.appendChild(sectionLabel('Nutrition (30 jours)'));
+        var nutBox = card();
+
+        // Stats header : moyenne kcal + adhérence cible
+        var kcalVals = nutTrend.kcal.filter(function(v) { return typeof v === 'number'; });
+        var kcalAvg = kcalVals.length ? (kcalVals.reduce(function(a,b){return a+b;},0) / kcalVals.length) : null;
+        var adherencePct = null;
+        if (kcalAvg !== null && nutTrend.targets && nutTrend.targets.kcal > 0) {
+          adherencePct = Math.round((kcalAvg / nutTrend.targets.kcal) * 100);
+        }
+        var pVals = nutTrend.protein.filter(function(v) { return typeof v === 'number'; });
+        var pAvg = pVals.length ? Math.round(pVals.reduce(function(a,b){return a+b;},0) / pVals.length) : null;
+
+        var nStatsRow = h('div', { style: 'display:flex;gap:8px;margin-bottom:12px;' });
+        function nutStat(value, label) {
+          var box = h('div', { 'class': 'sfc-stat-box', style: 'flex:1;text-align:center;padding:10px 8px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
+          box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);' }, value));
+          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
+          return box;
+        }
+        nStatsRow.appendChild(nutStat(
+          kcalAvg !== null ? Math.round(kcalAvg).toLocaleString('fr-FR') : '—',
+          'Kcal moy.'
+        ));
+        nStatsRow.appendChild(nutStat(
+          pAvg !== null ? pAvg + ' g' : '—',
+          'Protéines moy.'
+        ));
+        nStatsRow.appendChild(nutStat(
+          adherencePct !== null ? adherencePct + '%' : '—',
+          'Adhérence cible'
+        ));
+        nStatsRow.appendChild(nutStat(
+          nutTrend.loggedDays + '/30',
+          'Jours loggés'
+        ));
+        nutBox.appendChild(nStatsRow);
+
+        // Canvas Chart.js
+        var nChartWrap = h('div', { style: 'position:relative;height:180px;' });
+        var nCanvas = document.createElement('canvas');
+        nCanvas.id = 'today-nutrition-trend-chart';
+        nCanvas.style.cssText = 'width:100%;height:180px;max-height:180px;';
+        nChartWrap.appendChild(nCanvas);
+        nutBox.appendChild(nChartWrap);
+
+        requestAnimationFrame(function() {
+          try {
+            var nCtx = document.getElementById('today-nutrition-trend-chart');
+            if (!nCtx || typeof window.createChart !== 'function' || typeof Chart === 'undefined') return;
+            var shortLabels = nutTrend.labels.map(function(iso) {
+              var parts = iso.split('-');
+              return parts.length === 3 ? parts[2] + '/' + parts[1] : iso;
+            });
+            var datasets = [
+              {
+                label: 'Calories (kcal)',
+                data: nutTrend.kcal,
+                borderColor: '#1A4A1A',
+                backgroundColor: 'rgba(26, 74, 26, 0.08)',
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 2,
+                pointHoverRadius: 4,
+                spanGaps: true,
+                yAxisID: 'yKcal'
+              },
+              {
+                label: 'Protéines (g)',
+                data: nutTrend.protein,
+                borderColor: '#6A4A1A',
+                backgroundColor: 'rgba(106, 74, 26, 0.06)',
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 2,
+                pointHoverRadius: 4,
+                spanGaps: true,
+                borderDash: [4, 3],
+                yAxisID: 'yProtein'
+              }
+            ];
+            // Ligne pointillée de cible kcal si dispo
+            if (nutTrend.targets && nutTrend.targets.kcal > 0) {
+              datasets.push({
+                label: 'Cible kcal',
+                data: nutTrend.labels.map(function() { return nutTrend.targets.kcal; }),
+                borderColor: 'rgba(10,10,9,0.35)',
+                backgroundColor: 'transparent',
+                borderWidth: 1,
+                borderDash: [2, 4],
+                pointRadius: 0,
+                pointHoverRadius: 0,
+                tension: 0,
+                yAxisID: 'yKcal'
+              });
+            }
+            window.createChart(nCtx, {
+              type: 'line',
+              data: { labels: shortLabels, datasets: datasets },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                    labels: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 10 }, boxWidth: 12, padding: 10 }
+                  },
+                  tooltip: {
+                    backgroundColor: '#0A0A09',
+                    titleFont: { family: 'Georgia, serif', size: 11 },
+                    bodyFont: { family: 'Helvetica Neue, Arial, sans-serif', size: 11 },
+                    padding: 8
+                  }
+                },
+                scales: {
+                  x: {
+                    ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 7 },
+                    grid: { display: false }
+                  },
+                  yKcal: {
+                    type: 'linear', position: 'left',
+                    beginAtZero: false,
+                    ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } },
+                    grid: { color: 'rgba(216,216,208,0.3)' },
+                    title: { display: true, text: 'kcal', font: { family: 'Georgia, serif', size: 10 } }
+                  },
+                  yProtein: {
+                    type: 'linear', position: 'right',
+                    beginAtZero: true,
+                    ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } },
+                    grid: { display: false },
+                    title: { display: true, text: 'g', font: { family: 'Georgia, serif', size: 10 } }
+                  }
+                }
+              }
+            });
+          } catch(_ncErr) { /* silencieux */ }
+        });
+
+        wrapper.appendChild(nutBox);
+      }
+    }
+  } catch(_nErr) {
     // Widget optionnel — silencieux
   }
 
@@ -2566,20 +2834,36 @@ function renderExtendedSections(wrapper, S) {
   var dataCard = card();
   var dataBtns = h('div', { style: 'display:flex;flex-direction:column;gap:10px;' });
 
+  // POLISH 2026-04 — boutons "Mes données" unifiés (audit designer luxe).
+  // Primary : PDF + Export (actions principales)
+  // Outline : Import (secondaire)
+  // Danger : Delete (rouge, border rouge)
+  var pdfBtn = h('button', {
+    'class': 'sfc-data-btn sfc-data-btn-primary',
+    onclick: function() {
+      if (typeof window.exportWeeklyReportPDF === 'function') {
+        window.exportWeeklyReportPDF();
+      } else {
+        alert('Export PDF indisponible. Rechargez la page.');
+      }
+    }
+  }, '\u2193 Télécharger mon rapport PDF');
+  dataBtns.appendChild(pdfBtn);
+
   var exportBtn = h('button', {
-    style: 'width:100%;padding:18px 28px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;font-size:9px;letter-spacing:6px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    'class': 'sfc-data-btn sfc-data-btn-primary',
     onclick: function() { todayExportAllData(); }
   }, '\u2B07 Exporter mes données');
   dataBtns.appendChild(exportBtn);
 
   var importBtn = h('button', {
-    style: 'width:100%;padding:12px 24px;background:transparent;color:var(--grey);border:1px solid var(--border);border-radius:2px;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    'class': 'sfc-data-btn sfc-data-btn-outline',
     onclick: function() { todayImportData(); }
   }, '\u2B06 Importer une sauvegarde');
   dataBtns.appendChild(importBtn);
 
   var deleteBtn = h('button', {
-    style: 'width:100%;padding:12px 24px;background:transparent;color:var(--red,#5A1010);border:1px solid var(--red,#5A1010);border-radius:2px;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    'class': 'sfc-data-btn sfc-data-btn-danger',
     onclick: function() { todayDeleteAllData(); }
   }, 'Supprimer toutes mes données');
   dataBtns.appendChild(deleteBtn);

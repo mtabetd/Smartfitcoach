@@ -1,0 +1,365 @@
+/**
+ * SmartFitCoach — Proprietary Software
+ * Copyright (c) 2024-2026 SmartFitCoach. All rights reserved.
+ */
+// pdf-weekly-report.js — Export PDF du rapport hebdomadaire SmartFitCoach.
+// POLISH 2026-04 (audit designer luxe 6.5→9.5/10) :
+// - Typographie amplifiée (titres Times 14pt italic bold, values Times 13pt bold)
+// - Header avec relief (filet d'accent vert sous titre + monogramme SFC)
+// - Records en grille 2 colonnes (VIP content)
+// - Spacing section rythmé
+// - Footer watermark discret
+(function() {
+'use strict';
+
+// Layout A4 (mm)
+var W = 210, H = 297, M = 15, CW = W - 2 * M;
+
+// Palette (RGB triplets)
+var ivory  = [250, 250, 247];
+var black  = [10, 10, 9];
+var grey   = [107, 107, 101];
+var grey2  = [160, 160, 152];
+var green  = [26, 74, 26];
+var orange = [106, 74, 26];
+var red    = [90, 16, 16];
+
+function color(doc, fn, rgb) {
+  if (fn === 'fill') doc.setFillColor(rgb[0], rgb[1], rgb[2]);
+  else if (fn === 'text') doc.setTextColor(rgb[0], rgb[1], rgb[2]);
+  else if (fn === 'draw') doc.setDrawColor(rgb[0], rgb[1], rgb[2]);
+}
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  var s = String(iso).slice(0, 10);
+  var p = s.split('-');
+  return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : s;
+}
+
+// Section title — FIX audit luxe : Times 14pt italic bold (vs 7pt UPPERCASE)
+// Plus éditorial, plus d'autorité, lisible à 2m.
+function sectionTitle(doc, y, title) {
+  color(doc, 'text', black);
+  doc.setFont('times', 'italic'); doc.setFontSize(14);
+  doc.text(String(title), M, y);
+  // Double-ligne éditoriale (fine + accent)
+  color(doc, 'draw', grey);
+  doc.setLineWidth(0.2);
+  doc.line(M, y + 2.2, M + CW, y + 2.2);
+  color(doc, 'draw', green);
+  doc.setLineWidth(0.6);
+  doc.line(M, y + 2.2, M + 18, y + 2.2); // accent vert court
+  return y + 9;
+}
+
+// KvLine — FIX audit luxe : value en Times 13pt bold (vs 10pt normal)
+// Data chiffrée pèse visuellement comme dans les rapports Apple/Whoop.
+function kvLine(doc, y, label, value, opts) {
+  opts = opts || {};
+  color(doc, 'text', grey);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  doc.text(String(label), M, y);
+  color(doc, 'text', opts.valueColor || black);
+  if (opts.emphasis === false) {
+    doc.setFont('times', 'normal'); doc.setFontSize(10);
+  } else {
+    doc.setFont('times', 'bold'); doc.setFontSize(13);
+  }
+  var txt = String(value);
+  var w = doc.getTextWidth(txt);
+  doc.text(txt, M + CW - w, y);
+  return y + 8; // +8mm (rythme aéré, était 6)
+}
+
+// Pair cell pour grille 2 colonnes (Records)
+function gridCell(doc, x, y, colWidth, label, value, detail) {
+  color(doc, 'text', grey);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5);
+  doc.text(String(label).toUpperCase(), x, y);
+  color(doc, 'text', black);
+  doc.setFont('times', 'bold'); doc.setFontSize(14);
+  var valTxt = String(value);
+  // Tronquer si trop long pour colonne
+  var maxW = colWidth - 4;
+  while (doc.getTextWidth(valTxt) > maxW && valTxt.length > 1) {
+    valTxt = valTxt.slice(0, -1);
+  }
+  doc.text(valTxt, x, y + 6.5);
+  if (detail) {
+    color(doc, 'text', grey2);
+    doc.setFont('times', 'italic'); doc.setFontSize(8);
+    var detailLines = doc.splitTextToSize(String(detail), maxW);
+    doc.text(detailLines, x, y + 11);
+    return y + 11 + detailLines.length * 3;
+  }
+  return y + 12;
+}
+
+function checkPage(doc, y) {
+  if (y > 270) { doc.addPage(); return 22; }
+  return y;
+}
+
+window.exportWeeklyReportPDF = function() {
+  try {
+    if (window.isPremium && !window.isPremium()) {
+      if (window.showPaywall) window.showPaywall('pdf');
+      return;
+    }
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      alert('PDF non disponible. Rechargez la page.');
+      return;
+    }
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    var S = window.S || {};
+
+    // ═══ HEADER ═══
+    // Fond noir + monogramme SFC + titre éditorial + filet d'accent vert
+    color(doc, 'fill', black);
+    doc.rect(0, 0, W, 46, 'F');
+
+    // Monogramme "SFC" haut-droit (cercle subtil)
+    color(doc, 'draw', ivory);
+    doc.setLineWidth(0.4);
+    doc.circle(W - M - 5, 11, 5, 'S');
+    color(doc, 'text', ivory);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(7);
+    doc.text('SFC', W - M - 5, 12.5, { align: 'center' });
+
+    // Eyebrow
+    color(doc, 'text', ivory);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
+    doc.text('SMART FIT COACH', M, 12);
+    // Filet gris sous eyebrow
+    color(doc, 'draw', grey2);
+    doc.setLineWidth(0.2);
+    doc.line(M, 14, M + 40, 14);
+
+    // Titre principal — Times 22pt italic (plus impact)
+    doc.setFont('times', 'italic'); doc.setFontSize(22);
+    doc.text('Rapport hebdomadaire', M, 26);
+
+    // Filet d'accent vert sous titre (marque visuelle)
+    color(doc, 'draw', green);
+    doc.setLineWidth(1);
+    doc.line(M, 30, M + 22, 30);
+
+    // Sous-titre : prénom + date longue
+    color(doc, 'text', ivory);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    var prenom = (typeof window.getDisplayFirstName === 'function') ? window.getDisplayFirstName() : (S.prenom || '');
+    var dateStr = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    doc.text((prenom ? prenom + '  ·  ' : '') + dateStr, M, 38);
+
+    var y = 58;
+
+    // ═══ 1. PROFIL ═══
+    y = sectionTitle(doc, y, 'Profil');
+    if (S.sex) y = kvLine(doc, y, 'Sexe', S.sex === 'homme' ? 'Homme' : 'Femme', { emphasis: false });
+    if (S.age) y = kvLine(doc, y, 'Âge', S.age + ' ans', { emphasis: false });
+    if (S.weight) y = kvLine(doc, y, 'Poids actuel', S.weight + ' kg');
+    if (S.height) y = kvLine(doc, y, 'Taille', S.height + ' cm', { emphasis: false });
+    if (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) {
+      y = kvLine(doc, y, 'Objectif', window.GOALS[S.goal].label || window.GOALS[S.goal].key || '—', { emphasis: false });
+    }
+    y += 5;
+
+    // ═══ 2. OBJECTIFS SEMAINE ═══
+    y = checkPage(doc, y);
+    y = sectionTitle(doc, y, 'Objectifs de la semaine');
+    var goals = (typeof window.getWeeklyGoalsProgress === 'function') ? window.getWeeklyGoalsProgress() : null;
+    if (goals) {
+      function pctColor(pct, low, high) {
+        if (pct === null) return black;
+        if (low !== undefined && pct < low) return orange;
+        if (high !== undefined && pct > high) return orange;
+        return green;
+      }
+      if (goals.sessions) {
+        var sessTxt = goals.sessions.done + ' / ' + (goals.sessions.planned || '—') + (goals.sessions.pct !== null ? '   ' + goals.sessions.pct + '%' : '');
+        y = kvLine(doc, y, 'Séances', sessTxt, { valueColor: pctColor(goals.sessions.pct, 50) });
+      }
+      if (goals.kcalAvg) {
+        var kPct = goals.kcalAvg.pct;
+        var kDiff = kPct !== null ? Math.abs(kPct - 100) : null;
+        var kCol = kDiff === null ? black : (kDiff > 25 ? red : (kDiff > 10 ? orange : green));
+        var kTxt = goals.kcalAvg.current + ' / ' + (goals.kcalAvg.target || '—') + ' kcal' + (kPct !== null ? '   ' + kPct + '%' : '');
+        y = kvLine(doc, y, 'Calories (moy. 7j)', kTxt, { valueColor: kCol });
+      }
+      if (goals.proteinAvg) {
+        var pTxt = goals.proteinAvg.current + ' / ' + (goals.proteinAvg.target || '—') + ' g' + (goals.proteinAvg.pct !== null ? '   ' + goals.proteinAvg.pct + '%' : '');
+        y = kvLine(doc, y, 'Protéines (moy. 7j)', pTxt, { valueColor: pctColor(goals.proteinAvg.pct, 80) });
+      }
+      if (goals.wellnessLogged) {
+        y = kvLine(doc, y, 'Bilan forme loggés', goals.wellnessLogged.count + ' / 7 j   ' + goals.wellnessLogged.pct + '%', { valueColor: pctColor(goals.wellnessLogged.pct, 50) });
+      }
+    } else {
+      color(doc, 'text', grey);
+      doc.setFont('times', 'italic'); doc.setFontSize(10);
+      doc.text('Aucune donnée disponible pour cette semaine.', M, y);
+      y += 8;
+    }
+    y += 5;
+
+    // ═══ 3. BILAN 7 JOURS ═══
+    y = checkPage(doc, y);
+    y = sectionTitle(doc, y, 'Bilan 7 jours');
+    var ws = (typeof window.getWeekSessionsSummary === 'function') ? window.getWeekSessionsSummary() : null;
+    var wAvg = (typeof window.getWellnessAvg === 'function') ? window.getWellnessAvg(7) : null;
+    var wperf = (typeof window.getWeekPerformanceSummary === 'function') ? window.getWeekPerformanceSummary() : null;
+    if (ws) {
+      y = kvLine(doc, y, 'Séances effectuées', ws.sessions + '   (' + ws.daysActive + ' jours actifs)');
+      if (ws.kcalTotal > 0) y = kvLine(doc, y, 'Kcal dépensées', ws.kcalTotal.toLocaleString('fr-FR') + ' kcal');
+      if (ws.durationTotal > 0) y = kvLine(doc, y, 'Temps total', ws.durationTotal + ' min');
+    }
+    if (wAvg && wAvg.sleepAvg !== null) {
+      y = kvLine(doc, y, 'Sommeil moyen', wAvg.sleepAvg + ' / 5');
+    }
+    if (wperf && typeof wperf.rpeAvg === 'number') {
+      y = kvLine(doc, y, 'RPE moyen', wperf.rpeAvg + ' / 10');
+    }
+    y += 5;
+
+    // ═══ 4. SIGNAUX DÉTECTÉS ═══
+    y = checkPage(doc, y);
+    var patterns = (typeof window.detectWeekPatterns === 'function') ? window.detectWeekPatterns() : [];
+    if (Array.isArray(patterns) && patterns.length > 0) {
+      y = sectionTitle(doc, y, 'Signaux détectés');
+      patterns.slice(0, 5).forEach(function(p) {
+        y = checkPage(doc, y);
+        var rgbMap = { info: green, warning: orange, alert: red };
+        var col = rgbMap[p.severity] || grey;
+        // Marqueur couleur plus généreux (3×3 au lieu de 2×2.5)
+        color(doc, 'fill', col);
+        doc.rect(M, y - 3, 2.5, 3, 'F');
+        color(doc, 'text', black);
+        doc.setFont('times', 'bold'); doc.setFontSize(11);
+        doc.text(String(p.label || p.id || ''), M + 5, y);
+        y += 5;
+        if (p.advice) {
+          color(doc, 'text', grey);
+          doc.setFont('times', 'italic'); doc.setFontSize(9);
+          var lines = doc.splitTextToSize(String(p.advice), CW - 5);
+          doc.text(lines, M + 5, y);
+          y += lines.length * 4;
+        }
+        y += 4;
+      });
+      y += 3;
+    }
+
+    // ═══ 5. RECORDS PERSONNELS (GRILLE 2 COLONNES) ═══
+    y = checkPage(doc, y);
+    var records = (typeof window.getPersonalRecords === 'function') ? window.getPersonalRecords() : null;
+    if (records) {
+      y = sectionTitle(doc, y, 'Records personnels');
+      // Grille 2 colonnes — chaque cell 85mm (colWidth)
+      var colWidth = (CW - 10) / 2; // 10mm gouttière
+      var colX1 = M;
+      var colX2 = M + colWidth + 10;
+      var cells = []; // { label, value, detail }
+
+      if (Array.isArray(records.maxLifts)) {
+        records.maxLifts.forEach(function(lift) {
+          var d = [];
+          if (lift.reps) d.push(lift.reps + ' reps');
+          if (lift.oneRepMax) d.push('1RM ≈ ' + lift.oneRepMax + ' kg');
+          if (lift.date) d.push(fmtDate(lift.date));
+          cells.push({ label: lift.exercise, value: lift.weight + ' kg', detail: d.join(' · ') });
+        });
+      }
+      if (records.weightMilestone) {
+        cells.push({
+          label: records.weightMilestone.goalLabel,
+          value: records.weightMilestone.weight + ' kg',
+          detail: records.weightMilestone.date ? fmtDate(records.weightMilestone.date) : null
+        });
+      } else if (records.weightRange) {
+        cells.push({
+          label: 'Plage de poids',
+          value: records.weightRange.min + '–' + records.weightRange.max + ' kg',
+          detail: null
+        });
+      }
+      if (records.longestSession) {
+        var lsD = [];
+        if (records.longestSession.kcalTotal) lsD.push(records.longestSession.kcalTotal + ' kcal');
+        if (records.longestSession.date) lsD.push(fmtDate(records.longestSession.date));
+        cells.push({
+          label: 'Séance la plus longue',
+          value: records.longestSession.duration + ' min',
+          detail: lsD.join(' · ')
+        });
+      }
+      if (typeof records.maxStreak === 'number' && records.maxStreak > 0) {
+        cells.push({
+          label: 'Plus longue série',
+          value: records.maxStreak + ' jour' + (records.maxStreak > 1 ? 's' : ''),
+          detail: 'Jours consécutifs'
+        });
+      }
+
+      // Rendu en 2 colonnes (row by row)
+      for (var ri = 0; ri < cells.length; ri += 2) {
+        y = checkPage(doc, y);
+        var rowStartY = y;
+        var y1 = gridCell(doc, colX1, y, colWidth, cells[ri].label, cells[ri].value, cells[ri].detail);
+        var y2 = y;
+        if (cells[ri + 1]) {
+          y2 = gridCell(doc, colX2, y, colWidth, cells[ri + 1].label, cells[ri + 1].value, cells[ri + 1].detail);
+        }
+        y = Math.max(y1, y2) + 6; // gap row
+      }
+      y += 3;
+    }
+
+    // ═══ 6. FOOTER — DISCLAIMER + WATERMARK ═══
+    y = checkPage(doc, y);
+    y += 4;
+    color(doc, 'draw', grey2);
+    doc.setLineWidth(0.2);
+    doc.line(M, y, M + CW, y);
+    y += 5;
+    color(doc, 'text', grey);
+    doc.setFont('times', 'italic'); doc.setFontSize(8);
+    var disclaimerLines = doc.splitTextToSize(
+      'Ce rapport est généré à titre informatif et pédagogique. Il ne remplace pas l\'avis '
+      + 'd\'un médecin ou d\'un professionnel de santé qualifié. Consulte un pro en cas de '
+      + 'doute, de douleur persistante ou de pathologie.',
+      CW
+    );
+    doc.text(disclaimerLines, M, y);
+    y += disclaimerLines.length * 3.5 + 2;
+
+    // Footer watermark : chaque page — "Smart Fit Coach" + date + pagination
+    var pageCount = doc.internal.getNumberOfPages();
+    for (var pi = 1; pi <= pageCount; pi++) {
+      doc.setPage(pi);
+      color(doc, 'draw', grey2);
+      doc.setLineWidth(0.2);
+      doc.line(M, 286, M + CW, 286);
+      color(doc, 'text', grey);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
+      doc.text('Smart Fit Coach', M, 291);
+      doc.setFont('helvetica', 'italic'); doc.setFontSize(6.5);
+      doc.text(new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }), M, 294.5);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7);
+      var pn = pi + ' / ' + pageCount;
+      var pnW = doc.getTextWidth(pn);
+      doc.text(pn, W - M - pnW, 291);
+    }
+
+    // Nom fichier
+    var now = new Date();
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    var dateStrFile = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
+    doc.save('smartfitcoach-rapport-hebdo-' + dateStrFile + '.pdf');
+  } catch(e) {
+    console.error('[exportWeeklyReportPDF] Erreur:', e);
+    alert('Erreur lors de la génération du PDF. Réessaie ou contacte le support.');
+  }
+};
+
+})();

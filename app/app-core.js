@@ -347,6 +347,152 @@ window.recordSessionFeedback = function(data) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 (OBJECTIFS SEMAINE) : progression vs objectifs hebdo.
+// Retourne { sessions:{done,planned,pct}, kcalAvg:{current,target,pct},
+//            proteinAvg:{current,target,pct}, wellnessLogged:{count,target=7,pct} } ou null.
+// Chaque métrique est null si la data manque → widget gère visuellement.
+window.getWeeklyGoalsProgress = function() {
+  try {
+    var S = window.S;
+    if (!S) return null;
+    var result = {};
+
+    // 1) SÉANCES
+    try {
+      var planned = 0;
+      if (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > 0) {
+        planned = S.trainingDaysSelected.length;
+      } else if (typeof S.sportDays === 'number' && S.sportDays > 0) {
+        planned = S.sportDays;
+      }
+      var done = 0;
+      if (typeof window.getWeekSessionsSummary === 'function') {
+        var ws = window.getWeekSessionsSummary();
+        if (ws && typeof ws.sessions === 'number') done = ws.sessions;
+      }
+      if (planned > 0 || done > 0) {
+        result.sessions = {
+          done: done,
+          planned: planned || null,
+          pct: planned > 0 ? Math.min(100, Math.round((done / planned) * 100)) : null
+        };
+      }
+    } catch(_e1) {}
+
+    // 2-3) KCAL + PROTÉINES MOYENNES (vs cibles) — via 1 SEUL appel getNutritionTrend(7)
+    // FIX CONTRE-AUDIT : factoriser pour éviter parse JSON localStorage 2× + boucle 7j 2×.
+    try {
+      var ntrend = (typeof window.getNutritionTrend === 'function') ? window.getNutritionTrend(7) : null;
+      if (ntrend && ntrend.loggedDays > 0) {
+        // kcal
+        var kcalVals = ntrend.kcal.filter(function(v) { return typeof v === 'number'; });
+        if (kcalVals.length > 0) {
+          var avg = Math.round(kcalVals.reduce(function(a,b){return a+b;},0) / kcalVals.length);
+          var tgt = (ntrend.targets && typeof ntrend.targets.kcal === 'number') ? ntrend.targets.kcal : null;
+          result.kcalAvg = {
+            current: avg,
+            target: tgt,
+            pct: (tgt && tgt > 0) ? Math.min(150, Math.round((avg / tgt) * 100)) : null
+          };
+        }
+        // protéines
+        var pVals = ntrend.protein.filter(function(v) { return typeof v === 'number'; });
+        if (pVals.length > 0) {
+          var pAvg = Math.round(pVals.reduce(function(a,b){return a+b;},0) / pVals.length);
+          var pTgt = (ntrend.targets && typeof ntrend.targets.p === 'number') ? ntrend.targets.p : null;
+          result.proteinAvg = {
+            current: pAvg,
+            target: pTgt,
+            pct: (pTgt && pTgt > 0) ? Math.min(150, Math.round((pAvg / pTgt) * 100)) : null
+          };
+        }
+      }
+    } catch(_e2) {}
+
+    // 4) WELLNESS LOGGÉS (cible : 7 jours / semaine)
+    // FIX CONTRE-AUDIT : capper count à 7 pour cohérence "8/7 j (100%)" → "7/7 j (100%)"
+    // (multi-logs/jour possibles en théorie → cognitive dissonance sinon)
+    try {
+      if (typeof window.getWellnessHistory === 'function') {
+        var last7 = window.getWellnessHistory(7);
+        var raw = Array.isArray(last7) ? last7.length : 0;
+        var count = Math.min(raw, 7); // cap visuel
+        result.wellnessLogged = {
+          count: count,
+          target: 7,
+          pct: Math.min(100, Math.round((count / 7) * 100))
+        };
+      }
+    } catch(_e4) {}
+
+    if (Object.keys(result).length === 0) return null;
+    return result;
+  } catch(e) { return null; }
+};
+
+// POLISH 2026-04 (GRAPH NUTRITION) : série calories + macros sur N derniers jours.
+// Retourne { labels[N], kcal[num|null], protein[num|null], carbs[num|null],
+//            fat[num|null], targets:{kcal,p,g,l}, loggedDays } ou null.
+// Lit mtd_food_journal_<uid> DIRECTEMENT (FOOD_JOURNAL.getDayTotal ne lit que today).
+window.getNutritionTrend = function(days) {
+  try {
+    days = (typeof days === 'number' && days > 0) ? days : 30;
+    var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+    var uid = user && user.id ? user.id : 'anon';
+    var journal = {};
+    try {
+      var raw = localStorage.getItem('mtd_food_journal_' + uid);
+      if (raw) { var parsed = JSON.parse(raw); if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) journal = parsed; }
+    } catch(_je) {}
+
+    var labels = [], kcal = [], protein = [], carbs = [], fat = [];
+    var now = new Date();
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    var loggedDays = 0;
+
+    for (var i = days - 1; i >= 0; i--) {
+      var d = new Date(now.getTime() - i * 86400000);
+      var key = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+      labels.push(key);
+      var entries = Array.isArray(journal[key]) ? journal[key] : [];
+      if (entries.length > 0) {
+        var agg = entries.reduce(function(acc, e) {
+          acc.kcal += (Number(e.kcal) || 0);
+          acc.p += (Number(e.p) || 0);
+          acc.g += (Number(e.g) || 0);
+          acc.l += (Number(e.l) || 0);
+          return acc;
+        }, { kcal: 0, p: 0, g: 0, l: 0 });
+        kcal.push(Math.round(agg.kcal));
+        protein.push(Math.round(agg.p));
+        carbs.push(Math.round(agg.g));
+        fat.push(Math.round(agg.l));
+        loggedDays++;
+      } else {
+        kcal.push(null); protein.push(null); carbs.push(null); fat.push(null);
+      }
+    }
+
+    // Targets (via helpers déjà exposés)
+    var targets = null;
+    try {
+      if (typeof window.getCalorieTarget === 'function' && typeof window.getMacroTargets === 'function') {
+        var t = window.getCalorieTarget();
+        var m = window.getMacroTargets();
+        if (typeof t === 'number' && m && typeof m === 'object') {
+          targets = { kcal: t, p: m.p || null, g: m.g || null, l: m.l || null };
+        }
+      }
+    } catch(_te) {}
+
+    if (loggedDays === 0) return null; // rien à tracer
+    return {
+      labels: labels, kcal: kcal, protein: protein, carbs: carbs, fat: fat,
+      targets: targets, loggedDays: loggedDays
+    };
+  } catch(e) { return null; }
+};
+
 // POLISH 2026-04 (RECORDS) : calcule les meilleurs résultats historiques de l'user.
 // Retourne { maxLifts:[...], weightMilestone, longestSession, maxStreak } ou null.
 // 100% défensif : tous les champs optionnels, retourne null si aucune donnée.
