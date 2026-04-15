@@ -483,7 +483,7 @@ function renderCardNextMeal() {
 
   // COSMÉTIQUE 2026-04 : carte Prochain repas avec chip "dans Xh" premium
   var c = card('border-left:3px solid var(--black,#0A0A09);background:var(--ivory,#FAF9F6);position:relative;');
-  c.appendChild(eyebrow('PROCHAIN REPAS'));
+  // Bible Hermès §13.2 : max 2 eyebrows par écran — titre Georgia suffit.
 
   // Chip "DANS Xh" en position absolue top-right (signature Hermès)
   var chipEl = h('div', {
@@ -640,11 +640,14 @@ function renderHeroContextuel() {
     });
     context.stats.slice(0, 2).forEach(function(stat) {
       var col = h('div', { style: 'min-width:0;flex:1;' });
+      // FIX supervision Hermès : valeur + unité en Georgia, jamais en ligne avec du texte libre.
+      // On sépare proprement la "grosse valeur" de la "petite précision" éventuelle.
+      var val = String(stat.value);
       col.appendChild(h('div', {
-        style: 'font-family:Georgia,serif;font-size:44px;font-weight:normal;line-height:1;letter-spacing:-0.5px;color:' + (stat.highlight ? 'var(--orange,#E86F1E)' : 'var(--ink-900,#0A0A09)') + ';font-feature-settings:"tnum" 1,"onum" 1;margin-bottom:8px;'
-      }, stat.value));
+        style: 'font-family:Georgia,serif;font-size:44px;font-weight:normal;line-height:1.05;letter-spacing:-0.5px;color:' + (stat.highlight ? 'var(--orange,#E86F1E)' : 'var(--ink-900,#0A0A09)') + ';font-feature-settings:"tnum" 1,"onum" 1;margin-bottom:12px;white-space:nowrap;'
+      }, val));
       col.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;line-height:1.3;'
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;line-height:1.4;white-space:normal;'
       }, stat.label));
       statsRow.appendChild(col);
     });
@@ -1090,7 +1093,7 @@ function renderCardRepas() {
   if (S.appMode === 'sport') return null;
 
   var c = card();
-  c.appendChild(eyebrow('REPAS DU JOUR'));
+  // Bible Hermès §13.2 : pas d'eyebrow redondant — titre Georgia suffit.
 
   if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) {
     // No plan — empty state engageant
@@ -1652,7 +1655,7 @@ function renderCardSport() {
 
   var c = card();
   if (_recoveryBanner) c.appendChild(_recoveryBanner);
-  c.appendChild(eyebrow('SÉANCE DU JOUR'));
+  // Bible Hermès §13.2 : titre Georgia suffit, pas d'eyebrow "SÉANCE DU JOUR".
   c.appendChild(cardTitle('Entraînement'));
 
   var nameEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:6px;' });
@@ -1676,7 +1679,8 @@ function renderCardSport() {
       }, label));
       return cell;
     }
-    _statsRow.appendChild(_statCell(exCount || '—', 'Exercices', false));
+    // Bible Hermès §3.4 : accord singulier/pluriel correct ("1 EXERCICE" pas "1 EXERCICES")
+    _statsRow.appendChild(_statCell(exCount || '—', (exCount === 1 ? 'Exercice' : 'Exercices'), false));
     _statsRow.appendChild(_statCell(_estMins ? ('~' + _estMins + "'") : '—', 'Durée', false));
     _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', 'Semaine', true));
     c.appendChild(_statsRow);
@@ -1738,7 +1742,7 @@ function renderCardRestDay(S) {
   var c = card('background:var(--ivory,#FAF9F6);border-color:var(--border);');
 
   // Header
-  c.appendChild(eyebrow('RÉCUPÉRATION'));
+  // Bible Hermès §13.2 : pas d'eyebrow — titre Georgia suffit.
   c.appendChild(cardTitle('Jour de repos'));
 
   // Subtitle message
@@ -1760,19 +1764,23 @@ function renderCardRestDay(S) {
   moodLabel.textContent = mood ? 'Ton ressenti aujourd\'hui' : 'Comment tu te sens ?';
   c.appendChild(moodLabel);
 
-  var moods = ['\uD83D\uDE34', '\uD83D\uDE0A', '\uD83D\uDCAA']; // 😴 😊 💪
-  var moodRow = h('div', { style: 'display:flex;gap:12px;' });
-  moods.forEach(function(emoji) {
-    var isSelected = mood === emoji;
+  // Bible Hermès §13.1 : pas d'emoji. Labels typographiques à la place.
+  var moods = [
+    { key: 'apathique', label: 'Apathique' },
+    { key: 'neutre',    label: 'Neutre' },
+    { key: 'energique', label: 'Énergique' }
+  ];
+  var moodRow = h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;' });
+  moods.forEach(function(m) {
+    var isSelected = mood === m.key;
     var moodBtn = h('button', {
-      style: 'width:44px;height:44px;font-size:22px;border:1px solid ' + (isSelected ? 'var(--black)' : 'var(--border)') + ';background:' + (isSelected ? 'var(--black)' : 'transparent') + ';border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,background .15s;',
+      style: 'flex:1;min-height:44px;padding:12px 8px;border:1px solid ' + (isSelected ? 'var(--ink-900,#0A0A09)' : 'var(--line,#D8D8D0)') + ';background:' + (isSelected ? 'var(--ink-900,#0A0A09)' : 'transparent') + ';color:' + (isSelected ? 'var(--paper,#FAF9F6)' : 'var(--ink-900,#0A0A09)') + ';border-radius:2px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:all .15s;',
       onclick: function() {
-        S.restDayMood = { date: today, emoji: emoji };
+        S.restDayMood = { date: today, emoji: m.key, label: m.label };
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
         if (window.render) window.render();
       }
-    });
-    moodBtn.textContent = emoji;
+    }, m.label);
     moodRow.appendChild(moodBtn);
   });
   c.appendChild(moodRow);
@@ -1792,7 +1800,7 @@ function renderCardWellness(S) {
   if (!S.sportType && S.appMode === 'nutrition') return null;
 
   var c = card();
-  c.appendChild(eyebrow('BIEN-ÊTRE'));
+  // Bible Hermès §13.2 : pas d'eyebrow — "Comment tu te sens ?" est le titre direct.
   c.appendChild(cardTitle('Comment tu te sens ?'));
 
   var desc = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;' });
@@ -3029,23 +3037,33 @@ function renderExtendedSections(wrapper, S) {
     } catch(e) {}
     return [];
   })();
+  // Bible Hermès §13.1 : monogrammes typographiques, pas d'emoji.
   if (badgesData.length > 0) {
     badgesData.forEach(function(b) {
       var badgeId = typeof b === 'string' ? b : (b && b.id ? b.id : null);
       if (!badgeId) return;
       var def = (window.GAMIFICATION && window.GAMIFICATION.BADGE_DEFS) ? window.GAMIFICATION.BADGE_DEFS.find(function(d){ return d.id === badgeId; }) : null;
+      // Monogramme : emoji filtré des défs legacy, on prend label initiales ou icon custom texte court.
+      var monogram = (BADGE_EMOJI[badgeId] && BADGE_EMOJI[badgeId].emoji) || '';
+      // Filtrer les emoji Unicode (range étendu)
+      if (/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(monogram)) monogram = '';
+      if (!monogram) {
+        var label = (def && def.name) || (typeof b === 'object' && b.name) || badgeId;
+        monogram = String(label).charAt(0).toUpperCase();
+      }
       var mini = h('div', {
-        style: 'width:36px;height:36px;border-radius:2px;background:var(--ivory2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;',
+        style: 'width:40px;height:40px;border:1px solid var(--line,#D8D8D0);background:transparent;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:13px;color:var(--ink-900,#0A0A09);font-feature-settings:"onum" 1;',
         title: (def && def.name) || (typeof b === 'object' && b.name) || ''
-      }, (def && def.icon) || (typeof b === 'object' && (b.icon || b.emoji)) || '\u2605');
+      }, monogram.slice(0, 3));
       badgesRow.appendChild(mini);
     });
   } else {
-    ['\u2605','\uD83D\uDD25','\uD83C\uDFC6'].forEach(function(icon) {
-      var mini = h('div', { style: 'width:36px;height:36px;border-radius:2px;background:var(--ivory2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;opacity:.35;' }, icon);
+    // Placeholder : 3 cercles vides
+    ['I', 'II', 'III'].forEach(function(txt) {
+      var mini = h('div', { style: 'width:40px;height:40px;border:1px dashed var(--line,#D8D8D0);background:transparent;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:13px;color:var(--ink-300,#A8A8A0);' }, txt);
       badgesRow.appendChild(mini);
     });
-    badgesCard.appendChild(h('p', { style: 'font-size:11px;color:var(--grey);margin:8px 0 0;font-family:"Helvetica Neue",Arial,sans-serif;line-height:1.5;' }, 'Continue \u2014 tes premiers badges t\u2019attendent !'));
+    badgesCard.appendChild(h('p', { style: 'font-size:12px;color:var(--ink-500,#6B6B65);margin:12px 0 0;font-family:Georgia,serif;line-height:1.55;font-style:italic;' }, 'Tes premiers paliers t\u2019attendent.'));
   }
   var badgeLink = h('span', {
     style: 'font-size:11px;color:var(--grey);cursor:pointer;margin-left:auto;',
@@ -3433,6 +3451,10 @@ function renderTodayDashboard(p) {
   var cardToday = renderCardTodayForYou();
   if (cardToday) wrapper.appendChild(cardToday);
 
+  // ═══ CARTE CROSSFIT 1RM (supervision Hermès : identité athlète CF) ═══
+  var cardCF = renderCardCrossfit1RM();
+  if (cardCF) wrapper.appendChild(cardCF);
+
   // PREMIERS PAS : pour les users sans AUCUN plan (onboarding incomplet)
   try {
     var _hasNutritionPlan = Array.isArray(S.weekPlan) && S.weekPlan.length >= 7;
@@ -3655,7 +3677,9 @@ function renderFabLogger() {
   var isOpen = !!S._fabOpen;
 
   var container = h('div', {
-    style: 'position:fixed;right:20px;bottom:calc(64px + 20px + env(safe-area-inset-bottom));z-index:950;'
+    // Bible Hermès : FAB au-dessus de la coach bar + marge 36px pour ne pas chevaucher
+    // la dernière carte Repas (verdict Directeur Artistique : 84px insuffisant).
+    style: 'position:fixed;right:20px;bottom:calc(64px + 36px + env(safe-area-inset-bottom));z-index:950;'
   });
 
   // Backdrop quand ouvert
@@ -3866,6 +3890,68 @@ function renderCardTodayForYou() {
   return c;
 }
 window.renderCardTodayForYou = renderCardTodayForYou;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CARTE CROSSFIT — Records 1RM visibles (correction supervision Hermès Karim)
+// ═══════════════════════════════════════════════════════════════════════════
+// S'affiche uniquement pour sportType='crossfit' avec au moins 1 valeur crossfit1RM.
+// Monogrammes typographiques (pas d'emoji). Respect §3, §5, §13.
+function renderCardCrossfit1RM() {
+  var S = window.S;
+  if (!S || S.sportType !== 'crossfit' || !S.crossfit1RM) return null;
+  var lifts = window.CF_1RM_LIFTS || [];
+  var hasAny = Object.keys(S.crossfit1RM).some(function(k) { return S.crossfit1RM[k] > 0; });
+  if (!hasAny) return null;
+
+  var c = h('div', {
+    style: 'margin-bottom:24px;padding:24px;background:var(--paper-2,#F4F1EA);border:1px solid var(--line,#D8D8D0);'
+  });
+
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;margin-bottom:16px;'
+  }, 'CROSSFIT \u00b7 1RM'));
+
+  c.appendChild(h('div', {
+    style: 'font-family:Georgia,serif;font-size:22px;line-height:1.25;color:var(--ink-900,#0A0A09);margin-bottom:20px;'
+  }, 'Tes charges de référence'));
+
+  var levelLabel = S.crossfitLevel === 'scaled' ? 'Scaled'
+                 : S.crossfitLevel === 'inter' ? 'Intermediate'
+                 : S.crossfitLevel === 'rx' ? 'RX'
+                 : S.crossfitLevel === 'rx_plus' ? 'RX+'
+                 : 'Intermediate';
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-500,#6B6B65);letter-spacing:0.3px;margin-bottom:16px;'
+  }, 'Niveau : ' + levelLabel));
+
+  // Liste des 1RM renseignés
+  var liftsWithValues = lifts.filter(function(lift) {
+    return S.crossfit1RM[lift.key] && S.crossfit1RM[lift.key] > 0;
+  });
+  liftsWithValues.slice(0, 6).forEach(function(lift, idx) {
+    var row = h('div', {
+      style: 'display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;' + (idx < liftsWithValues.length - 1 ? 'border-bottom:1px solid var(--line,#D8D8D0);' : '')
+    });
+    row.appendChild(h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--ink-900,#0A0A09);'
+    }, lift.name));
+    row.appendChild(h('span', {
+      style: 'font-family:Georgia,serif;font-size:18px;color:var(--ink-900,#0A0A09);font-feature-settings:"tnum" 1;'
+    }, S.crossfit1RM[lift.key] + '\u00a0kg'));
+    c.appendChild(row);
+  });
+
+  // CTA mettre à jour
+  var cta = h('a', {
+    href: '#',
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;font-weight:500;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;margin-top:16px;',
+    onclick: function(e) { e.preventDefault(); S.view = 'sport'; if (window.render) window.render(); }
+  }, 'METTRE À JOUR MES CHARGES  \u2192');
+  c.appendChild(cta);
+
+  return c;
+}
+window.renderCardCrossfit1RM = renderCardCrossfit1RM;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // DRAWER PROGRESSION — Bottom sheet fullscreen (Bible Hermès §10)
