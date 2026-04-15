@@ -25,7 +25,11 @@
     var hasName    = true; // Prénom optionnel — ne bloque pas l'overlay de fin d'onboarding
     // Mode sport-only : pas de S.goal (concept nutrition) — accepter si sportType + sportProgram
     var hasGoal    = (s.goal !== null && s.goal !== undefined) || (s.appMode === 'sport' && !!s.sportType);
-    var hasPlan    = !!(s.weekPlan || (Array.isArray(s.sportProgram) && s.sportProgram.length > 0));
+    // FIX P1 contre-audit : `!!s.weekPlan` considérait `[]` comme truthy → overlay s'affichait
+    // avec plan nutrition vide. Vérification explicite de length.
+    var _hasNutritionPlan = Array.isArray(s.weekPlan) && s.weekPlan.length > 0;
+    var _hasSportPlan = Array.isArray(s.sportProgram) && s.sportProgram.length > 0;
+    var hasPlan = _hasNutritionPlan || _hasSportPlan;
     return hasName && hasGoal && hasPlan;
   }
 

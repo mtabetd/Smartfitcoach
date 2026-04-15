@@ -30,7 +30,7 @@ style.textContent = [
   '#ba-header{padding:20px 24px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}',
   '#ba-header-title{font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;}',
   '#ba-header-sub{font-family:Georgia,serif;font-size:13px;font-style:italic;opacity:0.6;margin-top:3px;}',
-  '#ba-close{background:none;border:none;color:var(--ivory,#FAF9F6);cursor:pointer;font-size:20px;padding:4px;opacity:0.6;transition:opacity 0.2s ease;line-height:1;}',
+  '#ba-close{background:none;border:none;color:var(--ivory,#FAF9F6);cursor:pointer;font-size:20px;padding:4px;opacity:0.6;transition:opacity 0.2s ease;line-height:1;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;}',
   '#ba-close:hover{opacity:1;}',
 
   // Contenu scrollable
