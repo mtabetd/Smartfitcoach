@@ -633,37 +633,49 @@ function renderHeroContextuel() {
     }, '« ' + context.quote + ' »'));
   }
 
-  // Deux chiffres côte à côte (max 2, jamais 3)
+  // Re-supervision Hermès v2 : stack VERTICAL, 1 KPI primaire max dans le hero.
+  // Le 2e KPI devient un complément discret sur la ligne suivante, jamais accolé.
+  // Bible §7 : règle d'or — jamais plus de 3 données chiffrées, mais PAS deux accolées.
   if (context.stats && context.stats.length > 0) {
-    var statsRow = h('div', {
-      style: 'display:flex;gap:32px;margin-bottom:32px;flex-wrap:wrap;'
-    });
-    context.stats.slice(0, 2).forEach(function(stat) {
-      var col = h('div', { style: 'min-width:0;flex:1;' });
-      // FIX supervision Hermès : valeur + unité en Georgia, jamais en ligne avec du texte libre.
-      // On sépare proprement la "grosse valeur" de la "petite précision" éventuelle.
-      var val = String(stat.value);
-      col.appendChild(h('div', {
-        style: 'font-family:Georgia,serif;font-size:44px;font-weight:normal;line-height:1.05;letter-spacing:-0.5px;color:' + (stat.highlight ? 'var(--orange,#E86F1E)' : 'var(--ink-900,#0A0A09)') + ';font-feature-settings:"tnum" 1,"onum" 1;margin-bottom:12px;white-space:nowrap;'
-      }, val));
-      col.appendChild(h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;line-height:1.4;white-space:normal;'
-      }, stat.label));
-      statsRow.appendChild(col);
-    });
-    inner.appendChild(statsRow);
+    var primary = context.stats[0];
+    var secondary = context.stats[1];
+
+    var primaryBlock = h('div', { style: 'margin-bottom:' + (secondary ? '24px' : '32px') + ';' });
+    primaryBlock.appendChild(h('div', {
+      style: 'font-family:Georgia,serif;font-size:44px;font-weight:normal;line-height:1.05;letter-spacing:-0.5px;color:' + (primary.highlight ? 'var(--orange,#E86F1E)' : 'var(--ink-900,#0A0A09)') + ';font-feature-settings:"tnum" 1,"onum" 1;margin-bottom:8px;white-space:nowrap;'
+    }, String(primary.value)));
+    primaryBlock.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.3px;color:var(--ink-500,#6B6B65);font-weight:400;line-height:1.5;'
+    }, primary.label));
+    inner.appendChild(primaryBlock);
+
+    // KPI secondaire : sur ligne dédiée, typographie plus discrète (Georgia 22px au lieu de 44)
+    if (secondary) {
+      var secBlock = h('div', {
+        style: 'display:flex;align-items:baseline;gap:12px;padding-top:20px;border-top:1px solid var(--line,#D8D8D0);margin-bottom:32px;'
+      });
+      secBlock.appendChild(h('div', {
+        style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;line-height:1;color:var(--ink-900,#0A0A09);font-feature-settings:"tnum" 1,"onum" 1;white-space:nowrap;'
+      }, String(secondary.value)));
+      secBlock.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.3px;color:var(--ink-500,#6B6B65);font-weight:400;'
+      }, secondary.label));
+      inner.appendChild(secBlock);
+    }
   }
 
-  // ── Row 5 : action primaire (texte uniquement, pas de bouton boxé) ──
+  // ── Row 5 : action primaire — lien Georgia italic, pas d'uppercase tracking ──
+  // Bible Hermès v2 supervision : réduire les éléments uppercase (eyebrows)
+  // à 2 max par écran. L'action du hero passe en Georgia italic souligné.
   if (context.action) {
     var actionLink = h('a', {
       href: '#',
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;font-weight:500;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;',
+      style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;',
       onclick: function(e) {
         e.preventDefault();
         if (context.action.onclick) context.action.onclick();
       }
-    }, context.action.label + '  \u2192');
+    }, context.action.labelLower || (context.action.label.charAt(0).toUpperCase() + context.action.label.slice(1).toLowerCase()) + '  \u2192');
     inner.appendChild(actionLink);
   }
 
@@ -720,7 +732,7 @@ function buildContextualHero(moment, S) {
     }
 
     ctx.action = {
-      label: 'LOGGER MON PETIT-DÉJEUNER',
+      labelLower: 'Logger mon petit-déjeuner', label: 'LOGGER MON PETIT-DÉJEUNER',
       onclick: function() { S.view = 'nutrition'; if (window.render) window.render(); }
     };
 
@@ -746,7 +758,7 @@ function buildContextualHero(moment, S) {
     }
 
     ctx.action = {
-      label: 'VOIR LE DÉJEUNER PROPOSÉ',
+      labelLower: 'Voir le déjeuner proposé', label: 'VOIR LE DÉJEUNER PROPOSÉ',
       onclick: function() {
         S.view = 'nutrition';
         S.nStep = 12;
@@ -774,7 +786,7 @@ function buildContextualHero(moment, S) {
     ];
 
     ctx.action = {
-      label: 'BILAN DÉTAILLÉ',
+      labelLower: 'Voir le bilan détaillé', label: 'BILAN DÉTAILLÉ',
       onclick: function() { S._dashExtOpen = true; if (window.render) window.render(); }
     };
 
@@ -1825,7 +1837,10 @@ function renderCardWellness(S) {
 // ─── RENDER CARD 6 — Raccourcis rapides ───
 function renderCardShortcuts() {
   var c = card();
-  c.appendChild(eyebrow('ACTIONS RAPIDES'));
+  // Bible Hermès §13.2 : titre Georgia 17px au lieu d'eyebrow uppercase.
+  c.appendChild(h('div', {
+    style: 'font-family:Georgia,serif;font-size:17px;font-weight:normal;color:var(--ink-900,#0A0A09);margin-bottom:14px;line-height:1.25;'
+  }, 'Actions rapides'));
 
   var row = h('div', { style: 'display:flex;gap:8px;margin-top:4px;' });
 
@@ -1860,8 +1875,10 @@ function renderCardShortcuts() {
 
 // ─── SECTION LABEL ───
 function sectionLabel(text) {
+  // Re-supervision Hermès v2 : sectionLabel du drawer passe en Georgia roman
+  // (pas uppercase, pas tracking). Bible §13.2 : budget eyebrow 2 max / écran.
   return h('div', {
-    style: 'font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);border-bottom:1px solid var(--border);padding-bottom:6px;margin:28px 0 14px;font-family:"Helvetica Neue",Arial,sans-serif;'
+    style: 'font-family:Georgia,serif;font-size:17px;font-weight:normal;color:var(--ink-900,#0A0A09);border-bottom:1px solid var(--line,#D8D8D0);padding-bottom:10px;margin:32px 0 20px;line-height:1.25;'
   }, text);
 }
 
@@ -2114,20 +2131,26 @@ function renderExtendedSections(wrapper, S) {
   var actCard = card();
   var navRow = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;' });
 
+  // Re-supervision Hermès v2 : suppression pavés NOIRS (hors charte ivoire).
+  // Bible §13 : pas de cartes noires remplies. Remplacement par filets ivoire + italic Georgia.
   var nutNavBtn = h('div', {
-    style: 'background:var(--black,#181818);color:var(--ivory,#FAF9F6);padding:20px 16px;cursor:pointer;transition:all .2s ease;',
+    style: 'background:transparent;border:1px solid var(--line,#D8D8D0);padding:24px 20px;cursor:pointer;transition:background .15s ease;',
+    onmouseover: function(e) { e.currentTarget.style.background = 'var(--paper-3,#EEEAE0)'; },
+    onmouseout: function(e) { e.currentTarget.style.background = 'transparent'; },
     onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('nutrition'); else { S.view = 'nutrition'; if (window.render) window.render(); } }
   });
-  nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin:0 0 4px;' }, 'Nutrition'));
-  nutNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Planifie tes repas'));
+  nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:17px;font-weight:normal;color:var(--ink-900,#0A0A09);margin-bottom:6px;' }, 'Nutrition'));
+  nutNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);line-height:1.4;' }, 'Planifie tes repas.'));
   navRow.appendChild(nutNavBtn);
 
   var sportNavBtn = h('div', {
-    style: 'background:var(--black,#181818);color:var(--ivory,#FAF9F6);padding:20px 16px;cursor:pointer;transition:all .2s ease;',
+    style: 'background:transparent;border:1px solid var(--line,#D8D8D0);padding:24px 20px;cursor:pointer;transition:background .15s ease;',
+    onmouseover: function(e) { e.currentTarget.style.background = 'var(--paper-3,#EEEAE0)'; },
+    onmouseout: function(e) { e.currentTarget.style.background = 'transparent'; },
     onclick: function() { if (window.APP_NAVIGATE) window.APP_NAVIGATE('sport'); else { S.view = 'sport'; if (window.render) window.render(); } }
   });
-  sportNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;font-style:italic;margin:0 0 4px;' }, 'Sport'));
-  sportNavBtn.appendChild(h('div', { style: 'font-size:11px;opacity:.65;' }, 'Ton programme'));
+  sportNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:17px;font-weight:normal;color:var(--ink-900,#0A0A09);margin-bottom:6px;' }, 'Sport'));
+  sportNavBtn.appendChild(h('div', { style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);line-height:1.4;' }, 'Ton programme.'));
   navRow.appendChild(sportNavBtn);
   actCard.appendChild(navRow);
 
@@ -3521,13 +3544,14 @@ function renderTodayDashboard(p) {
 
   // ═══ DRAWER PROGRESSION (Bible Hermès §10) ═══
   // Bottom sheet fullscreen avec animation translateY — rendu via document.body.
+  // Bible §13.2 : trigger drawer en Georgia italic, pas d'uppercase tracking.
   var drawerTrigger = h('button', {
-    style: 'display:block;width:100%;margin:32px 0 4px;padding:24px 12px;background:transparent;border:none;border-bottom:1px solid var(--line,#D8D8D0);color:var(--ink-900,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;text-align:left;font-weight:500;min-height:44px;',
+    style: 'display:block;width:100%;margin:32px 0 4px;padding:24px 12px;background:transparent;border:none;border-bottom:1px solid var(--line,#D8D8D0);color:var(--ink-900,#0A0A09);font-family:Georgia,serif;font-style:italic;font-size:15px;cursor:pointer;text-align:left;min-height:44px;',
     onclick: function() {
       S._dashExtOpen = true;
       if (window.render) window.render();
     }
-  }, 'VOIR MA PROGRESSION  \u2192');
+  }, 'Voir ma progression  \u2192');
   wrapper.appendChild(drawerTrigger);
 
   p.appendChild(wrapper);
@@ -3878,12 +3902,14 @@ function renderCardTodayForYou() {
   });
 
   if (content.ctaLabel) {
+    // Bible §13.2 : CTA en Georgia italic souligné, pas en uppercase tracking.
     var ctaRow = h('div', { style: 'margin-top:20px;' });
+    var prettyCta = content.ctaLabel.charAt(0).toUpperCase() + content.ctaLabel.slice(1).toLowerCase();
     ctaRow.appendChild(h('a', {
       href: '#',
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;font-weight:500;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;',
+      style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;',
       onclick: function(e) { e.preventDefault(); if (content.ctaFn) content.ctaFn(); }
-    }, content.ctaLabel + '  \u2192'));
+    }, prettyCta + '  \u2192'));
     c.appendChild(ctaRow);
   }
 
@@ -3907,13 +3933,10 @@ function renderCardCrossfit1RM() {
     style: 'margin-bottom:24px;padding:24px;background:var(--paper-2,#F4F1EA);border:1px solid var(--line,#D8D8D0);'
   });
 
-  c.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;margin-bottom:16px;'
-  }, 'CROSSFIT \u00b7 1RM'));
-
+  // Bible §13.2 : pas d'eyebrow redondant — le titre Georgia suffit.
   c.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:22px;line-height:1.25;color:var(--ink-900,#0A0A09);margin-bottom:20px;'
-  }, 'Tes charges de référence'));
+  }, 'Tes charges CrossFit'));
 
   var levelLabel = S.crossfitLevel === 'scaled' ? 'Scaled'
                  : S.crossfitLevel === 'inter' ? 'Intermediate'
@@ -3941,12 +3964,12 @@ function renderCardCrossfit1RM() {
     c.appendChild(row);
   });
 
-  // CTA mettre à jour
+  // CTA Georgia italic (Bible §13.2 : réduire uppercase/tracking)
   var cta = h('a', {
     href: '#',
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;font-weight:500;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;margin-top:16px;',
+    style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;margin-top:16px;',
     onclick: function(e) { e.preventDefault(); S.view = 'sport'; if (window.render) window.render(); }
-  }, 'METTRE À JOUR MES CHARGES  \u2192');
+  }, 'Mettre à jour mes charges  \u2192');
   c.appendChild(cta);
 
   return c;
@@ -3959,6 +3982,21 @@ window.renderCardCrossfit1RM = renderCardCrossfit1RM;
 // Affiché sur document.body si S._dashExtOpen=true. Animation translateY spring iOS.
 // Tabs internes : Records / Tendances / Charges / Objectifs.
 // ═══════════════════════════════════════════════════════════════════════════
+// Cleanup post-render : strip emoji du drawer (bible §13.1)
+function _hermesCleanupDrawerEmoji() {
+  var drawer = document.getElementById('progression-drawer');
+  if (!drawer) return;
+  var emojiRegex = /[\u{1F300}-\u{1FAFF}\u{1F600}-\u{1F64F}\u{2600}-\u{27BF}]/gu;
+  // Walk tous les text nodes, strip emoji
+  var walker = document.createTreeWalker(drawer, NodeFilter.SHOW_TEXT, null, false);
+  var node;
+  while (node = walker.nextNode()) {
+    if (emojiRegex.test(node.nodeValue)) {
+      node.nodeValue = node.nodeValue.replace(emojiRegex, '').replace(/\s+/g, ' ').trim();
+    }
+  }
+}
+
 function renderProgressionDrawer() {
   var S = window.S;
   if (!S || !S._dashExtOpen) return null;
@@ -4018,15 +4056,44 @@ function renderProgressionDrawer() {
   } catch(e) { console.warn('[ProgressionDrawer] renderExtendedSections failed:', e); }
 
   sheet.appendChild(content);
+  // Post-render : strip emoji (§13.1)
+  setTimeout(_hermesCleanupDrawerEmoji, 10);
   return sheet;
 }
 window.renderProgressionDrawer = renderProgressionDrawer;
 
-// CSS animation drawer
+// CSS scopé au drawer — force la conformité Bible Hermès sur tout le contenu legacy.
+// §13.3 pas de font-weight 700+ · §13.5 radius max 2px · §13.6 une seule ombre · §13.1 pas d'emoji dans les boutons noirs.
 if (!document.getElementById('hermes-drawer-styles')) {
   var drawerStyleEl = document.createElement('style');
   drawerStyleEl.id = 'hermes-drawer-styles';
-  drawerStyleEl.textContent = '@keyframes drawerSlideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }';
+  drawerStyleEl.textContent = [
+    '@keyframes drawerSlideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }',
+    /* Tous les éléments du drawer : poids typographique borné, radius max 2, pas d\'ombre décorative */
+    '#progression-drawer * { font-weight: normal !important; border-radius: 2px !important; box-shadow: none !important; }',
+    /* Cartes noires/sombres héritées → ivoire */
+    '#progression-drawer [style*="background:var(--black"],' +
+    '#progression-drawer [style*="background: var(--black"],' +
+    '#progression-drawer [style*="background:#181818"],' +
+    '#progression-drawer [style*="background: #181818"],' +
+    '#progression-drawer [style*="background:#0A0A09"] {',
+    '  background: var(--paper-2,#F4F1EA) !important;',
+    '  color: var(--ink-900,#0A0A09) !important;',
+    '  border: 1px solid var(--line,#D8D8D0) !important;',
+    '}',
+    /* Labels "opacity:.65" des boutons noirs ex-sombres → contraste correct */
+    '#progression-drawer [style*="opacity:.65"],' +
+    '#progression-drawer [style*="opacity: .65"] { opacity: 1 !important; color: var(--ink-500,#6B6B65) !important; }',
+    /* Boutons uppercase letter-spacing → Georgia italic roman */
+    '#progression-drawer button[style*="text-transform:uppercase"],' +
+    '#progression-drawer button[style*="text-transform: uppercase"] {',
+    '  text-transform: none !important;',
+    '  letter-spacing: 0 !important;',
+    '  font-family: Georgia, serif !important;',
+    '  font-style: italic !important;',
+    '  font-size: 14px !important;',
+    '}'
+  ].join('\n');
   document.head.appendChild(drawerStyleEl);
 }
 
