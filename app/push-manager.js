@@ -13,32 +13,68 @@
   // NOTE: window.PushManager is reserved by the Web Push API (browsers expose it natively).
   // We use window.SFCPushManager to avoid clobbering the native interface.
   window.SFCPushManager = {
+    // FIX POLISH 2026-04 : respect de l'opt-out explicite user (S.pushNotifsEnabled).
+    // Si user a désactivé via profil → pas de demande ni de scheduling.
+    _userOptedOut: function() {
+      try {
+        var S = window.S;
+        if (S && typeof S.pushNotifsEnabled === 'boolean' && S.pushNotifsEnabled === false) {
+          return true;
+        }
+      } catch(e) {}
+      return false;
+    },
+
     // Demande la permission et configure les notifications locales
     init: function() {
       if (!('Notification' in window)) return;
+      if (this._userOptedOut()) return; // user a désactivé → rien
       var prefs = this.getPrefs();
       if (prefs.asked) return; // Ne demander qu'une fois
       // Délai de 30 secondes après le premier chargement pour ne pas spammer
       setTimeout(function() {
+        if (window.SFCPushManager._userOptedOut()) return; // revérifier au tick
         window.SFCPushManager.askPermission();
       }, 30000);
     },
 
     askPermission: function() {
       if (!('Notification' in window)) return;
+      if (this._userOptedOut()) return;
       if (Notification.permission === 'granted') {
         window.SFCPushManager.scheduleLocalNotifs();
         return;
       }
       if (Notification.permission !== 'denied') {
-        Notification.requestPermission().then(function(perm) {
+        return Notification.requestPermission().then(function(perm) {
           var prefs = window.SFCPushManager.getPrefs();
           prefs.asked = true;
           prefs.granted = perm === 'granted';
           window.SFCPushManager.savePrefs(prefs);
           if (perm === 'granted') window.SFCPushManager.scheduleLocalNotifs();
+          return perm;
         });
       }
+    },
+
+    // FIX POLISH 2026-04 : API pour désactiver/réactiver proprement les notifs
+    // côté user (via toggle profil). Clear setTimeouts scheduled + flag.
+    disable: function() {
+      try {
+        var prefs = this.getPrefs();
+        prefs.granted = false;
+        this.savePrefs(prefs);
+        // Annuler les setTimeouts scheduled s'ils existent
+        if (window._sfcNotifTimers && Array.isArray(window._sfcNotifTimers)) {
+          window._sfcNotifTimers.forEach(function(t) { try { clearTimeout(t); } catch(e) {} });
+          window._sfcNotifTimers = [];
+        }
+      } catch(e) {}
+    },
+
+    enable: function() {
+      // Re-demande permission + scheduling si user réactive
+      this.askPermission();
     },
 
     // Notifications locales planifiées (pas de serveur requis)

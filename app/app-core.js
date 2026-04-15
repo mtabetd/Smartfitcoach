@@ -493,6 +493,33 @@ window.getNutritionTrend = function(days) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 (NOTIFS) : date de la dernière séance loggée (YYYY-MM-DD) ou null.
+// Utilisé par push-manager pour détecter l'inactivité + déclencher un rappel "comeback".
+// Lit S.sessionHistory dont les clés sont du format 'dayIdx_YYYY-MM-DD'.
+window.getLastSessionDate = function() {
+  try {
+    var S = window.S;
+    if (!S || !S.sessionHistory || typeof S.sessionHistory !== 'object') return null;
+    var dates = Object.keys(S.sessionHistory)
+      .map(function(k) { var m = String(k).match(/(\d{4}-\d{2}-\d{2})$/); return m ? m[1] : null; })
+      .filter(function(x) { return !!x; })
+      .sort();
+    return dates.length > 0 ? dates[dates.length - 1] : null;
+  } catch(e) { return null; }
+};
+
+// Renvoie le nombre de jours depuis la dernière séance (ou null).
+window.getDaysSinceLastSession = function() {
+  try {
+    var last = window.getLastSessionDate();
+    if (!last) return null;
+    var lastMs = new Date(last + 'T00:00:00').getTime();
+    if (isNaN(lastMs)) return null;
+    var diff = Date.now() - lastMs;
+    return Math.floor(diff / 86400000);
+  } catch(e) { return null; }
+};
+
 // POLISH 2026-04 (RECORDS) : calcule les meilleurs résultats historiques de l'user.
 // Retourne { maxLifts:[...], weightMilestone, longestSession, maxStreak } ou null.
 // 100% défensif : tous les champs optionnels, retourne null si aucune donnée.
@@ -3417,6 +3444,7 @@ window.S = {
   snacking: null,
   wantsDessert: false,        // inclure des desserts healthy 2-3x/semaine dans le plan
   emailOptin: true,            // opt-in emails (anniversaire, rappels, etc.)
+  pushNotifsEnabled: true,     // POLISH 2026-04 : opt-out PWA push notifications (défaut activé)
   mealTimes: { breakfast: '08:00', lunch: '12:30', snack: '16:00', dinner: '19:30' },
   restDayMood: null,           // { date: 'YYYY-MM-DD', emoji: string } — mood check-in jour de repos
   profilePhoto: null,          // base64 data URL (compressed JPEG)

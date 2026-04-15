@@ -73,6 +73,8 @@ var PROFILE_KEYS = [
  'wantsDessert',
  'wheyFlavors','saladBuilder',
  'emailOptin',
+ // POLISH 2026-04 (NOTIFS) : opt-out toggle PWA push notifications
+ 'pushNotifsEnabled',
  'profilePhoto','photoFront','photoBack',
  'mealTimes','restDayMood',
  'todayWellness',

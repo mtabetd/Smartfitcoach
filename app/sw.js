@@ -269,10 +269,11 @@ self.addEventListener('push', function(event) {
   var data = {};
   try { data = event.data ? event.data.json() : {}; } catch(e) {}
   var title = data.title || 'SmartFitCoach';
+  // FIX 2026-04 : icônes sur /app/icon-{192,512}.png (répertoire /icons/ n'existait pas).
   var options = {
     body: data.body || 'Votre programme vous attend.',
-    icon: data.icon || '/icons/icon-192.png',
-    badge: data.badge || '/icons/icon-72.png',
+    icon: data.icon || './icon-192.png',
+    badge: data.badge || './icon-192.png',
     tag: data.tag || 'sfc-notif',
     requireInteraction: false,
     data: { url: data.url || '/' }

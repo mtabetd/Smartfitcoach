@@ -2870,6 +2870,59 @@ function renderExtendedSections(wrapper, S) {
 
   dataCard.appendChild(dataBtns);
   wrapper.appendChild(dataCard);
+
+  // POLISH 2026-04 (NOTIFS) : toggle rappels push PWA
+  if ('Notification' in window) {
+    wrapper.appendChild(sectionLabel('Rappels & notifications'));
+    var notifsCard = card();
+    var currentEnabled = (typeof S.pushNotifsEnabled === 'boolean') ? S.pushNotifsEnabled : true;
+    var permState = (typeof Notification !== 'undefined') ? Notification.permission : 'unknown';
+
+    // Ligne 1 : toggle principal
+    var toggleRow = h('div', { style: 'display:flex;justify-content:space-between;align-items:center;padding:6px 0;' });
+    var toggleLabel = h('div');
+    toggleLabel.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, 'Activer les rappels'));
+    toggleLabel.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:3px;line-height:1.4;' }, 'Motivation quotidienne, repas, relance après inactivité'));
+    toggleRow.appendChild(toggleLabel);
+
+    // Switch visuel (track + thumb)
+    var switchTrack = h('div', {
+      style: 'position:relative;width:44px;height:24px;background:' + (currentEnabled ? 'var(--black,#0A0A09)' : 'var(--border,#D8D8D0)') + ';border-radius:12px;cursor:pointer;transition:background 0.2s ease;flex-shrink:0;',
+      onclick: function() {
+        var newState = !S.pushNotifsEnabled && S.pushNotifsEnabled !== false ? false : !S.pushNotifsEnabled;
+        // Si jamais défini, on le set selon toggle → de true défaut à false (désactivation)
+        if (typeof S.pushNotifsEnabled !== 'boolean') {
+          S.pushNotifsEnabled = false; // user toggle off depuis état par défaut activé
+        } else {
+          S.pushNotifsEnabled = !S.pushNotifsEnabled;
+        }
+        if (window.saveProfile) try { window.saveProfile(); } catch(e) {}
+        try {
+          if (S.pushNotifsEnabled && window.SFCPushManager) window.SFCPushManager.enable();
+          else if (!S.pushNotifsEnabled && window.SFCPushManager) window.SFCPushManager.disable();
+        } catch(_ex) {}
+        if (window.render) window.render();
+      }
+    });
+    var switchThumb = h('div', {
+      style: 'position:absolute;top:2px;left:' + (currentEnabled ? '22px' : '2px') + ';width:20px;height:20px;background:var(--ivory,#FAF9F6);border-radius:50%;box-shadow:0 1px 3px rgba(10,10,9,0.2);transition:left 0.22s cubic-bezier(0.4, 0, 0.2, 1);'
+    });
+    switchTrack.appendChild(switchThumb);
+    toggleRow.appendChild(switchTrack);
+    notifsCard.appendChild(toggleRow);
+
+    // Ligne 2 : état permission (info)
+    if (currentEnabled) {
+      var stateText = '';
+      var stateColor = 'var(--grey,#6B6B65)';
+      if (permState === 'granted') { stateText = 'Permission accordée ✓'; stateColor = 'var(--green,#1A4A1A)'; }
+      else if (permState === 'denied') { stateText = 'Permission refusée — autoriser dans les paramètres du navigateur'; stateColor = 'var(--red,#5A1010)'; }
+      else { stateText = 'Permission non demandée — demande apparaîtra au prochain usage'; }
+      notifsCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:' + stateColor + ';margin-top:10px;padding-top:10px;border-top:1px solid var(--border,#D8D8D0);letter-spacing:0.3px;' }, stateText));
+    }
+
+    wrapper.appendChild(notifsCard);
+  }
 }
 
 // ─── TDEE ADAPTATIF ───
