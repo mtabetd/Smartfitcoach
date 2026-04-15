@@ -1054,24 +1054,91 @@ function renderProfilePage(container) {
  c.appendChild(h('div', {style: 'margin-top:32px;padding-top:20px;border-top:1px solid var(--border);'}));
  c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:14px;'}, 'DONNÉES PERSONNELLES'));
 
- // Télécharger mes données
+ // Télécharger mes données (RGPD Art. 20 portabilité — export EXHAUSTIF)
+ // POLISH 2026-04 : enrichi — inclut désormais food_journal, photos, streak,
+ // feedback coach, wellness, etc. pour respecter vraiment le droit à la portabilité.
  var downloadDataBtn = h('button', {
    style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);cursor:pointer;text-decoration:underline;display:block;margin-bottom:12px;',
    onclick: function() {
      try {
-       var data = {};
-       var exportKeys = ['prenom', 'sex', 'weight', 'height', 'age', 'goal', 'activity', 'medical', 'allergies', 'supplements', 'weekPlan', 'sportType', 'sportProgram', 'muscuSessionLog', 'weightHistory'];
-       exportKeys.forEach(function(k) { if (S[k] !== undefined) data[k] = S[k]; });
-       var blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+       var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+       var uid = user && user.id ? user.id : 'anon';
+       // 1. Profil principal (toutes les clés PROFILE_KEYS — exhaustif)
+       var profileData = {};
+       PROFILE_KEYS.forEach(function(k) { if (S[k] !== undefined) profileData[k] = S[k]; });
+       // 2. Données liées stockées sous clés dédiées
+       var linkedData = {};
+       function _readJSON(key) {
+         try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch(e) { return null; }
+       }
+       var linkedKeys = [
+         'mtd_food_journal_' + uid,
+         'mtd_progress_photos_' + uid,
+         'mtd_weight_history_' + uid,
+         'mtd_streak_' + uid,
+         'mtd_badges_' + uid,
+         'mtd_aicoach_feedback_' + uid,
+         'mtd_muscu_progression_' + uid,
+         'mtd_perf_hist_muscu_weights_' + uid,
+         'mtd_wellness_history_' + uid,
+         'mtd_disclaimer_accepted_' + uid
+       ];
+       linkedKeys.forEach(function(k) {
+         var v = _readJSON(k);
+         if (v !== null) { linkedData[k] = v; return; }
+         // FIX CONTRE-AUDIT : non-JSON (flag '1') OU JSON corrompu → on encapsule
+         // dans { _raw, _corrupt } pour éviter que du texte brut invalide pollue
+         // le fichier JSON final + signale clairement à l'user une incohérence.
+         var raw = null;
+         try { raw = localStorage.getItem(k); } catch(e) {}
+         if (raw === null || raw === undefined) return;
+         // Test si c'est un simple string (flag) ou un JSON qu'on n'arrive pas à parser
+         var isSimpleFlag = /^[\w\-\s]{1,50}$/.test(raw);
+         if (isSimpleFlag) {
+           linkedData[k] = raw; // flag texte propre : OK
+         } else {
+           linkedData[k] = { _raw: raw.slice(0, 10000), _corrupt: true, _note: 'Contenu localStorage non parsable en JSON. Signaler au support si ce n\'est pas attendu.' };
+         }
+       });
+       // 3. Métadonnées export
+       var exportPayload = {
+         exportedAt: new Date().toISOString(),
+         exportVersion: 2,
+         userId: uid,
+         userEmail: (user && user.email) || null,
+         profile: profileData,
+         linked: linkedData,
+         notes: 'Export exhaustif RGPD Art. 20 — portabilité des données. '
+              + 'Contient : profil complet (PROFILE_KEYS), journal alimentaire, '
+              + 'photos de progression (base64), historique poids, streak, badges, '
+              + 'feedback coach, progression charges muscu, wellness.'
+       };
+       // FIX CONTRE-AUDIT : sérialisation dans try + check taille + confirmation si gros.
+       // Les photos base64 peuvent gonfler l'export à 50+ MB (Blob OK jusqu'à ~500 MB
+       // en browser, mais perf dégradée sur mobile + download peut échouer).
+       var jsonStr;
+       try { jsonStr = JSON.stringify(exportPayload, null, 2); }
+       catch(serErr) {
+         alert('Impossible de sérialiser tes données (trop volumineuses ou corrompues). Contacte le DPO si le problème persiste.');
+         return;
+       }
+       var sizeMB = (jsonStr.length / (1024 * 1024));
+       if (sizeMB > 50) {
+         var ok = window.confirm('Ton export fait ' + sizeMB.toFixed(1) + ' Mo (contient probablement beaucoup de photos). '
+           + 'Le téléchargement peut être long. Continuer ?');
+         if (!ok) return;
+       }
+       var blob = new Blob([jsonStr], {type: 'application/json'});
        var url = URL.createObjectURL(blob);
        var a = document.createElement('a');
-       a.href = url; a.download = 'smartfitcoach-data.json';
+       var dateStr = new Date().toISOString().slice(0, 10);
+       a.href = url; a.download = 'smartfitcoach-export-' + dateStr + '.json';
        document.body.appendChild(a); a.click();
        document.body.removeChild(a);
        URL.revokeObjectURL(url);
-     } catch(ex) { console.warn('[RGPD] download error', ex); }
+     } catch(ex) { console.warn('[RGPD] download error', ex); alert('Erreur lors du téléchargement. Réessaie.'); }
    }
- }, 'Télécharger mes données');
+ }, 'Télécharger mes données (RGPD)');
  c.appendChild(downloadDataBtn);
 
  // Supprimer mon compte
@@ -1097,6 +1164,14 @@ function renderProfilePage(container) {
    }
  }, 'Supprimer mon compte');
  c.appendChild(deleteAccountBtn);
+
+ // POLISH 2026-04 : Lien DPO visible dans la zone "Données personnelles"
+ // pour faciliter l'exercice des droits RGPD (accès, rectification, opposition).
+ var dpoLink = h('a', {
+   href: 'mailto:dpo@smartfitcoach.com?subject=Demande%20RGPD',
+   style: 'display:block;margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-decoration:underline;'
+ }, 'Contacter le DPO (exercer mes droits RGPD) →');
+ c.appendChild(dpoLink);
 
  container.appendChild(c);
 
@@ -2311,6 +2386,12 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
    S.firstLoginDate = new Date().toISOString().slice(0, 10);
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
  }
+ // POLISH 2026-04 : disclaimer médical au premier login (si pas encore accepté).
+ // Non-bloquant côté navigation (render continue), modal overlay indépendant.
+ // Rendu après un petit délai pour laisser le render principal s'exécuter d'abord.
+ setTimeout(function() {
+   try { if (window.showMedicalDisclaimerIfNeeded) window.showMedicalDisclaimerIfNeeded(); } catch(e) {}
+ }, 400);
  // Auto-populate prenom from auth metadata if missing (new users, OAuth, etc.)
  if (!S.prenom) {
    var _autoUser = window.AUTH ? window.AUTH.getUser() : null;
