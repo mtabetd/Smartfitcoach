@@ -4940,7 +4940,19 @@ function pickSmoothieForPlan(targetKcal, usedIds) {
 }
 window.pickSmoothieForPlan = pickSmoothieForPlan;
 
-function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var weekProtBudget={};var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
+function generateWeek(){var s=window.S;var cBase=calcTarget();if(!cBase||cBase<=0)return[];var plan=[];var uB=new Set,uL=new Set,uS=new Set,uD=new Set,uSM=new Set;var weekProtBudget={};var pB=filterRecipes(getPool('breakfast'),'breakfast'),pL=filterRecipes(getPool('lunch'),'lunch'),pS=filterRecipes(getPool('snack'),'snack'),pD=filterRecipes(getPool('dinner'),'dinner');
+// FIX P0 audit : si combinaison allergies + régime + intolérances rend les pools quasi-vides
+// (< 2 recettes par slot principal), on flag l'incohérence pour que l'UI affiche une alerte.
+// Ne pas retourner [] (laisse le moteur générer ce qu'il peut), juste signaler.
+try {
+  if (pB.length < 2 || pL.length < 2 || pD.length < 2) {
+    console.warn('[generateWeek] Pools très restreints : breakfast=' + pB.length + ' lunch=' + pL.length + ' dinner=' + pD.length + ' — combinaison allergies/régime/intolérances peut empêcher un plan varié.');
+    s._weekPlanRestrictionsTooStrict = true;
+  } else {
+    s._weekPlanRestrictionsTooStrict = false;
+  }
+} catch(_e) {}
+var pSW=pS.filter(function(r){return r.w}),pSN=pS.filter(function(r){return!r.w&&!(r.tags&&r.tags.indexOf('dessert')>=0)});var pSD=s.wantsDessert?pS.filter(function(r){return r.tags&&r.tags.indexOf('dessert')>=0}):[];var DESSERT_DAYS=[0,2,4];var meals=s.mealsPerDay||3;
 // useSmoothing : whey activé + WHEY_SMOOTHIES disponible + regime non-vegan (whey = protéine animale)
 // _canSmooth : base condition (whey activé, DB disponible, pas vegan)
 // Allergie lait/produits laitiers : whey = protéine lactée → bloquer les smoothies whey (sécurité allergène)
