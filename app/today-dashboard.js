@@ -2234,7 +2234,14 @@ function renderExtendedSections(wrapper, S) {
             var sCtx = document.getElementById('today-strength-trend-chart');
             if (!sCtx || typeof window.createChart !== 'function' || typeof Chart === 'undefined') return;
             // Palette sobre cohérente avec le reste
-            var colors = ['#1A4A1A', '#6A4A1A', '#5A3A7A'];
+            // FIX CONTRE-AUDIT : pair HEX/RGBA (la tentative précédente de convertir
+            // HEX → RGBA via .replace() ne fonctionnait PAS → fill opaque = bordure).
+            // Maintenant : valeurs RGBA explicites avec alpha 0.08 (fill discret).
+            var palette = [
+              { border: '#1A4A1A', bg: 'rgba(26, 74, 26, 0.08)' },   // vert sombre
+              { border: '#6A4A1A', bg: 'rgba(106, 74, 26, 0.08)' },  // orange profond
+              { border: '#5A3A7A', bg: 'rgba(90, 58, 122, 0.08)' }   // violet
+            ];
             var shortLabels = strengthTrend.labels.map(function(iso) {
               var parts = iso.split('-');
               return parts.length === 3 ? parts[2] + '/' + parts[1] : iso;
@@ -2244,11 +2251,12 @@ function renderExtendedSections(wrapper, S) {
               data: {
                 labels: shortLabels,
                 datasets: strengthTrend.datasets.map(function(ds, i) {
+                  var color = palette[i % palette.length];
                   return {
                     label: ds.name + ' (kg)',
                     data: ds.data,
-                    borderColor: colors[i % colors.length],
-                    backgroundColor: colors[i % colors.length].replace(')', ', 0.08)').replace('rgb', 'rgba').replace('#', '#'),
+                    borderColor: color.border,
+                    backgroundColor: color.bg,
                     borderWidth: 2,
                     tension: 0.3,
                     pointRadius: 3,
