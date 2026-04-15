@@ -211,41 +211,118 @@ function buildContext() {
     }
   }
 
+  // COACH ADAPTATIF 2026-04 (phase A-4) : enrichissement contexte avec feedback
+  // séances, performance hebdo, prochaine séance planifiée, phase de cycle.
+  // L'IA utilise ces données pour ajuster charges/volume (ISSN/ACSM) et adapter
+  // les conseils nutritionnels au timing (pré/post séance).
+  try {
+    if (typeof window.getLastSessionFeedback === 'function') {
+      var _lsf = window.getLastSessionFeedback();
+      if (_lsf) ctx.lastSessionFeedback = _lsf;
+    }
+    if (typeof window.getWeekPerformanceSummary === 'function') {
+      var _wperf = window.getWeekPerformanceSummary();
+      if (_wperf) ctx.weekPerformance = _wperf;
+    }
+    if (typeof window.getNextScheduledSession === 'function') {
+      var _nss = window.getNextScheduledSession();
+      if (_nss) ctx.nextSessionScheduled = _nss;
+    }
+    if (typeof window.getCyclePhaseForAI === 'function') {
+      var _cp = window.getCyclePhaseForAI();
+      if (_cp) ctx.cyclePhase = _cp;
+    }
+  } catch(_e) {}
+
   return ctx;
 }
 
 // ─── SUGGESTIONS CONTEXTUELLES ───────────────────────────────────────────────
+// COACH ADAPTATIF 2026-04 (phase A-4) : suggestions pilotées par le dernier
+// feedback séance + wellness + cycle pour rendre le chat actionnable direct.
 function getSuggestions() {
   var S = window.S || {};
   var suggestions = [];
 
-  // Nutrition
-  suggestions.push('Mon plan nutrition est-il adapté ?');
-
-  // Sport spécifique
-  if (S.sportType === 'crossfit') {
-    suggestions.push('Comment progresser en haltéro ?');
-    suggestions.push('Augmenter mes charges ce mois ?');
-  } else if (S.sportType === 'triathlon') {
-    suggestions.push('Adapter mon volume cette semaine ?');
-    suggestions.push('Optimiser ma nutrition longue distance ?');
-  } else if (S.sportType === 'calisthenics') {
-    suggestions.push('Progresser vers le muscle-up ?');
-    suggestions.push('Programme sur mesure cette semaine ?');
-  } else if (S.sportType === 'running') {
-    suggestions.push('Améliorer mon allure seuil ?');
-    suggestions.push('Gérer ma récupération ?');
-  } else {
-    suggestions.push('Adapter ma séance du jour ?');
-    suggestions.push('Progresser sur mes charges ?');
+  // ── 1. Priorité haute : feedback dernière séance (ajustements ISSN/ACSM) ──
+  var lsf = null;
+  try { lsf = typeof window.getLastSessionFeedback === 'function' ? window.getLastSessionFeedback() : null; } catch(e) {}
+  if (lsf) {
+    if (lsf.pain) {
+      // Douleur signalée → priorité absolue : adapter autour de la zone
+      suggestions.push('Adapter ma séance autour de ' + lsf.pain + ' ?');
+    }
+    if (typeof lsf.rpe === 'number') {
+      if (lsf.rpe <= 6) {
+        suggestions.push('Je peux monter les charges pour la prochaine séance ?');
+      } else if (lsf.rpe >= 9) {
+        suggestions.push('Je propose un dé-load cette semaine ?');
+      } else {
+        suggestions.push('Comment progresser sans en faire trop ?');
+      }
+    }
+  } else if (S.sessionHistory && Object.keys(S.sessionHistory).length > 0) {
+    // Des séances existent mais pas de feedback → inviter à reporter
+    suggestions.push('Reporter ma dernière séance');
   }
 
-  // Wellness
+  // ── 2. Cycle — si suivi activé ──
+  try {
+    var cp = typeof window.getCyclePhaseForAI === 'function' ? window.getCyclePhaseForAI() : null;
+    if (cp && cp.phase) {
+      if (cp.phase === 'menstruation') suggestions.push('Séance adaptée à cette phase ?');
+      else if (cp.phase === 'folliculaire') suggestions.push('Profiter du pic de performance ?');
+      else if (cp.phase === 'lutéale') suggestions.push('Ajuster mon volume en phase lutéale ?');
+    }
+  } catch(e) {}
+
+  // ── 3. Grossesse ──
+  if (S.pregnant && S.pregnancyWeek) {
+    var w2 = Number(S.pregnancyWeek);
+    var trim = w2 <= 12 ? 'T1' : (w2 <= 26 ? 'T2' : 'T3');
+    suggestions.push('Conseils adaptés à ma grossesse (' + trim + ') ?');
+  }
+
+  // ── 4. Wellness du jour ──
   var w = S.todayWellness || {};
   if (w.sleep && w.sleep <= 2) suggestions.push('Je suis fatigué, que faire ?');
   if (w.muscles === 'douleurs') suggestions.push('J\'ai des douleurs musculaires');
 
-  return suggestions.slice(0, 4);
+  // ── 5. Streak ──
+  try {
+    var _uidS = (window.AUTH && window.AUTH.getUser && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+    var _sRaw2 = localStorage.getItem('mtd_streak_' + _uidS);
+    if (_sRaw2) {
+      var _so = JSON.parse(_sRaw2);
+      if (_so && _so.current >= 7) suggestions.push('Je tiens ' + _so.current + ' jours — comment garder la cadence ?');
+    }
+  } catch(e) {}
+
+  // ── 6. Nutrition ──
+  suggestions.push('Mon plan nutrition est-il adapté ?');
+
+  // ── 7. Sport spécifique (fallback) ──
+  if (S.sportType === 'crossfit') {
+    suggestions.push('Comment progresser en haltéro ?');
+  } else if (S.sportType === 'triathlon') {
+    suggestions.push('Optimiser ma nutrition longue distance ?');
+  } else if (S.sportType === 'calisthenics') {
+    suggestions.push('Progresser vers le muscle-up ?');
+  } else if (S.sportType === 'running') {
+    suggestions.push('Améliorer mon allure seuil ?');
+  } else {
+    suggestions.push('Adapter ma séance du jour ?');
+  }
+
+  // Déduplication (au cas où un contexte produise la même phrase 2×)
+  var seen = {};
+  var uniq = suggestions.filter(function(s) {
+    if (seen[s]) return false;
+    seen[s] = true;
+    return true;
+  });
+
+  return uniq.slice(0, 4);
 }
 
 // ─── DOM ─────────────────────────────────────────────────────────────────────
@@ -516,7 +593,9 @@ function sendMessage() {
   // Contexte utilisateur
   var ctx = buildContext();
 
-  // Appel API avec timeout client 28s (marge 2s avant le timeout serveur Netlify 30s)
+  // Appel API avec timeout client 25s (marge 1s avant le timeout serveur Netlify Pro 26s).
+  // Sonnet 4.6 + MAX_TOKENS 500 → tient dans 10-20s typiquement.
+  // Si Sonnet dépasse → AbortController force une sortie propre + message erreur.
   var _coachCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
   var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 25000) : null;
   fetch(FUNCTION_URL, {
@@ -570,7 +649,9 @@ window.AI_COACH = {
   close: closePanel,
   toggle: togglePanel,
   send: sendMessage,
-  buildContext: buildContext
+  buildContext: buildContext,
+  // COACH ADAPTATIF 2026-04 (phase A-4) : expose getSuggestions pour tests E2E.
+  getSuggestions: getSuggestions
 };
 
 // Le coach ne s'initialise qu'après une vraie session authentifiée.

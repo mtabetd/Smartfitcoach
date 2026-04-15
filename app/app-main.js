@@ -107,6 +107,8 @@ var PROFILE_KEYS = [
  'weekPlanValidated', 'weekPlanValidatedISOWeek',
  // FIX VALIDATION SPORTPROGRAM 2026-04 : même pattern pour programme muscu
  'sportProgramValidated', 'sportProgramValidatedAt',
+ // COACH ADAPTATIF 2026-04 (phase A) : feedback séances pour progression pilotée
+ 'sessionFeedback',
  // Timestamp dernière sync cloud — comparaison anti-écrasement dans SupaSync.syncOnLogin
  '_cloudUpdatedAt',
  // Smart Calendar
@@ -346,7 +348,12 @@ function loadProfile() {
  var _objFields = ['sportFocus','bonusExercises','sessionHistory','muscuSessionLog',
  'muscuProgressionHistory','musculationWeights','muscuStrengthProfile','crossfit1RM',
  'hyroxBenchmarks','shopChecked','bodyZones','crossfitBenchmarks','muscuMedical',
- 'favoriteRecipes'];
+ 'favoriteRecipes',
+ // FIX BUG-3 contre-audit phase A : sessionFeedback dans rehydration défensive.
+ // Si user B se logge avec un storage SANS sessionFeedback, la forEach ligne 346
+ // ne l'écrase pas (data[k]=undefined) → S conserve le feedback de user A (leak).
+ // Le forEach ci-dessous force un reset à {} si absent/mal typé → isolation garantie.
+ 'sessionFeedback'];
  _objFields.forEach(function(f) { if (!S[f] || typeof S[f] !== 'object' || Array.isArray(S[f])) S[f] = {}; });
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','strongZones','weakZones',
@@ -2349,6 +2356,12 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
          (typeof S.sportProgramValidated === 'undefined' || S.sportProgramValidated === null)) {
        S.sportProgramValidated = true;
        S.sportProgramValidatedAt = new Date().toISOString();
+     }
+     // COACH ADAPTATIF 2026-04 (phase A) : migration sessionFeedback.
+     // Users legacy sans sessionFeedback → init à {} (évite undefined dans les helpers).
+     if (typeof S.sessionFeedback === 'undefined' || S.sessionFeedback === null ||
+         typeof S.sessionFeedback !== 'object' || Array.isArray(S.sessionFeedback)) {
+       S.sessionFeedback = {};
      }
    } catch(e) {}
  })();
