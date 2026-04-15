@@ -2452,8 +2452,20 @@ function buildPersonalizedMuscuPlan(S) {
         var alts = window.getAlternativeExercises(muscle, null, 6) || [];
         var compatibleAlts = alts.filter(function(a) {
           var eq = String(a.eq || a.equipment || '').toLowerCase();
-          // Pour 'home' : strictement bodyweight + élastique + haltères
-          if (equip === 'home') return /corps|body|aucun|sol|[eé]lastique|halt|kettlebell|banc/i.test(eq);
+          var nm = String(a.n || a.name || '').toLowerCase();
+          // FIX P0r-BIS++ contre-audit Thomas : rejet strict "barre" (sauf barre fixe/traction)
+          // dans le NOM de l'exo pour 'home'. Avant : "Hip thrust barre" passait via eq="banc".
+          if (equip === 'home') {
+            // Nom ne doit PAS contenir "barre" sauf "barre fixe" / "barre de traction"
+            if (/\bbarre\b/.test(nm) && !/barre\s+(?:fixe|de\s+traction)/.test(nm)) return false;
+            if (/\b(haltere|halt[eè]res?|dumbbell)\b|\b(haltere|halt[eè]re)s?\b/.test(nm)) {
+              // exos nommés explicitement "haltères" OK
+            }
+            // Pas de machine/câble/poulie/presse/smith dans NOM non plus
+            if (/machine|c[aâ]ble|presse|poulie|smith|station|guid[eé]/.test(nm)) return false;
+            return /corps|body|aucun|sol|[eé]lastique|halt|kettlebell|banc/i.test(eq)
+                && !/machine|c[aâ]ble|presse|poulie|smith|station|guid[eé]|^barre[^\s]/i.test(eq);
+          }
           // Pour 'dumbbells' : haltères + bodyweight
           if (equip === 'dumbbells') return /halt|corps|body|banc|barre.?ez/i.test(eq);
           return true; // gym = tout autorisé
