@@ -34,10 +34,11 @@ function _t(key, fallback) {
 var style = document.createElement('style');
 style.textContent = [
   // Bouton flottant — desktop
-  '#ai-coach-btn{position:fixed;bottom:calc(72px + env(safe-area-inset-bottom,0px));right:24px;z-index:9000;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;padding:14px 22px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(10,10,9,0.12);transition:all 0.2s ease;min-width:52px;min-height:52px;}',
+  /* FIX supervision Hermès 2026-04-15 : cercle 48×48 (bible §8 FAB spec). */
+  '#ai-coach-btn{position:fixed;bottom:calc(72px + env(safe-area-inset-bottom,0px));right:84px;z-index:950;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;border-radius:50%;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;width:48px;height:48px;box-shadow:0 6px 16px rgba(10,10,9,0.18);transition:transform 120ms ease-out;}',
   '#ai-coach-btn:hover{background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);box-shadow:0 8px 32px rgba(10,10,9,0.18);}',
   // Bouton flottant — mobile
-  '@media(max-width:479px){#ai-coach-btn{bottom:80px;right:16px;}}',
+  '@media(max-width:479px){#ai-coach-btn{bottom:calc(64px + 36px + env(safe-area-inset-bottom,0px));right:84px;}}',
 
   // Panel — desktop
   '#ai-coach-panel{position:fixed;bottom:80px;right:24px;z-index:8999;width:min(440px,100vw);height:min(680px,92vh);max-height:calc(100dvh - 80px);background:var(--ivory,#FAF9F6);border-top:1px solid var(--black,#0A0A09);border-left:1px solid var(--border,#D8D8D0);border-radius:2px 0 0 0;display:flex;flex-direction:column;transform:translateY(calc(100% + 80px));transition:transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);box-shadow:-8px 0 40px rgba(10,10,9,0.1);}',
@@ -393,18 +394,27 @@ function getSuggestions() {
 
 // ─── DOM ─────────────────────────────────────────────────────────────────────
 function buildUI() {
-  // Bouton flottant
-  var btn = document.createElement('button');
-  btn.id = 'ai-coach-btn';
-  btn.setAttribute('aria-label', 'Ouvrir le coach IA');
-  // Static button content: built via DOM for CSP compliance
-  var _btnIcon = document.createElement('span');
-  _btnIcon.style.fontSize = '14px';
-  _btnIcon.textContent = '\u25C6';
-  btn.appendChild(_btnIcon);
-  btn.appendChild(document.createTextNode(' Smart Fit Coach'));
-  btn.addEventListener('click', togglePanel);
-  document.body.appendChild(btn);
+  // FIX CRITIQUE 2026-04-15 (supervision Hermès user screenshot) :
+  // Si la nouvelle coach bar Hermès (#coach-bar, today-dashboard.js) est active,
+  // NE PAS créer ce FAB legacy — doublon visuel qui masque le contenu repas.
+  // L'ancien FAB était un pill 213×52 "◆ SMART FIT COACH" (violation Bible §13.4).
+  // La nouvelle coach bar sticky bottom remplace intégralement cette fonction.
+  if (document.getElementById('coach-bar') || (typeof window !== 'undefined' && window.renderCoachBar)) {
+    // La coach bar Hermès est ouverte ou dispo → on ne crée que le panel (pas le FAB)
+    // Panel reste buildable pour compatibilité des handlers togglePanel ailleurs.
+  } else {
+    // Fallback legacy : bouton flottant cercle discret 48×48 (bible §8)
+    var btn = document.createElement('button');
+    btn.id = 'ai-coach-btn';
+    btn.setAttribute('aria-label', 'Ouvrir le coach IA');
+    btn.setAttribute('title', 'Smart Fit Coach');
+    var _btnIcon = document.createElement('span');
+    _btnIcon.style.cssText = 'font-size:18px;line-height:1;';
+    _btnIcon.textContent = '\u25C6';
+    btn.appendChild(_btnIcon);
+    btn.addEventListener('click', togglePanel);
+    document.body.appendChild(btn);
+  }
 
   // Panel
   var panel = document.createElement('div');
@@ -1309,6 +1319,15 @@ function _patchRender() {
         // FIX P1 audit : si logout pendant recording, stopper proprement
         try { if (window.SpeechInput && window.SpeechInput.isRecording && window.SpeechInput.isRecording()) window.SpeechInput.stop(); } catch(_sle) {}
       }
+      // FIX CRITIQUE 2026-04-15 (supervision Hermès) : si la nouvelle coach bar Hermès
+      // est présente, AUTO-DÉTRUIRE le legacy #ai-coach-btn (doublon visuel masquant
+      // le contenu du dashboard — pavé pill 213×52 violation Bible §13.4).
+      try {
+        if (document.getElementById('coach-bar')) {
+          var _legacyBtn = document.getElementById('ai-coach-btn');
+          if (_legacyBtn) _legacyBtn.remove();
+        }
+      } catch(_eDup) {}
       // Masquer le bouton coach pendant l'onboarding actif (nStep 1-10 ou sStep 1-3)
       // pour éviter de bloquer les champs de saisie et les options de formulaire
       var _s = window.S;
