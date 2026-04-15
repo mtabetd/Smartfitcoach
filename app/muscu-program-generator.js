@@ -690,7 +690,23 @@
       muscuObjectifSpecifique: S.muscuObjectifSpecifique || '',
       muscuZonesCibles: Array.isArray(S.muscuZonesCibles) && S.muscuZonesCibles.length ? S.muscuZonesCibles.join(', ') : '',
       muscuRenforcementNote: S.muscuRenforcementNote || '',
-      muscuProgramCount: S.muscuProgramCount || 0
+      muscuProgramCount: S.muscuProgramCount || 0,
+      // FIX BIBLE MUSCU §5 : bodyZones + muscuMedical ABSENTS du payload IA (bug Sophie/Marie).
+      // Sans ça, l'IA ne sait pas que fessiers='high' ou equipment='home' → programme générique.
+      bodyZones: S.bodyZones || null,
+      weakZones: Array.isArray(S.weakZones) && S.weakZones.length ? S.weakZones : null,
+      priorityMuscles: (function() {
+        var prio = [];
+        if (S.bodyZones) {
+          Object.keys(S.bodyZones).forEach(function(z) { if (S.bodyZones[z] === 'high') prio.push(z); });
+        }
+        if (Array.isArray(S.weakZones)) S.weakZones.forEach(function(z) { if (prio.indexOf(z) < 0) prio.push(z); });
+        return prio.length ? prio.join(', ') : null;
+      })(),
+      muscuMedical: S.muscuMedical && S.muscuMedical.done ? S.muscuMedical : null,
+      medicalConditions: Array.isArray(S.medical) && S.medical.length ? S.medical.join(', ') : null,
+      cycleTracking: !!(S.cycleTracking && S.sex === 'femme'),
+      lastPeriodDate: S.lastPeriodDate || null
     };
   }
 
@@ -1141,8 +1157,9 @@
       alert('Profil incomplet — complétez d\u2019abord votre onboarding (sexe, poids, taille).');
       return;
     }
+    // FIX BIBLE MUSCU §4 : timeout 25s → 10s. L'utilisateur perd la foi après.
     var _mcCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var _mcTimer = _mcCtrl ? setTimeout(function() { _mcCtrl.abort(); }, 25000) : null;
+    var _mcTimer = _mcCtrl ? setTimeout(function() { _mcCtrl.abort(); }, 10000) : null;
     fetch('/.netlify/functions/generate-muscu-program', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1233,13 +1250,51 @@
       if (_mcTimer) clearTimeout(_mcTimer);
       _generating = false;
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
-      console.error('[muscu-prog] generation error:', err);
-      var _mcErrMsg = (err && err.name === 'AbortError')
-        ? 'La g\u00e9n\u00e9ration prend trop de temps. R\u00e9essaie dans quelques instants.'
-        : escapeHTML(err.message || 'La g\u00e9n\u00e9ration a \u00e9chou\u00e9 \u2014 v\u00e9rifiez votre connexion et r\u00e9essayez.');
-      content.innerHTML = '<div style="text-align:center;padding:40px;">' +
-        '<div style="font-size:14px;color:var(--red,#5A1010);margin-bottom:16px;">\u26a0 ' + _mcErrMsg + '</div>' +
-        '<button id="muscu-prog-retry" style="background:transparent;border:1px solid var(--grey,#6B6B65);color:var(--grey,#6B6B65);padding:10px 20px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;">Réessayer</button>' +
+      console.warn('[muscu-prog] serveur indisponible, bascule fallback local:', err && err.message);
+
+      // FIX BIBLE MUSCU §4 : FALLBACK LOCAL SILENCIEUX.
+      // Si Netlify tombe (timeout, 405, 500, etc.) → on bascule sur buildPersonalizedMuscuPlan.
+      // L'utilisateur ne doit jamais voir "serveur indisponible" — on parle d'appareil.
+      try {
+        if (typeof window.buildPersonalizedMuscuPlan === 'function') {
+          var localPlan = window.buildPersonalizedMuscuPlan(window.S || {});
+          if (localPlan && Array.isArray(localPlan.weekProgram) && localPlan.weekProgram.length > 0) {
+            var _Snow2 = window.S || {};
+            _Snow2.muscuProgramCount = (_Snow2.muscuProgramCount || 0) + 1;
+            _Snow2.muscuIAProgram = localPlan;
+            _Snow2.muscuIAProgramDate = new Date().toISOString();
+            if (window.saveProfile) { try { window.saveProfile(); } catch(eSv) {} }
+
+            // Affichage minimal du plan local (texte + parse si possible)
+            var planSummary = localPlan.weekProgram.map(function(day, i) {
+              var exos = Array.isArray(day.exercises) ? day.exercises.map(function(ex, j) {
+                return (j + 1) + '. ' + (ex.n || ex.name || '') + ' — ' + (ex.sets || 3) + 'x' + (ex.reps || 10);
+              }).join('\n') : '';
+              return 'JOUR ' + (i + 1) + ' — ' + (day.label || day.focus || 'Séance ' + (i + 1)) + '\n' + exos;
+            }).join('\n\n');
+
+            var escaped = planSummary.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            content.innerHTML =
+              '<div style="padding:16px 20px;margin-bottom:16px;border-left:3px solid var(--ink-500,#6B6B65);background:var(--paper-2,#F4F1EA);">' +
+                '<p style="font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);margin:0;line-height:1.55;">Programme personnalisé sur ton appareil.</p>' +
+              '</div>' +
+              '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--ink-900,#0A0A09);">' + escaped + '</div>' +
+              '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--line,#D8D8D0);padding-top:16px;">' +
+                '<button id="muscu-prog-retry-ia" style="background:transparent;border:1px solid var(--ink-900,#0A0A09);color:var(--ink-900,#0A0A09);padding:12px 20px;font-family:Georgia,serif;font-style:italic;font-size:13px;cursor:pointer;border-radius:2px;min-height:44px;">Régénérer avec l\u2019IA</button>' +
+              '</div>';
+            var retryIaBtn = document.getElementById('muscu-prog-retry-ia');
+            if (retryIaBtn) retryIaBtn.addEventListener('click', function() { window.openMuscuProgramGenerator(); });
+            return;
+          }
+        }
+      } catch(eFallback) {
+        console.error('[muscu-prog] fallback local failed:', eFallback);
+      }
+
+      // Dernier recours : vue "Réessayer" sobre (pas d'alert, pas de rouge agressif).
+      content.innerHTML = '<div style="text-align:center;padding:40px 20px;">' +
+        '<div style="font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-500,#6B6B65);margin-bottom:20px;line-height:1.55;">On n\u2019a pas pu construire ton programme. Vérifie ta connexion.</div>' +
+        '<button id="muscu-prog-retry" style="background:transparent;border:1px solid var(--ink-900,#0A0A09);color:var(--ink-900,#0A0A09);padding:12px 20px;font-family:Georgia,serif;font-style:italic;font-size:13px;cursor:pointer;border-radius:2px;min-height:44px;">Réessayer</button>' +
       '</div>';
       var retryBtn = document.getElementById('muscu-prog-retry');
       if (retryBtn) { retryBtn.addEventListener('click', function() { window.openMuscuProgramGenerator(); }); }

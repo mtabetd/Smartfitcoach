@@ -2296,7 +2296,18 @@ function buildPersonalizedMuscuPlan(S) {
   function equipOk(ex) {
     if (equip === 'gym') return true;
     if (equip === 'dumbbells') return ['halteres','haltères','poids_corps','poids du corps','banc','barre_ez'].indexOf(ex.equipment) >= 0;
-    if (equip === 'home') return ['poids_corps','poids du corps','elastique','\u00e9lastique','sol','banc','barre fixe','barre_de_traction','barre de traction','aucun'].indexOf(ex.equipment) >= 0;
+    // FIX BIBLE MUSCU §5 + audit Marie : 'home' n'acceptait PAS les haltères ni kettlebells.
+    // Résultat : Marie avec 2 haltères 5 kg recevait du matos de salle (câble, machine).
+    // Bible : home = {haltères, poids_corps, élastique, banc, kettlebell}. Dur et strict.
+    if (equip === 'home') {
+      var allowed = ['halteres','haltères','kettlebell','poids_corps','poids du corps','elastique','\u00e9lastique','sol','banc','barre fixe','barre_de_traction','barre de traction','aucun'];
+      // Exclusion explicite : jamais de machine/câble/presse/poulie pour home
+      var forbidden = /machine|c[aâ]ble|presse|poulie|smith|station|guid[eé]/i;
+      var exEq = String(ex.equipment || ex.eq || '').toLowerCase();
+      if (forbidden.test(exEq)) return false;
+      if (forbidden.test(String(ex.n || ex.name || '').toLowerCase())) return false;
+      return allowed.indexOf(exEq) >= 0;
+    }
     return true;
   }
 
@@ -2370,6 +2381,30 @@ function buildPersonalizedMuscuPlan(S) {
         try { console.warn('[buildPersonalizedMuscuPlan] Pool vide après filtre grossesse (sem ' + pregWeek + ')'); S._pregFilterEmpty = true; } catch(_e) {}
       }
     }
+
+    // FIX BIBLE MUSCU §5 audit Sophie : cap volume par muscle selon bodyZones.
+    // Avant : "bras low" → 28 sets biceps dans la semaine (aberrant). Bible : low → max 6 sets.
+    // On limite les exos d'un muscle si bodyZones[muscle]==='low'.
+    try {
+      if (bz && (dayPlan.muscles || []).length > 0) {
+        (dayPlan.muscles || []).forEach(function(mname) {
+          var zone = bz[mname] || bz[mname.replace(/s$/, '')];
+          if (zone === 'low') {
+            // Réduire exos de ce muscle à max 2 dans cette séance
+            var keptCount = 0;
+            allExercises = allExercises.filter(function(ex) {
+              var exMuscle = (ex.m || ex.muscle || '').toLowerCase();
+              var isThisMuscle = exMuscle.indexOf(mname.toLowerCase()) >= 0
+                              || exMuscle.indexOf(mname.toLowerCase().replace(/s$/, '')) >= 0;
+              if (!isThisMuscle) return true;
+              if (keptCount >= 2) return false;
+              keptCount++;
+              return true;
+            });
+          }
+        });
+      }
+    } catch(eBz) {}
 
     // Durée estimée : ~4min/série en moyenne
     var totalSets = allExercises.reduce(function(acc, ex) { var s = typeof ex.sets === 'string' ? (parseInt(ex.sets, 10) || 3) : (ex.sets || 3); return acc + s; }, 0);

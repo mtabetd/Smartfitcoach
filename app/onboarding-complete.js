@@ -268,6 +268,12 @@
       try { if (localStorage.getItem(DONE_KEY) === 'true') return; } catch(e) { return; }
       // Profil insuffisant ?
       if (!hasMinProfile()) return;
+      // FIX CRITIQUE 2026-04-15 : bug user report "repas pris s'additionne au besoin calorique".
+      // Cause : cet overlay s'empile à CHAQUE render (ex: clic "Marquer pris" → render).
+      // Après 4 clics : 5 overlays superposés avec "VOTRE OBJECTIF — Nutrition : X kcal/jour"
+      // répétés verticalement. L'user perçoit "ça s'additionne".
+      // Fix : dédup par ID avant de monter.
+      if (document.getElementById('onboarding-complete-overlay')) return;
       // Afficher l'écran
       showOnboardingScreen();
     }
