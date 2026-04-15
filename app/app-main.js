@@ -1054,24 +1054,69 @@ function renderProfilePage(container) {
  c.appendChild(h('div', {style: 'margin-top:32px;padding-top:20px;border-top:1px solid var(--border);'}));
  c.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:14px;'}, 'DONNÉES PERSONNELLES'));
 
- // Télécharger mes données
+ // Télécharger mes données (RGPD Art. 20 portabilité — export EXHAUSTIF)
+ // POLISH 2026-04 : enrichi — inclut désormais food_journal, photos, streak,
+ // feedback coach, wellness, etc. pour respecter vraiment le droit à la portabilité.
  var downloadDataBtn = h('button', {
    style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);cursor:pointer;text-decoration:underline;display:block;margin-bottom:12px;',
    onclick: function() {
      try {
-       var data = {};
-       var exportKeys = ['prenom', 'sex', 'weight', 'height', 'age', 'goal', 'activity', 'medical', 'allergies', 'supplements', 'weekPlan', 'sportType', 'sportProgram', 'muscuSessionLog', 'weightHistory'];
-       exportKeys.forEach(function(k) { if (S[k] !== undefined) data[k] = S[k]; });
-       var blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+       var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+       var uid = user && user.id ? user.id : 'anon';
+       // 1. Profil principal (toutes les clés PROFILE_KEYS — exhaustif)
+       var profileData = {};
+       PROFILE_KEYS.forEach(function(k) { if (S[k] !== undefined) profileData[k] = S[k]; });
+       // 2. Données liées stockées sous clés dédiées
+       var linkedData = {};
+       function _readJSON(key) {
+         try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch(e) { return null; }
+       }
+       var linkedKeys = [
+         'mtd_food_journal_' + uid,
+         'mtd_progress_photos_' + uid,
+         'mtd_weight_history_' + uid,
+         'mtd_streak_' + uid,
+         'mtd_badges_' + uid,
+         'mtd_aicoach_feedback_' + uid,
+         'mtd_muscu_progression_' + uid,
+         'mtd_perf_hist_muscu_weights_' + uid,
+         'mtd_wellness_history_' + uid,
+         'mtd_disclaimer_accepted_' + uid
+       ];
+       linkedKeys.forEach(function(k) {
+         var v = _readJSON(k);
+         if (v !== null) linkedData[k] = v;
+         else {
+           // Non-JSON (ex: flag '1') : lire brut
+           var raw = null;
+           try { raw = localStorage.getItem(k); } catch(e) {}
+           if (raw !== null) linkedData[k] = raw;
+         }
+       });
+       // 3. Métadonnées export
+       var exportPayload = {
+         exportedAt: new Date().toISOString(),
+         exportVersion: 2,
+         userId: uid,
+         userEmail: (user && user.email) || null,
+         profile: profileData,
+         linked: linkedData,
+         notes: 'Export exhaustif RGPD Art. 20 — portabilité des données. '
+              + 'Contient : profil complet (PROFILE_KEYS), journal alimentaire, '
+              + 'photos de progression (base64), historique poids, streak, badges, '
+              + 'feedback coach, progression charges muscu, wellness.'
+       };
+       var blob = new Blob([JSON.stringify(exportPayload, null, 2)], {type: 'application/json'});
        var url = URL.createObjectURL(blob);
        var a = document.createElement('a');
-       a.href = url; a.download = 'smartfitcoach-data.json';
+       var dateStr = new Date().toISOString().slice(0, 10);
+       a.href = url; a.download = 'smartfitcoach-export-' + dateStr + '.json';
        document.body.appendChild(a); a.click();
        document.body.removeChild(a);
        URL.revokeObjectURL(url);
-     } catch(ex) { console.warn('[RGPD] download error', ex); }
+     } catch(ex) { console.warn('[RGPD] download error', ex); alert('Erreur lors du téléchargement. Réessaie.'); }
    }
- }, 'Télécharger mes données');
+ }, 'Télécharger mes données (RGPD)');
  c.appendChild(downloadDataBtn);
 
  // Supprimer mon compte
