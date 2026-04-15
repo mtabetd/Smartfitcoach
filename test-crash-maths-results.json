@@ -25,8 +25,8 @@
       "bmi": null,
       "errors": []
     },
-    "htmlLen": 677,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA"
+    "htmlLen": 853,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA / MON PL"
   },
   {
     "name": "T2: height=0 → calcBMR=0, BMI=null (div-par-zéro protégé) → pas de NaN",
@@ -54,8 +54,8 @@
       "bmi": null,
       "errors": []
     },
-    "htmlLen": 677,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA"
+    "htmlLen": 853,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA / MON PL"
   },
   {
     "name": "T3: age=0 → calcBMR=0 (guard age<13) → pas de NaN",
@@ -83,8 +83,8 @@
       "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 2601,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · null ans · 75 kg · 175 cm · Modérément actif · Maintien / 0 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1500 / MAINTIEN / 130 / GLUCIDES / 130g / 120 / PROTÉINES "
+    "htmlLen": 2816,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · null ans · 75 kg · 175 cm · Modérément actif · Maintien / 0 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1500 / MAINTIEN / 130"
   },
   {
     "name": "T4: age=10 (< 13 minimum) → calcBMR=0 → pas de crash",
@@ -112,8 +112,8 @@
       "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 2696,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 10 ans · 75 kg · 175 cm · Modérément actif · Maintien / 0 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1500 / MAINTIEN / ✓ Calculs validés par NutritionMaster — P×"
+    "htmlLen": 2911,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 10 ans · 75 kg · 175 cm · Modérément actif · Maintien / 0 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1500 / MAINTIEN / ✓ Cal"
   },
   {
     "name": "T5: age=100 (maximum) → calcBMR valide et fini → pas de NaN",
@@ -141,8 +141,8 @@
       "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 3222,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 100 ans · 75 kg · 175 cm · Modérément actif · Maintien / 1986 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1986 / MAINTIEN / ✓ Calculs validés par NutritionMaster "
+    "htmlLen": 3437,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 100 ans · 75 kg · 175 cm · Modérément actif · Maintien / 1986 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1986 / MAINTIEN / ✓"
   },
   {
     "name": "T6: weight=300 (maximum) → calcBMR valide, poids ajusté obèse → pas de crash",
@@ -170,8 +170,8 @@
       "bmi": 98,
       "errors": []
     },
-    "htmlLen": 3100,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 300 kg · 175 cm · Modérément actif · Maintien / 6121 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 6121 / MAINTIEN / ✓ Calculs validés par NutritionMaster "
+    "htmlLen": 3315,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 300 kg · 175 cm · Modérément actif · Maintien / 6121 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 6121 / MAINTIEN / ✓"
   },
   {
     "name": "T7: height=100 (minimum valide) → calcBMR retourne valeur positive → pas de NaN",
@@ -199,8 +199,8 @@
       "bmi": 75,
       "errors": []
     },
-    "htmlLen": 3087,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 100 cm · Modérément actif · Maintien / 1907 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1907 / MAINTIEN / ✓ Calculs validés par NutritionMaster —"
+    "htmlLen": 3302,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 100 cm · Modérément actif · Maintien / 1907 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 1907 / MAINTIEN / ✓ "
   },
   {
     "name": "T8: activity=0 (Sédentaire) → ACTIVITIES[0] défini → calcTDEE valide",
@@ -228,8 +228,8 @@
       "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 2380,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Sédentaire · Maintien / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2633 / MAINTIEN / ✓ Calculs validés par NutritionMaster — P×4 +"
+    "htmlLen": 2595,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Sédentaire · Maintien / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2633 / MAINTIEN / ✓ Calcul"
   },
   {
     "name": "T9: weight=NaN → calcBMR=0 (guard !NaN) → pas de NaN dans DOM",
@@ -257,8 +257,8 @@
       "bmi": null,
       "errors": []
     },
-    "htmlLen": 677,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA"
+    "htmlLen": 853,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA / MON PL"
   },
   {
     "name": "T10: goal=99 (hors range GOALS) → calcTarget=0, pas de crash",
@@ -282,8 +282,8 @@
       "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 2611,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 0 / ✓ Calculs validés par NutritionMaster — P×4 + G×4 + L×9 = 0 kcal"
+    "htmlLen": 2826,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 0 / ✓ Calculs validés par Nutri"
   },
   {
     "name": "T11: targetWeight=0 → modulation targetWeight skippée → pas de NaN",
@@ -311,8 +311,8 @@
       "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 2713,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Perte de poids / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2238 / PERTE DE POIDS / ✓ Calculs validés par Nutri"
+    "htmlLen": 2928,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Perte de poids / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2238 / PERTE D"
   },
   {
     "name": "T12: mealsPerDay=1 → meal split valide (pas de div/0) → pas de NaN",
@@ -340,8 +340,8 @@
       "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 2702,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Maintien / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2633 / MAINTIEN / ✓ Calculs validés par NutritionMaster —"
+    "htmlLen": 2917,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Maintien / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2633 / MAINTIEN / ✓ "
   },
   {
     "name": "T13: sportDays=7 → calcTDEE PAL=1.725 (≥5j threshold) → pas de NaN",
@@ -369,8 +369,8 @@
       "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 2703,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Maintien / 2931 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2931 / MAINTIEN / ✓ Calculs validés par NutritionMaster —"
+    "htmlLen": 2918,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Maintien / 2931 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2931 / MAINTIEN / ✓ "
   },
   {
     "name": "T14: femme 75kg enceinte T3 (sem.30) → calcTarget +450 kcal → pas de NaN",
@@ -398,8 +398,8 @@
       "bmi": 27.5,
       "errors": []
     },
-    "htmlLen": 3648,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Femme · 30 ans · 75 kg · 165 cm · Modérément actif · Maintien / 2170 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2620 / MAINTIEN / ✓ Calculs validés par NutritionMaster —"
+    "htmlLen": 3863,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Femme · 30 ans · 75 kg · 165 cm · Modérément actif · Maintien / 2170 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2620 / MAINTIEN / ✓ "
   },
   {
     "name": "T15: Goals 0-5 itérés → calcTarget et calcMacros valides pour chacun → pas de NaN",
@@ -427,7 +427,7 @@
       "bmi": 24.5,
       "errors": []
     },
-    "htmlLen": 2701,
-    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Maintien / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2633 / MAINTIEN / ✓ Calculs validés par NutritionMaster —"
+    "htmlLen": 2916,
+    "html": "◆ SMARTFITCOACH / FR·EN / QM / AUJOURD'HUI / NUTRITION / CALENDRIER / ÉTAPE 11 SUR 12 / 92% / RÉSULTATS PERSONNALISÉS / QA MathTest, / Vos macros / Homme · 30 ans · 75 kg · 175 cm · Modérément actif · Maintien / 2633 / DÉPENSE TOTALE / Calories dépensées en une journée normale / 2633 / MAINTIEN / ✓ "
   }
 ]

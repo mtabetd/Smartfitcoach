@@ -6,7 +6,7 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 1169,
+    "htmlLen": 1352,
     "html": "◆ SMARTFITCOACH / QA, nous allons apprendre à vous connaître. / VOTRE CORPS A UNE LOGIQUE. NOUS ALLONS LA LIRE. / Avant de vous proposer quoi que ce soit, nous vous écoutons. / Votre métabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la façon dont vous bougez et d"
   },
   {
@@ -16,8 +16,8 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+    "htmlLen": 848,
+    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA / MON PLAN NU"
   },
   {
     "name": "T03: weight=null → today dashboard → pas de NaN",
@@ -26,7 +26,7 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 1169,
+    "htmlLen": 1352,
     "html": "◆ SMARTFITCOACH / QA, nous allons apprendre à vous connaître. / VOTRE CORPS A UNE LOGIQUE. NOUS ALLONS LA LIRE. / Avant de vous proposer quoi que ce soit, nous vous écoutons. / Votre métabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la façon dont vous bougez et d"
   },
   {
@@ -36,8 +36,8 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+    "htmlLen": 848,
+    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA / MON PLAN NU"
   },
   {
     "name": "T05: goal=null + nStep=12 → planning semaine → pas de crash",
@@ -46,8 +46,8 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 859,
-    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT"
+    "htmlLen": 1063,
+    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / ÉTAPE 12 SUR 12 / 100% / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SM"
   },
   {
     "name": "T06: allergies=null → generateWeek (nStep=12) → pas de crash",
@@ -56,8 +56,8 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 859,
-    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT"
+    "htmlLen": 1063,
+    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / ÉTAPE 12 SUR 12 / 100% / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SM"
   },
   {
     "name": "T07: trainingDaysSelected=null → getDayType → pas de crash",
@@ -66,8 +66,8 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 859,
-    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT"
+    "htmlLen": 1063,
+    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / ÉTAPE 12 SUR 12 / 100% / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SM"
   },
   {
     "name": "T08: weekPlan=null + nStep=12 → render planning → pas de page blanche",
@@ -76,8 +76,8 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 859,
-    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT"
+    "htmlLen": 1063,
+    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / ÉTAPE 12 SUR 12 / 100% / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SM"
   },
   {
     "name": "T09: weeklyCalendar={} partiel → smart calendar → pas de crash",
@@ -86,7 +86,7 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 1169,
+    "htmlLen": 1352,
     "html": "◆ SMARTFITCOACH / QA, nous allons apprendre à vous connaître. / VOTRE CORPS A UNE LOGIQUE. NOUS ALLONS LA LIRE. / Avant de vous proposer quoi que ce soit, nous vous écoutons. / Votre métabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la façon dont vous bougez et d"
   },
   {
@@ -96,8 +96,8 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 859,
-    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT"
+    "htmlLen": 1063,
+    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / ÉTAPE 12 SUR 12 / 100% / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SM"
   },
   {
     "name": "T11: S._nm=null → step 12 planning → pas de crash sur _nm.proteinGrams",
@@ -106,8 +106,8 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 859,
-    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT"
+    "htmlLen": 1063,
+    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / ÉTAPE 12 SUR 12 / 100% / PLANNING / Votre / semaine / 7 jours · 3 repas/jour · 527 recettes / Quelques informations manquent pour générer votre plan. Complétez les étapes précédentes. / ← RETOUR AUX RÉSULTATS / SMART FIT COACH / ◆ / SM"
   },
   {
     "name": "T12: sportType=null → render sport view → pas de crash",
@@ -116,7 +116,7 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 1169,
+    "htmlLen": 1352,
     "html": "◆ SMARTFITCOACH / QA, nous allons apprendre à vous connaître. / VOTRE CORPS A UNE LOGIQUE. NOUS ALLONS LA LIRE. / Avant de vous proposer quoi que ce soit, nous vous écoutons. / Votre métabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la façon dont vous bougez et d"
   },
   {
@@ -126,7 +126,7 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 1169,
+    "htmlLen": 1352,
     "html": "◆ SMARTFITCOACH / QA, nous allons apprendre à vous connaître. / VOTRE CORPS A UNE LOGIQUE. NOUS ALLONS LA LIRE. / Avant de vous proposer quoi que ce soit, nous vous écoutons. / Votre métabolisme, votre composition corporelle, votre rythme de vie, vos heures de sommeil, la façon dont vous bougez et d"
   },
   {
@@ -136,8 +136,8 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+    "htmlLen": 848,
+    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA / MON PLAN NU"
   },
   {
     "name": "T15: age=null → calcBMR/step 11 → pas de NaN/Infinity",
@@ -146,7 +146,7 @@
     "hasNaN": false,
     "hasUndefined": false,
     "isBlank": false,
-    "htmlLen": 683,
-    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / ◆ / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPO"
+    "htmlLen": 848,
+    "html": "◆ SMARTFITCOACH / FR·EN / QT / AUJOURD'HUI / NUTRITION / SPORT / SMART FIT COACH / SMART FIT COACH / Nutrition · Sport · Progression / × / SMART FIT COACH / La performance se construit dans les détails. Sur quoi veux-tu affiner ta préparation aujourd'hui, QA ? / ◆ ANALYSE CORPORELLE IA / MON PLAN NU"
   }
 ]
