@@ -6960,12 +6960,138 @@ function renderMusculationProgram(p) {
  _ncWrap.appendChild(_ncMsg);
  compPanel.appendChild(_ncWrap);
  }
+ // ─── COACH ADAPTATIF 2026-04 (phase A-3) : feedback séance (RPE, ressenti, douleur) ───
+ // Données piloteront la semaine suivante (ajustements ISSN/ACSM automatiques côté IA).
+ // État stocké temporairement dans S._sessionFeedbackDraft jusqu'à validation.
+ if (!S._sessionFeedbackDraft) S._sessionFeedbackDraft = { rpe: null, feeling: null, pain: null };
+ var fbDraft = S._sessionFeedbackDraft;
+
+ var fbPanel = h('div', {style: 'border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);padding:14px;margin-bottom:14px'});
+ fbPanel.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;margin-bottom:10px'}, 'Comment tu te sens ? (optionnel)'));
+
+ // RPE 1-10 (slider)
+ var rpeRow = h('div', {style: 'margin-bottom:14px'});
+ var rpeLabel = h('div', {style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px'});
+ rpeLabel.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:13px'}, 'Effort ressenti (RPE)'));
+ var rpeValSpan = h('span', {style: 'font-family:Georgia,serif;font-size:15px;font-weight:bold;color:var(--black,#0A0A09);min-width:42px;text-align:right'},
+   fbDraft.rpe ? (fbDraft.rpe + '/10') : '—');
+ rpeLabel.appendChild(rpeValSpan);
+ rpeRow.appendChild(rpeLabel);
+ var rpeSlider = h('input', {
+   type: 'range', min: '1', max: '10', step: '1',
+   value: String(fbDraft.rpe || 5),
+   style: 'width:100%;accent-color:var(--black,#0A0A09);cursor:pointer',
+   oninput: function(e) {
+     var v = parseInt(e.target.value);
+     if (!isNaN(v)) {
+       S._sessionFeedbackDraft.rpe = v;
+       rpeValSpan.textContent = v + '/10';
+     }
+   },
+   onclick: function(e) { e.stopPropagation(); }
+ });
+ rpeRow.appendChild(rpeSlider);
+ var rpeHelp = h('div', {style: 'display:flex;justify-content:space-between;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey,#6B6B65);margin-top:4px'});
+ rpeHelp.appendChild(h('span', {}, '1 · très facile'));
+ rpeHelp.appendChild(h('span', {}, '10 · max effort'));
+ rpeRow.appendChild(rpeHelp);
+ fbPanel.appendChild(rpeRow);
+
+ // Ressenti — 3 chips
+ var feelingRow = h('div', {style: 'display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap'});
+ feelingRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey,#6B6B65);width:100%;margin-bottom:2px'}, 'Ressenti général'));
+ var feelings = [
+   { key: 'fatigue', label: 'Fatigué' },
+   { key: 'normal', label: 'Normal' },
+   { key: 'forme', label: 'En forme' }
+ ];
+ feelings.forEach(function(f) {
+   var active = fbDraft.feeling === f.key;
+   var chip = h('button', {
+     style: 'font-family:"Helvetica Neue",sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 12px;border:1px solid ' +
+            (active ? 'var(--black,#0A0A09)' : 'var(--border,#D8D8D0)') +
+            ';background:' + (active ? 'var(--black,#0A0A09)' : 'transparent') +
+            ';color:' + (active ? 'var(--ivory,#FAF9F6)' : 'var(--black,#0A0A09)') +
+            ';cursor:pointer;border-radius:2px',
+     onclick: function(e) {
+       e.stopPropagation();
+       S._sessionFeedbackDraft.feeling = (S._sessionFeedbackDraft.feeling === f.key ? null : f.key);
+       window.render();
+     }
+   }, f.label);
+   feelingRow.appendChild(chip);
+ });
+ fbPanel.appendChild(feelingRow);
+
+ // Douleurs (optionnel) — 5 chips + aucun
+ var painRow = h('div', {style: 'display:flex;gap:6px;flex-wrap:wrap'});
+ painRow.appendChild(h('span', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey,#6B6B65);width:100%;margin-bottom:2px'}, 'Douleur signalée (si nécessaire)'));
+ var pains = [
+   { key: null, label: 'Aucune' },
+   { key: 'dos', label: 'Dos' },
+   { key: 'genou', label: 'Genou' },
+   { key: 'épaule', label: 'Épaule' },
+   { key: 'poignet', label: 'Poignet' },
+   { key: 'cheville', label: 'Cheville' }
+ ];
+ pains.forEach(function(pn) {
+   var active = (fbDraft.pain || null) === pn.key;
+   var chip = h('button', {
+     style: 'font-family:"Helvetica Neue",sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:6px 10px;border:1px solid ' +
+            (active ? (pn.key ? 'var(--red,#5A1010)' : 'var(--black,#0A0A09)') : 'var(--border,#D8D8D0)') +
+            ';background:' + (active ? (pn.key ? 'var(--red,#5A1010)' : 'var(--black,#0A0A09)') : 'transparent') +
+            ';color:' + (active ? 'var(--ivory,#FAF9F6)' : 'var(--black,#0A0A09)') +
+            ';cursor:pointer;border-radius:2px',
+     onclick: function(e) {
+       e.stopPropagation();
+       S._sessionFeedbackDraft.pain = pn.key;
+       window.render();
+     }
+   }, pn.label);
+   painRow.appendChild(chip);
+ });
+ fbPanel.appendChild(painRow);
+ compPanel.appendChild(fbPanel);
+
  var saveBtn = h('button', {style: 'width:100%;padding:12px;background:var(--black);color:#fff;border:none;font-family:"Helvetica Neue",sans-serif;font-size:13px;cursor:pointer', onclick: function() {
  if (!S.sessionHistory) S.sessionHistory = {};
  S.sessionHistory[todayKey] = {duration: realDur, kcalBase: kcalRes.base, kcalEpoc: kcalRes.epoc, kcalTotal: kcalRes.total, date: new Date().toISOString()};
  // Pruning : garder les 365 dernières sessions max
  var _shKeys = Object.keys(S.sessionHistory || {}).sort();
  if (_shKeys.length > 365) { _shKeys.slice(0, _shKeys.length - 365).forEach(function(k) { delete S.sessionHistory[k]; }); }
+ // COACH ADAPTATIF 2026-04 : enregistrer feedback (RPE + ressenti + pain + charges réelles).
+ // Les charges réelles proviennent de muscuSessionLog[today][exName] (sets validés).
+ try {
+   var _fbToday = new Date().toISOString().slice(0, 10);
+   var _logToday = (S.muscuSessionLog && S.muscuSessionLog[_fbToday]) || {};
+   var _chargeActual = {};
+   var _repsActual = {};
+   Object.keys(_logToday).forEach(function(exN) {
+     var _sets = _logToday[exN] || [];
+     var _vs = _sets.filter(function(s) { return s.validated === true && s.actualWeight && s.actualWeight > 0; });
+     if (_vs.length > 0) {
+       // On prend la charge max validée
+       var _maxW = 0, _maxR = 0;
+       _vs.forEach(function(s) {
+         if (s.actualWeight > _maxW) _maxW = s.actualWeight;
+         if (s.actualReps && s.actualReps > _maxR) _maxR = s.actualReps;
+       });
+       if (_maxW > 0) _chargeActual[exN] = _maxW;
+       if (_maxR > 0) _repsActual[exN] = _maxR;
+     }
+   });
+   if (typeof window.recordSessionFeedback === 'function') {
+     window.recordSessionFeedback({
+       sessionId: 'muscu-d' + S.selectedSportDay,
+       rpe: (S._sessionFeedbackDraft && S._sessionFeedbackDraft.rpe) || null,
+       feeling: (S._sessionFeedbackDraft && S._sessionFeedbackDraft.feeling) || null,
+       pain: (S._sessionFeedbackDraft && S._sessionFeedbackDraft.pain) || null,
+       chargeActual: _chargeActual,
+       reps: _repsActual
+     });
+   }
+ } catch(_e) {}
+ S._sessionFeedbackDraft = { rpe: null, feeling: null, pain: null };
  // Sync session vers Supabase
  if (window.SupaSync) SupaSync.saveSession({
  date: todayKey,
