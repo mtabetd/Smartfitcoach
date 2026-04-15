@@ -2833,6 +2833,20 @@ function renderExtendedSections(wrapper, S) {
   var dataCard = card();
   var dataBtns = h('div', { style: 'display:flex;flex-direction:column;gap:10px;' });
 
+  // POLISH 2026-04 : bouton PDF rapport hebdomadaire.
+  // Disponible dès que pdf-weekly-report.js expose exportWeeklyReportPDF.
+  var pdfBtn = h('button', {
+    style: 'width:100%;padding:14px 24px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--black,#0A0A09);border-radius:2px;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    onclick: function() {
+      if (typeof window.exportWeeklyReportPDF === 'function') {
+        window.exportWeeklyReportPDF();
+      } else {
+        alert('Export PDF indisponible. Rechargez la page.');
+      }
+    }
+  }, '\u2193 Télécharger mon rapport PDF');
+  dataBtns.appendChild(pdfBtn);
+
   var exportBtn = h('button', {
     style: 'width:100%;padding:18px 28px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;font-size:9px;letter-spacing:6px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
     onclick: function() { todayExportAllData(); }
