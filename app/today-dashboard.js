@@ -2341,11 +2341,15 @@ function renderExtendedSections(wrapper, S) {
           return row;
         }
 
-        // Helper : formater date ISO en "jj/mm/aaaa"
+        // Helper : formater date ISO en "jj/mm/aaaa".
+        // FIX CONTRE-AUDIT : slice(0,10) AVANT split pour éviter la corruption
+        // si on reçoit un timestamp ISO complet "2026-04-15T14:30:00Z"
+        // (sinon parts[2] = '15T14:30:00Z' → affichage cassé).
         function fmtDate(iso) {
           if (!iso) return '';
-          var parts = String(iso).split('-');
-          if (parts.length !== 3) return iso;
+          var shortIso = String(iso).slice(0, 10);
+          var parts = shortIso.split('-');
+          if (parts.length !== 3) return String(iso).slice(0, 30);
           return parts[2] + '/' + parts[1] + '/' + parts[0];
         }
 
