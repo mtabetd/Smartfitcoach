@@ -379,10 +379,12 @@ window.getWeeklyGoalsProgress = function() {
       }
     } catch(_e1) {}
 
-    // 2) KCAL MOYENNE (vs cible)
+    // 2-3) KCAL + PROTÉINES MOYENNES (vs cibles) — via 1 SEUL appel getNutritionTrend(7)
+    // FIX CONTRE-AUDIT : factoriser pour éviter parse JSON localStorage 2× + boucle 7j 2×.
     try {
       var ntrend = (typeof window.getNutritionTrend === 'function') ? window.getNutritionTrend(7) : null;
       if (ntrend && ntrend.loggedDays > 0) {
+        // kcal
         var kcalVals = ntrend.kcal.filter(function(v) { return typeof v === 'number'; });
         if (kcalVals.length > 0) {
           var avg = Math.round(kcalVals.reduce(function(a,b){return a+b;},0) / kcalVals.length);
@@ -393,17 +395,11 @@ window.getWeeklyGoalsProgress = function() {
             pct: (tgt && tgt > 0) ? Math.min(150, Math.round((avg / tgt) * 100)) : null
           };
         }
-      }
-    } catch(_e2) {}
-
-    // 3) PROTÉINES MOYENNE (vs cible)
-    try {
-      var ntrend2 = (typeof window.getNutritionTrend === 'function') ? window.getNutritionTrend(7) : null;
-      if (ntrend2 && ntrend2.loggedDays > 0) {
-        var pVals = ntrend2.protein.filter(function(v) { return typeof v === 'number'; });
+        // protéines
+        var pVals = ntrend.protein.filter(function(v) { return typeof v === 'number'; });
         if (pVals.length > 0) {
           var pAvg = Math.round(pVals.reduce(function(a,b){return a+b;},0) / pVals.length);
-          var pTgt = (ntrend2.targets && typeof ntrend2.targets.p === 'number') ? ntrend2.targets.p : null;
+          var pTgt = (ntrend.targets && typeof ntrend.targets.p === 'number') ? ntrend.targets.p : null;
           result.proteinAvg = {
             current: pAvg,
             target: pTgt,
@@ -411,13 +407,16 @@ window.getWeeklyGoalsProgress = function() {
           };
         }
       }
-    } catch(_e3) {}
+    } catch(_e2) {}
 
     // 4) WELLNESS LOGGÉS (cible : 7 jours / semaine)
+    // FIX CONTRE-AUDIT : capper count à 7 pour cohérence "8/7 j (100%)" → "7/7 j (100%)"
+    // (multi-logs/jour possibles en théorie → cognitive dissonance sinon)
     try {
       if (typeof window.getWellnessHistory === 'function') {
         var last7 = window.getWellnessHistory(7);
-        var count = Array.isArray(last7) ? last7.length : 0;
+        var raw = Array.isArray(last7) ? last7.length : 0;
+        var count = Math.min(raw, 7); // cap visuel
         result.wellnessLogged = {
           count: count,
           target: 7,
