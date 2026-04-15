@@ -230,31 +230,41 @@ function generateSportProgram() {
  // intermediate: pri 5 = 3-4, 4 = 3, 3 = 2-3, 2 = 2, 1 = 1-2 (original)
  // advanced: pri 5 = 4-5, 4 = 4, 3 = 3-4, 2 = 2-3, 1 = 2
  // FIX DÉTERMINISME MUSCU 2026-04 : suppression des Math.round(Math.random()) dans le
- // count d'exercices par priorité. Avant : chaque régénération donnait un nb d'exos différent
- // (2 ou 3, 3 ou 4, etc.) → plan muscu structurellement différent à chaque génération silencieuse.
- // Maintenant : nombre d'exercices déterministe par niveau + priorité. Même profil = même count.
- // (Le random reste dans le sort des exos pour diversité, mais c'est moins impactant.)
+ // count d'exercices par priorité. Même profil = même count.
+ // FIX F8 CONTRE-AUDIT 2026-04 : MÉDIANES (pas bornes hautes) pour éviter surentraînement.
+ // Avant : j'avais pris la borne haute pour chaque niveau (+15 à +25% vs médiane originale)
+ //         → un débutant passait de 8-9 exos/sem à 11 → DOMS sévères, contradict ACSM.
+ // Maintenant : médiane mathématique des anciennes fourchettes :
+ //   - beginner pri 5 : ancien 2+random(0-1) = 2-3, médiane 2 (au lieu de 3)
+ //   - beginner pri 3 : ancien 1-2, médiane 1 (au lieu de 2)
+ //   - intermediate pri 5 : ancien 3-4, médiane 3 (au lieu de 4)
+ //   - intermediate pri 1 : ancien 1-2, médiane 1 (au lieu de 2)
+ //   - advanced pri 5 : ancien 4-5, médiane 4 (au lieu de 5)
+ //   - advanced pri 3 : ancien 3-4, médiane 3 (au lieu de 4)
+ //   - advanced pri 2 : ancien 2-3, médiane 2 (au lieu de 3)
+ // Progression respectueuse ISSN 2017 + ACSM (≤10% hausse volume/semaine).
+ // FIX DÉTERMINISME MUSCU 2026-04 : médianes déterministes (cf. bloc commenté ci-dessus).
  function exerciseCountForPriority(pri) {
  var lvl = S.sportLevel || 'intermediate';
  if (lvl === 'beginner') {
- if (pri >= 5) return 3; // volume max sur la priorité top
+ if (pri >= 5) return 2;
  if (pri === 4) return 2;
- if (pri === 3) return 2;
+ if (pri === 3) return 1;
  if (pri === 2) return 1;
  return 1;
  } else if (lvl === 'advanced') {
- if (pri >= 5) return 5;
- if (pri === 4) return 4;
- if (pri === 3) return 4;
- if (pri === 2) return 3;
- return 2;
- } else {
- // intermediate
  if (pri >= 5) return 4;
- if (pri === 4) return 3;
+ if (pri === 4) return 4;
  if (pri === 3) return 3;
  if (pri === 2) return 2;
  return 2;
+ } else {
+ // intermediate
+ if (pri >= 5) return 3;
+ if (pri === 4) return 3;
+ if (pri === 3) return 2;
+ if (pri === 2) return 2;
+ return 1;
  }
  }
 
@@ -5263,11 +5273,11 @@ function renderMusculationProgram(p) {
        try {
          S._generatingProgram = false;
          S.sportProgram = generateSportProgram();
-         // FIX VALIDATION SPORTPROGRAM 2026-04 : marquer validé après génération initiale
-         if (S.sportProgram && S.sportProgram.length > 0) {
-           S.sportProgramValidated = true;
-           S.sportProgramValidatedAt = new Date().toISOString();
-         }
+         // FIX F5 CONTRE-AUDIT 2026-04 : NE PAS marquer validated=true dans le setTimeout boot.
+         // Avant : toute génération silencieuse au boot passait le flag à true → contradiction
+         //         avec l'intent ("validé uniquement après action explicite user").
+         // Maintenant : seuls les 3 boutons explicites (Générer, Nouveau cycle, Recalculer)
+         //              marquent le flag. Le boot régénère silencieusement sans valider.
          if (!S.sportProgram || S.sportProgram.length === 0 || S.sportProgram.every(function(d){ return !d.exercises || d.exercises.length === 0; })) {
            console.error('[sport] generateSportProgram returned empty program');
            S._generatingProgram = false;

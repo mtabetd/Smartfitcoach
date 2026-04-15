@@ -154,6 +154,14 @@ var NUTRITION_PLAN_KEYS = [
  'cycleTracking', 'lastPeriodDate', 'cycleLength' // cycle menstruel affecte calcTarget() via calorieAdjust
 ];
 
+// FIX F6 CONTRE-AUDIT 2026-04 : clés qui affectent le programme SPORT.
+// Si l'une change post-validation, devalidateSportProgram() est appelé.
+var SPORT_PROGRAM_KEYS = [
+ 'sportLevel', 'sportDays', 'sportEquipment', 'sportType', 'sportGoals',
+ 'sportFocus', 'muscuMedical', 'trainingDaysSelected',
+ 'sportMixEnabled', 'sportMixSecondary'
+];
+
 function saveProfile() {
  try {
  // FIX V7 2026-04 : si loadProfile a détecté un decode corrompu, on REFUSE de sauver
@@ -206,6 +214,32 @@ function saveProfile() {
  // Maintenant : plan préservé, flag dévalidé, bandeau "Revalider" apparaît.
  if (window.devalidateWeekPlan) window.devalidateWeekPlan('planImpacted saveProfile');
  else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
+ }
+ } catch(e2) {}
+ })();
+
+ // FIX VALIDATION SPORT 2026-04 (F6) : détection symétrique au plan nutrition.
+ // Si un paramètre sport change alors qu'un programme existait → dévalidation
+ // (programme préservé, flag reset, bandeau de revalidation apparaît).
+ (function() {
+ try {
+ var raw3 = localStorage.getItem('mtd_profile_' + uid);
+ if (!raw3 || !S.sportProgram) return;
+ var prev = null;
+ if (window._storageDecode) { prev = window._storageDecode(raw3); }
+ if (!prev) { try { prev = JSON.parse(raw3); } catch(e2) {} }
+ if (!prev) return;
+ var sportImpacted = SPORT_PROGRAM_KEYS.some(function(k) {
+ var pv = prev[k], sv = S[k];
+ if (pv === undefined) return false;
+ if ((typeof pv === 'object' && pv !== null) || (typeof sv === 'object' && sv !== null)) {
+ return JSON.stringify(pv) !== JSON.stringify(sv);
+ }
+ return pv !== sv;
+ });
+ if (sportImpacted) {
+ if (window.devalidateSportProgram) window.devalidateSportProgram('sportImpacted saveProfile');
+ else if (typeof S.sportProgramValidated !== 'undefined') S.sportProgramValidated = false;
  }
  } catch(e2) {}
  })();
@@ -660,9 +694,12 @@ function renderProfilePage(container) {
  sec1.appendChild(_infoRow('IMC', _bmiVal ? _bmiVal.toFixed(1) : null));
  // FIX STREAK PROFIL 2026-04 : afficher le streak dans la fiche perso (source unique
  // = localStorage mtd_streak_<uid>, même source que dashboard et gamification).
+ // FIX F7 CONTRE-AUDIT 2026-04 : UNIQUEMENT si user connecté (pas 'anon') pour éviter
+ // leak inter-users sur device partagé (kiosk, famille).
  (function() {
    try {
-     var _uidStreak = user && user.id ? user.id : 'anon';
+     if (!user || !user.id) return; // Skip pour users anonymes
+     var _uidStreak = user.id;
      var _sRaw = localStorage.getItem('mtd_streak_' + _uidStreak);
      if (_sRaw) {
        var _sObj = JSON.parse(_sRaw);
@@ -2305,6 +2342,13 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      if (typeof S.weekPlanValidated === 'undefined' || S.weekPlanValidated === null) {
        S.weekPlanValidated = true;
        if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
+     }
+     // FIX F10 CONTRE-AUDIT 2026-04 : même migration pour sportProgram.
+     // Si l'user a un sportProgram existant sans flag → considérer validé (pas dévalider).
+     if (S.sportProgram && Array.isArray(S.sportProgram) && S.sportProgram.length > 0 &&
+         (typeof S.sportProgramValidated === 'undefined' || S.sportProgramValidated === null)) {
+       S.sportProgramValidated = true;
+       S.sportProgramValidatedAt = new Date().toISOString();
      }
    } catch(e) {}
  })();

@@ -836,6 +836,10 @@ window.AUTH = {
       window.S.bodyZones = {}; window.S.strongZones = []; window.S.weakZones = [];
       window.S.muscuWeek = 1; window.S.muscuCycle = 1; window.S.muscuProgramCount = 0; window.S.sportSplashDone = false;
       window.S.sportMixEnabled = false; window.S.sportMixSecondary = null;
+      // FIX F4 CONTRE-AUDIT 2026-04 : reset flags validation au logout pour éviter
+      // leak inter-users sur device partagé (user2 voyait sportProgram=validé de user1).
+      window.S.sportProgramValidated = false; window.S.sportProgramValidatedAt = null;
+      window.S.weekPlanValidated = false; window.S.weekPlanValidatedISOWeek = null;
       window.S.bonusExercises = {}; window.S.sessionHistory = {};
       window.S.muscuSessionLog = {}; window.S.muscuProgressionHistory = {};
       window.S.musculationWeights = {};

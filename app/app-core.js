@@ -84,6 +84,18 @@ window.devalidateWeekPlan = function(reason) {
   } catch(e) {}
 };
 
+// FIX F6 CONTRE-AUDIT 2026-04 : symétrique pour sportProgram.
+// Appelé quand sportLevel / sportDays / sportEquipment / sportGoals / sportFocus change.
+// L'user verra son programme actuel (non-null) mais un bandeau "Paramètres changés".
+window.devalidateSportProgram = function(reason) {
+  try {
+    var S = window.S;
+    if (!S) return;
+    S.sportProgramValidated = false;
+    if (reason) console.log('[sportProgram] Dévalidé :', reason);
+  } catch(e) {}
+};
+
 // FIX VALIDATION WEEKPLAN 2026-04 : helper pour la semaine ISO courante.
 // Format : "2026-W16" (ISO 8601). Utilisé pour savoir si le plan validé est
 // toujours valable pour la semaine en cours.

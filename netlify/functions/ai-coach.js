@@ -178,10 +178,57 @@ function sanitizeContext(ctx) {
       }
     } else if (field === 'age' || field === 'weight' || field === 'height' ||
                field === 'sportDays' || field === 'crossfitWeek' || field === 'triathlonFTP' ||
-               field === 'hyroxWeek' || field === 'runningWeek') {
+               field === 'hyroxWeek' || field === 'runningWeek' ||
+               field === 'pregnancyWeek' || field === 'cycleLength' ||
+               field === 'mealsPerDay' || field === 'streak') {
       var num = parseFloat(val);
       if (!isNaN(num) && isFinite(num)) safe[field] = num;
-    } else {
+    }
+    // FIX F2 CONTRE-AUDIT 2026-04 : handlers typés pour booléens / arrays / objects.
+    // AVANT : le fallback `else` convertissait tout en string via sanitizeString("false"),
+    //         résultat : une string "false" est TRUTHY → alerte ⚠️ ENCEINTE émise POUR TOUS
+    //         les users (hommes inclus). Safety warnings COMPLÈTEMENT inversés !
+    // MAINTENANT : typage strict par champ.
+    else if (field === 'pregnant' || field === 'breastfeeding' ||
+             field === 'cycleTracking' || field === 'halal') {
+      // Booléen strict (true uniquement si val === true OR 'true')
+      safe[field] = (val === true || val === 'true');
+    }
+    else if (field === 'trainingDaysSelected' || field === 'medical' ||
+             field === 'intolerances' || field === 'sportGoals') {
+      // Tableau (max 20 éléments, 50 chars chacun)
+      if (Array.isArray(val)) {
+        safe[field] = val.slice(0, 20).map(function(x) { return sanitizeString(String(x), 50); });
+      }
+    }
+    else if (field === 'muscuMedical') {
+      // Objet (shallow copy, max 20 clés)
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        var safeMuscuMed = {};
+        Object.keys(val).slice(0, 20).forEach(function(k) {
+          var sk = sanitizeString(k, 40);
+          safeMuscuMed[sk] = !!val[k];
+        });
+        safe.muscuMedical = safeMuscuMed;
+      }
+    }
+    else if (field === 'lastPeriodDate' || field === 'trainTime') {
+      // String courte (date ISO ou token enum)
+      if (val != null) safe[field] = sanitizeString(String(val), 30);
+    }
+    else if (field === 'crossfit1RM' || field === 'strengthProfile') {
+      // Objet numérique (1RM bench: 100, squat: 140, etc.)
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        var safe1RM = {};
+        Object.keys(val).slice(0, 20).forEach(function(k) {
+          var sk = sanitizeString(k, 30);
+          var num = parseFloat(val[k]);
+          if (!isNaN(num) && isFinite(num)) safe1RM[sk] = num;
+        });
+        safe[field] = safe1RM;
+      }
+    }
+    else {
       safe[field] = sanitizeString(String(val), 100);
     }
   });
@@ -435,8 +482,24 @@ function buildSystemPrompt(ctx) {
   if (ctx.cycleTracking && ctx.cycleLength) health.push('Cycle:' + ctx.cycleLength + 'j');
   if (health.length) {
     lines.push('SANTÉ: ' + health.join(' | '));
-    if (ctx.pregnant || ctx.breastfeeding) {
-      lines.push('⚠️ SÉCURITÉ CLINIQUE : pas de déficit calorique, pas de jeûne, pas de compléments non validés. Suivre ACOG 2022 (+340 T2, +450 T3, +450 allaitement).');
+    // FIX F9 CONTRE-AUDIT 2026-04 : instructions ACOG CONDITIONNELLES au trimestre.
+    // Avant : on envoyait le même message "+340 T2, +450 T3" peu importe le trimestre →
+    //         IA pouvait conseiller +340 kcal à une femme en T1 (alors que surplus = 0 en T1).
+    // Maintenant : recommandations précises par trimestre.
+    if (ctx.pregnant) {
+      var _trimText = '';
+      if (ctx.pregnancyWeek) {
+        var _w = Number(ctx.pregnancyWeek);
+        if (_w <= 12) _trimText = 'T1 : aucun surplus calorique (alimentation normale). Éviter alcool, viandes crues, poisson au mercure.';
+        else if (_w <= 26) _trimText = 'T2 : +340 kcal/j (ACOG 2022). Calcium 1000mg, fer 27mg, folate 600µg.';
+        else _trimText = 'T3 : +450 kcal/j (ACOG 2022). Protéines 71g/j, activité modérée OK sauf décollement placenta.';
+      } else {
+        _trimText = 'Demander le trimestre avant de conseiller un apport calorique.';
+      }
+      lines.push('⚠️ SÉCURITÉ CLINIQUE (GROSSESSE) : pas de déficit calorique, pas de jeûne intermittent, pas de compléments non validés médecin. ' + _trimText);
+    }
+    if (ctx.breastfeeding) {
+      lines.push('⚠️ SÉCURITÉ ALLAITEMENT : +450 kcal/j (ACOG 2022). Hydratation renforcée (3L/j). Éviter caféine > 300mg/j, alcool.');
     }
   }
 
