@@ -1988,7 +1988,7 @@ function renderExtendedSections(wrapper, S) {
       // Stats principales — grille 2x2 sobre
       var statsGrid = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;' });
       function insightStat(value, label, color) {
-        var box = h('div', { style: 'padding:10px 12px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;text-align:center;' });
+        var box = h('div', { 'class': 'sfc-stat-box', style: 'padding:10px 12px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;text-align:center;' });
         box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;color:' + (color || 'var(--black,#0A0A09)') + ';' }, String(value)));
         box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
         return box;
@@ -2032,6 +2032,7 @@ function renderExtendedSections(wrapper, S) {
           var col = colorByS[p.severity] || 'var(--grey,#6B6B65)';
           var bg = bgBySeverity[p.severity] || 'transparent';
           var pChip = h('div', {
+            'class': 'sfc-pattern-chip',
             style: 'padding:10px 12px;background:' + bg + ';border-left:3px solid ' + col + ';'
           });
           pChip.appendChild(h('div', {
@@ -2064,7 +2065,7 @@ function renderExtendedSections(wrapper, S) {
 
         // Helper : row progress avec label + progress bar + valeur
         function goalRow(label, current, target, pct, unit, colorByPct) {
-          var row = h('div', { style: 'padding:10px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
+          var row = h('div', { 'class': 'sfc-goal-row', style: 'padding:10px 4px;border-bottom:1px solid var(--border,#D8D8D0);' });
           var top = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;' });
           top.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, label));
           var rightTxt = current + (unit ? ' ' + unit : '') + (target !== null && target !== undefined ? ' / ' + target + (unit ? ' ' + unit : '') : '');
@@ -2184,7 +2185,7 @@ function renderExtendedSections(wrapper, S) {
 
         var statsRow = h('div', { style: 'display:flex;gap:8px;margin-bottom:12px;justify-content:space-between;' });
         function trendStat(value, label) {
-          var box = h('div', { style: 'flex:1;text-align:center;padding:6px 8px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
+          var box = h('div', { 'class': 'sfc-stat-box', style: 'flex:1;text-align:center;padding:10px 12px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
           box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:18px;color:var(--black,#0A0A09);' }, value));
           box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
           return box;
@@ -2326,7 +2327,7 @@ function renderExtendedSections(wrapper, S) {
                               : (delta < 0 ? 'var(--red,#5A1010)' : 'var(--grey,#6B6B65)'));
           var signTxt = (delta === null) ? '' : (delta > 0 ? '+' : '') + delta.toFixed(1) + ' kg';
           var pctTxt = (deltaPct !== null) ? ' (' + (deltaPct > 0 ? '+' : '') + deltaPct.toFixed(1) + '%)' : '';
-          var line = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
+          var line = h('div', { 'class': 'sfc-delta-row', style: 'display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
           line.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, ds.name));
           var right = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:' + colorByDelta + ';font-weight:600;' }, signTxt + pctTxt);
           line.appendChild(right);
@@ -2442,11 +2443,11 @@ function renderExtendedSections(wrapper, S) {
 
         // Helper : ligne record (label gauche, valeur droite)
         function recordLine(label, value, detail) {
-          var row = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
+          var row = h('div', { 'class': 'sfc-record-row', style: 'display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 4px;border-bottom:1px solid var(--border,#D8D8D0);' });
           var left = h('div', { style: 'flex:1;min-width:0;' });
           left.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, label));
           if (detail) {
-            left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;letter-spacing:0.3px;' }, detail));
+            left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:4px;letter-spacing:0.3px;line-height:1.4;' }, detail));
           }
           var right = h('div', { style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);font-weight:normal;white-space:nowrap;' }, value);
           row.appendChild(left);
@@ -2562,7 +2563,7 @@ function renderExtendedSections(wrapper, S) {
 
         var nStatsRow = h('div', { style: 'display:flex;gap:8px;margin-bottom:12px;' });
         function nutStat(value, label) {
-          var box = h('div', { style: 'flex:1;text-align:center;padding:8px 6px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
+          var box = h('div', { 'class': 'sfc-stat-box', style: 'flex:1;text-align:center;padding:10px 8px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
           box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);' }, value));
           box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
           return box;
@@ -2833,10 +2834,12 @@ function renderExtendedSections(wrapper, S) {
   var dataCard = card();
   var dataBtns = h('div', { style: 'display:flex;flex-direction:column;gap:10px;' });
 
-  // POLISH 2026-04 : bouton PDF rapport hebdomadaire.
-  // Disponible dès que pdf-weekly-report.js expose exportWeeklyReportPDF.
+  // POLISH 2026-04 — boutons "Mes données" unifiés (audit designer luxe).
+  // Primary : PDF + Export (actions principales)
+  // Outline : Import (secondaire)
+  // Danger : Delete (rouge, border rouge)
   var pdfBtn = h('button', {
-    style: 'width:100%;padding:14px 24px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--black,#0A0A09);border-radius:2px;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    'class': 'sfc-data-btn sfc-data-btn-primary',
     onclick: function() {
       if (typeof window.exportWeeklyReportPDF === 'function') {
         window.exportWeeklyReportPDF();
@@ -2848,19 +2851,19 @@ function renderExtendedSections(wrapper, S) {
   dataBtns.appendChild(pdfBtn);
 
   var exportBtn = h('button', {
-    style: 'width:100%;padding:18px 28px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;font-size:9px;letter-spacing:6px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    'class': 'sfc-data-btn sfc-data-btn-primary',
     onclick: function() { todayExportAllData(); }
   }, '\u2B07 Exporter mes données');
   dataBtns.appendChild(exportBtn);
 
   var importBtn = h('button', {
-    style: 'width:100%;padding:12px 24px;background:transparent;color:var(--grey);border:1px solid var(--border);border-radius:2px;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    'class': 'sfc-data-btn sfc-data-btn-outline',
     onclick: function() { todayImportData(); }
   }, '\u2B06 Importer une sauvegarde');
   dataBtns.appendChild(importBtn);
 
   var deleteBtn = h('button', {
-    style: 'width:100%;padding:12px 24px;background:transparent;color:var(--red,#5A1010);border:1px solid var(--red,#5A1010);border-radius:2px;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;',
+    'class': 'sfc-data-btn sfc-data-btn-danger',
     onclick: function() { todayDeleteAllData(); }
   }, 'Supprimer toutes mes données');
   dataBtns.appendChild(deleteBtn);

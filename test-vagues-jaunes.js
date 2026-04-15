@@ -321,11 +321,11 @@ const CHROMIUM_PATH = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
   try {
     const src = fs.readFileSync('/home/user/Smartfitcoach/app/pdf-weekly-report.js', 'utf8');
     const markers = [
-      "section(doc, y, 'Profil')",
-      "section(doc, y, 'Objectifs de la semaine')",
-      "section(doc, y, 'Bilan 7 jours')",
-      "section(doc, y, 'Signaux d\u00e9tect\u00e9s')",
-      "section(doc, y, 'Records personnels')",
+      "sectionTitle(doc, y, 'Profil')",
+      "sectionTitle(doc, y, 'Objectifs de la semaine')",
+      "sectionTitle(doc, y, 'Bilan 7 jours')",
+      "sectionTitle(doc, y, 'Signaux d\u00e9tect\u00e9s')",
+      "sectionTitle(doc, y, 'Records personnels')",
       "disclaimer",
       "getWeekSessionsSummary",
       "getPersonalRecords",
