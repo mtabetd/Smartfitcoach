@@ -680,6 +680,21 @@ html {
   border-radius: 2px;
 }
 
+/* POLISH 2026-04 (V3.2) : classes utilitaires skeleton pour composer rapidement
+   un placeholder (ex: dashboard en chargement). Hauteurs calibrées sur nos tailles
+   typographiques. */
+.skeleton-line     { height: 14px; margin: 8px 0; }
+.skeleton-line-lg  { height: 24px; margin: 10px 0; }
+.skeleton-line-xs  { height: 10px; margin: 6px 0; }
+.skeleton-block    { height: 120px; margin: 12px 0; }
+.skeleton-card     { height: 180px; margin: 14px 0; border-radius: 2px; }
+/* W-variants pour des lignes de longueur variable (visuel plus naturel) */
+.skeleton-w-20 { width: 20%; }
+.skeleton-w-40 { width: 40%; }
+.skeleton-w-60 { width: 60%; }
+.skeleton-w-80 { width: 80%; }
+.skeleton-w-100 { width: 100%; }
+
 
 /* -------------------------------------------------------
    22. NOTIFICATION / TOAST SYSTEM
@@ -979,6 +994,16 @@ body.dark-mode ::-webkit-scrollbar-track{background:var(--ivory)}
   .app            { padding: 0 16px 60px; }
   .card-grid-2    { grid-template-columns: 1fr; }
   .auth-container { padding: 40px 16px; }
+  /* POLISH 2026-04 (V3.3) : letter-spacing réduit pour les petits écrans,
+     évite les headlines qui débordent ou cassent (6-8px letter-spacing
+     sur 380px devient cramped). */
+  h1              { letter-spacing: 2px; }
+  h2              { letter-spacing: 2px; }
+  .eyebrow        { letter-spacing: 2px; }
+  .main-nav-tab   { letter-spacing: 1.5px; padding: 14px 8px; }
+  /* Coach IA panel : input-area plus compact sur petit mobile */
+  #ai-coach-input-area { padding: 12px 14px; gap: 8px; }
+  #ai-coach-send       { padding: 10px 14px; letter-spacing: 2px; }
 }
 
 /* Tablet optimization */

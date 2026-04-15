@@ -65,7 +65,12 @@ function checkRateLimit(ip) {
   dayEntry.count += 1;
   _dayStore.set(ip, dayEntry);
 
-  return { allowed: true };
+  // POLISH 2026-04 (V1.3) : retourner les restants pour affichage UI client.
+  return {
+    allowed: true,
+    hourRemaining: Math.max(0, HOUR_MAX - hourList.length),
+    dayRemaining: Math.max(0, DAY_MAX - dayEntry.count)
+  };
 }
 
 // Nettoyer périodiquement pour éviter la fuite mémoire
@@ -473,7 +478,11 @@ exports.handler = async function(event, context) {
       console.error('[ai-coach] Réponse IA vide reçue');
       return { statusCode: 502, headers: headers, body: JSON.stringify({ error: 'Réponse IA vide. Veuillez réessayer.' }) };
     }
-    return { statusCode: 200, headers: headers, body: JSON.stringify({ reply: replyText }) };
+    // POLISH 2026-04 (V1.3) : inclure les quotas restants pour affichage UI client.
+    return { statusCode: 200, headers: headers, body: JSON.stringify({
+      reply: replyText,
+      remaining: { hourRemaining: rl.hourRemaining, dayRemaining: rl.dayRemaining }
+    })};
 
   } catch(err) {
     console.error('[ai-coach] Erreur interne:', err.message);
