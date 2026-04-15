@@ -336,6 +336,172 @@ window.recordSessionFeedback = function(data) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 (INSIGHTS) : moyenne wellness sur N derniers jours.
+// Retourne { sleepAvg, energyStats, muscleStats, daysLogged } ou null.
+// sleepAvg = moyenne numérique 1-5, energyStats/muscleStats = répartition par token.
+window.getWellnessAvg = function(days) {
+  try {
+    if (typeof window.getWellnessHistory !== 'function') return null;
+    var history = window.getWellnessHistory(days || 7);
+    if (!Array.isArray(history) || !history.length) return null;
+    var sleepSum = 0, sleepCount = 0;
+    var energyStats = {}, muscleStats = {};
+    history.forEach(function(h) {
+      if (!h) return;
+      if (typeof h.sleep === 'number' && h.sleep >= 1 && h.sleep <= 5) {
+        sleepSum += h.sleep; sleepCount++;
+      }
+      if (h.energy) energyStats[h.energy] = (energyStats[h.energy] || 0) + 1;
+      if (h.muscles) muscleStats[h.muscles] = (muscleStats[h.muscles] || 0) + 1;
+    });
+    return {
+      sleepAvg: sleepCount > 0 ? Math.round((sleepSum / sleepCount) * 10) / 10 : null,
+      energyStats: energyStats,
+      muscleStats: muscleStats,
+      daysLogged: history.length
+    };
+  } catch(e) { return null; }
+};
+
+// POLISH 2026-04 (INSIGHTS) : détection de patterns sur 7/14 jours glissants.
+// Retourne un array de patterns [{ id, severity, label, advice }] ou [].
+// Règles simples (sans faux positifs dangereux — pas d'alerte médicale directe).
+// Sévérité : 'info' (neutre), 'warning' (attention), 'alert' (action recommandée).
+window.detectWeekPatterns = function() {
+  try {
+    var patterns = [];
+    var S = window.S;
+    if (!S) return patterns;
+
+    // Données d'entrée
+    var sessionsSummary = (typeof window.getWeekSessionsSummary === 'function')
+      ? window.getWeekSessionsSummary() : null;
+    var wellnessAvg = (typeof window.getWellnessAvg === 'function')
+      ? window.getWellnessAvg(7) : null;
+    var weekPerf = (typeof window.getWeekPerformanceSummary === 'function')
+      ? window.getWeekPerformanceSummary() : null;
+
+    // PATTERN 1 : fatigue chronique — sommeil moyen < 3/5 sur 7j avec ≥ 3 jours loggés.
+    // Évite faux positif si 1 seul jour logué.
+    if (wellnessAvg && wellnessAvg.sleepAvg !== null && wellnessAvg.daysLogged >= 3 && wellnessAvg.sleepAvg < 3) {
+      patterns.push({
+        id: 'sleep_low_avg',
+        severity: 'warning',
+        label: 'Sommeil moyen bas (' + wellnessAvg.sleepAvg + '/5 sur ' + wellnessAvg.daysLogged + 'j)',
+        advice: 'Privilégie récupération active, coucher avant 23h, évite écran 1h avant dodo.'
+      });
+    }
+
+    // PATTERN 2 : douleurs récurrentes — muscles='douleurs' sur ≥ 2 jours dans les 7 derniers.
+    if (wellnessAvg && wellnessAvg.muscleStats && wellnessAvg.muscleStats['douleurs'] >= 2) {
+      patterns.push({
+        id: 'pain_recurrent',
+        severity: 'alert',
+        label: wellnessAvg.muscleStats['douleurs'] + ' jours de douleurs sur 7',
+        advice: 'Envisager un dé-load cette semaine. Consulter un pro si persiste.'
+      });
+    }
+
+    // PATTERN 3 : sous-entraînement — 0 séance sur 7j glissants AVEC un programme sport actif.
+    if (sessionsSummary && sessionsSummary.sessions === 0 &&
+        S.sportType && S.sportProgram) {
+      patterns.push({
+        id: 'undertraining',
+        severity: 'info',
+        label: 'Aucune séance cette semaine',
+        advice: 'Reprise en douceur recommandée. Commence par 1 séance courte (30 min).'
+      });
+    }
+
+    // PATTERN 4 : sur-entraînement — 6+ séances DANS LA SEMAINE + douleur signalée.
+    if (sessionsSummary && sessionsSummary.sessions >= 6 &&
+        weekPerf && weekPerf.lastPain) {
+      patterns.push({
+        id: 'overtraining',
+        severity: 'alert',
+        label: sessionsSummary.sessions + ' séances cette semaine + douleur ' + weekPerf.lastPain,
+        advice: 'Dé-load -20% volume cette semaine. 1-2 jours repos complet conseillés.'
+      });
+    }
+
+    // PATTERN 5 : progression positive — RPE moyen 6-8 ET charges en hausse.
+    if (weekPerf && typeof weekPerf.rpeAvg === 'number' &&
+        weekPerf.rpeAvg >= 6 && weekPerf.rpeAvg <= 8 &&
+        typeof weekPerf.chargeProgressionPct === 'number' &&
+        weekPerf.chargeProgressionPct > 0) {
+      patterns.push({
+        id: 'progress_positive',
+        severity: 'info',
+        label: 'Progression +' + weekPerf.chargeProgressionPct.toFixed(1) + '% charges, RPE moyen ' + weekPerf.rpeAvg + '/10',
+        advice: 'Continue sur cette lancée. Respect du volume recommandé ISSN.'
+      });
+    }
+
+    // PATTERN 6 : RPE en chute — RPE moyen semaine < RPE des séances individuelles précédentes.
+    // Détectable uniquement si chargeProgressionPct < -5% (charges qui baissent).
+    if (weekPerf && typeof weekPerf.chargeProgressionPct === 'number' &&
+        weekPerf.chargeProgressionPct < -5) {
+      patterns.push({
+        id: 'charges_drop',
+        severity: 'warning',
+        label: 'Charges en baisse (' + weekPerf.chargeProgressionPct.toFixed(1) + '% vs sem précédente)',
+        advice: 'Fatigue ? Deload voulu ? Vérifier sommeil + alimentation.'
+      });
+    }
+
+    // PATTERN 7 : sommeil excellent — sleepAvg >= 4 sur ≥ 5j → encouragement.
+    if (wellnessAvg && wellnessAvg.sleepAvg !== null && wellnessAvg.daysLogged >= 5 && wellnessAvg.sleepAvg >= 4) {
+      patterns.push({
+        id: 'sleep_excellent',
+        severity: 'info',
+        label: 'Sommeil excellent (' + wellnessAvg.sleepAvg + '/5 sur ' + wellnessAvg.daysLogged + 'j)',
+        advice: 'Bases solides de récupération. Idéal pour pousser la progression.'
+      });
+    }
+
+    return patterns;
+  } catch(e) { return []; }
+};
+
+// POLISH 2026-04 (INSIGHTS) : agrégat COMPLET 7 jours pour widget dashboard + coach IA.
+// { sessions, kcal, duration, daysActive, byDay, sleepAvg, muscleStats,
+//   energyStats, rpeAvg, chargeProgressionPct, patterns[] }
+// Tous les sous-helpers sont défensifs (null ok).
+window.getWeekInsights = function() {
+  try {
+    var out = {};
+    var sessions = (typeof window.getWeekSessionsSummary === 'function')
+      ? window.getWeekSessionsSummary() : null;
+    var wellness = (typeof window.getWellnessAvg === 'function')
+      ? window.getWellnessAvg(7) : null;
+    var perf = (typeof window.getWeekPerformanceSummary === 'function')
+      ? window.getWeekPerformanceSummary() : null;
+    var patterns = (typeof window.detectWeekPatterns === 'function')
+      ? window.detectWeekPatterns() : [];
+
+    if (sessions) {
+      out.sessions = sessions.sessions;
+      out.kcalTotal = sessions.kcalTotal;
+      out.durationTotal = sessions.durationTotal;
+      out.daysActive = sessions.daysActive;
+      out.byDay = sessions.byDay;
+    }
+    if (wellness) {
+      if (wellness.sleepAvg !== null) out.sleepAvg = wellness.sleepAvg;
+      out.wellnessDaysLogged = wellness.daysLogged;
+      if (wellness.muscleStats) out.muscleStats = wellness.muscleStats;
+      if (wellness.energyStats) out.energyStats = wellness.energyStats;
+    }
+    if (perf) {
+      if (typeof perf.rpeAvg === 'number') out.rpeAvg = perf.rpeAvg;
+      if (typeof perf.chargeProgressionPct === 'number') out.chargeProgressionPct = perf.chargeProgressionPct;
+      if (perf.lastPain) out.lastPain = perf.lastPain;
+    }
+    out.patterns = patterns || [];
+    return out;
+  } catch(e) { return { patterns: [] }; }
+};
+
 // POLISH 2026-04 : agrégat rollup sessions cette semaine (lundi → dimanche ISO).
 // Lit S.sessionHistory (format { 'dayIdx_YYYY-MM-DD': {duration, kcalTotal, date, ... }})
 // Retourne { sessions, kcalTotal, durationTotal, daysActive, byDay[0..6] } ou null.
