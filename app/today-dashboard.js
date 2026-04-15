@@ -2317,6 +2317,112 @@ function renderExtendedSections(wrapper, S) {
     // Widget optionnel — silencieux
   }
 
+  // POLISH 2026-04 (RECORDS) : meilleurs résultats historiques de l'user.
+  // Exploite window.getPersonalRecords() qui agrège charges max, poids milestone,
+  // séance plus longue, streak max. Affiché uniquement si ≥1 record collecté.
+  try {
+    if (typeof window.getPersonalRecords === 'function') {
+      var records = window.getPersonalRecords();
+      if (records) {
+        wrapper.appendChild(sectionLabel('Records personnels'));
+        var recordsBox = card();
+
+        // Helper : ligne record (label gauche, valeur droite)
+        function recordLine(label, value, detail) {
+          var row = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
+          var left = h('div', { style: 'flex:1;min-width:0;' });
+          left.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, label));
+          if (detail) {
+            left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;letter-spacing:0.3px;' }, detail));
+          }
+          var right = h('div', { style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);font-weight:normal;white-space:nowrap;' }, value);
+          row.appendChild(left);
+          row.appendChild(right);
+          return row;
+        }
+
+        // Helper : formater date ISO en "jj/mm/aaaa"
+        function fmtDate(iso) {
+          if (!iso) return '';
+          var parts = String(iso).split('-');
+          if (parts.length !== 3) return iso;
+          return parts[2] + '/' + parts[1] + '/' + parts[0];
+        }
+
+        var hasContent = false;
+
+        // 1) Charges max (top 3)
+        if (Array.isArray(records.maxLifts) && records.maxLifts.length > 0) {
+          records.maxLifts.forEach(function(lift) {
+            var valueStr = lift.weight + ' kg';
+            var detailParts = [];
+            if (lift.reps) detailParts.push(lift.reps + ' reps');
+            if (lift.oneRepMax) detailParts.push('1RM ≈ ' + lift.oneRepMax + ' kg');
+            if (lift.date) detailParts.push(fmtDate(lift.date));
+            recordsBox.appendChild(recordLine(lift.exercise, valueStr, detailParts.join(' · ')));
+            hasContent = true;
+          });
+        }
+
+        // 2) Poids milestone ou range
+        if (records.weightMilestone) {
+          var wm = records.weightMilestone;
+          recordsBox.appendChild(recordLine(
+            wm.goalLabel,
+            wm.weight + ' kg',
+            wm.date ? fmtDate(wm.date) : null
+          ));
+          hasContent = true;
+        } else if (records.weightRange) {
+          var wr = records.weightRange;
+          recordsBox.appendChild(recordLine(
+            'Plage de poids',
+            wr.min + '–' + wr.max + ' kg',
+            null
+          ));
+          hasContent = true;
+        }
+
+        // 3) Séance la plus longue
+        if (records.longestSession) {
+          var ls = records.longestSession;
+          var lsDetail = [];
+          if (ls.kcalTotal) lsDetail.push(ls.kcalTotal + ' kcal brûlées');
+          if (ls.date) lsDetail.push(fmtDate(ls.date));
+          recordsBox.appendChild(recordLine(
+            'Séance la plus longue',
+            ls.duration + ' min',
+            lsDetail.join(' · ')
+          ));
+          hasContent = true;
+        }
+
+        // 4) Streak max
+        if (typeof records.maxStreak === 'number' && records.maxStreak > 0) {
+          recordsBox.appendChild(recordLine(
+            'Plus longue série',
+            records.maxStreak + ' jour' + (records.maxStreak > 1 ? 's' : ''),
+            'Jours consécutifs'
+          ));
+          hasContent = true;
+        }
+
+        // Retirer le border-bottom du dernier élément pour finition propre
+        if (hasContent) {
+          var allRows = recordsBox.querySelectorAll('div > div[style*="border-bottom"]');
+          if (allRows.length) allRows[allRows.length - 1].style.borderBottom = 'none';
+        }
+
+        // Safety : si finalement rien affiché, ne pas ajouter de card vide
+        if (hasContent) {
+          wrapper.appendChild(recordsBox);
+        }
+      }
+    }
+  } catch(_rErr) {
+    // Widget optionnel — silencieux
+  }
+
   // Weight chart (Chart.js)
   wrapper.appendChild(sectionLabel('Courbe de poids'));
   var rawHistCheck = (S.weightHistory || []).filter(function(e) {
