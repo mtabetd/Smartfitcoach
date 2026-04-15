@@ -2427,6 +2427,160 @@ function renderExtendedSections(wrapper, S) {
     // Widget optionnel — silencieux
   }
 
+  // POLISH 2026-04 (GRAPH NUTRITION) : courbes calories + protéines 30j.
+  // Exploite mtd_food_journal_<uid> via window.getNutritionTrend.
+  // Affiché uniquement si ≥3 jours loggés (cohérence avec graphe sommeil).
+  try {
+    if (typeof window.getNutritionTrend === 'function') {
+      var nutTrend = window.getNutritionTrend(30);
+      if (nutTrend && nutTrend.loggedDays >= 3) {
+        wrapper.appendChild(sectionLabel('Nutrition (30 jours)'));
+        var nutBox = card();
+
+        // Stats header : moyenne kcal + adhérence cible
+        var kcalVals = nutTrend.kcal.filter(function(v) { return typeof v === 'number'; });
+        var kcalAvg = kcalVals.length ? (kcalVals.reduce(function(a,b){return a+b;},0) / kcalVals.length) : null;
+        var adherencePct = null;
+        if (kcalAvg !== null && nutTrend.targets && nutTrend.targets.kcal > 0) {
+          adherencePct = Math.round((kcalAvg / nutTrend.targets.kcal) * 100);
+        }
+        var pVals = nutTrend.protein.filter(function(v) { return typeof v === 'number'; });
+        var pAvg = pVals.length ? Math.round(pVals.reduce(function(a,b){return a+b;},0) / pVals.length) : null;
+
+        var nStatsRow = h('div', { style: 'display:flex;gap:8px;margin-bottom:12px;' });
+        function nutStat(value, label) {
+          var box = h('div', { style: 'flex:1;text-align:center;padding:8px 6px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
+          box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);' }, value));
+          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
+          return box;
+        }
+        nStatsRow.appendChild(nutStat(
+          kcalAvg !== null ? Math.round(kcalAvg).toLocaleString('fr-FR') : '—',
+          'Kcal moy.'
+        ));
+        nStatsRow.appendChild(nutStat(
+          pAvg !== null ? pAvg + ' g' : '—',
+          'Protéines moy.'
+        ));
+        nStatsRow.appendChild(nutStat(
+          adherencePct !== null ? adherencePct + '%' : '—',
+          'Adhérence cible'
+        ));
+        nStatsRow.appendChild(nutStat(
+          nutTrend.loggedDays + '/30',
+          'Jours loggés'
+        ));
+        nutBox.appendChild(nStatsRow);
+
+        // Canvas Chart.js
+        var nChartWrap = h('div', { style: 'position:relative;height:180px;' });
+        var nCanvas = document.createElement('canvas');
+        nCanvas.id = 'today-nutrition-trend-chart';
+        nCanvas.style.cssText = 'width:100%;height:180px;max-height:180px;';
+        nChartWrap.appendChild(nCanvas);
+        nutBox.appendChild(nChartWrap);
+
+        requestAnimationFrame(function() {
+          try {
+            var nCtx = document.getElementById('today-nutrition-trend-chart');
+            if (!nCtx || typeof window.createChart !== 'function' || typeof Chart === 'undefined') return;
+            var shortLabels = nutTrend.labels.map(function(iso) {
+              var parts = iso.split('-');
+              return parts.length === 3 ? parts[2] + '/' + parts[1] : iso;
+            });
+            var datasets = [
+              {
+                label: 'Calories (kcal)',
+                data: nutTrend.kcal,
+                borderColor: '#1A4A1A',
+                backgroundColor: 'rgba(26, 74, 26, 0.08)',
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 2,
+                pointHoverRadius: 4,
+                spanGaps: true,
+                yAxisID: 'yKcal'
+              },
+              {
+                label: 'Protéines (g)',
+                data: nutTrend.protein,
+                borderColor: '#6A4A1A',
+                backgroundColor: 'rgba(106, 74, 26, 0.06)',
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 2,
+                pointHoverRadius: 4,
+                spanGaps: true,
+                borderDash: [4, 3],
+                yAxisID: 'yProtein'
+              }
+            ];
+            // Ligne pointillée de cible kcal si dispo
+            if (nutTrend.targets && nutTrend.targets.kcal > 0) {
+              datasets.push({
+                label: 'Cible kcal',
+                data: nutTrend.labels.map(function() { return nutTrend.targets.kcal; }),
+                borderColor: 'rgba(10,10,9,0.35)',
+                backgroundColor: 'transparent',
+                borderWidth: 1,
+                borderDash: [2, 4],
+                pointRadius: 0,
+                pointHoverRadius: 0,
+                tension: 0,
+                yAxisID: 'yKcal'
+              });
+            }
+            window.createChart(nCtx, {
+              type: 'line',
+              data: { labels: shortLabels, datasets: datasets },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                    labels: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 10 }, boxWidth: 12, padding: 10 }
+                  },
+                  tooltip: {
+                    backgroundColor: '#0A0A09',
+                    titleFont: { family: 'Georgia, serif', size: 11 },
+                    bodyFont: { family: 'Helvetica Neue, Arial, sans-serif', size: 11 },
+                    padding: 8
+                  }
+                },
+                scales: {
+                  x: {
+                    ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 7 },
+                    grid: { display: false }
+                  },
+                  yKcal: {
+                    type: 'linear', position: 'left',
+                    beginAtZero: false,
+                    ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } },
+                    grid: { color: 'rgba(216,216,208,0.3)' },
+                    title: { display: true, text: 'kcal', font: { family: 'Georgia, serif', size: 10 } }
+                  },
+                  yProtein: {
+                    type: 'linear', position: 'right',
+                    beginAtZero: true,
+                    ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } },
+                    grid: { display: false },
+                    title: { display: true, text: 'g', font: { family: 'Georgia, serif', size: 10 } }
+                  }
+                }
+              }
+            });
+          } catch(_ncErr) { /* silencieux */ }
+        });
+
+        wrapper.appendChild(nutBox);
+      }
+    }
+  } catch(_nErr) {
+    // Widget optionnel — silencieux
+  }
+
   // Weight chart (Chart.js)
   wrapper.appendChild(sectionLabel('Courbe de poids'));
   var rawHistCheck = (S.weightHistory || []).filter(function(e) {

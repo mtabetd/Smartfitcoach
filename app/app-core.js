@@ -347,6 +347,69 @@ window.recordSessionFeedback = function(data) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 (GRAPH NUTRITION) : série calories + macros sur N derniers jours.
+// Retourne { labels[N], kcal[num|null], protein[num|null], carbs[num|null],
+//            fat[num|null], targets:{kcal,p,g,l}, loggedDays } ou null.
+// Lit mtd_food_journal_<uid> DIRECTEMENT (FOOD_JOURNAL.getDayTotal ne lit que today).
+window.getNutritionTrend = function(days) {
+  try {
+    days = (typeof days === 'number' && days > 0) ? days : 30;
+    var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+    var uid = user && user.id ? user.id : 'anon';
+    var journal = {};
+    try {
+      var raw = localStorage.getItem('mtd_food_journal_' + uid);
+      if (raw) { var parsed = JSON.parse(raw); if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) journal = parsed; }
+    } catch(_je) {}
+
+    var labels = [], kcal = [], protein = [], carbs = [], fat = [];
+    var now = new Date();
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    var loggedDays = 0;
+
+    for (var i = days - 1; i >= 0; i--) {
+      var d = new Date(now.getTime() - i * 86400000);
+      var key = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+      labels.push(key);
+      var entries = Array.isArray(journal[key]) ? journal[key] : [];
+      if (entries.length > 0) {
+        var agg = entries.reduce(function(acc, e) {
+          acc.kcal += (Number(e.kcal) || 0);
+          acc.p += (Number(e.p) || 0);
+          acc.g += (Number(e.g) || 0);
+          acc.l += (Number(e.l) || 0);
+          return acc;
+        }, { kcal: 0, p: 0, g: 0, l: 0 });
+        kcal.push(Math.round(agg.kcal));
+        protein.push(Math.round(agg.p));
+        carbs.push(Math.round(agg.g));
+        fat.push(Math.round(agg.l));
+        loggedDays++;
+      } else {
+        kcal.push(null); protein.push(null); carbs.push(null); fat.push(null);
+      }
+    }
+
+    // Targets (via helpers déjà exposés)
+    var targets = null;
+    try {
+      if (typeof window.getCalorieTarget === 'function' && typeof window.getMacroTargets === 'function') {
+        var t = window.getCalorieTarget();
+        var m = window.getMacroTargets();
+        if (typeof t === 'number' && m && typeof m === 'object') {
+          targets = { kcal: t, p: m.p || null, g: m.g || null, l: m.l || null };
+        }
+      }
+    } catch(_te) {}
+
+    if (loggedDays === 0) return null; // rien à tracer
+    return {
+      labels: labels, kcal: kcal, protein: protein, carbs: carbs, fat: fat,
+      targets: targets, loggedDays: loggedDays
+    };
+  } catch(e) { return null; }
+};
+
 // POLISH 2026-04 (RECORDS) : calcule les meilleurs résultats historiques de l'user.
 // Retourne { maxLifts:[...], weightMilestone, longestSession, maxStreak } ou null.
 // 100% défensif : tous les champs optionnels, retourne null si aucune donnée.
