@@ -494,6 +494,9 @@ window.ADVANCED_TECHNIQUES_DB = ADVANCED_TECHNIQUES_DB;
 window.SFC_PROGRAMS_FORCE = SFC_PROGRAMS_FORCE;
 
 var WEEKLY_SPLITS = {
+  // FIX P0 SPRINT 2026-04-15 — split 2j (Marie senior 2j/sem demandait 2j et recevait 3j).
+  // Full body 2j cohérent ACSM (≥48h récup, débutant/sénior 2 séances/sem suffisantes).
+  2: {name:'Full body 2j', days:[{day:'Mardi',muscles:['pectoraux','dos','jambes'],label:'Full body — Push + Pull + Jambes'},{day:'Vendredi',muscles:['epaules','fessiers_dedied','bras'],label:'Full body — Épaules + Fessiers + Bras'}], notes:'Split full body 2j/sem. Adapté débutants, séniors, profils contraints temps. ACSM 2018 : 2 séances/sem suffisent pour gains hypertrophie modérés. 72h récup entre séances.'},
   3: {name:'Push-Pull-Legs 3j', days:[{day:'Lundi',muscles:['pectoraux','epaules'],label:'Push \u2014 Pecs + \u00c9paules'},{day:'Mercredi',muscles:['dos','bras'],label:'Pull \u2014 Dos + Bras'},{day:'Vendredi',muscles:['jambes','fessiers_dedied'],label:'Legs \u2014 Jambes + Fessiers'}], notes:'Split PPL simplifi\u00e9 3j. Chaque groupe musculaire 1x/semaine avec volume concentr\u00e9. R\u00e9cup\u00e9ration optimale (72h min entre s\u00e9ances m\u00eames groupes). Id\u00e9al d\u00e9butants ou emploi du temps serr\u00e9.'},
   4: {name:'Heavy Duty 4j (Intensit\u00e9 Maximale)', days:[{day:'Lundi',muscles:['pectoraux','triceps_dedied'],label:'Push \u2014 Pecs + Triceps'},{day:'Mardi',muscles:['jambes'],label:'Legs \u2014 Jambes compl\u00e8tes'},{day:'Jeudi',muscles:['epaules','biceps_dedied'],label:'\u00c9paules + Biceps'},{day:'Vendredi',muscles:['dos'],label:'Pull \u2014 Dos + Ischios (Deadlift day)'}], notes:'Repos mercredi, samedi, dimanche. Chaque muscle 1x/semaine avec intensit\u00e9 MAXIMALE (M\u00e9thode Intensit\u00e9 Maximale). S\u00e9curit\u00e9 r\u00e9cup : pectoraux/triceps lundi, 72h repos, \u00e9paules/biceps jeudi, pecs et \u00e9paules ne se chevauchent pas. Qualit\u00e9 > quantit\u00e9.'},
   5: {name:'Split 5j (Pro)', days:[{day:'Lundi',muscles:['pectoraux'],label:'Pectoraux'},{day:'Mardi',muscles:['dos'],label:'Dos'},{day:'Mercredi',muscles:['epaules'],label:'\u00c9paules'},{day:'Jeudi',muscles:['bras'],label:'Bras'},{day:'Vendredi',muscles:['jambes'],label:'Jambes'}], notes:'Repos samedi et dimanche. Logique : pectoraux lundi \u2192 \u00e9paules mercredi (48h r\u00e9cup pecs avant sollicitation deltoide ant\u00e9rieur partag\u00e9) \u2192 bras jeudi (biceps + triceps frais) \u2192 jambes vendredi. DOS mardi = antago push du lundi. Structure optimale pour r\u00e9cup\u00e9ration et performance.'},
@@ -2217,12 +2220,24 @@ function buildPersonalizedMuscuPlan(S) {
 
   // 1. NIVEAU : détecté depuis profil
   // S.activity est un index numérique (0=sédentaire...5=élite) — pas une string
+  // ═══ FIX P0 SPRINT 2026-04-15 — bug détection niveau (audit 10 profils) ═══
+  // Avant : `sportLevel='beginner'` était ÉCRASÉ si activity≥2 (OR au lieu de AND).
+  // Conséquence : Léa 25 beginner activity=2 → upgradée intermediate
+  //               Jean-Pierre 65 beginner activity=2 → upgradée intermediate
+  // Résultat : sortie identique sénior/jeune. Sécurité compromise.
+  // Maintenant : `sportLevel` saisi par l'user FAIT FOI. Heuristique activity ne s'applique
+  //              QUE si sportLevel n'est PAS renseigné explicitement.
   var level = 'beginner';
-  if (S.sportLevel === 'advanced' || (S.muscuWeek >= 4 && S.activity >= 3)) {
+  if (S.sportLevel === 'advanced' || S.sportLevel === 'pro' || S.sportLevel === 'expert') {
     level = 'advanced';
-  } else if (S.sportLevel === 'intermediate' || S.muscuWeek >= 2 || (S.activity !== null && S.activity >= 2)) {
+  } else if (S.sportLevel === 'intermediate') {
     level = 'intermediate';
+  } else if (!S.sportLevel) {
+    // Pas de sportLevel saisi → on tombe en heuristique muscuWeek/activity
+    if (S.muscuWeek >= 4 && S.activity >= 3) level = 'advanced';
+    else if (S.muscuWeek >= 2 || (S.activity !== null && S.activity >= 2)) level = 'intermediate';
   }
+  // sportLevel='beginner' → reste 'beginner' (jamais écrasé).
 
   // 2. STYLE : selon objectif + sexe + niveau
   // S.goal is a numeric index into window.GOALS — resolve to key string for comparison.
@@ -2263,18 +2278,36 @@ function buildPersonalizedMuscuPlan(S) {
   var styleObj = TRAINING_STYLES[style] || TRAINING_STYLES.fusion;
 
   // 3. SPLIT : selon jours disponibles
-  // FIX P2 : utiliser S.sportDays (nombre de jours) et non S.muscuWeek (numéro de semaine 1-12).
-  // Cap à 6 jours max (Art ACSM : 1 jour de repos minimum/semaine).
-  var days = Math.min(6, Math.max(3, S.sportDays || 3));
+  // ═══ FIX P0 SPRINT 2026-04-15 (audit profils — Marie 2j→3j, Karim 5j→4j) ═══
+  // Avant : `Math.max(3, S.sportDays)` forçait 3 j minimum (Marie 2j → 3j silencieusement).
+  //         Et fallback "split le plus proche" sans warning (Karim 5j → 4j sans le savoir).
+  // Maintenant : on respecte EXACTEMENT S.sportDays (cap 1-6).
+  //              Si le style n'a pas le split exact, on bascule vers un style qui l'a.
+  var days = Math.min(6, Math.max(1, S.sportDays || 3));
   var availSplits = styleObj.splits || {};
   var splitDays = days;
-  // Trouve le split disponible le plus proche
   if (!availSplits[splitDays]) {
-    var keys = Object.keys(availSplits).map(Number).sort(function(a,b){return a-b;});
-    if (keys.length > 0) {
-      splitDays = keys.reduce(function(prev, cur) {
-        return Math.abs(cur - days) < Math.abs(prev - days) ? cur : prev;
-      }, keys[0]);
+    // Fallback DOCUMENTÉ : on cherche un autre style qui a ce nombre de jours
+    var foundStyle = null;
+    for (var sk in TRAINING_STYLES) {
+      if (TRAINING_STYLES[sk].splits && TRAINING_STYLES[sk].splits[days]) {
+        foundStyle = sk; break;
+      }
+    }
+    if (foundStyle) {
+      console.warn('[buildPersonalizedMuscuPlan] Style "' + style + '" n\'a pas de split ' + days + 'j. Bascule sur "' + foundStyle + '" pour respecter S.sportDays=' + days);
+      style = foundStyle;
+      styleObj = TRAINING_STYLES[style];
+      availSplits = styleObj.splits || {};
+    } else {
+      // Aucun style n'a ce nombre de jours → on prend le plus proche en notifiant
+      var keys = Object.keys(availSplits).map(Number).sort(function(a,b){return a-b;});
+      if (keys.length > 0) {
+        splitDays = keys.reduce(function(prev, cur) {
+          return Math.abs(cur - days) < Math.abs(prev - days) ? cur : prev;
+        }, keys[0]);
+        console.warn('[buildPersonalizedMuscuPlan] Aucun style avec ' + days + 'j → fallback ' + splitDays + 'j');
+      }
     }
   }
   var split = availSplits[splitDays] || availSplits[Object.keys(availSplits)[0]] || null;
@@ -2384,20 +2417,139 @@ function buildPersonalizedMuscuPlan(S) {
       allExercises = allExercises.concat(exos);
     });
 
-    // FIX P0 sécurité fœtale (audit user Aïcha T2 sem.22) : filtre ACOG 2020 complet
-    // Avant : regex faible laissait passer « Développé couché », « Hip thrust », « Presse à jambes »
-    //         → décubitus dorsal + Valsalva → compression veine cave inférieure → hypoxie fœtale.
-    // Maintenant : regex strict + broadening "couché" / "pull-over" / "flye banc" (audit retest 2026-04-15).
+    // ═══ FIX P0 SPRINT 2026-04-15 (audit 10 profils — DANGER FŒTAL Aïcha) ═══
+    // Avant : regex `couché` ne matchait PAS "Développé haltères PLAT" → exo supine
+    // T2 sem 22 passait → compression veine cave inférieure → hypoxie fœtale.
+    // Nouveau : regex couvre tous les synonymes décubitus + tractions/dips/Valsalva.
     if (S.pregnant && isFemale) {
       var pregWeek = (typeof S.pregnancyWeek === 'number') ? S.pregnancyWeek : 14;
       // T2/T3 (sem ≥ 14) : exclure décubitus dorsal + Valsalva + contact + tout mouvement supine.
-      var pregForbid = /valsalva|soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|couch[eé]|bench\s+press|leg\s+press|presse\s+[aà]?\s*jambes?|presse[\s-]?cuisses?|crunch|sit.?up|d[eé]clin[eé]|decline|hip\s+thrust|glute\s+bridge\s+sol|pull.?over|\bflye?\b|\bfly[e]?\s*haltere?s?\b|[eé]cart[eé]\s+halt[eè]res?|snatch|clean\s*(?:&|and|et)?\s*jerk|kettlebell\s+swing|box\s+jump/i;
+      var pregForbid = new RegExp([
+        // Décubitus dorsal (TOUS synonymes)
+        'couch[eé]', 'allong[eé]', 'sup[ie]ne', 'dos\\s+au\\s+sol',
+        '\\bplat\\b', 'incl[ie]n[eé]', 'd[eé]clin[eé]', 'decline',
+        'bench\\s+press', 'pec\\s+deck', 'butterfly',
+        // Valsalva / charges lourdes axiales
+        'valsalva', 'soulev[eé]\\s+de\\s+terre', 'deadlift', 'romanian',
+        'squat\\s+barre\\s+lourd', 'squat\\s+barre\\b', 'back\\s+squat',
+        'good\\s+morning', 'snatch', 'arrach[eé]', 'clean\\s*(?:&|and|et)?\\s*jerk', '[eé]paul[eé]',
+        'jerk', 'overhead\\s+squat', 'thruster',
+        // Compression veine cave (machines assises chargées + leg press inclinée vers le bas)
+        'leg\\s+press', 'presse\\s+[aà]?\\s*jambes?', 'presse[\\s-]?cuisses?', 'hack\\s+squat',
+        // Hip thrust / glute bridge sol = pression abdominale
+        'hip\\s+thrust', 'glute\\s+bridge\\s+sol',
+        // Crunch / abdos en flexion répétée
+        'crunch', 'sit.?up', 'roll.?up', 'ab\\s+wheel', 'pike',
+        // Tractions/dips lestés = Valsalva intense (T2/T3)
+        'tractions?\\s+lest[eé]', 'pull.?up\\s+lest', 'dips\\s+lest',
+        'tractions?\\s+pronation', 'tractions?\\s+supination',
+        // Mouvements balistiques contact
+        'kettlebell\\s+swing', 'box\\s+jump', 'jump\\s+squat', 'burpee',
+        // Pull-over / flye / écarté (extension supine)
+        'pull.?over', '\\bflye?\\b', 'fly[e]?\\s*haltere?s?', '[eé]cart[eé]\\s+halt[eè]res?',
+        '[eé]cart[eé]\\s+couch[eé]'
+      ].join('|'), 'i');
       allExercises = allExercises.filter(function(ex) {
         return !pregForbid.test(String(ex.n || ex.name || ''));
       });
-      // Warning si le filtre a tout supprimé (programme vide silencieux = bug UX dangereux)
+      // Warning si le filtre a tout supprimé
       if (allExercises.length === 0) {
         try { console.warn('[buildPersonalizedMuscuPlan] Pool vide après filtre grossesse (sem ' + pregWeek + ')'); S._pregFilterEmpty = true; } catch(_e) {}
+      }
+    }
+
+    // ═══ FIX P0 SPRINT 2026-04-15 (audit 10 profils — DANGER OSTEO/HTA Jean-Pierre) ═══
+    // Avant : `buildPersonalizedMuscuPlan` ne lisait QUE muscuMedical (PAR-Q dédié muscu).
+    // Le champ `S.medical` (conditions générales : osteoporose, hypertension, irc, etc.)
+    // était IGNORÉ. Jean-Pierre 65 ans medical:['osteoporose','hypertension'] recevait
+    // squat barre lourd + développé militaire barre = Valsalva + compression vertébrale.
+    // Maintenant : application des règles médicales générales sur le pool.
+    if (Array.isArray(S.medical) && S.medical.length > 0) {
+      var medList = S.medical.map(function(m) { return String(m).toLowerCase(); });
+      var medFilters = [];
+      // OSTÉOPOROSE (Sinaki JAMA 1984 / NOF 2022) : éviter compression vertébrale, flexion
+      // chargée, sauts, charges axiales lourdes. Privilégier mises en charge progressives.
+      if (medList.indexOf('osteoporose') !== -1 || medList.indexOf('osteoporosis') !== -1) {
+        medFilters.push(/squat\s+barre|back\s+squat|soulev[eé]\s+de\s+terre|deadlift|romanian|good\s+morning|crunch|sit.?up|ab\s+wheel|jefferson|hyperextension|box\s+jump|jump\s+squat|burpee|corde|jumping\s+jacks/i);
+      }
+      // HTA SÉVÈRE / HYPERTENSION (Pescatello MSSE 2004, AHA/ACSM 2007)
+      // Éviter Valsalva prolongé, charges maximales, isométriques soutenus, behind-neck.
+      if (medList.indexOf('hypertension') !== -1 || medList.indexOf('hta') !== -1 || medList.indexOf('hta_severe') !== -1) {
+        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|d[eé]velopp[eé]\s+militaire\s+barre|behind.?neck|derri[eè]re\s+nuque|snatch|arrach[eé]|clean\s*(?:&|and|et)?\s*jerk|l.?sit|dragon\s+flag|windshield/i);
+      }
+      // CARDIO / INSUFFISANCE CARDIAQUE
+      if (medList.indexOf('cardio') !== -1 || medList.indexOf('insuffisance_card') !== -1) {
+        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|snatch|clean|burpee|box\s+jump|hiit/i);
+      }
+      // GOUTTE / CALCULS / IRC : pas d'exclusion exos directe (impact diététique surtout)
+      // RHUMATISMES / POLYARTHRITE
+      if (medList.indexOf('polyarthrite') !== -1 || medList.indexOf('rheumatoid') !== -1) {
+        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|arrach[eé]|snatch|clean|jump\s+squat|box\s+jump|burpee|squat\s+barre/i);
+      }
+      // FIBROMYALGIE
+      if (medList.indexOf('fibromyalgie') !== -1) {
+        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|burpee|box\s+jump|jump\s+squat|pompes\s+plyo/i);
+      }
+      // Application combinée
+      if (medFilters.length > 0) {
+        var beforeCount = allExercises.length;
+        allExercises = allExercises.filter(function(ex) {
+          var name = String(ex.n || ex.name || '').toLowerCase();
+          for (var fi = 0; fi < medFilters.length; fi++) {
+            if (medFilters[fi].test(name)) return false;
+          }
+          return true;
+        });
+        if (allExercises.length === 0) {
+          console.warn('[buildPersonalizedMuscuPlan] Pool vide après filtre médical', medList);
+          try { S._medFilterEmpty = true; } catch(_e) {}
+        }
+      }
+    }
+
+    // ═══ FIX P0 SPRINT 2026-04-15 — muscuMedical lit aussi dans buildPersonalizedMuscuPlan ═══
+    // (avant : seul generateSportProgram appliquait filterExerciseByMedical).
+    // Marie a muscuMedical.lowerBack=true → AUCUNE exclusion ne s'appliquait dans le moteur local.
+    if (S.muscuMedical && S.muscuMedical.done) {
+      var mm = S.muscuMedical;
+      var mmFilters = [];
+      // Lombalgie / hernie discale (McGill 2007)
+      if (mm.lowerBack || mm.herniaDisc) {
+        mmFilters.push(/soulev[eé]\s+de\s+terre|deadlift|romanian|rdl|good\s+morning|jefferson|squat\s+barre|back\s+squat|front\s+squat|hack\s+squat|presse[\s\-]?(?:à|a)?\s*cuisses?|leg\s+press|rowing\s+barre|pendlay|t.?bar|crunch|sit.?up|ab\s+wheel|hyperextension|kettlebell\s+swing|\bswing\b|\bclean\b|\bsnatch\b|arrach[eé]|[eé]paul[eé]/i);
+      }
+      // Genoux / LCA
+      if (mm.knees || mm.acl) {
+        mmFilters.push(/leg\s+extension|pistol|sissy|jump\s+squat|box\s+jump|fente\s+avant|squat\s+bulgare|squat\s+barre\s+profond/i);
+      }
+      // Hanches
+      if (mm.hips) {
+        mmFilters.push(/sumo|deep\s+squat|pistol|fente\s+lat[eé]rale/i);
+      }
+      // Épaules / coiffe
+      if (mm.shoulders) {
+        mmFilters.push(/d[eé]velopp[eé]\s+nuque|behind.?neck|derri[eè]re\s+nuque|upright\s+row|tirage\s+menton|snatch|push\s+press|jerk/i);
+      }
+      // Cervicales
+      if (mm.neck) {
+        mmFilters.push(/shrug|neck\s+press|behind.?neck|derri[eè]re\s+nuque/i);
+      }
+      // Hernie inguinale
+      if (mm.herniaInguinal) {
+        mmFilters.push(/squat\s+barre\s+lourd|presse|leg\s+press|soulev[eé]\s+de\s+terre|deadlift|hip\s+thrust\s+lourd|burpee/i);
+      }
+      // Pieds / fasciite plantaire
+      if (mm.feet) {
+        mmFilters.push(/corde\s+sauter|box\s+jump|jump\s+squat|burpee|course|jogging|jumping\s+jacks/i);
+      }
+      // Application combinée
+      if (mmFilters.length > 0) {
+        allExercises = allExercises.filter(function(ex) {
+          var name = String(ex.n || ex.name || '').toLowerCase();
+          for (var fi = 0; fi < mmFilters.length; fi++) {
+            if (mmFilters[fi].test(name)) return false;
+          }
+          return true;
+        });
       }
     }
 
@@ -2429,9 +2581,54 @@ function buildPersonalizedMuscuPlan(S) {
       }
     } catch(eBz) {}
 
-    // Durée estimée : ~4min/série en moyenne
+    // ═══ FIX P0 SPRINT 2026-04-15 — Dédoublonnage exos dans la même séance ═══
+    // (audit profils — Marc avait Squat ×5 dans J1 ; Sophie avait RDL barre + RDL jambes
+    // tendues = même mouvement). Conserve uniquement la première occurrence par nom normalisé.
+    (function dedupExos() {
+      var seen = {};
+      var dedup = [];
+      allExercises.forEach(function(ex) {
+        var name = String(ex.n || ex.name || '').toLowerCase().trim();
+        // Normalisation : enlever variations charge (haltères/barre) pour matcher RDL = RDL
+        var normalKey = name.replace(/\s+(barre|halt[eè]res?|kettlebell|machine|c[aâ]ble|poulie)\b.*$/i, '').trim();
+        if (!normalKey) normalKey = name;
+        if (!seen[normalKey]) {
+          seen[normalKey] = true;
+          dedup.push(ex);
+        }
+      });
+      allExercises = dedup;
+    })();
+
+    // ═══ FIX P0 SPRINT 2026-04-15 — Cap durée séance 90 min max ═══
+    // (audit profils — séances 246 min Léa, 214 min Aïcha, 174 min Sophie = aberrant).
+    // Formule unique : ~4 min/set + 10 min échauffement (cohérence loop ↔ résultat final).
+    var SESSION_MAX_MIN = 90;
+    var SESSION_WARMUP_MIN = 10;
+    var SET_MIN_AVG = 4;
+    function estimateMinFor(exos) {
+      var total = exos.reduce(function(acc, ex) {
+        var s = typeof ex.sets === 'string' ? (parseInt(ex.sets, 10) || 3) : (ex.sets || 3);
+        return acc + s;
+      }, 0);
+      return Math.round(total * SET_MIN_AVG + SESSION_WARMUP_MIN);
+    }
+    var iterGuard = 50;
+    while (estimateMinFor(allExercises) > SESSION_MAX_MIN && allExercises.length > 3 && iterGuard-- > 0) {
+      // Retirer le DERNIER exo isolation (les composés sont prioritaires)
+      var idxToRemove = -1;
+      for (var k = allExercises.length - 1; k >= 0; k--) {
+        var ex = allExercises[k];
+        var tags = ex.type || ex.tags || '';
+        if (/isolation|finition|finisher/i.test(String(tags))) { idxToRemove = k; break; }
+      }
+      if (idxToRemove < 0) idxToRemove = allExercises.length - 1; // sinon dernier exo
+      allExercises.splice(idxToRemove, 1);
+    }
+
+    // Durée estimée — formule synchro avec le cap loop ci-dessus
     var totalSets = allExercises.reduce(function(acc, ex) { var s = typeof ex.sets === 'string' ? (parseInt(ex.sets, 10) || 3) : (ex.sets || 3); return acc + s; }, 0);
-    var estimatedMin = Math.round(totalSets * 4 + 10); // +10min échauffement
+    var estimatedMin = Math.round(totalSets * SET_MIN_AVG + SESSION_WARMUP_MIN);
 
     return {
       dayIndex: idx + 1,
