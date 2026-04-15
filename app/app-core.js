@@ -30,18 +30,29 @@ function svgRing(size,stroke,pct,color,label,value){
 }
 
 // ─── Chart instance tracking (prevent "Canvas already in use" errors) ───
+// FIX CONTRE-AUDIT 2026-04 : on détruit aussi les charts ORPHELINS (canvas
+// détaché du DOM = ancien canvas re-rendu par innerHTML=''). Évite la
+// fuite mémoire sur re-render espacés dans le temps (toggle section N×).
 window._chartInstances = [];
 window.createChart = function(canvas, config) {
   if (typeof Chart === 'undefined') return null;
-  // Destroy any existing chart on this canvas
+  // 1) Destroy any existing chart on EXACTLY this canvas ref (même objet DOM)
+  // 2) Destroy any orphan chart whose canvas is no longer in the document
+  //    OR shares the same canvas.id (re-render cas typique)
   for (var i = window._chartInstances.length - 1; i >= 0; i--) {
     try {
-      if (window._chartInstances[i].canvas === canvas) {
-        window._chartInstances[i].destroy();
+      var inst = window._chartInstances[i];
+      if (!inst || !inst.canvas) { window._chartInstances.splice(i, 1); continue; }
+      var sameRef = (inst.canvas === canvas);
+      var sameId = canvas.id && inst.canvas.id === canvas.id;
+      var orphan = !document.body.contains(inst.canvas);
+      if (sameRef || sameId || orphan) {
+        inst.destroy();
         window._chartInstances.splice(i, 1);
       }
     } catch(e) {
       console.error('[app-core] erreur:', e);
+      window._chartInstances.splice(i, 1); // supprimer l'entrée corrompue pour éviter bloc infini
     }
   }
   var chart = new Chart(canvas.getContext('2d'), config);
@@ -333,6 +344,48 @@ window.recordSessionFeedback = function(data) {
     }
     if (typeof window.saveProfile === 'function') window.saveProfile();
     return key;
+  } catch(e) { return null; }
+};
+
+// POLISH 2026-04 (GRAPHES) : série wellness sur N derniers jours pour Chart.js.
+// Retourne { labels:['YYYY-MM-DD',...], sleep:[num/null,...], energyScore:[num/null,...] }
+// Jours sans log → null (Chart.js skip gracefully avec spanGaps:true).
+// Score énergie : bas=1, moyen=2, haut=3 (numérisé pour visualisation).
+window.getSleepEnergyTrend = function(days) {
+  try {
+    days = (typeof days === 'number' && days > 0) ? days : 30;
+    if (typeof window.getWellnessHistory !== 'function') return null;
+    var history = window.getWellnessHistory(days);
+    if (!Array.isArray(history)) return null;
+    // Index historique par date pour lookup O(1)
+    var byDate = {};
+    history.forEach(function(h) { if (h && h.date) byDate[h.date] = h; });
+    // Générer les N derniers jours (avec null pour jours manquants)
+    var labels = [], sleep = [], energyScore = [];
+    var energyMap = { bas: 1, moyen: 2, haut: 3 };
+    var now = new Date();
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    for (var i = days - 1; i >= 0; i--) {
+      var d = new Date(now.getTime() - i * 86400000);
+      var key = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+      labels.push(key);
+      var h = byDate[key];
+      // FIX CONTRE-AUDIT : parseFloat tolérant (accepte "4" ou 4) + bornes 1-5
+      if (h && h.sleep != null) {
+        var sv = parseFloat(h.sleep);
+        if (!isNaN(sv) && isFinite(sv) && sv >= 1 && sv <= 5) sleep.push(sv);
+        else sleep.push(null);
+      } else {
+        sleep.push(null);
+      }
+      if (h && h.energy && typeof energyMap[h.energy] === 'number') {
+        energyScore.push(energyMap[h.energy]);
+      } else {
+        energyScore.push(null);
+      }
+    }
+    var loggedDays = sleep.filter(function(s) { return s !== null; }).length;
+    return { labels: labels, sleep: sleep, energyScore: energyScore, loggedDays: loggedDays };
   } catch(e) { return null; }
 };
 

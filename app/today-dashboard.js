@@ -2053,6 +2053,146 @@ function renderExtendedSections(wrapper, S) {
     // Widget optionnel — silencieux si helpers indispos
   }
 
+  // POLISH 2026-04 (GRAPHES) : courbes sommeil + énergie sur 30 jours.
+  // Utilise Chart.js (déjà chargé) + window.getSleepEnergyTrend.
+  // Affiché UNIQUEMENT si au moins 3 jours loggés (évite graphique vide).
+  try {
+    if (typeof window.getSleepEnergyTrend === 'function') {
+      var trend = window.getSleepEnergyTrend(30);
+      if (trend && trend.loggedDays >= 3) {
+        wrapper.appendChild(sectionLabel('Sommeil & énergie (30 jours)'));
+        var trendBox = card();
+
+        // Stats rapides au-dessus du graphique
+        var _sleepValues = trend.sleep.filter(function(v) { return typeof v === 'number'; });
+        var _sleepAvg = _sleepValues.length ? (_sleepValues.reduce(function(a,b){return a+b;}, 0) / _sleepValues.length) : null;
+        var _energyValues = trend.energyScore.filter(function(v) { return typeof v === 'number'; });
+        var _energyAvg = _energyValues.length ? (_energyValues.reduce(function(a,b){return a+b;}, 0) / _energyValues.length) : null;
+
+        var statsRow = h('div', { style: 'display:flex;gap:8px;margin-bottom:12px;justify-content:space-between;' });
+        function trendStat(value, label) {
+          var box = h('div', { style: 'flex:1;text-align:center;padding:6px 8px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;' });
+          box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:18px;color:var(--black,#0A0A09);' }, value));
+          box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
+          return box;
+        }
+        statsRow.appendChild(trendStat(
+          _sleepAvg !== null ? _sleepAvg.toFixed(1) + '/5' : '—',
+          'Sommeil moyen'
+        ));
+        statsRow.appendChild(trendStat(
+          _energyAvg !== null ? _energyAvg.toFixed(1) + '/3' : '—',
+          'Énergie moyenne'
+        ));
+        statsRow.appendChild(trendStat(
+          trend.loggedDays + '/30',
+          'Jours loggés'
+        ));
+        trendBox.appendChild(statsRow);
+
+        // Canvas Chart.js
+        var chartWrap = h('div', { style: 'position:relative;height:180px;' });
+        var canvas = document.createElement('canvas');
+        canvas.id = 'today-wellness-trend-chart';
+        canvas.style.cssText = 'width:100%;height:180px;max-height:180px;';
+        chartWrap.appendChild(canvas);
+        trendBox.appendChild(chartWrap);
+
+        // Rendu différé pour laisser DOM stabiliser
+        requestAnimationFrame(function() {
+          try {
+            var ctx = document.getElementById('today-wellness-trend-chart');
+            if (!ctx || typeof window.createChart !== 'function' || typeof Chart === 'undefined') return;
+            // Labels courts : "15/04" (jour/mois) pour lisibilité
+            var shortLabels = trend.labels.map(function(iso) {
+              var parts = iso.split('-');
+              return parts.length === 3 ? parts[2] + '/' + parts[1] : iso;
+            });
+            window.createChart(ctx, {
+              type: 'line',
+              data: {
+                labels: shortLabels,
+                datasets: [
+                  {
+                    label: 'Sommeil (1-5)',
+                    data: trend.sleep,
+                    borderColor: '#1A4A1A',
+                    backgroundColor: 'rgba(26,74,26,0.08)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 2,
+                    pointHoverRadius: 4,
+                    spanGaps: true,
+                    yAxisID: 'ySleep'
+                  },
+                  {
+                    label: 'Énergie (bas/moyen/haut)',
+                    data: trend.energyScore,
+                    borderColor: '#6A4A1A',
+                    backgroundColor: 'rgba(106,74,26,0.06)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 2,
+                    pointHoverRadius: 4,
+                    spanGaps: true,
+                    borderDash: [4, 3],
+                    yAxisID: 'yEnergy'
+                  }
+                ]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                    labels: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 10 }, boxWidth: 12, padding: 10 }
+                  },
+                  tooltip: {
+                    backgroundColor: '#0A0A09',
+                    titleFont: { family: 'Georgia, serif', size: 11 },
+                    bodyFont: { family: 'Helvetica Neue, Arial, sans-serif', size: 11 },
+                    padding: 8
+                  }
+                },
+                scales: {
+                  x: {
+                    ticks: {
+                      font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 },
+                      maxRotation: 0,
+                      autoSkip: true,
+                      maxTicksLimit: 7
+                    },
+                    grid: { display: false }
+                  },
+                  ySleep: {
+                    type: 'linear',
+                    position: 'left',
+                    min: 0, max: 5,
+                    ticks: { stepSize: 1, font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } },
+                    grid: { color: 'rgba(216,216,208,0.3)' }
+                  },
+                  yEnergy: {
+                    type: 'linear',
+                    position: 'right',
+                    min: 0, max: 3,
+                    ticks: { stepSize: 1, font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } },
+                    grid: { display: false }
+                  }
+                }
+              }
+            });
+          } catch(_cErr) { /* Chart.js crash silencieux — widget pas cassant */ }
+        });
+
+        wrapper.appendChild(trendBox);
+      }
+    }
+  } catch(_tErr) {
+    // Widget optionnel — silencieux
+  }
+
   // Weight chart (Chart.js)
   wrapper.appendChild(sectionLabel('Courbe de poids'));
   var rawHistCheck = (S.weightHistory || []).filter(function(e) {
