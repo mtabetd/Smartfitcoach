@@ -668,6 +668,49 @@ html {
   font-weight: 500;
 }
 
+/* -------------------------------------------------------
+   FIX UX audit 2026-04-15 : tap targets mobile ≥ 44px.
+   Classes dédiées aux boutons principaux — à appliquer ciblément.
+   Les micros-boutons (close "×", chevrons) conservent leur taille
+   car ils utilisent width/height explicites (non ciblés ici).
+   ------------------------------------------------------- */
+.btn-primary,
+.btn-secondary,
+.btn-touch {
+  min-height: 48px;
+  padding: 14px 20px;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: opacity 0.15s ease;
+}
+.btn-primary {
+  background: var(--black, #0A0A09);
+  color: var(--ivory, #FAF9F6);
+  border: 1px solid var(--black, #0A0A09);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--black, #0A0A09);
+  border: 1px solid var(--black, #0A0A09);
+}
+.btn-primary:hover,
+.btn-secondary:hover { opacity: 0.85; }
+
+/* RGPD / DPO / Retour — zone touch suffisante */
+.link-rgpd,
+.btn-back {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
 
 /* -------------------------------------------------------
    21. LOADING SKELETON

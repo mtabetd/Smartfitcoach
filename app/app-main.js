@@ -608,9 +608,9 @@ function renderProfilePage(container) {
  var user = window.AUTH ? window.AUTH.getUser() : null;
  var c = h('div', {style: 'max-width:480px;margin:0 auto;padding:24px 20px 48px'});
 
- // Back button
+ // Back button — FIX UX audit : min-height 44px (avant 12px = injoignable mobile)
  var backBtn = h('button', {
-   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);cursor:pointer;margin-bottom:24px;display:flex;align-items:center;gap:6px;',
+   style: 'background:none;border:none;padding:10px 14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);cursor:pointer;margin-bottom:24px;display:inline-flex;align-items:center;gap:6px;min-height:44px;',
    onclick: function() { S.view = 'today'; if (window.render) window.render(); }
  }, '← Retour');
  c.appendChild(backBtn);
@@ -1062,7 +1062,7 @@ function renderProfilePage(container) {
  // POLISH 2026-04 : enrichi — inclut désormais food_journal, photos, streak,
  // feedback coach, wellness, etc. pour respecter vraiment le droit à la portabilité.
  var downloadDataBtn = h('button', {
-   style: 'background:none;border:none;padding:0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);cursor:pointer;text-decoration:underline;display:block;margin-bottom:12px;',
+   style: 'background:none;border:none;padding:10px 0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);cursor:pointer;text-decoration:underline;display:block;margin-bottom:12px;min-height:44px;text-align:left;',
    onclick: function() {
      try {
        var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
@@ -1173,7 +1173,7 @@ function renderProfilePage(container) {
  // pour faciliter l'exercice des droits RGPD (accès, rectification, opposition).
  var dpoLink = h('a', {
    href: 'mailto:dpo@smartfitcoach.com?subject=Demande%20RGPD',
-   style: 'display:block;margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-decoration:underline;'
+   style: 'display:inline-flex;align-items:center;margin-top:12px;padding:10px 0;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);text-decoration:underline;min-height:44px;'
  }, 'Contacter le DPO (exercer mes droits RGPD) →');
  c.appendChild(dpoLink);
 
