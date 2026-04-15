@@ -2053,6 +2053,119 @@ function renderExtendedSections(wrapper, S) {
     // Widget optionnel — silencieux si helpers indispos
   }
 
+  // POLISH 2026-04 (OBJECTIFS SEMAINE) : progression vs objectifs (séances,
+  // kcal, protéines, wellness). Affiché si au moins 1 métrique disponible.
+  try {
+    if (typeof window.getWeeklyGoalsProgress === 'function') {
+      var goals = window.getWeeklyGoalsProgress();
+      if (goals) {
+        wrapper.appendChild(sectionLabel('Objectifs cette semaine'));
+        var goalsBox = card();
+
+        // Helper : row progress avec label + progress bar + valeur
+        function goalRow(label, current, target, pct, unit, colorByPct) {
+          var row = h('div', { style: 'padding:10px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
+          var top = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;' });
+          top.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, label));
+          var rightTxt = current + (unit ? ' ' + unit : '') + (target !== null && target !== undefined ? ' / ' + target + (unit ? ' ' + unit : '') : '');
+          var rightEl = h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);font-weight:600;' }, rightTxt);
+          top.appendChild(rightEl);
+          row.appendChild(top);
+          // Progress bar
+          var trackStyle = 'width:100%;height:6px;background:var(--border,#D8D8D0);border-radius:3px;overflow:hidden;';
+          var track = h('div', { style: trackStyle });
+          var fillColor = colorByPct || 'var(--green,#1A4A1A)';
+          var fillWidth = pct !== null ? Math.min(100, Math.max(0, pct)) : 0;
+          var fill = h('div', { style: 'width:' + fillWidth + '%;height:100%;background:' + fillColor + ';transition:width 0.4s ease;' });
+          track.appendChild(fill);
+          row.appendChild(track);
+          // Pct textuel à droite sous la barre
+          if (pct !== null) {
+            var pctLbl = h('div', { style: 'text-align:right;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1px;color:var(--grey,#6B6B65);margin-top:3px;' }, pct + '%');
+            row.appendChild(pctLbl);
+          }
+          return row;
+        }
+
+        var hasGoals = false;
+
+        // 1) Séances
+        if (goals.sessions) {
+          var sCol = 'var(--green,#1A4A1A)';
+          if (goals.sessions.pct !== null && goals.sessions.pct < 50) sCol = 'var(--orange,#6A4A1A)';
+          goalsBox.appendChild(goalRow(
+            'Séances',
+            goals.sessions.done,
+            goals.sessions.planned,
+            goals.sessions.pct,
+            '',
+            sCol
+          ));
+          hasGoals = true;
+        }
+
+        // 2) Kcal
+        if (goals.kcalAvg) {
+          var kCol = 'var(--green,#1A4A1A)';
+          // Si >110% ou <90% → warning orange, >125% ou <75% → rouge
+          if (goals.kcalAvg.pct !== null) {
+            var kDiff = Math.abs(goals.kcalAvg.pct - 100);
+            if (kDiff > 25) kCol = 'var(--red,#5A1010)';
+            else if (kDiff > 10) kCol = 'var(--orange,#6A4A1A)';
+          }
+          goalsBox.appendChild(goalRow(
+            'Calories (moy. 7j)',
+            goals.kcalAvg.current,
+            goals.kcalAvg.target,
+            goals.kcalAvg.pct,
+            'kcal',
+            kCol
+          ));
+          hasGoals = true;
+        }
+
+        // 3) Protéines
+        if (goals.proteinAvg) {
+          var pCol = 'var(--green,#1A4A1A)';
+          if (goals.proteinAvg.pct !== null && goals.proteinAvg.pct < 80) pCol = 'var(--orange,#6A4A1A)';
+          goalsBox.appendChild(goalRow(
+            'Protéines (moy. 7j)',
+            goals.proteinAvg.current,
+            goals.proteinAvg.target,
+            goals.proteinAvg.pct,
+            'g',
+            pCol
+          ));
+          hasGoals = true;
+        }
+
+        // 4) Wellness loggés
+        if (goals.wellnessLogged) {
+          var wCol = 'var(--green,#1A4A1A)';
+          if (goals.wellnessLogged.pct < 50) wCol = 'var(--orange,#6A4A1A)';
+          goalsBox.appendChild(goalRow(
+            'Bilan forme',
+            goals.wellnessLogged.count,
+            goals.wellnessLogged.target,
+            goals.wellnessLogged.pct,
+            'j',
+            wCol
+          ));
+          hasGoals = true;
+        }
+
+        // Finition : dernière row sans border-bottom
+        if (hasGoals) {
+          var allGoalRows = goalsBox.querySelectorAll('div[style*="border-bottom"]');
+          if (allGoalRows.length) allGoalRows[allGoalRows.length - 1].style.borderBottom = 'none';
+          wrapper.appendChild(goalsBox);
+        }
+      }
+    }
+  } catch(_gErr) {
+    // Widget optionnel — silencieux
+  }
+
   // POLISH 2026-04 (GRAPHES) : courbes sommeil + énergie sur 30 jours.
   // Utilise Chart.js (déjà chargé) + window.getSleepEnergyTrend.
   // Affiché UNIQUEMENT si au moins 3 jours loggés (évite graphique vide).

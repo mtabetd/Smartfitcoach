@@ -347,6 +347,90 @@ window.recordSessionFeedback = function(data) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 (OBJECTIFS SEMAINE) : progression vs objectifs hebdo.
+// Retourne { sessions:{done,planned,pct}, kcalAvg:{current,target,pct},
+//            proteinAvg:{current,target,pct}, wellnessLogged:{count,target=7,pct} } ou null.
+// Chaque métrique est null si la data manque → widget gère visuellement.
+window.getWeeklyGoalsProgress = function() {
+  try {
+    var S = window.S;
+    if (!S) return null;
+    var result = {};
+
+    // 1) SÉANCES
+    try {
+      var planned = 0;
+      if (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > 0) {
+        planned = S.trainingDaysSelected.length;
+      } else if (typeof S.sportDays === 'number' && S.sportDays > 0) {
+        planned = S.sportDays;
+      }
+      var done = 0;
+      if (typeof window.getWeekSessionsSummary === 'function') {
+        var ws = window.getWeekSessionsSummary();
+        if (ws && typeof ws.sessions === 'number') done = ws.sessions;
+      }
+      if (planned > 0 || done > 0) {
+        result.sessions = {
+          done: done,
+          planned: planned || null,
+          pct: planned > 0 ? Math.min(100, Math.round((done / planned) * 100)) : null
+        };
+      }
+    } catch(_e1) {}
+
+    // 2) KCAL MOYENNE (vs cible)
+    try {
+      var ntrend = (typeof window.getNutritionTrend === 'function') ? window.getNutritionTrend(7) : null;
+      if (ntrend && ntrend.loggedDays > 0) {
+        var kcalVals = ntrend.kcal.filter(function(v) { return typeof v === 'number'; });
+        if (kcalVals.length > 0) {
+          var avg = Math.round(kcalVals.reduce(function(a,b){return a+b;},0) / kcalVals.length);
+          var tgt = (ntrend.targets && typeof ntrend.targets.kcal === 'number') ? ntrend.targets.kcal : null;
+          result.kcalAvg = {
+            current: avg,
+            target: tgt,
+            pct: (tgt && tgt > 0) ? Math.min(150, Math.round((avg / tgt) * 100)) : null
+          };
+        }
+      }
+    } catch(_e2) {}
+
+    // 3) PROTÉINES MOYENNE (vs cible)
+    try {
+      var ntrend2 = (typeof window.getNutritionTrend === 'function') ? window.getNutritionTrend(7) : null;
+      if (ntrend2 && ntrend2.loggedDays > 0) {
+        var pVals = ntrend2.protein.filter(function(v) { return typeof v === 'number'; });
+        if (pVals.length > 0) {
+          var pAvg = Math.round(pVals.reduce(function(a,b){return a+b;},0) / pVals.length);
+          var pTgt = (ntrend2.targets && typeof ntrend2.targets.p === 'number') ? ntrend2.targets.p : null;
+          result.proteinAvg = {
+            current: pAvg,
+            target: pTgt,
+            pct: (pTgt && pTgt > 0) ? Math.min(150, Math.round((pAvg / pTgt) * 100)) : null
+          };
+        }
+      }
+    } catch(_e3) {}
+
+    // 4) WELLNESS LOGGÉS (cible : 7 jours / semaine)
+    try {
+      if (typeof window.getWellnessHistory === 'function') {
+        var last7 = window.getWellnessHistory(7);
+        var count = Array.isArray(last7) ? last7.length : 0;
+        result.wellnessLogged = {
+          count: count,
+          target: 7,
+          pct: Math.min(100, Math.round((count / 7) * 100))
+        };
+      }
+    } catch(_e4) {}
+
+    if (Object.keys(result).length === 0) return null;
+    return result;
+  } catch(e) { return null; }
+};
+
 // POLISH 2026-04 (GRAPH NUTRITION) : série calories + macros sur N derniers jours.
 // Retourne { labels[N], kcal[num|null], protein[num|null], carbs[num|null],
 //            fat[num|null], targets:{kcal,p,g,l}, loggedDays } ou null.
