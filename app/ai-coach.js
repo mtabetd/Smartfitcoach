@@ -94,11 +94,13 @@ style.textContent = [
   '#ai-coach-input-area{padding:14px 20px;border-top:1px solid var(--border,#D8D8D0);display:flex;gap:12px;align-items:flex-end;background:var(--ivory,#FAF9F6);flex-shrink:0;}',
   '#ai-coach-input{flex:1;border:none;border-bottom:1px solid var(--border,#D8D8D0);padding:10px 0;font-size:13px;font-family:"Helvetica Neue",Arial,sans-serif;resize:none;height:36px;max-height:120px;background:transparent;color:var(--black,#0A0A09);line-height:1.5;outline:none;}',
   '#ai-coach-input:focus{border-bottom-color:var(--black,#0A0A09);}',
-  '#ai-coach-send{background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;padding:10px 18px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;transition:all 0.2s ease;}',
+  '#ai-coach-send{background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);border-radius:2px;padding:12px 20px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;transition:all 0.2s ease;}',
+  // FIX P2 audit accessibility WCAG : focus-visible visible pour navigation clavier (input + boutons coach)
+  '#ai-coach-input:focus-visible,#ai-coach-send:focus-visible,#ai-coach-mic:focus-visible,.ai-suggestion:focus-visible,.ai-msg-actions button:focus-visible{outline:2px solid var(--black,#0A0A09);outline-offset:2px;}',
   '#ai-coach-send:disabled{opacity:0.35;cursor:not-allowed;}',
   '#ai-coach-send:hover:not(:disabled){background:var(--ivory,#FAF9F6);color:var(--black,#0A0A09);}',
   // POLISH 2026-04 (VOICE) : bouton micro Web Speech API. SVG inline (cohérent design luxe vs emoji).
-  '#ai-coach-mic{background:none;border:1px solid var(--border,#D8D8D0);border-radius:2px;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--grey,#6B6B65);transition:all 0.2s ease;flex-shrink:0;padding:0;}',
+  '#ai-coach-mic{background:none;border:1px solid var(--border,#D8D8D0);border-radius:2px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--grey,#6B6B65);transition:all 0.2s ease;flex-shrink:0;padding:0;}',
   '#ai-coach-mic:hover:not(:disabled){border-color:var(--black,#0A0A09);color:var(--black,#0A0A09);background:var(--ivory2,#F4F4F0);}',
   '#ai-coach-mic:disabled{opacity:0.35;cursor:not-allowed;}',
   '#ai-coach-mic.recording{border-color:var(--red,#5A1010);color:var(--red,#5A1010);background:rgba(90,16,16,0.04);animation:micPulse 1.4s ease-in-out infinite;}',

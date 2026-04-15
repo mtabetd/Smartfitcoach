@@ -840,6 +840,9 @@ window.AUTH = {
       // leak inter-users sur device partagé (user2 voyait sportProgram=validé de user1).
       window.S.sportProgramValidated = false; window.S.sportProgramValidatedAt = null;
       window.S.weekPlanValidated = false; window.S.weekPlanValidatedISOWeek = null;
+      // FIX P0 audit cohérence : pushNotifsEnabled reset (sinon user B hérite
+      // du flag user A → reçoit notifications d'un autre user, fuite confidentialité)
+      window.S.pushNotifsEnabled = true; // défaut activé (l'user pourra désactiver via toggle)
       // COACH ADAPTATIF 2026-04 : reset feedback séances (sinon fuite inter-users).
       window.S.sessionFeedback = {};
       window.S.bonusExercises = {}; window.S.sessionHistory = {};

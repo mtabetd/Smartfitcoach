@@ -2887,7 +2887,7 @@ function renderExtendedSections(wrapper, S) {
 
     // Switch visuel (track + thumb)
     var switchTrack = h('div', {
-      style: 'position:relative;width:44px;height:24px;background:' + (currentEnabled ? 'var(--black,#0A0A09)' : 'var(--border,#D8D8D0)') + ';border-radius:12px;cursor:pointer;transition:background 0.2s ease;flex-shrink:0;',
+      style: 'position:relative;width:48px;height:28px;background:' + (currentEnabled ? 'var(--black,#0A0A09)' : 'var(--border,#D8D8D0)') + ';border-radius:14px;cursor:pointer;transition:background 0.2s ease;flex-shrink:0;',
       onclick: function() {
         var newState = !S.pushNotifsEnabled && S.pushNotifsEnabled !== false ? false : !S.pushNotifsEnabled;
         // Si jamais défini, on le set selon toggle → de true défaut à false (désactivation)
@@ -2905,7 +2905,7 @@ function renderExtendedSections(wrapper, S) {
       }
     });
     var switchThumb = h('div', {
-      style: 'position:absolute;top:2px;left:' + (currentEnabled ? '22px' : '2px') + ';width:20px;height:20px;background:var(--ivory,#FAF9F6);border-radius:50%;box-shadow:0 1px 3px rgba(10,10,9,0.2);transition:left 0.22s cubic-bezier(0.4, 0, 0.2, 1);'
+      style: 'position:absolute;top:2px;left:' + (currentEnabled ? '22px' : '2px') + ';width:24px;height:24px;background:var(--ivory,#FAF9F6);border-radius:50%;box-shadow:0 1px 3px rgba(10,10,9,0.2);transition:left 0.22s cubic-bezier(0.4, 0, 0.2, 1);'
     });
     switchTrack.appendChild(switchThumb);
     toggleRow.appendChild(switchTrack);

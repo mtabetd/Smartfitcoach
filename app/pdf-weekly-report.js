@@ -315,6 +315,50 @@ window.exportWeeklyReportPDF = function() {
       y += 3;
     }
 
+    // ═══ 5b. TENDANCE NUTRITION 30J (P1 audit) ═══
+    y = checkPage(doc, y);
+    var nutTrend = (typeof window.getNutritionTrend === 'function') ? window.getNutritionTrend(30) : null;
+    if (nutTrend && nutTrend.loggedDays >= 3) {
+      y = sectionTitle(doc, y, 'Nutrition 30 jours');
+      var kcalVals = nutTrend.kcal.filter(function(v) { return typeof v === 'number'; });
+      var kcalAvg = kcalVals.length ? Math.round(kcalVals.reduce(function(a,b){return a+b;}, 0) / kcalVals.length) : null;
+      var pVals = nutTrend.protein.filter(function(v) { return typeof v === 'number'; });
+      var pAvg = pVals.length ? Math.round(pVals.reduce(function(a,b){return a+b;}, 0) / pVals.length) : null;
+      var tgtKcal = (nutTrend.targets && nutTrend.targets.kcal) ? nutTrend.targets.kcal : null;
+      var tgtP = (nutTrend.targets && nutTrend.targets.p) ? nutTrend.targets.p : null;
+      if (kcalAvg !== null) {
+        y = kvLine(doc, y, 'Kcal moyennes (30j)',
+          kcalAvg.toLocaleString('fr-FR') + (tgtKcal ? ' / ' + tgtKcal.toLocaleString('fr-FR') + ' kcal' : ' kcal'));
+      }
+      if (pAvg !== null) {
+        y = kvLine(doc, y, 'Protéines moyennes (30j)',
+          pAvg + ' g' + (tgtP ? ' / ' + tgtP + ' g' : ''));
+      }
+      y = kvLine(doc, y, 'Jours loggés', nutTrend.loggedDays + ' / 30 j', { emphasis: false });
+      y += 5;
+    }
+
+    // ═══ 5c. PROGRESSION CHARGES 30J (P1 audit) ═══
+    y = checkPage(doc, y);
+    var strengthTrend = (typeof window.getStrengthTrend === 'function') ? window.getStrengthTrend(30) : null;
+    if (strengthTrend && Array.isArray(strengthTrend.datasets) && strengthTrend.datasets.length > 0) {
+      y = sectionTitle(doc, y, 'Progression charges 30 jours');
+      strengthTrend.datasets.forEach(function(ds) {
+        y = checkPage(doc, y);
+        var deltaTxt = '—';
+        var deltaCol = grey;
+        if (typeof ds.lastValue === 'number' && typeof ds.firstValue === 'number') {
+          var delta = ds.lastValue - ds.firstValue;
+          var deltaPct = ds.firstValue > 0 ? (delta / ds.firstValue) * 100 : null;
+          var sign = delta > 0 ? '+' : '';
+          deltaTxt = ds.lastValue + ' kg   ' + sign + delta.toFixed(1) + ' kg' + (deltaPct !== null ? ' (' + sign + deltaPct.toFixed(1) + '%)' : '');
+          deltaCol = (delta > 0) ? green : (delta < 0 ? red : grey);
+        }
+        y = kvLine(doc, y, ds.name, deltaTxt, { valueColor: deltaCol });
+      });
+      y += 5;
+    }
+
     // ═══ 6. FOOTER — DISCLAIMER + WATERMARK ═══
     y = checkPage(doc, y);
     y += 4;

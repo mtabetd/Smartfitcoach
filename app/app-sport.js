@@ -483,6 +483,17 @@ function generateSportProgram() {
  });
  }
 
+ // FIX P0 audit ACOG 2020 : grossesse T2/T3 (semaine ≥ 14) → exclure les exercices
+ // en décubitus dorsal (allongé sur le dos), risque compression veine cave inférieure.
+ // Ex : développé couché barre/haltères, leg press, presse pectoraux décliné, crunch sol.
+ if (S.pregnant && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 14) {
+ available = available.filter(function(ex){
+   var n = String(ex.n || ex.name || '').toLowerCase();
+   // Exclure tout mouvement allongé sur le dos (DC, leg press inclinée vers le bas, etc.)
+   if (/d[eé]velopp[eé] couch[eé]|developpe couche|bench press|leg press|presse[\s-]?cuisses|crunch|sit.?up|décliné|decline|hip thrust|glute bridge sol/.test(n)) return false;
+   return true;
+ });
+ }
  // Medical restrictions: filter exercises based on muscuMedical profile
  if (S.muscuMedical && S.muscuMedical.done) {
  available = available.filter(function(ex){ return filterExerciseByMedical(ex, S.muscuMedical); });
@@ -491,7 +502,12 @@ function generateSportProgram() {
  if (available.length === 0) {
    available = pool.filter(function(ex){ return filterExerciseByMedical(ex, S.muscuMedical); });
  }
- // Si toujours vide après élargissement : laisser vide — renderMusculationProgram affichera l'erreur
+ // FIX P0 audit cohérence : si encore vide après élargissement (multi-pathologies extrêmes),
+ // logger + flag warning pour que l'UI alerte l'user (au lieu de programme vide silencieux).
+ if (available.length === 0) {
+   console.warn('[generateSportProgram] Pool d\'exos vide après filtrage médical — multi-pathologies probable. groupe=', group, 'niveau=', level, 'restrictions=', S.muscuMedical);
+   try { S._sportFilterIncomplete = true; } catch(_e) {}
+ }
  }
 
  var pri = categoryPriority[group] || 1;
