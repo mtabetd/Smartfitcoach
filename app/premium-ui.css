@@ -711,6 +711,27 @@ html {
   cursor: pointer;
 }
 
+/* -------------------------------------------------------
+   FIX SPRINT P1.1 audit UX (2026-04-15) — Tap targets ≥ 44px (WCAG 2.5.5)
+   77% des tap targets sur Today < 44px (audit Sprint P1).
+   Application universelle aux <button> et <a> avec exception pour les
+   éléments décoratifs (icon-only) qui ont width/height explicites.
+   ------------------------------------------------------- */
+button:not([data-icon-only]):not(.set-load-input):not(.set-reps-input),
+a.btn-link {
+  min-height: 44px;
+}
+/* Inputs numériques (charge/reps/RIR) : 16px font + tap target ≥ 44px */
+input[type="number"]:not([data-mini]),
+input[inputmode="numeric"]:not([data-mini]),
+input[inputmode="decimal"]:not([data-mini]) {
+  min-height: 44px;
+  font-size: 16px; /* anti-zoom iOS */
+}
+/* Liens dans nav/header : tap target garanti */
+.nav-tabs a, .main-nav button, .main-nav-tab {
+  min-height: 44px;
+}
 
 /* -------------------------------------------------------
    21. LOADING SKELETON

@@ -1700,8 +1700,26 @@ function renderCardSport() {
     c.appendChild(_statsRow);
   }
 
+  // FIX SPRINT P1.3 — Mini-aperçu des 3 premiers exos (audit UX flow)
+  // Avant : user devait cliquer "Commencer" pour voir les exos. Maintenant : aperçu direct.
+  if (Array.isArray(day.exercises) && day.exercises.length > 0) {
+    var _exosPreview = h('div', { style: 'margin:12px 0 16px;padding:12px 0;border-top:1px solid var(--line,#D8D8D0);' });
+    day.exercises.slice(0, 3).forEach(function(ex, exIdx) {
+      var exRow = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;font-family:Georgia,serif;font-size:13px;color:var(--ink-900,#0A0A09);' });
+      exRow.appendChild(h('span', { style: 'flex:1;font-style:italic;' }, (exIdx + 1) + '. ' + (ex.n || ex.name || '')));
+      var setsRepsTxt = String(ex.sets || '3') + (ex.reps ? ' × ' + ex.reps : '');
+      exRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-500,#6B6B65);letter-spacing:0.5px;margin-left:8px;' }, setsRepsTxt));
+      _exosPreview.appendChild(exRow);
+    });
+    if (day.exercises.length > 3) {
+      _exosPreview.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--ink-500,#6B6B65);text-align:center;margin-top:6px;letter-spacing:1px;' }, '+ ' + (day.exercises.length - 3) + ' autres exos'));
+    }
+    c.appendChild(_exosPreview);
+  }
+
+  // FIX SPRINT P1.3 — bouton "Commencer la séance" plus prominent (full-width, padding)
   var btn = h('button', {
-    style: 'padding:12px 16px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+    style: 'display:block;width:100%;padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;min-height:52px;font-weight:500;',
     onclick: function() {
       var S2 = window.S;
       if (!S2) return;
@@ -1709,7 +1727,7 @@ function renderCardSport() {
       S2.selectedSportDay = idx;
       if (window.render) window.render();
     }
-  }, '\u2192 Commencer la séance');
+  }, '→ Commencer la séance');
   c.appendChild(btn);
 
   return c;

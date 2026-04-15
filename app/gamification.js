@@ -281,6 +281,27 @@ function showToast(message, duration) {
   }, duration);
 }
 
+// FIX SPRINT P1.5 — exposer showToast sur window pour usage cross-module
+// (logger série muscu, valider repas, save profil, etc.).
+// Signature étendue : showToast(message, type, duration). type ∈ {success, error, info}
+if (typeof window !== 'undefined') {
+  window.showToast = function(message, typeOrDuration, duration) {
+    var typ = (typeof typeOrDuration === 'string') ? typeOrDuration : null;
+    var dur = (typeof typeOrDuration === 'number') ? typeOrDuration : (duration || 2200);
+    var existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    var toast = document.createElement('div');
+    toast.className = 'toast' + (typ ? ' toast-' + typ : '');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(function(){ toast.classList.add('show'); }, 10);
+    setTimeout(function(){
+      toast.classList.remove('show');
+      setTimeout(function(){ toast.remove(); }, 300);
+    }, dur);
+  };
+}
+
 // ─── DAILY QUOTE ───
 function getDailyQuote() {
   var today = new Date();

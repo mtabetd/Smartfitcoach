@@ -1724,7 +1724,7 @@ function renderChargesQuestionnaire(p) {
  inputmode: 'decimal', autocomplete: 'off',
  value: currentVal ? String(currentVal) : '',
  placeholder: '\u2014',
- style: 'width:60px;padding:8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory)',
+ style: 'width:80px;padding:10px 8px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);min-height:44px;',
  onchange: (function(key) { return function(e) {
  var v = parseFloat(e.target.value);
  if (!isNaN(v) && v > 0) S.muscuStrengthProfile[key] = v;
@@ -1747,7 +1747,7 @@ function renderChargesQuestionnaire(p) {
  var repInp = h('input', {
  type: 'number', min: '1', max: '30', value: String(currentReps),
  inputmode: 'numeric', autocomplete: 'off', 'aria-label': 'Nombre de répétitions',
- style: 'width:38px;padding:6px 4px;border:1px solid var(--border);font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);margin-left:4px',
+ style: 'width:56px;padding:10px 4px;border:1px solid var(--border);font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);margin-left:4px;min-height:44px;',
  onchange: (function(rkey, wkey) { return function(e) {
  var rv = parseInt(e.target.value);
  if (!isNaN(rv) && rv >= 1 && rv <= 30) S.muscuStrengthProfile[rkey] = rv;
@@ -6560,6 +6560,20 @@ function renderMusculationProgram(p) {
 
  // Tick de confirmation
  if (window.RestTimer) window.RestTimer.playTick();
+
+ // FIX SPRINT P1.5 — Toast "✓ Série loggée" feedback visuel
+ try { if (window.showToast) window.showToast('✓ Série loggée', 'success', 1400); } catch(_eT) {}
+
+ // FIX SPRINT P1.10 — Autofocus input REPS de la série suivante (gain UX mobile)
+ try {
+   var nextRow = e.target.closest('.set-row');
+   if (nextRow && nextRow.nextElementSibling && nextRow.nextElementSibling.classList.contains('set-row')) {
+     setTimeout(function() {
+       var nextRepsInput = nextRow.nextElementSibling.querySelector('input[inputmode="numeric"]');
+       if (nextRepsInput && !nextRepsInput.disabled) nextRepsInput.focus();
+     }, 100);
+   }
+ } catch(_eF) {}
 
  var isLastSet = _si >= _numSets - 1;
 
