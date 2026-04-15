@@ -148,7 +148,9 @@ function sanitizeContext(ctx) {
     'intolerances', 'halal',
     // COACH ADAPTATIF 2026-04 (phase A) : feedback séances + performance semaine + cycle
     'lastSessionFeedback', 'weekPerformance',
-    'nextSessionScheduled', 'cyclePhase'
+    'nextSessionScheduled', 'cyclePhase',
+    // POLISH 2026-04 (INSIGHTS) : synthèse hebdo + patterns détectés côté client
+    'weekInsights'
   ];
 
   var safe = {};
@@ -310,6 +312,29 @@ function sanitizeContext(ctx) {
         var ifac = parseFloat(val.intensityFactor);
         if (!isNaN(ifac) && isFinite(ifac)) cp2.intensityFactor = Math.round(ifac * 100) / 100;
         safe.cyclePhase = cp2;
+      }
+    }
+    else if (field === 'weekInsights') {
+      // { sessions, sleepAvg, rpeAvg, patterns:[{id, severity, label}] }
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        var wi = {};
+        var s = parseFloat(val.sessions);
+        if (!isNaN(s) && isFinite(s)) wi.sessions = Math.round(s);
+        var sa = parseFloat(val.sleepAvg);
+        if (!isNaN(sa) && isFinite(sa) && sa >= 0 && sa <= 5) wi.sleepAvg = Math.round(sa * 10) / 10;
+        var ra = parseFloat(val.rpeAvg);
+        if (!isNaN(ra) && isFinite(ra) && ra >= 0 && ra <= 10) wi.rpeAvg = Math.round(ra * 10) / 10;
+        if (Array.isArray(val.patterns)) {
+          wi.patterns = val.patterns.slice(0, 3).map(function(p) {
+            if (!p || typeof p !== 'object') return null;
+            var pp = {};
+            if (p.id) pp.id = sanitizeString(String(p.id), 30);
+            if (p.severity) pp.severity = sanitizeString(String(p.severity), 10);
+            if (p.label) pp.label = sanitizeString(String(p.label), 120);
+            return pp;
+          }).filter(function(x) { return x && x.id; });
+        }
+        safe.weekInsights = wi;
       }
     }
     else {
@@ -671,6 +696,23 @@ function buildSystemPrompt(ctx) {
     lines.push('PROCHAINE SÉANCE: ' + nssParts.join(' | '));
   }
 
+  // POLISH 2026-04 (INSIGHTS) : insights hebdo + patterns détectés côté client.
+  // Permet à l'IA de référencer spontanément les signaux forts (fatigue, progression).
+  if (ctx.weekInsights) {
+    var wi2 = ctx.weekInsights;
+    var wiParts = [];
+    if (typeof wi2.sessions === 'number') wiParts.push(wi2.sessions + ' séances');
+    if (typeof wi2.sleepAvg === 'number') wiParts.push('sommeil moyen ' + wi2.sleepAvg + '/5');
+    if (typeof wi2.rpeAvg === 'number') wiParts.push('RPE moyen ' + wi2.rpeAvg + '/10');
+    if (wiParts.length) lines.push('INSIGHTS 7J: ' + wiParts.join(' | '));
+    if (Array.isArray(wi2.patterns) && wi2.patterns.length) {
+      wi2.patterns.forEach(function(p) {
+        var sev = p.severity === 'alert' ? '⚠️' : (p.severity === 'warning' ? '⚡' : 'ℹ️');
+        lines.push(sev + ' PATTERN (' + p.id + ') : ' + (p.label || ''));
+      });
+    }
+  }
+
   // Règles adaptatives — seulement si on a des infos sport pour éviter du bruit
   if (ctx.lastSessionFeedback || ctx.weekPerformance || ctx.sportType) {
     lines.push('');
@@ -687,6 +729,11 @@ function buildSystemPrompt(ctx) {
       lines.push('- Grossesse : pas de Valsalva, pas de charges maximales, intensité modérée, hydratation +++.');
     }
     lines.push('- Toujours chiffrer les ajustements (ex: "passe de 60 à 62,5kg au DC") plutôt que vague.');
+    // Si patterns détectés, l'IA doit les adresser proactivement sans attendre
+    // que l'user pose la question (sauf si user change de sujet clairement).
+    if (ctx.weekInsights && Array.isArray(ctx.weekInsights.patterns) && ctx.weekInsights.patterns.length) {
+      lines.push('- Si un PATTERN est signalé ci-dessus (alert/warning), l\'intégrer naturellement dans ta réponse sans paraître alarmiste.');
+    }
   }
 
   return lines.join('\n');

@@ -253,6 +253,27 @@ function buildContext() {
       var _cp = window.getCyclePhaseForAI();
       if (_cp) ctx.cyclePhase = _cp;
     }
+    // POLISH 2026-04 (INSIGHTS) : insights hebdo condensés pour que l'IA puisse
+    // référencer les patterns détectés (fatigue, progression, sur-entraînement).
+    // getWeekInsights retourne déjà { sessions, kcalTotal, sleepAvg, rpeAvg,
+    //   chargeProgressionPct, lastPain, patterns:[{id,severity,label}] }.
+    // On envoie un extrait léger pour économiser les tokens (labels seulement, pas advice).
+    if (typeof window.getWeekInsights === 'function') {
+      var _wi = window.getWeekInsights();
+      if (_wi) {
+        var compact = {};
+        if (typeof _wi.sessions === 'number') compact.sessions = _wi.sessions;
+        if (typeof _wi.sleepAvg === 'number') compact.sleepAvg = _wi.sleepAvg;
+        if (typeof _wi.rpeAvg === 'number') compact.rpeAvg = _wi.rpeAvg;
+        if (Array.isArray(_wi.patterns) && _wi.patterns.length) {
+          // Top 3 patterns — id + severity + label uniquement (tokens économisés)
+          compact.patterns = _wi.patterns.slice(0, 3).map(function(p) {
+            return { id: p.id, severity: p.severity, label: p.label };
+          });
+        }
+        if (Object.keys(compact).length > 0) ctx.weekInsights = compact;
+      }
+    }
   } catch(_e) {}
 
   return ctx;
