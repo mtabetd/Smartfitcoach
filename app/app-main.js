@@ -1085,12 +1085,19 @@ function renderProfilePage(container) {
        ];
        linkedKeys.forEach(function(k) {
          var v = _readJSON(k);
-         if (v !== null) linkedData[k] = v;
-         else {
-           // Non-JSON (ex: flag '1') : lire brut
-           var raw = null;
-           try { raw = localStorage.getItem(k); } catch(e) {}
-           if (raw !== null) linkedData[k] = raw;
+         if (v !== null) { linkedData[k] = v; return; }
+         // FIX CONTRE-AUDIT : non-JSON (flag '1') OU JSON corrompu → on encapsule
+         // dans { _raw, _corrupt } pour éviter que du texte brut invalide pollue
+         // le fichier JSON final + signale clairement à l'user une incohérence.
+         var raw = null;
+         try { raw = localStorage.getItem(k); } catch(e) {}
+         if (raw === null || raw === undefined) return;
+         // Test si c'est un simple string (flag) ou un JSON qu'on n'arrive pas à parser
+         var isSimpleFlag = /^[\w\-\s]{1,50}$/.test(raw);
+         if (isSimpleFlag) {
+           linkedData[k] = raw; // flag texte propre : OK
+         } else {
+           linkedData[k] = { _raw: raw.slice(0, 10000), _corrupt: true, _note: 'Contenu localStorage non parsable en JSON. Signaler au support si ce n\'est pas attendu.' };
          }
        });
        // 3. Métadonnées export
@@ -1106,7 +1113,22 @@ function renderProfilePage(container) {
               + 'photos de progression (base64), historique poids, streak, badges, '
               + 'feedback coach, progression charges muscu, wellness.'
        };
-       var blob = new Blob([JSON.stringify(exportPayload, null, 2)], {type: 'application/json'});
+       // FIX CONTRE-AUDIT : sérialisation dans try + check taille + confirmation si gros.
+       // Les photos base64 peuvent gonfler l'export à 50+ MB (Blob OK jusqu'à ~500 MB
+       // en browser, mais perf dégradée sur mobile + download peut échouer).
+       var jsonStr;
+       try { jsonStr = JSON.stringify(exportPayload, null, 2); }
+       catch(serErr) {
+         alert('Impossible de sérialiser tes données (trop volumineuses ou corrompues). Contacte le DPO si le problème persiste.');
+         return;
+       }
+       var sizeMB = (jsonStr.length / (1024 * 1024));
+       if (sizeMB > 50) {
+         var ok = window.confirm('Ton export fait ' + sizeMB.toFixed(1) + ' Mo (contient probablement beaucoup de photos). '
+           + 'Le téléchargement peut être long. Continuer ?');
+         if (!ok) return;
+       }
+       var blob = new Blob([jsonStr], {type: 'application/json'});
        var url = URL.createObjectURL(blob);
        var a = document.createElement('a');
        var dateStr = new Date().toISOString().slice(0, 10);

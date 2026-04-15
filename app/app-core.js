@@ -493,7 +493,26 @@ window.showMedicalDisclaimerIfNeeded = function() {
     sheet.appendChild(btn);
     overlay.appendChild(sheet);
     document.body.appendChild(overlay);
-    // Accessibilité : focus sur le bouton de validation
+    // FIX CONTRE-AUDIT : focus trap WCAG AA. Tab/Shift+Tab rebouclent DANS le modal,
+    // empêchant l'user de sortir vers l'app derrière (garanti lecture effective).
+    var focusables = [cguLink, btn];
+    overlay.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab') {
+        var idx = focusables.indexOf(document.activeElement);
+        if (e.shiftKey) {
+          if (idx <= 0) { e.preventDefault(); focusables[focusables.length - 1].focus(); }
+        } else {
+          if (idx === focusables.length - 1 || idx === -1) { e.preventDefault(); focusables[0].focus(); }
+        }
+      }
+    });
+    // Bloque aussi le body scroll pendant que le modal est ouvert
+    var _prevBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    btn.addEventListener('click', function _restoreOnClose() {
+      document.body.style.overflow = _prevBodyOverflow || '';
+    }, { once: true });
+    // Accessibilité : focus initial sur le bouton de validation
     setTimeout(function() { try { btn.focus(); } catch(e) {} }, 100);
     return true;
   } catch(e) { return false; }
