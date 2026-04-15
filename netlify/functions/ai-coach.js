@@ -127,7 +127,13 @@ function sanitizeContext(ctx) {
     'muscuWeights', 'strengthProfile',
     'hyroxLevel', 'hyroxGoal', 'hyroxWeek',
     'runningLevel', 'runningGoal', 'runningWeek',
-    'cyclingLevel', 'cyclingGoal', 'appMode'
+    'cyclingLevel', 'cyclingGoal', 'appMode',
+    // FIX COACH IA CONTEXT 2026-04 : pertinence + sécurité (grossesse, blessures, streak)
+    'pregnant', 'pregnancyWeek', 'breastfeeding',
+    'cycleTracking', 'cycleLength', 'lastPeriodDate',
+    'trainingDaysSelected', 'trainTime', 'mealsPerDay',
+    'muscuMedical', 'medical', 'streak',
+    'intolerances', 'halal'
   ];
 
   var safe = {};
@@ -403,8 +409,61 @@ function buildSystemPrompt(ctx) {
   var constraints = [];
   if (ctx.regime) constraints.push('Régime:' + ctx.regime);
   if (Array.isArray(ctx.allergies) && ctx.allergies.length) constraints.push('Allergies:' + ctx.allergies.join(','));
+  if (Array.isArray(ctx.intolerances) && ctx.intolerances.length) constraints.push('Intolérances:' + ctx.intolerances.join(','));
+  if (ctx.halal) constraints.push('Halal');
   if (ctx.excluded) constraints.push('Exclusions:' + ctx.excluded);
+  if (ctx.mealsPerDay) constraints.push('Repas/jour:' + ctx.mealsPerDay);
   if (constraints.length) lines.push('CONTRAINTES: ' + constraints.join(' | '));
+
+  // FIX COACH IA CONTEXT 2026-04 : bloc SANTÉ FÉMININE (sécurité critique)
+  // L'IA DOIT savoir si l'user est enceinte / allaite / suit son cycle pour éviter
+  // des recommandations dangereuses (jeûne intermittent, restriction calorique, etc.)
+  var health = [];
+  if (ctx.pregnant) {
+    var trim = '';
+    if (ctx.pregnancyWeek) {
+      var w = Number(ctx.pregnancyWeek);
+      if (w <= 12) trim = 'T1';
+      else if (w <= 26) trim = 'T2';
+      else trim = 'T3';
+      health.push('⚠️ ENCEINTE semaine ' + w + ' (' + trim + ')');
+    } else {
+      health.push('⚠️ ENCEINTE');
+    }
+  }
+  if (ctx.breastfeeding) health.push('⚠️ ALLAITEMENT en cours');
+  if (ctx.cycleTracking && ctx.cycleLength) health.push('Cycle:' + ctx.cycleLength + 'j');
+  if (health.length) {
+    lines.push('SANTÉ: ' + health.join(' | '));
+    if (ctx.pregnant || ctx.breastfeeding) {
+      lines.push('⚠️ SÉCURITÉ CLINIQUE : pas de déficit calorique, pas de jeûne, pas de compléments non validés. Suivre ACOG 2022 (+340 T2, +450 T3, +450 allaitement).');
+    }
+  }
+
+  // FIX 2026-04 : blessures et restrictions médicales muscu
+  var medicalNotes = [];
+  if (Array.isArray(ctx.medical) && ctx.medical.length) {
+    medicalNotes.push('Médical:' + ctx.medical.join(','));
+  }
+  if (ctx.muscuMedical && typeof ctx.muscuMedical === 'object') {
+    var muscuLimits = Object.keys(ctx.muscuMedical).filter(function(k) { return ctx.muscuMedical[k]; });
+    if (muscuLimits.length) medicalNotes.push('Restrictions muscu:' + muscuLimits.join(','));
+  }
+  if (medicalNotes.length) lines.push('LIMITATIONS: ' + medicalNotes.join(' | '));
+
+  // FIX 2026-04 : jours d'entraînement et timing — pour conseils nutrition pré/post-séance
+  var sportContext = [];
+  if (Array.isArray(ctx.trainingDaysSelected) && ctx.trainingDaysSelected.length) {
+    var dayNames = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+    sportContext.push('Jours training:' + ctx.trainingDaysSelected.map(function(i) { return dayNames[i] || i; }).join(','));
+  }
+  if (ctx.trainTime) sportContext.push('Heure séance:' + ctx.trainTime);
+  if (sportContext.length) lines.push('PLANNING: ' + sportContext.join(' | '));
+
+  // FIX 2026-04 : streak pour personnalisation motivationnelle
+  if (ctx.streak && ctx.streak > 0) {
+    lines.push('STREAK: ' + ctx.streak + ' jour' + (ctx.streak > 1 ? 's' : '') + ' consécutif' + (ctx.streak > 1 ? 's' : '') + ' (mentionner si pertinent pour encourager)');
+  }
 
   if (ctx.muscuWeights) {
     var wobj = ctx.muscuWeights;

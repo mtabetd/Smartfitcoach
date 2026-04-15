@@ -2379,6 +2379,12 @@ window.S = {
   // Maintenant : weekPlan figé jusqu'à revalidation explicite user.
   weekPlanValidated: false,
   weekPlanValidatedISOWeek: null,
+  // FIX VALIDATION SPORTPROGRAM 2026-04 : même pattern pour le programme muscu
+  // (le fix #4 ayant supprimé Math.random dans exerciseCountForPriority, la
+  // régénération est déterministe — mais le flag sert à indiquer visuellement
+  // que l'user a validé son programme et à empêcher des dérives futures).
+  sportProgramValidated: false,
+  sportProgramValidatedAt: null,
   // Food habits
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,

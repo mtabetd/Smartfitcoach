@@ -229,27 +229,32 @@ function generateSportProgram() {
  // beginner: pri 5 = 2-3, 4 = 2, 3 = 1-2, 2 = 1, 1 = 1
  // intermediate: pri 5 = 3-4, 4 = 3, 3 = 2-3, 2 = 2, 1 = 1-2 (original)
  // advanced: pri 5 = 4-5, 4 = 4, 3 = 3-4, 2 = 2-3, 1 = 2
+ // FIX DÉTERMINISME MUSCU 2026-04 : suppression des Math.round(Math.random()) dans le
+ // count d'exercices par priorité. Avant : chaque régénération donnait un nb d'exos différent
+ // (2 ou 3, 3 ou 4, etc.) → plan muscu structurellement différent à chaque génération silencieuse.
+ // Maintenant : nombre d'exercices déterministe par niveau + priorité. Même profil = même count.
+ // (Le random reste dans le sort des exos pour diversité, mais c'est moins impactant.)
  function exerciseCountForPriority(pri) {
  var lvl = S.sportLevel || 'intermediate';
  if (lvl === 'beginner') {
- if (pri >= 5) return 2 + Math.round(Math.random()); // 2-3
+ if (pri >= 5) return 3; // volume max sur la priorité top
  if (pri === 4) return 2;
- if (pri === 3) return 1 + Math.round(Math.random()); // 1-2
+ if (pri === 3) return 2;
  if (pri === 2) return 1;
  return 1;
  } else if (lvl === 'advanced') {
- if (pri >= 5) return 4 + Math.round(Math.random()); // 4-5
+ if (pri >= 5) return 5;
  if (pri === 4) return 4;
- if (pri === 3) return 3 + Math.round(Math.random()); // 3-4
- if (pri === 2) return 2 + Math.round(Math.random()); // 2-3
+ if (pri === 3) return 4;
+ if (pri === 2) return 3;
  return 2;
  } else {
- // intermediate (original behaviour)
- if (pri >= 5) return 3 + Math.round(Math.random());
+ // intermediate
+ if (pri >= 5) return 4;
  if (pri === 4) return 3;
- if (pri === 3) return 2 + Math.round(Math.random());
+ if (pri === 3) return 3;
  if (pri === 2) return 2;
- return 1 + Math.round(Math.random());
+ return 2;
  }
  }
 
@@ -4155,6 +4160,9 @@ function renderMusculationZones(p) {
    return;
  }
  S.sportProgram = _prog;
+ // FIX VALIDATION SPORTPROGRAM 2026-04 : marquer validé (bouton "Générer" explicite)
+ S.sportProgramValidated = true;
+ S.sportProgramValidatedAt = new Date().toISOString();
  S.selectedSportDay = 0;
  S.sStep = 4;
  window.BLACKBOX && window.BLACKBOX.log('sport_program_generated', {days: S.sportDays, focus: S.sportFocus, duration: S.sportSessionDuration});
@@ -5078,7 +5086,15 @@ function renderWeekTracker(p) {
  var uid2 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
  try { localStorage.setItem('mtd_muscu_start_' + uid2, S.muscuProgramStart); } catch(e) { console.warn('[muscu_cycle] localStorage error:', e); }
  try { localStorage.setItem('mtd_muscu_cycle_' + uid2, String(S.muscuCycle)); } catch(e) { console.warn('[muscu_cycle] localStorage error:', e); }
- try { var _newProg = generateSportProgram(); if (_newProg && _newProg.length) S.sportProgram = _newProg; } catch(e) { console.error('[nouveau_cycle] generateSportProgram failed', e); }
+ try {
+   var _newProg = generateSportProgram();
+   if (_newProg && _newProg.length) {
+     S.sportProgram = _newProg;
+     // FIX VALIDATION SPORTPROGRAM 2026-04 : marquer validé (nouveau cycle explicite)
+     S.sportProgramValidated = true;
+     S.sportProgramValidatedAt = new Date().toISOString();
+   }
+ } catch(e) { console.error('[nouveau_cycle] generateSportProgram failed', e); }
  S.selectedSportDay = 0;
  saveMuscuWeek(1);
  window.render();
@@ -5247,6 +5263,11 @@ function renderMusculationProgram(p) {
        try {
          S._generatingProgram = false;
          S.sportProgram = generateSportProgram();
+         // FIX VALIDATION SPORTPROGRAM 2026-04 : marquer validé après génération initiale
+         if (S.sportProgram && S.sportProgram.length > 0) {
+           S.sportProgramValidated = true;
+           S.sportProgramValidatedAt = new Date().toISOString();
+         }
          if (!S.sportProgram || S.sportProgram.length === 0 || S.sportProgram.every(function(d){ return !d.exercises || d.exercises.length === 0; })) {
            console.error('[sport] generateSportProgram returned empty program');
            S._generatingProgram = false;
@@ -7068,6 +7089,9 @@ function renderMusculationProgram(p) {
    var _regen = generateSportProgram();
    if (_regen && _regen.length > 0) {
      S.sportProgram = _regen;
+     // FIX VALIDATION SPORTPROGRAM 2026-04 : marquer validé (recalcul explicite user)
+     S.sportProgramValidated = true;
+     S.sportProgramValidatedAt = new Date().toISOString();
      S.selectedSportDay = 0;
      window.BLACKBOX && window.BLACKBOX.log('sport_program_regenerated');
    } else {

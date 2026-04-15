@@ -105,6 +105,8 @@ var PROFILE_KEYS = [
  'favoriteRecipes',
  // FIX VALIDATION WEEKPLAN 2026-04 : flags de validation utilisateur
  'weekPlanValidated', 'weekPlanValidatedISOWeek',
+ // FIX VALIDATION SPORTPROGRAM 2026-04 : même pattern pour programme muscu
+ 'sportProgramValidated', 'sportProgramValidatedAt',
  // Timestamp dernière sync cloud — comparaison anti-écrasement dans SupaSync.syncOnLogin
  '_cloudUpdatedAt',
  // Smart Calendar
@@ -656,6 +658,20 @@ function renderProfilePage(container) {
  sec1.appendChild(_infoRow('Taille', S.height ? S.height + ' cm' : null));
  var _bmiVal = (typeof calcBMI === 'function') ? calcBMI() : null;
  sec1.appendChild(_infoRow('IMC', _bmiVal ? _bmiVal.toFixed(1) : null));
+ // FIX STREAK PROFIL 2026-04 : afficher le streak dans la fiche perso (source unique
+ // = localStorage mtd_streak_<uid>, même source que dashboard et gamification).
+ (function() {
+   try {
+     var _uidStreak = user && user.id ? user.id : 'anon';
+     var _sRaw = localStorage.getItem('mtd_streak_' + _uidStreak);
+     if (_sRaw) {
+       var _sObj = JSON.parse(_sRaw);
+       if (_sObj && typeof _sObj.current === 'number' && _sObj.current > 0) {
+         sec1.appendChild(_infoRow('Streak', _sObj.current + ' jour' + (_sObj.current > 1 ? 's' : '')));
+       }
+     }
+   } catch(eStreak) {}
+ })();
  if (S.sex === 'femme' && S.pregnant) sec1.appendChild(_infoRow('Grossesse', 'Semaine ' + (S.pregnancyWeek || '?')));
  if (S.sex === 'femme' && S.cycleTracking) sec1.appendChild(_infoRow('Cycle', S.cycleLength + ' jours'));
  c.appendChild(sec1);
@@ -666,10 +682,19 @@ function renderProfilePage(container) {
  var _goalName = (function() { var g = window.GOALS; if (g && Array.isArray(g) && S.goal !== null && S.goal !== undefined && g[S.goal]) return g[S.goal].icon + ' ' + g[S.goal].name; return null; })();
  sec2.appendChild(_infoRow('Objectif', _goalName));
  if (S.targetWeight) sec2.appendChild(_infoRow('Poids cible', S.targetWeight + ' kg'));
- var _tgtCal = (typeof calcTarget === 'function') ? calcTarget() : 0;
- if (_tgtCal > 0) sec2.appendChild(_infoRow('Calories/jour', _tgtCal + ' kcal'));
- var _macros = (typeof calcMacros === 'function') ? calcMacros() : null;
- if (_macros) sec2.appendChild(_infoRow('Macros (P/G/L)', _macros.p + 'g / ' + _macros.g + 'g / ' + _macros.l + 'g'));
+ // FIX COHÉRENCE PROFIL 2026-04 : utiliser getCalorieTarget/getMacroTargets (même source
+ // que le dashboard) au lieu de calcTarget/calcMacros bruts.
+ // Avant : profil affichait 2200 kcal (théorique jour training) tandis que dashboard
+ //         affichait 1980 kcal (appliqué calMultiplier jour repos -10%). Divergence visible.
+ // Maintenant : les 3 vues (profil + dashboard + planning) affichent les mêmes chiffres.
+ var _tgtCal = (typeof window.getCalorieTarget === 'function')
+   ? window.getCalorieTarget()
+   : ((typeof calcTarget === 'function') ? calcTarget() : 0);
+ if (_tgtCal > 0) sec2.appendChild(_infoRow('Calories/jour', Math.round(_tgtCal) + ' kcal'));
+ var _macros = (typeof window.getMacroTargets === 'function')
+   ? window.getMacroTargets()
+   : ((typeof calcMacros === 'function') ? calcMacros() : null);
+ if (_macros) sec2.appendChild(_infoRow('Macros (P/G/L)', Math.round(_macros.p) + 'g / ' + Math.round(_macros.g) + 'g / ' + Math.round(_macros.l) + 'g'));
  var _actName = (window.ACTIVITIES && S.activity !== null && S.activity !== undefined && window.ACTIVITIES[S.activity]) ? window.ACTIVITIES[S.activity].name : null;
  sec2.appendChild(_infoRow('Activit\u00e9', _actName));
  var _regNames = ['Omnivore', 'Pesc\u00e9tarien', 'V\u00e9g\u00e9tarien', 'V\u00e9gan'];
