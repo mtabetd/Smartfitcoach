@@ -377,10 +377,14 @@ window.exportWeeklyReportPDF = function() {
             y = kvLine(doc, y, lift.name, v + ' kg');
           }
         });
-        // Cycle haltéro en cours si existant
-        if (_S.cfHalteroCycleWeek) {
+        // Cycle haltéro en cours — dérivé depuis HALTERO_CYCLES si pas stocké (audit backend fix).
+        var _cycleWk = _S.cfHalteroCycleWeek;
+        if (!_cycleWk && window.HALTERO_CYCLES && typeof window.HALTERO_CYCLES.getCurrentCycle === 'function' && typeof _S.crossfitWeek === 'number') {
+          try { var _info = window.HALTERO_CYCLES.getCurrentCycle(_S.crossfitWeek); _cycleWk = _info && _info.weekInCycle; } catch(_e) {}
+        }
+        if (_cycleWk) {
           y = checkPage(doc, y);
-          y = kvLine(doc, y, 'Cycle haltérophilie', 'Semaine ' + _S.cfHalteroCycleWeek + ' / 6');
+          y = kvLine(doc, y, 'Cycle haltérophilie', 'Semaine ' + _cycleWk + ' / 6');
         }
         y += 5;
       }

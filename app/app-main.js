@@ -36,7 +36,7 @@ var PROFILE_KEYS = [
  'sportType','crossfitLevel','crossfitCompGoal','crossfitOpenDate',
  'trainTime',
  // CrossFit progress (calendar, current day, weekly cycle)
- 'cfProgress','cfCurrentDay','crossfitWeek','crossfitCycleWeek','selectedCrossfitDay',
+ 'cfProgress','cfCurrentDay','crossfitWeek','crossfitCycleWeek','cfHalteroCycleWeek','selectedCrossfitDay',
  // Running
  'runningLevel','runningGoal','runningDays','runningPace','runningVO2max','runningWeek','selectedRunDay','runningProgram',
  // Hyrox
@@ -1601,8 +1601,22 @@ function render() {
  if (window.TODAY) {
    window.TODAY.render(content);
  } else {
-   // Fallback si le module TODAY n'est pas encore chargé
-   content.appendChild(h('div', {style: 'padding:48px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Chargement en cours… Rechargez la page si ce message persiste.'));
+   // FIX audit backend 2026-04-15 : retry auto plutôt que message statique.
+   // Le module TODAY peut charger après le premier render (async script) → on retente
+   // toutes les 200ms pendant 3 secondes au lieu d'afficher un message permanent.
+   var _loader = h('div', {style: 'padding:48px 24px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65)'}, 'Chargement du dashboard…');
+   content.appendChild(_loader);
+   var _retryCount = 0;
+   var _retryId = setInterval(function() {
+     _retryCount++;
+     if (window.TODAY) {
+       clearInterval(_retryId);
+       try { window.render(); } catch(e) { console.warn('[TODAY retry]', e); }
+     } else if (_retryCount >= 15) { // 3 secondes
+       clearInterval(_retryId);
+       try { _loader.textContent = 'Erreur de chargement. Rechargez la page (Ctrl+R) ou vérifiez votre connexion.'; } catch(_e) {}
+     }
+   }, 200);
  }
  }
 
@@ -1730,15 +1744,22 @@ function renderLogin(app) {
  _migrateSteps();
  // Invariant grossesse : empêcher pregnant=true sur un profil non-féminin (données corrompues/stale)
  if (window.validatePregnancyState) window.validatePregnancyState();
- // Restaurer le contexte de vue selon l'état du profil chargé
- var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
- if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
- // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
- else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
- else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
- else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
- else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
- // else: stay on 'today' (default set above)
+ // FIX audit backend 2026-04-15 : extraire la logique de résolution de vue
+ // dans une fonction pour qu'elle soit ré-appelée après syncOnLogin (sinon user
+ // coincé sur vue stale si cloud plus récent que local).
+ function _resolvePostLoginView() {
+   var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
+   if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+   // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
+   else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
+   else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0)) { S.view = 'sport'; }
+   else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
+   else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
+   // Si onboarding complet (appMode défini + weekPlan ou sportProgram valides) → toujours 'today'
+   else if (S.appMode && (S.weekPlan || (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || S.muscuIAProgram)) { S.view = 'today'; }
+   // else: stay on 'today' (default set above)
+ }
+ _resolvePostLoginView();
  // Restore language preference
  if (window.I18N && S.lang) window.I18N.current = S.lang;
  // Restore unit preferences
@@ -1767,7 +1788,10 @@ function renderLogin(app) {
  window.UNITS.weight = S.weightUnit || 'kg';
  window.UNITS.height = S.heightUnit || 'cm';
  }
- render(); // Re-render après sync cloud : nStep migré, unités à jour
+ // FIX audit backend : recalculer la vue après chargement cloud
+ // (le profil peut être plus récent/complet que le local).
+ _resolvePostLoginView();
+ render(); // Re-render après sync cloud : nStep migré, unités à jour, vue recalculée
  }
  SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture
  }).catch(function(e) { console.warn('[Login] syncOnLogin unexpected error:', e); SupaSync.startAutoSync(); });
