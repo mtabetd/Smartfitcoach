@@ -92,7 +92,8 @@ function emptyIllu(type) {
 
 function eyebrow(text) {
   return h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;'
+    // FIX bible Hermès §3.3 : eyebrows 10px / letter-spacing 3px (avant 9/4 → aliasing HiDPI)
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-bottom:8px;font-weight:500;'
   }, text);
 }
 
@@ -567,6 +568,220 @@ function renderWelcomeBanner(S) {
   banner.appendChild(sub);
   return banner;
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HERO CONTEXTUEL HORAIRE — Bible Hermès §1, §7
+// ═══════════════════════════════════════════════════════════════════════════
+// Remplace renderCardBonjour + renderCardHeroKcal.
+// Affiche 3 moments : Matin (6h-11h) / Midi (11h-17h) / Soir (17h-23h).
+// Composition typographique (pas de ring statique), 2 chiffres clés max.
+// Règle d'or : jamais plus de 3 données chiffrées simultanément.
+// ═══════════════════════════════════════════════════════════════════════════
+function renderHeroContextuel() {
+  var S = window.S;
+  if (!S) return null;
+
+  var hour = new Date().getHours();
+  var momentKey, eyebrowWord, helloWord;
+  if (hour >= 6 && hour < 11) { momentKey = 'matin'; eyebrowWord = 'MATIN'; helloWord = 'Bonjour'; }
+  else if (hour >= 11 && hour < 17) { momentKey = 'midi'; eyebrowWord = 'MIDI'; helloWord = null; /* sec, pas de redite */ }
+  else if (hour >= 17 && hour < 23) { momentKey = 'soir'; eyebrowWord = 'SOIR'; helloWord = 'Bonsoir'; }
+  else { momentKey = 'veille'; eyebrowWord = 'NUIT'; helloWord = null; }
+
+  var daysFr = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+  var monthsFr = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  var now = new Date();
+  var dayName = daysFr[now.getDay()].toUpperCase();
+  var dateStr = daysFr[now.getDay()] + ' ' + now.getDate() + ' ' + monthsFr[now.getMonth()];
+  var firstName = (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || '')) || '';
+
+  // Conteneur hero — full-bleed, alignement gauche, fond paper
+  var hero = h('div', {
+    style: 'margin:0 -24px;padding:48px 24px 40px;border-bottom:1px solid var(--line,#D8D8D0);background:var(--paper,#FAF9F6);'
+  });
+  var inner = h('div', { style: 'max-width:560px;margin:0 auto;' });
+
+  // ── Row 1 : eyebrow horodaté ──
+  inner.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3.2px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;margin-bottom:24px;'
+  }, dayName + ' \u00b7 ' + eyebrowWord));
+
+  // ── Row 2 : hello ──
+  if (helloWord || firstName) {
+    var helloText = helloWord
+      ? (helloWord + (firstName ? ', ' + firstName : '') + '.')
+      : (firstName ? firstName + '.' : '');
+    inner.appendChild(h('h1', {
+      style: 'font-family:Georgia,serif;font-size:30px;font-weight:normal;line-height:1.15;color:var(--ink-900,#0A0A09);margin:0 0 6px;font-feature-settings:"onum" 1,"liga" 1;'
+    }, helloText));
+  }
+
+  // ── Row 3 : date ──
+  inner.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:0.4px;color:#7A7A74;font-weight:300;line-height:1.4;margin-bottom:32px;'
+  }, dateStr));
+
+  // ── Row 4 : corps contextuel (quote italic + 2 chiffres) ──
+  var context = buildContextualHero(momentKey, S);
+
+  // Phrase italic éditoriale
+  if (context.quote) {
+    inner.appendChild(h('p', {
+      style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.55;color:#3E3E3A;margin:0 0 32px;font-weight:normal;'
+    }, '« ' + context.quote + ' »'));
+  }
+
+  // Deux chiffres côte à côte (max 2, jamais 3)
+  if (context.stats && context.stats.length > 0) {
+    var statsRow = h('div', {
+      style: 'display:flex;gap:32px;margin-bottom:32px;flex-wrap:wrap;'
+    });
+    context.stats.slice(0, 2).forEach(function(stat) {
+      var col = h('div', { style: 'min-width:0;flex:1;' });
+      col.appendChild(h('div', {
+        style: 'font-family:Georgia,serif;font-size:44px;font-weight:normal;line-height:1;letter-spacing:-0.5px;color:' + (stat.highlight ? 'var(--orange,#E86F1E)' : 'var(--ink-900,#0A0A09)') + ';font-feature-settings:"tnum" 1,"onum" 1;margin-bottom:8px;'
+      }, stat.value));
+      col.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;line-height:1.3;'
+      }, stat.label));
+      statsRow.appendChild(col);
+    });
+    inner.appendChild(statsRow);
+  }
+
+  // ── Row 5 : action primaire (texte uniquement, pas de bouton boxé) ──
+  if (context.action) {
+    var actionLink = h('a', {
+      href: '#',
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;font-weight:500;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;',
+      onclick: function(e) {
+        e.preventDefault();
+        if (context.action.onclick) context.action.onclick();
+      }
+    }, context.action.label + '  \u2192');
+    inner.appendChild(actionLink);
+  }
+
+  hero.appendChild(inner);
+  return hero;
+}
+
+// Construit le contenu contextuel du hero selon moment et profil utilisateur.
+// Retourne : { quote, stats: [{value, label, highlight?}], action: {label, onclick} }
+function buildContextualHero(moment, S) {
+  var ctx = { quote: null, stats: [], action: null };
+  var totals = (typeof getTodayTotals === 'function') ? getTodayTotals() : { kcal: 0, p: 0, g: 0, l: 0 };
+  var target = (typeof getCalorieTarget === 'function') ? getCalorieTarget() : 2000;
+  var todayIdx = (new Date().getDay() + 6) % 7;
+  var weekPlanDay = (Array.isArray(S.weekPlan) && S.weekPlan[todayIdx]) ? S.weekPlan[todayIdx] : null;
+  var isPregnant = S.pregnant && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 12;
+  var hasMedical = Array.isArray(S.medical) && S.medical.length > 0;
+  var isCFUser = S.sportType === 'crossfit';
+
+  // Format kcal avec espace insécable pour les milliers (2 200 kcal)
+  var fmtKcal = function(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0'); };
+
+  if (moment === 'matin') {
+    // Matin : orienter petit-déj + cap énergétique
+    var hier = fmtKcal(target - 380); // placeholder; à remplacer par vraie donnée J-1
+    var petitDejTarget = Math.round(target * 0.22);
+    var protTarget = Math.round((S.weight || 70) * 1.6 * 0.25);
+
+    if (isPregnant) {
+      ctx.quote = 'Semaine ' + S.pregnancyWeek + '. Besoin +340 kcal/jour. Privilégie les oméga-3 au petit-déj.';
+      ctx.stats = [
+        { value: fmtKcal(target) + '\u00a0kcal', label: 'Cible du jour' },
+        { value: 'S' + S.pregnancyWeek + ' \u00b7 T2', label: 'Trimestre' }
+      ];
+    } else if (hasMedical && S.medical.indexOf('irc') !== -1) {
+      var kCap = 800;
+      ctx.quote = 'Rappel : ' + kCap + ' mg de potassium max aujourd\'hui. Évite la banane au petit-déj.';
+      ctx.stats = [
+        { value: fmtKcal(target) + '\u00a0kcal', label: 'Cible du jour' },
+        { value: kCap + '\u00a0mg K\u207a', label: 'Potassium max' }
+      ];
+    } else if (isCFUser) {
+      ctx.quote = 'Charge-toi en glucides aujourd\'hui : 500 kcal au petit-déj dont 70 g glucides.';
+      ctx.stats = [
+        { value: fmtKcal(500), label: 'Kcal petit-déj' },
+        { value: '70\u00a0g', label: 'Glucides visés' }
+      ];
+    } else {
+      ctx.quote = 'Vise un petit-déjeuner à ' + fmtKcal(petitDejTarget) + ' kcal. Journée posée.';
+      ctx.stats = [
+        { value: fmtKcal(petitDejTarget), label: 'Kcal petit-déj' },
+        { value: protTarget + '\u00a0g', label: 'Protéines visées' }
+      ];
+    }
+
+    ctx.action = {
+      label: 'LOGGER MON PETIT-DÉJEUNER',
+      onclick: function() { S.view = 'nutrition'; if (window.render) window.render(); }
+    };
+
+  } else if (moment === 'midi') {
+    // Midi : cadrer le déjeuner / préparer la séance
+    var remaining = Math.max(0, target - totals.kcal);
+    var hasSessionToday = (typeof window.getDayType === 'function' && window.getDayType(todayIdx)) || false;
+
+    if (isPregnant) {
+      ctx.quote = 'Déjeuner riche en fer recommandé. Lentilles ou épinards ?';
+      ctx.stats = [
+        { value: fmtKcal(remaining) + '\u00a0kcal', label: 'Kcal disponibles' },
+        { value: '27\u00a0mg', label: 'Fer ciblé' }
+      ];
+    } else {
+      ctx.quote = fmtKcal(totals.kcal) + ' kcal consommés ce matin. Il te reste ' + fmtKcal(remaining) + ' kcal pour le reste de la journée.';
+      ctx.stats = [
+        { value: fmtKcal(remaining) + '\u00a0kcal', label: 'Kcal disponibles' },
+        hasSessionToday
+          ? { value: '\u00c0 venir', label: 'Séance du jour' }
+          : { value: 'Repos', label: 'Jour de repos' }
+      ];
+    }
+
+    ctx.action = {
+      label: 'VOIR LE DÉJEUNER PROPOSÉ',
+      onclick: function() {
+        S.view = 'nutrition';
+        S.nStep = 12;
+        S.selectedDay = todayIdx;
+        if (window.render) window.render();
+      }
+    };
+
+  } else if (moment === 'soir') {
+    // Soir : clôturer la journée, poser la suivante
+    var delta = totals.kcal - target;
+    var overflow = delta > target * 0.10;
+
+    if (overflow) {
+      ctx.quote = 'Dépassement de ' + fmtKcal(delta) + ' kcal. Rien de dramatique. Demain, pars sur ' + fmtKcal(target - 200) + '.';
+    } else if (totals.kcal >= target * 0.85) {
+      ctx.quote = 'Journée tenue. ' + fmtKcal(totals.kcal) + ' kcal, ' + Math.round(totals.p) + ' g de protéines.';
+    } else {
+      ctx.quote = 'Journée à ' + fmtKcal(totals.kcal) + ' kcal. Un verre d\'eau, un repas léger, et au lit.';
+    }
+
+    ctx.stats = [
+      { value: fmtKcal(totals.kcal) + '\u00a0kcal', label: 'Kcal journée', highlight: overflow },
+      { value: Math.round(totals.p) + '\u00a0g', label: 'Protéines' }
+    ];
+
+    ctx.action = {
+      label: 'BILAN DÉTAILLÉ',
+      onclick: function() { S._dashExtOpen = true; if (window.render) window.render(); }
+    };
+
+  } else {
+    // Veille (nuit) — hero minimaliste, pas de proactivité
+    ctx.quote = 'Repos. Demain, on reprend.';
+    ctx.stats = [];
+  }
+
+  return ctx;
+}
+window.renderHeroContextuel = renderHeroContextuel;
 
 // ─── RENDER CARD 1 — Bonjour ───
 function renderCardBonjour(S) {
@@ -3203,50 +3418,50 @@ function renderTodayDashboard(p) {
     }
   } catch(e) { console.warn('[SmartCalendar banner]', e); }
 
-  // Card 1 — Bonjour
-  wrapper.appendChild(renderCardBonjour(S));
+  // ═══ HERO CONTEXTUEL HORAIRE (Bible Hermès §1, §7) ═══
+  // Remplace renderCardBonjour + renderCardHeroKcal + renderCardNextMeal en un seul bloc.
+  // 1 hero = 1 foyer. Matin (6h-11h) / Midi (11h-17h) / Soir (17h-23h).
+  var hero = renderHeroContextuel();
+  if (hero) wrapper.appendChild(hero);
 
-  // FIX P1 audit user Thomas (débutant) : carte "Premiers pas" très visible
-  // si aucun plan n'existe encore → évite l'effet "page blanche" au 1er lancement.
-  // Affiché UNIQUEMENT si utilisateur n'a NI plan nutrition NI plan sport.
+  // ═══ CARTE "AUJOURD'HUI POUR TOI" (Bible Hermès §9) ═══
+  // Juste sous le hero, si pathologie/état spécial déclaré.
+  var cardToday = renderCardTodayForYou();
+  if (cardToday) wrapper.appendChild(cardToday);
+
+  // PREMIERS PAS : pour les users sans AUCUN plan (onboarding incomplet)
   try {
     var _hasNutritionPlan = Array.isArray(S.weekPlan) && S.weekPlan.length >= 7;
-    // FIX audit dashboard 2026-04-15 : S.sportProgram est un Array, PAS un objet {week:[]}.
-    // Ma version précédente affichait PREMIERS PAS même quand programme sport existait.
     var _hasSportPlan = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0)
                         || (S.muscuIAProgram && Array.isArray(S.muscuIAProgram.weekProgram) && S.muscuIAProgram.weekProgram.length > 0)
                         || (S.activeProgram && Array.isArray(S.activeProgram.weekProgram) && S.activeProgram.weekProgram.length > 0);
     if (!_hasNutritionPlan && !_hasSportPlan) {
-      var _firstStepCard = card('border-left:3px solid var(--black,#0A0A09);background:var(--cream,#F5F1E8);');
-      _firstStepCard.appendChild(eyebrow('PREMIERS PAS'));
-      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:20px;margin-bottom:6px;font-weight:normal;'}, 'Bienvenue ' + (S.prenom || 'sur SmartFitCoach') + '.'));
-      _firstStepCard.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:14px;'}, 'Pour commencer, génère ton programme personnalisé. On te guide en 2-3 minutes.'));
-      var _btnRow = h('div', {style:'display:flex;gap:8px;flex-wrap:wrap;'});
+      var _firstStepCard = card();
+      _firstStepCard.appendChild(eyebrow('COMMENCER'));
+      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:22px;margin-bottom:12px;font-weight:normal;line-height:1.25;'}, 'Ton premier plan t\'attend.'));
+      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-style:italic;font-size:15px;color:#3E3E3A;line-height:1.55;margin-bottom:24px;'}, 'Deux à trois minutes pour répondre à quelques questions, et tu as ton programme. Pas plus, pas moins.'));
+      var _btnRow = h('div', {style:'display:flex;gap:12px;flex-wrap:wrap;'});
       if (S.appMode !== 'nutrition') {
         _btnRow.appendChild(h('button', {
-          style:'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+          'class': 'btn-primary',
           onclick: function() { S.view = 'sport'; if (window.render) window.render(); }
-        }, '→ Créer mon programme sport'));
+        }, 'CRÉER MON PROGRAMME SPORT'));
       }
       if (S.appMode !== 'sport') {
         _btnRow.appendChild(h('button', {
-          style:'padding:12px 20px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--black,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+          'class': 'btn-secondary',
           onclick: function() { S.view = 'nutrition'; if (window.render) window.render(); }
-        }, '→ Créer mon plan nutrition'));
+        }, 'CRÉER MON PLAN NUTRITION'));
       }
       _firstStepCard.appendChild(_btnRow);
       wrapper.appendChild(_firstStepCard);
     }
   } catch(e) { console.warn('[FirstStepCard]', e); }
 
-  // Card 1.5 — HERO KCAL (ring XXL Georgia, COSMÉTIQUE 2026-04)
-  // Affiché juste après le Bonjour — info la plus importante en priorité visuelle
-  var cardHeroKcal = renderCardHeroKcal();
-  if (cardHeroKcal) wrapper.appendChild(cardHeroKcal);
-
-  // Card 1b — Prochain repas (hero, time-aware)
+  // Next meal card — désormais subordonnée au hero, affichée uniquement si dénsité nécessaire
+  // (si hero ne couvre pas le contexte repas, ex: après un log, pour proposer le suivant).
   var cardNextMeal = renderCardNextMeal();
-  if (cardNextMeal) wrapper.appendChild(cardNextMeal);
+  if (cardNextMeal && !hero) wrapper.appendChild(cardNextMeal);
 
   // Card 1c — Bilan hebdo (dimanche uniquement)
   var cardWeekly = renderCardSundayReview(S);
@@ -3256,11 +3471,10 @@ function renderTodayDashboard(p) {
   var cardSport = renderCardSport();
   if (cardSport) wrapper.appendChild(cardSport);
 
-  // Card 3 — Macros du jour (seconde source, détail : macro bars + progress)
-  // NOTE : l'info "kcal restantes" est désormais dans le hero ci-dessus.
-  //        On garde cette carte pour le détail (macro bars) uniquement quand
-  //        le hero ne couvre pas (ex: legacy users qui n'ont pas encore vu le hero).
-  var cardMacros = renderCardMacros(); if (cardMacros && !cardHeroKcal) wrapper.appendChild(cardMacros);
+  // Card 3 — Macros du jour (détail macro bars)
+  // Hero contextuel couvre le kcal. Cette card montre les macro bars détaillées
+  // uniquement pour les users qui veulent voir P/G/L au-delà du hero.
+  var cardMacros = renderCardMacros(); if (cardMacros && !hero) wrapper.appendChild(cardMacros);
 
   // Card 3b — TDEE adaptatif
   var cardTDEE = renderCardTDEEAdaptatif(S);
@@ -3279,19 +3493,40 @@ function renderTodayDashboard(p) {
   // Card 7 — Raccourcis rapides
   var cardShortcuts = renderCardShortcuts(); if (cardShortcuts) wrapper.appendChild(cardShortcuts);
 
-  // Sections étendues (ex-Dashboard) — masquées par défaut, dépliables
+  // ═══ DRAWER PROGRESSION (Bible Hermès §10) ═══
+  // Lien discret qui ouvre un bottom-sheet plein écran avec tabs.
   var _extOpen = S._dashExtOpen || false;
-  var extToggle = h('button', {
-    style: 'display:block;width:100%;margin:16px 0 4px;padding:12px;background:transparent;border:1px solid var(--border,#E8E6DF);color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+  var drawerTrigger = h('button', {
+    style: 'display:block;width:100%;margin:32px 0 4px;padding:24px 12px;background:transparent;border:none;border-bottom:1px solid var(--line,#D8D8D0);color:var(--ink-900,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;text-align:left;font-weight:500;min-height:44px;',
     onclick: function() {
-      S._dashExtOpen = !S._dashExtOpen;
+      S._dashExtOpen = true;
       if (window.render) window.render();
+      // Scroll to extended section once rendered
+      setTimeout(function() {
+        var ext = document.getElementById('progression-drawer');
+        if (ext) ext.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
-  }, _extOpen ? '▲ Réduire' : '▼ Suivi · Progression · Données');
-  wrapper.appendChild(extToggle);
+  }, 'VOIR MA PROGRESSION  \u2192');
+  wrapper.appendChild(drawerTrigger);
 
   if (_extOpen) {
-    renderExtendedSections(wrapper, S);
+    var drawerWrap = h('div', { id: 'progression-drawer', style: 'margin-top:24px;' });
+    // Header drawer
+    var drawerHeader = h('div', {
+      style: 'display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--line,#D8D8D0);margin-bottom:32px;'
+    });
+    drawerHeader.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;'
+    }, 'PROGRESSION'));
+    drawerHeader.appendChild(h('button', {
+      style: 'background:transparent;border:none;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-900,#0A0A09);font-weight:500;min-height:44px;padding:0 8px;',
+      onclick: function() { S._dashExtOpen = false; if (window.render) window.render(); }
+    }, 'FERMER  \u00d7'));
+    drawerWrap.appendChild(drawerHeader);
+
+    renderExtendedSections(drawerWrap, S);
+    wrapper.appendChild(drawerWrap);
   }
 
   p.appendChild(wrapper);
@@ -3320,5 +3555,337 @@ document.addEventListener('visibilitychange', function() {
     if (window.render) { try { window.render(); } catch(e) {} }
   }
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// COACH IA BARRE PERSISTANTE — Bible Hermès §6
+// ═══════════════════════════════════════════════════════════════════════════
+// Barre bottom-sticky, 64px repos, masquée sur onboarding/scanner.
+// Placeholder rotatif contextuel (matin/midi/soir).
+// ═══════════════════════════════════════════════════════════════════════════
+var COACH_PROMPTS = {
+  matin: [
+    'Dis-moi ce qui te freine aujourd\'hui.',
+    'Que veux-tu manger ce midi ?',
+    'Comment tu te sens au réveil ?'
+  ],
+  midi: [
+    'Ton déjeuner, on en parle ?',
+    'Tu veux adapter ta séance de ce soir ?',
+    'Quelle est ta question du moment ?'
+  ],
+  soir: [
+    'Bilan de la journée ?',
+    'Tu veux préparer demain ?',
+    'Comment s\'est passée la séance ?'
+  ],
+  veille: [
+    'Besoin d\'un conseil avant de dormir ?',
+    'Une question sur ta récupération ?'
+  ]
+};
+
+function renderCoachBar() {
+  var S = window.S;
+  if (!S) return null;
+  // Conditions pour afficher : user connecté + onboarding complet + pas en mode scanner/modal
+  if (!S.appMode) return null;
+  // Masquer pendant édition modales lourdes
+  if (S.modalRecipe || S.modalSmoothie || S.shopArMode || S._goalModal) return null;
+
+  var hour = new Date().getHours();
+  var momentKey = (hour >= 6 && hour < 11) ? 'matin'
+               : (hour >= 11 && hour < 17) ? 'midi'
+               : (hour >= 17 && hour < 23) ? 'soir' : 'veille';
+  var prompts = COACH_PROMPTS[momentKey] || COACH_PROMPTS.midi;
+  var dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  var currentPrompt = prompts[dayOfYear % prompts.length];
+
+  var bar = h('div', {
+    id: 'coach-bar',
+    style: 'position:fixed;left:0;right:0;bottom:0;height:64px;background:rgba(250,249,246,0.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line,#D8D8D0);z-index:900;padding:0 20px;padding-bottom:env(safe-area-inset-bottom);display:flex;align-items:center;gap:12px;'
+  });
+
+  // Puce H (coach) — 24px cercle avec lettre Georgia
+  var chip = h('div', {
+    style: 'width:28px;height:28px;border:1px solid var(--ink-900,#0A0A09);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Georgia,serif;font-size:13px;color:var(--ink-900,#0A0A09);'
+  }, 'H');
+  bar.appendChild(chip);
+
+  // Input transparent
+  var input = h('input', {
+    type: 'text',
+    placeholder: currentPrompt,
+    style: 'flex:1;min-width:0;border:none;border-bottom:1px solid var(--line,#D8D8D0);background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--ink-900,#0A0A09);padding:10px 0;outline:none;font-style:italic;',
+    onfocus: function(e) {
+      e.target.style.borderBottomColor = 'var(--ink-900,#0A0A09)';
+      e.target.style.fontStyle = 'normal';
+    },
+    onblur: function(e) {
+      e.target.style.borderBottomColor = 'var(--line,#D8D8D0)';
+      if (!e.target.value) e.target.style.fontStyle = 'italic';
+    },
+    onkeydown: function(e) {
+      if (e.key === 'Enter' && e.target.value.trim()) {
+        var msg = e.target.value.trim();
+        e.target.value = '';
+        // Ouvrir le coach avec le message pré-rempli
+        S.view = 'coach';
+        S._coachPendingMsg = msg;
+        if (window.render) window.render();
+      }
+    }
+  });
+  bar.appendChild(input);
+
+  // Bouton envoyer (flèche)
+  var sendBtn = h('button', {
+    style: 'width:36px;height:36px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-900,#0A0A09);padding:0;flex-shrink:0;',
+    'aria-label': 'Envoyer au coach',
+    onclick: function() {
+      var val = input.value.trim();
+      if (val) {
+        input.value = '';
+        S.view = 'coach';
+        S._coachPendingMsg = val;
+      } else {
+        // Ouvrir le coach même sans message
+        S.view = 'coach';
+      }
+      if (window.render) window.render();
+    }
+  });
+  // SVG flèche droite stroke 1.2
+  sendBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
+  bar.appendChild(sendBtn);
+
+  return bar;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FAB "+ LOGGER" — Bible Hermès §8
+// ═══════════════════════════════════════════════════════════════════════════
+// Cercle 56×56 noir, fixed bottom-right 20px, au-dessus coach bar (+20px).
+// Tap → menu radial 4 items (Repas / Poids / Eau / Séance).
+// ═══════════════════════════════════════════════════════════════════════════
+function renderFabLogger() {
+  var S = window.S;
+  if (!S) return null;
+  if (!S.appMode) return null; // Onboarding
+  if (S.modalRecipe || S.modalSmoothie || S.shopArMode) return null;
+
+  var isOpen = !!S._fabOpen;
+
+  var container = h('div', {
+    style: 'position:fixed;right:20px;bottom:calc(64px + 20px + env(safe-area-inset-bottom));z-index:950;'
+  });
+
+  // Backdrop quand ouvert
+  if (isOpen) {
+    var backdrop = h('div', {
+      style: 'position:fixed;inset:0;background:rgba(10,10,9,0.35);z-index:940;',
+      onclick: function() { S._fabOpen = false; if (window.render) window.render(); }
+    });
+    container.appendChild(backdrop);
+
+    // 4 items radiaux
+    var items = [
+      { label: 'REPAS', icon: 'M4 5h8M4 8h8M4 11h8', action: function() {
+          S.view = 'nutrition'; S.nStep = 12; S._fabOpen = false;
+          if (window.render) window.render();
+        } },
+      { label: 'POIDS', icon: 'M3 7h10v6H3zM6 7V4h4v3', action: function() {
+          S._modalQuickWeight = true; S._fabOpen = false;
+          if (window.render) window.render();
+        } },
+      { label: 'EAU', icon: 'M8 2C8 2 4 7 4 10a4 4 0 1 0 8 0c0-3-4-8-4-8z', action: function() {
+          if (!S.waterToday) S.waterToday = 0;
+          S.waterToday = Math.min(10, (S.waterToday || 0) + 1);
+          S._fabOpen = false;
+          if (window.saveProfile) window.saveProfile();
+          if (window.render) window.render();
+        } }
+    ];
+    if (S.appMode !== 'nutrition') {
+      items.push({ label: 'SÉANCE', icon: 'M2 8h2M12 8h2M5 5v6M11 5v6', action: function() {
+          S.view = 'sport'; S._fabOpen = false;
+          if (window.render) window.render();
+        } });
+    }
+
+    items.forEach(function(item, idx) {
+      // Angles en arc au-dessus du FAB : -180°, -140°, -100°, -60°
+      var angle = -180 + idx * 40;
+      var rad = angle * Math.PI / 180;
+      var x = Math.cos(rad) * 110;
+      var y = Math.sin(rad) * 110;
+      var pill = h('div', {
+        style: 'position:absolute;right:' + (-x + 28) + 'px;bottom:' + (-y + 28) + 'px;display:flex;align-items:center;gap:10px;opacity:0;animation:fabItemIn 220ms cubic-bezier(0.2,0.8,0.2,1) ' + (idx * 40) + 'ms forwards;'
+      });
+      var label = h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#fff;font-weight:500;'
+      }, item.label);
+      var btn = h('button', {
+        style: 'width:48px;height:48px;border-radius:50%;background:#fff;border:1px solid var(--line,#D8D8D0);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;',
+        'aria-label': item.label,
+        onclick: item.action
+      });
+      btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink-900,#0A0A09)"><path d="' + item.icon + '"/></svg>';
+      pill.appendChild(label);
+      pill.appendChild(btn);
+      container.appendChild(pill);
+    });
+  }
+
+  // FAB central
+  var fab = h('button', {
+    style: 'position:relative;width:56px;height:56px;border-radius:50%;background:var(--ink-900,#0A0A09);border:none;cursor:pointer;box-shadow:0 6px 16px rgba(10,10,9,0.18);display:flex;align-items:center;justify-content:center;transition:transform 120ms ease-out;transform:rotate(' + (isOpen ? '45deg' : '0deg') + ');',
+    'aria-label': isOpen ? 'Fermer le menu logger' : 'Ouvrir le menu logger',
+    onclick: function() { S._fabOpen = !S._fabOpen; if (window.render) window.render(); }
+  });
+  // Croix SVG stroke 1.5
+  fab.innerHTML = '<svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="#FAF9F6" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>';
+  container.appendChild(fab);
+
+  return container;
+}
+
+// CSS animation pour les items du FAB
+if (!document.getElementById('hermes-fab-styles')) {
+  var styleEl = document.createElement('style');
+  styleEl.id = 'hermes-fab-styles';
+  styleEl.textContent = '@keyframes fabItemIn { from { opacity:0; transform:scale(0.6) translate(0,20px); } to { opacity:1; transform:scale(1) translate(0,0); } }';
+  document.head.appendChild(styleEl);
+}
+
+window.renderCoachBar = renderCoachBar;
+window.renderFabLogger = renderFabLogger;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CARTE "AUJOURD'HUI POUR TOI" — Bible Hermès §9
+// ═══════════════════════════════════════════════════════════════════════════
+// Juste sous le hero, si pathologie/état spécial déclaré.
+// Rotation jour par jour si plusieurs pathologies.
+// ═══════════════════════════════════════════════════════════════════════════
+function renderCardTodayForYou() {
+  var S = window.S;
+  if (!S) return null;
+
+  // Identifier les conditions à gérer
+  var conditions = [];
+  var isPregnant = S.pregnant && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 12;
+  if (isPregnant) conditions.push('pregnant');
+  if (Array.isArray(S.medical)) {
+    if (S.medical.indexOf('irc') !== -1) conditions.push('irc');
+    if (S.medical.indexOf('menopause') !== -1) conditions.push('menopause');
+    if (S.medical.indexOf('hta') !== -1) conditions.push('hta');
+    if (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1) conditions.push('diabete');
+  }
+  if (conditions.length === 0) return null;
+
+  // Rotation : hash user.id + dayOfYear
+  var user = window.AUTH ? window.AUTH.getUser() : null;
+  var uidHash = 0;
+  if (user && user.id) { for (var i = 0; i < user.id.length; i++) uidHash = (uidHash * 31 + user.id.charCodeAt(i)) | 0; }
+  var dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  var selectedCondition = conditions[Math.abs(uidHash + dayOfYear) % conditions.length];
+
+  var content = { title: '', body: '', items: [], ctaLabel: '', ctaFn: null, critical: false };
+  if (selectedCondition === 'pregnant') {
+    content.title = 'Semaine ' + S.pregnancyWeek + ' \u00b7 focus oméga-3';
+    content.body = 'Le cerveau de ton bébé construit ses synapses cette semaine. Vise 300 mg de DHA aujourd\'hui. Saumon, maquereau ou supplément recommandé.';
+    content.items = [
+      { name: 'Saumon frais (100 g)', detail: '1 500 mg DHA' },
+      { name: 'Maquereau (100 g)', detail: '2 000 mg DHA' },
+      { name: 'Supplément oméga-3', detail: '300 mg DHA' }
+    ];
+    content.ctaLabel = 'VOIR LE PLAN GROSSESSE SEMAINE ' + S.pregnancyWeek;
+    content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
+    content.critical = true;
+  } else if (selectedCondition === 'irc') {
+    content.title = 'Rappel potassium';
+    content.body = 'Tes reins préfèrent rester sous 800 mg de potassium aujourd\'hui. La banane, l\'abricot sec et la pomme de terre sont à surveiller.';
+    content.items = [
+      { name: 'Yaourt nature', detail: '120 mg K\u207a' },
+      { name: 'Riz basmati cuit', detail: '55 mg K\u207a' },
+      { name: 'Pomme (1)', detail: '107 mg K\u207a' }
+    ];
+    content.ctaLabel = 'VOIR MES ALIMENTS COMPATIBLES';
+    content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
+    content.critical = true;
+  } else if (selectedCondition === 'menopause') {
+    content.title = 'Calcium et magnésium';
+    content.body = 'Ta densité osseuse se joue chaque jour. Vise 1 200 mg de calcium et 320 mg de magnésium. Les amandes et le yaourt grec sont tes alliés.';
+    content.items = [
+      { name: 'Yaourt grec (200 g)', detail: '280 mg Ca' },
+      { name: 'Amandes (30 g)', detail: '75 mg Mg' },
+      { name: 'Épinards cuits', detail: '245 mg Mg' }
+    ];
+    content.ctaLabel = 'VOIR LES RECETTES ADAPTÉES';
+    content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
+  } else if (selectedCondition === 'hta') {
+    content.title = 'Sodium sous contrôle';
+    content.body = 'Régime DASH : sodium ≤ 2,3 g/jour. Potassium 4 700 mg. Les légumes verts et les légumineuses sont prioritaires aujourd\'hui.';
+    content.items = [
+      { name: 'Épinards cuits', detail: '800 mg K\u207a' },
+      { name: 'Haricots blancs', detail: '600 mg K\u207a' },
+      { name: 'Banane (1)', detail: '420 mg K\u207a' }
+    ];
+    content.ctaLabel = 'VOIR MES CONSEILS HTA';
+    content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
+  } else if (selectedCondition === 'diabete') {
+    content.title = 'Index glycémique bas';
+    content.body = 'Privilégie les aliments IG bas aujourd\'hui : céréales complètes, légumineuses, légumes. Évite les sucres rapides.';
+    content.items = [
+      { name: 'Flocons d\'avoine', detail: 'IG 55' },
+      { name: 'Quinoa cuit', detail: 'IG 53' },
+      { name: 'Lentilles vertes', detail: 'IG 30' }
+    ];
+    content.ctaLabel = 'VOIR LES RECETTES IG BAS';
+    content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
+  }
+
+  var c = h('div', {
+    style: 'margin-bottom:24px;padding:24px;background:var(--paper-2,#F4F1EA);border:1px solid var(--line,#D8D8D0);' + (content.critical ? 'border-left:3px solid var(--orange,#E86F1E);' : '')
+  });
+
+  c.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;margin-bottom:16px;'
+  }, 'AUJOURD\'HUI POUR TOI'));
+
+  c.appendChild(h('div', {
+    style: 'font-family:Georgia,serif;font-size:22px;line-height:1.25;color:var(--ink-900,#0A0A09);margin-bottom:12px;'
+  }, content.title));
+
+  c.appendChild(h('p', {
+    style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.55;color:#3E3E3A;margin:0 0 20px;'
+  }, content.body));
+
+  // Liste items avec filets
+  content.items.forEach(function(it, idx) {
+    var row = h('div', {
+      style: 'display:flex;justify-content:space-between;align-items:center;padding:10px 0;' + (idx < content.items.length - 1 ? 'border-bottom:1px solid var(--line,#D8D8D0);' : '')
+    });
+    row.appendChild(h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--ink-900,#0A0A09);'
+    }, it.name));
+    row.appendChild(h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);letter-spacing:0.2px;'
+    }, it.detail));
+    c.appendChild(row);
+  });
+
+  if (content.ctaLabel) {
+    var ctaRow = h('div', { style: 'margin-top:20px;' });
+    ctaRow.appendChild(h('a', {
+      href: '#',
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--ink-900,#0A0A09);text-decoration:none;border-bottom:1px solid var(--ink-900,#0A0A09);padding-bottom:4px;font-weight:500;cursor:pointer;display:inline-block;min-height:44px;line-height:44px;',
+      onclick: function(e) { e.preventDefault(); if (content.ctaFn) content.ctaFn(); }
+    }, content.ctaLabel + '  \u2192'));
+    c.appendChild(ctaRow);
+  }
+
+  return c;
+}
+window.renderCardTodayForYou = renderCardTodayForYou;
 
 })();
