@@ -1900,10 +1900,11 @@ var GREYSKULL_PROGRAMS = {
     }
   },
   splits: {
+    // FIX P0r-BIS : ajout `muscles` array. Sans lui, activeDays filter excluait tous les jours.
     '3': [
-      { day: 'Lundi',    type: 'workoutA', label: 'Workout A: Bench + Squat + Plug' },
-      { day: 'Mercredi', type: 'workoutB', label: 'Workout B: Press + Deadlift + Plug' },
-      { day: 'Vendredi', type: 'workoutA', label: 'Workout A: Bench + Squat + Plug' }
+      { day: 'Lundi',    type: 'workoutA', label: 'Workout A: Bench + Squat + Plug',     muscles: ['pectoraux','jambes','bras'] },
+      { day: 'Mercredi', type: 'workoutB', label: 'Workout B: Press + Deadlift + Plug',  muscles: ['epaules','dos','bras'] },
+      { day: 'Vendredi', type: 'workoutA', label: 'Workout A: Bench + Squat + Plug',     muscles: ['pectoraux','jambes','bras'] }
     ]
   }
 };
@@ -1992,10 +1993,11 @@ var TEXAS_METHOD_PROGRAMS = {
     }
   },
   splits: {
+    // FIX P0r-BIS : ajout `muscles` array. Jours muscle-focused (full-body Texas).
     '3': [
-      { day: 'Lundi',    type: 'volume',    label: 'Volume Day: 5x5 @ 90%' },
-      { day: 'Mercredi', type: 'recovery',  label: 'Recovery Day: 80% du Lundi' },
-      { day: 'Vendredi', type: 'intensity', label: 'Intensity Day: 1x5 PR weekly' }
+      { day: 'Lundi',    type: 'volume',    label: 'Volume Day: 5x5 @ 90%',        muscles: ['jambes','pectoraux','dos'] },
+      { day: 'Mercredi', type: 'recovery',  label: 'Recovery Day: 80% du Lundi',   muscles: ['jambes','epaules'] },
+      { day: 'Vendredi', type: 'intensity', label: 'Intensity Day: 1x5 PR weekly', muscles: ['jambes','pectoraux','dos','bras'] }
     ]
   }
 };
@@ -2089,12 +2091,29 @@ var NSUNS_PROGRAMS = {
     }
   },
   splits: {
+    // FIX P0r-BIS : ajout `muscles` array pour permettre rendu du plan.
     '5': [
-      { day: 'Lundi',    type: 'bench',    label: 'Bench T1 + OHP T2 + Accessoires' },
-      { day: 'Mardi',    type: 'squat',    label: 'Squat T1 + Sumo DL T2 + Quads' },
-      { day: 'Mercredi', type: 'ohp',      label: 'OHP T1 + Close Bench T2 + Épaules' },
-      { day: 'Jeudi',    type: 'deadlift', label: 'Deadlift T1 + Front Squat T2 + Dos' },
-      { day: 'Vendredi', type: 'bench2',   label: 'Bench T1 + OHP T2 (variante)' }
+      { day: 'Lundi',    type: 'bench',    label: 'Bench T1 + OHP T2 + Accessoires',       muscles: ['pectoraux'] },
+      { day: 'Mardi',    type: 'squat',    label: 'Squat T1 + Sumo DL T2 + Quads',         muscles: ['jambes'] },
+      { day: 'Mercredi', type: 'ohp',      label: 'OHP T1 + Close Bench T2 + Épaules',     muscles: ['epaules'] },
+      { day: 'Jeudi',    type: 'deadlift', label: 'Deadlift T1 + Front Squat T2 + Dos',    muscles: ['dos'] },
+      { day: 'Vendredi', type: 'bench2',   label: 'Bench T1 + OHP T2 (variante)',          muscles: ['pectoraux','bras'] }
+    ],
+    // Support 4j (fallback si sportDays=4) : Pierre ou autre pro avec 4j/sem
+    '4': [
+      { day: 'Lundi',    type: 'bench',    label: 'Bench T1 + OHP T2 + Accessoires',    muscles: ['pectoraux'] },
+      { day: 'Mardi',    type: 'squat',    label: 'Squat T1 + Sumo DL T2 + Quads',      muscles: ['jambes'] },
+      { day: 'Jeudi',    type: 'ohp',      label: 'OHP T1 + Close Bench T2',            muscles: ['epaules'] },
+      { day: 'Vendredi', type: 'deadlift', label: 'Deadlift T1 + Front Squat T2 + Dos', muscles: ['dos','bras'] }
+    ],
+    // Support 6j nSuns extended
+    '6': [
+      { day: 'Lundi',    type: 'bench',    label: 'Bench T1 + OHP T2 + Accessoires',       muscles: ['pectoraux'] },
+      { day: 'Mardi',    type: 'squat',    label: 'Squat T1 + Sumo DL T2 + Quads',         muscles: ['jambes'] },
+      { day: 'Mercredi', type: 'ohp',      label: 'OHP T1 + Close Bench T2 + Épaules',     muscles: ['epaules'] },
+      { day: 'Jeudi',    type: 'deadlift', label: 'Deadlift T1 + Front Squat T2 + Dos',    muscles: ['dos'] },
+      { day: 'Vendredi', type: 'bench2',   label: 'Bench T1 + OHP T2 (variante)',          muscles: ['pectoraux'] },
+      { day: 'Samedi',   type: 'arms',     label: 'Bras + Mobilité + Conditioning',        muscles: ['bras','epaules'] }
     ]
   }
 };
@@ -2260,8 +2279,21 @@ function buildPersonalizedMuscuPlan(S) {
   var goalKey = (S.goal !== null && S.goal !== undefined && window.GOALS && window.GOALS[S.goal])
     ? window.GOALS[S.goal].key : '';
   var sportGoals = S.sportGoals || [];
-  if (sportGoals.indexOf('performance') >= 0) {
-    style = level === 'beginner' ? 'classic' : 'intensity';
+  // ═══ FIX P0r-BIS SPRINT 2026-04-15 — différenciation PRO/EXPERT (audit Pierre) ═══
+  // Avant : Pierre `sportLevel='pro'` + perf/force produisait même sortie que Karim `advanced`.
+  // Détection : pro/expert + goals performance|force → nSuns 5/3/1 (si ≥4j) ou Texas Method.
+  // nSuns = Variant Wendler hybride powerbuilding, adapté aux powerlifters avancés.
+  // Texas Method = 3j Rippetoe pour intermédiaire-avancé (5×5 + volume + AMRAP intensité).
+  var isPro = S.sportLevel === 'pro' || S.sportLevel === 'expert';
+  var hasPerfGoal = sportGoals.indexOf('performance') >= 0 || sportGoals.indexOf('force') >= 0 || sportGoals.indexOf('strength') >= 0;
+  if (hasPerfGoal) {
+    if (isPro) {
+      var _proDays = S.sportDays || 5;
+      // nsuns exige 5j (rotation Squat/Bench/DL/OHP). Si <4j → texas (3j).
+      style = _proDays >= 4 ? 'nsuns' : 'texas';
+    } else {
+      style = level === 'beginner' ? 'classic' : 'intensity';
+    }
   } else if (goalKey === 'cut' || goalKey === 'shred') {
     style = level === 'advanced' ? 'fst7' : 'volume';
   } else if (goalKey === 'bulk' || goalKey === 'lean_bulk' || goalKey === 'recomposition') {
@@ -2474,9 +2506,19 @@ function buildPersonalizedMuscuPlan(S) {
         'extension\\s+triceps\\s+(?:barre\\s+)?ez\\s+couch', 'french\\s+press\\s+couch',
         // Valsalva / charges lourdes axiales
         'valsalva', 'soulev[eé]\\s+de\\s+terre', 'deadlift', 'romanian',
-        'squat\\s+barre\\s+lourd', 'squat\\s+barre\\b', 'back\\s+squat',
+        'squat\\s+barre\\s+lourd', 'squat\\s+barre\\b', 'back\\s+squat', 'front\\s+squat',
+        // FIX P0r-BIS contre-audit Aïcha : "Squat bulgare barre" unilatéral + charge = Valsalva.
+        'squat\\s+bulgare\\s+barre', 'split\\s+squat\\s+barre', 'zercher',
         'good\\s+morning', 'snatch', 'arrach[eé]', 'clean\\s*(?:&|and|et)?\\s*jerk', '[eé]paul[eé]',
-        'jerk', 'overhead\\s+squat', 'thruster',
+        'jerk', 'overhead\\s+squat', 'thruster', 'power\\s+clean', '\\bclean\\b',
+        // FIX P0r-BIS contre-audit Aïcha : développé militaire barre debout = Valsalva aigu T2.
+        // Alternative safe = développés épaules haltères assise avec dossier.
+        'd[eé]velopp[eé]\\s+militaire\\s+barre', 'militaire\\s+barre', 'overhead\\s+press\\s+(?:barre|barbell)',
+        'push\\s+press', 'strict\\s+press\\s+(?:barre|barbell)',
+        // FIX P0r-BIS contre-audit Aïcha : rowing barre penché = flexion avant + charge.
+        // ACOG 2020 : éviter flexion tronc chargée T2+ (pression abdominale + équilibre altéré).
+        'rowing\\s+barre', 'pendlay\\s+row', 'bent.?over\\s+row', 'bent.?over\\s+barbell',
+        't.?bar\\s+row', 'yates\\s+row',
         // Compression veine cave (machines assises chargées + leg press inclinée vers le bas)
         'leg\\s+press', 'presse\\s+[aà]?\\s*jambes?', 'presse[\\s-]?cuisses?', 'hack\\s+squat',
         // Hip thrust / glute bridge sol = pression abdominale
@@ -2515,13 +2557,19 @@ function buildPersonalizedMuscuPlan(S) {
       // FIX P0r.2 contre-audit : ajouter Power Clean / Clean seul (triple extension explosive
       // axiale = compression vertébrale max).
       if (medList.indexOf('osteoporose') !== -1 || medList.indexOf('osteoporosis') !== -1) {
-        medFilters.push(/squat\s+barre|back\s+squat|soulev[eé]\s+de\s+terre|deadlift|romanian|good\s+morning|crunch|sit.?up|ab\s+wheel|jefferson|hyperextension|box\s+jump|jump\s+squat|burpee|corde|jumping\s+jacks|\bpower\s+clean\b|\bclean\b|\bsnatch\b|arrach[eé]|[eé]paul[eé]|hang\s+clean/i);
+        // FIX P0r-BIS contre-audit Jean-Pierre : ajouter `fente bulgare barre` + `presse pieds hauts`
+        // (charges axiales asymétriques) et `squat bulgare barre` (compression unilatérale vertébrale).
+        medFilters.push(/squat\s+barre|back\s+squat|front\s+squat|soulev[eé]\s+de\s+terre|deadlift|romanian|good\s+morning|crunch|sit.?up|ab\s+wheel|jefferson|hyperextension|box\s+jump|jump\s+squat|burpee|corde|jumping\s+jacks|\bpower\s+clean\b|\bclean\b|\bsnatch\b|arrach[eé]|[eé]paul[eé]|hang\s+clean|fente\s+bulgare\s+barre|squat\s+bulgare\s+barre|presse\s+pieds?\s+hauts?|hack\s+squat|zercher/i);
       }
       // HTA SÉVÈRE / HYPERTENSION (Pescatello MSSE 2004, AHA/ACSM 2007)
       // Éviter Valsalva prolongé, charges maximales, isométriques soutenus, behind-neck.
       // FIX P0r.2 : Power Clean / Clean seul = Valsalva intense.
+      // FIX P0r-BIS contre-audit Jean-Pierre : ajouter `développé couché barre` (bench press
+      // barbell = Valsalva aigu sous charge lourde, AHA 2004/ACSM 2007 contre-indiqué HTA).
+      // Alternative safe = développé haltères (pas de Valsalva maximal, charge limitée).
+      // + `fente bulgare barre` + `presse pieds hauts` (charges axiales lourdes asymétriques).
       if (medList.indexOf('hypertension') !== -1 || medList.indexOf('hta') !== -1 || medList.indexOf('hta_severe') !== -1) {
-        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|d[eé]velopp[eé]\s+militaire\s+barre|behind.?neck|derri[eè]re\s+nuque|\bsnatch\b|arrach[eé]|clean|[eé]paul[eé]|jerk|thruster|l.?sit|dragon\s+flag|windshield/i);
+        medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|back\s+squat|front\s+squat|d[eé]velopp[eé]\s+militaire\s+barre|d[eé]velopp[eé]\s+couch[eé]\s+barre|bench\s+press\s+(?:barre|barbell)|behind.?neck|derri[eè]re\s+nuque|\bsnatch\b|arrach[eé]|clean|[eé]paul[eé]|jerk|thruster|l.?sit|dragon\s+flag|windshield|fente\s+bulgare\s+barre|squat\s+bulgare\s+barre|presse\s+pieds?\s+hauts?|hack\s+squat/i);
       }
       // CARDIO / INSUFFISANCE CARDIAQUE
       if (medList.indexOf('cardio') !== -1 || medList.indexOf('insuffisance_card') !== -1) {
@@ -2596,6 +2644,37 @@ function buildPersonalizedMuscuPlan(S) {
           }
           return true;
         });
+      }
+    }
+
+    // ═══ FIX P0r-BIS SPRINT 2026-04-15 — Safety beginner : exclure haltérophilie ═══
+    // (audit Marc H42 + Léa F25 cut beginners → Starting Strength retournait Power Clean
+    // 5×3 sans supervision). Rippetoe lui-même écrit : "Power Clean requiert coaching".
+    // Triple extension explosive chargée = risque lombaire + technique hors supervision.
+    // Règle : tout `level='beginner'` se voit exclure Power Clean / Snatch / C&J / Jerk /
+    // Hang Clean / Overhead Squat / Thruster — remplacés par Pendlay Row / Barbell Row
+    // via fallback getAlternativeExercises automatique.
+    if (level === 'beginner') {
+      var olyBeginnerForbid = /\bpower\s+clean\b|\bhang\s+clean\b|\bclean\s*(?:&|and|et)?\s*jerk\b|\bsnatch\b|arrach[eé]|[eé]paul[eé]\s*(?:-|jet)|overhead\s+squat|\bthruster\b|\bjerk\b/i;
+      var _beforeOly = allExercises.length;
+      allExercises = allExercises.filter(function(ex) {
+        return !olyBeginnerForbid.test(String(ex.n || ex.name || ''));
+      });
+      // Si ce muscle s'est vidé après filtrage oly, fallback rows barbell sur le pool
+      if (allExercises.length < _beforeOly && allExercises.length < 3 && window.getAlternativeExercises) {
+        var _pullMuscle = (dayPlan.muscles || []).indexOf('dos') >= 0 ? 'dos' : (dayPlan.muscles || [])[0];
+        if (_pullMuscle) {
+          var _rowAlts = window.getAlternativeExercises(_pullMuscle, null, 4) || [];
+          var _existNames = {};
+          allExercises.forEach(function(e) { _existNames[(e.n || e.name || '').toLowerCase()] = true; });
+          _rowAlts.forEach(function(a) {
+            var n = (a.n || a.name || '').toLowerCase();
+            if (!_existNames[n] && allExercises.length < 4 && !olyBeginnerForbid.test(n)) {
+              allExercises.push(a);
+              _existNames[n] = true;
+            }
+          });
+        }
       }
     }
 
