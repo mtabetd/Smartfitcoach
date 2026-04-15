@@ -347,6 +347,85 @@ window.recordSessionFeedback = function(data) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 (GRAPH CHARGES) : progression charges sur N derniers jours.
+// Retourne { labels:['YYYY-MM-DD' × N], datasets: [{name, data:[num|null × N]}, ...] }
+// Sélectionne jusqu'à 3 exos "compound" (Squat, DC, SDT, OHP) qui ont
+// au moins 2 entrées dans la fenêtre → pertinent pour tracer une courbe.
+window.getStrengthTrend = function(days) {
+  try {
+    days = (typeof days === 'number' && days > 0) ? days : 30;
+    var S = window.S;
+    if (!S || !S.muscuProgressionHistory || typeof S.muscuProgressionHistory !== 'object') return null;
+    // Exos compound cibles (noms FR tels qu'utilisés dans muscuProgressionHistory)
+    var targetExos = [
+      'Développé couché', 'Squat', 'Soulevé de terre', 'Développé militaire',
+      'Rowing barre', 'Hip Thrust', 'Presse à cuisses', 'Curl barre'
+    ];
+    // Matching case/accent-insensitive pour tolérer les variations de saisie
+    function normalize(s) {
+      return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    }
+    var histKeys = Object.keys(S.muscuProgressionHistory);
+    // Construire une map { targetExo: vraie_cle } pour retrouver l'entrée réelle
+    var matched = {};
+    targetExos.forEach(function(target) {
+      var normTarget = normalize(target);
+      for (var i = 0; i < histKeys.length; i++) {
+        if (normalize(histKeys[i]) === normTarget && !matched[target]) {
+          matched[target] = histKeys[i];
+          break;
+        }
+      }
+    });
+    var now = new Date();
+    var cutoffMs = now.getTime() - (days - 1) * 86400000;
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    // Labels (N jours glissants)
+    var labels = [];
+    for (var d2 = days - 1; d2 >= 0; d2--) {
+      var dd = new Date(now.getTime() - d2 * 86400000);
+      labels.push(dd.getFullYear() + '-' + pad(dd.getMonth()+1) + '-' + pad(dd.getDate()));
+    }
+    // Pour chaque exo matché, extraire la série (max weight par jour dans la fenêtre)
+    var datasets = [];
+    Object.keys(matched).forEach(function(name) {
+      var realKey = matched[name];
+      var entries = S.muscuProgressionHistory[realKey] || [];
+      if (!Array.isArray(entries)) return;
+      // Index par date (dernier poids gagne si plusieurs entries same day)
+      var byDate = {};
+      entries.forEach(function(e) {
+        if (!e || !e.date) return;
+        var dt = new Date(e.date + 'T00:00:00').getTime();
+        if (isNaN(dt) || dt < cutoffMs) return;
+        var w = parseFloat(e.weight);
+        if (!isNaN(w) && isFinite(w) && w > 0) {
+          // Prendre le max du jour (si plusieurs séries, on garde la plus lourde)
+          if (!byDate[e.date] || w > byDate[e.date]) byDate[e.date] = w;
+        }
+      });
+      // Construire la série alignée sur labels
+      var data = labels.map(function(lbl) { return typeof byDate[lbl] === 'number' ? byDate[lbl] : null; });
+      var nonNull = data.filter(function(v) { return v !== null; }).length;
+      // Seuil : exo doit avoir au moins 2 points pour tracer une courbe pertinente
+      if (nonNull >= 2) {
+        datasets.push({
+          name: name,
+          data: data,
+          lastValue: data.filter(function(v){ return v !== null; }).slice(-1)[0] || null,
+          firstValue: data.filter(function(v){ return v !== null; })[0] || null,
+          dataPoints: nonNull
+        });
+      }
+    });
+    // Trier par nombre de points (le plus régulier en premier) puis garder top 3
+    datasets.sort(function(a, b) { return b.dataPoints - a.dataPoints; });
+    datasets = datasets.slice(0, 3);
+    if (datasets.length === 0) return null;
+    return { labels: labels, datasets: datasets };
+  } catch(e) { return null; }
+};
+
 // POLISH 2026-04 (GRAPHES) : série wellness sur N derniers jours pour Chart.js.
 // Retourne { labels:['YYYY-MM-DD',...], sleep:[num/null,...], energyScore:[num/null,...] }
 // Jours sans log → null (Chart.js skip gracefully avec spanGaps:true).

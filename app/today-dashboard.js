@@ -2193,6 +2193,122 @@ function renderExtendedSections(wrapper, S) {
     // Widget optionnel — silencieux
   }
 
+  // POLISH 2026-04 (GRAPH CHARGES) : courbes progression charges 30j.
+  // Exploite S.muscuProgressionHistory + getStrengthTrend (top 3 compound).
+  // Affiché UNIQUEMENT si au moins 1 exo a ≥2 points sur 30j.
+  try {
+    if (typeof window.getStrengthTrend === 'function') {
+      var strengthTrend = window.getStrengthTrend(30);
+      if (strengthTrend && strengthTrend.datasets.length > 0) {
+        wrapper.appendChild(sectionLabel('Progression charges (30 jours)'));
+        var strengthBox = card();
+
+        // Header : delta par exo (Georgia)
+        var deltaRow = h('div', { style: 'display:flex;flex-direction:column;gap:6px;margin-bottom:12px;' });
+        strengthTrend.datasets.forEach(function(ds, idx) {
+          var delta = (ds.lastValue !== null && ds.firstValue !== null) ? (ds.lastValue - ds.firstValue) : null;
+          var deltaPct = (delta !== null && ds.firstValue > 0) ? (delta / ds.firstValue) * 100 : null;
+          var colorByDelta = (delta === null) ? 'var(--grey,#6B6B65)'
+                              : (delta > 0 ? 'var(--green,#1A4A1A)'
+                              : (delta < 0 ? 'var(--red,#5A1010)' : 'var(--grey,#6B6B65)'));
+          var signTxt = (delta === null) ? '' : (delta > 0 ? '+' : '') + delta.toFixed(1) + ' kg';
+          var pctTxt = (deltaPct !== null) ? ' (' + (deltaPct > 0 ? '+' : '') + deltaPct.toFixed(1) + '%)' : '';
+          var line = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
+          line.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, ds.name));
+          var right = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:' + colorByDelta + ';font-weight:600;' }, signTxt + pctTxt);
+          line.appendChild(right);
+          deltaRow.appendChild(line);
+        });
+        strengthBox.appendChild(deltaRow);
+
+        // Canvas Chart.js
+        var sChartWrap = h('div', { style: 'position:relative;height:180px;' });
+        var sCanvas = document.createElement('canvas');
+        sCanvas.id = 'today-strength-trend-chart';
+        sCanvas.style.cssText = 'width:100%;height:180px;max-height:180px;';
+        sChartWrap.appendChild(sCanvas);
+        strengthBox.appendChild(sChartWrap);
+
+        requestAnimationFrame(function() {
+          try {
+            var sCtx = document.getElementById('today-strength-trend-chart');
+            if (!sCtx || typeof window.createChart !== 'function' || typeof Chart === 'undefined') return;
+            // Palette sobre cohérente avec le reste
+            var colors = ['#1A4A1A', '#6A4A1A', '#5A3A7A'];
+            var shortLabels = strengthTrend.labels.map(function(iso) {
+              var parts = iso.split('-');
+              return parts.length === 3 ? parts[2] + '/' + parts[1] : iso;
+            });
+            window.createChart(sCtx, {
+              type: 'line',
+              data: {
+                labels: shortLabels,
+                datasets: strengthTrend.datasets.map(function(ds, i) {
+                  return {
+                    label: ds.name + ' (kg)',
+                    data: ds.data,
+                    borderColor: colors[i % colors.length],
+                    backgroundColor: colors[i % colors.length].replace(')', ', 0.08)').replace('rgb', 'rgba').replace('#', '#'),
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    spanGaps: true
+                  };
+                })
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                    labels: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 10 }, boxWidth: 12, padding: 10 }
+                  },
+                  tooltip: {
+                    backgroundColor: '#0A0A09',
+                    titleFont: { family: 'Georgia, serif', size: 11 },
+                    bodyFont: { family: 'Helvetica Neue, Arial, sans-serif', size: 11 },
+                    padding: 8,
+                    callbacks: {
+                      label: function(ctx) {
+                        var v = ctx.parsed.y;
+                        return ctx.dataset.label + ' : ' + (v === null ? '—' : v.toFixed(1) + ' kg');
+                      }
+                    }
+                  }
+                },
+                scales: {
+                  x: {
+                    ticks: {
+                      font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 },
+                      maxRotation: 0, autoSkip: true, maxTicksLimit: 7
+                    },
+                    grid: { display: false }
+                  },
+                  y: {
+                    ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } },
+                    grid: { color: 'rgba(216,216,208,0.3)' },
+                    title: {
+                      display: true,
+                      text: 'kg',
+                      font: { family: 'Georgia, serif', size: 10 }
+                    }
+                  }
+                }
+              }
+            });
+          } catch(_scErr) { /* silencieux */ }
+        });
+
+        wrapper.appendChild(strengthBox);
+      }
+    }
+  } catch(_stErr) {
+    // Widget optionnel — silencieux
+  }
+
   // Weight chart (Chart.js)
   wrapper.appendChild(sectionLabel('Courbe de poids'));
   var rawHistCheck = (S.weightHistory || []).filter(function(e) {
