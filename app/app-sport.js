@@ -6411,7 +6411,8 @@ function renderMusculationProgram(p) {
  var setTable = h('div', {style: 'margin-top:8px;border:1px solid var(--border);border-radius:2px;overflow-x:auto;-webkit-overflow-scrolling:touch'});
 
  var isAdvancedRIR = (S.sportLevel === 'advanced' || S.sportLevel === 'pro' || S.sportLevel === 'intermediate');
- var gridCols = isAdvancedRIR ? '40px 1fr 50px 1fr 44px' : '40px 1fr 60px 1fr';
+ // FIX P2 batch 2 : RIR column 44→56px pour tap target 44px + label RIR lisible
+ var gridCols = isAdvancedRIR ? '40px 1fr 50px 1fr 56px' : '40px 1fr 60px 1fr';
 
  // RIR target display for advanced users
  // MUSCU_PHASES doesn't carry rirTarget — use MESOCYCLE_WEEKS (4-week cycle) instead
@@ -6633,9 +6634,10 @@ function renderMusculationProgram(p) {
    type: 'number', min: '0', max: '5', step: '1',
    value: _rirVal,
    placeholder: '-',
-   style: 'width:36px;padding:4px;border:1px solid var(--border);border-radius:2px;font-family:Georgia;font-size:14px;text-align:center;background:var(--ivory)',
+   // FIX P2 batch 2 : tap target 44×44px, font 16px anti-iOS-zoom, ivory bg harmonisé
+   style: 'width:44px;min-height:44px;padding:6px;border:1px solid var(--border);border-radius:4px;font-family:Georgia;font-size:16px;text-align:center;background:var(--ivory);box-sizing:border-box',
    onclick: function(e) { e.stopPropagation(); },
-   onchange: (function(_setRow) {
+   onchange: (function(_setRow, _exName) {
     return function(e) {
      e.stopPropagation();
      var v = parseInt(e.target.value);
@@ -6646,14 +6648,22 @@ function renderMusculationProgram(p) {
       var _mesoI = _mesoW ? ((( S.muscuWeek || 1) - 1) % _mesoW.length) : -1;
       var _mesoE = (_mesoW && _mesoI >= 0) ? _mesoW[_mesoI] : null;
       var _rirTarget2 = _mesoE ? _mesoE.rirTarget : 2;
-      if (v > _rirTarget2 + 1) _setRow.rirNote = 'Augmentez la charge la prochaine fois';
-      else if (v < _rirTarget2 - 1) _setRow.rirNote = 'Réduisez la charge ou le volume';
+      // FIX P2 batch 2 — Auto-régulation charges basée sur RIR (Israetel RP).
+      // Écart de 2+ points → suggestion concrète ±2.5 kg (lift haut du corps)
+      //                   ou ±5 kg (lift bas du corps / compound lourd).
+      var _lbRegex = /squat|leg|fessier|ischios|mollet|presse|hip.*thrust|rdl|deadlift|soulev|cuisse|jambe/i;
+      var _incr = _lbRegex.test((_exName || '')) ? 5 : 2.5;
+      var _dRIR = v - _rirTarget2;
+      if (_dRIR >= 2) _setRow.rirNote = 'Trop facile — augmente de +' + _incr + ' kg la prochaine fois';
+      else if (_dRIR === 1) _setRow.rirNote = 'Facile — charge à maintenir ou +' + _incr + ' kg';
+      else if (_dRIR <= -2) _setRow.rirNote = 'Trop dur — réduis de −' + _incr + ' kg ou baisse les reps';
+      else if (_dRIR === -1) _setRow.rirNote = 'Limite — reste à cette charge';
       else _setRow.rirNote = null;
       try { localStorage.setItem('mtd_muscu_session_' + ((window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon'), JSON.stringify(S.muscuSessionLog)); } catch(e2) {}
       window.render();
      }
     };
-   })(setRow)
+   })(setRow, exRef && exRef.n)
   });
   row.appendChild(_rirInput);
  }
