@@ -1630,13 +1630,14 @@ function render() {
 
  // ═══ BIBLE HERMÈS §6 : Coach bar persistante bottom-sticky ═══
  // ═══ BIBLE HERMÈS §8 : FAB "+ Logger" flottant ═══
+ // ═══ BIBLE HERMÈS §10 : Drawer Progression bottom-sheet ═══
  // Détachés du wrap principal — ils vivent sur document.body pour être fixed au-dessus.
  try {
    // Nettoyer les instances précédentes
-   var _prevCoach = document.getElementById('coach-bar');
-   if (_prevCoach) _prevCoach.parentNode.removeChild(_prevCoach);
-   var _prevFab = document.getElementById('fab-logger-container');
-   if (_prevFab) _prevFab.parentNode.removeChild(_prevFab);
+   ['coach-bar', 'fab-logger-container', 'progression-drawer'].forEach(function(id) {
+     var el = document.getElementById(id);
+     if (el) el.parentNode.removeChild(el);
+   });
 
    if (window.renderCoachBar) {
      var coachBar = window.renderCoachBar();
@@ -1646,7 +1647,11 @@ function render() {
      var fab = window.renderFabLogger();
      if (fab) { fab.id = 'fab-logger-container'; document.body.appendChild(fab); }
    }
- } catch(e) { console.warn('[CoachBar/FAB]', e); }
+   if (window.renderProgressionDrawer) {
+     var drawer = window.renderProgressionDrawer();
+     if (drawer) document.body.appendChild(drawer);
+   }
+ } catch(e) { console.warn('[CoachBar/FAB/Drawer]', e); }
 
  // Auth banner (P1) — bannière sauvegarde cloud si pas de compte réel
  try { if (window.AuthBanner) window.AuthBanner.render(document.body); } catch(e) {}

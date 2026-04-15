@@ -134,61 +134,63 @@ function getStreakValue() {
   } catch(e) { return 0; }
 }
 
-// ─── BADGE ICON MAP (emoji overrides for richer display) ───
+// ─── BADGE ICON MAP — Bible Hermès §13.1 : PAS d'emoji. ───
+// Remplacé par monogrammes Georgia (initiales typographiques).
+// `emoji` conservé pour backward compat mais ignoré côté rendu (voir badgeIcon()).
 var BADGE_EMOJI = {
   // Onboarding
-  'first_login':      { emoji: '⭐', label: 'Premier Pas',        desc: 'Première connexion' },
-  'profile_complete': { emoji: '✅', label: 'Profil Complet',     desc: 'Toutes les infos renseignées' },
-  'first_plan':       { emoji: '📋', label: 'Planificateur',      desc: 'Premier planning généré' },
+  'first_login':      { emoji: '\u25CB', label: 'Premier Pas',        desc: 'Première connexion' },
+  'profile_complete': { emoji: '\u25CE', label: 'Profil Complet',     desc: 'Toutes les infos renseignées' },
+  'first_plan':       { emoji: '\u25A3', label: 'Planificateur',      desc: 'Premier planning généré' },
   // Streak
-  'streak_3':         { emoji: '🔥', label: '3 jours d\'affilée', desc: 'Connecté 3 jours de suite' },
-  'streak_7':         { emoji: '🔥', label: 'Semaine Parfaite',   desc: '7 jours consécutifs' },
-  'streak_14':        { emoji: '🔥', label: 'Deux Semaines',      desc: '14 jours consécutifs' },
-  'streak_30':        { emoji: '🏆', label: 'Mois Complet',       desc: '30 jours consécutifs' },
-  'streak_90':        { emoji: '🏆', label: 'Transformation',     desc: '90 jours consécutifs' },
+  'streak_3':         { emoji: 'III',    label: '3 jours d\'affilée', desc: 'Connecté 3 jours de suite' },
+  'streak_7':         { emoji: 'VII',    label: 'Semaine Parfaite',   desc: '7 jours consécutifs' },
+  'streak_14':        { emoji: 'XIV',    label: 'Deux Semaines',      desc: '14 jours consécutifs' },
+  'streak_30':        { emoji: 'XXX',    label: 'Mois Complet',       desc: '30 jours consécutifs' },
+  'streak_90':        { emoji: 'XC',     label: 'Transformation',     desc: '90 jours consécutifs' },
   // Weight tracking
-  'first_weigh':      { emoji: '⚖️', label: 'Suivi Lancé',        desc: 'Premier poids enregistré' },
-  'weight_10':        { emoji: '⚖️', label: 'Régulier',           desc: '10 pesées enregistrées' },
-  'weight_goal':      { emoji: '🎯', label: 'Objectif Atteint',   desc: 'Poids objectif atteint !' },
-  'first_kg_lost':    { emoji: '📉', label: 'Premier Kilo',       desc: 'Premier kg perdu' },
-  'five_kg':          { emoji: '📉', label: '-5 kg',              desc: '5 kg perdus' },
+  'first_weigh':      { emoji: 'W',      label: 'Suivi Lancé',        desc: 'Premier poids enregistré' },
+  'weight_10':        { emoji: 'W\u00b710', label: 'Régulier',        desc: '10 pesées enregistrées' },
+  'weight_goal':      { emoji: '\u25CE', label: 'Objectif Atteint',   desc: 'Poids objectif atteint.' },
+  'first_kg_lost':    { emoji: '-1',     label: 'Premier Kilo',       desc: 'Premier kg perdu' },
+  'five_kg':          { emoji: '-5',     label: '-5 kg',              desc: '5 kg perdus' },
   // Exploration
-  'recipes_10':       { emoji: '🍽️', label: 'Curieux',            desc: '10 recettes consultées' },
-  'recipes_50':       { emoji: '🍽️', label: 'Gastronome',         desc: '50 recettes consultées' },
-  'swap_master':      { emoji: '🔄', label: 'Swap Master',        desc: '20 repas échangés' },
-  'all_cuisines':     { emoji: '🌍', label: 'Tour du Monde',      desc: 'Toutes les cuisines goûtées' },
+  'recipes_10':       { emoji: 'R\u00b710', label: 'Curieux',         desc: '10 recettes consultées' },
+  'recipes_50':       { emoji: 'R\u00b750', label: 'Gastronome',      desc: '50 recettes consultées' },
+  'swap_master':      { emoji: '\u21C4', label: 'Swap Master',        desc: '20 repas échangés' },
+  'all_cuisines':     { emoji: 'W',      label: 'Tour du Monde',      desc: 'Toutes les cuisines goûtées' },
   // Sport
-  'first_workout':    { emoji: '💪', label: 'Sportif',            desc: 'Premier programme sport' },
-  'exercises_20':     { emoji: '💪', label: 'Athlète',            desc: '20 exercices consultés' },
+  'first_workout':    { emoji: 'S',      label: 'Sportif',            desc: 'Premier programme sport' },
+  'exercises_20':     { emoji: 'E\u00b720', label: 'Athlète',         desc: '20 exercices consultés' },
   // Calisthenics
-  'calisth_first_session': { emoji: '🤸', label: 'Callisthéniste',      desc: 'Premier programme callisthénie' },
-  'calisth_week_4':        { emoji: '🤸', label: 'Mois Callisthénie',   desc: '4 semaines complétées' },
-  'calisth_week_12':       { emoji: '🤸', label: 'Trimestriel Calisth.', desc: '12 semaines complétées' },
-  'calisth_first_pullup':  { emoji: '🏅', label: 'Première Traction',   desc: 'Première traction stricte' },
-  'calisth_muscle_up':     { emoji: '🏅', label: 'Muscle-Up',           desc: 'Muscle-up strict maîtrisé' },
+  'calisth_first_session': { emoji: 'C', label: 'Callisthéniste',      desc: 'Premier programme callisthénie' },
+  'calisth_week_4':        { emoji: 'IV', label: 'Mois Callisthénie',  desc: '4 semaines complétées' },
+  'calisth_week_12':       { emoji: 'XII', label: 'Trimestriel Calisth.', desc: '12 semaines complétées' },
+  'calisth_first_pullup':  { emoji: 'P', label: 'Première Traction',   desc: 'Première traction stricte' },
+  'calisth_muscle_up':     { emoji: 'M', label: 'Muscle-Up',           desc: 'Muscle-up strict maîtrisé' },
   // Muscu
-  'bench_100':    { emoji: '🏋️', label: 'Centenaire',     desc: 'Développé couché : 100 kg' },
-  'bench_120':    { emoji: '🏋️', label: 'Power Chest',    desc: 'Développé couché : 120 kg' },
-  'squat_100':    { emoji: '🏋️', label: 'Squatteur',      desc: 'Squat : 100 kg' },
-  'squat_140':    { emoji: '🏋️', label: 'Jambes de Fer',  desc: 'Squat : 140 kg' },
-  'deadlift_100': { emoji: '🏋️', label: 'Terrasseur',     desc: 'Soulevé de terre : 100 kg' },
-  'deadlift_160': { emoji: '🏋️', label: 'Force Brute',    desc: 'Soulevé de terre : 160 kg' },
-  'overhead_70':  { emoji: '🏋️', label: 'Bras au Ciel',   desc: 'Développé militaire : 70 kg' },
-  'total_300':    { emoji: '🥇', label: 'Powerlifter',    desc: 'Total bench+squat+dl ≥ 300 kg' },
-  'total_400':    { emoji: '🥇', label: 'Elite Force',    desc: 'Total bench+squat+dl ≥ 400 kg' },
-  'muscu_sessions_10': { emoji: '💪', label: 'Régularité Fer', desc: '10 séances muscu' },
-  'muscu_sessions_50': { emoji: '💪', label: 'Dédicace',       desc: '50 séances muscu' },
-  'first_pr':          { emoji: '🎖️', label: 'Premier PR',     desc: 'Premier record personnel' },
+  'bench_100':    { emoji: '100',  label: 'Centenaire',     desc: 'Développé couché : 100 kg' },
+  'bench_120':    { emoji: '120',  label: 'Power Chest',    desc: 'Développé couché : 120 kg' },
+  'squat_100':    { emoji: 'S100', label: 'Squatteur',      desc: 'Squat : 100 kg' },
+  'squat_140':    { emoji: 'S140', label: 'Jambes de Fer',  desc: 'Squat : 140 kg' },
+  'deadlift_100': { emoji: 'D100', label: 'Terrasseur',     desc: 'Soulevé de terre : 100 kg' },
+  'deadlift_160': { emoji: 'D160', label: 'Force Brute',    desc: 'Soulevé de terre : 160 kg' },
+  'overhead_70':  { emoji: 'OHP',  label: 'Bras au Ciel',   desc: 'Développé militaire : 70 kg' },
+  'total_300':    { emoji: '300',  label: 'Powerlifter',    desc: 'Total bench+squat+dl ≥ 300 kg' },
+  'total_400':    { emoji: '400',  label: 'Elite Force',    desc: 'Total bench+squat+dl ≥ 400 kg' },
+  'muscu_sessions_10': { emoji: 'X',  label: 'Régularité Fer', desc: '10 séances muscu' },
+  'muscu_sessions_50': { emoji: 'L',  label: 'Dédicace',       desc: '50 séances muscu' },
+  'first_pr':          { emoji: 'PR', label: 'Premier PR',     desc: 'Premier record personnel' },
   // Photos
-  'first_photo':  { emoji: '📸', label: 'Selfie',           desc: 'Première photo de progression' },
-  'both_photos':  { emoji: '📸', label: 'Analyse Complète', desc: 'Photos face + dos' },
+  'first_photo':  { emoji: '\u25A1', label: 'Selfie',         desc: 'Première photo de progression' },
+  'both_photos':  { emoji: '\u25A3', label: 'Analyse Complète', desc: 'Photos face + dos' },
   // Hyrox
-  'hyrox_first_program': { emoji: '🏃', label: 'Hyrox Starter',  desc: 'Premier programme Hyrox' },
-  'hyrox_week_4':        { emoji: '🏃', label: 'Mois Hyrox',     desc: '4 semaines de préparation' },
-  'hyrox_week_12':       { emoji: '🏃', label: 'Prépa Complète', desc: '12 semaines terminées' },
-  'hyrox_sub90':         { emoji: '⏱️', label: 'Sub 1h30',       desc: 'Objectif sub 1h30 atteint' },
-  'hyrox_sub60':         { emoji: '⏱️', label: 'Sub 1h00',       desc: 'Objectif sub 1h00 atteint' },
-  'hyrox_pro':           { emoji: '⭐', label: 'Élite Hyrox',    desc: 'Programme niveau Pro/Élite' }
+  'hyrox_first_program': { emoji: 'H',   label: 'Hyrox Starter',  desc: 'Premier programme Hyrox' },
+  'hyrox_week_4':        { emoji: 'H4',  label: 'Mois Hyrox',     desc: '4 semaines de préparation' },
+  'hyrox_week_12':       { emoji: 'H12', label: 'Prépa Complète', desc: '12 semaines terminées' },
+  'hyrox_sub90':         { emoji: '90',  label: 'Sub 1h30',       desc: 'Objectif sub 1h30 atteint' },
+  'hyrox_sub60':         { emoji: '60',  label: 'Sub 1h00',       desc: 'Objectif sub 1h00 atteint' },
+  'hyrox_pro':           { emoji: 'PRO', label: 'Élite Hyrox',    desc: 'Programme niveau Pro/Élite' }
 };
 
 // ─── GET LAST BADGE ───
@@ -824,7 +826,7 @@ function renderCardBonjour(S) {
     var _trialLeft = h('div', {});
     _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#6A4A1A);font-weight:600;margin-bottom:2px;'}, 'VERSION D\u2019ESSAI'));
     if (_trialDays > 0) {
-      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'}, _trialDays + ' jour' + (_trialDays > 1 ? 's' : '') + ' restant' + (_trialDays > 1 ? 's' : '') + ' \u2014 Profitez de toutes les fonctionnalit\u00e9s'));
+      _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'}, _trialDays + ' jour' + (_trialDays > 1 ? 's' : '') + ' restant' + (_trialDays > 1 ? 's' : '') + ' \u2014 Tu as accès à tout'));
     } else {
       _trialLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--red,#5A1010);'}, 'P\u00e9riode d\u2019essai termin\u00e9e'));
     }
@@ -1283,10 +1285,12 @@ function buildShareCanvas() {
   ctx.lineTo(SIZE - PAD, 100);
   ctx.stroke();
 
-  // ── Emoji flamme / trophée (grand) ──
-  ctx.font = '72px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",serif';
+  // ── Monogramme Hermès §13.1 : pas d'emoji, chiffres romains Georgia ──
+  ctx.font = '56px Georgia, serif';
   ctx.textAlign = 'center';
-  ctx.fillText(streak >= 7 ? '🏆' : '🔥', CX, 365);
+  ctx.fillStyle = '#0A0A09';
+  var monogram = streak >= 30 ? 'XXX+' : streak >= 7 ? 'VII+' : 'III';
+  ctx.fillText(monogram, CX, 365);
 
   // ── Nombre de jours (héro) ──
   ctx.fillStyle = '#F5F4F1';
@@ -3332,12 +3336,12 @@ function renderCardSundayReview(S) {
 
   c.appendChild(statsRow);
 
-  // Message de motivation
+  // Message de motivation — Bible Hermès §4 : tutoiement, pas de ponctuation émotionnelle.
   var motivMsg;
-  if (seancesDone >= 4) motivMsg = 'Excellente semaine ! La régularité, c\'est la clé.';
-  else if (seancesDone >= 2) motivMsg = 'Bonne semaine. Continuez sur cette lancée !';
-  else if (seancesDone >= 1) motivMsg = 'Un début. La semaine prochaine, visez 3 séances.';
-  else motivMsg = 'Pas de séance cette semaine. Recommencez dès demain !';
+  if (seancesDone >= 4) motivMsg = 'Semaine tenue. La régularité, c\'est la clé.';
+  else if (seancesDone >= 2) motivMsg = 'Bonne semaine. Tu continues sur cette lancée.';
+  else if (seancesDone >= 1) motivMsg = 'Un début. La semaine prochaine, vise 3 séances.';
+  else motivMsg = 'Pas de séance cette semaine. Tu reprends demain.';
 
   c.appendChild(h('p', { style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--grey);margin:12px 0 0;line-height:1.6;' }, motivMsg));
 
@@ -3494,40 +3498,15 @@ function renderTodayDashboard(p) {
   var cardShortcuts = renderCardShortcuts(); if (cardShortcuts) wrapper.appendChild(cardShortcuts);
 
   // ═══ DRAWER PROGRESSION (Bible Hermès §10) ═══
-  // Lien discret qui ouvre un bottom-sheet plein écran avec tabs.
-  var _extOpen = S._dashExtOpen || false;
+  // Bottom sheet fullscreen avec animation translateY — rendu via document.body.
   var drawerTrigger = h('button', {
     style: 'display:block;width:100%;margin:32px 0 4px;padding:24px 12px;background:transparent;border:none;border-bottom:1px solid var(--line,#D8D8D0);color:var(--ink-900,#0A0A09);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;text-align:left;font-weight:500;min-height:44px;',
     onclick: function() {
       S._dashExtOpen = true;
       if (window.render) window.render();
-      // Scroll to extended section once rendered
-      setTimeout(function() {
-        var ext = document.getElementById('progression-drawer');
-        if (ext) ext.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
     }
   }, 'VOIR MA PROGRESSION  \u2192');
   wrapper.appendChild(drawerTrigger);
-
-  if (_extOpen) {
-    var drawerWrap = h('div', { id: 'progression-drawer', style: 'margin-top:24px;' });
-    // Header drawer
-    var drawerHeader = h('div', {
-      style: 'display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--line,#D8D8D0);margin-bottom:32px;'
-    });
-    drawerHeader.appendChild(h('div', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;'
-    }, 'PROGRESSION'));
-    drawerHeader.appendChild(h('button', {
-      style: 'background:transparent;border:none;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-900,#0A0A09);font-weight:500;min-height:44px;padding:0 8px;',
-      onclick: function() { S._dashExtOpen = false; if (window.render) window.render(); }
-    }, 'FERMER  \u00d7'));
-    drawerWrap.appendChild(drawerHeader);
-
-    renderExtendedSections(drawerWrap, S);
-    wrapper.appendChild(drawerWrap);
-  }
 
   p.appendChild(wrapper);
 }
@@ -3887,5 +3866,146 @@ function renderCardTodayForYou() {
   return c;
 }
 window.renderCardTodayForYou = renderCardTodayForYou;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DRAWER PROGRESSION — Bottom sheet fullscreen (Bible Hermès §10)
+// ═══════════════════════════════════════════════════════════════════════════
+// Affiché sur document.body si S._dashExtOpen=true. Animation translateY spring iOS.
+// Tabs internes : Records / Tendances / Charges / Objectifs.
+// ═══════════════════════════════════════════════════════════════════════════
+function renderProgressionDrawer() {
+  var S = window.S;
+  if (!S || !S._dashExtOpen) return null;
+
+  var activeTab = S._progressionTab || 'records';
+
+  var sheet = h('div', {
+    id: 'progression-drawer',
+    style: 'position:fixed;inset:0;background:var(--paper,#FAF9F6);z-index:1000;overflow-y:auto;animation:drawerSlideUp 320ms cubic-bezier(0.32,0.72,0,1);'
+  });
+
+  // Header sticky
+  var header = h('div', {
+    style: 'position:sticky;top:0;background:var(--paper,#FAF9F6);border-bottom:1px solid var(--line,#D8D8D0);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;z-index:2;'
+  });
+  header.appendChild(h('button', {
+    style: 'background:transparent;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-900,#0A0A09);cursor:pointer;padding:10px 0;font-weight:500;min-height:44px;',
+    'aria-label': 'Fermer',
+    onclick: function() { S._dashExtOpen = false; if (window.render) window.render(); }
+  }, '\u2190 FERMER'));
+  header.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;'
+  }, 'PROGRESSION'));
+  header.appendChild(h('div', { style: 'width:80px;' })); // spacer pour centrage
+  sheet.appendChild(header);
+
+  // Tabs scrollable
+  var tabs = [
+    { key: 'records',   label: 'Records' },
+    { key: 'tendances', label: 'Tendances \u00b7 30 j' },
+    { key: 'charges',   label: 'Charges \u00b7 30 j' },
+    { key: 'objectifs', label: 'Objectifs semaine' }
+  ];
+  var tabsBar = h('div', {
+    style: 'display:flex;overflow-x:auto;border-bottom:1px solid var(--line,#D8D8D0);padding:0 24px;gap:4px;-webkit-overflow-scrolling:touch;'
+  });
+  tabs.forEach(function(tab) {
+    var isActive = activeTab === tab.key;
+    tabsBar.appendChild(h('button', {
+      style: 'background:transparent;border:none;padding:16px 20px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:' + (isActive ? 'var(--ink-900,#0A0A09)' : 'var(--ink-500,#6B6B65)') + ';font-weight:500;border-bottom:2px solid ' + (isActive ? 'var(--ink-900,#0A0A09)' : 'transparent') + ';white-space:nowrap;min-height:44px;',
+      onclick: function() { S._progressionTab = tab.key; if (window.render) window.render(); }
+    }, tab.label));
+  });
+  sheet.appendChild(tabsBar);
+
+  // Contenu par tab
+  var content = h('div', { style: 'padding:32px 24px 96px;max-width:720px;margin:0 auto;' });
+
+  // Rendre les sections existantes dans le drawer
+  try {
+    if (typeof window.renderExtendedSections === 'function' || typeof renderExtendedSections === 'function') {
+      // L'ancienne fonction renderExtendedSections rend TOUT — on la garde par compat
+      // mais dans le drawer on filtre visuellement selon l'onglet actif en utilisant des IDs.
+      var fn = window.renderExtendedSections || renderExtendedSections;
+      fn(content, S);
+    }
+  } catch(e) { console.warn('[ProgressionDrawer] renderExtendedSections failed:', e); }
+
+  sheet.appendChild(content);
+  return sheet;
+}
+window.renderProgressionDrawer = renderProgressionDrawer;
+
+// CSS animation drawer
+if (!document.getElementById('hermes-drawer-styles')) {
+  var drawerStyleEl = document.createElement('style');
+  drawerStyleEl.id = 'hermes-drawer-styles';
+  drawerStyleEl.textContent = '@keyframes drawerSlideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }';
+  document.head.appendChild(drawerStyleEl);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TOOLTIP JARGON — Bible Hermès §4.2.6 + §13 (explication inline des termes techniques)
+// ═══════════════════════════════════════════════════════════════════════════
+// Usage : jargonTooltip('TDEE') → span avec (?) cliquable, tap ouvre un popover.
+var JARGON_DEFS = {
+  'TDEE': { title: 'TDEE', text: 'Besoin calorique quotidien total. Calculé à partir de ton métabolisme de base (BMR) × un coefficient d\'activité physique. Unité : kcal/jour.' },
+  'BMR': { title: 'BMR', text: 'Métabolisme de base — énergie brûlée au repos pour maintenir tes fonctions vitales. Formule Mifflin-St Jeor.' },
+  '1RM': { title: '1RM', text: 'Charge maximale que tu peux soulever une seule fois sur un mouvement donné. Référence pour calculer tes charges de travail.' },
+  'RPE': { title: 'RPE', text: 'Rate of Perceived Exertion — effort ressenti de 1 à 10. 7 = dur mais contrôlé, 10 = impossible une rep de plus.' },
+  'RIR': { title: 'RIR', text: 'Reps In Reserve — combien de répétitions tu aurais pu faire en plus avant l\'échec. RIR 2 = il t\'en restait 2.' },
+  'VO2max': { title: 'VO2 max', text: 'Capacité maximale d\'oxygène que ton corps utilise à l\'effort. Indicateur clé d\'endurance cardio.' },
+  'K⁺': { title: 'Potassium', text: 'Minéral essentiel. En cas d\'insuffisance rénale, ton apport doit être surveillé (≤ 2 000 mg/j selon stade).' },
+  'DASH': { title: 'DASH', text: 'Régime Dietary Approaches to Stop Hypertension. Réduit le sodium, augmente le potassium/magnésium/calcium. Baisse la PA de 5-8 mmHg.' },
+  'macros': { title: 'Macronutriments', text: 'Les 3 grandes familles caloriques : protéines (4 kcal/g), glucides (4 kcal/g), lipides (9 kcal/g).' }
+};
+
+function jargonTooltip(term, displayText) {
+  var def = JARGON_DEFS[term];
+  if (!def) return h('span', {}, displayText || term);
+
+  var id = 'jargon-' + term.replace(/[^a-z0-9]/gi, '') + '-' + Math.random().toString(36).slice(2, 8);
+  var wrap = h('span', {
+    style: 'position:relative;display:inline-block;'
+  });
+  var label = h('span', {}, displayText || term);
+  var helper = h('button', {
+    style: 'display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-left:4px;border:1px solid var(--ink-500,#6B6B65);border-radius:50%;background:transparent;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--ink-500,#6B6B65);cursor:pointer;padding:0;line-height:1;vertical-align:middle;',
+    'aria-label': 'Définition : ' + def.title,
+    'aria-describedby': id,
+    onclick: function(e) {
+      e.preventDefault(); e.stopPropagation();
+      var existing = document.getElementById(id);
+      if (existing) { existing.parentNode.removeChild(existing); return; }
+      var pop = h('div', {
+        id: id,
+        role: 'tooltip',
+        style: 'position:absolute;top:100%;left:0;margin-top:8px;width:260px;max-width:calc(100vw - 40px);padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border-radius:2px;z-index:1100;box-shadow:0 6px 16px rgba(10,10,9,0.2);'
+      });
+      pop.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--paper,#FAF9F6);margin-bottom:8px;font-weight:500;opacity:0.7;'
+      }, def.title));
+      pop.appendChild(h('div', {
+        style: 'font-family:Georgia,serif;font-size:13px;line-height:1.55;color:var(--paper,#FAF9F6);'
+      }, def.text));
+      wrap.appendChild(pop);
+      // Close on outside click
+      setTimeout(function() {
+        var closeOnOutside = function(evt) {
+          if (!pop.contains(evt.target) && evt.target !== helper) {
+            if (pop.parentNode) pop.parentNode.removeChild(pop);
+            document.removeEventListener('click', closeOnOutside, true);
+          }
+        };
+        document.addEventListener('click', closeOnOutside, true);
+      }, 0);
+    }
+  }, '?');
+  wrap.appendChild(label);
+  wrap.appendChild(helper);
+  return wrap;
+}
+window.jargonTooltip = jargonTooltip;
+window.JARGON_DEFS = JARGON_DEFS;
 
 })();

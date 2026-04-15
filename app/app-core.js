@@ -18,11 +18,32 @@ function h(tag,attrs,ch){var el=document.createElement(tag);if(attrs)for(var k i
 function txt(s){return document.createTextNode(s)}
 
 function svgRing(size,stroke,pct,color,label,value){
-  var r=(size-stroke)/2,c=2*Math.PI*r,off=c-(pct/100)*c;
+  // FIX Bible Hermès §13.9 + audit Data Viz : suppression du cap 100% silencieux.
+  // Si dépassement, on affiche un 2ème anneau superposé --orange (Hermès H) qui
+  // représente l'overflow, comme Apple Watch. L'œil voit tout de suite la sur-conso.
+  var displayPct = Math.min(100, pct);
+  var overflowPct = Math.max(0, pct - 100);
+  var r=(size-stroke)/2,c=2*Math.PI*r,off=c-(displayPct/100)*c;
   var ns='http://www.w3.org/2000/svg';
   var svg=document.createElementNS(ns,'svg');svg.setAttribute('width',size);svg.setAttribute('height',size);svg.setAttribute('viewBox','0 0 '+size+' '+size);
   var bg=document.createElementNS(ns,'circle');bg.setAttribute('cx',size/2);bg.setAttribute('cy',size/2);bg.setAttribute('r',r);bg.setAttribute('fill','none');bg.setAttribute('stroke','#E5E4DE');bg.setAttribute('stroke-width',stroke);svg.appendChild(bg);
   var fg=document.createElementNS(ns,'circle');fg.setAttribute('cx',size/2);fg.setAttribute('cy',size/2);fg.setAttribute('r',r);fg.setAttribute('fill','none');fg.setAttribute('stroke',color);fg.setAttribute('stroke-width',stroke);fg.setAttribute('stroke-linecap','square');fg.setAttribute('stroke-dasharray',c);fg.setAttribute('stroke-dashoffset',c);fg.setAttribute('transform','rotate(-90 '+size/2+' '+size/2+')');fg.style.transition='stroke-dashoffset 0.7s ease';svg.appendChild(fg);
+  // Anneau OVERFLOW superposé (si pct > 100) en orange Hermès
+  if (overflowPct > 0) {
+    var overflowR = r - stroke - 1; // anneau interne légèrement plus petit
+    var oc = 2 * Math.PI * overflowR;
+    var ofOff = oc - (Math.min(100, overflowPct)/100) * oc;
+    var ov = document.createElementNS(ns,'circle');
+    ov.setAttribute('cx', size/2); ov.setAttribute('cy', size/2); ov.setAttribute('r', overflowR);
+    ov.setAttribute('fill','none'); ov.setAttribute('stroke', 'var(--orange,#E86F1E)');
+    ov.setAttribute('stroke-width', Math.max(2, stroke - 1));
+    ov.setAttribute('stroke-linecap','butt');
+    ov.setAttribute('stroke-dasharray', oc); ov.setAttribute('stroke-dashoffset', oc);
+    ov.setAttribute('transform', 'rotate(-90 ' + size/2 + ' ' + size/2 + ')');
+    ov.style.transition = 'stroke-dashoffset 0.7s ease';
+    svg.appendChild(ov);
+    setTimeout(function(){ ov.setAttribute('stroke-dashoffset', ofOff); }, 80);
+  }
   var t=document.createElementNS(ns,'text');t.setAttribute('x',size/2);t.setAttribute('y',size/2+1);t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','middle');t.setAttribute('fill','#0A0A09');t.setAttribute('font-family','Georgia');t.setAttribute('font-weight','normal');t.setAttribute('font-size','16');t.textContent=value;svg.appendChild(t);
   var w=h('div',{'class':'ring-wrap'},[svg,h('div',{'class':'ring-label'},label),h('div',{'class':'ring-val'},value+'g')]);
   setTimeout(function(){fg.setAttribute('stroke-dashoffset',off)},50);
