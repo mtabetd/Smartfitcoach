@@ -1143,6 +1143,14 @@ function renderProfilePage(container) {
  }, 'Supprimer mon compte');
  c.appendChild(deleteAccountBtn);
 
+ // POLISH 2026-04 : Lien DPO visible dans la zone "Données personnelles"
+ // pour faciliter l'exercice des droits RGPD (accès, rectification, opposition).
+ var dpoLink = h('a', {
+   href: 'mailto:dpo@smartfitcoach.com?subject=Demande%20RGPD',
+   style: 'display:block;margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);text-decoration:underline;'
+ }, 'Contacter le DPO (exercer mes droits RGPD) →');
+ c.appendChild(dpoLink);
+
  container.appendChild(c);
 
  // ─── Liens légaux ───
