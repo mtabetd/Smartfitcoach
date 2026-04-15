@@ -616,7 +616,7 @@ function replayLastUserMessage(_unused) {
     } else {
       var reply = data.reply || 'Pas de réponse.';
       stripRegenerateButtonsFromPrevious(messages);
-      appendCoachMessage(messages, reply, { canRegenerate: true });
+      appendCoachMessage(messages, reply, { canRegenerate: true, stream: true });
       if (Array.isArray(S.aiCoachHistory)) {
         S.aiCoachHistory.push({ role: 'assistant', content: reply });
         if (S.aiCoachHistory.length > MAX_HISTORY) S.aiCoachHistory = S.aiCoachHistory.slice(-MAX_HISTORY);
@@ -877,6 +877,51 @@ function recordCoachFeedback(messageText, rating) {
   } catch(e) {}
 }
 
+// POLISH 2026-04 (STREAMING) : streaming visuel "fake" client-side.
+// Affiche le texte mot par mot avec un délai variable basé sur la longueur du mot.
+// Pas de vrai SSE backend (Netlify timeout 26s + SSE proxy limité), mais le user
+// PERÇOIT un effet "live typing" identique. Respecte prefers-reduced-motion.
+// Vitesse : ~28ms/mot court, +6ms/caractère supplémentaire (max 80ms par chunk).
+function _streamTextInto(msgEl, text, doneCb) {
+  try {
+    if (!msgEl || !text) { if (doneCb) doneCb(); return; }
+    // Bypass animation si prefers-reduced-motion (accessibilité)
+    var reduceMotion = false;
+    try {
+      reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch(e) {}
+    if (reduceMotion) { msgEl.textContent = text; if (doneCb) doneCb(); return; }
+    // Découper par mot (préserve espaces + ponctuation)
+    var tokens = String(text).match(/\S+\s*/g) || [text];
+    msgEl.textContent = '';
+    var i = 0;
+    function tick() {
+      if (i >= tokens.length) { if (doneCb) doneCb(); return; }
+      msgEl.textContent += tokens[i];
+      // Auto-scroll pendant le streaming
+      try {
+        var scroller = document.getElementById('ai-coach-messages');
+        if (scroller && !_autoScrollSuspended) scroller.scrollTop = scroller.scrollHeight;
+      } catch(e) {}
+      var token = tokens[i];
+      i++;
+      // Délai variable : base 28ms + 6ms par char au-delà de 4 chars (cap 80ms)
+      var extra = Math.max(0, token.length - 4) * 6;
+      // Ralentir après ponctuation (point, virgule, deux-points, point d'exclamation/interrogation)
+      var lastChar = token.replace(/\s+$/, '').slice(-1);
+      var punctBoost = (lastChar === '.' || lastChar === '!' || lastChar === '?') ? 120
+                     : (lastChar === ',' || lastChar === ':' || lastChar === ';') ? 60 : 0;
+      var delay = Math.min(80, 28 + extra) + punctBoost;
+      setTimeout(tick, delay);
+    }
+    tick();
+  } catch(e) {
+    // Fallback : pose le texte d'un coup
+    try { msgEl.textContent = text; } catch(_e) {}
+    if (doneCb) doneCb();
+  }
+}
+
 function appendCoachMessage(container, text, opts) {
   opts = opts || {};
   var wrap = document.createElement('div');
@@ -886,7 +931,14 @@ function appendCoachMessage(container, text, opts) {
   name.textContent = 'Smart Fit Coach';
   var msg = document.createElement('div');
   msg.className = 'ai-msg-text';
-  msg.textContent = text;
+  // POLISH 2026-04 (STREAMING) : si opts.stream=true → animation mot par mot.
+  // Sinon (chargement historique, regen, etc.) → texte d'un coup.
+  if (opts.stream) {
+    msg.textContent = ''; // vide initial
+    _streamTextInto(msg, text);
+  } else {
+    msg.textContent = text;
+  }
   wrap.appendChild(name);
   wrap.appendChild(msg);
 
@@ -1172,7 +1224,7 @@ function sendMessage() {
       // POLISH 2026-04 (V1.2) : dernier message a le bouton "Régénérer".
       // Les précédents (via stripActions) gardent copier + feedback mais pas regen.
       stripRegenerateButtonsFromPrevious(messages);
-      appendCoachMessage(messages, reply, { canRegenerate: true });
+      appendCoachMessage(messages, reply, { canRegenerate: true, stream: true });
       // Sauvegarder réponse dans historique
       if (Array.isArray(S.aiCoachHistory)) {
         S.aiCoachHistory.push({ role: 'assistant', content: reply });
