@@ -336,6 +336,45 @@ window.recordSessionFeedback = function(data) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 (GRAPHES) : série wellness sur N derniers jours pour Chart.js.
+// Retourne { labels:['YYYY-MM-DD',...], sleep:[num/null,...], energyScore:[num/null,...] }
+// Jours sans log → null (Chart.js skip gracefully avec spanGaps:true).
+// Score énergie : bas=1, moyen=2, haut=3 (numérisé pour visualisation).
+window.getSleepEnergyTrend = function(days) {
+  try {
+    days = (typeof days === 'number' && days > 0) ? days : 30;
+    if (typeof window.getWellnessHistory !== 'function') return null;
+    var history = window.getWellnessHistory(days);
+    if (!Array.isArray(history)) return null;
+    // Index historique par date pour lookup O(1)
+    var byDate = {};
+    history.forEach(function(h) { if (h && h.date) byDate[h.date] = h; });
+    // Générer les N derniers jours (avec null pour jours manquants)
+    var labels = [], sleep = [], energyScore = [];
+    var energyMap = { bas: 1, moyen: 2, haut: 3 };
+    var now = new Date();
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    for (var i = days - 1; i >= 0; i--) {
+      var d = new Date(now.getTime() - i * 86400000);
+      var key = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+      labels.push(key);
+      var h = byDate[key];
+      if (h && typeof h.sleep === 'number' && h.sleep >= 1 && h.sleep <= 5) {
+        sleep.push(h.sleep);
+      } else {
+        sleep.push(null);
+      }
+      if (h && h.energy && typeof energyMap[h.energy] === 'number') {
+        energyScore.push(energyMap[h.energy]);
+      } else {
+        energyScore.push(null);
+      }
+    }
+    var loggedDays = sleep.filter(function(s) { return s !== null; }).length;
+    return { labels: labels, sleep: sleep, energyScore: energyScore, loggedDays: loggedDays };
+  } catch(e) { return null; }
+};
+
 // POLISH 2026-04 (INSIGHTS) : moyenne wellness sur N derniers jours.
 // Retourne { sleepAvg, energyStats, muscleStats, daysLogged } ou null.
 // sleepAvg = moyenne numérique 1-5, energyStats/muscleStats = répartition par token.
