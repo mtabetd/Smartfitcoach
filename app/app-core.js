@@ -347,6 +347,239 @@ window.recordSessionFeedback = function(data) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 (RECORDS) : calcule les meilleurs résultats historiques de l'user.
+// Retourne { maxLifts:[...], weightMilestone, longestSession, maxStreak } ou null.
+// 100% défensif : tous les champs optionnels, retourne null si aucune donnée.
+window.getPersonalRecords = function() {
+  try {
+    var S = window.S;
+    if (!S) return null;
+    var records = {};
+    // Formule Epley 1RM = weight × (1 + reps/30) — standard fitness literature
+    function epley1RM(weight, reps) {
+      var w = parseFloat(weight), r = parseFloat(reps);
+      if (isNaN(w) || !isFinite(w) || w <= 0) return null;
+      if (isNaN(r) || !isFinite(r) || r <= 0) return null;
+      return Math.round(w * (1 + r / 30) * 10) / 10;
+    }
+
+    // 1) CHARGES MAX : top 3 exos compound avec leur max historique + 1RM estimé
+    if (S.muscuProgressionHistory && typeof S.muscuProgressionHistory === 'object') {
+      var compoundExos = [
+        'Développé couché', 'Squat', 'Soulevé de terre', 'Développé militaire',
+        'Rowing barre', 'Hip Thrust', 'Presse à cuisses'
+      ];
+      function normalize(s) {
+        return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+      }
+      var histKeys = Object.keys(S.muscuProgressionHistory);
+      var maxLifts = [];
+      compoundExos.forEach(function(target) {
+        var normTarget = normalize(target);
+        var realKey = null;
+        for (var i = 0; i < histKeys.length; i++) {
+          if (normalize(histKeys[i]) === normTarget) { realKey = histKeys[i]; break; }
+        }
+        if (!realKey) return;
+        var entries = S.muscuProgressionHistory[realKey];
+        if (!Array.isArray(entries) || !entries.length) return;
+        // Trouver l'entrée avec la plus grande charge (weight)
+        var bestW = 0, bestEntry = null;
+        entries.forEach(function(e) {
+          if (!e) return;
+          var w = parseFloat(e.weight);
+          if (!isNaN(w) && isFinite(w) && w > bestW) {
+            bestW = w;
+            bestEntry = e;
+          }
+        });
+        if (bestEntry) {
+          maxLifts.push({
+            exercise: target,
+            weight: bestW,
+            reps: parseFloat(bestEntry.reps) || null,
+            date: bestEntry.date || null,
+            oneRepMax: epley1RM(bestEntry.weight, bestEntry.reps)
+          });
+        }
+      });
+      // Trier par 1RM (ou charge brute) décroissant + top 3
+      maxLifts.sort(function(a, b) {
+        var aScore = a.oneRepMax || a.weight;
+        var bScore = b.oneRepMax || b.weight;
+        return bScore - aScore;
+      });
+      if (maxLifts.length > 0) records.maxLifts = maxLifts.slice(0, 3);
+    }
+
+    // 2) POIDS MILESTONE : selon goal (bulk → max, cut/shred → min)
+    if (Array.isArray(S.weightHistory) && S.weightHistory.length >= 2) {
+      var cleanHistory = S.weightHistory
+        .filter(function(e) {
+          if (!e) return false;
+          var w = parseFloat(e.weight || e.w || e);
+          return !isNaN(w) && isFinite(w) && w > 0;
+        })
+        .map(function(e) {
+          return { weight: parseFloat(e.weight || e.w || e), date: e.date || null };
+        });
+      if (cleanHistory.length >= 2) {
+        var goalKey = null;
+        if (window.GOALS && typeof S.goal === 'number' && window.GOALS[S.goal]) {
+          goalKey = window.GOALS[S.goal].key;
+        }
+        // Déterminer la direction souhaitée selon le goal
+        var direction = null;
+        if (goalKey === 'bulk' || goalKey === 'lean_bulk') direction = 'max';
+        else if (goalKey === 'cut' || goalKey === 'shred') direction = 'min';
+        // Sinon (maintain ou inconnu) on affiche les 2 extrêmes
+        if (direction === 'max' || direction === 'min') {
+          var best = cleanHistory[0];
+          cleanHistory.forEach(function(e) {
+            if (direction === 'max' && e.weight > best.weight) best = e;
+            else if (direction === 'min' && e.weight < best.weight) best = e;
+          });
+          records.weightMilestone = {
+            direction: direction,
+            weight: Math.round(best.weight * 10) / 10,
+            date: best.date,
+            goalLabel: direction === 'max' ? 'Max atteint' : 'Min atteint'
+          };
+        } else {
+          // Maintain : afficher la plage (min-max)
+          var minW = cleanHistory[0].weight, maxW = cleanHistory[0].weight;
+          cleanHistory.forEach(function(e) {
+            if (e.weight < minW) minW = e.weight;
+            if (e.weight > maxW) maxW = e.weight;
+          });
+          records.weightRange = {
+            min: Math.round(minW * 10) / 10,
+            max: Math.round(maxW * 10) / 10,
+            goalLabel: 'Plage'
+          };
+        }
+      }
+    }
+
+    // 3) SÉANCE LA PLUS LONGUE
+    if (S.sessionHistory && typeof S.sessionHistory === 'object') {
+      var keys = Object.keys(S.sessionHistory);
+      var longest = null;
+      keys.forEach(function(k) {
+        var s = S.sessionHistory[k];
+        if (!s) return;
+        var dur = parseFloat(s.duration);
+        if (!isNaN(dur) && isFinite(dur) && dur > 0) {
+          if (!longest || dur > longest.duration) {
+            longest = {
+              duration: Math.round(dur),
+              kcalTotal: parseFloat(s.kcalTotal) || 0,
+              date: (s.date && typeof s.date === 'string') ? s.date.slice(0, 10) : null
+            };
+          }
+        }
+      });
+      if (longest) records.longestSession = longest;
+    }
+
+    // 4) STREAK MAX (depuis mtd_streak_<uid>)
+    try {
+      var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+      var uid = user && user.id ? user.id : 'anon';
+      var streakRaw = localStorage.getItem('mtd_streak_' + uid);
+      if (streakRaw) {
+        var streakObj = JSON.parse(streakRaw);
+        if (streakObj && typeof streakObj.max === 'number' && streakObj.max > 0) {
+          records.maxStreak = streakObj.max;
+        }
+      }
+    } catch(_e) {}
+
+    // Retourne null si aucun record collecté (évite widget vide)
+    if (Object.keys(records).length === 0) return null;
+    return records;
+  } catch(e) { return null; }
+};
+
+// POLISH 2026-04 (GRAPH CHARGES) : progression charges sur N derniers jours.
+// Retourne { labels:['YYYY-MM-DD' × N], datasets: [{name, data:[num|null × N]}, ...] }
+// Sélectionne jusqu'à 3 exos "compound" (Squat, DC, SDT, OHP) qui ont
+// au moins 2 entrées dans la fenêtre → pertinent pour tracer une courbe.
+window.getStrengthTrend = function(days) {
+  try {
+    days = (typeof days === 'number' && days > 0) ? days : 30;
+    var S = window.S;
+    if (!S || !S.muscuProgressionHistory || typeof S.muscuProgressionHistory !== 'object') return null;
+    // Exos compound cibles (noms FR tels qu'utilisés dans muscuProgressionHistory)
+    var targetExos = [
+      'Développé couché', 'Squat', 'Soulevé de terre', 'Développé militaire',
+      'Rowing barre', 'Hip Thrust', 'Presse à cuisses', 'Curl barre'
+    ];
+    // Matching case/accent-insensitive pour tolérer les variations de saisie
+    function normalize(s) {
+      return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    }
+    var histKeys = Object.keys(S.muscuProgressionHistory);
+    // Construire une map { targetExo: vraie_cle } pour retrouver l'entrée réelle
+    var matched = {};
+    targetExos.forEach(function(target) {
+      var normTarget = normalize(target);
+      for (var i = 0; i < histKeys.length; i++) {
+        if (normalize(histKeys[i]) === normTarget && !matched[target]) {
+          matched[target] = histKeys[i];
+          break;
+        }
+      }
+    });
+    var now = new Date();
+    var cutoffMs = now.getTime() - (days - 1) * 86400000;
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    // Labels (N jours glissants)
+    var labels = [];
+    for (var d2 = days - 1; d2 >= 0; d2--) {
+      var dd = new Date(now.getTime() - d2 * 86400000);
+      labels.push(dd.getFullYear() + '-' + pad(dd.getMonth()+1) + '-' + pad(dd.getDate()));
+    }
+    // Pour chaque exo matché, extraire la série (max weight par jour dans la fenêtre)
+    var datasets = [];
+    Object.keys(matched).forEach(function(name) {
+      var realKey = matched[name];
+      var entries = S.muscuProgressionHistory[realKey] || [];
+      if (!Array.isArray(entries)) return;
+      // Index par date (dernier poids gagne si plusieurs entries same day)
+      var byDate = {};
+      entries.forEach(function(e) {
+        if (!e || !e.date) return;
+        var dt = new Date(e.date + 'T00:00:00').getTime();
+        if (isNaN(dt) || dt < cutoffMs) return;
+        var w = parseFloat(e.weight);
+        if (!isNaN(w) && isFinite(w) && w > 0) {
+          // Prendre le max du jour (si plusieurs séries, on garde la plus lourde)
+          if (!byDate[e.date] || w > byDate[e.date]) byDate[e.date] = w;
+        }
+      });
+      // Construire la série alignée sur labels
+      var data = labels.map(function(lbl) { return typeof byDate[lbl] === 'number' ? byDate[lbl] : null; });
+      var nonNull = data.filter(function(v) { return v !== null; }).length;
+      // Seuil : exo doit avoir au moins 2 points pour tracer une courbe pertinente
+      if (nonNull >= 2) {
+        datasets.push({
+          name: name,
+          data: data,
+          lastValue: data.filter(function(v){ return v !== null; }).slice(-1)[0] || null,
+          firstValue: data.filter(function(v){ return v !== null; })[0] || null,
+          dataPoints: nonNull
+        });
+      }
+    });
+    // Trier par nombre de points (le plus régulier en premier) puis garder top 3
+    datasets.sort(function(a, b) { return b.dataPoints - a.dataPoints; });
+    datasets = datasets.slice(0, 3);
+    if (datasets.length === 0) return null;
+    return { labels: labels, datasets: datasets };
+  } catch(e) { return null; }
+};
+
 // POLISH 2026-04 (GRAPHES) : série wellness sur N derniers jours pour Chart.js.
 // Retourne { labels:['YYYY-MM-DD',...], sleep:[num/null,...], energyScore:[num/null,...] }
 // Jours sans log → null (Chart.js skip gracefully avec spanGaps:true).

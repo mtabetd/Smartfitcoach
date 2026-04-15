@@ -2193,6 +2193,240 @@ function renderExtendedSections(wrapper, S) {
     // Widget optionnel — silencieux
   }
 
+  // POLISH 2026-04 (GRAPH CHARGES) : courbes progression charges 30j.
+  // Exploite S.muscuProgressionHistory + getStrengthTrend (top 3 compound).
+  // Affiché UNIQUEMENT si au moins 1 exo a ≥2 points sur 30j.
+  try {
+    if (typeof window.getStrengthTrend === 'function') {
+      var strengthTrend = window.getStrengthTrend(30);
+      if (strengthTrend && strengthTrend.datasets.length > 0) {
+        wrapper.appendChild(sectionLabel('Progression charges (30 jours)'));
+        var strengthBox = card();
+
+        // Header : delta par exo (Georgia)
+        var deltaRow = h('div', { style: 'display:flex;flex-direction:column;gap:6px;margin-bottom:12px;' });
+        strengthTrend.datasets.forEach(function(ds, idx) {
+          var delta = (ds.lastValue !== null && ds.firstValue !== null) ? (ds.lastValue - ds.firstValue) : null;
+          var deltaPct = (delta !== null && ds.firstValue > 0) ? (delta / ds.firstValue) * 100 : null;
+          var colorByDelta = (delta === null) ? 'var(--grey,#6B6B65)'
+                              : (delta > 0 ? 'var(--green,#1A4A1A)'
+                              : (delta < 0 ? 'var(--red,#5A1010)' : 'var(--grey,#6B6B65)'));
+          var signTxt = (delta === null) ? '' : (delta > 0 ? '+' : '') + delta.toFixed(1) + ' kg';
+          var pctTxt = (deltaPct !== null) ? ' (' + (deltaPct > 0 ? '+' : '') + deltaPct.toFixed(1) + '%)' : '';
+          var line = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
+          line.appendChild(h('span', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, ds.name));
+          var right = h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:' + colorByDelta + ';font-weight:600;' }, signTxt + pctTxt);
+          line.appendChild(right);
+          deltaRow.appendChild(line);
+        });
+        strengthBox.appendChild(deltaRow);
+
+        // Canvas Chart.js
+        var sChartWrap = h('div', { style: 'position:relative;height:180px;' });
+        var sCanvas = document.createElement('canvas');
+        sCanvas.id = 'today-strength-trend-chart';
+        sCanvas.style.cssText = 'width:100%;height:180px;max-height:180px;';
+        sChartWrap.appendChild(sCanvas);
+        strengthBox.appendChild(sChartWrap);
+
+        requestAnimationFrame(function() {
+          try {
+            var sCtx = document.getElementById('today-strength-trend-chart');
+            if (!sCtx || typeof window.createChart !== 'function' || typeof Chart === 'undefined') return;
+            // Palette sobre cohérente avec le reste
+            // FIX CONTRE-AUDIT : pair HEX/RGBA (la tentative précédente de convertir
+            // HEX → RGBA via .replace() ne fonctionnait PAS → fill opaque = bordure).
+            // Maintenant : valeurs RGBA explicites avec alpha 0.08 (fill discret).
+            var palette = [
+              { border: '#1A4A1A', bg: 'rgba(26, 74, 26, 0.08)' },   // vert sombre
+              { border: '#6A4A1A', bg: 'rgba(106, 74, 26, 0.08)' },  // orange profond
+              { border: '#5A3A7A', bg: 'rgba(90, 58, 122, 0.08)' }   // violet
+            ];
+            var shortLabels = strengthTrend.labels.map(function(iso) {
+              var parts = iso.split('-');
+              return parts.length === 3 ? parts[2] + '/' + parts[1] : iso;
+            });
+            window.createChart(sCtx, {
+              type: 'line',
+              data: {
+                labels: shortLabels,
+                datasets: strengthTrend.datasets.map(function(ds, i) {
+                  var color = palette[i % palette.length];
+                  return {
+                    label: ds.name + ' (kg)',
+                    data: ds.data,
+                    borderColor: color.border,
+                    backgroundColor: color.bg,
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    spanGaps: true
+                  };
+                })
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                    labels: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 10 }, boxWidth: 12, padding: 10 }
+                  },
+                  tooltip: {
+                    backgroundColor: '#0A0A09',
+                    titleFont: { family: 'Georgia, serif', size: 11 },
+                    bodyFont: { family: 'Helvetica Neue, Arial, sans-serif', size: 11 },
+                    padding: 8,
+                    callbacks: {
+                      label: function(ctx) {
+                        var v = ctx.parsed.y;
+                        return ctx.dataset.label + ' : ' + (v === null ? '—' : v.toFixed(1) + ' kg');
+                      }
+                    }
+                  }
+                },
+                scales: {
+                  x: {
+                    ticks: {
+                      font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 },
+                      maxRotation: 0, autoSkip: true, maxTicksLimit: 7
+                    },
+                    grid: { display: false }
+                  },
+                  y: {
+                    ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } },
+                    grid: { color: 'rgba(216,216,208,0.3)' },
+                    title: {
+                      display: true,
+                      text: 'kg',
+                      font: { family: 'Georgia, serif', size: 10 }
+                    }
+                  }
+                }
+              }
+            });
+          } catch(_scErr) { /* silencieux */ }
+        });
+
+        wrapper.appendChild(strengthBox);
+      }
+    }
+  } catch(_stErr) {
+    // Widget optionnel — silencieux
+  }
+
+  // POLISH 2026-04 (RECORDS) : meilleurs résultats historiques de l'user.
+  // Exploite window.getPersonalRecords() qui agrège charges max, poids milestone,
+  // séance plus longue, streak max. Affiché uniquement si ≥1 record collecté.
+  try {
+    if (typeof window.getPersonalRecords === 'function') {
+      var records = window.getPersonalRecords();
+      if (records) {
+        wrapper.appendChild(sectionLabel('Records personnels'));
+        var recordsBox = card();
+
+        // Helper : ligne record (label gauche, valeur droite)
+        function recordLine(label, value, detail) {
+          var row = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 0;border-bottom:1px solid var(--border,#D8D8D0);' });
+          var left = h('div', { style: 'flex:1;min-width:0;' });
+          left.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, label));
+          if (detail) {
+            left.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;letter-spacing:0.3px;' }, detail));
+          }
+          var right = h('div', { style: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);font-weight:normal;white-space:nowrap;' }, value);
+          row.appendChild(left);
+          row.appendChild(right);
+          return row;
+        }
+
+        // Helper : formater date ISO en "jj/mm/aaaa".
+        // FIX CONTRE-AUDIT : slice(0,10) AVANT split pour éviter la corruption
+        // si on reçoit un timestamp ISO complet "2026-04-15T14:30:00Z"
+        // (sinon parts[2] = '15T14:30:00Z' → affichage cassé).
+        function fmtDate(iso) {
+          if (!iso) return '';
+          var shortIso = String(iso).slice(0, 10);
+          var parts = shortIso.split('-');
+          if (parts.length !== 3) return String(iso).slice(0, 30);
+          return parts[2] + '/' + parts[1] + '/' + parts[0];
+        }
+
+        var hasContent = false;
+
+        // 1) Charges max (top 3)
+        if (Array.isArray(records.maxLifts) && records.maxLifts.length > 0) {
+          records.maxLifts.forEach(function(lift) {
+            var valueStr = lift.weight + ' kg';
+            var detailParts = [];
+            if (lift.reps) detailParts.push(lift.reps + ' reps');
+            if (lift.oneRepMax) detailParts.push('1RM ≈ ' + lift.oneRepMax + ' kg');
+            if (lift.date) detailParts.push(fmtDate(lift.date));
+            recordsBox.appendChild(recordLine(lift.exercise, valueStr, detailParts.join(' · ')));
+            hasContent = true;
+          });
+        }
+
+        // 2) Poids milestone ou range
+        if (records.weightMilestone) {
+          var wm = records.weightMilestone;
+          recordsBox.appendChild(recordLine(
+            wm.goalLabel,
+            wm.weight + ' kg',
+            wm.date ? fmtDate(wm.date) : null
+          ));
+          hasContent = true;
+        } else if (records.weightRange) {
+          var wr = records.weightRange;
+          recordsBox.appendChild(recordLine(
+            'Plage de poids',
+            wr.min + '–' + wr.max + ' kg',
+            null
+          ));
+          hasContent = true;
+        }
+
+        // 3) Séance la plus longue
+        if (records.longestSession) {
+          var ls = records.longestSession;
+          var lsDetail = [];
+          if (ls.kcalTotal) lsDetail.push(ls.kcalTotal + ' kcal brûlées');
+          if (ls.date) lsDetail.push(fmtDate(ls.date));
+          recordsBox.appendChild(recordLine(
+            'Séance la plus longue',
+            ls.duration + ' min',
+            lsDetail.join(' · ')
+          ));
+          hasContent = true;
+        }
+
+        // 4) Streak max
+        if (typeof records.maxStreak === 'number' && records.maxStreak > 0) {
+          recordsBox.appendChild(recordLine(
+            'Plus longue série',
+            records.maxStreak + ' jour' + (records.maxStreak > 1 ? 's' : ''),
+            'Jours consécutifs'
+          ));
+          hasContent = true;
+        }
+
+        // Retirer le border-bottom du dernier élément pour finition propre
+        if (hasContent) {
+          var allRows = recordsBox.querySelectorAll('div > div[style*="border-bottom"]');
+          if (allRows.length) allRows[allRows.length - 1].style.borderBottom = 'none';
+        }
+
+        // Safety : si finalement rien affiché, ne pas ajouter de card vide
+        if (hasContent) {
+          wrapper.appendChild(recordsBox);
+        }
+      }
+    }
+  } catch(_rErr) {
+    // Widget optionnel — silencieux
+  }
+
   // Weight chart (Chart.js)
   wrapper.appendChild(sectionLabel('Courbe de poids'));
   var rawHistCheck = (S.weightHistory || []).filter(function(e) {
