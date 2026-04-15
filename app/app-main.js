@@ -1831,7 +1831,12 @@ function renderRegister(app) {
  }
 
  // ── Country dial codes for phone selector ──────────────────────────
+ // POLISH 2026-04 : Maroc en 1er (cible utilisateurs MA), suivi du Maghreb,
+ // puis Europe francophone (FR/BE/CH), puis reste du monde.
  var DIAL_CODES = [
+   {code:'+212',flag:'🇲🇦',name:'Maroc'},
+   {code:'+213',flag:'🇩🇿',name:'Algérie'},
+   {code:'+216',flag:'🇹🇳',name:'Tunisie'},
    {code:'+33',flag:'🇫🇷',name:'France'},
    {code:'+32',flag:'🇧🇪',name:'Belgique'},
    {code:'+41',flag:'🇨🇭',name:'Suisse'},
@@ -1844,9 +1849,6 @@ function renderRegister(app) {
    {code:'+351',flag:'🇵🇹',name:'Portugal'},
    {code:'+31',flag:'🇳🇱',name:'Pays-Bas'},
    {code:'+352',flag:'🇱🇺',name:'Luxembourg'},
-   {code:'+212',flag:'🇲🇦',name:'Maroc'},
-   {code:'+213',flag:'🇩🇿',name:'Algérie'},
-   {code:'+216',flag:'🇹🇳',name:'Tunisie'},
    {code:'+221',flag:'🇸🇳',name:'Sénégal'},
    {code:'+225',flag:'🇨🇮',name:'Côte d\'Ivoire'},
    {code:'+237',flag:'🇨🇲',name:'Cameroun'},
@@ -1883,7 +1885,7 @@ function renderRegister(app) {
    {code:'+358',flag:'🇫🇮',name:'Finlande'},
    {code:'+61',flag:'🇦🇺',name:'Australie'}
  ];
- var _selDialIdx = 0; // default: France +33
+ var _selDialIdx = 0; // default: Maroc +212 (cible utilisateurs MA)
 
  var form = h('form', {'class': 'auth-form', onsubmit: function(e){ e.preventDefault(); }, autocomplete: 'on'});
 
@@ -1981,6 +1983,7 @@ function renderRegister(app) {
    type: 'tel',
    placeholder: '6 12 34 56 78',
    autocomplete: 'tel-national',
+   inputmode: 'tel',
    style: 'flex:1;height:44px;min-width:0'
  });
 
