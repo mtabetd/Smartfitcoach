@@ -2454,6 +2454,13 @@ function renderTodayDashboard(p) {
 window.TODAY = {
   render: renderTodayDashboard
 };
+// FIX F1 COHÉRENCE PROFIL 2026-04 : exposer getCalorieTarget + getMacroTargets en window
+// pour que app-main.js renderProfilePage puisse les utiliser (source unique).
+// Avant : ces fonctions étaient dans l'IIFE de today-dashboard.js, inaccessibles depuis
+// app-main.js → le profil utilisait calcTarget() brut sans calMultiplier.
+window.getCalorieTarget = getCalorieTarget;
+window.getMacroTargets = getMacroTargets;
+window.getTodayTotals = getTodayTotals;
 
 // ─── DÉTECTION CHANGEMENT DE JOUR ───
 // Re-render quand l'app redevient visible (ex: lendemain matin, app gardée ouverte)

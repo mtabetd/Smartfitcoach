@@ -127,7 +127,13 @@ function sanitizeContext(ctx) {
     'muscuWeights', 'strengthProfile',
     'hyroxLevel', 'hyroxGoal', 'hyroxWeek',
     'runningLevel', 'runningGoal', 'runningWeek',
-    'cyclingLevel', 'cyclingGoal', 'appMode'
+    'cyclingLevel', 'cyclingGoal', 'appMode',
+    // FIX COACH IA CONTEXT 2026-04 : pertinence + sécurité (grossesse, blessures, streak)
+    'pregnant', 'pregnancyWeek', 'breastfeeding',
+    'cycleTracking', 'cycleLength', 'lastPeriodDate',
+    'trainingDaysSelected', 'trainTime', 'mealsPerDay',
+    'muscuMedical', 'medical', 'streak',
+    'intolerances', 'halal'
   ];
 
   var safe = {};
@@ -172,10 +178,57 @@ function sanitizeContext(ctx) {
       }
     } else if (field === 'age' || field === 'weight' || field === 'height' ||
                field === 'sportDays' || field === 'crossfitWeek' || field === 'triathlonFTP' ||
-               field === 'hyroxWeek' || field === 'runningWeek') {
+               field === 'hyroxWeek' || field === 'runningWeek' ||
+               field === 'pregnancyWeek' || field === 'cycleLength' ||
+               field === 'mealsPerDay' || field === 'streak') {
       var num = parseFloat(val);
       if (!isNaN(num) && isFinite(num)) safe[field] = num;
-    } else {
+    }
+    // FIX F2 CONTRE-AUDIT 2026-04 : handlers typés pour booléens / arrays / objects.
+    // AVANT : le fallback `else` convertissait tout en string via sanitizeString("false"),
+    //         résultat : une string "false" est TRUTHY → alerte ⚠️ ENCEINTE émise POUR TOUS
+    //         les users (hommes inclus). Safety warnings COMPLÈTEMENT inversés !
+    // MAINTENANT : typage strict par champ.
+    else if (field === 'pregnant' || field === 'breastfeeding' ||
+             field === 'cycleTracking' || field === 'halal') {
+      // Booléen strict (true uniquement si val === true OR 'true')
+      safe[field] = (val === true || val === 'true');
+    }
+    else if (field === 'trainingDaysSelected' || field === 'medical' ||
+             field === 'intolerances' || field === 'sportGoals') {
+      // Tableau (max 20 éléments, 50 chars chacun)
+      if (Array.isArray(val)) {
+        safe[field] = val.slice(0, 20).map(function(x) { return sanitizeString(String(x), 50); });
+      }
+    }
+    else if (field === 'muscuMedical') {
+      // Objet (shallow copy, max 20 clés)
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        var safeMuscuMed = {};
+        Object.keys(val).slice(0, 20).forEach(function(k) {
+          var sk = sanitizeString(k, 40);
+          safeMuscuMed[sk] = !!val[k];
+        });
+        safe.muscuMedical = safeMuscuMed;
+      }
+    }
+    else if (field === 'lastPeriodDate' || field === 'trainTime') {
+      // String courte (date ISO ou token enum)
+      if (val != null) safe[field] = sanitizeString(String(val), 30);
+    }
+    else if (field === 'crossfit1RM' || field === 'strengthProfile') {
+      // Objet numérique (1RM bench: 100, squat: 140, etc.)
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        var safe1RM = {};
+        Object.keys(val).slice(0, 20).forEach(function(k) {
+          var sk = sanitizeString(k, 30);
+          var num = parseFloat(val[k]);
+          if (!isNaN(num) && isFinite(num)) safe1RM[sk] = num;
+        });
+        safe[field] = safe1RM;
+      }
+    }
+    else {
       safe[field] = sanitizeString(String(val), 100);
     }
   });
@@ -403,8 +456,77 @@ function buildSystemPrompt(ctx) {
   var constraints = [];
   if (ctx.regime) constraints.push('Régime:' + ctx.regime);
   if (Array.isArray(ctx.allergies) && ctx.allergies.length) constraints.push('Allergies:' + ctx.allergies.join(','));
+  if (Array.isArray(ctx.intolerances) && ctx.intolerances.length) constraints.push('Intolérances:' + ctx.intolerances.join(','));
+  if (ctx.halal) constraints.push('Halal');
   if (ctx.excluded) constraints.push('Exclusions:' + ctx.excluded);
+  if (ctx.mealsPerDay) constraints.push('Repas/jour:' + ctx.mealsPerDay);
   if (constraints.length) lines.push('CONTRAINTES: ' + constraints.join(' | '));
+
+  // FIX COACH IA CONTEXT 2026-04 : bloc SANTÉ FÉMININE (sécurité critique)
+  // L'IA DOIT savoir si l'user est enceinte / allaite / suit son cycle pour éviter
+  // des recommandations dangereuses (jeûne intermittent, restriction calorique, etc.)
+  var health = [];
+  if (ctx.pregnant) {
+    var trim = '';
+    if (ctx.pregnancyWeek) {
+      var w = Number(ctx.pregnancyWeek);
+      if (w <= 12) trim = 'T1';
+      else if (w <= 26) trim = 'T2';
+      else trim = 'T3';
+      health.push('⚠️ ENCEINTE semaine ' + w + ' (' + trim + ')');
+    } else {
+      health.push('⚠️ ENCEINTE');
+    }
+  }
+  if (ctx.breastfeeding) health.push('⚠️ ALLAITEMENT en cours');
+  if (ctx.cycleTracking && ctx.cycleLength) health.push('Cycle:' + ctx.cycleLength + 'j');
+  if (health.length) {
+    lines.push('SANTÉ: ' + health.join(' | '));
+    // FIX F9 CONTRE-AUDIT 2026-04 : instructions ACOG CONDITIONNELLES au trimestre.
+    // Avant : on envoyait le même message "+340 T2, +450 T3" peu importe le trimestre →
+    //         IA pouvait conseiller +340 kcal à une femme en T1 (alors que surplus = 0 en T1).
+    // Maintenant : recommandations précises par trimestre.
+    if (ctx.pregnant) {
+      var _trimText = '';
+      if (ctx.pregnancyWeek) {
+        var _w = Number(ctx.pregnancyWeek);
+        if (_w <= 12) _trimText = 'T1 : aucun surplus calorique (alimentation normale). Éviter alcool, viandes crues, poisson au mercure.';
+        else if (_w <= 26) _trimText = 'T2 : +340 kcal/j (ACOG 2022). Calcium 1000mg, fer 27mg, folate 600µg.';
+        else _trimText = 'T3 : +450 kcal/j (ACOG 2022). Protéines 71g/j, activité modérée OK sauf décollement placenta.';
+      } else {
+        _trimText = 'Demander le trimestre avant de conseiller un apport calorique.';
+      }
+      lines.push('⚠️ SÉCURITÉ CLINIQUE (GROSSESSE) : pas de déficit calorique, pas de jeûne intermittent, pas de compléments non validés médecin. ' + _trimText);
+    }
+    if (ctx.breastfeeding) {
+      lines.push('⚠️ SÉCURITÉ ALLAITEMENT : +450 kcal/j (ACOG 2022). Hydratation renforcée (3L/j). Éviter caféine > 300mg/j, alcool.');
+    }
+  }
+
+  // FIX 2026-04 : blessures et restrictions médicales muscu
+  var medicalNotes = [];
+  if (Array.isArray(ctx.medical) && ctx.medical.length) {
+    medicalNotes.push('Médical:' + ctx.medical.join(','));
+  }
+  if (ctx.muscuMedical && typeof ctx.muscuMedical === 'object') {
+    var muscuLimits = Object.keys(ctx.muscuMedical).filter(function(k) { return ctx.muscuMedical[k]; });
+    if (muscuLimits.length) medicalNotes.push('Restrictions muscu:' + muscuLimits.join(','));
+  }
+  if (medicalNotes.length) lines.push('LIMITATIONS: ' + medicalNotes.join(' | '));
+
+  // FIX 2026-04 : jours d'entraînement et timing — pour conseils nutrition pré/post-séance
+  var sportContext = [];
+  if (Array.isArray(ctx.trainingDaysSelected) && ctx.trainingDaysSelected.length) {
+    var dayNames = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+    sportContext.push('Jours training:' + ctx.trainingDaysSelected.map(function(i) { return dayNames[i] || i; }).join(','));
+  }
+  if (ctx.trainTime) sportContext.push('Heure séance:' + ctx.trainTime);
+  if (sportContext.length) lines.push('PLANNING: ' + sportContext.join(' | '));
+
+  // FIX 2026-04 : streak pour personnalisation motivationnelle
+  if (ctx.streak && ctx.streak > 0) {
+    lines.push('STREAK: ' + ctx.streak + ' jour' + (ctx.streak > 1 ? 's' : '') + ' consécutif' + (ctx.streak > 1 ? 's' : '') + ' (mentionner si pertinent pour encourager)');
+  }
 
   if (ctx.muscuWeights) {
     var wobj = ctx.muscuWeights;

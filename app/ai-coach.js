@@ -75,6 +75,21 @@ function buildContext() {
   var user = null;
   try { user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null; } catch(e) {}
 
+  // FIX COACH IA CONTEXT 2026-04 : enrichissement contexte pour recos pertinentes + sécurité
+  // Avant : pregnant/cycle/trainingDays/streak/medical/mealsPerDay/trainTime absents
+  //         → IA pouvait donner des recos DANGEREUSES en grossesse, ignorer les blessures,
+  //           ne pas adapter selon les jours d'entraînement réels de l'user.
+  // Maintenant : contexte exhaustif. L'IA sait TOUT ce qui est pertinent.
+  var _streakVal = 0;
+  try {
+    var _uidForStreak = user && user.id ? user.id : 'anon';
+    var _sRaw = localStorage.getItem('mtd_streak_' + _uidForStreak);
+    if (_sRaw) {
+      var _sObj = JSON.parse(_sRaw);
+      if (_sObj && typeof _sObj.current === 'number') _streakVal = _sObj.current;
+    }
+  } catch(eS) {}
+
   var ctx = {
     prenom: (window.getDisplayFirstName ? window.getDisplayFirstName() : (user && user.name ? user.name.split(' ')[0] : (S.prenom || ''))),
     sex: S.sex || '',
@@ -89,7 +104,22 @@ function buildContext() {
     regime: S.regime || '',
     allergies: Array.isArray(S.allergies) ? S.allergies : [],
     excluded: S.excluded || '',
-    appMode: S.appMode || 'both'
+    appMode: S.appMode || 'both',
+    // FIX 2026-04 : ajouts critiques pour pertinence + sécurité
+    pregnant: !!S.pregnant,
+    pregnancyWeek: S.pregnancyWeek || null,
+    breastfeeding: Array.isArray(S.medical) && S.medical.indexOf('allaitement') !== -1,
+    cycleTracking: !!S.cycleTracking,
+    cycleLength: S.cycleLength || null,
+    lastPeriodDate: S.lastPeriodDate || null,
+    trainingDaysSelected: Array.isArray(S.trainingDaysSelected) ? S.trainingDaysSelected : [],
+    trainTime: S.trainTime || null,
+    mealsPerDay: S.mealsPerDay || 3,
+    muscuMedical: (S.muscuMedical && typeof S.muscuMedical === 'object') ? S.muscuMedical : {},
+    medical: Array.isArray(S.medical) ? S.medical : [],
+    streak: _streakVal,
+    intolerances: Array.isArray(S.intolerances) ? S.intolerances : [],
+    halal: !!S.halal
   };
 
   // Sport spécifique

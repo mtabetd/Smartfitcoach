@@ -68,6 +68,49 @@ window.todayIdxMonStart = function() {
   return (new Date().getDay() + 6) % 7;
 };
 
+// FIX VALIDATION WEEKPLAN 2026-04 : dévalider le plan sans le supprimer.
+// Appelé quand un paramètre critique change (regime, allergies, mealsPerDay, etc.)
+// → le plan reste visible mais le bandeau "Revalider" s'affiche à l'user.
+// Avant : ces changements faisaient `S.weekPlan = null` → régénération automatique
+//         → user voyait son plan changer silencieusement.
+window.devalidateWeekPlan = function(reason) {
+  try {
+    var S = window.S;
+    if (!S) return;
+    S.weekPlanValidated = false;
+    // Note : on ne touche PAS à S.weekPlan (il reste visible).
+    // La bannière en haut du planning affiche "Paramètres modifiés → Revalider".
+    if (reason) console.log('[weekPlan] Dévalidé :', reason);
+  } catch(e) {}
+};
+
+// FIX F6 CONTRE-AUDIT 2026-04 : symétrique pour sportProgram.
+// Appelé quand sportLevel / sportDays / sportEquipment / sportGoals / sportFocus change.
+// L'user verra son programme actuel (non-null) mais un bandeau "Paramètres changés".
+window.devalidateSportProgram = function(reason) {
+  try {
+    var S = window.S;
+    if (!S) return;
+    S.sportProgramValidated = false;
+    if (reason) console.log('[sportProgram] Dévalidé :', reason);
+  } catch(e) {}
+};
+
+// FIX VALIDATION WEEKPLAN 2026-04 : helper pour la semaine ISO courante.
+// Format : "2026-W16" (ISO 8601). Utilisé pour savoir si le plan validé est
+// toujours valable pour la semaine en cours.
+window.currentISOWeek = function(d) {
+  var date = d ? new Date(d) : new Date();
+  // Clone to avoid mutating input
+  var target = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  var dayNum = (target.getUTCDay() + 6) % 7; // Lundi=0, Dimanche=6
+  target.setUTCDate(target.getUTCDate() - dayNum + 3); // Jeudi de la semaine
+  var firstThursday = new Date(Date.UTC(target.getUTCFullYear(), 0, 4));
+  firstThursday.setUTCDate(firstThursday.getUTCDate() - ((firstThursday.getUTCDay() + 6) % 7) + 3);
+  var weekNum = 1 + Math.round((target - firstThursday) / (7 * 24 * 3600 * 1000));
+  return target.getUTCFullYear() + '-W' + String(weekNum).padStart(2, '0');
+};
+
 // FIX D5 COHÉRENCE PRÉNOM 2026-04 : helper unifié pour afficher le prénom.
 // Avant : today-dashboard, ai-coach et push-manager utilisaient 3 priorités différentes
 //         → user pouvait voir "Tom" sur le dashboard, "Thomas" dans ai-coach, "" dans push.
@@ -2342,6 +2385,18 @@ window.S = {
   smoothieBarOpen: false, modalSmoothie: null, _addMealModalSlot: null, _recipePicker: null,
   // Recettes favorites : map { _id: 1|2|3 } — étoiles = priorité dans generateWeek
   favoriteRecipes: {},
+  // FIX VALIDATION WEEKPLAN 2026-04 : flags de validation utilisateur
+  // Avant : weekPlan se régénérait tout seul à chaque boot / reload / changement
+  //         de paramètre → user voyait son plan changer tout seul.
+  // Maintenant : weekPlan figé jusqu'à revalidation explicite user.
+  weekPlanValidated: false,
+  weekPlanValidatedISOWeek: null,
+  // FIX VALIDATION SPORTPROGRAM 2026-04 : même pattern pour le programme muscu
+  // (le fix #4 ayant supprimé Math.random dans exerciseCountForPriority, la
+  // régénération est déterministe — mais le flag sert à indiquer visuellement
+  // que l'user a validé son programme et à empêcher des dérives futures).
+  sportProgramValidated: false,
+  sportProgramValidatedAt: null,
   // Food habits
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,

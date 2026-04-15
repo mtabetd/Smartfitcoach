@@ -369,10 +369,11 @@
           S.weeklyCalendar[String(si)] = selects[si].value;
         }
       }
-      // Invalider le plan nutritionnel — les jours d'entraînement ont peut-être changé
-      // → il sera régénéré avec les nouvelles données à la prochaine visite du planning
-      S.weekPlan = null;
-      S._planHash = null;
+      // FIX VALIDATION WEEKPLAN 2026-04 : dévalider au lieu de supprimer.
+      // Le plan reste visible, l'user clique "Revalider" pour intégrer les nouveaux
+      // jours d'entraînement (split calorique adapté).
+      if (window.devalidateWeekPlan) window.devalidateWeekPlan('smart-calendar saved');
+      else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
       btnSave.textContent = 'Sauvegarde...';
       btnSave.style.opacity = '0.6';
       btnSave.disabled = true;
