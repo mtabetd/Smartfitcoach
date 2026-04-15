@@ -6,7 +6,11 @@ const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 // (ajustements charges ISSN/ACSM, interprétation RPE + cycle + wellness).
 // Rate limit déjà strict (10/h, 30/j par IP) → coût maîtrisé.
 const MODEL = 'claude-sonnet-4-6';
-const MAX_TOKENS = 500; // Sonnet peut mieux — +100 tokens pour analyses progression
+// FIX BUG-2 contre-audit : MAX_TOKENS 400 (marge safety timeout Sonnet 4.6).
+// Netlify Pro timeout = 26s, client abort = 25s. Sonnet 4.6 + 400 tokens +
+// contexte enrichi = ~12-18s nominal, <22s pic → safe dans fenêtre 25s.
+// Si phase B démontre plus besoin de tokens, réévaluer avec streaming.
+const MAX_TOKENS = 400;
 
 // Domaines autorisés pour CORS
 var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')

@@ -348,7 +348,12 @@ function loadProfile() {
  var _objFields = ['sportFocus','bonusExercises','sessionHistory','muscuSessionLog',
  'muscuProgressionHistory','musculationWeights','muscuStrengthProfile','crossfit1RM',
  'hyroxBenchmarks','shopChecked','bodyZones','crossfitBenchmarks','muscuMedical',
- 'favoriteRecipes'];
+ 'favoriteRecipes',
+ // FIX BUG-3 contre-audit phase A : sessionFeedback dans rehydration défensive.
+ // Si user B se logge avec un storage SANS sessionFeedback, la forEach ligne 346
+ // ne l'écrase pas (data[k]=undefined) → S conserve le feedback de user A (leak).
+ // Le forEach ci-dessous force un reset à {} si absent/mal typé → isolation garantie.
+ 'sessionFeedback'];
  _objFields.forEach(function(f) { if (!S[f] || typeof S[f] !== 'object' || Array.isArray(S[f])) S[f] = {}; });
  var _arrFields = ['sportGoals','medical','allergies','intolerances','cuisines',
  'shopStores','shopPrefs','strongZones','weakZones',

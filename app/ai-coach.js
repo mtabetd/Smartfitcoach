@@ -593,7 +593,9 @@ function sendMessage() {
   // Contexte utilisateur
   var ctx = buildContext();
 
-  // Appel API avec timeout client 28s (marge 2s avant le timeout serveur Netlify 30s)
+  // Appel API avec timeout client 25s (marge 1s avant le timeout serveur Netlify Pro 26s).
+  // Sonnet 4.6 + MAX_TOKENS 500 → tient dans 10-20s typiquement.
+  // Si Sonnet dépasse → AbortController force une sortie propre + message erreur.
   var _coachCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
   var _coachTimer = _coachCtrl ? setTimeout(function() { _coachCtrl.abort(); }, 25000) : null;
   fetch(FUNCTION_URL, {

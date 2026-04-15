@@ -117,21 +117,29 @@ window.currentISOWeek = function(d) {
 
 // Renvoie le dernier feedback de séance (le plus récent) ou null.
 // Structure : { date, sessionId, rpe, feeling, pain, chargeActual, reps, notes }
+// FIX BUG-1 : supporte clés YYYY-MM-DD ET YYYY-MM-DD_sessionId (multi-séances/jour).
 window.getLastSessionFeedback = function() {
   try {
     var S = window.S;
     if (!S || !S.sessionFeedback || typeof S.sessionFeedback !== 'object') return null;
     var keys = Object.keys(S.sessionFeedback).filter(function(k) {
-      // Seulement clés date valide YYYY-MM-DD
-      return /^\d{4}-\d{2}-\d{2}$/.test(k);
+      // Accepte YYYY-MM-DD ou YYYY-MM-DD_<sessionId>
+      return /^\d{4}-\d{2}-\d{2}(_.+)?$/.test(k);
     });
     if (!keys.length) return null;
-    keys.sort(); // ordre chronologique
+    // Tri par savedAt timestamp si dispo, sinon fallback lexicographique
+    keys.sort(function(a, b) {
+      var fa = S.sessionFeedback[a], fb2 = S.sessionFeedback[b];
+      var ta = (fa && fa.savedAt) ? fa.savedAt : a;
+      var tb = (fb2 && fb2.savedAt) ? fb2.savedAt : b;
+      return ta < tb ? -1 : (ta > tb ? 1 : 0);
+    });
     var lastKey = keys[keys.length - 1];
     var fb = S.sessionFeedback[lastKey];
     if (!fb || typeof fb !== 'object') return null;
-    // Shallow copy avec date explicite pour la sécurité
-    var out = { date: lastKey };
+    // Extraire juste la partie date (avant _) pour exposition propre
+    var datePart = lastKey.split('_')[0];
+    var out = { date: datePart };
     if (fb.sessionId) out.sessionId = String(fb.sessionId);
     if (typeof fb.rpe === 'number' && fb.rpe >= 1 && fb.rpe <= 10) out.rpe = fb.rpe;
     if (fb.feeling) out.feeling = String(fb.feeling);
@@ -154,13 +162,16 @@ window.getWeekPerformanceSummary = function() {
     var day = 24 * 3600 * 1000;
     var t0 = now.getTime();
     var keys = Object.keys(S.sessionFeedback).filter(function(k) {
-      return /^\d{4}-\d{2}-\d{2}$/.test(k);
+      // Accepte YYYY-MM-DD ou YYYY-MM-DD_<sessionId>
+      return /^\d{4}-\d{2}-\d{2}(_.+)?$/.test(k);
     });
     if (!keys.length) return null;
     var thisWeek = [];
     var prevWeek = [];
     keys.forEach(function(k) {
-      var dt = new Date(k + 'T00:00:00Z').getTime();
+      // Extraire partie date (avant _) pour parser
+      var datePart = k.split('_')[0];
+      var dt = new Date(datePart + 'T00:00:00Z').getTime();
       if (isNaN(dt)) return;
       var diff = t0 - dt;
       if (diff < 7 * day) thisWeek.push({ key: k, fb: S.sessionFeedback[k] });
@@ -268,7 +279,9 @@ window.getCyclePhaseForAI = function() {
 
 // Enregistre un feedback de séance (appelé par le modal post-séance).
 // data : { rpe, feeling, pain, chargeActual, reps, notes, sessionId }
-// Retourne la date ISO (YYYY-MM-DD) utilisée comme clé.
+// Retourne la clé utilisée (YYYY-MM-DD ou YYYY-MM-DD_<sessionId> si multi-séances/jour).
+// FIX BUG-1 contre-audit phase A : clé enrichie avec sessionId pour éviter écrasement
+// quand user fait muscu matin + cardio soir le même jour (2 séances distinctes).
 window.recordSessionFeedback = function(data) {
   try {
     var S = window.S;
@@ -278,12 +291,19 @@ window.recordSessionFeedback = function(data) {
     }
     var d = new Date();
     var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
-    var key = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
-    var entry = {};
+    var dateStr = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+    // Clé : dateStr seule si pas de sessionId, sinon dateStr_sessionId pour multi-séances/jour.
+    var sessionId = data && data.sessionId ? String(data.sessionId).slice(0, 40) : null;
+    var key = sessionId ? (dateStr + '_' + sessionId) : dateStr;
+    var entry = { savedAt: d.toISOString() }; // timestamp précis pour trier par heure réelle
     if (data) {
-      if (data.sessionId) entry.sessionId = String(data.sessionId).slice(0, 40);
+      if (sessionId) entry.sessionId = sessionId;
+      // FIX BUG-6 : Math.round pour RPE (slider envoie entier, mais pre-caution API).
       var rpeN = parseFloat(data.rpe);
-      if (!isNaN(rpeN) && isFinite(rpeN) && rpeN >= 1 && rpeN <= 10) entry.rpe = rpeN;
+      if (!isNaN(rpeN) && isFinite(rpeN)) {
+        rpeN = Math.round(rpeN);
+        if (rpeN >= 1 && rpeN <= 10) entry.rpe = rpeN;
+      }
       if (data.feeling) entry.feeling = String(data.feeling).slice(0, 20);
       if (data.pain) entry.pain = String(data.pain).slice(0, 30);
       if (data.notes) entry.notes = String(data.notes).slice(0, 200);
@@ -305,8 +325,9 @@ window.recordSessionFeedback = function(data) {
       }
     }
     S.sessionFeedback[key] = entry;
-    // Garde uniquement les 60 derniers jours pour éviter gonflement localStorage
-    var keys = Object.keys(S.sessionFeedback).filter(function(k) { return /^\d{4}-\d{2}-\d{2}$/.test(k); }).sort();
+    // Garde uniquement les 60 dernières entrées pour éviter gonflement localStorage
+    // (accepte aussi clés avec sessionId pour multi-séances/jour)
+    var keys = Object.keys(S.sessionFeedback).filter(function(k) { return /^\d{4}-\d{2}-\d{2}(_.+)?$/.test(k); }).sort();
     if (keys.length > 60) {
       keys.slice(0, keys.length - 60).forEach(function(oldK) { delete S.sessionFeedback[oldK]; });
     }
