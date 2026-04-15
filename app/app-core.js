@@ -17,6 +17,73 @@
 function h(tag,attrs,ch){var el=document.createElement(tag);if(attrs)for(var k in attrs){if(attrs[k]===null||attrs[k]===undefined)continue;if(k==='class')el.className=attrs[k];else if(k==='html'){var _hv=String(attrs[k]);el.innerHTML=_hv}else if(k==='disabled'){if(attrs[k]===true)el.setAttribute('disabled','');else el.removeAttribute('disabled')}else if(k.indexOf('on')===0)el.addEventListener(k.slice(2),attrs[k]);else el.setAttribute(k,attrs[k])}if(ch!=null){if(typeof ch==='string'||typeof ch==='number')el.textContent=ch;else if(Array.isArray(ch))for(var i=0;i<ch.length;i++){if(ch[i])el.appendChild(ch[i])}else if(ch.nodeType)el.appendChild(ch)}return el}
 function txt(s){return document.createTextNode(s)}
 
+// ═══════════════════════════════════════════════════════════════════════════
+// FIX SPRINT P2.3 — Mapping bidirectionnel CF ↔ muscu 1RM (audit symbiose).
+// Avant : crossfit1RM (back_squat, deadlift, bench_press) et muscuStrengthProfile
+// (squat, deadlift, bench_press) étaient des stores SÉPARÉS. User CF→muscu devait
+// re-saisir ses 1RM. Maintenant : sync automatique des lifts communs.
+// ═══════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════
+// FIX SPRINT P2.6 — Auto-deload muscu RPE-based (audit symbiose).
+// Avant : S.cfDeloadRecommended ne fonctionnait QUE pour CrossFit.
+// Maintenant : muscu détecte le besoin de deload basé sur 4-5 dernières séances
+// avec RPE moyen ≥ 8.5 OU 3 séances consécutives ratées (rpe ≥ 9 + targetReps non atteints).
+// ═══════════════════════════════════════════════════════════════════════════
+function shouldRecommendMuscuDeload() {
+  var S = window.S;
+  if (!S || !S.sessionFeedback) return false;
+  var keys = Object.keys(S.sessionFeedback).sort();
+  if (keys.length < 4) return false;
+  var recent = keys.slice(-5).map(function(k) { return S.sessionFeedback[k]; });
+  // Critère 1 : RPE moyen sur 4-5 dernières séances ≥ 8.5
+  var rpeValues = recent.map(function(fb) { return typeof fb.rpe === 'number' ? fb.rpe : null; }).filter(function(v) { return v !== null; });
+  if (rpeValues.length >= 4) {
+    var avgRpe = rpeValues.reduce(function(a, b) { return a + b; }, 0) / rpeValues.length;
+    if (avgRpe >= 8.5) return { reason: 'rpe_high', value: Math.round(avgRpe * 10) / 10 };
+  }
+  // Critère 2 : 3 séances consécutives RPE ≥ 9
+  var consecutiveHard = 0;
+  for (var i = recent.length - 1; i >= 0; i--) {
+    if (typeof recent[i].rpe === 'number' && recent[i].rpe >= 9) consecutiveHard++;
+    else break;
+  }
+  if (consecutiveHard >= 3) return { reason: 'consecutive_hard', value: consecutiveHard };
+  return false;
+}
+window.shouldRecommendMuscuDeload = shouldRecommendMuscuDeload;
+
+function syncCfMuscuStrength() {
+  var S = window.S;
+  if (!S) return;
+  S.crossfit1RM = S.crossfit1RM || {};
+  S.muscuStrengthProfile = S.muscuStrengthProfile || {};
+  // Mapping bilateral : CF key → muscu key (Epley unifié, 1 rep)
+  var bidiMap = [
+    { cf: 'back_squat', muscu: 'squat' },
+    { cf: 'deadlift',   muscu: 'deadlift' },
+    { cf: 'bench_press', muscu: 'bench_press' },
+    { cf: 'overhead_press', muscu: 'overhead_press' },
+    { cf: 'press', muscu: 'overhead_press' }  // alias
+  ];
+  bidiMap.forEach(function(m) {
+    var cfVal = S.crossfit1RM[m.cf];
+    var muscuVal = S.muscuStrengthProfile[m.muscu];
+    if (cfVal && cfVal > 0 && (!muscuVal || muscuVal === 0)) {
+      // CF → muscu : si user CF a saisi back_squat=180kg, propager dans muscu.squat
+      S.muscuStrengthProfile[m.muscu] = cfVal;
+      S.muscuStrengthProfile[m.muscu + '_reps'] = 1;
+      try { console.log('[syncCfMuscu] ' + m.cf + '→' + m.muscu + ' = ' + cfVal); } catch(_e) {}
+    } else if (muscuVal && muscuVal > 0 && (!cfVal || cfVal === 0)) {
+      // muscu → CF : si user muscu a saisi squat=140×8, calculer 1RM Epley puis propager.
+      var reps = S.muscuStrengthProfile[m.muscu + '_reps'] || 8;
+      var epley1RM = Math.round(muscuVal * (1 + reps / 30));
+      S.crossfit1RM[m.cf] = epley1RM;
+      try { console.log('[syncCfMuscu] ' + m.muscu + '→' + m.cf + ' (Epley) = ' + epley1RM); } catch(_e) {}
+    }
+  });
+}
+window.syncCfMuscuStrength = syncCfMuscuStrength;
+
 function svgRing(size,stroke,pct,color,label,value){
   // FIX Bible Hermès §13.9 + audit Data Viz : suppression du cap 100% silencieux.
   // Si dépassement, on affiche un 2ème anneau superposé --orange (Hermès H) qui

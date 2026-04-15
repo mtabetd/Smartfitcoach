@@ -211,6 +211,21 @@ function buildContext() {
   if (S.crossfit1RM && Object.keys(S.crossfit1RM).length) {
     ctx.crossfit1RM = S.crossfit1RM;
   }
+  // FIX SPRINT P2.5 — muscuWeek + phase courante envoyés au Coach IA.
+  // Avant : coach IA ignorait la phase (intensification = RPE 9 attendu vs décharge = RPE 5).
+  // Maintenant : ctx.muscuPhase permet conseils calibrés au cycle de l'user.
+  if (typeof S.muscuWeek === 'number' && S.muscuWeek > 0) {
+    ctx.muscuWeek = S.muscuWeek;
+    // Phase Israetel/RP : S1=Accumulation, S2=Accumulation+, S3=Surcharge, S4=Décharge
+    var weekInMeso = ((S.muscuWeek - 1) % 4) + 1;
+    var phaseMap = { 1:'accumulation', 2:'accumulation_plus', 3:'surcharge_intensification', 4:'décharge_deload' };
+    ctx.muscuPhase = phaseMap[weekInMeso];
+    ctx.muscuPhaseRIRTarget = ({ 1:3, 2:2, 3:1, 4:4 })[weekInMeso];
+    ctx.muscuPhaseSetsMultiplier = ({ 1:0.85, 2:1.0, 3:1.15, 4:0.55 })[weekInMeso];
+  }
+  if (typeof S.muscuCycle === 'number' && S.muscuCycle > 0) {
+    ctx.muscuCycle = S.muscuCycle;
+  }
   // Objectifs sport et équipement
   if (Array.isArray(S.sportGoals) && S.sportGoals.length) {
     ctx.sportGoals = S.sportGoals;

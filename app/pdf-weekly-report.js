@@ -390,6 +390,52 @@ window.exportWeeklyReportPDF = function() {
       }
     } catch(e) { console.warn('[PDF CF section]', e); }
 
+    // ═══ 5e. SECTION MUSCULATION — Records 1RM (FIX SPRINT P2.11) ═══
+    // Symétrique avec section CrossFit. Avant : muscu sous-représenté dans le PDF.
+    try {
+      var _SM = window.S || {};
+      var isMuscuPure = _SM.sportType === 'muscu' || _SM.sportType === 'musculation';
+      if (isMuscuPure && _SM.muscuStrengthProfile && Object.keys(_SM.muscuStrengthProfile).length > 0) {
+        y = checkPage(doc, y);
+        y = sectionTitle(doc, y, 'Musculation — Records 1RM');
+        var KEY_LIFTS_PDF = [
+          { key: 'bench_press',     name: 'Développé couché' },
+          { key: 'squat',           name: 'Squat' },
+          { key: 'deadlift',        name: 'Deadlift' },
+          { key: 'overhead_press',  name: 'Développé militaire' },
+          { key: 'barbell_row',     name: 'Rowing barre' },
+          { key: 'hip_thrust',      name: 'Hip thrust' }
+        ];
+        var levelLabelM = _SM.sportLevel === 'beginner' ? 'Débutant'
+                        : _SM.sportLevel === 'intermediate' ? 'Intermédiaire'
+                        : _SM.sportLevel === 'advanced' ? 'Avancé'
+                        : _SM.sportLevel === 'pro' ? 'Pro' : 'Intermédiaire';
+        y = kvLine(doc, y, 'Niveau', levelLabelM);
+        if (typeof _SM.muscuWeek === 'number') {
+          y = checkPage(doc, y);
+          y = kvLine(doc, y, 'Semaine actuelle', 'Semaine ' + _SM.muscuWeek + ' / 12');
+        }
+        KEY_LIFTS_PDF.forEach(function(lift) {
+          var weight = _SM.muscuStrengthProfile[lift.key];
+          if (typeof weight === 'number' && weight > 0) {
+            var reps = _SM.muscuStrengthProfile[lift.key + '_reps'] || 8;
+            var oneRM = Math.round(weight * (1 + reps / 30));
+            y = checkPage(doc, y);
+            y = kvLine(doc, y, lift.name, weight + ' kg × ' + reps + '  →  1RM ' + oneRM + ' kg');
+          }
+        });
+        // Tonnage hebdo si le helper existe
+        if (typeof window.getWeeklyTonnage === 'function') {
+          var wt = window.getWeeklyTonnage(7);
+          if (wt && wt.tonnage > 0) {
+            y = checkPage(doc, y);
+            y = kvLine(doc, y, 'Tonnage 7 jours', wt.tonnage + ' kg (' + wt.sets + ' séries)');
+          }
+        }
+        y += 5;
+      }
+    } catch(e) { console.warn('[PDF Muscu section]', e); }
+
     // ═══ 6. FOOTER — DISCLAIMER + WATERMARK ═══
     y = checkPage(doc, y);
     y += 4;

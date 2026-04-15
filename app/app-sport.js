@@ -3950,7 +3950,17 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.level')));
  var list = h('div', {'class': 'level-list'});
  (window.SPORT_LEVELS || []).forEach(function(lv) {
- list.appendChild(h('div', {'class': 'level-item' + (S.sportLevel === lv.id ? ' on' : ''), onclick: function(){ S.sportLevel = lv.id; window.render(); }}, [
+ list.appendChild(h('div', {'class': 'level-item' + (S.sportLevel === lv.id ? ' on' : ''), onclick: function(){
+   var prevLevel = S.sportLevel;
+   S.sportLevel = lv.id;
+   // FIX SPRINT P2.10 — invalider sportProgram si niveau change → re-génération auto
+   if (prevLevel && prevLevel !== lv.id && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) {
+     S.sportProgram = null;
+     S.muscuIAProgram = null;
+     try { if (window.showToast) window.showToast('Niveau changé. Régénère ton programme.', 'info', 3000); } catch(_e) {}
+   }
+   window.render();
+ }}, [
  h('div', {}, [h('div', {'class': 'level-name'}, lv.name), h('div', {'class': 'level-desc'}, lv.desc)]),
  h('span', {'class': 'level-badge'}, '×' + lv.factor)
  ]));
@@ -4026,7 +4036,17 @@ function renderMusculationLevel(p) {
  ];
  var eqGrid = h('div', {'class': 'level-list'});
  equipOptions.forEach(function(eq) {
- eqGrid.appendChild(h('div', {'class': 'level-item' + (S.sportEquipment === eq.id ? ' on' : ''), onclick: function() { S.sportEquipment = eq.id; window.render(); }}, [
+ eqGrid.appendChild(h('div', {'class': 'level-item' + (S.sportEquipment === eq.id ? ' on' : ''), onclick: function() {
+   var prevEq = S.sportEquipment;
+   S.sportEquipment = eq.id;
+   // FIX SPRINT P2.10 — invalider sportProgram si équipement change → re-génération auto
+   if (prevEq && prevEq !== eq.id && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) {
+     S.sportProgram = null;
+     S.muscuIAProgram = null;
+     try { if (window.showToast) window.showToast('Équipement changé. Régénère ton programme.', 'info', 3000); } catch(_e) {}
+   }
+   window.render();
+ }}, [
  h('div', {}, [h('div', {'class': 'level-name'}, eq.label), h('div', {'class': 'level-desc'}, eq.desc)])
  ]));
  });

@@ -3679,6 +3679,9 @@ document.addEventListener('visibilitychange', function() {
 // Barre bottom-sticky, 64px repos, masquée sur onboarding/scanner.
 // Placeholder rotatif contextuel (matin/midi/soir).
 // ═══════════════════════════════════════════════════════════════════════════
+// FIX SPRINT P2.8 — Prompts du coach IA enrichis et muscu-aware.
+// Selon le profil (muscu vs nutrition) + moment + état (séance prévue, fatigue),
+// on propose un placeholder pertinent (pas du nutrition-centric pour user muscu).
 var COACH_PROMPTS = {
   matin: [
     'Dis-moi ce qui te freine aujourd\'hui.',
@@ -3700,6 +3703,32 @@ var COACH_PROMPTS = {
     'Une question sur ta récupération ?'
   ]
 };
+var COACH_PROMPTS_MUSCU = {
+  matin: [
+    'Tu veux ajuster ta séance d\'aujourd\'hui ?',
+    'Quel exo tu veux travailler en priorité ?',
+    'Tu as bien récupéré ?'
+  ],
+  midi: [
+    'Comment était ton bench hier ?',
+    'Tu te sens prêt pour un PR au squat ?',
+    'Tu veux remplacer un exo ?'
+  ],
+  soir: [
+    'Comment s\'est passée la séance ?',
+    'Tu veux logger un PR ?',
+    'Demain : repos ou séance suivante ?'
+  ],
+  veille: [
+    'Besoin d\'un conseil récup ?',
+    'Tu veux préparer ta prochaine séance ?'
+  ]
+};
+var COACH_PROMPTS_FATIGUE = [
+  'Tu sembles fatigué. On allège la séance ?',
+  'Repos ou mobilité douce aujourd\'hui ?',
+  'Tu veux que je propose une séance plus courte ?'
+];
 
 function renderCoachBar() {
   var S = window.S;
@@ -3713,7 +3742,26 @@ function renderCoachBar() {
   var momentKey = (hour >= 6 && hour < 11) ? 'matin'
                : (hour >= 11 && hour < 17) ? 'midi'
                : (hour >= 17 && hour < 23) ? 'soir' : 'veille';
-  var prompts = COACH_PROMPTS[momentKey] || COACH_PROMPTS.midi;
+  // FIX SPRINT P2.8 — Coach bar muscu-aware
+  // Détection user muscu + état fatigue → prompts adaptés.
+  var _isMuscuUser = S.sportType === 'muscu' || S.sportType === 'musculation' || (S.appMode === 'sport');
+  var _isFatigued = false;
+  try {
+    var _w = S.todayWellness;
+    if (_w && _w.date === new Date().toISOString().slice(0,10)) {
+      _isFatigued = (typeof _w.energy === 'number' && _w.energy <= 2)
+                 || (typeof _w.muscle === 'number' && _w.muscle <= 2);
+    }
+  } catch(eF) {}
+  var prompts;
+  if (_isFatigued && _isMuscuUser) {
+    prompts = COACH_PROMPTS_FATIGUE;
+  } else if (_isMuscuUser && COACH_PROMPTS_MUSCU[momentKey]) {
+    // Mix : 70% prompts muscu + 30% prompts généraux pour variété
+    prompts = COACH_PROMPTS_MUSCU[momentKey].concat((COACH_PROMPTS[momentKey] || []).slice(0, 1));
+  } else {
+    prompts = COACH_PROMPTS[momentKey] || COACH_PROMPTS.midi;
+  }
   var dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
   var currentPrompt = prompts[dayOfYear % prompts.length];
 
@@ -3899,6 +3947,38 @@ function renderCardTodayForYou() {
     if (S.medical.indexOf('hta') !== -1) conditions.push('hta');
     if (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1) conditions.push('diabete');
   }
+  // FIX SPRINT P2.9 — Branches muscu : detect deload semaine, post-PR, plateau
+  var _isMuscu = S.sportType === 'muscu' || S.sportType === 'musculation';
+  if (_isMuscu) {
+    // Détection deload : muscuWeek dans (4, 8, 12) → fin de mésocycle
+    if (typeof S.muscuWeek === 'number' && (S.muscuWeek % 4 === 0)) conditions.push('muscu_deload');
+    // Détection post-PR : un set validé dans les 7 derniers jours avec actualWeight ≥ profile 1RM
+    try {
+      if (S.muscuSessionLog && S.muscuStrengthProfile) {
+        var now = new Date();
+        for (var d = 0; d < 7; d++) {
+          var dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() - d).toISOString().slice(0, 10);
+          var dl = S.muscuSessionLog[dt];
+          if (!dl) continue;
+          var prFound = false;
+          Object.keys(dl).forEach(function(exName) {
+            (dl[exName] || []).forEach(function(set) {
+              if (set.validated && set.actualWeight) {
+                var key = exName.toLowerCase();
+                ['squat','bench','deadlift','press'].forEach(function(k) {
+                  var profileKey = k === 'squat' ? 'squat' : k === 'bench' ? 'bench_press' : k === 'deadlift' ? 'deadlift' : 'overhead_press';
+                  if (key.indexOf(k) >= 0 && S.muscuStrengthProfile[profileKey] && set.actualWeight > S.muscuStrengthProfile[profileKey]) {
+                    prFound = true;
+                  }
+                });
+              }
+            });
+          });
+          if (prFound) { conditions.push('muscu_pr'); break; }
+        }
+      }
+    } catch(_ePr) {}
+  }
   if (conditions.length === 0) return null;
 
   // Rotation : hash user.id + dayOfYear
@@ -3961,6 +4041,28 @@ function renderCardTodayForYou() {
     ];
     content.ctaLabel = 'VOIR LES RECETTES IG BAS';
     content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
+  } else if (selectedCondition === 'muscu_deload') {
+    // FIX SPRINT P2.9 — Branche muscu deload (semaine 4, 8, 12 du mésocycle)
+    content.title = 'Semaine de décharge';
+    content.body = 'Tu es en semaine ' + S.muscuWeek + ' — fin de mésocycle. Réduction volume −50%, intensité −15%. C\'est une vraie phase d\'entraînement, pas un repos. La super-compensation post-deload est ton moteur de progression.';
+    content.items = [
+      { name: 'Volume',    detail: '−50% sets' },
+      { name: 'Intensité', detail: '−15% charges (RIR 4)' },
+      { name: 'Sommeil',   detail: '8h+ recommandées' }
+    ];
+    content.ctaLabel = 'VOIR MA SÉANCE ALLÉGÉE';
+    content.ctaFn = function() { S.view = 'sport'; if (window.render) window.render(); };
+  } else if (selectedCondition === 'muscu_pr') {
+    // FIX SPRINT P2.9 — Branche muscu post-PR (record battu cette semaine)
+    content.title = 'Tu as battu un record';
+    content.body = 'Ton corps a délivré une nouvelle marche cette semaine. Pour consolider : repas riche en protéines (1.6 g/kg minimum), 8h de sommeil, récup active. Le PR n\'est tenu que si tu peux le refaire.';
+    content.items = [
+      { name: 'Protéines',    detail: '1.6-2.0 g/kg' },
+      { name: 'Sommeil',      detail: '8h+ pour récup' },
+      { name: 'Récup active', detail: 'Marche, mobilité' }
+    ];
+    content.ctaLabel = 'VOIR MES RECORDS';
+    content.ctaFn = function() { S._dashExtOpen = true; if (window.render) window.render(); };
   }
 
   var c = h('div', {
@@ -4069,6 +4171,39 @@ function renderCardCrossfit1RM() {
 window.renderCardCrossfit1RM = renderCardCrossfit1RM;
 
 // ═══════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════
+// FIX SPRINT P2.7 — TONNAGE HEBDO MUSCU
+// Calcule Σ (charge × reps × sets validés) sur les 7 derniers jours.
+// Affiché pour user muscu/CrossFit (data-driven, pas de bullshit).
+// ═══════════════════════════════════════════════════════════════════════════
+function getWeeklyTonnage(daysBack) {
+  var S = window.S;
+  if (!S || !S.muscuSessionLog) return { tonnage: 0, sets: 0, days: 0 };
+  daysBack = daysBack || 7;
+  var now = new Date();
+  var totalTonnage = 0, totalSets = 0, daysWithSession = 0;
+  for (var d = 0; d < daysBack; d++) {
+    var date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - d);
+    var key = date.toISOString().slice(0, 10);
+    var dayLog = S.muscuSessionLog[key];
+    if (!dayLog) continue;
+    var dayHadSession = false;
+    Object.keys(dayLog).forEach(function(exName) {
+      (dayLog[exName] || []).forEach(function(set) {
+        if (set.validated && typeof set.actualWeight === 'number' && set.actualWeight > 0
+            && typeof set.actualReps === 'number' && set.actualReps > 0) {
+          totalTonnage += set.actualWeight * set.actualReps;
+          totalSets++;
+          dayHadSession = true;
+        }
+      });
+    });
+    if (dayHadSession) daysWithSession++;
+  }
+  return { tonnage: Math.round(totalTonnage), sets: totalSets, days: daysWithSession };
+}
+window.getWeeklyTonnage = getWeeklyTonnage;
+
 // FIX SPRINT P1.8 — CARD "Mes records muscu" (audit dashboard widgets)
 // Avant : muscuStrengthProfile + 1RM Epley calculés mais cachés dans drawer.
 // Maintenant : carte en surface dashboard pour user muscu (sportType='muscu').
@@ -4102,6 +4237,26 @@ function renderCardMuscu1RM() {
   c.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);margin-bottom:18px;'
   }, '1RM estimé selon Epley (charge × reps)'));
+
+  // FIX SPRINT P2.7 — Tonnage hebdo affiché si user a entraîné cette semaine
+  var weeklyTonnage = getWeeklyTonnage(7);
+  if (weeklyTonnage.tonnage > 0) {
+    var tonnageRow = h('div', {
+      style: 'display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line,#D8D8D0);background:var(--paper-3,#EEEAE0);margin:0 -24px 8px;padding-left:24px;padding-right:24px;'
+    });
+    var tonnageLeft = h('div', {});
+    tonnageLeft.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;margin-bottom:2px;'
+    }, 'Tonnage 7 jours'));
+    tonnageLeft.appendChild(h('div', {
+      style: 'font-family:Georgia,serif;font-style:italic;font-size:11px;color:var(--ink-500,#6B6B65);'
+    }, weeklyTonnage.sets + ' séries · ' + weeklyTonnage.days + ' jour' + (weeklyTonnage.days > 1 ? 's' : '') + ' actif'));
+    tonnageRow.appendChild(tonnageLeft);
+    tonnageRow.appendChild(h('div', {
+      style: 'font-family:Georgia,serif;font-size:24px;color:var(--ink-900,#0A0A09);font-feature-settings:"tnum" 1;line-height:1;'
+    }, String(weeklyTonnage.tonnage).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0') + '\u00a0kg'));
+    c.appendChild(tonnageRow);
+  }
 
   liftsWithValues.slice(0, 6).forEach(function(lift, idx) {
     var weight = sp[lift.key];

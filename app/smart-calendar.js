@@ -61,19 +61,28 @@
   }
 
   // ─── INIT CALENDRIER PAR DÉFAUT ───
+  // FIX SPRINT P2.4 — Sync depuis trainingDaysSelected (audit symbiose).
+  // Avant : initialisé à TOUT 'repos' sans regarder S.trainingDaysSelected.
+  // L'utilisateur configurait 2 fois la même chose (onboarding + smart calendar).
+  // Maintenant : pré-rempli depuis trainingDaysSelected + sportType.
   function initCalendar() {
     var S = window.S;
     if (!S) return;
     if (!S.weeklyCalendar || typeof S.weeklyCalendar !== 'object') {
       S.weeklyCalendar = {
-        '0': 'repos',
-        '1': 'repos',
-        '2': 'repos',
-        '3': 'repos',
-        '4': 'repos',
-        '5': 'repos',
-        '6': 'repos'
+        '0': 'repos', '1': 'repos', '2': 'repos', '3': 'repos',
+        '4': 'repos', '5': 'repos', '6': 'repos'
       };
+      // Pré-remplissage depuis trainingDaysSelected
+      if (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > 0) {
+        var sportLabel = S.sportType || 'muscu';
+        S.trainingDaysSelected.forEach(function(dayIdx) {
+          if (dayIdx >= 0 && dayIdx <= 6) {
+            S.weeklyCalendar[String(dayIdx)] = sportLabel;
+          }
+        });
+        try { console.log('[smart-calendar] Sync depuis trainingDaysSelected:', S.trainingDaysSelected); } catch(_e) {}
+      }
     }
   }
 
