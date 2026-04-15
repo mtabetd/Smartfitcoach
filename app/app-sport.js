@@ -2790,6 +2790,8 @@ function renderWellnessBanner(p) {
  confirmBtn.addEventListener('click', function() {
   var today = new Date().toISOString().slice(0, 10);
   S.todayWellness = { date: today, sleep: wellnessState.sleep, muscles: wellnessState.muscles, energy: wellnessState.energy };
+  // POLISH 2026-04 : push dans wellness history multi-jours (90j glissants)
+  try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
   S._wellnessReminder = false;
   banner.style.display = 'none';
   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
@@ -2890,6 +2892,8 @@ function renderWellnessCheckin(p, onComplete) {
  var startBtn = h('button', {'class': 'btn-primary', style: 'width:100%;opacity:0.4;pointer-events:none', onclick: function() {
   var today = new Date().toISOString().slice(0, 10);
   S.todayWellness = { date: today, sleep: state.sleep, muscles: state.muscles, energy: state.energy };
+  // POLISH 2026-04 : push dans wellness history multi-jours (90j glissants)
+  try { if (window.pushWellnessHistory) window.pushWellnessHistory(S.todayWellness); } catch(e) {}
   if (onComplete) onComplete();
  }}, 'Commencer la seance');
  p.appendChild(startBtn);

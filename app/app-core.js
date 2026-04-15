@@ -336,6 +336,55 @@ window.recordSessionFeedback = function(data) {
   } catch(e) { return null; }
 };
 
+// POLISH 2026-04 : wellness history multi-jours — jusqu'ici S.todayWellness
+// stockait 1 seul jour, impossible donc de corréler sleep↓ vs RPE↑ sur la durée.
+// Maintenant : mtd_wellness_history_<uid> stocke jusqu'à 90 jours glissants.
+// Schema : [{ date:'YYYY-MM-DD', sleep, muscles, energy, dismissed:false, savedAt:ISO }]
+window.pushWellnessHistory = function(entry) {
+  try {
+    if (!entry || !entry.date) return false;
+    var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+    var uid = user && user.id ? user.id : 'anon';
+    var key = 'mtd_wellness_history_' + uid;
+    var arr = [];
+    try {
+      var raw = localStorage.getItem(key);
+      if (raw) { var parsed = JSON.parse(raw); if (Array.isArray(parsed)) arr = parsed; }
+    } catch(e) {}
+    // Dédupe : si on a déjà une entry pour cette date, on remplace (dernier gagne)
+    arr = arr.filter(function(x) { return x && x.date !== entry.date; });
+    var clean = { date: String(entry.date), savedAt: new Date().toISOString() };
+    if (entry.sleep !== undefined) clean.sleep = entry.sleep;
+    if (entry.muscles) clean.muscles = String(entry.muscles).slice(0, 40);
+    if (entry.energy) clean.energy = String(entry.energy).slice(0, 40);
+    if (entry.dismissed) clean.dismissed = true;
+    arr.push(clean);
+    // Tri chronologique + purge > 90 jours (glissant)
+    arr.sort(function(a, b) { return (a.date < b.date) ? -1 : (a.date > b.date ? 1 : 0); });
+    if (arr.length > 90) arr = arr.slice(-90);
+    try { localStorage.setItem(key, JSON.stringify(arr)); } catch(e) {
+      console.warn('[wellnessHistory] localStorage full:', e);
+    }
+    return true;
+  } catch(e) { return false; }
+};
+
+// Lit l'historique wellness (N derniers jours). Retourne array (vide si rien).
+window.getWellnessHistory = function(days) {
+  try {
+    var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+    var uid = user && user.id ? user.id : 'anon';
+    var raw = localStorage.getItem('mtd_wellness_history_' + uid);
+    if (!raw) return [];
+    var arr = JSON.parse(raw);
+    if (!Array.isArray(arr)) return [];
+    if (typeof days !== 'number' || days <= 0) return arr;
+    var cutoff = new Date(Date.now() - days * 24 * 3600 * 1000);
+    var cutoffStr = cutoff.toISOString().slice(0, 10);
+    return arr.filter(function(x) { return x && x.date && x.date >= cutoffStr; });
+  } catch(e) { return []; }
+};
+
 // POLISH 2026-04 (VX) : Disclaimer médical au premier login — obligatoire pour
 // protection légale (CGU promettent que user a "lu et compris"). Modal bloquant
 // non-dismissible sauf validation explicite. Flag persisté en localStorage par uid.
