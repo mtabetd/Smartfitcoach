@@ -1049,9 +1049,10 @@ function renderCardMacros() {
   // via le facteur d'activité PAL (Mifflin-St Jeor × PAL). L'ajouter créerait un double-comptage.
   // Le badge est conservé à titre informatif (confirmation de la dépense réelle de séance).
   if (_sportBurn > 0) {
+    // Bible Hermès §13.1 : pas d'emoji. Tiret typographique + tutoiement.
     var _burnEl = document.createElement('div');
-    _burnEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:6px;font-weight:500;color:var(--green,#1A4A1A);';
-    _burnEl.textContent = '🏃 ' + _sportBurn + ' kcal dépensées (incluses dans votre TDEE)';
+    _burnEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:6px;font-weight:500;color:var(--success,#3E5C3A);';
+    _burnEl.textContent = '— ' + _sportBurn + ' kcal dépensées (déjà incluses dans ton TDEE)';
     c.appendChild(_burnEl);
   }
 
@@ -1059,15 +1060,16 @@ function renderCardMacros() {
   var _netRemaining = Math.round(calorieTarget - totals.kcal);
   var _remEl = document.createElement('div');
   _remEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:10px;font-weight:500;';
+  // Bible Hermès §13.1 : pas d'emoji (⚡ ✓ ⚠). Typographie sobre.
   if (_netRemaining > 0) {
-    _remEl.style.color = 'var(--green,#1A4A1A)';
-    _remEl.textContent = '⚡ ' + _netRemaining + ' kcal restantes';
+    _remEl.style.color = 'var(--success,#3E5C3A)';
+    _remEl.textContent = _netRemaining + ' kcal restantes';
   } else if (_netRemaining === 0) {
-    _remEl.style.color = 'var(--grey,#6B6B65)';
-    _remEl.textContent = '✓ Objectif calorique atteint';
+    _remEl.style.color = 'var(--ink-500,#6B6B65)';
+    _remEl.textContent = 'Cible tenue.';
   } else {
-    _remEl.style.color = 'var(--orange,#6A4A1A)';
-    _remEl.textContent = '⚠ ' + Math.abs(_netRemaining) + ' kcal au-dessus de l\'objectif';
+    _remEl.style.color = 'var(--orange,#E86F1E)';
+    _remEl.textContent = 'Tu as dépassé de ' + Math.abs(_netRemaining) + ' kcal.';
   }
   c.appendChild(_remEl);
 
