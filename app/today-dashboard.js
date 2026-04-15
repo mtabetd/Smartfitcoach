@@ -1972,6 +1972,85 @@ function renderExtendedSections(wrapper, S) {
   }
   wrapper.appendChild(perfBox);
 
+  // POLISH 2026-04 (INSIGHTS) : Bilan 7 jours — stats + patterns détectés.
+  // Affiché uniquement si l'user a déjà au moins 1 donnée (session, wellness ou feedback).
+  try {
+    var insights = (typeof window.getWeekInsights === 'function') ? window.getWeekInsights() : null;
+    var hasAnyData = insights && (
+      (insights.sessions && insights.sessions > 0) ||
+      (insights.wellnessDaysLogged && insights.wellnessDaysLogged > 0) ||
+      (insights.patterns && insights.patterns.length > 0)
+    );
+    if (hasAnyData) {
+      wrapper.appendChild(sectionLabel('Bilan 7 jours'));
+      var insightsBox = card();
+
+      // Stats principales — grille 2x2 sobre
+      var statsGrid = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;' });
+      function insightStat(value, label, color) {
+        var box = h('div', { style: 'padding:10px 12px;background:var(--ivory,#FAF9F6);border:1px solid var(--border,#D8D8D0);border-radius:2px;text-align:center;' });
+        box.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:22px;font-weight:normal;color:' + (color || 'var(--black,#0A0A09)') + ';' }, String(value)));
+        box.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:2px;' }, label));
+        return box;
+      }
+      var sessions = (insights.sessions || 0);
+      var kcal = (insights.kcalTotal || 0);
+      statsGrid.appendChild(insightStat(sessions, 'Séances'));
+      statsGrid.appendChild(insightStat(kcal > 0 ? kcal.toLocaleString('fr-FR') : '—', 'Kcal dépensées'));
+      var sleep = (typeof insights.sleepAvg === 'number') ? insights.sleepAvg.toFixed(1) + '/5' : '—';
+      statsGrid.appendChild(insightStat(sleep, 'Sommeil moyen'));
+      var rpe = (typeof insights.rpeAvg === 'number') ? insights.rpeAvg.toFixed(1) + '/10' : '—';
+      statsGrid.appendChild(insightStat(rpe, 'RPE moyen'));
+      insightsBox.appendChild(statsGrid);
+
+      // Bar chart jours actifs (micro, visuel minimaliste)
+      if (Array.isArray(insights.byDay) && insights.byDay.length === 7) {
+        var dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+        var max = Math.max.apply(null, insights.byDay.concat([1]));
+        var barsWrap = h('div', { style: 'display:flex;gap:4px;align-items:flex-end;height:32px;margin-bottom:12px;padding:0 4px;' });
+        insights.byDay.forEach(function(cnt, i) {
+          var col = h('div', { style: 'flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;' });
+          var heightPct = cnt > 0 ? Math.max(8, Math.round((cnt / max) * 100)) : 6;
+          var bar = h('div', {
+            style: 'width:100%;height:' + heightPct + '%;background:' + (cnt > 0 ? 'var(--green,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';border-radius:1px;transition:height 0.3s ease;'
+          });
+          col.appendChild(bar);
+          col.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--grey,#6B6B65);' }, dayLabels[i]));
+          barsWrap.appendChild(col);
+        });
+        insightsBox.appendChild(barsWrap);
+      }
+
+      // Patterns détectés — chips informatifs
+      if (Array.isArray(insights.patterns) && insights.patterns.length > 0) {
+        var patternsWrap = h('div', { style: 'display:flex;flex-direction:column;gap:8px;' });
+        insights.patterns.slice(0, 3).forEach(function(p) {
+          var colorByS = { info: 'var(--green,#1A4A1A)', warning: 'var(--orange,#6A4A1A)', alert: 'var(--red,#5A1010)' };
+          var bgBySeverity = { info: 'var(--greenbg,rgba(26,74,26,0.06))', warning: 'var(--orangebg,rgba(106,74,26,0.06))', alert: 'var(--redbg,rgba(90,16,16,0.06))' };
+          var col = colorByS[p.severity] || 'var(--grey,#6B6B65)';
+          var bg = bgBySeverity[p.severity] || 'transparent';
+          var pChip = h('div', {
+            style: 'padding:10px 12px;background:' + bg + ';border-left:3px solid ' + col + ';'
+          });
+          pChip.appendChild(h('div', {
+            style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;color:' + col + ';margin-bottom:3px;'
+          }, p.label || ''));
+          if (p.advice) {
+            pChip.appendChild(h('div', {
+              style: 'font-family:Georgia,serif;font-size:12px;font-style:italic;color:var(--grey,#6B6B65);line-height:1.5;'
+            }, p.advice));
+          }
+          patternsWrap.appendChild(pChip);
+        });
+        insightsBox.appendChild(patternsWrap);
+      }
+
+      wrapper.appendChild(insightsBox);
+    }
+  } catch(_iErr) {
+    // Widget optionnel — silencieux si helpers indispos
+  }
+
   // Weight chart (Chart.js)
   wrapper.appendChild(sectionLabel('Courbe de poids'));
   var rawHistCheck = (S.weightHistory || []).filter(function(e) {
