@@ -1780,10 +1780,13 @@ var STARTING_STRENGTH_PROGRAMS = {
     }
   },
   splits: {
+    // FIX régression 2026-04-15 : ajout `muscles` array. Sans lui, l'activeDays filter
+    // (muscu-programs.js:2318 `d.muscles && d.muscles.length > 0`) excluait TOUS les jours
+    // → plan vide pour débutants (Marc). Starting Strength = full-body donc tous muscles.
     '3': [
-      { day: 'Lundi',    type: 'workoutA', label: 'Workout A: Squat + Bench + Deadlift' },
-      { day: 'Mercredi', type: 'workoutB', label: 'Workout B: Squat + Press + Power Clean' },
-      { day: 'Vendredi', type: 'workoutA', label: 'Workout A: Squat + Bench + Deadlift' }
+      { day: 'Lundi',    type: 'workoutA', label: 'Workout A: Squat + Bench + Deadlift',      muscles: ['jambes','pectoraux','dos'] },
+      { day: 'Mercredi', type: 'workoutB', label: 'Workout B: Squat + Press + Power Clean',  muscles: ['jambes','epaules','dos'] },
+      { day: 'Vendredi', type: 'workoutA', label: 'Workout A: Squat + Bench + Deadlift',      muscles: ['jambes','pectoraux','dos'] }
     ]
   },
   // FIX P1 audit user Thomas : macro 12 semaines en langage accessible débutant
@@ -2248,8 +2251,12 @@ function buildPersonalizedMuscuPlan(S) {
   // un vrai débutant progresse mieux en full-body 3×/sem qu'en PPL (fréquence/muscle=1
   // en PPL vs 3 en full-body → stimulus hebdo insuffisant).
   // N.B. : S.muscuWeek est un n° de semaine (pas de jours) → utiliser S.sportDays.
+  // FIX régression 2026-04-15 : Starting Strength EXIGE barbell (squat, bench, DL, press).
+  // Pour user `sportEquipment='home'` sans barre, Starting Strength = pool vide.
+  // On force classic (équipement-agnostique) à la place.
+  var _userEquip = S.sportEquipment || 'gym';
   var userDaysRequested = S.sportDays || 3;
-  if (level === 'beginner' && userDaysRequested <= 4 && sportGoals.indexOf('performance') < 0) {
+  if (level === 'beginner' && userDaysRequested <= 4 && sportGoals.indexOf('performance') < 0 && _userEquip !== 'home') {
     style = 'starting'; // Full-body Starting Strength (Rippetoe) — évidence littérature
   }
 
