@@ -49,7 +49,28 @@ style.textContent = [
   '.ai-msg-coach{align-self:flex-start;background:var(--ivory2,#F4F4F0);border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:14px 16px;}',
   '.ai-msg-coach-name{font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;}',
   '.ai-msg-text{font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:inherit;line-height:1.65;}',
-  '.ai-msg-typing{font-family:Georgia,serif;font-style:italic;color:var(--grey,#6B6B65);font-size:13px;}',
+  '.ai-msg-typing{font-family:Georgia,serif;font-style:italic;color:var(--grey,#6B6B65);font-size:13px;display:inline-flex;align-items:center;gap:3px;}',
+  // POLISH 2026-04 (V1.1) : 3 points animés propres (vs texte statique "réfléchit...")
+  '.ai-typing-dots{display:inline-flex;gap:3px;margin-left:6px;}',
+  '.ai-typing-dots span{width:4px;height:4px;background:var(--grey,#6B6B65);border-radius:50%;display:inline-block;animation:aiTypingBlink 1.4s infinite both;}',
+  '.ai-typing-dots span:nth-child(2){animation-delay:0.2s;}',
+  '.ai-typing-dots span:nth-child(3){animation-delay:0.4s;}',
+  '@keyframes aiTypingBlink{0%,80%,100%{opacity:0.25;transform:scale(0.9);}40%{opacity:1;transform:scale(1.1);}}',
+  // POLISH 2026-04 (V1.2) : barre d'actions sous messages coach (copier / régénérer / feedback)
+  '.ai-msg-actions{display:flex;gap:4px;margin-top:8px;opacity:0;transition:opacity 0.2s ease;}',
+  '.ai-msg-coach:hover .ai-msg-actions{opacity:1;}',
+  '.ai-msg-actions button{background:none;border:1px solid var(--border,#D8D8D0);border-radius:2px;padding:4px 7px;cursor:pointer;color:var(--grey,#6B6B65);font-size:11px;line-height:1;transition:all 0.15s ease;display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:24px;}',
+  '.ai-msg-actions button:hover{background:var(--ivory2,#F4F4F0);color:var(--black,#0A0A09);border-color:var(--grey,#6B6B65);}',
+  '.ai-msg-actions button.active-up{color:var(--green,#1A4A1A);border-color:var(--green,#1A4A1A);background:var(--greenbg,rgba(26,74,26,0.06));}',
+  '.ai-msg-actions button.active-down{color:var(--red,#5A1010);border-color:var(--red,#5A1010);background:var(--redbg,rgba(90,16,16,0.06));}',
+  // Toast feedback action (copié, régénéré, merci)
+  '.ai-toast{position:fixed;bottom:120px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:10px 18px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;z-index:9999;opacity:0;pointer-events:none;transition:opacity 0.25s ease, transform 0.25s ease;}',
+  '.ai-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}',
+  // Compteur rate-limit (V1.3)
+  '.ai-rate-hint{font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 20px 0;text-align:right;}',
+  // Pill "nouveaux messages" si auto-scroll suspendu (V1.3)
+  '.ai-new-pill{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);padding:6px 14px;border-radius:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;z-index:10;opacity:0;pointer-events:none;transition:opacity 0.2s ease;}',
+  '.ai-new-pill.show{opacity:1;pointer-events:auto;}',
 
   // Suggestions rapides
   '#ai-suggestions{padding:10px 20px;display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--border,#D8D8D0);background:var(--ivory2,#F4F4F0);flex-shrink:0;}',
@@ -400,6 +421,39 @@ function buildUI() {
   inputArea.appendChild(sendBtn);
   panel.appendChild(inputArea);
 
+  // POLISH 2026-04 (V1.3) : hint rate-limit sous input (rempli après chaque réponse API).
+  var rateHint = document.createElement('div');
+  rateHint.id = 'ai-rate-hint';
+  rateHint.className = 'ai-rate-hint';
+  rateHint.textContent = ''; // vide tant qu'on n'a pas fait d'appel
+  panel.appendChild(rateHint);
+
+  // POLISH 2026-04 (V1.3) : pill "nouveaux messages" pour auto-scroll intelligent.
+  var newPill = document.createElement('div');
+  newPill.id = 'ai-new-pill';
+  newPill.className = 'ai-new-pill';
+  newPill.textContent = '↓ Nouveaux messages';
+  newPill.addEventListener('click', function() {
+    var msgs = document.getElementById('ai-coach-messages');
+    if (msgs) {
+      msgs.scrollTop = msgs.scrollHeight;
+      newPill.classList.remove('show');
+    }
+  });
+  panel.appendChild(newPill);
+
+  // POLISH 2026-04 (V1.3) : détecter si user scrolle loin du bas → suspend auto-scroll.
+  messages.addEventListener('scroll', function() {
+    var threshold = 100; // px de tolérance
+    var distFromBottom = messages.scrollHeight - messages.scrollTop - messages.clientHeight;
+    _autoScrollSuspended = distFromBottom > threshold;
+    // Quand user revient en bas manuellement → hide pill
+    if (!_autoScrollSuspended) {
+      var pill = document.getElementById('ai-new-pill');
+      if (pill) pill.classList.remove('show');
+    }
+  });
+
   document.body.appendChild(panel);
 
   // Historique depuis S
@@ -409,7 +463,183 @@ function buildUI() {
   refreshSuggestions(suggestions);
 }
 
-function appendCoachMessage(container, text) {
+// POLISH 2026-04 (V1.3) : état auto-scroll. False par défaut → scroll auto en bas.
+// Passe à true quand user remonte de > 100px, déclenche affichage pill.
+var _autoScrollSuspended = false;
+
+// Helper : scroll auto si pas suspendu, sinon montre pill "nouveaux messages".
+function smartScroll(container) {
+  try {
+    if (!container) return;
+    if (_autoScrollSuspended) {
+      var pill = document.getElementById('ai-new-pill');
+      if (pill) pill.classList.add('show');
+    } else {
+      container.scrollTop = container.scrollHeight;
+    }
+  } catch(e) {}
+}
+
+// POLISH 2026-04 (V1.2) : retire le bouton "Régénérer" des messages coach précédents
+// quand une nouvelle réponse arrive (le bouton regen n'a de sens que sur la DERNIÈRE).
+function stripRegenerateButtonsFromPrevious(container) {
+  try {
+    if (!container) return;
+    var coachMsgs = container.querySelectorAll('.ai-msg-coach');
+    coachMsgs.forEach(function(m) {
+      var actions = m.querySelector('.ai-msg-actions');
+      if (!actions) return;
+      actions.querySelectorAll('button').forEach(function(b) {
+        if (b.getAttribute('title') === 'Régénérer') b.remove();
+      });
+    });
+  } catch(e) {}
+}
+
+// POLISH 2026-04 (V1.2) : régénère la dernière réponse coach en rejouant le dernier
+// message user. Si aucun message user précédent, no-op (silencieux).
+function regenerateLastResponse() {
+  try {
+    if (_sending) return;
+    var S = window.S || {};
+    if (!Array.isArray(S.aiCoachHistory) || !S.aiCoachHistory.length) return;
+    // Trouver le dernier message user
+    var lastUserMsg = null;
+    for (var i = S.aiCoachHistory.length - 1; i >= 0; i--) {
+      if (S.aiCoachHistory[i].role === 'user') { lastUserMsg = S.aiCoachHistory[i].content; break; }
+    }
+    if (!lastUserMsg) return;
+    // Retirer la dernière réponse assistant de l'historique (on va la refaire)
+    var lastMsg = S.aiCoachHistory[S.aiCoachHistory.length - 1];
+    if (lastMsg && lastMsg.role === 'assistant') S.aiCoachHistory.pop();
+    // Retirer la DOM du dernier message coach (le plus récent)
+    var messages = document.getElementById('ai-coach-messages');
+    if (messages) {
+      var coachMsgs = messages.querySelectorAll('.ai-msg-coach');
+      if (coachMsgs.length) coachMsgs[coachMsgs.length - 1].remove();
+    }
+    // Replayer le dernier message user via sendMessage (il va re-appender user, mais on veut éviter)
+    // → On appelle directement la partie "api call" sans re-push user.
+    showToast('Régénération…');
+    replayLastUserMessage(lastUserMsg);
+  } catch(e) {}
+}
+
+// Interne : envoie directement à l'API sans re-push du message user (utilisé par regenerate).
+function replayLastUserMessage(_unused) {
+  var messages = document.getElementById('ai-coach-messages');
+  var sendBtn = document.getElementById('ai-coach-send');
+  if (!messages) return;
+  _sending = true;
+  if (sendBtn) sendBtn.disabled = true;
+  var typingEl = appendTyping(messages);
+  var S = window.S || {};
+  var apiMessages = (S.aiCoachHistory || []).slice(-MAX_API_MESSAGES).map(function(m) {
+    return { role: m.role, content: String(m.content || '').slice(0, MAX_MSG_CHARS) };
+  });
+  var ctx = buildContext();
+  var _ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var _tm = _ctrl ? setTimeout(function() { _ctrl.abort(); }, 25000) : null;
+  fetch(FUNCTION_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages: apiMessages, context: ctx }),
+    signal: _ctrl ? _ctrl.signal : undefined
+  }).then(function(res) {
+    if (_tm) clearTimeout(_tm);
+    if (!res.ok) return res.json().catch(function(){ return {}; }).then(function(e){ throw new Error(e.error || 'Erreur HTTP ' + res.status); });
+    return res.json();
+  }).then(function(data) {
+    if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+    if (data.error) {
+      appendError(messages, 'Erreur : ' + data.error);
+    } else {
+      var reply = data.reply || 'Pas de réponse.';
+      stripRegenerateButtonsFromPrevious(messages);
+      appendCoachMessage(messages, reply, { canRegenerate: true });
+      if (Array.isArray(S.aiCoachHistory)) {
+        S.aiCoachHistory.push({ role: 'assistant', content: reply });
+        if (S.aiCoachHistory.length > MAX_HISTORY) S.aiCoachHistory = S.aiCoachHistory.slice(-MAX_HISTORY);
+      }
+      if (data.remaining && typeof data.remaining === 'object') updateRateLimitHint(data.remaining);
+      try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
+    }
+    smartScroll(messages);
+  }).catch(function(err) {
+    if (_tm) clearTimeout(_tm);
+    if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+    var errMsg = (err && err.name === 'AbortError')
+      ? 'Le coach met trop de temps à répondre. Réessaie dans quelques instants.'
+      : 'Impossible de régénérer. Vérifie ta connexion.';
+    appendError(messages, errMsg);
+  }).finally(function() {
+    _sending = false;
+    if (sendBtn) sendBtn.disabled = false;
+  });
+}
+
+// POLISH 2026-04 (V1.3) : met à jour le hint rate-limit sous la barre d'input.
+// Backend renvoie { hourRemaining, dayRemaining }. On affiche le plus contraignant.
+function updateRateLimitHint(remaining) {
+  try {
+    var el = document.getElementById('ai-rate-hint');
+    if (!el) return;
+    var hr = (remaining && typeof remaining.hourRemaining === 'number') ? remaining.hourRemaining : null;
+    var dy = (remaining && typeof remaining.dayRemaining === 'number') ? remaining.dayRemaining : null;
+    if (hr === null && dy === null) { el.textContent = ''; return; }
+    // On affiche celui qui se rapproche le plus du 0
+    var txt;
+    if (hr !== null && dy !== null) {
+      txt = Math.min(hr, dy) + ' question' + (Math.min(hr, dy) > 1 ? 's' : '') + ' restante' + (Math.min(hr, dy) > 1 ? 's' : '');
+    } else {
+      var v = hr !== null ? hr : dy;
+      txt = v + ' question' + (v > 1 ? 's' : '') + ' restante' + (v > 1 ? 's' : '');
+    }
+    el.textContent = txt;
+  } catch(e) {}
+}
+
+// POLISH 2026-04 (V1.2) : toast léger pour feedback actions (copier/régénérer/rating).
+function showToast(text) {
+  try {
+    var existing = document.querySelector('.ai-toast');
+    if (existing) existing.parentNode && existing.parentNode.removeChild(existing);
+    var t = document.createElement('div');
+    t.className = 'ai-toast';
+    t.textContent = text;
+    document.body.appendChild(t);
+    // Force reflow pour trigger transition
+    void t.offsetWidth;
+    t.classList.add('show');
+    setTimeout(function() {
+      t.classList.remove('show');
+      setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 300);
+    }, 1800);
+  } catch(e) {}
+}
+
+// Stockage feedback local (👍/👎) — pour stats futures, pas envoyé à l'API.
+function recordCoachFeedback(messageText, rating) {
+  try {
+    var user = (window.AUTH && window.AUTH.getUser) ? window.AUTH.getUser() : null;
+    var uid = user && user.id ? user.id : 'anon';
+    var key = 'mtd_aicoach_feedback_' + uid;
+    var raw = localStorage.getItem(key);
+    var arr = [];
+    if (raw) { try { arr = JSON.parse(raw); if (!Array.isArray(arr)) arr = []; } catch(e) { arr = []; } }
+    // Hash simple pour identifier le message (first 60 chars + length)
+    var msgHash = (messageText || '').slice(0, 60) + '_' + (messageText || '').length;
+    // Dédupe : si déjà noté, remplace
+    arr = arr.filter(function(x) { return x.hash !== msgHash; });
+    arr.push({ hash: msgHash, rating: rating, ts: Date.now() });
+    // Purge > 100 entries
+    if (arr.length > 100) arr = arr.slice(-100);
+    localStorage.setItem(key, JSON.stringify(arr));
+  } catch(e) {}
+}
+
+function appendCoachMessage(container, text, opts) {
+  opts = opts || {};
   var wrap = document.createElement('div');
   wrap.className = 'ai-msg ai-msg-coach';
   var name = document.createElement('div');
@@ -420,6 +650,76 @@ function appendCoachMessage(container, text) {
   msg.textContent = text;
   wrap.appendChild(name);
   wrap.appendChild(msg);
+
+  // POLISH 2026-04 (V1.2) : barre d'actions — copier / régénérer / 👍 / 👎
+  // opts.canRegenerate=true uniquement sur le DERNIER message (pas dans l'historique rechargé).
+  if (!opts.skipActions) {
+    var actions = document.createElement('div');
+    actions.className = 'ai-msg-actions';
+
+    // Copier
+    var copyBtn = document.createElement('button');
+    copyBtn.type = 'button';
+    copyBtn.title = 'Copier';
+    copyBtn.setAttribute('aria-label', 'Copier la réponse');
+    copyBtn.textContent = '\u2398'; // U+2398 next page icon — visible et sobre
+    copyBtn.addEventListener('click', function() {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function() { showToast('Copié'); }, function() { showToast('\u00c9chec copie'); });
+        } else {
+          // Fallback vieux navigateurs : textarea temporaire
+          var ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); showToast('Copié'); } catch(e) { showToast('\u00c9chec copie'); }
+          document.body.removeChild(ta);
+        }
+      } catch(e) { showToast('\u00c9chec copie'); }
+    });
+    actions.appendChild(copyBtn);
+
+    // Régénérer (uniquement sur le dernier message)
+    if (opts.canRegenerate) {
+      var regenBtn = document.createElement('button');
+      regenBtn.type = 'button';
+      regenBtn.title = 'Régénérer';
+      regenBtn.setAttribute('aria-label', 'Régénérer la réponse');
+      regenBtn.textContent = '\u21BB'; // clockwise arrow
+      regenBtn.addEventListener('click', function() { regenerateLastResponse(); });
+      actions.appendChild(regenBtn);
+    }
+
+    // 👍
+    var upBtn = document.createElement('button');
+    upBtn.type = 'button';
+    upBtn.title = 'Utile';
+    upBtn.setAttribute('aria-label', 'Marquer comme utile');
+    upBtn.textContent = '\u2713'; // check mark
+    upBtn.addEventListener('click', function() {
+      recordCoachFeedback(text, 'up');
+      upBtn.classList.add('active-up');
+      downBtn.classList.remove('active-down');
+      showToast('Merci pour ton retour');
+    });
+    actions.appendChild(upBtn);
+
+    // 👎
+    var downBtn = document.createElement('button');
+    downBtn.type = 'button';
+    downBtn.title = 'Peu utile';
+    downBtn.setAttribute('aria-label', 'Marquer comme peu utile');
+    downBtn.textContent = '\u2717'; // cross mark
+    downBtn.addEventListener('click', function() {
+      recordCoachFeedback(text, 'down');
+      downBtn.classList.add('active-down');
+      upBtn.classList.remove('active-up');
+      showToast('Retour enregistré');
+    });
+    actions.appendChild(downBtn);
+
+    wrap.appendChild(actions);
+  }
+
   container.appendChild(wrap);
   return wrap;
 }
@@ -443,7 +743,16 @@ function appendTyping(container) {
   name.textContent = 'Smart Fit Coach';
   var msg = document.createElement('div');
   msg.className = 'ai-msg-text ai-msg-typing';
-  msg.textContent = 'En train de réfléchir...';
+  var lbl = document.createElement('span');
+  lbl.textContent = 'Analyse en cours';
+  msg.appendChild(lbl);
+  // POLISH 2026-04 : 3 points animés CSS (clean, moins gadget que "réfléchit…")
+  var dots = document.createElement('span');
+  dots.className = 'ai-typing-dots';
+  dots.appendChild(document.createElement('span'));
+  dots.appendChild(document.createElement('span'));
+  dots.appendChild(document.createElement('span'));
+  msg.appendChild(dots);
   wrap.appendChild(name);
   wrap.appendChild(msg);
   container.appendChild(wrap);
@@ -479,13 +788,15 @@ function loadHistory(container) {
   var S = window.S || {};
   var history = S.aiCoachHistory;
   if (!Array.isArray(history) || !history.length) return;
-  // Afficher les 6 derniers messages de l'historique (pas le welcome)
-  var recent = history.slice(-6);
-  recent.forEach(function(msg) {
+  // POLISH 2026-04 (V1.1) : charger TOUT l'historique persisté (vs 6 derniers).
+  // MAX_HISTORY = 20 limite déjà la taille. Scroll auto en bas après rendu.
+  // Le user peut remonter pour relire les anciens échanges.
+  history.forEach(function(msg) {
     if (msg.role === 'user') appendUserMessage(container, msg.content);
     else if (msg.role === 'assistant') appendCoachMessage(container, msg.content);
   });
-  container.scrollTop = container.scrollHeight;
+  // Force un scroll bas après rendu asynchrone
+  setTimeout(function() { container.scrollTop = container.scrollHeight; }, 0);
 }
 
 // ─── LAYOUT ADAPTATIF ────────────────────────────────────────────────────────
@@ -614,7 +925,10 @@ function sendMessage() {
       appendError(messages, 'Erreur : ' + data.error);
     } else {
       var reply = data.reply || 'Pas de réponse.';
-      appendCoachMessage(messages, reply);
+      // POLISH 2026-04 (V1.2) : dernier message a le bouton "Régénérer".
+      // Les précédents (via stripActions) gardent copier + feedback mais pas regen.
+      stripRegenerateButtonsFromPrevious(messages);
+      appendCoachMessage(messages, reply, { canRegenerate: true });
       // Sauvegarder réponse dans historique
       if (Array.isArray(S.aiCoachHistory)) {
         S.aiCoachHistory.push({ role: 'assistant', content: reply });
@@ -622,10 +936,15 @@ function sendMessage() {
           S.aiCoachHistory = S.aiCoachHistory.slice(-MAX_HISTORY);
         }
       }
+      // POLISH 2026-04 (V1.3) : mettre à jour le hint rate-limit si backend fournit les restants.
+      if (data.remaining && typeof data.remaining === 'object') {
+        updateRateLimitHint(data.remaining);
+      }
       // Sauvegarder profil
       try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
     }
-    messages.scrollTop = messages.scrollHeight;
+    // Auto-scroll intelligent : bas si user en bas, sinon pill "nouveaux messages"
+    smartScroll(messages);
   }).catch(function(err) {
     if (_coachTimer) clearTimeout(_coachTimer);
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
