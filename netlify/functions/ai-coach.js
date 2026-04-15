@@ -2,8 +2,11 @@
 // Proxy sécurisé vers l'API Anthropic — la clé API reste côté serveur
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-const MODEL = 'claude-haiku-4-5-20251001';
-const MAX_TOKENS = 400; // Réduit : réponses courtes suffisent pour un coach
+// UPGRADE 2026-04 : Haiku → Sonnet 4.6 pour coach adaptatif avec raisonnement fin
+// (ajustements charges ISSN/ACSM, interprétation RPE + cycle + wellness).
+// Rate limit déjà strict (10/h, 30/j par IP) → coût maîtrisé.
+const MODEL = 'claude-sonnet-4-6';
+const MAX_TOKENS = 500; // Sonnet peut mieux — +100 tokens pour analyses progression
 
 // Domaines autorisés pour CORS
 var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
@@ -133,7 +136,10 @@ function sanitizeContext(ctx) {
     'cycleTracking', 'cycleLength', 'lastPeriodDate',
     'trainingDaysSelected', 'trainTime', 'mealsPerDay',
     'muscuMedical', 'medical', 'streak',
-    'intolerances', 'halal'
+    'intolerances', 'halal',
+    // COACH ADAPTATIF 2026-04 (phase A) : feedback séances + performance semaine + cycle
+    'lastSessionFeedback', 'weekPerformance',
+    'nextSessionScheduled', 'cyclePhase'
   ];
 
   var safe = {};
@@ -226,6 +232,75 @@ function sanitizeContext(ctx) {
           if (!isNaN(num) && isFinite(num)) safe1RM[sk] = num;
         });
         safe[field] = safe1RM;
+      }
+    }
+    // COACH ADAPTATIF 2026-04 : handlers typés pour feedback + perf
+    else if (field === 'lastSessionFeedback') {
+      // { date, sessionId, rpe, feeling, pain, chargeActual:{exo:kg}, reps:{exo:n}, notes }
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        var sfb = {};
+        if (val.date) sfb.date = sanitizeString(String(val.date), 30);
+        if (val.sessionId) sfb.sessionId = sanitizeString(String(val.sessionId), 40);
+        var rpeN = parseFloat(val.rpe);
+        if (!isNaN(rpeN) && isFinite(rpeN) && rpeN >= 1 && rpeN <= 10) sfb.rpe = rpeN;
+        if (val.feeling) sfb.feeling = sanitizeString(String(val.feeling), 20);
+        if (val.pain) sfb.pain = sanitizeString(String(val.pain), 30);
+        if (val.notes) sfb.notes = sanitizeString(String(val.notes), 200);
+        if (val.chargeActual && typeof val.chargeActual === 'object' && !Array.isArray(val.chargeActual)) {
+          var sc = {};
+          Object.keys(val.chargeActual).slice(0, 15).forEach(function(k) {
+            var sk = sanitizeString(k, 40);
+            var n = parseFloat(val.chargeActual[k]);
+            if (!isNaN(n) && isFinite(n)) sc[sk] = n;
+          });
+          sfb.chargeActual = sc;
+        }
+        if (val.reps && typeof val.reps === 'object' && !Array.isArray(val.reps)) {
+          var sr = {};
+          Object.keys(val.reps).slice(0, 15).forEach(function(k) {
+            var sk = sanitizeString(k, 40);
+            var n = parseFloat(val.reps[k]);
+            if (!isNaN(n) && isFinite(n)) sr[sk] = n;
+          });
+          sfb.reps = sr;
+        }
+        safe.lastSessionFeedback = sfb;
+      }
+    }
+    else if (field === 'weekPerformance') {
+      // { sessionsCount, rpeAvg, chargeProgressionPct, lastPain }
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        var wp = {};
+        var sc2 = parseFloat(val.sessionsCount);
+        if (!isNaN(sc2) && isFinite(sc2)) wp.sessionsCount = sc2;
+        var rpeA = parseFloat(val.rpeAvg);
+        if (!isNaN(rpeA) && isFinite(rpeA)) wp.rpeAvg = Math.round(rpeA * 10) / 10;
+        var cp = parseFloat(val.chargeProgressionPct);
+        if (!isNaN(cp) && isFinite(cp)) wp.chargeProgressionPct = Math.round(cp * 10) / 10;
+        if (val.lastPain) wp.lastPain = sanitizeString(String(val.lastPain), 30);
+        safe.weekPerformance = wp;
+      }
+    }
+    else if (field === 'nextSessionScheduled') {
+      // { date, dayLabel, type } (ex: { date:'2026-04-16', dayLabel:'Jeudi', type:'muscu Jour 3' })
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        var ns = {};
+        if (val.date) ns.date = sanitizeString(String(val.date), 30);
+        if (val.dayLabel) ns.dayLabel = sanitizeString(String(val.dayLabel), 30);
+        if (val.type) ns.type = sanitizeString(String(val.type), 60);
+        safe.nextSessionScheduled = ns;
+      }
+    }
+    else if (field === 'cyclePhase') {
+      // { phase, dayInCycle, intensityFactor } — déjà calculé côté client
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        var cp2 = {};
+        if (val.phase) cp2.phase = sanitizeString(String(val.phase), 30);
+        var dic = parseFloat(val.dayInCycle);
+        if (!isNaN(dic) && isFinite(dic)) cp2.dayInCycle = Math.round(dic);
+        var ifac = parseFloat(val.intensityFactor);
+        if (!isNaN(ifac) && isFinite(ifac)) cp2.intensityFactor = Math.round(ifac * 100) / 100;
+        safe.cyclePhase = cp2;
       }
     }
     else {
@@ -532,6 +607,73 @@ function buildSystemPrompt(ctx) {
     var wobj = ctx.muscuWeights;
     var wlist = Object.keys(wobj).filter(function(k) { return wobj[k]; }).map(function(k) { return k + ':' + wobj[k] + 'kg'; });
     if (wlist.length) lines.push('CHARGES: ' + wlist.join(' | '));
+  }
+
+  // COACH ADAPTATIF 2026-04 (phase A) : cycle + feedback séance + perf hebdo + prochaine séance.
+  // L'IA doit pouvoir ajuster les conseils en fonction de la dernière séance et de la phase du
+  // cycle hormonal. Principes ISSN 2017 + ACSM (volume ≤ +10%/sem, RPE → progression/deload).
+  if (ctx.cyclePhase && ctx.cyclePhase.phase) {
+    var cp = ctx.cyclePhase;
+    var cpLine = 'CYCLE: phase=' + cp.phase;
+    if (cp.dayInCycle) cpLine += ' (J' + cp.dayInCycle + ')';
+    if (cp.intensityFactor) cpLine += ' — facteur intensité recommandé ×' + cp.intensityFactor;
+    lines.push(cpLine);
+  }
+
+  if (ctx.lastSessionFeedback && ctx.lastSessionFeedback.date) {
+    var lsf = ctx.lastSessionFeedback;
+    var lsfParts = ['Date:' + lsf.date];
+    if (lsf.sessionId) lsfParts.push('ID:' + lsf.sessionId);
+    if (typeof lsf.rpe === 'number') lsfParts.push('RPE:' + lsf.rpe + '/10');
+    if (lsf.feeling) lsfParts.push('Ressenti:' + lsf.feeling);
+    if (lsf.pain) lsfParts.push('⚠️ Douleur:' + lsf.pain);
+    if (lsf.chargeActual && Object.keys(lsf.chargeActual).length) {
+      var chList = Object.keys(lsf.chargeActual).slice(0, 6).map(function(k) {
+        return k + ':' + lsf.chargeActual[k] + 'kg';
+      });
+      lsfParts.push('Charges réelles:' + chList.join(','));
+    }
+    if (lsf.notes) lsfParts.push('Notes:' + lsf.notes);
+    lines.push('DERNIÈRE SÉANCE: ' + lsfParts.join(' | '));
+  }
+
+  if (ctx.weekPerformance) {
+    var wperf = ctx.weekPerformance;
+    var wpParts = [];
+    if (typeof wperf.sessionsCount === 'number') wpParts.push('Séances:' + wperf.sessionsCount);
+    if (typeof wperf.rpeAvg === 'number') wpParts.push('RPE moyen:' + wperf.rpeAvg + '/10');
+    if (typeof wperf.chargeProgressionPct === 'number') {
+      var sign = wperf.chargeProgressionPct >= 0 ? '+' : '';
+      wpParts.push('Progression charges:' + sign + wperf.chargeProgressionPct + '%');
+    }
+    if (wperf.lastPain) wpParts.push('⚠️ Douleur récente:' + wperf.lastPain);
+    if (wpParts.length) lines.push('PERFORMANCE SEMAINE: ' + wpParts.join(' | '));
+  }
+
+  if (ctx.nextSessionScheduled && ctx.nextSessionScheduled.date) {
+    var nss = ctx.nextSessionScheduled;
+    var nssParts = ['Date:' + nss.date];
+    if (nss.dayLabel) nssParts.push(nss.dayLabel);
+    if (nss.type) nssParts.push(nss.type);
+    lines.push('PROCHAINE SÉANCE: ' + nssParts.join(' | '));
+  }
+
+  // Règles adaptatives — seulement si on a des infos sport pour éviter du bruit
+  if (ctx.lastSessionFeedback || ctx.weekPerformance || ctx.sportType) {
+    lines.push('');
+    lines.push('RÈGLES COACH ADAPTATIF (ISSN 2017 / ACSM) :');
+    lines.push('- Si DERNIÈRE SÉANCE absente et user parle de sa séance → demander charges réelles + RPE + ressenti.');
+    lines.push('- RPE ≤ 6 sur la/les dernière(s) séance(s) → suggérer +2,5 à 5% de charge sur les compound (squat, DC, DT, OHP).');
+    lines.push('- RPE 7-8 → maintenir volume, focus technique et tempo.');
+    lines.push('- RPE ≥ 9 OU douleur signalée → proposer dé-load -10% volume ou exo de substitution (ex: goblet squat si dos).');
+    lines.push('- Progression volume max +10%/semaine (ACSM). Au-delà → risque blessure.');
+    if (ctx.cyclePhase && ctx.cyclePhase.phase) {
+      lines.push('- Cycle actuel : adapter intensité au facteur indiqué. Menstruation (J1-5) = baisse OK si souhaité, Folliculaire (J6-13) = pic perf, Lutéale (J17-28) = volume modéré.');
+    }
+    if (ctx.pregnant) {
+      lines.push('- Grossesse : pas de Valsalva, pas de charges maximales, intensité modérée, hydratation +++.');
+    }
+    lines.push('- Toujours chiffrer les ajustements (ex: "passe de 60 à 62,5kg au DC") plutôt que vague.');
   }
 
   return lines.join('\n');
