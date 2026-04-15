@@ -2357,11 +2357,11 @@ function buildPersonalizedMuscuPlan(S) {
     // FIX P0 sécurité fœtale (audit user Aïcha T2 sem.22) : filtre ACOG 2020 complet
     // Avant : regex faible laissait passer « Développé couché », « Hip thrust », « Presse à jambes »
     //         → décubitus dorsal + Valsalva → compression veine cave inférieure → hypoxie fœtale.
-    // Maintenant : regex strict identique à app-sport.js:493 (source de vérité ACOG).
+    // Maintenant : regex strict + broadening "couché" / "pull-over" / "flye banc" (audit retest 2026-04-15).
     if (S.pregnant && isFemale) {
       var pregWeek = (typeof S.pregnancyWeek === 'number') ? S.pregnancyWeek : 14;
-      // T2/T3 (sem ≥ 14) : exclure décubitus dorsal + Valsalva + contact
-      var pregForbid = /valsalva|soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|d[eé]velopp[eé]\s+couch[eé]|developpe\s+couche|bench\s+press|leg\s+press|presse\s+[aà]?\s*jambes?|presse[\s-]?cuisses?|crunch|sit.?up|d[eé]clin[eé]|decline|hip\s+thrust|glute\s+bridge\s+sol|snatch|clean\s*(?:&|and|et)?\s*jerk|kettlebell\s+swing|box\s+jump/i;
+      // T2/T3 (sem ≥ 14) : exclure décubitus dorsal + Valsalva + contact + tout mouvement supine.
+      var pregForbid = /valsalva|soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|couch[eé]|bench\s+press|leg\s+press|presse\s+[aà]?\s*jambes?|presse[\s-]?cuisses?|crunch|sit.?up|d[eé]clin[eé]|decline|hip\s+thrust|glute\s+bridge\s+sol|pull.?over|\bflye?\b|\bfly[e]?\s*haltere?s?\b|[eé]cart[eé]\s+halt[eè]res?|snatch|clean\s*(?:&|and|et)?\s*jerk|kettlebell\s+swing|box\s+jump/i;
       allExercises = allExercises.filter(function(ex) {
         return !pregForbid.test(String(ex.n || ex.name || ''));
       });
@@ -2400,7 +2400,9 @@ function buildPersonalizedMuscuPlan(S) {
 
   return {
     style: style,
-    styleLabel: styleObj.meta ? styleObj.meta.name : style,
+    // Prioriser le label user-friendly de TRAINING_STYLES (ex: "Débuter la musculation")
+    // avant meta.name (ex: "Starting Strength" — trop technique) — audit user Thomas.
+    styleLabel: styleObj.label || (styleObj.meta ? styleObj.meta.name : style),
     level: level,
     splitDays: splitDays,
     split: split,
