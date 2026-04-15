@@ -111,6 +111,210 @@ window.currentISOWeek = function(d) {
   return target.getUTCFullYear() + '-W' + String(weekNum).padStart(2, '0');
 };
 
+// COACH ADAPTATIF 2026-04 (phase A) : helpers pour alimenter buildContext() avec
+// les données de feedback séances, performance hebdo, prochaine séance, cycle.
+// Tous défensifs — retournent null si données insuffisantes (jamais undefined ni NaN).
+
+// Renvoie le dernier feedback de séance (le plus récent) ou null.
+// Structure : { date, sessionId, rpe, feeling, pain, chargeActual, reps, notes }
+window.getLastSessionFeedback = function() {
+  try {
+    var S = window.S;
+    if (!S || !S.sessionFeedback || typeof S.sessionFeedback !== 'object') return null;
+    var keys = Object.keys(S.sessionFeedback).filter(function(k) {
+      // Seulement clés date valide YYYY-MM-DD
+      return /^\d{4}-\d{2}-\d{2}$/.test(k);
+    });
+    if (!keys.length) return null;
+    keys.sort(); // ordre chronologique
+    var lastKey = keys[keys.length - 1];
+    var fb = S.sessionFeedback[lastKey];
+    if (!fb || typeof fb !== 'object') return null;
+    // Shallow copy avec date explicite pour la sécurité
+    var out = { date: lastKey };
+    if (fb.sessionId) out.sessionId = String(fb.sessionId);
+    if (typeof fb.rpe === 'number' && fb.rpe >= 1 && fb.rpe <= 10) out.rpe = fb.rpe;
+    if (fb.feeling) out.feeling = String(fb.feeling);
+    if (fb.pain) out.pain = String(fb.pain);
+    if (fb.chargeActual && typeof fb.chargeActual === 'object') out.chargeActual = fb.chargeActual;
+    if (fb.reps && typeof fb.reps === 'object') out.reps = fb.reps;
+    if (fb.notes) out.notes = String(fb.notes).slice(0, 200);
+    return out;
+  } catch(e) { return null; }
+};
+
+// Renvoie un résumé de la semaine écoulée (7 derniers jours glissants) ou null.
+// { sessionsCount, rpeAvg, chargeProgressionPct, lastPain }
+// chargeProgressionPct = variation moyenne des charges vs semaine précédente (7-14j).
+window.getWeekPerformanceSummary = function() {
+  try {
+    var S = window.S;
+    if (!S || !S.sessionFeedback || typeof S.sessionFeedback !== 'object') return null;
+    var now = new Date();
+    var day = 24 * 3600 * 1000;
+    var t0 = now.getTime();
+    var keys = Object.keys(S.sessionFeedback).filter(function(k) {
+      return /^\d{4}-\d{2}-\d{2}$/.test(k);
+    });
+    if (!keys.length) return null;
+    var thisWeek = [];
+    var prevWeek = [];
+    keys.forEach(function(k) {
+      var dt = new Date(k + 'T00:00:00Z').getTime();
+      if (isNaN(dt)) return;
+      var diff = t0 - dt;
+      if (diff < 7 * day) thisWeek.push({ key: k, fb: S.sessionFeedback[k] });
+      else if (diff < 14 * day) prevWeek.push({ key: k, fb: S.sessionFeedback[k] });
+    });
+    if (!thisWeek.length) return null;
+    var rpeVals = thisWeek.map(function(x) { return x.fb && typeof x.fb.rpe === 'number' ? x.fb.rpe : null; })
+                          .filter(function(v) { return v !== null; });
+    var rpeAvg = rpeVals.length ? rpeVals.reduce(function(a,b){return a+b;}, 0) / rpeVals.length : null;
+    // Progression charges : compare moyenne des charges (exos communs) this vs prev week
+    var progPct = null;
+    if (prevWeek.length) {
+      var thisCh = {};
+      var prevCh = {};
+      function gather(arr, bag) {
+        arr.forEach(function(x) {
+          var ch = x.fb && x.fb.chargeActual;
+          if (!ch || typeof ch !== 'object') return;
+          Object.keys(ch).forEach(function(exo) {
+            var n = parseFloat(ch[exo]);
+            if (!isNaN(n) && isFinite(n)) {
+              if (!bag[exo]) bag[exo] = [];
+              bag[exo].push(n);
+            }
+          });
+        });
+      }
+      gather(thisWeek, thisCh);
+      gather(prevWeek, prevCh);
+      var commonExos = Object.keys(thisCh).filter(function(e) { return prevCh[e]; });
+      if (commonExos.length) {
+        var deltaSum = 0;
+        commonExos.forEach(function(e) {
+          var thisAvg = thisCh[e].reduce(function(a,b){return a+b;},0) / thisCh[e].length;
+          var prevAvg = prevCh[e].reduce(function(a,b){return a+b;},0) / prevCh[e].length;
+          if (prevAvg > 0) deltaSum += ((thisAvg - prevAvg) / prevAvg) * 100;
+        });
+        progPct = deltaSum / commonExos.length;
+      }
+    }
+    // Dernière douleur signalée
+    var lastPain = null;
+    thisWeek.slice().reverse().forEach(function(x) {
+      if (!lastPain && x.fb && x.fb.pain) lastPain = String(x.fb.pain);
+    });
+    var out = { sessionsCount: thisWeek.length };
+    if (rpeAvg !== null) out.rpeAvg = Math.round(rpeAvg * 10) / 10;
+    if (progPct !== null) out.chargeProgressionPct = Math.round(progPct * 10) / 10;
+    if (lastPain) out.lastPain = lastPain;
+    return out;
+  } catch(e) { return null; }
+};
+
+// Renvoie la prochaine séance planifiée selon trainingDaysSelected ou null.
+// { date: 'YYYY-MM-DD', dayLabel: 'Jeudi', type: 'Musculation Jour 3' }
+window.getNextScheduledSession = function() {
+  try {
+    var S = window.S;
+    if (!S) return null;
+    var dayNames = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    // trainingDaysSelected = array de 0-6 (Lun=0, Dim=6)
+    var days = Array.isArray(S.trainingDaysSelected) ? S.trainingDaysSelected : null;
+    if (!days || !days.length) return null;
+    var today = new Date();
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(today.getTime() + i * 24 * 3600 * 1000);
+      // JS: 0=dim, 1=lun... app: 0=lun, 6=dim → convert
+      var appDay = (d.getDay() + 6) % 7;
+      if (days.indexOf(appDay) !== -1) {
+        var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+        var dateStr = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+        var out = { date: dateStr, dayLabel: dayNames[d.getDay()] };
+        if (S.sportType) {
+          var typeLabels = { muscu:'Musculation', crossfit:'CrossFit', running:'Running', cycling:'Vélo', triathlon:'Triathlon', hyrox:'Hyrox', calisthenics:'Calisthenics', padel:'Padel', golf:'Golf', yoga:'Yoga' };
+          out.type = typeLabels[S.sportType] || String(S.sportType);
+        }
+        return out;
+      }
+    }
+    return null;
+  } catch(e) { return null; }
+};
+
+// Wrapper défensif autour de window.getCurrentCyclePhase() (existant dans app-core).
+// Renvoie { phase, dayInCycle, intensityFactor } pour le prompt IA ou null.
+window.getCyclePhaseForAI = function() {
+  try {
+    var S = window.S;
+    if (!S || !S.cycleTracking || !S.lastPeriodDate) return null;
+    if (typeof window.getCurrentCyclePhase !== 'function') return null;
+    var cp = window.getCurrentCyclePhase();
+    if (!cp || !cp.phase) return null;
+    var out = { phase: String(cp.phase) };
+    if (typeof cp.dayInCycle === 'number') out.dayInCycle = cp.dayInCycle;
+    // Retrouver intensityFactor depuis CYCLE_PHASES si dispo
+    if (window.CYCLE_PHASES && typeof window.CYCLE_PHASES === 'object') {
+      var phaseDef = window.CYCLE_PHASES[cp.phase];
+      if (phaseDef && typeof phaseDef.intensityFactor === 'number') {
+        out.intensityFactor = phaseDef.intensityFactor;
+      }
+    }
+    return out;
+  } catch(e) { return null; }
+};
+
+// Enregistre un feedback de séance (appelé par le modal post-séance).
+// data : { rpe, feeling, pain, chargeActual, reps, notes, sessionId }
+// Retourne la date ISO (YYYY-MM-DD) utilisée comme clé.
+window.recordSessionFeedback = function(data) {
+  try {
+    var S = window.S;
+    if (!S) return null;
+    if (!S.sessionFeedback || typeof S.sessionFeedback !== 'object' || Array.isArray(S.sessionFeedback)) {
+      S.sessionFeedback = {};
+    }
+    var d = new Date();
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    var key = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+    var entry = {};
+    if (data) {
+      if (data.sessionId) entry.sessionId = String(data.sessionId).slice(0, 40);
+      var rpeN = parseFloat(data.rpe);
+      if (!isNaN(rpeN) && isFinite(rpeN) && rpeN >= 1 && rpeN <= 10) entry.rpe = rpeN;
+      if (data.feeling) entry.feeling = String(data.feeling).slice(0, 20);
+      if (data.pain) entry.pain = String(data.pain).slice(0, 30);
+      if (data.notes) entry.notes = String(data.notes).slice(0, 200);
+      if (data.chargeActual && typeof data.chargeActual === 'object' && !Array.isArray(data.chargeActual)) {
+        var ch = {};
+        Object.keys(data.chargeActual).slice(0, 15).forEach(function(k) {
+          var n = parseFloat(data.chargeActual[k]);
+          if (!isNaN(n) && isFinite(n) && n > 0) ch[String(k).slice(0, 40)] = n;
+        });
+        if (Object.keys(ch).length) entry.chargeActual = ch;
+      }
+      if (data.reps && typeof data.reps === 'object' && !Array.isArray(data.reps)) {
+        var rp = {};
+        Object.keys(data.reps).slice(0, 15).forEach(function(k) {
+          var n = parseFloat(data.reps[k]);
+          if (!isNaN(n) && isFinite(n) && n > 0) rp[String(k).slice(0, 40)] = n;
+        });
+        if (Object.keys(rp).length) entry.reps = rp;
+      }
+    }
+    S.sessionFeedback[key] = entry;
+    // Garde uniquement les 60 derniers jours pour éviter gonflement localStorage
+    var keys = Object.keys(S.sessionFeedback).filter(function(k) { return /^\d{4}-\d{2}-\d{2}$/.test(k); }).sort();
+    if (keys.length > 60) {
+      keys.slice(0, keys.length - 60).forEach(function(oldK) { delete S.sessionFeedback[oldK]; });
+    }
+    if (typeof window.saveProfile === 'function') window.saveProfile();
+    return key;
+  } catch(e) { return null; }
+};
+
 // FIX D5 COHÉRENCE PRÉNOM 2026-04 : helper unifié pour afficher le prénom.
 // Avant : today-dashboard, ai-coach et push-manager utilisaient 3 priorités différentes
 //         → user pouvait voir "Tom" sur le dashboard, "Thomas" dans ai-coach, "" dans push.
@@ -2397,6 +2601,10 @@ window.S = {
   // que l'user a validé son programme et à empêcher des dérives futures).
   sportProgramValidated: false,
   sportProgramValidatedAt: null,
+  // COACH ADAPTATIF 2026-04 (phase A) : feedback séances pour progression pilotée (ISSN/ACSM).
+  // Structure : { 'YYYY-MM-DD': { sessionId, rpe, feeling, pain, chargeActual:{exo:kg}, reps:{exo:n}, notes } }
+  // Remplie par le modal post-séance ; lue par le coach IA pour ajuster la semaine suivante.
+  sessionFeedback: {},
   // Food habits
   mealsPerDay: 3, eatingLocation: null, mealPrepTime: null,
   snacking: null,

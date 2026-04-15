@@ -107,6 +107,8 @@ var PROFILE_KEYS = [
  'weekPlanValidated', 'weekPlanValidatedISOWeek',
  // FIX VALIDATION SPORTPROGRAM 2026-04 : même pattern pour programme muscu
  'sportProgramValidated', 'sportProgramValidatedAt',
+ // COACH ADAPTATIF 2026-04 (phase A) : feedback séances pour progression pilotée
+ 'sessionFeedback',
  // Timestamp dernière sync cloud — comparaison anti-écrasement dans SupaSync.syncOnLogin
  '_cloudUpdatedAt',
  // Smart Calendar
@@ -2349,6 +2351,12 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
          (typeof S.sportProgramValidated === 'undefined' || S.sportProgramValidated === null)) {
        S.sportProgramValidated = true;
        S.sportProgramValidatedAt = new Date().toISOString();
+     }
+     // COACH ADAPTATIF 2026-04 (phase A) : migration sessionFeedback.
+     // Users legacy sans sessionFeedback → init à {} (évite undefined dans les helpers).
+     if (typeof S.sessionFeedback === 'undefined' || S.sessionFeedback === null ||
+         typeof S.sessionFeedback !== 'object' || Array.isArray(S.sessionFeedback)) {
+       S.sessionFeedback = {};
      }
    } catch(e) {}
  })();
