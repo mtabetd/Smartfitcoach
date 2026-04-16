@@ -1756,6 +1756,9 @@ function renderMuscuMedicalQ(p) {
  p.appendChild(h('button', {'class': 'btn-primary', onclick: function(){
  S.muscuMedical.done = true;
  delete S._muscuMedicalEdit;
+ // FIX DESYNC CRITICAL 2026-04-16 — régénérer le programme après modif bilan médical
+ // Avant : user modifie "hernie discale" depuis step 4, revient → deadlifts toujours dans le programme
+ if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; }
  if (S._medicalReturnToDashboard) { S._medicalReturnToDashboard = false; S.sStep = 4; }
  else { S.sStep = !S.sportLevel ? 1 : 16; }
  window.render();
@@ -1767,6 +1770,8 @@ function renderMuscuMedicalQ(p) {
  onclick: function(){
  S.muscuMedical.done = true;
  delete S._muscuMedicalEdit;
+ // FIX DESYNC CRITICAL 2026-04-16 — idem bouton Passer
+ if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; }
  if (S._medicalReturnToDashboard) { S._medicalReturnToDashboard = false; S.sStep = 4; }
  else { S.sStep = !S.sportLevel ? 1 : 16; }
  window.render();
@@ -2136,6 +2141,8 @@ function renderMusculationGoals(p) {
  g.appendChild(h('div', {'class': 'sel-card' + (on ? ' on' : ''), onclick: function(){
  if (on) S.sportGoals = S.sportGoals.filter(function(x){ return x !== gl.id; });
  else if (S.sportGoals.length < 3) S.sportGoals.push(gl.id);
+ // FIX DESYNC 2026-04-16 — invalider sportProgram si goals changent (repos/reps baked at gen time)
+ if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; }
  syncSportGoalsToNutrition();
  window.render();
  }}, [
@@ -4172,8 +4179,9 @@ function renderMusculationLevel(p) {
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
  nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
- oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { S.sportDays = v; if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); } },
- onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { v = 2; e.target.value = S.sportDays = 2; } else if (v > 6) { v = 6; e.target.value = S.sportDays = 6; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); }
+ // FIX DESYNC 2026-04-16 — invalider sportProgram si days change (sinon labels 3j mais programme 5j)
+ oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { var prev = S.sportDays; S.sportDays = v; if (prev !== v && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); } },
+ onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { v = 2; e.target.value = S.sportDays = 2; } else if (v > 6) { v = 6; e.target.value = S.sportDays = 6; } if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgram.length !== v) { S.sportProgram = null; S.muscuIAProgram = null; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); }
  }));
  nw.appendChild(h('span', {'class': 'num-unit'}, 'jours'));
  p.appendChild(nw);
@@ -4210,7 +4218,10 @@ function renderMusculationLevel(p) {
        if (_mp !== -1) { S.trainingDaysSelected.splice(_mp, 1); }
        else { S.trainingDaysSelected.push(idx); S.trainingDaysSelected.sort(function(a, b) { return a - b; }); }
        // FIX 2026-04-16 : clamp à 2 min (comme le slider) — 1 jour/sem pas de split muscu cohérent
+       var _prevDays = S.sportDays;
        if (S.trainingDaysSelected.length > 0) S.sportDays = Math.max(2, S.trainingDaysSelected.length);
+       // FIX DESYNC 2026-04-16 — invalider sportProgram si nombre de jours change
+       if (_prevDays !== S.sportDays && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; }
        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (jours training changés)
        if (window.devalidateWeekPlan) window.devalidateWeekPlan('trainingDaysSelected changed');
        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
