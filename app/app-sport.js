@@ -6749,16 +6749,15 @@ function renderMusculationProgram(p) {
  var gridCols = isAdvancedRIR ? '40px 1fr 50px 1fr 56px' : '40px 1fr 60px 1fr';
 
  // RIR target display for advanced users
- // MUSCU_PHASES doesn't carry rirTarget — use MESOCYCLE_WEEKS (4-week cycle) instead
- if (isAdvancedRIR) {
-  var _mesoWeeks = window.MESOCYCLE_WEEKS;
-  var _mesoIdx = _mesoWeeks ? ((( S.muscuWeek || 1) - 1) % _mesoWeeks.length) : -1;
-  var _mesoEntry = (_mesoWeeks && _mesoIdx >= 0) ? _mesoWeeks[_mesoIdx] : null;
-  var _rirTarget = _mesoEntry ? _mesoEntry.rirTarget : 2;
+ // FIX 2026-04-16 — UNIFIÉ : RIR dérivé de MUSCU_PHASES (RPE), plus de MESOCYCLE_WEEKS.
+ // Avant : MUSCU_PHASES disait "RPE 9 / Intensification" mais MESOCYCLE_WEEKS disait
+ // "RIR 3 / modéré" pour la même semaine → contradiction. RPE 10 - RPE = RIR approximatif.
+ if (isAdvancedRIR && exPhase) {
+  var _rirTarget = Math.max(0, 10 - (exPhase.rpe || 8));
   var _rirLabel = _rirTarget <= 1 ? 'quasi-échec' : _rirTarget === 2 ? 'effort intense' : _rirTarget === 3 ? 'modéré' : 'léger';
   var _rirTargetDisplay = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6A4A1A;margin-bottom:6px;padding:4px 8px;background:rgba(106,74,26,0.06);border-radius:2px'});
   _rirTargetDisplay.appendChild(termTooltip('RIR', 'Reps In Reserve — nombre de reps que vous pourriez encore faire avant l\'échec musculaire'));
-  _rirTargetDisplay.appendChild(h('span', {}, ' cible cette semaine : ' + _rirTarget + ' — ' + _rirLabel + (_mesoEntry ? ' (' + _mesoEntry.name + ')' : '')));
+  _rirTargetDisplay.appendChild(h('span', {}, ' cible cette semaine : ' + _rirTarget + ' — ' + _rirLabel + ' (' + (exPhase.label || '') + ')'));
   card.appendChild(_rirTargetDisplay);
  }
 
