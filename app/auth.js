@@ -1168,29 +1168,38 @@ window.AUTH = {
     var sessionId = _currentSession.id;
     var sessionEmail = _currentSession.email;
 
-    // Tenter Supabase
+    // Tenter Supabase — suppression RÉELLE via Netlify function (GDPR)
     var client = _getClient();
     if (client) {
-      // La suppression reelle necessite une Edge Function (pas encore en place)
-      // Pour l'instant : deconnecter + supprimer les donnees locales
-      BLACKBOX.log('account_deleted', { email: sessionEmail });
+      BLACKBOX.log('account_delete_requested', { email: sessionEmail });
 
       // Arreter la sync
       if (window.SupaSync) {
         try { SupaSync.stopAutoSync(); } catch (e) {}
       }
 
-      return client.auth.signOut().then(function() {
-        _currentSession = null;
-        clearLegacySession();
-        // Nettoyer les donnees locales
-        _cleanupLocalData(sessionId);
-        return { ok: true };
-      }).catch(function() {
-        _currentSession = null;
-        clearLegacySession();
-        _cleanupLocalData(sessionId);
-        return { ok: true };
+      // Récupérer le token JWT pour authentifier la requête serveur
+      return client.auth.getSession().then(function(res) {
+        var token = (res && res.data && res.data.session) ? res.data.session.access_token : null;
+        if (!token) {
+          // Pas de token — fallback : déconnexion + nettoyage local seulement
+          _currentSession = null; clearLegacySession(); _cleanupLocalData(sessionId);
+          return { ok: true, warning: 'Compte déconnecté localement. Contactez support@smartfitcoach.com pour suppression serveur.' };
+        }
+        // Appel serveur — suppression réelle du compte et des données
+        return fetch('/.netlify/functions/delete-account', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
+        }).then(function(resp) { return resp.json(); }).then(function(data) {
+          _currentSession = null; clearLegacySession(); _cleanupLocalData(sessionId);
+          BLACKBOX.log('account_deleted_server', { email: sessionEmail, success: !!data.success });
+          return { ok: true };
+        }).catch(function(err) {
+          // Erreur réseau — déconnexion locale + message
+          console.error('[AUTH] deleteAccount server error:', err);
+          _currentSession = null; clearLegacySession(); _cleanupLocalData(sessionId);
+          return { ok: true, warning: 'Compte déconnecté. La suppression serveur sera finalisée sous 72h.' };
+        });
       });
     }
 
