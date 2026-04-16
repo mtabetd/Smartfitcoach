@@ -2902,11 +2902,11 @@ function renderStep9(p) {
       if (Array.isArray(_wk9) && _wk9.length === 7) {
         S.weekPlan = _wk9;
         S._weekPlanGeneratedAt = new Date().toISOString();
-        // Migration legacy : si flag validation absent, considérer validé
-        if (typeof S.weekPlanValidated === 'undefined' || S.weekPlanValidated === null) {
-          S.weekPlanValidated = true;
-          if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
-        }
+        // FIX 2026-04-16 — marquer toujours validé à la génération (pas juste legacy)
+        // Avant : seul le flag legacy était mis. L'user générait son plan, allait au dashboard,
+        // et voyait "Valide ton plan" alors qu'il venait de le générer.
+        S.weekPlanValidated = true;
+        if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
       }
     } catch(e) { console.error('[renderStep9] generateWeek failed', e); }
   } else if (_planHashNow && !S._planHash) {

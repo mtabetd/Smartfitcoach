@@ -176,6 +176,11 @@ window.devalidateWeekPlan = function(reason) {
   try {
     var S = window.S;
     if (!S) return;
+    // FIX 2026-04-16 — Ne dévalider QUE si un weekPlan existe.
+    // Avant : chaque changement de paramètre (allergies, medical, goal...) dévalidait
+    // même pendant l'onboarding (pas de plan). L'user arrivait sur le dashboard et
+    // voyait "Valide ton plan" en boucle alors qu'il venait de le valider.
+    if (!S.weekPlan || !Array.isArray(S.weekPlan) || S.weekPlan.length < 7) return;
     S.weekPlanValidated = false;
     // Note : on ne touche PAS à S.weekPlan (il reste visible).
     // La bannière en haut du planning affiche "Paramètres modifiés → Revalider".

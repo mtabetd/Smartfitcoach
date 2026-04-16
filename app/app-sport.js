@@ -5597,6 +5597,10 @@ function renderMusculationProgram(p) {
          }
          S._programGenerationError = null;
          S.selectedSportDay = 0;
+         // FIX 2026-04-16 — auto-regen préserve le statut validé si le programme existait déjà
+         // Avant : l'user validait son programme, une auto-regen (version stale, boot) remettait
+         // sportProgramValidated=undefined → dashboard redemandait de valider en boucle.
+         if (!S.sportProgramValidated) { S.sportProgramValidated = true; S.sportProgramValidatedAt = new Date().toISOString(); }
          if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
          if (window.render) window.render();
        } catch(e) {
@@ -6362,6 +6366,8 @@ function renderMusculationProgram(p) {
       S._splitChoice = _id;
       try { S.sportProgram = generateSportProgram(); } catch(e) { console.error('[split] regen error:', e); }
       S.selectedSportDay = 0;
+      // Préserver le statut validé (l'user a juste changé de split, pas reset)
+      S.sportProgramValidated = true; S.sportProgramValidatedAt = new Date().toISOString();
       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       window.render();
     }; })(opt.id)
