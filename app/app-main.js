@@ -945,7 +945,7 @@ function renderProfilePage(container) {
      value: S.weight ? String(S.weight) : '',
      placeholder: '75',
      style: 'flex:1;min-width:0;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;outline:none;border-radius:2px;',
-     oninput: function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) S.weight = v; }
+     oninput: function(e) { var v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) { S.weight = v; S._nm = null; } }
    });
    _efPoidsWrap.appendChild(_efPoids);
    _efPoidsWrap.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);'}, 'kg'));

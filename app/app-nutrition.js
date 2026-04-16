@@ -745,11 +745,11 @@ function renderStep3(p) {
   var ww = h('div', {'class': 'num-input-wrap'});
   ww.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(wRange.min), max: String(wRange.max), step: String(wRange.step), value: String(wVal), inputmode: 'decimal', placeholder: window.UNITS && window.UNITS.weight === 'lbs' ? '165' : '75', oninput: function(e) {
     var v = parseFloat(e.target.value);
-    if (!isNaN(v)) S.weight = window.UNITS ? window.UNITS.toKg(v) : v;
+    if (!isNaN(v)) { S.weight = window.UNITS ? window.UNITS.toKg(v) : v; S._nm = null; }
   }, onblur: function(e) {
     var v = parseFloat(e.target.value);
-    if (isNaN(v) || v < wRange.min) { e.target.value = wRange.min; S.weight = window.UNITS ? window.UNITS.toKg(wRange.min) : wRange.min; }
-    else if (v > wRange.max) { e.target.value = wRange.max; S.weight = window.UNITS ? window.UNITS.toKg(wRange.max) : wRange.max; }
+    if (isNaN(v) || v < wRange.min) { e.target.value = wRange.min; S.weight = window.UNITS ? window.UNITS.toKg(wRange.min) : wRange.min; S._nm = null; }
+    else if (v > wRange.max) { e.target.value = wRange.max; S.weight = window.UNITS ? window.UNITS.toKg(wRange.max) : wRange.max; S._nm = null; }
     window.render();
   }}));
   ww.appendChild(h('span', {'class': 'num-unit'}, window.UNITS ? window.UNITS.weightLabel() : 'kg'));

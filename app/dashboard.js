@@ -1369,8 +1369,8 @@ function openWeightPrompt() {
     var valKg = window.UNITS ? window.UNITS.toKg(val) : val;
 
     // Save to state FIRST (always succeeds)
-    if (window.S) window.S.weight = valKg;
-
+    if (window.S) { window.S.weight = valKg; window.S._nm = null; }
+    if (window.devalidateWeekPlan) window.devalidateWeekPlan('poids mis à jour (dashboard legacy)');
     // Log to BLACKBOX
     try { if (window.BLACKBOX) window.BLACKBOX.log('weight_logged', { weight: valKg }); } catch(e){}
 

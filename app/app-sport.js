@@ -991,7 +991,7 @@ function renderSportQuickProfile(p) {
     var weightErr = h('div', {style: 'font-size:11px;color:#8B2020;margin-top:4px;display:none', role: 'alert'}, '');
     weightInput.addEventListener('change', function() {
       var v = parseFloat(this.value);
-      if (!isNaN(v) && v >= 30 && v <= 300) { S.weight = v; weightErr.style.display = 'none'; }
+      if (!isNaN(v) && v >= 30 && v <= 300) { S.weight = v; S._nm = null; weightErr.style.display = 'none'; }
       else { this.value = S.weight ? String(S.weight) : ''; weightErr.textContent = 'Entre 30 et 300 kg.'; weightErr.style.display = 'block'; }
     });
     weightInput.addEventListener('focus', function() { setTimeout(function() { weightInput.scrollIntoView({behavior:'smooth', block:'center'}); }, 300); });
