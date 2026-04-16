@@ -256,7 +256,7 @@ function openScan(mealSlot) {
           n: data.name || 'Repas scann\u00e9',
           k: data.kcal || 0, kcal: data.kcal || 0,
           p: data.p || 0, g: data.g || 0, l: data.l || 0,
-          f: '\uD83D\uDCF7', custom: true, scanned: true
+          f: '\u25CE', custom: true, scanned: true
         };
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
       }

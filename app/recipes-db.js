@@ -731,8 +731,8 @@ var breakfast = [
   {
     _id: 'L051',
     n: "Porridge Avoine Lait Amande Banane",
-    f: "🌱",
-    k: 378,
+    f: "\u25CE",
+    k: 402,
     p: 14,
     g: 64,
     l: 10,
@@ -745,8 +745,8 @@ var breakfast = [
   {
     _id: 'L052',
     n: "Smoothie Bowl Mangue Coco Protéiné",
-    f: "🌱",
-    k: 392,
+    f: "\u25CE",
+    k: 412,
     p: 18,
     g: 58,
     l: 12,
@@ -815,8 +815,8 @@ var breakfast = [
   {
     _id: 'L057',
     n: "Tartine Pain Complet Beurre Amande Fruits",
-    f: "🌱",
-    k: 374,
+    f: "\u25CE",
+    k: 392,
     p: 18,
     g: 44,
     l: 16,
@@ -829,8 +829,8 @@ var breakfast = [
   {
     _id: 'L058',
     n: "Bowl Patate Douce Rôtie Beurre Noisette",
-    f: "🌱",
-    k: 412,
+    f: "\u25CE",
+    k: 430,
     p: 16,
     g: 60,
     l: 14,
