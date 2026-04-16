@@ -3858,21 +3858,27 @@ function renderFabLogger() {
 
   var isOpen = !!S._fabOpen;
 
-  var container = h('div', {
-    // Bible Hermès : FAB au-dessus de la coach bar + marge 36px pour ne pas chevaucher
-    // la dernière carte Repas (verdict Directeur Artistique : 84px insuffisant).
-    style: 'position:fixed;right:20px;bottom:calc(64px + 36px + env(safe-area-inset-bottom));z-index:950;'
-  });
+  // FIX 2026-04-16 : restructuré le FAB pour que les boutons ne soient PAS bloqués
+  // par le backdrop. Avant : backdrop position:fixed+inset:0 DANS le container → les
+  // boutons (position:absolute sans z-index) étaient derrière le backdrop → aucun clic
+  // ne passait. Maintenant : wrapper externe contient backdrop + container séparés.
+  var wrapper = h('div', { id: 'fab-logger-wrapper' });
 
-  // Backdrop quand ouvert
+  // Backdrop SÉPARÉ — derrière le container, couvre l'écran pour fermer au tap
   if (isOpen) {
     var backdrop = h('div', {
       style: 'position:fixed;inset:0;background:rgba(10,10,9,0.35);z-index:940;',
       onclick: function() { S._fabOpen = false; if (window.render) window.render(); }
     });
-    container.appendChild(backdrop);
+    wrapper.appendChild(backdrop);
+  }
 
-    // 4 items radiaux
+  var container = h('div', {
+    style: 'position:fixed;right:20px;bottom:calc(64px + 36px + env(safe-area-inset-bottom));z-index:950;'
+  });
+
+  // Items radiaux (au-dessus du backdrop grâce au z-index du container)
+  if (isOpen) {
     var items = [
       { label: 'REPAS', icon: 'M4 5h8M4 8h8M4 11h8', action: function() {
           S.view = 'nutrition'; S.nStep = 12; S._fabOpen = false;
@@ -3904,7 +3910,8 @@ function renderFabLogger() {
       var x = Math.cos(rad) * 110;
       var y = Math.sin(rad) * 110;
       var pill = h('div', {
-        style: 'position:absolute;right:' + (-x + 28) + 'px;bottom:' + (-y + 28) + 'px;display:flex;align-items:center;gap:10px;opacity:0;animation:fabItemIn 220ms cubic-bezier(0.2,0.8,0.2,1) ' + (idx * 40) + 'ms forwards;'
+        // FIX 2026-04-16 : z-index:960 explicite pour que les pills soient AU-DESSUS du backdrop (940).
+        style: 'position:absolute;right:' + (-x + 28) + 'px;bottom:' + (-y + 28) + 'px;display:flex;align-items:center;gap:10px;opacity:0;z-index:960;animation:fabItemIn 220ms cubic-bezier(0.2,0.8,0.2,1) ' + (idx * 40) + 'ms forwards;'
       });
       var label = h('div', {
         style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#fff;font-weight:500;'
@@ -3931,7 +3938,8 @@ function renderFabLogger() {
   fab.innerHTML = '<svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="#FAF9F6" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>';
   container.appendChild(fab);
 
-  return container;
+  wrapper.appendChild(container);
+  return wrapper;
 }
 
 // CSS animation pour les items du FAB
