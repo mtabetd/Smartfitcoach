@@ -801,7 +801,7 @@
     }).join('');
     content.innerHTML =
       '<div style="padding:8px 4px 24px 4px;">' +
-        renderStepperBar(1, 5) +
+        renderStepperBar(1, 6) +
         '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:1px;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quels équipements as-tu à disposition ?</h3>' +
         '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 20px 0;line-height:1.6;">Sélectionne toutes tes installations disponibles. Le programme ne prescrira que ce que tu peux réellement faire. <strong>Sélection multiple.</strong></p>' +
         '<div id="install-cards-wrap">' + cardsHTML + '</div>' +
@@ -877,7 +877,7 @@
     }).join('');
     content.innerHTML =
       '<div style="padding:8px 4px 24px 4px;">' +
-        renderStepperBar(2, 5) +
+        renderStepperBar(2, 6) +
         '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quel résultat veux-tu obtenir en priorité ?</h3>' +
         '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Ton programme sera entièrement construit autour de cet objectif — split, charges et périodisation s\'adapteront en conséquence.</p>' +
         '<div id="obj-cards-wrap">' + cardsHTML + '</div>' +
@@ -955,7 +955,7 @@
     }).join('');
     content.innerHTML =
       '<div style="padding:8px 4px 24px 4px;">' +
-        renderStepperBar(3, 5) +
+        renderStepperBar(3, 6) +
         '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quels groupes musculaires veux-tu développer ?</h3>' +
         '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 16px 0;line-height:1.6;">Sélection multiple. Laisse vide pour un programme équilibré sur tout le corps.</p>' +
         '<div id="zone-cards-wrap" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;">' + cardsHTML + '</div>' +
@@ -1038,7 +1038,7 @@
     }
     content.innerHTML =
       '<div style="padding:8px 4px 24px 4px;">' +
-        renderStepperBar(4, 5) +
+        renderStepperBar(4, 6) +
         '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 6px 0;">Ton niveau de stress actuel ?</h3>' +
         '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Ton programme s\'adaptera : volume, repos inter-séries et intensité s\'ajustent selon ta capacité de récupération.</p>' +
         '<div id="stress-opts">' + optionsHTML + '</div>' +
@@ -1073,6 +1073,115 @@
         if (!window.S) window.S = {};
         window.S.stress = 5; // safe default
       }
+      showProfilSportifStep();
+    });
+  }
+
+  // ─── ÉTAPE 5 bis : PROFIL SPORTIF DÉTAILLÉ ─────────────────────────────────
+  // FIX 2026-04-16 — user s'est plaint qu'aucun questionnaire détaillé n'était
+  // posé. Cette étape collecte/confirme fréquence, niveau, sports pratiqués.
+  function showProfilSportifStep() {
+    var content = document.getElementById('muscu-prog-content');
+    if (!content) return;
+    var S = window.S || {};
+    var currentDays = S.sportDays || 3;
+    var currentLevel = S.sportLevel || '';
+    var currentHobbies = Array.isArray(S.sportHobbies) ? S.sportHobbies.slice() : [];
+    var LEVELS = [
+      { id: 'beginner',     label: 'Débutant',       desc: 'Moins de 6 mois de pratique régulière' },
+      { id: 'intermediate', label: 'Intermédiaire',  desc: '6 mois à 2 ans, maîtrise des bases' },
+      { id: 'advanced',     label: 'Avancé',         desc: '2 à 5 ans, technique solide' },
+      { id: 'pro',          label: 'Expert',         desc: '5+ ans, programmation autonome' }
+    ];
+    var HOBBIES = [
+      { id: 'running',   label: 'Course à pied' },
+      { id: 'cycling',   label: 'Vélo' },
+      { id: 'swimming',  label: 'Natation' },
+      { id: 'football',  label: 'Football' },
+      { id: 'tennis',    label: 'Tennis' },
+      { id: 'basketball',label: 'Basketball' },
+      { id: 'climbing',  label: 'Escalade' },
+      { id: 'martial',   label: 'Arts martiaux' },
+      { id: 'yoga',      label: 'Yoga' },
+      { id: 'hiking',    label: 'Randonnée' }
+    ];
+    var levelCards = LEVELS.map(function(lv) {
+      var sel = (currentLevel === lv.id);
+      return '<div class="lvl-card" data-id="' + lv.id + '" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--border,#D8D8D0);border-radius:2px;cursor:pointer;margin-bottom:6px;font-family:\'Helvetica Neue\',Arial,sans-serif;' + (sel ? 'border-color:var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);' : '') + '">' +
+        '<div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--black,#0A0A09);margin-bottom:2px;">' + lv.label + '</div><div style="font-size:11px;color:var(--grey,#6B6B65);">' + lv.desc + '</div></div>' +
+        '<div class="lvl-dot" style="width:16px;height:16px;border:1.5px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';border-radius:50%;background:' + (sel ? 'var(--accent,#1A4A1A)' : 'transparent') + ';flex-shrink:0;"></div>' +
+      '</div>';
+    }).join('');
+    var hobbyChips = HOBBIES.map(function(hb) {
+      var sel = currentHobbies.indexOf(hb.id) !== -1;
+      return '<span class="hob-chip" data-id="' + hb.id + '" style="display:inline-block;padding:7px 12px;margin:0 6px 6px 0;border:1px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';border-radius:2px;cursor:pointer;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--black,#0A0A09)') + ';background:' + (sel ? 'rgba(26,74,26,0.06)' : 'transparent') + ';user-select:none;min-height:34px;line-height:18px;">' + hb.label + '</span>';
+    }).join('');
+    content.innerHTML =
+      '<div style="padding:8px 4px 24px 4px;">' +
+        renderStepperBar(5, 6) +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Votre profil sportif</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 20px 0;line-height:1.6;">Votre programme sera adapté à votre niveau, votre fréquence et les autres sports que vous pratiquez en parallèle.</p>' +
+
+        '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:0 0 8px 0;font-family:\'Helvetica Neue\',Arial,sans-serif;">Fréquence hebdomadaire</div>' +
+        '<div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;">' +
+          [2,3,4,5,6].map(function(n) {
+            var sel = (currentDays === n);
+            return '<button class="day-btn" data-v="' + n + '" style="flex:1;min-width:50px;min-height:44px;padding:10px;border:1px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';background:' + (sel ? 'rgba(26,74,26,0.08)' : 'transparent') + ';color:' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--black,#0A0A09)') + ';font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;font-weight:' + (sel ? '600' : '400') + ';border-radius:2px;cursor:pointer;">' + n + ' j</button>';
+          }).join('') +
+        '</div>' +
+
+        '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:0 0 8px 0;font-family:\'Helvetica Neue\',Arial,sans-serif;">Niveau d\'expérience</div>' +
+        '<div id="lvl-wrap" style="margin-bottom:18px;">' + levelCards + '</div>' +
+
+        '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:0 0 8px 0;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sports pratiqués en parallèle <span style="text-transform:none;letter-spacing:0;font-size:10px;color:var(--grey,#6B6B65);">(optionnel)</span></div>' +
+        '<div id="hob-wrap" style="margin-bottom:20px;">' + hobbyChips + '</div>' +
+
+        '<div id="ps-error" style="font-size:11px;color:#B02020;margin:0 0 10px 0;display:none;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sélectionne un niveau pour continuer.</div>' +
+        '<button id="ps-next" style="background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;padding:14px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:48px;">Continuer \u2192</button>' +
+      '</div>';
+
+    // Handlers fréquence
+    content.querySelectorAll('.day-btn').forEach(function(b) {
+      b.addEventListener('click', function() {
+        var v = parseInt(b.getAttribute('data-v'));
+        if (!window.S) window.S = {};
+        window.S.sportDays = v;
+        try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
+        showProfilSportifStep();
+      });
+    });
+
+    // Handlers niveau
+    document.getElementById('lvl-wrap').addEventListener('click', function(e) {
+      var card = e.target.closest('.lvl-card');
+      if (!card) return;
+      var id = card.getAttribute('data-id');
+      if (!window.S) window.S = {};
+      window.S.sportLevel = id;
+      try { if (window.saveProfile) window.saveProfile(); } catch(e2) {}
+      showProfilSportifStep();
+    });
+
+    // Handlers hobbies (toggle multi)
+    document.getElementById('hob-wrap').addEventListener('click', function(e) {
+      var chip = e.target.closest('.hob-chip');
+      if (!chip) return;
+      var id = chip.getAttribute('data-id');
+      if (!window.S) window.S = {};
+      if (!Array.isArray(window.S.sportHobbies)) window.S.sportHobbies = [];
+      var idx = window.S.sportHobbies.indexOf(id);
+      if (idx >= 0) window.S.sportHobbies.splice(idx, 1);
+      else window.S.sportHobbies.push(id);
+      try { if (window.saveProfile) window.saveProfile(); } catch(e2) {}
+      showProfilSportifStep();
+    });
+
+    document.getElementById('ps-next').addEventListener('click', function() {
+      if (!window.S || !window.S.sportLevel) {
+        var err = document.getElementById('ps-error');
+        if (err) err.style.display = 'block';
+        return;
+      }
       showGenerationStep();
     });
   }
@@ -1094,7 +1203,7 @@
         }).join('  ·  ')
       : '';
     content.innerHTML = '<div style="text-align:center;padding:32px 24px;">' +
-      renderStepperBar(5, 5) +
+      renderStepperBar(6, 6) +
       '<h3 style="font-family:Georgia,serif;font-size:24px;font-weight:normal;letter-spacing:1px;color:var(--ink-900,#0A0A09);margin:0 0 20px 0;">Ton programme t\'attend.</h3>' +
       '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--ink-500,#6B6B65);margin:0 auto 24px auto;max-width:520px;">On va croiser ton profil complet — niveau, disponibilités, équipement, objectifs et données de force — pour construire douze semaines qui n\'existent que pour toi. Aucune ligne ne sera générique. Chaque charge sera calculée sur ton profil réel.</p>' +
       (instSummary ? '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;line-height:1.8;">' + instSummary + '</div>' +
@@ -1121,6 +1230,8 @@
     var hasObjectif = !!(window.S && window.S.muscuObjectifSpecifique);
     var hasZones    = (window.S && Array.isArray(window.S.muscuZonesCibles)); // null/undefined = pas encore répondu
     var hasStress   = (window.S && typeof window.S.stress === 'number');
+    // FIX 2026-04-16 — étape profil sportif obligatoire pour personnalisation réelle
+    var hasProfilSportif = !!(window.S && window.S.sportLevel && window.S.sportDays);
     if (!hasInstallations) {
       showInstallationsStep();
     } else if (!hasObjectif) {
@@ -1129,6 +1240,8 @@
       showZonesCibleesStep();
     } else if (!hasStress) {
       showStressStep();
+    } else if (!hasProfilSportif) {
+      showProfilSportifStep();
     } else {
       showGenerationStep();
     }
