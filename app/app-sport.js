@@ -1294,14 +1294,17 @@ function renderObjectif(p) {
  ]));
 
  // Cross Training - clicking goes through PAR-Q (if not done), then CF level (step 5)
- typeGrid.appendChild(h('div', {'class': 'sel-card', style:'cursor:pointer', onclick: function(){
+ // FIX SÉCURITÉ 2026-04-16 — Bloquer CrossFit pour HTA sévère et grossesse T3
+ var _cfBlocked = (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) || (S.pregnant && S.sex === 'femme' && typeof S.pregnancyWeek === 'number' && S.pregnancyWeek >= 28);
+ var _cfBlockReason = _cfBlocked ? (S.pregnant ? 'Contre-indiqué pendant le 3e trimestre (ACOG 2020)' : 'Contre-indiqué avec HTA sévère (ESC/ESH 2018)') : '';
+ typeGrid.appendChild(h('div', {'class': 'sel-card' + (_cfBlocked ? ' disabled' : ''), style:'cursor:' + (_cfBlocked ? 'not-allowed' : 'pointer') + ';' + (_cfBlocked ? 'opacity:0.35;pointer-events:none;' : ''), onclick: _cfBlocked ? null : function(){
  S.sportType = 'crossfit';
  if (!S.parqDone) { S._parqNextStep = 5; S.sStep = 26; } else { S.sStep = 5; }
  if (window.BLACKBOX) BLACKBOX.log('sport_type', {type: 'crossfit'});
  window.render();
  }}, [
- h('div', {'class': 'card-name'}, 'Cross Training'),
- h('div', {'class': 'card-sub'}, 'Halt\u00e9rophilie \u00b7 WOD \u00b7 Gymnastique'),
+ h('div', {'class': 'card-name'}, 'Cross Training' + (_cfBlocked ? ' — Indisponible' : '')),
+ h('div', {'class': 'card-sub'}, _cfBlocked ? _cfBlockReason : 'Halt\u00e9rophilie \u00b7 WOD \u00b7 Gymnastique'),
  h('div', {'class': 'card-tag'}, '100 WODs \u00b7 Cycles 6 semaines \u00b7 Scaled/Inter/RX')
  ]));
 

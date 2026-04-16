@@ -4258,7 +4258,7 @@ window.validatePregnancyState = validatePregnancyState;
 function isPremium() {
   try {
     var s = window.S;
-    if (!s) return true; // fallback safe
+    if (!s) return false; // FIX 2026-04-16 — pas de state = pas premium
     // Abonnement payant actif
     if (s.subscriptionEnd) {
       if (s.subscriptionPlan === 'unlimited') return true;
@@ -4274,7 +4274,7 @@ function isPremium() {
     if (!s.firstLoginDate) return true;
     // Trial expiré et pas d'abonnement
     return false;
-  } catch(e) { return true; } // fallback safe
+  } catch(e) { return false; } // FIX 2026-04-16 — erreur = pas premium (avant: true = tout le monde premium en cas de bug)
 }
 // Jours restants de trial (0 si expiré ou si abonné)
 function getTrialDaysLeft() {

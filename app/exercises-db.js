@@ -645,7 +645,9 @@ var EXERCISES = {
     { n: "Rowing banc incliné haltères", m: "Dos / Rhomboïdes", eq: "Banc incliné + 2 haltères", sets: "4×10-12", rest: "75s", video: "https://www.youtube.com/results?search_query=chest+supported+dumbbell+row&sp=EgIYAQ%253D%253D", desc: "Chest-supported row : torse contre banc incliné 30-45°, tire les haltères vers les hanches. Zéro triche lombaire.", tips: ["Front contre le banc", "Coudes tirent derrière", "Squeeze omoplates 1s", "Idéal anti-triche lombaire"], lv: 1, tags: ["dos", "halteres", "banc-incline", "beginner-friendly"] },
     { n: "Rowing landmine unilatéral", m: "Dos / Obliques", eq: "Barre landmine", sets: "3×10 par côté", rest: "75s", video: "https://www.youtube.com/results?search_query=single+arm+landmine+row&sp=EgIYAQ%253D%253D", desc: "Fente haute, tirage d'une barre landmine vers la hanche. Cible dos + gainage rotationnel.", tips: ["Position solide, jambe avant côté barre", "Tire vers hanche opposée", "Pas de rotation buste"], lv: 2, tags: ["dos", "landmine", "unilateral", "core"] },
     { n: "Rack pulls", m: "Dos / Trapèzes / Ischios", eq: "Barre + rack (hauteur genoux)", sets: "4×5-8", rest: "180s", video: "https://www.youtube.com/results?search_query=rack+pulls+barbell&sp=EgIYAQ%253D%253D", warn: "CONTRE-INDIQUÉ grossesse et HTA sévère (Valsalva).", desc: "Deadlift partiel à partir du rack (hauteur genoux). Permet de surcharger la portion supérieure du lockout + trapèzes.", tips: ["Barre frotte les cuisses", "Épaules derrière la barre en bas", "Finition trapèzes actifs"], lv: 3, tags: ["dos", "trapèzes", "force", "partial-rom"] },
-    { n: "Rowing inversé TRX/anneaux", m: "Dos / Biceps / Rhomboïdes", eq: "TRX ou anneaux", sets: "4×8-15", rest: "75s", video: "https://www.youtube.com/results?search_query=inverted+row+trx+rings&sp=EgIYAQ%253D%253D", desc: "Corps sous les poignées, tirer la poitrine vers les mains. Progression tractions pour débutants.", tips: ["Plus horizontal = plus dur", "Corps aligné planche", "Squeeze omoplates en haut"], lv: 1, tags: ["dos", "poids du corps", "trx", "beginner-friendly", "home"] }
+    { n: "Rowing inversé TRX/anneaux", m: "Dos / Biceps / Rhomboïdes", eq: "TRX ou anneaux", sets: "4×8-15", rest: "75s", video: "https://www.youtube.com/results?search_query=inverted+row+trx+rings&sp=EgIYAQ%253D%253D", desc: "Corps sous les poignées, tirer la poitrine vers les mains. Progression tractions pour débutants.", tips: ["Plus horizontal = plus dur", "Corps aligné planche", "Squeeze omoplates en haut"], lv: 1, tags: ["dos", "poids du corps", "trx", "beginner-friendly", "home"] },
+    // FIX 2026-04-16 — Good Morning déplacé depuis legs (c'est un exercice chaîne postérieure/dos, pas jambes)
+    { n: "Good morning", m: "Postérieurs / Lombaires / Fessiers", eq: "Barre", sets: "3×8-12", rest: "120s", video: "https://www.youtube.com/results?search_query=good+morning+exercise+barbell&sp=EgIYAQ%253D%253D", warn: "CONTRE-INDIQUÉ hernie discale, lombalgie chronique, ostéoporose. Exécution stricte indispensable.", desc: "Hip hinge avec barre haute trapèzes. Recrute lombaires + ischios + fessiers. Charge légère obligatoire.", tips: ["Barre légère (40-60% squat)", "Hip hinge pur (genoux peu fléchis)", "Dos absolument plat", "Stop si douleur lombaire"], lv: 3, tags: ["dos", "fessiers", "ischios", "compose", "force"] }
   ],
 
   // ─── EPAULES ───
@@ -1378,19 +1380,6 @@ var EXERCISES = {
       tips: ["Pause sous parallèle", "Garde le dos rigide pendant la pause", "Drive max remontée", "Idéal pour technique squat"],
       lv: 3,
       tags: ["jambes", "quadriceps", "compose", "force"]
-    },
-    {
-      n: "Good morning",
-      m: "Postérieurs / Lombaires / Fessiers",
-      eq: "Barre",
-      sets: "3×8-12",
-      rest: "120s",
-      video: "https://www.youtube.com/results?search_query=good+morning+exercise+barbell&sp=EgIYAQ%253D%253D",
-      warn: "CONTRE-INDIQUÉ hernie discale, lombalgie chronique, ostéoporose. Exécution stricte indispensable.",
-      desc: "Hip hinge avec barre haute trapèzes. Recrute lombaires + ischios + fessiers. Charge légère obligatoire.",
-      tips: ["Barre légère (40-60% squat)", "Hip hinge pur (genoux peu fléchis)", "Dos absolument plat", "Stop si douleur lombaire"],
-      lv: 3,
-      tags: ["dos", "fessiers", "ischios", "compose", "force"]
     },
     {
       n: "Squat barre",
