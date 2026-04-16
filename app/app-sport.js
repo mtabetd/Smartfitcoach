@@ -1260,23 +1260,8 @@ function renderObjectif(p) {
    p.appendChild(_ctxBannerObj);
  }
 
- // ─── HERO CARTE GÉNÉRATEUR IA ───
- var heroCard = h('div', {style: 'border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.04);border-radius:2px;padding:20px 16px;margin-bottom:20px'});
- heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--accent,#1A4A1A);font-weight:400;margin-bottom:14px'}, 'COACH IA \u00b7 PROGRAMME HEBDOMADAIRE'));
- heroCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;font-style:italic;line-height:1.3;margin-bottom:10px'}, 'Ta semaine, sur mesure.'));
- heroCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.7;margin-bottom:16px'}, 'G\u00e9n\u00e9r\u00e9 chaque semaine selon tes mesures, ta progression et tes contraintes. Semaine apr\u00e8s semaine, le coach suit ta progression.'));
- var heroIaBtn = h('button', {id: 'hero-ia-btn', style: 'width:100%;padding:16px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:9px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif'}, 'G\u00c9N\u00c9RER MA SEMAINE');
- heroIaBtn.addEventListener('click', function() {
-  if (typeof window.openMuscuProgramGenerator === 'function') {
-   window.openMuscuProgramGenerator();
-  }
- });
- heroCard.appendChild(heroIaBtn);
- p.appendChild(heroCard);
-
- // Divider
- var divider = h('div', {style: 'text-align:center;color:var(--grey,#6B6B65);font-size:11px;margin-bottom:16px;font-family:"Helvetica Neue",Arial,sans-serif'}, '— ou choisir votre sport —');
- p.appendChild(divider);
+ // FIX UX 2026-04-16 — Hero IA déplacé en bas (carte discrète), choix de sport en premier
+ // L'user clique "Sport" pour VOIR son sport, pas pour ouvrir un modal générateur.
 
  p.appendChild(h('div', {'class': 'section-label'}, 'Type de programme'));
  var typeGrid = h('div', {'class': 'card-grid-2'});
@@ -1406,6 +1391,19 @@ function renderObjectif(p) {
  ]));
 
  p.appendChild(typeGrid);
+
+ // ─── Module IA — carte discrète en bas ───
+ // Accessible pour les utilisateurs qui veulent une programmation 100% sur-mesure par IA
+ var _iaCard = h('div', {style: 'margin-top:28px;padding:18px 16px;border:1px solid var(--border,#E8E6DF);background:var(--ivory2,#F5F3EC);border-radius:2px'});
+ _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:10px'}, 'Option · Programmation assistée'));
+ _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:15px;font-style:italic;color:var(--black,#0A0A09);line-height:1.4;margin-bottom:6px'}, 'Programmation de sport générée par votre assistant'));
+ _iaCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.6;margin-bottom:14px'}, 'Une alternative sur mesure, générée selon votre profil complet — limitée à 3 constructions par semaine.'));
+ var _iaBtnOption = h('button', {style: 'display:inline-block;padding:10px 18px;background:transparent;color:var(--black,#0A0A09);border:1px solid var(--black,#0A0A09);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;min-height:44px'}, 'Activer l\'assistant');
+ _iaBtnOption.addEventListener('click', function() {
+   if (typeof window.openMuscuProgramGenerator === 'function') { window.openMuscuProgramGenerator(); }
+ });
+ _iaCard.appendChild(_iaBtnOption);
+ p.appendChild(_iaCard);
 
  // No Continue button needed - cards auto-navigate
 }
