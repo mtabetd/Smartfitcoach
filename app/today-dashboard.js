@@ -4020,6 +4020,90 @@ function renderTodayDashboard(p) {
   var hero = renderHeroContextuel();
   if (hero) wrapper.appendChild(hero);
 
+  // ═══ PENSÉE DU JOUR (Hermès — citation de motivation, change chaque jour) ═══
+  // FIX 2026-04-16 : les citations motivantes vivaient dans renderCardBonjour (code
+  // mort depuis la migration hero contextuel). On réinjecte ici la plus belle source
+  // MOTIVATION_LIBRARY (300+ phrases, rotation déterministe jour/weekday/streak).
+  try {
+    var _dailyQuote = null;
+    var _qAuthor = '';
+    if (window.MOTIVATION_LIBRARY && typeof window.MOTIVATION_LIBRARY.getDailyMotivation === 'function') {
+      var _mprofile = {
+        prenom: (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || '')) || '',
+        streak: 0,
+        isTrainingDay: null
+      };
+      try {
+        var _uidM = (window.AUTH && window.AUTH.getUser && window.AUTH.getUser()) ? window.AUTH.getUser().id : null;
+        if (_uidM) {
+          var _sRaw = localStorage.getItem('mtd_streak_' + _uidM);
+          if (_sRaw) { var _so = JSON.parse(_sRaw); if (_so && typeof _so.current === 'number') _mprofile.streak = _so.current; }
+        }
+      } catch(_eStrk) {}
+      try {
+        if (typeof window.getDayType === 'function') {
+          var _ti = (new Date().getDay() + 6) % 7;
+          var _dt = window.getDayType(_ti);
+          if (_dt) _mprofile.isTrainingDay = !!_dt.isTraining;
+        }
+      } catch(_eDt) {}
+      var _m = window.MOTIVATION_LIBRARY.getDailyMotivation(_mprofile);
+      if (_m && _m.body) _dailyQuote = _m.body;
+    }
+    // Fallback sur TODAY_QUOTES (rotation par jour de l'année)
+    if (!_dailyQuote && Array.isArray(TODAY_QUOTES) && TODAY_QUOTES.length) {
+      var _doy = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+      var _q = TODAY_QUOTES[_doy % TODAY_QUOTES.length];
+      if (_q) { _dailyQuote = _q.text || _q; _qAuthor = _q.author || ''; }
+    }
+
+    if (_dailyQuote) {
+      var _qWrap = h('div', { style:
+        'max-width:560px;margin:24px auto 8px;padding:28px 24px;text-align:center;' +
+        'background:transparent;position:relative;'
+      });
+      // Filet horizontal + label Hermès
+      var _qLabel = h('div', { style:
+        'display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:20px;'
+      });
+      _qLabel.appendChild(h('span', {style: 'flex:1;max-width:56px;height:1px;background:var(--line,#D8D8D0);'}));
+      _qLabel.appendChild(h('span', {style:
+        'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:5px;' +
+        'text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:600;'
+      }, 'Pensée du jour'));
+      _qLabel.appendChild(h('span', {style: 'flex:1;max-width:56px;height:1px;background:var(--line,#D8D8D0);'}));
+      _qWrap.appendChild(_qLabel);
+
+      // Guillemet ouvrant Georgia XL (signature éditoriale Hermès)
+      _qWrap.appendChild(h('div', { style:
+        'font-family:Georgia,serif;font-size:48px;line-height:0.4;color:var(--accent,#1A4A1A);' +
+        'margin-bottom:4px;user-select:none;'
+      }, '\u201C'));
+
+      // La citation — Georgia italic, 17px, élégante
+      _qWrap.appendChild(h('p', { style:
+        'font-family:Georgia,serif;font-style:italic;font-size:17px;line-height:1.55;' +
+        'color:var(--ink-900,#0A0A09);margin:0 12px 14px;font-weight:normal;' +
+        'letter-spacing:0.2px;'
+      }, _dailyQuote));
+
+      // Auteur (si présent) — Helvetica micro caps
+      if (_qAuthor) {
+        _qWrap.appendChild(h('div', { style:
+          'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;' +
+          'text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:6px;'
+        }, '\u2014 ' + _qAuthor));
+      }
+
+      // Filet final bas — simple trait vert sapin centré (signature maison)
+      _qWrap.appendChild(h('div', { style:
+        'width:32px;height:1px;background:var(--accent,#1A4A1A);margin:16px auto 0;'
+      }));
+
+      wrapper.appendChild(_qWrap);
+    }
+  } catch(_eQ) { console.warn('[pensée du jour]', _eQ); }
+
   // ═══ SECTION "AUJOURD'HUI" — Séance + Repas en priorité (redesign 2026-04-16) ═══
   // Benchmark MFP/Strong/Hevy : séance + nutrition toujours en haut du dashboard.
 
