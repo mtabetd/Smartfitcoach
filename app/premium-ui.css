@@ -3604,6 +3604,19 @@ body.dark-mode input[type="email"] {
    FIX Hermès : accessibilité — respect reduced-motion global (Apple + WCAG 2.2 AA)
    Coupe toutes animations/transitions pour users qui activent l'option OS.
    ════════════════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════════════════
+   FIX A11Y 2026-04-16 : font-size minimum 11px (WCAG AA recommande 12px,
+   compromis à 11px pour garder les eyebrow/label compacts).
+   Les 9px inline sont overridés ici globalement.
+   ════════════════════════════════════════════════════════════════════ */
+#app *, #app *::before, #app *::after { min-font-size: 11px; }
+/* min-font-size n'est pas standard CSS — fallback via clamp sur les classes critiques */
+.eyebrow, .section-label, .field-label, .stat-label, .num-hint,
+[style*="font-size:9px"], [style*="font-size: 9px"],
+[style*="font-size:10px"], [style*="font-size: 10px"] {
+  font-size: max(11px, inherit) !important;
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

@@ -1049,6 +1049,43 @@ function renderProfilePage(container) {
  }, '\uD83C\uDFAF Changer mon objectif');
  c.appendChild(changeGoalBtn);
 
+ // ─── Restaurer depuis le cloud ───
+ if (window.SupaSync && window.AUTH && window.AUTH.isLoggedIn()) {
+   var restoreBtn = h('button', {
+     style: 'display:block;width:100%;padding:14px;border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);color:var(--accent,#1A4A1A);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:44px;',
+     onclick: function() {
+       if (!confirm('Restaurer tes données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.')) return;
+       restoreBtn.textContent = 'Restauration en cours...';
+       restoreBtn.disabled = true;
+       SupaSync.loadProfile().then(function(cloudData) {
+         if (!cloudData) {
+           if (window.showToast) window.showToast('Aucune donnée trouvée sur le cloud.', 'info', 3000);
+           restoreBtn.textContent = 'Restaurer depuis le cloud';
+           restoreBtn.disabled = false;
+           return;
+         }
+         // Appliquer les données cloud sur S (forcer l'écrasement)
+         var keys = Object.keys(cloudData);
+         for (var ki = 0; ki < keys.length; ki++) {
+           if (keys[ki] !== '__proto__' && keys[ki] !== 'constructor') {
+             S[keys[ki]] = cloudData[keys[ki]];
+           }
+         }
+         S._cloudUpdatedAt = new Date().toISOString();
+         if (window.saveProfile) saveProfile();
+         if (window.showToast) window.showToast('Données restaurées avec succès.', 'success', 3000);
+         if (window.render) render();
+       }).catch(function(err) {
+         console.error('[restore] Error:', err);
+         if (window.showToast) window.showToast('Erreur de restauration. Vérifie ta connexion.', 'error', 3000);
+         restoreBtn.textContent = 'Restaurer depuis le cloud';
+         restoreBtn.disabled = false;
+       });
+     }
+   }, 'Restaurer depuis le cloud');
+   c.appendChild(restoreBtn);
+ }
+
  // ─── Déconnexion ───
  var logoutBtn = h('button', {
    style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
