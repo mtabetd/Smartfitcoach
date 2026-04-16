@@ -227,6 +227,7 @@ function generateSportProgram() {
  var hasEndurance = _goals.indexOf('endurance') !== -1;
  var hasWeightloss = _goals.indexOf('weightloss') !== -1;
  var hasFlexibility = _goals.indexOf('flexibility') !== -1;
+ var hasStrength = _goals.indexOf('strength') !== -1 || _goals.indexOf('force') !== -1;
 
  // Map zone names to exercise categories
  var zoneToCategory = {
@@ -329,6 +330,28 @@ function generateSportProgram() {
  categoryPriority[cat] = pri;
  });
  });
+
+ // ═══ FIX P1 2026-04-16 — weakZones boost dans generateSportProgram ═══
+ // Avant : S.weakZones n'était affiché que dans l'UI ("⚡ À renforcer") mais IGNORÉ
+ // par le générateur. Un user avec weakZones=['Jambes'] ne recevait aucun boost.
+ // Maintenant : +1 priorité (cap 5) + fréquence recalculée pour les zones faibles.
+ // Cohérent avec buildPersonalizedMuscuPlan qui applique +30% volume (muscu-programs.js:2491).
+ if (Array.isArray(S.weakZones) && S.weakZones.length > 0) {
+   S.weakZones.forEach(function(wz) {
+     var cats = zoneCategories(wz);
+     cats.forEach(function(cat) {
+       var currentPri = categoryPriority[cat] || 0;
+       if (currentPri > 0 && currentPri < 5) {
+         categoryPriority[cat] = Math.min(5, currentPri + 1);
+         categoryFrequency[cat] = daysForPriority(categoryPriority[cat], days);
+       } else if (currentPri === 0) {
+         // Zone faible non sélectionnée par l'user → ajouter avec priorité 3 (moyenne)
+         categoryPriority[cat] = 3;
+         categoryFrequency[cat] = daysForPriority(3, days);
+       }
+     });
+   });
+ }
 
  // If cardio-focused goals, ensure cardio appears if not already selected
  if (hasCardio || hasShred) {
@@ -439,6 +462,11 @@ function generateSportProgram() {
  restOverride = '45-60s';
  repSuffix = ' (haute intensité)';
  supersetNote = ' — Superset recommandé';
+ } else if (hasStrength) {
+ // FIX P2 2026-04-16 — goal 'strength'/'force' était ignoré dans generateSportProgram.
+ // Force = repos longs (3-5 min), séries basses (3-6 reps), charges lourdes (NSCA 2016).
+ restOverride = '180-300s';
+ repSuffix = ' (force)';
  } else if (hasMuscle) {
  restOverride = '90-120s';
  repSuffix = '';

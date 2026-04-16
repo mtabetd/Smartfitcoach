@@ -2679,6 +2679,45 @@ function buildPersonalizedMuscuPlan(S) {
       if (mm.feet) {
         mmFilters.push(/corde\s+sauter|box\s+jump|jump\s+squat|burpee|course|jogging|jumping\s+jacks/i);
       }
+      // ═══ FIX P3 2026-04-16 — muscuMedical conditions manquantes (8 ajoutées) ═══
+      // Avant : seuls 7/15 conditions étaient vérifiées ici. Les 8 manquantes sont
+      // alignées avec filterExerciseByMedical() de app-sport.js (lignes 25-172).
+      // Coudes / Épicondylite (Bisset & Vicenzino, JOSPT 2015)
+      if (mm.elbows || mm.epicondylitis) {
+        mmFilters.push(/curl\s+barre|curl.*halt[eè]res|curl\s+marteau|curl\s+concentr|curl\s+pupitre|chin.?up|pull.?up.*pronation|skull.?crusher|french\s+press|extension.*triceps|rowing\s+barre|wrist\s+curl/i);
+      }
+      // Poignets
+      if (mm.wrists) {
+        mmFilters.push(/curl\s+barre|wrist\s+curl|curl.*poignet|front\s+squat|overhead\s+squat/i);
+      }
+      // Ostéoporose (Sinaki JAMA 1984)
+      if (mm.osteoporosis) {
+        mmFilters.push(/box\s+jump|jump\s+squat|burpee|pompes\s+plyo|corde|jumping\s+jacks|crunch|sit.?up|ab\s+wheel|dragon\s+flag|jefferson|squat\s+barre|back\s+squat|soulev[eé]\s+de\s+terre|deadlift|romanian|good\s+morning/i);
+      }
+      // HTA sévère (Pescatello MSSE 2004)
+      if (mm.hypertension) {
+        mmFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|l.?sit|dragon\s+flag|arrach[eé]|snatch|clean.*jerk|windshield/i);
+      }
+      // Polyarthrite rhumatoïde (EULAR 2020)
+      if (mm.rheumatoidArthritis) {
+        mmFilters.push(/soulev[eé]\s+de\s+terre|deadlift|arrach[eé]|snatch|clean|jump\s+squat|box\s+jump|burpee|squat\s+barre/i);
+      }
+      // Ménisque (flexion >90° sous charge)
+      if (mm.meniscus) {
+        mmFilters.push(/leg\s+extension|pistol|sissy|squat\s+bulgare|fente\s+avant|jump\s+squat|box\s+jump/i);
+      }
+      // Spondylarthrite ankylosante (ASAS guidelines)
+      if (mm.spondylarthritis) {
+        mmFilters.push(/soulev[eé]\s+de\s+terre|deadlift|romanian|rdl|good\s+morning|jefferson|squat\s+barre|back\s+squat|hack\s+squat|presse|leg\s+press|rowing\s+barre|pendlay|t.?bar|crunch|sit.?up|ab\s+wheel|hyperextension/i);
+      }
+      // Gonarthrose (OARSI 2014)
+      if (mm.kneeOsteoarthritis) {
+        mmFilters.push(/leg\s+extension|pistol|jump\s+squat|box\s+jump|burpee|squat\s+barre\s+lourd|soulev[eé]\s+de\s+terre\s+lourd/i);
+      }
+      // Fibromyalgie (Häuser Cochrane 2017)
+      if (mm.fibromyalgia) {
+        mmFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|burpee|box\s+jump|jump\s+squat|pompes\s+plyo/i);
+      }
       // Application combinée
       if (mmFilters.length > 0) {
         allExercises = allExercises.filter(function(ex) {
