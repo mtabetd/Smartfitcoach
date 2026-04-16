@@ -381,6 +381,11 @@ function loadProfile() {
  if (S.bodyScanDone === undefined) S.bodyScanDone = false;
  if (S._bodyFatEstimate === undefined) S._bodyFatEstimate = null;
  // Reset ephemeral UI state that should not persist across sessions
+ // FIX 2026-04-16 : ajoute S.view au reset pour forcer 'today' au prochain loadProfile.
+ // (S.view n'est pas dans PROFILE_KEYS mais les routeurs _resolvePostLoginView / _doAutoLogin
+ //  le rétablissent après loadProfile — ce reset garantit qu'il ne reste pas sur 'sport'
+ //  si le dernier saveProfile a été appelé pendant une navigation sport.)
+ S.view = null; // sera résolu par _resolvePostLoginView / _doAutoLogin après loadProfile
  S.shopListOpen = false;
  S.smoothieBarOpen = false;
  S._showCompletionFirst = false;
@@ -1794,17 +1799,25 @@ function renderLogin(app) {
  // coincé sur vue stale si cloud plus récent que local).
  function _resolvePostLoginView() {
    var _loginProgSteps = [4, 6, 8, 10, 12, 14, 15, 16, 17, 18, 20, 21, 23, 25];
+   // FIX 2026-04-16 : user qui a fini l'onboarding sport (sportType renseigné)
+   // mais dont le programme muscu est généré ON-THE-FLY (pas stocké dans S.sportProgram
+   // ni S.muscuIAProgram) tombait systématiquement sur la vue 'sport' au lieu de 'today'.
+   // L'indicateur fiable est : S.sportType est renseigné = sport onboarding terminé.
+   var _hasSportSetup = !!S.sportType;
+   // Muscu local plan est computed fresh via buildPersonalizedMuscuPlan(S) — pas stocké.
+   // CF/running/triathlon stockent dans S.sportProgram. Muscu IA dans S.muscuIAProgram.
+   var _hasAnyProgram = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || !!S.muscuIAProgram;
+   // Onboarding sport EN COURS (step intermédiaire) → rester sur sport
    if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
-   // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
-   // FIX CRITIQUE 2026-04-15 : ignorait muscuIAProgram → user envoyé sur sport
-   // onboarding alors qu'il avait bien un programme IA généré. Report user confirmé.
-   else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) && !S.muscuIAProgram) { S.view = 'sport'; }
-   else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) && !S.muscuIAProgram) { S.view = 'sport'; }
-   else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
+   // Mode sport-only SANS aucun programme ET SANS sportType → lancer onboarding sport
+   else if (S.appMode === 'sport' && !_hasSportSetup && !_hasAnyProgram) { S.view = 'sport'; }
+   // Mode both : nutrition finie mais sport pas encore lancé → lancer onboarding sport
+   else if (S.appMode === 'both' && S.nStep === 12 && !_hasSportSetup && !_hasAnyProgram) { S.view = 'sport'; }
+   // Onboarding nutrition en cours
    else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
-   // Si onboarding complet (appMode défini + weekPlan ou sportProgram valides) → toujours 'today'
-   else if (S.appMode && (S.weekPlan || (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || S.muscuIAProgram)) { S.view = 'today'; }
-   // else: stay on 'today' (default set above)
+   // Tout le reste (onboarding terminé, programmes dispo) → Dashboard Today
+   else if (S.appMode) { S.view = 'today'; }
+   // Pas de mode → rester sur today aussi (default safe)
  }
  _resolvePostLoginView();
  // Restore language preference
@@ -2484,15 +2497,22 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) === -1) {
    S.sStep = 0;
  }
- // Restaurer le contexte de vue (sport mid-onboarding vs nutrition vs today)
+ // FIX 2026-04-16 : résolution vue post-auto-login.
+ // Même logique que _resolvePostLoginView() dans le flow login manuel.
+ // L'indicateur fiable pour "sport onboarding terminé" = S.sportType renseigné.
+ // Le programme muscu est généré ON-THE-FLY (pas stocké dans S.sportProgram).
+ var _hasSportSetup2 = !!S.sportType;
+ var _hasAnyProgram2 = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || !!S.muscuIAProgram;
+ // Onboarding sport EN COURS (step intermédiaire) → rester sur sport
  if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
- // Mode sport-only ou both sans programme sport → lancer/reprendre l'onboarding sport
- // FIX CRITIQUE 2026-04-15 : ignorait muscuIAProgram → user envoyé sur sport
- // onboarding alors qu'il avait bien un programme IA généré. Report user confirmé.
- else if (S.appMode === 'sport' && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) && !S.muscuIAProgram) { S.view = 'sport'; }
- else if (S.appMode === 'both' && S.nStep === 12 && S.sStep === 0 && (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) && !S.muscuIAProgram) { S.view = 'sport'; }
- else if (S.weekPlan && (S.appMode === 'nutrition' || S.appMode === 'both')) { S.view = 'today'; }
+ // Mode sport SANS aucun setup → lancer onboarding sport
+ else if (S.appMode === 'sport' && !_hasSportSetup2 && !_hasAnyProgram2) { S.view = 'sport'; }
+ // Mode both : nutrition finie mais sport pas encore lancé
+ else if (S.appMode === 'both' && S.nStep === 12 && !_hasSportSetup2 && !_hasAnyProgram2) { S.view = 'sport'; }
+ // Onboarding nutrition en cours
  else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
+ // Tout le reste → Dashboard Today (le safe default)
+ else if (S.appMode) { S.view = 'today'; }
  // ─── AUTO-REGENERATION PLAN NUTRITION — DÉSACTIVÉE (FIX VALIDATION 2026-04) ───
  // AVANT : le plan se régénérait tout seul à chaque boot si >7j ou lundi matin
  //         → user voyait son plan changer mystérieusement.
