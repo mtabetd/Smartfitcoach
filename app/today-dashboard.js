@@ -389,33 +389,253 @@ function getNextSportDay() {
   }
 
   // FIX D1 COHÉRENCE MULTI-SPORTS 2026-04 : dispatcher par sportType
-  // Avant : le dashboard ne lisait QUE S.sportProgram (= muscu/crossfit statique).
-  //         Pour running/hyrox/triathlon/cycling/calisthenics → affichait "Aucun programme"
-  //         alors que la vue sport dédiée avait bien un programme.
-  // Maintenant : si sportType a un programme dédié → on retourne un placeholder
-  //             { kind: <sport> } pour que la carte affiche "Voir mon programme →"
+  // Chaque sport retourne la séance du jour avec ses données réelles
+  // (description pour les endurance, exercices pour les skills).
   var todayIdx = (new Date().getDay() + 6) % 7;
-  var sportsWithOwnProgram = {
-    running:       { key: 'runningProgram',      label: 'running' },
-    hyrox:         { key: 'hyroxProgram',        label: 'Hyrox' },
-    triathlon:     { key: 'triathlonProgram',    label: 'triathlon' },
-    cycling:       { key: 'cyclingProgram',      label: 'cycling' },
-    calisthenics:  { key: 'calisthenicsProgram', label: 'calisthenics' },
-    padel:         { key: 'padelProgram',        label: 'padel' },
-    golf:          { key: 'golfProgram',         label: 'golf' },
-    yoga:          { key: 'yogaWeek',            label: 'yoga' }
-  };
-  var sportInfo = sportsWithOwnProgram[S.sportType];
-  if (sportInfo) {
-    var prog = S[sportInfo.key];
-    var hasProg = Array.isArray(prog) ? prog.length > 0 : !!prog;
-    if (hasProg) {
-      return {
-        index: todayIdx,
-        day: { name: 'Programme ' + sportInfo.label, exercises: [] },
-        kind: S.sportType
-      };
-    }
+
+  // ── RUNNING ──
+  if (S.sportType === 'running') {
+    try {
+      var _rProg = S.runningProgram;
+      if (Array.isArray(_rProg) && _rProg.length > 0) {
+        var _rWeekIdx = Math.max(0, Math.min((S.runningWeek || 1) - 1, _rProg.length - 1));
+        var _rWeek = _rProg[_rWeekIdx];
+        if (_rWeek && Array.isArray(_rWeek.sessions) && _rWeek.sessions.length > 0) {
+          var _rDayIdx = Math.max(0, Math.min(S.selectedRunDay || 0, _rWeek.sessions.length - 1));
+          var _rSess = _rWeek.sessions[_rDayIdx];
+          return {
+            index: _rDayIdx,
+            day: {
+              name: (_rSess.name || 'Running') + (_rSess.zone ? ' — ' + _rSess.zone : ''),
+              exercises: [],
+              _desc: _rSess.desc || '',
+              _distance: _rSess.distance || '',
+              _phase: _rWeek.phase || ''
+            },
+            kind: 'running',
+            _weekLabel: 'Semaine ' + (S.runningWeek || 1) + ' / ' + _rProg.length
+          };
+        }
+        return { index: 0, day: { name: 'Running — Semaine ' + (S.runningWeek || 1), exercises: [] }, kind: 'running' };
+      }
+    } catch(_eRun) {}
+  }
+
+  // ── HYROX ──
+  if (S.sportType === 'hyrox') {
+    try {
+      var _hProg = S.hyroxProgram;
+      if (Array.isArray(_hProg) && _hProg.length > 0) {
+        var _hWeekIdx = Math.max(0, Math.min((S.hyroxWeek || 1) - 1, _hProg.length - 1));
+        var _hWeek = _hProg[_hWeekIdx];
+        if (_hWeek && Array.isArray(_hWeek.sessions) && _hWeek.sessions.length > 0) {
+          var _hDayIdx = Math.max(0, Math.min(S.selectedHyroxDay || 0, _hWeek.sessions.length - 1));
+          var _hSess = _hWeek.sessions[_hDayIdx];
+          var _hExos = [];
+          if (Array.isArray(_hSess.exercises)) {
+            _hSess.exercises.slice(0, 5).forEach(function(ex) {
+              _hExos.push({ n: ex.name || '', sets: '', reps: ex.detail || '' });
+            });
+          }
+          return {
+            index: _hDayIdx,
+            day: {
+              name: _hSess.name || ('Hyrox — Jour ' + (_hDayIdx + 1)),
+              exercises: _hExos,
+              _focus: _hSess.focus || ''
+            },
+            kind: 'hyrox',
+            _weekLabel: 'Semaine ' + (S.hyroxWeek || 1) + ' / ' + _hProg.length
+          };
+        }
+        return { index: 0, day: { name: 'Hyrox — Semaine ' + (S.hyroxWeek || 1), exercises: [] }, kind: 'hyrox' };
+      }
+    } catch(_eHyrox) {}
+  }
+
+  // ── TRIATHLON ──
+  if (S.sportType === 'triathlon') {
+    try {
+      var _tProg = S.triathlonProgram;
+      if (Array.isArray(_tProg) && _tProg.length > 0) {
+        var _tWeekIdx = Math.max(0, Math.min((S.triathlonWeek || 1) - 1, _tProg.length - 1));
+        var _tWeek = _tProg[_tWeekIdx];
+        if (_tWeek && Array.isArray(_tWeek.sessions) && _tWeek.sessions.length > 0) {
+          var _tDayIdx = Math.max(0, Math.min(S.selectedTriDay || 0, _tWeek.sessions.length - 1));
+          var _tSess = _tWeek.sessions[_tDayIdx];
+          var _discLabel = { swim: 'Natation', bike: 'Vélo', run: 'Course', brick: 'Brick', rest: 'Repos' };
+          return {
+            index: _tDayIdx,
+            day: {
+              name: (_tSess.name || 'Triathlon') + (_tSess.discipline ? ' — ' + (_discLabel[_tSess.discipline] || _tSess.discipline) : ''),
+              exercises: [],
+              _desc: _tSess.desc || '',
+              _duration: _tSess.duration || '',
+              _discipline: _tSess.discipline || ''
+            },
+            kind: 'triathlon',
+            _weekLabel: 'Semaine ' + (S.triathlonWeek || 1) + ' / ' + _tProg.length
+          };
+        }
+        return { index: 0, day: { name: 'Triathlon — Semaine ' + (S.triathlonWeek || 1), exercises: [] }, kind: 'triathlon' };
+      }
+    } catch(_eTri) {}
+  }
+
+  // ── CYCLING ──
+  if (S.sportType === 'cycling') {
+    try {
+      var _cProg = S.cyclingProgram;
+      if (Array.isArray(_cProg) && _cProg.length > 0) {
+        var _cWeekIdx = Math.max(0, Math.min((S.cyclingWeek || 1) - 1, _cProg.length - 1));
+        var _cWeek = _cProg[_cWeekIdx];
+        if (_cWeek && Array.isArray(_cWeek.sessions) && _cWeek.sessions.length > 0) {
+          var _cDayIdx = Math.max(0, Math.min(S.selectedCyclingDay || 0, _cWeek.sessions.length - 1));
+          var _cSess = _cWeek.sessions[_cDayIdx];
+          var _zoneStr = Array.isArray(_cSess.zone) ? 'Z' + _cSess.zone.join('-Z') : (_cSess.zone ? 'Z' + _cSess.zone : '');
+          return {
+            index: _cDayIdx,
+            day: {
+              name: (_cSess.type || 'Cycling') + (_zoneStr ? ' — ' + _zoneStr : ''),
+              exercises: [],
+              _desc: _cSess.desc || '',
+              _duration: _cSess.duration ? _cSess.duration + ' min' : ''
+            },
+            kind: 'cycling',
+            _weekLabel: 'Semaine ' + (S.cyclingWeek || 1) + ' / ' + _cProg.length
+          };
+        }
+        return { index: 0, day: { name: 'Cycling — Semaine ' + (S.cyclingWeek || 1), exercises: [] }, kind: 'cycling' };
+      }
+    } catch(_eCyc) {}
+  }
+
+  // ── PADEL ──
+  if (S.sportType === 'padel') {
+    try {
+      var _pProg = S.padelProgram;
+      if (Array.isArray(_pProg) && _pProg.length > 0) {
+        var _pWeekIdx = Math.max(0, Math.min((S.padelWeek || 1) - 1, _pProg.length - 1));
+        var _pWeek = _pProg[_pWeekIdx];
+        if (_pWeek && Array.isArray(_pWeek.sessions) && _pWeek.sessions.length > 0) {
+          var _pDayIdx = Math.max(0, Math.min(S.selectedPadelDay || 0, _pWeek.sessions.length - 1));
+          var _pSess = _pWeek.sessions[_pDayIdx];
+          var _pExos = [];
+          if (Array.isArray(_pSess.exercises)) {
+            _pSess.exercises.slice(0, 5).forEach(function(ex) {
+              _pExos.push({ n: ex.name || '', sets: '', reps: ex.detail || '' });
+            });
+          }
+          return {
+            index: _pDayIdx,
+            day: { name: _pSess.name || ('Padel — Jour ' + (_pDayIdx + 1)), exercises: _pExos },
+            kind: 'padel',
+            _weekLabel: 'Semaine ' + (S.padelWeek || 1) + ' / ' + _pProg.length
+          };
+        }
+        return { index: 0, day: { name: 'Padel — Semaine ' + (S.padelWeek || 1), exercises: [] }, kind: 'padel' };
+      }
+    } catch(_ePadel) {}
+  }
+
+  // ── GOLF ──
+  if (S.sportType === 'golf') {
+    try {
+      var _gProg = S.golfProgram;
+      if (Array.isArray(_gProg) && _gProg.length > 0) {
+        var _gWeekIdx = Math.max(0, Math.min((S.golfWeek || 1) - 1, _gProg.length - 1));
+        var _gWeek = _gProg[_gWeekIdx];
+        if (_gWeek && Array.isArray(_gWeek.sessions) && _gWeek.sessions.length > 0) {
+          var _gDayIdx = Math.max(0, Math.min(S.selectedGolfDay || 0, _gWeek.sessions.length - 1));
+          var _gSess = _gWeek.sessions[_gDayIdx];
+          var _gExos = [];
+          if (Array.isArray(_gSess.exercises)) {
+            _gSess.exercises.slice(0, 5).forEach(function(ex) {
+              _gExos.push({ n: ex.name || '', sets: '', reps: ex.detail || '' });
+            });
+          }
+          return {
+            index: _gDayIdx,
+            day: { name: _gSess.name || ('Golf — Jour ' + (_gDayIdx + 1)), exercises: _gExos },
+            kind: 'golf',
+            _weekLabel: 'Semaine ' + (S.golfWeek || 1) + ' / ' + _gProg.length
+          };
+        }
+        return { index: 0, day: { name: 'Golf — Semaine ' + (S.golfWeek || 1), exercises: [] }, kind: 'golf' };
+      }
+    } catch(_eGolf) {}
+  }
+
+  // ── CALISTHENICS ──
+  if (S.sportType === 'calisthenics') {
+    try {
+      // Calisthenics generates plan on-the-fly; check if config exists
+      if (S.calisthenicsLevel && typeof window.generateCalisthenicsPlan === 'function') {
+        var _calPlan = window.generateCalisthenicsPlan(
+          S.calisthenicsLevel,
+          Array.isArray(S.calisthenicsGoal) ? S.calisthenicsGoal : [],
+          parseInt(S.calisthPullups) || 0,
+          parseInt(S.calisthPushups) || 0,
+          parseInt(S.calisthenicsdays) || 3,
+          Array.isArray(S.calisthenicsEquipment) ? S.calisthenicsEquipment : ['bar'],
+          parseInt(S.calisthDips) || 0
+        );
+        if (_calPlan && Array.isArray(_calPlan.plan) && _calPlan.plan.length > 0) {
+          var _calWeekIdx = Math.max(0, Math.min((S.calisthCurrentWeek || 1) - 1, _calPlan.plan.length - 1));
+          var _calWeekData = _calPlan.plan[_calWeekIdx];
+          var _calDayIdx = S.selectedCalisthDay || 0;
+          var _calSessData = null;
+          // plan[w].sessions = array of sessions (one per training day)
+          if (_calWeekData && Array.isArray(_calWeekData.sessions) && _calWeekData.sessions.length > 0) {
+            _calDayIdx = Math.min(_calDayIdx, _calWeekData.sessions.length - 1);
+            _calSessData = _calWeekData.sessions[_calDayIdx];
+          }
+          var _calExos = [];
+          if (_calSessData && Array.isArray(_calSessData.exercises)) {
+            _calSessData.exercises.slice(0, 5).forEach(function(ex) {
+              _calExos.push({ n: ex.name || '', sets: ex.sets || '', reps: ex.reps || '' });
+            });
+          }
+          return {
+            index: _calDayIdx,
+            day: {
+              name: (_calSessData && _calSessData.name) ? _calSessData.name : ('Calisthenics — Semaine ' + (S.calisthCurrentWeek || 1)),
+              exercises: _calExos
+            },
+            kind: 'calisthenics',
+            _weekLabel: 'Semaine ' + (S.calisthCurrentWeek || 1) + ' / ' + _calPlan.totalWeeks
+          };
+        }
+      }
+      // Fallback: config exists but generator not loaded
+      if (S.calisthenicsLevel) {
+        return { index: 0, day: { name: 'Calisthenics — Semaine ' + (S.calisthCurrentWeek || 1), exercises: [] }, kind: 'calisthenics' };
+      }
+    } catch(_eCal) {}
+  }
+
+  // ── YOGA ──
+  if (S.sportType === 'yoga') {
+    try {
+      if (S.yogaLevel) {
+        var _yWeekIdx = Math.max(0, Math.min((S.yogaWeek || 1) - 1, 3));
+        var _yDayIdx = S.yogaDay || 0;
+        var _yPhase = '';
+        // YOGA_WEEKS is local to app-sport.js, we read the phase from a simple lookup
+        var _YOGA_PHASES = ['Fondations', '\u00c9quilibre et Force', 'Ouverture des Hanches & Torsions', 'Backbends & Inversions'];
+        _yPhase = _YOGA_PHASES[_yWeekIdx] || '';
+        return {
+          index: _yDayIdx,
+          day: {
+            name: 'Yoga — ' + _yPhase,
+            exercises: [],
+            _desc: (S.yogaDuration || '') + (S.yogaStyle ? ' \u00b7 ' + S.yogaStyle : '')
+          },
+          kind: 'yoga',
+          _weekLabel: 'Semaine ' + (S.yogaWeek || 1) + ' / 4'
+        };
+      }
+    } catch(_eYoga) {}
   }
 
   var program = S.sportProgram;
@@ -1767,8 +1987,41 @@ function renderCardSport() {
     }, next.wod.wod.type));
   }
 
+  // FIX MULTI-SPORTS 2026-04 : week label pour les sports avec semaines
+  if (next._weekLabel) {
+    c.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-bottom:8px;'
+    }, next._weekLabel));
+  }
+
+  // FIX MULTI-SPORTS 2026-04 : description pour les sports endurance (running/triathlon/cycling/yoga)
+  // Ces sports n'ont pas de liste d'exercices mais une description de séance.
+  var _isEnduranceSport = next.kind === 'running' || next.kind === 'triathlon' || next.kind === 'cycling' || next.kind === 'yoga';
+  if (_isEnduranceSport && day._desc) {
+    c.appendChild(h('div', {
+      style: 'font-family:Georgia,serif;font-style:italic;font-size:14px;color:var(--grey,#6B6B65);margin:8px 0 12px;line-height:1.5;'
+    }, day._desc));
+  }
+  if (_isEnduranceSport && (day._distance || day._duration)) {
+    var _metaEl = h('div', {
+      style: 'display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);'
+    });
+    if (day._distance) _metaEl.appendChild(h('span', {}, day._distance));
+    if (day._duration) _metaEl.appendChild(h('span', {}, day._duration));
+    if (day._phase) _metaEl.appendChild(h('span', {}, day._phase));
+    c.appendChild(_metaEl);
+  }
+  // Focus badge pour hyrox
+  if (next.kind === 'hyrox' && day._focus) {
+    c.appendChild(h('div', {
+      style: 'display:inline-block;padding:4px 10px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
+    }, day._focus));
+  }
+
   // COSMÉTIQUE 2026-04 : Grid 3-stats Georgia (ex / durée / semaine) — signature premium
-  if (exCount > 0 || _estMins || _weekTarget > 0) {
+  // FIX MULTI-SPORTS : les sports endurance n'ont pas d'exercices → adapter les labels
+  var _showStatsGrid = exCount > 0 || _estMins || _weekTarget > 0 || _isEnduranceSport;
+  if (_showStatsGrid) {
     var _statsRow = h('div', {
       style: 'display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--border,#D8D8D0);border-radius:2px;margin:12px 0;background:var(--ivory,#FAF9F6);'
     });
@@ -1784,10 +2037,19 @@ function renderCardSport() {
       }, label));
       return cell;
     }
-    // Bible Hermès §3.4 : accord singulier/pluriel correct ("1 EXERCICE" pas "1 EXERCICES")
-    _statsRow.appendChild(_statCell(exCount || '—', (exCount === 1 ? 'Exercice' : 'Exercices'), false));
-    _statsRow.appendChild(_statCell(_estMins ? ('~' + _estMins + "'") : '—', 'Durée', false));
-    _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', 'Semaine', true));
+    if (_isEnduranceSport) {
+      // Endurance sports: show duration/distance, discipline, and week progress instead of exercise count
+      var _endurDur = (day._duration || day._distance || '—');
+      var _sportLabels = { running: 'Running', triathlon: 'Triathlon', cycling: 'Cycling', yoga: 'Yoga' };
+      _statsRow.appendChild(_statCell(_endurDur, 'Séance', false));
+      _statsRow.appendChild(_statCell(_sportLabels[next.kind] || next.kind, 'Sport', false));
+      _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', 'Semaine', true));
+    } else {
+      // Bible Hermès §3.4 : accord singulier/pluriel correct ("1 EXERCICE" pas "1 EXERCICES")
+      _statsRow.appendChild(_statCell(exCount || '—', (exCount === 1 ? 'Exercice' : 'Exercices'), false));
+      _statsRow.appendChild(_statCell(_estMins ? ('~' + _estMins + "'") : '—', 'Durée', false));
+      _statsRow.appendChild(_statCell(_weekTarget > 0 ? (_weekDone + '/' + _weekTarget) : '—', 'Semaine', true));
+    }
     c.appendChild(_statsRow);
   }
 
@@ -1826,7 +2088,8 @@ function renderCardSport() {
   } catch(eIp) {}
 
   // FIX SPRINT P1.3 + P1.9 — bouton "Commencer/Continuer" prominent
-  var btnLabel = hasInProgressSession ? '→ Continuer la séance' : '→ Commencer la séance';
+  // FIX MULTI-SPORTS : adapter le libellé pour les sports endurance
+  var btnLabel = hasInProgressSession ? '\u2192 Continuer la s\u00e9ance' : (_isEnduranceSport ? '\u2192 Voir mon programme' : '\u2192 Commencer la s\u00e9ance');
   var btn = h('button', {
     style: 'display:block;width:100%;padding:16px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;min-height:52px;font-weight:500;',
     onclick: function() {
