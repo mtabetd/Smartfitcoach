@@ -5624,14 +5624,9 @@ function renderMusculationProgram(p) {
  }
  if (!S.musculationWeights || typeof S.musculationWeights !== 'object' || Array.isArray(S.musculationWeights)) S.musculationWeights = {};
 
- // ═══ CARTE "TES RECORDS" — déplacée ici depuis le dashboard (Bible Hermès) ═══
- // Dashboard = actionable. Records = contexte Sport. Accessible depuis la vue programme.
- if (window.renderCardMuscu1RM) {
-   try {
-     var _recordsCard = window.renderCardMuscu1RM();
-     if (_recordsCard) p.appendChild(_recordsCard);
-   } catch(_eRec) { console.warn('[sport] renderCardMuscu1RM error', _eRec); }
- }
+ // FIX UX 2026-04-16 — carte "Tes Records" retirée de la vue programme.
+ // Information utile dans le profil mais pas dans la section sport active.
+ // L'user vient ici pour voir ses exercices du jour, pas ses 1RM.
 
  // Load saved strength profile
  if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
