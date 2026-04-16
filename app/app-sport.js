@@ -6616,18 +6616,38 @@ function renderMusculationProgram(p) {
  var _setParts = ex.sets ? String(ex.sets).split('\u00d7') : [];
  var suggestedReps = _setParts.length > 1 ? parseInt(_setParts[1]) : null;
  var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
- // Surcharge progressive : appliquer le multiplicateur si charge de base connue
+ // ═══ FIX P1 2026-04-16 — Progression auto basée sur PERFORMANCE RÉELLE ═══
+ // Avant : progression linéaire aveugle (charge × 1.05 × semaine). Augmentait même
+ // si l'user avait échoué ses reps. Maintenant : on regarde le sessionLog de la
+ // dernière session. Si TOUTES les séries ont été validées → +2.5kg (upper) ou +5kg (lower).
+ // Sinon → même charge (consolider avant de progresser). NSCA 2016, Rippetoe 2011.
  var _savedW = S.musculationWeights[ex.n];
  var _baseW = (_savedW && _savedW.weight) ? _savedW.weight : suggested;
  if (_baseW && _baseW > 0) {
-  var _weekNumPO = S.muscuWeek || 1;
-  var _progressRatePO = S.sportLevel === 'beginner' ? 0.025 : 0.05;
-  var _loadMultiplier = 1 + (_progressRatePO * Math.min(_weekNumPO - 1, 12));
-  var _progressiveW = Math.round(_baseW * _loadMultiplier * 2) / 2;
-  if (_weekNumPO > 1 && _progressiveW !== _baseW) {
+  // Chercher la dernière session qui contient cet exercice
+  var _lastSessionSets = null;
+  if (S.muscuSessionLog) {
+    var _logDates = Object.keys(S.muscuSessionLog).sort().reverse();
+    for (var _ld = 0; _ld < Math.min(_logDates.length, 14); _ld++) {
+      var _dayLog = S.muscuSessionLog[_logDates[_ld]];
+      if (_dayLog && _dayLog[ex.n] && Array.isArray(_dayLog[ex.n])) {
+        _lastSessionSets = _dayLog[ex.n]; break;
+      }
+    }
+  }
+  // Déterminer si progression autorisée
+  var _allSetsCompleted = false;
+  if (_lastSessionSets && _lastSessionSets.length > 0) {
+    _allSetsCompleted = _lastSessionSets.every(function(s) { return s.validated === true; });
+  }
+  // Incrément : +2.5kg upper body, +5kg lower body (Rippetoe standard)
+  var _isLowerEx = /squat|presse|leg|fente|lunge|deadlift|soulev|hip thrust|glute|mollet|calf|ischios|hamstring/i.test(ex.n || '');
+  var _increment = _isLowerEx ? 5 : 2.5;
+  var _progressiveW = _allSetsCompleted ? Math.round((_baseW + _increment) * 2) / 2 : _baseW;
+  if (_progressiveW > _baseW) {
    var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
    var _sugLeft = h('div', {});
-   _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Charge progressive (sem. ' + _weekNumPO + ')'));
+   _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Progression +' + _increment + 'kg (toutes séries réussies)'));
    _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(_progressiveW) : _progressiveW + '\u00a0kg'));
    _sugBanner.appendChild(_sugLeft);
    _sugBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:22px;line-height:1'}, '\uD83D\uDCC8'));
