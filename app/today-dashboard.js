@@ -1946,7 +1946,10 @@ function renderCardSport() {
   // Avant : cette carte ne s'affichait JAMAIS (sportType ne matchait jamais 'muscu')
   //         → utilisateur ne voyait pas que son programme IA était actif sur le dashboard
   // Maintenant : check contre 'musculation' (valeur réelle dans S.sportType)
-  if (S.muscuIAProgram && S.sportType === 'musculation') {
+  // FIX 2026-04-16 — Ne PAS afficher la carte programme IA si un programme local est validé.
+  // L'user ne suit pas 2 programmations en parallèle. Le programme IA est une ALTERNATIVE,
+  // pas un complément. Il s'affiche UNIQUEMENT si le programme local n'existe pas ou n'est pas validé.
+  if (S.muscuIAProgram && S.sportType === 'musculation' && !(Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgramValidated)) {
     var _iaCard = card('border-left:4px solid var(--green,#1A4A1A);');
     _iaCard.appendChild(eyebrow('VOTRE PROGRAMME'));
     _iaCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;'}, 'Programme sur mesure actif'));

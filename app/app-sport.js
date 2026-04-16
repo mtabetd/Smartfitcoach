@@ -5511,8 +5511,10 @@ function renderMusculationProgram(p) {
    if (window.render) window.render();
    return;
  }
- // ── PROGRAMME IA PERSONNALISÉ (priorité sur le programme local) ──
- if (S.muscuIAProgram && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100) {
+ // ── PROGRAMME IA PERSONNALISÉ (alternative, pas prioritaire si programme local validé) ──
+ // FIX 2026-04-16 — L'user ne suit pas 2 programmes. Si le local est validé, on l'affiche.
+ if (S.muscuIAProgram && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100
+     && !(Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgramValidated)) {
    p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
    p.appendChild(h('h1', {html: 'Votre programme<br><em>sur mesure</em>'}));
    var _iaDateStr = S.muscuIAProgramDate ? new Date(S.muscuIAProgramDate).toLocaleDateString('fr-FR') : '';
