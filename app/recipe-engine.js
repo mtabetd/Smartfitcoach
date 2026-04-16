@@ -30164,10 +30164,35 @@
     'escalope de poulet':      'blanc de poulet',
     'emince de poulet':        'blanc de poulet',
     'poulet hache':            'blanc de poulet',
-    // Œufs
+    // Œufs — FIX 2026-04-16 : unifier toutes les variantes sous la clé "oeuf"
     'oeuf entier':             'oeuf',
+    'oeuf entiers':            'oeuf',
+    'oeufs entier':            'oeuf',
+    'oeufs entiers':           'oeuf',
+    'oeufs':                   'oeuf',
+    'oeuf dur':                'oeuf',
+    'oeufs durs':              'oeuf',
+    'oeuf mollet':             'oeuf',
+    'oeufs mollets':           'oeuf',
+    'oeuf poche':              'oeuf',
+    'oeufs poches':            'oeuf',
+    'oeuf coque':              'oeuf',
+    'oeufs coque':             'oeuf',
+    'oeuf au plat':            'oeuf',
+    'oeufs au plat':           'oeuf',
+    'oeuf brouille':           'oeuf',
+    'oeufs brouilles':         'oeuf',
     'gros oeuf':               'oeuf',
+    'gros oeufs':              'oeuf',
     'oeuf moyen':              'oeuf',
+    'oeufs moyens':            'oeuf',
+    // Blancs et jaunes restent séparés (ce sont de vrais sous-produits)
+    'blanc d oeuf':            'blanc d oeuf',
+    'blancs d oeuf':           'blanc d oeuf',
+    'blancs d oeufs':          'blanc d oeuf',
+    'jaune d oeuf':            'jaune d oeuf',
+    'jaunes d oeuf':           'jaune d oeuf',
+    'jaunes d oeufs':          'jaune d oeuf',
     // Huile d'olive
     'huile olive':             'huile d olive',
     'huile d olive vierge':    'huile d olive',
@@ -30549,6 +30574,20 @@
         // La clé = nom normalisé + unité normalisée → agrège singulier/pluriel/accents/unités FR.
         function _addIng(name, qty, unit) {
           if (!name || !unit) return; // ingrédient incomplet → ignorer
+          // FIX 2026-04-16 — Conversion automatique œufs en grammes → pièces (1 œuf ≈ 55g)
+          // Personne ne pèse ses œufs. Si name contient "oeuf/œuf" et unit='g', on convertit.
+          // Cela permet aussi l'agrégation avec les œufs déjà en 'pce'.
+          var nKey = _normIngKey(name);
+          if (unit === 'g' && /^(oeuf|oeuf dur|oeuf mollet|oeuf poche|oeuf entier|oeufs? durs?|oeufs? entiers?|blanc d oeuf|blancs d oeuf|jaune d oeuf|jaunes d oeuf)$/.test(nKey) && qty > 0) {
+            // 1 œuf moyen ≈ 55g | 1 blanc ≈ 33g | 1 jaune ≈ 18g
+            var perUnit = /jaune/.test(nKey) ? 18 : /blanc/.test(nKey) ? 33 : 55;
+            qty = Math.max(1, Math.round(qty / perUnit));
+            unit = 'pce';
+            // Normaliser le name pour l'agrégation : tous les types se regroupent sous "oeuf"
+            if (/jaune/.test(nKey)) name = 'Jaune d\'œuf';
+            else if (/blanc/.test(nKey)) name = 'Blanc d\'œuf';
+            else name = 'Œufs';
+          }
           var normU = _normUnit(unit);
           var key   = _normIngKey(name) + '||' + normU;
           if (!consolidated[key]) consolidated[key] = { name: name, qty: 0, unit: normU, recipes: [] };
