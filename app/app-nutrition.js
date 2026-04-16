@@ -2963,14 +2963,11 @@ function renderStep9(p) {
         style: 'display:block;width:100%;padding:14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;min-height:48px;font-weight:500;',
         onclick: function() {
           try {
-            // Régénérer si hash a changé ou nouvelle semaine, sinon juste valider le plan existant
-            if (hashChanged || weekChanged) {
-              var _wkV = generateWeek();
-              if (Array.isArray(_wkV) && _wkV.length === 7) {
-                S.weekPlan = _wkV;
-                S._weekPlanGeneratedAt = new Date().toISOString();
-              }
-            }
+            // FIX 2026-04-16 — Ne JAMAIS régénérer silencieusement au clic "Valider".
+            // Avant : si hashChanged, le plan était REMPLACÉ par de nouvelles recettes au moment
+            // du clic "Valider". L'user pensait valider le plan qu'il voyait, mais recevait un
+            // plan différent sur le dashboard. Maintenant : on valide le plan TEL QUEL.
+            // Si les paramètres ont changé, l'user doit utiliser le bouton "Régénérer" explicite.
             S.weekPlanValidated = true;
             S.weekPlanValidatedISOWeek = currentISO;
             if (_planHashNow) S._planHash = _planHashNow;
