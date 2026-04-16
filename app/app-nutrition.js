@@ -743,7 +743,7 @@ function renderStep3(p) {
   var wRange = window.UNITS ? window.UNITS.weightRange() : {min: 30, max: 300, step: 0.1};
   var wVal = window.UNITS ? (window.UNITS.displayWeightVal(S.weight) || '') : (S.weight || '');
   var ww = h('div', {'class': 'num-input-wrap'});
-  ww.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(wRange.min), max: String(wRange.max), step: String(wRange.step), value: String(wVal), inputmode: 'decimal', placeholder: window.UNITS && window.UNITS.weight === 'lbs' ? '165' : '75', oninput: function(e) {
+  ww.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(wRange.min), max: String(wRange.max), step: String(wRange.step), value: String(wVal), inputmode: 'decimal', 'aria-label': 'Poids en ' + (window.UNITS && window.UNITS.weight === 'lbs' ? 'livres' : 'kilogrammes'), placeholder: window.UNITS && window.UNITS.weight === 'lbs' ? '165' : '75', oninput: function(e) {
     var v = parseFloat(e.target.value);
     if (!isNaN(v)) { S.weight = window.UNITS ? window.UNITS.toKg(v) : v; S._nm = null; }
   }, onblur: function(e) {
@@ -784,7 +784,7 @@ function renderStep3(p) {
   var hRange = window.UNITS ? window.UNITS.heightRange() : {min: 120, max: 250, step: 1};
   var hVal = window.UNITS ? (window.UNITS.displayHeightVal(S.height) || '') : (S.height || '');
   var hw = h('div', {'class': 'num-input-wrap'});
-  hw.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(hRange.min), max: String(hRange.max), step: String(hRange.step), value: String(hVal), inputmode: window.UNITS && window.UNITS.height === 'ft' ? 'decimal' : 'numeric', placeholder: window.UNITS && window.UNITS.height === 'ft' ? 'pouces (ex: 70.9)' : '175', oninput: function(e) {
+  hw.appendChild(h('input', {'class': 'num-input', type: 'number', min: String(hRange.min), max: String(hRange.max), step: String(hRange.step), value: String(hVal), inputmode: window.UNITS && window.UNITS.height === 'ft' ? 'decimal' : 'numeric', 'aria-label': 'Taille en ' + (window.UNITS && window.UNITS.height === 'ft' ? 'pouces' : 'centimètres'), placeholder: window.UNITS && window.UNITS.height === 'ft' ? 'pouces (ex: 70.9)' : '175', oninput: function(e) {
     var v = parseFloat(e.target.value);
     if (!isNaN(v)) S.height = window.UNITS ? window.UNITS.toCm(v) : v;
   }, onblur: function(e) {

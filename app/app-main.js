@@ -1567,7 +1567,7 @@ function render() {
  wrap.appendChild(ub);
 
  // Main navigation (tabs adaptés selon S.appMode)
- var nav = h('div', {'class': 'main-nav'});
+ var nav = h('nav', {'class': 'main-nav', role: 'navigation', 'aria-label': 'Navigation principale'});
  nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'today' || S.view === 'dashboard' || !S.view ? ' active' : ''), onclick: function(){ S.view = 'today'; if(window.BLACKBOX)window.BLACKBOX.log('nav_today'); render(); }}, 'Aujourd\'hui'));
  if (S.appMode !== 'sport') {
    nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, window.t('nav.nutrition')));

@@ -4185,7 +4185,7 @@ function renderMusculationLevel(p) {
 
  p.appendChild(h('div', {'class': 'section-label'}, window.t('sport.days')));
  var nw = h('div', {'class': 'num-input-wrap'});
- nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric',
+ nw.appendChild(h('input', {'class': 'num-input', type: 'number', min: '2', max: '6', value: String(S.sportDays || 3), inputmode: 'numeric', 'aria-label': 'Nombre de jours d\'entraînement par semaine',
  // FIX DESYNC 2026-04-16 — invalider sportProgram si days change (sinon labels 3j mais programme 5j)
  oninput: function(e){ var v = parseInt(e.target.value); if (!isNaN(v) && v >= 2 && v <= 6) { var prev = S.sportDays; S.sportDays = v; if (prev !== v && Array.isArray(S.sportProgram) && S.sportProgram.length > 0) { S.sportProgram = null; S.muscuIAProgram = null; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); } },
  onblur: function(e){ var v = parseInt(e.target.value); if (isNaN(v) || v < 2) { v = 2; e.target.value = S.sportDays = 2; } else if (v > 6) { v = 6; e.target.value = S.sportDays = 6; } if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgram.length !== v) { S.sportProgram = null; S.muscuIAProgram = null; } if (S.sportMixSecondary && S.sportMixSecondary.days >= v) { S.sportMixSecondary.days = Math.max(1, v - 2); } window.render(); }
