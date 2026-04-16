@@ -3866,20 +3866,54 @@ function renderTodayDashboard(p) {
   var hero = renderHeroContextuel();
   if (hero) wrapper.appendChild(hero);
 
-  // ═══ CARTE "AUJOURD'HUI POUR TOI" (Bible Hermès §9) ═══
-  // Juste sous le hero, si pathologie/état spécial déclaré.
-  var cardToday = renderCardTodayForYou();
-  if (cardToday) wrapper.appendChild(cardToday);
+  // ═══ SECTION "AUJOURD'HUI" — Séance + Repas en priorité (redesign 2026-04-16) ═══
+  // Benchmark MFP/Strong/Hevy : séance + nutrition toujours en haut du dashboard.
 
-  // ═══ CARTE CROSSFIT 1RM (supervision Hermès : identité athlète CF) ═══
-  var cardCF = renderCardCrossfit1RM();
-  if (cardCF) wrapper.appendChild(cardCF);
+  // ── Banners de validation (si plans non validés) ──
+  try {
+    var _isoWeek = window.currentISOWeek ? window.currentISOWeek() : null;
+    var _nutNeedsValidation = S.weekPlan && Array.isArray(S.weekPlan) && S.weekPlan.length >= 7
+      && (!S.weekPlanValidated || (S.weekPlanValidatedISOWeek && _isoWeek && S.weekPlanValidatedISOWeek !== _isoWeek));
+    if (_nutNeedsValidation) {
+      var _nutBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
+      _nutBanner.appendChild(eyebrow('NUTRITION'));
+      _nutBanner.appendChild(cardTitle('Valide ton plan de la semaine'));
+      _nutBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Ton plan nutrition est pr\u00eat. Confirme-le pour qu\u2019il apparaisse dans ton suivi.'));
+      _nutBanner.appendChild(h('button', {
+        style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+        onclick: function() { S.weekPlanValidated = true; if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek; if (window.saveProfile) window.saveProfile(); if (window.render) window.render(); }
+      }, 'VALIDER MON PLAN NUTRITION'));
+      wrapper.appendChild(_nutBanner);
+    }
+    var _sportNeedsValidation = S.sportType && !S.sportProgramValidated && (S.appMode === 'sport' || S.appMode === 'both');
+    if (_sportNeedsValidation) {
+      var _sportBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
+      _sportBanner.appendChild(eyebrow('SPORT'));
+      _sportBanner.appendChild(cardTitle('Confirme ton programme sportif'));
+      _sportBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Ton programme est g\u00e9n\u00e9r\u00e9. Confirme-le pour activer le suivi.'));
+      _sportBanner.appendChild(h('button', {
+        style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+        onclick: function() { S.sportProgramValidated = true; S.sportProgramValidatedAt = new Date().toISOString(); if (window.saveProfile) window.saveProfile(); if (window.render) window.render(); }
+      }, 'CONFIRMER MON PROGRAMME'));
+      wrapper.appendChild(_sportBanner);
+    }
+  } catch(_eVal) { console.warn('[validation banners]', _eVal); }
 
-  // ═══ CARTE MUSCU 1RM — DÉPLACÉE vers section Sport (Bible Hermès : dashboard = actionable) ═══
-  // Le tonnage hebdo reste visible dans le hero (ligne ~816). Les 1RM détaillés sont dans Sport.
-  // renderCardMuscu1RM() reste exposée pour usage dans app-sport.js.
+  // ── Card 1 — SÉANCE DU JOUR (position prioritaire) ──
+  var cardSport = renderCardSport();
+  if (cardSport) wrapper.appendChild(cardSport);
 
-  // ═══ CARTE VOLUME HEBDO MEV/MAV/MRV (SPRINT P3 #7 — Israetel/RP) ═══
+  // ── Card 2 — REPAS DU JOUR (juste après la séance) ──
+  var cardRepas = renderCardRepas();
+  if (cardRepas) wrapper.appendChild(cardRepas);
+
+  // ═══ SECTION "PROGRESSION" ═══
+
+  // Card 3 — Streak & badges
+  var cardStreak = renderCardStreak();
+  if (cardStreak) wrapper.appendChild(cardStreak);
+
+  // Card 3b — Volume tracking MEV/MAV/MRV (muscu users uniquement)
   try {
     var cardVolume = renderCardVolumeTracking();
     if (cardVolume) {
@@ -3889,12 +3923,11 @@ function renderTodayDashboard(p) {
     }
   } catch(_eVt) { console.warn('[today] renderCardVolumeTracking error', _eVt); }
 
+  // ═══ SECTION "CONTEXTE & SECONDAIRE" ═══
+
   // PREMIERS PAS : pour les users sans AUCUN plan (onboarding incomplet)
   try {
     var _hasNutritionPlan = Array.isArray(S.weekPlan) && S.weekPlan.length >= 7;
-    // FIX 2026-04-16 : inclure TOUS les sports, pas seulement muscu.
-    // CF = CF_WODS_FULL (pas sportProgram). Running/triathlon/hyrox/padel/golf/calisthenics
-    // ont leurs propres stores. L'indicateur fiable = S.sportType renseigné.
     var _hasSportPlan = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0)
                         || (S.muscuIAProgram && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100)
                         || (S.activeProgram && Array.isArray(S.activeProgram.weekProgram) && S.activeProgram.weekProgram.length > 0)
@@ -3911,58 +3944,45 @@ function renderTodayDashboard(p) {
       var _firstStepCard = card();
       _firstStepCard.appendChild(eyebrow('COMMENCER'));
       _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-size:22px;margin-bottom:12px;font-weight:normal;line-height:1.25;'}, 'Ton premier plan t\'attend.'));
-      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-style:italic;font-size:15px;color:#3E3E3A;line-height:1.55;margin-bottom:24px;'}, 'Deux à trois minutes pour répondre à quelques questions, et tu as ton programme. Pas plus, pas moins.'));
+      _firstStepCard.appendChild(h('div', {style:'font-family:Georgia,serif;font-style:italic;font-size:15px;color:#3E3E3A;line-height:1.55;margin-bottom:24px;'}, 'Deux \u00e0 trois minutes pour r\u00e9pondre \u00e0 quelques questions, et tu as ton programme.'));
       var _btnRow = h('div', {style:'display:flex;gap:12px;flex-wrap:wrap;'});
       if (S.appMode !== 'nutrition') {
         _btnRow.appendChild(h('button', {
           'class': 'btn-primary',
           onclick: function() { S.view = 'sport'; if (window.render) window.render(); }
-        }, 'CRÉER MON PROGRAMME SPORT'));
+        }, 'CR\u00c9ER MON PROGRAMME SPORT'));
       }
       if (S.appMode !== 'sport') {
         _btnRow.appendChild(h('button', {
           'class': 'btn-secondary',
           onclick: function() { S.view = 'nutrition'; if (window.render) window.render(); }
-        }, 'CRÉER MON PLAN NUTRITION'));
+        }, 'CR\u00c9ER MON PLAN NUTRITION'));
       }
       _firstStepCard.appendChild(_btnRow);
       wrapper.appendChild(_firstStepCard);
     }
   } catch(e) { console.warn('[FirstStepCard]', e); }
 
-  // Next meal card — désormais subordonnée au hero, affichée uniquement si dénsité nécessaire
-  // (si hero ne couvre pas le contexte repas, ex: après un log, pour proposer le suivant).
-  var cardNextMeal = renderCardNextMeal();
-  if (cardNextMeal && !hero) wrapper.appendChild(cardNextMeal);
+  // Card — "Aujourd'hui pour toi" (pathologies, conditions spéciales)
+  var cardToday = renderCardTodayForYou();
+  if (cardToday) wrapper.appendChild(cardToday);
 
-  // Card 1c — Bilan hebdo (dimanche uniquement)
-  var cardWeekly = renderCardSundayReview(S);
-  if (cardWeekly) wrapper.appendChild(cardWeekly);
+  // Card — CrossFit 1RM (CF users only)
+  var cardCF = renderCardCrossfit1RM();
+  if (cardCF) wrapper.appendChild(cardCF);
 
-  // Card 2 — Séance du jour / Jour de repos
-  var cardSport = renderCardSport();
-  if (cardSport) wrapper.appendChild(cardSport);
-
-  // Card 3 — Macros du jour (détail macro bars)
-  // Hero contextuel couvre le kcal. Cette card montre les macro bars détaillées
-  // uniquement pour les users qui veulent voir P/G/L au-delà du hero.
+  // Card — Macros du jour (seulement si pas de hero)
   var cardMacros = renderCardMacros(); if (cardMacros && !hero) wrapper.appendChild(cardMacros);
 
-  // Card 3b — TDEE adaptatif
+  // Card — TDEE adaptatif
   var cardTDEE = renderCardTDEEAdaptatif(S);
   if (cardTDEE) wrapper.appendChild(cardTDEE);
 
-  // Card 4 — Repas du jour (plan complet)
-  var cardRepas = renderCardRepas();
-  if (cardRepas) wrapper.appendChild(cardRepas);
+  // Card — Bilan hebdo (dimanche uniquement)
+  var cardWeekly = renderCardSundayReview(S);
+  if (cardWeekly) wrapper.appendChild(cardWeekly);
 
-  // Card 5 — Streak & badges
-  var cardStreak = renderCardStreak();
-  if (cardStreak) wrapper.appendChild(cardStreak);
-
-  // Card 6 — Checkin bien-être supprimée : fait en plein écran à l'arrivée
-
-  // Card 7 — Raccourcis rapides
+  // Card — Raccourcis rapides
   var cardShortcuts = renderCardShortcuts(); if (cardShortcuts) wrapper.appendChild(cardShortcuts);
 
   // ═══ DRAWER PROGRESSION (Bible Hermès §10) ═══
