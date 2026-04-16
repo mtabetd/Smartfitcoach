@@ -6000,8 +6000,8 @@ function renderMusculationProgram(p) {
  }
  }
 
- // ─── STRENGTH GRADE ───
- if (window.renderStrengthGrade) renderStrengthGrade(p);
+ // FIX UX 2026-04-16 — Strength Grade retiré de la vue programme (déplacé vers profil).
+ // L'user vient ici pour ses exercices, pas pour voir son grade de force.
 
  // ─── GROSSESSE — Adaptations sport ───
  if (S.pregnant && S.sex === 'femme') {

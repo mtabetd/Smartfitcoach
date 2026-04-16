@@ -1049,6 +1049,14 @@ function renderProfilePage(container) {
  }, '\uD83C\uDFAF Changer mon objectif');
  c.appendChild(changeGoalBtn);
 
+ // ─── Strength Grade + Records (déplacé depuis la vue programme sport) ───
+ if (window.renderStrengthGrade) {
+   try { renderStrengthGrade(c); } catch(e) {}
+ }
+ if (window.renderCardMuscu1RM) {
+   try { var _recCard = window.renderCardMuscu1RM(); if (_recCard) c.appendChild(_recCard); } catch(e) {}
+ }
+
  // ─── Restaurer depuis le cloud ───
  if (window.SupaSync && window.AUTH && window.AUTH.isLoggedIn()) {
    var restoreBtn = h('button', {
