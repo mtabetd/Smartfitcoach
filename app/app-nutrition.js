@@ -2952,8 +2952,9 @@ function renderStep9(p) {
       var validateText = h('div', {
         style: 'font-family:Georgia,serif;font-size:14px;font-style:italic;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.5;'
       });
+      // FIX 2026-04-16 — label cohérent : "Valider" ne régénère plus, donc pas de "Régénérez"
       validateText.textContent = hashChanged
-        ? 'Vos informations ont changé. Régénérez votre plan pour les intégrer.'
+        ? 'Vos informations ont changé. Validez votre plan actuel ou régénérez-le avec le bouton ci-dessous.'
         : weekChanged
         ? 'Une nouvelle semaine commence. Validez votre programme pour qu\'il démarre.'
         : 'Validez votre programme nutritionnel pour le figer sur la semaine.';
@@ -2975,7 +2976,7 @@ function renderStep9(p) {
             if (window.render) window.render();
           } catch(e) { console.error('[renderStep9] validate failed', e); }
         }
-      }, hashChanged ? 'Régénérer et valider' : weekChanged ? 'Valider la nouvelle semaine' : 'Valider mon programme');
+      }, hashChanged ? 'Confirmer mon plan actuel' : weekChanged ? 'Valider la nouvelle semaine' : 'Valider mon programme');
       validateBox.appendChild(validateBtn);
       p.appendChild(validateBox);
     } else {

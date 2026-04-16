@@ -6934,11 +6934,10 @@ function renderMusculationProgram(p) {
      var v = parseInt(e.target.value);
      if (!isNaN(v) && v >= 0 && v <= 5) {
       _setRow.rirActual = v;
-      // Use MESOCYCLE_WEEKS for correct per-week rirTarget (MUSCU_PHASES lacks rirTarget)
-      var _mesoW = window.MESOCYCLE_WEEKS;
-      var _mesoI = _mesoW ? ((( S.muscuWeek || 1) - 1) % _mesoW.length) : -1;
-      var _mesoE = (_mesoW && _mesoI >= 0) ? _mesoW[_mesoI] : null;
-      var _rirTarget2 = _mesoE ? _mesoE.rirTarget : 2;
+      // FIX 2026-04-16 — RIR target dérivé de MUSCU_PHASES (comme l'affichage ligne 6714)
+      // Avant : utilisait MESOCYCLE_WEEKS qui contredisait MUSCU_PHASES.
+      var _phaseForRIR = window.getMuscuPhase ? window.getMuscuPhase(S.muscuWeek || 1) : null;
+      var _rirTarget2 = _phaseForRIR ? Math.max(0, 10 - (_phaseForRIR.rpe || 8)) : 2;
       // FIX P2 batch 2 — Auto-régulation charges basée sur RIR (Israetel RP).
       // Écart de 2+ points → suggestion concrète ±2.5 kg (lift haut du corps)
       //                   ou ±5 kg (lift bas du corps / compound lourd).
