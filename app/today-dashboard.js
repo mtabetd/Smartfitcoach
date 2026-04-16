@@ -3889,6 +3889,12 @@ function renderFabLogger() {
   // Items radiaux (au-dessus du backdrop grâce au z-index du container)
   if (isOpen) {
     var items = [
+      // Assistant IA — chatbot + scan corporel
+      { label: 'ASSISTANT', icon: 'M2 3h12v7H6l-3 3v-3H2V3zM5 6h1M8 6h1M11 6h1', action: function() {
+          S._fabOpen = false;
+          if (window.AI_COACH) window.AI_COACH.open();
+          if (window.render) window.render();
+        } },
       { label: 'REPAS', icon: 'M4 5h8M4 8h8M4 11h8', action: function() {
           S.view = 'nutrition'; S.nStep = 12; S._fabOpen = false;
           if (window.render) window.render();
@@ -3913,8 +3919,11 @@ function renderFabLogger() {
     }
 
     items.forEach(function(item, idx) {
-      // Angles en arc au-dessus du FAB : -180°, -140°, -100°, -60°
-      var angle = -180 + idx * 40;
+      // Angles en arc au-dessus du FAB — espacement dynamique selon nombre d'items.
+      // 4 items → 40° écart (180°→60°). 5 items → 30° écart (180°→60°).
+      var arcSpan = 120; // arc total en degrés
+      var step = items.length > 1 ? arcSpan / (items.length - 1) : 0;
+      var angle = -180 + idx * step;
       var rad = angle * Math.PI / 180;
       var x = Math.cos(rad) * 110;
       var y = Math.sin(rad) * 110;
