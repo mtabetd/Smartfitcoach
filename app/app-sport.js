@@ -193,6 +193,10 @@ function getPregnancySportWarning() {
 }
 
 // ─── PROGRAM GENERATION ───
+// Version du générateur — incrémentée à chaque fix qui change la sortie du programme.
+// Si le programme stocké a une version inférieure, il sera automatiquement régénéré.
+var SPORT_PROGRAM_VERSION = 3; // v1=initial, v2=split fix, v3=desync+medical+weakZones
+
 function generateSportProgram() {
  // FIX 2026-04-16 : clamp days 2-6 — 1 jour/sem n'a pas de split muscu viable
  var days = Math.min(6, Math.max(2, S.sportDays || 3));
@@ -862,6 +866,8 @@ function generateSportProgram() {
  });
  }
 
+ // Stamp version on the program for staleness detection
+ program._version = SPORT_PROGRAM_VERSION;
  return program;
 }
 
@@ -5554,6 +5560,14 @@ function renderMusculationProgram(p) {
      }}, 'Réessayer')
    ]));
    return;
+ }
+ // ═══ FIX P0 2026-04-16 — AUTO-RÉGÉNÉRATION si programme stale (version obsolète) ═══
+ // Avant : le programme généré avec l'ancien code buggé restait en cache localStorage
+ // indéfiniment. L'user voyait "Legs A" avec des exercices pecs de l'ancien split.
+ // Maintenant : chaque programme porte un _version. Si < SPORT_PROGRAM_VERSION, on régénère.
+ if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && (!S.sportProgram._version || S.sportProgram._version < SPORT_PROGRAM_VERSION)) {
+   console.warn('[sport] Programme stale (v' + (S.sportProgram._version || 0) + ' < v' + SPORT_PROGRAM_VERSION + ') — régénération automatique');
+   S.sportProgram = null;
  }
  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) {
    // Afficher un message de génération si pas de programme
