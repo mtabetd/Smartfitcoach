@@ -3850,6 +3850,12 @@ function renderTodayDashboard(p) {
 
   p.innerHTML = '';
 
+  // FIX 2026-04-16 — FAB Logger bouton POIDS : le flag était set mais jamais lu
+  if (S._modalQuickWeight) {
+    S._modalQuickWeight = false;
+    if (typeof openTodayWeightPrompt === 'function') { setTimeout(function() { openTodayWeightPrompt(); }, 50); }
+  }
+
   // ─── BILAN DE FORME — plein écran à la connexion ───
   // Seulement pour les utilisateurs ayant le sport (sport ou both)
   var _todayDate = new Date().toISOString().slice(0, 10);

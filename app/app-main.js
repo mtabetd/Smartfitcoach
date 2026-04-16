@@ -1094,6 +1094,20 @@ function renderProfilePage(container) {
    c.appendChild(restoreBtn);
  }
 
+ // ─── Dark mode toggle ───
+ var _isDark = document.body.classList.contains('dark-mode');
+ var darkBtn = h('button', {
+   style: 'display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--black);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:44px;',
+   onclick: function() {
+     var on = document.body.classList.toggle('dark-mode');
+     try { localStorage.setItem('mtd_dark_mode', on ? '1' : '0'); } catch(e) {}
+     if (window.render) window.render();
+   }
+ });
+ darkBtn.appendChild(h('span', {}, 'Mode sombre'));
+ darkBtn.appendChild(h('span', {style: 'font-size:14px'}, _isDark ? 'ON' : 'OFF'));
+ c.appendChild(darkBtn);
+
  // ─── Déconnexion ───
  var logoutBtn = h('button', {
    style: 'display:block;width:100%;padding:14px;border:1px solid var(--border);background:transparent;color:var(--grey);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
