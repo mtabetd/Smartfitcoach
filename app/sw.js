@@ -7,8 +7,8 @@
  */
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'sfc-v84';
-const RUNTIME_CACHE = 'sfc-runtime-v84';
+const CACHE_VERSION = 'sfc-v85';
+const RUNTIME_CACHE = 'sfc-runtime-v85';
 
 // Max age for static assets in the runtime cache: 7 days (in milliseconds).
 const STATIC_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
