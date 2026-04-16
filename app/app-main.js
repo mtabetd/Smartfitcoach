@@ -1057,6 +1057,140 @@ function renderProfilePage(container) {
    try { var _recCard = window.renderCardMuscu1RM(); if (_recCard) c.appendChild(_recCard); } catch(e) {}
  }
 
+ // ─── MON ABONNEMENT (Hermès — ivoire, orange tabac, Georgia serif) ───
+ (function() {
+   try {
+     var _isSub = !!(S.subscriptionEnd && (S.subscriptionPlan === 'unlimited' || new Date(S.subscriptionEnd) > new Date()));
+     var _daysLeft = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 7;
+     var _trialExpired = !_isSub && _daysLeft === 0 && !!S.firstLoginDate;
+
+     // Palette selon état
+     var _accent = _isSub ? 'var(--accent,#1A4A1A)' : '#6A4A1A'; // sapin si abonné, tabac si trial
+     var _bgTint = _isSub ? 'rgba(26,74,26,0.04)' : 'rgba(106,74,26,0.04)';
+     var _accentBorder = _isSub ? 'rgba(26,74,26,0.22)' : 'rgba(106,74,26,0.22)';
+
+     var card = h('div', {style:
+       'margin:28px 0;padding:28px 24px;border:1px solid ' + _accentBorder + ';' +
+       'background:' + _bgTint + ';border-radius:2px;position:relative;'
+     });
+
+     // Label maison Hermès — filet horizontal + label
+     var _topLabel = h('div', {style:
+       'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:6px;' +
+       'text-transform:uppercase;color:' + _accent + ';font-weight:600;margin-bottom:18px;' +
+       'display:flex;align-items:center;gap:10px;'
+     });
+     _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
+     _topLabel.appendChild(h('span', {}, _isSub ? 'MEMBRE' : 'VERSION D\u2019ESSAI'));
+     _topLabel.appendChild(h('span', {style: 'flex:1;height:1px;background:' + _accentBorder + ';'}));
+     card.appendChild(_topLabel);
+
+     // Numéro ou marqueur central Georgia — signature de la maison
+     var _numRow = h('div', {style: 'text-align:center;margin-bottom:6px;'});
+     if (_isSub) {
+       _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:40px;color:var(--black);line-height:1;'}, '\u2014'));
+     } else if (_daysLeft > 0) {
+       _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:56px;color:var(--black);line-height:1;font-weight:normal;letter-spacing:-1px;'}, String(_daysLeft)));
+       _numRow.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);margin-top:8px;'}, _daysLeft > 1 ? 'jours restants' : 'jour restant'));
+     } else {
+       _numRow.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:28px;color:var(--black);line-height:1.3;'}, 'Essai terminé'));
+     }
+     card.appendChild(_numRow);
+
+     // Sous-titre — type d'abonnement / période
+     var _subtitle = '';
+     if (_isSub) {
+       var _planLabel = (S.subscriptionPlan === 'unlimited') ? 'Accès illimité' : 'Abonnement actif';
+       var _endStr = '';
+       if (S.subscriptionEnd && S.subscriptionPlan !== 'unlimited') {
+         try {
+           var _d = new Date(S.subscriptionEnd);
+           _endStr = ' · renouvellement le ' + _d.getDate() + ' ' +
+             ['janv.','févr.','mars','avril','mai','juin','juil.','août','sept.','oct.','nov.','déc.'][_d.getMonth()] + ' ' + _d.getFullYear();
+         } catch(e) {}
+       }
+       _subtitle = _planLabel + _endStr;
+     } else if (_daysLeft > 0) {
+       _subtitle = 'Toutes les fonctionnalités — sans restriction';
+     } else {
+       _subtitle = 'Votre période d\u2019essai de 7 jours est écoulée';
+     }
+     card.appendChild(h('div', {style:
+       'text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;' +
+       'color:var(--grey);line-height:1.6;margin-bottom:22px;padding:0 8px;'
+     }, _subtitle));
+
+     // Barre de progression fine (si trial) — style ruban Hermès
+     if (!_isSub && S.firstLoginDate) {
+       var _pct = Math.max(0, Math.min(100, ((7 - _daysLeft) / 7) * 100));
+       var _bar = h('div', {style: 'height:2px;background:' + _accentBorder + ';margin:0 0 22px;position:relative;overflow:hidden;'});
+       _bar.appendChild(h('div', {style: 'position:absolute;top:0;left:0;height:100%;width:' + _pct + '%;background:' + _accent + ';transition:width 0.6s ease;'}));
+       card.appendChild(_bar);
+     }
+
+     // Liste des avantages premium — filets Hermès
+     var _featsWrap = h('div', {style: 'border-top:1px solid ' + _accentBorder + ';margin-top:4px;padding-top:18px;'});
+     _featsWrap.appendChild(h('div', {style:
+       'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;' +
+       'text-transform:uppercase;color:var(--grey);margin-bottom:14px;text-align:center;'
+     }, 'Ce qui est inclus'));
+
+     var _feats = [
+       ['Scanner repas IA', 'Analyse nutritionnelle instantanée'],
+       ['Coach IA illimité', 'Conversations sans restriction'],
+       ['Export PDF', 'Rapports hebdomadaires complets'],
+       ['Historique complet', 'Progression sur toute la durée'],
+       ['Analyse corporelle', 'Composition & évolution']
+     ];
+     _feats.forEach(function(f) {
+       var row = h('div', {style:
+         'display:flex;align-items:baseline;gap:12px;padding:9px 4px;' +
+         'border-bottom:1px solid rgba(216,216,208,0.5);'
+       });
+       row.appendChild(h('span', {style: 'font-family:Georgia,serif;font-size:11px;color:' + _accent + ';width:10px;flex-shrink:0;'}, '\u00B7'));
+       var _txt = h('div', {style: 'flex:1;'});
+       _txt.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black);'}, f[0]));
+       _txt.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey);margin-top:2px;letter-spacing:0.3px;'}, f[1]));
+       row.appendChild(_txt);
+       _featsWrap.appendChild(row);
+     });
+     card.appendChild(_featsWrap);
+
+     // CTA — bouton Hermès noir laqué (ou info si abonné)
+     if (!_isSub) {
+       var _cta = h('button', {
+         style:
+           'display:block;width:100%;margin-top:22px;padding:16px;' +
+           'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);' +
+           'border:none;border-radius:2px;cursor:pointer;' +
+           'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;' +
+           'letter-spacing:4px;text-transform:uppercase;min-height:48px;',
+         onclick: function() {
+           if (window.showPaywall) window.showPaywall('premium');
+           else if (window.showToast) window.showToast('Abonnement bientôt disponible', 'info', 3000);
+         }
+       }, _trialExpired ? 'Réactiver mon accès' : 'Passer à Premium');
+       card.appendChild(_cta);
+
+       // Mention discrète sous le CTA — ton maison
+       card.appendChild(h('div', {style:
+         'text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;' +
+         'font-size:9px;letter-spacing:2px;text-transform:uppercase;' +
+         'color:var(--grey);margin-top:10px;'
+       }, 'Sans engagement · Résiliable à tout moment'));
+     } else {
+       card.appendChild(h('div', {style:
+         'text-align:center;margin-top:20px;padding:14px;' +
+         'border-top:1px solid ' + _accentBorder + ';' +
+         'font-family:Georgia,serif;font-style:italic;font-size:12px;' +
+         'color:' + _accent + ';'
+       }, 'Merci de votre confiance.'));
+     }
+
+     c.appendChild(card);
+   } catch(eSub) { console.warn('[profile] abonnement card error', eSub); }
+ })();
+
  // ─── Restaurer depuis le cloud ───
  if (window.SupaSync && window.AUTH && window.AUTH.isLoggedIn()) {
    var restoreBtn = h('button', {
