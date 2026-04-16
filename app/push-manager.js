@@ -30,7 +30,14 @@
       if (!('Notification' in window)) return;
       if (this._userOptedOut()) return; // user a désactivé → rien
       var prefs = this.getPrefs();
-      if (prefs.asked) return; // Ne demander qu'une fois
+      // FIX 2026-04-16 — Avant : if (prefs.asked) return → notifications JAMAIS reschedulées
+      // après la première visite. L'user ne recevait rien après la session initiale.
+      // Maintenant : si permission déjà accordée, on reschedule à chaque session.
+      if (prefs.asked && Notification.permission === 'granted') {
+        this.scheduleLocalNotifs();
+        return;
+      }
+      if (prefs.asked) return; // Permission refusée ou dismissed → ne pas re-demander
       // Délai de 30 secondes après le premier chargement pour ne pas spammer
       setTimeout(function() {
         if (window.SFCPushManager._userOptedOut()) return; // revérifier au tick
@@ -150,7 +157,7 @@
       try {
         new Notification(title, {
           body: body,
-          icon: '/icons/icon-192.png',
+          icon: './icon-192.png',
           tag: tag || 'sfc-local',
           requireInteraction: false
         });
