@@ -535,7 +535,14 @@ function renderCardNextMeal() {
         window.PLATE_SCAN.open(slotKey);
       }
     });
-    scanBtn.appendChild(h('span', {style: 'font-size:14px'}, '\uD83D\uDCF7'));
+    // FIX Hermès : SVG camera monochrome au lieu de 📷 (cohérence avec mic ai-coach).
+    var _scanSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    _scanSvg.setAttribute('width', '16'); _scanSvg.setAttribute('height', '16');
+    _scanSvg.setAttribute('viewBox', '0 0 24 24'); _scanSvg.setAttribute('fill', 'none');
+    _scanSvg.setAttribute('stroke', 'currentColor'); _scanSvg.setAttribute('stroke-width', '1.5');
+    _scanSvg.setAttribute('stroke-linecap', 'round'); _scanSvg.setAttribute('stroke-linejoin', 'round');
+    _scanSvg.innerHTML = '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>';
+    scanBtn.appendChild(_scanSvg);
     scanBtn.appendChild(h('span', {}, 'Scanner mon repas'));
     c.appendChild(scanBtn);
   }

@@ -3255,7 +3255,7 @@ function renderStep9(p) {
                   var slotKey3 = S._foodSearchSlot;
                   if (!S.weekPlan) return;
                   if (!S.weekPlan[S.selectedDay]) S.weekPlan[S.selectedDay] = {};
-                  S.weekPlan[S.selectedDay][slotKey3] = { n: food.name, k: food.kcal, kcal: food.kcal, p: food.p, g: food.g, l: food.l, f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true };
+                  S.weekPlan[S.selectedDay][slotKey3] = { n: food.name, k: food.kcal, kcal: food.kcal, p: food.p, g: food.g, l: food.l, f: '\u25CE', emoji: '\u25CE', custom: true };
                   S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false;
                   try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }
                   window.render();
@@ -3309,7 +3309,7 @@ function renderStep9(p) {
           S.weekPlan[S.selectedDay][slotKey4] = {
             n: fd.name.trim(), k: parseFloat(fd.kcal) || 0, kcal: parseFloat(fd.kcal) || 0,
             p: parseFloat(fd.p) || 0, g: parseFloat(fd.g) || 0, l: parseFloat(fd.l) || 0,
-            f: '\uD83C\uDF7D\uFE0F', emoji: '\uD83C\uDF7D\uFE0F', custom: true
+            f: '\u25CE', emoji: '\u25CE', custom: true
           };
           S._foodSearchSlot = null; S._foodSearchQuery = ''; S._foodSearchResults = null; S._foodManualEntry = false; S._foodManualData = null;
           try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[nutrition] saveProfile error:', e); }

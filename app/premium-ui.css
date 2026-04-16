@@ -721,6 +721,28 @@ button:not([data-icon-only]):not(.set-load-input):not(.set-reps-input),
 a.btn-link {
   min-height: 44px;
 }
+/* FIX Hermès P1 : TOUS les boutons ≥ 44×44 (Apple HIG + bible Hermès).
+   Les icon-only (action inline dans une rangée) reçoivent min-width:44px. */
+button[data-icon-only],
+.icon-btn,
+.set-copy-btn,
+.set-validate-btn,
+.record-action,
+.record-action-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+/* Footer text links : tap target 44px via inline-flex wrapper */
+footer a, .sfc-brand-link, .app-footer a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 0;
+}
 /* Inputs numériques (charge/reps/RIR) : 16px font + tap target ≥ 44px */
 input[type="number"]:not([data-mini]),
 input[inputmode="numeric"]:not([data-mini]),
@@ -1646,14 +1668,14 @@ p, li, .card-sub, .level-desc, .exercise-detail,
 .shop-ar {
   direction: rtl;
   text-align: right;
-  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
 }
 
 /* Header de catégorie en RTL */
 .shop-ar .shop-cat-header {
   direction: rtl;
   text-align: right;
-  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
   letter-spacing: 0;
 }
 
@@ -1672,12 +1694,12 @@ p, li, .card-sub, .level-desc, .exercise-detail,
 /* Label RTL */
 .shop-ar .shop-item-label {
   text-align: right;
-  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
 }
 
 /* Titre principal liste en arabe */
 .shop-ar-title {
-  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
   direction: rtl;
   text-align: right;
 }
@@ -1692,7 +1714,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
 }
 .btn-shop-ar.active {
   background: #0D3310;
@@ -1708,7 +1730,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
 }
 
 /* ── PRINT : n'imprimer QUE la liste de courses en arabe ── */
@@ -1735,7 +1757,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
     display: block !important;
     direction: rtl;
     text-align: right;
-    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+    font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
     padding: 20px;
     color: #000;
     background: #fff;
@@ -1747,7 +1769,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
     margin-bottom: 4px;
     direction: rtl;
     text-align: right;
-    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+    font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
   }
 
   .shop-print-area .shop-print-date {
@@ -1772,7 +1794,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
     margin-bottom: 4px;
     direction: rtl;
     text-align: right;
-    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+    font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
   }
 
   .shop-print-area .shop-print-item {
@@ -1782,7 +1804,7 @@ p, li, .card-sub, .level-desc, .exercise-detail,
     padding: 3px 10px;
     font-size: 13px;
     border-bottom: 1px solid #eee;
-    font-family: 'Segoe UI', Arial, 'Tahoma', sans-serif;
+    font-family: 'Noto Naskh Arabic', 'Amiri', Georgia, serif;
   }
 
   /* Masquer les éléments non liés à l'impression */
@@ -2954,7 +2976,7 @@ select {
 /* === COLOUR SYSTEM — Ivoires, Noirs & Verts Raffinés === */
 :root {
   /* Ivoires — gradient chaud */
-  --ivory-0: #FFFFFF;
+  --ivory-0: #FAF9F6; /* FIX Hermès : blanc pur interdit — ivoire chaud */
   --ivory-1: #FDFCFA;    /* quasi-blanc chaud */
   --ivory-2: #FAF9F6;    /* ivoire principal */
   --ivory-3: #F5F4F0;    /* ivoire secondaire */
@@ -3246,7 +3268,7 @@ select {
   border-color: var(--green-main, #1A4A1A);
   border-bottom-color: var(--green-main, #1A4A1A);
   box-shadow: 0 2px 8px rgba(26,74,26,0.08);
-  background: #FFFFFF;
+  background: var(--ivory, #FAF9F6); /* FIX Hermès : blanc pur interdit */
 }
 .input-premium::placeholder {
   color: var(--grey-4, #AEAEA7);
@@ -3284,7 +3306,7 @@ select {
 .badge-new {
   background: var(--green-main, #1A4A1A);
   color: white;
-  font-size: 8px;
+  font-size: 11px; /* FIX Hermès : plancher 11px strict (était 8px) */
 }
 
 
@@ -3303,7 +3325,8 @@ select {
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .progress-bar-luxury.green .fill {
-  background: linear-gradient(90deg, var(--green-main, #1A4A1A), #2E6B2E);
+  /* FIX Hermès : aplat monochrome au lieu du gradient multi-stop */
+  background: var(--green-main, #1A4A1A);
 }
 
 /* Macro rings — amélioration de l'animation */
@@ -3575,4 +3598,17 @@ body.dark-mode input[type="email"] {
 @keyframes segPulse {
   0%, 100% { box-shadow: 0 0 0 1px rgba(10,10,9,0.15); }
   50%       { box-shadow: 0 0 0 2px rgba(10,10,9,0.25); }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   FIX Hermès : accessibilité — respect reduced-motion global (Apple + WCAG 2.2 AA)
+   Coupe toutes animations/transitions pour users qui activent l'option OS.
+   ════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

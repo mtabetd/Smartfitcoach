@@ -1504,7 +1504,8 @@ function render() {
          style: 'display:flex;align-items:center;gap:3px;min-height:44px;cursor:default;',
          title: _sVal + ' jour' + (_sVal > 1 ? 's' : '') + ' cons\u00e9cutif' + (_sVal > 1 ? 's' : '')
        });
-       _streakEl.appendChild(h('span', {style: 'font-size:12px;line-height:1;'}, _sVal >= 7 ? '\uD83C\uDFC6' : '\uD83D\uDD25'));
+       // FIX Hermès : remplacement emojis 🏆/🔥 par glyphe ● avec opacity selon seuil.
+       _streakEl.appendChild(h('span', {style: 'font-size:10px;line-height:1;opacity:' + (_sVal >= 7 ? '1' : '0.55') + ';color:var(--black);'}, '\u25CF'));
        _streakEl.appendChild(h('span', {
          style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:0.5px;'
        }, String(_sVal)));

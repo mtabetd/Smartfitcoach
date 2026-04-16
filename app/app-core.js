@@ -1726,13 +1726,14 @@ window.EATING_LOCATIONS = EATING_LOCATIONS;
 var BODY_ZONES = ['Poitrine','Dos','Épaules','Bras','Abdominaux','Jambes','Fessiers','Cardio'];
 window.BODY_ZONES = BODY_ZONES;
 
+// FIX Hermès : icônes sobres unicode (tonal-on-tonal). Emojis 💪🫀🧘🔥⚡ retirés.
 var SPORT_GOALS = [
-  {id:'muscle', name:'Prise de muscle', desc:'Hypertrophie et force', icon:'💪'},
-  {id:'endurance', name:'Endurance', desc:'Cardio et stamina', icon:'🫀'},
-  {id:'flexibility', name:'Souplesse', desc:'Mobilité et stretching', icon:'🧘'},
-  {id:'weightloss', name:'Perte de poids', desc:'Brûler des calories', icon:'🔥'},
-  {id:'general', name:'Forme générale', desc:'Un peu de tout', icon:'⚡'},
-  {id:'shred', name:'Sèche', desc:'Perdre du gras, garder le muscle', icon:'🔥'}
+  {id:'muscle',      name:'Prise de muscle',  desc:'Hypertrophie et force',           icon:'\u25A0'},
+  {id:'endurance',   name:'Endurance',        desc:'Cardio et stamina',               icon:'\u25CF'},
+  {id:'flexibility', name:'Souplesse',        desc:'Mobilité et stretching',          icon:'\u25CB'},
+  {id:'weightloss',  name:'Perte de poids',   desc:'Brûler des calories',             icon:'\u2193'},
+  {id:'general',     name:'Forme générale',   desc:'Un peu de tout',                  icon:'\u25C6'},
+  {id:'shred',       name:'Sèche',            desc:'Perdre du gras, garder le muscle',icon:'\u25BC'}
 ];
 window.SPORT_GOALS = SPORT_GOALS;
 
@@ -1789,16 +1790,17 @@ window.CF_STANDARDS = CF_STANDARDS;
 
 // FIX P0 audit user Karim : ajout bench_press (Développé couché) + squat (alias back_squat)
 // Avant : impossible de saisir DC/Squat en mode CF → perte de données pour athlètes complets.
+// FIX Hermès : icônes sobres (◆ carré, ▲ triangle) — remplace 🏋🦬🦵💪🔥.
 var CF_1RM_LIFTS = [
-  {key: 'clean', name: 'Clean (Épaulé)', icon: '🏋️', placeholder: 'kg', desc: 'Votre meilleur clean à 1 rep'},
-  {key: 'snatch', name: 'Snatch (Arraché)', icon: '🏋️', placeholder: 'kg', desc: 'Votre meilleur snatch à 1 rep'},
-  {key: 'deadlift', name: 'Deadlift (Soulevé de terre)', icon: '🦬', placeholder: 'kg', desc: 'Votre meilleur deadlift'},
-  {key: 'front_squat', name: 'Front Squat', icon: '🦵', placeholder: 'kg', desc: 'Votre meilleur front squat'},
-  {key: 'back_squat', name: 'Back Squat', icon: '🦵', placeholder: 'kg', desc: 'Votre meilleur back squat'},
-  {key: 'bench_press', name: 'Développé couché (Bench Press)', icon: '💪', placeholder: 'kg', desc: 'Votre meilleur DC à 1 rep'},
-  {key: 'push_press', name: 'Push Press / Shoulder to OH', icon: '💪', placeholder: 'kg', desc: 'Votre meilleur push press'},
-  {key: 'overhead_squat', name: 'Overhead Squat', icon: '🏋️', placeholder: 'kg', desc: 'Votre meilleur OHS'},
-  {key: 'thruster', name: 'Thruster', icon: '🔥', placeholder: 'kg', desc: 'Votre meilleur thruster'}
+  {key: 'clean',          name: 'Clean (Épaulé)',               icon: '\u25A0', placeholder: 'kg', desc: 'Votre meilleur clean à 1 rep'},
+  {key: 'snatch',         name: 'Snatch (Arraché)',             icon: '\u25B2', placeholder: 'kg', desc: 'Votre meilleur snatch à 1 rep'},
+  {key: 'deadlift',       name: 'Deadlift (Soulevé de terre)',  icon: '\u25A0', placeholder: 'kg', desc: 'Votre meilleur deadlift'},
+  {key: 'front_squat',    name: 'Front Squat',                   icon: '\u25CF', placeholder: 'kg', desc: 'Votre meilleur front squat'},
+  {key: 'back_squat',     name: 'Back Squat',                    icon: '\u25CF', placeholder: 'kg', desc: 'Votre meilleur back squat'},
+  {key: 'bench_press',    name: 'Développé couché (Bench Press)',icon: '\u25A0', placeholder: 'kg', desc: 'Votre meilleur DC à 1 rep'},
+  {key: 'push_press',     name: 'Push Press / Shoulder to OH',   icon: '\u25B2', placeholder: 'kg', desc: 'Votre meilleur push press'},
+  {key: 'overhead_squat', name: 'Overhead Squat',                icon: '\u25B2', placeholder: 'kg', desc: 'Votre meilleur OHS'},
+  {key: 'thruster',       name: 'Thruster',                      icon: '\u25C6', placeholder: 'kg', desc: 'Votre meilleur thruster'}
 ];
 window.CF_1RM_LIFTS = CF_1RM_LIFTS;
 
@@ -3875,15 +3877,16 @@ window.UNITS = {
 };
 
 // ─── MUSCULATION KEY EXERCISES (Strength Assessment) ───
+// FIX Hermès : icônes sobres tonal-on-tonal.
 var MUSCU_KEY_EXERCISES = [
-  {key: 'bench_press', name: 'Développé couché', muscle: 'Poitrine', icon: '🏋️', unit: 'kg', desc: 'Charge max pour 1 série de 8-10 reps'},
-  {key: 'squat', name: 'Squat', muscle: 'Jambes', icon: '🦵', unit: 'kg', desc: 'Charge max pour 1 série de 8-10 reps'},
-  {key: 'deadlift', name: 'Soulevé de terre', muscle: 'Dos', icon: '🦬', unit: 'kg', desc: 'Charge max pour 1 série de 8-10 reps'},
-  {key: 'overhead_press', name: 'Développé militaire', muscle: 'Épaules', icon: '💪', unit: 'kg', desc: 'Charge max debout, 8-10 reps'},
-  {key: 'barbell_row', name: 'Rowing barre', muscle: 'Dos', icon: '🏋️', unit: 'kg', desc: 'Charge pour 8-10 reps propres'},
-  {key: 'barbell_curl', name: 'Curl barre', muscle: 'Biceps', icon: '💪', unit: 'kg', desc: 'Charge pour 10-12 reps'},
-  {key: 'hip_thrust', name: 'Hip Thrust', muscle: 'Fessiers', icon: '🍑', unit: 'kg', desc: 'Charge pour 10-12 reps'},
-  {key: 'leg_press', name: 'Presse à cuisses', muscle: 'Jambes', icon: '🦵', unit: 'kg', desc: 'Charge totale pour 10-12 reps'}
+  {key: 'bench_press',   name: 'Développé couché',   muscle: 'Poitrine', icon: '\u25A0', unit: 'kg', desc: 'Charge max pour 1 série de 8-10 reps'},
+  {key: 'squat',         name: 'Squat',              muscle: 'Jambes',   icon: '\u25CF', unit: 'kg', desc: 'Charge max pour 1 série de 8-10 reps'},
+  {key: 'deadlift',      name: 'Soulevé de terre',   muscle: 'Dos',      icon: '\u25A0', unit: 'kg', desc: 'Charge max pour 1 série de 8-10 reps'},
+  {key: 'overhead_press',name: 'Développé militaire',muscle: 'Épaules',  icon: '\u25B2', unit: 'kg', desc: 'Charge max debout, 8-10 reps'},
+  {key: 'barbell_row',   name: 'Rowing barre',       muscle: 'Dos',      icon: '\u25A0', unit: 'kg', desc: 'Charge pour 8-10 reps propres'},
+  {key: 'barbell_curl',  name: 'Curl barre',         muscle: 'Biceps',   icon: '\u25C6', unit: 'kg', desc: 'Charge pour 10-12 reps'},
+  {key: 'hip_thrust',    name: 'Hip Thrust',         muscle: 'Fessiers', icon: '\u25C7', unit: 'kg', desc: 'Charge pour 10-12 reps'},
+  {key: 'leg_press',     name: 'Presse à cuisses',   muscle: 'Jambes',   icon: '\u25CF', unit: 'kg', desc: 'Charge totale pour 10-12 reps'}
 ];
 window.MUSCU_KEY_EXERCISES = MUSCU_KEY_EXERCISES;
 
@@ -5736,12 +5739,13 @@ var RUNNING_LEVELS = [
 ];
 window.RUNNING_LEVELS = RUNNING_LEVELS;
 
+// FIX Hermès : icônes sobres. Chiffres et symboles typographiques uniquement.
 var RUNNING_GOALS = [
-  {id: '5k', name: '5 km', desc: 'Première course ou PR', icon: '🏁', weeks: 8, longRunMax: 8},
-  {id: '10k', name: '10 km', desc: 'Distance populaire', icon: '🏁', weeks: 10, longRunMax: 12},
-  {id: 'semi', name: 'Semi-marathon', desc: '21.1 km', icon: '🏅', weeks: 12, longRunMax: 18},
-  {id: 'marathon', name: 'Marathon', desc: '42.195 km', icon: '🏆', weeks: 16, longRunMax: 35},
-  {id: 'trail', name: 'Trail', desc: 'Course nature / dénivelé', icon: '⛰️', weeks: 12, longRunMax: 25}
+  {id: '5k',       name: '5 km',           desc: 'Première course ou PR', icon: '5',     weeks: 8,  longRunMax: 8},
+  {id: '10k',      name: '10 km',          desc: 'Distance populaire',    icon: '10',    weeks: 10, longRunMax: 12},
+  {id: 'semi',     name: 'Semi-marathon',  desc: '21.1 km',               icon: '21',    weeks: 12, longRunMax: 18},
+  {id: 'marathon', name: 'Marathon',       desc: '42.195 km',             icon: '42',    weeks: 16, longRunMax: 35},
+  {id: 'trail',    name: 'Trail',          desc: 'Course nature / dénivelé', icon: '\u25B2', weeks: 12, longRunMax: 25}
 ];
 window.RUNNING_GOALS = RUNNING_GOALS;
 
@@ -5756,20 +5760,22 @@ var RUNNING_ZONES = [
 window.RUNNING_ZONES = RUNNING_ZONES;
 
 // ─── HYROX CONSTANTS ───
+// FIX Hermès : gradés ○◔◑◕● (circles filling) au lieu de cercles colorés 🟢🟡🟠🔴.
 var HYROX_LEVELS = [
-  {id: 'beginner', name: 'Débutant', desc: 'Premier Hyrox', icon: '🟢'},
-  {id: 'intermediate', name: 'Intermédiaire', desc: '1-3 Hyrox complétés', icon: '🟡'},
-  {id: 'advanced', name: 'Avancé', desc: 'Compétiteur régulier', icon: '🟠'},
-  {id: 'pro', name: 'Pro / Élite', desc: 'Top 10% ou Pro division', icon: '🔴'}
+  {id: 'beginner',     name: 'Débutant',       desc: 'Premier Hyrox',          icon: '\u25CB'},
+  {id: 'intermediate', name: 'Intermédiaire',  desc: '1-3 Hyrox complétés',    icon: '\u25D4'},
+  {id: 'advanced',     name: 'Avancé',         desc: 'Compétiteur régulier',   icon: '\u25D1'},
+  {id: 'pro',          name: 'Pro / Élite',    desc: 'Top 10% ou Pro division',icon: '\u25CF'}
 ];
 window.HYROX_LEVELS = HYROX_LEVELS;
 
+// FIX Hermès : icônes temps/distance sobres.
 var HYROX_GOALS = [
-  {id: 'finish', name: 'Finir', desc: 'Compléter mon premier Hyrox', icon: '🏁', targetMin: null},
-  {id: 'sub90', name: 'Sub 1h30', desc: 'Passer sous 1h30', icon: '⏱️', targetMin: 90},
-  {id: 'sub75', name: 'Sub 1h15', desc: 'Passer sous 1h15', icon: '⏱️', targetMin: 75},
-  {id: 'sub60', name: 'Sub 1h00', desc: 'Passer sous 1 heure', icon: '🔥', targetMin: 60},
-  {id: 'podium', name: 'Podium', desc: 'Top 3 de ma catégorie', icon: '🏆', targetMin: null}
+  {id: 'finish', name: 'Finir',    desc: 'Compléter mon premier Hyrox', icon: '\u25A1', targetMin: null},
+  {id: 'sub90',  name: 'Sub 1h30', desc: 'Passer sous 1h30',            icon: '\u2014', targetMin: 90},
+  {id: 'sub75',  name: 'Sub 1h15', desc: 'Passer sous 1h15',            icon: '\u2014', targetMin: 75},
+  {id: 'sub60',  name: 'Sub 1h00', desc: 'Passer sous 1 heure',         icon: '\u2014', targetMin: 60},
+  {id: 'podium', name: 'Podium',   desc: 'Top 3 de ma catégorie',       icon: '\u2605', targetMin: null}
 ];
 window.HYROX_GOALS = HYROX_GOALS;
 
@@ -6258,9 +6264,10 @@ window.generateHyroxProgram = generateHyroxProgram;
 
 
 // ─── PADEL ───
-var PADEL_LEVELS=[{id:'beginner',name:'Débutant',desc:'< 6 mois',icon:'🟢'},{id:'intermediate',name:'Intermédiaire',desc:'6 mois-2 ans',icon:'🟡'},{id:'advanced',name:'Avancé',desc:'2+ ans, compétitions',icon:'🟠'},{id:'competition',name:'Compétition',desc:'Tournois, classé',icon:'🔴'}];
+// FIX Hermès : icônes sobres gradées ○◔◑◕● + marqueurs typographiques.
+var PADEL_LEVELS=[{id:'beginner',name:'Débutant',desc:'< 6 mois',icon:'\u25CB'},{id:'intermediate',name:'Intermédiaire',desc:'6 mois-2 ans',icon:'\u25D4'},{id:'advanced',name:'Avancé',desc:'2+ ans, compétitions',icon:'\u25D1'},{id:'competition',name:'Compétition',desc:'Tournois, classé',icon:'\u25CF'}];
 window.PADEL_LEVELS=PADEL_LEVELS;
-var PADEL_GOALS=[{id:'fitness',name:'Forme physique',desc:'Padel pour rester en forme',icon:'💪'},{id:'improve',name:'Progresser',desc:'Améliorer technique et jeu',icon:'📈'},{id:'compete',name:'Compétition',desc:'Préparer des tournois',icon:'🏆'},{id:'tournament',name:'Tournoi spécifique',desc:'Préparation ciblée',icon:'🎯'}];
+var PADEL_GOALS=[{id:'fitness',name:'Forme physique',desc:'Padel pour rester en forme',icon:'\u25A0'},{id:'improve',name:'Progresser',desc:'Améliorer technique et jeu',icon:'\u2197'},{id:'compete',name:'Compétition',desc:'Préparer des tournois',icon:'\u2605'},{id:'tournament',name:'Tournoi spécifique',desc:'Préparation ciblée',icon:'\u25CE'}];
 window.PADEL_GOALS=PADEL_GOALS;
 var PADEL_SKILLS=[{id:'forehand',name:'Coup droit',category:'Fondamentaux'},{id:'backhand',name:'Revers',category:'Fondamentaux'},{id:'serve',name:'Service',category:'Fondamentaux'},{id:'volley',name:'Volée',category:'Filet'},{id:'bandeja',name:'Bandeja',category:'Coups spéciaux'},{id:'vibora',name:'Víbora',category:'Coups spéciaux'},{id:'smash',name:'Smash',category:'Attaque'},{id:'lob',name:'Lob',category:'Défense'},{id:'chiquita',name:'Chiquita',category:'Coups spéciaux'},{id:'wall_play',name:'Jeu de mur',category:'Murs'},{id:'positioning',name:'Placement',category:'Tactique'}];
 window.PADEL_SKILLS=PADEL_SKILLS;
@@ -6269,9 +6276,11 @@ function generatePadelProgram(days,level,goal){var program=[];var totalWeeks=8;v
 window.generatePadelProgram=generatePadelProgram;
 
 // ─── GOLF ───
-var GOLF_LEVELS=[{id:'beginner',name:'Débutant',desc:'< 1 an, HC 36+',icon:'🟢'},{id:'intermediate',name:'Intermédiaire',desc:'1-3 ans, HC 18-36',icon:'🟡'},{id:'advanced',name:'Avancé',desc:'3+ ans, HC 5-18',icon:'🟠'},{id:'scratch',name:'Expert',desc:'HC < 5, compétitions',icon:'🔴'}];
+// FIX Hermès : cercles gradés + marqueurs typographiques.
+var GOLF_LEVELS=[{id:'beginner',name:'Débutant',desc:'< 1 an, HC 36+',icon:'\u25CB'},{id:'intermediate',name:'Intermédiaire',desc:'1-3 ans, HC 18-36',icon:'\u25D4'},{id:'advanced',name:'Avancé',desc:'3+ ans, HC 5-18',icon:'\u25D1'},{id:'scratch',name:'Expert',desc:'HC < 5, compétitions',icon:'\u25CF'}];
 window.GOLF_LEVELS=GOLF_LEVELS;
-var GOLF_GOALS=[{id:'start',name:'Débuter',desc:'Bases et carte verte',icon:'🏌️'},{id:'break100',name:'Casser 100',desc:'Passer sous 100',icon:'💯'},{id:'break90',name:'Casser 90',desc:'Scorer sous 90',icon:'📉'},{id:'break80',name:'Casser 80',desc:'Niveau avancé',icon:'🎯'},{id:'compete',name:'Compétition',desc:'Préparer des tournois',icon:'🏆'}];
+// FIX Hermès : scores numériques + glyphes sobres.
+var GOLF_GOALS=[{id:'start',name:'Débuter',desc:'Bases et carte verte',icon:'\u25CB'},{id:'break100',name:'Casser 100',desc:'Passer sous 100',icon:'100'},{id:'break90',name:'Casser 90',desc:'Scorer sous 90',icon:'90'},{id:'break80',name:'Casser 80',desc:'Niveau avancé',icon:'80'},{id:'compete',name:'Compétition',desc:'Préparer des tournois',icon:'\u2605'}];
 window.GOLF_GOALS=GOLF_GOALS;
 var GOLF_SKILLS=[{id:'driving',name:'Drive',category:'Long jeu'},{id:'iron_long',name:'Fers longs (3-5)',category:'Long jeu'},{id:'iron_mid',name:'Fers moyens (6-8)',category:'Long jeu'},{id:'iron_short',name:'Fers courts (9-PW)',category:'Approche'},{id:'chipping',name:'Chipping',category:'Petit jeu'},{id:'pitching',name:'Pitching',category:'Petit jeu'},{id:'putting',name:'Putting',category:'Putting'},{id:'bunker',name:'Bunker',category:'Petit jeu'},{id:'course_mgmt',name:'Gestion parcours',category:'Mental'},{id:'mental',name:'Mental & Routine',category:'Mental'}];
 window.GOLF_SKILLS=GOLF_SKILLS;

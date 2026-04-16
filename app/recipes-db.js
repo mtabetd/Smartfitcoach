@@ -4284,7 +4284,7 @@ var dinner = [
   {
     _id: 'L426',
     n: "Turmeric Golden Milk",
-    f: "✨",
+    f: "\u25CE",
     k: 157,
     p: 2,
     g: 26,

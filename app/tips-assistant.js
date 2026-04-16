@@ -200,7 +200,7 @@ function renderToggle(container) {
   var left = document.createElement('div');
   var label = document.createElement('div');
   label.className = 'tip-toggle-label';
-  label.textContent = '\uD83D\uDCA1 Assistant Tips';
+  label.textContent = 'Assistant Tips';
   left.appendChild(label);
   var sub = document.createElement('div');
   sub.className = 'tip-toggle-sub';
