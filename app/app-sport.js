@@ -5796,16 +5796,29 @@ function renderMusculationProgram(p) {
  }());
 
  // ─── PRO PROGRAMS ACCESS (advanced/pro only) ───
+ // FIX 2026-04-16 : déplacé SOUS le programme quotidien (avant : au-dessus = confusion UX).
+ // Rendu collapsible + bouton "Adopter ce programme" qui injecte les exercices SFC dans
+ // S.sportProgram pour bénéficier du tracking complet (charges, reps, RIR, progression).
  if ((S.sportLevel === 'advanced' || S.sportLevel === 'pro') && window.SFC_PROGRAMS) {
-  // Filter out _dedied groups (use .variations structure, shown in renderDedicatedPrograms separately)
   var _sfcKeys = Object.keys(window.SFC_PROGRAMS).filter(function(k) {
    var _p = window.SFC_PROGRAMS[k];
    return _p && !_p.variations;
   });
   if (_sfcKeys.length > 0) {
-   var _sfcSection = h('div', {style: 'margin-bottom:20px'});
-   _sfcSection.appendChild(h('div', {'class':'section-label'}, 'Programmes scientifiques (niveau avancé)'));
-   _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:12px;line-height:1.5'}, 'Programmes périodisés basés sur la recherche (Schoenfeld, RP Hypertrophy). Sélectionnez un groupe musculaire pour une séance dédiée.'));
+   var _sfcCollapsed = !S._sfcExplorerOpen;
+   var _sfcSection = h('div', {style: 'margin-top:24px;margin-bottom:20px;border-top:1px solid var(--line,#D8D8D0);padding-top:16px'});
+
+   // Header collapsible
+   var _sfcHeader = h('div', {
+    style: 'display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:8px 0;',
+    onclick: function() { S._sfcExplorerOpen = !S._sfcExplorerOpen; window.render(); }
+   });
+   _sfcHeader.appendChild(h('div', {'class':'section-label', style:'margin:0;border:none;padding:0'}, 'Bibliothèque scientifique'));
+   _sfcHeader.appendChild(h('div', {style:'font-size:12px;color:var(--grey);transition:transform 200ms'}, _sfcCollapsed ? '\u25BC' : '\u25B2'));
+   _sfcSection.appendChild(_sfcHeader);
+   _sfcSection.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px;line-height:1.5'}, 'Programmes périodisés Schoenfeld / RP Hypertrophy. Sélectionnez un groupe musculaire puis adoptez-le pour bénéficier du tracking complet.'));
+
+   if (!_sfcCollapsed) {
 
    var _sfcGrid = h('div', {style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px'});
    _sfcKeys.forEach(function(key) {
@@ -5972,10 +5985,51 @@ function renderMusculationProgram(p) {
       }
       _sfcSection.appendChild(_exCard);
      });
+
+     // ═══ BOUTON "ADOPTER CE PROGRAMME" ═══
+     // Convertit les exercices SFC sélectionnés en format sportProgram trackable.
+     // L'user bénéficie ensuite du tracking complet : charges, reps, RIR, progression, timer.
+     var _adoptBtn = h('button', {
+      style: 'width:100%;margin-top:16px;padding:14px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+      onclick: (function(_exos, _name, _phase) { return function() {
+       // Convertir en format sportProgram : un "jour" = la séance SFC sélectionnée
+       var _converted = _exos.map(function(exo, idx) {
+        return {
+         n: exo.name || exo.n || '',
+         m: exo.muscle || '',
+         eq: exo.equipment || '',
+         sets: (exo.sets || 4) + '\u00d7' + (exo.reps || '8-12'),
+         rest: exo.rest || '90s',
+         technique: exo.technique || '',
+         type: exo.type || '',
+         rirTarget: exo.rirTarget,
+         order: idx + 1
+        };
+       });
+       // Remplacer le jour sélectionné dans sportProgram
+       var _dayIdx = S.selectedSportDay || 0;
+       if (!Array.isArray(S.sportProgram)) S.sportProgram = [];
+       // Créer/remplacer le jour
+       S.sportProgram[_dayIdx] = {
+        day: _dayIdx + 1,
+        label: _name + ' — ' + _phase,
+        focus: _name,
+        exercises: _converted
+       };
+       S._activeSfcProgram = null;
+       S._sfcExplorerOpen = false;
+       if (window.saveProfile) window.saveProfile();
+       if (window.showToast) window.showToast('\u2713 Programme scientifique adopté — tracking actif', 'success', 2000);
+       if (window.render) window.render();
+      }; })(_phaseExos, _progDisplayName, _phaseKey)
+     }, 'Adopter ce programme \u2192 tracking actif');
+     _sfcSection.appendChild(_adoptBtn);
     }
    }
+   } // end if (!_sfcCollapsed)
 
-   p.appendChild(_sfcSection);
+   // Stocké pour insertion APRÈS le programme quotidien (pas avant)
+   window._pendingSfcSection = _sfcSection;
   }
  }
 
@@ -7373,6 +7427,13 @@ function renderMusculationProgram(p) {
  p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); else alert('Export PDF non disponible.'); }}, '\u21e9 Exporter le programme en PDF'));
 
  // Weight chart removed (was crashing)
+
+ // ═══ INSERTION SECTION SFC (stockée dans window._pendingSfcSection) ═══
+ // Rendue APRÈS le programme quotidien pour ne pas polluer la hiérarchie UX.
+ if (window._pendingSfcSection) {
+  p.appendChild(window._pendingSfcSection);
+  window._pendingSfcSection = null;
+ }
 
  p.appendChild(h('div', {style: 'height:12px'}));
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 3; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier les zones'}));
