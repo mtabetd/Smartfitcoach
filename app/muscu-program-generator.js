@@ -18,17 +18,18 @@
   var LS_KEY_PROGRESS = 'mtd_muscu_ia_progress';
   var LS_KEY_GENERATIONS = 'mtd_muscu_generations';
 
-  // Installations/facilities options
+  // FIX Hermès : icônes unicode sobres (◆ ● ○ ◇ ■ □ ▲ △) — remplacement des emojis
+  // décoratifs colorés par des marqueurs typographiques tonal-on-tonal.
   var INSTALLATIONS = [
-    { id: 'muscu',       label: 'Salle de musculation',  desc: 'Barres, haltères, machines, câbles',         icon: '🏋️' },
-    { id: 'home_gym',    label: 'Home gym',               desc: 'Haltères + banc à domicile',                 icon: '🏠' },
-    { id: 'poids_corps', label: 'Maison / PDC',           desc: 'Sans matériel, poids du corps uniquement',   icon: '🤸' },
-    { id: 'crossfit',    label: 'Box CrossFit',           desc: 'WODs, rower, anneaux, barbell olympique',    icon: '🔥' },
-    { id: 'piscine',     label: 'Piscine',                desc: 'Natation, aquagym',                          icon: '🏊' },
-    { id: 'course',      label: 'Course à pied',          desc: 'Piste, route, tapis de course',              icon: '🏃' },
-    { id: 'velo',        label: 'Vélo / cardio',          desc: 'Vélo, home trainer, elliptique',             icon: '🚴' },
-    { id: 'terrain',     label: 'Terrain de sport',       desc: 'Padel, tennis, foot, sports collectifs',     icon: '🎾' },
-    { id: 'gymnase',     label: 'Gymnase / yoga',         desc: 'Studio yoga, danse, arts martiaux',          icon: '🧘' }
+    { id: 'muscu',       label: 'Salle de musculation',  desc: 'Barres, haltères, machines, câbles',         icon: '\u25A0' },
+    { id: 'home_gym',    label: 'Home gym',               desc: 'Haltères + banc à domicile',                 icon: '\u25A1' },
+    { id: 'poids_corps', label: 'Maison / PDC',           desc: 'Sans matériel, poids du corps uniquement',   icon: '\u25CB' },
+    { id: 'crossfit',    label: 'Box CrossFit',           desc: 'WODs, rower, anneaux, barbell olympique',    icon: '\u25C6' },
+    { id: 'piscine',     label: 'Piscine',                desc: 'Natation, aquagym',                          icon: '\u2248' },
+    { id: 'course',      label: 'Course à pied',          desc: 'Piste, route, tapis de course',              icon: '\u2192' },
+    { id: 'velo',        label: 'Vélo / cardio',          desc: 'Vélo, home trainer, elliptique',             icon: '\u29BF' },
+    { id: 'terrain',     label: 'Terrain de sport',       desc: 'Padel, tennis, foot, sports collectifs',     icon: '\u25A2' },
+    { id: 'gymnase',     label: 'Gymnase / yoga',         desc: 'Studio yoga, danse, arts martiaux',          icon: '\u25B3' }
   ];
 
   var LOADING_PHRASES = [

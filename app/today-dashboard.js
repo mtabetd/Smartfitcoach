@@ -221,7 +221,8 @@ function getLastBadge() {
       if (Array.isArray(defs)) {
         var defU = defs.find(function(b) { return b && b.id === badgeId; });
         if (defU) {
-          var emoji = (BADGE_EMOJI[badgeId] && BADGE_EMOJI[badgeId].emoji) || defU.emoji || '🏆';
+          // FIX Hermès : fallback '★' (étoile unicode safe) au lieu de 🏆 décoratif
+          var emoji = (BADGE_EMOJI[badgeId] && BADGE_EMOJI[badgeId].emoji) || defU.emoji || '\u2605';
           return { id: badgeId, name: defU.name, icon: emoji, desc: defU.desc || (BADGE_EMOJI[badgeId] && BADGE_EMOJI[badgeId].desc) || '' };
         }
       }

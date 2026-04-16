@@ -1325,7 +1325,7 @@ function renderStep5(p) {
   p.appendChild(h('div', {style: 'height:8px'}));
 
   // Desserts healthy
-  p.appendChild(h('div', {'class': 'section-label'}, '🍮 Desserts healthy dans mon plan'));
+  p.appendChild(h('div', {'class': 'section-label'}, 'Desserts healthy dans mon plan'));
   var dessertWrap = h('div', {'class': 'chip-wrap'});
   var dessertSub = h('div', {style: 'font-size:11px;color:var(--grey);margin-bottom:6px;font-family:"Helvetica Neue",Arial,sans-serif'}, '2-3 fois par semaine en collation' + ((S.mealsPerDay||3) < 4 ? ' (nécessite 4 repas/jour)' : ''));
   p.appendChild(dessertSub);
@@ -3415,7 +3415,7 @@ function renderStep9(p) {
         }
         if (_fullSm) {
           S.modalRecipe = { _id: r._id, n: _fullSm.name || r.n, k: r.k, p: r.p, g: r.g, l: r.l,
-            f: _fullSm.emoji || '🥤', ingredients: _fullSm.ingredients || [], steps: _fullSm.steps || [],
+            f: _fullSm.emoji || '·', ingredients: _fullSm.ingredients || [], steps: _fullSm.steps || [],
             _smoothie: true };
         } else { S.modalRecipe = r; }
       } else { S.modalRecipe = r; }
@@ -3638,7 +3638,7 @@ function renderStep9(p) {
   if (window.RecipeEngine && window.RecipeEngine.calcWeekPlanBudget && S.weekPlan) {
     var budget = window.RecipeEngine.calcWeekPlanBudget(S.weekPlan);
     var budgetBlock = h('div', { style: 'margin:16px 0;padding:14px 16px;background:var(--card);border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,0.08)' });
-    budgetBlock.appendChild(h('div', { style: 'font-weight:700;font-size:13px;margin-bottom:10px;color:var(--text)' }, '💰 Budget courses estimé'));
+    budgetBlock.appendChild(h('div', { style: 'font-weight:700;font-size:13px;margin-bottom:10px;color:var(--text);letter-spacing:0.5px;text-transform:uppercase' }, 'Budget courses estimé'));
     if (budget.totalMAD > 0) {
       var budgetGrid = h('div', { style: 'display:grid;grid-template-columns:1fr 1fr;gap:8px' });
       budgetGrid.appendChild(h('div', { style: 'background:var(--bg);border-radius:2px;padding:10px;text-align:center' },
@@ -5503,7 +5503,7 @@ function renderSmoothieBar(p) {
   });
 
   p.appendChild(h('div', {style:'font-size:13px;color:var(--fg2,#888);margin-bottom:12px'},
-    '🥛 ' + filtered.length + ' recettes de smoothies' + (flavors.length ? ' filtrées pour vos parfums' : '') + ' — Shake by SmartFitCoach'));
+    filtered.length + ' recettes de smoothies' + (flavors.length ? ' filtrées pour vos parfums' : '') + ' — Shake by SmartFitCoach'));
 
   // ── Conseil substitution whey végétale (régime végétarien/vegan) ──
   // Les recettes de smoothies utilisent de la whey classique (lactosérum).
@@ -5523,7 +5523,7 @@ function renderSmoothieBar(p) {
 
   filtered.forEach(function(sm) {
     var tColors = {pre:'#E07B00', post:'#1A6B2A', other:'#4A6A8A'};
-    var tLabels = {pre:'⚡ Pré-workout', post:'💪 Post-workout', other:'🕐 Libre'};
+    var tLabels = {pre:'Pré-workout', post:'Post-workout', other:'Libre'};
     var tKey = sm.timing === 'pre' ? 'pre' : sm.timing === 'post' ? 'post' : 'other';
 
     var card = h('div', {
@@ -5594,7 +5594,7 @@ function showSmoothieModal(sm) {
 
   // ── HEADER ──
   var timingColors = {pre:'#E07B00', post:'#1A6B2A', other:'#4A4A8A'};
-  var timingLabels = {pre:'⚡ Pré-workout', post:'💪 Post-workout', other:'🕐 Libre'};
+  var timingLabels = {pre:'Pré-workout', post:'Post-workout', other:'Libre'};
   var tKey = sm.timing === 'pre' ? 'pre' : sm.timing === 'post' ? 'post' : 'other';
   var tColor = timingColors[tKey];
 
@@ -5702,7 +5702,7 @@ function showSmoothieModal(sm) {
         return;
       }
       var smoothieAsRecipe = {
-        n: sm.name, f: '🥛', k: sm.cal, p: sm.p, g: sm.c, l: sm.f,
+        n: sm.name, f: '\u25CE', k: sm.cal, p: sm.p, g: sm.c, l: sm.f,
         i: (sm.ingredients||[]).map(function(ing){ return ing.qty+' '+ing.unit+' '+ing.name; }).join(', '),
         ingredients: sm.ingredients, st: sm.steps, w: true,
         tags: ['whey','smoothie'].concat(sm.goal || []),
@@ -5743,9 +5743,9 @@ function showSmoothieModal(sm) {
       if (el && el.parentNode) el.parentNode.removeChild(el);
       S.smoothieBarOpen = false;
       goStep(12);
-      showToast('✅ Smoothie ajouté en collation — Plan recalculé', 2500);
+      showToast('\u2713 Smoothie ajouté en collation — Plan recalculé', 2500);
     }
-  }, '🥛 Ajouter à mon plan — Collation '+dayLabel);
+  }, 'Ajouter à mon plan — Collation '+dayLabel);
   footer.appendChild(addBtn);
   box.appendChild(footer);
   ov.appendChild(box);
@@ -5825,7 +5825,7 @@ function renderShoppingList(p) {
     var shopBudget = window.RecipeEngine.calcWeekPlanBudget(s.weekPlan);
     if (shopBudget && shopBudget.totalMAD > 0) {
       var budgetLine = h('div', {style:'margin:0 16px 12px;padding:10px 14px;background:rgba(26,74,26,0.08);border-radius:2px;display:flex;justify-content:space-between;align-items:center'});
-      budgetLine.appendChild(h('span', {style:'font-size:13px;font-weight:600;color:var(--text)'}, '💰 Budget total estimé'));
+      budgetLine.appendChild(h('span', {style:'font-size:13px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--text)'}, 'Budget total estimé'));
       budgetLine.appendChild(h('span', {style:'font-size:16px;font-weight:700;color:var(--accent,#1A4A1A)'}, '~' + Math.round(shopBudget.weeklyMAD) + ' DH'));
       p.appendChild(budgetLine);
     }
@@ -5837,7 +5837,7 @@ function renderShoppingList(p) {
   var btnPDF = h('button', {
     style:'flex:1;padding:10px 14px;background:var(--black);color:#fff;border:none;border-radius:2px;font-size:13px;font-weight:600;cursor:pointer;min-width:140px',
     onclick: function() { exportShoppingListPDF(list, s.shopChecked); }
-  }, arMode ? (AR ? AR.ui['download_pdf'] : '📄 PDF') : '\uD83D\uDCC4 ' + window.t('shop.export'));
+  }, arMode ? (AR ? AR.ui['download_pdf'] : 'PDF') : window.t('shop.export'));
 
   var btnReset = h('button', {
     style:'padding:10px 14px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:2px;font-size:13px;cursor:pointer',
@@ -5857,7 +5857,7 @@ function renderShoppingList(p) {
   var btnPrintAR = h('button', {
     'class': 'btn-shop-print-ar',
     onclick: function() { printShoppingListAR(list); }
-  }, arMode ? (AR ? AR.ui['print'] : '🖨️ طباعة') : '🖨️ طباعة');
+  }, arMode ? (AR ? AR.ui['print'] : 'طباعة') : 'Imprimer');
 
   actions.appendChild(btnPDF);
   actions.appendChild(btnReset);

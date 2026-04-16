@@ -1304,15 +1304,16 @@ window.lsSet = function lsSet(key, value) {
 
 // ─── CONSTANTS ───
 var STEPS=['Accueil','Identité','Morphologie','Activité','Santé','Objectif','Préférences','Résultats','Planning'];
+// FIX Hermès : icônes sobres unicode (◯ ● chiffres romains) — remplace emojis colorés.
 var ACTIVITIES=[
-  {icon:'\u{1FA91}',name:'Sédentaire',desc:'Pas d\'exercice',factor:1.2},
-  {icon:'\u{1F6B6}',name:'Légèrement actif',desc:'1-2x / semaine',factor:1.375},
-  {icon:'\u{1F3C3}',name:'Modérément actif',desc:'3-4x / semaine',factor:1.55},
-  {icon:'\u{1F3CB}\uFE0F',name:'Très actif',desc:'5-6x / semaine',factor:1.725},
-  {icon:'⚡',name:'Athlète',desc:'2x / jour',factor:1.9},
-  {icon:'🏆',name:'Athlète élite',desc:'>10h / semaine (IRONMAN, pro)',factor:2.1}
+  {icon:'\u25CB',name:'Sédentaire',desc:'Pas d\'exercice',factor:1.2},
+  {icon:'I',name:'Légèrement actif',desc:'1-2x / semaine',factor:1.375},
+  {icon:'II',name:'Modérément actif',desc:'3-4x / semaine',factor:1.55},
+  {icon:'III',name:'Très actif',desc:'5-6x / semaine',factor:1.725},
+  {icon:'IV',name:'Athlète',desc:'2x / jour',factor:1.9},
+  {icon:'V',name:'Athlète élite',desc:'>10h / semaine (IRONMAN, pro)',factor:2.1}
 ];
-var TRAINS=[{icon:'\u{1F3CB}\uFE0F',name:'Musculation'},{icon:'\u{1FAC0}',name:'Cardio'},{icon:'💪',name:'Mixte'},{icon:'⚽',name:'Sport co.'},{icon:'\u{1F3C3}',name:'Running'}];
+var TRAINS=[{icon:'\u25A0',name:'Musculation'},{icon:'\u25B2',name:'Cardio'},{icon:'\u25C6',name:'Mixte'},{icon:'\u25CF',name:'Sport co.'},{icon:'\u2192',name:'Running'}];
 var SLEEPS=['< 6h','6-7h','7-8h','8h+'];
 var GOALS=[
   {icon:'↗',name:'Prise de masse',desc:'+15% calories',mult:1.15,key:'bulk'},
@@ -1320,7 +1321,7 @@ var GOALS=[
   {icon:'=',name:'Maintien',desc:'= TDEE',mult:1.0,key:'maintain'},
   {icon:'↘',name:'Perte de poids',desc:'-15% calories',mult:0.85,key:'cut'},
   {icon:'↓',name:'Sèche',desc:'-20% calories (plafonn\u00e9 \u00e0 \u22125\u200900 kcal/j max — Helms 2014)',mult:0.80,key:'shred'},
-  {icon:'⚖️',name:'Recomposition',desc:'Maintien calories, optimisation macros',mult:1.00,key:'recomposition'}
+  {icon:'=',name:'Recomposition',desc:'Maintien calories, optimisation macros',mult:1.00,key:'recomposition'}
 ];
 // RATIOS : distribution calorique indicative par objectif (pour affichage uniquement)
 // ATTENTION : calcMacros() utilise la méthode g/kg (ISSN 2017), pas ces ratios
