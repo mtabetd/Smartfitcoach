@@ -866,8 +866,8 @@ function generateSportProgram() {
  });
  }
 
- // Stamp version on the program for staleness detection
- program._version = SPORT_PROGRAM_VERSION;
+ // Stamp version — stocké dans S (pas sur l'array, qui perd les custom props au JSON.stringify)
+ S._sportProgramVersion = SPORT_PROGRAM_VERSION;
  return program;
 }
 
@@ -5565,9 +5565,10 @@ function renderMusculationProgram(p) {
  // Avant : le programme généré avec l'ancien code buggé restait en cache localStorage
  // indéfiniment. L'user voyait "Legs A" avec des exercices pecs de l'ancien split.
  // Maintenant : chaque programme porte un _version. Si < SPORT_PROGRAM_VERSION, on régénère.
- if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && (!S.sportProgram._version || S.sportProgram._version < SPORT_PROGRAM_VERSION)) {
-   console.warn('[sport] Programme stale (v' + (S.sportProgram._version || 0) + ' < v' + SPORT_PROGRAM_VERSION + ') — régénération automatique');
+ if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && (!S._sportProgramVersion || S._sportProgramVersion < SPORT_PROGRAM_VERSION)) {
+   console.warn('[sport] Programme stale (v' + (S._sportProgramVersion || 0) + ' < v' + SPORT_PROGRAM_VERSION + ') — régénération automatique');
    S.sportProgram = null;
+   S._sportProgramVersion = null;
  }
  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) {
    // Afficher un message de génération si pas de programme
