@@ -3803,20 +3803,83 @@ function renderModal(app) {
     pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, carbs + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.carbs'))]));
     pills.appendChild(h('div', {'class': 'macro-pill'}, [h('div', {'class': 'mp-val'}, fats + 'g'), h('div', {'class': 'mp-label'}, window.t('onb.s8.fats'))]));
     body.appendChild(pills);
+    // ═══ SCALING PORTIONS AU PROFIL UTILISATEUR ═══
+    // Les recettes ont des portions fixes. On ajuste au kcal cible du slot.
+    // Ex: recette 600 kcal mais slot déjeuner cible 550 kcal → facteur 0.92 → toutes qtés ×0.92
+    var _scaleFactor = 1;
+    try {
+      var _userKcalTarget = 0;
+      if (window.getCalorieTarget) _userKcalTarget = window.getCalorieTarget() || 0;
+      if (_userKcalTarget > 0 && kcal > 0) {
+        var _mealsPerDay = S.mealsPerDay || 4;
+        // Distribution standard : petit-déj 25%, déj 35%, collation 15%, dîner 25%
+        var _slotPcts = {breakfast:0.25, lunch:0.35, snack:0.15, dinner:0.25};
+        var _slot = r._slot || r.slot || null;
+        var _slotPct = _slotPcts[_slot] || (1 / _mealsPerDay);
+        var _slotTarget = Math.round(_userKcalTarget * _slotPct);
+        _scaleFactor = _slotTarget / kcal;
+        // Limiter le scaling entre 0.5x et 2x (éviter portions aberrantes)
+        _scaleFactor = Math.max(0.5, Math.min(2, _scaleFactor));
+        // Afficher le badge scaling si facteur ≠ 1 (±5%)
+        if (Math.abs(_scaleFactor - 1) > 0.05) {
+          var _scaledKcal = Math.round(kcal * _scaleFactor);
+          var _scaleLabel = _scaleFactor < 1 ? 'Portions réduites' : 'Portions augmentées';
+          body.appendChild(h('div', {style:'display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin-bottom:12px;background:rgba(26,74,26,0.06);border:1px solid rgba(26,74,26,0.15);border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--green,#1A4A1A);'}, [
+            h('span', {}, _scaleLabel + ' pour ton profil'),
+            h('span', {style:'font-weight:700'}, _scaledKcal + ' kcal (×' + _scaleFactor.toFixed(2) + ')')
+          ]));
+        }
+      }
+    } catch(_eScale) { _scaleFactor = 1; }
+
     body.appendChild(h('div', {'class': 'section-label'}, 'Ingr\u00e9dients'));
     var ingredList = h('ul', {'class': 'ingredient-list'});
     // Helper: display one ingredient {name, qty, unit} as a readable line
+    // FIX 2026-04-16 : "pce" masqué (affichait "1 pce Citron" au lieu de "1 Citron").
+    // Standardisation : g/ml affichés, pce masqué, c.à.s/c.à.c abrégés proprement.
     function fmtIng(ing) {
       var qty = ing.qty ? roundDisplayQty(ing.qty, ing.unit) : '';
-      var unit = ing.unit && ing.unit !== 'pce' ? ing.unit + '\u00a0' : (ing.unit === 'pce' ? ' pce\u00a0' : ' ');
-      return (qty + unit + (ing.name || '')).trim();
+      var u = (ing.unit || '').toLowerCase().trim();
+      var unitStr = '';
+      if (u === 'g' || u === 'ml' || u === 'cl' || u === 'l') unitStr = '\u00a0' + u;
+      else if (u === 'c.à.s' || u === 'c.a.s' || u === 'cas' || u === 'càs') unitStr = ' c.\u00e0 s.';
+      else if (u === 'c.à.c' || u === 'c.a.c' || u === 'cac' || u === 'càc') unitStr = ' c.\u00e0 c.';
+      else if (u === 'pce' || u === 'piece' || u === 'pièce' || u === 'unité' || u === 'unite') unitStr = '';
+      else if (u) unitStr = ' ' + u;
+      var name = (ing.name || '').trim();
+      // Normalisation noms courants (cohérence affichage sans toucher la DB)
+      var _nameNorm = {
+        'huile':'Huile d\'olive','huile olive':'Huile d\'olive',
+        'fromage blanc':'Fromage blanc 0%','Fromage Blanc':'Fromage blanc 0%','Fromage blanc':'Fromage blanc 0%',
+        'blanc de poulet':'Blanc de poulet','Blanc de Poulet':'Blanc de poulet','blancs de poulet':'Blancs de poulet',
+        'filets de poulet':'Filets de poulet','Filets de Poulet':'Filets de poulet',
+        'oeuf':'Oeuf entier','Oeuf':'Oeuf entier','oeuf entier':'Oeuf entier',
+      };
+      if (_nameNorm[name]) name = _nameNorm[name];
+      else if (name) name = name.charAt(0).toUpperCase() + name.slice(1);
+      return (qty + unitStr + (name ? ' ' + name : '')).trim();
+    }
+    // FIX 2026-04-16 : appliquer le scaleFactor aux quantités des ingrédients
+    function scaleIng(ing) {
+      if (_scaleFactor === 1 || !ing.qty) return ing;
+      return Object.assign({}, ing, { qty: Math.round(ing.qty * _scaleFactor * 10) / 10 });
     }
     if (r._scaledIngredients && r._scaledIngredients.length > 0) {
-      r._scaledIngredients.forEach(function(ing) { ingredList.appendChild(h('li', {}, fmtIng(ing))); });
+      r._scaledIngredients.forEach(function(ing) { ingredList.appendChild(h('li', {}, fmtIng(scaleIng(ing)))); });
     } else if (r.ingredients && Array.isArray(r.ingredients) && r.ingredients.length > 0) {
-      r.ingredients.forEach(function(ing) { ingredList.appendChild(h('li', {}, fmtIng(ing))); });
+      r.ingredients.forEach(function(ing) { ingredList.appendChild(h('li', {}, fmtIng(scaleIng(ing)))); });
     } else if (r.i) {
-      r.i.split(',').forEach(function(ing) { if (ing.trim()) ingredList.appendChild(h('li', {}, ing.trim())); });
+      // Legacy string format — parse + scale les nombres
+      r.i.split(',').forEach(function(raw) {
+        var t = raw.trim();
+        if (!t) return;
+        if (_scaleFactor !== 1) {
+          t = t.replace(/(\d+(?:\.\d+)?)\s*(g|ml|cl|kg)\b/gi, function(m, n, u) {
+            return Math.round(parseFloat(n) * _scaleFactor) + u;
+          });
+        }
+        ingredList.appendChild(h('li', {}, t));
+      });
     } else if (r._id && window.RecipeEngine && window.RecipeEngine.findRecipe) {
       // Fallback direct RECIPES_DB lookup — always works even for old/cached weekPlans
       var fullR = window.RecipeEngine.findRecipe(r._id);
@@ -3853,7 +3916,7 @@ function renderModal(app) {
     if (!isNaN(chk) && chk > 0) {
     var diffPctChk = kcal > 0 ? Math.abs((chk - kcal) / kcal * 100) : 0;
     var chkColor = diffPctChk <= 5 ? 'var(--green,#1A4A1A)' : 'var(--orange,#6A4A1A)';
-    body.appendChild(h('div', {'class': 'macro-check', style: 'color:' + chkColor}, '\u2139\ufe0f \u00c9quivalent calorique macros : ' + chk + ' kcal' + (diffPctChk > 5 ? ' (\u00e9cart ' + Math.round(diffPctChk) + '% vs ' + kcal + ' kcal affich\u00e9)' : ' \u2713')));
+    body.appendChild(h('div', {'class': 'macro-check', style: 'color:' + chkColor}, 'V\u00e9rification macros : ' + chk + ' kcal' + (diffPctChk > 5 ? ' (\u00e9cart ' + Math.round(diffPctChk) + '% vs ' + kcal + ' kcal affich\u00e9)' : ' \u2713')));
     }
     var expBtn = h('button', {'class': 'btn-primary', style: 'margin-top:12px;font-size:9px', onclick: function(e) { e.stopPropagation(); window.exportRecipePDF(r); }}, '\u21e9 Exporter cette recette en PDF');
     body.appendChild(expBtn);
