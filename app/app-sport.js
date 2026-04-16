@@ -5395,6 +5395,15 @@ function renderMusculationProgram(p) {
  }
  if (!S.musculationWeights || typeof S.musculationWeights !== 'object' || Array.isArray(S.musculationWeights)) S.musculationWeights = {};
 
+ // ═══ CARTE "TES RECORDS" — déplacée ici depuis le dashboard (Bible Hermès) ═══
+ // Dashboard = actionable. Records = contexte Sport. Accessible depuis la vue programme.
+ if (window.renderCardMuscu1RM) {
+   try {
+     var _recordsCard = window.renderCardMuscu1RM();
+     if (_recordsCard) p.appendChild(_recordsCard);
+   } catch(_eRec) { console.warn('[sport] renderCardMuscu1RM error', _eRec); }
+ }
+
  // Load saved strength profile
  if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
  var userId2 = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';

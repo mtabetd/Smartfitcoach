@@ -3574,9 +3574,9 @@ function renderTodayDashboard(p) {
   var cardCF = renderCardCrossfit1RM();
   if (cardCF) wrapper.appendChild(cardCF);
 
-  // ═══ CARTE MUSCU 1RM (FIX SPRINT P1.8 — symétrique CF) ═══
-  var cardMuscu = renderCardMuscu1RM();
-  if (cardMuscu) wrapper.appendChild(cardMuscu);
+  // ═══ CARTE MUSCU 1RM — DÉPLACÉE vers section Sport (Bible Hermès : dashboard = actionable) ═══
+  // Le tonnage hebdo reste visible dans le hero (ligne ~816). Les 1RM détaillés sont dans Sport.
+  // renderCardMuscu1RM() reste exposée pour usage dans app-sport.js.
 
   // ═══ CARTE VOLUME HEBDO MEV/MAV/MRV (SPRINT P3 #7 — Israetel/RP) ═══
   try {
