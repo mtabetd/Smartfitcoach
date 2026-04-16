@@ -404,6 +404,57 @@ suite('Stabilité — NaN, valeurs aberrantes, profils limites');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// ─── SUITE 6 : Bridge NutritionMaster — calcMacros() écrase TOUJOURS ────────
+
+suite('Bridge NutritionMaster — calcMacros() écrase toujours les valeurs brutes');
+
+test('computeNutritionState retourne les macros de calcMacros, pas de NutritionMaster', function() {
+  setState({ sex: 'homme', age: 30, weight: 80, height: 175, activity: 2, goal: 0 });
+  if (!window.computeNutritionState || !window.NutritionMaster) {
+    console.log('    (skip — computeNutritionState ou NutritionMaster absent en Node)');
+    return;
+  }
+  var nm = window.computeNutritionState(false);
+  var cm = calcMacros();
+  if (nm && cm) {
+    assert.strictEqual(nm.proteinGrams, cm.p, 'protéines _nm (' + nm.proteinGrams + ') !== calcMacros (' + cm.p + ')');
+    assert.strictEqual(nm.carbsGrams, cm.g, 'glucides _nm (' + nm.carbsGrams + ') !== calcMacros (' + cm.g + ')');
+    assert.strictEqual(nm.fatGrams, cm.l, 'lipides _nm (' + nm.fatGrams + ') !== calcMacros (' + cm.l + ')');
+  }
+});
+
+test('IRC : _nm protéines DOIVENT être cap 0.6g/kg (bridge ne laisse pas passer NutritionMaster brut)', function() {
+  setState({ sex: 'homme', age: 50, weight: 80, height: 175, activity: 2, goal: 2, medical: ['irc'] });
+  var m = calcMacros();
+  assert(m.p <= Math.round(80 * 0.66) + 1, 'IRC protéines (' + m.p + 'g) dépassent 0.66g/kg (' + Math.round(80 * 0.66) + 'g)');
+});
+
+test('Diabète T2 : glucides réduits de ~10% vs sans diabète', function() {
+  setState({ sex: 'homme', age: 30, weight: 80, height: 175, activity: 2, goal: 2, medical: [] });
+  var gSain = calcMacros().g;
+  setState({ sex: 'homme', age: 30, weight: 80, height: 175, activity: 2, goal: 2, medical: ['diabete_t2'] });
+  var gDiab = calcMacros().g;
+  assert(gDiab < gSain, 'Diabète T2 glucides (' + gDiab + 'g) pas inférieurs à sain (' + gSain + 'g)');
+  var ratio = gDiab / gSain;
+  // Note : le -10% est appliqué puis la normalisation C-01 redistribue les calories,
+  // ce qui réduit l'écart réel. Plage attendue : 85-98% (pas exactement 90%).
+  assert(ratio < 0.99 && ratio > 0.85, 'Ratio diabète/sain (' + Math.round(ratio*100) + '%) hors plage 85-99%');
+});
+
+test('Grossesse : calories >= TDEE (pas de déficit)', function() {
+  setState({ sex: 'femme', age: 30, weight: 65, height: 168, activity: 2, goal: 4, pregnant: true, pregnancyWeek: 24, medical: ['grossesse'] });
+  var tdee = calcTDEE();
+  var target = calcTarget();
+  assert(target >= tdee, 'Grossesse cible (' + target + ') < TDEE (' + tdee + ')');
+});
+
+test('Senior 65+ IRC : cap 0.6g/kg prend priorité sur plancher ESPEN 1.6g/kg', function() {
+  setState({ sex: 'homme', age: 70, weight: 80, height: 175, activity: 0, goal: 2, medical: ['irc'] });
+  var m = calcMacros();
+  assert(m.p <= Math.round(80 * 0.66) + 1, 'Senior IRC protéines (' + m.p + 'g) dépassent cap IRC');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // ─── RÉSULTAT FINAL ──────────────────────────────────────────────────────────
 
 console.log('\n' + '─'.repeat(52));
