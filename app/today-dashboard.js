@@ -2354,7 +2354,8 @@ function openTodayWeightPrompt() {
         var val = parseFloat(input.value);
         if (isNaN(val) || val <= 0) { input.style.borderColor = '#c44'; return; }
         var valKg = window.UNITS ? window.UNITS.toKg(val) : val;
-        if (window.S) window.S.weight = valKg;
+        if (window.S) { window.S.weight = valKg; window.S._nm = null; }
+        if (window.devalidateWeekPlan) window.devalidateWeekPlan('poids mis à jour (dashboard)');
         try { if (window.BLACKBOX) window.BLACKBOX.log('weight_logged', { weight: valKg }); } catch(e) {}
         var user = window.AUTH ? window.AUTH.getUser() : null;
         var userId = user ? user.id : 'anon';

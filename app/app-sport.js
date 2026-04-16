@@ -3127,6 +3127,78 @@ function getWellnessAdaptation() {
 }
 window.getWellnessAdaptation = getWellnessAdaptation;
 
+// ═══ FIX P0/P1 2026-04-16 — Bannières médicales + grossesse pour TOUS les sports ═══
+// Avant : seuls Musculation et CrossFit vérifiaient S.medical/S.muscuMedical.
+// Running, Hyrox, Triathlon, Padel, Golf n'avaient AUCUN filtre médical ni grossesse.
+// Un user avec cardiopathie recevait des intervals Z4-Z5, une femme enceinte du Hyrox.
+function appendSportMedicalBanner(p, sportName) {
+  // ── GROSSESSE ──
+  if (S.pregnant && S.sex === 'femme' && !S._sportMedPregShown) {
+    var _pw = window.getPregnancySportWarning ? window.getPregnancySportWarning() : null;
+    var _pwC = h('div', {style: 'border-left:3px solid #FF6B6B;background:#FFF3CD;padding:12px 16px;margin-bottom:12px'});
+    _pwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#C00;margin-bottom:6px'}, 'Grossesse \u2014 Adaptations obligatoires'));
+    _pwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;line-height:1.6'}, _pw ? _pw.warning : 'Réduisez l\u2019intensité et le volume. Consultez votre médecin avant de continuer ce sport.'));
+    p.appendChild(_pwC);
+  }
+  // ── CONDITIONS MÉDICALES (S.medical) ──
+  if (Array.isArray(S.medical) && S.medical.length > 0) {
+    var _warns = [];
+    var _ml = S.medical.map(function(m) { return String(m).toLowerCase(); });
+    if (_ml.indexOf('cardio') !== -1 || _ml.indexOf('insuffisance_card') !== -1) {
+      _warns.push('\u26A0 Cardiopathie : intensité max Zone 2 (< 65% FCmax). Pas de sprints, pas d\u2019intervalles courts. Arrêtez immédiatement en cas de douleur thoracique, essoufflement anormal ou vertiges (AHA 2018).');
+    }
+    if (_ml.indexOf('hta') !== -1 || _ml.indexOf('hta_severe') !== -1 || _ml.indexOf('hypertension') !== -1) {
+      _warns.push('\u26A0 Hypertension : évitez les efforts isométriques intenses et les sprints. Restez en Zone 1-2. Mesurez votre tension avant chaque séance (ESC/ESH 2018).');
+    }
+    if (_ml.indexOf('osteoporose') !== -1 || _ml.indexOf('osteoporosis') !== -1) {
+      _warns.push('\u26A0 Ostéoporose : évitez les impacts élevés (sauts, sprints, changements de direction brusques). Privilégiez les mouvements contrôlés et la marche (NOF 2022).');
+    }
+    if (_ml.indexOf('diabete_t1') !== -1 || _ml.indexOf('diabete_t2') !== -1) {
+      _warns.push('\u26A0 Diabète : mesurez votre glycémie avant/après. Évitez l\u2019effort si < 4 mmol/L ou > 14 mmol/L. Gardez du sucre rapide à portée (ADA 2023).');
+    }
+    if (_ml.indexOf('polyarthrite') !== -1 || _ml.indexOf('arthrite') !== -1 || _ml.indexOf('rheumatoid') !== -1) {
+      _warns.push('\u26A0 Arthrite : évitez les impacts répétés et les charges lourdes. Privilégiez les mouvements doux à amplitude contrôlée. Arrêtez en cas de poussée inflammatoire (EULAR 2020).');
+    }
+    if (_ml.indexOf('fibromyalgie') !== -1) {
+      _warns.push('\u26A0 Fibromyalgie : intensité légère uniquement (RPE max 5/10). Progression très graduelle. Évitez l\u2019épuisement (Häuser, Cochrane 2017).');
+    }
+    if (_warns.length > 0) {
+      var _mc = h('div', {style: 'border-left:3px solid #6A4A1A;background:rgba(106,74,26,0.06);padding:12px 16px;margin-bottom:12px'});
+      _mc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#6A4A1A;margin-bottom:6px'}, 'Restrictions médicales \u2014 ' + sportName));
+      _warns.forEach(function(w) { _mc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;line-height:1.6;margin-bottom:4px'}, w)); });
+      p.appendChild(_mc);
+    }
+  }
+  // ── CONDITIONS MUSCU-SPÉCIFIQUES (S.muscuMedical) ──
+  if (S.muscuMedical && S.muscuMedical.done) {
+    var _mw = [];
+    if (S.muscuMedical.knees || S.muscuMedical.acl || S.muscuMedical.meniscus || S.muscuMedical.kneeOsteoarthritis) {
+      _mw.push('\u26A0 Genoux : évitez les sauts, changements de direction brusques, sprints et descentes. Privilégiez le vélo ou la natation.');
+    }
+    if (S.muscuMedical.lowerBack || S.muscuMedical.herniaDisc || S.muscuMedical.spondylarthritis) {
+      _mw.push('\u26A0 Dos / Hernie : évitez les impacts, rotations sous charge et positions prolongées penchées. Gainage et mobilité recommandés.');
+    }
+    if (S.muscuMedical.shoulders || S.muscuMedical.rotatorCuff) {
+      _mw.push('\u26A0 Épaules : évitez les mouvements au-dessus de la tête et les gestes balistiques (service, smash, swing).');
+    }
+    if (S.muscuMedical.elbows || S.muscuMedical.epicondylitis) {
+      _mw.push('\u26A0 Coudes / Épicondylite : évitez les gestes répétitifs en pronation/supination forcée. Protégez avec une coudière.');
+    }
+    if (S.muscuMedical.feet) {
+      _mw.push('\u26A0 Pieds / Fasciite : évitez les impacts répétés (course, sauts). Semelles adaptées obligatoires.');
+    }
+    if (S.muscuMedical.hypertension) {
+      _mw.push('\u26A0 HTA (profil muscu) : pas d\u2019efforts isométriques maximaux. RPE max 6/10. Restez en Zone 1-2.');
+    }
+    if (_mw.length > 0) {
+      var _mwc = h('div', {style: 'border-left:3px solid #5A1010;background:rgba(90,16,16,0.04);padding:12px 16px;margin-bottom:12px'});
+      _mwc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#5A1010;margin-bottom:6px'}, 'Adaptations \u2014 Profil médical'));
+      _mw.forEach(function(w) { _mwc.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A1010;line-height:1.6;margin-bottom:4px'}, w)); });
+      p.appendChild(_mwc);
+    }
+  }
+}
+
 function appendWellnessBanner(p) {
   // Dismissed via "Reporter" / "Compris" button — skip until next render cycle resets it
   if (window.S && window.S._wellnessBannerDismissed) { window.S._wellnessBannerDismissed = false; return; }
@@ -7614,6 +7686,9 @@ function renderWeightChartSport(container) {
  // Sync poids vers Supabase
  if (window.SupaSync) SupaSync.saveWeight(today, v);
  S.weight = v;
+ // FIX P2 2026-04-16 — Invalider le cache nutrition quand le poids change depuis le module sport
+ S._nm = null;
+ if (window.devalidateWeekPlan) window.devalidateWeekPlan('poids mis à jour (sport)');
  window.BLACKBOX && window.BLACKBOX.log('weight_logged', {weight: v, from: 'sport'});
  if (window.GAMIFICATION) {
  GAMIFICATION.unlockBadge('first_weigh');
@@ -7886,6 +7961,7 @@ function renderRunningProgram(p) {
    _rpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;line-height:1.6'}, _rpw ? _rpw.warning : 'R\u00e9duisez l\u2019intensit\u00e9. Pas de sprints ni d\u2019intervalles courts. Privil\u00e9giez la marche rapide et le jogging l\u00e9ger en Zone 1-2. Consultez votre m\u00e9decin.'));
    p.appendChild(_rpwC);
  }
+ appendSportMedicalBanner(p, 'Running');
  var goalObj2 = (window.RUNNING_GOALS || []).find(function(g){ return g.id === S.runningGoal; });
  var levelObj = (window.RUNNING_LEVELS || []).find(function(l){ return l.id === S.runningLevel; });
 
@@ -8127,6 +8203,7 @@ function renderHyroxProgram(p) {
  p.appendChild(h('p', {'class': 'subtitle'}, 'Phase ' + currentWeekData.phase + ' · ' + (goalObj ? goalObj.name : '') + ' · ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '')));
 
  appendWellnessBanner(p);
+ appendSportMedicalBanner(p, 'Hyrox');
 
  // Competition week banner
  if (S.hyroxWeek === 12) {
@@ -8321,6 +8398,7 @@ function renderPadelProgram(p) {
  var goalName = ''; (window.PADEL_GOALS || []).forEach(function(g){ if(g.id===S.padelGoal) goalName=g.name; });
  p.appendChild(h('p', {'class': 'subtitle'}, S.padelDays + ' jours/semaine — ' + goalName));
  p.appendChild(h('div', {style: 'text-align:center;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, week.notes));
+ appendSportMedicalBanner(p, 'Padel');
 
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});
@@ -8447,6 +8525,7 @@ function renderGolfProgram(p) {
 
  // Rappel Dave Pelz
  p.appendChild(h('div', {style: 'text-align:center;font-family:Georgia;font-size:11px;font-style:italic;color:var(--grey2,#9A9A90);margin-bottom:12px'}, '"60% du score se joue à moins de 100m du green" — Dave Pelz'));
+ appendSportMedicalBanner(p, 'Golf');
 
  // Week navigation
  var wn = h('div', {style: 'display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0'});
@@ -8703,6 +8782,7 @@ function renderTriathlonProgram(p) {
    _tpwC.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;line-height:1.6'}, _tpw ? _tpw.warning : 'R\u00e9duisez le volume et l\u2019intensit\u00e9. Natation recommand\u00e9e, v\u00e9lo station\u00e9 autoris\u00e9, course l\u00e9g\u00e8re Zone 1-2 uniquement. Consultez votre m\u00e9decin.'));
    p.appendChild(_tpwC);
  }
+ appendSportMedicalBanner(p, 'Triathlon');
 
  var goalObj = null;
  (window.TRIATHLON_GOALS || []).forEach(function(g) { if (g.id === S.triathlonGoal) goalObj = g; });

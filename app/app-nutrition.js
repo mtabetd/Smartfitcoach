@@ -2526,6 +2526,10 @@ function renderStep8(p) {
     // Sync S.weightHistory avec localStorage (source de vérité unique)
     S.weightHistory = _histN.slice();
     S.weight = vKg;
+    // FIX P2 2026-04-16 — Invalider le cache nutrition quand le poids change
+    // Avant : _nm restait stale → macros affichées ne reflétaient pas le nouveau poids
+    S._nm = null;
+    if (window.devalidateWeekPlan) window.devalidateWeekPlan('poids mis à jour');
     // Sync poids vers Supabase (toujours en kg — cohérence cross-device)
     if (window.SupaSync) { try { SupaSync.saveWeight(today, vKg); } catch(e) { console.warn('[nutrition] saveWeight error:', e); } }
     bb('weight_logged', {weight: vKg});
