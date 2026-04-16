@@ -1087,6 +1087,8 @@
     var currentDays = S.sportDays || 3;
     var currentLevel = S.sportLevel || '';
     var currentHobbies = Array.isArray(S.sportHobbies) ? S.sportHobbies.slice() : [];
+    var currentDuration = S.muscuDuration || 60;
+    var currentTrainTime = S.trainTime || '';
     var LEVELS = [
       { id: 'beginner',     label: 'Débutant',       desc: 'Moins de 6 mois de pratique régulière' },
       { id: 'intermediate', label: 'Intermédiaire',  desc: '6 mois à 2 ans, maîtrise des bases' },
@@ -1134,7 +1136,23 @@
         '<div id="lvl-wrap" style="margin-bottom:18px;">' + levelCards + '</div>' +
 
         '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:0 0 8px 0;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sports pratiqués en parallèle <span style="text-transform:none;letter-spacing:0;font-size:10px;color:var(--grey,#6B6B65);">(optionnel)</span></div>' +
-        '<div id="hob-wrap" style="margin-bottom:20px;">' + hobbyChips + '</div>' +
+        '<div id="hob-wrap" style="margin-bottom:18px;">' + hobbyChips + '</div>' +
+
+        '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:0 0 8px 0;font-family:\'Helvetica Neue\',Arial,sans-serif;">Durée de séance souhaitée</div>' +
+        '<div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;">' +
+          [45, 60, 75, 90].map(function(n) {
+            var sel = (currentDuration === n);
+            return '<button class="dur-btn" data-v="' + n + '" style="flex:1;min-width:60px;min-height:44px;padding:10px;border:1px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';background:' + (sel ? 'rgba(26,74,26,0.08)' : 'transparent') + ';color:' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--black,#0A0A09)') + ';font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;font-weight:' + (sel ? '600' : '400') + ';border-radius:2px;cursor:pointer;">' + n + ' min</button>';
+          }).join('') +
+        '</div>' +
+
+        '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin:0 0 8px 0;font-family:\'Helvetica Neue\',Arial,sans-serif;">Heure d\'entraînement habituelle <span style="text-transform:none;letter-spacing:0;font-size:10px;color:var(--grey,#6B6B65);">(optionnel)</span></div>' +
+        '<div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;">' +
+          [{v:'morning',l:'Matin'},{v:'noon',l:'Midi'},{v:'evening',l:'Soir'}].map(function(opt) {
+            var sel = (currentTrainTime === opt.v);
+            return '<button class="time-btn" data-v="' + opt.v + '" style="flex:1;min-width:80px;min-height:44px;padding:10px;border:1px solid ' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--border,#D8D8D0)') + ';background:' + (sel ? 'rgba(26,74,26,0.08)' : 'transparent') + ';color:' + (sel ? 'var(--accent,#1A4A1A)' : 'var(--black,#0A0A09)') + ';font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;font-weight:' + (sel ? '600' : '400') + ';border-radius:2px;cursor:pointer;">' + opt.l + '</button>';
+          }).join('') +
+        '</div>' +
 
         '<div id="ps-error" style="font-size:11px;color:#B02020;margin:0 0 10px 0;display:none;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sélectionne un niveau pour continuer.</div>' +
         '<button id="ps-next" style="background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;padding:14px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:48px;">Continuer \u2192</button>' +
@@ -1174,6 +1192,26 @@
       else window.S.sportHobbies.push(id);
       try { if (window.saveProfile) window.saveProfile(); } catch(e2) {}
       showProfilSportifStep();
+    });
+
+    // Handlers durée de séance
+    content.querySelectorAll('.dur-btn').forEach(function(b) {
+      b.addEventListener('click', function() {
+        if (!window.S) window.S = {};
+        window.S.muscuDuration = parseInt(b.getAttribute('data-v'));
+        try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
+        showProfilSportifStep();
+      });
+    });
+
+    // Handlers heure d'entraînement
+    content.querySelectorAll('.time-btn').forEach(function(b) {
+      b.addEventListener('click', function() {
+        if (!window.S) window.S = {};
+        window.S.trainTime = b.getAttribute('data-v');
+        try { if (window.saveProfile) window.saveProfile(); } catch(e) {}
+        showProfilSportifStep();
+      });
     });
 
     document.getElementById('ps-next').addEventListener('click', function() {
