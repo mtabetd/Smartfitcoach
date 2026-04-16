@@ -923,6 +923,46 @@ function renderHeroContextuel() {
     }
   }
 
+  // ── Row 4b : mini sparkline poids (SVG inline, pas de Chart.js) ──
+  // Audit Hermès : glisser un micro-indicateur de tendance dans le hero
+  // pour donner de la profondeur sans quitter la page. Discret, trait 1px.
+  try {
+    var _wHist = (S.weightHistory || []).filter(function(e) {
+      if (!e) return false;
+      var w = parseFloat(e.weight || e.w || e);
+      return !isNaN(w) && w > 0;
+    }).slice(-8);
+    if (_wHist.length >= 3) {
+      var _wVals = _wHist.map(function(e) { return parseFloat(e.weight || e.w || e); });
+      var _wMin = Math.min.apply(null, _wVals);
+      var _wMax = Math.max.apply(null, _wVals);
+      var _wRange = _wMax - _wMin || 1;
+      var _sparkW = 120, _sparkH = 28, _sparkPad = 2;
+      var _sparkPts = _wVals.map(function(v, i) {
+        var x = _sparkPad + (i / (_wVals.length - 1)) * (_sparkW - 2 * _sparkPad);
+        var y = _sparkPad + (1 - (v - _wMin) / _wRange) * (_sparkH - 2 * _sparkPad);
+        return x.toFixed(1) + ',' + y.toFixed(1);
+      }).join(' ');
+      var _lastW = _wVals[_wVals.length - 1];
+      var _firstW = _wVals[0];
+      var _wDelta = _lastW - _firstW;
+      var _wDeltaLabel = (_wDelta > 0 ? '+' : '') + _wDelta.toFixed(1) + (window.UNITS ? ' ' + window.UNITS.weightLabel() : ' kg');
+      var _sparkRow = h('div', { style: 'display:flex;align-items:center;gap:12px;margin-bottom:28px;padding-top:16px;border-top:1px solid var(--line,#D8D8D0);' });
+      var _sparkSvgNs = 'http://www.w3.org/2000/svg';
+      var _sparkSvg = document.createElementNS(_sparkSvgNs, 'svg');
+      _sparkSvg.setAttribute('width', String(_sparkW)); _sparkSvg.setAttribute('height', String(_sparkH));
+      _sparkSvg.setAttribute('viewBox', '0 0 ' + _sparkW + ' ' + _sparkH);
+      _sparkSvg.setAttribute('fill', 'none');
+      _sparkSvg.innerHTML = '<polyline points="' + _sparkPts + '" stroke="#3E5C3A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>';
+      _sparkRow.appendChild(_sparkSvg);
+      var _sparkMeta = h('div', {});
+      _sparkMeta.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-900,#0A0A09);line-height:1.2;' }, (window.UNITS ? window.UNITS.displayWeightVal(_lastW) : _lastW.toFixed(1)) + (window.UNITS ? ' ' + window.UNITS.weightLabel() : ' kg')));
+      _sparkMeta.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--ink-500,#6B6B65);margin-top:2px;' }, _wDeltaLabel + ' sur ' + _wVals.length + ' pesees'));
+      _sparkRow.appendChild(_sparkMeta);
+      inner.appendChild(_sparkRow);
+    }
+  } catch(_sparkErr) { /* sparkline optionnel — silencieux */ }
+
   // ── Row 5 : action primaire — lien Georgia italic, pas d'uppercase tracking ──
   // Bible Hermès v2 supervision : réduire les éléments uppercase (eyebrows)
   // à 2 max par écran. L'action du hero passe en Georgia italic souligné.
@@ -3060,10 +3100,13 @@ function renderExtendedSections(wrapper, S) {
                     data: ds.data,
                     borderColor: color.border,
                     backgroundColor: color.bg,
-                    borderWidth: 2,
-                    tension: 0.3,
-                    pointRadius: 3,
-                    pointHoverRadius: 5,
+                    borderWidth: 1.5,
+                    tension: 0.35,
+                    pointRadius: 2.5,
+                    pointHoverRadius: 4,
+                    pointBorderColor: color.border,
+                    pointBackgroundColor: color.border,
+                    fill: true,
                     spanGaps: true
                   };
                 })
@@ -3100,7 +3143,7 @@ function renderExtendedSections(wrapper, S) {
                   },
                   y: {
                     ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } },
-                    grid: { color: 'rgba(216,216,208,0.3)' },
+                    grid: { color: 'rgba(216,216,208,0.25)' },
                     title: {
                       display: true,
                       text: 'kg',
@@ -3393,20 +3436,20 @@ function renderExtendedSections(wrapper, S) {
   });
   var chartWrap = card();
   if (rawHistCheck.length < 2) {
-    var _weightEmpty = h('div', { style: 'text-align:center;padding:24px 0 12px;' });
+    var _weightEmpty = h('div', { style: 'text-align:center;padding:32px 24px 20px;' });
     // SVG : mini balance stylisée (monochrome trait 1px)
     var _wSvgNs = 'http://www.w3.org/2000/svg';
     var _wSvg = document.createElementNS(_wSvgNs, 'svg');
-    _wSvg.setAttribute('width', '56'); _wSvg.setAttribute('height', '56');
+    _wSvg.setAttribute('width', '48'); _wSvg.setAttribute('height', '48');
     _wSvg.setAttribute('viewBox', '0 0 56 56'); _wSvg.setAttribute('fill', 'none');
-    _wSvg.setAttribute('stroke', 'var(--ink-300,#A8A8A0)'); _wSvg.setAttribute('stroke-width', '1.2');
+    _wSvg.setAttribute('stroke', '#A8A8A0'); _wSvg.setAttribute('stroke-width', '1');
     _wSvg.setAttribute('stroke-linecap', 'round');
     _wSvg.innerHTML = '<line x1="28" y1="12" x2="28" y2="44"/><line x1="16" y1="44" x2="40" y2="44"/><line x1="12" y1="22" x2="44" y2="22"/><polyline points="12,22 18,32 24,22"/><polyline points="32,22 38,32 44,22"/>';
-    var _wSvgWrap = h('div', { style: 'display:flex;justify-content:center;margin-bottom:12px;' });
+    var _wSvgWrap = h('div', { style: 'display:flex;justify-content:center;margin-bottom:16px;opacity:0.6;' });
     _wSvgWrap.appendChild(_wSvg);
     _weightEmpty.appendChild(_wSvgWrap);
-    _weightEmpty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:15px;color:var(--ink-900,#0A0A09);margin-bottom:6px;' }, 'Pas encore de courbe'));
-    _weightEmpty.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);line-height:1.5;' }, 'Ajoute au moins deux pesees pour\nvoir ta progression.'));
+    _weightEmpty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:15px;color:var(--ink-900,#0A0A09);margin-bottom:8px;line-height:1.3;' }, 'Pas encore de courbe'));
+    _weightEmpty.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);line-height:1.6;max-width:220px;margin:0 auto;' }, 'Ajoute au moins deux pesees pour voir ta progression.'));
     chartWrap.appendChild(_weightEmpty);
   } else {
     var canvas = document.createElement('canvas');
@@ -3430,8 +3473,8 @@ function renderExtendedSections(wrapper, S) {
       if (window._todayWeightChart) { try { window._todayWeightChart.destroy(); } catch(e2) {} window._todayWeightChart = null; }
       window._todayWeightChart = window.createChart ? window.createChart(ctx, {
         type: 'line',
-        data: { labels: labels, datasets: [{ data: data, borderColor: '#3E5C3A', backgroundColor: 'rgba(62,92,58,0.07)', pointRadius: 3, pointBackgroundColor: '#3E5C3A', tension: 0.3, fill: true, borderWidth: 1.8 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 10 }, callback: function(v) { return window.UNITS ? window.UNITS.displayWeightVal(v) + ' ' + window.UNITS.weightLabel() : v + ' kg'; } }, grid: { color: 'rgba(216,216,208,0.3)' } }, x: { grid: { display: false }, ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } } } } }
+        data: { labels: labels, datasets: [{ data: data, borderColor: '#3E5C3A', backgroundColor: 'rgba(62,92,58,0.06)', pointRadius: 2.5, pointHoverRadius: 4, pointBackgroundColor: '#3E5C3A', pointBorderColor: '#3E5C3A', tension: 0.35, fill: true, borderWidth: 1.5 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0A0A09', titleFont: { family: 'Georgia, serif', size: 11 }, bodyFont: { family: 'Helvetica Neue, Arial, sans-serif', size: 11 }, padding: 8, callbacks: { label: function(c) { var v = c.parsed.y; return window.UNITS ? window.UNITS.displayWeightVal(v) + ' ' + window.UNITS.weightLabel() : v.toFixed(1) + ' kg'; } } } }, scales: { y: { ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 10 }, callback: function(v) { return window.UNITS ? window.UNITS.displayWeightVal(v) + ' ' + window.UNITS.weightLabel() : v + ' kg'; } }, grid: { color: 'rgba(216,216,208,0.25)' } }, x: { grid: { display: false }, ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } } } } }
       }) : null;
     });
   }
@@ -3461,8 +3504,20 @@ function renderExtendedSections(wrapper, S) {
       // Empty state : si tous les kcals sont a 0, afficher un message plutot qu'un chart vide
       var _allZero = dayKcals.every(function(k) { return k === 0; });
       if (_allZero) {
-        var kcalEmpty = h('div', { style: 'text-align:center;padding:20px 0 8px;' });
-        kcalEmpty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-500,#6B6B65);font-style:italic;' }, 'Les calories apparaitront ici\nlorsque le plan sera rempli.'));
+        var kcalEmpty = h('div', { style: 'text-align:center;padding:32px 24px 20px;' });
+        // SVG : mini assiette (cohérent avec emptyIllu('nutrition'))
+        var _kSvgNs = 'http://www.w3.org/2000/svg';
+        var _kSvg = document.createElementNS(_kSvgNs, 'svg');
+        _kSvg.setAttribute('width', '40'); _kSvg.setAttribute('height', '40');
+        _kSvg.setAttribute('viewBox', '0 0 56 56'); _kSvg.setAttribute('fill', 'none');
+        _kSvg.setAttribute('stroke', '#A8A8A0'); _kSvg.setAttribute('stroke-width', '1');
+        _kSvg.setAttribute('stroke-linecap', 'round');
+        _kSvg.innerHTML = '<circle cx="28" cy="28" r="20"/><circle cx="28" cy="28" r="12" stroke-dasharray="3 3"/>';
+        var _kSvgWrap = h('div', { style: 'display:flex;justify-content:center;margin-bottom:14px;opacity:0.5;' });
+        _kSvgWrap.appendChild(_kSvg);
+        kcalEmpty.appendChild(_kSvgWrap);
+        kcalEmpty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-900,#0A0A09);margin-bottom:6px;line-height:1.3;' }, 'Plan en attente'));
+        kcalEmpty.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);line-height:1.6;max-width:220px;margin:0 auto;' }, 'Les calories apparaitront ici lorsque le plan sera rempli.'));
         ctx2.style.display = 'none';
         ctx2.parentNode.appendChild(kcalEmpty);
         return;
@@ -3471,10 +3526,10 @@ function renderExtendedSections(wrapper, S) {
       window._todayKcalChart = window.createChart ? window.createChart(ctx2, {
         type: 'bar',
         data: { labels: JOURS_CH, datasets: [
-          { label: 'Kcal plan', data: dayKcals, backgroundColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.65)' : r > 1.08 ? 'rgba(122,31,31,0.65)' : 'rgba(62,92,58,0.85)'; }), borderRadius: 2 },
-          { label: 'Cible', data: Array(7).fill(target), type: 'line', borderColor: '#7A1F1F', borderDash: [4,3], pointRadius: 0, borderWidth: 1.5, fill: false }
+          { label: 'Kcal plan', data: dayKcals, backgroundColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.55)' : r > 1.08 ? 'rgba(90,16,16,0.50)' : 'rgba(62,92,58,0.75)'; }), borderColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.25)' : r > 1.08 ? 'rgba(90,16,16,0.25)' : 'rgba(62,92,58,0.35)'; }), borderWidth: 1, borderRadius: 1 },
+          { label: 'Cible', data: Array(7).fill(target), type: 'line', borderColor: '#5A1010', borderDash: [4,3], pointRadius: 0, borderWidth: 1.2, fill: false }
         ] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 }, callback: function(v) { return v + ' kcal'; } }, grid: { color: 'rgba(216,216,208,0.3)' } }, x: { grid: { display: false }, ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0A0A09', titleFont: { family: 'Georgia, serif', size: 11 }, bodyFont: { family: 'Helvetica Neue, Arial, sans-serif', size: 11 }, padding: 8, callbacks: { label: function(c) { return c.dataset.label + ' : ' + Math.round(c.parsed.y) + ' kcal'; } } } }, scales: { y: { ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 }, callback: function(v) { return v + ' kcal'; } }, grid: { color: 'rgba(216,216,208,0.25)' } }, x: { grid: { display: false }, ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } } } } }
       }) : null;
     });
   }
@@ -4051,7 +4106,7 @@ function renderTodayDashboard(p) {
   // Bottom sheet fullscreen avec animation translateY — rendu via document.body.
   // Bible §13.2 : trigger drawer en Georgia italic, pas d'uppercase tracking.
   var drawerTrigger = h('button', {
-    style: 'display:block;width:100%;margin:32px 0 4px;padding:24px 12px;background:transparent;border:none;border-bottom:1px solid var(--line,#D8D8D0);color:var(--ink-900,#0A0A09);font-family:Georgia,serif;font-style:italic;font-size:15px;cursor:pointer;text-align:left;min-height:44px;',
+    style: 'display:flex;align-items:center;justify-content:space-between;width:100%;margin:36px 0 4px;padding:20px 16px;background:var(--paper-2,#F4F1EA);border:1px solid var(--line,#D8D8D0);border-radius:2px;color:var(--ink-900,#0A0A09);font-family:Georgia,serif;font-style:italic;font-size:15px;cursor:pointer;text-align:left;min-height:56px;',
     onclick: function() {
       S._dashExtOpen = true;
       if (window.render) window.render();
@@ -4907,7 +4962,7 @@ function renderProgressionDrawer() {
 
   var sheet = h('div', {
     id: 'progression-drawer',
-    style: 'position:fixed;inset:0;background:var(--paper,#FAF9F6);z-index:1000;overflow-y:auto;animation:drawerSlideUp 320ms cubic-bezier(0.32,0.72,0,1);'
+    style: 'position:fixed;inset:0;background:var(--paper,#FAF9F6);z-index:1000;overflow-y:auto;animation:drawerSlideUp 380ms cubic-bezier(0.32,0.72,0,1);will-change:transform,opacity;'
   });
 
   // Header sticky
@@ -4970,7 +5025,7 @@ if (!document.getElementById('hermes-drawer-styles')) {
   var drawerStyleEl = document.createElement('style');
   drawerStyleEl.id = 'hermes-drawer-styles';
   drawerStyleEl.textContent = [
-    '@keyframes drawerSlideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }',
+    '@keyframes drawerSlideUp { from { transform:translateY(100%);opacity:0.6; } to { transform:translateY(0);opacity:1; } }',
     /* Tous les éléments du drawer : poids typographique borné, radius max 2, pas d\'ombre décorative */
     '#progression-drawer * { font-weight: normal !important; border-radius: 2px !important; box-shadow: none !important; }',
     /* Cartes noires/sombres héritées → ivoire */
