@@ -3039,10 +3039,11 @@ function renderExtendedSections(wrapper, S) {
             // FIX CONTRE-AUDIT : pair HEX/RGBA (la tentative précédente de convertir
             // HEX → RGBA via .replace() ne fonctionnait PAS → fill opaque = bordure).
             // Maintenant : valeurs RGBA explicites avec alpha 0.08 (fill discret).
+            // Palette alignee sur les tokens Hermes :root
             var palette = [
-              { border: '#1A4A1A', bg: 'rgba(26, 74, 26, 0.08)' },   // vert sombre
-              { border: '#6A4A1A', bg: 'rgba(106, 74, 26, 0.08)' },  // orange profond
-              { border: '#5A3A7A', bg: 'rgba(90, 58, 122, 0.08)' }   // violet
+              { border: '#3E5C3A', bg: 'rgba(62, 92, 58, 0.07)' },   // --success / --green
+              { border: '#B07A2A', bg: 'rgba(176, 122, 42, 0.07)' },  // --warning (ambre)
+              { border: '#0A0A09', bg: 'rgba(10, 10, 9, 0.05)' }     // --ink-900 (encre)
             ];
             var shortLabels = strengthTrend.labels.map(function(iso) {
               var parts = iso.split('-');
@@ -3392,9 +3393,21 @@ function renderExtendedSections(wrapper, S) {
   });
   var chartWrap = card();
   if (rawHistCheck.length < 2) {
-    chartWrap.appendChild(h('div', {
-      style: 'font-size:11px;color:var(--grey);text-align:center;padding:16px 0;'
-    }, 'Ajoute ton premier poids pour voir la courbe de progression.'));
+    var _weightEmpty = h('div', { style: 'text-align:center;padding:24px 0 12px;' });
+    // SVG : mini balance stylisée (monochrome trait 1px)
+    var _wSvgNs = 'http://www.w3.org/2000/svg';
+    var _wSvg = document.createElementNS(_wSvgNs, 'svg');
+    _wSvg.setAttribute('width', '56'); _wSvg.setAttribute('height', '56');
+    _wSvg.setAttribute('viewBox', '0 0 56 56'); _wSvg.setAttribute('fill', 'none');
+    _wSvg.setAttribute('stroke', 'var(--ink-300,#A8A8A0)'); _wSvg.setAttribute('stroke-width', '1.2');
+    _wSvg.setAttribute('stroke-linecap', 'round');
+    _wSvg.innerHTML = '<line x1="28" y1="12" x2="28" y2="44"/><line x1="16" y1="44" x2="40" y2="44"/><line x1="12" y1="22" x2="44" y2="22"/><polyline points="12,22 18,32 24,22"/><polyline points="32,22 38,32 44,22"/>';
+    var _wSvgWrap = h('div', { style: 'display:flex;justify-content:center;margin-bottom:12px;' });
+    _wSvgWrap.appendChild(_wSvg);
+    _weightEmpty.appendChild(_wSvgWrap);
+    _weightEmpty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:15px;color:var(--ink-900,#0A0A09);margin-bottom:6px;' }, 'Pas encore de courbe'));
+    _weightEmpty.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);line-height:1.5;' }, 'Ajoute au moins deux pesees pour\nvoir ta progression.'));
+    chartWrap.appendChild(_weightEmpty);
   } else {
     var canvas = document.createElement('canvas');
     canvas.id = 'today-weight-chart';
@@ -3417,8 +3430,8 @@ function renderExtendedSections(wrapper, S) {
       if (window._todayWeightChart) { try { window._todayWeightChart.destroy(); } catch(e2) {} window._todayWeightChart = null; }
       window._todayWeightChart = window.createChart ? window.createChart(ctx, {
         type: 'line',
-        data: { labels: labels, datasets: [{ data: data, borderColor: '#1A4A1A', backgroundColor: 'rgba(26,74,26,0.08)', pointRadius: 4, pointBackgroundColor: '#1A4A1A', tension: 0.3, fill: true }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { size: 10 }, callback: function(v) { return window.UNITS ? window.UNITS.displayWeightVal(v) + ' ' + window.UNITS.weightLabel() : v + ' kg'; } } }, x: { grid: { display: false }, ticks: { font: { size: 9 } } } } }
+        data: { labels: labels, datasets: [{ data: data, borderColor: '#3E5C3A', backgroundColor: 'rgba(62,92,58,0.07)', pointRadius: 3, pointBackgroundColor: '#3E5C3A', tension: 0.3, fill: true, borderWidth: 1.8 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 10 }, callback: function(v) { return window.UNITS ? window.UNITS.displayWeightVal(v) + ' ' + window.UNITS.weightLabel() : v + ' kg'; } }, grid: { color: 'rgba(216,216,208,0.3)' } }, x: { grid: { display: false }, ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } } } } }
       }) : null;
     });
   }
@@ -3445,14 +3458,23 @@ function renderExtendedSections(wrapper, S) {
         function getK(meal) { return (meal && (meal.k || (meal.baseNutrition && meal.baseNutrition.calories) || meal.kcal)) || 0; }
         return getK(day.breakfast) + getK(day.lunch) + getK(day.snack) + getK(day.dinner);
       });
+      // Empty state : si tous les kcals sont a 0, afficher un message plutot qu'un chart vide
+      var _allZero = dayKcals.every(function(k) { return k === 0; });
+      if (_allZero) {
+        var kcalEmpty = h('div', { style: 'text-align:center;padding:20px 0 8px;' });
+        kcalEmpty.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:14px;color:var(--ink-500,#6B6B65);font-style:italic;' }, 'Les calories apparaitront ici\nlorsque le plan sera rempli.'));
+        ctx2.style.display = 'none';
+        ctx2.parentNode.appendChild(kcalEmpty);
+        return;
+      }
       if (window._todayKcalChart) { try { window._todayKcalChart.destroy(); } catch(e2) {} window._todayKcalChart = null; }
       window._todayKcalChart = window.createChart ? window.createChart(ctx2, {
         type: 'bar',
         data: { labels: JOURS_CH, datasets: [
-          { label: 'Kcal plan', data: dayKcals, backgroundColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(26,74,26,0.7)' : r > 1.08 ? 'rgba(180,40,40,0.7)' : 'rgba(26,74,26,0.9)'; }), borderRadius: 4 },
-          { label: 'Cible', data: Array(7).fill(target), type: 'line', borderColor: '#5A1010', borderDash: [4,3], pointRadius: 0, borderWidth: 1.5, fill: false }
+          { label: 'Kcal plan', data: dayKcals, backgroundColor: dayKcals.map(function(k) { var r = k / target; return r < 0.92 ? 'rgba(62,92,58,0.65)' : r > 1.08 ? 'rgba(122,31,31,0.65)' : 'rgba(62,92,58,0.85)'; }), borderRadius: 2 },
+          { label: 'Cible', data: Array(7).fill(target), type: 'line', borderColor: '#7A1F1F', borderDash: [4,3], pointRadius: 0, borderWidth: 1.5, fill: false }
         ] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { size: 9 }, callback: function(v) { return v + ' kcal'; } } }, x: { grid: { display: false }, ticks: { font: { size: 9 } } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 }, callback: function(v) { return v + ' kcal'; } }, grid: { color: 'rgba(216,216,208,0.3)' } }, x: { grid: { display: false }, ticks: { font: { family: 'Helvetica Neue, Arial, sans-serif', size: 9 } } } } }
       }) : null;
     });
   }
@@ -4911,7 +4933,7 @@ function renderProgressionDrawer() {
     { key: 'objectifs', label: 'Objectifs semaine' }
   ];
   var tabsBar = h('div', {
-    style: 'display:flex;overflow-x:auto;border-bottom:1px solid var(--line,#D8D8D0);padding:0 24px;gap:4px;-webkit-overflow-scrolling:touch;'
+    style: 'display:flex;overflow-x:auto;border-bottom:1px solid var(--line,#D8D8D0);padding:0 24px;gap:4px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scrollbar-width:none;'
   });
   tabs.forEach(function(tab) {
     var isActive = activeTab === tab.key;
