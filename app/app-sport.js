@@ -194,9 +194,30 @@ function getPregnancySportWarning() {
 
 // ─── PROGRAM GENERATION ───
 function generateSportProgram() {
- var days = S.sportDays || 3;
+ // FIX 2026-04-16 : clamp days 2-6 — 1 jour/sem n'a pas de split muscu viable
+ var days = Math.min(6, Math.max(2, S.sportDays || 3));
  var level = (window.SPORT_LEVELS || []).find(function(l){ return l.id === S.sportLevel; });
  var program = [];
+
+ // ═══ FIX P0 SPRINT 2026-04-16 — AUTO-SET _splitChoice AVANT génération ═══
+ // Avant : _splitChoice n'était initialisé que dans le RENDER du step 4 (split selector).
+ // Mais generateSportProgram() est appelé à la transition step 3 → 4.
+ // Conséquence : première génération avec _splitChoice=null → algorithme fréquence libre
+ // → épaules sur jour Legs, dos sur jour Push, etc. Bug critique "Arnold Press sur Leg A".
+ // Maintenant : on auto-set _splitChoice ICI si l'user est intermediate+ et n'a pas encore choisi.
+ var _isIntermediatePlus = S.sportLevel === 'intermediate' || S.sportLevel === 'advanced' || S.sportLevel === 'pro';
+ var _DEFAULT_SPLITS = { 2:'fullbody_ab', 3:'ppl_3', 4:'upper_lower', 5:'ppl_5', 6:'ppl_6' };
+ // Valider que le _splitChoice existant correspond au nombre de jours actuel
+ var _VALID_SPLITS_PER_DAY = {
+   2:['fullbody_ab'], 3:['fullbody_3','ppl_3'], 4:['upper_lower','ppl_plus1','bro_4'],
+   5:['ppl_5','bro_5'], 6:['ppl_6']
+ };
+ if (_isIntermediatePlus && days >= 2) {
+   var _validForDays = _VALID_SPLITS_PER_DAY[days] || [];
+   if (!S._splitChoice || _validForDays.indexOf(S._splitChoice) === -1) {
+     S._splitChoice = _DEFAULT_SPLITS[days] || _DEFAULT_SPLITS[Math.min(6, Math.max(2, days))] || null;
+   }
+ }
 
  // Adjust splits based on goals
  var _goals = S.sportGoals || [];
@@ -254,6 +275,14 @@ function generateSportProgram() {
  if (pri === 3) return 1;
  if (pri === 2) return 1;
  return 1;
+ } else if (lvl === 'pro') {
+ // FIX 2026-04-16 : pro était traité comme intermediate (tombait dans else).
+ // Pro = athlète confirmé, volume supérieur à advanced (NSCA CSCS guidelines).
+ if (pri >= 5) return 5;
+ if (pri === 4) return 4;
+ if (pri === 3) return 3;
+ if (pri === 2) return 3;
+ return 2;
  } else if (lvl === 'advanced') {
  if (pri >= 5) return 4;
  if (pri === 4) return 4;
@@ -271,7 +300,9 @@ function generateSportProgram() {
  }
 
  // Maximum total exercises per session by level (BUG-18)
+ // FIX 2026-04-16 : ajout 'pro' (était traité comme intermediate → 12 au lieu de 16-18)
  var maxExercisesPerSession = S.sportLevel === 'beginner' ? 8
+ : S.sportLevel === 'pro' ? 18
  : S.sportLevel === 'advanced' ? 16
  : 12;
 
@@ -344,7 +375,8 @@ function generateSportProgram() {
    var _LOWER_C = {legs:1, glutes:1};
    var _PUSH_C  = {chest:1, shoulders:1, triceps:1};
    var _PULL_C  = {back:1, biceps:1};
-   var _FULL_C  = {chest:1, back:1, shoulders:1, legs:1, glutes:1};
+   // FIX P0 2026-04-16 : ajout biceps/triceps/abs manquants — sinon fullbody drops user focus
+   var _FULL_C  = {chest:1, back:1, shoulders:1, legs:1, glutes:1, biceps:1, triceps:1, abs:1};
    var _SPLIT_TMPL = {
      'upper_lower': ['upper','lower','upper','lower'],
      'ppl_3':       ['push','pull','legs'],
@@ -529,6 +561,62 @@ function generateSportProgram() {
  }
  }
 
+ // ═══ FIX P0 SPRINT 2026-04-16 — BRIDGE S.medical → generateSportProgram ═══
+ // Avant : seul muscuMedical (questionnaire muscu step 20) filtrait les exercices ici.
+ // S.medical (onboarding nutrition : ostéoporose, HTA, cardio, polyarthrite, fibromyalgie…)
+ // était IGNORÉ. Un user avec medical:['osteoporose','hta'] mais sans muscuMedical.done
+ // recevait squat barre lourd + développé militaire barre = danger.
+ // Maintenant : on applique les mêmes règles que buildPersonalizedMuscuPlan (muscu-programs.js)
+ // pour S.medical, en plus de filterExerciseByMedical pour S.muscuMedical.
+ if (Array.isArray(S.medical) && S.medical.length > 0) {
+   var _medList = S.medical.map(function(m) { return String(m).toLowerCase(); });
+   var _medRegexes = [];
+   // OSTÉOPOROSE (Sinaki JAMA 1984 / NOF 2022)
+   if (_medList.indexOf('osteoporose') !== -1 || _medList.indexOf('osteoporosis') !== -1) {
+     _medRegexes.push(/squat\s+barre|back\s+squat|front\s+squat|soulev[eé]\s+de\s+terre|deadlift|romanian|good\s+morning|crunch|sit.?up|ab\s+wheel|jefferson|hyperextension|box\s+jump|jump\s+squat|burpee|corde|jumping\s+jacks|\bpower\s+clean\b|\bclean\b|\bsnatch\b|arrach[eé]|[eé]paul[eé]|hang\s+clean|hack\s+squat|zercher/i);
+   }
+   // HTA / HTA SÉVÈRE (Pescatello MSSE 2004, AHA/ACSM 2007)
+   if (_medList.indexOf('hypertension') !== -1 || _medList.indexOf('hta') !== -1 || _medList.indexOf('hta_severe') !== -1) {
+     _medRegexes.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|back\s+squat|front\s+squat|d[eé]velopp[eé]\s+militaire\s+barre|d[eé]velopp[eé]\s+couch[eé]\s+barre|bench\s+press\s+(?:barre|barbell)|behind.?neck|derri[eè]re\s+nuque|\bsnatch\b|arrach[eé]|clean|[eé]paul[eé]|jerk|thruster|l.?sit|dragon\s+flag|windshield|hack\s+squat/i);
+   }
+   // CARDIO / INSUFFISANCE CARDIAQUE
+   if (_medList.indexOf('cardio') !== -1 || _medList.indexOf('insuffisance_card') !== -1) {
+     _medRegexes.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|\bsnatch\b|\bclean\b|burpee|box\s+jump|hiit/i);
+   }
+   // POLYARTHRITE / ARTHRITE / RHUMATISMES
+   if (_medList.indexOf('polyarthrite') !== -1 || _medList.indexOf('rheumatoid') !== -1 || _medList.indexOf('arthrite') !== -1) {
+     _medRegexes.push(/soulev[eé]\s+de\s+terre|deadlift|arrach[eé]|snatch|clean|jump\s+squat|box\s+jump|burpee|squat\s+barre/i);
+   }
+   // FIBROMYALGIE
+   if (_medList.indexOf('fibromyalgie') !== -1) {
+     _medRegexes.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre|burpee|box\s+jump|jump\s+squat|pompes\s+plyo/i);
+   }
+   if (_medRegexes.length > 0) {
+     var _beforeMedGen = available.length;
+     available = available.filter(function(ex) {
+       var _ename = String(ex.n || ex.name || '').toLowerCase();
+       for (var _ri = 0; _ri < _medRegexes.length; _ri++) {
+         if (_medRegexes[_ri].test(_ename)) return false;
+       }
+       return true;
+     });
+     // Fallback : si tout filtré, garder les exos filtrés par le pool complet (même logique que muscuMedical)
+     if (available.length === 0) {
+       available = pool.filter(function(ex) {
+         var _ename = String(ex.n || ex.name || '').toLowerCase();
+         for (var _ri = 0; _ri < _medRegexes.length; _ri++) {
+           if (_medRegexes[_ri].test(_ename)) return false;
+         }
+         return true;
+       });
+     }
+     if (available.length === 0) {
+       console.warn('[generateSportProgram] Pool vide après filtrage S.medical — groupe=', group, 'conditions=', _medList);
+       try { S._sportFilterIncomplete = true; } catch(_e) {}
+     }
+   }
+ }
+
  var pri = categoryPriority[group] || 1;
 
  // FIX BIBLE MUSCU §6.2 audit Marc (débutant) : priorité absolue aux composés
@@ -706,14 +794,28 @@ function generateSportProgram() {
  });
  var focusLabel = focusParts.join(' · ');
 
- // PPL split naming for 5 days when user has muscle goal (advanced/pro)
- var isPPL5 = (days === 5 && hasMuscle && (S.sportLevel === 'advanced' || S.sportLevel === 'pro'));
- var PPL5_NAMES = ['Push A', 'Pull A', 'Legs', 'Push B', 'Pull B'];
- var PPL5_FOCUS = ['Poitrine · Épaules · Triceps', 'Dos · Biceps · Trapèzes', 'Quadriceps · Ischio-jambiers · Fessiers', 'Épaules · Poitrine · Triceps', 'Ischio-jambiers · Fessiers · Dos'];
+ // ═══ FIX P0 SPRINT 2026-04-16 — NOMS JOURS BASÉS SUR LE SPLIT RÉEL ═══
+ // Avant : isPPL5 hardcodait ['Push A','Pull A','Legs','Push B','Pull B'] pour TOUT user
+ // 5j advanced+muscle, MÊME si le split choisi était bro_5 (Pecs/Dos/Épaules/Bras/Jambes).
+ // Résultat : jour d'épaules nommé "Legs" → Arnold Press sur "Leg A" = incohérence critique.
+ // Maintenant : on lit les dayLabels depuis _SPLIT_OPTIONS correspondant au _splitChoice réel.
+ var _SPLIT_DAY_LABELS = {
+   'fullbody_ab': ['Full Body A','Full Body B'],
+   'fullbody_3':  ['Full Body A','Full Body B','Full Body C'],
+   'ppl_3':       ['Push','Pull','Legs'],
+   'upper_lower': ['Upper A','Lower A','Upper B','Lower B'],
+   'ppl_plus1':   ['Push','Pull','Legs','Upper'],
+   'bro_4':       ['Pecs + Triceps','Dos + Biceps','Épaules','Jambes'],
+   'ppl_5':       ['Push A','Pull A','Legs','Push B','Pull B'],
+   'bro_5':       ['Pecs','Dos','Épaules','Bras','Jambes'],
+   'ppl_6':       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
+ };
+ var _splitDayLabels = S._splitChoice ? (_SPLIT_DAY_LABELS[S._splitChoice] || null) : null;
+ var _dayName = (_splitDayLabels && _splitDayLabels[d]) ? _splitDayLabels[d] : ('Jour ' + (d + 1));
 
  program.push({
- name: isPPL5 ? PPL5_NAMES[d] : 'Jour ' + (d + 1),
- focus: isPPL5 ? PPL5_FOCUS[d] : focusLabel,
+ name: _dayName,
+ focus: focusLabel,
  exercises: dayExercises,
  warmup: {
   duration: 8,
@@ -4007,7 +4109,8 @@ function renderMusculationLevel(p) {
        var _mp = S.trainingDaysSelected.indexOf(idx);
        if (_mp !== -1) { S.trainingDaysSelected.splice(_mp, 1); }
        else { S.trainingDaysSelected.push(idx); S.trainingDaysSelected.sort(function(a, b) { return a - b; }); }
-       if (S.trainingDaysSelected.length > 0) S.sportDays = S.trainingDaysSelected.length;
+       // FIX 2026-04-16 : clamp à 2 min (comme le slider) — 1 jour/sem pas de split muscu cohérent
+       if (S.trainingDaysSelected.length > 0) S.sportDays = Math.max(2, S.trainingDaysSelected.length);
        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (jours training changés)
        if (window.devalidateWeekPlan) window.devalidateWeekPlan('trainingDaysSelected changed');
        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
@@ -6049,7 +6152,7 @@ function renderMusculationProgram(p) {
   4: [
    {id:'upper_lower', label:'Upper/Lower', dayLabels:['Upper A','Lower A','Upper B','Lower B']},
    {id:'ppl_plus1', label:'PPL+1', dayLabels:['Push','Pull','Legs','Upper']},
-   {id:'bro_4', label:'Bro Split 4j', dayLabels:['Pecs/Triceps','Dos/Biceps','Épaules','Jambes']}
+   {id:'bro_4', label:'Bro Split 4j', dayLabels:['Pecs + Triceps','Dos + Biceps','Épaules','Jambes']}
   ],
   5: [
    {id:'ppl_5', label:'PPL 5j', dayLabels:['Push A','Pull A','Legs','Push B','Pull B']},

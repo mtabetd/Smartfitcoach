@@ -2352,7 +2352,7 @@ function buildPersonalizedMuscuPlan(S) {
   // arthrite/fibromyalgie) car SS = squat barre + DC + DL + Power Clean → tous filtrés
   // par les regex médicales → programme vide pour Jean-Pierre senior osteo+HTA.
   var _hasHeavyMedical = Array.isArray(S.medical) && S.medical.some(function(m) {
-    return /osteo|osteoporosis|cardio|insuffisance|fibromy|polyarthrite|rheumatoid/.test(String(m).toLowerCase());
+    return /osteo|osteoporosis|cardio|insuffisance|fibromy|polyarthrite|rheumatoid|arthrite/.test(String(m).toLowerCase());
   });
   if (level === 'beginner' && userDaysRequested <= 4 && sportGoals.indexOf('performance') < 0 && _userEquip !== 'home' && !_hasHeavyMedical) {
     style = 'starting'; // Full-body Starting Strength (Rippetoe) — évidence littérature
@@ -2618,8 +2618,10 @@ function buildPersonalizedMuscuPlan(S) {
         medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|squat\s+barre\s+lourd|\bsnatch\b|\bclean\b|burpee|box\s+jump|hiit/i);
       }
       // GOUTTE / CALCULS / IRC : pas d'exclusion exos directe (impact diététique surtout)
-      // RHUMATISMES / POLYARTHRITE
-      if (medList.indexOf('polyarthrite') !== -1 || medList.indexOf('rheumatoid') !== -1) {
+      // RHUMATISMES / POLYARTHRITE / ARTHRITE
+      // FIX 2026-04-16 : ajout 'arthrite' (forme française générique) — avant, seuls
+      // 'polyarthrite' et 'rheumatoid' étaient matchés.
+      if (medList.indexOf('polyarthrite') !== -1 || medList.indexOf('rheumatoid') !== -1 || medList.indexOf('arthrite') !== -1) {
         medFilters.push(/soulev[eé]\s+de\s+terre|deadlift|arrach[eé]|snatch|clean|jump\s+squat|box\s+jump|burpee|squat\s+barre/i);
       }
       // FIBROMYALGIE
