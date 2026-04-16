@@ -6340,7 +6340,19 @@ function renderMusculationProgram(p) {
  p.appendChild(tabs);
 
  // Current day — bounds check
- if (typeof S.selectedSportDay !== 'number' || S.selectedSportDay < 0 || S.selectedSportDay >= S.sportProgram.length) S.selectedSportDay = 0;
+ // FIX 2026-04-16 — reset selectedSportDay à 0 chaque nouveau jour (pas garder hier)
+ var _sportTodayKey = new Date().toISOString().slice(0, 10);
+ if (S._selectedSportDayDate !== _sportTodayKey || typeof S.selectedSportDay !== 'number' || S.selectedSportDay < 0 || S.selectedSportDay >= S.sportProgram.length) {
+   // Essayer de matcher le jour actuel si trainingDaysSelected existe
+   var _todayIdx = (new Date().getDay() + 6) % 7;
+   if (Array.isArray(S.trainingDaysSelected) && S.trainingDaysSelected.length > 0) {
+     var _pos = S.trainingDaysSelected.indexOf(_todayIdx);
+     S.selectedSportDay = (_pos >= 0) ? Math.min(_pos, S.sportProgram.length - 1) : 0;
+   } else {
+     S.selectedSportDay = Math.min(_todayIdx, S.sportProgram.length - 1);
+   }
+   S._selectedSportDayDate = _sportTodayKey;
+ }
  var day = S.sportProgram[S.selectedSportDay];
  if (day) {
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus || ''));
