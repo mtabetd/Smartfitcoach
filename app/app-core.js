@@ -1745,11 +1745,12 @@ var SPORT_LEVELS = [
 window.SPORT_LEVELS = SPORT_LEVELS;
 
 // ─── CROSSFIT CONSTANTS ───
+// FIX Hermès : cercles gradés ○◔◑● (remplacement emojis couleur 🟢🟡🔴⚫).
 var CROSSFIT_LEVELS = [
-  {id: 'scaled', name: 'Scaled', desc: 'Débutant / Adapté — Mouvements simplifiés, charges légères', icon: '🟢'},
-  {id: 'inter', name: 'Intermédiaire', desc: 'Mouvements maîtrisés — Charges modérées', icon: '🟡'},
-  {id: 'rx', name: 'RX (Prescrit)', desc: 'Standards compétition — Charges et mouvements avancés', icon: '🔴'},
-  {id: 'rx_plus', name: 'RX+ (Élite)', desc: 'Athlète élite Games / Compétiteur — Charges maximales, mouvements avancés', icon: '⚫'}
+  {id: 'scaled', name: 'Scaled', desc: 'Débutant / Adapté — Mouvements simplifiés, charges légères', icon: '\u25CB'},
+  {id: 'inter', name: 'Intermédiaire', desc: 'Mouvements maîtrisés — Charges modérées', icon: '\u25D4'},
+  {id: 'rx', name: 'RX (Prescrit)', desc: 'Standards compétition — Charges et mouvements avancés', icon: '\u25D1'},
+  {id: 'rx_plus', name: 'RX+ (Élite)', desc: 'Athlète élite Games / Compétiteur — Charges maximales, mouvements avancés', icon: '\u25CF'}
 ];
 window.CROSSFIT_LEVELS = CROSSFIT_LEVELS;
 
@@ -5802,15 +5803,16 @@ function generateRunningProgram(weeks, daysPerWeek, level, goal) {
   var maxLongRun = goalObj.longRunMax;
   var totalWeeks = goalObj.weeks;
 
+  // FIX Hermès : icônes unicode sobres (remplacement emojis 🟢🔵🟡🔴⛰🟠🔄).
   var SESSION_TYPES = {
-    easy: {name: 'Footing facile', zone: 'Z1-Z2', icon: '🟢', desc: 'Allure conversationnelle'},
-    long: {name: 'Sortie longue', zone: 'Z2', icon: '🔵', desc: 'Endurance fondamentale'},
-    tempo: {name: 'Tempo / Seuil', zone: 'Z3', icon: '🟡', desc: 'Allure marathon à semi'},
-    interval: {name: 'Fractionné', zone: 'Z4-Z5', icon: '🔴', desc: 'VMA / vitesse'},
-    hills: {name: 'Côtes', zone: 'Z4', icon: '⛰️', desc: 'Force spécifique'},
-    recovery: {name: 'Récupération', zone: 'Z1', icon: '🟢', desc: 'Très facile ou repos'},
-    race_pace: {name: 'Allure course', zone: 'Z3-Z4', icon: '🟠', desc: 'Simulation de course'},
-    cross: {name: 'Cross-training', zone: 'Z2', icon: '🔄', desc: 'Vélo, natation, renforcement'}
+    easy: {name: 'Footing facile', zone: 'Z1-Z2', icon: '\u25CB', desc: 'Allure conversationnelle'},
+    long: {name: 'Sortie longue', zone: 'Z2', icon: '\u25CF', desc: 'Endurance fondamentale'},
+    tempo: {name: 'Tempo / Seuil', zone: 'Z3', icon: '\u25D4', desc: 'Allure marathon à semi'},
+    interval: {name: 'Fractionné', zone: 'Z4-Z5', icon: '\u25D1', desc: 'VMA / vitesse'},
+    hills: {name: 'Côtes', zone: 'Z4', icon: '\u25B2', desc: 'Force spécifique'},
+    recovery: {name: 'Récupération', zone: 'Z1', icon: '\u25CB', desc: 'Très facile ou repos'},
+    race_pace: {name: 'Allure course', zone: 'Z3-Z4', icon: '\u25C6', desc: 'Simulation de course'},
+    cross: {name: 'Cross-training', zone: 'Z2', icon: '\u21C4', desc: 'Vélo, natation, renforcement'}
   };
 
   var templates = {

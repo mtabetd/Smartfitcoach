@@ -1586,7 +1586,7 @@ function renderCardStreak() {
       style: [
         'flex-shrink:0;',
         'font-family:"Helvetica Neue",Arial,sans-serif;',
-        'font-size:8px;',
+        'font-size:11px;',
         'letter-spacing:2px;',
         'text-transform:uppercase;',
         'color:var(--accent);',
@@ -4376,7 +4376,7 @@ function renderCardVolumeTracking() {
   if (!rows) return null;
 
   var html = (
-    '<div style="background:#FFFFFF;border:1px solid rgba(10,10,9,0.08);border-radius:16px;padding:20px;margin-bottom:16px;">' +
+    '<div style="background:var(--ivory,#FAF9F6);border:1px solid rgba(10,10,9,0.08);border-radius:16px;padding:20px;margin-bottom:16px;">' +
       '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(10,10,9,0.45);margin-bottom:4px;">Volume hebdo</div>' +
       '<div style="font-size:16px;font-weight:500;color:#0A0A09;margin-bottom:2px;">Charge par groupe musculaire</div>' +
       '<div style="font-size:12px;color:rgba(10,10,9,0.55);margin-bottom:16px;">7 derniers jours · landmarks Renaissance Periodization (Dr Mike Israetel)</div>' +

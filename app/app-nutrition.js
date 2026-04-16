@@ -3356,7 +3356,7 @@ function renderStep9(p) {
             }
           });
           var sheet = h('div', {
-            style: 'background:var(--card,#FFFFFF);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 1px 3px rgba(0,0,0,0.08);max-height:80vh;overflow-y:auto;'
+            style: 'background:var(--card,#FAF9F6);border-radius:2px 2px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;box-shadow:0 1px 3px rgba(0,0,0,0.08);max-height:80vh;overflow-y:auto;'
           });
           sheet.appendChild(h('div', {
             style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:16px;text-align:center'
@@ -5228,7 +5228,7 @@ function renderRecipePicker(p) {
   });
 
   // Header
-  var hdr = h('div', { style: 'display:flex;align-items:center;gap:10px;padding:16px 16px 12px;background:var(--card,#FFFFFF);box-shadow:0 2px 8px rgba(0,0,0,0.08);flex-shrink:0' });
+  var hdr = h('div', { style: 'display:flex;align-items:center;gap:10px;padding:16px 16px 12px;background:var(--card,#FAF9F6);box-shadow:0 2px 8px rgba(0,0,0,0.08);flex-shrink:0' });
   hdr.appendChild(h('button', {
     style: 'background:none;border:none;font-size:18px;cursor:pointer;padding:4px 8px',
     onclick: function() { S._recipePicker = null; window.render(); }
@@ -5237,7 +5237,7 @@ function renderRecipePicker(p) {
   overlay.appendChild(hdr);
 
   // Search box
-  var searchWrap = h('div', { style: 'padding:12px 16px;background:var(--card,#FFFFFF);border-top:1px solid var(--border,#E5E4DE);flex-shrink:0' });
+  var searchWrap = h('div', { style: 'padding:12px 16px;background:var(--card,#FAF9F6);border-top:1px solid var(--border,#E5E4DE);flex-shrink:0' });
   var searchInput = h('input', {
     type: 'text',
     placeholder: 'Rechercher une recette...',
@@ -5426,7 +5426,7 @@ function renderRecipePicker(p) {
   } else {
     filtered.forEach(function(recipe) {
       var card = h('div', {
-        style: 'background:var(--card,#FFFFFF);border-radius:2px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,0.08)'
+        style: 'background:var(--card,#FAF9F6);border-radius:2px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,0.08)'
       });
       card.addEventListener('click', function() {
         if (!S.weekPlan || !S.weekPlan[S.selectedDay]) { S._recipePicker = null; window.render(); return; }
@@ -5778,11 +5778,11 @@ function renderShoppingList(p) {
   // Header
   var header = h('div', {style:'padding:20px 16px 8px'});
   var titleEl = h('div', {
-    style:'font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ''),
+    style:'font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px' + (arMode ? ';direction:rtl;text-align:right;font-family:"Noto Naskh Arabic","Amiri",Georgia,serif' : ''),
     'class': arMode ? 'shop-ar-title' : ''
   }, arMode ? (AR ? AR.ui['title'] : 'قائمة التسوق') : '\uD83D\uDED2 ' + window.t('shop.title'));
   var subtitleEl = h('div', {
-    style:'font-size:13px;color:var(--text-secondary)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : '')
+    style:'font-size:13px;color:var(--text-secondary)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Noto Naskh Arabic","Amiri",Georgia,serif' : '')
   }, arMode ? (AR ? AR.ui['subtitle'] : 'الأسبوع كامل') : 'Semaine complète — cochez au fur et à mesure');
   header.appendChild(titleEl);
   header.appendChild(subtitleEl);
@@ -5790,7 +5790,7 @@ function renderShoppingList(p) {
 
   // Bouton retour
   var btnBack = h('button', {
-    style:'margin:0 16px 12px;padding:10px 14px;background:transparent;border:none;color:var(--text-secondary);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px' + (arMode ? ';direction:rtl;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ''),
+    style:'margin:0 16px 12px;padding:10px 14px;background:transparent;border:none;color:var(--text-secondary);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px' + (arMode ? ';direction:rtl;font-family:"Noto Naskh Arabic","Amiri",Georgia,serif' : ''),
     'class': 'shop-print-hide',
     onclick: function() { window.S.shopListOpen = false; if(window.render) window.render(); }
   }, arMode ? (AR ? AR.ui['back'] : '← ارجع') : '← Retour au plan');
@@ -5871,7 +5871,7 @@ function renderShoppingList(p) {
     ? (checked + ' / ' + total + ' ' + (AR ? AR.ui['articles_bought'] : 'منتج مشترى'))
     : (checked + ' / ' + total + ' ' + window.t('shop.bought'));
   var counter = h('div', {
-    style:'padding:0 16px 8px;font-size:13px;color:var(--text-secondary)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ''),
+    style:'padding:0 16px 8px;font-size:13px;color:var(--text-secondary)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Noto Naskh Arabic","Amiri",Georgia,serif' : ''),
     'class':'shop-print-hide'
   }, counterText);
 
@@ -5883,7 +5883,7 @@ function renderShoppingList(p) {
     ? (sectionsCount + ' ' + (AR ? AR.ui['sections'] : 'رايون') + ' — ' + total + ' ' + (AR ? AR.ui['articles'] : 'منتج') + ' — ' + (AR ? AR.ui['optimized_route'] : 'مسار محسّن'))
     : (sectionsCount + ' ' + window.t('shop.aisles') + ' — ' + total + ' ' + window.t('shop.items') + ' — ' + window.t('shop.optimized'));
   var infoBar = h('div', {
-    style:'margin:0 16px 12px;padding:10px 14px;border:1px solid var(--border);font-size:11px;letter-spacing:' + (arMode ? '0' : '1px') + ';color:var(--grey)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : ';font-family:"Helvetica Neue",Arial,sans-serif'),
+    style:'margin:0 16px 12px;padding:10px 14px;border:1px solid var(--border);font-size:11px;letter-spacing:' + (arMode ? '0' : '1px') + ';color:var(--grey)' + (arMode ? ';direction:rtl;text-align:right;font-family:"Noto Naskh Arabic","Amiri",Georgia,serif' : ';font-family:"Helvetica Neue",Arial,sans-serif'),
     'class':'shop-print-hide'
   }, infoBarText);
   p.appendChild(infoBar);
@@ -5899,7 +5899,7 @@ function renderShoppingList(p) {
 
     var catChecked = cat.items.filter(function(item){return s.shopChecked[item.name];}).length;
     var catHeaderStyle = 'padding:12px 16px 10px;background:var(--ivory2,#F4F4F0);border-bottom:1px solid var(--border);font-size:11px;text-transform:uppercase;color:var(--black,#0A0A09);display:flex;justify-content:space-between;align-items:center;' +
-      (arMode ? 'direction:rtl;text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif;letter-spacing:0' : 'font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:2px');
+      (arMode ? 'direction:rtl;text-align:right;font-family:"Noto Naskh Arabic","Amiri",Georgia,serif;letter-spacing:0' : 'font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:2px');
 
     catBlock.appendChild(h('div', {style: catHeaderStyle, 'class':'shop-cat-header'},
       h('span', {}, arSection(cat.category)),
@@ -5931,7 +5931,7 @@ function renderShoppingList(p) {
       var cb = h('div', {style: cbStyle, 'class':'shop-cb'});
       if (isChecked) cb.appendChild(h('span', {style:'color:#fff;font-size:13px;font-weight:700'}, '✓'));
 
-      var labelStyle = 'flex:1' + (arMode ? ';text-align:right;font-family:"Segoe UI",Arial,Tahoma,sans-serif' : '');
+      var labelStyle = 'flex:1' + (arMode ? ';text-align:right;font-family:"Noto Naskh Arabic","Amiri",Georgia,serif' : '');
       var label = h('div', {style: labelStyle, 'class':'shop-item-label'});
 
       var displayName = arIngredient(item.name);
@@ -5940,7 +5940,7 @@ function renderShoppingList(p) {
         displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
       }
       var nameStyle = 'font-size:13px;color:var(--text);' +
-        (arMode ? 'font-family:"Segoe UI",Arial,Tahoma,sans-serif;' : 'font-family:Georgia,serif;') +
+        (arMode ? 'font-family:"Noto Naskh Arabic","Amiri",Georgia,serif;' : 'font-family:Georgia,serif;') +
         (isChecked ? 'text-decoration:line-through;opacity:0.6;' : '');
       label.appendChild(h('div', {style: nameStyle}, displayName));
       label.appendChild(h('div', {style:'font-size:11px;font-family:"Helvetica Neue",Arial,sans-serif;color:var(--text-secondary)'}, item.qty + ' ' + item.unit));
@@ -5986,7 +5986,7 @@ function printShoppingListAR(list) {
   // Impression via iframe dédié (évite les problèmes de redirection avec window.open)
   var title = AR ? AR.ui['print_title'] : 'قائمة التسوق';
   var fullHTML = '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>' + escHTML(title) + '</title><style>' +
-    'body{font-family:"Segoe UI",Arial,Tahoma,sans-serif;direction:rtl;text-align:right;padding:20px;color:#000;background:#fff;}' +
+    'body{font-family:"Noto Naskh Arabic","Amiri",Georgia,serif;direction:rtl;text-align:right;padding:20px;color:#000;background:#fff;}' +
     '.shop-print-title{font-size:24px;font-weight:700;margin-bottom:4px;}' +
     '.shop-print-date{font-size:13px;color:#666;margin-bottom:16px;}' +
     '.shop-cat-block{margin-bottom:12px;page-break-inside:avoid;}' +
