@@ -822,7 +822,7 @@ function generateSportProgram() {
  var pri = categoryPriority[g] || 0;
  var starCount = Math.min(pri, 5);
  var stars = '';
- for (var s = 0; s < starCount; s++) stars += '';
+ for (var s = 0; s < starCount; s++) stars += '\u2605';
  focusParts.push(label + (stars ? ' ' + stars : ''));
  });
  var focusLabel = focusParts.join(' · ');
@@ -6003,107 +6003,15 @@ function renderMusculationProgram(p) {
  // FIX UX 2026-04-16 — Strength Grade retiré de la vue programme (déplacé vers profil).
  // L'user vient ici pour ses exercices, pas pour voir son grade de force.
 
- // ─── GROSSESSE — Adaptations sport ───
- if (S.pregnant && S.sex === 'femme') {
- var triSport = window.getPregnancyTrimester ? window.getPregnancyTrimester() : null;
- if (triSport && triSport.trimester) {
- var triSportColor = '#5A1010';
- var intensitySport = Math.round((triSport.trimester.intensityFactor || 0.5) * 100);
+ // ═══ FIX HERMÈS POLISH 2026-04-16 — Grossesse, cycle, suppléments, estimation calorique ═══
+ // DÉPLACÉS APRÈS les exercices pour que l'user voie ses exos en 1-2 scrolls max.
+ // Les cartes sont stockées dans _deferredCards et insérées après les boutons d'action.
 
- var pregSportCard = h('div', {style: 'border:2px solid ' + triSportColor + ';padding:16px;background:rgba(192,57,43,0.04);margin-bottom:16px'});
- pregSportCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:' + triSportColor + ';margin-bottom:8px'}, '\uD83E\uDD30 Programme adapt\u00e9 grossesse \u2014 ' + (triSport.trimester.name || '')));
- pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:10px'}, 'Intensit\u00e9 : ' + intensitySport + '% \u2014 \u00c9coutez votre corps'));
-
- // Sport tips
- if (triSport.trimester.sportTips) triSport.trimester.sportTips.forEach(function(tip) {
- pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
- });
-
- // Forbidden exercises
- pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:' + triSportColor + ';margin:10px 0 6px'}, 'Exercices interdits ce trimestre'));
- if (triSport.trimester.forbiddenExercises) triSport.trimester.forbiddenExercises.forEach(function(ex) {
- pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + triSportColor + ';margin-bottom:2px;padding-left:8px'}, '\u2716 ' + ex));
- });
-
- // Emergency stop warning
- var pregStopWarn = h('div', {style: 'margin-top:10px;padding:8px 12px;background:rgba(192,57,43,0.08);border-radius:2px'});
- pregStopWarn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + triSportColor + ';font-weight:bold'}, '\u26A0 Arr\u00eatez imm\u00e9diatement si : saignements, vertiges, contractions, douleurs, essoufflement excessif'));
- pregSportCard.appendChild(pregStopWarn);
-
- p.appendChild(pregSportCard);
- }
- }
-
- // Cycle menstruel — Recommandation sport
+ // Cycle menstruel — data nécessaire pour le badge intensité dans les exercices
  var cycleInfo = null;
  if (S.sex === 'femme' && S.cycleTracking) {
  cycleInfo = window.getCurrentCyclePhase ? window.getCurrentCyclePhase() : null;
- if (cycleInfo) {
- var phaseColors = {menstruation: '#5A1010', follicular: '#6A4A1A', ovulation: '#1A4A1A', luteal: '#6A4A1A'};
- var phaseColor = phaseColors[cycleInfo.phase.id] || '#6A4A1A';
- var intensity = Math.round(cycleInfo.phase.intensityFactor * 100);
-
- var cycSportCard = h('div', {style: 'border-left:3px solid ' + phaseColor + ';padding:14px 16px;background:var(--ivory2);margin-bottom:16px'});
- cycSportCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:4px'}, cycleInfo.phase.icon + ' ' + cycleInfo.phase.name));
- cycSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, 'Intensit\u00e9 recommand\u00e9e : ' + intensity + '%'));
-
- // Sport tips
- (cycleInfo.phase.sportTips || []).forEach(function(tip) {
- cycSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
- });
-
- // Warning or encouragement
- if (cycleInfo.phase.intensityFactor < 0.8) {
- var warnDiv = h('div', {style: 'margin-top:8px;padding:6px 10px;background:rgba(192,57,43,0.06);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A1010;border-radius:2px'});
- warnDiv.textContent = '\u26A0 Phase de r\u00e9cup\u00e9ration \u2014 adaptez votre effort';
- cycSportCard.appendChild(warnDiv);
- } else if (cycleInfo.phase.intensityFactor > 1.0) {
- var greenDiv = h('div', {style: 'margin-top:8px;padding:6px 10px;background:rgba(39,174,96,0.06);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;border-radius:2px'});
- greenDiv.textContent = '\u2705 Phase optimale \u2014 poussez vos limites !';
- cycSportCard.appendChild(greenDiv);
  }
-
- p.appendChild(cycSportCard);
- }
- }
-
- // Supplement tips
- if (S.creatine) {
- var creatSupp = null;
- if (window.SUPPLEMENTS_DB) {
- for (var si = 0; si < window.SUPPLEMENTS_DB.length; si++) {
- if (window.SUPPLEMENTS_DB[si].id === 'creatine') { creatSupp = window.SUPPLEMENTS_DB[si]; break; }
- }
- }
- var creatDose = S.creatineDose || (creatSupp ? creatSupp.dosageCalc(S).dose : 5);
- var creatTip = h('div', {'class': 'whey-tip', style: 'border-left-color:var(--blue,#1A3A6A);background:var(--bluebg,rgba(26,58,106,0.04));margin-bottom:8px'});
- creatTip.appendChild(h('strong', {}, '\uD83D\uDC8A Cr\u00e9atine \u2014 '));
- creatTip.appendChild(h('span', {}, creatDose + 'g apr\u00e8s l\'entra\u00eenement avec glucides pour absorption optimale'));
- p.appendChild(creatTip);
- }
- if (S.supplements && S.supplements.indexOf('cafeine') !== -1) {
- var cafSupp = null;
- if (window.SUPPLEMENTS_DB) {
- for (var ci2 = 0; ci2 < window.SUPPLEMENTS_DB.length; ci2++) {
- if (window.SUPPLEMENTS_DB[ci2].id === 'cafeine') { cafSupp = window.SUPPLEMENTS_DB[ci2]; break; }
- }
- }
- var cafDose = cafSupp ? cafSupp.dosageCalc(S).dose : 200;
- var cafTip = h('div', {'class': 'whey-tip', style: 'border-left-color:var(--blue,#1A3A6A);background:var(--bluebg,rgba(26,58,106,0.04));margin-bottom:8px'});
- cafTip.appendChild(h('strong', {}, '\u2615 Caf\u00e9ine \u2014 '));
- cafTip.appendChild(h('span', {}, cafDose + 'mg 30-60 min avant la s\u00e9ance'));
- p.appendChild(cafTip);
- }
-
- // ─── ESTIMATION CALORIQUE MUSCU ───
- (function() {
-  var _lvlNorm = {beginner:'debutant', intermediate:'intermediaire', advanced:'avance', elite:'elite'}[S.sportLevel] || 'intermediaire';
-  var SESSION_DUR_MUSCU = { debutant: 50, intermediaire: 60, avance: 75, elite: 90 };
-  var muscuDur = SESSION_DUR_MUSCU[_lvlNorm] || 60;
-  var muscuLevel = S.sportLevel || 'intermediate';
-  var muscuKcal = estimateKcal('muscu', muscuLevel, muscuDur);
-  p.appendChild(buildKcalCard(muscuKcal, muscuDur));
- }());
 
  // ─── PRO PROGRAMS ACCESS (advanced/pro only) ───
  // FIX 2026-04-16 : déplacé SOUS le programme quotidien (avant : au-dessus = confusion UX).
@@ -7735,6 +7643,95 @@ function renderMusculationProgram(p) {
  p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); else if (window.showToast) window.showToast('Export PDF non disponible.', 'info', 3000); }}, '\u21e9 Exporter le programme en PDF'));
 
  // Weight chart removed (was crashing)
+
+ // ═══ HERMÈS POLISH — CARTES SECONDAIRES (déplacées ici pour scroll UX) ═══
+ // Grossesse, cycle menstruel, suppléments, estimation calorique : utiles mais
+ // ne doivent pas repousser les exercices hors du viewport mobile.
+
+ // ─── GROSSESSE — Adaptations sport ───
+ if (S.pregnant && S.sex === 'femme') {
+ var triSport = window.getPregnancyTrimester ? window.getPregnancyTrimester() : null;
+ if (triSport && triSport.trimester) {
+ var triSportColor = '#5A1010';
+ var intensitySport = Math.round((triSport.trimester.intensityFactor || 0.5) * 100);
+
+ var pregSportCard = h('div', {style: 'border:2px solid ' + triSportColor + ';padding:16px;background:rgba(192,57,43,0.04);margin-bottom:16px'});
+ pregSportCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;color:' + triSportColor + ';margin-bottom:8px'}, '\uD83E\uDD30 Programme adapt\u00e9 grossesse \u2014 ' + (triSport.trimester.name || '')));
+ pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey);margin-bottom:10px'}, 'Intensit\u00e9 : ' + intensitySport + '% \u2014 \u00c9coutez votre corps'));
+ if (triSport.trimester.sportTips) triSport.trimester.sportTips.forEach(function(tip) {
+ pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
+ });
+ pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:' + triSportColor + ';margin:10px 0 6px'}, 'Exercices interdits ce trimestre'));
+ if (triSport.trimester.forbiddenExercises) triSport.trimester.forbiddenExercises.forEach(function(ex) {
+ pregSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + triSportColor + ';margin-bottom:2px;padding-left:8px'}, '\u2716 ' + ex));
+ });
+ var pregStopWarn = h('div', {style: 'margin-top:10px;padding:8px 12px;background:rgba(192,57,43,0.08);border-radius:2px'});
+ pregStopWarn.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + triSportColor + ';font-weight:bold'}, '\u26A0 Arr\u00eatez imm\u00e9diatement si : saignements, vertiges, contractions, douleurs, essoufflement excessif'));
+ pregSportCard.appendChild(pregStopWarn);
+ p.appendChild(pregSportCard);
+ }
+ }
+
+ // ─── Cycle menstruel — Recommandation sport ───
+ if (cycleInfo) {
+ var phaseColors = {menstruation: '#5A1010', follicular: '#6A4A1A', ovulation: '#1A4A1A', luteal: '#6A4A1A'};
+ var phaseColor = phaseColors[cycleInfo.phase.id] || '#6A4A1A';
+ var intensity = Math.round(cycleInfo.phase.intensityFactor * 100);
+ var cycSportCard = h('div', {style: 'border-left:3px solid ' + phaseColor + ';padding:14px 16px;background:var(--ivory2);margin-bottom:16px'});
+ cycSportCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:16px;margin-bottom:4px'}, cycleInfo.phase.icon + ' ' + cycleInfo.phase.name));
+ cycSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:8px'}, 'Intensit\u00e9 recommand\u00e9e : ' + intensity + '%'));
+ (cycleInfo.phase.sportTips || []).forEach(function(tip) {
+ cycSportCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
+ });
+ if (cycleInfo.phase.intensityFactor < 0.8) {
+ var warnDiv = h('div', {style: 'margin-top:8px;padding:6px 10px;background:rgba(192,57,43,0.06);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A1010;border-radius:2px'});
+ warnDiv.textContent = '\u26A0 Phase de r\u00e9cup\u00e9ration \u2014 adaptez votre effort';
+ cycSportCard.appendChild(warnDiv);
+ } else if (cycleInfo.phase.intensityFactor > 1.0) {
+ var greenDiv = h('div', {style: 'margin-top:8px;padding:6px 10px;background:rgba(39,174,96,0.06);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;border-radius:2px'});
+ greenDiv.textContent = '\u2705 Phase optimale \u2014 poussez vos limites !';
+ cycSportCard.appendChild(greenDiv);
+ }
+ p.appendChild(cycSportCard);
+ }
+
+ // ─── Supplement tips ───
+ if (S.creatine) {
+ var creatSupp = null;
+ if (window.SUPPLEMENTS_DB) {
+ for (var si = 0; si < window.SUPPLEMENTS_DB.length; si++) {
+ if (window.SUPPLEMENTS_DB[si].id === 'creatine') { creatSupp = window.SUPPLEMENTS_DB[si]; break; }
+ }
+ }
+ var creatDose = S.creatineDose || (creatSupp ? creatSupp.dosageCalc(S).dose : 5);
+ var creatTip = h('div', {'class': 'whey-tip', style: 'border-left-color:var(--blue,#1A3A6A);background:var(--bluebg,rgba(26,58,106,0.04));margin-bottom:8px'});
+ creatTip.appendChild(h('strong', {}, '\uD83D\uDC8A Cr\u00e9atine \u2014 '));
+ creatTip.appendChild(h('span', {}, creatDose + 'g apr\u00e8s l\'entra\u00eenement avec glucides pour absorption optimale'));
+ p.appendChild(creatTip);
+ }
+ if (S.supplements && S.supplements.indexOf('cafeine') !== -1) {
+ var cafSupp = null;
+ if (window.SUPPLEMENTS_DB) {
+ for (var ci2 = 0; ci2 < window.SUPPLEMENTS_DB.length; ci2++) {
+ if (window.SUPPLEMENTS_DB[ci2].id === 'cafeine') { cafSupp = window.SUPPLEMENTS_DB[ci2]; break; }
+ }
+ }
+ var cafDose = cafSupp ? cafSupp.dosageCalc(S).dose : 200;
+ var cafTip = h('div', {'class': 'whey-tip', style: 'border-left-color:var(--blue,#1A3A6A);background:var(--bluebg,rgba(26,58,106,0.04));margin-bottom:8px'});
+ cafTip.appendChild(h('strong', {}, '\u2615 Caf\u00e9ine \u2014 '));
+ cafTip.appendChild(h('span', {}, cafDose + 'mg 30-60 min avant la s\u00e9ance'));
+ p.appendChild(cafTip);
+ }
+
+ // ─── ESTIMATION CALORIQUE MUSCU ───
+ (function() {
+  var _lvlNorm = {beginner:'debutant', intermediate:'intermediaire', advanced:'avance', elite:'elite'}[S.sportLevel] || 'intermediaire';
+  var SESSION_DUR_MUSCU = { debutant: 50, intermediaire: 60, avance: 75, elite: 90 };
+  var muscuDur = SESSION_DUR_MUSCU[_lvlNorm] || 60;
+  var muscuLevel = S.sportLevel || 'intermediate';
+  var muscuKcal = estimateKcal('muscu', muscuLevel, muscuDur);
+  p.appendChild(buildKcalCard(muscuKcal, muscuDur));
+ }());
 
  // ═══ INSERTION SECTION SFC (stockée dans window._pendingSfcSection) ═══
  // Rendue APRÈS le programme quotidien pour ne pas polluer la hiérarchie UX.
