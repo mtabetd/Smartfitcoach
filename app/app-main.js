@@ -1434,8 +1434,13 @@ function render() {
  if (window.destroyAllCharts) window.destroyAllCharts();
  // Stopper le timer CrossFit si on navigue ailleurs (évite le bip en background)
  if (window._wodTimerInterval) { clearInterval(window._wodTimerInterval); window._wodTimerInterval = null; }
- // Éviter le double saveProfile() si une correction de sécurité a déjà persisté
- if (!_goalCorrected && window.AUTH && window.AUTH.isLoggedIn()) saveProfile();
+ // FIX PERF 2026-04-16 — Debounce saveProfile dans render() (750ms)
+ // Avant : saveProfile() appelé à CHAQUE render → localStorage read×2 + JSON parse
+ // + XOR encode + write sur chaque clic/interaction. Maintenant : debounced.
+ if (!_goalCorrected && window.AUTH && window.AUTH.isLoggedIn()) {
+   if (window._saveProfileTimer) clearTimeout(window._saveProfileTimer);
+   window._saveProfileTimer = setTimeout(function() { try { saveProfile(); } catch(e) {} }, 750);
+ }
  var app = document.getElementById('app');
  if (!app) { console.error('[render] #app not found'); return; }
 

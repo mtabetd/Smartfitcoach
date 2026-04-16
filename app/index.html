@@ -12,6 +12,12 @@
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <!-- meta robots noindex supprimé — indexation activée -->
 <meta name="description" content="Smart Fit Coach — Nutrition personnalisée et programmes sportifs sur mesure">
+<meta property="og:title" content="Smart Fit Coach">
+<meta property="og:description" content="Nutrition personnalisée et programmes sportifs sur mesure. 10+ sports, 600+ recettes, coaching IA.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="icon-512.png">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://uwaoxkgsgbzohakzgyvq.supabase.co">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
@@ -38,7 +44,7 @@
   /* ── Alias LEGACY (conservés 1 release pour compat) ── */
   --ivory:#FAF9F6; --ivory2:#F4F1EA; --ivory3:#EEEAE0; --ivory4:#E5E4DE;
   --black:#0A0A09; --black2:#181818;
-  --grey:#6B6B65; --grey2:#7A7A74; --grey3:#7A7A72;
+  --grey:#595953; --grey2:#6E6E68; --grey3:#6E6E66;
   --border:#D8D8D0;
   --green:#3E5C3A; --greenbg:rgba(62,92,58,.06);
   --blue:#1A3A6A; --bluebg:rgba(26,58,106,.06);
@@ -379,7 +385,7 @@ canvas.weight-chart{width:100%;height:200px}
 <div style="margin-top:14px;text-align:center"><a href="https://instagram.com/smart.fitcoach" target="_blank" rel="noopener noreferrer" style="font-family:Georgia,serif;font-style:italic;font-size:10px;color:var(--grey,#6B6B65);text-decoration:none;letter-spacing:1px">@smart.fitcoach</a></div>
 </div>
 </div>
-<div id="app" style="display:none"></div>
+<main id="app" role="main" style="display:none"></main>
 <script src="./gate.js"></script>
 <script src="./error-boundary.js"></script>
 <script defer src="./chart.umd.min.js"></script>

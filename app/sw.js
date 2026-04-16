@@ -7,8 +7,8 @@
  */
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
-const CACHE_VERSION = 'sfc-v80';
-const RUNTIME_CACHE = 'sfc-runtime-v80';
+const CACHE_VERSION = 'sfc-v81';
+const RUNTIME_CACHE = 'sfc-runtime-v81';
 
 // Max age for static assets in the runtime cache: 7 days (in milliseconds).
 const STATIC_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
@@ -59,7 +59,12 @@ const APP_SHELL = [
   './jspdf.umd.min.js',
   './chart.umd.min.js',
   './supabase-client.js',
-  './supabase.min.js'
+  './supabase.min.js',
+  './exercise-gifs-map.js',
+  './smart-calendar.js',
+  './plate-scan.js',
+  './muscle-taxonomy.js',
+  './pwa-install.js'
 ];
 
 // Critical static assets to pre-cache during install.

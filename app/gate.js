@@ -34,7 +34,7 @@
     return Promise.resolve(simpleHash(pw) === GATE_HASH);
   }
 
-  // SHA-256('Bet@user2026' + 'sfc_gate_2024') — pre-computed, not derivable without knowing the password
+  // SHA-256 pre-computed hash — do NOT put the raw password in source code
   var GATE_SHA256 = '910a9f0191b598ef2056c288cf9bcb3ae67ec1d94c30349a48ec9025e0743c3b';
 
   // Brute-force protection: max attempts per session
