@@ -4136,7 +4136,7 @@ function renderTodayDashboard(p) {
       _nutBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Ton plan nutrition est pr\u00eat. Confirme-le pour qu\u2019il apparaisse dans ton suivi.'));
       _nutBanner.appendChild(h('button', {
         style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
-        onclick: function() { S.weekPlanValidated = true; if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek; if (window.saveProfile) window.saveProfile(); if (window.render) window.render(); }
+        onclick: function() { S.weekPlanValidated = true; if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek; S._planHash = (S.weekPlan && Array.isArray(S.weekPlan)) ? JSON.stringify(S.weekPlan).length : 0; if (window.saveProfile) window.saveProfile(); if (window.render) window.render(); }
       }, 'VALIDER MON PLAN NUTRITION'));
       wrapper.appendChild(_nutBanner);
     }
