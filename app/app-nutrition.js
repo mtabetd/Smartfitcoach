@@ -2921,8 +2921,13 @@ function renderStep9(p) {
     return;
   }
   // Défaut : afficher AUJOURD'HUI (même jour que le dashboard) plutôt que toujours Lundi
+  // FIX 2026-04-16 — forcer à "aujourd'hui" à chaque changement de jour (pas garder hier)
   var _todayPlanIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim, cohérent avec today-dashboard.js
-  if (typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) S.selectedDay = _todayPlanIdx;
+  var _todayDateKey = new Date().toISOString().slice(0, 10);
+  if (S._selectedDayDate !== _todayDateKey || typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) {
+    S.selectedDay = _todayPlanIdx;
+    S._selectedDayDate = _todayDateKey;
+  }
 
   // FIX VALIDATION WEEKPLAN 2026-04 : bandeau de validation / revalidation.
   // 3 états possibles :
