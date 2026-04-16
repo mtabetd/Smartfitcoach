@@ -5678,7 +5678,44 @@ function renderMusculationProgram(p) {
 
  // ─── SECTION : PROGRAMME DE LA SEMAINE ───
 
- appendWellnessBanner(p);
+ // ═══ FIX UX HERMÈS 2026-04-16 — Bannières regroupées dans section collapsible ═══
+ // Avant : 15+ bannières empilées avant le premier exercice = 5+ écrans de scroll.
+ // Maintenant : une seule ligne "Adaptations actives (N)" cliquable → déplie les détails.
+ var _adaptCount = 0;
+ var _adaptContainer = h('div', {style: 'display:none;margin-bottom:12px'});
+
+ // Compteur d'adaptations pour le header
+ if (S.muscuMedical && S.muscuMedical.done) {
+   var _mm = S.muscuMedical;
+   if (_mm.shoulders || _mm.rotatorCuff || _mm.lowerBack || _mm.herniaDisc || _mm.knees || _mm.acl || _mm.herniaInguinal || _mm.hypertension || _mm.osteoporosis || _mm.rheumatoidArthritis || _mm.fibromyalgia || _mm.meniscus || _mm.feet || _mm.spondylarthritis || _mm.kneeOsteoarthritis || _mm.epicondylitis || _mm.elbows) _adaptCount++;
+ }
+ if (Array.isArray(S.medical) && S.medical.length > 0) _adaptCount++;
+ if (S.pregnant && S.sex === 'femme') _adaptCount++;
+ if (S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1)) _adaptCount++;
+ if (S.medical && (S.medical.indexOf('cardio') !== -1 || S.medical.indexOf('hta') !== -1 || S.medical.indexOf('hta_severe') !== -1)) _adaptCount++;
+ if (typeof getAge === 'function' && getAge() >= 50) _adaptCount++;
+ if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) _adaptCount++;
+
+ // Header cliquable (affiché seulement si adaptations présentes)
+ if (_adaptCount > 0) {
+   var _adaptHeader = h('button', {
+     style: 'width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--border,#E8E6DF);background:var(--ivory2,#F5F3EC);margin-bottom:8px;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);letter-spacing:2px;text-transform:uppercase;min-height:44px;',
+     onclick: function() {
+       var c = _adaptContainer;
+       if (c.style.display === 'none') { c.style.display = 'block'; this.querySelector('span:last-child').textContent = '\u25B2'; }
+       else { c.style.display = 'none'; this.querySelector('span:last-child').textContent = '\u25BC'; }
+     }
+   });
+   _adaptHeader.appendChild(h('span', {}, _adaptCount + ' adaptation' + (_adaptCount > 1 ? 's' : '') + ' active' + (_adaptCount > 1 ? 's' : '')));
+   _adaptHeader.appendChild(h('span', {style: 'font-size:10px'}, '\u25BC'));
+   p.appendChild(_adaptHeader);
+   p.appendChild(_adaptContainer);
+ }
+
+ // Toutes les bannières vont dans le conteneur collapsible (ou dans p si aucune adaptation)
+ var _bannerTarget = _adaptCount > 0 ? _adaptContainer : p;
+
+ appendWellnessBanner(_bannerTarget);
 
  // CS-01: Bannière charges estimées si profil de force non renseigné
  if (Object.keys(S.muscuStrengthProfile || {}).length === 0) {
@@ -5688,7 +5725,7 @@ function renderMusculationProgram(p) {
  var goBack16 = h('span', {style: 'text-decoration:underline;cursor:pointer', onclick: function(){ S._chargesReturnToDashboard = true; S.sStep = 16; window.render(); }}, 'saisissez vos charges de référence');
  estBanner.appendChild(goBack16);
  estBanner.appendChild(h('span', {}, '.'));
- p.appendChild(estBanner);
+ _bannerTarget.appendChild(estBanner);
  }
 
  // ─── BANNIÈRE ADAPTATIONS MÉDICALES ───
@@ -5717,7 +5754,7 @@ function renderMusculationProgram(p) {
  var editMed = h('div', {style: 'margin-top:8px;font-size:11px;text-decoration:underline;cursor:pointer;color:#6A4A1A',
  onclick: function(){ S._medicalReturnToDashboard = true; S.sStep = 20; window.render(); }}, 'Modifier mon bilan m\u00e9dical');
  medBanner.appendChild(editMed);
- p.appendChild(medBanner);
+ _bannerTarget.appendChild(medBanner);
  }
  }
  // FIX 2026-04-16 — Bannière S.medical (onboarding nutrition) si muscuMedical pas rempli
@@ -5734,14 +5771,14 @@ function renderMusculationProgram(p) {
      var _gmBanner = h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A'});
      _gmBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, 'Adaptations médicales (profil nutrition)'));
      _genMedRestrictions.forEach(function(r) { _gmBanner.appendChild(h('div', {style: 'margin-bottom:3px'}, r)); });
-     p.appendChild(_gmBanner);
+     _bannerTarget.appendChild(_gmBanner);
    }
  }
 
  // ─── ALERTE GROSSESSE SPORT (ACOG 2020) ───
  var pregSportWarn = getPregnancySportWarning();
  if (pregSportWarn) {
- p.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;line-height:1.6'}, pregSportWarn));
+ _bannerTarget.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A;line-height:1.6'}, pregSportWarn));
  }
 
  // ─── CONFLITS OBJECTIFS NUTRITION × SPORT ───
@@ -5755,7 +5792,7 @@ function renderMusculationProgram(p) {
  var bg = c.level === 'CRITIQUE' ? 'var(--redbg,rgba(90,16,16,.06))' : c.level === '\u00c9LEV\u00c9' ? 'var(--orangebg,rgba(106,74,26,.06))' : 'var(--bluebg,rgba(26,58,106,.06))';
  var border = c.level === 'CRITIQUE' ? '#5A1010' : c.level === '\u00c9LEV\u00c9' ? '#6A4A1A' : '#1A3A6A';
  var color = c.level === 'CRITIQUE' ? '#5A1010' : c.level === '\u00c9LEV\u00c9' ? '#6A4A1A' : '#0D47A1';
- p.appendChild(h('div', {style: 'background:' + bg + ';border-left:4px solid ' + border + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:' + color + ';line-height:1.5'}, c.message));
+ _bannerTarget.appendChild(h('div', {style: 'background:' + bg + ';border-left:4px solid ' + border + ';padding:10px 14px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:' + color + ';line-height:1.5'}, c.message));
  });
  }
 
@@ -5765,10 +5802,10 @@ function renderMusculationProgram(p) {
  var diabMsg = S.medical.indexOf('diabete_t1') !== -1
  ? ' Diabète T1 : RPE plafonné à 7/10 (risque hypoglycémie à haute intensité). Glycémie cible avant séance : 7-10 mmol/L. Glucomètre obligatoire avant/après. Gardez 15-20g glucides rapides à portée.'
  : ' Diabète : Vérifiez votre glycémie avant/après chaque séance. Gardez du sucre rapide à portée. Intensité maximale RPE 8/10 — jamais à l\'échec. Hydratation ×1.5.';
- p.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'}, diabMsg));
+ _bannerTarget.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'}, diabMsg));
  }
  if (getAge() >= 50) {
- p.appendChild(h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border-left:4px solid #1A4A1A;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1A4A1A'}, ' 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.'));
+ _bannerTarget.appendChild(h('div', {style: 'background:var(--greenbg,rgba(26,74,26,.06));border-left:4px solid #1A4A1A;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1A4A1A'}, ' 50+ : Échauffement 15-20 min obligatoire. Décharge toutes les 4-5 semaines. Favorisez les mouvements guidés pour protéger les articulations.'));
  }
  // Cardiopathie : zones FC Karvonen + avertissement beta-bloquants (AHA 2018, ACSM 2021)
  if (S.medical && S.medical.indexOf('cardio') !== -1) {
@@ -5791,7 +5828,7 @@ function renderMusculationProgram(p) {
  zonesRow.appendChild(h('span', {'class': 'val-neutral'}, 'Z3 Seuil ' + z3lo + '–' + z3hi + ' bpm'));
  karvonenDiv.appendChild(zonesRow);
  karvonenDiv.appendChild(h('div', {style: 'margin-top:4px;font-style:italic;color:var(--grey)'}, ' Beta-bloquants : si prescrit, votre FC max réelle est plus basse (~10-20%). Consulter votre cardiologue pour ajuster les zones. Test d\'effort (VO2max) recommandé avant programme intensif.'));
- p.appendChild(karvonenDiv);
+ _bannerTarget.appendChild(karvonenDiv);
  }
 
  // HTA légère : avertissement intensité sport (ESC/ESH 2018, AHA/ACSM 2019)
@@ -5803,7 +5840,7 @@ function renderMusculationProgram(p) {
  htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Intensité maximale recommandée : RPE 8/10 — évitez les efforts maximaux'));
  htaLightDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (apnée en poussée lourde) — favorisez une respiration continue'));
  htaLightDiv.appendChild(h('div', {}, '\u2022 Contrôle tensionnel mensuel recommandé. Consultez votre médecin si PA > 160/100 mmHg à l\'effort.'));
- p.appendChild(htaLightDiv);
+ _bannerTarget.appendChild(htaLightDiv);
  }
 
  // HTA sévère : avertissement intensité sport (ESC/ESH 2018, AHA/ACSM 2007)
@@ -5815,7 +5852,7 @@ function renderMusculationProgram(p) {
  htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Intensité maximale : RPE 6/10 — cardio Z1-Z2 uniquement (<65% FCmax)'));
  htaDiv.appendChild(h('div', {style: 'margin-bottom:4px'}, '\u2022 Évitez le Valsalva (squat lourd, soulevé de terre, arraché) — Lamotte et al., Arch Cardiovasc Dis 2015'));
  htaDiv.appendChild(h('div', {}, '\u2022 Consultation cardiologique obligatoire avant tout programme. Test d\'effort recommandé.'));
- p.appendChild(htaDiv);
+ _bannerTarget.appendChild(htaDiv);
  }
 
  // Sommeil insuffisant : avertissement récupération (S.sleep 0=<6h, 1=6-7h) — ACSM 2020, IOC 2018
@@ -5824,7 +5861,7 @@ function renderMusculationProgram(p) {
  var sleepMsg = S.sleep === 0
  ? ' Sommeil < 6h/nuit — risque de surentraînement élevé. Performance -30%, récupération compromise (IOC 2018). Limitez les séances intenses à 2/semaine. Évitez les blocs HIIT consécutifs.'
  : ' Sommeil 6-7h/nuit — récupération partielle. Maintenez au maximum 4 séances/semaine. Évitez 2 jours intenses d\'affilée.';
- p.appendChild(h('div', {style: 'background:#FFF8E1;border-left:4px solid #F9A825;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'}, sleepMsg));
+ _bannerTarget.appendChild(h('div', {style: 'background:#FFF8E1;border-left:4px solid #F9A825;padding:8px 12px;margin-bottom:10px;font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#6A4A1A'}, sleepMsg));
  }
 
  var goalNames = (S.sportGoals || []).map(function(gid){
