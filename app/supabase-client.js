@@ -445,6 +445,7 @@
           // que le local les a. Voir diagnostic bug persistance 2026-04.
           var _PROTECTED_KEYS = {
             // Programmes sport (tous)
+            _sportProgramVersion: 1,
             sportProgram: 1, runningProgram: 1, cyclingProgram: 1,
             triathlonProgram: 1, hyroxProgram: 1, padelProgram: 1,
             golfProgram: 1, yogaWeek: 1, calisthenicsWeek: 1,
