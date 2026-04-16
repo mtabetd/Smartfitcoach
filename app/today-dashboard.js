@@ -3811,10 +3811,16 @@ function renderCoachBar() {
       if (e.key === 'Enter' && e.target.value.trim()) {
         var msg = e.target.value.trim();
         e.target.value = '';
-        // Ouvrir le coach avec le message pré-rempli
-        S.view = 'coach';
-        S._coachPendingMsg = msg;
-        if (window.render) window.render();
+        // FIX 2026-04-16 : ouvrir le panel AI Coach overlay (pas S.view='coach' qui n'existe pas)
+        if (window.AI_COACH) {
+          window.AI_COACH.open();
+          // Pré-remplir le message et l'envoyer automatiquement
+          setTimeout(function() {
+            var coachInput = document.getElementById('ai-coach-input');
+            if (coachInput) { coachInput.value = msg; }
+            if (window.AI_COACH.send) window.AI_COACH.send();
+          }, 300);
+        }
       }
     }
   });
@@ -3826,15 +3832,18 @@ function renderCoachBar() {
     'aria-label': 'Envoyer au coach',
     onclick: function() {
       var val = input.value.trim();
-      if (val) {
-        input.value = '';
-        S.view = 'coach';
-        S._coachPendingMsg = val;
-      } else {
-        // Ouvrir le coach même sans message
-        S.view = 'coach';
+      // FIX 2026-04-16 : ouvrir le panel AI Coach overlay directement
+      if (window.AI_COACH) {
+        window.AI_COACH.open();
+        if (val) {
+          input.value = '';
+          setTimeout(function() {
+            var coachInput = document.getElementById('ai-coach-input');
+            if (coachInput) { coachInput.value = val; }
+            if (window.AI_COACH.send) window.AI_COACH.send();
+          }, 300);
+        }
       }
-      if (window.render) window.render();
     }
   });
   // SVG flèche droite stroke 1.2
