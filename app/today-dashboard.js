@@ -3982,6 +3982,38 @@ function renderTodayDashboard(p) {
     }
   } catch(e) { console.warn('[SmartCalendar banner]', e); }
 
+  // ═══ BANDEAU VERSION D'ESSAI (Hermès — ruban tabac discret au-dessus du hero) ═══
+  // FIX 2026-04-16 : le bandeau trial de renderCardBonjour n'était plus appelé
+  // depuis la migration vers renderHeroContextuel → invisible. On le remet ici.
+  try {
+    if (window.isTrialUser && window.isTrialUser()) {
+      var _td = (typeof window.getTrialDaysLeft === 'function') ? window.getTrialDaysLeft() : 0;
+      var _tBar = h('div', {
+        style:
+          'display:flex;align-items:center;justify-content:space-between;gap:12px;' +
+          'max-width:560px;margin:0 auto 0;padding:12px 16px;' +
+          'border:1px solid rgba(106,74,26,0.25);background:rgba(106,74,26,0.05);' +
+          'border-radius:2px;cursor:pointer;'
+      });
+      _tBar.addEventListener('click', function() { S.view = 'profil'; if (window.render) window.render(); });
+      var _tL = h('div', {style: 'flex:1;min-width:0;'});
+      _tL.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:4px;text-transform:uppercase;color:#6A4A1A;font-weight:600;margin-bottom:3px;'
+      }, 'VERSION D\u2019ESSAI'));
+      _tL.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.4;'
+      }, _td > 0
+          ? (_td + ' jour' + (_td > 1 ? 's' : '') + ' restant' + (_td > 1 ? 's' : '') + ' \u2014 Tu as accès à tout')
+          : 'Période d\u2019essai terminée \u2014 Voir mon abonnement'));
+      _tBar.appendChild(_tL);
+      var _tR = h('div', {
+        style: 'font-family:Georgia,serif;font-size:22px;color:#6A4A1A;flex-shrink:0;line-height:1;'
+      }, _td > 0 ? String(_td) + 'j' : '!');
+      _tBar.appendChild(_tR);
+      wrapper.appendChild(_tBar);
+    }
+  } catch(_eTr) { console.warn('[trial banner hero]', _eTr); }
+
   // ═══ HERO CONTEXTUEL HORAIRE (Bible Hermès §1, §7) ═══
   // Remplace renderCardBonjour + renderCardHeroKcal + renderCardNextMeal en un seul bloc.
   // 1 hero = 1 foyer. Matin (6h-11h) / Midi (11h-17h) / Soir (17h-23h).
