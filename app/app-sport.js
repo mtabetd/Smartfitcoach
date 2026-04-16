@@ -6339,29 +6339,8 @@ function renderMusculationProgram(p) {
  }
 
  // ─── I6: PROGRAMME HEADER BANNER ───
- var _goalNames2 = (S.sportGoals || []).map(function(gid){
-  var g = (window.SPORT_GOALS || []).find(function(x){ return x.id === gid; });
-  return g ? g.name : '';
- }).filter(function(n){ return n; }).join(' + ');
-
- var _splitLabel = '';
- if (S._splitChoice && _splitOpts) {
-  var _chosenSplit = _splitOpts.filter(function(o){ return o.id === S._splitChoice; })[0];
-  if (_chosenSplit) _splitLabel = _chosenSplit.label;
- } else if (_numDays && window.WEEKLY_SPLITS && window.WEEKLY_SPLITS[_numDays]) {
-  _splitLabel = window.WEEKLY_SPLITS[_numDays].name || '';
- }
-
- // Si l'utilisateur a explicitement cliqué une phase SFC, la priorité va à cette phase (pas à l'objectif sportif)
- var _phaseLabelsB = {masse: 'Masse', seche: 'S\u00e8che', force: 'Force'};
- var _goalDisplay = S._sfcPhase ? _phaseLabelsB[S._sfcPhase] : _goalNames2;
- var _bannerText = _splitLabel
-  ? 'Programme\u00a0: ' + _splitLabel + (_goalDisplay ? ' \u2014 ' + _goalDisplay : '')
-  : (_goalDisplay ? 'Programme\u00a0: ' + _goalDisplay : '');
-
- if (_bannerText) {
-  p.appendChild(h('div', {style: 'font-size:11px;color:var(--grey);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;font-family:"Helvetica Neue",Arial,sans-serif'}, _bannerText));
- }
+ // FIX UX 2026-04-16 — Banner supprimé (redondant avec subtitle sous H1).
+ // FIX _sfcPhase leak — banner n'utilise plus _sfcPhase pour l'affichage.
 
  // Day tabs — rename according to split choice if available
  var _currentSplitOpt = null;
@@ -6422,28 +6401,15 @@ function renderMusculationProgram(p) {
   p.appendChild(briefCard);
  }
 
- // ─── CTA SÉANCE — visible en haut, avant de scroller les exercices ───
+ // ─── CTA SÉANCE — badge "validée" en haut si session complétée (bouton déplacé en bas) ───
  var _ctaToday = new Date().toISOString().slice(0, 10);
  var _ctaTodayKey = S.selectedSportDay + '_' + _ctaToday;
  var _ctaDone = S.sessionHistory && S.sessionHistory[_ctaTodayKey];
- var _ctaCompleting = (S.sessionCompleting === S.selectedSportDay);
  if (_ctaDone) {
    var _ctaDoneBadge = h('div', {style: 'border:1px solid #1A4A1A;background:rgba(26,74,26,0.06);padding:10px 14px;margin-bottom:14px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;display:flex;align-items:center;gap:8px;'});
    _ctaDoneBadge.appendChild(h('span', {}, '\u2714'));
    _ctaDoneBadge.appendChild(h('span', {}, 'S\u00e9ance valid\u00e9e \u2014 ' + _ctaDone.duration + '\u00a0min \u00b7 ' + _ctaDone.kcalTotal + '\u00a0kcal'));
    p.appendChild(_ctaDoneBadge);
- } else if (!_ctaCompleting) {
-   var _ctaBtn = h('button', {
-     style: 'display:block;width:100%;padding:16px 24px;background:var(--green,#1A4A1A);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:600;border:none;border-radius:2px;cursor:pointer;margin-bottom:16px;transition:all 0.25s cubic-bezier(0.25,0.46,0.45,0.94);box-shadow:0 4px 12px rgba(26,74,26,0.2);',
-     onclick: function() {
-       S.sessionCompleting = S.selectedSportDay;
-       S._sessionDuration = null;
-       window.render();
-       // Scroll vers le bas pour afficher le panneau de complétion
-       setTimeout(function() { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }, 80);
-     }
-   }, '\u2713 S\u00e9ance termin\u00e9e');
-   p.appendChild(_ctaBtn);
  }
 
  // ─── INDICATEUR SURCHARGE PROGRESSIVE ───
