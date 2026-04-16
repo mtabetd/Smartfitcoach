@@ -198,6 +198,26 @@ function generateSportProgram() {
  var level = (window.SPORT_LEVELS || []).find(function(l){ return l.id === S.sportLevel; });
  var program = [];
 
+ // ═══ FIX P0 SPRINT 2026-04-16 — AUTO-SET _splitChoice AVANT génération ═══
+ // Avant : _splitChoice n'était initialisé que dans le RENDER du step 4 (split selector).
+ // Mais generateSportProgram() est appelé à la transition step 3 → 4.
+ // Conséquence : première génération avec _splitChoice=null → algorithme fréquence libre
+ // → épaules sur jour Legs, dos sur jour Push, etc. Bug critique "Arnold Press sur Leg A".
+ // Maintenant : on auto-set _splitChoice ICI si l'user est intermediate+ et n'a pas encore choisi.
+ var _isIntermediatePlus = S.sportLevel === 'intermediate' || S.sportLevel === 'advanced' || S.sportLevel === 'pro';
+ var _DEFAULT_SPLITS = { 2:'fullbody_ab', 3:'ppl_3', 4:'upper_lower', 5:'ppl_5', 6:'ppl_6' };
+ // Valider que le _splitChoice existant correspond au nombre de jours actuel
+ var _VALID_SPLITS_PER_DAY = {
+   2:['fullbody_ab'], 3:['fullbody_3','ppl_3'], 4:['upper_lower','ppl_plus1','bro_4'],
+   5:['ppl_5','bro_5'], 6:['ppl_6']
+ };
+ if (_isIntermediatePlus && days >= 2) {
+   var _validForDays = _VALID_SPLITS_PER_DAY[days] || [];
+   if (!S._splitChoice || _validForDays.indexOf(S._splitChoice) === -1) {
+     S._splitChoice = _DEFAULT_SPLITS[days] || _DEFAULT_SPLITS[Math.min(6, Math.max(2, days))] || null;
+   }
+ }
+
  // Adjust splits based on goals
  var _goals = S.sportGoals || [];
  var hasCardio = _goals.some(function(g){ return g === 'endurance' || g === 'weightloss' || g === 'shred'; });
@@ -706,14 +726,28 @@ function generateSportProgram() {
  });
  var focusLabel = focusParts.join(' · ');
 
- // PPL split naming for 5 days when user has muscle goal (advanced/pro)
- var isPPL5 = (days === 5 && hasMuscle && (S.sportLevel === 'advanced' || S.sportLevel === 'pro'));
- var PPL5_NAMES = ['Push A', 'Pull A', 'Legs', 'Push B', 'Pull B'];
- var PPL5_FOCUS = ['Poitrine · Épaules · Triceps', 'Dos · Biceps · Trapèzes', 'Quadriceps · Ischio-jambiers · Fessiers', 'Épaules · Poitrine · Triceps', 'Ischio-jambiers · Fessiers · Dos'];
+ // ═══ FIX P0 SPRINT 2026-04-16 — NOMS JOURS BASÉS SUR LE SPLIT RÉEL ═══
+ // Avant : isPPL5 hardcodait ['Push A','Pull A','Legs','Push B','Pull B'] pour TOUT user
+ // 5j advanced+muscle, MÊME si le split choisi était bro_5 (Pecs/Dos/Épaules/Bras/Jambes).
+ // Résultat : jour d'épaules nommé "Legs" → Arnold Press sur "Leg A" = incohérence critique.
+ // Maintenant : on lit les dayLabels depuis _SPLIT_OPTIONS correspondant au _splitChoice réel.
+ var _SPLIT_DAY_LABELS = {
+   'fullbody_ab': ['Full Body A','Full Body B'],
+   'fullbody_3':  ['Full Body A','Full Body B','Full Body C'],
+   'ppl_3':       ['Push','Pull','Legs'],
+   'upper_lower': ['Upper A','Lower A','Upper B','Lower B'],
+   'ppl_plus1':   ['Push','Pull','Legs','Upper'],
+   'bro_4':       ['Pecs + Triceps','Dos + Biceps','Épaules','Jambes'],
+   'ppl_5':       ['Push A','Pull A','Legs','Push B','Pull B'],
+   'bro_5':       ['Pecs','Dos','Épaules','Bras','Jambes'],
+   'ppl_6':       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
+ };
+ var _splitDayLabels = S._splitChoice ? (_SPLIT_DAY_LABELS[S._splitChoice] || null) : null;
+ var _dayName = (_splitDayLabels && _splitDayLabels[d]) ? _splitDayLabels[d] : ('Jour ' + (d + 1));
 
  program.push({
- name: isPPL5 ? PPL5_NAMES[d] : 'Jour ' + (d + 1),
- focus: isPPL5 ? PPL5_FOCUS[d] : focusLabel,
+ name: _dayName,
+ focus: focusLabel,
  exercises: dayExercises,
  warmup: {
   duration: 8,

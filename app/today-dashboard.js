@@ -1693,7 +1693,22 @@ function renderCardSport() {
 
   var day = next.day;
   var idx = next.index;
-  var dayName = day.name || ('Séance ' + (idx + 1));
+  // ═══ FIX P0 SPRINT 2026-04-16 — NOMS JOURS DASHBOARD BASÉS SUR LE SPLIT RÉEL ═══
+  // Avant : day.name pouvait être "Legs" (hardcodé isPPL5) alors que le split réel était
+  // bro_5 (jour 2 = épaules). Maintenant : on lit le dayLabel depuis _splitChoice.
+  var _DASH_SPLIT_LABELS = {
+    'fullbody_ab': ['Full Body A','Full Body B'],
+    'fullbody_3':  ['Full Body A','Full Body B','Full Body C'],
+    'ppl_3':       ['Push','Pull','Legs'],
+    'upper_lower': ['Upper A','Lower A','Upper B','Lower B'],
+    'ppl_plus1':   ['Push','Pull','Legs','Upper'],
+    'bro_4':       ['Pecs + Triceps','Dos + Biceps','Épaules','Jambes'],
+    'ppl_5':       ['Push A','Pull A','Legs','Push B','Pull B'],
+    'bro_5':       ['Pecs','Dos','Épaules','Bras','Jambes'],
+    'ppl_6':       ['Push A','Pull A','Legs A','Push B','Pull B','Legs B']
+  };
+  var _dashLabels = (S._splitChoice && S.sportType === 'musculation') ? (_DASH_SPLIT_LABELS[S._splitChoice] || null) : null;
+  var dayName = (_dashLabels && _dashLabels[idx]) ? _dashLabels[idx] : (day.name || ('Séance ' + (idx + 1)));
   var exCount = Array.isArray(day.exercises) ? day.exercises.length : 0;
 
   // Estimated duration heuristic
