@@ -6269,12 +6269,23 @@ function renderMusculationProgram(p) {
  }
 
  // ─── Weight/Load tracking ───
+ // FIX 2026-04-16 : détection bodyweight avant barre. "Barre de traction" / "barre fixe"
+ // = pull-up bar = poids du corps (pas une barre d'haltéro !). Sans ce check, les tractions
+ // affichaient un champ "BARRE kg" au lieu du mode poids du corps avec lest optionnel.
+ // Détection par NOM aussi : tractions/chin-up/pull-up/dips/pompes = toujours bodyweight.
  var eqType = 'barre';
  var eqLower = (ex.eq || '').toLowerCase();
- if (/halt[eè]re|dumbbell|db/i.test(eqLower)) eqType = 'haltere';
- else if (/machine|poulie|cable|presse/i.test(eqLower)) eqType = 'machine';
+ var exNameLower = (ex.n || '').toLowerCase();
+ // 1. Bodyweight par EQUIPMENT explicite
+ if (/poids du corps|poids de corps|corps seul|bodyweight|body\s?weight|aucun|^none$|^sol$|^\s*$/.test(eqLower)) eqType = 'bodyweight';
+ // 2. Bodyweight par EQUIPMENT "barre de traction" / "barre fixe" / "barres parallèles"
+ else if (/barre\s+(?:de\s+)?traction|barre\s+fixe|barres?\s+parall[eè]les?|anneaux|rings|trx/i.test(eqLower)) eqType = 'bodyweight';
+ // 3. Bodyweight par NOM d'exercice (tractions, dips, pompes, pull-ups, chin-ups, muscle-up)
+ else if (/^tractions?|^chin.?ups?|^pull.?ups?|^dips?\b|^pompes?\b|^muscle.?ups?|^burpees?|^planche|^gainage/i.test(exNameLower)) eqType = 'bodyweight';
+ // 4. Types matériel classiques
+ else if (/halt[eè]re|dumbbell|db/i.test(eqLower)) eqType = 'haltere';
+ else if (/machine|poulie|cable|c[aâ]ble|presse/i.test(eqLower)) eqType = 'machine';
  else if (/kettle|kb/i.test(eqLower)) eqType = 'kb';
- else if (/^(poids du corps|corps seul|bodyweight|body\s?weight|aucun|none)$/.test(eqLower)) eqType = 'bodyweight';
  else if (/barre|barbell/i.test(eqLower)) eqType = 'barre';
 
  // ─── AI-suggested weight from strength profile (skip for bodyweight) ───
