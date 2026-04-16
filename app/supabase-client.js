@@ -468,6 +468,19 @@
             aiCoachHistory: 1, trainingDaysSelected: 1,
             installations: 1, sportHobbies: 1
           };
+          // FIX 2026-04-16 : flags de validation utilisateur (jamais dévalider via cloud).
+          // Bug : si un device A vient de valider son plan (flag = true) et qu'un device B
+          // (ou un sync stale) renvoie le flag à null/false, le bandeau "valider mon plan"
+          // réapparaît et oblige l'utilisateur à re-cliquer. Très chiant en multi-device.
+          // Règle : un flag de validation est une ACTION UTILISATEUR explicite ; le cloud
+          // ne doit JAMAIS le rabaisser (false/null/'') quand le local est à true.
+          var _VALIDATION_KEYS = {
+            weekPlanValidated: 1,
+            weekPlanValidatedISOWeek: 1,
+            sportProgramValidated: 1,
+            sportProgramValidatedAt: 1,
+            _planHash: 1
+          };
           function _isEmptyValue(v) {
             if (v === null || v === undefined) return true;
             if (Array.isArray(v) && v.length === 0) return true;
@@ -486,6 +499,11 @@
               // Protection : si la clé est "précieuse" et que le cloud est vide mais le local non → on garde le local
               if (_PROTECTED_KEYS[k] && _isEmptyValue(cv) && _isMeaningful(window.S[k])) {
                 console.log('[SupaSync] Skip overwrite of protected key "' + k + '" (cloud empty, local has data)');
+                continue;
+              }
+              // Anti-dévalidation : un flag de validation utilisateur ne doit jamais être rabaissé par le cloud.
+              if (_VALIDATION_KEYS[k] && window.S[k] && (cv === null || cv === undefined || cv === '' || cv === false)) {
+                console.log('[SupaSync] Skip devalidation of "' + k + '" (cloud empty, local validated)');
                 continue;
               }
               window.S[k] = cv;

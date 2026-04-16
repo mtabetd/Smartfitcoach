@@ -4110,6 +4110,23 @@ function renderTodayDashboard(p) {
   // ── Banners de validation (si plans non validés) ──
   try {
     var _isoWeek = window.currentISOWeek ? window.currentISOWeek() : null;
+    // FIX 2026-04-16 : auto-revalidation silencieuse.
+    // Bug : chaque lundi (changement ISO week) le bandeau "valider mon plan" réapparaît
+    //       même si le plan n'a pas changé (mêmes ingrédients, mêmes recettes). Très chiant.
+    // Règle : si le plan est déjà validé ET que son hash n'a pas changé, on revalide en silence
+    //         pour la nouvelle semaine. Le bandeau ne s'affiche que si quelque chose a changé.
+    if (_isoWeek && S.weekPlanValidated && S.weekPlanValidatedISOWeek && S.weekPlanValidatedISOWeek !== _isoWeek) {
+      var _currentHash = (S.weekPlan && Array.isArray(S.weekPlan)) ? JSON.stringify(S.weekPlan).length : 0;
+      if (S._planHash && S._planHash === _currentHash) {
+        S.weekPlanValidatedISOWeek = _isoWeek;
+        if (window.saveProfile) window.saveProfile();
+        console.log('[dashboard] auto-revalidation silencieuse semaine ISO ' + _isoWeek + ' (plan inchangé)');
+      } else {
+        S._planHash = _currentHash;
+      }
+    } else if (_isoWeek && S.weekPlanValidated && !S._planHash && S.weekPlan) {
+      S._planHash = JSON.stringify(S.weekPlan).length;
+    }
     var _nutNeedsValidation = S.weekPlan && Array.isArray(S.weekPlan) && S.weekPlan.length >= 7
       && (!S.weekPlanValidated || (S.weekPlanValidatedISOWeek && _isoWeek && S.weekPlanValidatedISOWeek !== _isoWeek));
     if (_nutNeedsValidation) {
@@ -4123,7 +4140,16 @@ function renderTodayDashboard(p) {
       }, 'VALIDER MON PLAN NUTRITION'));
       wrapper.appendChild(_nutBanner);
     }
-    var _sportNeedsValidation = S.sportType && !S.sportProgramValidated && (S.appMode === 'sport' || S.appMode === 'both');
+    // FIX 2026-04-16 : ne pas afficher le bandeau si AUCUN programme n'existe encore.
+    // Bug : un user sans programme généré voyait le bandeau "Confirme ton programme" alors
+    //       qu'il n'y avait rien à confirmer. Maintenant on attend qu'un programme existe
+    //       (sportProgram, muscuIAProgram, ou autres programmes spécifiques au sport choisi).
+    var _hasAnyProgram = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0)
+      || S.muscuIAProgram || S.runningProgram || S.cyclingProgram
+      || S.triathlonProgram || S.hyroxProgram || S.padelProgram
+      || S.golfProgram || S.yogaWeek || S.calisthenicsWeek;
+    var _sportNeedsValidation = S.sportType && !S.sportProgramValidated && _hasAnyProgram
+      && (S.appMode === 'sport' || S.appMode === 'both');
     if (_sportNeedsValidation) {
       var _sportBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
       _sportBanner.appendChild(eyebrow('SPORT'));

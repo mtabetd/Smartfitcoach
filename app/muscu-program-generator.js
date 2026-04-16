@@ -1360,6 +1360,10 @@
       // Sauvegarder le programme IA pour l'afficher dans la vue Sport + Dashboard
       _Snow.muscuIAProgram = programText;
       _Snow.muscuIAProgramDate = new Date().toISOString();
+      // FIX 2026-04-16 : générer un programme via le questionnaire IA = action utilisateur explicite,
+      // pas besoin de re-confirmer ensuite via un bandeau "Confirme ton programme".
+      _Snow.sportProgramValidated = true;
+      _Snow.sportProgramValidatedAt = new Date().toISOString();
       if (window.saveProfile) { try { window.saveProfile(); } catch(e3) {} }
 
       // Try to parse into interactive cards; fall back to plain text if it fails
@@ -1430,6 +1434,9 @@
             _Snow2.muscuProgramCount = (_Snow2.muscuProgramCount || 0) + 1;
             _Snow2.muscuIAProgram = localPlan;
             _Snow2.muscuIAProgramDate = new Date().toISOString();
+            // FIX 2026-04-16 : fallback local = même action utilisateur explicite que le path IA.
+            _Snow2.sportProgramValidated = true;
+            _Snow2.sportProgramValidatedAt = new Date().toISOString();
             if (window.saveProfile) { try { window.saveProfile(); } catch(eSv) {} }
 
             // Affichage minimal du plan local (texte + parse si possible)
