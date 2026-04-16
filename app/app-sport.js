@@ -5566,10 +5566,21 @@ function renderMusculationProgram(p) {
  // Avant : le programme généré avec l'ancien code buggé restait en cache localStorage
  // indéfiniment. L'user voyait "Legs A" avec des exercices pecs de l'ancien split.
  // Maintenant : chaque programme porte un _version. Si < SPORT_PROGRAM_VERSION, on régénère.
+ // FIX 2026-04-16 — RÈGLE ABSOLUE : si le programme est validé, on ne le touche PLUS.
+ // Avant : la version stale forçait une régénération → l'user perdait son programme validé
+ // et voyait de nouveaux exercices sans avoir rien demandé. C'EST FINI.
+ // Si la version est obsolète ET le programme est validé → bandeau informatif seulement.
+ // Si pas encore validé → on peut régénérer silencieusement.
  if (Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && (!S._sportProgramVersion || S._sportProgramVersion < SPORT_PROGRAM_VERSION)) {
-   console.warn('[sport] Programme stale (v' + (S._sportProgramVersion || 0) + ' < v' + SPORT_PROGRAM_VERSION + ') — régénération automatique');
-   S.sportProgram = null;
-   S._sportProgramVersion = null;
+   if (S.sportProgramValidated) {
+     // Programme validé → on ne touche pas. Juste un flag pour le bandeau.
+     S._sportUpdateAvailable = true;
+   } else {
+     // Pas encore validé → régénération OK
+     console.warn('[sport] Programme non-validé stale (v' + (S._sportProgramVersion || 0) + ') — régénération');
+     S.sportProgram = null;
+     S._sportProgramVersion = null;
+   }
  }
  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) {
    // Afficher un message de génération si pas de programme
@@ -5679,6 +5690,22 @@ function renderMusculationProgram(p) {
 
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Votre<br><em>programme</em>'}));
+
+ // Bandeau "mise à jour disponible" (version stale mais programme validé = on ne touche pas)
+ if (S._sportUpdateAvailable) {
+   var _updateBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);margin-bottom:12px;border-radius:2px'});
+   _updateBanner.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--accent,#1A4A1A)'}, 'Une mise à jour du programme est disponible.'));
+   _updateBanner.appendChild(h('button', {
+     style: 'padding:6px 12px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;min-height:36px;white-space:nowrap;',
+     onclick: function() {
+       try { S.sportProgram = generateSportProgram(); S.sportProgramValidated = true; S.sportProgramValidatedAt = new Date().toISOString(); } catch(e) {}
+       S._sportUpdateAvailable = false;
+       if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+       if (window.render) window.render();
+     }
+   }, 'Mettre à jour'));
+   p.appendChild(_updateBanner);
+ }
 
  // ─── SECTION : PROGRAMME DE LA SEMAINE ───
 

@@ -1384,8 +1384,9 @@ function renderProfilePage(container) {
        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider au lieu de supprimer (plan reste visible)
        if (window.devalidateWeekPlan) window.devalidateWeekPlan('changement objectif');
        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
-       // sportProgram reste invalidé (pas encore de flag de validation sport)
-       S.sportProgram = null;
+       // FIX 2026-04-16 — NE PLUS écraser sportProgram validé. Juste marquer update dispo.
+       if (!S.sportProgramValidated) { S.sportProgram = null; }
+       else { S._sportUpdateAvailable = true; }
        // Cleanup temp state
        delete S._modalGoal;
        delete S._modalTargetWeight;
