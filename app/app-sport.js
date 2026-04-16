@@ -441,7 +441,8 @@ function generateSportProgram() {
          else if (_dtype === 'push')      _filtered = ['chest','shoulders','triceps'];
          else if (_dtype === 'pull')      _filtered = ['back','biceps'];
          else if (_dtype === 'lower' || _dtype === 'legs') _filtered = ['legs','glutes'];
-         else if (_dtype === 'full')      _filtered = ['chest','back','legs'];
+         // FIX 2026-04-16 — fullbody fallback incluait seulement chest/back/legs, manquait shoulders/arms/glutes
+         else if (_dtype === 'full')      _filtered = ['chest','back','shoulders','legs','glutes'];
          else if (_dtype === 'chest_tri') _filtered = ['chest','triceps'];
          else if (_dtype === 'back_bi')   _filtered = ['back','biceps'];
          else if (_dtype === 'shoulders_only') _filtered = ['shoulders'];
@@ -5719,6 +5720,23 @@ function renderMusculationProgram(p) {
  p.appendChild(medBanner);
  }
  }
+ // FIX 2026-04-16 — Bannière S.medical (onboarding nutrition) si muscuMedical pas rempli
+ // L'user voit des exos filtrés (ostéoporose, HTA...) sans savoir pourquoi si muscuMedical.done=false
+ if (Array.isArray(S.medical) && S.medical.length > 0 && !(S.muscuMedical && S.muscuMedical.done)) {
+   var _genMedRestrictions = [];
+   var _gml = S.medical.map(function(m) { return String(m).toLowerCase(); });
+   if (_gml.indexOf('osteoporose') !== -1 || _gml.indexOf('osteoporosis') !== -1) _genMedRestrictions.push('\u26A0 Ostéoporose : exercices à impact et charges axiales lourdes retirés');
+   if (_gml.indexOf('hta') !== -1 || _gml.indexOf('hta_severe') !== -1 || _gml.indexOf('hypertension') !== -1) _genMedRestrictions.push('\u26A0 HTA : efforts maximaux et Valsalva retirés');
+   if (_gml.indexOf('cardio') !== -1 || _gml.indexOf('insuffisance_card') !== -1) _genMedRestrictions.push('\u26A0 Cardiopathie : exercices à haute intensité retirés');
+   if (_gml.indexOf('polyarthrite') !== -1 || _gml.indexOf('arthrite') !== -1) _genMedRestrictions.push('\u26A0 Arthrite : charges lourdes et impacts retirés');
+   if (_gml.indexOf('fibromyalgie') !== -1) _genMedRestrictions.push('\u26A0 Fibromyalgie : intensité plafonnée');
+   if (_genMedRestrictions.length > 0) {
+     var _gmBanner = h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border-left:4px solid #6A4A1A;padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#6A4A1A'});
+     _gmBanner.appendChild(h('div', {style: 'font-weight:bold;margin-bottom:6px'}, 'Adaptations médicales (profil nutrition)'));
+     _genMedRestrictions.forEach(function(r) { _gmBanner.appendChild(h('div', {style: 'margin-bottom:3px'}, r)); });
+     p.appendChild(_gmBanner);
+   }
+ }
 
  // ─── ALERTE GROSSESSE SPORT (ACOG 2020) ───
  var pregSportWarn = getPregnancySportWarning();
@@ -5812,7 +5830,7 @@ function renderMusculationProgram(p) {
  var goalNames = (S.sportGoals || []).map(function(gid){
  var g = (window.SPORT_GOALS || []).find(function(x){ return x.id === gid; });
  return g ? g.name : '';
- }).join(' + ');
+ }).filter(function(n){ return n; }).join(' + ');
  // RPE Guide for beginners
  if (S.sportLevel === 'beginner' || !S.sportLevel) {
   if (S.sportLevel === 'beginner' && S._rpeGuideExpanded === undefined) S._rpeGuideExpanded = true;
@@ -7100,7 +7118,7 @@ function renderMusculationProgram(p) {
  _nudgeRight.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:12px;color:#fff;max-width:140px;text-align:right'}, _nextEx2.n));
  _nudge.appendChild(_nudgeRight);
  } else {
- _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8)'}, '\uD83C\uDFC6 Derni\u00e8r exercice \u2014 Belle s\u00e9ance\u00a0!'));
+ _nudge.appendChild(h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.8)'}, '\uD83C\uDFC6 Dernier exercice \u2014 Belle s\u00e9ance\u00a0!'));
  }
  card.appendChild(_nudge);
  }
@@ -7647,6 +7665,8 @@ function renderMusculationProgram(p) {
      S.sportProgramValidatedAt = new Date().toISOString();
      S.selectedSportDay = 0;
      window.BLACKBOX && window.BLACKBOX.log('sport_program_regenerated');
+     // FIX 2026-04-16 — Recalculer ne sauvegardait pas → programme perdu si app fermée
+     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    } else {
      console.warn('[sport] Recalculer: generateSportProgram returned empty — keeping existing program');
    }
@@ -7657,7 +7677,7 @@ function renderMusculationProgram(p) {
  }}, '\u21bb Recalculer le programme hebdomadaire'));
 
  // Export PDF
- p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); else alert('Export PDF non disponible.'); }}, '\u21e9 Exporter le programme en PDF'));
+ p.appendChild(h('button', {'class': 'btn-primary', style: 'margin-top:12px;background:var(--black2)', onclick: function() { if (typeof window.exportSportPDF === 'function') window.exportSportPDF(); else if (window.showToast) window.showToast('Export PDF non disponible.', 'info', 3000); }}, '\u21e9 Exporter le programme en PDF'));
 
  // Weight chart removed (was crashing)
 
