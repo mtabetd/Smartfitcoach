@@ -2879,6 +2879,14 @@ function renderStep9(p) {
   p.appendChild(h('p', {'class': 'subtitle'}, '7 jours \u00b7 ' + (S.mealsPerDay || 3) + ' repas/jour \u00b7 527 recettes'));
   if (window.TIPS) TIPS.renderTip(p, 'planning');
 
+  // FIX 2026-04-16 — reset selectedDay à aujourd'hui AVANT tout calcul (sinon _nm est calculé pour hier)
+  var _todayPlanIdx = (new Date().getDay() + 6) % 7;
+  var _todayDateKey = new Date().toISOString().slice(0, 10);
+  if (S._selectedDayDate !== _todayDateKey || typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) {
+    S.selectedDay = _todayPlanIdx;
+    S._selectedDayDate = _todayDateKey;
+  }
+
   // Recompute _nm adapté au type de jour sélectionné (carb cycling +20% si entraînement)
   if (window.computeNutritionState && window.getDayType) {
     var _dayInfoForNm = window.getDayType(S.selectedDay || 0);
@@ -2920,14 +2928,7 @@ function renderStep9(p) {
     p.appendChild(h('button', {'class': 'btn-secondary', onclick: function() { goStep(11); }}, '\u2190 Retour aux résultats'));
     return;
   }
-  // Défaut : afficher AUJOURD'HUI (même jour que le dashboard) plutôt que toujours Lundi
-  // FIX 2026-04-16 — forcer à "aujourd'hui" à chaque changement de jour (pas garder hier)
-  var _todayPlanIdx = (new Date().getDay() + 6) % 7; // 0=Lun … 6=Dim, cohérent avec today-dashboard.js
-  var _todayDateKey = new Date().toISOString().slice(0, 10);
-  if (S._selectedDayDate !== _todayDateKey || typeof S.selectedDay !== 'number' || S.selectedDay < 0 || S.selectedDay > 6) {
-    S.selectedDay = _todayPlanIdx;
-    S._selectedDayDate = _todayDateKey;
-  }
+  // (reset selectedDay déjà fait en haut de fonction avant calcul _nm)
 
   // FIX VALIDATION WEEKPLAN 2026-04 : bandeau de validation / revalidation.
   // 3 états possibles :

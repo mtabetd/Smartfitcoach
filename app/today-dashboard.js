@@ -353,7 +353,9 @@ function getNextSportDay() {
 
   // FIX COHÉRENCE SPORT 2026-04 : bug #2 — si un programme IA muscu existe, il prévaut
   // sur le sportProgram statique (vue sport l'affiche, dashboard doit l'afficher aussi).
-  if (S.sportType === 'musculation' && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100) {
+  // FIX 2026-04-16 : sauf si programme local VALIDÉ (user a confirmé son split) → local prime
+  if (S.sportType === 'musculation' && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100
+      && !(Array.isArray(S.sportProgram) && S.sportProgram.length > 0 && S.sportProgramValidated)) {
     return { index: 0, day: { name: 'Programme sur mesure', exercises: [] }, kind: 'ia' };
   }
 

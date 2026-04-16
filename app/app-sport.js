@@ -6330,17 +6330,9 @@ function renderMusculationProgram(p) {
  }
 
  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) return;
- var tabs = h('div', {'class': 'day-tabs'});
- S.sportProgram.forEach(function(day, i) {
-  var _tabLabel = (_currentSplitOpt && _currentSplitOpt.dayLabels && _currentSplitOpt.dayLabels[i])
-   ? _currentSplitOpt.dayLabels[i]
-   : day.name;
-  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedSportDay === i ? ' active' : ''), onclick: function(){ S.selectedSportDay = i; window.render(); }}, _tabLabel));
- });
- p.appendChild(tabs);
 
- // Current day — bounds check
- // FIX 2026-04-16 — reset selectedSportDay à 0 chaque nouveau jour (pas garder hier)
+ // FIX 2026-04-16 — reset selectedSportDay à aujourd'hui AVANT le render des tabs
+ // (sinon la tab active est celle d'hier pendant un tick)
  var _sportTodayKey = new Date().toISOString().slice(0, 10);
  if (S._selectedSportDayDate !== _sportTodayKey || typeof S.selectedSportDay !== 'number' || S.selectedSportDay < 0 || S.selectedSportDay >= S.sportProgram.length) {
    // Essayer de matcher le jour actuel si trainingDaysSelected existe
@@ -6353,6 +6345,17 @@ function renderMusculationProgram(p) {
    }
    S._selectedSportDayDate = _sportTodayKey;
  }
+
+ var tabs = h('div', {'class': 'day-tabs'});
+ S.sportProgram.forEach(function(day, i) {
+  var _tabLabel = (_currentSplitOpt && _currentSplitOpt.dayLabels && _currentSplitOpt.dayLabels[i])
+   ? _currentSplitOpt.dayLabels[i]
+   : day.name;
+  tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedSportDay === i ? ' active' : ''), onclick: function(){ S.selectedSportDay = i; window.render(); }}, _tabLabel));
+ });
+ p.appendChild(tabs);
+
+ // Current day — bounds check (already reset above)
  var day = S.sportProgram[S.selectedSportDay];
  if (day) {
  p.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--grey);margin:16px 0 12px'}, day.focus || ''));

@@ -1215,7 +1215,7 @@
     });
 
     document.getElementById('ps-next').addEventListener('click', function() {
-      if (!window.S || !window.S.sportLevel) {
+      if (!window.S || !window.S.sportLevel || !window.S.sportDays) {
         var err = document.getElementById('ps-error');
         if (err) err.style.display = 'block';
         return;
