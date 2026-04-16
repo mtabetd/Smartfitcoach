@@ -1006,7 +1006,7 @@ function renderActiviteSommeil(p) {
   p.appendChild(actLabel);
   var list = h('div', {'class': 'level-list'});
   ACTIVITIES.forEach(function(a, i) {
-    list.appendChild(h('div', {'class': 'level-item' + (S.activity === i ? ' on' : ''), onclick: function() { S.activity = i; window.render(); }}, [
+    list.appendChild(h('div', {'class': 'level-item' + (S.activity === i ? ' on' : ''), onclick: function() { var _prev = S.activity; S.activity = i; if (_prev !== i) { S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('activity changed'); } window.render(); }}, [
       h('div', {}, [h('div', {'class': 'level-name'}, a.name), h('div', {'class': 'level-desc'}, a.desc)]),
       h('span', {'class': 'level-badge'}, '\u00d7' + a.factor)
     ]));
@@ -1185,32 +1185,24 @@ function renderStep4(p) {
           // Sync: désactiver grossesse médicale → désactiver S.pregnant (double chemin)
           if (item.id === 'grossesse') {
             S.pregnant = false; S.pregnancyWeek = null; S.prePregnancyWeight = null; S.dueDate = null;
-            // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (grossesse off, calTarget change)
-            S._nm = null;
-            if (window.devalidateWeekPlan) window.devalidateWeekPlan('grossesse off');
-            else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
             if (S._prePregnancyGoal !== null && S._prePregnancyGoal !== undefined) { S.goal = S._prePregnancyGoal; S._prePregnancyGoal = null; }
           }
-          // Sync: désactiver allaitement → dévalider cache nutrition
-          if (item.id === 'allaitement') {
-            S._nm = null;
-            if (window.devalidateWeekPlan) window.devalidateWeekPlan('allaitement off');
-            else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
-          }
+          // FIX DESYNC 2026-04-16 — TOUTES les conditions médicales invalident le cache + plan
+          // Avant : seules grossesse/allaitement invalidaient. Diabète, HTA, IRC, TCA etc.
+          // laissaient le plan stale → macros incorrects, recettes inadaptées.
+          S._nm = null;
+          if (window.devalidateWeekPlan) window.devalidateWeekPlan('medical off: ' + item.id);
+          else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
         } else {
           S.medical.push(item.id);
           // Sync: activer grossesse médicale → activer S.pregnant pour déclencher les protections
           if (item.id === 'grossesse' && S.sex === 'femme') {
             S.pregnant = true; S.cycleTracking = false;
-            S._nm = null;
-            if (window.devalidateWeekPlan) window.devalidateWeekPlan('grossesse on');
-            else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
           }
-          if (item.id === 'allaitement') {
-            S._nm = null;
-            if (window.devalidateWeekPlan) window.devalidateWeekPlan('allaitement on');
-            else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
-          }
+          // FIX DESYNC 2026-04-16 — idem pour ajout de condition
+          S._nm = null;
+          if (window.devalidateWeekPlan) window.devalidateWeekPlan('medical on: ' + item.id);
+          else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
         }
         if (window.validatePregnancyState) validatePregnancyState();
         window.render();
@@ -1727,7 +1719,10 @@ function renderStep6(p) {
       'class': 'sel-card' + (S.goal === i ? ' on' : '') + (_pregBlock ? ' disabled' : ''),
       style: _pregBlock ? 'opacity:0.35;cursor:not-allowed;pointer-events:none;' : '',
       onclick: _pregBlock ? null : function() {
+        var _prevGoal = S.goal;
         S.goal = i;
+        // FIX DESYNC 2026-04-16 — invalider cache + plan si objectif change
+        if (_prevGoal !== i) { S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('goal changed'); }
         // ── SYNC SPORT GOALS ─────────────────────────────────────────────────
         // If sport goals already selected, replace the "primary" one to stay coherent
         if (S.sportGoals && S.sportGoals.length > 0 && window.NUTRITION_TO_SPORT_GOAL) {
@@ -1932,6 +1927,8 @@ function renderStep7(p) {
     allergyWrap.appendChild(h('span', {'class': 'chip' + (on ? ' on' : ''), onclick: function() {
       if (a === 'Aucune') { S.allergies = on ? [] : ['Aucune']; }
       else { S.allergies = S.allergies.filter(function(x) { return x !== 'Aucune'; }); if (on) S.allergies = S.allergies.filter(function(x) { return x !== a; }); else S.allergies.push(a); }
+      // FIX DESYNC 2026-04-16 — invalider plan si allergies changent (recettes avec allergènes restaient)
+      S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('allergies changed');
       window.render();
     }}, a));
   });
@@ -1946,6 +1943,8 @@ function renderStep7(p) {
     intolWrap.appendChild(h('span', {'class': 'chip' + (on ? ' on' : ''), onclick: function() {
       if (t === 'Aucune') { S.intolerances = on ? [] : ['Aucune']; }
       else { S.intolerances = S.intolerances.filter(function(x) { return x !== 'Aucune'; }); if (on) S.intolerances = S.intolerances.filter(function(x) { return x !== t; }); else S.intolerances.push(t); }
+      // FIX DESYNC 2026-04-16 — invalider plan si intolérances changent
+      S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('intolerances changed');
       window.render();
     }}, t));
   });
