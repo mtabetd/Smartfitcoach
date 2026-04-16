@@ -2498,7 +2498,7 @@ function renderNewPassword(app) {
 window.render = render;
 
 // ─── DARK MODE PREFERENCE ───
-try { if (localStorage.getItem('mtd_dark_mode') === 'true') document.body.classList.add('dark-mode'); } catch(e) {}
+try { if (localStorage.getItem('mtd_dark_mode') === '1') document.body.classList.add('dark-mode'); } catch(e) {}
 
 // ─── DEV ONLY: ?reset=users handler (localhost only) ───
 (function() {
