@@ -4489,24 +4489,31 @@ function renderFabLogger() {
         } });
     }
 
-    items.forEach(function(item, idx) {
-      // Angles en arc au-dessus du FAB — espacement dynamique selon nombre d'items.
-      // 4 items → 40° écart (180°→60°). 5 items → 30° écart (180°→60°).
-      var arcSpan = 120; // arc total en degrés
-      var step = items.length > 1 ? arcSpan / (items.length - 1) : 0;
-      var angle = -180 + idx * step;
-      var rad = angle * Math.PI / 180;
-      var x = Math.cos(rad) * 110;
-      var y = Math.sin(rad) * 110;
+    // FIX 2026-04-16 : stack vertical aligné droite au lieu d'arc radial.
+    // Avant : 5 items sur arc 120° → labels se chevauchent + "SÉANCE" tronqué hors écran.
+    // Maintenant : colonne verticale au-dessus du FAB, chaque pill = [LABEL · bouton].
+    // Espace constant 66px entre items, labels blancs lisibles, bouton cercle ivoire.
+    var itemSpacing = 66; // 48px bouton + 18px gap
+    var itemsReversed = items.slice().reverse(); // premier item = plus proche du FAB
+    itemsReversed.forEach(function(item, idx) {
       var pill = h('div', {
-        // FIX 2026-04-16 : z-index:960 explicite pour que les pills soient AU-DESSUS du backdrop (940).
-        style: 'position:absolute;right:' + (-x + 28) + 'px;bottom:' + (-y + 28) + 'px;display:flex;align-items:center;gap:10px;opacity:0;z-index:960;animation:fabItemIn 220ms cubic-bezier(0.2,0.8,0.2,1) ' + (idx * 40) + 'ms forwards;'
+        style:
+          'position:absolute;right:4px;bottom:' + (76 + idx * itemSpacing) + 'px;' +
+          'display:flex;align-items:center;gap:14px;opacity:0;z-index:960;' +
+          'animation:fabItemIn 240ms cubic-bezier(0.2,0.8,0.2,1) ' + (idx * 35) + 'ms forwards;'
       });
       var label = h('div', {
-        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#fff;font-weight:500;'
+        style:
+          'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;' +
+          'letter-spacing:3px;text-transform:uppercase;color:#FAF9F6;font-weight:500;' +
+          'white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.3);'
       }, item.label);
       var btn = h('button', {
-        style: 'width:48px;height:48px;border-radius:50%;background:#fff;border:1px solid var(--line,#D8D8D0);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;',
+        style:
+          'width:48px;height:48px;border-radius:50%;background:#FAF9F6;' +
+          'border:1px solid var(--line,#D8D8D0);cursor:pointer;' +
+          'display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;' +
+          'box-shadow:0 2px 8px rgba(10,10,9,0.12);',
         'aria-label': item.label,
         onclick: item.action
       });
