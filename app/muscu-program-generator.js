@@ -33,13 +33,13 @@
   ];
 
   var LOADING_PHRASES = [
-    'On analyse ton profil et on calcule tes charges adaptées.',
-    'On choisit le split qui colle à tes jours dispo et ton matos.',
-    'On calibre chaque charge, semaine par semaine.',
-    'On construit ta progression sur 12 semaines…',
-    'On rédige les conseils techniques pour chaque exo.',
-    'On intègre tes restrictions médicales et ta récupération.',
-    'Dernier ajustement sur ton programme. C\'est bientôt prêt…'
+    'On analyse ton profil et on calcule tes charges adapt\u00e9es.',
+    'On choisit le split qui colle \u00e0 tes jours dispo et ton matos.',
+    'On calibre chaque charge pour cette semaine.',
+    'On construit ta semaine en tenant compte de ta progression\u2026',
+    'On r\u00e9dige les conseils techniques pour chaque exo.',
+    'On int\u00e8gre tes restrictions m\u00e9dicales et ta r\u00e9cup\u00e9ration.',
+    'Dernier ajustement sur ton programme. C\'est bient\u00f4t pr\u00eat\u2026'
   ];
 
   var FOOTER_QUOTES = [
@@ -1320,7 +1320,7 @@
   function shareMuscuProgram(programText) {
     var shareData = {
       title: 'Mon programme SmartFitCoach',
-      text: 'Mon programme sur 12 semaines — SmartFitCoach.',
+      text: 'Mon programme hebdomadaire — SmartFitCoach.',
       url: window.location.origin
     };
     if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
