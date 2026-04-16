@@ -6279,7 +6279,16 @@ function renderMusculationProgram(p) {
    var _isActive = S._splitChoice === opt.id;
    var _btn = h('button', {
     style: 'height:36px;padding:0 12px;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;cursor:pointer;border:1px solid ' + (_isActive ? 'var(--accent,#1A4A1A)' : 'var(--border,#E8E6DF)') + ';background:' + (_isActive ? 'rgba(26,74,26,0.08)' : 'transparent') + ';color:' + (_isActive ? 'var(--accent,#1A4A1A)' : 'var(--black,#1A1A18)') + ';font-weight:' + (_isActive ? '600' : '400'),
-    onclick: (function(_id) { return function() { S._splitChoice = _id; window.render(); }; })(opt.id)
+    // FIX P0 2026-04-16 — Changement de split DOIT régénérer le programme.
+    // Avant : seul _splitChoice changeait + render() → onglets "Legs" mais exercices épaules
+    // de l'ancien split. Maintenant : on régénère immédiatement pour aligner exercices et labels.
+    onclick: (function(_id) { return function() {
+      S._splitChoice = _id;
+      try { S.sportProgram = generateSportProgram(); } catch(e) { console.error('[split] regen error:', e); }
+      S.selectedSportDay = 0;
+      if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+      window.render();
+    }; })(opt.id)
    }, opt.label);
    _splitBtns.appendChild(_btn);
   });
