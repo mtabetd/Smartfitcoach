@@ -570,7 +570,6 @@ window.AUTH = {
     _authReady.then(function() {
       if (_currentSession && window.S && window.S.view === 'auth') {
         console.log('[AUTH] Late session restore — loading profile and re-rendering dashboard');
-        window.S.view = 'today';
         // Restore profile from localStorage (same as _doAutoLogin does)
         if (window.loadProfile) window.loadProfile();
         if (window.S.nStep === 0 && (window.S.sex || window.S.goal || window.S.weekPlan)) {
@@ -582,6 +581,16 @@ window.AUTH = {
         if (window.S.sStep > 0 && _PROG_STEPS_AUTH.indexOf(window.S.sStep) === -1) {
           window.S.sStep = 0;
         }
+        // FIX 2026-04-16 : résolution vue cohérente avec _resolvePostLoginView / _doAutoLogin.
+        // Avant : hard-set 'today' → user avec onboarding incomplet voyait le dashboard vide.
+        // Maintenant : même logique que les deux autres flows.
+        var _lsSetup = !!window.S.sportType;
+        var _lsProg = (Array.isArray(window.S.sportProgram) && window.S.sportProgram.length > 0) || !!window.S.muscuIAProgram;
+        if (window.S.sStep > 0 && _PROG_STEPS_AUTH.indexOf(window.S.sStep) !== -1 && !_lsSetup) { window.S.view = 'sport'; }
+        else if (window.S.appMode === 'sport' && !_lsSetup && !_lsProg) { window.S.view = 'sport'; }
+        else if (window.S.appMode === 'both' && window.S.nStep === 12 && !_lsSetup && !_lsProg) { window.S.view = 'sport'; }
+        else if (window.S.nStep > 0 && window.S.nStep < 12) { window.S.view = 'nutrition'; }
+        else { window.S.view = 'today'; }
         if (window.I18N && window.S.lang) window.I18N.current = window.S.lang;
         if (window.UNITS) {
           window.UNITS.weight = window.S.weightUnit || 'kg';

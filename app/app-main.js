@@ -1807,8 +1807,10 @@ function renderLogin(app) {
    // Muscu local plan est computed fresh via buildPersonalizedMuscuPlan(S) — pas stocké.
    // CF/running/triathlon stockent dans S.sportProgram. Muscu IA dans S.muscuIAProgram.
    var _hasAnyProgram = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || !!S.muscuIAProgram;
-   // Onboarding sport EN COURS (step intermédiaire) → rester sur sport
-   if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+   // Onboarding sport EN COURS (step intermédiaire) ET sportType pas encore défini → rester sur sport
+   // FIX 2026-04-16 : si sportType est renseigné, l'onboarding est TERMINÉ (sStep=4 = vue programme muscu,
+   // pas "onboarding en cours"). Ne PAS rediriger vers sport dans ce cas → aller au dashboard.
+   if (S.sStep > 0 && _loginProgSteps.indexOf(S.sStep) !== -1 && !_hasSportSetup) { S.view = 'sport'; }
    // Mode sport-only SANS aucun programme ET SANS sportType → lancer onboarding sport
    else if (S.appMode === 'sport' && !_hasSportSetup && !_hasAnyProgram) { S.view = 'sport'; }
    // Mode both : nutrition finie mais sport pas encore lancé → lancer onboarding sport
@@ -2503,8 +2505,9 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Le programme muscu est généré ON-THE-FLY (pas stocké dans S.sportProgram).
  var _hasSportSetup2 = !!S.sportType;
  var _hasAnyProgram2 = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || !!S.muscuIAProgram;
- // Onboarding sport EN COURS (step intermédiaire) → rester sur sport
- if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1) { S.view = 'sport'; }
+ // Onboarding sport EN COURS (step intermédiaire) ET sportType pas encore défini → rester sur sport
+ // FIX 2026-04-16 : si sportType est renseigné, l'onboarding est TERMINÉ — aller au dashboard.
+ if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1 && !_hasSportSetup2) { S.view = 'sport'; }
  // Mode sport SANS aucun setup → lancer onboarding sport
  else if (S.appMode === 'sport' && !_hasSportSetup2 && !_hasAnyProgram2) { S.view = 'sport'; }
  // Mode both : nutrition finie mais sport pas encore lancé
@@ -2571,6 +2574,14 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
      _migrateSteps();
      if (window.I18N && S.lang) window.I18N.current = S.lang;
      if (window.UNITS) { window.UNITS.weight = S.weightUnit || 'kg'; window.UNITS.height = S.heightUnit || 'cm'; }
+     // FIX 2026-04-16 : recalculer la vue après chargement cloud (comme _resolvePostLoginView dans login manuel)
+     var _csSetup = !!S.sportType;
+     var _csProg = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0) || !!S.muscuIAProgram;
+     if (S.sStep > 0 && _PROGRAM_STEPS_MAIN.indexOf(S.sStep) !== -1 && !_csSetup) { S.view = 'sport'; }
+     else if (S.appMode === 'sport' && !_csSetup && !_csProg) { S.view = 'sport'; }
+     else if (S.appMode === 'both' && S.nStep === 12 && !_csSetup && !_csProg) { S.view = 'sport'; }
+     else if (S.nStep > 0 && S.nStep < 12) { S.view = 'nutrition'; }
+     else if (S.appMode) { S.view = 'today'; }
      if (window.render) window.render();
    }
    SupaSync.startAutoSync(); // Démarrer après syncOnLogin pour éviter la double-écriture

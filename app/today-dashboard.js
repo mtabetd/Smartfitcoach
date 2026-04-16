@@ -357,6 +357,37 @@ function getNextSportDay() {
     return { index: 0, day: { name: 'Programme sur mesure', exercises: [] }, kind: 'ia' };
   }
 
+  // FIX 2026-04-16 : CrossFit WOD du jour — les WODs sont dans CF_WODS_FULL (global),
+  // pas dans S.sportProgram. On retourne le WOD courant pour l'afficher sur le dashboard.
+  if (S.sportType === 'crossfit') {
+    var cfDay = S.cfCurrentDay || 1;
+    var allWods = window.CF_WODS_FULL || window.CF_WODS || [];
+    var todayWod = null;
+    for (var wi = 0; wi < allWods.length; wi++) {
+      if (allWods[wi] && allWods[wi].day === cfDay) { todayWod = allWods[wi]; break; }
+    }
+    if (todayWod) {
+      // Build exercises list from WOD movements for the card preview
+      var cfExercises = [];
+      if (todayWod.wod && Array.isArray(todayWod.wod.movements)) {
+        todayWod.wod.movements.forEach(function(m) {
+          cfExercises.push({ n: m.name || '', sets: '', reps: m.reps || '' });
+        });
+      }
+      return {
+        index: cfDay - 1,
+        day: {
+          name: (todayWod.name || 'WOD') + (todayWod.theme ? ' — ' + todayWod.theme : ''),
+          exercises: cfExercises
+        },
+        kind: 'crossfit',
+        wod: todayWod
+      };
+    }
+    // CF user but WODs not loaded yet — return placeholder
+    return { index: 0, day: { name: 'CrossFit — Jour ' + cfDay, exercises: [] }, kind: 'crossfit' };
+  }
+
   // FIX D1 COHÉRENCE MULTI-SPORTS 2026-04 : dispatcher par sportType
   // Avant : le dashboard ne lisait QUE S.sportProgram (= muscu/crossfit statique).
   //         Pour running/hyrox/triathlon/cycling/calisthenics → affichait "Aucun programme"
@@ -1729,6 +1760,13 @@ function renderCardSport() {
   nameEl.textContent = 'Jour\u00a0' + (idx + 1) + '\u00a0\u2014\u00a0' + dayName;
   c.appendChild(nameEl);
 
+  // FIX 2026-04-16 : CrossFit WOD type badge (AMRAP/For Time/EMOM etc.)
+  if (next.kind === 'crossfit' && next.wod && next.wod.wod && next.wod.wod.type) {
+    c.appendChild(h('div', {
+      style: 'display:inline-block;padding:4px 10px;background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
+    }, next.wod.wod.type));
+  }
+
   // COSMÉTIQUE 2026-04 : Grid 3-stats Georgia (ex / durée / semaine) — signature premium
   if (exCount > 0 || _estMins || _weekTarget > 0) {
     var _statsRow = h('div', {
@@ -1760,7 +1798,7 @@ function renderCardSport() {
     day.exercises.slice(0, 3).forEach(function(ex, exIdx) {
       var exRow = h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;font-family:Georgia,serif;font-size:13px;color:var(--ink-900,#0A0A09);' });
       exRow.appendChild(h('span', { style: 'flex:1;font-style:italic;' }, (exIdx + 1) + '. ' + (ex.n || ex.name || '')));
-      var setsRepsTxt = String(ex.sets || '3') + (ex.reps ? ' × ' + ex.reps : '');
+      var setsRepsTxt = ex.sets ? (String(ex.sets) + (ex.reps ? ' \u00d7 ' + ex.reps : '')) : (ex.reps ? String(ex.reps) + ' reps' : '');
       exRow.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--ink-500,#6B6B65);letter-spacing:0.5px;margin-left:8px;' }, setsRepsTxt));
       _exosPreview.appendChild(exRow);
     });
@@ -3591,9 +3629,21 @@ function renderTodayDashboard(p) {
   // PREMIERS PAS : pour les users sans AUCUN plan (onboarding incomplet)
   try {
     var _hasNutritionPlan = Array.isArray(S.weekPlan) && S.weekPlan.length >= 7;
+    // FIX 2026-04-16 : inclure TOUS les sports, pas seulement muscu.
+    // CF = CF_WODS_FULL (pas sportProgram). Running/triathlon/hyrox/padel/golf/calisthenics
+    // ont leurs propres stores. L'indicateur fiable = S.sportType renseigné.
     var _hasSportPlan = (Array.isArray(S.sportProgram) && S.sportProgram.length > 0)
-                        || (S.muscuIAProgram && Array.isArray(S.muscuIAProgram.weekProgram) && S.muscuIAProgram.weekProgram.length > 0)
-                        || (S.activeProgram && Array.isArray(S.activeProgram.weekProgram) && S.activeProgram.weekProgram.length > 0);
+                        || (S.muscuIAProgram && typeof S.muscuIAProgram === 'string' && S.muscuIAProgram.length > 100)
+                        || (S.activeProgram && Array.isArray(S.activeProgram.weekProgram) && S.activeProgram.weekProgram.length > 0)
+                        || (S.sportType === 'crossfit' && (window.CF_WODS_FULL || []).length > 0)
+                        || (S.sportType === 'running' && S.runningProgram)
+                        || (S.sportType === 'triathlon' && S.triathlonProgram)
+                        || (S.sportType === 'hyrox' && S.hyroxProgram)
+                        || (S.sportType === 'padel' && S.padelProgram)
+                        || (S.sportType === 'golf' && S.golfProgram)
+                        || (S.sportType === 'cycling' && S.cyclingProgram)
+                        || (S.sportType === 'calisthenics')
+                        || (S.sportType === 'musculation' && !!S.sportType);
     if (!_hasNutritionPlan && !_hasSportPlan) {
       var _firstStepCard = card();
       _firstStepCard.appendChild(eyebrow('COMMENCER'));
