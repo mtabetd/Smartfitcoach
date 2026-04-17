@@ -59,7 +59,14 @@ function filterExerciseByMedical(ex, med) {
  // développé nuque / behind-neck (compression C4-C6 + impingement), handstand push-up (HSPU).
  // Réf : Ludewig & Cook, Phys Ther 2000 ; Flatow et al., JSES 1994.
  if (med.shoulders || med.rotatorCuff) {
- if (/militaire|d[eé]velopp[eé] militaire|developpe militaire|d[eé]velopp[eé] halteres|developpe halteres|arnold press|overhead press|el[eé]vation.*lat[eé]rale|elevations? lat[eé]rales?|elevation frontale|elevations? frontales?|dips|upright row|tirage menton|lu raise|behind.?neck|nuque|handstand|hspu/.test(n)) return false;
+ // FIX 2026-04-17 : regex épaules élargie — bugs découverts en audit muscu live
+ //  1) `el[eé]vation` ne matchait pas `Élévations` (É majuscule → lowercase "é") car
+ //     le premier char était `e` sans classe d'accent. Corrigé en `[eé]l[eé]vation`.
+ //  2) Manquaient : push/strict/z-press (variantes overhead), cable lateral raise,
+ //     machine shoulder press, kettlebell press, leaning lateral raise, overhead carry.
+ //  Tous ces exos chargent l'épaule au-dessus de 90° d'abduction / en compression axiale
+ //  overhead → contre-indiqués en cas de conflit sous-acromial ou lésion coiffe.
+ if (/militaire|d[eé]velopp[eé] militaire|developpe militaire|d[eé]velopp[eé] halteres|developpe halteres|arnold press|overhead press|push\s+press|strict\s+press|\bz[\s-]?press\b|[eé]l[eé]vation.*lat[eé]rale|[eé]l[eé]vations?\s+lat[eé]rales?|[eé]l[eé]vation\s+frontale|[eé]l[eé]vations?\s+frontales?|cable\s+lateral\s+raise|machine\s+shoulder\s+press|kettlebell\s+press|leaning\s+lateral\s+raise|overhead\s+carry|dips|upright row|tirage menton|lu raise|behind.?neck|nuque|handstand|hspu/.test(n)) return false;
  }
 
  // ── COUDES — ÉPICONDYLITE LATÉRALE (tennis elbow) / MÉDIALE (golfer's elbow) ──
@@ -2267,6 +2274,30 @@ function renderCrossfitLevel(p) {
        else { S.trainingDaysSelected.push(idx); S.trainingDaysSelected.sort(function(a, b) { return a - b; }); }
        var cnt = S.trainingDaysSelected.length;
        if (cnt > 0) S.sportDays = Math.max(3, Math.min(6, cnt));
+       // SPRINT 2 F1 HYPERSTAB 2026-04-17 — sync conditionnel weeklyCalendar.
+       // Si l'user a déjà visité le smart calendar (weeklyCalendar existe comme
+       // objet en mémoire), on met à jour UNIQUEMENT la cellule touchée pour
+       // éviter la désync visuelle flaguée par UX agent. Conditions strictes :
+       //   - weeklyCalendar est un objet (pas null, pas array)
+       //   - S.sportType est défini (pas de label orphelin "sport" écrit)
+       //   - on ne touche pas une cellule customisée vers un AUTRE sport
+       //     (respect de la personnalisation smart-calendar)
+       // En onboarding : weeklyCalendar est null → condition false → no-op.
+       // NB: la persistance cross-reload dépend du fix de loadProfile (~l.399
+       // reset weeklyCalendar si !Array) — hors-scope Sprint 2, session-only.
+       if (S.sportType && S.weeklyCalendar && typeof S.weeklyCalendar === 'object' && !Array.isArray(S.weeklyCalendar)) {
+         var _sportLabel = S.sportType;
+         var _dayKey = String(idx);
+         if (pos !== -1) {
+           // Day deselected : ne libérer que si c'était bien le sport courant
+           if (S.weeklyCalendar[_dayKey] === _sportLabel) S.weeklyCalendar[_dayKey] = 'repos';
+         } else {
+           // Day selected : n'assigner que si c'était 'repos' ou absent
+           if (!S.weeklyCalendar[_dayKey] || S.weeklyCalendar[_dayKey] === 'repos') {
+             S.weeklyCalendar[_dayKey] = _sportLabel;
+           }
+         }
+       }
        try { window.saveProfile(); } catch(e) {}
        window.render();
      }
@@ -4255,6 +4286,24 @@ function renderMusculationLevel(p) {
        // FIX VALIDATION WEEKPLAN 2026-04 : dévalider (jours training changés)
        if (window.devalidateWeekPlan) window.devalidateWeekPlan('trainingDaysSelected changed');
        else if (typeof S.weekPlanValidated !== 'undefined') S.weekPlanValidated = false;
+       // SPRINT 2 F1 HYPERSTAB 2026-04-17 — sync conditionnel weeklyCalendar (muscu).
+       // Même logique que dans renderCrossfitLevel : n'agit que si weeklyCalendar
+       // existe déjà en mémoire (user a déjà ouvert smart-calendar dans la session)
+       // ET S.sportType est défini (pas de label orphelin "muscu" écrit).
+       // Préserve les customisations user vers d'autres sports.
+       // NB: la persistance cross-reload dépend du fix de loadProfile (~l.399
+       // reset weeklyCalendar si !Array) — hors-scope Sprint 2, session-only.
+       if (S.sportType && S.weeklyCalendar && typeof S.weeklyCalendar === 'object' && !Array.isArray(S.weeklyCalendar)) {
+         var _sportLabelM = S.sportType;
+         var _dayKeyM = String(idx);
+         if (_mp !== -1) {
+           if (S.weeklyCalendar[_dayKeyM] === _sportLabelM) S.weeklyCalendar[_dayKeyM] = 'repos';
+         } else {
+           if (!S.weeklyCalendar[_dayKeyM] || S.weeklyCalendar[_dayKeyM] === 'repos') {
+             S.weeklyCalendar[_dayKeyM] = _sportLabelM;
+           }
+         }
+       }
        try { window.saveProfile(); } catch(e) {}
        window.render();
      }

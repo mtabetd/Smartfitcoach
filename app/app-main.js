@@ -160,9 +160,29 @@ var NUTRITION_PLAN_KEYS = [
 
 // FIX F6 CONTRE-AUDIT 2026-04 : clés qui affectent le programme SPORT.
 // Si l'une change post-validation, devalidateSportProgram() est appelé.
+// HYPERSTAB 2026-04-17 : `trainingDaysSelected` retiré volontairement —
+// il détermine QUELS jours d'entraînement (lundi/mercredi/...) mais PAS
+// la structure du split (qui dépend de `sportDays`, le NOMBRE de jours).
+// Les générateurs (muscu/running/triathlon/hyrox/cycling/calisthenics/yoga)
+// n'utilisent aucun `trainingDaysSelected`, donc changer les jours sans
+// changer leur nombre ne doit pas régénérer ni dévalider le programme sport.
+// `trainingDaysSelected` reste dans NUTRITION_PLAN_KEYS (carb cycling).
+//
+// Sprint 2 F2 revert (audits Symbiose + UX) : l'idée d'ajouter
+// `runningDays/hyroxDays/padelDays/golfDays/cyclingDays` a été tentée puis
+// retirée. Raisons cumulées :
+//   1. Le guard saveProfile ligne ~247 `if (!raw3 || !S.sportProgram) return`
+//      exit tôt pour un runner (S.sportProgram est null, le plan vit dans
+//      S.runningProgram). L'ajout était donc un no-op silencieux.
+//   2. Même sans le guard, le bandeau "Confirmez votre programme" ne
+//      régénère pas S.runningProgram ; l'user cliquerait "Confirmer" sur
+//      un plan périmé → désync validée (pire que la désync silencieuse
+//      pré-existante).
+// Fix propre reporté : étendre le guard + pipeline de régénération par
+// sportType depuis le bandeau. À traiter dans un sprint dédié.
 var SPORT_PROGRAM_KEYS = [
  'sportLevel', 'sportDays', 'sportEquipment', 'sportType', 'sportGoals',
- 'sportFocus', 'muscuMedical', 'trainingDaysSelected',
+ 'sportFocus', 'muscuMedical',
  'sportMixEnabled', 'sportMixSecondary'
 ];
 
@@ -1250,7 +1270,7 @@ function renderProfilePage(container) {
    var restoreBtn = h('button', {
      style: 'display:block;width:100%;padding:14px;border:1px solid var(--accent,#1A4A1A);background:rgba(26,74,26,0.06);color:var(--accent,#1A4A1A);font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;min-height:44px;',
      onclick: function() {
-       if (!confirm('Restaurer tes données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.')) return;
+       if (!confirm('Restaurer vos données depuis le cloud ?\n\nLes données locales seront remplacées par la dernière sauvegarde cloud.')) return;
        restoreBtn.textContent = 'Restauration en cours...';
        restoreBtn.disabled = true;
        SupaSync.loadProfile().then(function(cloudData) {
@@ -1380,7 +1400,7 @@ function renderProfilePage(container) {
        }
        var sizeMB = (jsonStr.length / (1024 * 1024));
        if (sizeMB > 50) {
-         var ok = window.confirm('Ton export fait ' + sizeMB.toFixed(1) + ' Mo (contient probablement beaucoup de photos). '
+         var ok = window.confirm('Votre export fait ' + sizeMB.toFixed(1) + ' Mo (contient probablement beaucoup de photos). '
            + 'Le téléchargement peut être long. Continuer ?');
          if (!ok) return;
        }
