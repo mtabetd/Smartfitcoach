@@ -1058,7 +1058,15 @@ function buildContextualHero(moment, S) {
 
     ctx.action = {
       labelLower: 'Logger mon petit-déjeuner', label: 'LOGGER MON PETIT-DÉJEUNER',
-      onclick: function() { S.view = 'nutrition'; if (window.render) window.render(); }
+      onclick: function() {
+        // HYPERSTAB 2026-04-17 — aligné sur l'action midi : cibler explicitement
+        // la vue logger (nStep=12) + le jour courant, sinon le user atterrit sur
+        // l'étape où il était la dernière fois (souvent nStep=0 → onboarding).
+        S.view = 'nutrition';
+        S.nStep = 12;
+        S.selectedDay = todayIdx;
+        if (window.render) window.render();
+      }
     };
 
   } else if (moment === 'midi') {
@@ -2600,8 +2608,7 @@ function todayImportData() {
 }
 
 function todayDeleteAllData() {
-  if (!confirm('Êtes-vous sûr(e) ? Toutes vos données seront supprimées définitivement.')) return;
-  if (!confirm('Dernière confirmation : cette action est irréversible. Continuer ?')) return;
+  if (!confirm('Action irr\u00e9versible. Toutes vos donn\u00e9es seront supprim\u00e9es d\u00e9finitivement. Continuer ?')) return;
   var keysToRemove = [];
   for (var i = 0; i < localStorage.length; i++) {
     var key = localStorage.key(i);

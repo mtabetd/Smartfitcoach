@@ -160,9 +160,16 @@ var NUTRITION_PLAN_KEYS = [
 
 // FIX F6 CONTRE-AUDIT 2026-04 : clés qui affectent le programme SPORT.
 // Si l'une change post-validation, devalidateSportProgram() est appelé.
+// HYPERSTAB 2026-04-17 : `trainingDaysSelected` retiré volontairement —
+// il détermine QUELS jours d'entraînement (lundi/mercredi/...) mais PAS
+// la structure du split (qui dépend de `sportDays`, le NOMBRE de jours).
+// Les générateurs (muscu/running/triathlon/hyrox/cycling/calisthenics/yoga)
+// n'utilisent aucun `trainingDaysSelected`, donc changer les jours sans
+// changer leur nombre ne doit pas régénérer ni dévalider le programme sport.
+// `trainingDaysSelected` reste dans NUTRITION_PLAN_KEYS (carb cycling).
 var SPORT_PROGRAM_KEYS = [
  'sportLevel', 'sportDays', 'sportEquipment', 'sportType', 'sportGoals',
- 'sportFocus', 'muscuMedical', 'trainingDaysSelected',
+ 'sportFocus', 'muscuMedical',
  'sportMixEnabled', 'sportMixSecondary'
 ];
 
