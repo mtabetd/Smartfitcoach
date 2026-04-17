@@ -4146,17 +4146,6 @@ function renderTodayDashboard(p) {
     }
     var _nutNeedsValidation = S.weekPlan && Array.isArray(S.weekPlan) && S.weekPlan.length >= 7
       && (!S.weekPlanValidated || (S.weekPlanValidatedISOWeek && _isoWeek && S.weekPlanValidatedISOWeek !== _isoWeek));
-    if (_nutNeedsValidation) {
-      var _nutBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
-      _nutBanner.appendChild(eyebrow('NUTRITION'));
-      _nutBanner.appendChild(cardTitle('Validez votre plan de la semaine'));
-      _nutBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre plan nutrition est pr\u00eat. Confirmez-le pour qu\u2019il apparaisse dans votre suivi.'));
-      _nutBanner.appendChild(h('button', {
-        style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
-        onclick: function() { S.weekPlanValidated = true; if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek; S._planHash = (S.weekPlan && Array.isArray(S.weekPlan)) ? JSON.stringify(S.weekPlan).length : 0; if (window.saveProfile) window.saveProfile(); if (window.render) window.render(); }
-      }, 'VALIDER MON PLAN NUTRITION'));
-      wrapper.appendChild(_nutBanner);
-    }
     // FIX 2026-04-16 : ne pas afficher le bandeau si AUCUN programme n'existe encore.
     // Bug : un user sans programme généré voyait le bandeau "Confirme ton programme" alors
     //       qu'il n'y avait rien à confirmer. Maintenant on attend qu'un programme existe
@@ -4167,16 +4156,68 @@ function renderTodayDashboard(p) {
       || S.golfProgram || S.yogaWeek || S.calisthenicsWeek;
     var _sportNeedsValidation = S.sportType && !S.sportProgramValidated && _hasAnyProgram
       && (S.appMode === 'sport' || S.appMode === 'both');
-    if (_sportNeedsValidation) {
-      var _sportBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
-      _sportBanner.appendChild(eyebrow('SPORT'));
-      _sportBanner.appendChild(cardTitle('Confirmez votre programme sportif'));
-      _sportBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre programme est g\u00e9n\u00e9r\u00e9. Confirmez-le pour activer le suivi.'));
-      _sportBanner.appendChild(h('button', {
+
+    // P2 HYPERSTAB 2026-04-17 — Bannière fusionnée quand les DEUX plans sont à valider.
+    // Préserve intégralement la logique individuelle quand un seul plan est concerné.
+    var _bothNeedValidation = _nutNeedsValidation && _sportNeedsValidation;
+
+    if (_bothNeedValidation) {
+      var _bothBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
+      _bothBanner.appendChild(eyebrow('VOTRE SEMAINE'));
+      _bothBanner.appendChild(cardTitle('Validez vos deux programmes'));
+      _bothBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre plan nutrition et votre programme sportif sont pr\u00eats. Confirmez-les pour activer le suivi de la semaine.'));
+      _bothBanner.appendChild(h('button', {
         style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
-        onclick: function() { S.sportProgramValidated = true; S.sportProgramValidatedAt = new Date().toISOString(); if (window.saveProfile) window.saveProfile(); if (window.render) window.render(); }
-      }, 'CONFIRMER MON PROGRAMME'));
-      wrapper.appendChild(_sportBanner);
+        onclick: function() {
+          try {
+            S.weekPlanValidated = true;
+            if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek;
+            S._planHash = (S.weekPlan && Array.isArray(S.weekPlan)) ? JSON.stringify(S.weekPlan).length : 0;
+            S.sportProgramValidated = true;
+            S.sportProgramValidatedAt = new Date().toISOString();
+            if (window.saveProfile) window.saveProfile();
+            if (window.showToast) window.showToast('Programmes valid\u00e9s pour la semaine', 'success', 2200);
+          } catch(_eBoth) { console.warn('[both banner validate]', _eBoth); }
+          if (window.render) window.render();
+        }
+      }, 'VALIDER MES DEUX PROGRAMMES'));
+      wrapper.appendChild(_bothBanner);
+    } else {
+      if (_nutNeedsValidation) {
+        var _nutBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
+        _nutBanner.appendChild(eyebrow('NUTRITION'));
+        _nutBanner.appendChild(cardTitle('Validez votre plan de la semaine'));
+        _nutBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre plan nutrition est pr\u00eat. Confirmez-le pour qu\u2019il apparaisse dans votre suivi.'));
+        _nutBanner.appendChild(h('button', {
+          style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+          onclick: function() {
+            S.weekPlanValidated = true;
+            if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek;
+            S._planHash = (S.weekPlan && Array.isArray(S.weekPlan)) ? JSON.stringify(S.weekPlan).length : 0;
+            if (window.saveProfile) window.saveProfile();
+            if (window.showToast) window.showToast('Plan nutrition valid\u00e9', 'success', 1800);
+            if (window.render) window.render();
+          }
+        }, 'VALIDER MON PLAN NUTRITION'));
+        wrapper.appendChild(_nutBanner);
+      }
+      if (_sportNeedsValidation) {
+        var _sportBanner = card('border-left:3px solid var(--orange,#6A4A1A);');
+        _sportBanner.appendChild(eyebrow('SPORT'));
+        _sportBanner.appendChild(cardTitle('Confirmez votre programme sportif'));
+        _sportBanner.appendChild(h('div', {style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:12px;line-height:1.5;'}, 'Votre programme est g\u00e9n\u00e9r\u00e9. Confirmez-le pour activer le suivi.'));
+        _sportBanner.appendChild(h('button', {
+          style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
+          onclick: function() {
+            S.sportProgramValidated = true;
+            S.sportProgramValidatedAt = new Date().toISOString();
+            if (window.saveProfile) window.saveProfile();
+            if (window.showToast) window.showToast('Programme sport valid\u00e9', 'success', 1800);
+            if (window.render) window.render();
+          }
+        }, 'CONFIRMER MON PROGRAMME'));
+        wrapper.appendChild(_sportBanner);
+      }
     }
   } catch(_eVal) { console.warn('[validation banners]', _eVal); }
 
