@@ -291,7 +291,11 @@ if (typeof window !== 'undefined') {
     var existing = document.querySelector('.toast');
     if (existing) existing.remove();
     var toast = document.createElement('div');
-    toast.className = 'toast' + (typ ? ' toast-' + typ : '');
+    // FIX UX 2026-04-17 : ajoute toast-long pour les messages > 40 char (micro-caps illisible sinon)
+    var isLong = typeof message === 'string' && message.length > 40;
+    toast.className = 'toast' + (typ ? ' toast-' + typ : '') + (isLong ? ' toast-long' : '');
+    toast.setAttribute('role', typ === 'error' ? 'alert' : 'status');
+    toast.setAttribute('aria-live', typ === 'error' ? 'assertive' : 'polite');
     toast.textContent = message;
     document.body.appendChild(toast);
     setTimeout(function(){ toast.classList.add('show'); }, 10);

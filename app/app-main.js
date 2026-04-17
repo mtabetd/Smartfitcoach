@@ -275,8 +275,23 @@ function saveProfile() {
  }
  // Fallback: plain JSON (if encoding unavailable)
  localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
- } catch(e) { console.warn('Storage quota exceeded ou erreur localStorage:', e); }
- // Sync vers Supabase (debounced)
+ } catch(e) {
+   console.warn('Storage quota exceeded ou erreur localStorage:', e);
+   // FIX P1 DATA INTEGRITY 2026-04-17 : détection quota + alerte user non-bloquante
+   // Avant : échec silencieux → user croit que ses modifs sont persistées alors que non.
+   var _isQuota = e && (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014 || (e.message && e.message.indexOf('quota') !== -1));
+   if (_isQuota) {
+     // Alerter une seule fois par session ET par user (cohérent avec mtd_profile_<uid>)
+     var _quotaFlagKey = '_quotaWarnShown_' + uid;
+     if (!window[_quotaFlagKey]) {
+       window[_quotaFlagKey] = true;
+       if (window.showToast) {
+         window.showToast('Espace de stockage saturé — vos dernières modifications pourraient ne pas être conservées. Reconnectez-vous pour synchroniser.', 'error', 6000);
+       }
+     }
+   }
+ }
+ // Sync vers Supabase (debounced) — même si local a échoué, le cloud peut prendre le relais
  if (window.SupaSync) SupaSync.scheduleSave();
 }
 // Migration centralisée des anciens numéros de step vers le nouveau routing (Apr 2026)
@@ -380,6 +395,39 @@ function loadProfile() {
  if (S.swapCount === undefined) S.swapCount = 0;
  if (S.bodyScanDone === undefined) S.bodyScanDone = false;
  if (S._bodyFatEstimate === undefined) S._bodyFatEstimate = null;
+
+ // ─── FIX P1 DATA INTEGRITY 2026-04-17 — REPAIR ON LOAD ───
+ // Corrige les corruptions silencieuses (string au lieu de number, flag désync, clés mortes).
+ // Exécuté à CHAQUE loadProfile — absorbe 50% des dégâts de corruption historique.
+ try {
+   // 1. Repair numeric fields (peuvent devenir string via vieilles migrations)
+   if (typeof S.weight === 'string') { var _w = parseFloat(S.weight); S.weight = isNaN(_w) ? null : _w; }
+   if (S.weight !== null && S.weight !== undefined && (S.weight <= 0 || S.weight > 300)) S.weight = null;
+   if (typeof S.targetWeight === 'string') { var _tw = parseFloat(S.targetWeight); S.targetWeight = isNaN(_tw) ? null : _tw; }
+   if (S.targetWeight !== null && S.targetWeight !== undefined && (S.targetWeight <= 0 || S.targetWeight > 300)) S.targetWeight = null;
+   if (typeof S.height === 'string') { var _h = parseFloat(S.height); S.height = isNaN(_h) ? null : _h; }
+   if (S.height !== null && S.height !== undefined && (S.height <= 0 || S.height > 260)) S.height = null;
+   if (typeof S.age === 'string') { var _a = parseInt(S.age, 10); S.age = isNaN(_a) ? null : _a; }
+   if (S.age !== null && S.age !== undefined && (S.age < 10 || S.age > 120)) S.age = null;
+   if (typeof S.prePregnancyWeight === 'string') { var _pw = parseFloat(S.prePregnancyWeight); S.prePregnancyWeight = isNaN(_pw) ? null : _pw; }
+
+   // 2. Repair validation flags désynchronisés (flag=true mais programme=null)
+   if (S.weekPlanValidated && !S.weekPlan) S.weekPlanValidated = false;
+   // Exhaustif : couvre tous les types de programmes sport (référence : today-dashboard.js:4166)
+   if (S.sportProgramValidated
+       && !S.sportProgram && !S.muscuIAProgram
+       && !S.runningProgram && !S.cyclingProgram
+       && !S.triathlonProgram && !S.hyroxProgram
+       && !S.padelProgram && !S.calisthenicsProgram) {
+     S.sportProgramValidated = false;
+   }
+
+   // 3. Note : pas de suppression de clés localStorage ici — mtd_muscu_program,
+   //    mtd_muscu_ia_progress, mtd_muscu_generations sont TOUJOURS utilisées
+   //    (muscu-program-generator.js ligne 18 + supabase-client.js ligne 167 les sync).
+   //    L'audit les avait marquées "legacy" à tort. On ne les touche pas.
+ } catch(_eRepair) { console.warn('[loadProfile] repair failed:', _eRepair && _eRepair.message); }
+
  // Reset ephemeral UI state that should not persist across sessions
  // FIX 2026-04-16 : ajoute S.view au reset pour forcer 'today' au prochain loadProfile.
  // (S.view n'est pas dans PROFILE_KEYS mais les routeurs _resolvePostLoginView / _doAutoLogin
@@ -406,8 +454,14 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
  if (!app || !app.nodeType) return; // FIX edge audit : guard p=null
  // Safe first name retrieval — S.prenom preferred, fallback to auth name, no crash
  var _u = window.AUTH ? window.AUTH.getUser() : null;
- var _name = (window.S && window.S.prenom && window.S.prenom.trim())
-   || (_u && _u.name && (_u.name.trim().split(/\s+/).filter(Boolean)[0] || '').trim()) || '';
+ // FIX P0 stability 2026-04-17 : typeof check supplémentaire (crash si _u.name non-string)
+ var _nameFromAuth = '';
+ if (_u && typeof _u.name === 'string' && _u.name.trim()) {
+   var _partsAuth = _u.name.trim().split(/\s+/).filter(Boolean);
+   _nameFromAuth = (_partsAuth[0] || '').trim();
+ }
+ var _name = (window.S && typeof window.S.prenom === 'string' && window.S.prenom.trim())
+   || _nameFromAuth || '';
  var _cap = _name ? _name.charAt(0).toUpperCase() + _name.slice(1) : '';
  var _titleText = _cap
    ? (_cap + ', nous allons apprendre \u00e0 vous conna\u00eetre.')
@@ -1321,7 +1375,7 @@ function renderProfilePage(container) {
        var jsonStr;
        try { jsonStr = JSON.stringify(exportPayload, null, 2); }
        catch(serErr) {
-         alert('Impossible de sérialiser tes données (trop volumineuses ou corrompues). Contacte le DPO si le problème persiste.');
+         if (window.showToast) window.showToast('Impossible de s\u00e9rialiser vos donn\u00e9es. Contactez le DPO si le probl\u00e8me persiste.', 'error', 5000);
          return;
        }
        var sizeMB = (jsonStr.length / (1024 * 1024));
@@ -1338,7 +1392,7 @@ function renderProfilePage(container) {
        document.body.appendChild(a); a.click();
        document.body.removeChild(a);
        URL.revokeObjectURL(url);
-     } catch(ex) { console.warn('[RGPD] download error', ex); alert('Erreur lors du téléchargement. Réessaie.'); }
+     } catch(ex) { console.warn('[RGPD] download error', ex); if (window.showToast) window.showToast('Erreur lors du t\u00e9l\u00e9chargement. R\u00e9essayez.', 'error', 3500); }
    }
  }, 'Télécharger mes données (RGPD)');
  c.appendChild(downloadDataBtn);
@@ -1762,16 +1816,30 @@ function render() {
 
  // Main navigation (tabs adaptés selon S.appMode)
  var nav = h('nav', {'class': 'main-nav', role: 'navigation', 'aria-label': 'Navigation principale'});
- nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'today' || S.view === 'dashboard' || !S.view ? ' active' : ''), onclick: function(){ S.view = 'today'; if(window.BLACKBOX)window.BLACKBOX.log('nav_today'); render(); }}, 'Aujourd\'hui'));
+ var _navIcons = {
+   today: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 3v2 M12 19v2 M3 12h2 M19 12h2 M5.6 5.6l1.4 1.4 M17 17l1.4 1.4 M5.6 18.4l1.4-1.4 M17 7l1.4-1.4"/></svg>',
+   nutrition: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 3v7a2 2 0 0 0 4 0V3 M9 10v11 M16 3c-1.5 1.5-2 3.5-2 5 0 2 1 3 2 3v10"/></svg>',
+   sport: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 9v6 M6 7v10 M8 12h8 M18 7v10 M21 9v6"/></svg>',
+   calendar: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M8 3v4 M16 3v4 M3 10h18"/></svg>'
+ };
+ function _makeNavTab(key, label, isActive, logKey, targetView) {
+   var attrs = {'class': 'main-nav-tab' + (isActive ? ' active' : ''), onclick: function(){ S.view = targetView; if(window.BLACKBOX)window.BLACKBOX.log(logKey); render(); }};
+   if (isActive) attrs['aria-current'] = 'page';
+   var btn = h('button', attrs);
+   btn.insertAdjacentHTML('afterbegin', _navIcons[key]);
+   btn.appendChild(h('span', {'class': 'main-nav-tab-label'}, label));
+   return btn;
+ }
+ nav.appendChild(_makeNavTab('today', 'Aujourd\'hui', (S.view === 'today' || S.view === 'dashboard' || !S.view), 'nav_today', 'today'));
  if (S.appMode !== 'sport') {
-   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, window.t('nav.nutrition')));
+   nav.appendChild(_makeNavTab('nutrition', window.t('nav.nutrition'), S.view === 'nutrition', 'nav_nutrition', 'nutrition'));
  }
  if (S.appMode !== 'nutrition') {
-   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, window.t('nav.sport')));
+   nav.appendChild(_makeNavTab('sport', window.t('nav.sport'), S.view === 'sport', 'nav_sport', 'sport'));
  }
  if (S.appMode) {
    // Calendrier accessible en mode sport ET nutrition (le calendrier pilote les jours training/repos = données nutritionnelles)
-   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'calendar' ? ' active' : ''), style: 'font-size:11px', onclick: function(){ S.view = 'calendar'; if(window.BLACKBOX)window.BLACKBOX.log('nav_calendar'); render(); }}, 'Calendrier'));
+   nav.appendChild(_makeNavTab('calendar', 'Calendrier', S.view === 'calendar', 'nav_calendar', 'calendar'));
  }
  wrap.appendChild(nav);
 
@@ -2685,8 +2753,10 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Auto-populate prenom from auth metadata if missing (new users, OAuth, etc.)
  if (!S.prenom) {
    var _autoUser = window.AUTH ? window.AUTH.getUser() : null;
-   if (_autoUser && _autoUser.name && _autoUser.name !== _autoUser.email) {
-     S.prenom = _autoUser.name.split(' ')[0];
+   // FIX P0 stability 2026-04-17 : guard typeof avant .split()
+   if (_autoUser && typeof _autoUser.name === 'string' && _autoUser.name.trim() && _autoUser.name !== _autoUser.email) {
+     var _autoParts = _autoUser.name.trim().split(/\s+/);
+     if (_autoParts[0]) S.prenom = _autoParts[0];
    }
  }
  // Note : la migration nStep=0 est gérée par _migrateSteps() (appelé ligne 1867)

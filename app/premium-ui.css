@@ -651,21 +651,71 @@ html {
 .main-nav-tab {
   flex: 1;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   /* FIX P0 audit mobile 2026-04-15 : tap target ≥ 44px (Apple HIG / WCAG 2.5.5).
      Avant : font:9px, padding:8px → ~34px → trop petit pour le doigt. */
-  min-height: 44px;
+  min-height: 48px;
   font-size: 11px;
-  padding: 14px 4px;
+  padding: 10px 4px 12px;
   cursor: pointer;
+  /* FIX UX 2026-04-17 : colonne flex pour icône + label */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--grey, #6B6B65);
+  position: relative;
 }
 
 .main-nav-tab:hover {
   background: rgba(10, 10, 9, 0.02);
+  color: var(--black, #0A0A09);
+}
+
+/* FIX UX 2026-04-17 : icône nav Hermès — ligne 1.5px, 20x20px, éditorial */
+.main-nav-tab-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-width 0.25s ease;
+  flex-shrink: 0;
+}
+.main-nav-tab-icon * {
+  stroke: currentColor;
+  fill: none;
+}
+.main-nav-tab-label {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  line-height: 1;
 }
 
 .main-nav-tab.active {
   font-weight: 500;
+  color: var(--black, #0A0A09);
+}
+
+/* FIX UX 2026-04-17 : état actif avec soulignement sapin animé (signature Hermès) */
+.main-nav-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background: var(--accent, var(--green, #1A4A1A));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-nav-tab.active .main-nav-tab-icon {
+  stroke-width: 2;
 }
 
 /* -------------------------------------------------------
@@ -909,10 +959,32 @@ input[inputmode="decimal"]:not([data-mini]) {
   z-index: 2000;
   border: 1px solid var(--black, #0A0A09);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: calc(100vw - 32px);
+  text-align: center;
+  line-height: 1.5;
 }
 
 .toast.show {
   transform: translateX(-50%) translateY(0);
+}
+
+/* FIX UX 2026-04-17 : variantes toast (success sapin, error tabac, info noir).
+   Ajout du long-text modifier pour les messages d'erreur (>40 char) — passe en
+   textCase:none + letter-spacing réduit pour rester lisible. */
+.toast-long {
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  padding: 14px 20px;
+  max-width: 340px;
+}
+.toast-success {
+  background: var(--sapin, var(--green, #1A4A1A));
+  border-color: var(--sapin, var(--green, #1A4A1A));
+}
+.toast-error {
+  background: var(--tabac, #6A4A1A);
+  border-color: var(--tabac, #6A4A1A);
 }
 
 
@@ -1194,7 +1266,8 @@ body.dark-mode ::-webkit-scrollbar-track{background:var(--ivory)}
   h1              { letter-spacing: 2px; }
   h2              { letter-spacing: 2px; }
   .eyebrow        { letter-spacing: 2px; }
-  .main-nav-tab   { letter-spacing: 1.5px; padding: 14px 8px; }
+  .main-nav-tab   { padding: 10px 4px 12px; }
+  .main-nav-tab-label { letter-spacing: 1.5px; }
   /* Coach IA panel : input-area plus compact sur petit mobile */
   #ai-coach-input-area { padding: 12px 14px; gap: 8px; }
   #ai-coach-send       { padding: 10px 14px; letter-spacing: 2px; }
@@ -1946,8 +2019,8 @@ body, p, .subtitle {
   letter-spacing: 6px;
 }
 
-/* Navigation tabs: reduced letter-spacing to prevent overflow on 4-tab layout */
-.main-nav-tab {
+/* Navigation tabs: reduced letter-spacing sur le label enfant (layout 4-tab) */
+.main-nav-tab-label {
   letter-spacing: 2px;
 }
 
@@ -2046,22 +2119,23 @@ body, p, .subtitle {
   background: rgba(250, 250, 247, 0.92);
 }
 
-.main-nav-tab {
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+/* FIX UX 2026-04-17 : legacy rules neutralisées — flex column (icône + label)
+   gère maintenant la typographie via .main-nav-tab-label. text-overflow/nowrap
+   retirés car ils clipperaient l'icône SVG enfant dans le flex container. */
+.main-nav-tab .main-nav-tab-label {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 14px 6px;
+  max-width: 100%;
 }
 
-/* Extra-narrow screens: even tighter padding */
+/* Extra-narrow screens: letter-spacing réduit sur le label uniquement */
 @media (max-width: 420px) {
-  .main-nav-tab {
-    font-size: 11px;
+  .main-nav-tab-label {
     letter-spacing: 1px;
-    padding: 12px 4px;
+  }
+  .main-nav-tab {
+    padding: 8px 2px 10px;
   }
 }
 

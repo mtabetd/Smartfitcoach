@@ -136,8 +136,13 @@ function buildContext() {
     }
   } catch(eS) {}
 
+  // FIX P0 stability 2026-04-17 : guard typeof user.name avant .split() (crash si non-string)
+  var _aiFirst = '';
+  if (user && typeof user.name === 'string' && user.name.trim()) {
+    _aiFirst = user.name.trim().split(/\s+/)[0] || '';
+  }
   var ctx = {
-    prenom: (window.getDisplayFirstName ? window.getDisplayFirstName() : (user && user.name ? user.name.split(' ')[0] : (S.prenom || ''))),
+    prenom: (window.getDisplayFirstName ? window.getDisplayFirstName() : (_aiFirst || S.prenom || '')),
     sex: S.sex || '',
     age: S.age || '',
     weight: S.weight || '',

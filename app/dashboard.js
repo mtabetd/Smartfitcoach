@@ -1624,7 +1624,7 @@ function importData() {
     reader.onload = function(ev) {
       try {
         var backup = JSON.parse(ev.target.result);
-        if (!backup.data || !backup.version) { alert('Fichier invalide'); return; }
+        if (!backup.data || !backup.version) { if (window.showToast) window.showToast('Fichier invalide', 'error', 3000); return; }
 
         if (!confirm('Cela remplacera vos données actuelles. Continuer ?')) return;
 
@@ -1635,7 +1635,7 @@ function importData() {
         if (window.GAMIFICATION) GAMIFICATION.showToast('Données restaurées !');
         setTimeout(function(){ location.reload(); }, 1000);
       } catch(err) {
-        alert('Erreur de lecture : ' + err.message);
+        if (window.showToast) window.showToast('Erreur de lecture : ' + err.message, 'error', 4000);
       }
     };
     reader.readAsText(file);

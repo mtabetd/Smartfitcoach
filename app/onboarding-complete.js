@@ -38,7 +38,11 @@
     var s = window.S;
     if (s && s.prenom) return s.prenom;
     var user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null;
-    if (user && user.name) return user.name.split(' ')[0];
+    // FIX P0 stability 2026-04-17 : guard typeof avant .split()
+    if (user && typeof user.name === 'string' && user.name.trim()) {
+      var _parts = user.name.trim().split(/\s+/);
+      if (_parts[0]) return _parts[0];
+    }
     return '';
   }
 
