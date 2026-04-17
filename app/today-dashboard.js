@@ -4191,11 +4191,13 @@ function renderTodayDashboard(p) {
         _nutBanner.appendChild(h('button', {
           style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
           onclick: function() {
-            S.weekPlanValidated = true;
-            if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek;
-            S._planHash = (S.weekPlan && Array.isArray(S.weekPlan)) ? JSON.stringify(S.weekPlan).length : 0;
-            if (window.saveProfile) window.saveProfile();
-            if (window.showToast) window.showToast('Plan nutrition valid\u00e9', 'success', 1800);
+            try {
+              S.weekPlanValidated = true;
+              if (_isoWeek) S.weekPlanValidatedISOWeek = _isoWeek;
+              S._planHash = (S.weekPlan && Array.isArray(S.weekPlan)) ? JSON.stringify(S.weekPlan).length : 0;
+              if (window.saveProfile) window.saveProfile();
+              if (window.showToast) window.showToast('Plan nutrition valid\u00e9', 'success', 1800);
+            } catch(_eNut) { console.warn('[nut banner validate]', _eNut); }
             if (window.render) window.render();
           }
         }, 'VALIDER MON PLAN NUTRITION'));
@@ -4209,10 +4211,12 @@ function renderTodayDashboard(p) {
         _sportBanner.appendChild(h('button', {
           style:'padding:12px 20px;background:var(--accent,#1A4A1A);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;min-height:44px;',
           onclick: function() {
-            S.sportProgramValidated = true;
-            S.sportProgramValidatedAt = new Date().toISOString();
-            if (window.saveProfile) window.saveProfile();
-            if (window.showToast) window.showToast('Programme sport valid\u00e9', 'success', 1800);
+            try {
+              S.sportProgramValidated = true;
+              S.sportProgramValidatedAt = new Date().toISOString();
+              if (window.saveProfile) window.saveProfile();
+              if (window.showToast) window.showToast('Programme sport valid\u00e9', 'success', 1800);
+            } catch(_eSp) { console.warn('[sport banner validate]', _eSp); }
             if (window.render) window.render();
           }
         }, 'CONFIRMER MON PROGRAMME'));
