@@ -123,8 +123,13 @@ function buildContext() {
   var S = window.S || {};
   var user = null;
   try { user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null; } catch(e) {}
+  // FIX P0 stability 2026-04-17 : guard typeof avant .split()
+  var _bodyFirst = '';
+  if (user && typeof user.name === 'string' && user.name.trim()) {
+    _bodyFirst = user.name.trim().split(/\s+/)[0] || '';
+  }
   return {
-    prenom: user && user.name ? user.name.split(' ')[0] : (S.prenom || ''),
+    prenom: _bodyFirst || S.prenom || '',
     sex: S.sex || '',
     age: S.age || '',
     weight: S.weight || '',

@@ -12,6 +12,7 @@
   var _generating = false;
   var _loadingInterval = null;
   var _previousFocus = null;
+  var _generationSafetyTimer = null;
 
   var MAX_GENERATIONS_PER_WEEK = 3;
   var LS_KEY_PROGRAM = 'mtd_muscu_program';
@@ -760,6 +761,8 @@
 
   function closeModal() {
     if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+    // FIX P0 stability 2026-04-17 : clear safety timer aussi (évite ghost timer après fermeture)
+    if (_generationSafetyTimer) { clearTimeout(_generationSafetyTimer); _generationSafetyTimer = null; }
     _generating = false; // toujours réinitialiser pour éviter le blocage si fermé pendant génération
     if (_modalEl) _modalEl.style.display = 'none';
     if (_previousFocus && _previousFocus.focus) {
@@ -1289,9 +1292,26 @@
     }, 50);
   }
 
+  // FIX P0 stability 2026-04-17 : safety net — si pour une raison quelconque (exception JS
+  // dans .then, race condition, etc.) _generating reste bloqué à true, on le libère
+  // automatiquement après 35s (timeout fetch = 10s → 35s est un upper bound safe).
+  // Évite le bouton "Générer" bloqué forever qui nécessitait un reload.
+  function _scheduleGenerationSafetyReset() {
+    if (_generationSafetyTimer) clearTimeout(_generationSafetyTimer);
+    _generationSafetyTimer = setTimeout(function() {
+      if (_generating) {
+        console.warn('[muscu-prog] Safety reset: _generating flag stuck, force release');
+        _generating = false;
+        if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+      }
+      _generationSafetyTimer = null;
+    }, 35000);
+  }
+
   function generateMuscuProgram() {
     if (_generating) return;
     _generating = true;
+    _scheduleGenerationSafetyReset();
     // Détecter si c'est la première génération
     var _S = window.S || {};
     var _isFirstProgram = (!_S.muscuProgramCount || _S.muscuProgramCount === 0);
@@ -1321,6 +1341,7 @@
     if (!profile || !window.S || !window.S.sex || !window.S.weight || !window.S.height) {
       _generating = false;
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+      if (_generationSafetyTimer) { clearTimeout(_generationSafetyTimer); _generationSafetyTimer = null; }
       if (window.showToast) window.showToast('Profil incomplet \u2014 compl\u00e9tez votre onboarding (sexe, poids, taille)', 'error', 4000);
       return;
     }
@@ -1345,6 +1366,7 @@
       if (_mcTimer) clearTimeout(_mcTimer);
       _generating = false;
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+      if (_generationSafetyTimer) { clearTimeout(_generationSafetyTimer); _generationSafetyTimer = null; }
 
       // Record this generation for the weekly counter
       recordGeneration();
@@ -1421,6 +1443,7 @@
       if (_mcTimer) clearTimeout(_mcTimer);
       _generating = false;
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
+      if (_generationSafetyTimer) { clearTimeout(_generationSafetyTimer); _generationSafetyTimer = null; }
       console.warn('[muscu-prog] serveur indisponible, bascule fallback local:', err && err.message);
 
       // FIX BIBLE MUSCU §4 : FALLBACK LOCAL SILENCIEUX.

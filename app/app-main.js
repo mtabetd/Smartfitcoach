@@ -406,8 +406,14 @@ window.renderWelcomeScreen = function renderWelcomeScreen(app) {
  if (!app || !app.nodeType) return; // FIX edge audit : guard p=null
  // Safe first name retrieval — S.prenom preferred, fallback to auth name, no crash
  var _u = window.AUTH ? window.AUTH.getUser() : null;
- var _name = (window.S && window.S.prenom && window.S.prenom.trim())
-   || (_u && _u.name && (_u.name.trim().split(/\s+/).filter(Boolean)[0] || '').trim()) || '';
+ // FIX P0 stability 2026-04-17 : typeof check supplémentaire (crash si _u.name non-string)
+ var _nameFromAuth = '';
+ if (_u && typeof _u.name === 'string' && _u.name.trim()) {
+   var _partsAuth = _u.name.trim().split(/\s+/).filter(Boolean);
+   _nameFromAuth = (_partsAuth[0] || '').trim();
+ }
+ var _name = (window.S && typeof window.S.prenom === 'string' && window.S.prenom.trim())
+   || _nameFromAuth || '';
  var _cap = _name ? _name.charAt(0).toUpperCase() + _name.slice(1) : '';
  var _titleText = _cap
    ? (_cap + ', nous allons apprendre \u00e0 vous conna\u00eetre.')
@@ -2699,8 +2705,10 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  // Auto-populate prenom from auth metadata if missing (new users, OAuth, etc.)
  if (!S.prenom) {
    var _autoUser = window.AUTH ? window.AUTH.getUser() : null;
-   if (_autoUser && _autoUser.name && _autoUser.name !== _autoUser.email) {
-     S.prenom = _autoUser.name.split(' ')[0];
+   // FIX P0 stability 2026-04-17 : guard typeof avant .split()
+   if (_autoUser && typeof _autoUser.name === 'string' && _autoUser.name.trim() && _autoUser.name !== _autoUser.email) {
+     var _autoParts = _autoUser.name.trim().split(/\s+/);
+     if (_autoParts[0]) S.prenom = _autoParts[0];
    }
  }
  // Note : la migration nStep=0 est gérée par _migrateSteps() (appelé ligne 1867)

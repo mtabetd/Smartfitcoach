@@ -806,7 +806,13 @@ function renderCardNextMeal() {
 // ─── WELCOME BANNER — Bon retour parmi nous ───
 function renderWelcomeBanner(S) {
   var user = window.AUTH ? window.AUTH.getUser() : null;
-  var firstName = (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || (user && user.name ? user.name.split(' ')[0] : '') || ''));
+  // FIX P0 stability 2026-04-17 : guard typeof user.name avant .split() (crash si name non-string)
+  var _userFirst = '';
+  if (user && typeof user.name === 'string' && user.name.trim()) {
+    var _parts = user.name.trim().split(/\s+/);
+    _userFirst = _parts[0] || '';
+  }
+  var firstName = (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || _userFirst || ''));
 
   var days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
   var months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
@@ -1150,7 +1156,13 @@ window.renderHeroContextuel = renderHeroContextuel;
 function renderCardBonjour(S) {
   var c = card();
   var user = window.AUTH ? window.AUTH.getUser() : null;
-  var firstName = (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || (user && user.name ? user.name.split(' ')[0] : '') || ''));
+  // FIX P0 stability 2026-04-17 : guard typeof user.name avant .split() (crash si name non-string)
+  var _userFirst = '';
+  if (user && typeof user.name === 'string' && user.name.trim()) {
+    var _parts = user.name.trim().split(/\s+/);
+    _userFirst = _parts[0] || '';
+  }
+  var firstName = (window.getDisplayFirstName ? window.getDisplayFirstName() : (S.prenom || _userFirst || ''));
 
   // Random daily quote — seeded by day of year for consistency
   var allQuotes = (window.SPORT_QUOTES && window.SPORT_QUOTES.length) ? window.SPORT_QUOTES : TODAY_QUOTES;
