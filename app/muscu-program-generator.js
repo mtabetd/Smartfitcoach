@@ -808,7 +808,7 @@
         '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:1px;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quels équipements avez-vous à disposition ?</h3>' +
         '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 20px 0;line-height:1.6;">Sélectionnez toutes vos installations disponibles. Le programme ne prescrira que ce que vous pouvez réellement faire. <strong>Sélection multiple.</strong></p>' +
         '<div id="install-cards-wrap">' + cardsHTML + '</div>' +
-        '<div id="install-error" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#B02020;margin:8px 0 0 0;display:none;">Sélectionne au moins une installation pour continuer.</div>' +
+        '<div id="install-error" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#B02020;margin:8px 0 0 0;display:none;">Sélectionnez au moins une installation pour continuer.</div>' +
         '<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">' +
           '<button id="install-confirm" style="background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;padding:14px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:48px;">Continuer →</button>' +
         '</div>' +
@@ -884,7 +884,7 @@
         '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quel résultat voulez-vous obtenir en priorité ?</h3>' +
         '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Votre programme sera entièrement construit autour de cet objectif — split, charges et périodisation s\'adapteront en conséquence.</p>' +
         '<div id="obj-cards-wrap">' + cardsHTML + '</div>' +
-        '<div id="obj-error" style="font-size:11px;color:#B02020;margin:6px 0 0 0;display:none;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sélectionne un objectif pour continuer.</div>' +
+        '<div id="obj-error" style="font-size:11px;color:#B02020;margin:6px 0 0 0;display:none;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sélectionnez un objectif pour continuer.</div>' +
         '<div style="margin-top:20px;">' +
           '<button id="obj-confirm" style="background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;padding:14px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:48px;">Continuer \u2192</button>' +
         '</div>' +
@@ -960,7 +960,7 @@
       '<div style="padding:8px 4px 24px 4px;">' +
         renderStepperBar(3, 6) +
         '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quels groupes musculaires voulez-vous développer ?</h3>' +
-        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 16px 0;line-height:1.6;">Sélection multiple. Laisse vide pour un programme équilibré sur tout le corps.</p>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 16px 0;line-height:1.6;">Sélection multiple. Laissez vide pour un programme équilibré sur tout le corps.</p>' +
         '<div id="zone-cards-wrap" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;">' + cardsHTML + '</div>' +
         '<div style="margin-bottom:20px;">' +
           '<label style="display:block;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;">Ce que vous voulez renforcer / améliorer (optionnel)</label>' +
@@ -1157,7 +1157,7 @@
           }).join('') +
         '</div>' +
 
-        '<div id="ps-error" style="font-size:11px;color:#B02020;margin:0 0 10px 0;display:none;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sélectionne un niveau pour continuer.</div>' +
+        '<div id="ps-error" style="font-size:11px;color:#B02020;margin:0 0 10px 0;display:none;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sélectionnez un niveau pour continuer.</div>' +
         '<button id="ps-next" style="background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;padding:14px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:48px;">Continuer \u2192</button>' +
       '</div>';
 

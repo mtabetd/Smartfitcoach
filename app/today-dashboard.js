@@ -2586,7 +2586,7 @@ function todayImportData() {
       try {
         var backup = JSON.parse(ev.target.result);
         if (!backup.data || !backup.version) { if (window.showToast) window.showToast('Fichier invalide', 'error', 3000); return; }
-        if (!confirm('Cela remplacera tes données actuelles. Continuer ?')) return;
+        if (!confirm('Cela remplacera vos données actuelles. Continuer ?')) return;
         Object.keys(backup.data).forEach(function(key) {
           localStorage.setItem(key, typeof backup.data[key] === 'string' ? backup.data[key] : JSON.stringify(backup.data[key]));
         });
@@ -2600,7 +2600,7 @@ function todayImportData() {
 }
 
 function todayDeleteAllData() {
-  if (!confirm('Es-tu sûr(e) ? Toutes tes données seront supprimées définitivement.')) return;
+  if (!confirm('Êtes-vous sûr(e) ? Toutes vos données seront supprimées définitivement.')) return;
   if (!confirm('Dernière confirmation : cette action est irréversible. Continuer ?')) return;
   var keysToRemove = [];
   for (var i = 0; i < localStorage.length; i++) {
@@ -4659,7 +4659,7 @@ function renderCardTodayForYou() {
   var content = { title: '', body: '', items: [], ctaLabel: '', ctaFn: null, critical: false };
   if (selectedCondition === 'pregnant') {
     content.title = 'Semaine ' + S.pregnancyWeek + ' \u00b7 focus oméga-3';
-    content.body = 'Le cerveau de ton bébé construit ses synapses cette semaine. Vise 300 mg de DHA aujourd\'hui. Saumon, maquereau ou supplément recommandé.';
+    content.body = 'Le cerveau de votre bébé construit ses synapses cette semaine. Visez 300 mg de DHA aujourd\'hui. Saumon, maquereau ou supplément recommandé.';
     content.items = [
       { name: 'Saumon frais (100 g)', detail: '1 500 mg DHA' },
       { name: 'Maquereau (100 g)', detail: '2 000 mg DHA' },
@@ -4670,7 +4670,7 @@ function renderCardTodayForYou() {
     content.critical = true;
   } else if (selectedCondition === 'irc') {
     content.title = 'Rappel potassium';
-    content.body = 'Tes reins préfèrent rester sous 800 mg de potassium aujourd\'hui. La banane, l\'abricot sec et la pomme de terre sont à surveiller.';
+    content.body = 'Vos reins préfèrent rester sous 800 mg de potassium aujourd\'hui. La banane, l\'abricot sec et la pomme de terre sont à surveiller.';
     content.items = [
       { name: 'Yaourt nature', detail: '120 mg K\u207a' },
       { name: 'Riz basmati cuit', detail: '55 mg K\u207a' },
@@ -4681,7 +4681,7 @@ function renderCardTodayForYou() {
     content.critical = true;
   } else if (selectedCondition === 'menopause') {
     content.title = 'Calcium et magnésium';
-    content.body = 'Ta densité osseuse se joue chaque jour. Vise 1 200 mg de calcium et 320 mg de magnésium. Les amandes et le yaourt grec sont tes alliés.';
+    content.body = 'Votre densité osseuse se joue chaque jour. Visez 1 200 mg de calcium et 320 mg de magnésium. Les amandes et le yaourt grec sont vos alliés.';
     content.items = [
       { name: 'Yaourt grec (200 g)', detail: '280 mg Ca' },
       { name: 'Amandes (30 g)', detail: '75 mg Mg' },
@@ -4701,7 +4701,7 @@ function renderCardTodayForYou() {
     content.ctaFn = function() { S.view = 'nutrition'; if (window.render) window.render(); };
   } else if (selectedCondition === 'diabete') {
     content.title = 'Index glycémique bas';
-    content.body = 'Privilégie les aliments IG bas aujourd\'hui : céréales complètes, légumineuses, légumes. Évite les sucres rapides.';
+    content.body = 'Privilégiez les aliments IG bas aujourd\'hui : céréales complètes, légumineuses, légumes. Évitez les sucres rapides.';
     content.items = [
       { name: 'Flocons d\'avoine', detail: 'IG 55' },
       { name: 'Quinoa cuit', detail: 'IG 53' },
@@ -4712,7 +4712,7 @@ function renderCardTodayForYou() {
   } else if (selectedCondition === 'muscu_deload') {
     // FIX SPRINT P2.9 — Branche muscu deload (semaine 4, 8, 12 du mésocycle)
     content.title = 'Semaine de décharge';
-    content.body = 'Tu es en semaine ' + S.muscuWeek + ' — fin de mésocycle. Réduction volume −50%, intensité −15%. C\'est une vraie phase d\'entraînement, pas un repos. La super-compensation post-deload est ton moteur de progression.';
+    content.body = 'Vous êtes en semaine ' + S.muscuWeek + ' — fin de mésocycle. Réduction volume −50%, intensité −15%. C\'est une vraie phase d\'entraînement, pas un repos. La super-compensation post-deload est votre moteur de progression.';
     content.items = [
       { name: 'Volume',    detail: '−50% sets' },
       { name: 'Intensité', detail: '−15% charges (RIR 4)' },
@@ -4722,8 +4722,8 @@ function renderCardTodayForYou() {
     content.ctaFn = function() { S.view = 'sport'; if (window.render) window.render(); };
   } else if (selectedCondition === 'muscu_pr') {
     // FIX SPRINT P2.9 — Branche muscu post-PR (record battu cette semaine)
-    content.title = 'Tu as battu un record';
-    content.body = 'Ton corps a délivré une nouvelle marche cette semaine. Pour consolider : repas riche en protéines (1.6 g/kg minimum), 8h de sommeil, récup active. Le PR n\'est tenu que si tu peux le refaire.';
+    content.title = 'Vous avez battu un record';
+    content.body = 'Votre corps a délivré une nouvelle marche cette semaine. Pour consolider : repas riche en protéines (1.6 g/kg minimum), 8h de sommeil, récup active. Le PR n\'est tenu que si vous pouvez le refaire.';
     content.items = [
       { name: 'Protéines',    detail: '1.6-2.0 g/kg' },
       { name: 'Sommeil',      detail: '8h+ pour récup' },
@@ -4739,7 +4739,7 @@ function renderCardTodayForYou() {
 
   c.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-500,#6B6B65);font-weight:500;margin-bottom:16px;'
-  }, 'AUJOURD\'HUI POUR TOI'));
+  }, 'AUJOURD\'HUI POUR VOUS'));
 
   c.appendChild(h('div', {
     style: 'font-family:Georgia,serif;font-size:22px;line-height:1.25;color:var(--ink-900,#0A0A09);margin-bottom:12px;'
@@ -5255,13 +5255,13 @@ if (!document.getElementById('hermes-drawer-styles')) {
 // ═══════════════════════════════════════════════════════════════════════════
 // Usage : jargonTooltip('TDEE') → span avec (?) cliquable, tap ouvre un popover.
 var JARGON_DEFS = {
-  'TDEE': { title: 'TDEE', text: 'Besoin calorique quotidien total. Calculé à partir de ton métabolisme de base (BMR) × un coefficient d\'activité physique. Unité : kcal/jour.' },
-  'BMR': { title: 'BMR', text: 'Métabolisme de base — énergie brûlée au repos pour maintenir tes fonctions vitales. Formule Mifflin-St Jeor.' },
-  '1RM': { title: '1RM', text: 'Charge maximale que tu peux soulever une seule fois sur un mouvement donné. Référence pour calculer tes charges de travail.' },
+  'TDEE': { title: 'TDEE', text: 'Besoin calorique quotidien total. Calculé à partir de votre métabolisme de base (BMR) × un coefficient d\'activité physique. Unité : kcal/jour.' },
+  'BMR': { title: 'BMR', text: 'Métabolisme de base — énergie brûlée au repos pour maintenir vos fonctions vitales. Formule Mifflin-St Jeor.' },
+  '1RM': { title: '1RM', text: 'Charge maximale que vous pouvez soulever une seule fois sur un mouvement donné. Référence pour calculer vos charges de travail.' },
   'RPE': { title: 'RPE', text: 'Rate of Perceived Exertion — effort ressenti de 1 à 10. 7 = dur mais contrôlé, 10 = impossible une rep de plus.' },
-  'RIR': { title: 'RIR', text: 'Reps In Reserve — combien de répétitions tu aurais pu faire en plus avant l\'échec. RIR 2 = il t\'en restait 2.' },
-  'VO2max': { title: 'VO2 max', text: 'Capacité maximale d\'oxygène que ton corps utilise à l\'effort. Indicateur clé d\'endurance cardio.' },
-  'K⁺': { title: 'Potassium', text: 'Minéral essentiel. En cas d\'insuffisance rénale, ton apport doit être surveillé (≤ 2 000 mg/j selon stade).' },
+  'RIR': { title: 'RIR', text: 'Reps In Reserve — combien de répétitions vous auriez pu faire en plus avant l\'échec. RIR 2 = il vous en restait 2.' },
+  'VO2max': { title: 'VO2 max', text: 'Capacité maximale d\'oxygène que votre corps utilise à l\'effort. Indicateur clé d\'endurance cardio.' },
+  'K⁺': { title: 'Potassium', text: 'Minéral essentiel. En cas d\'insuffisance rénale, votre apport doit être surveillé (≤ 2 000 mg/j selon stade).' },
   'DASH': { title: 'DASH', text: 'Régime Dietary Approaches to Stop Hypertension. Réduit le sodium, augmente le potassium/magnésium/calcium. Baisse la PA de 5-8 mmHg.' },
   'macros': { title: 'Macronutriments', text: 'Les 3 grandes familles caloriques : protéines (4 kcal/g), glucides (4 kcal/g), lipides (9 kcal/g).' }
 };
