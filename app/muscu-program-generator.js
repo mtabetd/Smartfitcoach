@@ -34,13 +34,13 @@
   ];
 
   var LOADING_PHRASES = [
-    'On analyse ton profil et on calcule tes charges adapt\u00e9es.',
-    'On choisit le split qui colle \u00e0 tes jours dispo et ton matos.',
+    'On analyse votre profil et on calcule vos charges adapt\u00e9es.',
+    'On choisit le split qui colle \u00e0 vos jours dispo et votre mat\u00e9riel.',
     'On calibre chaque charge pour cette semaine.',
-    'On construit ta semaine en tenant compte de ta progression\u2026',
+    'On construit votre semaine en tenant compte de votre progression\u2026',
     'On r\u00e9dige les conseils techniques pour chaque exo.',
-    'On int\u00e8gre tes restrictions m\u00e9dicales et ta r\u00e9cup\u00e9ration.',
-    'Dernier ajustement sur ton programme. C\'est bient\u00f4t pr\u00eat\u2026'
+    'On int\u00e8gre vos restrictions m\u00e9dicales et votre r\u00e9cup\u00e9ration.',
+    'Dernier ajustement sur votre programme. C\'est bient\u00f4t pr\u00eat\u2026'
   ];
 
   var FOOTER_QUOTES = [
@@ -805,8 +805,8 @@
     content.innerHTML =
       '<div style="padding:8px 4px 24px 4px;">' +
         renderStepperBar(1, 6) +
-        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:1px;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quels équipements as-tu à disposition ?</h3>' +
-        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 20px 0;line-height:1.6;">Sélectionne toutes tes installations disponibles. Le programme ne prescrira que ce que tu peux réellement faire. <strong>Sélection multiple.</strong></p>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;letter-spacing:1px;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quels équipements avez-vous à disposition ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 20px 0;line-height:1.6;">Sélectionnez toutes vos installations disponibles. Le programme ne prescrira que ce que vous pouvez réellement faire. <strong>Sélection multiple.</strong></p>' +
         '<div id="install-cards-wrap">' + cardsHTML + '</div>' +
         '<div id="install-error" style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:#B02020;margin:8px 0 0 0;display:none;">Sélectionne au moins une installation pour continuer.</div>' +
         '<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">' +
@@ -881,8 +881,8 @@
     content.innerHTML =
       '<div style="padding:8px 4px 24px 4px;">' +
         renderStepperBar(2, 6) +
-        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quel résultat veux-tu obtenir en priorité ?</h3>' +
-        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Ton programme sera entièrement construit autour de cet objectif — split, charges et périodisation s\'adapteront en conséquence.</p>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quel résultat voulez-vous obtenir en priorité ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Votre programme sera entièrement construit autour de cet objectif — split, charges et périodisation s\'adapteront en conséquence.</p>' +
         '<div id="obj-cards-wrap">' + cardsHTML + '</div>' +
         '<div id="obj-error" style="font-size:11px;color:#B02020;margin:6px 0 0 0;display:none;font-family:\'Helvetica Neue\',Arial,sans-serif;">Sélectionne un objectif pour continuer.</div>' +
         '<div style="margin-top:20px;">' +
@@ -959,7 +959,7 @@
     content.innerHTML =
       '<div style="padding:8px 4px 24px 4px;">' +
         renderStepperBar(3, 6) +
-        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quels groupes musculaires veux-tu développer ?</h3>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 8px 0;">Quels groupes musculaires voulez-vous développer ?</h3>' +
         '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 16px 0;line-height:1.6;">Sélection multiple. Laisse vide pour un programme équilibré sur tout le corps.</p>' +
         '<div id="zone-cards-wrap" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;">' + cardsHTML + '</div>' +
         '<div style="margin-bottom:20px;">' +
@@ -1042,8 +1042,8 @@
     content.innerHTML =
       '<div style="padding:8px 4px 24px 4px;">' +
         renderStepperBar(4, 6) +
-        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 6px 0;">Ton niveau de stress actuel ?</h3>' +
-        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Ton programme s\'adaptera : volume, repos inter-séries et intensité s\'ajustent selon ta capacité de récupération.</p>' +
+        '<h3 style="font-family:Georgia,serif;font-size:20px;font-weight:normal;color:var(--ink-900,#0A0A09);margin:0 0 6px 0;">Votre niveau de stress actuel ?</h3>' +
+        '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:12px;color:var(--ink-500,#6B6B65);margin:0 0 18px 0;line-height:1.6;">Votre programme s\'adaptera : volume, repos inter-séries et intensité s\'ajustent selon votre capacité de récupération.</p>' +
         '<div id="stress-opts">' + optionsHTML + '</div>' +
         '<div style="font-size:11px;color:var(--ink-900,#0A0A09);font-family:\'Helvetica Neue\',Arial,sans-serif;font-weight:600;margin:12px 0 20px;text-align:center;">Niveau sélectionné : <span id="stress-val">' + currentStress + '</span>/10</div>' +
         '<button id="stress-next" style="background:var(--ink-900,#0A0A09);color:var(--paper,#FAF9F6);border:none;padding:14px 28px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:\'Helvetica Neue\',Arial,sans-serif;min-height:48px;">Continuer \u2192</button>' +
@@ -1245,8 +1245,8 @@
       : '';
     content.innerHTML = '<div style="text-align:center;padding:32px 24px;">' +
       renderStepperBar(6, 6) +
-      '<h3 style="font-family:Georgia,serif;font-size:24px;font-weight:normal;letter-spacing:1px;color:var(--ink-900,#0A0A09);margin:0 0 20px 0;">Ton programme t\'attend.</h3>' +
-      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--ink-500,#6B6B65);margin:0 auto 24px auto;max-width:520px;">On va croiser ton profil complet — niveau, disponibilités, équipement, objectifs et données de force — pour construire douze semaines qui n\'existent que pour toi. Aucune ligne ne sera générique. Chaque charge sera calculée sur ton profil réel.</p>' +
+      '<h3 style="font-family:Georgia,serif;font-size:24px;font-weight:normal;letter-spacing:1px;color:var(--ink-900,#0A0A09);margin:0 0 20px 0;">Votre programme vous attend.</h3>' +
+      '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--ink-500,#6B6B65);margin:0 auto 24px auto;max-width:520px;">On va croiser votre profil complet — niveau, disponibilités, équipement, objectifs et données de force — pour construire douze semaines qui n\'existent que pour vous. Aucune ligne ne sera générique. Chaque charge sera calculée sur votre profil réel.</p>' +
       (instSummary ? '<div style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-bottom:8px;line-height:1.8;">' + instSummary + '</div>' +
         '<button id="install-change" style="background:transparent;border:none;font-size:10px;color:var(--grey,#6B6B65);cursor:pointer;text-decoration:underline;margin-bottom:20px;font-family:\'Helvetica Neue\',Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;">Modifier mes équipements</button>' : '') +
       '<p style="font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:11px;color:var(--grey3,#9A9A90);margin-bottom:20px;">Génération limitée à 3 fois par semaine. Patientez 30 à 60 secondes.</p>' +
@@ -1473,7 +1473,7 @@
             var escaped = planSummary.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             content.innerHTML =
               '<div style="padding:16px 20px;margin-bottom:16px;border-left:3px solid var(--ink-500,#6B6B65);background:var(--paper-2,#F4F1EA);">' +
-                '<p style="font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);margin:0;line-height:1.55;">Programme personnalisé sur ton appareil.</p>' +
+                '<p style="font-family:Georgia,serif;font-style:italic;font-size:13px;color:var(--ink-500,#6B6B65);margin:0;line-height:1.55;">Programme personnalisé sur votre appareil.</p>' +
               '</div>' +
               '<div style="white-space:pre-wrap;font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;line-height:1.7;color:var(--ink-900,#0A0A09);">' + escaped + '</div>' +
               '<div style="margin-top:24px;text-align:center;border-top:1px solid var(--line,#D8D8D0);padding-top:16px;">' +
@@ -1490,7 +1490,7 @@
 
       // Dernier recours : vue "Réessayer" sobre (pas d'alert, pas de rouge agressif).
       content.innerHTML = '<div style="text-align:center;padding:40px 20px;">' +
-        '<div style="font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-500,#6B6B65);margin-bottom:20px;line-height:1.55;">On n\u2019a pas pu construire ton programme. Vérifie ta connexion.</div>' +
+        '<div style="font-family:Georgia,serif;font-style:italic;font-size:15px;color:var(--ink-500,#6B6B65);margin-bottom:20px;line-height:1.55;">On n\u2019a pas pu construire votre programme. V\u00e9rifiez votre connexion.</div>' +
         '<button id="muscu-prog-retry" style="background:transparent;border:1px solid var(--ink-900,#0A0A09);color:var(--ink-900,#0A0A09);padding:12px 20px;font-family:Georgia,serif;font-style:italic;font-size:13px;cursor:pointer;border-radius:2px;min-height:44px;">Réessayer</button>' +
       '</div>';
       var retryBtn = document.getElementById('muscu-prog-retry');
