@@ -59,7 +59,14 @@ function filterExerciseByMedical(ex, med) {
  // développé nuque / behind-neck (compression C4-C6 + impingement), handstand push-up (HSPU).
  // Réf : Ludewig & Cook, Phys Ther 2000 ; Flatow et al., JSES 1994.
  if (med.shoulders || med.rotatorCuff) {
- if (/militaire|d[eé]velopp[eé] militaire|developpe militaire|d[eé]velopp[eé] halteres|developpe halteres|arnold press|overhead press|el[eé]vation.*lat[eé]rale|elevations? lat[eé]rales?|elevation frontale|elevations? frontales?|dips|upright row|tirage menton|lu raise|behind.?neck|nuque|handstand|hspu/.test(n)) return false;
+ // FIX 2026-04-17 : regex épaules élargie — bugs découverts en audit muscu live
+ //  1) `el[eé]vation` ne matchait pas `Élévations` (É majuscule → lowercase "é") car
+ //     le premier char était `e` sans classe d'accent. Corrigé en `[eé]l[eé]vation`.
+ //  2) Manquaient : push/strict/z-press (variantes overhead), cable lateral raise,
+ //     machine shoulder press, kettlebell press, leaning lateral raise, overhead carry.
+ //  Tous ces exos chargent l'épaule au-dessus de 90° d'abduction / en compression axiale
+ //  overhead → contre-indiqués en cas de conflit sous-acromial ou lésion coiffe.
+ if (/militaire|d[eé]velopp[eé] militaire|developpe militaire|d[eé]velopp[eé] halteres|developpe halteres|arnold press|overhead press|push\s+press|strict\s+press|\bz[\s-]?press\b|[eé]l[eé]vation.*lat[eé]rale|[eé]l[eé]vations?\s+lat[eé]rales?|[eé]l[eé]vation\s+frontale|[eé]l[eé]vations?\s+frontales?|cable\s+lateral\s+raise|machine\s+shoulder\s+press|kettlebell\s+press|leaning\s+lateral\s+raise|overhead\s+carry|dips|upright row|tirage menton|lu raise|behind.?neck|nuque|handstand|hspu/.test(n)) return false;
  }
 
  // ── COUDES — ÉPICONDYLITE LATÉRALE (tennis elbow) / MÉDIALE (golfer's elbow) ──
