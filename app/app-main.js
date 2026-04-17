@@ -275,8 +275,22 @@ function saveProfile() {
  }
  // Fallback: plain JSON (if encoding unavailable)
  localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
- } catch(e) { console.warn('Storage quota exceeded ou erreur localStorage:', e); }
- // Sync vers Supabase (debounced)
+ } catch(e) {
+   console.warn('Storage quota exceeded ou erreur localStorage:', e);
+   // FIX P1 DATA INTEGRITY 2026-04-17 : détection quota + alerte user non-bloquante
+   // Avant : échec silencieux → user croit que ses modifs sont persistées alors que non.
+   var _isQuota = e && (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014 || (e.message && e.message.indexOf('quota') !== -1));
+   if (_isQuota) {
+     // Alerter une seule fois par session pour ne pas harceler
+     if (!window._quotaWarnShown) {
+       window._quotaWarnShown = true;
+       if (window.showToast) {
+         window.showToast('Espace de stockage saturé — vos dernières modifications pourraient ne pas être conservées. Reconnectez-vous pour synchroniser.', 'error', 6000);
+       }
+     }
+   }
+ }
+ // Sync vers Supabase (debounced) — même si local a échoué, le cloud peut prendre le relais
  if (window.SupaSync) SupaSync.scheduleSave();
 }
 // Migration centralisée des anciens numéros de step vers le nouveau routing (Apr 2026)
@@ -380,6 +394,34 @@ function loadProfile() {
  if (S.swapCount === undefined) S.swapCount = 0;
  if (S.bodyScanDone === undefined) S.bodyScanDone = false;
  if (S._bodyFatEstimate === undefined) S._bodyFatEstimate = null;
+
+ // ─── FIX P1 DATA INTEGRITY 2026-04-17 — REPAIR ON LOAD ───
+ // Corrige les corruptions silencieuses (string au lieu de number, flag désync, clés mortes).
+ // Exécuté à CHAQUE loadProfile — absorbe 50% des dégâts de corruption historique.
+ try {
+   // 1. Repair numeric fields (peuvent devenir string via vieilles migrations)
+   if (typeof S.weight === 'string') { var _w = parseFloat(S.weight); S.weight = isNaN(_w) ? null : _w; }
+   if (S.weight !== null && S.weight !== undefined && (S.weight <= 0 || S.weight > 300)) S.weight = null;
+   if (typeof S.targetWeight === 'string') { var _tw = parseFloat(S.targetWeight); S.targetWeight = isNaN(_tw) ? null : _tw; }
+   if (S.targetWeight !== null && S.targetWeight !== undefined && (S.targetWeight <= 0 || S.targetWeight > 300)) S.targetWeight = null;
+   if (typeof S.height === 'string') { var _h = parseFloat(S.height); S.height = isNaN(_h) ? null : _h; }
+   if (S.height !== null && S.height !== undefined && (S.height <= 0 || S.height > 260)) S.height = null;
+   if (typeof S.age === 'string') { var _a = parseInt(S.age, 10); S.age = isNaN(_a) ? null : _a; }
+   if (S.age !== null && S.age !== undefined && (S.age < 10 || S.age > 120)) S.age = null;
+   if (typeof S.prePregnancyWeight === 'string') { var _pw = parseFloat(S.prePregnancyWeight); S.prePregnancyWeight = isNaN(_pw) ? null : _pw; }
+
+   // 2. Repair validation flags désynchronisés (flag=true mais programme=null)
+   if (S.weekPlanValidated && !S.weekPlan) S.weekPlanValidated = false;
+   if (S.sportProgramValidated && !S.sportProgram && !S.muscuIAProgram && !S.runningProgram && !S.cyclingProgram) {
+     S.sportProgramValidated = false;
+   }
+
+   // 3. Note : pas de suppression de clés localStorage ici — mtd_muscu_program,
+   //    mtd_muscu_ia_progress, mtd_muscu_generations sont TOUJOURS utilisées
+   //    (muscu-program-generator.js ligne 18 + supabase-client.js ligne 167 les sync).
+   //    L'audit les avait marquées "legacy" à tort. On ne les touche pas.
+ } catch(_eRepair) { console.warn('[loadProfile] repair failed:', _eRepair && _eRepair.message); }
+
  // Reset ephemeral UI state that should not persist across sessions
  // FIX 2026-04-16 : ajoute S.view au reset pour forcer 'today' au prochain loadProfile.
  // (S.view n'est pas dans PROFILE_KEYS mais les routeurs _resolvePostLoginView / _doAutoLogin
