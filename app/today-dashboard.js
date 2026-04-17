@@ -1057,11 +1057,14 @@ function buildContextualHero(moment, S) {
     }
 
     ctx.action = {
-      labelLower: 'Logger mon petit-déjeuner', label: 'LOGGER MON PETIT-DÉJEUNER',
+      labelLower: 'Voir mon petit-déjeuner proposé', label: 'VOIR MON PETIT-DÉJEUNER PROPOSÉ',
       onclick: function() {
         // HYPERSTAB 2026-04-17 — aligné sur l'action midi : cibler explicitement
-        // la vue logger (nStep=12) + le jour courant, sinon le user atterrit sur
-        // l'étape où il était la dernière fois (souvent nStep=0 → onboarding).
+        // la vue Planning semaine (nStep=12 → renderStep9) + jour courant.
+        // Avant : S.view='nutrition' seul → user atterrissait sur l'étape où il était
+        // la dernière fois (souvent nStep=0 = onboarding). Label renommé "Voir … proposé"
+        // (au lieu de "Logger") pour aligner sur la destination réelle (planning/recette),
+        // le geste "logger / marquer pris" se fait ensuite sur la carte du repas.
         S.view = 'nutrition';
         S.nStep = 12;
         S.selectedDay = todayIdx;
