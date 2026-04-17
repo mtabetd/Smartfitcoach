@@ -281,9 +281,10 @@ function saveProfile() {
    // Avant : échec silencieux → user croit que ses modifs sont persistées alors que non.
    var _isQuota = e && (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014 || (e.message && e.message.indexOf('quota') !== -1));
    if (_isQuota) {
-     // Alerter une seule fois par session pour ne pas harceler
-     if (!window._quotaWarnShown) {
-       window._quotaWarnShown = true;
+     // Alerter une seule fois par session ET par user (cohérent avec mtd_profile_<uid>)
+     var _quotaFlagKey = '_quotaWarnShown_' + uid;
+     if (!window[_quotaFlagKey]) {
+       window[_quotaFlagKey] = true;
        if (window.showToast) {
          window.showToast('Espace de stockage saturé — vos dernières modifications pourraient ne pas être conservées. Reconnectez-vous pour synchroniser.', 'error', 6000);
        }
@@ -412,7 +413,12 @@ function loadProfile() {
 
    // 2. Repair validation flags désynchronisés (flag=true mais programme=null)
    if (S.weekPlanValidated && !S.weekPlan) S.weekPlanValidated = false;
-   if (S.sportProgramValidated && !S.sportProgram && !S.muscuIAProgram && !S.runningProgram && !S.cyclingProgram) {
+   // Exhaustif : couvre tous les types de programmes sport (référence : today-dashboard.js:4166)
+   if (S.sportProgramValidated
+       && !S.sportProgram && !S.muscuIAProgram
+       && !S.runningProgram && !S.cyclingProgram
+       && !S.triathlonProgram && !S.hyroxProgram
+       && !S.padelProgram && !S.calisthenicsProgram) {
      S.sportProgramValidated = false;
    }
 
