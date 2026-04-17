@@ -1293,7 +1293,7 @@ function renderProfilePage(container) {
          if (window.render) render();
        }).catch(function(err) {
          console.error('[restore] Error:', err);
-         if (window.showToast) window.showToast('Erreur de restauration. Vérifie ta connexion.', 'error', 3000);
+         if (window.showToast) window.showToast('Erreur de restauration. Vérifiez votre connexion.', 'error', 3000);
          restoreBtn.textContent = 'Restaurer depuis le cloud';
          restoreBtn.disabled = false;
        });

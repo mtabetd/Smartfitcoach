@@ -77,7 +77,11 @@ function filterExerciseByMedical(ex, med) {
  // Recommander : prise supination ou neutre, extensions poignet légères en rééducation.
  // Réf : Bisset & Vicenzino, JOSPT 2015 ; Coombes et al., Lancet 2013.
  if (med.elbows || med.epicondylitis) {
- if (/curl barre|curl.*halteres|curl marteau|curl concentre|curl pupitre|curl 21|chin.?up|tractions.*pronation|pull.?up.*pronation|skull.?crusher|barre.*front skullcrusher|french press|extension.*triceps|rowing barre|rowing.*prise large|tirage vertical|wrist curl/.test(n)) return false;
+ // FIX 2026-04-17 : regex coudes élargie — audit muscu trouvait 8 curls + 6 ext. triceps
+ // non couverts. Manques : preacher/spider/zottman/drag/reverse/bayesian/cross-body hammer,
+ // pushdown, kickback triceps, JM/Tate press, extension overhead. Fix accent `concentr[eé]`.
+ // Tous sollicitent épicondyles (médial = flexion supination, latéral = extension pronation).
+ if (/curl barre|curl.*halt[eéè]res|curl marteau|curl concentr[eé]|curl pupitre|curl 21|curl [eé]lastique|preacher\s*curl|\bspider\b|bayesian|zottman|drag\s*curl|reverse\s*curl|cross.?body.*hammer|chin.?up|tractions.*pronation|pull.?up.*pronation|skull.?crusher|barre.*front skullcrusher|french press|extension.*triceps?|overhead.*triceps?|extension overhead|pushdown|kickback.*triceps?|jm\s*press|tate\s*press|rowing barre|rowing.*prise large|tirage vertical|wrist curl/.test(n)) return false;
  }
 
  // ── POIGNETS ──
@@ -138,7 +142,9 @@ function filterExerciseByMedical(ex, med) {
  // Flexion vertébrale répétée sous charge — fractures de compression T6-L2
  if (/crunch|sit.?up|ab wheel|roue abdominal|cable crunch|dragon flag|windshield wiper|russian twist|jefferson curl/.test(n)) return false;
  // Charges axiales lourdes — compression vertébrale directe
- if (/squat barre|back squat|soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning/.test(n)) return false;
+ // FIX 2026-04-17 : ajout front squat, hack squat, presse/leg press — toutes compressions axiales
+ // non couvertes précédemment (audit muscu a identifié l'incohérence avec filtre spondylarthrite).
+ if (/squat barre|back squat|front squat|hack squat|presse.*cuisse|leg press|soulev[eé].*terre|deadlift|romanian deadlift|rdl|good morning/.test(n)) return false;
  }
 
  // ── HTA SÉVÈRE (≥180/110 mmHg) ──
