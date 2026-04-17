@@ -4309,7 +4309,7 @@ function showPaywall(feature) {
   var old = document.getElementById('sfc-paywall-modal');
   if (old && old.parentNode) old.parentNode.removeChild(old);
   var h = window.h;
-  if (!h) { alert(name + ' est réservée aux abonnés.'); return; }
+  if (!h) { if (window.showToast) window.showToast(name + ' est r\u00e9serv\u00e9e aux abonn\u00e9s', 'error', 3500); return; }
   var ov = document.createElement('div');
   ov.id = 'sfc-paywall-modal';
   ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,9,0.55);z-index:9500;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s ease;';

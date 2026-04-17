@@ -12,14 +12,38 @@ var S = window.S;
 var h = window.h, txt = window.txt;
 
 // ─── I3: TERM TOOLTIP HELPER ───
-// Returns a span with a native tooltip (title attr) styled with dotted underline
+// FIX UX 2026-04-17 : tooltip cliquable sur mobile (title attr seul = invisible iOS/Android).
+// Desktop : hover affiche le title natif. Mobile : tap affiche un popover custom.
 function termTooltip(term, definition) {
  var span = document.createElement('span');
  span.textContent = term;
  span.title = definition;
+ span.setAttribute('aria-label', definition);
+ span.setAttribute('role', 'button');
+ span.setAttribute('tabindex', '0');
  span.style.cssText = 'border-bottom:1px dotted var(--grey,#6B6B65);cursor:help;';
+ span.addEventListener('click', function(e) {
+  e.stopPropagation();
+  // Ferme les autres tooltips ouverts
+  document.querySelectorAll('.sfc-tooltip-pop').forEach(function(el){ el.remove(); });
+  var pop = document.createElement('div');
+  pop.className = 'sfc-tooltip-pop';
+  pop.textContent = definition;
+  pop.style.cssText = 'position:fixed;max-width:280px;padding:12px 14px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.5;border:1px solid var(--grey,#6B6B65);border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,0.1);z-index:10020;pointer-events:auto;';
+  var rect = span.getBoundingClientRect();
+  var top = rect.bottom + 8;
+  var left = Math.max(12, Math.min(rect.left, window.innerWidth - 292));
+  pop.style.top = top + 'px';
+  pop.style.left = left + 'px';
+  document.body.appendChild(pop);
+  setTimeout(function(){
+   document.addEventListener('click', function _close(){ pop.remove(); document.removeEventListener('click', _close); }, { once: true });
+  }, 10);
+ });
  return span;
 }
+// Exposer pour usage nutrition / autres modules
+if (typeof window !== 'undefined') window.termTooltip = termTooltip;
 
 // ─── MEDICAL EXERCISE FILTER ───
 function filterExerciseByMedical(ex, med) {
@@ -6347,10 +6371,36 @@ function renderMusculationProgram(p) {
  }
 
  var tabs = h('div', {'class': 'day-tabs'});
+ // FIX UX 2026-04-17 : enrichir les onglets "Jour N" avec le focus musculaire (ex : "J1 · Push").
+ // Avant : user devait ouvrir chaque jour pour savoir si c'est Push/Pull/Legs → 3-4 taps.
+ // Maintenant : focus visible dès la tab bar.
+ function _shortFocus(focus) {
+  if (!focus) return '';
+  var f = String(focus).toLowerCase();
+  // Mots-clés muscu → labels courts
+  if (/push|pectoral|poitrine|pecs/.test(f)) return 'Push';
+  if (/pull|dos|dorsaux/.test(f)) return 'Pull';
+  if (/leg|jambe|quadri|fessier|ischio|mollet/.test(f)) return 'Legs';
+  if (/upper|haut/.test(f)) return 'Upper';
+  if (/lower|bas/.test(f)) return 'Lower';
+  if (/full[\s-]?body|tout/.test(f)) return 'Full Body';
+  if (/bras|biceps|triceps/.test(f)) return 'Bras';
+  if (/\bcore\b|abdo|gain/.test(f)) return 'Core';
+  if (/cardio|hiit/.test(f)) return 'Cardio';
+  if (/repos|rest/.test(f)) return 'Repos';
+  // Fallback : premier mot, cap à 8 chars
+  var first = focus.split(/[\s,·\-]/)[0];
+  return first.length > 10 ? first.slice(0, 10) : first;
+ }
  S.sportProgram.forEach(function(day, i) {
-  var _tabLabel = (_currentSplitOpt && _currentSplitOpt.dayLabels && _currentSplitOpt.dayLabels[i])
+  var _base = (_currentSplitOpt && _currentSplitOpt.dayLabels && _currentSplitOpt.dayLabels[i])
    ? _currentSplitOpt.dayLabels[i]
    : day.name;
+  var _short = _shortFocus(day.focus);
+  // Si le label de base contient déjà le focus (ex : "Push"), ne pas dupliquer
+  var _tabLabel = _short && _base && !_base.toLowerCase().includes(_short.toLowerCase())
+   ? 'J' + (i + 1) + ' \u00b7 ' + _short
+   : (_base || ('J' + (i + 1)));
   tabs.appendChild(h('button', {'class': 'day-tab' + (S.selectedSportDay === i ? ' active' : ''), onclick: function(){ S.selectedSportDay = i; window.render(); }}, _tabLabel));
  });
  p.appendChild(tabs);
@@ -6791,7 +6841,8 @@ function renderMusculationProgram(p) {
  inputmode: 'decimal', autocomplete: 'off', 'aria-label': 'Charge (kg)',
  placeholder: weightPlaceholder,
  value: setRow.actualWeight !== null ? String(setRow.actualWeight) : '',
- style: 'width:52px;padding:4px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
+ // FIX UX 2026-04-17 : tap target 60x44 (WCAG 2.5.5) + font 16px anti-zoom iOS
+ style: 'width:64px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
  oninput: (function(sr, _valBtnRef){ return function(e) {
  var v = parseFloat(e.target.value);
  sr.actualWeight = isNaN(v) ? null : v;
@@ -6824,7 +6875,8 @@ function renderMusculationProgram(p) {
  inputmode: 'decimal', autocomplete: 'off', 'aria-label': 'Lest (kg)',
  placeholder: 'kg',
  value: setRow.actualWeight !== null && setRow.actualWeight > 0 ? String(setRow.actualWeight) : '',
- style: 'width:44px;padding:4px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
+ // FIX UX 2026-04-17 : tap target 60x44 (WCAG 2.5.5) + font 16px anti-zoom iOS
+ style: 'width:60px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
  oninput: (function(sr){ return function(e) {
  var v = parseFloat(e.target.value);
  sr.actualWeight = isNaN(v) ? null : v;
@@ -6843,7 +6895,8 @@ function renderMusculationProgram(p) {
  inputmode: 'numeric', autocomplete: 'off', 'aria-label': 'Répétitions',
  placeholder: String(setRow.targetReps),
  value: setRow.actualReps !== null ? String(setRow.actualReps) : '',
- style: 'width:40px;padding:4px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
+ // FIX UX 2026-04-17 : tap target 56x44 (WCAG 2.5.5) + font 16px anti-zoom iOS
+ style: 'width:56px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
  oninput: (function(sr, _isBw){ return function(e) {
  var v = parseInt(e.target.value);
  sr.actualReps = isNaN(v) ? null : v;
@@ -6870,9 +6923,24 @@ function renderMusculationProgram(p) {
  var hasData = _sr.actualReps !== null && (_sr.actualWeight !== null || _bwNoWeight);
 
  if (isValidated) {
- // Série déjà validée : afficher le checkmark
+ // Série déjà validée : afficher le checkmark + bouton annuler discret
  var ok = _sr.actualReps >= _sr.targetReps && (_bwNoWeight || _sr.actualWeight >= _sr.targetWeight);
  inputZone.appendChild(h('span', {'class': ok ? 'set-success' : 'set-fail', style: 'font-size:13px'}, ok ? '\u2713' : '\u2717'));
+ // FIX UX 2026-04-17 : bouton "Annuler" la validation — permet de revenir sur une erreur de frappe
+ var _undoBtn = h('button', {
+  'class': 'set-undo-btn',
+  'aria-label': 'Annuler la validation de cette s\u00e9rie',
+  title: 'Annuler la validation',
+  style: 'margin-left:6px;min-width:44px;min-height:44px;padding:6px 8px;background:transparent;border:none;color:var(--grey,#6B6B65);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
+  onclick: (function(_srUndo){ return function(e) {
+   e.stopPropagation();
+   _srUndo.validated = false;
+   saveMuscuSessionLog();
+   if (window.showToast) window.showToast('S\u00e9rie d\u00e9verrouill\u00e9e', 'info', 1800);
+   if (window.render) window.render();
+  }; })(_sr)
+ }, 'Annuler');
+ inputZone.appendChild(_undoBtn);
  row.classList.add('set-row-validated');
  } else {
  // Bouton de validation
@@ -7223,7 +7291,7 @@ function renderMusculationProgram(p) {
  summary.appendChild(h('div', {'class': 'dt-val'}, '~' + estDuration + ' min'));
  p.appendChild(summary);
 
- // ─── CÉLÉBRATION FIN DE SÉANCE ───
+ // ─── CÉLÉBRATION FIN DE SÉANCE (Hermès : stats + PR detection) ───
  (function() {
   var _celToday = new Date().toISOString().slice(0, 10);
   var _celLog = (S.muscuSessionLog && S.muscuSessionLog[_celToday]) ? S.muscuSessionLog[_celToday] : {};
@@ -7244,21 +7312,99 @@ function renderMusculationProgram(p) {
     }
    });
   });
+
+  // FIX UX 2026-04-17 : détection PR — compare best volume/charge par exercice aux sessions passées.
+  var _prList = [];
+  try {
+   _dayExNames.forEach(function(exName) {
+    var todaySets = (_celLog[exName] || []).filter(function(s){ return s.validated; });
+    if (todaySets.length === 0) return;
+    var todayMax = todaySets.reduce(function(m, s){
+     var w = s.actualWeight || 0;
+     return w > m ? w : m;
+    }, 0);
+    if (todayMax <= 0) return;
+    var histMax = 0;
+    if (S.muscuSessionLog && typeof S.muscuSessionLog === 'object') {
+     Object.keys(S.muscuSessionLog).forEach(function(dateKey){
+      if (dateKey === _celToday) return;
+      var pastSets = (S.muscuSessionLog[dateKey] && S.muscuSessionLog[dateKey][exName]) || [];
+      pastSets.forEach(function(ps){
+       if (ps.validated && ps.actualWeight && ps.actualWeight > histMax) histMax = ps.actualWeight;
+      });
+     });
+    }
+    if (todayMax > histMax && histMax > 0) {
+     _prList.push({name: exName, weight: todayMax, prev: histMax});
+    }
+   });
+  } catch(_ePr) { console.warn('[PR detection]', _ePr); }
+
   var _celCard = document.createElement('div');
-  _celCard.style.cssText = 'border:1px solid #1A4A1A;background:rgba(26,74,26,0.05);padding:20px 20px 16px;margin-top:16px;border-left:4px solid #1A4A1A;';
+  _celCard.style.cssText = 'border:1px solid #1A4A1A;background:rgba(26,74,26,0.05);padding:24px 20px 20px;margin-top:16px;border-left:4px solid #1A4A1A;';
+
+  // Filet + label Hermès
+  var _celLabel = document.createElement('div');
+  _celLabel.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:14px;';
+  var _l1 = document.createElement('span'); _l1.style.cssText = 'flex:1;max-width:56px;height:1px;background:#1A4A1A;'; _celLabel.appendChild(_l1);
+  var _lt = document.createElement('span'); _lt.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:8px;letter-spacing:5px;text-transform:uppercase;color:#1A4A1A;font-weight:600;'; _lt.textContent = 'S\u00e9ance termin\u00e9e'; _celLabel.appendChild(_lt);
+  var _l2 = document.createElement('span'); _l2.style.cssText = 'flex:1;max-width:56px;height:1px;background:#1A4A1A;'; _celLabel.appendChild(_l2);
+  _celCard.appendChild(_celLabel);
+
   var _celTitle = document.createElement('div');
-  _celTitle.style.cssText = 'font-family:Georgia,serif;font-size:16px;font-style:italic;color:#1A4A1A;margin-bottom:6px;';
-  _celTitle.textContent = 'S\u00e9ance termin\u00e9e. Excellent travail.';
+  _celTitle.style.cssText = 'font-family:Georgia,serif;font-size:18px;font-style:italic;color:#0A0A09;margin-bottom:14px;text-align:center;';
+  _celTitle.textContent = 'Excellent travail.';
   _celCard.appendChild(_celTitle);
-  var _celSub = document.createElement('div');
-  _celSub.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.7;letter-spacing:0.3px;';
-  var _celSubText = _totalSets + ' s\u00e9rie' + (_totalSets > 1 ? 's' : '') + ' r\u00e9alis\u00e9e' + (_totalSets > 1 ? 's' : '');
+
+  // Stats grid : séries · volume · durée
+  var _statsRow = document.createElement('div');
+  _statsRow.style.cssText = 'display:flex;justify-content:space-around;gap:8px;margin-bottom:12px;padding:14px 0;border-top:1px solid rgba(26,74,26,0.15);border-bottom:1px solid rgba(26,74,26,0.15);';
+  function _mkStat(val, lbl) {
+   var w = document.createElement('div');
+   w.style.cssText = 'flex:1;text-align:center;min-width:0;';
+   var v = document.createElement('div');
+   v.style.cssText = 'font-family:Georgia,serif;font-size:20px;font-weight:normal;color:#0A0A09;line-height:1;margin-bottom:6px;';
+   v.textContent = val;
+   w.appendChild(v);
+   var l = document.createElement('div');
+   l.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6B6B65;';
+   l.textContent = lbl;
+   w.appendChild(l);
+   return w;
+  }
+  _statsRow.appendChild(_mkStat(String(_totalSets), 'S\u00e9ries'));
   if (_hasVolume) {
    var _vDisplay = window.UNITS ? window.UNITS.displayWeight(Math.round(_totalVolume)) : Math.round(_totalVolume) + '\u00a0kg';
-   _celSubText += ' \u00b7 ' + _vDisplay + ' de volume total';
+   _statsRow.appendChild(_mkStat(_vDisplay, 'Volume'));
   }
-  _celSub.textContent = _celSubText;
-  _celCard.appendChild(_celSub);
+  _statsRow.appendChild(_mkStat('~' + estDuration + '\u00a0min', 'Dur\u00e9e'));
+  _celCard.appendChild(_statsRow);
+
+  // PR banner (si records battus)
+  if (_prList.length > 0) {
+   var _prBanner = document.createElement('div');
+   _prBanner.style.cssText = 'margin-top:8px;padding:10px 12px;background:rgba(26,74,26,0.08);border-left:2px solid #1A4A1A;';
+   var _prLbl = document.createElement('div');
+   _prLbl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1A4A1A;font-weight:600;margin-bottom:4px;';
+   _prLbl.textContent = 'Record' + (_prList.length > 1 ? 's' : '') + ' battu' + (_prList.length > 1 ? 's' : '');
+   _prBanner.appendChild(_prLbl);
+   _prList.slice(0, 3).forEach(function(pr){
+    var _prLine = document.createElement('div');
+    _prLine.style.cssText = 'font-family:Georgia,serif;font-size:12px;color:#0A0A09;line-height:1.5;';
+    var _prW = window.UNITS ? window.UNITS.displayWeight(pr.weight) : (pr.weight + '\u00a0kg');
+    var _prPrev = window.UNITS ? window.UNITS.displayWeight(pr.prev) : (pr.prev + '\u00a0kg');
+    _prLine.textContent = pr.name + ' \u2014 ' + _prW + ' (ancien : ' + _prPrev + ')';
+    _prBanner.appendChild(_prLine);
+   });
+   if (_prList.length > 3) {
+    var _prMore = document.createElement('div');
+    _prMore.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6B6B65;margin-top:4px;';
+    _prMore.textContent = '+ ' + (_prList.length - 3) + ' autre' + (_prList.length - 3 > 1 ? 's' : '');
+    _prBanner.appendChild(_prMore);
+   }
+   _celCard.appendChild(_prBanner);
+  }
+
   p.appendChild(_celCard);
  })();
 
@@ -10151,8 +10297,8 @@ window.renderWellnessCheckin = renderWellnessCheckin;
 // ─── EXPORT SPORT PROGRAM PDF ─────────────────────────────────────────────
 window.exportSportPDF = function() {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
-  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible. Rechargez la page.'); return; }
-  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) { alert('Aucun programme sport \u00e0 exporter. G\u00e9n\u00e9rez d\u2019abord votre programme.'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { if (window.showToast) window.showToast('PDF non disponible. Rechargez la page.', 'error', 3500); return; }
+  if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0) { if (window.showToast) window.showToast('Aucun programme \u00e0 exporter. G\u00e9n\u00e9rez votre programme.', 'error', 4000); return; }
   try {
     var jsPDF = window.jspdf.jsPDF;
     var doc = new jsPDF({unit: 'mm', format: 'a4'});
@@ -10204,7 +10350,7 @@ window.exportSportPDF = function() {
     doc.setFontSize(6); doc.setTextColor(grey[0], grey[1], grey[2]);
     doc.text('Smart Fit Coach \u2014 ' + new Date().toLocaleDateString('fr-FR'), M, 290);
     doc.save('programme-musculation-sem' + (S.muscuWeek || 1) + '.pdf');
-  } catch(e) { console.error('[exportSportPDF] Erreur:', e); alert('Erreur lors de la g\u00e9n\u00e9ration du PDF programme.'); }
+  } catch(e) { console.error('[exportSportPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF programme', 'error', 3500); }
 };
 
 })();

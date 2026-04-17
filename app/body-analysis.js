@@ -385,10 +385,10 @@ function shareBodyAnalysis() {
     });
   } else if (navigator.clipboard) {
     navigator.clipboard.writeText(shareData.title + '\n' + shareData.text + '\n' + shareData.url)
-      .then(function() { alert('Lien copié dans le presse-papier !'); })
-      .catch(function() { alert('Partage non disponible.'); });
+      .then(function() { if (window.showToast) window.showToast('Lien copié', 'success', 2200); })
+      .catch(function() { if (window.showToast) window.showToast('Partage non disponible', 'error', 2800); });
   } else {
-    alert('Partage non disponible sur ce navigateur.');
+    if (window.showToast) window.showToast('Partage non disponible sur ce navigateur', 'error', 3000);
   }
 }
 window.shareBodyAnalysis = shareBodyAnalysis;
@@ -464,11 +464,11 @@ function buildPanel() {
       var file = e.target.files[0];
       if (!file) return;
       if (!file.type.startsWith('image/')) {
-        alert('Veuillez sélectionner une image.');
+        if (window.showToast) window.showToast('Veuillez sélectionner une image', 'error', 3000);
         return;
       }
       if (file.size > 10 * 1024 * 1024) {
-        alert('Image trop volumineuse (max 10MB).');
+        if (window.showToast) window.showToast('Image trop volumineuse (max 10\u00a0MB)', 'error', 3000);
         return;
       }
       compressImage(file, function(b64) {
@@ -516,7 +516,7 @@ function buildPanel() {
   btn.textContent = 'Lancer l\'analyse';
   btn.disabled = true;
   btn.addEventListener('click', function() {
-    if (!consentCb.checked) { alert('Veuillez accepter le consentement avant de lancer l\u2019analyse.'); return; }
+    if (!consentCb.checked) { if (window.showToast) window.showToast('Veuillez accepter le consentement avant l\u2019analyse', 'error', 3500); return; }
     runAnalysis();
   });
   consentCb.addEventListener('change', function() { updateBtn(); });

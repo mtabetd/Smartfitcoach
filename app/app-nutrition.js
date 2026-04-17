@@ -2775,15 +2775,24 @@ function renderNutritionCompletion(p) {
       var statsRow = h('div', {
         style: 'display:flex;justify-content:center;flex-wrap:wrap;gap:0;margin-bottom:32px'
       });
+      // FIX UX 2026-04-17 : tooltips explicatifs pour termes techniques (MB/TDEE/Cible)
+      // Réutilise window.termTooltip (défini dans app-sport.js) pour cohérence Hermès — DRY.
       var statItems = [
-        {label: 'MB', value: bmr + '\u00a0kcal/j'},
-        {label: 'TDEE', value: tdee + '\u00a0kcal/j'},
-        {label: 'Cible', value: tgt + '\u00a0kcal/j'}
+        {label: 'MB', value: bmr + '\u00a0kcal/j', tip: 'M\u00e9tabolisme de Base \u2014 calories que votre corps consomme au repos complet (respiration, circulation, etc.)'},
+        {label: 'TDEE', value: tdee + '\u00a0kcal/j', tip: 'Total Daily Energy Expenditure \u2014 votre d\u00e9pense \u00e9nerg\u00e9tique totale sur une journ\u00e9e (MB + activit\u00e9 quotidienne + sport)'},
+        {label: 'Cible', value: tgt + '\u00a0kcal/j', tip: 'Objectif calorique quotidien \u2014 ajust\u00e9 selon votre objectif (d\u00e9ficit pour perdre, surplus pour prendre du muscle, maintien pour stabiliser)'}
       ];
+      var _microLabelStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65)';
       statItems.forEach(function(item, idx) {
         var cell = h('div', {style: 'display:flex;align-items:center;gap:6px'});
-        var labelEl = h('span', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65)'});
-        labelEl.textContent = item.label;
+        var labelEl;
+        if (window.termTooltip) {
+          labelEl = window.termTooltip(item.label, item.tip);
+          labelEl.style.cssText = _microLabelStyle + ';border-bottom:1px dotted var(--grey,#6B6B65);cursor:help;';
+        } else {
+          labelEl = h('span', {style: _microLabelStyle, title: item.tip, 'aria-label': item.tip});
+          labelEl.textContent = item.label;
+        }
         var valEl = h('span', {style: 'font-family:Georgia,serif;font-size:13px;font-style:italic;color:var(--black,#1A1A18)'});
         valEl.textContent = item.value;
         cell.appendChild(labelEl);
@@ -3454,9 +3463,10 @@ function renderStep9(p) {
     card.appendChild(h('div', {'class': 'meal-name'}, [h('span', {'class': 'meal-flag'}, r.f || ''), txt(r.n || 'Repas')]));
     card.appendChild(h('div', {'class': 'meal-kcal'}, (r.k || 0) + ' kcal'));
     var mc = h('div', {'class': 'meal-macros'});
-    mc.appendChild(h('span', {}, 'G ' + (r.g || 0) + 'g'));
-    mc.appendChild(h('span', {}, 'P ' + (r.p || 0) + 'g'));
-    mc.appendChild(h('span', {}, 'L ' + (r.l || 0) + 'g'));
+    var _microMacroStyle = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);';
+    mc.appendChild(h('span', {title:'Glucides', style:_microMacroStyle}, 'GLU. ' + (r.g || 0) + 'g'));
+    mc.appendChild(h('span', {title:'Prot\u00e9ines', style:_microMacroStyle}, 'PROT. ' + (r.p || 0) + 'g'));
+    mc.appendChild(h('span', {title:'Lipides', style:_microMacroStyle}, 'LIP. ' + (r.l || 0) + 'g'));
     card.appendChild(mc);
     var lv = r.lv || 0;
     var stars = '';
@@ -3586,9 +3596,9 @@ function renderStep9(p) {
 
   // Add macro breakdown
   var macroInfo = h('div', {style: 'display:flex;gap:12px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey)'});
-  macroInfo.appendChild(h('span', {}, 'G ' + dayTotalG + 'g'));
-  macroInfo.appendChild(h('span', {}, 'P ' + dayTotalP + 'g'));
-  macroInfo.appendChild(h('span', {}, 'L ' + dayTotalL + 'g'));
+  macroInfo.appendChild(h('span', {title:'Glucides'}, 'Glucides ' + dayTotalG + 'g'));
+  macroInfo.appendChild(h('span', {title:'Prot\u00e9ines'}, 'Prot\u00e9ines ' + dayTotalP + 'g'));
+  macroInfo.appendChild(h('span', {title:'Lipides'}, 'Lipides ' + dayTotalL + 'g'));
   vd.appendChild(macroInfo);
 
   vd.appendChild(h('span', {'class': 'dt-diff', style: 'color:' + (isOk ? '#1A4A1A' : '#6A4A1A')}, (diff >= 0 ? '+' : '') + diff + ' kcal ' + (isOk ? '\u2713' : '\u26a0')));
@@ -3598,7 +3608,7 @@ function renderStep9(p) {
   // Target macros comparison
   var targetMacros = calcMacros();
   var macroComparison = h('div', {style: 'display:flex;justify-content:space-between;padding:8px 16px;font-family:Helvetica Neue,Arial,sans-serif;font-size:11px;color:var(--grey);border:1px solid var(--border);border-top:none;background:var(--ivory2)'});
-  macroComparison.appendChild(h('span', {}, 'Objectif : G ' + targetMacros.g + 'g \u00b7 P ' + targetMacros.p + 'g \u00b7 L ' + targetMacros.l + 'g'));
+  macroComparison.appendChild(h('span', {}, 'Objectif : Glucides ' + targetMacros.g + 'g \u00b7 Prot\u00e9ines ' + targetMacros.p + 'g \u00b7 Lipides ' + targetMacros.l + 'g'));
   var totalMacroKcal = dayTotalP * 4 + dayTotalG * 4 + dayTotalL * 9;
   macroComparison.appendChild(h('span', {}, 'V\u00e9rif : ' + totalMacroKcal + ' kcal'));
   p.appendChild(macroComparison);
@@ -3727,7 +3737,7 @@ function renderStep9(p) {
       } else {
         // IMPORTANT-G2: feedback si pool vide
         console.warn('[nutrition] regen: generateWeek() a retourné un plan vide');
-        alert('Impossible de générer un nouveau plan. Vérifiez vos préférences alimentaires.');
+        if (window.showToast) window.showToast('Impossible de g\u00e9n\u00e9rer un nouveau plan. V\u00e9rifiez vos pr\u00e9f\u00e9rences alimentaires.', 'error', 4500);
       }
       window.render();
     } finally {
@@ -3940,8 +3950,8 @@ function renderModal(app) {
 // ─── PDF EXPORT ───
 function exportDayPDF(dayIdx) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
-  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e). Rechargez la page.'); return; }
-  if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { alert('Aucun plan disponible pour ce jour. G\u00e9n\u00e9rez d\u2019abord votre plan nutritionnel.'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { if (window.showToast) window.showToast('PDF non disponible. Rechargez la page.', 'error', 3500); return; }
+  if (!Array.isArray(S.weekPlan) || !S.weekPlan[dayIdx]) { if (window.showToast) window.showToast('Aucun plan disponible pour ce jour. G\u00e9n\u00e9rez votre plan nutritionnel.', 'error', 4000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
@@ -3956,7 +3966,7 @@ function exportDayPDF(dayIdx) {
   doc.text('SMART FIT COACH', M, 14);
   // CRITIQUE-1: garde validité dayIdx avant tout accès à DAY_NAMES/weekPlan
   if (typeof dayIdx !== 'number' || dayIdx < 0 || dayIdx > 6 || !S.weekPlan || !S.weekPlan[dayIdx]) {
-    alert('Aucun plan disponible pour ce jour.'); return;
+    if (window.showToast) window.showToast('Aucun plan disponible pour ce jour', 'error', 3000); return;
   }
   doc.setFontSize(16); doc.setFont('times', 'italic');
   doc.text((DAY_NAMES[dayIdx] || 'Jour') + ' \u2014 Plan du jour', M, 26);
@@ -4039,14 +4049,14 @@ function exportDayPDF(dayIdx) {
     .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   doc.save('plan-' + (safeDayName || 'jour') + '.pdf');
-  } catch(e) { console.error('[exportDayPDF] Erreur:', e); alert('Erreur lors de la g\u00e9n\u00e9ration du PDF. V\u00e9rifiez que vos donn\u00e9es sont compl\u00e8tes.'); }
+  } catch(e) { console.error('[exportDayPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF. V\u00e9rifiez vos donn\u00e9es.', 'error', 4000); }
 }
 window.exportDayPDF = exportDayPDF;
 
 function exportRecipePDF(r) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
-  if (!window.jspdf || !window.jspdf.jsPDF) { alert('PDF non disponible (biblioth\u00e8que non charg\u00e9e). Rechargez la page.'); return; }
-  if (!r || !r.n) { alert('Recette non disponible pour l\u2019export.'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { if (window.showToast) window.showToast('PDF non disponible. Rechargez la page.', 'error', 3500); return; }
+  if (!r || !r.n) { if (window.showToast) window.showToast('Recette non disponible pour l\u2019export', 'error', 3000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({unit: 'mm', format: 'a4'});
@@ -4114,7 +4124,7 @@ function exportRecipePDF(r) {
     .replace(/[ùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
     .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   doc.save((safeName || 'recette') + '.pdf');
-  } catch(e) { console.error('[exportRecipePDF] Erreur:', e); alert('Erreur lors de la g\u00e9n\u00e9ration du PDF recette.'); }
+  } catch(e) { console.error('[exportRecipePDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF recette', 'error', 3500); }
 }
 window.exportRecipePDF = exportRecipePDF;
 
@@ -5617,12 +5627,14 @@ function renderSmoothieBar(p) {
     var macroRow = h('div', {style:'display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap'});
     var macroItems = [
       {v: sm.cal + ' kcal', bg: 'rgba(26,74,26,0.08)', c: 'var(--green,#1A4A1A)'},
-      {v: 'P ' + sm.p + 'g', bg: 'rgba(26,74,26,0.05)', c: 'var(--text,#0A0A09)'},
-      {v: 'G ' + sm.c + 'g', bg: 'rgba(26,74,26,0.05)', c: 'var(--text,#0A0A09)'},
-      {v: 'L ' + sm.f + 'g', bg: 'rgba(26,74,26,0.05)', c: 'var(--text,#0A0A09)'}
+      {v: 'PROT. ' + sm.p + 'g', t: 'Prot\u00e9ines', bg: 'rgba(26,74,26,0.05)', c: 'var(--text,#0A0A09)'},
+      {v: 'GLU. ' + sm.c + 'g', t: 'Glucides', bg: 'rgba(26,74,26,0.05)', c: 'var(--text,#0A0A09)'},
+      {v: 'LIP. ' + sm.f + 'g', t: 'Lipides', bg: 'rgba(26,74,26,0.05)', c: 'var(--text,#0A0A09)'}
     ];
     macroItems.forEach(function(mi) {
-      macroRow.appendChild(h('span', {style:'font-size:11px;font-weight:600;padding:3px 8px;background:'+mi.bg+';color:'+mi.c+';border-radius:2px'}, mi.v));
+      var _attrs = {style:'font-size:11px;font-weight:600;padding:3px 8px;background:'+mi.bg+';color:'+mi.c+';border-radius:2px'};
+      if (mi.t) _attrs.title = mi.t;
+      macroRow.appendChild(h('span', _attrs, mi.v));
     });
     card.appendChild(macroRow);
 
@@ -6104,8 +6116,8 @@ function printShoppingListAR(list) {
 
 function exportShoppingListPDF(list, shopChecked) {
   if (window.isPremium && !window.isPremium()) { if (window.showPaywall) window.showPaywall('pdf'); return; }
-  if (!window.jspdf || !window.jspdf.jsPDF) { alert('Export PDF non disponible. Rechargez la page.'); return; }
-  if (!Array.isArray(list) || list.length === 0) { alert('Liste de courses vide \u2014 g\u00e9n\u00e9rez d\u2019abord votre plan nutritionnel.'); return; }
+  if (!window.jspdf || !window.jspdf.jsPDF) { if (window.showToast) window.showToast('Export PDF non disponible. Rechargez la page.', 'error', 3500); return; }
+  if (!Array.isArray(list) || list.length === 0) { if (window.showToast) window.showToast('Liste de courses vide \u2014 g\u00e9n\u00e9rez votre plan nutritionnel', 'error', 4000); return; }
   try {
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ unit: 'mm', format: 'a4' });
@@ -6176,7 +6188,7 @@ function exportShoppingListPDF(list, shopChecked) {
   doc.text('Généré par SmartFitCoach — ' + new Date().toLocaleDateString('fr-FR'), margin, 290);
 
   doc.save('liste-courses-smartfitcoach.pdf');
-  } catch(e) { console.error('[exportShoppingListPDF] Erreur:', e); alert('Erreur lors de la g\u00e9n\u00e9ration du PDF liste de courses.'); }
+  } catch(e) { console.error('[exportShoppingListPDF] Erreur:', e); if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF liste', 'error', 3500); }
 }
 
 // ─── SALADE COMPOSER ───
@@ -6301,7 +6313,7 @@ function renderBodyScan(p) {
       if (window.BODY_ANALYSIS && typeof window.BODY_ANALYSIS.open === 'function') {
         window.BODY_ANALYSIS.open();
       } else {
-        alert('Module d\u2019analyse corporelle non disponible. Rechargez la page.');
+        if (window.showToast) window.showToast('Module d\u2019analyse corporelle non disponible. Rechargez la page.', 'error', 3500);
       }
     }
   });

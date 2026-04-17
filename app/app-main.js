@@ -1321,7 +1321,7 @@ function renderProfilePage(container) {
        var jsonStr;
        try { jsonStr = JSON.stringify(exportPayload, null, 2); }
        catch(serErr) {
-         alert('Impossible de sérialiser tes données (trop volumineuses ou corrompues). Contacte le DPO si le problème persiste.');
+         if (window.showToast) window.showToast('Impossible de s\u00e9rialiser vos donn\u00e9es. Contactez le DPO si le probl\u00e8me persiste.', 'error', 5000);
          return;
        }
        var sizeMB = (jsonStr.length / (1024 * 1024));
@@ -1338,7 +1338,7 @@ function renderProfilePage(container) {
        document.body.appendChild(a); a.click();
        document.body.removeChild(a);
        URL.revokeObjectURL(url);
-     } catch(ex) { console.warn('[RGPD] download error', ex); alert('Erreur lors du téléchargement. Réessaie.'); }
+     } catch(ex) { console.warn('[RGPD] download error', ex); if (window.showToast) window.showToast('Erreur lors du t\u00e9l\u00e9chargement. R\u00e9essayez.', 'error', 3500); }
    }
  }, 'Télécharger mes données (RGPD)');
  c.appendChild(downloadDataBtn);
@@ -1762,16 +1762,30 @@ function render() {
 
  // Main navigation (tabs adaptés selon S.appMode)
  var nav = h('nav', {'class': 'main-nav', role: 'navigation', 'aria-label': 'Navigation principale'});
- nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'today' || S.view === 'dashboard' || !S.view ? ' active' : ''), onclick: function(){ S.view = 'today'; if(window.BLACKBOX)window.BLACKBOX.log('nav_today'); render(); }}, 'Aujourd\'hui'));
+ var _navIcons = {
+   today: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 3v2 M12 19v2 M3 12h2 M19 12h2 M5.6 5.6l1.4 1.4 M17 17l1.4 1.4 M5.6 18.4l1.4-1.4 M17 7l1.4-1.4"/></svg>',
+   nutrition: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 3v7a2 2 0 0 0 4 0V3 M9 10v11 M16 3c-1.5 1.5-2 3.5-2 5 0 2 1 3 2 3v10"/></svg>',
+   sport: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 9v6 M6 7v10 M8 12h8 M18 7v10 M21 9v6"/></svg>',
+   calendar: '<svg class="main-nav-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M8 3v4 M16 3v4 M3 10h18"/></svg>'
+ };
+ function _makeNavTab(key, label, isActive, logKey, targetView) {
+   var attrs = {'class': 'main-nav-tab' + (isActive ? ' active' : ''), onclick: function(){ S.view = targetView; if(window.BLACKBOX)window.BLACKBOX.log(logKey); render(); }};
+   if (isActive) attrs['aria-current'] = 'page';
+   var btn = h('button', attrs);
+   btn.insertAdjacentHTML('afterbegin', _navIcons[key]);
+   btn.appendChild(h('span', {'class': 'main-nav-tab-label'}, label));
+   return btn;
+ }
+ nav.appendChild(_makeNavTab('today', 'Aujourd\'hui', (S.view === 'today' || S.view === 'dashboard' || !S.view), 'nav_today', 'today'));
  if (S.appMode !== 'sport') {
-   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'nutrition' ? ' active' : ''), onclick: function(){ S.view = 'nutrition'; if(window.BLACKBOX)window.BLACKBOX.log('nav_nutrition'); render(); }}, window.t('nav.nutrition')));
+   nav.appendChild(_makeNavTab('nutrition', window.t('nav.nutrition'), S.view === 'nutrition', 'nav_nutrition', 'nutrition'));
  }
  if (S.appMode !== 'nutrition') {
-   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'sport' ? ' active' : ''), onclick: function(){ S.view = 'sport'; if(window.BLACKBOX)window.BLACKBOX.log('nav_sport'); render(); }}, window.t('nav.sport')));
+   nav.appendChild(_makeNavTab('sport', window.t('nav.sport'), S.view === 'sport', 'nav_sport', 'sport'));
  }
  if (S.appMode) {
    // Calendrier accessible en mode sport ET nutrition (le calendrier pilote les jours training/repos = données nutritionnelles)
-   nav.appendChild(h('button', {'class': 'main-nav-tab' + (S.view === 'calendar' ? ' active' : ''), style: 'font-size:11px', onclick: function(){ S.view = 'calendar'; if(window.BLACKBOX)window.BLACKBOX.log('nav_calendar'); render(); }}, 'Calendrier'));
+   nav.appendChild(_makeNavTab('calendar', 'Calendrier', S.view === 'calendar', 'nav_calendar', 'calendar'));
  }
  wrap.appendChild(nav);
 

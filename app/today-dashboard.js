@@ -1456,15 +1456,16 @@ function renderCardRepas() {
   // Bible Hermès §13.2 : pas d'eyebrow redondant — titre Georgia suffit.
 
   if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) {
-    // No plan — empty state engageant
-    var _emptyCard = h('div', {style: 'text-align:center;padding:32px 16px;'});
+    // No plan — empty state engageant (Hermès : vouvoiement, micro-caps, tap target ≥ 48px)
+    var _emptyCard = h('div', {style: 'text-align:center;padding:36px 16px 28px;'});
     _emptyCard.appendChild(emptyIllu('nutrition'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;font-weight:normal;'}, 'Aucun plan nutritionnel'));
-    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:16px;line-height:1.5;'}, 'Crée ton programme personnalisé\nen 5 minutes'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin:4px 0 10px;font-weight:normal;color:var(--black,#0A0A09);line-height:1.3;max-width:240px;margin-left:auto;margin-right:auto;'}, 'Votre plan nutritionnel vous attend'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.55;max-width:260px;margin-left:auto;margin-right:auto;'}, 'Calibré sur votre corps, vos objectifs et votre quotidien.'));
     _emptyCard.appendChild(h('button', {
-      style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+      style: 'padding:14px 24px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { var S = window.S; S.view = 'nutrition'; if (window.render) window.render(); }
-    }, 'Créer mon plan'));
+    }, 'Composer mon plan'));
+    _emptyCard.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:14px;'}, '5 min \u00b7 Gratuit \u00b7 Personnalis\u00e9'));
     c.appendChild(_emptyCard);
     return c;
   }
@@ -1962,18 +1963,19 @@ function renderCardSport() {
   }
 
   if (!hasSportProgram) {
-    // No sport program — empty state
+    // No sport program — empty state (Hermès : vouvoiement, micro-caps, tap target ≥ 48px)
     if (S && (S.appMode === 'nutrition')) return null; // nutrition-only mode: ne pas afficher
     var _sportEmptyCard = card();
     _sportEmptyCard.appendChild(eyebrow('SPORT'));
-    var _sportEmpty = h('div', {style: 'text-align:center;padding:24px 0 12px;'});
+    var _sportEmpty = h('div', {style: 'text-align:center;padding:28px 0 16px;'});
     _sportEmpty.appendChild(emptyIllu('sport'));
-    _sportEmpty.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;margin-bottom:8px;font-weight:normal;'}, 'Aucun programme sportif'));
-    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey);margin-bottom:14px;line-height:1.5;'}, 'Choisis ton sport et obtiens\nun programme sur mesure'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:20px;margin:4px 0 10px;font-weight:normal;color:var(--black,#0A0A09);line-height:1.3;max-width:240px;margin-left:auto;margin-right:auto;'}, 'Votre programme sur mesure vous attend'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-bottom:20px;line-height:1.55;max-width:260px;margin-left:auto;margin-right:auto;'}, 'Choisissez votre sport, votre niveau et votre agenda.'));
     _sportEmpty.appendChild(h('button', {
-      style: 'padding:12px 20px;background:var(--black,#0A0A09);color:#fff;border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
+      style: 'padding:14px 24px;min-height:48px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
       onclick: function() { var S2 = window.S; S2.view = 'sport'; if (window.render) window.render(); }
-    }, 'Créer mon programme'));
+    }, 'Composer mon programme'));
+    _sportEmpty.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-top:14px;'}, '3 min \u00b7 Gratuit \u00b7 Personnalis\u00e9'));
     _sportEmptyCard.appendChild(_sportEmpty);
     return _sportEmptyCard;
   }
@@ -2571,14 +2573,14 @@ function todayImportData() {
     reader.onload = function(ev) {
       try {
         var backup = JSON.parse(ev.target.result);
-        if (!backup.data || !backup.version) { alert('Fichier invalide'); return; }
+        if (!backup.data || !backup.version) { if (window.showToast) window.showToast('Fichier invalide', 'error', 3000); return; }
         if (!confirm('Cela remplacera tes données actuelles. Continuer ?')) return;
         Object.keys(backup.data).forEach(function(key) {
           localStorage.setItem(key, typeof backup.data[key] === 'string' ? backup.data[key] : JSON.stringify(backup.data[key]));
         });
         if (window.GAMIFICATION) window.GAMIFICATION.showToast('Données restaurées !');
         setTimeout(function() { location.reload(); }, 1000);
-      } catch(err) { alert('Erreur de lecture : ' + err.message); }
+      } catch(err) { if (window.showToast) window.showToast('Erreur de lecture : ' + err.message, 'error', 4000); }
     };
     reader.readAsText(file);
   };
@@ -3624,7 +3626,7 @@ function renderExtendedSections(wrapper, S) {
       if (typeof window.exportWeeklyReportPDF === 'function') {
         window.exportWeeklyReportPDF();
       } else {
-        alert('Export PDF indisponible. Rechargez la page.');
+        if (window.showToast) window.showToast('Export PDF indisponible. Rechargez la page.', 'error', 3500);
       }
     }
   }, '\u2193 Télécharger mon rapport PDF');
@@ -4024,6 +4026,9 @@ function renderTodayDashboard(p) {
   // FIX 2026-04-16 : les citations motivantes vivaient dans renderCardBonjour (code
   // mort depuis la migration hero contextuel). On réinjecte ici la plus belle source
   // MOTIVATION_LIBRARY (300+ phrases, rotation déterministe jour/weekday/streak).
+  // FIX UX 2026-04-17 : la Pensée du Jour est construite ici mais appendChild() est
+  // reporté après les cartes Séance + Repas (data first, motivation ensuite — UX audit).
+  var _pensee = null;
   try {
     var _dailyQuote = null;
     var _qAuthor = '';
@@ -4100,7 +4105,7 @@ function renderTodayDashboard(p) {
         'width:32px;height:1px;background:var(--accent,#1A4A1A);margin:16px auto 0;'
       }));
 
-      wrapper.appendChild(_qWrap);
+      _pensee = _qWrap; // Différé : append après les cartes data (Séance + Repas)
     }
   } catch(_eQ) { console.warn('[pensée du jour]', _eQ); }
 
@@ -4170,6 +4175,9 @@ function renderTodayDashboard(p) {
   // ── Card 2 — REPAS DU JOUR (juste après la séance) ──
   var cardRepas = renderCardRepas();
   if (cardRepas) wrapper.appendChild(cardRepas);
+
+  // ── Pensée du jour (différée : après les cartes data, avant progression) ──
+  if (_pensee) wrapper.appendChild(_pensee);
 
   // ═══ SECTION "PROGRESSION" ═══
 

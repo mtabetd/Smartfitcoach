@@ -46,7 +46,7 @@ function openScan(mealSlot) {
   // Premium gate — scanner repas = feature premium
   if (window.isPremium && !window.isPremium()) {
     if (window.showPaywall) window.showPaywall('scanner');
-    else alert('Fonctionnalit\u00e9 r\u00e9serv\u00e9e aux abonn\u00e9s. Souscrivez un abonnement pour scanner vos repas.');
+    else if (window.showToast) window.showToast('Fonctionnalit\u00e9 r\u00e9serv\u00e9e aux abonn\u00e9s', 'error', 3500);
     return;
   }
 
@@ -132,7 +132,7 @@ function openScan(mealSlot) {
     if (!file || !file.type.startsWith('image/')) return;
 
     compressImage(file, function(b64) {
-      if (!b64) { alert('Impossible de lire cette image.'); return; }
+      if (!b64) { if (window.showToast) window.showToast('Impossible de lire cette image', 'error', 3000); return; }
       selectedImage = b64;
 
       // Show preview

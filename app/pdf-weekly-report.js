@@ -108,7 +108,7 @@ window.exportWeeklyReportPDF = function() {
       return;
     }
     if (!window.jspdf || !window.jspdf.jsPDF) {
-      alert('PDF non disponible. Rechargez la page.');
+      if (window.showToast) window.showToast('PDF non disponible. Rechargez la page.', 'error', 3500);
       return;
     }
     var jsPDF = window.jspdf.jsPDF;
@@ -479,7 +479,7 @@ window.exportWeeklyReportPDF = function() {
     doc.save('smartfitcoach-rapport-hebdo-' + dateStrFile + '.pdf');
   } catch(e) {
     console.error('[exportWeeklyReportPDF] Erreur:', e);
-    alert('Erreur lors de la génération du PDF. Réessaie ou contacte le support.');
+    if (window.showToast) window.showToast('Erreur lors de la g\u00e9n\u00e9ration du PDF. R\u00e9essayez ou contactez le support.', 'error', 4500);
   }
 };
 

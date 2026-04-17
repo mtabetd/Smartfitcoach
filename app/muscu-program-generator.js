@@ -1321,7 +1321,7 @@
     if (!profile || !window.S || !window.S.sex || !window.S.weight || !window.S.height) {
       _generating = false;
       if (_loadingInterval) { clearInterval(_loadingInterval); _loadingInterval = null; }
-      alert('Profil incomplet — complétez d\u2019abord votre onboarding (sexe, poids, taille).');
+      if (window.showToast) window.showToast('Profil incomplet \u2014 compl\u00e9tez votre onboarding (sexe, poids, taille)', 'error', 4000);
       return;
     }
     // FIX BIBLE MUSCU §4 : timeout 25s → 10s. L'utilisateur perd la foi après.
@@ -1490,12 +1490,12 @@
       var fallbackText = shareData.title + '\n\n' + shareData.text + '\n\n' + shareData.url;
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(fallbackText).then(function() {
-          alert('Lien copié dans le presse-papier !');
+          if (window.showToast) window.showToast('Lien copié', 'success', 2200);
         }).catch(function() {
-          alert('Partage non disponible sur ce navigateur.');
+          if (window.showToast) window.showToast('Partage non disponible', 'error', 2800);
         });
       } else {
-        alert('Partage non disponible sur ce navigateur.');
+        if (window.showToast) window.showToast('Partage non disponible sur ce navigateur', 'error', 3000);
       }
     }
   }
