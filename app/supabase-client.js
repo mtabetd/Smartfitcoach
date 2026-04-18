@@ -556,6 +556,11 @@
         if (!hasValidLocalData && cloudData.goal != null) {
           console.log('[SupaSync] Loading profile from cloud (no valid local data for user)');
           _applyCloudData();
+          // FIX 2026-04-18 : persister IMMÉDIATEMENT en localStorage pour éviter que la donnée
+          // soit perdue si l'utilisatrice ferme l'onglet avant l'autosave 30s.
+          // Bug rapporté : femme se reconnecte, voit ses données, ferme l'app → rien n'a été
+          // écrit en local → prochaine session re-dépend du cloud (potentiellement lent/partiel).
+          try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[SupaSync] post-cloud saveProfile failed:', e); }
           if (window.render) window.render();
           return 'loaded_from_cloud';
         }
@@ -590,6 +595,8 @@
           } else if (cloudIsNewer || cloudNStep > localNStep || cloudSStep > localSStep || (cloudHasPlan && !localHasPlan)) {
             console.log('[SupaSync] Cloud preferred — cloudTime=' + new Date(cloudTime).toISOString() + ' localTime=' + (localTime ? new Date(localTime).toISOString() : 'none') + ' nStep cloud/local=' + cloudNStep + '/' + localNStep);
             _applyCloudData();
+            // FIX 2026-04-18 : même principe — persister immédiatement en localStorage.
+            try { if (window.saveProfile) window.saveProfile(); } catch(e) { console.warn('[SupaSync] post-cloud saveProfile failed:', e); }
             if (window.render) window.render();
             return 'loaded_from_cloud';
           }
