@@ -102,43 +102,52 @@
   function _weeksAgo(n) { return _daysAgo(n * 7); }
 
   function _calcDelta(a, b) {
-    if (!a || !b || a === 0) return { abs: 0, pct: 0, arrow: '' };
+    if (!a || !b || a === 0) return { abs: 0, pct: 0, dir: 'none' };
     var abs = b - a;
     var pct = (abs / a) * 100;
-    return { abs: abs, pct: pct, arrow: abs > 0 ? '↑' : (abs < 0 ? '↓' : '→') };
+    return { abs: abs, pct: pct, dir: abs > 0 ? 'up' : (abs < 0 ? 'down' : 'stable') };
   }
 
-  // ─── STYLE TOKENS ───
+  // ─── STYLE TOKENS — grille 8px stricte + Hermès sobre ───
   var ST = {
-    card: 'background:var(--ivory2,#F4F4F0);border:1px solid var(--line,#D8D8D0);padding:16px;margin-bottom:12px;border-radius:2px;',
+    card: 'background:var(--ivory2,#F4F4F0);border:1px solid var(--line,#D8D8D0);padding:16px;margin-bottom:16px;border-radius:2px;',
     eyebrow: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:8px;',
+    sectionTitle: 'font-family:Georgia,serif;font-size:17px;color:var(--black,#0A0A09);margin:0 0 16px;line-height:1.3;font-weight:normal;',
     title: 'font-family:Georgia,serif;font-size:20px;color:var(--black,#0A0A09);margin-bottom:8px;line-height:1.3;',
     value: 'font-family:Georgia,serif;font-size:28px;color:var(--black,#0A0A09);line-height:1.1;',
     unit: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--grey,#6B6B65);margin-left:4px;',
-    delta: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;margin-top:4px;',
+    delta: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;margin-top:8px;display:inline-flex;align-items:center;gap:6px;',
+    deltaBullet: 'display:inline-block;width:8px;height:8px;border-radius:1px;',
     row: 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line,#D8D8D0);',
     sub: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
   };
 
   // ─── SECTION HELPERS ───
+  // Hermès pattern : eyebrow (kind) en haut + sectionTitle en dessous, pas fusionnés
   function section(title, kind) {
     var box = h('div', { style: ST.card });
-    box.appendChild(h('div', { style: ST.eyebrow }, (kind || 'Progrès') + ' — ' + title));
+    box.appendChild(h('div', { style: ST.eyebrow }, kind || 'Progrès'));
+    box.appendChild(h('h2', { style: ST.sectionTitle }, title));
     return box;
   }
 
   function metricBig(label, value, unit, deltaObj, period) {
     var wrap = h('div', { style: 'margin-bottom:4px;' });
-    wrap.appendChild(h('div', { style: ST.sub + 'margin-bottom:2px;' }, label));
+    wrap.appendChild(h('div', { style: ST.sub + 'margin-bottom:4px;' }, label));
     var line = h('div', { style: 'display:flex;align-items:baseline;' });
     line.appendChild(h('span', { style: ST.value }, String(value)));
     if (unit) line.appendChild(h('span', { style: ST.unit }, unit));
     wrap.appendChild(line);
-    if (deltaObj && deltaObj.arrow) {
+    if (deltaObj && deltaObj.dir && deltaObj.dir !== 'none') {
+      // Hermès : carré coloré (pas de flèche/emoji) + libellé explicite
       var color = deltaObj.abs > 0 ? 'var(--success,#1A4A1A)' : (deltaObj.abs < 0 ? 'var(--warning,#B06A1A)' : 'var(--grey,#6B6B65)');
-      wrap.appendChild(h('div', {
-        style: ST.delta + 'color:' + color + ';'
-      }, deltaObj.arrow + ' ' + (deltaObj.abs > 0 ? '+' : '') + (Math.abs(deltaObj.abs) < 0.1 ? deltaObj.abs.toFixed(2) : deltaObj.abs.toFixed(1)) + (unit || '') + ' (' + (deltaObj.pct > 0 ? '+' : '') + deltaObj.pct.toFixed(1) + '%)' + (period ? ' · ' + period : '')));
+      var deltaRow = h('div', { style: ST.delta + 'color:' + color + ';' });
+      deltaRow.appendChild(h('span', { style: ST.deltaBullet + 'background:' + color + ';' }));
+      var absVal = (Math.abs(deltaObj.abs) < 0.1 ? deltaObj.abs.toFixed(2) : deltaObj.abs.toFixed(1));
+      var sign = deltaObj.abs > 0 ? '+' : '';
+      var pctSign = deltaObj.pct > 0 ? '+' : '';
+      deltaRow.appendChild(h('span', {}, sign + absVal + (unit || '') + '  ·  ' + pctSign + deltaObj.pct.toFixed(1) + ' %' + (period ? '  ·  ' + period : '')));
+      wrap.appendChild(deltaRow);
     }
     return wrap;
   }
@@ -332,18 +341,21 @@
     return s;
   }
 
-  // ─── PERIOD SELECTOR ───
+  // ─── PERIOD SELECTOR — cubic-bezier Hermès ───
   function _renderPeriodSelector(currentPeriod, onChange) {
-    var row = h('div', { style: 'display:flex;gap:8px;margin-bottom:16px;' });
+    var row = h('div', { style: 'display:flex;gap:8px;margin-bottom:24px;' });
     [4, 8, 12].forEach(function(w) {
       var isActive = w === currentPeriod;
       var btn = h('button', {
         type: 'button',
-        style: 'flex:1;padding:10px 4px;min-height:44px;cursor:pointer;border:1px solid var(--line,#D8D8D0);'
+        'aria-label': 'Afficher progression sur ' + w + ' semaines',
+        'aria-pressed': isActive ? 'true' : 'false',
+        style: 'flex:1;padding:12px 8px;min-height:44px;cursor:pointer;border:1px solid var(--line,#D8D8D0);'
           + 'background:' + (isActive ? 'var(--black,#0A0A09)' : 'transparent') + ';'
           + 'color:' + (isActive ? 'var(--ivory,#FAF9F6)' : 'var(--black,#0A0A09)') + ';'
           + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;'
-          + 'border-radius:2px;transition:background 0.18s ease,color 0.18s ease;'
+          + 'border-radius:2px;'
+          + 'transition:background 0.24s cubic-bezier(0.25,0.46,0.45,0.94),color 0.24s cubic-bezier(0.25,0.46,0.45,0.94),border-color 0.24s cubic-bezier(0.25,0.46,0.45,0.94);'
       }, w + ' semaines');
       btn.addEventListener('click', function() { onChange(w); });
       row.appendChild(btn);
