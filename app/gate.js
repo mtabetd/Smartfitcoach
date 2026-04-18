@@ -205,6 +205,10 @@
             var msg = (r.body && r.body.error) || 'Une erreur est survenue. Merci de réessayer.';
             // Email déjà inscrit → message doux
             if(r.status===409) msg = 'Vous figurez déjà parmi les premiers inscrits.';
+            // DEBUG temporaire : si le serveur renvoie un détail, on l'affiche
+            if(r.body && r.body.debug){
+              try { msg += ' [' + (r.body.debug.code||'?') + ': ' + (r.body.debug.message||'').slice(0,120) + ']'; } catch(_){}
+            }
             showErr(msg);
           }
         }).catch(function(){
