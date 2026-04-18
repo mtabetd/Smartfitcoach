@@ -2655,6 +2655,204 @@ var MUSCU_MIX_SESSIONS = [
  }
 ];
 
+// ═══════════════════════════════════════════════════════════════
+// 2026-04 PHASE 1 — SESSIONS MIX ÉTENDUES (running/yoga/crossfit)
+// Permet à un sport secondaire (X jours/sem) d'être : musculation,
+// running, yoga ou crossfit. Format identique à MUSCU_MIX_SESSIONS :
+//   { name, focus, exercises: [{ name, sets, rest, note }] }
+// ═══════════════════════════════════════════════════════════════
+
+var RUNNING_MIX_SESSIONS = [
+ {
+  name: 'Run Easy',
+  focus: 'Zone 2 — Aérobie pure, conversation possible',
+  exercises: [
+   { name: 'Échauffement', sets: '5 min marche + mobilité', rest: '—', note: 'Rotation chevilles/genoux/hanches — 30s chaque' },
+   { name: 'Course continue Zone 2', sets: '25-35 min', rest: '—', note: 'FC 65-75% FCmax — respiration par le nez si possible' },
+   { name: 'Retour au calme', sets: '5 min marche', rest: '—', note: 'Progressive decrease — ne pas s\'arrêter sec' },
+   { name: 'Étirements dynamiques', sets: '5 min', rest: '—', note: 'Quadriceps, ischios, mollets, fessiers' }
+  ]
+ },
+ {
+  name: 'Fractionné 30/30',
+  focus: 'Intervalles VO2max — intensité élevée',
+  exercises: [
+   { name: 'Échauffement progressif', sets: '10 min', rest: '—', note: 'Démarrage marche rapide → course Z1 → accélérations courtes' },
+   { name: 'Séries 30s rapide / 30s récup', sets: '10-15 × 30s/30s', rest: 'actif', note: '30s à 90% FCmax / 30s marche ou jogging lent. FCmax ≈ 220 - âge.' },
+   { name: 'Retour au calme', sets: '10 min Zone 1', rest: '—', note: 'Décrescendo jusqu\'à la marche' },
+   { name: 'Étirements passifs', sets: '5 min', rest: '—', note: 'Maintien 20-30s par muscle' }
+  ]
+ },
+ {
+  name: 'Tempo Run',
+  focus: 'Seuil lactique — Zone 3/4',
+  exercises: [
+   { name: 'Échauffement', sets: '10 min', rest: '—', note: 'Zone 1 + 3 accélérations progressives 60m' },
+   { name: 'Tempo continu', sets: '20-30 min Zone 3', rest: '—', note: 'Allure comfortably hard — "phrases courtes" seulement' },
+   { name: 'Retour au calme', sets: '10 min Zone 1', rest: '—', note: 'Récupération active' },
+   { name: 'Mobilité post-run', sets: '5 min', rest: '—', note: 'Hanches + mollets — prévention blessures' }
+  ]
+ },
+ {
+  name: 'Long Run',
+  focus: 'Endurance fondamentale — Zone 2 prolongée',
+  exercises: [
+   { name: 'Échauffement', sets: '5-10 min', rest: '—', note: 'Marche active + jogging léger' },
+   { name: 'Course Zone 2 longue', sets: '45-75 min', rest: '—', note: 'Allure tenable 1h30+. Hydratation toutes 20 min.' },
+   { name: 'Retour au calme', sets: '5 min marche', rest: '—', note: 'Décélération progressive' },
+   { name: 'Étirements complets', sets: '10 min', rest: '—', note: 'Tous groupes — attention ischios/mollets' }
+  ]
+ }
+];
+
+var YOGA_MIX_SESSIONS = [
+ {
+  name: 'Vinyasa Flow',
+  focus: 'Enchaînement dynamique — force + souplesse',
+  exercises: [
+   { name: 'Centrage & respiration', sets: '3 min', rest: '—', note: 'Assise jambes croisées — 3 respirations profondes' },
+   { name: 'Salutations au soleil A', sets: '5 rounds', rest: '—', note: 'Chaque posture 1 souffle — rythme fluide' },
+   { name: 'Guerriers I-II-III', sets: '3 rounds chaque côté', rest: '15s', note: 'Maintien 30s — gainage actif' },
+   { name: 'Chien tête en bas', sets: '5 respirations profondes', rest: '—', note: 'Talons ancrés — étirement ischios/mollets' },
+   { name: 'Planche haute + basse', sets: '3 × 30s', rest: '20s', note: 'Gainage actif — sangle abdominale engagée' },
+   { name: 'Cobra / Chien tête en haut', sets: '5 respirations', rest: '—', note: 'Ouverture poitrine — épaules basses' },
+   { name: 'Savasana', sets: '5 min', rest: '—', note: 'Intégration — corps complètement relâché' }
+  ]
+ },
+ {
+  name: 'Yin Restauratif',
+  focus: 'Récupération profonde — tissus conjonctifs',
+  exercises: [
+   { name: 'Enfant prolongé', sets: '3 min', rest: '—', note: 'Bras tendus devant — relâchement total des épaules' },
+   { name: 'Papillon assis', sets: '3 min', rest: '—', note: 'Plantes jointes — basculer doucement vers l\'avant' },
+   { name: 'Pigeon (les 2 côtés)', sets: '3 min × 2', rest: '30s', note: 'Étirement fessiers profond — respirer dans la tension' },
+   { name: 'Demi-torsion allongée', sets: '2 min × 2 côtés', rest: '—', note: 'Épaules au sol — genou opposé vers le sol' },
+   { name: 'Cobra passif', sets: '2 min', rest: '—', note: 'Ouvre la cage thoracique — extension dorsale douce' },
+   { name: 'Savasana prolongé', sets: '10 min', rest: '—', note: 'Scan corporel — détente consciente' }
+  ]
+ },
+ {
+  name: 'Power Yoga',
+  focus: 'Force + équilibre + gainage',
+  exercises: [
+   { name: 'Salutations dynamiques', sets: '8 rounds A + 4 rounds B', rest: '—', note: 'Rythme soutenu — activer le cœur' },
+   { name: 'Séquence guerriers enchaînée', sets: '3 rounds', rest: '30s', note: 'Warrior I → II → III → Half moon — chaque posture 5 souffles' },
+   { name: 'Chaturanga + Plank variations', sets: '5 × 10 chaturangas', rest: '30s', note: 'Contrôle excentrique — coudes contre les côtes' },
+   { name: 'Équilibre arbre / aigle', sets: '1 min × 2 côtés', rest: '—', note: 'Focus + gainage — respiration calme' },
+   { name: 'Bakasana (corbeau)', sets: '5 tentatives × 10s', rest: '30s', note: 'Progression : pointes de pieds au sol si besoin' },
+   { name: 'Torsions assises', sets: '2 min × 2 côtés', rest: '—', note: 'Colonne en rotation — respiration dans l\'étirement' },
+   { name: 'Savasana', sets: '5 min', rest: '—', note: 'Récupération complète' }
+  ]
+ },
+ {
+  name: 'Mobilité & Ouverture',
+  focus: 'Amplitude articulaire complète',
+  exercises: [
+   { name: 'Chat-vache', sets: '10 cycles', rest: '—', note: 'Colonne ondulée — rythme de la respiration' },
+   { name: 'Thread the needle', sets: '1 min × 2 côtés', rest: '—', note: 'Ouverture épaules + thoracique' },
+   { name: 'Low lunge + twist', sets: '1 min × 2 côtés', rest: '—', note: 'Ouverture hanches + rotation' },
+   { name: 'Pigeon dynamique', sets: '1 min × 2 côtés', rest: '—', note: 'Étirement fessiers profond' },
+   { name: 'Happy baby', sets: '2 min', rest: '—', note: 'Hanches ouvertes — bas du dos décontracté' },
+   { name: 'Savasana guidé', sets: '5 min', rest: '—', note: 'Body scan de la tête aux pieds' }
+  ]
+ }
+];
+
+var CROSSFIT_MIX_SESSIONS = [
+ {
+  name: 'AMRAP 15',
+  focus: 'Conditioning métabolique — rythme soutenu',
+  exercises: [
+   { name: 'Échauffement général', sets: '5 min', rest: '—', note: 'Jumping jacks, squats, push-ups — montée cardio progressive' },
+   { name: 'AMRAP 15 min', sets: 'Autant de rounds que possible', rest: '—', note: '10 Burpees + 15 Air squats + 20 Mountain climbers. Repos selon besoin. Compter les rounds.' },
+   { name: 'Retour au calme', sets: '5 min', rest: '—', note: 'Marche + étirements légers' }
+  ]
+ },
+ {
+  name: 'EMOM 20 Force',
+  focus: 'Every Minute on the Minute — force + cardio',
+  exercises: [
+   { name: 'Échauffement spécifique', sets: '8 min', rest: '—', note: 'Mobilité épaules/hanches + activation squat' },
+   { name: 'EMOM 20 (4 rounds)', sets: '20 min', rest: '—', note: 'Min 1 : 8 Goblet squats | Min 2 : 10 KB swings | Min 3 : 8 Push-ups | Min 4 : 10 Sit-ups | Min 5 : Repos' },
+   { name: 'Étirements', sets: '5 min', rest: '—', note: 'Quadriceps, ischios, épaules' }
+  ]
+ },
+ {
+  name: 'For Time - Chipper',
+  focus: 'Volume + mental — enchaîner sans s\'arrêter',
+  exercises: [
+   { name: 'Échauffement complet', sets: '10 min', rest: '—', note: 'Mobilité + cardio léger + activation' },
+   { name: 'For Time', sets: '15-25 min', rest: '—', note: '50 Air squats → 40 Walking lunges → 30 Push-ups → 20 Burpees → 10 Pull-ups/Ring rows. Chrono jusqu\'au dernier rep.' },
+   { name: 'Cooldown', sets: '5 min', rest: '—', note: 'Marche + étirements — hydratation' }
+  ]
+ },
+ {
+  name: 'Hero WOD Light',
+  focus: 'Conditioning long — endurance musculaire',
+  exercises: [
+   { name: 'Échauffement dynamique', sets: '10 min', rest: '—', note: 'Rameur 5 min + mobilité articulaire' },
+   { name: 'WOD "Angie" light', sets: 'For Time', rest: '—', note: '50 Pull-ups (ou rows) → 75 Push-ups → 100 Sit-ups → 150 Air squats. Chrono final.' },
+   { name: 'Étirements prolongés', sets: '10 min', rest: '—', note: 'Focus bas du dos + épaules (sollicités +++)' }
+  ]
+ }
+];
+
+// Sessions courtes pour calisthenics comme secondaire (ou complément)
+var CALISTHENICS_MIX_SESSIONS = [
+ {
+  name: 'Push Bodyweight',
+  focus: 'Pectoraux + Triceps + Épaules — poids du corps',
+  exercises: [
+   { name: 'Échauffement épaules', sets: '3 min', rest: '—', note: 'Rotations + élévations actives' },
+   { name: 'Pompes classiques', sets: '4 × AMRAP', rest: '90s', note: 'Technique stricte — corps gainé' },
+   { name: 'Dips bancs', sets: '3 × 10-15', rest: '60s', note: 'Coudes près du corps — descente contrôlée' },
+   { name: 'Pike push-ups', sets: '3 × 8-12', rest: '60s', note: 'Progression vers handstand push-up' },
+   { name: 'Planche haute + latérale', sets: '3 × 45s chaque', rest: '30s', note: 'Gainage isométrique' }
+  ]
+ },
+ {
+  name: 'Pull Bodyweight',
+  focus: 'Dos + Biceps — traction',
+  exercises: [
+   { name: 'Échauffement grip', sets: '3 min', rest: '—', note: 'Dead hang + band pull-aparts' },
+   { name: 'Tractions / Ring rows', sets: '4 × AMRAP (ou 6-10 tractions)', rest: '120s', note: 'Amplitude complète — omoplates rétractées' },
+   { name: 'Rowing horizontal bar', sets: '3 × 10-15', rest: '75s', note: 'Prise neutre ou pronation — coudes vers le sol' },
+   { name: 'Chin-ups prise serrée', sets: '3 × 6-10', rest: '90s', note: 'Biceps + dos — supination' },
+   { name: 'Hollow body hold', sets: '3 × 30-45s', rest: '45s', note: 'Gainage antérieur — colonne neutre' }
+  ]
+ },
+ {
+  name: 'Legs & Core Bodyweight',
+  focus: 'Quadriceps + Fessiers + Core',
+  exercises: [
+   { name: 'Échauffement hanches', sets: '5 min', rest: '—', note: 'Leg swings + squats profonds lents' },
+   { name: 'Squats poids du corps', sets: '4 × 20-30', rest: '60s', note: 'Amplitude profonde — cuisses sous parallèle' },
+   { name: 'Fentes alternées', sets: '3 × 12 chaque jambe', rest: '60s', note: 'Genou arrière proche sol' },
+   { name: 'Bulgarian split squat', sets: '3 × 10 chaque jambe', rest: '75s', note: 'Pied arrière surélevé — contrôle excentrique' },
+   { name: 'Hollow + Superman', sets: '3 × 30s chaque', rest: '30s', note: 'Gainage antérieur + postérieur alternés' },
+   { name: 'Mollets debout', sets: '3 × 20', rest: '30s', note: 'Amplitude complète — pointe de pieds' }
+  ]
+ }
+];
+
+// ─── DISPATCHER UNIFIÉ : retourne les sessions pour n'importe quel type secondaire ───
+// Priorité : type reconnu → sessions dédiées, sinon fallback muscu (safe default)
+function getMixSessionsForType(type, days) {
+ var d = Math.min(Math.max(days || 1, 1), 4);
+ var t = String(type || 'musculation').toLowerCase();
+ var source = null;
+ if (t === 'running')           source = RUNNING_MIX_SESSIONS;
+ else if (t === 'yoga')         source = YOGA_MIX_SESSIONS;
+ else if (t === 'crossfit')     source = CROSSFIT_MIX_SESSIONS;
+ else if (t === 'calisthenics') source = CALISTHENICS_MIX_SESSIONS;
+ else                           source = MUSCU_MIX_SESSIONS; // défaut safe
+ // Toujours retourner exactement "d" sessions (rotation si moins de sessions disponibles)
+ var out = [];
+ for (var i = 0; i < d; i++) out.push(source[i % source.length]);
+ return out;
+}
+window.getMixSessionsForType = getMixSessionsForType;
+
 // ─── SESSION MUSCU MIX: sélection des sessions selon nombre de jours ───
 function getMuscuMixSessionsForDays(days) {
  var d = Math.min(Math.max(days, 1), 4);
