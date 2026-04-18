@@ -2872,6 +2872,21 @@ function renderSportMixSection(p, primarySport) {
  var _maxSecDays = totalDays - _primMinDays;
  if (_maxSecDays < 1) return; // Pas assez de jours pour un 2ème sport
 
+ // 2026-04 P5 GUARDS EDGE CASES :
+ // 1) Si sport primaire change mais un secondaire orphelin reste en mémoire (data corruption)
+ //    → nettoyer si le type secondaire n'est plus dans la nouvelle compatMap du primaire.
+ // 2) Si prim === sec (corruption cross-session), reset pour éviter boucle logique.
+ // 3) Si sportMixSecondary.days > _maxSecDays ou < 1, clamp (déjà fait plus bas mais on
+ //    sécurise aussi ici avant l'affichage).
+ if (S.sportMixEnabled && S.sportMixSecondary) {
+  var _sec = S.sportMixSecondary;
+  // Guard 2 : prim === sec → reset
+  if (_sec.type === primarySport) {
+   S.sportMixSecondary = null;
+   S.sportMixEnabled = false;
+  }
+ }
+
  // Sports secondaires compatibles par sport principal (2026-04 P3 étendu)
  // Règle : on n'ajoute PAS le même sport en secondaire (pas de crossfit+crossfit)
  var compatMap = {
@@ -2893,6 +2908,15 @@ function renderSportMixSection(p, primarySport) {
  };
  var secondaryOptions = compatMap[primarySport] || [];
  if (!secondaryOptions.length) return;
+
+ // 2026-04 P5 GUARD 1 : si secondaire orphelin (type plus dans compatMap courante), reset
+ if (S.sportMixEnabled && S.sportMixSecondary && S.sportMixSecondary.type) {
+  var _stillCompatible = secondaryOptions.some(function(opt) { return opt.type === S.sportMixSecondary.type; });
+  if (!_stillCompatible) {
+   S.sportMixSecondary = null;
+   S.sportMixEnabled = false;
+  }
+ }
 
  // ─── HEADER SECTION ───
  p.appendChild(h('div', { style: 'height:24px' }));
