@@ -406,13 +406,51 @@
     },
 
     // Sync initial au login : charger depuis Supabase si localStorage vide ou moins avancé
+    // 2026-04 P0 FIX : attendre AUTH.ready() avant de toucher au storage. Avant ce fix,
+    // getUser() pouvait retourner null si la session Supabase n'était pas hydratée, ce qui
+    // faisait sauvegarder les données sous uid='anon' → perte multi-device (bug ta femme).
     syncOnLogin: function() {
       if (!getClient()) return Promise.resolve('no_client');
       if (this._syncLoginInProgress) return Promise.resolve('already_syncing');
       var self = this;
-      self._syncLoginInProgress = true;
-      self._syncPending = true;
-      return self.loadProfile().then(function(cloudData) {
+
+      // 1) Attendre que la session Supabase soit hydratée (ou timeout 12s)
+      var authReadyPromise = (window.AUTH && window.AUTH.ready)
+        ? window.AUTH.ready()
+        : Promise.resolve();
+
+      return authReadyPromise.then(function() {
+        // 2) Vérifier qu'on a bien un uid valide. Si pas, on abandonne — on ne crée
+        //    PAS de clé 'anon' qui pourrait écraser des données existantes.
+        var userNow = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null;
+        var uidNow = (userNow && userNow.id) ? userNow.id : null;
+        if (!uidNow) {
+          // Tentative ultime via getSession() direct (v2 API)
+          var client = getClient();
+          if (client && client.auth && client.auth.getSession) {
+            return client.auth.getSession().then(function(res) {
+              var session = res && res.data && res.data.session;
+              if (session && session.user && session.user.id) {
+                // Session trouvée tardivement : on continue
+                return _doSync(session.user.id);
+              }
+              console.warn('[SupaSync] syncOnLogin abandonné : aucune session utilisateur valide');
+              return 'no_session';
+            }).catch(function() {
+              console.warn('[SupaSync] syncOnLogin abandonné : getSession failed');
+              return 'no_session';
+            });
+          }
+          console.warn('[SupaSync] syncOnLogin abandonné : AUTH non initialisé');
+          return 'no_session';
+        }
+        return _doSync(uidNow);
+      });
+
+      function _doSync(validUid) {
+        self._syncLoginInProgress = true;
+        self._syncPending = true;
+        return self.loadProfile().then(function(cloudData) {
         self._syncPending = false;
         self._syncLoginInProgress = false;
         if (!cloudData) return 'no_cloud_data';
@@ -422,12 +460,9 @@
         var hasValidLocalData = false;
         var localData = null;
         try {
-          var user = window.AUTH && window.AUTH.getUser ? window.AUTH.getUser() : null;
-          // Fallback: try to get uid from Supabase session directly (avoids async timing issue)
-          var uid = (user && user.id) ? user.id : null;
-          // Note: auth.session() est API v1 Supabase — non disponible en v2
-          // uid reste null si AUTH n'est pas encore initialisé, on utilise 'anon'
-          uid = uid || 'anon';
+          // 2026-04 P0 FIX : on utilise validUid (uid garanti valide depuis AUTH.ready())
+          // au lieu de retomber sur 'anon' ce qui causait le bug multi-device.
+          var uid = validUid;
           var raw = localStorage.getItem('mtd_profile_' + uid);
           if (raw) {
             if (window._storageDecode) { localData = window._storageDecode(raw); }
@@ -634,6 +669,7 @@
         }
         return result;
       });
+      }  // end of function _doSync
     },
 
     // Démarrer la sync périodique

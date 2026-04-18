@@ -1940,12 +1940,26 @@
   if (!mergeWhenReady()) {
     // extras.js peut charger après : retente au DOMContentLoaded + fallback timer
     document.addEventListener('DOMContentLoaded', function() {
-      if (!mergeWhenReady()) {
-        var tries = 0;
-        var iv = setInterval(function() {
-          if (mergeWhenReady() || ++tries > 40) clearInterval(iv);
-        }, 100);
+      if (mergeWhenReady()) return;
+      // 2026-04 P0 FIX : setInterval avec garantie cleanup (try/finally + timeout absolu)
+      var iv = null;
+      var tries = 0;
+      var stopped = false;
+      function stopPolling() {
+        stopped = true;
+        if (iv) { try { clearInterval(iv); } catch(e) {} iv = null; }
       }
+      iv = setInterval(function() {
+        if (stopped) { stopPolling(); return; }
+        try {
+          if (mergeWhenReady() || ++tries > 40) stopPolling();
+        } catch(e) {
+          // Sur toute erreur, on arrête pour éviter le leak
+          stopPolling();
+        }
+      }, 100);
+      // Timeout absolu de sécurité : arrête tout après 10s, peu importe ce qui se passe
+      setTimeout(stopPolling, 10000);
     });
   }
 

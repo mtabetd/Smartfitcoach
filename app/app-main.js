@@ -297,17 +297,54 @@ function saveProfile() {
  localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
  } catch(e) {
    console.warn('Storage quota exceeded ou erreur localStorage:', e);
-   // FIX P1 DATA INTEGRITY 2026-04-17 : détection quota + alerte user non-bloquante
-   // Avant : échec silencieux → user croit que ses modifs sont persistées alors que non.
    var _isQuota = e && (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014 || (e.message && e.message.indexOf('quota') !== -1));
    if (_isQuota) {
-     // Alerter une seule fois par session ET par user (cohérent avec mtd_profile_<uid>)
-     var _quotaFlagKey = '_quotaWarnShown_' + uid;
-     if (!window[_quotaFlagKey]) {
-       window[_quotaFlagKey] = true;
-       if (window.showToast) {
-         window.showToast('Espace de stockage saturé — vos dernières modifications pourraient ne pas être conservées. Reconnectez-vous pour synchroniser.', 'error', 6000);
+     // ─── P0 FIX 2026-04 : quota localStorage — cleanup auto + retry + toast répété ───
+     // Étape 1 : purger les clés obsolètes (vieux caches, vieux users, vieux logs)
+     var recovered = false;
+     try {
+       var purgeable = [];
+       for (var i = 0; i < localStorage.length; i++) {
+         var k = localStorage.key(i);
+         if (!k) continue;
+         // Priorité de purge : caches OFF, logs, anciennes sessions, journaux anciens
+         if (/^_fjOFF_|^mtd_blackbox_|^mtd_quote_|^mtd_off_cache_|^_log_|^mtd_plan_cache_/.test(k)) {
+           purgeable.push(k);
+         }
        }
+       // Purger aussi les profils d'autres users (si multi-compte sur même device)
+       for (var j = 0; j < localStorage.length; j++) {
+         var k2 = localStorage.key(j);
+         if (k2 && /^mtd_profile_/.test(k2) && k2 !== 'mtd_profile_' + uid) purgeable.push(k2);
+       }
+       if (purgeable.length) {
+         purgeable.forEach(function(k) { try { localStorage.removeItem(k); } catch(e2) {} });
+         // Retenter le setItem après purge
+         try {
+           localStorage.setItem('mtd_profile_' + uid, JSON.stringify(data));
+           recovered = true;
+         } catch(e3) {}
+       }
+     } catch(e4) {}
+
+     // Étape 2 : marquer l'échec global pour que le cloud devienne la source de vérité
+     if (!recovered) {
+       window._saveFailedAt = Date.now();
+       // Sauvegarde d'urgence en sessionStorage (survit tant que l'onglet est ouvert)
+       try {
+         sessionStorage.setItem('mtd_profile_emergency_' + uid, JSON.stringify(data));
+       } catch(e5) {}
+
+       // Toast répété (une fois toutes les 10 actions, pas à chaque save pour éviter spam)
+       window._quotaWarnCount = (window._quotaWarnCount || 0) + 1;
+       if (window._quotaWarnCount === 1 || window._quotaWarnCount % 10 === 0) {
+         if (window.showToast) {
+           window.showToast('⚠️ Stockage saturé. Vos modifications ne sont PAS sauvegardées localement. Synchronisation cloud tentée automatiquement.', 'error', 8000);
+         }
+       }
+     } else {
+       // Récupération réussie : toast informatif
+       if (window.showToast) window.showToast('Espace libéré automatiquement — données sauvegardées.', 'info', 3000);
      }
    }
  }

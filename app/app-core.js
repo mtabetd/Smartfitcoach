@@ -145,6 +145,13 @@ window.createChart = function(canvas, config) {
   }
   var chart = new Chart(canvas.getContext('2d'), config);
   window._chartInstances.push(chart);
+  // 2026-04 P0 FIX : cap absolu pour prévenir memory leak (filet de sécurité)
+  // Si la détection d'orphans échoue (edge case DOM ghosts), on force FIFO après 500 instances.
+  var _CHART_CAP = 500;
+  while (window._chartInstances.length > _CHART_CAP) {
+    var oldChart = window._chartInstances.shift();
+    try { if (oldChart && oldChart.destroy) oldChart.destroy(); } catch(e) {}
+  }
   return chart;
 };
 window.destroyAllCharts = function() {
