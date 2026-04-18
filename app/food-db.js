@@ -1879,7 +1879,30 @@
     ['Dragibus (Haribo)',             345,  4.0, 81.0,  0.0],
     ['Chamallow guimauve',            335,  5.5, 78.0,  0.2],
     ['Tic Tac (boîte)',               391,  0.0, 96.0,  0.0],
-    ['Chupa Chups sucette',           382,  0.0, 96.0,  0.0]
+    ['Chupa Chups sucette',           382,  0.0, 96.0,  0.0],
+
+    // ─── PIZZA HUT — Recettes spécifiques par croûte (batch 89) ───
+    // Valeurs nutritionnelles officielles Pizza Hut FR/UK (kcal/100g moyennes)
+    ['Pizza Hut Marinara (Pan)',      255, 10.0, 30.0, 10.0],
+    ['Pizza Hut Marinara (Hand Tossed)',230, 10.0, 32.0, 7.5],
+    ['Pizza Hut Margherita (Pan)',    265, 11.0, 30.0, 11.0],
+    ['Pizza Hut Margherita (Hand Tossed)',240, 11.0, 32.0, 8.0],
+    ['Pizza Hut Margherita (Cheezy Crust)',285, 12.0, 30.0, 13.0],
+    ['Pizza Hut Margherita (Stuffed Crust)',290, 12.0, 30.0, 13.5],
+    ['Pizza Hut Pepperoni (Pan)',     285, 12.0, 30.0, 13.0],
+    ['Pizza Hut Pepperoni (Hand Tossed)',265, 12.0, 31.0, 11.0],
+    ['Pizza Hut Pepperoni (Cheezy Crust)',310, 13.0, 29.0, 15.0],
+    ['Pizza Hut Pepperoni (Stuffed Crust)',315, 13.0, 30.0, 15.5],
+    ['Pizza Hut Super Supreme (Pan)', 295, 13.0, 28.0, 14.5],
+    ['Pizza Hut Super Supreme (Hand Tossed)',275, 13.0, 30.0, 12.5],
+    ['Pizza Hut Super Supreme (Cheezy Crust)',315, 14.0, 28.0, 16.5],
+    ['Pizza Hut Super Supreme (Stuffed Crust)',325, 14.0, 28.5, 17.0],
+    ['Pizza Hut BBQ Chicken (Pan)',   270, 14.0, 31.0, 10.5],
+    ['Pizza Hut BBQ Chicken (Cheezy Crust)',300, 15.0, 31.0, 13.0],
+    ['Pizza Hut Meat Lovers (Pan)',   305, 15.0, 27.0, 16.0],
+    ['Pizza Hut Hawaiian (Pan)',      265, 11.0, 32.0, 10.5],
+    ['Pizza Hut Veggie Lovers (Pan)', 235,  9.5, 31.0,  8.5],
+    ['Pizza Hut Cheesy Bites (4 pcs)',300,  9.0, 35.0, 14.0]
   ];
 
   // Attache à FOOD_CALC._DB si dispo, sinon expose pour merge ultérieur

@@ -1681,7 +1681,22 @@ function _fjRenderFoodRow(food, source) {
 
   info.addEventListener('click', function() {
     _fjState.selectedFood = food;
-    _fjState.qty = 100;
+    // 2026-04 : si une portion par défaut existe pour cet aliment, on initialise
+    // qty avec la portion (en grammes) et count = 1 (1 portion).
+    // Sinon, mode "100g" classique.
+    var defaultPortion = (window.FOOD_PORTIONS && window.FOOD_PORTIONS.getDefaultPortion)
+      ? window.FOOD_PORTIONS.getDefaultPortion(food.name) : null;
+    if (defaultPortion) {
+      _fjState.portion = defaultPortion;     // {label, g}
+      _fjState.portionCount = 1;
+      _fjState.qty = defaultPortion.g;       // grammes effectifs
+      _fjState.unitMode = 'portion';         // 'portion' ou 'grams'
+    } else {
+      _fjState.portion = null;
+      _fjState.portionCount = 1;
+      _fjState.qty = 100;
+      _fjState.unitMode = 'grams';
+    }
     _fjShowSelection();
   });
 
@@ -1852,6 +1867,15 @@ function _fjShowSelection() {
 
   var food = _fjState.selectedFood;
   var qty = _fjState.qty;
+  // 2026-04 : calcul intelligent selon unitMode (portion ou grams)
+  // qty est TOUJOURS en grammes effectifs (calculé depuis portionCount × portion.g si mode portion)
+  var unitMode = _fjState.unitMode || 'grams';
+  var portion = _fjState.portion;
+  var portionCount = _fjState.portionCount || 1;
+  if (unitMode === 'portion' && portion) {
+    qty = Math.round(portion.g * portionCount);
+    _fjState.qty = qty;
+  }
   var factor = qty / 100;
   var kcal = Math.round(food.kcal * factor);
   var p = Math.round(food.protein * factor * 10) / 10;
@@ -1862,34 +1886,125 @@ function _fjShowSelection() {
     style: 'font-family:Georgia,serif;font-size:14px;color:var(--black,#0A0A09);margin-bottom:8px;'
   }, food.name));
 
-  var qtyRow = h('div', { style: 'display:flex;align-items:center;gap:8px;margin-bottom:10px;' });
-  qtyRow.appendChild(h('label', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
-  }, 'Quantit\u00e9'));
-  var qtyInput = h('input', {
-    type: 'number',
-    min: '1',
-    max: '2000',
-    step: '1',
-    value: String(qty),
-    style: 'width:70px;padding:6px 8px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
-      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;text-align:center;outline:none;'
-  });
-  qtyInput.addEventListener('input', function(e) {
-    var v = parseInt(e.target.value, 10);
-    if (isNaN(v) || v < 1) v = 1;
-    if (v > 2000) v = 2000;
-    _fjState.qty = v;
-    _fjShowSelection();
-  });
-  qtyRow.appendChild(qtyInput);
-  qtyRow.appendChild(h('span', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
-  }, 'g'));
-  box.appendChild(qtyRow);
+  // ─── SÉLECTEUR DE PORTION (si dispo) ───
+  var allPortions = (window.FOOD_PORTIONS && window.FOOD_PORTIONS.getPortions)
+    ? window.FOOD_PORTIONS.getPortions(food.name) : null;
+
+  if (allPortions && allPortions.length && unitMode === 'portion') {
+    // Sélecteur de format si plus d'une portion
+    if (allPortions.length > 1) {
+      var formatRow = h('div', { style: 'display:flex;align-items:center;gap:8px;margin-bottom:8px;' });
+      formatRow.appendChild(h('label', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:48px;'
+      }, 'Format'));
+      var formatSelect = h('select', {
+        style: 'flex:1;padding:8px 10px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);outline:none;'
+      });
+      allPortions.forEach(function(opt, i) {
+        var optEl = h('option', { value: String(i) }, opt.label + ' (' + opt.g + ' g)');
+        if (portion && opt.label === portion.label && opt.g === portion.g) optEl.selected = true;
+        formatSelect.appendChild(optEl);
+      });
+      formatSelect.addEventListener('change', function(e) {
+        var idx = parseInt(e.target.value, 10);
+        if (!isNaN(idx) && allPortions[idx]) {
+          _fjState.portion = allPortions[idx];
+          _fjShowSelection();
+        }
+      });
+      formatRow.appendChild(formatSelect);
+      box.appendChild(formatRow);
+    }
+
+    // Compteur de portions
+    var pluralLabel = portion.label;
+    if (portionCount > 1 && /^1\s/.test(pluralLabel)) {
+      // Remplacer "1 X" par "N X(s)"
+      var rest = pluralLabel.replace(/^1\s+/, '');
+      // Pluriel basique : ajout 's' si pas déjà
+      if (!/s$/i.test(rest.split(' ')[0])) rest = rest.replace(/^(\S+)/, '$1s');
+      pluralLabel = portionCount + ' ' + rest;
+    }
+
+    var countRow = h('div', { style: 'display:flex;align-items:center;gap:8px;margin-bottom:8px;' });
+    countRow.appendChild(h('label', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:48px;'
+    }, 'Combien'));
+    var countInput = h('input', {
+      type: 'number', min: '1', max: '50', step: '1', value: String(portionCount),
+      style: 'width:70px;padding:8px 10px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;text-align:center;outline:none;'
+    });
+    countInput.addEventListener('input', function(e) {
+      var v = parseInt(e.target.value, 10);
+      if (isNaN(v) || v < 1) v = 1;
+      if (v > 50) v = 50;
+      _fjState.portionCount = v;
+      _fjShowSelection();
+    });
+    countRow.appendChild(countInput);
+    countRow.appendChild(h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);flex:1;'
+    }, '× ' + portion.label + (portionCount > 1 ? '   (' + qty + ' g total)' : '   (' + qty + ' g)')));
+    box.appendChild(countRow);
+
+    // Bouton bascule en mode grammes
+    var switchToGrams = h('button', {
+      type: 'button',
+      style: 'background:none;border:none;padding:4px 0;cursor:pointer;color:var(--grey,#6B6B65);'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:underline;margin-bottom:8px;'
+    }, 'Saisir en grammes');
+    switchToGrams.addEventListener('click', function() {
+      _fjState.unitMode = 'grams';
+      _fjShowSelection();
+    });
+    box.appendChild(switchToGrams);
+  } else {
+    // Mode grammes (manuel ou pas de portion connue)
+    var qtyRow = h('div', { style: 'display:flex;align-items:center;gap:8px;margin-bottom:8px;' });
+    qtyRow.appendChild(h('label', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:48px;'
+    }, 'Quantit\u00e9'));
+    var qtyInput = h('input', {
+      type: 'number', min: '1', max: '2000', step: '1', value: String(qty),
+      style: 'width:80px;padding:8px 10px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;text-align:center;outline:none;'
+    });
+    qtyInput.addEventListener('input', function(e) {
+      var v = parseInt(e.target.value, 10);
+      if (isNaN(v) || v < 1) v = 1;
+      if (v > 2000) v = 2000;
+      _fjState.qty = v;
+      _fjState.unitMode = 'grams';
+      _fjShowSelection();
+    });
+    qtyRow.appendChild(qtyInput);
+    qtyRow.appendChild(h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
+    }, 'g'));
+    box.appendChild(qtyRow);
+
+    // Bouton retour aux portions si dispo
+    if (allPortions && allPortions.length) {
+      var switchToPortion = h('button', {
+        type: 'button',
+        style: 'background:none;border:none;padding:4px 0;cursor:pointer;color:var(--grey,#6B6B65);'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:underline;margin-bottom:8px;'
+      }, 'Choisir une portion standard');
+      switchToPortion.addEventListener('click', function() {
+        _fjState.unitMode = 'portion';
+        if (!_fjState.portion) _fjState.portion = allPortions[0];
+        _fjState.portionCount = 1;
+        _fjState.qty = _fjState.portion.g;
+        _fjShowSelection();
+      });
+      box.appendChild(switchToPortion);
+    }
+  }
 
   box.appendChild(h('div', {
-    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.6;'
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.6;font-weight:600;'
   }, kcal + ' kcal \u00b7 P ' + p + 'g \u00b7 G ' + g + 'g \u00b7 L ' + l + 'g'));
 
   var MEAL_FULL = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
@@ -1899,14 +2014,30 @@ function _fjShowSelection() {
   }, 'Ajouter \u00e0 ' + (MEAL_FULL[_fjState.meal] || 'ce repas'));
   addBtn.addEventListener('click', function() {
     if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
+      // 2026-04 : libellé lisible si on est en mode portion (ex "1 burger" au lieu de "215g")
+      var label = qty + 'g';
+      if (_fjState.unitMode === 'portion' && _fjState.portion) {
+        var pCount = _fjState.portionCount || 1;
+        var pLab = _fjState.portion.label;
+        if (pCount === 1) label = pLab + ' (' + qty + 'g)';
+        else {
+          // Pluralisation simple
+          var rest = pLab.replace(/^1\s+/, '');
+          if (!/s$/i.test(rest.split(' ')[0])) rest = rest.replace(/^(\S+)/, '$1s');
+          label = pCount + ' ' + rest + ' (' + qty + 'g)';
+        }
+      }
       window.FOOD_JOURNAL.addEntry(
         _fjState.meal,
         food.name,
         kcal, p, g, l,
-        qty + 'g'
+        label
       );
       _fjState.selectedFood = null;
       _fjState.query = '';
+      _fjState.portion = null;
+      _fjState.portionCount = 1;
+      _fjState.unitMode = 'grams';
       _reRenderFJCard();
     }
   });
