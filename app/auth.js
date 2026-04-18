@@ -568,7 +568,19 @@ window.AUTH = {
     // When _authReady resolves AFTER the timeout (late Supabase response),
     // trigger a full profile restore + re-render so the user sees their dashboard.
     _authReady.then(function() {
-      if (_currentSession && window.S && window.S.view === 'auth') {
+      if (!_currentSession || !window.S) return;
+      // FIX 2026-04-18 : si l'utilisateur est déjà sur le dashboard (auto-login localStorage)
+      // mais que Supabase répond tardivement, on déclenche quand même le sync cloud.
+      // Avant : sync ignoré si view !== 'auth' → données jamais sauvegardées vers Supabase.
+      if (window.S.view !== 'auth') {
+        if (window.SupaSync && !window.SupaSync._syncInterval) {
+          console.log('[AUTH] Late session — triggering cloud sync (user already on dashboard)');
+          window.SupaSync.syncOnLogin();
+          window.SupaSync.startAutoSync();
+        }
+        return;
+      }
+      if (window.S.view === 'auth') {
         console.log('[AUTH] Late session restore — loading profile and re-rendering dashboard');
         // Restore profile from localStorage (same as _doAutoLogin does)
         if (window.loadProfile) window.loadProfile();
