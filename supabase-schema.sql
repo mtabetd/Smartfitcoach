@@ -165,6 +165,23 @@ create table public.progress_photos (
 );
 
 
+-- 13. EARLY REGISTRATIONS (pré-inscrits avant ouverture — gate.js / preregister function)
+create table public.early_registrations (
+  id bigint generated always as identity primary key,
+  first_name text not null,
+  last_name text not null,
+  email text not null unique,
+  phone text,
+  ip_hash text,
+  user_agent text,
+  created_at timestamptz not null default now()
+);
+
+-- RLS : accessible uniquement via service key (fonction Netlify) — aucun accès client direct
+alter table public.early_registrations enable row level security;
+-- Pas de policy publique : seul le service role (bypass RLS) peut insérer
+
+
 -- ============================================================
 -- INDEX pour les requetes frequentes
 -- ============================================================
