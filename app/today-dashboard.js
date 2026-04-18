@@ -3159,10 +3159,15 @@ function openTodayKitchenTimer() {
         running = true;
         startBtn.textContent = 'En cours...';
         interval = window._kitchenTimerInterval = setInterval(function() {
+          // 2026-04 P1 FIX : suicide si l'overlay est detached du DOM (fermeture non-orthodoxe)
+          if (!overlay || !overlay.parentNode || !document.body.contains(overlay)) {
+            clearInterval(interval); window._kitchenTimerInterval = null; running = false;
+            return;
+          }
           totalSeconds--;
           display.textContent = formatTime(totalSeconds);
           if (totalSeconds <= 0) {
-            clearInterval(interval); running = false;
+            clearInterval(interval); window._kitchenTimerInterval = null; running = false;
             startBtn.textContent = window.t ? window.t('extras.start') : 'Démarrer';
             display.textContent = 'Terminé !';
             try { if (window.navigator && window.navigator.vibrate) window.navigator.vibrate([200,100,200]); } catch(e) {}

@@ -76,6 +76,9 @@
     signOut: function() {
       var client = getClient();
       if (!client) return Promise.reject('Supabase not loaded');
+      // 2026-04 P1 FIX : stopper la sync automatique avant logout
+      // (sinon l'interval continue à tenter des saves vers le user déco)
+      try { if (window.SupaSync && window.SupaSync.stopAutoSync) window.SupaSync.stopAutoSync(); } catch(e) {}
       return client.auth.signOut();
     },
 
