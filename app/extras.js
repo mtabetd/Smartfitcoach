@@ -21,8 +21,8 @@ style.textContent = [
   '/* Water tracker */',
   '.water-section { padding:16px 0; }',
   '.water-title { font-family:Georgia,serif; font-size:15px; font-style:italic; margin-bottom:12px; color:var(--black,#0A0A09); }',
-  '.water-row { display:flex; gap:6px; justify-content:center; margin:12px 0; }',
-  '.water-glass { width:44px; height:44px; border:1px solid var(--border,#D8D8D0); background:var(--ivory2,#F4F4F0); cursor:pointer; transition:all 0.2s ease; display:flex; align-items:flex-end; overflow:hidden; border-radius:0 0 2px 2px; position:relative; }',
+  '.water-row { display:flex; gap:10px; justify-content:center; margin:12px 0; padding:4px 0; }',
+  '.water-glass { width:44px; height:44px; border:1px solid var(--border,#D8D8D0); background:var(--ivory2,#F4F4F0); cursor:pointer; transition:all 0.2s ease; display:flex; align-items:flex-end; overflow:hidden; border-radius:0 0 2px 2px; position:relative; flex-shrink:0; }',
   '.water-glass.filled { border-color:var(--blue,#1A3A6A); }',
   '.water-glass .water-fill { width:100%; background:rgba(26,58,106,0.15); transition:height 0.3s ease; }',
   '.water-glass.filled .water-fill { height:100%; }',
@@ -1740,6 +1740,9 @@ window.FOOD_JOURNAL = {
         del.className = 'fj-entry-delete';
         del.textContent = '\u2715';
         del.onclick = function() {
+          // 2026-04 NIVEAU 1 : confirmation avant suppression aliment (1 clic = perte macros)
+          var entryName = (item.entry && item.entry.name) || 'cet aliment';
+          if (!confirm('Retirer « ' + entryName + ' » du journal ?')) return;
           self.removeEntry(today, item.index);
           if (window.APP_RENDER) APP_RENDER();
           else if (window.render) render();

@@ -7484,7 +7484,11 @@ function renderMusculationProgram(p) {
  var doneBadge = h('div', {style: 'border:1px solid #1A4A1A;background:var(--greenbg,rgba(26,74,26,.06));padding:12px 16px;margin-top:8px'});
  doneBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;font-weight:bold;color:#1A4A1A'}, '\u2714 Objectif accompli \u2014 S\u00e9ance valid\u00e9e'));
  doneBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",sans-serif;font-size:11px;color:#1A4A1A;margin-top:4px'}, doneSess.duration + '\u00a0min \u2014 ' + doneSess.kcalTotal + '\u00a0kcal brul\u00e9es (dont +' + doneSess.kcalEpoc + '\u00a0kcal EPOC)'));
- doneBadge.appendChild(h('button', {style: 'margin-top:8px;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);background:none;border:none;cursor:pointer;padding:0', onclick: function() { delete S.sessionHistory[todayKey]; window.render(); }}, 'Annuler'));
+ doneBadge.appendChild(h('button', {style: 'margin-top:8px;font-family:"Helvetica Neue",sans-serif;font-size:9px;color:var(--grey);background:none;border:none;cursor:pointer;padding:0', onclick: function() {
+   // 2026-04 NIVEAU 1 : confirmation avant d'annuler une séance validée (1 clic accidentel = journée perdue)
+   if (!confirm('Annuler la séance validée de ce jour ?\nVous perdrez les ' + (doneSess.kcalTotal || 0) + ' kcal enregistrées.')) return;
+   delete S.sessionHistory[todayKey]; window.render();
+ }}, 'Annuler'));
  p.appendChild(doneBadge);
  } else if (S.sessionCompleting === S.selectedSportDay) {
  var realDur = S._sessionDuration != null ? S._sessionDuration : estDuration;

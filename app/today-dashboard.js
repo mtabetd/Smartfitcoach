@@ -1938,8 +1938,13 @@ function _fjShowSelection() {
     });
     countInput.addEventListener('input', function(e) {
       var v = parseInt(e.target.value, 10);
+      // 2026-04 NIVEAU 1 : cap réaliste à 20 portions (au-delà = saisie erronée)
+      // + warning visuel si valeur inhabituelle
       if (isNaN(v) || v < 1) v = 1;
-      if (v > 50) v = 50;
+      if (v > 20) {
+        v = 20;
+        if (window.showToast) window.showToast('Maximum 20 portions. Pour plus, passez en mode grammes.', 'warning', 3000);
+      }
       _fjState.portionCount = v;
       _fjShowSelection();
     });
@@ -2087,6 +2092,9 @@ function _fjBuildEntriesList(container) {
     del.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M2 2 L10 10 M10 2 L2 10"/></svg>';
     del.addEventListener('click', function() {
       if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.removeEntry) {
+        // 2026-04 NIVEAU 1 : confirmation avant suppression aliment du journal
+        var entryName = (entry && entry.name) || 'cet aliment';
+        if (!confirm('Retirer « ' + entryName + ' » du journal ?')) return;
         var today = new Date().toISOString().slice(0, 10);
         window.FOOD_JOURNAL.removeEntry(today, absIdx);
         _reRenderFJCard();
@@ -3051,8 +3059,19 @@ function openTodayWeightPrompt() {
       style: 'width:100%;padding:12px;background:var(--black,#181818);color:var(--ivory,#FAF9F6);border:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;',
       onclick: function() {
         var val = parseFloat(input.value);
-        if (isNaN(val) || val <= 0) { input.style.borderColor = '#c44'; return; }
+        // 2026-04 NIVEAU 1 : validation plausible (évite saisies absurdes comme -50 ou 500)
+        // Bornes en kg après conversion éventuelle depuis lbs.
         var valKg = window.UNITS ? window.UNITS.toKg(val) : val;
+        if (isNaN(val) || val <= 0 || valKg < 20 || valKg > 300) {
+          input.style.borderColor = '#c44';
+          // Toast explicite pour expliquer POURQUOI refusé
+          if (window.showToast) {
+            var unitTxt = window.UNITS ? window.UNITS.weightLabel() : 'kg';
+            window.showToast('Poids invalide. Entrez une valeur entre 20 et 300 kg (44-660 ' + (unitTxt === 'lbs' ? 'lbs' : 'kg') + ').', 'error', 4000);
+          }
+          return;
+        }
+        input.style.borderColor = 'var(--border)'; // reset si valide après erreur précédente
         if (window.S) { window.S.weight = valKg; window.S._nm = null; }
         if (window.devalidateWeekPlan) window.devalidateWeekPlan('poids mis à jour (dashboard)');
         try { if (window.BLACKBOX) window.BLACKBOX.log('weight_logged', { weight: valKg }); } catch(e) {}
