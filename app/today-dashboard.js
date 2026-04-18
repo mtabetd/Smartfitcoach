@@ -1868,9 +1868,51 @@ function _fjRefreshResults() {
     if (list.length > 40) list = list.slice(0, 40);
     allowOFF = true;
   } else {
-    box.appendChild(h('div', {
-      style: 'padding:12px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
-    }, 'Saisissez au moins deux caract\u00e8res.'));
+    // 2026-04 SIMPL-A : au lieu d'un écran vide "saisissez…", afficher les aliments
+    // récemment loggés comme quick-add (Sarah : "pas de raccourci pour les aliments courants")
+    var recentFoods = [];
+    try {
+      var uid = (window.AUTH && window.AUTH.getUser) ? (window.AUTH.getUser() || {}).id : 'anon';
+      var journalKey = 'mtd_food_journal_' + (uid || 'anon');
+      var journal = JSON.parse(localStorage.getItem(journalKey) || '{}');
+      // Parcourir les 7 derniers jours, collecter les aliments uniques par nom
+      var days = Object.keys(journal).sort().reverse().slice(0, 7);
+      var seen = {};
+      for (var d = 0; d < days.length; d++) {
+        var entries = journal[days[d]] || [];
+        // Parcourir du plus récent au plus ancien
+        for (var ei = entries.length - 1; ei >= 0; ei--) {
+          var e = entries[ei];
+          if (!e || !e.name || seen[e.name]) continue;
+          seen[e.name] = true;
+          recentFoods.push({
+            name: e.name,
+            kcal: e.kcal || 0,
+            protein: e.p || 0,
+            carbs: e.g || 0,
+            fat: e.l || 0
+          });
+          if (recentFoods.length >= 8) break;
+        }
+        if (recentFoods.length >= 8) break;
+      }
+    } catch(e) { recentFoods = []; }
+
+    if (recentFoods.length > 0) {
+      box.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 4px 6px;'
+      }, 'Récents · ajout rapide'));
+      recentFoods.forEach(function(food) {
+        box.appendChild(_fjRenderFoodRow(food, 'recent'));
+      });
+      box.appendChild(h('div', {
+        style: 'padding:12px 4px 4px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);'
+      }, 'Ou saisissez 2+ caractères pour rechercher dans la base.'));
+    } else {
+      box.appendChild(h('div', {
+        style: 'padding:12px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);'
+      }, 'Saisissez au moins deux caractères pour chercher un aliment.'));
+    }
     _fjOFF.results = null;
     return;
   }
