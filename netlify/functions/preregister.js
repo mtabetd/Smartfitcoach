@@ -3,6 +3,12 @@
 // Appelée par la gate (app/gate.js). Aucune auth requise côté client.
 
 const { createClient } = require('@supabase/supabase-js');
+const crypto = require('crypto');
+
+function hashIp(ip) {
+  if (!ip || ip === 'unknown') return null;
+  return crypto.createHash('sha256').update(String(ip) + '|sfc_ip_salt').digest('hex');
+}
 
 var ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://smartfitcoach.netlify.app,https://smartfitcoach.fr,https://www.smartfitcoach.fr,https://smartfitcoach.fitness,https://www.smartfitcoach.fitness')
   .split(',').map(function(o){ return o.trim(); });
@@ -184,7 +190,7 @@ exports.handler = async function(event) {
       last_name: lastName,
       email: email,
       phone: phone || null,
-      ip_address: ip,
+      ip_hash: hashIp(ip),
       user_agent: String(event.headers['user-agent'] || '').slice(0, 300)
     }).select('id').single();
 
