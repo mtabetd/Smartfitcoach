@@ -43,6 +43,35 @@
     return getClient();
   }
 
+  // ─── SYNC STATUS TRACKING (2026-04 N2) ───
+  // Compte les échecs consécutifs de sync cloud pour alerter l'user si persistant.
+  var _syncFailCount = 0;
+  var _syncFailWarnedAt = 0;
+  function _trackSyncSuccess() {
+    if (_syncFailCount > 0) {
+      // Transition offline → online : toast de rétablissement si on avait alerté
+      if (_syncFailWarnedAt > 0 && window.showToast) {
+        try { window.showToast('Synchronisation cloud rétablie.', 'info', 3000); } catch(e) {}
+      }
+    }
+    _syncFailCount = 0;
+    _syncFailWarnedAt = 0;
+  }
+  function _trackSyncFailure(reason) {
+    _syncFailCount++;
+    // Alerter l'utilisateur après 3 échecs consécutifs ET pas plus qu'une fois par 10 min
+    if (_syncFailCount >= 3 && (Date.now() - _syncFailWarnedAt > 10 * 60 * 1000)) {
+      _syncFailWarnedAt = Date.now();
+      if (window.showToast) {
+        try { window.showToast('Synchronisation cloud indisponible. Vos modifications sont conservées localement.', 'warning', 5000); } catch(e) {}
+      }
+    }
+  }
+  // Expose pour consultation externe (badge UI éventuel)
+  window._sfcSyncStatus = function() {
+    return { failCount: _syncFailCount, online: _syncFailCount === 0, lastWarnedAt: _syncFailWarnedAt };
+  };
+
   // ─── AUTH MODULE ──────────────────────────────────────────
   var SupaAuth = {
     // Inscription
@@ -200,10 +229,11 @@
           .then(function(result) {
             if (result.error) {
               console.warn('[SupaSync] saveProfile error:', result.error.message);
+              // 2026-04 N2 : tracker les échecs successifs pour alerter l'utilisateur
+              _trackSyncFailure(result.error.message);
             } else {
               console.log('[SupaSync] Profile saved to cloud');
-              // Marquer le local comme "à jour avec le cloud" pour que la comparaison
-              // syncOnLogin() fonctionne correctement (fix bug persistance 2026-04).
+              _trackSyncSuccess();
               try {
                 window.S._cloudUpdatedAt = new Date().toISOString();
               } catch(e) {}
@@ -212,6 +242,8 @@
           });
       }).catch(function(e) {
         console.warn('[SupaSync] saveProfile failed:', e);
+        // 2026-04 N2 : erreur réseau (pas juste applicative) → tracker
+        _trackSyncFailure((e && e.message) || String(e));
       });
     },
 

@@ -3998,6 +3998,22 @@ function renderCrossfitProgram(p) {
  var _elapsed = 0;
  var _timerStartTime = 0;
  var _lastTickSecond = -1;
+ // 2026-04 N2 : persistance du timer WOD — survit au verrou écran / rafraîchissement
+ // Clé unique basée sur le WOD en cours + type de timer (countdown/up) + durée prévue
+ var _wodPersistKey = '_sfc_wodTimer_' + (wod && wod.day ? wod.day : 'adhoc') + '_' + (isCountdown ? 'cd' : 'up') + '_' + totalSeconds;
+ try {
+   var _savedState = sessionStorage.getItem(_wodPersistKey);
+   if (_savedState) {
+     var _st = JSON.parse(_savedState);
+     // Ne restaurer que si < 4h (sinon c'est un timer abandonné)
+     if (_st && typeof _st.elapsed === 'number' && Date.now() - (_st.savedAt || 0) < 4 * 3600 * 1000) {
+       _elapsed = _st.elapsed;
+       // Ne pas auto-démarrer — l'utilisateur doit explicitement reprendre
+     } else {
+       sessionStorage.removeItem(_wodPersistKey);
+     }
+   }
+ } catch(e) {}
 
  function formatTime(secs) {
  var m = Math.floor(Math.abs(secs) / 60);
@@ -4035,6 +4051,8 @@ function renderCrossfitProgram(p) {
  _timerInterval = window._wodTimerInterval = setInterval(function() {
  _elapsed = Math.floor((Date.now() - _timerStartTime) / 1000);
  updateDisplay();
+ // 2026-04 N2 : sauvegarder l'état toutes les secondes (persist face au verrou écran)
+ try { sessionStorage.setItem(_wodPersistKey, JSON.stringify({ elapsed: _elapsed, savedAt: Date.now() })); } catch(e) {}
  if (isCountdown) {
  var remaining = totalSeconds - _elapsed;
  // Tick pour les 3 dernières secondes (une seule fois par seconde)
@@ -4059,6 +4077,8 @@ function renderCrossfitProgram(p) {
  clearInterval(_timerInterval);
  _elapsed = 0;
  _lastTickSecond = -1;
+ // 2026-04 N2 : purger l'état persistant (l'utilisateur veut repartir à zéro)
+ try { sessionStorage.removeItem(_wodPersistKey); } catch(e) {}
  startBtn.textContent = 'D\u00e9marrer';
  displayEl.style.color = '#0A0A09';
  updateDisplay();

@@ -1647,7 +1647,7 @@ function _reRenderFJCard() {
 }
 
 // OpenFoodFacts state (module-level)
-var _fjOFF = { loading: false, results: null, lastQuery: '' };
+var _fjOFF = { loading: false, results: null, lastQuery: '', ctrl: null };
 
 function _fjRenderFoodRow(food, source) {
   var row = h('div', {
@@ -1718,6 +1718,7 @@ function _fjFetchOFF(query) {
 
   var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
   var timer = ctrl ? setTimeout(function() { try { ctrl.abort(); } catch(e) {} }, 8000) : null;
+  _fjOFF.ctrl = ctrl;  // 2026-04 N2 : expose pour bouton Annuler manuel
 
   try {
     window.fetch(
@@ -1793,9 +1794,27 @@ function _fjAppendOFFResults() {
   }, 'Base mondiale OpenFoodFacts'));
 
   if (_fjOFF.loading) {
-    sec.appendChild(h('div', {
-      style: 'padding:10px 4px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
+    // 2026-04 N2 : spinner + bouton Annuler pour sortir d'un fetch bloqué
+    var loadRow = h('div', {
+      style: 'padding:10px 4px;display:flex;align-items:center;justify-content:space-between;gap:8px;'
+    });
+    loadRow.appendChild(h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
     }, 'Recherche de produits en ligne\u2026'));
+    var cancelBtn = h('button', {
+      type: 'button',
+      style: 'background:none;border:1px solid var(--line,#D8D8D0);padding:6px 12px;min-height:32px;cursor:pointer;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);border-radius:2px;'
+    }, 'Annuler');
+    cancelBtn.addEventListener('click', function() {
+      try { if (_fjOFF.ctrl) _fjOFF.ctrl.abort(); } catch(e) {}
+      _fjOFF.loading = false;
+      _fjOFF.results = [];
+      _fjOFF.ctrl = null;
+      _fjAppendOFFResults();
+    });
+    loadRow.appendChild(cancelBtn);
+    sec.appendChild(loadRow);
   } else if (Array.isArray(_fjOFF.results)) {
     if (_fjOFF.results.length === 0) {
       sec.appendChild(h('div', {
