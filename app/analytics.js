@@ -255,7 +255,9 @@
     }
     var totalK = 0, totalP = 0, totalG = 0, totalL = 0;
     recentDays.forEach(function(d) {
-      var entries = journal[d] || [];
+      var entries = journal[d];
+      // P2 FIX smoke test : guard Array (si journal mal formé, éviter forEach sur objet = clés)
+      if (!Array.isArray(entries)) return;
       entries.forEach(function(e) {
         if (!e) return;
         totalK += Number(e.kcal) || 0;
