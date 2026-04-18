@@ -102,6 +102,127 @@
     if(g) g.style.display='none';
     if(a) a.style.display='block';
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',checkGate);
-  else checkGate();
+
+  // ─── Pré-inscription early-member (overlay popup) ─────────────────
+  // Complètement isolé du flow mot-de-passe. Tout échec ici n'affecte
+  // jamais la gate principale ni l'app (try/catch systématiques).
+  var _preLock = false; // anti double-submit
+  function setupPreregister(){
+    try {
+      var link    = document.getElementById('gate-preregister-link');
+      var overlay = document.getElementById('gate-preregister-overlay');
+      var modal   = document.getElementById('gate-preregister-modal');
+      var closeBtn= document.getElementById('gate-preregister-close');
+      var form    = document.getElementById('gate-preregister-form');
+      var success = document.getElementById('gate-preregister-success');
+      var errBox  = document.getElementById('gate-preregister-error');
+      var submit  = document.getElementById('gate-preregister-submit');
+      if(!link||!overlay||!modal||!form) return; // pas de popup sur cette page
+
+      function showErr(msg){
+        if(!errBox) return;
+        errBox.textContent = msg;
+        errBox.style.display = 'block';
+      }
+      function clearErr(){ if(errBox) errBox.style.display='none'; }
+
+      function openModal(e){
+        if(e) e.preventDefault();
+        overlay.style.display='block';
+        modal.style.display='block';
+        // Force reflow avant transition pour que opacity:0 soit bien appliqué
+        void modal.offsetWidth;
+        requestAnimationFrame(function(){
+          overlay.style.opacity='1';
+          modal.style.opacity='1';
+          modal.style.transform='translate(-50%,-50%) scale(1)';
+        });
+        var firstInput = document.getElementById('gate-pre-first');
+        if(firstInput) setTimeout(function(){ try{firstInput.focus();}catch(_){}}, 380);
+      }
+      function closeModal(){
+        overlay.style.opacity='0';
+        modal.style.opacity='0';
+        modal.style.transform='translate(-50%,-48%) scale(0.98)';
+        setTimeout(function(){
+          overlay.style.display='none';
+          modal.style.display='none';
+        }, 360);
+      }
+
+      link.addEventListener('click', openModal);
+      if(closeBtn) closeBtn.addEventListener('click', closeModal);
+      overlay.addEventListener('click', closeModal);
+      document.addEventListener('keydown', function(e){
+        if(e.key==='Escape' && modal.style.display==='block') closeModal();
+      });
+
+      // Focus style fin Hermès : underline noir au focus
+      var inputs = form.querySelectorAll('input');
+      for(var i=0;i<inputs.length;i++){
+        (function(inp){
+          inp.addEventListener('focus', function(){ inp.style.borderBottomColor = '#1A1A1A'; });
+          inp.addEventListener('blur',  function(){ inp.style.borderBottomColor = '#E0E0DA'; });
+        })(inputs[i]);
+      }
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        if(_preLock) return;
+        clearErr();
+
+        var data = {
+          first_name: (document.getElementById('gate-pre-first').value||'').trim(),
+          last_name:  (document.getElementById('gate-pre-last').value||'').trim(),
+          email:      (document.getElementById('gate-pre-email').value||'').trim(),
+          phone:      (document.getElementById('gate-pre-phone').value||'').trim()
+        };
+
+        // Validation côté client — minimaliste, la function Netlify revalide
+        if(!data.first_name || !data.last_name){ showErr('Prénom et nom requis.'); return; }
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)){ showErr('Adresse email invalide.'); return; }
+
+        _preLock = true;
+        if(submit){
+          submit.disabled = true;
+          submit.textContent = 'Envoi en cours…';
+          submit.style.opacity = '0.7';
+        }
+
+        fetch('/.netlify/functions/preregister', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        }).then(function(res){
+          return res.json().then(function(body){ return { ok: res.ok, body: body, status: res.status }; });
+        }).then(function(r){
+          if(r.ok){
+            form.style.display = 'none';
+            if(success) success.style.display = 'block';
+          } else {
+            _preLock = false;
+            if(submit){ submit.disabled=false; submit.textContent='Rejoindre le cercle'; submit.style.opacity='1'; }
+            var msg = (r.body && r.body.error) || 'Une erreur est survenue. Merci de réessayer.';
+            // Email déjà inscrit → message doux
+            if(r.status===409) msg = 'Vous figurez déjà parmi les premiers inscrits.';
+            showErr(msg);
+          }
+        }).catch(function(){
+          _preLock = false;
+          if(submit){ submit.disabled=false; submit.textContent='Rejoindre le cercle'; submit.style.opacity='1'; }
+          showErr('Connexion impossible. Vérifiez votre réseau.');
+        });
+      });
+    } catch(err) {
+      // Log silencieux — ne doit jamais bloquer la gate
+      try { console.warn('[gate-preregister] init failed:', err && err.message); } catch(_){}
+    }
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', function(){ checkGate(); setupPreregister(); });
+  } else {
+    checkGate();
+    setupPreregister();
+  }
 })();
