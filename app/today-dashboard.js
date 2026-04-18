@@ -3165,7 +3165,10 @@ function openTodayWeightPrompt() {
             window.computeNutritionState(_isTrainDay);
           } catch(e) { /* fallback : _nm=null forcera recompute au prochain render */ }
         }
-        if (window.devalidateWeekPlan) window.devalidateWeekPlan('poids mis à jour (dashboard)');
+        // 2026-04 FIX UX : NE PAS dévalider le plan hebdo pour une simple mise à jour de poids
+        // (avant : chaque saisie de poids forçait l'user à re-cliquer "Valider mon programme",
+        //  même pour une variation de 0.2 kg — frustrant). _nm=null suffit pour recalculer
+        //  les macros cibles au prochain render. Le plan reste valide pour la semaine.
         try { if (window.BLACKBOX) window.BLACKBOX.log('weight_logged', { weight: valKg }); } catch(e) {}
         var user = window.AUTH ? window.AUTH.getUser() : null;
         var userId = user ? user.id : 'anon';

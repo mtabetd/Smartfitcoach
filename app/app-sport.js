@@ -8317,9 +8317,9 @@ function renderWeightChartSport(container) {
  // Sync poids vers Supabase
  if (window.SupaSync) SupaSync.saveWeight(today, v);
  S.weight = v;
- // FIX P2 2026-04-16 — Invalider le cache nutrition quand le poids change depuis le module sport
+ // 2026-04 FIX UX : NE PAS dévalider le plan hebdo pour un simple changement de poids
+ // (_nm=null suffit pour recalculer les macros ; le plan de la semaine reste valide)
  S._nm = null;
- if (window.devalidateWeekPlan) window.devalidateWeekPlan('poids mis à jour (sport)');
  window.BLACKBOX && window.BLACKBOX.log('weight_logged', {weight: v, from: 'sport'});
  if (window.GAMIFICATION) {
  GAMIFICATION.unlockBadge('first_weigh');

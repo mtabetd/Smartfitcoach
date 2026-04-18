@@ -1025,7 +1025,6 @@
     // ─── FAST FOOD & RESTAURATION RAPIDE (batch 47) ───
     ['Hamburger classique (maison)',  295, 15.0, 25.0, 14.0],
     ['Cheeseburger (maison)',         330, 18.0, 26.0, 16.0],
-    ['Big Mac',                       503, 25.0, 43.0, 25.0],
     ['Whopper',                       627, 28.0, 49.0, 35.0],
     ['Kebab sandwich (agneau)',       340, 22.0, 28.0, 14.0],
     ['Kebab assiette (viande/frites)',280, 23.0, 12.0, 16.0],
