@@ -992,13 +992,13 @@
     ['Yaourt grec entier',           115,  9.0,  4.0,  7.5],
     ['Fromage blanc (20%)',           88,  8.0,  4.0,  4.5],
     ['Petit-suisse (nature)',         80,  8.0,  4.5,  3.5],
-    ['Lait demi-écrémé',              46,  3.2,  4.8,  1.6],
-    ['Lait entier',                   65,  3.2,  4.8,  3.5],
-    ['Beurre',                       743,  0.7,  0.5, 82.0],
+
+
+
     ['Margarine (70% MG)',            539,  0.1,  0.5, 60.0],
     ['Crème chantilly',              300,  2.5, 13.0, 27.0],
     ['Chocolat au lait (tablette)',  535,  8.0, 57.0, 31.0],
-    ['Chocolat noir 70%',            580,  7.8, 40.0, 42.0],
+
     ['Nutella (pâte à tartiner)',     539,  6.3, 57.0, 31.0],
 
     // ─── ESSENTIELS FR — Légumes frais ultra-courants (batch 46) ───
@@ -1228,7 +1228,7 @@
     ['Blette (cuite)',                 19,  1.8,  3.7,  0.2],
     ['Navet (cuit)',                   22,  1.1,  5.0,  0.1],
     ['Topinambour (cuit)',             73,  2.0, 17.4,  0.1],
-    ['Patate douce (cuite)',           90,  1.6, 20.7,  0.1],
+
     ['Citrouille/potiron (cuit)',      26,  1.0,  6.5,  0.1],
     ['Mâche (salade)',                 21,  2.1,  3.7,  0.4],
     ['Cresson (cru)',                  32,  3.0,  4.4,  0.7],
@@ -1292,7 +1292,7 @@
     ['Polenta (cuite)',                70,  1.5, 15.0,  0.4],
     ['Gnocchi (cuits, beurre)',       170,  3.0, 29.0,  4.5],
     ['Couscous moyen (cuit)',         112,  3.6, 23.0,  0.2],
-    ['Boulgour (cuit)',                83,  3.1, 18.6,  0.2],
+
     ['Épeautre (cuit)',               118,  4.0, 22.0,  0.7],
     ['Orge perlé (cuit)',             123,  2.3, 28.0,  0.4],
     ['Sarrasin/kasha (cuit)',          92,  3.4, 19.9,  0.6],
