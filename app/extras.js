@@ -1018,7 +1018,13 @@ window.FOOD_CALC = {
       .replace(/[ôö]/g, 'o')
       .replace(/[ùûü]/g, 'u')
       .replace(/ç/g, 'c')
-      .replace(/[''\-]/g, ' ');
+      .replace(/[œ]/g, 'oe').replace(/[æ]/g, 'ae')
+      // Apostrophes françaises (d', l', j', n', s', c', qu', m', t')
+      // → remplacer par espace pour que les termes soient séparés
+      .replace(/\b([dljnscmt]|qu)['']/gi, '$1 ')
+      // Autres apostrophes (Domino's, Ben & Jerry's) → supprimer pour coller
+      .replace(/['']/g, '')
+      .replace(/[\-]/g, ' ');
   },
 
   search: function(query) {
@@ -1034,21 +1040,34 @@ window.FOOD_CALC = {
       var item = this._DB[i];
       var name = this._normalize(item[0]);
       var score = 0;
+      var wordBoundaryBonus = 0;
+      var startsWithBonus = 0;
       for (var t = 0; t < terms.length; t++) {
-        if (name.indexOf(terms[t]) !== -1) score++;
+        var idx = name.indexOf(terms[t]);
+        if (idx === -1) continue;
+        score++;
+        // Bonus +2 si le terme match un mot entier (pas sous-chaîne)
+        // Exemple : "reine" matche "1 reine 2" mais pas "reinette"
+        var charBefore = idx === 0 ? ' ' : name[idx - 1];
+        var charAfter = (idx + terms[t].length >= name.length) ? ' ' : name[idx + terms[t].length];
+        var isWordBoundaryStart = !/[a-z0-9]/i.test(charBefore);
+        var isWordBoundaryEnd   = !/[a-z0-9]/i.test(charAfter);
+        if (isWordBoundaryStart && isWordBoundaryEnd) wordBoundaryBonus += 2;
+        // Bonus +3 si le nom commence par ce terme
+        if (idx === 0) startsWithBonus += 3;
       }
       if (score === 0) continue;
-      // Bonus si la phrase exacte apparaît dans le nom
-      var phraseBonus = (name.indexOf(q) !== -1) ? terms.length : 0;
+      // Bonus phrase exacte
+      var phraseBonus = (name.indexOf(q) !== -1) ? terms.length * 2 : 0;
+      var finalScore = score + wordBoundaryBonus + startsWithBonus + phraseBonus;
       var obj = { name: item[0], kcal: item[1], protein: item[2], carbs: item[3], fat: item[4] };
       if (score === terms.length) {
-        full.push({ obj: obj, score: score + phraseBonus });
+        full.push({ obj: obj, score: finalScore });
       } else {
-        partial.push({ obj: obj, score: score + phraseBonus });
+        partial.push({ obj: obj, score: finalScore });
       }
     }
 
-    // Trier chaque groupe par score décroissant
     full.sort(function(a, b) { return b.score - a.score; });
     partial.sort(function(a, b) { return b.score - a.score; });
 

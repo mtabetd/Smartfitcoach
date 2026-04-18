@@ -16,7 +16,11 @@
       .replace(/[éèêë]/g, 'e').replace(/[àâä]/g, 'a').replace(/[îï]/g, 'i')
       .replace(/[ùûü]/g, 'u').replace(/[ôö]/g, 'o').replace(/ç/g, 'c')
       .replace(/[œ]/g, 'oe').replace(/[æ]/g, 'ae')
-      .replace(/['''\-\/]/g, ' ')
+      // Apostrophes françaises → espace (pour "d'orange" → "d orange")
+      .replace(/\b([dljnscmt]|qu)['']/gi, '$1 ')
+      // Autres apostrophes → coller (pour "Domino's" → "dominos")
+      .replace(/['']/g, '')
+      .replace(/[\-\/]/g, ' ')
       .replace(/[^a-z0-9\s]/g, '')
       .replace(/\s+/g, ' ')
       .trim();
@@ -435,10 +439,53 @@
     'oeufs au plat huile':       [{ label: '1 œuf', g: 50 }, { label: '2 œufs', g: 100 }],
     'oeuf au plat':              [{ label: '1 œuf', g: 50 }],
     'oeufs au plat':             [{ label: '1 œuf', g: 50 }, { label: '2 œufs', g: 100 }],
-    'oeufs au plat huile':       [{ label: '1 œuf', g: 50 }, { label: '2 œufs', g: 100 }],
     'oeufs brouilles':           [{ label: '2 œufs', g: 100 }, { label: '3 œufs', g: 150 }],
     'oeufs durs':                [{ label: '1 œuf', g: 50 }, { label: '2 œufs', g: 100 }],
     'oeufs poches':              [{ label: '1 œuf', g: 50 }, { label: '2 œufs', g: 100 }],
+
+    // ─── CORRECTIFS AUDIT — portions manquantes détectées ───
+    // Starbucks & cafés préparés
+    'starbucks latte lait entier':   [{ label: '1 tall 35cl', g: 350 }, { label: '1 grande 47cl', g: 470 }, { label: '1 venti 59cl', g: 590 }],
+    'starbucks frappuccino caramel': [{ label: '1 tall 35cl', g: 350 }, { label: '1 grande 47cl', g: 470 }, { label: '1 venti 59cl', g: 590 }],
+    'starbucks mocha':               [{ label: '1 tall 35cl', g: 350 }, { label: '1 grande 47cl', g: 470 }],
+    'starbucks chai latte':          [{ label: '1 tall 35cl', g: 350 }, { label: '1 grande 47cl', g: 470 }],
+    'starbucks matcha latte':        [{ label: '1 tall 35cl', g: 350 }, { label: '1 grande 47cl', g: 470 }],
+    'starbucks cappuccino':          [{ label: '1 tall 35cl', g: 350 }, { label: '1 grande 47cl', g: 470 }],
+    // Domino's
+    // Subway 30cm (footlong)
+    // Fast food FR
+    'o tacos viande m':              [{ label: '1 M (moyen)', g: 320 }, { label: '1 L (large)', g: 480 }, { label: '1 XL (Gigatacos)', g: 750 }],
+    'tacos mexicain classic':        [{ label: '1 tacos', g: 120 }, { label: '3 tacos', g: 360 }],
+    'tacos francais moyen':          [{ label: '1 M', g: 320 }, { label: '1 L', g: 480 }],
+    'tacos français moyen':          [{ label: '1 M', g: 320 }, { label: '1 L', g: 480 }],
+    // Burgers génériques
+    'burger classique':              [{ label: '1 burger', g: 200 }],
+    'hamburger':                     [{ label: '1 burger', g: 150 }],
+    'cheeseburger':                  [{ label: '1 burger', g: 130 }],
+    // KFC complément
+    // Autres lacunes détectées
+
+    // ─── DOMINO'S — portions (Small Ø23cm, Medium Ø28cm, Large Ø33cm) ───
+    'dominos margherita classic':   [{ label: '1 part Medium', g: 95 }, { label: '1 part Large', g: 130 }, { label: '1 part Small', g: 60 }, { label: '1 pizza Medium', g: 760 }, { label: '1 pizza Large', g: 1560 }],
+    'dominos margherita thin':      [{ label: '1 part Medium', g: 80 }, { label: '1 part Large', g: 110 }, { label: '1 part Small', g: 55 }],
+    'dominos pepperoni passion':    [{ label: '1 part Medium', g: 95 }, { label: '1 part Large', g: 130 }, { label: '1 part Small', g: 60 }],
+    'dominos texas bbq':            [{ label: '1 part Medium', g: 100 }, { label: '1 part Large', g: 135 }],
+    'dominos meatzza 4 viandes':    [{ label: '1 part Medium', g: 105 }, { label: '1 part Large', g: 140 }],
+    'dominos veggie supreme':       [{ label: '1 part Medium', g: 100 }, { label: '1 part Large', g: 135 }],
+    'dominos hawaiian dream':       [{ label: '1 part Medium', g: 100 }, { label: '1 part Large', g: 135 }],
+    'dominos extravaganzza':        [{ label: '1 part Medium', g: 105 }, { label: '1 part Large', g: 140 }],
+    'dominos mighty meaty':         [{ label: '1 part Medium', g: 105 }, { label: '1 part Large', g: 140 }],
+    'dominos dominator toutes viandes':[{ label: '1 part Medium', g: 105 }, { label: '1 part Large', g: 140 }],
+    'dominos chicken feast':        [{ label: '1 part Medium', g: 100 }, { label: '1 part Large', g: 135 }],
+    'dominos four seasons':         [{ label: '1 part Medium', g: 100 }, { label: '1 part Large', g: 135 }],
+    'dominos quattro formaggi':     [{ label: '1 part Medium', g: 100 }, { label: '1 part Large', g: 135 }],
+    'dominos carbonara':            [{ label: '1 part Medium', g: 100 }, { label: '1 part Large', g: 135 }],
+    'dominos reine':                [{ label: '1 part Medium', g: 95 }, { label: '1 part Large', g: 130 }],
+    'dominos 4 fromages cheese burst':[{ label: '1 part Medium', g: 110 }, { label: '1 part Large', g: 145 }],
+    'dominos garlic bread pain ail':[{ label: '1 portion', g: 85 }, { label: '2 portions', g: 170 }],
+    'dominos garlic pizza bread':   [{ label: '1 portion', g: 85 }, { label: '2 portions', g: 170 }],
+    'dominos chicken wings 6 pcs':  [{ label: '6 wings', g: 150 }, { label: '10 wings', g: 250 }, { label: '14 wings', g: 350 }],
+    'dominos chocolate lava cake':  [{ label: '1 unité', g: 85 }, { label: '2 unités', g: 170 }],
     'oeuf':                      [{ label: '1 œuf', g: 50 }, { label: '2 œufs', g: 100 }, { label: '3 œufs', g: 150 }],
     'fraises':                   [{ label: '5 fraises', g: 50 }, { label: '10 fraises', g: 100 }, { label: '1 barquette 250g', g: 250 }],
     'framboises':                [{ label: '1 portion 100g', g: 100 }, { label: '1 barquette 125g', g: 125 }],

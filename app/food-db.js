@@ -1902,7 +1902,29 @@
     ['Pizza Hut Meat Lovers (Pan)',   305, 15.0, 27.0, 16.0],
     ['Pizza Hut Hawaiian (Pan)',      265, 11.0, 32.0, 10.5],
     ['Pizza Hut Veggie Lovers (Pan)', 235,  9.5, 31.0,  8.5],
-    ['Pizza Hut Cheesy Bites (4 pcs)',300,  9.0, 35.0, 14.0]
+    ['Pizza Hut Cheesy Bites (4 pcs)',300,  9.0, 35.0, 14.0],
+
+    // ─── DOMINO'S PIZZA — Recettes spécifiques (batch 90) ───
+    ['Domino\'s Margherita (Classic)',     245, 10.0, 30.0,  9.5],
+    ['Domino\'s Margherita (Thin)',        230, 10.0, 28.0,  8.5],
+    ['Domino\'s Pepperoni Passion',        285, 12.0, 29.0, 13.5],
+    ['Domino\'s Texas BBQ',                260, 14.0, 30.0, 10.0],
+    ['Domino\'s Meatzza (4 viandes)',      305, 15.0, 27.0, 15.5],
+    ['Domino\'s Veggie Supreme',           240,  9.5, 30.0,  9.0],
+    ['Domino\'s Hawaiian Dream',           255, 11.0, 32.0,  9.5],
+    ['Domino\'s Extravaganzza',            310, 14.0, 28.0, 16.0],
+    ['Domino\'s Mighty Meaty',             320, 15.0, 27.0, 17.0],
+    ['Domino\'s Dominator (toutes viandes)',315, 15.0, 27.0, 16.5],
+    ['Domino\'s Chicken Feast',            265, 14.0, 30.0, 10.0],
+    ['Domino\'s Four Seasons',             275, 12.0, 29.0, 12.5],
+    ['Domino\'s Quattro Formaggi',         290, 13.0, 29.0, 13.5],
+    ['Domino\'s Carbonara',                295, 13.0, 29.0, 14.0],
+    ['Domino\'s Reine',                    265, 13.0, 30.0, 11.0],
+    ['Domino\'s 4 Fromages (Cheese Burst)',325, 14.0, 29.0, 16.5],
+    ['Domino\'s Garlic Bread (pain ail)',  315,  8.5, 43.0, 12.0],
+    ['Domino\'s Garlic Pizza Bread',       290,  9.0, 41.0, 10.5],
+    ['Domino\'s Chicken Wings (6 pcs)',    225, 22.0,  4.0, 14.0],
+    ['Domino\'s Chocolate Lava Cake',      415,  4.5, 50.0, 22.0]
   ];
 
   // Attache à FOOD_CALC._DB si dispo, sinon expose pour merge ultérieur
