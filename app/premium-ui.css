@@ -3699,3 +3699,86 @@ body.dark-mode input[type="email"] {
     scroll-behavior: auto !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   HERMÈS POLISH — chef designer audit 2026-04
+   Micro-interactions premium + scrollbars stylées + focus renforcé
+   ═══════════════════════════════════════════════════════════════ */
+
+/* H4 — Scrollbars discrètes (iOS/Android) */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(10, 10, 9, 0.12);
+  border-radius: 2px;
+  transition: background 0.2s ease;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(10, 10, 9, 0.24); }
+.modal-sheet::-webkit-scrollbar,
+#fj-results::-webkit-scrollbar { width: 2px; }
+/* Firefox */
+* { scrollbar-width: thin; scrollbar-color: rgba(10,10,9,0.12) transparent; }
+
+/* H6 — Modal fade plus premium (0.2s → 0.3s + backdrop blur progressif) */
+.modal-overlay {
+  backdrop-filter: blur(0);
+  -webkit-backdrop-filter: blur(0);
+  transition: backdrop-filter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              -webkit-backdrop-filter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.modal-overlay.open {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.modal-sheet {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* H7 — Focus ring renforcé sur inputs (WCAG AA + premium) */
+.field input:focus-visible,
+.num-input:focus-visible,
+input[type="text"]:focus-visible,
+input[type="number"]:focus-visible,
+input[type="email"]:focus-visible,
+input[type="password"]:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-color: var(--black, #0A0A09) !important;
+  box-shadow: 0 0 0 3px rgba(26, 74, 26, 0.12);
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+/* H8 — Swap-btn hover discret (1.05 → 1.02, plus Hermès) */
+.swap-btn:hover {
+  transform: scale(1.02) !important;
+  box-shadow: 0 2px 6px rgba(10, 10, 9, 0.06) !important;
+}
+
+/* H10 — Button active state tactile (scale 0.98, subtle) */
+.btn-primary:active,
+.btn-secondary:active,
+.btn-back:active,
+.swap-btn:active,
+.regen-btn:active,
+button[type="button"]:active:not(:disabled),
+button[type="submit"]:active:not(:disabled) {
+  transform: scale(0.98);
+  transition: transform 0.08s ease-out;
+}
+
+/* Bonus — Disabled state clair */
+button:disabled,
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.55;
+  transform: none !important;
+}
+
+/* Bonus — Spinner lettering plus élégant */
+@keyframes sfc-fade-dots {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}

@@ -2575,7 +2575,7 @@ function renderCardStreak() {
 
   // ── Last badge block ──
   if (lastBadge) {
-    var badgeIcon = lastBadge.icon || '⭐';
+    var badgeIcon = lastBadge.icon || '\u2605'; // ★ unicode safe (pas ⭐ emoji)
     var badgeName = lastBadge.name || lastBadge.id || 'Badge';
     var badgeDesc = lastBadge.desc || '';
 

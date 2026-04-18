@@ -3987,7 +3987,7 @@ function generateExerciseSets(exercise, userWeight, sportGoals, sportLevel, week
     strength: {sets:[{reps:5,pct:0.85,rest:'3min'},{reps:5,pct:0.85,rest:'3min'},{reps:3,pct:0.90,rest:'4min'},{reps:3,pct:0.90,rest:'4min'},{reps:1,pct:0.95,rest:'5min'}],inc:2.5,note:'Force pure — repos complets entre les séries'},
     hypertrophy: {sets:[{reps:12,pct:0.65,rest:'90s'},{reps:10,pct:0.70,rest:'90s'},{reps:8,pct:0.75,rest:'90s'},{reps:8,pct:0.75,rest:'2min'}],inc:1.25,note:'Hypertrophie — contrôlez la descente (3s excentrique)'},
     endurance: {sets:[{reps:15,pct:0.55,rest:'45s'},{reps:15,pct:0.55,rest:'45s'},{reps:12,pct:0.60,rest:'45s'},{reps:12,pct:0.60,rest:'30s'}],inc:1.0,note:'Endurance — enchaînez, gardez la tension'},
-    shred: {sets:[{reps:15,pct:0.50,rest:'30s'},{reps:12,pct:0.55,rest:'30s'},{reps:12,pct:0.55,rest:'30s'},{reps:10,pct:0.60,rest:'45s'}],inc:0,note:'Sèche — tempo rapide, volume max, repos min 🔥'}
+    shred: {sets:[{reps:15,pct:0.50,rest:'30s'},{reps:12,pct:0.55,rest:'30s'},{reps:12,pct:0.55,rest:'30s'},{reps:10,pct:0.60,rest:'45s'}],inc:0,note:'Sèche — tempo rapide, volume max, repos min.'}
   };
   var scheme = schemes[style] || schemes.hypertrophy;
   var weekBonus = ((week || 1) - 1) * scheme.inc;
@@ -5921,10 +5921,10 @@ function generateRunningProgram(weeks, daysPerWeek, level, goal) {
       sessions: weekPlan,
       isDeload: w % 4 === 0,
       isTaper: pctOfPlan > 0.85,
-      notes: w % 4 === 0 ? '📉 Semaine de récupération — volume réduit' :
-             pctOfPlan > 0.85 ? '🎯 Affûtage — réduisez le volume, gardez l\'intensité' :
-             phase === 'Base' ? '🏗️ Construction de la base aérobie' :
-             phase === 'Développement' ? '📈 Montée en charge progressive' :
+      notes: w % 4 === 0 ? 'Semaine de récupération — volume réduit' :
+             pctOfPlan > 0.85 ? 'Affûtage — réduisez le volume, gardez l\'intensité' :
+             phase === 'Base' ? 'Construction de la base aérobie' :
+             phase === 'Développement' ? 'Montée en charge progressive' :
              '⚡ Travail spécifique course'
     });
   }
