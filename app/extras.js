@@ -1024,27 +1024,36 @@ window.FOOD_CALC = {
   search: function(query) {
     if (!query || query.length < 2) return [];
     var q = this._normalize(query);
-    var terms = q.split(/\s+/);
-    var results = [];
+    var terms = q.split(/\s+/).filter(function(t) { return t.length >= 2; });
+    if (!terms.length) terms = [q];
+
+    var full = [];     // tous les termes matchent → priorité
+    var partial = [];  // au moins un terme matche → résultats secondaires
 
     for (var i = 0; i < this._DB.length; i++) {
       var item = this._DB[i];
       var name = this._normalize(item[0]);
-      var match = true;
+      var score = 0;
       for (var t = 0; t < terms.length; t++) {
-        if (name.indexOf(terms[t]) === -1) { match = false; break; }
+        if (name.indexOf(terms[t]) !== -1) score++;
       }
-      if (match) {
-        results.push({
-          name: item[0],
-          kcal: item[1],
-          protein: item[2],
-          carbs: item[3],
-          fat: item[4]
-        });
+      if (score === 0) continue;
+      // Bonus si la phrase exacte apparaît dans le nom
+      var phraseBonus = (name.indexOf(q) !== -1) ? terms.length : 0;
+      var obj = { name: item[0], kcal: item[1], protein: item[2], carbs: item[3], fat: item[4] };
+      if (score === terms.length) {
+        full.push({ obj: obj, score: score + phraseBonus });
+      } else {
+        partial.push({ obj: obj, score: score + phraseBonus });
       }
     }
-    return results;
+
+    // Trier chaque groupe par score décroissant
+    full.sort(function(a, b) { return b.score - a.score; });
+    partial.sort(function(a, b) { return b.score - a.score; });
+
+    var results = full.concat(partial).map(function(r) { return r.obj; });
+    return results.slice(0, 50);
   },
 
   renderWidget: function(container) {
