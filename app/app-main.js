@@ -2112,7 +2112,11 @@ function renderLogin(app) {
  localStorage.removeItem('mtd_weight_history_anon');
  }
  }
- } catch(e) {}
+ } catch(e) {
+   // 2026-04 P0 FIX : log la migration échec (évite fail silencieux)
+   console.warn('[anon→uid migration] échec lors du transfert des données anon vers user:', e);
+   window._anonMigrationFailed = true;
+ }
  // Restore profile from localStorage for this user
  loadProfile();
  _migrateSteps();

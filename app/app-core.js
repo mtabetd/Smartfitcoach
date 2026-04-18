@@ -5154,7 +5154,13 @@ function swapMeal(di,slot){
   // MINEUR: valider slot avant de continuer
   var VALID_SLOTS=['breakfast','lunch','snack','dinner'];
   if(VALID_SLOTS.indexOf(slot)===-1)return;
-  if(!s._nm&&window.computeNutritionState)window.computeNutritionState(false);
+  // 2026-04 SYMBIOSE : détecter si c'est un jour sport pour activer le carb cycling
+  // (avant ce fix : trainingDay=false systématique → algo carb cycling jamais appliqué)
+  if(!s._nm&&window.computeNutritionState){
+    var _isTrainingDay = false;
+    try { var _di = getDayType(di); _isTrainingDay = !!(_di && _di.isTraining); } catch(e) {}
+    window.computeNutritionState(_isTrainingDay);
+  }
   var cBase=calcTarget(),split=getAdaptedMealSplit(di);if(!split)return;var c=Math.round(cBase*(split.calMultiplier||1));
   var tgt=slot==='breakfast'?Math.round(c*split.pctBreak):slot==='lunch'?Math.round(c*split.pctLunch):slot==='snack'?Math.round(c*split.pctSnack):Math.round(c*split.pctDinner);
   // Snack + whey → swapper vers un autre smoothie (pas une collation normale)

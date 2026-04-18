@@ -5699,7 +5699,7 @@ function renderMusculationProgram(p) {
          //         avec l'intent ("validé uniquement après action explicite user").
          // Maintenant : seuls les 3 boutons explicites (Générer, Nouveau cycle, Recalculer)
          //              marquent le flag. Le boot régénère silencieusement sans valider.
-         if (!S.sportProgram || S.sportProgram.length === 0 || S.sportProgram.every(function(d){ return !d.exercises || d.exercises.length === 0; })) {
+         if (!Array.isArray(S.sportProgram) || S.sportProgram.length === 0 || S.sportProgram.every(function(d){ return !d || !Array.isArray(d.exercises) || d.exercises.length === 0; })) {
            console.error('[sport] generateSportProgram returned empty program');
            S._generatingProgram = false;
            S._programGenerationError = 'Aucun exercice disponible avec vos contraintes actuelles. Essayez d\'assouplir vos restrictions médicales ou d\'ajouter davantage d\'équipement.';

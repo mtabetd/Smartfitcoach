@@ -1421,7 +1421,7 @@ function renderCardMacros() {
     // Bible Hermès §13.1 : pas d'emoji. Tiret typographique + tutoiement.
     var _burnEl = document.createElement('div');
     _burnEl.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;margin-bottom:6px;font-weight:500;color:var(--success,#3E5C3A);';
-    _burnEl.textContent = '— ' + _sportBurn + ' kcal dépensées (déjà incluses dans votre TDEE)';
+    _burnEl.textContent = _sportBurn + ' kcal dépensées aujourd\'hui · incluses dans votre objectif (calMultiplier : jour sport = 100%, jour repos = −10%)';
     c.appendChild(_burnEl);
   }
 
@@ -1619,6 +1619,24 @@ function renderFoodJournalCard() {
     _reRenderFJCard();
   });
   searchRow.appendChild(favBtn);
+
+  // 2026-04 C-1 : bouton scanner repas par IA (PLATE_SCAN) visible dans la barre
+  // (les personas Marc/Sarah ne trouvaient pas cette feature dans le menu distant)
+  if (window.PLATE_SCAN && typeof window.PLATE_SCAN.open === 'function') {
+    var plateScanBtn = h('button', {
+      type: 'button',
+      'aria-label': 'Scanner un repas par photo IA',
+      title: 'Scanner un repas (photo IA)',
+      style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;'
+        + 'background:transparent;border:1px solid var(--black,#0A0A09);border-radius:2px;cursor:pointer;box-sizing:border-box;flex-shrink:0;'
+    });
+    // SVG caméra 16x16 trait 1.4
+    plateScanBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 5 L4.5 5 L5.5 3.5 L10.5 3.5 L11.5 5 L13.5 5 L13.5 12 L2.5 12 Z"/><circle cx="8" cy="8.5" r="2.3"/></svg>';
+    plateScanBtn.addEventListener('click', function() {
+      try { window.PLATE_SCAN.open(_fjState.meal || 'lunch'); } catch(e) { console.warn('[journal] plate scan open failed:', e); }
+    });
+    searchRow.appendChild(plateScanBtn);
+  }
   c.appendChild(searchRow);
 
   // ─── Résultats de recherche (liste) ───
@@ -3092,6 +3110,19 @@ function openTodayWeightPrompt() {
         }
         input.style.borderColor = 'var(--border)'; // reset si valide après erreur précédente
         if (window.S) { window.S.weight = valKg; window.S._nm = null; }
+        // 2026-04 SYMBIOSE : forcer le recompute des macros (avant, _nm restait stale et macros basées sur l'ancien poids)
+        if (window.computeNutritionState) {
+          try {
+            var _isTrainDay = false;
+            if (window.getDayType) {
+              var _td = (new Date()).getDay(); // 0=dim, 1=lun...
+              var _dayIdx = _td === 0 ? 6 : _td - 1; // convertir : 0=lun..6=dim
+              var _di = window.getDayType(_dayIdx);
+              _isTrainDay = !!(_di && _di.isTraining);
+            }
+            window.computeNutritionState(_isTrainDay);
+          } catch(e) { /* fallback : _nm=null forcera recompute au prochain render */ }
+        }
         if (window.devalidateWeekPlan) window.devalidateWeekPlan('poids mis à jour (dashboard)');
         try { if (window.BLACKBOX) window.BLACKBOX.log('weight_logged', { weight: valKg }); } catch(e) {}
         var user = window.AUTH ? window.AUTH.getUser() : null;
