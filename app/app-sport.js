@@ -6583,8 +6583,21 @@ function renderMusculationProgram(p) {
  if (ex.eq) card.appendChild(h('div', {'class': 'exercise-detail'}, ex.eq));
 
  // ─── EXERCISE DESCRIPTION FOR BEGINNERS ───
+ // 2026-04 : refonte UX débutants — description claire + tips visibles avant la vidéo
  if ((S.sportLevel === 'beginner' || !S.sportLevel) && ex.desc) {
-  card.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;margin-top:4px;font-style:italic'}, ex.desc));
+  // Bandeau "Comment faire" mis en avant (pas en gris-italique perdu)
+  var howTo = h('div', { style: 'margin-top:10px;padding:10px 12px;background:var(--ivory,#FAF9F6);border-left:2px solid var(--black,#0A0A09);' });
+  howTo.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:4px;' }, 'Comment faire'));
+  howTo.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black,#0A0A09);line-height:1.55;' }, ex.desc));
+  // Top 2 tips si dispo (les plus importants)
+  if (ex.tips && ex.tips.length) {
+    var tipsList = h('ul', { style: 'margin:6px 0 0;padding:0 0 0 16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;' });
+    ex.tips.slice(0, 2).forEach(function(t) {
+      tipsList.appendChild(h('li', { style: 'margin-bottom:2px;' }, t));
+    });
+    howTo.appendChild(tipsList);
+  }
+  card.appendChild(howTo);
  }
 
  // ─── BOUTON TIMER DE REPOS ───
@@ -6635,13 +6648,23 @@ function renderMusculationProgram(p) {
  }
 
  // Video link — auto-generate URL if not preset in exercise data
- var _videoUrl = ex.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(ex.n) : null);
+ // 2026-04 : utilise EXERCISE_VIDEOS si dispo (URL ciblée chaîne FR débutants)
+ // + modal "préparation" pour ne pas perdre l'utilisateur sur YouTube
+ var _exoLv = (typeof ex.lv === 'number') ? ex.lv : 1;
+ var _videoUrl = (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.buildSmartVideoUrl)
+   ? window.EXERCISE_VIDEOS.buildSmartVideoUrl(ex.n, _exoLv)
+   : (ex.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(ex.n) : null));
  if (_videoUrl) {
  var vlink = h('a', {'class': 'exercise-video', href: _videoUrl, target: '_blank', rel: 'noopener', onclick: function(e){
  e.stopPropagation();
  window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
  var count = window.GAMIFICATION ? GAMIFICATION.incrementCounter('exercises_viewed') : 0;
  if (count >= 20 && window.GAMIFICATION) GAMIFICATION.unlockBadge('exercises_20');
+ // Si modal dispo → l'ouvre au lieu de rediriger d'un coup
+ if (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.openVideoModal) {
+   e.preventDefault();
+   window.EXERCISE_VIDEOS.openVideoModal(_videoUrl, ex.n, _exoLv);
+ }
  }}, '\u25b6 Voir la technique');
  card.appendChild(vlink);
  }
@@ -8119,14 +8142,23 @@ function renderSportModal(app) {
    }));
  }
 
- // Video button (with fallback URL generator)
- var _detailVideoUrl = ex.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(ex.n) : null);
+ // Video button — 2026-04 EXERCISE_VIDEOS smart URL + modal préparation
+ var _detailExoLv = (typeof ex.lv === 'number') ? ex.lv : 1;
+ var _detailVideoUrl = (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.buildSmartVideoUrl)
+   ? window.EXERCISE_VIDEOS.buildSmartVideoUrl(ex.n, _detailExoLv)
+   : (ex.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(ex.n) : null));
  if (_detailVideoUrl) {
  body.appendChild(h('a', {
  'class': 'btn-primary', href: _detailVideoUrl, target: '_blank', rel: 'noopener',
  style: 'display:block;text-align:center;text-decoration:none;margin-top:16px',
- onclick: function(){ window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n}); }
- }, '▶ Voir la vidéo technique'));
+ onclick: function(e){
+   window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
+   if (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.openVideoModal) {
+     e.preventDefault();
+     window.EXERCISE_VIDEOS.openVideoModal(_detailVideoUrl, ex.n, _detailExoLv);
+   }
+ }
+ }, '▶ Voir la vidéo guidée'));
  }
 
  sheet.appendChild(body);
