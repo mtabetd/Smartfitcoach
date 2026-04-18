@@ -99,7 +99,7 @@ function renderEmail(firstName) {
 
 async function sendEmail(toEmail, firstName) {
   var resendKey = process.env.RESEND_API_KEY;
-  var fromAddress = process.env.RESEND_FROM || 'SmartFitCoach <noreply@smartfitcoach.fr>';
+  var fromAddress = process.env.RESEND_FROM_EMAIL || 'SmartFitCoach <noreply@smartfitcoach.fitness>';
   if (!resendKey) {
     console.warn('[preregister] RESEND_API_KEY absent — email non envoyé');
     return { sent: false, reason: 'no_api_key' };
@@ -168,7 +168,7 @@ exports.handler = async function(event) {
   }
 
   var supabaseUrl = process.env.SUPABASE_URL;
-  var supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  var supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
   if (!supabaseUrl || !supabaseServiceKey) {
     console.error('[preregister] Missing Supabase env vars');
     return { statusCode: 500, headers: corsHeaders(origin), body: JSON.stringify({ error: 'Erreur de configuration serveur.' }) };
