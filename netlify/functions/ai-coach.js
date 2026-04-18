@@ -448,12 +448,35 @@ exports.handler = async function(event, context) {
     return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Au moins un message est requis.' }) };
   }
 
+  // Normalize: Anthropic requires strict user/assistant alternation.
+  // If the client sends consecutive same-role messages (e.g. two user messages in a row
+  // after a network failure), keep only the most recent one per consecutive group.
+  var normalized = [];
+  for (var ni = 0; ni < validatedMessages.length; ni++) {
+    var nm = validatedMessages[ni];
+    if (!normalized.length) {
+      if (nm.role === 'user') normalized.push(nm); // skip leading assistant messages
+    } else if (nm.role === normalized[normalized.length - 1].role) {
+      normalized[normalized.length - 1] = nm; // same role: keep the latest
+    } else {
+      normalized.push(nm);
+    }
+  }
+  // Anthropic requires the last message to be from user
+  if (normalized.length > 0 && normalized[normalized.length - 1].role !== 'user') {
+    normalized.pop();
+  }
+
+  if (normalized.length === 0) {
+    return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'Au moins un message est requis.' }) };
+  }
+
   // ── Sanitize Context ───────────────────────────────────────────────────────
   var userContext = sanitizeContext(body.context || {});
   var systemPrompt = buildSystemPrompt(userContext);
 
   // Garder max 10 messages (5 échanges user/assistant)
-  var messages = validatedMessages.slice(-10);
+  var messages = normalized.slice(-10);
 
   try {
     var https = require('https');

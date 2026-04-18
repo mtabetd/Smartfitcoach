@@ -1289,6 +1289,13 @@ function sendMessage() {
   }).catch(function(err) {
     if (_coachTimer) clearTimeout(_coachTimer);
     if (typingEl && typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+    // Rollback: the user message was pushed before the call — on failure, no assistant reply
+    // was saved, which would leave two consecutive user messages on the next send and cause
+    // the Anthropic API to reject the request (strict user/assistant alternation required).
+    if (Array.isArray(S.aiCoachHistory) && S.aiCoachHistory.length > 0 &&
+        S.aiCoachHistory[S.aiCoachHistory.length - 1].role === 'user') {
+      S.aiCoachHistory.pop();
+    }
     var errMsg = (err && err.name === 'AbortError')
       ? 'Le coach met trop de temps \u00e0 r\u00e9pondre. R\u00e9essaie dans quelques instants.'
       : (err && err.message && err.message.indexOf('429') !== -1)
