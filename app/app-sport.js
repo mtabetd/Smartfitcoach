@@ -2080,8 +2080,14 @@ function renderDedicatedPrograms(p) {
  left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-top:2px'}, ex.muscle + ' \u2014 ' + ex.equipment));
  if (ex.technique) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:var(--orange);margin-top:2px'}, ex.technique));
  // Suggested weight based on phase %1RM
+ // 2026-04 UX-5 : si sugW > 0 → affiche la charge; sinon guidance débutant (avant : rien affiché → Sarah perdue)
  var sugW = getSuggestedWeight(ex.name, ex.reps, currentPhase);
- if (sugW && sugW > 0) left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:2px'}, '\u2192 Charge cible : ~' + (window.UNITS ? window.UNITS.displayWeight(sugW) : sugW + ' kg')));
+ if (sugW && sugW > 0) {
+   left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;margin-top:2px;font-weight:500'}, '\u2192 Charge cible : ~' + (window.UNITS ? window.UNITS.displayWeight(sugW) : sugW + ' kg')));
+ } else {
+   // Pas de 1RM connu → guidance débutant sobre (Hermès §13.1 : pas d'emoji)
+   left.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);margin-top:2px;font-style:italic'}, 'Charge à tester : commencez léger, technique avant tout. L\'app affinera après vos 2 premières séances.'));
+ }
  row.appendChild(left);
  var right = h('div', {style: 'text-align:right;flex-shrink:0;margin-left:12px'});
  right.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:13px;font-weight:normal'}, ex.sets + '\u00d7' + ex.reps));
@@ -6675,16 +6681,15 @@ function renderMusculationProgram(p) {
    ? window.EXERCISE_VIDEOS.buildSmartVideoUrl(ex.n, _exoLv)
    : (ex.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(ex.n) : null));
  if (_videoUrl) {
+ // 2026-04 UX-1 : lien direct (plus de modal intermédiaire qui imposait
+ // un double-clic frustrant selon feedback Sarah). La query est filtrée
+ // par chaîne adaptée au niveau (Tibo InShape/AthleanX/Squat U) donc la
+ // 1re vidéo affichée est la bonne.
  var vlink = h('a', {'class': 'exercise-video', href: _videoUrl, target: '_blank', rel: 'noopener', onclick: function(e){
  e.stopPropagation();
  window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
  var count = window.GAMIFICATION ? GAMIFICATION.incrementCounter('exercises_viewed') : 0;
  if (count >= 20 && window.GAMIFICATION) GAMIFICATION.unlockBadge('exercises_20');
- // Si modal dispo → l'ouvre au lieu de rediriger d'un coup
- if (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.openVideoModal) {
-   e.preventDefault();
-   window.EXERCISE_VIDEOS.openVideoModal(_videoUrl, ex.n, _exoLv);
- }
  }}, '\u25b6 Voir la technique');
  card.appendChild(vlink);
  }
@@ -8172,15 +8177,12 @@ function renderSportModal(app) {
    ? window.EXERCISE_VIDEOS.buildSmartVideoUrl(ex.n, _detailExoLv)
    : (ex.video || (window.getExerciseVideoUrl ? window.getExerciseVideoUrl(ex.n) : null));
  if (_detailVideoUrl) {
+ // 2026-04 UX-1 : lien direct (plus de modal intermédiaire)
  body.appendChild(h('a', {
  'class': 'btn-primary', href: _detailVideoUrl, target: '_blank', rel: 'noopener',
  style: 'display:block;text-align:center;text-decoration:none;margin-top:16px',
- onclick: function(e){
+ onclick: function(){
    window.BLACKBOX && window.BLACKBOX.log('video_clicked', {exercise: ex.n});
-   if (window.EXERCISE_VIDEOS && window.EXERCISE_VIDEOS.openVideoModal) {
-     e.preventDefault();
-     window.EXERCISE_VIDEOS.openVideoModal(_detailVideoUrl, ex.n, _detailExoLv);
-   }
  }
  }, '▶ Voir la vidéo guidée'));
  }

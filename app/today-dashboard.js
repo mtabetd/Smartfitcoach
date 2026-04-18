@@ -2047,7 +2047,7 @@ function _fjShowSelection() {
 
   box.appendChild(h('div', {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.6;font-weight:600;'
-  }, kcal + ' kcal \u00b7 P ' + p + 'g \u00b7 G ' + g + 'g \u00b7 L ' + l + 'g'));
+  }, kcal + ' kcal \u00b7 Prot ' + p + 'g \u00b7 Gluc ' + g + 'g \u00b7 Lip ' + l + 'g'));
 
   var MEAL_FULL = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
   var addBtn = h('button', {
@@ -6027,7 +6027,20 @@ var JARGON_DEFS = {
   'VO2max': { title: 'VO2 max', text: 'Capacité maximale d\'oxygène que votre corps utilise à l\'effort. Indicateur clé d\'endurance cardio.' },
   'K⁺': { title: 'Potassium', text: 'Minéral essentiel. En cas d\'insuffisance rénale, votre apport doit être surveillé (≤ 2 000 mg/j selon stade).' },
   'DASH': { title: 'DASH', text: 'Régime Dietary Approaches to Stop Hypertension. Réduit le sodium, augmente le potassium/magnésium/calcium. Baisse la PA de 5-8 mmHg.' },
-  'macros': { title: 'Macronutriments', text: 'Les 3 grandes familles caloriques : protéines (4 kcal/g), glucides (4 kcal/g), lipides (9 kcal/g).' }
+  'macros': { title: 'Macronutriments', text: 'Les 3 grandes familles caloriques : protéines (4 kcal/g), glucides (4 kcal/g), lipides (9 kcal/g).' },
+  // 2026-04 UX-4 : compléter pour les termes CrossFit / cycling / training
+  'AMRAP': { title: 'AMRAP', text: 'As Many Rounds/Reps As Possible — faites le plus de tours/répétitions possible dans le temps imparti. Exemple : AMRAP 15 = 15 min d\'effort max.' },
+  'EMOM': { title: 'EMOM', text: 'Every Minute On the Minute — au début de chaque minute, vous faites une série prescrite, puis reposez jusqu\'à la minute suivante.' },
+  'WOD': { title: 'WOD', text: 'Workout of the Day — séance CrossFit du jour, combinant plusieurs mouvements en format chronométré (AMRAP, EMOM, For Time…).' },
+  'PAL': { title: 'PAL', text: 'Physical Activity Level — multiplicateur qui estime votre dépense énergétique selon votre activité physique. Sédentaire = 1.2, Très actif = 1.9.' },
+  'FTP': { title: 'FTP', text: 'Functional Threshold Power — puissance maximale que vous pouvez soutenir 1 heure en vélo (en watts). Base de calcul de vos zones cyclistes.' },
+  'Z1': { title: 'Zone 1', text: 'Zone de récupération active (56-75% FTP / 50-60% FCmax). Effort très léger, conversation aisée.' },
+  'Z2': { title: 'Zone 2', text: 'Zone d\'endurance aérobie (76-90% FTP / 60-70% FCmax). Effort modéré, conversation possible. Idéale pour le fond.' },
+  'Z3': { title: 'Zone 3', text: 'Zone seuil aérobie (91-105% FTP / 70-80% FCmax). Effort soutenu, phrases courtes seulement.' },
+  'Z4': { title: 'Zone 4', text: 'Zone seuil anaérobie (106-120% FTP / 80-90% FCmax). Effort intense, très peu de conversation.' },
+  'Z5': { title: 'Zone 5', text: 'Zone VO2 max (>120% FTP / >90% FCmax). Effort maximal, essoufflement total. Courtes durées uniquement.' },
+  'EPOC': { title: 'EPOC', text: 'Excess Post-exercise Oxygen Consumption — calories brûlées après l\'effort (effet « afterburn »). Plus l\'intensité est élevée, plus l\'EPOC est important.' },
+  'Atwater': { title: 'Atwater', text: 'Système de calcul des calories par macronutriment : 4 kcal/g pour protéines et glucides, 9 kcal/g pour lipides, 7 kcal/g pour alcool.' }
 };
 
 function jargonTooltip(term, displayText) {

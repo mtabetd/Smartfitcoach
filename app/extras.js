@@ -1767,7 +1767,8 @@ window.FOOD_JOURNAL = {
       kcalSummary.appendChild(boldKcal);
       kcalSummary.appendChild(document.createTextNode(' / ' + target + ' kcal'));
       var macroSummary = document.createElement('span');
-      macroSummary.textContent = 'P ' + total.p.toFixed(0) + '/' + targetMacros.p + 'g \u00B7 G ' + total.g.toFixed(0) + '/' + targetMacros.g + 'g \u00B7 L ' + total.l.toFixed(0) + '/' + targetMacros.l + 'g';
+      // 2026-04 UX-2 : libellés lisibles (avant "P 165/180g" → incompréhensible ; maintenant "Prot 165/180g")
+      macroSummary.textContent = 'Prot ' + total.p.toFixed(0) + '/' + targetMacros.p + 'g \u00B7 Gluc ' + total.g.toFixed(0) + '/' + targetMacros.g + 'g \u00B7 Lip ' + total.l.toFixed(0) + '/' + targetMacros.l + 'g';
       totalRow.appendChild(kcalSummary);
       totalRow.appendChild(macroSummary);
       section.appendChild(totalRow);
