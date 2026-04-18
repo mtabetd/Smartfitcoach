@@ -1555,13 +1555,17 @@ function renderFoodJournalCard() {
     { key: 'snack',     label: 'Collation' },
     { key: 'dinner',    label: 'D\u00eener' }
   ];
-  var tabs = h('div', { style: 'display:flex;gap:4px;margin-bottom:12px;border-bottom:1px solid var(--line,#D8D8D0);' });
+  var MEAL_LABELS_FULL = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
+
+  var tabs = h('div', { style: 'display:flex;gap:0;margin-bottom:0;border-bottom:1px solid var(--line,#D8D8D0);' });
   MEALS.forEach(function(m) {
     var active = _fjState.meal === m.key;
     var btn = h('button', {
-      style: 'flex:1;padding:12px 4px;min-height:44px;background:none;border:none;cursor:pointer;'
+      style: 'flex:1;padding:10px 4px;min-height:44px;cursor:pointer;border:none;border-bottom:' + (active ? '2px solid var(--black,#0A0A09)' : '2px solid transparent') + ';'
+        + 'background:' + (active ? 'var(--black,#0A0A09)' : 'transparent') + ';'
         + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'
-        + (active ? 'color:var(--black,#0A0A09);border-bottom:1px solid var(--black,#0A0A09);' : 'color:var(--grey,#6B6B65);border-bottom:1px solid transparent;')
+        + 'color:' + (active ? 'var(--ivory,#FAF9F6)' : 'var(--grey,#6B6B65)') + ';'
+        + 'transition:background 0.15s,color 0.15s;'
     }, m.label);
     btn.addEventListener('click', function() {
       _fjState.meal = m.key;
@@ -1570,6 +1574,18 @@ function renderFoodJournalCard() {
     tabs.appendChild(btn);
   });
   c.appendChild(tabs);
+
+  // Banner "Ajouter à : [Repas]" — contexte toujours visible
+  c.appendChild(h('div', {
+    style: 'display:flex;align-items:center;gap:6px;padding:7px 12px;background:var(--ivory,#FAF9F6);border-left:2px solid var(--black,#0A0A09);margin-bottom:10px;'
+  }, [
+    h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+    }, 'Ajouter\u00a0\u00e0\u00a0:'),
+    h('span', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--black,#0A0A09);font-weight:600;'
+    }, MEAL_LABELS_FULL[_fjState.meal])
+  ]));
 
   // ─── Barre de recherche + toggle favoris ───
   var searchRow = h('div', { style: 'display:flex;gap:8px;margin-bottom:10px;' });
@@ -1705,8 +1721,18 @@ function _fjFetchOFF(query) {
           var p = data.products[i];
           if (!p || !p.product_name) continue;
           var n = p.nutriments || {};
-          var kcal = Number(n['energy-kcal_100g']) || 0;
-          if (kcal <= 0 || kcal > 1500) continue; // filter invalid
+          // OFF uses various field names; fallback kJ→kcal when kcal missing
+          var kcal = Number(n['energy-kcal_100g']) || Number(n['energy-kcal']) || 0;
+          if (kcal <= 0) {
+            var kj = Number(n['energy_100g']) || Number(n['energy-kj_100g']) || Number(n['energy']) || 0;
+            if (kj > 0) kcal = Math.round(kj / 4.184);
+          }
+          if (kcal < 0 || kcal > 1500) continue; // skip negative or implausible
+          if (kcal === 0) {
+            // Accept 0-kcal products (e.g. water, some spices) but require at least some nutriment info
+            var hasMacros = Number(n['proteins_100g']) > 0 || Number(n['carbohydrates_100g']) > 0 || Number(n['fat_100g']) > 0;
+            if (!hasMacros) continue;
+          }
           var prot = Number(n['proteins_100g']) || 0;
           var carbs = Number(n['carbohydrates_100g']) || 0;
           var fat = Number(n['fat_100g']) || 0;
@@ -1866,10 +1892,11 @@ function _fjShowSelection() {
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.6;'
   }, kcal + ' kcal \u00b7 P ' + p + 'g \u00b7 G ' + g + 'g \u00b7 L ' + l + 'g'));
 
+  var MEAL_FULL = { breakfast: 'Petit-d\u00e9jeuner', lunch: 'D\u00e9jeuner', snack: 'Collation', dinner: 'D\u00eener' };
   var addBtn = h('button', {
     style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;min-height:44px;'
-  }, 'Ajouter au journal');
+  }, 'Ajouter \u00e0 ' + (MEAL_FULL[_fjState.meal] || 'ce repas'));
   addBtn.addEventListener('click', function() {
     if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
       window.FOOD_JOURNAL.addEntry(
