@@ -3663,7 +3663,9 @@ function renderCrossfitProgram(p) {
  p.appendChild(h('div', {'class': 'eyebrow'}, 'Programme'));
  p.appendChild(h('h1', {html: 'Cross Training<br><em>Programme</em>'}));
  var levelObj = (window.CROSSFIT_LEVELS || []).find(function(l) { return l.id === S.crossfitLevel; });
- var _subtitleMix = _mixSec ? (' + ' + _mixSecDays + ' j Musculation') : '';
+ // 2026-04 P4 : sous-titre dynamique selon type secondaire (pas hardcoded Musculation)
+ var _SECLAB_SUB = { musculation: 'Musculation', crossfit: 'Cross Training', running: 'Running', yoga: 'Yoga', calisthenics: 'Calisthenics' };
+ var _subtitleMix = _mixSec ? (' + ' + _mixSecDays + ' j ' + (_SECLAB_SUB[_mixSec.type] || 'Sport')) : '';
  p.appendChild(h('p', {'class': 'subtitle'}, daysPerWeek + ' j CrossFit' + _subtitleMix + ' \u2014 ' + (levelObj ? levelObj.icon + ' ' + levelObj.name : '')));
 
  appendWellnessBanner(p);
@@ -3885,6 +3887,9 @@ function renderCrossfitProgram(p) {
  });
  // Onglets supplémentaires pour les jours de musculation (sport mix)
  if (_mixSec && _mixSecDays > 0) {
+  // 2026-04 P4 : label tab générique selon type secondaire
+  var _SECLAB_SHORT = { musculation: 'Muscu', crossfit: 'Cross', running: 'Run', yoga: 'Yoga', calisthenics: 'Calli' };
+  var _secShortLabel = _SECLAB_SHORT[_mixSec.type] || 'Sec';
   for (var _mi = 0; _mi < _mixSecDays; _mi++) {
    (function(_midx) {
     var _tabIdx = template.length + _midx;
@@ -3892,22 +3897,27 @@ function renderCrossfitProgram(p) {
      'class': 'day-tab' + (S.selectedCrossfitDay === _tabIdx ? ' active' : ''),
      style: 'color:var(--accent,#1A4A1A);' + (S.selectedCrossfitDay === _tabIdx ? 'border-color:var(--accent,#1A4A1A);' : ''),
      onclick: function() { S.selectedCrossfitDay = _tabIdx; window.render(); }
-    }, 'Muscu ' + (_midx + 1)));
+    }, _secShortLabel + ' ' + (_midx + 1)));
    })(_mi);
   }
  }
  p.appendChild(tabs);
 
- // ─── CONTENU JOUR MUSCULATION (si onglet Muscu sélectionné) ───
+ // ─── CONTENU JOUR SECONDAIRE (muscu, running, yoga, crossfit...) ───
+ // 2026-04 P4 : généralisation via dispatcher getMixSessionsForType (fallback muscu legacy)
  if (_mixSec && S.selectedCrossfitDay >= template.length) {
   var _mMixIdx = S.selectedCrossfitDay - template.length;
-  var _mMixSessions = getMuscuMixSessionsForDays(_mixSecDays);
+  var _mMixSessions = (typeof window.getMixSessionsForType === 'function')
+    ? window.getMixSessionsForType(_mixSec.type, _mixSecDays)
+    : getMuscuMixSessionsForDays(_mixSecDays);
   var _mMixSession = _mMixSessions[Math.min(_mMixIdx, _mMixSessions.length - 1)];
   if (_mMixSession) {
-   p.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;text-align:center;margin:16px 0 4px' }, 'Musculation \u2014 ' + _mMixSession.name));
+   var _SECLAB_FULL = { musculation: 'Musculation', crossfit: 'Cross Training', running: 'Running', yoga: 'Yoga', calisthenics: 'Calisthenics' };
+   var _secFullLabel = _SECLAB_FULL[_mixSec.type] || 'Sport secondaire';
+   p.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:24px;text-align:center;margin:16px 0 4px' }, _secFullLabel + ' \u2014 ' + _mMixSession.name));
    p.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent,#1A4A1A);text-align:center;margin-bottom:20px' }, _mMixSession.focus));
    var _mCard = h('div', { 'class': 'exercise-card', style: 'border-left:3px solid var(--accent,#1A4A1A)' });
-   _mCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent,#1A4A1A);margin-bottom:12px' }, 'S\u00c9ANCE MUSCULATION'));
+   _mCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent,#1A4A1A);margin-bottom:12px' }, 'SÉANCE ' + _secFullLabel.toUpperCase()));
    _mMixSession.exercises.forEach(function(ex, _ei) {
     var _exRow = h('div', { style: 'padding:10px 0;border-bottom:1px solid var(--border,#E8E6DF)' });
     _exRow.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:15px;margin-bottom:3px' }, (_ei + 1) + '. ' + ex.name));
