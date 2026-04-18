@@ -2865,18 +2865,31 @@ function getMuscuMixSessionsForDays(days) {
 // ─── SECTION SPORT MIX : injectée dans les étapes de configuration de chaque sport ───
 function renderSportMixSection(p, primarySport) {
  var totalDays = S.sportDays || 3;
- // Jours minimum requis pour chaque sport principal
- var _minPrimaryDays = { crossfit: 3, musculation: 2, running: 2 };
+ // Jours minimum requis pour chaque sport principal (2026-04 P2 étendu)
+ var _minPrimaryDays = { crossfit: 3, musculation: 2, running: 2, yoga: 2, calisthenics: 2 };
  var _primMinDays = _minPrimaryDays[primarySport] || 2;
  // Maximum de jours secondaires = totalDays - minimum du sport principal
  var _maxSecDays = totalDays - _primMinDays;
  if (_maxSecDays < 1) return; // Pas assez de jours pour un 2ème sport
 
- // Sports secondaires compatibles par sport principal
+ // Sports secondaires compatibles par sport principal (2026-04 P3 étendu)
+ // Règle : on n'ajoute PAS le même sport en secondaire (pas de crossfit+crossfit)
  var compatMap = {
-  crossfit:    [{ type: 'musculation', label: 'Musculation', desc: 'Hypertrophie + force — séances de renforcement isolées' }],
-  musculation: [{ type: 'crossfit',    label: 'Cross Training', desc: 'Conditioning + WOD fonctionnel' }, { type: 'running', label: 'Running', desc: 'Cardio aérobic — endurance' }],
-  running:     [{ type: 'musculation', label: 'Musculation', desc: 'Renforcement — prévention des blessures course' }]
+  crossfit:    [
+   { type: 'musculation', label: 'Musculation', desc: 'Hypertrophie + force — séances de renforcement isolées' },
+   { type: 'running',     label: 'Running',     desc: 'Cardio aérobic — zone 2 endurance' },
+   { type: 'yoga',        label: 'Yoga',        desc: 'Mobilité + récupération — prévention' }
+  ],
+  musculation: [
+   { type: 'crossfit',    label: 'Cross Training', desc: 'Conditioning + WOD fonctionnel' },
+   { type: 'running',     label: 'Running',        desc: 'Cardio — fonte du gras + cœur' },
+   { type: 'yoga',        label: 'Yoga',           desc: 'Mobilité + récupération active' }
+  ],
+  running:     [
+   { type: 'musculation', label: 'Musculation',    desc: 'Renforcement — prévention des blessures course' },
+   { type: 'crossfit',    label: 'Cross Training', desc: 'Force fonctionnelle + power' },
+   { type: 'yoga',        label: 'Yoga',           desc: 'Souplesse + récupération' }
+  ]
  };
  var secondaryOptions = compatMap[primarySport] || [];
  if (!secondaryOptions.length) return;
@@ -2928,8 +2941,10 @@ function renderSportMixSection(p, primarySport) {
 
  var _secDays  = S.sportMixSecondary.days;
  var _primDays = totalDays - _secDays;
- var _primLabel = primarySport === 'crossfit' ? 'Cross Training' : primarySport === 'musculation' ? 'Musculation' : 'Running';
- var _secLabel = { musculation: 'Musculation', crossfit: 'Cross Training', running: 'Running', yoga: 'Yoga' }[S.sportMixSecondary.type] || S.sportMixSecondary.type;
+ // 2026-04 P3 : labels étendus pour supporter running/yoga/calisthenics en primaire ET secondaire
+ var _LABELS = { musculation: 'Musculation', crossfit: 'Cross Training', running: 'Running', yoga: 'Yoga', calisthenics: 'Calisthenics' };
+ var _primLabel = _LABELS[primarySport] || primarySport;
+ var _secLabel = _LABELS[S.sportMixSecondary.type] || S.sportMixSecondary.type;
 
  // ─── RÉPARTITION DES JOURS ───
  p.appendChild(h('div', { 'class': 'section-label', style: 'margin-top:16px' }, 'R\u00e9partition des jours'));
@@ -8518,6 +8533,12 @@ function renderRunningConfig(p) {
  window.render();
  }
  }}, 'Générer mon plan'));
+ // 2026-04 PHASE 2 : offrir le mix pour running primaire aussi
+ // sportDays utilisé par renderSportMixSection mappe vers runningDays ici
+ var _prevSportDays = S.sportDays;
+ S.sportDays = S.runningDays || 3;
+ renderSportMixSection(p, 'running');
+ S.sportDays = _prevSportDays;
  p.appendChild(h('button', {'class': 'btn-back', onclick: function(){ S.sStep = 0; S.sportType = null; window.render(); }, html: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour'}));
 }
 
