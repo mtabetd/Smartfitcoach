@@ -4624,11 +4624,23 @@ function getSuggestedWeight(exerciseName, reps, phase) {
  if (matchedEx && S.muscuStrengthProfile[matchedEx.key]) {
  var profileWeight = S.muscuStrengthProfile[matchedEx.key];
  var profileReps = S.muscuStrengthProfile[matchedEx.key + '_reps'] || 8;
- // Calculate 1RM via Epley: weight × (1 + reps/30)
- var oneRM = profileWeight * (1 + profileReps / 30);
- // Return pct1rm × 1RM, rounded to nearest 2.5kg
- var suggested = Math.round(oneRM * pct / 2.5) * 2.5;
- return Math.max(suggested, 5);
+ // 2026-04 FIX A3 : guard explicite (si profileReps corrompu = 0 ou négatif, fallback 8)
+ // Avant : `|| 8` ne captait pas 0 (0 est falsy donc OK pour ||, mais pas les négatifs)
+ if (!profileReps || profileReps <= 0 || profileReps > 30) profileReps = 8;
+ if (!profileWeight || profileWeight <= 0) { profileWeight = null; /* fallthrough to Priority 2 */ }
+ if (profileWeight) {
+   // Calculate 1RM via Epley: weight × (1 + reps/30)
+   var oneRM = profileWeight * (1 + profileReps / 30);
+   // Return pct1rm × 1RM, rounded to nearest 2.5kg
+   var suggested = Math.round(oneRM * pct / 2.5) * 2.5;
+   // 2026-04 FIX A2 : plancher différencié par nom d'exercice (barre vide = 20kg, haltère = 2.5kg)
+   // Détection conservatrice : si le nom contient "haltère/dumbbell" → 2.5, si "poulie/machine" → 5, sinon 20 (barre par défaut)
+   var _nameLower = (exerciseName || '').toLowerCase();
+   var _minLoad = /haltère|haltere|dumbbell|bw|pdc/.test(_nameLower) ? 2.5 :
+                  /poulie|cable|machine|smith|guidé/.test(_nameLower) ? 5 :
+                  20;
+   return Math.max(suggested, _minLoad);
+ }
  }
  }
  // Priority 2: fall back to generic getMusculationWeight
@@ -6838,7 +6850,16 @@ function renderMusculationProgram(p) {
  // FIX: MUSCU_PHASES uses .label not .name; also map phase.id for accuracy
  var _phaseName = exPhase ? (exPhase.id || exPhase.label || '').toLowerCase() : 'hypertrophie';
  var _cycleKey = /intensification/.test(_phaseName) ? 'force' : /decharge|deload/.test(_phaseName) ? 'deload' : /adaptation/.test(_phaseName) ? 'volume' : 'hypertrophie';
- _setScheme = window.getSetScheme(exRef.n, S.weight || 70, S.sex || 'homme', S.sportLevel || 'intermediate', _cycleKey, numSets);
+ // 2026-04 FIX A6 CRITIQUE : reconstituer le 1RM réel depuis sugWeight
+ // (sugWeight = oneRM × phase.pct1rm, donc oneRM = sugWeight / phase.pct1rm)
+ // Avant ce fix : getSetScheme utilisait TOUJOURS estimateBaseLoad(BW×ratio), ignorant
+ // le strength profile de l'user → pyramide calculée sur un mauvais 1RM → charges
+ // contradictoires avec getSuggestedWeight.
+ var _knownOneRM = null;
+ if (exPhase && exPhase.pct1rm && exPhase.pct1rm > 0 && sugWeight > 0) {
+   _knownOneRM = Math.round(sugWeight / exPhase.pct1rm);
+ }
+ _setScheme = window.getSetScheme(exRef.n, S.weight || 70, S.sex || 'homme', S.sportLevel || 'intermediate', _cycleKey, numSets, _knownOneRM);
  }
 
  var today = new Date().toISOString().slice(0, 10);

@@ -3171,10 +3171,17 @@ var CYCLE_CONFIG = {
   'deload':       { reps: [12,12,12,12,12], pcts: [0.50, 0.50, 0.50, 0.55, 0.55], type: 'constant' }
 };
 
-// ─── getSetScheme(exerciceName, bw, sex, level, muscuCycle, nSets) ───────────
+// ─── getSetScheme(exerciceName, bw, sex, level, muscuCycle, nSets, knownOneRM) ───
+// 2026-04 FIX A6 CRITIQUE : accepte un oneRM connu en 7e param (depuis strength profile
+// utilisateur). Avant ce fix, getSetScheme calculait TOUJOURS via estimateBaseLoad()
+// qui ignore le strength profile → charges incohérentes avec getSuggestedWeight.
 // Retourne un tableau de séries : [{setNum, targetReps, loadKg, pctOf1RM, deltaFromPrev}]
-function getSetScheme(exerciceName, bw, sex, level, muscuCycle, nSets) {
-  var oneRM = estimateBaseLoad(exerciceName, bw, sex, level);
+function getSetScheme(exerciceName, bw, sex, level, muscuCycle, nSets, knownOneRM) {
+  // Priorité 1 : 1RM explicite passé en paramètre (strength profile utilisateur)
+  // Priorité 2 : estimation depuis poids corporel + niveau (fallback)
+  var oneRM = (typeof knownOneRM === 'number' && knownOneRM > 0)
+    ? knownOneRM
+    : estimateBaseLoad(exerciceName, bw, sex, level);
   var n = nSets || 4;
   var cfg = CYCLE_CONFIG[muscuCycle] || CYCLE_CONFIG['hypertrophie'];
   var sets = [];
