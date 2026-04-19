@@ -6,28 +6,21 @@
  * Contact: contact@smartfitcoach.com
  */
 if ('serviceWorker' in navigator) {
+  var _reloadedForSW = false;
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('./sw.js', {scope: './'}).then(function(reg) {
-      // Check for updates every 30 minutes (browser default is 24h)
-      setInterval(function() { reg.update(); }, 30 * 60 * 1000);
-      // Detect new SW version installed
+      // Vérifier maj immédiatement au load
+      try { reg.update(); } catch(e) {}
+      // Puis toutes les 10 min (plus agressif que 30min)
+      setInterval(function() { try { reg.update(); } catch(e) {} }, 10 * 60 * 1000);
+      // Nouveau SW installé → activation automatique sans interaction utilisateur
       reg.addEventListener('updatefound', function() {
         var newWorker = reg.installing;
         if (!newWorker) return;
         newWorker.addEventListener('statechange', function() {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // New version available — show a discreet banner
-            try {
-              var banner = document.createElement('div');
-              banner.setAttribute('style', 'position:fixed;bottom:0;left:0;right:0;background:#1A1A18;color:#FAF9F6;padding:12px 16px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;display:flex;align-items:center;justify-content:space-between;z-index:99999;');
-              banner.innerHTML = '<span>Nouvelle version disponible</span>';
-              var btn = document.createElement('button');
-              btn.setAttribute('style', 'background:#FAF9F6;color:#1A1A18;border:none;padding:8px 16px;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;min-height:44px;');
-              btn.textContent = 'Mettre \u00e0 jour';
-              btn.addEventListener('click', function() { window.location.reload(); });
-              banner.appendChild(btn);
-              document.body.appendChild(banner);
-            } catch(e) {}
+            // Nouvelle version prête → demander skipWaiting (active immédiatement)
+            try { newWorker.postMessage({ type: 'SKIP_WAITING' }); } catch(e) {}
           }
         });
       });
@@ -35,8 +28,10 @@ if ('serviceWorker' in navigator) {
       console.warn('[SW] Registration failed:', err);
     });
   });
-  // Auto-reload when new SW takes control
+  // Auto-reload silencieux quand le nouveau SW prend le contrôle
   navigator.serviceWorker.addEventListener('controllerchange', function() {
-    if (document.visibilityState === 'visible') window.location.reload();
+    if (_reloadedForSW) return;
+    _reloadedForSW = true;
+    window.location.reload();
   });
 }
