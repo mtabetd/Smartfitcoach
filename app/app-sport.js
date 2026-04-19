@@ -1962,7 +1962,7 @@ function renderChargesQuestionnaire(p) {
  p.appendChild(_chargesInfoCard);
 
  // Medical/age safety warnings
- var hasDiabetes = S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
+ var hasDiabetes = Array.isArray(S.medical) && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1);
  if (hasDiabetes) {
  p.appendChild(h('div', {style: 'background:var(--orangebg,rgba(106,74,26,.06));border:1px solid var(--orange,#6A4A1A);padding:10px 14px;margin-bottom:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;line-height:1.6'}, [
  h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--orange,#6A4A1A);margin-bottom:6px'}, 'Diabète — Précautions sportives'),
@@ -2215,7 +2215,8 @@ function renderDedicatedPrograms(p) {
    var _c = _challenges[_dayOfYear % _challenges.length];
    // Load from localStorage if not yet in memory (step 15 may be first render before step 4)
    if (!S.dailyChallengeHistory) {
-     var _uid15 = (window.AUTH && window.AUTH.getUser && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+     var _authUser15 = (window.AUTH && window.AUTH.getUser) ? AUTH.getUser() : null;
+     var _uid15 = _authUser15 ? _authUser15.id : 'anon';
      var _dc15 = localStorage.getItem('mtd_daily_challenge_' + _uid15);
      if (_dc15) { try { S.dailyChallengeHistory = JSON.parse(_dc15); } catch(e) { S.dailyChallengeHistory = {}; } }
      else { S.dailyChallengeHistory = {}; }
@@ -2252,8 +2253,14 @@ function renderDedicatedPrograms(p) {
          var _clickToday = new Date().toISOString().slice(0, 10); // recompute at click time (midnight-safe)
          if (!S.dailyChallengeHistory || typeof S.dailyChallengeHistory !== 'object') S.dailyChallengeHistory = {};
          S.dailyChallengeHistory[_clickToday] = true;
-         var uid = (window.AUTH && window.AUTH.getUser && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+         // Prune entries > 1 year old (unbounded growth fix 2026-04-19)
+         var _dcCutoff = new Date(); _dcCutoff.setFullYear(_dcCutoff.getFullYear() - 1);
+         var _dcCutStr = _dcCutoff.toISOString().slice(0, 10);
+         Object.keys(S.dailyChallengeHistory).forEach(function(k) { if (k < _dcCutStr) delete S.dailyChallengeHistory[k]; });
+         var _dcAuthUser = (window.AUTH && window.AUTH.getUser) ? AUTH.getUser() : null;
+         var uid = _dcAuthUser ? _dcAuthUser.id : 'anon';
          try { localStorage.setItem('mtd_daily_challenge_' + uid, JSON.stringify(S.dailyChallengeHistory)); } catch(e) {}
+         if (window.showToast) window.showToast('\u2605 D\u00e9fi du jour valid\u00e9 !', 'success', 2500);
          // Confetti burst — simple DOM-based
          var burst = document.createElement('div');
          burst.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden;';
@@ -5977,6 +5984,9 @@ function saveMuscuSessionLog() {
 
 // Returns { streak, totalSessions, milestone } — streak = consecutive distinct training days
 function getMuscuConsistencyStreak() {
+ // 60-second cache — function called on every program render, no need to recompute every time
+ var _now = Date.now();
+ if (S._streakCache && S._streakCacheTime && (_now - S._streakCacheTime) < 60000) return S._streakCache;
  var log = S.muscuSessionLog || {};
  var dates = Object.keys(log).filter(function(d) {
    var exs = log[d];
@@ -6008,7 +6018,10 @@ function getMuscuConsistencyStreak() {
  if (totalSessions === 3) milestone = { type: 'xp', msg: '+50 XP — 3 séances au compteur !', xp: 50 };
  else if (streak === 7) milestone = { type: 'badge', msg: 'Badge Semaine de Feu débloqué !', icon: 'Semaine de Feu' };
  else if (streak === 14) milestone = { type: 'unlock', msg: '2 semaines sans pause — exercices avancés débloqués !', icon: 'Elite' };
- return { streak: streak, totalSessions: totalSessions, milestone: milestone };
+ var _result = { streak: streak, totalSessions: totalSessions, milestone: milestone };
+ S._streakCache = _result;
+ S._streakCacheTime = Date.now();
+ return _result;
 }
 window.getMuscuConsistencyStreak = getMuscuConsistencyStreak;
 
@@ -6050,11 +6063,11 @@ function saveMuscuWeek(week) {
 function loadMuscuWeek() {
  try {
  var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
- var w = parseInt(localStorage.getItem('mtd_muscu_week_' + uid));
+ var w = parseInt(localStorage.getItem('mtd_muscu_week_' + uid), 10);
  if (!isNaN(w) && w >= 1) S.muscuWeek = w;
  var start = localStorage.getItem('mtd_muscu_start_' + uid);
  if (start) S.muscuProgramStart = start;
- var c = parseInt(localStorage.getItem('mtd_muscu_cycle_' + uid));
+ var c = parseInt(localStorage.getItem('mtd_muscu_cycle_' + uid), 10);
  if (!isNaN(c) && c >= 1) S.muscuCycle = c;
  } catch (e) {
  console.warn('[loadMuscuWeek] localStorage error:', e);
@@ -6148,7 +6161,7 @@ function renderWeekTracker(p) {
  container.appendChild(labels);
 
  // RPE badge — T1D cap: RPE max 7 (hypoglycémie à intensité élevée — ADA 2023, ACSM 2016)
- var hasT1D = S.medical && S.medical.indexOf('diabete_t1') !== -1;
+ var hasT1D = Array.isArray(S.medical) && S.medical.indexOf('diabete_t1') !== -1;
  var displayRpe = phase.rpe;
  var displayRpeNote = phase.rpeNote;
  if (hasT1D && phase.rpe > 7) {
@@ -6498,6 +6511,16 @@ function renderMusculationProgram(p) {
    p.appendChild(_updateBanner);
  }
 
+ // FIX 2026-04-19 — Warning si filtrage médical strict a réduit des groupes (programme incomplet)
+ if (S._sportFilterIncomplete) {
+   var _filterWarn = h('div', {style: 'background:rgba(180,130,0,0.08);border:1px solid rgba(180,130,0,0.3);padding:10px 14px;margin-bottom:12px;border-radius:2px;display:flex;align-items:flex-start;gap:8px;'});
+   _filterWarn.appendChild(h('span', {style: 'flex-shrink:0;font-size:13px;'}, '\u26a0\ufe0f'));
+   var _fwText = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#5A3A00;line-height:1.5;'});
+   _fwText.textContent = 'Certains groupes musculaires ont été filtrés en raison de vos conditions médicales. Le programme peut être incomplet. Consultez un coach ou réduisez vos restrictions dans le questionnaire médical.';
+   _filterWarn.appendChild(_fwText);
+   p.appendChild(_filterWarn);
+ }
+
  // FIX 2026-04-19 — Alerte persistante HTA sévère dans la vue programme (ESC/ESH 2018)
  if (Array.isArray(S.medical) && S.medical.indexOf('hta_severe') !== -1) {
    var _htaProgAlert = h('div', {style: 'background:rgba(220,53,69,0.07);border:1px solid rgba(220,53,69,0.3);padding:10px 14px;margin-bottom:12px;border-radius:2px;display:flex;align-items:flex-start;gap:8px;'});
@@ -6523,8 +6546,8 @@ function renderMusculationProgram(p) {
  }
  if (Array.isArray(S.medical) && S.medical.length > 0) _adaptCount++;
  if (S.pregnant && S.sex === 'femme') _adaptCount++;
- if (S.medical && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1)) _adaptCount++;
- if (S.medical && (S.medical.indexOf('cardio') !== -1 || S.medical.indexOf('hta') !== -1 || S.medical.indexOf('hta_severe') !== -1)) _adaptCount++;
+ if (Array.isArray(S.medical) && (S.medical.indexOf('diabete_t2') !== -1 || S.medical.indexOf('diabete_t1') !== -1)) _adaptCount++;
+ if (Array.isArray(S.medical) && (S.medical.indexOf('cardio') !== -1 || S.medical.indexOf('hta') !== -1 || S.medical.indexOf('hta_severe') !== -1)) _adaptCount++;
  if (typeof getAge === 'function' && getAge() >= 50) _adaptCount++;
  if (S.sleep !== null && S.sleep !== undefined && S.sleep <= 1) _adaptCount++;
 
@@ -8573,9 +8596,11 @@ function renderMusculationProgram(p) {
  kcalTotal: kcalRes.total
  });
  S.sessionCompleting = false; S._sessionDuration = null;
+ S._streakCache = null; // Invalider le cache streak après une nouvelle séance
  // Mise à jour du streak sur action réelle (séance validée)
  if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
  window.BLACKBOX && window.BLACKBOX.log('session_done', {day: S.selectedSportDay, kcal: kcalRes.total, duration: realDur});
+ if (window.showToast) { var _kcalMsg = kcalRes && kcalRes.total ? ' — ' + Math.round(kcalRes.total) + ' kcal' : ''; window.showToast('\u2713 S\u00e9ance valid\u00e9e' + _kcalMsg, 'success'); }
  window.render();
  }}, '\u2713 Valider la s\u00e9ance');
  compPanel.appendChild(saveBtn);

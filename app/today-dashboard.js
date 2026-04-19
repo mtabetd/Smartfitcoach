@@ -5299,9 +5299,10 @@ function renderCardSundayReview(S) {
   var isSunday = now.getDay() === 0;
   if (!isSunday && !S._forceWeeklyReview) return null;
 
-  // Ne pas construire le DOM si déjà dismissé aujourd'hui (optimisation)
-  try { if (localStorage.getItem('mtd_weekly_review_dismissed_' + now.toISOString().slice(0, 10)) === '1') return null; } catch(e) {}
+  // Ne pas construire le DOM si déjà dismissé aujourd'hui — clé isolée par userId (fix 2026-04-19)
   var uid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+  var _wrDismissKey = 'mtd_weekly_review_dismissed_' + uid + '_' + now.toISOString().slice(0, 10);
+  try { if (localStorage.getItem(_wrDismissKey) === '1') return null; } catch(e) {}
 
   // Charger le log séances de la semaine
   var muscuLog = {};
@@ -5380,16 +5381,17 @@ function renderCardSundayReview(S) {
     style: 'margin-top:12px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:transparent;border:none;cursor:pointer;padding:12px 0;min-height:44px;display:block;width:100%;text-align:left;',
     onclick: function() {
       S._forceWeeklyReview = false;
-      // Stocker le dismiss dans localStorage pour ne pas réafficher aujourd'hui
-      try { localStorage.setItem('mtd_weekly_review_dismissed_' + new Date().toISOString().slice(0, 10), '1'); } catch(e) {}
+      // Stocker le dismiss dans localStorage avec userId pour isolation multi-compte (fix 2026-04-19)
+      var _dismissUid = (window.AUTH && window.AUTH.getUser()) ? window.AUTH.getUser().id : 'anon';
+      try { localStorage.setItem('mtd_weekly_review_dismissed_' + _dismissUid + '_' + new Date().toISOString().slice(0, 10), '1'); } catch(e) {}
       if (window.render) window.render();
     }
   }, 'Fermer le bilan');
   c.appendChild(dismissBtn);
 
-  // Ne pas réafficher si déjà fermé aujourd'hui
+  // Ne pas réafficher si déjà fermé aujourd'hui (isolation userId)
   try {
-    if (localStorage.getItem('mtd_weekly_review_dismissed_' + now.toISOString().slice(0, 10)) === '1') return null;
+    if (localStorage.getItem(_wrDismissKey) === '1') return null;
   } catch(e) {}
 
   return c;

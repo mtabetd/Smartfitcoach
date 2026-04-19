@@ -17,6 +17,42 @@
 function h(tag,attrs,ch){var el=document.createElement(tag);var _hasClick=false;if(attrs)for(var k in attrs){if(attrs[k]===null||attrs[k]===undefined)continue;if(k==='class')el.className=attrs[k];else if(k==='html'){var _hv=String(attrs[k]);el.innerHTML=_hv}else if(k==='disabled'){if(attrs[k]===true)el.setAttribute('disabled','');else el.removeAttribute('disabled')}else if(k.indexOf('on')===0){el.addEventListener(k.slice(2),attrs[k]);if(k==='onclick')_hasClick=true}else el.setAttribute(k,attrs[k])}/* FIX A11Y 2026-04-16: div/span avec onclick → role=button + tabindex + keydown Enter/Space */if(_hasClick&&(tag==='div'||tag==='span')&&!el.getAttribute('role')){el.setAttribute('role','button');el.setAttribute('tabindex','0');el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()}})}if(ch!=null){if(typeof ch==='string'||typeof ch==='number')el.textContent=ch;else if(Array.isArray(ch))for(var i=0;i<ch.length;i++){if(ch[i])el.appendChild(ch[i])}else if(ch.nodeType)el.appendChild(ch)}return el}
 function txt(s){return document.createTextNode(s)}
 
+// ─── TOAST NOTIFICATION SYSTEM 2026-04-19 ───
+// Usage: window.showToast('Message', 'success' | 'warning' | 'error', 3000ms)
+window.showToast = function(msg, type, duration) {
+  if (!msg) return;
+  type = type || 'success';
+  duration = duration || 3000;
+  var colors = { success: '#1A4A1A', warning: '#6A4A1A', error: '#5A1010' };
+  var bg = colors[type] || colors.success;
+  var existing = document.querySelectorAll('.sfc-toast');
+  // Stack offset
+  var offset = 16 + existing.length * 52;
+  var toast = document.createElement('div');
+  toast.className = 'sfc-toast';
+  toast.style.cssText = 'position:fixed;bottom:' + offset + 'px;left:50%;transform:translateX(-50%);z-index:9999;' +
+    'background:' + bg + ';color:#FAF9F6;padding:10px 20px;font-family:"Helvetica Neue",Arial,sans-serif;' +
+    'font-size:11px;letter-spacing:1px;border-radius:2px;box-shadow:0 4px 16px rgba(0,0,0,0.18);' +
+    'max-width:calc(100vw - 32px);text-align:center;pointer-events:none;' +
+    'animation:sfcToastIn .2s ease forwards;';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  // Auto-remove
+  setTimeout(function() {
+    toast.style.animation = 'sfcToastOut .2s ease forwards';
+    setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 200);
+  }, duration);
+};
+// Inject toast CSS once
+(function() {
+  if (document.getElementById('sfc-toast-style')) return;
+  var s = document.createElement('style');
+  s.id = 'sfc-toast-style';
+  s.textContent = '@keyframes sfcToastIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}' +
+    '@keyframes sfcToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,12px)}}';
+  document.head.appendChild(s);
+})();
+
 // ═══════════════════════════════════════════════════════════════════════════
 // FIX SPRINT P2.3 — Mapping bidirectionnel CF ↔ muscu 1RM (audit symbiose).
 // Avant : crossfit1RM (back_squat, deadlift, bench_press) et muscuStrengthProfile
