@@ -1923,7 +1923,40 @@
     ['Domino\'s Garlic Bread (pain ail)',  315,  8.5, 43.0, 12.0],
     ['Domino\'s Garlic Pizza Bread',       290,  9.0, 41.0, 10.5],
     ['Domino\'s Chicken Wings (6 pcs)',    225, 22.0,  4.0, 14.0],
-    ['Domino\'s Chocolate Lava Cake',      415,  4.5, 50.0, 22.0]
+    ['Domino\'s Chocolate Lava Cake',      415,  4.5, 50.0, 22.0],
+
+    // ─── WHEY & PROTÉINES — 25 marques mondiales (batch 91) ───
+    // Valeurs nutritionnelles par 100g de poudre. Une scoop = ~30g.
+    ['Optimum Nutrition Gold Standard Whey', 388, 80.0,  9.0,  4.0],
+    ['MyProtein Impact Whey Protein',     412, 82.0,  4.0,  7.5],
+    ['MyProtein Impact Whey Isolate',     373, 90.0,  2.5,  0.7],
+    ['Eric Favre 100% Whey',              383, 75.0, 10.0,  6.0],
+    ['Eric Favre Pure Whey Isolate',      390, 88.0,  3.0,  3.0],
+    ['Eafit Pure Whey 95',                385, 82.0,  4.5,  4.0],
+    ['Foodspring Whey Protein',           395, 75.0,  9.0,  6.0],
+    ['Foodspring 3K Protein',             390, 82.0,  6.0,  4.5],
+    ['Nutrimuscle Whey Native',           400, 85.0,  4.0,  5.0],
+    ['Nutrimuscle Whey Isolate Native',   380, 92.0,  2.0,  1.0],
+    ['Yamamoto Iso-Whey',                 376, 87.0,  4.0,  2.5],
+    ['BSN Syntha-6',                      400, 44.0, 25.0, 12.0],
+    ['Dymatize ISO 100',                  366, 90.0,  3.5,  1.0],
+    ['Dymatize Elite Whey',               373, 82.0,  4.0,  4.5],
+    ['MuscleTech Nitro-Tech',             390, 75.0, 10.0,  3.5],
+    ['Cellucor COR-Performance Whey',     383, 80.0,  6.0,  4.0],
+    ['Olimp 100% Whey Protein Complex',   373, 80.0,  6.5,  5.0],
+    ['Maxler 100% Golden Whey',           388, 80.0,  6.5,  4.5],
+    ['Bulk Powders Pure Whey Protein',    393, 82.0,  4.5,  6.0],
+    ['Universal Animal Whey',             376, 85.0,  3.0,  3.0],
+    ['Quamtrax Direct Whey Protein',      390, 80.0,  6.0,  6.0],
+    ['Iron-Trec Whey 100',                388, 76.0,  9.0,  5.5],
+    ['Star Nutrition 100% Whey',          385, 78.0,  8.0,  5.0],
+    ['Body Attack 100% Whey',             390, 80.0,  6.5,  5.0],
+    ['ProteinWorks Diet Whey Isolate 90', 360, 90.0,  2.0,  1.0],
+    ['Optimum Nutrition Gold Standard Casein',360, 80.0,  7.0,  3.0],
+    ['Dymatize Elite Casein',             370, 85.0,  4.0,  3.0],
+    ['Vega Sport Premium Protein (vegan)',380, 70.0, 13.0,  6.5],
+    ['Sunwarrior Warrior Blend (vegan)',  400, 70.0, 13.0, 10.0],
+    ['Garden of Life Sport Whey (bio)',   388, 80.0,  6.0,  5.5]
   ];
 
   // Attache à FOOD_CALC._DB si dispo, sinon expose pour merge ultérieur

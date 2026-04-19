@@ -2006,20 +2006,32 @@ function _fjShowSelection() {
       pluralLabel = portionCount + ' ' + rest;
     }
 
-    var countRow = h('div', { style: 'display:flex;align-items:center;gap:8px;margin-bottom:8px;' });
+    // ─── Compteur portions avec STEPPER -/+ et input décimal (UX 2026-04) ───
+    var countRow = h('div', { style: 'display:flex;align-items:center;gap:6px;margin-bottom:8px;' });
     countRow.appendChild(h('label', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:48px;'
     }, 'Combien'));
+    // Stepper - large (44×44 mobile-friendly)
+    var minusBtn = h('button', {
+      type: 'button', 'aria-label': 'Diminuer',
+      style: 'width:44px;height:40px;border:1px solid var(--line,#D8D8D0);background:transparent;cursor:pointer;border-radius:2px;font-size:18px;line-height:1;color:var(--black,#0A0A09);font-family:Georgia,serif;'
+    }, '\u2212');
+    minusBtn.addEventListener('click', function() {
+      var v = (_fjState.portionCount || 1) - 0.5;
+      if (v < 0.5) v = 0.5;
+      _fjState.portionCount = v;
+      _fjShowSelection();
+    });
+    countRow.appendChild(minusBtn);
     var countInput = h('input', {
-      type: 'number', min: '1', max: '50', step: '1', value: String(portionCount),
-      style: 'width:70px;padding:8px 10px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;text-align:center;outline:none;'
+      type: 'number', min: '0.5', max: '20', step: '0.5', value: String(portionCount),
+      inputmode: 'decimal',
+      style: 'width:64px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+        + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
     });
     countInput.addEventListener('input', function(e) {
-      var v = parseInt(e.target.value, 10);
-      // 2026-04 NIVEAU 1 : cap réaliste à 20 portions (au-delà = saisie erronée)
-      // + warning visuel si valeur inhabituelle
-      if (isNaN(v) || v < 1) v = 1;
+      var v = parseFloat(e.target.value);
+      if (isNaN(v) || v < 0.5) v = 0.5;
       if (v > 20) {
         v = 20;
         if (window.showToast) window.showToast('Maximum 20 portions. Pour plus, passez en mode grammes.', 'warning', 3000);
@@ -2028,32 +2040,53 @@ function _fjShowSelection() {
       _fjShowSelection();
     });
     countRow.appendChild(countInput);
+    var plusBtn = h('button', {
+      type: 'button', 'aria-label': 'Augmenter',
+      style: 'width:44px;height:40px;border:1px solid var(--line,#D8D8D0);background:transparent;cursor:pointer;border-radius:2px;font-size:18px;line-height:1;color:var(--black,#0A0A09);font-family:Georgia,serif;'
+    }, '+');
+    plusBtn.addEventListener('click', function() {
+      var v = (_fjState.portionCount || 1) + 0.5;
+      if (v > 20) v = 20;
+      _fjState.portionCount = v;
+      _fjShowSelection();
+    });
+    countRow.appendChild(plusBtn);
     countRow.appendChild(h('span', {
-      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);flex:1;'
-    }, '× ' + portion.label + (portionCount > 1 ? '   (' + qty + ' g total)' : '   (' + qty + ' g)')));
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);flex:1;text-align:right;'
+    }, portion.label + ' \u00b7 ' + qty + ' g total'));
     box.appendChild(countRow);
 
-    // Bouton bascule en mode grammes
+    // Bascule mode (chip plus visible que lien underline)
     var switchToGrams = h('button', {
       type: 'button',
-      style: 'background:none;border:none;padding:4px 0;cursor:pointer;color:var(--grey,#6B6B65);'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:underline;margin-bottom:8px;'
-    }, 'Saisir en grammes');
+      style: 'background:transparent;border:1px solid var(--line,#D8D8D0);padding:6px 12px;cursor:pointer;color:var(--grey,#6B6B65);'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
+    }, 'Mode grammes');
     switchToGrams.addEventListener('click', function() {
       _fjState.unitMode = 'grams';
       _fjShowSelection();
     });
     box.appendChild(switchToGrams);
   } else {
-    // Mode grammes (manuel ou pas de portion connue)
-    var qtyRow = h('div', { style: 'display:flex;align-items:center;gap:8px;margin-bottom:8px;' });
+    // Mode grammes : input + presets rapides 50/100/150/200g (UX 2026-04)
+    var qtyRow = h('div', { style: 'display:flex;align-items:center;gap:6px;margin-bottom:8px;' });
     qtyRow.appendChild(h('label', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);min-width:48px;'
     }, 'Quantit\u00e9'));
+    var minusG = h('button', { type: 'button', 'aria-label': '-10g',
+      style: 'width:44px;height:40px;border:1px solid var(--line,#D8D8D0);background:transparent;cursor:pointer;border-radius:2px;font-size:18px;line-height:1;color:var(--black,#0A0A09);font-family:Georgia,serif;'
+    }, '\u2212');
+    minusG.addEventListener('click', function() {
+      var v = (_fjState.qty || 100) - 10;
+      if (v < 1) v = 1;
+      _fjState.qty = v; _fjState.unitMode = 'grams'; _fjShowSelection();
+    });
+    qtyRow.appendChild(minusG);
     var qtyInput = h('input', {
-      type: 'number', min: '1', max: '2000', step: '1', value: String(qty),
-      style: 'width:80px;padding:8px 10px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
-        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;text-align:center;outline:none;'
+      type: 'number', min: '1', max: '2000', step: '5', value: String(qty),
+      inputmode: 'numeric',
+      style: 'width:80px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+        + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
     });
     qtyInput.addEventListener('input', function(e) {
       var v = parseInt(e.target.value, 10);
@@ -2064,18 +2097,45 @@ function _fjShowSelection() {
       _fjShowSelection();
     });
     qtyRow.appendChild(qtyInput);
+    var plusG = h('button', { type: 'button', 'aria-label': '+10g',
+      style: 'width:44px;height:40px;border:1px solid var(--line,#D8D8D0);background:transparent;cursor:pointer;border-radius:2px;font-size:18px;line-height:1;color:var(--black,#0A0A09);font-family:Georgia,serif;'
+    }, '+');
+    plusG.addEventListener('click', function() {
+      var v = (_fjState.qty || 100) + 10;
+      if (v > 2000) v = 2000;
+      _fjState.qty = v; _fjState.unitMode = 'grams'; _fjShowSelection();
+    });
+    qtyRow.appendChild(plusG);
     qtyRow.appendChild(h('span', {
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
     }, 'g'));
     box.appendChild(qtyRow);
 
-    // Bouton retour aux portions si dispo
+    // Quick presets grammes (50, 100, 150, 200, 250)
+    var presetRow = h('div', { style: 'display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap;' });
+    [50, 100, 150, 200, 250].forEach(function(preset) {
+      var isActive = qty === preset;
+      var pBtn = h('button', {
+        type: 'button',
+        style: 'flex:1;min-width:50px;padding:6px 4px;cursor:pointer;border:1px solid var(--line,#D8D8D0);'
+          + 'background:' + (isActive ? 'var(--black,#0A0A09)' : 'transparent') + ';'
+          + 'color:' + (isActive ? 'var(--ivory,#FAF9F6)' : 'var(--black,#0A0A09)') + ';'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;border-radius:2px;'
+      }, preset + ' g');
+      pBtn.addEventListener('click', function() {
+        _fjState.qty = preset; _fjState.unitMode = 'grams'; _fjShowSelection();
+      });
+      presetRow.appendChild(pBtn);
+    });
+    box.appendChild(presetRow);
+
+    // Bouton retour aux portions si dispo (chip visible)
     if (allPortions && allPortions.length) {
       var switchToPortion = h('button', {
         type: 'button',
-        style: 'background:none;border:none;padding:4px 0;cursor:pointer;color:var(--grey,#6B6B65);'
-          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:underline;margin-bottom:8px;'
-      }, 'Choisir une portion standard');
+        style: 'background:transparent;border:1px solid var(--line,#D8D8D0);padding:6px 12px;cursor:pointer;color:var(--grey,#6B6B65);'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;margin-bottom:10px;'
+      }, 'Mode portion');
       switchToPortion.addEventListener('click', function() {
         _fjState.unitMode = 'portion';
         if (!_fjState.portion) _fjState.portion = allPortions[0];
