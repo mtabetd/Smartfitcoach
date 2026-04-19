@@ -5360,10 +5360,13 @@ function getProgressiveWeight(exerciseName, baseWeight, weekNumber) {
 
 // ─── CALCULATEUR DE PLAQUES ──────────────────────────────────────────────────
 // Calcule les plaques à mettre de chaque côté de la barre pour atteindre targetKg
+// 2026-04 FIX UX : label clair (avant : "PLAQUES PAR CÔTÉ — 20KG" était ambigu — c'est
+// la cible TOTALE qui était affichée, pas le poids des plaques)
 function renderPlateCalculator(targetKg, barKg) {
   var PLATES = [25, 20, 15, 10, 5, 2.5, 1.25];
   barKg = barKg || 20; // barre olympique standard
-  var remaining = (targetKg - barKg) / 2; // par côté
+  var perSideKg = (targetKg - barKg) / 2; // poids des plaques par côté
+  var remaining = perSideKg;
   var result = [];
 
   PLATES.forEach(function(plate) {
@@ -5375,11 +5378,13 @@ function renderPlateCalculator(targetKg, barKg) {
   });
 
   var html = '<div class="plate-calc" style="margin:12px 0;padding:12px;border:1px solid var(--border);background:var(--ivory2)">';
-  html += '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;color:var(--grey)">PLAQUES PAR CÔTÉ — ' + targetKg + 'kg</div>';
-
-  if (result.length === 0 && remaining <= 0.1) {
-    html += '<div style="font-size:12px;color:var(--grey)">Barre seule (' + barKg + 'kg)</div>';
+  // Label clair : "Cible totale 77.5kg = barre 20kg + plaques par côté"
+  if (perSideKg <= 0.1) {
+    html += '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;color:var(--grey)">Cible ' + targetKg + ' kg \u2014 Barre seule</div>';
+    html += '<div style="font-size:12px;color:var(--grey)">Pas de plaques nécessaires (barre olympique ' + barKg + ' kg)</div>';
   } else {
+    html += '<div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;color:var(--grey)">Cible ' + targetKg + ' kg \u2014 ' + perSideKg.toFixed(1) + ' kg de plaques par côté</div>';
+    html += '<div style="font-size:11px;color:var(--grey);margin-bottom:6px">Barre ' + barKg + ' kg + (' + perSideKg.toFixed(1) + ' kg × 2 côtés) = ' + targetKg + ' kg</div>';
     result.forEach(function(r) {
       // Couleurs cohérentes design system (palette --green/--blue/--orange/--grey)
       var color = r.plate >= 20 ? 'var(--green,#1A4A1A)' : r.plate >= 10 ? 'var(--blue,#1A3A6A)' : r.plate >= 5 ? 'var(--orange,#6A4A1A)' : 'var(--grey,#6B6B65)';
@@ -6977,7 +6982,37 @@ function renderMusculationProgram(p) {
  if (eqType !== 'bodyweight') {
  var _setParts = ex.sets ? String(ex.sets).split('\u00d7') : [];
  var suggestedReps = _setParts.length > 1 ? parseInt(_setParts[1]) : null;
- var suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
+ // 2026-04 FIX A6 v2 : la 'Charge recommandée' DOIT être cohérente avec le tableau des séries.
+ // Avant : 3 fonctions différentes (getMusculationWeight + getSuggestedWeight + getSetScheme)
+ // donnaient 3 valeurs distinctes → user voyait "Recommandée 77.5 kg" mais "Conseillé 45 kg" en série.
+ // Après : on lit le top set du sessionLog (généré par getSetScheme avec le vrai 1RM),
+ // sinon fallback sur getSuggestedWeight (algo phase × pct1rm), sinon getMusculationWeight (legacy).
+ var suggested = null;
+ try {
+   var _todayK = new Date().toISOString().slice(0, 10);
+   var _todayLog = S.muscuSessionLog && S.muscuSessionLog[_todayK];
+   var _exLog = _todayLog && _todayLog[ex.n];
+   if (Array.isArray(_exLog) && _exLog.length) {
+     // Top set = série la plus lourde (généralement la dernière en pyramide)
+     var _max = 0;
+     _exLog.forEach(function(s) { if (s && s.targetWeight > _max) _max = s.targetWeight; });
+     if (_max > 0) suggested = _max;
+   }
+ } catch(e) {}
+ // Fallback 1 : phase × pct1rm (cohérent avec "Charge cible" sur la carte exo)
+ // getMuscuPhase + getSuggestedWeight sont dans la même IIFE → accès direct (pas window.)
+ if (!suggested) {
+   try {
+     var _phase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(S.muscuWeek || 1) : null;
+     if (typeof getSuggestedWeight === 'function') {
+       suggested = getSuggestedWeight(ex.n, suggestedReps || 8, _phase);
+     }
+   } catch(e) {}
+ }
+ // Fallback 2 : legacy
+ if (!suggested) {
+   suggested = window.getMusculationWeight ? window.getMusculationWeight(ex.n, ex.sets, suggestedReps) : null;
+ }
  // ═══ FIX P1 2026-04-16 — Progression auto basée sur PERFORMANCE RÉELLE ═══
  // Avant : progression linéaire aveugle (charge × 1.05 × semaine). Augmentait même
  // si l'user avait échoué ses reps. Maintenant : on regarde le sessionLog de la
