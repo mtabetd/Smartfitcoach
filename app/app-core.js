@@ -4969,9 +4969,9 @@ function filterRecipes(pool,type){
   // Grossesse : exclure les aliments contre-indiqués pendant la grossesse (OMS / ANSES 2022)
   // Risques : listériose (charcuterie crue, fromage au lait cru), parasites (poisson cru, sushi)
   // L'alcool traverse le placenta — aucune dose sûre (OMS 2014, ACOG 2021)
-  if(s.pregnant&&s.sex==='femme'){r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();
-    // Poisson cru / sushi / carpaccio / ceviche / gravlax / tartare de poisson
-    if((/sushi|sashimi|tartare de (?:saumon|thon|poisson)|gravlax|carpaccio de (?:saumon|poisson)|ceviche|poisson cru|truite fumée|saumon fumé/).test(i))return false;
+  if(s.pregnant&&s.sex==='femme'){r=r.filter(function(x){var i=((x.i||'')+' '+(x.n||'')+' '+(x.tags||[]).join(' ')).toLowerCase();
+    // Poisson cru / sushi / carpaccio / ceviche / gravlax / tartare de poisson — élargi (carpaccio.*saumon, saumon tranché fin)
+    if((/sushi|sashimi|tartare de (?:saumon|thon|poisson)|gravlax|carpaccio.*(?:saumon|thon|poisson)|ceviche|poisson cru|saumon (?:cru|tranché fin)|truite fumée|saumon fumé/).test(i))return false;
     // Alcool (même en cuisine — l'alcool ne s'évapore jamais totalement)
     if((/alcool|vin blanc|vin rouge|bière|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)|sake/).test(i))return false;
     // Fromage au lait cru (listériose — ANSES 2022)
@@ -4983,7 +4983,7 @@ function filterRecipes(pool,type){
   if(!s.pregnant&&Array.isArray(s.medical)&&s.medical.indexOf('allaitement')!==-1){r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/alcool|vin blanc|vin rouge|bière|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)|sake/).test(i)});}
   // Halal : exclut porc, charcuterie porcine et alcool
   // Porc exclu par défaut — inclure si allowPork = true (opt-in explicite)
-  if(!s.allowPork)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard(?!on[s]?\s+de\s+(?:dinde|volaille|poulet))|bacon|jambon(?! de dinde| de volaille)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|saucisse(?! de volaille| de poulet| de dinde| de soja)|\bandouille\b|\bboudin\b/).test(i)});
+  if(!s.allowPork)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/porc(?!ini)|cochon|lard(?!on[s]?[-\s]+(?:de\s+)?(?:dinde|volaille|poulet))|bacon|jambon(?![-\s]+(?:de\s+)?(?:dinde|volaille|poulet))|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|saucisse(?![-\s]+(?:de\s+)?(?:volaille|poulet|dinde|soja))|\bandouille\b|\bboudin\b/).test(i)});
   // Alcool en cuisine exclu par défaut — inclure si allowAlcohol = true
   if(!s.allowAlcohol)r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();return!(/alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/).test(i)});
   if(typeof s.excluded==='string'&&s.excluded&&s.excluded.trim()){var excl=s.excluded.toLowerCase().split(',').map(function(str){return str.trim()}).filter(Boolean);r=r.filter(function(x){var i=((x.i||'')+' '+(x.tags||[]).join(' ')).toLowerCase();for(var e=0;e<excl.length;e++){if(i.indexOf(excl[e])!==-1)return false}return true})}

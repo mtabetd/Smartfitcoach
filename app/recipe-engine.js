@@ -29539,8 +29539,9 @@
     for (var j = 0; j < excludedTerms.length; j++) {
       var term = excludedTerms[j].toLowerCase();
       if (combined.indexOf(term) === -1) continue;
-      // Exception: 'lard' in 'lardons de dinde/volaille/poulet' is halal
-      if (term === 'lard' && /lardon[s]?\s+de\s+(?:dinde|volaille|poulet)/.test(combined)) continue;
+      // Exceptions volaille (lardons/jambon de dinde/volaille/poulet — halal-friendly)
+      if (term === 'lard' && /lardon[s]?[-\s]+(?:de\s+)?(?:dinde|volaille|poulet)/.test(combined)) continue;
+      if (term === 'jambon porc' && /jambon[-\s]+(?:de\s+)?(?:dinde|volaille|poulet)/.test(combined)) continue;
       return false;
     }
     return true;
@@ -29652,7 +29653,7 @@
         (Array.isArray(r.tags) ? r.tags.join(' ') : ''),
         (r.ingredients || []).map(function(ig) { return ig.name || ''; }).join(' ')
       ].join(' ').toLowerCase();
-      if (!filters.allowPork && /\bjambon\b/.test(_rText) && !/dinde|volaille/.test(_rText)) return false;
+      if (!filters.allowPork && /\bjambon\b/.test(_rText) && !/jambon[-\s]+(?:de\s+)?(?:dinde|volaille|poulet)/.test(_rText)) return false;
       if (!filters.allowAlcohol && /mirin/.test(_rText) && !/mirin halal/.test(_rText)) return false;
 
       return true;
@@ -30001,7 +30002,7 @@
     var s = window.S;
     if (s) {
       if (!s.allowPork) {
-        var PORK_BAN = /porc(?!ini)|cochon|lard(?!on[s]?\s+de\s+(?:dinde|volaille|poulet))|bacon|jambon(?! de dinde| de volaille)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc/;
+        var PORK_BAN = /porc(?!ini)|cochon|lard(?!on[s]?[-\s]+(?:de\s+)?(?:dinde|volaille|poulet))|bacon|jambon(?![-\s]+(?:de\s+)?(?:dinde|volaille|poulet))|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc/;
         pool = pool.filter(function(r) {
           return !PORK_BAN.test(((r.i || '') + ' ' + (r.tags || []).join(' ')).toLowerCase());
         });
