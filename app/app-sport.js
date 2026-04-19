@@ -7438,20 +7438,22 @@ function renderMusculationProgram(p) {
 
  if (!isBodyweight) {
  var weightPlaceholder = progressiveWeight > 0 ? String(progressiveWeight) : 'kg';
+ var _wSuggested = setRow.actualWeight === null && setRow.targetWeight > 0;
  var weightInput = h('input', {
  type: 'number', min: '0', max: '500', step: '0.5',
  inputmode: 'decimal', autocomplete: 'off', 'aria-label': 'Charge (kg)',
  placeholder: weightPlaceholder,
- value: setRow.actualWeight !== null ? String(setRow.actualWeight) : '',
+ value: setRow.actualWeight !== null ? String(setRow.actualWeight) : (setRow.targetWeight > 0 ? String(setRow.targetWeight) : ''),
  // FIX UX 2026-04-17 : tap target 60x44 (WCAG 2.5.5) + font 16px anti-zoom iOS
- style: 'width:64px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
+ // Gris = valeur suggérée (pas encore confirmée), noir = saisie utilisateur
+ style: 'width:64px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory));color:' + (_wSuggested ? 'var(--grey,#6B6B65)' : 'var(--black,#0A0A09)'),
  oninput: (function(sr, _valBtnRef){ return function(e) {
+ e.target.style.color = 'var(--black,#0A0A09)'; // confirmation utilisateur
  var v = parseFloat(e.target.value);
  sr.actualWeight = isNaN(v) ? null : v;
  saveMuscuSessionLog();
- // Réactiver le bouton validation en temps réel
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
- if (_btn) { var _ok = sr.actualReps !== null && sr.actualWeight !== null; _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ if (_btn) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || sr.targetWeight > 0); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
  }; })(setRow)
  });
  inputZone.appendChild(weightInput);
@@ -7492,20 +7494,21 @@ function renderMusculationProgram(p) {
  }
  }
 
+ var _rSuggested = setRow.actualReps === null && !!setRow.targetReps;
  var repsInput = h('input', {
  type: 'number', min: '0', max: '50', step: '1',
  inputmode: 'numeric', autocomplete: 'off', 'aria-label': 'Répétitions',
  placeholder: String(setRow.targetReps),
- value: setRow.actualReps !== null ? String(setRow.actualReps) : '',
+ value: setRow.actualReps !== null ? String(setRow.actualReps) : (setRow.targetReps ? String(setRow.targetReps) : ''),
  // FIX UX 2026-04-17 : tap target 56x44 (WCAG 2.5.5) + font 16px anti-zoom iOS
- style: 'width:56px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory))',
+ style: 'width:56px;min-height:44px;padding:10px 6px;border:1px solid var(--border);border-radius:2px;font-size:16px;text-align:center;background:var(--bg,var(--ivory));color:' + (_rSuggested ? 'var(--grey,#6B6B65)' : 'var(--black,#0A0A09)'),
  oninput: (function(sr, _isBw){ return function(e) {
+ e.target.style.color = 'var(--black,#0A0A09)'; // confirmation utilisateur
  var v = parseInt(e.target.value);
  sr.actualReps = isNaN(v) ? null : v;
  saveMuscuSessionLog();
- // Réactiver le bouton validation en temps réel
  var _btn = e.target.closest('.set-row') ? e.target.closest('.set-row').querySelector('.set-validate-btn') : null;
- if (_btn) { var _ok = sr.actualReps !== null && (sr.actualWeight !== null || (_isBw && !sr.weighted)); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
+ if (_btn) { var _ok = (sr.actualReps !== null || !!sr.targetReps) && (sr.actualWeight !== null || (_isBw && !sr.weighted) || sr.targetWeight > 0); _btn.disabled = !_ok; _btn.className = 'set-validate-btn' + (_ok ? '' : ' set-validate-btn-disabled'); }
  }; })(setRow, isBodyweight)
  });
  inputZone.appendChild(repsInput);
@@ -7522,7 +7525,8 @@ function renderMusculationProgram(p) {
  (function(_sr, _si, _exRef, _numSets, _isBody, _exI, _allEx) {
  var isValidated = _sr.validated === true;
  var _bwNoWeight = _isBody && !_sr.weighted;
- var hasData = _sr.actualReps !== null && (_sr.actualWeight !== null || _bwNoWeight);
+ // Bouton actif si : l'user a saisi des valeurs OU les valeurs conseillées existent (pré-rempli)
+ var hasData = (_sr.actualReps !== null || !!_sr.targetReps) && (_sr.actualWeight !== null || _bwNoWeight || _sr.targetWeight > 0);
 
  if (isValidated) {
  // Série déjà validée : afficher le checkmark + bouton annuler discret
@@ -7551,6 +7555,9 @@ function renderMusculationProgram(p) {
  disabled: !hasData,
  onclick: function(e) {
  e.stopPropagation();
+ // Si l'user n'a rien modifié, confirmer automatiquement les valeurs conseillées
+ if (_sr.actualWeight === null && !_bwNoWeight && _sr.targetWeight > 0) _sr.actualWeight = _sr.targetWeight;
+ if (_sr.actualReps === null && _sr.targetReps) _sr.actualReps = _sr.targetReps;
  // Marquer la série comme validée
  _sr.validated = true;
  saveMuscuSessionLog();
