@@ -3282,12 +3282,17 @@ function openTodayWeightPrompt() {
         }
         // Persister le nouveau poids dans le profil (évite la perte de données si l'utilisateur ferme l'app)
         if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
+        var _wLabel = 'Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg');
         if (window.GAMIFICATION) {
           try {
-            window.GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(valKg) : valKg + ' kg'));
+            window.GAMIFICATION.showToast(_wLabel);
             window.GAMIFICATION.unlockBadge('first_weigh');
             if (wh.length >= 10) window.GAMIFICATION.unlockBadge('weight_10');
-          } catch(e) {}
+          } catch(e) {
+            if (window.showToast) { try { window.showToast(_wLabel, 'success', 2500); } catch(_){} }
+          }
+        } else if (window.showToast) {
+          try { window.showToast(_wLabel, 'success', 2500); } catch(_){}
         }
         document.body.removeChild(overlay);
         if (window.APP_RENDER) window.APP_RENDER();

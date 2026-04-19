@@ -1722,7 +1722,11 @@ function renderStep6(p) {
         var _prevGoal = S.goal;
         S.goal = i;
         // FIX DESYNC 2026-04-16 — invalider cache + plan si objectif change
-        if (_prevGoal !== i) { S._nm = null; if (window.devalidateWeekPlan) window.devalidateWeekPlan('goal changed'); }
+        if (_prevGoal !== i) {
+          S._nm = null;
+          if (window.devalidateWeekPlan) window.devalidateWeekPlan('goal changed');
+          if (window.devalidateSportProgram) window.devalidateSportProgram('goal changed');
+        }
         // ── SYNC SPORT GOALS ─────────────────────────────────────────────────
         // If sport goals already selected, replace the "primary" one to stay coherent
         if (S.sportGoals && S.sportGoals.length > 0 && window.NUTRITION_TO_SPORT_GOAL) {

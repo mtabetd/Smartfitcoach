@@ -1025,7 +1025,7 @@
     // ─── FAST FOOD & RESTAURATION RAPIDE (batch 47) ───
     ['Hamburger classique (maison)',  295, 15.0, 25.0, 14.0],
     ['Cheeseburger (maison)',         330, 18.0, 26.0, 16.0],
-    ['Whopper',                       627, 28.0, 49.0, 35.0],
+    ['Whopper',                       216,  9.7, 16.9, 12.1],
     ['Kebab sandwich (agneau)',       340, 22.0, 28.0, 14.0],
     ['Kebab assiette (viande/frites)',280, 23.0, 12.0, 16.0],
     ['Pizza margherita (part)',       235, 11.0, 30.0,  8.0],
@@ -1838,16 +1838,16 @@
 
     // ─── FAST FOOD CHAINS — variantes connues (batch 87) ───
     ['McChicken (McDo)',              400, 14.0, 39.0, 21.0],
-    ['McRib (McDo)',                  500, 22.0, 44.0, 26.0],
-    ['Big Tasty (McDo)',              860, 39.0, 45.0, 56.0],
+    ['McRib (McDo)',                  239, 10.5, 21.1, 12.4],
+    ['Big Tasty (McDo)',              246, 11.1, 12.9, 16.0],
     ['Croque McDo',                   235, 10.0, 26.0, 11.0],
     ['McFlurry M&M\'s',               325,  6.5, 51.0, 11.0],
     ['McFlurry Oreo',                 280,  6.0, 47.0,  8.0],
     ['McFlurry Daim',                 340,  5.5, 50.0, 13.5],
     ['Sundae chocolat (McDo)',        285,  6.5, 49.0,  7.0],
-    ['BK Bacon King',                 1150,61.0, 49.0, 79.0],
-    ['BK Steakhouse XXL',             870, 38.0, 53.0, 55.0],
-    ['BK Long Chicken',               595, 24.0, 56.0, 30.0],
+    ['BK Bacon King',                 279, 14.8, 11.9, 19.2],
+    ['BK Steakhouse XXL',             249, 10.9, 15.1, 15.7],
+    ['BK Long Chicken',               270, 10.9, 25.5, 13.6],
     ['BK Onion Rings (moyen)',        410,  5.0, 53.0, 20.0],
     ['KFC Wings (boneless, 4pcs)',    285, 18.0, 18.0, 16.0],
     ['KFC Bucket original (1 pc)',    320, 22.0,  8.0, 21.0],
@@ -1855,7 +1855,7 @@
     ['Subway Steak/Cheese (15cm)',    380, 24.0, 47.0, 10.0],
     ['Subway Veggie Delite (15cm)',   230,  9.0, 45.0,  3.0],
     ['Domino\'s Margherita (part)',   240, 10.0, 30.0,  9.0],
-    ['Quick Giant Bacon',             720, 32.0, 49.0, 42.0],
+    ['Quick Giant Bacon',             236, 10.5, 16.1, 13.8],
     ['O\'Tacos viande (M)',           905, 33.0, 95.0, 44.0],
 
     // ─── CHOCOLATS & CONFISERIES — marques (batch 88) ───
