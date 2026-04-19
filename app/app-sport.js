@@ -7045,7 +7045,7 @@ function renderMusculationProgram(p) {
    var _sugBanner = h('div', {style: 'display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 12px;background:var(--greenbg,rgba(26,74,26,.06));border:1px solid rgba(26,74,26,0.25);border-radius:2px'});
    var _sugLeft = h('div', {});
    _sugLeft.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green,#1A4A1A);margin-bottom:2px'}, 'Progression +' + _increment + 'kg (toutes séries réussies)'));
-   _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, window.UNITS ? window.UNITS.displayWeight(_progressiveW) : _progressiveW + '\u00a0kg'));
+   _sugLeft.appendChild(h('div', {style: 'font-family:Georgia,serif;font-size:18px;font-weight:bold;color:var(--green,#1A4A1A);line-height:1'}, ((window.UNITS ? window.UNITS.displayWeight(_progressiveW) : _progressiveW + '\u00a0kg') + (eqType === 'haltere' ? '\u00a0/haltère' : eqType === 'kb' ? '\u00a0/kb' : ''))));
    _sugBanner.appendChild(_sugLeft);
    card.appendChild(_sugBanner);
   } else if (suggested && suggested > 0) {
@@ -7121,6 +7121,18 @@ function renderMusculationProgram(p) {
  var numSets = setsMatch ? parseInt(setsMatch[1]) : 3;
  var minReps = setsMatch ? parseInt(setsMatch[2]) : 10;
  var maxReps = setsMatch && setsMatch[3] ? parseInt(setsMatch[3]) : minReps;
+ // 2026-04 FIX UX : détecter le type d'équipement pour clarifier le label de poids
+ // (halt: poids PAR haltère, kb: idem, machine/poulie: poids résistance machine, barre: total)
+ var _eqLow = (exRef.eq || '').toLowerCase();
+ var _exNameLow = (exRef.n || '').toLowerCase();
+ var _isHaltere = /halt[eè]re|dumbbell|\bdb\b/.test(_eqLow) || /halt[eè]re|dumbbell/.test(_exNameLow);
+ var _isKb = /kettlebell|kettle|\bkb\b/.test(_eqLow) || /kettle/.test(_exNameLow);
+ var _isMachine = /machine|poulie|cable|c[aâ]ble|smith|guidé|presse/.test(_eqLow);
+ // 2026-04 FIX UX : détection unilatéral (squat 1 jambe, presse 1 main, fente bulgare…)
+ // Convention : poids saisi = par CÔTÉ (jambe/bras travaillant), pas total
+ var _isUnilateral = /unilat[eé]ral|1\s*jambe|une\s*jambe|1\s*main|une\s*main|1\s*bras|single.?leg|single.?arm|bulgare|pistol|shrimp|fente arri[eè]re alternee/.test(_exNameLow);
+ var _weightUnit = _isHaltere ? ' kg /haltère' : (_isKb ? ' kg /kettlebell' : (_isUnilateral ? ' kg /côté' : ' kg'));
+ var _weightHint = _isHaltere ? ' (par haltère, prendre 2 identiques)' : (_isKb ? ' (par kettlebell)' : (_isUnilateral ? ' (par côté travaillant)' : ''));
 
  var exPhase = (typeof getMuscuPhase === 'function') ? getMuscuPhase(S.muscuWeek || 1) : null;
  var sugWeight = getSuggestedWeight(exRef.n, minReps, exPhase) || 0;
@@ -7183,6 +7195,22 @@ function renderMusculationProgram(p) {
   _rirTargetDisplay.appendChild(h('span', {}, ' cible cette semaine : ' + _rirTarget + ' — ' + _rirLabel + ' (' + (exPhase.label || '') + ')'));
   card.appendChild(_rirTargetDisplay);
  }
+ // 2026-04 FIX UX : bandeau d'avertissement convention poids (anti-ambiguïté)
+ if (_isHaltere || _isKb || _isUnilateral || _isMachine) {
+   var _convNotice = h('div', {
+     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#1A3C5E;margin-bottom:6px;padding:6px 10px;background:rgba(26,60,94,0.06);border-left:2px solid #1A3C5E;border-radius:2px;line-height:1.5;'
+   });
+   if (_isHaltere) {
+     _convNotice.textContent = 'Convention : poids saisi = par haltère (prendre 2 haltères identiques). Ex : 20 kg = 2 × 20 kg.';
+   } else if (_isKb) {
+     _convNotice.textContent = 'Convention : poids saisi = pour 1 kettlebell.';
+   } else if (_isUnilateral) {
+     _convNotice.textContent = 'Convention : poids saisi = par côté travaillant (jambe ou bras).';
+   } else if (_isMachine) {
+     _convNotice.textContent = 'Convention : poids saisi = pile de la machine. Effort ressenti ≈ 70 % de l\'équivalent en charges libres.';
+   }
+   card.appendChild(_convNotice);
+ }
 
  // Header with set progress counter
  var _doneCount = setData.filter(function(s){ return s.validated === true; }).length;
@@ -7206,8 +7234,13 @@ function renderMusculationProgram(p) {
 
  var conseilleEl = h('div', {style: 'font-size:13px;color:var(--grey)'});
  var _dispW = (window.UNITS && window.UNITS.displayWeight) ? window.UNITS.displayWeight(setRow.targetWeight) : (setRow.targetWeight + ' kg');
+ // 2026-04 FIX UX HALTÈRE/KB/UNILATÉRAL : suffixe explicite (jamais d'ambiguïté)
+ var _wDisplay = _dispW;
+ if (setRow.targetWeight > 0 && (_isHaltere || _isKb || _isUnilateral)) {
+   _wDisplay = _dispW.replace(/\s*kg\s*$/, '') + (_isHaltere ? ' kg/halt.' : _isKb ? ' kg/kb' : ' kg/côté');
+ }
  var conseilleStr = (setRow.targetWeight > 0 && !isBodyweight)
- ? (_dispW + ' \u00d7 ' + setRow.targetReps)
+ ? (_wDisplay + ' \u00d7 ' + setRow.targetReps)
  : (setRow.targetReps + ' reps');
  conseilleEl.appendChild(h('span', {}, conseilleStr));
  // FIX BIBLE MUSCU §7 audit Marc "1260%1RM" : garde-fou défensif.
