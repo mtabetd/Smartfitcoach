@@ -2090,7 +2090,7 @@ function renderChargesQuestionnaire(p) {
      var nameD = h('div', { style: 'flex:1;font-family:Georgia,serif;font-size:12px;color:var(--black,#0A0A09);' }, kd.name);
      row.appendChild(nameD);
      // ratio bar
-     var barWrap = h('div', { style: 'flex:1;height:4px;background:var(--border,#D8D8D0);border-radius:2px;overflow:hidden;' });
+     var barWrap = h('div', { style: 'flex:1;height:3px;background:var(--border,#D8D8D0);border-radius:2px;overflow:hidden;' });
      var barPct = Math.min(100, Math.round((info.ratio / (_sex === 'm' ? 2.5 : 1.8)) * 100));
      var barFill = h('div', { style: 'height:100%;width:' + barPct + '%;background:' + info.color + ';transition:width .4s;' });
      barWrap.appendChild(barFill);
@@ -2132,12 +2132,12 @@ function renderChargesQuestionnaire(p) {
    var unlockWrap = h('div', { style: 'margin-bottom:16px;border:1px solid var(--border);background:var(--ivory2);' });
    unlockWrap.appendChild(h('div', { style: 'padding:10px 14px;border-bottom:1px solid var(--border);font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);font-weight:700;' }, 'Exercices avancés'));
    _advExercises.forEach(function(ex) {
-     var row = h('div', { style: 'display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);opacity:' + (ex.unlock ? '1' : '0.45') + ';' });
-     var icon = h('div', { style: 'flex-shrink:0;width:20px;height:20px;border-radius:50%;background:' + (ex.unlock ? '#1A4A1A' : 'var(--border)') + ';display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;margin-top:1px;' }, ex.unlock ? '✓' : '○');
+     var row = h('div', { style: 'display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);opacity:' + (ex.unlock ? '1' : '0.4') + ';' });
+     var icon = h('div', { style: 'flex-shrink:0;width:18px;height:18px;border:' + (ex.unlock ? '1px solid #1A4A1A' : '1px solid var(--border)') + ';background:transparent;display:flex;align-items:center;justify-content:center;font-size:10px;color:' + (ex.unlock ? '#1A4A1A' : 'var(--grey)') + ';margin-top:1px;' }, ex.unlock ? '✓' : '○');
      row.appendChild(icon);
      var info = h('div', { style: 'flex:1;' });
-     info.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:12px;color:var(--black,#0A0A09);' }, ex.name));
-     info.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.4;margin-top:2px;' }, ex.unlock ? ex.desc : 'Débloquez à ' + ex.req));
+     info.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);' }, ex.name));
+     info.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);line-height:1.5;margin-top:2px;' }, ex.unlock ? ex.desc : 'Débloquez à ' + ex.req));
      row.appendChild(info);
      unlockWrap.appendChild(row);
    });
@@ -2207,20 +2207,20 @@ function renderDedicatedPrograms(p) {
      else break;
      if (_cStreak > 365) break;
    }
-   var challengeCard = h('div', { style: 'margin-bottom:16px;border:1px solid ' + (_doneToday ? '#1A4A1A' : 'var(--border)') + ';background:' + (_doneToday ? 'rgba(26,74,26,0.04)' : 'var(--ivory2)') + ';padding:14px 16px;' });
+   var challengeCard = h('div', { style: 'margin-bottom:16px;border:1px solid ' + (_doneToday ? '#1A4A1A' : 'var(--border)') + ';background:' + (_doneToday ? 'rgba(26,74,26,0.04)' : 'var(--ivory2)') + ';padding:14px 16px;border-radius:0;' });
    var chRow1 = h('div', { style: 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;' });
    var chLeft = h('div', {});
    chLeft.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:' + (_doneToday ? '#1A4A1A' : 'var(--grey,#6B6B65)') + ';font-weight:700;margin-bottom:3px;' }, 'Défi du jour'));
-   chLeft.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:15px;color:var(--black,#0A0A09);' }, _c.title));
+   chLeft.appendChild(h('div', { style: 'font-family:Georgia,serif;font-size:16px;color:var(--black,#0A0A09);' }, _c.title));
    chRow1.appendChild(chLeft);
    if (_cStreak > 0) {
-     var streakPill = h('div', { style: 'flex-shrink:0;margin-left:10px;padding:3px 8px;background:' + (_doneToday ? '#1A4A1A' : '#C8A84B') + ';color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:2px;white-space:nowrap;' }, _cStreak + ' j');
+     var streakPill = h('div', { style: 'flex-shrink:0;margin-left:10px;padding:3px 8px;background:' + (_doneToday ? '#C8A84B' : (_cStreak > 7 ? '#1A4A1A' : '#C8A84B')) + ';color:#fff;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:2px;white-space:nowrap;' }, _cStreak + ' j');
      chRow1.appendChild(streakPill);
    }
    challengeCard.appendChild(chRow1);
    challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);line-height:1.5;margin-bottom:12px;' }, _c.desc));
    if (_doneToday) {
-     challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:#1A4A1A;font-weight:600;' }, '✓ Défi accompli — à demain !'));
+     challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:#1A4A1A;' }, '✓ Défi accompli — à demain !'));
    } else {
      var doneBtn = h('button', {
        style: 'padding:8px 16px;background:var(--black,#0A0A09);color:#FAF9F6;border:none;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;',
@@ -7280,21 +7280,21 @@ function renderMusculationProgram(p) {
    var _repsPlat = _allReps.every(function(r) { return r === _allReps[0] && r > 0; });
    if (!_isPlat) return;
    var _platSuggestions = [
-     { icon: '⏱', label: 'Tempo 3-1-3', desc: 'Ralentis : 3s descente, 1s pause bas, 3s montée' },
-     { icon: '✋', label: 'Prise variée', desc: 'Change la largeur ou le type de prise (pronation / supination)' },
-     { icon: '⬇', label: 'Excentrique lent', desc: '4-5 secondes sur la phase de descente, même charge' },
-     { icon: '🔻', label: 'Dropset', desc: 'Dernière série : -20 % de charge, continue jusqu\'à l\'échec' },
-     { icon: '⏸', label: 'Pause reps', desc: '2s de pause en position basse avant de remonter' }
+     { icon: '▪', label: 'Tempo 3-1-3', desc: 'Ralentis : 3s descente, 1s pause bas, 3s montée' },
+     { icon: '▸', label: 'Prise variée', desc: 'Change la largeur ou le type de prise (pronation / supination)' },
+     { icon: '↓', label: 'Excentrique lent', desc: '4-5 secondes sur la phase de descente, même charge' },
+     { icon: '◂', label: 'Dropset', desc: 'Dernière série : -20 % de charge, continue jusqu\'à l\'échec' },
+     { icon: '‖', label: 'Pause reps', desc: '2s de pause en position basse avant de remonter' }
    ];
    var _tipIdx = (new Date().getDate() + ex.n.length) % _platSuggestions.length;
    var _tip = _platSuggestions[_tipIdx];
-   var platCard = h('div', { style: 'margin-top:8px;padding:10px 12px;background:#FFF8E7;border-left:3px solid #C8A84B;border-radius:0 2px 2px 0;' });
+   var platCard = h('div', { style: 'margin-top:8px;padding:10px 12px;background:#FFF8E7;border-left:3px solid #C8A84B;border-radius:0;box-shadow:none;' });
    var platHeader = h('div', { style: 'display:flex;align-items:center;gap:6px;margin-bottom:4px;' });
-   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6A4A1A;font-weight:600;' }, 'Plateau détecté'));
+   platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#6A4A1A;font-weight:700;' }, 'Plateau détecté'));
    platHeader.appendChild(h('span', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;color:#6A4A1A;' }, '— ' + _allWeights[0] + ' kg × 3 séances'));
    platCard.appendChild(platHeader);
    var platTip = h('div', { style: 'display:flex;align-items:flex-start;gap:8px;' });
-   platTip.appendChild(h('span', { style: 'font-size:14px;line-height:1.4;flex-shrink:0;' }, _tip.icon));
+   platTip.appendChild(h('span', { style: 'font-size:11px;line-height:1.4;flex-shrink:0;color:#6A4A1A;' }, _tip.icon));
    var platText = h('div', {});
    platText.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;color:#0A0A09;' }, _tip.label));
    platText.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:#6B6B65;line-height:1.45;margin-top:1px;' }, _tip.desc));
@@ -8554,12 +8554,12 @@ function renderMusculationProgram(p) {
    var _total = _cStr.totalSessions;
    var _ms = _cStr.milestone;
    var streakBanner = document.createElement('div');
-   streakBanner.style.cssText = 'margin-top:12px;padding:12px 14px;border:1px solid ' + (_ms ? '#C8A84B' : 'var(--border,#D8D8D0)') + ';background:' + (_ms ? '#FFF8E7' : 'var(--ivory,#FAF9F6)') + ';';
+   streakBanner.style.cssText = 'margin-top:12px;padding:10px 0;border-top:1px solid var(--border,#D8D8D0);border-bottom:1px solid var(--border,#D8D8D0);background:transparent;';
    var streakRow = document.createElement('div');
    streakRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;';
    var streakLeft = document.createElement('div');
    var streakLabel = document.createElement('div');
-   streakLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:2px;';
+   streakLabel.style.cssText = 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--grey,#6B6B65);margin-bottom:2px;';
    streakLabel.textContent = 'Régularité';
    streakLeft.appendChild(streakLabel);
    var streakVal = document.createElement('div');
@@ -8577,7 +8577,7 @@ function renderMusculationProgram(p) {
    streakBanner.appendChild(streakRow);
    if (_ms) {
      var msDiv = document.createElement('div');
-     msDiv.style.cssText = 'margin-top:8px;padding:8px 10px;background:#FFF8E7;border-top:1px solid #C8A84B;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:600;color:#6A4A1A;';
+     msDiv.style.cssText = 'margin-top:6px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;font-weight:400;color:#C8A84B;';
      msDiv.textContent = _ms.msg;
      streakBanner.appendChild(msDiv);
    }
@@ -8614,7 +8614,7 @@ function renderMusculationProgram(p) {
 
    var cardShareWrap = h('div', { style: 'margin-top:16px;' });
    var cardShareToggle = h('button', {
-     style: 'width:100%;padding:10px 14px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:left;',
+     style: 'width:100%;padding:8px 12px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:left;',
      onclick: function() {
        var existing = document.getElementById('sfc-share-card');
        if (existing) { existing.style.display = existing.style.display === 'none' ? 'block' : 'none'; }
@@ -8628,7 +8628,7 @@ function renderMusculationProgram(p) {
 
    var card = document.createElement('div');
    card.id = 'sfc-share-card-inner';
-   card.style.cssText = 'background:#0A0A09;color:#FAF9F6;padding:24px 20px;font-family:"Helvetica Neue",Arial,sans-serif;position:relative;overflow:hidden;';
+   card.style.cssText = 'background:#0A0A09;color:#FAF9F6;padding:24px 20px;font-family:"Helvetica Neue",Arial,sans-serif;position:relative;overflow:hidden;border-radius:0;';
 
    var cHeader = document.createElement('div');
    cHeader.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;';
@@ -8657,7 +8657,7 @@ function renderMusculationProgram(p) {
    cStats.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;';
    function _cStatBox(label, val) {
      var b = document.createElement('div');
-     b.style.cssText = 'text-align:center;border:1px solid rgba(250,249,246,0.15);padding:10px 6px;';
+     b.style.cssText = 'text-align:center;border:1px solid rgba(250,249,246,0.12);padding:10px 6px;';
      var v = document.createElement('div');
      v.style.cssText = 'font-family:Georgia,serif;font-size:18px;font-weight:bold;';
      v.textContent = val;
@@ -8677,7 +8677,7 @@ function renderMusculationProgram(p) {
      var cPr = document.createElement('div');
      cPr.style.cssText = 'border-top:1px solid rgba(250,249,246,0.15);padding-top:12px;margin-bottom:16px;';
      var cPrLbl = document.createElement('div');
-     cPrLbl.style.cssText = 'font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(200,168,75,0.9);margin-bottom:8px;';
+     cPrLbl.style.cssText = 'font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(200,168,75,0.85);margin-bottom:8px;';
      cPrLbl.textContent = 'Records battus';
      cPr.appendChild(cPrLbl);
      _cPrList.slice(0, 3).forEach(function(pr) {
@@ -8691,7 +8691,7 @@ function renderMusculationProgram(p) {
    }
 
    var cFooter = document.createElement('div');
-   cFooter.style.cssText = 'font-size:8px;letter-spacing:1px;color:rgba(250,249,246,0.3);text-align:center;border-top:1px solid rgba(250,249,246,0.1);padding-top:10px;';
+   cFooter.style.cssText = 'font-size:8px;letter-spacing:2px;color:rgba(250,249,246,0.3);text-align:center;border-top:1px solid rgba(250,249,246,0.1);padding-top:10px;';
    cFooter.textContent = 'smartfitcoach.app';
    card.appendChild(cFooter);
 
