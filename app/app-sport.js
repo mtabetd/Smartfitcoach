@@ -7940,8 +7940,9 @@ function renderMusculationProgram(p) {
       });
      });
     }
-    if (todayMax > histMax && histMax > 0) {
-     _prList.push({name: exName, weight: todayMax, prev: histMax});
+    if (todayMax > 0 && (todayMax > histMax || histMax === 0)) {
+     // histMax === 0 → premier record jamais enregistré → toujours afficher
+     _prList.push({name: exName, weight: todayMax, prev: histMax > 0 ? histMax : null});
     }
    });
   } catch(_ePr) { console.warn('[PR detection]', _ePr); }
@@ -7998,8 +7999,10 @@ function renderMusculationProgram(p) {
     var _prLine = document.createElement('div');
     _prLine.style.cssText = 'font-family:Georgia,serif;font-size:12px;color:#0A0A09;line-height:1.5;';
     var _prW = window.UNITS ? window.UNITS.displayWeight(pr.weight) : (pr.weight + '\u00a0kg');
-    var _prPrev = window.UNITS ? window.UNITS.displayWeight(pr.prev) : (pr.prev + '\u00a0kg');
-    _prLine.textContent = pr.name + ' \u2014 ' + _prW + ' (ancien : ' + _prPrev + ')';
+    var _prMsg = pr.prev === null
+      ? (pr.name + ' \u2014 ' + _prW + ' \u2605 1er record !')
+      : (pr.name + ' \u2014 ' + _prW + ' (ancien\u00a0: ' + (window.UNITS ? window.UNITS.displayWeight(pr.prev) : (pr.prev + '\u00a0kg')) + ')');
+    _prLine.textContent = _prMsg;
     _prBanner.appendChild(_prLine);
    });
    if (_prList.length > 3) {
