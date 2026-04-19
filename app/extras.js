@@ -1541,6 +1541,8 @@ window.FOOD_JOURNAL = {
     localStorage.setItem(key, JSON.stringify(journal));
     // Mise à jour du streak sur action réelle (pas seulement à la connexion)
     if (window.GAMIFICATION) { try { window.GAMIFICATION.updateStreak(); } catch(e) {} }
+    // Streak nutrition + compteur repas (gamification)
+    if (window.GAMIFICATION && window.GAMIFICATION.incrementMealsLogged) { try { window.GAMIFICATION.incrementMealsLogged(); } catch(e) {} }
     // Sync vers Supabase
     if (window.SupaSync) SupaSync.saveFoodEntry({
       date: today,

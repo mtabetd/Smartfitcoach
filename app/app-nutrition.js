@@ -3802,6 +3802,13 @@ function renderModal(app) {
   var ov = h('div', {'class': 'modal-overlay' + (S.modalRecipe ? ' open' : ''), role: 'dialog', 'aria-modal': 'true', onclick: function(e) {
     if (e.target === ov) { S.modalRecipe = null; window.render(); }
   }});
+  if (S.modalRecipe) {
+    ov.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { S.modalRecipe = null; window.render(); }
+    });
+    setTimeout(function() { if (ov) ov.focus(); }, 0);
+    ov.setAttribute('tabindex', '-1');
+  }
   var sheet = h('div', {'class': 'modal-sheet'});
   if (S.modalRecipe) {
     var r = S.modalRecipe;

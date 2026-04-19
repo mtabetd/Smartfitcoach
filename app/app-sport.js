@@ -8439,6 +8439,11 @@ function renderWeightChartSport(container) {
 // ─── SPORT MODAL (exercise detail) ───
 function renderSportModal(app) {
  var ov = h('div', {'class': 'modal-overlay' + (S.sportModalExercise ? ' open' : ''), role: 'dialog', 'aria-modal': 'true', onclick: function(e){ if (e.target === ov) { S.sportModalExercise = null; window.render(); } }});
+ if (S.sportModalExercise) {
+   ov.setAttribute('tabindex', '-1');
+   ov.addEventListener('keydown', function(e) { if (e.key === 'Escape') { S.sportModalExercise = null; window.render(); } });
+   setTimeout(function() { if (ov) ov.focus(); }, 0);
+ }
  var sheet = h('div', {'class': 'modal-sheet'});
 
  if (S.sportModalExercise) {

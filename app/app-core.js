@@ -146,8 +146,8 @@ window.createChart = function(canvas, config) {
   var chart = new Chart(canvas.getContext('2d'), config);
   window._chartInstances.push(chart);
   // 2026-04 P0 FIX : cap absolu pour prévenir memory leak (filet de sécurité)
-  // Si la détection d'orphans échoue (edge case DOM ghosts), on force FIFO après 500 instances.
-  var _CHART_CAP = 500;
+  // Si la détection d'orphans échoue (edge case DOM ghosts), on force FIFO après 50 instances.
+  var _CHART_CAP = 50;
   while (window._chartInstances.length > _CHART_CAP) {
     var oldChart = window._chartInstances.shift();
     try { if (oldChart && oldChart.destroy) oldChart.destroy(); } catch(e) {}
@@ -4595,7 +4595,7 @@ function calcMacros(){
       } else if(actFactor>=1.375){
         ppk=isFemale?1.6:1.7;   // Léger coupe : H=1.7, F=1.6 (plancher Helms 2014 : ≥1.6g/kg en déficit)
       } else {
-        ppk=isFemale?1.6:1.6;   // Sédentaire coupe : plancher 1.6g/kg en déficit (Helms 2014, ISSN 2017)
+        ppk=isFemale?1.4:1.6;   // Sédentaire coupe : H=1.6, F=1.4 (EFSA 2012 — cohérent avec shred sédentaire)
       }
     }
   }

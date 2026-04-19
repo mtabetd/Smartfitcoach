@@ -165,6 +165,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Supabase API data must always be network-first — stale data causes desync.
+  if (url.hostname.includes('supabase.co')) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
   // Static assets (JS, CSS, images, fonts): cache-first with maxAge enforcement.
   const ext = url.pathname.split('.').pop().toLowerCase();
   const isStaticAsset = ['js', 'css', 'png', 'ico', 'woff', 'woff2', 'ttf', 'svg', 'webp', 'jpg', 'jpeg'].includes(ext)
@@ -177,8 +183,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Everything else: cache-first for speed.
-  event.respondWith(cacheFirst(request));
+  // Everything else: network-first for data freshness.
+  event.respondWith(networkFirst(request));
 });
 
 // ---------------------------------------------------------------------------
