@@ -246,12 +246,7 @@
     ['Jus de raisin', 67, 0.4, 16.0, 0.1],
     ['Limonade', 32, 0.0, 8.0, 0.0],
     ['Sirop dilué', 40, 0.0, 10.0, 0.0],
-    ['Bière blonde', 43, 0.5, 3.6, 0.0],
     ['Bière sans alcool', 25, 0.4, 5.0, 0.0],
-    ['Vin rouge', 85, 0.1, 2.6, 0.0],
-    ['Vin blanc sec', 82, 0.1, 2.6, 0.0],
-    ['Champagne', 80, 0.2, 1.5, 0.0],
-    ['Cidre brut', 42, 0.0, 2.0, 0.0],
     ['Café expresso (sans sucre)', 2, 0.1, 0.0, 0.0],
     ['Cappuccino (sans sucre)', 35, 2.0, 3.5, 1.6],
     ['Café au lait (sans sucre)', 40, 2.0, 3.2, 1.8],
@@ -1066,11 +1061,11 @@
     ['Champagne brut',                 76,  0.3,  2.4,  0.0],
     ['Vodka (40°)',                   231,  0.0,  0.1,  0.0],
     ['Rhum (40°)',                    231,  0.0,  0.0,  0.0],
-    ['Whisky (40°)',                  250,  0.0,  0.1,  0.0],
-    ['Gin (37°)',                     263,  0.0,  0.1,  0.0],
-    ['Tequila (38°)',                 231,  0.0,  0.0,  0.0],
-    ['Cognac (40°)',                  236,  0.0,  0.0,  0.0],
-    ['Pastis (45°)',                  295,  0.0,  3.0,  0.0],
+    ['Whisky (40°)',                  222,  0.0,  0.1,  0.0],  // fix: 40×0.789×7=221+traces
+    ['Gin (37°)',                     205,  0.0,  0.1,  0.0],  // fix: 37×0.789×7=204+traces
+    ['Tequila (38°)',                 211,  0.0,  0.0,  0.0],  // fix: 38×0.789×7=209+traces
+    ['Cognac (40°)',                  222,  0.0,  0.0,  0.0],  // fix: 40×0.789×7=221+traces
+    ['Pastis (45°)',                  261,  0.0,  3.0,  0.0],  // fix: 45×0.789×7=249+carbs12
     ['Mojito (verre)',                160,  0.1, 18.0,  0.0],
     ['Margarita (verre)',             170,  0.1, 12.0,  0.1],
 
@@ -1956,7 +1951,41 @@
     ['Dymatize Elite Casein',             370, 85.0,  4.0,  3.0],
     ['Vega Sport Premium Protein (vegan)',380, 70.0, 13.0,  6.5],
     ['Sunwarrior Warrior Blend (vegan)',  400, 70.0, 13.0, 10.0],
-    ['Garden of Life Sport Whey (bio)',   388, 80.0,  6.0,  5.5]
+    ['Garden of Life Sport Whey (bio)',   388, 80.0,  6.0,  5.5],
+
+    // ─── YAOURTS MARQUE (batch P3-A — pour 100g) ───
+    ['Activia nature',                    67,  3.6,  7.5,  2.8],
+    ['Activia fruits',                    93,  3.5, 13.5,  2.8],
+    ['Activia 0%',                        44,  4.5,  5.5,  0.1],
+    ['Actimel nature',                    72,  3.6,  8.0,  2.7],
+    ['Actimel fruits',                    96,  3.2, 14.0,  2.6],
+    ['Danette chocolat',                 125,  3.8, 18.0,  3.8],
+    ['Danette vanille',                  110,  3.5, 16.0,  3.2],
+    ['Danette caramel',                  118,  3.5, 17.0,  3.5],
+    ['Oikos nature 0%',                   57, 10.0,  5.0,  0.1],
+    ['Oikos fruits 0%',                   75,  9.5,  9.5,  0.1],
+
+    // ─── BOISSONS VÉGÉTALES (batch P3-B — pour 100ml) ───
+    ['Lait d\'avoine',                    45,  1.0,  7.0,  1.5],
+    ['Lait d\'avoine barista',            58,  1.0,  9.0,  2.0],
+    ['Lait d\'amande non sucré',          17,  0.5,  1.5,  1.1],
+    ['Lait d\'amande sucré',              30,  0.5,  4.5,  1.2],
+    ['Lait de riz',                       47,  0.1, 10.0,  0.9],
+    ['Lait de coco (boisson)',            19,  0.2,  2.4,  0.8],
+    ['Boisson végétale avoine + calcium', 44,  1.0,  6.5,  1.4],
+
+    // ─── PLATS CUISINÉS SURGELÉS génériques (batch P3-C — pour 100g) ───
+    ['Lasagne bolognaise surgelée',       118,  7.5, 12.0,  4.3],
+    ['Hachis parmentier surgelé',         112,  5.5, 11.5,  4.5],
+    ['Gratin dauphinois surgelé',         145,  3.0, 15.0,  8.0],
+    ['Moussaka surgelée',                 115,  5.8, 10.0,  5.2],
+    ['Blanquette de veau surgelée',        98,  8.0,  7.5,  4.0],
+    ['Quiche lorraine surgelée',          240,  8.5, 16.0, 16.0],
+    ['Gratin de coquilles St-Jacques',   115,  9.0,  8.0,  5.0],
+    ['Croque monsieur surgelé',           230, 10.5, 22.0, 10.5],
+    ['Poisson pané surgelé',              200, 12.0, 16.0,  9.5],
+    ['Filet de saumon en papillote',      165, 18.0,  1.0, 10.0],
+
   ];
 
   // Attache à FOOD_CALC._DB si dispo, sinon expose pour merge ultérieur

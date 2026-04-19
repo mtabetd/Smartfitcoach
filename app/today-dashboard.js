@@ -1485,7 +1485,8 @@ var _fjState = {
   qty: 100,
   selectedFood: null,
   showFavs: false,
-  multiSelected: {}        // name → food obj (multi-ajout phase 2)
+  showSavedMeals: false,   // Phase 3 M
+  multiSelected: {}
 };
 
 function _fjGetUid() {
@@ -1516,6 +1517,36 @@ function _fjToggleFav(food) {
   else favs.unshift({ name: food.name, kcal: food.kcal, protein: food.protein, carbs: food.carbs, fat: food.fat });
   if (favs.length > 50) favs.length = 50;
   _fjSaveFavs(favs);
+}
+
+// ─── MES REPAS SAUVEGARDÉS ───
+function _fjGetSavedMeals() {
+  try {
+    var v = JSON.parse(localStorage.getItem('mtd_saved_meals_' + _fjGetUid()) || '[]');
+    return Array.isArray(v) ? v : [];
+  } catch(e) { return []; }
+}
+function _fjSaveMeal(name, entries) {
+  var meals = _fjGetSavedMeals();
+  meals.unshift({ id: Date.now(), name: name, entries: entries });
+  if (meals.length > 20) meals.length = 20;
+  try { localStorage.setItem('mtd_saved_meals_' + _fjGetUid(), JSON.stringify(meals)); } catch(e) {}
+}
+function _fjDeleteSavedMeal(id) {
+  var meals = _fjGetSavedMeals().filter(function(m) { return m.id !== id; });
+  try { localStorage.setItem('mtd_saved_meals_' + _fjGetUid(), JSON.stringify(meals)); } catch(e) {}
+}
+
+// ─── COPIER D'HIER ───
+function _fjYesterdayEntries(mealKey) {
+  try {
+    var key = 'mtd_food_journal_' + _fjGetUid();
+    var journal = JSON.parse(localStorage.getItem(key) || '{}');
+    var d = new Date(); d.setDate(d.getDate() - 1);
+    var yKey = d.toISOString().slice(0, 10);
+    var all = journal[yKey] || [];
+    return all.filter(function(e) { return e && e.meal === mealKey; });
+  } catch(e) { return []; }
 }
 
 // ─── CUSTOM FOODS — Création et injection dans FOOD_CALC._DB ───
@@ -1692,6 +1723,7 @@ function renderFoodJournalCard() {
     btn.addEventListener('click', function() {
       _fjState.meal = m.key;
       _fjState.multiSelected = {};
+      _fjState.showSavedMeals = false;
       _reRenderFJCard();
     });
     tabs.appendChild(btn);
@@ -1811,6 +1843,26 @@ function renderFoodJournalCard() {
   searchRow.appendChild(createFoodBtn);
 
   c.appendChild(searchRow);
+
+  // Phase 3 M : pill "Mes Repas" sous la barre de recherche
+  var pillRow = h('div', { style: 'display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;' });
+  var pillSaved = h('button', {
+    type: 'button',
+    style: 'padding:5px 12px;min-height:32px;border-radius:14px;cursor:pointer;box-sizing:border-box;'
+      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;'
+      + (_fjState.showSavedMeals
+        ? 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:1px solid var(--black,#0A0A09);'
+        : 'background:transparent;color:var(--grey,#6B6B65);border:1px solid var(--line,#D8D8D0);')
+  }, 'Mes repas');
+  pillSaved.addEventListener('click', function() {
+    _fjState.showSavedMeals = !_fjState.showSavedMeals;
+    _fjState.showFavs = false;
+    _fjState.query = '';
+    _fjState.selectedFood = null;
+    _reRenderFJCard();
+  });
+  pillRow.appendChild(pillSaved);
+  c.appendChild(pillRow);
 
   // ─── Résultats de recherche (liste) ───
   var resultsBox = h('div', { id: 'fj-results', style: 'max-height:360px;overflow-y:auto;margin-bottom:12px;' });
@@ -2162,10 +2214,85 @@ function _fjAppendOFFResults() {
   _fjUpdateMultiCTA();
 }
 
+function _fjRenderSavedMeals(box) {
+  var saved = _fjGetSavedMeals();
+  if (saved.length === 0) {
+    box.appendChild(h('div', {
+      style: 'padding:20px;text-align:center;font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);line-height:1.6;'
+    }, 'Aucun repas sauvegardé.\nLoggez un repas puis touchez « Sauvegarder ce repas ».'));
+    return;
+  }
+  box.appendChild(h('div', {
+    style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);padding:4px 4px 8px;'
+  }, 'Mes repas · ' + saved.length + ' sauvegardé' + (saved.length > 1 ? 's' : '')));
+
+  saved.forEach(function(meal) {
+    if (!meal || !meal.entries) return;
+    var totalKcal = meal.entries.reduce(function(s, e) { return s + (Number(e.kcal) || 0); }, 0);
+    var row = h('div', {
+      style: 'display:flex;align-items:center;justify-content:space-between;padding:10px 4px;border-bottom:1px solid var(--line,#D8D8D0);'
+    });
+    var info = h('div', { style: 'flex:1;min-width:0;cursor:pointer;' });
+    info.appendChild(h('div', {
+      style: 'font-family:Georgia,serif;font-size:13px;color:var(--black,#0A0A09);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'
+    }, meal.name));
+    info.appendChild(h('div', {
+      style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey,#6B6B65);margin-top:2px;'
+    }, meal.entries.length + ' aliment' + (meal.entries.length > 1 ? 's' : '') + ' \u00b7 ' + Math.round(totalKcal) + ' kcal'));
+    row.appendChild(info);
+
+    // Bouton re-logger
+    var logBtn = h('button', {
+      type: 'button',
+      'aria-label': 'Re-logger ' + meal.name,
+      style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 10px;'
+        + 'background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;flex-shrink:0;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1px;margin-left:6px;'
+    }, '+');
+    logBtn.addEventListener('click', function() {
+      if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
+      meal.entries.forEach(function(e) {
+        window.FOOD_JOURNAL.addEntry(
+          _fjState.meal, e.name,
+          e.kcal || 0, e.p || 0, e.g || 0, e.l || 0,
+          e.qty || '100g'
+        );
+      });
+      _fjState.showSavedMeals = false;
+      _reRenderFJCard();
+      if (window.showToast) window.showToast('\u00ab ' + meal.name + ' \u00bb ajouté !', 'success', 2000);
+    });
+    row.appendChild(logBtn);
+
+    // Bouton supprimer
+    var delBtn = h('button', {
+      type: 'button',
+      'aria-label': 'Supprimer ' + meal.name,
+      style: 'display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:44px;padding:0;'
+        + 'background:none;border:none;cursor:pointer;color:var(--grey,#6B6B65);flex-shrink:0;margin-left:2px;'
+    });
+    delBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M2 2 L10 10 M10 2 L2 10"/></svg>';
+    delBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (!confirm('Supprimer « ' + meal.name + ' » ?')) return;
+      _fjDeleteSavedMeal(meal.id);
+      _fjRefreshResults();
+    });
+    row.appendChild(delBtn);
+    box.appendChild(row);
+  });
+}
+
 function _fjRefreshResults() {
   var box = document.getElementById('fj-results');
   if (!box) return;
   box.innerHTML = '';
+
+  // Phase 3 M : mode "Mes Repas"
+  if (_fjState.showSavedMeals) {
+    _fjRenderSavedMeals(box);
+    return;
+  }
 
   var list = [];
   var allowOFF = false;
@@ -2625,6 +2752,73 @@ function _fjBuildEntriesList(container) {
     row.appendChild(del);
     container.appendChild(row);
   });
+
+  // ─── Actions contextuelles (bas de liste) ───
+  var actionsRow = h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;' });
+
+  // Phase 3 O : Copier d'hier (si hier a des entrées pour ce repas)
+  var yesterdayItems = _fjYesterdayEntries(_fjState.meal);
+  if (yesterdayItems.length > 0) {
+    var copyBtn = h('button', {
+      type: 'button',
+      style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
+        + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+    }, 'Copier d\'hier (' + yesterdayItems.length + ')');
+    copyBtn.addEventListener('click', function() {
+      if (!window.FOOD_JOURNAL || !window.FOOD_JOURNAL.addEntry) return;
+      yesterdayItems.forEach(function(e) {
+        window.FOOD_JOURNAL.addEntry(
+          _fjState.meal, e.name,
+          e.kcal || 0, e.p || 0, e.g || 0, e.l || 0,
+          e.qty || '100g'
+        );
+      });
+      _reRenderFJCard();
+      if (window.showToast) window.showToast(yesterdayItems.length + ' aliment' + (yesterdayItems.length > 1 ? 's copiés' : ' copié') + ' !', 'success', 2000);
+    });
+    actionsRow.appendChild(copyBtn);
+  }
+
+  // Phase 3 M : Sauvegarder ce repas
+  var saveBtn = h('button', {
+    type: 'button',
+    style: 'padding:6px 14px;min-height:36px;border:1px solid var(--line,#D8D8D0);border-radius:2px;cursor:pointer;background:transparent;'
+      + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey,#6B6B65);'
+  }, 'Sauvegarder ce repas');
+  saveBtn.addEventListener('click', function() {
+    todayModal('Sauvegarder ce repas', function(box, overlay) {
+      var MEAL_LABELS2 = { breakfast: 'Petit-déjeuner', lunch: 'Déjeuner', snack: 'Collation', dinner: 'Dîner' };
+      var defaultName = MEAL_LABELS2[_fjState.meal] || 'Mon repas';
+      box.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:12px;color:var(--grey,#6B6B65);margin-bottom:10px;'
+      }, mealEntries.length + ' aliment' + (mealEntries.length > 1 ? 's' : '') + ' — donnez un nom à ce repas'));
+      var inp = h('input', {
+        type: 'text',
+        placeholder: defaultName,
+        value: defaultName,
+        style: 'width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line,#D8D8D0);border-radius:2px;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;background:#fff;min-height:44px;margin-bottom:12px;'
+      });
+      box.appendChild(inp);
+      var confirmBtn = h('button', {
+        style: 'width:100%;padding:12px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;border-radius:2px;cursor:pointer;'
+          + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;min-height:44px;'
+      }, 'Sauvegarder');
+      confirmBtn.addEventListener('click', function() {
+        var name = (inp.value || '').trim() || defaultName;
+        _fjSaveMeal(name, mealEntries.map(function(e) {
+          return { name: e.name, kcal: e.kcal, p: e.p, g: e.g, l: e.l, qty: e.qty };
+        }));
+        document.body.removeChild(overlay);
+        if (window.showToast) window.showToast('\u00ab ' + name + ' \u00bb sauvegardé !', 'success', 2000);
+      });
+      box.appendChild(confirmBtn);
+      setTimeout(function() { try { inp.select(); } catch(e2) {} }, 80);
+    });
+  });
+  actionsRow.appendChild(saveBtn);
+
+  if (actionsRow.children.length > 0) container.appendChild(actionsRow);
 }
 
 // ─── RENDER CARD 3 — Repas du jour ───
