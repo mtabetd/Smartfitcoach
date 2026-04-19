@@ -525,7 +525,34 @@
     'raisin':                    [{ label: '1 grappe ~150g', g: 150 }, { label: '1 portion 100g', g: 100 }],
     'avocado':                   [{ label: '1/2 avocat', g: 100 }, { label: '1 entier', g: 200 }],
     'pamplemousse':              [{ label: '1/2 pamplemousse', g: 130 }, { label: '1 entier', g: 260 }],
-    'mangue fraiche':            [{ label: '1/2 mangue', g: 175 }, { label: '1 mangue entière', g: 350 }]
+    'mangue fraiche':            [{ label: '1/2 mangue', g: 175 }, { label: '1 mangue entière', g: 350 }],
+
+    // ─── BATCH 2026-04 R2 : portions FR du quotidien (20 basiques) ───
+    'carotte':                   [{ label: '1 carotte moyenne', g: 80 }, { label: '1 carotte grande', g: 120 }, { label: '1 portion râpée', g: 100 }],
+    'ananas':                    [{ label: '1 tranche', g: 80 }, { label: '1/4 fruit', g: 200 }, { label: '1/2 fruit', g: 400 }],
+    'baguette':                  [{ label: '1 tranche', g: 30 }, { label: '1/2 baguette', g: 125 }, { label: '1 baguette', g: 250 }],
+    'croissant':                 [{ label: '1 croissant', g: 60 }, { label: '1 mini', g: 35 }],
+    'pain au chocolat':          [{ label: '1 pain au chocolat', g: 70 }, { label: '1 mini', g: 35 }],
+    'madeleine':                 [{ label: '1 madeleine', g: 25 }, { label: '1 grande', g: 40 }],
+    'steak hache boeuf 5':       [{ label: '1 steak', g: 100 }, { label: '1 steak 125g', g: 125 }],
+    'steak hache boeuf 15':      [{ label: '1 steak', g: 100 }, { label: '1 steak 125g', g: 125 }],
+    'blanc de poulet cru':       [{ label: '1 escalope', g: 130 }, { label: '1 petite', g: 100 }, { label: '1 grande', g: 180 }],
+    'saumon fume':               [{ label: '1 tranche', g: 30 }, { label: '1 portion', g: 60 }, { label: '1 paquet 100g', g: 100 }],
+    'thon rouge':                [{ label: '1 pavé', g: 130 }, { label: '1 grande portion', g: 180 }],
+    'thon germon blanc':         [{ label: '1 pavé', g: 130 }, { label: '1 portion', g: 100 }],
+    'riz blanc cuit':            [{ label: '1 portion', g: 150 }, { label: '1 bol', g: 200 }, { label: '1 petite portion', g: 100 }],
+    'spaghetti cuits al dente':  [{ label: '1 portion', g: 200 }, { label: '1 grosse portion', g: 250 }, { label: '1 petite', g: 150 }],
+    'lentilles corail cuites':   [{ label: '1 portion', g: 180 }, { label: '1 grosse', g: 250 }],
+    'lentilles vertes cuites':   [{ label: '1 portion', g: 180 }, { label: '1 grosse', g: 250 }],
+    'lentilles du puy cuites':   [{ label: '1 portion', g: 180 }, { label: '1 grosse', g: 250 }],
+    'pomme de terre cuite':      [{ label: '1 pomme de terre', g: 150 }, { label: '1 grosse', g: 200 }, { label: '1 portion', g: 200 }],
+    'yaourt nature 0 mg':        [{ label: '1 pot', g: 125 }, { label: '1 pot grand', g: 150 }],
+    'yaourt grec entier':        [{ label: '1 pot', g: 150 }, { label: '1 petit pot', g: 125 }],
+    'fromage blanc 20':          [{ label: '1 portion', g: 100 }, { label: '1 pot', g: 150 }, { label: '1 c.s.', g: 30 }],
+    'beurre demi sel':           [{ label: '1 noix', g: 10 }, { label: '1 c.à.c.', g: 5 }, { label: '1 c.s.', g: 15 }, { label: '1 portionnette', g: 7 }],
+    'jambon cru bayonne':        [{ label: '1 tranche', g: 25 }, { label: '2 tranches', g: 50 }],
+    'jambon de parme':           [{ label: '1 tranche', g: 20 }, { label: '2 tranches', g: 40 }],
+    'jambon de parme prosciutto':[{ label: '1 tranche', g: 20 }, { label: '2 tranches', g: 40 }]
   };
 
   function getPortions(name) {

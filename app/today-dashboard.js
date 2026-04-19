@@ -1599,13 +1599,26 @@ function renderFoodJournalCard() {
     type: 'text',
     placeholder: 'Rechercher un aliment',
     value: _fjState.query,
+    inputmode: 'search',
+    enterkeyhint: 'search',
+    autocomplete: 'off',
+    autocorrect: 'off',
+    autocapitalize: 'off',
+    spellcheck: 'false',
+    'aria-label': 'Rechercher un aliment',
     style: 'flex:1;padding:12px 14px;min-height:44px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
       + 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;color:var(--black,#0A0A09);outline:none;box-sizing:border-box;'
   });
+  // 2026-04 R4-B1 : debounce 180ms pour éviter spam fetch OFF + churn DOM
+  var _fjSearchDebounce = null;
   input.addEventListener('input', function(e) {
     _fjState.query = e.target.value;
     _fjState.showFavs = false;
-    _fjRefreshResults();
+    if (_fjSearchDebounce) clearTimeout(_fjSearchDebounce);
+    _fjSearchDebounce = setTimeout(function() {
+      _fjSearchDebounce = null;
+      _fjRefreshResults();
+    }, 180);
   });
   searchRow.appendChild(input);
 
@@ -1643,6 +1656,31 @@ function renderFoodJournalCard() {
     });
     searchRow.appendChild(plateScanBtn);
   }
+
+  // 2026-04 R5 : bouton scanner code-barres (était orphelin dans scanner.js)
+  if (window.SCANNER && typeof window.SCANNER.renderWidget === 'function') {
+    var barcodeBtn = h('button', {
+      type: 'button',
+      'aria-label': 'Scanner un code-barres',
+      title: 'Scanner un code-barres',
+      style: 'display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;'
+        + 'background:transparent;border:1px solid var(--black,#0A0A09);border-radius:2px;cursor:pointer;box-sizing:border-box;flex-shrink:0;'
+    });
+    // SVG code-barres 16x16 trait 1.4
+    barcodeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 3 L3 13 M5 3 L5 13 M7.5 3 L7.5 13 M10 3 L10 13 M13 3 L13 13"/></svg>';
+    barcodeBtn.addEventListener('click', function() {
+      try {
+        todayModal('Scanner un code-barres', function(box) {
+          var scanContainer = h('div', { style: 'margin-top:8px;' });
+          try { window.SCANNER.renderWidget(scanContainer); }
+          catch(e) { scanContainer.appendChild(h('p', { style: 'font-size:13px;color:var(--grey);' }, 'Scanner indisponible sur ce navigateur.')); }
+          box.appendChild(scanContainer);
+        });
+      } catch(e) { console.warn('[journal] barcode scan open failed:', e); }
+    });
+    searchRow.appendChild(barcodeBtn);
+  }
+
   c.appendChild(searchRow);
 
   // ─── Résultats de recherche (liste) ───
@@ -1666,8 +1704,15 @@ function renderFoodJournalCard() {
 
 // ─── Helpers de rendu dynamique ───
 function _reRenderFJCard() {
-  // Re-render full dashboard to avoid DOM desync
+  // 2026-04 R4-M5 : préserver le scroll Y avant re-render (sinon l'user retourne en haut après chaque ajout)
+  var _sy = (typeof window !== 'undefined' && typeof window.scrollY === 'number') ? window.scrollY : 0;
   if (window.render) window.render();
+  if (_sy > 0 && typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+    // requestAnimationFrame pour laisser le DOM se stabiliser avant scroll restore
+    var _restore = function() { try { window.scrollTo(0, _sy); } catch(e) {} };
+    if (typeof window.requestAnimationFrame === 'function') window.requestAnimationFrame(_restore);
+    else setTimeout(_restore, 0);
+  }
 }
 
 // OpenFoodFacts state (module-level)
@@ -1759,9 +1804,11 @@ function _fjFetchOFF(query) {
   _fjOFF.ctrl = ctrl;  // 2026-04 N2 : expose pour bouton Annuler manuel
 
   try {
+    // 2026-04 R5 : lc=fr + cc=fr pour prioriser noms français + produits FR
     window.fetch(
       'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(query) +
-      '&search_simple=1&action=process&json=1&page_size=12&fields=product_name,brands,nutriments',
+      '&search_simple=1&action=process&json=1&page_size=14&lc=fr&cc=fr' +
+      '&fields=product_name,brands,nutriments',
       { signal: ctrl ? ctrl.signal : undefined }
     ).then(function(r) {
       if (timer) clearTimeout(timer);
@@ -1854,12 +1901,21 @@ function _fjAppendOFFResults() {
     loadRow.appendChild(cancelBtn);
     sec.appendChild(loadRow);
   } else if (Array.isArray(_fjOFF.results)) {
-    if (_fjOFF.results.length === 0) {
+    // 2026-04 R5 : déduplication vs résultats locaux par nom normalisé
+    var _normFn = (window.FOOD_PORTIONS && window.FOOD_PORTIONS._normalize) ? window.FOOD_PORTIONS._normalize : function(s){return String(s||'').toLowerCase();};
+    var localSet = _fjOFF.localNames || {};
+    var filtered = _fjOFF.results.filter(function(f) {
+      if (!f || !f.name) return false;
+      var n = _normFn(f.name);
+      if (!n) return true; // garde l'entrée si la normalisation échoue (défense)
+      return !localSet[n];
+    });
+    if (filtered.length === 0) {
       sec.appendChild(h('div', {
         style: 'padding:8px 4px;font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);'
-      }, 'Aucun produit correspondant en ligne.'));
+      }, _fjOFF.results.length > 0 ? 'D\u00e9j\u00e0 dans la base SmartFitCoach.' : 'Aucun produit correspondant en ligne.'));
     } else {
-      _fjOFF.results.forEach(function(food) {
+      filtered.forEach(function(food) {
         sec.appendChild(_fjRenderFoodRow(food, 'off'));
       });
     }
@@ -1886,7 +1942,15 @@ function _fjRefreshResults() {
   } else if (_fjState.query && _fjState.query.length >= 2) {
     list = (window.FOOD_CALC && window.FOOD_CALC.search) ? window.FOOD_CALC.search(_fjState.query) : [];
     if (list.length > 40) list = list.slice(0, 40);
-    allowOFF = true;
+    // 2026-04 R5 : OFF seulement >= 3 chars (évite spam fetch sur saisie courte)
+    allowOFF = (_fjState.query.length >= 3);
+    // 2026-04 R5 : mémoriser noms locaux normalisés pour déduplication OFF
+    _fjOFF.localNames = {};
+    var _normFn = (window.FOOD_PORTIONS && window.FOOD_PORTIONS._normalize) ? window.FOOD_PORTIONS._normalize : function(s){return String(s||'').toLowerCase();};
+    for (var li = 0; li < list.length; li++) {
+      var ln = _normFn(list[li].name || '');
+      if (ln) _fjOFF.localNames[ln] = 1;
+    }
   } else {
     // 2026-04 SIMPL-A : au lieu d'un écran vide "saisissez…", afficher les aliments
     // récemment loggés comme quick-add (Sarah : "pas de raccourci pour les aliments courants")
@@ -2062,28 +2126,34 @@ function _fjShowSelection() {
       type: 'button', 'aria-label': 'Diminuer',
       style: 'width:44px;height:40px;border:1px solid var(--line,#D8D8D0);background:transparent;cursor:pointer;border-radius:2px;font-size:18px;line-height:1;color:var(--black,#0A0A09);font-family:Georgia,serif;'
     }, '\u2212');
+    // 2026-04 R4-M2 : type=text + inputmode=decimal pour accepter virgule FR ("2,5")
+    var countInput = h('input', {
+      type: 'text', inputmode: 'decimal',
+      pattern: '[0-9]*[.,]?[0-9]*',
+      autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false',
+      'aria-label': 'Nombre de portions',
+      value: String(portionCount),
+      style: 'width:64px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
+        + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
+    });
+    // 2026-04 R4-B2 : update countInput.value au lieu de re-render → focus stepper préservé
     minusBtn.addEventListener('click', function() {
       var v = (_fjState.portionCount || 1) - 0.5;
       if (v < 0.5) v = 0.5;
       _fjState.portionCount = v;
-      _fjShowSelection();
+      countInput.value = String(v);
+      _fjUpdateMacrosLive();
     });
     countRow.appendChild(minusBtn);
-    var countInput = h('input', {
-      type: 'number', min: '0.5', max: '20', step: '0.5', value: String(portionCount),
-      inputmode: 'decimal',
-      style: 'width:64px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
-        + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
-    });
     countInput.addEventListener('input', function(e) {
-      var v = parseFloat(e.target.value);
+      var raw = String(e.target.value || '').replace(',', '.');
+      var v = parseFloat(raw);
       if (isNaN(v) || v < 0.5) v = 0.5;
       if (v > 20) {
         v = 20;
         if (window.showToast) window.showToast('Maximum 20 portions. Pour plus, passez en mode grammes.', 'warning', 3000);
       }
       _fjState.portionCount = v;
-      // 2026-04 FIX FOCUS : update macros live SANS re-render (garde focus + clavier)
       _fjUpdateMacrosLive();
     });
     countRow.appendChild(countInput);
@@ -2095,7 +2165,8 @@ function _fjShowSelection() {
       var v = (_fjState.portionCount || 1) + 0.5;
       if (v > 20) v = 20;
       _fjState.portionCount = v;
-      _fjShowSelection();
+      countInput.value = String(v);
+      _fjUpdateMacrosLive();
     });
     countRow.appendChild(plusBtn);
     // 2026-04 FIX FOCUS : id pour update live (sans rebuild input qui kill le focus mobile)
@@ -2125,25 +2196,30 @@ function _fjShowSelection() {
     var minusG = h('button', { type: 'button', 'aria-label': '-10g',
       style: 'width:44px;height:40px;border:1px solid var(--line,#D8D8D0);background:transparent;cursor:pointer;border-radius:2px;font-size:18px;line-height:1;color:var(--black,#0A0A09);font-family:Georgia,serif;'
     }, '\u2212');
-    minusG.addEventListener('click', function() {
-      var v = (_fjState.qty || 100) - 10;
-      if (v < 1) v = 1;
-      _fjState.qty = v; _fjState.unitMode = 'grams'; _fjShowSelection();
-    });
     qtyRow.appendChild(minusG);
     var qtyInput = h('input', {
-      type: 'number', min: '1', max: '2000', step: '5', value: String(qty),
-      inputmode: 'numeric',
+      type: 'text', inputmode: 'numeric',
+      pattern: '[0-9]*',
+      autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false',
+      'aria-label': 'Quantit\u00e9 en grammes',
+      value: String(qty),
       style: 'width:80px;padding:8px 6px;min-height:40px;border:1px solid var(--line,#D8D8D0);border-radius:2px;background:#fff;'
         + 'font-family:Georgia,serif;font-size:16px;text-align:center;outline:none;font-weight:500;'
     });
+    minusG.addEventListener('click', function() {
+      var v = (_fjState.qty || 100) - 10;
+      if (v < 1) v = 1;
+      _fjState.qty = v; _fjState.unitMode = 'grams';
+      qtyInput.value = String(v);
+      _fjUpdateMacrosLive();
+    });
     qtyInput.addEventListener('input', function(e) {
-      var v = parseInt(e.target.value, 10);
+      var raw = String(e.target.value || '').replace(',', '.');
+      var v = parseInt(raw, 10);
       if (isNaN(v) || v < 1) v = 1;
       if (v > 2000) v = 2000;
       _fjState.qty = v;
       _fjState.unitMode = 'grams';
-      // 2026-04 FIX FOCUS : update macros live sans re-render (clavier mobile reste ouvert)
       _fjUpdateMacrosLive();
     });
     qtyRow.appendChild(qtyInput);
@@ -2153,7 +2229,9 @@ function _fjShowSelection() {
     plusG.addEventListener('click', function() {
       var v = (_fjState.qty || 100) + 10;
       if (v > 2000) v = 2000;
-      _fjState.qty = v; _fjState.unitMode = 'grams'; _fjShowSelection();
+      _fjState.qty = v; _fjState.unitMode = 'grams';
+      qtyInput.value = String(v);
+      _fjUpdateMacrosLive();
     });
     qtyRow.appendChild(plusG);
     qtyRow.appendChild(h('span', {
@@ -2211,23 +2289,33 @@ function _fjShowSelection() {
   }, 'Ajouter \u00e0 ' + (MEAL_FULL[_fjState.meal] || 'ce repas'));
   addBtn.addEventListener('click', function() {
     if (window.FOOD_JOURNAL && window.FOOD_JOURNAL.addEntry) {
+      // 2026-04 R4-B2 : recompute LIVE au click (closure stale après refacto +/- sans rebuild)
+      var qtyNow = _fjState.qty;
+      if (_fjState.unitMode === 'portion' && _fjState.portion) {
+        qtyNow = Math.round(_fjState.portion.g * (_fjState.portionCount || 1));
+      }
+      var facNow = qtyNow / 100;
+      var kcalNow = Math.round(food.kcal * facNow);
+      var pNow = Math.round(food.protein * facNow * 10) / 10;
+      var gNow = Math.round(food.carbs * facNow * 10) / 10;
+      var lNow = Math.round(food.fat * facNow * 10) / 10;
       // 2026-04 : libellé lisible si on est en mode portion (ex "1 burger" au lieu de "215g")
-      var label = qty + 'g';
+      var label = qtyNow + 'g';
       if (_fjState.unitMode === 'portion' && _fjState.portion) {
         var pCount = _fjState.portionCount || 1;
         var pLab = _fjState.portion.label;
-        if (pCount === 1) label = pLab + ' (' + qty + 'g)';
+        if (pCount === 1) label = pLab + ' (' + qtyNow + 'g)';
         else {
           // Pluralisation simple
           var rest = pLab.replace(/^1\s+/, '');
           if (!/s$/i.test(rest.split(' ')[0])) rest = rest.replace(/^(\S+)/, '$1s');
-          label = pCount + ' ' + rest + ' (' + qty + 'g)';
+          label = pCount + ' ' + rest + ' (' + qtyNow + 'g)';
         }
       }
       window.FOOD_JOURNAL.addEntry(
         _fjState.meal,
         food.name,
-        kcal, p, g, l,
+        kcalNow, pNow, gNow, lNow,
         label
       );
       _fjState.selectedFood = null;
