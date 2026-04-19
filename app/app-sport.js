@@ -2223,7 +2223,7 @@ function renderDedicatedPrograms(p) {
      challengeCard.appendChild(h('div', { style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;letter-spacing:1px;color:#1A4A1A;' }, '✓ Défi accompli — à demain !'));
    } else {
      var doneBtn = h('button', {
-       style: 'padding:8px 16px;background:var(--black,#0A0A09);color:#FAF9F6;border:none;cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;',
+       style: 'padding:10px 18px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
        onclick: function() {
          S.dailyChallengeHistory[_today] = true;
          var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
