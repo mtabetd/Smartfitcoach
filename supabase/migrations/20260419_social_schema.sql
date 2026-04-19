@@ -153,14 +153,14 @@ $$;
 CREATE OR REPLACE FUNCTION find_social_profile_by_email(lookup_email TEXT)
 RETURNS TABLE(id UUID, pseudo TEXT, avatar_color TEXT)
 LANGUAGE PLPGSQL SECURITY DEFINER AS $$
-DECLARE found_id UUID;
+DECLARE v_user_uuid UUID;
 BEGIN
-  SELECT au.id INTO found_id FROM auth.users au
+  SELECT au.id INTO v_user_uuid FROM auth.users au
   WHERE lower(au.email) = lower(lookup_email) LIMIT 1;
-  IF found_id IS NULL THEN RETURN; END IF;
+  IF v_user_uuid IS NULL THEN RETURN; END IF;
   RETURN QUERY
     SELECT sp.id, sp.pseudo, sp.avatar_color
-    FROM social_profiles sp WHERE sp.id = found_id;
+    FROM social_profiles sp WHERE sp.id = v_user_uuid;
 END;
 $$;
 
