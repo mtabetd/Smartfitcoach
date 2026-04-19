@@ -423,19 +423,33 @@ function _initAuth() {
         if (_currentSession.phone && !window.S.phone) window.S.phone = _currentSession.phone;
       }
       // RGPD : vérifier côté serveur que l'utilisateur existe toujours (compte supprimé ?).
-      // getUser() hit le serveur et renvoie une erreur si le compte n'existe plus.
+      // SAFETY : on ne purge QUE sur erreurs d'auth explicites (401/403/404 ou
+      // code "user_not_found"). Erreurs réseau (0, 5xx, timeout) → on garde la
+      // session pour ne pas wiper les données d'un user valide pendant un
+      // hiccup Supabase.
       var _verifyUid = _currentSession.id;
       client.auth.getUser().then(function(ures) {
-        if (ures && ures.error) {
-          console.warn('[AUTH] Compte inexistant côté serveur — purge locale:', ures.error.message);
-          try { client.auth.signOut(); } catch(e) {}
-          _currentSession = null;
-          clearLegacySession();
-          _cleanupLocalData(_verifyUid);
-          try { localStorage.removeItem('mtd_profile_anon'); } catch(e) {}
-          try { localStorage.removeItem('mtd_onboarding_done'); } catch(e) {}
-          if (window.render) window.render();
+        if (!ures || !ures.error) return;
+        var err = ures.error;
+        var status = err.status || 0;
+        var code = (err.code || '').toLowerCase();
+        var msg = (err.message || '').toLowerCase();
+        var isUserDeleted = (status === 401 || status === 403 || status === 404)
+          || code.indexOf('user_not_found') !== -1
+          || msg.indexOf('user not found') !== -1
+          || msg.indexOf('user from sub claim') !== -1; // Supabase msg typique
+        if (!isUserDeleted) {
+          console.warn('[AUTH] getUser error transitoire — session conservée:', status, msg);
+          return;
         }
+        console.warn('[AUTH] Compte inexistant côté serveur — purge locale:', status, msg);
+        try { client.auth.signOut(); } catch(e) {}
+        _currentSession = null;
+        clearLegacySession();
+        _cleanupLocalData(_verifyUid);
+        try { localStorage.removeItem('mtd_profile_anon'); } catch(e) {}
+        try { localStorage.removeItem('mtd_onboarding_done'); } catch(e) {}
+        if (window.render) window.render();
       }).catch(function() {}); // réseau down = on garde la session (offline-first)
     }
     _authReadyResolved = true; // FIX V4 : restore terminé (avec ou sans session)
