@@ -172,6 +172,16 @@ function renderProgressBar(p, current, total) {
 
 // ─── INTERSTITIEL: programme existant ───
 function renderNutritionChoice(app) {
+  // Detect cycle phase change — invalidate weekPlan if phase shifted since last generation
+  if (S.sex === 'femme' && S.cycleTracking && window.getCurrentCyclePhase) {
+    var _cpNow = window.getCurrentCyclePhase();
+    var _cpId = _cpNow ? _cpNow.phase.id : null;
+    if (_cpId && S._weekPlanCyclePhase && S._weekPlanCyclePhase !== _cpId) {
+      window.devalidateWeekPlan('cycle phase changed: ' + S._weekPlanCyclePhase + ' → ' + _cpId);
+    }
+    if (_cpId) S._weekPlanCyclePhase = _cpId;
+  }
+
   var prenom = S.prenom || S.nom || '';
   var wrap = h('div', {style: 'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 28px 56px;text-align:center;min-height:65vh'});
 
@@ -466,8 +476,10 @@ function renderStep2(p) {
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_dobValid2, onclick: function() {
     if (!_dobValid2) return;
     bb('nutrition_birthdate', {age: getAge(), birthDate: S.birthDate});
-    // Femmes → étape cycle/grossesse (N4b)
-    if (S.sex === 'femme') {
+    // Femmes → étape cycle/grossesse (N4b), sauf ménopause ou âge ≥ 50
+    var _age2 = getAge();
+    var _isMeno = Array.isArray(S.medical) && S.medical.indexOf('menopause') !== -1;
+    if (S.sex === 'femme' && !(_age2 >= 50 || _isMeno)) {
       window._s2page = 1;
       window.render();
     } else {
@@ -986,8 +998,10 @@ function renderStep3(p) {
   var _step2ok = !!(S.weight && S.height);
   p.appendChild(h('button', {'class': 'btn-primary', disabled: !_step2ok, onclick: function() { if (S.weight && S.height) goStep(4); }}, window.t('onb.next')));
   p.appendChild(h('button', {'class': 'btn-back', 'aria-label': 'Retour', onclick: function() {
-    // Femmes : revenir à N4b (cycle/grossesse), pas à N4a (date de naissance)
-    window._s2page = (S.sex === 'femme') ? 1 : 0;
+    // Femmes : revenir à N4b sauf si ménopause ou âge ≥ 50
+    var _bkAge = getAge();
+    var _bkMeno = Array.isArray(S.medical) && S.medical.indexOf('menopause') !== -1;
+    window._s2page = (S.sex === 'femme' && !(_bkAge >= 50 || _bkMeno)) ? 1 : 0;
     goStep(2);
   }, html: backArrowHtml() + window.t('onb.back')}));
 }
@@ -2483,17 +2497,37 @@ function renderStep8(p) {
         tipsList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
       });
       cycCard.appendChild(tipsList);
-  
+
+      // Sport tips + intensity banner
+      if (cycleInfo.phase.sportTips && cycleInfo.phase.sportTips.length > 0) {
+        var sportTipsList = h('div', {style: 'border-left:2px solid ' + phaseColor + ';padding:8px 12px;margin-bottom:10px'});
+        sportTipsList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + phaseColor + ';margin-bottom:6px'}, 'Conseils sport'));
+        cycleInfo.phase.sportTips.forEach(function(tip) {
+          sportTipsList.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);margin-bottom:3px;padding-left:8px'}, '\u2022 ' + tip));
+        });
+        cycCard.appendChild(sportTipsList);
+      }
+
+      // Intensity factor badge
+      if (cycleInfo.phase.intensityFactor) {
+        var intPct = Math.round(cycleInfo.phase.intensityFactor * 100);
+        var intColor = intPct >= 110 ? '#1A4A1A' : intPct >= 90 ? '#6A4A1A' : '#5A1010';
+        var intBadge = h('div', {style: 'display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(0,0,0,0.04);border-radius:2px;margin-bottom:8px'});
+        intBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey)'},'Intensit\u00e9 recommand\u00e9e cette phase :'));
+        intBadge.appendChild(h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:14px;font-weight:600;color:' + intColor}, intPct + '%'));
+        cycCard.appendChild(intBadge);
+      }
+
       // Calorie adjustment note
       if (cycleInfo.phase.calorieAdjust !== 0) {
         var adjPct = Math.round(cycleInfo.phase.calorieAdjust * 100);
         var baseCal = Math.round(calcTDEE() * ((S.goal !== null && GOALS[S.goal]) ? GOALS[S.goal].mult : 1));
         var adjCal = tgt;
-        var adjNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + phaseColor + ';margin-top:8px;padding:6px 10px;background:rgba(0,0,0,0.03);border-radius:2px'});
+        var adjNote = h('div', {style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:' + phaseColor + ';margin-top:4px;padding:6px 10px;background:rgba(0,0,0,0.03);border-radius:2px'});
         adjNote.textContent = 'Calories adapt\u00e9es : ' + baseCal + ' kcal (base) + ' + adjPct + '% = ' + adjCal + ' kcal';
         cycCard.appendChild(adjNote);
       }
-  
+
       p.appendChild(cycCard);
     }
   }
@@ -2931,6 +2965,11 @@ function renderStep9(p) {
         // et voyait "Valide ton plan" alors qu'il venait de le générer.
         S.weekPlanValidated = true;
         if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
+        // Snapshot cycle phase at generation — used to detect phase drift
+        if (S.sex === 'femme' && S.cycleTracking && window.getCurrentCyclePhase) {
+          var _cpGen = window.getCurrentCyclePhase();
+          if (_cpGen) S._weekPlanCyclePhase = _cpGen.phase.id;
+        }
       }
     } catch(e) { console.error('[renderStep9] generateWeek failed', e); }
   } else if (_planHashNow && !S._planHash) {
@@ -3019,6 +3058,11 @@ function renderStep9(p) {
               S.weekPlanValidated = true;
               if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
               if (_planHashNow) S._planHash = _planHashNow;
+              // Snapshot cycle phase for drift detection
+              if (S.sex === 'femme' && S.cycleTracking && window.getCurrentCyclePhase) {
+                var _cpReg = window.getCurrentCyclePhase();
+                if (_cpReg) S._weekPlanCyclePhase = _cpReg.phase.id;
+              }
               if (window.saveProfile) { try { window.saveProfile(); } catch(eS) {} }
               if (window.render) window.render();
             }

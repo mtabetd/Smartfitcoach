@@ -8393,7 +8393,22 @@ function renderWeightChartSport(container) {
  GAMIFICATION.unlockBadge('first_weigh');
  if (hist.length >= 10) GAMIFICATION.unlockBadge('weight_10');
  }
- if (window.GAMIFICATION) GAMIFICATION.showToast('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg'));
+ // Auto-PR detection: new lowest (cut/shred) or highest (bulk/lean_bulk/recompo) weight in 30 days
+ var _prWeightMsg = null;
+ var _hist30 = hist.filter(function(e){ return e && e.date && e.date >= new Date(Date.now() - 30*86400000).toISOString().slice(0,10); });
+ if (_hist30.length >= 2) {
+   var _pastValues = _hist30.slice(0, -1).map(function(e){ return parseFloat(e.weight); }).filter(function(x){ return !isNaN(x); });
+   if (_pastValues.length > 0) {
+     var _gKey = (S.goal !== null && window.GOALS && window.GOALS[S.goal]) ? window.GOALS[S.goal].key : '';
+     var _isLoss = (_gKey === 'cut' || _gKey === 'shred');
+     var _isGain = (_gKey === 'bulk' || _gKey === 'lean_bulk' || _gKey === 'recomposition');
+     var _pastMin = Math.min.apply(null, _pastValues);
+     var _pastMax = Math.max.apply(null, _pastValues);
+     if (_isLoss && v < _pastMin) _prWeightMsg = 'Nouveau record bas ce mois : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg') + ' \uD83C\uDFC6';
+     else if (_isGain && v > _pastMax) _prWeightMsg = 'Nouveau record haut ce mois : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg') + ' \uD83D\uDCAA';
+   }
+ }
+ if (window.GAMIFICATION) GAMIFICATION.showToast(_prWeightMsg || ('Poids enregistré : ' + (window.UNITS ? window.UNITS.displayWeight(v) : v + ' kg')));
  window.render();
  }
  }}, 'Enregistrer'));
