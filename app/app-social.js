@@ -171,6 +171,7 @@ async function createOrUpdateProfile(fields){
   var payload = { id: id };
   if (fields.pseudo)       payload.pseudo = sanitizeText(fields.pseudo);
   if (fields.avatar_color) payload.avatar_color = fields.avatar_color;
+  if (fields.avatar_url !== undefined)  payload.avatar_url = fields.avatar_url; // null possible = retirer
   if (fields.sport_main !== undefined)  payload.sport_main = fields.sport_main;
   if (fields.sport_level !== undefined) payload.sport_level = fields.sport_level;
   if (fields.bio !== undefined) payload.bio = String(fields.bio || '').slice(0, MAX_BIO_LENGTH);
@@ -225,7 +226,7 @@ async function loadNotifications(limit){
   var list = Object.keys(ids);
   var profs = {};
   if (list.length){
-    var rp = await c.from('social_profiles').select('id,pseudo,avatar_color').in('id', list);
+    var rp = await c.from('social_profiles').select('id,pseudo,avatar_color,avatar_url').in('id', list);
     (rp.data || []).forEach(function(p){ profs[p.id] = p; });
   }
   _notifications = rows.map(function(x){
@@ -261,6 +262,19 @@ function _initials(pseudo){
 
 function _avatar(profile, size){
   size = size || 40;
+  var photoUrl = profile && profile.avatar_url;
+  // Photo si disponible — sinon initiales sur fond couleur
+  if (photoUrl) {
+    var safeUrl = String(photoUrl).replace(/"/g, '%22');
+    return _h('div', {
+      'class': 'sfc-avatar sfc-avatar-photo',
+      'aria-hidden': 'true',
+      style: 'width:'+size+'px;height:'+size+'px;border-radius:50%;'+
+        'background-image:url("'+safeUrl+'");background-size:cover;background-position:center;'+
+        'background-color:#F4F1EA;flex-shrink:0;'+
+        'box-shadow:inset 0 0 0 1px rgba(0,0,0,0.08);'
+    });
+  }
   var color = (profile && profile.avatar_color) || colorForId(profile && profile.id || '');
   var initials = _initials(profile && profile.pseudo);
   return _h('div', {
@@ -273,6 +287,54 @@ function _avatar(profile, size){
       'user-select:none;text-transform:uppercase;'+
       'box-shadow:inset 0 0 0 1px rgba(0,0,0,0.06);'
   }, initials);
+}
+
+// Thumbnail carré JPEG — 128×128 qualité 70% → ~8-15KB data URL
+function _makeThumbnail(dataUrl, size, quality){
+  return new Promise(function(resolve){
+    if (!dataUrl) return resolve(null);
+    try {
+      var img = new Image();
+      img.onload = function(){
+        var s = size || 128;
+        var q = quality != null ? quality : 0.7;
+        var canvas = document.createElement('canvas');
+        canvas.width = s; canvas.height = s;
+        var ctx = canvas.getContext('2d');
+        // cover (recadrage centré)
+        var scale = Math.max(s / img.width, s / img.height);
+        var w = img.width * scale, h = img.height * scale;
+        ctx.fillStyle = '#F4F1EA';
+        ctx.fillRect(0, 0, s, s);
+        ctx.drawImage(img, (s - w)/2, (s - h)/2, w, h);
+        try { resolve(canvas.toDataURL('image/jpeg', q)); }
+        catch(e){ resolve(null); }
+      };
+      img.onerror = function(){ resolve(null); };
+      img.src = dataUrl;
+    } catch(e){ resolve(null); }
+  });
+}
+
+// Sanitise un prénom en pseudo valide (retire accents, chars invalides)
+function _suggestPseudoFromName(name){
+  if (!name) return '';
+  try {
+    return String(name).toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9_-]/g, '')
+      .slice(0, 20);
+  } catch(e){ return ''; }
+}
+
+function _realNameInitials(){
+  var S = window.S;
+  var p = S && S.prenom ? String(S.prenom).trim() : '';
+  var n = S && S.nom ? String(S.nom).trim() : '';
+  if (!p && !n) return '';
+  var i1 = p ? p[0] : '';
+  var i2 = n ? n[0] : (p && p.length > 1 ? p[1] : '');
+  return (i1 + i2).toUpperCase();
 }
 
 function _emptyState(title, subtitle, ctaText, ctaCb){
@@ -327,8 +389,19 @@ function renderProfileSetup(container){
   wrap.appendChild(_h('p', { 'class':'subtitle' },
     'Votre pseudo est public auprès de vos amis uniquement. Aucune recherche publique, aucun annuaire. Vous seul décidez qui vous ajoute.'));
 
+  var S = window.S;
+  // Suggestion pseudo depuis prenom (si pas encore de profil créé)
+  var suggested = _suggestPseudoFromName(S && S.prenom);
+  if (suggested && suggested.length < 3 && S && S.nom) {
+    suggested += _suggestPseudoFromName(S.nom).slice(0, 20 - suggested.length);
+  }
+  // Photo de profil existante (base64 JPEG) → on crée un thumbnail pour l'avatar social
+  var existingPhoto = S && S.profilePhoto ? S.profilePhoto : null;
+  var selectedPhotoUrl = null;    // thumbnail base64 (chargé async)
+  var usePhoto = !!existingPhoto; // auto-activé si photo dispo
+
   // Pseudo
-  var pseudoVal = (_myProfile && _myProfile.pseudo) || '';
+  var pseudoVal = (_myProfile && _myProfile.pseudo) || suggested || '';
   var colorVal = (_myProfile && _myProfile.avatar_color) || AVATAR_COLORS[0];
 
   var pField = _h('div', { 'class':'field', style:'margin-bottom:24px' });
@@ -343,14 +416,65 @@ function renderProfileSetup(container){
   pField.appendChild(hint);
   wrap.appendChild(pField);
 
+  // Photo de profil (si dispo dans S.profilePhoto)
+  if (existingPhoto) {
+    wrap.appendChild(_h('div', { 'class':'section-label' }, 'Photo'));
+    var photoRow = _h('div', {
+      style:'display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--ivory2);border:1px solid var(--border);border-radius:2px;margin-bottom:24px'
+    });
+    var photoThumbHolder = _h('div', { style:'flex-shrink:0' });
+    var _placeholder = _h('div', {
+      style:'width:48px;height:48px;border-radius:50%;background:#F4F1EA;'+
+        'display:flex;align-items:center;justify-content:center;color:var(--grey3);font-size:10px'
+    }, '…');
+    photoThumbHolder.appendChild(_placeholder);
+    photoRow.appendChild(photoThumbHolder);
+
+    var photoLabel = _h('div', { style:'flex:1;min-width:0' });
+    photoLabel.appendChild(_h('div', { style:'font-family:Georgia,serif;font-size:14px;margin-bottom:2px' },
+      'Photo de profil détectée'));
+    photoLabel.appendChild(_h('div', {
+      style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey);line-height:1.5'
+    }, 'Utilisée comme avatar auprès de vos amis.'));
+    photoRow.appendChild(photoLabel);
+
+    var photoToggle = _h('button', {
+      type:'button',
+      style:'background:transparent;border:1px solid var(--border);padding:8px 12px;border-radius:2px;'+
+        'font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;'+
+        'color:var(--grey);cursor:pointer;flex-shrink:0'
+    }, 'Retirer');
+    photoToggle.addEventListener('click', function(){
+      usePhoto = !usePhoto;
+      photoToggle.textContent = usePhoto ? 'Retirer' : 'Utiliser';
+      updatePreview();
+    });
+    photoRow.appendChild(photoToggle);
+    wrap.appendChild(photoRow);
+
+    // Génère le thumbnail au chargement
+    _makeThumbnail(existingPhoto, 128, 0.7).then(function(thumb){
+      selectedPhotoUrl = thumb;
+      photoThumbHolder.innerHTML = '';
+      photoThumbHolder.appendChild(_avatar({ avatar_url: thumb }, 48));
+      updatePreview();
+    });
+  }
+
   // Avatar color
-  wrap.appendChild(_h('div', { 'class':'section-label' }, 'Couleur d\'avatar'));
+  wrap.appendChild(_h('div', { 'class':'section-label' }, 'Couleur d\'avatar' + (existingPhoto ? ' (fallback sans photo)' : '')));
   var palette = _h('div', { style:'display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px' });
   var selectedColor = colorVal;
   var previewAvatarBox = _h('div', { style:'display:flex;justify-content:center;margin:20px 0 8px' });
   var updatePreview = function(){
     previewAvatarBox.innerHTML = '';
-    previewAvatarBox.appendChild(_avatar({ pseudo: pInput.value || '??', avatar_color: selectedColor }, 72));
+    // Si photo sélectionnée → photo. Sinon initiales depuis pseudo (ou nom réel en fallback)
+    var displayPseudo = pInput.value || suggested || _realNameInitials() || '??';
+    previewAvatarBox.appendChild(_avatar({
+      pseudo: displayPseudo,
+      avatar_color: selectedColor,
+      avatar_url: usePhoto ? selectedPhotoUrl : null
+    }, 72));
   };
   AVATAR_COLORS.forEach(function(col){
     var chip = _h('button', {
@@ -427,7 +551,10 @@ function renderProfileSetup(container){
     validating = true;
     errMsg.textContent = '';
     try {
-      await createOrUpdateProfile({ pseudo: pInput.value.trim(), avatar_color: selectedColor });
+      var payload = { pseudo: pInput.value.trim(), avatar_color: selectedColor };
+      // Inclut la photo thumbnail si sélectionnée
+      if (usePhoto && selectedPhotoUrl) payload.avatar_url = selectedPhotoUrl;
+      await createOrUpdateProfile(payload);
       _toast('Pseudo confirmé', 'success');
       // Re-render la vue social (on passe au hub)
       if (window.render) window.render();
@@ -1086,10 +1213,57 @@ function renderEditProfile(container){
     style:'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;color:var(--grey3);margin-bottom:24px'
   }, 'Le pseudo ne peut pas être modifié pour l\'instant.'));
 
+  // Aperçu avatar courant
+  var currentPhotoUrl = _myProfile.avatar_url || null;
+  var previewBox = _h('div', { style:'display:flex;justify-content:center;margin:12px 0 8px' });
+  var refreshEditPreview = function(){
+    previewBox.innerHTML = '';
+    previewBox.appendChild(_avatar({
+      pseudo: _myProfile.pseudo,
+      avatar_color: currentColor,
+      avatar_url: currentPhotoUrl
+    }, 80));
+  };
+
+  // Photo section (si S.profilePhoto existe ou avatar_url déjà défini)
+  var S = window.S;
+  var hasLocalPhoto = !!(S && S.profilePhoto);
+  if (hasLocalPhoto || currentPhotoUrl) {
+    wrap.appendChild(_h('div', { 'class':'section-label' }, 'Photo de profil'));
+    var photoActions = _h('div', { style:'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px' });
+    if (hasLocalPhoto) {
+      var useBtn = _h('button', {
+        type:'button', 'class':'btn-secondary',
+        style:'margin:0;flex:1;min-width:150px'
+      }, currentPhotoUrl ? 'Regénérer depuis mon profil' : 'Utiliser ma photo de profil');
+      useBtn.addEventListener('click', async function(){
+        useBtn.disabled = true;
+        useBtn.textContent = 'Génération…';
+        var thumb = await _makeThumbnail(S.profilePhoto, 128, 0.7);
+        if (thumb) { currentPhotoUrl = thumb; refreshEditPreview(); }
+        useBtn.disabled = false;
+        useBtn.textContent = 'Regénérer depuis mon profil';
+      });
+      photoActions.appendChild(useBtn);
+    }
+    if (currentPhotoUrl) {
+      var removeBtn = _h('button', {
+        type:'button', 'class':'btn-secondary',
+        style:'margin:0;flex:1;min-width:120px'
+      }, 'Retirer la photo');
+      removeBtn.addEventListener('click', function(){
+        currentPhotoUrl = null;
+        refreshEditPreview();
+      });
+      photoActions.appendChild(removeBtn);
+    }
+    wrap.appendChild(photoActions);
+  }
+
   // Couleur
-  wrap.appendChild(_h('div', { 'class':'section-label' }, 'Couleur d\'avatar'));
+  wrap.appendChild(_h('div', { 'class':'section-label' }, 'Couleur d\'avatar (fallback sans photo)'));
   var currentColor = _myProfile.avatar_color || AVATAR_COLORS[0];
-  var palette = _h('div', { style:'display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px' });
+  var palette = _h('div', { style:'display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px' });
   AVATAR_COLORS.forEach(function(col){
     var chip = _h('button', {
       type:'button',
@@ -1103,10 +1277,13 @@ function renderEditProfile(container){
       Array.prototype.forEach.call(palette.children, function(c){
         c.style.borderColor = (c.dataset.col === col) ? '#0A0A09' : 'transparent';
       });
+      refreshEditPreview();
     });
     palette.appendChild(chip);
   });
   wrap.appendChild(palette);
+  wrap.appendChild(previewBox);
+  refreshEditPreview();
 
   // Bio
   wrap.appendChild(_h('div', { 'class':'section-label' }, 'Bio (facultatif)'));
@@ -1128,6 +1305,7 @@ function renderEditProfile(container){
     try {
       await createOrUpdateProfile({
         avatar_color: currentColor,
+        avatar_url: currentPhotoUrl,   // null = retirer la photo
         bio: sanitizeText(bioInput.value)
       });
       _toast('Profil mis à jour', 'success');
@@ -1180,7 +1358,7 @@ async function loadFriendships(){
     // Hydrate profils
     var profByI = {};
     if (otherIds.length){
-      var rp = await c.from('social_profiles').select('id,pseudo,avatar_color,sport_main,sport_level')
+      var rp = await c.from('social_profiles').select('id,pseudo,avatar_color,avatar_url,sport_main,sport_level')
         .in('id', otherIds);
       (rp.data || []).forEach(function(p){ profByI[p.id] = p; });
     }
@@ -1355,7 +1533,7 @@ async function loadFeed(limit){
     var ids = Object.keys(authorIds);
     var profs = {};
     if (ids.length){
-      var rpr = await c.from('social_profiles').select('id,pseudo,avatar_color,sport_main')
+      var rpr = await c.from('social_profiles').select('id,pseudo,avatar_color,avatar_url,sport_main')
         .in('id', ids);
       (rpr.data || []).forEach(function(p){ profs[p.id] = p; });
     }
@@ -1435,7 +1613,7 @@ async function loadComments(postId){
   var list = Object.keys(ids);
   var profs = {};
   if (list.length){
-    var rp = await c.from('social_profiles').select('id,pseudo,avatar_color').in('id', list);
+    var rp = await c.from('social_profiles').select('id,pseudo,avatar_color,avatar_url').in('id', list);
     (rp.data || []).forEach(function(p){ profs[p.id] = p; });
   }
   return rows.map(function(x){
