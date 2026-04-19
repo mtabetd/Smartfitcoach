@@ -8,3 +8,6 @@ test-*.js
 audit-*.js
 audit-*.sh
 !test/**/*.js
+
+# Local Netlify folder
+.netlify

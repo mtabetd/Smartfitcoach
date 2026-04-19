@@ -1147,7 +1147,10 @@ window.SPORT = {
    }, 'Changer de sport');
    hdr.appendChild(_changeLink);
  } else {
-   var stepLabel = S.sStep === 26 ? 'Questionnaire sant\u00e9' : S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? '\u00c9val. des charges' : S.sStep === 15 ? 'Programmes d\u00e9di\u00e9s' : ('\u00c9tape ' + currentDisplay + ' / ' + totalSteps);
+   // Hermès polish : clamp currentDisplay [1, totalSteps] — jamais d'étape négative/dépassée affichée
+   var _clampedStep = Math.max(1, Math.min(totalSteps, currentDisplay));
+   var _stepValid = (currentDisplay >= 1 && currentDisplay <= totalSteps);
+   var stepLabel = S.sStep === 26 ? 'Questionnaire sant\u00e9' : S.sStep === 20 ? '\u00c9val. m\u00e9dicale' : S.sStep === 16 ? '\u00c9val. des charges' : S.sStep === 15 ? 'Programmes d\u00e9di\u00e9s' : (_stepValid ? ('\u00c9tape ' + _clampedStep + ' / ' + totalSteps) : '\u2014');
    hdr.appendChild(h('div', {'class': 'step-indicator'}, stepLabel));
  }
  p.appendChild(hdr);

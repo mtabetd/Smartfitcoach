@@ -204,10 +204,9 @@ async function runTests() {
   log('\n=== TEST 3: CrossFit program (no mix) ===');
   try {
     const { page, context, consoleErrors } = await createPageWithProfile({
-      appMode: 'sport', sStep: 6,
+      step: 12, appMode: 'sport', sStep: 6, _sportProfileDone: true,
       sportType: 'crossfit', sportDays: 4, crossfitLevel: 'rx',
       crossfitWeek: 1, parqDone: true, sportMixEnabled: false,
-      // Required for sport-only mode (avoids renderSportQuickProfile guard)
       sex: 'homme', age: 30, weight: 70, height: 175,
       _view: 'sport'
     });
@@ -255,7 +254,7 @@ async function runTests() {
   log('\n=== TEST 4: CrossFit + Muscu mix ===');
   try {
     const { page, context, consoleErrors } = await createPageWithProfile({
-      appMode: 'sport', sStep: 6,
+      step: 12, appMode: 'sport', sStep: 6, _sportProfileDone: true,
       sportType: 'crossfit', sportDays: 5, crossfitLevel: 'rx',
       crossfitWeek: 1, parqDone: true, sportMixEnabled: true,
       sportMixSecondary: { type: 'musculation', days: 2 },
@@ -333,7 +332,7 @@ async function runTests() {
   log('\n=== TEST 5: Muscu level step — sport mix section visible ===');
   try {
     const { page, context, consoleErrors } = await createPageWithProfile({
-      appMode: 'sport', sStep: 2,
+      step: 12, appMode: 'sport', sStep: 2, _sportProfileDone: true,
       sportType: 'musculation', sportDays: 5,
       sportLevel: 'intermediate', parqDone: true,
       // Required for sport-only mode

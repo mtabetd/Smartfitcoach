@@ -8,8 +8,8 @@
 // Smart Fit Coach — Service Worker
 // Cache version: bump this string to force a full cache refresh on next visit.
 // 2026-04 NIVEAU 1 : versions unifiées pour éviter caches orphelins lors du bump
-const CACHE_VERSION = 'sfc-v102';
-const RUNTIME_CACHE = 'sfc-runtime-v102';
+const CACHE_VERSION = 'sfc-v103';
+const RUNTIME_CACHE = 'sfc-runtime-v103';
 
 // Max age for static assets in the runtime cache: 7 days (in milliseconds).
 const STATIC_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
@@ -77,6 +77,15 @@ const STATIC_ASSETS = [
 
 // Third-party CDN scripts to pre-cache (currently none — chart.js is bundled locally).
 const CDN_ASSETS = [];
+
+// ---------------------------------------------------------------------------
+// Message — écouter SKIP_WAITING du client pour activation immédiate
+// ---------------------------------------------------------------------------
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 
 // ---------------------------------------------------------------------------
 // Install — cache the app shell and CDN dependencies
@@ -172,14 +181,21 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static assets (JS, CSS, images, fonts): cache-first with maxAge enforcement.
+  // JS/CSS: network-first so code fixes (RGPD, bugs) arrive immédiatement.
+  // Cache reste fallback pour offline.
   const ext = url.pathname.split('.').pop().toLowerCase();
-  const isStaticAsset = ['js', 'css', 'png', 'ico', 'woff', 'woff2', 'ttf', 'svg', 'webp', 'jpg', 'jpeg'].includes(ext)
+  if (['js', 'css'].includes(ext)) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
+  // Images/fonts : cache-first avec maxAge (changent rarement).
+  const isBinaryAsset = ['png', 'ico', 'woff', 'woff2', 'ttf', 'svg', 'webp', 'jpg', 'jpeg'].includes(ext)
     || url.hostname.includes('cdn.jsdelivr.net')
     || url.hostname.includes('fonts.googleapis.com')
     || url.hostname.includes('fonts.gstatic.com');
 
-  if (isStaticAsset) {
+  if (isBinaryAsset) {
     event.respondWith(cacheFirstWithMaxAge(request));
     return;
   }

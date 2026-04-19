@@ -29527,17 +29527,22 @@
    */
   function recipeHasNoExcludedIngredients(recipe, excludedTerms) {
     if (!excludedTerms || !excludedTerms.length) return true;
+    // Build combined text from BOTH structured format (ingredients[].name) AND
+    // flat format (recipe.i string) so short-format recipes are properly filtered.
+    var parts = [];
     var ings = recipe.ingredients || [];
-    for (var i = 0; i < ings.length; i++) {
-      var ingName = (ings[i].name || '').toLowerCase();
-      for (var j = 0; j < excludedTerms.length; j++) {
-        if (ingName.indexOf(excludedTerms[j].toLowerCase()) !== -1) return false;
-      }
-    }
-    // Also check recipe name and tags for allergen hints
-    var rName = (recipe.name || '').toLowerCase();
-    for (var k = 0; k < excludedTerms.length; k++) {
-      if (rName.indexOf(excludedTerms[k].toLowerCase()) !== -1) return false;
+    for (var i = 0; i < ings.length; i++) { parts.push(ings[i].name || ''); }
+    if (recipe.i) parts.push(recipe.i);
+    parts.push(recipe.name || recipe.n || '');
+    if (Array.isArray(recipe.tags)) parts.push(recipe.tags.join(' '));
+    var combined = parts.join(' ').toLowerCase();
+    for (var j = 0; j < excludedTerms.length; j++) {
+      var term = excludedTerms[j].toLowerCase();
+      if (combined.indexOf(term) === -1) continue;
+      // Exceptions volaille (lardons/jambon de dinde/volaille/poulet — halal-friendly)
+      if (term === 'lard' && /lardon[s]?[-\s]+(?:de\s+)?(?:dinde|volaille|poulet)/.test(combined)) continue;
+      if (term === 'jambon porc' && /jambon[-\s]+(?:de\s+)?(?:dinde|volaille|poulet)/.test(combined)) continue;
+      return false;
     }
     return true;
   }
@@ -29592,16 +29597,14 @@
       });
     }
 
-    // ── Halal exclusions (porc + alcool) ──
-    // Synchronisé avec app-core.js filtreHalal pour cohérence double-filtre végétarien+halal
-    var HALAL_EXCLUSIONS = ['porc', 'cochon', 'lard', 'bacon', 'jambon porc', 'saucisson',
-                            'pepperoni', 'chorizo', 'pancetta', 'gélatine de porc',
-                            'alcool', 'vin blanc', 'vin rouge', 'bière', 'rhum',
-                            'cognac', 'whisky', 'vodka', 'porto', 'amaretto'];
-    var halalExclusions = [];
-    if (filters.halal) {
-      halalExclusions = HALAL_EXCLUSIONS;
-    }
+    // ── Exclusions porc (opt-in : inclus seulement si allowPork = true) ──
+    var PORK_EXCLUSIONS = ['porc', 'cochon', 'lard', 'bacon', 'jambon porc', 'saucisson',
+                           'pepperoni', 'chorizo', 'pancetta', 'gélatine de porc'];
+    // ── Exclusions alcool en cuisine (opt-in : inclus seulement si allowAlcohol = true) ──
+    var ALCOHOL_EXCLUSIONS = ['alcool', 'vin blanc', 'vin rouge', 'bière', 'rhum',
+                              'cognac', 'whisky', 'vodka', 'porto', 'amaretto'];
+    var porkExclusions = filters.allowPork ? [] : PORK_EXCLUSIONS;
+    var alcoholExclusions = filters.allowAlcohol ? [] : ALCOHOL_EXCLUSIONS;
 
     // ── Combine all ingredient exclusions ──
     var allExclusions = allergyExclusions.concat(intoleranceExclusions).concat(halalExclusions);
@@ -29620,7 +29623,7 @@
     if (regimeIdx === 1) {
       regimeExclusions = MEAT_INGREDIENTS;
     }
-    allExclusions = allExclusions.concat(regimeExclusions);
+    allExclusions = allExclusions.concat(regimeExclusions).concat(porkExclusions).concat(alcoholExclusions);
 
     return RECIPES_DB.filter(function (r) {
       if (filters.category && r.category !== filters.category) return false;
@@ -29641,14 +29644,17 @@
       // ── Filtre ingrédients exclus (allergies + intolérances + régime ingrédient) ──
       if (allExclusions.length && !recipeHasNoExcludedIngredients(r, allExclusions)) return false;
 
-      // ── Filtre mirin (halal exception: "mirin halal" est autorisé) ──
-      if (filters.halal) {
-        var ings = r.ingredients || [];
-        for (var mi = 0; mi < ings.length; mi++) {
-          var iName = (ings[mi].name || '').toLowerCase();
-          if (iName.indexOf('mirin') !== -1 && iName.indexOf('mirin halal') === -1) return false;
-        }
-      }
+      // ── Filtres complémentaires porc & alcool (format court i: + jambon non-porcin) ──
+      // Couvre les cas non captés par recipeHasNoExcludedIngredients :
+      // — jambon blanc/cru/de Parme : exclure sauf jambon de dinde/volaille si !allowPork
+      // — mirin : exclure sauf mirin halal si !allowAlcohol
+      var _rText = [
+        (r.i || ''), (r.name || r.n || ''),
+        (Array.isArray(r.tags) ? r.tags.join(' ') : ''),
+        (r.ingredients || []).map(function(ig) { return ig.name || ''; }).join(' ')
+      ].join(' ').toLowerCase();
+      if (!filters.allowPork && /\bjambon\b/.test(_rText) && !/jambon[-\s]+(?:de\s+)?(?:dinde|volaille|poulet)/.test(_rText)) return false;
+      if (!filters.allowAlcohol && /mirin/.test(_rText) && !/mirin halal/.test(_rText)) return false;
 
       return true;
     }).sort(function (a, b) {
@@ -29992,14 +29998,21 @@
       }
     });
 
-    // ── Appliquer filtre halal si S.halal = true (cohérence avec app-core.js filterRecipes) ──
+    // ── Filtres porc & alcool par défaut (opt-in via allowPork / allowAlcohol) ──
     var s = window.S;
-    if (s && s.halal) {
-      var HALAL_BAN = /porc(?!ini)|cochon|lard|bacon|jambon(?! de dinde)|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc|alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/;
-      pool = pool.filter(function(r) {
-        var ingText = ((r.i || '') + ' ' + (r.tags || []).join(' ')).toLowerCase();
-        return !HALAL_BAN.test(ingText);
-      });
+    if (s) {
+      if (!s.allowPork) {
+        var PORK_BAN = /porc(?!ini)|cochon|lard(?!on[s]?[-\s]+(?:de\s+)?(?:dinde|volaille|poulet))|bacon|jambon(?![-\s]+(?:de\s+)?(?:dinde|volaille|poulet))|saucisson|pepperoni|chorizo|pancetta|g\u00e9latine de porc/;
+        pool = pool.filter(function(r) {
+          return !PORK_BAN.test(((r.i || '') + ' ' + (r.tags || []).join(' ')).toLowerCase());
+        });
+      }
+      if (!s.allowAlcohol) {
+        var ALCOHOL_BAN = /alcool|vin blanc|vin rouge|bi[e\u00e8]re|rhum|cognac|whisky|vodka|porto|amaretto|mirin(?! halal)/;
+        pool = pool.filter(function(r) {
+          return !ALCOHOL_BAN.test(((r.i || '') + ' ' + (r.tags || []).join(' ')).toLowerCase());
+        });
+      }
     }
 
     return pool;

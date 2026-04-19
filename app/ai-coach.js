@@ -170,7 +170,8 @@ function buildContext() {
     medical: Array.isArray(S.medical) ? S.medical : [],
     streak: _streakVal,
     intolerances: Array.isArray(S.intolerances) ? S.intolerances : [],
-    halal: !!S.halal
+    allowPork: !!S.allowPork,
+    allowAlcohol: !!S.allowAlcohol
   };
 
   // Sport spécifique

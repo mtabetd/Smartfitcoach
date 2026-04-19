@@ -272,6 +272,8 @@
 
   window.OnboardingComplete = {
     check: function() {
+      // Doit être authentifié — évite l'affichage après suppression de compte
+      if (!window.AUTH || !window.AUTH.isLoggedIn || !window.AUTH.isLoggedIn()) return;
       // Déjà vu ?
       try { if (localStorage.getItem(DONE_KEY) === 'true') return; } catch(e) { return; }
       // Profil insuffisant ?

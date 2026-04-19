@@ -426,6 +426,35 @@ function _initAuth() {
         if (_currentSession.nom   && !window.S.nom)   window.S.nom   = _currentSession.nom;
         if (_currentSession.phone && !window.S.phone) window.S.phone = _currentSession.phone;
       }
+      // RGPD : vérifier côté serveur que l'utilisateur existe toujours (compte supprimé ?).
+      // SAFETY : on ne purge QUE sur erreurs d'auth explicites (401/403/404 ou
+      // code "user_not_found"). Erreurs réseau (0, 5xx, timeout) → on garde la
+      // session pour ne pas wiper les données d'un user valide pendant un
+      // hiccup Supabase.
+      var _verifyUid = _currentSession.id;
+      client.auth.getUser().then(function(ures) {
+        if (!ures || !ures.error) return;
+        var err = ures.error;
+        var status = err.status || 0;
+        var code = (err.code || '').toLowerCase();
+        var msg = (err.message || '').toLowerCase();
+        var isUserDeleted = (status === 401 || status === 403 || status === 404)
+          || code.indexOf('user_not_found') !== -1
+          || msg.indexOf('user not found') !== -1
+          || msg.indexOf('user from sub claim') !== -1; // Supabase msg typique
+        if (!isUserDeleted) {
+          console.warn('[AUTH] getUser error transitoire — session conservée:', status, msg);
+          return;
+        }
+        console.warn('[AUTH] Compte inexistant côté serveur — purge locale:', status, msg);
+        try { client.auth.signOut(); } catch(e) {}
+        _currentSession = null;
+        clearLegacySession();
+        _cleanupLocalData(_verifyUid);
+        try { localStorage.removeItem('mtd_profile_anon'); } catch(e) {}
+        try { localStorage.removeItem('mtd_onboarding_done'); } catch(e) {}
+        if (window.render) window.render();
+      }).catch(function() {}); // réseau down = on garde la session (offline-first)
     }
     _authReadyResolved = true; // FIX V4 : restore terminé (avec ou sans session)
   }).catch(function(err) {
@@ -860,7 +889,7 @@ window.AUTH = {
       window.S.snacking = null; window.S.alcoholFreq = null; window.S.alcoholTypes = [];
       window.S.hydration = null; window.S.cookLevel = 2; window.S.whey = null;
       window.S.allergies = []; window.S.intolerances = []; window.S.regime = 0;
-      window.S.halal = false; window.S.excluded = ''; window.S.cuisines = [0];
+      window.S.allowPork = false; window.S.allowAlcohol = false; window.S.excluded = ''; window.S.cuisines = [0];
       window.S.weekPlan = null; window.S.selectedDay = 0;
       window.S.nStep = 0; window.S.sStep = 0;
       window.S.sportType = null; window.S.sportGoals = []; window.S.sportLevel = null;
@@ -1310,6 +1339,14 @@ function _cleanupLocalData(userId) {
         localStorage.removeItem(_keysToRemove[_ri]);
       }
     }
+    // Supprimer les clés globales (sans userId) liées au profil
+    var _globalKeys = ['mtd_onboarding_done', 'mtd_login_rl'];
+    for (var _gi = 0; _gi < _globalKeys.length; _gi++) {
+      try { localStorage.removeItem(_globalKeys[_gi]); } catch(e2) {}
+    }
+    // Supprimer mtd_profile_anon — créé quand saveProfile() s'exécute sans session active
+    try { localStorage.removeItem('mtd_profile_anon'); } catch(e3) {}
+    try { localStorage.removeItem('mtd_weight_history_anon'); } catch(e4) {}
   } catch (e) {}
 }
 

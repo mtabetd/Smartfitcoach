@@ -12,21 +12,79 @@
 // ─── QUOTES LOCALES (sport/motivation) ───
 var TODAY_QUOTES = [
   { text: "La constance est la clé de toute transformation.", author: "" },
-  { text: "Chaque séance est un pas vers la meilleure version de vous-même.", author: "" },
   { text: "Le corps sait des choses que l'esprit refuse d'admettre.", author: "Paul Valéry" },
   { text: "La discipline, c'est se souvenir de ce que l'on veut vraiment.", author: "David Campbell" },
-  { text: "Chaque journée est une nouvelle chance de changer votre vie.", author: "" },
   { text: "La force ne vient pas de la capacité physique. Elle vient d'une volonté indomptable.", author: "Gandhi" },
   { text: "Le succès, c'est la somme de petits efforts répétés jour après jour.", author: "Robert Collier" },
   { text: "N'abandonnez pas. Souffrez maintenant et vivez le reste de votre vie comme un champion.", author: "Muhammad Ali" },
   { text: "Votre corps peut résister à presque tout. C'est votre esprit qu'il faut convaincre.", author: "" },
   { text: "La fatigue est temporaire. La fierté de l'effort dure toujours.", author: "" },
-  { text: "Respecter son corps, c'est respecter la vie.", author: "" },
-  { text: "Chaque repas est une opportunité de nourrir votre corps avec excellence.", author: "" },
-  { text: "La nutrition est l'architecture invisible de votre performance.", author: "" },
+  { text: "Ce n'est pas la montagne que nous conquérons, mais nous-mêmes.", author: "Edmund Hillary" },
   { text: "Le mouvement est la vie. La vie est le mouvement.", author: "Moshe Feldenkrais" },
-  { text: "Ce n'est pas la montagne que nous conquérons, mais nous-mêmes.", author: "Edmund Hillary" }
+  { text: "La douleur que vous ressentez aujourd'hui sera la force que vous ressentirez demain.", author: "" },
+  { text: "Un champion, c'est quelqu'un qui se relève quand il ne peut plus.", author: "Jack Dempsey" },
+  { text: "Personne ne se souvient de l'entraînement. Tout le monde se souvient du résultat.", author: "" },
+  { text: "Il n'y a pas de raccourci vers un endroit qui vaut le déplacement.", author: "Beverly Sills" },
+  { text: "Le seul mauvais entraînement est celui qui n'a pas eu lieu.", author: "" },
+  { text: "Prenez soin de votre corps. C'est le seul endroit où vous devez vivre.", author: "Jim Rohn" },
+  { text: "La santé est la vraie richesse, pas les pièces d'or et d'argent.", author: "Gandhi" },
+  { text: "Mangez pour nourrir votre ambition, pas pour calmer vos émotions.", author: "" },
+  { text: "Votre corps entend tout ce que vous dites à votre esprit.", author: "" },
+  { text: "La régularité bat l'intensité sur le long terme.", author: "" },
+  { text: "Chaque séance est une conversation avec votre futur vous.", author: "" },
+  { text: "Les grandes choses ne sont jamais faites par impulsion, mais par une série de petits gestes réunis.", author: "Vincent van Gogh" },
+  { text: "Le corps s'adapte à ce qu'on lui impose. Imposez-lui la grandeur.", author: "" },
+  { text: "La volonté peut faire presque tout.", author: "Honoré de Balzac" },
+  { text: "Le moment où vous voulez arrêter est exactement le moment où vous devez continuer.", author: "" },
+  { text: "Ce qui ne vous tue pas vous rend plus fort.", author: "Friedrich Nietzsche" },
+  { text: "Travaillez dur en silence. Laissez le succès faire du bruit.", author: "" },
+  { text: "Les muscles ne grandissent pas pendant l'entraînement. Ils grandissent pendant la récupération.", author: "" },
+  { text: "Le repos fait partie de l'entraînement.", author: "" },
+  { text: "La nutrition, c'est 80% du travail. L'entraînement, c'est 20%.", author: "" },
+  { text: "Ce que vous mangez en privé, vous le portez en public.", author: "" },
+  { text: "Ne comptez pas les jours. Faites que les jours comptent.", author: "Muhammad Ali" },
+  { text: "La souffrance est temporaire. L'abandon est pour toujours.", author: "Lance Armstrong" },
+  { text: "La performance n'est pas un accident. C'est le résultat d'un engagement élevé.", author: "" },
+  { text: "Entraînez votre esprit aussi dur que vous entraînez votre corps.", author: "" },
+  { text: "Chaque répétition compte. Chaque repas compte. Chaque nuit de sommeil compte.", author: "" },
+  { text: "La cohérence transforme l'ordinaire en extraordinaire.", author: "" },
+  { text: "Votre corps est votre instrument le plus précieux. Accordez-le.", author: "" },
+  { text: "Un bon plan aujourd'hui vaut mieux qu'un plan parfait demain.", author: "George Patton" },
+  { text: "Vous n'avez pas à être extrême. Juste constant.", author: "" },
+  { text: "Le standard n'existe pas.", author: "SmartFitCoach" },
+  { text: "Le progrès, pas la perfection.", author: "" },
+  { text: "Vous devenez ce que vous faites régulièrement.", author: "Aristote" },
+  { text: "La meilleure version de vous vient de mille petites décisions, pas d'un seul effort.", author: "" },
+  { text: "Quand tu penses abandonner, rappelle-toi pourquoi tu as commencé.", author: "" },
+  { text: "Le vrai athlète n'est pas celui qui gagne. C'est celui qui refuse d'arrêter.", author: "" },
+  { text: "L'excellence n'est pas un acte isolé. C'est une habitude.", author: "Aristote" },
+  { text: "La différence entre l'impossible et le possible tient à la détermination.", author: "Tommy Lasorda" },
+  { text: "Si ça ne vous challenge pas, ça ne vous change pas.", author: "" },
+  { text: "Votre santé est un investissement, pas une dépense.", author: "" },
+  { text: "Ne cherchez pas à être le meilleur. Cherchez à être meilleur qu'hier.", author: "" },
+  { text: "Le temps passé à prendre soin de soi n'est jamais du temps perdu.", author: "" },
+  { text: "Un corps en mouvement reste en mouvement. Commencez.", author: "" },
+  { text: "La confiance naît de la preuve. Prouvez-vous quelque chose chaque jour.", author: "" },
+  { text: "Les victoires silencieuses sont les plus belles.", author: "" },
+  { text: "Chaque séance difficile construit un mental plus fort.", author: "" },
+  { text: "Ce que vous faites aujourd'hui décide de ce que vous serez demain.", author: "" },
+  { text: "Dormir, c'est performer. La récupération est une discipline.", author: "" },
+  { text: "Changer son corps commence par changer ses habitudes.", author: "" },
+  { text: "La nutrition est l'architecture invisible de votre performance.", author: "" },
+  { text: "Le corps s'adapte toujours. Ne lui laissez pas le temps de s'habituer à moins.", author: "" },
+  { text: "Chaque matin est une nouvelle chance de devenir meilleur.", author: "" },
+  { text: "La discipline d'aujourd'hui est la liberté de demain.", author: "" },
+  { text: "L'effort sans direction est du gaspillage. Suivez le plan.", author: "" },
+  { text: "Les habitudes forgent le destin, pas les intentions.", author: "" },
+  { text: "Faites de vos journées ordinaires des journées extraordinaires.", author: "" }
 ];
+
+function getDailyCitationObj() {
+  var doy = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  var q = TODAY_QUOTES[doy % TODAY_QUOTES.length];
+  if (!q) return { text: '', author: '' };
+  return { text: typeof q === 'string' ? q : (q.text || ''), author: typeof q === 'object' ? (q.author || '') : '' };
+}
 
 // ─── HELPERS ───
 function h(tag, attrs, children) {
@@ -893,11 +951,18 @@ function renderHeroContextuel() {
   // ── Row 4 : corps contextuel (quote italic + 2 chiffres) ──
   var context = buildContextualHero(momentKey, S);
 
-  // Phrase italic éditoriale
+  // Phrase italic éditoriale + auteur
   if (context.quote) {
-    inner.appendChild(h('p', {
-      style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.55;color:#3E3E3A;margin:0 0 32px;font-weight:normal;'
-    }, '« ' + context.quote + ' »'));
+    var _qBlock = h('div', { style: 'margin:0 0 32px;' });
+    _qBlock.appendChild(h('p', {
+      style: 'font-family:Georgia,serif;font-style:italic;font-size:15px;line-height:1.55;color:#3E3E3A;margin:0;font-weight:normal;'
+    }, '\u00AB ' + context.quote + ' \u00BB'));
+    if (context.quoteAuthor) {
+      _qBlock.appendChild(h('div', {
+        style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-500,#6B6B65);margin-top:8px;'
+      }, '\u2014 ' + context.quoteAuthor));
+    }
+    inner.appendChild(_qBlock);
   }
 
   // Re-supervision Hermès v2 : stack VERTICAL, 1 KPI primaire max dans le hero.
@@ -993,7 +1058,7 @@ function renderHeroContextuel() {
 // Construit le contenu contextuel du hero selon moment et profil utilisateur.
 // Retourne : { quote, stats: [{value, label, highlight?}], action: {label, onclick} }
 function buildContextualHero(moment, S) {
-  var ctx = { quote: null, stats: [], action: null };
+  var ctx = { quote: null, quoteAuthor: '', stats: [], action: null };
   var totals = (typeof getTodayTotals === 'function') ? getTodayTotals() : { kcal: 0, p: 0, g: 0, l: 0 };
   var target = (typeof getCalorieTarget === 'function') ? getCalorieTarget() : 2000;
   var todayIdx = (new Date().getDay() + 6) % 7;
@@ -1055,7 +1120,7 @@ function buildContextualHero(moment, S) {
         { value: todaySportSession.name.split(/[—–-]/)[0].trim().slice(0, 12), label: 'Séance prévue' }
       ];
     } else {
-      ctx.quote = 'Vise un petit-déjeuner à ' + fmtKcal(petitDejTarget) + ' kcal. Journée posée.';
+      var _citMatin = getDailyCitationObj(); ctx.quote = _citMatin.text; ctx.quoteAuthor = _citMatin.author;
       ctx.stats = [
         { value: fmtKcal(petitDejTarget), label: 'Kcal petit-déj' },
         { value: protTarget + '\u00a0g', label: 'Protéines visées' }
@@ -1090,7 +1155,7 @@ function buildContextualHero(moment, S) {
         { value: '27\u00a0mg', label: 'Fer ciblé' }
       ];
     } else {
-      ctx.quote = fmtKcal(totals.kcal) + ' kcal consommés ce matin. Il te reste ' + fmtKcal(remaining) + ' kcal pour le reste de la journée.';
+      var _citMidi = getDailyCitationObj(); ctx.quote = _citMidi.text; ctx.quoteAuthor = _citMidi.author;
       ctx.stats = [
         { value: fmtKcal(remaining) + '\u00a0kcal', label: 'Kcal disponibles' },
         hasSessionToday
@@ -1139,9 +1204,9 @@ function buildContextualHero(moment, S) {
     } else if (muscuToday) {
       ctx.quote = 'Vous avez soulevé ' + fmtKcal(muscuToday.tonnage) + ' kg sur ' + muscuToday.sets + ' séries. ' + fmtKcal(totals.kcal) + ' kcal, ' + Math.round(totals.p) + ' g de protéines.';
     } else if (totals.kcal >= target * 0.85) {
-      ctx.quote = 'Journée tenue. ' + fmtKcal(totals.kcal) + ' kcal, ' + Math.round(totals.p) + ' g de protéines.';
+      var _citSoir1 = getDailyCitationObj(); ctx.quote = _citSoir1.text; ctx.quoteAuthor = _citSoir1.author;
     } else {
-      ctx.quote = 'Journée à ' + fmtKcal(totals.kcal) + ' kcal. Un verre d\'eau, un repas léger, et au lit.';
+      var _citSoir2 = getDailyCitationObj(); ctx.quote = _citSoir2.text; ctx.quoteAuthor = _citSoir2.author;
     }
 
     ctx.stats = muscuToday
