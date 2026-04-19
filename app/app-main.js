@@ -2868,6 +2868,20 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
        S.weekPlanValidated = true;
        if (window.currentISOWeek) S.weekPlanValidatedISOWeek = window.currentISOWeek();
      }
+     // 2026-04 MIGRATION SILENCIEUSE : le hash a été restreint (retrait weight/age/etc.)
+     // Si l'user avait validé son plan avec l'ANCIEN hash (long avec biométrie),
+     // on resync silencieusement vers le NOUVEAU hash sans dévalider — sinon la bannière
+     // "Valider mon programme" apparaîtrait une dernière fois sans raison.
+     if (S.weekPlanValidated === true && window.getPlanHash) {
+       try {
+         var _newHash = window.getPlanHash();
+         if (_newHash && S._planHash !== _newHash) {
+           // Détection ancien hash : présence de séparateurs avec valeurs biométriques
+           // (l'ancien faisait ~25 segments, le nouveau ~16). On migre direct.
+           S._planHash = _newHash;
+         }
+       } catch(e) {}
+     }
      // FIX F10 CONTRE-AUDIT 2026-04 : même migration pour sportProgram.
      // Si l'user a un sportProgram existant sans flag → considérer validé (pas dévalider).
      if (S.sportProgram && Array.isArray(S.sportProgram) && S.sportProgram.length > 0 &&

@@ -5234,6 +5234,30 @@ window.swapMeal = swapMeal;
 // BUG A fix : sportDays et trainingDaysSelected influencent le calMultiplier via
 // getAdaptedMealSplit() → getDayType(). Un changement de planning sport doit
 // invalider le weekPlan pour que les macros soient recalculées correctement.
+// 2026-04 FIX MAJEUR : hash basé UNIQUEMENT sur les paramètres qui DÉTERMINENT
+// les RECETTES proposées (pas les paramètres biométriques qui changent naturellement).
+//
+// AVANT (bug) : weight/height/age/sex/activity/sleep dans le hash
+//   → user enregistre poids 79.5 → hash change → bandeau "Valider mon programme"
+//   → user frustré : "j'ai validé hier !"
+//
+// APRÈS (fix) : seuls les paramètres qui PILOTENT les choix de recettes :
+//   - Objectif (goal) : muscle/cut/maintain change la composition
+//   - Régime (regime) : végé/vegan filtre les recettes
+//   - Allergies/intolérances : exclusion d'ingrédients
+//   - Cuisines préférées + cookLevel : type de recettes
+//   - Médical/grossesse/halal : filtres santé/religion
+//   - Repas/jour : nombre de plats à générer
+//   - Whey/wantsDessert : ajout/retrait collations spécifiques
+//   - Jours sport : impacte le carb cycling (recette différente jour repos vs sport)
+//
+// EXCLUS du hash (ne déclenchent plus de revalidation intempestive) :
+//   - weight/height/age : changent naturellement, ne changent que les MACROS cibles
+//     (recalculées silencieusement via _nm = null)
+//   - sex : ne devrait jamais changer
+//   - activity (PAL), sleep : modifient les besoins kcal mais pas les recettes
+//   - cycle menstruel : affecte les macros, pas les recettes choisies
+//   - trainTime : horaire d'entraînement (modifie le timing meals, pas les recettes)
 window.getPlanHash = function() {
   var s = window.S;
   if (!s) return '';
@@ -5245,27 +5269,14 @@ window.getPlanHash = function() {
     Array.isArray(s.allergies) ? s.allergies.slice().sort().join(',') : '',
     Array.isArray(s.intolerances) ? s.intolerances.slice().sort().join(',') : '',
     s.wantsDessert ? '1' : '0',
-    s.weight || 0,
-    s.height || 0,
-    s.age || 0,
-    s.sex || '',
-    s.activity !== undefined && s.activity !== null ? String(s.activity) : '',
-    s.sportDays || 0,
     Array.isArray(s.trainingDaysSelected) ? s.trainingDaysSelected.slice().sort().join(',') : '',
     s.weeklyCalendar ? JSON.stringify(s.weeklyCalendar) : '',
-    // Paramètres manquants identifiés par audit : grossesse + filtres recettes
     s.pregnant ? '1' : '0',
     s.halal ? '1' : '0',
     typeof s.excluded === 'string' ? s.excluded : '',
     s.cookLevel !== undefined && s.cookLevel !== null ? String(s.cookLevel) : '',
     Array.isArray(s.cuisines) ? s.cuisines.slice().sort().join(',') : '',
-    s.trainTime || '',
-    Array.isArray(s.medical) ? s.medical.slice().sort().join(',') : '',
-    // Cycle menstruel : affecte calcTarget() via calorieAdjust phase-dépendant
-    s.cycleTracking ? '1' : '0',
-    s.lastPeriodDate || '',
-    s.cycleLength || 28,
-    s.sleep !== null && s.sleep !== undefined ? String(s.sleep) : ''
+    Array.isArray(s.medical) ? s.medical.slice().sort().join(',') : ''
   ].join('|');
 };
 
