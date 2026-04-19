@@ -2952,6 +2952,11 @@ function renderStep9(p) {
   //              on affiche une bannière "Vos paramètres ont changé, [Revalider]".
   //              L'user décide explicitement quand regénérer.
   var _planHashNow = window.getPlanHash ? window.getPlanHash() : '';
+  // Structural validation: clear corrupted plan (null slots or non-object days)
+  if (Array.isArray(S.weekPlan) && S.weekPlan.length >= 7) {
+    var _structOk = S.weekPlan.every(function(d) { return d && typeof d === 'object'; });
+    if (!_structOk) { S.weekPlan = null; console.warn('[weekPlan] corrupted structure cleared'); }
+  }
   if (!Array.isArray(S.weekPlan) || S.weekPlan.length < 7) {
     // Pas de plan du tout — génération initiale (onboarding)
     try {

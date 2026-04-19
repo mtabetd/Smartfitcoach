@@ -1604,6 +1604,7 @@ function renderPARQ(p) {
  // Si déjà complété, passer directement au step suivant
  if (S.parqDone) {
   var _next = S._parqNextStep || 0;
+  delete S._parqNextStep;
   S.sStep = _next;
   if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
   setTimeout(function() { if (window.render) window.render(); }, 0);
@@ -1677,6 +1678,7 @@ function renderPARQ(p) {
    S.parqResult = 'clear';
    S._parqAnswers = {};
    var nextStep = S._parqNextStep || 0;
+   delete S._parqNextStep;
    S.sStep = nextStep;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
@@ -1696,6 +1698,7 @@ function renderPARQ(p) {
    S.parqResult = 'medical_cleared';
    S._parqAnswers = {};
    var nextStep = S._parqNextStep || 0;
+   delete S._parqNextStep;
    S.sStep = nextStep;
    if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
    window.render();
@@ -1710,6 +1713,7 @@ function renderPARQ(p) {
     S.parqResult = 'user_override';
     S._parqAnswers = {};
     var nextStep = S._parqNextStep || 0;
+    delete S._parqNextStep;
     S.sStep = nextStep;
     if (window.saveProfile) { try { window.saveProfile(); } catch(e) {} }
     window.render();
@@ -2196,7 +2200,14 @@ function renderDedicatedPrograms(p) {
      { title: '3 séries de respirations 4-7-8', desc: 'Inspire 4s, retiens 7s, expire 8s — récupération vagale.', target: 3, unit: 'séries' }
    ];
    var _c = _challenges[_dayOfYear % _challenges.length];
-   if (!S.dailyChallengeHistory || typeof S.dailyChallengeHistory !== 'object') S.dailyChallengeHistory = {};
+   // Load from localStorage if not yet in memory (step 15 may be first render before step 4)
+   if (!S.dailyChallengeHistory) {
+     var _uid15 = (window.AUTH && window.AUTH.getUser && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+     var _dc15 = localStorage.getItem('mtd_daily_challenge_' + _uid15);
+     if (_dc15) { try { S.dailyChallengeHistory = JSON.parse(_dc15); } catch(e) { S.dailyChallengeHistory = {}; } }
+     else { S.dailyChallengeHistory = {}; }
+   }
+   if (typeof S.dailyChallengeHistory !== 'object') S.dailyChallengeHistory = {};
    var _doneToday = !!S.dailyChallengeHistory[_today];
    // Compute streak
    var _cStreak = 0;
@@ -2225,8 +2236,10 @@ function renderDedicatedPrograms(p) {
      var doneBtn = h('button', {
        style: 'padding:10px 18px;background:var(--black,#0A0A09);color:var(--ivory,#FAF9F6);border:none;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;',
        onclick: function() {
-         S.dailyChallengeHistory[_today] = true;
-         var uid = (window.AUTH && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
+         var _clickToday = new Date().toISOString().slice(0, 10); // recompute at click time (midnight-safe)
+         if (!S.dailyChallengeHistory || typeof S.dailyChallengeHistory !== 'object') S.dailyChallengeHistory = {};
+         S.dailyChallengeHistory[_clickToday] = true;
+         var uid = (window.AUTH && window.AUTH.getUser && AUTH.getUser()) ? AUTH.getUser().id : 'anon';
          try { localStorage.setItem('mtd_daily_challenge_' + uid, JSON.stringify(S.dailyChallengeHistory)); } catch(e) {}
          // Confetti burst — simple DOM-based
          var burst = document.createElement('div');
@@ -5936,12 +5949,10 @@ function saveMuscuSessionLog() {
    var _cs = getMuscuConsistencyStreak ? getMuscuConsistencyStreak() : null;
    if (_cs && _cs.milestone) {
      S._consistencyMilestone = _cs.milestone;
-     if (window.GAMIFICATION && _cs.milestone.xp) {
-       if (GAMIFICATION.addXP) GAMIFICATION.addXP(_cs.milestone.xp);
-       else if (GAMIFICATION.incrementCounter) GAMIFICATION.incrementCounter('xp', _cs.milestone.xp);
-     }
-     if (window.GAMIFICATION && _cs.milestone.type === 'badge') {
-       if (GAMIFICATION.unlockBadge) GAMIFICATION.unlockBadge('streak_7');
+     if (window.GAMIFICATION) {
+       if (_cs.milestone.xp && GAMIFICATION.unlockBadge) GAMIFICATION.unlockBadge('sessions_3');
+       if (_cs.milestone.type === 'badge' && GAMIFICATION.unlockBadge) GAMIFICATION.unlockBadge('streak_7');
+       if (_cs.milestone.type === 'unlock' && GAMIFICATION.unlockBadge) GAMIFICATION.unlockBadge('streak_14');
      }
    }
    if (_cs) S._muscuStreak = _cs.streak;
@@ -5964,21 +5975,22 @@ function getMuscuConsistencyStreak() {
  }).sort();
  var totalSessions = dates.length;
  if (totalSessions === 0) return { streak: 0, totalSessions: 0, milestone: null };
- var streak = 1;
  var today = new Date().toISOString().slice(0, 10);
- // Walk backwards from today
- var cur = new Date(today);
- for (var i = dates.length - 1; i >= 0; i--) {
-   var d = dates[i];
-   var diff = Math.round((cur - new Date(d)) / 86400000);
-   if (diff === 0) { cur.setDate(cur.getDate() - 1); continue; }
-   if (diff === 1) { streak++; cur = new Date(d); cur.setDate(cur.getDate() - 1); }
-   else break;
- }
- // Only count streak if last session was today or yesterday
  var lastDate = dates[dates.length - 1];
  var daysSinceLast = Math.round((new Date(today) - new Date(lastDate)) / 86400000);
- if (daysSinceLast > 1) streak = 0;
+ // Streak resets if last session was more than 1 day ago
+ if (daysSinceLast > 1) return { streak: 0, totalSessions: totalSessions, milestone: null };
+ // Count consecutive days ending at lastDate (walk backwards through sorted dates)
+ var streak = 1;
+ var prevDay = new Date(lastDate);
+ for (var i = dates.length - 2; i >= 0; i--) {
+   prevDay.setDate(prevDay.getDate() - 1);
+   if (dates[i] === prevDay.toISOString().slice(0, 10)) {
+     streak++;
+   } else {
+     break;
+   }
+ }
  var milestone = null;
  if (totalSessions === 3) milestone = { type: 'xp', msg: '+50 XP — 3 séances au compteur !', xp: 50 };
  else if (streak === 7) milestone = { type: 'badge', msg: 'Badge Semaine de Feu débloqué !', icon: 'Semaine de Feu' };
@@ -8616,15 +8628,14 @@ function renderMusculationProgram(p) {
    var cardShareToggle = h('button', {
      style: 'width:100%;padding:8px 12px;border:1px solid var(--border,#D8D8D0);background:var(--ivory,#FAF9F6);cursor:pointer;font-family:"Helvetica Neue",Arial,sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey,#6B6B65);text-align:left;',
      onclick: function() {
-       var existing = document.getElementById('sfc-share-card');
-       if (existing) { existing.style.display = existing.style.display === 'none' ? 'block' : 'none'; }
+       S._shareCardOpen = !S._shareCardOpen;
+       window.render();
      }
-   }, 'Générer ma carte de séance');
+   }, S._shareCardOpen ? 'Masquer la carte' : 'Générer ma carte de séance');
    cardShareWrap.appendChild(cardShareToggle);
 
    var cardEl = document.createElement('div');
-   cardEl.id = 'sfc-share-card';
-   cardEl.style.cssText = 'display:none;margin-top:8px;';
+   cardEl.style.cssText = (S._shareCardOpen ? 'display:block;' : 'display:none;') + 'margin-top:8px;';
 
    var card = document.createElement('div');
    card.id = 'sfc-share-card-inner';

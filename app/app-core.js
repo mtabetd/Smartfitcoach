@@ -4607,7 +4607,8 @@ function calcMacros(){
     var hasMuscGoal=s.sportGoals.indexOf('muscle')!==-1||s.sportGoals.indexOf('shred')!==-1;
     var hasEndurOnly=!hasMuscGoal&&(s.sportGoals.indexOf('endurance')!==-1||s.sportGoals.indexOf('weightloss')!==-1||s.sportGoals.indexOf('flexibility')!==-1||s.sportGoals.indexOf('general')!==-1);
     var isDeficit=goalKey==='shred'||goalKey==='cut';
-    if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure (sauf déficit calorique — Helms 2014)
+    if(hasEndurOnly&&!isDeficit)ppk=Math.max(1.2,ppk-0.2); // Tarnopolsky 2004 : -0.2g/kg endurance pure
+    else if(hasEndurOnly&&isDeficit)ppk=Math.min(3.5,ppk+0.2); // Helms 2014: déficit calorique → +0.2g/kg pour préserver la masse maigre
   }
   if(s.train&&Array.isArray(s.train)&&s.train.indexOf(0)!==-1)ppk+=0.1;
   if(s.medical&&s.medical.indexOf('irc')!==-1)ppk=Math.min(ppk,0.6); // KDOQI 2020: 0.55-0.60g/kg CKD 3-5 non-dialysis
@@ -4622,7 +4623,7 @@ function calcMacros(){
   ppk=_isIrc?Math.max(0.1,Math.min(3.5,ppk)):Math.max(0.8,Math.min(3.5,ppk));
   // Sarcopenia prevention: +0.3g/kg for age 40-49, +0.4g/kg for age 50+ (ESPEN 2019, Bauer 2013)
   // Skip for IRC (hard cap 0.6g/kg) and max is still 3.5g/kg
-  if(!_isIrc){var _sarcAge=typeof getAge==='function'?getAge():(s.age||0);if(_sarcAge>=50)ppk=Math.min(3.5,ppk+0.4);else if(_sarcAge>=40)ppk=Math.min(3.5,ppk+0.3);}
+  if(!_isIrc){var _sarcAge=(typeof getAge==='function'?getAge():null)||(s.age||0);if(_sarcAge>=50)ppk=Math.min(3.5,ppk+0.4);else if(_sarcAge>=40)ppk=Math.min(3.5,ppk+0.3);}
   var pGrams=Math.round(bw*ppk);
   // Pregnancy protein bonus: +25g/day T2+T3 (ACOG 2018, WHO)
   if(s.pregnant&&s.sex==='femme'){var triP=getPregnancyTrimester();if(triP&&triP.trimester.proteinExtra)pGrams=Math.round(pGrams+triP.trimester.proteinExtra);}
