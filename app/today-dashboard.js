@@ -1938,6 +1938,32 @@ function _fjRefreshResults() {
   }
 }
 
+// 2026-04 FIX FOCUS CRITIQUE : update live macros SANS rebuild DOM
+// (sinon l'input perd le focus → clavier mobile se ferme entre chaque chiffre)
+function _fjUpdateMacrosLive() {
+  if (!_fjState.selectedFood) return;
+  var food = _fjState.selectedFood;
+  var qty = _fjState.qty;
+  // Recalculer qty si mode portion (au cas où portionCount a changé)
+  if (_fjState.unitMode === 'portion' && _fjState.portion) {
+    qty = Math.round(_fjState.portion.g * (_fjState.portionCount || 1));
+    _fjState.qty = qty;
+  }
+  var fac = qty / 100;
+  var kcal = Math.round(food.kcal * fac);
+  var p = Math.round(food.protein * fac * 10) / 10;
+  var g = Math.round(food.carbs * fac * 10) / 10;
+  var l = Math.round(food.fat * fac * 10) / 10;
+  var el = document.getElementById('fj-live-macros');
+  if (el) el.textContent = kcal + ' kcal \u00b7 Prot ' + p + 'g \u00b7 Gluc ' + g + 'g \u00b7 Lip ' + l + 'g';
+  // MAJ aussi le label "X g total" du compteur portions s'il existe
+  var totalEl = document.getElementById('fj-portion-total');
+  if (totalEl && _fjState.unitMode === 'portion' && _fjState.portion) {
+    totalEl.textContent = _fjState.portion.label + ' \u00b7 ' + qty + ' g total';
+  }
+  // MAJ aussi le label du bouton CTA "Ajouter à X" (recalcule pour preview avant click)
+}
+
 function _fjShowSelection() {
   var box = document.getElementById('fj-selected');
   if (!box || !_fjState.selectedFood) return;
@@ -2037,7 +2063,8 @@ function _fjShowSelection() {
         if (window.showToast) window.showToast('Maximum 20 portions. Pour plus, passez en mode grammes.', 'warning', 3000);
       }
       _fjState.portionCount = v;
-      _fjShowSelection();
+      // 2026-04 FIX FOCUS : update macros live SANS re-render (garde focus + clavier)
+      _fjUpdateMacrosLive();
     });
     countRow.appendChild(countInput);
     var plusBtn = h('button', {
@@ -2051,7 +2078,9 @@ function _fjShowSelection() {
       _fjShowSelection();
     });
     countRow.appendChild(plusBtn);
+    // 2026-04 FIX FOCUS : id pour update live (sans rebuild input qui kill le focus mobile)
     countRow.appendChild(h('span', {
+      id: 'fj-portion-total',
       style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;color:var(--grey,#6B6B65);flex:1;text-align:right;'
     }, portion.label + ' \u00b7 ' + qty + ' g total'));
     box.appendChild(countRow);
@@ -2094,7 +2123,8 @@ function _fjShowSelection() {
       if (v > 2000) v = 2000;
       _fjState.qty = v;
       _fjState.unitMode = 'grams';
-      _fjShowSelection();
+      // 2026-04 FIX FOCUS : update macros live sans re-render (clavier mobile reste ouvert)
+      _fjUpdateMacrosLive();
     });
     qtyRow.appendChild(qtyInput);
     var plusG = h('button', { type: 'button', 'aria-label': '+10g',
@@ -2147,7 +2177,10 @@ function _fjShowSelection() {
     }
   }
 
+  // 2026-04 FIX FOCUS : id sur le bloc macros pour update live SANS re-render
+  // (avant : _fjShowSelection() rebuilt tout → input perdait le focus → clavier mobile se fermait à chaque keystroke)
   box.appendChild(h('div', {
+    id: 'fj-live-macros',
     style: 'font-family:"Helvetica Neue",Arial,sans-serif;font-size:13px;color:var(--black,#0A0A09);margin-bottom:12px;line-height:1.6;font-weight:600;'
   }, kcal + ' kcal \u00b7 Prot ' + p + 'g \u00b7 Gluc ' + g + 'g \u00b7 Lip ' + l + 'g'));
 
