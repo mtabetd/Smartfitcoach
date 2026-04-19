@@ -4,8 +4,8 @@ node_modules/
 .claude/worktrees/
 # Scripts de contre-audit Playwright (temporaires, cleanup automatique)
 test-*.js
-audit-test*.js
-audit-code.sh
+audit-*.js
+audit-*.sh
 !test/**/*.js
 
 # Local Netlify folder
