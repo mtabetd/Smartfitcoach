@@ -2939,6 +2939,10 @@ if (window.AUTH && window.AUTH.isLoggedIn()) {
  }
 } else {
  S.view = 'auth';
+ // Purger les données anon résiduelles — évite l'affichage de données après suppression compte
+ try { localStorage.removeItem('mtd_profile_anon'); } catch(e) {}
+ try { localStorage.removeItem('mtd_weight_history_anon'); } catch(e) {}
+ try { localStorage.removeItem('mtd_onboarding_done'); } catch(e) {}
 }
 render();
 }

@@ -1303,6 +1303,9 @@ function _cleanupLocalData(userId) {
     for (var _gi = 0; _gi < _globalKeys.length; _gi++) {
       try { localStorage.removeItem(_globalKeys[_gi]); } catch(e2) {}
     }
+    // Supprimer mtd_profile_anon — créé quand saveProfile() s'exécute sans session active
+    try { localStorage.removeItem('mtd_profile_anon'); } catch(e3) {}
+    try { localStorage.removeItem('mtd_weight_history_anon'); } catch(e4) {}
   } catch (e) {}
 }
 
